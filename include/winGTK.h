@@ -55,7 +55,7 @@ typedef struct _NhGtkProgressWindow NhGtkProgressWindow;
 extern GtkWidget *nh_gtk_window_dialog(boolean is_modal);
 
 extern void nh_gtk_focus_set_master(GtkWindow *w, GtkSignalFunc func,
-  gpointer data);
+  gpointer data, gboolean use_focus_keys);
 extern void nh_gtk_focus_set_slave_for(GtkWindow *w, GtkWindow *slave_for);
 
 extern GtkWidget *nh_session_window_new(const char *name);

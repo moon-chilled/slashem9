@@ -206,7 +206,7 @@ GTK_init_menu_widgets(NHWindow *w, winid inven)
     if (w->menu_information->cancelled >= 0) {
 	w->w = nh_gtk_window_dialog(TRUE);
 	nh_gtk_focus_set_master(GTK_WINDOW(w->w),
-	  GTK_SIGNAL_FUNC(menu_key_press), w);
+	  GTK_SIGNAL_FUNC(menu_key_press), w, TRUE);
 	nh_position_popup_dialog(GTK_WIDGET(w->w));
     } else {
 	w->w = nh_session_window_new("inventory");

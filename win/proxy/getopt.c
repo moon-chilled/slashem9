@@ -222,5 +222,7 @@ char *get_option(const char *option)
 	    case MENU_FULL:		return "full";
 	}
     }
+    if (!strcmp(option, "number_pad"))
+	return iflags.num_pad ? iflags.num_pad_mode ? "2" : "1" : "0";
     return "";
 }

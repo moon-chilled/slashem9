@@ -101,7 +101,7 @@ yn_show_window(gpointer data)
     params.w = window = nh_gtk_window_dialog(FALSE);
     nh_position_popup_dialog(GTK_WIDGET(window));
     nh_gtk_focus_set_master(GTK_WINDOW(window),
-      GTK_SIGNAL_FUNC(yn_key_press), 0);
+      GTK_SIGNAL_FUNC(yn_key_press), 0, TRUE);
     gtk_signal_connect(GTK_OBJECT(window), "destroy",
       GTK_SIGNAL_FUNC(yn_destroy), 0);
 

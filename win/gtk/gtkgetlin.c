@@ -86,7 +86,7 @@ GTK_ext_getlin(const char *query)
 #endif
 
     nh_gtk_focus_set_master(GTK_WINDOW(window),
-      GTK_SIGNAL_FUNC(entry_key_press), 0);
+      GTK_SIGNAL_FUNC(entry_key_press), 0, TRUE);
 
     hbox = nh_gtk_new_and_pack(gtk_hbox_new(FALSE, 0), vbox, "",
       FALSE, FALSE, NH_PAD);

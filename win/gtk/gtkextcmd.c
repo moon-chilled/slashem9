@@ -177,7 +177,7 @@ GTK_get_ext_cmd()
     window = nh_gtk_window_dialog(TRUE);
     nh_position_popup_dialog(GTK_WIDGET(window));
     nh_gtk_focus_set_master(GTK_WINDOW(window),
-      GTK_SIGNAL_FUNC(extcmd_key_press), 0);
+      GTK_SIGNAL_FUNC(extcmd_key_press), 0, TRUE);
     hid = gtk_signal_connect(GTK_OBJECT(window), "destroy",
       GTK_SIGNAL_FUNC(extcmd_destroy), &hid);
 
