@@ -227,7 +227,7 @@ GTK_init_menu_widgets(NHWindow *w)
 			    (gpointer)MENU_INVERT_ALL);
      }
      else
-	 gtk_accel_group_attach(accel_group, GTK_OBJECT(w->w));
+	 gtk_accel_group_attach(accel_group, G_OBJECT(w->w));
      w->hbox2 = nh_gtk_new_and_pack(
 	 gtk_hbox_new(FALSE, 0), w->vbox, "",
 	 FALSE, FALSE, NH_PAD);
