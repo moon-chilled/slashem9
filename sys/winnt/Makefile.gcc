@@ -1586,6 +1586,7 @@ winval.o: ../win/X11/winval.c $(HACK_H) $(INCL)/winX.h
 gtk.o: ../win/gtk/gtk.c $(INCL)/md5.h $(INCL)/winGTK.h $(HACK_H) \
 		$(INCL)/nhxdr.h $(INCL)/proxycom.h $(INCL)/func_tab.h \
 		$(INCL)/dlb.h $(INCL)/patchlevel.h $(INCL)/proxycb.h
+		$(INCL)/prxyclnt.h
 	$(CCOMPILE) $(CFLAGS) $(WINGTKCFLAGS) -o$@ ../win/gtk/gtk.c
 gtkgetlin.o: ../win/gtk/gtkgetlin.c $(INCL)/winGTK.h $(HACK_H) \
 		$(INCL)/nhxdr.h $(INCL)/proxycom.h
