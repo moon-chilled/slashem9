@@ -5,6 +5,7 @@
 #include "hack.h"
 #include "nhxdr.h"
 #include "winproxy.h"
+#include "proxycb.h"
 
 /*
  * This module implements the XDR routines for non-trivial compound types that
@@ -54,4 +55,27 @@ struct proxy_status_req *datum;
     return nhext_xdr_int(xdr, &datum->reconfig) &
       nhext_xdr_array(xdr, (char **)&datum->values, 
       &datum->nv, (unsigned int)-1, sizeof(char *), nhext_xdr_wrapstring);
+}
+
+boolean proxycb_xdr_get_player_choices_res_role(xdr, datum)
+NhExtXdr *xdr;
+struct proxycb_get_player_choices_res_role *datum;
+{
+    return nhext_xdr_wrapstring(xdr, (char **)&datum->male) &
+      nhext_xdr_wrapstring(xdr, (char **)&datum->female);
+}
+
+boolean proxycb_xdr_get_player_choices_res(xdr, datum)
+NhExtXdr *xdr;
+struct proxycb_get_player_choices_res *datum;
+{
+    return nhext_xdr_array(xdr, (char **)&datum->aligns, &datum->n_aligns,
+        (unsigned int)-1, sizeof(char *), nhext_xdr_wrapstring) &
+      nhext_xdr_array(xdr, (char **)&datum->genders, &datum->n_genders,
+        (unsigned int)-1, sizeof(char *), nhext_xdr_wrapstring) &
+      nhext_xdr_array(xdr, (char **)&datum->races, &datum->n_races,
+        (unsigned int)-1, sizeof(char *), nhext_xdr_wrapstring) &
+      nhext_xdr_array(xdr, (char **)&datum->roles, &datum->n_roles,
+        (unsigned int)-1, sizeof(struct proxycb_get_player_choices_res_role),
+	proxycb_xdr_get_player_choices_res_role);
 }

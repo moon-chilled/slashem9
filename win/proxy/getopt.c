@@ -20,6 +20,7 @@ static struct Bool_Opt
 {
     const char *name;
     boolean *addr, initvalue;
+    int optflags;
 } *boolopt = (struct Bool_Opt *)0;
 
 static int

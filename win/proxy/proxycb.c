@@ -93,7 +93,26 @@ char *
 proxy_cb_get_option(opt)
 char *opt;
 {
-    char *retval;
+    char *retval = (char *)0;
     nhext_rpc(EXT_CID_GET_OPTION, 1, EXT_STRING(opt), 1, EXT_STRING_P(retval));
     return retval;
+}
+
+struct proxycb_get_player_choices_res *
+proxy_cb_get_player_choices()
+{
+    struct proxycb_get_player_choices_res *retval;
+    retval=(struct proxycb_get_player_choices_res *)alloc(sizeof(*retval));
+    memset(retval, 0, sizeof(*retval));
+    nhext_rpc(EXT_CID_GET_PLAYER_CHOICES, 0, 1,
+      EXT_XDRF(proxycb_xdr_get_player_choices_res, retval));
+    return retval;
+}
+
+void
+proxy_cb_free_player_choices(choices)
+struct proxycb_get_player_choices_res *choices;
+{
+    nhext_xdr_free(proxycb_xdr_get_player_choices_res, (char *)choices);
+    free(choices);
 }

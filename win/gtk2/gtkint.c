@@ -45,6 +45,8 @@ static void FDECL(GTK_int_getlin, (const char *, char *));
 
 struct window_procs GTK_procs = {
     "gtk",
+    WC_COLOR | WC_HILITE_PET | WC_ASCII_MAP | WC_TILED_MAP | WC_SPLASH_SCREEN |
+    WC_POPUP_DIALOG | WC_EIGHT_BIT_IN | WC_PERM_INVENT,
     GTK_int_init_nhwindows,
     GTK_int_player_selection,
     GTK_int_askname,

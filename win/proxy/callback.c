@@ -27,6 +27,8 @@ static void FDECL(callback_parse_options, \
 			(unsigned short, NhExtXdr *, NhExtXdr *));
 static void FDECL(callback_get_option, \
 			(unsigned short, NhExtXdr *, NhExtXdr *));
+static void FDECL(callback_get_player_choices, \
+			(unsigned short, NhExtXdr *, NhExtXdr *));
 
 static void
 callback_display_inventory(id, request, reply)
@@ -186,6 +188,43 @@ NhExtXdr *request, *reply;
     nhext_rpc_params(reply, 1, EXT_STRING(value));
 }
 
+static void
+callback_get_player_choices(id, request, reply)
+unsigned short id;
+NhExtXdr *request, *reply;
+{
+    int i;
+    const char *aligns_adj[ROLE_ALIGNS], *genders_adj[ROLE_GENDERS];
+    struct proxycb_get_player_choices_res choices;
+    choices.n_aligns = ROLE_ALIGNS;
+    choices.aligns = aligns_adj;
+    for(i = 0; i < ROLE_ALIGNS; i++)
+	aligns_adj[i] = aligns[i].adj;
+    choices.n_genders = ROLE_GENDERS;
+    choices.genders = genders_adj;
+    for(i = 0; i < ROLE_GENDERS; i++)
+	genders_adj[i] = genders[i].adj;
+    for(i = 0; races[i].noun; i++)
+	;
+    choices.n_races = i;
+    choices.races = (const char **)alloc(i * sizeof(const char *));
+    for(i = 0; i < choices.n_races; i++)
+	choices.races[i] = races[i].noun;
+    for(i = 0; roles[i].name.m; i++)
+	;
+    choices.n_roles = i;
+    choices.roles = (struct proxycb_get_player_choices_res_role *)
+      alloc(i * sizeof(struct proxycb_get_player_choices_res_role));
+    for(i = 0; i < choices.n_roles; i++) {
+	choices.roles[i].male = roles[i].name.m;
+	choices.roles[i].female = roles[i].name.f ? roles[i].name.f : "";
+    }
+    nhext_rpc_params(reply, 1,
+      EXT_XDRF(proxycb_xdr_get_player_choices_res, &choices));
+    free(choices.races);
+    free(choices.roles);
+}
+
 struct nhext_svc proxy_callbacks[] = {
     EXT_CID_DISPLAY_INVENTORY,		callback_display_inventory,
     EXT_CID_DLBH_FOPEN,			callback_dlbh_fopen,
@@ -196,5 +235,6 @@ struct nhext_svc proxy_callbacks[] = {
     EXT_CID_STATUS_MODE,		callback_status_mode,
     EXT_CID_PARSE_OPTIONS,		callback_parse_options,
     EXT_CID_GET_OPTION,			callback_get_option,
+    EXT_CID_GET_PLAYER_CHOICES,		callback_get_player_choices,
     0, NULL,
 };

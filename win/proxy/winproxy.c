@@ -18,6 +18,7 @@
 /* Interface definition for plug-in windowing ports */
 struct window_procs proxy_procs = {
     "proxy",
+    0xFFFFFFFF,
     proxy_init_nhwindows,
     proxy_player_selection,
     proxy_askname,
