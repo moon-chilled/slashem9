@@ -80,7 +80,7 @@ nh_message_putstr(const char *str)
     gtk_text_freeze(t);
 #endif
 
-  if(u.uhpmax > 0 && (((double)u.uhp) / u.uhpmax < 0.1 || u.uhp < 5))
+  if (nh_status_in_trouble())
     i = CLR_RED;
   else
     i = MAP_BLACK;

@@ -679,16 +679,20 @@ static int
 server_read(void *handle, void *buf, unsigned int len)
 {
     DWORD nb;
+#ifdef PROXY_INTERNAL
     /*
      * Hack for single process operation - let the game handle the pending
      * callback.
      */
     if (!proxy_svc_unread)
 	win_proxy_iteration();
+#endif
     if (!ReadFile((HANDLE)handle, buf, len, &nb, NULL))
 	return -1;
     else {
+#ifdef PROXY_INTERNAL
 	proxy_svc_unread -= nb;
+#endif
 	return nb;
     }
 }
@@ -700,7 +704,9 @@ server_write(void *handle, void *buf, unsigned int len)
     if (!WriteFile((HANDLE)handle, buf, len, &nb, NULL))
 	return -1;
     else {
+#ifdef PROXY_INTERNAL
 	proxy_unread += nb;
+#endif
 	return nb;
     }
 }
@@ -709,15 +715,19 @@ static int
 server_read(void *handle, void *buf, unsigned int len)
 {
     int nb;
+#ifdef PROXY_INTERNAL
     /*
      * Hack for single process operation - let the game handle the pending
      * callback.
      */
     if (!proxy_svc_unread)
 	win_proxy_iteration();
+#endif
     nb = read((int)handle, buf, len);
+#ifdef PROXY_INTERNAL
     if (nb > 0)
 	proxy_svc_unread -= nb;
+#endif
     return nb;
 }
 
@@ -726,8 +736,10 @@ server_write(void *handle, void *buf, unsigned int len)
 {
     int nb;
     nb = write((int)handle, buf, len);
+#ifdef PROXY_INTERNAL
     if (nb > 0)
 	proxy_unread += nb;
+#endif
     return nb;
 }
 #endif	/* WIN32 */

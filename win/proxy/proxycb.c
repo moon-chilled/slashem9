@@ -79,3 +79,21 @@ int mode;
 {
     nhext_rpc(EXT_CID_STATUS_MODE, 1, EXT_INT(mode), 0);
 }
+
+int
+proxy_cb_parse_options(opts)
+char *opts;
+{
+    int retval;
+    nhext_rpc(EXT_CID_PARSE_OPTIONS, 1, EXT_STRING(opts), 1, EXT_INT_P(retval));
+    return retval;
+}
+
+char *
+proxy_cb_get_option(opt)
+char *opt;
+{
+    char *retval;
+    nhext_rpc(EXT_CID_GET_OPTION, 1, EXT_STRING(opt), 1, EXT_STRING_P(retval));
+    return retval;
+}

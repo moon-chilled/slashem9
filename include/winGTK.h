@@ -30,6 +30,8 @@
 #endif
 #endif
 
+#define GTK_GRAPHICS	/* Needed when building an external interface */
+
 #ifdef WINGTK_X11
 #include <gdk/gdkx.h>
 #include <X11/Xlib.h>
@@ -200,6 +202,7 @@ extern void		nh_message_putstr(const char *);
 
 extern GtkWidget	*nh_status_new(void);
 #if defined(DEVEL_BRANCH) && defined(GTK_V20)
+extern boolean		nh_status_in_trouble(void);
 extern void		GTK_ext_status(int, int, const char **);
 #else
 extern void		nh_status_update(void);
