@@ -582,7 +582,9 @@ GTK_ext_select_menu(winid id, int how, struct proxy_mi **menu_list)
 	 * contents are instantly viewable. The exception is where this
 	 * would mean that the window is too large to fit on the screen.
 	 */
-	if (w->clist->requisition.height >= root_height * 2 / 3)
+	GtkRequisition requisition;
+	gtk_widget_size_request(w->clist, &requisition);
+	if (requisition.height >= root_height * 2 / 3)
 	    gtk_widget_set_size_request(w->clist, -1, root_height * 2 / 3);
 	else
 	    gtk_widget_hide(w->scrolled);
