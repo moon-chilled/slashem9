@@ -266,11 +266,12 @@ nh_set_map_visual(int mode)
 #ifdef RADAR
 	nh_radar_update();
 #endif
+	map_visual = mode;
+	strcpy(tileset, tileTab[map_visual].ident);
 	doredraw();
 
 	gtk_widget_show(map);
     }
-    map_visual = mode;
 }
 
 int
