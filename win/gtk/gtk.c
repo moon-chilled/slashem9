@@ -1409,13 +1409,13 @@ GTK_init_nhwindows(int *argc, char **argv)
 #ifdef UNIX
     savuid = geteuid();
     (void) seteuid(getuid());
+    hide_privileges(TRUE);
 #endif
     
-    hide_privileges(TRUE);
     gtk_init(argc, &argv);
-    hide_privileges(FALSE);
 
 #ifdef UNIX
+    hide_privileges(FALSE);
     (void) seteuid(savuid);
 #endif
     
