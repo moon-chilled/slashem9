@@ -572,7 +572,7 @@ tile_scan(void)
 	if ((tilesets[i].flags & ~(TILESET_TRANSPARENT | TILESET_PSEUDO3D)) != 0)
 	    continue;	/* Unsupported flag set */
 #ifdef FILE_AREAS
-	fp = fopen_datafile_area(FILE_AREA_SHARE, tilesets[i]->file, RDTMODE, FALSE);
+	fp = fopen_datafile_area(FILE_AREA_SHARE, tilesets[i].file, RDTMODE, FALSE);
 #else
 	fp = fopen_datafile(tilesets[i].file, RDTMODE, FALSE);
 #endif
