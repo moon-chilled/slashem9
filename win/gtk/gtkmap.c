@@ -122,6 +122,7 @@ int no_tileTab = 0;	/* Not including dummy (index 0) */
 
 static TileTab *Tile;
 int map_visual = -1;
+int map_clip_dist2 = 0;
 
 /* from tile.c */
 extern int tiles_per_row;
@@ -702,7 +703,7 @@ map_button_event(void *map, GdkEventButton *event, gpointer data)
 void
 nh_map_check_visibility()
 {
-    nh_map_cliparound(cursx, cursy, TRUE);
+    nh_map_cliparound(cursx, cursy, FALSE);
 }
 
 void
@@ -1321,19 +1322,17 @@ nh_radar_update()
 }
 #endif	/* WINGTK_RADAR */
 
-#define DIFF(a, b)	((a) >= (b) ? (a) - (b) : (b) - (a))
-
 static void
 nh_map_cliparound(int x, int y, gboolean exact)
 {
     static int sx = -1, sy;
-    if (!exact && sx >= 0 && DIFF(x, sx) <= 1 && DIFF(y, sy) <= 1)
+    if (!map || !exact && sx >= 0 &&
+      (x - sx) * (x - sx) + (y - sy) * (y - sy) <= map_clip_dist2)
 	return;
     sx = x;
     sy = y;
-    if (map)
-	xshm_map_cliparound(x * c_3dwidth + (no_rows - y) * c_3dofset,
-	  y * c_3dheight);
+    xshm_map_cliparound(x * c_3dwidth + (no_rows - y) * c_3dofset,
+      y * c_3dheight);
 }
 
 #undef DIFF

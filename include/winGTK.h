@@ -367,6 +367,9 @@ extern void x_tile_destroy();
 /* Current Map Mode */
 extern int map_visual;
 
+/* Current Map Clipping Squared distance */
+extern int map_clip_dist2;
+
 /* Current map cursor position */
 extern int cursx, cursy;
 
