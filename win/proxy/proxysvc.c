@@ -908,7 +908,11 @@ failed:
 	goto failed;
     }
     if (sscanf(lp->values[j], "%d.%d", &major, &minor) != 2 ||
-      major != EXT_STANDARD_MAJOR || !major && minor != EXT_STANDARD_MINOR) {
+#if (EXT_STANDARD_MAJOR != 0)
+      major != EXT_STANDARD_MAJOR || minor < EXT_STANDARD_MINOR) {
+#else
+      major != EXT_STANDARD_MAJOR || minor != EXT_STANDARD_MINOR) {
+#endif
 	nhext_subprotocol0_free_line(lp);
 	fprintf(stderr, "proxy_clnt: Incompatible NhExt standard (%s).\n",
 	  lp->values[j]);
