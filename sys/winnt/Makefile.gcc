@@ -589,6 +589,7 @@ ifeq ($(USE_DLB),Y)
 	$(COPY) $(DAT)\nhshare				$(GAMEDIR)
 	$(COPY) $(DAT)\nhushare				$(GAMEDIR)
 	$(COPY) $(DAT)\license				$(GAMEDIR)
+	$(COPY) $(DAT)\opthelp				$(GAMEDIR)
 else
 	$(COPY) $(DAT)\*.				$(GAMEDIR)
 	$(COPY) $(DAT)\*.dat				$(GAMEDIR)
@@ -1844,7 +1845,7 @@ dog.o: dog.c $(HACK_H) $(INCL)/edog.h $(INCL)/emin.h $(INCL)/epri.h
 dogmove.o: dogmove.c $(HACK_H) $(INCL)/mfndpos.h $(INCL)/edog.h \
 		$(INCL)/emin.h $(INCL)/epri.h
 dokick.o: dokick.c $(HACK_H) $(INCL)/eshk.h
-dothrow.o: dothrow.c $(HACK_H)
+dothrow.o: dothrow.c $(HACK_H) $(INCL)/eshk.h
 drawing.o: drawing.c $(HACK_H) $(INCL)/tcap.h
 dungeon.o: dungeon.c $(HACK_H) $(INCL)/dgn_file.h $(INCL)/dlb.h
 eat.o: eat.c $(HACK_H)
