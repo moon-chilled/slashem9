@@ -227,6 +227,11 @@ nh_option_set(void)
     struct GTK_Option *p;
     char *s;
 
+    gtk_entry_set_text(GTK_ENTRY(entry_plname), nh_option_cache_get("name"));
+    gtk_entry_set_text(GTK_ENTRY(entry_catname), nh_option_cache_get("catname"));
+    gtk_entry_set_text(GTK_ENTRY(entry_dogname), nh_option_cache_get("dogname"));
+    gtk_entry_set_text(GTK_ENTRY(entry_fruit), nh_option_cache_get("fruit"));
+
     s = nh_option_cache_get("pettype");
     if (*s == 'c')
 	button = radio_k;
@@ -676,7 +681,6 @@ nh_option_plname_new()
 
     entry_plname = nh_gtk_new_and_pack(gtk_entry_new_with_max_length(PL_NSIZ),
       hbox, "", FALSE, FALSE, NH_PAD);
-    gtk_entry_set_text(GTK_ENTRY(entry_plname), nh_option_cache_get("name"));
 
     hbox2 = nh_gtk_new_and_pack(gtk_hbox_new(FALSE, 0), vbox, "",
       FALSE, FALSE, NH_PAD);
@@ -704,9 +708,6 @@ nh_option_pet_kitten_new()
     entry_catname = nh_gtk_new_and_pack(gtk_entry_new_with_max_length(PL_NSIZ),
       hbox, "", FALSE, FALSE, NH_PAD);
 
-    gtk_entry_set_text(GTK_ENTRY(entry_catname),
-      nh_option_cache_get("catname"));
-
     gtk_widget_set_sensitive(GTK_WIDGET(label), !option_lock);
 
     return frame;
@@ -730,9 +731,6 @@ nh_option_pet_dog_new()
       hbox, "", FALSE, FALSE, NH_PAD);
     entry_dogname = nh_gtk_new_and_pack(gtk_entry_new_with_max_length(PL_NSIZ),
       hbox, "", FALSE, FALSE, NH_PAD);
-
-    gtk_entry_set_text(GTK_ENTRY(entry_dogname),
-      nh_option_cache_get("dogname"));
 
     gtk_widget_set_sensitive(GTK_WIDGET(label), !option_lock);
 
@@ -809,8 +807,6 @@ nh_option_fruit_new()
       hbox, "", FALSE, FALSE, NH_PAD);
     entry_fruit = nh_gtk_new_and_pack(gtk_entry_new_with_max_length(PL_NSIZ),
       hbox, "", FALSE, FALSE, NH_PAD);
-
-    gtk_entry_set_text(GTK_ENTRY(entry_fruit), nh_option_cache_get("fruit"));
 
     return frame;
 }
