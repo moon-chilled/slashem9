@@ -43,6 +43,7 @@ panic VA_DECL(const char *,str)
 
 	(void) fputs(" ERROR:  ", stderr);
 	Vfprintf(stderr, str, VA_ARGS);
+	(void) fputc('\n', stderr);
 	(void) fflush(stderr);
 #if defined(UNIX) || defined(VMS)
 # ifdef SYSV

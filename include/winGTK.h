@@ -320,6 +320,9 @@ typedef struct _NHWindow{
 typedef struct _TileTab{
     char *ident;
     char *file;
+#ifdef GTK_PROXY
+    char *mapfile;
+#endif
     int tilemap_width, tilemap_height;
     int unit_width, unit_height;
 
@@ -333,6 +336,9 @@ typedef struct _TileTab{
 } TileTab;
 extern TileTab tileTab[];
 extern int no_tileTab;
+#if defined(GTK_V20)
+extern int stone_tile;
+#endif
 
 #if defined(GTK_V20)
 extern GtkWidget *xshm_map_init(enum xshm_map_mode, int width, int height);

@@ -104,6 +104,7 @@ struct proxycb_get_tilesets_res_tileset *datum;
 {
     return nhext_xdr_wrapstring(xdr, (char **)&datum->name) &
       nhext_xdr_wrapstring(xdr, (char **)&datum->file) &
+      nhext_xdr_wrapstring(xdr, (char **)&datum->mapfile) &
       nhext_xdr_long(xdr, &datum->flags);
 }
 
@@ -114,4 +115,50 @@ struct proxycb_get_tilesets_res *datum;
     return nhext_xdr_array(xdr, (char **)&datum->tilesets, &datum->n_tilesets,
         (unsigned int)-1, sizeof(struct proxycb_get_tilesets_res_tileset),
 	proxycb_xdr_get_tilesets_res_tileset);
+}
+
+boolean proxycb_xdr_get_glyph_mapping_res_symdef(xdr, datum)
+NhExtXdr *xdr;
+struct proxycb_get_glyph_mapping_res_symdef *datum;
+{
+    return nhext_xdr_long(xdr, &datum->rgbsym) &
+      nhext_xdr_wrapstring(xdr, (char **)&datum->description);
+}
+
+boolean proxycb_xdr_get_glyph_mapping_res_submapping(xdr, datum)
+NhExtXdr *xdr;
+struct proxycb_get_glyph_mapping_res_submapping *datum;
+{
+    int start, retval;
+    start = xdr->x_pos;
+    retval = proxycb_xdr_get_glyph_mapping_res_symdef(xdr, &datum->symdef) &
+      nhext_xdr_array(xdr, (char **)&datum->glyphs, &datum->n_glyphs,
+        (unsigned int)-1, sizeof(struct proxycb_get_glyph_mapping_res_symdef),
+	proxycb_xdr_get_glyph_mapping_res_symdef);
+    return retval;
+}
+
+boolean proxycb_xdr_get_glyph_mapping_res_mapping(xdr, datum)
+NhExtXdr *xdr;
+struct proxycb_get_glyph_mapping_res_mapping *datum;
+{
+    return nhext_xdr_wrapstring(xdr, (char **)&datum->flags) &
+      nhext_xdr_int(xdr, &datum->base_mapping) &
+      nhext_xdr_int(xdr, &datum->alt_glyph) &
+      proxycb_xdr_get_glyph_mapping_res_symdef(xdr, &datum->symdef) &
+      nhext_xdr_array(xdr, (char **)&datum->submappings, &datum->n_submappings,
+        (unsigned int)-1,
+	sizeof(struct proxycb_get_glyph_mapping_res_submapping),
+	proxycb_xdr_get_glyph_mapping_res_submapping);
+}
+
+boolean proxycb_xdr_get_glyph_mapping_res(xdr, datum)
+NhExtXdr *xdr;
+struct proxycb_get_glyph_mapping_res *datum;
+{
+    return nhext_xdr_int(xdr, &datum->no_glyph) &
+      nhext_xdr_long(xdr, &datum->transparent) &
+      nhext_xdr_array(xdr, (char **)&datum->mappings, &datum->n_mappings,
+        (unsigned int)-1, sizeof(struct proxycb_get_glyph_mapping_res_mapping),
+	proxycb_xdr_get_glyph_mapping_res_mapping);
 }
