@@ -186,7 +186,7 @@ nh_option_more_confirm(void)
       hbox, "", FALSE, FALSE, NH_PAD);
     button2 = nh_gtk_new_and_pack(gtk_button_new_from_stock(GTK_STOCK_NO),
       hbox, "", FALSE, FALSE, NH_PAD);
-    button3 = nh_gtk_new_and_pack(gtk_button_new_with_label(GTK_STOCK_CANCEL),
+    button3 = nh_gtk_new_and_pack(gtk_button_new_from_stock(GTK_STOCK_CANCEL),
       hbox, "", FALSE, FALSE, NH_PAD);
     gtk_signal_connect(GTK_OBJECT(button1), "clicked",
       GTK_SIGNAL_FUNC(mc_clicked), (gpointer)'y');
