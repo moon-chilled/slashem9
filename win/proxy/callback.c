@@ -331,8 +331,7 @@ NhExtXdr *request, *reply;
 {
     extern int proxy_curs_on_u;
     flush_screen(proxy_curs_on_u);
-    if (!nhext_async_mode())
-	nhext_rpc_params(reply, 0);
+    nhext_rpc_params(reply, 0);
 }
 
 static void
