@@ -1318,6 +1318,7 @@ GTK_init_nhwindows2()
 #endif
 
     initialized2 = 1;
+    GTK_update_inventory();
 }
 
 winid
@@ -1657,6 +1658,8 @@ GTK_player_selection(void)
 void
 GTK_update_inventory(void)
 {
+    if (!initialized2)
+	return;
     if (flags.perm_invent)
 	(void) display_inventory((char *)0, FALSE);
     else if (WIN_INVEN != WIN_ERR)
