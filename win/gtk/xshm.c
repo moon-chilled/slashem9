@@ -19,8 +19,10 @@
 #include <machine/param.h>
 #endif
 #include <sys/types.h>
+#ifndef WIN32
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#endif
 
 #include "winGTK.h"
 #include "xshm.h"

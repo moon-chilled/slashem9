@@ -132,7 +132,11 @@ x_tile_init(GdkImage *img, TileTab *t)
 void
 x_tile_destroy()
 {
+#ifdef WINGTK_X11
     XDestroyImage(tile_img);
+#else
+    gdk_image_destroy(tile_img);
+#endif
 }
 
 void
