@@ -111,6 +111,7 @@ default_clicked(GtkWidget *widget, gpointer data)
 		    keysym = 0;
 		    return FALSE;
 		default:	/* Discard changes */
+		    nh_option_set();
 		    break;
 		case 1:		/* Apply changes first */
 		    nh_option_get();
