@@ -124,6 +124,16 @@ nh_status_in_trouble(void)
     return in_trouble;
 }
 
+char *
+nh_status_last_displayed(char *quan)
+{
+    int i;
+    for(i = 0; i < SIZE(stat_tab); i++)
+	if (!strcmp(quan, stat_tab[i].quan))
+	    return stat_tab[i].oldvalue;
+    return NULL;
+}
+
 static void
 nh_status_reconfig(nv, values)
 int nv;

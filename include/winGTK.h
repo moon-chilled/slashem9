@@ -201,6 +201,7 @@ extern void		nh_message_putstr(const char *);
 extern GtkWidget	*nh_status_new(void);
 #if defined(GTK_V20)
 extern boolean		nh_status_in_trouble(void);
+extern char		*nh_status_last_displayed(char *quan);
 extern void		GTK_ext_status(int, int, const char **);
 #else
 extern void		nh_status_update(void);
