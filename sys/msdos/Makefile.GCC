@@ -784,7 +784,7 @@ else
 $(U)lev_yacc.c: $(SSHR)/lev_yacc.c
 	@echo ---
 	@echo For now, we will copy the prebuilt
-	@echo lev_comp.c from $(SSHR) into $(U) and use that.
+	@echo lev_yacc.c from $(SSHR) into $(U) and use that.
 	@$(subst /,\,$(UPD) $(SSHR)/lev_yacc.c $(U)lev_yacc.c)
 	@$(subst /,\,echo.>>$(U)lev_yacc.c)
 
