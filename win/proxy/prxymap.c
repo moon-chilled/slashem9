@@ -155,3 +155,41 @@ proxy_glyph_map_close(info)
 struct proxy_glyph_map_info *info;
 {
 }
+
+unsigned int
+proxy_glyph_map_get_length(glyph_map)
+struct proxycb_get_glyph_mapping_res *glyph_map;
+{
+    unsigned int count = 0;
+    struct proxycb_get_glyph_mapping_res_mapping *mapping, *base;
+    int mi = 0, bsmi = 0, bgi = 0, smi = 0, gi = 0;
+    mapping = glyph_map->mappings + 0;
+    if (mapping->base_mapping >= 0)
+	base = glyph_map->mappings + mapping->base_mapping;
+    else
+	base = NULL;
+    for(;;) {
+	count++;
+	if (++gi >= (mapping->n_submappings ?
+	  mapping->submappings[smi].n_glyphs : 0)) {
+	    if (++smi >= mapping->n_submappings) {
+		if (++bgi >= (base && base->n_submappings ?
+		  base->submappings[bsmi].n_glyphs : 0)) {
+		    if (++bsmi >= (base ? base->n_submappings : 0)) {
+			if (++mi >= glyph_map->n_mappings)
+			    return count;
+			mapping++;
+			if (mapping->base_mapping >= 0)
+			    base = glyph_map->mappings + mapping->base_mapping;
+			else
+			    base = NULL;
+			bsmi = 0;
+		    }
+		    bgi = 0;
+		}
+		smi = 0;
+	    }
+	    gi = 0;
+	}
+    }
+}

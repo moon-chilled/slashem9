@@ -120,14 +120,17 @@ extern struct proxy_glyph_mapping *proxy_glyph_map_first(
 extern struct proxy_glyph_mapping *proxy_glyph_map_next(
 	struct proxy_glyph_map_info *);
 extern void proxy_glyph_map_close(struct proxy_glyph_map_info *);
+extern unsigned int proxy_glyph_map_get_length(
+	struct proxycb_get_glyph_mapping_res *);
 
 /* ### prxytile.c ### */
 
-extern struct proxy_tilemap *proxy_load_tilemap(int);
+extern struct proxy_tilemap *proxy_load_tilemap(int, void (*pulse)(),
+	void *pulse_data);
 extern void proxy_free_tilemap(struct proxy_tilemap *);
 extern short * proxy_map_glyph2tile(
 	struct proxycb_get_glyph_mapping_res *glyph_map,
-	struct proxy_tilemap *);
+	struct proxy_tilemap *, void (*pulse)(), void *pulse_data);
 
 /* ### prxychar.c ### */
 
