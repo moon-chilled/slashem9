@@ -113,7 +113,6 @@ extern void	GTK_nhbell(void);
 extern int	GTK_doprev_message(void);
 extern char	GTK_yn_function(const char *, const char *, CHAR_P);
 extern void	GTK_getlin(const char *, char *);
-extern void	GTK_extcmd_init(void);
 extern void	GTK_extcmd_set(int cmd);
 extern int	GTK_get_ext_cmd(void);
 extern void	GTK_number_pad(void);
