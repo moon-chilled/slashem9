@@ -1,5 +1,5 @@
 /* $Id$ */
-/* Copyright (c) Slash'EM Development Team 2001-2003 */
+/* Copyright (c) Slash'EM Development Team 2001-2004 */
 /* NetHack may be freely redistributed.  See license for details. */
 
 /* #define DEBUG */
@@ -1250,7 +1250,6 @@ static unsigned long async_callbacks[] = {
       1 << EXT_CID_FLUSH_SCREEN - EXT_CID_DISPLAY_INVENTORY |
       1 << EXT_CID_DOREDRAW - EXT_CID_DISPLAY_INVENTORY |
       1 << EXT_CID_INTERFACE_MODE - EXT_CID_DISPLAY_INVENTORY |
-      1 << EXT_CID_QUIT_GAME - EXT_CID_DISPLAY_INVENTORY |
       1 << EXT_CID_DISPLAY_SCORE - EXT_CID_DISPLAY_INVENTORY |
       1 << EXT_CID_SET_OPTION_MOD_STATUS - EXT_CID_DISPLAY_INVENTORY,
 };

@@ -1,5 +1,5 @@
 /* $Id$ */
-/* Copyright (c) Slash'EM Development Team 2001-2003 */
+/* Copyright (c) Slash'EM Development Team 2001-2004 */
 /* NetHack may be freely redistributed.  See license for details. */
 
 /* #define DEBUG */
@@ -488,8 +488,7 @@ NhExtXdr *request, *reply;
 	terminate(EXIT_SUCCESS);
     }
     /* Not reached */
-    if (!nhext_async_mode())
-	nhext_rpc_params(reply, 0);
+    nhext_rpc_params(reply, 0);
 }
 
 static void
