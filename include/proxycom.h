@@ -38,6 +38,11 @@
 #define EXT_BOOLEAN_P(b)	EXT_PARAM_PTR | EXT_PARAM_BOOLEAN, &(b)
 #define EXT_CHAR_P(c)		EXT_PARAM_PTR | EXT_PARAM_CHAR, &(c)
 
+#define EXT_ERROR_INTERNAL	0
+#define EXT_ERROR_COMMS		1
+#define EXT_ERROR_NOTSUPPORTED	2
+#define EXT_ERROR_PROTOCOL	3
+
 #ifdef NHXDR_H
 struct nhext_svc {
     unsigned short id;
@@ -50,12 +55,15 @@ struct nhext_line {
     char **tags, **values;
 };
 
+typedef void FDECL((*nhext_errhandler), (int, const char *));
+
 E int FDECL(nhext_init, (NhExtIO *, NhExtIO *, struct nhext_svc *));
 E void NDECL(nhext_end);
 E int FDECL(nhext_subprotocol0_write_line, (struct nhext_line *));
 E void FDECL(nhext_subprotocol0_free_line, (struct nhext_line *));
 E struct nhext_line *NDECL(nhext_subprotocol0_read_line);
 E char *FDECL(nhext_subprotocol0_get_failed_packet, (int *));
+E nhext_errhandler FDECL(nhext_set_errhandler, (nhext_errhandler));
 E int VDECL(nhext_rpc_params, (NhExtXdr *xdrs, int, ...));
 E int VDECL(nhext_rpc, (unsigned short, ...));
 E int FDECL(nhext_svc, (struct nhext_svc *));

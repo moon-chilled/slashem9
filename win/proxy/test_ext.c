@@ -44,6 +44,22 @@ void impossible(const char *fmt,...)
     exit(126);
 }
 
+void nhext_error_handler(int class, const char *error)
+{
+    int i;
+    fputs("NhExt error: ", stderr);
+    if (is_child)
+	fputs("C: ", stderr);
+    fputs(error, stderr);
+    putc('\n', stderr);
+    fflush(stderr);
+    if (!is_child) {
+	for(i=0;i<10 && !child_wait0();i++)
+	    sleep(1);
+    }
+    exit(126);
+}
+
 #ifdef WIN32
 #include <windows.h>
 
@@ -462,6 +478,7 @@ void server(void)
 	fprintf(stderr, "C Failed to open I/O streams.\n");
 	exit(1);
     }
+    (void)nhext_set_errhandler(nhext_error_handler);
     if (nhext_init(rd, wr, callbacks) < 0) {
 	fprintf(stderr, "C Failed to initialize NhExt.\n");
 	exit(1);
@@ -551,6 +568,7 @@ char **argv;
 	fprintf(stderr, "Failed to open I/O streams.\n");
 	exit(1);
     }
+    (void)nhext_set_errhandler(nhext_error_handler);
     if (nhext_init(rd, wr, callbacks) < 0) {
 	fprintf(stderr, "Failed to initialize NhExt.\n");
 	exit(1);
