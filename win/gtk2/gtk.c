@@ -650,8 +650,10 @@ session_window_configure_event(GtkWidget *widget, GdkEventConfigure *event,
 		session_window_info[i].oy = session_window_info[j].oy;
 	    } else {
 		gdk_window_get_frame_extents(widget->window, &frame);
+#ifdef DEBUG_SESSION
 		fprintf(stderr, "frame is %d x %d @ (%d, %d)\n",
 		  frame.width, frame.height, frame.x, frame.y);
+#endif
 		session_window_info[i].ox = event->x - frame.x;
 		session_window_info[i].oy = event->y - frame.y;
 	    }
