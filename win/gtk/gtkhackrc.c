@@ -66,6 +66,7 @@ extern void rc_window_position(GScanner *scanner, GtkHackRcVList *params,
   GtkHackRcValue *value);
 extern void rc_window_size(GScanner *scanner, GtkHackRcVList *params,
   GtkHackRcValue *value);
+extern void rc_map_font(GScanner *scanner, GtkHackRcValue *value);
 extern void rc_radar(GScanner *scanner, GtkHackRcValue *value);
 extern void rc_connections(GScanner *scanner, GtkHackRcValue *value);
 extern void rc_default_connection(GScanner *scanner, GtkHackRcValue *value);
@@ -87,8 +88,9 @@ struct gtkhackrc_setting {
 } gtkhackrc_settings[] = {
     GTKHACKRC_FUNCTION, "window.position", rc_window_position,
     GTKHACKRC_FUNCTION, "window.size", rc_window_size,
-#if 0
+    GTKHACKRC_VARIABLE, "map.font", rc_map_font,
     GTKHACKRC_VARIABLE, "radar", rc_radar,
+#if 0
     GTKHACKRC_VARIABLE, "connections", rc_connections,
     GTKHACKRC_VARIABLE, "default_connection", rc_default_connection,
 #endif
@@ -740,6 +742,7 @@ nh_write_gtkhackrc(void)
       "version = \"0.1\"\n");
 #endif
     nh_session_save(&rc);
+    GTK_preferences_save(&rc);
 #ifdef WIN32
     RegCloseKey(rc.key);
 #else
@@ -811,4 +814,18 @@ void rc_window_size(GScanner *scanner, GtkHackRcVList *params,
 	return;
     nh_session_set_geometry(params->values[0]->u.string, -1, -1,
       value->u.record.values[0]->u.number, value->u.record.values[1]->u.number);
+}
+
+void rc_map_font(GScanner *scanner, GtkHackRcValue *value)
+{
+    if (!gtkhackrc_check_type(scanner, value, "value", PARSE_VALUE_TYPE_STRING))
+	return;
+    nh_set_map_font(value->u.string);
+}
+
+void rc_radar(GScanner *scanner, GtkHackRcValue *value)
+{
+    if (!gtkhackrc_check_type(scanner, value, "value", PARSE_VALUE_TYPE_NUMBER))
+	return;
+    nh_radar_set_use(value->u.number);
 }
