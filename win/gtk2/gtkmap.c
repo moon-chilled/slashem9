@@ -611,8 +611,8 @@ map_button_event(void *map, GdkEventButton *event, gpointer data)
     else
 	cursm = CLICK_2;
 
-    if(map_click)
-	gtk_main_quit();
+    if (map_click)
+	quit_hook();
     return FALSE;
 }
 

@@ -186,7 +186,11 @@ extern void		nh_set_map_visual(int);
 extern int		nh_get_map_visual(void);
 extern int		nh_check_map_visual(int);
 
+#if defined(GTK_V20)
+extern void		main_hook(int *watch);
+#else
 extern void		main_hook(void);
+#endif
 extern void		quit_hook(void);
 extern gint		GTK_default_key_press(GtkWidget *widget,
 			  GdkEventKey *event, gpointer data);
