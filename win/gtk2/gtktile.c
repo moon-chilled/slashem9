@@ -24,6 +24,7 @@ int total_tiles_used;
 int tiles_per_row;
 int tiles_per_col;
 #else
+extern short glyph2tile[];
 /* from tile.c */
 extern int total_tiles_used;
 extern int tiles_per_row;
@@ -487,8 +488,10 @@ x_tile_destroy()
 	gdk_image_destroy(tile_image);
 	tile_image = NULL;
     }
+#ifdef GTK_PROXY
     free(GTK_glyph2tile);
     GTK_glyph2tile = (short *)0;
+#endif
 }
 
 #define nh_pixbuf_get_pixel(x, y, pixel) \
