@@ -519,8 +519,7 @@ unsigned short id;
 NhExtXdr *request, *reply;
 {
     doset();
-    if (!nhext_async_mode())
-	nhext_rpc_params(reply, 0);
+    nhext_rpc_params(reply, 0);
 }
 
 static void
