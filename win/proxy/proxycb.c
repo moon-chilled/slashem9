@@ -360,3 +360,11 @@ struct proxycb_get_extensions_res *extensions;
     nhext_xdr_free(proxycb_xdr_get_extensions_res, (char *)extensions);
     free(extensions);
 }
+
+void
+proxy_cb_set_option_mod_status(optnam, status)
+const char *optnam;
+{
+    (void)nhext_rpc(EXT_CID_SET_OPTION_MOD_STATUS, 2, EXT_STRING(optnam),
+      EXT_INT(status), 0);
+}

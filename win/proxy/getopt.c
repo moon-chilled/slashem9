@@ -24,7 +24,7 @@ static struct Bool_Opt
 } *boolopt = (struct Bool_Opt *)0;
 
 static int
-get_option_bool(char *option)
+get_option_bool(const char *option)
 {
     int i;
     if (!boolopt)
@@ -92,7 +92,7 @@ oc_to_str(src,dest)
     *dest = '\0';
 }
 
-char *get_option(char *option)
+char *get_option(const char *option)
 {
     int b;
     static char buf[BUFSIZ];

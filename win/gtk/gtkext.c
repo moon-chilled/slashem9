@@ -66,6 +66,7 @@ struct window_ext_procs GTK_ext_procs = {
     v_hook, /* start_screen,*/
     v_hook, /* end_screen,*/
     GTK_ext_outrip,
+    GTK_ext_preference_update,
     GTK_ext_status,
     GTK_ext_print_glyph_layered,
 };

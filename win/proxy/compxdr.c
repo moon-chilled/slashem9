@@ -26,6 +26,8 @@ struct proxy_init_nhwindow_res *datum;
     int retval = nhext_xdr_bool(xdr, &datum->inited);
     retval &= nhext_xdr_array(xdr, (char **)&datum->argv, 
       &datum->argc, (unsigned int)-1, sizeof(char *), nhext_xdr_wrapstring);
+    retval &= nhext_xdr_array(xdr, (char **)&datum->capv, 
+      &datum->capc, (unsigned int)-1, sizeof(char *), nhext_xdr_wrapstring);
     return retval;
 }
 
