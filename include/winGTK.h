@@ -49,6 +49,8 @@
 #define NHW_NONE 0		/* Unallocated window type.  Must be	*/
 				/* different from any other NHW_* type. */
 
+#define PROXY_CLNT_LOGGED 0x80000000UL	/* Unallocated proxy clnt flag. */
+
 #define	NH_PAD			5
 
 #define NH_SESSION_RESIZABLE	1    /* Allow the user to resize window */
@@ -473,13 +475,16 @@ enum {
     N_COLUMNS
 };
 
-extern GtkTreeRowReference *GTK_default_connection;
+extern GtkTreeRowReference *GTK_default_connection, *GTK_current_connection;
 extern GtkListStore *GTK_connections;
+extern GtkTextBuffer *GTK_nhext_log;
 
 extern GtkTreeRowReference *GTK_connection_lookup(const char *name);
 extern void GTK_connection_set_default(const char *name);
 extern void GTK_connection_add(const char *name, const char *scheme,
   const char *address, unsigned long flags);
+extern void gtkhack_enable_logging(gboolean setting);
+extern GtkWidget *GTK_troubleshooting_new(void);
 #endif
 
 #endif	/* WINGTK_H */

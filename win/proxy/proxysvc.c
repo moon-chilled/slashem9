@@ -1415,8 +1415,11 @@ win_proxy_clnt_log_open(nhext_io_func func, void *handle)
 {
     if (proxy_clnt_log)
 	nhext_io_close(proxy_clnt_log);
-    proxy_clnt_log = nhext_io_open(func, handle,
-      NHEXT_IO_WRONLY | NHEXT_IO_LINEBUF);
+    if (func)
+	proxy_clnt_log = nhext_io_open(func, handle,
+	  NHEXT_IO_WRONLY | NHEXT_IO_LINEBUF);
+    else
+	proxy_clnt_log = (NhExtIO *)0;
     return !!proxy_clnt_log;
 }
 
