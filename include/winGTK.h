@@ -299,4 +299,7 @@ extern void	x_tile_tmp_draw_rectangle(int ofsx, int ofsy, int c);
 /* Current Map Mode */
 extern int	map_visual;
 
+/* Current map cursor position */
+extern int	cursx, cursy;
+
 #endif

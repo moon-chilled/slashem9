@@ -336,6 +336,7 @@ nh_option_get(void)
 	    nh_set_map_visual(i);
 	    break;
 	}
+    flush_screen(cursx == u.ux && cursy == u.uy ? 1 : 0);
 }
 
 static int
