@@ -118,6 +118,7 @@ NhExtXdr *request, *reply;
 		if (s) {
 		    buf = (char *)alloc(s - subname + 5);
 		    (void)strncpy(buf, subname, s - subname);
+		    buf[s - subname] = '\0';
 		} else {
 		    buf = (char *)alloc(strlen(subname) + 5);
 		    Strcpy(buf, subname);
