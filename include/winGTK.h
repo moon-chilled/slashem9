@@ -5,15 +5,6 @@
 #ifndef WINGTK_H
 #define WINGTK_H
 
-/*
- * GtkText is broken and replaced by the much better GtkTextView in GTK+ 1.3
- * As a temporary measure, we will continue to use it even though we
- * would do much better to change to GtkTextView.
- * FIXME: This define should go away.
- */
-
-#define GTK_ENABLE_BROKEN	/* Enable support for old (broken) widgets */
-
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
