@@ -792,6 +792,7 @@ static int
 proxy_init()
 {
     int i;
+    static char *name = (char *)0;
     NhExtIO *rd, *wr;
     struct nhext_line *lp = (struct nhext_line *)0, line;
     rd = nhext_io_open(READ_F, READ_H, NHEXT_IO_RDONLY);
@@ -839,6 +840,18 @@ failed:
 	    break;
     if (i == lp->n || strcmp(lp->values[i], "1"))
 	goto failed;
+    for(i = 0; i < lp->n; i++)
+	if (!strcmp(lp->tags[i], "windowtype"))
+	    break;
+    if (name)
+	free(name);
+    if (i == lp->n)
+	windowprocs.name = proxy_procs.name;
+    else {
+	name = (char *)alloc(strlen(lp->values[i]) + 7);
+	Sprintf(name, "proxy/%s", lp->values[i]);
+	windowprocs.name = name;
+    }
     return TRUE;
 } 
 

@@ -463,3 +463,7 @@ extern GdkPixbuf *xshm_map_pixbuf;
 #endif
 
 #endif
+
+#ifndef GTKHACK
+#define nh_strncmpi	strncmpi
+#endif

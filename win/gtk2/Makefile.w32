@@ -24,7 +24,7 @@ MS_BITFIELDS = -mms-bitfields
 
 # Where the NhProxy library is installed.
 NHPROXYLIB = ..\..\src
-# and it's associated header files.
+# and its associated header files.
 NHPROXYINC = ..\..\include
 
 # The pkg-config executable
@@ -40,10 +40,10 @@ GTKCFLAGS = $(PKG_CONFIG) --cflags gtk+-2.0
 GTKLIBS = $(PKG_CONFIG) --libs gtk+-2.0
 
 # Debugging
-CFLAGS = -g -I$(NHPROXYINC) $(MS_BITFIELDS)
+CFLAGS = -g -I$(NHPROXYINC) $(MS_BITFIELDS) -DGTKHACK
 LFLAGS = -g
 
-#CFLAGS = -O -I$(NHPROXYINC) $(MS_BITFIELDS)
+#CFLAGS = -O -I$(NHPROXYINC) $(MS_BITFIELDS) -DGTKHACK
 #LFLAGS =
 
 LIBS =

@@ -121,4 +121,10 @@ extern short * proxy_map_glyph2tile(
 
 extern long *proxy_map_glyph2char(struct proxycb_get_glyph_mapping_res *);
 
+/* ### prxyconn.c ### */
+
+extern void proxy_start_server(char *prgname, void *read_h, void *write_h);
+extern void proxy_connect(
+	char *protocol, char *address, int *argcp, char **argv);
+
 #endif /* PROXYSVR_H */

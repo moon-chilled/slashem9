@@ -566,13 +566,12 @@ nhext_svc(struct nhext_svc *services)
     }
     nhext_io_setautofill_limit(nhext_connection.rd, 4);
     if (!nhext_xdr_u_long(nhext_connection.in, &value)) {
-	impossible("Bad reply packet (no header)");
+	impossible("Bad NhExt packet (no header)");
 	return -1;
     }
     nhext_connection.length = (value & 0xffff) << 2;
     id = value >> 16;
-    if (id)
-    {
+    if (id) {
 	nhext_io_setautofill_limit(nhext_connection.rd,
 	  nhext_connection.length);
 	for(i = 0; services[i].id; i++) {
