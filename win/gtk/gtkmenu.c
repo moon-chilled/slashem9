@@ -524,9 +524,6 @@ GTK_select_menu(winid id, int how, MENU_ITEM_P **menu_list)
     if (menu_info->cancelled < 0)
 	return 0;
     gtk_grab_add(w->w);
-    gtk_main();
-    if (menu_info->cancelled)
-	return 0;
 
     c = GTK_CLIST(w->clist);
 /*    
@@ -534,6 +531,7 @@ GTK_select_menu(winid id, int how, MENU_ITEM_P **menu_list)
     aa = GTK_CLIST(w->clist)->hadjustment;
     */
     while(1){
+	gtk_main();
 	if(menu_info->keysym == '\033' || menu_info->keysym == '\n' ||
 	  menu_info->keysym == ' ')
 	    break;
@@ -581,8 +579,6 @@ GTK_select_menu(winid id, int how, MENU_ITEM_P **menu_list)
 		}
 	    }
 	}
-	
-	gtk_main();
     }
  loopout:
     
