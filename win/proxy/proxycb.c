@@ -127,3 +127,49 @@ int role, race, gender, alignment;
       1, EXT_INT_P(retval));
     return retval;
 }
+
+void
+proxy_cb_quit_game()
+{
+    nhext_rpc(EXT_CID_QUIT_GAME, 0, 0);
+}
+
+void
+proxy_cb_display_score()
+{
+    nhext_rpc(EXT_CID_DISPLAY_SCORE, 0, 0);
+}
+
+void
+proxy_cb_doset()
+{
+    nhext_rpc(EXT_CID_DOSET, 0, 0);
+}
+
+struct proxycb_get_extended_commands_res *
+proxy_cb_get_extended_commands()
+{
+    struct proxycb_get_extended_commands_res *retval;
+    retval=(struct proxycb_get_extended_commands_res *)alloc(sizeof(*retval));
+    memset(retval, 0, sizeof(*retval));
+    nhext_rpc(EXT_CID_GET_EXTENDED_COMMANDS, 0, 1,
+      EXT_XDRF(proxycb_xdr_get_extended_commands_res, retval));
+    return retval;
+}
+
+void
+proxy_cb_free_extended_commands(commands)
+struct proxycb_get_extended_commands_res *commands;
+{
+    nhext_xdr_free(proxycb_xdr_get_extended_commands_res, (char *)commands);
+    free(commands);
+}
+
+int
+proxy_cb_map_menu_cmd(ch)
+int ch;
+{
+    int retval;
+    nhext_rpc(EXT_CID_MAP_MENU_CMD, 1, EXT_INT(ch), 1, EXT_INT_P(retval));
+    return retval;
+}

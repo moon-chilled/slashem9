@@ -15,6 +15,10 @@
 #include "win32api.h"
 #endif
 
+/* Window to redirect raw output to, if not WIN_ERR */
+
+int proxy_rawprint_win = WIN_ERR;
+
 /* Interface definition for plug-in windowing ports */
 struct window_procs proxy_procs = {
     "proxy",
@@ -388,6 +392,10 @@ proxy_raw_print(str)
 const char *str;
 {
     static int active = 0;
+    if (proxy_rawprint_win != WIN_ERR) {
+	proxy_putstr(proxy_rawprint_win, 0, str);
+	return;
+    }
     if (active++ || !nhext_rpc(EXT_FID_RAW_PRINT, 1, EXT_STRING(str), 0)) {
 	puts(str);
 	(void) fflush(stdout);
@@ -400,6 +408,10 @@ proxy_raw_print_bold(str)
 const char *str;
 {
     static int active = 0;
+    if (proxy_rawprint_win != WIN_ERR) {
+	proxy_putstr(proxy_rawprint_win, ATR_BOLD, str);
+	return;
+    }
     if (active++ || !nhext_rpc(EXT_FID_RAW_PRINT_BOLD, 1, EXT_STRING(str), 0)) {
 	puts(str);
 	(void) fflush(stdout);

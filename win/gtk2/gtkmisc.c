@@ -131,7 +131,11 @@ default_clicked(GtkWidget *widget, gpointer data)
 		    break;
 	    }
 	}
+#ifdef GTK_PROXY
+	proxy_cb_doset();
+#else
 	doset();
+#endif
 	nh_option_set();
     }
     else

@@ -63,7 +63,11 @@ menu_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
     NHWindow *w = (NHWindow *)data;
     struct menu_info_t *menu_info = w->menu_information;
 
+#ifdef GTK_PROXY
+    menu_info->keysym = proxy_cb_map_menu_cmd(nh_keysym(event));
+#else
     menu_info->keysym = map_menu_cmd(nh_keysym(event));
+#endif
     if (event->keyval == GDK_Escape) {
 	menu_info->keysym = '\033';
 	menu_info->cancelled = 1;

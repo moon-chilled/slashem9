@@ -79,3 +79,11 @@ struct proxycb_get_player_choices_res *datum;
         (unsigned int)-1, sizeof(struct proxycb_get_player_choices_res_role),
 	proxycb_xdr_get_player_choices_res_role);
 }
+
+boolean proxycb_xdr_get_extended_commands_res(xdr, datum)
+NhExtXdr *xdr;
+struct proxycb_get_extended_commands_res *datum;
+{
+    return nhext_xdr_array(xdr, (char **)&datum->commands, &datum->n_commands,
+        (unsigned int)-1, sizeof(char *), nhext_xdr_wrapstring);
+}
