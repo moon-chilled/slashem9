@@ -1261,6 +1261,11 @@ tiles.bmp:	tile2bmp.exe ../win/share/monsters.txt \
 	tile2bmp $@ $(WSHR)\monsters.txt $(WSHR)\objects.txt \
 		$(WSHR)\other.txt
 
+tiles32.bmp:	tile2bmp.exe ../win/share/mon32.txt \
+		../win/share/obj32.txt ../win/share/oth32.txt
+	tile2bmp $@ $(WSHR)\mon32.txt $(WSHR)\obj32.txt \
+		$(WSHR)\oth32.txt
+
 gltile16.png: tile2png.exe ../win/share/monsters.txt ../win/share/objects.txt \
 				../win/share/other.txt
 	tile2png -o gltile16.png $(WSHR)\monsters.txt $(WSHR)\objects.txt \
