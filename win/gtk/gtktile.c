@@ -113,7 +113,7 @@ static void calc_tile_transp(TileTab *t, GdkPixbuf *pixbuf, int i)
     if (i < 0) {
 	/* Clean up */
 #ifdef DEBUG
-	fprintf(stderr, "%d bytes used for transarency data\n", n_bytes);
+	fprintf(stderr, "%d bytes used for transparency data\n", n_bytes);
 #endif
 	free(rle_buf);
 	rle_buf = NULL;
