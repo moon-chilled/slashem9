@@ -83,7 +83,7 @@ struct window_procs GTK_procs = {
     GTK_int_yn_function,
     GTK_int_getlin,
     GTK_get_ext_cmd,
-    hook, /* number_pad */
+    GTK_number_pad,
     GTK_delay_output,
 #ifdef CHANGE_COLOR
     hook, /* change_color */

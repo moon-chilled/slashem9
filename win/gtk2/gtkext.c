@@ -56,7 +56,7 @@ struct window_ext_procs GTK_ext_procs = {
     GTK_ext_yn_function,
     GTK_ext_getlin,
     GTK_get_ext_cmd,
-    v_hook, /* number_pad */
+    GTK_number_pad,
     GTK_delay_output,
     v_hook, /* change_color */
     v_hook, /* change_background */

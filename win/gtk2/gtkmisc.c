@@ -82,11 +82,6 @@ static struct GTK_Option {
     {"group similar kinds of objects in inventory", "Yes", "No", "sortpack"},
 };
 
-static char *	nh_option_cache_get(char *option);
-static boolean	nh_option_cache_get_bool(char *option);
-static void	nh_option_cache_set(char *option, const char *value);
-static void	nh_option_cache_set_bool(char *option, boolean value);
-
 static void	nh_option_set(void);
 static void	nh_option_get(void);
 static int	nh_option_has_changed(void);
@@ -306,6 +301,7 @@ static int nh_option_cache_size;
 static struct nh_option {
     char *option;
     char *value;
+    void *addr;
     unsigned flags;
 } *nh_option_cache;
 
@@ -334,7 +330,7 @@ nh_option_cache_getent(char *option)
     return nh_option_cache[i].option ? nh_option_cache + i : NULL;
 }
 
-static int
+int
 nh_option_cache_sync(void)
 {
     int i, nb = 0;
@@ -375,32 +371,67 @@ nh_option_cache_sync(void)
     return TRUE;
 }
 
-static void
+void
 nh_option_cache_set(char *option, const char *value)
 {
     struct nh_option *no = nh_option_cache_getent(option);
-    if (no->flags & NHOF_BOOLEAN)
+    if (no && no->flags & NHOF_BOOLEAN)
 	panic("Setting value for boolean option %s", option);
     if (no && (!no->value || strcmp(value, no->value))) {
 	free(no->value);
 	no->value = strdup(value);
 	no->flags |= NHOF_DIRTY;
     }
+    if (no && no->addr) {
+	free(*(char **)no->addr);
+	*(char **)no->addr = strdup(value);
+    }
 }
 
-static void
+void
 nh_option_cache_set_bool(char *option, boolean value)
 {
     struct nh_option *no = nh_option_cache_getent(option);
-    if (!(no->flags & NHOF_BOOLEAN) && no->value)
+    if (no && !(no->flags & NHOF_BOOLEAN) && no->value)
 	panic("Setting boolean value for text option %s", option);
     if (no && no->value != (value ? boolean_set : boolean_reset)) {
 	no->value = value ? boolean_set : boolean_reset;
 	no->flags |= NHOF_DIRTY | NHOF_BOOLEAN;
     }
+    if (no && no->addr)
+	*(boolean *)no->addr = value;
 }
 
-static char *
+void
+nh_option_cache_set_addr(char *option, char **addr)
+{
+    struct nh_option *no = nh_option_cache_getent(option);
+    if (no) {
+	if (no->flags & NHOF_BOOLEAN)
+	    panic("Setting address for boolean option %s", option);
+	if (no->addr) {
+	    free(*(char **)no->addr);
+	    *(char **)no->addr = (char *)0;
+	}
+	no->addr = addr;
+	*addr = nh_option_cache_get(option);
+    }
+}
+
+void
+nh_option_cache_set_bool_addr(char *option, boolean *addr)
+{
+    struct nh_option *no = nh_option_cache_getent(option);
+    if (no) {
+	if (!(no->flags & NHOF_BOOLEAN) && no->value)
+	    panic("Setting boolean address for text option %s", option);
+	no->addr = addr;
+	no->flags |= NHOF_BOOLEAN;
+	*addr = nh_option_cache_get_bool(option);
+    }
+}
+
+char *
 nh_option_cache_get(char *option)
 {
     char *value;
@@ -418,7 +449,7 @@ nh_option_cache_get(char *option)
     return no->value;
 }
 
-static boolean
+boolean
 nh_option_cache_get_bool(char *option)
 {
     char *value;
