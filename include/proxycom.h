@@ -7,8 +7,8 @@
 
 /* The NhExt standard to which we conform */
 
-#define EXT_STANDARD_MAJOR	0
-#define EXT_STANDARD_MINOR	3
+#define EXT_STANDARD_MAJOR	1
+#define EXT_STANDARD_MINOR	0
 
 #define EXT_IM_STATUS		0x0001
 #define EXT_IM_DISPLAY_LAYERS	0x0002
