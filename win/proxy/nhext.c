@@ -238,6 +238,13 @@ nhext_svc_c(int cn, struct nhext_svc *services)
     int i, len;
     unsigned short id;
     unsigned long value;
+    /*
+     * FIXME:	This does not cope with fragmentation and relies on
+     *		the synchronous nature of the NhExt protocol to prevent
+     *		packet merging. This needs to be changed without breaking
+     *		the potential for using a seqpacket connection. This
+     *		probably means buffering the input.
+     */
     nc->reply_len = (*nc->read_f)(nc->read_h, nc->reply, sizeof(nc->reply));
     if (nc->reply_len < 4) {
 	if (nc->reply_len > 0)
