@@ -239,7 +239,11 @@ typedef struct _TileTab{
 
     int transparent:1;
     int spread:1;
+
+    void *data;
 } TileTab;
+extern TileTab tileTab[];
+extern int no_tileTab;
 
 #ifdef WINGTK_X11
 extern void	xshm_init(Display *dpy);
