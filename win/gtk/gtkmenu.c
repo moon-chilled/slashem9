@@ -18,6 +18,8 @@
 #include "patchlevel.h"
 #endif
 
+/* #define DEBUG */
+
 #ifdef WINGTK_MENU_IMAGES
 #define MENU_COLS	4
 #else
@@ -144,6 +146,20 @@ menu_unselected(GtkWidget *clist, gint row, gint column,
     gtk_clist_set_text(GTK_CLIST(clist), row, MENU_COLS - 2, buf);
     return FALSE;
 }
+
+#ifdef DEBUG
+static void
+dump_menu_window(winid id, const char *tag)
+{
+    struct menu_info_t *menu_info = gtkWindows[id].menu_information;
+    fprintf(stderr, "%s: Window %d: mi @ %p\n", tag, id, menu_info);
+    if (menu_info)
+	fprintf(stderr, "\tcurr: %d/%d items @ %p, new: %d/%d items @ %p\n",
+	  menu_info->curr_menu.n_menuitem, menu_info->curr_menu.alloc_menuitem,
+	  menu_info->curr_menu.nhMenuItem, menu_info->new_menu.n_menuitem,
+	  menu_info->new_menu.alloc_menuitem, menu_info->new_menu.nhMenuItem);
+}
+#endif
 
 void
 GTK_start_menu(winid id)
@@ -466,11 +482,17 @@ GTK_end_menu(winid id, const char *prompt)
     w = &gtkWindows[id];
     menu = &w->menu_information->new_menu;
 
-    new = (NHMenuItem *) realloc((genericptr_t)menu->nhMenuItem,
-      (unsigned)(sizeof(NHMenuItem) * menu->n_menuitem));
-    if (new) {
-	menu->alloc_menuitem = menu->n_menuitem;
-	menu->nhMenuItem = new;
+    if (menu->n_menuitem) {
+	new = (NHMenuItem *) realloc((genericptr_t)menu->nhMenuItem,
+	  (unsigned)(sizeof(NHMenuItem) * menu->n_menuitem));
+	if (new) {
+	    menu->alloc_menuitem = menu->n_menuitem;
+	    menu->nhMenuItem = new;
+	}
+    } else {
+	free((genericptr_t)menu->nhMenuItem);
+	menu->nhMenuItem = NULL;
+	menu->alloc_menuitem = 0;
     }
 
     menu->prompt = prompt ? strdup(prompt) : (char *)0;
