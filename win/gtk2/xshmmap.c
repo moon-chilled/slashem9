@@ -561,6 +561,9 @@ xshm_map_button_handler(GtkSignalFunc func, gpointer data)
 void
 xshm_map_destroy()
 {
+#ifdef DEBUG
+    fprintf(stderr, "Map: Destroy\n");
+#endif
     if (xshm.pixmap) {
 	gdk_pixmap_unref(xshm.pixmap);
 	xshm.pixmap = NULL;

@@ -637,8 +637,8 @@ nh_status_new()
 	gtk_widget_draw(mp_bar, &update_rect);
 
     }
-    gdk_gc_set_foreground(hp_gc, &nh_color[MAP_BLUE]);
-    gdk_gc_set_foreground(mp_gc, &nh_color[MAP_GREEN]);
+    gdk_gc_set_foreground(hp_gc, &nh_color[CLR_BLUE]);
+    gdk_gc_set_foreground(mp_gc, &nh_color[CLR_GREEN]);
 
     return handle;
 }
