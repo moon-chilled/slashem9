@@ -556,7 +556,7 @@ GTK_ext_select_menu(winid id, int how, struct proxy_mi **menu_list)
 	}
     }
     
-    if (w->menu_information->cancelled < 0) {
+    if (menu_info->cancelled < 0) {
 	/* Permenant inventory.
 	 * The default size request from a clist is based on the initial
 	 * contents which means that the user can't resize the window smaller
@@ -591,6 +591,7 @@ GTK_ext_select_menu(winid id, int how, struct proxy_mi **menu_list)
 	gtk_widget_hide(w->scrolled2);
     }
 
+    w->flags |= NHWF_DISPLAYED;
     gtk_widget_show(w->w);
     
     if (menu_info->cancelled < 0) {
