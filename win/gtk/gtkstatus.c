@@ -8,11 +8,6 @@
 
 #include <sys/types.h>
 #include <signal.h>
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
-#ifndef WIN32
-#include <gdk/gdkx.h>
-#endif
 #include "winGTK.h"
 
 #define	NH_BAR_WIDTH	150
