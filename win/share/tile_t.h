@@ -29,9 +29,11 @@ extern int tile_x, tile_y;
 /*
 #define MAX_TILE_X 32
 #define MAX_TILE_Y 32
-*/
 #define MAX_TILE_X 48
 #define MAX_TILE_Y 64
+*/
+#define MAX_TILE_X 128
+#define MAX_TILE_Y 128
 
 #define Fprintf (void) fprintf
 
