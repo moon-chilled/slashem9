@@ -48,7 +48,6 @@
 HANDLE ffhandle = (HANDLE)0;
 WIN32_FIND_DATA ffd;
 
-
 /* The function pointer nt_kbhit contains a kbhit() equivalent
  * which varies depending on which window port is active.
  * For the tty port it is tty_kbhit() [from nttty.c]
@@ -163,10 +162,7 @@ def_kbhit()
 }
 
 /* 
- * Windows NT version >= 3.5x and above supports long file names,
- * even on FAT volumes (VFAT), so no need for nt_regularize.
- * Windows NT 3.1 could not do long file names except on NTFS,
- * so nt_regularize was required.
+ * Strip out troublesome file system characters.
  */
 
 void
@@ -261,9 +257,16 @@ error VA_DECL(const char *,s)
 	VA_INIT(s, const char *);
 	/* error() may get called before tty is initialized */
 	if (iflags.window_inited) end_screen();
-	putchar('\n');
-	Vprintf(s,VA_ARGS);
-	putchar('\n');
+	if (!strncmpi(windowprocs.name, "tty", 3)) {
+		putchar('\n');
+		Vprintf(s,VA_ARGS);
+		putchar('\n');
+	} else {
+		char buf[BUFSZ];
+		(void) vsprintf(buf, s, VA_ARGS);
+		Strcat(buf, "\n");
+		raw_printf(buf);
+	}
 	VA_END();
 	exit(EXIT_FAILURE);
 }
@@ -271,6 +274,16 @@ error VA_DECL(const char *,s)
 void Delay(int ms)
 {
 	(void)Sleep(ms);
+}
+
+void win32_abort()
+{
+
+#ifdef WIZARD
+   	if (wizard)
+		DebugBreak();
+#endif
+	abort();
 }
 #endif /* WIN32 */
 
