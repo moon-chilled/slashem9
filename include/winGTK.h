@@ -226,6 +226,7 @@ struct menu_info_t {
     int		selmode;
     int 	keysym;
     int		valid_widgets;
+    long	count;			/* Pending count */
 #ifdef WINGTK_MENU_IMAGES
     int		pixmaps;		/* Set if any pixmaps set in clist */
 #endif
