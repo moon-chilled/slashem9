@@ -890,6 +890,7 @@ proxy_init()
     static char *name = (char *)0;
     NhExtIO *rd, *wr;
     struct nhext_line *lp = (struct nhext_line *)0, line;
+    char standard[8];
     rd = nhext_io_open(READ_F, READ_H, NHEXT_IO_RDONLY);
     if (!rd)
 	return FALSE;
@@ -904,15 +905,18 @@ proxy_init()
 	return FALSE;
     }
     line.type = "NhExt";
-    line.n = 3;
+    line.n = 4;
     line.tags = (char **)alloc(line.n * sizeof(char *));
     line.values = (char **)alloc(line.n * sizeof(char *));
-    line.tags[0] = "game";
-    line.values[0] = DEF_GAME_NAME;
-    line.tags[1] = "version";
-    line.values[1] = VERSION_STRING;
-    line.tags[2] = "protocols";
-    line.values[2] = "1";
+    line.tags[0] = "standard";
+    Sprintf(standard, "%d.%d", EXT_STANDARD_MAJOR, EXT_STANDARD_MINOR);
+    line.values[0] = standard;
+    line.tags[1] = "game";
+    line.values[1] = DEF_GAME_NAME;
+    line.tags[2] = "version";
+    line.values[2] = VERSION_STRING;
+    line.tags[3] = "protocols";
+    line.values[3] = "1";
     i = nhext_subprotocol0_write_line(&line);
     free(line.tags);
     free(line.values);
