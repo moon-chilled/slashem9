@@ -348,8 +348,10 @@ GTK_load_menu_clist(NHWindow *w)
 	if(menu->nhMenuItem[j].glyph != NO_GLYPH && map_visual){
 	    GdkPixmap *pixmap;
 	    pixmap = GTK_glyph_to_gdkpixmap(menu->nhMenuItem[j].glyph);
-	    if (pixmap)
+	    if (pixmap) {
 		gtk_clist_set_pixmap(c, j, 0, pixmap, NULL);
+		gdk_pixmap_unref(pixmap);
+	    }
 	}
 #endif
     }

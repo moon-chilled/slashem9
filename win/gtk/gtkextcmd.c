@@ -192,8 +192,8 @@ GTK_get_ext_cmd()
 	gtk_widget_unmap(window);
 	gtk_signal_disconnect(GTK_OBJECT(window), hid);
 
-	gtk_widget_destroy(frame);
 	gtk_widget_destroy(vbox);
+	gtk_widget_destroy(frame);
 	gtk_widget_destroy(window);
     }
 

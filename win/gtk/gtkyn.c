@@ -262,7 +262,6 @@ GTK_yn_function(const char *query, const char *resp, CHAR_P def)
 	gtk_signal_disconnect(GTK_OBJECT(window), hid);
 
 	gtk_widget_destroy(frame);
-	gtk_widget_destroy(vbox);
 	if(clist)
 	    gtk_widget_destroy(clist);
 	gtk_widget_destroy(window);

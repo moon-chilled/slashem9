@@ -52,7 +52,7 @@ nh_message_putstr(const char *str)
 
   t = GTK_TEXT(message_text);
 
-  buf = malloc(strlen(str) + 2);
+  buf = (char *)alloc(strlen(str) + 2);
 
   sprintf(buf, "\n%s", str);
 

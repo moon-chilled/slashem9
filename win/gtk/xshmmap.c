@@ -78,6 +78,7 @@ xshm_map_destroy()
     XShmDestroyXShmImage(dpy, map);
 #else
     XShmDestroyXShmImage(map);
+    gdk_gc_unref(gc);
 #endif
 }
 
@@ -133,9 +134,9 @@ void
 x_tile_destroy()
 {
 #ifdef WINGTK_X11
-    XDestroyImage(tile_img);
+    XDestroyImage(tmp_img);
 #else
-    gdk_image_destroy(tile_img);
+    gdk_image_destroy(tmp_img);
 #endif
 }
 
