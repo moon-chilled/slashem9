@@ -201,6 +201,9 @@ struct menu_info_t {
     int		selmode;
     int 	keysym;
     int		valid_widgets;
+#ifdef WINGTK_MENU_IMAGES
+    int		pixmaps;		/* Set if any pixmaps set in clist */
+#endif
 };
 
 typedef struct _NHWindow{
