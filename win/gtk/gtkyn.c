@@ -260,6 +260,7 @@ GTK_yn_function(const char *query, const char *resp, CHAR_P def)
 
     gtk_grab_add(window);
     gtk_widget_show_all(window);
+    nh_gtk_perm_invent_hack();
     
     gtk_main();
 

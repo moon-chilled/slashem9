@@ -58,7 +58,7 @@ GTK_getlin(const char *query, char *ret)
 
     cancelled = 0;
 
-    window = nh_gtk_window_dialog();
+    window = nh_gtk_window_dialog(TRUE);
     nh_position_popup_dialog(GTK_WIDGET(window));
 
     frame = nh_gtk_new_and_add(gtk_frame_new(query), window, "");
@@ -70,9 +70,8 @@ GTK_getlin(const char *query, char *ret)
 	gtk_entry_new(), vbox, "",
 	FALSE, FALSE, NH_PAD);
 
-    gtk_signal_connect_after(
-	GTK_OBJECT(entry), "key_press_event",
-	GTK_SIGNAL_FUNC(entry_key_press), NULL);
+    nh_gtk_focus_set_master(GTK_WINDOW(window),
+      GTK_SIGNAL_FUNC(entry_key_press), 0);
 
     hbox = nh_gtk_new_and_pack(
 	gtk_hbox_new(FALSE, 0), vbox, "",
