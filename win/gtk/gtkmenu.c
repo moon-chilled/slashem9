@@ -621,5 +621,6 @@ GTK_destroy_menu_window(NHWindow *w)
 void
 GTK_unmap_menu_window(NHWindow *w)
 {
-    gtk_widget_unmap(w->w);
+    if (w && w->w) /* FIXME:  This shouldn't be necessary, but is */
+    	gtk_widget_unmap(w->w);
 }

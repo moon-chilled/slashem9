@@ -237,6 +237,8 @@ nh_set_map_visual(int mode)
 	    if(map_font->type != GDK_FONT_FONT)
 		panic("Bad font");
 #ifndef WINGTK_X11
+	    if (gdk_char_width(map_font, 'm') != gdk_char_width(map_font, 'l'))
+	    	panic("Proportional font!");
 	    c_width = gdk_char_width(map_font, 'm');
 #else
 	    c_width = ((XFontStruct *)GDK_FONT_XFONT(map_font))->max_bounds.width;
