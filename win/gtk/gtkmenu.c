@@ -247,8 +247,8 @@ GTK_init_menu_widgets(NHWindow *w)
      for(i = 0; i < MENU_COLS; i++)
 	 gtk_clist_set_column_auto_resize(GTK_CLIST(w->clist), i, TRUE);
 #ifdef WINGTK_MENU_IMAGES
-     if (GTK_CLIST(w->clist)->row_height < nh_tile_height())
-	gtk_clist_set_row_height(GTK_CLIST(w->clist), nh_tile_height());
+     if (GTK_CLIST(w->clist)->row_height < nh_tile_3dheight())
+	gtk_clist_set_row_height(GTK_CLIST(w->clist), nh_tile_3dheight());
 #endif
 
      w->scrolled = nh_gtk_new_and_pack(

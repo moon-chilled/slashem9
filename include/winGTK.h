@@ -169,6 +169,7 @@ extern void		nh_option_new(void);
 extern void		nh_option_lock(void);
 
 extern int		nh_tile_height();
+extern int		nh_tile_3dheight();
 
 extern void		nh_position_popup_dialog(GtkWidget *w);
 /*
