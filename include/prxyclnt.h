@@ -1,5 +1,5 @@
 /* $Id$ */
-/* Copyright (c) Slash'EM Development Team 2002-2003 */
+/* Copyright (c) Slash'EM Development Team 2002-2004 */
 /* NetHack may be freely redistributed.  See license for details. */
 
 #ifndef PRXYCLNT_H
@@ -101,6 +101,7 @@ struct window_ext_procs {
 };
 
 typedef void FDECL((*proxy_clnt_errhandler), (const char *));
+typedef int FDECL((*proxy_clnt_authhandler), (unsigned long));
 
 /* ### proxysvc.c ### */
 
@@ -117,6 +118,8 @@ extern char *win_proxy_clnt_get_extension(const char *name, const char *min_ver,
 extern proxy_clnt_errhandler proxy_clnt_set_errhandler(
 	proxy_clnt_errhandler new);
 extern void proxy_clnt_error(const char *fmt, ...);
+extern proxy_clnt_authhandler proxy_clnt_set_authhandler(
+	proxy_clnt_authhandler new);
 
 /* ### prxymap.c ### */
 
