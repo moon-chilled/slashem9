@@ -27,8 +27,8 @@ tests:	test_ext FORCE
 	- ./test_ext
 	@echo ============================
 
-test_ext:	test_ext.c nhext.o nhxdr.o nhextxdr.o
-	$(CC) $(CFLAGS) -o test_ext test_ext.c nhext.o nhxdr.o nhextxdr.o
+test_ext:	test_ext.c nhext.o nhxdr.o nhextxdr.o nhextio.o
+	$(CC) $(CFLAGS) -o test_ext test_ext.c nhext.o nhxdr.o nhextxdr.o nhextio.o
 
 clean:
 	$(RM) *.o test_ext

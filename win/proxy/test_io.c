@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
-#include "proxycom.h"
+#include "nhxdr.h"
 
 /*
  * This module tests the NhExtIO implementation by using it to write
