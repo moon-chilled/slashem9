@@ -60,6 +60,8 @@ struct proxycb_get_tilesets_res {
 };
 
 #define RGB_SYM(rgb, sym)	((rgb) << 8 | (sym))
+#define RGBSYM_RGB(rgbsym)	((rgbsym) >> 8 & 0xFFFFFF)
+#define RGBSYM_SYM(rgbsym)	((rgbsym) & 0xFF)
 
 struct proxycb_get_glyph_mapping_res_symdef {
 	long rgbsym;
