@@ -996,7 +996,7 @@ recover.o:   $(CONFIG_H) recover.c
 
 #  Headers
 
-$(INCL)\tile.h: $(WSHR)\tile.h tilemap.exe
+$(INCL)\tile.h: $(WSHR)\tile_t.h tilemap.exe
 	tilemap.exe
 
 #  Utilities

@@ -46,7 +46,7 @@ LFLAGS = -g
 #CFLAGS = -O -I$(NHPROXYINC) $(MS_BITFIELDS) -DGTKHACK
 #LFLAGS =
 
-LIBS =
+LIBS = -lws2_32
 
 # ----------------------------------------
 #
