@@ -234,7 +234,7 @@ nh_conf_map_dimens(int rows, int cols, int layers, int preserve)
 		    i = 0;
 		for(; i < cols; i++) {
 		    tm = GTKMAP_PTR(new[j], i, new_size);
-		    tm->flags = 0;
+		    tm->flags = TILEMAP_UPDATE;
 		    for(k = 0; k < layers; k++)
 			tm->glyphs[k] = NO_GLYPH;
 		}
@@ -244,7 +244,7 @@ nh_conf_map_dimens(int rows, int cols, int layers, int preserve)
 	for(; j < rows; j++)
 	    for(i = 0; i < cols; i++) {
 		tm = GTKMAP_PTR(new[j], i, new_size);
-		tm->flags = 0;
+		tm->flags = TILEMAP_UPDATE;
 		for(k = 0; k < layers; k++)
 		    tm->glyphs[k] = NO_GLYPH;
 	    }
@@ -266,6 +266,7 @@ out:
 	tilemap_size = 0;
     } else {
 	gtkmap = new;
+	map_update = 1;
 	no_layers = layers;
 	no_rows = rows;
 	no_cols = cols;
