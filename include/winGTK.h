@@ -179,7 +179,7 @@ extern int nh_check_map_visual(int);
 
 extern GtkWidget *GTK_preferences_new(void);
 
-extern void main_hook(int *watch);
+extern int main_hook(int *watch);
 extern void quit_hook(void);
 extern gint GTK_default_key_press(GtkWidget *widget, GdkEventKey *event,
   gpointer data);
