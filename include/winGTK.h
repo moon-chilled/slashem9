@@ -124,6 +124,7 @@ extern void GTK_ext_print_glyph_layered(winid id, int nl,
   struct proxy_glyph_layer *layers);
 extern char GTK_ext_yn_function(const char *, const char *, CHAR_P, int *);
 extern int GTK_ext_outrip(winid, char *);
+extern char *GTK_getline(const char *query, boolean cancelable);
 extern char *GTK_ext_getlin(const char *query);
 extern void GTK_get_nh_event(void);
 extern void GTK_exit_nhwindows(const char *);
