@@ -19,7 +19,13 @@ extern struct proxycb_get_player_choices_res
 		*NDECL(proxy_cb_get_player_choices);
 extern void FDECL(proxy_cb_free_player_choices,
 		(struct proxycb_get_player_choices_res *choices));
-extern int FDECL(proxy_cb_is_valid_selection, (int, int, int, int));
+extern struct proxycb_get_valid_selections_res
+		*NDECL(proxy_cb_get_valid_selections);
+extern void FDECL(proxy_cb_free_valid_selections,
+		(struct proxycb_get_valid_selections_res *vs));
+extern void NDECL(proxy_cb_valid_selection_open);
+extern int FDECL(proxy_cb_valid_selection_check, (int, int, int, int));
+extern void NDECL(proxy_cb_valid_selection_close);
 extern void NDECL(proxy_cb_quit_game);
 extern void NDECL(proxy_cb_display_score);
 extern void NDECL(proxy_cb_doset);

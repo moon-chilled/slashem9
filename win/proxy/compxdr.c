@@ -107,6 +107,18 @@ struct proxycb_get_player_choices_res *datum;
 	proxycb_xdr_get_player_choices_res_role);
 }
 
+nhext_xdr_bool_t proxycb_xdr_get_valid_selections_res(xdr, datum)
+NhExtXdr *xdr;
+struct proxycb_get_valid_selections_res *datum;
+{
+    return nhext_xdr_int(xdr, &datum->no_roles) &
+      nhext_xdr_int(xdr, &datum->no_races) &
+      nhext_xdr_int(xdr, &datum->no_aligns) &
+      nhext_xdr_int(xdr, &datum->no_genders) &
+      nhext_xdr_array(xdr, (char **)&datum->masks, &datum->n_masks,
+        (unsigned int)-1, sizeof(unsigned long), nhext_xdr_u_long);
+}
+
 nhext_xdr_bool_t proxycb_xdr_get_extended_commands_res(xdr, datum)
 NhExtXdr *xdr;
 struct proxycb_get_extended_commands_res *datum;
