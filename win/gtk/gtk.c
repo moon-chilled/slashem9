@@ -3237,7 +3237,6 @@ int nh_dlbh_ftell(int fh)
 # define USE_TEXTVIEW
 #endif
 
-#ifdef GTKHACK
 int nh_set_help_font(gchar *name)
 {
     if (help_font_name)
@@ -3252,7 +3251,6 @@ nh_help_save(struct gtkhackrc *rc)
     if (help_font_name)
 	nh_gtkhackrc_store(rc, "help.font = \"%s\"", help_font_name);
 }
-#endif
 
 #ifdef USE_TEXTVIEW
 static void
