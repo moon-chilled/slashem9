@@ -526,6 +526,7 @@ GTK_select_menu(winid id, int how, MENU_ITEM_P **menu_list)
     if (menu_info->cancelled < 0)
 	return 0;
     gtk_grab_add(w->w);
+    gtk_widget_grab_focus(w->clist);
 
     c = GTK_CLIST(w->clist);
 /*    
