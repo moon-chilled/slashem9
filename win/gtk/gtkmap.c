@@ -952,7 +952,8 @@ nh_radar_configure()
 	gtk_drawing_area_size(GTK_DRAWING_AREA(radar_darea),
 	  NH_RADAR_WIDTH, NH_RADAR_HEIGHT);
 	nh_radar_update();
-	gtk_widget_show(radar);
+	if (use_radar)
+	    gtk_widget_show(radar);
     } else {
 	if (radar_pixmap)
 	    gdk_pixmap_unref(radar_pixmap);
