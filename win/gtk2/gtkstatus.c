@@ -451,11 +451,5 @@ nh_status_new()
     for(i = 0; i < SIZE(stat_tab); i++)
 	stat_tab[i].vi = stat_tab[i].dvi = -1;
 
-#ifdef GTK_PROXY
-    proxy_cb_status_mode(1);
-#else
-    bot_set_handler(GTK_ext_status);
-#endif
-
     return handle;
 }

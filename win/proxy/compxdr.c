@@ -57,6 +57,16 @@ struct proxy_status_req *datum;
       &datum->nv, (unsigned int)-1, sizeof(char *), nhext_xdr_wrapstring);
 }
 
+boolean proxy_xdr_print_glyph_layered_req(xdr, datum)
+NhExtXdr *xdr;
+struct proxy_print_glyph_layered_req *datum;
+{
+    return nhext_xdr_int(xdr, &datum->window) &
+      nhext_xdr_int(xdr, &datum->x) & nhext_xdr_int(xdr, &datum->y) &
+      nhext_xdr_array(xdr, (char **)&datum->glyphs, 
+      &datum->ng, (unsigned int)-1, sizeof(int), nhext_xdr_int);
+}
+
 boolean proxycb_xdr_get_player_choices_res_role(xdr, datum)
 NhExtXdr *xdr;
 struct proxycb_get_player_choices_res_role *datum;

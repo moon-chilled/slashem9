@@ -74,10 +74,10 @@ proxy_cb_doredraw()
 }
 
 void
-proxy_cb_status_mode(mode)
-int mode;
+proxy_cb_interface_mode(mode)
+unsigned long mode;
 {
-    nhext_rpc(EXT_CID_STATUS_MODE, 1, EXT_INT(mode), 0);
+    nhext_rpc(EXT_CID_INTERFACE_MODE, 1, EXT_LONG(mode), 0);
 }
 
 int
