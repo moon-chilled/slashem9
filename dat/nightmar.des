@@ -4,7 +4,7 @@
 #
 # Nightmare's Nightmare World
 MAZE:"nightmar",' '
-FLAGS:noteleport,hardfloor,nommap,shortsighted
+FLAGS:noteleport,hardfloor,nommap,shortsighted,spooky
 GEOMETRY:center,center
 MAP
   T.    T.T                    CC     CC    #######H#H                      
