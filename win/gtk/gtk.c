@@ -1411,7 +1411,9 @@ GTK_init_nhwindows(int *argc, char **argv)
     (void) seteuid(getuid());
 #endif
     
+    hide_privileges(TRUE);
     gtk_init(argc, &argv);
+    hide_privileges(FALSE);
 
 #ifdef UNIX
     (void) seteuid(savuid);
