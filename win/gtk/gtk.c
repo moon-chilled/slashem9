@@ -1898,7 +1898,8 @@ init_select_player(boolean init)
 	menu_items = NULL;
 #ifdef GTK_PROXY
 	proxy_cb_valid_selection_close();
-	proxy_cb_free_player_choices(player_choices);
+	if (player_choices)
+	    proxy_cb_free_player_choices(player_choices);
 	player_choices = NULL;
 #endif
 	return;
