@@ -934,7 +934,7 @@ nh_map_print_glyph(XCHAR_P x, XCHAR_P y, struct tilemap *tmap)
 }
 
 void
-GTK_print_glyph(winid id, XCHAR_P x, XCHAR_P y, int glyph)
+GTK_ext_print_glyph(winid id, int x, int y, int glyph)
 {
     struct rm *lev = &levl[x][y];
     int tile;

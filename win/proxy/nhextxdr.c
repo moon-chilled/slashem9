@@ -203,6 +203,14 @@ unsigned int maxsize;
 }
 
 boolean
+nhext_xdr_wrapstring(xdrs, datum)
+NhExtXdr *xdrs;
+char **datum;
+{
+    return nhext_xdr_string(xdrs, datum, (unsigned int)-1);
+}
+
+boolean
 nhext_xdr_vector(xdrs, addr, len, size, codec)
 NhExtXdr *xdrs;
 char *addr;
@@ -235,7 +243,7 @@ boolean (*codec)(NhExtXdr *, void *);
     if (xdrs->x_op != NHEXT_XDR_FREE && slen > maxlen)
 	return FALSE;
     if (xdrs->x_op == NHEXT_XDR_DECODE && !*addr && slen) {
-	*addr = malloc(slen * size);
+	*addr = calloc(slen, size);
 	if (!*addr)
 	    return FALSE;
     }

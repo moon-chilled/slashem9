@@ -56,6 +56,7 @@ E boolean FDECL(nhext_xdr_u_char, (NhExtXdr *, unsigned char *));
 E boolean FDECL(nhext_xdr_enum, (NhExtXdr *, int *));
 E boolean FDECL(nhext_xdr_bool, (NhExtXdr *, boolean *));
 E boolean FDECL(nhext_xdr_string, (NhExtXdr *, char **, unsigned int));
+E boolean FDECL(nhext_xdr_wrapstring, (NhExtXdr *, char **));
 E boolean FDECL(nhext_xdr_vector, (NhExtXdr *, char *, unsigned int,
   unsigned int, boolean (*)()));
 E boolean FDECL(nhext_xdr_array, (NhExtXdr *, char **, unsigned int *,
