@@ -743,3 +743,9 @@ struct nhproxy_cb_get_glyph_mapping_res *mapping;
     if (mapping->n_mappings)
 	free(mapping->mappings);
 }
+
+int
+get_no_glyph()
+{
+    return NO_GLYPH;
+}

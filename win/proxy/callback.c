@@ -403,4 +403,7 @@ struct nhproxy_serv_callbacks win_proxy_callbacks = {
     get_glyph_mapping,
     free_glyph_mapping,
     set_option_mod_status,
+#if NHPROXY_CHECK_VERSION(0,9,1)
+    get_no_glyph,
+#endif
 };

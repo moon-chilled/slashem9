@@ -87,6 +87,7 @@ E char *FDECL(get_option, (const char *));
 E void NDECL(set_glyph_mapping);
 E struct nhproxy_cb_get_glyph_mapping_res *NDECL(get_glyph_mapping);
 E void FDECL(free_glyph_mapping, (struct nhproxy_cb_get_glyph_mapping_res *));
+E int NDECL(get_no_glyph);
 
 /* dlbh.c */
 #ifndef FILE_AREAS
