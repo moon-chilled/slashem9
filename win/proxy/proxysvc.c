@@ -5,6 +5,9 @@
 #include "hack.h"
 #include "nhxdr.h"
 #include "winproxy.h"
+#ifdef WIN32
+#include "win32api.h"
+#endif
 
 static void NDECL((*proxy_ini));		/* optional (can be 0) */
 static struct window_ext_procs *proxy_svc;
@@ -657,6 +660,27 @@ struct window_ext_procs *windowprocs;
     proxy_svc = windowprocs;
 }
 
+#ifdef WIN32
+static int
+server_read(void *handle, void *buf, unsigned int len)
+{
+    DWORD nb;
+    if (!ReadFile((HANDLE)handle, buf, len, &nb, NULL))
+	return -1;
+    else
+	return nb;
+}
+
+static int
+server_write(void *handle, void *buf, unsigned int len)
+{
+    DWORD nb;
+    if (!WriteFile((HANDLE)handle, buf, len, &nb, NULL))
+	return -1;
+    else
+	return nb;
+}
+#else	/* WIN32 */
 static int
 server_read(void *handle, void *buf, unsigned int len)
 {
@@ -668,6 +692,7 @@ server_write(void *handle, void *buf, unsigned int len)
 {
     return write((int)handle, buf, len);
 }
+#endif	/* WIN32 */
 
 extern void NDECL(win_GTK_init);
 extern struct window_ext_procs GTK_ext_procs;

@@ -11,7 +11,7 @@
  * NhExt needs.
  */
 
-int proxy_xdr_init_nhwindow_req(xdr, datum)
+boolean proxy_xdr_init_nhwindow_req(xdr, datum)
 NhExtXdr *xdr;
 struct proxy_init_nhwindow_req *datum;
 {
@@ -19,7 +19,7 @@ struct proxy_init_nhwindow_req *datum;
       &datum->argc, (unsigned int)-1, sizeof(char *), nhext_xdr_wrapstring);
 }
 
-int proxy_xdr_init_nhwindow_res(xdr, datum)
+boolean proxy_xdr_init_nhwindow_res(xdr, datum)
 NhExtXdr *xdr;
 struct proxy_init_nhwindow_res *datum;
 {
@@ -36,7 +36,7 @@ struct proxy_mi *datum;
     return nhext_xdr_int(xdrs, &datum->item) && nhext_xdr_long(xdrs, &datum->count);
 }
 
-int proxy_xdr_select_menu_res(xdr, datum)
+boolean proxy_xdr_select_menu_res(xdr, datum)
 NhExtXdr *xdr;
 struct proxy_select_menu_res *datum;
 {

@@ -32,6 +32,8 @@ static int mapid__add_winid(id)
 winid id;
 {
     int i;
+    if (id == WIN_ERR)
+	panic("mapid__add_winid: Bad window ID");
     for(i = 0; i < mapid__no_windows; i++)
 	if (mapid__windows[i].id == id)
 	    return i;
@@ -62,6 +64,8 @@ void mapid_del_winid(id)
 winid id;
 {
     int i;
+    if (id == WIN_ERR)
+	panic("mapid_del_winid: Bad window ID");
     for(i = 0; i < mapid__no_windows; i++)
 	if (mapid__windows[i].id == id) {
 	    if (mapid__windows[i].no_identifiers)
@@ -113,6 +117,8 @@ anything *identifier;
 	identifier->a_void = 0;
 	return;
     }
+    if (id == WIN_ERR)
+	panic("mapid_unmap_identifier: Bad window ID");
     for(i = 0; i < mapid__no_windows; i++)
 	if (mapid__windows[i].id == id)
 	    break;
@@ -139,6 +145,8 @@ void mapid_del_identifiers(id)
 winid id;
 {
     int i;
+    if (id == WIN_ERR)
+	panic("mapid_del_indentifiers: Bad window ID");
     for(i = 0; i < mapid__no_windows; i++)
 	if (mapid__windows[i].id == id) {
 	    if (mapid__windows[i].no_identifiers)

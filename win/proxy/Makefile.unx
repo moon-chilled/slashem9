@@ -67,10 +67,14 @@ depend: ../../sys/unix/depend.awk $(CSRC)
 	@echo 'w' >>eddep
 	@cp Makefile.unx Makefile.bak
 	ed - Makefile.unx < eddep
+	ed - Makefile.w32 < eddep
 	@rm -f eddep makedep
 	@echo '# DEPENDENCIES MUST END AT END OF FILE' >> Makefile.unx
 	@echo '# IF YOU PUT STUFF HERE IT WILL GO AWAY' >> Makefile.unx
 	@echo '# see make depend above' >> Makefile.unx
+	@echo '# DEPENDENCIES MUST END AT END OF FILE' >> Makefile.w32
+	@echo '# IF YOU PUT STUFF HERE IT WILL GO AWAY' >> Makefile.w32
+	@echo '# see Makefile.unx' >> Makefile.w32
 	- diff Makefile.bak Makefile.unx
 	@rm -f Makefile.bak
 

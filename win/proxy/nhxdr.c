@@ -31,6 +31,16 @@ unsigned int pos;
     return TRUE;
 }
 
+void
+nhext_xdr_free(codec, addr)
+char *addr;
+boolean (*codec)(NhExtXdr *, void *);
+{
+    NhExtXdr xdrs;
+    xdrs.x_op = NHEXT_XDR_FREE;
+    (void)(*codec)(&xdrs, addr);
+}
+
 static boolean
 nhext_xdrmem_read(xdrs, addr, size)
 NhExtXdr *xdrs;
