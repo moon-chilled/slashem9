@@ -88,6 +88,9 @@ static int
 cb_dlbh_fopen(char *name, char *mode)
 {
     char *file, *subname;
+#ifdef FILE_AREAS
+    char *area;
+#endif
     char *s;
     char *buf = NULL;
     int i, retval = 0;

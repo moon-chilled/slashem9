@@ -368,7 +368,7 @@ BOOLEAN_P complain;
 {
     int fh;
 #ifdef FILE_AREAS
-    fh = dlbh_fopen(farea, fname, "r");
+    fh = dlbh_fopen_area(farea, fname, "r");
 #else
     fh = dlbh_fopen(fname, "r");
 #endif
