@@ -11,6 +11,7 @@ int
 main(int argc, char **argv)
 {
     char *s;
+    proxy_svc_set_ext_procs(win_GTK_init, &GTK_ext_procs);
     s = g_find_program_in_path("slashem");
     proxy_connect("file", s ? s : "slashem", &argc, argv);
     /* proxy_connect only returns if it failed */

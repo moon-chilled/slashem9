@@ -749,9 +749,6 @@ server_write(void *handle, void *buf, unsigned int len)
 }
 #endif	/* WIN32 */
 
-extern void NDECL(win_GTK_init);
-extern struct window_ext_procs GTK_ext_procs;
-
 #ifdef DEBUG
 static void
 debug_dump(buf, len, arrow)
@@ -895,16 +892,12 @@ failed:
 	return FALSE;
     }
     nhext_subprotocol0_free_line(lp);
-    /*
-     * For now, we hardcode the client side to the GTK interface
-     */
-    proxy_svc_set_ext_procs(win_GTK_init, &GTK_ext_procs);
     line.type = "Ack";
     line.n = 2;
     line.tags = (char **)alloc(line.n * sizeof(char *));
     line.values = (char **)alloc(line.n * sizeof(char *));
     line.tags[0] = "windowtype";
-    line.values[0] = "Gtk";
+    line.values[0] = (char *)proxy_svc->name;
     line.tags[1] = "protocol";
     line.values[1] = "1";
     i = nhext_subprotocol0_write_line(&line);

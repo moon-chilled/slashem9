@@ -103,6 +103,9 @@ enum xshm_map_mode {
 #endif
 
 #if defined(GTK_V20)
+extern void	win_GTK_init(void);
+extern struct	window_ext_procs GTK_ext_procs;
+
 extern int	GTK_ext_init_nhwindows(int *, char **);
 extern char	*GTK_ext_askname(void);
 extern int	GTK_ext_player_selection(int *, int *, int *, int *);
