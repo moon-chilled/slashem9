@@ -1437,6 +1437,25 @@ nh_map_redraw()
 }
 
 void
+nh_map_color_changed(boolean new_value)
+{
+    if (map_visual == 0)
+	nh_map_redraw();
+}
+
+void
+nh_map_hilite_pet_changed(boolean new_value)
+{
+    int i, j, k;
+    map_update = 1;
+    for(j = 0; j < no_rows; j++)
+	for(i = 0; i < no_cols; i++)
+	    for(k = 0; k < no_layers; k++)
+		if (glyph_is_pet(GTKMAP(j, i)->glyphs[k]))
+		    GTKMAP(j, i)->flags |= TILEMAP_UPDATE;
+}
+
+void
 nh_map_flush()
 {
     int i, j;
