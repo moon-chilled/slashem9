@@ -4,8 +4,8 @@
 
 /*
  * This module tests the NhExt support routines for sub-protocol 1.
- * These include nhext_subprotocol1_init(), nhext_subprotocol1_end()
- * nhext_rpc() and nhext_svc(), all of which can be found in nhext.c.
+ * These include nhext_init(), nhext_end() nhext_rpc() and nhext_svc(),
+ * all of which can be found in nhext.c.
  *
  * Note: This module does not test the implementation of sub-protocol 1
  * itself (which is found in winproxy.c).
@@ -464,7 +464,7 @@ void server(void)
 	fprintf(stderr, "C Failed to open I/O streams.\n");
 	exit(1);
     }
-    server_connection = nhext_subprotocol1_init(rd, wr, callbacks);
+    server_connection = nhext_init(rd, wr, callbacks);
     if (server_connection < 0) {
 	fprintf(stderr, "C Failed to initialize sub-protocol1.\n");
 	exit(1);
@@ -474,7 +474,7 @@ void server(void)
 	if (!i)
 	    impossible("Ignoring packet with zero ID");
     } while (!server_exit);
-    nhext_subprotocol1_end_c(server_connection);
+    nhext_end_c(server_connection);
     nhext_io_close(rd);
     nhext_io_close(wr);
 }
@@ -554,14 +554,14 @@ char **argv;
 	fprintf(stderr, "Failed to open I/O streams.\n");
 	exit(1);
     }
-    connection = nhext_subprotocol1_init(rd, wr, callbacks);
+    connection = nhext_init(rd, wr, callbacks);
     if (connection < 0) {
 	fprintf(stderr, "Failed to initialize sub-protocol1.\n");
 	exit(1);
     }
     run_tests();
     nhext_rpc_c(connection, EXT_FID_EXIT, 0, 0);
-    nhext_subprotocol1_end_c(connection);
+    nhext_end_c(connection);
     nhext_io_close(rd);
     nhext_io_close(wr);
     if (!child_wait()) {
