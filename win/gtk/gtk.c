@@ -1981,6 +1981,7 @@ GTK_init_nhwindows(char ***capvp)
 
     nh_option_cache_set_bool_addr("color", &copts.use_color);
     nh_option_cache_set_bool_addr("hilite_pet", &copts.hilite_pet);
+    copts.num_pad = nh_option_cache_get_bool("number_pad");
 
     /* Init windows to nothing. */
     for (i = 0; i < MAXWIN; i++)
