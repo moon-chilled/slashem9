@@ -48,6 +48,7 @@ static void FDECL(GTK_proxy_raw_print_bold, (const char *));
 struct window_procs GTK_procs = {
     "gtk",
     0,
+    0L,
     GTK_proxy_init_nhwindows,
     hook, /* player_selection */
     GTK_proxy_askname,
@@ -245,6 +246,7 @@ struct window_procs GTK_procs = {
     WC_EIGHT_BIT_IN |
 #endif
     WC_PERM_INVENT,
+    0L,
     GTK_int_init_nhwindows,
     GTK_int_player_selection,
     GTK_int_askname,

@@ -61,6 +61,7 @@ static int in_proxy_init = 0;
 struct window_procs proxy_procs = {
     "proxy",
     0x0,
+    0L,
     proxy_init_nhwindows,
     proxy_player_selection,
     proxy_askname,
