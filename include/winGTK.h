@@ -190,6 +190,7 @@ extern void		nh_status_update(void);
 extern void		nh_status_index_update(void);
 
 extern int		nh_keysym(GdkEventKey *ev);
+extern int		nh_dir_keysym(GdkEventKey *ev);
 
 extern void		nh_option_new(void);
 extern void		nh_option_lock(void);
