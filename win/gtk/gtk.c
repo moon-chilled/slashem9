@@ -96,7 +96,7 @@ hook()
     ;
 }
 
-#ifdef WIN32
+#ifdef GTK_ASKNAME
 void
 gtk_askname() {
     int tryct = 0;

@@ -8,7 +8,11 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
-#ifndef WIN32
+#ifdef WIN32
+# ifndef GTK_ASKNAME
+#  define GTK_ASKNAME
+# endif
+#else
 #define WINGTK_X11	/* X11 libraries are available for our use */
 #endif
 
