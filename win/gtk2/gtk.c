@@ -1614,7 +1614,7 @@ GTK_ext_init_nhwindows(int *argc, char **argv)
 #endif
 
     gtk_set_locale();
-#if defined(DEVEL_BRANCH) && defined(GTK_V20)
+#ifdef GTK_V20
     nh_option_cache_set_bool_addr("color", &copts.use_color);
     nh_option_cache_set_bool_addr("hilite_pet", &copts.hilite_pet);
     nh_option_cache_set_bool_addr("perm_invent", &copts.perm_invent);

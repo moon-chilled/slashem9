@@ -12,8 +12,6 @@
 #include "winGTK.h"
 #include "dlb.h"
 
-#ifdef DEVEL_BRANCH	/* This file is unused in stable */
-
 /* from tile.c */
 extern int total_tiles_used;
 extern int tiles_per_row;
@@ -963,5 +961,3 @@ tile_scan(void)
     }
     return visual;
 }
-
-#endif	/* DEVEL_BRANCH */
