@@ -206,6 +206,9 @@ extern GtkWidget	*nh_radar_new(void);
 extern void		nh_radar_update(void);
 
 extern GtkWidget	*nh_message_new(void);
+#if defined(GTK_V20)
+extern void		nh_message_destroy(void);
+#endif
 extern void		nh_message_putstr(const char *);
 
 extern GtkWidget	*nh_status_new(void);

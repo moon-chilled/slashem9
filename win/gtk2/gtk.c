@@ -1945,6 +1945,7 @@ GTK_exit_nhwindows(const char *str)
 #ifdef RADAR
     nh_radar_destroy();
 #endif
+    nh_message_destroy();
     gtk_widget_destroy(main_window);
     g_blow_chunks();
 
