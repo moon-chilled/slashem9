@@ -48,7 +48,9 @@ static void GTK_pref_apply(GtkWidget *w, gpointer data)
 int
 GTK_preferences_save(struct gtkhackrc *rc)
 {
-    nh_gtkhackrc_store(rc, "map.font = \"%s\"", nh_get_map_font());
+    gchar *map_font = nh_get_map_font();
+    if (map_font)
+	nh_gtkhackrc_store(rc, "map.font = \"%s\"", map_font);
     nh_gtkhackrc_store(rc, "radar = %d", nh_radar_get_use());
     nh_gtkhackrc_store(rc, "map.clip_dist2 = %d", map_clip_dist2);
 }
