@@ -46,3 +46,12 @@ struct proxy_select_menu_res *datum;
       &datum->n, 0xffffffff, sizeof(struct proxy_mi), proxy_xdr_proxy_mi);
     return retval;
 }
+
+boolean proxy_xdr_status_req(xdr, datum)
+NhExtXdr *xdr;
+struct proxy_status_req *datum;
+{
+    return nhext_xdr_int(xdr, &datum->reconfig) &
+      nhext_xdr_array(xdr, (char **)&datum->values, 
+      &datum->nv, (unsigned int)-1, sizeof(char *), nhext_xdr_wrapstring);
+}

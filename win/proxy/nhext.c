@@ -98,11 +98,11 @@ int nhext_rpc_vparams(NhExtXdr *xdrs, int no, va_list *app)
 		nhext_xdr_int(xdrs, &param_i);
 		break;
 	    case EXT_PARAM_BOOLEAN:
-		param_b = va_arg(ap, boolean);
+		param_b = va_arg(ap, int);	/* boolean is promoted to int */
 		nhext_xdr_bool(xdrs, &param_b);
 		break;
 	    case EXT_PARAM_CHAR:
-		param_i = va_arg(ap, char);
+		param_i = va_arg(ap, int);	/* char is promoted to int */
 		nhext_xdr_int(xdrs, &param_i);
 		break;
 	    case EXT_PARAM_PTR | EXT_PARAM_INT:
