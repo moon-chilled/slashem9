@@ -116,3 +116,14 @@ struct proxycb_get_player_choices_res *choices;
     nhext_xdr_free(proxycb_xdr_get_player_choices_res, (char *)choices);
     free(choices);
 }
+
+int
+proxy_cb_is_valid_selection(role, race, gender, alignment)
+int role, race, gender, alignment;
+{
+    int retval;
+    nhext_rpc(EXT_CID_IS_VALID_SELECTION,
+      4, EXT_INT(role), EXT_INT(race), EXT_INT(gender), EXT_INT(alignment),
+      1, EXT_INT_P(retval));
+    return retval;
+}

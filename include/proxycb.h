@@ -15,6 +15,7 @@
 #define EXT_CID_PARSE_OPTIONS		0x08
 #define EXT_CID_GET_OPTION		0x09
 #define EXT_CID_GET_PLAYER_CHOICES	0x10
+#define EXT_CID_IS_VALID_SELECTION	0x11
 
 struct proxycb_get_player_choices_res_role {
 	const char *male;
@@ -41,6 +42,7 @@ extern void NDECL(proxy_cb_doredraw);
 extern void FDECL(proxy_cb_status_mode, (int));
 extern int FDECL(proxy_cb_parse_options, (char *));
 extern char *FDECL(proxy_cb_get_option, (char *));
+extern int FDECL(proxy_cb_is_valid_selection, (int, int, int, int));
 extern struct proxycb_get_player_choices_res
 		*NDECL(proxy_cb_get_player_choices);
 extern void FDECL(proxy_cb_free_player_choices,
