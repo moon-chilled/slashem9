@@ -136,7 +136,7 @@ OBJECT[80%]:'/',"nothing",place[2],cursed,0
 OBJECT[60%]:'/',"secret door detection",place[2],cursed,0
 OBJECT[40%]:'[',"fumble boots",place[2],cursed,-2
 OBJECT[40%]:'[',"gauntlets of fumbling",place[2],cursed,-4
-OBJECT[40%]:'[',"cloak of poisonousness",place[2],cursed,-1
+OBJECT[40%]:'[',"poisonous cloak",place[2],cursed,-1
 OBJECT[40%]:'[',"robe of weakness",place[2],cursed,0
 OBJECT[40%]:')',"fly swatter",place[2],cursed,-2,"Bugshmasher"
 OBJECT[40%]:')',"worm tooth",place[2],cursed,-4,"Storm Brand"
