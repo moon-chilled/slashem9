@@ -1204,7 +1204,7 @@ select_node_accel(unsigned long key)
     }
     else if (rolenum < 12)
     {
-	accel = (gchar *) alloc(rolenum > 9 ? 4 : 3);
+	accel = (gchar *) alloc(rolenum > 8 ? 4 : 3);
 	sprintf(accel, "F%d", rolenum + 1);
     }
     else
