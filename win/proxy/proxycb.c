@@ -173,3 +173,13 @@ int ch;
     nhext_rpc(EXT_CID_MAP_MENU_CMD, 1, EXT_INT(ch), 1, EXT_INT_P(retval));
     return retval;
 }
+
+winid
+proxy_cb_get_standard_winid(window)
+char *window;
+{
+    winid retval;
+    nhext_rpc(EXT_CID_GET_STANDARD_WINID, 1, EXT_STRING(window),
+      1, EXT_WINID_P(retval));
+    return retval;
+}
