@@ -469,6 +469,7 @@ enum {
     COLUMN_NAME,
     COLUMN_SCHEME,
     COLUMN_ADDRESS,
+    COLUMN_FLAGS,
     N_COLUMNS
 };
 
@@ -478,7 +479,7 @@ extern GtkListStore *GTK_connections;
 extern GtkTreeRowReference *GTK_connection_lookup(const char *name);
 extern void GTK_connection_set_default(const char *name);
 extern void GTK_connection_add(const char *name, const char *scheme,
-  const char *address);
+  const char *address, unsigned long flags);
 #endif
 
 #endif	/* WINGTK_H */
