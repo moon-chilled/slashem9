@@ -195,7 +195,15 @@ static void GTK_proxy_clnt_errhandler(const char *error)
 
 static void GTK_nhext_errhandler(int class, const char *error)
 {
-    GTK_proxy_clnt_errhandler(error);
+    GtkWidget *w;
+    if (class == EXT_ERROR_COMMS) {
+	w = gtk_message_dialog_new(NULL, 0, GTK_MESSAGE_ERROR, GTK_BUTTONS_NONE,
+	  "Connection to game server lost.\n\n%s", error);
+	gtk_dialog_add_button(GTK_DIALOG(w), GTK_STOCK_QUIT, 0);
+	gtk_dialog_run(GTK_DIALOG(w));
+	exit(1);
+    } else
+	GTK_proxy_clnt_errhandler(error);
 }
 
 void
