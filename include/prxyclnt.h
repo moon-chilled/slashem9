@@ -95,6 +95,7 @@ struct window_ext_procs {
     void FDECL((*winext_status), (int, int, const char **));
     void FDECL((*winext_print_glyph_layered), (int, int,
     		struct proxy_glyph_layer *));
+    void FDECL((*winext_send_config_file), (int));
 };
 
 typedef void FDECL((*proxy_clnt_errhandler), (const char *));
@@ -102,6 +103,7 @@ typedef void FDECL((*proxy_clnt_errhandler), (const char *));
 /* ### proxysvc.c ### */
 
 extern void proxy_svc_set_ext_procs(void (*)(void), struct window_ext_procs *);
+extern char *win_proxy_clnt_gettag(const char *tag);
 #ifdef NHXDR_H
 extern int win_proxy_clnt_init(nhext_io_func, void *, nhext_io_func, void *);
 #endif

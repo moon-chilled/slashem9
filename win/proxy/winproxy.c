@@ -874,6 +874,29 @@ struct gbuf_layer *layers;
 }
 #endif	/* DISPLAY_LAYERS */
 
+FILE *proxy_config_fp = NULL;
+
+FILE *
+proxy_config_file_open()
+{
+    proxy_config_fp = tmpfile();
+    if (proxy_config_fp) {
+	/* Since this is currently the only use of writable dlbh streams,
+	 * we simply use a hard-coded handle of zero.
+	 */
+	(void)nhext_rpc(EXT_FID_SEND_CONFIG_FILE, 1, EXT_INT(0), 0);
+	rewind(proxy_config_fp);		/* Ready to read */
+    }
+    return proxy_config_fp;
+}
+
+void
+proxy_config_file_close(FILE *fp)
+{
+    fclose(proxy_config_fp);
+    proxy_config_fp = NULL;
+}
+
 extern struct nhext_svc proxy_callbacks[];
 
 #ifdef DEBUG

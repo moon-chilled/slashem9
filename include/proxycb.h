@@ -9,6 +9,7 @@ extern void NDECL(proxy_cb_display_inventory);
 extern int FDECL(proxy_cb_dlbh_fopen, (const char *, const char *));
 extern char *FDECL(proxy_cb_dlbh_fgets, (char *, int, int));
 extern int FDECL(proxy_cb_dlbh_fread, (char *, int, int, int));
+extern int FDECL(proxy_cb_dlbh_fwrite, (char *, int, int, int));
 extern int FDECL(proxy_cb_dlbh_fclose, (int));
 extern void NDECL(proxy_cb_flush_screen);
 extern void NDECL(proxy_cb_doredraw);

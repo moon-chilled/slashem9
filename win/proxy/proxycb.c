@@ -82,6 +82,19 @@ int size, no, fh;
 }
 
 int
+proxy_cb_dlbh_fwrite(buf, size, no, fh)
+char *buf;
+int size, no, fh;
+{
+    int retval;
+    if (!nhext_rpc(EXT_CID_DLBH_FWRITE,
+      2, EXT_INT(fh), EXT_BYTES(buf, size * no),
+      1, EXT_INT_P(retval)))
+	retval = -1;
+    return retval ? -1 : no;
+}
+
+int
 proxy_cb_dlbh_fclose(fh)
 int fh;
 {

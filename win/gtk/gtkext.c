@@ -69,6 +69,11 @@ struct window_ext_procs GTK_ext_procs = {
     GTK_ext_preference_update,
     GTK_ext_status,
     GTK_ext_print_glyph_layered,
+#ifdef GTKHACK
+    GTK_ext_send_config_file,
+#else
+    v_hook, /* send_config_file */
+#endif
 };
 
 static void

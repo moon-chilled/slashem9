@@ -25,6 +25,8 @@ extern unsigned long proxy_interface_mode;
 
 extern short glyph2proxy[MAX_GLYPH];
 
+extern FILE *proxy_config_fp;
+
 /* external declarations */
 E void FDECL(proxy_init_nhwindows, (int *, char **));
 E void NDECL(proxy_player_selection);
@@ -85,6 +87,7 @@ E void NDECL(proxy_end_screen);
 E void FDECL(proxy_outrip, (winid, int));
 E void FDECL(proxy_preference_update, (const char *));
 E void FDECL(proxy_status, (int, int, const char **));
+E FILE *NDECL(proxy_config_file_open);
 
 #undef E
 

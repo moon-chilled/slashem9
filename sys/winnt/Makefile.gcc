@@ -1823,7 +1823,7 @@ exper.o: exper.c $(HACK_H)
 explode.o: explode.c $(HACK_H)
 extralev.o: extralev.c $(HACK_H)
 files.o: files.c $(HACK_H) $(INCL)/dlb.h $(INCL)/filename.h \
-		$(INCL)/winGL.h
+		$(INCL)/winGL.h $(INCL)/winproxy.h
 fountain.o: fountain.c $(HACK_H)
 hack.o: hack.c $(HACK_H)
 hacklib.o: hacklib.c $(HACK_H)

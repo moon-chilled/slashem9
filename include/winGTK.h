@@ -158,6 +158,9 @@ extern void GTK_end_screen(void);
 extern void GTK_raw_print(const char *);
 extern void GTK_raw_print_bold(const char *);
 extern void GTK_ext_preference_update(const char *, const char *);
+#ifdef GTKHACK
+extern void GTK_ext_send_config_file(int);
+#endif
 
 extern GdkPixmap *GTK_glyph_to_gdkpixmap(int);
 
