@@ -535,9 +535,9 @@ tile_scan(void)
 	if(!tileTab[i])
 	    continue;
 #ifdef FILE_AREAS
-	fp = fopen_datafile_area(FILE_AREA_SHARE, tileTab[i]->file, RDTMODE);
+	fp = fopen_datafile_area(FILE_AREA_SHARE, tileTab[i]->file, RDTMODE, FALSE);
 #else
-	fp = fopen_datafile(tileTab[i]->file, RDTMODE);
+	fp = fopen_datafile(tileTab[i]->file, RDTMODE, FALSE);
 #endif
 	if(!fp){
 	    tileTab[i] = NULL;
