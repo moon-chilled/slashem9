@@ -171,7 +171,7 @@ GTK_init_menu_widgets(NHWindow *w)
      else
 	 w->w = gtk_window_new(GTK_WINDOW_TOPLEVEL);
      gtk_widget_set_name(GTK_WIDGET(w->w), "fixed font");
-     gtk_window_set_position(GTK_WINDOW(w->w), GTK_WIN_POS_MOUSE);
+     nh_position_popup_dialog(GTK_WIDGET(w->w));
      w->hid = gtk_signal_connect(
 	 GTK_OBJECT(w->w), "destroy",
 	 GTK_SIGNAL_FUNC(menu_destroy), w);

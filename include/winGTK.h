@@ -164,6 +164,7 @@ extern void		nh_option_lock(void);
 
 extern int		nh_tile_height();
 
+extern void		nh_position_popup_dialog(GtkWidget *w);
 /*
   topten.c
  */
