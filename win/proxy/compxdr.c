@@ -191,3 +191,22 @@ struct proxycb_get_glyph_mapping_res *datum;
         (unsigned int)-1, sizeof(struct proxycb_get_glyph_mapping_res_mapping),
 	proxycb_xdr_get_glyph_mapping_res_mapping);
 }
+
+nhext_xdr_bool_t proxycb_xdr_get_extensions_res_extension(xdr, datum)
+NhExtXdr *xdr;
+struct proxycb_get_extensions_res_extension *datum;
+{
+    return nhext_xdr_wrapstring(xdr, (char **)&datum->name) &
+      nhext_xdr_wrapstring(xdr, (char **)&datum->version) &
+      nhext_xdr_int(xdr, &datum->no_procedures);
+}
+
+nhext_xdr_bool_t proxycb_xdr_get_extensions_res(xdr, datum)
+NhExtXdr *xdr;
+struct proxycb_get_extensions_res *datum;
+{
+    return nhext_xdr_array(xdr, (char **)&datum->extensions,
+	&datum->n_extensions, (unsigned int)-1,
+	sizeof(struct proxycb_get_extensions_res_extension),
+	proxycb_xdr_get_extensions_res_extension);
+}

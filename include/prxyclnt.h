@@ -101,6 +101,7 @@ struct window_ext_procs {
 extern void proxy_svc_set_ext_procs(void (*)(void), struct window_ext_procs *);
 extern int win_proxy_clnt_init(void *, void *);
 extern char *win_proxy_clnt_get_failed_packet(int *);
+extern char *win_proxy_clnt_get_extension(const char *name, const char *min_ver,	const char *next_ver, unsigned short *idp);
 
 /* ### prxymap.c ### */
 

@@ -41,5 +41,8 @@ extern void FDECL(proxy_cb_free_tilesets,
 extern struct proxycb_get_glyph_mapping_res *NDECL(proxy_cb_get_glyph_mapping);
 extern void FDECL(proxy_cb_free_glyph_mapping,
 		(struct proxycb_get_glyph_mapping_res *mapping));
+extern struct proxycb_get_extensions_res *NDECL(proxy_cb_get_extensions);
+extern void FDECL(proxy_cb_free_extensions,
+		(struct proxycb_get_extensions_res *extensions));
 
 #endif /* PROXYCB_H */

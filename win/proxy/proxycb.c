@@ -338,3 +338,25 @@ struct proxycb_get_glyph_mapping_res *mapping;
     nhext_xdr_free(proxycb_xdr_get_glyph_mapping_res, (char *)mapping);
     free(mapping);
 }
+
+struct proxycb_get_extensions_res *
+proxy_cb_get_extensions()
+{
+    struct proxycb_get_extensions_res *retval;
+    retval=(struct proxycb_get_extensions_res *)alloc(sizeof(*retval));
+    memset(retval, 0, sizeof(*retval));
+    if (!nhext_rpc(EXT_CID_GET_EXTENSIONS, 0, 1,
+      EXT_XDRF(proxycb_xdr_get_extensions_res, retval))) {
+	free(retval);
+	return (struct proxycb_get_extensions_res *)0;
+    }
+    return retval;
+}
+
+void
+proxy_cb_free_extensions(extensions)
+struct proxycb_get_extensions_res *extensions;
+{
+    nhext_xdr_free(proxycb_xdr_get_extensions_res, (char *)extensions);
+    free(extensions);
+}
