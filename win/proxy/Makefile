@@ -6,7 +6,7 @@
 
 AWK = awk
 
-CFLAGS = -I../../include
+CFLAGS = -g -I../../include
 #RPCLIB = -lrpclib
 
 # ----------------------------------------
@@ -23,13 +23,19 @@ all:	tests
 
 FORCE:
 
-tests:	test_xdr rpcgen-test_xdr FORCE
+tests:	test_xdr rpcgen-test_xdr test_ext FORCE
 	@echo ""
-	@echo The output of the two tests should be identical:
+	@echo Testing NhExt XDR routines...
+	@echo The output of these two tests should be identical:
 	@echo ============================
 	- test_xdr -w | rpcgen-test_xdr -r
 	@echo ============================
 	- rpcgen-test_xdr -w | test_xdr -r
+	@echo ============================
+	@echo ""
+	@echo Testing NhExt sub-protocol 1 support routines...
+	@echo ============================
+	- test_ext
 	@echo ============================
 
 test_xdr:	test_xdr.c nhxdr.o nhextxdr.o
@@ -43,6 +49,9 @@ rpcgen-nhext.h rpcgen-nhext_xdr.c:	rpcgen-nhext.x
 
 rpcgen-nhext.x:	ext_protocol.html
 	$(AWK) '/<h3>init<\/h3>/ { init=1; } /<pre>/ { if (init) output=1; next;} /<\/pre>/ { output=0; } { if (output) print }' < ext_protocol.html > rpcgen-nhext.x
+
+test_ext:	test_ext.c nhext.o nhxdr.o nhextxdr.o
+	$(CC) $(CFLAGS) -o test_ext test_ext.c nhext.o nhxdr.o nhextxdr.o
 
 clean:
 	$(RM) *.o test_xdr rpcgen-test_xdr
@@ -76,6 +85,7 @@ $(HACK_H): ../../include/hack.h
 	touch $(HACK_H)
 #
 nhxdr.o: nhxdr.c $(HACK_H) nhxdr.h
+nhext.o: nhext.c
 nhextxdr.o: nhextxdr.c $(HACK_H) nhxdr.h
 # DEPENDENCIES MUST END AT END OF FILE
 # IF YOU PUT STUFF HERE IT WILL GO AWAY
