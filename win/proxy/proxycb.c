@@ -104,6 +104,23 @@ int fh;
     return retval;
 }
 
+char *
+proxy_cb_dlbh_fmd5sum(name)
+const char *name;
+{
+    int retval;
+    char *digest = (char *)0;
+    if (!nhext_rpc(EXT_CID_DLBH_FMD5SUM, 1, EXT_STRING(name),
+      2, EXT_INT_P(retval), EXT_STRING_P(digest)))
+	retval = -1;
+    if (!retval)
+	return digest;
+    else {
+	free(digest);
+	return (char *)0;
+    }
+}
+
 void
 proxy_cb_flush_screen()
 {

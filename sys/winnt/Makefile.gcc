@@ -270,8 +270,8 @@ endif
 #
 # Files for a proxy interface.
 ifeq ($(USE_PROXY),Y)
-WINPROXYSRC = ../win/proxy/winproxy.c ../win/proxy/callback.c
-WINPROXYOBJ = winproxy.o callback.o
+WINPROXYSRC = ../win/proxy/winproxy.c ../win/proxy/callback.c ../win/proxy/md5.c
+WINPROXYOBJ = winproxy.o callback.o md5.o
 endif
 #
 # Common files for proxy window interface and window servers.
@@ -1688,8 +1688,11 @@ winproxy.o: ../win/proxy/winproxy.c $(HACK_H) $(INCL)/patchlevel.h \
 		$(INCL)/winproxy.h $(INCL)/win32api.h
 	$(CCOMPILE) $(CFLAGS) -o$@ ../win/proxy/winproxy.c
 callback.o: ../win/proxy/callback.c $(HACK_H) $(INCL)/func_tab.h \
-		$(INCL)/nhxdr.h $(INCL)/proxycom.h $(INCL)/winproxy.h
+		$(INCL)/md5.h $(INCL)/nhxdr.h $(INCL)/proxycom.h \
+		$(INCL)/winproxy.h
 	$(CCOMPILE) $(CFLAGS) -o$@ ../win/proxy/callback.c
+md5.o: ../win/proxy/md5.c $(INCL)/md5.h
+	$(CCOMPILE) $(CFLAGS) -o$@ ../win/proxy/md5.c
 dlbh.o: ../win/proxy/dlbh.c $(HACK_H) $(INCL)/dlb.h
 	$(CCOMPILE) $(CFLAGS) -o$@ ../win/proxy/dlbh.c
 mapid.o: ../win/proxy/mapid.c $(HACK_H) $(INCL)/nhxdr.h $(INCL)/winproxy.h
