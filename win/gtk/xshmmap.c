@@ -336,3 +336,24 @@ xshm_map_tile_draw(int dstx, int dsty)
     XShmSyncXShmImageRegion(map, dstx, dsty, tmp_img->width, tmp_img->height); 
 #endif
 }
+
+GdkPixmap *
+GTK_tmp_to_pixmap()
+{
+    GdkPixmap * ret;
+
+    ret = gdk_pixmap_new ( NULL, tmp_img->width, tmp_img->height, 
+    	(gdk_visual_get_system())->depth);
+    
+#ifdef WINGTK_X11
+    /* FIXME 
+     * Need to add code that takes tmp_img (which is an XSubImage) and draw it onto
+     * ret (which is a GdkPixmap).   Anyone know how to do this?
+     */
+#else   
+    gdk_draw_image(ret, gc, tmp_img, 0, 0, 
+    			0, 0, tmp_img->width, tmp_img->height);
+#endif
+
+    return ret;
+}
