@@ -45,9 +45,11 @@ all:	gtkhack
 	$(CC) `$(GTKCFLAGS)` $(CFLAGS) -c $<
 
 CSRC = gtkhack.c gtk.c gtkgetlin.c gtkstatus.c gtkmenu.c gtkyn.c gtkextcmd.c \
-	gtkmap.c gtkmessage.c gtkmisc.c gtktile.c xshmmap.c gtkext.c panic.c
+	gtkmap.c gtkmessage.c gtkmisc.c gtktile.c xshmmap.c gtkext.c \
+	gtkhackrc.c panic.c
 OBJS = gtkhack.o gtk.o gtkgetlin.o gtkstatus.o gtkmenu.o gtkyn.o gtkextcmd.o \
-	gtkmap.o gtkmessage.o gtkmisc.o gtktile.o xshmmap.o gtkext.o panic.o
+	gtkmap.o gtkmessage.o gtkmisc.o gtktile.o xshmmap.o gtkext.o \
+	gtkhackrc.o panic.o
 
 gtkhack:	$(OBJS) $(NHPROXYLIB)/nhproxy.a
 	$(CC) `$(GTKLIBS)` $(LFLAGS) -o $@ $(OBJS) $(NHPROXYLIB)/nhproxy.a $(LIBS)
@@ -81,10 +83,10 @@ depend: ../../sys/unix/depend.awk $(CSRC)
 
 # config.h timestamp
 $(CONFIG_H): ../../include/config.h
-	touch $(CONFIG_H)
+	@echo /**/ >> $(CONFIG_H)
 # hack.h timestamp
 $(HACK_H): ../../include/hack.h
-	touch $(HACK_H)
+	@echo /**/ >> $(HACK_H)
 #
 gtkhack.o: gtkhack.c ../../include/winGTK.h ../../include/prxyclnt.h \
 		../../include/proxycb.h
@@ -105,6 +107,7 @@ gtktile.o: gtktile.c ../../include/winGTK.h ../../include/dlb.h ../../include/pr
 		../../include/prxyclnt.h
 xshmmap.o: xshmmap.c ../../include/winGTK.h
 gtkext.o: gtkext.c ../../include/winGTK.h ../../include/prxyclnt.h
+gtkhackrc.o: gtkhackrc.c ../../include/winGTK.h
 panic.o: panic.c $(CONFIG_H)
 # DEPENDENCIES MUST END AT END OF FILE
 # IF YOU PUT STUFF HERE IT WILL GO AWAY
