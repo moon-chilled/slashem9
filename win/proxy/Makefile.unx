@@ -1,12 +1,12 @@
 # $Id$
-# Copyright (c) Slash'EM Development Team 2001-2003
+# Copyright (c) Slash'EM Development Team 2001-2004
 # NetHack may be freely redistributed.  See license for details.
 #
 # This makefile is for maintainer use. It is not needed when building the game.
 
 AWK = awk
 
-CFLAGS = -g -I../../include
+CFLAGS = -g -I../../include -pthread
 #RPCLIB = -lrpclib
 
 # ----------------------------------------
