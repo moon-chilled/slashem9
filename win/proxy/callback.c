@@ -508,8 +508,7 @@ NhExtXdr *request, *reply;
     destroy_toptenwin();
     dlb_init();                         /* Re-initialise DLB */
     proxy_rawprint_win = WIN_ERR;
-    if (!nhext_async_mode())
-	nhext_rpc_params(reply, 0);
+    nhext_rpc_params(reply, 0);
 }
 
 static void
