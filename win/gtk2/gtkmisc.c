@@ -49,7 +49,7 @@ static struct GTK_Option {
     GtkWidget *radio2;
 } gtk_option[] = {
     {"prevent you from attacking your pet", "Yes", "No", "safe_pet"},
-    {"ask before hidding peaceful monsters", "Yes", "No", "confirm"},
+    {"ask before hitting peaceful monsters", "Yes", "No", "confirm"},
 #ifdef TEXTCOLOR
     {"display pets in a red square", "Yes", "No", "hilite_pet"},
 #endif
