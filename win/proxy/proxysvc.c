@@ -886,7 +886,7 @@ proxy_svc_yn_function(id, request, reply)
 unsigned short id;
 NhExtXdr *request, *reply;
 {
-    int retval, count, def;
+    int retval, count = 0, def;
     char *ques = (char *)0, *choices = (char *)0;
     nhext_rpc_params(request,
       3, EXT_STRING_P(ques), EXT_STRING_P(choices), EXT_INT_P(def));
