@@ -14,10 +14,10 @@
 
 #include <sys/types.h>
 #include <signal.h>
+#include "winGTK.h"
 #include "nhxdr.h"
 #include "proxycom.h"
 #include "prxyclnt.h"
-#include "winGTK.h"
 #include "wintype.h"
 #include "func_tab.h"
 #include "dlb.h"
