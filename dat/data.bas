@@ -2214,7 +2214,6 @@ ninja
 nurse
 page
 *priest*
-ronin
 samurai
 shopkeeper
 student
