@@ -1667,7 +1667,7 @@ GTK_nhgetch(void)
 
     keysym = keysym1;
     keysym1 = 0;
-    if(!keysym)
+    while(!keysym)
 	main_hook();
 
     key = keysym;
@@ -1688,7 +1688,7 @@ GTK_nh_poskey(int *x, int *y, int *mod)
     keysym = keysym1;
     keysym1 = 0;
 
-    if(!keysym)
+    while(!keysym)
     {
 	nh_map_click(TRUE);
 	main_hook();
