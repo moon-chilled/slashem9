@@ -101,7 +101,7 @@ void GTK_extcmd_set(int cmd)
 	return;
     else {
 	for(j = 0; j < n_extcmds; j++)
-	    if (!strcmpi(extcmdmap[cmd].txt, extcmds[j])) {
+	    if (!nh_strncmpi(extcmdmap[cmd].txt, extcmds[j], -1)) {
 		extcmd = j;
 		return;
 	    }

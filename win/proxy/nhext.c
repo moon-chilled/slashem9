@@ -62,6 +62,18 @@ void nhext_subprotocol1_end_c(int cn)
     nhext_connections[cn].out = NULL;
 }
 
+/*
+ * This function is available for callers to use if sub-protocol 1 fails.
+ * It returns a pointer to the received packet which was being processed
+ * at the time.
+ */
+
+char *nhext_subprotocol1_get_failed_packet(int cn, int *nb)
+{
+    *nb = nhext_connections[cn].reply_len;
+    return nhext_connections[cn].reply;
+}
+
 int nhext_rpc_vparams(NhExtXdr *xdrs, int no, va_list *app)
 {
     int retval = TRUE;
