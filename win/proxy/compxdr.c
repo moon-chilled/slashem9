@@ -97,3 +97,21 @@ struct proxycb_get_extended_commands_res *datum;
     return nhext_xdr_array(xdr, (char **)&datum->commands, &datum->n_commands,
         (unsigned int)-1, sizeof(char *), nhext_xdr_wrapstring);
 }
+
+boolean proxycb_xdr_get_tilesets_res_tileset(xdr, datum)
+NhExtXdr *xdr;
+struct proxycb_get_tilesets_res_tileset *datum;
+{
+    return nhext_xdr_wrapstring(xdr, (char **)&datum->name) &
+      nhext_xdr_wrapstring(xdr, (char **)&datum->file) &
+      nhext_xdr_long(xdr, &datum->flags);
+}
+
+boolean proxycb_xdr_get_tilesets_res(xdr, datum)
+NhExtXdr *xdr;
+struct proxycb_get_tilesets_res *datum;
+{
+    return nhext_xdr_array(xdr, (char **)&datum->tilesets, &datum->n_tilesets,
+        (unsigned int)-1, sizeof(struct proxycb_get_tilesets_res_tileset),
+	proxycb_xdr_get_tilesets_res_tileset);
+}
