@@ -125,6 +125,8 @@ extern unsigned int proxy_glyph_map_get_length(
 
 /* ### prxytile.c ### */
 
+extern struct proxy_tilemap *proxy_new_tilemap(void);
+extern int proxy_load_tilemap_line(struct proxy_tilemap *map, const char *line);
 extern struct proxy_tilemap *proxy_load_tilemap(int, void (*pulse)(),
 	void *pulse_data);
 extern void proxy_free_tilemap(struct proxy_tilemap *);
