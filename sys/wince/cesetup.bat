@@ -70,6 +70,16 @@ copy winhcksp.rc  ..\..\wince\winhack_sp.rc
 copy winmain.c    ..\..\wince\winmain.c
 copy winMS.h      ..\..\wince\winMS.h
 copy cesound.c    ..\..\wince\cesound.c
+copy mksetup.bat  ..\..\wince\mksetup.bat
+copy slashem.inf  ..\..\wince\slashem.inf
+copy slashem.ini  ..\..\wince\slashem.ini
+echo.
+echo Attempting to copy existing data files 
+echo This will only succeed if you have successfully
+echo built the sys/winnt SLASHEM
+copy ..\..\binary\nhshare      ..\..\wince\nhshare
+copy ..\..\binary\nhushare     ..\..\wince\nhushare
+copy ..\..\binary\defaults.nh  ..\..\wince\defaults.nh
 echo.
 echo Proceed with the following steps:
 echo.
