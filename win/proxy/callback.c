@@ -65,9 +65,18 @@ callback_display_inventory(id, request, reply)
 unsigned short id;
 NhExtXdr *request, *reply;
 {
-    display_inventory((char *)0, FALSE);
-    if (!nhext_async_mode())
-	nhext_rpc_params(reply, 0);
+    /*
+     * Ignore recursive calls. They cause the game to
+     * produce illegal output and have no utility.
+     */
+    static int busy = 0;
+    if (!busy) {
+	busy++;
+	display_inventory((char *)0, FALSE);
+	if (!nhext_async_mode())
+	    nhext_rpc_params(reply, 0);
+	busy--;
+    }
 }
 
 /* 
