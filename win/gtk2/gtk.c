@@ -266,6 +266,17 @@ static gint
 nh_dialog_partial_grab(GtkWidget *widget, gpointer data)
 {
     boolean enable = !GPOINTER_TO_INT(data);
+#if GTK_CHECK_VERSION(1,3,12)
+    if (enable)
+	gtk_window_add_accel_group(GTK_WINDOW(main_window), accel_group);
+    else
+	gtk_window_remove_accel_group(GTK_WINDOW(main_window), accel_group);
+#else
+    if (enable)
+	gtk_accel_group_attach(accel_group, G_OBJECT(main_window));
+    else
+	gtk_accel_group_detach(accel_group, G_OBJECT(main_window));
+#endif
     nh_menu_sensitive("/Game", enable);
     nh_menu_sensitive("/Move", enable);
     nh_menu_sensitive("/Fight", enable);
