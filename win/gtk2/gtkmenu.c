@@ -180,6 +180,8 @@ GTK_start_menu(winid id)
     menu_info->new_menu.n_menuitem = 0;
     menu_info->new_menu.c_menuitem = 'a';
     menu_info->new_menu.clist = GTK_CLIST(gtk_clist_new(MENU_COLS));
+    g_object_ref(menu_info->new_menu.clist);
+    gtk_object_sink(GTK_OBJECT(menu_info->new_menu.clist));
 }
 
 static void
