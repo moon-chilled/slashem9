@@ -378,8 +378,12 @@ main(int argc, char **argv)
 	    if (flags & PROXY_CLNT_LOGGED)
 		gtkhack_enable_logging(TRUE);
 	    gtk_widget_realize(progress);
+#if GTK_CHECK_VERSION(2,2,0)
 	    cursor = gdk_cursor_new_for_display(
 	      gdk_drawable_get_display(progress->window), GDK_WATCH);
+#else
+	    cursor = gdk_cursor_new(GDK_WATCH);
+#endif
 	    gdk_window_set_cursor(progress->window, cursor);
 	    gdk_cursor_unref(cursor);
 	    gtk_widget_show_now(progress);
