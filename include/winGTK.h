@@ -25,6 +25,9 @@
 #endif
 
 #define GTK_GRAPHICS	/* Needed when building an external interface */
+#ifdef GTKHACK
+#define GTK_PROXY
+#endif
 
 #ifdef WINGTK_X11
 #include <gdk/gdkx.h>

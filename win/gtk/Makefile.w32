@@ -79,7 +79,7 @@ OBJS01 = gtkhack.o gtk.o gtkgetlin.o gtkstatus.o gtkmenu.o gtkyn.o gtkextcmd.o
 OBJS02 = gtkmap.o gtkmessage.o gtkmisc.o gtktile.o xshmmap.o gtkext.o
 OBJS03 = gtkhackrc.o gtkprefs.o panic.o
 
-gtkhack.exe:	cc-gtk.exe $(OBJS01) $(OBJS02) $(NHPROXYLIB)/nhproxy.a
+gtkhack.exe:	cc-gtk.exe $(OBJS01) $(OBJS02) $(OBJS03) $(NHPROXYLIB)/nhproxy.a
 	@echo INPUT( $(OBJS01) )> tmp.lnk
 	@echo INPUT( $(OBJS02) )>> tmp.lnk
 	@echo INPUT( $(OBJS03) )>> tmp.lnk
