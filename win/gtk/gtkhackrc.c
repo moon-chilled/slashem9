@@ -534,9 +534,11 @@ static GString *print_value(GtkHackRcValue *var)
 	    return str;
 	case PARSE_VALUE_TYPE_VECTOR:
 	    str = g_string_new("[");
-	    vl = print_value_list(&var->u.vector);
-	    g_string_append_len(str, vl->str, vl->len);
-	    g_string_free(vl, TRUE);
+	    if (var->u.vector.n_values) {
+		vl = print_value_list(&var->u.vector);
+		g_string_append_len(str, vl->str, vl->len);
+		g_string_free(vl, TRUE);
+	    }
 	    g_string_append_c(str, ']');
 	    return str;
 	case PARSE_VALUE_TYPE_VALUE_LIST:
