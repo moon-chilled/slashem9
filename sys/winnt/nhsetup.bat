@@ -76,8 +76,11 @@ copy ..\..\win\win32\tile2bmp.dsp  ..\..\build >nul
 copy ..\..\win\win32\tiles.dsp     ..\..\build >nul
 copy ..\..\win\win32\tiles.mak     ..\..\build >nul
 copy ..\..\win\win32\tilemap.dsp   ..\..\build >nul
-copy ..\..\win\win32\uudecode.dsp   ..\..\build >nul
-copy ..\..\win\win32\nethackw.dsp   ..\..\build >nul
+copy ..\..\win\win32\uudecode.dsp  ..\..\build >nul
+copy ..\..\win\win32\nethackw.dsp  ..\..\build >nul
+copy ..\..\win\win32\magtile.dsp   ..\..\build >nul
+copy ..\..\win\win32\txtbg.dsp     ..\..\build >nul
+copy ..\..\win\win32\txtmerge.dsp  ..\..\build >nul
 
 goto :done
 
