@@ -194,7 +194,7 @@ stat_align(void *data)
     return "";
 }
 
-#if defined(MONITOR_HEAP) && defined(LINUX)
+#if defined(MONITOR_HEAP) && defined(INTERNAL_MALLOC)
 static int
 stat_mem()
 {
@@ -249,7 +249,7 @@ struct nh_stat_tab {
 	{NOVALUE, STAT_TYPE_F_INT, NULL,	"INT",		stat_stat, (void *)A_INT},
 	{NOVALUE, STAT_TYPE_F_INT, NULL,	"WIS",		stat_stat, (void *)A_WIS},
 	{NOVALUE, STAT_TYPE_F_INT, NULL,	"CHA",		stat_stat, (void *)A_CHA},
-#if defined(MONITOR_HEAP) && defined(LINUX)
+#if defined(MONITOR_HEAP) && defined(INTERNAL_MALLOC)
 	{NOVALUE, STAT_TYPE_F_INT, NULL,	"MEM",		stat_mem},
 #endif
     },
