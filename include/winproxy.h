@@ -85,15 +85,6 @@ E void NDECL(proxy_end_screen);
 E void FDECL(proxy_outrip, (winid, int));
 E void FDECL(proxy_status, (int, int, const char **));
 
-/* riputil.c */
-E char * FDECL(get_killer_string, (int));
-/* getopt.c */
-E char * FDECL(get_option, (char *));
-/* glyphmap.c */
-E void NDECL(set_glyph_mapping);
-E struct proxycb_get_glyph_mapping_res * NDECL(get_glyph_mapping);
-E void FDECL(free_glyph_mapping, (struct proxycb_get_glyph_mapping_res *));
-
 #undef E
 
 #endif /* WINPROXY_H */

@@ -307,4 +307,13 @@ extern nhext_xdr_bool_t FDECL(proxycb_xdr_get_extensions_res,
 		(NhExtXdr *, struct proxycb_get_extensions_res *));
 #endif  /* NHXDR_H */
 
+/* riputil.c */
+extern char * FDECL(get_killer_string, (int));
+/* getopt.c */
+extern char * FDECL(get_option, (char *));
+/* glyphmap.c */
+extern void NDECL(set_glyph_mapping);
+extern struct proxycb_get_glyph_mapping_res * NDECL(get_glyph_mapping);
+extern void FDECL(free_glyph_mapping, (struct proxycb_get_glyph_mapping_res *));
+
 #endif /* PROXYCOM_H */
