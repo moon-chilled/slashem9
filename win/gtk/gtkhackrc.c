@@ -606,20 +606,15 @@ nh_scan_gtkhackrc(GScanner *scanner)
     struct gtkhackrc *rc = GTKHACKRC(scanner);
     char *home, *file;
     home = getenv("HOME");
-    if (!home) {
-	g_scanner_destroy(scanner);
+    if (!home)
 	return FALSE;			/* Can't write file */
-    }
     file = malloc(strlen(home) + 12);
-    if (!file) {
-	g_scanner_destroy(scanner);
+    if (!file)
 	return FALSE;
-    }
     sprintf(file, "%s/.gtkhackrc", home);
     fd = open(file, O_RDONLY);
     if (fd < 0) {
 	free(file);
-	g_scanner_destroy(scanner);
 	return TRUE;
     }
     scanner->input_name = file;
