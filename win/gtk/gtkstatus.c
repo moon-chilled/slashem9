@@ -246,8 +246,8 @@ struct nh_stat_tab {
 	{NOVALUE, STAT_TYPE_F_CHAR_P, NULL,	"STR",		stat_str},
 	{NOVALUE, STAT_TYPE_F_INT, NULL,	"DEX",		stat_stat, (void *)A_DEX},
 	{NOVALUE, STAT_TYPE_F_INT, NULL,	"CON",		stat_stat, (void *)A_CON},
-	{NOVALUE, STAT_TYPE_F_INT, NULL,	"INT",		stat_stat, (void *)A_CON},
-	{NOVALUE, STAT_TYPE_F_INT, NULL,	"WIZ",		stat_stat, (void *)A_WIS},
+	{NOVALUE, STAT_TYPE_F_INT, NULL,	"INT",		stat_stat, (void *)A_INT},
+	{NOVALUE, STAT_TYPE_F_INT, NULL,	"WIS",		stat_stat, (void *)A_WIS},
 	{NOVALUE, STAT_TYPE_F_INT, NULL,	"CHA",		stat_stat, (void *)A_CHA},
 #if defined(MONITOR_HEAP) && defined(LINUX)
 	{NOVALUE, STAT_TYPE_F_INT, NULL,	"MEM",		stat_mem},
