@@ -78,43 +78,36 @@ GTK_ext_getlin(const char *query)
 
     vbox = nh_gtk_new_and_add(gtk_vbox_new(FALSE, 0), frame, "");
 
-    entry = nh_gtk_new_and_pack(
-	gtk_entry_new(), vbox, "",
-	FALSE, FALSE, NH_PAD);
+    entry = nh_gtk_new_and_pack(gtk_entry_new(), vbox, "",
+      FALSE, FALSE, NH_PAD);
 
 #if GTK_CHECK_VERSION(2,0,0)
-    gtk_entry_set_activates_default(entry, TRUE);
+    gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 #endif
 
     nh_gtk_focus_set_master(GTK_WINDOW(window),
       GTK_SIGNAL_FUNC(entry_key_press), 0);
 
-    hbox = nh_gtk_new_and_pack(
-	gtk_hbox_new(FALSE, 0), vbox, "",
-	FALSE, FALSE, NH_PAD);
+    hbox = nh_gtk_new_and_pack(gtk_hbox_new(FALSE, 0), vbox, "",
+      FALSE, FALSE, NH_PAD);
 
-    ok = nh_gtk_new_and_pack(
-	gtk_button_new_with_label("OK"), hbox, "",
-	FALSE, FALSE, NH_PAD);
+    ok = nh_gtk_new_and_pack(gtk_button_new_with_label("OK"), hbox, "",
+      FALSE, FALSE, NH_PAD);
 
     GTK_WIDGET_SET_FLAGS(ok, GTK_CAN_DEFAULT);
     gtk_widget_grab_default(ok);
 
-    gtk_signal_connect(
-	GTK_OBJECT(ok), "clicked",
-	GTK_SIGNAL_FUNC(entry_ok), NULL);
+    gtk_signal_connect(GTK_OBJECT(ok), "clicked",
+      GTK_SIGNAL_FUNC(entry_ok), NULL);
 
-    cancel = nh_gtk_new_and_pack(
-	gtk_button_new_with_label("CANCEL"), hbox, "",
-	FALSE, FALSE, NH_PAD);
+    cancel = nh_gtk_new_and_pack(gtk_button_new_with_label("CANCEL"), hbox, "",
+      FALSE, FALSE, NH_PAD);
 
-    gtk_signal_connect(
-	GTK_OBJECT(cancel), "clicked",
-	GTK_SIGNAL_FUNC(entry_cancel), NULL);
+    gtk_signal_connect(GTK_OBJECT(cancel), "clicked",
+      GTK_SIGNAL_FUNC(entry_cancel), NULL);
 
-    h = gtk_signal_connect(
-	GTK_OBJECT(window), "destroy",
-	GTK_SIGNAL_FUNC(getlin_destroy), NULL);
+    h = gtk_signal_connect(GTK_OBJECT(window), "destroy",
+      GTK_SIGNAL_FUNC(getlin_destroy), NULL);
 
     gtk_widget_grab_focus(entry);
     gtk_grab_add(window);

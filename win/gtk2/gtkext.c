@@ -8,8 +8,9 @@
 */
 
 /*
- * This module contains everything that is only needed for the external interface
- * (ie., when linking the GTK interface seperately from the game executable).
+ * This module contains everything that is only needed for the external
+ * interface (ie., when linking the GTK interface seperately from the game
+ * executable).
  */
 
 #include "winGTK.h"
@@ -72,7 +73,6 @@ struct window_ext_procs GTK_ext_procs = {
 static void
 v_hook()
 {
-    ;
 }
 
 static int
