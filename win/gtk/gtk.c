@@ -1275,12 +1275,12 @@ focus_key_press_early(GtkWidget *widget, GdkEventKey *event, gpointer data)
       event->keyval == GDK_Right || event->keyval == GDK_KP_Right ||
       event->keyval == GDK_Tab || event->keyval == GDK_ISO_Left_Tab))
 	return focus_key_press(widget, event, data);
-    if (event->keyval == GDK_Escape || event->keyval == GDK_KP_0 ||
-      event->keyval == GDK_KP_1 || event->keyval == GDK_KP_2 ||
-      event->keyval == GDK_KP_3 || event->keyval == GDK_KP_4 ||
-      event->keyval == GDK_KP_5 || event->keyval == GDK_KP_6 ||
-      event->keyval == GDK_KP_7 || event->keyval == GDK_KP_8 ||
-      event->keyval == GDK_KP_9)
+    if (event->keyval == GDK_Escape || event->keyval == GDK_space ||
+      event->keyval == GDK_KP_0 || event->keyval == GDK_KP_1 ||
+      event->keyval == GDK_KP_2 || event->keyval == GDK_KP_3 ||
+      event->keyval == GDK_KP_4 || event->keyval == GDK_KP_5 ||
+      event->keyval == GDK_KP_6 || event->keyval == GDK_KP_7 ||
+      event->keyval == GDK_KP_8 || event->keyval == GDK_KP_9)
 	return focus_key_press(widget, event, data);
     else
 	return FALSE;
