@@ -154,11 +154,12 @@ connect_pipe(void *rh, void *wh)
 static int
 client_read_file(void *handle, void *buf, unsigned int len)
 {
-    DWORD nb;
-    if (!ReadFile((HANDLE)handle, buf, len, &nb, NULL))
-	return -1;
-    else
-	return nb;
+    DWORD d;
+    if (!ReadFile((HANDLE)handle, buf, len, &d, NULL)) {
+	d = GetLastError();
+	return d == ERROR_HANDLE_EOF || d == ERROR_BROKEN_PIPE ? 0 : -1;
+    } else
+	return d;
 }
 
 static int
@@ -235,7 +236,7 @@ client_read(void *handle, void *buf, unsigned int len)
 {
     int nb;
     nb = read((int)handle, buf, len);
-    return nb;
+    return nb >= 0 ? nb : -1;
 }
 
 static int
@@ -243,7 +244,7 @@ client_write(void *handle, void *buf, unsigned int len)
 {
     int nb;
     nb = write((int)handle, buf, len);
-    return nb;
+    return nb >= 0 ? nb : -1;
 }
 
 #endif /* WIN32 */

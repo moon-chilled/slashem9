@@ -105,8 +105,10 @@ typedef void FDECL((*proxy_clnt_errhandler), (const char *));
 extern void proxy_svc_set_ext_procs(void (*)(void), struct window_ext_procs *);
 extern char *win_proxy_clnt_gettag(const char *tag);
 #ifdef NHXDR_H
+extern int win_proxy_clnt_log_open(nhext_io_func func, void *handle);
 extern int win_proxy_clnt_init(nhext_io_func, void *, nhext_io_func, void *);
 #endif
+extern int win_proxy_clnt_iteration(void);
 extern char *win_proxy_clnt_get_failed_packet(int *);
 extern char *win_proxy_clnt_get_extension(const char *name, const char *min_ver,	const char *next_ver, unsigned short *idp);
 extern proxy_clnt_errhandler proxy_clnt_set_errhandler(

@@ -29,7 +29,7 @@ LFLAGS = -g
 #CFLAGS = -O -I$(NHPROXYINC) -DGTKHACK
 #LFLAGS =
 
-LIBS =
+LIBS = -lpthread
 
 # ----------------------------------------
 #

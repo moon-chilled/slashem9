@@ -8,6 +8,7 @@
 #include "nhxdr.h"
 #include "proxycom.h"
 #include "prxyclnt.h"
+#include "proxycb.h"
 
 /* #define DEBUG */
 
@@ -82,6 +83,7 @@ proxy_new_tilemap(void)
     map->no_entries = map->max_entries = 0;
     map->no_tiles = 0;
     map->entries = NULL;
+    return map;
 }
 
 int
@@ -89,7 +91,7 @@ proxy_load_tilemap_line(struct proxy_tilemap *map, const char *line)
 {
     int i, j, k, tn;
     char buf[256];
-    char *s, c;
+    char c;
     if (!strncmp(line, "tile ", 5) &&
 	    sscanf(line + 5, "%d \"%255[^\"]", &tn, buf) == 2) {
 	map->no_tiles ++;
@@ -190,7 +192,7 @@ static short
 proxy_map_glyph(struct proxy_tilemap *tile_map,
   struct proxy_glyph_mapping *desc)
 {
-    int i, j, k;
+    int i, j;
     int best = -1;
     int best_refs;
     int best_matches;

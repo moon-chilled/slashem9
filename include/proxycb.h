@@ -46,5 +46,7 @@ extern void FDECL(proxy_cb_free_glyph_mapping,
 extern struct proxycb_get_extensions_res *NDECL(proxy_cb_get_extensions);
 extern void FDECL(proxy_cb_free_extensions,
 		(struct proxycb_get_extensions_res *extensions));
+extern unsigned long *FDECL(proxy_cb_start_async_mode,
+		(int, unsigned long *async_callbacks, int *));
 
 #endif /* PROXYCB_H */

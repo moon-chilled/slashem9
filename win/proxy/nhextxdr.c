@@ -1,8 +1,9 @@
 /* $Id$ */
-/* Copyright (c) Slash'EM Development Team 2001-2002 */
+/* Copyright (c) Slash'EM Development Team 2001-2003 */
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include <stdlib.h>
+#include <string.h>
 #include "nhxdr.h"
 
 /*

@@ -142,7 +142,7 @@ GTK_client_read(void *handle, void *buf, unsigned int len)
 {
     int nb;
     nb = read((int)handle, buf, len);
-    return nb;
+    return nb >= 0 ? nb : -1;
 }
 
 static int
@@ -150,7 +150,7 @@ GTK_client_write(void *handle, void *buf, unsigned int len)
 {
     int nb;
     nb = write((int)handle, buf, len);
-    return nb;
+    return nb >= 0 ? nb : -1;
 }
 #endif
 
