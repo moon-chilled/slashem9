@@ -47,16 +47,13 @@ struct nhext_line {
 
 E int FDECL(nhext_init, (NhExtIO *, NhExtIO *, struct nhext_svc *));
 E void NDECL(nhext_end);
-E void FDECL(nhext_end_c, (int));
-E int FDECL(nhext_subprotocol0_write_line_c, (int, struct nhext_line *));
+E int FDECL(nhext_subprotocol0_write_line, (struct nhext_line *));
 E void FDECL(nhext_subprotocol0_free_line, (struct nhext_line *));
-E struct nhext_line *FDECL(nhext_subprotocol0_read_line_c, (int ));
-E char *FDECL(nhext_subprotocol0_get_failed_packet, (int, int *));
+E struct nhext_line *NDECL(nhext_subprotocol0_read_line);
+E char *FDECL(nhext_subprotocol0_get_failed_packet, (int *));
 E int VDECL(nhext_rpc_params, (NhExtXdr *xdrs, int, ...));
 E int VDECL(nhext_rpc, (unsigned short, ...));
-E int VDECL(nhext_rpc_c, (int, unsigned short, ...));
 E int FDECL(nhext_svc, (struct nhext_svc *));
-E int FDECL(nhext_svc_c, (int, struct nhext_svc *));
 #endif	/* NHXDR_H */
 
 #define EXT_FID_INIT			0x01

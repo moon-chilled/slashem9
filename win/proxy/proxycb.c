@@ -8,16 +8,6 @@
 #include "proxycom.h"
 #include "proxycb.h"
 
-extern int proxy_svc_connection;
-
-/*
- * Warning: This uses a gcc extension. The assumption is that we're going to
- * remove the connection number before release anyway, so it's easier not to
- * add a new parameter to every call to next_rpc().
- */
-
-#define nhext_rpc(id, args...) nhext_rpc_c(proxy_svc_connection, id, args)
-
 void
 proxy_cb_display_inventory()
 {
