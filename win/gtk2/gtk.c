@@ -72,6 +72,8 @@ static GtkItemFactory	*main_item_factory;
 int			root_width;
 int			root_height;
 
+static int		exiting = 0;
+
 GdkColor	  nh_color[N_NH_COLORS] = {
     /*
      * Standard NetHack colours (CLR_...)
@@ -600,7 +602,7 @@ main_hook(int *watch)
 	nh_radar_update();
 #endif
 
-    while(!nh_key_check() && (!watch || !*watch))
+    while(!exiting && !nh_key_check() && (!watch || !*watch))
 	gtk_main_iteration();
 }
 
@@ -756,6 +758,7 @@ ext_command(GtkWidget *widget, gpointer data)
 static void
 quit()
 {
+    exiting++;
 #ifdef GTK_PROXY
     proxy_cb_quit_game();
 #else
