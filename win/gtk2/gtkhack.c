@@ -1,10 +1,10 @@
 /* $Id$ */
-/* Copyright (c) Slash'EM Development Team 2002 */
+/* Copyright (c) Slash'EM Development Team 2002-2003 */
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include <stdio.h>
 #include "winGTK.h"
-#include "proxysvr.h"
+#include "prxyclnt.h"
 #include "proxycb.h"
 
 int

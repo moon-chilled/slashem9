@@ -3,7 +3,7 @@
  */
 /*
   GTK+ NetHack Copyright (c) Issei Numata 1999-2000
-               Copyright (c) Slash'EM Development Team 2000-2002
+               Copyright (c) Slash'EM Development Team 2000-2003
   GTK+ NetHack may be freely redistributed.  See license for details. 
 */
 
@@ -12,7 +12,7 @@
 #include "winGTK.h"
 #include "dlb.h"
 #include "proxycb.h"
-#include "proxysvr.h"
+#include "prxyclnt.h"
 
 /* #define DEBUG */
 

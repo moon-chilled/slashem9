@@ -1,5 +1,5 @@
 /* $Id$ */
-/* Copyright (c) Slash'EM Development Team 2002 */
+/* Copyright (c) Slash'EM Development Team 2002-2003 */
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include <stdlib.h>
@@ -7,7 +7,7 @@
 #include <string.h>
 #include "nhxdr.h"
 #include "proxycom.h"
-#include "proxysvr.h"
+#include "prxyclnt.h"
 
 /* #define DEBUG */
 

@@ -3,7 +3,7 @@
  */
 /*
   GTK+ NetHack Copyright (c) Issei Numata 1999-2000
-               Copyright (c) Slash'EM Development Team 2001-2002
+               Copyright (c) Slash'EM Development Team 2001-2003
   GTK+ NetHack may be freely redistributed.  See license for details. 
 */
 
@@ -1960,7 +1960,7 @@ GTK_exit_nhwindows(const char *str)
     }
 #endif
 #if defined(GTK_PROXY)
-    proxy_exit_server();
+    proxy_exit_client_services();
 #endif
 }
 
