@@ -30,7 +30,7 @@ struct window_ext_procs GTK_ext_procs = {
     v_hook, /* suspend_nhwindows */
     v_hook, /* resume_nhwindows */
     GTK_create_nhwindow,
-    GTK_clear_nhwindow,
+    GTK_ext_clear_nhwindow,
     GTK_display_nhwindow,
     GTK_destroy_nhwindow,
     GTK_curs,

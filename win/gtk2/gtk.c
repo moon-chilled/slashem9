@@ -2115,11 +2115,10 @@ GTK_display_nhwindow(winid id, BOOLEAN_P blocking)
 }
 
 void
-GTK_clear_nhwindow(winid id)
+GTK_ext_clear_nhwindow(winid id, int rows, int cols, int layers)
 {
-    if (gtkWindows[id].type == NHW_MAP) {
-	nh_map_clear();
-    }
+    if (gtkWindows[id].type == NHW_MAP)
+	nh_map_clear(rows, cols, layers);
 }
 
 /*
