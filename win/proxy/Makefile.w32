@@ -44,11 +44,10 @@ $(CONFIG_H): ../../include/config.h
 $(HACK_H): ../../include/hack.h
 	touch $(HACK_H)
 #
-nhxdr.o: nhxdr.c $(HACK_H) ../../include/nhxdr.h
-nhext.o: nhext.c $(HACK_H) ../../include/nhxdr.h ../../include/proxycom.h \
-		../../include/winproxy.h
-nhextxdr.o: nhextxdr.c $(HACK_H) ../../include/nhxdr.h
-nhextio.o: nhextio.c ../../include/proxycom.h
+nhxdr.o: nhxdr.c ../../include/nhxdr.h
+nhext.o: nhext.c ../../include/nhxdr.h ../../include/proxycom.h
+nhextxdr.o: nhextxdr.c ../../include/nhxdr.h
+nhextio.o: nhextio.c ../../include/nhxdr.h ../../include/proxycom.h
 # DEPENDENCIES MUST END AT END OF FILE
 # IF YOU PUT STUFF HERE IT WILL GO AWAY
 # see Makefile.unx

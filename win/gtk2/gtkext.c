@@ -13,7 +13,7 @@
  */
 
 #include "winGTK.h"
-#include "winproxy.h"
+#include "proxysvr.h"
 
 static void v_hook();
 static int i_hook();

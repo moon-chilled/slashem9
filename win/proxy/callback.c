@@ -7,8 +7,8 @@
 #include "hack.h"
 #include "func_tab.h"
 #include "nhxdr.h"
+#include "proxycom.h"
 #include "winproxy.h"
-#include "proxycb.h"
 
 static void FDECL(callback_display_inventory, \
 			(unsigned short, NhExtXdr *, NhExtXdr *));

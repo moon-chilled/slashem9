@@ -11,7 +11,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include "winGTK.h"
-#include "winproxy.h"
 #ifdef SHORT_FILENAMES
 #include "patchlev.h"
 #else

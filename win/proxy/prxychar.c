@@ -5,10 +5,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include "hack.h"
-#include "winproxy.h"
+#include "nhxdr.h"
+#include "proxycom.h"
 #include "proxysvr.h"
-#include "proxycb.h"
 
 long *
 proxy_map_glyph2char(glyph_map)

@@ -4,7 +4,6 @@
 
 #include "hack.h"
 #include "nhxdr.h"
-#include "proxycb.h"
 #include "winproxy.h"
 
 /* #define DEBUG */

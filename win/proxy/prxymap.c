@@ -4,10 +4,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "hack.h"
-#include "winproxy.h"
+#include "nhxdr.h"
+#include "proxycom.h"
 #include "proxysvr.h"
-#include "proxycb.h"
 
 static void
 proxy_set_description(struct proxy_glyph_mapping *datum, int level,

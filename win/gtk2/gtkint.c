@@ -16,7 +16,6 @@
 #include <signal.h>
 #include "winGTK.h"
 #include "wintype.h"
-#include "winproxy.h"
 #include "func_tab.h"
 #include "dlb.h"
 #ifdef SHORT_FILENAMES

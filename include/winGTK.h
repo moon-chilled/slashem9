@@ -42,7 +42,8 @@
 #include "hack.h"
 #include "wintty.h"
 #if defined(GTK_V20)
-#include "winproxy.h"
+#include "nhxdr.h"
+#include "proxycom.h"
 #endif
 
 #define WINGTK_MENU_IMAGES	/* Pretty images (tiles) in first column */

@@ -6,6 +6,7 @@
 
 #include <stdlib.h>
 #include <limits.h>
+#include "nhxdr.h"
 #include "proxycom.h"
 
 struct NhExtIO_ {
