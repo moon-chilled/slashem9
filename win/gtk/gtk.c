@@ -12,6 +12,9 @@
 
 #include <sys/types.h>
 #include <signal.h>
+#ifdef WIN32
+#include <windows.h>
+#endif
 #include "md5.h"
 #include "winGTK.h"
 #include "wintype.h"
