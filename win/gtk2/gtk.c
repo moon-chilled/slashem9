@@ -2536,6 +2536,12 @@ GTK_ext_outrip(winid id, char *str)
     free(rip_file);
 #endif
 
+    if (!rip_pixmap) {
+	rip_pixmap = gdk_pixmap_new(w->window, 310, 200, -1);
+	gdk_draw_rectangle(rip_pixmap, w->style->white_gc, TRUE, 0, 0,
+	  310, 200);
+    }
+
     rip = nh_gtk_new_and_pack(
 	gtk_pixmap_new(rip_pixmap, 0), vbox, "",
 	FALSE, FALSE, NH_PAD);
