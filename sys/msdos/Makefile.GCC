@@ -1525,7 +1525,7 @@ $(O)monstr.o: monstr.c $(CONFIG_H)
 $(O)vis_tab.o: vis_tab.c $(CONFIG_H) $(INCL)/vis_tab.h
 $(O)allmain.o: allmain.c $(HACK_H)
 $(O)alloc.o: alloc.c $(CONFIG_H)
-$(O)apply.o: apply.c $(HACK_H) $(INCL)/edog.h
+$(O)apply.o: apply.c $(HACK_H) $(INCL)/edog.h $(INCL)/eleash.h
 $(O)artifact.o: artifact.c $(HACK_H) $(INCL)/artifact.h $(INCL)/artilist.h
 $(O)attrib.o: attrib.c $(HACK_H) $(INCL)/artifact.h
 $(O)ball.o: ball.c $(HACK_H)
