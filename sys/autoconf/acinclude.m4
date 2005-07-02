@@ -23,7 +23,7 @@ AC_DEFUN([NETHACK_DISABLE],
 # Update if there is a newer source
 AC_DEFUN([NETHACK_LINKS_ADD],
 	if test ${srcdir}/$1 -nt $1 ; then
-	   NETHACK_LINKS="${LINKS_LIST} $1:$1"
+	   NETHACK_LINKS="${NETHACK_LINKS} $1:$1"
 	fi)
 
 # Autoconf's standard AC_CONFIG_HEADERS() avoids undefining switches because
