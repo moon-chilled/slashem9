@@ -28,11 +28,12 @@ AC_DEFUN([NETHACK_LINKS_ADD],
 
 # Autoconf's standard AC_CONFIG_HEADERS() avoids undefining switches because
 # of concern that it might undefine system switches (eg., POSIX_SOURCE).
-# However, we need to override the settings in config.h etc., so we
-# post-process the generated headers and force an explicit define or undefine.
+# However, we need to override the settings in config.h etc., so we post-process
+# the generated headers and force an explicit define and/or undefine.
 AC_DEFUN([NETHACK_CONFIG_HEADER],
     [AC_CONFIG_HEADERS([$1],
-      [sed 's,^/\* \(#undef .*\) \*/,\1,'] < m4_bpatsubst([$1], [:.*]) \
-        > m4_bpatsubst([$1], [[^.]*:.*], [new])
+      [sed -e 's,^/\* \(#undef .*\) \*/,\1,' \
+        -e 's,#define \([^ ]*\),#undef \1\n&,'] \
+        < m4_bpatsubst([$1], [:.*]) > m4_bpatsubst([$1], [[^.]*:.*], [new])
       [mv] m4_bpatsubst([$1], [[^.]*:.*], [new]) \
         m4_bpatsubst([$1], [:.*]),[])])

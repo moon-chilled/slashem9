@@ -277,6 +277,19 @@ NETHACK_ENABLE(goldobj,goldobj,
 NETHACK_ENABLE(autopickup-exceptions,autopickup_exceptions,
 	[Exceptions to autopickup (experimental)],AUTOPICKUP_EXCEPTIONS)
 
+AC_MSG_CHECKING([whether to enable wizmode])
+AC_ARG_ENABLE([wizmode], AC_HELP_STRING([--enable-wizmode=USER],
+	[enable wizard mode for the specified user (default=wizard)]),
+	if test "$enableval" != no; then enable_wizmode=yes; wizard=$enableval;
+	else enable_wizmode=no; fi, enable_wizmode=yes; wizard="wizard")
+if test "$enable_wizmode" != "no" ; then
+	AC_MSG_RESULT([yes (user $wizard)])
+	AC_DEFINE_UNQUOTED([WIZARD], ["$wizard"], [The person allowed to use the -D option])
+else
+	AC_MSG_RESULT([no])
+fi
+
+
 NETHACK_LINKS=
 NETHACK_LINKS_ADD([include/file.h])
 NETHACK_LINKS_ADD([dat/data.base])
