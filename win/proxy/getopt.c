@@ -203,6 +203,7 @@ char *get_option(const char *option)
 	}
 	return buf;
     }
+# ifdef MSDOS
     if (!strcmp(option, "videoshades")) {
 	sprintf(buf, "%s-%s-%s",
 		ttycolors[CLR_BLACK] == M_BLACK ? "dark" :
@@ -212,6 +213,7 @@ char *get_option(const char *option)
 		ttycolors[CLR_WHITE] == M_BLACK ? "dark" :
 		ttycolors[CLR_WHITE] == M_GRAY ?  "normal" : "light");
     }
+# endif
 #endif
     if (!strcmp(option, "menustyle")) {
 	switch (flags.menu_style) {
