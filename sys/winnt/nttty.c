@@ -136,7 +136,6 @@ KEYHANDLERNAME pKeyHandlerName;
 #endif
 int ttycolors[CLR_MAX];
 # ifdef TEXTCOLOR
-int ttycolors[CLR_MAX];
 static void NDECL(init_ttycolor);
 # endif
 static void NDECL(really_move_cursor);
