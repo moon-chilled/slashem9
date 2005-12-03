@@ -113,7 +113,7 @@ MONSTER[80%]:'%',"killer tripe ration",place[1],asleep
 MONSTER[80%]:'%',"bad egg",place[1],asleep
 MONSTER[60%]:'%',"bad egg",place[1],asleep
 MONSTER[40%]:'%',"bad egg",place[1],asleep
-OBJECT:'%',"egg",place[1],"giant louse",1
+OBJECT:'%',"egg",place[1],"giant louse",2
 OBJECT[40%]:'%',"egg",place[1],"giant flea",0
 OBJECT[20%]:'%',"mushroom",place[1],cursed,0
 OBJECT[50%]:'%',"tin",place[1],"asphynx meat",0
