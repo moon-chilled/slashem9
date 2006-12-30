@@ -231,3 +231,13 @@ AC_DEFUN([NETHACK_CHECK_LIBPNG],[
     m4_ifval([$3],[else $3],[])
     fi
 ])
+
+# NETHACK_COMMAND_IFELSE(command, action-if, action-if-not)
+# ---------------------------------
+# If command returns an exit status of 0 when executed, run shell commands
+# action-if. Otherwise, run shell commands action-if-not.
+AC_DEFUN([NETHACK_COMMAND_IFELSE], [
+    AS_IF([AC_TRY_COMMAND([$1])], [$2],
+    [echo "$as_me: program exited with status $ac_status" >&AS_MESSAGE_LOG_FD
+    m4_ifvaln([$3], [( exit $ac_status )
+	    $3])])])
