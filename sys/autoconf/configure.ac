@@ -111,6 +111,7 @@ AC_CHECK_TOOLS(CHOWN,[chown true])
 AC_CHECK_TOOLS(CHGRP,[chgrp true])
 AC_CHECK_TOOLS(CHMOD,[chmod true])
 AC_CHECK_TOOL(WINDRES,windres,no)
+NETHACK_PROG_COMPRESS
 
 dnl  ----- Check for libraries
 
