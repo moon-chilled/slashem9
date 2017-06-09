@@ -1,0 +1,7 @@
+Slash'EM Variant uses autotools.  To build, simply type the following:
+
+mkdir build; cd build
+../configure --prefix=$HOME/slashem-install --with-owner=`whoami` --with-group=`whoami`
+make install
+
+This will install Slash'EM Variant into ~/slashem-install.  Change this if you know what you are doing and want to do something different.
