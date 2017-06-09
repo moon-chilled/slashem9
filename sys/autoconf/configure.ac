@@ -5,7 +5,7 @@ dnl and it will cause confusing revision numbers to be included
 dnl in configure if developers forget to check in configure.ac
 dnl before running bootstrap.sh and checking in configure.
 # $Revision$
-AC_CONFIG_SRCDIR(slamfaq.txt)
+#AC_CONFIG_SRCDIR(slamfaq.txt)
 AC_SUBST(SRCDIR,[../$srcdir/src])
 AC_CONFIG_AUX_DIR(sys/autoconf)
 
