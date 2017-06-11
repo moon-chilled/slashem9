@@ -748,7 +748,6 @@ enable_unpolypile
 enable_lightsabers
 enable_d_saber
 enable_firearms
-enable_eaten_memory
 enable_steed
 enable_dwarf
 enable_tourist
@@ -1435,8 +1434,6 @@ Optional Features:
   --enable-lightsabers    Lightsabers (default=yes)
   --enable-d-saber        Dimsabers (default=yes)
   --enable-firearms       Guns and Bullets (default=yes)
-  --enable-eaten-memory   Remember which monsters have been eaten
-                          (default=yes)
   --enable-steed          Ability to ride monsters (default=yes)
   --enable-dwarf          Dwarf race (default=yes)
   --enable-tourist        Tourist class (default=yes)
@@ -6311,25 +6308,6 @@ $as_echo "$enable_firearms" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define FIREARMS /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable eaten-memory" >&5
-$as_echo_n "checking whether to enable eaten-memory... " >&6; }
-   # Check whether --enable-eaten-memory was given.
-if test "${enable_eaten_memory+set}" = set; then :
-  enableval=$enable_eaten_memory;
-else
-  enable_eaten_memory="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_eaten_memory" >&5
-$as_echo "$enable_eaten_memory" >&6; }
-   if test "$enable_eaten_memory" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define EATEN_MEMORY /**/
 _ACEOF
 
    fi

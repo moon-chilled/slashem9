@@ -1770,11 +1770,11 @@ register struct obj *obj;
 	    can->blessed = obj->blessed;
 	    can->owt = weight(can);
 	    can->known = 1;
-#ifdef EATEN_MEMORY
+
 	    /* WAC You know the type of tinned corpses */
 	    if (mvitals[corpse->corpsenm].eaten < 255) 
 	    	mvitals[corpse->corpsenm].eaten++;
-#endif    
+
 	    can->spe = -1;  /* Mark tinned tins. No spinach allowed... */
 	    if (carried(corpse)) {
 		if (corpse->unpaid)

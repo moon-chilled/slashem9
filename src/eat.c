@@ -1276,7 +1276,6 @@ opentin()		/* called during each move whilst opening a tin */
 		    which = type_is_pname(&mons[tin.tin->corpsenm]) ? 1 : 2;
 	    }
 	    if (which == 0) what = makeplural(what);
-#ifdef EATEN_MEMORY
 	    /* ALI - you already know the type of the tinned meat */
 	    if (tin.tin->known && mvitals[tin.tin->corpsenm].eaten < 255)
 		mvitals[tin.tin->corpsenm].eaten++;
@@ -1288,14 +1287,11 @@ opentin()		/* called during each move whilst opening a tin */
 		else 
 			pline_The("smell is unfamiliar.");
 	    } else
-#endif
 	    pline("It smells like %s%s.", (which == 2) ? "the " : "", what);
 
 	    if (yn("Eat it?") == 'n') {
-#ifdef EATEN_MEMORY
 	    	/* ALI - you know the tin iff you recognized the contents */
 		if (mvitals[tin.tin->corpsenm].eaten)
-#endif
 		if (!Hallucination) tin.tin->dknown = tin.tin->known = TRUE;
 		if (flags.verbose) You("discard the open tin.");
 		costly_tin((const char*)0);
@@ -1305,15 +1301,10 @@ opentin()		/* called during each move whilst opening a tin */
 	    victual.piece = (struct obj *)0;
 	    victual.fullwarn = victual.eating = victual.doreset = FALSE;
 
-#ifdef EATEN_MEMORY
 	    /* WAC - you only recognize if you've eaten this before */
 	    You("consume %s %s.", tintxts[r].txt,
 				mvitals[tin.tin->corpsenm].eaten ?
 				mons[tin.tin->corpsenm].mname : "food");
-#else
-	    You("consume %s %s.", tintxts[r].txt,
-			mons[tin.tin->corpsenm].mname);
-#endif
 
 	    /* KMH, conduct */
 	    u.uconduct.food++;
@@ -1322,9 +1313,7 @@ opentin()		/* called during each move whilst opening a tin */
 	    if (!vegetarian(&mons[tin.tin->corpsenm]))
 		violated_vegetarian();
 
-#ifdef EATEN_MEMORY
 	    if (mvitals[tin.tin->corpsenm].eaten)
-#endif
 	    tin.tin->dknown = tin.tin->known = TRUE;
 	    cprefx(tin.tin->corpsenm); cpostfx(tin.tin->corpsenm);
 
@@ -1638,10 +1627,8 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 		  ? "is delicious" : "tastes terrible");
 	}
 
-#ifdef EATEN_MEMORY
 	/* WAC Track food types eaten */
 	if (mvitals[mnum].eaten < 255) mvitals[mnum].eaten++;
-#endif
 
 	return(retcode);
 }

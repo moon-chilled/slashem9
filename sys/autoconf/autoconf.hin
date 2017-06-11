@@ -42,9 +42,6 @@
 /* Dwarf race */
 #undef DWARF
 
-/* Remember which monsters have been eaten */
-#undef EATEN_MEMORY
-
 /* Engraving the E-word repels monsters */
 #undef ELBERETH
 

@@ -327,8 +327,6 @@ NETHACK_ARG(unpolypile,[Object unpolymorphing],UNPOLYPILE,yes)
 NETHACK_ARG(lightsabers,[Lightsabers],LIGHTSABERS,yes)
 NETHACK_ARG(d-saber,[Dimsabers],LIGHTSABERS,yes)
 NETHACK_ARG(firearms,[Guns and Bullets],FIREARMS,yes)
-NETHACK_ARG(eaten-memory,[Remember which monsters have been eaten],
-  EATEN_MEMORY,yes)
 NETHACK_ARG(steed,[Ability to ride monsters],STEED,yes)
 NETHACK_ARG(dwarf,[Dwarf race],DWARF,yes)
 NETHACK_ARG(tourist,[Tourist class],TOURIST,yes)

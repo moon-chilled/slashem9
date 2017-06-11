@@ -331,7 +331,6 @@ boolean forcecontrol;
 			 * want if they specified a human.... */
 			else if (!polyok(&mons[mntmp]) && !your_race(&mons[mntmp]))
 				You("cannot polymorph into that.");
-#ifdef EATEN_MEMORY
 			else if (!mvitals[mntmp].eaten) {
 				You("attempt an unfamiliar polymorph.");
 				if ((rn2(5) + u.ulevel) < mons[mntmp].mlevel)
@@ -339,12 +338,6 @@ boolean forcecontrol;
 				/* Either way, give it a shot */
 				break;
 			}
-#else
-			else if (rn2((u.ulevel + 25)) < 20) {
-				mntmp = LOW_PM - 1;
-				break;
-			}
-#endif
 
 			else break;
 		} while(++tries < 5);
@@ -396,9 +389,7 @@ boolean forcecontrol;
         if (!polyok(&mons[mntmp]) ||
         		(Race_if(PM_DOPPELGANGER) ? (
         			((u.ulevel < mons[mntmp].mlevel)
-#ifdef EATEN_MEMORY
         			 || !mvitals[mntmp].eaten
-#endif
         			 ) && !rn2(20)) : 
 				   !rn2(5)) || your_race(&mons[mntmp]))
 		newman();
@@ -568,13 +559,11 @@ int	mntmp;
 #endif
 	}
 
-#ifdef EATEN_MEMORY
 	/* WAC Doppelgangers can stay much longer in a form they know well */
 	if (Race_if(PM_DOPPELGANGER) && mvitals[mntmp].eaten) {
 		u.mtimedone *= 2;
 		u.mtimedone += mvitals[mntmp].eaten;
 	}
-#endif
 
 	if (uskin && mntmp != armor_to_dragon(uskin->otyp))
 		skinback(FALSE);
@@ -1857,7 +1846,6 @@ special_poly()
 				Role_if(PM_GNOME) ? !is_gnome(&mons[mntmp]) :
 				!is_human(&mons[mntmp])))
 			You("cannot polymorph into that.");
-#ifdef EATEN_MEMORY
 		else if (!mvitals[mntmp].eaten && (rn2((u.ulevel + 25)) < 20)) {
 			You("don't have the knowledge to polymorph into that.");
 			return;  /* Nice try */
@@ -1865,7 +1853,6 @@ special_poly()
 			You("attempt an unfamiliar polymorph.");
 			break;
 		}
-#endif
 	} while(++tries < 5);
 	if (tries==5) {
 		pline(thats_enough_tries);
