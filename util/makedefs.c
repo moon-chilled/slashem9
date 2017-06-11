@@ -850,7 +850,6 @@ static const char *build_opts[] = {
 #endif
 #ifdef LIGHTSABERS
 		"lightsabers",
-# endif
 #endif
 #ifdef FIREARMS
 		"firearms",
