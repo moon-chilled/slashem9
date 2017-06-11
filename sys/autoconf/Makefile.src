@@ -58,10 +58,10 @@ WINTTYOBJ = getline.o termcap.o topl.o wintty.o
 WINCURSESSRC = $(srcdir)/../win/curses/cursmain.c $(srcdir)/../win/curses/curswins.c \
 	$(srcdir)/../win/curses/cursmisc.c $(srcdir)/../win/curses/cursdial.c \
 	$(srcdir)/../win/curses/cursstat.c $(srcdir)/../win/curses/cursinit.c \
-	$(srcdir)/../win/curses/cursmesg.c
+	$(srcdir)/../win/curses/cursmesg.c $(srcdir)/../win/curses/cursinvt.c
 
 WINCURSESOBJ = cursmain.o curswins.o cursmisc.o cursdial.o cursstat.o \
-	cursinit.o cursmesg.o
+	cursinit.o cursmesg.o cursinvt.o
 
 
 
@@ -569,6 +569,9 @@ cursinit.o:
 
 cursmesg.o:
 	$(CC) $(CFLAGS) -c $(srcdir)/../win/curses/cursmesg.c
+
+cursinvt.o:
+	$(CC) $(CFLAGS) -c $(srcdir)/../win/curses/cursinvt.c
 
 #WINCURSESSRC = $(srcdir)/../win/curses/cursmain.c $(srcdir)../win/curses/curswins.c \
 #        $(srcdir)/../win/curses/cursmisc.c $(srcdir)/../win/curses/cursdial.c \
