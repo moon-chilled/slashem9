@@ -398,7 +398,6 @@ typedef unsigned char	uchar;
 #define UNPOLYPILE	/* WAC -- Items can unpolymorph */
 #define WALLET_O_P      /* Perseus' Wallet, and all related code (tsanth@iname.com)*/
 #define LIGHTSABERS
-#define P_SPOON         /* Enable WEPTOOL(spoon), and all related code (tsanth@iname.com)*/
 #define FIREARMS	/* KMH -- Guns and bullets */
 #define EATEN_MEMORY	/* WAC -- Remember which monsters have been eaten */
 #define STEED		/* The ability to ride monsters */

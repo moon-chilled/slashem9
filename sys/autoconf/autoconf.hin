@@ -164,9 +164,6 @@
 /* proxy graphics */
 #undef PROXY_GRAPHICS
 
-/* Spoon */
-#undef P_SPOON
-
 /* Redo last command */
 #undef REDO
 

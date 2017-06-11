@@ -246,10 +246,8 @@ struct monst *mon;
 
 	if (otyp == CREAM_PIE) return 0;
 
-# ifdef P_SPOON
 	if (otmp->oartifact == ART_HOUCHOU)
 	        return 9999;
-# endif /* P_SPOON */
 
 	if (bigmonst(ptr)) {
 	    if (objects[otyp].oc_wldam)

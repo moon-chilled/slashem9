@@ -327,7 +327,6 @@ NETHACK_ARG(unpolypile,[Object unpolymorphing],UNPOLYPILE,yes)
 NETHACK_ARG(wallet-o-p,[Perseus' Wallet],WALLET_O_P,yes)
 NETHACK_ARG(lightsabers,[Lightsabers],LIGHTSABERS,yes)
 NETHACK_ARG(d-saber,[Dimsabers],LIGHTSABERS,yes)
-NETHACK_ARG(p-spoon,[Spoon],P_SPOON,yes)
 NETHACK_ARG(firearms,[Guns and Bullets],FIREARMS,yes)
 NETHACK_ARG(eaten-memory,[Remember which monsters have been eaten],
   EATEN_MEMORY,yes)

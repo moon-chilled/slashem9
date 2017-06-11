@@ -1551,9 +1551,7 @@ int thrown;
 			objects[otyp].oc_skill > -P_BOOMERANG) ||
 			(obj->oclass == GEM_CLASS && 
 			!objects[otyp].oc_magic))
-# ifdef P_SPOON
 			|| (obj->oartifact == ART_HOUCHOU)
-# endif
 			/* WAC catch Hellfire */
 			|| (launcher && launcher->oartifact == ART_HELLFIRE 
 			&& is_ammo(obj) && ammo_and_launcher(obj, launcher))

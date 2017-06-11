@@ -748,7 +748,6 @@ enable_unpolypile
 enable_wallet_o_p
 enable_lightsabers
 enable_d_saber
-enable_p_spoon
 enable_firearms
 enable_eaten_memory
 enable_steed
@@ -1437,7 +1436,6 @@ Optional Features:
   --enable-wallet-o-p     Perseus' Wallet (default=yes)
   --enable-lightsabers    Lightsabers (default=yes)
   --enable-d-saber        Dimsabers (default=yes)
-  --enable-p-spoon        Spoon (default=yes)
   --enable-firearms       Guns and Bullets (default=yes)
   --enable-eaten-memory   Remember which monsters have been eaten
                           (default=yes)
@@ -6315,25 +6313,6 @@ $as_echo "$enable_d_saber" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define LIGHTSABERS /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable p-spoon" >&5
-$as_echo_n "checking whether to enable p-spoon... " >&6; }
-   # Check whether --enable-p-spoon was given.
-if test "${enable_p_spoon+set}" = set; then :
-  enableval=$enable_p_spoon;
-else
-  enable_p_spoon="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_p_spoon" >&5
-$as_echo "$enable_p_spoon" >&6; }
-   if test "$enable_p_spoon" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define P_SPOON /**/
 _ACEOF
 
    fi
