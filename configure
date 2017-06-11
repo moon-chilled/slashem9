@@ -745,7 +745,6 @@ enable_kops
 enable_seduce
 enable_invisible_objects
 enable_unpolypile
-enable_wallet_o_p
 enable_lightsabers
 enable_d_saber
 enable_firearms
@@ -1433,7 +1432,6 @@ Optional Features:
   --enable-invisible-objects
                           Invisible objects (default=yes)
   --enable-unpolypile     Object unpolymorphing (default=yes)
-  --enable-wallet-o-p     Perseus' Wallet (default=yes)
   --enable-lightsabers    Lightsabers (default=yes)
   --enable-d-saber        Dimsabers (default=yes)
   --enable-firearms       Guns and Bullets (default=yes)
@@ -6256,25 +6254,6 @@ $as_echo "$enable_unpolypile" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define UNPOLYPILE /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable wallet-o-p" >&5
-$as_echo_n "checking whether to enable wallet-o-p... " >&6; }
-   # Check whether --enable-wallet-o-p was given.
-if test "${enable_wallet_o_p+set}" = set; then :
-  enableval=$enable_wallet_o_p;
-else
-  enable_wallet_o_p="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_wallet_o_p" >&5
-$as_echo "$enable_wallet_o_p" >&6; }
-   if test "$enable_wallet_o_p" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define WALLET_O_P /**/
 _ACEOF
 
    fi

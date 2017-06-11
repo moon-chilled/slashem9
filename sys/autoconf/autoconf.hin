@@ -213,9 +213,6 @@
 /* Use regular expressions */
 #undef USE_REGEX_MATCH
 
-/* Perseus' Wallet */
-#undef WALLET_O_P
-
 /* Fancy mazes */
 #undef WALLIFIED_MAZE
 
