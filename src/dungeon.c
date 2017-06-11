@@ -628,10 +628,8 @@ struct level_map {
 	{ "wizard1",	&wiz1_level },
 	{ "wizard2",	&wiz2_level },
 	{ "wizard3",	&wiz3_level },
-#ifdef RECORD_ACHIEVE
 	{ "minend",     &mineend_level },
 	{ "soko1",      &sokoend_level },
-#endif
 	{ "nightmar",	&lawful_quest_level },
 	{ "beholder",	&neutral_quest_level },
 	{ "lich",	&chaotic_quest_level },

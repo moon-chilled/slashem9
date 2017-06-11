@@ -50,9 +50,7 @@ struct toptenentry {
 	int maxlvl, hp, maxhp, deaths;
 	int ver_major, ver_minor, patchlevel;
 	long deathdate, birthdate;
-#ifdef RECORD_CONDUCT
 	long conduct;
-#endif
 	int uid;
 	char plrole[ROLESZ+1];
 	char plrace[ROLESZ+1];
@@ -80,16 +78,10 @@ STATIC_DCL int FDECL(classmon, (char *,BOOLEAN_P));
 STATIC_DCL int FDECL(score_wanted,
 		(BOOLEAN_P, int,struct toptenentry *,int,const char **,int));
 
-#ifdef RECORD_CONDUCT
 STATIC_DCL long FDECL(encodeconduct, (void));
-#endif
-#ifdef RECORD_ACHIEVE
 STATIC_DCL long FDECL(encodeachieve, (void));
-#endif
 
-#ifdef RECORD_CONDUCT
 STATIC_DCL long FDECL(encodeconduct, (void));
-#endif
 #ifdef NO_SCAN_BRACK
 STATIC_DCL void FDECL(nsb_mung_line,(char*));
 STATIC_DCL void FDECL(nsb_unmung_line,(char*));
@@ -105,9 +97,7 @@ NEARDATA const char * const killed_by_prefix[] = {
 
 static winid toptenwin = WIN_ERR;
 
-#ifdef RECORD_START_END_TIME
 static time_t deathtime = 0L;
-#endif
 
 STATIC_OVL void
 topten_print(x)
@@ -168,9 +158,7 @@ struct toptenentry *tt;
 #endif
 #define TTFIELDS 13
 
-#ifdef RECORD_CONDUCT
 	tt->conduct = 4095;
-#endif
 
 	if(fscanf(rfile, fmt,
 			&tt->ver_major, &tt->ver_minor, &tt->patchlevel,
@@ -207,7 +195,6 @@ struct toptenentry *tt;
 		}
 #endif
 
-#ifdef RECORD_CONDUCT
 		if(tt->points > 0) {
 			/* If the string "Conduct=%d" appears, set tt->conduct and remove that
 			 * portion of the string */
@@ -235,8 +222,6 @@ struct toptenentry *tt;
 			if(tt->conduct < 0 || tt->conduct > 4095)
 				tt->conduct = 4095;
 		}
-#endif
-
 	}
 
 	/* check old score entries for Y2K problem and fix whenever found */
@@ -251,12 +236,10 @@ writeentry(rfile,tt)
 FILE *rfile;
 struct toptenentry *tt;
 {
-#ifdef RECORD_CONDUCT
 	char *cp = eos(tt->death);
 
 	/* Add a trailing " Conduct=%d" to tt->death */
 	Sprintf(cp, " Conduct=%d", tt->conduct);
-#endif
 
 #ifdef NO_SCAN_BRACK
 	nsb_mung_line(tt->name);
@@ -292,10 +275,8 @@ struct toptenentry *tt;
 	nsb_unmung_line(tt->death);
 #endif
 
-#ifdef RECORD_CONDUCT
 	/* Return the tt->death line to the original form */
 	*cp = '\0';
-#endif
 }
 
 #ifdef XLOGFILE
@@ -362,35 +343,21 @@ struct toptenentry *tt;
    munge_xlstring(buf, tt->death, DTHSZ + 1);
   (void)fprintf(rfile, SEP "death=%s", buf);
 
-#ifdef RECORD_CONDUCT
   (void)fprintf(rfile, SEP "conduct=0x%lx", encodeconduct());
-#endif
 
-#ifdef RECORD_TURNS
   (void)fprintf(rfile, SEP "turns=%ld", moves);
-#endif
 
-#ifdef RECORD_ACHIEVE
   (void)fprintf(rfile, SEP "achieve=0x%lx", encodeachieve());
-#endif
 
-#ifdef RECORD_REALTIME
   (void)fprintf(rfile, SEP "realtime=%ld", (long)realtime_data.realtime);
-#endif
 
-#ifdef RECORD_START_END_TIME
   (void)fprintf(rfile, SEP "starttime=%ld", (long)u.ubirthday);
   (void)fprintf(rfile, SEP "endtime=%ld", (long)deathtime);
-#endif
 
-#ifdef RECORD_GENDER0
   (void)fprintf(rfile, SEP "gender0=%s", genders[flags.initgend].filecode);
-#endif
 
-#ifdef RECORD_ALIGN0
   (void)fprintf(rfile, SEP "align0=%s", 
           aligns[1 - u.ualignbase[A_ORIGINAL]].filecode);
-#endif
 
   (void)fprintf(rfile, "\n");
 
@@ -509,24 +476,16 @@ int how;
 	}
 	t0->birthdate = yyyymmdd(u.ubirthday);
 
-#ifdef RECORD_START_END_TIME
   /* Make sure that deathdate and deathtime refer to the same time; it
    * wouldn't be good to have deathtime refer to the day after deathdate. */
-
 # if defined(BSD) && !defined(POSIX_TYPES)
 	(void) time((long *)&deathtime);
 # else
 	(void) time(&deathtime);
 # endif
-
 	t0->deathdate = yyyymmdd(deathtime);
-#else
-	t0->deathdate = yyyymmdd((time_t)0L);
-#endif /* RECORD_START_END_TIME */
 
-#ifdef RECORD_CONDUCT
 	t0->conduct = encodeconduct();
-#endif
 	t0->tt_next = 0;
 #ifdef UPDATE_RECORD_IN_PLACE
 	t0->fpos = -1L;
@@ -832,7 +791,6 @@ boolean so;
 	    second_line = FALSE;
 	} else if (!strncmp("ascended", t1->death, 8)) {
 
-#ifdef RECORD_CONDUCT
 		/* Add a notation for conducts kept */
 		if(t1->conduct != 4095) {
 			int i, m;
@@ -862,7 +820,6 @@ boolean so;
 			}
 			Strcat(eos(linebuf), ") ");
 		}
-#endif
 
 	    Sprintf(eos(linebuf), "ascended to demigod%s-hood",
 		    (t1->plgend[0] == 'F') ? "dess" : "");
@@ -1030,7 +987,6 @@ int uid;
 	return 0;
 }
 
-#ifdef RECORD_CONDUCT
 long
 encodeconduct(void)
 {
@@ -1051,9 +1007,7 @@ encodeconduct(void)
 
        return e;
 }
-#endif
 
-#ifdef RECORD_ACHIEVE
 long
 encodeachieve(void)
 {
@@ -1092,7 +1046,6 @@ encodeachieve(void)
 
   return r;
 }
-#endif
 
 /*
  * print selected parts of score list.

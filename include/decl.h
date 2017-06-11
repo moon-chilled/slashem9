@@ -83,9 +83,7 @@ E struct dgn_topology {		/* special dungeon levels for speed */
     d_level	d_chaotic_quest_level;
     d_level	d_qstart_level, d_qlocate_level, d_nemesis_level;
     d_level	d_knox_level;
-#ifdef RECORD_ACHIEVE
     d_level	d_sokoend_level;
-#endif
 #ifdef BLACKMARKET
     d_level     d_blackmarket_level;
 #endif /* BLACKMARKET */
@@ -126,12 +124,8 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 #define qlocate_level		(dungeon_topology.d_qlocate_level)
 #define nemesis_level		(dungeon_topology.d_nemesis_level)
 #define knox_level		(dungeon_topology.d_knox_level)
-
-#ifdef RECORD_ACHIEVE
 #define mineend_level		(dungeon_topology.d_mineend_level)
 #define sokoend_level		(dungeon_topology.d_sokoend_level)
-#endif
-
 #define spiders_dnum		(dungeon_topology.d_spiders_dnum)
 #define lawful_quest_level	(dungeon_topology.d_lawful_quest_level)
 #define neutral_quest_level	(dungeon_topology.d_neutral_quest_level)
@@ -493,7 +487,6 @@ struct autopickup_exception {
 };
 #endif /* AUTOPICKUP_EXCEPTIONS */
 
-#ifdef RECORD_ACHIEVE
 struct u_achieve {
         Bitfield(get_bell,1);        /* You have obtained the bell of 
                                       * opening */
@@ -516,16 +509,13 @@ struct u_achieve {
 };
 
 E struct u_achieve achieve;
-#endif
 
-#if defined(RECORD_REALTIME) || defined(REALTIME_ON_BOTL)
 E struct realtime_data {
   time_t realtime;    /* Amount of actual playing time up until the last time
                        * the game was restored. */
   time_t restoretime; /* The time that the game was started or restored. */
   time_t last_displayed_time; /* Last time displayed on the status line */
 } realtime_data;
-#endif /* RECORD_REALTIME || REALTIME_ON_BOTL */
 
 #undef E
 

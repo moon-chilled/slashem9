@@ -1339,9 +1339,7 @@ boolean at_stairs, falling, portal;
 		You_hear("groans and moans everywhere.");
 	    } else pline("It is hot here.  You smell smoke...");
 
-#ifdef RECORD_ACHIEVE
             achieve.enter_gehennom = 1;
-#endif
 	}
 
 	if (familiar) {

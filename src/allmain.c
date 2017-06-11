@@ -607,8 +607,6 @@ newgame()
 #endif
 	program_state.something_worth_saving++;	/* useful data now exists */
 
-#if defined(RECORD_REALTIME) || defined(REALTIME_ON_BOTL)
-
         /* Start the timer here */
         realtime_data.realtime = (time_t)0L;
 
@@ -617,8 +615,6 @@ newgame()
 #else
         (void) time(&realtime_data.restoretime);
 #endif
-
-#endif /* RECORD_REALTIME || REALTIME_ON_BOTL */
 
 	/* Success! */
 	welcome(TRUE);
@@ -740,7 +736,6 @@ do_positionbar()
 }
 #endif
 
-#if defined(REALTIME_ON_BOTL) || defined (RECORD_REALTIME)
 time_t
 get_realtime(void)
 {
@@ -764,7 +759,6 @@ get_realtime(void)
  
     return curtime;
 }
-#endif /* REALTIME_ON_BOTL || RECORD_REALTIME */
 
 
 #endif /* OVLB */

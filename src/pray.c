@@ -1482,9 +1482,7 @@ dosacrifice()
 	    } else { /* super big win */
 		adjalign(10);
 
-#ifdef RECORD_ACHIEVE
                 achieve.ascended = 1;
-#endif
 
 pline("An invisible choir sings, and you are bathed in radiance...");
 		godvoice(altaralign, "Congratulations, mortal!");
