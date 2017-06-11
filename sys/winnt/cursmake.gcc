@@ -397,7 +397,7 @@ DLBOBJ = $(O)dlb.o
 
 #TTYOBJ = $(O)topl.o     $(O)getline.o  $(O)wintty.o
 TTYOBJ = $(O)cursmain.o $(O)curswins.o  $(O)cursmisc.o $(O)cursdial.o \
-	$(O)cursstat.o $(O)cursinit.o $(O)cursmesg.o 
+	$(O)cursstat.o $(O)cursinit.o $(O)cursmesg.o $(O)cursinvt.o
 
 SOBJ   = $(O)winnt.o    $(O)pcsys.o      $(O)pcunix.o  \
 	$(SOUND) $(O)pcmain.o $(O)mapimail.o $(O)nhlan.o

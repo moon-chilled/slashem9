@@ -175,6 +175,7 @@ struct flag {
 struct instance_flags {
 	boolean  cbreak;	/* in cbreak mode, rogue format */
 #ifdef CURSES_GRAPHICS
+    boolean  classic_status;    /* What kind of horizontal statusbar to use */
     boolean  cursesgraphics;    /* Use portable curses extended characters */
 #endif
 	boolean  DECgraphics;	/* use DEC VT-xxx extended character set */
@@ -244,6 +245,7 @@ struct instance_flags {
 	boolean lan_mail;	/* mail is initialized */
 	boolean lan_mail_fetched; /* mail is awaiting display */
 #endif
+	boolean use_menu_glyphs; /* item glyphs in inventory */
 /*
  * Window capability support.
  */
