@@ -29,6 +29,10 @@ NEARDATA struct instance_flags iflags;	/* provide linkage */
 #define PREFER_TILED FALSE
 #endif
 
+#ifdef CURSES_GRAPHICS
+extern int curses_read_attrs(char *attrs);
+#endif
+
 /*
  *  NOTE:  If you add (or delete) an option, please update the short
  *  options help (option_help()), the long options help (dat/opthelp),
@@ -75,19 +79,24 @@ static struct Bool_Opt
 	{"checkspace", (boolean *)0, FALSE, SET_IN_FILE},
 #endif
 	{"cmdassist", &iflags.cmdassist, TRUE, SET_IN_GAME},
-# if defined(MICRO) || defined(WIN32)
+# if defined(MICRO) || defined(WIN32) || defined(CURSES_GRAPHICS)
 	{"color",         &iflags.wc_color,TRUE, SET_IN_GAME},		/*WC*/
 # else	/* systems that support multiple terminals, many monochrome */
 	{"color",         &iflags.wc_color, FALSE, SET_IN_GAME},	/*WC*/
 # endif
 	{"confirm",&flags.confirm, TRUE, SET_IN_GAME},
+#ifdef CURSES_GRAPHICS
+	{"cursesgraphics", &iflags.cursesgraphics, TRUE, SET_IN_GAME},
+#else
+	{"cursesgraphics", (boolean *)0, FALSE, SET_IN_FILE},
+#endif
 #if defined(TERMLIB) && !defined(MAC_GRAPHICS_ENV)
 	{"DECgraphics", &iflags.DECgraphics, FALSE, SET_IN_GAME},
 #else
 	{"DECgraphics", (boolean *)0, FALSE, SET_IN_FILE},
 #endif
 	{"eight_bit_tty", &iflags.wc_eight_bit_input, FALSE, SET_IN_GAME},	/*WC*/
-#ifdef TTY_GRAPHICS
+#if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS)
 	{"extmenu", &iflags.extmenu, FALSE, SET_IN_GAME},
 #else
 	{"extmenu", (boolean *)0, FALSE, SET_IN_FILE},
@@ -105,6 +114,7 @@ static struct Bool_Opt
 	{"flush", (boolean *)0, FALSE, SET_IN_FILE},
 #endif
 	{"fullscreen", &iflags.wc2_fullscreen, FALSE, SET_IN_FILE},
+	{"guicolor", &iflags.wc2_guicolor, TRUE, SET_IN_GAME},
 	{"help", &flags.help, TRUE, SET_IN_GAME},
 	{"hilite_pet",    &iflags.wc_hilite_pet, FALSE, SET_IN_GAME},	/*WC*/
 #ifdef ASCIIGRAPH
@@ -163,7 +173,11 @@ static struct Bool_Opt
 #else
 	{"mon_polycontrol", (boolean *)0, FALSE, SET_IN_FILE},
 #endif
+#ifdef CURSES_GRAPHICS
+	{"mouse_support", &iflags.wc_mouse_support, FALSE, DISP_IN_GAME},	/*WC*/
+#else
 	{"mouse_support", &iflags.wc_mouse_support, TRUE, DISP_IN_GAME},	/*WC*/
+#endif
 #ifdef NEWS
 	{"news", &iflags.news, TRUE, DISP_IN_GAME},
 #else
@@ -349,6 +363,7 @@ static struct Comp_Opt
 						15, SET_IN_FILE },
 # endif
 #endif
+	{ "petattr",  "attributes for highlighting pets", 12, SET_IN_FILE },
 	{ "pettype",  "your preferred initial pet type", 4, DISP_IN_GAME },
 	{ "pickup_burden",  "maximum burden picked up before prompt",
 						20, SET_IN_GAME },
@@ -2377,6 +2392,63 @@ goodfruit:
 		return;
 	}
 
+	/* WINCAP2
+	 * term_cols:amount */
+	fullname = "term_cols";
+	if (match_optname(opts, fullname, sizeof("term_cols")-1, TRUE)) {
+		op = string_for_opt(opts, negated);
+		iflags.wc2_term_cols = atoi(op);
+		if (negated) bad_negation(fullname, FALSE);
+		return;
+	}
+
+	/* WINCAP2
+	 * term_rows:amount */
+	fullname = "term_rows";
+	if (match_optname(opts, fullname, sizeof("term_rows")-1, TRUE)) {
+		op = string_for_opt(opts, negated);
+		iflags.wc2_term_rows = atoi(op);
+		if (negated) bad_negation(fullname, FALSE);
+		return;
+	}
+
+
+	/* WINCAP2
+	 * petattr:string */
+	fullname = "petattr";
+	if (match_optname(opts, fullname, sizeof("petattr")-1, TRUE)) {
+		op = string_for_opt(opts, negated);
+		if (op && !negated) {
+		    iflags.wc2_petattr = curses_read_attrs(op);
+		    if (!curses_read_attrs(op))
+		    	badoption(opts);
+		} else if (negated) bad_negation(fullname, TRUE);
+		return;
+	}
+
+
+	/* WINCAP2
+	 * windowborders:n */
+	fullname = "windowborders";
+	if (match_optname(opts, fullname, sizeof("windowborders")-1, TRUE)) {
+		op = string_for_opt(opts, negated);
+		if (negated && op) bad_negation(fullname, TRUE);
+		else {
+		    if (negated)
+		        iflags.wc2_windowborders = 2; /* Off */
+		    else if (!op)
+		        iflags.wc2_windowborders = 1; /* On */
+		    else    /* Value supplied */
+		        iflags.wc2_windowborders = atoi(op);
+		    if ((iflags.wc2_windowborders > 3) ||
+		     (iflags.wc2_windowborders < 1)) {
+		        iflags.wc2_windowborders = 0;
+		        badoption(opts);
+		    }
+		}
+		return;
+	}
+
 	/* menustyle:traditional or combo or full or partial */
 	if (match_optname(opts, "menustyle", 4, TRUE)) {
 		int tmp;
@@ -2483,7 +2555,7 @@ goodfruit:
 
 			duplicate_opt_detection(boolopt[i].name, 0);
 
-#if defined(TERMLIB) || defined(ASCIIGRAPH) || defined(MAC_GRAPHICS_ENV)
+#if defined(TERMLIB) || defined(ASCIIGRAPH) || defined(MAC_GRAPHICS_ENV) || defined(CURSES_GRAPHICS)
 			if (FALSE
 # ifdef TERMLIB
 				 || (boolopt[i].addr) == &iflags.DECgraphics
@@ -2493,6 +2565,9 @@ goodfruit:
 # endif
 # ifdef MAC_GRAPHICS_ENV
 				 || (boolopt[i].addr) == &iflags.MACgraphics
+# endif
+# ifdef CURSES_GRAPHICS
+				 || (boolopt[i].addr) == &iflags.cursesgraphics
 # endif
 				) {
 # ifdef REINCARNATION
@@ -2518,6 +2593,11 @@ goodfruit:
 			    if ((boolopt[i].addr) == &iflags.MACgraphics)
 				switch_graphics(iflags.MACgraphics ?
 						MAC_GRAPHICS : ASCII_GRAPHICS);
+# endif
+# ifdef CURSES_GRAPHICS
+			    if ((boolopt[i].addr) == &iflags.cursesgraphics)
+				switch_graphics(iflags.cursesgraphics ?
+						CURS_GRAPHICS : ASCII_GRAPHICS);
 # endif
 # ifdef REINCARNATION
 			    if (!initial && u.uz.dlevel &&
@@ -2568,9 +2648,15 @@ goodfruit:
 			}
 			else if ((boolopt[i].addr) == &iflags.use_inverse ||
 					(boolopt[i].addr) == &iflags.showrace ||
-					(boolopt[i].addr) == &iflags.hilite_pet) {
+					(boolopt[i].addr) == &iflags.hilite_pet ||
+					(boolopt[i].addr) == &iflags.wc2_guicolor) {
 			    need_redraw = TRUE;
 			}
+#ifdef CURSES_GRAPHICS
+			else if ((boolopt[i].addr) == &iflags.cursesgraphics) {
+			    need_redraw = TRUE;
+			}
+#endif
 #ifdef TEXTCOLOR
 			else if ((boolopt[i].addr) == &iflags.use_color) {
 			    need_redraw = TRUE;
@@ -3605,6 +3691,14 @@ char *buf;
 			FEATURE_NOTICE_VER_MIN,
 			FEATURE_NOTICE_VER_PATCH);
 	}
+	else if (!strcmp(optname, "term_cols")) {
+		if (iflags.wc2_term_cols) Sprintf(buf, "%d",iflags.wc2_term_cols);
+		else Strcpy(buf, defopt);
+	}
+	else if (!strcmp(optname, "term_rows")) {
+		if (iflags.wc2_term_rows) Sprintf(buf, "%d",iflags.wc2_term_rows);
+		else Strcpy(buf, defopt);
+	}
 	else if (!strcmp(optname, "tile_file"))
 		Sprintf(buf, "%s", iflags.wc_tile_file ? iflags.wc_tile_file : defopt);
 	else if (!strcmp(optname, "tile_height")) {
@@ -3653,6 +3747,11 @@ char *buf;
 			ttycolors[CLR_BRIGHT_CYAN], ttycolors[CLR_WHITE]);
 # endif /* MSDOS */
 #endif /* VIDEOSHADES */
+	else if (!strcmp(optname,"windowborders"))
+		Sprintf(buf, "%s", iflags.wc2_windowborders == 1     ? "1=on" :
+				   iflags.wc2_windowborders == 2             ? "2=off" :
+				   iflags.wc2_windowborders == 3             ? "3=auto" :
+				   defopt);
 	else if (!strcmp(optname, "windowtype"))
 		Sprintf(buf, "%s", windowprocs.name);
 	else if (!strcmp(optname, "windowcolors"))
@@ -4135,6 +4234,11 @@ struct wc_Opt wc2_options[] = {
 	{"fullscreen", WC2_FULLSCREEN},
 	{"softkeyboard", WC2_SOFTKEYBOARD},
 	{"wraptext", WC2_WRAPTEXT},
+	{"term_cols", WC2_TERM_COLS},
+	{"term_rows", WC2_TERM_ROWS},
+	{"windowborders", WC2_WINDOWBORDERS},
+	{"petattr", WC2_PETATTR},
+	{"guicolor", WC2_GUICOLOR},
 	{(char *)0, 0L}
 };
 

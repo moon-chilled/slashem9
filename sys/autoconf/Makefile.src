@@ -53,7 +53,18 @@ WINPROXYCFLAGS=@NETHACK_PROXY_CFLAGS@
 WINTTYSRC = $(srcdir)/../win/tty/getline.c $(srcdir)/../win/tty/termcap.c $(srcdir)/../win/tty/topl.c \
 	$(srcdir)/../win/tty/wintty.c 
 WINTTYOBJ = getline.o termcap.o topl.o wintty.o 
-#
+
+# Files for curses interface
+WINCURSESSRC = $(srcdir)/../win/curses/cursmain.c $(srcdir)/../win/curses/curswins.c \
+	$(srcdir)/../win/curses/cursmisc.c $(srcdir)/../win/curses/cursdial.c \
+	$(srcdir)/../win/curses/cursstat.c $(srcdir)/../win/curses/cursinit.c \
+	$(srcdir)/../win/curses/cursmesg.c
+
+WINCURSESOBJ = cursmain.o curswins.o cursmisc.o cursdial.o cursstat.o \
+	cursinit.o cursmesg.o
+
+
+
 # files for an X11 port
 # (tile.c is included in the defn. for WINCSRC, below)
 WINX11SRC = $(srcdir)/../win/X11/Window.c $(srcdir)/../win/X11/dialogs.c $(srcdir)/../win/X11/winX.c \
@@ -129,6 +140,7 @@ WINMSCFLAGS=-I$(srcdir)/../win/win32 -D_WIN32_IE=0x0400
 WINSRC = @WINSRC@
 WINOBJ = @WINOBJ@
 WINTTYLIB = @WINTTYLIB@
+WINCURSESLIB = -lncursesw
 WINX11LIB = -lXaw -lXmu -lXext -lXt -lX11
 
 # libraries for Qt
@@ -536,6 +548,33 @@ topl.o: $(srcdir)/../win/tty/topl.c $(HACK_H) ../include/tcap.h
 wintty.o: $(srcdir)/../win/tty/wintty.c $(HACK_H) ../include/dlb.h \
 		../include/patchlevel.h ../include/tcap.h
 	$(CC) $(CFLAGS) -c $(srcdir)/../win/tty/wintty.c
+
+cursmain.o:
+	$(CC) $(CFLAGS) -c $(srcdir)/../win/curses/cursmain.c
+
+curswins.o:
+	$(CC) $(CFLAGS) -c $(srcdir)/../win/curses/curswins.c
+
+cursmisc.o:
+	$(CC) $(CFLAGS) -c $(srcdir)/../win/curses/cursmisc.c
+
+cursdial.o:
+	$(CC) $(CFLAGS) -c $(srcdir)/../win/curses/cursdial.c
+
+cursstat.o:
+	$(CC) $(CFLAGS) -c $(srcdir)/../win/curses/cursstat.c
+
+cursinit.o:
+	$(CC) $(CFLAGS) -c $(srcdir)/../win/curses/cursinit.c
+
+cursmesg.o:
+	$(CC) $(CFLAGS) -c $(srcdir)/../win/curses/cursmesg.c
+
+#WINCURSESSRC = $(srcdir)/../win/curses/cursmain.c $(srcdir)../win/curses/curswins.c \
+#        $(srcdir)/../win/curses/cursmisc.c $(srcdir)/../win/curses/cursdial.c \
+#        $(srcdir)/../win/curses/cursstat.c $(srcdir)/../win/curses/cursinit.c \
+#        $(srcdir)/../win/curses/cursmesg.c
+
 Window.o: $(srcdir)/../win/X11/Window.c ../include/xwindowp.h \
 		../include/xwindow.h $(CONFIG_H)
 	$(CC) $(CFLAGS) -c $(srcdir)/../win/X11/Window.c

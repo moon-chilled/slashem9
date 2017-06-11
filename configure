@@ -731,6 +731,7 @@ ac_user_opts='
 enable_option_checking
 enable_proxy_graphics
 enable_tty_graphics
+enable_curses_graphics
 enable_x11_graphics
 enable_sdl_graphics
 enable_gl_graphics
@@ -1418,11 +1419,13 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-proxy-graphics use proxy-graphics (default=auto)
-  --enable-tty-graphics   use tty-graphics (default=auto)
+  --enable-tty-graphics   use tty-graphics (default=yes)
+  --enable-curses-graphics
+                          use curses-graphics (default=yes)
   --enable-x11-graphics   use x11-graphics (default=no)
   --enable-sdl-graphics   use sdl-graphics (default=no)
   --enable-gl-graphics    use gl-graphics (enables sdl-graphics) (default=no)
-  --enable-mswin-graphics use Microsoft Window's native graphics (default=no)
+  --enable-mswin-graphics use Microsoft Windows' native graphics (default=no)
   --enable-data-librarian Data librarian (default=auto)
   --enable-sinks          Kitchen sinks (default=yes)
   --enable-light-src-spell
@@ -2446,11 +2449,21 @@ nethack_default_win=""
 if test "${enable_tty_graphics+set}" = set; then :
   enableval=$enable_tty_graphics; enable_tty_graphics="$enableval"
 else
-  enable_tty_graphics="auto"
+  enable_tty_graphics="yes"
 fi
 
   if test "$enable_tty_graphics" != "no"; then
     nethack_wins="tty $nethack_wins"
+  fi
+# Check whether --enable-curses-graphics was given.
+if test "${enable_curses_graphics+set}" = set; then :
+  enableval=$enable_curses_graphics; enable_curses_graphics="$enableval"
+else
+  enable_curses_graphics="yes"
+fi
+
+  if test "$enable_curses_graphics" != "no"; then
+    nethack_wins="curses $nethack_wins"
   fi
 # Check whether --enable-x11-graphics was given.
 if test "${enable_x11_graphics+set}" = set; then :
@@ -5072,6 +5085,76 @@ if test "$enable_tty_graphics" = "no" -a $host_os = mingw32; then
     LFLAGS="$LFLAGS -mwindows"
 fi
 
+
+if test "$enable_curses_graphics" != "no"; then
+	WINSRC="${WINSRC} \$(WINCURSESSRC)"
+	WINOBJ="${WINOBJ} \$(WINCURSESOBJ)"
+	WINLIB="${WINLIB} \$(WINCURSESLIB)"
+
+
+$as_echo "#define CURSES_GRAPHICS /**/" >>confdefs.h
+
+
+	# initscr is just a random function.  I just care if ncursesw is there at all
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing initscr" >&5
+$as_echo_n "checking for library containing initscr... " >&6; }
+if ${ac_cv_search_initscr+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char initscr ();
+int
+main ()
+{
+return initscr ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' ncursesw; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_initscr=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_initscr+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_initscr+:} false; then :
+
+else
+  ac_cv_search_initscr=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_initscr" >&5
+$as_echo "$ac_cv_search_initscr" >&6; }
+ac_res=$ac_cv_search_initscr
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+
+else
+   as_fn_error $? "Unable to find ncursesw library." "$LINENO" 5
+fi
+
+fi
 
 if test "$enable_proxy_graphics" != "no"; then
     if test "$have_libpng" = "no"; then

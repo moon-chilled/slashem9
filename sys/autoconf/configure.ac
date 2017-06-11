@@ -26,7 +26,8 @@ dnl  ----- Window systems
 NETHACK_WIN_ENABLE(proxy, auto)
 nethack_default_win=""
 # Note: Order is important: The last listed enabled port will be the default.
-NETHACK_WIN_ENABLE(tty, auto)
+NETHACK_WIN_ENABLE(tty, yes)
+NETHACK_WIN_ENABLE(curses, yes)
 NETHACK_WIN_ENABLE(x11, no)
 NETHACK_WIN_ENABLE(sdl, no)
 NETHACK_WIN_ENABLE(gl, no, [use gl-graphics (enables sdl-graphics)])
@@ -34,7 +35,7 @@ if test "$enable_gl_graphics" != no -a "$enable_sdl_graphics" = no; then
     enable_sdl_graphics="yes"
     nethack_wins=`echo $nethack_wins | sed 's/^gl/gl sdl/'`
 fi
-NETHACK_WIN_ENABLE(mswin, no, [use Microsoft Window's native graphics])
+NETHACK_WIN_ENABLE(mswin, no, [use Microsoft Windows' native graphics])
 
 dnl  ----- Figure out a C compiler to use; set @CC@
 AC_PROG_CC
@@ -161,6 +162,17 @@ if test "$enable_tty_graphics" = "no" -a $host_os = mingw32; then
     LFLAGS="$LFLAGS -mwindows"
 fi
 AC_SUBST(WINTTYLIB)
+
+if test "$enable_curses_graphics" != "no"; then
+	WINSRC="${WINSRC} \$(WINCURSESSRC)"
+	WINOBJ="${WINOBJ} \$(WINCURSESOBJ)"
+	WINLIB="${WINLIB} \$(WINCURSESLIB)"
+
+	AC_DEFINE(CURSES_GRAPHICS, [], [Curses graphics])
+
+	# initscr is just a random function.  I just care if ncursesw is there at all
+	AC_SEARCH_LIBS([initscr], [ncursesw], [], [ AC_MSG_ERROR([Unable to find ncursesw library.]) ])
+fi
 
 if test "$enable_proxy_graphics" != "no"; then
     if test "$have_libpng" = "no"; then
