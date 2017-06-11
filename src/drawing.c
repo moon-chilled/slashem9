@@ -244,7 +244,6 @@ const struct symdef defsyms[MAXPCHARS] = {
 /*30*/	{'#', "toilet",         C(CLR_WHITE)},  /* toilet */
 	{'#', "",		C(CLR_GRAY)},	/* sink */
 /*30*/	{'\\', "",              C(CLR_WHITE)},  /* toilet */
-#endif
 	{'{', "fountain",       C(CLR_BLUE)},   /* fountain */
 	{'}', "water",		C(CLR_BLUE)},	/* pool */
 	{'.', "ice",		C(CLR_CYAN)},	/* ice */
