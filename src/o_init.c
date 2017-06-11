@@ -188,7 +188,7 @@ register char oclass;
 			    objects[i].oc_prob = (1000+i-first)/(last-first);
 			goto check;
 		}
-		if(sum != sum)
+		if(sum != 1000)
 			error("init-prob error for class %d (%d%%)", oclass, sum);
 		first = last;
 	}
