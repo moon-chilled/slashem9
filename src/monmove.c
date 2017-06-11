@@ -541,11 +541,8 @@ toofar:
 	   (mdat->mlet == S_LEPRECHAUN && !ygold && (lepgold || rn2(2))) ||
 #endif
 	   (is_wanderer(mdat) && !rn2(4)) || (Conflict && !mtmp->iswiz
-#ifdef BLACKMARKET
-	   && !Is_blackmarket(&u.uz)
-#endif
-	   ) ||
-	   (!mtmp->mcansee && !rn2(4)) || mtmp->mpeaceful) {
+	   && !Is_blackmarket(&u.uz))
+	   || (!mtmp->mcansee && !rn2(4)) || mtmp->mpeaceful) {
 		/* Possibly cast an undirected spell if not attacking you */
 		/* note that most of the time castmu() will pick a directed
 		   spell and do nothing, so the monster moves normally */
@@ -604,10 +601,7 @@ toofar:
 
 	if (!mtmp->mpeaceful ||
 	    (Conflict && !resist(mtmp, RING_CLASS, 0, 0)
-#ifdef BLACKMARKET
-		&& !Is_blackmarket(&u.uz)
-#endif
-	)) {
+		&& !Is_blackmarket(&u.uz))) {
 	    if(inrange && !noattacks(mdat) && u.uhp > 0 && !scared && tmp != 3)
 		if(mattacku(mtmp)) return(1); /* monster died (e.g. exploded) */
 

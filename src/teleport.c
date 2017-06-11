@@ -1062,9 +1062,7 @@ level_tele()
 	     * [ALI] Add other single level dungeons entered via portal.
 	     */
 	    if ((Is_knox(&u.uz) ||
-#ifdef BLACKMARKET
 		    Is_blackmarket(&u.uz) ||
-#endif
 		    Is_aligned_quest(&u.uz)) && newlev > 0) {
 		You(shudder_for_moment);
 		return;
@@ -1542,7 +1540,6 @@ int in_sight;
 		    }
 		    return 0;
 		}
-#ifdef BLACKMARKET
 	      	else if (mtmp->mtame &&
 			(Is_blackmarket(&trap->dst) || Is_blackmarket(&u.uz))) {
 	          if (in_sight) {
@@ -1551,9 +1548,7 @@ int in_sight;
 		     seetrap(trap);
 	          }
 	          return 0;
-	        }
-#endif /* BLACKMARKET */
-		  else {
+	        } else {
 		    assign_level(&tolevel, &trap->dst);
 		    migrate_typ = MIGR_PORTAL;
 		}
@@ -1643,9 +1638,7 @@ random_teleport_level()
 	    cur_depth = (int)depth(&u.uz);
 
 	if (!rn2(5) || Is_knox(&u.uz) ||
-#ifdef BLACKMARKET
 		Is_blackmarket(&u.uz) ||
-#endif
 		Is_aligned_quest(&u.uz))
 	    return cur_depth;
 

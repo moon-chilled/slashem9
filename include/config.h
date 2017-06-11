@@ -390,7 +390,6 @@ typedef unsigned char	uchar;
 /* dungeon levels */
 #define WALLIFIED_MAZE	/* Fancy mazes - Jean-Christophe Collet */
 /* #define REINCARNATION */     /* Special Rogue-like levels */
-#define BLACKMARKET     /* Massimo Campostrini (campo@sunthpi3.difi.unipi.it) */
 
 /* monsters & objects */
 #define KOPS		/* Keystone Kops by Scott R. Turner */

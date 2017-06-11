@@ -471,9 +471,6 @@ make_version()
 #ifdef REINCARNATION
 			| (1L <<  1)
 #endif
-#ifdef BLACKMARKET
-			| (1L <<  3)
-#endif
 		/* monsters (4..7) */
 #ifdef KOPS
 			| (1L <<  6)
@@ -705,9 +702,6 @@ static const char *build_opts[] = {
 #endif
 #ifdef ANSI_DEFAULT
 		"ANSI default terminal",
-#endif
-#ifdef BLACKMARKET
-		"blackmarket level",
 #endif
 /*WAC added for borg,  invisible objects, keep_save,noartifactwish */
 #ifdef BORG

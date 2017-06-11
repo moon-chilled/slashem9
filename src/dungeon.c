@@ -612,9 +612,7 @@ struct level_map {
 	{ "fire",	&fire_level },
 	{ "juiblex",	&juiblex_level },
 	{ "knox",	&knox_level },
-#ifdef BLACKMARKET        
 	{ "blkmar",     &blackmarket_level },
-#endif /* BLACKMARKET */
 	{ "medusa",	&medusa_level },
 	{ "mine_end",   &mineend_level },        
 	{ "oracle",	&oracle_level },
@@ -887,9 +885,7 @@ init_dungeons()
 	spiders_dnum = dname_to_dnum("The Spider Caves");        
 	tower_dnum = dname_to_dnum("Vlad's Tower");
 /*
-#ifdef BLACKMARKET
 	blackmarket_dnum = dname_to_dnum("The Black Market");
-#endif
 */
 
 	/* one special fixup for dummy surface level */

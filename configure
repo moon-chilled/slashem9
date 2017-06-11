@@ -741,7 +741,6 @@ enable_data_librarian
 enable_light_src_spell
 enable_wallified_maze
 enable_reincarnation
-enable_blackmarket
 enable_kops
 enable_seduce
 enable_invisible_objects
@@ -1430,7 +1429,6 @@ Optional Features:
                           Spells are light sources (default=yes)
   --enable-wallified-maze Fancy mazes (default=yes)
   --enable-reincarnation  Special Rogue-like levels (default=no)
-  --enable-blackmarket    Blackmarket (default=yes)
   --enable-kops           Keystone Kops (default=yes)
   --enable-seduce         Succubi/incubi seduction (default=yes)
   --enable-invisible-objects
@@ -6184,25 +6182,6 @@ $as_echo "$enable_reincarnation" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define REINCARNATION /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable blackmarket" >&5
-$as_echo_n "checking whether to enable blackmarket... " >&6; }
-   # Check whether --enable-blackmarket was given.
-if test "${enable_blackmarket+set}" = set; then :
-  enableval=$enable_blackmarket;
-else
-  enable_blackmarket="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_blackmarket" >&5
-$as_echo "$enable_blackmarket" >&6; }
-   if test "$enable_blackmarket" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define BLACKMARKET /**/
 _ACEOF
 
    fi
