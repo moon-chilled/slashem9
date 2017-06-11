@@ -19,10 +19,8 @@
 
 
 STATIC_DCL void FDECL(mkfount,(int,struct mkroom *));
-#ifdef SINKS
 STATIC_DCL void FDECL(mksink,(struct mkroom *));
 STATIC_DCL void FDECL(mktoilet,(struct mkroom *));
-#endif
 STATIC_DCL void FDECL(mkaltar,(struct mkroom *));
 STATIC_DCL void FDECL(mkgrave,(struct mkroom *));
 STATIC_DCL void NDECL(makevtele);
@@ -832,12 +830,10 @@ skip0:
 		if(Is_rogue_level(&u.uz)) goto skip_nonrogue;
 #endif
 		if(!rn2(10)) mkfount(0,croom);
-#ifdef SINKS
 		if(!rn2(60)) {
 		    mksink(croom);
 		    if(!rn2(3)) mktoilet(croom);
 		}
-#endif
 		x = 80 - (depth(&u.uz) * 2);
 		if (x < 2) x = 2;
 		if(!rn2(x)) mkgrave(croom);
@@ -1387,7 +1383,6 @@ register struct mkroom *croom;
 	level.flags.nfountains++;
 }
 
-#ifdef SINKS
 STATIC_OVL void
 mksink(croom)
 register struct mkroom *croom;
@@ -1425,7 +1420,6 @@ register struct mkroom *croom;
 
 	level.flags.nsinks++; /* counted as a sink for sounds.c */
 }
-#endif /* SINKS */
 
 STATIC_OVL void
 mkaltar(croom)

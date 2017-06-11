@@ -385,7 +385,6 @@ typedef unsigned char	uchar;
  */
 
 /* dungeon features */
-#define SINKS		/* Kitchen sinks - Janet Walz */
 #define LIGHT_SRC_SPELL /* WAC Light sourced spells (wac@intergate.bc.ca)*/
 
 /* dungeon levels */

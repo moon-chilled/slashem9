@@ -349,10 +349,8 @@ dodrink()
 
 	*qp++ = ALLOW_FLOOROBJ;
 	if (!u.uswallow && (IS_FOUNTAIN(levl[u.ux][u.uy].typ) ||
-#ifdef SINKS
 			    IS_SINK(levl[u.ux][u.uy].typ) ||
 			    IS_TOILET(levl[u.ux][u.uy].typ) ||
-#endif
 			    Underwater || IS_POOL(levl[u.ux][u.uy].typ)))
 	    *qp++ = ALLOW_THISPLACE;
 	Strcpy(qp, beverages);
@@ -363,7 +361,6 @@ dodrink()
 		drinkfountain();
 		return 1;
 	    }
-#ifdef SINKS
 	    else if (IS_SINK(levl[u.ux][u.uy].typ)) {
 		drinksink();
 		return 1;
@@ -372,7 +369,6 @@ dodrink()
 		drinktoilet();
 		return 1;
 	    }
-#endif
 	    pline("Do you know what lives in this water!");
 	    return 1;
 	}

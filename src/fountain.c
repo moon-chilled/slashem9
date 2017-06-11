@@ -499,7 +499,6 @@ register struct obj *obj;
 	dryup(u.ux, u.uy, TRUE);
 }
 
-#ifdef SINKS
 void
 diptoilet(obj)
 register struct obj *obj;
@@ -715,7 +714,6 @@ drinktoilet()
 			vomit();
 	}
 }
-#endif /* SINKS */
 
 
 void
@@ -825,7 +823,6 @@ register struct obj *obj;
 	dryup(u.ux, u.uy, TRUE);
 }
 
-#ifdef SINKS
 
 void
 whetstone_toilet_effects(obj)
@@ -896,7 +893,5 @@ register struct obj *obj;
 			break;
 	}
 }
-
-#endif /* SINKS */
 
 /*fountain.c*/

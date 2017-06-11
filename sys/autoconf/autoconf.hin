@@ -191,9 +191,6 @@
 /* Display object weight */
 #undef SHOW_WEIGHT
 
-/* Kitchen sinks */
-#undef SINKS
-
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 

@@ -112,7 +112,6 @@ dosit()
 		(void) rust_dmg(uarm, "armor", 1, TRUE, &youmonst);
 	    else if (!rn2(10) && uarmf && uarmf->otyp != WATER_WALKING_BOOTS)
 		(void) rust_dmg(uarm, "armor", 1, TRUE, &youmonst);
-#ifdef SINKS
 	} else if(IS_SINK(typ)) {
 
 	    You(sit_message, defsyms[S_sink].explanation);
@@ -126,7 +125,6 @@ dosit()
 			if (Sick) make_sick(0L, (char *)0, TRUE, SICK_ALL);
 			if (u.uhs == 0) morehungry(rn2(400)+200);
 	    }
-#endif
 	} else if(IS_ALTAR(typ)) {
 
 	    You(sit_message, defsyms[S_altar].explanation);
