@@ -795,13 +795,8 @@ WEPTOOL("spoon", (char *)0,
 	1, 0, 0, 0,  0,  1, 5000,  0,  0, 0, WHACK,  -P_DART, PLATINUM, HI_METAL),
 # endif /* P_SPOON */
 #ifdef LIGHTSABERS
-# ifdef D_SABER
 WEPTOOL("pick-axe", (char *)0,
 	1, 0, 0, 0, 17, 80,   50,  6,  3, 0, WHACK,  P_PICK_AXE, IRON, HI_METAL),
-# else
-WEPTOOL("pick-axe", (char *)0,
-	1, 0, 0, 0, 18, 80,   50,  6,  3, 0, WHACK,  P_PICK_AXE, IRON, HI_METAL),
-# endif
 #else	/* LIGHTSABERS */
 WEPTOOL("pick-axe", (char *)0,
 	1, 0, 0, 0, 20, 80,   50,  6,  3, 0, WHACK,  P_PICK_AXE, IRON, HI_METAL),
@@ -833,10 +828,8 @@ OBJECT(OBJ("torch", (char *)0),
  */
 WEPTOOL("green lightsaber", "lightsaber",
 	0, 0, 1, 0,  1, 60, 500, 3,  5, -3, SLASH, P_LIGHTSABER, PLASTIC, HI_METAL),
-# ifdef D_SABER
 WEPTOOL("blue lightsaber",  "lightsaber",
 	0, 0, 1, 0,  1, 60, 500, 5,  7, -3, SLASH, P_LIGHTSABER, PLATINUM, HI_METAL),
-# endif /* D_SABER */
 WEPTOOL("red lightsaber",  "lightsaber",
 	0, 0, 1, 0,  1, 60, 500, 9,  11, -3, SLASH, P_LIGHTSABER, PLATINUM, HI_METAL),
 WEPTOOL("red double lightsaber",  "double lightsaber",

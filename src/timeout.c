@@ -1413,9 +1413,7 @@ long timeout;
 			    whose, xname(obj));
 	    	}
 	    case GREEN_LIGHTSABER: 
-#ifdef D_SABER
 	    case BLUE_LIGHTSABER:
-#endif
 	    case RED_LIGHTSABER:
 	        /* Callback is checked every 5 turns - 
 	        	lightsaber automatically deactivates if not wielded */
@@ -1568,9 +1566,7 @@ begin_burn(obj, already_lit)
 	    	if (obj->altmode && obj->age > 1) 
 		    obj->age--; /* Double power usage */
 	    case RED_LIGHTSABER:
-#ifdef D_SABER
 	    case BLUE_LIGHTSABER:
-#endif
 	    case GREEN_LIGHTSABER:
 	    	turns = 1;
     	    	radius = 1;

@@ -3622,9 +3622,7 @@ doapply()
 		break;
 #ifdef LIGHTSABERS
 	case GREEN_LIGHTSABER:
-#ifdef D_SABER
   	case BLUE_LIGHTSABER:
-#endif
 	case RED_LIGHTSABER:
 	case RED_DOUBLE_LIGHTSABER:
 		if (uwep != obj && !wield_tool(obj, (const char *)0)) break;

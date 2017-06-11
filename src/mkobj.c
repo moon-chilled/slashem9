@@ -549,9 +549,7 @@ boolean artif;
 		case RED_DOUBLE_LIGHTSABER:
 					otmp->altmode = FALSE;
 		case GREEN_LIGHTSABER:
-#ifdef D_SABER
 		case BLUE_LIGHTSABER:
-#endif
 		case RED_LIGHTSABER:
 					otmp->lamplit = 0;
 					otmp->age = (long) rn1(500,1000);

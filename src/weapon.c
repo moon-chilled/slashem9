@@ -281,9 +281,7 @@ struct monst *mon;
 
 #ifdef LIGHTSABERS
 		case GREEN_LIGHTSABER:  tmp +=13; break;
-#ifdef D_SABER
 		case BLUE_LIGHTSABER:   tmp +=12; break;
-#endif
 		case RED_DOUBLE_LIGHTSABER: 
 					if (otmp->altmode) tmp += rnd(11);
 					/* fallthrough */
@@ -317,9 +315,7 @@ struct monst *mon;
 
 #ifdef LIGHTSABERS
 		case GREEN_LIGHTSABER:  tmp +=9; break;
-#ifdef D_SABER
 		case BLUE_LIGHTSABER:   tmp +=8; break;
-#endif
 		case RED_DOUBLE_LIGHTSABER:
 					if (otmp->altmode) tmp += rnd(9);
 					/* fallthrough */
@@ -616,9 +612,7 @@ static const NEARDATA short hwep[] = {
 	  DWARVISH_MATTOCK, 
 #ifdef LIGHTSABERS
 	  RED_DOUBLE_LIGHTSABER, RED_LIGHTSABER,
-#ifdef D_SABER
 	  BLUE_LIGHTSABER,
-#endif
 	  GREEN_LIGHTSABER,
 #endif
 	  TWO_HANDED_SWORD, BATTLE_AXE,
