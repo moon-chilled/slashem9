@@ -5,6 +5,10 @@
 .*.swl
 build
 
+# leftovers from patches
+*.rej
+*.orig
+
 
 # artifacts of an in-tree build
 

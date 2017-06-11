@@ -337,6 +337,10 @@ savegamestate(fd, mode)
 register int fd, mode;
 {
 	int uid;
+#if defined(RECORD_REALTIME) || defined(REALTIME_ON_BOTL)
+        time_t realtime;
+#endif
+
 
 #ifdef MFLOPPY
 	count_only = (mode & COUNT_SAVE);
@@ -384,6 +388,15 @@ register int fd, mode;
 	savefruitchn(fd, mode);
 	savenames(fd, mode);
 	save_waterlevel(fd, mode);
+
+#ifdef RECORD_ACHIEVE
+        bwrite(fd, (genericptr_t) &achieve, sizeof achieve);
+#endif
+#if defined(RECORD_REALTIME) || defined(REALTIME_ON_BOTL)
+        realtime = get_realtime();
+        bwrite(fd, (genericptr_t) &realtime, sizeof realtime);
+#endif
+
 	bflush(fd);
 }
 
