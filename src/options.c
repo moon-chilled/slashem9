@@ -163,8 +163,6 @@ static struct Bool_Opt
 #else
 	{"menucolors", (boolean *)0, FALSE, SET_IN_GAME},
 #endif
-        /* Not supported in tty at the moment (hence SET_IN_FILE), but curses has it */
-        {"menu_glyphs", &iflags.use_menu_glyphs, FALSE, SET_IN_FILE},
 	{"menu_on_esc", &flags.menu_on_esc, TRUE, SET_IN_GAME},
 #ifdef WIZARD
 	/* for menu debugging only*/
@@ -172,6 +170,7 @@ static struct Bool_Opt
 #else
 	{"menu_tab_sep", (boolean *)0, FALSE, SET_IN_FILE},
 #endif
+	{"menu_glyphs", &iflags.use_menu_glyphs, FALSE, SET_IN_GAME},
 #ifdef WIZARD
 	{"mon_polycontrol", &iflags.mon_polycontrol, FALSE, SET_IN_GAME},
 #else
