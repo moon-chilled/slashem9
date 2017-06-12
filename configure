@@ -739,7 +739,6 @@ enable_mswin_graphics
 with_compression
 enable_data_librarian
 enable_light_src_spell
-enable_wallified_maze
 enable_reincarnation
 enable_kops
 enable_seduce
@@ -1424,7 +1423,6 @@ Optional Features:
   --enable-data-librarian Data librarian (default=auto)
   --enable-light-src-spell
                           Spells are light sources (default=yes)
-  --enable-wallified-maze Fancy mazes (default=yes)
   --enable-reincarnation  Special Rogue-like levels (default=no)
   --enable-kops           Keystone Kops (default=yes)
   --enable-seduce         Succubi/incubi seduction (default=yes)
@@ -6137,25 +6135,6 @@ $as_echo "$enable_light_src_spell" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define LIGHT_SRC_SPELL /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable wallified-maze" >&5
-$as_echo_n "checking whether to enable wallified-maze... " >&6; }
-   # Check whether --enable-wallified-maze was given.
-if test "${enable_wallified_maze+set}" = set; then :
-  enableval=$enable_wallified_maze;
-else
-  enable_wallified_maze="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_wallified_maze" >&5
-$as_echo "$enable_wallified_maze" >&6; }
-   if test "$enable_wallified_maze" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define WALLIFIED_MAZE /**/
 _ACEOF
 
    fi

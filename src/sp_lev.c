@@ -2248,12 +2248,8 @@ dlb *fd;
       for(x = 2; x <= x_maze_max; x++)
 	for(y = 0; y <= y_maze_max; y++)
 	    if (filling == -1) {
-#ifndef WALLIFIED_MAZE
-		    levl[x][y].typ = STONE;
-#else
 		    levl[x][y].typ =
 			(y < 2 || ((x % 2) && (y % 2))) ? STONE : HWALL;
-#endif
 	    } else {
 		    levl[x][y].typ = filling;
 	    }
@@ -2729,11 +2725,7 @@ dlb *fd;
 	    }
 
 	    if(!IS_DOOR(levl[x][y].typ)) {
-#ifndef WALLIFIED_MAZE
-		levl[x][y].typ = CORR;
-#else
 		levl[x][y].typ = ROOM;
-#endif
 		levl[x][y].flags = 0;
 	    }
 
@@ -2749,11 +2741,7 @@ dlb *fd;
 		    x--;
 
 		/* no need for IS_DOOR check; out of map bounds */
-#ifndef WALLIFIED_MAZE
-		levl[x][y].typ = CORR;
-#else
 		levl[x][y].typ = ROOM;
-#endif
 		levl[x][y].flags = 0;
 	    }
 

@@ -388,7 +388,6 @@ typedef unsigned char	uchar;
 #define LIGHT_SRC_SPELL /* WAC Light sourced spells (wac@intergate.bc.ca)*/
 
 /* dungeon levels */
-#define WALLIFIED_MAZE	/* Fancy mazes - Jean-Christophe Collet */
 /* #define REINCARNATION */     /* Special Rogue-like levels */
 
 /* monsters & objects */

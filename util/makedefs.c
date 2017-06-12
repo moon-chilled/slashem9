@@ -870,9 +870,6 @@ static const char *build_opts[] = {
 #ifdef VISION_TABLES
 		"vision tables",
 #endif
-#ifdef WALLIFIED_MAZE
-		"walled mazes",
-#endif
 #ifdef YEOMAN
 		"yeomen",
 #endif
