@@ -44,8 +44,6 @@ struct flag {
 	boolean  friday13;	/* it's Friday the 13th */
 	boolean  groundhogday;	/* KMH -- February 2 */
 	boolean  help;		/* look in data file for info about stuff */
-	boolean  hilite_hidden_stairs;
-	boolean  hilite_obj_piles;
 	boolean  ignintr;	/* ignore interrupts */
 #ifdef INSURANCE
 	boolean  ins_chkpt;	/* checkpoint as appropriate */
@@ -176,7 +174,7 @@ struct flag {
  */
 
 struct instance_flags {
-	boolean  cbreak;	/* in cbreak mode, rogue format */
+    boolean  cbreak;	/* in cbreak mode, rogue format */
 #ifdef CURSES_GRAPHICS
     boolean  classic_status;    /* What kind of horizontal statusbar to use */
     boolean  cursesgraphics;    /* Use portable curses extended characters */
@@ -200,6 +198,8 @@ struct instance_flags {
 	uchar	bouldersym;	/* symbol for boulder display */
 	boolean	travel1;	/* first travel step */
 	coord	travelcc;	/* coordinates for travel_cache */
+	boolean  hilite_hidden_stairs;
+	boolean  hilite_obj_piles;
 #ifdef WIZARD
 	boolean  sanity_check;	/* run sanity checks */
 	boolean  mon_polycontrol;	/* debug: control monster polymorphs */

@@ -339,6 +339,8 @@ struct u_achieve achieve = DUMMY;
 
 struct realtime_data realtime_data = { 0, 0, 0 };
 
+struct _plinemsg *pline_msg = NULL;
+
 /* dummy routine used to force linkage */
 void
 decl_init()
