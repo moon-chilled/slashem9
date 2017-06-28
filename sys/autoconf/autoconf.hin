@@ -1,8 +1,5 @@
 /* sys/autoconf/autoconf.hin.  Generated from sys/autoconf/configure.ac by autoheader.  */
 
-/* Exceptions to autopickup (experimental) */
-#undef AUTOPICKUP_EXCEPTIONS
-
 /* A BSD like system */
 #undef BSD
 

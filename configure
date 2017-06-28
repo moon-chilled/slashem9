@@ -769,7 +769,6 @@ enable_other_services
 enable_dungeon_growth
 enable_display_layers
 enable_goldobj
-enable_autopickup_exceptions
 enable_wizmode
 with_owner
 with_group
@@ -1457,8 +1456,6 @@ Optional Features:
   --enable-display-layers Support transparent tilesets (default=yes)
   --enable-goldobj        Gold is kept on object chains (experimental)
                           (default=no)
-  --enable-autopickup-exceptions
-                          Exceptions to autopickup (experimental) (default=no)
   --enable-wizmode=USER   enable wizard mode for the specified user
                           (default=wizard)
 
@@ -4566,8 +4563,8 @@ fi
     # but 1.2.4 is the earliest tested to date.
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for NETHACK__LIBPNG" >&5
-$as_echo_n "checking for NETHACK__LIBPNG... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libpng >= 1.2.4" >&5
+$as_echo_n "checking for libpng >= 1.2.4... " >&6; }
 
 if test -n "$NETHACK__LIBPNG_CFLAGS"; then
     pkg_cv_NETHACK__LIBPNG_CFLAGS="$NETHACK__LIBPNG_CFLAGS"
@@ -4607,7 +4604,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -4625,7 +4622,7 @@ fi
 
 	nethack__succeeded=no
 elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	nethack__succeeded=no
 else
@@ -5155,8 +5152,8 @@ $as_echo "$as_me: WARNING: Can't enable proxy graphics (no useable libpng)" >&2;
 	if test "$enable_proxy_graphics" = "yes"; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for NETHACK_PROXY" >&5
-$as_echo_n "checking for NETHACK_PROXY... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for nhproxy >= 0.9.0" >&5
+$as_echo_n "checking for nhproxy >= 0.9.0... " >&6; }
 
 if test -n "$NETHACK_PROXY_CFLAGS"; then
     pkg_cv_NETHACK_PROXY_CFLAGS="$NETHACK_PROXY_CFLAGS"
@@ -5196,7 +5193,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -5223,7 +5220,7 @@ Alternatively, you may set the environment variables NETHACK_PROXY_CFLAGS
 and NETHACK_PROXY_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
@@ -5247,8 +5244,8 @@ fi
 	else
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for NETHACK_PROXY" >&5
-$as_echo_n "checking for NETHACK_PROXY... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for nhproxy >= 0.9.0" >&5
+$as_echo_n "checking for nhproxy >= 0.9.0... " >&6; }
 
 if test -n "$NETHACK_PROXY_CFLAGS"; then
     pkg_cv_NETHACK_PROXY_CFLAGS="$NETHACK_PROXY_CFLAGS"
@@ -5288,7 +5285,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -5306,7 +5303,7 @@ fi
 
 	:
 elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	:
 else
@@ -6707,25 +6704,6 @@ $as_echo "$enable_goldobj" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define GOLDOBJ /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable autopickup-exceptions" >&5
-$as_echo_n "checking whether to enable autopickup-exceptions... " >&6; }
-   # Check whether --enable-autopickup-exceptions was given.
-if test "${enable_autopickup_exceptions+set}" = set; then :
-  enableval=$enable_autopickup_exceptions;
-else
-  enable_autopickup_exceptions="no"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_autopickup_exceptions" >&5
-$as_echo "$enable_autopickup_exceptions" >&6; }
-   if test "$enable_autopickup_exceptions" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define AUTOPICKUP_EXCEPTIONS /**/
 _ACEOF
 
    fi

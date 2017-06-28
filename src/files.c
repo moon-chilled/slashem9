@@ -1916,10 +1916,8 @@ char		*tmp_levels;
 			plnamesuffix();	/* set the character class */
 	} else if (match_varname(buf, "TILESETS", 7)) {
 		parsetileset(bufp);
-#ifdef AUTOPICKUP_EXCEPTIONS
 	} else if (match_varname(buf, "AUTOPICKUP_EXCEPTION", 5)) {
 		add_autopickup_exception(bufp);
-#endif
 #ifdef NOCWD_ASSUMPTIONS
 	} else if (match_varname(buf, "HACKDIR", 4)) {
 		adjust_prefix(bufp, HACKPREFIX);

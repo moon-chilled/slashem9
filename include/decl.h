@@ -473,13 +473,11 @@ E char *fqn_prefix_names[PREFIX_COUNT];
 #endif
 
 
-#ifdef AUTOPICKUP_EXCEPTIONS
 struct autopickup_exception {
 	char *pattern;
 	boolean grab;
 	struct autopickup_exception *next;
 };
-#endif /* AUTOPICKUP_EXCEPTIONS */
 
 struct u_achieve {
         Bitfield(get_bell,1);        /* You have obtained the bell of 

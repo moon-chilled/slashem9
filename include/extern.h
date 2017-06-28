@@ -1527,10 +1527,8 @@ E void FDECL(set_option_mod_status, (const char *, int));
 #ifdef MENU_COLOR
 E boolean FDECL(add_menu_coloring, (char *));
 #endif
-#ifdef AUTOPICKUP_EXCEPTIONS
 E int FDECL(add_autopickup_exception, (const char *));
 E void NDECL(free_autopickup_exceptions);
-#endif /* AUTOPICKUP_EXCEPTIONS */
 
 /* ### pager.c ### */
 

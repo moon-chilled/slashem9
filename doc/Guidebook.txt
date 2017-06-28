@@ -2819,10 +2819,8 @@
 
           pickup_types
             Specify the object types to be picked up when autopickup is on.
-            Default is all types.  If your copy of the game has the experi-
-            mental  compile time option AUTOPICKUP_EXCEPTIONS included, you
-            may be able  to  use  autopickup_exception  configuration  file
-            lines to further refine autopickup behavior.
+            Default is all types.  You may be able to use autopickup_excep-
+            tion configuration file lines to further refine autopickup behavior.
 
           prayconfirm
                Prompt for confirmation before praying (default on).

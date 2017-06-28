@@ -701,9 +701,6 @@ static const char *build_opts[] = {
 #ifdef BORG
 		"borg",               
 #endif
-#ifdef AUTOPICKUP_EXCEPTIONS
-		"autopickup_exceptions",
-#endif
 #ifdef TEXTCOLOR
 		"color",
 #endif

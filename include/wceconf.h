@@ -43,8 +43,6 @@
 
 #define USER_SOUNDS
 
-#define AUTOPICKUP_EXCEPTIONS
-
 /*
  * -----------------------------------------------------------------
  *  The remaining code shouldn't need modification.
