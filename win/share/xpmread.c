@@ -17,7 +17,7 @@ static XpmInfo info;
 /* Maybe these should be in xpm.h, but there isn't one. */
 boolean FDECL(fopen_xpm_file, (char *, char *));
 boolean FDECL(read_xpm_tile, (pixel(*)[]));
-int NDECL(fclose_xpm_file);
+int fclose_xpm_file(void);
 
 boolean
 fopen_xpm_file(filename, type)

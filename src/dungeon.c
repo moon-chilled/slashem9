@@ -58,7 +58,7 @@ STATIC_DCL void FDECL(print_branch, (winid, int, int, int, BOOLEAN_P, struct lch
 
 #if defined(DEBUG) || defined(DEBUG_420942)
 #define DD	dungeons[i]
-STATIC_DCL void NDECL(dumpit);
+STATIC_DCL void dumpit(void);
 
 STATIC_OVL void
 dumpit()

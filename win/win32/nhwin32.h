@@ -233,86 +233,83 @@ extern int input_text_size;
  * External function prototypes
  *############################################################
  */
-#define E extern
-
 
 /* #### nhproc.c #### */
 
-E void NDECL(win32_init_nhwindows);
-E void NDECL(win32_player_selection);
-E void NDECL(win32_askname);
-E void NDECL(win32_get_nh_event) ;
-E void FDECL(win32_exit_nhwindows, (const char *));
-E void FDECL(win32_suspend_nhwindows, (const char *));
-E void NDECL(win32_resume_nhwindows);
-E winid FDECL(win32_create_nhwindow, (int));
-E void FDECL(win32_clear_nhwindow, (winid));
-E void FDECL(win32_display_nhwindow, (winid, BOOLEAN_P));
-E void FDECL(win32_dismiss_nhwindow, (winid));
-E void FDECL(win32_destroy_nhwindow, (winid));
-E void FDECL(win32_curs, (winid,int,int));
-E void FDECL(win32_putstr, (winid, int, const char *));
+extern void win32_init_nhwindows(void);
+extern void win32_player_selection(void);
+extern void win32_askname(void);
+extern void win32_get_nh_event(void) ;
+extern void FDECL(win32_exit_nhwindows, (const char *));
+extern void FDECL(win32_suspend_nhwindows, (const char *));
+extern void win32_resume_nhwindows(void);
+extern winid FDECL(win32_create_nhwindow, (int));
+extern void FDECL(win32_clear_nhwindow, (winid));
+extern void FDECL(win32_display_nhwindow, (winid, BOOLEAN_P));
+extern void FDECL(win32_dismiss_nhwindow, (winid));
+extern void FDECL(win32_destroy_nhwindow, (winid));
+extern void FDECL(win32_curs, (winid,int,int));
+extern void FDECL(win32_putstr, (winid, int, const char *));
 #ifdef FILE_AREAS
-E void FDECL(win32_display_file, (const char *, const char *, BOOLEAN_P));
+extern void FDECL(win32_display_file, (const char *, const char *, BOOLEAN_P));
 #else
-E void FDECL(win32_display_file, (const char *, BOOLEAN_P));
+extern void FDECL(win32_display_file, (const char *, BOOLEAN_P));
 #endif
-E void FDECL(win32_start_menu, (winid));
-E void FDECL(win32_add_menu, (winid,int,const ANY_P,
+extern void FDECL(win32_start_menu, (winid));
+extern void FDECL(win32_add_menu, (winid,int,const ANY_P,
 			CHAR_P,int,const char *, BOOLEAN_P));
-E void FDECL(win32_end_menu, (winid, const char *));
-E int FDECL(win32_select_menu, (winid, int, MENU_ITEM_P **));
-E void NDECL(win32_update_inventory);
-E void NDECL(win32_mark_synch);
-E void NDECL(win32_wait_synch);
+extern void FDECL(win32_end_menu, (winid, const char *));
+extern int FDECL(win32_select_menu, (winid, int, MENU_ITEM_P **));
+extern void win32_update_inventory(void);
+extern void win32_mark_synch(void);
+extern void win32_wait_synch(void);
 #ifdef CLIPPING
-E void FDECL(win32_cliparound, (int, int));
+extern void FDECL(win32_cliparound, (int, int));
 #endif
-E void FDECL(win32_print_glyph, (winid,XCHAR_P,XCHAR_P,int));
-E void FDECL(win32_raw_print, (const char *));
-E void FDECL(win32_raw_print_bold, (const char *));
-E int  NDECL(win32_nhgetch);
-E int  FDECL(win32_nh_poskey, (int *, int *, int *));
-E void NDECL(win32_nhbell);
-E int  NDECL(win32_doprev_message);
-E char FDECL(win32_yn_function, (const char *, const char *, CHAR_P));
-E void FDECL(win32_getlin, (const char *,char *));
-E int  NDECL(win32_get_ext_cmd);
-E void FDECL(win32_number_pad, (int));
-E void NDECL(win32_delay_output);
+extern void FDECL(win32_print_glyph, (winid,XCHAR_P,XCHAR_P,int));
+extern void FDECL(win32_raw_print, (const char *));
+extern void FDECL(win32_raw_print_bold, (const char *));
+extern int  win32_nhgetch(void);
+extern int  FDECL(win32_nh_poskey, (int *, int *, int *));
+extern void win32_nhbell(void);
+extern int  win32_doprev_message(void);
+extern char FDECL(win32_yn_function, (const char *, const char *, CHAR_P));
+extern void FDECL(win32_getlin, (const char *,char *));
+extern int  win32_get_ext_cmd(void);
+extern void FDECL(win32_number_pad, (int));
+extern void win32_delay_output(void);
 
 /* other defs that really should go away (they're win32 specific) */
-E void NDECL(win32_start_screen);
-E void NDECL(win32_end_screen);
-E void FDECL(genl_outrip, (winid,int));
+extern void win32_start_screen(void);
+extern void win32_end_screen(void);
+extern void FDECL(genl_outrip, (winid,int));
 
 /* #### win32msg.c #### */
 
-E LONG WINAPI BaseWndProc(HWND,UINT,UINT,LONG);
-E LONG WINAPI TextWndProc(HWND,UINT,UINT,LONG);
-E LONG WINAPI PopupWndProc(HWND,UINT,UINT,LONG);
-E LONG WINAPI ListboxWndProc(HWND,UINT,UINT,LONG);
-E BOOL WINAPI PlayerSelectProc(HWND,UINT,UINT,LONG);
-E BOOL WINAPI CopyrightProc(HWND,UINT,UINT,LONG);
-E BOOL WINAPI AskNameProc(HWND,UINT,UINT,LONG);
-E LRESULT CALLBACK MenuDialogProc(HWND,UINT,UINT,LONG);
-E int win32_kbhit(void);
+extern LONG WINAPI BaseWndProc(HWND,UINT,UINT,LONG);
+extern LONG WINAPI TextWndProc(HWND,UINT,UINT,LONG);
+extern LONG WINAPI PopupWndProc(HWND,UINT,UINT,LONG);
+extern LONG WINAPI ListboxWndProc(HWND,UINT,UINT,LONG);
+extern BOOL WINAPI PlayerSelectProc(HWND,UINT,UINT,LONG);
+extern BOOL WINAPI CopyrightProc(HWND,UINT,UINT,LONG);
+extern BOOL WINAPI AskNameProc(HWND,UINT,UINT,LONG);
+extern LRESULT CALLBACK MenuDialogProc(HWND,UINT,UINT,LONG);
+extern int win32_kbhit(void);
 
 /* #### winmain.c #### */
 
-E void NDECL(win_win32_init);
-E BOOL InitBaseWindow(void);
-E BOOL InitTextWindow(void);
-E BOOL InitPopupWindow(void);
-E BOOL InitListboxWindow(void);
-E BOOL CALLBACK EnumChildProc(HWND,LPARAM);
+extern void win_win32_init(void);
+extern BOOL InitBaseWindow(void);
+extern BOOL InitTextWindow(void);
+extern BOOL InitPopupWindow(void);
+extern BOOL InitListboxWindow(void);
+extern BOOL CALLBACK EnumChildProc(HWND,LPARAM);
 #if 0
-E void WinClear(HWND);
-E int WinGetChar(HWND);
-E int WinPutChar(HWND,int,int,int);
-E void WinMinSize(HWND,int,int);
-E void WinHackGetText(const char *,char *);
+extern void WinClear(HWND);
+extern int WinGetChar(HWND);
+extern int WinPutChar(HWND,int,int,int);
+extern void WinMinSize(HWND,int,int);
+extern void WinHackGetText(const char *,char *);
 #endif
-#undef E
 
 #endif /* WIN32_H */

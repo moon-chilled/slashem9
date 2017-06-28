@@ -8,13 +8,13 @@
 struct func_tab {
 	char f_char;
 	boolean	can_if_buried;
-	int NDECL((*f_funct));
+	int (*f_funct)(void);
 	const char *f_text;
 };
 
 struct ext_func_tab {
 	const char *ef_txt, *ef_desc;
-	int NDECL((*ef_funct));
+	int (*ef_funct)(void);
 	boolean	can_if_buried;
 };
 
@@ -24,7 +24,7 @@ extern struct ext_func_tab extcmdlist[];
 struct menu_tab {
         char m_char;
 	boolean	can_if_buried;
-        int NDECL((*m_funct));
+        int (*m_funct)(void);
         const char *m_item;
         const char *m_text;
 };

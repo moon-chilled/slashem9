@@ -24,7 +24,7 @@
 #include <allegro.h>
 
 void FDECL(alleg_gotoloc, (int,int));  /* This should be made a macro */
-void NDECL(alleg_backsp);
+void alleg_backsp(void);
 #ifdef SCROLLMAP
 STATIC_DCL void FDECL(alleg_scrollmap,(BOOLEAN_P));
 #endif
@@ -32,7 +32,7 @@ STATIC_DCL void FDECL(alleg_redrawmap,(BOOLEAN_P));
 void FDECL(alleg_cliparound,(int, int));
 
 #ifdef POSITIONBAR
-STATIC_DCL void NDECL(positionbar);
+STATIC_DCL void positionbar(void);
 static void FDECL(alleg_special,(int, int, int));
 #endif
 

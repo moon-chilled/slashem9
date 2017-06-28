@@ -11,23 +11,23 @@
 
 static boolean FDECL(gettech, (int *));
 static boolean FDECL(dotechmenu, (int, int *));
-static void NDECL(doblitzlist);
+static void doblitzlist(void);
 static int FDECL(get_tech_no,(int));
 static int FDECL(techeffects, (int));
 static void FDECL(hurtmon, (struct monst *,int));
 static int FDECL(mon_to_zombie, (int));
-STATIC_PTR int NDECL(tinker);
-STATIC_PTR int NDECL(draw_energy);
-static const struct innate_tech * NDECL(role_tech);
-static const struct innate_tech * NDECL(race_tech);
-static int NDECL(doblitz);
-static int NDECL(blitz_chi_strike);
-static int NDECL(blitz_e_fist);
-static int NDECL(blitz_pummel);
-static int NDECL(blitz_g_slam);
-static int NDECL(blitz_dash);
-static int NDECL(blitz_power_surge);
-static int NDECL(blitz_spirit_bomb);
+STATIC_PTR int tinker(void);
+STATIC_PTR int draw_energy(void);
+static const struct innate_tech * role_tech(void);
+static const struct innate_tech * race_tech(void);
+static int doblitz(void);
+static int blitz_chi_strike(void);
+static int blitz_e_fist(void);
+static int blitz_pummel(void);
+static int blitz_g_slam(void);
+static int blitz_dash(void);
+static int blitz_power_surge(void);
+static int blitz_spirit_bomb(void);
 
 static NEARDATA schar delay;            /* moves left for tinker/energy draw */
 static NEARDATA const char revivables[] = { ALLOW_FLOOROBJ, FOOD_CLASS, 0 };

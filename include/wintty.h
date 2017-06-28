@@ -5,8 +5,6 @@
 #ifndef WINTTY_H
 #define WINTTY_H
 
-#define E extern
-
 #ifndef WINDOW_STRUCTS
 #define WINDOW_STRUCTS
 
@@ -92,13 +90,13 @@ extern char defmorestr[];	/* default --more-- prompt */
 /* port specific external function references */
 
 /* ### getline.c ### */
-E void FDECL(xwaitforspace, (const char *));
+extern void FDECL(xwaitforspace, (const char *));
 
 /* ### termcap.c, video.c ### */
 
-E void FDECL(tty_startup,(int*, int*));
+extern void FDECL(tty_startup,(int*, int*));
 #ifndef NO_TERMS
-E void NDECL(tty_shutdown);
+extern void tty_shutdown(void);
 #endif
 #if defined(apollo)
 /* Apollos don't widen old-style function definitions properly -- they try to
@@ -106,30 +104,30 @@ E void NDECL(tty_shutdown);
  * define UNWIDENDED_PROTOTYPES (in tradstdc.h), which makes CHAR_P below a
  * char.  But the tputs termcap call was compiled as if xputc's argument
  * actually would be expanded.	So here, we have to make an exception. */
-E void FDECL(xputc, (int));
+extern void FDECL(xputc, (int));
 #else
-E void FDECL(xputc, (CHAR_P));
+extern void FDECL(xputc, (CHAR_P));
 #endif
-E void FDECL(xputs, (const char *));
+extern void FDECL(xputs, (const char *));
 #if defined(SCREEN_VGA) || defined(SCREEN_8514) || defined(ALLEG_FX)
-E void FDECL(xputg, (int, int, unsigned));
+extern void FDECL(xputg, (int, int, unsigned));
 #endif
-E void NDECL(cl_end);
-E void NDECL(clear_screen);
-E void NDECL(home);
-E void NDECL(standoutbeg);
-E void NDECL(standoutend);
+extern void cl_end(void);
+extern void clear_screen(void);
+extern void home(void);
+extern void standoutbeg(void);
+extern void standoutend(void);
 # if 0
-E void NDECL(revbeg);
-E void NDECL(boldbeg);
-E void NDECL(blinkbeg);
-E void NDECL(dimbeg);
-E void NDECL(m_end);
+extern void revbeg(void);
+extern void boldbeg(void);
+extern void blinkbeg(void);
+extern void dimbeg(void);
+extern void m_end(void);
 # endif
-E void NDECL(backsp);
-E void NDECL(graph_on);
-E void NDECL(graph_off);
-E void NDECL(cl_eos);
+extern void backsp(void);
+extern void graph_on(void);
+extern void graph_off(void);
+extern void cl_eos(void);
 
 /*
  * termcap.c (or facsimiles in other ports) is the right place for doing
@@ -137,95 +135,95 @@ E void NDECL(cl_eos);
  * a color or whatever.  wintty.c should concern itself with WHERE to put
  * stuff in a window.
  */
-E void FDECL(term_start_attr,(int attr));
-E void FDECL(term_end_attr,(int attr));
-E void NDECL(term_start_raw_bold);
-E void NDECL(term_end_raw_bold);
+extern void FDECL(term_start_attr,(int attr));
+extern void FDECL(term_end_attr,(int attr));
+extern void term_start_raw_bold(void);
+extern void term_end_raw_bold(void);
 
 #ifdef TEXTCOLOR
-E void NDECL(term_end_color);
-E void FDECL(term_start_color,(int color));
-E int FDECL(has_color,(int color));
+extern void term_end_color(void);
+extern void FDECL(term_start_color,(int color));
+extern int FDECL(has_color,(int color));
 #endif /* TEXTCOLOR */
 
 
 /* ### topl.c ### */
 
-E void FDECL(addtopl, (const char *));
-E void NDECL(more);
-E void FDECL(update_topl, (const char *));
-E void FDECL(putsyms, (const char*));
+extern void FDECL(addtopl, (const char *));
+extern void more(void);
+extern void FDECL(update_topl, (const char *));
+extern void FDECL(putsyms, (const char*));
 
 /* ### wintty.c ### */
 #ifdef CLIPPING
-E void NDECL(setclipped);
+extern void setclipped(void);
 #endif
-E void FDECL(docorner, (int, int));
-E void NDECL(end_glyphout);
-E void FDECL(g_putch, (int));
-E void NDECL(win_tty_init);
+extern void FDECL(docorner, (int, int));
+extern void end_glyphout(void);
+extern void FDECL(g_putch, (int));
+extern void win_tty_init(void);
 
 /* external declarations */
-E void FDECL(tty_init_nhwindows, (int *, char **));
-E void NDECL(tty_player_selection);
-E void NDECL(tty_askname);
-E void NDECL(tty_get_nh_event) ;
-E void FDECL(tty_exit_nhwindows, (const char *));
-E void FDECL(tty_suspend_nhwindows, (const char *));
-E void NDECL(tty_resume_nhwindows);
-E winid FDECL(tty_create_nhwindow, (int));
-E void FDECL(tty_clear_nhwindow, (winid));
-E void FDECL(tty_display_nhwindow, (winid, BOOLEAN_P));
-E void FDECL(tty_dismiss_nhwindow, (winid));
-E void FDECL(tty_destroy_nhwindow, (winid));
-E void FDECL(tty_curs, (winid,int,int));
-E void FDECL(tty_putstr, (winid, int, const char *));
+extern void FDECL(tty_init_nhwindows, (int *, char **));
+extern void tty_player_selection(void);
+extern void tty_askname(void);
+extern void tty_get_nh_event(void) ;
+extern void FDECL(tty_exit_nhwindows, (const char *));
+extern void FDECL(tty_suspend_nhwindows, (const char *));
+extern void tty_resume_nhwindows(void);
+extern winid FDECL(tty_create_nhwindow, (int));
+extern void FDECL(tty_clear_nhwindow, (winid));
+extern void FDECL(tty_display_nhwindow, (winid, BOOLEAN_P));
+extern void FDECL(tty_dismiss_nhwindow, (winid));
+extern void FDECL(tty_destroy_nhwindow, (winid));
+extern void FDECL(tty_curs, (winid,int,int));
+extern void FDECL(tty_putstr, (winid, int, const char *));
 #ifdef FILE_AREAS
-E void FDECL(tty_display_file, (const char *, const char *, BOOLEAN_P));
+extern void FDECL(tty_display_file, (const char *, const char *, BOOLEAN_P));
 #else
-E void FDECL(tty_display_file, (const char *, BOOLEAN_P));
+extern void FDECL(tty_display_file, (const char *, BOOLEAN_P));
 #endif
-E void FDECL(tty_start_menu, (winid));
-E void FDECL(tty_add_menu, (winid,int,const ANY_P *,
+extern void FDECL(tty_start_menu, (winid));
+extern void FDECL(tty_add_menu, (winid,int,const ANY_P *,
 			CHAR_P,CHAR_P,int,const char *, BOOLEAN_P));
-E void FDECL(tty_end_menu, (winid, const char *));
-E int FDECL(tty_select_menu, (winid, int, MENU_ITEM_P **));
-E char FDECL(tty_message_menu, (CHAR_P,int,const char *));
-E void NDECL(tty_update_inventory);
-E void NDECL(tty_mark_synch);
-E void NDECL(tty_wait_synch);
+extern void FDECL(tty_end_menu, (winid, const char *));
+extern int FDECL(tty_select_menu, (winid, int, MENU_ITEM_P **));
+extern char FDECL(tty_message_menu, (CHAR_P,int,const char *));
+extern void tty_update_inventory(void);
+extern void tty_mark_synch(void);
+extern void tty_wait_synch(void);
 #ifdef CLIPPING
-E void FDECL(tty_cliparound, (int, int));
+extern void FDECL(tty_cliparound, (int, int));
 #endif
 #ifdef POSITIONBAR
-E void FDECL(tty_update_positionbar, (char *));
+extern void FDECL(tty_update_positionbar, (char *));
 #endif
-E void FDECL(tty_print_glyph, (winid,XCHAR_P,XCHAR_P,int));
-E void FDECL(tty_raw_print, (const char *));
-E void FDECL(tty_raw_print_bold, (const char *));
-E int NDECL(tty_nhgetch);
-E int FDECL(tty_nh_poskey, (int *, int *, int *));
-E void NDECL(tty_nhbell);
-E int NDECL(tty_doprev_message);
-E char FDECL(tty_yn_function, (const char *, const char *, CHAR_P));
-E void FDECL(tty_getlin, (const char *,char *));
-E int NDECL(tty_get_ext_cmd);
-E void FDECL(tty_number_pad, (int));
-E void NDECL(tty_delay_output);
+extern void FDECL(tty_print_glyph, (winid,XCHAR_P,XCHAR_P,int));
+extern void FDECL(tty_raw_print, (const char *));
+extern void FDECL(tty_raw_print_bold, (const char *));
+extern int tty_nhgetch(void);
+extern int FDECL(tty_nh_poskey, (int *, int *, int *));
+extern void tty_nhbell(void);
+extern int tty_doprev_message(void);
+extern char FDECL(tty_yn_function, (const char *, const char *, CHAR_P));
+extern void FDECL(tty_getlin, (const char *,char *));
+extern int tty_get_ext_cmd(void);
+extern void FDECL(tty_number_pad, (int));
+extern void tty_delay_output(void);
 #ifdef CHANGE_COLOR
-E void FDECL(tty_change_color,(int color,long rgb,int reverse));
+extern void FDECL(tty_change_color,(int color,long rgb,int reverse));
 #ifdef MAC
-E void FDECL(tty_change_background,(int white_or_black));
-E short FDECL(set_tty_font_name, (winid, char *));
+extern void FDECL(tty_change_background,(int white_or_black));
+extern short FDECL(set_tty_font_name, (winid, char *));
 #endif
-E char * NDECL(tty_get_color_string);
+extern char * tty_get_color_string(void);
 #endif
 
 /* other defs that really should go away (they're tty specific) */
-E void NDECL(tty_start_screen);
-E void NDECL(tty_end_screen);
+extern void tty_start_screen(void);
+extern void tty_end_screen(void);
 
-E void FDECL(genl_outrip, (winid,int));
+extern void FDECL(genl_outrip, (winid,int));
 
 #ifdef NO_TERMS
 # ifdef MAC
@@ -236,9 +234,9 @@ E void FDECL(genl_outrip, (winid,int));
 #  define putchar term_putc
 #  define fflush term_flush
 #  define puts term_puts
-E int FDECL(term_putc, (int c));
-E int FDECL(term_flush, (void *desc));
-E int FDECL(term_puts, (const char *str));
+extern int FDECL(term_putc, (int c));
+extern int FDECL(term_flush, (void *desc));
+extern int FDECL(term_puts, (const char *str));
 # endif /* MAC */
 # if defined(MSDOS) || defined(WIN32CON)
 #  if defined(SCREEN_BIOS) || defined(SCREEN_DJGPPFAST) || defined(WIN32CON)
@@ -250,7 +248,7 @@ E int FDECL(term_puts, (const char *str));
 #   define puts(x) xputs(x)
 #  endif/*SCREEN_BIOS || SCREEN_DJGPPFAST || WIN32CON */
 #  ifdef POSITIONBAR
-E void FDECL(video_update_positionbar, (char *));
+extern void FDECL(video_update_positionbar, (char *));
 #  endif
 # endif/*MSDOS*/
 #endif/*NO_TERMS*/

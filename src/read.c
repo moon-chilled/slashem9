@@ -35,7 +35,7 @@ static const char *warnings[] = {
 #if 0
 static void FDECL(wand_explode, (struct obj *));
 #endif
-static void NDECL(do_class_genocide);
+static void do_class_genocide(void);
 static void FDECL(stripspe,(struct obj *));
 static void FDECL(p_glow1,(struct obj *));
 static void FDECL(p_glow2,(struct obj *,const char *));

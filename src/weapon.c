@@ -36,7 +36,7 @@ STATIC_DCL int FDECL(enhance_skill, (boolean));
 #endif
 
 static void FDECL(give_may_advance_msg, (int));
-STATIC_PTR int NDECL(practice);
+STATIC_PTR int practice(void);
 static int FDECL(get_obj_skill, (struct obj *));
 
 #ifdef LIGHTSABERS

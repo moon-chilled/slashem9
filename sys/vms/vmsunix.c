@@ -28,7 +28,7 @@ extern unsigned long smg$init_term_table_by_type(), smg$del_term_table();
 #define vms_ok(sts) ((sts) & 1) /* odd => success */
 
 static int FDECL(veryold, (int));
-static char *NDECL(verify_term);
+static char *verify_term(void);
 #if defined(SHELL) || defined(SUSPEND)
 static void FDECL(hack_escape, (BOOLEAN_P,const char *));
 static void FDECL(hack_resume, (BOOLEAN_P));

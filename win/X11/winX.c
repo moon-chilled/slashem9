@@ -161,7 +161,7 @@ static void FDECL(getline_delete, (Widget, XEvent*, String*, Cardinal*));
 static void FDECL(X11_hangup, (Widget, XEvent*, String*, Cardinal*));
 static int FDECL(input_event, (int));
 static void FDECL(win_visible, (Widget,XtPointer,XEvent *,Boolean *));
-static void NDECL(init_standard_windows);
+static void init_standard_windows(void);
 
 
 /*

@@ -110,7 +110,7 @@
 
 /* STATIC_DCL void FDECL(vga_NoBorder, (int));  */
 void FDECL(vga_gotoloc, (int,int));  /* This should be made a macro */
-void NDECL(vga_backsp);
+void vga_backsp(void);
 #ifdef SCROLLMAP
 STATIC_DCL void FDECL(vga_scrollmap,(BOOLEAN_P));
 #endif
@@ -119,7 +119,7 @@ void FDECL(vga_cliparound,(int, int));
 STATIC_OVL void FDECL(decal_planar,(struct planar_cell_struct *, unsigned));
 
 #ifdef POSITIONBAR
-STATIC_DCL void NDECL(positionbar);
+STATIC_DCL void positionbar(void);
 static void FDECL(vga_special,(int, int, int));
 #endif
 

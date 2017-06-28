@@ -5,14 +5,14 @@
 #include "hack.h"
 #include "epri.h"
 
-STATIC_PTR int NDECL(prayer_done);
-STATIC_DCL struct obj *NDECL(worst_cursed_item);
-STATIC_DCL int NDECL(in_trouble);
+STATIC_PTR int prayer_done(void);
+STATIC_DCL struct obj *worst_cursed_item(void);
+STATIC_DCL int in_trouble(void);
 STATIC_DCL void FDECL(fix_worst_trouble,(int));
 STATIC_DCL void FDECL(angrygods,(ALIGNTYP_P));
 STATIC_DCL void FDECL(at_your_feet, (const char *));
 #ifdef ELBERETH
-STATIC_DCL void NDECL(gcrownu);
+STATIC_DCL void gcrownu(void);
 #endif	/*ELBERETH*/
 STATIC_DCL void FDECL(pleased,(ALIGNTYP_P));
 STATIC_DCL void FDECL(godvoice,(ALIGNTYP_P,const char*));
@@ -23,7 +23,7 @@ STATIC_DCL void FDECL(gods_upset,(ALIGNTYP_P));
 STATIC_DCL void FDECL(consume_offering,(struct obj *));
 STATIC_DCL boolean FDECL(water_prayer,(BOOLEAN_P));
 STATIC_DCL boolean FDECL(blocked_boulder,(int,int));
-static void NDECL(lawful_god_gives_angel);
+static void lawful_god_gives_angel(void);
 static void FDECL(god_gives_pet,(ALIGNTYP_P));
 static int FDECL(offer_oracle,(struct monst *, struct obj *));
 static void FDECL(god_gives_benefit,(ALIGNTYP_P));

@@ -27,7 +27,7 @@
 #ifdef OVLB
 
 static int FDECL(domonnoise,(struct monst *));
-static int NDECL(dochat);
+static int dochat(void);
 static const char *FDECL(yelp_sound,(struct monst *));
 static const char *FDECL(whimper_sound,(struct monst *));
 

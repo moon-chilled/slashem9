@@ -35,8 +35,8 @@ const char *enc_abbrev_stat[] = {
 	"Old"
 };
 
-STATIC_DCL void NDECL(bot1);
-STATIC_DCL void NDECL(bot2);
+STATIC_DCL void bot1(void);
+STATIC_DCL void bot2(void);
 #ifdef ALLEG_FX
 STATIC_DCL void FDECL(set_botl_warn, (int));
 #endif
@@ -63,7 +63,7 @@ STATIC_DCL int mrank_sz;
 STATIC_OVL NEARDATA int mrank_sz = 0; /* loaded by max_rank_sz (from u_init) */
 #endif /* OVLB */
 
-STATIC_DCL const char *NDECL(rank);
+STATIC_DCL const char *rank(void);
 
 #ifdef OVL1
 

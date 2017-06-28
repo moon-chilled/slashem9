@@ -125,7 +125,7 @@ void FDECL(get_cursor, (int *, int *));
 void FDECL(adjust_cursor_flags, (struct WinDesc *));
 void FDECL(cmov, (int, int));
 void FDECL(nocmov, (int, int));
-STATIC_DCL void NDECL(init_ttycolor);
+STATIC_DCL void init_ttycolor(void);
 
 # ifdef OVLB
 int savevmode;		  /* store the original video mode in here */

@@ -24,7 +24,7 @@ extern int FDECL(vms_open, (const char *,int,unsigned));
 int FDECL(restore_savefile, (char *));
 void FDECL(set_levelfile_name, (int));
 int FDECL(open_levelfile, (int));
-int NDECL(create_savefile);
+int create_savefile(void);
 void FDECL(copy_bytes, (int,int));
 
 #ifndef WIN_CE

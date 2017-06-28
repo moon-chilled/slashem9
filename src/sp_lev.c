@@ -39,7 +39,7 @@ STATIC_DCL void FDECL(create_gold, (gold *, struct mkroom *));
 STATIC_DCL void FDECL(create_feature, (int,int,struct mkroom *,int));
 STATIC_DCL boolean FDECL(search_door, (struct mkroom *, xchar *, xchar *,
 					XCHAR_P, int));
-STATIC_DCL void NDECL(fix_stair_rooms);
+STATIC_DCL void fix_stair_rooms(void);
 STATIC_DCL void FDECL(create_corridor, (corridor *));
 
 STATIC_DCL boolean FDECL(create_subroom, (struct mkroom *, XCHAR_P, XCHAR_P,
@@ -76,8 +76,8 @@ static NEARDATA char xsize, ysize;
 static lev_region rarea[10];
 
 STATIC_DCL void FDECL(set_wall_property, (XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P,int));
-STATIC_DCL int NDECL(rnddoor);
-STATIC_DCL int NDECL(rndtrap);
+STATIC_DCL int rnddoor(void);
+STATIC_DCL int rndtrap(void);
 STATIC_DCL boolean FDECL(get_location, (schar *,schar *,int));
 STATIC_DCL void FDECL(sp_lev_shuffle, (char *,char *,int));
 STATIC_DCL void FDECL(light_region, (region *));

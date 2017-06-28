@@ -55,7 +55,7 @@ STATIC_DCL void FDECL(shk_names_obj,
 STATIC_DCL struct obj *FDECL(bp_to_obj, (struct bill_x *));
 STATIC_DCL boolean FDECL(inherits, (struct monst *,int,int));
 STATIC_DCL void FDECL(set_repo_loc, (struct eshk *));
-STATIC_DCL boolean NDECL(angry_shk_exists);
+STATIC_DCL boolean angry_shk_exists(void);
 STATIC_DCL void FDECL(rile_shk, (struct monst *));
 STATIC_DCL void FDECL(rouse_shk, (struct monst *,BOOLEAN_P));
 STATIC_DCL void FDECL(remove_damage, (struct monst *, BOOLEAN_P));
@@ -73,7 +73,7 @@ static boolean FDECL(rob_shop, (struct monst *));
 
 #ifdef OTHER_SERVICES
 #define NOBOUND         (-1)    /* No lower/upper limit to charge       */
-static void NDECL(shk_other_services);
+static void shk_other_services(void);
 static void FDECL(shk_identify, (char *, struct monst *));
 static void FDECL(shk_uncurse, (char *, struct monst *));
 static void FDECL(shk_appraisal, (char *, struct monst *));

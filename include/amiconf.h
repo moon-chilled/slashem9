@@ -73,14 +73,14 @@ extern void  FDECL(nethack_exit, (int));
 
 /* ### amiwbench.c ### */
 
-extern void NDECL(ami_wbench_init);
-extern void NDECL(ami_wbench_args);
+extern void ami_wbench_init(void);
+extern void ami_wbench_args(void);
 extern int FDECL(ami_wbench_getsave, (int));
 extern void FDECL(ami_wbench_unlink, (char *));
 extern int FDECL(ami_wbench_iconsize, (char *));
 extern void FDECL(ami_wbench_iconwrite, (char *));
 extern int FDECL(ami_wbench_badopt, (const char *));
-extern void NDECL(ami_wbench_cleanup);
+extern void ami_wbench_cleanup(void);
 extern void FDECL(getlind, (const char *,char *,const char *));
 
 /* ### winreq.c ### */
@@ -88,12 +88,12 @@ extern void FDECL(getlind, (const char *,char *,const char *));
 extern void amii_setpens(int);
 
 extern void FDECL(exit, (int));
-extern void NDECL(CleanUp);
+extern void CleanUp(void);
 extern void FDECL(Abort, (long));
-extern int NDECL(getpid);
+extern int getpid(void);
 extern char *FDECL(CopyFile, (const char *, const char *));
-extern int NDECL(kbhit);
-extern int NDECL(WindowGetchar);
+extern int kbhit(void);
+extern int WindowGetchar(void);
 extern void FDECL(ami_argset, (int *, char *[]));
 extern void FDECL(ami_mkargline, (int *, char **[]));
 extern void ami_wininit_data(void);

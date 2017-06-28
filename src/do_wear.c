@@ -44,8 +44,8 @@ static NEARDATA const long takeoff_order[] = { WORN_BLINDF, W_WEP,
 STATIC_DCL void FDECL(on_msg, (struct obj *));
 STATIC_DCL void FDECL(Ring_off_or_gone, (struct obj *, BOOLEAN_P));
 STATIC_PTR int FDECL(select_off, (struct obj *));
-STATIC_DCL struct obj *NDECL(do_takeoff);
-STATIC_PTR int NDECL(take_off);
+STATIC_DCL struct obj *do_takeoff(void);
+STATIC_PTR int take_off(void);
 STATIC_DCL int FDECL(menu_remarm, (int));
 STATIC_DCL void FDECL(already_wearing, (const char*));
 STATIC_DCL void FDECL(already_wearing2, (const char*, const char*));

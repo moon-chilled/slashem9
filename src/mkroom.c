@@ -18,12 +18,12 @@
 #ifdef OVLB
 STATIC_DCL boolean FDECL(isbig, (struct mkroom *));
 STATIC_DCL struct mkroom * FDECL(pick_room,(BOOLEAN_P));
-STATIC_DCL void NDECL(mkshop), FDECL(mkzoo,(int)), NDECL(mkswamp);
-STATIC_DCL void NDECL(mktemple);
+STATIC_DCL void mkshop(void), FDECL(mkzoo,(int)), mkswamp(void);
+STATIC_DCL void mktemple(void);
 STATIC_DCL coord * FDECL(shrine_pos, (int));
-STATIC_DCL struct permonst * NDECL(morguemon);
-STATIC_DCL struct permonst * NDECL(squadmon);
-STATIC_DCL struct permonst * NDECL(fungus);
+STATIC_DCL struct permonst *morguemon(void);
+STATIC_DCL struct permonst *squadmon(void);
+STATIC_DCL struct permonst *fungus(void);
 STATIC_DCL void FDECL(save_room, (int,struct mkroom *));
 STATIC_DCL void FDECL(rest_room, (int,struct mkroom *));
 #endif /* OVLB */

@@ -5,12 +5,12 @@
 #include "hack.h"
 #include "lev.h"	/* for checking save modes */
 
-STATIC_DCL void NDECL(stoned_dialogue);
-STATIC_DCL void NDECL(vomiting_dialogue);
-STATIC_DCL void NDECL(choke_dialogue);
-STATIC_DCL void NDECL(slime_dialogue);
-STATIC_DCL void NDECL(slime_dialogue);
-STATIC_DCL void NDECL(slip_or_trip);
+STATIC_DCL void stoned_dialogue(void);
+STATIC_DCL void vomiting_dialogue(void);
+STATIC_DCL void choke_dialogue(void);
+STATIC_DCL void slime_dialogue(void);
+STATIC_DCL void slime_dialogue(void);
+STATIC_DCL void slip_or_trip(void);
 STATIC_DCL void FDECL(see_lamp_flicker, (struct obj *, const char *));
 STATIC_DCL void FDECL(lantern_message, (struct obj *));
 STATIC_DCL void FDECL(accelerate_timer, (SHORT_P, genericptr_t, long));

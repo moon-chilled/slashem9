@@ -23,7 +23,7 @@
 
 STATIC_DCL void FDECL(redotoplin, (const char*));
 STATIC_DCL void FDECL(topl_putsym, (CHAR_P));
-STATIC_DCL void NDECL(remember_topl);
+STATIC_DCL void remember_topl(void);
 STATIC_DCL void FDECL(removetopl, (int));
 
 #ifdef OVLB

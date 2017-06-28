@@ -523,7 +523,7 @@ struct obj *otmp;
 
 # ifdef VMS
 
-extern NDECL(struct mail_info *parse_next_broadcast);
+extern struct mail_info *parse_next_broadcast(void);
 
 volatile int broadcasts = 0;
 

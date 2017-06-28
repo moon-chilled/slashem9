@@ -282,7 +282,7 @@ E char FDECL(key_event_to_char,(XKeyEvent*));
 E void FDECL(msgkey, (Widget, XtPointer, XEvent*));
 E void FDECL(nh_XtPopup, (Widget, int, Widget));
 E void FDECL(nh_XtPopdown, (Widget));
-E void NDECL(win_X11_init);
+E void win_X11_init(void);
 E void FDECL(nh_keyscroll, (Widget, XEvent*, String*, Cardinal*));
 
 /* ### winmesg.c ### */
@@ -294,7 +294,7 @@ E void FDECL(append_message,(struct xwindow*, const char*));
 E void FDECL(set_last_pause, (struct xwindow*));
 
 /* ### winmap.c ### */
-E void NDECL(post_process_tiles);
+E void post_process_tiles(void);
 E void FDECL(check_cursor_visibility,(struct xwindow*));
 E void FDECL(display_map_window,(struct xwindow*));
 E void FDECL(clear_map_window,(struct xwindow*));
@@ -322,8 +322,8 @@ E void FDECL(ec_key,(Widget, XEvent*, String*, Cardinal*)); /* extended command 
 E void FDECL(create_status_window,(struct xwindow*, BOOLEAN_P, Widget));
 E void FDECL(destroy_status_window,(struct xwindow*));
 E void FDECL(adjust_status,(struct xwindow*, const char*));
-E void NDECL(null_out_status);
-E void NDECL(check_turn_events);
+E void null_out_status(void);
+E void check_turn_events(void);
 
 /* ### wintext.c ### */
 E void FDECL(delete_text, (Widget, XEvent*, String*, Cardinal*));
@@ -359,12 +359,12 @@ E void	 FDECL(swap_fg_bg,(Widget));
 
 /* external declarations */
 E void FDECL(X11_init_nhwindows, (int *, char **));
-E void NDECL(X11_player_selection);
-E void NDECL(X11_askname);
-E void NDECL(X11_get_nh_event) ;
+E void X11_player_selection(void);
+E void X11_askname(void);
+E void X11_get_nh_event(void);
 E void FDECL(X11_exit_nhwindows, (const char *));
 E void FDECL(X11_suspend_nhwindows, (const char *));
-E void NDECL(X11_resume_nhwindows);
+E void X11_resume_nhwindows(void);
 E winid FDECL(X11_create_nhwindow, (int));
 E void FDECL(X11_clear_nhwindow, (winid));
 E void FDECL(X11_display_nhwindow, (winid, BOOLEAN_P));
@@ -381,28 +381,28 @@ E void FDECL(X11_add_menu, (winid,int,const ANY_P *,
 			CHAR_P, CHAR_P, int, const char *, BOOLEAN_P));
 E void FDECL(X11_end_menu, (winid, const char *));
 E int FDECL(X11_select_menu, (winid, int, MENU_ITEM_P **));
-E void NDECL(X11_update_inventory);
-E void NDECL(X11_mark_synch);
-E void NDECL(X11_wait_synch);
+E void X11_update_inventory(void);
+E void X11_mark_synch(void);
+E void X11_wait_synch(void);
 #ifdef CLIPPING
 E void FDECL(X11_cliparound, (int, int));
 #endif
 E void FDECL(X11_print_glyph, (winid,XCHAR_P,XCHAR_P,int));
 E void FDECL(X11_raw_print, (const char *));
 E void FDECL(X11_raw_print_bold, (const char *));
-E int NDECL(X11_nhgetch);
+E int X11_nhgetch(void);
 E int FDECL(X11_nh_poskey, (int *, int *, int *));
-E void NDECL(X11_nhbell);
-E int NDECL(X11_doprev_message);
+E void X11_nhbell(void);
+E int X11_doprev_message(void);
 E char FDECL(X11_yn_function, (const char *, const char *, CHAR_P));
 E void FDECL(X11_getlin, (const char *,char *));
-E int NDECL(X11_get_ext_cmd);
+E int X11_get_ext_cmd(void);
 E void FDECL(X11_number_pad, (int));
-E void NDECL(X11_delay_output);
+E void X11_delay_output(void);
 
 /* other defs that really should go away (they're tty specific) */
-E void NDECL(X11_start_screen);
-E void NDECL(X11_end_screen);
+E void X11_start_screen(void);
+E void X11_end_screen(void);
 
 #ifdef GRAPHIC_TOMBSTONE
 E void FDECL(X11_outrip, (winid,int));

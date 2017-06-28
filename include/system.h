@@ -94,7 +94,7 @@ typedef long	off_t;
 # undef random
 # endif
 # if !defined(__SC__) && !defined(__CYGWIN__) && !defined(LINUX)
-E  long NDECL(random);
+E  long random(void);
 # endif
 # if (!defined(SUNOS4) && !defined(bsdi) && !defined(__NetBSD__) && !defined(__FreeBSD__) && !defined(__DragonFly__) && !defined(__APPLE__)) || defined(RANDOM)
 E void FDECL(srandom, (unsigned int));
@@ -221,7 +221,7 @@ E int FDECL(read, (int,genericptr_t,unsigned int));
 E int FDECL(open, (const char *,int,...));
 E int FDECL(dup2, (int, int));
 E int FDECL(setmode, (int,int));
-E int NDECL(kbhit);
+E int kbhit(void);
 # if !defined(_DCC) && !defined(__MINGW32__)
 #  if defined(__TURBOC__) || defined(_MSC_VER)
 E int FDECL(chdir, (const char *));
@@ -252,9 +252,9 @@ E int FDECL(ioctl, (int, int, char*));
 E int FDECL(isatty, (int));	/* 1==yes, 0==no, -1==error */
 #include <sys/file.h>
 # if defined(ULTRIX_PROTO) || defined(__GNUC__)
-E int NDECL(fork);
+E int fork(void);
 # else
-E long NDECL(fork);
+E long fork(void);
 # endif
 #endif /* ULTRIX */
 
@@ -301,12 +301,12 @@ E int FDECL(execl, (const char *, ...));
 # endif
 #endif
 #ifdef MICRO
-E void NDECL(abort);
+E void abort(void);
 E void FDECL(_exit, (int));
 E int FDECL(system, (const char *));
 #endif
 #if defined(HPUX) && !defined(_POSIX_SOURCE)
-E long NDECL(fork);
+E long fork(void);
 #endif
 
 #ifdef POSIX_TYPES
@@ -375,29 +375,29 @@ E int FDECL(sleep, (unsigned));
 E char *FDECL(getenv, (const char *));
 E char *getlogin(void);
 #if defined(HPUX) && !defined(_POSIX_SOURCE)
-E long NDECL(getuid);
-E long NDECL(getgid);
-E long NDECL(getpid);
+E long getuid(void);
+E long getgid(void);
+E long getpid(void);
 #else
 # ifdef POSIX_TYPES
-E pid_t NDECL(getpid);
-E uid_t NDECL(getuid);
-E gid_t NDECL(getgid);
+E pid_t getpid(void);
+E uid_t getuid(void);
+E gid_t getgid(void);
 #  ifdef VMS
-E pid_t NDECL(getppid);
+E pid_t getppid(void);
 #  endif
 # else	/*!POSIX_TYPES*/
 #  ifndef getpid		/* Borland C defines getpid() as a macro */
-E int NDECL(getpid);
+E int getpid(void);
 #  endif
 #  ifdef VMS
-E int NDECL(getppid);
-E unsigned NDECL(getuid);
-E unsigned NDECL(getgid);
+E int getppid(void);
+E unsigned getuid(void);
+E unsigned getgid(void);
 #  endif
 #  if defined(ULTRIX) && !defined(_UNISTD_H_)
-E unsigned NDECL(getuid);
-E unsigned NDECL(getgid);
+E unsigned getuid(void);
+E unsigned getgid(void);
 E int FDECL(setgid, (int));
 E int FDECL(setuid, (int));
 #  endif
