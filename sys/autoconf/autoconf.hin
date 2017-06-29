@@ -125,9 +125,6 @@
 /* Prevent wishing for special artifacts */
 #undef NOARTIFACTWISH
 
-/* No void type available */
-#undef NOVOID
-
 /* Disable loading and saving bones levels */
 #undef NO_BONES
 
