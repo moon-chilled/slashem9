@@ -143,6 +143,7 @@ extern void term_end_raw_bold(void);
 #ifdef TEXTCOLOR
 extern void term_end_color(void);
 extern void term_start_color(int color);
+extern void term_start_bgcolor(int color);
 extern int has_color(int color);
 #endif /* TEXTCOLOR */
 
