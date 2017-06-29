@@ -24,7 +24,6 @@
 /*
  * Assume an ANSI X3.159 compatible compiler
  */
-#define VDECL(f, p)		(f)p
 #define CHAR_P			int
 #define SHORT_P			int
 #define BOOLEAN_P		int

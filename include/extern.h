@@ -610,7 +610,7 @@ extern void done_intr(int);
 #endif
 extern void done_in_by(struct monst *);
 #endif /* !MAKEDEFS_C && !LEV_LEX_C */
-extern void VDECL(panic, (const char *,...)) PRINTF_F(1,2);
+extern void panic(const char *,...) PRINTF_F(1,2);
 #if !defined(MAKEDEFS_C) && !defined(LEV_LEX_C)
 extern void done(int);
 extern void container_contents(struct obj *,BOOLEAN_P,BOOLEAN_P);
@@ -1000,7 +1000,7 @@ extern int SanePositions(void);
 /* ### mttymain.c ### */
 
 extern void getreturn(const char *);
-extern void VDECL(msmsg, (const char *,...));
+extern void msmsg(const char *,...);
 extern void gettty(void);
 extern void setftty(void);
 extern void settty(const char *);
@@ -1557,7 +1557,7 @@ extern void gameDiskPrompt(void);
 extern void append_slash(char *);
 extern void getreturn(const char *);
 # ifndef AMIGA
-extern void VDECL(msmsg, (const char *,...));
+extern void msmsg(const char *,...);
 # endif
 extern FILextern *fopenp(const char *,const char *);
 #endif /* MICRO || WIN32 */
@@ -1568,7 +1568,7 @@ extern FILextern *fopenp(const char *,const char *);
 extern void gettty(void);
 extern void settty(const char *);
 extern void setftty(void);
-extern void VDECL(error, (const char *,...));
+extern void error(const char *,...);
 #if defined(TIMED_DELAY) && defined(_MSC_VER)
 extern void msleep(unsigned);
 #endif
@@ -1621,19 +1621,19 @@ extern boolean is_autopickup_exception(struct obj *, BOOLEAN_P);
 
 extern void msgpline_add(int, char *);
 extern void msgpline_free(void);
-extern void VDECL(pline, (const char *,...)) PRINTF_F(1,2);
-extern void VDECL(Norep, (const char *,...)) PRINTF_F(1,2);
+extern void pline(const char *,...) PRINTF_F(1,2);
+extern void Norep(const char *,...) PRINTF_F(1,2);
 extern void free_youbuf(void);
-extern void VDECL(You, (const char *,...)) PRINTF_F(1,2);
-extern void VDECL(Your, (const char *,...)) PRINTF_F(1,2);
-extern void VDECL(You_feel, (const char *,...)) PRINTF_F(1,2);
-extern void VDECL(You_cant, (const char *,...)) PRINTF_F(1,2);
-extern void VDECL(You_hear, (const char *,...)) PRINTF_F(1,2);
-extern void VDECL(pline_The, (const char *,...)) PRINTF_F(1,2);
-extern void VDECL(There, (const char *,...)) PRINTF_F(1,2);
-extern void VDECL(verbalize, (const char *,...)) PRINTF_F(1,2);
-extern void VDECL(raw_printf, (const char *,...)) PRINTF_F(1,2);
-extern void VDECL(impossible, (const char *,...)) PRINTF_F(1,2);
+extern void You(const char *,...) PRINTF_F(1,2);
+extern void Your(const char *,...) PRINTF_F(1,2);
+extern void You_feel(const char *,...) PRINTF_F(1,2);
+extern void You_cant(const char *,...) PRINTF_F(1,2);
+extern void You_hear(const char *,...) PRINTF_F(1,2);
+extern void pline_The(const char *,...) PRINTF_F(1,2);
+extern void There(const char *,...) PRINTF_F(1,2);
+extern void verbalize(const char *,...) PRINTF_F(1,2);
+extern void raw_printf(const char *,...) PRINTF_F(1,2);
+extern void impossible(const char *,...) PRINTF_F(1,2);
 extern const char *align_str(ALIGNTYP_P);
 extern void mstatusline(struct monst *);
 extern void ustatusline(void);
@@ -2240,7 +2240,7 @@ extern void settty(const char *);
 extern void setftty(void);
 extern void intron(void);
 extern void introff(void);
-extern void VDECL(error, (const char *,...)) PRINTF_F(1,2);
+extern void error(const char *,...) PRINTF_F(1,2);
 #endif /* UNIX || __BEOS_ */
 
 /* ### unixunix.c ### */
@@ -2279,7 +2279,7 @@ extern int hide_privileges(BOOLEAN_P);
 /* ### unixres.c ### */
 
 #ifdef UNIX
-# ifdef GNOME_GRAPHICS 
+# ifdef GNOME_GRAPHICS
 extern int hide_privileges(BOOLEAN_P);
 # endif
 #endif /* UNIX */
@@ -2386,7 +2386,7 @@ extern void shuttty(const char *);
 extern void setftty(void);
 extern void intron(void);
 extern void introff(void);
-extern void VDECL(error, (const char *,...)) PRINTF_F(1,2);
+extern void error(const char *,...) PRINTF_F(1,2);
 #ifdef TIMED_DELAY
 extern void msleep(unsigned);
 #endif

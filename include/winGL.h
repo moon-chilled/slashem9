@@ -164,9 +164,9 @@ extern void Sdlgl_nhbell(void);
 extern void Sdlgl_number_pad(int);
 extern void Sdlgl_delay_output(void);
 
-extern void VDECL(sdlgl_warning, (const char *, ...)) PRINTF_F(1,2);
-extern void VDECL(sdlgl_error, (const char *, ...)) PRINTF_F(1,2);
-extern void VDECL(sdlgl_hangup, (const char *, ...)) PRINTF_F(1,2);
+extern void sdlgl_warning(const char *, ...) PRINTF_F(1,2);
+extern void sdlgl_error(const char *, ...) PRINTF_F(1,2);
+extern void sdlgl_hangup(const char *, ...) PRINTF_F(1,2);
 
 extern void sdlgl_sleep(int);
 extern int sdlgl_get_time(void);

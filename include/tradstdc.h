@@ -99,22 +99,6 @@
 
 #if defined(NHSTDC) || defined(MSDOS) || defined(MAC) || defined(ULTRIX_PROTO) || defined(__BEOS__)
 
-/*
- * Used for robust ANSI parameter forward declarations:
- * int VDECL(sprintf, (char *, const char *, ...));
- *
- * VDECL() is used for functions with a variable number of arguments.
- * Separate macros are needed because ANSI will mix old-style declarations
- * with prototypes, except in the case of varargs, and the OVERLAY-specific
- * trampoli.* mechanism conflicts with the ANSI <<f(void)>> syntax.
- */
-
-# if defined(MSDOS) || defined(USE_STDARG)
-#  define VDECL(f,p)	f p
-# else
-#  define VDECL(f,p)	f()
-# endif
-
 /* generic pointer, always a macro; genericptr_t is usually a typedef */
 # define genericptr	void *
 
@@ -148,8 +132,6 @@
 # endif
 
 #else /* NHSTDC */	/* a "traditional" C  compiler */
-
-# define VDECL(f,p)	f()
 
 # if defined(AMIGA) || defined(HPUX) || defined(POSIX_TYPES) || defined(__DECC) || defined(__BORLANDC__)
 #  define genericptr	void *
@@ -209,26 +191,6 @@ typedef genericptr genericptr_t;	/* (void *) or (char *) */
 # define WIDENED_PROTOTYPES
 # endif
 #endif
-
-#if 0
-/* The problem below is still the case through 4.0.5F, but the suggested
- * compiler flags in the Makefiles suppress the nasty messages, so we don't
- * need to be quite so drastic.
- */
-#if defined(__sgi) && !defined(__GNUC__)
-/*
- * As of IRIX 4.0.1, /bin/cc claims to be an ANSI compiler, but it thinks
- * it's impossible for a prototype to match an old-style definition with
- * unwidened argument types.  Thus, we have to turn off all NetHack
- * prototypes, and avoid declaring several system functions, since the system
- * include files have prototypes and the compiler also complains that
- * prototyped and unprototyped declarations don't match.
- */
-# undef VDECL
-# define VDECL(f,p)	f()
-#endif
-#endif
-
 
 	/* MetaWare High-C defaults to unsigned chars */
 	/* AIX 3.2 needs this also */

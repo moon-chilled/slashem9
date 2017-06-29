@@ -273,12 +273,12 @@ extern int umask(int);
 # endif
 /* #include <unixio.h> */
 extern int close(int);
-extern int VDECL(creat, (const char *,unsigned,...));
+extern int creat(const char *, unsigned, ...);
 extern int delete(const char *);
 extern int fstat( /*_ int, stat_t * _*/ );
 extern int isatty(int);	/* 1==yes, 0==no, -1==error */
 extern long lseek(int,long,int);
-extern int VDECL(open, (const char *,int,unsigned,...));
+extern int open(const char *,int,unsigned,...);
 extern int read(int,genericptr_t,unsigned);
 extern int rename(const char *,const char *);
 extern int stat( /*_ const char *,stat_t * _*/ );
