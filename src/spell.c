@@ -38,19 +38,19 @@ static NEARDATA struct obj *book;	/* last/current book being xscribed */
 	        (spell < 52) ? ('A' + spell - 26) : \
 		(spell < 62) ? ('0' + spell - 52) : 0 ))
 
-STATIC_DCL int FDECL(spell_let_to_idx, (CHAR_P));
-STATIC_DCL boolean FDECL(cursed_book, (struct obj *bp));
-STATIC_DCL boolean FDECL(confused_book, (struct obj *));
-STATIC_DCL void FDECL(deadbook, (struct obj *));
+STATIC_DCL int spell_let_to_idx(CHAR_P);
+STATIC_DCL boolean cursed_book(struct obj *bp);
+STATIC_DCL boolean confused_book(struct obj *);
+STATIC_DCL void deadbook(struct obj *);
 STATIC_PTR int learn(void);
 STATIC_DCL void do_reset_learn(void);
-STATIC_DCL boolean FDECL(getspell, (int *));
-STATIC_DCL boolean FDECL(dospellmenu, (const char *,int,int *));
-STATIC_DCL int FDECL(percent_success, (int));
+STATIC_DCL boolean getspell(int *);
+STATIC_DCL boolean dospellmenu(const char *,int,int *);
+STATIC_DCL int percent_success(int);
 STATIC_DCL void cast_protection(void);
-STATIC_DCL void FDECL(spell_backfire, (int));
-STATIC_DCL const char *FDECL(spelltypemnemonic, (int));
-STATIC_DCL int FDECL(isqrt, (int));
+STATIC_DCL void spell_backfire(int);
+STATIC_DCL const char *spelltypemnemonic(int);
+STATIC_DCL int isqrt(int);
 
 /* The roles[] table lists the role-specific values for tuning
  * percent_success().

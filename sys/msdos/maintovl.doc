@@ -142,7 +142,7 @@ necessary that if a macro is used to supply the _arguments_ of a
 trampoli'd function, it must also supply the name (this necessity in
 fact triggered a change in the style of the macros that provide
 dialect-independent function declaration in NetHack; the new style
-would have you write FDECL(functionName, (argTypes...)).
+would have you write functionName(argTypes...).
 	Finally, there is the case of functions declared to take no
 arguments whatsoever; in Standard C this is notated:
 

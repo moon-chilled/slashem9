@@ -4,11 +4,11 @@
 
 #include "hack.h"
 
-STATIC_DCL boolean FDECL(tele_jump_ok, (int,int,int,int));
-STATIC_DCL boolean FDECL(teleok, (int,int,BOOLEAN_P));
+STATIC_DCL boolean tele_jump_ok(int,int,int,int);
+STATIC_DCL boolean teleok(int,int,BOOLEAN_P);
 STATIC_DCL void vault_tele(void);
-STATIC_DCL boolean FDECL(rloc_pos_ok, (int,int,struct monst *));
-STATIC_DCL void FDECL(mvault_tele, (struct monst *));
+STATIC_DCL boolean rloc_pos_ok(int,int,struct monst *);
+STATIC_DCL void mvault_tele(struct monst *);
 
 /*
  * Is (x, y) a bad position of mtmp?  If mtmp is NULL, then is (x, y) bad
@@ -346,7 +346,7 @@ struct permonst *mdat;
 boolean
 wpathto(src_cc, dest_cc, step_proc, arg, mdat, max_pathlen)
 coord *src_cc, *dest_cc;
-boolean FDECL((*step_proc), (genericptr_t, int, int));
+boolean (*step_proc)(genericptr_t, int, int);
 genericptr_t arg;
 struct permonst *mdat;
 int max_pathlen;

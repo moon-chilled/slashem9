@@ -96,7 +96,7 @@ CC = @CC@ -DAUTOCONF
 # flags for debugging:
 # CFLAGS = -g -I../include -I$(srcdir)/../include
 
-CFLAGS = -O -I../include -I$(srcdir)/../include @CFLAGS@
+CFLAGS = -O -I../include -I$(srcdir)/../include -std=c99 @CFLAGS@
 LFLAGS =
 
 LIBS =

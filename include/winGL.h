@@ -18,7 +18,7 @@ extern struct window_procs sdlgl_hardw_procs;
 extern struct window_procs sdlgl_softw_procs;
 #endif
 
-extern void FDECL(Sdlgl_parse_options, (char *, int, int));
+extern void Sdlgl_parse_options(char *, int, int);
 
 #ifdef VANILLA_GLHACK
 #define GLHACK_VER_HEX  0x110
@@ -148,30 +148,30 @@ struct TextItem
 /* Note: routines that are in the interface table (sdlgl_procs) begin
  * with a capital `S'.  Everything else has a lowercase `s'.
  */
-extern void FDECL(Sdlgl_init_nhwindows, (int *, char **));
+extern void Sdlgl_init_nhwindows(int *, char **);
 extern void Sdlgl_get_nh_event(void) ;
-extern void FDECL(Sdlgl_exit_nhwindows, (const char *));
-extern void FDECL(Sdlgl_suspend_nhwindows, (const char *));
+extern void Sdlgl_exit_nhwindows(const char *);
+extern void Sdlgl_suspend_nhwindows(const char *);
 extern void Sdlgl_resume_nhwindows(void);
 extern void Sdlgl_update_inventory(void);
 extern void Sdlgl_mark_synch(void);
 extern void Sdlgl_wait_synch(void);
-extern void FDECL(Sdlgl_raw_print, (const char *));
-extern void FDECL(Sdlgl_raw_print_bold, (const char *));
+extern void Sdlgl_raw_print(const char *);
+extern void Sdlgl_raw_print_bold(const char *);
 extern int Sdlgl_nhgetch(void);
-extern int FDECL(Sdlgl_nh_poskey, (int *, int *, int *));
+extern int Sdlgl_nh_poskey(int *, int *, int *);
 extern void Sdlgl_nhbell(void);
-extern void FDECL(Sdlgl_number_pad, (int));
+extern void Sdlgl_number_pad(int);
 extern void Sdlgl_delay_output(void);
 
 extern void VDECL(sdlgl_warning, (const char *, ...)) PRINTF_F(1,2);
 extern void VDECL(sdlgl_error, (const char *, ...)) PRINTF_F(1,2);
 extern void VDECL(sdlgl_hangup, (const char *, ...)) PRINTF_F(1,2);
 
-extern void FDECL(sdlgl_sleep, (int));
+extern void sdlgl_sleep(int);
 extern int sdlgl_get_time(void);
-extern int FDECL(sdlgl_get_poskey, (int, int *, int *, int *));
-extern int FDECL(sdlgl_get_key, (int));
+extern int sdlgl_get_poskey(int, int *, int *, int *);
+extern int sdlgl_get_key(int);
 
 
 /*
@@ -221,10 +221,10 @@ extern int sdlgl_jump_scroll;
 extern int sdlgl_invis_fx;
 extern int sdlgl_gamma;
 
-extern void FDECL(sdlgl_parse_cmdline_options, (int *, char **));
+extern void sdlgl_parse_cmdline_options(int *, char **);
 extern void sdlgl_validate_wincap_options(void);
 extern void sdlgl_validate_gl_options(void);
-extern void FDECL(Sdlgl_preference_update, (const char *));
+extern void Sdlgl_preference_update(const char *);
 
 
 /*
@@ -279,12 +279,12 @@ struct GraphicUnit
 extern void sdlgl_unit_startup(void);
 extern void sdlgl_unit_shutdown(void);
 
-extern void FDECL(sdlgl_begin_units, (int, int));
-extern void FDECL(sdlgl_add_unit, (GLuint,float,float,float,float,
-      short,short,short,short,short,rgbcol_t,float));
+extern void sdlgl_begin_units(int, int);
+extern void sdlgl_add_unit(GLuint,float,float,float,float,
+      short,short,short,short,short,rgbcol_t,float);
 extern void sdlgl_finish_units(void);
 
-extern void FDECL(sdlgl_hw_make_screenshot, (const char *));
+extern void sdlgl_hw_make_screenshot(const char *);
 
 
 /*
@@ -505,41 +505,39 @@ extern void sdlgl_tile_shutdown(void);
 extern void sdlgl_tile_load_rest(void);
 extern void sdlgl_start_logo(void);
 extern int sdlgl_iterate_logo(void);
-extern int FDECL(sdlgl_display_RIP, (int));
+extern int sdlgl_display_RIP(int);
 extern void sdlgl_dismiss_RIP(void);
 
-extern struct TileWindow *FDECL(sdlgl_new_tilewin,
-    (struct TileSet *, int, int, int, int));
-extern void FDECL(sdlgl_map_tilewin,
-    (struct TileWindow *, int, int, int, int, int));
-extern void FDECL(sdlgl_unmap_tilewin, (struct TileWindow *));
-extern void FDECL(sdlgl_free_tilewin, (struct TileWindow *));
-extern void FDECL(sdlgl_change_tileset, (struct TileWindow *,
-      struct TileSet *, int));
+extern struct TileWindow *sdlgl_new_tilewin(struct TileSet *, int, int, int, int);
+extern void sdlgl_map_tilewin(struct TileWindow *, int, int, int, int, int);
+extern void sdlgl_unmap_tilewin(struct TileWindow *);
+extern void sdlgl_free_tilewin(struct TileWindow *);
+extern void sdlgl_change_tileset(struct TileWindow *,
+      struct TileSet *, int);
 extern void sdlgl_flush(void);
 
-extern void FDECL(sdlgl_add_extrashape, (struct TileWindow *,
-      enum ShapeType, short, short, int, int));
-extern void FDECL(sdlgl_remove_extrashapes, (struct TileWindow *,
-      short, short));
-extern int FDECL(sdlgl_test_tile_visible, (int, int, int, int, int));
-extern void FDECL(sdlgl_set_start_depth, (int));
+extern void sdlgl_add_extrashape(struct TileWindow *,
+      enum ShapeType, short, short, int, int);
+extern void sdlgl_remove_extrashapes(struct TileWindow *,
+      short, short);
+extern int sdlgl_test_tile_visible(int, int, int, int, int);
+extern void sdlgl_set_start_depth(int);
 
-extern void FDECL(sdlgl_store_char, (struct TileWindow *, int, int,
-      char, rgbcol_t));
-extern int FDECL(sdlgl_store_str, (struct TileWindow *, int, int,
-      const char *, int, rgbcol_t));
-extern void FDECL(sdlgl_store_tile, (struct TileWindow *, int, int,
-      tileidx_t, tileidx_t, tileidx_t, tileflags_t));
-extern void FDECL(sdlgl_blank_area, (struct TileWindow *, int, int, int, int));
-extern void FDECL(sdlgl_copy_area, (struct TileWindow *, int, int,
-      int, int, int, int));
-extern void FDECL(sdlgl_transfer_area, (struct TileWindow *, int, int,
-      int, int, struct TileWindow *, int, int));
-extern void FDECL(sdlgl_transfer_line, (struct TileWindow *, int, int,
-      int, struct TilePair *, int));
-extern void FDECL(sdlgl_set_scale, (struct TileWindow *, int));
-extern void FDECL(sdlgl_set_cursor, (struct TileWindow *, int, int, int));
+extern void sdlgl_store_char(struct TileWindow *, int, int,
+      char, rgbcol_t);
+extern int sdlgl_store_str(struct TileWindow *, int, int,
+      const char *, int, rgbcol_t);
+extern void sdlgl_store_tile(struct TileWindow *, int, int,
+      tileidx_t, tileidx_t, tileidx_t, tileflags_t);
+extern void sdlgl_blank_area(struct TileWindow *, int, int, int, int);
+extern void sdlgl_copy_area(struct TileWindow *, int, int,
+      int, int, int, int);
+extern void sdlgl_transfer_area(struct TileWindow *, int, int,
+      int, int, struct TileWindow *, int, int);
+extern void sdlgl_transfer_line(struct TileWindow *, int, int,
+      int, struct TilePair *, int);
+extern void sdlgl_set_scale(struct TileWindow *, int);
+extern void sdlgl_set_cursor(struct TileWindow *, int, int, int);
 
 
 /*
@@ -565,16 +563,16 @@ extern unsigned char sdlgl_gamma_table[256];
 #define GAMMA(n)    (sdlgl_gamma_table[n])
 #define GAMMA_F(n)  ((float)GAMMA(n) / 255.0)
 
-extern int FDECL(sdlgl_quantize_tile_size, (int));
-extern int FDECL(sdlgl_mon_tile_face_dir, (tileidx_t));
+extern int sdlgl_quantize_tile_size(int);
+extern int sdlgl_mon_tile_face_dir(tileidx_t);
 extern void sdlgl_generate_gamma_table(void);
 extern void sdlgl_init_mouse_cursors(void);
 extern void sdlgl_free_mouse_cursors(void);
 
-extern void FDECL(sdlgl_load_face_dirs, (const char *, char *));
-extern unsigned char * FDECL(sdlgl_load_png_file, (const char*, int*, int*));
-extern int FDECL(sdlgl_save_ppm_file, (const char *, const unsigned char *,
-      int, int));
+extern void sdlgl_load_face_dirs(const char *, char *);
+extern unsigned char * sdlgl_load_png_file(const char*, int*, int*);
+extern int sdlgl_save_ppm_file(const char *, const unsigned char *,
+      int, int);
 
 
 /*
@@ -654,8 +652,8 @@ extern struct TileSet *sdlgl_font_status;
 
 extern void sdlgl_font_startup(void);
 extern void sdlgl_font_shutdown(void);
-extern int FDECL(sdlgl_quantize_font, (int));
-extern struct TileSet *FDECL(sdlgl_next_narrower_font, (int));
+extern int sdlgl_quantize_font(int);
+extern struct TileSet *sdlgl_next_narrower_font(int);
 
 
 /*
@@ -667,35 +665,34 @@ struct rendering_procs
 {
   void (*rend_startup)(void);
   void (*rend_shutdown)(void);
-  struct TileSet *FDECL((*load_tileset),
-      (const char *, int, int, int, int, int *, int *));
-  void FDECL((*free_tileset), (struct TileSet *));
+  struct TileSet * (*load_tileset)(const char *, int, int, int, int, int *, int *);
+  void (*free_tileset)(struct TileSet *);
   void (*create_extra_graphics)(void);
   void (*free_extra_shapes)(void);
 
-  void FDECL((*enable_clipper), (int, int, int, int));
+  void (*enable_clipper)(int, int, int, int);
   void (*disable_clipper)(void);
   void (*blit_frame)(void);
 
-  void FDECL((*draw_background), (int, int, int, int, rgbcol_t,
-      int, int));
-  void FDECL((*draw_extra_shape), (struct TileWindow *,
-      struct ExtraShape *));
-  void FDECL((*draw_cursor), (struct TileWindow *));
-  void FDECL((*begin_tile_draw), (int, int));
-  void FDECL((*draw_tile), (struct TileWindow *, int, int,
-      int, int, tileidx_t, tilecol_t, tileflags_t, short));
+  void (*draw_background)(int, int, int, int, rgbcol_t,
+      int, int);
+  void (*draw_extra_shape)(struct TileWindow *,
+      struct ExtraShape *);
+  void (*draw_cursor)(struct TileWindow *);
+  void (*begin_tile_draw)(int, int);
+  void (*draw_tile)(struct TileWindow *, int, int,
+      int, int, tileidx_t, tilecol_t, tileflags_t, short);
   void (*finish_tile_draw)(void);
-  void FDECL((*draw_border), (struct TileWindow *, rgbcol_t));
+  void (*draw_border)(struct TileWindow *, rgbcol_t);
 
-  void FDECL((*start_fading), (int, int));
-  void FDECL((*draw_fading), (float));
+  void (*start_fading)(int, int);
+  void (*draw_fading)(float);
   void (*finish_fading)(void);
-  void FDECL((*make_screenshot), (const char *));
+  void (*make_screenshot)(const char *);
 
-  void FDECL((*set_pan), (struct TileWindow *, int, int));
-  void FDECL((*set_new_pos), (struct TileWindow *, int, int, int, int));
-  void FDECL((*mark_dirty), (int, int, int, int, int));
+  void (*set_pan)(struct TileWindow *, int, int);
+  void (*set_new_pos)(struct TileWindow *, int, int, int, int);
+  void (*mark_dirty)(int, int, int, int, int);
 };
 
 extern struct rendering_procs sdlgl_rend_procs;
@@ -733,7 +730,7 @@ extern struct rendering_procs sdlgl_softw_rend_procs;
 #define sdlgl_mark_dirty    (*sdlgl_rend_procs.mark_dirty)
 
 #ifdef GL_GRAPHICS
-extern GLuint FDECL(sdlgl_send_graphic_RGBA, (unsigned char *, int, int));
+extern GLuint sdlgl_send_graphic_RGBA(unsigned char *, int, int);
 #endif
 
 
@@ -774,29 +771,29 @@ struct DirtyMatrix
   SDL_Rect *updaters;
 };
 
-extern void FDECL(sdlgl_set_surface_colors, (SDL_Surface *));
-extern SDL_Surface *FDECL(sdlgl_RGBA_to_truecolor, (unsigned char *,
-        int, int));
-extern SDL_Surface *FDECL(sdlgl_RGBA_to_palettised, (unsigned char *,
-        int, int));
-extern SDL_Surface *FDECL(sdlgl_shrink_surface, (SDL_Surface *));
-extern void FDECL(sdlgl_sw_create_has_alpha, (struct TileSet *));
+extern void sdlgl_set_surface_colors(SDL_Surface *);
+extern SDL_Surface *sdlgl_RGBA_to_truecolor(unsigned char *,
+        int, int);
+extern SDL_Surface *sdlgl_RGBA_to_palettised(unsigned char *,
+        int, int);
+extern SDL_Surface *sdlgl_shrink_surface(SDL_Surface *);
+extern void sdlgl_sw_create_has_alpha(struct TileSet *);
 
-extern void FDECL(sdlgl_create_font_cache, (struct TileSet *));
-extern void FDECL(sdlgl_free_font_cache, (struct TileSet *));
-extern void FDECL(sdlgl_font_cache_lookup, (struct TileSet *, tileidx_t,
-        tilecol_t, int *, int *));
+extern void sdlgl_create_font_cache(struct TileSet *);
+extern void sdlgl_free_font_cache(struct TileSet *);
+extern void sdlgl_font_cache_lookup(struct TileSet *, tileidx_t,
+        tilecol_t, int *, int *);
 
-extern struct DirtyMatrix *FDECL(sdlgl_create_dirty_matrix, (int, int));
-extern void FDECL(sdlgl_free_dirty_matrix, (struct DirtyMatrix *));
-extern void FDECL(sdlgl_dirty_matrix_clear, (struct DirtyMatrix *));
-extern void FDECL(sdlgl_dirty_matrix_add, (struct DirtyMatrix *, int, int,
-      int, int, int));
-extern int FDECL(sdlgl_dirty_matrix_test, (struct DirtyMatrix *, int, int,
-      int, int, int));
-extern int FDECL(sdlgl_dirty_matrix_to_updaters, (struct DirtyMatrix *));
-extern void FDECL(sdlgl_dirty_matrix_blit, (struct DirtyMatrix *, 
-      SDL_Surface *, SDL_Rect *, SDL_Rect *, Uint32, int));
+extern struct DirtyMatrix *sdlgl_create_dirty_matrix(int, int);
+extern void sdlgl_free_dirty_matrix(struct DirtyMatrix *);
+extern void sdlgl_dirty_matrix_clear(struct DirtyMatrix *);
+extern void sdlgl_dirty_matrix_add(struct DirtyMatrix *, int, int,
+      int, int, int);
+extern int sdlgl_dirty_matrix_test(struct DirtyMatrix *, int, int,
+      int, int, int);
+extern int sdlgl_dirty_matrix_to_updaters(struct DirtyMatrix *);
+extern void sdlgl_dirty_matrix_blit(struct DirtyMatrix *, 
+      SDL_Surface *, SDL_Rect *, SDL_Rect *, Uint32, int);
 
 
 /*
@@ -1046,56 +1043,56 @@ struct TextWindow
 
 extern struct TextWindow *text_wins[MAXWIN];
 
-extern winid FDECL(Sdlgl_create_nhwindow, (int));
-extern void FDECL(Sdlgl_clear_nhwindow, (winid));
-extern void FDECL(Sdlgl_display_nhwindow, (winid, BOOLEAN_P));
-extern void FDECL(Sdlgl_dismiss_nhwindow, (winid));
-extern void FDECL(Sdlgl_destroy_nhwindow, (winid));
-extern void FDECL(Sdlgl_curs, (winid,int,int));
-extern void FDECL(Sdlgl_putstr, (winid, int, const char *));
-extern void FDECL(Sdlgl_outrip, (winid,int));
+extern winid Sdlgl_create_nhwindow(int);
+extern void Sdlgl_clear_nhwindow(winid);
+extern void Sdlgl_display_nhwindow(winid, BOOLEAN_P);
+extern void Sdlgl_dismiss_nhwindow(winid);
+extern void Sdlgl_destroy_nhwindow(winid);
+extern void Sdlgl_curs(winid,int,int);
+extern void Sdlgl_putstr(winid, int, const char *);
+extern void Sdlgl_outrip(winid,int);
 extern int Sdlgl_doprev_message(void);
 
 extern void sdlgl_win_startup(void);
 extern void sdlgl_win_shutdown(void);
-extern void FDECL(sdlgl_more, (struct TextWindow *));
-extern void FDECL(sdlgl_adjust_scrollback, (struct TextWindow *, int));
+extern void sdlgl_more(struct TextWindow *);
+extern void sdlgl_adjust_scrollback(struct TextWindow *, int);
 extern void sdlgl_remove_scrollback(void);
-extern void FDECL(sdlgl_pan_window, (int, int, int));
-extern tilecol_t FDECL(sdlgl_attr_to_tilecol, (int attr));
-extern void FDECL(sdlgl_update_mouse_location, (int));
+extern void sdlgl_pan_window(int, int, int);
+extern tilecol_t sdlgl_attr_to_tilecol(int attr);
+extern void sdlgl_update_mouse_location(int);
 
-extern int FDECL(sdlgl_internal_key_handler, (SDL_keysym *, int));
-extern int FDECL(sdlgl_internal_button_handler, (SDL_MouseButtonEvent *));
-extern void FDECL(sdlgl_internal_motion_handler, (SDL_MouseMotionEvent *));
+extern int sdlgl_internal_key_handler(SDL_keysym *, int);
+extern int sdlgl_internal_button_handler(SDL_MouseButtonEvent *);
+extern void sdlgl_internal_motion_handler(SDL_MouseMotionEvent *);
 
 
 /*
  * GL_MENU
  */
 
-extern void FDECL(Sdlgl_start_menu, (winid));
-extern void FDECL(Sdlgl_add_menu, (winid,int,const ANY_P *,
-    CHAR_P,CHAR_P,int,const char *, BOOLEAN_P));
-extern void FDECL(Sdlgl_end_menu, (winid, const char *));
-extern int FDECL(Sdlgl_select_menu, (winid, int, MENU_ITEM_P **));
-extern char FDECL(Sdlgl_message_menu, (CHAR_P,int,const char *));
-extern char FDECL(Sdlgl_yn_function, (const char *, const char *, CHAR_P));
+extern void Sdlgl_start_menu(winid);
+extern void Sdlgl_add_menu(winid,int,const ANY_P *,
+    CHAR_P,CHAR_P,int,const char *, BOOLEAN_P);
+extern void Sdlgl_end_menu(winid, const char *);
+extern int Sdlgl_select_menu(winid, int, MENU_ITEM_P **);
+extern char Sdlgl_message_menu(CHAR_P,int,const char *);
+extern char Sdlgl_yn_function(const char *, const char *, CHAR_P);
 
-extern void FDECL(sdlgl_clear_menu_items, (struct TextWindow *));
-extern int FDECL(sdlgl_process_menu_window, (int, struct TextWindow *, int));
+extern void sdlgl_clear_menu_items(struct TextWindow *);
+extern int sdlgl_process_menu_window(int, struct TextWindow *, int);
 
 
 /*
  * GL_TEXT
  */
 
-extern void FDECL(Sdlgl_display_file, (const char *, BOOLEAN_P));
+extern void Sdlgl_display_file(const char *, BOOLEAN_P);
 
-extern void FDECL(sdlgl_clear_text_items, (struct TextWindow *));
-extern void FDECL(sdlgl_insert_text_item, (struct TextWindow *,
-    struct TextItem *, int, int, const char *));
-extern void FDECL(sdlgl_process_text_window, (int, struct TextWindow *));
+extern void sdlgl_clear_text_items(struct TextWindow *);
+extern void sdlgl_insert_text_item(struct TextWindow *,
+    struct TextItem *, int, int, const char *);
+extern void sdlgl_process_text_window(int, struct TextWindow *);
 
 
 /*
@@ -1126,18 +1123,18 @@ extern void FDECL(sdlgl_process_text_window, (int, struct TextWindow *));
 #define Fl_Caves    Fl_Rogue
 #define Fl_Beach    (FLOOR_TILES + 7)
 
-extern void FDECL(Sdlgl_cliparound, (int, int));
-extern void FDECL(Sdlgl_update_positionbar, (char *));
-extern void FDECL(Sdlgl_print_glyph, (winid,XCHAR_P,XCHAR_P,int));
+extern void Sdlgl_cliparound(int, int);
+extern void Sdlgl_update_positionbar(char *);
+extern void Sdlgl_print_glyph(winid,XCHAR_P,XCHAR_P,int);
 
-extern void FDECL(sdlgl_create_map, (struct TextWindow *, int, int));
-extern void FDECL(sdlgl_zoom_map, (int));
-extern int FDECL(sdlgl_quantize_zoom, (int));
+extern void sdlgl_create_map(struct TextWindow *, int, int);
+extern void sdlgl_zoom_map(int);
+extern int sdlgl_quantize_zoom(int);
 extern int sdlgl_cursor_visible(void);
 extern void sdlgl_center_screen_on_player(void);
 extern void sdlgl_toggle_text_view(void);
-extern int FDECL(sdlgl_find_click, (int, int *, int *));
-extern void FDECL(sdlgl_pan_map_window, (int, int));
+extern int sdlgl_find_click(int, int *, int *);
+extern void sdlgl_pan_map_window(int, int);
 
 
 /*
@@ -1149,28 +1146,28 @@ extern void sdlgl_emul_shutdown(void);
 extern void Sdlgl_start_screen(void);
 extern void Sdlgl_end_screen(void);
 extern void Sdlgl_askname(void);
-extern void FDECL(Sdlgl_getlin, (const char *,char *));
+extern void Sdlgl_getlin(const char *,char *);
 extern int Sdlgl_get_ext_cmd(void);
 
-extern struct TextWindow *FDECL(sdlgl_new_textwin, (int));
-extern void FDECL(sdlgl_free_textwin, (struct TextWindow *));
-extern void FDECL(sdlgl_putc, (struct TextWindow *, int));
-extern void FDECL(sdlgl_puts, (struct TextWindow *, const char *));
-extern void FDECL(sdlgl_puts_nolf, (struct TextWindow *, const char *));
-extern void FDECL(sdlgl_gotoxy, (struct TextWindow *, int, int));
-extern void FDECL(sdlgl_home, (struct TextWindow *));
-extern void FDECL(sdlgl_backsp, (struct TextWindow *));
-extern void FDECL(sdlgl_clear, (struct TextWindow *));
-extern void FDECL(sdlgl_clear_end, (struct TextWindow *));
-extern void FDECL(sdlgl_clear_eos, (struct TextWindow *));
-extern void FDECL(sdlgl_enable_cursor, (struct TextWindow *, int));
+extern struct TextWindow *sdlgl_new_textwin(int);
+extern void sdlgl_free_textwin(struct TextWindow *);
+extern void sdlgl_putc(struct TextWindow *, int);
+extern void sdlgl_puts(struct TextWindow *, const char *);
+extern void sdlgl_puts_nolf(struct TextWindow *, const char *);
+extern void sdlgl_gotoxy(struct TextWindow *, int, int);
+extern void sdlgl_home(struct TextWindow *);
+extern void sdlgl_backsp(struct TextWindow *);
+extern void sdlgl_clear(struct TextWindow *);
+extern void sdlgl_clear_end(struct TextWindow *);
+extern void sdlgl_clear_eos(struct TextWindow *);
+extern void sdlgl_enable_cursor(struct TextWindow *, int);
 
 
 /*
  * GL_STAT
  */
-extern void FDECL(sdlgl_write_status, (struct TextWindow *win));
-extern void FDECL(sdlgl_update_status, (int));
+extern void sdlgl_write_status(struct TextWindow *win);
+extern void sdlgl_update_status(int);
 
 
 #endif /* WINGL_INTERNAL */

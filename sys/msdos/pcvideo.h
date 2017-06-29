@@ -228,84 +228,83 @@ extern void HideCursor(void);
 # ifdef NO_TERMS
 extern void txt_backsp(void);
 extern void txt_clear_screen(void);
-extern void FDECL(txt_cl_end,(int,int));
+extern void txt_cl_end(int,int);
 extern void txt_cl_eos(void);
 extern void txt_get_scr_size(void);
-extern void FDECL(txt_gotoxy,(int,int));
+extern void txt_gotoxy(int,int);
 extern int  txt_monoadapt_check(void);
 extern void txt_nhbell(void);
-extern void FDECL(txt_startup,(int*,int*));
-extern void FDECL(txt_xputs, (const char *, int, int));
-extern void FDECL(txt_xputc, (CHAR_P, int));
+extern void txt_startup(int*,int*);
+extern void txt_xputs(const char *, int, int);
+extern void txt_xputc(CHAR_P, int);
 
 /* ### vidvga.c ### */
 
 #  ifdef SCREEN_VGA
 extern void vga_backsp(void);
-extern void FDECL(vga_clear_screen,(int));
-extern void FDECL(vga_cl_end,(int,int));
-extern void FDECL(vga_cl_eos,(int));
+extern void vga_clear_screen(int);
+extern void vga_cl_end(int,int);
+extern void vga_cl_eos(int);
 extern int  vga_detect(void);
 #   ifdef SIMULATE_CURSOR
 extern void vga_DrawCursor(void);
 #   endif
-extern void FDECL(vga_DisplayCell, (struct planar_cell_struct *, int, int));
-extern void FDECL(vga_DisplayCell_O, 
-			(struct overview_planar_cell_struct *, int, int));
+extern void vga_DisplayCell(struct planar_cell_struct *, int, int);
+extern void vga_DisplayCell_O(struct overview_planar_cell_struct *, int, int);
 extern void vga_Finish(void);
 extern char __far *vga_FontPtrs(void);
 extern void vga_get_scr_size(void);
-extern void FDECL(vga_gotoloc,(int,int));
+extern void vga_gotoloc(int,int);
 #   ifdef POSITIONBAR
-extern void FDECL(vga_update_positionbar, (char *));
+extern void vga_update_positionbar(char *);
 #   endif
 #   ifdef SIMULATE_CURSOR
 extern void vga_HideCursor(void);
 #   endif
 extern void vga_Init(void);
-extern void FDECL(vga_SwitchMode, (unsigned int));
-extern void FDECL(vga_SetPalette, (char *));
+extern void vga_SwitchMode(unsigned int);
+extern void vga_SetPalette(char *);
 extern void vga_tty_end_screen(void);
-extern void FDECL(vga_tty_startup,(int*,int*));
-extern void FDECL(vga_WriteChar, (int, int, int, int));
-extern void FDECL(vga_WriteStr, (char *, int, int, int, int));
-extern void FDECL(vga_xputs, (const char *, int, int));
-extern void FDECL(vga_xputc, (CHAR_P, int));
-extern void FDECL(vga_xputg, (int, int, unsigned));
-extern void FDECL(vga_userpan, (BOOLEAN_P));
-extern void FDECL(vga_overview, (BOOLEAN_P));
-extern void FDECL(vga_traditional, (BOOLEAN_P));
+extern void vga_tty_startup(int*,int*);
+extern void vga_WriteChar(int, int, int, int);
+extern void vga_WriteStr(char *, int, int, int, int);
+extern void vga_xputs(const char *, int, int);
+extern void vga_xputc(CHAR_P, int);
+extern void vga_xputg(int, int, unsigned);
+extern void vga_userpan(BOOLEAN_P);
+extern void vga_overview(BOOLEAN_P);
+extern void vga_traditional(BOOLEAN_P);
 extern void vga_refresh(void);
 #  endif /* SCREEN_VGA */
 
 #  ifdef ALLEG_FX
 extern void alleg_backsp(void);
-extern void FDECL(alleg_clear_screen,(int));
-extern void FDECL(alleg_cl_end,(int,int));
-extern void FDECL(alleg_cl_eos,(int));
+extern void alleg_clear_screen(int);
+extern void alleg_cl_end(int,int);
+extern void alleg_cl_eos(int);
 extern int  alleg_detect(void);
 #   ifdef SIMULATE_CURSOR
 extern void alleg_DrawCursor(void);
 #   endif
 extern void alleg_Finish(void);
 extern void alleg_get_scr_size(void);
-extern void FDECL(alleg_gotoloc,(int,int)); /* This should be made a macro */
+extern void alleg_gotoloc(int,int); /* This should be made a macro */
 #   ifdef POSITIONBAR
-extern void FDECL(alleg_update_positionbar, (char *));
+extern void alleg_update_positionbar(char *);
 #   endif
 #   ifdef SIMULATE_CURSOR
 extern void alleg_HideCursor(void);
 #   endif
 extern void alleg_Init(void);
 extern void alleg_tty_end_screen(void);
-extern void FDECL(alleg_tty_startup,(int*,int*));
-extern void FDECL(alleg_WriteChar, (int, int, int, int));
-extern void FDECL(alleg_xputs, (char *, int, int));
-extern void FDECL(alleg_xputc, (CHAR_P, int));
-extern void FDECL(alleg_xputg, (int, int));
-extern void FDECL(alleg_userpan, (BOOLEAN_P));
-extern void FDECL(alleg_overview, (BOOLEAN_P));
-extern void FDECL(alleg_traditional, (BOOLEAN_P));
+extern void alleg_tty_startup(int*,int*);
+extern void alleg_WriteChar(int, int, int, int);
+extern void alleg_xputs(char *, int, int);
+extern void alleg_xputc(CHAR_P, int);
+extern void alleg_xputg(int, int);
+extern void alleg_userpan(BOOLEAN_P);
+extern void alleg_overview(BOOLEAN_P);
+extern void alleg_traditional(BOOLEAN_P);
 extern void alleg_refresh(void);
 extern void alleg_screenshot(void);
 

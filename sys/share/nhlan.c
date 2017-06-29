@@ -26,10 +26,10 @@
 
 #ifdef LAN_MAIL
 /* Port specific code needs to implement these routines for LAN_MAIL */
-extern char *FDECL(get_username, (int *));
+extern char *get_username(int *);
 extern boolean mail_check(void);
-extern boolean FDECL(mail_fetch, (struct lan_mail_struct *)); 
-extern void FDECL(mail_init, (char *));
+extern boolean mail_fetch(struct lan_mail_struct *); 
+extern void mail_init(char *);
 extern void mail_finish(void);
 
 struct lan_mail_struct mailmessage;

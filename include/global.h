@@ -341,14 +341,14 @@ typedef xchar	boolean;		/* 0 or 1 */
 
 /* primitive memory leak debugging; see alloc.c */
 #ifdef MONITOR_HEAP
-extern long *FDECL(nhalloc, (unsigned int,const char *,int));
-extern void FDECL(nhfree, (genericptr_t,const char *,int));
+extern long *nhalloc(unsigned int,const char *,int);
+extern void nhfree(genericptr_t,const char *,int);
 #ifdef INTERNAL_MALLOC
-extern void FDECL(monitor_heap_push, (const char *, int));
-extern unsigned long FDECL(monitor_heap_pop, (const char *, int, unsigned long));
-extern void FDECL(monitor_heap_set_subid, (const char *, int ));
+extern void monitor_heap_push(const char *, int);
+extern unsigned long monitor_heap_pop(const char *, int, unsigned long);
+extern void monitor_heap_set_subid(const char *, int );
 extern size_t monitor_heap_getmem(void);
-extern boolean FDECL(monitor_heap_trace, (boolean flag));
+extern boolean monitor_heap_trace(boolean flag);
 extern void monitor_heap_mark(void);
 #endif
 # ifndef __FILE__
@@ -360,7 +360,7 @@ extern void monitor_heap_mark(void);
 # define alloc(a) nhalloc(a,__FILE__,(int)__LINE__)
 # define free(a) nhfree(a,__FILE__,(int)__LINE__)
 #else	/* !MONITOR_HEAP */
-extern long *FDECL(alloc, (unsigned int));		/* alloc.c */
+extern long *alloc(unsigned int);		/* alloc.c */
 #endif
 
 /* Used for consistency checks of various data files; declare it here so

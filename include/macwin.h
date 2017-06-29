@@ -165,7 +165,7 @@ extern Boolean RetrievePosition (short, short *, short *);
 extern Boolean RetrieveSize (short, short, short, short *, short *);
 extern void SaveWindowPos (WindowPtr);
 extern void SaveWindowSize (WindowPtr);
-extern Boolean FDECL(RetrieveWinPos, (WindowPtr,short *,short *));
+extern Boolean RetrieveWinPos(WindowPtr,short *,short *);
 
 /* ### macerrs.c ### */
 
@@ -181,8 +181,8 @@ extern void popattempt(void);
 /* ### macfile.c ### */
 
 /* extern char *macgets(int fd, char *ptr, unsigned len); unused */
-extern void FDECL(C2P,(const char *c, unsigned char *p));
-extern void FDECL(P2C,(const unsigned char *p, char *c));
+extern void C2P(const char *c, unsigned char *p);
+extern void P2C(const unsigned char *p, char *c);
 
 /* ### macmenu.c ### */
 
@@ -194,7 +194,7 @@ extern void AdjustMenus(short);
 
 /* ### macmain.c ### */
 
-extern void FDECL (process_openfile, (short s_vol, long s_dir, Str255 fNm, OSType ft));
+extern void process_openfile(short s_vol, long s_dir, Str255 fNm, OSType ft);
 
 /* ### macwin.c ### */
 
@@ -202,41 +202,41 @@ extern void AddToKeyQueue(unsigned char, Boolean);
 extern unsigned char GetFromKeyQueue (void);
 void trans_num_keys (EventRecord *);
 extern void InitMac(void);
-int FDECL (try_key_queue, (char *));
-void FDECL (enter_topl_mode, (char *));
-void FDECL (leave_topl_mode, (char *));
-void FDECL (topl_set_resp, (char *, char));
-Boolean FDECL (topl_key, (unsigned char, Boolean));
-extern void FDECL(HandleEvent, (EventRecord *));	/* used in mmodal.c */
+int try_key_queue(char *);
+void enter_topl_mode(char *);
+void leave_topl_mode(char *);
+void topl_set_resp(char *, char);
+Boolean topl_key(unsigned char, Boolean);
+extern void HandleEvent(EventRecord *);	/* used in mmodal.c */
 extern void port_help(void);
 
 extern Boolean small_screen;
 
-extern void FDECL(mac_init_nhwindows, (int *, char **));
+extern void mac_init_nhwindows(int *, char **);
 extern void mac_askname(void);
 extern void mac_get_nh_event(void);
-extern void FDECL(mac_exit_nhwindows, (const char *));
-extern winid FDECL(mac_create_nhwindow, (int));
-extern void FDECL(mac_clear_nhwindow, (winid));
-extern void FDECL(mac_display_nhwindow, (winid, BOOLEAN_P));
-extern void FDECL(mac_destroy_nhwindow, (winid));
-extern void FDECL(mac_curs, (winid,int,int));
-extern void FDECL(mac_putstr, (winid, int, const char *));
-extern void FDECL(mac_start_menu, (winid));
-extern void FDECL(mac_add_menu, (winid,int,const anything *,
-		CHAR_P,CHAR_P,int,const char *, BOOLEAN_P));
-extern void FDECL(mac_end_menu, (winid, const char *));
-extern int FDECL(mac_select_menu, (winid, int, menu_item **));
+extern void mac_exit_nhwindows(const char *);
+extern winid mac_create_nhwindow(int);
+extern void mac_clear_nhwindow(winid);
+extern void mac_display_nhwindow(winid, BOOLEAN_P);
+extern void mac_destroy_nhwindow(winid);
+extern void mac_curs(winid,int,int);
+extern void mac_putstr(winid, int, const char *);
+extern void mac_start_menu(winid);
+extern void mac_add_menu(winid,int,const anything *,
+		CHAR_P,CHAR_P,int,const char *, BOOLEAN_P);
+extern void mac_end_menu(winid, const char *);
+extern int mac_select_menu(winid, int, menu_item **);
 #ifdef CLIPPING
-extern void FDECL(mac_cliparound, (int, int));
+extern void mac_cliparound(int, int);
 #endif
 extern int mac_nhgetch(void);
-extern int FDECL(mac_nh_poskey, (int *, int *, int *));
+extern int mac_nh_poskey(int *, int *, int *);
 extern int mac_doprev_message(void);
-extern char FDECL(mac_yn_function, (const char *, const char *, CHAR_P));
-extern void FDECL(mac_getlin, (const char *,char *));
+extern char mac_yn_function(const char *, const char *, CHAR_P);
+extern void mac_getlin(const char *,char *);
 extern int mac_get_ext_cmd(void);
-extern void FDECL(mac_number_pad, (int));
+extern void mac_number_pad(int);
 extern void mac_delay_output(void);
 
 #endif /* ! MACWIN_H */

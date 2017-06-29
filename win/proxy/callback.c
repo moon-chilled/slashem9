@@ -396,7 +396,7 @@ struct nhproxy_serv_callbacks win_proxy_callbacks = {
     (void (*)())doset,
     cb_get_extended_commands,
     cb_free_extended_commands,
-    (char NHPROXY_FDECL(*, (NHPROXY_CHAR_P)))map_menu_cmd,
+    (char NHPROXY_*(NHPROXY_CHAR_P))map_menu_cmd,
     cb_get_standard_winid,
     cb_get_tilesets,
     cb_free_tilesets,

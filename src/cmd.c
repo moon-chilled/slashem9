@@ -142,16 +142,16 @@ STATIC_PTR int wiz_show_vision(void);
 STATIC_PTR int wiz_mon_polycontrol(void);
 STATIC_PTR int wiz_show_wmodes(void);
 #if defined(__BORLANDC__) && !defined(_WIN32)
-extern void FDECL(show_borlandc_stats, (winid));
+extern void show_borlandc_stats(winid);
 #endif
 #ifdef DEBUG_MIGRATING_MONS
 STATIC_PTR int wiz_migrate_mons(void);
 #endif
-STATIC_DCL void FDECL(count_obj, (struct obj *, long *, long *, BOOLEAN_P, BOOLEAN_P));
-STATIC_DCL void FDECL(obj_chain, (winid, const char *, struct obj *, long *, long *));
-STATIC_DCL void FDECL(mon_invent_chain, (winid, const char *, struct monst *, long *, long *));
-STATIC_DCL void FDECL(mon_chain, (winid, const char *, struct monst *, long *, long *));
-STATIC_DCL void FDECL(contained, (winid, const char *, long *, long *));
+STATIC_DCL void count_obj(struct obj *, long *, long *, BOOLEAN_P, BOOLEAN_P);
+STATIC_DCL void obj_chain(winid, const char *, struct obj *, long *, long *);
+STATIC_DCL void mon_invent_chain(winid, const char *, struct monst *, long *, long *);
+STATIC_DCL void mon_chain(winid, const char *, struct monst *, long *, long *);
+STATIC_DCL void contained(winid, const char *, long *, long *);
 STATIC_PTR int wiz_show_stats(void);
 #ifdef DISPLAY_LAYERS
 STATIC_PTR int wiz_show_display(void);
@@ -164,13 +164,13 @@ STATIC_PTR int enter_explore_mode(void);
 STATIC_PTR int doattributes(void);
 STATIC_PTR int doconduct(void); /**/
 STATIC_PTR boolean minimal_enlightenment(void);
-STATIC_PTR int FDECL(makemenu, (const char *, struct menu_list *));
+STATIC_PTR int makemenu(const char *, struct menu_list *);
 
 static NEARDATA struct rm *maploc;
 
 #ifdef OVLB
-STATIC_DCL void FDECL(enlght_line, (const char *,const char *,const char *));
-STATIC_DCL char *FDECL(enlght_combatinc, (const char *,int,int,char *));
+STATIC_DCL void enlght_line(const char *,const char *,const char *);
+STATIC_DCL char *enlght_combatinc(const char *,int,int,char *);
 #ifdef UNIX
 static void end_of_input(void);
 #endif
@@ -179,7 +179,7 @@ static void end_of_input(void);
 static const char* readchar_queue="";
 
 STATIC_DCL char *parse(void);
-STATIC_DCL boolean FDECL(help_dir, (CHAR_P,const char *));
+STATIC_DCL boolean help_dir(CHAR_P,const char *);
 
 STATIC_PTR int domenusystem(void); /* WAC the menus*/
 

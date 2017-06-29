@@ -90,11 +90,11 @@ extern char defmorestr[];	/* default --more-- prompt */
 /* port specific external function references */
 
 /* ### getline.c ### */
-extern void FDECL(xwaitforspace, (const char *));
+extern void xwaitforspace(const char *);
 
 /* ### termcap.c, video.c ### */
 
-extern void FDECL(tty_startup,(int*, int*));
+extern void tty_startup(int*, int*);
 #ifndef NO_TERMS
 extern void tty_shutdown(void);
 #endif
@@ -104,13 +104,13 @@ extern void tty_shutdown(void);
  * define UNWIDENDED_PROTOTYPES (in tradstdc.h), which makes CHAR_P below a
  * char.  But the tputs termcap call was compiled as if xputc's argument
  * actually would be expanded.	So here, we have to make an exception. */
-extern void FDECL(xputc, (int));
+extern void xputc(int);
 #else
-extern void FDECL(xputc, (CHAR_P));
+extern void xputc(CHAR_P);
 #endif
-extern void FDECL(xputs, (const char *));
+extern void xputs(const char *);
 #if defined(SCREEN_VGA) || defined(SCREEN_8514) || defined(ALLEG_FX)
-extern void FDECL(xputg, (int, int, unsigned));
+extern void xputg(int, int, unsigned);
 #endif
 extern void cl_end(void);
 extern void clear_screen(void);
@@ -135,86 +135,86 @@ extern void cl_eos(void);
  * a color or whatever.  wintty.c should concern itself with WHERE to put
  * stuff in a window.
  */
-extern void FDECL(term_start_attr,(int attr));
-extern void FDECL(term_end_attr,(int attr));
+extern void term_start_attr(int attr);
+extern void term_end_attr(int attr);
 extern void term_start_raw_bold(void);
 extern void term_end_raw_bold(void);
 
 #ifdef TEXTCOLOR
 extern void term_end_color(void);
-extern void FDECL(term_start_color,(int color));
-extern int FDECL(has_color,(int color));
+extern void term_start_color(int color);
+extern int has_color(int color);
 #endif /* TEXTCOLOR */
 
 
 /* ### topl.c ### */
 
-extern void FDECL(addtopl, (const char *));
+extern void addtopl(const char *);
 extern void more(void);
-extern void FDECL(update_topl, (const char *));
-extern void FDECL(putsyms, (const char*));
+extern void update_topl(const char *);
+extern void putsyms(const char*);
 
 /* ### wintty.c ### */
 #ifdef CLIPPING
 extern void setclipped(void);
 #endif
-extern void FDECL(docorner, (int, int));
+extern void docorner(int, int);
 extern void end_glyphout(void);
-extern void FDECL(g_putch, (int));
+extern void g_putch(int);
 extern void win_tty_init(void);
 
 /* external declarations */
-extern void FDECL(tty_init_nhwindows, (int *, char **));
+extern void tty_init_nhwindows(int *, char **);
 extern void tty_player_selection(void);
 extern void tty_askname(void);
 extern void tty_get_nh_event(void) ;
-extern void FDECL(tty_exit_nhwindows, (const char *));
-extern void FDECL(tty_suspend_nhwindows, (const char *));
+extern void tty_exit_nhwindows(const char *);
+extern void tty_suspend_nhwindows(const char *);
 extern void tty_resume_nhwindows(void);
-extern winid FDECL(tty_create_nhwindow, (int));
-extern void FDECL(tty_clear_nhwindow, (winid));
-extern void FDECL(tty_display_nhwindow, (winid, BOOLEAN_P));
-extern void FDECL(tty_dismiss_nhwindow, (winid));
-extern void FDECL(tty_destroy_nhwindow, (winid));
-extern void FDECL(tty_curs, (winid,int,int));
-extern void FDECL(tty_putstr, (winid, int, const char *));
+extern winid tty_create_nhwindow(int);
+extern void tty_clear_nhwindow(winid);
+extern void tty_display_nhwindow(winid, BOOLEAN_P);
+extern void tty_dismiss_nhwindow(winid);
+extern void tty_destroy_nhwindow(winid);
+extern void tty_curs(winid,int,int);
+extern void tty_putstr(winid, int, const char *);
 #ifdef FILE_AREAS
-extern void FDECL(tty_display_file, (const char *, const char *, BOOLEAN_P));
+extern void tty_display_file(const char *, const char *, BOOLEAN_P);
 #else
-extern void FDECL(tty_display_file, (const char *, BOOLEAN_P));
+extern void tty_display_file(const char *, BOOLEAN_P);
 #endif
-extern void FDECL(tty_start_menu, (winid));
-extern void FDECL(tty_add_menu, (winid,int,const ANY_P *,
-			CHAR_P,CHAR_P,int,const char *, BOOLEAN_P));
-extern void FDECL(tty_end_menu, (winid, const char *));
-extern int FDECL(tty_select_menu, (winid, int, MENU_ITEM_P **));
-extern char FDECL(tty_message_menu, (CHAR_P,int,const char *));
+extern void tty_start_menu(winid);
+extern void tty_add_menu(winid,int,const ANY_P *,
+			CHAR_P,CHAR_P,int,const char *, BOOLEAN_P);
+extern void tty_end_menu(winid, const char *);
+extern int tty_select_menu(winid, int, MENU_ITEM_P **);
+extern char tty_message_menu(CHAR_P,int,const char *);
 extern void tty_update_inventory(void);
 extern void tty_mark_synch(void);
 extern void tty_wait_synch(void);
 #ifdef CLIPPING
-extern void FDECL(tty_cliparound, (int, int));
+extern void tty_cliparound(int, int);
 #endif
 #ifdef POSITIONBAR
-extern void FDECL(tty_update_positionbar, (char *));
+extern void tty_update_positionbar(char *);
 #endif
-extern void FDECL(tty_print_glyph, (winid,XCHAR_P,XCHAR_P,int));
-extern void FDECL(tty_raw_print, (const char *));
-extern void FDECL(tty_raw_print_bold, (const char *));
+extern void tty_print_glyph(winid,XCHAR_P,XCHAR_P,int);
+extern void tty_raw_print(const char *);
+extern void tty_raw_print_bold(const char *);
 extern int tty_nhgetch(void);
-extern int FDECL(tty_nh_poskey, (int *, int *, int *));
+extern int tty_nh_poskey(int *, int *, int *);
 extern void tty_nhbell(void);
 extern int tty_doprev_message(void);
-extern char FDECL(tty_yn_function, (const char *, const char *, CHAR_P));
-extern void FDECL(tty_getlin, (const char *,char *));
+extern char tty_yn_function(const char *, const char *, CHAR_P);
+extern void tty_getlin(const char *,char *);
 extern int tty_get_ext_cmd(void);
-extern void FDECL(tty_number_pad, (int));
+extern void tty_number_pad(int);
 extern void tty_delay_output(void);
 #ifdef CHANGE_COLOR
-extern void FDECL(tty_change_color,(int color,long rgb,int reverse));
+extern void tty_change_color(int color,long rgb,int reverse);
 #ifdef MAC
-extern void FDECL(tty_change_background,(int white_or_black));
-extern short FDECL(set_tty_font_name, (winid, char *));
+extern void tty_change_background(int white_or_black);
+extern short set_tty_font_name(winid, char *);
 #endif
 extern char * tty_get_color_string(void);
 #endif
@@ -223,7 +223,7 @@ extern char * tty_get_color_string(void);
 extern void tty_start_screen(void);
 extern void tty_end_screen(void);
 
-extern void FDECL(genl_outrip, (winid,int));
+extern void genl_outrip(winid,int);
 
 #ifdef NO_TERMS
 # ifdef MAC
@@ -234,9 +234,9 @@ extern void FDECL(genl_outrip, (winid,int));
 #  define putchar term_putc
 #  define fflush term_flush
 #  define puts term_puts
-extern int FDECL(term_putc, (int c));
-extern int FDECL(term_flush, (void *desc));
-extern int FDECL(term_puts, (const char *str));
+extern int term_putc(int c);
+extern int term_flush(void *desc);
+extern int term_puts(const char *str);
 # endif /* MAC */
 # if defined(MSDOS) || defined(WIN32CON)
 #  if defined(SCREEN_BIOS) || defined(SCREEN_DJGPPFAST) || defined(WIN32CON)
@@ -248,7 +248,7 @@ extern int FDECL(term_puts, (const char *str));
 #   define puts(x) xputs(x)
 #  endif/*SCREEN_BIOS || SCREEN_DJGPPFAST || WIN32CON */
 #  ifdef POSITIONBAR
-extern void FDECL(video_update_positionbar, (char *));
+extern void video_update_positionbar(char *);
 #  endif
 # endif/*MSDOS*/
 #endif/*NO_TERMS*/

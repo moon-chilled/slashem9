@@ -103,14 +103,11 @@
  * Used for robust ANSI parameter forward declarations:
  * int VDECL(sprintf, (char *, const char *, ...));
  *
- * FDECL() is used for functions with a fixed number of arguments;
  * VDECL() is used for functions with a variable number of arguments.
  * Separate macros are needed because ANSI will mix old-style declarations
  * with prototypes, except in the case of varargs, and the OVERLAY-specific
  * trampoli.* mechanism conflicts with the ANSI <<f(void)>> syntax.
  */
-
-# define FDECL(f,p)	f p
 
 # if defined(MSDOS) || defined(USE_STDARG)
 #  define VDECL(f,p)	f p
@@ -152,7 +149,6 @@
 
 #else /* NHSTDC */	/* a "traditional" C  compiler */
 
-# define FDECL(f,p)	f()
 # define VDECL(f,p)	f()
 
 # if defined(AMIGA) || defined(HPUX) || defined(POSIX_TYPES) || defined(__DECC) || defined(__BORLANDC__)
@@ -228,9 +224,7 @@ typedef genericptr genericptr_t;	/* (void *) or (char *) */
  * include files have prototypes and the compiler also complains that
  * prototyped and unprototyped declarations don't match.
  */
-# undef FDECL
 # undef VDECL
-# define FDECL(f,p)	f()
 # define VDECL(f,p)	f()
 #endif
 #endif

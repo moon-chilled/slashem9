@@ -4,24 +4,24 @@
 
 #include "hack.h"
 
-STATIC_DCL boolean FDECL(known_hitum, (struct monst *,int,int *,struct attack *));
-STATIC_DCL void FDECL(steal_it, (struct monst *, struct attack *));
+STATIC_DCL boolean known_hitum(struct monst *,int,int *,struct attack *);
+STATIC_DCL void steal_it(struct monst *, struct attack *);
 #if 0
-STATIC_DCL boolean FDECL(hitum, (struct monst *,int,int,struct attack *));
+STATIC_DCL boolean hitum(struct monst *,int,int,struct attack *);
 #endif
-STATIC_DCL boolean FDECL(hmon_hitmon, (struct monst *,struct obj *,int));
+STATIC_DCL boolean hmon_hitmon(struct monst *,struct obj *,int);
 #ifdef STEED
-STATIC_DCL int FDECL(joust, (struct monst *,struct obj *));
+STATIC_DCL int joust(struct monst *,struct obj *);
 #endif
 STATIC_DCL void demonpet(void);
-STATIC_DCL boolean FDECL(m_slips_free, (struct monst *mtmp,struct attack *mattk));
-STATIC_DCL int FDECL(explum, (struct monst *,struct attack *));
-STATIC_DCL void FDECL(start_engulf, (struct monst *));
+STATIC_DCL boolean m_slips_free(struct monst *mtmp,struct attack *mattk);
+STATIC_DCL int explum(struct monst *,struct attack *);
+STATIC_DCL void start_engulf(struct monst *);
 STATIC_DCL void end_engulf(void);
-STATIC_DCL int FDECL(gulpum, (struct monst *,struct attack *));
-STATIC_DCL boolean FDECL(hmonas, (struct monst *,int));
-STATIC_DCL void FDECL(nohandglow, (struct monst *));
-STATIC_DCL boolean FDECL(shade_aware, (struct obj *));
+STATIC_DCL int gulpum(struct monst *,struct attack *);
+STATIC_DCL boolean hmonas(struct monst *,int);
+STATIC_DCL void nohandglow(struct monst *);
+STATIC_DCL boolean shade_aware(struct obj *);
 
 static int martial_dmg(void);
 

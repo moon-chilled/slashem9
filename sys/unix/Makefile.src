@@ -155,7 +155,7 @@ LFLAGS =
 # Same as above, but for XCurses
 #CFLAGS = -O -DXCURSES -I../include -I/usr/local/include/pdcurses
 # Compile against system curses library, such as ncurses
-CFLAGS = -O -I../include
+CFLAGS = -O -I../include -std=c99
 
 
 # Only used for the Gnome interface.

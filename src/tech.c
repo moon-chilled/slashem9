@@ -9,13 +9,13 @@
 
 /* #define DEBUG */		/* turn on for diagnostics */
 
-static boolean FDECL(gettech, (int *));
-static boolean FDECL(dotechmenu, (int, int *));
+static boolean gettech(int *);
+static boolean dotechmenu(int, int *);
 static void doblitzlist(void);
-static int FDECL(get_tech_no,(int));
-static int FDECL(techeffects, (int));
-static void FDECL(hurtmon, (struct monst *,int));
-static int FDECL(mon_to_zombie, (int));
+static int get_tech_no(int);
+static int techeffects(int);
+static void hurtmon(struct monst *,int);
+static int mon_to_zombie(int);
 STATIC_PTR int tinker(void);
 STATIC_PTR int draw_energy(void);
 static const struct innate_tech * role_tech(void);

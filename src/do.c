@@ -8,20 +8,20 @@
 #include "lev.h"
 
 # ifdef OVLB
-STATIC_DCL void FDECL(trycall, (struct obj *));
+STATIC_DCL void trycall(struct obj *);
 # endif /* OVLB */
-STATIC_DCL void FDECL(dosinkring, (struct obj *));
+STATIC_DCL void dosinkring(struct obj *);
 
-STATIC_PTR int FDECL(drop, (struct obj *));
+STATIC_PTR int drop(struct obj *);
 STATIC_PTR int wipeoff(void);
 
 #ifdef OVL0
-STATIC_DCL int FDECL(menu_drop, (int));
+STATIC_DCL int menu_drop(int);
 #endif
 #ifdef OVL2
 STATIC_DCL int currentlevel_rewrite(void);
 STATIC_DCL void final_level(void);
-/* static boolean FDECL(badspot, (XCHAR_P,XCHAR_P)); */
+/* static boolean badspot(XCHAR_P,XCHAR_P); */
 #endif
 
 #ifdef OVLB

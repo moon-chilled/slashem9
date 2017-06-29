@@ -8,25 +8,25 @@
 STATIC_PTR int prayer_done(void);
 STATIC_DCL struct obj *worst_cursed_item(void);
 STATIC_DCL int in_trouble(void);
-STATIC_DCL void FDECL(fix_worst_trouble,(int));
-STATIC_DCL void FDECL(angrygods,(ALIGNTYP_P));
-STATIC_DCL void FDECL(at_your_feet, (const char *));
+STATIC_DCL void fix_worst_trouble(int);
+STATIC_DCL void angrygods(ALIGNTYP_P);
+STATIC_DCL void at_your_feet(const char *);
 #ifdef ELBERETH
 STATIC_DCL void gcrownu(void);
 #endif	/*ELBERETH*/
-STATIC_DCL void FDECL(pleased,(ALIGNTYP_P));
-STATIC_DCL void FDECL(godvoice,(ALIGNTYP_P,const char*));
-STATIC_DCL void FDECL(god_zaps_you,(ALIGNTYP_P));
-STATIC_DCL void FDECL(fry_by_god,(ALIGNTYP_P));
-STATIC_DCL void FDECL(gods_angry,(ALIGNTYP_P));
-STATIC_DCL void FDECL(gods_upset,(ALIGNTYP_P));
-STATIC_DCL void FDECL(consume_offering,(struct obj *));
-STATIC_DCL boolean FDECL(water_prayer,(BOOLEAN_P));
-STATIC_DCL boolean FDECL(blocked_boulder,(int,int));
+STATIC_DCL void pleased(ALIGNTYP_P);
+STATIC_DCL void godvoice(ALIGNTYP_P,const char*);
+STATIC_DCL void god_zaps_you(ALIGNTYP_P);
+STATIC_DCL void fry_by_god(ALIGNTYP_P);
+STATIC_DCL void gods_angry(ALIGNTYP_P);
+STATIC_DCL void gods_upset(ALIGNTYP_P);
+STATIC_DCL void consume_offering(struct obj *);
+STATIC_DCL boolean water_prayer(BOOLEAN_P);
+STATIC_DCL boolean blocked_boulder(int,int);
 static void lawful_god_gives_angel(void);
-static void FDECL(god_gives_pet,(ALIGNTYP_P));
-static int FDECL(offer_oracle,(struct monst *, struct obj *));
-static void FDECL(god_gives_benefit,(ALIGNTYP_P));
+static void god_gives_pet(ALIGNTYP_P);
+static int offer_oracle(struct monst *, struct obj *);
+static void god_gives_benefit(ALIGNTYP_P);
 
 /* simplify a few tests */
 #define Cursed_obj(obj,typ) ((obj) && (obj)->otyp == (typ) && (obj)->cursed)

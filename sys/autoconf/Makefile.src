@@ -30,7 +30,7 @@ SYSOBJ=@SYSOBJ@
 CC = @CC@ -DAUTOCONF
 WINDRES = @WINDRES@
 
-CFLAGS = -O -I../include -I$(srcdir)/../include @CFLAGS@
+CFLAGS = -O -I../include -I$(srcdir)/../include -std=c99 @CFLAGS@
 LFLAGS = @LFLAGS@
 
 # Only used for the Gnome interface.

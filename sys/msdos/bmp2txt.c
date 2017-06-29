@@ -35,7 +35,7 @@
 #endif
 #include <time.h>
 
-extern char *FDECL(tilename, (int, int));
+extern char *tilename(int, int);
 
 #define Fprintf (void) fprintf
 #define Fclose  (void) fclose

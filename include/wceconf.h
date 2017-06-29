@@ -170,7 +170,7 @@ extern char hackdir[];
 #define getlogin() ((char *)0)
 extern void win32_abort(void);
 #ifdef WIN32CON
-extern void FDECL(nttty_preference_update, (const char *));
+extern void nttty_preference_update(const char *);
 extern void toggle_mouse_support(void);
 #endif
 
@@ -220,7 +220,7 @@ extern void toggle_mouse_support(void);
 	#define NH_A2W(a, w, cb)     (strncpy((w), (a), (cb)))
 #endif
 
-extern int FDECL(set_win32_option, (const char *, const char *));
+extern int set_win32_option(const char *, const char *);
 
 /* 
  * 3.4.3 addition - Stuff to help the user with some common, yet significant errors 

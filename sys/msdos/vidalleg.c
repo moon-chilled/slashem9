@@ -49,20 +49,20 @@ void nh_stretch_blit(BITMAP *, BITMAP *, int, int, int, int, int, int, int, int)
    support for non-DJGPP compilers isn't needed. */
 
 /* prototypes */
-int FDECL(alleg_swallowed,(int,int));
-STATIC_DCL void FDECL(alleg_redrawmap,(BOOLEAN_P));
+int alleg_swallowed(int,int);
+STATIC_DCL void alleg_redrawmap(BOOLEAN_P);
 STATIC_DCL void alleg_full_redraw(void);
 STATIC_DCL void alleg_load_cnf(void);
-void FDECL(alleg_cliparound,(int,int));
+void alleg_cliparound(int,int);
 
-STATIC_DCL void FDECL(alleg_scrollmap,(BOOLEAN_P));
+STATIC_DCL void alleg_scrollmap(BOOLEAN_P);
 STATIC_DCL void positionbar(void);
 STATIC_DCL void init_progress_meter(void);
 STATIC_DCL void inc_progress_meter(void);
-STATIC_DCL void FDECL(alleg_printGlyph_at, (int,int,int)); /* row, col, level */
+STATIC_DCL void alleg_printGlyph_at(int,int,int); /* row, col, level */
 #define PRINT_BACKGROUND	1
 #define PRINT_FOREGROUND	2
-STATIC_DCL int FDECL(alleg_SwitchMode,(int));
+STATIC_DCL int alleg_SwitchMode(int);
 #define ALLEG_MODETEXT	0
 #define ALLEG_MODEGFX	1
 #define ALLEG_MODE_NONE	-1

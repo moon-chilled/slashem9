@@ -14,17 +14,17 @@
 
 /* #define DEBUG */	/* uncomment for debugging */
 
-static void FDECL(Fread, (genericptr_t,int,int,dlb *));
-STATIC_DCL struct qtmsg * FDECL(construct_qtlist, (long));
+static void Fread(genericptr_t,int,int,dlb *);
+STATIC_DCL struct qtmsg * construct_qtlist(long);
 STATIC_DCL const char * intermed(void);
 STATIC_DCL const char * neminame(void);
 STATIC_DCL const char * guardname(void);
 STATIC_DCL const char * homebase(void);
-STATIC_DCL struct qtmsg * FDECL(msg_in, (struct qtmsg *,int));
-STATIC_DCL void FDECL(convert_arg, (CHAR_P));
+STATIC_DCL struct qtmsg * msg_in(struct qtmsg *,int);
+STATIC_DCL void convert_arg(CHAR_P);
 STATIC_DCL void convert_line(void);
-STATIC_DCL void FDECL(deliver_by_pline, (struct qtmsg *));
-STATIC_DCL void FDECL(deliver_by_window, (struct qtmsg *,int));
+STATIC_DCL void deliver_by_pline(struct qtmsg *);
+STATIC_DCL void deliver_by_window(struct qtmsg *,int);
 
 static char	in_line[80], cvt_buf[64], out_line[128];
 static struct	qtlists	qt_list;

@@ -8,12 +8,12 @@
 STATIC_DCL void maybe_wail(void);
 #endif /*OVL1*/
 STATIC_DCL int moverock(void);
-STATIC_DCL int FDECL(still_chewing,(XCHAR_P,XCHAR_P));
+STATIC_DCL int still_chewing(XCHAR_P,XCHAR_P);
 STATIC_DCL void dosinkfall(void);
-STATIC_DCL boolean FDECL(findtravelpath, (BOOLEAN_P));
-STATIC_DCL boolean FDECL(monstinroom, (struct permonst *,int));
+STATIC_DCL boolean findtravelpath(BOOLEAN_P);
+STATIC_DCL boolean monstinroom(struct permonst *,int);
 
-STATIC_DCL void FDECL(move_update, (BOOLEAN_P));
+STATIC_DCL void move_update(BOOLEAN_P);
 
 #define IS_SHOP(x)	(rooms[x].rtype >= SHOPBASE)
 

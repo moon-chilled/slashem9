@@ -27,7 +27,7 @@ extern void linux_mapon(void);
 extern void linux_mapoff(void);
 #endif
 
-static int FDECL (veryold, (int));
+static int veryold(int);
 static int eraseoldlocks(void);
 
 #ifndef NHSTDC
@@ -639,10 +639,10 @@ const char *filearea, *filename;
 
 #ifdef GETRES_SUPPORT
 
-extern int FDECL(nh_getresuid, (uid_t *, uid_t *, uid_t *));
+extern int nh_getresuid(uid_t *, uid_t *, uid_t *);
 extern uid_t nh_getuid(void);
 extern uid_t nh_geteuid(void);
-extern int FDECL(nh_getresgid, (gid_t *, gid_t *, gid_t *));
+extern int nh_getresgid(gid_t *, gid_t *, gid_t *);
 extern gid_t nh_getgid(void);
 extern gid_t nh_getegid(void);
 

@@ -9,7 +9,7 @@
 
 #ifdef AMIGA_INTUITION
 
-static int FDECL( put_ext_cmd, ( char *, int, struct amii_WinDesc *, int ) );
+static int put_ext_cmd( char *, int, struct amii_WinDesc *, int ) );
 
 struct amii_DisplayDesc *amiIDisplay;	/* the Amiga Intuition descriptor */
 struct Rectangle lastinvent, lastmsg;
@@ -480,7 +480,7 @@ amii_player_selection()
     long class, code;
 
     amii_clear_nhwindow( WIN_BASE );
-    if (validrole(flags.initrole))
+    if (validrole(flags.initrole)
 	return;
     else {
 	flags.initrole=randrole();

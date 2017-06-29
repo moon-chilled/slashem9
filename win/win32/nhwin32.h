@@ -240,49 +240,49 @@ extern void win32_init_nhwindows(void);
 extern void win32_player_selection(void);
 extern void win32_askname(void);
 extern void win32_get_nh_event(void) ;
-extern void FDECL(win32_exit_nhwindows, (const char *));
-extern void FDECL(win32_suspend_nhwindows, (const char *));
+extern void win32_exit_nhwindows(const char *);
+extern void win32_suspend_nhwindows(const char *);
 extern void win32_resume_nhwindows(void);
-extern winid FDECL(win32_create_nhwindow, (int));
-extern void FDECL(win32_clear_nhwindow, (winid));
-extern void FDECL(win32_display_nhwindow, (winid, BOOLEAN_P));
-extern void FDECL(win32_dismiss_nhwindow, (winid));
-extern void FDECL(win32_destroy_nhwindow, (winid));
-extern void FDECL(win32_curs, (winid,int,int));
-extern void FDECL(win32_putstr, (winid, int, const char *));
+extern winid win32_create_nhwindow(int);
+extern void win32_clear_nhwindow(winid);
+extern void win32_display_nhwindow(winid, BOOLEAN_P);
+extern void win32_dismiss_nhwindow(winid);
+extern void win32_destroy_nhwindow(winid);
+extern void win32_curs(winid,int,int);
+extern void win32_putstr(winid, int, const char *);
 #ifdef FILE_AREAS
-extern void FDECL(win32_display_file, (const char *, const char *, BOOLEAN_P));
+extern void win32_display_file(const char *, const char *, BOOLEAN_P);
 #else
-extern void FDECL(win32_display_file, (const char *, BOOLEAN_P));
+extern void win32_display_file(const char *, BOOLEAN_P);
 #endif
-extern void FDECL(win32_start_menu, (winid));
-extern void FDECL(win32_add_menu, (winid,int,const ANY_P,
-			CHAR_P,int,const char *, BOOLEAN_P));
-extern void FDECL(win32_end_menu, (winid, const char *));
-extern int FDECL(win32_select_menu, (winid, int, MENU_ITEM_P **));
+extern void win32_start_menu(winid);
+extern void win32_add_menu(winid,int,const ANY_P,
+			CHAR_P,int,const char *, BOOLEAN_P);
+extern void win32_end_menu(winid, const char *);
+extern int win32_select_menu(winid, int, MENU_ITEM_P **);
 extern void win32_update_inventory(void);
 extern void win32_mark_synch(void);
 extern void win32_wait_synch(void);
 #ifdef CLIPPING
-extern void FDECL(win32_cliparound, (int, int));
+extern void win32_cliparound(int, int);
 #endif
-extern void FDECL(win32_print_glyph, (winid,XCHAR_P,XCHAR_P,int));
-extern void FDECL(win32_raw_print, (const char *));
-extern void FDECL(win32_raw_print_bold, (const char *));
+extern void win32_print_glyph(winid,XCHAR_P,XCHAR_P,int);
+extern void win32_raw_print(const char *);
+extern void win32_raw_print_bold(const char *);
 extern int  win32_nhgetch(void);
-extern int  FDECL(win32_nh_poskey, (int *, int *, int *));
+extern int  win32_nh_poskey(int *, int *, int *);
 extern void win32_nhbell(void);
 extern int  win32_doprev_message(void);
-extern char FDECL(win32_yn_function, (const char *, const char *, CHAR_P));
-extern void FDECL(win32_getlin, (const char *,char *));
+extern char win32_yn_function(const char *, const char *, CHAR_P);
+extern void win32_getlin(const char *,char *);
 extern int  win32_get_ext_cmd(void);
-extern void FDECL(win32_number_pad, (int));
+extern void win32_number_pad(int);
 extern void win32_delay_output(void);
 
 /* other defs that really should go away (they're win32 specific) */
 extern void win32_start_screen(void);
 extern void win32_end_screen(void);
-extern void FDECL(genl_outrip, (winid,int));
+extern void genl_outrip(winid,int);
 
 /* #### win32msg.c #### */
 
