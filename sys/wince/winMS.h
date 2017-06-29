@@ -104,11 +104,7 @@ typedef struct mswin_nhwindow_app {
 } NHWinApp, *PNHWinApp;
 extern PNHWinApp GetNHApp();
 
-#define E extern
-
-E struct window_procs mswin_procs;
-
-#undef E
+extern struct window_procs mswin_procs;
 
 /* Some prototypes */
 void mswin_init_nhwindows(int* argc, char** argv);

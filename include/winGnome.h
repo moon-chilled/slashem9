@@ -6,11 +6,7 @@
 #ifndef WINGNOME_H
 #define WINGNOME_H
 
-#define E extern
-
-E struct window_procs Gnome_procs;
-
-#undef E
+extern struct window_procs Gnome_procs;
 
 #define NHW_WORN	6
 extern winid WIN_WORN;

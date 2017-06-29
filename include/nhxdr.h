@@ -53,34 +53,32 @@ typedef struct NhExtIO_ NhExtIO;
 typedef int (*nhext_io_func)(void *handle, void *buf, unsigned int len);
 typedef struct NhExtNB_ NhExtNB;
 
-#define E extern
-
-E unsigned int FDECL(nhext_xdr_getpos, (NhExtXdr *));
-E nhext_xdr_bool_t FDECL(nhext_xdr_setpos, (NhExtXdr *, unsigned int));
-E void FDECL(nhext_xdr_free, (nhext_xdr_bool_t (*)(), char *));
-E void FDECL(nhext_xdrmem_create, (NhExtXdr *, char *, unsigned int,
+extern unsigned int FDECL(nhext_xdr_getpos, (NhExtXdr *));
+extern nhext_xdr_bool_t FDECL(nhext_xdr_setpos, (NhExtXdr *, unsigned int));
+extern void FDECL(nhext_xdr_free, (nhext_xdr_bool_t (*)(), char *));
+extern void FDECL(nhext_xdrmem_create, (NhExtXdr *, char *, unsigned int,
 			enum nhext_xdr_op));
-E void FDECL(nhext_xdrio_create, (NhExtXdr *, NhExtIO *, enum nhext_xdr_op));
+extern void FDECL(nhext_xdrio_create, (NhExtXdr *, NhExtIO *, enum nhext_xdr_op));
 
 #define nhext_xdr_destroy(xdrs)	(*(xdrs)->x_destroy)(xdrs)
 
-E nhext_xdr_bool_t FDECL(nhext_xdr_long, (NhExtXdr *, long *));
-E nhext_xdr_bool_t FDECL(nhext_xdr_u_long, (NhExtXdr *, unsigned long *));
-E nhext_xdr_bool_t FDECL(nhext_xdr_short, (NhExtXdr *, short *));
-E nhext_xdr_bool_t FDECL(nhext_xdr_u_short, (NhExtXdr *, unsigned short *));
-E nhext_xdr_bool_t FDECL(nhext_xdr_int, (NhExtXdr *, int *));
-E nhext_xdr_bool_t FDECL(nhext_xdr_u_int, (NhExtXdr *, unsigned int *));
-E nhext_xdr_bool_t FDECL(nhext_xdr_char, (NhExtXdr *, char *));
-E nhext_xdr_bool_t FDECL(nhext_xdr_u_char, (NhExtXdr *, unsigned char *));
-E nhext_xdr_bool_t FDECL(nhext_xdr_enum, (NhExtXdr *, int *));
-E nhext_xdr_bool_t FDECL(nhext_xdr_bool, (NhExtXdr *, nhext_xdr_bool_t *));
-E nhext_xdr_bool_t FDECL(nhext_xdr_string, (NhExtXdr *, char **, unsigned int));
-E nhext_xdr_bool_t FDECL(nhext_xdr_bytes, (NhExtXdr *, char **, unsigned int *,
+extern nhext_xdr_bool_t FDECL(nhext_xdr_long, (NhExtXdr *, long *));
+extern nhext_xdr_bool_t FDECL(nhext_xdr_u_long, (NhExtXdr *, unsigned long *));
+extern nhext_xdr_bool_t FDECL(nhext_xdr_short, (NhExtXdr *, short *));
+extern nhext_xdr_bool_t FDECL(nhext_xdr_u_short, (NhExtXdr *, unsigned short *));
+extern nhext_xdr_bool_t FDECL(nhext_xdr_int, (NhExtXdr *, int *));
+extern nhext_xdr_bool_t FDECL(nhext_xdr_u_int, (NhExtXdr *, unsigned int *));
+extern nhext_xdr_bool_t FDECL(nhext_xdr_char, (NhExtXdr *, char *));
+extern nhext_xdr_bool_t FDECL(nhext_xdr_u_char, (NhExtXdr *, unsigned char *));
+extern nhext_xdr_bool_t FDECL(nhext_xdr_enum, (NhExtXdr *, int *));
+extern nhext_xdr_bool_t FDECL(nhext_xdr_bool, (NhExtXdr *, nhext_xdr_bool_t *));
+extern nhext_xdr_bool_t FDECL(nhext_xdr_string, (NhExtXdr *, char **, unsigned int));
+extern nhext_xdr_bool_t FDECL(nhext_xdr_bytes, (NhExtXdr *, char **, unsigned int *,
   unsigned int));
-E nhext_xdr_bool_t FDECL(nhext_xdr_wrapstring, (NhExtXdr *, char **));
-E nhext_xdr_bool_t FDECL(nhext_xdr_vector, (NhExtXdr *, char *, unsigned int,
+extern nhext_xdr_bool_t FDECL(nhext_xdr_wrapstring, (NhExtXdr *, char **));
+extern nhext_xdr_bool_t FDECL(nhext_xdr_vector, (NhExtXdr *, char *, unsigned int,
   unsigned int, nhext_xdr_bool_t (*)()));
-E nhext_xdr_bool_t FDECL(nhext_xdr_array, (NhExtXdr *, char **, unsigned int *,
+extern nhext_xdr_bool_t FDECL(nhext_xdr_array, (NhExtXdr *, char **, unsigned int *,
   unsigned int, unsigned int, nhext_xdr_bool_t (*)()));
 
 #define NHEXT_IO_RDONLY		1
@@ -98,28 +96,28 @@ E nhext_xdr_bool_t FDECL(nhext_xdr_array, (NhExtXdr *, char **, unsigned int *,
 #define NHEXT__PRINTF(p_fmt, p_arg0)
 #endif
 
-E NhExtIO *FDECL(nhext_io_open, (nhext_io_func, void *, unsigned int));
-E int FDECL(nhext_io_close, (NhExtIO *));
-E unsigned int FDECL(nhext_io_getmode, (NhExtIO *));
-E void FDECL(nhext_io_setmode, (NhExtIO *, unsigned int));
-E void FDECL(nhext_io_setautofill_limit, (NhExtIO *, unsigned int));
-E void FDECL(nhext_io_setnbfunc, (NhExtIO *, nhext_io_func));
-E int FDECL(nhext_io_filbuf, (NhExtIO *, int));
-E int FDECL(nhext_io_getc, (NhExtIO *));
-E int FDECL(nhext_io_read, (NhExtIO *, char *, int));
-E char *FDECL(nhext_io_getpacket, (NhExtIO *, int *));
-E int FDECL(nhext_io_willblock, (NhExtIO *));
-E int FDECL(nhext_io_flush, (NhExtIO *));
-E int FDECL(nhext_io_fputc, (int, NhExtIO *));
-E int FDECL(nhext_io_write, (NhExtIO *, char *, int));
-E int FDECL(nhext_io_writet, (NhExtIO *, char *, int));
+extern NhExtIO *FDECL(nhext_io_open, (nhext_io_func, void *, unsigned int));
+extern int FDECL(nhext_io_close, (NhExtIO *));
+extern unsigned int FDECL(nhext_io_getmode, (NhExtIO *));
+extern void FDECL(nhext_io_setmode, (NhExtIO *, unsigned int));
+extern void FDECL(nhext_io_setautofill_limit, (NhExtIO *, unsigned int));
+extern void FDECL(nhext_io_setnbfunc, (NhExtIO *, nhext_io_func));
+extern int FDECL(nhext_io_filbuf, (NhExtIO *, int));
+extern int FDECL(nhext_io_getc, (NhExtIO *));
+extern int FDECL(nhext_io_read, (NhExtIO *, char *, int));
+extern char *FDECL(nhext_io_getpacket, (NhExtIO *, int *));
+extern int FDECL(nhext_io_willblock, (NhExtIO *));
+extern int FDECL(nhext_io_flush, (NhExtIO *));
+extern int FDECL(nhext_io_fputc, (int, NhExtIO *));
+extern int FDECL(nhext_io_write, (NhExtIO *, char *, int));
+extern int FDECL(nhext_io_writet, (NhExtIO *, char *, int));
 #ifdef _STDARG_H
-E int FDECL(nhext_io_vprintf, (NhExtIO *, char *, va_list));
+extern int FDECL(nhext_io_vprintf, (NhExtIO *, char *, va_list));
 #endif
-E int FDECL(nhext_io_printf, (NhExtIO *, char *, ...)) NHEXT__PRINTF(2, 3);
+extern int FDECL(nhext_io_printf, (NhExtIO *, char *, ...)) NHEXT__PRINTF(2, 3);
 
-E NhExtNB *FDECL(nhext_nb_open, (nhext_io_func, void *));
-E int FDECL(nhext_nb_close, (NhExtNB *));
-E int FDECL(nhext_nb_read, (NhExtNB *, char *, int, int));
+extern NhExtNB *FDECL(nhext_nb_open, (nhext_io_func, void *));
+extern int FDECL(nhext_nb_close, (NhExtNB *));
+extern int FDECL(nhext_nb_read, (NhExtNB *, char *, int, int));
 
 #endif /* NHXDR_H */

@@ -155,8 +155,6 @@ extern winid BASE_WINDOW, WIN_MAP, WIN_MESSAGE, WIN_INVEN, WIN_STATUS;
  * External declarations for the window routines.
  */
 
-#define E extern
-
 /* ### dprintf.c ### */
 
 extern void dprintf (char *, ...);
@@ -209,38 +207,36 @@ void FDECL (enter_topl_mode, (char *));
 void FDECL (leave_topl_mode, (char *));
 void FDECL (topl_set_resp, (char *, char));
 Boolean FDECL (topl_key, (unsigned char, Boolean));
-E void FDECL(HandleEvent, (EventRecord *));	/* used in mmodal.c */
+extern void FDECL(HandleEvent, (EventRecord *));	/* used in mmodal.c */
 extern void port_help(void);
 
 extern Boolean small_screen;
 
-E void FDECL(mac_init_nhwindows, (int *, char **));
-E void mac_askname(void);
-E void mac_get_nh_event(void);
-E void FDECL(mac_exit_nhwindows, (const char *));
-E winid FDECL(mac_create_nhwindow, (int));
-E void FDECL(mac_clear_nhwindow, (winid));
-E void FDECL(mac_display_nhwindow, (winid, BOOLEAN_P));
-E void FDECL(mac_destroy_nhwindow, (winid));
-E void FDECL(mac_curs, (winid,int,int));
-E void FDECL(mac_putstr, (winid, int, const char *));
-E void FDECL(mac_start_menu, (winid));
-E void FDECL(mac_add_menu, (winid,int,const anything *,
+extern void FDECL(mac_init_nhwindows, (int *, char **));
+extern void mac_askname(void);
+extern void mac_get_nh_event(void);
+extern void FDECL(mac_exit_nhwindows, (const char *));
+extern winid FDECL(mac_create_nhwindow, (int));
+extern void FDECL(mac_clear_nhwindow, (winid));
+extern void FDECL(mac_display_nhwindow, (winid, BOOLEAN_P));
+extern void FDECL(mac_destroy_nhwindow, (winid));
+extern void FDECL(mac_curs, (winid,int,int));
+extern void FDECL(mac_putstr, (winid, int, const char *));
+extern void FDECL(mac_start_menu, (winid));
+extern void FDECL(mac_add_menu, (winid,int,const anything *,
 		CHAR_P,CHAR_P,int,const char *, BOOLEAN_P));
-E void FDECL(mac_end_menu, (winid, const char *));
-E int FDECL(mac_select_menu, (winid, int, menu_item **));
+extern void FDECL(mac_end_menu, (winid, const char *));
+extern int FDECL(mac_select_menu, (winid, int, menu_item **));
 #ifdef CLIPPING
-E void FDECL(mac_cliparound, (int, int));
+extern void FDECL(mac_cliparound, (int, int));
 #endif
-E int mac_nhgetch(void);
-E int FDECL(mac_nh_poskey, (int *, int *, int *));
-E int mac_doprev_message(void);
-E char FDECL(mac_yn_function, (const char *, const char *, CHAR_P));
-E void FDECL(mac_getlin, (const char *,char *));
-E int mac_get_ext_cmd(void);
-E void FDECL(mac_number_pad, (int));
-E void mac_delay_output(void);
-
-#undef E
+extern int mac_nhgetch(void);
+extern int FDECL(mac_nh_poskey, (int *, int *, int *));
+extern int mac_doprev_message(void);
+extern char FDECL(mac_yn_function, (const char *, const char *, CHAR_P));
+extern void FDECL(mac_getlin, (const char *,char *));
+extern int mac_get_ext_cmd(void);
+extern void FDECL(mac_number_pad, (int));
+extern void mac_delay_output(void);
 
 #endif /* ! MACWIN_H */

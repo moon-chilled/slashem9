@@ -79,12 +79,8 @@ typedef struct mswin_nhwindow_app {
 	DWORD   regMainShowState;
 } NHWinApp, *PNHWinApp;
 
-#define E extern
-
-E PNHWinApp GetNHApp(void);
-E struct window_procs mswin_procs;
-
-#undef E
+extern PNHWinApp GetNHApp(void);
+extern struct window_procs mswin_procs;
 
 /* Some prototypes */
 void mswin_init_nhwindows(int* argc, char** argv);

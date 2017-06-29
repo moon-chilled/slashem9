@@ -9,10 +9,6 @@
 #ifndef WINX_H
 #define WINX_H
 
-#ifndef E
-#define E extern
-#endif
-
 #if defined(BOS) || defined(NHSTDC)
 #define DIMENSION_P int
 #else
@@ -224,16 +220,16 @@ struct xwindow {
 
 
 /* Window variables (winX.c). */
-E struct xwindow window_list[MAX_WINDOWS];
-E XtAppContext	 app_context;		/* context of application */
-E Widget	 toplevel;		/* toplevel widget */
-E Atom		 wm_delete_window;	/* delete window protocol */
-E boolean	 exit_x_event;		/* exit condition for event loop */
+extern struct xwindow window_list[MAX_WINDOWS];
+extern XtAppContext	 app_context;		/* context of application */
+extern Widget	 toplevel;		/* toplevel widget */
+extern Atom		 wm_delete_window;	/* delete window protocol */
+extern boolean	 exit_x_event;		/* exit condition for event loop */
 #define EXIT_ON_KEY_PRESS	    0	/* valid values for exit_x_event */
 #define EXIT_ON_KEY_OR_BUTTON_PRESS 1
 #define EXIT_ON_EXIT		    2
 #define EXIT_ON_SENT_EVENT	    3
-E int click_x, click_y, click_button, updated_inventory;
+extern int click_x, click_y, click_button, updated_inventory;
 
 typedef struct {
     Boolean slow;
@@ -254,8 +250,8 @@ typedef struct {
 #endif
 } AppResources;
 
-E AppResources appResources;
-E void (*input_func)();
+extern AppResources appResources;
+extern void (*input_func)();
 
 extern struct window_procs X11_procs;
 
@@ -268,146 +264,146 @@ extern struct window_procs X11_procs;
 
 
 /* ### dialogs.c ### */
-E Widget FDECL(CreateDialog, (Widget, String, XtCallbackProc, XtCallbackProc));
-E void FDECL(SetDialogPrompt,(Widget, String));
-E String FDECL(GetDialogResponse,(Widget));
-E void FDECL(SetDialogResponse,(Widget, String));
-E void FDECL(positionpopup,(Widget,BOOLEAN_P));
+extern Widget FDECL(CreateDialog, (Widget, String, XtCallbackProc, XtCallbackProc));
+extern void FDECL(SetDialogPrompt,(Widget, String));
+extern String FDECL(GetDialogResponse,(Widget));
+extern void FDECL(SetDialogResponse,(Widget, String));
+extern void FDECL(positionpopup,(Widget,BOOLEAN_P));
 
 /* ### winX.c ### */
-E struct xwindow *FDECL(find_widget,(Widget));
-E Boolean FDECL(nhApproxColor,(Screen*, Colormap, char*, XColor*));
-E Dimension FDECL(nhFontHeight,(Widget));
-E char FDECL(key_event_to_char,(XKeyEvent*));
-E void FDECL(msgkey, (Widget, XtPointer, XEvent*));
-E void FDECL(nh_XtPopup, (Widget, int, Widget));
-E void FDECL(nh_XtPopdown, (Widget));
-E void win_X11_init(void);
-E void FDECL(nh_keyscroll, (Widget, XEvent*, String*, Cardinal*));
+extern struct xwindow *FDECL(find_widget,(Widget));
+extern Boolean FDECL(nhApproxColor,(Screen*, Colormap, char*, XColor*));
+extern Dimension FDECL(nhFontHeight,(Widget));
+extern char FDECL(key_event_to_char,(XKeyEvent*));
+extern void FDECL(msgkey, (Widget, XtPointer, XEvent*));
+extern void FDECL(nh_XtPopup, (Widget, int, Widget));
+extern void FDECL(nh_XtPopdown, (Widget));
+extern void win_X11_init(void);
+extern void FDECL(nh_keyscroll, (Widget, XEvent*, String*, Cardinal*));
 
 /* ### winmesg.c ### */
-E void FDECL(set_message_slider, (struct xwindow*));
-E void FDECL(create_message_window,(struct xwindow*, BOOLEAN_P, Widget));
-E void FDECL(destroy_message_window,(struct xwindow*));
-E void FDECL(display_message_window, (struct xwindow*));
-E void FDECL(append_message,(struct xwindow*, const char*));
-E void FDECL(set_last_pause, (struct xwindow*));
+extern void FDECL(set_message_slider, (struct xwindow*));
+extern void FDECL(create_message_window,(struct xwindow*, BOOLEAN_P, Widget));
+extern void FDECL(destroy_message_window,(struct xwindow*));
+extern void FDECL(display_message_window, (struct xwindow*));
+extern void FDECL(append_message,(struct xwindow*, const char*));
+extern void FDECL(set_last_pause, (struct xwindow*));
 
 /* ### winmap.c ### */
-E void post_process_tiles(void);
-E void FDECL(check_cursor_visibility,(struct xwindow*));
-E void FDECL(display_map_window,(struct xwindow*));
-E void FDECL(clear_map_window,(struct xwindow*));
-E void FDECL(map_input, (Widget, XEvent*, String*, Cardinal*));
-E void FDECL(set_map_size,(struct xwindow*, DIMENSION_P, DIMENSION_P));
-E void FDECL(create_map_window,(struct xwindow*, BOOLEAN_P, Widget));
-E void FDECL(destroy_map_window,(struct xwindow*));
-E int  FDECL(x_event,(int));
+extern void post_process_tiles(void);
+extern void FDECL(check_cursor_visibility,(struct xwindow*));
+extern void FDECL(display_map_window,(struct xwindow*));
+extern void FDECL(clear_map_window,(struct xwindow*));
+extern void FDECL(map_input, (Widget, XEvent*, String*, Cardinal*));
+extern void FDECL(set_map_size,(struct xwindow*, DIMENSION_P, DIMENSION_P));
+extern void FDECL(create_map_window,(struct xwindow*, BOOLEAN_P, Widget));
+extern void FDECL(destroy_map_window,(struct xwindow*));
+extern int  FDECL(x_event,(int));
 
 /* ### winmenu.c ### */
-E void FDECL(menu_delete, (Widget, XEvent*, String*, Cardinal*));
-E void FDECL(menu_key,(Widget, XEvent*, String*, Cardinal*));
-E void FDECL(create_menu_window,(struct xwindow*));
-E void FDECL(destroy_menu_window,(struct xwindow*));
+extern void FDECL(menu_delete, (Widget, XEvent*, String*, Cardinal*));
+extern void FDECL(menu_key,(Widget, XEvent*, String*, Cardinal*));
+extern void FDECL(create_menu_window,(struct xwindow*));
+extern void FDECL(destroy_menu_window,(struct xwindow*));
 
 /* ### winmisc.c ### */
-E void FDECL(ps_key,(Widget, XEvent*, String*, Cardinal*)); /* player selection action */
-E void FDECL(race_key,(Widget, XEvent*, String*, Cardinal*)); /* race selection action */
-E void FDECL(gend_key, (Widget,XEvent *,String *,Cardinal *)); /* gender */
-E void FDECL(algn_key, (Widget,XEvent *,String *,Cardinal *)); /* alignment */
-E void FDECL(ec_delete, (Widget, XEvent*, String*, Cardinal*));
-E void FDECL(ec_key,(Widget, XEvent*, String*, Cardinal*)); /* extended command action */
+extern void FDECL(ps_key,(Widget, XEvent*, String*, Cardinal*)); /* player selection action */
+extern void FDECL(race_key,(Widget, XEvent*, String*, Cardinal*)); /* race selection action */
+extern void FDECL(gend_key, (Widget,XEvent *,String *,Cardinal *)); /* gender */
+extern void FDECL(algn_key, (Widget,XEvent *,String *,Cardinal *)); /* alignment */
+extern void FDECL(ec_delete, (Widget, XEvent*, String*, Cardinal*));
+extern void FDECL(ec_key,(Widget, XEvent*, String*, Cardinal*)); /* extended command action */
 
 /* ### winstatus.c ### */
-E void FDECL(create_status_window,(struct xwindow*, BOOLEAN_P, Widget));
-E void FDECL(destroy_status_window,(struct xwindow*));
-E void FDECL(adjust_status,(struct xwindow*, const char*));
-E void null_out_status(void);
-E void check_turn_events(void);
+extern void FDECL(create_status_window,(struct xwindow*, BOOLEAN_P, Widget));
+extern void FDECL(destroy_status_window,(struct xwindow*));
+extern void FDECL(adjust_status,(struct xwindow*, const char*));
+extern void null_out_status(void);
+extern void check_turn_events(void);
 
 /* ### wintext.c ### */
-E void FDECL(delete_text, (Widget, XEvent*, String*, Cardinal*));
-E void FDECL(dismiss_text,(Widget, XEvent*, String*, Cardinal*));
-E void FDECL(key_dismiss_text,(Widget, XEvent*, String*, Cardinal*));
+extern void FDECL(delete_text, (Widget, XEvent*, String*, Cardinal*));
+extern void FDECL(dismiss_text,(Widget, XEvent*, String*, Cardinal*));
+extern void FDECL(key_dismiss_text,(Widget, XEvent*, String*, Cardinal*));
 #ifdef GRAPHIC_TOMBSTONE
-E void FDECL(rip_dismiss_text,(Widget, XEvent*, String*, Cardinal*));
+extern void FDECL(rip_dismiss_text,(Widget, XEvent*, String*, Cardinal*));
 #endif
-E void FDECL(add_to_text_window,(struct xwindow*, int, const char*));
-E void FDECL(display_text_window,(struct xwindow*, BOOLEAN_P));
-E void FDECL(create_text_window,(struct xwindow*));
-E void FDECL(destroy_text_window,(struct xwindow*));
-E void FDECL(clear_text_window,(struct xwindow*));
-E void FDECL(append_text_buffer,(struct text_buffer*, const char*, BOOLEAN_P)); /* text buffer routines */
-E void FDECL(init_text_buffer,(struct text_buffer*));
-E void FDECL(clear_text_buffer,(struct text_buffer*));
-E void FDECL(free_text_buffer,(struct text_buffer*));
+extern void FDECL(add_to_text_window,(struct xwindow*, int, const char*));
+extern void FDECL(display_text_window,(struct xwindow*, BOOLEAN_P));
+extern void FDECL(create_text_window,(struct xwindow*));
+extern void FDECL(destroy_text_window,(struct xwindow*));
+extern void FDECL(clear_text_window,(struct xwindow*));
+extern void FDECL(append_text_buffer,(struct text_buffer*, const char*, BOOLEAN_P)); /* text buffer routines */
+extern void FDECL(init_text_buffer,(struct text_buffer*));
+extern void FDECL(clear_text_buffer,(struct text_buffer*));
+extern void FDECL(free_text_buffer,(struct text_buffer*));
 #ifdef GRAPHIC_TOMBSTONE
-E void FDECL(calculate_rip_text, (int));
+extern void FDECL(calculate_rip_text, (int));
 #endif
 
 
 /* ### winval.c ### */
-E Widget FDECL(create_value,(Widget, const char*));
-E void	 FDECL(set_name,(Widget, char*));
-E void	 FDECL(set_name_width,(Widget, int));
-E int	 FDECL(get_name_width,(Widget));
-E void	 FDECL(set_value,(Widget, const char*));
-E void	 FDECL(set_value_width,(Widget, int));
-E int	 FDECL(get_value_width,(Widget));
-E void	 FDECL(hilight_value,(Widget));
-E void	 FDECL(swap_fg_bg,(Widget));
+extern Widget FDECL(create_value,(Widget, const char*));
+extern void	 FDECL(set_name,(Widget, char*));
+extern void	 FDECL(set_name_width,(Widget, int));
+extern int	 FDECL(get_name_width,(Widget));
+extern void	 FDECL(set_value,(Widget, const char*));
+extern void	 FDECL(set_value_width,(Widget, int));
+extern int	 FDECL(get_value_width,(Widget));
+extern void	 FDECL(hilight_value,(Widget));
+extern void	 FDECL(swap_fg_bg,(Widget));
 
 /* external declarations */
-E void FDECL(X11_init_nhwindows, (int *, char **));
-E void X11_player_selection(void);
-E void X11_askname(void);
-E void X11_get_nh_event(void);
-E void FDECL(X11_exit_nhwindows, (const char *));
-E void FDECL(X11_suspend_nhwindows, (const char *));
-E void X11_resume_nhwindows(void);
-E winid FDECL(X11_create_nhwindow, (int));
-E void FDECL(X11_clear_nhwindow, (winid));
-E void FDECL(X11_display_nhwindow, (winid, BOOLEAN_P));
-E void FDECL(X11_destroy_nhwindow, (winid));
-E void FDECL(X11_curs, (winid,int,int));
-E void FDECL(X11_putstr, (winid, int, const char *));
+extern void FDECL(X11_init_nhwindows, (int *, char **));
+extern void X11_player_selection(void);
+extern void X11_askname(void);
+extern void X11_get_nh_event(void);
+extern void FDECL(X11_exit_nhwindows, (const char *));
+extern void FDECL(X11_suspend_nhwindows, (const char *));
+extern void X11_resume_nhwindows(void);
+extern winid FDECL(X11_create_nhwindow, (int));
+extern void FDECL(X11_clear_nhwindow, (winid));
+extern void FDECL(X11_display_nhwindow, (winid, BOOLEAN_P));
+extern void FDECL(X11_destroy_nhwindow, (winid));
+extern void FDECL(X11_curs, (winid,int,int));
+extern void FDECL(X11_putstr, (winid, int, const char *));
 #ifdef FILE_AREAS
-E void FDECL(X11_display_file, (const char *, const char *, BOOLEAN_P));
+extern void FDECL(X11_display_file, (const char *, const char *, BOOLEAN_P));
 #else
-E void FDECL(X11_display_file, (const char *, BOOLEAN_P));
+extern void FDECL(X11_display_file, (const char *, BOOLEAN_P));
 #endif
-E void FDECL(X11_start_menu, (winid));
-E void FDECL(X11_add_menu, (winid,int,const ANY_P *,
+extern void FDECL(X11_start_menu, (winid));
+extern void FDECL(X11_add_menu, (winid,int,const ANY_P *,
 			CHAR_P, CHAR_P, int, const char *, BOOLEAN_P));
-E void FDECL(X11_end_menu, (winid, const char *));
-E int FDECL(X11_select_menu, (winid, int, MENU_ITEM_P **));
-E void X11_update_inventory(void);
-E void X11_mark_synch(void);
-E void X11_wait_synch(void);
+extern void FDECL(X11_end_menu, (winid, const char *));
+extern int FDECL(X11_select_menu, (winid, int, MENU_ITEM_P **));
+extern void X11_update_inventory(void);
+extern void X11_mark_synch(void);
+extern void X11_wait_synch(void);
 #ifdef CLIPPING
-E void FDECL(X11_cliparound, (int, int));
+extern void FDECL(X11_cliparound, (int, int));
 #endif
-E void FDECL(X11_print_glyph, (winid,XCHAR_P,XCHAR_P,int));
-E void FDECL(X11_raw_print, (const char *));
-E void FDECL(X11_raw_print_bold, (const char *));
-E int X11_nhgetch(void);
-E int FDECL(X11_nh_poskey, (int *, int *, int *));
-E void X11_nhbell(void);
-E int X11_doprev_message(void);
-E char FDECL(X11_yn_function, (const char *, const char *, CHAR_P));
-E void FDECL(X11_getlin, (const char *,char *));
-E int X11_get_ext_cmd(void);
-E void FDECL(X11_number_pad, (int));
-E void X11_delay_output(void);
+extern void FDECL(X11_print_glyph, (winid,XCHAR_P,XCHAR_P,int));
+extern void FDECL(X11_raw_print, (const char *));
+extern void FDECL(X11_raw_print_bold, (const char *));
+extern int X11_nhgetch(void);
+extern int FDECL(X11_nh_poskey, (int *, int *, int *));
+extern void X11_nhbell(void);
+extern int X11_doprev_message(void);
+extern char FDECL(X11_yn_function, (const char *, const char *, CHAR_P));
+extern void FDECL(X11_getlin, (const char *,char *));
+extern int X11_get_ext_cmd(void);
+extern void FDECL(X11_number_pad, (int));
+extern void X11_delay_output(void);
 
 /* other defs that really should go away (they're tty specific) */
-E void X11_start_screen(void);
-E void X11_end_screen(void);
+extern void X11_start_screen(void);
+extern void X11_end_screen(void);
 
 #ifdef GRAPHIC_TOMBSTONE
-E void FDECL(X11_outrip, (winid,int));
+extern void FDECL(X11_outrip, (winid,int));
 #else
-E void FDECL(genl_outrip, (winid,int));
+extern void FDECL(genl_outrip, (winid,int));
 #endif
 
 #endif /* WINX_H */
