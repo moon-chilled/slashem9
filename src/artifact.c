@@ -123,7 +123,7 @@ void init_artifacts1(void) {
 	    P_MAX_SKILL(skill) = P_SKILLED;
 	}
     }
-#endif 
+#endif
     /* KMH -- Should be expert in quest artifact */
     if (urole.questarti &&
 	    (objects[artilist[urole.questarti].otyp].oc_class == WEAPON_CLASS ||
@@ -349,7 +349,7 @@ boolean confers_luck(struct obj *obj) {
 boolean arti_reflects(struct obj *obj) {
     const struct artifact *arti = get_artifact(obj);
 
-    if (arti) {      
+    if (arti) {
 	/* while being worn */
 	if ((obj->owornmask & ~W_ART) && (arti->spfx & SPFX_REFLECT))
 	    return TRUE;
@@ -989,7 +989,7 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
 
     return result;
 }
-  
+
 /* Function used when someone attacks someone else with an artifact
  * weapon.  Only adds the special (artifact) damage, and returns a 1 if it
  * did something special (in which case the caller won't print the normal
@@ -1030,7 +1030,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 	    return FALSE;
 	}
 
-	realizes_damage = (youdefend || vis || 
+	realizes_damage = (youdefend || vis ||
 			   /* feel the effect even if not seen */
 			   (youattack && mdef == u.ustuck));
 
@@ -1081,7 +1081,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 
 	if (!spec_dbon_applies && !spec_ability(otmp, SPFX_BEHEAD) ||
 		!special_applies) {
-	    /* since damage bonus didn't apply, nothing more to do;  
+	    /* since damage bonus didn't apply, nothing more to do;
 	       no further attacks have side-effects on inventory */
 	    /* [ALI] The Tsurugi of Muramasa has no damage bonus but
 	       is handled below so avoid early exit if SPFX_BEHEAD set
