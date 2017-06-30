@@ -310,11 +310,6 @@ typedef xchar	boolean;		/* 0 or 1 */
 
 #define Strcat   (void) strcat
 #define Strcpy   (void) strcpy
-#ifdef NEED_VARARGS
-#define Vprintf  (void) vprintf
-#define Vfprintf (void) vfprintf
-#endif
-
 
 /* primitive memory leak debugging; see alloc.c */
 #ifdef MONITOR_HEAP

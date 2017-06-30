@@ -480,8 +480,8 @@ error VA_DECL(const char *,s)
 	VA_INIT(s, const char *);
 	if(settty_needed)
 		settty((char *)0);
-	Vprintf(s,VA_ARGS);
-	(void) putchar('\n');
+	vprintf(s,VA_ARGS);
+	putchar('\n');
 	VA_END();
 #ifndef SAVE_ON_FATAL_ERROR
 	/* prevent vmsmain's exit handler byebye() from calling hangup() */

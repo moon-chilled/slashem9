@@ -413,7 +413,7 @@ msmsg VA_DECL(const char *, fmt)
 	if (iflags.grmode)
 		gr_finish();
 # endif
-	Vprintf(fmt, VA_ARGS);
+	vprintf(fmt, VA_ARGS);
 	flushout();
 	VA_END();
 	return;
