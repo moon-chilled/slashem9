@@ -304,7 +304,7 @@ STATIC_OVL boolean e_survives_at(struct entity *etmp, int x, int y) {
 	if (noncorporeal(etmp->edata))
 		return(TRUE);
 	if (is_pool(x, y))
-                return((boolean)((is_u(etmp) && 
+                return((boolean)((is_u(etmp) &&
 				(Wwalking || Amphibious || Swimming ||
 				Flying || Levitation)) ||
 			is_swimmer(etmp->edata) || is_flyer(etmp->edata) ||
