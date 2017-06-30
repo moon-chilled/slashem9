@@ -24,7 +24,7 @@ char amii_yn_function(const char * , const char * , char );
 void amii_addtopl(const char *);
 void TextSpaces(struct RastPort * , int );
 void amii_putstr(winid  , int  , const char *);
-void amii_putsym(winid  , int  , int  , CHAR_P );
+void amii_putsym(winid  , int  , int  , char );
 void amii_clear_nhwindow(winid );
 void amii_exit_nhwindows(const char *);
 int amii_nh_poskey(int * , int * , int *);

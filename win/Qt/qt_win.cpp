@@ -4900,7 +4900,7 @@ void NetHackQtBind::qt_start_menu(winid wid)
 }
 
 void NetHackQtBind::qt_add_menu(winid wid, int glyph,
-    const ANY_P * identifier, CHAR_P ch, CHAR_P gch, int attr,
+    const ANY_P * identifier, char ch, char gch, int attr,
     const char *str, BOOLEAN_P presel)
 {
     NetHackQtWindow* window=id_to_window[wid];
@@ -4948,12 +4948,12 @@ void NetHackQtBind::qt_cliparound_window(winid wid, int x, int y)
     NetHackQtWindow* window=id_to_window[wid];
     window->ClipAround(x,y);
 }
-void NetHackQtBind::qt_print_glyph(winid wid,XCHAR_P x,XCHAR_P y,int glyph)
+void NetHackQtBind::qt_print_glyph(winid wid,xchar x, xchar y,int glyph)
 {
     NetHackQtWindow* window=id_to_window[wid];
     window->PrintGlyph(x,y,glyph);
 }
-//void NetHackQtBind::qt_print_glyph_compose(winid wid,XCHAR_P x,XCHAR_P y,int glyph1, int glyph2)
+//void NetHackQtBind::qt_print_glyph_compose(winid wid, xchar x, xchar y,int glyph1, int glyph2)
 //{
     //NetHackQtWindow* window=id_to_window[wid];
     //window->PrintGlyphCompose(x,y,glyph1,glyph2);
@@ -5016,7 +5016,7 @@ int NetHackQtBind::qt_doprev_message()
     return 0;
 }
 
-char NetHackQtBind::qt_yn_function(const char *question, const char *choices, CHAR_P def)
+char NetHackQtBind::qt_yn_function(const char *question, const char *choices, xchar def)
 {
     if (qt_settings->ynInMessages() && WIN_MESSAGE!=WIN_ERR) {
 	// Similar to X11 windowport `slow' feature.
