@@ -114,7 +114,7 @@ extern void recalc_health(void);
 extern void ballfall(void);
 extern void placebc(void);
 extern void unplacebc(void);
-extern void set_bc(int);
+extern void set_bc(boolean);
 extern void move_bc(int,int,xchar,xchar,xchar,xchar);
 extern boolean drag_ball(xchar,xchar,
 		int *,xchar *,xchar *,xchar *,xchar *, boolean *,boolean);
