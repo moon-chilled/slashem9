@@ -15,24 +15,20 @@ STATIC_DCL void goodfruit(int);
 STATIC_DCL void resetobjs(struct obj *,boolean);
 STATIC_DCL void drop_upon_death(struct monst *, struct obj *);
 
-STATIC_OVL boolean
-no_bones_level(lev)
-d_level *lev;
-{
+STATIC_OVL boolean no_bones_level(d_level *lev) {
 	extern d_level save_dlevel;		/* in do.c */
 	s_level *sptr;
 
 	if (ledger_no(&save_dlevel)) assign_level(lev, &save_dlevel);
 
-	return (boolean)(((sptr = Is_special(lev)) != 0 && !sptr->boneid)
+	return ((sptr = Is_special(lev)) != 0 && !sptr->boneid)
 		|| !dungeons[lev->dnum].boneid
 		   /* no bones on the last or multiway branch levels */
 		   /* in any dungeon (level 1 isn't multiway).       */
 		|| Is_botlevel(lev) || (Is_branchlev(lev) && lev->dlevel > 1)
 		|| (lev->dlevel < 2)  /* no bones on 1st level */
 		   /* no bones in the invocation level               */
-		|| (In_hell(lev) && lev->dlevel == dunlevs_in_dungeon(lev) - 1)
-		);
+		|| (In_hell(lev) && lev->dlevel == dunlevs_in_dungeon(lev) - 1);
 }
 
 /* Call this function for each fruit object saved in the bones level: it marks
@@ -40,11 +36,8 @@ d_level *lev;
  * ID is positive instead of negative).  This way, when we later save the
  * chain of fruit types, we know to only save the types that exist.
  */
-STATIC_OVL void
-goodfruit(id)
-int id;
-{
-	register struct fruit *f;
+STATIC_OVL void goodfruit(int id) {
+	struct fruit *f;
 
 	for(f=ffruit; f; f=f->nextf) {
 		if(f->fid == -id) {
@@ -54,11 +47,7 @@ int id;
 	}
 }
 
-STATIC_OVL void
-resetobjs(ochain,restore)
-struct obj *ochain;
-boolean restore;
-{
+STATIC_OVL void resetobjs(struct obj *ochain, boolean restore) {
 	struct obj *otmp;
 
 	for (otmp = ochain; otmp; otmp = otmp->nobj) {
@@ -131,11 +120,7 @@ boolean restore;
 	}
 }
 
-STATIC_OVL void
-drop_upon_death(mtmp, cont)
-struct monst *mtmp;
-struct obj *cont;
-{
+STATIC_OVL void drop_upon_death(struct monst *mtmp, struct obj *cont) {
 	struct obj *otmp;
 
 	uswapwep = 0; /* ensure curse() won't cause swapwep to drop twice */
@@ -152,9 +137,9 @@ struct obj *cont;
 
 		if(rn2(5)) curse(otmp);
 		if (mtmp)
-			(void) add_to_minv(mtmp, otmp);
+			add_to_minv(mtmp, otmp);
 		else if (cont)
-			(void) add_to_container(cont, otmp);
+			add_to_container(cont, otmp);
 		else
 			place_object(otmp, u.ux, u.uy);
 	}
@@ -162,8 +147,8 @@ struct obj *cont;
 	if(u.ugold) {
 		long ugold = u.ugold;
 		if (mtmp) mtmp->mgold = ugold;
-		else if (cont) (void) add_to_container(cont, mkgoldobj(ugold));
-		else (void)mkgold(ugold, u.ux, u.uy);
+		else if (cont) add_to_container(cont, mkgoldobj(ugold));
+		else mkgold(ugold, u.ux, u.uy);
 		u.ugold = ugold;	/* undo mkgoldobj()'s removal */
 	}
 #endif
@@ -171,10 +156,8 @@ struct obj *cont;
 }
 
 /* check whether bones are feasible */
-boolean
-can_make_bones()
-{
-	register struct trap *ttmp;
+boolean can_make_bones(void) {
+	struct trap *ttmp;
 
 #ifdef NO_BONES
 	return FALSE;
@@ -210,9 +193,7 @@ can_make_bones()
 }
 
 /* save bones and possessions of a deceased adventurer */
-void 
-savebones (struct obj *corpse)
-{
+void savebones(struct obj *corpse) {
 	int fd, x, y;
 	struct trap *ttmp;
 	struct monst *mtmp;
@@ -415,11 +396,9 @@ savebones (struct obj *corpse)
 	compress_bonesfile();
 }
 
-int 
-getbones (void)
-{
-	register int fd;
-	register int ok;
+int getbones(void) {
+	int fd;
+	int ok;
 	char c, *bonesid, oldbonesid[10];
 
 #ifdef NO_BONES
