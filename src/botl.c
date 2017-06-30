@@ -70,38 +70,27 @@ STATIC_DCL const char *rank(void);
 #ifdef ALLEG_FX
 static int botl_warn = 0;
 
-static void 
-set_botl_warn (int level)
-{
+static void set_botl_warn(int level) {
         botl_warn = level;
         flags.botl = 1;
 }
 #endif
 
 /* convert experience level (1..30) to rank index (0..8) */
-int 
-xlev_to_rank (int xlev)
-{
+int xlev_to_rank(int xlev) {
 	return (xlev <= 2) ? 0 : (xlev <= 30) ? ((xlev + 2) / 4) : 8;
 }
 
 #if 0	/* not currently needed */
 /* convert rank index (0..8) to experience level (1..30) */
-int 
-rank_to_xlev (int rank)
-{
+int rank_to_xlev(int rank) {
 	return (rank <= 0) ? 1 : (rank <= 8) ? ((rank * 4) - 2) : 30;
 }
 #endif
 
-const char *
-rank_of(lev, monnum, female)
-int lev;
-	short monnum;
-boolean female;
-{
-	register struct Role *role;
-	register int i;
+const char *rank_of(int lev, short monnum, boolean female) {
+	struct Role *role;
+	int i;
 
 
 	/* Find the role */
@@ -124,16 +113,12 @@ boolean female;
 }
 
 
-STATIC_OVL const char *
-rank()
-{
-	return(rank_of(u.ulevel, Role_switch, flags.female));
+STATIC_OVL const char *rank(void) {
+	return rank_of(u.ulevel, Role_switch, flags.female);
 }
 
-int 
-title_to_mon (const char *str, int *rank_indx, int *title_length)
-{
-	register int i, j;
+int title_to_mon(const char *str, int *rank_indx, int *title_length) {
+	int i, j;
 
 
 	/* Loop through each of the roles */
@@ -159,10 +144,8 @@ title_to_mon (const char *str, int *rank_indx, int *title_length)
 #endif /* OVL1 */
 #ifdef OVLB
 
-void 
-max_rank_sz (void)
-{
-	register int i, r, maxr = 0;
+void max_rank_sz(void) {
+	int i, r, maxr = 0;
 
 
 	for (i = 0; i < 9; i++) {
@@ -177,9 +160,7 @@ max_rank_sz (void)
 #ifdef OVL0
 
 #ifdef SCORE_ON_BOTL
-long 
-botl_score (void)
-{
+long botl_score(void) {
     int deepest = deepest_lev_reached(FALSE);
 #ifndef GOLDOBJ
     long ugold = u.ugold + hidden_gold();
@@ -197,9 +178,7 @@ botl_score (void)
 }
 #endif
 
-static char *
-botl_player (void)
-{
+static char *botl_player(void) {
     static char player[MAXCO];
 	register char *nb;
     char mbot[MAXCO - 15];
@@ -225,9 +204,7 @@ botl_player (void)
     return player;
 }
 
-static char *
-botl_strength (void)
-{
+static char *botl_strength(void) {
     static char strength[6];
 	if (ACURR(A_STR) > 18) {
 		if (ACURR(A_STR) > STR18(100))
@@ -244,8 +221,7 @@ botl_strength (void)
 #ifdef DUMP_LOG
 void bot1str(char *newbot1)
 #else
-STATIC_OVL void
-bot1()
+STATIC_OVL void bot1(void)
 #endif
 {
 #ifndef DUMP_LOG
@@ -260,7 +236,7 @@ bot1()
 	j = (nb + 2) - newbot1; /* aka strlen(newbot1) but less computation */
 	if((i - j) > 0)
 		sprintf(nb = eos(nb),"%*s", i-j, " ");  /* pad with spaces */
-        
+
 	sprintf(nb = eos(nb), "St:%s ", botl_strength());
 	sprintf(nb = eos(nb),
 		"Dx:%-1d Co:%-1d In:%-1d Wi:%-1d Ch:%-1d",
@@ -273,9 +249,7 @@ bot1()
 #endif
 #ifdef DUMP_LOG
 }
-STATIC_OVL void
-bot1()
-{
+STATIC_OVL void bot1(void) {
 	char newbot1[MAXCO];
 
 	bot1str(newbot1);
@@ -285,9 +259,7 @@ bot1()
 }
 
 /* provide the name of the current level for display by various ports */
-int 
-describe_level (char *buf, int verbose)
-{
+int describe_level(char *buf, int verbose) {
 	int ret = 1;
 
 	/* TODO:	Add in dungeon name */
@@ -333,9 +305,8 @@ void
 #else
 STATIC_OVL void
 #endif
-bot2str(char *newbot2)
-{
-	register char *nb;
+bot2str(char *newbot2) {
+	char *nb;
 	int hp, hpmax;
 	int cap = near_capacity();
 #ifdef ALLEG_FX
@@ -365,7 +336,7 @@ bot2str(char *newbot2)
 		hp, hpmax, u.uen, u.uenmax, u.uac);
 
 	if (Upolyd)
-		sprintf(nb = eos(nb), " HD:%d", ((u.ulycn == u.umonnum) ? 
+		sprintf(nb = eos(nb), " HD:%d", ((u.ulycn == u.umonnum) ?
 						u.ulevel : mons[u.umonnum].mlevel));
 #ifdef EXP_ON_BOTL
 	else if(flags.showexp && bot2_abbrev < 3)
@@ -399,7 +370,7 @@ bot2str(char *newbot2)
                 sprintf(nb = eos(nb), "!");
         }
 #endif
-	        
+
         if (bot2_abbrev >= 2) {
 		if (hu_abbrev_stat[u.uhs][0]!='\0') {
 			sprintf(nb = eos(nb), " ");
@@ -445,9 +416,7 @@ bot2str(char *newbot2)
 		  bot2_abbrev >= 2 ? enc_abbrev_stat[cap] : enc_stat[cap]);
 }
 
-STATIC_OVL void
-bot2()
-{
+STATIC_OVL void bot2(void) {
 	char  newbot2[MAXCO];
 
 	bot2str(newbot2);
@@ -463,9 +432,7 @@ bot2()
  * ". Str:18/99 Dx:11 Co:13 In:12 Wi:14 Ch:14 Neutral" or 49 Chars long.
  */
 #if 0
-const char *
-shorten_bot1 (const char *str, int len)
-{
+const char *shorten_bot1(const char *str, int len) {
     static char cbuf[BUFSZ];
 
     register const char *bp0 = str;
@@ -476,10 +443,10 @@ shorten_bot1 (const char *str, int len)
             *bp1++ = *bp0;
             k++;
     } while(*bp0++ && k < (len - 49));
-    
+
     cbuf[k] = '.';
     bp1++;
-    
+
     bp0 = index(str, ':') - 3;
     do {
             *bp1++ = *bp0;
@@ -496,9 +463,7 @@ shorten_bot1 (const char *str, int len)
  * -- or just under 80 characters
  */
 #ifdef TTY_GRAPHICS
-const char *
-shorten_bot2 (const char *str, unsigned int len)
-{
+const char *shorten_bot2(const char *str, unsigned int len) {
     static char cbuf[MAXCO];
     for(bot2_abbrev = 1; bot2_abbrev <= 4; bot2_abbrev++) {
 	bot2str(cbuf);
@@ -514,9 +479,7 @@ shorten_bot2 (const char *str, unsigned int len)
 
 static void (*raw_handler)();
 
-static void bot_raw(reconfig)
-boolean reconfig;
-{
+static void bot_raw(boolean reconfig) {
     const char *botl_raw_values[24], **rv = botl_raw_values;
     char dex[3], con[3], itl[3], wis[3], cha[3], score[21];
     int uhp;
@@ -587,24 +550,18 @@ boolean reconfig;
     (*raw_handler)(reconfig, rv - botl_raw_values, botl_raw_values);
 }
 
-void 
-bot_reconfig (void)
-{
+void bot_reconfig(void) {
     if (raw_handler)
 	bot_raw(TRUE);
     flags.botl = 1;
 }
 
-void 
-bot_set_handler (void (*handler)(void))
-{
+void bot_set_handler(void (*handler)(void)) {
     raw_handler = handler;
     bot_reconfig();
 }
 
-void 
-bot (void)
-{
+void bot(void) {
 	/*
 	 * ALI: Cope with the fact that u_init may not have been
 	 * called yet. This happens if the player selection menus
