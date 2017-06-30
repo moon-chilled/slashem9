@@ -430,7 +430,7 @@ boolean racialexception;
 	if (mon->mfrozen) return; /* probably putting previous item on */
 
 	/* Get a copy of monster's name before altering its visibility */
-	Strcpy(nambuf, See_invisible ? Monnam(mon) : mon_nam(mon));
+	strcpy(nambuf, See_invisible ? Monnam(mon) : mon_nam(mon));
 
 	old = which_armor(mon, flag);
 	if (old && old->cursed) return;

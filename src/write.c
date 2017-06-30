@@ -211,7 +211,7 @@ found:
 			update_inventory();	/* pen charges */
 		} else {
 			if (by_descr) {
-			    Strcpy(namebuf, OBJ_DESCR(objects[new_obj->otyp]));
+			    strcpy(namebuf, OBJ_DESCR(objects[new_obj->otyp]));
 			    wipeout_text(namebuf, (6+MAXULEV - u.ulevel)/6, 0);
 			} else
 			    sprintf(namebuf, "%s was here!", plname);

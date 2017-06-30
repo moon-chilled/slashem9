@@ -506,16 +506,16 @@ const char *filename;
 char *lockname;
 {
 # ifdef NO_FILE_LINKS
-	Strcpy(lockname, LOCKDIR);
+	strcpy(lockname, LOCKDIR);
 	if (LOCKDIR[sizeof(LOCKDIR)-2]!='/')
 		strcat(lockname, "/");
 	strcat(lockname, filename);
 # else
 # ifdef FILE_AREAS
-	Strcpy(lockname, FILE_AREA_VAR);
+	strcpy(lockname, FILE_AREA_VAR);
 	strcat(lockname, filename);
 # else
-	Strcpy(lockname, filename);
+	strcpy(lockname, filename);
 # endif
 # endif	/* NO_FILE_LINKS */
 	strcat(lockname, "_lock");

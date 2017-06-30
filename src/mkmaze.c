@@ -584,7 +584,7 @@ makemaz (register const char *s)
 	if(*s) {
 	    if(sp && sp->rndlevs) sprintf(protofile, "%s-%d", s,
 						rnd((int) sp->rndlevs));
-	    else		 Strcpy(protofile, s);
+	    else		 strcpy(protofile, s);
 	} else if(*(dungeons[u.uz.dnum].proto)) {
 	    if(dunlevs_in_dungeon(&u.uz) > 1) {
 		if(sp && sp->rndlevs)
@@ -596,9 +596,9 @@ makemaz (register const char *s)
 	    } else if(sp && sp->rndlevs) {
 		     sprintf(protofile, "%s-%d", dungeons[u.uz.dnum].proto,
 						rnd((int) sp->rndlevs));
-	    } else Strcpy(protofile, dungeons[u.uz.dnum].proto);
+	    } else strcpy(protofile, dungeons[u.uz.dnum].proto);
 
-	} else Strcpy(protofile, "");
+	} else strcpy(protofile, "");
 
 #ifdef WIZARD
 	/* SPLEVTYPE format is "level-choice,level-choice"... */

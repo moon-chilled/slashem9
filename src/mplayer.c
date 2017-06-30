@@ -73,10 +73,10 @@ char *nam;
 
 	devnam = dev_name();
 	if (!devnam)
-	    Strcpy(nam, fmlkind ? "Eve" : "Adam");
+	    strcpy(nam, fmlkind ? "Eve" : "Adam");
 	else if (fmlkind && !!strcmp(devnam, "Janet"))
-	    Strcpy(nam, rn2(2) ? "Maud" : "Eve");
-	else Strcpy(nam, devnam);
+	    strcpy(nam, rn2(2) ? "Maud" : "Eve");
+	else strcpy(nam, devnam);
 
 	if (fmlkind || !strcmp(nam, "Janet"))
 	    mtmp->female = 1;

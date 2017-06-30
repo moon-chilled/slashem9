@@ -395,16 +395,16 @@ give_up:	/* Quit */
 			if (thisch == lastch) thisch = highc(thisch);
 			if (flags.initgend != ROLE_NONE && flags.initgend != ROLE_RANDOM) {
 				if (flags.initgend == 1  && roles[i].name.f)
-					Strcpy(rolenamebuf, roles[i].name.f);
+					strcpy(rolenamebuf, roles[i].name.f);
 				else
-					Strcpy(rolenamebuf, roles[i].name.m);
+					strcpy(rolenamebuf, roles[i].name.m);
 			} else {
 				if (roles[i].name.f) {
-					Strcpy(rolenamebuf, roles[i].name.m);
+					strcpy(rolenamebuf, roles[i].name.m);
 					strcat(rolenamebuf, "/");
 					strcat(rolenamebuf, roles[i].name.f);
 				} else 
-					Strcpy(rolenamebuf, roles[i].name.m);
+					strcpy(rolenamebuf, roles[i].name.m);
 			}	
 			add_menu(win, NO_GLYPH, &any, thisch,
 			    0, ATR_NONE, an(rolenamebuf), MENU_UNSELECTED);
@@ -1412,7 +1412,7 @@ char mswin_yn_function(const char *question, const char *choices,
 
 		allow_num = (index(choices, '#') != 0);
 
-		Strcpy(choicebuf, choices);
+		strcpy(choicebuf, choices);
 		if ((cb = index(choicebuf, '\033')) != 0) {
 			/* anything beyond <esc> is hidden */
 			*cb = '\0';
@@ -1423,7 +1423,7 @@ char mswin_yn_function(const char *question, const char *choices,
 		yn_esc_map = (index(choices, 'q') ? 'q' :
 			(index(choices, 'n') ? 'n' : def));
     } else {
-		Strcpy(message, question);
+		strcpy(message, question);
 		strcat(message, " ");
     }
 
@@ -1661,7 +1661,7 @@ int mswin_get_ext_cmd()
 		                    }
 	                    }
 	                    if (com_index >= 0) {
-		                    Strcpy(cmd, extcmdlist[com_index].ef_txt);
+		                    strcpy(cmd, extcmdlist[com_index].ef_txt);
 	                    }
                     }
                     mswin_putstr_ex(WIN_MESSAGE, ATR_BOLD, cmd, 1);
@@ -1775,15 +1775,15 @@ void mswin_outrip(winid wid, int how)
 	switch (killer_format) {
 		default: impossible("bad killer format?");
 		case KILLED_BY_AN:
-			Strcpy(buf, killed_by_prefix[how]);
+			strcpy(buf, killed_by_prefix[how]);
 			strcat(buf, an(killer));
 			break;
 		case KILLED_BY:
-			Strcpy(buf, killed_by_prefix[how]);
+			strcpy(buf, killed_by_prefix[how]);
 			strcat(buf, killer);
 			break;
 		case NO_KILLER_PREFIX:
-			Strcpy(buf, killer);
+			strcpy(buf, killer);
 			break;
 	}
 

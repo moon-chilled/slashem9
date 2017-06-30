@@ -221,10 +221,10 @@ gold_detect (register struct obj *sobj)
 #else
 			        money_cnt(invent))
 #endif
-			Strcpy(buf,
+			strcpy(buf,
 				"You feel worried about your future financial situation.");
 		else
-			Strcpy(buf, "You feel materially poor.");
+			strcpy(buf, "You feel materially poor.");
 		strange_feeling(sobj, buf);
         }
 	return(1);
@@ -433,9 +433,9 @@ int		class;		/* an object class, 0 for all */
     	boulder = ROCK_CLASS;
 
     if (Hallucination || (Confusion && class == SCROLL_CLASS))
-	Strcpy(stuff, something);
+	strcpy(stuff, something);
     else
-    	Strcpy(stuff, class ? oclass_names[class] : "objects");
+    	strcpy(stuff, class ? oclass_names[class] : "objects");
     if (boulder && class != ROCK_CLASS) strcat(stuff, " and/or large stones");
 
     if (do_dknown) for(obj = invent; obj; obj = obj->nobj) do_dknown_of(obj);

@@ -165,7 +165,7 @@ boolean ghostly;
 	    mread(fd, (genericptr_t) tmp_dam, sizeof(*tmp_dam));
 	    if (ghostly)
 		tmp_dam->when += (monstermoves - omoves);
-	    Strcpy(damaged_shops,
+	    strcpy(damaged_shops,
 		   in_rooms(tmp_dam->place.x, tmp_dam->place.y, SHOPBASE));
 	    if (u.uz.dlevel) {
 		/* when restoring, there are two passes over the current

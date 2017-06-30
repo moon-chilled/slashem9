@@ -908,7 +908,7 @@ tamedog (register struct monst *mtmp, register struct obj *obj)
 	mtmp2 = newmonst(sizeof(struct edog) + mtmp->mnamelth);
 	*mtmp2 = *mtmp;
 	mtmp2->mxlth = sizeof(struct edog);
-	if (mtmp->mnamelth) Strcpy(NAME(mtmp2), NAME(mtmp));
+	if (mtmp->mnamelth) strcpy(NAME(mtmp2), NAME(mtmp));
 	initedog(mtmp2);
 	replmon(mtmp, mtmp2);
 	/* `mtmp' is now obsolete */
@@ -942,7 +942,7 @@ aligntyp alignment;
     mtmp2 = newmonst(sizeof(struct edog) + mon->mnamelth);
     *mtmp2 = *mon;
     mtmp2->mxlth = sizeof(struct edog);
-    if(mon->mnamelth) Strcpy(NAME(mtmp2), NAME(mon));
+    if(mon->mnamelth) strcpy(NAME(mtmp2), NAME(mon));
     initedog(mtmp2);
     replmon(mon,mtmp2);
     newsym(mtmp2->mx, mtmp2->my);

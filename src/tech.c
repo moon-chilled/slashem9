@@ -358,7 +358,7 @@ gettech(tech_no)
 	    return FALSE;
 	}
 	if (flags.menu_style == MENU_TRADITIONAL) {
-            if (ntechs == 1)  Strcpy(lets, "a");
+            if (ntechs == 1)  strcpy(lets, "a");
             else if (ntechs < 27)  sprintf(lets, "a-%c", 'a' + ntechs - 1);
             else if (ntechs == 27)  sprintf(lets, "a-z A");
             else sprintf(lets, "a-z A-%c", 'A' + ntechs - 27);

@@ -82,7 +82,7 @@ main (void)
 
 #ifdef WIZARD
 	if (wizard)
-		Strcpy(plname, "wizard");
+		strcpy(plname, "wizard");
 	else
 #endif
 	if(!*plname || !strncmp(plname, "player", 4) || !strncmp(plname, "games", 4))

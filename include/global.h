@@ -308,8 +308,6 @@ typedef xchar	boolean;		/* 0 or 1 */
 # endif
 #endif
 
-#define Strcpy   (void) strcpy
-
 /* primitive memory leak debugging; see alloc.c */
 #ifdef MONITOR_HEAP
 extern long *nhalloc(unsigned int,const char *,int);

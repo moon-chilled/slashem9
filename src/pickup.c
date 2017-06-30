@@ -1091,12 +1091,12 @@ int *wt_before, *wt_after;
 
     if (qq < count) {
 	/* some message will be given */
-	Strcpy(obj_nambuf, doname(obj));
+	strcpy(obj_nambuf, doname(obj));
 	if (container) {
 	    sprintf(where, "in %s", the(xname(container)));
 	    verb = "carry";
 	} else {
-	    Strcpy(where, "lying here");
+	    strcpy(where, "lying here");
 	    verb = telekinesis ? "acquire" : "lift";
 	}
     } else {
@@ -1113,7 +1113,7 @@ int *wt_before, *wt_after;
 	return qq;
     }
 
-    if (!container) Strcpy(where, "here");  /* slightly shorter form */
+    if (!container) strcpy(where, "here");  /* slightly shorter form */
 #ifndef GOLDOBJ
     if (invent || u.ugold) {
 #else
@@ -1179,7 +1179,7 @@ boolean telekinesis;
 		long savequan = obj->quan;
 
 		obj->quan = *cnt_p;
-		Strcpy(qbuf,
+		strcpy(qbuf,
 			(next_encumbr > HVY_ENCUMBER) ? overloadmsg :
 			(next_encumbr > MOD_ENCUMBER) ? nearloadmsg :
 			moderateloadmsg);
@@ -1311,9 +1311,9 @@ boolean telekinesis;	/* not picking it up directly by hand */
 		else {
 			char kbuf[BUFSZ];
 
-			Strcpy(kbuf, an(corpse_xname(obj, TRUE)));
+			strcpy(kbuf, an(corpse_xname(obj, TRUE)));
 			pline("Touching %s is a fatal mistake.", kbuf);
-			Strcpy(kbuf, an(killer_cxname(obj, TRUE)));
+			strcpy(kbuf, an(killer_cxname(obj, TRUE)));
 			instapetrify(kbuf);
 		    return -1;
 		}
@@ -1380,13 +1380,13 @@ struct obj *otmp;
 	    /* addtobill cares about your location rather than the object's;
 	       usually they'll be the same, but not when using telekinesis
 	       (if ever implemented) or a grappling hook */
-	    Strcpy(saveushops, u.ushops);
+	    strcpy(saveushops, u.ushops);
 	    fakeshop[0] = *in_rooms(otmp->ox, otmp->oy, SHOPBASE);
 	    fakeshop[1] = '\0';
-	    Strcpy(u.ushops, fakeshop);
+	    strcpy(u.ushops, fakeshop);
 	    /* sets obj->unpaid if necessary */
 	    addtobill(otmp, TRUE, FALSE, FALSE);
-	    Strcpy(u.ushops, saveushops);
+	    strcpy(u.ushops, saveushops);
 	    /* if you're outside the shop, make shk notice */
 	    if (!index(u.ushops, *fakeshop))
 		remote_burglary(otmp->ox, otmp->oy);
@@ -1916,9 +1916,9 @@ register struct obj *obj;
 		else {
 		    char kbuf[BUFSZ];
 
-		    Strcpy(kbuf, an(corpse_xname(obj, TRUE)));
+		    strcpy(kbuf, an(corpse_xname(obj, TRUE)));
 		    pline("Touching %s is a fatal mistake.", kbuf);
-		    Strcpy(kbuf, an(killer_cxname(obj, TRUE)));
+		    strcpy(kbuf, an(killer_cxname(obj, TRUE)));
 		    instapetrify(kbuf);
 		    return -1;
 		}
@@ -1934,7 +1934,7 @@ register struct obj *obj;
 		 *  use the result of strcpy() within You() --- the order
 		 *  of evaluation of the parameters is undefined.
 		 */
-		Strcpy(buf, the(xname(obj)));
+		strcpy(buf, the(xname(obj)));
 		You("cannot fit %s into %s.", buf,
 		    the(xname(current_container)));
 		return 0;
@@ -1997,7 +1997,7 @@ register struct obj *obj;
 	}
 
 	if (current_container) {
-	    Strcpy(buf, the(xname(current_container)));
+	    strcpy(buf, the(xname(current_container)));
 	    You("put %s into %s.", doname(obj), buf);
 
 	    /* gold in container always needs to be added to credit */
@@ -2049,9 +2049,9 @@ register struct obj *obj;
 		else {
 		    char kbuf[BUFSZ];
 
-		    Strcpy(kbuf, an(corpse_xname(obj, TRUE)));
+		    strcpy(kbuf, an(corpse_xname(obj, TRUE)));
 		    pline("Touching %s is a fatal mistake.", kbuf);
-		    Strcpy(kbuf, an(killer_cxname(obj, TRUE)));
+		    strcpy(kbuf, an(killer_cxname(obj, TRUE)));
 		    instapetrify(kbuf);
 		    return -1;
 		}
@@ -2267,7 +2267,7 @@ int held;
 	    return 0;
 	}
 	if (cnt || flags.menu_style == MENU_FULL) {
-	    Strcpy(qbuf, "Do you want to take something out of ");
+	    strcpy(qbuf, "Do you want to take something out of ");
 	    sprintf(eos(qbuf), "%s?",
 		    safe_qbuf(qbuf, 1, yname(obj), ysimple_name(obj), "it"));
 	    if (flags.menu_style != MENU_TRADITIONAL) {
@@ -2308,7 +2308,7 @@ int held;
 ask_again2:
 		menu_on_request = 0;
 		add_valid_menu_class(0);	/* reset */
-		Strcpy(pbuf, ":ynq");
+		strcpy(pbuf, ":ynq");
 		if (cnt) strcat(pbuf, "m");
 		switch (yn_function(qbuf, pbuf, 'n')) {
 		case ':':
@@ -2359,7 +2359,7 @@ ask_again2:
 	}
 	if (flags.menu_style != MENU_FULL) {
 	    sprintf(qbuf, "Do you wish to put %s in?", something);
-	    Strcpy(pbuf, ynqchars);
+	    strcpy(pbuf, ynqchars);
 	    if (flags.menu_style == MENU_TRADITIONAL && invent && inv_cnt() > 0)
 		strcat(pbuf, "m");
 	    switch (yn_function(qbuf, pbuf, 'n')) {

@@ -193,7 +193,7 @@ int *lan_username_size;
 	/* i gets updated with actual size */
 	status = GetUserName(username_buffer, &i);		
 	if (status) username_buffer[i] = '\0';
-	else Strcpy(username_buffer, "NetHack");
+	else strcpy(username_buffer, "NetHack");
 	if (lan_username_size) *lan_username_size = strlen(username_buffer);
 	return username_buffer;
 }

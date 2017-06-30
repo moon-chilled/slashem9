@@ -156,15 +156,15 @@ int how;
     default:
 	impossible("bad killer format?");
     case KILLED_BY_AN:
-	Strcpy(buf, killed_by_prefix[how]);
+	strcpy(buf, killed_by_prefix[how]);
 	strcat(buf, an(killer));
 	break;
     case KILLED_BY:
-	Strcpy(buf, killed_by_prefix[how]);
+	strcpy(buf, killed_by_prefix[how]);
 	strcat(buf, killer);
 	break;
     case NO_KILLER_PREFIX:
-	Strcpy(buf, killer);
+	strcpy(buf, killer);
 	break;
     }
 
@@ -209,15 +209,15 @@ int how;
     default:
 	impossible("bad killer format?");
     case KILLED_BY_AN:
-	Strcpy(buf, killed_by_prefix[how]);
+	strcpy(buf, killed_by_prefix[how]);
 	strcat(buf, an(killer));
 	break;
     case KILLED_BY:
-	Strcpy(buf, killed_by_prefix[how]);
+	strcpy(buf, killed_by_prefix[how]);
 	strcat(buf, killer);
 	break;
     case NO_KILLER_PREFIX:
-	Strcpy(buf, killer);
+	strcpy(buf, killer);
 	break;
     }
 

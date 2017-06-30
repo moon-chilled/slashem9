@@ -2662,7 +2662,7 @@ boolean msg;
 
 	if (msg) {
 	    /* like Monnam() but never mention saddle */
-	    Strcpy(oldname, x_monnam(mtmp, ARTICLE_THE, (char *)0,
+	    strcpy(oldname, x_monnam(mtmp, ARTICLE_THE, (char *)0,
 				     SUPPRESS_SADDLE, FALSE));
 	    oldname[0] = highc(oldname[0]);
 	}

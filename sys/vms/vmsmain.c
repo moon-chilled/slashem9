@@ -127,7 +127,7 @@ char *argv[];
 
 #ifdef WIZARD
 	if (wizard)
-		Strcpy(plname, "wizard");
+		strcpy(plname, "wizard");
 	else
 #endif
 	if (!*plname || !strncmpi(plname, "games", 4) ||

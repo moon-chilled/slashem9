@@ -281,7 +281,7 @@ char c;
 	     default:	str = "";
 			break;
 	}
-	Strcpy(cvt_buf, str);
+	strcpy(cvt_buf, str);
 }
 
 STATIC_OVL void
@@ -320,12 +320,12 @@ convert_line()
 
 					/* pluralize */
 				case 'P': cvt_buf[0] = highc(cvt_buf[0]);
-				case 'p': Strcpy(cvt_buf, makeplural(cvt_buf));
+				case 'p': strcpy(cvt_buf, makeplural(cvt_buf));
 				    break;
 
 					/* append possessive suffix */
 				case 'S': cvt_buf[0] = highc(cvt_buf[0]);
-				case 's': Strcpy(cvt_buf, s_suffix(cvt_buf));
+				case 's': strcpy(cvt_buf, s_suffix(cvt_buf));
 				    break;
 
 					/* strip any "the" prefix */

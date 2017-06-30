@@ -341,14 +341,14 @@ update_val(attr_rec, new_value)
 
 	if (attr_rec == &shown_stats[F_NAME]) {
 
-	    Strcpy(buf, plname);
+	    strcpy(buf, plname);
 	    if ('a' <= buf[0] && buf[0] <= 'z') buf[0] += 'A'-'a';
 	    strcat(buf, " the ");
 	    if (u.mtimedone) {
 		char mname[BUFSZ];
 		int k = 0;
 
-		Strcpy(mname, mons[u.umonnum].mname);
+		strcpy(mname, mons[u.umonnum].mname);
 		while(mname[k] != 0) {
 		    if ((k == 0 || (k > 0 && mname[k-1] == ' ')) &&
 					'a' <= mname[k] && mname[k] <= 'z')
@@ -361,7 +361,7 @@ update_val(attr_rec, new_value)
 
 	} else if (attr_rec == &shown_stats[F_DLEVEL]) {
 	    if (!describe_level(buf, FALSE)) {
-		Strcpy(buf, dungeons[u.uz.dnum].dname);
+		strcpy(buf, dungeons[u.uz.dnum].dname);
 		sprintf(eos(buf), ", level %d", depth(&u.uz));
 	    }
 	} else {
@@ -373,7 +373,7 @@ update_val(attr_rec, new_value)
 	if (strcmp(buf, attr_rec->name) == 0) return;	/* same */
 
 	/* Set the label. */
-	Strcpy(attr_rec->name, buf);
+	strcpy(attr_rec->name, buf);
 	XtSetArg(args[0], XtNlabel, buf);
 	XtSetValues(attr_rec->w, args, ONE);
 
@@ -565,13 +565,13 @@ update_val(attr_rec, new_value)
 		else if(new_value < 118)
 		    sprintf(buf, "18/%02ld", new_value-18);
 		else
-		    Strcpy(buf, "18/**");
+		    strcpy(buf, "18/**");
 	    } else {
 		sprintf(buf, "%ld", new_value);
 	    }
 	} else if (attr_rec == &shown_stats[F_ALIGN]) {
 
-	    Strcpy(buf, (new_value == A_CHAOTIC) ? "Chaotic" :
+	    strcpy(buf, (new_value == A_CHAOTIC) ? "Chaotic" :
 			(new_value == A_NEUTRAL) ? "Neutral" :
 						   "Lawful"  );
 	} else {

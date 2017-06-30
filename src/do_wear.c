@@ -485,7 +485,7 @@ Gloves_off (void)
 
 	You("wield the %s in your bare %s.",
 	    corpse_xname(uwep, TRUE), makeplural(body_part(HAND)));
-	Strcpy(kbuf, an(killer_cxname(uwep, TRUE)));
+	strcpy(kbuf, an(killer_cxname(uwep, TRUE)));
 	instapetrify(kbuf);
 	uwepgone();  /* life-saved still doesn't allow touching cockatrice */
     }
@@ -498,7 +498,7 @@ Gloves_off (void)
 	You("wield the %s in your bare %s.",
 	    corpse_xname(uswapwep, TRUE), body_part(HAND));
 
-	Strcpy(kbuf, an(killer_cxname(uswapwep, TRUE)));
+	strcpy(kbuf, an(killer_cxname(uswapwep, TRUE)));
 	instapetrify(kbuf);
 	uswapwepgone();	/* lifesaved still doesn't allow touching cockatrice */
     }

@@ -434,10 +434,10 @@ int *wid, *hgt;
 	nh_HE = (char *) alloc((unsigned)(strlen(ME)+1));
 	i = 0;
 	while (digit(SO[i])) i++;
-	Strcpy(nh_HI, &SO[i]);
+	strcpy(nh_HI, &SO[i]);
 	i = 0;
 	while (digit(ME[i])) i++;
-	Strcpy(nh_HE, &ME[i]);
+	strcpy(nh_HE, &ME[i]);
 	AS = Tgetstr("as");
 	AE = Tgetstr("ae");
 	nh_CD = Tgetstr("cd");
@@ -1024,13 +1024,13 @@ init_hilite()
 	    if (c != CLR_GRAY) {
 #endif
 		hilites[c] = (char *) alloc(strlen(scratch) + 1);
-		Strcpy(hilites[c], scratch);
+		strcpy(hilites[c], scratch);
 #ifndef VIDEOSHADES
 	    }
 #endif
 	    if (c != CLR_BLACK) {
 		hilites[c|BRIGHT] = (char*) alloc(strlen(scratch)+strlen(MD)+1);
-		Strcpy(hilites[c|BRIGHT], MD);
+		strcpy(hilites[c|BRIGHT], MD);
 		strcat(hilites[c|BRIGHT], scratch);
 	    }
 
@@ -1124,7 +1124,7 @@ init_hilite()
 		if (tos_numcolors > 4)
 			sprintf(foo, "\033b%c", (c&~BRIGHT)+'0');
 		else
-			Strcpy(foo, "\033b0");
+			strcpy(foo, "\033b0");
 		hilites[c] = foo;
 	}
 

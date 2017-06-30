@@ -119,37 +119,37 @@ char *genbuf;
 		case PM_WERERAT:
 		case PM_HUMAN_WERERAT:
 			typ = rn2(3) ? PM_SEWER_RAT : rn2(3) ? PM_GIANT_RAT : PM_RABID_RAT ;
-			if (genbuf) Strcpy(genbuf, "rat");
+			if (genbuf) strcpy(genbuf, "rat");
 			break;
 		case PM_WEREJACKAL:
 		case PM_HUMAN_WEREJACKAL:
 			typ = PM_JACKAL;
-			if (genbuf) Strcpy(genbuf, "jackal");
+			if (genbuf) strcpy(genbuf, "jackal");
 			break;
 		case PM_WEREWOLF:
 		case PM_HUMAN_WEREWOLF:
 			typ = rn2(5) ? PM_WOLF : PM_WINTER_WOLF ;
-			if (genbuf) Strcpy(genbuf, "wolf");
+			if (genbuf) strcpy(genbuf, "wolf");
 			break;
 		case PM_WEREPANTHER:
 		case PM_HUMAN_WEREPANTHER:
 			typ = rn2(5) ? PM_JAGUAR : PM_PANTHER ;
-			if (genbuf) Strcpy(genbuf, "large cat");
+			if (genbuf) strcpy(genbuf, "large cat");
 			break;
 		case PM_WERETIGER:
 		case PM_HUMAN_WERETIGER:
 			typ = rn2(5) ? PM_JAGUAR : PM_TIGER ;
-			if (genbuf) Strcpy(genbuf, "large cat");
+			if (genbuf) strcpy(genbuf, "large cat");
 			break;
 		case PM_WERESNAKE:
 		case PM_HUMAN_WERESNAKE:
 			typ = rn2(5) ? PM_SNAKE : PM_PIT_VIPER ;
-			if (genbuf) Strcpy(genbuf, "snake");
+			if (genbuf) strcpy(genbuf, "snake");
 			break;
 		case PM_WERESPIDER:
 		case PM_HUMAN_WERESPIDER:
 			typ = rn2(5) ? PM_CAVE_SPIDER : PM_RECLUSE_SPIDER ;
-			if (genbuf) Strcpy(genbuf, "spider");
+			if (genbuf) strcpy(genbuf, "spider");
 			break;
 		default:
 			continue;

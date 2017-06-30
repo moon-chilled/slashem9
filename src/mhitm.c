@@ -48,12 +48,12 @@ mon_nam_too(outbuf, mon, other_mon)
 char *outbuf;
 struct monst *mon, *other_mon;
 {
-	Strcpy(outbuf, mon_nam(mon));
+	strcpy(outbuf, mon_nam(mon));
 	if (mon == other_mon)
 	    switch (pronoun_gender(mon)) {
-	    case 0:	Strcpy(outbuf, "himself");  break;
-	    case 1:	Strcpy(outbuf, "herself");  break;
-	    default:	Strcpy(outbuf, "itself"); break;
+	    case 0:	strcpy(outbuf, "himself");  break;
+	    case 1:	strcpy(outbuf, "herself");  break;
+	    default:	strcpy(outbuf, "itself"); break;
 	    }
 	return outbuf;
 }
@@ -321,7 +321,7 @@ mattackm (register struct monst *magr, register struct monst *mdef)
 		attk = 0;
 		if (canseemon(magr) && couldsee(magr->mx, magr->my)) {
 		    char buf[BUFSZ];
-		    Strcpy(buf, Monnam(magr));
+		    strcpy(buf, Monnam(magr));
 		    if (vis)
 			pline("%s points at %s, then curses.", buf,
 				mon_nam(mdef));
@@ -387,7 +387,7 @@ mattackm (register struct monst *magr, register struct monst *mdef)
 			    if (vis) {
 				char buf[BUFSZ];
 
-				Strcpy(buf, Monnam(mdef));
+				strcpy(buf, Monnam(mdef));
 				pline("%s divides as %s hits it!", buf, mon_nam(magr));
 			    }
 			}
@@ -756,7 +756,7 @@ hitmm(magr, mdef, mattk)
 		} else {
 		    char magr_name[BUFSZ];
 
-		    Strcpy(magr_name, Monnam(magr));
+		    strcpy(magr_name, Monnam(magr));
 		    switch (mattk->aatyp) {
 			case AT_BITE:
 				sprintf(buf,"%s bites", magr_name);
@@ -1171,7 +1171,7 @@ physical:
                                 if(otmp->oartifact == ART_STAKE_OF_VAN_HELSING) {
                                         if (!rn2(10)) {
                                                 if (vis) {
-                                                        Strcpy(buf, Monnam(magr));
+                                                        strcpy(buf, Monnam(magr));
                                                         pline("%s plunges the stake into the heart of %s.",
                                                                 buf, mon_nam(mdef));
                                                         pline("%s's body vaporizes!", Monnam(mdef));
@@ -1181,7 +1181,7 @@ physical:
                                                         (grow_up(magr,mdef) ? 0 : MM_AGR_DIED));                                                
                                         } else {
                                                 if (vis) {
-                                                        Strcpy(buf, Monnam(magr));
+                                                        strcpy(buf, Monnam(magr));
                                                         pline("%s drives the stake into %s.",
                                                                 buf, mon_nam(mdef));
                                                 }
@@ -1189,7 +1189,7 @@ physical:
                                         }
                                 } else {
                                         if (vis) {
-                                                Strcpy(buf, Monnam(magr));
+                                                strcpy(buf, Monnam(magr));
                                                 pline("%s drives the stake into %s.",
                                                         buf, mon_nam(mdef));
                                         }
@@ -1382,7 +1382,7 @@ physical:
 		    char mdef_Monnam[BUFSZ];
 		    /* save the name before monster teleports, otherwise
 		       we'll get "it" in the suddenly disappears message */
-		    if (vis) Strcpy(mdef_Monnam, Monnam(mdef));
+		    if (vis) strcpy(mdef_Monnam, Monnam(mdef));
 		    mdef->mstrategy &= ~STRAT_WAITFORU;
 		    (void) rloc(mdef, FALSE);
 		    if (vis && !canspotmon(mdef)
@@ -1408,7 +1408,7 @@ physical:
 		if (!cancelled && !mdef->msleeping &&
 			sleep_monst(mdef, rnd(10), -1)) {
 		    if (vis) {
-			Strcpy(buf, Monnam(mdef));
+			strcpy(buf, Monnam(mdef));
 			pline("%s is put to sleep by %s.", buf, mon_nam(magr));
 		    }
 		    mdef->mstrategy &= ~STRAT_WAITFORU;
@@ -1456,7 +1456,7 @@ physical:
 		if (nohit) break;                
 		if(!cancelled && mdef->mcanmove) {
 		    if (vis) {
-			Strcpy(buf, Monnam(mdef));
+			strcpy(buf, Monnam(mdef));
 			pline("%s is frozen by %s.", buf, mon_nam(magr));
 		    }
 		    mdef->mcanmove = 0;
@@ -1467,7 +1467,7 @@ physical:
 	    case AD_TCKL:
 		if(!cancelled && mdef->mcanmove) {
 		    if (vis) {
-			Strcpy(buf, Monnam(magr));
+			strcpy(buf, Monnam(magr));
 			pline("%s mercilessly tickles %s.", buf, mon_nam(mdef));
 		    }
 		    mdef->mcanmove = 0;
@@ -1585,7 +1585,7 @@ physical:
 #endif
 		mdef->mstrategy &= ~STRAT_WAITFORU;
 		if (vis) {
-		    Strcpy(buf, Monnam(magr));
+		    strcpy(buf, Monnam(magr));
 		    pline("%s steals some gold from %s.", buf, mon_nam(mdef));
 		}
 		if (!tele_restrict(magr)) {
@@ -1629,7 +1629,7 @@ physical:
 
 			/* make a special x_monnam() call that never omits
 			   the saddle, and save it for later messages */
-			Strcpy(mdefnambuf, x_monnam(mdef, ARTICLE_THE, (char *)0, 0, FALSE));
+			strcpy(mdefnambuf, x_monnam(mdef, ARTICLE_THE, (char *)0, 0, FALSE));
 
 			otmp = obj;
 #ifdef STEED
@@ -1648,10 +1648,10 @@ physical:
 			}
 			/* add_to_minv() might free otmp [if it merges] */
 			if (vis)
-				Strcpy(onambuf, doname(otmp));
+				strcpy(onambuf, doname(otmp));
 			(void) add_to_minv(magr, otmp);
 			if (vis) {
-				Strcpy(buf, Monnam(magr));
+				strcpy(buf, Monnam(magr));
 				pline("%s steals %s from %s!", buf,
 				    onambuf, mdefnambuf);
 			}
@@ -1701,7 +1701,7 @@ physical:
 		}
 		if ((mdef->misc_worn_check & W_ARMH) && rn2(8)) {
 		    if (vis) {
-			Strcpy(buf, s_suffix(Monnam(mdef)));
+			strcpy(buf, s_suffix(Monnam(mdef)));
 			pline("%s helmet blocks %s attack to %s head.",
 				buf, s_suffix(mon_nam(magr)),
 				mhis(mdef));
@@ -1786,7 +1786,7 @@ physical:
 
 	/* STEPHEN WHITE'S NEW CODE */
 	if (objenchant < canhitmon && vis) {
-			Strcpy(buf, Monnam(magr));
+			strcpy(buf, Monnam(magr));
 			pline("%s doesn't seem to harm %s.", buf,
 								mon_nam(mdef));
 		return(MM_HIT);
@@ -1928,7 +1928,7 @@ register struct obj *otemp;
 {
 	char buf[BUFSZ];
 	if (!flags.verbose || Blind || !mon_visible(magr)) return;
-	Strcpy(buf, mon_nam(mdef));
+	strcpy(buf, mon_nam(mdef));
 	pline("%s %s %s %s at %s.", Monnam(magr),
 	      (objects[otemp->otyp].oc_dir & PIERCE) ? "thrusts" : "swings",
 	      mhis(magr), singular(otemp, xname), buf);
@@ -1966,7 +1966,7 @@ int mdead;
 	switch(mddat->mattk[i].adtyp) {
 	    case AD_ACID:
 		if (mhit && !rn2(2)) {
-		    Strcpy(buf, Monnam(magr));
+		    strcpy(buf, Monnam(magr));
 		    if(canseemon(magr))
 			pline("%s is splashed by %s acid!",
 			      buf, s_suffix(mon_nam(mdef)));
@@ -2015,7 +2015,7 @@ int mdead;
 			if (mon_reflects(magr,
 					 canseemon(magr) ? buf : (char *)0))
 				return(mdead|mhit);
-			Strcpy(buf, Monnam(magr));
+			strcpy(buf, Monnam(magr));
 			if(canseemon(magr))
 			    pline("%s is frozen by %s gaze!",
 				  buf, s_suffix(mon_nam(mdef)));
@@ -2024,7 +2024,7 @@ int mdead;
 			return (mdead|mhit);
 		    }
 		} else { /* gelatinous cube */
-		    Strcpy(buf, Monnam(magr));
+		    strcpy(buf, Monnam(magr));
 		    if(canseemon(magr))
 			pline("%s is frozen by %s.", buf, mon_nam(mdef));
 		    magr->mcanmove = 0;

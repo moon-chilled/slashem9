@@ -27,7 +27,7 @@ version_string (char *buf)
 char *
 getversionstring (char *buf)
 {
-	Strcpy(buf, VERSION_ID);
+	strcpy(buf, VERSION_ID);
 #if defined(BETA) && defined(BETA_INFO)
 	sprintf(eos(buf), " %s", BETA_INFO);
 #endif

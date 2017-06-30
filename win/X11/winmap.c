@@ -1120,7 +1120,7 @@ map_input(w, event, params, num_params)
 #endif
 	    if (in_nparams > 0 &&
 		(nbytes = strlen(params[0])) < MAX_KEY_STRING) {
-		Strcpy(keystring, params[0]);
+		strcpy(keystring, params[0]);
 		key = (XKeyEvent *) event; /* just in case */
 		goto key_events;
 	    }
@@ -1149,7 +1149,7 @@ map_input(w, event, params, num_params)
 	    key = (XKeyEvent *) event;
 	    if (in_nparams > 0 &&
 		(nbytes = strlen(params[0])) < MAX_KEY_STRING) {
-		Strcpy(keystring, params[0]);
+		strcpy(keystring, params[0]);
 	    } else {
 		/*
 		 * Assume that mod1 is really the meta key.

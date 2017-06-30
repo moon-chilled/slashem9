@@ -486,21 +486,21 @@ int sdlgl_display_RIP(int how)
   switch (killer_format) 
   {
     case KILLED_BY_AN:
-      Strcpy(info_buf, killed_by_prefix[how]);
+      strcpy(info_buf, killed_by_prefix[how]);
       strcat(info_buf, an(killer));
       break;
     
     case KILLED_BY:
-      Strcpy(info_buf, killed_by_prefix[how]);
+      strcpy(info_buf, killed_by_prefix[how]);
       strcat(info_buf, killer);
       break;
     
     case NO_KILLER_PREFIX:
-      Strcpy(info_buf, killer);
+      strcpy(info_buf, killer);
       break;
       
     default:
-      Strcpy(info_buf, "Killed by a bad switch");
+      strcpy(info_buf, "Killed by a bad switch");
       break;
   }
 

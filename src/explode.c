@@ -593,7 +593,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 			if (olet == MON_EXPLODE) {
 			    /* killer handled by caller */
 			    if (str != killer_buf && !generic)
-				Strcpy(killer_buf, str);
+				strcpy(killer_buf, str);
 			    killer_format = KILLED_BY_AN;
 			} else if (type >= 0 && olet != SCROLL_CLASS && yours) {
 			    killer_format = NO_KILLER_PREFIX;
@@ -601,10 +601,10 @@ boolean yours; /* is it your fault (for killing monsters) */
 				    uhim(), uhis(), str);
 			} else if (olet != BURNING_OIL) {
 			    killer_format = KILLED_BY_AN;
-			    Strcpy(killer_buf, str);
+			    strcpy(killer_buf, str);
 			} else {
 			    killer_format = KILLED_BY;
-			    Strcpy(killer_buf, str);
+			    strcpy(killer_buf, str);
 			}
 			killer = killer_buf;
 			/* Known BUG: BURNING suppresses corpse in bones data,

@@ -521,7 +521,7 @@ do_play_instrument (struct obj *instr)
     }
     if (c == 'n') {
 	if (u.uevent.uheard_tune == 2 && yn("Play the passtune?") == 'y') {
-	    Strcpy(buf, tune);
+	    strcpy(buf, tune);
 	} else {
 	    getlin("What tune are you playing? [5 notes, A-G]", buf);
 	    (void)mungspaces(buf);

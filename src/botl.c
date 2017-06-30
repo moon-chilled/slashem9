@@ -205,7 +205,7 @@ botl_player (void)
     char mbot[MAXCO - 15];
     int k = 0;
 
-    Strcpy(player, plname);
+    strcpy(player, plname);
     if ('a' <= player[0] && player[0] <= 'z') player[0] += 'A'-'a';
     player[10] = 0;
     sprintf(nb = eos(player)," the ");
@@ -254,7 +254,7 @@ bot1()
 	register char *nb;
 	register int i,j;
 
-	Strcpy(newbot1, botl_player());
+	strcpy(newbot1, botl_player());
 	sprintf(nb = eos(newbot1),"  ");
 	i = mrank_sz + 15;
 	j = (nb + 2) - newbot1; /* aka strlen(newbot1) but less computation */

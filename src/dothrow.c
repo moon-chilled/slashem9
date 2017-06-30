@@ -1674,7 +1674,7 @@ register struct obj *obj;
 	static NEARDATA const char noluck[] = " graciously";
 	static NEARDATA const char addluck[] = " gratefully";
 
-	Strcpy(buf,Monnam(mon));
+	strcpy(buf,Monnam(mon));
 	mon->mpeaceful = 1;
 	mon->mavenge = 0;
 

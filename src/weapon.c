@@ -973,7 +973,7 @@ char *buf;
 	    break;
 	default:	     ptr = "Unknown";	break;
     }
-    Strcpy(buf, ptr);
+    strcpy(buf, ptr);
     return buf;
 }
 
@@ -1277,7 +1277,7 @@ int enhance_skill(boolean want_dump)
 #endif
 	    }
 
-	    Strcpy(buf, (to_advance > 0) ? "Pick a skill to advance:" :
+	    strcpy(buf, (to_advance > 0) ? "Pick a skill to advance:" :
 					   "Current skills:");
 #ifdef WIZARD
 	    if (wizard && !speedy)

@@ -43,7 +43,7 @@ int MAIN(int argc, char **argv)
 
 #ifdef WIZARD
 	if (wizard)
-		Strcpy(plname, "wizard");
+		strcpy(plname, "wizard");
 	else
 #endif
 	if(!*plname || !strncmp(plname, "player", 4)

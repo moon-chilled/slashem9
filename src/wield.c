@@ -514,7 +514,7 @@ can_twoweapon (void)
 		disallowed_by_race = youmonst.data->mattk[1].aatyp != AT_WEAP;
 		*buf = '\0';
 		if (!disallowed_by_role)
-		    Strcpy(buf, disallowed_by_race ? urace.noun : urace.adj);
+		    strcpy(buf, disallowed_by_race ? urace.noun : urace.adj);
 		if (disallowed_by_role || !disallowed_by_race) {
 		    if (!disallowed_by_role)
 			strcat(buf, " ");
@@ -584,7 +584,7 @@ drop_uswapwep (void)
 	struct obj *obj = uswapwep;
 
 	/* Avoid trashing makeplural's static buffer */
-	Strcpy(str, makeplural(body_part(HAND)));
+	strcpy(str, makeplural(body_part(HAND)));
 	Your("%s from your %s!",  aobjnam(obj, "slip"), str);
 	setuswapwep((struct obj *) 0, FALSE);
 	dropx(obj);

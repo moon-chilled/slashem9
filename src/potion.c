@@ -201,7 +201,7 @@ boolean talk;
 		if (!haseyes(youmonst.data)) {
 		    strange_feeling((struct obj *)0, (char *)0);
 		} else if (Blindfolded) {
-		    Strcpy(buf, body_part(EYE));
+		    strcpy(buf, body_part(EYE));
 		    eyecnt = eyecount(youmonst.data);
 		    Your(eyemsg, (eyecnt == 1) ? buf : makeplural(buf),
 			 (eyecnt == 1) ? "itches" : "itch");
@@ -227,7 +227,7 @@ boolean talk;
 		if (!haseyes(youmonst.data)) {
 		    strange_feeling((struct obj *)0, (char *)0);
 		} else if (Blindfolded) {
-		    Strcpy(buf, body_part(EYE));
+		    strcpy(buf, body_part(EYE));
 		    eyecnt = eyecount(youmonst.data);
 		    Your(eyemsg, (eyecnt == 1) ? buf : makeplural(buf),
 			 (eyecnt == 1) ? "twitches" : "twitch");
@@ -279,7 +279,7 @@ long mask;	/* nonzero if resistance status should change by mask */
 		    char buf[BUFSZ];
 		    int eyecnt = eyecount(youmonst.data);
 
-		    Strcpy(buf, body_part(EYE));
+		    strcpy(buf, body_part(EYE));
 		    Your(eyemsg, (eyecnt == 1) ? buf : makeplural(buf),
 			 (eyecnt == 1) ? "itches" : "itch");
 		} else {	/* Grayswandir */
@@ -350,7 +350,7 @@ dodrink (void)
 			    IS_TOILET(levl[u.ux][u.uy].typ) ||
 			    Underwater || IS_POOL(levl[u.ux][u.uy].typ)))
 	    *qp++ = ALLOW_THISPLACE;
-	Strcpy(qp, beverages);
+	strcpy(qp, beverages);
 
 	otmp = getobj(quaffables, "drink");
 	if (otmp == &thisplace) {
@@ -1174,7 +1174,7 @@ boolean your_fault;
 				s_suffix(mnam),
 				(notonhead ? "body" : "head"));
 		    } else {
-			Strcpy(buf, mnam);
+			strcpy(buf, mnam);
 		    }
 		    pline_The("%s crashes on %s and breaks into shards.",
 			   botlnam, buf);
@@ -2505,7 +2505,7 @@ upgrade_obj (register struct obj *obj)
 	    int n;
 	    char c1, c2;
 
-	    Strcpy(buf, ONAME(obj));
+	    strcpy(buf, ONAME(obj));
 	    n = rn2((int)strlen(buf));
 	    c1 = lowc(buf[n]);
 	    do c2 = 'a' + rn2('z'-'a'); while (c1 == c2);
@@ -2881,7 +2881,7 @@ dodip (void)
 		if (potion->quan > 1L)
 		    sprintf(buf, "One of %s", the(xname(potion)));
 		else
-		    Strcpy(buf, The(xname(potion)));
+		    strcpy(buf, The(xname(potion)));
 		pline("%s forms a coating on %s.",
 		      buf, the(xname(obj)));
 		obj->opoisoned = TRUE;

@@ -247,7 +247,7 @@ bhitm (struct monst *mtmp, struct obj *otmp)
 		char nambuf[BUFSZ];
 
 		/* format monster's name before altering its visibility */
-		Strcpy(nambuf, Monnam(mtmp));
+		strcpy(nambuf, Monnam(mtmp));
 		mon_set_minvis(mtmp);
 		if (!oldinvis && knowninvisible(mtmp)) {
 		    pline("%s turns transparent!", nambuf);
@@ -836,13 +836,13 @@ struct monst *mon;
 		revive_egg(otmp);
 	    if (otmp->otyp != CORPSE) continue;
 	    /* save the name; the object is liable to go away */
-	    if (youseeit) Strcpy(corpse, corpse_xname(otmp, TRUE));
+	    if (youseeit) strcpy(corpse, corpse_xname(otmp, TRUE));
 
 	    /* for a merged group, only one is revived; should this be fixed? */
 	    if ((mtmp2 = revive(otmp)) != 0) {
 		++res;
 		if (youseeit) {
-		    if (!once++) Strcpy(owner,
+		    if (!once++) strcpy(owner,
 					(mon == &youmonst) ? "Your" :
 					s_suffix(Monnam(mon)));
 		    pline("%s %s suddenly comes alive!", owner, corpse);
@@ -3851,10 +3851,10 @@ boolean u_caused;
 		    /* save name before potential delobj() */
 		    if (give_feedback) {
 			obj->quan = 1;
-			Strcpy(buf1, (x == u.ux && y == u.uy) ?
+			strcpy(buf1, (x == u.ux && y == u.uy) ?
 				xname(obj) : distant_name(obj, xname));
 			obj->quan = 2;
-		    	Strcpy(buf2, (x == u.ux && y == u.uy) ?
+		    	strcpy(buf2, (x == u.ux && y == u.uy) ?
 				xname(obj) : distant_name(obj, xname));
 			obj->quan = scrquan;
 		    }

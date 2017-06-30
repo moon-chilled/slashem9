@@ -152,9 +152,9 @@ change_sex (void)
 	    u.mfemale = !u.mfemale;
 	max_rank_sz();		/* [this appears to be superfluous] */
 	if ((already_polyd ? u.mfemale : flags.female) && urole.name.f)
-	    Strcpy(pl_character, urole.name.f);
+	    strcpy(pl_character, urole.name.f);
 	else
-	    Strcpy(pl_character, urole.name.m);
+	    strcpy(pl_character, urole.name.m);
 	u.umonster = ((already_polyd ? u.mfemale : flags.female) && urole.femalenum != NON_PM) ?
 			urole.femalenum : urole.malenum;
 
@@ -1075,13 +1075,13 @@ dospinweb (void)
 				sweep[0] = '\0';
 				switch(u.ustuck->data->mattk[i].adtyp) {
 					case AD_FIRE:
-						Strcpy(sweep, "ignites and ");
+						strcpy(sweep, "ignites and ");
 						break;
 					case AD_ELEC:
-						Strcpy(sweep, "fries and ");
+						strcpy(sweep, "fries and ");
 						break;
 					case AD_COLD:
-						Strcpy(sweep,
+						strcpy(sweep,
 						      "freezes, shatters and ");
 						break;
 				}

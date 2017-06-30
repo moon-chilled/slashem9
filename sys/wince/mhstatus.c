@@ -179,7 +179,7 @@ void FormatStatusString(char* text, int format)
 	int hp, hpmax;
 	int cap = near_capacity();
 
-	Strcpy(text, plname);
+	strcpy(text, plname);
 	if('a' <= text[0] && text[0] <= 'z') text[0] += 'A'-'a';
 	text[10] = 0;
 	sprintf(nb = eos(text)," the ");
@@ -188,7 +188,7 @@ void FormatStatusString(char* text, int format)
 		char mbot[BUFSZ];
 		int k = 0;
 
-		Strcpy(mbot, mons[u.umonnum].mname);
+		strcpy(mbot, mons[u.umonnum].mname);
 		while(mbot[k] != 0) {
 		    if ((k == 0 || (k > 0 && mbot[k-1] == ' ')) &&
 					'a' <= mbot[k] && mbot[k] <= 'z')

@@ -585,16 +585,16 @@ char * plbuf;
 		if (thisch == lastch) thisch = highc(thisch);
 		if (flags.initgend != ROLE_NONE && flags.initgend != ROLE_RANDOM) {
 			if (flags.initgend == 1  && roles[i].name.f)
-				Strcpy(rolenamebuf, roles[i].name.f);
+				strcpy(rolenamebuf, roles[i].name.f);
 			else
-				Strcpy(rolenamebuf, roles[i].name.m);
+				strcpy(rolenamebuf, roles[i].name.m);
 		} else {
 			if (roles[i].name.f) {
-				Strcpy(rolenamebuf, roles[i].name.m);
+				strcpy(rolenamebuf, roles[i].name.m);
 				strcat(rolenamebuf, "/");
 				strcat(rolenamebuf, roles[i].name.f);
 			} else 
-				Strcpy(rolenamebuf, roles[i].name.m);
+				strcpy(rolenamebuf, roles[i].name.m);
 		}	
 		add_menu(win, NO_GLYPH, &any, thisch,
 			    0, ATR_NONE, an(rolenamebuf), MENU_UNSELECTED);
@@ -1476,9 +1476,9 @@ struct WinDesc *cw;
 			sprintf(cw->morestr, "(%d of %d)",
 				curr_page + 1, (int) cw->npages);
 	    else if (msave)
-			Strcpy(cw->morestr, msave);
+			strcpy(cw->morestr, msave);
 	    else
-			Strcpy(cw->morestr, defmorestr);
+			strcpy(cw->morestr, defmorestr);
 
 	    tty_curs(window, 1, page_lines);
 	    cl_end();
@@ -2135,7 +2135,7 @@ tty_putstr(window, attr, str)
 	n0 = strlen(str) + 1;
 	ob = cw->data[cw->cury] = (char *)alloc((unsigned)n0 + 1);
 	*ob++ = (char)(attr + 1);	/* avoid nuls, for convenience */
-	Strcpy(ob, str);
+	strcpy(ob, str);
 
 	if(n0 > cw->maxcol)
 	    cw->maxcol = n0;

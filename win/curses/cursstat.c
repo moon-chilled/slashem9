@@ -141,16 +141,16 @@ get_playerrank(char *rank)
     if (Upolyd) {
         int k = 0;
 
-        Strcpy(buf, mons[u.umonnum].mname);
+        strcpy(buf, mons[u.umonnum].mname);
         while(buf[k] != 0) {
             if ((k == 0 || (k > 0 && buf[k-1] == ' ')) &&
                 'a' <= buf[k] && buf[k] <= 'z')
                 buf[k] += 'A' - 'a';
             k++;
         }
-        Strcpy(rank, buf);
+        strcpy(rank, buf);
     } else
-        Strcpy(rank, rank_of(u.ulevel, Role_switch, flags.female));
+        strcpy(rank, rank_of(u.ulevel, Role_switch, flags.female));
 }
 
 /* Handles numerical stat changes of various kinds.
@@ -383,7 +383,7 @@ draw_bar(boolean is_hp, int cur, int max, const char *title)
 
     char buf[BUFSZ];
     if (title)
-        Strcpy(buf, title);
+        strcpy(buf, title);
     else {
         int len = 5;
         sprintf(buf, "%*d / %-*d", len, cur, len, max);
@@ -601,7 +601,7 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
 
     get_playerrank(rank);
     char race[BUFSZ];
-    Strcpy(race, urace.adj);
+    strcpy(race, urace.adj);
     race[0] = highc(race[0]);
     wprintw(win, "%s the %s %s%s%s", plname,
             (u.ualign.type == A_CHAOTIC ? "Chaotic" :
@@ -904,7 +904,7 @@ curses_add_status(WINDOW *win, boolean align_right, boolean vertical,
 
     /* For whatever reason, hunger states have trailing spaces. Get rid of them. */
     char buf[BUFSZ];
-    Strcpy(buf, str);
+    strcpy(buf, str);
     int i;
     for (i = 0; (buf[i] != ' ' && buf[i] != '\0'); i++) ;
 

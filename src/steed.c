@@ -421,7 +421,7 @@ kick_steed (void)
 	    /* We assume a message has just been output of the form
 	     * "You kick <steed>."
 	     */
-	    Strcpy(He, mhe(u.usteed));
+	    strcpy(He, mhe(u.usteed));
 	    *He = highc(*He);
 	    if ((u.usteed->mcanmove || u.usteed->mfrozen) && !rn2(2)) {
 		if (u.usteed->mcanmove)

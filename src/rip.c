@@ -98,7 +98,7 @@ int how;
 	rip = dp = (char **) alloc(sizeof(rip_txt));
 	for (x = 0; rip_txt[x]; x++) {
 		dp[x] = (char *) alloc((unsigned int)(strlen(rip_txt[x]) + 1));
-		Strcpy(dp[x], rip_txt[x]);
+		strcpy(dp[x], rip_txt[x]);
 	}
 	dp[x] = (char *)0;
 
@@ -121,28 +121,28 @@ int how;
 		default: impossible("bad killer format?");
 		case KILLED_BY_AN:
                       if (Instant_Death) {
-                        Strcpy(buf, "instantly ");
+                        strcpy(buf, "instantly ");
                         strcat(buf, killed_by_prefix[how]);
                       }
                       else if (Quick_Death) {
-                        Strcpy(buf, "quickly ");
+                        strcpy(buf, "quickly ");
                         strcat(buf, killed_by_prefix[how]);
-                      } else Strcpy(buf, killed_by_prefix[how]);
+                      } else strcpy(buf, killed_by_prefix[how]);
 			strcat(buf, an(killer));
 			break;
 		case KILLED_BY:
                       if (Instant_Death) {
-                        Strcpy(buf, "instantly ");
+                        strcpy(buf, "instantly ");
                         strcat(buf, killed_by_prefix[how]);
                       }
                       else if (Quick_Death) {
-                        Strcpy(buf, "quickly ");
+                        strcpy(buf, "quickly ");
                         strcat(buf, killed_by_prefix[how]);
-                      } else Strcpy(buf, killed_by_prefix[how]);
+                      } else strcpy(buf, killed_by_prefix[how]);
 			strcat(buf, killer);
 			break;
 		case NO_KILLER_PREFIX:
-			Strcpy(buf, killer);
+			strcpy(buf, killer);
 			break;
 	}
 

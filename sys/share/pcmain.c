@@ -171,7 +171,7 @@ char *argv[];
 		    int prefcnt;
 
 		    fqn_prefix[0] = (char *)alloc(strlen(hackdir)+2);
-		    Strcpy(fqn_prefix[0], hackdir);
+		    strcpy(fqn_prefix[0], hackdir);
 		    append_slash(fqn_prefix[0]);
 		    for (prefcnt = 1; prefcnt < PREFIX_COUNT; prefcnt++)
 			fqn_prefix[prefcnt] = fqn_prefix[0];
@@ -213,9 +213,9 @@ char *argv[];
 #endif
 	if (!hackdir[0])
 #if !defined(LATTICE) && !defined(AMIGA)
-		Strcpy(hackdir, orgdir);
+		strcpy(hackdir, orgdir);
 #else
-		Strcpy(hackdir, HACKDIR);
+		strcpy(hackdir, HACKDIR);
 #endif
 	if(argc > 1) {
 	    if (!strncmp(argv[1], "-d", 2) && argv[1][2] != 'e') {
@@ -233,7 +233,7 @@ char *argv[];
 		}
 		if(!*dir)
 		    error("Flag -d must be followed by a directory name.");
-		Strcpy(hackdir, dir);
+		strcpy(hackdir, dir);
 	    }
 	    if (argc > 1) {
 
@@ -310,7 +310,7 @@ char *argv[];
 # else
 		if(!strcmp(plname, WIZARD))
 # endif
-			Strcpy(plname, "wizard");
+			strcpy(plname, "wizard");
 		else {
 			wizard = FALSE;
 			discover = TRUE;
@@ -334,7 +334,7 @@ char *argv[];
 	 * it into the name. */
 	sprintf(lock, "%s-%s",get_username(0),plname);
 # else
-	Strcpy(lock,plname);
+	strcpy(lock,plname);
 	regularize(lock);
 # endif
 	getlock();
@@ -347,7 +347,7 @@ char *argv[];
 	/* I'm not sure what, if anything, is left here, but MFLOPPY has
 	 * conflicts with set_lock_and_bones() in files.c.
 	 */
-	Strcpy(lock,plname);
+	strcpy(lock,plname);
 	strcat(lock,".99");
 	regularize(lock);	/* is this necessary? */
 				/* not compatible with full path a la AMIGA */
@@ -690,7 +690,7 @@ char *str;
 	bsize = EXEPATHBUFSZ;
 	tmp = exepathbuf;
 #ifndef WIN32
-	Strcpy (tmp, str);
+	strcpy (tmp, str);
 #else
 	#ifdef UNICODE
 	{

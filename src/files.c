@@ -316,7 +316,7 @@ fqname (const char *basename, int whichprefix, int buffnum)
 						basename);
 		return basename;	/* XXX */
 	}
-	Strcpy(fqn_filename_buffer[buffnum], fqn_prefix[whichprefix]);
+	strcpy(fqn_filename_buffer[buffnum], fqn_prefix[whichprefix]);
 	return strcat(fqn_filename_buffer[buffnum], basename);
 #endif
 }
@@ -402,8 +402,8 @@ void
 set_lock_and_bones (void)
 {
 	if (!ramdisk) {
-		Strcpy(levels, permbones);
-		Strcpy(bones, permbones);
+		strcpy(levels, permbones);
+		strcpy(bones, permbones);
 	}
 	append_slash(permbones);
 	append_slash(levels);
@@ -412,7 +412,7 @@ set_lock_and_bones (void)
 #endif
 	append_slash(bones);
 	strcat(bones, "bonesnn.*");
-	Strcpy(lock, levels);
+	strcpy(lock, levels);
 #ifndef AMIGA
 	strcat(lock, alllevels);
 #endif
@@ -885,7 +885,7 @@ set_savefile_name (void)
 	strcat(SAVEF, ";1");
 #else
 # if defined(MICRO)
-	Strcpy(SAVEF, SAVEP);
+	strcpy(SAVEF, SAVEP);
 #  ifdef AMIGA
 	strncat(SAVEF, bbs_id, PATHLEN);
 #  endif
@@ -1090,7 +1090,7 @@ const char* filename;
     int fd;
     char* result = 0;
 
-    Strcpy(SAVEF,filename);
+    strcpy(SAVEF,filename);
 #ifdef COMPRESS_EXTENSION
     SAVEF[strlen(SAVEF)-strlen(COMPRESS_EXTENSION)] = '\0';
 #endif
@@ -1228,7 +1228,7 @@ boolean uncomp;
 	boolean istty = !strncmpi(windowprocs.name, "tty", 3);
 # endif
 
-	Strcpy(cfn, filename);
+	strcpy(cfn, filename);
 # ifdef COMPRESS_EXTENSION
 	strcat(cfn, COMPRESS_EXTENSION);
 # endif
@@ -1248,7 +1248,7 @@ boolean uncomp;
 	    char *opt;
 	    boolean inword = FALSE;
 
-	    Strcpy(opts, COMPRESS_OPTIONS);
+	    strcpy(opts, COMPRESS_OPTIONS);
 	    opt = opts;
 	    while (*opt) {
 		if ((*opt == ' ') || (*opt == '\t')) {
@@ -1425,11 +1425,11 @@ char *lockname;
 #else
 # if defined(UNIX) || defined(VMS) || defined(AMIGA) || defined(WIN32) || defined(MSDOS)
 #  ifdef NO_FILE_LINKS
-	Strcpy(lockname, LOCKDIR);
+	strcpy(lockname, LOCKDIR);
 	strcat(lockname, "/");
 	strcat(lockname, filename);
 #  else
-	Strcpy(lockname, filename);
+	strcpy(lockname, filename);
 #  endif
 #  ifdef VMS
       {
@@ -1712,7 +1712,7 @@ const char *filename;
 
 	envp = nh_getenv("HOME");
 	if (!envp)
-		Strcpy(tmp_config, NH_CONFIG_FILE3);
+		strcpy(tmp_config, NH_CONFIG_FILE3);
 	else
 		sprintf(tmp_config, "%s%s", envp, NH_CONFIG_FILE3);
 	if ((fp = fopenp(tmp_config, "r")) != (FILE *)0)
@@ -1720,7 +1720,7 @@ const char *filename;
 # else	/* should be only UNIX left */
 	envp = nh_getenv("HOME");
 	if (!envp)
-		Strcpy(tmp_config, configfile);
+		strcpy(tmp_config, configfile);
 	else
 		sprintf(tmp_config, "%s/%s", envp, configfile);
 	if ((fp = fopenp(tmp_config, "r")) != (FILE *)0)
@@ -1842,7 +1842,7 @@ int prefixid;
 	if ((ptr = index(bufp, ';')) != 0) *ptr = '\0';
 	if (strlen(bufp) > 0) {
 		fqn_prefix[prefixid] = (char *)alloc(strlen(bufp)+2);
-		Strcpy(fqn_prefix[prefixid], bufp);
+		strcpy(fqn_prefix[prefixid], bufp);
 		append_slash(fqn_prefix[prefixid]);
 	}
 }
@@ -2304,17 +2304,17 @@ clnt_process:
 #if defined(MICRO) && !defined(NOCWD_ASSUMPTIONS)
 	/* should be superseded by fqn_prefix[] */
 # ifdef MFLOPPY
-	Strcpy(permbones, tmp_levels);
+	strcpy(permbones, tmp_levels);
 #  ifndef AMIGA
 	if (tmp_ramdisk[0]) {
-		Strcpy(levels, tmp_ramdisk);
+		strcpy(levels, tmp_ramdisk);
 		if (strcmp(permbones, levels))		/* if not identical */
 			ramdisk = TRUE;
 	} else
 #  endif /* AMIGA */
-		Strcpy(levels, tmp_levels);
+		strcpy(levels, tmp_levels);
 
-	Strcpy(bones, levels);
+	strcpy(bones, levels);
 # endif /* MFLOPPY */
 #endif /* MICRO */
 post_process:
@@ -2398,7 +2398,7 @@ fopen_wizkit_file()
 	envp = nh_getenv("HOME");
 	if (envp)
 		sprintf(tmp_wizkit, "%s/%s", envp, wizkit);
-	else 	Strcpy(tmp_wizkit, wizkit);
+	else 	strcpy(tmp_wizkit, wizkit);
 	if ((fp = fopenp(tmp_wizkit, "r")) != (FILE *)0)
 		return(fp);
 	else if (errno != ENOENT) {
@@ -2526,7 +2526,7 @@ const char *dir;
 	fq_record = tmp;
 #  endif
 # else
-	Strcpy(tmp, NH_RECORD);
+	strcpy(tmp, NH_RECORD);
 #  ifndef FILE_AREAS
 	fq_record = fqname(NH_RECORD, SCOREPREFIX, 0);
 #  endif

@@ -215,7 +215,7 @@ card_name (num, buf)
 	if (num < 0 || num >= CARD_TOTAL) {
 		/* Invalid card */
 		impossible("no such card %d", num);
-		Strcpy(buf, "a card");
+		strcpy(buf, "a card");
 	} else if (card_istrump(num)) {
 		/* Handle trump cards */
 		r = card_trump(num);

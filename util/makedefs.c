@@ -238,7 +238,7 @@ main(void)
     fgets(buf, 100, stdin);
     len = strlen(buf);
     if (len <= 1)
-	Strcpy(buf, def_options);
+	strcpy(buf, def_options);
     else
 	buf[len-1] = 0;			/* remove return */
 
@@ -562,7 +562,7 @@ const char *build_date;
     subbuf[0] = '\0';
 #ifdef PORT_SUB_ID
     subbuf[0] = ' ';
-    Strcpy(&subbuf[1], PORT_SUB_ID);
+    strcpy(&subbuf[1], PORT_SUB_ID);
 #endif
 #if defined(ALPHA)
     strcat(subbuf, " Alpha");
@@ -597,10 +597,10 @@ do_date()
 
 #ifdef KR1ED
 	time(&clocktim);
-	Strcpy(cbuf, ctime(&clocktim));
+	strcpy(cbuf, ctime(&clocktim));
 #else
 	time((time_t *)&clocktim);
-	Strcpy(cbuf, ctime((time_t *)&clocktim));
+	strcpy(cbuf, ctime((time_t *)&clocktim));
 #endif
 	for (c = cbuf; *c; c++) if (*c == '\n') break;
 	*c = '\0';	/* strip off the '\n' */
@@ -673,7 +673,7 @@ build_savebones_compat_string()
 	}
 # endif
 #endif
-	Strcpy(save_bones_compat_buf,
+	strcpy(save_bones_compat_buf,
 		"save and bones files accepted from version");
 #ifdef VERSION_COMPATIBILITY
 	sprintf(eos(save_bones_compat_buf),

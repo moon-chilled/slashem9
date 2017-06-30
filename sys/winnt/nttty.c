@@ -966,7 +966,7 @@ load_keyboard_handler()
 				(MAX_ALTKEYHANDLER - sizeof suffx) - 1);
 		kh[(MAX_ALTKEYHANDLER - sizeof suffx) - 1] = '\0';
 		strcat(kh, suffx);
-		Strcpy(iflags.altkeyhandler, kh);
+		strcpy(iflags.altkeyhandler, kh);
 		hLibrary = LoadLibrary(kh);
 		if (hLibrary) {
 		   pProcessKeystroke =
@@ -996,7 +996,7 @@ load_keyboard_handler()
 		}
 		(void)strncpy(kh, "nhdefkey.dll", (MAX_ALTKEYHANDLER - sizeof suffx) - 1);
 		kh[(MAX_ALTKEYHANDLER - sizeof suffx) - 1] = '\0';
-		Strcpy(iflags.altkeyhandler, kh);
+		strcpy(iflags.altkeyhandler, kh);
 		hLibrary = LoadLibrary(kh);
 		if (hLibrary) {
 		   pProcessKeystroke =

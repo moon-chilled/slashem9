@@ -437,7 +437,7 @@ dodiscovered (void)				/* free after Robert Viduya */
     ct += disp_artifact_discoveries(tmpwin);
 
     /* several classes are omitted from packorder; one is of interest here */
-    Strcpy(classes, flags.inv_order);
+    strcpy(classes, flags.inv_order);
     if (!index(classes, VENOM_CLASS)) {
 	s = eos(classes);
 	*s++ = VENOM_CLASS;

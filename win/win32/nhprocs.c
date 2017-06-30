@@ -497,8 +497,8 @@ const char *str;
 	switch(wins[window]->type) {
 	    case NHW_MESSAGE:
 		tmp = (char *)alloc(strlen(str)+1);
-		Strcpy(toplines, str); 		/* for Norep() */
-		Strcpy(tmp, str);
+		strcpy(toplines, str); 		/* for Norep() */
+		strcpy(tmp, str);
 		if (MessageCount >= MAX_MESSAGE_COUNT) {
 			free((genericptr_t)MessagePtr[0]);
 			for (i = 0; i < (MessageCount - 1); ++i) {
@@ -733,7 +733,7 @@ char def;
 	if (choices) {
 	    char *cb, choicebuf[QBUFSZ];
 
-	    Strcpy(choicebuf, choices);	/* anything beyond <esc> is hidden */
+	    strcpy(choicebuf, choices);	/* anything beyond <esc> is hidden */
 	    if ((cb = index(choicebuf, '\033')) != 0) *cb = '\0';
 	    if ((1 + strlen(query) + 2 + strlen(choicebuf) + 4) >= QBUFSZ)
 		panic("yn_function: question too long");

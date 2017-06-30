@@ -948,7 +948,7 @@ char *op;
 	    buf[num] = '\0';	/* explicitly terminate for next index() */
 	}
 
-    Strcpy(flags.inv_order, buf);
+    strcpy(flags.inv_order, buf);
     return 1;
 }
 
@@ -1273,7 +1273,7 @@ boolean tinitial, tfrom_file;
 	/* variant spelling */
 
 	if (match_optname(opts, "colour", 5, FALSE))
-		Strcpy(opts, "color");	/* fortunately this isn't longer */
+		strcpy(opts, "color");	/* fortunately this isn't longer */
 
 	if (!match_optname(opts, "subkeyvalue", 11, TRUE)) /* allow multiple */
 	duplicate_opt_detection(opts, 1);	/* 1 means compound opts */
@@ -2346,7 +2346,7 @@ goodfruit:
 		if ((op = string_for_opt(opts, FALSE)) != 0) {
 			if (iflags.wc_tile_file) free(iflags.wc_tile_file);
 			iflags.wc_tile_file = (char *)alloc(strlen(op) + 1);
-			Strcpy(iflags.wc_tile_file, op);
+			strcpy(iflags.wc_tile_file, op);
 		}
 		return;
 	}
@@ -3541,24 +3541,24 @@ char *buf;
 		sprintf(buf, "%s", iflags.wc_font_text ? iflags.wc_font_text : defopt);
 	else if (!strcmp(optname, "font_size_map")) {
 		if (iflags.wc_fontsiz_map) sprintf(buf, "%d", iflags.wc_fontsiz_map);
-		else Strcpy(buf, defopt);
+		else strcpy(buf, defopt);
 	}
 	else if (!strcmp(optname, "font_size_message")) {
 		if (iflags.wc_fontsiz_message) sprintf(buf, "%d",
 							iflags.wc_fontsiz_message);
-		else Strcpy(buf, defopt);
+		else strcpy(buf, defopt);
 	}
 	else if (!strcmp(optname, "font_size_status")) {
 		if (iflags.wc_fontsiz_status) sprintf(buf, "%d", iflags.wc_fontsiz_status);
-		else Strcpy(buf, defopt);
+		else strcpy(buf, defopt);
 	}
 	else if (!strcmp(optname, "font_size_menu")) {
 		if (iflags.wc_fontsiz_menu) sprintf(buf, "%d", iflags.wc_fontsiz_menu);
-		else Strcpy(buf, defopt);
+		else strcpy(buf, defopt);
 	}
 	else if (!strcmp(optname, "font_size_text")) {
 		if (iflags.wc_fontsiz_text) sprintf(buf, "%d",iflags.wc_fontsiz_text);
-		else Strcpy(buf, defopt);
+		else strcpy(buf, defopt);
 	}
 	else if (!strcmp(optname, "fruit")) 
 		sprintf(buf, "%s", pl_fruit);
@@ -3660,11 +3660,11 @@ char *buf;
 	}
 	else if (!strcmp(optname, "scroll_amount")) {
 		if (iflags.wc_scroll_amount) sprintf(buf, "%d",iflags.wc_scroll_amount);
-		else Strcpy(buf, defopt);
+		else strcpy(buf, defopt);
 	}
 	else if (!strcmp(optname, "scroll_margin")) {
 		if (iflags.wc_scroll_margin) sprintf(buf, "%d",iflags.wc_scroll_margin);
-		else Strcpy(buf, defopt);
+		else strcpy(buf, defopt);
 	}
 	else if (!strcmp(optname, "player_selection"))
 		sprintf(buf, "%s", iflags.wc_player_selection ? "prompts" : "dialog");
@@ -3674,7 +3674,7 @@ char *buf;
 #endif
 	else if (!strcmp(optname, "suppress_alert")) {
 	    if (flags.suppress_alert == 0L)
-		Strcpy(buf, none);
+		strcpy(buf, none);
 	    else
 		sprintf(buf, "%lu.%lu.%lu",
 			FEATURE_NOTICE_VER_MAJ,
@@ -3683,21 +3683,21 @@ char *buf;
 	}
 	else if (!strcmp(optname, "term_cols")) {
 		if (iflags.wc2_term_cols) sprintf(buf, "%d",iflags.wc2_term_cols);
-		else Strcpy(buf, defopt);
+		else strcpy(buf, defopt);
 	}
 	else if (!strcmp(optname, "term_rows")) {
 		if (iflags.wc2_term_rows) sprintf(buf, "%d",iflags.wc2_term_rows);
-		else Strcpy(buf, defopt);
+		else strcpy(buf, defopt);
 	}
 	else if (!strcmp(optname, "tile_file"))
 		sprintf(buf, "%s", iflags.wc_tile_file ? iflags.wc_tile_file : defopt);
 	else if (!strcmp(optname, "tile_height")) {
 		if (iflags.wc_tile_height) sprintf(buf, "%d",iflags.wc_tile_height);
-		else Strcpy(buf, defopt);
+		else strcpy(buf, defopt);
 	}
 	else if (!strcmp(optname, "tile_width")) {
 		if (iflags.wc_tile_width) sprintf(buf, "%d",iflags.wc_tile_width);
-		else Strcpy(buf, defopt);
+		else strcpy(buf, defopt);
 	}
 	else if (!strcmp(optname, "tileset")) 
 		sprintf(buf, "%s", tileset[0] ? tileset : none );
@@ -3705,7 +3705,7 @@ char *buf;
 		sprintf(buf, "%s", to_be_done);
 	else if (!strcmp(optname, "vary_msgcount")) {
 		if (iflags.wc_vary_msgcount) sprintf(buf, "%d",iflags.wc_vary_msgcount);
-		else Strcpy(buf, defopt);
+		else strcpy(buf, defopt);
 	}
 #ifdef MSDOS
 	else if (!strcmp(optname, "video"))
@@ -3783,7 +3783,7 @@ dotogglepickup (void)
 			    ", with one exception" : ", with some exceptions") :
 			"");
 	} else {
-	    Strcpy(buf, "OFF");
+	    strcpy(buf, "OFF");
 	}
 	pline("Autopickup: %s.", buf);
 	return 0;
@@ -3812,7 +3812,7 @@ add_autopickup_exception (const char *mapping)
 		ape = (struct autopickup_exception *)
 				alloc(sizeof(struct autopickup_exception));
 		ape->pattern = (char *) alloc(textsize+1);
-		Strcpy(ape->pattern, text2);
+		strcpy(ape->pattern, text2);
 		ape->grab = grab;
 		if (!*apehead) ape->next = (struct autopickup_exception *)0;
 		else ape->next = *apehead;
@@ -3975,7 +3975,7 @@ const char *str;
 	if (!*str) {
 		s = eos(buf);
 		if (s > &buf[1] && s[-2] == ',')
-		    Strcpy(s - 2, ".");	/* replace last ", " */
+		    strcpy(s - 2, ".");	/* replace last ", " */
 		i = COLNO;	/* (greater than COLNO - 2) */
 	} else {
 		i = strlen(buf) + strlen(str) + 2;
@@ -4051,8 +4051,8 @@ fruitadd (char *str)
 			    !strncmp(eos(str)-4, " egg",4)) &&
 			name_to_mon(str) >= LOW_PM))
 			{
-				Strcpy(buf, pl_fruit);
-				Strcpy(pl_fruit, "candied ");
+				strcpy(buf, pl_fruit);
+				strcpy(pl_fruit, "candied ");
 				nmcpy(pl_fruit+8, buf, PL_FSIZ-8);
 		}
 	}
@@ -4069,7 +4069,7 @@ fruitadd (char *str)
 	f = newfruit();
 	if (ffruit) lastf->nextf = f;
 	else ffruit = f;
-	Strcpy(f->fname, str);
+	strcpy(f->fname, str);
 	f->fid = highest_fruit_id;
 	f->nextf = 0;
 nonew:
@@ -4393,7 +4393,7 @@ char *fontname;
 	if (fn) {
 		if (*fn) free(*fn);
 		*fn = (char *)alloc(strlen(fontname) + 1);
-		Strcpy(*fn, fontname);
+		strcpy(*fn, fontname);
 	}
 	return;
 }
@@ -4424,7 +4424,7 @@ char *op;
 		&iflags.wc_backgrnd_text
 	};
 
-	Strcpy(buf, op);
+	strcpy(buf, op);
 	newop = mungspaces(buf);
 	while (newop && *newop) {
 
@@ -4467,12 +4467,12 @@ char *op;
 				if (tfg && !strstri(tfg, " ")) {
 					if (*fgp[j]) free(*fgp[j]);
 					*fgp[j] = (char *)alloc(strlen(tfg) + 1);
-					Strcpy(*fgp[j], tfg);
+					strcpy(*fgp[j], tfg);
 				}
 				if (tbg && !strstri(tbg, " ")) {
 					if (*bgp[j]) free(*bgp[j]);
 					*bgp[j] = (char *)alloc(strlen(tbg) + 1);
-					Strcpy(*bgp[j], tbg);
+					strcpy(*bgp[j], tbg);
 				}
  				break;
 			}

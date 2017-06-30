@@ -205,7 +205,7 @@ remember_topl()
 	cw->data[idx] = (char *)alloc(len);
 	cw->datlen[idx] = (short)len;
     }
-    Strcpy(cw->data[idx], toplines);
+    strcpy(cw->data[idx], toplines);
     cw->maxcol = cw->maxrow = (idx + 1) % cw->rows;
 }
 
@@ -414,7 +414,7 @@ char def;
 	    char *rb, respbuf[QBUFSZ];
 
 	    allow_num = (index(resp, '#') != 0);
-	    Strcpy(respbuf, resp);
+	    strcpy(respbuf, resp);
 	    /* any acceptable responses that follow <esc> aren't displayed */
 	    if ((rb = index(respbuf, '\033')) != 0) *rb = '\0';
 	    sprintf(prompt, "%s [%s] ", query, respbuf);

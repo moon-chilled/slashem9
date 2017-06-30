@@ -1067,7 +1067,7 @@ char gnome_yn_function(const char *question, const char *choices,
     
     if (choices) {
 	char *cb, choicebuf[QBUFSZ];
-	Strcpy(choicebuf, choices);
+	strcpy(choicebuf, choices);
 	if ((cb = index(choicebuf, '\033')) != 0) {
 	    /* anything beyond <esc> is hidden */
 	    *cb = '\0';
@@ -1078,7 +1078,7 @@ char gnome_yn_function(const char *question, const char *choices,
 	yn_esc_map = (index(choices, 'q') ? 'q' :
 		 (index(choices, 'n') ? 'n' : def));
     } else {
-	Strcpy(message, question);
+	strcpy(message, question);
     }
     
     
@@ -1213,15 +1213,15 @@ void gnome_outrip(winid wid, int how)
     switch (killer_format) {
 	    default: impossible("bad killer format?");
 	    case KILLED_BY_AN:
-		    Strcpy(buf, killed_by_prefix[how]);
+		    strcpy(buf, killed_by_prefix[how]);
 		    strcat(buf, an(killer));
 		    break;
 	    case KILLED_BY:
-		    Strcpy(buf, killed_by_prefix[how]);
+		    strcpy(buf, killed_by_prefix[how]);
 		    strcat(buf, killer);
 		    break;
 	    case NO_KILLER_PREFIX:
-		    Strcpy(buf, killer);
+		    strcpy(buf, killer);
 		    break;
     }
     /* Put death type on stone */

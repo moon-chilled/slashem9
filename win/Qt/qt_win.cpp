@@ -2543,14 +2543,14 @@ void NetHackQtStatusWindow::updateStats()
 	encumber.setLabel(enc);
 	encumber.show();
     }
-    Strcpy(buf, plname);
+    strcpy(buf, plname);
     if ('a' <= buf[0] && buf[0] <= 'z') buf[0] += 'A'-'a';
     strcat(buf, " the ");
     if (u.mtimedone) {
 	char mname[BUFSZ];
 	int k = 0;
 
-	Strcpy(mname, mons[u.umonnum].mname);
+	strcpy(mname, mons[u.umonnum].mname);
 	while(mname[k] != 0) {
 	    if ((k == 0 || (k > 0 && mname[k-1] == ' '))
 	     && 'a' <= mname[k] && mname[k] <= 'z')
@@ -3130,7 +3130,7 @@ void NetHackQtMenuWindow::mousePressEvent(QMouseEvent* event)
 	    if (item[row].count>0)
 		sprintf(buf,"%d", item[row].count);
 	    else
-		Strcpy(buf, "");
+		strcpy(buf, "");
 
 	    requestor.SetDefault(buf);
 	    if (requestor.Get(buf)) {
@@ -3334,15 +3334,15 @@ static char** rip_line=0;
     switch (killer_format) {
 	default: impossible("bad killer format?");
 	case KILLED_BY_AN:
-	    Strcpy(buf, killed_by_prefix[how]);
+	    strcpy(buf, killed_by_prefix[how]);
 	    strcat(buf, an(killer));
 	    break;
 	case KILLED_BY:
-	    Strcpy(buf, killed_by_prefix[how]);
+	    strcpy(buf, killed_by_prefix[how]);
 	    strcat(buf, killer);
 	    break;
 	case NO_KILLER_PREFIX:
-	    Strcpy(buf, killer);
+	    strcpy(buf, killer);
 	    break;
     }
 
@@ -5026,7 +5026,7 @@ char NetHackQtBind::qt_yn_function(const char *question, const char *choices, CH
 
 	if (choices) {
 	    char *cb, choicebuf[QBUFSZ];
-	    Strcpy(choicebuf, choices);
+	    strcpy(choicebuf, choices);
 	    if ((cb = index(choicebuf, '\033')) != 0) {
 		// anything beyond <esc> is hidden
 		*cb = '\0';
@@ -5037,7 +5037,7 @@ char NetHackQtBind::qt_yn_function(const char *question, const char *choices, CH
 	    yn_esc_map = (index(choices, 'q') ? 'q' :
 		     (index(choices, 'n') ? 'n' : def));
 	} else {
-	    Strcpy(message, question);
+	    strcpy(message, question);
 	}
 
 #ifdef USE_POPUPS

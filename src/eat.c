@@ -2207,8 +2207,8 @@ struct obj *otmp;
 	    mnum = otmp->corpsenm;
 	long rotted = 0L;
 
-	Strcpy(foodsmell, Tobjnam(otmp, "smell"));
-	Strcpy(it_or_they, (otmp->quan == 1L) ? "it" : "they");
+	strcpy(foodsmell, Tobjnam(otmp, "smell"));
+	strcpy(it_or_they, (otmp->quan == 1L) ? "it" : "they");
 	sprintf(eat_it_anyway, "Eat %s anyway?",
 		(otmp->quan == 1L) ? "it" : "one");
 
@@ -2387,7 +2387,7 @@ doeat (void)		/* generic "eat" command funtion (see cmd.c) */
 		return 1;
 	}
 	if (otmp->otyp == EYEBALL || otmp->otyp == SEVERED_HAND) {
-	    Strcpy(qbuf,"Are you sure you want to eat that?");
+	    strcpy(qbuf,"Are you sure you want to eat that?");
 	    if ((c = yn_function(qbuf, ynqchars, 'n')) != 'y') return 0;
 	}
 

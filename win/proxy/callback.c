@@ -77,7 +77,7 @@ const char *path, *mode;
 		    buf[s - subname] = '\0';
 		} else {
 		    buf = (char *)alloc(strlen(subname) + 5);
-		    Strcpy(buf, subname);
+		    strcpy(buf, subname);
 		}
 		strcat(buf, ".map");
 		SET_FILE(buf, FILE_AREA_SHARE);

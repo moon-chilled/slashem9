@@ -971,7 +971,7 @@ amii_get_ext_cmd( void )
 
 	    if(com_index >= 0 && *obufp )
 	    {
-		Strcpy(obufp, extcmdlist[com_index].ef_txt);
+		strcpy(obufp, extcmdlist[com_index].ef_txt);
 		/* finish printing our string */
 		colx = put_ext_cmd( obufp, colx, cw, bottom );
 		bufp = obufp; /* reset it */
@@ -1079,7 +1079,7 @@ char def;
 	    char *rb, respbuf[QBUFSZ];
 
   	    allow_num = (index(resp, '#') != 0);
-	    Strcpy(respbuf, resp);
+	    strcpy(respbuf, resp);
 	    /* any acceptable responses that follow <esc> aren't displayed */
 	    if ((rb = index(respbuf, '\033')) != 0) *rb = '\0';
 	    sprintf(prompt, "%s [%s] ", query, respbuf);
@@ -1474,16 +1474,16 @@ give_up:	/* Quit */
 			if (thisch == lastch) thisch = highc(thisch);
 			if (flags.initgend != ROLE_NONE && flags.initgend != ROLE_RANDOM) {
 				if (flags.initgend == 1  && roles[i].name.f)
-					Strcpy(rolenamebuf, roles[i].name.f);
+					strcpy(rolenamebuf, roles[i].name.f);
 				else
-					Strcpy(rolenamebuf, roles[i].name.m);
+					strcpy(rolenamebuf, roles[i].name.m);
 			} else {
 				if (roles[i].name.f) {
-					Strcpy(rolenamebuf, roles[i].name.m);
+					strcpy(rolenamebuf, roles[i].name.m);
 					strcat(rolenamebuf, "/");
 					strcat(rolenamebuf, roles[i].name.f);
 				} else 
-					Strcpy(rolenamebuf, roles[i].name.m);
+					strcpy(rolenamebuf, roles[i].name.m);
 			}	
 			add_menu(win, NO_GLYPH, &any, thisch,
 			    0, ATR_NONE, an(rolenamebuf), MENU_UNSELECTED);

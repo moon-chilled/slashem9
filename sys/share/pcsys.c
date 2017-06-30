@@ -187,7 +187,7 @@ int mode;
 			if (_copyfile(from, to))
 				goto error_copying;
 #  endif
-			Strcpy(last, foundfile);
+			strcpy(last, foundfile);
 		} while (findnext());
 #  ifdef TOS
 	else
