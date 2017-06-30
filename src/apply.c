@@ -333,12 +333,12 @@ STATIC_OVL void use_magic_whistle(struct obj *obj) {
 }
 
 boolean um_dist(xchar x, xchar y, xchar n) {
-	return((boolean)(abs(u.ux - x) > n  || abs(u.uy - y) > n));
+	return (abs(u.ux - x) > n  || abs(u.uy - y) > n);
 }
 
 int number_leashed (void) {
-	register int i = 0;
-	register struct obj *obj;
+	int i = 0;
+	struct obj *obj;
 
 	for(obj = invent; obj; obj = obj->nobj)
 		if(obj->otyp == LEASH && obj->leashmon != 0) i++;
@@ -1545,7 +1545,7 @@ int jump( int magic /* 0=Physical, otherwise skill level */) {
 	    if(u.utrap)
 		switch(u.utraptype) {
 		case TT_BEARTRAP: {
-		    register long side = rn2(3) ? LEFT_SIDE : RIGHT_SIDE;
+		    long side = rn2(3) ? LEFT_SIDE : RIGHT_SIDE;
 		    You("rip yourself free of the bear trap!  Ouch!");
 #ifdef STEED
 			if (!u.usteed)
@@ -1609,7 +1609,7 @@ boolean tinnable(struct obj *corpse) {
 	return 1;
 }
 
-STATIC_OVL void use_tinning_kit(register struct obj *obj) {
+STATIC_OVL void use_tinning_kit(struct obj *obj) {
 	struct obj *corpse, *can;
 /*
 	char *badmove;
@@ -3113,8 +3113,8 @@ STATIC_OVL int do_break_wand(struct obj *obj) {
  */
 int wand_explode(struct obj *obj, boolean hero_broke) {
     static const char nothing_else_happens[] = "But nothing else happens...";
-    register int i, x, y;
-    register struct monst *mon;
+    int i, x, y;
+    struct monst *mon;
     int dmg, damage;
     boolean affects_objects;
     boolean shop_damage = FALSE;
@@ -3515,7 +3515,7 @@ int doapply(void) {
 	    break;
 	case ORB_OF_CHARGING:
 		if(obj->spe > 0) {
-			register struct obj *otmp;
+			struct obj *otmp;
 			makeknown(ORB_OF_CHARGING);
 			consume_obj_charge(obj, TRUE);
 			otmp = getobj(all_count, "charge");
