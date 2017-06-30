@@ -1079,7 +1079,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 	    return Mb_hit(magr, mdef, otmp, dmgptr, dieroll, vis, hittee);
 	}
 
-	if (!spec_dbon_applies && !spec_ability(otmp, SPFX_BEHEAD) ||
+	if ((!spec_dbon_applies && !spec_ability(otmp, SPFX_BEHEAD)) ||
 		!special_applies) {
 	    /* since damage bonus didn't apply, nothing more to do;
 	       no further attacks have side-effects on inventory */
@@ -1210,7 +1210,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 			otmp->dknown = TRUE;
 			return TRUE;
 		}
-	    } else if (dieroll < 3 || otmp->oartifact == ART_VORPAL_BLADE &&
+	    } else if ((dieroll < 3 || otmp->oartifact == ART_VORPAL_BLADE) &&
 				      mdef->data == &mons[PM_JABBERWOCK]) {
 		static const char * const behead_msg[2] = {
 		     "%s beheads %s!",
@@ -1372,7 +1372,7 @@ STATIC_OVL int arti_invoke(struct obj *obj) {
 		if(obj->otyp == CRYSTAL_BALL)
 			use_crystal_ball(obj);
 		else
-			pline(nothing_happens);
+			pline("%s", nothing_happens);
 		return 1;
 	}
 

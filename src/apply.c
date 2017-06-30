@@ -62,7 +62,7 @@ STATIC_OVL int use_camera(struct obj *obj) {
 	if(!getdir((char *)0)) return(0);
 
 	if (obj->spe <= 0) {
-		pline(nothing_happens);
+		pline("%s", nothing_happens);
 		return (1);
 	}
 	consume_obj_charge(obj, TRUE);
@@ -934,9 +934,9 @@ STATIC_OVL void use_bell(struct obj **optr) {
 
 	    if (u.uswallow) {
 		if (!obj->cursed)
-		    (void) openit();
+		    openit();
 		else
-		    pline(nothing_happens);
+		    pline("%s", nothing_happens);
 
 	    } else if (obj->cursed) {
 		coord mm;
@@ -968,7 +968,7 @@ STATIC_OVL void use_bell(struct obj **optr) {
 		}
 		res += openit();
 		switch (res) {
-		  case 0:  pline(nothing_happens); break;
+		  case 0:  pline("%s", nothing_happens); break;
 		  case 1:  pline("%s opens...", Something);
 			   learno = TRUE; break;
 		  default: pline("Things open around you...");
@@ -980,7 +980,7 @@ STATIC_OVL void use_bell(struct obj **optr) {
 		amii_speaker( obj, "AeFeaeFeAefegw", AMII_OKAY_VOLUME );
 #endif
 		if (findit() != 0) learno = TRUE;
-		else pline(nothing_happens);
+		else pline("%s", nothing_happens);
 	    }
 
 	}	/* charged BofO */
@@ -1422,12 +1422,12 @@ int dorub(void) {
 		update_inventory();
 	    } else if (rn2(2) && !Blind)
 		You("see a puff of smoke.");
-	    else pline(nothing_happens);
+	    else pline("%s", nothing_happens);
 	} else if (obj->otyp == BRASS_LANTERN) {
 	    /* message from Adventure */
 	    pline("Rubbing the electric lamp is not particularly rewarding.");
 	    pline("Anyway, nothing exciting happens.");
-	} else pline(nothing_happens);
+	} else pline("%s", nothing_happens);
 	return 1;
 }
 
@@ -1754,7 +1754,7 @@ void use_unicorn_horn (struct obj *obj) {
 	}
 
 	if (trouble_count == 0) {
-	    pline(nothing_happens);
+	    pline("%s", nothing_happens);
 	    return;
 	} else if (trouble_count > 1) {		/* shuffle */
 	    int i, j, k;
@@ -2570,7 +2570,7 @@ STATIC_OVL int use_whip(struct obj *obj) {
 		You("wrap your bullwhip around %s on the %s.",
 		    an(singular(otmp, xname)), surface(u.ux, u.uy));
 		if (rnl(6) || pickup_object(otmp, 1L, TRUE) < 1)
-		    pline(msg_slipsfree);
+		    pline("%s", msg_slipsfree);
 		return 1;
 	    }
 	}
@@ -2611,7 +2611,7 @@ STATIC_OVL int use_whip(struct obj *obj) {
 		wrapped_what = strcpy(buf, mon_nam(mtmp));
 	    } else if (proficient) {
 		if (attack(mtmp)) return 1;
-		else pline(msg_snap);
+		else pline("%s", msg_snap);
 	    }
 	}
 	if (!wrapped_what) {
@@ -2633,10 +2633,10 @@ STATIC_OVL int use_whip(struct obj *obj) {
 		    vision_full_recalc = 1;
 		}
 	    } else {
-		pline(msg_slipsfree);
+		pline("%s", msg_slipsfree);
 	    }
 	    if (mtmp) wakeup(mtmp);
-	} else pline(msg_snap);
+	} else pline("%s", msg_snap);
 
     } else if (mtmp) {
 	if (!canspotmon(mtmp) &&
@@ -2728,7 +2728,7 @@ STATIC_OVL int use_whip(struct obj *obj) {
 		    break;
 		}
 	    } else {
-		pline(msg_slipsfree);
+		pline("%s", msg_slipsfree);
 	    }
 	    wakeup(mtmp);
 	} else {
@@ -2738,7 +2738,7 @@ STATIC_OVL int use_whip(struct obj *obj) {
 	    else You("flick your bullwhip towards %s.", mon_nam(mtmp));
 	    if (proficient) {
 		if (attack(mtmp)) return 1;
-		else pline(msg_snap);
+		else pline("%s", msg_snap);
 	    }
 	}
 
@@ -2747,7 +2747,7 @@ STATIC_OVL int use_whip(struct obj *obj) {
 	    You("snap your whip through thin air.");
 
     } else {
-	pline(msg_snap);
+	pline("%s", msg_snap);
 
     }
     return 1;
@@ -2914,7 +2914,7 @@ STATIC_OVL int use_pole(struct obj *obj) {
 		u.uconduct.weaphit++;
 	} else
 	    /* Now you know that nothing is there... */
-	    pline(nothing_happens);
+	    pline("%s", nothing_happens);
 	return (1);
 }
 
@@ -3067,8 +3067,8 @@ STATIC_OVL int use_grapple(struct obj *obj) {
 	    }
 	    break;
 	}
-	pline(nothing_happens);
-	return (1);
+	pline("%s", nothing_happens);
+	return 1;
 }
 
 
@@ -3618,7 +3618,7 @@ int doapply(void) {
 				if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 				You_feel("better.");
 				flags.botl = TRUE;
-			    } else pline(nothing_happens);
+			    } else pline("%s", nothing_happens);
 			} else if (!rn2(3))
 			    pline("Nothing seems to happen.");
 			else if (!Sick)
@@ -3666,7 +3666,7 @@ int doapply(void) {
 					       (const char *)0);
 		    makeknown(HORN_OF_PLENTY);
 		} else
-		    pline(nothing_happens);
+		    pline("%s", nothing_happens);
 		break;
 	case LAND_MINE:
 	case BEARTRAP:
