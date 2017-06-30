@@ -190,17 +190,17 @@ static char *botl_player(void) {
     sprintf(nb = eos(player)," the ");
 
 	if (Upolyd) {
-	(void) strncpy(mbot, mons[u.umonnum].mname, SIZE(mbot) - 1);
-	mbot[SIZE(mbot) - 1] = 0;
+		strncpy(mbot, mons[u.umonnum].mname, SIZE(mbot) - 1);
+		mbot[SIZE(mbot) - 1] = 0;
 		while(mbot[k] != 0) {
-		    if ((k == 0 || (k > 0 && mbot[k-1] == ' ')) &&
+			if ((k == 0 || (k > 0 && mbot[k-1] == ' ')) &&
 					'a' <= mbot[k] && mbot[k] <= 'z')
-			mbot[k] += 'A' - 'a';
-		    k++;
+				mbot[k] += 'A' - 'a';
+			k++;
 		}
-	sprintf(eos(nb), mbot);
+		sprintf(eos(nb), "%s", mbot);
 	} else
-	sprintf(eos(nb), rank());
+		sprintf(eos(nb), "%s", rank());
     return player;
 }
 
@@ -357,7 +357,7 @@ bot2str(char *newbot2) {
 #ifdef REALTIME_ON_BOTL
 	if(iflags.showrealtime) {
 		time_t currenttime = get_realtime();
-		sprintf(nb = eos(nb), " %d:%2.2d", currenttime / 3600, (currenttime % 3600) / 60);
+		sprintf(nb = eos(nb), " %ld:%2.2ld", currenttime / 3600, (currenttime % 3600) / 60);
 	}
 #endif
 
@@ -538,7 +538,7 @@ static void bot_raw(boolean reconfig) {
     *rv++ = reconfig ? "hunger" : strcmp(hu_stat[u.uhs], "        ") ?
 	    hu_stat[u.uhs] : "";
     *rv++ = reconfig ? "encumberance" : enc_stat[near_capacity()];
-    *rv++ = reconfig ? "flags" : (sprintf(flgs, "%lX",
+    *rv++ = reconfig ? "flags" : (sprintf(flgs, "%d",
         (Levitation ? RAW_STAT_LEVITATION : 0) |
 	(Confusion ? RAW_STAT_CONFUSION : 0) |
 	(Sick && (u.usick_type & SICK_VOMITABLE) ? RAW_STAT_FOODPOIS : 0) |
