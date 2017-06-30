@@ -27,15 +27,6 @@ int open_levelfile(int);
 int create_savefile(void);
 void copy_bytes(int,int);
 
-#ifndef WIN_CE
-#define Fprintf	(void)fprintf
-#else
-#define Fprintf	(void)nhce_message
-static void nhce_message(FILE*, const char*, ...);
-#endif
-
-#define Close	(void)close
-
 #ifdef UNIX
 #define SAVESIZE	(PL_NSIZ + 13)	/* save/99999player.e */
 #else
@@ -78,12 +69,12 @@ char *argv[];
 	if (!dir) dir = exepath(argv[0]);
 #endif
 	if (argc == 1 || (argc == 2 && !strcmp(argv[1], "-"))) {
-	    Fprintf(stderr,
+	    fprintf(stderr,
 		"Usage: %s [ -d directory ] base1 [ base2 ... ]\n", argv[0]);
 #if defined(WIN32) || defined(MSDOS)
 	    if (dir) {
-	    	Fprintf(stderr, "\t(Unless you override it with -d, recover will look \n");
-	    	Fprintf(stderr, "\t in the %s directory on your system)\n", dir);
+		fprintf(stderr, "\t(Unless you override it with -d, recover will look \n");
+		fprintf(stderr, "\t in the %s directory on your system)\n", dir);
 	    }
 #endif
 	    exit(EXIT_FAILURE);
@@ -98,7 +89,7 @@ char *argv[];
 			dir = argv[argno];
 		}
 		if (!*dir) {
-		    Fprintf(stderr,
+		    fprintf(stderr,
 			"%s: flag -d must be followed by a directory name.\n",
 			argv[0]);
 		    exit(EXIT_FAILURE);
@@ -124,13 +115,13 @@ char *argv[];
 	startdir = getcwd(0,255);
 #endif
 	if (dir && chdir((char *) dir) < 0) {
-		Fprintf(stderr, "%s: cannot chdir to %s.\n", argv[0], dir);
+		fprintf(stderr, "%s: cannot chdir to %s.\n", argv[0], dir);
 		exit(EXIT_FAILURE);
 	}
 
 	while (argc > argno) {
 		if (restore_savefile(argv[argno]) == 0)
-		    Fprintf(stderr, "recovered \"%s\" to %s\n",
+		    fprintf(stderr, "recovered \"%s\" to %s\n",
 			    argv[argno], savename);
 		argno++;
 	}
@@ -197,7 +188,7 @@ int ifd, ofd;
 		nfrom = read(ifd, buf, BUFSIZ);
 		nto = write(ofd, buf, nfrom);
 		if (nto != nfrom) {
-			Fprintf(stderr, "file copy failed!\n");
+			fprintf(stderr, "file copy failed!\n");
 			exit(EXIT_FAILURE);
 		}
 	} while (nfrom == BUFSIZ);
@@ -223,38 +214,38 @@ char *basename;
 	if (gfd < 0) {
 #if defined(WIN32) && !defined(WIN_CE)
  	    if(errno == EACCES) {
-	  	Fprintf(stderr,
+	  	fprintf(stderr,
 			"\nThere are files from a game in progress under your name.");
-		Fprintf(stderr,"\nThe files are locked or inaccessible.");
-		Fprintf(stderr,"\nPerhaps the other game is still running?\n");
+		fprintf(stderr,"\nThe files are locked or inaccessible.");
+		fprintf(stderr,"\nPerhaps the other game is still running?\n");
 	    } else
-	  	Fprintf(stderr,
+	  	fprintf(stderr,
 			"\nTrouble accessing level 0 (errno = %d).\n", errno);
 #endif
-	    Fprintf(stderr, "Cannot open level 0 for %s.\n", basename);
+	    fprintf(stderr, "Cannot open level 0 for %s.\n", basename);
 	    return(-1);
 	}
 	if (read(gfd, (genericptr_t) &hpid, sizeof hpid) != sizeof hpid) {
-	    Fprintf(stderr, "%s\n%s%s%s\n",
+	    fprintf(stderr, "%s\n%s%s%s\n",
 	     "Checkpoint data incompletely written or subsequently clobbered;",
 		    "recovery for \"", basename, "\" impossible.");
-	    Close(gfd);
+	    close(gfd);
 	    return(-1);
 	}
 	if (read(gfd, (genericptr_t) &savelev, sizeof(savelev))
 							!= sizeof(savelev)) {
-	    Fprintf(stderr,
+	    fprintf(stderr,
 	    "Checkpointing was not in effect for %s -- recovery impossible.\n",
 		    basename);
-	    Close(gfd);
+	    close(gfd);
 	    return(-1);
 	}
 	if ((read(gfd, (genericptr_t) savename, sizeof savename)
 		!= sizeof savename) ||
 	    (read(gfd, (genericptr_t) &version_data, sizeof version_data)
 		!= sizeof version_data)) {
-	    Fprintf(stderr, "Error reading %s -- can't recover.\n", lock);
-	    Close(gfd);
+	    fprintf(stderr, "Error reading %s -- can't recover.\n", lock);
+	    close(gfd);
 	    return(-1);
 	}
 
@@ -266,33 +257,33 @@ char *basename;
 	 */
 	sfd = create_savefile();
 	if (sfd < 0) {
-	    Fprintf(stderr, "Cannot create savefile %s.\n", savename);
-	    Close(gfd);
+	    fprintf(stderr, "Cannot create savefile %s.\n", savename);
+	    close(gfd);
 	    return(-1);
 	}
 
 	lfd = open_levelfile(savelev);
 	if (lfd < 0) {
-	    Fprintf(stderr, "Cannot open level of save for %s.\n", basename);
-	    Close(gfd);
-	    Close(sfd);
+	    fprintf(stderr, "Cannot open level of save for %s.\n", basename);
+	    close(gfd);
+	    close(sfd);
 	    return(-1);
 	}
 
 	if (write(sfd, (genericptr_t) &version_data, sizeof version_data)
 		!= sizeof version_data) {
-	    Fprintf(stderr, "Error writing %s; recovery failed.\n", savename);
-	    Close(gfd);
-	    Close(sfd);
+	    fprintf(stderr, "Error writing %s; recovery failed.\n", savename);
+	    close(gfd);
+	    close(sfd);
 	    return(-1);
 	}
 
 	copy_bytes(lfd, sfd);
-	Close(lfd);
+	close(lfd);
 	(void) unlink(lock);
 
 	copy_bytes(gfd, sfd);
-	Close(gfd);
+	close(gfd);
 	set_levelfile_name(0);
 	(void) unlink(lock);
 
@@ -307,13 +298,13 @@ char *basename;
 				levc = (xchar) lev;
 				write(sfd, (genericptr_t) &levc, sizeof(levc));
 				copy_bytes(lfd, sfd);
-				Close(lfd);
+				close(lfd);
 				(void) unlink(lock);
 			}
 		}
 	}
 
-	Close(sfd);
+	close(sfd);
 
 #if 0 /* OBSOLETE, HackWB is no longer in use */
 #ifdef AMIGA
@@ -380,20 +371,4 @@ char *str;
 #include "date.h"
 const char amiga_version_string[] = AMIGA_VERSION_STRING;
 #endif
-
-#ifdef WIN_CE
-void nhce_message(FILE* f, const char* str, ...)
-{
-    va_list ap;
-	TCHAR wbuf[NHSTR_BUFSIZE];
-	char buf[NHSTR_BUFSIZE];
-
-    va_start(ap, str);
-	vsprintf(buf, str, ap);
-    va_end(ap);
-
-	MessageBox(NULL, NH_A2W(buf, wbuf, NHSTR_BUFSIZE), TEXT("Recover"), MB_OK);
-}
-#endif
-
 /*recover.c*/

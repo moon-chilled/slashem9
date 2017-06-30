@@ -47,7 +47,6 @@ void init_yyout(FILE *);
 #ifdef AZTEC_36
 FILE *freopen(char *,char *,FILE *);
 #endif
-#define Fprintf (void)fprintf
 
 #if defined(__BORLANDC__) && !defined(_WIN32)
 extern unsigned _stklen = STKSIZ;
