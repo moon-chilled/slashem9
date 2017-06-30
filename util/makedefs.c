@@ -42,9 +42,9 @@
 # define SpinCursor(x)
 #endif
 
-#define Fprintf	(void) fprintf
-#define Fclose	(void) fclose
-#define Unlink	(void) unlink
+#define Fprintf	fprintf
+#define Fclose	fclose
+#define Unlink	unlink
 #if !defined(AMIGA) || defined(AZTEC_C)
 #define rewind(fp) fseek((fp),0L,SEEK_SET)	/* guarantee a return value */
 #endif
@@ -263,7 +263,7 @@ char	*argv[];
 #endif
 	) {
 	    Fprintf(stderr, "Bad arg count (%d).\n", argc-1);
-	    (void) fflush(stderr);
+	    fflush(stderr);
 	    return 1;
 	}
 #ifdef FILE_PREFIX
@@ -338,9 +338,9 @@ char	*options;
 				break;
 		default:	Fprintf(stderr,	"Unknown option '%c'.\n",
 					*options);
-				(void) fflush(stderr);
+				fflush(stderr);
 				exit(EXIT_FAILURE);
-		
+
 	    }
 	    options++;
 	}
@@ -355,9 +355,9 @@ char *xcrypt(str)
 const char *str;
 {				/* duplicated in src/hacklib.c */
 	static char buf[BUFSZ];
-	register const char *p;
-	register char *q;
-	register int bitmask;
+	const char *p;
+	char *q;
+	int bitmask;
 
 	for (bitmask = 1, p = str, q = buf; *p; q++) {
 		*q = *p++;
@@ -384,7 +384,7 @@ do_rumors()
 		perror(filename);
 		exit(EXIT_FAILURE);
 	}
-	Fprintf(ofp,Dont_Edit_Data);
+	Fprintf(ofp, "%s", Dont_Edit_Data);
 
 	Sprintf(infile, DATA_IN_TEMPLATE, RUMOR_FILE);
 	Strcat(infile, ".tru");
@@ -397,7 +397,7 @@ do_rumors()
 
 	/* get size of true rumors file */
 #ifndef VMS
-	(void) fseek(ifp, 0L, SEEK_END);
+	fseek(ifp, 0L, SEEK_END);
 	true_rumor_size = ftell(ifp);
 #else
 	/* seek+tell is only valid for stream format files; since rumors.%%%
@@ -408,11 +408,11 @@ do_rumors()
 		true_rumor_size += strlen(in_line);	/* includes newline */
 #endif /* VMS */
 	Fprintf(ofp,"%06lx\n", true_rumor_size);
-	(void) fseek(ifp, 0L, SEEK_SET);
+	fseek(ifp, 0L, SEEK_SET);
 
 	/* copy true rumors */
 	while (fgets(in_line, sizeof in_line, ifp) != 0)
-		(void) fputs(xcrypt(in_line), ofp);
+		fputs(xcrypt(in_line), ofp);
 
 	Fclose(ifp);
 
@@ -427,7 +427,7 @@ do_rumors()
 
 	/* copy false rumors */
 	while (fgets(in_line, sizeof in_line, ifp) != 0)
-		(void) fputs(xcrypt(in_line), ofp);
+		fputs(xcrypt(in_line), ofp);
 
 	Fclose(ifp);
 	Fclose(ofp);
@@ -450,7 +450,7 @@ do_rumors()
 static void
 make_version()
 {
-	register int i;
+	int i;
 
 	/*
 	 * integer version number
@@ -596,13 +596,13 @@ do_date()
 		exit(EXIT_FAILURE);
 	}
 	Fprintf(ofp,"/*\tSCCS Id: @(#)date.h\t3.4\t2002/02/03 */\n\n");
-	Fprintf(ofp,Dont_Edit_Code);
+	Fprintf(ofp, "%s", Dont_Edit_Code);
 
 #ifdef KR1ED
-	(void) time(&clocktim);
+	time(&clocktim);
 	Strcpy(cbuf, ctime(&clocktim));
 #else
-	(void) time((time_t *)&clocktim);
+	time((time_t *)&clocktim);
 	Strcpy(cbuf, ctime((time_t *)&clocktim));
 #endif
 	for (c = cbuf; *c; c++) if (*c == '\n') break;
@@ -699,7 +699,7 @@ static const char *build_opts[] = {
 #endif
 /*WAC added for borg,  invisible objects, keep_save,noartifactwish */
 #ifdef BORG
-		"borg",               
+		"borg",
 #endif
 #ifdef TEXTCOLOR
 		"color",
@@ -736,10 +736,10 @@ static const char *build_opts[] = {
 #endif
 /*WAC invisible objects, keep_save,  light sourced spells*/
 #ifdef LIGHT_SRC_SPELL
-                "light sourced spell effects",               
+                "light sourced spell effects",
 #endif
-#ifdef INVISIBLE_OBJECTS 
-                "invisible objects",               
+#ifdef INVISIBLE_OBJECTS
+                "invisible objects",
 #endif
 #ifdef KEEP_SAVE
                 "keep savefiles",
@@ -930,8 +930,8 @@ static const char *window_opts[] = {
 void
 do_options()
 {
-	register int i, length;
-	register const char *str, *indent = "    ";
+	int i, length;
+	const char *str, *indent = "    ";
 
 	filename[0]='\0';
 #ifdef FILE_PREFIX
@@ -1076,13 +1076,13 @@ do_data()
 		/* first finish previous entry */
 		if (line_cnt)  Fprintf(ofp, "%d\n", line_cnt),  line_cnt = 0;
 		/* output the entry name */
-		(void) fputs(in_line, ofp);
+		fputs(in_line, ofp);
 		entry_cnt++;		/* update number of entries */
 	    } else if (entry_cnt) {	/* got some descriptive text */
 		/* update previous entry with current text offset */
 		if (!line_cnt)  Fprintf(ofp, "%ld,", ftell(tfp));
 		/* save the text line in the scratch file */
-		(void) fputs(in_line, tfp);
+		fputs(in_line, tfp);
 		line_cnt++;		/* update line counter */
 	    }
 	}
@@ -1097,7 +1097,7 @@ do_data()
 	if (rewind(tfp) != 0)  goto dead_data;
 	/* copy all lines of text from the scratch file into the output file */
 	while (fgets(in_line, sizeof in_line, tfp))
-	    (void) fputs(in_line, ofp);
+	    fputs(in_line, ofp);
 
 	/* finished with scratch file */
 	Fclose(tfp);
@@ -1174,7 +1174,7 @@ do_oracles()
 	boolean in_oracle, ok;
 	long	txt_offset, offset, fpos;
 	int	oracle_cnt;
-	register int i;
+	int i;
 
 	infile = malloc(strlen(DATA_IN_TEMPLATE) - 2 + strlen(ORACLE_FILE) + 5);
 	tempfile = malloc(strlen(DATA_TEMPLATE) - 2 + strlen("oracles.tmp") + 1);
@@ -1208,16 +1208,16 @@ do_oracles()
 	Fprintf(ofp, "%s%5d\n", Dont_Edit_Data, 0);
 
 	/* handle special oracle; it must come first */
-	(void) fputs("---\n", tfp);
+	fputs("---\n", tfp);
 	Fprintf(ofp, "%05lx\n", ftell(tfp));  /* start pos of special oracle */
 	for (i = 0; i < SIZE(special_oracle); i++) {
-	    (void) fputs(xcrypt(special_oracle[i]), tfp);
-	    (void) fputc('\n', tfp);
+	    fputs(xcrypt(special_oracle[i]), tfp);
+	    fputc('\n', tfp);
 	}
 	SpinCursor(3);
 
 	oracle_cnt = 1;
-	(void) fputs("---\n", tfp);
+	fputs("---\n", tfp);
 	Fprintf(ofp, "%05lx\n", ftell(tfp));	/* start pos of first oracle */
 	in_oracle = FALSE;
 
@@ -1229,18 +1229,18 @@ do_oracles()
 		if (!in_oracle) continue;
 		in_oracle = FALSE;
 		oracle_cnt++;
-		(void) fputs("---\n", tfp);
+		fputs("---\n", tfp);
 		Fprintf(ofp, "%05lx\n", ftell(tfp));
 		/* start pos of this oracle */
 	    } else {
 		in_oracle = TRUE;
-		(void) fputs(xcrypt(in_line), tfp);
+		fputs(xcrypt(in_line), tfp);
 	    }
 	}
 
 	if (in_oracle) {	/* need to terminate last oracle */
 	    oracle_cnt++;
-	    (void) fputs("---\n", tfp);
+	    fputs("---\n", tfp);
 	    Fprintf(ofp, "%05lx\n", ftell(tfp));	/* eof position */
 	}
 
@@ -1253,7 +1253,7 @@ do_oracles()
 	if (rewind(tfp) != 0)  goto dead_data;
 	/* copy all lines of text from the scratch file into the output file */
 	while (fgets(in_line, sizeof in_line, tfp))
-	    (void) fputs(in_line, ofp);
+	    fputs(in_line, ofp);
 
 	/* finished with scratch file */
 	Fclose(tfp);
@@ -1363,7 +1363,7 @@ do_dungeon()
 		perror(filename);
 		exit(EXIT_FAILURE);
 	}
-	Fprintf(ofp,Dont_Edit_Data);
+	Fprintf(ofp, "%s", Dont_Edit_Data);
 
 	while (fgets(in_line, sizeof in_line, ifp) != 0) {
 	    SpinCursor(3);
@@ -1378,14 +1378,14 @@ recheck:
 			while (fgets(in_line, sizeof in_line, ifp) != 0)
 			    if(check_control(in_line) != i) goto recheck;
 		    } else
-			(void) fputs(without_control(in_line),ofp);
+			fputs(without_control(in_line),ofp);
 		} else {
 		    Fprintf(stderr, "Unknown control option '%s' in file %s at line %d.\n",
 			    in_line, DGN_I_FILE, rcnt);
 		    exit(EXIT_FAILURE);
 		}
 	    } else
-		(void) fputs(in_line,ofp);
+		fputs(in_line,ofp);
 	}
 	Fclose(ifp);
 	Fclose(ofp);
@@ -1395,10 +1395,10 @@ recheck:
 
 static boolean
 ranged_attk(ptr)	/* returns TRUE if monster can attack at range */
-	register struct permonst *ptr;
+	struct permonst *ptr;
 {
-	register int	i, j;
-	register int atk_mask = (1<<AT_BREA) | (1<<AT_SPIT) | (1<<AT_GAZE);
+	int	i, j;
+	int atk_mask = (1<<AT_BREA) | (1<<AT_SPIT) | (1<<AT_GAZE);
 
 	for(i = 0; i < NATTK; i++) {
 	    if((j=ptr->mattk[i].aatyp) >= AT_WEAP || (atk_mask & (1<<j)))
@@ -1473,8 +1473,8 @@ struct permonst *ptr;
 void
 do_monstr()
 {
-    register struct permonst *ptr;
-    register int i, j;
+    struct permonst *ptr;
+    int i, j;
 
     /*
      * create the source file, "monstr.c"
@@ -1488,9 +1488,9 @@ do_monstr()
 	perror(filename);
 	exit(EXIT_FAILURE);
     }
-    Fprintf(ofp,Dont_Edit_Code);
-    Fprintf(ofp,"#include \"config.h\"\n");
-    Fprintf(ofp,"\nconst int monstr[] = {\n");
+    Fprintf(ofp, "%s", Dont_Edit_Code);
+    Fprintf(ofp, "#include \"config.h\"\n");
+    Fprintf(ofp, "\nconst int monstr[] = {\n");
     for (ptr = &mons[0], j = 0; ptr->mlet; ptr++) {
 
 	SpinCursor(3);
@@ -1528,9 +1528,9 @@ do_permonst()
 		perror(filename);
 		exit(EXIT_FAILURE);
 	}
-	Fprintf(ofp,"/*\tSCCS Id: @(#)pm.h\t3.4\t2002/02/03 */\n\n");
-	Fprintf(ofp,Dont_Edit_Code);
-	Fprintf(ofp,"#ifndef PM_H\n#define PM_H\n");
+	Fprintf(ofp, "/*\tSCCS Id: @(#)pm.h\t3.4\t2002/02/03 */\n\n");
+	Fprintf(ofp, "%s", Dont_Edit_Code);
+	Fprintf(ofp, "#ifndef PM_H\n#define PM_H\n");
 
 	if (strcmp(mons[0].mname, "playermon") != 0)
 		Fprintf(ofp,"\n#define\tPM_PLAYERMON\t(-1)");
@@ -1720,10 +1720,10 @@ put_qt_hdrs()
 #ifdef DEBUG
 	Fprintf(stderr, "%ld: header info.\n", ftell(ofp));
 #endif
-	(void) fwrite((genericptr_t)&(qt_hdr.n_hdr), sizeof(int), 1, ofp);
-	(void) fwrite((genericptr_t)&(qt_hdr.id[0][0]), sizeof(char)*LEN_HDR,
+	fwrite((genericptr_t)&(qt_hdr.n_hdr), sizeof(int), 1, ofp);
+	fwrite((genericptr_t)&(qt_hdr.id[0][0]), sizeof(char)*LEN_HDR,
 							qt_hdr.n_hdr, ofp);
-	(void) fwrite((genericptr_t)&(qt_hdr.offset[0]), sizeof(long),
+	fwrite((genericptr_t)&(qt_hdr.offset[0]), sizeof(long),
 							qt_hdr.n_hdr, ofp);
 #ifdef DEBUG
 	for(i = 0; i < qt_hdr.n_hdr; i++)
@@ -1741,9 +1741,9 @@ put_qt_hdrs()
 	    Fprintf(stderr, "%ld: %c header info.\n", ftell(ofp),
 		    qt_hdr.id[i]);
 #endif
-	    (void) fwrite((genericptr_t)&(msg_hdr[i].n_msg), sizeof(int),
+	    fwrite((genericptr_t)&(msg_hdr[i].n_msg), sizeof(int),
 							1, ofp);
-	    (void) fwrite((genericptr_t)&(msg_hdr[i].qt_msg[0]),
+	    fwrite((genericptr_t)&(msg_hdr[i].qt_msg[0]),
 			    sizeof(struct qtmsg), msg_hdr[i].n_msg, ofp);
 #ifdef DEBUG
 	    { int j;
@@ -1791,7 +1791,7 @@ do_questtxt()
 	    else		    do_qt_text(in_line);
 	}
 
-	(void) rewind(ifp);
+	rewind(ifp);
 	in_msg = FALSE;
 	adjust_qt_hdrs();
 	put_qt_hdrs();
@@ -1804,7 +1804,7 @@ do_questtxt()
 #ifdef DEBUG
 		Fprintf(stderr, "%ld: %s", ftell(stdout), in_line);
 #endif
-		(void) fputs(xcrypt(in_line), ofp);
+		fputs(xcrypt(in_line), ofp);
 	}
 	Fclose(ifp);
 	Fclose(ofp);
@@ -1819,7 +1819,7 @@ limit(name,pref)	/* limit a name to 30 characters length */
 char	*name;
 int	pref;
 {
-	(void) strncpy(temp, name, pref ? 26 : 30);
+	strncpy(temp, name, pref ? 26 : 30);
 	temp[pref ? 26 : 30] = 0;
 	return temp;
 }
@@ -1843,9 +1843,9 @@ do_objs()
 		perror(filename);
 		exit(EXIT_FAILURE);
 	}
-	Fprintf(ofp,"/*\tSCCS Id: @(#)onames.h\t3.4\t2002/02/03 */\n\n");
-	Fprintf(ofp,Dont_Edit_Code);
-	Fprintf(ofp,"#ifndef ONAMES_H\n#define ONAMES_H\n\n");
+	Fprintf(ofp, "/*\tSCCS Id: @(#)onames.h\t3.4\t2002/02/03 */\n\n");
+	Fprintf(ofp, "%s", Dont_Edit_Code);
+	Fprintf(ofp, "#ifndef ONAMES_H\n#define ONAMES_H\n\n");
 
 	for(i = 0; !i || objects[i].oc_class != ILLOBJ_CLASS; i++) {
 		SpinCursor(3);
@@ -1858,7 +1858,7 @@ do_objs()
 			if (sum && sum != 1000) {
 			    Fprintf(stderr, "prob error for class %d (%d%%)",
 				    class, sum);
-			    (void) fflush(stderr);
+			    fflush(stderr);
 			    sumerr = TRUE;
 			}
 			class = objects[i].oc_class;
@@ -1910,7 +1910,7 @@ do_objs()
 	/* check last set of probabilities */
 	if (sum && sum != 1000) {
 	    Fprintf(stderr, "prob error for class %d (%d%%)", class, sum);
-	    (void) fflush(stderr);
+	    fflush(stderr);
 	    sumerr = TRUE;
 	}
 
@@ -1999,13 +1999,13 @@ do_vision()
 	perror(filename);
 	exit(EXIT_FAILURE);
     }
-    Fprintf(ofp,Dont_Edit_Code);
-    Fprintf(ofp,"#ifdef VISION_TABLES\n");
+    Fprintf(ofp, "%s", Dont_Edit_Code);
+    Fprintf(ofp, "#ifdef VISION_TABLES\n");
 #ifdef VISION_TABLES
     H_close_gen();
     H_far_gen();
 #endif /* VISION_TABLES */
-    Fprintf(ofp,"\n#endif /* VISION_TABLES */\n");
+    Fprintf(ofp, "\n#endif /* VISION_TABLES */\n");
     Fclose(ofp);
 
     SpinCursor(3);
@@ -2024,10 +2024,10 @@ do_vision()
 	Unlink(filename);
 	exit(EXIT_FAILURE);
     }
-    Fprintf(ofp,Dont_Edit_Code);
-    Fprintf(ofp,"#include \"config.h\"\n");
-    Fprintf(ofp,"#ifdef VISION_TABLES\n");
-    Fprintf(ofp,"#include \"vis_tab.h\"\n");
+    Fprintf(ofp, "%s", Dont_Edit_Code);
+    Fprintf(ofp, "#include \"config.h\"\n");
+    Fprintf(ofp, "#ifdef VISION_TABLES\n");
+    Fprintf(ofp, "#include \"vis_tab.h\"\n");
 
     SpinCursor(3);
 
@@ -2036,7 +2036,7 @@ do_vision()
     C_far_gen();
     /* KMH -- vis_tab_init() needs prototype */
     Fprintf(ofp, "\nvoid vis_tab_init(void);\n");
-    Fprintf(ofp,"\nvoid vis_tab_init() { return; }\n");
+    Fprintf(ofp, "\nvoid vis_tab_init() { return; }\n");
 #endif /* VISION_TABLES */
 
     SpinCursor(3);
@@ -2271,7 +2271,7 @@ clear_path(you_row,you_col,y2,x2)
     int you_row, you_col, y2, x2;
 {
     int dx, dy, s1, s2;
-    register int i, error, x, y, dxs, dys;
+    int i, error, x, y, dxs, dys;
 
     x  = you_col;		y  = you_row;
     dx = abs(x2-you_col);	dy = abs(y2-you_row);
@@ -2339,8 +2339,8 @@ do_filenames()
 	char uname[20] = DEF_GAME_NAME;
 
 	infile = malloc(strlen(INCLUDE_TEMPLATE) - 2 + strlen(FILE_H) + 1);
-	(void) lcase(lname);
-	(void) ucase(uname);
+	lcase(lname);
+	ucase(uname);
 
     /*
      * create the source file, "filename.h"
@@ -2355,8 +2355,8 @@ do_filenames()
 		perror(filename);
 		exit(EXIT_FAILURE);
     }
-    Fprintf(ofp,"/*\tSCCS Id: @(#)filename.h\t3.2\t96/05/17 */\n\n");
-    Fprintf(ofp,Dont_Edit_Code);
+    Fprintf(ofp, "/*\tSCCS Id: @(#)filename.h\t3.2\t96/05/17 */\n\n");
+    Fprintf(ofp, "%s", Dont_Edit_Code);
 
 /*OPEN file*/
     Sprintf(infile, INCLUDE_TEMPLATE, FILE_H);
@@ -2379,14 +2379,14 @@ do_filenames()
 /*assume DEF_GAME_NAME is uppercase*/
 /* KMH -- Added mixed case */
                 if ((in_line[i+1] == 'l') || (in_line[i+1] == 'L'))
-                        (void) fputs(lname,ofp);
+                        fputs(lname,ofp);
                 else if ((in_line[i+1] == 'u') || (in_line[i+1] == 'U'))
-                        (void) fputs(uname,ofp);
+                        fputs(uname,ofp);
                 else
-                        (void) fputs(DEF_GAME_NAME,ofp);                
+                        fputs(DEF_GAME_NAME,ofp);
                 i=i+6;
                 }
-           else (void) fputc(in_line[i], ofp);
+           else fputc(in_line[i], ofp);
         }
      }
      Fclose(ifp);
@@ -2399,7 +2399,7 @@ char *
 lcase(s)		/* convert a string into all lowercase */
     char *s;
 {
-    register char *p;
+    char *p;
 
     for (p = s; *p; p++)
 		if ('A' <= *p && *p <= 'Z') *p |= 040;
@@ -2412,7 +2412,7 @@ char *
 ucase(s)		/* convert a string into all lowercase */
     char *s;
 {
-    register char *p;
+    char *p;
 
     for (p = s; *p; p++)
 		if ('a' <= *p && *p <= 'z') *p &= ~040;
