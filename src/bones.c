@@ -12,7 +12,7 @@ extern long bytes_counted;
 
 STATIC_DCL boolean no_bones_level(d_level *);
 STATIC_DCL void goodfruit(int);
-STATIC_DCL void resetobjs(struct obj *,BOOLEAN_P);
+STATIC_DCL void resetobjs(struct obj *,boolean);
 STATIC_DCL void drop_upon_death(struct monst *, struct obj *);
 
 STATIC_OVL boolean
@@ -210,9 +210,8 @@ can_make_bones()
 }
 
 /* save bones and possessions of a deceased adventurer */
-void
-savebones(corpse)
-struct obj *corpse;
+void 
+savebones (struct obj *corpse)
 {
 	int fd, x, y;
 	struct trap *ttmp;
@@ -416,8 +415,8 @@ struct obj *corpse;
 	compress_bonesfile();
 }
 
-int
-getbones()
+int 
+getbones (void)
 {
 	register int fd;
 	register int ok;

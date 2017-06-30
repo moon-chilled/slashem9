@@ -11,9 +11,8 @@
 
 STATIC_DCL int pet_type(void);
 
-void
-initedog(mtmp)
-register struct monst *mtmp;
+void 
+initedog (register struct monst *mtmp)
 {
 	mtmp->mtame = is_domestic(mtmp->data) ? 10 : 5;
 	mtmp->mpeaceful = 1;
@@ -161,7 +160,7 @@ make_helper(mnum,x,y)
 
 
 struct monst *
-makedog()
+makedog (void)
 {
 	register struct monst *mtmp;
 #ifdef STEED
@@ -235,8 +234,8 @@ makedog()
 
 /* record `last move time' for all monsters prior to level save so that
    mon_arrive() can catch up for lost time when they're restored later */
-void
-update_mlstmv()
+void 
+update_mlstmv (void)
 {
 	struct monst *mon;
 
@@ -246,8 +245,8 @@ update_mlstmv()
 	    if (!DEADMONSTER(mon)) mon->mlstmv = monstermoves;
 }
 
-void
-losedogs()
+void 
+losedogs (void)
 {
 	register struct monst *mtmp, *mtmp0 = 0, *mtmp2;
 
@@ -450,10 +449,11 @@ boolean with_you;
 }
 
 /* heal monster for time spent elsewhere */
-void
-mon_catchup_elapsed_time(mtmp, nmv)
-struct monst *mtmp;
-long nmv;		/* number of moves */
+void 
+mon_catchup_elapsed_time (
+    struct monst *mtmp,
+    long nmv		/* number of moves */
+)
 {
 	int imv = 0;	/* avoid zillions of casts and lint warnings */
 
@@ -714,10 +714,8 @@ migrate_to_level(mtmp, tolev, xyloc, cc)
 
 /* return quality of food; the lower the better */
 /* fungi will eat even tainted food */
-int
-dogfood(mon,obj)
-struct monst *mon;
-register struct obj *obj;
+int 
+dogfood (struct monst *mon, register struct obj *obj)
 {
 	boolean carni = carnivorous(mon->data);
 	boolean herbi = herbivorous(mon->data);
@@ -835,9 +833,7 @@ register struct obj *obj;
 #ifdef OVLB
 
 struct monst *
-tamedog(mtmp, obj)
-register struct monst *mtmp;
-register struct obj *obj;
+tamedog (register struct monst *mtmp, register struct obj *obj)
 {
 	register struct monst *mtmp2;
 
@@ -1037,9 +1033,8 @@ boolean was_dead;
     }
 }
 
-void
-abuse_dog(mtmp)
-struct monst *mtmp;
+void 
+abuse_dog (struct monst *mtmp)
 {
 	if (!mtmp->mtame) return;
 

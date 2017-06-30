@@ -35,7 +35,7 @@ STATIC_DCL void savemonchn(int,struct monst *,int);
 STATIC_DCL void savetrapchn(int,struct trap *,int);
 STATIC_DCL void savegamestate(int,int);
 #ifdef MFLOPPY
-STATIC_DCL void savelev0(int,XCHAR_P,int);
+STATIC_DCL void savelev0(int,xchar,int);
 STATIC_DCL boolean swapout_oldest(void);
 STATIC_DCL void copyfile(char *,char *);
 #endif /* MFLOPPY */
@@ -58,8 +58,8 @@ extern struct menucoloring *menu_colorings;
 /* need to preserve these during save to avoid accessing freed memory */
 static unsigned ustuck_id = 0, usteed_id = 0;
 
-int
-dosave()
+int 
+dosave (void)
 {
 #ifdef KEEP_SAVE
 	/*WAC for reloading*/

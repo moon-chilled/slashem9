@@ -33,7 +33,7 @@ STATIC_DCL int mdamagem(struct monst *,struct monst *,struct attack *);
 STATIC_DCL void mswingsm(struct monst *, struct monst *, struct obj *);
 STATIC_DCL void noises(struct monst *,struct attack *);
 STATIC_DCL void missmm(struct monst *,struct monst *, int, int, struct attack *);
-STATIC_DCL int passivemm(struct monst *, struct monst *, BOOLEAN_P, int);
+STATIC_DCL int passivemm(struct monst *, struct monst *, boolean, int);
 
 /* Needed for the special case of monsters wielding vorpal blades (rare).
  * If we use this a lot it should probably be a parameter to mdamagem()
@@ -139,9 +139,10 @@ missmm(magr, mdef, target, roll, mattk)
  *  then we report that the monster did nothing so it will continue to
  *  digest the hero.
  */
-int
-fightm(mtmp)		/* have monsters fight each other */
-	register struct monst *mtmp;
+int 
+fightm (		/* have monsters fight each other */
+    register struct monst *mtmp
+)
 {
 	register struct monst *mon, *nmon;
 	int result, has_u_swallowed;
@@ -228,9 +229,8 @@ fightm(mtmp)		/* have monsters fight each other */
  *
  * In the case of exploding monsters, the monster dies as well.
  */
-int
-mattackm(magr, mdef)
-    register struct monst *magr,*mdef;
+int 
+mattackm (register struct monst *magr, register struct monst *mdef)
 {
     int		    i,		/* loop counter */
 		    tmp,	/* amour class difference */

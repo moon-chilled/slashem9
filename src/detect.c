@@ -13,18 +13,16 @@
 extern boolean known;	/* from read.c */
 
 STATIC_DCL void do_dknown_of(struct obj *);
-STATIC_DCL boolean check_map_spot(int,int,CHAR_P,unsigned);
-STATIC_DCL boolean clear_stale_map(CHAR_P,unsigned);
-STATIC_DCL void sense_trap(struct trap *,XCHAR_P,XCHAR_P,int);
+STATIC_DCL boolean check_map_spot(int,int,char,unsigned);
+STATIC_DCL boolean clear_stale_map(char,unsigned);
+STATIC_DCL void sense_trap(struct trap *,xchar,xchar,int);
 STATIC_DCL void show_map_spot(int,int);
 STATIC_PTR void findone(int,int,genericptr_t);
 STATIC_PTR void openone(int,int,genericptr_t);
 
 /* Recursively search obj for an object in class oclass and return 1st found */
 struct obj *
-o_in(obj, oclass)
-struct obj* obj;
-char oclass;
+o_in (struct obj *obj, char oclass)
 {
     register struct obj* otmp;
     struct obj *temp;
@@ -51,9 +49,7 @@ char oclass;
 
 /* Recursively search obj for an object made of specified material and return 1st found */
 struct obj *
-o_material(obj, material)
-struct obj* obj;
-unsigned material;
+o_material (struct obj *obj, unsigned material)
 {
     register struct obj* otmp;
     struct obj *temp;
@@ -168,9 +164,8 @@ unsigned material;
 }
 
 /* look for gold, on the floor or in monsters' possession */
-int
-gold_detect(sobj)
-register struct obj *sobj;
+int 
+gold_detect (register struct obj *sobj)
 {
     register struct obj *obj;
     register struct monst *mtmp;

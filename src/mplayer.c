@@ -6,7 +6,7 @@
 
 STATIC_DCL const char *dev_name(void);
 STATIC_DCL void get_mplname(struct monst *, char *);
-STATIC_DCL void mk_mplayer_armor(struct monst *, SHORT_P);
+STATIC_DCL void mk_mplayer_armor(struct monst *, short);
 
 /* These are the names of those who
  * contributed to the development of NetHack 3.2/3.3/3.4.
@@ -332,9 +332,8 @@ boolean special;
 	}
 }
 
-void
-mplayer_talk(mtmp)
-register struct monst *mtmp;
+void 
+mplayer_talk (register struct monst *mtmp)
 {
 	static const char *same_class_msg[3] = {
 		"I can't win, and neither will you!",

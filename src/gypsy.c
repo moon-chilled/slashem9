@@ -14,10 +14,8 @@
 
 /*** Money-related functions ***/
 
-static void
-gypsy_charge (mtmp, amount)
-	struct monst *mtmp;
-	long amount;
+static void 
+gypsy_charge (struct monst *mtmp, long amount)
 {
 #ifdef GOLDOBJ
 	struct obj *gypgold;
@@ -75,10 +73,8 @@ gypsy_offer (mtmp, cost, txt)
 	return (FALSE);
 }
 
-static long
-gypsy_bet (mtmp, minimum)
-	struct monst *mtmp;
-	long minimum;
+static long 
+gypsy_bet (struct monst *mtmp, long minimum)
 {
 	char prompt[BUFSZ], buf[BUFSZ];
 	long bet = 0L;

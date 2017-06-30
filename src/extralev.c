@@ -194,8 +194,8 @@ int x,y;
 	}
 }
 
-void
-makeroguerooms() {
+void 
+makeroguerooms (void) {
 	register int x,y;
 	/* Rogue levels are structured 3 by 3, with each section containing
 	 * a room or an intersection.  The minimum width is 2 each way.
@@ -274,9 +274,8 @@ makeroguerooms() {
 	}
 }
 
-void
-corr(x,y)
-int x, y;
+void 
+corr (int x, int y)
 {
 	if (rn2(50)) {
 		levl[x][y].typ = CORR;
@@ -285,8 +284,8 @@ int x, y;
 	}
 }
 
-void
-makerogueghost()
+void 
+makerogueghost (void)
 {
 	register struct monst *ghost;
 	struct obj *ghostobj;

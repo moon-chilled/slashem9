@@ -44,10 +44,10 @@ typedef struct Attk {
 
 extern void attk_by_you(Attk);
 extern void attk_by_mon(Attk, struct monst *);
-extern void attk_by_god(Attk, SCHAR_P);
-extern void attk_by_trap(Attk, XCHAR_P);
+extern void attk_by_god(Attk, schar);
+extern void attk_by_trap(Attk, xchar);
 extern void attk_with_obj(Attk, struct obj *);
-extern void attk_with_mon(Attk, XCHAR_P);
+extern void attk_with_mon(Attk, xchar);
 extern void attk_throw(Attk, struct obj *);
 extern void attk_upon(Attk, struct monst *);
 extern char *attk_aname(Attk);

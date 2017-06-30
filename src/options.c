@@ -521,16 +521,16 @@ STATIC_DCL void escapes(const char *, char *);
 STATIC_DCL void rejectoption(const char *);
 STATIC_DCL void badoption(const char *);
 STATIC_OVL void badtileoption(const char *);
-STATIC_DCL char *string_for_opt(char *,BOOLEAN_P);
-STATIC_OVL char *string_for_tile_opt(char *, BOOLEAN_P);
-STATIC_DCL char *string_for_env_opt(const char *, char *,BOOLEAN_P);
-STATIC_DCL void bad_negation(const char *,BOOLEAN_P);
+STATIC_DCL char *string_for_opt(char *,boolean);
+STATIC_OVL char *string_for_tile_opt(char *, boolean);
+STATIC_DCL char *string_for_env_opt(const char *, char *,boolean);
+STATIC_DCL void bad_negation(const char *,boolean);
 STATIC_DCL int change_inv_order(char *);
 STATIC_DCL void oc_to_str(char *, char *);
 STATIC_DCL void graphics_opts(char *,const char *,int,int);
 STATIC_DCL int feature_alert_opts(char *, const char *);
 STATIC_DCL const char *get_compopt_value(const char *, char *);
-STATIC_DCL boolean special_handling(const char *, BOOLEAN_P, BOOLEAN_P);
+STATIC_DCL boolean special_handling(const char *, boolean, boolean);
 STATIC_DCL void warning_opts(char *,const char *);
 STATIC_DCL void duplicate_opt_detection(const char *, int);
 
@@ -574,8 +574,7 @@ boolean val_allowed;
  * bounds-check itself.
  */
 char *
-nh_getenv(ev)
-const char *ev;
+nh_getenv (const char *ev)
 {
 	char *getev = getenv(ev);
 
@@ -585,8 +584,8 @@ const char *ev;
 		return (char *)0;
 }
 
-void
-initoptions()
+void 
+initoptions (void)
 {
 #ifndef MAC
 	char *opts;
@@ -1037,9 +1036,8 @@ const char *optn;
 	return 1;
 }
 
-void
-set_duplicate_opt_detection(on_or_off)
-int on_or_off;
+void 
+set_duplicate_opt_detection (int on_or_off)
 {
 	int k, *optptr;
 	if (on_or_off != 0) {
@@ -2688,9 +2686,8 @@ goodfruit:
 	badoption(opts);
 }
 
-static void
-parseauthopt(opts)
-register char *opts;
+static void 
+parseauthopt (register char *opts)
 {
 	register char *op;
 	boolean negated;
@@ -2735,9 +2732,8 @@ register char *opts;
 	badauthoption(opts);
 }
 
-void
-parseauthentication(opts)
-register char *opts;
+void 
+parseauthentication (register char *opts)
 {
 	register char *op;
 
@@ -2756,9 +2752,8 @@ register char *opts;
 		badauthoption("Arguments given but no program specified.");
 }
 
-static void
-parsetilesetopt(opts)
-register char *opts;
+static void 
+parsetilesetopt (register char *opts)
 {
 	register char *op;
 	boolean negated;
@@ -2818,9 +2813,8 @@ register char *opts;
 	badtileoption(opts);
 }
 
-void
-parsetileset(opts)
-register char *opts;
+void 
+parsetileset (register char *opts)
 {
 	register char *op;
 	int i;
@@ -2889,9 +2883,8 @@ oc_to_str(src,dest)
  * Add the given mapping to the menu command map list.  Always keep the
  * maps valid C strings.
  */
-void
-add_menu_cmd_alias(from_ch, to_ch)
-    char from_ch, to_ch;
+void 
+add_menu_cmd_alias (char from_ch, char to_ch)
 {
     if (n_menu_mapped >= MAX_MENU_MAPPED_CMDS)
 	pline("out of menu map space.");
@@ -2908,9 +2901,8 @@ add_menu_cmd_alias(from_ch, to_ch)
  * Map the given character to its corresponding menu command.  If it
  * doesn't match anything, just return the original.
  */
-char
-map_menu_cmd(ch)
-    char ch;
+char 
+map_menu_cmd (char ch)
 {
     char *found = index(mapped_menu_cmds, ch);
     if (found) {
@@ -2969,8 +2961,8 @@ doset_add_menu(win, option, indexoffset)
 }
 
 /* Changing options via menu by Per Liboriussen */
-int
-doset()
+int 
+doset (void)
 {
 	char buf[BUFSZ], buf2[BUFSZ];
 	int i, pass, boolcount, pick_cnt, pick_idx, opt_indx;
@@ -3776,8 +3768,8 @@ char *buf;
 	else return "unknown";
 }
 
-int
-dotogglepickup()
+int 
+dotogglepickup (void)
 {
 	char buf[BUFSZ], ocl[MAXOCLASSES+1];
 
@@ -3797,9 +3789,8 @@ dotogglepickup()
 	return 0;
 }
 
-int
-add_autopickup_exception(mapping)
-const char *mapping;
+int 
+add_autopickup_exception (const char *mapping)
 {
 	struct autopickup_exception *ape, **apehead;
 	char text[256], *text2;
@@ -3875,8 +3866,8 @@ int *leave, *grab;
 	return totalapes;
 }
 
-void
-free_autopickup_exceptions()
+void 
+free_autopickup_exceptions (void)
 {
 	struct autopickup_exception *ape;
 	int pass;
@@ -3918,8 +3909,8 @@ static const char *opt_epilog[] = {
 	(char *)0
 };
 
-void
-option_help()
+void 
+option_help (void)
 {
     char buf[BUFSZ], buf2[BUFSZ];
     register int i;
@@ -4008,9 +3999,8 @@ const char *str;
  * returns the fid of that one; if it does not exist, it adds a new fruit
  * type to the chain and returns the new one.
  */
-int
-fruitadd(str)
-char *str;
+int 
+fruitadd (char *str)
 {
 	register int i;
 	register struct fruit *f;
@@ -4244,10 +4234,8 @@ struct wc_Opt wc2_options[] = {
  * set_option_mod_status()
  * with the second argument of 0,2, or 3 respectively.
  */
-void
-set_option_mod_status(optnam, status)
-const char *optnam;
-int status;
+void 
+set_option_mod_status (const char *optnam, int status)
 {
 	int k;
 	if (status < SET_IN_FILE || status > SET_IN_GAME) {
@@ -4277,10 +4265,8 @@ int status;
  * prior to calling.
  *    example: set_wc_option_mod_status(WC_COLOR|WC_SCROLL_MARGIN, SET_IN_GAME);
  */
-void
-set_wc_option_mod_status(optmask, status)
-unsigned long optmask;
-int status;
+void 
+set_wc_option_mod_status (unsigned long optmask, int status)
 {
 	int k = 0;
 	if (status < SET_IN_FILE || status > SET_IN_GAME) {
@@ -4333,10 +4319,8 @@ const char *optnam;
  *    example: set_wc2_option_mod_status(WC2_FULLSCREEN|WC2_SOFTKEYBOARD|WC2_WRAPTEXT, SET_IN_FILE);
  */
 
-void
-set_wc2_option_mod_status(optmask, status)
-unsigned long optmask;
-int status;
+void 
+set_wc2_option_mod_status (unsigned long optmask, int status)
 {
 	int k = 0;
 	if (status < SET_IN_FILE || status > SET_IN_GAME) {

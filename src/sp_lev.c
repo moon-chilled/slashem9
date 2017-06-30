@@ -29,7 +29,7 @@ extern void mkmap(lev_init *);
 STATIC_DCL void get_room_loc(schar *, schar *, struct mkroom *);
 STATIC_DCL void get_free_room_loc(schar *, schar *, struct mkroom *);
 STATIC_DCL void create_trap(trap *, struct mkroom *);
-STATIC_DCL int noncoalignment(ALIGNTYP_P);
+STATIC_DCL int noncoalignment(aligntyp);
 STATIC_DCL void create_monster(monster *, struct mkroom *);
 STATIC_DCL void create_object(object *, struct mkroom *);
 STATIC_DCL void create_engraving(engraving *,struct mkroom *);
@@ -38,12 +38,12 @@ STATIC_DCL void create_altar(altar *, struct mkroom *);
 STATIC_DCL void create_gold(gold *, struct mkroom *);
 STATIC_DCL void create_feature(int,int,struct mkroom *,int);
 STATIC_DCL boolean search_door(struct mkroom *, xchar *, xchar *,
-					XCHAR_P, int);
+					xchar, int);
 STATIC_DCL void fix_stair_rooms(void);
 STATIC_DCL void create_corridor(corridor *);
 
-STATIC_DCL boolean create_subroom(struct mkroom *, XCHAR_P, XCHAR_P,
-					XCHAR_P, XCHAR_P, XCHAR_P, XCHAR_P);
+STATIC_DCL boolean create_subroom(struct mkroom *, xchar, xchar,
+					xchar, xchar, xchar, xchar);
 
 #define LEFT	1
 #define H_LEFT	2
@@ -75,7 +75,7 @@ static NEARDATA xchar xstart, ystart;
 static NEARDATA char xsize, ysize;
 static lev_region rarea[10];
 
-STATIC_DCL void set_wall_property(XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P,int);
+STATIC_DCL void set_wall_property(xchar,xchar,xchar,xchar,int);
 STATIC_DCL int rnddoor(void);
 STATIC_DCL int rndtrap(void);
 STATIC_DCL boolean get_location(schar *,schar *,int);
@@ -167,7 +167,7 @@ rndtrap()
 #define WET	0x2
 #define MOLTEN	0x4
 
-STATIC_DCL boolean is_ok_location(SCHAR_P, SCHAR_P, int);
+STATIC_DCL boolean is_ok_location(schar, schar, int);
 
 STATIC_OVL boolean
 get_location(x, y, humidity)

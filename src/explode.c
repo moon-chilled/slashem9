@@ -120,7 +120,7 @@ ExplodeRegion *reg;
 }
 
 /* This is the "do-it-all" explosion command */
-STATIC_DCL void do_explode(int,int,ExplodeRegion *,int,int,CHAR_P,int,int,BOOLEAN_P);
+STATIC_DCL void do_explode(int,int,ExplodeRegion *,int,int,char,int,int,boolean);
 
 /* Note: I had to choose one of three possible kinds of "type" when writing
  * this function: a wand type (like in zap.c), an adtyp, or an object type.
@@ -655,12 +655,14 @@ struct scatter_chain {
  */
 
 /* returns number of scattered objects */
-long
-scatter(sx,sy,blastforce,scflags, obj)
-int sx,sy;				/* location of objects to scatter */
-int blastforce;				/* force behind the scattering	*/
-unsigned int scflags;
-struct obj *obj;			/* only scatter this obj        */
+long 
+scatter (
+    int sx,
+    int sy,				/* location of objects to scatter */
+    int blastforce,				/* force behind the scattering	*/
+    unsigned int scflags,
+    struct obj *obj			/* only scatter this obj        */
+)
 {
 	register struct obj *otmp;
 	register int tmp;
@@ -820,9 +822,8 @@ struct obj *obj;			/* only scatter this obj        */
  *
  * For now, just perform a "regular" explosion.
  */
-void
-splatter_burning_oil(x, y)
-    int x, y;
+void 
+splatter_burning_oil (int x, int y)
 {
     explode(x, y, ZT_SPELL(ZT_FIRE), d(4,4), BURNING_OIL, EXPL_FIERY);
 }
@@ -861,8 +862,8 @@ struct grenade_callback {
     boolean isyou;
 };
 
-STATIC_DCL void grenade_effects(struct obj *,XCHAR_P,XCHAR_P,
-	ExplodeRegion *,ExplodeRegion *,ExplodeRegion *,BOOLEAN_P);
+STATIC_DCL void grenade_effects(struct obj *,xchar,xchar,
+	ExplodeRegion *,ExplodeRegion *,ExplodeRegion *,boolean);
 
 STATIC_DCL int
 grenade_fiery_callback(data, x, y)

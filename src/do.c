@@ -21,7 +21,7 @@ STATIC_DCL int menu_drop(int);
 #ifdef OVL2
 STATIC_DCL int currentlevel_rewrite(void);
 STATIC_DCL void final_level(void);
-/* static boolean badspot(XCHAR_P,XCHAR_P); */
+/* static boolean badspot(xchar,xchar); */
 #endif
 
 #ifdef OVLB
@@ -30,8 +30,8 @@ static NEARDATA const char drop_types[] =
 	{ ALLOW_COUNT, COIN_CLASS, ALL_CLASSES, 0 };
 
 /* 'd' command: drop one inventory item */
-int
-dodrop()
+int 
+dodrop (void)
 {
 #ifndef GOLDOBJ
 	int result, i = (invent || u.ugold) ? 0 : (SIZE(drop_types) - 1);
@@ -237,9 +237,10 @@ const char *verb;
 #endif /* OVL0 */
 #ifdef OVLB
 
-void
-doaltarobj(obj)  /* obj is an object dropped on an altar */
-	register struct obj *obj;
+void 
+doaltarobj (  /* obj is an object dropped on an altar */
+    register struct obj *obj
+)
 {
 	if (Blind)
 		return;
@@ -539,9 +540,8 @@ register struct obj *obj;
 
 /* Called in several places - may produce output */
 /* eg ship_object() and dropy() -> sellobj() both produce output */
-void
-dropx(obj)
-register struct obj *obj;
+void 
+dropx (register struct obj *obj)
 {
 #ifndef GOLDOBJ
 	if (obj->oclass != COIN_CLASS || obj == invent) freeinv(obj);
@@ -558,9 +558,8 @@ register struct obj *obj;
 	dropy(obj);
 }
 
-void
-dropy(obj)
-register struct obj *obj;
+void 
+dropy (register struct obj *obj)
 {
 	if (obj == uwep) setuwep((struct obj *)0, FALSE);
 	if (obj == uquiver) setuqwep((struct obj *)0);
@@ -619,9 +618,8 @@ register struct obj *obj;
 
 /* things that must change when not held; recurse into containers.
    Called for both player and monsters */
-void
-obj_no_longer_held(obj)
-struct obj *obj;
+void 
+obj_no_longer_held (struct obj *obj)
 {
 	if (!obj) {
 	    return;
@@ -643,8 +641,8 @@ struct obj *obj;
 }
 
 /* 'D' command: drop several things */
-int
-doddrop()
+int 
+doddrop (void)
 {
 	int result = 0;
 
@@ -772,8 +770,8 @@ int retry;
 /* on a ladder, used in goto_level */
 static NEARDATA boolean at_ladder = FALSE;
 
-int
-dodown()
+int 
+dodown (void)
 {
 	struct trap *trap = 0;
 	boolean stairs_down = ((u.ux == xdnstair && u.uy == ydnstair) ||
@@ -866,8 +864,8 @@ dodown()
 	return(1);
 }
 
-int
-doup()
+int 
+doup (void)
 {
 	if( (u.ux != xupstair || u.uy != yupstair)
 	     && (!xupladder || u.ux != xupladder || u.uy != yupladder)
@@ -951,8 +949,8 @@ currentlevel_rewrite()
 }
 
 #ifdef INSURANCE
-void
-save_currentstate()
+void 
+save_currentstate (void)
 {
 	int fd;
 
@@ -1497,8 +1495,8 @@ const char *pre_msg, *post_msg;
 }
 
 /* handle something like portal ejection */
-void
-deferred_goto()
+void 
+deferred_goto (void)
 {
 	if (!on_level(&u.uz, &u.utolev)) {
 	    d_level dest;
@@ -1734,8 +1732,8 @@ long timeout;
     }
 }
 
-int
-donull()
+int 
+donull (void)
 {
 	return(1);	/* Do nothing, but let other things happen */
 }
@@ -1763,8 +1761,8 @@ wipeoff()
 	return(1);		/* still busy */
 }
 
-int
-dowipe()
+int 
+dowipe (void)
 {
 	if(u.ucreamed)  {
 		static NEARDATA char buf[39];
@@ -1780,10 +1778,8 @@ dowipe()
 	return(1);
 }
 
-void
-set_wounded_legs(side, timex)
-register long side;
-register int timex;
+void 
+set_wounded_legs (register long side, register int timex)
 {
 	/* KMH -- STEED
 	 * If you are riding, your steed gets the wounded legs instead.
@@ -1803,8 +1799,8 @@ register int timex;
 	(void)encumber_msg();
 }
 
-void
-heal_legs()
+void 
+heal_legs (void)
 {
 	if(Wounded_legs) {
 		if (ATEMP(A_DEX) < 0) {

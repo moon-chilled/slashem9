@@ -125,7 +125,7 @@ int skill;
 
 #endif	/* OVLB */
 
-STATIC_DCL boolean can_advance(int, BOOLEAN_P);
+STATIC_DCL boolean can_advance(int, boolean);
 STATIC_DCL boolean could_advance(int);
 STATIC_DCL boolean peaked_skill(int);
 STATIC_DCL int slots_required(int);
@@ -152,10 +152,8 @@ static NEARDATA const char kebabable[] = {
  *	hitval returns an integer representing the "to hit" bonuses
  *	of "otmp" against the monster.
  */
-int
-hitval(otmp, mon)
-struct obj *otmp;
-struct monst *mon;
+int 
+hitval (struct obj *otmp, struct monst *mon)
 {
 	int	tmp = 0;
 	struct permonst *ptr = mon->data;
@@ -235,10 +233,8 @@ struct monst *mon;
  *	dmgval returns an integer representing the damage bonuses
  *	of "otmp" against the monster.
  */
-int
-dmgval(otmp, mon)
-struct obj *otmp;
-struct monst *mon;
+int 
+dmgval (struct obj *otmp, struct monst *mon)
 {
 	int tmp = 0, otyp = otmp->otyp;
 	struct permonst *ptr = mon->data;
@@ -459,8 +455,9 @@ static NEARDATA const int pwep[] =
 static struct obj *propellor;
 
 struct obj *
-select_rwep(mtmp)	/* select a ranged weapon for the monster */
-register struct monst *mtmp;
+select_rwep (	/* select a ranged weapon for the monster */
+    register struct monst *mtmp
+)
 {
 	register struct obj *otmp;
 	int i;
@@ -631,8 +628,9 @@ static const NEARDATA short hwep[] = {
 };
 
 struct obj *
-select_hwep(mtmp)	/* select a hand to hand weapon for the monster */
-register struct monst *mtmp;
+select_hwep (	/* select a hand to hand weapon for the monster */
+    register struct monst *mtmp
+)
 {
 	register struct obj *otmp;
 	register int i;
@@ -726,9 +724,8 @@ boolean polyspot;
 /* Let a monster try to wield a weapon, based on mon->weapon_check.
  * Returns 1 if the monster took time to do it, 0 if it did not.
  */
-int
-mon_wield_item(mon)
-register struct monst *mon;
+int 
+mon_wield_item (register struct monst *mon)
 {
 	struct obj *obj;
 
@@ -845,10 +842,8 @@ register struct monst *mon;
 }
 
 #ifdef LIGHTSABERS
-static void
-mon_ignite_lightsaber(obj, mon)
-struct obj * obj;
-struct monst * mon;
+static void 
+mon_ignite_lightsaber (struct obj *obj, struct monst *mon)
 {
 	/* No obj or not lightsaber */
 	if (!obj || !is_lightsaber(obj)) return;
@@ -885,8 +880,8 @@ struct monst * mon;
 #endif
 
 /* STEPHEN WHITE'S NEW CODE */
-int
-abon()		/* attack bonus for strength & dexterity */
+int 
+abon (void)		/* attack bonus for strength & dexterity */
 {
 	int sbon;
 	int str = ACURR(A_STR), dex = ACURR(A_DEX);
@@ -931,8 +926,8 @@ abon()		/* attack bonus for strength & dexterity */
 #ifdef OVL1
 
 /* STEPHEN WHITE'S NEW CODE */
-int
-dbon()		/* damage bonus for strength */
+int 
+dbon (void)		/* damage bonus for strength */
 {
 	int str = ACURR(A_STR);
 
@@ -1107,14 +1102,15 @@ const static struct skill_range {
  * to be able to update the menu since selecting one item could make
  * others unselectable.
  */
-int
-enhance_weapon_skill()
+int 
+enhance_weapon_skill (void)
 #ifdef DUMP_LOG
 {
 	return enhance_skill(FALSE);
 }
 
-void dump_weapon_skill()
+void 
+dump_weapon_skill (void)
 {
 	enhance_skill(TRUE);
 }
@@ -1321,9 +1317,8 @@ int enhance_skill(boolean want_dump)
  * Change from restricted to unrestricted, allowing P_BASIC as max.  This
  * function may be called with with P_NONE.  Used in pray.c.
  */
-void
-unrestrict_weapon_skill(skill)
-int skill;
+void 
+unrestrict_weapon_skill (int skill)
 {
     if (skill < P_NUM_SKILLS && P_RESTRICTED(skill)) {
 	P_SKILL(skill) = P_UNSKILLED;
@@ -1335,10 +1330,8 @@ int skill;
 #endif /* OVL1 */
 #ifdef OVLB
 
-void
-use_skill(skill,degree)
-int skill;
-int degree;
+void 
+use_skill (int skill, int degree)
 {
     boolean advance_before;
 
@@ -1355,9 +1348,10 @@ int degree;
     }
 }
 
-void
-add_weapon_skill(n)
-int n;	/* number of slots to gain; normally one */
+void 
+add_weapon_skill (
+    int n	/* number of slots to gain; normally one */
+)
 {
     int i, before, after;
 
@@ -1370,9 +1364,10 @@ int n;	/* number of slots to gain; normally one */
 	give_may_advance_msg(P_NONE);
 }
 
-void
-lose_weapon_skill(n)
-int n;	/* number of slots to lose; normally one */
+void 
+lose_weapon_skill (
+    int n	/* number of slots to lose; normally one */
+)
 {
     int skill;
     boolean maybe_loose_disarm = FALSE;
@@ -1410,9 +1405,8 @@ int n;	/* number of slots to lose; normally one */
     }
 }
 
-int
-weapon_type(obj)
-struct obj *obj;
+int 
+weapon_type (struct obj *obj)
 {
 	/* KMH, balance patch -- now uses the object table */
 	int type;
@@ -1429,8 +1423,8 @@ struct obj *obj;
 	return ((type < 0) ? -type : type);
 }
 
-int
-uwep_skill_type()
+int 
+uwep_skill_type (void)
 {
 	if (u.twoweap)
 		return P_TWO_WEAPON_COMBAT;
@@ -1441,9 +1435,8 @@ uwep_skill_type()
  * Return hit bonus/penalty based on skill of weapon.
  * Treat restricted weapons as unskilled.
  */
-int
-weapon_hit_bonus(weapon)
-struct obj *weapon;
+int 
+weapon_hit_bonus (struct obj *weapon)
 {
     int type, wep_type, bonus = 0;
 #if 0
@@ -1528,9 +1521,8 @@ struct obj *weapon;
  * Return damage bonus/penalty based on skill of weapon.
  * Treat restricted weapons as unskilled.
  */
-int
-weapon_dam_bonus(weapon)
-struct obj *weapon;
+int 
+weapon_dam_bonus (struct obj *weapon)
 {
     int type, wep_type, bonus = 0;
 #if 0
@@ -1603,9 +1595,8 @@ struct obj *weapon;
     return bonus;
 }
 
-int
-skill_bonus(type)
-int type;
+int 
+skill_bonus (int type)
 {
     int bonus = 0;
     if (type == P_NONE) {
@@ -1643,9 +1634,8 @@ int type;
 }
 
 /* Try to return an associated skill for the specified object */
-static 
-int get_obj_skill(obj)
-struct obj *obj;
+static int 
+get_obj_skill (struct obj *obj)
 {
 	int skill;
 	
@@ -1674,9 +1664,8 @@ struct obj *obj;
  * hero is holding, finally reading the given array that sets
  * maximums.
  */
-void
-skill_init(class_skill)
-const struct def_skill *class_skill;
+void 
+skill_init (const struct def_skill *class_skill)
 {
 	struct obj *obj;
 	int skmax, skill;
@@ -1776,8 +1765,8 @@ practice()
 	return(0);
 }
 
-void
-practice_weapon()
+void 
+practice_weapon (void)
 {
 	if (can_practice(weapon_type(uwep))
 #ifdef WIZARD
@@ -1800,10 +1789,8 @@ practice_weapon()
                 
 }
 
-void
-setmnotwielded(mon,obj)
-register struct monst *mon;
-register struct obj *obj;
+void 
+setmnotwielded (register struct monst *mon, register struct obj *obj)
 {
     if (!obj) return;
     if (artifact_light(obj) && obj->lamplit) {

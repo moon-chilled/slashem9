@@ -23,22 +23,22 @@ extern void proxy_suspend_nhwindows(const char *);
 extern void proxy_resume_nhwindows(void);
 extern winid proxy_create_nhwindow(int);
 extern void proxy_clear_nhwindow(winid);
-extern void proxy_display_nhwindow(winid, BOOLEAN_P);
+extern void proxy_display_nhwindow(winid, boolean);
 extern void proxy_dismiss_nhwindow(winid);
 extern void proxy_destroy_nhwindow(winid);
 extern void proxy_curs(winid, int, int);
 extern void proxy_putstr(winid, int, const char *);
 #ifdef FILE_AREAS
-extern void proxy_display_file(const char *, const char *, BOOLEAN_P);
+extern void proxy_display_file(const char *, const char *, boolean);
 #else
-extern void proxy_display_file(const char *, BOOLEAN_P);
+extern void proxy_display_file(const char *, boolean);
 #endif
 extern void proxy_start_menu(winid);
 extern void proxy_add_menu(winid, int, const ANY_P *,
-			CHAR_P, CHAR_P, int, const char *, BOOLEAN_P);
+			char, char, int, const char *, boolean);
 extern void proxy_end_menu(winid, const char *);
 extern int proxy_select_menu(winid, int, MENU_ITEM_P **);
-extern char proxy_message_menu(CHAR_P, int, const char *);
+extern char proxy_message_menu(char, int, const char *);
 extern void proxy_update_inventory(void);
 extern void proxy_mark_synch(void);
 extern void proxy_wait_synch(void);
@@ -48,14 +48,14 @@ extern void proxy_cliparound(int, int);
 #ifdef POSITIONBAR
 extern void proxy_update_positionbar(char *);
 #endif
-extern void proxy_print_glyph(winid, XCHAR_P, XCHAR_P, int);
+extern void proxy_print_glyph(winid, xchar, xchar, int);
 extern void proxy_raw_print(const char *);
 extern void proxy_raw_print_bold(const char *);
 extern int proxy_nhgetch(void);
 extern int proxy_nh_poskey(int *, int *, int *);
 extern void proxy_nhbell(void);
 extern int proxy_doprev_message(void);
-extern char proxy_yn_function(const char *, const char *, CHAR_P);
+extern char proxy_yn_function(const char *, const char *, char);
 extern void proxy_getlin(const char *,char *);
 extern int proxy_get_ext_cmd(void);
 extern void proxy_number_pad(int);

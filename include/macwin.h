@@ -218,13 +218,13 @@ extern void mac_get_nh_event(void);
 extern void mac_exit_nhwindows(const char *);
 extern winid mac_create_nhwindow(int);
 extern void mac_clear_nhwindow(winid);
-extern void mac_display_nhwindow(winid, BOOLEAN_P);
+extern void mac_display_nhwindow(winid, boolean);
 extern void mac_destroy_nhwindow(winid);
 extern void mac_curs(winid,int,int);
 extern void mac_putstr(winid, int, const char *);
 extern void mac_start_menu(winid);
 extern void mac_add_menu(winid,int,const anything *,
-		CHAR_P,CHAR_P,int,const char *, BOOLEAN_P);
+		char,char,int,const char *, boolean);
 extern void mac_end_menu(winid, const char *);
 extern int mac_select_menu(winid, int, menu_item **);
 #ifdef CLIPPING
@@ -233,7 +233,7 @@ extern void mac_cliparound(int, int);
 extern int mac_nhgetch(void);
 extern int mac_nh_poskey(int *, int *, int *);
 extern int mac_doprev_message(void);
-extern char mac_yn_function(const char *, const char *, CHAR_P);
+extern char mac_yn_function(const char *, const char *, char);
 extern void mac_getlin(const char *,char *);
 extern int mac_get_ext_cmd(void);
 extern void mac_number_pad(int);

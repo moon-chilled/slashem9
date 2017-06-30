@@ -277,7 +277,7 @@ curses_clear_nhwindow(winid wid)
                    --more--, if necessary, in the tty window-port.
 */
 void
-curses_display_nhwindow(winid wid, BOOLEAN_P block)
+curses_display_nhwindow(winid wid, boolean block)
 {
     menu_item *selected = NULL;
 
@@ -357,7 +357,7 @@ curses_putstr(winid wid, int attr, const char *text)
                    iff complain is TRUE.
 */
 void
-curses_display_file(const char *filename, BOOLEAN_P must_exist)
+curses_display_file(const char *filename, boolean must_exist)
 {
     curses_view_file(filename, must_exist);
 }
@@ -409,8 +409,8 @@ add_menu(winid wid, int glyph, const anything identifier,
 */
 void
 curses_add_menu(winid wid, int glyph, const ANY_P * identifier,
-                CHAR_P accelerator, CHAR_P group_accel, int attr,
-                const char *str, BOOLEAN_P presel)
+                char accelerator, char group_accel, int attr,
+                const char *str, boolean presel)
 {
     int curses_attr = curses_convert_attr(attr);
 
@@ -544,7 +544,7 @@ print_glyph(window, x, y, glyph)
                    a 1-1 map between glyphs and distinct things on the map).
 */
 void
-curses_print_glyph(winid wid, XCHAR_P x, XCHAR_P y, int glyph)
+curses_print_glyph(winid wid, xchar x, xchar y, int glyph)
 {
     int ch;
     int color;
@@ -689,7 +689,7 @@ char yn_function(const char *ques, const char *choices, char default)
                    ports might use a popup.
 */
 char
-curses_yn_function(const char *question, const char *choices, CHAR_P def)
+curses_yn_function(const char *question, const char *choices, char def)
 {
     return (char) curses_character_input_dialog(question, choices, def);
 }

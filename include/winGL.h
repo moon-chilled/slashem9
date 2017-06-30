@@ -1045,7 +1045,7 @@ extern struct TextWindow *text_wins[MAXWIN];
 
 extern winid Sdlgl_create_nhwindow(int);
 extern void Sdlgl_clear_nhwindow(winid);
-extern void Sdlgl_display_nhwindow(winid, BOOLEAN_P);
+extern void Sdlgl_display_nhwindow(winid, boolean);
 extern void Sdlgl_dismiss_nhwindow(winid);
 extern void Sdlgl_destroy_nhwindow(winid);
 extern void Sdlgl_curs(winid,int,int);
@@ -1073,11 +1073,11 @@ extern void sdlgl_internal_motion_handler(SDL_MouseMotionEvent *);
 
 extern void Sdlgl_start_menu(winid);
 extern void Sdlgl_add_menu(winid,int,const ANY_P *,
-    CHAR_P,CHAR_P,int,const char *, BOOLEAN_P);
+    char,char,int,const char *, boolean);
 extern void Sdlgl_end_menu(winid, const char *);
 extern int Sdlgl_select_menu(winid, int, MENU_ITEM_P **);
-extern char Sdlgl_message_menu(CHAR_P,int,const char *);
-extern char Sdlgl_yn_function(const char *, const char *, CHAR_P);
+extern char Sdlgl_message_menu(char,int,const char *);
+extern char Sdlgl_yn_function(const char *, const char *, char);
 
 extern void sdlgl_clear_menu_items(struct TextWindow *);
 extern int sdlgl_process_menu_window(int, struct TextWindow *, int);
@@ -1087,7 +1087,7 @@ extern int sdlgl_process_menu_window(int, struct TextWindow *, int);
  * GL_TEXT
  */
 
-extern void Sdlgl_display_file(const char *, BOOLEAN_P);
+extern void Sdlgl_display_file(const char *, boolean);
 
 extern void sdlgl_clear_text_items(struct TextWindow *);
 extern void sdlgl_insert_text_item(struct TextWindow *,
@@ -1125,7 +1125,7 @@ extern void sdlgl_process_text_window(int, struct TextWindow *);
 
 extern void Sdlgl_cliparound(int, int);
 extern void Sdlgl_update_positionbar(char *);
-extern void Sdlgl_print_glyph(winid,XCHAR_P,XCHAR_P,int);
+extern void Sdlgl_print_glyph(winid,xchar,xchar,int);
 
 extern void sdlgl_create_map(struct TextWindow *, int, int);
 extern void sdlgl_zoom_map(int);

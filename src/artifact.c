@@ -24,7 +24,7 @@ extern boolean notonhead;	/* for long worms */
 STATIC_DCL int spec_applies(const struct artifact *,struct monst *);
 STATIC_DCL int arti_invoke(struct obj*);
 STATIC_DCL boolean Mb_hit(struct monst *magr,struct monst *mdef,
-				  struct obj *,int *,int,BOOLEAN_P,char *);
+				  struct obj *,int *,int,boolean,char *);
 
 /* The amount added to the victim's total hit points to insure that the
    victim will be killed even after damage bonus/penalty adjustments.
@@ -89,8 +89,8 @@ hack_artifacts()
 }
 
 /* zero out the artifact existence list */
-void
-init_artifacts()
+void 
+init_artifacts (void)
 {
 	(void) memset((genericptr_t) artiexist, 0, sizeof artiexist);
 	(void) memset((genericptr_t) artidisco, 0, sizeof artidisco);
@@ -98,8 +98,8 @@ init_artifacts()
 }
 
 /* Post u_init() initialization */
-void
-init_artifacts1()
+void 
+init_artifacts1 (void)
 {
 #if 0
     /* KMH -- Should be at least skilled in first artifact gifts */
@@ -146,17 +146,15 @@ init_artifacts1()
     }
 }
 
-void
-save_artifacts(fd)
-int fd;
+void 
+save_artifacts (int fd)
 {
 	bwrite(fd, (genericptr_t) artiexist, sizeof artiexist);
 	bwrite(fd, (genericptr_t) artidisco, sizeof artidisco);
 }
 
-void
-restore_artifacts(fd)
-int fd;
+void 
+restore_artifacts (int fd)
 {
 	mread(fd, (genericptr_t) artiexist, sizeof artiexist);
 	mread(fd, (genericptr_t) artidisco, sizeof artidisco);
@@ -164,8 +162,7 @@ int fd;
 }
 
 const char *
-artiname(artinum)
-int artinum;
+artiname (int artinum)
 {
 	if (artinum <= 0 || artinum > NROFARTIFACTS) return("");
 	return(artilist[artinum].name);
@@ -272,10 +269,8 @@ make_artif: if (by_align) otmp = mksobj((int)a->otyp, TRUE, FALSE);
  * The object type of the artifact is returned in otyp if the return value
  * is non-NULL.
  */
-const char*
-artifact_name(name, otyp)
-const char *name;
-short *otyp;
+const char *
+artifact_name (const char *name, short *otyp)
 {
     register const struct artifact *a;
     register const char *aname;
@@ -347,8 +342,8 @@ register boolean mod;
 	return;
 }
 
-int
-nartifact_exist()
+int 
+nartifact_exist (void)
 {
     int a = 0;
     int n = SIZE(artiexist);
@@ -616,10 +611,8 @@ long wp_mask;
  * Ignores such things as gauntlets, assuming the artifact is not
  * fooled by such trappings.
  */
-int
-touch_artifact(obj,mon)
-    struct obj *obj;
-    struct monst *mon;
+int 
+touch_artifact (struct obj *obj, struct monst *mon)
 {
     register const struct artifact *oart = get_artifact(obj);
     boolean badclass, badalign, self_willed, yours;
@@ -765,9 +758,8 @@ struct monst *mtmp;
 }
 
 /* return the M2 flags of monster that an artifact's special attacks apply against */
-long
-spec_m2(otmp)
-struct obj *otmp;
+long 
+spec_m2 (struct obj *otmp)
 {
 	register const struct artifact *artifact = get_artifact(otmp);
 	if (artifact)
@@ -776,10 +768,8 @@ struct obj *otmp;
 }
 
 /* special attack bonus */
-int
-spec_abon(otmp, mon)
-struct obj *otmp;
-struct monst *mon;
+int 
+spec_abon (struct obj *otmp, struct monst *mon)
 {
 	register const struct artifact *weap = get_artifact(otmp);
 
@@ -792,11 +782,8 @@ struct monst *mon;
 }
 
 /* special damage bonus */
-int
-spec_dbon(otmp, mon, tmp)
-struct obj *otmp;
-struct monst *mon;
-int tmp;
+int 
+spec_dbon (struct obj *otmp, struct monst *mon, int tmp)
 {
 	register const struct artifact *weap = get_artifact(otmp);
 
@@ -1446,8 +1433,8 @@ static NEARDATA const char recharge_type[] = { ALLOW_COUNT, ALL_CLASSES, 0 };
 static NEARDATA const char invoke_types[] = { ALL_CLASSES, 0 };
 		/* #invoke: an "ugly check" filters out most objects */
 
-int
-doinvoke()
+int 
+doinvoke (void)
 {
     register struct obj *obj;
 
@@ -1876,9 +1863,8 @@ artifact_light(obj)
 }
 
 /* KMH -- Talking artifacts are finally implemented */
-void
-arti_speak(obj)
-    struct obj *obj;
+void 
+arti_speak (struct obj *obj)
 {
 	register const struct artifact *oart = get_artifact(obj);
 	const char *line;
@@ -1908,9 +1894,8 @@ uchar inv_prop;
 }
 
 /* Return the price sold to the hero of a given artifact or unique item */
-long
-arti_cost(otmp)
-struct obj *otmp;
+long 
+arti_cost (struct obj *otmp)
 {
 	if (!otmp->oartifact)
 	    return ((long)objects[otmp->otyp].oc_cost);

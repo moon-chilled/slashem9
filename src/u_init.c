@@ -14,7 +14,7 @@ struct trobj {
 
 STATIC_DCL void ini_inv(struct trobj *);
 STATIC_DCL void knows_object(int);
-STATIC_DCL void knows_class(CHAR_P);
+STATIC_DCL void knows_class(char);
 STATIC_DCL boolean restricted_spell_discipline(int);
 
 #define UNDEF_TYP	0
@@ -856,10 +856,8 @@ register char sym;
  * Currently only used by priests.
  */
 
-static void
-spellbook_skill_raise(class_skill, spellbook)
-register struct def_skill *class_skill;
-int spellbook;
+static void 
+spellbook_skill_raise (register struct def_skill *class_skill, int spellbook)
 {
     register int i, j;
     j = spell_skilltype(spellbook);
@@ -917,8 +915,8 @@ int spellbook;
     }
 }
 
-void
-u_init()
+void 
+u_init (void)
 {
 	register int i, temp;
 	int no_extra_food = FALSE;

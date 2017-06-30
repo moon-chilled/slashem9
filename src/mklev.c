@@ -27,23 +27,23 @@ STATIC_DCL void makevtele(void);
 STATIC_DCL void clear_level_structures(void);
 STATIC_DCL void makelevel(void);
 STATIC_DCL void mineralize(void);
-STATIC_DCL boolean bydoor(XCHAR_P,XCHAR_P);
+STATIC_DCL boolean bydoor(xchar,xchar);
 STATIC_DCL struct mkroom *find_branch_room(coord *);
-STATIC_DCL struct mkroom *pos_to_room(XCHAR_P, XCHAR_P);
+STATIC_DCL struct mkroom *pos_to_room(xchar, xchar);
 STATIC_DCL boolean place_niche(struct mkroom *, int*, int*, int*);
 STATIC_DCL void makeniche(int);
 STATIC_DCL void make_niches(void);
 
 STATIC_PTR int CFDECLSPEC do_comp(const genericptr, const genericptr);
 
-STATIC_DCL void dosdoor(XCHAR_P,XCHAR_P,struct mkroom *,int);
-STATIC_DCL void join(int,int,BOOLEAN_P);
+STATIC_DCL void dosdoor(xchar,xchar,struct mkroom *,int);
+STATIC_DCL void join(int,int,boolean);
 STATIC_DCL void do_room_or_subroom(struct mkroom *,int,int,int,int,
-				       BOOLEAN_P,SCHAR_P,BOOLEAN_P,BOOLEAN_P);
+				       boolean,schar,boolean,boolean);
 STATIC_DCL void makerooms(void);
-STATIC_DCL void finddpos(coord *,XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P);
-STATIC_DCL void mkinvpos(XCHAR_P,XCHAR_P,int);
-STATIC_DCL void mk_knox_portal(XCHAR_P,XCHAR_P);
+STATIC_DCL void finddpos(coord *,xchar,xchar,xchar,xchar);
+STATIC_DCL void mkinvpos(xchar,xchar,int);
+STATIC_DCL void mk_knox_portal(xchar,xchar);
 
 #define create_vault()	create_room(-1, -1, 2, 2, -1, -1, VAULT, TRUE)
 #define init_vault()	vault_x = -1
@@ -103,8 +103,8 @@ gotit:
 	return;
 }
 
-void
-sort_rooms()
+void 
+sort_rooms (void)
 {
 #if defined(SYSV) || defined(DGUX)
 	qsort((genericptr_t) rooms, (unsigned)nroom, sizeof(struct mkroom), do_comp);
@@ -317,8 +317,8 @@ boolean nxcor;
 		smeq[a] = smeq[b];
 }
 
-void
-makecorridors()
+void 
+makecorridors (void)
 {
 	int a, b, i;
 	boolean any = TRUE;
@@ -349,10 +349,8 @@ makecorridors()
 
 /* ALI - Artifact doors: Track doors in maze levels as well */
 
-int
-add_door(x,y,aroom)
-register int x, y;
-register struct mkroom *aroom;
+int 
+add_door (register int x, register int y, register struct mkroom *aroom)
 {
 	register struct mkroom *broom;
 	register int tmp;

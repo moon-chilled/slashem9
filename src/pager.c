@@ -11,8 +11,8 @@
 STATIC_DCL boolean is_swallow_sym(int);
 STATIC_DCL int append_str(char *, const char *);
 STATIC_DCL struct permonst * lookat(int, int, char *, char *);
-STATIC_DCL void checkfile(char *,struct permonst *,BOOLEAN_P,BOOLEAN_P);
-STATIC_DCL int do_look(BOOLEAN_P);
+STATIC_DCL void checkfile(char *,struct permonst *,boolean,boolean);
+STATIC_DCL int do_look(boolean);
 STATIC_DCL boolean help_menu(int *);
 #ifdef PORT_HELP
 extern void port_help(void);
@@ -787,20 +787,20 @@ do_look(quick)
 }
 
 
-int
-dowhatis()
+int 
+dowhatis (void)
 {
 	return do_look(FALSE);
 }
 
-int
-doquickwhatis()
+int 
+doquickwhatis (void)
 {
 	return do_look(TRUE);
 }
 
-int
-doidtrap()
+int 
+doidtrap (void)
 {
 	register struct trap *trap;
 	int x, y, tt;
@@ -832,9 +832,7 @@ doidtrap()
 }
 
 char *
-dowhatdoes_core(q, cbuf)
-char q;
-char *cbuf;
+dowhatdoes_core (char q, char *cbuf)
 {
 	dlb *fp;
 	char bufr[BUFSZ];
@@ -878,8 +876,8 @@ char *cbuf;
 	return (char *)0;
 }
 
-int
-dowhatdoes()
+int 
+dowhatdoes (void)
 {
 	char bufr[BUFSZ];
 	char q, *reslt;
@@ -982,8 +980,8 @@ help_menu(sel)
 	return FALSE;
 }
 
-int
-dohelp()
+int 
+dohelp (void)
 {
 	int sel = 0;
 
@@ -1023,8 +1021,8 @@ dohelp()
 	return 0;
 }
 
-int
-dohistory()
+int 
+dohistory (void)
 {
 	display_file_area(NH_HISTORY_AREA, NH_HISTORY, TRUE);
 	return 0;

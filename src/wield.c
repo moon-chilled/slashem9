@@ -49,7 +49,7 @@
  * No item may be in more than one of these slots.
  */
 
-STATIC_DCL int ready_weapon(struct obj *, BOOLEAN_P);
+STATIC_DCL int ready_weapon(struct obj *, boolean);
 
 /* used by will_weld() */
 /* probably should be renamed */
@@ -220,9 +220,8 @@ boolean put_away;
 	return(res);
 }
 
-void
-setuqwep(obj)
-register struct obj *obj;
+void 
+setuqwep (register struct obj *obj)
 {
 	setworn(obj, W_QUIVER);
 	update_inventory();
@@ -251,8 +250,8 @@ static NEARDATA const char ready_objs[] =
 static NEARDATA const char bullets[] =	/* (note: different from dothrow.c) */
 	{ ALL_CLASSES, ALLOW_NONE, GEM_CLASS, WEAPON_CLASS, 0 };
 
-int
-dowield()
+int 
+dowield (void)
 {
 	register struct obj *wep, *oldwep;
 	int result;
@@ -305,8 +304,8 @@ dowield()
 	return (result);
 }
 
-int
-doswapweapon()
+int 
+doswapweapon (void)
 {
 	register struct obj *oldwep, *oldswap;
 	int result = 0;
@@ -352,8 +351,8 @@ doswapweapon()
 	return (result);
 }
 
-int
-dowieldquiver()
+int 
+dowieldquiver (void)
 {
 	register struct obj *newquiver;
 	const char *quivee_types = (uslinging() ||
@@ -494,8 +493,8 @@ const char *verb;	/* "rub",&c */
 /* WAC
  * For the purposes of SLASH'EM, artifacts should be wieldable in either hand
  */
-int
-can_twoweapon()
+int 
+can_twoweapon (void)
 {
 	char buf[BUFSZ];
 	const char *what;
@@ -578,8 +577,8 @@ can_twoweapon()
 	return (FALSE);
 }
 
-void
-drop_uswapwep()
+void 
+drop_uswapwep (void)
 {
 	char str[BUFSZ];
 	struct obj *obj = uswapwep;
@@ -591,8 +590,8 @@ drop_uswapwep()
 	dropx(obj);
 }
 
-int
-dotwoweapon()
+int 
+dotwoweapon (void)
 {
 	/* You can always toggle it off */
 	if (u.twoweap) {
@@ -637,8 +636,8 @@ dotwoweapon()
  * 1.  The item has been eaten, stolen, burned away, or rotted away.
  * 2.  Making an item disappear for a bones pile.
  */
-void
-uwepgone()
+void 
+uwepgone (void)
 {
 	if (uwep) {
 		if (artifact_light(uwep) && uwep->lamplit) {
@@ -652,8 +651,8 @@ uwepgone()
 	}
 }
 
-void
-uswapwepgone()
+void 
+uswapwepgone (void)
 {
 	if (uswapwep) {
 		setworn((struct obj *)0, W_SWAPWEP);
@@ -661,8 +660,8 @@ uswapwepgone()
 	}
 }
 
-void
-uqwepgone()
+void 
+uqwepgone (void)
 {
 	if (uquiver) {
 		setworn((struct obj *)0, W_QUIVER);
@@ -670,8 +669,8 @@ uqwepgone()
 	}
 }
 
-void
-untwoweapon()
+void 
+untwoweapon (void)
 {
 	if (u.twoweap) {
 		if (uwep && uswapwep)
@@ -780,10 +779,8 @@ boolean fade_scrolls;
 	}
 }
 
-int
-chwepon(otmp, amount)
-register struct obj *otmp;
-register int amount;
+int 
+chwepon (register struct obj *otmp, register int amount)
 {
 	const char *color = hcolor((amount < 0) ? NH_BLACK : NH_BLUE);
 	const char *xtime;
@@ -869,9 +866,8 @@ register int amount;
 	return(1);
 }
 
-int
-welded(obj)
-register struct obj *obj;
+int 
+welded (register struct obj *obj)
 {
 	if (obj && obj == uwep && will_weld(obj)) {
 		obj->bknown = TRUE;
@@ -880,9 +876,8 @@ register struct obj *obj;
 	return 0;
 }
 
-void
-weldmsg(obj)
-register struct obj *obj;
+void 
+weldmsg (register struct obj *obj)
 {
 	long savewornmask;
 

@@ -23,7 +23,7 @@ STATIC_DCL void mayberem(struct obj *, const char *);
 STATIC_DCL boolean diseasemu(struct permonst *);
 STATIC_DCL int hitmu(struct monst *,struct attack *);
 STATIC_DCL int gulpmu(struct monst *,struct attack *);
-STATIC_DCL int explmu(struct monst *,struct attack *,BOOLEAN_P);
+STATIC_DCL int explmu(struct monst *,struct attack *,boolean);
 STATIC_DCL void missmu(struct monst *,int,int,struct attack *);
 STATIC_DCL void mswings(struct monst *,struct obj *);
 STATIC_DCL void wildmiss(struct monst *,struct attack *);
@@ -201,9 +201,7 @@ register struct obj *otemp;
 
 /* return how a poison attack was delivered */
 const char *
-mpoisons_subj(mtmp, mattk)
-struct monst *mtmp;
-struct attack *mattk;
+mpoisons_subj (struct monst *mtmp, struct attack *mattk)
 {
 	if (mattk->aatyp == AT_WEAP) {
 	    struct obj *mwep = (mtmp == &youmonst) ? uwep : MON_WEP(mtmp);
@@ -218,8 +216,8 @@ struct attack *mattk;
 }
 
 /* called when your intrinsic speed is taken away */
-void
-u_slow_down()
+void 
+u_slow_down (void)
 {
 	HFast = 0L;
 	if (!Fast) You("slow down.");
@@ -349,10 +347,7 @@ boolean message;
 
 /* select a monster's next attack, possibly substituting for its usual one */
 struct attack *
-getmattk(mptr, indx, prev_result, alt_attk_buf)
-struct permonst *mptr;
-int indx, prev_result[];
-struct attack *alt_attk_buf;
+getmattk (struct permonst *mptr, int indx, int prev_result[], struct attack *alt_attk_buf)
 {
     struct attack *attk = &mptr->mattk[indx];
 
@@ -405,9 +400,8 @@ struct monst *mtmp;
  *		monster which it attacks by mistake, the caller had better
  *		take care of it...
  */
-int
-mattacku(mtmp)
-	register struct monst *mtmp;
+int 
+mattacku (register struct monst *mtmp)
 {
 	struct	attack	*mattk, alt_attk;
 	int	i, j, tmp, sum[NATTK];
@@ -963,9 +957,8 @@ struct attack *mattk;
 }
 
 /* armor that sufficiently covers the body might be able to block magic */
-int
-magic_negation(mon)
-struct monst *mon;
+int 
+magic_negation (struct monst *mon)
 {
 	struct obj *armor;
 	int armpro = 0;
@@ -2262,10 +2255,11 @@ common:
     return(2);	/* it dies */
 }
 
-int
-gazemu(mtmp, mattk)	/* monster gazes at you */
-	register struct monst *mtmp;
-	register struct attack  *mattk;
+int 
+gazemu (	/* monster gazes at you */
+    register struct monst *mtmp,
+    register struct attack *mattk
+)
 {
 	switch(mattk->adtyp) {
 	    case AD_STON:
@@ -2525,10 +2519,11 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 #endif /* OVLB */
 #ifdef OVL1
 
-void
-mdamageu(mtmp, n)	/* mtmp hits you for n points damage */
-register struct monst *mtmp;
-register int n;
+void 
+mdamageu (	/* mtmp hits you for n points damage */
+    register struct monst *mtmp,
+    register int n
+)
 {
 	 
 	if (Invulnerable) n=0;
@@ -2607,10 +2602,8 @@ register struct obj *obj;
 #endif /* OVLB */
 #ifdef OVL1
 
-int
-could_seduce(magr,mdef,mattk)
-struct monst *magr, *mdef;
-struct attack *mattk;
+int 
+could_seduce (struct monst *magr, struct monst *mdef, struct attack *mattk)
 /* returns 0 if seduction impossible,
  *	   1 if fine,
  *	   2 if wrong gender for nymph */
@@ -2663,9 +2656,8 @@ struct attack *mattk;
 
 #ifdef SEDUCE
 /* Returns 1 if monster teleported */
-int
-doseduce(mon)
-register struct monst *mon;
+int 
+doseduce (register struct monst *mon)
 {
 	register struct obj *ring, *nring;
 	boolean fem = (mon->data == &mons[PM_SUCCUBUS]); /* otherwise incubus */
@@ -3129,7 +3121,7 @@ register struct attack *mattk;
 
 #include "edog.h"
 struct monst *
-cloneu()
+cloneu (void)
 {
 	register struct monst *mon;
 	int mndx = monsndx(youmonst.data);

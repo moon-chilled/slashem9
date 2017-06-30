@@ -218,10 +218,8 @@ adjattrib(ndx, incr, msgflg)
 	return TRUE;
 }
 
-void
-gainstr(otmp, incr)
-	register struct obj *otmp;
-	register int incr;
+void 
+gainstr (register struct obj *otmp, register int incr)
 {
 	int num = 1;
 
@@ -233,9 +231,10 @@ gainstr(otmp, incr)
 	(void) adjattrib(A_STR, (otmp && otmp->cursed) ? -num : num, TRUE);
 }
 
-void
-losestr(num)	/* may kill you; cause may be poison or monster like 'a' */
-	register int num;
+void 
+losestr (	/* may kill you; cause may be poison or monster like 'a' */
+    register int num
+)
 {
 	int ustr = ABASE(A_STR) - num;
 
@@ -283,8 +282,8 @@ boolean parameter; /* So I can't think up of a good name.  So sue me. --KAA */
 }
 
 /* there has just been an inventory change affecting a luck-granting item */
-void
-set_moreluck()
+void 
+set_moreluck (void)
 {
 	int luckbon = stone_luck(TRUE);
 
@@ -295,8 +294,8 @@ set_moreluck()
 
 
 /* KMH, balance patch -- new function for healthstones */
-void
-recalc_health()
+void 
+recalc_health (void)
 {
 	register struct obj *otmp;
 
@@ -313,8 +312,8 @@ recalc_health()
 #endif /* OVLB */
 #ifdef OVL1
 
-void
-restore_attrib()
+void 
+restore_attrib (void)
 {
 	int	i;
 
@@ -442,8 +441,8 @@ exerper()
 	}
 }
 
-void
-exerchk()
+void 
+exerchk (void)
 {
 	int	i, mod_val;
 
@@ -531,16 +530,15 @@ exerchk()
 }
 
 /* next_check will otherwise have its initial 600L after a game restore */
-void
-reset_attribute_clock()
+void 
+reset_attribute_clock (void)
 {
 	if (moves > 600L) next_check = moves + rn1(50,800);
 }
 
 
-void
-init_attr(np)
-	register int	np;
+void 
+init_attr (register int np)
 {
 	register int	i, x, tryct;
 
@@ -588,8 +586,8 @@ init_attr(np)
 	}
 }
 
-void
-redist_attr()
+void 
+redist_attr (void)
 {
 	register int i, tmp;
 
@@ -617,9 +615,8 @@ long *ability;
 		see_monsters();
 }
 
-void
-adjabil(oldlevel,newlevel)
-int oldlevel, newlevel;
+void 
+adjabil (int oldlevel, int newlevel)
 {
 	register const struct innate *abil, *rabil;
 	long mask = FROMEXPER;
@@ -726,8 +723,8 @@ int oldlevel, newlevel;
 
 
 /* STEPHEN WHITE'S NEW CODE */
-int
-newhp()
+int 
+newhp (void)
 {
 	int	hp, conplus;
 
@@ -831,9 +828,8 @@ acurrstr()
 /* avoid possible problems with alignment overflow, and provide a centralized
  * location for any future alignment limits
  */
-void
-adjalign(n)
-register int n;
+void 
+adjalign (register int n)
 {
 	register int newalign = u.ualign.record + n;
 

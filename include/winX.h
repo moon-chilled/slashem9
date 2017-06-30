@@ -268,7 +268,7 @@ extern Widget CreateDialog(Widget, String, XtCallbackProc, XtCallbackProc);
 extern void SetDialogPrompt(Widget, String);
 extern String GetDialogResponse(Widget);
 extern void SetDialogResponse(Widget, String);
-extern void positionpopup(Widget,BOOLEAN_P);
+extern void positionpopup(Widget,boolean);
 
 /* ### winX.c ### */
 extern struct xwindow *find_widget(Widget);
@@ -283,7 +283,7 @@ extern void nh_keyscroll(Widget, XEvent*, String*, Cardinal*);
 
 /* ### winmesg.c ### */
 extern void set_message_slider(struct xwindow*);
-extern void create_message_window(struct xwindow*, BOOLEAN_P, Widget);
+extern void create_message_window(struct xwindow*, boolean, Widget);
 extern void destroy_message_window(struct xwindow*);
 extern void display_message_window(struct xwindow*);
 extern void append_message(struct xwindow*, const char*);
@@ -296,7 +296,7 @@ extern void display_map_window(struct xwindow*);
 extern void clear_map_window(struct xwindow*);
 extern void map_input(Widget, XEvent*, String*, Cardinal*);
 extern void set_map_size(struct xwindow*, DIMENSION_P, DIMENSION_P);
-extern void create_map_window(struct xwindow*, BOOLEAN_P, Widget);
+extern void create_map_window(struct xwindow*, boolean, Widget);
 extern void destroy_map_window(struct xwindow*);
 extern int  x_event(int);
 
@@ -315,7 +315,7 @@ extern void ec_delete(Widget, XEvent*, String*, Cardinal*);
 extern void ec_key(Widget, XEvent*, String*, Cardinal*); /* extended command action */
 
 /* ### winstatus.c ### */
-extern void create_status_window(struct xwindow*, BOOLEAN_P, Widget);
+extern void create_status_window(struct xwindow*, boolean, Widget);
 extern void destroy_status_window(struct xwindow*);
 extern void adjust_status(struct xwindow*, const char*);
 extern void null_out_status(void);
@@ -329,11 +329,11 @@ extern void key_dismiss_text(Widget, XEvent*, String*, Cardinal*);
 extern void rip_dismiss_text(Widget, XEvent*, String*, Cardinal*);
 #endif
 extern void add_to_text_window(struct xwindow*, int, const char*);
-extern void display_text_window(struct xwindow*, BOOLEAN_P);
+extern void display_text_window(struct xwindow*, boolean);
 extern void create_text_window(struct xwindow*);
 extern void destroy_text_window(struct xwindow*);
 extern void clear_text_window(struct xwindow*);
-extern void append_text_buffer(struct text_buffer*, const char*, BOOLEAN_P); /* text buffer routines */
+extern void append_text_buffer(struct text_buffer*, const char*, boolean); /* text buffer routines */
 extern void init_text_buffer(struct text_buffer*);
 extern void clear_text_buffer(struct text_buffer*);
 extern void free_text_buffer(struct text_buffer*);
@@ -363,18 +363,18 @@ extern void X11_suspend_nhwindows(const char *);
 extern void X11_resume_nhwindows(void);
 extern winid X11_create_nhwindow(int);
 extern void X11_clear_nhwindow(winid);
-extern void X11_display_nhwindow(winid, BOOLEAN_P);
+extern void X11_display_nhwindow(winid, boolean);
 extern void X11_destroy_nhwindow(winid);
 extern void X11_curs(winid,int,int);
 extern void X11_putstr(winid, int, const char *);
 #ifdef FILE_AREAS
-extern void X11_display_file(const char *, const char *, BOOLEAN_P);
+extern void X11_display_file(const char *, const char *, boolean);
 #else
-extern void X11_display_file(const char *, BOOLEAN_P);
+extern void X11_display_file(const char *, boolean);
 #endif
 extern void X11_start_menu(winid);
 extern void X11_add_menu(winid,int,const ANY_P *,
-			CHAR_P, CHAR_P, int, const char *, BOOLEAN_P);
+			char, char, int, const char *, boolean);
 extern void X11_end_menu(winid, const char *);
 extern int X11_select_menu(winid, int, MENU_ITEM_P **);
 extern void X11_update_inventory(void);
@@ -383,14 +383,14 @@ extern void X11_wait_synch(void);
 #ifdef CLIPPING
 extern void X11_cliparound(int, int);
 #endif
-extern void X11_print_glyph(winid,XCHAR_P,XCHAR_P,int);
+extern void X11_print_glyph(winid,xchar,xchar,int);
 extern void X11_raw_print(const char *);
 extern void X11_raw_print_bold(const char *);
 extern int X11_nhgetch(void);
 extern int X11_nh_poskey(int *, int *, int *);
 extern void X11_nhbell(void);
 extern int X11_doprev_message(void);
-extern char X11_yn_function(const char *, const char *, CHAR_P);
+extern char X11_yn_function(const char *, const char *, char);
 extern void X11_getlin(const char *,char *);
 extern int X11_get_ext_cmd(void);
 extern void X11_number_pad(int);

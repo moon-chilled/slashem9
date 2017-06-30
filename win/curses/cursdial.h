@@ -14,12 +14,12 @@
 
 void curses_line_input_dialog(const char *prompt, char *answer, int buffer);
 int curses_character_input_dialog(const char *prompt, const char *choices,
-                                  CHAR_P def);
+                                  char def);
 int curses_ext_cmd(void);
 void curses_create_nhmenu(winid wid);
 void curses_add_nhmenu_item(winid wid, int glyph, const ANY_P * identifier,
-                            CHAR_P accelerator, CHAR_P group_accel, int attr,
-                            const char *str, BOOLEAN_P presel);
+                            char accelerator, char group_accel, int attr,
+                            const char *str, boolean presel);
 # ifdef MENU_COLOR
 boolean get_menu_coloring(char *, int *, int *);
 # endif

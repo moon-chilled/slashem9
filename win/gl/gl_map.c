@@ -214,7 +214,7 @@ static int glyph_is_dungeon(glyphidx_t glyph)
   return 1;
 }
 
-static int back_to_trap(XCHAR_P lev_x, XCHAR_P lev_y)
+static int back_to_trap(xchar lev_x, xchar lev_y)
 {
   struct trap *trap = t_at(lev_x, lev_y);
 
@@ -228,7 +228,7 @@ static int back_to_trap(XCHAR_P lev_x, XCHAR_P lev_y)
     (Blind || (viz_array && !cansee((x), (y))))
 
 static void make_double_glyph(struct GlyphPair *gpair,
-    XCHAR_P lev_x, XCHAR_P lev_y, glyphidx_t glyph)
+    xchar lev_x, xchar lev_y, glyphidx_t glyph)
 {
   int back;
   
@@ -452,7 +452,7 @@ static void update_map_extras(struct TextWindow *win,
  *  Since this is only called from show_glyph(), it is assumed that the
  *  position and glyph are always correct (checked there)!
  */
-void Sdlgl_print_glyph(winid window, XCHAR_P x, XCHAR_P y, int glyph)
+void Sdlgl_print_glyph(winid window, xchar x, xchar y, int glyph)
 {
   struct TextWindow *win;
 

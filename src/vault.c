@@ -12,7 +12,7 @@ STATIC_DCL struct monst *findgd(void);
 
 #ifdef OVLB
 
-STATIC_DCL boolean clear_fcorr(struct monst *,BOOLEAN_P);
+STATIC_DCL boolean clear_fcorr(struct monst *,boolean);
 STATIC_DCL void restfakecorr(struct monst *);
 STATIC_DCL boolean in_fcorridor(struct monst *,int,int);
 STATIC_DCL void move_gold(struct obj *,int);
@@ -114,9 +114,8 @@ findgd()
 #endif /* OVLB */
 #ifdef OVL0
 
-char
-vault_occupied(array)
-char *array;
+char 
+vault_occupied (char *array)
 {
 	register char *ptr;
 
@@ -126,8 +125,8 @@ char *array;
 	return('\0');
 }
 
-void
-invault()
+void 
+invault (void)
 {
 #ifdef BSD_43_BUG
     int dummy;		/* hack to avoid schain botch */
@@ -433,9 +432,8 @@ struct monst *grd;
 /*
  * return  1: guard moved,  0: guard didn't,  -1: let m_move do it,  -2: died
  */
-int
-gd_move(grd)
-register struct monst *grd;
+int 
+gd_move (register struct monst *grd)
 {
 	int x, y, nx, ny, m, n;
 	int dx, dy, gx, gy, fci;
@@ -738,8 +736,8 @@ cleanup:
 }
 
 /* Routine when dying or quitting with a vault guard around */
-void
-paygd()
+void 
+paygd (void)
 {
 	register struct monst *grd = findgd();
 #ifndef GOLDOBJ
@@ -798,8 +796,8 @@ paygd()
 	mongone(grd);
 }
 
-long
-hidden_gold()
+long 
+hidden_gold (void)
 {
 	register long value = 0L;
 	register struct obj *obj;

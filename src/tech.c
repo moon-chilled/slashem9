@@ -236,8 +236,8 @@ tech_known(tech)
 }
 
 /* Called to prematurely stop a technique */
-void
-aborttech(tech)
+void 
+aborttech (int tech)
 {
 	int i;
 
@@ -266,11 +266,8 @@ aborttech(tech)
 }
 
 /* Called to teach a new tech.  Level is starting tech level */
-void
-learntech(tech, mask, tlevel)
-	short tech;
-	long mask;
-	int tlevel;
+void 
+learntech (short tech, long mask, int tlevel)
 {
 	int i;
 	const struct innate_tech *tp;
@@ -506,9 +503,8 @@ dotechmenu(how, tech_no)
 	return FALSE;
 }
 
-static int
-get_tech_no(tech)
-int tech;
+static int 
+get_tech_no (int tech)
 {
 	int i;
 
@@ -520,8 +516,8 @@ int tech;
 	return (-1);
 }
 
-int
-dotech()
+int 
+dotech (void)
 {
 	int tech_no;
 
@@ -567,9 +563,8 @@ char *verb;
 /* gettech is reworked getspell */
 /* reworked class special effects code */
 /* adapted from specialpower in cmd.c */
-static int
-techeffects(tech_no)
-int tech_no;
+static int 
+techeffects (int tech_no)
 {
 	/* These variables are used in various techs */
 	struct obj *obj, *otmp;
@@ -1494,9 +1489,8 @@ int tech_no;
 /* Whether or not a tech is in use.
  * 0 if not in use, turns left if in use. Tech is done when techinuse == 1
  */
-int
-tech_inuse(tech_id)
-int tech_id;
+int 
+tech_inuse (int tech_id)
 {
         int i;
 
@@ -1512,8 +1506,8 @@ int tech_id;
 	return (0);
 }
 
-void
-tech_timeout()
+void 
+tech_timeout (void)
 {
 	int i;
 	
@@ -1590,8 +1584,8 @@ tech_timeout()
         }
 }
 
-void
-docalm()
+void 
+docalm (void)
 {
 	int i, tech, n = 0;
 
@@ -1606,10 +1600,8 @@ docalm()
 	    You("calm down.");
 }
 
-static void
-hurtmon(mtmp, tmp)
-struct monst *mtmp;
-int tmp;
+static void 
+hurtmon (struct monst *mtmp, int tmp)
 {
 	mtmp->mhp -= tmp;
 	if (mtmp->mhp < 1) killed (mtmp);
@@ -1618,8 +1610,8 @@ int tmp;
 #endif
 }
 
-static const struct 	innate_tech *
-role_tech()
+static const struct innate_tech *
+role_tech (void)
 {
 	switch (Role_switch) {
 		case PM_ARCHEOLOGIST:	return (arc_tech);
@@ -1648,8 +1640,8 @@ role_tech()
 	}
 }
 
-static const struct     innate_tech *
-race_tech()
+static const struct innate_tech *
+race_tech (void)
 {
 	switch (Race_switch) {
 		case PM_DOPPELGANGER:	return (dop_tech);
@@ -1666,9 +1658,8 @@ race_tech()
 	}
 }
 
-void
-adjtech(oldlevel,newlevel)
-int oldlevel, newlevel;
+void 
+adjtech (int oldlevel, int newlevel)
 {
 	const struct   innate_tech  
 		*tech = role_tech(), *rtech = race_tech();
@@ -1700,9 +1691,8 @@ int oldlevel, newlevel;
 	}
 }
 
-int
-mon_to_zombie(monnum)
-int monnum;
+int 
+mon_to_zombie (int monnum)
 {
 	if ((&mons[monnum])->mlet == S_ZOMBIE) return monnum;  /* is already zombie */
 	if ((&mons[monnum])->mlet == S_KOBOLD) return PM_KOBOLD_ZOMBIE;
@@ -1846,8 +1836,8 @@ static const struct blitz_tab blitzes[] = {
 #define MAX_CHAIN 5
 
 /* parse blitz input */
-static int
-doblitz()
+static int 
+doblitz (void)
 {
 	int i, j, dx, dy, bdone = 0, tech_no;
 	char buf[BUFSZ];
@@ -1965,8 +1955,8 @@ doblitz()
 	return(1);
 }
 
-static void
-doblitzlist()
+static void 
+doblitzlist (void)
 {
 	winid tmpwin;
 	int i, n;
@@ -2012,8 +2002,8 @@ doblitzlist()
 	return;
 }
 
-static int
-blitz_chi_strike()
+static int 
+blitz_chi_strike (void)
 {
 	int tech_no;
 	
@@ -2032,8 +2022,8 @@ blitz_chi_strike()
 	return(1);
 }
 
-static int
-blitz_e_fist()
+static int 
+blitz_e_fist (void)
 {
 	int tech_no;
 	const char *str;
@@ -2051,8 +2041,8 @@ blitz_e_fist()
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int
-blitz_pummel()
+static int 
+blitz_pummel (void)
 {
 	int i = 0, tech_no;
 	struct monst *mtmp;
@@ -2093,8 +2083,8 @@ blitz_pummel()
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int
-blitz_g_slam()
+static int 
+blitz_g_slam (void)
 {
 	int tech_no, tmp, canhitmon, objenchant;
 	struct monst *mtmp;
@@ -2172,8 +2162,8 @@ blitz_g_slam()
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int
-blitz_dash()
+static int 
+blitz_dash (void)
 {
 	int tech_no;
 	tech_no = (get_tech_no(T_DASH));
@@ -2189,8 +2179,8 @@ blitz_dash()
 	return 1;
 }
 
-static int
-blitz_power_surge()
+static int 
+blitz_power_surge (void)
 {
 	int tech_no, num;
 	
@@ -2213,8 +2203,8 @@ blitz_power_surge()
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int
-blitz_spirit_bomb()
+static int 
+blitz_spirit_bomb (void)
 {
 	int tech_no, num;
 	int sx = u.ux, sy = u.uy, i;
@@ -2257,8 +2247,8 @@ blitz_spirit_bomb()
 }
 
 #ifdef DEBUG
-void
-wiz_debug_cmd() /* in this case, allow controlled loss of techniques */
+void 
+wiz_debug_cmd (void) /* in this case, allow controlled loss of techniques */
 {
 	int tech_no, id, n = 0;
 	long mask;

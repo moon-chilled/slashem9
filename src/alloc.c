@@ -78,8 +78,7 @@ extern void panic(const char *,...) PRINTF_F(1,2);
 
 
 long *
-alloc(lth)
-register unsigned int lth;
+alloc (register unsigned int lth)
 {
 #ifdef LINT
 /*
@@ -141,8 +140,8 @@ char *buf;
 
 /* If ${NH_HEAPLOG} is defined and we can create a file by that name,
    then we'll log the allocation and release information to that file. */
-static void
-heapmon_init()
+static void 
+heapmon_init (void)
 {
 	char *logname = getenv("NH_HEAPLOG");
 
@@ -152,10 +151,7 @@ heapmon_init()
 }
 
 long *
-nhalloc(lth, file, line)
-unsigned int lth;
-const char *file;
-int line;
+nhalloc (unsigned int lth, const char *file, int line)
 {
 	long *ptr;
 	char ptr_address[20];

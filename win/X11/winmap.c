@@ -68,7 +68,7 @@ extern int tiles_per_col;
 static boolean init_tiles(struct xwindow *);
 static void set_button_values(Widget,int,int,unsigned);
 static void map_check_size_change(struct xwindow *);
-static void map_update(struct xwindow *,int,int,int,int,BOOLEAN_P);
+static void map_update(struct xwindow *,int,int,int,int,boolean);
 static void init_text(struct xwindow *);
 static void map_exposed(Widget,XtPointer,XtPointer);
 static void set_gc(Widget,Font,char *,Pixel,GC *,GC *);

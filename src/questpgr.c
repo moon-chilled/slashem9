@@ -21,7 +21,7 @@ STATIC_DCL const char * neminame(void);
 STATIC_DCL const char * guardname(void);
 STATIC_DCL const char * homebase(void);
 STATIC_DCL struct qtmsg * msg_in(struct qtmsg *,int);
-STATIC_DCL void convert_arg(CHAR_P);
+STATIC_DCL void convert_arg(char);
 STATIC_DCL void convert_line(void);
 STATIC_DCL void deliver_by_pline(struct qtmsg *);
 STATIC_DCL void deliver_by_window(struct qtmsg *,int);
@@ -35,8 +35,8 @@ static char	nambuf[sizeof cvt_buf];
 #ifdef DEBUG
 static void dump_qtlist(void);
 
-static void
-dump_qtlist()	/* dump the character msg list to check appearance */
+static void 
+dump_qtlist (void)	/* dump the character msg list to check appearance */
 {
 	struct	qtmsg	*msg;
 	long	size;
@@ -87,8 +87,8 @@ long	hdr_offset;
 	return(msg_list);
 }
 
-void
-load_qtlist()
+void 
+load_qtlist (void)
 {
 
 	int	n_classes, i;
@@ -135,8 +135,8 @@ load_qtlist()
 }
 
 /* called at program exit */
-void
-unload_qtlist()
+void 
+unload_qtlist (void)
 {
 	if (msg_file)
 	    (void) dlb_fclose(msg_file),  msg_file = 0;
@@ -147,9 +147,8 @@ unload_qtlist()
 	return;
 }
 
-short
-quest_info(typ)
-int typ;
+short 
+quest_info (int typ)
 {
 	switch (typ) {
 	    case 0:		return (urole.questarti);
@@ -162,7 +161,7 @@ int typ;
 }
 
 const char *
-ldrname()	/* return your role leader's name */
+ldrname (void)	/* return your role leader's name */
 {
 	int i = urole.ldrnum;
 
@@ -387,9 +386,8 @@ int how;
 	destroy_nhwindow(datawin);
 }
 
-void
-com_pager(msgnum)
-int	msgnum;
+void 
+com_pager (int msgnum)
 {
 	struct qtmsg *qt_msg;
 
@@ -405,9 +403,8 @@ int	msgnum;
 	return;
 }
 
-void
-qt_pager(msgnum)
-int	msgnum;
+void 
+qt_pager (int msgnum)
 {
 	struct qtmsg *qt_msg;
 
@@ -424,7 +421,7 @@ int	msgnum;
 }
 
 struct permonst *
-qt_montype()
+qt_montype (void)
 {
 	int qpm;
 

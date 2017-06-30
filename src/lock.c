@@ -294,8 +294,8 @@ forcedoor()      /* try to break/pry open a door */
 #endif /* OVLB */
 #ifdef OVL0
 
-void
-reset_pick()
+void 
+reset_pick (void)
 {
 	xlock.usedtime = xlock.chance = xlock.picktyp = 0;
 	xlock.door = 0;
@@ -305,9 +305,10 @@ reset_pick()
 #endif /* OVL0 */
 #ifdef OVLB
 
-int
-pick_lock(pickp) /* pick a lock with a given object */
-	struct	obj	**pickp;
+int 
+pick_lock ( /* pick a lock with a given object */
+    struct obj **pickp
+)
 {
 	int picktyp, c, ch;
 	coord cc;
@@ -569,8 +570,8 @@ pick_lock(pickp) /* pick a lock with a given object */
 	return(1);
 }
 
-int
-doforce()		/* try to force a chest with your weapon */
+int 
+doforce (void)		/* try to force a chest with your weapon */
 {
 	register struct obj *otmp;
 	register int x, y, c, picktyp;
@@ -774,8 +775,8 @@ doforce()		/* try to force a chest with your weapon */
 	return(0);
 }
 
-int
-doopen()		/* try to open a door */
+int 
+doopen (void)		/* try to open a door */
 {
 	coord cc;
 	register struct rm *door;
@@ -880,8 +881,8 @@ objhere:	pline("%s's in the way.", Something);
 	return(FALSE);
 }
 
-int
-doclose()		/* try to close a door */
+int 
+doclose (void)		/* try to close a door */
 {
 	register int x, y;
 	register struct rm *door;
@@ -1220,9 +1221,8 @@ struct obj *otmp;
  * implement trapped secret doors we will have to extend this.
  */
 
-int
-artifact_door(x, y)
-int x, y;
+int 
+artifact_door (int x, int y)
 {
     int i;
 

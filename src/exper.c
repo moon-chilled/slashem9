@@ -7,9 +7,8 @@
 /*STATIC_DCL*/ long newuexp(int);
 STATIC_DCL int enermod(int);
 
-/*STATIC_OVL*/ long
-newuexp(lev)
-int lev;
+/*STATIC_OVL*/ long 
+newuexp (int lev)
 {
 	/* KMH, balance patch -- changed again! */
 	if (lev < 9) return (20L * (1L << lev));
@@ -81,10 +80,11 @@ int en;
 	}
 }
 
-int
-experience(mtmp, nk)	/* return # of exp points for mtmp after nk killed */
-	register struct	monst *mtmp;
-	register int	nk;
+int 
+experience (	/* return # of exp points for mtmp after nk killed */
+    register struct monst *mtmp,
+    register int nk
+)
 #if defined(MAC_MPW)
 # pragma unused(nk)
 #endif
@@ -140,9 +140,8 @@ experience(mtmp, nk)	/* return # of exp points for mtmp after nk killed */
 	return(tmp);
 }
 
-void
-more_experienced(exp, rexp)
-	register int exp, rexp;
+void 
+more_experienced (register int exp, register int rexp)
 {
 	u.uexp += exp;
 	u.urexp += 4*exp + rexp;
@@ -215,8 +214,8 @@ boolean force;		/* Force the loss of an experience level */
  * After all, how much real experience does one get shooting a wand of death
  * at a dragon created with a wand of polymorph??
  */
-void
-newexplevel()
+void 
+newexplevel (void)
 {
 	if (u.ulevel < MAXULEV && u.uexp >= newuexp(u.ulevel))
 	    pluslvl(TRUE);

@@ -26,7 +26,7 @@ STATIC_DCL const char *E_phrase(struct entity *, const char *);
 STATIC_DCL boolean e_survives_at(struct entity *, int, int);
 STATIC_DCL void e_died(struct entity *, int, int);
 STATIC_DCL boolean automiss(struct entity *);
-STATIC_DCL boolean e_missed(struct entity *, BOOLEAN_P);
+STATIC_DCL boolean e_missed(struct entity *, boolean);
 STATIC_DCL boolean e_jumps(struct entity *);
 STATIC_DCL void do_entity(struct entity *);
 #endif /* OVLB */
@@ -86,9 +86,8 @@ int x,y;
  * Return value:  the direction of the drawbridge.
  */
 
-int
-is_drawbridge_wall(x,y)
-int x,y;
+int 
+is_drawbridge_wall (int x, int y)
 {
 	struct rm *lev;
 
@@ -318,8 +317,7 @@ struct entity *etmp;
  */
 
 static const char *
-Enam(etmp)
-struct entity *etmp;
+Enam (struct entity *etmp)
 {
 	return(is_u(etmp)? "You" : Monnam(etmp->emon));
 }
@@ -744,9 +742,8 @@ struct entity *etmp;
  * Close the drawbridge located at x,y
  */
 
-void
-close_drawbridge(x,y)
-int x,y;
+void 
+close_drawbridge (int x, int y)
 {
 	register struct rm *lev1, *lev2;
 	struct trap *t;
@@ -796,9 +793,8 @@ int x,y;
  * Open the drawbridge located at x,y
  */
 
-void
-open_drawbridge(x,y)
-int x,y;
+void 
+open_drawbridge (int x, int y)
 {
 	register struct rm *lev1, *lev2;
 	struct trap *t;
@@ -834,9 +830,8 @@ int x,y;
  * Let's destroy the drawbridge located at x,y
  */
 
-void
-destroy_drawbridge(x,y)
-int x,y;
+void 
+destroy_drawbridge (int x, int y)
 {
 	register struct rm *lev1, *lev2;
 	struct trap *t;

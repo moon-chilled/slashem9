@@ -67,16 +67,18 @@ letter(c)		/* is 'c' a letter?  note: '@' classed as letter */
 #endif /* OVLB */
 
 #ifdef OVL1
-char
-highc(c)			/* force 'c' into uppercase */
-    char c;
+char 
+highc (			/* force 'c' into uppercase */
+    char c
+)
 {
     return((char)(('a' <= c && c <= 'z') ? (c & ~040) : c));
 }
 
-char
-lowc(c)			/* force 'c' into lowercase */
-    char c;
+char 
+lowc (			/* force 'c' into lowercase */
+    char c
+)
 {
     return((char)(('A' <= c && c <= 'Z') ? (c | 040) : c));
 }
@@ -84,8 +86,9 @@ lowc(c)			/* force 'c' into lowercase */
 
 #ifdef OVLB
 char *
-lcase(s)		/* convert a string into all lowercase */
-    char *s;
+lcase (		/* convert a string into all lowercase */
+    char *s
+)
 {
     register char *p;
 
@@ -95,8 +98,9 @@ lcase(s)		/* convert a string into all lowercase */
 }
 
 char *
-upstart(s)		/* convert first character of a string to uppercase */
-    char *s;
+upstart (		/* convert first character of a string to uppercase */
+    char *s
+)
 {
     if (s) *s = highc(*s);
     return s;
@@ -104,8 +108,7 @@ upstart(s)		/* convert first character of a string to uppercase */
 
 /* remove excess whitespace from a string buffer (in place) */
 char *
-mungspaces(bp)
-char *bp;
+mungspaces (char *bp)
 {
     register char c, *p, *p2;
     boolean was_space = TRUE;
@@ -124,8 +127,9 @@ char *bp;
 
 #ifdef OVL0
 char *
-eos(s)			/* return the end of a string (pointing at '\0') */
-    register char *s;
+eos (			/* return the end of a string (pointing at '\0') */
+    register char *s
+)
 {
     while (*s) s++;	/* s += strlen(s); */
     return s;
@@ -133,9 +137,10 @@ eos(s)			/* return the end of a string (pointing at '\0') */
 
 /* strcat(s, {c,'\0'}); */
 char *
-strkitten(s, c)		/* append a character to a string (in place) */
-    char *s;
-    char c;
+strkitten (		/* append a character to a string (in place) */
+    char *s,
+    char c
+)
 {
     char *p = eos(s);
 
@@ -145,8 +150,9 @@ strkitten(s, c)		/* append a character to a string (in place) */
 }
 
 char *
-s_suffix(s)		/* return a name converted to possessive */
-    const char *s;
+s_suffix (		/* return a name converted to possessive */
+    const char *s
+)
 {
     Static char buf[BUFSZ];
 
@@ -161,9 +167,10 @@ s_suffix(s)		/* return a name converted to possessive */
 }
 
 char *
-xcrypt(str, buf)	/* trivial text encryption routine (see makedefs) */
-const char *str;
-char *buf;
+xcrypt (	/* trivial text encryption routine (see makedefs) */
+    const char *str,
+    char *buf
+)
 {
     register const char *p;
     register char *q;
@@ -192,8 +199,9 @@ onlyspace(s)		/* is a string entirely whitespace? */
 
 #ifdef OVLB
 char *
-tabexpand(sbuf)		/* expand tabs into proper number of spaces */
-    char *sbuf;
+tabexpand (		/* expand tabs into proper number of spaces */
+    char *sbuf
+)
 {
     char buf[BUFSZ];
     register char *bp, *s = sbuf;
@@ -214,8 +222,9 @@ tabexpand(sbuf)		/* expand tabs into proper number of spaces */
 }
 
 char *
-visctrl(c)		/* make a displayable string from a character */
-    char c;
+visctrl (		/* make a displayable string from a character */
+    char c
+)
 {
     Static char ccc[3];
 
@@ -238,8 +247,9 @@ visctrl(c)		/* make a displayable string from a character */
 
 #ifdef OVL2
 const char *
-ordin(n)		/* return the ordinal suffix of a number */
-    int n;			/* note: should be non-negative */
+ordin (		/* return the ordinal suffix of a number */
+    int n			/* note: should be non-negative */
+)
 {
     register int dd = n % 10;
 
@@ -250,8 +260,9 @@ ordin(n)		/* return the ordinal suffix of a number */
 
 #ifdef OVL1
 char *
-sitoa(n)		/* make a signed digit string from a number */
-    int n;
+sitoa (		/* make a signed digit string from a number */
+    int n
+)
 {
     Static char buf[13];
 
@@ -259,19 +270,21 @@ sitoa(n)		/* make a signed digit string from a number */
     return buf;
 }
 
-int
-sgn(n)			/* return the sign of a number: -1, 0, or 1 */
-    int n;
+int 
+sgn (			/* return the sign of a number: -1, 0, or 1 */
+    int n
+)
 {
     return (n < 0) ? -1 : (n != 0);
 }
 #endif /* OVL1 */
 
 #ifdef OVLB
-int
-rounddiv(x, y)		/* calculate x/y, rounding as appropriate */
-    long x;
-    int  y;
+int 
+rounddiv (		/* calculate x/y, rounding as appropriate */
+    long x,
+    int y
+)
 {
     int r, m;
     int divsgn = 1;
@@ -293,9 +306,13 @@ rounddiv(x, y)		/* calculate x/y, rounding as appropriate */
 #endif /* OVLB */
 
 #ifdef OVL0
-int
-distmin(x0, y0, x1, y1) /* distance between two points, in moves */
-    int x0, y0, x1, y1;
+int 
+distmin ( /* distance between two points, in moves */
+    int x0,
+    int y0,
+    int x1,
+    int y1
+)
 {
     register int dx = x0 - x1, dy = y0 - y1;
     if (dx < 0) dx = -dx;
@@ -306,9 +323,13 @@ distmin(x0, y0, x1, y1) /* distance between two points, in moves */
     return (dx < dy) ? dy : dx;
 }
 
-int
-dist2(x0, y0, x1, y1)	/* square of euclidean distance between pair of pts */
-    int x0, y0, x1, y1;
+int 
+dist2 (	/* square of euclidean distance between pair of pts */
+    int x0,
+    int y0,
+    int x1,
+    int y1
+)
 {
     register int dx = x0 - x1, dy = y0 - y1;
     return dx * dx + dy * dy;
@@ -353,10 +374,12 @@ pmatch_top:
 
 #ifdef OVL2
 #ifndef STRNCMPI
-int
-strncmpi(s1, s2, n)	/* case insensitive counted string comparison */
-    register const char *s1, *s2;
-    register int n; /*(should probably be size_t, which is usually unsigned)*/
+int 
+strncmpi (	/* case insensitive counted string comparison */
+    register const char *s1,
+    register const char *s2,
+    register int n /*(should probably be size_t, which is usually unsigned)*/
+)
 {					/*{ aka strncasecmp }*/
     register char t1, t2;
 
@@ -376,9 +399,10 @@ strncmpi(s1, s2, n)	/* case insensitive counted string comparison */
 #ifndef STRSTRI
 
 char *
-strstri(str, sub)	/* case insensitive substring search */
-    const char *str;
-    const char *sub;
+strstri (	/* case insensitive substring search */
+    const char *str,
+    const char *sub
+)
 {
     register const char *s1, *s2;
     register int i, k;
@@ -457,8 +481,8 @@ extern struct tm *localtime(time_t *);
 #endif
 static struct tm *getlt(void);
 
-void
-setrandom()
+void 
+setrandom (void)
 {
 	/* the types are different enough here that sweeping the different
 	 * routine names into one via #defines is even more confusing
@@ -486,7 +510,7 @@ setrandom()
 }
 
 static struct tm *
-getlt()
+getlt (void)
 {
 	time_t date;
 
@@ -502,15 +526,15 @@ getlt()
 #endif
 }
 
-int
-getyear()
+int 
+getyear (void)
 {
 	return(1900 + getlt()->tm_year);
 }
 
 /* KMH -- Used by gypsies */
-int
-getmonth()
+int 
+getmonth (void)
 {
 	return (getlt()->tm_mon);
 }
@@ -581,8 +605,8 @@ time_t date;
  * 177 ~= 8 reported phases * 22
  * + 11/22 for rounding
  */
-int
-phase_of_the_moon()		/* 0-7, with 0: new, 4: full */
+int 
+phase_of_the_moon (void)		/* 0-7, with 0: new, 4: full */
 {
 	register struct tm *lt = getlt();
 	register int epact, diy, goldn;
@@ -613,16 +637,16 @@ groundhog_day()
 	return((boolean)(lt->tm_mon == 1 && lt->tm_mday == 2));
 }
 
-int
-night()
+int 
+night (void)
 {
 	register int hour = getlt()->tm_hour;
 
 	return(hour < 6 || hour > 21);
 }
 
-int
-midnight()
+int 
+midnight (void)
 {
 	return(getlt()->tm_hour == 0);
 }

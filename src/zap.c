@@ -26,7 +26,7 @@ STATIC_DCL void polyuse(struct obj*, int, int);
 STATIC_DCL void create_polymon(struct obj *, int);
 STATIC_DCL boolean zap_updown(struct obj *);
 STATIC_DCL int zhitm(struct monst *,int,int, struct obj **);
-STATIC_DCL void zhitu(int,int,const char *,XCHAR_P,XCHAR_P);
+STATIC_DCL void zhitu(int,int,const char *,xchar,xchar);
 STATIC_DCL void revive_egg(struct obj *);
 STATIC_DCL void throwstorm(struct obj *, int, int, int);
 #ifdef STEED
@@ -127,10 +127,8 @@ const char *yell_types[] = {    /*10 different beam types*/
 
 /* Routines for IMMEDIATE wands and spells. */
 /* bhitm: monster mtmp was hit by the effect of wand or spell otmp */
-int
-bhitm(mtmp, otmp)
-struct monst *mtmp;
-struct obj *otmp;
+int 
+bhitm (struct monst *mtmp, struct obj *otmp)
 {
 	boolean wake = TRUE;	/* Most 'zaps' should wake monster */
 	boolean reveal_invis = FALSE;
@@ -439,9 +437,8 @@ struct obj *otmp;
 	return 0;
 }
 
-void
-probe_monster(mtmp)
-struct monst *mtmp;
+void 
+probe_monster (struct monst *mtmp)
 {
 	struct obj *otmp;
 

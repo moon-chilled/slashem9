@@ -64,7 +64,7 @@ STATIC_DCL void topten_print(const char *);
 STATIC_DCL void topten_print_bold(const char *);
 STATIC_DCL xchar observable_depth(d_level *);
 STATIC_DCL void outheader(void);
-STATIC_DCL void outentry(int,struct toptenentry *,BOOLEAN_P);
+STATIC_DCL void outentry(int,struct toptenentry *,boolean);
 STATIC_DCL void readentry(FILE *,struct toptenentry *);
 STATIC_DCL void writeentry(FILE *,struct toptenentry *);
 
@@ -74,8 +74,8 @@ STATIC_DCL void write_xlentry(FILE *,struct toptenentry *);
 #endif
 
 STATIC_DCL void free_ttlist(struct toptenentry *);
-STATIC_DCL int classmon(char *,BOOLEAN_P);
-STATIC_DCL int score_wanted(BOOLEAN_P, int,struct toptenentry *,int,const char **,int);
+STATIC_DCL int classmon(char *,boolean);
+STATIC_DCL int score_wanted(boolean, int,struct toptenentry *,int,const char **,int);
 
 STATIC_DCL long encodeconduct(void);
 STATIC_DCL long encodeachieve(void);
@@ -379,9 +379,8 @@ struct toptenentry *tt;
 	dealloc_ttentry(tt);
 }
 
-void
-topten(how)
-int how;
+void 
+topten (int how)
 {
 	int uid = getuid();
 	int rank, rank0 = -1, rank1 = 0;

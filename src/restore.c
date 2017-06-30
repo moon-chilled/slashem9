@@ -20,16 +20,16 @@ static int mgetc(void);
 #endif
 STATIC_DCL void find_lev_obj(void);
 STATIC_DCL void restlevchn(int);
-STATIC_DCL void restdamage(int,BOOLEAN_P);
-STATIC_DCL struct obj *restobjchn(int,BOOLEAN_P,BOOLEAN_P);
-STATIC_DCL struct monst *restmonchn(int,BOOLEAN_P);
+STATIC_DCL void restdamage(int,boolean);
+STATIC_DCL struct obj *restobjchn(int,boolean,boolean);
+STATIC_DCL struct monst *restmonchn(int,boolean);
 STATIC_DCL struct fruit *loadfruitchn(int);
 STATIC_DCL void freefruitchn(struct fruit *);
 STATIC_DCL void ghostfruit(struct obj *);
 STATIC_DCL boolean restgamestate(int, unsigned int *, unsigned int *);
 STATIC_DCL void restlevelstate(unsigned int, unsigned int);
-STATIC_DCL int restlevelfile(int,XCHAR_P);
-STATIC_DCL void reset_oattached_mids(BOOLEAN_P);
+STATIC_DCL int restlevelfile(int,xchar);
+STATIC_DCL void reset_oattached_mids(boolean);
 
 /*
  * Save a mapping of IDs from ghost levels to the current level.  This
@@ -572,9 +572,8 @@ xchar ltmp;
 	return(2);
 }
 
-int
-dorecover(fd)
-register int fd;
+int 
+dorecover (register int fd)
 {
 	unsigned int stuckid = 0, steedid = 0;	/* not a register */
 	xchar ltmp;
@@ -734,9 +733,8 @@ register int fd;
 	return(1);
 }
 
-void
-trickery(reason)
-char *reason;
+void 
+trickery (char *reason)
 {
 	pline("Strange, this map is not as I remember it.");
 	pline("Somebody is trying some trickery here...");
@@ -1068,8 +1066,8 @@ static NEARDATA unsigned short inbufsz = 0;
 static NEARDATA short inrunlength = -1;
 static NEARDATA int mreadfd;
 
-static int
-mgetc()
+static int 
+mgetc (void)
 {
     if (inbufp >= inbufsz) {
 	inbufsz = read(mreadfd, (genericptr_t)inbuf, sizeof inbuf);
@@ -1084,8 +1082,8 @@ mgetc()
     return inbuf[inbufp++];
 }
 
-void
-minit()
+void 
+minit (void)
 {
     inbufsz = 0;
     inbufp = 0;
@@ -1119,8 +1117,8 @@ register unsigned len;
 
 #else /* ZEROCOMP */
 
-void
-minit()
+void 
+minit (void)
 {
     return;
 }

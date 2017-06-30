@@ -38,10 +38,10 @@ void remove_region(NhRegion *);
 #if 0
 void replace_mon_regions(struct monst *,struct monst *);
 void remove_mon_from_regions(struct monst *);
-NhRegion *create_msg_region(XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P,
+NhRegion *create_msg_region(xchar,xchar,xchar,xchar,
 				    const char *,const char *);
 boolean enter_force_field(genericptr,genericptr);
-NhRegion *create_force_field(XCHAR_P,XCHAR_P,int,int);
+NhRegion *create_force_field(xchar,xchar,int,int);
 #endif
 
 static void reset_region_mids(NhRegion *);
@@ -353,8 +353,8 @@ NhRegion *reg;
  * Remove all regions and clear all related data (This must be down
  * when changing level, for instance).
  */
-void
-clear_regions()
+void 
+clear_regions (void)
 {
     register int i;
 
@@ -372,8 +372,8 @@ clear_regions()
  * It makes the regions age, if necessary and calls the appropriate
  * callbacks when needed.
  */
-void
-run_regions()
+void 
+run_regions (void)
 {
     register int i, j, k;
     int f_indx;
@@ -517,8 +517,8 @@ xchar x, y;
 /*
  * Checks player's regions after a teleport for instance.
  */
-void
-update_player_regions()
+void 
+update_player_regions (void)
 {
     register int i;
 
@@ -532,9 +532,8 @@ update_player_regions()
 /*
  * Ditto for a specified monster.
  */
-void
-update_monster_region(mon)
-struct monst *mon;
+void 
+update_monster_region (struct monst *mon)
 {
     register int i;
 
@@ -557,9 +556,8 @@ struct monst *mon;
  * This happens, for instance, when a monster grows and
  * need a new structure (internally that is).
  */
-void
-replace_mon_regions(monold, monnew)
-struct monst *monold, *monnew;
+void 
+replace_mon_regions (struct monst *monold, struct monst *monnew)
 {
     register int i;
 
@@ -573,9 +571,8 @@ struct monst *monold, *monnew;
 /*
  * Remove monster from all regions it was in (ie monster just died)
  */
-void
-remove_mon_from_regions(mon)
-struct monst *mon;
+void 
+remove_mon_from_regions (struct monst *mon)
 {
     register int i;
 
@@ -614,10 +611,8 @@ xchar x, y;
 /**
  * save_regions :
  */
-void
-save_regions(fd, mode)
-int fd;
-int mode;
+void 
+save_regions (int fd, int mode)
 {
     int i, j;
     unsigned n;

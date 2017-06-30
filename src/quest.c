@@ -16,8 +16,8 @@ STATIC_DCL void on_start(void);
 STATIC_DCL void on_locate(void);
 STATIC_DCL void on_goal(void);
 STATIC_DCL boolean not_capable(void);
-STATIC_DCL int is_pure(BOOLEAN_P);
-STATIC_DCL void expulsion(BOOLEAN_P);
+STATIC_DCL int is_pure(boolean);
+STATIC_DCL void expulsion(boolean);
 STATIC_DCL void chat_with_leader(void);
 STATIC_DCL void chat_with_nemesis(void);
 STATIC_DCL void chat_with_guardian(void);
@@ -60,8 +60,8 @@ on_goal()
   }
 }
 
-void
-onquest()
+void 
+onquest (void)
 {
 	if(u.uevent.qcompleted || Not_firsttime) return;
 	if(!Is_special(&u.uz)) return;
@@ -72,8 +72,8 @@ onquest()
 	return;
 }
 
-void
-nemdead()
+void 
+nemdead (void)
 {
 	if(!Qstat(killed_nemesis)) {
 	    Qstat(killed_nemesis) = TRUE;
@@ -81,8 +81,8 @@ nemdead()
 	}
 }
 
-void
-artitouch()
+void 
+artitouch (void)
 {
 	if(!Qstat(touched_artifact)) {
 	    Qstat(touched_artifact) = TRUE;
@@ -173,9 +173,10 @@ boolean seal;
    completion text hasn't been given yet, give it now.  Otherwise
    give another message about the character keeping the artifact
    and using the magic portal to return to the dungeon. */
-void
-finish_quest(obj)
-struct obj *obj;	/* quest artifact; possibly null if carrying Amulet */
+void 
+finish_quest (
+    struct obj *obj	/* quest artifact; possibly null if carrying Amulet */
+)
 {
 	struct obj *otmp;
 
@@ -269,9 +270,8 @@ chat_with_leader()
 	}
 }
 
-void
-leader_speaks(mtmp)
-	register struct monst *mtmp;
+void 
+leader_speaks (register struct monst *mtmp)
 {
 	/* maybe you attacked leader? */
 	if(!mtmp->mpeaceful) {
@@ -296,8 +296,8 @@ chat_with_nemesis()
 	if(!Qstat(met_nemesis)) Qstat(met_nemesis++);
 }
 
-void
-nemesis_speaks()
+void 
+nemesis_speaks (void)
 {
 	if(!Qstat(in_battle)) {
 	  if(u.uhave.questart) qt_pager(QT_NEMWANTSIT);
@@ -344,9 +344,8 @@ prisoner_speaks (mtmp)
 	return;
 }
 
-void
-quest_chat(mtmp)
-	register struct monst *mtmp;
+void 
+quest_chat (register struct monst *mtmp)
 {
     if (mtmp->m_id == Qstat(leader_m_id)) {
 	chat_with_leader();
@@ -360,9 +359,8 @@ quest_chat(mtmp)
 	}
 }
 
-void
-quest_talk(mtmp)
-	register struct monst *mtmp;
+void 
+quest_talk (register struct monst *mtmp)
 {
     if (mtmp->m_id == Qstat(leader_m_id)) {
 	leader_speaks(mtmp);
@@ -375,9 +373,8 @@ quest_talk(mtmp)
 	}
 }
 
-void
-quest_stat_check(mtmp)
-	struct monst *mtmp;
+void 
+quest_stat_check (struct monst *mtmp)
 {
     if(mtmp->data->msound == MS_NEMESIS)
 	Qstat(in_battle) = (mtmp->mcanmove && !mtmp->msleeping &&

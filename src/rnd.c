@@ -18,9 +18,10 @@ extern int rand(void);
 
 #ifdef OVL0
 
-int
-rn2(x)		/* 0 <= rn2(x) < x */
-register int x;
+int 
+rn2 (		/* 0 <= rn2(x) < x */
+    register int x
+)
 {
 #ifdef DEBUG
 	if (x <= 0) {
@@ -37,9 +38,10 @@ register int x;
 #endif /* OVL0 */
 #ifdef OVLB
 
-int
-rnl(x)		/* 0 <= rnl(x) < x; sometimes subtracting Luck */
-register int x;	/* good luck approaches 0, bad luck approaches (x-1) */
+int 
+rnl (		/* 0 <= rnl(x) < x; sometimes subtracting Luck */
+    register int x	/* good luck approaches 0, bad luck approaches (x-1) */
+)
 {
 	register int i;
 
@@ -63,9 +65,10 @@ register int x;	/* good luck approaches 0, bad luck approaches (x-1) */
 #endif /* OVLB */
 #ifdef OVL0
 
-int
-rnd(x)		/* 1 <= rnd(x) <= x */
-register int x;
+int 
+rnd (		/* 1 <= rnd(x) <= x */
+    register int x
+)
 {
 #ifdef DEBUG
 	if (x <= 0) {
@@ -82,9 +85,11 @@ register int x;
 #endif /* OVL0 */
 #ifdef OVL1
 
-int
-d(n,x)		/* n <= d(n,x) <= (n*x) */
-register int n, x;
+int 
+d (		/* n <= d(n,x) <= (n*x) */
+    register int n,
+    register int x
+)
 {
 	register int tmp = n;
 
@@ -101,9 +106,8 @@ register int n, x;
 #endif /* OVL1 */
 #ifdef OVLB
 
-int
-rne(x)
-register int x;
+int 
+rne (register int x)
 {
 	register int tmp, utmp;
 
@@ -122,9 +126,8 @@ register int x;
 	 */
 }
 
-int
-rnz(i)
-int i;
+int 
+rnz (int i)
 {
 #ifdef LINT
 	int x = i;

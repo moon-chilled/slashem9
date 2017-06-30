@@ -68,9 +68,8 @@ register struct obj *otmp;
 
 static NEARDATA const char write_on[] = { SCROLL_CLASS, SPBOOK_CLASS, 0 };
 
-int
-dowrite(pen)
-register struct obj *pen;
+int 
+dowrite (register struct obj *pen)
 {
 	register struct obj *paper;
 	char namebuf[BUFSZ], *nm, *bp;

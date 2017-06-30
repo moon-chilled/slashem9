@@ -134,10 +134,11 @@ boolean exclude_cookie;
 	return rumor_buf;
 }
 
-void
-outrumor(truth, mechanism)
-int truth; /* 1=true, -1=false, 0=either */
-int mechanism;
+void 
+outrumor (
+    int truth, /* 1=true, -1=false, 0=either */
+    int mechanism
+)
 {
 	static const char fortune_msg[] =
 		"This cookie has a scrap of paper inside.";
@@ -201,9 +202,8 @@ dlb *fp;
 	return;
 }
 
-void
-save_oracles(fd, mode)
-int fd, mode;
+void 
+save_oracles (int fd, int mode)
 {
 	if (perform_bwrite(mode)) {
 	    bwrite(fd, (genericptr_t) &oracle_cnt, sizeof oracle_cnt);
@@ -218,9 +218,8 @@ int fd, mode;
 	}
 }
 
-void
-restore_oracles(fd)
-int fd;
+void 
+restore_oracles (int fd)
 {
 	mread(fd, (genericptr_t) &oracle_cnt, sizeof oracle_cnt);
 	if (oracle_cnt) {
@@ -283,9 +282,8 @@ boolean delphi;
 	}
 }
 
-int
-doconsult(oracl)
-register struct monst *oracl;
+int 
+doconsult (register struct monst *oracl)
 {
 #ifdef GOLDOBJ
         long umoney = money_cnt(invent);

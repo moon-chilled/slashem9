@@ -12,10 +12,10 @@ STATIC_DCL void autoquiver(void);
 STATIC_DCL int gem_accept(struct monst *, struct obj *);
 STATIC_DCL void tmiss(struct obj *, struct monst *);
 STATIC_DCL int throw_gold(struct obj *);
-STATIC_DCL void check_shop_obj(struct obj *,XCHAR_P,XCHAR_P,BOOLEAN_P);
-STATIC_DCL void breakobj(struct obj *,XCHAR_P,XCHAR_P,BOOLEAN_P,BOOLEAN_P);
-STATIC_DCL void breakmsg(struct obj *,BOOLEAN_P);
-STATIC_DCL boolean toss_up(struct obj *, BOOLEAN_P);
+STATIC_DCL void check_shop_obj(struct obj *,xchar,xchar,boolean);
+STATIC_DCL void breakobj(struct obj *,xchar,xchar,boolean,boolean);
+STATIC_DCL void breakmsg(struct obj *,boolean);
+STATIC_DCL boolean toss_up(struct obj *, boolean);
 STATIC_DCL boolean throwing_weapon(struct obj *);
 STATIC_DCL void sho_obj_return_to_u(struct obj *obj);
 STATIC_DCL boolean mhurtle_step(genericptr_t,int,int);
@@ -38,8 +38,7 @@ extern boolean notonhead;	/* for long worms */
 /* Split this object off from its slot */
 
 struct obj *
-splitoneoff(pobj)
-struct obj **pobj;
+splitoneoff (struct obj **pobj)
 {
     struct obj *obj = *pobj;
     struct obj *otmp = (struct obj *)0;
@@ -286,8 +285,8 @@ int thrown;
 }
 
 
-int
-dothrow()
+int 
+dothrow (void)
 {
 	register struct obj *obj;
 	int oldmulti = multi, result, shotlimit;
@@ -336,8 +335,8 @@ dothrow()
 
 /* KMH -- automatically fill quiver */
 /* Suggested by Jeffrey Bay <jbay@convex.hp.com> */
-static void
-autoquiver()
+static void 
+autoquiver (void)
 {
 	struct obj *otmp, *oammo = 0, *omissile = 0, *omisc = 0, *altammo = 0;
 
@@ -399,8 +398,8 @@ autoquiver()
 	return;
 }
 
-int
-dofire()
+int 
+dofire (void)
 {
 	int result, shotlimit;
 
@@ -460,9 +459,8 @@ dofire()
 /*
  * Object hits floor at hero's feet.  Called from drop() and throwit().
  */
-void
-hitfloor(obj)
-register struct obj *obj;
+void 
+hitfloor (register struct obj *obj)
 {
 	if (IS_SOFT(levl[u.ux][u.uy].typ) || u.uinwater) {
 		dropy(obj);
@@ -775,10 +773,8 @@ hurtle(dx, dy, range, verbose)
 
 /* Move a monster through the air for a few squares.
  */
-void
-mhurtle(mon, dx, dy, range)
-	struct monst *mon;
-	int dx, dy, range;
+void 
+mhurtle (struct monst *mon, int dx, int dy, int range)
 {
     coord mc, cc;
 
@@ -1375,11 +1371,8 @@ struct monst *mon;
  * Return 1 if obj has disappeared or otherwise been taken care of,
  * 0 if caller must take care of it.
  */
-int
-thitmonst(mon, obj, thrown)
-register struct monst *mon;
-register struct obj   *obj;
-int thrown;
+int 
+thitmonst (register struct monst *mon, register struct obj *obj, int thrown)
 {
 	register int	tmp; /* Base chance to hit */
 	register int	disttmp; /* distance modifier */

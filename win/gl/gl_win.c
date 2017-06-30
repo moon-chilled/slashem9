@@ -301,7 +301,7 @@ static int compute_window_base_y(int type, int *h)
   return 0;
 }
 
-void Sdlgl_display_nhwindow(winid window, BOOLEAN_P blocking)
+void Sdlgl_display_nhwindow(winid window, boolean blocking)
 {
   struct TextWindow *win;
   int win_y, win_h;

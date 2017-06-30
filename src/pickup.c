@@ -8,15 +8,15 @@
 
 #include "hack.h"
 
-STATIC_DCL void simple_look(struct obj *,BOOLEAN_P);
+STATIC_DCL void simple_look(struct obj *,boolean);
 #ifndef GOLDOBJ
 STATIC_DCL boolean query_classes(char *,boolean *,boolean *,
-		const char *,struct obj *,BOOLEAN_P,BOOLEAN_P,int *);
+		const char *,struct obj *,boolean,boolean,int *);
 #else
 STATIC_DCL boolean query_classes(char *,boolean *,boolean *,
-		const char *,struct obj *,BOOLEAN_P,int *);
+		const char *,struct obj *,boolean,int *);
 #endif
-STATIC_DCL void check_here(BOOLEAN_P);
+STATIC_DCL void check_here(boolean);
 STATIC_DCL boolean n_or_more(struct obj *);
 STATIC_DCL boolean all_but_uchain(struct obj *);
 #if 0 /* not used */
@@ -24,16 +24,16 @@ STATIC_DCL boolean allow_cat_no_uchain(struct obj *);
 #endif
 STATIC_DCL int autopick(struct obj*, int, menu_item **);
 STATIC_DCL int count_categories(struct obj *,int);
-STATIC_DCL long carry_count(struct obj *,struct obj *,long,BOOLEAN_P,int *,int *);
-STATIC_DCL int lift_object(struct obj *,struct obj *,long *,BOOLEAN_P);
+STATIC_DCL long carry_count(struct obj *,struct obj *,long,boolean,int *,int *);
+STATIC_DCL int lift_object(struct obj *,struct obj *,long *,boolean);
 STATIC_PTR int in_container(struct obj *);
 STATIC_PTR int ck_bag(struct obj *);
 STATIC_PTR int out_container(struct obj *);
 STATIC_DCL long mbag_item_gone(int,struct obj *);
 STATIC_DCL void observe_quantum_cat(struct obj *);
-STATIC_DCL int menu_loot(int, struct obj *, BOOLEAN_P);
-STATIC_DCL int in_or_out_menu(const char *,struct obj *, BOOLEAN_P, BOOLEAN_P);
-STATIC_DCL int container_at(int, int, BOOLEAN_P);
+STATIC_DCL int menu_loot(int, struct obj *, boolean);
+STATIC_DCL int in_or_out_menu(const char *,struct obj *, boolean, boolean);
+STATIC_DCL int container_at(int, int, boolean);
 STATIC_DCL boolean able_to_loot(int, int);
 STATIC_DCL boolean mon_beside(int, int);
 
@@ -295,9 +295,8 @@ struct obj *obj;
 /* List of valid menu classes for query_objlist() and allow_category callback */
 static char valid_menu_classes[MAXOCLASSES + 2];
 
-void
-add_valid_menu_class(c)
-int c;
+void 
+add_valid_menu_class (int c)
 {
 	static int vmc_count = 0;
 
@@ -386,9 +385,10 @@ register struct obj *otmp;
  * Returns 1 if tried to pick something up, whether
  * or not it succeeded.
  */
-int
-pickup(what)
-int what;		/* should be a long */
+int 
+pickup (
+    int what		/* should be a long */
+)
 {
 	int i, n, res, count, n_tried = 0, n_picked = 0;
 	menu_item *pick_list = (menu_item *) 0;

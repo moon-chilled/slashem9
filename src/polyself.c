@@ -27,8 +27,8 @@ static void special_poly(void);
 
 /* Assumes u.umonster is set up already */
 /* Use u.umonster since we might be restoring and you may be polymorphed */
-void
-init_uasmon()
+void 
+init_uasmon (void)
 {
 	int i;
 
@@ -55,8 +55,8 @@ init_uasmon()
 }
 
 /* update the youmonst.data structure pointer */
-void
-set_uasmon()
+void 
+set_uasmon (void)
 {
 	set_mon_data(&youmonst, ((u.umonnum == u.umonster) ? 
 					&upermonst : &mons[u.umonnum]), 0);
@@ -135,8 +135,8 @@ const char *fmt, *arg;
 	see_monsters();
 }
 
-void
-change_sex()
+void 
+change_sex (void)
 {
 	/* setting u.umonster for caveman/cavewoman or priest/priestess
 	   swap unintentionally makes `Upolyd' appear to be true */
@@ -413,9 +413,10 @@ boolean forcecontrol;
 }
 
 /* (try to) make a mntmp monster out of the player */
-int
-polymon(mntmp)	/* returns 1 if polymorph successful */
-int	mntmp;
+int 
+polymon (	/* returns 1 if polymorph successful */
+    int mntmp
+)
 {
 	boolean sticky = sticks(youmonst.data) && u.ustuck && !u.uswallow,
 		was_blind = !!Blind, dochange = FALSE;
@@ -843,8 +844,8 @@ int alone;
 	untwoweapon();
 }
 
-void
-rehumanize()
+void 
+rehumanize (void)
 {
 	boolean forced = (u.mh < 1);
 	
@@ -890,8 +891,8 @@ rehumanize()
  * Note - you can only gaze at one monster at a time, to keep this 
  * from getting out of hand ;B  Also costs 20 energy.
  */
-int
-dogaze()
+int 
+dogaze (void)
 {
 	coord cc;
 	struct monst *mtmp;
@@ -961,8 +962,8 @@ dogaze()
 	return(1);
 }
 
-int
-dobreathe()
+int 
+dobreathe (void)
 {
 	struct attack *mattk;
 	int energy = 0;
@@ -1004,8 +1005,8 @@ dobreathe()
 	return(1);
 }
 
-int
-dospit()
+int 
+dospit (void)
 {
 	struct obj *otmp;
 	struct attack *mattk;
@@ -1033,8 +1034,8 @@ dospit()
 	return(1);
 }
 
-int
-doremove()
+int 
+doremove (void)
 {
 	if (!Punished) {
 		You("are not chained to anything!");
@@ -1044,8 +1045,8 @@ doremove()
 	return(1);
 }
 
-int
-dospinweb()
+int 
+dospinweb (void)
 {
 	register struct trap *ttmp = t_at(u.ux,u.uy);
 
@@ -1160,8 +1161,8 @@ dospinweb()
 	return(1);
 }
 
-int
-dosummon()
+int 
+dosummon (void)
 {
 	int placeholder;
 	if (u.uen < 10) {
@@ -1181,8 +1182,8 @@ dosummon()
 
 #if 0
 /* WAC supplanted by dogaze (). */
-int
-dogaze()
+int 
+dogaze (void)
 {
 	register struct monst *mtmp;
 	int looked = 0;
@@ -1310,8 +1311,8 @@ dogaze()
 #endif
 
 
-int
-dohide()
+int 
+dohide (void)
 {
 	boolean ismimic = youmonst.data->mlet == S_MIMIC;
 
@@ -1329,8 +1330,8 @@ dohide()
 	return(1);
 }
 
-int
-domindblast()
+int 
+domindblast (void)
 {
 	struct monst *mtmp, *nmon;
 
@@ -1390,9 +1391,7 @@ boolean silently;
 #ifdef OVL1
 
 const char *
-mbodypart(mon, part)
-struct monst *mon;
-int part;
+mbodypart (struct monst *mon, int part)
 {
 	static NEARDATA const char
 	*humanoid_parts[] = { "arm", "eye", "face", "finger",
@@ -1503,8 +1502,7 @@ int part;
 }
 
 const char *
-body_part(part)
-int part;
+body_part (int part)
 {
 	return mbodypart(&youmonst, part);
 }
@@ -1512,8 +1510,8 @@ int part;
 #endif /* OVL1 */
 #ifdef OVL0
 
-int
-poly_gender()
+int 
+poly_gender (void)
 {
 /* Returns gender of polymorphed player; 0/1=same meaning as flags.female,
  * 2=none.
@@ -1525,9 +1523,8 @@ poly_gender()
 #endif /* OVL0 */
 #ifdef OVLB
 
-void
-ugolemeffects(damtype, dam)
-int damtype, dam;
+void 
+ugolemeffects (int damtype, int dam)
 {
 	int heal = 0;
 	/* We won't bother with "slow"/"haste" since players do not
@@ -1614,8 +1611,8 @@ mage_transform()	/* called each move during transformation process */
     return 0;
 }
 
-int
-polyatwill()      /* Polymorph under conscious control (#youpoly) */
+int 
+polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
 {
 #define EN_DOPP 	20 	/* This is the "base cost" for a polymorph
 				 * Actual cost is this base cost + 5 * monster level
@@ -1787,8 +1784,8 @@ polyatwill()      /* Polymorph under conscious control (#youpoly) */
 	return 1;
 }
 
-static void
-merge_with_armor()
+static void 
+merge_with_armor (void)
 {
 	/* This function does hides the armor being worn 
 	 * It currently assumes that you are changing into a dragon
@@ -1811,8 +1808,8 @@ merge_with_armor()
 }
 
 #if 0	/* What the f*** is this for? -- KMH */
-static void
-special_poly()
+static void 
+special_poly (void)
 {
 	char buf[BUFSZ];
 	int old_light, new_light;

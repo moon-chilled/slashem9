@@ -15,8 +15,8 @@ static NEARDATA const char steeds[] = {
 STATIC_DCL boolean landing_spot(coord *, int, int);
 
 /* caller has decided that hero can't reach something while mounted */
-void
-rider_cant_reach()
+void 
+rider_cant_reach (void)
 {
      You("aren't skilled enough to reach from %s.", y_monnam(u.usteed));
 }
@@ -37,9 +37,8 @@ can_saddle(mtmp)
 }
 
 
-int
-use_saddle(otmp)
-	struct obj *otmp;
+int 
+use_saddle (struct obj *otmp)
 {
 	struct monst *mtmp;
 	struct permonst *ptr;
@@ -167,8 +166,8 @@ can_ride(mtmp)
 }
 
 
-int
-doride()
+int 
+doride (void)
 {
 	boolean forcemount = FALSE;
 
@@ -345,8 +344,8 @@ mount_steed(mtmp, force)
 
 
 /* You and your steed have moved */
-void
-exercise_steed()
+void 
+exercise_steed (void)
 {
 	if (!u.usteed)
 		return;
@@ -410,8 +409,8 @@ int forceit;
 }
 
 /* The player kicks or whips the steed */
-void
-kick_steed()
+void 
+kick_steed (void)
 {
 	char He[4];
 	if (!u.usteed)
@@ -457,9 +456,10 @@ kick_steed()
 }
 
 /* Stop riding the current steed */
-void
-dismount_steed(reason)
-	int reason;		/* Player was thrown off etc. */
+void 
+dismount_steed (
+    int reason		/* Player was thrown off etc. */
+)
 {
 	struct monst *mtmp;
 	struct obj *otmp;
@@ -619,10 +619,8 @@ dismount_steed(reason)
 	return;
 }
 
-void
-place_monster(mon, x, y)
-struct monst *mon;
-int x, y;
+void 
+place_monster (struct monst *mon, int x, int y)
 {
     if (mon == u.usteed ||
 	    /* special case is for convoluted vault guard handling */

@@ -8,15 +8,15 @@
 #define HEIGHT	(ROWNO - 1)
 #define WIDTH	(COLNO - 2)
 
-STATIC_DCL void init_map(SCHAR_P);
-STATIC_DCL void init_fill(SCHAR_P,SCHAR_P);
-STATIC_DCL schar get_map(int,int,SCHAR_P);
-STATIC_DCL void pass_one(SCHAR_P,SCHAR_P);
-STATIC_DCL void pass_two(SCHAR_P,SCHAR_P);
-STATIC_DCL void pass_three(SCHAR_P,SCHAR_P);
+STATIC_DCL void init_map(schar);
+STATIC_DCL void init_fill(schar,schar);
+STATIC_DCL schar get_map(int,int,schar);
+STATIC_DCL void pass_one(schar,schar);
+STATIC_DCL void pass_two(schar,schar);
+STATIC_DCL void pass_three(schar,schar);
 STATIC_DCL void wallify_map(void);
-STATIC_DCL void join_map(SCHAR_P,SCHAR_P);
-STATIC_DCL void finish_map(SCHAR_P,SCHAR_P,XCHAR_P,XCHAR_P);
+STATIC_DCL void join_map(schar,schar);
+STATIC_DCL void finish_map(schar,schar,xchar,xchar);
 STATIC_DCL void remove_room(unsigned);
 void mkmap(lev_init *);
 
@@ -372,9 +372,8 @@ finish_map(fg_typ, bg_typ, lit, walled)
  * region are already cleared, and roomno and irregular fields outside the
  * region are all set.
  */
-void
-remove_rooms(lx, ly, hx, hy)
-    int lx, ly, hx, hy;
+void 
+remove_rooms (int lx, int ly, int hx, int hy)
 {
     int i;
     struct mkroom *croom;

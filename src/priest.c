@@ -13,7 +13,7 @@
 
 #ifdef OVLB
 
-STATIC_DCL boolean histemple_at(struct monst *,XCHAR_P,XCHAR_P);
+STATIC_DCL boolean histemple_at(struct monst *,xchar,xchar);
 STATIC_DCL boolean has_shrine(struct monst *);
 
 /*
@@ -113,9 +113,8 @@ pick_move:
 
 #ifdef OVL0
 
-char
-temple_occupied(array)
-register char *array;
+char 
+temple_occupied (register char *array)
 {
 	register char *ptr;
 
@@ -140,9 +139,8 @@ register xchar x, y;
 /*
  * pri_move: return 1: moved  0: didn't  -1: let m_move do it  -2: died
  */
-int
-pri_move(priest)
-register struct monst *priest;
+int 
+pri_move (register struct monst *priest)
 {
 	register xchar gx,gy,omx,omy;
 	schar temple;
@@ -255,9 +253,10 @@ boolean sanctum;   /* is it the seat of the high priest? */
  *		the true name even when under that influence
  */
 char *
-priestname(mon, pname)
-register struct monst *mon;
-char *pname;		/* caller-supplied output buffer */
+priestname (
+    register struct monst *mon,
+    char *pname		/* caller-supplied output buffer */
+)
 {
 	const char *what = Hallucination ? rndmonnam() : mon->data->mname;
 
@@ -318,8 +317,7 @@ struct monst *pri;
 }
 
 struct monst *
-findpriest(roomno)
-char roomno;
+findpriest (char roomno)
 {
 	register struct monst *mtmp;
 
@@ -333,9 +331,8 @@ char roomno;
 }
 
 /* called from check_special_room() when the player enters the temple room */
-void
-intemple(roomno)
-register int roomno;
+void 
+intemple (register int roomno)
 {
 	register struct monst *priest = findpriest((char)roomno);
 	boolean tended = (priest != (struct monst *)0);
@@ -412,9 +409,8 @@ register int roomno;
        }
 }
 
-void
-priest_talk(priest)
-register struct monst *priest;
+void 
+priest_talk (register struct monst *priest)
 {
 	boolean coaligned = p_coaligned(priest);
 	boolean strayed = (u.ualign.record < 0);

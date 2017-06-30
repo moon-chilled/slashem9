@@ -9,24 +9,24 @@ STATIC_PTR int prayer_done(void);
 STATIC_DCL struct obj *worst_cursed_item(void);
 STATIC_DCL int in_trouble(void);
 STATIC_DCL void fix_worst_trouble(int);
-STATIC_DCL void angrygods(ALIGNTYP_P);
+STATIC_DCL void angrygods(aligntyp);
 STATIC_DCL void at_your_feet(const char *);
 #ifdef ELBERETH
 STATIC_DCL void gcrownu(void);
 #endif	/*ELBERETH*/
-STATIC_DCL void pleased(ALIGNTYP_P);
-STATIC_DCL void godvoice(ALIGNTYP_P,const char*);
-STATIC_DCL void god_zaps_you(ALIGNTYP_P);
-STATIC_DCL void fry_by_god(ALIGNTYP_P);
-STATIC_DCL void gods_angry(ALIGNTYP_P);
-STATIC_DCL void gods_upset(ALIGNTYP_P);
+STATIC_DCL void pleased(aligntyp);
+STATIC_DCL void godvoice(aligntyp,const char*);
+STATIC_DCL void god_zaps_you(aligntyp);
+STATIC_DCL void fry_by_god(aligntyp);
+STATIC_DCL void gods_angry(aligntyp);
+STATIC_DCL void gods_upset(aligntyp);
 STATIC_DCL void consume_offering(struct obj *);
-STATIC_DCL boolean water_prayer(BOOLEAN_P);
+STATIC_DCL boolean water_prayer(boolean);
 STATIC_DCL boolean blocked_boulder(int,int);
 static void lawful_god_gives_angel(void);
-static void god_gives_pet(ALIGNTYP_P);
+static void god_gives_pet(aligntyp);
 static int offer_oracle(struct monst *, struct obj *);
-static void god_gives_benefit(ALIGNTYP_P);
+static void god_gives_benefit(aligntyp);
 
 /* simplify a few tests */
 #define Cursed_obj(obj,typ) ((obj) && (obj)->otyp == (typ) && (obj)->cursed)
@@ -641,9 +641,8 @@ aligntyp resp_god;
 }
 
 /* helper to print "str appears at your feet", or appropriate */
-static void
-at_your_feet(str)
-	const char *str;
+static void 
+at_your_feet (const char *str)
 {
 	if (Blind) str = Something;
 	if (u.uswallow) {
@@ -1200,8 +1199,8 @@ aligntyp alignment;
     }
 }
 
-static void
-lawful_god_gives_angel()
+static void 
+lawful_god_gives_angel (void)
 {
 /*
     register struct monst *mtmp2;
@@ -1220,10 +1219,8 @@ lawful_god_gives_angel()
 
 
 /* KMH -- offerings to Oracle */
-static int
-offer_oracle (mtmp, otmp)
-	struct monst *mtmp;
-	struct obj *otmp;
+static int 
+offer_oracle (struct monst *mtmp, struct obj *otmp)
 {
 	/* The Oracle doesn't care about the age or species of the corpse,
 	 * except for the dreaded woodchuck.
@@ -1255,8 +1252,8 @@ offer_oracle (mtmp, otmp)
 }
 
 
-int
-dosacrifice()
+int 
+dosacrifice (void)
 {
     register struct obj *otmp;
     int value = 0;
@@ -1785,8 +1782,8 @@ boolean praying;	/* false means no messages should be given */
     return !praying ? (boolean)(p_type == 3 && !Inhell) : TRUE;
 }
 
-int
-dopray()
+int 
+dopray (void)
 {
     /* Confirm accidental slips of Alt-P */
     if (flags.prayconfirm)
@@ -1897,8 +1894,8 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
     return(1);
 }
 
-int
-doturn()
+int 
+doturn (void)
 {	
 	/* WAC doturn is now a technique */
 	/* Try to use turn undead spell if you don't know the tech. */
@@ -1921,8 +1918,8 @@ doturn()
 	return(turn_undead());
 }
 
-int
-turn_undead()
+int 
+turn_undead (void)
 {
 	struct monst *mtmp, *mtmp2;
 	int once, range, xlev;
@@ -2004,7 +2001,7 @@ turn_undead()
 }
 
 const char *
-a_gname()
+a_gname (void)
 {
     return(a_gname_at(u.ux, u.uy));
 }
@@ -2019,7 +2016,7 @@ xchar x, y;
 }
 
 const char *
-u_gname()  /* returns the name of the player's deity */
+u_gname (void)  /* returns the name of the player's deity */
 {
     return align_gname(u.ualign.type);
 }
@@ -2082,9 +2079,8 @@ aligntyp alignment;
     return result;
 }
 
-void
-altar_wrath(x, y)
-register int x, y;
+void 
+altar_wrath (register int x, register int y)
 {
     aligntyp altaralign = a_align(x,y);
 

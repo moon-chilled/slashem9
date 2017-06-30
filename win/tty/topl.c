@@ -22,7 +22,7 @@
 
 
 STATIC_DCL void redotoplin(const char*);
-STATIC_DCL void topl_putsym(CHAR_P);
+STATIC_DCL void topl_putsym(char);
 STATIC_DCL void remember_topl(void);
 STATIC_DCL void removetopl(int);
 

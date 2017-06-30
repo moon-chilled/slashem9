@@ -588,8 +588,8 @@ void Sdlgl_start_menu(winid window)
  * Add a menu item to the menu list.
  */
 void Sdlgl_add_menu(winid window, int glyph, const anything *identifier, 
-    CHAR_P ch, CHAR_P groupacc, int attr, const char *str, 
-    BOOLEAN_P preselected)
+    char ch, char groupacc, int attr, const char *str, 
+    boolean preselected)
 {
   struct TextWindow *win;
   struct MenuItem *item;
@@ -768,7 +768,7 @@ int Sdlgl_select_menu(winid window, int how, menu_item **menu_list)
   return num;
 }
 
-char Sdlgl_message_menu(CHAR_P let, int how, const char *mesg)
+char Sdlgl_message_menu(char let, int how, const char *mesg)
 {
   struct TextWindow *win;
   
@@ -818,7 +818,7 @@ char Sdlgl_message_menu(CHAR_P let, int how, const char *mesg)
  *   are allowed); if it includes an <esc>, anything beyond that won't
  *   be shown in the prompt to the user but will be acceptable as input.
  */
-char Sdlgl_yn_function(const char *query, const char *resp, CHAR_P def)
+char Sdlgl_yn_function(const char *query, const char *resp, char def)
 {
   struct TextWindow *win;
   

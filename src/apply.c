@@ -41,9 +41,9 @@ STATIC_DCL int use_pole(struct obj *);
 STATIC_DCL int use_cream_pie(struct obj *);
 STATIC_DCL int use_grapple(struct obj *);
 STATIC_DCL int do_break_wand(struct obj *);
-STATIC_DCL boolean figurine_location_checks(struct obj *, coord *, BOOLEAN_P);
+STATIC_DCL boolean figurine_location_checks(struct obj *, coord *, boolean);
 STATIC_DCL boolean uhave_graystone(void);
-STATIC_DCL void add_class(char *, CHAR_P);
+STATIC_DCL void add_class(char *, char);
 
 #ifdef	AMIGA
 void amii_speaker(struct obj *, char *, int);
@@ -357,8 +357,8 @@ register xchar x, y, n;
 	return((boolean)(abs(u.ux - x) > n  || abs(u.uy - y) > n));
 }
 
-int
-number_leashed()
+int 
+number_leashed (void)
 {
 	register int i = 0;
 	register struct obj *obj;
@@ -368,9 +368,10 @@ number_leashed()
 	return(i);
 }
 
-void
-o_unleash(otmp)		/* otmp is about to be destroyed or stolen */
-register struct obj *otmp;
+void 
+o_unleash (		/* otmp is about to be destroyed or stolen */
+    register struct obj *otmp
+)
 {
 	register struct monst *mtmp;
 
@@ -400,8 +401,8 @@ boolean feedback;
 	mtmp->mleashed = 0;
 }
 
-void
-unleash_all()		/* player is about to die (for bones) */
+void 
+unleash_all (void)		/* player is about to die (for bones) */
 {
 	register struct obj *otmp;
 	register struct monst *mtmp;
@@ -527,8 +528,9 @@ struct obj **optr;
 }
 
 struct obj *
-get_mleash(mtmp)	/* assuming mtmp->mleashed has been checked */
-register struct monst *mtmp;
+get_mleash (	/* assuming mtmp->mleashed has been checked */
+    register struct monst *mtmp
+)
 {
 	register struct obj *otmp;
 
@@ -1486,8 +1488,8 @@ light_cocktail(obj)
 
 static NEARDATA const char cuddly[] = { TOOL_CLASS, GEM_CLASS, 0 };
 
-int
-dorub()
+int 
+dorub (void)
 {
 	struct obj *obj = getobj(cuddly, "rub");
 
@@ -1525,16 +1527,17 @@ dorub()
 	return 1;
 }
 
-int
-dojump()
+int 
+dojump (void)
 {
 	/* Physical jump */
 	return jump(0);
 }
 
-int
-jump(magic)
-int magic; /* 0=Physical, otherwise skill level */
+int 
+jump (
+    int magic /* 0=Physical, otherwise skill level */
+)
 {
 	coord cc;
 
@@ -1792,9 +1795,8 @@ register struct obj *obj;
 }
 
 
-void
-use_unicorn_horn(obj)
-struct obj *obj;
+void 
+use_unicorn_horn (struct obj *obj)
 {
 #define PROP_COUNT 6		/* number of properties we're dealing with */
 #define ATTR_COUNT (A_MAX*3)	/* number of attribute points we might fix */
@@ -2191,8 +2193,8 @@ static struct trapinfo {
 	boolean force_bungle;
 } trapinfo;
 
-void
-reset_trapset()
+void 
+reset_trapset (void)
 {
 	trapinfo.tobj = 0;
 	trapinfo.force_bungle = 0;
@@ -2203,8 +2205,8 @@ static struct whetstoneinfo {
 	int time_needed;
 } whetstoneinfo;
 
-void
-reset_whetstone()
+void 
+reset_whetstone (void)
 {
 	whetstoneinfo.tobj = 0;
 	whetstoneinfo.wsobj = 0;
@@ -3481,8 +3483,8 @@ char class;
 	Strcat(cl, tmp);
 }
 
-int
-doapply()
+int 
+doapply (void)
 {
 	struct obj *obj;
 	register int res = 1;

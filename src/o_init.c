@@ -6,7 +6,7 @@
 #include "lev.h"	/* save & restore info */
 
 STATIC_DCL void setgemprobs(d_level*);
-STATIC_DCL void shuffle(int,int,BOOLEAN_P);
+STATIC_DCL void shuffle(int,int,boolean);
 STATIC_DCL void shuffle_all(void);
 STATIC_DCL boolean interesting_to_discover(int);
 
@@ -128,8 +128,8 @@ shuffle(o_low, o_high, domaterial)
 	}
 }
 
-void
-init_objects()
+void 
+init_objects (void)
 {
 register int i, first, last, sum;
 register char oclass;
@@ -256,8 +256,8 @@ shuffle_all()
 }
 
 /* find the object index for snow boots; used [once] by slippery ice code */
-int
-find_skates()
+int 
+find_skates (void)
 {
     register int i;
     register const char *s;
@@ -270,15 +270,14 @@ find_skates()
     return -1;	/* not 0, or caller would try again each move */
 }
 
-void
-oinit()			/* level dependent initialization */
+void 
+oinit (void)			/* level dependent initialization */
 {
 	setgemprobs(&u.uz);
 }
 
-void
-savenames(fd, mode)
-int fd, mode;
+void 
+savenames (int fd, int mode)
 {
 	register int i;
 	unsigned int len;
@@ -306,9 +305,8 @@ int fd, mode;
 	    }
 }
 
-void
-restnames(fd)
-register int fd;
+void 
+restnames (register int fd)
 {
 	register int i;
 	unsigned int len;
@@ -359,9 +357,8 @@ boolean credit_hero;
 }
 
 /* if a class name has been cleared, we may need to purge it from disco[] */
-void
-undiscover_object(oindx)
-register int oindx;
+void 
+undiscover_object (register int oindx)
 {
     if (!objects[oindx].oc_name_known) {
 	register int dindx, acls = objects[oindx].oc_class;
@@ -400,8 +397,8 @@ static short uniq_objs[] = {
 	BELL_OF_OPENING,
 };
 
-int
-dodiscovered()				/* free after Robert Viduya */
+int 
+dodiscovered (void)				/* free after Robert Viduya */
 {
     register int i, dis;
     int	ct = 0;

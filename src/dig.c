@@ -11,9 +11,9 @@
 static NEARDATA boolean did_dig_msg;
 
 STATIC_DCL boolean rm_waslit(void);
-STATIC_DCL void mkcavepos(XCHAR_P,XCHAR_P,int,BOOLEAN_P,BOOLEAN_P);
-STATIC_DCL void mkcavearea(BOOLEAN_P);
-STATIC_DCL int dig_typ(struct obj *,XCHAR_P,XCHAR_P);
+STATIC_DCL void mkcavepos(xchar,xchar,int,boolean,boolean);
+STATIC_DCL void mkcavearea(boolean);
+STATIC_DCL int dig_typ(struct obj *,xchar,xchar);
 STATIC_DCL int dig(void);
 STATIC_DCL schar fillholetyp(int, int);
 STATIC_DCL void dig_up_grave(void);
@@ -475,8 +475,8 @@ cleanup:
 }
 
 /* When will hole be finished? Very rough indication used by shopkeeper. */
-int
-holetime()
+int 
+holetime (void)
 {
 	if(occupation != dig || !*u.ushops) return(-1);
 	return ((250 - digging.effort) / 20);
@@ -517,11 +517,8 @@ int x, y;
 	return ROOM;
 }
 
-void
-digactualhole(x, y, madeby, ttyp)
-register int	x, y;
-struct monst	*madeby;
-int ttyp;
+void 
+digactualhole (register int x, register int y, struct monst *madeby, int ttyp)
 {
 	struct obj *oldobjs, *newobjs;
 	register struct trap *ttmp;
@@ -863,9 +860,8 @@ dig_up_grave()
 	return;
 }
 
-int
-use_pick_axe(obj)
-struct obj *obj;
+int 
+use_pick_axe (struct obj *obj)
 {
 	boolean ispick;
 	char dirsyms[12];
@@ -921,8 +917,8 @@ struct obj *obj;
 /*       the "In what direction do you want to dig?" query.        */
 /*       use_pick_axe2() uses the existing u.dx, u.dy and u.dz    */
 
-int use_pick_axe2(obj)
-struct obj *obj;
+int 
+use_pick_axe2 (struct obj *obj)
 {
 	register int rx, ry;
 	register struct rm *lev;
@@ -1218,8 +1214,8 @@ register struct monst *mtmp;
 #ifdef OVL3
 
 /* digging via wand zap or spell cast */
-void
-zap_dig()
+void 
+zap_dig (void)
 {
 	struct rm *room;
 	struct monst *mtmp;
@@ -1394,8 +1390,7 @@ zap_dig()
 /* move objects from fobj/nexthere lists to buriedobjlist, keeping position */
 /* information */
 struct obj *
-bury_an_obj(otmp)
-	struct obj *otmp;
+bury_an_obj (struct obj *otmp)
 {
 	struct obj *otmp2;
 	boolean under_ice;
@@ -1452,9 +1447,8 @@ bury_an_obj(otmp)
 	return(otmp2);
 }
 
-void
-bury_objs(x, y)
-int x, y;
+void 
+bury_objs (int x, int y)
 {
 	struct obj *otmp, *otmp2;
 
@@ -1471,9 +1465,8 @@ int x, y;
 }
 
 /* move objects from buriedobjlist to fobj/nexthere lists */
-void
-unearth_objs(x, y)
-int x, y;
+void 
+unearth_objs (int x, int y)
 {
 	struct obj *otmp, *otmp2;
 
@@ -1585,9 +1578,8 @@ long timeout;	/* unused */
 }
 
 #if 0
-void
-bury_monst(mtmp)
-struct monst *mtmp;
+void 
+bury_monst (struct monst *mtmp)
 {
 #ifdef DEBUG
 	pline("bury_monst: %s", mon_nam(mtmp));
@@ -1607,8 +1599,8 @@ struct monst *mtmp;
 	newsym(mtmp->mx, mtmp->my);
 }
 
-void
-bury_you()
+void 
+bury_you (void)
 {
 #ifdef DEBUG
 	pline("bury_you");
@@ -1627,8 +1619,8 @@ bury_you()
     }
 }
 
-void
-unearth_you()
+void 
+unearth_you (void)
 {
 #ifdef DEBUG
 	pline("unearth_you");
@@ -1640,8 +1632,8 @@ unearth_you()
 	vision_recalc(0);
 }
 
-void
-escape_tomb()
+void 
+escape_tomb (void)
 {
 #ifdef DEBUG
 	pline("escape_tomb");
@@ -1670,9 +1662,8 @@ escape_tomb()
 	}
 }
 
-void
-bury_obj(otmp)
-struct obj *otmp;
+void 
+bury_obj (struct obj *otmp)
 {
 
 #ifdef DEBUG
@@ -1687,8 +1678,8 @@ struct obj *otmp;
 #endif
 
 #ifdef DEBUG
-int
-wiz_debug_cmd() /* in this case, bury everything at your loc and around */
+int 
+wiz_debug_cmd (void) /* in this case, bury everything at your loc and around */
 {
 	int x, y;
 

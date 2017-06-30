@@ -83,8 +83,8 @@ static long laststattime;
 #  define MAILPATH "/usr/mail/"
 # endif
 
-void
-getmailstatus()
+void 
+getmailstatus (void)
 {
 	if(!mailbox && !(mailbox = nh_getenv("MAIL"))) {
 #  ifdef MAILPATH
@@ -418,8 +418,8 @@ give_up:
 
 # if !defined(UNIX) && !defined(VMS) && !defined(LAN_MAIL)
 
-void
-ckmailstatus()
+void 
+ckmailstatus (void)
 {
 	if (u.uswallow || !flags.biff) return;
 	if (mustgetmail < 0) {
@@ -437,9 +437,8 @@ ckmailstatus()
 }
 
 /*ARGSUSED*/
-void
-readmail(otmp)
-struct obj *otmp;
+void 
+readmail (struct obj *otmp)
 {
     const char *line;
     char buf[BUFSZ];
@@ -457,8 +456,8 @@ struct obj *otmp;
 
 # ifdef UNIX
 
-void
-ckmailstatus()
+void 
+ckmailstatus (void)
 {
 	if(!mailbox || u.uswallow || !flags.biff
 #  ifdef MAILCKFREQ
@@ -493,9 +492,8 @@ ckmailstatus()
 }
 
 /*ARGSUSED*/
-void
-readmail(otmp)
-struct obj *otmp;
+void 
+readmail (struct obj *otmp)
 {
 #  ifdef DEF_MAILREADER			/* This implies that UNIX is defined */
 	register const char *mr = 0;
@@ -527,8 +525,8 @@ extern struct mail_info *parse_next_broadcast(void);
 
 volatile int broadcasts = 0;
 
-void
-ckmailstatus()
+void 
+ckmailstatus (void)
 {
     struct mail_info *brdcst;
 
@@ -543,9 +541,8 @@ ckmailstatus()
     }
 }
 
-void
-readmail(otmp)
-struct obj *otmp;
+void 
+readmail (struct obj *otmp)
 {
 #  ifdef SHELL	/* can't access mail reader without spawning subprocess */
     const char *txt, *cmd;
@@ -577,8 +574,8 @@ struct obj *otmp;
 
 # ifdef LAN_MAIL
 
-void
-ckmailstatus()
+void 
+ckmailstatus (void)
 {
 	static int laststattime = 0;
 	
@@ -605,9 +602,8 @@ ckmailstatus()
 }
 
 /*ARGSUSED*/
-void
-readmail(otmp)
-struct obj *otmp;
+void 
+readmail (struct obj *otmp)
 {
 	lan_mail_read(otmp);
 }

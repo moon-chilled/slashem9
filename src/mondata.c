@@ -30,9 +30,7 @@ int flag;
 #ifdef OVL0
 
 struct attack *
-attacktype_fordmg(ptr, atyp, dtyp)
-struct permonst *ptr;
-int atyp, dtyp;
+attacktype_fordmg (struct permonst *ptr, int atyp, int dtyp)
 {
     struct attack *a;
 
@@ -293,9 +291,8 @@ sticks(ptr)	/* creature sticks other creatures it hits */
 }
 
 /* number of horns this type of monster has on its head */
-int
-num_horns(ptr)
-struct permonst *ptr;
+int 
+num_horns (struct permonst *ptr)
 {
     switch (monsndx(ptr)) {
     case PM_LAMB:
@@ -320,9 +317,7 @@ struct permonst *ptr;
 }
 
 struct attack *
-dmgtype_fromattack(ptr, dtyp, atyp)
-struct permonst *ptr;
-int dtyp, atyp;
+dmgtype_fromattack (struct permonst *ptr, int dtyp, int atyp)
 {
     struct attack *a;
 
@@ -343,9 +338,8 @@ int dtyp;
 
 /* returns the maximum damage a defender can do to the attacker via
  * a passive defense */
-int
-max_passive_dmg(mdef, magr)
-    register struct monst *mdef, *magr;
+int 
+max_passive_dmg (register struct monst *mdef, register struct monst *magr)
 {
     int	i, dmg = 0;
     uchar adtyp;
@@ -372,9 +366,10 @@ max_passive_dmg(mdef, magr)
 #endif /* OVL1 */
 #ifdef OVL0
 
-int
-monsndx(ptr)		/* return an index into the mons array */
-	struct	permonst	*ptr;
+int 
+monsndx (		/* return an index into the mons array */
+    struct permonst *ptr
+)
 {
 	register int	i;
 
@@ -395,9 +390,8 @@ monsndx(ptr)		/* return an index into the mons array */
 #ifdef OVL1
 
 
-int
-name_to_mon(in_str)
-const char *in_str;
+int 
+name_to_mon (const char *in_str)
 {
 	/* Be careful.  We must check the entire string in case it was
 	 * something such as "ettin zombie corpse".  The calling routine
@@ -517,9 +511,8 @@ const char *in_str;
 #ifdef OVL2
 
 /* returns 3 values (0=male, 1=female, 2=none) */
-int
-gender(mtmp)
-register struct monst *mtmp;
+int 
+gender (register struct monst *mtmp)
 {
 	if (is_neuter(mtmp->data)) return 2;
 	return mtmp->female;
@@ -527,9 +520,8 @@ register struct monst *mtmp;
 
 /* Like gender(), but lower animals and such are still "it". */
 /* This is the one we want to use when printing messages. */
-int
-pronoun_gender(mtmp)
-register struct monst *mtmp;
+int 
+pronoun_gender (register struct monst *mtmp)
 {
 	if (!mtmp->isshk && (is_neuter(mtmp->data) || !canspotmon(mtmp))) return 2;
 	return (humanoid(mtmp->data) || (mtmp->data->geno & G_UNIQ) ||
@@ -631,9 +623,8 @@ static const short grownups[][2] = {
 	{NON_PM,NON_PM}
 };
 
-int
-little_to_big(montype)
-int montype;
+int 
+little_to_big (int montype)
 {
 #ifndef AIXPS2_BUG
 	register int i;
@@ -658,9 +649,8 @@ int montype;
 #endif
 }
 
-int
-big_to_little(montype)
-int montype;
+int 
+big_to_little (int montype)
 {
 	register int i;
 
@@ -675,8 +665,7 @@ int montype;
  * player.  It does not return a pointer to player role character.
  */
 const struct permonst *
-raceptr(mtmp)
-struct monst *mtmp;
+raceptr (struct monst *mtmp)
 {
     if (mtmp == &youmonst && !Upolyd) return(&mons[urace.malenum]);
     else return(mtmp->data);
@@ -691,9 +680,7 @@ static const char *immobile[4]	= { "wiggle", "Wiggle", "pulsate", "Pulsate" };
 static const char *crawl[4]	= { "crawl", "Crawl", "falter", "Falter" };
 
 const char *
-locomotion(ptr, def)
-const struct permonst *ptr;
-const char *def;
+locomotion (const struct permonst *ptr, const char *def)
 {
 	int capitalize = (*def == highc(*def));
 
@@ -711,9 +698,7 @@ const char *def;
 }
 
 const char *
-stagger(ptr, def)
-const struct permonst *ptr;
-const char *def;
+stagger (const struct permonst *ptr, const char *def)
 {
 	int capitalize = 2 + (*def == highc(*def));
 
@@ -732,9 +717,7 @@ const char *def;
 
 /* return a phrase describing the effect of fire attack on a type of monster */
 const char *
-on_fire(mptr, mattk)
-struct permonst *mptr;
-struct attack *mattk;
+on_fire (struct permonst *mptr, struct attack *mattk)
 {
     const char *what;
 

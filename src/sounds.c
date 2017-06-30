@@ -39,10 +39,8 @@ static const char *whimper_sound(struct monst *);
 static int mon_in_room(struct monst *,int);
 
 /* this easily could be a macro, but it might overtax dumb compilers */
-static int
-mon_in_room(mon, rmtyp)
-struct monst *mon;
-int rmtyp;
+static int 
+mon_in_room (struct monst *mon, int rmtyp)
 {
     int rno = levl[mon->mx][mon->my].roomno;
 
@@ -54,8 +52,8 @@ int rmtyp;
 					- ROOMOFFSET].rtype == (rmtype))
 #endif
 
-void
-dosounds()
+void 
+dosounds (void)
 {
     register struct mkroom *sroom;
     register int hallu, vx, vy;
@@ -331,10 +329,8 @@ static const char * const h_sounds[] = {
 
 /* make the sounds of a pet in any level of distress */
 /* (1 = "whimper", 2 = "yelp", 3 = "growl") */
-void
-pet_distress(mtmp, lev)
-register struct monst *mtmp;
-int lev;
+void 
+pet_distress (register struct monst *mtmp, int lev)
 {
     const char *verb;
     if (mtmp->msleeping || !mtmp->mcanmove || !mtmp->data->msound)
@@ -364,8 +360,7 @@ int lev;
 /* in extern.h: #define growl(mon) pet_distess((mon),3) */
 
 const char *
-growl_sound(mtmp)
-register struct monst *mtmp;
+growl_sound (register struct monst *mtmp)
 {
 	const char *ret;
 
@@ -411,10 +406,8 @@ register struct monst *mtmp;
 /* the sounds of mistreated pets */
 /* in extern.h: #define yelp(mon) pet_distress((mon),2) */
 
-static
-const char *
-yelp_sound(mtmp)
-register struct monst *mtmp;
+static const char *
+yelp_sound (register struct monst *mtmp)
 {
     const char *ret;
 
@@ -447,10 +440,8 @@ register struct monst *mtmp;
 /* the sounds of distressed pets */
 /* in extern.h: #define whimper(mon) pet_distress((mon),1) */
 
-static
-const char *
-whimper_sound(mtmp)
-register struct monst *mtmp;
+static const char *
+whimper_sound (register struct monst *mtmp)
 {
     const char *ret;
 
@@ -472,9 +463,8 @@ register struct monst *mtmp;
 }
 
 /* pet makes "I'm hungry" noises */
-void
-beg(mtmp)
-register struct monst *mtmp;
+void 
+beg (register struct monst *mtmp)
 {
     if (mtmp->msleeping || !mtmp->mcanmove ||
 	    !(carnivorous(mtmp->data) || herbivorous(mtmp->data)))
@@ -490,9 +480,8 @@ register struct monst *mtmp;
 }
 }
 
-static int
-domonnoise(mtmp)
-register struct monst *mtmp;
+static int 
+domonnoise (register struct monst *mtmp)
 {
     register const char *pline_msg = 0,	/* Monnam(mtmp) will be prepended */
 			*verbl_msg = 0;	/* verbalize() */
@@ -945,8 +934,8 @@ register struct monst *mtmp;
 }
 
 
-int
-dotalk()
+int 
+dotalk (void)
 {
     int result;
     boolean save_soundok = flags.soundok;
@@ -956,8 +945,8 @@ dotalk()
     return result;
 }
 
-static int
-dochat()
+static int 
+dochat (void)
 {
     register struct monst *mtmp;
     register int tx,ty;
@@ -1070,9 +1059,8 @@ static audio_mapping *soundmap = 0;
 char* sounddir = ".";
 
 /* adds a sound file mapping, returns 0 on failure, 1 on success */
-int
-add_sound_mapping(mapping)
-const char *mapping;
+int 
+add_sound_mapping (const char *mapping)
 {
 	char text[256];
 	char filename[256];
@@ -1132,9 +1120,8 @@ const char *mapping;
 	return 1;
 }
 
-void
-play_sound_for_message(msg)
-const char* msg;
+void 
+play_sound_for_message (const char *msg)
 {
 	audio_mapping* cursor = soundmap;
 

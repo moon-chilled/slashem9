@@ -147,7 +147,7 @@ extern void show_borlandc_stats(winid);
 #ifdef DEBUG_MIGRATING_MONS
 STATIC_PTR int wiz_migrate_mons(void);
 #endif
-STATIC_DCL void count_obj(struct obj *, long *, long *, BOOLEAN_P, BOOLEAN_P);
+STATIC_DCL void count_obj(struct obj *, long *, long *, boolean, boolean);
 STATIC_DCL void obj_chain(winid, const char *, struct obj *, long *, long *);
 STATIC_DCL void mon_invent_chain(winid, const char *, struct monst *, long *, long *);
 STATIC_DCL void mon_chain(winid, const char *, struct monst *, long *, long *);
@@ -179,7 +179,7 @@ static void end_of_input(void);
 static const char* readchar_queue="";
 
 STATIC_DCL char *parse(void);
-STATIC_DCL boolean help_dir(CHAR_P,const char *);
+STATIC_DCL boolean help_dir(char,const char *);
 
 STATIC_PTR int domenusystem(void); /* WAC the menus*/
 
@@ -222,8 +222,8 @@ timed_occupation()
  *			Picking Locks / Forcing Chests.
  *			Setting traps.
  */
-void
-reset_occupations()
+void 
+reset_occupations (void)
 {
 	reset_remarm();
 	reset_pick();
@@ -233,11 +233,8 @@ reset_occupations()
 /* If a time is given, use it to timeout this function, otherwise the
  * function times out by its own means.
  */
-void
-set_occupation(fn, txt, xtime)
-int (*fn)(void);
-const char *txt;
-int xtime;
+void 
+set_occupation (int (*fn)(void), const char *txt, int xtime)
 {
 	if (xtime) {
 		occupation = timed_occupation;
@@ -263,8 +260,8 @@ static char popch(void);
 static char pushq[BSIZE], saveq[BSIZE];
 static NEARDATA int phead, ptail, shead, stail;
 
-static char
-popch() {
+static char 
+popch (void) {
 	/* If occupied, return '\0', letting tgetch know a character should
 	 * be read from the keyboard.  If the character read is not the
 	 * ABORT character (as checked in pcmain.c), that character will be
@@ -275,8 +272,8 @@ popch() {
 	else		return(char)((phead != ptail) ? pushq[ptail++] : '\0');
 }
 
-char
-pgetchar() {		/* curtesy of aeb@cwi.nl */
+char 
+pgetchar (void) {		/* curtesy of aeb@cwi.nl */
 	register int ch;
 
 	if(!(ch = popch()))
@@ -285,9 +282,8 @@ pgetchar() {		/* curtesy of aeb@cwi.nl */
 }
 
 /* A ch == 0 resets the pushq */
-void
-pushch(ch)
-char ch;
+void 
+pushch (char ch)
 {
 	if (!ch)
 		phead = ptail = 0;
@@ -299,9 +295,8 @@ char ch;
 /* A ch == 0 resets the saveq.	Only save keystrokes when not
  * replaying a previous command.
  */
-void
-savech(ch)
-char ch;
+void 
+savech (char ch)
 {
 	if (!in_doagain) {
 		if (!ch)
@@ -332,8 +327,8 @@ doextcmd()	/* here after # - now read a full-word command */
 	return retval;
 }
 
-int
-doextlist()	/* here after #? - now list all full-word commands */
+int 
+doextlist (void)	/* here after #? - now list all full-word commands */
 {
 	register const struct ext_func_tab *efp;
 	char	 buf[BUFSZ];
@@ -377,8 +372,8 @@ doborgtoggle()
  * controlled via runtime option 'extmenu'
  * -AJA- The SDL/GL window systems use it too.
  */
-int
-extcmd_via_menu()	/* here after # - now show pick-list of possible commands */
+int 
+extcmd_via_menu (void)	/* here after # - now show pick-list of possible commands */
 {
     const struct ext_func_tab *efp;
     menu_item *pick_list = (menu_item *)0;

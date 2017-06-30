@@ -23,7 +23,7 @@ STATIC_DCL long itimeout_incr(long,int);
 STATIC_DCL void ghost_from_bottle(void);
 STATIC_DCL short mixtype(struct obj *,struct obj *);
 
-STATIC_DCL void healup_mon(struct monst *, int,int,BOOLEAN_P,BOOLEAN_P);
+STATIC_DCL void healup_mon(struct monst *, int,int,boolean,boolean);
 	/* For healing monsters - analogous to healup for players */
 
 
@@ -48,19 +48,16 @@ int incr;
 }
 
 /* set the timeout field of intrinsic `which' */
-void
-set_itimeout(which, val)
-long *which, val;
+void 
+set_itimeout (long *which, long val)
 {
     *which &= ~TIMEOUT;
     *which |= itimeout(val);
 }
 
 /* increment the timeout field of intrinsic `which' */
-void
-incr_itimeout(which, incr)
-long *which;
-int incr;
+void 
+incr_itimeout (long *which, int incr)
 {
     set_itimeout(which, itimeout_incr(*which, incr));
 }
@@ -334,8 +331,8 @@ ghost_from_bottle()
 
 /* "Quaffing is like drinking, except you spill more."  -- Terry Pratchett
  */
-int
-dodrink()
+int 
+dodrink (void)
 {
 	register struct obj *otmp;
 	const char *potion_descr;
@@ -398,9 +395,8 @@ dodrink()
 	return dopotion(otmp);
 }
 
-int
-dopotion(otmp)
-register struct obj *otmp;
+int 
+dopotion (register struct obj *otmp)
 {
 	int retval;
 
@@ -430,9 +426,8 @@ register struct obj *otmp;
 }
 
 /* return -1 if potion is used up,  0 if error,  1 not used */
-int
-peffects(otmp)
-	register struct obj	*otmp;
+int 
+peffects (register struct obj *otmp)
 {
 	register int i, ii, lim;
 
@@ -1122,10 +1117,8 @@ healup_mon(mtmp, nhp, nxtra, curesick, cureblind)
 	return;
 }
 
-void
-strange_feeling(obj,txt)
-register struct obj *obj;
-register const char *txt;
+void 
+strange_feeling (register struct obj *obj, register const char *txt)
 {
 	if (flags.beginner || !txt)
 		You("have a %s feeling for a moment, then it passes.",
@@ -1148,7 +1141,7 @@ const char *bottlenames[] = {
 };
 
 const char *
-bottlename()
+bottlename (void)
 {
 	return bottlenames[rn2(SIZE(bottlenames))];
 }
@@ -1503,9 +1496,8 @@ boolean your_fault;
 }
 
 /* vapors are inhaled or get in your eyes */
-void
-potionbreathe(obj)
-register struct obj *obj;
+void 
+potionbreathe (register struct obj *obj)
 {
 	register int i, ii, isdone, kn = 0;
 
@@ -2165,9 +2157,8 @@ boolean amnesia;
  * potions, rings, and wands) should NOT be supported.
  * Polearms are not currently implemented.
  */
-int
-upgrade_obj(obj)
-register struct obj *obj;
+int 
+upgrade_obj (register struct obj *obj)
 /* returns 1 if something happened (potion should be used up) 
  * returns 0 if nothing happened
  * returns -1 if object exploded (potion should be used up) 
@@ -2627,8 +2618,8 @@ register struct obj *obj;
 	return 1;
 }
 
-int
-dodip()
+int 
+dodip (void)
 {
 	struct obj *potion, *obj, *singlepotion;
 	const char *tmp;
@@ -3149,9 +3140,8 @@ dodip()
 }
 
 
-void
-djinni_from_bottle(obj)
-register struct obj *obj;
+void 
+djinni_from_bottle (register struct obj *obj)
 {
 	struct monst *mtmp;
 	int genie_type;        
@@ -3211,9 +3201,10 @@ register struct obj *obj;
 /* clone a gremlin or mold (2nd arg non-null implies heat as the trigger);
    hit points are cut in half (odd HP stays with original) */
 struct monst *
-split_mon(mon, mtmp)
-struct monst *mon,	/* monster being split */
-	     *mtmp;	/* optional attacker whose heat triggered it */
+split_mon (
+    struct monst *mon,	/* monster being split */
+    struct monst *mtmp	/* optional attacker whose heat triggered it */
+)
 {
 	struct monst *mtmp2;
 	char reason[BUFSZ];

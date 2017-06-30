@@ -22,8 +22,8 @@ initrack()
 #ifdef OVL1
 
 /* add to track */
-void
-settrack()
+void 
+settrack (void)
 {
 	if(utcnt < UTSZ) utcnt++;
 	if(utpnt == UTSZ) utpnt = 0;

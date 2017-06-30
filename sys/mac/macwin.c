@@ -1139,7 +1139,7 @@ adjust_window_pos(NhWindow *aWin, short width, short height)
  * until presumed seen.
  */
 void
-mac_display_nhwindow (winid win, BOOLEAN_P f) {
+mac_display_nhwindow (winid win, boolean f) {
 	NhWindow *aWin = &theWindows [win];
 	WindowPtr theWindow = aWin->its_window;
 
@@ -2417,7 +2417,7 @@ mac_start_menu (winid win) {
 
 
 void
-mac_add_menu (winid win, int glyph, const anything *any, CHAR_P menuChar, CHAR_P groupAcc, int attr, const char *inStr, int preselected) {
+mac_add_menu (winid win, int glyph, const anything *any, char menuChar, char groupAcc, int attr, const char *inStr, int preselected) {
 #if defined(MAC_MPW)
 # pragma unused(glyph)
 #endif

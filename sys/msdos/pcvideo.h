@@ -236,7 +236,7 @@ extern int  txt_monoadapt_check(void);
 extern void txt_nhbell(void);
 extern void txt_startup(int*,int*);
 extern void txt_xputs(const char *, int, int);
-extern void txt_xputc(CHAR_P, int);
+extern void txt_xputc(char, int);
 
 /* ### vidvga.c ### */
 
@@ -269,11 +269,11 @@ extern void vga_tty_startup(int*,int*);
 extern void vga_WriteChar(int, int, int, int);
 extern void vga_WriteStr(char *, int, int, int, int);
 extern void vga_xputs(const char *, int, int);
-extern void vga_xputc(CHAR_P, int);
+extern void vga_xputc(char, int);
 extern void vga_xputg(int, int, unsigned);
-extern void vga_userpan(BOOLEAN_P);
-extern void vga_overview(BOOLEAN_P);
-extern void vga_traditional(BOOLEAN_P);
+extern void vga_userpan(boolean);
+extern void vga_overview(boolean);
+extern void vga_traditional(boolean);
 extern void vga_refresh(void);
 #  endif /* SCREEN_VGA */
 
@@ -300,11 +300,11 @@ extern void alleg_tty_end_screen(void);
 extern void alleg_tty_startup(int*,int*);
 extern void alleg_WriteChar(int, int, int, int);
 extern void alleg_xputs(char *, int, int);
-extern void alleg_xputc(CHAR_P, int);
+extern void alleg_xputc(char, int);
 extern void alleg_xputg(int, int);
-extern void alleg_userpan(BOOLEAN_P);
-extern void alleg_overview(BOOLEAN_P);
-extern void alleg_traditional(BOOLEAN_P);
+extern void alleg_userpan(boolean);
+extern void alleg_overview(boolean);
+extern void alleg_traditional(boolean);
 extern void alleg_refresh(void);
 extern void alleg_screenshot(void);
 

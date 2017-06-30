@@ -40,9 +40,9 @@ struct tibhdr_struct {
  *	char packtile[TILE_Y][TILE_X];
  */
  
-extern void CloseTileFile(BOOLEAN_P);
-extern int  OpenTileFile(char *, BOOLEAN_P);
-extern int  ReadTileFileHeader(struct tibhdr_struct *, BOOLEAN_P);
+extern void CloseTileFile(boolean);
+extern int  OpenTileFile(char *, boolean);
+extern int  ReadTileFileHeader(struct tibhdr_struct *, boolean);
 
 # ifdef PLANAR_FILE
 #  ifdef SCREEN_VGA

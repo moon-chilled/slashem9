@@ -162,8 +162,8 @@ int distance;
 
 /* Awake only soldiers of the level. */
 
-void
-awaken_soldiers()
+void 
+awaken_soldiers (void)
 {
 	register struct monst *mtmp = fmon;
 
@@ -504,9 +504,8 @@ struct obj *instr;
  * So you want music...
  */
 
-int
-do_play_instrument(instr)
-struct obj *instr;
+int 
+do_play_instrument (struct obj *instr)
 {
     char buf[BUFSZ], c = 'y';
     char *s;
@@ -773,8 +772,8 @@ char	*buf;
 }
 
 # ifdef DEBUG
-main(argc,argv)
-char *argv[];
+int 
+main (int argc, char *argv[])
 {
     if (argc == 2) {
 	playinit();

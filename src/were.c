@@ -6,9 +6,8 @@
 
 #ifdef OVL0
 
-void
-were_change(mon)
-register struct monst *mon;
+void 
+were_change (register struct monst *mon)
 {
 	if (!is_were(mon->data))
 	    return;
@@ -40,9 +39,8 @@ register struct monst *mon;
 #endif /* OVL0 */
 #ifdef OVLB
 
-int
-counter_were(pm)
-int pm;
+int 
+counter_were (int pm)
 {
 	switch(pm) {
 	    case PM_WEREWOLF:	      return(PM_HUMAN_WEREWOLF);
@@ -63,9 +61,8 @@ int pm;
 	}
 }
 
-void
-new_were(mon)
-register struct monst *mon;
+void 
+new_were (register struct monst *mon)
 {
 	register int pm;
 
@@ -168,8 +165,8 @@ char *genbuf;
 	return total;
 }
 
-void
-you_were()
+void 
+you_were (void)
 {
 	char qbuf[QBUFSZ];
 

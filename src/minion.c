@@ -6,9 +6,10 @@
 #include "emin.h"
 #include "epri.h"
 
-void
-msummon(mon)		/* mon summons a monster */
-struct monst *mon;
+void 
+msummon (		/* mon summons a monster */
+    struct monst *mon
+)
 {
 	register struct permonst *ptr;
 	register int dtype = NON_PM, cnt = 0;
@@ -137,9 +138,10 @@ boolean talk;
 }
 #define Athome	(Inhell && !mtmp->cham)
 
-int
-demon_talk(mtmp)		/* returns 1 if it won't attack. */
-register struct monst *mtmp;
+int 
+demon_talk (		/* returns 1 if it won't attack. */
+    register struct monst *mtmp
+)
 {
 	long cash, demand, offer;
 
@@ -275,9 +277,8 @@ int chaotic_minion(int difficulty)
    return PM_GREMLIN;
 }
 
-long
-bribe(mtmp)
-struct monst *mtmp;
+long 
+bribe (struct monst *mtmp)
 {
 	char buf[BUFSZ];
 	long offer;
@@ -350,8 +351,8 @@ aligntyp atyp;
 }
 
 /* create lawful (good) lord */
-int
-llord()
+int 
+llord (void)
 {
 	if (!(mvitals[PM_ARCHON].mvflags & G_GONE))
 		return(PM_ARCHON);
@@ -359,8 +360,8 @@ llord()
 	return(lminion());	/* approximate */
 }
 
-int
-lminion()
+int 
+lminion (void)
 {
 	int	tryct;
 	struct	permonst *ptr;

@@ -17,7 +17,7 @@
 
 #ifdef OVLB
 STATIC_DCL boolean isbig(struct mkroom *);
-STATIC_DCL struct mkroom * pick_room(BOOLEAN_P);
+STATIC_DCL struct mkroom * pick_room(boolean);
 STATIC_DCL void mkshop(void), mkzoo(int), mkswamp(void);
 STATIC_DCL void mktemple(void);
 STATIC_DCL coord * shrine_pos(int);
@@ -43,10 +43,11 @@ register struct mkroom *sroom;
 	return((boolean)( area > 20 ));
 }
 
-void
-mkroom(roomtype)
+void 
+mkroom (
 /* make and stock a room of a given type */
-int	roomtype;
+    int roomtype
+)
 {
     if (roomtype >= SHOPBASE)
 	mkshop();	/* someday, we should be able to specify shop type */
@@ -247,9 +248,8 @@ int type;
 	}
 }
 
-void
-fill_zoo(sroom)
-struct mkroom *sroom;
+void 
+fill_zoo (struct mkroom *sroom)
 {
 	struct monst *mon;
 	register int sx,sy,i;
@@ -511,7 +511,7 @@ morguemon()
 }
 
 struct permonst *
-antholemon()
+antholemon (void)
 {
 	int mtyp;
 
@@ -673,16 +673,14 @@ register struct mkroom *sroom;
 #endif /* OVLB */
 #ifdef OVL0
 
-int
-somex(croom)
-register struct mkroom *croom;
+int 
+somex (register struct mkroom *croom)
 {
 	return rn2(croom->hx-croom->lx+1) + croom->lx;
 }
 
-int
-somey(croom)
-register struct mkroom *croom;
+int 
+somey (register struct mkroom *croom)
 {
 	return rn2(croom->hy-croom->ly+1) + croom->ly;
 }
@@ -777,7 +775,7 @@ schar type;
 #ifdef OVLB
 
 struct permonst *
-courtmon()
+courtmon (void)
 {
 	int     i = rn2(60) + rn2(3*level_difficulty());
 	if (i > 200)            return(mkclass(S_DRAGON,0));
@@ -792,7 +790,7 @@ courtmon()
 }
 
 struct permonst *
-realzoomon()
+realzoomon (void)
 {
 	int     i = rn2(60) + rn2(3*level_difficulty());
 	if (i > 175)    return(&mons[PM_JUMBO_THE_ELEPHANT]);
@@ -861,9 +859,8 @@ struct mkroom *r;
  * save_rooms : Save all the rooms on disk!
  */
 
-void
-save_rooms(fd)
-int fd;
+void 
+save_rooms (int fd)
 {
 	short i;
 
@@ -893,9 +890,8 @@ struct mkroom *r;
  * the disk.
  */
 
-void
-rest_rooms(fd)
-int	fd;
+void 
+rest_rooms (int fd)
 {
 	short i;
 

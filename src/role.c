@@ -775,16 +775,15 @@ validrole(rolenum)
 }
 
 
-int
-randrole()
+int 
+randrole (void)
 {
 	return (rn2(SIZE(roles)-1));
 }
 
 
-int
-str2role(str)
-	char *str;
+int 
+str2role (char *str)
 {
 	int i, len;
 
@@ -830,9 +829,8 @@ validrace(rolenum, racenum)
 }
 
 
-int
-randrace(rolenum)
-	int rolenum;
+int 
+randrace (int rolenum)
 {
 	int i, n = 0;
 
@@ -860,9 +858,8 @@ randrace(rolenum)
  * [ALI] Find the player equivalent race for a monster from its M2 flags.
  */
 
-int
-mrace2race(mflags2)
-	int mflags2;
+int 
+mrace2race (int mflags2)
 {
 	int i;
 
@@ -881,9 +878,8 @@ mrace2race(mflags2)
 	return ROLE_NONE;
 }
 
-int
-str2race(str)
-	char *str;
+int 
+str2race (char *str)
 {
 	int i, len;
 
@@ -922,9 +918,8 @@ validgend(rolenum, racenum, gendnum)
 }
 
 
-int
-randgend(rolenum, racenum)
-	int rolenum, racenum;
+int 
+randgend (int rolenum, int racenum)
 {
 	int i, n = 0;
 
@@ -950,9 +945,8 @@ randgend(rolenum, racenum)
 }
 
 
-int
-str2gend(str)
-	char *str;
+int 
+str2gend (char *str)
 {
 	int i, len;
 
@@ -990,9 +984,8 @@ validalign(rolenum, racenum, alignnum)
 }
 
 
-int
-randalign(rolenum, racenum)
-	int rolenum, racenum;
+int 
+randalign (int rolenum, int racenum)
 {
 	int i, n = 0;
 
@@ -1016,9 +1009,8 @@ randalign(rolenum, racenum)
 }
 
 
-int
-str2align(str)
-	char *str;
+int 
+str2align (char *str)
 {
 	int i, len;
 
@@ -1091,9 +1083,8 @@ int rolenum, racenum, gendnum, alignnum;
 /* pick a random role subject to any racenum/gendnum/alignnum constraints */
 /* If pickhow == PICK_RIGID a role is returned only if there is  */
 /* a single possibility */
-int
-pick_role(racenum, gendnum, alignnum, pickhow)
-int racenum, gendnum, alignnum, pickhow;
+int 
+pick_role (int racenum, int gendnum, int alignnum, int pickhow)
 {
     int i;
     int roles_ok = 0;
@@ -1163,9 +1154,8 @@ int rolenum, racenum, gendnum, alignnum;
 /* pick a random race subject to any rolenum/gendnum/alignnum constraints */
 /* If pickhow == PICK_RIGID a race is returned only if there is  */
 /* a single possibility */
-int
-pick_race(rolenum, gendnum, alignnum, pickhow)
-int rolenum, gendnum, alignnum, pickhow;
+int 
+pick_race (int rolenum, int gendnum, int alignnum, int pickhow)
 {
     int i;
     int races_ok = 0;
@@ -1226,9 +1216,8 @@ int rolenum, racenum, gendnum, alignnum;
 /* gender and alignment are not comparable (and also not constrainable) */
 /* If pickhow == PICK_RIGID a gender is returned only if there is  */
 /* a single possibility */
-int
-pick_gend(rolenum, racenum, alignnum, pickhow)
-int rolenum, racenum, alignnum, pickhow;
+int 
+pick_gend (int rolenum, int racenum, int alignnum, int pickhow)
 {
     int i;
     int gends_ok = 0;
@@ -1289,9 +1278,8 @@ int rolenum, racenum, gendnum, alignnum;
 /* alignment and gender are not comparable (and also not constrainable) */
 /* If pickhow == PICK_RIGID an alignment is returned only if there is  */
 /* a single possibility */
-int
-pick_align(rolenum, racenum, gendnum, pickhow)
-int rolenum, racenum, gendnum, pickhow;
+int 
+pick_align (int rolenum, int racenum, int gendnum, int pickhow)
 {
     int i;
     int aligns_ok = 0;
@@ -1314,8 +1302,8 @@ int rolenum, racenum, gendnum, pickhow;
     return ROLE_NONE;
 }
 
-void
-rigid_role_checks()
+void 
+rigid_role_checks (void)
 {
     /* Some roles are limited to a single race, alignment, or gender and
      * calling this routine prior to XXX_player_selection() will help
@@ -1398,9 +1386,7 @@ int racenum;
 }
 
 char *
-root_plselection_prompt(suppliedbuf, buflen, rolenum, racenum, gendnum, alignnum)
-char *suppliedbuf;
-int buflen, rolenum, racenum, gendnum, alignnum;
+root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum, int gendnum, int alignnum)
 {
 	int k, gendercount = 0, aligncount = 0;
 	char buf[BUFSZ];
@@ -1533,9 +1519,7 @@ int buflen, rolenum, racenum, gendnum, alignnum;
 }
 
 char *
-build_plselection_prompt(buf, buflen, rolenum, racenum, gendnum, alignnum)
-char *buf;
-int buflen, rolenum, racenum, gendnum, alignnum;
+build_plselection_prompt (char *buf, int buflen, int rolenum, int racenum, int gendnum, int alignnum)
 {
 	const char *defprompt = "Shall I pick a character for you? [ynq] ";
 	int num_post_attribs = 0;
@@ -1592,8 +1576,8 @@ int buflen, rolenum, racenum, gendnum, alignnum;
 #undef BP_ROLE
 #undef NUM_BP
 
-void
-plnamesuffix()
+void 
+plnamesuffix (void)
 {
 	char *sptr, *eptr;
 	int i;
@@ -1645,8 +1629,8 @@ plnamesuffix()
  *
  * This code also replaces quest_init().
  */
-void
-role_init()
+void 
+role_init (void)
 {
 	int alignmnt;
 
@@ -1751,8 +1735,7 @@ role_init()
 }
 
 const char *
-Hello(mtmp)
-struct monst *mtmp;
+Hello (struct monst *mtmp)
 {
 	switch (Role_switch) {
 	case PM_KNIGHT:
@@ -1776,7 +1759,7 @@ struct monst *mtmp;
 }
 
 const char *
-Goodbye()
+Goodbye (void)
 {
 	switch (Role_switch) {
 	case PM_KNIGHT:

@@ -118,7 +118,7 @@
 #include "hack.h"
 #include "region.h"
 
-STATIC_DCL void display_monster(XCHAR_P,XCHAR_P,struct monst *,int,XCHAR_P);
+STATIC_DCL void display_monster(xchar,xchar,struct monst *,int,xchar);
 STATIC_DCL int swallow_to_glyph(int, int);
 STATIC_DCL void display_warning(struct monst *);
 
@@ -133,7 +133,7 @@ STATIC_DCL int set_crosswall(int, int);
 STATIC_DCL void set_seenv(struct rm *, int, int, int, int);
 STATIC_DCL void t_warn(struct rm *);
 STATIC_DCL int wall_angle(struct rm *);
-STATIC_DCL int back_to_cmap(XCHAR_P, XCHAR_P);
+STATIC_DCL int back_to_cmap(xchar, xchar);
 
 STATIC_VAR boolean transp;    /* cached transparency flag for current tileset */
 
@@ -238,10 +238,8 @@ map_background(x, y, show)
  * Map the trap and print it out if directed.  This routine assumes that the
  * hero can physically see the location.
  */
-void
-map_trap(trap, show)
-    register struct trap *trap;
-    register int	 show;
+void 
+map_trap (register struct trap *trap, register int show)
 {
     register int x = trap->tx, y = trap->ty;
     register int cmap = trap_to_cmap(trap);
@@ -261,10 +259,8 @@ map_trap(trap, show)
  * Map the given object.  This routine assumes that the hero can physically
  * see the location of the object.  Update the screen if directed.
  */
-void
-map_object(obj, show)
-    register struct obj *obj;
-    register int	show;
+void 
+map_object (register struct obj *obj, register int show)
 {
     register int x = obj->ox, y = obj->oy;
     register int glyph = obj_to_glyph(obj);
@@ -314,9 +310,8 @@ register xchar x, y;
  * if this is used to get rid of an invisible monster notation, we might have
  * to call newsym().
  */
-void
-unmap_object(x, y)
-    register int x, y;
+void 
+unmap_object (register int x, register int y)
 {
 #ifndef DISPLAY_LAYERS
     register struct trap *trap;
@@ -394,15 +389,14 @@ unmap_object(x, y)
 }
 #endif	/* DISPLAY_LAYERS */
 
-void
-map_location(x,y,show)
-    int x, y, show;
+void 
+map_location (int x, int y, int show)
 {
     _map_location(x,y,show);
 }
 
-int memory_glyph(x, y)
-    int x, y;
+int 
+memory_glyph (int x, int y)
 {
 #ifdef DISPLAY_LAYERS
     if (levl[x][y].mem_invis)
@@ -421,8 +415,8 @@ int memory_glyph(x, y)
 #endif
 }
 
-void clear_memory_glyph(x, y, to)
-    int x, y, to;
+void 
+clear_memory_glyph (int x, int y, int to)
 {
 #ifdef DISPLAY_LAYERS
     levl[x][y].mem_bg = to;
@@ -742,9 +736,8 @@ feel_location(x, y)
  *
  * Possibly put a new glyph at the given location.
  */
-void
-newsym(x,y)
-    register int x,y;
+void 
+newsym (register int x, register int y)
 {
     register struct monst *mon;
     register struct rm *lev = &(levl[x][y]);
@@ -964,9 +957,8 @@ static struct tmp_glyph {
 } tgfirst;
 static struct tmp_glyph *tglyph = (struct tmp_glyph *)0;
 
-void
-tmp_at(x, y)
-    int x, y;
+void 
+tmp_at (int x, int y)
 {
     struct tmp_glyph *tmp, *cont;
 
@@ -1071,9 +1063,8 @@ tmp_at(x, y)
 }
 
 #ifdef DISPLAY_LAYERS
-int
-glyph_is_floating(glyph)
-int glyph;
+int 
+glyph_is_floating (int glyph)
 {
     return glyph_is_monster(glyph) || glyph_is_explosion(glyph) ||
 	    glyph_is_zap_beam(glyph) || glyph_is_swallow(glyph) ||
@@ -1089,9 +1080,8 @@ int glyph;
  * directly.  This method works because both vision and display check for
  * being swallowed.
  */
-void
-swallowed(first)
-    int first;
+void 
+swallowed (int first)
 {
     static xchar lastx, lasty;	/* last swallowed position */
     int swallower, left_ok, rght_ok;
@@ -1153,9 +1143,8 @@ swallowed(first)
  * Similar to swallowed() in operation.  Shows hero when underwater
  * except when in water level.  Special routines exist for that.
  */
-void
-under_water(mode)
-    int mode;
+void 
+under_water (int mode)
 {
     static xchar lastx, lasty;
     static boolean dela;
@@ -1198,9 +1187,8 @@ under_water(mode)
  *
  *	Very restricted display.  You can only see yourself.
  */
-void
-under_ground(mode)
-    int mode;
+void 
+under_ground (int mode)
 {
     static boolean dela;
 
@@ -1239,8 +1227,8 @@ under_ground(mode)
  *	+ losing telepathy while blind [xkilled() in mon.c, attrcurse() in
  *	  sit.c]
  */
-void
-see_monsters()
+void 
+see_monsters (void)
 {
     register struct monst *mon;
 
@@ -1263,8 +1251,8 @@ see_monsters()
  * invisible or not.  Should be called only when the state of See_invisible
  * changes.
  */
-void
-set_mimic_blocking()
+void 
+set_mimic_blocking (void)
 {
     register struct monst *mon;
 
@@ -1286,8 +1274,8 @@ set_mimic_blocking()
  * Loop through all of the object *locations* and update them.  Called when
  *	+ hallucinating.
  */
-void
-see_objects()
+void 
+see_objects (void)
 {
     register struct obj *obj;
     for(obj = fobj; obj; obj = obj->nobj)
@@ -1297,8 +1285,8 @@ see_objects()
 /*
  * Update hallucinated traps.
  */
-void
-see_traps()
+void 
+see_traps (void)
 {
     struct trap *trap;
     int glyph;
@@ -1313,21 +1301,21 @@ see_traps()
 /*
  * Put the cursor on the hero.  Flush all accumulated glyphs before doing it.
  */
-void
-curs_on_u()
+void 
+curs_on_u (void)
 {
     flush_screen(1);	/* Flush waiting glyphs & put cursor on hero */
 }
 
-int
-doredraw()
+int 
+doredraw (void)
 {
     docrt();
     return 0;
 }
 
-void
-docrt()
+void 
+docrt (void)
 {
     register int x,y;
     register struct rm *lev;
@@ -1445,9 +1433,10 @@ int glyph;
 #ifdef TTY_GRAPHICS
 extern const char * compress_str(const char *);
 #else
-const char*
-compress_str(str) /* copied from win/tty/wintty.c */
-const char *str;
+const char *
+compress_str ( /* copied from win/tty/wintty.c */
+    const char *str
+)
 {
 	static char cbuf[BUFSZ];
 	/* compress in case line too long */
@@ -1466,7 +1455,8 @@ const char *str;
 #endif /* TTY_GRAPHICS */
 
 /* Take a screen dump */
-void dump_screen()
+void 
+dump_screen (void)
 {
     register int x,y;
     int lastc;
@@ -1500,9 +1490,8 @@ void dump_screen()
 /*
  * Store the glyph in the 3rd screen for later flushing.
  */
-void
-show_glyph(x,y,glyph)
-    int x, y, glyph;
+void 
+show_glyph (int x, int y, int glyph)
 {
     /*
      * Check for bad positions and glyphs.
@@ -1590,8 +1579,8 @@ static gbuf_entry nul_gbuf = { 0, cmap_to_glyph(S_stone) };
 /*
  * Turn the 3rd screen into stone.
  */
-void
-clear_glyph_buffer()
+void 
+clear_glyph_buffer (void)
 {
     register int x, y;
     register gbuf_entry *gptr;
@@ -1608,9 +1597,8 @@ clear_glyph_buffer()
 /*
  * Assumes that the indicated positions are filled with S_stone glyphs.
  */
-void
-row_refresh(start,stop,y)
-    int start,stop,y;
+void 
+row_refresh (int start, int stop, int y)
 {
     register int x;
 
@@ -1619,8 +1607,8 @@ row_refresh(start,stop,y)
 	    print_glyph(WIN_MAP,x,y,gbuf[y][x].glyph);
 }
 
-void
-cls()
+void 
+cls (void)
 {
     display_nhwindow(WIN_MESSAGE, FALSE); /* flush messages */
     flags.botlx = 1;		/* force update of botl window */
@@ -1631,9 +1619,8 @@ cls()
 /*
  * Synch the third screen with the display.
  */
-void
-flush_screen(cursor_on_u)
-    int cursor_on_u;
+void 
+flush_screen (int cursor_on_u)
 {
     /* Prevent infinite loops on errors:
      *	    flush_screen->print_glyph->impossible->pline->flush_screen
@@ -1814,10 +1801,8 @@ swallow_to_glyph(mnum, loc)
  *	\  S_lslant	( 1, 1) or (-1,-1)
  *	/  S_rslant	(-1, 1) or ( 1,-1)
  */
-int
-zapdir_to_glyph(dx, dy, beam_type)
-    register int dx, dy;
-    int beam_type;
+int 
+zapdir_to_glyph (register int dx, register int dy, int beam_type)
 {
     if (beam_type >= NUM_ZAP) {
 	impossible("zapdir_to_glyph:  illegal beam type");
@@ -1869,8 +1854,7 @@ static const char *type_names[MAX_TYPE] = {
 
 
 static const char *
-type_to_name(type)
-    int type;
+type_to_name (int type)
 {
     return (type < 0 || type > MAX_TYPE) ? "unknown" : type_names[type];
 }
@@ -2035,8 +2019,8 @@ set_crosswall(x, y)
 }
 
 /* Called from mklev.  Scan the level and set the wall modes. */
-void
-set_wall_state()
+void 
+set_wall_state (void)
 {
     int x, y;
     int wmode;

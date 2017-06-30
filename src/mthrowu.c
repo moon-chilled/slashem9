@@ -4,7 +4,7 @@
 
 #include "hack.h"
 
-STATIC_DCL int drop_throw(struct monst *, struct obj *,BOOLEAN_P,int,int);
+STATIC_DCL int drop_throw(struct monst *, struct obj *,boolean,int,int);
 
 #define URETREATING(x,y) (distmin(u.ux,u.uy,x,y) > distmin(u.ux0,u.uy0,x,y))
 
@@ -33,11 +33,13 @@ NEARDATA const char *breathwep[] = {
 };
 
 /* hero is hit by something other than a monster */
-int
-thitu(tlev, dam, obj, name)
-int tlev, dam;
-struct obj *obj;
-const char *name;	/* if null, then format `obj' */
+int 
+thitu (
+    int tlev,
+    int dam,
+    struct obj *obj,
+    const char *name	/* if null, then format `obj' */
+)
 {
 	const char *onm, *knm;
 	boolean is_acid;
@@ -308,11 +310,16 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 	return 0;
 }
 
-void
-m_throw(mon, x, y, dx, dy, range, obj)
-	register struct monst *mon;
-	register int x,y,dx,dy,range;		/* direction and range */
-	register struct obj *obj;
+void 
+m_throw (
+    register struct monst *mon,
+    register int x,
+    register int y,
+    register int dx,
+    register int dy,
+    register int range,		/* direction and range */
+    register struct obj *obj
+)
 {
 	register struct monst *mtmp;
 	struct obj *singleobj, *mwep;
@@ -535,10 +542,8 @@ m_throw(mon, x, y, dx, dy, range, obj)
 #ifdef OVLB
 
 /* Remove an item from the monster's inventory and destroy it. */
-void
-m_useup(mon, obj)
-struct monst *mon;
-struct obj *obj;
+void 
+m_useup (struct monst *mon, struct obj *obj)
 {
 	if (obj->quan > 1L) {
 		obj->quan--;
@@ -558,9 +563,8 @@ struct obj *obj;
 #ifdef OVL1
 
 /* monster attempts ranged weapon attack against player */
-void
-thrwmu(mtmp)
-struct monst *mtmp;
+void 
+thrwmu (struct monst *mtmp)
 {
 	struct obj *otmp, *mwep;
 	xchar x, y;
@@ -718,10 +722,11 @@ struct monst *mtmp;
 #endif /* OVL1 */
 #ifdef OVLB
 
-int
-spitmu(mtmp, mattk)		/* monster spits substance at you */
-register struct monst *mtmp;
-register struct attack *mattk;
+int 
+spitmu (		/* monster spits substance at you */
+    register struct monst *mtmp,
+    register struct attack *mattk
+)
 {
 	register struct obj *otmp;
 
@@ -760,10 +765,11 @@ register struct attack *mattk;
 #endif /* OVLB */
 #ifdef OVL1
 
-int
-breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
-	register struct monst *mtmp;
-	register struct attack  *mattk;
+int 
+breamu (			/* monster breathes at you (ranged) */
+    register struct monst *mtmp,
+    register struct attack *mattk
+)
 {
 	/* if new breath types are added, change AD_ACID to max type */
 	int typ = (mattk->adtyp == AD_RBRE) ? rnd(AD_ACID) : mattk->adtyp ;
@@ -863,9 +869,7 @@ lined_up(mtmp)		/* is mtmp in position to use ranged attack? */
 /* Check if a monster is carrying a particular item.
  */
 struct obj *
-m_carrying(mtmp, type)
-struct monst *mtmp;
-int type;
+m_carrying (struct monst *mtmp, int type)
 {
 	register struct obj *otmp;
 

@@ -34,18 +34,18 @@ STATIC_PTR void done_intr(int);
 static void done_hangup(int);
 # endif
 #endif
-STATIC_DCL void disclose(int,BOOLEAN_P);
+STATIC_DCL void disclose(int,boolean);
 STATIC_DCL void get_valuables(struct obj *);
 STATIC_DCL void sort_valuables(struct valuable_data *,int);
-STATIC_DCL void artifact_score(struct obj *,BOOLEAN_P,winid);
+STATIC_DCL void artifact_score(struct obj *,boolean,winid);
 STATIC_DCL void savelife(int);
-STATIC_DCL boolean list_vanquished(CHAR_P, BOOLEAN_P);
+STATIC_DCL boolean list_vanquished(char, boolean);
 #ifdef DUMP_LOG
 extern void dump_spells(void);
-void do_vanquished(int, BOOLEAN_P, BOOLEAN_P);
-STATIC_DCL void list_genocided(int, BOOLEAN_P, BOOLEAN_P);
+void do_vanquished(int, boolean, boolean);
+STATIC_DCL void list_genocided(int, boolean, boolean);
 #else
-STATIC_DCL void list_genocided(CHAR_P,BOOLEAN_P);
+STATIC_DCL void list_genocided(char,boolean);
 #endif /* DUMP_LOG */
 STATIC_DCL boolean should_query_disclose_option(int,char *);
 
@@ -94,8 +94,8 @@ static NEARDATA const char *ends[] = {		/* "when you..." */
 FILE *dump_fp = (FILE *)0;  /* file pointer for dumps */
 /* functions dump_init, dump_exit and dump are from the dump patch */
 
-void
-dump_init ()
+void 
+dump_init (void)
 {
   if (dump_fn[0]) {
     char *p = (char *) strstr(dump_fn, "%n");
@@ -131,15 +131,15 @@ dump_init ()
   }
 }
 
-void
-dump_exit ()
+void 
+dump_exit (void)
 {
   if (dump_fp)
     fclose (dump_fp);
 }
 
-void dump (pre, str)
-     char *pre, *str;
+void 
+dump (char *pre, char *str)
 {
   if (dump_fp)
     fprintf (dump_fp, "%s%s\n", pre, str);
@@ -147,9 +147,10 @@ void dump (pre, str)
 #endif  /* DUMP_LOG */
 
 /*ARGSUSED*/
-void
-done1(sig_unused)   /* called as signal() handler, so sent at least one arg */
-int sig_unused;
+void 
+done1 (   /* called as signal() handler, so sent at least one arg */
+    int sig_unused
+)
 {
 #if defined(MAC_MPW)
 # pragma unused ( sig_unused )
@@ -173,8 +174,8 @@ int sig_unused;
 extern const char * const killed_by_prefix[];	/* from topten.c */
 
 /* "#quit" command or keyboard interrupt */
-int
-done2()
+int 
+done2 (void)
 {
 	if(yn("Really quit?") == 'n') {
 #ifndef NO_SIGNAL
@@ -233,9 +234,10 @@ int sig_unused;
 }
 
 # if defined(UNIX) || defined(VMS) || defined(__EMX__)
-static void
-done_hangup(sig)	/* signal() handler */
-int sig;
+static void 
+done_hangup (	/* signal() handler */
+    int sig
+)
 {
 	program_state.done_hup++;
 	(void)signal(SIGHUP, SIG_IGN);
@@ -245,9 +247,8 @@ int sig;
 # endif
 #endif /* NO_SIGNAL */
 
-void
-done_in_by(mtmp)
-register struct monst *mtmp;
+void 
+done_in_by (register struct monst *mtmp)
 {
 	char buf[BUFSZ];
 	boolean distorted = (boolean)(Hallucination && canspotmon(mtmp));
@@ -648,9 +649,8 @@ winid endwin;
 }
 
 /* Be careful not to call panic from here! */
-void
-done(how)
-int how;
+void 
+done (int how)
 {
 	boolean taken;
 	char kilbuf[BUFSZ], pbuf[BUFSZ];
@@ -1180,9 +1180,8 @@ boolean identified, all_containers, want_dump;
 }
 
 /* should be called with either EXIT_SUCCESS or EXIT_FAILURE */
-void
-terminate(status)
-int status;
+void 
+terminate (int status)
 {
 #ifdef MAC
 	getreturn("to exit");
@@ -1295,8 +1294,8 @@ boolean want_dump;
     return (boolean) (total_killed);
 }
 
-int
-dolistvanq()
+int 
+dolistvanq (void)
 {
     if (!list_vanquished('y', FALSE))
         pline("No monsters have yet been killed.");
@@ -1304,8 +1303,8 @@ dolistvanq()
 }
     
 /* number of monster species which have been genocided */
-int
-num_genocides()
+int 
+num_genocides (void)
 {
     int i, n = 0;
 

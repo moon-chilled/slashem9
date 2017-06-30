@@ -25,8 +25,8 @@ static int rect_cnt;
  * new level to be build...
  */
 
-void
-init_rect()
+void 
+init_rect (void)
 {
 	rect_cnt = 1;
 	rect[0].lx = rect[0].ly = 0;

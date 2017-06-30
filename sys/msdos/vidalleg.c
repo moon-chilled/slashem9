@@ -50,12 +50,12 @@ void nh_stretch_blit(BITMAP *, BITMAP *, int, int, int, int, int, int, int, int)
 
 /* prototypes */
 int alleg_swallowed(int,int);
-STATIC_DCL void alleg_redrawmap(BOOLEAN_P);
+STATIC_DCL void alleg_redrawmap(boolean);
 STATIC_DCL void alleg_full_redraw(void);
 STATIC_DCL void alleg_load_cnf(void);
 void alleg_cliparound(int,int);
 
-STATIC_DCL void alleg_scrollmap(BOOLEAN_P);
+STATIC_DCL void alleg_scrollmap(boolean);
 STATIC_DCL void positionbar(void);
 STATIC_DCL void init_progress_meter(void);
 STATIC_DCL void inc_progress_meter(void);

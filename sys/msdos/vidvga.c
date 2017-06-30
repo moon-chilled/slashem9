@@ -112,9 +112,9 @@
 void vga_gotoloc(int,int);  /* This should be made a macro */
 void vga_backsp(void);
 #ifdef SCROLLMAP
-STATIC_DCL void vga_scrollmap(BOOLEAN_P);
+STATIC_DCL void vga_scrollmap(boolean);
 #endif
-STATIC_DCL void vga_redrawmap(BOOLEAN_P);
+STATIC_DCL void vga_redrawmap(boolean);
 void vga_cliparound(int, int);
 STATIC_OVL void decal_planar(struct planar_cell_struct *, unsigned);
 
@@ -124,7 +124,7 @@ static void vga_special(int, int, int);
 #endif
 
 /* WAC draw a pet mark */
-void vga_Draw_PetMark(int,int,BOOLEAN_P);
+void vga_Draw_PetMark(int,int,boolean);
 
 
 extern int clipx, clipxmax;	/* current clipping column from wintty.c */

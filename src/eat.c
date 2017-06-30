@@ -20,13 +20,13 @@ STATIC_PTR int opentin(void);
 STATIC_PTR int unfaint(void);
 
 #ifdef OVLB
-STATIC_DCL const char *food_xname(struct obj *,BOOLEAN_P);
-STATIC_DCL const char *Food_xname(struct obj *,BOOLEAN_P);
+STATIC_DCL const char *food_xname(struct obj *,boolean);
+STATIC_DCL const char *Food_xname(struct obj *,boolean);
 STATIC_DCL void choke(struct obj *);
 STATIC_DCL void recalc_wt(void);
 STATIC_DCL struct obj *touchfood(struct obj *);
 STATIC_DCL void do_reset_eat(void);
-STATIC_DCL void done_eating(BOOLEAN_P);
+STATIC_DCL void done_eating(boolean);
 STATIC_DCL void cprefx(int);
 STATIC_DCL int intrinsic_possible(int,struct permonst *);
 STATIC_DCL void givit(int,struct permonst *);
@@ -43,7 +43,7 @@ STATIC_DCL int rottenfood(struct obj *);
 STATIC_DCL void eatspecial(void);
 STATIC_DCL void eataccessory(struct obj *);
 STATIC_DCL const char *foodword(struct obj *);
-STATIC_DCL boolean maybe_cannibal(int,BOOLEAN_P);
+STATIC_DCL boolean maybe_cannibal(int,boolean);
 STATIC_DCL struct obj *floorfood(const char *);
 
 char msgbuf[BUFSZ];
@@ -145,8 +145,8 @@ register struct obj *obj;
 #endif /* OVL1 */
 #ifdef OVLB
 
-void
-init_uhunger()
+void 
+init_uhunger (void)
 {
 	u.uhunger = 900;
 	u.uhs = NOT_HUNGRY;
@@ -341,8 +341,8 @@ recalc_wt()
 #endif
 }
 
-void
-reset_eat()		/* called when eating interrupted by an event */
+void 
+reset_eat (void)		/* called when eating interrupted by an event */
 {
     /* we only set a flag here - the actual reset process is done after
      * the round is spent eating.
@@ -404,9 +404,8 @@ register struct obj *otmp;
  * do_reset_eat() at the beginning of eatfood()) and check for null pointers
  * in do_reset_eat().
  */
-void
-food_disappears(obj)
-register struct obj *obj;
+void 
+food_disappears (register struct obj *obj)
 {
 	if (obj == victual.piece) victual.piece = (struct obj *)0;
 	if (obj->timed) obj_stop_timers(obj);
@@ -415,9 +414,8 @@ register struct obj *obj;
 /* renaming an object usually results in it having a different address;
    so the sequence start eating/opening, get interrupted, name the food,
    resume eating/opening would restart from scratch */
-void
-food_substitution(old_obj, new_obj)
-struct obj *old_obj, *new_obj;
+void 
+food_substitution (struct obj *old_obj, struct obj *new_obj)
 {
 	if (old_obj == victual.piece) victual.piece = new_obj;
 	if (old_obj == tin.tin) tin.tin = new_obj;
@@ -634,8 +632,8 @@ struct monst *mon;
     return FALSE;
 }
 
-void
-fix_petrification()
+void 
+fix_petrification (void)
 {
 	Stoned = 0;
 	delayed_killer = 0;
@@ -1200,8 +1198,8 @@ register int pm;
 	return;
 }
 
-void
-violated_vegetarian()
+void 
+violated_vegetarian (void)
 {
     u.uconduct.unvegetarian++;
     if (Role_if(PM_MONK)) {
@@ -1424,8 +1422,8 @@ no_opener:
 	return;
 }
 
-int
-Hear_again()		/* called when waking up after fainting */
+int 
+Hear_again (void)		/* called when waking up after fainting */
 {
 	flags.soundok = 1;
 	return 0;
@@ -2322,8 +2320,8 @@ struct obj *otmp;
 	return 0;
 }
 
-int
-doeat()		/* generic "eat" command funtion (see cmd.c) */
+int 
+doeat (void)		/* generic "eat" command funtion (see cmd.c) */
 {
 	register struct obj *otmp;
 	int basenutrit;			/* nutrition of full item */
@@ -2630,8 +2628,8 @@ bite()
 #endif /* OVLB */
 #ifdef OVL0
 
-void
-gethungry()	/* as time goes by - called by moveloop() and domove() */
+void 
+gethungry (void)	/* as time goes by - called by moveloop() and domove() */
 {
 	if (u.uinvulnerable) return;	/* you don't feel hungrier */
 
@@ -2674,18 +2672,20 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 #endif /* OVL0 */
 #ifdef OVLB
 
-void
-morehungry(num)	/* called after vomiting and after performing feats of magic */
-register int num;
+void 
+morehungry (	/* called after vomiting and after performing feats of magic */
+    register int num
+)
 {
 	u.uhunger -= num;
 	newuhs(TRUE);
 }
 
 
-void
-lesshungry(num)	/* called after eating (and after drinking fruit juice) */
-register int num;
+void 
+lesshungry (	/* called after eating (and after drinking fruit juice) */
+    register int num
+)
 {
 	/* See comments in newuhs() for discussion on force_save_hs */
 	boolean iseating = occupation == eatfood || force_save_hs;
@@ -2749,15 +2749,15 @@ is_fainted()
 	return((boolean)(u.uhs == FAINTED));
 }
 
-void
-reset_faint()	/* call when a faint must be prematurely terminated */
+void 
+reset_faint (void)	/* call when a faint must be prematurely terminated */
 {
 	if(is_fainted()) nomul(0);
 }
 
 #if 0
-void
-sync_hunger()
+void 
+sync_hunger (void)
 {
 	if(is_fainted()) {
 		flags.soundok = 0;
@@ -2955,18 +2955,16 @@ floorfood(verb)		/* get food from floor or pack */
 
 /* Side effects of vomiting */
 /* added nomul (MRS) - it makes sense, you're too busy being sick! */
-void
-vomit()		/* A good idea from David Neves */
+void 
+vomit (void)		/* A good idea from David Neves */
 {
 	make_sick(0L, (char *) 0, TRUE, SICK_VOMITABLE);
 	nomul(-2);
 	nomovemsg = 0;
 }
 
-int
-eaten_stat(base, obj)
-register int base;
-register struct obj *obj;
+int 
+eaten_stat (register int base, register struct obj *obj)
 {
 	long uneaten_amt, full_amount;
 
@@ -2985,10 +2983,8 @@ register struct obj *obj;
 }
 
 /* reduce obj's oeaten field, making sure it never hits or passes 0 */
-void
-consume_oeaten(obj, amt)
-struct obj *obj;
-int amt;
+void 
+consume_oeaten (struct obj *obj, int amt)
 {
     /*
      * This is a hack to try to squelch several long standing mystery

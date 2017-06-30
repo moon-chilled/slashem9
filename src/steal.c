@@ -8,7 +8,7 @@ STATIC_PTR int stealarm(void);
 
 #ifdef OVLB
 STATIC_DCL const char *equipname(struct obj *);
-STATIC_DCL void mdrop_obj(struct monst *,struct obj *,BOOLEAN_P);
+STATIC_DCL void mdrop_obj(struct monst *,struct obj *,boolean);
 
 STATIC_OVL const char *
 equipname(otmp)
@@ -26,8 +26,8 @@ register struct obj *otmp;
 }
 
 #ifndef GOLDOBJ
-long		/* actually returns something that fits in an int */
-somegold()
+long 
+somegold (void)
 {
 #ifdef LINT	/* long conv. ok */
 	return(0L);
@@ -37,9 +37,8 @@ somegold()
 #endif
 }
 
-void
-stealgold(mtmp)
-register struct monst *mtmp;
+void 
+stealgold (register struct monst *mtmp)
 {
 	register struct obj *gold = g_at(u.ux, u.uy);
 	register long tmp;
@@ -68,9 +67,8 @@ register struct monst *mtmp;
 
 #else /* !GOLDOBJ */
 
-long		/* actually returns something that fits in an int */
-somegold(umoney)
-long umoney;
+long 
+somegold (long umoney)
 {
 #ifdef LINT	/* long conv. ok */
 	return(0L);
@@ -89,8 +87,7 @@ May search containers too.
 Deals in gold only, as leprechauns don't care for lesser coins.
 */
 struct obj *
-findgold(chain)
-register struct obj *chain;
+findgold (register struct obj *chain)
 {
         while (chain && chain->otyp != GOLD_PIECE) chain = chain->nobj;
         return chain;
@@ -99,9 +96,8 @@ register struct obj *chain;
 /* 
 Steal gold coins only.  Leprechauns don't care for lesser coins.
 */
-void
-stealgold(mtmp)
-register struct monst *mtmp;
+void 
+stealgold (register struct monst *mtmp)
 {
 	register struct obj *fgold = g_at(u.ux, u.uy);
 	register struct obj *ygold;
@@ -229,10 +225,8 @@ boolean unchain_ball;	/* whether to unpunish or just unwield */
  * Returns -1 if the monster died in the attempt
  * Avoid stealing the object stealoid
  */
-int
-steal(mtmp, objnambuf)
-struct monst *mtmp;
-char *objnambuf;
+int 
+steal (struct monst *mtmp, char *objnambuf)
 {
 	struct obj *otmp;
 	int tmp, could_petrify, named = 0, armordelay;
@@ -447,10 +441,8 @@ gotobj:
 #ifdef OVL1
 
 /* Returns 1 if otmp is free'd, 0 otherwise. */
-int
-mpickobj(mtmp,otmp)
-register struct monst *mtmp;
-register struct obj *otmp;
+int 
+mpickobj (register struct monst *mtmp, register struct obj *otmp)
 {
     int freed_otmp;
 
@@ -489,9 +481,8 @@ register struct obj *otmp;
 #endif /* OVL1 */
 #ifdef OVLB
 
-void
-stealamulet(mtmp)
-struct monst *mtmp;
+void 
+stealamulet (struct monst *mtmp)
 {
     struct obj *otmp = (struct obj *)0;
     int real=0, fake=0;
@@ -572,9 +563,8 @@ boolean verbosely;
 /* some monsters bypass the normal rules for moving between levels or
    even leaving the game entirely; when that happens, prevent them from
    taking the Amulet or invocation tools with them */
-void
-mdrop_special_objs(mon)
-struct monst *mon;
+void 
+mdrop_special_objs (struct monst *mon)
 {
     struct obj *obj, *otmp;
 

@@ -117,8 +117,8 @@ STATIC_DCL void rogue_vision(char **,char *,char *);
  * This must be called before mklev() is called in newgame() [allmain.c],
  * or before a game restore.   Else we die a horrible death.
  */
-void
-vision_init()
+void 
+vision_init (void)
 {
     int i;
 
@@ -154,10 +154,8 @@ vision_init()
  * Returns true if the level feature, object, or monster at (x,y) blocks
  * sight.
  */
-int
-does_block(x,y,lev)
-    int x, y;
-    register struct rm    *lev;
+int 
+does_block (int x, int y, register struct rm *lev)
 {
     struct obj   *obj;
     struct monst *mon;
@@ -192,8 +190,8 @@ does_block(x,y,lev)
  * This must be called *after* the levl[][] structure is set with the new
  * level and the level monsters and objects are in place.
  */
-void
-vision_reset()
+void 
+vision_reset (void)
 {
     int y;
     register int x, i, dig_left, block;
@@ -491,9 +489,8 @@ new_angle(lev, sv, row, col)
  *	+ Right after the hero is swallowed. [gulpmu()]
  *	+ Just before bubbles are moved. [movebubbles()]
  */
-void
-vision_recalc(control)
-    int control;
+void 
+vision_recalc (int control)
 {
     char **temp_array;	/* points to the old vision array */
     char **next_array;	/* points to the new vision array */
@@ -817,9 +814,8 @@ skip:
  *
  * Make the location opaque to light.
  */
-void
-block_point(x,y)
-    int x, y;
+void 
+block_point (int x, int y)
 {
     fill_point(y,x);
 
@@ -840,9 +836,8 @@ block_point(x,y)
  *
  * Make the location transparent to light.
  */
-void
-unblock_point(x,y)
-    int x, y;
+void 
+unblock_point (int x, int y)
 {
     dig_point(y,x);
 

@@ -633,9 +633,8 @@ void (*ascgraphics_mode_callback)(void) = 0;	/* set in tty_start_screen() */
  * recognized, then MAXOCLASSES is returned.  Used in detect.c invent.c,
  * options.c, pickup.c, sp_lev.c, and lev_main.c.
  */
-int
-def_char_to_objclass(ch)
-    char ch;
+int 
+def_char_to_objclass (char ch)
 {
     int i;
     for (i = 1; i < MAXOCLASSES; i++)
@@ -647,9 +646,8 @@ def_char_to_objclass(ch)
  * Convert a character into a monster class.  This returns the _first_
  * match made.  If there are are no matches, return MAXMCLASSES.
  */
-int
-def_char_to_monclass(ch)
-    char ch;
+int 
+def_char_to_monclass (char ch)
 {
     int i;
     for (i = 1; i < MAXMCLASSES; i++)
@@ -684,9 +682,8 @@ int glth, maxlen, offset;
 }
 #endif
 
-void
-switch_graphics(gr_set_flag)
-int gr_set_flag;
+void 
+switch_graphics (int gr_set_flag)
 {
     switch (gr_set_flag) {
 	default:

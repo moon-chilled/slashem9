@@ -35,7 +35,7 @@
 void cmov(int, int);
 void nocmov(int, int);
 int process_keystroke(INPUT_RECORD *, boolean *,
-    BOOLEAN_P numberpad, int portdebug);
+    boolean numberpad, int portdebug);
 
 /*
  * The following WIN32 Console API routines are used in this file.
@@ -91,7 +91,7 @@ typedef int (__stdcall * PROCESS_KEYSTROKE)(
     HANDLE,
     INPUT_RECORD *,
     boolean *,
-    BOOLEAN_P,
+    boolean,
     int
 );
 
@@ -104,7 +104,7 @@ typedef int (__stdcall * CHECKINPUT)(
 	HANDLE,
 	INPUT_RECORD *,
 	DWORD *,
-	BOOLEAN_P,
+	boolean,
 	int,
 	int *,
 	coord *

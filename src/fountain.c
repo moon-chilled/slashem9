@@ -87,9 +87,10 @@ dowaternymph() /* Water Nymph */
 		   You_hear("a loud pop.");
 }
 
-void
-dogushforth(drinking) /* Gushing forth along LOS from (u.ux, u.uy) */
-int drinking;
+void 
+dogushforth ( /* Gushing forth along LOS from (u.ux, u.uy) */
+    int drinking
+)
 {
 	int madepool = 0;
 
@@ -192,8 +193,8 @@ boolean isyou;
 	}
 }
 
-void
-drinkfountain()
+void 
+drinkfountain (void)
 {
 	/* What happens when you drink from a fountain? */
 	register boolean mgkftn = (levl[u.ux][u.uy].blessedftn == 1);
@@ -348,9 +349,8 @@ drinkfountain()
 	dryup(u.ux, u.uy, TRUE);
 }
 
-void
-dipfountain(obj)
-register struct obj *obj;
+void 
+dipfountain (register struct obj *obj)
 {
 	if (Levitation) {
 		floating_above("fountain");
@@ -499,9 +499,8 @@ register struct obj *obj;
 	dryup(u.ux, u.uy, TRUE);
 }
 
-void
-diptoilet(obj)
-register struct obj *obj;
+void 
+diptoilet (register struct obj *obj)
 {
 	if (Levitation) {
 	    floating_above("toilet");
@@ -525,9 +524,8 @@ register struct obj *obj;
 }
 
 
-void
-breaksink(x,y)
-int x, y;
+void 
+breaksink (int x, int y)
 {
     if(cansee(x,y) || (x == u.ux && y == u.uy))
 	pline_The("pipes break!  Water spurts out!");
@@ -538,9 +536,8 @@ int x, y;
     newsym(x,y);
 }
 
-void
-breaktoilet(x,y)
-int x, y;
+void 
+breaktoilet (int x, int y)
 {
     register int num = rn1(5,2);
     struct monst *mtmp;
@@ -565,8 +562,8 @@ int x, y;
     }
 }
 
-void
-drinksink()
+void 
+drinksink (void)
 {
 	struct obj *otmp;
 	struct monst *mtmp;
@@ -660,8 +657,8 @@ drinksink()
 	}
 }
 
-void
-drinktoilet()
+void 
+drinktoilet (void)
 {
 	if (Levitation) {
 		floating_above("toilet");
@@ -716,9 +713,8 @@ drinktoilet()
 }
 
 
-void
-whetstone_fountain_effects(obj)
-register struct obj *obj;
+void 
+whetstone_fountain_effects (register struct obj *obj)
 {
 	if (Levitation) {
 		floating_above("fountain");
@@ -824,9 +820,8 @@ register struct obj *obj;
 }
 
 
-void
-whetstone_toilet_effects(obj)
-register struct obj *obj;
+void 
+whetstone_toilet_effects (register struct obj *obj)
 {
 	if (Levitation) {
 	    floating_above("toilet");
@@ -839,9 +834,8 @@ register struct obj *obj;
 	if (flags.verbose)  pline("Yuck!");
 }
 
-void
-whetstone_sink_effects(obj)
-register struct obj *obj;
+void 
+whetstone_sink_effects (register struct obj *obj)
 {
 	struct monst *mtmp;
 

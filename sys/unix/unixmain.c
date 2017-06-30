@@ -25,7 +25,7 @@ extern struct passwd *getpwuid(int);
 #endif
 extern struct passwd *getpwnam(const char *);
 #ifdef CHDIR
-static void chdirx(const char *,BOOLEAN_P);
+static void chdirx(const char *,boolean);
 #endif /* CHDIR */
 static boolean whoami(void);
 static void process_options(int, char **);

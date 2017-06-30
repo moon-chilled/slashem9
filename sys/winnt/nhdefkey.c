@@ -29,7 +29,7 @@ char dllname[512];
 char *shortdllname;
 
 int __declspec(dllexport) __stdcall ProcessKeystroke(HANDLE hConIn, INPUT_RECORD *ir, 
-    boolean *valid, BOOLEAN_P numberpad, int portdebug);
+    boolean *valid, boolean numberpad, int portdebug);
 
 int WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved)
 {

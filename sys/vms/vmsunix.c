@@ -30,8 +30,8 @@ extern unsigned long smg$init_term_table_by_type(), smg$del_term_table();
 static int veryold(int);
 static char *verify_term(void);
 #if defined(SHELL) || defined(SUSPEND)
-static void hack_escape(BOOLEAN_P,const char *);
-static void hack_resume(BOOLEAN_P);
+static void hack_escape(boolean,const char *);
+static void hack_resume(boolean);
 #endif
 
 static int

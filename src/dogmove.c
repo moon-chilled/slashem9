@@ -29,9 +29,9 @@ STATIC_DCL int dog_invent(struct monst *,struct edog *,int);
 STATIC_DCL int dog_goal(struct monst *,struct edog *,int,int,int);
 
 STATIC_DCL struct obj *DROPPABLES(struct monst *);
-STATIC_DCL boolean can_reach_location(struct monst *,XCHAR_P,XCHAR_P,
-    XCHAR_P,XCHAR_P);
-STATIC_DCL boolean could_reach_item(struct monst *, XCHAR_P,XCHAR_P);
+STATIC_DCL boolean can_reach_location(struct monst *,xchar,xchar,
+    xchar,xchar);
+STATIC_DCL boolean could_reach_item(struct monst *, xchar,xchar);
 
 STATIC_OVL struct obj *
 DROPPABLES(mon)
@@ -93,10 +93,8 @@ int x, y;
 	return FALSE;
 }
 
-int
-dog_nutrition(mtmp, obj)
-struct monst *mtmp;
-struct obj *obj;
+int 
+dog_nutrition (struct monst *mtmp, struct obj *obj)
 {
 	int nutrit;
 

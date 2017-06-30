@@ -70,9 +70,8 @@ STATIC_DCL const char *rank(void);
 #ifdef ALLEG_FX
 static int botl_warn = 0;
 
-static void
-set_botl_warn(level)
-int level;
+static void 
+set_botl_warn (int level)
 {
         botl_warn = level;
         flags.botl = 1;
@@ -80,18 +79,16 @@ int level;
 #endif
 
 /* convert experience level (1..30) to rank index (0..8) */
-int
-xlev_to_rank(xlev)
-int xlev;
+int 
+xlev_to_rank (int xlev)
 {
 	return (xlev <= 2) ? 0 : (xlev <= 30) ? ((xlev + 2) / 4) : 8;
 }
 
 #if 0	/* not currently needed */
 /* convert rank index (0..8) to experience level (1..30) */
-int
-rank_to_xlev(rank)
-int rank;
+int 
+rank_to_xlev (int rank)
 {
 	return (rank <= 0) ? 1 : (rank <= 8) ? ((rank * 4) - 2) : 30;
 }
@@ -133,10 +130,8 @@ rank()
 	return(rank_of(u.ulevel, Role_switch, flags.female));
 }
 
-int
-title_to_mon(str, rank_indx, title_length)
-const char *str;
-int *rank_indx, *title_length;
+int 
+title_to_mon (const char *str, int *rank_indx, int *title_length)
 {
 	register int i, j;
 
@@ -164,8 +159,8 @@ int *rank_indx, *title_length;
 #endif /* OVL1 */
 #ifdef OVLB
 
-void
-max_rank_sz()
+void 
+max_rank_sz (void)
 {
 	register int i, r, maxr = 0;
 
@@ -182,8 +177,8 @@ max_rank_sz()
 #ifdef OVL0
 
 #ifdef SCORE_ON_BOTL
-long
-botl_score()
+long 
+botl_score (void)
 {
     int deepest = deepest_lev_reached(FALSE);
 #ifndef GOLDOBJ
@@ -203,7 +198,7 @@ botl_score()
 #endif
 
 static char *
-botl_player()
+botl_player (void)
 {
     static char player[MAXCO];
 	register char *nb;
@@ -231,7 +226,7 @@ botl_player()
 }
 
 static char *
-botl_strength()
+botl_strength (void)
 {
     static char strength[6];
 	if (ACURR(A_STR) > 18) {
@@ -290,10 +285,8 @@ bot1()
 }
 
 /* provide the name of the current level for display by various ports */
-int
-describe_level(buf, verbose)
-char *buf;
-int verbose;
+int 
+describe_level (char *buf, int verbose)
 {
 	int ret = 1;
 
@@ -470,10 +463,8 @@ bot2()
  * ". Str:18/99 Dx:11 Co:13 In:12 Wi:14 Ch:14 Neutral" or 49 Chars long.
  */
 #if 0
-const char*
-shorten_bot1(str, len)
-const char *str;
-int len;
+const char *
+shorten_bot1 (const char *str, int len)
 {
     static char cbuf[BUFSZ];
 
@@ -505,10 +496,8 @@ int len;
  * -- or just under 80 characters
  */
 #ifdef TTY_GRAPHICS
-const char*
-shorten_bot2(str, len)
-const char *str;
-unsigned int len;
+const char *
+shorten_bot2 (const char *str, unsigned int len)
 {
     static char cbuf[MAXCO];
     for(bot2_abbrev = 1; bot2_abbrev <= 4; bot2_abbrev++) {
@@ -598,23 +587,23 @@ boolean reconfig;
     (*raw_handler)(reconfig, rv - botl_raw_values, botl_raw_values);
 }
 
-void bot_reconfig()
+void 
+bot_reconfig (void)
 {
     if (raw_handler)
 	bot_raw(TRUE);
     flags.botl = 1;
 }
 
-void
-bot_set_handler(handler)
-void (*handler)();
+void 
+bot_set_handler (void (*handler)(void))
 {
     raw_handler = handler;
     bot_reconfig();
 }
 
-void
-bot()
+void 
+bot (void)
 {
 	/*
 	 * ALI: Cope with the fact that u_init may not have been

@@ -15,8 +15,8 @@ STATIC_DCL void litter(void);
 #define memory_object(x, y)	(levl[x][y].glyph)
 #endif
 
-void
-ballfall()
+void 
+ballfall (void)
 {
 	boolean gets_hit;
 
@@ -101,8 +101,8 @@ ballfall()
  *
  *  Should not be called while swallowed.
  */
-void
-placebc()
+void 
+placebc (void)
 {
     if (!uchain || !uball) {
 	impossible("Where are your ball and chain?");
@@ -127,8 +127,8 @@ placebc()
     newsym(u.ux,u.uy);
 }
 
-void
-unplacebc()
+void 
+unplacebc (void)
 {
     if (u.uswallow) return;	/* ball&chain not placed while swallowed */
 
@@ -175,9 +175,8 @@ bc_order()
  *  The hero is either about to go blind or already blind and just punished.
  *  Set up the ball and chain variables so that the ball and chain are "felt".
  */
-void
-set_bc(already_blind)
-int already_blind;
+void 
+set_bc (int already_blind)
 {
     int ball_on_floor = !carried(uball);
 
@@ -749,8 +748,8 @@ litter()
 	}
 }
 
-void
-drag_down()
+void 
+drag_down (void)
 {
 	boolean forward;
 	uchar dragchance = 3;

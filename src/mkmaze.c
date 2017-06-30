@@ -17,8 +17,8 @@ STATIC_DCL boolean is_solid(int,int);
 STATIC_DCL int extend_spine(int [3][3], int, int, int);
 STATIC_DCL boolean okay(int,int,int);
 STATIC_DCL void maze0xy(coord *);
-STATIC_DCL boolean put_lregion_here(XCHAR_P,XCHAR_P,XCHAR_P,
-	XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P,BOOLEAN_P,d_level *);
+STATIC_DCL boolean put_lregion_here(xchar,xchar,xchar,
+	xchar,xchar,xchar,xchar,boolean,d_level *);
 STATIC_DCL void fixup_special(void);
 STATIC_DCL void move(int *,int *,int);
 STATIC_DCL void setup_waterlevel(void);
@@ -573,9 +573,8 @@ fixup_special()
     num_lregions = 0;
 }
 
-void
-makemaz(s)
-register const char *s;
+void 
+makemaz (register const char *s)
 {
 	int x,y;
 	char protofile[20];
@@ -731,9 +730,8 @@ register const char *s;
  * the program.  This iterative version uses the minimum amount of stack
  * that is totally safe.
  */
-void
-walkfrom(x,y)
-int x,y;
+void 
+walkfrom (int x, int y)
 {
 #define CELLS (ROWNO * COLNO) / 4		/* a maze cell is 4 squares */
 	char mazex[CELLS + 1], mazey[CELLS + 1];	/* char's are OK */
@@ -771,9 +769,8 @@ int x,y;
 }
 #else
 
-void
-walkfrom(x,y)
-int x,y;
+void 
+walkfrom (int x, int y)
 {
 	register int q,a,dir;
 	int dirs[4];
@@ -838,8 +835,8 @@ mazexy(cc)	/* find random point in generated corridors,
 	return;
 }
 
-void
-bound_digging()
+void 
+bound_digging (void)
 /* put a non-diggable boundary around the initial portion of a level map.
  * assumes that no level will initially put things beyond the isok() range.
  *
@@ -973,10 +970,10 @@ static int xmin, ymin, xmax, ymax;	/* level boundaries */
 
 STATIC_DCL void set_wportal(void);
 STATIC_DCL void mk_bubble(int,int,int);
-STATIC_DCL void mv_bubble(struct bubble *,int,int,BOOLEAN_P);
+STATIC_DCL void mv_bubble(struct bubble *,int,int,boolean);
 
-void
-movebubbles()
+void 
+movebubbles (void)
 {
 	static boolean up;
 	register struct bubble *b;

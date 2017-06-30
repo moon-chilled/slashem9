@@ -93,9 +93,8 @@ register struct monst *mtmp;
 #endif /* OVL0 */
 #ifdef OVL1
 
-int
-dochugw(mtmp)
-register struct monst *mtmp;
+int 
+dochugw (register struct monst *mtmp)
 {
 	register int x = mtmp->mx, y = mtmp->my;
 	boolean already_saw_mon = !occupation ? 0 : canspotmon(mtmp);
@@ -334,9 +333,8 @@ struct monst *mon;
 /* The whole dochugw/m_move/distfleeck/mfndpos section is serious spaghetti
  * code. --KAA
  */
-int
-dochug(mtmp)
-register struct monst *mtmp;
+int 
+dochug (register struct monst *mtmp)
 {
 	register struct permonst *mdat;
 	register int tmp=0;
@@ -644,10 +642,8 @@ register struct monst *mtmp;
  * 2: monster died.
  * 3: did not move, and can't do anything else either.
  */
-int
-m_move(mtmp, after)
-register struct monst *mtmp;
-register int after;
+int 
+m_move (register struct monst *mtmp, register int after)
 {
 	register int appr;
 	xchar gx,gy,nix,niy,chcnt;
@@ -1306,9 +1302,8 @@ register int x, y;
 #ifdef OVL0
 
 /* decide where the monster thinks you are standing */
-void
-set_apparxy(mtmp)
-register struct monst *mtmp;
+void 
+set_apparxy (register struct monst *mtmp)
 {
 	boolean notseen, gotu;
 	register int disp, mx = mtmp->mux, my = mtmp->muy;
@@ -1434,9 +1429,8 @@ struct monst *mtmp;
 	return TRUE;
 }
 
-static int
-bust_door_breath(mtmp)
-	register struct monst        *mtmp;
+static int 
+bust_door_breath (register struct monst *mtmp)
 {
 	struct permonst *ptr = mtmp->data;
 	int     i;

@@ -156,19 +156,19 @@ static const char to_continue[] = "to continue";
 #else
 STATIC_DCL void getret(void);
 #endif
-STATIC_DCL void erase_menu_or_text(winid, struct WinDesc *, BOOLEAN_P);
-STATIC_DCL void free_window_info(struct WinDesc *, BOOLEAN_P);
+STATIC_DCL void erase_menu_or_text(winid, struct WinDesc *, boolean);
+STATIC_DCL void free_window_info(struct WinDesc *, boolean);
 STATIC_DCL void dmore(struct WinDesc *, const char *);
 STATIC_DCL void set_item_state(winid, int, tty_menu_item *);
 STATIC_DCL void set_all_on_page(winid,tty_menu_item *,tty_menu_item *);
 STATIC_DCL void unset_all_on_page(winid,tty_menu_item *,tty_menu_item *);
-STATIC_DCL void invert_all_on_page(winid,tty_menu_item *,tty_menu_item *, CHAR_P);
-STATIC_DCL void invert_all(winid,tty_menu_item *,tty_menu_item *, CHAR_P);
+STATIC_DCL void invert_all_on_page(winid,tty_menu_item *,tty_menu_item *, char);
+STATIC_DCL void invert_all(winid,tty_menu_item *,tty_menu_item *, char);
 STATIC_DCL void process_menu_window(winid,struct WinDesc *);
 STATIC_DCL void process_text_window(winid,struct WinDesc *);
 STATIC_DCL tty_menu_item *reverse(tty_menu_item *);
 const char * compress_str(const char *);
-STATIC_DCL void tty_putsym(winid, int, int, CHAR_P);
+STATIC_DCL void tty_putsym(winid, int, int, char);
 static char *copy_of(const char *);
 STATIC_DCL void bail(const char *);	/* __attribute__((noreturn)) */
 STATIC_DCL int tty_role_select(char *, char *);

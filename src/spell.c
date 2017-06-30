@@ -38,7 +38,7 @@ static NEARDATA struct obj *book;	/* last/current book being xscribed */
 	        (spell < 52) ? ('A' + spell - 26) : \
 		(spell < 62) ? ('0' + spell - 52) : 0 ))
 
-STATIC_DCL int spell_let_to_idx(CHAR_P);
+STATIC_DCL int spell_let_to_idx(char);
 STATIC_DCL boolean cursed_book(struct obj *bp);
 STATIC_DCL boolean confused_book(struct obj *);
 STATIC_DCL void deadbook(struct obj *);
@@ -425,9 +425,8 @@ learn()
 	return(0);
 }
 
-int
-study_book(spellbook)
-register struct obj *spellbook;
+int 
+study_book (register struct obj *spellbook)
 {
 	register int	 booktype = spellbook->otyp;
 	register boolean confused = (Confusion != 0);
@@ -577,9 +576,8 @@ register struct obj *spellbook;
 
 /* a spellbook has been destroyed or the character has changed levels;
    the stored address for the current book is no longer valid */
-void
-book_disappears(obj)
-struct obj *obj;
+void 
+book_disappears (struct obj *obj)
 {
 	if (obj == book) book = (struct obj *)0;
 }
@@ -587,22 +585,21 @@ struct obj *obj;
 /* renaming an object usually results in it having a different address;
    so the sequence start reading, get interrupted, name the book, resume
    reading would read the "new" book from scratch */
-void
-book_substitution(old_obj, new_obj)
-struct obj *old_obj, *new_obj;
+void 
+book_substitution (struct obj *old_obj, struct obj *new_obj)
 {
 	if (old_obj == book) book = new_obj;
 }
 
-static void
-do_reset_learn()
+static void 
+do_reset_learn (void)
 {
 	stop_occupation();
 }
 
 /* called from moveloop() */
-void
-age_spells()
+void 
+age_spells (void)
 {
 	int i;
 	/*
@@ -669,8 +666,8 @@ getspell(spell_no)
 }
 
 /* the 'Z' command -- cast a spell */
-int
-docast()
+int 
+docast (void)
 {
 	int spell_no;
 
@@ -703,9 +700,8 @@ spelltypemnemonic(int skill)
 	}
 }
 
-int
-spell_skilltype(booktype)
-int booktype;
+int 
+spell_skilltype (int booktype)
 {
 	return (objects[booktype].oc_skill);
 }
@@ -1156,8 +1152,8 @@ boolean atme;
 }
 
 
-void
-losespells()
+void 
+losespells (void)
 {
 	boolean confused = (Confusion != 0);
 	int  n, nzap, i;
@@ -1177,8 +1173,8 @@ losespells()
 
 
 /* the '+' command -- view known spells */
-int
-dovspell()
+int 
+dovspell (void)
 {
 	char qbuf[QBUFSZ];
 	int splnum, othnum;
@@ -1278,7 +1274,7 @@ int *spell_no;
 
 #ifdef DUMP_LOG
 void 
-dump_spells()
+dump_spells (void)
 {
 	int i, n;
 	char buf[BUFSZ];
@@ -1428,9 +1424,8 @@ int spell;
 }
 
 /* Learn a spell during creation of the initial inventory */
-void
-initialspell(obj)
-struct obj *obj;
+void 
+initialspell (struct obj *obj)
 {
 	int i;
 

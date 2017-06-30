@@ -14,12 +14,12 @@ static NEARDATA const char *gate_str;
 
 extern boolean notonhead;	/* for long worms */
 
-STATIC_DCL void kickdmg(struct monst *, BOOLEAN_P);
-STATIC_DCL void kick_monster(XCHAR_P, XCHAR_P);
-STATIC_DCL int kick_object(XCHAR_P, XCHAR_P);
+STATIC_DCL void kickdmg(struct monst *, boolean);
+STATIC_DCL void kick_monster(xchar, xchar);
+STATIC_DCL int kick_object(xchar, xchar);
 STATIC_DCL char *kickstr(char *);
-STATIC_DCL void otransit_msg(struct obj *, BOOLEAN_P, long);
-STATIC_DCL void drop_to(coord *,SCHAR_P);
+STATIC_DCL void otransit_msg(struct obj *, boolean, long);
+STATIC_DCL void drop_to(coord *,schar);
 
 static NEARDATA struct obj *kickobj;
 
@@ -368,9 +368,8 @@ register struct obj *gold;
 
 /* container is kicked, dropped, thrown or otherwise impacted by player.
  * Assumes container is on floor.  Checks contents for possible damage. */
-void
-container_impact_dmg(obj)
-struct obj *obj;
+void 
+container_impact_dmg (struct obj *obj)
 {
 	struct monst *shkp;
 	struct obj *otmp, *otmp2;
@@ -653,8 +652,8 @@ char *buf;
 	return strcat(strcpy(buf, "kicking "), what);
 }
 
-int
-dokick()
+int 
+dokick (void)
 {
 	int x, y;
 	int avrg_attrib;
@@ -1443,8 +1442,8 @@ boolean shop_floor_obj;
 	return(TRUE);
 }
 
-void
-obj_delivery()
+void 
+obj_delivery (void)
 {
 	register struct obj *otmp, *otmp2;
 	register int nx, ny;

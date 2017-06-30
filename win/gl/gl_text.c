@@ -627,7 +627,7 @@ void sdlgl_clear_text_items(struct TextWindow *win)
   assert(win->lines == NULL);
 }
 
-void Sdlgl_display_file(const char *fname, BOOLEAN_P complain)
+void Sdlgl_display_file(const char *fname, boolean complain)
 {
   dlb *f;
   winid datawin;

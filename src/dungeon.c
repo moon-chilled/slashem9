@@ -42,7 +42,7 @@ struct lchoice {
 static void Fread(genericptr_t, int, int, dlb *);
 STATIC_DCL xchar dname_to_dnum(const char *);
 STATIC_DCL int find_branch(const char *, struct proto_dungeon *);
-STATIC_DCL int level_range(XCHAR_P,int,int,int,struct proto_dungeon *,int *);
+STATIC_DCL int level_range(xchar,int,int,int,struct proto_dungeon *,int *);
 STATIC_DCL xchar parent_dlevel(int, struct proto_dungeon *);
 STATIC_DCL int correct_branch_type(struct tmpbranch *);
 STATIC_DCL branch *add_branch(int, int, struct proto_dungeon *);
@@ -53,7 +53,7 @@ STATIC_DCL xchar pick_level(boolean *, int);
 STATIC_DCL boolean place_level(int, struct proto_dungeon *);
 #ifdef WIZARD
 STATIC_DCL const char *br_string(int);
-STATIC_DCL void print_branch(winid, int, int, int, BOOLEAN_P, struct lchoice *);
+STATIC_DCL void print_branch(winid, int, int, int, boolean, struct lchoice *);
 #endif
 
 #if defined(DEBUG) || defined(DEBUG_420942)
@@ -149,9 +149,8 @@ save_dungeon(fd, perform_write, free_data)
 }
 
 /* Restore the dungeon structures. */
-void
-restore_dungeon(fd)
-    int fd;
+void 
+restore_dungeon (int fd)
 {
     branch *curr, *last;
     int    count, i;
@@ -537,9 +536,8 @@ pick_level(map, nth)
 #ifdef DDEBUG
 static void indent(int);
 
-static void
-indent(d)
-int d;
+static void 
+indent (int d)
 {
     while (d-- > 0) fputs("    ", stderr);
 }
@@ -637,8 +635,8 @@ struct level_map {
 	{ "",		(d_level *)0 }
 };
 
-void
-init_dungeons()
+void 
+init_dungeons (void)
 {
 	dlb	*dgn_file;
 	register int i, cl = 0, cb = 0;
@@ -1106,9 +1104,8 @@ boolean	at_stairs;
 	}
 }
 
-void
-u_on_newpos(x, y)
-int x, y;
+void 
+u_on_newpos (int x, int y)
 {
 	u.ux = x;
 	u.uy = y;
@@ -1121,8 +1118,8 @@ int x, y;
 #endif
 }
 
-void
-u_on_sstairs() {	/* place you on the special staircase */
+void 
+u_on_sstairs (void) {	/* place you on the special staircase */
 
 	if (sstairs.sx) {
 	    u_on_newpos(sstairs.sx, sstairs.sy);
@@ -1147,8 +1144,8 @@ u_on_sstairs() {	/* place you on the special staircase */
 	}
 }
 
-void
-u_on_upstairs()	/* place you on upstairs (or special equivalent) */
+void 
+u_on_upstairs (void)	/* place you on upstairs (or special equivalent) */
 {
 	if (xupstair) {
 		u_on_newpos(xupstair, yupstair);
@@ -1156,8 +1153,8 @@ u_on_upstairs()	/* place you on upstairs (or special equivalent) */
 		u_on_sstairs();
 }
 
-void
-u_on_dnstairs()	/* place you on dnstairs (or special equivalent) */
+void 
+u_on_dnstairs (void)	/* place you on dnstairs (or special equivalent) */
 {
 	if (xdnstair) {
 		u_on_newpos(xdnstair, ydnstair);
@@ -1445,9 +1442,8 @@ int range;
 #endif /* OVL1 */
 #ifdef OVL0
 
-int
-induced_align(pct)
-int	pct;
+int 
+induced_align (int pct)
 {
 	s_level	*lev = Is_special(&u.uz);
 	aligntyp al;

@@ -255,8 +255,8 @@ lib_dlb_init()
     return TRUE;
 }
 
-static void
-lib_dlb_cleanup()
+static void 
+lib_dlb_cleanup (void)
 {
     int i;
 
@@ -451,8 +451,8 @@ dlb_init()
     return dlb_initialized;
 }
 
-void
-dlb_cleanup()
+void 
+dlb_cleanup (void)
 {
     if (dlb_initialized) {
 	do_dlb_cleanup();
@@ -466,8 +466,8 @@ dlb *
 dlb_fopen(name, mode)
     const char *name, *mode;
 #else
-dlb_fopen_area(area, name, mode)
-    const char *area, *name, *mode;
+int 
+dlb_fopen_area (const char *area, const char *name, const char *mode)
 #endif
 {
     FILE *fp;

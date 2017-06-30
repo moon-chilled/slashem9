@@ -23,7 +23,7 @@ boolean m_using = FALSE;
 STATIC_DCL struct permonst *muse_newcham_mon(struct monst *);
 #endif
 STATIC_DCL int precheck(struct monst *,struct obj *);
-STATIC_DCL void mzapmsg(struct monst *,struct obj *,BOOLEAN_P);
+STATIC_DCL void mzapmsg(struct monst *,struct obj *,boolean);
 STATIC_DCL void mreadmsg(struct monst *,struct obj *);
 STATIC_DCL void mquaffmsg(struct monst *,struct obj *);
 STATIC_PTR int mbhitm(struct monst *,struct obj *);
@@ -31,7 +31,7 @@ STATIC_DCL void mbhit(struct monst *,int,int (*)(MONST_P,OBJ_P),
 	int (*)(OBJ_P,OBJ_P),struct obj *);
 STATIC_DCL void you_aggravate(struct monst *);
 STATIC_DCL void mon_consume_unstone(struct monst *,struct obj *,
-	BOOLEAN_P,BOOLEAN_P);
+	boolean,boolean);
 
 static struct musable {
 	struct obj *offensive;
@@ -559,9 +559,8 @@ botm:	return((boolean)(!!m.has_defense));
  * after find_defensive().  Return values are 0: did something, 1: died,
  * 2: did something and can't attack again (i.e. teleported).
  */
-int
-use_defensive(mtmp)
-struct monst *mtmp;
+int 
+use_defensive (struct monst *mtmp)
 {
 	int i, fleetim, how = 0;
 	struct obj *otmp = m.defensive;
@@ -985,9 +984,8 @@ mon_tele:
 #undef m_flee
 }
 
-int
-rnd_defensive_item(mtmp)
-struct monst *mtmp;
+int 
+rnd_defensive_item (struct monst *mtmp)
 {
 	struct permonst *pm = mtmp->data;
 	int difficulty = monstr[(monsndx(pm))];
@@ -1415,9 +1413,8 @@ struct obj *obj;			/* 2nd arg to fhitm/fhito */
 /* Perform an offensive action for a monster.  Must be called immediately
  * after find_offensive().  Return values are same as use_defensive().
  */
-int
-use_offensive(mtmp)
-struct monst *mtmp;
+int 
+use_offensive (struct monst *mtmp)
 {
 	int i;
 	struct obj *otmp = m.offensive;
@@ -1685,9 +1682,8 @@ struct monst *mtmp;
 	return 0;
 }
 
-int
-rnd_offensive_item(mtmp)
-struct monst *mtmp;
+int 
+rnd_offensive_item (struct monst *mtmp)
 {
 	struct permonst *pm = mtmp->data;
 	int difficulty = monstr[(monsndx(pm))];
@@ -1856,8 +1852,7 @@ struct monst *mtmp;
 /* type of monster to polymorph into; defaults to one suitable for the
    current level rather than the totally arbitrary choice of newcham() */
 static struct permonst *
-muse_newcham_mon(mon)
-struct monst *mon;
+muse_newcham_mon (struct monst *mon)
 {
 	struct obj *m_armr;
 
@@ -1871,9 +1866,8 @@ struct monst *mon;
 }
 #endif
 
-int
-use_misc(mtmp)
-struct monst *mtmp;
+int 
+use_misc (struct monst *mtmp)
 {
 	int i;
 	struct obj *otmp = m.misc;
@@ -2098,9 +2092,8 @@ struct monst *mtmp;
 	    map_invisible(mtmp->mx, mtmp->my);
 }
 
-int
-rnd_misc_item(mtmp)
-struct monst *mtmp;
+int 
+rnd_misc_item (struct monst *mtmp)
 {
 	struct permonst *pm = mtmp->data;
 	int difficulty = monstr[(monsndx(pm))];

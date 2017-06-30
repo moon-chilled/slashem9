@@ -13,7 +13,7 @@ STATIC_DCL void slime_dialogue(void);
 STATIC_DCL void slip_or_trip(void);
 STATIC_DCL void see_lamp_flicker(struct obj *, const char *);
 STATIC_DCL void lantern_message(struct obj *);
-STATIC_DCL void accelerate_timer(SHORT_P, genericptr_t, long);
+STATIC_DCL void accelerate_timer(short, genericptr_t, long);
 STATIC_DCL void cleanup_burn(genericptr_t,long);
 
 #ifdef OVLB
@@ -147,8 +147,8 @@ slime_dialogue()
 	exercise(A_DEX, FALSE);
 }
 
-void
-burn_away_slime()
+void 
+burn_away_slime (void)
 {
 	if (Slimed) {
 	    pline_The("slime that covers you is burned away!");
@@ -162,8 +162,8 @@ burn_away_slime()
 #endif /* OVLB */
 #ifdef OVL0
 
-void
-nh_timeout()
+void 
+nh_timeout (void)
 {
 	register struct prop *upp;
 /*
@@ -440,9 +440,8 @@ boolean wakeup_msg;
 /* WAC polymorph an object
  * Unlike monsters,  this function is called after the polymorph
  */
-void
-set_obj_poly(obj, old)
-struct obj *obj, *old;
+void 
+set_obj_poly (struct obj *obj, struct obj *old)
 {
 	/* Same unpolytime (500,500) as for player */
 	if (is_hazy(old))
@@ -764,9 +763,8 @@ free_bomb:
 #endif
 
 /* Attach an egg hatch timeout to the given egg. */
-void
-attach_egg_hatch_timeout(egg)
-struct obj *egg;
+void 
+attach_egg_hatch_timeout (struct obj *egg)
 {
 	int i;
 
@@ -789,9 +787,8 @@ struct obj *egg;
 }
 
 /* prevent an egg from ever hatching */
-void
-kill_egg(egg)
-struct obj *egg;
+void 
+kill_egg (struct obj *egg)
 {
 	/* stop previous timer, if any */
 	(void) stop_timer(HATCH_EGG, (genericptr_t) egg);
@@ -970,9 +967,8 @@ long timeout;
 }
 
 /* Learn to recognize eggs of the given type. */
-void
-learn_egg_type(mnum)
-int mnum;
+void 
+learn_egg_type (int mnum)
 {
 	/* baby monsters hatch from grown-up eggs */
 	mnum = little_to_big(mnum);
@@ -982,9 +978,8 @@ int mnum;
 }
 
 /* Attach a fig_transform timeout to the given figurine. */
-void
-attach_fig_transform_timeout(figurine)
-struct obj *figurine;
+void 
+attach_fig_transform_timeout (struct obj *figurine)
 {
 	int i;
 
@@ -1716,9 +1711,7 @@ cleanup_burn(arg, expire_time)
  */
 
 void 
-burn_faster(obj, adj) 
-struct obj *obj;
-long adj;
+burn_faster (struct obj *obj, long adj)
 {
 
   if (!obj->lamplit) {
@@ -1729,8 +1722,8 @@ long adj;
   accelerate_timer(BURN_OBJECT, obj, adj);
 }
 
-void
-do_storms()
+void 
+do_storms (void)
 {
     int nstrike;
     register int x, y;
@@ -1831,16 +1824,16 @@ do_storms()
  */
 
 #ifdef WIZARD
-STATIC_DCL const char *kind_name(SHORT_P);
+STATIC_DCL const char *kind_name(short);
 STATIC_DCL void print_queue(winid, timer_element *);
 #endif
 STATIC_DCL void insert_timer(timer_element *);
-STATIC_DCL timer_element *remove_timer(timer_element **, SHORT_P,
+STATIC_DCL timer_element *remove_timer(timer_element **, short,
 								genericptr_t);
 STATIC_DCL void write_timer(int, timer_element *);
 STATIC_DCL boolean mon_is_local(struct monst *);
 STATIC_DCL boolean timer_is_local(timer_element *);
-STATIC_DCL int maybe_write_timer(int, int, BOOLEAN_P);
+STATIC_DCL int maybe_write_timer(int, int, boolean);
 static void write_timer(int, timer_element *); /* Damn typedef write_timer is in the middle */
 
 /* ordered timer list */
@@ -1924,8 +1917,8 @@ print_queue(win, base)
     }
 }
 
-int
-wiz_timeout_queue()
+int 
+wiz_timeout_queue (void)
 {
     winid win;
     char buf[BUFSZ];
@@ -1946,8 +1939,8 @@ wiz_timeout_queue()
     return 0;
 }
 
-void
-timer_sanity_check()
+void 
+timer_sanity_check (void)
 {
     timer_element *curr;
     char obj_address[20];
@@ -1970,8 +1963,8 @@ timer_sanity_check()
  * Pick off timeout elements from the global queue and call their functions.
  * Do this until their time is less than or equal to the move count.
  */
-void
-run_timers()
+void 
+run_timers (void)
 {
     timer_element *curr;
 
@@ -2054,9 +2047,8 @@ genericptr_t arg;
 /*
  * Move all object timers from src to dest, leaving src untimed.
  */
-void
-obj_move_timers(src, dest)
-    struct obj *src, *dest;
+void 
+obj_move_timers (struct obj *src, struct obj *dest)
 {
     int count;
     timer_element *curr;
@@ -2076,9 +2068,8 @@ obj_move_timers(src, dest)
 /*
  * Find all object timers and duplicate them for the new object "dest".
  */
-void
-obj_split_timers(src, dest)
-    struct obj *src, *dest;
+void 
+obj_split_timers (struct obj *src, struct obj *dest)
 {
     timer_element *curr, *next_timer=0;
 
@@ -2096,9 +2087,8 @@ obj_split_timers(src, dest)
  * Stop all timers attached to this object.  We can get away with this because
  * all object pointers are unique.
  */
-void
-obj_stop_timers(obj)
-    struct obj *obj;
+void 
+obj_stop_timers (struct obj *obj)
 {
     timer_element *curr, *prev, *next_timer=0;
 
@@ -2125,9 +2115,8 @@ obj_stop_timers(obj)
  * Stop all timers attached to this monster.  We can get away with this because
  * all monster pointers are unique.
  */
-void
-mon_stop_timers(mon)
-    struct monst *mon;
+void 
+mon_stop_timers (struct monst *mon)
 {
     timer_element *curr, *prev, *next_timer=0;
 
@@ -2377,9 +2366,8 @@ maybe_write_timer(fd, range, write_it)
  *		+ timeouts that are level specific (e.g. storms)
  *		+ timeouts that stay with the level (obj & monst)
  */
-void
-save_timers(fd, mode, range)
-    int fd, mode, range;
+void 
+save_timers (int fd, int mode, int range)
 {
     timer_element *curr, *prev, *next_timer=0;
     int count;

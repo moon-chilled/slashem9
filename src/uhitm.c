@@ -251,9 +251,8 @@ boolean barehanded;
 /*
  * It is unchivalrous for a knight to attack the defenseless or from behind.
  */
-void
-check_caitiff(mtmp)
-struct monst *mtmp;
+void 
+check_caitiff (struct monst *mtmp)
 {
 	if (Role_if(PM_KNIGHT) && u.ualign.type == A_LAWFUL &&
 	    (!mtmp->mcanmove || mtmp->msleeping ||
@@ -651,8 +650,8 @@ struct attack *uattk;
 #endif
 
 /* WAC Seperate martial arts damage function */
-int
-martial_dmg()
+int 
+martial_dmg (void)
 {
         int damage;
         /* WAC   plateau at 16 if Monk and Grand Master (6d4)

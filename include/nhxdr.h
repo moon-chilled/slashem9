@@ -24,9 +24,9 @@
 /*
  * Assume an ANSI X3.159 compatible compiler
  */
-#define CHAR_P			int
-#define SHORT_P			int
-#define BOOLEAN_P		int
+#define char			int
+#define short			int
+#define boolean		int
 #endif
 
 #define NHEXT_XDR_RNDUP(x)	(((x) - 1 | 3) + 1)

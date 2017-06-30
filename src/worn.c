@@ -5,7 +5,7 @@
 #include "hack.h"
 
 STATIC_DCL void m_lose_armor(struct monst *,struct obj *);
-STATIC_DCL void m_dowear_type(struct monst *,long, BOOLEAN_P, BOOLEAN_P);
+STATIC_DCL void m_dowear_type(struct monst *,long, boolean, boolean);
 STATIC_DCL int extra_pref(struct monst *, struct obj *);
 
 const struct worn {
@@ -51,10 +51,8 @@ const struct worn {
 /* KMH, intrinsic patch.
  * Updated to use the extrinsic and blocked fields.
  */
-void
-setworn(obj, mask)
-register struct obj *obj;
-long mask;
+void 
+setworn (register struct obj *obj, long mask)
 {
 	register const struct worn *wp;
 	register struct obj *oobj;
@@ -118,9 +116,8 @@ long mask;
 /* KMH, intrinsic patch.
  * Updated to use the extrinsic and blocked fields.
  */
-void
-setnotworn(obj)
-register struct obj *obj;
+void 
+setnotworn (register struct obj *obj)
 {
 	register const struct worn *wp;
 	register int p;
@@ -145,9 +142,8 @@ register struct obj *obj;
 	update_inventory();
 }
 
-void
-mon_set_minvis(mon)
-struct monst *mon;
+void 
+mon_set_minvis (struct monst *mon)
 {
 	mon->perminvis = 1;
 	if (!mon->invis_blkd) {
@@ -157,11 +153,12 @@ struct monst *mon;
 	}
 }
 
-void
-mon_adjust_speed(mon, adjust, obj)
-struct monst *mon;
-int adjust;	/* positive => increase speed, negative => decrease */
-struct obj *obj;	/* item to make known if effect can be seen */
+void 
+mon_adjust_speed (
+    struct monst *mon,
+    int adjust,	/* positive => increase speed, negative => decrease */
+    struct obj *obj	/* item to make known if effect can be seen */
+)
 {
     struct obj *otmp;
     boolean give_msg = !in_mklev, petrify = FALSE;
@@ -348,9 +345,8 @@ boolean on, silently;
 	newsym(mon->mx, mon->my);
 }
 
-int
-find_mac(mon)
-register struct monst *mon;
+int 
+find_mac (register struct monst *mon)
 {
 	register struct obj *obj;
 	int base = mon->data->ac;
@@ -537,9 +533,7 @@ outer_break:
 #undef RACE_EXCEPTION
 
 struct obj *
-which_armor(mon, flag)
-struct monst *mon;
-long flag;
+which_armor (struct monst *mon, long flag)
 {
 	register struct obj *obj;
 
@@ -566,8 +560,8 @@ struct obj *obj;
 }
 
 /* all objects with their bypass bit set should now be reset to normal */
-void
-clear_bypasses()
+void 
+clear_bypasses (void)
 {
 	struct obj *otmp, *nobj;
 	struct monst *mtmp;
@@ -606,9 +600,8 @@ clear_bypasses()
 	flags.bypasses = FALSE;
 }
 
-void
-bypass_obj(obj)
-struct obj *obj;
+void 
+bypass_obj (struct obj *obj)
 {
 	obj->bypass = 1;
 	flags.bypasses = TRUE;
@@ -779,10 +772,8 @@ boolean polyspot;
 /* bias a monster's preferences towards armor that has special benefits. */
 /* currently only does speed boots, but might be expanded if monsters get to
    use more armor abilities */
-static int
-extra_pref(mon, obj)
-struct monst *mon;
-struct obj *obj;
+static int 
+extra_pref (struct monst *mon, struct obj *obj)
 {
     if (obj) {
 	if (obj->otyp == SPEED_BOOTS && mon->permspeed != MFAST)
@@ -798,10 +789,8 @@ struct obj *obj;
  * 	 1 If the race/object combination is acceptable.
  *	-1 If the race/object combination is unacceptable.
  */
-int
-racial_exception(mon, obj)
-struct monst *mon;
-struct obj *obj;
+int 
+racial_exception (struct monst *mon, struct obj *obj)
 {
     const struct permonst *ptr = raceptr(mon);
 

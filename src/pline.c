@@ -28,8 +28,8 @@ msgpline_add(typ, pattern)
     pline_msg = tmp;
 }
 
-void
-msgpline_free()
+void 
+msgpline_free (void)
 {
     struct _plinemsg *tmp = pline_msg;
     struct _plinemsg *tmp2;
@@ -42,9 +42,8 @@ msgpline_free()
     pline_msg = NULL;
 }
 
-int
-msgpline_type(msg)
-     char *msg;
+int 
+msgpline_type (char *msg)
 {
     struct _plinemsg *tmp = pline_msg;
     while (tmp) {
@@ -132,8 +131,7 @@ static char *you_buf = 0;
 static int you_buf_siz = 0;
 
 static char *
-You_buf(siz)
-int siz;
+You_buf (int siz)
 {
 	if (siz > you_buf_siz) {
 		if (you_buf) free((genericptr_t) you_buf);
@@ -143,8 +141,8 @@ int siz;
 	return you_buf;
 }
 
-void
-free_youbuf()
+void 
+free_youbuf (void)
 {
 	if (you_buf) free((genericptr_t) you_buf),  you_buf = (char *)0;
 	you_buf_siz = 0;
@@ -322,9 +320,8 @@ align_str(alignment)
     return "unknown";
 }
 
-void
-mstatusline(mtmp)
-register struct monst *mtmp;
+void 
+mstatusline (register struct monst *mtmp)
 {
 	aligntyp alignment;
 	char info[BUFSZ], monnambuf[BUFSZ];
@@ -408,8 +405,8 @@ register struct monst *mtmp;
 		info);
 }
 
-void
-ustatusline()
+void 
+ustatusline (void)
 {
 	char info[BUFSZ];
 
@@ -483,8 +480,8 @@ ustatusline()
 		info);
 }
 
-void
-self_invis_message()
+void 
+self_invis_message (void)
 {
 	pline("%s %s.",
 	    Hallucination ? "Far out, man!  You" : "Gee!  All of a sudden, you",

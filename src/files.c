@@ -174,14 +174,14 @@ STATIC_DCL char *set_bonesfile_name(char *,d_level*);
 STATIC_DCL char *set_bonestemp_name(void);
 #ifdef COMPRESS
 STATIC_DCL void redirect(const char *,const char *,const char *,
-	FILE *,BOOLEAN_P);
-STATIC_DCL void docompress_file(const char *,const char *,BOOLEAN_P);
+	FILE *,boolean);
+STATIC_DCL void docompress_file(const char *,const char *,boolean);
 #endif
 #ifndef FILE_AREAS
 STATIC_DCL char *make_lockname(const char *,char *);
 #endif
 STATIC_DCL FILE *fopen_config_file(const char *);
-STATIC_DCL int get_uchars(FILE *,char *,char *,uchar *,BOOLEAN_P,int,const char *);
+STATIC_DCL int get_uchars(FILE *,char *,char *,uchar *,boolean,int,const char *);
 int parse_config_line(FILE *,char *,char *,char *);
 #ifdef NOCWD_ASSUMPTIONS
 STATIC_DCL void adjust_prefix(char *, int);
@@ -215,11 +215,7 @@ STATIC_DCL int open_levelfile_exclusively(const char *, int, int);
  *	    "This%20is%20a%20%25%20test%21"
  */
 char *
-fname_encode(legal, quotechar, s, callerbuf, bufsz)
-const char *legal;
-char quotechar;
-char *s, *callerbuf;
-int bufsz;
+fname_encode (const char *legal, char quotechar, char *s, char *callerbuf, int bufsz)
 {
 	char *sp, *op;
 	int cnt = 0;
@@ -261,10 +257,7 @@ int bufsz;
  *	bufsz		size of callerbuf
  */
 char *
-fname_decode(quotechar, s, callerbuf, bufsz)
-char quotechar;
-char *s, *callerbuf;
-int bufsz;
+fname_decode (char quotechar, char *s, char *callerbuf, int bufsz)
 {
 	char *sp, *op;
 	int k,calc,cnt = 0;
@@ -303,9 +296,7 @@ int bufsz;
 /*ARGSUSED*/
 #endif
 const char *
-fqname(basename, whichprefix, buffnum)
-const char *basename;
-int whichprefix, buffnum;
+fqname (const char *basename, int whichprefix, int buffnum)
 {
 #ifndef PREFIXES_IN_USE
 	return basename;
@@ -332,9 +323,8 @@ int whichprefix, buffnum;
 
 /* reasonbuf must be at least BUFSZ, supplied by caller */
 /*ARGSUSED*/
-int
-validate_prefix_locations(reasonbuf)
-char *reasonbuf;
+int 
+validate_prefix_locations (char *reasonbuf)
 {
 #if defined(NOCWD_ASSUMPTIONS)
 	FILE *fp;
@@ -408,8 +398,8 @@ int prefix;
 
 #ifdef MFLOPPY
 /* Set names for bones[] and lock[] */
-void
-set_lock_and_bones()
+void 
+set_lock_and_bones (void)
 {
 	if (!ramdisk) {
 		Strcpy(levels, permbones);
@@ -437,10 +427,8 @@ set_lock_and_bones()
  * a two digit number.  This is true for 'level'
  * but be careful if you use it for other things -dgk
  */
-void
-set_levelfile_name(file, lev)
-char *file;
-int lev;
+void 
+set_levelfile_name (char *file, int lev)
 {
 	char *tf;
 
@@ -453,10 +441,8 @@ int lev;
 	return;
 }
 
-int
-create_levelfile(lev, errbuf)
-int lev;
-char errbuf[];
+int 
+create_levelfile (int lev, char errbuf[])
 {
 	int fd;
 #ifndef FILE_AREAS
@@ -508,10 +494,8 @@ char errbuf[];
 }
 
 
-int
-open_levelfile(lev, errbuf)
-int lev;
-char errbuf[];
+int 
+open_levelfile (int lev, char errbuf[])
 {
 	int fd;
 #ifndef FILE_AREAS
@@ -555,9 +539,8 @@ char errbuf[];
 }
 
 
-void
-delete_levelfile(lev)
-int lev;
+void 
+delete_levelfile (int lev)
 {
 	/*
 	 * Level 0 might be created by port specific code that doesn't
@@ -578,8 +561,8 @@ int lev;
 }
 
 
-void
-clearlocks()
+void 
+clearlocks (void)
 {
 /* [Tom] Watcom.....
 #if !defined(PC_LOCKING) && defined(MFLOPPY) && !defined(AMIGA)
@@ -635,8 +618,8 @@ int lev, oflag;
 	return fd;
 }
 
-void
-really_close()
+void 
+really_close (void)
 {
 	int fd = lftrack.fd;
 	lftrack.nethack_thinks_it_is_open = FALSE;
@@ -646,9 +629,8 @@ really_close()
 	return;
 }
 
-int
-close(fd)
-int fd;
+int 
+close (int fd)
 {
  	if (lftrack.fd == fd) {
 		really_close();	/* close it, but reopen it to hold it */
@@ -772,8 +754,8 @@ char errbuf[];
 
 #ifdef MFLOPPY
 /* remove partial bonesfile in process of creation */
-void
-cancel_bonesfile()
+void 
+cancel_bonesfile (void)
 {
 	const char *tempname;
 
@@ -869,8 +851,8 @@ d_level *lev;
 
 /* assume we're compressing the recently read or created bonesfile, so the
  * file name is already set properly */
-void
-compress_bonesfile()
+void 
+compress_bonesfile (void)
 {
 #ifdef FILE_AREAS
 	compress_area(FILE_AREA_BONES, bones);
@@ -886,8 +868,8 @@ compress_bonesfile()
 
 /* set savefile name in OS-dependent manner from pre-existing plname,
  * avoiding troublesome characters */
-void
-set_savefile_name()
+void 
+set_savefile_name (void)
 {
 #if defined(WIN32)
 	char fnamebuf[BUFSZ], encodedfnamebuf[BUFSZ];
@@ -940,9 +922,8 @@ set_savefile_name()
 }
 
 #ifdef INSURANCE
-void
-save_savefile_name(fd)
-int fd;
+void 
+save_savefile_name (int fd)
 {
 	(void) write(fd, (genericptr_t) SAVEF, sizeof(SAVEF));
 }
@@ -951,8 +932,8 @@ int fd;
 
 #if defined(WIZARD) && !defined(MICRO)
 /* change pre-existing savefile name to indicate an error savefile */
-void
-set_error_savefile()
+void 
+set_error_savefile (void)
 {
 # ifdef VMS
       {
@@ -972,8 +953,8 @@ set_error_savefile()
 
 
 /* create save file, overwriting one if it already exists */
-int
-create_savefile()
+int 
+create_savefile (void)
 {
 #ifndef FILE_AREAS
 	const char *fq_save;
@@ -1021,8 +1002,8 @@ create_savefile()
 
 
 /* open savefile for reading */
-int
-open_savefile()
+int 
+open_savefile (void)
 {
 	int fd;
 
@@ -1042,8 +1023,8 @@ open_savefile()
 
 
 /* delete savefile */
-int
-delete_savefile()
+int 
+delete_savefile (void)
 {
 /*WAC OK...this is probably a contreversial addition.  It's an option tho*/
 #ifdef KEEP_SAVE
@@ -1066,8 +1047,8 @@ delete_savefile()
 
 
 /* try to open up a save file and prepare to restore it */
-int
-restore_saved_game()
+int 
+restore_saved_game (void)
 {
 #ifndef FILE_AREAS
 	const char *fq_save;

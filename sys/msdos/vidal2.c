@@ -26,9 +26,9 @@
 void alleg_gotoloc(int,int);  /* This should be made a macro */
 void alleg_backsp(void);
 #ifdef SCROLLMAP
-STATIC_DCL void alleg_scrollmap(BOOLEAN_P);
+STATIC_DCL void alleg_scrollmap(boolean);
 #endif
-STATIC_DCL void alleg_redrawmap(BOOLEAN_P);
+STATIC_DCL void alleg_redrawmap(boolean);
 void alleg_cliparound(int, int);
 
 #ifdef POSITIONBAR
