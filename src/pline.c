@@ -93,7 +93,7 @@ pline VA_DECL(const char *, line)
 
 	if (!line || !*line) return;
 	if (index(line, '%')) {
-	    Vsprintf(pbuf,line,VA_ARGS);
+	    vsprintf(pbuf,line,VA_ARGS);
 	    line = pbuf;
 	}
 	typ = msgpline_type(line);
@@ -282,7 +282,7 @@ raw_printf VA_DECL(const char *, line)
 	    raw_print(line);
 	else {
 	    char pbuf[BUFSZ];
-	    Vsprintf(pbuf,line,VA_ARGS);
+	    vsprintf(pbuf,line,VA_ARGS);
 	    raw_print(pbuf);
 	}
 }
@@ -298,7 +298,7 @@ impossible VA_DECL(const char *, s)
 	program_state.in_impossible = 1;
 	{
 	    char pbuf[BUFSZ];
-	    Vsprintf(pbuf,s,VA_ARGS);
+	    vsprintf(pbuf,s,VA_ARGS);
 	    paniclog("impossible", pbuf);
 	}
 	vpline(s,VA_ARGS);

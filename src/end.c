@@ -376,7 +376,7 @@ panic VA_DECL(const char *, str)
 #endif
 	{
 	    char buf[BUFSZ];
-	    Vsprintf(buf,str,VA_ARGS);
+	    vsprintf(buf,str,VA_ARGS);
 	    raw_print(buf);
 	    paniclog("panic", buf);
 	}

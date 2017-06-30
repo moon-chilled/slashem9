@@ -1033,7 +1033,7 @@ msmsg VA_DECL(const char *, fmt)
 	char buf[ROWNO * COLNO];	/* worst case scenario */
 	VA_START(fmt);
 	VA_INIT(fmt, const char *);
-	Vsprintf(buf, fmt, VA_ARGS);
+	vsprintf(buf, fmt, VA_ARGS);
 	VA_END();
 	nttty_check_stdio();
 	xputs(buf);

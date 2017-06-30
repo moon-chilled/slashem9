@@ -313,7 +313,6 @@ typedef xchar	boolean;		/* 0 or 1 */
 #ifdef NEED_VARARGS
 #define Vprintf  (void) vprintf
 #define Vfprintf (void) vfprintf
-#define Vsprintf (void) vsprintf
 #endif
 
 
