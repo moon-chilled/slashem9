@@ -52,11 +52,8 @@ void amii_speaker(struct obj *, char *, int);
 const char no_elbow_room[] = "don't have enough elbow-room to maneuver.";
 
 #ifdef TOURIST
-STATIC_OVL int
-use_camera(obj)
-	struct obj *obj;
-{
-	register struct monst *mtmp;
+STATIC_OVL int use_camera(struct obj *obj) {
+	struct monst *mtmp;
 
 	if(Underwater) {
 		pline("Using your camera underwater would void the warranty.");
@@ -91,10 +88,7 @@ use_camera(obj)
 }
 #endif
 
-STATIC_OVL int
-use_towel(obj)
-	struct obj *obj;
-{
+STATIC_OVL int use_towel(struct obj *obj) {
 	if(!freehand()) {
 		You("have no free %s!", body_part(HAND));
 		return 0;
@@ -161,10 +155,7 @@ use_towel(obj)
 }
 
 /* maybe give a stethoscope message based on floor objects */
-STATIC_OVL boolean
-its_dead(rx, ry, resp)
-int rx, ry, *resp;
-{
+STATIC_OVL boolean its_dead(int rx, int ry, int *resp) {
 	struct obj *otmp;
 	struct trap *ttmp;
 
@@ -203,10 +194,7 @@ static const char hollow_str[] = "a hollow sound.  This must be a secret %s!";
    not take any time; however, unless it did, the stethoscope would be
    almost useless.  As a compromise, one use per turn is free, another
    uses up the turn; this makes curse status have a tangible effect. */
-STATIC_OVL int
-use_stethoscope(obj)
-	register struct obj *obj;
-{
+STATIC_OVL int use_stethoscope(struct obj *obj) {
 	static long last_used_move = -1;
 	static short last_used_movement = 0;
 	struct monst *mtmp;
@@ -312,19 +300,13 @@ use_stethoscope(obj)
 
 static const char whistle_str[] = "produce a %s whistling sound.";
 
-STATIC_OVL void
-use_whistle(obj)
-struct obj *obj;
-{
+STATIC_OVL void use_whistle(struct obj *obj) {
 	You(whistle_str, obj->cursed ? "shrill" : "high");
 	wake_nearby();
 }
 
-STATIC_OVL void
-use_magic_whistle(obj)
-struct obj *obj;
-{
-	register struct monst *mtmp, *nextmon;
+STATIC_OVL void use_magic_whistle(struct obj *obj) {
+	struct monst *mtmp, *nextmon;
 
 	if(obj->cursed && !rn2(2)) {
 		You("produce a high-pitched humming noise.");
@@ -350,16 +332,11 @@ struct obj *obj;
 	}
 }
 
-boolean
-um_dist(x,y,n)
-register xchar x, y, n;
-{
+boolean um_dist(xchar x, xchar y, xchar n) {
 	return((boolean)(abs(u.ux - x) > n  || abs(u.uy - y) > n));
 }
 
-int 
-number_leashed (void)
-{
+int number_leashed (void) {
 	register int i = 0;
 	register struct obj *obj;
 
@@ -368,12 +345,8 @@ number_leashed (void)
 	return(i);
 }
 
-void 
-o_unleash (		/* otmp is about to be destroyed or stolen */
-    register struct obj *otmp
-)
-{
-	register struct monst *mtmp;
+void o_unleash(struct obj *otmp	/* otmp is about to be destroyed or stolen */) {
+	struct monst *mtmp;
 
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon)
 		if(mtmp->m_id == (unsigned)otmp->leashmon)
@@ -381,12 +354,8 @@ o_unleash (		/* otmp is about to be destroyed or stolen */
 	otmp->leashmon = 0;
 }
 
-void
-m_unleash(mtmp, feedback)	/* mtmp is about to die, or become untame */
-register struct monst *mtmp;
-boolean feedback;
-{
-	register struct obj *otmp;
+void m_unleash(struct monst *mtmp, boolean feedback) /* mtmp is about to die, or become untame */ {
+	struct obj *otmp;
 
 	if (feedback) {
 	    if (canseemon(mtmp))
@@ -401,11 +370,9 @@ boolean feedback;
 	mtmp->mleashed = 0;
 }
 
-void 
-unleash_all (void)		/* player is about to die (for bones) */
-{
-	register struct obj *otmp;
-	register struct monst *mtmp;
+void unleash_all(void) /* player is about to die (for bones) */ {
+	struct obj *otmp;
+	struct monst *mtmp;
 
 	for(otmp = invent; otmp; otmp = otmp->nobj)
 		if(otmp->otyp == LEASH) otmp->leashmon = 0;
@@ -415,14 +382,10 @@ unleash_all (void)		/* player is about to die (for bones) */
 
 #define MAXLEASHED	2
 
-/* ARGSUSED */
-STATIC_OVL void
-use_leash(optr)
-struct obj **optr;
-{
+STATIC_OVL void use_leash(struct obj **optr) {
 	struct obj *obj = *optr;
 	coord cc;
-	register struct monst *mtmp;
+	struct monst *mtmp;
 	int spotmon;
 
 	if(!obj->leashmon && number_leashed() >= MAXLEASHED) {

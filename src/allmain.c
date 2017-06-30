@@ -24,9 +24,7 @@ STATIC_DCL void do_positionbar(void);
 
 #ifdef OVL0
 
-void 
-moveloop (void)
-{
+void moveloop (void) {
 #if defined(MICRO) || defined(WIN32)
     char ch;
     int abort_lev;
@@ -493,9 +491,7 @@ moveloop (void)
 #endif /* OVL0 */
 #ifdef OVL1
 
-void 
-stop_occupation (void)
-{
+void stop_occupation (void) {
 	if(occupation) {
 		if (!maybe_finished_meal(TRUE))
 		    You("stop %s.", occtxt);
@@ -514,9 +510,7 @@ stop_occupation (void)
 #endif /* OVL1 */
 #ifdef OVLB
 
-void 
-display_gamewindows (void)
-{
+void display_gamewindows(void) {
     WIN_MESSAGE = create_nhwindow(NHW_MESSAGE);
     WIN_STATUS = create_nhwindow(NHW_STATUS);
     WIN_MAP = create_nhwindow(NHW_MAP);
@@ -543,9 +537,7 @@ display_gamewindows (void)
     display_nhwindow(WIN_MAP, FALSE);
 }
 
-void 
-newgame (void)
-{
+void newgame(void) {
 	int i;
 
 #ifdef MFLOPPY
@@ -622,10 +614,7 @@ newgame (void)
 }
 
 /* show "welcome [back] to nethack" message at program startup */
-void
-welcome(new_game)
-boolean new_game;	/* false => restoring an old game */
-{
+void welcome(boolean new_game /* false => restoring an old game */ ) {
     char buf[BUFSZ];
     boolean currentgend = Upolyd ? u.mfemale : flags.female;
 
@@ -661,9 +650,7 @@ boolean new_game;	/* false => restoring an old game */
 }
 
 #ifdef POSITIONBAR
-STATIC_DCL void
-do_positionbar()
-{
+STATIC_DCL void do_positionbar(void) {
 	static char pbar[COLNO];
 	char *p;
 	
@@ -736,9 +723,7 @@ do_positionbar()
 }
 #endif
 
-time_t
-get_realtime(void)
-{
+time_t get_realtime(void) {
     time_t curtime;
 
     /* Get current time */

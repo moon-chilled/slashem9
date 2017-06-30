@@ -77,9 +77,7 @@ long *alloc(unsigned int);
 extern void panic(const char *,...) PRINTF_F(1,2);
 
 
-long *
-alloc (register unsigned int lth)
-{
+long *alloc (register unsigned int lth) {
 #ifdef LINT
 /*
  * a ridiculous definition, suppressing
@@ -124,11 +122,7 @@ alloc (register unsigned int lth)
 # endif
 
 /* format a pointer for display purposes; caller supplies the result buffer */
-char *
-fmt_ptr(ptr, buf)
-const genericptr ptr;
-char *buf;
-{
+char * fmt_ptr(const genericptr ptr, char *buf) {
 	Sprintf(buf, PTR_FMT, (PTR_TYP)ptr);
 	return buf;
 }
@@ -140,9 +134,7 @@ char *buf;
 
 /* If ${NH_HEAPLOG} is defined and we can create a file by that name,
    then we'll log the allocation and release information to that file. */
-static void 
-heapmon_init (void)
-{
+static void heapmon_init (void) {
 	char *logname = getenv("NH_HEAPLOG");
 
 	if (logname && *logname)
@@ -150,9 +142,7 @@ heapmon_init (void)
 	tried_heaplog = TRUE;
 }
 
-long *
-nhalloc (unsigned int lth, const char *file, int line)
-{
+long *nhalloc(unsigned int lth, const char *file, int line) {
 	long *ptr;
 	char ptr_address[20];
 
@@ -175,12 +165,7 @@ nhalloc (unsigned int lth, const char *file, int line)
 	return ptr;
 }
 
-void
-nhfree(ptr, file, line)
-genericptr_t ptr;
-const char *file;
-int line;
-{
+void nhfree(genericptr_t ptr, const char *file, int line) {
 	char ptr_address[20];
 
 	if (!tried_heaplog) heapmon_init();
@@ -252,8 +237,7 @@ static unsigned int triv_pagesize = 0;
 
 #define ROUNDUP(nbytes, align) (((nbytes) + (align) - 1) / (align) * (align))
 
-void *triv_get_userdata(void *p)
-{
+void *triv_get_userdata(void *p) {
     struct triv_head *h;
     if (!p)
 	return p;
@@ -261,8 +245,7 @@ void *triv_get_userdata(void *p)
     return h->triv_userdata;
 }
 
-void triv_set_userdata(void *p, void *d)
-{
+void triv_set_userdata(void *p, void *d) {
     struct triv_head *h;
     if (p) {
 	h = (struct triv_head *)p - 1;
@@ -273,8 +256,7 @@ void triv_set_userdata(void *p, void *d)
 #define IS_CONTIGUOUS(h1,h2) ((h2) == \
 	(struct triv_head *)((unsigned char *)((h1) + 1) + (h1)->triv_size))
 
-void triv_free(void *p)
-{
+void triv_free(void *p) {
     struct triv_head *f, *lf, *h;
     if (!p)
 	return;
@@ -304,8 +286,7 @@ void triv_free(void *p)
     }
 }
 
-void *triv_malloc(size_t nb)
-{
+void *triv_malloc(size_t nb) {
     struct triv_head *f, *lf, *nf;
     size_t size = ROUNDUP(nb, TRIV_ALIGN);
     size_t pagesize;
@@ -364,8 +345,7 @@ void *triv_malloc(size_t nb)
     return f + 1;
 }
 
-void *triv_calloc(size_t nobj, size_t size)
-{
+void *triv_calloc(size_t nobj, size_t size) {
     void *p;
     size_t nb = nobj * size;
     if (nb / nobj != size) {		/* Check overflow */
@@ -378,8 +358,7 @@ void *triv_calloc(size_t nobj, size_t size)
     return p;
 }
 
-void *triv_realloc(void *p, size_t size)
-{
+void *triv_realloc(void *p, size_t size) {
     struct triv_head *h;
     void *np;
     if (!size) {
@@ -428,8 +407,7 @@ struct monitor_head {
 
 static struct monitor_head *monitor_heap = NULL;
 
-void monitor_heap_push(const char *id, int subid)
-{
+void monitor_heap_push(const char *id, int subid) {
     ++monitor_id_stack_depth;
     monitor_id_stack = triv_realloc(monitor_id_stack,
       monitor_id_stack_depth * sizeof (*monitor_id_stack));
@@ -441,8 +419,7 @@ void monitor_heap_push(const char *id, int subid)
 
 /* retval is to make writing macros which use monitor_heap_push/pop easier */
 
-unsigned long monitor_heap_pop(const char *id, int subid, unsigned long retval)
-{
+unsigned long monitor_heap_pop(const char *id, int subid, unsigned long retval) {
     if (!monitor_id_stack_depth)
 	panic("monitor_heap_pop: empty stack");
     if (monitor_id_stack[monitor_id_stack_depth - 1].id != id ||
@@ -457,8 +434,7 @@ unsigned long monitor_heap_pop(const char *id, int subid, unsigned long retval)
     return retval;
 }
 
-void monitor_heap_set_subid(const char *id, int subid)
-{
+void monitor_heap_set_subid(const char *id, int subid) {
     if (!monitor_id_stack_depth)
 	panic("monitor_heap_set_subid: empty stack");
     if (monitor_id_stack[monitor_id_stack_depth - 1].id != id)
@@ -467,13 +443,11 @@ void monitor_heap_set_subid(const char *id, int subid)
     monitor_id_stack[monitor_id_stack_depth - 1].subid = subid;
 }
 
-size_t monitor_heap_getmem(void)
-{
+size_t monitor_heap_getmem(void) {
     return monitor_mem_in_use;
 }
 
-boolean monitor_heap_trace(boolean flag)
-{
+boolean monitor_heap_trace(boolean flag) {
     boolean retval = !!monitor_trace;
     if (flag)
 	monitor_trace++;
@@ -482,15 +456,13 @@ boolean monitor_heap_trace(boolean flag)
     return retval;
 }
 
-void monitor_heap_mark(void)
-{
+void monitor_heap_mark(void) {
     struct monitor_head *m;
     for(m = monitor_heap; m; m = m->next)
 	m->flags |= MHF_MARKED;
 }
 
-void monitor_heap_release(void)
-{
+void monitor_heap_release(void) {
     int first = 1;
     struct monitor_head *m;
     if (!monitor_fp)
@@ -510,8 +482,7 @@ void monitor_heap_release(void)
 	}
 }
 
-static void monitor_dump(void)
-{
+static void monitor_dump(void) {
     int first = 1;
     struct monitor_head *m;
     FILE *fp;
@@ -539,8 +510,7 @@ static void monitor_dump(void)
     fprintf(monitor_fp, "Total used space: %lu bytes\n", used);
 }
 
-void *malloc(size_t nb)
-{
+void *malloc(size_t nb) {
     static int busy = 0;
     static int inited = 0;
     struct monitor_head *m;
@@ -585,8 +555,7 @@ void *malloc(size_t nb)
     return m->p;
 }
 
-void *calloc(size_t nobj, size_t size)
-{
+void *calloc(size_t nobj, size_t size) {
     void *p;
     size_t nb = nobj * size;
     if (nb / nobj != size) {		/* Check overflow */
@@ -599,8 +568,7 @@ void *calloc(size_t nobj, size_t size)
     return p;
 }
 
-void *realloc(void *p, size_t size)
-{
+void *realloc(void *p, size_t size) {
     struct monitor_head *m;
     void *np;
     if (!size) {
@@ -621,8 +589,7 @@ void *realloc(void *p, size_t size)
     return np;
 }
 
-void free(void *p)
-{
+void free(void *p) {
     struct monitor_head *m;
     if (p)
     {
