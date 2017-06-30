@@ -33,10 +33,7 @@ STATIC_DCL void do_entity(struct entity *);
 
 #ifdef OVL0
 
-boolean
-is_pool(x,y)
-int x,y;
-{
+boolean is_pool(int x, int y) {
     schar ltyp;
 
     if (!isok(x,y)) return FALSE;
@@ -47,10 +44,7 @@ int x,y;
     return FALSE;
 }
 
-boolean
-is_lava(x,y)
-int x,y;
-{
+boolean is_lava(int x,int y) {
     schar ltyp;
 
     if (!isok(x,y)) return FALSE;
@@ -61,10 +55,7 @@ int x,y;
     return FALSE;
 }
 
-boolean
-is_ice(x,y)
-int x,y;
-{
+boolean is_ice(int x, int y) {
     schar ltyp;
 
     if (!isok(x,y)) return FALSE;
@@ -86,9 +77,7 @@ int x,y;
  * Return value:  the direction of the drawbridge.
  */
 
-int 
-is_drawbridge_wall (int x, int y)
-{
+int is_drawbridge_wall (int x, int y) {
 	struct rm *lev;
 
 	lev = &levl[x][y];
@@ -116,11 +105,8 @@ is_drawbridge_wall (int x, int y)
  * drawbridge "wall" is UP in the location x, y
  * (instead of UP or DOWN, as with is_drawbridge_wall).
  */
-boolean
-is_db_wall(x,y)
-int x,y;
-{
-	return((boolean)( levl[x][y].typ == DBWALL ));
+boolean is_db_wall(int x, int y) {
+	return levl[x][y].typ == DBWALL;
 }
 
 
@@ -128,10 +114,7 @@ int x,y;
  * Return true with x,y pointing to the drawbridge if x,y initially indicate
  * a drawbridge or drawbridge wall.
  */
-boolean
-find_drawbridge(x,y)
-int *x,*y;
-{
+boolean find_drawbridge(int *x, int *y) {
 	int dir;
 
 	if (IS_DRAWBRIDGE(levl[*x][*y].typ))
@@ -155,10 +138,7 @@ int *x,*y;
 /*
  * Find the drawbridge wall associated with a drawbridge.
  */
-STATIC_OVL void
-get_wall_for_db(x,y)
-int *x,*y;
-{
+STATIC_OVL void get_wall_for_db(int *x, int *y) {
 	switch (levl[*x][*y].drawbridgemask & DB_DIR) {
 		case DB_NORTH: (*y)--; break;
 		case DB_SOUTH: (*y)++; break;
@@ -173,11 +153,7 @@ int *x,*y;
  *     flag must be put to TRUE if we want the drawbridge to be opened.
  */
 
-boolean
-create_drawbridge(x,y,dir,flag)
-int x,y,dir;
-boolean flag;
-{
+boolean create_drawbridge(int x, int y, int dir, boolean flag) {
 	int x2,y2;
 	boolean horiz;
 	boolean lava = levl[x][y].typ == LAVAPOOL; /* assume initialized map */
@@ -233,11 +209,7 @@ struct entity {
 
 static NEARDATA struct entity occupants[ENTITIES];
 
-STATIC_OVL
-struct entity *
-e_at(x, y)
-int x, y;
-{
+STATIC_OVL struct entity *e_at(int x, int y) {
 	int entitycnt;
 
 	for (entitycnt = 0; entitycnt < ENTITIES; entitycnt++)
@@ -253,12 +225,7 @@ int x, y;
 	       (struct entity *)0 : &(occupants[entitycnt]));
 }
 
-STATIC_OVL void
-m_to_e(mtmp, x, y, etmp)
-struct monst *mtmp;
-int x, y;
-struct entity *etmp;
-{
+STATIC_OVL void m_to_e(struct monst *mtmp, int x, int y, struct entity *etmp) {
 	etmp->emon = mtmp;
 	if (mtmp) {
 		etmp->ex = x;
@@ -271,21 +238,14 @@ struct entity *etmp;
 		etmp->edata = (struct permonst *)0;
 }
 
-STATIC_OVL void
-u_to_e(etmp)
-struct entity *etmp;
-{
+STATIC_OVL void u_to_e(struct entity *etmp) {
 	etmp->emon = &youmonst;
 	etmp->ex = u.ux;
 	etmp->ey = u.uy;
 	etmp->edata = youmonst.data;
 }
 
-STATIC_OVL void
-set_entity(x, y, etmp)
-int x, y;
-struct entity *etmp;
-{
+STATIC_OVL void set_entity(int x, int y, struct entity *etmp) {
 	if ((x == u.ux) && (y == u.uy))
 		u_to_e(etmp);
 	else if (MON_AT(x, y))
@@ -304,10 +264,7 @@ struct entity *etmp;
 
 /* #define e_strg(etmp, func) (is_u(etmp)? (char *)0 : func(etmp->emon)) */
 
-STATIC_OVL const char *
-e_nam(etmp)
-struct entity *etmp;
-{
+STATIC_OVL const char *e_nam(struct entity *etmp) {
 	return(is_u(etmp)? "you" : mon_nam(etmp->emon));
 }
 
@@ -316,9 +273,7 @@ struct entity *etmp;
  * Enam is another unused utility routine:  E_phrase is preferable.
  */
 
-static const char *
-Enam (struct entity *etmp)
-{
+static const char *Enam(struct entity *etmp) {
 	return(is_u(etmp)? "You" : Monnam(etmp->emon));
 }
 #endif /* D_DEBUG */
@@ -328,11 +283,7 @@ Enam (struct entity *etmp)
  * verb, where necessary.
  */
 
-STATIC_OVL const char *
-E_phrase(etmp, verb)
-struct entity *etmp;
-const char *verb;
-{
+STATIC_OVL const char *E_phrase(struct entity *etmp, const char *verb) {
 	static char wholebuf[80];
 
 	strcpy(wholebuf, is_u(etmp) ? "You" : Monnam(etmp->emon));
@@ -349,11 +300,7 @@ const char *verb;
  * Simple-minded "can it be here?" routine
  */
 
-STATIC_OVL boolean
-e_survives_at(etmp, x, y)
-struct entity *etmp;
-int x, y;
-{
+STATIC_OVL boolean e_survives_at(struct entity *etmp, int x, int y) {
 	if (noncorporeal(etmp->edata))
 		return(TRUE);
 	if (is_pool(x, y))
@@ -372,11 +319,7 @@ int x, y;
 	return(TRUE);
 }
 
-STATIC_OVL void
-e_died(etmp, dest, how)
-struct entity *etmp;
-int dest, how;
-{
+STATIC_OVL void e_died(struct entity *etmp, int dest, int how) {
 	if (is_u(etmp)) {
 		if (how == DROWNING) {
 			killer = 0;	/* drown() sets its own killer */
@@ -437,23 +380,15 @@ int dest, how;
  * These are never directly affected by a bridge or portcullis.
  */
 
-STATIC_OVL boolean
-automiss(etmp)
-struct entity *etmp;
-{
-	return (boolean)((is_u(etmp) ? Passes_walls :
-			passes_walls(etmp->edata)) || noncorporeal(etmp->edata));
+STATIC_OVL boolean automiss(struct entity *etmp) {
+	return (is_u(etmp) ? Passes_walls : passes_walls(etmp->edata)) || noncorporeal(etmp->edata);
 }
 
 /*
  * Does falling drawbridge or portcullis miss etmp?
  */
 
-STATIC_OVL boolean
-e_missed(etmp, chunks)
-struct entity *etmp;
-boolean chunks;
-{
+STATIC_OVL boolean e_missed(struct entity *etmp, boolean chunks) {
 	int misses;
 
 #ifdef D_DEBUG
@@ -490,10 +425,7 @@ boolean chunks;
  * Can etmp jump from death?
  */
 
-STATIC_OVL boolean
-e_jumps(etmp)
-struct entity *etmp;
-{
+STATIC_OVL boolean e_jumps(struct entity *etmp) {
 	int tmp = 4;		/* out of 10 */
 
 	if (is_u(etmp)? (Sleeping || Fumbling) :
@@ -513,13 +445,10 @@ struct entity *etmp;
 #ifdef D_DEBUG
 	pline("%s to jump (%d chances in 10)", E_phrase(etmp, "try"), tmp);
 #endif
-	return((boolean)((tmp >= rnd(10))? TRUE : FALSE));
+	return tmp >= rnd(10);
 }
 
-STATIC_OVL void
-do_entity(etmp)
-struct entity *etmp;
-{
+STATIC_OVL void do_entity(struct entity *etmp) {
 	int newx, newy, at_portcullis, oldx, oldy;
 	boolean must_jump = FALSE, relocates = FALSE, e_inview;
 	struct rm *crm;
@@ -742,10 +671,8 @@ struct entity *etmp;
  * Close the drawbridge located at x,y
  */
 
-void 
-close_drawbridge (int x, int y)
-{
-	register struct rm *lev1, *lev2;
+void close_drawbridge (int x, int y) {
+	struct rm *lev1, *lev2;
 	struct trap *t;
 	int x2, y2;
 
@@ -793,10 +720,8 @@ close_drawbridge (int x, int y)
  * Open the drawbridge located at x,y
  */
 
-void 
-open_drawbridge (int x, int y)
-{
-	register struct rm *lev1, *lev2;
+void open_drawbridge (int x, int y) {
+	struct rm *lev1, *lev2;
 	struct trap *t;
 	int x2, y2;
 
@@ -830,10 +755,8 @@ open_drawbridge (int x, int y)
  * Let's destroy the drawbridge located at x,y
  */
 
-void 
-destroy_drawbridge (int x, int y)
-{
-	register struct rm *lev1, *lev2;
+void destroy_drawbridge (int x, int y) {
+	struct rm *lev1, *lev2;
 	struct trap *t;
 	int x2, y2;
 	boolean e_inview;
