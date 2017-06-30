@@ -37,7 +37,6 @@
 
 extern char *tilename(int, int);
 
-#define Fprintf (void) fprintf
 #define Fclose  (void) fclose
 
 
@@ -97,7 +96,7 @@ char *argv[];
         boolean has_index = 0, has_output = 0;
 
         if (argc > 3) {        	
-	    	Fprintf(stderr, "Bad arg count (%d).\n", argc-1);
+	    	fprintf(stderr, "Bad arg count (%d).\n", argc-1);
 	    	(void) fflush(stderr);
                 exit(EXIT_FAILURE);
         }
@@ -114,7 +113,7 @@ char *argv[];
 	
         if ((fp = fopen(filename, "r")) == (FILE *)0)
         {
-                Fprintf(stderr, "Could not open index file '%s'!\n", filename);
+                fprintf(stderr, "Could not open index file '%s'!\n", filename);
 	        exit(EXIT_FAILURE);
         }
 
@@ -125,7 +124,7 @@ char *argv[];
 	bigtile_bmp = load_bitmap(filename, bmp_pal);	
         if (!bigtile_bmp)
         {
-                Fprintf(stderr, "Could not open bitmap file '%s'!\n", filename);
+                fprintf(stderr, "Could not open bitmap file '%s'!\n", filename);
 	        exit(EXIT_FAILURE);
         }
               
@@ -134,7 +133,7 @@ char *argv[];
          * HOW DO WE HANDLE TRANSPARENT TILES?
          */
 	
-        Fprintf(stderr, "Generating rgb lookup table
+        fprintf(stderr, "Generating rgb lookup table
         create_rgb_table(rgb_map, bmp_pal, NULL);
         
         i = 0;
@@ -162,7 +161,7 @@ char *argv[];
 
 		/* #### (tile name) */
                 sscanf (buf, "%*4c (%[^)])", tilename);
-                Fprintf(stderr, "# tile %d (%s)\n", i, tilename);
+                fprintf(stderr, "# tile %d (%s)\n", i, tilename);
 
 
 	    	col = (int)(i % TILES_PER_ROW);

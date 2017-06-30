@@ -40,7 +40,6 @@
 
 extern char *tilename(int, int);
 
-#define Fprintf (void) fprintf
 #define Fclose  (void) fclose
 
 
@@ -95,7 +94,7 @@ char *argv[];
         boolean has_index = 0, has_output = 0;
 
         if (argc > 3) {        	
-	    	Fprintf(stderr, "Bad arg count (%d).\n", argc-1);
+	    	fprintf(stderr, "Bad arg count (%d).\n", argc-1);
 	    	(void) fflush(stderr);
                 exit(EXIT_FAILURE);
         }
@@ -113,7 +112,7 @@ char *argv[];
 	else sprintf(filename, index_file);
         if ((fp = fopen(filename, "r")) == (FILE *)0)
         {
-                Fprintf(stderr, "Could not open index file '%s'!\n", filename);
+                fprintf(stderr, "Could not open index file '%s'!\n", filename);
 	        exit(EXIT_FAILURE);
         }
               
@@ -151,7 +150,7 @@ char *argv[];
                 tilebmp = load_bitmap(filename, (RGB *)0);
 
                 if(!tilebmp) {
-                	Fprintf(stderr, "Could not open file '%s', continuing.\n", filename);
+                	fprintf(stderr, "Could not open file '%s', continuing.\n", filename);
                 	continue;
                 }
 		
@@ -165,7 +164,7 @@ char *argv[];
 	    	col = (int)(i % TILES_PER_ROW);
 		row = (int)(i / TILES_PER_ROW);
 #ifdef DEBUG
-		Fprintf(stderr, "col: %i row: %i\n", col, row);
+		fprintf(stderr, "col: %i row: %i\n", col, row);
 #endif
 		blit(tilebmp, bigtile_bmp, 0, 0, col * tile_x, row * tile_y, tile_x, tile_y);
 	                
@@ -176,7 +175,7 @@ char *argv[];
 	if (has_output) sprintf(filename, argv[2]);
 	else sprintf(filename, output_file);
       	if (save_bitmap(filename, bigtile_bmp, 0)) {
-                Fprintf(stderr, "Could not save bitmap '%s'!\n", filename);
+                fprintf(stderr, "Could not save bitmap '%s'!\n", filename);
 	        exit(EXIT_FAILURE);
       	}
 

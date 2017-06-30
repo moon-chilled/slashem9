@@ -31,25 +31,25 @@ char *type;
     const pixel bg = DEFAULT_BACKGROUND;
 
     if (strcmp(type, RDBMODE)) {
-	Fprintf(stderr, "using reading routine for non-reading?\n");
+	fprintf(stderr, "using reading routine for non-reading?\n");
 	return FALSE;
     }
     errorcode = XpmReadFileToXpmImage(filename, &image, &info);
     if (errorcode != XpmSuccess) {
-	Fprintf(stderr, "cannot open xpm file %s: %s\n", filename,
+	fprintf(stderr, "cannot open xpm file %s: %s\n", filename,
 	  XpmGetErrorString(errorcode));
 	return FALSE;
     }
 
     if (image.width % tile_x) {
-	Fprintf(stderr, "error: width %d not divisible by %d\n",
+	fprintf(stderr, "error: width %d not divisible by %d\n",
 	  image.width, tile_x);
 	exit(EXIT_FAILURE);
     }
     tiles_across = image.width / tile_x;
     curr_tiles_across = 0;
     if (image.height % tile_y) {
-	Fprintf(stderr, "error: height %d not divisible by %d\n",
+	fprintf(stderr, "error: height %d not divisible by %d\n",
 	  image.height, tile_y);
 	/* exit(EXIT_FAILURE) */;
     }
@@ -68,7 +68,7 @@ char *type;
 	    n = strlen(image.colorTable[i].c_color + 1);
 	    if (n % 3 || n > 12 || n < 3)
 	    {
-		Fprintf(stderr, "error: Unknown color defn for %s (%s)\n",
+		fprintf(stderr, "error: Unknown color defn for %s (%s)\n",
 		  image.colorTable[i].string, image.colorTable[i].c_color);
 		exit(EXIT_FAILURE);
 	    }
@@ -76,7 +76,7 @@ char *type;
 	    sprintf(fmt, "%%0%dlx%%0%dlx%%0%dlx", n, n, n);
 	    if (sscanf(image.colorTable[i].c_color + 1, fmt, &r, &g, &b) != 3)
 	    {
-		Fprintf(stderr, "error: Unknown color defn for %s (%s)\n",
+		fprintf(stderr, "error: Unknown color defn for %s (%s)\n",
 		  image.colorTable[i].string, image.colorTable[i].c_color);
 		exit(EXIT_FAILURE);
 	    }
@@ -95,7 +95,7 @@ char *type;
 	}
 	else
 	{
-	    Fprintf(stderr, "error: Unknown color defn for %s (%s)\n",
+	    fprintf(stderr, "error: Unknown color defn for %s (%s)\n",
 	      image.colorTable[i].string, image.colorTable[i].c_color);
 	    exit(EXIT_FAILURE);
 	}
@@ -188,7 +188,7 @@ char *argv[];
 	    else if (argn + 1 < argc)
 		tile_x = atoi(argv[++argn]);
 	    else {
-		Fprintf(stderr, "xpm2txt: -w option needs an argument\n");
+		fprintf(stderr, "xpm2txt: -w option needs an argument\n");
 		exit(EXIT_FAILURE);
 	    }
 	    argn ++;
@@ -199,7 +199,7 @@ char *argv[];
 	    else if (argn + 1 < argc)
 		tile_y = atoi(argv[++argn]);
 	    else {
-		Fprintf(stderr, "xpm2txt: -h option needs an argument\n");
+		fprintf(stderr, "xpm2txt: -h option needs an argument\n");
 		exit(EXIT_FAILURE);
 	    }
 	    argn ++;
@@ -213,8 +213,8 @@ char *argv[];
     }
     
     if (argc - argn != (split_mode ? 4 : 2)) {
-	Fprintf(stderr, "usage: xpm2txt [-w#] [-h#] xpmfile txtfile\n");
-	Fprintf(stderr, "       xpm2txt -s xpmfile montxt objtxt othtxt\n");
+	fprintf(stderr, "usage: xpm2txt [-w#] [-h#] xpmfile txtfile\n");
+	fprintf(stderr, "       xpm2txt -s xpmfile montxt objtxt othtxt\n");
 	exit(EXIT_FAILURE);
     }
 
