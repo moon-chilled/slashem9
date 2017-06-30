@@ -1625,7 +1625,7 @@ proceed:
 #ifdef GOLDOBJ
                 umoney = money_cnt(invent);
 #endif
-		Sprintf(sbuf, "You owe %s %ld %s ",
+		sprintf(sbuf, "You owe %s %ld %s ",
 					   shkname(shkp), dtmp, currency(dtmp));
 		if(loan) {
 		    if(loan == dtmp)
@@ -1962,7 +1962,7 @@ boolean itemize;
 
 	if (itemize) {
 	    char qbuf[BUFSZ];
-	    Sprintf(qbuf,"%s for %ld %s.  Pay?", quan == 1L ?
+	    sprintf(qbuf,"%s for %ld %s.  Pay?", quan == 1L ?
 		    Doname2(obj) : doname(obj), ltmp, currency(ltmp));
 	    if (yn(qbuf) == 'n') {
 		buy = PAY_SKIP;		/* don't want to buy */
@@ -2657,7 +2657,7 @@ const char *arg;
 	obj_name = doname(obj);
 	/* Use an alternate message when extra information is being provided */
 	if (was_unknown) {
-	    Sprintf(fmtbuf, "%%s; you %s", fmt);
+	    sprintf(fmtbuf, "%%s; you %s", fmt);
 	    obj_name[0] = highc(obj_name[0]);
 	    pline(fmtbuf, obj_name, (obj->quan > 1) ? "them" : "it",
 		  amt, plur(amt), arg);
@@ -3166,7 +3166,7 @@ move_on:
 		    c = sell_response = 'y';
 		} else if (sell_response != 'n') {
 		    pline("%s cannot pay you at present.", Monnam(shkp));
-		    Sprintf(qbuf,
+		    sprintf(qbuf,
 			    "Will you accept %ld %s in credit for %s?",
 			    tmpcr, currency(tmpcr), doname(obj));
 		    /* won't accept 'a' response here */
@@ -3209,7 +3209,7 @@ move_on:
 		    only_partially_your_contents =
 			(contained_cost(obj, shkp, 0L, FALSE, FALSE) !=
 			 contained_cost(obj, shkp, 0L, FALSE, TRUE));
-		    Sprintf(qbuf,
+		    sprintf(qbuf,
 			 "%s offers%s %ld gold piece%s for%s %s %s.  Sell %s?",
 			    Monnam(shkp), short_funds ? " only" : "",
 			    offer, plur(offer),
@@ -4110,7 +4110,7 @@ getcad:
 	}
 
 	if (Invis) Your("invisibility does not fool %s!", shkname(shkp));
-	Sprintf(qbuf,"\"Cad!  You did %ld %s worth of damage!\"  Pay? ",
+	sprintf(qbuf,"\"Cad!  You did %ld %s worth of damage!\"  Pay? ",
 		 cost_of_damage, currency(cost_of_damage));
 	if(yn(qbuf) != 'n') {
 		cost_of_damage = check_credit(cost_of_damage, shkp);
@@ -4197,10 +4197,10 @@ register struct obj *first_obj;
 	if (!cost) {
 	    Strcpy(price, "no charge");
 	} else {
-	    Sprintf(price, "%ld %s%s", cost, currency(cost),
+	    sprintf(price, "%ld %s%s", cost, currency(cost),
 		    otmp->quan > 1L ? " each" : "");
 	}
-	Sprintf(buf, "%s, %s", doname(otmp), price);
+	sprintf(buf, "%s, %s", doname(otmp), price);
 	putstr(tmpwin, 0, buf),  cnt++;
     }
     if (cnt > 1) {
@@ -4936,8 +4936,8 @@ shk_appraisal(slang, shkp)
 	}
 
 	/* Convert damage to ascii */
-	Sprintf(ascii_wsdam, "%d", objects[obj->otyp].oc_wsdam);
-	Sprintf(ascii_wldam, "%d", objects[obj->otyp].oc_wldam);
+	sprintf(ascii_wsdam, "%d", objects[obj->otyp].oc_wsdam);
+	sprintf(ascii_wldam, "%d", objects[obj->otyp].oc_wldam);
 
 	/* Will shopkeeper be unsure? */
 	if (guesswork)
@@ -5420,7 +5420,7 @@ shk_offer_price(slang, charge, shkp)
 	long credit = ESHK(shkp)->credit;
 
 	/* Ask y/n if player wants to pay */
-        Sprintf(sbuf, "It'll cost you %ld zorkmid%s.  Interested?",
+        sprintf(sbuf, "It'll cost you %ld zorkmid%s.  Interested?",
 		charge, plur(charge));
 
 	if ( yn(sbuf) != 'y' ) {
@@ -5546,7 +5546,7 @@ wiz_debug_cmd()	/* in this case, display your bill(s) */
 	    bp = ESHK(shkp)->bill_p;
 	    ct = ESHK(shkp)->billct;
 	    if (ct) {
-		Sprintf(buf, "Your bill with %s", noit_mon_nam(shkp));
+		sprintf(buf, "Your bill with %s", noit_mon_nam(shkp));
 		if (shkp == ushkp) {
 		    Strcat(buf, " (here)");
 		    ushkp = NULL;
@@ -5562,15 +5562,15 @@ wiz_debug_cmd()	/* in this case, display your bill(s) */
 			Strcpy(obj->unpaid ? buf2 : buf2 + 1, xname(obj));
 		    }
 		    else
-			Sprintf(buf2, "Unknown, with ID %d", bp->bo_id);
-		    Sprintf(buf, "%-7d %-7d %-7s %s", bp->price, bp->bquan,
+			sprintf(buf2, "Unknown, with ID %d", bp->bo_id);
+		    sprintf(buf, "%-7d %-7d %-7s %s", bp->price, bp->bquan,
 		      bp->useup ? "Yes" : "No", buf2);
 		    putstr(win, 0, buf);
 		    bp++;
 		}
 	    }
 	    else {
-		Sprintf(buf, "You do not owe %s anything.", noit_mon_nam(shkp));
+		sprintf(buf, "You do not owe %s anything.", noit_mon_nam(shkp));
 		putstr(win, 0, buf);
 	    }
 	    if (special)

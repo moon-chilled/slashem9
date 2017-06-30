@@ -415,7 +415,7 @@ struct obj *instr;
 		} else if (!u.dx && !u.dy && !u.dz) {
 		    if ((damage = zapyourself(instr, TRUE)) != 0) {
 			char buf[BUFSZ];
-			Sprintf(buf, "using a magical horn on %sself", uhim());
+			sprintf(buf, "using a magical horn on %sself", uhim());
 			losehp(damage, buf, KILLED_BY);
 		    }
 		} else {

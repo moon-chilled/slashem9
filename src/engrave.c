@@ -657,14 +657,14 @@ doengrave (void)
 			break;
 		    case WAN_SLOW_MONSTER:
 			if (!Blind) {
-			   Sprintf(post_engr_text,
+			   sprintf(post_engr_text,
 				   "The bugs on the %s slow down!",
 				   surface(u.ux, u.uy));
 			}
 			break;
 		    case WAN_SPEED_MONSTER:
 			if (!Blind) {
-			   Sprintf(post_engr_text,
+			   sprintf(post_engr_text,
 				   "The bugs on the %s speed up!",
 				   surface(u.ux, u.uy));
 			}
@@ -672,14 +672,14 @@ doengrave (void)
 		    case WAN_HEALING:
 		    case WAN_EXTRA_HEALING:
 			if (!Blind) {
-			   Sprintf(post_engr_text,
+			   sprintf(post_engr_text,
 				   "The bugs on the %s look healthier!",
 				   surface(u.ux, u.uy));
 			}
 			break;
 		    case WAN_FEAR:
 			if (!Blind) {
-			   Sprintf(post_engr_text,
+			   sprintf(post_engr_text,
 				   "The bugs on the %s run away!",
 				   surface(u.ux, u.uy));
 			}
@@ -727,7 +727,7 @@ doengrave (void)
 		    case WAN_MAGIC_MISSILE:
 			ptext = TRUE;
 			if (!Blind) {
-			   Sprintf(post_engr_text,
+			   sprintf(post_engr_text,
 				   "The %s is riddled by bullet holes!",
 				   surface(u.ux, u.uy));
 			}
@@ -737,7 +737,7 @@ doengrave (void)
 		    case WAN_SLEEP:
 		    case WAN_DEATH:
 			if (!Blind) {
-			   Sprintf(post_engr_text,
+			   sprintf(post_engr_text,
 				   "The bugs on the %s stop moving!",
 				   surface(u.ux, u.uy));
 			}
@@ -1057,7 +1057,7 @@ doengrave (void)
 		makeplural(body_part(FINGER)));
 
 	/* Prompt for engraving! */
-	Sprintf(qbuf,"What do you want to %s the %s here?", everb, eloc);
+	sprintf(qbuf,"What do you want to %s the %s here?", everb, eloc);
 	getlin(qbuf, ebuf);
 
 	/* Count the actual # of chars engraved not including spaces */

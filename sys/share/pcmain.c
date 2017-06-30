@@ -332,7 +332,7 @@ char *argv[];
 # if defined(WIN32)
 	/* Obtain the name of the logged on user and incorporate
 	 * it into the name. */
-	Sprintf(lock, "%s-%s",get_username(0),plname);
+	sprintf(lock, "%s-%s",get_username(0),plname);
 # else
 	Strcpy(lock,plname);
 	regularize(lock);
@@ -599,14 +599,14 @@ nhusage()
 	/* -role still works for those cases which aren't already taken, but
 	 * is deprecated and will not be listed here.
 	 */
-	(void) Sprintf(buf1,
+	(void) sprintf(buf1,
 "\nUsage: %s [-d dir] -s [-r race] [-p profession] [maxrank] [name]...\n       or",
 		hname);
 	if (!iflags.window_inited)
 		raw_printf(buf1);
 	else
 		(void)	printf(buf1);
-	(void) Sprintf(buf1,
+	(void) sprintf(buf1,
 	 "\n       %s [-d dir] [-u name] [-r race] [-p profession] [-[DX]]",
 		hname);
 #ifdef NEWS

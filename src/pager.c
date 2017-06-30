@@ -70,10 +70,10 @@ lookat(x, y, buf, monbuf)
 	/* if not polymorphed, show both the role and the race */
 	race[0] = 0;
 	if (!Upolyd) {
-	    Sprintf(race, "%s ", urace.adj);
+	    sprintf(race, "%s ", urace.adj);
 	}
 
-	Sprintf(buf, "%s%s%s called %s",
+	sprintf(buf, "%s%s%s called %s",
 		Invis ? "invisible " : "",
 		race,
 		mons[u.umonnum].mname,
@@ -92,11 +92,11 @@ lookat(x, y, buf, monbuf)
 	race[0] = 0;
 	
 	if (!Upolyd) {
-	    Sprintf(race, "%s ", urace.adj);
-	    Sprintf(role, "%s ", urole.name);
-	} else Sprintf(race, "%s ", mons[u.umonnum].mname);
+	    sprintf(race, "%s ", urace.adj);
+	    sprintf(role, "%s ", urole.name);
+	} else sprintf(race, "%s ", mons[u.umonnum].mname);
 
-	Sprintf(buf, "%s%s%s called %s",
+	sprintf(buf, "%s%s%s called %s",
 		Invis ? "invisible " : "",
 		race,
 		role,
@@ -108,7 +108,7 @@ lookat(x, y, buf, monbuf)
 	if (u.usteed) {
 	    char steedbuf[BUFSZ];
 
-	    Sprintf(steedbuf, ", mounted on %s", y_monnam(u.usteed));
+	    sprintf(steedbuf, ", mounted on %s", y_monnam(u.usteed));
 	    /* assert((sizeof buf >= strlen(buf)+strlen(steedbuf)+1); */
 	    Strcat(buf, steedbuf);
 	}
@@ -125,7 +125,7 @@ lookat(x, y, buf, monbuf)
 	    if (Detect_monsters) how |= 4;
 
 	    if (how)
-		Sprintf(eos(buf), " [seen: %s%s%s%s%s]",
+		sprintf(eos(buf), " [seen: %s%s%s%s%s]",
 			(how & 1) ? "infravision" : "",
 			/* add comma if telep and infrav */
 			((how & 3) > 2) ? ", " : "",
@@ -136,7 +136,7 @@ lookat(x, y, buf, monbuf)
 	}
     } else if (u.uswallow) {
 	/* all locations when swallowed other than the hero are the monster */
-	Sprintf(buf, "interior of %s",
+	sprintf(buf, "interior of %s",
 				    Blind ? "a monster" : a_monnam(u.ustuck));
 	pm = u.ustuck->data;
     } else if (glyph_is_monster(glyph)) {
@@ -153,7 +153,7 @@ lookat(x, y, buf, monbuf)
 		name = distant_monnam(mtmp, ARTICLE_NONE, monnambuf);
 
 	    pm = mtmp->data;
-	    Sprintf(buf, "%s%s%s",
+	    sprintf(buf, "%s%s%s",
 		    (mtmp->mx != x || mtmp->my != y) ?
 			((mtmp->isshk && accurate)
 				? "tail of " : "tail of a ") : "",
@@ -173,7 +173,7 @@ lookat(x, y, buf, monbuf)
 		/* newsym lets you know of the trap, so mention it here */
 		if (tt == BEAR_TRAP || tt == PIT ||
 			tt == SPIKED_PIT || tt == WEB)
-		    Sprintf(eos(buf), ", trapped in %s",
+		    sprintf(eos(buf), ", trapped in %s",
 			    an(defsyms[trap_to_defsym(tt)].explanation));
 	    }
 
@@ -240,7 +240,7 @@ lookat(x, y, buf, monbuf)
 			if (Hallucination)
 				Strcat(monbuf, "paranoid delusion");
 			else {
-				Sprintf(wbuf, "warned of %s",
+				sprintf(wbuf, "warned of %s",
 					makeplural(mtmp->data->mname));
 		    		Strcat(monbuf, wbuf);
 		    	}
@@ -284,9 +284,9 @@ lookat(x, y, buf, monbuf)
     } else switch(glyph_to_cmap(glyph)) {
     case S_altar:
 	if(!In_endgame(&u.uz))
-	    Sprintf(buf, "%s altar",
+	    sprintf(buf, "%s altar",
 		align_str(Amask2align(levl[x][y].altarmask & ~AM_SHRINE)));
-	else Sprintf(buf, "aligned altar");
+	else sprintf(buf, "aligned altar");
 	break;
     case S_ndoor:
 	if (is_drawbridge_wall(x, y) >= 0)
@@ -587,7 +587,7 @@ do_look(quick)
 		monexplain[i]) {
 		need_to_look = TRUE;
 		if (!found) {
-		    Sprintf(out_str, "%c       %s", sym, an(monexplain[i]));
+		    sprintf(out_str, "%c       %s", sym, an(monexplain[i]));
 		    firstmatch = monexplain[i];
 		    found++;
 		} else {
@@ -611,7 +611,7 @@ do_look(quick)
 	 */
 	if (u.uswallow && from_screen && is_swallow_sym(sym)) {
 	    if (!found) {
-		Sprintf(out_str, "%c       %s", sym, mon_interior);
+		sprintf(out_str, "%c       %s", sym, mon_interior);
 		firstmatch = mon_interior;
 	    } else {
 		found += append_str(out_str, mon_interior);
@@ -628,7 +628,7 @@ do_look(quick)
 		    continue;
 		}
 		if (!found) {
-		    Sprintf(out_str, "%c       %s", sym, an(objexplain[i]));
+		    sprintf(out_str, "%c       %s", sym, an(objexplain[i]));
 		    firstmatch = objexplain[i];
 		    found++;
 		} else {
@@ -639,7 +639,7 @@ do_look(quick)
 
 	if (sym == DEF_INVISIBLE) {
 	    if (!found) {
-		Sprintf(out_str, "%c       %s", sym, an(invisexplain));
+		sprintf(out_str, "%c       %s", sym, an(invisexplain));
 		firstmatch = invisexplain;
 		found++;
 	    } else {
@@ -661,12 +661,12 @@ do_look(quick)
 
 		if (!found) {
 		    if (is_cmap_trap(i)) {
-			Sprintf(out_str, "%c       a trap", sym);
+			sprintf(out_str, "%c       a trap", sym);
 			hit_trap = TRUE;
 		    } else if (level.flags.lethe && !strcmp(x_str, "water")) {
-			Sprintf(out_str, "%c       sparkling water", sym);
+			sprintf(out_str, "%c       sparkling water", sym);
 		    } else {
-			Sprintf(out_str, "%c       %s", sym,
+			sprintf(out_str, "%c       %s", sym,
 				article == 2 ? the(x_str) :
 				article == 1 ? an(x_str) : x_str);
 		    }
@@ -693,7 +693,7 @@ do_look(quick)
 	    x_str = def_warnsyms[i].explanation;
 	    if (sym == (from_screen ? warnsyms[i] : def_warnsyms[i].sym)) {
 		if (!found) {
-			Sprintf(out_str, "%c       %s",
+			sprintf(out_str, "%c       %s",
 				sym, def_warnsyms[i].explanation);
 			firstmatch = def_warnsyms[i].explanation;
 			found++;
@@ -712,7 +712,7 @@ do_look(quick)
 	if (skipped_venom && found < 2) {
 	    x_str = objexplain[VENOM_CLASS];
 	    if (!found) {
-		Sprintf(out_str, "%c       %s", sym, an(x_str));
+		sprintf(out_str, "%c       %s", sym, an(x_str));
 		firstmatch = x_str;
 		found++;
 	    } else {
@@ -724,7 +724,7 @@ do_look(quick)
 	if (iflags.bouldersym && sym == iflags.bouldersym) {
 	    if (!found) {
 		firstmatch = "boulder";
-		Sprintf(out_str, "%c       %s", sym, an(firstmatch));
+		sprintf(out_str, "%c       %s", sym, an(firstmatch));
 		found++;
 	    } else {
 		found += append_str(out_str, "boulder");
@@ -743,19 +743,19 @@ do_look(quick)
 		pm = lookat(cc.x, cc.y, look_buf, monbuf);
 		firstmatch = look_buf;
 		if (*firstmatch) {
-		    Sprintf(temp_buf, " (%s)", firstmatch);
+		    sprintf(temp_buf, " (%s)", firstmatch);
 		    (void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
 		    found = 1;	/* we have something to look up */
 		}
 		if (monbuf[0]) {
-		    Sprintf(temp_buf, " [seen: %s]", monbuf);
+		    sprintf(temp_buf, " [seen: %s]", monbuf);
 		    (void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
 		}
 #ifdef WIZARD
 		if (wizard && pm) {
 		    struct monst *mtmp = m_at(cc.x, cc.y);
 		    if (mtmp && mtmp->oldmonnm != monsndx(pm)) {
-			Sprintf(temp_buf, " [polymorphed from a %s]",
+			sprintf(temp_buf, " [polymorphed from a %s]",
 				mons[mtmp->oldmonnm].mname);
 			(void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
 		    }
@@ -958,7 +958,7 @@ help_menu(sel)
 #ifdef PORT_HELP
 	    /* port-specific line has a %s in it for the PORT_ID */
 	    if (help_menu_items[i][0] == '%') {
-		Sprintf(helpbuf, help_menu_items[i], PORT_ID);
+		sprintf(helpbuf, help_menu_items[i], PORT_ID);
 		any.a_int = PORT_HELP_ID + 1;
 		add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE,
 			 helpbuf, MENU_UNSELECTED);

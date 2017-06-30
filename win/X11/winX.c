@@ -1625,8 +1625,8 @@ X11_yn_function(ques, choices, def)
 	/* ques [choices] (def) */
 	if ((int)(1 + strlen(ques) + 2 + strlen(choicebuf) + 4) >= QBUFSZ)
 	    panic("yn_function:  question too long");
-	Sprintf(buf, "%s [%s] ", ques, choicebuf);
-	if (def) Sprintf(eos(buf), "(%c) ", def);
+	sprintf(buf, "%s [%s] ", ques, choicebuf);
+	if (def) sprintf(eos(buf), "(%c) ", def);
 
 	/* escape maps to 'q' or 'n' or default, in that order */
 	yn_esc_map = (index(choices, 'q') ? 'q' :

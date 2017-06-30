@@ -91,7 +91,7 @@ main (void)
 				/* again if suffix was whole name */
 				/* accepts any suffix */
 
-	Sprintf (lock, "%d%s", getuid (), plname);
+	sprintf (lock, "%d%s", getuid (), plname);
 	getlock ();
 
 	if ((fd = restore_saved_game()) >= 0) {

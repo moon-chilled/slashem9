@@ -550,7 +550,7 @@ mattacku (register struct monst *mtmp)
 			plname);
 	    if (multi < 0) {	/* this should always be the case */
 		char buf[BUFSZ];
-		Sprintf(buf, "You appear to be %s again.",
+		sprintf(buf, "You appear to be %s again.",
 			Upolyd ? (const char *) an(youmonst.data->mname) :
 			    (const char *) "yourself");
 		unmul(buf);	/* immediately stop mimicking */
@@ -617,10 +617,10 @@ mattacku (register struct monst *mtmp)
 			    if (numseen < 1) You_feel("hemmed in.");
 			    else {
 				if (numseen == 1)
-			    		Sprintf(buf, "%s appears",
+			    		sprintf(buf, "%s appears",
 							an(genericwere));
 			    	else
-			    		Sprintf(buf, "%s appear",
+			    		sprintf(buf, "%s appear",
 							makeplural(genericwere));
 				pline("%s%s!", upstart(buf), from_nowhere);
 			    }
@@ -1323,7 +1323,7 @@ hitmu(mtmp, mattk)
 dopois:
 		hitmsg(mtmp, mattk);
 		if (uncancelled && !rn2(8)) {
-		    Sprintf(buf, "%s %s",
+		    sprintf(buf, "%s %s",
 			    s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
 		    poisoned(buf, ptmp, mdat->mname, 30);
 		}
@@ -1543,7 +1543,7 @@ dopois:
 
 			    pline("%s drowns you...", Monnam(mtmp));
 			    killer_format = KILLED_BY_AN;
-			    Sprintf(buf, "%s by %s",
+			    sprintf(buf, "%s by %s",
 				    moat ? "moat" : "pool of water",
 				    an(mtmp->data->mname));
 			    killer = buf;
@@ -2684,7 +2684,7 @@ doseduce (register struct monst *mon)
 	    if (ring->otyp != RIN_ADORNMENT) continue;
 	    if (fem) {
 		if (rn2(20) < ACURR(A_CHA)) {
-		    Sprintf(qbuf, "\"That %s looks pretty.  May I have it?\"",
+		    sprintf(qbuf, "\"That %s looks pretty.  May I have it?\"",
 			safe_qbuf("",sizeof("\"That  looks pretty.  May I have it?\""),
 			xname(ring), simple_typename(ring->otyp), "ring"));
 		    makeknown(RIN_ADORNMENT);
@@ -2706,7 +2706,7 @@ doseduce (register struct monst *mon)
 			break;
 		if (ring==uleft || ring==uright) continue;
 		if (rn2(20) < ACURR(A_CHA)) {
-		    Sprintf(qbuf,"\"That %s looks pretty.  Would you wear it for me?\"",
+		    sprintf(qbuf,"\"That %s looks pretty.  Would you wear it for me?\"",
 			safe_qbuf("",
 			    sizeof("\"That  looks pretty.  Would you wear it for me?\""),
 			    xname(ring), simple_typename(ring->otyp), "ring"));
@@ -2927,14 +2927,14 @@ const char *str;
 	if (!obj || !obj->owornmask) return;
 
 	if (rn2(20) < ACURR(A_CHA)) {
-		Sprintf(qbuf,"\"Shall I remove your %s, %s?\"",
+		sprintf(qbuf,"\"Shall I remove your %s, %s?\"",
 			str,
 			(!rn2(2) ? "lover" : !rn2(2) ? "dear" : "sweetheart"));
 		if (yn(qbuf) == 'n') return;
 	} else {
 		char hairbuf[BUFSZ];
 
-		Sprintf(hairbuf, "let me run my fingers through your %s",
+		sprintf(hairbuf, "let me run my fingers through your %s",
 			body_part(HAIR));
 		verbalize("Take off your %s; %s.", str,
 			(obj == uarm)  ? "let's get a little closer" :

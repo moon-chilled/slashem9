@@ -308,7 +308,6 @@ typedef xchar	boolean;		/* 0 or 1 */
 # endif
 #endif
 
-#define Sprintf  (void) sprintf
 #define Strcat   (void) strcat
 #define Strcpy   (void) strcpy
 #ifdef NEED_VARARGS

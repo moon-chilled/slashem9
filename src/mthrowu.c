@@ -688,7 +688,7 @@ thrwmu (struct monst *mtmp)
 	    if (multishot > 1) {
 		/* "N arrows"; multishot > 1 implies otmp->quan > 1, so
 		   xname()'s result will already be pluralized */
-		Sprintf(onmbuf, "%d %s", multishot, xname(otmp));
+		sprintf(onmbuf, "%d %s", multishot, xname(otmp));
 		onm = onmbuf;
 	    } else {
 		/* "an arrow" */

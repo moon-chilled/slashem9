@@ -1475,7 +1475,7 @@ domove (void)
 	    (memory_is_invisible(x, y) && !flags.nopick)) {
 		boolean expl = (Upolyd && attacktype(youmonst.data, AT_EXPL));
 	    	char buf[BUFSZ];
-		Sprintf(buf,"a vacant spot on the %s", surface(x,y));
+		sprintf(buf,"a vacant spot on the %s", surface(x,y));
 		You("%s %s.",
 		    expl ? "explode at" : "attack",
 		    !Underwater ? "thin air" :
@@ -1864,11 +1864,11 @@ invocation_message (void)
 		pline("You're picking up good vibrations!");
 	    else {
 #ifdef STEED
-	    if (u.usteed) Sprintf(buf, "beneath %s", y_monnam(u.usteed));
+	    if (u.usteed) sprintf(buf, "beneath %s", y_monnam(u.usteed));
 	    else
 #endif
 	    if (Levitation || Flying) Strcpy(buf, "beneath you");
-	    else Sprintf(buf, "under your %s", makeplural(body_part(FOOT)));
+	    else sprintf(buf, "under your %s", makeplural(body_part(FOOT)));
 
 	    You_feel("a strange vibration %s.", buf);
 	    }

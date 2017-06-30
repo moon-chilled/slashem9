@@ -53,7 +53,7 @@ int MAIN(int argc, char **argv)
 						/* again if suffix was whole name */
 						/* accepts any suffix */
 
-	Sprintf(lock,"%d%s", getuid(), plname);
+	sprintf(lock,"%d%s", getuid(), plname);
 	getlock();
 
 

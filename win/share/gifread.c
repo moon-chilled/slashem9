@@ -156,7 +156,7 @@ int	label;
 		return;
 	default:
 		str = buf;
-		Sprintf(buf, "UNKNOWN (0x%02x)", label);
+		sprintf(buf, "UNKNOWN (0x%02x)", label);
 		break;
 	}
 

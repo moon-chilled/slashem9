@@ -29,7 +29,7 @@ getversionstring (char *buf)
 {
 	Strcpy(buf, VERSION_ID);
 #if defined(BETA) && defined(BETA_INFO)
-	Sprintf(eos(buf), " %s", BETA_INFO);
+	sprintf(eos(buf), " %s", BETA_INFO);
 #endif
 #if defined(RUNTIME_PORT_ID)
 	append_port_id(buf);

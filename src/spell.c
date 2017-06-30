@@ -371,7 +371,7 @@ learn()
 	    return(0);
 	}
 
-	Sprintf(splname, objects[booktype].oc_name_known ?
+	sprintf(splname, objects[booktype].oc_name_known ?
 			"\"%s\"" : "the \"%s\" spell",
 		OBJ_NAME(objects[booktype]));
 	for (i = 0; i < MAXSPELL; i++)  {
@@ -491,7 +491,7 @@ study_book (register struct obj *spellbook)
 			if (Role_if(PM_WIZARD) && read_ability < 20 &&
 			    !confused && !spellbook->spe) {
 			    char qbuf[QBUFSZ];
-			    Sprintf(qbuf,
+			    sprintf(qbuf,
 		      "This spellbook is %sdifficult to comprehend. Continue?",
 				    (read_ability < 12 ? "very " : ""));
 			    if (yn(qbuf) != 'y') {
@@ -552,7 +552,7 @@ study_book (register struct obj *spellbook)
 	        	char qbuf[QBUFSZ];
 	        	
 	        	if (multi + 1 > MAX_STUDY_TIME) multi = MAX_STUDY_TIME - 1;
-	        	Sprintf(qbuf, "Study for at least %i turns?", (multi+1));
+	        	sprintf(qbuf, "Study for at least %i turns?", (multi+1));
 			if (ynq(qbuf) != 'y') {
 				multi = 0;
 				return(1);
@@ -636,17 +636,17 @@ getspell(spell_no)
 		continue;
 
 	    if (nspells == 1)  Strcpy(lets, "a");
-	    else if (nspells < 27)  Sprintf(lets, "a-%c", 'a' + nspells - 1);
-	    else if (nspells == 27)  Sprintf(lets, "a-z A");
+	    else if (nspells < 27)  sprintf(lets, "a-%c", 'a' + nspells - 1);
+	    else if (nspells == 27)  sprintf(lets, "a-z A");
 	    else if (nspells < 53)
-		Sprintf(lets, "a-z A-%c", 'A' + nspells - 27);
-	    else if (nspells == 53)  Sprintf(lets, "a-z A-Z 0");
+		sprintf(lets, "a-z A-%c", 'A' + nspells - 27);
+	    else if (nspells == 53)  sprintf(lets, "a-z A-Z 0");
 	    else if (nspells < 62)
-		Sprintf(lets, "a-z A-Z 0-%c", '0' + nspells - 53);
-	    else  Sprintf(lets, "a-z A-Z 0-9");
+		sprintf(lets, "a-z A-Z 0-%c", '0' + nspells - 53);
+	    else  sprintf(lets, "a-z A-Z 0-9");
 
 	    for(;;)  {
-		Sprintf(qbuf, "Cast which spell? [%s ?]", lets);
+		sprintf(qbuf, "Cast which spell? [%s ?]", lets);
 		if ((ilet = yn_function(qbuf, (char *)0, '\0')) == '?')
 		    break;
 
@@ -974,7 +974,7 @@ boolean atme;
 			if(!u.dx && !u.dy && !u.dz) {
 			    if ((damage = zapyourself(pseudo, TRUE)) != 0) {
 				char buf[BUFSZ];
-				Sprintf(buf, "zapped %sself with a spell", uhim());
+				sprintf(buf, "zapped %sself with a spell", uhim());
 				losehp(damage, buf, NO_KILLER_PREFIX);
 			    }
 			} else weffects(pseudo);
@@ -1185,7 +1185,7 @@ dovspell (void)
 	else {
 	    while (dospellmenu("Currently known spells",
 			       SPELLMENU_VIEW, &splnum)) {
-		Sprintf(qbuf, "Reordering spells; swap '%s' with",
+		sprintf(qbuf, "Reordering spells; swap '%s' with",
 			spellname(splnum));
 		if (!dospellmenu(qbuf, splnum, &othnum)) break;
 
@@ -1223,21 +1223,21 @@ int *spell_no;
 	 * in the window-ports (say via a tab character).
 	 */
 	if (!iflags.menu_tab_sep)
-		Sprintf(buf, "%-20s     Level  %-12s Fail", "    Name", "Category");
+		sprintf(buf, "%-20s     Level  %-12s Fail", "    Name", "Category");
 	else
-		Sprintf(buf, "Name\tLevel\tCategory\tFail");
+		sprintf(buf, "Name\tLevel\tCategory\tFail");
 	if (flags.menu_style == MENU_TRADITIONAL)
 		Strcat(buf, iflags.menu_tab_sep ? "\tKey" : "  Key");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	for (i = 0; i < MAXSPELL && spellid(i) != NO_SPELL; i++) {
-		Sprintf(buf, iflags.menu_tab_sep ?
+		sprintf(buf, iflags.menu_tab_sep ?
 			"%s\t%-d%s\t%s\t%-d%%" : "%-20s  %2d%s   %-12s %3d%%",
 			spellname(i), spellev(i),
 			spellknow(i) ? " " : "*",
 			spelltypemnemonic(spell_skilltype(spellid(i))),
 			100 - percent_success(i));
 		if (flags.menu_style == MENU_TRADITIONAL)
-			Sprintf(eos(buf), iflags.menu_tab_sep ?
+			sprintf(eos(buf), iflags.menu_tab_sep ?
 				"\t%c" : "%4c ", spellet(i) ? spellet(i) : ' ');
 
 		any.a_int = i+1;	/* must be non-zero */
@@ -1286,10 +1286,10 @@ dump_spells (void)
 	}
 	dump("", "Spells known in the end");
 
-	Sprintf(buf, "%-20s   Level    %-12s Fail", "    Name", "Category");
+	sprintf(buf, "%-20s   Level    %-12s Fail", "    Name", "Category");
 	dump("  ",buf);
 	for (i = 0; i < MAXSPELL && spellid(i) != NO_SPELL; i++) {
-		Sprintf(buf, "%c - %-20s  %2d%s   %-12s %3d%%",
+		sprintf(buf, "%c - %-20s  %2d%s   %-12s %3d%%",
 			spellet(i), spellname(i), spellev(i),
 			spellknow(i) ? " " : "*",
 			spelltypemnemonic(spell_skilltype(spellid(i))),

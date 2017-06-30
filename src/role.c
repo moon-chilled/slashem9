@@ -1538,7 +1538,7 @@ build_plselection_prompt (char *buf, int buflen, int rolenum, int racenum, int g
 
 	(void)  root_plselection_prompt(eos(tmpbuf), buflen - strlen(tmpbuf),
 					rolenum, racenum, gendnum, alignnum);
-	Sprintf(buf, "%s", s_suffix(tmpbuf));
+	sprintf(buf, "%s", s_suffix(tmpbuf));
 
 	/* buf should now be:
 	 * < your lawful female gnomish cavewoman's> || <your lawful female gnome's>

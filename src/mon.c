@@ -944,10 +944,10 @@ meatobj (		/* for gelatinous cubes */
 				    otmp != uball && otmp != uchain) {
 		++ecount;
 		if (ecount == 1) {
-			Sprintf(buf, "%s engulfs %s.", Monnam(mtmp),
+			sprintf(buf, "%s engulfs %s.", Monnam(mtmp),
 			    distant_name(otmp,doname));
 		} else if (ecount == 2)
-			Sprintf(buf, "%s engulfs several objects.", Monnam(mtmp));
+			sprintf(buf, "%s engulfs several objects.", Monnam(mtmp));
 		obj_extract_self(otmp);
 		(void) mpickobj(mtmp, otmp);	/* slurp */
 	    }
@@ -1731,7 +1731,7 @@ boolean was_swallowed;			/* digestion */
 		    if (magr == &youmonst) {
 			There("is an explosion in your %s!",
 			      body_part(STOMACH));
-			Sprintf(killer_buf, "%s explosion",
+			sprintf(killer_buf, "%s explosion",
 				s_suffix(mdat->mname));
 			if (Half_physical_damage) tmp = (tmp+1) / 2;
 			losehp(tmp, killer_buf, KILLED_BY_AN);
@@ -1750,7 +1750,7 @@ boolean was_swallowed;			/* digestion */
 		    return FALSE;
 		}
 
-	    	Sprintf(killer_buf, "%s explosion", s_suffix(mdat->mname));
+	    	sprintf(killer_buf, "%s explosion", s_suffix(mdat->mname));
 	    	killer = killer_buf;
 	    	killer_format = KILLED_BY_AN;
 	    	explode(mon->mx, mon->my, -1, tmp, MON_EXPLODE, EXPL_NOXIOUS); 
@@ -2625,7 +2625,7 @@ struct monst *mon;
 		char pprompt[BUFSZ], buf[BUFSZ];
 		int tries = 0;
 		do {
-			Sprintf(pprompt,
+			sprintf(pprompt,
 				"Change %s into what kind of monster? [type the name]",
 				mon_nam(mon));
 			getlin(pprompt,buf);
@@ -2797,7 +2797,7 @@ boolean msg;
 	    	char buf[BUFSZ];
 
 	    	pline("You touch %s.", mon_nam(u.usteed));
-	    	Sprintf(buf, "riding %s", an(u.usteed->data->mname));
+	    	sprintf(buf, "riding %s", an(u.usteed->data->mname));
 	    	instapetrify(buf);
  	    }
 	    if (!can_ride(u.usteed)) dismount_steed(DISMOUNT_POLY);

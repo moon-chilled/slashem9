@@ -359,12 +359,12 @@ gettech(tech_no)
 	}
 	if (flags.menu_style == MENU_TRADITIONAL) {
             if (ntechs == 1)  Strcpy(lets, "a");
-            else if (ntechs < 27)  Sprintf(lets, "a-%c", 'a' + ntechs - 1);
-            else if (ntechs == 27)  Sprintf(lets, "a-z A");
-            else Sprintf(lets, "a-z A-%c", 'A' + ntechs - 27);
+            else if (ntechs < 27)  sprintf(lets, "a-%c", 'a' + ntechs - 1);
+            else if (ntechs == 27)  sprintf(lets, "a-z A");
+            else sprintf(lets, "a-z A-%c", 'A' + ntechs - 27);
 
 	    for(;;)  {
-                Sprintf(qbuf, "Perform which technique? [%s ?]", lets);
+                sprintf(qbuf, "Perform which technique? [%s ?]", lets);
 		if ((ilet = yn_function(qbuf, (char *)0, '\0')) == '?')
 		    break;
 
@@ -418,9 +418,9 @@ dotechmenu(how, tech_no)
 		if ((len = strlen(techname(i))) > longest)
 		    longest = len;
 	    }
-	    Sprintf(buf, "    %-*s Level   Status", longest, "Name");
+	    sprintf(buf, "    %-*s Level   Status", longest, "Name");
 	} else
-	    Sprintf(buf, "Name\tLevel\tStatus");
+	    sprintf(buf, "Name\tLevel\tStatus");
 
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
 
@@ -440,7 +440,7 @@ dotechmenu(how, tech_no)
 #ifdef WIZARD
 	    if (wizard) 
 		if (!iflags.menu_tab_sep)			
-		    Sprintf(buf, "%s%-*s %2d%c%c%c   %s(%i)",
+		    sprintf(buf, "%s%-*s %2d%c%c%c   %s(%i)",
 			    prefix, longest, techname(i), tlevel,
 			    tech_list[i].t_intrinsic & FROMEXPER ? 'X' : ' ',
 			    tech_list[i].t_intrinsic & FROMRACE ? 'R' : ' ',
@@ -452,7 +452,7 @@ dotechmenu(how, tech_no)
 			    techtout(i) > 100 ? "Not Ready" : "Soon",
 			    techtout(i));
 		else
-		    Sprintf(buf, "%s%s\t%2d%c%c%c\t%s(%i)",
+		    sprintf(buf, "%s%s\t%2d%c%c%c\t%s(%i)",
 			    prefix, techname(i), tlevel,
 			    tech_list[i].t_intrinsic & FROMEXPER ? 'X' : ' ',
 			    tech_list[i].t_intrinsic & FROMRACE ? 'R' : ' ',
@@ -466,7 +466,7 @@ dotechmenu(how, tech_no)
 	    else
 #endif
 	    if (!iflags.menu_tab_sep)			
-		Sprintf(buf, "%s%-*s %5d   %s",
+		sprintf(buf, "%s%-*s %5d   %s",
 			prefix, longest, techname(i), tlevel,
 			tech_inuse(techid(i)) ? "Active" :
 			tlevel <= 0 ? "Beyond recall" :
@@ -474,7 +474,7 @@ dotechmenu(how, tech_no)
 			!techtout(i) ? "Prepared" : 
 			techtout(i) > 100 ? "Not Ready" : "Soon");
 	    else
-		Sprintf(buf, "%s%s\t%5d\t%s",
+		sprintf(buf, "%s%s\t%5d\t%s",
 			prefix, techname(i), tlevel,
 			tech_inuse(techid(i)) ? "Active" :
 			tlevel <= 0 ? "Beyond recall" :
@@ -1302,7 +1302,7 @@ techeffects (int tech_no)
 					polymon(PM_STONE_GOLEM))) {
 				char kbuf[BUFSZ];
 
-				Sprintf(kbuf, "%s corpse",
+				sprintf(kbuf, "%s corpse",
 					an(mons[obj->corpsenm].mname));
 				pline("Snatching %s is a fatal mistake.", kbuf);
 				instapetrify(kbuf);
@@ -1968,19 +1968,19 @@ doblitzlist (void)
 	start_menu(tmpwin);
 	any.a_void = 0;         /* zero out all bits */
 
-        Sprintf(buf, "%16s %10s %-17s", "[LU = Left Up]", "[U = Up]", "[RU = Right Up]");
+        sprintf(buf, "%16s %10s %-17s", "[LU = Left Up]", "[U = Up]", "[RU = Right Up]");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
-        Sprintf(buf, "%16s %10s %-17s", "[L = Left]", "", "[R = Right]");
+        sprintf(buf, "%16s %10s %-17s", "[L = Left]", "", "[R = Right]");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
-        Sprintf(buf, "%16s %10s %-17s", "[LD = Left Down]", "[D = Down]", "[RD = Right Down]");
+        sprintf(buf, "%16s %10s %-17s", "[LD = Left Down]", "[D = Down]", "[RD = Right Down]");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);        
 
-        Sprintf(buf, "%-30s %10s   %s", "Name", "Type", "Command");
+        sprintf(buf, "%-30s %10s   %s", "Name", "Type", "Command");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
 
         for (i = 0; blitzes[i].blitz_len; i++) {
 	    if (tech_known(blitzes[i].blitz_tech)) {
-                Sprintf(buf, "%-30s %10s   %s",
+                sprintf(buf, "%-30s %10s   %s",
                     (i && blitzes[i].blitz_tech == blitzes[(i-1)].blitz_tech ?
                     	"" : tech_names[blitzes[i].blitz_tech]), 
                     (blitzes[i].blitz_type == BLITZ_START ? 

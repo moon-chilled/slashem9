@@ -901,7 +901,7 @@ use_pick_axe (struct obj *obj)
 		sdp++;
 	}
 	*dsp = 0;
-	Sprintf(qbuf, "In what direction do you want to %s? [%s]", verb, dirsyms);
+	sprintf(qbuf, "In what direction do you want to %s? [%s]", verb, dirsyms);
 	if(!getdir(qbuf))
 		return(res);
 
@@ -958,7 +958,7 @@ use_pick_axe2 (struct obj *obj)
 		dam = rnd(2) + dbon() + obj->spe;
 		if (dam <= 0) dam = 1;
 		You("hit yourself with %s.", yname(uwep));
-		Sprintf(buf, "%s own %s", uhis(),
+		sprintf(buf, "%s own %s", uhis(),
 				OBJ_NAME(objects[obj->otyp]));
 		losehp(dam, buf, KILLED_BY);
 		flags.botl=1;

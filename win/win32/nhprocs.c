@@ -738,8 +738,8 @@ char def;
 	    if ((1 + strlen(query) + 2 + strlen(choicebuf) + 4) >= QBUFSZ)
 		panic("yn_function: question too long");
 	    if (query) {
-		Sprintf(buf, "%s [%s] ", query, choicebuf);
-		if (def) Sprintf(eos(buf), "(%c) ", def);
+		sprintf(buf, "%s [%s] ", query, choicebuf);
+		if (def) sprintf(eos(buf), "(%c) ", def);
 	    }
 	}else
 		return key_from_buf();
@@ -867,7 +867,7 @@ int part;
 		wins[window]->nWindowX = 0;
 		wins[window]->nWindowY = 0;
 
-		Sprintf(WindowName,"NetHack Text Window %d",window);
+		sprintf(WindowName,"NetHack Text Window %d",window);
 		wins[window]->hWnd=CreateWindowEx(
 			0,
 			NHTextClassName,
@@ -1028,7 +1028,7 @@ boolean preselected;
 	    if (menuitem->str)
 		strcpy(menuitem->str, (str != (char *)0) ? str : "Oops!");
 	} else 
-		Sprintf(menuitem->str,"%s",
+		sprintf(menuitem->str,"%s",
 			 (str != (char *)0) ? str : "Oops");
 	MenuPtr[window][MenuCount[window]] = menuitem;
 	++MenuCount[window];
@@ -1068,11 +1068,11 @@ const char *morestr;
 				if (MenuPtr[window][i]->identifier.a_void) {
 					if (!MenuPtr[window][i]->ch)
 						MenuPtr[window][i]->ch = j++;
-					Sprintf(buf,"%c - %s",
+					sprintf(buf,"%c - %s",
 						MenuPtr[window][i]->ch,
 						MenuPtr[window][i]->str);
 				} else {
-					Sprintf(buf,"\t%s",
+					sprintf(buf,"\t%s",
 						MenuPtr[window][i]->str);
 					MenuPtr[window][i]->ch = junk++;
 				}
@@ -1086,7 +1086,7 @@ const char *morestr;
 			}
 #ifdef DEBUG_FULL
 			else {
-				Sprintf(buf2,"Listbox empty string: %d",i);
+				sprintf(buf2,"Listbox empty string: %d",i);
 				DEBUG_MSG(buf2);
 			}
 #endif

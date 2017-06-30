@@ -597,7 +597,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 			    killer_format = KILLED_BY_AN;
 			} else if (type >= 0 && olet != SCROLL_CLASS && yours) {
 			    killer_format = NO_KILLER_PREFIX;
-			    Sprintf(killer_buf, "caught %sself in %s own %s",
+			    sprintf(killer_buf, "caught %sself in %s own %s",
 				    uhim(), uhis(), str);
 			} else if (olet != BURNING_OIL) {
 			    killer_format = KILLED_BY_AN;

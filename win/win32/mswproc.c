@@ -420,7 +420,7 @@ give_up:	/* Quit */
 		any.a_int = i+1;	/* must be non-zero */
 		add_menu(win, NO_GLYPH, &any , 'q', 0, ATR_NONE,
 				"Quit", MENU_UNSELECTED);
-		Sprintf(pbuf, "Pick a role for your %s", plbuf);
+		sprintf(pbuf, "Pick a role for your %s", plbuf);
 		end_menu(win, pbuf);
 		n = select_menu(win, PICK_ONE, &selected);
 		destroy_nhwindow(win);
@@ -491,7 +491,7 @@ give_up:	/* Quit */
 		    any.a_int = i+1;	/* must be non-zero */
 		    add_menu(win, NO_GLYPH, &any , 'q', 0, ATR_NONE,
 				    "Quit", MENU_UNSELECTED);
-		    Sprintf(pbuf, "Pick the race of your %s", plbuf);
+		    sprintf(pbuf, "Pick the race of your %s", plbuf);
 		    end_menu(win, pbuf);
 		    n = select_menu(win, PICK_ONE, &selected);
 		    destroy_nhwindow(win);
@@ -563,7 +563,7 @@ give_up:	/* Quit */
 		    any.a_int = i+1;	/* must be non-zero */
 		    add_menu(win, NO_GLYPH, &any , 'q', 0, ATR_NONE,
 				    "Quit", MENU_UNSELECTED);
-		    Sprintf(pbuf, "Pick the gender of your %s", plbuf);
+		    sprintf(pbuf, "Pick the gender of your %s", plbuf);
 		    end_menu(win, pbuf);
 		    n = select_menu(win, PICK_ONE, &selected);
 		    destroy_nhwindow(win);
@@ -634,7 +634,7 @@ give_up:	/* Quit */
 		    any.a_int = i+1;	/* must be non-zero */
 		    add_menu(win, NO_GLYPH, &any , 'q', 0, ATR_NONE,
 				    "Quit", MENU_UNSELECTED);
-		    Sprintf(pbuf, "Pick the alignment of your %s", plbuf);
+		    sprintf(pbuf, "Pick the alignment of your %s", plbuf);
 		    end_menu(win, pbuf);
 		    n = select_menu(win, PICK_ONE, &selected);
 		    destroy_nhwindow(win);
@@ -1758,15 +1758,15 @@ void mswin_outrip(winid wid, int how)
 	}
 
 	/* Put name on stone */
-	Sprintf(buf, "%s", plname);
+	sprintf(buf, "%s", plname);
 	buf[STONE_LINE_LEN] = 0;
 	putstr(wid, 0, buf);
 
 	/* Put $ on stone */
 #ifndef GOLDOBJ
-	Sprintf(buf, "%ld Au", u.ugold);
+	sprintf(buf, "%ld Au", u.ugold);
 #else
-	Sprintf(buf, "%ld Au", done_money);
+	sprintf(buf, "%ld Au", done_money);
 #endif
 	buf[STONE_LINE_LEN] = 0; /* It could be a *lot* of gold :-) */
 	putstr(wid, 0, buf);
@@ -1791,7 +1791,7 @@ void mswin_outrip(winid wid, int how)
 	putstr(wid, 0, buf);
 
 	/* Put year on stone */
-	Sprintf(buf, "%4d", getyear());
+	sprintf(buf, "%4d", getyear());
 	putstr(wid, 0, buf);
 	mswin_finish_rip_text(wid);
 }

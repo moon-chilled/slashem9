@@ -601,7 +601,7 @@ int touch_artifact (struct obj *obj, struct monst *mon) {
 	if (!yours) return 0;
 	You("are blasted by %s power!", s_suffix(the(xname(obj))));
 	dmg = d((Antimagic ? 6 : 8), (self_willed ? 10 : 6));
-	Sprintf(buf, "touching %s", oart->name);
+	sprintf(buf, "touching %s", oart->name);
 	losehp(dmg, buf, KILLED_BY);
 	exercise(A_WIS, FALSE);
     }
@@ -777,7 +777,7 @@ int disp_artifact_discoveries(winid tmpwin /* supplied by dodiscover() */) {
 	      "Artifacts", MENU_UNSELECTED);
 	m = artidisco[i];
 	otyp = artilist[m].otyp;
-	Sprintf(buf, "  %s [%s %s]", artiname(m),
+	sprintf(buf, "  %s [%s %s]", artiname(m),
 		align_str(artilist[m].alignment), simple_typename(otyp));
 	add_menu(tmpwin, objnum_to_glyph(otyp), &any, 0, 0, ATR_NONE,
 	  buf, MENU_UNSELECTED);

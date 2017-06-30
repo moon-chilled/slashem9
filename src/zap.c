@@ -2196,7 +2196,7 @@ dozap()
 	} else if(!u.dx && !u.dy && !u.dz && !(objects[obj->otyp].oc_dir == NODIR)) {
 	    if ((damage = zapyourself(obj, TRUE)) != 0) {
 		char buf[BUFSZ];
-		Sprintf(buf, "zapped %sself with a wand", uhim());
+		sprintf(buf, "zapped %sself with a wand", uhim());
 		losehp(damage, buf, NO_KILLER_PREFIX);
 	    }
 	} else {
@@ -2559,7 +2559,7 @@ boolean ordinary;
 			break;
 		    }
 		    killer_format = NO_KILLER_PREFIX;
-		    Sprintf(buf, "shot %sself with a death ray", uhim());
+		    sprintf(buf, "shot %sself with a death ray", uhim());
 		    killer = buf;
 		    You("irradiate yourself with pure energy!");
 		    You("die.");

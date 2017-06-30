@@ -146,11 +146,11 @@ char *argv[];
 		(void) signal(SIGQUIT,SIG_IGN);
 		(void) signal(SIGINT,SIG_IGN);
 		if(!locknum)
-			Sprintf(lock, "_%u%s", (unsigned)getuid(), plname);
+			sprintf(lock, "_%u%s", (unsigned)getuid(), plname);
 		getlock();
 #ifdef WIZARD
 	} else {
-		Sprintf(lock, "_%u%s", (unsigned)getuid(), plname);
+		sprintf(lock, "_%u%s", (unsigned)getuid(), plname);
 		getlock();
 	}
 #endif /* WIZARD */

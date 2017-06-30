@@ -428,7 +428,7 @@ dodiscovered (void)				/* free after Robert Viduya */
 	    if (!dis++)
 		add_menu(tmpwin, NO_GLYPH, &any, 0, 0, iflags.menu_headings,
 		  "Unique Items", MENU_UNSELECTED);
-		Sprintf(buf, "  %s", OBJ_NAME(objects[uniq_objs[i]]));
+		sprintf(buf, "  %s", OBJ_NAME(objects[uniq_objs[i]]));
 	    add_menu(tmpwin, objnum_to_glyph(uniq_objs[i]), &any,
 	      0, 0, ATR_NONE, buf, MENU_UNSELECTED);
 	    ++ct;
@@ -456,7 +456,7 @@ dodiscovered (void)				/* free after Robert Viduya */
 		      let_to_name(oclass, FALSE), MENU_UNSELECTED);
 		    prev_class = oclass;
 		}
-		Sprintf(buf, "%s %s",(objects[dis].oc_pre_discovered ? "*" : " "),
+		sprintf(buf, "%s %s",(objects[dis].oc_pre_discovered ? "*" : " "),
 				obj_typename(dis));
 		add_menu(tmpwin, objnum_to_glyph(dis), &any, 0, 0,
 		  ATR_NONE, buf, MENU_UNSELECTED);

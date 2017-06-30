@@ -146,7 +146,7 @@ boolean put_away;
 
 	    You("wield the %s corpse in your bare %s.",
 		mons[wep->corpsenm].mname, makeplural(body_part(HAND)));
-	    Sprintf(kbuf, "%s corpse", an(mons[wep->corpsenm].mname));
+	    sprintf(kbuf, "%s corpse", an(mons[wep->corpsenm].mname));
 	    instapetrify(kbuf);
 	} else if (uarms && bimanual(wep))
 	    You("cannot wield a two-handed %s while wearing a shield.",
@@ -564,7 +564,7 @@ can_twoweapon (void)
 
 	    You("wield the %s corpse with your bare %s.",
 		    mons[uswapwep->corpsenm].mname, body_part(HAND));
-	    Sprintf(kbuf, "%s corpse", an(mons[uswapwep->corpsenm].mname));
+	    sprintf(kbuf, "%s corpse", an(mons[uswapwep->corpsenm].mname));
 	    instapetrify(kbuf);
         } else if (uswapwep && (Glib || uswapwep->cursed)) {
 	    if (!Glib)
@@ -789,7 +789,7 @@ chwepon (register struct obj *otmp, register int amount)
 	if(!uwep || (uwep->oclass != WEAPON_CLASS && !is_weptool(uwep))) {
 		char buf[BUFSZ];
 
-		Sprintf(buf, "Your %s %s.", makeplural(body_part(HAND)),
+		sprintf(buf, "Your %s %s.", makeplural(body_part(HAND)),
 			(amount >= 0) ? "twitch" : "itch");
 		strange_feeling(otmp, buf);
 		exercise(A_DEX, (boolean) (amount >= 0));

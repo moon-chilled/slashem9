@@ -238,7 +238,7 @@ struct toptenentry *tt;
 	char *cp = eos(tt->death);
 
 	/* Add a trailing " Conduct=%d" to tt->death */
-	Sprintf(cp, " Conduct=%d", tt->conduct);
+	sprintf(cp, " Conduct=%d", tt->conduct);
 
 #ifdef NO_SCAN_BRACK
 	nsb_mung_line(tt->name);
@@ -521,7 +521,7 @@ topten (int how)
 	    if (how != PANICKED) HUP {
 		char pbuf[BUFSZ];
 		topten_print("");
-		Sprintf(pbuf,
+		sprintf(pbuf,
 	      "Since you were in %s mode, the score list will not be checked.",
 		    wizard ? "wizard" : "discover");
 		topten_print(pbuf);
@@ -597,7 +597,7 @@ topten (int how)
 			rank1 = rank;
 			HUP {
 			    char pbuf[BUFSZ];
-			    Sprintf(pbuf,
+			    sprintf(pbuf,
 			  "You didn't beat your previous score of %ld points.",
 				    t1->points);
 			    topten_print(pbuf);
@@ -644,7 +644,7 @@ topten (int how)
 #endif
 		    } else {
 			char pbuf[BUFSZ];
-			Sprintf(pbuf,
+			sprintf(pbuf,
 			  "You reached the %d%s place on the top %d list.",
 				rank0, ordin(rank0), ENTRYMAX);
 			topten_print(pbuf);
@@ -763,24 +763,24 @@ boolean so;
 
 
 	linebuf[0] = '\0';
-	if (rank) Sprintf(eos(linebuf), "%3d", rank);
+	if (rank) sprintf(eos(linebuf), "%3d", rank);
 	else Strcat(linebuf, "   ");
 
-	Sprintf(eos(linebuf), " %10ld  %.10s", t1->points, t1->name);
-	Sprintf(eos(linebuf), "-%s", t1->plrole);
+	sprintf(eos(linebuf), " %10ld  %.10s", t1->points, t1->name);
+	sprintf(eos(linebuf), "-%s", t1->plrole);
 	if (t1->plrace[0] != '?')
-		Sprintf(eos(linebuf), "-%s", t1->plrace);
+		sprintf(eos(linebuf), "-%s", t1->plrace);
 	/* Printing of gender and alignment is intentional.  It has been
 	 * part of the NetHack Geek Code, and illustrates a proper way to
 	 * specify a character from the command line.
 	 */
-	Sprintf(eos(linebuf), "-%s", t1->plgend);
+	sprintf(eos(linebuf), "-%s", t1->plgend);
 	if (t1->plalign[0] != '?')
-		Sprintf(eos(linebuf), "-%s ", t1->plalign);
+		sprintf(eos(linebuf), "-%s ", t1->plalign);
 	else
 		Strcat(linebuf, " ");
 	if (!strncmp("escaped", t1->death, 7)) {
-	    Sprintf(eos(linebuf), "escaped the dungeon %s[max level %d]",
+	    sprintf(eos(linebuf), "escaped the dungeon %s[max level %d]",
 		    !strncmp(" (", t1->death + 7, 2) ? t1->death + 7 + 2 : "",
 		    t1->maxlvl);
 	    /* fixup for closing paren in "escaped... with...Amulet)[max..." */
@@ -819,7 +819,7 @@ boolean so;
 			Strcat(eos(linebuf), ") ");
 		}
 
-	    Sprintf(eos(linebuf), "ascended to demigod%s-hood",
+	    sprintf(eos(linebuf), "ascended to demigod%s-hood",
 		    (t1->plgend[0] == 'F') ? "dess" : "");
 	    second_line = FALSE;
 	} else {
@@ -830,7 +830,7 @@ boolean so;
 		Strcat(linebuf, "starved to death");
 		second_line = FALSE;
 	    } else if (!strncmp(t1->death, "choked", 6)) {
-		Sprintf(eos(linebuf), "choked on h%s food",
+		sprintf(eos(linebuf), "choked on h%s food",
 			(t1->plgend[0] == 'F') ? "er" : "is");
 	    } else if (!strncmp(t1->death, "poisoned", 8)) {
 		Strcat(linebuf, "was poisoned");
@@ -862,13 +862,13 @@ boolean so;
 		default:
 			arg = "Void";	break;
 		}
-		Sprintf(eos(linebuf), fmt, arg);
+		sprintf(eos(linebuf), fmt, arg);
 	    } else {
-		Sprintf(eos(linebuf), " in %s", dungeons[t1->deathdnum].dname);
+		sprintf(eos(linebuf), " in %s", dungeons[t1->deathdnum].dname);
 		if (t1->deathdnum != knox_level.dnum)
-		    Sprintf(eos(linebuf), " on level %d", t1->deathlev);
+		    sprintf(eos(linebuf), " on level %d", t1->deathlev);
 		if (t1->deathlev != t1->maxlvl)
-		    Sprintf(eos(linebuf), " [max %d]", t1->maxlvl);
+		    sprintf(eos(linebuf), " [max %d]", t1->maxlvl);
 	    }
 
 	    /* kludge for "quit while already on Charon's boat" */
@@ -879,11 +879,11 @@ boolean so;
 
 	/* Quit, starved, ascended, and escaped contain no second line */
 	if (second_line)
-	    Sprintf(eos(linebuf), "  %c%s.", highc(*(t1->death)), t1->death+1);
+	    sprintf(eos(linebuf), "  %c%s.", highc(*(t1->death)), t1->death+1);
 
 	lngr = (int)strlen(linebuf);
 	if (t1->hp <= 0) hpbuf[0] = '-', hpbuf[1] = '\0';
-	else Sprintf(hpbuf, "%d", t1->hp);
+	else sprintf(hpbuf, "%d", t1->hp);
 	/* beginning of hp column after padding (not actually padded yet) */
 	hppos = COLNO - (sizeof("  Hp [max]")-1); /* sizeof(str) includes \0 */
 	while (lngr >= hppos) {
@@ -909,7 +909,7 @@ boolean so;
 		dump(" ", linebuf[0]==' '? linebuf+1: linebuf);
 #endif
 	    }
-	    Sprintf(linebuf, "%15s %s", "", linebuf3);
+	    sprintf(linebuf, "%15s %s", "", linebuf3);
 	    lngr = strlen(linebuf);
 	}
 	/* beginning of hp column not including padding */
@@ -920,7 +920,7 @@ boolean so;
 	    /* pad any necessary blanks to the hit point entry */
 	    while (bp < linebuf + hppos) *bp++ = ' ';
 	    Strcpy(bp, hpbuf);
-	    Sprintf(eos(bp), " %s[%d]",
+	    sprintf(eos(bp), " %s[%d]",
 		    (t1->maxhp < 10) ? "  " : (t1->maxhp < 100) ? " " : "",
 		    t1->maxhp);
 	}
@@ -1153,7 +1153,7 @@ char **argv;
 		    (void) outentry(rank, t1, 0);
 	    }
 	} else {
-	    Sprintf(pbuf, "Cannot find any %sentries for ",
+	    sprintf(pbuf, "Cannot find any %sentries for ",
 				current_ver ? "current " : "");
 	    if (playerct < 1) Strcat(pbuf, "you.");
 	    else {

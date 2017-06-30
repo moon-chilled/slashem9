@@ -481,7 +481,7 @@ really_move_cursor()
 		if (GetConsoleTitle(oldtitle, BUFSZ)) {
 			oldtitle[39] = '\0';
 		}
-		Sprintf(newtitle, "%-55s tty=(%02d,%02d) nttty=(%02d,%02d)",
+		sprintf(newtitle, "%-55s tty=(%02d,%02d) nttty=(%02d,%02d)",
 			oldtitle, ttyDisplay->curx, ttyDisplay->cury,
 			cursor.X, cursor.Y);
 		(void)SetConsoleTitle(newtitle);

@@ -362,7 +362,7 @@ update_val(attr_rec, new_value)
 	} else if (attr_rec == &shown_stats[F_DLEVEL]) {
 	    if (!describe_level(buf, FALSE)) {
 		Strcpy(buf, dungeons[u.uz.dnum].dname);
-		Sprintf(eos(buf), ", level %d", depth(&u.uz));
+		sprintf(eos(buf), ", level %d", depth(&u.uz));
 	    }
 	} else {
 	    impossible("update_val: unknown label type \"%s\"",
@@ -561,13 +561,13 @@ update_val(attr_rec, new_value)
 	if (attr_rec == &shown_stats[F_STR]) {
 	    if(new_value > 18) {
 		if (new_value > 118)
-		    Sprintf(buf,"%ld", new_value-100);
+		    sprintf(buf,"%ld", new_value-100);
 		else if(new_value < 118)
-		    Sprintf(buf, "18/%02ld", new_value-18);
+		    sprintf(buf, "18/%02ld", new_value-18);
 		else
 		    Strcpy(buf, "18/**");
 	    } else {
-		Sprintf(buf, "%ld", new_value);
+		sprintf(buf, "%ld", new_value);
 	    }
 	} else if (attr_rec == &shown_stats[F_ALIGN]) {
 
@@ -575,7 +575,7 @@ update_val(attr_rec, new_value)
 			(new_value == A_NEUTRAL) ? "Neutral" :
 						   "Lawful"  );
 	} else {
-	    Sprintf(buf, "%ld", new_value);
+	    sprintf(buf, "%ld", new_value);
 	}
 	set_value(attr_rec->w, buf);
     }

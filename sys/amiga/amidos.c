@@ -102,8 +102,6 @@ dosh()
 #ifdef MFLOPPY
 # include <ctype.h>
 
-# define Sprintf (void) sprintf
-
 #define EXTENSION   72
 
 /*

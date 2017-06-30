@@ -1196,11 +1196,11 @@ void gnome_outrip(winid wid, int how)
     extern const char *killed_by_prefix[];
     
     /* Put name on stone */
-    Sprintf(buf, "%s\n", plname);
+    sprintf(buf, "%s\n", plname);
     Strcat(ripString, buf);
     
     /* Put $ on stone */
-    Sprintf(buf, "%ld Au\n",
+    sprintf(buf, "%ld Au\n",
 #ifndef GOLDOBJ
 		u.ugold);
 #else
@@ -1229,7 +1229,7 @@ void gnome_outrip(winid wid, int how)
     Strcat(ripString, "\n");
 
     /* Put year on stone */
-    Sprintf(buf, "%4d\n", getyear());
+    sprintf(buf, "%4d\n", getyear());
     Strcat(ripString, buf);
 
     ghack_text_window_rip_string( ripString);

@@ -123,7 +123,7 @@ long *alloc (register unsigned int lth) {
 
 /* format a pointer for display purposes; caller supplies the result buffer */
 char * fmt_ptr(const genericptr ptr, char *buf) {
-	Sprintf(buf, PTR_FMT, (PTR_TYP)ptr);
+	sprintf(buf, PTR_FMT, (PTR_TYP)ptr);
 	return buf;
 }
 

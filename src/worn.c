@@ -507,7 +507,7 @@ outer_break:
 		char buf[BUFSZ];
 
 		if (old)
-		    Sprintf(buf, " removes %s and", distant_name(old, doname));
+		    sprintf(buf, " removes %s and", distant_name(old, doname));
 		else
 		    buf[0] = '\0';
 		pline("%s%s puts on %s.", Monnam(mon),
@@ -759,7 +759,7 @@ boolean polyspot;
 		char buf[BUFSZ];
 
 		You("touch %s.", mon_nam(u.usteed));
-		Sprintf(buf, "falling off %s",
+		sprintf(buf, "falling off %s",
 				an(u.usteed->data->mname));
 		instapetrify(buf);
 	    }

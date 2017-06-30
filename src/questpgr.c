@@ -165,7 +165,7 @@ ldrname (void)	/* return your role leader's name */
 {
 	int i = urole.ldrnum;
 
-	Sprintf(nambuf, "%s%s",
+	sprintf(nambuf, "%s%s",
 		type_is_pname(&mons[i]) ? "" : "the ",
 		mons[i].mname);
 	return nambuf;
@@ -189,7 +189,7 @@ neminame()	/* return your role nemesis' name */
 {
 	int i = urole.neminum;
 
-	Sprintf(nambuf, "%s%s",
+	sprintf(nambuf, "%s%s",
 		type_is_pname(&mons[i]) ? "" : "the ",
 		mons[i].mname);
 	return nambuf;

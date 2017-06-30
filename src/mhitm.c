@@ -114,7 +114,7 @@ missmm(magr, mdef, target, roll, mattk)
 		if (magr->m_ap_type) seemimic(magr);
 		if (flags.verbose && !nearmiss && blocker) {
 			fmt = "%s %s blocks";
-			Sprintf(buf,fmt, s_suffix(Monnam(mdef)), 
+			sprintf(buf,fmt, s_suffix(Monnam(mdef)), 
 				aobjnam(blocker, (char *)0));
 	                pline("%s %s.", buf, mon_nam_too(mon_name, magr, mdef));
 		} else {
@@ -122,7 +122,7 @@ missmm(magr, mdef, target, roll, mattk)
 				"%s pretends to be friendly to" : 
 				((flags.verbose && nearmiss) ? "%s just misses" : 
 				  "%s misses");
-		Sprintf(buf, fmt, Monnam(magr));
+		sprintf(buf, fmt, Monnam(magr));
 	                pline("%s %s.", buf, mon_nam_too(mon_name, mdef, magr));
 		}
 	} else  noises(magr, mattk);
@@ -696,7 +696,7 @@ struct monst *magr, *mdef;
 	if (multishot > 1) {
 	    /* "N arrows"; multishot > 1 implies obj->quan > 1, so
 	       xname()'s result will already be pluralized */
-	    Sprintf(onmbuf, "%d %s", multishot, xname(obj));
+	    sprintf(onmbuf, "%d %s", multishot, xname(obj));
 	    onm = onmbuf;
 	} else {
 	    /* "an arrow" */
@@ -748,7 +748,7 @@ hitmm(magr, mdef, mattk)
 		if(mdef->m_ap_type) seemimic(mdef);
 		if(magr->m_ap_type) seemimic(magr);
 		if((compat = could_seduce(magr,mdef,mattk)) && !magr->mcan) {
-			Sprintf(buf, "%s %s", Monnam(magr),
+			sprintf(buf, "%s %s", Monnam(magr),
 				mdef->mcansee ? "smiles at" : "talks to");
 			pline("%s %s %s.", buf, mon_nam(mdef),
 				compat == 2 ?
@@ -759,31 +759,31 @@ hitmm(magr, mdef, mattk)
 		    Strcpy(magr_name, Monnam(magr));
 		    switch (mattk->aatyp) {
 			case AT_BITE:
-				Sprintf(buf,"%s bites", magr_name);
+				sprintf(buf,"%s bites", magr_name);
 				break;
 			case AT_STNG:
-				Sprintf(buf,"%s stings", magr_name);
+				sprintf(buf,"%s stings", magr_name);
 				break;
 			case AT_BUTT:
-				Sprintf(buf,"%s butts", magr_name);
+				sprintf(buf,"%s butts", magr_name);
 				break;
 			case AT_TUCH:
-				Sprintf(buf,"%s touches", magr_name);
+				sprintf(buf,"%s touches", magr_name);
 				break;
 			case AT_TENT:
-				Sprintf(buf, "%s tentacles suck",
+				sprintf(buf, "%s tentacles suck",
 					s_suffix(magr_name));
 				break;
 			case AT_HUGS:
 				if (magr != u.ustuck) {
-				    Sprintf(buf,"%s squeezes", magr_name);
+				    sprintf(buf,"%s squeezes", magr_name);
 				    break;
 				}
 			case AT_MULTIPLY:
 				/* No message. */
 				break;
 			default:
-				Sprintf(buf,"%s hits", magr_name);
+				sprintf(buf,"%s hits", magr_name);
 		    }
 		    pline("%s %s.", buf, mon_nam_too(mdef_name, mdef, magr));
 		}
@@ -800,7 +800,7 @@ gazemm(magr, mdef, mattk)
 	char buf[BUFSZ];
 
 	if(vis) {
-		Sprintf(buf,"%s gazes at", Monnam(magr));
+		sprintf(buf,"%s gazes at", Monnam(magr));
 		pline("%s %s...", buf, mon_nam(mdef));
 	}
 
@@ -854,7 +854,7 @@ gulpmm(magr, mdef, mattk)
 	if (mdef->data->msize >= MZ_HUGE) return MM_MISS;
 
 	if (vis) {
-		Sprintf(buf,"%s swallows", Monnam(magr));
+		sprintf(buf,"%s swallows", Monnam(magr));
 		pline("%s %s.", buf, mon_nam(mdef));
 	}
 	for (obj = mdef->minvent; obj; obj = obj->nobj)
@@ -2010,7 +2010,7 @@ int mdead;
 		    if (!rn2(4)) tmp = 127;
 		    if (magr->mcansee && haseyes(madat) && mdef->mcansee &&
 			(perceives(madat) || !mdef->minvis)) {
-			Sprintf(buf, "%s gaze is reflected by %%s %%s.",
+			sprintf(buf, "%s gaze is reflected by %%s %%s.",
 				s_suffix(mon_nam(mdef)));
 			if (mon_reflects(magr,
 					 canseemon(magr) ? buf : (char *)0))

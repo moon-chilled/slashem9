@@ -291,7 +291,7 @@ int set, entry;
 			if ( !obj_descr[i].oc_name )
 			    return obj_descr[i].oc_descr;
 
-			Sprintf(buf, "%s / %s",
+			sprintf(buf, "%s / %s",
 				obj_descr[i].oc_descr,
 				obj_descr[i].oc_name);
 			return buf;
@@ -324,19 +324,19 @@ int set, entry;
 				 */
 				switch (i) {
 				    case S_sink:
-					    Sprintf(buf, "sink");
+					    sprintf(buf, "sink");
 					    break;
 				    default:
 					for(j = 0; j < SIZE(cmaps); j++)
 					    if (cmaps[j].cmap ==
 					      tilenum - oth_origin)
 					    {
-						Sprintf(buf, "cmap / %s",
+						sprintf(buf, "cmap / %s",
 						  cmaps[j].name);
 						break;
 					    }
 					if (j == SIZE(cmaps))
-					    Sprintf(buf, "cmap %d",
+					    sprintf(buf, "cmap %d",
 					      tilenum - oth_origin);
 					    break;
 				}
@@ -361,7 +361,7 @@ int set, entry;
 			"dark", "noxious", "muddy", "wet",
 			"magical", "fiery", "frosty"
 		};
-		Sprintf(buf, "explosion %s %d",
+		sprintf(buf, "explosion %s %d",
 			explosion_types[i / MAXEXPCHARS], i % MAXEXPCHARS);
 		return buf;
 	    }
@@ -371,7 +371,7 @@ int set, entry;
 	i = entry - tilenum;
 	if (i < (NUM_ZAP << 2)) {
 		if (in_set) {
-			Sprintf(buf, "zap %d %d", i/4, i%4);
+			sprintf(buf, "zap %d %d", i/4, i%4);
 			return buf;
 		}
 	}
@@ -380,7 +380,7 @@ int set, entry;
 	i = entry - tilenum;
 	if (i < WARNCOUNT) {
 		if (set == OTH_GLYPH) {
-			Sprintf(buf, "warning %d", i);
+			sprintf(buf, "warning %d", i);
 			return buf;
 	        }
 	}
@@ -390,7 +390,7 @@ int set, entry;
 	    j = entry - tilenum;
 	    if (j <= substitutes[i].last_glyph - substitutes[i].first_glyph) {
 		if (in_set) {
-		    Sprintf(buf, "sub %s %d", substitutes[i].sub_name, j);
+		    sprintf(buf, "sub %s %d", substitutes[i].sub_name, j);
 		    return buf;
 		}
 	    }
@@ -398,7 +398,7 @@ int set, entry;
 				- substitutes[i].first_glyph + 1;
 	}
 
-	Sprintf(buf, "unknown %d %d", set, entry);
+	sprintf(buf, "unknown %d %d", set, entry);
 	return buf;
 }
 
@@ -737,7 +737,7 @@ int main()
     /*
      * create the source file, "tile.c"
      */
-    Sprintf(filename, SOURCE_TEMPLATE, TILE_FILE_C);
+    sprintf(filename, SOURCE_TEMPLATE, TILE_FILE_C);
     if (!(ofp = fopen(filename, "w"))) {
 	    perror(filename);
 	    exit(EXIT_FAILURE);
@@ -764,12 +764,12 @@ int main()
     /*
      * create the include file, "tile.h"
      */
-    Sprintf(filename, SHARE_IN_TEMPLATE, TILE_FILE_IN_H);
+    sprintf(filename, SHARE_IN_TEMPLATE, TILE_FILE_IN_H);
     if (!(ifp = fopen(filename, "r"))) {
 	    perror(filename);
 	    exit(EXIT_FAILURE);
     }
-    Sprintf(filename, INCLUDE_TEMPLATE, TILE_FILE_H);
+    sprintf(filename, INCLUDE_TEMPLATE, TILE_FILE_H);
     if (!(ofp = fopen(filename, "w"))) {
 	    perror(filename);
 	    exit(EXIT_FAILURE);

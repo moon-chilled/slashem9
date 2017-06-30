@@ -1170,7 +1170,7 @@ boolean your_fault;
 		    char buf[BUFSZ];
 
 		    if(has_head(mon->data)) {
-			Sprintf(buf, "%s %s",
+			sprintf(buf, "%s %s",
 				s_suffix(mnam),
 				(notonhead ? "body" : "head"));
 		    } else {
@@ -2646,7 +2646,7 @@ dodip (void)
 		}
 	} else if (is_pool(u.ux,u.uy)) {
 		tmp = waterbody_name(u.ux,u.uy);
-		Sprintf(qbuf, "Dip it into the %s?", tmp);
+		sprintf(qbuf, "Dip it into the %s?", tmp);
 		if (yn(qbuf) == 'y') {
 		    if (Levitation) {
 			floating_above(tmp);
@@ -2879,7 +2879,7 @@ dodip (void)
 	    if(potion->otyp == POT_SICKNESS && !obj->opoisoned) {
 		char buf[BUFSZ];
 		if (potion->quan > 1L)
-		    Sprintf(buf, "One of %s", the(xname(potion)));
+		    sprintf(buf, "One of %s", the(xname(potion)));
 		else
 		    Strcpy(buf, The(xname(potion)));
 		pline("%s forms a coating on %s.",
@@ -3039,7 +3039,7 @@ dodip (void)
 		oldbuf[0] = '\0';
 		if (potion->dknown) {
 		    old_dknown = TRUE;
-		    Sprintf(oldbuf, "%s ",
+		    sprintf(oldbuf, "%s ",
 			    hcolor(OBJ_DESCR(objects[potion->otyp])));
 		}
 		/* with multiple merged potions, split off one and
@@ -3108,9 +3108,9 @@ dodip (void)
 		} else {
 		    singlepotion->dknown = !Hallucination;
 		    if (mixture == POT_WATER && singlepotion->dknown)
-			Sprintf(newbuf, "clears");
+			sprintf(newbuf, "clears");
 		    else
-			Sprintf(newbuf, "turns %s",
+			sprintf(newbuf, "turns %s",
 				hcolor(OBJ_DESCR(objects[mixture])));
 		    pline_The("%spotion%s %s.", oldbuf,
 			      more_than_one ? " that you dipped into" : "",
@@ -3210,7 +3210,7 @@ split_mon (
 	char reason[BUFSZ];
 
 	reason[0] = '\0';
-	if (mtmp) Sprintf(reason, " from %s heat",
+	if (mtmp) sprintf(reason, " from %s heat",
 			  (mtmp == &youmonst) ? (const char *)"your" :
 			      (const char *)s_suffix(mon_nam(mtmp)));
 

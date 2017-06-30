@@ -417,8 +417,8 @@ char def;
 	    Strcpy(respbuf, resp);
 	    /* any acceptable responses that follow <esc> aren't displayed */
 	    if ((rb = index(respbuf, '\033')) != 0) *rb = '\0';
-	    Sprintf(prompt, "%s [%s] ", query, respbuf);
-	    if (def) Sprintf(eos(prompt), "(%c) ", def);
+	    sprintf(prompt, "%s [%s] ", query, respbuf);
+	    if (def) sprintf(eos(prompt), "(%c) ", def);
 	    pline("%s", prompt);
 	} else {
 	    pline("%s ", query);
@@ -513,7 +513,7 @@ char def;
 	} while(!q);
 
 	if (q != '#') {
-		Sprintf(rtmp, "%c", q);
+		sprintf(rtmp, "%c", q);
 		addtopl(rtmp);
 	}
     clean_up:

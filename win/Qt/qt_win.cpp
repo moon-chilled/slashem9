@@ -2097,9 +2097,9 @@ void NetHackQtLabelledIcon::setLabel(const char* t, long v, long cv, const char*
 {
     char buf[BUFSZ];
     if (v==NoNum) {
-	Sprintf(buf,"%s%s",t,tail);
+	sprintf(buf,"%s%s",t,tail);
     } else {
-	Sprintf(buf,"%s%ld%s",t,v,tail);
+	sprintf(buf,"%s%ld%s",t,v,tail);
     }
     setLabel(buf,cv<prev_value);
     prev_value=cv;
@@ -2493,13 +2493,13 @@ void NetHackQtStatusWindow::updateStats()
     if (cursy != 0) return;    /* do a complete update when line 0 is done */
 
     if (ACURR(A_STR) > 118) {
-	Sprintf(buf,"STR:%d",ACURR(A_STR)-100);
+	sprintf(buf,"STR:%d",ACURR(A_STR)-100);
     } else if (ACURR(A_STR)==118) {
-	Sprintf(buf,"STR:18/**");
+	sprintf(buf,"STR:18/**");
     } else if(ACURR(A_STR) > 18) {
-	Sprintf(buf,"STR:18/%02d",ACURR(A_STR)-18);
+	sprintf(buf,"STR:18/%02d",ACURR(A_STR)-18);
     } else {
-	Sprintf(buf,"STR:%d",ACURR(A_STR));
+	sprintf(buf,"STR:%d",ACURR(A_STR));
     }
     str.setLabel(buf,NetHackQtLabelledIcon::NoNum,ACURR(A_STR));
 
@@ -2568,7 +2568,7 @@ void NetHackQtStatusWindow::updateStats()
     if (describe_level(buf, FALSE)) {
 	dlevel.setLabel(buf,(bool)TRUE);
     } else {
-	Sprintf(buf, "%s, level ", dungeons[u.uz.dnum].dname);
+	sprintf(buf, "%s, level ", dungeons[u.uz.dnum].dname);
 	dlevel.setLabel(buf,(long)depth(&u.uz));
     }
 
@@ -2580,17 +2580,17 @@ void NetHackQtStatusWindow::updateStats()
     if (u.mtimedone) {
 	// You're a monster!
 
-	Sprintf(buf, "/%d", u.mhmax);
+	sprintf(buf, "/%d", u.mhmax);
 	hp.setLabel("HP:",u.mh  > 0 ? u.mh  : 0,buf);
 	level.setLabel("HD:",(long)mons[u.umonnum].mlevel);
     } else {
 	// You're normal.
 
-	Sprintf(buf, "/%d", u.uhpmax);
+	sprintf(buf, "/%d", u.uhpmax);
 	hp.setLabel("HP:",u.uhp > 0 ? u.uhp : 0,buf);
 	level.setLabel("Level:",(long)u.ulevel);
     }
-    Sprintf(buf, "/%d", u.uenmax);
+    sprintf(buf, "/%d", u.uenmax);
     power.setLabel("Pow:",u.uen,buf);
     ac.setLabel("AC:",(long)u.uac);
 #ifdef EXP_ON_BOTL
@@ -2624,7 +2624,7 @@ void NetHackQtStatusWindow::updateStats()
     }
 #ifdef SHOW_WEIGHT
     if (::flags.showweight) {
-	Sprintf(buf, "/%ld", (long)weight_cap());
+	sprintf(buf, "/%ld", (long)weight_cap());
 	weight.setLabel("Weight:",(long)(inv_weight()+weight_cap()),buf);
     } else
 #endif
@@ -3128,7 +3128,7 @@ void NetHackQtMenuWindow::mousePressEvent(QMouseEvent* event)
 	    char buf[BUFSZ];
 
 	    if (item[row].count>0)
-		Sprintf(buf,"%d", item[row].count);
+		sprintf(buf,"%d", item[row].count);
 	    else
 		Strcpy(buf, "");
 
@@ -3321,13 +3321,13 @@ static char** rip_line=0;
     int line;
 
     /* Put name on stone */
-    Sprintf(rip_line[NAME_LINE], "%s", plname);
+    sprintf(rip_line[NAME_LINE], "%s", plname);
 
     /* Put $ on stone */
 #ifndef GOLDOBJ
-    Sprintf(rip_line[GOLD_LINE], "%ld Au", u.ugold);
+    sprintf(rip_line[GOLD_LINE], "%ld Au", u.ugold);
 #else
-    Sprintf(rip_line[GOLD_LINE], "%ld Au", done_money);
+    sprintf(rip_line[GOLD_LINE], "%ld Au", done_money);
 #endif
 
     /* Put together death description */
@@ -3367,7 +3367,7 @@ static char** rip_line=0;
     }
 
     /* Put year on stone */
-    Sprintf(rip_line[YEAR_LINE], "%4d", getyear());
+    sprintf(rip_line[YEAR_LINE], "%4d", getyear());
 
     rip.setLines(rip_line,YEAR_LINE+1);
 
@@ -5031,8 +5031,8 @@ char NetHackQtBind::qt_yn_function(const char *question, const char *choices, CH
 		// anything beyond <esc> is hidden
 		*cb = '\0';
 	    }
-	    Sprintf(message, "%s [%s] ", question, choicebuf);
-	    if (def) Sprintf(eos(message), "(%c) ", def);
+	    sprintf(message, "%s [%s] ", question, choicebuf);
+	    if (def) sprintf(eos(message), "(%c) ", def);
 	    // escape maps to 'q' or 'n' or default, in that order
 	    yn_esc_map = (index(choices, 'q') ? 'q' :
 		     (index(choices, 'n') ? 'n' : def));
