@@ -54,9 +54,7 @@ STATIC_DCL boolean attacks(int,struct obj *);
 
 
 /* handle some special cases; must be called after role_init() */
-STATIC_OVL void
-hack_artifacts()
-{
+STATIC_OVL void hack_artifacts(void) {
 	struct artifact *art;
 	int alignmnt = aligns[flags.initalign].value;
 
@@ -89,18 +87,14 @@ hack_artifacts()
 }
 
 /* zero out the artifact existence list */
-void 
-init_artifacts (void)
-{
-	(void) memset((genericptr_t) artiexist, 0, sizeof artiexist);
-	(void) memset((genericptr_t) artidisco, 0, sizeof artidisco);
+void init_artifacts (void) {
+	memset((genericptr_t) artiexist, 0, sizeof artiexist);
+	memset((genericptr_t) artidisco, 0, sizeof artidisco);
 	hack_artifacts();
 }
 
 /* Post u_init() initialization */
-void 
-init_artifacts1 (void)
-{
+void init_artifacts1(void) {
 #if 0
     /* KMH -- Should be at least skilled in first artifact gifts */
     if (urole.gift1arti &&
@@ -146,24 +140,18 @@ init_artifacts1 (void)
     }
 }
 
-void 
-save_artifacts (int fd)
-{
+void save_artifacts(int fd) {
 	bwrite(fd, (genericptr_t) artiexist, sizeof artiexist);
 	bwrite(fd, (genericptr_t) artidisco, sizeof artidisco);
 }
 
-void 
-restore_artifacts (int fd)
-{
+void restore_artifacts(int fd) {
 	mread(fd, (genericptr_t) artiexist, sizeof artiexist);
 	mread(fd, (genericptr_t) artidisco, sizeof artidisco);
 	hack_artifacts();	/* redo non-saved special cases */
 }
 
-const char *
-artiname (int artinum)
-{
+const char *artiname(int artinum) {
 	if (artinum <= 0 || artinum > NROFARTIFACTS) return("");
 	return(artilist[artinum].name);
 }
@@ -178,11 +166,9 @@ artiname (int artinum)
    For the 2nd case, caller should use ``obj = mk_artifact(obj, A_NONE);''
    for the 1st, ``obj = mk_artifact((struct obj *)0, some_alignment);''.
  */
-struct obj *
-mk_artifact(otmp, alignment)
-struct obj *otmp;	/* existing object; ignored if alignment specified */
-aligntyp alignment;	/* target alignment, or A_NONE */
-{
+struct obj *mk_artifact(
+struct obj *otmp,	/* existing object; ignored if alignment specified */
+aligntyp alignment	/* target alignment, or A_NONE */ ) {
 	const struct artifact *a;
 	int n, m;
 	boolean by_align = (alignment != A_NONE);
@@ -269,11 +255,9 @@ make_artif: if (by_align) otmp = mksobj((int)a->otyp, TRUE, FALSE);
  * The object type of the artifact is returned in otyp if the return value
  * is non-NULL.
  */
-const char *
-artifact_name (const char *name, short *otyp)
-{
-    register const struct artifact *a;
-    register const char *aname;
+const char *artifact_name(const char *name, short *otyp) {
+    const struct artifact *a;
+    const char *aname;
 
     if(!strncmpi(name, "the ", 4)) name += 4;
     if(!strncmpi(name, "poisoned ", 9)) name += 9;
@@ -287,16 +271,12 @@ artifact_name (const char *name, short *otyp)
 	}
     }
 
-    return (char *)0;
+    return 0;
 }
 
-boolean
-exist_artifact(otyp, name)
-register int otyp;
-register const char *name;
-{
-	register const struct artifact *a;
-	register boolean *arex;
+boolean exist_artifact(int otyp, const char *name) {
+	const struct artifact *a;
+	boolean *arex;
 
 	if (otyp && *name)
 	    for (a = artilist+1,arex = artiexist+1; a->otyp; a++,arex++)
@@ -305,13 +285,8 @@ register const char *name;
 	return FALSE;
 }
 
-void
-artifact_exists(otmp, name, mod)
-register struct obj *otmp;
-register const char *name;
-register boolean mod;
-{
-	register const struct artifact *a;
+void artifact_exists(struct obj *otmp, const char *name, boolean mod) {
+	const struct artifact *a;
 
 	if (otmp && *name)
 	    for (a = artilist+1; a->otyp; a++)
@@ -342,9 +317,7 @@ register boolean mod;
 	return;
 }
 
-int 
-nartifact_exist (void)
-{
+int nartifact_exist(void) {
     int a = 0;
     int n = SIZE(artiexist);
 
@@ -356,21 +329,14 @@ nartifact_exist (void)
 #endif /* OVLB */
 #ifdef OVL0
 
-boolean
-spec_ability(otmp, abil)
-struct obj *otmp;
-unsigned long abil;
-{
+boolean spec_ability(struct obj *otmp, unsigned long abil) {
 	const struct artifact *arti = get_artifact(otmp);
 
-	return((boolean)(arti && (arti->spfx & abil)));
+	return arti && (arti->spfx & abil);
 }
 
 /* used so that callers don't need to known about SPFX_ codes */
-boolean
-confers_luck(obj)
-struct obj *obj;
-{
+boolean confers_luck(struct obj *obj) {
     /* might as well check for this too */
     if (obj->otyp == LUCKSTONE) return TRUE;
 
@@ -380,10 +346,7 @@ struct obj *obj;
 }
 
 /* used to check whether a monster is getting reflection from an artifact */
-boolean
-arti_reflects(obj)
-struct obj *obj;
-{
+boolean arti_reflects(struct obj *obj) {
     const struct artifact *arti = get_artifact(obj);
 
     if (arti) {      
@@ -400,12 +363,9 @@ struct obj *obj;
 #ifdef OVLB
 
 boolean
-restrict_name(otmp, name)  /* returns 1 if name is restricted for otmp->otyp */
-register struct obj *otmp;
-register const char *name;
-{
-	register const struct artifact *a;
-	register const char *aname;
+restrict_name(struct obj *otmp, const char *name) /* returns 1 if name is restricted for otmp->otyp */ {
+	const struct artifact *a;
+	const char *aname;
 
 	if (!*name) return FALSE;
 	if (!strncmpi(name, "the ", 4)) name += 4;
@@ -426,40 +386,28 @@ register const char *name;
 	return FALSE;
 }
 
-STATIC_OVL boolean
-attacks(adtyp, otmp)
-register int adtyp;
-register struct obj *otmp;
-{
-	register const struct artifact *weap;
+STATIC_OVL boolean attacks(int adtyp, struct obj *otmp) {
+	const struct artifact *weap;
 
 	if ((weap = get_artifact(otmp)) != 0)
-		return((boolean)(weap->attk.adtyp == adtyp));
+		return (weap->attk.adtyp == adtyp);
 	return FALSE;
 }
 
-boolean
-defends(adtyp, otmp)
-register int adtyp;
-register struct obj *otmp;
-{
-	register const struct artifact *weap;
+boolean defends(int adtyp, struct obj *otmp) {
+	const struct artifact *weap;
 
 	if ((weap = get_artifact(otmp)) != 0)
-		return((boolean)(weap->defn.adtyp == adtyp));
+		return (weap->defn.adtyp == adtyp);
 	return FALSE;
 }
 
 /* used for monsters */
-boolean
-protects(adtyp, otmp)
-int adtyp;
-struct obj *otmp;
-{
-	register const struct artifact *weap;
+boolean protects(int adtyp, struct obj *otmp) {
+	const struct artifact *weap;
 
 	if ((weap = get_artifact(otmp)) != 0)
-		return (boolean)(weap->cary.adtyp == adtyp);
+		return (weap->cary.adtyp == adtyp);
 	return FALSE;
 }
 
@@ -467,14 +415,9 @@ struct obj *otmp;
  * a potential artifact has just been worn/wielded/picked-up or
  * unworn/unwielded/dropped.  Pickup/drop only set/reset the W_ART mask.
  */
-void
-set_artifact_intrinsic(otmp,on,wp_mask)
-register struct obj *otmp;
-boolean on;
-long wp_mask;
-{
+void set_artifact_intrinsic(struct obj *otmp, boolean on, long wp_mask) {
 	long *mask = 0;
-	register const struct artifact *oart = get_artifact(otmp);
+	const struct artifact *oart = get_artifact(otmp);
 	uchar dtyp;
 	long spfx;
 
@@ -600,7 +543,7 @@ long wp_mask;
 	    /* might have to turn off invoked power too */
 	    if (oart->inv_prop <= LAST_PROP &&
 		(u.uprops[oart->inv_prop].extrinsic & W_ARTI))
-		(void) arti_invoke(otmp);
+		arti_invoke(otmp);
 	}
 }
 
@@ -611,10 +554,8 @@ long wp_mask;
  * Ignores such things as gauntlets, assuming the artifact is not
  * fooled by such trappings.
  */
-int 
-touch_artifact (struct obj *obj, struct monst *mon)
-{
-    register const struct artifact *oart = get_artifact(obj);
+int touch_artifact (struct obj *obj, struct monst *mon) {
+    const struct artifact *oart = get_artifact(obj);
     boolean badclass, badalign, self_willed, yours;
 
     if(!oart) return 1;
@@ -678,11 +619,7 @@ touch_artifact (struct obj *obj, struct monst *mon)
 #ifdef OVL1
 
 /* decide whether an artifact's special attacks apply against mtmp */
-STATIC_OVL int
-spec_applies(weap, mtmp)
-register const struct artifact *weap;
-struct monst *mtmp;
-{
+STATIC_OVL int spec_applies(const struct artifact *weap, struct monst *mtmp) {
 	int retval = TRUE;
 	struct permonst *ptr;
 	boolean yours;
@@ -758,9 +695,7 @@ struct monst *mtmp;
 }
 
 /* return the M2 flags of monster that an artifact's special attacks apply against */
-long 
-spec_m2 (struct obj *otmp)
-{
+long spec_m2 (struct obj *otmp) {
 	register const struct artifact *artifact = get_artifact(otmp);
 	if (artifact)
 		return artifact->mtype;
@@ -768,24 +703,20 @@ spec_m2 (struct obj *otmp)
 }
 
 /* special attack bonus */
-int 
-spec_abon (struct obj *otmp, struct monst *mon)
-{
-	register const struct artifact *weap = get_artifact(otmp);
+int spec_abon (struct obj *otmp, struct monst *mon) {
+	const struct artifact *weap = get_artifact(otmp);
 
 	/* no need for an extra check for `NO_ATTK' because this will
 	   always return 0 for any artifact which has that attribute */
 
 	if (weap && weap->attk.damn && spec_applies(weap, mon))
-	    return (int)weap->attk.damn;
+	    return weap->attk.damn;
 	return 0;
 }
 
 /* special damage bonus */
-int 
-spec_dbon (struct obj *otmp, struct monst *mon, int tmp)
-{
-	register const struct artifact *weap = get_artifact(otmp);
+int spec_dbon (struct obj *otmp, struct monst *mon, int tmp) {
+	const struct artifact *weap = get_artifact(otmp);
 
 	if (!weap || (weap->attk.adtyp == AD_PHYS && /* check for `NO_ATTK' */
 			weap->attk.damn == 0 && weap->attk.damd == 0))
@@ -803,10 +734,7 @@ spec_dbon (struct obj *otmp, struct monst *mon, int tmp)
 }
 
 /* add identified artifact to discoveries list */
-void
-discover_artifact(m)
-xchar m;
-{
+void discover_artifact(xchar m) {
     int i;
 
     /* look for this artifact in the discoveries list;
@@ -818,14 +746,11 @@ xchar m;
 	}
     /* there is one slot per artifact, so we should never reach the
        end without either finding the artifact or an empty slot... */
-    impossible("couldn't discover artifact (%d)", (int)m);
+    impossible("couldn't discover artifact (%d)", m);
 }
 
 /* used to decide whether an artifact has been fully identified */
-boolean
-undiscovered_artifact(m)
-xchar m;
-{
+boolean undiscovered_artifact(xchar m) {
     int i;
 
     /* look for this artifact in the discoveries list;
@@ -839,10 +764,7 @@ xchar m;
 }
 
 /* display a list of discovered artifacts; return their count */
-int
-disp_artifact_discoveries(tmpwin)
-winid tmpwin;		/* supplied by dodiscover() */
-{
+int disp_artifact_discoveries(winid tmpwin /* supplied by dodiscover() */) {
     int i, m, otyp;
     char buf[BUFSZ];
     anything any;
@@ -899,15 +821,13 @@ static const char * const mb_verb[2][4] = {
 #define MB_INDEX_CANCEL		3
 
 /* called when someone is being hit by Magicbane */
-STATIC_OVL boolean
-Mb_hit(magr, mdef, mb, dmgptr, dieroll, vis, hittee)
-struct monst *magr, *mdef;	/* attacker and defender */
-struct obj *mb;			/* Magicbane */
-int *dmgptr;			/* extra damage target will suffer */
-int dieroll;			/* d20 that has already scored a hit */
-boolean vis;			/* whether the action can be seen */
-char *hittee;			/* target's name: "you" or mon_nam(mdef) */
-{
+STATIC_OVL boolean Mb_hit(
+struct monst *magr, struct monst *mdef,/* attacker and defender */
+struct obj *mb,			/* Magicbane */
+int *dmgptr,			/* extra damage target will suffer */
+int dieroll,			/* d20 that has already scored a hit */
+boolean vis,			/* whether the action can be seen */
+char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
     struct permonst *old_uasmon;
     const char *verb;
     boolean youattack = (magr == &youmonst),
@@ -1078,13 +998,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
  * extension: change the killer so that when an orc kills you with
  * Stormbringer it's "killed by Stormbringer" instead of "killed by an orc".
  */
-boolean
-artifact_hit(magr, mdef, otmp, dmgptr, dieroll)
-struct monst *magr, *mdef;
-struct obj *otmp;
-int *dmgptr;
-int dieroll; /* needed for Magicbane and vorpal blades */
-{
+boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, int *dmgptr, int dieroll /* needed for Magicbane and vorpal blades */ ) {
 	boolean youattack = (magr == &youmonst);
 	boolean youdefend = (mdef == &youmonst);
 	boolean vis = (!youattack && magr && cansee(magr->mx, magr->my))
@@ -1433,10 +1347,8 @@ static NEARDATA const char recharge_type[] = { ALLOW_COUNT, ALL_CLASSES, 0 };
 static NEARDATA const char invoke_types[] = { ALL_CLASSES, 0 };
 		/* #invoke: an "ugly check" filters out most objects */
 
-int 
-doinvoke (void)
-{
-    register struct obj *obj;
+int doinvoke(void) {
+    struct obj *obj;
 
     obj = getobj(invoke_types, "invoke");
     if (!obj) return 0;
@@ -1444,366 +1356,363 @@ doinvoke (void)
     return arti_invoke(obj);
 }
 
-STATIC_OVL int
-arti_invoke(obj)
-    register struct obj *obj;
-{
-    register const struct artifact *oart = get_artifact(obj);
-	    register struct monst *mtmp;
-	    register struct monst *mtmp2;
-	    register struct permonst *pm;
+STATIC_OVL int arti_invoke(struct obj *obj) {
+	const struct artifact *oart = get_artifact(obj);
+	struct monst *mtmp;
+	struct monst *mtmp2;
+	struct permonst *pm;
 
-    int summon_loop;
-    int unseen;
-/*
-    int kill_loop;
- */
+	int summon_loop;
+	int unseen;
+	/*
+	   int kill_loop;
+	   */
 
-    if(!oart || !oart->inv_prop) {
-	if(obj->otyp == CRYSTAL_BALL)
-	    use_crystal_ball(obj);
-	else
-	    pline(nothing_happens);
-	return 1;
-    }
-
-    if(oart->inv_prop > LAST_PROP) {
-	/* It's a special power, not "just" a property */
-	if(obj->age > monstermoves) {
-	    /* the artifact is tired :-) */
-	    You_feel("that %s %s ignoring you.",
-		     the(xname(obj)), otense(obj, "are"));
-	    /* and just got more so; patience is essential... */
-	    obj->age += (long) d(3,10);
-	    return 1;
-	}
-	obj->age = monstermoves + rnz(100);
-
-	switch(oart->inv_prop) {
-	case TAMING: {
-	    struct obj pseudo;
-
-	    pseudo = zeroobj;	/* neither cursed nor blessed */
-	    pseudo.otyp = SCR_TAMING;
-	    (void) seffects(&pseudo);
-	    break;
-	  }
-	case HEALING: {
-	    int healamt = (u.uhpmax + 1 - u.uhp) / 2;
-	    long creamed = (long)u.ucreamed;
-
-	    if (Upolyd) healamt = (u.mhmax + 1 - u.mh) / 2;
-	    if (healamt || Sick || Slimed || Blinded > creamed)
-		You_feel("better.");
-	    else
-		goto nothing_special;
-	    if (healamt > 0) {
-		if (Upolyd) u.mh += healamt;
-		else u.uhp += healamt;
-	    }
-	    if(Sick) make_sick(0L,(char *)0,FALSE,SICK_ALL);
-	    if(Slimed) Slimed = 0L;
-	    if (Blinded > creamed) make_blinded(creamed, FALSE);
-	    flags.botl = 1;
-	    break;
-	  }
-	case ENERGY_BOOST: {
-	    int epboost = (u.uenmax + 1 - u.uen) / 2;
-	    if (epboost > 120) epboost = 120;		/* arbitrary */
-	    else if (epboost < 12) epboost = u.uenmax - u.uen;
-	    if(epboost) {
-		You_feel("re-energized.");
-		u.uen += epboost;
-		flags.botl = 1;
-	    } else
-		goto nothing_special;
-	    break;
-	  }
-	case UNTRAP: {
-	    if(!untrap(TRUE)) {
-		obj->age = 0; /* don't charge for changing their mind */
-		return 0;
-	    }
-	    break;
-	  }
-	case CHARGE_OBJ: {
-	    struct obj *otmp = getobj(recharge_type, "charge");
-	    boolean b_effect;
-
-	    if (!otmp) {
-		obj->age = 0;
-		return 0;
-	    }
-	    b_effect = obj->blessed &&
-		(Role_switch == oart->role || !oart->role);
-	    recharge(otmp, b_effect ? 1 : obj->cursed ? -1 : 0);
-	    update_inventory();
-	    break;
-	  }
-	case LEV_TELE:
-	    level_tele();
-	    break;
-	case LIGHT_AREA:
-	    if (!Blind)
-		pline("%s shines brightly for an instant!", The(xname(obj)));
-	    else
-		pline("%s grows warm for a second!", The(xname(obj)));
-	    litroom(TRUE, obj);
-	    vision_recalc(0);
-	    if (is_undead(youmonst.data)) {
-		You("burn in the radiance!");
-		/* This is ground zero.  Not good news ... */
-		u.uhp /= 100;
-		if (u.uhp < 1) {
-		    u.uhp = 0;
-		    killer_format = KILLED_BY;
-		    killer = "the Holy Spear of Light";
-		    done(DIED);
-		}
-	    }
-	    /* Undead and Demonics can't stand the light */
-	    unseen = 0;
-	    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-		if (DEADMONSTER(mtmp)) continue;
-	    	if (distu(mtmp->mx, mtmp->my) > 9*9) continue;
-		if (couldsee(mtmp->mx, mtmp->my) &&
-			(is_undead(mtmp->data) || is_demon(mtmp->data)) &&
-			!resist(mtmp, '\0', 0, TELL)) {
-		    if (canseemon(mtmp))
-			pline("%s burns in the radiance!", Monnam(mtmp));
-		    else
-			unseen++;
-		    /* damage depends on distance, divisor ranges from 10 to 2 */
-		    mtmp->mhp /= (10 - (distu(mtmp->mx, mtmp->my) / 10));
-		    if (mtmp->mhp < 1) mtmp->mhp = 1;
-		}
-	    }
-	    if (unseen)
-		You_hear("%s of intense pain!", unseen > 1 ? "cries" : "a cry");
-	    break;
-	case DEATH_GAZE:
-	    if (u.uluck < -9) {
-		pline_The("Eye turns on you!");
-		u.uhp = 0;
-		killer_format = KILLED_BY;
-		killer = "the Eye of the Beholder";
-		done(DIED);
-	    }
-	    pline_The("Eye looks around with its icy gaze!");
-	    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-		if (DEADMONSTER(mtmp)) continue;
-		/* The eye is never blind ... */
-		if (couldsee(mtmp->mx, mtmp->my) && !is_undead(mtmp->data)) {
-		    pline("%s screams in agony!", Monnam(mtmp));
-		    mtmp->mhp /= 3;
-		    if (mtmp->mhp < 1) mtmp->mhp = 1;
-		}
-	    }
-	    /* Tsk,tsk.. */
-	    adjalign(-3);
-	    u.uluck -= 3;
-	    break;
-	case SUMMON_UNDEAD:
-	    if (u.uluck < -9) {
-		u.uhp -= rn2(20) + 5;
-		pline_The("Hand claws you with its icy nails!");
-		if (u.uhp <= 0) {
-		    killer_format = KILLED_BY;
-		    killer="the Hand of Vecna";
-		    done(DIED);
-		}
-	    }
-	    summon_loop = rn2(4) + 4;
-	    pline("Creatures from the grave surround you!");
-	    do {
-		switch (rn2(6) + 1) {
-		    case 1:
-			pm = mkclass(S_VAMPIRE, 0);
-			break;
-		    case 2:
-		    case 3:
-			pm = mkclass(S_ZOMBIE, 0);
-			break;
-		    case 4:
-			pm = mkclass(S_MUMMY, 0);
-			break;
-		    case 5:
-			pm = mkclass(S_GHOST, 0);
-			break;
-		    default:
-			pm = mkclass(S_WRAITH, 0);
-			break;
-		}
-		mtmp = makemon(pm, u.ux, u.uy, NO_MM_FLAGS);
-	        if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0)
-		    mtmp = mtmp2;
-		mtmp->mtame = 30;
-		summon_loop--;
-	    } while (summon_loop);
-	    /* Tsk,tsk.. */
-	    adjalign(-3);
-	    u.uluck -= 3;
-	    break;
-	case PROT_POLY:
-	    You("feel more observant.");
-	    rescham();
-	    break;
-	case SUMMON_FIRE_ELEMENTAL:
-	    pm = &mons[PM_FIRE_ELEMENTAL];
-	    mtmp = makemon(pm, u.ux, u.uy, NO_MM_FLAGS);
-   
-	    pline("You summon an elemental.");
-   
-	    if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0)
-			mtmp = mtmp2;
-	    mtmp->mtame = 30;
-	    break;
-	case SUMMON_WATER_ELEMENTAL:
-	    pm = &mons[PM_WATER_ELEMENTAL];
-	    mtmp = makemon(pm, u.ux, u.uy, NO_MM_FLAGS);
-   
-	    pline("You summon an elemental.");
-	    
-	    if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0)
-			mtmp = mtmp2;
-	    mtmp->mtame = 30;
-	    break;
-	case OBJ_DETECTION:
-		(void)object_detect(obj, 0);
-		break;
-	case CREATE_PORTAL: {
-	    int i, num_ok_dungeons, last_ok_dungeon = 0;
-	    d_level newlev;
-	    extern int n_dgns; /* from dungeon.c */
-	    winid tmpwin = create_nhwindow(NHW_MENU);
-	    anything any;
-
-	    any.a_void = 0;	/* set all bits to zero */
-	    if (Is_blackmarket(&u.uz) && *u.ushops) {
-		You("feel very disoriented for a moment.");
-		break;
-	    }
-	    start_menu(tmpwin);
-	    /* use index+1 (cant use 0) as identifier */
-	    for (i = num_ok_dungeons = 0; i < n_dgns; i++) {
-		if (!dungeons[i].dunlev_ureached) continue;
-		any.a_int = i+1;
-		add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE,
-			 dungeons[i].dname, MENU_UNSELECTED);
-		num_ok_dungeons++;
-		last_ok_dungeon = i;
-	    }
-	    end_menu(tmpwin, "Open a portal to which dungeon?");
-	    if (num_ok_dungeons > 1) {
-		/* more than one entry; display menu for choices */
-		menu_item *selected;
-		int n;
-
-		n = select_menu(tmpwin, PICK_ONE, &selected);
-		if (n <= 0) {
-		    destroy_nhwindow(tmpwin);
-		    goto nothing_special;
-		}
-		i = selected[0].item.a_int - 1;
-		free((genericptr_t)selected);
-	    } else
-		i = last_ok_dungeon;	/* also first & only OK dungeon */
-	    destroy_nhwindow(tmpwin);
-
-	    /*
-	     * i is now index into dungeon structure for the new dungeon.
-	     * Find the closest level in the given dungeon, open
-	     * a use-once portal to that dungeon and go there.
-	     * The closest level is either the entry or dunlev_ureached.
-	     */
-	    newlev.dnum = i;
-	    if(dungeons[i].depth_start >= depth(&u.uz))
-		newlev.dlevel = dungeons[i].entry_lev;
-	    else
-		newlev.dlevel = dungeons[i].dunlev_ureached;
-	    if(u.uhave.amulet || In_endgame(&u.uz) || In_endgame(&newlev) ||
-	       newlev.dnum == u.uz.dnum) {
-		You_feel("very disoriented for a moment.");
-	    } else {
-		if(!Blind) You("are surrounded by a shimmering sphere!");
-		else You_feel("weightless for a moment.");
-		goto_level(&newlev, FALSE, FALSE, FALSE);
-	    }
-	    break;
-	  }
-	case ENLIGHTENING:
-	    enlightenment(0);
-	    break;
-	case CREATE_AMMO: {
-	    struct obj *otmp = mksobj(ARROW, TRUE, FALSE);
-
-	    if (!otmp) goto nothing_special;
-	    otmp->blessed = obj->blessed;
-	    otmp->cursed = obj->cursed;
-	    otmp->bknown = obj->bknown;
-	    if (obj->blessed) {
-		if (otmp->spe < 0) otmp->spe = 0;
-		otmp->quan += rnd(10);
-	    } else if (obj->cursed) {
-		if (otmp->spe > 0) otmp->spe = 0;
-	    } else
-		otmp->quan += rnd(5);
-	    otmp->owt = weight(otmp);
-	    otmp = hold_another_object(otmp, "Suddenly %s out.",
-				       aobjnam(otmp, "fall"), (const char *)0);
-	    break;
-	  }
-	}
-    } else {
-	long eprop = (u.uprops[oart->inv_prop].extrinsic ^= W_ARTI),
-	     iprop = u.uprops[oart->inv_prop].intrinsic;
-	boolean on = (eprop & W_ARTI) != 0; /* true if invoked prop just set */
-
-	if(on && obj->age > monstermoves) {
-	    /* the artifact is tired :-) */
-	    u.uprops[oart->inv_prop].extrinsic ^= W_ARTI;
-	    You_feel("that %s %s ignoring you.",
-		     the(xname(obj)), otense(obj, "are"));
-	    /* can't just keep repeatedly trying */
-	    obj->age += (long) d(3,10);
-	    return 1;
-	} else if(!on) {
-	    /* when turning off property, determine downtime */
-	    /* arbitrary for now until we can tune this -dlc */
-	    obj->age = monstermoves + rnz(100);
+	if(!oart || !oart->inv_prop) {
+		if(obj->otyp == CRYSTAL_BALL)
+			use_crystal_ball(obj);
+		else
+			pline(nothing_happens);
+		return 1;
 	}
 
-	if ((eprop & ~W_ARTI) || iprop) {
+	if(oart->inv_prop > LAST_PROP) {
+		/* It's a special power, not "just" a property */
+		if(obj->age > monstermoves) {
+			/* the artifact is tired :-) */
+			You_feel("that %s %s ignoring you.",
+					the(xname(obj)), otense(obj, "are"));
+			/* and just got more so; patience is essential... */
+			obj->age += (long) d(3,10);
+			return 1;
+		}
+		obj->age = monstermoves + rnz(100);
+
+		switch(oart->inv_prop) {
+			case TAMING: {
+					     struct obj pseudo;
+
+					     pseudo = zeroobj;	/* neither cursed nor blessed */
+					     pseudo.otyp = SCR_TAMING;
+					     (void) seffects(&pseudo);
+					     break;
+				     }
+			case HEALING: {
+					      int healamt = (u.uhpmax + 1 - u.uhp) / 2;
+					      long creamed = (long)u.ucreamed;
+
+					      if (Upolyd) healamt = (u.mhmax + 1 - u.mh) / 2;
+					      if (healamt || Sick || Slimed || Blinded > creamed)
+						      You_feel("better.");
+					      else
+						      goto nothing_special;
+					      if (healamt > 0) {
+						      if (Upolyd) u.mh += healamt;
+						      else u.uhp += healamt;
+					      }
+					      if(Sick) make_sick(0L,(char *)0,FALSE,SICK_ALL);
+					      if(Slimed) Slimed = 0L;
+					      if (Blinded > creamed) make_blinded(creamed, FALSE);
+					      flags.botl = 1;
+					      break;
+				      }
+			case ENERGY_BOOST: {
+						   int epboost = (u.uenmax + 1 - u.uen) / 2;
+						   if (epboost > 120) epboost = 120;		/* arbitrary */
+						   else if (epboost < 12) epboost = u.uenmax - u.uen;
+						   if(epboost) {
+							   You_feel("re-energized.");
+							   u.uen += epboost;
+							   flags.botl = 1;
+						   } else
+							   goto nothing_special;
+						   break;
+					   }
+			case UNTRAP: {
+					     if(!untrap(TRUE)) {
+						     obj->age = 0; /* don't charge for changing their mind */
+						     return 0;
+					     }
+					     break;
+				     }
+			case CHARGE_OBJ: {
+						 struct obj *otmp = getobj(recharge_type, "charge");
+						 boolean b_effect;
+
+						 if (!otmp) {
+							 obj->age = 0;
+							 return 0;
+						 }
+						 b_effect = obj->blessed &&
+							 (Role_switch == oart->role || !oart->role);
+						 recharge(otmp, b_effect ? 1 : obj->cursed ? -1 : 0);
+						 update_inventory();
+						 break;
+					 }
+			case LEV_TELE:
+					 level_tele();
+					 break;
+			case LIGHT_AREA:
+					 if (!Blind)
+						 pline("%s shines brightly for an instant!", The(xname(obj)));
+					 else
+						 pline("%s grows warm for a second!", The(xname(obj)));
+					 litroom(TRUE, obj);
+					 vision_recalc(0);
+					 if (is_undead(youmonst.data)) {
+						 You("burn in the radiance!");
+						 /* This is ground zero.  Not good news ... */
+						 u.uhp /= 100;
+						 if (u.uhp < 1) {
+							 u.uhp = 0;
+							 killer_format = KILLED_BY;
+							 killer = "the Holy Spear of Light";
+							 done(DIED);
+						 }
+					 }
+					 /* Undead and Demonics can't stand the light */
+					 unseen = 0;
+					 for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+						 if (DEADMONSTER(mtmp)) continue;
+						 if (distu(mtmp->mx, mtmp->my) > 9*9) continue;
+						 if (couldsee(mtmp->mx, mtmp->my) &&
+								 (is_undead(mtmp->data) || is_demon(mtmp->data)) &&
+								 !resist(mtmp, '\0', 0, TELL)) {
+							 if (canseemon(mtmp))
+								 pline("%s burns in the radiance!", Monnam(mtmp));
+							 else
+								 unseen++;
+							 /* damage depends on distance, divisor ranges from 10 to 2 */
+							 mtmp->mhp /= (10 - (distu(mtmp->mx, mtmp->my) / 10));
+							 if (mtmp->mhp < 1) mtmp->mhp = 1;
+						 }
+					 }
+					 if (unseen)
+						 You_hear("%s of intense pain!", unseen > 1 ? "cries" : "a cry");
+					 break;
+			case DEATH_GAZE:
+					 if (u.uluck < -9) {
+						 pline_The("Eye turns on you!");
+						 u.uhp = 0;
+						 killer_format = KILLED_BY;
+						 killer = "the Eye of the Beholder";
+						 done(DIED);
+					 }
+					 pline_The("Eye looks around with its icy gaze!");
+					 for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+						 if (DEADMONSTER(mtmp)) continue;
+						 /* The eye is never blind ... */
+						 if (couldsee(mtmp->mx, mtmp->my) && !is_undead(mtmp->data)) {
+							 pline("%s screams in agony!", Monnam(mtmp));
+							 mtmp->mhp /= 3;
+							 if (mtmp->mhp < 1) mtmp->mhp = 1;
+						 }
+					 }
+					 /* Tsk,tsk.. */
+					 adjalign(-3);
+					 u.uluck -= 3;
+					 break;
+			case SUMMON_UNDEAD:
+					 if (u.uluck < -9) {
+						 u.uhp -= rn2(20) + 5;
+						 pline_The("Hand claws you with its icy nails!");
+						 if (u.uhp <= 0) {
+							 killer_format = KILLED_BY;
+							 killer="the Hand of Vecna";
+							 done(DIED);
+						 }
+					 }
+					 summon_loop = rn2(4) + 4;
+					 pline("Creatures from the grave surround you!");
+					 do {
+						 switch (rn2(6) + 1) {
+							 case 1:
+								 pm = mkclass(S_VAMPIRE, 0);
+								 break;
+							 case 2:
+							 case 3:
+								 pm = mkclass(S_ZOMBIE, 0);
+								 break;
+							 case 4:
+								 pm = mkclass(S_MUMMY, 0);
+								 break;
+							 case 5:
+								 pm = mkclass(S_GHOST, 0);
+								 break;
+							 default:
+								 pm = mkclass(S_WRAITH, 0);
+								 break;
+						 }
+						 mtmp = makemon(pm, u.ux, u.uy, NO_MM_FLAGS);
+						 if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0)
+							 mtmp = mtmp2;
+						 mtmp->mtame = 30;
+						 summon_loop--;
+					 } while (summon_loop);
+					 /* Tsk,tsk.. */
+					 adjalign(-3);
+					 u.uluck -= 3;
+					 break;
+			case PROT_POLY:
+					 You("feel more observant.");
+					 rescham();
+					 break;
+			case SUMMON_FIRE_ELEMENTAL:
+					 pm = &mons[PM_FIRE_ELEMENTAL];
+					 mtmp = makemon(pm, u.ux, u.uy, NO_MM_FLAGS);
+
+					 pline("You summon an elemental.");
+
+					 if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0)
+						 mtmp = mtmp2;
+					 mtmp->mtame = 30;
+					 break;
+			case SUMMON_WATER_ELEMENTAL:
+					 pm = &mons[PM_WATER_ELEMENTAL];
+					 mtmp = makemon(pm, u.ux, u.uy, NO_MM_FLAGS);
+
+					 pline("You summon an elemental.");
+
+					 if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0)
+						 mtmp = mtmp2;
+					 mtmp->mtame = 30;
+					 break;
+			case OBJ_DETECTION:
+					 (void)object_detect(obj, 0);
+					 break;
+			case CREATE_PORTAL: {
+						    int i, num_ok_dungeons, last_ok_dungeon = 0;
+						    d_level newlev;
+						    extern int n_dgns; /* from dungeon.c */
+						    winid tmpwin = create_nhwindow(NHW_MENU);
+						    anything any;
+
+						    any.a_void = 0;	/* set all bits to zero */
+						    if (Is_blackmarket(&u.uz) && *u.ushops) {
+							    You("feel very disoriented for a moment.");
+							    break;
+						    }
+						    start_menu(tmpwin);
+						    /* use index+1 (cant use 0) as identifier */
+						    for (i = num_ok_dungeons = 0; i < n_dgns; i++) {
+							    if (!dungeons[i].dunlev_ureached) continue;
+							    any.a_int = i+1;
+							    add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE,
+									    dungeons[i].dname, MENU_UNSELECTED);
+							    num_ok_dungeons++;
+							    last_ok_dungeon = i;
+						    }
+						    end_menu(tmpwin, "Open a portal to which dungeon?");
+						    if (num_ok_dungeons > 1) {
+							    /* more than one entry; display menu for choices */
+							    menu_item *selected;
+							    int n;
+
+							    n = select_menu(tmpwin, PICK_ONE, &selected);
+							    if (n <= 0) {
+								    destroy_nhwindow(tmpwin);
+								    goto nothing_special;
+							    }
+							    i = selected[0].item.a_int - 1;
+							    free((genericptr_t)selected);
+						    } else
+							    i = last_ok_dungeon;	/* also first & only OK dungeon */
+						    destroy_nhwindow(tmpwin);
+
+						    /*
+						     * i is now index into dungeon structure for the new dungeon.
+						     * Find the closest level in the given dungeon, open
+						     * a use-once portal to that dungeon and go there.
+						     * The closest level is either the entry or dunlev_ureached.
+						     */
+						    newlev.dnum = i;
+						    if(dungeons[i].depth_start >= depth(&u.uz))
+							    newlev.dlevel = dungeons[i].entry_lev;
+						    else
+							    newlev.dlevel = dungeons[i].dunlev_ureached;
+						    if(u.uhave.amulet || In_endgame(&u.uz) || In_endgame(&newlev) ||
+								    newlev.dnum == u.uz.dnum) {
+							    You_feel("very disoriented for a moment.");
+						    } else {
+							    if(!Blind) You("are surrounded by a shimmering sphere!");
+							    else You_feel("weightless for a moment.");
+							    goto_level(&newlev, FALSE, FALSE, FALSE);
+						    }
+						    break;
+					    }
+			case ENLIGHTENING:
+					    enlightenment(0);
+					    break;
+			case CREATE_AMMO: {
+						  struct obj *otmp = mksobj(ARROW, TRUE, FALSE);
+
+						  if (!otmp) goto nothing_special;
+						  otmp->blessed = obj->blessed;
+						  otmp->cursed = obj->cursed;
+						  otmp->bknown = obj->bknown;
+						  if (obj->blessed) {
+							  if (otmp->spe < 0) otmp->spe = 0;
+							  otmp->quan += rnd(10);
+						  } else if (obj->cursed) {
+							  if (otmp->spe > 0) otmp->spe = 0;
+						  } else
+							  otmp->quan += rnd(5);
+						  otmp->owt = weight(otmp);
+						  otmp = hold_another_object(otmp, "Suddenly %s out.",
+								  aobjnam(otmp, "fall"), (const char *)0);
+						  break;
+					  }
+		}
+	} else {
+		long eprop = (u.uprops[oart->inv_prop].extrinsic ^= W_ARTI),
+		     iprop = u.uprops[oart->inv_prop].intrinsic;
+		boolean on = (eprop & W_ARTI) != 0; /* true if invoked prop just set */
+
+		if(on && obj->age > monstermoves) {
+			/* the artifact is tired :-) */
+			u.uprops[oart->inv_prop].extrinsic ^= W_ARTI;
+			You_feel("that %s %s ignoring you.",
+					the(xname(obj)), otense(obj, "are"));
+			/* can't just keep repeatedly trying */
+			obj->age += (long) d(3,10);
+			return 1;
+		} else if(!on) {
+			/* when turning off property, determine downtime */
+			/* arbitrary for now until we can tune this -dlc */
+			obj->age = monstermoves + rnz(100);
+		}
+
+		if ((eprop & ~W_ARTI) || iprop) {
 nothing_special:
-	    /* you had the property from some other source too */
-	    if (carried(obj))
-		You_feel("a surge of power, but nothing seems to happen.");
-	    return 1;
+			/* you had the property from some other source too */
+			if (carried(obj))
+				You_feel("a surge of power, but nothing seems to happen.");
+			return 1;
+		}
+		switch(oart->inv_prop) {
+			case CONFLICT:
+				if(on) You_feel("like a rabble-rouser.");
+				else You_feel("the tension decrease around you.");
+				break;
+			case LEVITATION:
+				if(on) {
+					float_up();
+					spoteffects(FALSE);
+				} else (void) float_down(I_SPECIAL|TIMEOUT, W_ARTI);
+				break;
+			case INVIS:
+				if (BInvis || Blind) goto nothing_special;
+				newsym(u.ux, u.uy);
+				if (on)
+					Your("body takes on a %s transparency...",
+							Hallucination ? "normal" : "strange");
+				else
+					Your("body seems to unfade...");
+				break;
+		}
 	}
-	switch(oart->inv_prop) {
-	case CONFLICT:
-	    if(on) You_feel("like a rabble-rouser.");
-	    else You_feel("the tension decrease around you.");
-	    break;
-	case LEVITATION:
-	    if(on) {
-		float_up();
-		spoteffects(FALSE);
-	    } else (void) float_down(I_SPECIAL|TIMEOUT, W_ARTI);
-	    break;
-	case INVIS:
-	    if (BInvis || Blind) goto nothing_special;
-	    newsym(u.ux, u.uy);
-	    if (on)
-		    Your("body takes on a %s transparency...",
-			 Hallucination ? "normal" : "strange");
-	    else
-		    Your("body seems to unfade...");
-	    break;
-	}
-    }
 
-    return 1;
+	return 1;
 }
 
 /*
@@ -1816,11 +1725,7 @@ nothing_special:
  *      This only prints messages about the actual artifact.
  */
 
-int
-artifact_wet(obj, silent)
-struct obj *obj;
-boolean silent;
-{
+int artifact_wet(struct obj *obj, boolean silent) {
 	 if (!obj->oartifact) return (-1);
 	 switch (artilist[(int) (obj)->oartifact].attk.adtyp) {
 		 case AD_FIRE:
@@ -1853,20 +1758,15 @@ boolean silent;
 }
 
 /* WAC return TRUE if artifact is always lit */
-boolean
-artifact_light(obj)
-    struct obj *obj;
-{
+boolean artifact_light(struct obj *obj) {
     return get_artifact(obj) && (obj->oartifact == ART_SUNSWORD ||
 	    obj->oartifact == ART_HOLY_SPEAR_OF_LIGHT ||
 	    obj->oartifact == ART_CANDLE_OF_ETERNAL_FLAME);
 }
 
 /* KMH -- Talking artifacts are finally implemented */
-void 
-arti_speak (struct obj *obj)
-{
-	register const struct artifact *oart = get_artifact(obj);
+void arti_speak (struct obj *obj) {
+	const struct artifact *oart = get_artifact(obj);
 	const char *line;
 	char buf[BUFSZ];
 
@@ -1883,26 +1783,20 @@ arti_speak (struct obj *obj)
 	return;
 }
 
-boolean
-artifact_has_invprop(otmp, inv_prop)
-struct obj *otmp;
-uchar inv_prop;
-{
+boolean artifact_has_invprop(struct obj *otmp, uchar inv_prop) {
 	const struct artifact *arti = get_artifact(otmp);
 
-	return((boolean)(arti && (arti->inv_prop == inv_prop)));
+	return (arti && (arti->inv_prop == inv_prop));
 }
 
 /* Return the price sold to the hero of a given artifact or unique item */
-long 
-arti_cost (struct obj *otmp)
-{
+long arti_cost(struct obj *otmp) {
 	if (!otmp->oartifact)
-	    return ((long)objects[otmp->otyp].oc_cost);
-	else if (artilist[(int) otmp->oartifact].cost)
-	    return (artilist[(int) otmp->oartifact].cost);
+	    return (objects[otmp->otyp].oc_cost);
+	else if (artilist[otmp->oartifact].cost)
+	    return (artilist[otmp->oartifact].cost);
 	else
-	    return (100L * (long)objects[otmp->otyp].oc_cost);
+	    return (100L * objects[otmp->otyp].oc_cost);
 }
 
 #endif /* OVLB */
