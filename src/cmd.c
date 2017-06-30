@@ -540,7 +540,7 @@ STATIC_PTR int playersteal(void) {
 
 	x = u.ux + u.dx;
 	y = u.uy + u.dy;
-	
+
 	if(u.uswallow) {
 		pline("You search around but don't find anything.");
 		return(1);
@@ -561,7 +561,7 @@ STATIC_PTR int playersteal(void) {
 			dexadj = 3;
 		}
 		if (ACURR(A_DEX) < 10) statbonus = (ACURR(A_DEX) - 10) * dexadj;
-		else 
+		else
 		if (ACURR(A_DEX) > 14) statbonus = (ACURR(A_DEX) - 14) * dexadj;
 
 		chanch = base + statbonus;
@@ -597,7 +597,7 @@ STATIC_PTR int playersteal(void) {
 				mongold = (int)gold->quan;
 				if (coinstolen > mongold) coinstolen = mongold;
 				if (coinstolen > 0)	{
-					if (coinstolen != mongold) 
+					if (coinstolen != mongold)
 						gold = splitobj(gold, coinstolen);
 					obj_extract_self(gold);
 		      if (merge_choice(invent, gold) || inv_cnt() < 52) {
@@ -634,7 +634,7 @@ STATIC_PTR int playersteal(void) {
 	}
 
 	return(0);
-} 
+}
 
 #ifdef WIZARD
 
@@ -788,7 +788,7 @@ STATIC_PTR int specialpower(void) {
                                 You("discover it is %s",doname(uwep));
                                 } else
                      pline("Unfortunately, you didn't learn anything new.");
-                    } 
+                    }
                 /*WAC Added practicing code - in weapon.c*/
                     practice_weapon();
 		}
@@ -1242,7 +1242,7 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	}
 #if defined(WIZARD) && defined(STEED)
 	if (Wounded_legs && u.usteed && wizard) {
-	    strcpy(buf, x_monnam(u.usteed, ARTICLE_YOUR, (char *)0, 
+	    strcpy(buf, x_monnam(u.usteed, ARTICLE_YOUR, (char *)0,
 		    SUPPRESS_SADDLE | SUPPRESS_HALLUCINATION, FALSE));
 	    *buf = highc(*buf);
 	    enl_msg(buf, " has", " had", " wounded legs");
@@ -1285,7 +1285,7 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	    {
 		if (nth)
 		    strcat(buf, " and ");
-		strcat(buf, something); 
+		strcat(buf, something);
 	    }
 		you_are(buf);
 	}
@@ -1328,7 +1328,7 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	else if (Levitation) you_are("levitating");	/* without control */
 	else if (Flying) you_can("fly");
 	if (Wwalking) you_can("walk on water");
-	if (Swimming) you_can("swim");        
+	if (Swimming) you_can("swim");
 	if (Breathless) you_can("survive without air");
 	else if (Amphibious) you_can("breathe water");
 	if (Passes_walls) you_can("walk through walls");
@@ -1619,7 +1619,7 @@ void dump_enlightenment(int final) {
 	}
 #ifdef STEED
 	if (Wounded_legs && u.usteed) {
-	    strcpy(buf, x_monnam(u.usteed, ARTICLE_YOUR, (char *)0, 
+	    strcpy(buf, x_monnam(u.usteed, ARTICLE_YOUR, (char *)0,
 		    SUPPRESS_SADDLE | SUPPRESS_HALLUCINATION, FALSE));
 	    *buf = highc(*buf);
 	    strcat(buf, " had wounded legs");
@@ -1637,7 +1637,7 @@ void dump_enlightenment(int final) {
 		sprintf(buf, "aware of the presence of %s",
 			(flags.warntype & M2_ORC) ? "orcs" :
 			(flags.warntype & M2_DEMON) ? "demons" :
-			something); 
+			something);
 		dump(youwere, buf);
 	}
 	if (Undead_warning) dump(youwere, "warned of undead");
@@ -1717,7 +1717,7 @@ void dump_enlightenment(int final) {
 	    if(uright && uright->otyp == RIN_PROTECTION) prot += uright->spe;
 	    if (HProtection & INTRINSIC) prot += u.ublessed;
 	    prot += u.uspellprot;
-	    
+
 	    if (prot < 0)
 		dump(youwere, "ineffectively protected");
 	    else
@@ -1836,7 +1836,7 @@ STATIC_OVL boolean minimal_enlightenment(void) {
 
 	fmtstr = iflags.menu_tab_sep ? tabbed_fmtstr : untabbed_fmtstr;
 	deity_fmtstr = iflags.menu_tab_sep ?
-			tabbed_deity_fmtstr : untabbed_deity_fmtstr; 
+			tabbed_deity_fmtstr : untabbed_deity_fmtstr;
 	any.a_void = 0;
 	buf[0] = buf2[0] = '\0';
 	tmpwin = create_nhwindow(NHW_MENU);
@@ -1969,7 +1969,7 @@ static const struct menu_tab action_menu[] = {
 	{'o', FALSE, doopen, "Open a door"},
 	{'q', TRUE, dodrink, "Quaff a potion"},
 	{'r', FALSE, doread, "Read an object"},
-	{'u', FALSE, dountrap, "Untrap"}, 
+	{'u', FALSE, dountrap, "Untrap"},
 	{'z', FALSE, dozap, "Zap a wand"},
 	{'Z', TRUE, docast, "Cast a spell"},
 	{0,0,0,0}
@@ -1978,7 +1978,7 @@ static const struct menu_tab action_menu[] = {
 static const struct menu_tab player_menu[] = {
 	{'b', FALSE, playersteal, "Steal from Monsters [M-b]"},
 	{'c', TRUE, dotalk, "Chat with Monsters [M-c]"},
-	{'d', FALSE, dokick, "Do Kick"}, 
+	{'d', FALSE, dokick, "Do Kick"},
 	/*        {'e', FALSE, specialpower, "Use your Class Ability [M-e]"},*/
 	{'e', TRUE, enhance_weapon_skill, "Weapon Skills [M-k]"},
 	{'m', TRUE, domonability, "Use your Monster Ability [M-m]"},
@@ -2083,7 +2083,7 @@ STATIC_PTR int makemenu(const char *menuname, struct menu_list menu_struct[]) {
 			if (!wizard && !current_menu[n].m_funct && !strcmp(current_menu[n].m_item,"Wizard")) continue;
 #endif
                         if (current_menu[n].m_char == (char)0) {
-                                any.a_int = 0; 
+                                any.a_int = 0;
                                 add_menu(win, NO_GLYPH, &any, 0, 0, ATR_BOLD,
                                      current_menu[n].m_item, MENU_UNSELECTED);
                                 continue;
@@ -2281,7 +2281,7 @@ void dump_conduct(int final) {
 	else if (!u.uconduct.unvegetarian)
 	    dump("", "  You were a vegetarian");
 	else if (Role_if(PM_MONK) && u.uconduct.unvegetarian < 10) {
-	    sprintf(buf, "  You ate non-vegetarian food %ld time%s.", 
+	    sprintf(buf, "  You ate non-vegetarian food %ld time%s.",
 		u.uconduct.unvegetarian, plur(u.uconduct.unvegetarian));
 	    dump("", buf);
 	}
@@ -2476,13 +2476,13 @@ static const struct func_tab cmdlist[] = {
 	{'w', FALSE, dowield},
 	{'W', FALSE, dowear},
 	{M('w'), FALSE, dowipe},
-	{'x', FALSE, doswapweapon},                    /* [Tom] */        
+	{'x', FALSE, doswapweapon},                    /* [Tom] */
 	{'X', TRUE, enter_explore_mode},
 #if 0
         {M('x'), TRUE, dovspell},                  /* Mike Stephenson */
 #endif
 /*	'y', 'Y' : go nw */
-	{M('y'), FALSE, polyatwill},  /* jla */        
+	{M('y'), FALSE, polyatwill},  /* jla */
 	{'z', FALSE, dozap},
 	{'Z', TRUE, docast},
 	{'<', FALSE, doup},
@@ -2523,7 +2523,7 @@ static const struct func_tab cmdlist[] = {
 struct ext_func_tab extcmdlist[] = {
 	{"2weapon", "toggle two-weapon combat", dotwoweapon, FALSE},
 	{"adjust", "adjust inventory letters", doorganize, TRUE},
-	{"borrow", "steal from monsters", playersteal, FALSE},  /* jla */        
+	{"borrow", "steal from monsters", playersteal, FALSE},  /* jla */
 	{"chat", "talk to someone", dotalk, TRUE},	/* converse? */
 	{"conduct", "list which challenges you have adhered to", doconduct, TRUE},
 	{"dip", "dip an object into something", dodip, FALSE},
@@ -2558,7 +2558,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"version", "list compile time options for this version of Slash'EM",
 		doextversion, TRUE},
 	{"wipe", "wipe off your face", dowipe, FALSE},
-	{"youpoly", "polymorph at will", polyatwill, FALSE},  /* jla */        
+	{"youpoly", "polymorph at will", polyatwill, FALSE},  /* jla */
 	{"?", "get this list of extended commands", doextlist, TRUE},
 #if defined(WIZARD)
 	/*
@@ -2941,7 +2941,7 @@ void rhack(char *cmd) {
 		/* This handles very old inconsistent DOS/Windows behaviour
 		 * in a new way: earlier, the keyboard handler mapped these,
 		 * which caused counts to be strange when entered from the
-		 * number pad. Now do not map them until here. 
+		 * number pad. Now do not map them until here.
 		 */
 		switch (*cmd) {
 		    case '5':       *cmd = 'g'; break;
@@ -3168,7 +3168,7 @@ int getdir(const char *s) {
 	char dirsym;
 	/* WAC add dirsymbols to generic prompt */
 	char buf[BUFSZ];
-        
+
 	sprintf(buf, "In what direction? [%s]",
                 (iflags.num_pad ? ndir : sdir));
 
@@ -3216,7 +3216,7 @@ STATIC_OVL boolean help_dir(char sym, const char *msg) {
 		putstr(win, 0, buf);
 		putstr(win, 0, "");
 	}
-	if (letter(sym)) { 
+	if (letter(sym)) {
 	    sym = highc(sym);
 	    ctrl = (sym - 'A') + 1;
 	    if ((expln = dowhatdoes_core(ctrl, buf2))
@@ -3428,7 +3428,7 @@ STATIC_OVL char *parse(void) {
 		 borg_on = 0;
 	   }
 
-	} else 
+	} else
 #endif
 	/* [Tom] for those who occasionally go insane... */
 	if (repeat_hit) {
@@ -3437,7 +3437,7 @@ STATIC_OVL char *parse(void) {
 		else {
 			/* Don't want things to get too out of hand */
 			if (repeat_hit > 10) repeat_hit = 10;
-			
+
 			repeat_hit--;
 			in_line[0] = repeat_char;
 			in_line[1] = 0;
@@ -3497,7 +3497,7 @@ STATIC_OVL char *parse(void) {
 
 	if (prezero) in_line[0] = '\033';
 	repeat_char = in_line[0];
-	
+
 	return(in_line);
 }
 
