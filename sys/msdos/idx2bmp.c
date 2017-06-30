@@ -40,9 +40,6 @@
 
 extern char *tilename(int, int);
 
-#define Fclose  (void) fclose
-
-
 static const char
     *output_file = "tiles.bmp",
     *index_file = "index";

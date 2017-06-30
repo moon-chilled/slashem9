@@ -37,8 +37,6 @@
 
 extern char *tilename(int, int);
 
-#define Fclose  (void) fclose
-
 static int num_colors;
 static pixel pixels[MAX_TILE_Y][MAX_TILE_X];
 static BITMAP *bigtile_bmp;
@@ -398,7 +396,7 @@ char *argv[];
 
 	/* Close file */
         if ((util_mode == 'i') || (util_mode == 'h'))
-        	Fclose(ofp);
+        	fclose(ofp);
         else if (util_mode == 'f')
 		fprintf(stderr, "Total of %d bmp tiles written.\n", tilecount);
         else if (util_mode == 'b' || util_mode == 'c') {

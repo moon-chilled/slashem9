@@ -254,7 +254,7 @@ void clipbrd_save(void *data,int cnt,boolean append,boolean is_inv){
 				Fwrite((int) handle,2L,crlf);
 			}
 		}
-		Fclose((int) handle);
+		fclose(handle);
 
 		scrp_changed(SCF_TEXT,0x2e545854l);	/* .TXT */
 	}
