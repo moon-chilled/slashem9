@@ -1352,10 +1352,10 @@ int num_post_attribs;
 	const char *conj = "and ";
 	if (num_post_attribs > 1
 	    && post_attribs < num_post_attribs && post_attribs > 1)
-	 	Strcat(buf, ","); 
-	Strcat(buf, " ");
+	 	strcat(buf, ","); 
+	strcat(buf, " ");
 	--post_attribs;
-	if (!post_attribs && num_post_attribs > 1) Strcat(buf, conj);
+	if (!post_attribs && num_post_attribs > 1) strcat(buf, conj);
 	return buf;
 }
 
@@ -1409,12 +1409,12 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 	if (alignnum != ROLE_NONE && alignnum != ROLE_RANDOM) {
 		/* if race specified, and multiple choice of alignments for it */
 		if ((racenum >= 0) && (aligncount > 1)) {
-			if (donefirst) Strcat(buf, " ");
-			Strcat(buf, aligns[alignnum].adj);
+			if (donefirst) strcat(buf, " ");
+			strcat(buf, aligns[alignnum].adj);
 			donefirst = TRUE;
 		} else {
-			if (donefirst) Strcat(buf, " ");
-			Strcat(buf, aligns[alignnum].adj);
+			if (donefirst) strcat(buf, " ");
+			strcat(buf, aligns[alignnum].adj);
 			donefirst = TRUE;
 		}
 	} else {
@@ -1441,13 +1441,13 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 			and name of role itself does not distinguish gender */
 			if ((rolenum != ROLE_NONE) && (gendercount > 1)
 						&& !roles[rolenum].name.f) {
-				if (donefirst) Strcat(buf, " ");
-				Strcat(buf, genders[gendnum].adj);
+				if (donefirst) strcat(buf, " ");
+				strcat(buf, genders[gendnum].adj);
 				donefirst = TRUE;
 			}
 	        } else {
-			if (donefirst) Strcat(buf, " ");
-	        	Strcat(buf, genders[gendnum].adj);
+			if (donefirst) strcat(buf, " ");
+	        	strcat(buf, genders[gendnum].adj);
 			donefirst = TRUE;
 	        }
 	} else {
@@ -1463,14 +1463,14 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 
 	if (racenum != ROLE_NONE && racenum != ROLE_RANDOM) {
 		if (validrole(rolenum) && ok_race(rolenum, racenum, gendnum, alignnum)) {
-			if (donefirst) Strcat(buf, " "); 
-			Strcat(buf, (rolenum == ROLE_NONE) ?
+			if (donefirst) strcat(buf, " "); 
+			strcat(buf, (rolenum == ROLE_NONE) ?
 				races[racenum].noun :
 				races[racenum].adj);
 			donefirst = TRUE;
 		} else if (!validrole(rolenum)) {
-			if (donefirst) Strcat(buf, " ");
-			Strcat(buf, races[racenum].noun);
+			if (donefirst) strcat(buf, " ");
+			strcat(buf, races[racenum].noun);
 			donefirst = TRUE;
 		} else {
 			pa[BP_RACE] = 1;
@@ -1483,19 +1483,19 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 	/* <your lawful female gnomish> || <your lawful female gnome> */
 
 	if (validrole(rolenum)) {
-		if (donefirst) Strcat(buf, " ");
+		if (donefirst) strcat(buf, " ");
 		if (gendnum != ROLE_NONE) {
 		    if (gendnum == 1  && roles[rolenum].name.f)
-			Strcat(buf, roles[rolenum].name.f);
+			strcat(buf, roles[rolenum].name.f);
 		    else
-  			Strcat(buf, roles[rolenum].name.m);
+  			strcat(buf, roles[rolenum].name.m);
 		} else {
 			if (roles[rolenum].name.f) {
-				Strcat(buf, roles[rolenum].name.m);
-				Strcat(buf, "/");
-				Strcat(buf, roles[rolenum].name.f);
+				strcat(buf, roles[rolenum].name.m);
+				strcat(buf, "/");
+				strcat(buf, roles[rolenum].name.f);
 			} else 
-				Strcat(buf, roles[rolenum].name.m);
+				strcat(buf, roles[rolenum].name.m);
 		}
 		donefirst = TRUE;
 	} else if (rolenum == ROLE_NONE) {
@@ -1504,8 +1504,8 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 	}
 	
 	if ((racenum == ROLE_NONE || racenum == ROLE_RANDOM) && !validrole(rolenum)) {
-		if (donefirst) Strcat(buf, " ");
-		Strcat(buf, "character");
+		if (donefirst) strcat(buf, " ");
+		strcat(buf, "character");
 		donefirst = TRUE;
 	}
 	/* <your lawful female gnomish cavewoman> || <your lawful female gnome>
@@ -1530,9 +1530,9 @@ build_plselection_prompt (char *buf, int buflen, int rolenum, int racenum, int g
 
 	Strcpy(tmpbuf, "Shall I pick ");
 	if (racenum != ROLE_NONE || validrole(rolenum))
-		Strcat(tmpbuf, "your ");
+		strcat(tmpbuf, "your ");
 	else {
-		Strcat(tmpbuf, "a ");
+		strcat(tmpbuf, "a ");
 	}
 	/* <your> */
 
@@ -1551,22 +1551,22 @@ build_plselection_prompt (char *buf, int buflen, int rolenum, int racenum, int g
 	if (post_attribs) {
 		if (pa[BP_RACE]) {
 			(void) promptsep(eos(buf), num_post_attribs);
-			Strcat(buf, "race");
+			strcat(buf, "race");
 		}
 		if (pa[BP_ROLE]) {
 			(void) promptsep(eos(buf), num_post_attribs);
-			Strcat(buf, "role");
+			strcat(buf, "role");
 		}
 		if (pa[BP_GEND]) {
 			(void) promptsep(eos(buf), num_post_attribs);
-			Strcat(buf, "gender");
+			strcat(buf, "gender");
 		}
 		if (pa[BP_ALIGN]) {
 			(void) promptsep(eos(buf), num_post_attribs);
-			Strcat(buf, "alignment");
+			strcat(buf, "alignment");
 		}
 	}
-	Strcat(buf, " for you? [ynq] ");
+	strcat(buf, " for you? [ynq] ");
 	return buf;
 }
 

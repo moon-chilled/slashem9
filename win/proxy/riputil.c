@@ -25,7 +25,7 @@ int how;
 	    }
 	    else
 		Strcpy(buf, killed_by_prefix[how]);
-	    Strcat(buf, an(killer));
+	    strcat(buf, an(killer));
 	    break;
 	case KILLED_BY:
 	    if (Instant_Death) {
@@ -38,7 +38,7 @@ int how;
 	    }
 	    else
 		Strcpy(buf, killed_by_prefix[how]);
-	    Strcat(buf, killer);
+	    strcat(buf, killer);
 	    break;
 	case NO_KILLER_PREFIX:
 	    Strcpy(buf, killer);

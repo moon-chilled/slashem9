@@ -403,12 +403,12 @@ bot2str(char *newbot2)
         if (bot2_abbrev >= 2) {
 		if (hu_abbrev_stat[u.uhs][0]!='\0') {
 			sprintf(nb = eos(nb), " ");
-			Strcat(newbot2, hu_abbrev_stat[u.uhs]);
+			strcat(newbot2, hu_abbrev_stat[u.uhs]);
 		}
 	}
 	else if(strcmp(hu_stat[u.uhs], "        ")) {
 		sprintf(nb = eos(nb), " ");
-		Strcat(newbot2, hu_stat[u.uhs]);
+		strcat(newbot2, hu_stat[u.uhs]);
 	}
 
 /* WAC further Up

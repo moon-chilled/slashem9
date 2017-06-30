@@ -487,12 +487,12 @@ int sdlgl_display_RIP(int how)
   {
     case KILLED_BY_AN:
       Strcpy(info_buf, killed_by_prefix[how]);
-      Strcat(info_buf, an(killer));
+      strcat(info_buf, an(killer));
       break;
     
     case KILLED_BY:
       Strcpy(info_buf, killed_by_prefix[how]);
-      Strcat(info_buf, killer);
+      strcat(info_buf, killer);
       break;
     
     case NO_KILLER_PREFIX:

@@ -517,8 +517,8 @@ can_twoweapon (void)
 		    Strcpy(buf, disallowed_by_race ? urace.noun : urace.adj);
 		if (disallowed_by_role || !disallowed_by_race) {
 		    if (!disallowed_by_role)
-			Strcat(buf, " ");
-		    Strcat(buf, (flags.female && urole.name.f) ?
+			strcat(buf, " ");
+		    strcat(buf, (flags.female && urole.name.f) ?
 			    urole.name.f : urole.name.m);
 		}
 		pline("%s aren't able to use %s at once.",

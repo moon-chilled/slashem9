@@ -79,7 +79,7 @@ const char *path, *mode;
 		    buf = (char *)alloc(strlen(subname) + 5);
 		    Strcpy(buf, subname);
 		}
-		Strcat(buf, ".map");
+		strcat(buf, ".map");
 		SET_FILE(buf, FILE_AREA_SHARE);
 	    }
 	} else

@@ -401,8 +401,8 @@ give_up:	/* Quit */
 			} else {
 				if (roles[i].name.f) {
 					Strcpy(rolenamebuf, roles[i].name.m);
-					Strcat(rolenamebuf, "/");
-					Strcat(rolenamebuf, roles[i].name.f);
+					strcat(rolenamebuf, "/");
+					strcat(rolenamebuf, roles[i].name.f);
 				} else 
 					Strcpy(rolenamebuf, roles[i].name.m);
 			}	
@@ -1424,7 +1424,7 @@ char mswin_yn_function(const char *question, const char *choices,
 			(index(choices, 'n') ? 'n' : def));
     } else {
 		Strcpy(message, question);
-		Strcat(message, " ");
+		strcat(message, " ");
     }
 
     createcaret = 1;
@@ -1776,11 +1776,11 @@ void mswin_outrip(winid wid, int how)
 		default: impossible("bad killer format?");
 		case KILLED_BY_AN:
 			Strcpy(buf, killed_by_prefix[how]);
-			Strcat(buf, an(killer));
+			strcat(buf, an(killer));
 			break;
 		case KILLED_BY:
 			Strcpy(buf, killed_by_prefix[how]);
-			Strcat(buf, killer);
+			strcat(buf, killer);
 			break;
 		case NO_KILLER_PREFIX:
 			Strcpy(buf, killer);

@@ -343,7 +343,7 @@ update_val(attr_rec, new_value)
 
 	    Strcpy(buf, plname);
 	    if ('a' <= buf[0] && buf[0] <= 'z') buf[0] += 'A'-'a';
-	    Strcat(buf, " the ");
+	    strcat(buf, " the ");
 	    if (u.mtimedone) {
 		char mname[BUFSZ];
 		int k = 0;
@@ -355,9 +355,9 @@ update_val(attr_rec, new_value)
 			    mname[k] += 'A' - 'a';
 		    k++;
 		}
-		Strcat(buf, mname);
+		strcat(buf, mname);
 	    } else
-		Strcat(buf, rank_of(u.ulevel, pl_character[0], flags.female));
+		strcat(buf, rank_of(u.ulevel, pl_character[0], flags.female));
 
 	} else if (attr_rec == &shown_stats[F_DLEVEL]) {
 	    if (!describe_level(buf, FALSE)) {
@@ -392,11 +392,11 @@ update_val(attr_rec, new_value)
 	    buf[0] = 0;
 	    if (Sick) {
 		if (u.usick_type & SICK_VOMITABLE)
-		    Strcat(buf, "FoodPois");
+		    strcat(buf, "FoodPois");
 		if (u.usick_type & SICK_NONVOMITABLE) {
 		    if (u.usick_type & SICK_VOMITABLE)
-			Strcat(buf, " ");
-		    Strcat(buf, "Ill");
+			strcat(buf, " ");
+		    strcat(buf, "Ill");
 		}
 	    }
 	    XtSetArg(args[0], XtNlabel, buf);

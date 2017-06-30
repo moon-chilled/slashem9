@@ -397,8 +397,8 @@ give_up:	/* Quit */
 			} else {
 				if (roles[i].name.f) {
 					Strcpy(rolenamebuf, roles[i].name.m);
-					Strcat(rolenamebuf, "/");
-					Strcat(rolenamebuf, roles[i].name.f);
+					strcat(rolenamebuf, "/");
+					strcat(rolenamebuf, roles[i].name.f);
 				} else 
 					Strcpy(rolenamebuf, roles[i].name.m);
 			}	

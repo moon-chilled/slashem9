@@ -342,8 +342,8 @@ validate_prefix_locations (char *reasonbuf)
 			(void) unlink(filename);
 		} else {
 			if (reasonbuf) {
-				if (failcount) Strcat(reasonbuf,", ");
-				Strcat(reasonbuf, fqn_prefix_names[prefcnt]);
+				if (failcount) strcat(reasonbuf,", ");
+				strcat(reasonbuf, fqn_prefix_names[prefcnt]);
 			}
 			/* the paniclog entry gets the value of errno as well */
 			sprintf(panicbuf1,"Invalid %s", fqn_prefix_names[prefcnt]);
@@ -411,10 +411,10 @@ set_lock_and_bones (void)
 	strncat(levels, bbs_id, PATHLEN);
 #endif
 	append_slash(bones);
-	Strcat(bones, "bonesnn.*");
+	strcat(bones, "bonesnn.*");
 	Strcpy(lock, levels);
 #ifndef AMIGA
-	Strcat(lock, alllevels);
+	strcat(lock, alllevels);
 #endif
 	return;
 }
@@ -436,7 +436,7 @@ set_levelfile_name (char *file, int lev)
 	if (!tf) tf = eos(file);
 	sprintf(tf, ".%d", lev);
 #ifdef VMS
-	Strcat(tf, ";1");
+	strcat(tf, ";1");
 #endif
 	return;
 }
@@ -666,7 +666,7 @@ d_level *lev;
 	else
 	    sprintf(dptr, ".%d", lev->dlevel);
 #ifdef VMS
-	Strcat(dptr, ";1");
+	strcat(dptr, ";1");
 #endif
 	return(dptr-2);
 }
@@ -686,7 +686,7 @@ set_bonestemp_name()
 	if (!tf) tf = eos(lock);
 	sprintf(tf, ".bn");
 #ifdef VMS
-	Strcat(tf, ";1");
+	strcat(tf, ";1");
 #endif
 	return lock;
 }
@@ -882,7 +882,7 @@ set_savefile_name (void)
 	sprintf(SAVEF, "%d%s", getuid(), plname);
 	regularize(SAVEF);
 #endif
-	Strcat(SAVEF, ";1");
+	strcat(SAVEF, ";1");
 #else
 # if defined(MICRO)
 	Strcpy(SAVEF, SAVEP);
@@ -899,7 +899,7 @@ set_savefile_name (void)
 #  endif
 		regularize(SAVEF+i);
 	}
-	Strcat(SAVEF, ".sav");
+	strcat(SAVEF, ".sav");
 # else
 #  ifndef FILE_AREAS
 #  if defined(WIN32)
@@ -940,12 +940,12 @@ set_error_savefile (void)
 	char *semi_colon = rindex(SAVEF, ';');
 	if (semi_colon) *semi_colon = '\0';
       }
-	Strcat(SAVEF, ".e;1");
+	strcat(SAVEF, ".e;1");
 # else
 #  ifdef MAC
-	Strcat(SAVEF, "-e");
+	strcat(SAVEF, "-e");
 #  else
-	Strcat(SAVEF, ".e");
+	strcat(SAVEF, ".e");
 #  endif
 # endif
 }
@@ -1230,7 +1230,7 @@ boolean uncomp;
 
 	Strcpy(cfn, filename);
 # ifdef COMPRESS_EXTENSION
-	Strcat(cfn, COMPRESS_EXTENSION);
+	strcat(cfn, COMPRESS_EXTENSION);
 # endif
 	/* when compressing, we know the file exists */
 	if (uncomp) {
@@ -1426,8 +1426,8 @@ char *lockname;
 # if defined(UNIX) || defined(VMS) || defined(AMIGA) || defined(WIN32) || defined(MSDOS)
 #  ifdef NO_FILE_LINKS
 	Strcpy(lockname, LOCKDIR);
-	Strcat(lockname, "/");
-	Strcat(lockname, filename);
+	strcat(lockname, "/");
+	strcat(lockname, filename);
 #  else
 	Strcpy(lockname, filename);
 #  endif
@@ -1436,9 +1436,9 @@ char *lockname;
 	char *semi_colon = rindex(lockname, ';');
 	if (semi_colon) *semi_colon = '\0';
       }
-	Strcat(lockname, ".lock;1");
+	strcat(lockname, ".lock;1");
 #  else
-	Strcat(lockname, "_lock");
+	strcat(lockname, "_lock");
 #  endif
 	return lockname;
 # else
@@ -2520,7 +2520,7 @@ const char *dir;
 	tmp[PATHLEN-1] = '\0';
 	if ((strlen(tmp) + 1 + strlen(NH_RECORD)) < (PATHLEN - 1)) {
 		append_slash(tmp);
-		Strcat(tmp, NH_RECORD);
+		strcat(tmp, NH_RECORD);
 	}
 #  ifndef FILE_AREAS
 	fq_record = tmp;

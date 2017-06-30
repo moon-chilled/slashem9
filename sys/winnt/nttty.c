@@ -965,7 +965,7 @@ load_keyboard_handler()
 		(void) strncpy(kh, iflags.altkeyhandler,
 				(MAX_ALTKEYHANDLER - sizeof suffx) - 1);
 		kh[(MAX_ALTKEYHANDLER - sizeof suffx) - 1] = '\0';
-		Strcat(kh, suffx);
+		strcat(kh, suffx);
 		Strcpy(iflags.altkeyhandler, kh);
 		hLibrary = LoadLibrary(kh);
 		if (hLibrary) {

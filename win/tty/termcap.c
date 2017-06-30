@@ -1031,7 +1031,7 @@ init_hilite()
 	    if (c != CLR_BLACK) {
 		hilites[c|BRIGHT] = (char*) alloc(strlen(scratch)+strlen(MD)+1);
 		Strcpy(hilites[c|BRIGHT], MD);
-		Strcat(hilites[c|BRIGHT], scratch);
+		strcat(hilites[c|BRIGHT], scratch);
 	    }
 
 	}
@@ -1171,7 +1171,7 @@ init_hilite()
 			sprintf(eos(hilites[c]), ";3%d", c & ~BRIGHT);
 		    if (backg != CLR_BLACK)
 			sprintf(eos(hilites[c]), ";4%d", backg & ~BRIGHT);
-		    Strcat(hilites[c], "m");
+		    strcat(hilites[c], "m");
 		}
 	    }
 

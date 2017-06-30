@@ -1622,7 +1622,7 @@ nextclass:
 		if (!allflag) {
 			Strcpy(qbuf, !ininv ? doname(otmp) :
 				xprname(otmp, (char *)0, ilet, !nodot, 0L, 0L));
-			Strcat(qbuf, "?");
+			strcat(qbuf, "?");
 			sym = (takeoff || ident || otmp->quan < 2L) ?
 				nyaq(qbuf) : nyNaq(qbuf);
 		}
@@ -2311,11 +2311,11 @@ dotypeinv()
 #endif
 					      (boolean (*)(OBJ_P)) 0, &itemcount);
 	    if (unpaid_count) {
-		Strcat(types, "u");
+		strcat(types, "u");
 		class_count++;
 	    }
 	    if (billx) {
-		Strcat(types, "x");
+		strcat(types, "x");
 		class_count++;
 	    }
 	    /* add everything not already included; user won't see these */
@@ -2475,7 +2475,7 @@ boolean picked_some;
 			if (otmp->otyp == CORPSE) feel_cockatrice(otmp, FALSE);
 		}
 		if (Blind) Strcpy(fbuf, "You feel");
-		Strcat(fbuf,":");
+		strcat(fbuf,":");
 	    	(void) display_minventory(mtmp, MINV_ALL, fbuf);
 	    } else {
 		You("%s no objects here.", verb);
@@ -2516,7 +2516,7 @@ boolean picked_some;
 			 IS_SINK(levl[u.ux][u.uy].typ) ||
 			 IS_TOILET(levl[u.ux][u.uy].typ)
 			))
-		    Strcat(fbuf, "  Use \"q.\" to drink from it.");
+		    strcat(fbuf, "  Use \"q.\" to drink from it.");
 	}
 
 	if (!otmp || is_lava(u.ux,u.uy) || (is_pool(u.ux,u.uy) && !Underwater)) {
@@ -2557,7 +2557,7 @@ boolean picked_some;
 			char buf[BUFSZ];
 			felt_cockatrice = TRUE;
 			Strcpy(buf, doname(otmp));
-			Strcat(buf, "...");
+			strcat(buf, "...");
 			putstr(tmpwin, 0, buf);
 			break;
 		}
@@ -2964,7 +2964,7 @@ boolean unpaid;
 	    invbuf = (char *) alloc(invbufsiz);
 	}
 	if (unpaid)
-	    Strcat(strcpy(invbuf, "Unpaid "), class_name);
+	    strcat(strcpy(invbuf, "Unpaid "), class_name);
 	else
 	    Strcpy(invbuf, class_name);
 	return invbuf;

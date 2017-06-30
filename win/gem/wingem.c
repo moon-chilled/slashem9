@@ -1083,11 +1083,11 @@ int how;
 	default: impossible("bad killer format?");
 	case KILLED_BY_AN:
 		Strcpy(buf, killed_by_prefix[how]);
-		Strcat(buf, an(killer));
+		strcat(buf, an(killer));
 		break;
 	case KILLED_BY:
 		Strcpy(buf, killed_by_prefix[how]);
-		Strcat(buf, killer);
+		strcat(buf, killer);
 		break;
 	case NO_KILLER_PREFIX:
 		Strcpy(buf, killer);

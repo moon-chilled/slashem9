@@ -1227,7 +1227,7 @@ int *spell_no;
 	else
 		sprintf(buf, "Name\tLevel\tCategory\tFail");
 	if (flags.menu_style == MENU_TRADITIONAL)
-		Strcat(buf, iflags.menu_tab_sep ? "\tKey" : "  Key");
+		strcat(buf, iflags.menu_tab_sep ? "\tKey" : "  Key");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	for (i = 0; i < MAXSPELL && spellid(i) != NO_SPELL; i++) {
 		sprintf(buf, iflags.menu_tab_sep ?

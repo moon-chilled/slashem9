@@ -158,11 +158,11 @@ s_suffix (		/* return a name converted to possessive */
 
     Strcpy(buf, s);
     if(!strcmpi(buf, "it"))
-	Strcat(buf, "s");
+	strcat(buf, "s");
     else if(*(eos(buf)-1) == 's')
-	Strcat(buf, "'");
+	strcat(buf, "'");
     else
-	Strcat(buf, "'s");
+	strcat(buf, "'s");
     return buf;
 }
 

@@ -374,7 +374,7 @@ do_rumors()
 	infile = malloc(strlen(DATA_IN_TEMPLATE) - 2 + strlen(RUMOR_FILE) + 5);
 	filename[0]='\0';
 #ifdef FILE_PREFIX
-	Strcat(filename,file_prefix);
+	strcat(filename,file_prefix);
 #endif
 	sprintf(eos(filename), DATA_TEMPLATE, RUMOR_FILE);
 	if (!(ofp = fopen(filename, WRTMODE))) {
@@ -384,7 +384,7 @@ do_rumors()
 	fprintf(ofp, "%s", Dont_Edit_Data);
 
 	sprintf(infile, DATA_IN_TEMPLATE, RUMOR_FILE);
-	Strcat(infile, ".tru");
+	strcat(infile, ".tru");
 	if (!(ifp = fopen(infile, RDTMODE))) {
 		perror(infile);
 		fclose(ofp);
@@ -414,7 +414,7 @@ do_rumors()
 	fclose(ifp);
 
 	sprintf(infile, DATA_IN_TEMPLATE, RUMOR_FILE);
-	Strcat(infile, ".fal");
+	strcat(infile, ".fal");
 	if (!(ifp = fopen(infile, RDTMODE))) {
 		perror(infile);
 		fclose(ofp);
@@ -565,9 +565,9 @@ const char *build_date;
     Strcpy(&subbuf[1], PORT_SUB_ID);
 #endif
 #if defined(ALPHA)
-    Strcat(subbuf, " Alpha");
+    strcat(subbuf, " Alpha");
 #elif defined(BETA)
-    Strcat(subbuf, " Beta");
+    strcat(subbuf, " Beta");
 #endif
 
     sprintf(outbuf, "%s %s%s Version %s - last build %s.",
@@ -585,7 +585,7 @@ do_date()
 	cbuf = malloc(600);
 	filename[0]='\0';
 #ifdef FILE_PREFIX
-	Strcat(filename,file_prefix);
+	strcat(filename,file_prefix);
 #endif
 	sprintf(eos(filename), INCLUDE_TEMPLATE, DATE_FILE);
 	if (!(ofp = fopen(filename, WRTMODE))) {
@@ -932,7 +932,7 @@ do_options()
 
 	filename[0]='\0';
 #ifdef FILE_PREFIX
-	Strcat(filename,file_prefix);
+	strcat(filename,file_prefix);
 #endif
 	sprintf(eos(filename), DATA_TEMPLATE, OPTIONS_FILE);
 	if (!(ofp = fopen(filename, WRTMODE))) {
@@ -1033,11 +1033,11 @@ do_data()
 	sprintf(tempfile, DATA_TEMPLATE, "database.tmp");
 	filename[0]='\0';
 #ifdef FILE_PREFIX
-	Strcat(filename,file_prefix);
+	strcat(filename,file_prefix);
 #endif
 	sprintf(eos(filename), DATA_TEMPLATE, DATA_FILE);
 	sprintf(infile, DATA_IN_TEMPLATE, DATA_FILE);
-	Strcat(infile,
+	strcat(infile,
 #ifdef SHORT_FILENAMES
 		".bas"
 #else
@@ -1178,11 +1178,11 @@ do_oracles()
 	sprintf(tempfile, DATA_TEMPLATE, "oracles.tmp");
 	filename[0]='\0';
 #ifdef FILE_PREFIX
-	Strcat(filename, file_prefix);
+	strcat(filename, file_prefix);
 #endif
 	sprintf(eos(filename), DATA_TEMPLATE, ORACLE_FILE);
 	sprintf(infile, DATA_IN_TEMPLATE, ORACLE_FILE);
-	Strcat(infile, ".txt");
+	strcat(infile, ".txt");
 	if (!(ifp = fopen(infile, RDTMODE))) {
 		perror(infile);
 		exit(EXIT_FAILURE);
@@ -1353,7 +1353,7 @@ do_dungeon()
 	}
 	filename[0]='\0';
 #ifdef FILE_PREFIX
-	Strcat(filename, file_prefix);
+	strcat(filename, file_prefix);
 #endif
 	sprintf(eos(filename), DGN_TEMPLATE, DGN_O_FILE);
 	if (!(ofp = fopen(filename, WRTMODE))) {
@@ -1478,7 +1478,7 @@ do_monstr()
      */
     filename[0]='\0';
 #ifdef FILE_PREFIX
-    Strcat(filename, file_prefix);
+    strcat(filename, file_prefix);
 #endif
     sprintf(eos(filename), SOURCE_TEMPLATE, MON_STR_C);
     if (!(ofp = fopen(filename, WRTMODE))) {
@@ -1518,7 +1518,7 @@ do_permonst()
 
 	filename[0]='\0';
 #ifdef FILE_PREFIX
-	Strcat(filename, file_prefix);
+	strcat(filename, file_prefix);
 #endif
 	sprintf(eos(filename), INCLUDE_TEMPLATE, MONST_FILE);
 	if (!(ofp = fopen(filename, WRTMODE))) {
@@ -1766,7 +1766,7 @@ do_questtxt()
 
 	filename[0]='\0';
 #ifdef FILE_PREFIX
-	Strcat(filename, file_prefix);
+	strcat(filename, file_prefix);
 #endif
 	sprintf(eos(filename), DATA_TEMPLATE, QTXT_O_FILE);
 	if(!(ofp = fopen(filename, WRBMODE))) {
@@ -1833,7 +1833,7 @@ do_objs()
 
 	filename[0]='\0';
 #ifdef FILE_PREFIX
-	Strcat(filename, file_prefix);
+	strcat(filename, file_prefix);
 #endif
 	sprintf(eos(filename), INCLUDE_TEMPLATE, ONAME_FILE);
 	if (!(ofp = fopen(filename, WRTMODE))) {
@@ -1989,7 +1989,7 @@ do_vision()
      */
     filename[0]='\0';
 #ifdef FILE_PREFIX
-    Strcat(filename, file_prefix);
+    strcat(filename, file_prefix);
 #endif
     sprintf(filename, INCLUDE_TEMPLATE, VIS_TAB_H);
     if (!(ofp = fopen(filename, WRTMODE))) {
@@ -2012,7 +2012,7 @@ do_vision()
      */
     filename[0]='\0';
 #ifdef FILE_PREFIX
-    Strcat(filename, file_prefix);
+    strcat(filename, file_prefix);
 #endif
     sprintf(filename, SOURCE_TEMPLATE, VIS_TAB_C);
     if (!(ofp = fopen(filename, WRTMODE))) {
@@ -2344,7 +2344,7 @@ do_filenames()
      */
     filename[0]='\0';
 #ifdef FILE_PREFIX
-    Strcat(filename, file_prefix);
+    strcat(filename, file_prefix);
 #endif
 
     sprintf(eos(filename), INCLUDE_TEMPLATE, FILENAME_H);

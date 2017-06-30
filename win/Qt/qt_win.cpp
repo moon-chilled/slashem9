@@ -2545,7 +2545,7 @@ void NetHackQtStatusWindow::updateStats()
     }
     Strcpy(buf, plname);
     if ('a' <= buf[0] && buf[0] <= 'z') buf[0] += 'A'-'a';
-    Strcat(buf, " the ");
+    strcat(buf, " the ");
     if (u.mtimedone) {
 	char mname[BUFSZ];
 	int k = 0;
@@ -2559,9 +2559,9 @@ void NetHackQtStatusWindow::updateStats()
 	    }
 	    k++;
 	}
-	Strcat(buf, mname);
+	strcat(buf, mname);
     } else {
-	Strcat(buf, rank_of(u.ulevel, pl_character[0], ::flags.female));
+	strcat(buf, rank_of(u.ulevel, pl_character[0], ::flags.female));
     }
     name.setLabel(buf,NetHackQtLabelledIcon::NoNum,u.ulevel);
 
@@ -3335,11 +3335,11 @@ static char** rip_line=0;
 	default: impossible("bad killer format?");
 	case KILLED_BY_AN:
 	    Strcpy(buf, killed_by_prefix[how]);
-	    Strcat(buf, an(killer));
+	    strcat(buf, an(killer));
 	    break;
 	case KILLED_BY:
 	    Strcpy(buf, killed_by_prefix[how]);
-	    Strcat(buf, killer);
+	    strcat(buf, killer);
 	    break;
 	case NO_KILLER_PREFIX:
 	    Strcpy(buf, killer);

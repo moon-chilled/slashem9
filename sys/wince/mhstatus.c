@@ -253,7 +253,7 @@ void FormatStatusString(char* text, int format)
 	    sprintf(nb = eos(nb), "T:%ld ", moves);
 
 	if(strcmp(hu_stat[u.uhs], "        ")) {
-		Strcat(text, hu_stat[u.uhs]);
+		strcat(text, hu_stat[u.uhs]);
 		sprintf(nb = eos(nb), " ");
 	}
 	if(Confusion)	   sprintf(nb = eos(nb), "Conf");

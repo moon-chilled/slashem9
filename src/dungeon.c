@@ -658,19 +658,19 @@ init_dungeons (void)
 	    sprintf(tbuf, "Cannot open dungeon description - \"%s",
 		DUNGEON_FILE);
 #ifdef DLBRSRC /* using a resource from the executable */
-	    Strcat(tbuf, "\" resource!");
+	    strcat(tbuf, "\" resource!");
 #else /* using a file or DLB file */
 # if defined(DLB)
-	    Strcat(tbuf, "\" from ");
+	    strcat(tbuf, "\" from ");
 #  ifdef PREFIXES_IN_USE
-	    Strcat(tbuf, "\n\"");
-	    if (fqn_prefix[DATAPREFIX]) Strcat(tbuf, fqn_prefix[DATAPREFIX]);
+	    strcat(tbuf, "\n\"");
+	    if (fqn_prefix[DATAPREFIX]) strcat(tbuf, fqn_prefix[DATAPREFIX]);
 #  else
-	    Strcat(tbuf, "\"");
+	    strcat(tbuf, "\"");
 #  endif
-	    Strcat(tbuf, DLBFILE);
+	    strcat(tbuf, DLBFILE);
 # endif
-	    Strcat(tbuf, "\" file!");
+	    strcat(tbuf, "\" file!");
 #endif
 #ifdef WIN32
 	    interject_assistance(1, INTERJECT_PANIC, (genericptr_t)tbuf,
@@ -1641,7 +1641,7 @@ xchar *rdgn;
 	/* Most entrances are uninteresting. */
 	if (dptr->entry_lev != 1) {
 	    if (dptr->entry_lev == nlev)
-		Strcat(buf, ", entrance from below");
+		strcat(buf, ", entrance from below");
 	    else
 		sprintf(eos(buf), ", entrance on %d",
 			dptr->depth_start + dptr->entry_lev - 1);

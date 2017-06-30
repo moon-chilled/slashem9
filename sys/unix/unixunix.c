@@ -508,17 +508,17 @@ char *lockname;
 # ifdef NO_FILE_LINKS
 	Strcpy(lockname, LOCKDIR);
 	if (LOCKDIR[sizeof(LOCKDIR)-2]!='/')
-		Strcat(lockname, "/");
-	Strcat(lockname, filename);
+		strcat(lockname, "/");
+	strcat(lockname, filename);
 # else
 # ifdef FILE_AREAS
 	Strcpy(lockname, FILE_AREA_VAR);
-	Strcat(lockname, filename);
+	strcat(lockname, filename);
 # else
 	Strcpy(lockname, filename);
 # endif
 # endif	/* NO_FILE_LINKS */
-	Strcat(lockname, "_lock");
+	strcat(lockname, "_lock");
 	return lockname;
 }
 

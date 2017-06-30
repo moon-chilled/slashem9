@@ -1682,45 +1682,45 @@ register struct obj *obj;
 	if(obj->dknown && objects[obj->otyp].oc_name_known) {
 		if(is_gem) {
 			if(is_buddy) {
-				Strcat(buf,addluck);
+				strcat(buf,addluck);
 				change_luck(5);
 			} else {
-				Strcat(buf,maybeluck);
+				strcat(buf,maybeluck);
 				change_luck(rn2(7)-3);
 			}
 		} else {
-			Strcat(buf,nogood);
+			strcat(buf,nogood);
 			goto nopick;
 		}
 	/* making guesses */
 	} else if(obj->onamelth || objects[obj->otyp].oc_uname) {
 		if(is_gem) {
 			if(is_buddy) {
-				Strcat(buf,addluck);
+				strcat(buf,addluck);
 				change_luck(2);
 			} else {
-				Strcat(buf,maybeluck);
+				strcat(buf,maybeluck);
 				change_luck(rn2(3)-1);
 			}
 		} else {
-			Strcat(buf,nogood);
+			strcat(buf,nogood);
 			goto nopick;
 		}
 	/* value completely unknown to @ */
 	} else {
 		if(is_gem) {
 			if(is_buddy) {
-				Strcat(buf,addluck);
+				strcat(buf,addluck);
 				change_luck(1);
 			} else {
-				Strcat(buf,maybeluck);
+				strcat(buf,maybeluck);
 				change_luck(rn2(3)-1);
 			}
 		} else {
-			Strcat(buf,noluck);
+			strcat(buf,noluck);
 		}
 	}
-	Strcat(buf,acceptgift);
+	strcat(buf,acceptgift);
 	if(*u.ushops) check_shop_obj(obj, mon->mx, mon->my, TRUE);
 	(void) mpickobj(mon, obj);	/* may merge and free obj */
 	ret = 1;

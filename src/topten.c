@@ -459,12 +459,12 @@ topten (int how)
 	switch (killer_format) {
 		default: impossible("bad killer format?");
 		case KILLED_BY_AN:
-			Strcat(t0->death, killed_by_prefix[how]);
+			strcat(t0->death, killed_by_prefix[how]);
 			(void) strncat(t0->death, an(killer),
 						DTHSZ-strlen(t0->death));
 			break;
 		case KILLED_BY:
-			Strcat(t0->death, killed_by_prefix[how]);
+			strcat(t0->death, killed_by_prefix[how]);
 			(void) strncat(t0->death, killer,
 						DTHSZ-strlen(t0->death));
 			break;
@@ -764,7 +764,7 @@ boolean so;
 
 	linebuf[0] = '\0';
 	if (rank) sprintf(eos(linebuf), "%3d", rank);
-	else Strcat(linebuf, "   ");
+	else strcat(linebuf, "   ");
 
 	sprintf(eos(linebuf), " %10ld  %.10s", t1->points, t1->name);
 	sprintf(eos(linebuf), "-%s", t1->plrole);
@@ -778,7 +778,7 @@ boolean so;
 	if (t1->plalign[0] != '?')
 		sprintf(eos(linebuf), "-%s ", t1->plalign);
 	else
-		Strcat(linebuf, " ");
+		strcat(linebuf, " ");
 	if (!strncmp("escaped", t1->death, 7)) {
 	    sprintf(eos(linebuf), "escaped the dungeon %s[max level %d]",
 		    !strncmp(" (", t1->death + 7, 2) ? t1->death + 7 + 2 : "",
@@ -798,7 +798,7 @@ boolean so;
 				"Ill", "Poly", "Form", "Wish", "Art", "Geno",
 				NULL };
 		
-			Strcat(eos(linebuf), "(");
+			strcat(eos(linebuf), "(");
 			for(i = 0, m = 1; conduct_names[i]; i += skip + 1, m <<= (skip + 1)) {
 				skip = 0;
 				if(t1->conduct & m)
@@ -812,11 +812,11 @@ boolean so;
 				if(i == 9) skip = 1;
 
 				/* Add a hyphen for multiple conducts */
-				if(dash) Strcat(eos(linebuf), "-");
-				Strcat(eos(linebuf), conduct_names[i]);
+				if(dash) strcat(eos(linebuf), "-");
+				strcat(eos(linebuf), conduct_names[i]);
 				dash = 1;
 			}
-			Strcat(eos(linebuf), ") ");
+			strcat(eos(linebuf), ") ");
 		}
 
 	    sprintf(eos(linebuf), "ascended to demigod%s-hood",
@@ -824,21 +824,21 @@ boolean so;
 	    second_line = FALSE;
 	} else {
 	    if (!strncmp(t1->death, "quit", 4)) {
-		Strcat(linebuf, "quit");
+		strcat(linebuf, "quit");
 		second_line = FALSE;
 	    } else if (!strncmp(t1->death, "died of st", 10)) {
-		Strcat(linebuf, "starved to death");
+		strcat(linebuf, "starved to death");
 		second_line = FALSE;
 	    } else if (!strncmp(t1->death, "choked", 6)) {
 		sprintf(eos(linebuf), "choked on h%s food",
 			(t1->plgend[0] == 'F') ? "er" : "is");
 	    } else if (!strncmp(t1->death, "poisoned", 8)) {
-		Strcat(linebuf, "was poisoned");
+		strcat(linebuf, "was poisoned");
 	    } else if (!strncmp(t1->death, "crushed", 7)) {
-		Strcat(linebuf, "was crushed to death");
+		strcat(linebuf, "was crushed to death");
 	    } else if (!strncmp(t1->death, "petrified by ", 13)) {
-		Strcat(linebuf, "turned to stone");
-	    } else Strcat(linebuf, "died");
+		strcat(linebuf, "turned to stone");
+	    } else strcat(linebuf, "died");
 
 	    if (t1->deathdnum == astral_level.dnum) {
 		int deathlev = t1->deathlev;
@@ -873,9 +873,9 @@ boolean so;
 
 	    /* kludge for "quit while already on Charon's boat" */
 	    if (!strncmp(t1->death, "quit ", 5))
-		Strcat(linebuf, t1->death + 4);
+		strcat(linebuf, t1->death + 4);
 	}
-	Strcat(linebuf, ".");
+	strcat(linebuf, ".");
 
 	/* Quit, starved, ascended, and escaped contain no second line */
 	if (second_line)
@@ -1155,22 +1155,22 @@ char **argv;
 	} else {
 	    sprintf(pbuf, "Cannot find any %sentries for ",
 				current_ver ? "current " : "");
-	    if (playerct < 1) Strcat(pbuf, "you.");
+	    if (playerct < 1) strcat(pbuf, "you.");
 	    else {
-		if (playerct > 1) Strcat(pbuf, "any of ");
+		if (playerct > 1) strcat(pbuf, "any of ");
 		for (i = 0; i < playerct; i++) {
 		    /* stop printing players if there are too many to fit */
 		    if (strlen(pbuf) + strlen(players[i]) + 2 >= BUFSZ) {
-			if (strlen(pbuf) < BUFSZ-4) Strcat(pbuf, "...");
+			if (strlen(pbuf) < BUFSZ-4) strcat(pbuf, "...");
 			else Strcpy(pbuf+strlen(pbuf)-4, "...");
 			break;
 		    }
-		    Strcat(pbuf, players[i]);
+		    strcat(pbuf, players[i]);
 		    if (i < playerct-1) {
 			if (players[i][0] == '-' &&
 			    index("prga", players[i][1]) && players[i][2] == 0)
-			    Strcat(pbuf, " ");
-			else Strcat(pbuf, ":");
+			    strcat(pbuf, " ");
+			else strcat(pbuf, ":");
 		    }
 		}
 	    }

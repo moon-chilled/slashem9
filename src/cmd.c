@@ -448,8 +448,8 @@ extcmd_via_menu (void)	/* here after # - now show pick-list of possible commands
 		    sprintf(prompt, "%s or %s", choices[i-1]->ef_txt,
 				choices[i]->ef_txt);
 		} else {
-		    Strcat(prompt," or ");
-		    Strcat(prompt, choices[i]->ef_txt);
+		    strcat(prompt," or ");
+		    strcat(prompt, choices[i]->ef_txt);
 		}
 		++acount;
 	    }
@@ -1690,7 +1690,7 @@ int final;
 	    Strcpy(buf, x_monnam(u.usteed, ARTICLE_YOUR, (char *)0, 
 		    SUPPRESS_SADDLE | SUPPRESS_HALLUCINATION, FALSE));
 	    *buf = highc(*buf);
-	    Strcat(buf, " had wounded legs");
+	    strcat(buf, " had wounded legs");
 	    dump("  ", buf);
 	}
 #endif
@@ -2967,13 +2967,13 @@ wiz_show_display()
     glyph = glyph_at(cc.x, cc.y);
     sprintf(buf, "Buffered (3rd screen): ");
     if (glyph_is_monster(glyph)) {
-	Strcat(buf, mons[glyph_to_mon(glyph)].mname);
+	strcat(buf, mons[glyph_to_mon(glyph)].mname);
 	if (glyph_is_pet(glyph))
-	    Strcat(buf, " (tame)");
+	    strcat(buf, " (tame)");
 	if (glyph_is_ridden_monster(glyph))
-	    Strcat(buf, " (ridden)");
+	    strcat(buf, " (ridden)");
 	if (glyph_is_detected_monster(glyph))
-	    Strcat(buf, " (detected)");
+	    strcat(buf, " (detected)");
     } else if (glyph_is_object(glyph)) {
 	if (glyph_is_body(glyph)) {
 	    int corpse = glyph_to_body(glyph);
@@ -2984,11 +2984,11 @@ wiz_show_display()
 	    else
 		sprintf(eos(buf), "%s corpse", mons[corpse].mname);
 	} else
-	    Strcat(buf, obj_typename(glyph_to_obj(glyph)));
+	    strcat(buf, obj_typename(glyph_to_obj(glyph)));
     } else if (glyph_is_invisible(glyph))
-	Strcat(buf, "invisible monster");
+	strcat(buf, "invisible monster");
     else if (glyph_is_cmap(glyph))
-	Strcat(buf, defsyms[glyph_to_cmap(glyph)].explanation);
+	strcat(buf, defsyms[glyph_to_cmap(glyph)].explanation);
     else
 	sprintf(eos(buf), "[%d]", glyph);
     putstr(win, 0, buf);
@@ -3839,7 +3839,7 @@ char def;
 	truncspot = QBUFSZ - reduction;
 	(void) strncpy(qbuf, query, (int)truncspot);
 	qbuf[truncspot] = '\0';
-	Strcat(qbuf,"...");
+	strcat(qbuf,"...");
 	return (*windowprocs.win_yn_function)(qbuf, resp, def);
 }
 #endif

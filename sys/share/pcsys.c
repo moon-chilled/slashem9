@@ -472,7 +472,7 @@ const char *name, *mode;
 	buf[BUFSZ-1] = '\0';
 	if ((strlen(name) + 1 + strlen(buf)) < BUFSZ - 1) {
 		append_slash(buf);
-		Strcat(buf,name);
+		strcat(buf,name);
 	} else 
 		impossible("fopenp() buffer too small for complete filename!");
 	if(fp = fopen(buf,mode))

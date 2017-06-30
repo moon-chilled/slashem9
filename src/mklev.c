@@ -659,7 +659,7 @@ makelevel()
 		    loc_lev = find_level(fillname);
 
 		    sprintf(fillname, "%s-fil", urole.filecode);
-		    Strcat(fillname,
+		    strcat(fillname,
 			   (u.uz.dlevel < loc_lev->dlevel.dlevel) ? "a" : "b");
 		    makemaz(fillname);
 		    return;

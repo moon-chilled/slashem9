@@ -1197,7 +1197,7 @@ void gnome_outrip(winid wid, int how)
     
     /* Put name on stone */
     sprintf(buf, "%s\n", plname);
-    Strcat(ripString, buf);
+    strcat(ripString, buf);
     
     /* Put $ on stone */
     sprintf(buf, "%ld Au\n",
@@ -1207,30 +1207,30 @@ void gnome_outrip(winid wid, int how)
 		done_money);
 #endif
 
-    Strcat(ripString, buf);
+    strcat(ripString, buf);
 
     /* Put together death description */
     switch (killer_format) {
 	    default: impossible("bad killer format?");
 	    case KILLED_BY_AN:
 		    Strcpy(buf, killed_by_prefix[how]);
-		    Strcat(buf, an(killer));
+		    strcat(buf, an(killer));
 		    break;
 	    case KILLED_BY:
 		    Strcpy(buf, killed_by_prefix[how]);
-		    Strcat(buf, killer);
+		    strcat(buf, killer);
 		    break;
 	    case NO_KILLER_PREFIX:
 		    Strcpy(buf, killer);
 		    break;
     }
     /* Put death type on stone */
-    Strcat(ripString, buf);
-    Strcat(ripString, "\n");
+    strcat(ripString, buf);
+    strcat(ripString, "\n");
 
     /* Put year on stone */
     sprintf(buf, "%4d\n", getyear());
-    Strcat(ripString, buf);
+    strcat(ripString, buf);
 
     ghack_text_window_rip_string( ripString);
 }

@@ -120,7 +120,7 @@ boolean exclude_cookie;
 			(void) dlb_fgets(line, sizeof line, rumors);
 		}
 		if ((endp = index(line, '\n')) != 0) *endp = 0;
-		Strcat(rumor_buf, xcrypt(line, xbuf));
+		strcat(rumor_buf, xcrypt(line, xbuf));
 	    } while(count++ < 50 && exclude_cookie && (strstri(rumor_buf, "fortune") || strstri(rumor_buf, "pity")));
 	    (void) dlb_fclose(rumors);
 	    if (count >= 50)

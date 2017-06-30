@@ -2030,8 +2030,8 @@ STATIC_OVL void use_grease(struct obj *obj) {
 #ifdef TOURIST
 		if ((otmp->owornmask & WORN_SHIRT) && (uarmc || uarm)) {
 			Strcpy(buf, uarmc ? xname(uarmc) : "");
-			if (uarmc && uarm) Strcat(buf, " and ");
-			Strcat(buf, uarm ? xname(uarm) : "");
+			if (uarmc && uarm) strcat(buf, " and ");
+			strcat(buf, uarm ? xname(uarm) : "");
 			You(need_to_remove_outer_armor, buf, xname(otmp));
 			return;
 		}
@@ -3311,7 +3311,7 @@ STATIC_OVL void add_class(char *cl, char class) {
 	char tmp[2];
 	tmp[0] = class;
 	tmp[1] = '\0';
-	Strcat(cl, tmp);
+	strcat(cl, tmp);
 }
 
 int doapply(void) {
