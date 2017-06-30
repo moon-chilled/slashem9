@@ -21,8 +21,7 @@ const char	* const plusattr[] = {
 
 
 /* KMH, intrinsics patch -- many of these are updated */
-static
-const struct innate {
+static const struct innate {
 	schar	ulevel;
 	long	*ability;
 	const char *gainstr, *losestr;
@@ -158,12 +157,10 @@ STATIC_DCL void exerper(void);
 STATIC_DCL void postadjabil(long *);
 
 /* adjust an attribute; return TRUE if change is made, FALSE otherwise */
-boolean
-adjattrib(ndx, incr, msgflg)
-	int	ndx, incr;
-	int	msgflg;	    /* 2 => no message at all, 1 => no message */
-			    /* except encumber, zero => message, and */
-{			    /* negative => conditional (msg if change made) */
+boolean adjattrib(int ndx, int incr, int msgflg	/* 2 => no message at all, 1 => no message */
+						/* except encumber, zero => message, and */
+						/* negative => conditional (msg if change made) */ ) {
+
 	if (Fixed_abil || !incr) return FALSE;
 
 	if ((ndx == A_INT || ndx == A_WIS)
@@ -218,9 +215,7 @@ adjattrib(ndx, incr, msgflg)
 	return TRUE;
 }
 
-void 
-gainstr (register struct obj *otmp, register int incr)
-{
+void gainstr(struct obj *otmp, int incr) {
 	int num = 1;
 
 	if(incr) num = incr;
@@ -228,14 +223,11 @@ gainstr (register struct obj *otmp, register int incr)
 	    if(ABASE(A_STR) < 18) num = (rn2(4) ? 1 : rnd(6) );
 	    else if (ABASE(A_STR) < STR18(85)) num = rnd(10);
 	}
-	(void) adjattrib(A_STR, (otmp && otmp->cursed) ? -num : num, TRUE);
+	adjattrib(A_STR, (otmp && otmp->cursed) ? -num : num, TRUE);
 }
 
-void 
-losestr (	/* may kill you; cause may be poison or monster like 'a' */
-    register int num
-)
-{
+// may kill you; cause may be poison or monster like 'a'
+void losestr(int num) {
 	int ustr = ABASE(A_STR) - num;
 
 	while(ustr < 3) {
@@ -249,24 +241,18 @@ losestr (	/* may kill you; cause may be poison or monster like 'a' */
 		u.uhpmax -= 6;
 	    }
 	}
-	(void) adjattrib(A_STR, -num, TRUE);
+	adjattrib(A_STR, -num, TRUE);
 }
 
-void
-change_luck(n)
-	register schar n;
-{
+void change_luck(schar n) {
 	u.uluck += n;
 	if (u.uluck < 0 && u.uluck < LUCKMIN)	u.uluck = LUCKMIN;
 	if (u.uluck > 0 && u.uluck > LUCKMAX)	u.uluck = LUCKMAX;
 }
 
-int
-stone_luck(parameter)
-boolean parameter; /* So I can't think up of a good name.  So sue me. --KAA */
-{
-	register struct obj *otmp;
-	register long bonchance = 0;
+int stone_luck(boolean parameter /* So I can't think up of a good name.  So sue me. --KAA */) {
+	struct obj *otmp;
+	long bonchance = 0;
 
 	for (otmp = invent; otmp; otmp = otmp->nobj)
 	    if (confers_luck(otmp)) {
@@ -278,13 +264,11 @@ boolean parameter; /* So I can't think up of a good name.  So sue me. --KAA */
 	/* STEPHEN WHITE'S NEW CODE */
 	if (uarmh && uarmh->otyp == FEDORA && !uarmh->cursed) bonchance += 2;
 	
-	return sgn((int)bonchance);
+	return sgn(bonchance);
 }
 
 /* there has just been an inventory change affecting a luck-granting item */
-void 
-set_moreluck (void)
-{
+void set_moreluck(void) {
 	int luckbon = stone_luck(TRUE);
 
 	if (!luckbon && !carrying(LUCKSTONE)) u.moreluck = 0;
@@ -294,10 +278,8 @@ set_moreluck (void)
 
 
 /* KMH, balance patch -- new function for healthstones */
-void 
-recalc_health (void)
-{
-	register struct obj *otmp;
+void recalc_health(void) {
+	struct obj *otmp;
 
 
 	u.uhealbonus = 0;
@@ -312,12 +294,10 @@ recalc_health (void)
 #endif /* OVLB */
 #ifdef OVL1
 
-void 
-restore_attrib (void)
-{
-	int	i;
+void restore_attrib(void) {
+	int i;
 
-	for(i = 0; i < A_MAX; i++) {	/* all temporary losses/gains */
+	for (i = 0; i < A_MAX; i++) {	/* all temporary losses/gains */
 
 	   if(ATEMP(i) && ATIME(i)) {
 		if(!(--(ATIME(i)))) { /* countdown for change */
@@ -328,7 +308,7 @@ restore_attrib (void)
 		}
 	    }
 	}
-	(void)encumber_msg();
+	encumber_msg();
 }
 
 #endif /* OVL1 */
@@ -336,11 +316,7 @@ restore_attrib (void)
 
 #define AVAL	50		/* tune value for exercise gains */
 
-void
-exercise(i, inc_or_dec)
-int	i;
-boolean	inc_or_dec;
-{
+void exercise(int i, boolean inc_or_dec) {
 #ifdef DEBUG
 	pline("Exercise:");
 #endif
@@ -379,9 +355,7 @@ boolean	inc_or_dec;
 #define FAINTED		5
 #define STARVED		6
 
-STATIC_OVL void
-exerper()
-{
+STATIC_OVL void exerper(void) {
 	if(!(moves % 10)) {
 		/* Hunger Checks */
 
@@ -441,10 +415,8 @@ exerper()
 	}
 }
 
-void 
-exerchk (void)
-{
-	int	i, mod_val;
+void exerchk(void) {
+	int i, mod_val;
 
 	/*	Check out the periodic accumulations */
 	exerper();
@@ -530,17 +502,13 @@ exerchk (void)
 }
 
 /* next_check will otherwise have its initial 600L after a game restore */
-void 
-reset_attribute_clock (void)
-{
+void reset_attribute_clock (void) {
 	if (moves > 600L) next_check = moves + rn1(50,800);
 }
 
 
-void 
-init_attr (register int np)
-{
-	register int	i, x, tryct;
+void init_attr (int np) {
+	int i, x, tryct;
 
 
 	for(i = 0; i < A_MAX; i++) {
@@ -586,10 +554,8 @@ init_attr (register int np)
 	}
 }
 
-void 
-redist_attr (void)
-{
-	register int i, tmp;
+void redist_attr(void) {
+	int i, tmp;
 
 	for(i = 0; i < A_MAX; i++) {
 	    if (i==A_INT || i==A_WIS) continue;
@@ -602,23 +568,17 @@ redist_attr (void)
 	    /* ABASE(i) > ATTRMAX(i) is impossible */
 	    if (ABASE(i) < ATTRMIN(i)) ABASE(i) = ATTRMIN(i);
 	}
-	(void)encumber_msg();
+	encumber_msg();
 }
 
-STATIC_OVL
-void
-postadjabil(ability)
-long *ability;
-{
+STATIC_OVL void postadjabil(long *ability) {
 	if (!ability) return;
 	if (ability == &(HWarning) || ability == &(HSee_invisible))
 		see_monsters();
 }
 
-void 
-adjabil (int oldlevel, int newlevel)
-{
-	register const struct innate *abil, *rabil;
+void adjabil(int oldlevel, int newlevel) {
+	const struct innate *abil, *rabil;
 	long mask = FROMEXPER;
 
 	switch (Role_switch) {
@@ -723,10 +683,8 @@ adjabil (int oldlevel, int newlevel)
 
 
 /* STEPHEN WHITE'S NEW CODE */
-int 
-newhp (void)
-{
-	int	hp, conplus;
+int newhp(void) {
+	int hp, conplus;
 
 	if(u.ulevel == 0) {
 	    /* Initialize hit points */
@@ -759,18 +717,15 @@ newhp (void)
 	else conplus = 4;
 	
 	hp += conplus;
-	return((hp <= 0) ? 1 : hp);
+	return (hp <= 0) ? 1 : hp;
 }
 
 #endif /* OVLB */
 #ifdef OVL0
 
 /* STEPHEN WHITE'S NEW CODE */   
-schar
-acurr(x)
-int x;
-{
-	register int tmp = (u.abon.a[x] + u.atemp.a[x] + u.acurr.a[x]);
+schar acurr(int x) {
+	int tmp = (u.abon.a[x] + u.atemp.a[x] + u.acurr.a[x]);
 
 	if (x == A_STR) {
                 /* WAC twiddle so that wearing rings and gauntlets have
@@ -812,10 +767,8 @@ int x;
 
 /* condense clumsy ACURR(A_STR) value into value that fits into game formulas
  */
-schar
-acurrstr()
-{
-	register int str = ACURR(A_STR);
+schar acurrstr(void) {
+	int str = ACURR(A_STR);
 
 	if (str <= 18) return str;
 	if (str <= 121) return (19 + str / 50); /* map to 19-21 */
@@ -828,10 +781,8 @@ acurrstr()
 /* avoid possible problems with alignment overflow, and provide a centralized
  * location for any future alignment limits
  */
-void 
-adjalign (register int n)
-{
-	register int newalign = u.ualign.record + n;
+void adjalign (int n) {
+	int newalign = u.ualign.record + n;
 
 	if (n < 0) {
 		if (newalign < u.ualign.record)
