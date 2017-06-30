@@ -979,7 +979,7 @@ STATIC_PTR int wiz_level_change(void) {
     else ret = sscanf(buf, "%d", &newlevel);
 
     if (ret != 1) {
-	pline(Never_mind);
+	pline("%s", Never_mind);
 	return 0;
     }
     if (newlevel == u.ulevel) {
@@ -1441,7 +1441,7 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 		sprintf(buf, "%s health", u.uhealbonus > 0 ? "extra" :
 			"reduced");
 #ifdef WIZARD
-	    if (wizard) sprintf(eos(buf), " (%d)", u.uhealbonus);
+	    if (wizard) sprintf(eos(buf), " (%ld)", u.uhealbonus);
 #endif
 		you_have(buf);
 	}
@@ -3149,7 +3149,7 @@ int movecmd(char sym) {
 int get_adjacent_loc(const char *prompt, const char *emsg, xchar x, xchar y, coord *cc) {
 	xchar new_x, new_y;
 	if (!getdir(prompt)) {
-		pline(Never_mind);
+		pline("%s", Never_mind);
 		return 0;
 	}
 	new_x = x + u.dx;
@@ -3158,7 +3158,7 @@ int get_adjacent_loc(const char *prompt, const char *emsg, xchar x, xchar y, coo
 		cc->x = new_x;
 		cc->y = new_y;
 	} else {
-		if (emsg) pline(emsg);
+		if (emsg) pline("%s", emsg);
 		return 0;
 	}
 	return 1;
@@ -3454,7 +3454,7 @@ STATIC_OVL char *parse(void) {
 		    if (multi > 9) {
 			clear_nhwindow(WIN_MESSAGE);
 			sprintf(in_line, "Count: %d", multi);
-			pline(in_line);
+			pline("%s", in_line);
 			mark_synch();
 		    }
 		    last_multi = multi;
