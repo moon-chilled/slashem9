@@ -1261,7 +1261,7 @@ STATIC_OVL void use_lamp(struct obj *obj) {
 		} else if (is_lightsaber(obj)) {
 		    /* WAC -- lightsabers */
 		    /* you can see the color of the blade */
-		    
+
 		    if (!Blind) makeknown(obj->otyp);
 		    You("ignite %s.", yname(obj));
 		    unweapon = FALSE;
@@ -1436,8 +1436,7 @@ int dojump(void) {
 	return jump(0);
 }
 
-int 
-jump( int magic /* 0=Physical, otherwise skill level */) {
+int jump( int magic /* 0=Physical, otherwise skill level */) {
 	coord cc;
 
 	if (!magic && (nolimbs(youmonst.data) || slithy(youmonst.data))) {
@@ -1667,7 +1666,7 @@ STATIC_OVL void use_tinning_kit(register struct obj *obj) {
 	    can->known = 1;
 
 	    /* WAC You know the type of tinned corpses */
-	    if (mvitals[corpse->corpsenm].eaten < 255) 
+	    if (mvitals[corpse->corpsenm].eaten < 255)
 	    	mvitals[corpse->corpsenm].eaten++;
 
 	    can->spe = -1;  /* Mark tinned tins. No spinach allowed... */
@@ -3101,7 +3100,7 @@ STATIC_OVL int do_break_wand(struct obj *obj) {
  * user-specified 'applying' as well as wands exploding by accident
  * during use (called by backfire() in zap.c)
  *
- * If the effect is directly recognisable as pertaining to a 
+ * If the effect is directly recognisable as pertaining to a
  * specific wand, the wand should be makeknown()
  * Otherwise, if there is an ambiguous or indirect but visible effect
  * the wand should be allowed to be named by the user.
@@ -3205,7 +3204,7 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 				newsym(u.ux, u.uy); /* if our hero happens to be invisible */
 				if (*in_rooms(u.ux,u.uy,SHOPBASE)) {
 					/* shopkeeper will remove it */
-					add_damage(u.ux, u.uy, 0L);             
+					add_damage(u.ux, u.uy, 0L);
 				}
 			}
 		}
@@ -3239,7 +3238,7 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 		     * do if it's a wall or door that's being dug */
 		    watch_dig((struct monst *)0, x, y, TRUE);
 		    if (*in_rooms(x,y,SHOPBASE)) shop_damage = TRUE;
-		}		    
+		}
 		digactualhole(x, y, BY_OBJECT,
 			      (rn2(obj->spe) < 3 || !Can_dig_down(&u.uz)) ?
 			       PIT : HOLE);
@@ -3444,7 +3443,7 @@ int doapply(void) {
 		use_candelabrum(obj);
 		break;
 	case WAX_CANDLE:
-/* STEPHEN WHITE'S NEW CODE */           
+/* STEPHEN WHITE'S NEW CODE */
 	case MAGIC_CANDLE:
 	case TALLOW_CANDLE:
 		use_candle(&obj);
@@ -3484,7 +3483,7 @@ int doapply(void) {
 #if 0
 	case ORB_OF_ENCHANTMENT:
 	    if(obj->spe > 0) {
-		
+
 		check_unpaid(obj);
 		if(uwep && (uwep->oclass == WEAPON_CLASS ||
 			    uwep->otyp == PICK_AXE ||
@@ -3493,7 +3492,7 @@ int doapply(void) {
 		if (obj->blessed) {
 				if (!Blind) pline("Your %s glows silver.",xname(uwep));
 				uwep->spe += rnd(2);
-		} else if (obj->cursed) {                               
+		} else if (obj->cursed) {
 				if (!Blind) pline("Your %s glows black.",xname(uwep));
 				uwep->spe -= rnd(2);
 		} else {
@@ -3505,13 +3504,13 @@ int doapply(void) {
 					uwep->spe -= 1;
 				}
 		}
-		} else pline("Nothing seems to happen.");                
-		
+		} else pline("Nothing seems to happen.");
+
 		if (uwep->spe > 5) uwep->spe = 5;
-				
+
 		} else pline("The orb glows for a moment, then fades.");
 		consume_obj_charge(obj, FALSE);
-	    
+
 	    } else pline("This orb is burnt out.");
 	    break;
 	case ORB_OF_CHARGING:
@@ -3563,12 +3562,12 @@ int doapply(void) {
 	case LEATHER_DRUM:
 	case DRUM_OF_EARTHQUAKE:
 	/* KMH, balance patch -- removed
-	case PAN_PIPE_OF_SUMMONING:                
+	case PAN_PIPE_OF_SUMMONING:
 	case PAN_PIPE_OF_THE_SEWERS:
 	case PAN_PIPE:*/
 		res = do_play_instrument(obj);
 		break;
-	case MEDICAL_KIT:        
+	case MEDICAL_KIT:
 		if (Role_if(PM_HEALER)) can_use = TRUE;
 		else if ((Role_if(PM_PRIEST) || Role_if(PM_MONK) ||
 			Role_if(PM_UNDEAD_SLAYER) || Role_if(PM_SAMURAI)) &&
@@ -3576,7 +3575,7 @@ int doapply(void) {
 		else if(!rn2(4)) can_use = TRUE;
 
 		if (obj->cursed && rn2(3)) can_use = FALSE;
-		if (obj->blessed && rn2(3)) can_use = TRUE;  
+		if (obj->blessed && rn2(3)) can_use = TRUE;
 
 		makeknown(MEDICAL_KIT);
 		if (obj->cobj) {
@@ -3692,17 +3691,17 @@ int doapply(void) {
 		} else {
 			obj->altmode = WP_MODE_AUTO;
 		}
-		
-		You("switch %s to %s mode.", yname(obj), 
-			((obj->altmode == WP_MODE_SINGLE) ? "single shot" : 
+
+		You("switch %s to %s mode.", yname(obj),
+			((obj->altmode == WP_MODE_SINGLE) ? "single shot" :
 			 ((obj->altmode == WP_MODE_BURST) ? "burst" :
 			  "full automatic")));
-		break;	
+		break;
 	case AUTO_SHOTGUN:
-	case SUBMACHINE_GUN:		
+	case SUBMACHINE_GUN:
 		if (obj->altmode == WP_MODE_AUTO) obj-> altmode = WP_MODE_SINGLE;
 		else obj->altmode = WP_MODE_AUTO;
-		You("switch %s to %s mode.", yname(obj), 
+		You("switch %s to %s mode.", yname(obj),
 			(obj->altmode ? "semi-automatic" : "full automatic"));
 		break;
 	case FRAG_GRENADE:
