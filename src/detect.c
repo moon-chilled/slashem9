@@ -177,7 +177,7 @@ int gold_detect(struct obj *sobj) {
 		goto outgoldmap;	/* skip further searching */
 	    }
     }
-    
+
     /* look for gold objects */
     for (obj = fobj; obj; obj = obj->nobj) {
 	if (sobj->blessed && o_material(obj, GOLD)) {
@@ -262,7 +262,7 @@ outgoldmap:
 		break;
 	    }
     }
-    
+
     newsym(u.ux,u.uy);
     You_feel("very greedy, and sense gold!");
     exercise(A_WIS, TRUE);
@@ -300,7 +300,7 @@ int food_detect(struct obj *sobj) {
 		break;
 	    }
     }
-    
+
     if (!ct && !ctu) {
 	known = stale && !confused;
 	if (stale) {
@@ -827,7 +827,7 @@ void use_crystal_ball(struct obj *obj) {
     if (flags.verbose) You("may look for an object or monster symbol.");
     ch = yn_function("What do you look for?", (char *)0, '\0');
     /* Don't filter out ' ' here; it has a use */
-    if ((ch != def_monsyms[S_GHOST]) && index(quitchars,ch)) { 
+    if ((ch != def_monsyms[S_GHOST]) && index(quitchars,ch)) {
 	if (flags.verbose) pline("%s", Never_mind);
 	return;
     }
@@ -1194,7 +1194,7 @@ int dosearch0(int aflag) {
 
 			    if (trap->ttyp == STATUE_TRAP) {
  				mtmp = activate_statue_trap(trap, x, y, FALSE);
- 				if (mtmp != (struct monst *)0) 
+ 				if (mtmp != (struct monst *)0)
 				    exercise(A_WIS, TRUE);
 				return(1);
 			    } else {
