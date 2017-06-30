@@ -1,0 +1,27 @@
+language: c
+
+sudo: false
+
+script:
+ - cd build
+ - ../configure
+ - make all
+
+notifications:
+  irc:
+    channels:
+      - "irc.freenode.net#em.slashem.me"
+    skip_join: true
+
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+    - os: linux
+      compiler: clang
+    - os: osx
+      compiler: gcc
+      osx_image: xcode9
+    - os: osx
+      compiler: clang
+      osx_image: xcode9
