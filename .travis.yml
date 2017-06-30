@@ -10,7 +10,7 @@ notifications:
   irc:
     channels:
       - "irc.freenode.net#em.slashem.me"
-    skip_join: false
+    skip_join: true
 
 matrix:
   include:
