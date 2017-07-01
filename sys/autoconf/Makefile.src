@@ -441,15 +441,6 @@ $(srcdir)/../win/gnome/gn_rip.h: $(srcdir)/../win/X11/rip.xpm
 	../util/makedefs -v
 
 
-lint:
-# lint cannot have -p here because (i) capitals are meaningful:
-# [Ww]izard, (ii) identifiers may coincide in the first six places:
-# doweararm() versus dowearring().
-# _flsbuf comes from <stdio.h>, a bug in the system libraries.
-	@echo lint -axbh -DLINT ...
-	@lint -axbh -I../include -I$(srcdir)/../include -DLINT $(CSOURCES) | sed '/_flsbuf/d'
-
-
 tags: $(CSOURCES)
 	@echo ctags -tw ...
 	@ctags -tw $(CSOURCES)

@@ -500,11 +500,7 @@ xname (register struct obj *obj)
 {
 /* WAC moved hallucination here */
 	register struct obj *hobj;
-#ifdef LINT     /* lint may handle static decl poorly -- static char bufr[]; */
-	char bufr[BUFSZ];
-#else
 	static char bufr[BUFSZ];
-#endif
 	register char *buf = &(bufr[PREFIX]);   /* leave room for "17 -3 " */
 
 	if (Hallucination && !program_state.gameover) {

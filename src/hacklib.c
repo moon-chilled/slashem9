@@ -44,11 +44,8 @@ NetHack, except that rounddiv may call panic().
 	int		night		(void)
 	int		midnight	(void)
 =*/
-#ifdef LINT
-# define Static		/* pacify lint */
-#else
-# define Static static
-#endif
+
+#define Static static
 
 #ifdef OVLB
 boolean

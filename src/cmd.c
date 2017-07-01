@@ -3400,11 +3400,7 @@ const char *click_to_cmd(int x, int y, int mod) {
 }
 
 STATIC_OVL char *parse(void) {
-#ifdef LINT	/* static char in_line[COLNO]; */
-	char in_line[COLNO];
-#else
 	static char in_line[COLNO];
-#endif
 	register int foo;
 #ifdef BORG
 	char junk_char;

@@ -127,13 +127,10 @@ struct tchars inittyb2, curttyb2;
 #endif	/* V7 */
 
 #if defined(TTY_GRAPHICS) && ((!defined(SYSV) && !defined(HPUX)) || defined(UNIXPC) || defined(SVR4))
-# ifndef LINT
-extern			/* it is defined in libtermlib (libtermcap) */
-# endif
-	short ospeed;	/* terminal baudrate; set by gettty */
-#else
-short	ospeed = 0;	/* gets around "not defined" error message */
-#endif
+
+extern short ospeed;	// terminal baudrate; set by gettty
+			// it is defined in libtermlib (libtermcap)
+
 
 #if defined(POSIX_TYPES) && defined(BSD)
 unsigned
@@ -222,11 +219,7 @@ void
 setftty()
 {
 register int ef = 0;			/* desired value of flags & ECHO */
-#ifdef LINT	/* cf = CBRKON(CBRKMASK); const expr to initialize is ok */
-register int cf = 0;
-#else
 register int cf = CBRKON(CBRKMASK);	/* desired value of flags & CBREAK */
-#endif
 register int change = 0;
 	iflags.cbreak = ON;
 	iflags.echo = OFF;
