@@ -127,9 +127,11 @@ struct tchars inittyb2, curttyb2;
 #endif	/* V7 */
 
 #if defined(TTY_GRAPHICS) && ((!defined(SYSV) && !defined(HPUX)) || defined(UNIXPC) || defined(SVR4))
-
 extern short ospeed;	// terminal baudrate; set by gettty
 			// it is defined in libtermlib (libtermcap)
+#else
+short ospeed = 0; // gets around "not defined" error message 
+#endif
 
 
 #if defined(POSIX_TYPES) && defined(BSD)
