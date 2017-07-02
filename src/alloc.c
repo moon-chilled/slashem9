@@ -4,13 +4,14 @@
 
 #include <stdlib.h>
 
-#include "hack.h"
-#include "extern.h"
 #include "tradstdc.h"
+#include "config1.h"
 
 #ifdef WIZARD
 char *fmt_ptr(const void*,char *);
 #endif
+
+extern void panic(const char *,...);
 
 void *alloc(size_t lth) {
 	void *ptr = calloc(1, lth);
