@@ -247,7 +247,7 @@ xname2 (register struct obj *obj)
 	if (Role_if(PM_SAMURAI) && Japanese_item_name(typ))
 		actualn = Japanese_item_name(typ);
 
-	if (!dn && !Blind) dn = "???";
+	if (!dn && restoring) dn = "???";
 	buf[0] = '\0';
 	/*
 	 * clean up known when it's tied to oc_name_known, eg after AD_DRIN
