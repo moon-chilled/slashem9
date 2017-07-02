@@ -4,8 +4,9 @@
 
 #include <stdlib.h>
 
-#include "tradstdc.h"
+#include "hack.h"
 #include "extern.h"
+#include "tradstdc.h"
 
 #ifdef WIZARD
 char *fmt_ptr(const void*,char *);

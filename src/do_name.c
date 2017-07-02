@@ -12,11 +12,7 @@ static void getpos_help(boolean,const char *);
 extern const char what_is_an_unknown_object[];		/* from pager.c */
 
 /* the response for '?' help request in getpos() */
-static void
-getpos_help(force, goal)
-boolean force;
-const char *goal;
-{
+static void getpos_help(boolean force, const char *goal) {
     char sbuf[BUFSZ];
     boolean doing_what_is;
     winid tmpwin = create_nhwindow(NHW_MENU);
@@ -39,12 +35,7 @@ const char *goal;
     destroy_nhwindow(tmpwin);
 }
 
-int
-getpos(cc,force,goal)
-coord *cc;
-boolean force;
-const char *goal;
-{
+int getpos(coord *cc, boolean force, const char *goal) {
     int result = 0;
     int cx, cy, i, c;
     int sidx, tx, ty;
@@ -190,9 +181,7 @@ const char *goal;
     return result;
 }
 
-struct monst *
-christen_monst (struct monst *mtmp, const char *name)
-{
+struct monst *christen_monst(struct monst *mtmp, const char *name) {
 	int lth;
 	struct monst *mtmp2;
 	char buf[PL_PSIZ];
@@ -219,13 +208,11 @@ christen_monst (struct monst *mtmp, const char *name)
 	return(mtmp2);
 }
 
-int 
-do_mname (void)
-{
+int do_mname(void) {
 	char buf[BUFSZ];
 	coord cc;
-	register int cx,cy;
-	register struct monst *mtmp;
+	int cx,cy;
+	struct monst *mtmp;
 	char qbuf[QBUFSZ];
 
 	if (Hallucination) {
@@ -285,11 +272,7 @@ do_mname (void)
  * when there might be pointers around in unknown places. For now: only
  * when obj is in the inventory.
  */
-STATIC_OVL
-void
-do_oname(obj)
-register struct obj *obj;
-{
+STATIC_OVL void do_oname(struct obj *obj) {
 	char buf[BUFSZ], qbuf[QBUFSZ];
 	const char *aname;
 	short objtyp;
@@ -325,14 +308,7 @@ register struct obj *obj;
 /*
  * Allocate a new and possibly larger storage space for an obj.
  */
-struct obj *
-realloc_obj(obj, oextra_size, oextra_src, oname_size, name)
-struct obj *obj;
-int oextra_size;		/* storage to allocate for oextra            */
-void * oextra_src;
-int oname_size;			/* size of name string + 1 (null terminator) */
-const char *name;
-{
+struct obj *realloc_obj(struct obj *obj, int oextra_size, void *oextra_src, int oname_size, const char *name) {
 	struct obj *otmp;
 
 	otmp = newobj(oextra_size + oname_size);
@@ -395,9 +371,7 @@ const char *name;
 	return otmp;
 }
 
-struct obj *
-oname (struct obj *obj, const char *name)
-{
+struct obj *oname(struct obj *obj, const char *name) {
 	int lth;
 	char buf[PL_PSIZ];
 
@@ -436,10 +410,8 @@ static NEARDATA const char callable[] = {
 	SCROLL_CLASS, POTION_CLASS, WAND_CLASS, RING_CLASS, AMULET_CLASS,
 	GEM_CLASS, SPBOOK_CLASS, ARMOR_CLASS, TOOL_CLASS, 0 };
 
-int 
-ddocall (void)
-{
-	register struct obj *obj;
+int ddocall(void) {
+	struct obj *obj;
 #ifdef REDO
 	char	ch;
 #endif
@@ -482,12 +454,10 @@ ddocall (void)
 	return 0;
 }
 
-void 
-docall (register struct obj *obj)
-{
+void docall(struct obj *obj) {
 	char buf[BUFSZ], qbuf[QBUFSZ];
 	struct obj otemp;
-	register char **str1;
+	char **str1;
 
 	if (!obj->dknown) return; /* probably blind */
 	otemp = *obj;
@@ -537,9 +507,7 @@ static const char * const ghostnames[] = {
 };
 
 /* ghost names formerly set by x_monnam(), now by makemon() instead */
-const char *
-rndghostname (void)
-{
+const char *rndghostname(void) {
     return rn2(7) ? ghostnames[rn2(SIZE(ghostnames))] : (const char *)plname;
 }
 
@@ -561,24 +529,20 @@ rndghostname (void)
 /* Bug: if the monster is a priest or shopkeeper, not every one of these
  * options works, since those are special cases.
  */
-char *
-x_monnam(mtmp, article, adjective, suppress, called)
-register struct monst *mtmp;
-int article;
-/* ARTICLE_NONE, ARTICLE_THE, ARTICLE_A: obvious
+char *x_monnam(struct monst *mtmp, int article, const char *adjective, int suppress, boolean called) {
+/* article:
+ * ARTICLE_NONE, ARTICLE_THE, ARTICLE_A: obvious
  * ARTICLE_YOUR: "your" on pets, "the" on everything else
  *
  * If the monster would be referred to as "it" or if the monster has a name
  * _and_ there is no adjective, "invisible", "saddled", etc., override this
  * and always use no article.
  */
-const char *adjective;
-int suppress;
-/* SUPPRESS_IT, SUPPRESS_INVISIBLE, SUPPRESS_HALLUCINATION, SUPPRESS_SADDLE.
+
+/* suppress:
+ * SUPPRESS_IT, SUPPRESS_INVISIBLE, SUPPRESS_HALLUCINATION, SUPPRESS_SADDLE.
  * EXACT_NAME: combination of all the above
  */
-boolean called;
-{
 	static char buf[BUFSZ];
 	struct permonst *mdat = mtmp->data;
 	boolean do_hallu, do_invis, do_it, do_saddle;
@@ -744,9 +708,7 @@ boolean called;
 #endif /* OVL0 */
 #ifdef OVLB
 
-char *
-l_monnam (register struct monst *mtmp)
-{
+char *l_monnam(struct monst *mtmp) {
 	return(x_monnam(mtmp, ARTICLE_NONE, (char *)0, 
 		mtmp->mnamelth ? SUPPRESS_SADDLE : 0, TRUE));
 }
@@ -754,9 +716,7 @@ l_monnam (register struct monst *mtmp)
 #endif /* OVLB */
 #ifdef OVL0
 
-char *
-mon_nam (register struct monst *mtmp)
-{
+char *mon_nam(struct monst *mtmp) {
 	return(x_monnam(mtmp, ARTICLE_THE, (char *)0,
 		mtmp->mnamelth ? SUPPRESS_SADDLE : 0, FALSE));
 }
@@ -765,43 +725,33 @@ mon_nam (register struct monst *mtmp)
  * can always see the monster--used for probing and for monsters aggravating
  * the player with a cursed potion of invisibility
  */
-char *
-noit_mon_nam (register struct monst *mtmp)
-{
+char *noit_mon_nam(struct monst *mtmp) {
 	return(x_monnam(mtmp, ARTICLE_THE, (char *)0,
 		mtmp->mnamelth ? (SUPPRESS_SADDLE|SUPPRESS_IT) :
 		    SUPPRESS_IT, FALSE));
 }
 
-char *
-Monnam (register struct monst *mtmp)
-{
-	register char *bp = mon_nam(mtmp);
+char *Monnam(struct monst *mtmp) {
+	char *bp = mon_nam(mtmp);
 
 	*bp = highc(*bp);
 	return(bp);
 }
 
-char *
-noit_Monnam (register struct monst *mtmp)
-{
-	register char *bp = noit_mon_nam(mtmp);
+char *noit_Monnam(struct monst *mtmp) {
+	char *bp = noit_mon_nam(mtmp);
 
 	*bp = highc(*bp);
 	return(bp);
 }
 
-/* monster's own name */
-char *
-m_monnam (struct monst *mtmp)
-{
+// monster's own name
+char *m_monnam(struct monst *mtmp) {
 	return x_monnam(mtmp, ARTICLE_NONE, (char *)0, EXACT_NAME, FALSE);
 }
 
-/* pet name: "your little dog" */
-char *
-y_monnam (struct monst *mtmp)
-{
+// pet name: "your little dog"
+char *y_monnam(struct monst *mtmp) {
 	int prefix, suppression_flag;
 
 	prefix = mtmp->mtame ? ARTICLE_YOUR : ARTICLE_THE;
@@ -818,27 +768,21 @@ y_monnam (struct monst *mtmp)
 #endif /* OVL0 */
 #ifdef OVLB
 
-char *
-Adjmonnam (register struct monst *mtmp, register const char *adj)
-{
-	register char *bp = x_monnam(mtmp, ARTICLE_THE, adj,
+char *Adjmonnam(struct monst *mtmp, const char *adj) {
+	char *bp = x_monnam(mtmp, ARTICLE_THE, adj,
 		mtmp->mnamelth ? SUPPRESS_SADDLE : 0, FALSE);
 
 	*bp = highc(*bp);
 	return(bp);
 }
 
-char *
-a_monnam (register struct monst *mtmp)
-{
+char *a_monnam(struct monst *mtmp) {
 	return x_monnam(mtmp, ARTICLE_A, (char *)0,
 		mtmp->mnamelth ? SUPPRESS_SADDLE : 0, FALSE);
 }
 
-char *
-Amonnam (register struct monst *mtmp)
-{
-	register char *bp = a_monnam(mtmp);
+char *Amonnam(struct monst *mtmp) {
+	char *bp = a_monnam(mtmp);
 
 	*bp = highc(*bp);
 	return(bp);
@@ -846,13 +790,9 @@ Amonnam (register struct monst *mtmp)
 
 /* used for monster ID by the '/', ';', and 'C' commands to block remote
    identification of the endgame altars via their attending priests */
-char *
-distant_monnam (
-    struct monst *mon,
-    int article,	/* only ARTICLE_NONE and ARTICLE_THE are handled here */
-    char *outbuf
-)
-{
+char *distant_monnam(struct monst *mon,
+			int article,	/* only ARTICLE_NONE and ARTICLE_THE are handled here */
+			char *outbuf) {
     /* high priest(ess)'s identity is concealed on the Astral Plane,
        unless you're adjacent (overridden for hallucination which does
        its own obfuscation) */
@@ -937,9 +877,7 @@ static const char * const bogusmons[] = {
  * (the Terminator, a Dalek).  There's no elegant way to deal
  * with this without radically modifying the calling functions.
  */
-const char *
-rndmonnam (void)
-{
+const char *rndmonnam(void) {
 	int name;
 
 	do {
@@ -952,9 +890,8 @@ rndmonnam (void)
 }
 
 #ifdef REINCARNATION
-const char *
-roguename (void) /* Name of a Rogue player */
-{
+// Name of a Rogue player
+const char *roguename(void) {
 	char *i, *opts;
 
 	if ((opts = nh_getenv("ROGUEOPTS")) != 0) {
@@ -986,17 +923,13 @@ static NEARDATA const char * const hcolors[] = {
 	"romantic", "incandescent"
 };
 
-const char *
-hcolor (const char *colorpref)
-{
+const char *hcolor(const char *colorpref) {
 	return (Hallucination || !colorpref) ?
 		hcolors[rn2(SIZE(hcolors))] : colorpref;
 }
 
 /* return a random real color unless hallucinating */
-const char *
-rndcolor (void)
-{
+const char *rndcolor(void) {
 	int k = rn2(CLR_MAX);
 	return Hallucination ? hcolor((char *)0) : (k == NO_COLOR) ?
 		"colorless" : c_obj_colors[k];
@@ -1018,9 +951,7 @@ static const char * const coynames[] = {
 	"Nemesis Riduclii","Canis latrans"
 };
 	
-char *
-coyotename (struct monst *mtmp, char *buf)
-{
+char *coyotename(struct monst *mtmp, char *buf) {
     if (mtmp && buf) {
 	sprintf(buf, "%s - %s",
 	    x_monnam(mtmp, ARTICLE_NONE, (char *)0, 0, TRUE),
