@@ -25,10 +25,6 @@ extern void win_GTK_init(void);
 #ifdef MAC
 extern struct window_procs mac_procs;
 #endif
-#ifdef BEOS_GRAPHICS
-extern struct window_procs beos_procs;
-extern void be_win_init(void);
-#endif
 #ifdef WIN32_GRAPHICS
 extern struct window_procs win32_procs;
 #endif
@@ -76,9 +72,6 @@ struct win_choices {
 #endif
 #ifdef MAC
     { &mac_procs, 0 },
-#endif
-#ifdef BEOS_GRAPHICS
-    { &beos_procs, be_win_init },
 #endif
 #ifdef WIN32_GRAPHICS
     { &win32_procs, 0 },

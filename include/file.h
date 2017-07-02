@@ -16,7 +16,7 @@
 #ifdef UNIX                
 # define NH_CONFIG_FILE     ".@LOWER@rc"
 #else
-# if defined(MAC) || defined(__BEOS__)
+# ifdef MAC
 #  define NH_CONFIG_FILE     "Slash'EM Defaults"
 # else                     
 #   ifdef WIN32

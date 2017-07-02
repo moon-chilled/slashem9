@@ -675,10 +675,6 @@ SOURCE=..\include\attrib.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\beconf.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\bitmfile.h
 # End Source File
 # Begin Source File
@@ -700,10 +696,6 @@ SOURCE=..\include\coord.h
 # Begin Source File
 
 SOURCE=..\include\decl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\def_os2.h
 # End Source File
 # Begin Source File
 
@@ -844,10 +836,6 @@ SOURCE=..\include\obj.h
 # Begin Source File
 
 SOURCE=..\include\objclass.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\os2conf.h
 # End Source File
 # Begin Source File
 

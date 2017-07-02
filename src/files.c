@@ -62,7 +62,7 @@ extern int errno;
 #define uncompress(file)	uncompress_area(NULL, file)
 #endif
 
-#if defined(OS2) || defined(WIN32)
+#ifdef WIN32
 #include <sys\stat.h>
 #endif
 #ifndef O_BINARY	/* used for micros, no-op for others */
@@ -88,7 +88,7 @@ char lock[PL_NSIZ+25];		/* long enough for username+-+name+.99 */
 # endif
 #endif
 
-#if defined(UNIX) || defined(__BEOS__)
+#ifdef UNIX
 # define SAVESIZE	(PL_NSIZ + 13)	/* save/99999player.e */
 #else
 # if defined(WIN32)
@@ -1379,7 +1379,7 @@ const char *configfile =
 #ifdef UNIX
 			".nethackrc";
 #else
-# if defined(MAC) || defined(__BEOS__)
+# ifdef MAC
 			"NetHack Defaults";
 #  ifdef WIN32
 			"defaults.nh";
@@ -1436,7 +1436,7 @@ const char *filename;
 		}
 	}
 
-#if defined(MICRO) || defined(MAC) || defined(__BEOS__) || defined(WIN32)
+#if defined(MICRO) || defined(MAC) || defined(WIN32)
 	if ((fp = fopenp(fqname(configfile, CONFIGPREFIX, 0), "r"))
 								!= (FILE *)0)
 		return(fp);
@@ -1968,7 +1968,7 @@ fopen_wizkit_file()
 #endif
 	}
 
-#if defined(MICRO) || defined(MAC) || defined(__BEOS__) || defined(WIN32)
+#if defined(MICRO) || defined(MAC) || defined(WIN32)
 	if ((fp = fopenp(fqname(wizkit, CONFIGPREFIX, 0), "r"))
 								!= (FILE *)0)
 		return(fp);
@@ -2073,24 +2073,9 @@ const char *dir;
 #endif  /* !UNIX && !VMS */
 #if defined(MICRO) || defined(WIN32)
 	char tmp[PATHLEN];
-
-# ifdef OS2_CODEVIEW   /* explicit path on opening for OS/2 */
-	/* how does this work when there isn't an explicit path or fopenp
-	 * for later access to the file via fopen_datafile? ? */
-	(void) strncpy(tmp, dir, PATHLEN - 1);
-	tmp[PATHLEN-1] = '\0';
-	if ((strlen(tmp) + 1 + strlen(NH_RECORD)) < (PATHLEN - 1)) {
-		append_slash(tmp);
-		strcat(tmp, NH_RECORD);
-	}
-#  ifndef FILE_AREAS
-	fq_record = tmp;
-#  endif
-# else
 	strcpy(tmp, NH_RECORD);
-#  ifndef FILE_AREAS
+# ifndef FILE_AREAS
 	fq_record = fqname(NH_RECORD, SCOREPREFIX, 0);
-#  endif
 # endif
 
 # ifdef FILE_AREAS

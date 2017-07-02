@@ -97,8 +97,8 @@
 #endif
 #endif /* NEED_VARARGS */
 
-#if defined(NHSTDC) || defined(MAC) || defined(ULTRIX_PROTO) || defined(__BEOS__)
-# if (defined(ULTRIX_PROTO) && !defined(__GNUC__)) || defined(OS2_CSET2)
+#if defined(NHSTDC) || defined(MAC) || defined(ULTRIX_PROTO)
+# if defined(ULTRIX_PROTO) && !defined(__GNUC__)
 # else
 #  if !defined(NHSTDC) && !defined(MAC)
 #   define const
@@ -142,9 +142,6 @@
  */
 #if defined(MAC_MPW)
 #define WIDENED_PROTOTYPES
-#endif
-#if defined(__MWERKS__) && defined(__BEOS__)
-#define UNWIDENED_PROTOTYPES
 #endif
 #if defined(WIN32)
 #define UNWIDENED_PROTOTYPES

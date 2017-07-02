@@ -85,8 +85,6 @@ SHELLDIR = $(PREFIX)/bin
 CNF_SHARE_QTND = x11tiles rip.xpm nhsplash.xpm
 CNF_SHARE_X11ND = x11bigtiles x11tiles SlashEM.ad pet_mark.xbm
 # CNF_SHARE_X11ND = x11bigtiles x11tiles SlashEM.ad pet_mark.xbm rip.xpm
-# for BeOS
-CNF_SHARE_BEND = beostiles
 # for SDL/GL window port
 CNF_SHARE_GLND = gltile16.png gltile32.png gltile64.png gllogo.png glrip.png \
                  glfont8.png glfont14.png glfont20.png glfont22.png
@@ -214,10 +212,6 @@ x11bigtiles.map: x11bigtiles
 x11big3dtiles.map: x11big3dtiles
 	( cd util ; $(MAKE) mapmerge )
 	( cd dat ; $(MAKE) x11big3dtiles.map )
-
-beostiles: $(GAME)
-	( cd util ; $(MAKE) tile2beos )
-	( cd dat ; $(MAKE) beostiles )
 
 gl%.png: $(GAME)
 	( cd util ; $(MAKE) tile2png )

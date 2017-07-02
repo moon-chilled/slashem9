@@ -413,15 +413,9 @@ int set, entry;
 #  define SOURCE_TEMPLATE	":src:%s"
 #  define SHARE_IN_TEMPLATE	":share:%s"
 #else
-# ifdef OS2
-#  define INCLUDE_TEMPLATE	"..\\include\\%s"
-#  define SOURCE_TEMPLATE	"..\\src\\%s"
-#  define SHARE_IN_TEMPLATE	"..\\win\\share\\%s"
-# else
-#  define INCLUDE_TEMPLATE	"../include/%s"
-#  define SOURCE_TEMPLATE	"../src/%s"
-#  define SHARE_IN_TEMPLATE	"../win/share/%s"
-# endif
+# define INCLUDE_TEMPLATE	"../include/%s"
+# define SOURCE_TEMPLATE	"../src/%s"
+# define SHARE_IN_TEMPLATE	"../win/share/%s"
 #endif
 
 short tilemap[MAX_GLYPH];

@@ -12,10 +12,8 @@
 #endif
 
 /* might display need graphics code? */
-#ifndef MAC
-# if defined(TERMLIB) || defined(OS2)
-#  define ASCIIGRAPH
-# endif
+#if !defined(MAC) && defined(TERMLIB)
+# define ASCIIGRAPH
 #endif
 
 #ifndef DECL_H

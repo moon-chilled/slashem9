@@ -42,7 +42,7 @@ SHARED_DCL char orgdir[PATHLEN];	/* also used in pcsys.c, amidos.c */
 STATIC_DCL void process_options(int argc,char **argv);
 STATIC_DCL void nhusage(void);
 
-#if defined(MICRO) || defined(WIN32) || defined(OS2)
+#if defined(MICRO) || defined(WIN32)
 extern void nethack_exit(int);
 #else
 #define nethack_exit exit
@@ -392,9 +392,6 @@ not_recovered:
 
 #ifndef NO_SIGNAL
 	(void) signal(SIGINT, SIG_IGN);
-#endif
-#ifdef OS2
-	gettty(); /* somehow ctrl-P gets turned back on during startup ... */
 #endif
 	return;
 }

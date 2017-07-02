@@ -130,12 +130,6 @@ WINX11LIB = -lXaw -lXmu -lXext -lXt -lX11
 # libraries for Gnome
 WINGNOMELIB = -lgnomeui -lgnome -lart_lgpl -lgtk -lgdk -lpopt
 #
-# libraries for Gem port
-WINGEMLIB = -le_gem -lgem
-#
-# libraries for BeOS
-WINBELIB = -lbe
-#
 # libraries for SDL/GL window port
 WINSDLLIB = @SDL_CONFIG_LIBS@ -lz -lpng
 WINGLLIB = -lGL
@@ -228,12 +222,12 @@ CSOURCES = $(HACKCSRC) $(SYSSRC) $(WINCSRC) $(GENCSRC)
 # cause dependency loops if run through "make depend"
 # and dgn_comp.h, dgn_file.h, lev_comp.h, special level & dungeon files.
 #
-HACKINCL = align.h artifact.h artilist.h attrib.h beconf.h color.h \
-	config.h config1.h coord.h decl.h def_os2.h display.h dlb.h dungeon.h \
+HACKINCL = align.h artifact.h artilist.h attrib.h color.h \
+	config.h config1.h coord.h decl.h display.h dlb.h dungeon.h \
 	edog.h emin.h engrave.h epri.h eshk.h extern.h flag.h func_tab.h \
 	global.h autoconf.h hack.h lev.h macconf.h mfndpos.h micro.h mkroom.h \
 	monattk.h mondata.h monflag.h monst.h monsym.h obj.h objclass.h \
-	os2conf.h patchlevel.h pcconf.h permonst.h prop.h rect.h region.h rm.h \
+	patchlevel.h pcconf.h permonst.h prop.h rect.h region.h rm.h \
 	sp_lev.h spell.h system.h tcap.h timeout.h tradstdc.h \
 	trap.h unixconf.h vault.h vision.h wintty.h winX.h winprocs.h \
 	wintype.h you.h youprop.h
@@ -286,22 +280,10 @@ Sysatt:	$(HOBJ) Makefile
 	@$(LD) $(LFLAGS) /lib/crt0s.o /lib/shlib.ifile -o $(GAME) $(HOBJ)
 	@touch Sysatt
 
-Systos:	$(HOBJ) Makefile
-	@echo "Loading ..."
-	@$(LINK) $(LFLAGS) -o $(GAME) $(HOBJ) $(WINLIB)
-	@touch Systos
-
 SysV-AT:	DUMB.Setup $(HOBJ) Makefile
 	@echo "Loading ..."
 	@$(LINK) $(LFLAGS) -o $(GAME) $(HOBJ) $(WINLIB)
 	@touch SysV-AT
-
-SysBe: $(HOBJ) Makefile
-	@echo "Loading ..."
-	@$(LINK) $(LFLAGS) -o $(GAME) $(HOBJ) $(WINLIB) $(LIBS)
-	@xres -o $(GAME) $(srcdir)/../win/BeOS/nethack.rsrc
-	@mimeset -f $(GAME)
-	@touch SysBe
 
 DUMB.Setup:	../include/extern.h
 	cp ../include/extern.h ../include/extern.h.BAK
@@ -445,9 +427,9 @@ depend: ../sys/autoconf/depend.awk \
 # config.h timestamp
 $(CONFIG_H): ../include/config.h ../include/config1.h ../include/tradstdc.h \
 		../include/global.h ../include/coord.h ../include/system.h \
-		../include/unixconf.h ../include/os2conf.h ../include/micro.h \
+		../include/unixconf.h ../include/micro.h \
 		../include/pcconf.h ../include/macconf.h \
-		../include/beconf.h ../include/ntconf.h ../include/nhlan.h \
+		../include/ntconf.h ../include/nhlan.h \
 		../include/autoconf.h
 	touch $(CONFIG_H)
 # hack.h timestamp

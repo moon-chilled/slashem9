@@ -49,7 +49,7 @@ STATIC_DCL void list_genocided(char,boolean);
 #endif /* DUMP_LOG */
 STATIC_DCL boolean should_query_disclose_option(int,char *);
 
-#if defined(__BEOS__) || defined(MICRO) || defined(WIN32) || defined(OS2)
+#if defined(MICRO) || defined(WIN32)
 extern void nethack_exit(int);
 #else
 #define nethack_exit exit

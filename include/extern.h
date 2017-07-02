@@ -868,14 +868,14 @@ extern int jumble_pack(void);
 
 /* ### ioctl.c ### */
 
-#if defined(UNIX) || defined(__BEOS__)
+#ifdef UNIX
 extern void getwindowsz(void);
 extern void getioctls(void);
 extern void setioctls(void);
 # ifdef SUSPEND
 extern int dosuspend(void);
 # endif /* SUSPEND */
-#endif /* UNIX || __BEOS__ */
+#endif /* UNIX */
 
 /* ### light.c ### */
 
@@ -1267,7 +1267,7 @@ extern void mplayer_talk(struct monst *);
 
 #if defined(MICRO) || defined(WIN32)
 
-/* ### msdos.c,os2.c,tos.c,winnt.c ### */
+/* ### winnt.c ### */
 
 #  ifndef WIN32
 extern int tgetch(void);
@@ -2124,14 +2124,14 @@ extern void port_help(void);
 
 /* ### unixtty.c ### */
 
-#if defined(UNIX) || defined(__BEOS__)
+#ifdef UNIX
 extern void gettty(void);
 extern void settty(const char *);
 extern void setftty(void);
 extern void intron(void);
 extern void introff(void);
 extern void error(const char *,...) PRINTF_F(1,2);
-#endif /* UNIX || __BEOS_ */
+#endif /* UNIX */
 
 /* ### unixunix.c ### */
 

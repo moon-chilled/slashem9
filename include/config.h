@@ -19,8 +19,6 @@
 
 #define UNIX		/* delete if no fork(), exec() available */
 
-/* #define OS2 */	/* in case it's not auto-detected */
-  
 /* #define STUPID */	/* avoid some complicated expressions if
   			   your C compiler chokes on them */
 /* #define MINIMAL_TERM */
@@ -34,7 +32,7 @@
   			/* Hint: if you're not developing code, don't define
   			   ULTRIX_PROTO. */
   
-#include "config1.h"	/* should auto-detect MAC, WIN32 and OS2 */
+#include "config1.h"	/* should auto-detect MAC and WIN32 */
   
 /* Windowing systems...
  * Define all of those you want supported in your binary.
@@ -54,7 +52,7 @@
  * Define the default window system.  This should be one that is compiled
  * into your system (see defines above).  Known window systems are:
  *
- *	tty, X11, mac, amii, BeOS, Qt, Gem, Gnome, gtk, proxy, GL, SDL
+ *	tty, X11, mac, Gnome, gtk, proxy, GL, SDL
  */
 
 /* MAC also means MAC windows */
@@ -68,14 +66,6 @@
 /* Windows NT supports TTY_GRAPHICS */
 #ifdef WIN32
 #  define DEFAULT_WINDOW_SYS "tty"
-#endif
-#endif
-
-#ifdef __BEOS__
-#define BEOS_GRAPHICS /* (optional) */
-#define DEFAULT_WINDOW_SYS "BeOS"  /* "tty" */
-#ifndef HACKDIR	/* override the default hackdir below */
-# define HACKDIR "/boot/apps/NetHack"
 #endif
 #endif
 

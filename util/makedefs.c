@@ -82,19 +82,11 @@ static	const char	SCCS_Id[] = "@(#)makedefs.c\t3.4\t2002/02/03";
 #  define DATA_TEMPLATE        "::lib:%s"
 #  define DATA_IN_TEMPLATE	":dat:%s"
 #else /* MAC */
-# ifdef OS2
-#  define INCLUDE_TEMPLATE	"..\\include\\%s"
-#  define SOURCE_TEMPLATE	"..\\src\\%s"
-#  define DGN_TEMPLATE		"..\\dat\\%s"  /* where dungeon.pdf file goes */
-#  define DATA_TEMPLATE	"..\\dat\\%s"
-#  define DATA_IN_TEMPLATE	"..\\dat\\%s"
-# else /* OS2 */
-#  define INCLUDE_TEMPLATE	"../include/%s"
-#  define SOURCE_TEMPLATE	"../src/%s"
-#  define DGN_TEMPLATE		"../dat/%s"  /* where dungeon.pdf file goes */
-#  define DATA_TEMPLATE	"../dat/%s"
-#  define DATA_IN_TEMPLATE	"../dat/%s"
-# endif /* OS2 */
+# define INCLUDE_TEMPLATE	"../include/%s"
+# define SOURCE_TEMPLATE	"../src/%s"
+# define DGN_TEMPLATE		"../dat/%s"  /* where dungeon.pdf file goes */
+# define DATA_TEMPLATE	"../dat/%s"
+# define DATA_IN_TEMPLATE	"../dat/%s"
 #endif /* MAC */
 
 static const char
@@ -871,9 +863,6 @@ static const char *window_opts[] = {
 #endif
 #ifdef MSWIN_GRAPHICS
 		"mswin",
-#endif
-#ifdef BEOS_GRAPHICS
-		"BeOS InterfaceKit",
 #endif
 #ifdef PROXY_GRAPHICS
 		"Plug-in modules",

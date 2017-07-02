@@ -21,7 +21,6 @@
 #	'Sysatt'	-- AT&T UNIXPC, 7300, 3B1
 #	'SysV-AT'	-- Microport 286 UNIX (put -DDUMB in CFLAGS)
 #	'Systos'	-- Atari
-#	'SysBe'		-- BeOS
 SYSTEM = Sysunix
 
 #
@@ -45,16 +44,6 @@ LINK=$(CC)
 SYSSRC = ../sys/share/ioctl.c ../sys/share/unixtty.c ../sys/unix/unixmain.c \
 	../sys/unix/unixunix.c ../sys/unix/unixres.c
 SYSOBJ = ioctl.o unixmain.o unixtty.o unixunix.o unixres.o
-#
-# for Systos
-# SYSSRC = ../sys/atari/tos.c ../sys/share/pcmain.c ../sys/share/pcsys.c \
-#	../sys/share/pctty.c ../sys/share/pcunix.c
-# SYSOBJ = tos.o pcmain.o pcsys.o pctty.o pcunix.o
-#
-# for BeOS
-#SYSSRC = ../sys/be/bemain.c ../sys/share/unixtty.c ../sys/share/ioctl.c
-#SYSOBJ = bemain.o unixtty.o ioctl.o
-
 
 # if you are using gcc as your compiler:
 #	uncomment the CC definition below if it's not in your environment
@@ -129,17 +118,6 @@ CC = gcc
 #   OR compile backwards compatible a.out format
 # CFLAGS = -O2 -b i486-linuxaout -fomit-frame-pointer -I../include
 # LFLAGS = -b i486-linuxaout -L/usr/X11R6/lib
-
-# flags for BeOS
-#   on a Mac/BeBox:
-#CC = mwcc
-#CFLAGS = -r -I../include
-#LINK = mwld
-#LFLAGS = -map nethack.xMAP
-#   on Intel:
-#CFLAGS = -O -I../include
-#LINK = gcc
-#LFLAGS = -Xlinker -soname=_APP_
 
 # flags for debugging:
 # CFLAGS = -g -I../include
@@ -220,13 +198,7 @@ WINGNOMEOBJ = gnaskstr.o gnbind.o gnglyph.o gnmain.o gnmap.o gnmenu.o \
 WINGEMSRC = ../win/gem/wingem.c ../win/gem/wingem1.c ../win/gem/load_img.c \
 	../win/gem/gr_rect.c
 WINGEMOBJ = wingem.o wingem1.o load_img.o gr_rect.o nhwin.a
-#
-# Files for a BeOS InterfaceKit port -- not ready for prime time
-WINBESRC =
-WINBEOBJ =
-#WINBESRC = ../win/BeOS/winbe.cpp ../win/BeOS/NHWindow.cpp \
-#     ../win/BeOS/NHMenuWindow.cpp ../win/BeOS/NHMapWindow.cpp
-#WINBEOBJ = winbe.o NHWindow.o NHMenuWindow.o NHMapWindow.o nhwin.a
+
 #
 # Files for a proxy interface
 WINPROXYSRC = ../win/proxy/winproxy.c ../win/proxy/callback.c \
@@ -307,9 +279,6 @@ WINGNOMELIB = -lgnomeui -lgnome -lart_lgpl -lgtk -lgdk -lpopt
 #
 # libraries for Gem port
 WINGEMLIB = -le_gem -lgem
-#
-# libraries for BeOS
-WINBELIB = -lbe
 #
 # libraries for SDL/GL window port
 WINSDLLIB = `sdl-config --libs` -lz -lpng
@@ -427,12 +396,12 @@ CSOURCES = $(HACKCSRC) $(SYSSRC) $(WINCSRC) $(GENCSRC)
 # cause dependency loops if run through "make depend"
 # and dgn_comp.h, dgn_file.h, lev_comp.h, special level & dungeon files.
 #
-HACKINCL = align.h artifact.h artilist.h attrib.h beconf.h color.h \
-	config.h config1.h coord.h decl.h def_os2.h display.h dlb.h dungeon.h \
+HACKINCL = align.h artifact.h artilist.h attrib.h color.h \
+	config.h config1.h coord.h decl.h display.h dlb.h dungeon.h \
 	edog.h emin.h engrave.h epri.h eshk.h extern.h flag.h func_tab.h \
 	global.h hack.h lev.h macconf.h mfndpos.h micro.h mkroom.h \
 	monattk.h mondata.h monflag.h monst.h monsym.h obj.h objclass.h \
-	os2conf.h patchlevel.h pcconf.h permonst.h prop.h rect.h region.h rm.h \
+	patchlevel.h pcconf.h permonst.h prop.h rect.h region.h rm.h \
 	sp_lev.h spell.h system.h tcap.h timeout.h tradstdc.h trap.h \
 	unixconf.h vault.h vision.h wintty.h winX.h winprocs.h wintype.h you.h \
 	youprop.h 
@@ -489,13 +458,6 @@ SysV-AT:	DUMB.Setup $(HOBJ) Makefile
 	@echo "Loading ..."
 	@$(LINK) $(LFLAGS) -o $(GAME) $(HOBJ) $(WINLIB)
 	@touch SysV-AT
-
-SysBe: $(HOBJ) Makefile
-	@echo "Loading ..."
-	@$(LINK) $(LFLAGS) -o $(GAME) $(HOBJ) $(WINLIB) $(LIBS)
-	@xres -o $(GAME) ../win/BeOS/nethack.rsrc
-	@mimeset -f $(GAME)
-	@touch SysBe
 
 DUMB.Setup:	../include/extern.h
 	cp ../include/extern.h ../include/extern.h.BAK
@@ -612,10 +574,9 @@ depend: ../sys/unix/depend.awk \
 # config.h timestamp
 $(CONFIG_H): ../include/config.h ../include/config1.h ../include/tradstdc.h \
 		../include/global.h ../include/coord.h \
-		../include/system.h ../include/unixconf.h ../include/os2conf.h \
+		../include/system.h ../include/unixconf.h \
 		../include/micro.h ../include/pcconf.h \
-		../include/macconf.h ../include/beconf.h \
-		../include/ntconf.h ../include/nhlan.h
+		../include/macconf.h ../include/ntconf.h ../include/nhlan.h
 		#../include/autoconf.h
 	touch $(CONFIG_H)
 # hack.h timestamp

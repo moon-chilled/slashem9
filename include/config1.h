@@ -23,20 +23,14 @@
 #endif
 
 #ifdef __MWERKS__	/* defined by Metrowerks' Codewarrior compiler */
-# ifndef __BEOS__	/* BeOS */
-#  define MAC
-# endif
+# define MAC
 # define NEED_VARARGS
 # define USE_STDARG
 #endif
 
-#if defined(MAC) || defined(__BEOS__)
+#ifdef MAC
 # define DLB
 # undef UNIX
-#endif
-
-#ifdef __BEOS__
-# define NEED_VARARGS
 #endif
 
 #ifdef __APPLE__        /* defined by GCC on Mac OS X */
@@ -112,13 +106,6 @@
  * defined("") => (-1 != - "" - 1)
  *   [which is an unavoidable catastrophe.]
  */
-#endif
-
-#if defined(__OS2__) || defined(__EMX__)
-# ifndef OS2
-#  define OS2
-# endif
-# undef UNIX
 #endif
 
 #endif	/* CONFIG1_H */

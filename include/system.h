@@ -60,11 +60,11 @@ typedef long	off_t;
  * impossible to get right automatically.
  * This is the type of signal handling functions.
  */
-#if !defined(OS2) && (defined(_MSC_VER) || defined(__TURBOC__) || defined(__SC__) || defined(WIN32))
+#if defined(_MSC_VER) || defined(__TURBOC__) || defined(__SC__) || defined(WIN32)
 # define SIG_RET_TYPE void (__cdecl *)(int)
 #endif
 #ifndef SIG_RET_TYPE
-# if defined(NHSTDC) || defined(POSIX_TYPES) || defined(OS2) || defined(__DECC)
+# if defined(NHSTDC) || defined(POSIX_TYPES) || defined(__DECC)
 #  define SIG_RET_TYPE void (*)(int)
 # endif
 #endif
@@ -104,24 +104,11 @@ extern void srand48(long);
 # ifndef MICRO
 extern void exit(int);
 # endif /* MICRO */
-/* compensate for some CSet/2 bogosities */
-# if defined(OS2_CSET2) && defined(OS2_CSET2_VER_2)
-#  define open	  _open
-#  define close   _close
-#  define read	  _read
-#  define write   _write
-#  define lseek   _lseek
-#  define chdir   _chdir
-#  define getcwd  _getcwd
-#  define setmode _setmode
-# endif /* OS2_CSET2 && OS2_CSET2_VER_2 */
 /* If flex thinks that we're not __STDC__ it declares free() to return
    int and we die.  We must use __STDC__ instead of NHSTDC because
    the former is naturally what flex tests for. */
 # if defined(__STDC__) || !defined(FLEX_SCANNER)
-#  ifndef OS2_CSET2
 extern void free(void *);
-#  endif
 # endif
 #if !defined(__SASC_60) && !defined(_DCC) && !defined(__SC__)
 #  if !(defined(ULTRIX_PROTO) && defined(__GNUC__))
@@ -172,19 +159,6 @@ extern int write(int,void *,unsigned);
 #   endif
 #  endif
 # endif /* ULTRIX */
-
-# ifdef OS2_CSET2	/* IBM CSet/2 */
-#  ifdef OS2_CSET2_VER_1
-extern int unlink(char *);
-#  else
-#  ifndef __SC__
-extern int unlink(const char *);
-#  else
-extern int unlink(const char *); /* prototype is ok in ver >= 2 */
-#  endif
-#  endif
-# endif
-
 #endif /* AZTEC_50 && __GNUC__ */
 
 #ifdef MAC

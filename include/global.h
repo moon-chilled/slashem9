@@ -145,16 +145,8 @@ typedef xchar	boolean;		/* 0 or 1 */
 #include "unixconf.h"
 #endif
 
-#ifdef OS2
-#include "os2conf.h"
-#endif
-
 #ifdef MAC
 #include "macconf.h"
-#endif
-
-#ifdef __BEOS__
-#include "beconf.h"
 #endif
 
 #ifdef WIN32
@@ -202,9 +194,6 @@ typedef xchar	boolean;		/* 0 or 1 */
 #  endif
 #  endif
 # endif
-# ifdef OS2
-#  define PORT_ID	"OS/2"
-# endif
 # ifdef UNIX
 #  define PORT_ID	"Unix"
 # endif
@@ -221,9 +210,7 @@ typedef xchar	boolean;		/* 0 or 1 */
 #endif
 
 #if defined(MICRO)
-#if !defined(OS2_HPFS)
 #define SHORT_FILENAMES		/* filenames are 8.3 */
-#endif
 #endif
 
 #ifndef EXIT_SUCCESS
