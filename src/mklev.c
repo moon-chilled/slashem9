@@ -18,32 +18,32 @@
 /* conversion of result to int is reasonable */
 
 
-STATIC_DCL void mkfount(int,struct mkroom *);
-STATIC_DCL void mksink(struct mkroom *);
-STATIC_DCL void mktoilet(struct mkroom *);
-STATIC_DCL void mkaltar(struct mkroom *);
-STATIC_DCL void mkgrave(struct mkroom *);
-STATIC_DCL void makevtele(void);
-STATIC_DCL void clear_level_structures(void);
-STATIC_DCL void makelevel(void);
-STATIC_DCL void mineralize(void);
-STATIC_DCL boolean bydoor(xchar,xchar);
-STATIC_DCL struct mkroom *find_branch_room(coord *);
-STATIC_DCL struct mkroom *pos_to_room(xchar, xchar);
-STATIC_DCL boolean place_niche(struct mkroom *, int*, int*, int*);
-STATIC_DCL void makeniche(int);
-STATIC_DCL void make_niches(void);
+static void mkfount(int,struct mkroom *);
+static void mksink(struct mkroom *);
+static void mktoilet(struct mkroom *);
+static void mkaltar(struct mkroom *);
+static void mkgrave(struct mkroom *);
+static void makevtele(void);
+static void clear_level_structures(void);
+static void makelevel(void);
+static void mineralize(void);
+static boolean bydoor(xchar,xchar);
+static struct mkroom *find_branch_room(coord *);
+static struct mkroom *pos_to_room(xchar, xchar);
+static boolean place_niche(struct mkroom *, int*, int*, int*);
+static void makeniche(int);
+static void make_niches(void);
 
-STATIC_PTR int CFDECLSPEC do_comp(const void*, const void*);
+static int CFDECLSPEC do_comp(const void*, const void*);
 
-STATIC_DCL void dosdoor(xchar,xchar,struct mkroom *,int);
-STATIC_DCL void join(int,int,boolean);
-STATIC_DCL void do_room_or_subroom(struct mkroom *,int,int,int,int,
+static void dosdoor(xchar,xchar,struct mkroom *,int);
+static void join(int,int,boolean);
+static void do_room_or_subroom(struct mkroom *,int,int,int,int,
 				       boolean,schar,boolean,boolean);
-STATIC_DCL void makerooms(void);
-STATIC_DCL void finddpos(coord *,xchar,xchar,xchar,xchar);
-STATIC_DCL void mkinvpos(xchar,xchar,int);
-STATIC_DCL void mk_knox_portal(xchar,xchar);
+static void makerooms(void);
+static void finddpos(coord *,xchar,xchar,xchar,xchar);
+static void mkinvpos(xchar,xchar,int);
+static void mk_knox_portal(xchar,xchar);
 
 #define create_vault()	create_room(-1, -1, 2, 2, -1, -1, VAULT, TRUE)
 #define init_vault()	vault_x = -1
@@ -54,7 +54,7 @@ static boolean made_branch;	/* used only during level creation */
 
 /* Args must be (const void*) so that qsort will always be happy. */
 
-STATIC_PTR int CFDECLSPEC
+static int CFDECLSPEC
 do_comp(vx,vy)
 const void *vx;
 const void *vy;
@@ -67,7 +67,7 @@ const void *vy;
 	return(x->lx > y->lx);
 }
 
-STATIC_OVL void
+static void
 finddpos(cc, xl,yl,xh,yh)
 coord *cc;
 xchar xl,yl,xh,yh;
@@ -105,7 +105,7 @@ sort_rooms (void)
 #endif
 }
 
-STATIC_OVL void
+static void
 do_room_or_subroom(croom, lowx, lowy, hix, hiy, lit, rtype, special, is_room)
     register struct mkroom *croom;
     int lowx, lowy;
@@ -214,7 +214,7 @@ boolean special;
 	nsubroom++;
 }
 
-STATIC_OVL void
+static void
 makerooms()
 {
 	boolean tried_vault = FALSE;
@@ -236,7 +236,7 @@ makerooms()
 	return;
 }
 
-STATIC_OVL void
+static void
 join(a,b,nxcor)
 register int a, b;
 boolean nxcor;
@@ -371,7 +371,7 @@ add_door (register int x, register int y, register struct mkroom *aroom)
 	return tmp;
 }
 
-STATIC_OVL void
+static void
 dosdoor(x,y,aroom,type)
 register xchar x, y;
 register struct mkroom *aroom;
@@ -429,7 +429,7 @@ register int type;
 	add_door(x,y,aroom);
 }
 
-STATIC_OVL boolean
+static boolean
 place_niche(aroom,dy,xx,yy)
 register struct mkroom *aroom;
 int *dy, *xx, *yy;
@@ -461,7 +461,7 @@ static const char *trap_engravings[TRAPNUM] = {
 			(char *)0,
 };
 
-STATIC_OVL void
+static void
 makeniche(trap_type)
 int trap_type;
 {
@@ -512,7 +512,7 @@ int trap_type;
 	}
 }
 
-STATIC_OVL void
+static void
 make_niches()
 {
 	register int ct = rnd((nroom>>1) + 1), dep = depth(&u.uz);
@@ -531,7 +531,7 @@ make_niches()
 	}
 }
 
-STATIC_OVL void
+static void
 makevtele()
 {
 	makeniche(TELEP_TRAP);
@@ -542,7 +542,7 @@ makevtele()
  * special) but it's easier to put it all in one place than make sure
  * each type initializes what it needs to separately.
  */
-STATIC_OVL void
+static void
 clear_level_structures()
 {
 #ifdef DISPLAY_LAYERS
@@ -611,7 +611,7 @@ clear_level_structures()
 	clear_regions();
 }
 
-STATIC_OVL void
+static void
 makelevel()
 {
 	register struct mkroom *croom, *troom;
@@ -883,7 +883,7 @@ skip0:
  *	Also place kelp in water.
  */
 
-STATIC_OVL void
+static void
 mineralize()
 {
 	s_level *sp;
@@ -1058,7 +1058,7 @@ register struct mkroom *croom;
 }
 
 /* Find an unused room for a branch location. */
-STATIC_OVL struct mkroom *
+static struct mkroom *
 find_branch_room(mp)
     coord *mp;
 {
@@ -1088,7 +1088,7 @@ find_branch_room(mp)
 }
 
 /* Find the room for (x,y).  Return null if not in a room. */
-STATIC_OVL struct mkroom *
+static struct mkroom *
 pos_to_room(x, y)
     xchar x, y;
 {
@@ -1160,7 +1160,7 @@ xchar x, y;	/* location */
 	made_branch = TRUE;
 }
 
-STATIC_OVL boolean
+static boolean
 bydoor(x, y)
 register xchar x, y;
 {
@@ -1347,7 +1347,7 @@ struct mkroom *croom;
 	levl[x][y].ladder = up ? LA_UP : LA_DOWN;
 }
 
-STATIC_OVL
+static
 void
 mkfount(mazeflag,croom)
 register int mazeflag;
@@ -1373,7 +1373,7 @@ register struct mkroom *croom;
 	level.flags.nfountains++;
 }
 
-STATIC_OVL void
+static void
 mksink(croom)
 register struct mkroom *croom;
 {
@@ -1411,7 +1411,7 @@ register struct mkroom *croom;
 	level.flags.nsinks++; /* counted as a sink for sounds.c */
 }
 
-STATIC_OVL void
+static void
 mkaltar(croom)
 register struct mkroom *croom;
 {
@@ -1530,7 +1530,7 @@ mkinvokearea()
 /* Change level topology.  Boulders in the vicinity are eliminated.
  * Temporarily overrides vision in the name of a nice effect.
  */
-STATIC_OVL void
+static void
 mkinvpos(x,y,dist)
 xchar x,y;
 int dist;
@@ -1610,7 +1610,7 @@ int dist;
  *
  * Ludios will remain isolated until the branch is corrected by this function.
  */
-STATIC_OVL void
+static void
 mk_knox_portal(x, y)
 xchar x, y;
 {

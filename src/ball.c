@@ -6,8 +6,8 @@
 
 #include "hack.h"
 
-STATIC_DCL int bc_order(void);
-STATIC_DCL void litter(void);
+static int bc_order(void);
+static void litter(void);
 
 #ifdef DISPLAY_LAYERS
 #define memory_object(x, y)	(levl[x][y].mem_obj)
@@ -146,7 +146,7 @@ void unplacebc(void) {
  *  Return the stacking of the hero's ball & chain.  This assumes that the
  *  hero is being punished.
  */
-STATIC_OVL int bc_order(void) {
+static int bc_order(void) {
     struct obj *obj;
 
     if (uchain->ox != uball->ox || uchain->oy != uball->oy || carried(uball)
@@ -704,7 +704,7 @@ void drop_ball(xchar x, xchar y) {
 }
 
 
-STATIC_OVL void litter(void) {
+static void litter(void) {
 	struct obj *otmp = invent, *nextobj;
 	int capacity = weight_cap();
 

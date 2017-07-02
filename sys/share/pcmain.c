@@ -30,17 +30,12 @@
 #include <unistd.h>			/* for getcwd() prototype */
 #endif
 
-#ifdef OVL0
 #define SHARED_DCL
-#else
-#define SHARED_DCL extern
-#endif
-
 
 SHARED_DCL char orgdir[PATHLEN];	/* also used in pcsys.c, amidos.c */
 
-STATIC_DCL void process_options(int argc,char **argv);
-STATIC_DCL void nhusage(void);
+static void process_options(int argc,char **argv);
+static void nhusage(void);
 
 #if defined(MICRO) || defined(WIN32)
 extern void nethack_exit(int);
@@ -57,25 +52,18 @@ extern void mswin_destroy_reg(void);
 #endif
 
 #ifdef EXEPATH
-STATIC_DCL char *exepath(char *);
+static char *exepath(char *);
 #endif
 
-#ifdef OVL0
 int main(int,char **);
-#endif
 
 extern void pcmain(int,char **);
 
 #if defined(__BORLANDC__) && !defined(_WIN32)
 void  startup (void);
-# ifdef OVLB
 unsigned _stklen = STKSIZ;
-# else
-extern unsigned _stklen;
-# endif
 #endif
 
-#ifdef OVL0
 /* If the graphics version is built, we don't need a main; it is skipped
  * to help MinGW decide which entry point to choose. If both main and
  * WinMain exist, the resulting executable won't work correctly.
@@ -96,8 +84,6 @@ char *argv[];
      return 0;
 }
 #endif /*MSWIN_GRAPHICS*/
-#endif /*OVL0*/
-#ifdef OVL1
 
 void
 pcmain(argc,argv)
@@ -383,7 +369,7 @@ not_recovered:
 	return;
 }
 
-STATIC_OVL void
+static void
 process_options(argc, argv)
 int argc;
 char *argv[];
@@ -495,7 +481,7 @@ char *argv[];
 	}
 }
 
-STATIC_OVL void 
+static void 
 nhusage()
 {
 	char buf1[BUFSZ];
@@ -546,8 +532,6 @@ boolean wr;
 	if (wr) check_recordfile(dir ? dir : thisdir);
 }
 #endif /* CHDIR */
-#endif /*OVL1*/
-#ifdef OVLB
 
 #ifdef PORT_HELP
 # ifdef WIN32
@@ -597,5 +581,4 @@ char *str;
 	return tmp;
 }
 #endif /* EXEPATH */
-#endif /*OVLB*/
 /*pcmain.c*/

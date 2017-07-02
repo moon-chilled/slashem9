@@ -22,18 +22,16 @@
 
 extern boolean notonhead;
 
-#ifdef OVL0
+static boolean dog_hunger(struct monst *,struct edog *);
+static int dog_invent(struct monst *,struct edog *,int);
+static int dog_goal(struct monst *,struct edog *,int,int,int);
 
-STATIC_DCL boolean dog_hunger(struct monst *,struct edog *);
-STATIC_DCL int dog_invent(struct monst *,struct edog *,int);
-STATIC_DCL int dog_goal(struct monst *,struct edog *,int,int,int);
-
-STATIC_DCL struct obj *DROPPABLES(struct monst *);
-STATIC_DCL boolean can_reach_location(struct monst *,xchar,xchar,
+static struct obj *DROPPABLES(struct monst *);
+static boolean can_reach_location(struct monst *,xchar,xchar,
     xchar,xchar);
-STATIC_DCL boolean could_reach_item(struct monst *, xchar,xchar);
+static boolean could_reach_item(struct monst *, xchar,xchar);
 
-STATIC_OVL struct obj *DROPPABLES(struct monst *mon) {
+static struct obj *DROPPABLES(struct monst *mon) {
 	register struct obj *obj;
 	struct obj *wep = MON_WEP(mon);
 	boolean item1 = FALSE, item2 = FALSE;
@@ -59,16 +57,13 @@ STATIC_OVL struct obj *DROPPABLES(struct monst *mon) {
 
 static const char nofetch[] = { BALL_CLASS, CHAIN_CLASS, ROCK_CLASS, 0 };
 
-#endif /* OVL0 */
+static boolean cursed_object_at(struct monst *, int, int);
 
-STATIC_OVL boolean cursed_object_at(struct monst *, int, int);
+static xchar gtyp, gx, gy;	/* type and position of dog's current goal */
 
-STATIC_VAR xchar gtyp, gx, gy;	/* type and position of dog's current goal */
+static void wantdoor(int, int, void *);
 
-STATIC_PTR void wantdoor(int, int, void *);
-
-#ifdef OVLB
-STATIC_OVL boolean cursed_object_at(struct monst *mtmp, int x, int y) {
+static boolean cursed_object_at(struct monst *mtmp, int x, int y) {
 	struct obj *otmp;
 
 	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
@@ -244,11 +239,9 @@ int dog_eat(struct monst *mtmp, struct obj *obj, int x, int y, boolean devour) {
 	return 1;
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
 /* hunger effects -- returns TRUE on starvation */
-STATIC_OVL boolean dog_hunger(struct monst *mtmp, struct edog *edog) {
+static boolean dog_hunger(struct monst *mtmp, struct edog *edog) {
 	if (monstermoves > edog->hungrytime + 500) {
 	    if (!carnivorous(mtmp->data) && !herbivorous(mtmp->data)) {
 		edog->hungrytime = monstermoves + 500;
@@ -292,7 +285,7 @@ STATIC_OVL boolean dog_hunger(struct monst *mtmp, struct edog *edog) {
 /* do something with object (drop, pick up, eat) at current position
  * returns 1 if object eaten (since that counts as dog's move), 2 if died
  */
-STATIC_OVL int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
+static int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 	/* KMH, balance patch -- quantity picked up should depend on dog's level */
 	int dogquan = 10 * mtmp->m_lev;
 	int omx, omy;
@@ -409,7 +402,7 @@ STATIC_OVL int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 /* set dog's goal -- gtyp, gx, gy
  * returns -1/0/1 (dog's desire to approach player) or -2 (abort move)
  */
-STATIC_OVL int dog_goal(struct monst *mtmp, struct edog *edog, int after, int udist, int whappr) {
+static int dog_goal(struct monst *mtmp, struct edog *edog, int after, int udist, int whappr) {
 	int omx, omy;
 	boolean in_masters_sight, dog_has_minvent;
 	struct obj *obj;
@@ -563,7 +556,7 @@ STATIC_OVL int dog_goal(struct monst *mtmp, struct edog *edog, int after, int ud
 				    bp += strlen(bp); \
 				} else
 
-STATIC_OVL char *allow_set(long allowflags) {
+static char *allow_set(long allowflags) {
     static char buf[500];
     char *bp = buf;
     if (allowflags == 0)
@@ -1013,7 +1006,7 @@ dognext:
 }
 
 /* check if a monster could pick up objects from a location */
-STATIC_OVL boolean could_reach_item(struct monst *mon, xchar nx, xchar ny) {
+static boolean could_reach_item(struct monst *mon, xchar nx, xchar ny) {
     if ((!is_pool(nx,ny) || is_swimmer(mon->data)) &&
 	(!is_lava(nx,ny) || likes_lava(mon->data)) &&
 	(!sobj_at(BOULDER,nx,ny) || throws_rocks(mon->data)))
@@ -1028,7 +1021,7 @@ STATIC_OVL boolean could_reach_item(struct monst *mon, xchar nx, xchar ny) {
  * Since the maximum food distance is 5, this should never be more than 5 calls
  * deep.
  */
-STATIC_OVL boolean can_reach_location(struct monst *mon, xchar mx, xchar my, xchar fx, xchar fy) {
+static boolean can_reach_location(struct monst *mon, xchar mx, xchar my, xchar fx, xchar fy) {
     int i, j;
     int dist;
 
@@ -1057,11 +1050,9 @@ STATIC_OVL boolean can_reach_location(struct monst *mon, xchar mx, xchar my, xch
     return FALSE;
 }
 
-#endif /* OVL0 */
-#ifdef OVLB
 
 /* do_clear_area client */
-STATIC_PTR void wantdoor(int x, int y, void *distance) {
+static void wantdoor(int x, int y, void *distance) {
     int ndist;
 
     if (*(int*)distance > (ndist = distu(x, y))) {
@@ -1070,7 +1061,5 @@ STATIC_PTR void wantdoor(int x, int y, void *distance) {
 	*(int*)distance = ndist;
     }
 }
-
-#endif /* OVLB */
 
 /*dogmove.c*/

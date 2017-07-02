@@ -41,30 +41,30 @@ struct toptenentry {
 	char death[DTHSZ+1];
 } *tt_head;
 
-STATIC_DCL void topten_print(const char *);
-STATIC_DCL void topten_print_bold(const char *);
-STATIC_DCL xchar observable_depth(d_level *);
-STATIC_DCL void outheader(void);
-STATIC_DCL void outentry(int,struct toptenentry *,boolean);
-STATIC_DCL void readentry(FILE *,struct toptenentry *);
-STATIC_DCL void writeentry(FILE *,struct toptenentry *);
+static void topten_print(const char *);
+static void topten_print_bold(const char *);
+static xchar observable_depth(d_level *);
+static void outheader(void);
+static void outentry(int,struct toptenentry *,boolean);
+static void readentry(FILE *,struct toptenentry *);
+static void writeentry(FILE *,struct toptenentry *);
 
 #ifdef XLOGFILE
-STATIC_DCL void munge_xlstring(char *dest, char *src, int n);
-STATIC_DCL void write_xlentry(FILE *,struct toptenentry *);
+static void munge_xlstring(char *dest, char *src, int n);
+static void write_xlentry(FILE *,struct toptenentry *);
 #endif
 
-STATIC_DCL void free_ttlist(struct toptenentry *);
-STATIC_DCL int classmon(char *,boolean);
-STATIC_DCL int score_wanted(boolean, int,struct toptenentry *,int,const char **,int);
+static void free_ttlist(struct toptenentry *);
+static int classmon(char *,boolean);
+static int score_wanted(boolean, int,struct toptenentry *,int,const char **,int);
 
-STATIC_DCL long encodeconduct(void);
-STATIC_DCL long encodeachieve(void);
+static long encodeconduct(void);
+static long encodeachieve(void);
 
-STATIC_DCL long encodeconduct(void);
+static long encodeconduct(void);
 #ifdef NO_SCAN_BRACK
-STATIC_DCL void nsb_mung_line(char*);
-STATIC_DCL void nsb_unmung_line(char*);
+static void nsb_mung_line(char*);
+static void nsb_unmung_line(char*);
 #endif
 
 /* must fit with end.c; used in rip.c */
@@ -79,7 +79,7 @@ static winid toptenwin = WIN_ERR;
 
 static time_t deathtime = 0L;
 
-STATIC_OVL void
+static void
 topten_print(x)
 const char *x;
 {
@@ -89,7 +89,7 @@ const char *x;
 	    putstr(toptenwin, ATR_NONE, x);
 }
 
-STATIC_OVL void
+static void
 topten_print_bold(x)
 const char *x;
 {
@@ -99,7 +99,7 @@ const char *x;
 	    putstr(toptenwin, ATR_BOLD, x);
 }
 
-STATIC_OVL xchar
+static xchar
 observable_depth(lev)
 d_level *lev;
 {
@@ -117,7 +117,7 @@ d_level *lev;
 	    return depth(lev);
 }
 
-STATIC_OVL void
+static void
 readentry(rfile,tt)
 FILE *rfile;
 struct toptenentry *tt;
@@ -207,7 +207,7 @@ struct toptenentry *tt;
 	}
 }
 
-STATIC_OVL void
+static void
 writeentry(rfile,tt)
 FILE *rfile;
 struct toptenentry *tt;
@@ -260,7 +260,7 @@ struct toptenentry *tt;
 
 /* copy a maximum of n-1 characters from src to dest, changing ':' and '\n'
  * to '_'; always null-terminate. */
-STATIC_OVL void
+static void
 munge_xlstring(dest, src, n)
 char *dest;
 char *src;
@@ -280,7 +280,7 @@ int n;
   return;
 }
 
-STATIC_OVL void
+static void
 write_xlentry(rfile,tt)
 FILE *rfile;
 struct toptenentry *tt;
@@ -342,7 +342,7 @@ struct toptenentry *tt;
 #undef SEP
 #endif /* XLOGFILE */
 
-STATIC_OVL void
+static void
 free_ttlist(tt)
 struct toptenentry *tt;
 {
@@ -667,7 +667,7 @@ topten (int how)
 	}
 }
 
-STATIC_OVL void
+static void
 outheader()
 {
 	char linebuf[BUFSZ];
@@ -684,7 +684,7 @@ outheader()
 }
 
 /* so>0: standout line; so=0: ordinary line */
-STATIC_OVL void
+static void
 outentry(rank, t1, so)
 struct toptenentry *t1;
 int rank;
@@ -872,7 +872,7 @@ boolean so;
 #endif
 }
 
-STATIC_OVL int
+static int
 score_wanted(current_ver, rank, t1, playerct, players, uid)
 boolean current_ver;
 int rank;
@@ -1106,7 +1106,7 @@ char **argv;
 	free_ttlist(tt_head);
 }
 
-STATIC_OVL int
+static int
 classmon(plch, fem)
 	char *plch;
 	boolean fem;
@@ -1184,14 +1184,14 @@ pickentry:
 /* Lattice scanf isn't up to reading the scorefile.  What */
 /* follows deals with that; I admit it's ugly. (KL) */
 /* Now generally available (KL) */
-STATIC_OVL void
+static void
 nsb_mung_line(p)
 	char *p;
 {
 	while ((p = index(p, ' ')) != 0) *p = '|';
 }
 
-STATIC_OVL void
+static void
 nsb_unmung_line(p)
 	char *p;
 {

@@ -8,34 +8,34 @@
 
 #include "hack.h"
 
-STATIC_DCL void simple_look(struct obj *,boolean);
+static void simple_look(struct obj *,boolean);
 #ifndef GOLDOBJ
-STATIC_DCL boolean query_classes(char *,boolean *,boolean *,
+static boolean query_classes(char *,boolean *,boolean *,
 		const char *,struct obj *,boolean,boolean,int *);
 #else
-STATIC_DCL boolean query_classes(char *,boolean *,boolean *,
+static boolean query_classes(char *,boolean *,boolean *,
 		const char *,struct obj *,boolean,int *);
 #endif
-STATIC_DCL void check_here(boolean);
-STATIC_DCL boolean n_or_more(struct obj *);
-STATIC_DCL boolean all_but_uchain(struct obj *);
+static void check_here(boolean);
+static boolean n_or_more(struct obj *);
+static boolean all_but_uchain(struct obj *);
 #if 0 /* not used */
-STATIC_DCL boolean allow_cat_no_uchain(struct obj *);
+static boolean allow_cat_no_uchain(struct obj *);
 #endif
-STATIC_DCL int autopick(struct obj*, int, menu_item **);
-STATIC_DCL int count_categories(struct obj *,int);
-STATIC_DCL long carry_count(struct obj *,struct obj *,long,boolean,int *,int *);
-STATIC_DCL int lift_object(struct obj *,struct obj *,long *,boolean);
-STATIC_PTR int in_container(struct obj *);
-STATIC_PTR int ck_bag(struct obj *);
-STATIC_PTR int out_container(struct obj *);
-STATIC_DCL long mbag_item_gone(int,struct obj *);
-STATIC_DCL void observe_quantum_cat(struct obj *);
-STATIC_DCL int menu_loot(int, struct obj *, boolean);
-STATIC_DCL int in_or_out_menu(const char *,struct obj *, boolean, boolean);
-STATIC_DCL int container_at(int, int, boolean);
-STATIC_DCL boolean able_to_loot(int, int);
-STATIC_DCL boolean mon_beside(int, int);
+static int autopick(struct obj*, int, menu_item **);
+static int count_categories(struct obj *,int);
+static long carry_count(struct obj *,struct obj *,long,boolean,int *,int *);
+static int lift_object(struct obj *,struct obj *,long *,boolean);
+static int in_container(struct obj *);
+static int ck_bag(struct obj *);
+static int out_container(struct obj *);
+static long mbag_item_gone(int,struct obj *);
+static void observe_quantum_cat(struct obj *);
+static int menu_loot(int, struct obj *, boolean);
+static int in_or_out_menu(const char *,struct obj *, boolean, boolean);
+static int container_at(int, int, boolean);
+static boolean able_to_loot(int, int);
+static boolean mon_beside(int, int);
 
 /* define for query_objlist() and autopickup() */
 #define FOLLOW(curr, flags) \
@@ -67,7 +67,7 @@ static const char overloadmsg[] = "You have extreme difficulty lifting";
 /* BUG: this lets you look at cockatrice corpses while blind without
    touching them */
 /* much simpler version of the look-here code; used by query_classes() */
-STATIC_OVL void
+static void
 simple_look(otmp, here)
 struct obj *otmp;	/* list of objects */
 boolean here;		/* flag for type of obj list linkage */
@@ -143,7 +143,7 @@ int *itemcount;
  *	    (ie, treated as if it had just been "?a").
  */
 #ifndef GOLDOBJ
-STATIC_OVL boolean
+static boolean
 query_classes(oclasses, one_at_a_time, everything, action, objs,
 	      here, incl_gold, menu_on_demand)
 char oclasses[];
@@ -153,7 +153,7 @@ struct obj *objs;
 boolean here, incl_gold;
 int *menu_on_demand;
 #else
-STATIC_OVL boolean
+static boolean
 query_classes(oclasses, one_at_a_time, everything, action, objs,
 	      here, menu_on_demand)
 char oclasses[];
@@ -257,7 +257,7 @@ ask_again:
 }
 
 /* look at the objects at our location, unless there are too many of them */
-STATIC_OVL void
+static void
 check_here(picked_some)
 boolean picked_some;
 {
@@ -284,7 +284,7 @@ boolean picked_some;
 static long val_for_n_or_more;
 
 /* query_objlist callback: return TRUE if obj's count is >= reference value */
-STATIC_OVL boolean
+static boolean
 n_or_more(obj)
 struct obj *obj;
 {
@@ -308,7 +308,7 @@ add_valid_menu_class (int c)
 }
 
 /* query_objlist callback: return TRUE if not uchain */
-STATIC_OVL boolean
+static boolean
 all_but_uchain(obj)
 struct obj *obj;
 {
@@ -350,7 +350,7 @@ struct obj *obj;
 
 #if 0 /* not used */
 /* query_objlist callback: return TRUE if valid category (class), no uchain */
-STATIC_OVL boolean
+static boolean
 allow_cat_no_uchain(obj)
 struct obj *obj;
 {
@@ -626,7 +626,7 @@ boolean grab;	 /* forced pickup, rather than forced leave behind? */
  * picked is zero, the pickup list is left alone.  The caller of this
  * function must free the pickup list.
  */
-STATIC_OVL int
+static int
 autopick(olist, follow, pick_list)
 struct obj *olist;	/* the object list */
 int follow;		/* how to follow the object list */
@@ -942,7 +942,7 @@ int how;			/* type of query */
 	return n;
 }
 
-STATIC_OVL int
+static int
 count_categories(olist, qflags)
 struct obj *olist;
 int qflags;
@@ -973,7 +973,7 @@ int qflags;
 }
 
 /* could we carry `obj'? if not, could we carry some of it/them? */
-STATIC_OVL long
+static long
 carry_count(obj, container, count, telekinesis, wt_before, wt_after)
 struct obj *obj, *container;	/* object to pick up, bag it's coming out of */
 long count;
@@ -1136,7 +1136,7 @@ int *wt_before, *wt_after;
 }
 
 /* determine whether character is able and player is willing to carry `obj' */
-STATIC_OVL
+static
 int 
 lift_object(obj, container, cnt_p, telekinesis)
 struct obj *obj, *container;	/* object to pick up, bag it's coming out of */
@@ -1443,7 +1443,7 @@ encumber_msg()
 }
 
 /* Is there a container at x,y. Optional: return count of containers at x,y */
-STATIC_OVL int
+static int
 container_at(x, y, countem)
 int x,y;
 boolean countem;
@@ -1461,7 +1461,7 @@ boolean countem;
 	return container_count;
 }
 
-STATIC_OVL boolean
+static boolean
 able_to_loot(x, y)
 int x, y;
 {
@@ -1489,7 +1489,7 @@ int x, y;
 	return TRUE;
 }
 
-STATIC_OVL boolean
+static boolean
 mon_beside(x,y)
 int x, y;
 {
@@ -1855,7 +1855,7 @@ free_bomb:
 }
 
 /* Returns: -1 to stop, 1 item was inserted, 0 item was not inserted. */
-STATIC_PTR int
+static int
 in_container(obj)
 register struct obj *obj;
 {
@@ -2015,7 +2015,7 @@ register struct obj *obj;
 	return(current_container ? 1 : -1);
 }
 
-STATIC_PTR int
+static int
 ck_bag(obj)
 struct obj *obj;
 {
@@ -2023,7 +2023,7 @@ struct obj *obj;
 }
 
 /* Returns: -1 to stop, 1 item was removed, 0 item was not removed. */
-STATIC_PTR int
+static int
 out_container(obj)
 register struct obj *obj;
 {
@@ -2103,7 +2103,7 @@ register struct obj *obj;
 }
 
 /* an object inside a cursed bag of holding is being destroyed */
-STATIC_OVL long
+static long
 mbag_item_gone(held, item)
 int held;
 struct obj *item;
@@ -2132,7 +2132,7 @@ struct obj *item;
     return loss;
 }
 
-STATIC_OVL void
+static void
 observe_quantum_cat(box)
 struct obj *box;
 {
@@ -2437,7 +2437,7 @@ ask_again2:
 }
 
 /* Loot a container (take things out, put things in), using a menu. */
-STATIC_OVL int
+static int
 menu_loot(retry, container, put_in)
 int retry;
 struct obj *container;
@@ -2514,7 +2514,7 @@ boolean put_in;
     return n_looted;
 }
 
-STATIC_OVL int
+static int
 in_or_out_menu(prompt, obj, outokay, inokay)
 const char *prompt;
 struct obj *obj;

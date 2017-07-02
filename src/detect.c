@@ -12,13 +12,13 @@
 
 extern boolean known;	/* from read.c */
 
-STATIC_DCL void do_dknown_of(struct obj *);
-STATIC_DCL boolean check_map_spot(int,int,char,unsigned);
-STATIC_DCL boolean clear_stale_map(char,unsigned);
-STATIC_DCL void sense_trap(struct trap *,xchar,xchar,int);
-STATIC_DCL void show_map_spot(int,int);
-STATIC_PTR void findone(int,int,void *);
-STATIC_PTR void openone(int,int,void *);
+static void do_dknown_of(struct obj *);
+static boolean check_map_spot(int,int,char,unsigned);
+static boolean clear_stale_map(char,unsigned);
+static void sense_trap(struct trap *,xchar,xchar,int);
+static void show_map_spot(int,int);
+static void findone(int,int,void *);
+static void openone(int,int,void *);
 
 /* Recursively search obj for an object in class oclass and return 1st found */
 struct obj *o_in(struct obj *obj, char oclass) {
@@ -61,7 +61,7 @@ struct obj *o_material (struct obj *obj, unsigned int material) {
     return (struct obj *) 0;
 }
 
-STATIC_OVL void do_dknown_of(struct obj *obj) {
+static void do_dknown_of(struct obj *obj) {
     struct obj *otmp;
 
     obj->dknown = 1;
@@ -72,7 +72,7 @@ STATIC_OVL void do_dknown_of(struct obj *obj) {
 }
 
 /* Check whether the location has an outdated object displayed on it. */
-STATIC_OVL boolean check_map_spot(int x, int y, char oclass, unsigned int material) {
+static boolean check_map_spot(int x, int y, char oclass, unsigned int material) {
 	int glyph;
 	struct obj *otmp;
 	struct monst *mtmp;
@@ -133,7 +133,7 @@ STATIC_OVL boolean check_map_spot(int x, int y, char oclass, unsigned int materi
    reappear after the detection has completed.  Return true if noticeable
    change occurs.
  */
-STATIC_OVL boolean clear_stale_map(char oclass, unsigned int material) {
+static boolean clear_stale_map(char oclass, unsigned int material) {
 	int zx, zy;
 	boolean change_made = FALSE;
 
@@ -620,7 +620,7 @@ int mclass		/* monster class, 0 for all */) {
     return 0;
 }
 
-STATIC_OVL void sense_trap(struct trap *trap, xchar x, xchar y, int src_cursed) {
+static void sense_trap(struct trap *trap, xchar x, xchar y, int src_cursed) {
     if (Hallucination || src_cursed) {
 	struct obj obj;			/* fake object */
 	if (trap) {
@@ -878,7 +878,7 @@ void use_crystal_ball(struct obj *obj) {
     return;
 }
 
-STATIC_OVL void show_map_spot(int x, int y) {
+static void show_map_spot(int x, int y) {
     struct rm *lev;
 
     if (Confusion && rn2(7)) return;
@@ -962,7 +962,7 @@ void cvt_sdoor_to_door(struct rm *lev) {
 	lev->doormask = newmask;
 }
 
-STATIC_PTR void findone(int zx, int zy, void * num) {
+static void findone(int zx, int zy, void * num) {
 	struct trap *ttmp;
 	struct monst *mtmp;
 
@@ -1004,7 +1004,7 @@ STATIC_PTR void findone(int zx, int zy, void * num) {
 	}
 }
 
-STATIC_PTR void openone(int zx, int zy, void * num) {
+static void openone(int zx, int zy, void * num) {
 	struct trap *ttmp;
 	struct obj *otmp;
 

@@ -8,7 +8,6 @@
 
 /*	These routines provide basic data for any type of monster. */
 
-#ifdef OVLB
 
 void
 set_mon_data(mon, ptr, flag)
@@ -26,8 +25,6 @@ int flag;
     return;
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
 struct attack *
 attacktype_fordmg (struct permonst *ptr, int atyp, int dtyp)
@@ -49,8 +46,6 @@ int atyp;
     return attacktype_fordmg(ptr, atyp, AD_ANY) ? TRUE : FALSE;
 }
 
-#endif /* OVL0 */
-#ifdef OVLB
 
 boolean
 poly_when_stoned(ptr)
@@ -211,8 +206,6 @@ struct obj *obj;		/* aatyp == AT_WEAP, AT_SPIT */
 	return TRUE;
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
 boolean
 ranged_attk(ptr)	/* returns TRUE if monster can attack at range */
@@ -246,8 +239,6 @@ struct permonst *mptr;
 		      (slithy(mptr) && !bigmonst(mptr)));
 }
 
-#endif /* OVL0 */
-#ifdef OVL1
 
 boolean
 can_track(ptr)		/* returns TRUE if monster can track well */
@@ -259,8 +250,6 @@ can_track(ptr)		/* returns TRUE if monster can track well */
 		return((boolean)haseyes(ptr));
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 boolean
 sliparm(ptr)	/* creature will slide out of armor */
@@ -279,8 +268,6 @@ breakarm(ptr)	/* creature will break out of armor */
 		ptr == &mons[PM_MARILITH] || ptr == &mons[PM_WINGED_GARGOYLE])
 	      && !sliparm(ptr));
 }
-#endif /* OVLB */
-#ifdef OVL1
 
 boolean
 sticks(ptr)	/* creature sticks other creatures it hits */
@@ -363,8 +350,6 @@ max_passive_dmg (register struct monst *mdef, register struct monst *magr)
     return 0;
 }
 
-#endif /* OVL1 */
-#ifdef OVL0
 
 int 
 monsndx (		/* return an index into the mons array */
@@ -386,8 +371,6 @@ monsndx (		/* return an index into the mons array */
 	return(i);
 }
 
-#endif /* OVL0 */
-#ifdef OVL1
 
 
 int 
@@ -507,8 +490,6 @@ name_to_mon (const char *in_str)
 	return mntmp;
 }
 
-#endif /* OVL1 */
-#ifdef OVL2
 
 /* returns 3 values (0=male, 1=female, 2=none) */
 int 
@@ -528,8 +509,6 @@ pronoun_gender (register struct monst *mtmp)
 		type_is_pname(mtmp->data)) ? (int)mtmp->female : 2;
 }
 
-#endif /* OVL2 */
-#ifdef OVLB
 
 /* used for nearby monsters when you go to another level */
 boolean
@@ -752,7 +731,5 @@ on_fire (struct permonst *mptr, struct attack *mattk)
     }
     return what;
 }
-
-#endif /* OVLB */
 
 /*mondata.c*/

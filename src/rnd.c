@@ -11,7 +11,6 @@
 # define RND(x)	(int)((Rand()>>3) % (x))
 #endif
 
-#ifdef OVL0
 
 int 
 rn2 (		/* 0 <= rn2(x) < x */
@@ -30,8 +29,6 @@ rn2 (		/* 0 <= rn2(x) < x */
 #endif
 }
 
-#endif /* OVL0 */
-#ifdef OVLB
 
 int 
 rnl (		/* 0 <= rnl(x) < x; sometimes subtracting Luck */
@@ -57,8 +54,6 @@ rnl (		/* 0 <= rnl(x) < x; sometimes subtracting Luck */
 	return i;
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
 int 
 rnd (		/* 1 <= rnd(x) <= x */
@@ -77,8 +72,6 @@ rnd (		/* 1 <= rnd(x) <= x */
 #endif
 }
 
-#endif /* OVL0 */
-#ifdef OVL1
 
 int 
 d (		/* n <= d(n,x) <= (n*x) */
@@ -98,8 +91,6 @@ d (		/* n <= d(n,x) <= (n*x) */
 	return(tmp); /* Alea iacta est. -- J.C. */
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 int 
 rne (register int x)
@@ -133,7 +124,5 @@ rnz (int i)
 	else { x *= 1000; x /= tmp; }
 	return((int)x);
 }
-
-#endif /* OVLB */
 
 /*rnd.c*/

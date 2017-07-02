@@ -21,14 +21,14 @@ int dotcnt, dotrow;	/* also used in restore */
 #endif
 
 #ifdef ZEROCOMP
-STATIC_DCL void bputc(int);
+static void bputc(int);
 #endif
-STATIC_DCL void savelevchn(int,int);
-STATIC_DCL void savedamage(int,int);
-STATIC_DCL void saveobjchn(int,struct obj *,int);
-STATIC_DCL void savemonchn(int,struct monst *,int);
-STATIC_DCL void savetrapchn(int,struct trap *,int);
-STATIC_DCL void savegamestate(int,int);
+static void savelevchn(int,int);
+static void savedamage(int,int);
+static void saveobjchn(int,struct obj *,int);
+static void savemonchn(int,struct monst *,int);
+static void savetrapchn(int,struct trap *,int);
+static void savegamestate(int,int);
 #ifdef GCC_WARN
 static long nulls[10];
 #else
@@ -280,7 +280,7 @@ dosave0()
 	return(1);
 }
 
-STATIC_OVL void
+static void
 savegamestate(fd, mode)
 register int fd, mode;
 {
@@ -556,7 +556,7 @@ static boolean compressing = FALSE;
     HUP printf("outbufp %d outrunlength %d\n", outbufp,outrunlength);
 }*/
 
-STATIC_OVL void
+static void
 bputc(c)
 int c;
 {
@@ -748,7 +748,7 @@ bclose(fd)
 }
 #endif /* ZEROCOMP */
 
-STATIC_OVL void
+static void
 savelevchn(fd, mode)
 register int fd, mode;
 {
@@ -770,7 +770,7 @@ register int fd, mode;
 	    sp_levchn = 0;
 }
 
-STATIC_OVL void
+static void
 savedamage(fd, mode)
 register int fd, mode;
 {
@@ -795,7 +795,7 @@ register int fd, mode;
 	    level.damagelist = 0;
 }
 
-STATIC_OVL void
+static void
 saveobjchn(fd, otmp, mode)
 register int fd, mode;
 register struct obj *otmp;
@@ -827,7 +827,7 @@ register struct obj *otmp;
 	    bwrite(fd, (void *) &minusone, sizeof(int));
 }
 
-STATIC_OVL void
+static void
 savemonchn(fd, mtmp, mode)
 register int fd, mode;
 register struct monst *mtmp;
@@ -859,7 +859,7 @@ register struct monst *mtmp;
 	    bwrite(fd, (void *) &minusone, sizeof(int));
 }
 
-STATIC_OVL void
+static void
 savetrapchn(fd, trap, mode)
 register int fd, mode;
 register struct trap *trap;

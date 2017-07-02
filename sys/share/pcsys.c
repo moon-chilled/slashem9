@@ -26,15 +26,6 @@ void nethack_exit(int);
 static void msexit(void);
 
 
-#ifdef MOVERLAY
-extern void __far __cdecl _movepause( void );
-extern void __far __cdecl _moveresume( void );
-extern unsigned short __far __cdecl _movefpause;
-extern unsigned short __far __cdecl _movefpaused;
-#define     __MOVE_PAUSE_DISK	  2   /* Represents the executable file */
-#define     __MOVE_PAUSE_CACHE	  4   /* Represents the cache memory */
-#endif /* MOVERLAY */
-
 #ifdef WIN32CON
 extern int GUILaunched;    /* from nttty.c */
 #endif
@@ -67,16 +58,7 @@ dosh()
 #  ifdef __GO32__
 		if (system(comspec) < 0) {  /* wsu@eecs.umich.edu */
 #  else
-#   ifdef MOVERLAY
-       /* Free the cache memory used by overlays, close .exe */
-	_movefpause |= __MOVE_PAUSE_DISK;
-	_movefpause |= __MOVE_PAUSE_CACHE;
-	_movepause();
-#   endif
 		spawnstat = spawnl(P_WAIT, comspec, comspec, (char *)0);
-#   ifdef MOVERLAY
-		 _moveresume();
-#   endif
 
 		if ( spawnstat < 0) {
 #  endif

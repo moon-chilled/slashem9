@@ -13,19 +13,16 @@
 #include "wintty.h"
 #include "func_tab.h"
 
-#ifdef OVL1
 char morc = 0;	/* tell the outside world what char you chose */
-#endif /* OVL1 */
-STATIC_DCL boolean ext_cmd_getlin_hook(char *);
+static boolean ext_cmd_getlin_hook(char *);
 
 typedef boolean (*getlin_hook_proc)(char *);
 
-STATIC_DCL void hooked_tty_getlin(const char*,char*,getlin_hook_proc);
+static void hooked_tty_getlin(const char*,char*,getlin_hook_proc);
 extern int extcmd_via_menu(void);	/* cmd.c */
 
 extern char erase_char, kill_char;	/* from appropriate tty.c file */
 
-#ifdef OVL1
 
 /*
  * Read a line closed with '\n' into the array char bufp[BUFSZ].
@@ -41,7 +38,7 @@ register char *bufp;
     hooked_tty_getlin(query, bufp, (getlin_hook_proc) 0);
 }
 
-STATIC_OVL void
+static void
 hooked_tty_getlin(query, bufp, hook)
 const char *query;
 register char *bufp;
@@ -197,8 +194,6 @@ register const char *s;	/* chars allowed besides return */
 
 }
 
-#endif /* OVL1 */
-#ifdef OVL2
 
 /*
  * Implement extended command completion by using this hook into
@@ -212,7 +207,7 @@ register const char *s;	/* chars allowed besides return */
  *	+ we don't change the characters that are already in base
  *	+ base has enough room to hold our string
  */
-STATIC_OVL boolean
+static boolean
 ext_cmd_getlin_hook(base)
 	char *base;
 {
@@ -276,8 +271,6 @@ tty_get_ext_cmd()
 
 	return i;
 }
-
-#endif /* OVL2 */
 
 #endif /* TTY_GRAPHICS */
 

@@ -29,25 +29,25 @@ static struct val_list { struct valuable_data *list; int size; } valuables[] = {
 };
 
 #ifndef NO_SIGNAL
-STATIC_PTR void done_intr(int);
+static void done_intr(int);
 # if defined(UNIX) || defined (__EMX__)
 static void done_hangup(int);
 # endif
 #endif
-STATIC_DCL void disclose(int,boolean);
-STATIC_DCL void get_valuables(struct obj *);
-STATIC_DCL void sort_valuables(struct valuable_data *,int);
-STATIC_DCL void artifact_score(struct obj *,boolean,winid);
-STATIC_DCL void savelife(int);
-STATIC_DCL boolean list_vanquished(char, boolean);
+static void disclose(int,boolean);
+static void get_valuables(struct obj *);
+static void sort_valuables(struct valuable_data *,int);
+static void artifact_score(struct obj *,boolean,winid);
+static void savelife(int);
+static boolean list_vanquished(char, boolean);
 #ifdef DUMP_LOG
 extern void dump_spells(void);
 void do_vanquished(int, boolean, boolean);
-STATIC_DCL void list_genocided(int, boolean, boolean);
+static void list_genocided(int, boolean, boolean);
 #else
-STATIC_DCL void list_genocided(char,boolean);
+static void list_genocided(char,boolean);
 #endif /* DUMP_LOG */
-STATIC_DCL boolean should_query_disclose_option(int,char *);
+static boolean should_query_disclose_option(int,char *);
 
 #if defined(MICRO) || defined(WIN32)
 extern void nethack_exit(int);
@@ -208,7 +208,7 @@ done2 (void)
 
 #ifndef NO_SIGNAL
 /*ARGSUSED*/
-STATIC_PTR void
+static void
 done_intr(sig_unused) /* called as signal() handler, so sent at least one arg */
 int sig_unused;
 {
@@ -381,7 +381,7 @@ panic VA_DECL(const char *, str)
 	done(PANICKED);
 }
 
-STATIC_OVL boolean
+static boolean
 should_query_disclose_option(category, defquery)
 int category;
 char *defquery;
@@ -419,7 +419,7 @@ char *defquery;
     return TRUE;
 }
 
-STATIC_OVL void
+static void
 disclose(how,taken)
 int how;
 boolean taken;
@@ -511,7 +511,7 @@ boolean taken;
 }
 
 /* try to get the player back in a viable state after being killed */
-STATIC_OVL void
+static void
 	savelife(how)
 int how;
 {
@@ -541,7 +541,7 @@ int how;
  * Get valuables from the given list.  Revised code: the list always remains
  * intact.
  */
-STATIC_OVL void
+static void
 get_valuables(list)
 struct obj *list;	/* inventory or container contents */
 {
@@ -574,7 +574,7 @@ struct obj *list;	/* inventory or container contents */
  *  Sort collected valuables, most frequent to least.  We could just
  *  as easily use qsort, but we don't care about efficiency here.
  */
-STATIC_OVL void
+static void
 sort_valuables(list, size)
 struct valuable_data list[];
 int size;		/* max value is less than 20 */
@@ -597,7 +597,7 @@ int size;		/* max value is less than 20 */
 }
 
 /* called twice; first to calculate total, then to list relevant items */
-STATIC_OVL void
+static void
 artifact_score(list, counting, endwin)
 struct obj *list;
 boolean counting;	/* true => add up points; false => display them */
@@ -1186,7 +1186,7 @@ terminate (int status)
 	nethack_exit(status);
 }
 
-STATIC_OVL boolean
+static boolean
 list_vanquished(defquery, ask)
 char defquery;
 boolean ask;
@@ -1305,13 +1305,13 @@ num_genocides (void)
 }
 
 #ifdef DUMP_LOG
-STATIC_OVL void
+static void
 list_genocided(defquery, ask, want_dump)
 int defquery;
 boolean ask;
 boolean want_dump;
 #else
-STATIC_OVL void
+static void
 list_genocided(defquery, ask)
 char defquery;
 boolean ask;

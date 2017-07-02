@@ -4,24 +4,24 @@
 
 #include "hack.h"
 
-STATIC_DCL boolean known_hitum(struct monst *,int,int *,struct attack *);
-STATIC_DCL void steal_it(struct monst *, struct attack *);
+static boolean known_hitum(struct monst *,int,int *,struct attack *);
+static void steal_it(struct monst *, struct attack *);
 #if 0
-STATIC_DCL boolean hitum(struct monst *,int,int,struct attack *);
+static boolean hitum(struct monst *,int,int,struct attack *);
 #endif
-STATIC_DCL boolean hmon_hitmon(struct monst *,struct obj *,int);
+static boolean hmon_hitmon(struct monst *,struct obj *,int);
 #ifdef STEED
-STATIC_DCL int joust(struct monst *,struct obj *);
+static int joust(struct monst *,struct obj *);
 #endif
-STATIC_DCL void demonpet(void);
-STATIC_DCL boolean m_slips_free(struct monst *mtmp,struct attack *mattk);
-STATIC_DCL int explum(struct monst *,struct attack *);
-STATIC_DCL void start_engulf(struct monst *);
-STATIC_DCL void end_engulf(void);
-STATIC_DCL int gulpum(struct monst *,struct attack *);
-STATIC_DCL boolean hmonas(struct monst *,int);
-STATIC_DCL void nohandglow(struct monst *);
-STATIC_DCL boolean shade_aware(struct obj *);
+static void demonpet(void);
+static boolean m_slips_free(struct monst *mtmp,struct attack *mattk);
+static int explum(struct monst *,struct attack *);
+static void start_engulf(struct monst *);
+static void end_engulf(void);
+static int gulpum(struct monst *,struct attack *);
+static boolean hmonas(struct monst *,int);
+static void nohandglow(struct monst *);
+static boolean shade_aware(struct obj *);
 
 static int martial_dmg(void);
 
@@ -484,7 +484,7 @@ atk_done:
 	return(TRUE);
 }
 
-STATIC_OVL boolean
+static boolean
 known_hitum(mon, mattack, mhit, uattk)   /* returns TRUE if monster still lives */
 register struct monst *mon;
 int mattack;			/* Which weapons you attacked with -ALI */
@@ -601,7 +601,7 @@ struct attack *uattk;
 }
 
 #if 0 /* Obsolete */
-STATIC_OVL boolean
+static boolean
 hitum(mon, tmp, mhit, uattk)          /* returns TRUE if monster still lives */
 struct monst *mon;
 int tmp;
@@ -697,7 +697,7 @@ int thrown;	/* 0: not thrown, 1: launched with uwep,
 }
 
 /* guts of hmon() */
-STATIC_OVL boolean
+static boolean
 hmon_hitmon(mon, obj, thrown)
 struct monst *mon;
 struct obj *obj;
@@ -1598,7 +1598,7 @@ int thrown;
 	return((boolean)(destroyed ? FALSE : TRUE));
 }
 
-STATIC_OVL boolean
+static boolean
 shade_aware(obj)
 struct obj *obj;
 {
@@ -1621,7 +1621,7 @@ struct obj *obj;
 
 /* check whether slippery clothing protects from hug or wrap attack */
 /* [currently assumes that you are the attacker] */
-STATIC_OVL boolean
+static boolean
 m_slips_free(mdef, mattk)
 struct monst *mdef;
 struct attack *mattk;
@@ -1664,7 +1664,7 @@ struct attack *mattk;
 }
 
 /* used when hitting a monster with a lance while mounted */
-STATIC_OVL int	/* 1: joust hit; 0: ordinary hit; -1: joust but break lance */
+static int	/* 1: joust hit; 0: ordinary hit; -1: joust but break lance */
 joust(mon, obj)
 struct monst *mon;	/* target */
 struct obj *obj;	/* weapon */
@@ -1698,7 +1698,7 @@ struct obj *obj;	/* weapon */
  * (DR4 and DR4.5) screws up with an internal error 5 "Expression Too Complex."
  * Pulling it out makes it work.
  */
-STATIC_OVL void
+static void
 demonpet()
 {
 	int i;
@@ -1725,7 +1725,7 @@ demonpet()
  * If that ever changes, the check for touching a cockatrice corpse
  * will need to be smarter about whether to break out of the theft loop.
  */
-STATIC_OVL void
+static void
 steal_it(mdef, mattk)
 struct monst *mdef;
 struct attack *mattk;
@@ -2350,7 +2350,7 @@ register struct attack *mattk;
 	return(1);
 }
 
-STATIC_OVL int
+static int
 explum(mdef, mattk)
 register struct monst *mdef;
 register struct attack *mattk;
@@ -2406,7 +2406,7 @@ common:
 	return(1);
 }
 
-STATIC_OVL void
+static void
 start_engulf(mdef)
 struct monst *mdef;
 {
@@ -2420,7 +2420,7 @@ struct monst *mdef;
 	delay_output();
 }
 
-STATIC_OVL void
+static void
 end_engulf()
 {
 	if (!Invisible) {
@@ -2429,7 +2429,7 @@ end_engulf()
 	}
 }
 
-STATIC_OVL int
+static int
 gulpum(mdef,mattk)
 register struct monst *mdef;
 register struct attack *mattk;
@@ -2671,7 +2671,7 @@ register int roll;
  *
  * [ALI] Returns TRUE if you hit (and maybe killed) the monster.
  */
-STATIC_OVL boolean
+static boolean
 hmonas(mon, tmp)		/* attack monster as a monster. */
 register struct monst *mon;
 register int tmp;
@@ -3343,7 +3343,7 @@ struct monst *mtmp;
 	wakeup(mtmp);	/* clears mimicking */
 }
 
-STATIC_OVL void
+static void
 nohandglow(mon)
 struct monst *mon;
 {

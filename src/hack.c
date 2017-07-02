@@ -4,20 +4,17 @@
 
 #include "hack.h"
 
-#ifdef OVL1
-STATIC_DCL void maybe_wail(void);
-#endif /*OVL1*/
-STATIC_DCL int moverock(void);
-STATIC_DCL int still_chewing(xchar,xchar);
-STATIC_DCL void dosinkfall(void);
-STATIC_DCL boolean findtravelpath(boolean);
-STATIC_DCL boolean monstinroom(struct permonst *,int);
+static void maybe_wail(void);
+static int moverock(void);
+static int still_chewing(xchar,xchar);
+static void dosinkfall(void);
+static boolean findtravelpath(boolean);
+static boolean monstinroom(struct permonst *,int);
 
-STATIC_DCL void move_update(boolean);
+static void move_update(boolean);
 
 #define IS_SHOP(x)	(rooms[x].rtype >= SHOPBASE)
 
-#ifdef OVL2
 
 #ifdef DUNGEON_GROWTH
 void
@@ -379,7 +376,7 @@ const char *msg;
     return (revived);
 }
 
-STATIC_OVL int
+static int
 moverock()
 {
     register xchar rx, ry, sx, sy;
@@ -632,7 +629,7 @@ moverock()
  *  Chew on a wall, door, or boulder.  Returns TRUE if still eating, FALSE
  *  when done.
  */
-STATIC_OVL int
+static int
 still_chewing(x,y)
     xchar x, y;
 {
@@ -752,8 +749,6 @@ still_chewing(x,y)
     return 0;
 }
 
-#endif /* OVL2 */
-#ifdef OVLB
 
 void
 movobj(obj, ox, oy)
@@ -769,7 +764,7 @@ register xchar ox, oy;
 
 static const char fell_on_sink[] = "fell onto a sink";
 
-STATIC_OVL void
+static void
 dosinkfall()
 {
 	register struct obj *obj;
@@ -837,8 +832,6 @@ register xchar x,y;
 			(levl[x][y].wall_info & W_NONPASSWALL)));
 }
 
-#endif /* OVLB */
-#ifdef OVL1
 
 /* [ALI] Changed to take monst * as argument to support passwall property */
 boolean
@@ -861,8 +854,6 @@ xchar x, y;
 	return((boolean)(Invocation_lev(&u.uz) && x == inv_pos.x && y == inv_pos.y));
 }
 
-#endif /* OVL1 */
-#ifdef OVL3
 /* For my clever ending messages... */
 int Instant_Death = 0;
 int Quick_Death = 0;
@@ -1873,8 +1864,6 @@ invocation_message (void)
 	}
 }
 
-#endif /* OVL3 */
-#ifdef OVL2
 
 void
 spoteffects(pick)
@@ -1990,7 +1979,7 @@ stillinwater:;
 	}
 }
 
-STATIC_OVL boolean
+static boolean
 monstinroom(mdat,roomno)
 struct permonst *mdat;
 int roomno;
@@ -2097,7 +2086,7 @@ register int x, y;
 	return !has_subrooms;
 }
 
-STATIC_OVL void
+static void
 move_update(newlev)
 register boolean newlev;
 {
@@ -2286,8 +2275,6 @@ register boolean newlev;
 	return;
 }
 
-#endif /* OVL2 */
-#ifdef OVLB
 
 int 
 dopickup (void)
@@ -2365,8 +2352,6 @@ dopickup (void)
 	return (pickup(-count));
 }
 
-#endif /* OVLB */
-#ifdef OVL2
 
 /* stop running if we see something interesting */
 /* turn around a corner if that is the only way we can proceed */
@@ -2522,7 +2507,7 @@ monster_nearby (void)
 	return(0);
 }
 
-STATIC_OVL void
+static void
 maybe_wail()
 {
     static short powers[] = { TELEPORT, SEE_INVIS, POISON_RES, COLD_RES,
@@ -2577,8 +2562,6 @@ unmul (const char *msg_override)
 	afternmv = 0;
 }
 
-#endif /* OVL2 */
-#ifdef OVL1
 
 
 #ifdef SHOW_DMG                
@@ -2766,8 +2749,6 @@ const char *str;
     return 0;
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 int 
 inv_cnt (void)
@@ -2798,6 +2779,5 @@ money_cnt (struct obj *otmp)
 	return 0;
 }
 #endif
-#endif /* OVLB */
 
 /*hack.c*/

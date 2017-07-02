@@ -17,7 +17,6 @@
 	((mndx) == urace.malenum || \
 	 (urace.femalenum != NON_PM && (mndx) == urace.femalenum))
 
-#ifdef OVLB
 
 boolean	known;
 
@@ -43,7 +42,7 @@ static void randomize(int *, int);
 static void forget_single_object(int);
 static void maybe_tame(struct monst *,struct obj *);
 
-STATIC_PTR void set_lit(int,int,void *);
+static void set_lit(int,int,void *);
 
 int 
 doread (void)
@@ -1607,7 +1606,7 @@ wand_explode (register struct obj *obj)
 /*
  * Low-level lit-field update routine.
  */
-STATIC_PTR void
+static void
 set_lit(x,y,val)
 int x, y;
 void * val;
@@ -2188,7 +2187,5 @@ create_particular (void)
 	return mtmp;
 }
 #endif /* WIZARD */
-
-#endif /* OVLB */
 
 /*read.c*/

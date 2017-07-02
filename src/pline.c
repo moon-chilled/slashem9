@@ -9,8 +9,6 @@
 #include "edog.h"
 #endif
 
-#ifdef OVLB
-
 static boolean no_repeat = FALSE;
 
 static char *You_buf(int);
@@ -488,6 +486,4 @@ self_invis_message (void)
 	    See_invisible ? "can see right through yourself" :
 		"can't see yourself");
 }
-
-#endif /* OVLB */
 /*pline.c*/

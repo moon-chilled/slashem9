@@ -10,7 +10,7 @@
 #include "hack.h"
 
 #ifdef DUMP_LOG
-STATIC_DCL int enhance_skill(boolean);
+static int enhance_skill(boolean);
 #endif
 
 /* categories whose names don't come from OBJ_NAME(objects[type]) */
@@ -36,7 +36,7 @@ STATIC_DCL int enhance_skill(boolean);
 #endif
 
 static void give_may_advance_msg(int);
-STATIC_PTR int practice(void);
+static int practice(void);
 static int get_obj_skill(struct obj *);
 
 #ifdef LIGHTSABERS
@@ -47,17 +47,10 @@ static void mon_ignite_lightsaber(struct obj *, struct monst *);
 static schar delay;            /* moves left for practice */
 static boolean speed_advance = FALSE;
 
-STATIC_DCL void give_may_advance_msg(int);
-
-#ifndef OVLB
-
-STATIC_DCL const short skill_names_indices[];
-STATIC_DCL const char *odd_skill_names[];
-
-#else	/* OVLB */
+static void give_may_advance_msg(int);
 
 /* KMH, balance patch -- updated */
-STATIC_OVL const short skill_names_indices[P_NUM_SKILLS] = {
+static const short skill_names_indices[P_NUM_SKILLS] = {
 	0,                DAGGER,         KNIFE,        AXE,
 	PICK_AXE,         SHORT_SWORD,    BROADSWORD,   LONG_SWORD,
 	TWO_HANDED_SWORD, SCIMITAR,       PN_SABER,     CLUB,
@@ -81,7 +74,7 @@ STATIC_OVL const short skill_names_indices[P_NUM_SKILLS] = {
 };
 
 
-STATIC_OVL const char * const odd_skill_names[] = {
+static const char * const odd_skill_names[] = {
     "no skill",
     "polearms",
     "saber",
@@ -106,7 +99,7 @@ STATIC_OVL const char * const odd_skill_names[] = {
 };
 
 
-STATIC_OVL void
+static void
 give_may_advance_msg(skill)
 int skill;
 {
@@ -123,22 +116,13 @@ int skill;
 	            "");
 }
 
-#endif	/* OVLB */
-
-STATIC_DCL boolean can_advance(int, boolean);
-STATIC_DCL boolean could_advance(int);
-STATIC_DCL boolean peaked_skill(int);
-STATIC_DCL int slots_required(int);
-STATIC_DCL boolean can_practice(int); /* WAC for Practicing */
-
-#ifdef OVL1
-
-STATIC_DCL char *skill_level_name(int,char *);
-STATIC_DCL void skill_advance(int);
-
-#endif	/* OVL1 */
-
-#ifdef OVLB
+static boolean can_advance(int, boolean);
+static boolean could_advance(int);
+static boolean peaked_skill(int);
+static int slots_required(int);
+static boolean can_practice(int); /* WAC for Practicing */
+static char *skill_level_name(int,char *);
+static void skill_advance(int);
 
 #define P_NAME(type) (skill_names_indices[type] > 0 ? \
 		      OBJ_NAME(objects[skill_names_indices[type]]) : \
@@ -399,13 +383,10 @@ dmgval (struct obj *otmp, struct monst *mon)
 	return(tmp);
 }
 
-#endif /* OVLB */
-#ifdef OVL0
-
-STATIC_DCL struct obj *oselect(struct monst *,int);
+static struct obj *oselect(struct monst *,int);
 #define Oselect(x)	if ((otmp = oselect(mtmp, x)) != 0) return(otmp);
 
-STATIC_OVL struct obj *
+static struct obj *
 oselect(mtmp, x)
 struct monst *mtmp;
 int x;
@@ -922,9 +903,6 @@ abon (void)		/* attack bonus for strength & dexterity */
 	return(sbon);
 }
 
-#endif /* OVL0 */
-#ifdef OVL1
-
 /* STEPHEN WHITE'S NEW CODE */
 int 
 dbon (void)		/* damage bonus for strength */
@@ -949,7 +927,7 @@ dbon (void)		/* damage bonus for strength */
 }
 
 /* copy the skill level name into the given buffer */
-STATIC_OVL char *
+static char *
 skill_level_name(skill, buf)
 int skill;
 char *buf;
@@ -978,7 +956,7 @@ char *buf;
 }
 
 /* return the # of slots required to advance the skill */
-STATIC_OVL int
+static int
 slots_required(skill)
 int skill;
 {
@@ -1008,7 +986,7 @@ int skill;
 
 /* return true if this skill can be advanced */
 /*ARGSUSED*/
-STATIC_OVL boolean
+static boolean
 can_advance(skill, speedy)
 int skill;
 boolean speedy;
@@ -1025,7 +1003,7 @@ boolean speedy;
 }
 
 /* WAC return true if skill can be practiced */
-STATIC_OVL boolean
+static boolean
 can_practice(skill)
 int skill;
 {
@@ -1037,7 +1015,7 @@ int skill;
 
 
 /* return true if this skill could be advanced if more slots were available */
-STATIC_OVL boolean
+static boolean
 could_advance(skill)
 int skill;
 {
@@ -1050,7 +1028,7 @@ int skill;
 
 /* return true if this skill has reached its maximum and there's been enough
    practice to become eligible for the next step if that had been possible */
-STATIC_OVL boolean
+static boolean
 peaked_skill(skill)
 int skill;
 {
@@ -1060,7 +1038,7 @@ int skill;
 		(unsigned) practice_needed_to_advance(P_SKILL(skill), skill)));
 }
 
-STATIC_OVL void
+static void
 skill_advance(skill)
 int skill;
 {
@@ -1326,9 +1304,6 @@ unrestrict_weapon_skill (int skill)
 	P_ADVANCE(skill) = 0;
     }
 }
-
-#endif /* OVL1 */
-#ifdef OVLB
 
 void 
 use_skill (int skill, int degree)
@@ -1749,7 +1724,7 @@ skill_init (const struct def_skill *class_skill)
 }
 
 /*WAC  weapon practice code*/
-STATIC_PTR int
+static int
 practice()
 {
 	if (delay) {    /* not if (delay++), so at end delay == 0 */
@@ -1802,7 +1777,4 @@ setmnotwielded (register struct monst *mon, register struct obj *obj)
     }
     obj->owornmask &= ~W_WEP;
 }
-
-#endif /* OVLB */
-
 /*weapon.c*/

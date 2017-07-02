@@ -7,18 +7,18 @@
 #include "hack.h"
 #include "edog.h"
 
-STATIC_DCL int throw_obj(struct obj *, int, int);
-STATIC_DCL void autoquiver(void);
-STATIC_DCL int gem_accept(struct monst *, struct obj *);
-STATIC_DCL void tmiss(struct obj *, struct monst *);
-STATIC_DCL int throw_gold(struct obj *);
-STATIC_DCL void check_shop_obj(struct obj *,xchar,xchar,boolean);
-STATIC_DCL void breakobj(struct obj *,xchar,xchar,boolean,boolean);
-STATIC_DCL void breakmsg(struct obj *,boolean);
-STATIC_DCL boolean toss_up(struct obj *, boolean);
-STATIC_DCL boolean throwing_weapon(struct obj *);
-STATIC_DCL void sho_obj_return_to_u(struct obj *obj);
-STATIC_DCL boolean mhurtle_step(void *,int,int);
+static int throw_obj(struct obj *, int, int);
+static void autoquiver(void);
+static int gem_accept(struct monst *, struct obj *);
+static void tmiss(struct obj *, struct monst *);
+static int throw_gold(struct obj *);
+static void check_shop_obj(struct obj *,xchar,xchar,boolean);
+static void breakobj(struct obj *,xchar,xchar,boolean,boolean);
+static void breakmsg(struct obj *,boolean);
+static boolean toss_up(struct obj *, boolean);
+static boolean throwing_weapon(struct obj *);
+static void sho_obj_return_to_u(struct obj *obj);
+static boolean mhurtle_step(void *,int,int);
 static void autoquiver(void);	/* KMH -- automatically fill quiver */
 
 
@@ -65,7 +65,7 @@ struct obj *splitoneoff(struct obj **pobj) {
 }
 
 /* Throw the selected object, asking for direction */
-STATIC_OVL int throw_obj(struct obj *obj, int shotlimit, int thrown) {
+static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 	struct obj *otmp;
 	struct obj *launcher;
 	int multishot = 1;
@@ -662,7 +662,7 @@ boolean hurtle_step(void *arg, int x, int y) {
     return TRUE;
 }
 
-STATIC_OVL boolean mhurtle_step(void *arg, int x, int y) {
+static boolean mhurtle_step(void *arg, int x, int y) {
 	struct monst *mon = (struct monst *)arg;
 
 	/* TODO: Treat walls, doors, iron bars, pools, lava, etc. specially
@@ -767,7 +767,7 @@ void mhurtle(struct monst *mon, int dx, int dy, int range) {
 	return;
 }
 
-STATIC_OVL void check_shop_obj(struct obj *obj, xchar x, xchar y, boolean broken) {
+static void check_shop_obj(struct obj *obj, xchar x, xchar y, boolean broken) {
 	struct monst *shkp = shop_keeper(*u.ushops);
 
 	if(!shkp) return;
@@ -803,7 +803,7 @@ STATIC_OVL void check_shop_obj(struct obj *obj, xchar x, xchar y, boolean broken
  *
  * Returns FALSE if the object is gone.
  */
-STATIC_OVL boolean toss_up(struct obj *obj, boolean hitsroof) {
+static boolean toss_up(struct obj *obj, boolean hitsroof) {
     const char *almost;
     /* note: obj->quan == 1 */
 
@@ -906,7 +906,7 @@ STATIC_OVL boolean toss_up(struct obj *obj, boolean hitsroof) {
 }
 
 /* return true for weapon meant to be thrown; excludes ammo */
-STATIC_OVL boolean throwing_weapon(struct obj *obj) {
+static boolean throwing_weapon(struct obj *obj) {
 	return (is_missile(obj) || is_spear(obj) ||
 		/* daggers and knife (excludes scalpel) */
 		(is_blade(obj) && !is_sword(obj) &&
@@ -916,7 +916,7 @@ STATIC_OVL boolean throwing_weapon(struct obj *obj) {
 }
 
 /* the currently thrown object is returning to you (not for boomerangs) */
-STATIC_OVL void sho_obj_return_to_u(struct obj *obj) {
+static void sho_obj_return_to_u(struct obj *obj) {
     /* might already be our location (bounced off a wall) */
     if (bhitpos.x != u.ux || bhitpos.y != u.uy) {
 	int x = bhitpos.x - u.dx, y = bhitpos.y - u.dy;
@@ -1286,7 +1286,7 @@ int omon_adj(struct monst *mon, struct obj *obj, boolean mon_notices) {
 }
 
 /* thrown object misses target monster */
-STATIC_OVL void tmiss(struct obj *obj, struct monst *mon) {
+static void tmiss(struct obj *obj, struct monst *mon) {
     const char *missile = mshot_xname(obj);
 
     /* If the target can't be seen or doesn't look like a valid target,
@@ -1596,7 +1596,7 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 	return 0;
 }
 
-STATIC_OVL int gem_accept(struct monst *mon, struct obj *obj) {
+static int gem_accept(struct monst *mon, struct obj *obj) {
 	char buf[BUFSZ];
 	boolean is_buddy = sgn(mon->data->maligntyp) == sgn(u.ualign.type);
 	boolean is_gem = objects[obj->otyp].oc_material == GEMSTONE;
@@ -1722,7 +1722,7 @@ int breaks(struct obj *obj, xchar x, xchar y) {
  * Unconditionally break an object. Assumes all resistance checks
  * and break messages have been delivered prior to getting here.
  */
-STATIC_OVL void breakobj(struct obj *obj, xchar x, xchar y, boolean hero_caused, boolean from_invent) {
+static void breakobj(struct obj *obj, xchar x, xchar y, boolean hero_caused, boolean from_invent) {
 	int am;
 	if (IS_ALTAR(levl[x][y].typ))
 	    am = levl[x][y].altarmask & AM_MASK;
@@ -1838,7 +1838,7 @@ boolean breaktest(struct obj *obj) {
 	}
 }
 
-STATIC_OVL void breakmsg(struct obj *obj, boolean in_view) {
+static void breakmsg(struct obj *obj, boolean in_view) {
 	const char *to_pieces;
 
 	to_pieces = "";
@@ -1876,7 +1876,7 @@ STATIC_OVL void breakmsg(struct obj *obj, boolean in_view) {
 	}
 }
 
-STATIC_OVL int throw_gold(struct obj *obj) {
+static int throw_gold(struct obj *obj) {
 	int range, odx, ody;
 #ifndef GOLDOBJ
 	long zorks = obj->quan;

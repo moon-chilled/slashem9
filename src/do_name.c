@@ -4,9 +4,7 @@
 
 #include "hack.h"
 
-#ifdef OVLB
-
-STATIC_DCL void do_oname(struct obj *);
+static void do_oname(struct obj *);
 static void getpos_help(boolean,const char *);
 
 extern const char what_is_an_unknown_object[];		/* from pager.c */
@@ -272,7 +270,7 @@ int do_mname(void) {
  * when there might be pointers around in unknown places. For now: only
  * when obj is in the inventory.
  */
-STATIC_OVL void do_oname(struct obj *obj) {
+static void do_oname(struct obj *obj) {
 	char buf[BUFSZ], qbuf[QBUFSZ];
 	const char *aname;
 	short objtyp;
@@ -493,8 +491,6 @@ void docall(struct obj *obj) {
 	}
 }
 
-#endif /*OVLB*/
-#ifdef OVL0
 
 static const char * const ghostnames[] = {
 	/* these names should have length < PL_NSIZ */
@@ -705,16 +701,12 @@ char *x_monnam(struct monst *mtmp, int article, const char *adjective, int suppr
 	}
 }
 
-#endif /* OVL0 */
-#ifdef OVLB
 
 char *l_monnam(struct monst *mtmp) {
 	return(x_monnam(mtmp, ARTICLE_NONE, (char *)0, 
 		mtmp->mnamelth ? SUPPRESS_SADDLE : 0, TRUE));
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
 char *mon_nam(struct monst *mtmp) {
 	return(x_monnam(mtmp, ARTICLE_THE, (char *)0,
@@ -765,8 +757,6 @@ char *y_monnam(struct monst *mtmp) {
 	return x_monnam(mtmp, prefix, (char *)0, suppression_flag, FALSE);
 }
 
-#endif /* OVL0 */
-#ifdef OVLB
 
 char *Adjmonnam(struct monst *mtmp, const char *adj) {
 	char *bp = x_monnam(mtmp, ARTICLE_THE, adj,
@@ -907,9 +897,6 @@ const char *roguename(void) {
 		: "Glenn Wichman";
 }
 #endif /* REINCARNATION */
-#endif /* OVLB */
-
-#ifdef OVL2
 
 static const char * const hcolors[] = {
 	"ultraviolet", "infrared", "bluish-orange",
@@ -959,6 +946,5 @@ char *coyotename(struct monst *mtmp, char *buf) {
     }
     return buf;
 }
-#endif /* OVL2 */
 
 /*do_name.c*/

@@ -8,8 +8,6 @@
 
 /* #define DEBUG */	/* uncomment for debugging info */
 
-#ifdef OVLB
-
 	/* part of the output on gain or loss of attribute */
 static
 const char	* const plusattr[] = {
@@ -153,8 +151,8 @@ static const struct innate {
 		     {	 0, 0, 0, 0 } };
 
 static long next_check = 600L;	/* arbitrary first setting */
-STATIC_DCL void exerper(void);
-STATIC_DCL void postadjabil(long *);
+static void exerper(void);
+static void postadjabil(long *);
 
 /* adjust an attribute; return TRUE if change is made, FALSE otherwise */
 boolean adjattrib(int ndx, int incr, int msgflg	/* 2 => no message at all, 1 => no message */
@@ -291,8 +289,6 @@ void recalc_health(void) {
 }
 
 
-#endif /* OVLB */
-#ifdef OVL1
 
 void restore_attrib(void) {
 	int i;
@@ -311,8 +307,6 @@ void restore_attrib(void) {
 	encumber_msg();
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 #define AVAL	50		/* tune value for exercise gains */
 
@@ -355,7 +349,7 @@ void exercise(int i, boolean inc_or_dec) {
 #define FAINTED		5
 #define STARVED		6
 
-STATIC_OVL void exerper(void) {
+static void exerper(void) {
 	if(!(moves % 10)) {
 		/* Hunger Checks */
 
@@ -571,7 +565,7 @@ void redist_attr(void) {
 	encumber_msg();
 }
 
-STATIC_OVL void postadjabil(long *ability) {
+static void postadjabil(long *ability) {
 	if (!ability) return;
 	if (ability == &(HWarning) || ability == &(HSee_invisible))
 		see_monsters();
@@ -720,8 +714,6 @@ int newhp(void) {
 	return (hp <= 0) ? 1 : hp;
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
 /* STEPHEN WHITE'S NEW CODE */   
 schar acurr(int x) {
@@ -775,8 +767,6 @@ schar acurrstr(void) {
 	else return str - 100;
 }
 
-#endif /* OVL0 */
-#ifdef OVL2
 
 /* avoid possible problems with alignment overflow, and provide a centralized
  * location for any future alignment limits
@@ -794,7 +784,5 @@ void adjalign (int n) {
 				u.ualign.record = ALIGNLIM;
 		}
 }
-
-#endif /* OVL2 */
 
 /*attrib.c*/

@@ -28,23 +28,23 @@
 
 #include "hack.h"
 
-STATIC_DCL void awaken_monsters(int);
-STATIC_DCL void put_monsters_to_sleep(int);
-STATIC_DCL void charm_snakes(int);
-STATIC_DCL void calm_nymphs(int);
-STATIC_DCL void charm_monsters(int);
-STATIC_DCL void do_earthquake(int);
-STATIC_DCL int do_improvisation(struct obj *);
+static void awaken_monsters(int);
+static void put_monsters_to_sleep(int);
+static void charm_snakes(int);
+static void calm_nymphs(int);
+static void charm_monsters(int);
+static void do_earthquake(int);
+static int do_improvisation(struct obj *);
 
 #ifdef UNIX386MUSIC
-STATIC_DCL int atconsole(void);
-STATIC_DCL void speaker(struct obj *,char *);
+static int atconsole(void);
+static void speaker(struct obj *,char *);
 #endif
 #ifdef VPIX_MUSIC
 extern int sco_flag_console;	/* will need changing if not _M_UNIX */
-STATIC_DCL void playinit(void);
-STATIC_DCL void playstring(char *,size_t);
-STATIC_DCL void speaker(struct obj *,char *);
+static void playinit(void);
+static void playstring(char *,size_t);
+static void speaker(struct obj *,char *);
 #endif
 #ifdef PCMUSIC
 void pc_speaker(struct obj *, char *);
@@ -54,7 +54,7 @@ void pc_speaker(struct obj *, char *);
  * Wake every monster in range...
  */
 
-STATIC_OVL void
+static void
 awaken_monsters(distance)
 int distance;
 {
@@ -82,7 +82,7 @@ int distance;
  * Make monsters fall asleep.  Note that they may resist the spell.
  */
 
-STATIC_OVL void
+static void
 put_monsters_to_sleep(distance)
 int distance;
 {
@@ -102,7 +102,7 @@ int distance;
  * Charm snakes in range.  Note that the snakes are NOT tamed.
  */
 
-STATIC_OVL void
+static void
 charm_snakes(distance)
 int distance;
 {
@@ -136,7 +136,7 @@ int distance;
  * Calm nymphs in range.
  */
 
-STATIC_OVL void
+static void
 calm_nymphs(distance)
 int distance;
 {
@@ -182,7 +182,7 @@ awaken_soldiers (void)
  * If swallowed, range is reduced to 0.
  */
 
-STATIC_OVL void
+static void
 charm_monsters(distance)
 int distance;
 {
@@ -209,7 +209,7 @@ int distance;
  * That is:  create random chasms (pits).
  */
 
-STATIC_OVL void
+static void
 do_earthquake(force)
 int force;
 {
@@ -351,7 +351,7 @@ do_pit:		    chasm = maketrap(x,y,PIT);
  * The player is trying to extract something from his/her instrument.
  */
 
-STATIC_OVL int
+static int
 do_improvisation(instr)
 struct obj *instr;
 {
@@ -621,7 +621,7 @@ do_play_instrument (struct obj *instr)
  * Play audible music on the machine's speaker if appropriate.
  */
 
-STATIC_OVL int
+static int
 atconsole()
 {
     /*
@@ -639,7 +639,7 @@ atconsole()
      return(!strcmp(termtype, "AT386") || !strcmp(termtype, "xterm"));
 }
 
-STATIC_OVL void
+static void
 speaker(instr, buf)
 struct obj *instr;
 char	*buf;
@@ -693,7 +693,7 @@ char	*buf;
 
 #define noDEBUG
 
-STATIC_OVL void tone(hz, ticks)
+static void tone(hz, ticks)
 /* emit tone of frequency hz for given number of ticks */
 unsigned int hz, ticks;
 {
@@ -704,7 +704,7 @@ unsigned int hz, ticks;
     nap(ticks * 10);
 }
 
-STATIC_OVL void rest(ticks)
+static void rest(ticks)
 /* rest for given number of ticks */
 int	ticks;
 {
@@ -718,7 +718,7 @@ int	ticks;
 #include "interp.c"	/* from snd86unx.shr */
 
 
-STATIC_OVL void
+static void
 speaker(instr, buf)
 struct obj *instr;
 char	*buf;

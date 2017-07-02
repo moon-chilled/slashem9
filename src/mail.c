@@ -31,21 +31,18 @@
  *			 random intervals.
  */
 
-STATIC_DCL boolean md_start(coord *);
-STATIC_DCL boolean md_stop(coord *, coord *);
-STATIC_DCL boolean md_rush(struct monst *,int,int);
-STATIC_DCL void newmail(struct mail_info *);
+static boolean md_start(coord *);
+static boolean md_stop(coord *, coord *);
+static boolean md_rush(struct monst *,int,int);
+static void newmail(struct mail_info *);
 
 extern char *viz_rmin, *viz_rmax;	/* line-of-sight limits (vision.c) */
 
-#ifdef OVL0
 
 # if !defined(UNIX) && !defined(LAN_MAIL)
 int mustgetmail = -1;
 # endif
 
-#endif /* OVL0 */
-#ifdef OVLB
 
 # ifdef UNIX
 #include <sys/stat.h>
@@ -119,14 +116,12 @@ getmailstatus (void)
 }
 # endif /* UNIX */
 
-#endif /* OVLB */
-#ifdef OVL0
 
 /*
  * Pick coordinates for a starting position for the mail daemon.  Called
  * from newmail() and newphone().
  */
-STATIC_OVL boolean
+static boolean
 md_start(startp)
     coord *startp;
 {
@@ -227,7 +222,7 @@ retry:
  * enexto().  Use enexto() as a last resort because enexto() chooses
  * its point randomly, which is not what we want.
  */
-STATIC_OVL boolean
+static boolean
 md_stop(stopp, startp)
     coord *stopp;	/* stopping position (we fill it in) */
     coord *startp;	/* starting positon (read only) */
@@ -271,7 +266,7 @@ static const char *mail_text[] = {
  * FALSE if the md gets stuck in a position where there is a monster.  Return
  * TRUE otherwise.
  */
-STATIC_OVL boolean
+static boolean
 md_rush(md,tx,ty)
     struct monst *md;
     register int tx, ty;		/* destination of mail daemon */
@@ -367,7 +362,7 @@ md_rush(md,tx,ty)
 
 /* Deliver a scroll of mail. */
 /*ARGSUSED*/
-STATIC_OVL void
+static void
 newmail(info)
 struct mail_info *info;
 {
@@ -553,8 +548,6 @@ readmail (struct obj *otmp)
 }
 
 # endif /* LAN_MAIL */
-
-#endif /* OVL0 */
 
 #endif /* MAIL */
 

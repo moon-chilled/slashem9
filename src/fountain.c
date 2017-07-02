@@ -6,11 +6,11 @@
 
 #include "hack.h"
 
-STATIC_DCL void dowatersnakes(void);
-STATIC_DCL void dowaterdemon(void);
-STATIC_DCL void dowaternymph(void);
-STATIC_PTR void gush(int,int,void *);
-STATIC_DCL void dofindgem(void);
+static void dowatersnakes(void);
+static void dowaterdemon(void);
+static void dowaternymph(void);
+static void gush(int,int,void *);
+static void dofindgem(void);
 
 void
 floating_above(what)
@@ -19,7 +19,7 @@ const char *what;
     You("are floating high above the %s.", what);
 }
 
-STATIC_OVL void
+static void
 dowatersnakes() /* Fountain of snakes! */
 {
     register int num = rn1(5,2);
@@ -39,7 +39,7 @@ dowatersnakes() /* Fountain of snakes! */
 	pline_The("fountain bubbles furiously for a moment, then calms.");
 }
 
-STATIC_OVL
+static
 void
 dowaterdemon() /* Water demon */
 {
@@ -66,7 +66,7 @@ dowaterdemon() /* Water demon */
 	pline_The("fountain bubbles furiously for a moment, then calms.");
 }
 
-STATIC_OVL void
+static void
 dowaternymph() /* Water Nymph */
 {
 	register struct monst *mtmp;
@@ -103,7 +103,7 @@ dogushforth ( /* Gushing forth along LOS from (u.ux, u.uy) */
 	}
 }
 
-STATIC_PTR void
+static void
 gush(x, y, poolcnt)
 int x, y;
 void * poolcnt;
@@ -135,7 +135,7 @@ void * poolcnt;
 		newsym(x,y);
 }
 
-STATIC_OVL void
+static void
 dofindgem() /* Find a gem in the sparkling waters. */
 {
 	if (!Blind) You("spot a gem in the sparkling waters!");

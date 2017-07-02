@@ -4,10 +4,10 @@
 
 #include "hack.h"
 
-/*STATIC_DCL*/ long newuexp(int);
-STATIC_DCL int enermod(int);
+/*static*/ long newuexp(int);
+static int enermod(int);
 
-/*STATIC_OVL*/ long 
+/*static*/ long 
 newuexp (int lev)
 {
 	/* KMH, balance patch -- changed again! */
@@ -58,7 +58,7 @@ newuexp (int lev)
 #endif
 }
 
-STATIC_OVL int
+static int
 enermod(en)
 int en;
 {

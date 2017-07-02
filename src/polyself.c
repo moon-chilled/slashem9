@@ -12,14 +12,13 @@
 
 #include "hack.h"
 
-#ifdef OVLB
-STATIC_DCL void polyman(const char *,const char *);
-STATIC_DCL void break_armor(void);
-STATIC_DCL void drop_weapon(int);
-STATIC_DCL void uunstick(void);
-STATIC_DCL int armor_to_dragon(int);
-STATIC_DCL void newman(void);
-STATIC_DCL void merge_with_armor(void);
+static void polyman(const char *,const char *);
+static void break_armor(void);
+static void drop_weapon(int);
+static void uunstick(void);
+static int armor_to_dragon(int);
+static void newman(void);
+static void merge_with_armor(void);
 
 /*  Not Used 
 static void special_poly(void);
@@ -64,7 +63,7 @@ set_uasmon (void)
 }
 
 /* make a (new) human out of the player */
-STATIC_OVL void
+static void
 polyman(fmt, arg)
 const char *fmt, *arg;
 {
@@ -168,7 +167,7 @@ change_sex (void)
 	set_uasmon();
 }
 
-STATIC_OVL void
+static void
 newman()
 {
 	int tmp, oldlvl;
@@ -668,7 +667,7 @@ polymon (	/* returns 1 if polymorph successful */
 	return(1);
 }
 
-STATIC_OVL void
+static void
 break_armor()
 {
     register struct obj *otmp;
@@ -799,7 +798,7 @@ break_armor()
     }
 }
 
-STATIC_OVL void
+static void
 drop_weapon(alone)
 int alone;
 {
@@ -1356,7 +1355,7 @@ domindblast (void)
 	return 1;
 }
 
-STATIC_OVL void
+static void
 uunstick()
 {
 	pline("%s is no longer in your clutches.", Monnam(u.ustuck));
@@ -1376,8 +1375,6 @@ boolean silently;
 	}
 }
 
-#endif /* OVLB */
-#ifdef OVL1
 
 const char *
 mbodypart (struct monst *mon, int part)
@@ -1496,8 +1493,6 @@ body_part (int part)
 	return mbodypart(&youmonst, part);
 }
 
-#endif /* OVL1 */
-#ifdef OVL0
 
 int 
 poly_gender (void)
@@ -1509,8 +1504,6 @@ poly_gender (void)
 	return flags.female;
 }
 
-#endif /* OVL0 */
-#ifdef OVLB
 
 void 
 ugolemeffects (int damtype, int dam)
@@ -1539,7 +1532,7 @@ ugolemeffects (int damtype, int dam)
 	}
 }
 
-STATIC_OVL int
+static int
 armor_to_dragon(atyp)
 int atyp;
 {
@@ -1588,7 +1581,7 @@ static struct {
     boolean merge;
 } draconic;
 
-STATIC_PTR
+static
 int
 mage_transform()	/* called each move during transformation process */
 {
@@ -1858,8 +1851,5 @@ special_poly (void)
 	return;
 }
 #endif
-
-
-#endif /* OVLB */
 
 /*polyself.c*/

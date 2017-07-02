@@ -15,14 +15,12 @@
 #endif
 
 #ifdef POSITIONBAR
-STATIC_DCL void do_positionbar(void);
+static void do_positionbar(void);
 #endif
 
 #define decrnknow(spell)	spl_book[spell].sp_know--
 #define spellid(spell)		spl_book[spell].sp_id
 #define spellknow(spell)	spl_book[spell].sp_know
-
-#ifdef OVL0
 
 void moveloop (void) {
 #if defined(MICRO) || defined(WIN32)
@@ -487,10 +485,6 @@ void moveloop (void) {
     }
 }
 
-
-#endif /* OVL0 */
-#ifdef OVL1
-
 void stop_occupation (void) {
 	if(occupation) {
 		if (!maybe_finished_meal(TRUE))
@@ -506,9 +500,6 @@ void stop_occupation (void) {
 #endif
 	}
 }
-
-#endif /* OVL1 */
-#ifdef OVLB
 
 void display_gamewindows(void) {
     WIN_MESSAGE = create_nhwindow(NHW_MESSAGE);
@@ -646,7 +637,7 @@ void welcome(boolean new_game /* false => restoring an old game */ ) {
 }
 
 #ifdef POSITIONBAR
-STATIC_DCL void do_positionbar(void) {
+static void do_positionbar(void) {
 	static char pbar[COLNO];
 	char *p;
 	
@@ -740,8 +731,5 @@ time_t get_realtime(void) {
  
     return curtime;
 }
-
-
-#endif /* OVLB */
 
 /*allmain.c*/

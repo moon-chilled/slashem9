@@ -18,8 +18,6 @@ extern void backsp(void);
 extern void clear_screen(void);
 #endif
 
-#ifdef OVLB
-
 #if 0
 static struct stat buf;
 #endif
@@ -194,8 +192,6 @@ register char *s;
                         *lp = '_';
 }
 # endif /* WIN32 */
-#endif /* OVLB */
-
 
 #ifdef __EMX__
 void seteuid(int i){;}

@@ -11,35 +11,29 @@
  */
 #define MAGIC_COOKIE 1000
 
-#ifdef OVLB
 static boolean obj_zapped;
 static int poly_zapped;
-#endif
 
 extern boolean notonhead;	/* for long worms */
 
 /* kludge to use mondied instead of killed */
 extern boolean m_using;
 
-STATIC_DCL void costly_cancel(struct obj *);
-STATIC_DCL void polyuse(struct obj*, int, int);
-STATIC_DCL void create_polymon(struct obj *, int);
-STATIC_DCL boolean zap_updown(struct obj *);
-STATIC_DCL int zhitm(struct monst *,int,int, struct obj **);
-STATIC_DCL void zhitu(int,int,const char *,xchar,xchar);
-STATIC_DCL void revive_egg(struct obj *);
-STATIC_DCL void throwstorm(struct obj *, int, int, int);
+static void costly_cancel(struct obj *);
+static void polyuse(struct obj*, int, int);
+static void create_polymon(struct obj *, int);
+static boolean zap_updown(struct obj *);
+static int zhitm(struct monst *,int,int, struct obj **);
+static void zhitu(int,int,const char *,xchar,xchar);
+static void revive_egg(struct obj *);
+static void throwstorm(struct obj *, int, int, int);
 #ifdef STEED
-STATIC_DCL boolean zap_steed(struct obj *);
+static boolean zap_steed(struct obj *);
 #endif
 
-#ifdef OVLB
-STATIC_DCL int zap_hit(int,int);
-#endif
-#ifdef OVL0
-STATIC_DCL void backfire(struct obj *);
-STATIC_DCL int spell_hit_bonus(int);
-#endif
+static int zap_hit(int,int);
+static void backfire(struct obj *);
+static int spell_hit_bonus(int);
 
 /* WAC -- ZT_foo #defines moved to spell.h, since explode uses these types */
 
@@ -47,11 +41,7 @@ STATIC_DCL int spell_hit_bonus(int);
 #define is_mega_spell(type)	(type >= ZT_MEGA(ZT_FIRST) && \
 				 type <= ZT_MEGA(ZT_LAST))
 
-#ifndef OVLB
-STATIC_VAR const char are_blinded_by_the_flash[];
-extern const char * const flash_types[];
-#else
-STATIC_VAR const char are_blinded_by_the_flash[] = "are blinded by the flash!";
+static const char are_blinded_by_the_flash[] = "are blinded by the flash!";
 
 const char * const flash_types[] = {	/* also used in buzzmu(mcastu.c) */
 	"magic missile",	/* Wands must be 0-9 */
@@ -458,8 +448,6 @@ probe_monster (struct monst *mtmp)
 	}
 }
 
-#endif /*OVLB*/
-#ifdef OVL1
 
 /*
  * Return the object's physical location.  This only makes sense for
@@ -804,7 +792,7 @@ register struct obj *obj;
 	return mtmp;
 }
 
-STATIC_OVL void
+static void
 revive_egg(obj)
 struct obj *obj;
 {
@@ -852,13 +840,11 @@ struct monst *mon;
 	}
 	return res;
 }
-#endif /*OVL1*/
 
-#ifdef OVLB
 static const char charged_objs[] = { WAND_CLASS, WEAPON_CLASS, ARMOR_CLASS,
 				     SPBOOK_CLASS, 0 };
 
-STATIC_OVL void
+static void
 costly_cancel(obj)
 register struct obj *obj;
 {
@@ -1085,8 +1071,6 @@ register struct obj *obj;
 	return (TRUE);
 }
 
-#endif /*OVLB*/
-#ifdef OVL0
 
 boolean
 obj_resists(obj, ochance, achance)
@@ -1131,15 +1115,13 @@ struct obj *obj;
 
 	return((boolean)(! rn2(zap_odds)));
 }
-#endif /*OVL0*/
-#ifdef OVLB
 
 /* Use up at least minwt number of things made of material mat.
  * There's also a chance that other stuff will be used up.  Finally,
  * there's a random factor here to keep from always using the stuff
  * at the top of the pile.
  */
-STATIC_OVL void
+static void
 polyuse(objhdr, mat, minwt)
     struct obj *objhdr;
     int mat, minwt;
@@ -1179,7 +1161,7 @@ polyuse(objhdr, mat, minwt)
  * Polymorph some of the stuff in this pile into a monster, preferably
  * a golem of the kind okind.
  */
-STATIC_OVL void
+static void
 create_polymon(obj, okind)
     struct obj *obj;
     int okind;
@@ -2076,8 +2058,6 @@ bhitpile(obj,fhito,tx,ty)
 
     return hitanything;
 }
-#endif /*OVLB*/
-#ifdef OVL1
 
 /*
  * zappable - returns 1 if zap is available, 0 otherwise.
@@ -2146,10 +2126,8 @@ register struct obj *obj;
 		more_experienced(0,10);
 	}
 }
-#endif /*OVL1*/
-#ifdef OVL0
 
-STATIC_OVL void
+static void
 backfire(otmp)
 struct obj *otmp;
 {
@@ -2245,7 +2223,7 @@ int type;
 }
 
 
-STATIC_OVL void
+static void
 throwstorm(obj, skilldmg, min, range)
 register struct obj	*obj;
 int min, range, skilldmg;
@@ -2663,7 +2641,7 @@ boolean ordinary;
  * Return TRUE if the steed was hit by the wand.
  * Return FALSE if the steed was not hit by the wand.
  */
-STATIC_OVL boolean
+static boolean
 zap_steed(obj)
 struct obj *obj;	/* wand or spell */
 {
@@ -2723,9 +2701,6 @@ struct obj *obj;	/* wand or spell */
 }
 #endif
 
-
-#endif /*OVL0*/
-#ifdef OVL3
 
 /*
  * cancel a monster (possibly the hero).  inventory is cancelled only
@@ -2814,7 +2789,7 @@ boolean			youattack, allow_cancel_kill, self_cancel;
 }
 
 /* you've zapped an immediate type wand up or down */
-STATIC_OVL boolean
+static boolean
 zap_updown(obj)
 struct obj *obj;	/* wand or spell */
 {
@@ -2972,8 +2947,6 @@ struct obj *obj;	/* wand or spell */
 	return disclose;
 }
 
-#endif /*OVL3*/
-#ifdef OVLB
 
 /* called for various wand and spell effects - M. Stephenson */
 void
@@ -3061,8 +3034,6 @@ struct obj *obj;
 	}
 	return;
 }
-#endif /*OVLB*/
-#ifdef OVL0
 
 /*
  * LSZ/WWA The Wizard Patch July '96 -
@@ -3098,7 +3069,7 @@ register int booktype;
  * Generate the to hit bonus for a spell.  Based on the hero's skill in
  * spell class and dexterity.
  */
-STATIC_OVL int
+static int
 spell_hit_bonus(skill)
 int skill;
 {
@@ -3161,8 +3132,6 @@ register struct monst *mtmp;
 	       && flags.verbose) ?
 	      mon_nam(mtmp) : "it");
 }
-#endif /*OVL0*/
-#ifdef OVL1
 
 /*
  *  Called for the following distance effects:
@@ -3507,7 +3476,7 @@ int dx, dy;
 	return (struct monst *)0;
 }
 
-STATIC_OVL int
+static int
 zhitm(mon, type, nd, ootmp)			/* returns damage to mon */
 register struct monst *mon;
 register int type, nd;
@@ -3673,7 +3642,7 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 	return(tmp);
 }
 
-STATIC_OVL void
+static void
 zhitu(type, nd, fltxt, sx, sy)
 int type, nd;
 const char *fltxt;
@@ -3819,9 +3788,6 @@ xchar sx, sy;
 	return;
 }
 
-#endif /*OVL1*/
-#ifdef OVLB
-
 /*
  * burn scrolls and spell books on floor at position x,y
  * return the number of scrolls and spell books burned
@@ -3876,7 +3842,7 @@ boolean u_caused;
 }
 
 /* will zap/spell/breath attack score a hit against armor class `ac'? */
-STATIC_OVL int
+static int
 zap_hit(ac, type)
 int ac;
 int type;
@@ -4289,8 +4255,6 @@ register int dx,dy;
 		       abstype == ZT_DEATH ? "disintegrate" : "destroy", FALSE);
     bhitpos = save_bhitpos;
 }
-#endif /*OVLB*/
-#ifdef OVL0
 
 void
 melt_ice(x, y)
@@ -4535,9 +4499,6 @@ boolean *shopdamage;
 	}
 	return rangemod;
 }
-
-#endif /*OVL0*/
-#ifdef OVL3
 
 void
 fracture_rock(obj)	/* fractured by pick-axe or wand of striking */
@@ -4868,9 +4829,6 @@ int osym, dmgtyp;
 	return(tmp);
 }
 
-#endif /*OVL3*/
-#ifdef OVL2
-
 int
 resist(mtmp, oclass, damage, tell)
 struct monst *mtmp;
@@ -5007,8 +4965,4 @@ throwspell()
 		}
 	}
 }
-
-
-#endif /*OVL2*/
-
 /*zap.c*/

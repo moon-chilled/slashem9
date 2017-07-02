@@ -6,9 +6,8 @@
 #include "lev.h"
 #include <ctype.h>
 
-STATIC_VAR struct engr *head_engr;
+static struct engr *head_engr;
 
-#ifdef OVLB
 /* random engravings */
 static const char *random_mesg[] = {
 	"Elbereth",
@@ -163,8 +162,6 @@ can_reach_floor()
 			 (!Levitation ||
 			  Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)));
 }
-#endif /* OVLB */
-#ifdef OVL0
 
 const char *
 surface (register int x, register int y)
@@ -256,8 +253,6 @@ sengr_at(s, x, y)
 }
 #endif /* ELBERETH */
 
-#endif /* OVL0 */
-#ifdef OVL2
 
 void 
 u_wipe_engr (register int cnt)
@@ -266,8 +261,6 @@ u_wipe_engr (register int cnt)
 		wipe_engr_at(u.ux, u.uy, cnt);
 }
 
-#endif /* OVL2 */
-#ifdef OVL1
 
 void
 wipe_engr_at(x,y,cnt)
@@ -289,8 +282,6 @@ register xchar x,y,cnt;
 	}
 }
 
-#endif /* OVL1 */
-#ifdef OVL2
 
 boolean
 sense_engr_at(x,y,read_it)
@@ -379,8 +370,6 @@ boolean read_it; /* Read any sensed engraving */
 	return FALSE;
 }
 
-#endif /* OVL2 */
-#ifdef OVLB
 
 void
 make_engr_at(x,y,s,e_time,e_type)
@@ -1336,8 +1325,5 @@ make_grave (int x, int y, const char *str)
 	make_engr_at(x, y, str, 0L, HEADSTONE);
 	return;
 }
-
-
-#endif /* OVLB */
 
 /*engrave.c*/

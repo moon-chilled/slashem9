@@ -24,16 +24,11 @@
  * -- JRN
  */
 
-#ifdef OVLB
-
 static int domonnoise(struct monst *);
 static int dochat(void);
 static const char *yelp_sound(struct monst *);
 static const char *whimper_sound(struct monst *);
 
-#endif /* OVLB */
-
-#ifdef OVL0
 
 #ifdef DUMB
 static int mon_in_room(struct monst *,int);
@@ -309,8 +304,6 @@ dosounds (void)
     }
 }
 
-#endif /* OVL0 */
-#ifdef OVLB
 
 static const char * const h_sounds[] = {
     "beep", "boing", "sing", "belche", "creak", "cough", "rattle",
@@ -1128,7 +1121,5 @@ play_sound_for_message (const char *msg)
 }
 
 #endif /* USER_SOUNDS */
-
-#endif /* OVLB */
 
 /*sounds.c*/

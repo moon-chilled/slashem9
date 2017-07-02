@@ -4,12 +4,12 @@
 
 #include "hack.h"
 
-STATIC_PTR int picklock(void);
-STATIC_PTR int forcelock(void);
-STATIC_PTR int forcedoor(void);
+static int picklock(void);
+static int forcelock(void);
+static int forcedoor(void);
 
 /* at most one of `door' and `box' should be non-null at any given time */
-STATIC_VAR struct xlock_s {
+static struct xlock_s {
 	struct rm  *door;
 	struct obj *box;
 	int picktyp, chance, usedtime;
@@ -17,11 +17,10 @@ STATIC_VAR struct xlock_s {
 	int key;			/* Key being used (doors only) */
 } xlock;
 
-#ifdef OVLB
 
-STATIC_DCL const char *lock_action(void);
-STATIC_DCL boolean obstructed(int,int);
-STATIC_DCL void chest_shatter_msg(struct obj *);
+static const char *lock_action(void);
+static boolean obstructed(int,int);
+static void chest_shatter_msg(struct obj *);
 
 boolean
 picking_lock(x, y)
@@ -45,7 +44,7 @@ int x, y;
 }
 
 /* produce an occupation string appropriate for the current activity */
-STATIC_OVL const char *
+static const char *
 lock_action()
 {
 	/* "unlocking"+2 == "locking" */
@@ -74,7 +73,7 @@ lock_action()
 		return xlock.box->otyp == CHEST ? actions[1] : actions[2];
 }
 
-STATIC_PTR
+static
 int
 picklock()	/* try to open/close a lock */
 {
@@ -129,7 +128,7 @@ picklock()	/* try to open/close a lock */
 	return((xlock.usedtime = 0));
 }
 
-STATIC_PTR
+static
 int
 forcelock()	/* try to force a locked chest */
 {
@@ -218,7 +217,7 @@ forcelock()	/* try to force a locked chest */
 	return((xlock.usedtime = 0));
 }
 
-STATIC_PTR
+static
 int
 forcedoor()      /* try to break/pry open a door */
 {
@@ -291,8 +290,6 @@ forcedoor()      /* try to break/pry open a door */
 	return((xlock.usedtime = 0));
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
 void 
 reset_pick (void)
@@ -302,8 +299,6 @@ reset_pick (void)
 	xlock.box = 0;
 }
 
-#endif /* OVL0 */
-#ifdef OVLB
 
 int 
 pick_lock ( /* pick a lock with a given object */
@@ -859,7 +854,7 @@ doopen (void)		/* try to open a door */
 	return(1);
 }
 
-STATIC_OVL
+static
 boolean
 obstructed(x,y)
 register int x, y;
@@ -1173,7 +1168,7 @@ int x, y;
 	return res;
 }
 
-STATIC_OVL void
+static void
 chest_shatter_msg(otmp)
 struct obj *otmp;
 {
@@ -1232,7 +1227,5 @@ artifact_door (int x, int y)
     }
     return 0;
 }
-
-#endif /* OVLB */
 
 /*lock.c*/

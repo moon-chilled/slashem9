@@ -7,37 +7,32 @@
 #define NOINVSYM	'#'
 #define CONTAINED_SYM	'>'	/* designator for inside a container */
 
-#ifdef OVL1
-STATIC_DCL void reorder_invent(void);
-STATIC_DCL boolean mergable(struct obj *,struct obj *);
-STATIC_DCL void invdisp_nothing(const char *,const char *);
-STATIC_DCL boolean worn_wield_only(struct obj *);
-STATIC_DCL boolean only_here(struct obj *);
-#endif /* OVL1 */
-STATIC_DCL void compactify(char *);
-STATIC_DCL boolean taking_off(const char *);
-STATIC_DCL boolean putting_on(const char *);
-STATIC_PTR int ckunpaid(struct obj *);
-STATIC_PTR int ckvalidcat(struct obj *);
+static void reorder_invent(void);
+static boolean mergable(struct obj *,struct obj *);
+static void invdisp_nothing(const char *,const char *);
+static boolean worn_wield_only(struct obj *);
+static boolean only_here(struct obj *);
+static void compactify(char *);
+static boolean taking_off(const char *);
+static boolean putting_on(const char *);
+static int ckunpaid(struct obj *);
+static int ckvalidcat(struct obj *);
 #ifdef DUMP_LOG
 static char display_pickinv(const char *,boolean, long *, boolean);
 #else
 static char display_pickinv(const char *,boolean, long *);
 #endif /* DUMP_LOG */
-#ifdef OVLB
-STATIC_DCL boolean this_type_only(struct obj *);
-STATIC_DCL void dounpaid(void);
-STATIC_DCL struct obj *find_unpaid(struct obj *,struct obj **);
-STATIC_DCL void menu_identify(int);
-STATIC_DCL boolean tool_in_use(struct obj *);
-#endif /* OVLB */
-STATIC_DCL char obj_to_let(struct obj *);
+static boolean this_type_only(struct obj *);
+static void dounpaid(void);
+static struct obj *find_unpaid(struct obj *,struct obj **);
+static void menu_identify(int);
+static boolean tool_in_use(struct obj *);
+static char obj_to_let(struct obj *);
 
 /* define for getobj() */
 #define FOLLOW(curr, flags) \
     (((flags) & BY_NEXTHERE) ? (curr)->nexthere : (curr)->nobj)
 
-#ifdef OVLB
 
 static int lastinvnr = 51;	/* 0 ... 51 (never saved&restored) */
 
@@ -86,14 +81,12 @@ assigninvlet (register struct obj *otmp)
 	lastinvnr = i;
 }
 
-#endif /* OVLB */
-#ifdef OVL1
 
 /* note: assumes ASCII; toggling a bit puts lowercase in front of uppercase */
 #define inv_rank(o) ((o)->invlet ^ 040)
 
 /* sort the inventory; used by addinv() and doorganize() */
-STATIC_OVL void
+static void
 reorder_invent()
 {
 	struct obj *otmp, *prev, *next;
@@ -440,8 +433,6 @@ carry_obj_effects (struct monst *mon, struct obj *obj)
 	}	
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 /* Add an item to the inventory unless we're fumbling or it refuses to be
  * held (via touch_artifact), and give a message.
@@ -556,8 +547,6 @@ boolean maybe_unpaid;	/* false if caller handles shop billing */
 	if (obj->known) update_inventory();
 }
 
-#endif /* OVLB */
-#ifdef OVL3
 
 /*
 Adjust hero's attributes as if this object was being removed from the
@@ -635,8 +624,6 @@ delallobj (int x, int y)
 	}
 }
 
-#endif /* OVL3 */
-#ifdef OVL2
 
 /* destroy object in fobj chain (if unpaid, it remains on the bill) */
 void 
@@ -660,8 +647,6 @@ delobj (register struct obj *obj)
 	obfree(obj, (struct obj *) 0);
 }
 
-#endif /* OVL2 */
-#ifdef OVL0
 
 struct obj *
 sobj_at (register int n, register int x, register int y)
@@ -674,8 +659,6 @@ sobj_at (register int n, register int x, register int y)
 	return((struct obj *)0);
 }
 
-#endif /* OVL0 */
-#ifdef OVLB
 
 struct obj *
 carrying (register int type)
@@ -732,8 +715,6 @@ int x, y;
 	return(FALSE);
 }
 
-#endif /* OVLB */
-#ifdef OVL2
 
 struct obj *
 g_at (register int x, register int y)
@@ -746,8 +727,6 @@ g_at (register int x, register int y)
 	return((struct obj *)0);
 }
 
-#endif /* OVL2 */
-#ifdef OVLB
 #ifndef GOLDOBJ
 /* Make a gold object from the hero's gold. */
 struct obj *
@@ -763,10 +742,8 @@ mkgoldobj (register long q)
 	return(otmp);
 }
 #endif
-#endif /* OVLB */
-#ifdef OVL1
 
-STATIC_OVL void
+static void
 compactify(buf)
 register char *buf;
 /* compact a string of inventory letters by dashing runs of letters */
@@ -797,7 +774,7 @@ register char *buf;
 }
 
 /* match the prompt for either 'T' or 'R' command */
-STATIC_OVL boolean
+static boolean
 taking_off(action)
 const char *action;
 {
@@ -805,14 +782,14 @@ const char *action;
 }
 
 /* match the prompt for either 'W' or 'P' command */
-STATIC_OVL boolean
+static boolean
 putting_on(action)
 const char *action;
 {
     return !strcmp(action, "wear") || !strcmp(action, "put on");
 }
 
-STATIC_OVL int
+static int
 ugly_checks(let, word, otmp)
 const char *let, *word;
 struct obj *otmp;
@@ -925,7 +902,7 @@ static char valid_ugly_classes[MAXOCLASSES + 1];
 /* Action word for allow_ugly callback */
 static const char *ugly_word;
 
-STATIC_OVL boolean
+static boolean
 allow_ugly(obj)
 struct obj *obj;
 {
@@ -1347,10 +1324,8 @@ silly_thing (const char *word, struct obj *otmp)
 	}
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
-STATIC_PTR int
+static int
 ckvalidcat(otmp)
 register struct obj *otmp;
 {
@@ -1358,7 +1333,7 @@ register struct obj *otmp;
 	return((int)allow_category(otmp));
 }
 
-STATIC_PTR int
+static int
 ckunpaid(otmp)
 register struct obj *otmp;
 {
@@ -1710,7 +1685,7 @@ struct obj *otmp;
 }
 
 /* menu of unidentified objects; select and identify up to id_limit of them */
-STATIC_OVL void
+static void
 menu_identify(id_limit)
 int id_limit;
 {
@@ -1779,10 +1754,8 @@ int id_limit;
     update_inventory();
 }
 
-#endif /* OVLB */
-#ifdef OVL2
 
-STATIC_OVL char
+static char
 obj_to_let(obj)	/* should of course only be called for things in invent */
 register struct obj *obj;
 {
@@ -1813,8 +1786,6 @@ long quan;
 	      xprname(obj, (char *)0, obj_to_let(obj), TRUE, 0L, quan));
 }
 
-#endif /* OVL2 */
-#ifdef OVL1
 
 char *
 xprname(obj, txt, let, dot, cost, quan)
@@ -1860,8 +1831,6 @@ long quan;		/* if non-0, print this quantity, not obj->quan */
     return li;
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 /* the 'i' command */
 int
@@ -1880,7 +1849,7 @@ ddoinv()
  * next unpaid object is returned.  This routine recursively follows
  * containers.
  */
-STATIC_OVL struct obj *
+static struct obj *
 find_unpaid(list, last_found)
     struct obj *list, **last_found;
 {
@@ -2165,7 +2134,7 @@ count_buc(list, type)
     return count;
 }
 
-STATIC_OVL void
+static void
 dounpaid()
 {
     winid win;
@@ -2256,7 +2225,7 @@ dounpaid()
 /* query objlist callback: return TRUE if obj type matches "this_type" */
 static int this_type;
 
-STATIC_OVL boolean
+static boolean
 this_type_only(obj)
     struct obj *obj;
 {
@@ -2604,8 +2573,6 @@ boolean force_touch;
 	}
 }
 
-#endif /* OVLB */
-#ifdef OVL1
 
 void
 stackobj(obj)
@@ -2619,7 +2586,7 @@ struct obj *obj;
 	return;
 }
 
-STATIC_OVL boolean
+static boolean
 mergable(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	register struct obj *otmp, *obj;
 {
@@ -2732,8 +2699,6 @@ doprgold()
 	return 0;
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 int
 doprwep()
@@ -2830,7 +2795,7 @@ dopramulet()
 	return 0;
 }
 
-STATIC_OVL boolean
+static boolean
 tool_in_use(obj)
 struct obj *obj;
 {
@@ -2908,16 +2873,12 @@ long numused;
 	    u.uundetected = OBJ_AT(u.ux, u.uy);
 }
 
-#endif /* OVLB */
-
-
-#ifdef OVL1
 
 /*
  * Conversion from a class to a string for printing.
  * This must match the object class order.
  */
-STATIC_VAR const char *names[] = { 0,
+static const char *names[] = { 0,
 	"Illegal objects", "Weapons", "Armor", "Rings", "Amulets",
 	"Tools", "Comestibles", "Potions", "Scrolls", "Spellbooks",
 	"Wands", "Coins", "Gems", "Boulders/Statues", "Iron balls",
@@ -2973,8 +2934,6 @@ free_invbuf()
 	invbufsiz = 0;
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 void
 reassign()
@@ -2987,8 +2946,6 @@ reassign()
 	lastinvnr = i;
 }
 
-#endif /* OVLB */
-#ifdef OVL1
 
 int
 doorganize()	/* inventory organizer by Del Lamb */
@@ -3077,7 +3034,7 @@ doorganize()	/* inventory organizer by Del Lamb */
 }
 
 /* common to display_minventory and display_cinventory */
-STATIC_OVL void
+static void
 invdisp_nothing(hdr, txt)
 const char *hdr, *txt;
 {
@@ -3099,7 +3056,7 @@ const char *hdr, *txt;
 }
 
 /* query_objlist callback: return things that could possibly be worn/wielded */
-STATIC_OVL boolean
+static boolean
 worn_wield_only(obj)
 struct obj *obj;
 {
@@ -3237,7 +3194,7 @@ register struct obj *obj;
 /* query objlist callback: return TRUE if obj is at given location */
 static coord only;
 
-STATIC_OVL boolean
+static boolean
 only_here(obj)
     struct obj *obj;
 {
@@ -3277,7 +3234,5 @@ boolean as_if_seen;
 	}
 	return n;
 }
-
-#endif /* OVL1 */
 
 /*invent.c*/

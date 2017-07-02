@@ -5,15 +5,15 @@
 #include "hack.h"
 #include "lev.h"	/* save & restore info */
 
-STATIC_DCL void setgemprobs(d_level*);
-STATIC_DCL void shuffle(int,int,boolean);
-STATIC_DCL void shuffle_all(void);
-STATIC_DCL boolean interesting_to_discover(int);
+static void setgemprobs(d_level*);
+static void shuffle(int,int,boolean);
+static void shuffle_all(void);
+static boolean interesting_to_discover(int);
 
 static short disco[NUM_OBJECTS] = DUMMY;
 
 #ifdef USE_TILES
-STATIC_DCL void shuffle_tiles(void);
+static void shuffle_tiles(void);
 extern short glyph2tile[];	/* from tile.c */
 
 /* Shuffle tile assignments to match descriptions, so a red potion isn't
@@ -25,7 +25,7 @@ extern short glyph2tile[];	/* from tile.c */
  * is restored.  So might as well do that the first time instead of writing
  * another routine.
  */
-STATIC_OVL void
+static void
 shuffle_tiles()
 {
 	int i;
@@ -41,14 +41,14 @@ shuffle_tiles()
 #endif	/* USE_TILES */
 
 #ifdef PROXY_GRAPHICS
-STATIC_DCL void shuffle_proxy_glyphs(void);
+static void shuffle_proxy_glyphs(void);
 extern short glyph2proxy[];	/* from glyphmap.c */
 
 /* Shuffle proxy glyph assignments for the same reason as tiles
  * (internal glyphs are based on object numbers, proxy glyphs
  * are based on object descriptions).
  */
-STATIC_OVL void
+static void
 shuffle_proxy_glyphs()
 {
 	int i;
@@ -63,7 +63,7 @@ shuffle_proxy_glyphs()
 }
 #endif	/* USE_TILES */
 
-STATIC_OVL void
+static void
 setgemprobs(dlev)
 d_level *dlev;
 {
@@ -91,7 +91,7 @@ d_level *dlev;
 }
 
 /* shuffle descriptions on objects o_low to o_high */
-STATIC_OVL void
+static void
 shuffle(o_low, o_high, domaterial)
 	int o_low, o_high;
 	boolean domaterial;
@@ -202,7 +202,7 @@ register char oclass;
 #endif
 }
 
-STATIC_OVL void
+static void
 shuffle_all()
 {
 	int first, last, oclass;
@@ -380,7 +380,7 @@ undiscover_object (register int oindx)
     }
 }
 
-STATIC_OVL boolean
+static boolean
 interesting_to_discover(i)
 register int i;
 {

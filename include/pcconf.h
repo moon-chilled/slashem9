@@ -36,10 +36,6 @@
 
 /* Borland Stuff */
 # if defined(__BORLANDC__)
-#  if defined(__OVERLAY__) && !defined(VROOMM)
-/* __OVERLAY__ is automatically defined by Borland C if overlay option is on */
-#define VROOMM		/* Borland's VROOMM overlay system */
-#  endif
 #  if !defined(STKSIZ)
 #define STKSIZ	5*1024	/* Use a default of 5K stack for Borland C	*/
 			/* This macro is used in any file that contains */
@@ -75,24 +71,6 @@
 #ifndef REDO
 # undef Getchar
 # define Getchar nhgetch
-#endif
-
-/* Sanity check, do not modify these blocks. */
-
-/* OVERLAY must be defined with MOVERLAY or VROOMM */
-#if (defined(MOVERLAY) || defined(VROOMM))
-# ifndef OVERLAY
-#  define OVERLAY
-# endif
-#endif
-
-#if defined(FUNCTION_LEVEL_LINKING)
-#define OVERLAY
-#define OVL0
-#define OVL1
-#define OVL2
-#define OVL3
-#define OVLB
 #endif
 
 #ifdef MSC7_WARN	/* define with cl /DMSC7_WARN	*/

@@ -7,12 +7,12 @@
 
 extern char bones[];	/* from files.c */
 
-STATIC_DCL boolean no_bones_level(d_level *);
-STATIC_DCL void goodfruit(int);
-STATIC_DCL void resetobjs(struct obj *,boolean);
-STATIC_DCL void drop_upon_death(struct monst *, struct obj *);
+static boolean no_bones_level(d_level *);
+static void goodfruit(int);
+static void resetobjs(struct obj *,boolean);
+static void drop_upon_death(struct monst *, struct obj *);
 
-STATIC_OVL boolean no_bones_level(d_level *lev) {
+static boolean no_bones_level(d_level *lev) {
 	extern d_level save_dlevel;		/* in do.c */
 	s_level *sptr;
 
@@ -33,7 +33,7 @@ STATIC_OVL boolean no_bones_level(d_level *lev) {
  * ID is positive instead of negative).  This way, when we later save the
  * chain of fruit types, we know to only save the types that exist.
  */
-STATIC_OVL void goodfruit(int id) {
+static void goodfruit(int id) {
 	struct fruit *f;
 
 	for(f=ffruit; f; f=f->nextf) {
@@ -44,7 +44,7 @@ STATIC_OVL void goodfruit(int id) {
 	}
 }
 
-STATIC_OVL void resetobjs(struct obj *ochain, boolean restore) {
+static void resetobjs(struct obj *ochain, boolean restore) {
 	struct obj *otmp;
 
 	for (otmp = ochain; otmp; otmp = otmp->nobj) {
@@ -117,7 +117,7 @@ STATIC_OVL void resetobjs(struct obj *ochain, boolean restore) {
 	}
 }
 
-STATIC_OVL void drop_upon_death(struct monst *mtmp, struct obj *cont) {
+static void drop_upon_death(struct monst *mtmp, struct obj *cont) {
 	struct obj *otmp;
 
 	uswapwep = 0; /* ensure curse() won't cause swapwep to drop twice */

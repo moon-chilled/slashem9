@@ -4,13 +4,7 @@
 
 #include "hack.h"
 
-#ifndef OVLB
-
-STATIC_DCL long takeoff_mask, taking_off;
-
-#else /* OVLB */
-
-STATIC_OVL long takeoff_mask = 0L;
+static long takeoff_mask = 0L;
 static long taking_off = 0L;
 
 static int todelay;
@@ -41,14 +35,14 @@ static const long takeoff_order[] = { WORN_BLINDF, W_WEP,
 #endif
 	WORN_BOOTS, W_SWAPWEP, W_QUIVER, 0L };
 
-STATIC_DCL void on_msg(struct obj *);
-STATIC_DCL void Ring_off_or_gone(struct obj *, boolean);
-STATIC_PTR int select_off(struct obj *);
-STATIC_DCL struct obj *do_takeoff(void);
-STATIC_PTR int take_off(void);
-STATIC_DCL int menu_remarm(int);
-STATIC_DCL void already_wearing(const char*);
-STATIC_DCL void already_wearing2(const char*, const char*);
+static void on_msg(struct obj *);
+static void Ring_off_or_gone(struct obj *, boolean);
+static int select_off(struct obj *);
+static struct obj *do_takeoff(void);
+static int take_off(void);
+static int menu_remarm(int);
+static void already_wearing(const char*);
+static void already_wearing2(const char*, const char*);
 
 void off_msg(struct obj *otmp) {
 	if(flags.verbose)
@@ -56,7 +50,7 @@ void off_msg(struct obj *otmp) {
 }
 
 /* for items that involve no delay */
-STATIC_OVL void on_msg(struct obj *otmp) {
+static void on_msg(struct obj *otmp) {
 	if (flags.verbose) {
 	    char how[BUFSZ];
 
@@ -879,7 +873,7 @@ void Ring_on(struct obj *obj) {
     }
 }
 
-STATIC_OVL void Ring_off_or_gone(struct obj *obj, boolean gone) {
+static void Ring_off_or_gone(struct obj *obj, boolean gone) {
     long mask = (obj->owornmask & W_RING);
     int old_attrib, which;
 
@@ -1318,11 +1312,11 @@ int armoroff(struct obj *otmp) {
 	return(1);
 }
 
-STATIC_OVL void already_wearing(const char *cc) {
+static void already_wearing(const char *cc) {
 	You("are already wearing %s%c", cc, (cc == c_that_) ? '!' : '.');
 }
 
-STATIC_OVL void already_wearing2(const char *cc1, const char *cc2) {
+static void already_wearing2(const char *cc1, const char *cc2) {
 	You_cant("wear %s because you're wearing %s there already.", cc1, cc2);
 }
 
@@ -1668,10 +1662,6 @@ int doputon(void) {
 	return(1);
 }
 
-#endif /* OVLB */
-
-#ifdef OVL0
-
 /* Limits of uac (conveniently equal to the limits of an schar ;) */
 #define UAC_MIN (-128)
 #define UAC_LIM 127
@@ -1724,9 +1714,6 @@ void find_ac(void) {
 		flags.botl = 1;
 	}
 }
-
-#endif /* OVL0 */
-#ifdef OVLB
 
 void glibr(void) {
 	struct obj *otmp;
@@ -1849,7 +1836,7 @@ struct obj *unchanger(void) {
 }
 
 /* occupation callback for 'A' */
-STATIC_PTR int select_off(struct obj *otmp) {
+static int select_off(struct obj *otmp) {
 	struct obj *why;
 	char buf[BUFSZ];
 
@@ -1958,7 +1945,7 @@ STATIC_PTR int select_off(struct obj *otmp) {
 	return(0);
 }
 
-STATIC_OVL struct obj *do_takeoff() {
+static struct obj *do_takeoff() {
 	struct obj *otmp = (struct obj *)0;
 
 	if (taking_off == W_WEP) {
@@ -2015,7 +2002,7 @@ STATIC_OVL struct obj *do_takeoff() {
 
 static const char *disrobing = "";
 
-STATIC_PTR int take_off(void) {
+static int take_off(void) {
 	int i;
 	struct obj *otmp;
 
@@ -2138,7 +2125,7 @@ int doddoremarm(void) {
     return 0;
 }
 
-STATIC_OVL int menu_remarm(int retry) {
+static int menu_remarm(int retry) {
     int n, i = 0;
     menu_item *pick_list;
     boolean all_worn_categories = TRUE;
@@ -2250,7 +2237,4 @@ void adj_abon(struct obj *otmp, schar delta) {
 		flags.botl = 1;
 	}
 }
-
-#endif /* OVLB */
-
 /*do_wear.c*/

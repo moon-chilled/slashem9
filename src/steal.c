@@ -4,13 +4,12 @@
 
 #include "hack.h"
 
-STATIC_PTR int stealarm(void);
+static int stealarm(void);
 
-#ifdef OVLB
-STATIC_DCL const char *equipname(struct obj *);
-STATIC_DCL void mdrop_obj(struct monst *,struct obj *,boolean);
+static const char *equipname(struct obj *);
+static void mdrop_obj(struct monst *,struct obj *,boolean);
 
-STATIC_OVL const char *
+static const char *
 equipname(otmp)
 register struct obj *otmp;
 {
@@ -130,7 +129,7 @@ stealgold (register struct monst *mtmp)
 unsigned int stealoid;		/* object to be stolen */
 unsigned int stealmid;		/* monster doing the stealing */
 
-STATIC_PTR int
+static int
 stealarm()
 {
 	register struct monst *mtmp;
@@ -429,8 +428,6 @@ gotobj:
 	return((multi < 0) ? 0 : 1);
 }
 
-#endif /* OVLB */
-#ifdef OVL1
 
 /* Returns 1 if otmp is free'd, 0 otherwise. */
 int 
@@ -470,8 +467,6 @@ mpickobj (register struct monst *mtmp, register struct obj *otmp)
     return freed_otmp;
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 void 
 stealamulet (struct monst *mtmp)
@@ -516,11 +511,9 @@ stealamulet (struct monst *mtmp)
     }
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
 /* drop one object taken from a (possibly dead) monster's inventory */
-STATIC_OVL void
+static void
 mdrop_obj(mon, obj, verbosely)
 struct monst *mon;
 struct obj *obj;
@@ -629,7 +622,5 @@ boolean is_pet;		/* If true, pet should keep wielded/worn items */
 	if (show & cansee(omx, omy))
 		newsym(omx, omy);
 }
-
-#endif /* OVL0 */
 
 /*steal.c*/

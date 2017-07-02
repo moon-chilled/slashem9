@@ -4,8 +4,6 @@
 
 #include "hack.h"
 
-#ifdef OVL0
-
 /* ExplodeRegions share some commonalities with NhRegions, but not enough to
  * make it worth trying to create a common implementation.
  */
@@ -20,7 +18,7 @@ typedef struct {
     short nlocations, alocations;
 } ExplodeRegion;
 
-STATIC_DCL ExplodeRegion *
+static ExplodeRegion *
 create_explode_region()
 {
     ExplodeRegion *reg;
@@ -32,7 +30,7 @@ create_explode_region()
     return reg;
 }
 
-STATIC_DCL void
+static void
 add_location_to_explode_region(reg, x, y)
 ExplodeRegion *reg;
 xchar x, y;
@@ -58,14 +56,14 @@ xchar x, y;
     reg->nlocations++;
 }
 
-STATIC_DCL int
+static int
 compare_explode_location(loc1, loc2)
 ExplodeLocation *loc1, *loc2;
 {
     return loc1->y == loc2->y ? loc1->x - loc2->x : loc1->y - loc2->y;
 }
 
-STATIC_DCL void
+static void
 set_blast_symbols(reg)
 ExplodeRegion *reg;
 {
@@ -111,7 +109,7 @@ ExplodeRegion *reg;
 	reg->locations[i].blast = blast_symbols[reg->locations[i].blast];
 }
 
-STATIC_DCL void
+static void
 free_explode_region(reg)
 ExplodeRegion *reg;
 {
@@ -120,7 +118,7 @@ ExplodeRegion *reg;
 }
 
 /* This is the "do-it-all" explosion command */
-STATIC_DCL void do_explode(int,int,ExplodeRegion *,int,int,char,int,int,boolean);
+static void do_explode(int,int,ExplodeRegion *,int,int,char,int,int,boolean);
 
 /* Note: I had to choose one of three possible kinds of "type" when writing
  * this function: a wand type (like in zap.c), an adtyp, or an object type.
@@ -630,8 +628,6 @@ boolean yours; /* is it your fault (for killing monsters) */
         if (iflags.usealleg) cleanup_explosions();
 #endif
 }
-#endif /* OVL0 */
-#ifdef OVL1
 
 struct scatter_chain {
 	struct scatter_chain *next;	/* pointer to next scatter item	*/
@@ -832,7 +828,7 @@ splatter_burning_oil (int x, int y)
 
 #define BY_OBJECT       ((struct monst *)0)
 
-STATIC_DCL int
+static int
 dp(n, p)		/* 0 <= dp(n, p) <= n */
 int n, p;
 {
@@ -862,10 +858,10 @@ struct grenade_callback {
     boolean isyou;
 };
 
-STATIC_DCL void grenade_effects(struct obj *,xchar,xchar,
+static void grenade_effects(struct obj *,xchar,xchar,
 	ExplodeRegion *,ExplodeRegion *,ExplodeRegion *,boolean);
 
-STATIC_DCL int
+static int
 grenade_fiery_callback(data, x, y)
 void * data;
 int x, y;
@@ -880,7 +876,7 @@ int x, y;
     return !is_accessible;
 }
 
-STATIC_DCL int
+static int
 grenade_gas_callback(data, x, y)
 void * data;
 int x, y;
@@ -892,7 +888,7 @@ int x, y;
     return !is_accessible;
 }
 
-STATIC_DCL int
+static int
 grenade_dig_callback(data, x, y)
 void * data;
 int x, y;
@@ -903,7 +899,7 @@ int x, y;
     return !ZAP_POS(levl[x][y].typ);
 }
 
-STATIC_DCL void
+static void
 grenade_effects(source, x, y, fiery_area, gas_area, dig_area, isyou)
 struct obj *source;
 xchar x, y;
@@ -1077,7 +1073,5 @@ boolean yours;
 }
 
 #endif /* FIREARMS */
-
-#endif /* OVL1 */
 
 /*explode.c*/

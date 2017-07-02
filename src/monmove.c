@@ -9,17 +9,14 @@
 
 extern boolean notonhead;
 
-#ifdef OVL0
 
-STATIC_DCL int disturb(struct monst *);
-STATIC_DCL void distfleeck(struct monst *,int *,int *,int *);
-STATIC_DCL int m_arrival(struct monst *);
-STATIC_DCL void watch_on_duty(struct monst *);
+static int disturb(struct monst *);
+static void distfleeck(struct monst *,int *,int *,int *);
+static int m_arrival(struct monst *);
+static void watch_on_duty(struct monst *);
 /* WAC for breath door busting */
 static int bust_door_breath(struct monst *);
 
-#endif /* OVL0 */
-#ifdef OVLB
 
 boolean /* TRUE : mtmp died */
 mb_trapped(mtmp)
@@ -44,10 +41,8 @@ register struct monst *mtmp;
 	return(FALSE);
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
-STATIC_OVL void
+static void
 watch_on_duty(mtmp)
 register struct monst *mtmp;
 {
@@ -90,8 +85,6 @@ register struct monst *mtmp;
 	}
 }
 
-#endif /* OVL0 */
-#ifdef OVL1
 
 int 
 dochugw (register struct monst *mtmp)
@@ -159,8 +152,6 @@ dochugw (register struct monst *mtmp)
 	return(rd);
 }
 
-#endif /* OVL1 */
-#ifdef OVL2
 
 boolean
 onscary(x, y, mtmp)
@@ -182,8 +173,6 @@ struct monst *mtmp;
 			     && IS_ALTAR(levl[x][y].typ)));
 }
 
-#endif /* OVL2 */
-#ifdef OVL0
 
 /* regenerate lost hit points */
 void
@@ -208,7 +197,7 @@ boolean digest_meal;
  * Possibly awaken the given monster.  Return a 1 if the monster has been
  * jolted awake.
  */
-STATIC_OVL int
+static int
 disturb(mtmp)
 	register struct monst *mtmp;
 {
@@ -280,7 +269,7 @@ boolean fleemsg;
 	}
 }
 
-STATIC_OVL void
+static void
 distfleeck(mtmp,inrange,nearby,scared)
 register struct monst *mtmp;
 int *inrange, *nearby, *scared;
@@ -320,7 +309,7 @@ int *inrange, *nearby, *scared;
 
 /* perform a special one-time action for a monster; returns -1 if nothing
    special happened, 0 if monster uses up its turn, 1 if monster is killed */
-STATIC_OVL int
+static int
 m_arrival(mon)
 struct monst *mon;
 {
@@ -1280,8 +1269,6 @@ postmov:
 	return(mmoved);
 }
 
-#endif /* OVL0 */
-#ifdef OVL2
 
 boolean
 closed_door(x, y)
@@ -1298,8 +1285,6 @@ register int x, y;
 	return((boolean)(ACCESSIBLE(levl[x][y].typ) && !closed_door(x, y)));
 }
 
-#endif /* OVL2 */
-#ifdef OVL0
 
 /* decide where the monster thinks you are standing */
 void 
@@ -1449,8 +1434,5 @@ bust_door_breath (register struct monst *mtmp)
 
         return(-1);
 }
-
-
-#endif /* OVL0 */
 
 /*monmove.c*/

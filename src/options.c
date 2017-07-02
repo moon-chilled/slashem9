@@ -467,33 +467,33 @@ static short n_menu_mapped = 0;
 
 static boolean initial, from_file;
 
-STATIC_DCL void doset_add_menu(winid,const char *,int);
-STATIC_DCL void nmcpy(char *, const char *, int);
-STATIC_DCL void escapes(const char *, char *);
-STATIC_DCL void rejectoption(const char *);
-STATIC_DCL void badoption(const char *);
-STATIC_OVL void badtileoption(const char *);
-STATIC_DCL char *string_for_opt(char *,boolean);
-STATIC_OVL char *string_for_tile_opt(char *, boolean);
-STATIC_DCL char *string_for_env_opt(const char *, char *,boolean);
-STATIC_DCL void bad_negation(const char *,boolean);
-STATIC_DCL int change_inv_order(char *);
-STATIC_DCL void oc_to_str(char *, char *);
-STATIC_DCL void graphics_opts(char *,const char *,int,int);
-STATIC_DCL int feature_alert_opts(char *, const char *);
-STATIC_DCL const char *get_compopt_value(const char *, char *);
-STATIC_DCL boolean special_handling(const char *, boolean, boolean);
-STATIC_DCL void warning_opts(char *,const char *);
-STATIC_DCL void duplicate_opt_detection(const char *, int);
+static void doset_add_menu(winid,const char *,int);
+static void nmcpy(char *, const char *, int);
+static void escapes(const char *, char *);
+static void rejectoption(const char *);
+static void badoption(const char *);
+static void badtileoption(const char *);
+static char *string_for_opt(char *,boolean);
+static char *string_for_tile_opt(char *, boolean);
+static char *string_for_env_opt(const char *, char *,boolean);
+static void bad_negation(const char *,boolean);
+static int change_inv_order(char *);
+static void oc_to_str(char *, char *);
+static void graphics_opts(char *,const char *,int,int);
+static int feature_alert_opts(char *, const char *);
+static const char *get_compopt_value(const char *, char *);
+static boolean special_handling(const char *, boolean, boolean);
+static void warning_opts(char *,const char *);
+static void duplicate_opt_detection(const char *, int);
 
-STATIC_OVL void wc_set_font_name(int, char *);
-STATIC_OVL int wc_set_window_colors(char *);
-STATIC_OVL boolean is_wc_option(const char *);
-STATIC_OVL boolean wc_supported(const char *);
-STATIC_OVL boolean is_wc2_option(const char *);
-STATIC_OVL boolean wc2_supported(const char *);
-STATIC_DCL void remove_autopickup_exception(struct autopickup_exception *);
-STATIC_OVL int count_ape_maps(int *, int *);
+static void wc_set_font_name(int, char *);
+static int wc_set_window_colors(char *);
+static boolean is_wc_option(const char *);
+static boolean wc_supported(const char *);
+static boolean is_wc2_option(const char *);
+static boolean wc2_supported(const char *);
+static void remove_autopickup_exception(struct autopickup_exception *);
+static int count_ape_maps(int *, int *);
 
 /* check whether a user-supplied option string is a proper leading
    substring of a particular option name; option string might have
@@ -667,7 +667,7 @@ initoptions (void)
 	return;
 }
 
-STATIC_OVL void
+static void
 nmcpy(dest, src, maxlen)
 	char	*dest;
 	const char *src;
@@ -689,7 +689,7 @@ nmcpy(dest, src, maxlen)
  * previous forms or by a character has the effect of 'meta'-ing the value (so
  * that the alternate character set will be enabled).
  */
-STATIC_OVL void
+static void
 escapes(cp, tp)
 const char	*cp;
 char *tp;
@@ -745,7 +745,7 @@ char *tp;
     *tp = '\0';
 }
 
-STATIC_OVL void
+static void
 rejectoption(optname)
 const char *optname;
 {
@@ -757,7 +757,7 @@ const char *optname;
 #endif
 }
 
-STATIC_OVL void
+static void
 badoption(opts)
 const char *opts;
 {
@@ -780,7 +780,7 @@ const char *opts;
 	wait_synch();
 }
 
-STATIC_OVL void
+static void
 badauthoption(opts)
 const char *opts;
 {
@@ -788,7 +788,7 @@ const char *opts;
 	wait_synch();
 }
 
-STATIC_OVL void
+static void
 badtileoption(opts)
 const char *opts;
 {
@@ -796,7 +796,7 @@ const char *opts;
 	wait_synch();
 }
 
-STATIC_OVL char *
+static char *
 string_for_opt(opts, val_optional)
 char *opts;
 boolean val_optional;
@@ -814,7 +814,7 @@ boolean val_optional;
 	return colon;
 }
 
-STATIC_OVL char *
+static char *
 string_for_auth_opt(opts, val_optional)
 char *opts;
 boolean val_optional;
@@ -824,7 +824,7 @@ boolean val_optional;
 	return colon;
 }
 
-STATIC_OVL char *
+static char *
 string_for_tile_opt(opts, val_optional)
 char *opts;
 boolean val_optional;
@@ -834,7 +834,7 @@ boolean val_optional;
 	return colon;
 }
 
-STATIC_OVL char *
+static char *
 string_for_env_opt(optname, opts, val_optional)
 const char *optname;
 char *opts;
@@ -847,7 +847,7 @@ boolean val_optional;
 	return string_for_opt(opts, val_optional);
 }
 
-STATIC_OVL void
+static void
 bad_negation(optname, with_parameter)
 const char *optname;
 boolean with_parameter;
@@ -866,7 +866,7 @@ boolean with_parameter;
  * This routine returns 1 unless there is a duplicate or bad char in
  * the string.
  */
-STATIC_OVL int
+static int
 change_inv_order(op)
 char *op;
 {
@@ -904,7 +904,7 @@ char *op;
     return 1;
 }
 
-STATIC_OVL void
+static void
 graphics_opts(opts, optype, maxlen, offset)
 register char *opts;
 const char *optype;
@@ -925,7 +925,7 @@ int maxlen, offset;
 	assign_graphics(translate, length, maxlen, offset);
 }
 
-STATIC_OVL void
+static void
 warning_opts(opts, optype)
 register char *opts;
 const char *optype;
@@ -955,7 +955,7 @@ register uchar *graph_chars;
 	    if (graph_chars[i]) warnsyms[i] = graph_chars[i];
 }
 
-STATIC_OVL int
+static int
 feature_alert_opts(op, optn)
 char *op;
 const char *optn;
@@ -1016,7 +1016,7 @@ set_duplicate_opt_detection (int on_or_off)
 	} 
 }
 
-STATIC_OVL void
+static void
 duplicate_opt_detection(opts, bool_or_comp)
 const char *opts;
 int bool_or_comp;	/* 0 == boolean option, 1 == compound */
@@ -2753,7 +2753,7 @@ static const char *runmodes[] = {
  * Convert the given string of object classes to a string of default object
  * symbols.
  */
-STATIC_OVL void
+static void
 oc_to_str(src,dest)
     char *src, *dest;
 {
@@ -2811,7 +2811,7 @@ map_menu_cmd (char ch)
 static char fmtstr_doset_add_menu[] = "%s%-15s [%s]   "; 
 static char fmtstr_doset_add_menu_tab[] = "%s\t[%s]";
 
-STATIC_OVL void
+static void
 doset_add_menu(win, option, indexoffset)
     winid win;			/* window to add to */
     const char *option;		/* option name */
@@ -3008,7 +3008,7 @@ doset (void)
 	return 0;
 }
 
-STATIC_OVL boolean
+static boolean
 special_handling(optname, setinitial, setfromfile)
 const char *optname;
 boolean setinitial,setfromfile;
@@ -3360,7 +3360,7 @@ ape_again:
 
 /* This is ugly. We have all the option names in the compopt[] array,
    but we need to look at each option individually to get the value. */
-STATIC_OVL const char *
+static const char *
 get_compopt_value(optname, buf)
 const char *optname;
 char *buf;
@@ -3691,7 +3691,7 @@ add_autopickup_exception (const char *mapping)
 	return 1;
 }
 
-STATIC_OVL void
+static void
 remove_autopickup_exception(whichape)
 struct autopickup_exception *whichape;
 {
@@ -3713,7 +3713,7 @@ struct autopickup_exception *whichape;
     }
 }
 
-STATIC_OVL int
+static int
 count_ape_maps(leave, grab)
 int *leave, *grab;
 {
@@ -4146,7 +4146,7 @@ set_wc_option_mod_status (unsigned long optmask, int status)
 	}
 }
 
-STATIC_OVL boolean
+static boolean
 is_wc_option(optnam)
 const char *optnam;
 {
@@ -4159,7 +4159,7 @@ const char *optnam;
 	return FALSE;
 }
 
-STATIC_OVL boolean
+static boolean
 wc_supported(optnam)
 const char *optnam;
 {
@@ -4200,7 +4200,7 @@ set_wc2_option_mod_status (unsigned long optmask, int status)
 	}
 }
 
-STATIC_OVL boolean
+static boolean
 is_wc2_option(optnam)
 const char *optnam;
 {
@@ -4213,7 +4213,7 @@ const char *optnam;
 	return FALSE;
 }
 
-STATIC_OVL boolean
+static boolean
 wc2_supported(optnam)
 const char *optnam;
 {
@@ -4228,7 +4228,7 @@ const char *optnam;
 }
 
 
-STATIC_OVL void
+static void
 wc_set_font_name(wtype, fontname)
 int wtype;
 char *fontname;
@@ -4262,7 +4262,7 @@ char *fontname;
 	return;
 }
 
-STATIC_OVL int
+static int
 wc_set_window_colors(op)
 char *op;
 {

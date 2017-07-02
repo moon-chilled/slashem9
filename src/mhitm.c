@@ -11,8 +11,6 @@ extern const char *breathwep[];		/* from mthrowu.c */
 
 #define POLE_LIM 5	/* How far monsters can use pole-weapons */
 
-#ifdef OVLB
-
 static boolean vis, far_noise;
 static long noisetime;
 static struct obj *otmp;
@@ -20,20 +18,20 @@ static struct obj *otmp;
 static const char brief_feeling[] =
 	"have a %s feeling for a moment, then it passes.";
 
-STATIC_DCL char *mon_nam_too(char *,struct monst *,struct monst *);
-STATIC_DCL void mrustm(struct monst *, struct monst *, struct obj *);
-STATIC_DCL int breamm(struct monst *, struct monst *, struct attack *);
-STATIC_DCL int spitmm(struct monst *, struct monst *, struct attack *);
-STATIC_DCL int thrwmm(struct monst *, struct monst *);
-STATIC_DCL int hitmm(struct monst *,struct monst *,struct attack *);
-STATIC_DCL int gazemm(struct monst *,struct monst *,struct attack *);
-STATIC_DCL int gulpmm(struct monst *,struct monst *,struct attack *);
-STATIC_DCL int explmm(struct monst *,struct monst *,struct attack *);
-STATIC_DCL int mdamagem(struct monst *,struct monst *,struct attack *);
-STATIC_DCL void mswingsm(struct monst *, struct monst *, struct obj *);
-STATIC_DCL void noises(struct monst *,struct attack *);
-STATIC_DCL void missmm(struct monst *,struct monst *, int, int, struct attack *);
-STATIC_DCL int passivemm(struct monst *, struct monst *, boolean, int);
+static char *mon_nam_too(char *,struct monst *,struct monst *);
+static void mrustm(struct monst *, struct monst *, struct obj *);
+static int breamm(struct monst *, struct monst *, struct attack *);
+static int spitmm(struct monst *, struct monst *, struct attack *);
+static int thrwmm(struct monst *, struct monst *);
+static int hitmm(struct monst *,struct monst *,struct attack *);
+static int gazemm(struct monst *,struct monst *,struct attack *);
+static int gulpmm(struct monst *,struct monst *,struct attack *);
+static int explmm(struct monst *,struct monst *,struct attack *);
+static int mdamagem(struct monst *,struct monst *,struct attack *);
+static void mswingsm(struct monst *, struct monst *, struct obj *);
+static void noises(struct monst *,struct attack *);
+static void missmm(struct monst *,struct monst *, int, int, struct attack *);
+static int passivemm(struct monst *, struct monst *, boolean, int);
 
 /* Needed for the special case of monsters wielding vorpal blades (rare).
  * If we use this a lot it should probably be a parameter to mdamagem()
@@ -43,7 +41,7 @@ static int dieroll;
 
 /* returns mon_nam(mon) relative to other_mon; normal name unless they're
    the same, in which case the reference is to {him|her|it} self */
-STATIC_OVL char *
+static char *
 mon_nam_too(outbuf, mon, other_mon)
 char *outbuf;
 struct monst *mon, *other_mon;
@@ -58,7 +56,7 @@ struct monst *mon, *other_mon;
 	return outbuf;
 }
 
-STATIC_OVL void
+static void
 noises(magr, mattk)
 	register struct monst *magr;
 	register struct	attack *mattk;
@@ -74,7 +72,7 @@ noises(magr, mattk)
 	}
 }
 
-STATIC_OVL
+static
 void
 missmm(magr, mdef, target, roll, mattk)
 	register struct monst *magr, *mdef;
@@ -465,7 +463,7 @@ mattackm (register struct monst *magr, register struct monst *mdef)
 }
 
 /* monster attempts breath attack against another monster */
-STATIC_OVL int
+static int
 breamm(magr, mdef, mattk)
 struct monst *magr, *mdef;
 struct attack *mattk;
@@ -503,7 +501,7 @@ struct attack *mattk;
 }
 
 /* monster attempts spit attack against another monster */
-STATIC_OVL int
+static int
 spitmm(magr, mdef, mattk)
 struct monst *magr, *mdef;
 struct attack *mattk;
@@ -551,7 +549,7 @@ struct attack *mattk;
 }
 
 /* monster attempts ranged weapon attack against another monster */
-STATIC_OVL int
+static int
 thrwmm(magr, mdef)
 struct monst *magr, *mdef;
 {
@@ -729,7 +727,7 @@ struct monst *magr, *mdef;
 }
 
 /* Returns the result of mdamagem(). */
-STATIC_OVL int
+static int
 hitmm(magr, mdef, mattk)
 	register struct monst *magr,*mdef;
 	struct	attack *mattk;
@@ -789,7 +787,7 @@ hitmm(magr, mdef, mattk)
 }
 
 /* Returns the same values as mdamagem(). */
-STATIC_OVL int
+static int
 gazemm(magr, mdef, mattk)
 	register struct monst *magr, *mdef;
 	struct attack *mattk;
@@ -838,7 +836,7 @@ gazemm(magr, mdef, mattk)
 }
 
 /* Returns the same values as mattackm(). */
-STATIC_OVL int
+static int
 gulpmm(magr, mdef, mattk)
 	register struct monst *magr, *mdef;
 	register struct	attack *mattk;
@@ -906,7 +904,7 @@ gulpmm(magr, mdef, mattk)
 	return status;
 }
 
-STATIC_OVL int
+static int
 explmm(magr, mdef, mattk)
 	register struct monst *magr, *mdef;
 	register struct	attack *mattk;
@@ -943,7 +941,7 @@ explmm(magr, mdef, mattk)
 /*
  *  See comment at top of mattackm(), for return values.
  */
-STATIC_OVL int
+static int
 mdamagem(magr, mdef, mattk)
 	register struct monst	*magr, *mdef;
 	register struct attack	*mattk;
@@ -1827,10 +1825,6 @@ physical:
 	return(MM_HIT);
 }
 
-#endif /* OVLB */
-
-
-#ifdef OVL0
 
 int
 noattacks(ptr)			/* returns 1 if monster doesn't attack */
@@ -1878,10 +1872,7 @@ struct monst *mon;
 	}
 }
 
-#endif /* OVL0 */
-#ifdef OVLB
-
-STATIC_OVL void
+static void
 mrustm(magr, mdef, obj)
 register struct monst *magr, *mdef;
 register struct obj *obj;
@@ -1918,7 +1909,7 @@ register struct obj *obj;
 	}
 }
 
-STATIC_OVL void
+static void
 mswingsm(magr, mdef, otemp)
 register struct monst *magr, *mdef;
 register struct obj *otemp;
@@ -1935,7 +1926,7 @@ register struct obj *otemp;
  * Passive responses by defenders.  Does not replicate responses already
  * handled above.  Returns same values as mattackm.
  */
-STATIC_OVL int
+static int
 passivemm(magr,mdef,mhit,mdead)
 register struct monst *magr, *mdef;
 boolean mhit;
@@ -2136,8 +2127,5 @@ int aatyp;
     }
     return w_mask;
 }
-
-#endif /* OVLB */
-
 /*mhitm.c*/
 

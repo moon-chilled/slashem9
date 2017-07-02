@@ -721,17 +721,6 @@ static const char *build_opts[] = {
 #ifdef NOARTIFACTWISH
 		"no wishing for special artifacts",
 #endif
-#ifdef OVERLAY
-# ifdef MOVERLAY
-		"MOVE overlays",
-# else
-#  ifdef VROOMM
-		"VROOMM overlays",
-#  else
-		"overlays",
-#  endif
-# endif
-#endif
 #ifdef REDO
 		"redo command",
 #endif

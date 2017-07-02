@@ -18,13 +18,11 @@
 
 void display_monster(xchar,xchar,struct monst *,int,xchar);
  
-STATIC_DCL boolean restrap(struct monst *);
-STATIC_DCL long mm_aggression(struct monst *,struct monst *);
-#ifdef OVL2
-STATIC_DCL int pick_animal(void);
-STATIC_DCL int select_newcham_form(struct monst *);
-STATIC_DCL void kill_eggs(struct obj *);
-#endif
+static boolean restrap(struct monst *);
+static long mm_aggression(struct monst *,struct monst *);
+static int pick_animal(void);
+static int select_newcham_form(struct monst *);
+static void kill_eggs(struct obj *);
 
 #ifdef REINCARNATION
 #define LEVEL_SPECIFIC_NOCORPSE(mdat) \
@@ -40,22 +38,17 @@ STATIC_DCL void kill_eggs(struct obj *);
 
 #if 0
 /* part of the original warning code which was replaced in 3.3.1 */
-#ifdef OVL1
 #define warnDelay 10
 long lastwarntime;
 int lastwarnlev;
 
 
-STATIC_DCL void warn_effects(void);
-#endif /* OVL1 */
+static void warn_effects(void);
 #endif /* 0 */
 
-#ifndef OVLB
-STATIC_VAR short cham_to_pm[];
-#else
-STATIC_DCL struct obj *make_corpse(struct monst *);
-STATIC_DCL void m_detach(struct monst *, struct permonst *);
-STATIC_DCL void lifesaved_monster(struct monst *);
+static struct obj *make_corpse(struct monst *);
+static void m_detach(struct monst *, struct permonst *);
+static void lifesaved_monster(struct monst *);
 static void unpoly_monster(struct monst *);
 
 /* convert the monster index of an undead to its living counterpart */
@@ -144,7 +137,7 @@ pm_to_cham (int mndx)
 }
 
 /* convert chameleon index to monster index */
-STATIC_VAR short cham_to_pm[] = {
+static short cham_to_pm[] = {
 		NON_PM,		/* placeholder for CHAM_ORDINARY */
 		PM_CHAMELEON,
 		PM_DOPPELGANGER,
@@ -167,7 +160,7 @@ STATIC_VAR short cham_to_pm[] = {
  * G_NOCORPSE set in order to prevent wishing for one, finding tins of one,
  * etc....
  */
-STATIC_OVL struct obj *
+static struct obj *
 make_corpse(mtmp)
 register struct monst *mtmp;
 {
@@ -434,12 +427,10 @@ register struct monst *mtmp;
 	return obj;
 }
 
-#endif /* OVLB */
-#ifdef OVL1
 
 #if 0
 /* part of the original warning code which was replaced in 3.3.1 */
-STATIC_OVL void
+static void
 warn_effects()
 {
 	register struct monst *mtmp;    
@@ -741,8 +732,6 @@ movemon (void)
     return somebody_can_move;
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 #define mstoning(obj)	(ofood(obj) && \
 					(touch_petrifies(&mons[(obj)->corpsenm]) || \
@@ -988,8 +977,6 @@ mpickgold (register struct monst *mtmp)
 	}
     }
 }
-#endif /* OVLB */
-#ifdef OVL2
 
 boolean
 mpickstuff(mtmp, str)
@@ -1034,8 +1021,6 @@ mpickstuff(mtmp, str)
 	return FALSE;
 }
 
-#endif /* OVL2 */
-#ifdef OVL0
 
 int 
 curr_mon_load (register struct monst *mtmp)
@@ -1342,15 +1327,13 @@ impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
 	return(cnt);
 }
 
-#endif /* OVL0 */
-#ifdef OVL1
 
 /* Monster against monster special attacks; for the specified monster
    combinations, this allows one monster to attack another adjacent one
    in the absence of Conflict.  There is no provision for targetting
    other monsters; just hand to hand fighting when they happen to be
    next to each other. */
-STATIC_OVL long
+static long
 mm_aggression(magr, mdef)
 struct monst *magr,	/* monster that is currently deciding where to move */
 	     *mdef;	/* another monster which is next to it */
@@ -1416,8 +1399,6 @@ dmonsfree (void)
     iflags.purge_monsters = 0;
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 /* called when monster is moved to larger structure */
 void 
@@ -1490,7 +1471,7 @@ relmon (register struct monst *mon)
 }
 
 /* remove effects of mtmp from other data structures */
-STATIC_OVL void
+static void
 m_detach(mtmp, mptr)
 struct monst *mtmp;
 struct permonst *mptr;	/* reflects mtmp->data _prior_ to mtmp's death */
@@ -1526,7 +1507,7 @@ mlifesaver (struct monst *mon)
 	return (struct obj *)0;
 }
 
-STATIC_OVL void
+static void
 lifesaved_monster(mtmp)
 struct monst *mtmp;
 {
@@ -2343,8 +2324,6 @@ m_respond (register struct monst *mtmp)
     }
 }
 
-#endif /* OVLB */
-#ifdef OVL2
 
 void 
 setmangry (register struct monst *mtmp)
@@ -2533,7 +2512,7 @@ restore_cham (struct monst *mon)
 }
 
 /* unwatched hiders may hide again; if so, a 1 is returned.  */
-STATIC_OVL boolean
+static boolean
 restrap(mtmp)
 register struct monst *mtmp;
 {
@@ -2582,7 +2561,7 @@ boolean construct;
 	}
 }
 
-STATIC_OVL int
+static int
 pick_animal()
 {
 	if (!animal_list) mon_animal_list(TRUE);
@@ -2590,7 +2569,7 @@ pick_animal()
 	return animal_list[rn2(animal_list_count)];
 }
 
-STATIC_OVL int
+static int
 select_newcham_form(mon)
 struct monst *mon;
 {
@@ -2957,7 +2936,7 @@ boolean egg;
 }
 
 /* kill off any eggs of genocided monsters */
-STATIC_OVL void
+static void
 kill_eggs(obj_list)
 struct obj *obj_list;
 {
@@ -3031,8 +3010,6 @@ kill_genocided_monsters()
 	kill_eggs(level.buriedobjlist);
 }
 
-#endif /* OVL2 */
-#ifdef OVLB
 
 void
 golemeffects(mon, damtype, dam)
@@ -3140,6 +3117,5 @@ short otyp;
 		break;
 	}
 }
-#endif /* OVLB */
 
 /*mon.c*/

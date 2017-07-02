@@ -12,23 +12,22 @@
  */
 
 
-#ifdef OVLB
 boolean notonhead = FALSE;
 
 static int nothing, unkn;
 static const char beverages[] = { POTION_CLASS, 0 };
 
-STATIC_DCL long itimeout(long);
-STATIC_DCL long itimeout_incr(long,int);
-STATIC_DCL void ghost_from_bottle(void);
-STATIC_DCL short mixtype(struct obj *,struct obj *);
+static long itimeout(long);
+static long itimeout_incr(long,int);
+static void ghost_from_bottle(void);
+static short mixtype(struct obj *,struct obj *);
 
-STATIC_DCL void healup_mon(struct monst *, int,int,boolean,boolean);
+static void healup_mon(struct monst *, int,int,boolean,boolean);
 	/* For healing monsters - analogous to healup for players */
 
 
 /* force `val' to be within valid range for intrinsic timeout value */
-STATIC_OVL long
+static long
 itimeout(val)
 long val;
 {
@@ -39,7 +38,7 @@ long val;
 }
 
 /* increment `old' by `incr' and force result to be valid intrinsic timeout */
-STATIC_OVL long
+static long
 itimeout_incr(old, incr)
 long old;
 int incr;
@@ -308,7 +307,7 @@ long mask;	/* nonzero if resistance status should change by mask */
 	return changed;
 }
 
-STATIC_OVL void
+static void
 ghost_from_bottle()
 {
 	struct monst *mtmp = makemon(&mons[PM_GHOST], u.ux, u.uy, NO_MM_FLAGS);
@@ -1657,7 +1656,7 @@ potionbreathe (register struct obj *obj)
 	}
 }
 
-STATIC_OVL short
+static short
 mixtype(o1, o2)
 register struct obj *o1, *o2;
 /* returns the potion type when o1 is dipped in o2 */
@@ -1887,7 +1886,7 @@ register struct obj *o1, *o2;
 
 /* Bills an object that's about to be downgraded, assuming that's not already
  * been done */
-STATIC_OVL
+static
 void
 pre_downgrade_obj(obj, used)
 register struct obj *obj;
@@ -1905,7 +1904,7 @@ boolean *used;
 }
 
 /* Implements the downgrading effect of potions of amnesia and Lethe water */
-STATIC_OVL
+static
 void
 downgrade_obj(obj, nomagic, used)
 register struct obj *obj;
@@ -3233,7 +3232,4 @@ split_mon (
 	}
 	return mtmp2;
 }
-
-#endif /* OVLB */
-
 /*potion.c*/

@@ -118,24 +118,24 @@
 #include "hack.h"
 #include "region.h"
 
-STATIC_DCL void display_monster(xchar,xchar,struct monst *,int,xchar);
-STATIC_DCL int swallow_to_glyph(int, int);
-STATIC_DCL void display_warning(struct monst *);
+static void display_monster(xchar,xchar,struct monst *,int,xchar);
+static int swallow_to_glyph(int, int);
+static void display_warning(struct monst *);
 
-STATIC_DCL int check_pos(int, int, int);
+static int check_pos(int, int, int);
 #ifdef WA_VERBOSE
-STATIC_DCL boolean more_than_one(int, int, int, int, int);
+static boolean more_than_one(int, int, int, int, int);
 #endif
-STATIC_DCL int set_twall(int,int, int,int, int,int, int,int);
-STATIC_DCL int set_wall(int, int, int);
-STATIC_DCL int set_corn(int,int, int,int, int,int, int,int);
-STATIC_DCL int set_crosswall(int, int);
-STATIC_DCL void set_seenv(struct rm *, int, int, int, int);
-STATIC_DCL void t_warn(struct rm *);
-STATIC_DCL int wall_angle(struct rm *);
-STATIC_DCL int back_to_cmap(xchar, xchar);
+static int set_twall(int,int, int,int, int,int, int,int);
+static int set_wall(int, int, int);
+static int set_corn(int,int, int,int, int,int, int,int);
+static int set_crosswall(int, int);
+static void set_seenv(struct rm *, int, int, int, int);
+static void t_warn(struct rm *);
+static int wall_angle(struct rm *);
+static int back_to_cmap(xchar, xchar);
 
-STATIC_VAR boolean transp;    /* cached transparency flag for current tileset */
+static boolean transp;    /* cached transparency flag for current tileset */
 
 #ifdef INVISIBLE_OBJECTS
 /*
@@ -416,7 +416,7 @@ void clear_memory_glyph(int x, int y, int to) {
  * a worm tail.
  *
  */
-STATIC_OVL void
+static void
 display_monster(
     xchar x, xchar y,	/* display position */
     struct monst *mon,	/* monster to display */
@@ -515,7 +515,7 @@ display_monster(
  *
  * Do not call for worm tails.
  */
-STATIC_OVL void display_warning(struct monst *mon) {
+static void display_warning(struct monst *mon) {
     int x = mon->mx, y = mon->my;
     int wl = (int) (mon->m_lev / 4);
     int glyph;
@@ -1327,7 +1327,7 @@ static char gbuf_stop[ROWNO];
 
 #ifdef DUMP_LOG
 /* D: Added to dump screen to output file */
-STATIC_PTR uchar get_glyph_char(int glyph) {
+static uchar get_glyph_char(int glyph) {
     uchar   ch;
     int offset;
 
@@ -1593,7 +1593,7 @@ void flush_screen(int cursor_on_u) {
  * were up or down.  I didn't want to check the upstairs and dnstairs
  * variables.
  */
-STATIC_OVL int back_to_cmap(xchar x, xchar y) {
+static int back_to_cmap(xchar x, xchar y) {
     int idx;
     struct rm *ptr = &(levl[x][y]);
 
@@ -1692,7 +1692,7 @@ int back_to_glyph(xchar x,xchar y) {
  * If you don't want a patchwork monster while hallucinating, decide on
  * a random monster in swallowed() and don't use what_mon() here.
  */
-STATIC_OVL int swallow_to_glyph(int mnum, int loc) {
+static int swallow_to_glyph(int mnum, int loc) {
     if (loc < S_sw_tl || S_sw_br < loc) {
 	impossible("swallow_to_glyph: bad swallow location");
 	loc = S_sw_br;
@@ -1765,7 +1765,7 @@ static const char *type_to_name (int type) {
     return (type < 0 || type > MAX_TYPE) ? "unknown" : type_names[type];
 }
 
-STATIC_OVL void error4(int x, int y, int a, int b, int c, int dd) {
+static void error4(int x, int y, int a, int b, int c, int dd) {
     pline("set_wall_state: %s @ (%d,%d) %s%s%s%s",
 	type_to_name(levl[x][y].typ), x, y,
 	a ? "1":"", b ? "2":"", c ? "3":"", dd ? "4":"");
@@ -1779,7 +1779,7 @@ STATIC_OVL void error4(int x, int y, int a, int b, int c, int dd) {
  *
  * Things that are ambigious: lava
  */
-STATIC_OVL int check_pos(int x, int y, int which) {
+static int check_pos(int x, int y, int which) {
     int type;
     if (!isok(x,y)) return which;
     type = levl[x][y].typ;
@@ -1790,7 +1790,7 @@ STATIC_OVL int check_pos(int x, int y, int which) {
 /* Return TRUE if more than one is non-zero. */
 /*ARGSUSED*/
 #ifdef WA_VERBOSE
-STATIC_OVL boolean more_than_one(int x, int y, int a, int b, int c) {
+static boolean more_than_one(int x, int y, int a, int b, int c) {
 #if defined(MAC_MPW)
 # pragma unused ( x,y )
 #endif
@@ -1805,7 +1805,7 @@ STATIC_OVL boolean more_than_one(int x, int y, int a, int b, int c) {
 #endif
 
 /* Return the wall mode for a T wall. */
-STATIC_OVL int set_twall(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3) {
+static int set_twall(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3) {
     int wmode, is_1, is_2, is_3;
 
     is_1 = check_pos(x1, y1, WM_T_LONG);
@@ -1820,7 +1820,7 @@ STATIC_OVL int set_twall(int x0, int y0, int x1, int y1, int x2, int y2, int x3,
 }
 
 /* Return wall mode for a horizontal or vertical wall. */
-STATIC_OVL int set_wall(int x, int y, int horiz) {
+static int set_wall(int x, int y, int horiz) {
     int wmode, is_1, is_2;
 
     if (horiz) {
@@ -1845,7 +1845,7 @@ STATIC_OVL int set_wall(int x, int y, int horiz) {
  *
  * Return a wall mode for a corner wall. (x4,y4) is the "inner" position.
  */
-STATIC_OVL int set_corn(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
+static int set_corn(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
     int wmode, is_1, is_2, is_3, is_4;
 
     is_1 = check_pos(x1, y1, 1);
@@ -1871,7 +1871,7 @@ STATIC_OVL int set_corn(int x1, int y1, int x2, int y2, int x3, int y3, int x4, 
 }
 
 /* Return mode for a crosswall. */
-STATIC_OVL int set_crosswall(int x, int y) {
+static int set_crosswall(int x, int y) {
     int wmode, is_1, is_2, is_3, is_4;
 
     is_1 = check_pos(x-1, y-1, 1);
@@ -1984,7 +1984,7 @@ unsigned char seenv_matrix[3][3] = { {SV2,   SV1, SV0},
 #define sign(z) ((z) < 0 ? -1 : ((z) > 0 ? 1 : 0))
 
 /* Set the seen vector of lev as if seen from (x0,y0) to (x,y). */
-STATIC_OVL void set_seenv(struct rm *lev, int x0, int y0, int x, int y) {
+static void set_seenv(struct rm *lev, int x0, int y0, int x, int y) {
     int dx = x-x0, dy = y0-y;
     lev->seenv |= seenv_matrix[sign(dy)+1][sign(dx)+1];
 }
@@ -2047,7 +2047,7 @@ static const int cross_matrix[4][6] = {
 
 
 /* Print out a T wall warning and all interesting info. */
-STATIC_OVL void t_warn(struct rm *lev) {
+static void t_warn(struct rm *lev) {
     static const char warn_str[] = "wall_angle: %s: case %d: seenv = 0x%x";
     const char *wname;
 
@@ -2072,7 +2072,7 @@ STATIC_OVL void t_warn(struct rm *lev) {
  * draw diagrams.  See rm.h for more details on the wall modes and
  * seen vector (SV).
  */
-STATIC_OVL int wall_angle(struct rm *lev) {
+static int wall_angle(struct rm *lev) {
     unsigned int seenv = lev->seenv & 0xff;
     const int *row;
     int col, idx;

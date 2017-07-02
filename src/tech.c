@@ -16,8 +16,8 @@ static int get_tech_no(int);
 static int techeffects(int);
 static void hurtmon(struct monst *,int);
 static int mon_to_zombie(int);
-STATIC_PTR int tinker(void);
-STATIC_PTR int draw_energy(void);
+static int tinker(void);
+static int draw_energy(void);
 static const struct innate_tech * role_tech(void);
 static const struct innate_tech * race_tech(void);
 static int doblitz(void);
@@ -37,7 +37,7 @@ static const char revivables[] = { ALLOW_FLOOROBJ, FOOD_CLASS, 0 };
  * menu will look bad :B  WAC
  */
  
-STATIC_OVL const char *tech_names[] = {
+static const char *tech_names[] = {
 	"no technique",
 	"berserk",
 	"kiii",
@@ -1712,7 +1712,7 @@ mon_to_zombie (int monnum)
 
 
 /*WAC tinker code*/
-STATIC_PTR int
+static int
 tinker()
 {
 	int chance;
@@ -1747,7 +1747,7 @@ tinker()
 }
 
 /*WAC  draw energy from surrounding objects */
-STATIC_PTR int
+static int
 draw_energy()
 {
 	int powbonus = 1;

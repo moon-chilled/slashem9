@@ -11,21 +11,21 @@ extern char *lev_message;
 extern lev_region *lregions;
 extern int num_lregions;
 
-STATIC_DCL boolean iswall(int,int);
-STATIC_DCL boolean iswall_or_stone(int,int);
-STATIC_DCL boolean is_solid(int,int);
-STATIC_DCL int extend_spine(int [3][3], int, int, int);
-STATIC_DCL boolean okay(int,int,int);
-STATIC_DCL void maze0xy(coord *);
-STATIC_DCL boolean put_lregion_here(xchar,xchar,xchar,
+static boolean iswall(int,int);
+static boolean iswall_or_stone(int,int);
+static boolean is_solid(int,int);
+static int extend_spine(int [3][3], int, int, int);
+static boolean okay(int,int,int);
+static void maze0xy(coord *);
+static boolean put_lregion_here(xchar,xchar,xchar,
 	xchar,xchar,xchar,xchar,boolean,d_level *);
-STATIC_DCL void fixup_special(void);
-STATIC_DCL void move(int *,int *,int);
-STATIC_DCL void setup_waterlevel(void);
-STATIC_DCL void unsetup_waterlevel(void);
+static void fixup_special(void);
+static void move(int *,int *,int);
+static void setup_waterlevel(void);
+static void unsetup_waterlevel(void);
 
 
-STATIC_OVL boolean
+static boolean
 iswall(x,y)
 int x,y;
 {
@@ -37,7 +37,7 @@ int x,y;
 	    type == SDOOR || type == IRONBARS);
 }
 
-STATIC_OVL boolean
+static boolean
 iswall_or_stone(x,y)
     int x,y;
 {
@@ -52,7 +52,7 @@ iswall_or_stone(x,y)
 }
 
 /* return TRUE if out of bounds, wall or rock */
-STATIC_OVL boolean
+static boolean
 is_solid(x,y)
     int x, y;
 {
@@ -78,7 +78,7 @@ is_solid(x,y)
  *		W x W		This would extend a spine from x down.
  *		. W W
  */
-STATIC_OVL int
+static int
 extend_spine(locale, wall_there, dx, dy)
     int locale[3][3];
     int wall_there, dx, dy;
@@ -117,7 +117,7 @@ extend_spine(locale, wall_there, dx, dy)
  *
  * Wall cleanup. This function turns all wall squares into 'floortype' squares.
  */
-STATIC_OVL
+static
 void
 wallify_special(x1, y1, x2, y2, floortype)
 int x1, y1, x2, y2;
@@ -155,7 +155,7 @@ int floortype;		/* The 'wall' floortype */
  * are totally surrounded by stone - they are redundant.  (2) correct
  * the types so that they extend and connect to each other.
  */
-STATIC_OVL
+static
 void
 wallify_stone(x1, y1, x2, y2)	/* [Lethe] Classic stone walls */
 int x1, y1, x2, y2;
@@ -268,7 +268,7 @@ boolean initial;
 	return;
 }
 
-STATIC_OVL boolean
+static boolean
 okay(x,y,dir)
 int x,y;
 register int dir;
@@ -280,7 +280,7 @@ register int dir;
 	return(TRUE);
 }
 
-STATIC_OVL void
+static void
 maze0xy(cc)	/* find random starting point for maze generation */
 	coord	*cc;
 {
@@ -354,7 +354,7 @@ place_lregion(lx, ly, hx, hy, nlx, nly, nhx, nhy, rtype, lev)
     impossible("Couldn't place lregion type %d!", rtype);
 }
 
-STATIC_OVL boolean
+static boolean
 put_lregion_here(x,y,nlx,nly,nhx,nhy,rtype,oneshot,lev)
 xchar x, y;
 xchar nlx, nly, nhx, nhy;
@@ -404,7 +404,7 @@ d_level *lev;
 static boolean was_waterlevel; /* ugh... this shouldn't be needed */
 
 /* this is special stuff that the level compiler cannot (yet) handle */
-STATIC_OVL void
+static void
 fixup_special()
 {
     register lev_region *r = lregions;
@@ -795,7 +795,7 @@ walkfrom (int x, int y)
 }
 #endif /* MICRO */
 
-STATIC_OVL void
+static void
 move(x,y,dir)
 register int *x, *y;
 register int dir;
@@ -968,9 +968,9 @@ static int xmin, ymin, xmax, ymax;	/* level boundaries */
 #define bxmax (xmax - 1)
 #define bymax (ymax - 1)
 
-STATIC_DCL void set_wportal(void);
-STATIC_DCL void mk_bubble(int,int,int);
-STATIC_DCL void mv_bubble(struct bubble *,int,int,boolean);
+static void set_wportal(void);
+static void mk_bubble(int,int,int);
+static void mv_bubble(struct bubble *,int,int,boolean);
 
 void 
 movebubbles (void)
@@ -1217,7 +1217,7 @@ xchar x,y;
 	else return "water";
 }
 
-STATIC_OVL void
+static void
 set_wportal()
 {
 	/* there better be only one magic portal on water level... */
@@ -1226,7 +1226,7 @@ set_wportal()
 	impossible("set_wportal(): no portal!");
 }
 
-STATIC_OVL void
+static void
 setup_waterlevel()
 {
 	register int x, y;
@@ -1254,7 +1254,7 @@ setup_waterlevel()
 			mk_bubble(x,y,rn2(7));
 }
 
-STATIC_OVL void
+static void
 unsetup_waterlevel()
 {
 	register struct bubble *b, *bb;
@@ -1268,7 +1268,7 @@ unsetup_waterlevel()
 	bbubbles = ebubbles = (struct bubble *)0;
 }
 
-STATIC_OVL void
+static void
 mk_bubble(x,y,n)
 register int x, y, n;
 {
@@ -1325,7 +1325,7 @@ register int x, y, n;
  * in the immediate neighborhood of one, he/she may get sucked inside.
  * This property also makes leaving a bubble slightly difficult.
  */
-STATIC_OVL void
+static void
 mv_bubble(b,dx,dy,ini)
 register struct bubble *b;
 register int dx, dy;

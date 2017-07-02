@@ -10,7 +10,7 @@
 #include <ctype.h>
 #endif
 
-STATIC_VAR struct monst zeromonst;
+static struct monst zeromonst;
 
 /* this assumes that a human quest leader or nemesis is an archetype
    of the corresponding role; that isn't so for some roles (tourist
@@ -19,18 +19,14 @@ STATIC_VAR struct monst zeromonst;
 		(mptr->mlet == S_HUMAN && Role_if(role_pm) && \
 		  (mptr->msound == MS_LEADER || mptr->msound == MS_NEMESIS))
 
-#ifdef OVL0
-STATIC_DCL boolean uncommon(int);
-STATIC_DCL int align_shift(struct permonst *);
-#endif /* OVL0 */
-STATIC_DCL boolean wrong_elem_type(struct permonst *);
-STATIC_DCL void m_initgrp(struct monst *,int,int,int);
-STATIC_DCL void m_initthrow(struct monst *,int,int);
-STATIC_DCL void m_initweap(struct monst *);
-STATIC_DCL void m_initweap_normal(struct monst *);
-#ifdef OVL1
-STATIC_DCL void m_initinv(struct monst *);
-#endif /* OVL1 */
+static boolean uncommon(int);
+static int align_shift(struct permonst *);
+static boolean wrong_elem_type(struct permonst *);
+static void m_initgrp(struct monst *,int,int,int);
+static void m_initthrow(struct monst *,int,int);
+static void m_initweap(struct monst *);
+static void m_initweap_normal(struct monst *);
+static void m_initinv(struct monst *);
 
 extern const int monstr[];
 
@@ -40,7 +36,6 @@ extern const int monstr[];
 #define toostrong(monindx, lev) (monstr[monindx] > lev)
 #define tooweak(monindx, lev)	(monstr[monindx] < lev)
 
-#ifdef OVLB
 boolean
 is_home_elemental(ptr)
 register struct permonst *ptr;
@@ -58,7 +53,7 @@ register struct permonst *ptr;
 /*
  * Return true if the given monster cannot exist on this elemental level.
  */
-STATIC_OVL boolean
+static boolean
 wrong_elem_type(ptr)
     register struct permonst *ptr;
 {
@@ -79,7 +74,7 @@ wrong_elem_type(ptr)
     return FALSE;
 }
 
-STATIC_OVL void
+static void
 m_initgrp(mtmp, x, y, n)	/* make a group just like mtmp */
 register struct monst *mtmp;
 register int x, y, n;
@@ -144,7 +139,7 @@ register int x, y, n;
 	}
 }
 
-STATIC_OVL
+static
 void
 m_initthrow(mtmp,otyp,oquan)
 struct monst *mtmp;
@@ -159,10 +154,8 @@ int otyp,oquan;
 	(void) mpickobj(mtmp, otmp);
 }
 
-#endif /* OVLB */
-#ifdef OVL2
 
-STATIC_OVL void
+static void
 m_initweap_normal(mtmp)
 register struct monst *mtmp;
 {
@@ -214,7 +207,7 @@ register struct monst *mtmp;
 	return;
 }
 
-STATIC_OVL void
+static void
 m_initweap(mtmp)
 register struct monst *mtmp;
 {
@@ -929,8 +922,6 @@ register struct monst *mtmp;
 		(void) mongets(mtmp, rnd_offensive_item(mtmp));
 }
 
-#endif /* OVL2 */
-#ifdef OVL1
 
 #ifdef GOLDOBJ
 /*
@@ -946,7 +937,7 @@ mkmonmoney (struct monst *mtmp, long amount)
 }
 #endif
 
-STATIC_OVL void
+static void
 m_initinv(mtmp)
 register struct	monst	*mtmp;
 {
@@ -1756,10 +1747,8 @@ struct permonst *mptr;		/* usually null; used for confused reading */
 	return known;
 }
 
-#endif /* OVL1 */
-#ifdef OVL0
 
-STATIC_OVL boolean
+static boolean
 uncommon(mndx)
 int mndx;
 {
@@ -1776,7 +1765,7 @@ int mndx;
  *	comparing the dungeon alignment and monster alignment.
  *	return an integer in the range of 0-5.
  */
-STATIC_OVL int
+static int
 align_shift(ptr)
 register struct permonst *ptr;
 {
@@ -1936,8 +1925,6 @@ reset_rndmonst (
 	} /* note: safe to ignore extinction of unique monsters */
 }
 
-#endif /* OVL0 */
-#ifdef OVL1
 
 /*	The routine below is used to make one of the multiple types
  *	of a given monster class.  The second parameter specifies a
@@ -2045,8 +2032,6 @@ adj_lev (	/* adjust strength of monsters based on u.uz and u.ulevel */
 	return((tmp > tmp2) ? tmp2 : (tmp > 0 ? tmp : 0)); /* 0 lower limit */
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 struct permonst *
 grow_up (	/* `mtmp' might "grow up" into a bigger version */
@@ -2155,8 +2140,6 @@ grow_up (	/* `mtmp' might "grow up" into a bigger version */
 	return ptr;
 }
 
-#endif /* OVLB */
-#ifdef OVL1
 
 int 
 mongets (register struct monst *mtmp, register int otyp)
@@ -2224,8 +2207,6 @@ mongets (register struct monst *mtmp, register int otyp)
 	} else return(0);
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 int 
 golemhp (int type)
@@ -2256,8 +2237,6 @@ golemhp (int type)
 	}
 }
 
-#endif /* OVLB */
-#ifdef OVL1
 
 /*
  *	Alignment vs. yours determines monster's attitude to you.
@@ -2368,8 +2347,6 @@ set_malign (struct monst *mtmp)
 		mtmp->malign = abs(mal);
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 static char syms[] = {
 	MAXOCLASSES, MAXOCLASSES+1, RING_CLASS, WAND_CLASS, WEAPON_CLASS,
@@ -2512,7 +2489,5 @@ bagotricks (struct obj *bag)
 	if (gotone) makeknown(BAG_OF_TRICKS);
     }
 }
-
-#endif /* OVLB */
 
 /*makemon.c*/

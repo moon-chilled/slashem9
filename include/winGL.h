@@ -47,9 +47,6 @@ extern void Sdlgl_parse_options(char *, int, int);
 #ifdef CHANGE_COLOR
 #error CHANGE_COLOR defined
 #endif
-#ifdef OVERLAY
-#error OVERLAY defined
-#endif
 #ifdef MICRO
 #error MICRO defined
 #endif

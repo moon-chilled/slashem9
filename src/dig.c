@@ -6,17 +6,15 @@
 #include "edog.h"
 /* #define DEBUG */	/* turn on for diagnostics */
 
-#ifdef OVLB
-
 static boolean did_dig_msg;
 
-STATIC_DCL boolean rm_waslit(void);
-STATIC_DCL void mkcavepos(xchar,xchar,int,boolean,boolean);
-STATIC_DCL void mkcavearea(boolean);
-STATIC_DCL int dig_typ(struct obj *,xchar,xchar);
-STATIC_DCL int dig(void);
-STATIC_DCL schar fillholetyp(int, int);
-STATIC_DCL void dig_up_grave(void);
+static boolean rm_waslit(void);
+static void mkcavepos(xchar,xchar,int,boolean,boolean);
+static void mkcavearea(boolean);
+static int dig_typ(struct obj *,xchar,xchar);
+static int dig(void);
+static schar fillholetyp(int, int);
+static void dig_up_grave(void);
 
 /* Indices returned by dig_typ() */
 #define DIGTYP_UNDIGGABLE 0
@@ -27,7 +25,7 @@ STATIC_DCL void dig_up_grave(void);
 #define DIGTYP_TREE       5
 
 
-STATIC_OVL boolean rm_waslit(void) {
+static boolean rm_waslit(void) {
     xchar x, y;
 
     if(levl[u.ux][u.uy].typ == ROOM && levl[u.ux][u.uy].waslit)
@@ -42,7 +40,7 @@ STATIC_OVL boolean rm_waslit(void) {
  * boulders in the name of a nice effect.  Vision will get fixed up again
  * immediately after the effect is complete.
  */
-STATIC_OVL void mkcavepos(xchar x, xchar y, int dist, boolean waslit, boolean rockit) {
+static void mkcavepos(xchar x, xchar y, int dist, boolean waslit, boolean rockit) {
     struct rm *lev;
 
     if(!isok(x,y)) return;
@@ -76,7 +74,7 @@ STATIC_OVL void mkcavepos(xchar x, xchar y, int dist, boolean waslit, boolean ro
     else newsym(x,y);
 }
 
-STATIC_OVL void mkcavearea(boolean rockit) {
+static void mkcavearea(boolean rockit) {
     int dist;
     xchar xmin = u.ux, xmax = u.ux;
     xchar ymin = u.uy, ymax = u.uy;
@@ -120,7 +118,7 @@ STATIC_OVL void mkcavearea(boolean rockit) {
 }
 
 /* When digging into location <x,y>, what are you actually digging into? */
-STATIC_OVL int dig_typ(struct obj *otmp, xchar x, xchar y) {
+static int dig_typ(struct obj *otmp, xchar x, xchar y) {
 	boolean ispick = is_pick(otmp);
 
 	return (ispick && sobj_at(STATUE, x, y) ? DIGTYP_STATUE :
@@ -195,7 +193,7 @@ boolean dig_check(struct monst *madeby, boolean verbose, int x, int y) {
 	return(TRUE);
 }
 
-STATIC_OVL int dig(void) {
+static int dig(void) {
 	struct rm *lev;
 	xchar dpx = digging.pos.x, dpy = digging.pos.y;
 	boolean ispick = uwep && is_pick(uwep);
@@ -458,7 +456,7 @@ int holetime(void) {
 }
 
 /* Return typ of liquid to fill a hole with, or ROOM, if no liquid nearby */
-STATIC_OVL schar fillholetyp(int x, int y) {
+static schar fillholetyp(int x, int y) {
     int x1, y1;
     int lo_x = max(1,x-1), hi_x = min(x+1,COLNO-1),
 	lo_y = max(0,y-1), hi_y = min(y+1,ROWNO-1);
@@ -780,7 +778,7 @@ boolean dighole(boolean pit_only) {
 	return FALSE;
 }
 
-STATIC_OVL void dig_up_grave(void) {
+static void dig_up_grave(void) {
 	struct obj *otmp;
 
 	/* Grave-robbing is frowned upon... */
@@ -1088,8 +1086,6 @@ void watch_dig(struct monst *mtmp, xchar x, xchar y, boolean zap) {
 	}
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
 /* Return TRUE if monster died, FALSE otherwise.  Called from m_move(). */
 boolean mdig_tunnel(struct monst *mtmp) {
@@ -1162,8 +1158,6 @@ boolean mdig_tunnel(struct monst *mtmp) {
 	return FALSE;
 }
 
-#endif /* OVL0 */
-#ifdef OVL3
 
 /* digging via wand zap or spell cast */
 void zap_dig(void) {
@@ -1616,6 +1610,5 @@ int wiz_debug_cmd(void) {
 }
 
 #endif /* DEBUG */
-#endif /* OVL3 */
 
 /*dig.c*/

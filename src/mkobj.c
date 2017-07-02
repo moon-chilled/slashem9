@@ -6,16 +6,14 @@
 #include "prop.h"
 
 
-STATIC_DCL void mkbox_cnts(struct obj *);
-STATIC_DCL void obj_timer_checks(struct obj *, xchar, xchar, int);
-#ifdef OVL1
-STATIC_DCL void container_weight(struct obj *);
-STATIC_DCL struct obj *save_mtraits(struct obj *, struct monst *);
+static void mkbox_cnts(struct obj *);
+static void obj_timer_checks(struct obj *, xchar, xchar, int);
+static void container_weight(struct obj *);
+static struct obj *save_mtraits(struct obj *, struct monst *);
 #ifdef WIZARD
-STATIC_DCL const char *where_name(int);
-STATIC_DCL void check_contained(struct obj *,const char *);
+static const char *where_name(int);
+static void check_contained(struct obj *,const char *);
 #endif
-#endif /* OVL1 */
 
 extern struct obj *thrownobj;		/* defined in dothrow.c */
 
@@ -26,7 +24,6 @@ struct icp {
     char iclass;	/* item class */
 };
 
-#ifdef OVL1
 
 /* STEPHEN WHITE'S NEW CODE */   
 /* [Tom] tried to fix this back up a little... */
@@ -139,7 +136,7 @@ boolean artif;
 	return(mksobj(i, TRUE, artif));
 }
 
-STATIC_OVL void
+static void
 mkbox_cnts(box)
 struct obj *box;
 {
@@ -384,8 +381,6 @@ bill_dummy_object (register struct obj *otmp)
 	return;
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 static const char dknowns[] = {
 		WAND_CLASS, RING_CLASS, POTION_CLASS, SCROLL_CLASS,
@@ -891,8 +886,6 @@ uncurse (register struct obj *otmp)
 	    otmp->owt = weight(otmp);
 }
 
-#endif /* OVLB */
-#ifdef OVL1
 
 void 
 blessorcurse (register struct obj *otmp, register int chance)
@@ -909,8 +902,6 @@ blessorcurse (register struct obj *otmp, register int chance)
 	return;
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 int 
 bcsign (register struct obj *otmp)
@@ -918,8 +909,6 @@ bcsign (register struct obj *otmp)
 	return(!!otmp->blessed - !!otmp->cursed);
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
 /*
  *  Calculate the weight of the given object.  This will recursively follow
@@ -995,8 +984,6 @@ rnd_treefruit_at (int x, int y)
 {
 	return mksobj_at(treefruits[rn2(SIZE(treefruits))], x, y, TRUE, FALSE);
 }
-#endif /* OVL0 */
-#ifdef OVLB
 
 struct obj *
 mkgold (long amount, int x, int y)
@@ -1015,8 +1002,6 @@ mkgold (long amount, int x, int y)
     return (gold);
 }
 
-#endif /* OVLB */
-#ifdef OVL1
 
 /* return TRUE if the corpse has special timing */
 /* special timing is a timing that is not rotting or molding */
@@ -1156,8 +1141,6 @@ boolean copyof;
 	return mnew;
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 /* make an object named after someone listed in the scoreboard file */
 struct obj *
@@ -1221,8 +1204,6 @@ register struct obj *otmp;
 			objects[otyp].oc_material != LIQUID));
 }
 
-#endif /* OVLB */
-#ifdef OVL1
 
 /*
  * These routines maintain the single-linked lists headed in level.objects[][]
@@ -1313,7 +1294,7 @@ peek_at_iced_corpse_age (struct obj *otmp)
     return retval;
 }
 
-STATIC_OVL void
+static void
 obj_timer_checks(otmp, x, y, force)
 struct obj *otmp;
 xchar x, y;
@@ -1617,7 +1598,7 @@ add_to_buried (struct obj *obj)
 }
 
 /* Recalculate the weight of this container and all of _its_ containers. */
-STATIC_OVL void
+static void
 container_weight(container)
     struct obj *container;
 {
@@ -1763,7 +1744,7 @@ static const char *obj_state_names[NOBJ_STATES] = {
 	"minvent",	"migrating",	"buried",	"onbill"
 };
 
-STATIC_OVL const char *
+static const char *
 where_name(where)
     int where;
 {
@@ -1771,7 +1752,7 @@ where_name(where)
 }
 
 /* obj sanity check: check objs contained by container */
-STATIC_OVL void
+static void
 check_contained(container, mesg)
     struct obj *container;
     const char *mesg;
@@ -1791,7 +1772,5 @@ check_contained(container, mesg)
     }
 }
 #endif /* WIZARD */
-
-#endif /* OVL1 */
 
 /*mkobj.c*/

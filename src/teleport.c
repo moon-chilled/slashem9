@@ -4,11 +4,11 @@
 
 #include "hack.h"
 
-STATIC_DCL boolean tele_jump_ok(int,int,int,int);
-STATIC_DCL boolean teleok(int,int,boolean);
-STATIC_DCL void vault_tele(void);
-STATIC_DCL boolean rloc_pos_ok(int,int,struct monst *);
-STATIC_DCL void mvault_tele(struct monst *);
+static boolean tele_jump_ok(int,int,int,int);
+static boolean teleok(int,int,boolean);
+static void vault_tele(void);
+static boolean rloc_pos_ok(int,int,struct monst *);
+static void mvault_tele(struct monst *);
 
 /*
  * Is (x, y) a bad position of mtmp?  If mtmp is NULL, then is (x, y) bad
@@ -474,7 +474,7 @@ void * data;
 }
 
 #ifdef DEBUG
-STATIC_OVL boolean
+static boolean
 wiz_debug_wpathto(arg, x, y)
 void * arg;
 int x, y;
@@ -535,7 +535,7 @@ wiz_debug_cmd (void) /* in this case, run wpathto on arbitary monster & goal */
  * need to be augmented to allow deliberate passage in wizard mode, but
  * only for explicitly chosen destinations.)
  */
-STATIC_OVL boolean
+static boolean
 tele_jump_ok(x1, y1, x2, y2)
 int x1, y1, x2, y2;
 {
@@ -580,7 +580,7 @@ int x1, y1, x2, y2;
 	return TRUE;
 }
 
-STATIC_OVL boolean
+static boolean
 teleok(x, y, trapok)
 register int x, y;
 boolean trapok;
@@ -717,7 +717,7 @@ boolean allow_drag;
 		return FALSE;
 }
 
-STATIC_OVL void
+static void
 vault_tele()
 {
 	register struct mkroom *croom = search_special(VAULT);
@@ -1288,7 +1288,7 @@ level_tele_trap (struct trap *trap)
 }
 
 /* check whether monster can arrive at location <x,y> via Tport (or fall) */
-STATIC_OVL boolean
+static boolean
 rloc_pos_ok(x, y, mtmp)
 register int x, y;		/* coordinates of candidate location */
 struct monst *mtmp;
@@ -1436,7 +1436,7 @@ boolean suppress_impossible;
 	return TRUE;
 }
 
-STATIC_OVL void
+static void
 mvault_tele(mtmp)
 struct monst *mtmp;
 {

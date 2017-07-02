@@ -20,17 +20,17 @@ boolean m_using = FALSE;
  */
 
 #if 0
-STATIC_DCL struct permonst *muse_newcham_mon(struct monst *);
+static struct permonst *muse_newcham_mon(struct monst *);
 #endif
-STATIC_DCL int precheck(struct monst *,struct obj *);
-STATIC_DCL void mzapmsg(struct monst *,struct obj *,boolean);
-STATIC_DCL void mreadmsg(struct monst *,struct obj *);
-STATIC_DCL void mquaffmsg(struct monst *,struct obj *);
-STATIC_PTR int mbhitm(struct monst *,struct obj *);
-STATIC_DCL void mbhit(struct monst *,int,int (*)(MONST_P,OBJ_P),
+static int precheck(struct monst *,struct obj *);
+static void mzapmsg(struct monst *,struct obj *,boolean);
+static void mreadmsg(struct monst *,struct obj *);
+static void mquaffmsg(struct monst *,struct obj *);
+static int mbhitm(struct monst *,struct obj *);
+static void mbhit(struct monst *,int,int (*)(MONST_P,OBJ_P),
 	int (*)(OBJ_P,OBJ_P),struct obj *);
-STATIC_DCL void you_aggravate(struct monst *);
-STATIC_DCL void mon_consume_unstone(struct monst *,struct obj *,
+static void you_aggravate(struct monst *);
+static void mon_consume_unstone(struct monst *,struct obj *,
 	boolean,boolean);
 
 static struct musable {
@@ -54,7 +54,7 @@ static boolean zap_oseen;
  * the item.  Returns 0 if nothing happened, 2 if the monster can't do anything
  * (i.e. it teleported) and 1 if it's dead.
  */
-STATIC_OVL int
+static int
 precheck(mon, obj)
 struct monst *mon;
 struct obj *obj;
@@ -144,7 +144,7 @@ struct obj *obj;
 	return 0;
 }
 
-STATIC_OVL void
+static void
 mzapmsg(mtmp, otmp, self)
 struct monst *mtmp;
 struct obj *otmp;
@@ -164,7 +164,7 @@ boolean self;
 	}
 }
 
-STATIC_OVL void
+static void
 mreadmsg(mtmp, otmp)
 struct monst *mtmp;
 struct obj *otmp;
@@ -203,7 +203,7 @@ struct obj *otmp;
 		  vismon ? mon_nam(mtmp) : mhe(mtmp));
 }
 
-STATIC_OVL void
+static void
 mquaffmsg(mtmp, otmp)
 struct monst *mtmp;
 struct obj *otmp;
@@ -1213,7 +1213,7 @@ struct monst *mtmp;
 #undef nomore
 }
 
-STATIC_PTR
+static
 int
 mbhitm(mtmp, otmp)
 register struct monst *mtmp;
@@ -1322,7 +1322,7 @@ register struct obj *otmp;
  * zapping you, so we need a special function for it.  (Unless someone wants
  * to merge the two functions...)
  */
-STATIC_OVL void
+static void
 mbhit(mon,range,fhitm,fhito,obj)
 struct monst *mon;			/* monster shooting the wand */
 register int range;			/* direction and range */
@@ -2067,7 +2067,7 @@ skipmsg:
 	return 0;
 }
 
-STATIC_OVL void
+static void
 you_aggravate(mtmp)
 struct monst *mtmp;
 {
@@ -2332,7 +2332,7 @@ boolean by_you;
 	return FALSE;
 }
 
-STATIC_OVL void
+static void
 mon_consume_unstone(mon, obj, by_you, stoning)
 struct monst *mon;
 struct obj *obj;

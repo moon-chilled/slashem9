@@ -12,26 +12,22 @@
 
 #include "hack.h"
 
-#ifdef OVLB
-STATIC_DCL void get_wall_for_db(int *, int *);
-STATIC_DCL struct entity *e_at(int, int);
-STATIC_DCL void m_to_e(struct monst *, int, int, struct entity *);
-STATIC_DCL void u_to_e(struct entity *);
-STATIC_DCL void set_entity(int, int, struct entity *);
-STATIC_DCL const char *e_nam(struct entity *);
+static void get_wall_for_db(int *, int *);
+static struct entity *e_at(int, int);
+static void m_to_e(struct monst *, int, int, struct entity *);
+static void u_to_e(struct entity *);
+static void set_entity(int, int, struct entity *);
+static const char *e_nam(struct entity *);
 #ifdef D_DEBUG
 static const char *Enam(struct entity *); /* unused */
 #endif
-STATIC_DCL const char *E_phrase(struct entity *, const char *);
-STATIC_DCL boolean e_survives_at(struct entity *, int, int);
-STATIC_DCL void e_died(struct entity *, int, int);
-STATIC_DCL boolean automiss(struct entity *);
-STATIC_DCL boolean e_missed(struct entity *, boolean);
-STATIC_DCL boolean e_jumps(struct entity *);
-STATIC_DCL void do_entity(struct entity *);
-#endif /* OVLB */
-
-#ifdef OVL0
+static const char *E_phrase(struct entity *, const char *);
+static boolean e_survives_at(struct entity *, int, int);
+static void e_died(struct entity *, int, int);
+static boolean automiss(struct entity *);
+static boolean e_missed(struct entity *, boolean);
+static boolean e_jumps(struct entity *);
+static void do_entity(struct entity *);
 
 boolean is_pool(int x, int y) {
     schar ltyp;
@@ -66,9 +62,6 @@ boolean is_ice(int x, int y) {
     return FALSE;
 }
 
-#endif /* OVL0 */
-
-#ifdef OVL1
 
 /*
  * We want to know whether a wall (or a door) is the portcullis (passageway)
@@ -132,13 +125,11 @@ boolean find_drawbridge(int *x, int *y) {
 	return FALSE;
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 /*
  * Find the drawbridge wall associated with a drawbridge.
  */
-STATIC_OVL void get_wall_for_db(int *x, int *y) {
+static void get_wall_for_db(int *x, int *y) {
 	switch (levl[*x][*y].drawbridgemask & DB_DIR) {
 		case DB_NORTH: (*y)--; break;
 		case DB_SOUTH: (*y)++; break;
@@ -209,7 +200,7 @@ struct entity {
 
 static struct entity occupants[ENTITIES];
 
-STATIC_OVL struct entity *e_at(int x, int y) {
+static struct entity *e_at(int x, int y) {
 	int entitycnt;
 
 	for (entitycnt = 0; entitycnt < ENTITIES; entitycnt++)
@@ -225,7 +216,7 @@ STATIC_OVL struct entity *e_at(int x, int y) {
 	       (struct entity *)0 : &(occupants[entitycnt]));
 }
 
-STATIC_OVL void m_to_e(struct monst *mtmp, int x, int y, struct entity *etmp) {
+static void m_to_e(struct monst *mtmp, int x, int y, struct entity *etmp) {
 	etmp->emon = mtmp;
 	if (mtmp) {
 		etmp->ex = x;
@@ -238,14 +229,14 @@ STATIC_OVL void m_to_e(struct monst *mtmp, int x, int y, struct entity *etmp) {
 		etmp->edata = (struct permonst *)0;
 }
 
-STATIC_OVL void u_to_e(struct entity *etmp) {
+static void u_to_e(struct entity *etmp) {
 	etmp->emon = &youmonst;
 	etmp->ex = u.ux;
 	etmp->ey = u.uy;
 	etmp->edata = youmonst.data;
 }
 
-STATIC_OVL void set_entity(int x, int y, struct entity *etmp) {
+static void set_entity(int x, int y, struct entity *etmp) {
 	if ((x == u.ux) && (y == u.uy))
 		u_to_e(etmp);
 	else if (MON_AT(x, y))
@@ -264,7 +255,7 @@ STATIC_OVL void set_entity(int x, int y, struct entity *etmp) {
 
 /* #define e_strg(etmp, func) (is_u(etmp)? (char *)0 : func(etmp->emon)) */
 
-STATIC_OVL const char *e_nam(struct entity *etmp) {
+static const char *e_nam(struct entity *etmp) {
 	return(is_u(etmp)? "you" : mon_nam(etmp->emon));
 }
 
@@ -283,7 +274,7 @@ static const char *Enam(struct entity *etmp) {
  * verb, where necessary.
  */
 
-STATIC_OVL const char *E_phrase(struct entity *etmp, const char *verb) {
+static const char *E_phrase(struct entity *etmp, const char *verb) {
 	static char wholebuf[80];
 
 	strcpy(wholebuf, is_u(etmp) ? "You" : Monnam(etmp->emon));
@@ -300,7 +291,7 @@ STATIC_OVL const char *E_phrase(struct entity *etmp, const char *verb) {
  * Simple-minded "can it be here?" routine
  */
 
-STATIC_OVL boolean e_survives_at(struct entity *etmp, int x, int y) {
+static boolean e_survives_at(struct entity *etmp, int x, int y) {
 	if (noncorporeal(etmp->edata))
 		return(TRUE);
 	if (is_pool(x, y))
@@ -319,7 +310,7 @@ STATIC_OVL boolean e_survives_at(struct entity *etmp, int x, int y) {
 	return(TRUE);
 }
 
-STATIC_OVL void e_died(struct entity *etmp, int dest, int how) {
+static void e_died(struct entity *etmp, int dest, int how) {
 	if (is_u(etmp)) {
 		if (how == DROWNING) {
 			killer = 0;	/* drown() sets its own killer */
@@ -380,7 +371,7 @@ STATIC_OVL void e_died(struct entity *etmp, int dest, int how) {
  * These are never directly affected by a bridge or portcullis.
  */
 
-STATIC_OVL boolean automiss(struct entity *etmp) {
+static boolean automiss(struct entity *etmp) {
 	return (is_u(etmp) ? Passes_walls : passes_walls(etmp->edata)) || noncorporeal(etmp->edata);
 }
 
@@ -388,7 +379,7 @@ STATIC_OVL boolean automiss(struct entity *etmp) {
  * Does falling drawbridge or portcullis miss etmp?
  */
 
-STATIC_OVL boolean e_missed(struct entity *etmp, boolean chunks) {
+static boolean e_missed(struct entity *etmp, boolean chunks) {
 	int misses;
 
 #ifdef D_DEBUG
@@ -425,7 +416,7 @@ STATIC_OVL boolean e_missed(struct entity *etmp, boolean chunks) {
  * Can etmp jump from death?
  */
 
-STATIC_OVL boolean e_jumps(struct entity *etmp) {
+static boolean e_jumps(struct entity *etmp) {
 	int tmp = 4;		/* out of 10 */
 
 	if (is_u(etmp)? (Sleeping || Fumbling) :
@@ -448,7 +439,7 @@ STATIC_OVL boolean e_jumps(struct entity *etmp) {
 	return tmp >= rnd(10);
 }
 
-STATIC_OVL void do_entity(struct entity *etmp) {
+static void do_entity(struct entity *etmp) {
 	int newx, newy, at_portcullis, oldx, oldy;
 	boolean must_jump = FALSE, relocates = FALSE, e_inview;
 	struct rm *crm;
@@ -854,7 +845,5 @@ void destroy_drawbridge (int x, int y) {
 		}
 	}
 }
-
-#endif /* OVLB */
 
 /*dbridge.c*/

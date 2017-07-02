@@ -8,18 +8,18 @@
 #include "hack.h"
 #include "dlb.h"
 
-STATIC_DCL boolean is_swallow_sym(int);
-STATIC_DCL int append_str(char *, const char *);
-STATIC_DCL struct permonst * lookat(int, int, char *, char *);
-STATIC_DCL void checkfile(char *,struct permonst *,boolean,boolean);
-STATIC_DCL int do_look(boolean);
-STATIC_DCL boolean help_menu(int *);
+static boolean is_swallow_sym(int);
+static int append_str(char *, const char *);
+static struct permonst * lookat(int, int, char *, char *);
+static void checkfile(char *,struct permonst *,boolean,boolean);
+static int do_look(boolean);
+static boolean help_menu(int *);
 #ifdef PORT_HELP
 extern void port_help(void);
 #endif
 
 /* Returns "true" for characters that could represent a monster's stomach. */
-STATIC_OVL boolean
+static boolean
 is_swallow_sym(c)
 int c;
 {
@@ -34,7 +34,7 @@ int c;
  * a substring of buf.  Return 1 if the string was appended, 0 otherwise.
  * It is expected that buf is of size BUFSZ.
  */
-STATIC_OVL int
+static int
 append_str(buf, new_str)
     char *buf;
     const char *new_str;
@@ -53,7 +53,7 @@ append_str(buf, new_str)
  * Return the name of the glyph found at (x,y).
  * If not hallucinating and the glyph is a monster, also monster data.
  */
-STATIC_OVL struct permonst *
+static struct permonst *
 lookat(x, y, buf, monbuf)
     int x, y;
     char *buf, *monbuf;
@@ -321,7 +321,7 @@ lookat(x, y, buf, monbuf)
  *	 lcase() for data.base lookup so that we can have a clean key.
  *	 Therefore, we create a copy of inp _just_ for data.base lookup.
  */
-STATIC_OVL void
+static void
 checkfile(inp, pm, user_typed_name, without_asking)
     char *inp;
     struct permonst *pm;
@@ -477,7 +477,7 @@ bad_data_file:	impossible("'data' file in wrong format");
 /* also used by getpos hack in do_name.c */
 const char what_is_an_unknown_object[] = "an unknown object";
 
-STATIC_OVL int
+static int
 do_look(quick)
     boolean quick;	/* use cursor && don't search for "more info" */
 {
@@ -933,7 +933,7 @@ enum {
   NULL_SLOT
 };
 
-STATIC_OVL boolean
+static boolean
 help_menu(sel)
 	int *sel;
 {

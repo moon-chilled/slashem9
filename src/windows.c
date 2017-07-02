@@ -49,7 +49,7 @@ extern void win_proxy_init(void);
 extern struct window_procs mswin_procs;
 #endif
 
-STATIC_DCL void def_raw_print(const char *s);
+static void def_raw_print(const char *s);
 
 struct window_procs windowprocs;
 
@@ -94,7 +94,7 @@ struct win_choices {
     { 0, 0 }		/* must be last */
 };
 
-STATIC_OVL
+static
 void
 def_raw_print(s)
 const char *s;

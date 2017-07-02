@@ -7,24 +7,17 @@
 #include "hack.h"
 #include "lev.h"
 
-# ifdef OVLB
-STATIC_DCL void trycall(struct obj *);
-# endif /* OVLB */
-STATIC_DCL void dosinkring(struct obj *);
+static void trycall(struct obj *);
+static void dosinkring(struct obj *);
 
-STATIC_PTR int drop(struct obj *);
-STATIC_PTR int wipeoff(void);
+static int drop(struct obj *);
+static int wipeoff(void);
 
-#ifdef OVL0
-STATIC_DCL int menu_drop(int);
-#endif
-#ifdef OVL2
-STATIC_DCL int currentlevel_rewrite(void);
-STATIC_DCL void final_level(void);
+static int menu_drop(int);
+static int currentlevel_rewrite(void);
+static void final_level(void);
 /* static boolean badspot(xchar,xchar); */
-#endif
 
-#ifdef OVLB
 
 static const char drop_types[] =
 	{ ALLOW_COUNT, COIN_CLASS, ALL_CLASSES, 0 };
@@ -45,8 +38,6 @@ int dodrop(void) {
 	return result;
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
 /* Called when a boulder is dropped, thrown, or pushed.  If it ends up
  * in a pool, it either fills the pool up or sinks away.  In either case,
@@ -222,9 +213,6 @@ boolean flooreffects(struct obj *obj, int x, int y, const char *verb) {
 }
 
 
-#endif /* OVL0 */
-#ifdef OVLB
-
 // obj is an object dropped on an altar
 void doaltarobj(struct obj *obj) {
 	if (Blind)
@@ -245,14 +233,14 @@ void doaltarobj(struct obj *obj) {
 	}
 }
 
-STATIC_OVL void trycall(struct obj *obj) {
+static void trycall(struct obj *obj) {
 	if(!objects[obj->otyp].oc_name_known &&
 	   !objects[obj->otyp].oc_uname)
 	   docall(obj);
 }
 
 // obj is a ring being dropped over a kitchen sink
-STATIC_OVL void dosinkring(struct obj *obj) {
+static void dosinkring(struct obj *obj) {
 	struct obj *otmp,*otmp2;
 	boolean ideed = TRUE;
 
@@ -409,8 +397,6 @@ giveback:
 		useup(obj);
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
 // some common tests when trying to drop or throw items
 boolean canletgo(struct obj *obj, const char *word) {
@@ -454,7 +440,7 @@ boolean canletgo(struct obj *obj, const char *word) {
 	return(TRUE);
 }
 
-STATIC_PTR int drop(struct obj *obj) {
+static int drop(struct obj *obj) {
 	if(!obj) return(0);
 	if(!canletgo(obj,"drop"))
 		return(0);
@@ -620,7 +606,7 @@ int doddrop(void) {
 }
 
 /* Drop things from the hero's inventory, using a menu. */
-STATIC_OVL int menu_drop(int retry) {
+static int menu_drop(int retry) {
     int n, i, n_dropped = 0;
     long cnt;
     struct obj *otmp, *otmp2;
@@ -723,8 +709,6 @@ STATIC_OVL int menu_drop(int retry) {
     return n_dropped;
 }
 
-#endif /* OVL0 */
-#ifdef OVL2
 
 /* on a ladder, used in goto_level */
 static boolean at_ladder = FALSE;
@@ -868,7 +852,7 @@ int doup(void) {
 d_level save_dlevel = {0, 0};
 
 /* check that we can write out the current level */
-STATIC_OVL int currentlevel_rewrite(void) {
+static int currentlevel_rewrite(void) {
 	int fd;
 	char whynot[BUFSZ];
 
@@ -1338,7 +1322,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 	pickup(1);
 }
 
-STATIC_OVL void final_level(void) {
+static void final_level(void) {
 	struct monst *mtmp;
 	struct obj *otmp;
 	coord mm;
@@ -1446,9 +1430,6 @@ void deferred_goto(void) {
 	if (dfr_post_msg)
 	    free((void *)dfr_post_msg),  dfr_post_msg = 0;
 }
-
-#endif /* OVL2 */
-#ifdef OVL3
 
 /*
  * Return TRUE if we created a monster for the corpse.  If successful, the
@@ -1648,10 +1629,7 @@ int donull(void) {
 	return(1);	// Do nothing, but let other things happen
 }
 
-#endif /* OVL3 */
-#ifdef OVLB
-
-STATIC_PTR int wipeoff(void) {
+static int wipeoff(void) {
 	if(u.ucreamed < 4)	u.ucreamed = 0;
 	else			u.ucreamed -= 4;
 	if (Blinded < 4)	Blinded = 0;
@@ -1727,7 +1705,4 @@ void heal_legs(void) {
 	}
 	encumber_msg();
 }
-
-#endif /* OVLB */
-
 /*do.c*/

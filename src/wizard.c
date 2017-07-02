@@ -13,15 +13,13 @@
 
 extern const int monstr[];
 
-#ifdef OVLB
-
-STATIC_DCL short which_arti(int);
-STATIC_DCL boolean mon_has_arti(struct monst *,short);
-STATIC_DCL struct monst *other_mon_has_arti(struct monst *,short);
-STATIC_DCL struct obj *on_ground(short);
-STATIC_DCL boolean you_have(int);
-STATIC_DCL long target_on(int,struct monst *);
-STATIC_DCL long strategy(struct monst *);
+static short which_arti(int);
+static boolean mon_has_arti(struct monst *,short);
+static struct monst *other_mon_has_arti(struct monst *,short);
+static struct obj *on_ground(short);
+static boolean you_have(int);
+static long target_on(int,struct monst *);
+static long strategy(struct monst *);
 
 static const int nasties[] = {
 	PM_COCKATRICE, PM_ETTIN, PM_STALKER, PM_MINOTAUR, PM_RED_DRAGON,
@@ -48,9 +46,6 @@ static const unsigned wizapp[] = {
 	PM_GUARDIAN_NAGA,
 	PM_TRAPPER
 };
-
-#endif /* OVLB */
-#ifdef OVL0
 
 /* If you've found the Amulet, make the Wizard appear after some time */
 /* Also, give hints about portal locations, if amulet is worn/wielded -dlc */
@@ -97,9 +92,6 @@ amulet (void)
 	    }
 }
 
-#endif /* OVL0 */
-#ifdef OVLB
-
 int 
 mon_has_amulet (register struct monst *mtmp)
 {
@@ -132,7 +124,7 @@ mon_has_special (register struct monst *mtmp)
 
 #define M_Wants(mask)	(mtmp->data->mflags3 & (mask))
 
-STATIC_OVL short
+static short
 which_arti(mask)
 	register int mask;
 {
@@ -151,7 +143,7 @@ which_arti(mask)
  *	since bell, book, candle, and amulet are all objects, not really
  *	artifacts right now.	[MRS]
  */
-STATIC_OVL boolean
+static boolean
 mon_has_arti(mtmp, otyp)
 	register struct monst *mtmp;
 	register short	otyp;
@@ -169,7 +161,7 @@ mon_has_arti(mtmp, otyp)
 
 }
 
-STATIC_OVL struct monst *
+static struct monst *
 other_mon_has_arti(mtmp, otyp)
 	register struct monst *mtmp;
 	register short	otyp;
@@ -184,7 +176,7 @@ other_mon_has_arti(mtmp, otyp)
 	return((struct monst *)0);
 }
 
-STATIC_OVL struct obj *
+static struct obj *
 on_ground(otyp)
 	register short	otyp;
 {
@@ -199,7 +191,7 @@ on_ground(otyp)
 	return((struct obj *)0);
 }
 
-STATIC_OVL boolean
+static boolean
 you_have(mask)
 	register int mask;
 {
@@ -214,7 +206,7 @@ you_have(mask)
 	return(0);
 }
 
-STATIC_OVL long
+static long
 target_on(mask, mtmp)
 	register int mask;
 	register struct monst *mtmp;
@@ -237,7 +229,7 @@ target_on(mask, mtmp)
 	return(STRAT_NONE);
 }
 
-STATIC_OVL long
+static long
 strategy(mtmp)
 	register struct monst *mtmp;
 {
@@ -629,7 +621,4 @@ cuss (register struct monst *mtmp)
 	        com_pager(rn2(QTN_DEMONIC) + QT_DEMONIC);
 	}
 }
-
-#endif /* OVLB */
-
 /*wizard.c*/

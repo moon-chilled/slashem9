@@ -5,24 +5,24 @@
 #include "hack.h"
 #include "epri.h"
 
-STATIC_PTR int prayer_done(void);
-STATIC_DCL struct obj *worst_cursed_item(void);
-STATIC_DCL int in_trouble(void);
-STATIC_DCL void fix_worst_trouble(int);
-STATIC_DCL void angrygods(aligntyp);
-STATIC_DCL void at_your_feet(const char *);
+static int prayer_done(void);
+static struct obj *worst_cursed_item(void);
+static int in_trouble(void);
+static void fix_worst_trouble(int);
+static void angrygods(aligntyp);
+static void at_your_feet(const char *);
 #ifdef ELBERETH
-STATIC_DCL void gcrownu(void);
+static void gcrownu(void);
 #endif	/*ELBERETH*/
-STATIC_DCL void pleased(aligntyp);
-STATIC_DCL void godvoice(aligntyp,const char*);
-STATIC_DCL void god_zaps_you(aligntyp);
-STATIC_DCL void fry_by_god(aligntyp);
-STATIC_DCL void gods_angry(aligntyp);
-STATIC_DCL void gods_upset(aligntyp);
-STATIC_DCL void consume_offering(struct obj *);
-STATIC_DCL boolean water_prayer(boolean);
-STATIC_DCL boolean blocked_boulder(int,int);
+static void pleased(aligntyp);
+static void godvoice(aligntyp,const char*);
+static void god_zaps_you(aligntyp);
+static void fry_by_god(aligntyp);
+static void gods_angry(aligntyp);
+static void gods_upset(aligntyp);
+static void consume_offering(struct obj *);
+static boolean water_prayer(boolean);
+static boolean blocked_boulder(int,int);
 static void lawful_god_gives_angel(void);
 static void god_gives_pet(aligntyp);
 static int offer_oracle(struct monst *, struct obj *);
@@ -121,7 +121,7 @@ but that's really hard.
 #define on_shrine()	((levl[u.ux][u.uy].altarmask & AM_SHRINE) != 0)
 #define a_align(x,y)	((aligntyp)Amask2align(levl[x][y].altarmask & AM_MASK))
 
-STATIC_OVL int
+static int
 in_trouble()
 {
 	struct obj *otmp;
@@ -209,7 +209,7 @@ in_trouble()
 }
 
 /* select an item for TROUBLE_CURSED_ITEMS */
-STATIC_OVL struct obj *
+static struct obj *
 worst_cursed_item()
 {
     register struct obj *otmp;
@@ -268,7 +268,7 @@ worst_cursed_item()
     return otmp;
 }
 
-STATIC_OVL void
+static void
 fix_worst_trouble(trouble)
 register int trouble;
 {
@@ -474,7 +474,7 @@ decurse:
  * bathroom walls, but who is foiled by bathrobes." --Bertrand Russell, 1943
  * Divine wrath, dungeon walls, and armor follow the same principle.
  */
-STATIC_OVL void
+static void
 god_zaps_you(resp_god)
 aligntyp resp_god;
 {
@@ -557,7 +557,7 @@ aligntyp resp_god;
 	}
 }
 
-STATIC_OVL void
+static void
 fry_by_god(resp_god)
 aligntyp resp_god;
 {
@@ -570,7 +570,7 @@ aligntyp resp_god;
 	done(DIED);
 }
 
-STATIC_OVL void
+static void
 angrygods(resp_god)
 aligntyp resp_god;
 {
@@ -658,7 +658,7 @@ at_your_feet (const char *str)
 }
 
 #ifdef ELBERETH
-STATIC_OVL void
+static void
 gcrownu()
 {
     struct obj *obj;
@@ -811,7 +811,7 @@ gcrownu()
 }
 #endif	/*ELBERETH*/
 
-STATIC_OVL void
+static void
 pleased(g_align)
 	aligntyp g_align;
 {
@@ -1060,7 +1060,7 @@ pleased(g_align)
 /* either blesses or curses water on the altar,
  * returns true if it found any water here.
  */
-STATIC_OVL boolean
+static boolean
 water_prayer(bless_water)
     boolean bless_water;
 {
@@ -1089,7 +1089,7 @@ water_prayer(bless_water)
     return((boolean)(changed > 0L));
 }
 
-STATIC_OVL void
+static void
 godvoice(g_align, words)
     aligntyp g_align;
     const char *words;
@@ -1104,7 +1104,7 @@ godvoice(g_align, words)
 	  godvoices[rn2(SIZE(godvoices))], quot, words, quot);
 }
 
-STATIC_OVL void
+static void
 gods_angry(g_align)
     aligntyp g_align;
 {
@@ -1112,7 +1112,7 @@ gods_angry(g_align)
 }
 
 /* The g_align god is upset with you. */
-STATIC_OVL void
+static void
 gods_upset(g_align)
 	aligntyp g_align;
 {
@@ -1125,7 +1125,7 @@ static const char sacrifice_types[] = { FOOD_CLASS, AMULET_CLASS, 0 };
 static const char ext_sacrifice_types[] = { ALLOW_FLOOROBJ,
 	FOOD_CLASS, AMULET_CLASS, 0 };
 
-STATIC_OVL void
+static void
 consume_offering(otmp)
 register struct obj *otmp;
 {
@@ -1836,7 +1836,7 @@ dopray (void)
     return(1);
 }
 
-STATIC_PTR int
+static int
 prayer_done()		/* M. Stephenson (1.0.3b) */
 {
     aligntyp alignment = p_aligntyp;
@@ -2096,7 +2096,7 @@ altar_wrath (register int x, register int y)
 }
 
 /* assumes isok() at one space away, but not necessarily at two */
-STATIC_OVL boolean
+static boolean
 blocked_boulder(dx,dy)
 int dx,dy;
 {

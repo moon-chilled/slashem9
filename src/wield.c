@@ -49,7 +49,7 @@
  * No item may be in more than one of these slots.
  */
 
-STATIC_DCL int ready_weapon(struct obj *, boolean);
+static int ready_weapon(struct obj *, boolean);
 
 /* used by will_weld() */
 /* probably should be renamed */
@@ -123,7 +123,7 @@ boolean put_away;
 	update_inventory();
 }
 
-STATIC_OVL int
+static int
 ready_weapon(wep, put_away)
 struct obj *wep;
 boolean put_away;

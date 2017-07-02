@@ -4,7 +4,6 @@
 
 #include "hack.h"
 
-#ifdef OVL0
 extern const char *hu_stat[];	/* defined in eat.c */
 
 const char *hu_abbrev_stat[] = {	/* must be kept consistent with eat.c */
@@ -35,12 +34,11 @@ const char *enc_abbrev_stat[] = {
 	"Old"
 };
 
-STATIC_DCL void bot1(void);
-STATIC_DCL void bot2(void);
+static void bot1(void);
+static void bot2(void);
 #ifdef ALLEG_FX
-STATIC_DCL void set_botl_warn(int);
+static void set_botl_warn(int);
 #endif
-#endif /* OVL0 */
 
 /* MAXCO must hold longest uncompressed status line, and must be larger
  * than COLNO
@@ -57,15 +55,10 @@ STATIC_DCL void set_botl_warn(int);
 #define MAXCO (COLNO+20)
 #endif
 
-#ifndef OVLB
-STATIC_DCL int mrank_sz;
-#else /* OVLB */
-STATIC_OVL int mrank_sz = 0; /* loaded by max_rank_sz (from u_init) */
-#endif /* OVLB */
+static int mrank_sz = 0; /* loaded by max_rank_sz (from u_init) */
 
-STATIC_DCL const char *rank(void);
+static const char *rank(void);
 
-#ifdef OVL1
 
 #ifdef ALLEG_FX
 static int botl_warn = 0;
@@ -113,7 +106,7 @@ const char *rank_of(int lev, short monnum, boolean female) {
 }
 
 
-STATIC_OVL const char *rank(void) {
+static const char *rank(void) {
 	return rank_of(u.ulevel, Role_switch, flags.female);
 }
 
@@ -141,8 +134,6 @@ int title_to_mon(const char *str, int *rank_indx, int *title_length) {
 	return NON_PM;
 }
 
-#endif /* OVL1 */
-#ifdef OVLB
 
 void max_rank_sz(void) {
 	int i, r, maxr = 0;
@@ -156,8 +147,6 @@ void max_rank_sz(void) {
 	return;
 }
 
-#endif /* OVLB */
-#ifdef OVL0
 
 #ifdef SCORE_ON_BOTL
 long botl_score(void) {
@@ -221,7 +210,7 @@ static char *botl_strength(void) {
 #ifdef DUMP_LOG
 void bot1str(char *newbot1)
 #else
-STATIC_OVL void bot1(void)
+static void bot1(void)
 #endif
 {
 #ifndef DUMP_LOG
@@ -249,7 +238,7 @@ STATIC_OVL void bot1(void)
 #endif
 #ifdef DUMP_LOG
 }
-STATIC_OVL void bot1(void) {
+static void bot1(void) {
 	char newbot1[MAXCO];
 
 	bot1str(newbot1);
@@ -303,7 +292,7 @@ static int bot2_abbrev = 0;	/* Line 2 abbreviation level (max 4) */
 #ifdef DUMP_LOG
 void
 #else
-STATIC_OVL void
+static void
 #endif
 bot2str(char *newbot2) {
 	char *nb;
@@ -416,7 +405,7 @@ bot2str(char *newbot2) {
 		  bot2_abbrev >= 2 ? enc_abbrev_stat[cap] : enc_stat[cap]);
 }
 
-STATIC_OVL void bot2(void) {
+static void bot2(void) {
 	char  newbot2[MAXCO];
 
 	bot2str(newbot2);
@@ -579,7 +568,5 @@ void bot(void) {
 	}
 	flags.botl = flags.botlx = 0;
 }
-
-#endif /* OVL0 */
 
 /*botl.c*/

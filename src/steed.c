@@ -12,7 +12,7 @@ static const char steeds[] = {
 	S_QUADRUPED, S_UNICORN, S_ANGEL, S_CENTAUR, S_DRAGON, S_JABBERWOCK, '\0'
 };
 
-STATIC_DCL boolean landing_spot(coord *, int, int);
+static boolean landing_spot(coord *, int, int);
 
 /* caller has decided that hero can't reach something while mounted */
 void 
@@ -365,7 +365,7 @@ exercise_steed (void)
  * room's walls, which is not what we want.
  * Adapted from mail daemon code.
  */
-STATIC_OVL boolean
+static boolean
 landing_spot(spot, reason, forceit)
 coord *spot;	/* landing position (we fill it in) */
 int reason;
