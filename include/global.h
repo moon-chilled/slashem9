@@ -249,29 +249,7 @@ typedef xchar	boolean;		/* 0 or 1 */
 # endif
 #endif
 
-/* primitive memory leak debugging; see alloc.c */
-#ifdef MONITOR_HEAP
-extern long *nhalloc(unsigned int,const char *,int);
-extern void nhfree(genericptr_t,const char *,int);
-#ifdef INTERNAL_MALLOC
-extern void monitor_heap_push(const char *, int);
-extern unsigned long monitor_heap_pop(const char *, int, unsigned long);
-extern void monitor_heap_set_subid(const char *, int );
-extern size_t monitor_heap_getmem(void);
-extern boolean monitor_heap_trace(boolean flag);
-extern void monitor_heap_mark(void);
-#endif
-# ifndef __FILE__
-#  define __FILE__ ""
-# endif
-# ifndef __LINE__
-#  define __LINE__ 0
-# endif
-# define alloc(a) nhalloc(a,__FILE__,(int)__LINE__)
-# define free(a) nhfree(a,__FILE__,(int)__LINE__)
-#else	/* !MONITOR_HEAP */
 extern long *alloc(unsigned int);		/* alloc.c */
-#endif
 
 /* Used for consistency checks of various data files; declare it here so
    that utility programs which include config.h but not hack.h can see it. */

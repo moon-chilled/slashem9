@@ -120,9 +120,7 @@ extern void exit(int);
    the former is naturally what flex tests for. */
 # if defined(__STDC__) || !defined(FLEX_SCANNER)
 #  ifndef OS2_CSET2
-#   ifndef MONITOR_HEAP
 extern void free(genericptr_t);
-#   endif
 #  endif
 # endif
 #if !defined(__SASC_60) && !defined(_DCC) && !defined(__SC__)

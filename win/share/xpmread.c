@@ -4,9 +4,7 @@
 #include "hack.h"
 #include "tile.h"
 
-#ifndef MONITOR_HEAP
 extern long *alloc(unsigned int);
-#endif
 
 extern const char *tilename(int, int);
 

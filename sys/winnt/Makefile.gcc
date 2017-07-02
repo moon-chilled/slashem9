@@ -148,16 +148,6 @@ USE_DLB = Y
 
 # USE_PROXY = Y
 
-#
-# Uncomment the line below if you want to compile with the internal malloc
-# routines (used to test for memory leaks).
-# You will also need to define MONITOR_HEAP and INTERNAL_MALLOC in config.h
-#
-# Warning: Doing this increases the risk of a non-recoverable game crash.
-
-# USE_NHALLOC = Y
-
-
 #############################################################################
 #
 # nothing below this line should have to be changed
@@ -320,30 +310,20 @@ endif
 #  Utility Objects.
 #
 
-ifeq ($(USE_NHALLOC),Y)
-NHALLOCOBJ = nhalloc.o
-NHALLOCDLL = nhalloc.dll
-NHALLOCA = nhalloc.a
-else
-NHALLOCOBJ =
-NHALLOCDLL =
-NHALLOCA =
-endif
-
 MAKESRC	    = makedefs.c
 
 SPLEVSRC    = lev_yacc.c  lev_$(LEX).c	 lev_main.c  panic.c
 
 DGNCOMPSRC  = dgn_yacc.c  dgn_$(LEX).c	 dgn_main.c
 
-MAKEOBJS    = makedefs.o  monst.o	 objects.o alloc.o panic.o $(NHALLOCOBJ)
+MAKEOBJS    = makedefs.o  monst.o	 objects.o alloc.o panic.o
 
 SPLEVOBJS   = lev_yacc.o  lev_$(LEX).o	lev_main.o  alloc.o	\
 		monst.o	    objects.o	    panic.o  \
-		drawing.o	decl.o $(NHALLOCOBJ)
+		drawing.o	decl.o
 
 DGNCOMPOBJS = dgn_yacc.o  dgn_$(LEX).o	dgn_main.o  alloc.o	 \
-		panic.o $(NHALLOCOBJ)
+		panic.o
 
 RECOVOBJS   = recover.o
 
@@ -367,10 +347,10 @@ PPMWRIT2     =
 else
 
 TEXTIO      = tiletext.o tiletxt.o drawing.o decl.o monst.o objects.o \
-              panic.o alloc.o $(NHALLOCOBJ)
+              panic.o alloc.o
 
 TEXTIO2     = tiletex2.o tiletxt2.o drawing.o decl.o monst.o objects.o \
-              panic.o alloc.o $(NHALLOCOBJ)
+              panic.o alloc.o
 
 
 PLANAR_TIB  = NetHack1.tib
@@ -470,7 +450,7 @@ DLB_H      = $(INCL)\dlb.h
 
 ifeq ($(USE_DLB),Y)
 DLB = $(DAT)\nhshare $(DAT)\nhushare
-DLBOBJS = dlb_main.o dlb.o alloc.o panic.o $(NHALLOCOBJ)
+DLBOBJS = dlb_main.o dlb.o alloc.o panic.o
 else
 DLB =
 DLBOBJS =
@@ -529,9 +509,6 @@ ifeq ($(USE_PNG),Y)
 	$(COPY) $(subst /,\,gltile32.png		$(GAMEDIR))
 	$(COPY) $(subst /,\,gltile64.png		$(GAMEDIR))
 endif
-ifeq ($(USE_NHALLOC),Y)
-	$(COPY) $(subst /,\,nhalloc.dll			$(GAMEDIR))
-endif
 	$(COPY) $(subst /,\,recover.exe			$(GAMEDIR))
 	$(COPY) $(subst /,\,$(DOC)\guidebook.txt	$(GAMEDIR))
 	$(COPY) $(subst /,\,$(DOC)\recover.txt		$(GAMEDIR))
@@ -558,7 +535,7 @@ cc-pkg.exe:	cc-pkg.c cc-pkg.h
 endif
 
 ifeq ($(USE_PROXY),Y)
-$(GAMEFILE): cc-pkg.exe gamedir.tag utility.tag $(NHALLOCDLL) $(NHALLOCA) \
+$(GAMEFILE): cc-pkg.exe gamedir.tag utility.tag \
 		$(ALLOBJ) $(GAME).lnk $(GAMEDIR)/nhdefkey.dll \
 		$(GAMEDIR)/nh340key.dll $(GAMEDIR)/nhraykey.dll
 	@cc-pkg -v -p $(WINPROXYDEPS) -l $(LINK) $(LFLAGS) \
@@ -566,7 +543,7 @@ $(GAMEFILE): cc-pkg.exe gamedir.tag utility.tag $(NHALLOCDLL) $(NHALLOCA) \
 	$(COPY) $(GAME).exe $(GAMEFILE)
 	$(DEL) $(GAME).exe
 else
-$(GAMEFILE): gamedir.tag utility.tag $(NHALLOCDLL) $(NHALLOCA) \
+$(GAMEFILE): gamedir.tag utility.tag \
 		$(ALLOBJ) $(GAME).lnk $(GAMEDIR)/nhdefkey.dll \
 		$(GAMEDIR)/nh340key.dll $(GAMEDIR)/nhraykey.dll
 	$(LINK) $(LFLAGS) -o$(GAME).exe $(GAME).lnk
@@ -642,9 +619,6 @@ ifneq ($(WINLIB),)
 endif
 ifneq ($(SYSLIB),)
 	@echo INPUT( $(SYSLIB) )>> $@
-endif
-ifeq ($(USE_NHALLOC),Y)
-	@echo INPUT( nhalloc.a )>> $@
 endif
 
 #
@@ -813,7 +787,7 @@ $(INCL)\filename.h: makedefs.exe
 	-makedefs -f
 
 nhalloc.o:	$(CONFIG_H) alloc.c
-	$(CCOMPILE) $(CFLAGS) -DNHALLOC_DLL -onhalloc.o alloc.c
+	$(CCOMPILE) $(CFLAGS) -onhalloc.o alloc.c
 
 nhalloc.def:
 	@echo EXPORTS > nhalloc.def
