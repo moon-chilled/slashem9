@@ -869,9 +869,6 @@ static const char *window_opts[] = {
 #ifdef MAC
 		"Mac",
 #endif
-#ifdef GEM_GRAPHICS
-		"Gem",
-#endif
 #ifdef MSWIN_GRAPHICS
 		"mswin",
 #endif

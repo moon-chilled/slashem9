@@ -309,10 +309,6 @@ struct tileset def_tilesets[] = {
 #if defined(GTK_GRAPHICS)
     { "Big 3D tiles", "x11big3dtiles", TILESET_TRANSPARENT | TILESET_PSEUDO3D },
 #endif
-#if defined(GEM_GRAPHICS)
-    { "Monochrome tiles", "nh2.img", 0 },
-    { "Colour tiles", "nh16.img", 0 },
-#endif
 #if defined(ALLEG_FX)
     { "Small tiles", "slam16.bmp", 0 },
     { "Big tiles", "slam32.bmp", TILESET_TRANSPARENT },

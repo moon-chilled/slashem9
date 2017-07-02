@@ -149,10 +149,6 @@ typedef xchar	boolean;		/* 0 or 1 */
 #include "os2conf.h"
 #endif
 
-#ifdef TOS
-#include "tosconf.h"
-#endif
-
 #ifdef MAC
 #include "macconf.h"
 #endif
@@ -209,9 +205,6 @@ typedef xchar	boolean;		/* 0 or 1 */
 # ifdef OS2
 #  define PORT_ID	"OS/2"
 # endif
-# ifdef TOS
-#  define PORT_ID	"ST"
-# endif
 # ifdef UNIX
 #  define PORT_ID	"Unix"
 # endif
@@ -228,7 +221,7 @@ typedef xchar	boolean;		/* 0 or 1 */
 #endif
 
 #if defined(MICRO)
-#if !defined(TOS) && !defined(OS2_HPFS)
+#if !defined(OS2_HPFS)
 #define SHORT_FILENAMES		/* filenames are 8.3 */
 #endif
 #endif
@@ -245,7 +238,7 @@ typedef xchar	boolean;		/* 0 or 1 */
 #  define USE_TILES		/* glyph2tile[] will be available */
 # endif
 #endif
-#if defined(GEM_GRAPHICS) || defined(GTK_GRAPHICS)
+#ifdef GTK_GRAPHICS
 # ifndef USE_TILES
 #  define USE_TILES
 # endif

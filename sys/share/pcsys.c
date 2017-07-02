@@ -2,7 +2,7 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 /*
- *  System related functions for MSDOS, OS/2, TOS, and Windows NT
+ *  System related functions for OS/2, and Windows NT
  */
 
 #define NEED_VARARGS
@@ -15,9 +15,6 @@
 #ifdef __GO32__
 #define P_WAIT		0
 #define P_NOWAIT	1
-#endif
-#ifdef TOS
-#include <osbind.h>
 #endif
 
 
@@ -40,9 +37,7 @@ extern unsigned short __far __cdecl _movefpaused;
 
 #ifdef MFLOPPY
 STATIC_DCL boolean record_exists(void);
-# ifndef TOS
 STATIC_DCL boolean comspec_exists(void);
-# endif
 #endif
 
 #ifdef WIN32CON
@@ -58,12 +53,7 @@ flushout()
 	return;
 }
 
-static const char *COMSPEC =
-# ifdef TOS
-"SHELL";
-# else
-"COMSPEC";
-# endif
+static const char *COMSPEC = "COMSPEC";
 
 #define getcomspec() nh_getenv(COMSPEC)
 
@@ -77,11 +67,7 @@ dosh()
 	int spawnstat;
 # endif
 	if ((comspec = getcomspec())) {
-#  ifndef TOS	/* TOS has a variety of shells */
 		suspend_nhwindows("To return to NetHack, enter \"exit\" at the system prompt.\n");
-#  else
-		suspend_nhwindows((char *)0);
-#  endif /* TOS */
 		chdirx(orgdir, 0);
 #  ifdef __GO32__
 		if (system(comspec) < 0) {  /* wsu@eecs.umich.edu */
@@ -102,11 +88,6 @@ dosh()
 			raw_printf("Can't spawn \"%s\"!", comspec);
 			getreturn("to continue");
 		}
-#  ifdef TOS
-/* Some shells (e.g. Gulam) turn the cursor off when they exit */
-		if (iflags.BIOS)
-			(void)Cursconf(1, -1);
-#  endif
 		chdirx(hackdir, 0);
 		get_scr_size(); /* maybe the screen mode changed (TH) */
 		resume_nhwindows();
@@ -145,10 +126,8 @@ int mode;
 	char from[PATHLEN], to[PATHLEN], last[13];
 	char *frompath, *topath;
 	char *foundfile;
-#  ifndef TOS
 	int status;
 	char copy[8], *comspec;
-#  endif
 
 	if (!ramdisk)
 		return;
@@ -160,23 +139,10 @@ int mode;
 	last[0] = '\0';
 	sprintf(from, "%s%s", frompath, allbones);
 	topath = (mode == TOPERM) ? permbones : levels;
-#  ifdef TOS
-	eraseall(topath, allbones);
-#  endif
 	if (findfirst(from))
 		do {
-#  ifdef TOS
-			sprintf(from, "%s%s", frompath, foundfile);
-			sprintf(to, "%s%s", topath, foundfile);
-			if (_copyfile(from, to))
-				goto error_copying;
-#  endif
 			strcpy(last, foundfile);
 		} while (findnext());
-#  ifdef TOS
-	else
-		return;
-#  else
 	if (last[0]) {
 		sprintf(copy, "%cC copy",switchar());
 
@@ -191,7 +157,6 @@ int mode;
 			to, "> nul", (char *)0);
 	} else
 		return;
-#  endif /* TOS */
 
 	/* See if the last file got there.  If so, remove the ramdisk bones
 	 * files.
@@ -203,18 +168,13 @@ int mode;
 		return;
 	}
 
-#  ifdef TOS
-error_copying:
-#  endif
 	/* Last file didn't get there.
 	 */
 	sprintf(to, "%s%s", topath, allbones);
 	msmsg("Can't copy \"%s\" to \"%s\" -- ", from, to);
-#  ifndef TOS
 	if (status < 0)
 	    msmsg("can't spawn \"%s\"!", comspec);
 	else
-#  endif
 	    msmsg((freediskspace(topath) < filesize(from)) ?
 	    "insufficient disk space." : "bad path(s)?");
 	if (mode == TOPERM) {
@@ -300,9 +260,6 @@ record_exists()
 }
 #endif /* MFLOPPY */
 
-# ifdef TOS
-#define comspec_exists() 1
-# else
 #  ifdef MFLOPPY
 /* Return 1 if the comspec was found */
 STATIC_OVL boolean
@@ -319,7 +276,6 @@ comspec_exists()
 	return FALSE;
 }
 #  endif /* MFLOPPY */
-# endif
 
 
 # ifdef MFLOPPY
@@ -379,11 +335,7 @@ const char *str;
 #ifdef WIN32
 	if (!getreturn_enabled) return;
 #endif
-#ifdef TOS
-	msmsg("Hit <Return> %s.", str);
-#else
 	msmsg("Hit <Enter> %s.", str);
-#endif
 	while (Getchar() != '\n') ;
 	return;
 }
@@ -398,19 +350,6 @@ msmsg VA_DECL(const char *, fmt)
 	VA_END();
 	return;
 }
-#endif
-
-/*
- * Follow the PATH, trying to fopen the file.
- */
-#ifdef TOS
-# ifdef __MINT__
-#define PATHSEP ':'
-# else
-#define PATHSEP ','
-# endif
-#else
-#define PATHSEP ';'
 #endif
 
 FILE *
@@ -469,12 +408,6 @@ int code;
 	exit(code);
 }
 
-/* Chdir back to original directory
- */
-#ifdef TOS
-extern boolean run_from_desktop;	/* set in pcmain.c */
-#endif
-
 static void msexit()
 {
 #ifdef CHDIR
@@ -482,11 +415,9 @@ static void msexit()
 #endif
 
 	flushout();
-#ifndef TOS
 # ifndef WIN32
 	enable_ctrlP(); 	/* in case this wasn't done */
 # endif
-#endif
 #ifdef MFLOPPY
 	if (ramdisk) copybones(TOPERM);
 #endif
@@ -494,14 +425,6 @@ static void msexit()
 	chdir(orgdir);		/* chdir, not chdirx */
 # ifndef __CYGWIN__
 	chdrive(orgdir);
-# endif
-#endif
-#ifdef TOS
-	if (run_from_desktop)
-	    getreturn("to continue"); /* so the user can read the score list */
-# ifdef TEXTCOLOR
-	if (colors_changed)
-		restore_colors();
 # endif
 #endif
 #ifdef WIN32CON

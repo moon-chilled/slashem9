@@ -423,7 +423,7 @@ ckmailstatus (void)
 {
 	if (u.uswallow || !flags.biff) return;
 	if (mustgetmail < 0) {
-#if defined(TOS) || defined(OS2)
+#if defined(OS2)
 	    mustgetmail=(moves<2000)?(100+rn2(2000)):(2000+rn2(3000));
 #endif
 	    return;

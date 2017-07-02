@@ -68,9 +68,7 @@
 # define Rand() rand()
 #endif
 
-#ifndef TOS
 # define FCMASK 0660	/* file creation mask */
-#endif
 
 #include <fcntl.h>
 

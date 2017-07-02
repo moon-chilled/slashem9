@@ -85,8 +85,6 @@ SHELLDIR = $(PREFIX)/bin
 CNF_SHARE_QTND = x11tiles rip.xpm nhsplash.xpm
 CNF_SHARE_X11ND = x11bigtiles x11tiles SlashEM.ad pet_mark.xbm
 # CNF_SHARE_X11ND = x11bigtiles x11tiles SlashEM.ad pet_mark.xbm rip.xpm
-# for Atari/Gem
-CNF_SHARE_GEMND = nh16.img title.img GEM_RSC.RSC rip.img
 # for BeOS
 CNF_SHARE_BEND = beostiles
 # for SDL/GL window port

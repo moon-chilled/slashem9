@@ -22,9 +22,6 @@ extern void win_X11_init(void);
 extern struct window_procs GTK_procs;
 extern void win_GTK_init(void);
 #endif
-#ifdef GEM_GRAPHICS
-#include "wingem.h"
-#endif
 #ifdef MAC
 extern struct window_procs mac_procs;
 #endif
@@ -76,9 +73,6 @@ struct win_choices {
 #endif
 #ifdef GTK_GRAPHICS
     { &GTK_procs, win_GTK_init },
-#endif
-#ifdef GEM_GRAPHICS
-    { &Gem_procs, win_Gem_init },
 #endif
 #ifdef MAC
     { &mac_procs, 0 },

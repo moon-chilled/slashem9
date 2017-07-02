@@ -33,11 +33,11 @@
 # endif
 #endif
 
-#if (defined(MICRO) && !defined(TOS)) || defined(ANCIENT_VAXC)
+#if defined(MICRO) || defined(ANCIENT_VAXC)
 # if !defined(_SIZE_T) && !defined(__size_t) /* __size_t for CSet/2 */
 #  define _SIZE_T
 # endif
-#endif	/* MICRO && !TOS */
+#endif	// MICRO || ANCIENT_VAXC
 
 #if defined(__TURBOC__) || defined(MAC)
 #include <time.h>	/* time_t is not in <sys/types.h> */
@@ -300,11 +300,6 @@ extern void *memset(char*,int,int);
 #endif /* POSIX_TYPES */
 
 #if defined(MICRO) && !defined(LATTICE)
-# if defined(TOS) && defined(__GNUC__)
-extern int memcmp(const void *,const void *,size_t);
-extern void *memcpy(void *,const void *,size_t);
-extern void *memset(void *,int,size_t);
-# else
 #  if defined(AZTEC_50) || defined(NHSTDC) || defined(WIN32)
 extern int  memcmp(const void *, const void *, size_t);
 extern void *memcpy(void *, const void *, size_t);
@@ -314,7 +309,6 @@ extern int memcmp(char *,char *,unsigned int);
 extern char *memcpy(char *,char *,unsigned int);
 extern char *memset(char*,int,int);
 #  endif /* AZTEC_50 || NHSTDC */
-# endif /* TOS */
 #endif /* MICRO */
 
 #if defined(BSD) && defined(ultrix)	/* i.e., old versions of Ultrix */
@@ -413,7 +407,7 @@ extern char	*rindex(const char *,int);
 #if (defined(SUNOS4) && defined(__STDC__)) || defined(_AIX32)
 #define SPRINTF_PROTO
 #endif
-#if defined(TOS) || defined(AZTEC_50) || defined(__sgi) || defined(__GNUC__)
+#if defined(AZTEC_50) || defined(__sgi) || defined(__GNUC__)
 	/* problem with prototype mismatches */
 #define SPRINTF_PROTO
 #endif

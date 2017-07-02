@@ -1272,9 +1272,7 @@ extern void mplayer_talk(struct monst *);
 #  ifndef WIN32
 extern int tgetch(void);
 #  endif
-#  ifndef TOS
 extern char switchar(void);
-#  endif
 # ifndef __GO32__
 extern long freediskspace(char *);
 extern int findfirst(char *);
@@ -1285,30 +1283,17 @@ extern char *foundfile_buffer(void);
 # ifndef __CYGWIN__
 extern void chdrive(char *);
 # endif
-# ifndef TOS
 extern void disable_ctrlP(void);
 extern void enable_ctrlP(void);
-# endif
 # if defined(MICRO) && !defined(WINNT)
 extern void get_scr_size(void);
-#  ifndef TOS
 extern void gotoxy(int,int);
-#  endif
 # endif
-# ifdef TOS
-extern int _copyfile(char *,char *);
-extern int kbhit(void);
-extern void set_colors(void);
-extern void restore_colors(void);
-#  ifdef SUSPEND
-extern int dosuspend(void);
-#  endif
-# endif /* TOS */
 # ifdef WIN32
 extern char *get_username(int *);
 extern int set_binary_mode(int, int);
 extern void nt_regularize(char *);
-extern int (*(void)t_kbhit));
+extern int (*t_kbhit(void));
 extern void Delay(int);
 # endif /* WIN32 */
 #endif /* MICRO || WIN32 */

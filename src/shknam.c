@@ -130,9 +130,6 @@ static const char * const shktools[] = {
     "Nhoj-lee", "Evad\'kh", "Ettaw-noj", "Tsew-mot", "Ydna-s",
     "Yao-hang", "Tonbar", "Nivek", "Kivenhoug",
 #endif
-#ifdef TOS
-    "Nivram",
-#endif
     0
 };
 

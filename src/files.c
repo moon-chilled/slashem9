@@ -62,7 +62,7 @@ extern int errno;
 #define uncompress(file)	uncompress_area(NULL, file)
 #endif
 
-#if defined(OS2) || defined(TOS) || defined(WIN32)
+#if defined(OS2) || defined(WIN32)
 #include <sys\stat.h>
 #endif
 #ifndef O_BINARY	/* used for micros, no-op for others */
