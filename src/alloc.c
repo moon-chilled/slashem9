@@ -21,7 +21,7 @@ extern void panic(const char *,...) PRINTF_F(1,2);
 void *alloc(size_t lth) {
 	void *ptr = malloc(lth);
 
-	if (!ptr) panic("Memory allocation failure; cannot get %u bytes", lth);
+	if (!ptr) panic("Memory allocation failure; cannot get %zu bytes", lth);
 
 	return ptr;
 }
