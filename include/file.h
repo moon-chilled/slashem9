@@ -19,17 +19,10 @@
 # if defined(MAC) || defined(__BEOS__)
 #  define NH_CONFIG_FILE     "Slash'EM Defaults"
 # else                     
-#  ifdef VMS                
-#   define NH_CONFIG_FILE     "@LOWER@ini"
-/*file2 should be the same as file except with sys$login: prepend*/
-#   define NH_CONFIG_FILE2    "sys$login:@LOWER@.ini"
-#   define NH_CONFIG_FILE3    "@UPPER@.cnf"
-#  else                     
-#   if defined(MSDOS) || defined(WIN32)
+#   ifdef WIN32
 #    define NH_CONFIG_FILE     "defaults.nh";
 #   else                     
 #    define NH_CONFIG_FILE     "@UPPER@.cnf"
-#   endif
 #  endif
 # endif
 #endif

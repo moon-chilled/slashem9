@@ -10,7 +10,7 @@ int (*occupation)(void);
 /* from xxxmain.c */
 const char *hname = 0;		/* name of the game (argv[0] of main) */
 int hackpid = 0;		/* current process id */
-#if defined(UNIX) || defined(VMS)
+#ifdef UNIX
 int locknum = 0;		/* max num of simultaneous users */
 #endif
 #ifdef DEF_PAGER
@@ -312,9 +312,6 @@ struct tileset def_tilesets[] = {
 #if defined(GEM_GRAPHICS)
     { "Monochrome tiles", "nh2.img", 0 },
     { "Colour tiles", "nh16.img", 0 },
-#endif
-#if defined(MSDOS)
-    { "Planer style tiles", "slashem1.tib", 0 },
 #endif
 #if defined(ALLEG_FX)
     { "Small tiles", "slam16.bmp", 0 },

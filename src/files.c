@@ -48,7 +48,7 @@ extern int errno;
 #include <dirent.h>
 #endif
 
-#if defined(UNIX) || defined(VMS)
+#ifdef UNIX
 #include <signal.h>
 #endif
 
@@ -66,12 +66,8 @@ extern int errno;
 #define uncompress(file)	uncompress_area(NULL, file)
 #endif
 
-#if defined(MSDOS) || defined(OS2) || defined(TOS) || defined(WIN32)
-# ifndef GNUDOS
+#if defined(OS2) || defined(TOS) || defined(WIN32)
 #include <sys\stat.h>
-# else
-#include <sys/stat.h>
-# endif
 #endif
 #ifndef O_BINARY	/* used for micros, no-op for others */
 # define O_BINARY 0
@@ -82,17 +78,13 @@ extern int errno;
 static char fqn_filename_buffer[FQN_NUMBUF][FQN_MAX_FILENAME];
 #endif
 
-#if !defined(MFLOPPY) && !defined(VMS) && !defined(WIN32)
+#if !defined(MFLOPPY) && !defined(WIN32)
 char bones[] = "bonesnn.xxx";
 char lock[PL_NSIZ+14] = "1lock"; /* long enough for uid+name+.99 */
 #else
 # if defined(MFLOPPY)
 char bones[FILENAMELEN];           /* pathname of bones files */
 char lock[FILENAMELEN];            /* pathname of level files */
-# endif
-# if defined(VMS)
-char bones[] = "bonesnn.xxx;1";
-char lock[PL_NSIZ+17] = "1lock"; /* long enough for _uid+name+.99;1 */
 # endif
 # if defined(WIN32)
 char bones[] = "bonesnn.xxx";
@@ -101,16 +93,12 @@ char lock[PL_NSIZ+25];		/* long enough for username+-+name+.99 */
 #endif
 
 #if defined(UNIX) || defined(__BEOS__)
-#define SAVESIZE	(PL_NSIZ + 13)	/* save/99999player.e */
+# define SAVESIZE	(PL_NSIZ + 13)	/* save/99999player.e */
 #else
-# ifdef VMS
-#define SAVESIZE	(PL_NSIZ + 22)	/* [.save]<uid>player.e;1 */
+# if defined(WIN32)
+#  define SAVESIZE	(PL_NSIZ + 40)	/* username-player.NetHack-saved-game */
 # else
-#  if defined(WIN32)
-#define SAVESIZE	(PL_NSIZ + 40)	/* username-player.NetHack-saved-game */
-#  else
-#define SAVESIZE        FILENAMELEN        /* from macconf.h or pcconf.h */
-#  endif
+#  define SAVESIZE        FILENAMELEN        /* from macconf.h or pcconf.h */
 # endif
 #endif
 
@@ -137,27 +125,10 @@ static char wizkit[WIZKIT_MAX];
 STATIC_DCL FILE *fopen_wizkit_file(void);
 #endif
 
-#ifdef AMIGA
-extern char PATH[];	/* see sys/amiga/amidos.c */
-extern char bbs_id[];
+#ifdef WIN32
 static int lockptr;
-# ifdef __SASC_60
-#include <proto/dos.h>
-# endif
-
-#include <libraries/dos.h>
-extern void amii_set_text_font( char *, int );
-#endif
-
-#if defined(WIN32) || defined(MSDOS)
-static int lockptr;
-# ifdef MSDOS
-#define Delay(a) msleep(a)
-# endif
 #define Close close
-#ifndef WIN_CE
 #define DeleteFile unlink
-#endif
 #endif
 
 #ifdef MAC
@@ -379,17 +350,7 @@ int prefix;
 	FILE *fp;
 
 	filename = fqname(filename, prefix, prefix == TROUBLEPREFIX ? 3 : 0);
-#ifdef VMS	/* essential to have punctuation, to avoid logical names */
-    {
-	char tmp[BUFSIZ];
-
-	if (!index(filename, '.') && !index(filename, ';'))
-		filename = strcat(strcpy(tmp, filename), ";0");
-	fp = fopen(filename, mode, "mbc=16");
-    }
-#else
 	fp = fopen(filename, mode);
-#endif
 	return fp;
 }
 #endif	/* FILE_AREA */
@@ -407,15 +368,10 @@ set_lock_and_bones (void)
 	}
 	append_slash(permbones);
 	append_slash(levels);
-#ifdef AMIGA
-	strncat(levels, bbs_id, PATHLEN);
-#endif
 	append_slash(bones);
 	strcat(bones, "bonesnn.*");
 	strcpy(lock, levels);
-#ifndef AMIGA
 	strcat(lock, alllevels);
-#endif
 	return;
 }
 #endif /* MFLOPPY */
@@ -435,9 +391,6 @@ set_levelfile_name (char *file, int lev)
 	tf = rindex(file, '.');
 	if (!tf) tf = eos(file);
 	sprintf(tf, ".%d", lev);
-#ifdef VMS
-	strcat(tf, ";1");
-#endif
 	return;
 }
 
@@ -565,14 +518,14 @@ void
 clearlocks (void)
 {
 /* [Tom] Watcom.....
-#if !defined(PC_LOCKING) && defined(MFLOPPY) && !defined(AMIGA)
+#if !defined(PC_LOCKING) && defined(MFLOPPY)
 	eraseall(levels, alllevels);
 	if (ramdisk)
 		eraseall(permbones, alllevels);
 #else
 	register int x;
 
-# if defined(UNIX) || defined(VMS)
+# ifdef UNIX
 	(void) signal(SIGHUP, SIG_IGN);
 # endif */
 	/* can't access maxledgerno() before dungeons are created -dlc */
@@ -665,9 +618,6 @@ d_level *lev;
 	    sprintf(dptr, ".%c", sptr->boneid);
 	else
 	    sprintf(dptr, ".%d", lev->dlevel);
-#ifdef VMS
-	strcat(dptr, ";1");
-#endif
 	return(dptr-2);
 }
 
@@ -685,9 +635,6 @@ set_bonestemp_name()
 	tf = rindex(lock, '.');
 	if (!tf) tf = eos(lock);
 	sprintf(tf, ".bn");
-#ifdef VMS
-	strcat(tf, ";1");
-#endif
 	return lock;
 }
 
@@ -732,22 +679,6 @@ char errbuf[];
 	    sprintf(errbuf,
 		    "Cannot create bones \"%s\", id %s (errno %d).",
 		    lock, *bonesid, errno);
-
-# if defined(VMS) && !defined(SECURE)
-	/*
-	   Re-protect bones file with world:read+write+execute+delete access.
-	   umask() doesn't seem very reliable; also, vaxcrtl won't let us set
-	   delete access without write access, which is what's really wanted.
-	   Can't simply create it with the desired protection because creat
-	   ANDs the mask with the user's default protection, which usually
-	   denies some or all access to world.
-	 */
-#  ifndef FILE_AREAS
-	(void) chmod(file, FCMASK | 007);  /* allow other users full access */
-#  else
-	(void) chmod_area(FILE_AREA_BONES, file, FCMASK | 007);
-#  endif
-# endif /* VMS && !SECURE */
 
 	return fd;
 }
@@ -874,29 +805,11 @@ set_savefile_name (void)
 #if defined(WIN32)
 	char fnamebuf[BUFSZ], encodedfnamebuf[BUFSZ];
 #endif
-#ifdef VMS
-#ifndef FILE_AREAS
-	sprintf(SAVEF, "[.save]%d%s", getuid(), plname);
-	regularize(SAVEF+7);
-#else
-	sprintf(SAVEF, "%d%s", getuid(), plname);
-	regularize(SAVEF);
-#endif
-	strcat(SAVEF, ";1");
-#else
 # if defined(MICRO)
 	strcpy(SAVEF, SAVEP);
-#  ifdef AMIGA
-	strncat(SAVEF, bbs_id, PATHLEN);
-#  endif
 	{
 		int i = strlen(SAVEP);
-#  ifdef AMIGA
-		/* plname has to share space with SAVEP and ".sav" */
-		(void)strncat(SAVEF, plname, FILENAME - i - 4);
-#  else
 		(void)strncat(SAVEF, plname, 8);
-#  endif
 		regularize(SAVEF+i);
 	}
 	strcat(SAVEF, ".sav");
@@ -918,7 +831,6 @@ set_savefile_name (void)
 	regularize(SAVEF);      /* avoid . or / in name */
 #  endif
 # endif	/* MICRO */
-#endif /* VMS   */
 }
 
 #ifdef INSURANCE
@@ -935,18 +847,15 @@ save_savefile_name (int fd)
 void 
 set_error_savefile (void)
 {
-# ifdef VMS
       {
 	char *semi_colon = rindex(SAVEF, ';');
 	if (semi_colon) *semi_colon = '\0';
       }
 	strcat(SAVEF, ".e;1");
-# else
-#  ifdef MAC
+# ifdef MAC
 	strcat(SAVEF, "-e");
-#  else
+# else
 	strcat(SAVEF, ".e");
-#  endif
 # endif
 }
 #endif
@@ -981,22 +890,6 @@ create_savefile (void)
 # endif /* MICRO */
 #endif  /* FILE_AREAS */
 
-#if defined(VMS) && !defined(SECURE)
-	/*
-	   Make sure the save file is owned by the current process.  That's
-	   the default for non-privileged users, but for priv'd users the
-	   file will be owned by the directory's owner instead of the user.
-	 */
-#  ifdef getuid	/*(see vmsunix.c)*/
-#   undef getuid
-#  endif
-# ifdef FILE_AREAS
-	(void) chown_area(FILE_AREA_SAVE, SAVEF, getuid(), getgid());
-# else
-	(void) chown(fq_save, getuid(), getgid());
-# endif
-#endif /* VMS && !SECURE */
-
 	return fd;
 }
 
@@ -1030,9 +923,6 @@ delete_savefile (void)
 #ifdef KEEP_SAVE
 /* Wizard mode already has prompt*/
 	if (flags.keep_savefile && !wizard) {
-# ifdef AMIGA /*WAC If Amiga is ever supported*/
-		preserve_icon();
-# endif
 		return 1; /*Should this return 0?*/
 	}
 #endif
@@ -1423,7 +1313,7 @@ char *lockname;
 # pragma unused(filename,lockname)
 	return (char*)0;
 #else
-# if defined(UNIX) || defined(VMS) || defined(AMIGA) || defined(WIN32) || defined(MSDOS)
+# if defined(UNIX) || defined(WIN32)
 #  ifdef NO_FILE_LINKS
 	strcpy(lockname, LOCKDIR);
 	strcat(lockname, "/");
@@ -1431,20 +1321,12 @@ char *lockname;
 #  else
 	strcpy(lockname, filename);
 #  endif
-#  ifdef VMS
-      {
-	char *semi_colon = rindex(lockname, ';');
-	if (semi_colon) *semi_colon = '\0';
-      }
-	strcat(lockname, ".lock;1");
-#  else
 	strcat(lockname, "_lock");
-#  endif
 	return lockname;
 # else
 	lockname[0] = '\0';
 	return (char*)0;
-# endif  /* UNIX || VMS || AMIGA || WIN32 || MSDOS */
+# endif  /* UNIX || WIN32 */
 #endif
 }
 
@@ -1474,7 +1356,7 @@ int retryct;
 	lockname = fqname(lockname, LOCKPREFIX, 2);
 #endif
 
-#if defined(UNIX) || defined(VMS)
+#ifdef UNIX
 # ifdef NO_FILE_LINKS
 	while ((lockfd = open(lockname, O_RDWR|O_CREAT|O_EXCL, 0666)) == -1) {
 # else
@@ -1488,7 +1370,7 @@ int retryct;
 		    HUP raw_printf(
 			    "Waiting for access to %s.  (%d retries left).",
 			    filename, retryct);
-# if defined(SYSV) || defined(ULTRIX) || defined(VMS)
+# if defined(SYSV) || defined(ULTRIX)
 		    (void)
 # endif
 			sleep(1);
@@ -1509,14 +1391,6 @@ int retryct;
 		HUP raw_printf("No write permission to lock %s!", filename);
 		nesting--;
 		return FALSE;
-# ifdef VMS			/* c__translate(vmsfiles.c) */
-	    case EPERM:
-		/* could be misleading, but usually right */
-		HUP raw_printf("Can't lock %s due to directory protection.",
-			       filename);
-		nesting--;
-		return FALSE;
-# endif
 	    default:
 		HUP perror(lockname);
 		HUP raw_printf(
@@ -1527,27 +1401,15 @@ int retryct;
 	    }
 
 	}
-#endif  /* UNIX || VMS */
+#endif  // UNIX
 
-#if defined(AMIGA) || defined(WIN32) || defined(MSDOS)
-# ifdef AMIGA
-#define OPENFAILURE(fd) (!fd)
-    lockptr = 0;
-# else
+#ifdef WIN32
 #define OPENFAILURE(fd) (fd < 0)
+
     lockptr = -1;
-# endif
     while (--retryct && OPENFAILURE(lockptr)) {
-# if defined(WIN32) && !defined(WIN_CE)
 	lockptr = sopen(lockname, O_RDWR|O_CREAT, SH_DENYRW, S_IWRITE);
-# else
-	(void)DeleteFile(lockname); /* in case dead process was here first */
-#  ifdef AMIGA
-	lockptr = Open(lockname,MODE_NEWFILE);
-#  else
-	lockptr = open(lockname, O_RDWR|O_CREAT|O_EXCL, S_IWRITE);
-#  endif
-# endif
+
 	if (OPENFAILURE(lockptr)) {
 	    raw_printf("Waiting for access to %s.  (%d retries left).",
 			filename, retryct);
@@ -1559,17 +1421,10 @@ int retryct;
 	nesting--;
 	return FALSE;
     }
-#endif /* AMIGA || WIN32 || MSDOS */
+#endif // WIN32
 	return TRUE;
 }
 
-
-#ifdef VMS	/* for unlock_file, use the unlink() routine in vmsunix.c */
-# ifdef unlink
-#  undef unlink
-# endif
-# define unlink(foo) vms_unlink(foo)
-#endif
 
 /* unlock file, which must be currently locked by lock_file */
 void
@@ -1585,20 +1440,20 @@ const char *filename;
 		lockname = fqname(lockname, LOCKPREFIX, 2);
 #endif
 
-#if defined(UNIX) || defined(VMS)
+#ifdef UNIX
 		if (unlink(lockname) < 0)
 			HUP raw_printf("Can't unlink %s.", lockname);
 # ifdef NO_FILE_LINKS
 		(void) close(lockfd);
 # endif
 
-#endif  /* UNIX || VMS */
+#endif  /* UNIX */
 
-#if defined(AMIGA) || defined(WIN32) || defined(MSDOS)
+#ifdef WIN32
 		if (lockptr) Close(lockptr);
 		DeleteFile(lockname);
 		lockptr = 0;
-#endif /* AMIGA || WIN32 || MSDOS */
+#endif /* WIN32 */
 	}
 
 	nesting--;
@@ -1618,7 +1473,7 @@ const char *configfile =
 #else
 # if defined(MAC) || defined(__BEOS__)
 			"NetHack Defaults";
-#  if defined(MSDOS) || defined(WIN32)
+#  ifdef WIN32
 			"defaults.nh";
 #  else
 			"NetHack.cnf";
@@ -1627,17 +1482,6 @@ const char *configfile =
 #endif
 */
 
-
-#ifdef MSDOS
-/* conflict with speed-dial under windows
- * for XXX.cnf file so support of NetHack.cnf
- * is for backward compatibility only.
- * Preferred name (and first tried) is now defaults.nh but
- * the game will try the old name if there
- * is no defaults.nh.
- */
-const char *backward_compat_configfile = "nethack.cnf"; 
-#endif
 
 #ifndef MFLOPPY
 #define fopenp fopen
@@ -1648,7 +1492,7 @@ fopen_config_file(filename)
 const char *filename;
 {
 	FILE *fp;
-#if defined(UNIX) || defined(VMS)
+#ifdef UNIX
 	char	tmp_config[BUFSZ];
 	char *envp;
 #endif
@@ -1673,7 +1517,7 @@ const char *filename;
 		if ((fp = fopenp(filename, "r")) != (FILE *)0) {
 		    configfile = filename;
 		    return(fp);
-#if defined(UNIX) || defined(VMS)
+#ifdef UNIX
 		} else {
 		    /* access() above probably caught most problems for UNIX */
 		    raw_printf("Couldn't open requested config file %s (%d).",
@@ -1688,36 +1532,8 @@ const char *filename;
 	if ((fp = fopenp(fqname(configfile, CONFIGPREFIX, 0), "r"))
 								!= (FILE *)0)
 		return(fp);
-# ifdef MSDOS
-	else if ((fp = fopenp(fqname(backward_compat_configfile,
-					CONFIGPREFIX, 0), "r")) != (FILE *)0)
-		return(fp);
-# endif
 #else
 	/* constructed full path names don't need fqname() */
-# ifdef VMS
-	if ((fp = fopenp(fqname(NH_CONFIG_FILE, CONFIGPREFIX, 0), "r"))
-								!= (FILE *)0) {
-		configfile = NH_CONFIG_FILE;
-		return(fp);
-	}
-	if ((fp = fopenp(NH_CONFIG_FILE2, "r")) != (FILE *)0) {
-		configfile = index(NH_CONFIG_FILE2, ':');
-		if (configfile)
-			configfile++;
-		else
-			configfile = NH_CONFIG_FILE2;
-		return(fp);
-	}
-
-	envp = nh_getenv("HOME");
-	if (!envp)
-		strcpy(tmp_config, NH_CONFIG_FILE3);
-	else
-		sprintf(tmp_config, "%s%s", envp, NH_CONFIG_FILE3);
-	if ((fp = fopenp(tmp_config, "r")) != (FILE *)0)
-		return(fp);
-# else	/* should be only UNIX left */
 	envp = nh_getenv("HOME");
 	if (!envp)
 		strcpy(tmp_config, configfile);
@@ -1760,7 +1576,6 @@ const char *filename;
 		wait_synch();
 	    }
 	}
-# endif
 #endif
 	return (FILE *)0;
 
@@ -1928,9 +1743,7 @@ char		*tmp_levels;
 				/* The following ifdef is NOT in the wrong
 				 * place.  For now, we accept and silently
 				 * ignore RAMDISK */
-#   ifndef AMIGA
 		(void) strncpy(tmp_ramdisk, bufp, PATHLEN-1);
-#   endif
 #  endif
 	} else if (match_varname(buf, "LEVELS", 4)) {
 		(void) strncpy(tmp_levels, bufp, PATHLEN-1);
@@ -2052,116 +1865,6 @@ char		*tmp_levels;
 	} else if (match_varname(buf, "WIZKIT", 6)) {
 	    (void) strncpy(wizkit, bufp, WIZKIT_MAX-1);
 #endif
-#ifdef AMIGA
-	} else if (match_varname(buf, "FONT", 4)) {
-		char *t;
-
-		if( t = strchr( buf+5, ':' ) )
-		{
-		    *t = 0;
-		    amii_set_text_font( buf+5, atoi( t + 1 ) );
-		    *t = ':';
-		}
-	} else if (match_varname(buf, "PATH", 4)) {
-		(void) strncpy(PATH, bufp, PATHLEN-1);
-	} else if (match_varname(buf, "DEPTH", 5)) {
-		extern int amii_numcolors;
-		int val = atoi( bufp );
-		amii_numcolors = 1L << min( DEPTH, val );
-	} else if (match_varname(buf, "DRIPENS", 7)) {
-		int i, val;
-		char *t;
-		for (i = 0, t = strtok(bufp, ",/"); t != (char *)0;
-				i < 20 && (t = strtok((char*)0, ",/")), ++i) {
-			sscanf(t, "%d", &val );
-			flags.amii_dripens[i] = val;
-		}
-	} else if (match_varname(buf, "SCREENMODE", 10 )) {
-		extern long amii_scrnmode;
-		if (!stricmp(bufp,"req"))
-		    amii_scrnmode = 0xffffffff; /* Requester */
-		else if( sscanf(bufp, "%x", &amii_scrnmode) != 1 )
-		    amii_scrnmode = 0;
-	} else if (match_varname(buf, "MSGPENS", 7)) {
-		extern int amii_msgAPen, amii_msgBPen;
-		char *t = strtok(bufp, ",/");
-		if( t )
-		{
-		    sscanf(t, "%d", &amii_msgAPen);
-		    if( t = strtok((char*)0, ",/") )
-				sscanf(t, "%d", &amii_msgBPen);
-		}
-	} else if (match_varname(buf, "TEXTPENS", 8)) {
-		extern int amii_textAPen, amii_textBPen;
-		char *t = strtok(bufp, ",/");
-		if( t )
-		{
-		    sscanf(t, "%d", &amii_textAPen);
-		    if( t = strtok((char*)0, ",/") )
-				sscanf(t, "%d", &amii_textBPen);
-		}
-	} else if (match_varname(buf, "MENUPENS", 8)) {
-		extern int amii_menuAPen, amii_menuBPen;
-		char *t = strtok(bufp, ",/");
-		if( t )
-		{
-		    sscanf(t, "%d", &amii_menuAPen);
-		    if( t = strtok((char*)0, ",/") )
-				sscanf(t, "%d", &amii_menuBPen);
-		}
-	} else if (match_varname(buf, "STATUSPENS", 10)) {
-		extern int amii_statAPen, amii_statBPen;
-		char *t = strtok(bufp, ",/");
-		if( t )
-		{
-		    sscanf(t, "%d", &amii_statAPen);
-		    if( t = strtok((char*)0, ",/") )
-				sscanf(t, "%d", &amii_statBPen);
-		}
-	} else if (match_varname(buf, "OTHERPENS", 9)) {
-		extern int amii_otherAPen, amii_otherBPen;
-		char *t = strtok(bufp, ",/");
-		if( t )
-		{
-		    sscanf(t, "%d", &amii_otherAPen);
-		    if( t = strtok((char*)0, ",/") )
-				sscanf(t, "%d", &amii_otherBPen);
-		}
-	} else if (match_varname(buf, "PENS", 4)) {
-		extern unsigned short amii_init_map[ AMII_MAXCOLORS ];
-		int i;
-		char *t;
-
-		for (i = 0, t = strtok(bufp, ",/");
-			i < AMII_MAXCOLORS && t != (char *)0;
-			t = strtok((char *)0, ",/"), ++i)
-		{
-			sscanf(t, "%hx", &amii_init_map[i]);
-		}
-		amii_setpens( amii_numcolors = i );
-	} else if (match_varname(buf, "FGPENS", 6)) {
-		extern int foreg[ AMII_MAXCOLORS ];
-		int i;
-		char *t;
-
-		for (i = 0, t = strtok(bufp, ",/");
-			i < AMII_MAXCOLORS && t != (char *)0;
-			t = strtok((char *)0, ",/"), ++i)
-		{
-			sscanf(t, "%d", &foreg[i]);
-		}
-	} else if (match_varname(buf, "BGPENS", 6)) {
-		extern int backg[ AMII_MAXCOLORS ];
-		int i;
-		char *t;
-
-		for (i = 0, t = strtok(bufp, ",/");
-			i < AMII_MAXCOLORS && t != (char *)0;
-			t = strtok((char *)0, ",/"), ++i)
-		{
-			sscanf(t, "%d", &backg[i]);
-		}
-#endif
 #ifdef USER_SOUNDS
 	} else if (match_varname(buf, "SOUNDDIR", 8)) {
 		sounddir = (char *)strdup(bufp);
@@ -2215,10 +1918,8 @@ const char *filename;
 #undef tmp_levels
 	char	tmp_levels[PATHLEN];
 # ifdef MFLOPPY
-#  ifndef AMIGA
 #undef tmp_ramdisk
 	char	tmp_ramdisk[PATHLEN];
-#  endif
 # endif
 #endif
 	char	buf[4*BUFSZ];
@@ -2237,9 +1938,7 @@ const char *filename;
 
 #if defined(MICRO) || defined(WIN32)
 # ifdef MFLOPPY
-#  ifndef AMIGA
 	tmp_ramdisk[0] = 0;
-#  endif
 # endif
 	tmp_levels[0] = 0;
 #endif
@@ -2305,13 +2004,11 @@ clnt_process:
 	/* should be superseded by fqn_prefix[] */
 # ifdef MFLOPPY
 	strcpy(permbones, tmp_levels);
-#  ifndef AMIGA
 	if (tmp_ramdisk[0]) {
 		strcpy(levels, tmp_ramdisk);
 		if (strcmp(permbones, levels))		/* if not identical */
 			ramdisk = TRUE;
 	} else
-#  endif /* AMIGA */
 		strcpy(levels, tmp_levels);
 
 	strcpy(bones, levels);
@@ -2347,7 +2044,7 @@ STATIC_OVL FILE *
 fopen_wizkit_file()
 {
 	FILE *fp;
-#if defined(VMS) || defined(UNIX)
+#ifdef UNIX
 	char	tmp_wizkit[BUFSZ];
 #endif
 	char *envp;
@@ -2372,7 +2069,7 @@ fopen_wizkit_file()
 #endif
 	if ((fp = fopenp(wizkit, "r")) != (FILE *)0) {
 	    return(fp);
-#if defined(UNIX) || defined(VMS)
+#ifdef UNIX
 	} else {
 	    /* access() above probably caught most problems for UNIX */
 	    raw_printf("Couldn't open requested config file %s (%d).",
@@ -2386,15 +2083,6 @@ fopen_wizkit_file()
 								!= (FILE *)0)
 		return(fp);
 #else
-# ifdef VMS
-	envp = nh_getenv("HOME");
-	if (envp)
-		sprintf(tmp_wizkit, "%s%s", envp, wizkit);
-	else
-		sprintf(tmp_wizkit, "%s%s", "sys$login:", wizkit);
-	if ((fp = fopenp(tmp_wizkit, "r")) != (FILE *)0)
-		return(fp);
-# else	/* should be only UNIX left */
 	envp = nh_getenv("HOME");
 	if (envp)
 		sprintf(tmp_wizkit, "%s/%s", envp, wizkit);
@@ -2408,7 +2096,6 @@ fopen_wizkit_file()
 					tmp_wizkit, errno);
 		wait_synch();
 	}
-# endif
 #endif
 	return (FILE *)0;
 }
@@ -2469,7 +2156,7 @@ const char *dir;
 	const char *fq_record;
 #endif
 
-#if defined(UNIX) || defined(VMS)
+#ifdef UNIX
 # ifdef FILE_AREAS
 	fd = open_area(NH_RECORD_AREA, NH_RECORD, O_RDWR, 0);
 # else
@@ -2478,14 +2165,6 @@ const char *dir;
 # endif
 
 	if (fd >= 0) {
-# ifdef VMS	/* must be stream-lf to use UPDATE_RECORD_IN_PLACE */
-		if (!file_is_stmlf(fd)) {
-		    raw_printf(
-		  "Warning: scoreboard file %s is not in stream_lf format",
-				fq_record);
-		    wait_synch();
-		}
-# endif
 	    (void) close(fd);   /* NH_RECORD is accessible */
 #  ifdef FILE_AREAS
 	} else if ((fd = open_area(NH_RECORD_AREA, NH_RECORD, O_CREAT|O_RDWR, FCMASK)) >= 0) {
@@ -2493,14 +2172,6 @@ const char *dir;
 	} else if ((fd = open(fq_record, O_CREAT|O_RDWR, FCMASK)) >= 0) {
 #  endif
 	    (void) close(fd);   /* NH_RECORD newly created */
-# if defined(VMS) && !defined(SECURE)
-	    /* Re-protect NH_RECORD with world:read+write+execute+delete access. */
-#  ifdef FILE_AREAS
-	    (void) chmod_area(NH_RECORD_AREA, NH_RECORD, FCMASK | 007);
-#  else
-	    (void) chmod(fq_record, FCMASK | 007);
-#  endif
-# endif /* VMS && !SECURE */
 	} else {
 # ifdef FILE_AREAS
 	    raw_printf("Warning: cannot write scoreboard file %s", NH_RECORD);
@@ -2541,7 +2212,7 @@ const char *dir;
 # if defined(FILE_AREAS)
 	    if ((fd = open_area(NH_RECORD_AREA, tmp, O_CREAT|O_RDWR,
 	      S_IREAD|S_IWRITE)) < 0) {
-# elif defined(AZTEC_C) || defined(_DCC) || (defined(__GNUC__) && defined(__AMIGA__))
+# elif defined(AZTEC_C) || defined(_DCC)
 	    /* Aztec doesn't use the third argument */
 	    /* DICE doesn't like it */
 	    if ((fd = open(fq_record, O_CREAT|O_RDWR)) < 0) {

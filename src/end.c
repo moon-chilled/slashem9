@@ -30,7 +30,7 @@ static struct val_list { struct valuable_data *list; int size; } valuables[] = {
 
 #ifndef NO_SIGNAL
 STATIC_PTR void done_intr(int);
-# if defined(UNIX) || defined(VMS) || defined (__EMX__)
+# if defined(UNIX) || defined (__EMX__)
 static void done_hangup(int);
 # endif
 #endif
@@ -57,17 +57,13 @@ extern void nethack_exit(int);
 
 #define done_stopprint program_state.stopprint
 
-#ifdef AMIGA
-# define NH_abort()	Abort(0)
-#else
-# ifdef SYSV
+#ifdef SYSV
 # define NH_abort()	(void) abort()
+#else
+# ifdef WIN32
+#define NH_abort()	win32_abort()
 # else
-#  ifdef WIN32
-# define NH_abort()	win32_abort()
-#  else
-# define NH_abort()	abort()
-#  endif
+#define NH_abort()	abort()
 # endif
 #endif
 
@@ -191,17 +187,13 @@ done2 (void)
 		}
 		return 0;
 	}
-#if defined(WIZARD) && (defined(UNIX) || defined(VMS) || defined(LATTICE))
+#if defined(WIZARD) && (defined(UNIX) || defined(LATTICE))
 	if(wizard) {
 	    int c;
-# ifdef VMS
-	    const char *tmp = "Enter debugger?";
-# else
 #  ifdef LATTICE
 	    const char *tmp = "Create SnapShot?";
 #  else
 	    const char *tmp = "Dump core?";
-#  endif
 # endif
 	    if ((c = ynq(tmp)) == 'y') {
 		(void) signal(SIGINT, (SIG_RET_TYPE) done1);
@@ -225,13 +217,13 @@ int sig_unused;
 #endif
 	done_stopprint++;
 	(void) signal(SIGINT, SIG_IGN);
-# if defined(UNIX) || defined(VMS)
+# ifdef UNIX
 	(void) signal(SIGQUIT, SIG_IGN);
 # endif
 	return;
 }
 
-# if defined(UNIX) || defined(VMS) || defined(__EMX__)
+# if defined(UNIX) || defined(__EMX__)
 static void 
 done_hangup (	/* signal() handler */
     int sig
@@ -381,7 +373,7 @@ panic VA_DECL(const char *, str)
 #ifdef WIN32
 	interject(INTERJECT_PANIC);
 #endif
-#if defined(WIZARD) && (defined(UNIX) || defined(VMS) || defined(LATTICE) || defined(WIN32))
+#if defined(WIZARD) && (defined(UNIX) || defined(LATTICE) || defined(WIN32))
 	if (wizard)
 	    NH_abort();	/* generate core dump */
 #endif
@@ -788,7 +780,7 @@ die:
 	if (have_windows) wait_synch();	/* flush screen output */
 #ifndef NO_SIGNAL
 	(void) signal(SIGINT, (SIG_RET_TYPE) done_intr);
-# if defined(UNIX) || defined(VMS) || defined (__EMX__)
+# if defined(UNIX) || defined (__EMX__)
 	(void) signal(SIGQUIT, (SIG_RET_TYPE) done_intr);
 	(void) signal(SIGHUP, (SIG_RET_TYPE) done_hangup);
 # endif

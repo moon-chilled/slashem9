@@ -55,7 +55,7 @@ extern void merge_colormap(void);
 
 #if defined(MICRO) || defined(WIN32)
 #undef exit
-# if !defined(MSDOS) && !defined(WIN32)
+# ifndef WIN32
 extern void exit(int);
 # endif
 #endif

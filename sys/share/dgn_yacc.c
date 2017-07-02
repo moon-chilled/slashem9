@@ -55,13 +55,6 @@ void output_dgn(void);
 
 #define Free(ptr)		free((genericptr_t)ptr)
 
-#ifdef AMIGA
-# undef	printf
-#ifndef	LATTICE
-# define    memset(addr,val,len)    setmem(addr,len,val)
-#endif
-#endif
-
 #define ERR		(-1)
 
 static struct couple couple;

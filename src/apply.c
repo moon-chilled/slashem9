@@ -45,10 +45,6 @@ STATIC_DCL boolean figurine_location_checks(struct obj *, coord *, boolean);
 STATIC_DCL boolean uhave_graystone(void);
 STATIC_DCL void add_class(char *, char);
 
-#ifdef	AMIGA
-void amii_speaker(struct obj *, char *, int);
-#endif
-
 const char no_elbow_room[] = "don't have enough elbow-room to maneuver.";
 
 #ifdef TOURIST
@@ -888,9 +884,6 @@ STATIC_OVL void use_bell(struct obj **optr) {
 	You("ring %s.", the(xname(obj)));
 
 	if (Underwater || (u.uswallow && ordinary)) {
-#ifdef	AMIGA
-	    amii_speaker( obj, "AhDhGqEqDhEhAqDqFhGw", AMII_MUFFLED_VOLUME );
-#endif
 	    pline("But the sound is muffled.");
 
 	} else if (invoking && ordinary) {
@@ -899,9 +892,6 @@ STATIC_OVL void use_bell(struct obj **optr) {
 	    learno = TRUE;	/* help player figure out why */
 
 	} else if (ordinary) {
-#ifdef	AMIGA
-	    amii_speaker( obj, "ahdhgqeqdhehaqdqfhgw", AMII_MUFFLED_VOLUME );
-#endif
 	    if (obj->cursed && !rn2(4) &&
 		    /* note: once any of them are gone, we stop all of them */
 		    !(mvitals[PM_WOOD_NYMPH].mvflags & G_GONE) &&
@@ -949,9 +939,6 @@ STATIC_OVL void use_bell(struct obj **optr) {
 	    } else  if (invoking) {
 		pline("%s an unsettling shrill sound...",
 		      Tobjnam(obj, "issue"));
-#ifdef	AMIGA
-		amii_speaker( obj, "aefeaefeaefeaefeaefe", AMII_LOUDER_VOLUME );
-#endif
 		obj->age = moves;
 		learno = TRUE;
 		wakem = TRUE;
@@ -959,9 +946,6 @@ STATIC_OVL void use_bell(struct obj **optr) {
 	    } else if (obj->blessed) {
 		int res = 0;
 
-#ifdef	AMIGA
-		amii_speaker( obj, "ahahahDhEhCw", AMII_SOFT_VOLUME );
-#endif
 		if (uchain) {
 		    unpunish();
 		    res = 1;
@@ -976,9 +960,6 @@ STATIC_OVL void use_bell(struct obj **optr) {
 		}
 
 	    } else {  /* uncursed */
-#ifdef	AMIGA
-		amii_speaker( obj, "AeFeaeFeAefegw", AMII_OKAY_VOLUME );
-#endif
 		if (findit() != 0) learno = TRUE;
 		else pline("%s", nothing_happens);
 	    }

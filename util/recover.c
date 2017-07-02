@@ -16,11 +16,6 @@
 #include "win32api.h"
 #endif
 
-#ifdef VMS
-extern int vms_creat(const char *,unsigned);
-extern int vms_open(const char *,int,unsigned);
-#endif	/* VMS */
-
 int restore_savefile(char *);
 void set_levelfile_name(int);
 int open_levelfile(int);
@@ -28,17 +23,13 @@ int create_savefile(void);
 void copy_bytes(int,int);
 
 #ifdef UNIX
-#define SAVESIZE	(PL_NSIZ + 13)	/* save/99999player.e */
+# define SAVESIZE	(PL_NSIZ + 13)	/* save/99999player.e */
 #else
-# ifdef VMS
-#define SAVESIZE	(PL_NSIZ + 22)	/* [.save]<uid>player.e;1 */
-# else
-#  ifdef WIN32
-#define SAVESIZE	(PL_NSIZ + 40)  /* username-player.NetHack-saved-game */
-#  else
-#define SAVESIZE	FILENAMELEN	/* from macconf.h or pcconf.h */
-#  endif
-# endif
+# ifdef WIN32
+#  define SAVESIZE	(PL_NSIZ + 40)  /* username-player.NetHack-saved-game */
+# else /* WIN32 */
+#  define SAVESIZE	FILENAMELEN	/* from macconf.h or pcconf.h */
+# endif /* WIN32 */
 #endif
 
 #if defined(EXEPATH)
@@ -58,9 +49,6 @@ char *argv[];
 {
 	int argno;
 	const char *dir = (char *)0;
-#ifdef AMIGA
-	char *startdir = (char *)0;
-#endif
 
 
 	if (!dir) dir = getenv("NETHACKDIR");
@@ -71,7 +59,7 @@ char *argv[];
 	if (argc == 1 || (argc == 2 && !strcmp(argv[1], "-"))) {
 	    fprintf(stderr,
 		"Usage: %s [ -d directory ] base1 [ base2 ... ]\n", argv[0]);
-#if defined(WIN32) || defined(MSDOS)
+#ifdef WIN32
 	    if (dir) {
 		fprintf(stderr, "\t(Unless you override it with -d, recover will look \n");
 		fprintf(stderr, "\t in the %s directory on your system)\n", dir);
@@ -96,7 +84,7 @@ char *argv[];
 		}
 		argno++;
 	}
-#if defined(SECURE) && !defined(VMS)
+#ifdef SECURE
 	if (dir
 # ifdef HACKDIR
 		&& strcmp(dir, HACKDIR)
@@ -105,15 +93,12 @@ char *argv[];
 		(void) setgid(getgid());
 		(void) setuid(getuid());
 	}
-#endif	/* SECURE && !VMS */
+#endif	/* SECURE */
 
 #ifdef HACKDIR
 	if (!dir) dir = HACKDIR;
 #endif
 
-#ifdef AMIGA
-	startdir = getcwd(0,255);
-#endif
 	if (dir && chdir((char *) dir) < 0) {
 		fprintf(stderr, "%s: cannot chdir to %s.\n", argv[0], dir);
 		exit(EXIT_FAILURE);
@@ -125,9 +110,6 @@ char *argv[];
 			    argv[argno], savename);
 		argno++;
 	}
-#ifdef AMIGA
-	if (startdir) (void)chdir(startdir);
-#endif
 	exit(EXIT_SUCCESS);
 	/*NOTREACHED*/
 	return 0;
@@ -144,9 +126,6 @@ int lev;
 	tf = rindex(lock, '.');
 	if (!tf) tf = lock + strlen(lock);
 	(void) sprintf(tf, ".%d", lev);
-#ifdef VMS
-	(void) strcat(tf, ";1");
-#endif
 }
 
 int
@@ -156,7 +135,7 @@ int lev;
 	int fd;
 
 	set_levelfile_name(lev);
-#if defined(MICRO) || defined(WIN32) || defined(MSDOS)
+#if defined(MICRO) || defined(WIN32)
 	fd = open(lock, O_RDONLY | O_BINARY);
 #else
 	fd = open(lock, O_RDONLY, 0);
@@ -169,7 +148,7 @@ create_savefile()
 {
 	int fd;
 
-#if defined(MICRO) || defined(WIN32) || defined(MSDOS)
+#if defined(MICRO) || defined(WIN32)
 	fd = open(savename, O_WRONLY | O_BINARY | O_CREAT | O_TRUNC, FCMASK);
 #else
 	fd = creat(savename, FCMASK);
@@ -212,7 +191,7 @@ char *basename;
 	(void) strcpy(lock, basename);
 	gfd = open_levelfile(0);
 	if (gfd < 0) {
-#if defined(WIN32) && !defined(WIN_CE)
+#ifdef WIN32
  	    if(errno == EACCES) {
 	  	fprintf(stderr,
 			"\nThere are files from a game in progress under your name.");
@@ -306,26 +285,6 @@ char *basename;
 
 	close(sfd);
 
-#if 0 /* OBSOLETE, HackWB is no longer in use */
-#ifdef AMIGA
-			/* we need to create an icon for the saved game
-			 * or HackWB won't notice the file.
-			 */
-	{
-	char iconfile[FILENAME];
-	int in, out;
-
-	(void) sprintf(iconfile, "%s.info", savename);
-	in = open("NetHack:default.icon", O_RDONLY);
-	out = open(iconfile, O_WRONLY | O_TRUNC | O_CREAT);
-	if(in > -1 && out > -1){
-		copy_bytes(in,out);
-	}
-	if(in > -1)close(in);
-	if(out > -1)close(out);
-	}
-#endif
-#endif
 	return(0);
 }
 
@@ -351,24 +310,11 @@ char *str;
 #if !defined(WIN32)
 	strcpy (tmp, str);
 #else
-# if defined(WIN_CE)
-	{
-	  TCHAR wbuf[EXEPATHBUFSZ];
-	  GetModuleFileName((HANDLE)0, wbuf, EXEPATHBUFSZ);
-	  NH_W2A(wbuf, tmp, bsize);
-	}
-# else
 	*(tmp + GetModuleFileName((HANDLE)0, tmp, bsize)) = '\0';
-# endif
 #endif
 	tmp2 = strrchr(tmp, PATH_SEPARATOR);
 	if (tmp2) *tmp2 = '\0';
 	return tmp;
 }
 #endif /* EXEPATH */
-
-#ifdef AMIGA
-#include "date.h"
-const char amiga_version_string[] = AMIGA_VERSION_STRING;
-#endif
 /*recover.c*/

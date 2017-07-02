@@ -851,9 +851,6 @@ dowhatdoes_core (char q, char *cbuf)
 		(meta && *buf=='M' && *(buf+1)=='-' && *(buf+2)==meta) ||
 		*buf==q) {
 		if ((ep = index(buf, '\n')) != 0) *ep = 0;
-#ifdef MSDOS
-		if ((ep = index(buf, '\r')) != 0) *ep = 0;
-#endif
 		if (ctrl && buf[2] == '\t'){
 			buf = bufr + 1;
 			(void) strncpy(buf, "^?      ", 8);
@@ -882,11 +879,11 @@ dowhatdoes (void)
 	char bufr[BUFSZ];
 	char q, *reslt;
 
-#if defined(UNIX) || defined(VMS)
+#ifdef UNIX
 	introff();
 #endif
 	q = yn_function("What command?", (char *)0, '\0');
-#if defined(UNIX) || defined(VMS)
+#ifdef UNIX
 	intron();
 #endif
 	reslt = dowhatdoes_core(q, bufr);

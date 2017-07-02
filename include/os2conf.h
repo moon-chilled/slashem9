@@ -54,10 +54,6 @@
 # define DLB	/* Untested without dlb, comment out on your own risk! */
 #endif
 
-#ifdef MSDOS
-# undef MSDOS			/* MSC autodefines this but we don't want it */
-#endif
-
 #ifndef MICRO
 # define MICRO			/* must be defined to allow some inclusions */
 #endif

@@ -258,10 +258,6 @@ SOURCE=..\include\tradstdc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\trampoli.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\trap.h
 # End Source File
 # Begin Source File

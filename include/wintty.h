@@ -239,7 +239,7 @@ extern int term_putc(int c);
 extern int term_flush(void *desc);
 extern int term_puts(const char *str);
 # endif /* MAC */
-# if defined(MSDOS) || defined(WIN32CON)
+# ifdef WIN32CON
 #  if defined(SCREEN_BIOS) || defined(SCREEN_DJGPPFAST) || defined(WIN32CON)
 #   undef putchar
 #   undef putc
@@ -251,7 +251,7 @@ extern int term_puts(const char *str);
 #  ifdef POSITIONBAR
 extern void video_update_positionbar(char *);
 #  endif
-# endif/*MSDOS*/
+# endif/*WIN32CON*/
 #endif/*NO_TERMS*/
 
 #undef E

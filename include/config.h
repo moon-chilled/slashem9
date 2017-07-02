@@ -19,14 +19,10 @@
  * Section 1:	Operating and window systems selection.
  *		Select the version of the OS you are using.
  *		For "UNIX" select BSD, ULTRIX, SYSV, or HPUX in unixconf.h.
- *		A "VMS" option is not needed since the VMS C-compilers
- *		provide it (no need to change sec#1, vmsconf.h handles it).
  */
 
 #define UNIX		/* delete if no fork(), exec() available */
 
-/* #define MSDOS */	/* in case it's not auto-detected */
-  
 /* #define OS2 */	/* in case it's not auto-detected */
   
 /* #define TOS */	/* define for Atari ST/TT */
@@ -44,7 +40,7 @@
   			/* Hint: if you're not developing code, don't define
   			   ULTRIX_PROTO. */
   
-#include "config1.h"	/* should auto-detect MSDOS, MAC, AMIGA, WIN32 and OS2 */
+#include "config1.h"	/* should auto-detect MAC, WIN32 and OS2 */
   
 /* Windowing systems...
  * Define all of those you want supported in your binary.
@@ -73,12 +69,6 @@
 # ifndef	AUX
 #  define DEFAULT_WINDOW_SYS "Mac"
 # endif
-#endif
-
-/* Amiga supports AMII_GRAPHICS and/or TTY_GRAPHICS */
-#ifdef AMIGA
-# define AMII_GRAPHICS			/* (optional) */
-# define DEFAULT_WINDOW_SYS "amii"	/* "amii", "amitile" or "tty" */
 #endif
 
 #if 0 /* Removed in 3.3.0 */

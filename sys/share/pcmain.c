@@ -20,13 +20,7 @@
 
 #include <ctype.h>
 
-#if !defined(AMIGA) && !defined(GNUDOS)
 #include <sys\stat.h>
-#else
-# ifdef GNUDOS
-#include <sys/stat.h>
-# endif
-#endif
 
 #ifdef WIN32
 #include "win32api.h"			/* for GetModuleFileName */
@@ -50,11 +44,6 @@ boolean run_from_desktop = TRUE;	/* should we pause before exiting?? */
 # ifdef __GNUC__
 long _stksize = 16*1024;
 # endif
-#endif
-
-#ifdef AMIGA
-extern int bigscreen;
-void  preserve_icon(void);
 #endif
 
 STATIC_DCL void process_options(int argc,char **argv);
@@ -145,7 +134,6 @@ char *argv[];
 
 	choose_windows(DEFAULT_WINDOW_SYS);
 
-#if !defined(AMIGA) && !defined(GNUDOS)
 	/* Save current directory and make sure it gets restored when
 	 * the game is exited.
 	 */
@@ -154,7 +142,6 @@ char *argv[];
 # ifndef NO_SIGNAL
 	signal(SIGINT, (SIG_RET_TYPE) nethack_exit);	/* restore original directory */
 # endif
-#endif /* !AMIGA && !GNUDOS */
 
 	dir = nh_getenv("NETHACKDIR");
 	if (dir == (char *)0)
@@ -181,18 +168,6 @@ char *argv[];
 		chdirx (dir, 1);
 #endif
 	}
-#ifdef AMIGA
-# ifdef CHDIR
-	/*
-	 * If we're dealing with workbench, change the directory.  Otherwise
-	 * we could get "Insert disk in drive 0" messages. (Must be done
-	 * before initoptions())....
-	 */
-	if(argc == 0)
-		chdirx(HACKDIR, 1);
-# endif
-	ami_wininit_data();
-#endif
 #if defined(WIN32) && defined(PROXY_GRAPHICS)
 	/* Handle --proxy before options, if supported */
 	if (argc > 1 && !strcmp(argv[1], "--proxy")) {
@@ -212,7 +187,7 @@ char *argv[];
 		set_colors();
 #endif
 	if (!hackdir[0])
-#if !defined(LATTICE) && !defined(AMIGA)
+#ifndef LATTICE
 		strcpy(hackdir, orgdir);
 #else
 		strcpy(hackdir, HACKDIR);
@@ -283,19 +258,12 @@ char *argv[];
 	chdirx(hackdir,1);
 #endif
 
-#ifdef MSDOS
-	process_options(argc, argv);
-	init_nhwindows(&argc,argv);
-#else
 	init_nhwindows(&argc,argv);
 	process_options(argc, argv);
-#endif
 
 #ifdef MFLOPPY
 	set_lock_and_bones();
-# ifndef AMIGA
 	copybones(FROMPERM);
-# endif
 #endif
 
 	if (!*plname)
@@ -339,19 +307,13 @@ char *argv[];
 # endif
 	getlock();
 #else   /* PC_LOCKING */
-# ifdef AMIGA /* We'll put the bones & levels in the user specified directory -jhsa */
-	strcat(lock,plname);
-	strcat(lock,".99");
-# else
-#  ifndef MFLOPPY
+# ifndef MFLOPPY
 	/* I'm not sure what, if anything, is left here, but MFLOPPY has
 	 * conflicts with set_lock_and_bones() in files.c.
 	 */
 	strcpy(lock,plname);
 	strcat(lock,".99");
 	regularize(lock);	/* is this necessary? */
-				/* not compatible with full path a la AMIGA */
-#  endif
 # endif
 #endif
 
@@ -514,7 +476,6 @@ char *argv[];
 			} else
 				raw_print("Player name expected after -u");
 			break;
-#ifndef AMIGA
 		case 'i':
 			if (!strncmpi(argv[0]+1, "IBM", 3))
 				switch_graphics(IBM_GRAPHICS);
@@ -523,7 +484,6 @@ char *argv[];
 			if (!strncmpi(argv[0]+1, "DEC", 3))
 				switch_graphics(DEC_GRAPHICS);
 			break;
-#endif
 		case 'g':
 			if (argv[0][2]) {
 			    if ((i = str2gend(&argv[0][2])) >= 0)
@@ -558,21 +518,10 @@ char *argv[];
 			}
 			break;
 #ifdef MFLOPPY
-# ifndef AMIGA
 		/* Player doesn't want to use a RAM disk
 		 */
 		case 'R':
 			ramdisk = FALSE;
-			break;
-# endif
-#endif
-#ifdef AMIGA
-			/* interlaced and non-interlaced screens */
-		case 'L':
-			bigscreen = 1;
-			break;
-		case 'l':
-			bigscreen = -1;
 			break;
 #endif
 		case '@':
@@ -612,16 +561,9 @@ nhusage()
 #ifdef NEWS
 	strcat(buf1," [-n]");
 #endif
-#ifndef AMIGA
 	strcat(buf1," [-I] [-i] [-d]");
-#endif
 #ifdef MFLOPPY
-# ifndef AMIGA
 	strcat(buf1," [-R]");
-# endif
-#endif
-#ifdef AMIGA
-	strcat(buf1," [-[lL]]");
 #endif
 	if (!iflags.window_inited)
 		raw_printf("%s\n",buf1);
@@ -635,16 +577,12 @@ chdirx(dir, wr)
 char *dir;
 boolean wr;
 {
-# ifdef AMIGA
-	static char thisdir[] = "";
-# else
 	static char thisdir[] = ".";
-# endif
 	if(dir && chdir(dir) < 0) {
 		error("Cannot chdir to %s.", dir);
 	}
 
-# if !defined(AMIGA) && !defined(__CYGWIN__)
+# ifndef __CYGWIN__
 	/* Change the default drive as well.
 	 */
 	chdrive(dir);
@@ -660,14 +598,14 @@ boolean wr;
 #ifdef OVLB
 
 #ifdef PORT_HELP
-# if defined(MSDOS) || defined(WIN32)
+# ifdef WIN32
 void
 port_help()
 {
     /* display port specific help file */
     display_file_area(FILE_AREA_SHARE, PORT_HELP, 1 );
 }
-# endif /* MSDOS || WIN32 */
+# endif /* WIN32 */
 #endif /* PORT_HELP */
 
 #ifdef EXEPATH

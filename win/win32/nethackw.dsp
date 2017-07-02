@@ -663,10 +663,6 @@ SOURCE=..\include\align.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\amiconf.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\artifact.h
 # End Source File
 # Begin Source File
@@ -943,10 +939,6 @@ SOURCE=..\include\tradstdc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\trampoli.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\trap.h
 # End Source File
 # Begin Source File
@@ -960,14 +952,6 @@ SOURCE=..\include\vault.h
 # Begin Source File
 
 SOURCE=..\include\vision.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\vmsconf.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\winami.h
 # End Source File
 # Begin Source File
 

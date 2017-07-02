@@ -10,22 +10,6 @@
 #include "patchlevel.h"
 #endif
 
-#ifdef VMS
- /* We don't want to rewrite the whole file, because that entails	 */
- /* creating a new version which requires that the old one be deletable. */
-# define UPDATE_RECORD_IN_PLACE
-#endif
-
-/*
- * Updating in place can leave junk at the end of the file in some
- * circumstances (if it shrinks and the O.S. doesn't have a straightforward
- * way to truncate it).  The trailing junk is harmless and the code
- * which reads the scores will ignore it.
- */
-#ifdef UPDATE_RECORD_IN_PLACE
-static long final_fpos;
-#endif
-
 #define done_stopprint program_state.stopprint
 
 #define newttentry() (struct toptenentry *) alloc(sizeof(struct toptenentry))
@@ -42,9 +26,6 @@ static long final_fpos;
 #endif
 struct toptenentry {
 	struct toptenentry *tt_next;
-#ifdef UPDATE_RECORD_IN_PLACE
-	long fpos;
-#endif
 	long points;
 	int deathdnum, deathlev;
 	int maxlvl, hp, maxhp, deaths;
@@ -151,10 +132,6 @@ struct toptenentry *tt;
 	static const char fmt33[] = "%s %s %s %s %[^,],%[^\n]%*c";
 #endif
 
-#ifdef UPDATE_RECORD_IN_PLACE
-	/* note: fscanf() below must read the record's terminating newline */
-	final_fpos = tt->fpos = ftell(rfile);
-#endif
 #define TTFIELDS 13
 
 	tt->conduct = 4095;
@@ -416,7 +393,7 @@ topten (int how)
 	    toptenwin = create_nhwindow(NHW_TEXT);
 	}
 
-#if defined(UNIX) || defined(VMS) || defined(__EMX__)
+#if defined(UNIX) || defined(__EMX__)
 #define HUP	if (!program_state.done_hup)
 #else
 #define HUP
@@ -485,9 +462,6 @@ topten (int how)
 
 	t0->conduct = encodeconduct();
 	t0->tt_next = 0;
-#ifdef UPDATE_RECORD_IN_PLACE
-	t0->fpos = -1L;
-#endif
 
 #ifdef LOGFILE		/* used for debugging (who dies of what, where) */
 #ifdef FILE_AREAS
@@ -542,11 +516,7 @@ topten (int how)
 #endif
 		goto destroywin;
 
-#ifdef UPDATE_RECORD_IN_PLACE
-	rfile = fopen_datafile_area(NH_RECORD_AREA, NH_RECORD, "r+", SCOREPREFIX);
-#else
 	rfile = fopen_datafile_area(NH_RECORD_AREA, NH_RECORD, "r", SCOREPREFIX);
-#endif
 
 	if (!rfile) {
 		HUP raw_print("Cannot open record file!");
@@ -575,9 +545,6 @@ topten (int how)
 		else
 			tprev->tt_next = t0;
 		t0->tt_next = t1;
-#ifdef UPDATE_RECORD_IN_PLACE
-		t0->fpos = t1->fpos;	/* insert here */
-#endif
 		t0_used = TRUE;
 		occ_cnt--;
 		flg++;		/* ask for a rewrite */
@@ -624,10 +591,6 @@ topten (int how)
 	    }
 	}
 	if(flg) {	/* rewrite record file */
-#ifdef UPDATE_RECORD_IN_PLACE
-		(void) fseek(rfile, (t0->fpos >= 0 ?
-				     t0->fpos : final_fpos), SEEK_SET);
-#else
 		(void) fclose(rfile);
 		if(!(rfile = fopen_datafile_area(NH_RECORD_AREA, NH_RECORD, "w", SCOREPREFIX))){
 			HUP raw_print("Cannot write record file");
@@ -635,7 +598,6 @@ topten (int how)
 			free_ttlist(tt_head);
 			goto destroywin;
 		}
-#endif	/* UPDATE_RECORD_IN_PLACE */
 		if(!done_stopprint) if(rank0 > 0){
 		    if(rank0 <= 10) {
 			topten_print("You made the top ten list!");
@@ -663,11 +625,7 @@ topten (int how)
 	if(!done_stopprint) outheader();
 	t1 = tt_head;
 	for(rank = 1; t1->points != 0; rank++, t1 = t1->tt_next) {
-	    if(flg
-#ifdef UPDATE_RECORD_IN_PLACE
-		    && rank >= rank0
-#endif
-		) writeentry(rfile, t1);
+	    if(flg) writeentry(rfile, t1);
 	    if (done_stopprint) continue;
 	    if (rank > flags.end_top &&
 		    (rank < rank0 - flags.end_around ||
@@ -698,27 +656,6 @@ topten (int how)
 	}
 	if(rank0 >= rank) if(!done_stopprint)
 		outentry(0, t0, TRUE);
-#ifdef UPDATE_RECORD_IN_PLACE
-	if (flg) {
-# ifdef TRUNCATE_FILE
-	    /* if a reasonable way to truncate a file exists, use it */
-	    truncate_file(rfile);
-# else
-	    /* use sentinel record rather than relying on truncation */
-	    t1->points = 0L;	/* terminates file when read back in */
-	    t1->ver_major = t1->ver_minor = t1->patchlevel = 0;
-	    t1->uid = t1->deathdnum = t1->deathlev = 0;
-	    t1->maxlvl = t1->hp = t1->maxhp = t1->deaths = 0;
-	    t1->plrole[0] = t1->plrace[0] = t1->plgend[0] = t1->plalign[0] = '-';
-	    t1->plrole[1] = t1->plrace[1] = t1->plgend[1] = t1->plalign[1] = 0;
-	    t1->birthdate = t1->deathdate = yyyymmdd((time_t)0L);
-	    strcpy(t1->name, "@");
-	    strcpy(t1->death, "<eod>\n");
-	    writeentry(rfile, t1);
-	    (void) fflush(rfile);
-# endif	/* TRUNCATE_FILE */
-	}
-#endif	/* UPDATE_RECORD_IN_PLACE */
 	(void) fclose(rfile);
 	unlock_file_area(NH_RECORD_AREA, NH_RECORD);
 	free_ttlist(tt_head);
@@ -1079,13 +1016,6 @@ char **argv;
 		return;
 	}
 
-#ifdef	AMIGA
-	{
-	    extern winid amii_rawprwin;
-	    init_nhwindows(&argc, argv);
-	    amii_rawprwin = create_nhwindow(NHW_TEXT);
-	}
-#endif
 
 	/* If the score list isn't after a game, we never went through
 	 * initialization. */
@@ -1114,11 +1044,7 @@ char **argv;
 #else
 		player0 = plname;
 		if (!*player0)
-# ifdef AMIGA
-			player0 = "all";	/* single user system */
-# else
 			player0 = "hackplayer";
-# endif
 		playerct = 1;
 		players = &player0;
 #endif
@@ -1181,14 +1107,6 @@ char **argv;
 	    raw_printf("Player types are: [-p role] [-r race] [-g gender] [-a align]");
 	}
 	free_ttlist(tt_head);
-#ifdef	AMIGA
-	{
-	    extern winid amii_rawprwin;
-	    display_nhwindow(amii_rawprwin, 1);
-	    destroy_nhwindow(amii_rawprwin);
-	    amii_rawprwin = WIN_ERR;
-	}
-#endif
 }
 
 STATIC_OVL int

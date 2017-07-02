@@ -399,7 +399,7 @@ HACK_H      = $(CONFIG_H) $(INCL)\dungeon.h $(INCL)\align.h $(INCL)\monsym.h \
               $(INCL)\mkroom.h $(INCL)\objclass.h $(DECL_H) $(INCL)\trap.h \
               $(INCL)\flag.h $(INCL)\rm.h $(INCL)\vision.h $(INCL)\mondata.h \
               $(INCL)\wintype.h $(INCL)\engrave.h $(INCL)\rect.h \
-              $(INCL)\winprocs.h $(INCL)\trampoli.h \
+              $(INCL)\winprocs.h \
               $(INCL)\align.h 
 TILE_H      = ..\win\share\tile.h $(TILEHDR)
 ALIGN_H     = $(INCL)\align.h

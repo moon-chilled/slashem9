@@ -31,16 +31,8 @@
 # endif
 #endif
 
-#ifdef WIN_CE
-#define PREFIX "\\nethack\\dat\\"
-#endif
-
 #ifndef MPWTOOL
 # define SpinCursor(x)
-#endif
-
-#if defined(AMIGA) && defined(DLB)
-# define PREFIX "NH:slib/"
 #endif
 
 #ifndef O_WRONLY

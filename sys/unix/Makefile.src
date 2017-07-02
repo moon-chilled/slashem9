@@ -462,15 +462,15 @@ CSOURCES = $(HACKCSRC) $(SYSSRC) $(WINCSRC) $(GENCSRC)
 # cause dependency loops if run through "make depend"
 # and dgn_comp.h, dgn_file.h, lev_comp.h, special level & dungeon files.
 #
-HACKINCL = align.h amiconf.h artifact.h artilist.h attrib.h beconf.h color.h \
+HACKINCL = align.h artifact.h artilist.h attrib.h beconf.h color.h \
 	config.h config1.h coord.h decl.h def_os2.h display.h dlb.h dungeon.h \
 	edog.h emin.h engrave.h epri.h eshk.h extern.h flag.h func_tab.h \
 	global.h hack.h lev.h macconf.h mfndpos.h micro.h mkroom.h \
 	monattk.h mondata.h monflag.h monst.h monsym.h obj.h objclass.h \
 	os2conf.h patchlevel.h pcconf.h permonst.h prop.h rect.h region.h rm.h \
 	sp_lev.h spell.h system.h tcap.h timeout.h tosconf.h tradstdc.h \
-	trampoli.h trap.h unixconf.h vault.h vision.h vmsconf.h wintty.h \
-	winX.h winprocs.h wintype.h you.h youprop.h 
+	trap.h unixconf.h vault.h vision.h wintty.h winX.h winprocs.h \
+	wintype.h you.h youprop.h 
 
 HSOURCES = $(HACKINCL) date.h onames.h pm.h vis_tab.h\
 		lev_comp.h dgn_comp.h dgn_file.h
@@ -656,11 +656,11 @@ depend: ../sys/unix/depend.awk \
 
 # config.h timestamp
 $(CONFIG_H): ../include/config.h ../include/config1.h ../include/tradstdc.h \
-		../include/global.h ../include/coord.h ../include/vmsconf.h \
+		../include/global.h ../include/coord.h \
 		../include/system.h ../include/unixconf.h ../include/os2conf.h \
 		../include/micro.h ../include/pcconf.h ../include/tosconf.h \
-		../include/amiconf.h ../include/macconf.h ../include/beconf.h \
-		../include/wceconf.h ../include/ntconf.h ../include/nhlan.h \
+		../include/macconf.h ../include/beconf.h \
+		../include/ntconf.h ../include/nhlan.h
 		#../include/autoconf.h
 	touch $(CONFIG_H)
 # hack.h timestamp
@@ -676,7 +676,7 @@ $(HACK_H): ../include/hack.h $(CONFIG_H) ../include/align.h \
 		../include/timeout.h ../include/trap.h ../include/flag.h \
 		../include/rm.h ../include/vision.h ../include/display.h \
 		../include/engrave.h ../include/rect.h ../include/region.h \
-		../include/winprocs.h ../include/wintty.h ../include/trampoli.h
+		../include/winprocs.h ../include/wintty.h
 	touch $(HACK_H)
 #
 tos.o: ../sys/atari/tos.c $(HACK_H) ../include/tcap.h

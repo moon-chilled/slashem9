@@ -25,24 +25,17 @@
 /* some old <sys/types.h> may not define off_t and size_t; if your system is
  * one of these, define them by hand below
  */
-#if (defined(VMS) && !defined(__GNUC__)) || defined(MAC)
+#ifdef MAC
 #include <types.h>
 #else
-# ifndef AMIGA
 #  ifndef       __WATCOMC__
 #include <sys/types.h>
-# endif
 # endif
 #endif
 
 #if (defined(MICRO) && !defined(TOS)) || defined(ANCIENT_VAXC)
 # if !defined(_SIZE_T) && !defined(__size_t) /* __size_t for CSet/2 */
 #  define _SIZE_T
-#  if !((defined(MSDOS) || defined(OS2)) && defined(_SIZE_T_DEFINED)) /* MSC 5.1 */
-#   if !(defined(__GNUC__) && defined(AMIGA))
-typedef unsigned int	size_t;
-#   endif
-#  endif
 # endif
 #endif	/* MICRO && !TOS */
 
@@ -54,7 +47,7 @@ typedef unsigned int	size_t;
 # define time_t long
 #endif
 
-#if defined(ULTRIX) || defined(VMS)
+#ifdef ULTRIX
 # define off_t long
 #endif
 #if defined(AZTEC) || defined(THINKC4) || defined(__TURBOC__)
@@ -133,12 +126,8 @@ extern void free(genericptr_t);
 #  endif
 # endif
 #if !defined(__SASC_60) && !defined(_DCC) && !defined(__SC__)
-# if defined(AMIGA) && !defined(AZTEC_50) && !defined(__GNUC__)
-extern int perror(const char *);
-# else
 #  if !(defined(ULTRIX_PROTO) && defined(__GNUC__))
 extern void perror(const char *);
-#  endif
 # endif
 #endif
 #endif
@@ -256,35 +245,6 @@ extern long fork(void);
 # endif
 #endif /* ULTRIX */
 
-#ifdef VMS
-# ifndef abs
-extern int abs(int);
-# endif
-extern int atexit(void (*)(void));
-extern int atoi(const char *);
-extern int chdir(const char *);
-extern int chown(const char *,unsigned,unsigned);
-# ifdef __DECC_VER
-extern int chmod(const char *,mode_t);
-extern mode_t umask(mode_t);
-# else
-extern int chmod(const char *,int);
-extern int umask(int);
-# endif
-/* #include <unixio.h> */
-extern int close(int);
-extern int creat(const char *, unsigned, ...);
-extern int delete(const char *);
-extern int fstat( /*_ int, stat_t * _*/ );
-extern int isatty(int);	/* 1==yes, 0==no, -1==error */
-extern long lseek(int,long,int);
-extern int open(const char *,int,unsigned,...);
-extern int read(int,genericptr_t,unsigned);
-extern int rename(const char *,const char *);
-extern int stat( /*_ const char *,stat_t * _*/ );
-extern int write(int,const genericptr,unsigned);
-#endif
-
 #endif	/* __SASC_60 */
 
 /* both old & new versions of Ultrix want these, but real BSD does not */
@@ -311,8 +271,8 @@ extern long fork(void);
 /* The POSIX string.h is required to define all the mem* and str* functions */
 #include <string.h>
 #else
-#if defined(SYSV) || defined(VMS) || defined(MAC) || defined(SUNOS4)
-# if defined(NHSTDC) || (defined(VMS) && !defined(ANCIENT_VAXC))
+#if defined(SYSV) || defined(MAC) || defined(SUNOS4)
+# ifdef NHSTDC
 #  if !defined(_AIX32) && !(defined(SUNOS4) && defined(__STDC__)) && !defined(LINUX)
 /* Solaris unbundled cc (acc) */
 extern int memcmp(const void *,const void *,size_t);
@@ -366,9 +326,6 @@ extern unsigned sleep(unsigned);
 #if defined(HPUX)
 extern unsigned int sleep(unsigned int);
 #endif
-#ifdef VMS
-extern int sleep(unsigned);
-#endif
 
 extern char *getenv(const char *);
 extern char *getlogin(void);
@@ -381,17 +338,9 @@ extern long getpid(void);
 extern pid_t getpid(void);
 extern uid_t getuid(void);
 extern gid_t getgid(void);
-#  ifdef VMS
-extern pid_t getppid(void);
-#  endif
 # else	/*!POSIX_TYPES*/
 #  ifndef getpid		/* Borland C defines getpid() as a macro */
 extern int getpid(void);
-#  endif
-#  ifdef VMS
-extern int getppid(void);
-extern unsigned getuid(void);
-extern unsigned getgid(void);
 #  endif
 #  if defined(ULTRIX) && !defined(_UNISTD_H_)
 extern unsigned getuid(void);
@@ -420,7 +369,7 @@ extern char	*strcat(char *,const char *);
 extern char	*strncat(char *,const char *,size_t);
 extern char	*strpbrk(const char *,const char *);
 
-# if defined(SYSV) || defined(MICRO) || defined(MAC) || defined(VMS) || defined(HPUX)
+# if defined(SYSV) || defined(MICRO) || defined(MAC) || defined(HPUX)
 extern char	*strchr(const char *,int);
 extern char	*strrchr(const char *,int);
 # else /* BSD */
@@ -430,7 +379,7 @@ extern char	*rindex(const char *,int);
 
 extern int	strcmp(const char *,const char *);
 extern int	strncmp(const char *,const char *,size_t);
-# if defined(MICRO) || defined(MAC) || defined(VMS)
+# if defined(MICRO) || defined(MAC)
 extern size_t strlen(const char *);
 # else
 # ifdef HPUX
@@ -538,19 +487,13 @@ extern struct tm *localtime(const time_t *);
 # endif
 # endif
 
-# if defined(ULTRIX) || (defined(BSD) && defined(POSIX_TYPES)) || defined(SYSV) || defined(MICRO) || defined(VMS) || defined(MAC) || (defined(HPUX) && defined(_POSIX_SOURCE))
+# if defined(ULTRIX) || (defined(BSD) && defined(POSIX_TYPES)) || defined(SYSV) || defined(MICRO) || defined(MAC) || (defined(HPUX) && defined(_POSIX_SOURCE))
 #  ifndef       __WATCOMC__
 extern time_t time(time_t *);
 #  endif
 # else
 extern long time(time_t *);
 # endif /* ULTRIX */
-
-#ifdef VMS
-	/* used in makedefs.c, but missing from gcc-vms's <time.h> */
-extern char *ctime(const time_t *);
-#endif
-
 
 #ifdef MICRO
 # ifdef abs

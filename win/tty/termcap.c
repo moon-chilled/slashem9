@@ -89,8 +89,6 @@ STATIC_VAR char tgotobuf[20];
 # endif
 #endif /* TERMLIB */
 
-#ifndef MSDOS
-
 STATIC_DCL void init_ttycolor(void);
 
 #ifdef VIDEOSHADES
@@ -196,7 +194,6 @@ convert_uchars(bufp,list,size)
     }
     /*NOTREACHED*/
 }
-#  endif /* !MSDOS */
 # endif /* VIDEOSHADES*/
 
 #ifdef OVLB
@@ -213,17 +210,11 @@ int *wid, *hgt;
 #endif
 
 #ifdef TEXTCOLOR
-# ifndef MSDOS
 	init_ttycolor();
-# endif
 #endif
 
 #ifdef TERMLIB
 
-# ifdef VMS
-	term = verify_termcap();
-	if (!term)
-# endif
 	term = getenv("TERM");
 
 # if defined(TOS) && defined(__GNUC__)
@@ -841,16 +832,9 @@ graph_off() {
 #ifdef OVL1
 
 #if !defined(MICRO)
-# ifdef VMS
-static const short tmspc10[] = {		/* from termcap */
-	0, 2000, 1333, 909, 743, 666, 333, 166, 83, 55, 50, 41, 27, 20, 13, 10,
-	5
-};
-# else
 static const short tmspc10[] = {		/* from termcap */
 	0, 2000, 1333, 909, 743, 666, 500, 333, 166, 83, 55, 41, 20, 10, 5
 };
-# endif
 #endif
 
 /* delay 50 ms */
@@ -1326,10 +1310,6 @@ int color;
 	/* XXX has_color() should be added to windowprocs */
 	if (windowprocs.name != NULL &&
 	    !strcmpi(windowprocs.name, "Qt")) return TRUE;
-#endif
-#ifdef AMII_GRAPHICS
-	/* hilites[] not used */
-	return iflags.use_color;
 #endif
 #ifdef CURSES_GRAPHICS
     /* XXX has_color() should be added to windowprocs */

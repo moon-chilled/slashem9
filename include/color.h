@@ -76,7 +76,7 @@ struct menucoloring {
 };
 #endif
 
-#if defined(VIDEOSHADES) && !defined(MSDOS)
+#ifdef VIDEOSHADES
 extern char ttycolors[CLR_MAX];
 #endif
 

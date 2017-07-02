@@ -118,14 +118,6 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 #include "extern.h"
 #include "winprocs.h"
 
-#ifdef USE_TRAMPOLI
-#include "wintty.h"
-#undef WINTTY_H
-#include "trampoli.h"
-#undef EXTERN_H
-#include "extern.h"
-#endif /* USE_TRAMPOLI */
-
 #define NO_SPELL	0
 
 /* flags to control makemon() */
@@ -322,11 +314,7 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 #endif	/* OVERLAY && (OVL0 || OVL1 || OVL2 || OVL3 || OVLB) */
 
 /* Macro for a few items that are only static if we're not overlaid.... */
-#if defined(USE_TRAMPOLI) || defined(USE_OVLx)
-# define STATIC_PTR
-#else
-# define STATIC_PTR static
-#endif
+#define STATIC_PTR static
 
 /* For my clever ending messages... */
 extern int Instant_Death;
@@ -353,10 +341,6 @@ extern int repeat_hit;
  * calling convention under WINCE which is not the default
  * in that environment.
  */
-#if defined(WIN_CE)
-# define CFDECLSPEC __cdecl
-#else
 # define CFDECLSPEC
-#endif
  
 #endif /* HACK_H */

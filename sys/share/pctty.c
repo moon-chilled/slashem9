@@ -23,12 +23,6 @@ gettty(){
 #if !defined(TOS) 
 	disable_ctrlP();	/* turn off ^P processing */
 #endif
-#if defined(MSDOS) && defined(NO_TERMS)
-	gr_init();
-#endif
-#if defined(MSDOS) && defined(PC_MOUSE)
-        mouse_init();
-#endif
 }
 
 /* reset terminal to original state */
@@ -36,12 +30,6 @@ void
 settty(s)
 const char *s;
 {
-#if defined(MSDOS) && defined(NO_TERMS)
-	gr_finish();
-#endif
-#if defined(MSDOS) && defined(PC_MOUSE)
-        mouse_finish();
-#endif
 	end_screen();
 	if(s) raw_print(s);
 #if !defined(TOS)

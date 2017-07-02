@@ -15,10 +15,6 @@
  */
 
 struct flag {
-#ifdef AMIFLUSH
-	boolean  altmeta;	/* use ALT keys as META */
-	boolean  amiflush;	/* kill typeahead */
-#endif
 #ifdef	MFLOPPY
 	boolean  asksavedisk;
 #endif
@@ -160,11 +156,6 @@ struct flag {
 	char     end_disclose[NUM_DISCLOSURE_OPTIONS + 1];  /* disclose various info
 							       upon exit */
 	char	 menu_style;	/* User interface style setting */
-#ifdef AMII_GRAPHICS
-	int numcols;
-	unsigned short amii_dripens[ 20 ]; /* DrawInfo Pens currently there are 13 in v39 */
-	AMII_COLOR_TYPE amii_curmap[ AMII_MAXCOLORS ]; /* colormap */
-#endif
 };
 
 /*
@@ -229,20 +220,13 @@ struct instance_flags {
 				   as defined in the special font HackFont */
 	unsigned  use_stone;		/* use the stone ppats */
 #endif
-#if defined(MSDOS) || defined(WIN32)
+#ifdef WIN32
 	boolean hassound;	/* has a sound card */
 	boolean usesound;	/* use the sound card */
 	boolean usepcspeaker;	/* use the pc speaker */
 	boolean tile_view;
 	boolean over_view;
 	boolean traditional_view;
-#endif
-#ifdef MSDOS
-	boolean	hasalleg;	/* has a Allegor compatible adapter  */
-	boolean usealleg;	/* use the Allegro library           */
-	boolean hasvga;		/* has a vga adapter */
-	boolean usevga;		/* use the vga adapter */
-	boolean grmode;		/* currently in graphics mode */
 #endif
 #ifdef LAN_FEATURES
 	boolean lan_mail;	/* mail is initialized */

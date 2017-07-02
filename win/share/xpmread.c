@@ -156,7 +156,6 @@ fclose_xpm_file()
     return FALSE;
 }
 
-#ifndef AMIGA
 static char *std_args[] = { "tilemap",	/* dummy argv[0] */
 			"monsters.xpm", "monsters.txt",
 			"objects.xpm",  "objects.txt",
@@ -257,4 +256,3 @@ char *argv[];
     /*NOTREACHED*/
     return 0;
 }
-#endif

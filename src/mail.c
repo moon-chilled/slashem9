@@ -40,7 +40,7 @@ extern char *viz_rmin, *viz_rmax;	/* line-of-sight limits (vision.c) */
 
 #ifdef OVL0
 
-# if !defined(UNIX) && !defined(VMS) && !defined(LAN_MAIL)
+# if !defined(UNIX) && !defined(LAN_MAIL)
 int mustgetmail = -1;
 # endif
 
@@ -416,14 +416,14 @@ give_up:
 	pline("Hark!  \"%s.\"", info->display_txt);
 }
 
-# if !defined(UNIX) && !defined(VMS) && !defined(LAN_MAIL)
+# if !defined(UNIX) && !defined(LAN_MAIL)
 
 void 
 ckmailstatus (void)
 {
 	if (u.uswallow || !flags.biff) return;
 	if (mustgetmail < 0) {
-#if defined(AMIGA) || defined(MSDOS) || defined(TOS) || defined(OS2)
+#if defined(TOS) || defined(OS2)
 	    mustgetmail=(moves<2000)?(100+rn2(2000)):(2000+rn2(3000));
 #endif
 	    return;
@@ -452,7 +452,7 @@ readmail (struct obj *otmp)
 
 }
 
-# endif /* !UNIX && !VMS */
+# endif /* !UNIX */
 
 # ifdef UNIX
 
@@ -518,59 +518,6 @@ readmail (struct obj *otmp)
 }
 
 # endif /* UNIX */
-
-# ifdef VMS
-
-extern struct mail_info *parse_next_broadcast(void);
-
-volatile int broadcasts = 0;
-
-void 
-ckmailstatus (void)
-{
-    struct mail_info *brdcst;
-
-    if(u.uswallow || !flags.biff) return;
-
-    while (broadcasts > 0) {	/* process all trapped broadcasts [until] */
-	broadcasts--;
-	if ((brdcst = parse_next_broadcast()) != 0) {
-	    newmail(brdcst);
-	    break;		/* only handle one real message at a time */
-	}
-    }
-}
-
-void 
-readmail (struct obj *otmp)
-{
-#  ifdef SHELL	/* can't access mail reader without spawning subprocess */
-    const char *txt, *cmd;
-    char *p, buf[BUFSZ], qbuf[BUFSZ];
-    int len;
-
-    /* there should be a command hidden beyond the object name */
-    txt = otmp->onamelth ? ONAME(otmp) : "";
-    len = strlen(txt);
-    cmd = (len + 1 < otmp->onamelth) ? txt + len + 1 : (char *) 0;
-    if (!cmd || !*cmd) cmd = "SPAWN";
-
-    sprintf(qbuf, "System command (%s)", cmd);
-    getlin(qbuf, buf);
-    if (*buf != '\033') {
-	for (p = eos(buf); p > buf; *p = '\0')
-	    if (*--p != ' ') break;	/* strip trailing spaces */
-	if (*buf) cmd = buf;		/* use user entered command */
-	if (!strcmpi(cmd, "SPAWN") || !strcmp(cmd, "!"))
-	    cmd = (char *) 0;		/* interactive escape */
-
-	vms_doshell(cmd, TRUE);
-	(void) sleep(1);
-    }
-#  endif /* SHELL */
-}
-
-# endif /* VMS */
 
 # ifdef LAN_MAIL
 

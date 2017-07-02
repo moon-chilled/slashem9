@@ -160,26 +160,6 @@ extern const char * shorten_bot2(const char *, unsigned int);
 
 /* ### cmd.c ### */
 
-#ifdef USE_TRAMPOLI
-extern int doextcmd(void);
-extern int domonability(void);
-extern int domonability(void);
-extern int polyatwill(void);
-extern int playersteal(void);
-extern int doprev_message(void);
-extern int timed_occupation(void);
-extern int wiz_attributes(void);
-extern int enter_explore_mode(void);
-# ifdef WIZARD
-extern int wiz_detect(void);
-extern int wiz_genesis(void);
-extern int wiz_identify(void);
-extern int wiz_level_tele(void);
-extern int wiz_map(void);
-extern int wiz_where(void);
-extern int wiz_wish(void);
-# endif /* WIZARD */
-#endif /* USE_TRAMPOLI */
 extern void reset_occupations(void);
 extern void set_occupation(int (*)(void),const char *,int);
 #ifdef REDO
@@ -244,10 +224,6 @@ extern void use_crystal_ball(struct obj *);
 extern void do_mapping(void);
 extern void do_vicinity_map(void);
 extern void cvt_sdoor_to_door(struct rm *);
-#ifdef USE_TRAMPOLI
-extern void findone(int,int,genericptr_t);
-extern void openone(int,int,genericptr_t);
-#endif
 extern int findit(void);
 extern int openit(void);
 extern void find_trap(struct trap *);
@@ -260,9 +236,6 @@ extern void sokoban_detect(void);
 /* ### dig.c ### */
 
 extern boolean is_digging(void);
-#ifdef USE_TRAMPOLI
-extern int dig(void);
-#endif
 extern int holetime(void);
 extern boolean dig_check(struct monst *, boolean, int, int);
 extern void digactualhole(int,int,struct monst *,int);
@@ -331,10 +304,6 @@ extern void set_wall_state(void);
 
 /* ### do.c ### */
 
-#ifdef USE_TRAMPOLI
-extern int drop(struct obj *);
-extern int wipeoff(void);
-#endif
 extern int dodrop(void);
 extern boolean boulder_hits_pool(struct obj *,int,int,boolean);
 extern boolean flooreffects(struct obj *,int,int,const char *);
@@ -404,10 +373,6 @@ extern int Shield_on(void);
 extern int Shirt_on(void);
 #endif
 extern void Amulet_on(void);
-#ifdef USE_TRAMPOLI
-extern int select_off(struct obj *);
-extern int take_off(void);
-#endif
 extern void off_msg(struct obj *);
 extern void set_wear(void);
 extern boolean donning(struct obj *);
@@ -471,9 +436,6 @@ extern int dog_nutrition(struct monst *,struct obj *);
 extern int dog_eat(struct monst *,struct obj *,int,int,boolean);
 extern int dog_move(struct monst *,int);
 extern boolean betrayed(struct monst *);
-#ifdef USE_TRAMPOLI
-extern void wantdoor(int,int,genericptr_t);
-#endif
 
 /* ### dokick.c ### */
 
@@ -570,12 +532,6 @@ extern schar print_dungeon(boolean,schar *,xchar *);
 
 /* ### eat.c ### */
 
-#ifdef USE_TRAMPOLI
-extern int eatmdone(void);
-extern int eatfood(void);
-extern int opentin(void);
-extern int unfaint(void);
-#endif
 extern boolean is_edible(struct obj *);
 extern void init_uhunger(void);
 extern int Hear_again(void);
@@ -605,9 +561,6 @@ extern boolean maybe_finished_meal(boolean);
 
 extern void done1(int);
 extern int done2(void);
-#ifdef USE_TRAMPOLI
-extern void done_intr(int);
-#endif
 extern void done_in_by(struct monst *);
 #endif /* !MAKEDEFS_C && !LEV_LEX_C */
 extern void panic(const char *,...) PRINTF_F(1,2);
@@ -743,9 +696,6 @@ extern void really_close(void);
 
 extern void floating_above(const char *);
 extern void dogushforth(int);
-# ifdef USE_TRAMPOLI
-extern void gush(int,int,genericptr_t);
-# endif
 extern void dryup(xchar,xchar, boolean);
 extern void drinkfountain(void);
 extern void dipfountain(struct obj *);
@@ -852,9 +802,6 @@ extern int midnight(void);
 extern void assigninvlet(struct obj *);
 extern struct obj *merge_choice(struct obj *,struct obj *);
 extern int merged(struct obj **,struct obj **);
-#ifdef USE_TRAMPOLI
-extern int ckunpaid(struct obj *);
-#endif
 extern void addinv_core1(struct obj *);
 extern void addinv_core2(struct obj *);
 extern struct obj *addinv(struct obj *);
@@ -955,10 +902,6 @@ extern int wiz_light_sources(void);
 
 /* ### lock.c ### */
 
-#ifdef USE_TRAMPOLI
-extern int forcelock(void);
-extern int picklock(void);
-#endif
 extern boolean picking_lock(int *,int *);
 extern boolean picking_at(int,int);
 extern void reset_pick(void);
@@ -1096,9 +1039,6 @@ extern int lminion(void);
 
 /* ### mklev.c ### */
 
-#ifdef USE_TRAMPOLI
-extern int do_comp(genericptr_t,genericptr_t);
-#endif
 extern void sort_rooms(void);
 extern void add_room(int,int,int,int,boolean,schar,boolean);
 extern void add_subroom(struct mkroom *,int,int,int,int,
@@ -1338,15 +1278,9 @@ extern char switchar(void);
 #  endif
 # ifndef __GO32__
 extern long freediskspace(char *);
-#  ifdef MSDOS
-extern int findfirst_file(char *);
-extern int findnext_file(void);
-extern long filesize_nh(char *);
-#  else
 extern int findfirst(char *);
 extern int findnext(void);
 extern long filesize(char *);
-#  endif /* MSDOS */
 extern char *foundfile_buffer(void);
 # endif /* __GO32__ */
 # ifndef __CYGWIN__
@@ -1401,9 +1335,6 @@ extern boolean find_defensive(struct monst *);
 extern int use_defensive(struct monst *);
 extern int rnd_defensive_item(struct monst *);
 extern boolean find_offensive(struct monst *);
-#ifdef USE_TRAMPOLI
-extern int mbhitm(struct monst *,struct obj *);
-#endif
 extern int use_offensive(struct monst *);
 extern int rnd_offensive_item(struct monst *);
 extern boolean find_misc(struct monst *);
@@ -1556,9 +1487,7 @@ extern void gameDiskPrompt(void);
 # endif
 extern void append_slash(char *);
 extern void getreturn(const char *);
-# ifndef AMIGA
 extern void msmsg(const char *,...);
-# endif
 extern FILextern *fopenp(const char *,const char *);
 #endif /* MICRO || WIN32 */
 
@@ -1596,11 +1525,6 @@ extern boolean allow_category(struct obj *);
 extern boolean is_worn_by_type(struct obj *);
 extern boolean mbag_explodes(struct obj *, int);
 extern void destroy_mbag(struct obj *, boolean);
-#ifdef USE_TRAMPOLI
-extern int ck_bag(struct obj *);
-extern int in_container(struct obj *);
-extern int out_container(struct obj *);
-#endif
 extern int pickup(int);
 extern int pickup_object(struct obj *, long, boolean);
 extern int query_category(const char *, struct obj *, int,
@@ -1689,9 +1613,6 @@ extern const char *bottlename(void);
 
 /* ### pray.c ### */
 
-#ifdef USE_TRAMPOLI
-extern int prayer_done(void);
-#endif
 extern int dosacrifice(void);
 extern boolean can_pray(boolean);
 extern int dopray(void);
@@ -1771,9 +1692,6 @@ extern void forget_levels(int);
 extern void forget_traps(void);
 extern void forget_map(int);
 extern int seffects(struct obj *);
-#ifdef USE_TRAMPOLI
-extern void set_lit(int,int,genericptr_t);
-#endif
 extern void litroom(boolean,struct obj *);
 extern void do_genocide(int);
 extern void punish(struct obj *);
@@ -1876,7 +1794,7 @@ extern int doconsult(struct monst *);
 /* ### save.c ### */
 
 extern int dosave(void);
-#if defined(UNIX) || defined(VMS) || defined(__EMX__) || defined(WIN32)
+#if defined(UNIX) || defined(__EMX__) || defined(WIN32)
 extern void hangup(int);
 #endif
 extern int dosave0(void);
@@ -1996,12 +1914,6 @@ extern int add_sound_mapping(const char *);
 extern void play_sound_for_message(const char *);
 #endif
 
-/* ### sys/msdos/sound.c ### */
-
-#ifdef MSDOS
-extern int assign_soundcard(char *);
-#endif
-
 /* ### sp_lev.c ### */
 
 extern boolean check_room(xchar *,xchar *,xchar *,xchar *,boolean);
@@ -2014,9 +1926,6 @@ extern boolean load_special(const char *);
 
 /* ### spell.c ### */
 
-#ifdef USE_TRAMPOLI
-extern int learn(void);
-#endif
 extern int study_book(struct obj *);
 extern void book_disappears(struct obj *);
 extern void book_substitution(struct obj *,struct obj *);
@@ -2032,9 +1941,6 @@ extern void initialspell(struct obj *);
 
 /* ### steal.c ### */
 
-#ifdef USE_TRAMPOLI
-extern int stealarm(void);
-#endif
 #ifdef GOLDOBJ
 extern long somegold(long);
 #else
@@ -2313,14 +2219,6 @@ extern void append_port_id(char *);
 
 /* ### video.c ### */
 
-#ifdef MSDOS
-extern int assign_video(char *);
-# ifdef NO_TERMS
-extern void gr_init(void);
-extern void gr_finish(void);
-# endif
-extern void tileview(boolean);
-#endif
 #ifdef VIDEOSHADES
 extern int assign_videoshades(char *);
 extern int assign_videocolors(char *);
@@ -2343,78 +2241,6 @@ extern void unblock_point(int,int);
 extern boolean clear_path(int,int,int,int);
 extern void do_clear_area(int,int,int,
 			     void (*)(int,int,genericptr_t),genericptr_t);
-
-#ifdef VMS
-
-/* ### vmsfiles.c ### */
-
-extern int vms_link(const char *,const char *);
-extern int vms_unlink(const char *);
-extern int vms_creat(const char *,unsigned int);
-extern int vms_open(const char *,int,unsigned int);
-extern boolean same_dir(const char *,const char *);
-extern int c__translate(int);
-extern char *vms_basename(const char *);
-
-/* ### vmsmail.c ### */
-
-extern unsigned long init_broadcast_trapping(void);
-extern unsigned long enable_broadcast_trapping(void);
-extern unsigned long disable_broadcast_trapping(void);
-# if 0
-extern struct mail_info *parse_next_broadcast(void);
-# endif /*0*/
-
-/* ### vmsmain.c ### */
-
-extern int main(int, char **);
-# ifdef CHDIR
-extern void chdirx(const char *,boolean);
-# endif /* CHDIR */
-
-/* ### vmsmisc.c ### */
-
-extern void vms_abort(void);
-extern void vms_exit(int);
-
-/* ### vmstty.c ### */
-
-extern int vms_getchar(void);
-extern void gettty(void);
-extern void settty(const char *);
-extern void shuttty(const char *);
-extern void setftty(void);
-extern void intron(void);
-extern void introff(void);
-extern void error(const char *,...) PRINTF_F(1,2);
-#ifdef TIMED_DELAY
-extern void msleep(unsigned);
-#endif
-
-/* ### vmsunix.c ### */
-
-extern void getlock(void);
-extern void regularize(char *);
-extern int vms_getuid(void);
-extern boolean file_is_stmlf(int);
-extern int vms_define(const char *,const char *,int);
-extern int vms_putenv(const char *);
-extern char *verify_termcap(void);
-# if defined(CHDIR) || defined(SHELL) || defined(SECURE)
-extern void privoff(void);
-extern void privon(void);
-# endif
-# ifdef SHELL
-extern int dosh(void);
-# endif
-# if defined(SHELL) || defined(MAIL)
-extern int vms_doshell(const char *,boolean);
-# endif
-# ifdef SUSPEND
-extern int dosuspend(void);
-# endif
-
-#endif /* VMS */
 
 /* ### weapon.c ### */
 

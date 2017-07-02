@@ -818,7 +818,7 @@ int yylex(void);
 #  define VOIDYYPUT
 # endif
 # if !defined(VOIDYYPUT) && defined(POSIX_TYPES)
-#  if !defined(BOS) && !defined(HISX) && !defined(_M_UNIX) && !defined(VMS)
+#  if !defined(BOS) && !defined(HISX) && !defined(_M_UNIX)
 #   define VOIDYYPUT
 #  endif
 # endif
@@ -2506,14 +2506,6 @@ int main()
 	yylex();
 	return 0;
 	}
-#endif
-
-#ifdef	AMIGA
-long *alloc(n)
-	unsigned n;
-{
-	return ((long *)malloc (n));
-}
 #endif
 
 /* routine to switch to another input file; needed for flex */

@@ -97,7 +97,7 @@
 #endif
 #endif /* NEED_VARARGS */
 
-#if defined(NHSTDC) || defined(MSDOS) || defined(MAC) || defined(ULTRIX_PROTO) || defined(__BEOS__)
+#if defined(NHSTDC) || defined(MAC) || defined(ULTRIX_PROTO) || defined(__BEOS__)
 
 /* generic pointer, always a macro; genericptr_t is usually a typedef */
 # define genericptr	void *
@@ -133,7 +133,7 @@
 
 #else /* NHSTDC */	/* a "traditional" C  compiler */
 
-# if defined(AMIGA) || defined(HPUX) || defined(POSIX_TYPES) || defined(__DECC) || defined(__BORLANDC__)
+# if defined(HPUX) || defined(POSIX_TYPES) || defined(__DECC) || defined(__BORLANDC__)
 #  define genericptr	void *
 # endif
 # ifndef genericptr
@@ -163,12 +163,6 @@ typedef genericptr genericptr_t;	/* (void *) or (char *) */
  * prototypes for the ANSI compilers so people quit trying to fix the
  * prototypes to match the standard and thus lose the typechecking.
  */
-#if defined(MSDOS) && !defined(__GO32__)
-#define UNWIDENED_PROTOTYPES
-#endif
-#if defined(AMIGA) && !defined(AZTEC_50)
-#define UNWIDENED_PROTOTYPES
-#endif
 #if defined(MAC_MPW)
 #define WIDENED_PROTOTYPES
 #endif

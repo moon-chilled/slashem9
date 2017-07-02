@@ -402,17 +402,6 @@ case $basic_machine in
 		basic_machine=580-amdahl
 		os=-sysv
 		;;
-	amiga | amiga-*)
-		basic_machine=m68k-unknown
-		;;
-	amigaos | amigados)
-		basic_machine=m68k-unknown
-		os=-amigaos
-		;;
-	amigaunix | amix)
-		basic_machine=m68k-unknown
-		os=-sysv4
-		;;
 	apollo68)
 		basic_machine=m68k-apollo
 		os=-sysv
@@ -1172,7 +1161,7 @@ case $os in
 	-gnu* | -bsd* | -mach* | -minix* | -genix* | -ultrix* | -irix* \
 	      | -*vms* | -sco* | -esix* | -isc* | -aix* | -sunos | -sunos[34]*\
 	      | -hpux* | -unos* | -osf* | -luna* | -dgux* | -solaris* | -sym* \
-	      | -amigaos* | -amigados* | -msdos* | -newsos* | -unicos* | -aof* \
+	      | -msdos* | -newsos* | -unicos* | -aof* \
 	      | -aos* \
 	      | -nindy* | -vxsim* | -vxworks* | -ebmon* | -hms* | -mvs* \
 	      | -clix* | -riscos* | -uniplus* | -iris* | -rtu* | -xenix* \
@@ -1419,9 +1408,6 @@ case $basic_machine in
 		;;
 	i860-* | *-att | *-ncr | *-altos | *-motorola | *-convergent)
 		os=-sysv
-		;;
-	*-cbm)
-		os=-amigaos
 		;;
 	*-dg)
 		os=-dgux

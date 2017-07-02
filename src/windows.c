@@ -35,11 +35,6 @@ extern struct window_procs mac_procs;
 extern struct window_procs beos_procs;
 extern void be_win_init(void);
 #endif
-#ifdef AMIGA_INTUITION
-extern struct window_procs amii_procs;
-extern struct window_procs amiv_procs;
-extern void ami_wininit_data(void);
-#endif
 #ifdef WIN32_GRAPHICS
 extern struct window_procs win32_procs;
 #endif
@@ -96,10 +91,6 @@ struct win_choices {
 #endif
 #ifdef BEOS_GRAPHICS
     { &beos_procs, be_win_init },
-#endif
-#ifdef AMIGA_INTUITION
-    { &amii_procs, ami_wininit_data },		/* Old font version of the game */
-    { &amiv_procs, ami_wininit_data },		/* Tile version of the game */
 #endif
 #ifdef WIN32_GRAPHICS
     { &win32_procs, 0 },

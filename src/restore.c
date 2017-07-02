@@ -50,12 +50,6 @@ STATIC_DCL void add_id_mapping(unsigned, unsigned);
 static int n_ids_mapped = 0;
 static struct bucket *id_map = 0;
 
-
-#ifdef AMII_GRAPHICS
-void amii_setpens(int) );	/* use colors from save file */
-extern int amii_numcolors;
-#endif
-
 #include "quest.h"
 
 boolean restoring = FALSE;
@@ -383,9 +377,6 @@ unsigned int *stuckid, *steedid;	/* STEED */
 
 	role_init();	/* Reset the initial role, gender, and alignment */
 
-#ifdef AMII_GRAPHICS
-	amii_setpens(amii_numcolors);	/* use colors from save file */
-#endif
 	mread(fd, (genericptr_t) &u, sizeof(struct you));
 	init_uasmon();
 #ifdef CLIPPING
@@ -535,9 +526,6 @@ xchar ltmp;
 		/* Remove levels and bones that may have been created.
 		 */
 		(void) close(nfd);
-# ifdef AMIGA
-		clearlocks();
-# else
 		eraseall(levels, alllevels);
 		eraseall(levels, allbones);
 
@@ -558,12 +546,9 @@ xchar ltmp;
 		} else
 #endif
 		{
-# endif
 			pline("Be seeing you...");
 			terminate(EXIT_SUCCESS);
-# ifndef AMIGA
 		}
-# endif
 	}
 #endif
 	bufon(nfd);
@@ -612,17 +597,7 @@ dorecover (register int fd)
 #endif
 
 #ifdef MICRO
-# ifdef AMII_GRAPHICS
-	{
-	extern struct window_procs amii_procs;
-	if(windowprocs.win_init_nhwindows== amii_procs.win_init_nhwindows){
-	    extern winid WIN_BASE;
-	    clear_nhwindow(WIN_BASE);	/* hack until there's a hook for this */
-	}
-	}
-# else
 	clear_nhwindow(WIN_MAP);
-# endif
 	clear_nhwindow(WIN_MESSAGE);
 	/* moved lower */
 	curs(WIN_MAP, 1, 1);
@@ -762,7 +737,7 @@ boolean ghostly;
 	if (ghostly)
 	    clear_id_mapping();
 
-#if defined(MSDOS) || defined(OS2)
+#ifdef OS2
 	setmode(fd, O_BINARY);
 #endif
 	/* Load the old fruit info.  We have to do it first, so the

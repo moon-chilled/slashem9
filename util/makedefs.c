@@ -42,9 +42,7 @@
 # define SpinCursor(x)
 #endif
 
-#if !defined(AMIGA) || defined(AZTEC_C)
 #define rewind(fp) fseek((fp),0L,SEEK_SET)	/* guarantee a return value */
-#endif
 
 #if defined(UNIX) && !defined(GCC_WARN)
 static	const char	SCCS_Id[] = "@(#)makedefs.c\t3.4\t2002/02/03";
@@ -76,37 +74,28 @@ static	const char	SCCS_Id[] = "@(#)makedefs.c\t3.4\t2002/02/03";
 #define FILENAME_H      "filename.h"
 
 	/* locations for those files */
-#ifdef AMIGA
-# define FILE_PREFIX
-# define INCLUDE_TEMPLATE	"NH:include/t.%s"
-# define SOURCE_TEMPLATE	"NH:src/%s"
-# define DGN_TEMPLATE		"NH:dat/%s"  /* where dungeon.pdf file goes */
-# define DATA_TEMPLATE		"NH:slib/%s"
-# define DATA_IN_TEMPLATE	"NH:dat/%s"
-#else
-# if defined(MAC) && !defined(__MACH__)
-	/* MacOS 9 or earlier */
-#   define INCLUDE_TEMPLATE	":include:%s"
-#   define SOURCE_TEMPLATE	":src:%s"
-#   define DGN_TEMPLATE		":dat:%s"  /* where dungeon.pdf file goes */
-#   define DATA_TEMPLATE        "::lib:%s"
-#   define DATA_IN_TEMPLATE	":dat:%s"
-# else /* MAC */
-#  ifdef OS2
-#   define INCLUDE_TEMPLATE	"..\\include\\%s"
-#   define SOURCE_TEMPLATE	"..\\src\\%s"
-#   define DGN_TEMPLATE		"..\\dat\\%s"  /* where dungeon.pdf file goes */
-#   define DATA_TEMPLATE	"..\\dat\\%s"
-#   define DATA_IN_TEMPLATE	"..\\dat\\%s"
-#  else /* OS2 */
-#   define INCLUDE_TEMPLATE	"../include/%s"
-#   define SOURCE_TEMPLATE	"../src/%s"
-#   define DGN_TEMPLATE		"../dat/%s"  /* where dungeon.pdf file goes */
-#   define DATA_TEMPLATE	"../dat/%s"
-#   define DATA_IN_TEMPLATE	"../dat/%s"
-#  endif /* OS2 */
-# endif /* MAC */
-#endif  /* AMIGA */
+#if defined(MAC) && !defined(__MACH__)
+       /* MacOS 9 or earlier */
+#  define INCLUDE_TEMPLATE	":include:%s"
+#  define SOURCE_TEMPLATE	":src:%s"
+#  define DGN_TEMPLATE		":dat:%s"  /* where dungeon.pdf file goes */
+#  define DATA_TEMPLATE        "::lib:%s"
+#  define DATA_IN_TEMPLATE	":dat:%s"
+#else /* MAC */
+# ifdef OS2
+#  define INCLUDE_TEMPLATE	"..\\include\\%s"
+#  define SOURCE_TEMPLATE	"..\\src\\%s"
+#  define DGN_TEMPLATE		"..\\dat\\%s"  /* where dungeon.pdf file goes */
+#  define DATA_TEMPLATE	"..\\dat\\%s"
+#  define DATA_IN_TEMPLATE	"..\\dat\\%s"
+# else /* OS2 */
+#  define INCLUDE_TEMPLATE	"../include/%s"
+#  define SOURCE_TEMPLATE	"../src/%s"
+#  define DGN_TEMPLATE		"../dat/%s"  /* where dungeon.pdf file goes */
+#  define DATA_TEMPLATE	"../dat/%s"
+#  define DATA_IN_TEMPLATE	"../dat/%s"
+# endif /* OS2 */
+#endif /* MAC */
 
 static const char
     *Dont_Edit_Code =
@@ -393,17 +382,9 @@ do_rumors()
 	}
 
 	/* get size of true rumors file */
-#ifndef VMS
 	fseek(ifp, 0L, SEEK_END);
 	true_rumor_size = ftell(ifp);
-#else
-	/* seek+tell is only valid for stream format files; since rumors.%%%
-	   might be in record format, count the actual data bytes instead.
-	 */
-	true_rumor_size = 0;
-	while (fgets(in_line, sizeof in_line, ifp) != 0)
-		true_rumor_size += strlen(in_line);	/* includes newline */
-#endif /* VMS */
+
 	fprintf(ofp,"%06lx\n", true_rumor_size);
 	fseek(ifp, 0L, SEEK_SET);
 
@@ -628,15 +609,6 @@ do_date()
 	fprintf(ofp,"#define VERSION_STRING \"%s\"\n", version_string(buf));
 	fprintf(ofp,"#define VERSION_ID \\\n \"%s\"\n",
 		version_id_string(buf, cbuf));
-#ifdef AMIGA
-	{
-	struct tm *tm = localtime((time_t *) &clocktim);
-	fprintf(ofp,"#define AMIGA_VERSION_STRING ");
-	fprintf(ofp,"\"\\0$VER: NetHack %d.%d.%d (%d.%d.%d)\"\n",
-		VERSION_MAJOR, VERSION_MINOR, PATCHLEVEL,
-		tm->tm_mday, tm->tm_mon+1, tm->tm_year+1900);
-	}
-#endif
 	fclose(ofp);
 	free(cbuf);
 	return;
@@ -688,9 +660,6 @@ build_savebones_compat_string()
 }
 
 static const char *build_opts[] = {
-#ifdef AMIGA_WBENCH
-		"Amiga WorkBench support",
-#endif
 #ifdef ANSI_DEFAULT
 		"ANSI default terminal",
 #endif
@@ -755,9 +724,6 @@ static const char *build_opts[] = {
 #endif
 #ifdef MAIL
 		"mail daemon",
-#endif
-#ifdef GNUDOS
-		"MSDOS protected mode",
 #endif
 #ifdef NEWS
 		"news file",
@@ -905,9 +871,6 @@ static const char *window_opts[] = {
 #endif
 #ifdef MAC
 		"Mac",
-#endif
-#ifdef AMIGA_INTUITION
-		"Amiga Intuition",
 #endif
 #ifdef GEM_GRAPHICS
 		"Gem",
@@ -1267,9 +1230,7 @@ do_oracles()
 	if (ok) {
 	    sprintf(in_line, "data rewrite of \"%s\"", filename);
 	    for (i = 0; i <= oracle_cnt; i++) {
-#ifndef VMS	/* alpha/vms v1.0; this fflush seems to confuse ftell */
 		if (!(ok = (fflush(ofp) == 0))) break;
-#endif
 		if (!(ok = (fpos = ftell(ofp)) >= 0)) break;
 		if (!(ok = (fseek(ofp, fpos, SEEK_SET) >= 0))) break;
 		if (!(ok = (fscanf(ofp, "%5lx", &offset) == 1))) break;

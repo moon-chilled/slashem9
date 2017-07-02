@@ -54,9 +54,6 @@ struct termios termio;
 struct termio termio;
 #  endif
 # endif
-# ifdef AMIX
-#include <sys/ioctl.h>
-# endif /* AMIX */
 #endif
 
 #ifdef SUSPEND	/* BSD isn't alone anymore... */

@@ -141,10 +141,6 @@ typedef xchar	boolean;		/* 0 or 1 */
  * Please don't change the order.  It does matter.
  */
 
-#ifdef VMS
-#include "vmsconf.h"
-#endif
-
 #ifdef UNIX
 #include "unixconf.h"
 #endif
@@ -153,16 +149,8 @@ typedef xchar	boolean;		/* 0 or 1 */
 #include "os2conf.h"
 #endif
 
-#ifdef MSDOS
-#include "pcconf.h"
-#endif
-
 #ifdef TOS
 #include "tosconf.h"
-#endif
-
-#ifdef AMIGA
-#include "amiconf.h"
 #endif
 
 #ifdef MAC
@@ -174,11 +162,7 @@ typedef xchar	boolean;		/* 0 or 1 */
 #endif
 
 #ifdef WIN32
-#ifdef WIN_CE
-#include "wceconf.h"
-#else
 #include "ntconf.h"
-#endif
 #endif
 
 #ifndef FILE_AREAS
@@ -210,9 +194,6 @@ typedef xchar	boolean;		/* 0 or 1 */
 
 /* Displayable name of this port; don't redefine if defined in *conf.h */
 #ifndef PORT_ID
-# ifdef AMIGA
-#  define PORT_ID	"Amiga"
-# endif
 # ifdef MAC
 #  define PORT_ID	"Mac"
 #  if 0
@@ -225,22 +206,6 @@ typedef xchar	boolean;		/* 0 or 1 */
 #  endif
 #  endif
 # endif
-# ifdef MSDOS
-#  ifdef PC9800
-#  define PORT_ID	"PC-9800"
-#  else
-#  define PORT_ID	"PC"
-#  endif
-#  ifdef DJGPP
-#  define PORT_SUB_ID	"djgpp"
-#  else
-#   ifdef OVERLAY
-#  define PORT_SUB_ID	"overlaid"
-#   else
-#  define PORT_SUB_ID	"non-overlaid"
-#   endif
-#  endif
-# endif
 # ifdef OS2
 #  define PORT_ID	"OS/2"
 # endif
@@ -249,9 +214,6 @@ typedef xchar	boolean;		/* 0 or 1 */
 # endif
 # ifdef UNIX
 #  define PORT_ID	"Unix"
-# endif
-# ifdef VMS
-#  define PORT_ID	"VMS"
 # endif
 # ifdef WIN32
 #  define PORT_ID	"Windows"
@@ -266,23 +228,9 @@ typedef xchar	boolean;		/* 0 or 1 */
 #endif
 
 #if defined(MICRO)
-#if !defined(AMIGA) && !defined(TOS) && !defined(OS2_HPFS)
+#if !defined(TOS) && !defined(OS2_HPFS)
 #define SHORT_FILENAMES		/* filenames are 8.3 */
 #endif
-#endif
-
-#ifdef VMS
-/* vms_exit() (sys/vms/vmsmisc.c) expects the non-VMS EXIT_xxx values below.
- * these definitions allow all systems to be treated uniformly, provided
- * main() routines do not terminate with return(), whose value is not
- * so massaged.
- */
-# ifdef EXIT_SUCCESS
-#  undef EXIT_SUCCESS
-# endif
-# ifdef EXIT_FAILURE
-#  undef EXIT_FAILURE
-# endif
 #endif
 
 #ifndef EXIT_SUCCESS
@@ -297,7 +245,7 @@ typedef xchar	boolean;		/* 0 or 1 */
 #  define USE_TILES		/* glyph2tile[] will be available */
 # endif
 #endif
-#if defined(AMII_GRAPHICS) || defined(GEM_GRAPHICS) || defined(GTK_GRAPHICS)
+#if defined(GEM_GRAPHICS) || defined(GTK_GRAPHICS)
 # ifndef USE_TILES
 #  define USE_TILES
 # endif

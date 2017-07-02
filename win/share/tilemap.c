@@ -15,7 +15,7 @@ void process_substitutions(FILE *);
 
 #if defined(MICRO) || defined(WIN32)
 #undef exit
-#if !defined(MSDOS) && !defined(WIN32)
+#ifndef WIN32
 extern void exit(int);
 #endif
 #endif
@@ -408,25 +408,19 @@ int set, entry;
 #define TILE_FILE_IN_H	"tile_t.h"
 #define TILE_FILE_C	"tile.c"
 
-#ifdef AMIGA
-# define INCLUDE_TEMPLATE	"NH:include/t.%s"
-# define SOURCE_TEMPLATE	"NH:src/%s"
-# define SHARE_IN_TEMPLATE	"NH:share/%s"
+#ifdef MAC
+#  define INCLUDE_TEMPLATE	":include:%s"
+#  define SOURCE_TEMPLATE	":src:%s"
+#  define SHARE_IN_TEMPLATE	":share:%s"
 #else
-# ifdef MAC
-#   define INCLUDE_TEMPLATE	":include:%s"
-#   define SOURCE_TEMPLATE	":src:%s"
-#   define SHARE_IN_TEMPLATE	":share:%s"
+# ifdef OS2
+#  define INCLUDE_TEMPLATE	"..\\include\\%s"
+#  define SOURCE_TEMPLATE	"..\\src\\%s"
+#  define SHARE_IN_TEMPLATE	"..\\win\\share\\%s"
 # else
-#  ifdef OS2
-#   define INCLUDE_TEMPLATE	"..\\include\\%s"
-#   define SOURCE_TEMPLATE	"..\\src\\%s"
-#   define SHARE_IN_TEMPLATE	"..\\win\\share\\%s"
-#  else
-#   define INCLUDE_TEMPLATE	"../include/%s"
-#   define SOURCE_TEMPLATE	"../src/%s"
-#   define SHARE_IN_TEMPLATE	"../win/share/%s"
-#  endif
+#  define INCLUDE_TEMPLATE	"../include/%s"
+#  define SOURCE_TEMPLATE	"../src/%s"
+#  define SHARE_IN_TEMPLATE	"../win/share/%s"
 # endif
 #endif
 

@@ -110,9 +110,6 @@ char **argv;
 #else
 		/* Use the whole name - strip off the last 3 or 4 chars. */
 
-#ifdef VMS	/* avoid possible interaction with logical name */
-		len++;	/* retain "." as trailing punctuation */
-#endif
 		basename = (char*)alloc(len + 1);
 		(void) strncpy(basename, infile, len);
 		basename[len] = '\0';

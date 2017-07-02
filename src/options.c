@@ -2,18 +2,9 @@
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
-#ifdef OPTION_LISTS_ONLY	/* (AMIGA) external program for opt lists */
-#include "config.h"
-#include "objclass.h"
-#include "flag.h"
-NEARDATA struct flag flags;	/* provide linkage */
-NEARDATA struct instance_flags iflags;	/* provide linkage */
-#define static
-#else
 #include "hack.h"
 #include "tcap.h"
 #include <ctype.h>
-#endif
 
 #if defined(GL_GRAPHICS) || defined(SDL_GRAPHICS)
 #include "winGL.h"  /* Sdlgl_parse_options */
@@ -49,11 +40,6 @@ static struct Bool_Opt
 	boolean	*addr, initvalue;
 	int optflags;
 } boolopt[] = {
-#ifdef AMIGA
-	{"altmeta", &flags.altmeta, TRUE, DISP_IN_GAME},
-#else
-	{"altmeta", (boolean *)0, TRUE, DISP_IN_GAME},
-#endif
 	{"ascii_map",     &iflags.wc_ascii_map, !PREFER_TILED, SET_IN_GAME},	/*WC*/
 #ifdef MFLOPPY
 	{"asksavedisk", &flags.asksavedisk, FALSE, SET_IN_GAME},
@@ -63,7 +49,7 @@ static struct Bool_Opt
 	{"autodig", &flags.autodig, FALSE, SET_IN_GAME},
 	{"autopickup", &flags.pickup, TRUE, SET_IN_GAME},
 	{"autoquiver", &flags.autoquiver, FALSE, SET_IN_GAME},
-#if defined(MICRO) && !defined(AMIGA)
+#ifdef MICRO
 	{"BIOS", &iflags.BIOS, FALSE, SET_IN_FILE},
 #else
 	{"BIOS", (boolean *)0, FALSE, SET_IN_FILE},
@@ -110,11 +96,6 @@ static struct Bool_Opt
 #endif
 	{"female", &flags.female, FALSE, DISP_IN_GAME},
 	{"fixinv", &flags.invlet_constant, TRUE, SET_IN_GAME},
-#ifdef AMIFLUSH
-	{"flush", &flags.amiflush, FALSE, SET_IN_GAME},
-#else
-	{"flush", (boolean *)0, FALSE, SET_IN_FILE},
-#endif
 	{"fullscreen", &iflags.wc2_fullscreen, FALSE, SET_IN_FILE},
 	{"guicolor", &iflags.wc2_guicolor, TRUE, SET_IN_GAME},
 	{"help", &flags.help, TRUE, SET_IN_GAME},
@@ -201,7 +182,7 @@ static struct Bool_Opt
 	{"preload_tiles", &iflags.wc_preload_tiles, TRUE, DISP_IN_GAME},	/*WC*/
 	{"pushweapon", &flags.pushweapon, FALSE, SET_IN_GAME},
 	{"radar", (boolean *)0, FALSE, SET_IN_FILE},	/* OBSOLETE */
-#if defined(MICRO) && !defined(AMIGA)
+#ifdef MICRO
 	{"rawio", &iflags.rawio, FALSE, DISP_IN_GAME},
 #else
 	{"rawio", (boolean *)0, FALSE, SET_IN_FILE},
@@ -390,9 +371,6 @@ static struct Comp_Opt
 	{ "scroll_amount", "amount to scroll map when scroll_margin is reached",
 						20, DISP_IN_GAME }, /*WC*/
 	{ "scroll_margin", "scroll map when this far from the edge", 20, DISP_IN_GAME }, /*WC*/
-#ifdef MSDOS
-	{ "soundcard", "type of sound card to use", 20, SET_IN_FILE },
-#endif
 	{ "suppress_alert", "suppress alerts about version-specific features",
 						8, SET_IN_GAME },
 	{ "tile_width", "width of tiles", 20, DISP_IN_GAME},	/*WC*/
@@ -403,16 +381,9 @@ static struct Comp_Opt
 	{ "traps",    "the symbols to use in drawing traps",
 						MAXTCHARS+1, SET_IN_FILE },
 	{ "vary_msgcount", "show more old messages at a time", 20, DISP_IN_GAME }, /*WC*/
-#ifdef MSDOS
-	{ "video",    "method of video updating", 20, SET_IN_FILE },
-#endif
 #ifdef VIDEOSHADES
 	{ "videocolors", "color mappings for internal screen routines",
 						40, DISP_IN_GAME },
-#ifdef MSDOS
-	{ "videoshades", "gray shades to map to black/gray/white",
-						32, DISP_IN_GAME },
-#endif
 #endif
 #ifdef WIN32CON
 	{"subkeyvalue", "override keystroke value", 7, SET_IN_FILE},
@@ -435,11 +406,6 @@ static struct Bool_Tile_Opt
 	{"pseudo3D", TILESET_PSEUDO3D, 0},
 	{(char *)0, 0, 0}
 };
-
-#ifdef OPTION_LISTS_ONLY
-#undef static
-
-#else	/* use rest of file */
 
 static boolean need_redraw; /* for doset() */
 
@@ -656,7 +622,7 @@ initoptions (void)
 # endif
 	}
 #endif /* UNIX && TTY_GRAPHICS */
-#if defined(UNIX) || defined(VMS)
+#ifdef UNIX
 # ifdef TTY_GRAPHICS
 	/* detect whether a "vt" terminal can handle alternate charsets */
 	if ((opts = nh_getenv("TERM")) &&
@@ -665,7 +631,7 @@ initoptions (void)
 		switch_graphics(DEC_GRAPHICS);
 	}
 # endif
-#endif /* UNIX || VMS */
+#endif // UNIX
 
 #ifdef MAC_GRAPHICS_ENV
 	switch_graphics(MAC_GRAPHICS);
@@ -1296,7 +1262,7 @@ boolean tinitial, tfrom_file;
 		return;
 	}
 
-#if defined(MICRO) && !defined(AMIGA)
+#ifdef MICRO
 	/* included for compatibility with old NetHack.cnf files */
 	if (match_optname(opts, "IBM_", 4, FALSE)) {
 		iflags.BIOS = !negated;
@@ -1607,21 +1573,15 @@ boolean tinitial, tfrom_file;
 		    }
 		    while (cnt-- > 0) {
 			if (*pt && *pt != '/') {
-# ifdef AMIGA
-			    rgb <<= 4;
-# else
 			    rgb <<= 8;
-# endif
 			    tmp = *(pt++);
 			    if (isalpha(tmp)) {
 				tmp = (tmp + 9) & 0xf;	/* Assumes ASCII... */
 			    } else {
 				tmp &= 0xf;	/* Digits in ASCII too... */
 			    }
-# ifndef AMIGA
 			    /* Add an extra so we fill f -> ff and 0 -> 00 */
 			    rgb += tmp << 4;
-# endif
 			    rgb += tmp;
 			}
 		    }
@@ -2214,55 +2174,7 @@ goodfruit:
 			badoption(opts);
 		return;
 	}
-# ifdef MSDOS
-	/* videoshades:string */
-	fullname = "videoshades";
-	if (match_optname(opts, fullname, 6, TRUE)) {
-		if (negated) {
-			bad_negation(fullname, FALSE);
-			return;
-		}
-		else if (!(opts = string_for_env_opt(fullname, opts, FALSE))) {
-			return;
-		}
-		if (!assign_videoshades(opts))
-			badoption(opts);
-		return;
-	}
-# endif
 #endif /* VIDEOSHADES */
-#ifdef MSDOS
-# ifdef NO_TERMS
-	/* video:string -- must be after longer tests */
-	fullname = "video";
-	if (match_optname(opts, fullname, 5, TRUE)) {
-		if (negated) {
-			bad_negation(fullname, FALSE);
-			return;
-		}
-		else if (!(opts = string_for_env_opt(fullname, opts, FALSE))) {
-			return;
-		}
-		if (!assign_video(opts))
-			badoption(opts);
-		return;
-	}
-# endif /* NO_TERMS */
-	/* soundcard:string -- careful not to match boolean 'sound' */
-	fullname = "soundcard";
-	if (match_optname(opts, fullname, 6, TRUE)) {
-		if (negated) {
-			bad_negation(fullname, FALSE);
-			return;
-		}
-		else if (!(opts = string_for_env_opt(fullname, opts, FALSE))) {
-			return;
-		}
-		if (!assign_soundcard(opts))
-			badoption(opts);
-		return;
-	}
-#endif /* MSDOS */
 
 	/* WINCAP
 	 * map_mode:[tiles|ascii4x6|ascii6x8|ascii8x8|ascii16x8|ascii7x12|ascii8x12|
@@ -3668,10 +3580,6 @@ char *buf;
 	}
 	else if (!strcmp(optname, "player_selection"))
 		sprintf(buf, "%s", iflags.wc_player_selection ? "prompts" : "dialog");
-#ifdef MSDOS
-	else if (!strcmp(optname, "soundcard"))
-		sprintf(buf, "%s", to_be_done);
-#endif
 	else if (!strcmp(optname, "suppress_alert")) {
 	    if (flags.suppress_alert == 0L)
 		strcpy(buf, none);
@@ -3707,24 +3615,7 @@ char *buf;
 		if (iflags.wc_vary_msgcount) sprintf(buf, "%d",iflags.wc_vary_msgcount);
 		else strcpy(buf, defopt);
 	}
-#ifdef MSDOS
-	else if (!strcmp(optname, "video"))
-		sprintf(buf, "%s", to_be_done);
-#endif
 #ifdef VIDEOSHADES
-# ifdef MSDOS
-	else if (!strcmp(optname, "videoshades"))
-		sprintf(buf, "%s-%s-%s", shade[0],shade[1],shade[2]);
-	else if (!strcmp(optname, "videocolors"))
-		sprintf(buf, "%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d",
-			ttycolors[CLR_RED], ttycolors[CLR_GREEN],
-			ttycolors[CLR_BROWN], ttycolors[CLR_BLUE],
-			ttycolors[CLR_MAGENTA], ttycolors[CLR_CYAN],
-			ttycolors[CLR_ORANGE], ttycolors[CLR_BRIGHT_GREEN],
-			ttycolors[CLR_YELLOW], ttycolors[CLR_BRIGHT_BLUE],
-			ttycolors[CLR_BRIGHT_MAGENTA],
-			ttycolors[CLR_BRIGHT_CYAN]);
-# else
 	else if (!strcmp(optname, "videocolors"))
 		sprintf(buf, "%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d",
 			ttycolors[CLR_RED], ttycolors[CLR_GREEN],
@@ -3735,7 +3626,6 @@ char *buf;
 			ttycolors[CLR_YELLOW], ttycolors[CLR_BRIGHT_BLUE],
 			ttycolors[CLR_BRIGHT_MAGENTA], 
 			ttycolors[CLR_BRIGHT_CYAN], ttycolors[CLR_WHITE]);
-# endif /* MSDOS */
 #endif /* VIDEOSHADES */
 	else if (!strcmp(optname,"windowborders"))
 		sprintf(buf, "%s", iflags.wc2_windowborders == 1     ? "1=on" :
@@ -3893,9 +3783,6 @@ static const char *opt_intro[] = {
 	"or use `%s=\"<options>\"' in your environment",
 #endif
 	"(<options> is a list of options separated by commas)",
-#ifdef VMS
-  	"-- for example, $ DEFINE %s \"noautopickup,fruit:kumquat\"",
-#endif
 	"or press \"O\" while playing and use the menu.",
 	"",
  "Boolean options (which can be negated by prefixing them with '!' or \"no\"):",
@@ -4480,6 +4367,4 @@ char *op;
 	}
 	return 1;
 }
-
-#endif	/* OPTION_LISTS_ONLY */
 /*options.c*/

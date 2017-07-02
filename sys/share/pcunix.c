@@ -8,15 +8,13 @@
 #include "wintty.h"
 
 #include	<sys/stat.h>
-#if defined(WIN32) || defined(MSDOS)
+#ifdef WIN32
 #include	<errno.h>
 #endif
 
-#if defined(WIN32) || defined(MSDOS)
+#ifdef WIN32
 extern char orgdir[];
-# ifdef WIN32
 extern void backsp(void);
-# endif
 extern void clear_screen(void);
 #endif
 
@@ -61,10 +59,6 @@ int fd;
 	/* This problem occurs enough times we need to give the player
 	 * some more information about what causes it, and how to fix.
 	 */
-#  ifdef MSDOS
-	    pline("Make sure that your system's date and time are correct.");
-	    pline("They must be more current than NetHack.EXE's date/time stamp.");
-#  endif /* MSDOS */
 	return(0);
     }
 #  endif  /* MICRO */
@@ -100,9 +94,6 @@ getlock()
 	register int fd, c, ci, ct;
 	char tbuf[BUFSZ];
 	const char *fq_lock;
-# if defined(MSDOS) && defined(NO_TERMS)
-	int grmode = iflags.grmode;
-# endif
 	/* we ignore QUIT and INT at this point */
 	if (!lock_file(HLOCK, LOCKPREFIX, 10)) {
 		wait_synch();
@@ -129,10 +120,6 @@ getlock()
 	  pline("You may be able to use \"recover %s\" to get it back.\n",tbuf);
 	  c = yn("Do you want to destroy the old game?");
 	} else {
-# if defined(MSDOS) && defined(NO_TERMS)
-		grmode = iflags.grmode;
-		if (grmode) gr_finish();
-# endif
 		c = 'n';
 		ct = 0;
 		msmsg("\nThere is already a game in progress under your name.\n");
@@ -186,9 +173,6 @@ gotlock:
 			error("cannot close lock (%s)", fq_lock);
 		}
 	}
-# if defined(MSDOS) && defined(NO_TERMS)
-	if (grmode) gr_init();
-# endif
 }	
 # endif /* PC_LOCKING */
 

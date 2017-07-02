@@ -3262,9 +3262,6 @@
             the .dll extension and without any path information.  Cannot be
             set with the `O' command.
 
-          altmeta
-               (default on, AMIGA SLASH'EM only).
-
           BIOS
             Use BIOS calls to update the screen display quickly and to read
             the keyboard (allowing the use of arrow keys to  move)  on  ma-

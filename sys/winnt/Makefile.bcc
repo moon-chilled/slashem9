@@ -466,10 +466,10 @@ OPTIONS_FILE = $(DAT)\ttyoptions
 #==========================================
 
 CONFIG_H = $(INCL)\config.h $(INCL)\config1.h $(INCL)\tradstdc.h \
-		$(INCL)\global.h $(INCL)\coord.h $(INCL)\vmsconf.h \
+		$(INCL)\global.h $(INCL)\coord.h \
 		$(INCL)\system.h $(INCL)\unixconf.h $(INCL)\os2conf.h \
 		$(INCL)\micro.h $(INCL)\pcconf.h $(INCL)\tosconf.h \
-		$(INCL)\amiconf.h $(INCL)\macconf.h $(INCL)\beconf.h \
+		$(INCL)\macconf.h $(INCL)\beconf.h \
 		$(INCL)\ntconf.h $(INCL)\nhlan.h
 
 HACK_H = $(INCL)\hack.h $(CONFIG_H) $(INCL)\align.h \
@@ -484,7 +484,7 @@ HACK_H = $(INCL)\hack.h $(CONFIG_H) $(INCL)\align.h \
 		$(INCL)\trap.h $(INCL)\flag.h $(INCL)\rm.h \
 		$(INCL)\vision.h $(INCL)\display.h $(INCL)\engrave.h \
 		$(INCL)\rect.h $(INCL)\region.h $(INCL)\winprocs.h \
-		$(INCL)\wintty.h $(INCL)\trampoli.h
+		$(INCL)\wintty.h
 
 LEV_H       = $(INCL)\lev.h
 DGN_FILE_H  = $(INCL)\dgn_file.h

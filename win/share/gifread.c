@@ -663,7 +663,6 @@ fclose_gif_file()
 	return(fclose(gif_file));
 }
 
-#ifndef AMIGA
 static char *std_args[] = { "tilemap",	/* dummy argv[0] */
 			"monsters.gif", "monsters.txt",
 			"objects.gif",  "objects.txt",
@@ -779,4 +778,3 @@ char *argv[];
 	/*NOTREACHED*/
 	return 0;
 }
-#endif

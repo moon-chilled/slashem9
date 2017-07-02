@@ -13,9 +13,6 @@
 #ifdef AZTEC
 #define abort() exit()
 #endif
-#ifdef VMS
-extern void vms_abort(void);
-#endif
 
 /*VARARGS1*/
 boolean panicking;
@@ -34,7 +31,7 @@ panic VA_DECL(char *,str)
 	fputs(" ERROR:  ", stderr);
 	vfprintf(stderr, str, VA_ARGS);
 	(void) fflush(stderr);
-#if defined(UNIX) || defined(VMS)
+#ifdef UNIX
 # ifdef SYSV
 		(void)
 # endif
