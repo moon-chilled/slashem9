@@ -37,9 +37,7 @@ extern boolean notonhead;	/* for long worms */
 
 /* Split this object off from its slot */
 
-struct obj *
-splitoneoff (struct obj **pobj)
-{
+struct obj *splitoneoff(struct obj **pobj) {
     struct obj *obj = *pobj;
     struct obj *otmp = (struct obj *)0;
     if (obj == uquiver) {
@@ -67,12 +65,7 @@ splitoneoff (struct obj **pobj)
 }
 
 /* Throw the selected object, asking for direction */
-STATIC_OVL int
-throw_obj(obj, shotlimit, thrown)
-register struct obj *obj;
-int shotlimit;
-int thrown;
-{
+STATIC_OVL int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 	struct obj *otmp;
 	struct obj *launcher;
 	int multishot = 1;
@@ -285,10 +278,8 @@ int thrown;
 }
 
 
-int 
-dothrow (void)
-{
-	register struct obj *obj;
+int dothrow(void) {
+	struct obj *obj;
 	int oldmulti = multi, result, shotlimit;
 	char *oldsave_cm = save_cm;
 
@@ -335,9 +326,7 @@ dothrow (void)
 
 /* KMH -- automatically fill quiver */
 /* Suggested by Jeffrey Bay <jbay@convex.hp.com> */
-static void 
-autoquiver (void)
-{
+static void autoquiver(void) {
 	struct obj *otmp, *oammo = 0, *omissile = 0, *omisc = 0, *altammo = 0;
 
 	if (uquiver)
@@ -398,9 +387,7 @@ autoquiver (void)
 	return;
 }
 
-int 
-dofire (void)
-{
+int dofire(void) {
 	int result, shotlimit;
 
 	if (notake(youmonst.data)) {
@@ -459,9 +446,7 @@ dofire (void)
 /*
  * Object hits floor at hero's feet.  Called from drop() and throwit().
  */
-void 
-hitfloor (register struct obj *obj)
-{
+void hitfloor(struct obj *obj) {
 	if (IS_SOFT(levl[u.ux][u.uy].typ) || u.uinwater) {
 		dropy(obj);
 		return;
@@ -484,13 +469,7 @@ hitfloor (register struct obj *obj)
  * and return FALSE.  If stopped early, dest_cc will be the location
  * before the failed callback.
  */
-boolean
-walk_path(src_cc, dest_cc, check_proc, arg)
-    coord *src_cc;
-    coord *dest_cc;
-    boolean (*check_proc)(void *, int, int);
-    void * arg;
-{
+boolean walk_path(coord *src_cc, coord *dest_cc, boolean (*check_proc)(void*, int, int), void *arg) {
     int x, y, dx, dy, x_change, y_change, err, i, prev_x, prev_y;
     boolean keep_going = TRUE;
 
@@ -568,11 +547,7 @@ walk_path(src_cc, dest_cc, check_proc, arg)
  *	o bounce off walls
  *	o let jumps go over boulders
  */
-boolean
-hurtle_step(arg, x, y)
-    void * arg;
-    int x, y;
-{
+boolean hurtle_step(void *arg, int x, int y) {
     int ox, oy, *range = (int *)arg;
     struct obj *obj;
     struct monst *mon;
@@ -687,11 +662,7 @@ hurtle_step(arg, x, y)
     return TRUE;
 }
 
-STATIC_OVL boolean
-mhurtle_step(arg, x, y)
-    void * arg;
-    int x, y;
-{
+STATIC_OVL boolean mhurtle_step(void *arg, int x, int y) {
 	struct monst *mon = (struct monst *)arg;
 
 	/* TODO: Treat walls, doors, iron bars, pools, lava, etc. specially
@@ -716,11 +687,7 @@ mhurtle_step(arg, x, y)
  * dx and dy should be the direction of the hurtle, not of the original
  * kick or throw and be only.
  */
-void
-hurtle(dx, dy, range, verbose)
-    int dx, dy, range;
-    boolean verbose;
-{
+void hurtle(int dx, int dy, int range, boolean verbose) {
     coord uc, cc;
 
     /* The chain is stretched vertically, so you shouldn't be able to move
@@ -773,9 +740,7 @@ hurtle(dx, dy, range, verbose)
 
 /* Move a monster through the air for a few squares.
  */
-void 
-mhurtle (struct monst *mon, int dx, int dy, int range)
-{
+void mhurtle(struct monst *mon, int dx, int dy, int range) {
     coord mc, cc;
 
 	/* At the very least, debilitate the monster */
@@ -802,12 +767,7 @@ mhurtle (struct monst *mon, int dx, int dy, int range)
 	return;
 }
 
-STATIC_OVL void
-check_shop_obj(obj, x, y, broken)
-register struct obj *obj;
-register xchar x, y;
-register boolean broken;
-{
+STATIC_OVL void check_shop_obj(struct obj *obj, xchar x, xchar y, boolean broken) {
 	struct monst *shkp = shop_keeper(*u.ushops);
 
 	if(!shkp) return;
@@ -843,11 +803,7 @@ register boolean broken;
  *
  * Returns FALSE if the object is gone.
  */
-STATIC_OVL boolean
-toss_up(obj, hitsroof)
-struct obj *obj;
-boolean hitsroof;
-{
+STATIC_OVL boolean toss_up(struct obj *obj, boolean hitsroof) {
     const char *almost;
     /* note: obj->quan == 1 */
 
@@ -894,8 +850,8 @@ boolean hitsroof;
 		    if (otyp == BLINDING_VENOM && !Blind)
 			pline("It blinds you!");
 		    u.ucreamed += blindinc;
-		    make_blinded(Blinded + (long)blindinc, FALSE);
-		    if (!Blind) Your(vision_clears);
+		    make_blinded(Blinded + blindinc, FALSE);
+		    if (!Blind) Your("%s", vision_clears);
 		}
 		break;
 	default:
@@ -950,10 +906,7 @@ boolean hitsroof;
 }
 
 /* return true for weapon meant to be thrown; excludes ammo */
-STATIC_OVL boolean
-throwing_weapon(obj)
-struct obj *obj;
-{
+STATIC_OVL boolean throwing_weapon(struct obj *obj) {
 	return (is_missile(obj) || is_spear(obj) ||
 		/* daggers and knife (excludes scalpel) */
 		(is_blade(obj) && !is_sword(obj) &&
@@ -963,10 +916,7 @@ struct obj *obj;
 }
 
 /* the currently thrown object is returning to you (not for boomerangs) */
-STATIC_OVL void
-sho_obj_return_to_u(obj)
-struct obj *obj;
-{
+STATIC_OVL void sho_obj_return_to_u(struct obj *obj) {
     /* might already be our location (bounced off a wall) */
     if (bhitpos.x != u.ux || bhitpos.y != u.uy) {
 	int x = bhitpos.x - u.dx, y = bhitpos.y - u.dy;
@@ -981,15 +931,13 @@ struct obj *obj;
     }
 }
 
-void
-throwit(obj, wep_mask, twoweap, thrown)
-struct obj *obj;
-long wep_mask;	/* used to re-equip returning boomerang */
-boolean twoweap; /* used to restore twoweapon mode if wielded weapon returns */
-int thrown;
-{
-	register struct monst *mon;
-	register int range, urange;
+void throwit(
+struct obj *obj,
+long wep_mask,	/* used to re-equip returning boomerang */
+boolean twoweap, /* used to restore twoweapon mode if wielded weapon returns */
+int thrown) {
+	struct monst *mon;
+	int range, urange;
 	struct obj *launcher = (struct obj*) 0;
 	boolean impaired = (Confusion || Stunned || Blind ||
 			   Hallucination || Fumbling);
@@ -1302,12 +1250,7 @@ int thrown;
 }
 
 /* an object may hit a monster; various factors adjust the chance of hitting */
-int
-omon_adj(mon, obj, mon_notices)
-struct monst *mon;
-struct obj *obj;
-boolean mon_notices;
-{
+int omon_adj(struct monst *mon, struct obj *obj, boolean mon_notices) {
 	int tmp = 0;
 
 	/* size of target affects the chance of hitting */
@@ -1343,11 +1286,7 @@ boolean mon_notices;
 }
 
 /* thrown object misses target monster */
-STATIC_OVL void
-tmiss(obj, mon)
-struct obj *obj;
-struct monst *mon;
-{
+STATIC_OVL void tmiss(struct obj *obj, struct monst *mon) {
     const char *missile = mshot_xname(obj);
 
     /* If the target can't be seen or doesn't look like a valid target,
@@ -1371,11 +1310,9 @@ struct monst *mon;
  * Return 1 if obj has disappeared or otherwise been taken care of,
  * 0 if caller must take care of it.
  */
-int 
-thitmonst (register struct monst *mon, register struct obj *obj, int thrown)
-{
-	register int	tmp; /* Base chance to hit */
-	register int	disttmp; /* distance modifier */
+int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
+	int tmp; /* Base chance to hit */
+	int disttmp; /* distance modifier */
 	struct obj *launcher;
 	
 	int otyp = obj->otyp;
@@ -1659,11 +1596,7 @@ thitmonst (register struct monst *mon, register struct obj *obj, int thrown)
 	return 0;
 }
 
-STATIC_OVL int
-gem_accept(mon, obj)
-register struct monst *mon;
-register struct obj *obj;
-{
+STATIC_OVL int gem_accept(struct monst *mon, struct obj *obj) {
 	char buf[BUFSZ];
 	boolean is_buddy = sgn(mon->data->maligntyp) == sgn(u.ualign.type);
 	boolean is_gem = objects[obj->otyp].oc_material == GEMSTONE;
@@ -1763,12 +1696,7 @@ nopick:
  * The hero causes breakage of an object (throwing, dropping it, etc.)
  * Return 0 if the object didn't break, 1 if the object broke.
  */
-int
-hero_breaks(obj, x, y, from_invent)
-struct obj *obj;
-xchar x, y;		/* object location (ox, oy may not be right) */
-boolean from_invent;	/* thrown or dropped by player; maybe on shop bill */
-{
+int hero_breaks(struct obj *obj, xchar x, xchar y, boolean from_invent) {
 	boolean in_view = !Blind;
 	if (!breaktest(obj)) return 0;
 	breakmsg(obj, in_view);
@@ -1781,11 +1709,7 @@ boolean from_invent;	/* thrown or dropped by player; maybe on shop bill */
  * something to it.
  * Return 0 if the object doesn't break, 1 if the object broke.
  */
-int
-breaks(obj, x, y)
-struct obj *obj;
-xchar x, y;		/* object location (ox, oy may not be right) */
-{
+int breaks(struct obj *obj, xchar x, xchar y) {
 	boolean in_view = Blind ? FALSE : cansee(x, y);
 
 	if (!breaktest(obj)) return 0;
@@ -1798,13 +1722,7 @@ xchar x, y;		/* object location (ox, oy may not be right) */
  * Unconditionally break an object. Assumes all resistance checks
  * and break messages have been delivered prior to getting here.
  */
-STATIC_OVL void
-breakobj(obj, x, y, hero_caused, from_invent)
-struct obj *obj;
-xchar x, y;		/* object location (ox, oy may not be right) */
-boolean hero_caused;	/* is this the hero's fault? */
-boolean from_invent;
-{
+STATIC_OVL void breakobj(struct obj *obj, xchar x, xchar y, boolean hero_caused, boolean from_invent) {
 	int am;
 	if (IS_ALTAR(levl[x][y].typ))
 	    am = levl[x][y].altarmask & AM_MASK;
@@ -1899,10 +1817,7 @@ boolean from_invent;
  * Check to see if obj is going to break, but don't actually break it.
  * Return 0 if the object isn't going to break, 1 if it is.
  */
-boolean
-breaktest(obj)
-struct obj *obj;
-{
+boolean breaktest(struct obj *obj) {
 	if (obj_resists(obj, 1, 99)) return 0;
 	if (objects[obj->otyp].oc_material == GLASS && !obj->oartifact &&
 		obj->oclass != GEM_CLASS)
@@ -1923,11 +1838,7 @@ struct obj *obj;
 	}
 }
 
-STATIC_OVL void
-breakmsg(obj, in_view)
-struct obj *obj;
-boolean in_view;
-{
+STATIC_OVL void breakmsg(struct obj *obj, boolean in_view) {
 	const char *to_pieces;
 
 	to_pieces = "";
@@ -1965,15 +1876,12 @@ boolean in_view;
 	}
 }
 
-STATIC_OVL int
-throw_gold(obj)
-struct obj *obj;
-{
+STATIC_OVL int throw_gold(struct obj *obj) {
 	int range, odx, ody;
 #ifndef GOLDOBJ
 	long zorks = obj->quan;
 #endif
-	register struct monst *mon;
+	struct monst *mon;
 
 	if(!u.dx && !u.dy && !u.dz) {
 #ifndef GOLDOBJ
