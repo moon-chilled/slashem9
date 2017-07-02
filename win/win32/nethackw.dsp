@@ -915,10 +915,6 @@ SOURCE=..\include\timeout.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\tosconf.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\tradstdc.h
 # End Source File
 # Begin Source File
