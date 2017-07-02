@@ -30,22 +30,9 @@ static const char *yelp_sound(struct monst *);
 static const char *whimper_sound(struct monst *);
 
 
-#ifdef DUMB
-static int mon_in_room(struct monst *,int);
-
-/* this easily could be a macro, but it might overtax dumb compilers */
-static int 
-mon_in_room (struct monst *mon, int rmtyp)
-{
-    int rno = levl[mon->mx][mon->my].roomno;
-
-    return rooms[rno - ROOMOFFSET].rtype == rmtyp;
-}
-#else
 /* JRN: converted above to macro */
 # define mon_in_room(mon,rmtype) (rooms[ levl[(mon)->mx][(mon)->my].roomno \
 					- ROOMOFFSET].rtype == (rmtype))
-#endif
 
 void 
 dosounds (void)

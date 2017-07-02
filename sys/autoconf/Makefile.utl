@@ -41,42 +41,6 @@ CC = @CC@
 # for Atari
 # SHELL=E:/GEMINI2/MUPFEL.TTP
 
-# flags may have to be changed as required
-# flags for 286 Xenix:
-# CFLAGS = -Ml2t16 -O -LARGE -I../include -I$(srcdir)/../include
-# LFLAGS = -Ml -F 4000 -SEG 512
-
-# flags for 286 Microport SysV-AT
-# CFLAGS = -DDUMB -Ml -I../include -I$(srcdir)/../include
-# LFLAGS = -Ml
-
-# flags for Atari GCC (3.2.1)
-# CFLAGS = -O -I../include -I$(srcdir)/../include
-# LFLAGS = -s
-# flags for Atari GCC (3.3)
-# CFLAGS = -mshort -O2 -I../include -I$(srcdir)/../include
-# LFLAGS = -mshort -s
-
-# flags for Apollos using their native cc
-# (as long as it claims to be __STDC__ but isn't)
-# CFLAGS = -DAPOLLO -O -I../include -I$(srcdir)/../include
-
-# flags for AIX 3.1 cc on IBM RS/6000 to define
-# a suitable subset of standard libraries
-# (note that there is more info regarding the "-qchars=signed"
-# switch in file Install.unx note 8)
-# CFLAGS = -D_NO_PROTO -D_XOPEN_SOURCE -O -I../include -I$(srcdir)/../include -qchars=signed
-# and for AIX 3.2:
-# CFLAGS = -D_NO_PROTO -D_XOPEN_SOURCE -D_ALL_SOURCE -O -I../include -I$(srcdir)/../include -qchars=signed
-
-# flags for A/UX 2.01 using native cc or c89
-# gcc predefines AUX so that's not needed there
-# CFLAGS = -ZS -D_POSIX_SOURCE -O -I../include -I$(srcdir)/../include -DAUX
-
-# flags for IRIX 4.0.x using native cc
-# SGI cc 3.10 will fail to compile makedefs with -O
-# CFLAGS = -I../include -I$(srcdir)/../include -D__STDC__ -woff 100,293
-
 # flags for Linux
 #   compile normally
 # CFLAGS = -O2 -fomit-frame-pointer -I../include -I$(srcdir)/../include

@@ -538,14 +538,7 @@ polymon (	/* returns 1 if polymorph successful */
 
 	if (u.ulevel < mlvl) {
 	/* Low level characters can't become high level monsters for long */
-#ifdef DUMB
-		/* DRS/NS 2.2.6 messes up -- Peter Kendell */
-		int mtd = u.mtimedone, ulv = u.ulevel;
-
-		u.mtimedone = mtd * ulv / mlvl;
-#else
 		u.mtimedone = u.mtimedone * u.ulevel / mlvl;
-#endif
 	}
 
 	/* WAC Doppelgangers can stay much longer in a form they know well */
