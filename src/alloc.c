@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #include "tradstdc.h"
-#include "config1.h"
+#include "config.h"
 
 #ifdef WIZARD
 char *fmt_ptr(const void*,char *);
