@@ -18,7 +18,7 @@ srcdir=@srcdir@
 # MAKE = make
 
 EXEEXT = @EXEEXT@
-CC = @CC@ -DAUTOCONF
+CC = @CC@
 
 # if you are using gcc as your compiler,
 #	uncomment the CC definition below if it's not in your environment
@@ -88,7 +88,7 @@ CC = @CC@ -DAUTOCONF
 # flags for debugging:
 # CFLAGS = -g -I../include -I$(srcdir)/../include
 
-CFLAGS = -O -I../include -I$(srcdir)/../include -std=c99 @CFLAGS@
+CFLAGS = -DAUTOCONF -I../include -I$(srcdir)/../include -std=c99 @CFLAGS@
 LFLAGS =
 
 LIBS =

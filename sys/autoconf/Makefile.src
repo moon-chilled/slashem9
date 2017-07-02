@@ -27,10 +27,10 @@ SYSMSWINOBJ = nttty.o winnt.o pcsys.o pcunix.o pcmain.o random.o nhlan.o
 SYSSRC=@SYSSRC@
 SYSOBJ=@SYSOBJ@
 
-CC = @CC@ -DAUTOCONF
+CC = @CC@
 WINDRES = @WINDRES@
 
-CFLAGS = -O -I../include -I$(srcdir)/../include -std=c99 @CFLAGS@
+CFLAGS = -DAUTOCONF -I../include -I$(srcdir)/../include -std=c99 @CFLAGS@
 LFLAGS = @LFLAGS@
 
 # Only used for the Gnome interface.
