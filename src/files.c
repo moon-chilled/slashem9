@@ -74,18 +74,12 @@ extern int errno;
 static char fqn_filename_buffer[FQN_NUMBUF][FQN_MAX_FILENAME];
 #endif
 
-#if !defined(MFLOPPY) && !defined(WIN32)
+#ifndef WIN32
 char bones[] = "bonesnn.xxx";
 char lock[PL_NSIZ+14] = "1lock"; /* long enough for uid+name+.99 */
 #else
-# if defined(MFLOPPY)
-char bones[FILENAMELEN];           /* pathname of bones files */
-char lock[FILENAMELEN];            /* pathname of level files */
-# endif
-# if defined(WIN32)
 char bones[] = "bonesnn.xxx";
 char lock[PL_NSIZ+25];		/* long enough for username+-+name+.99 */
-# endif
 #endif
 
 #ifdef UNIX
@@ -353,26 +347,6 @@ int prefix;
 
 /* ----------  BEGIN LEVEL FILE HANDLING ----------- */
 
-#ifdef MFLOPPY
-/* Set names for bones[] and lock[] */
-void 
-set_lock_and_bones (void)
-{
-	if (!ramdisk) {
-		strcpy(levels, permbones);
-		strcpy(bones, permbones);
-	}
-	append_slash(permbones);
-	append_slash(levels);
-	append_slash(bones);
-	strcat(bones, "bonesnn.*");
-	strcpy(lock, levels);
-	strcat(lock, alllevels);
-	return;
-}
-#endif /* MFLOPPY */
-
-
 /* Construct a file name for a level-type file, which is of the form
  * something.level (with any old level stripped off).
  * This assumes there is space on the end of 'file' to append
@@ -456,11 +430,6 @@ open_levelfile (int lev, char errbuf[])
 #ifndef FILE_AREAS
 	fq_lock = fqname(lock, LEVELPREFIX, 0);
 #endif
-#ifdef MFLOPPY
-	/* If not currently accessible, swap it in. */
-	if (level_info[lev].where != ACTIVE)
-		swapin_file(lev);
-#endif
 #ifdef FILE_AREAS
 	fd = open_area(FILE_AREA_LEVL, lock, O_RDONLY | O_BINARY, 0);
 #else
@@ -514,7 +483,7 @@ void
 clearlocks (void)
 {
 /* [Tom] Watcom.....
-#if !defined(PC_LOCKING) && defined(MFLOPPY)
+#if !defined(PC_LOCKING)
 	eraseall(levels, alllevels);
 	if (ramdisk)
 		eraseall(permbones, alllevels);
@@ -678,23 +647,6 @@ char errbuf[];
 
 	return fd;
 }
-
-#ifdef MFLOPPY
-/* remove partial bonesfile in process of creation */
-void 
-cancel_bonesfile (void)
-{
-	const char *tempname;
-
-	tempname = set_bonestemp_name();
-# ifdef FILE_AREAS
-	(void) remove_area(FILE_AREA_BONES, tempname);
-# else
-	tempname = fqname(tempname, BONESPREFIX, 0);
-	(void) unlink(tempname);
-# endif
-}
-#endif /* MFLOPPY */
 
 /* move completed bones file to proper name */
 void
@@ -942,10 +894,6 @@ restore_saved_game (void)
 	int fd;
 
 	set_savefile_name();
-#ifdef MFLOPPY
-	if (!saveDiskPrompt(1))
-	    return -1;
-#endif /* MFLOPPY */
 #ifndef FILE_AREAS
 	fq_save = fqname(SAVEF, SAVEPREFIX, 0);
 
@@ -1391,9 +1339,7 @@ const char *configfile =
 */
 
 
-#ifndef MFLOPPY
 #define fopenp fopen
-#endif
 
 STATIC_OVL FILE *
 fopen_config_file(filename)
@@ -1646,33 +1592,14 @@ char		*tmp_levels;
 # ifdef MICRO
 	} else if (match_varname(buf, "HACKDIR", 4)) {
 		(void) strncpy(hackdir, bufp, PATHLEN-1);
-#  ifdef MFLOPPY
-	} else if (match_varname(buf, "RAMDISK", 3)) {
-				/* The following ifdef is NOT in the wrong
-				 * place.  For now, we accept and silently
-				 * ignore RAMDISK */
-		(void) strncpy(tmp_ramdisk, bufp, PATHLEN-1);
-#  endif
 	} else if (match_varname(buf, "LEVELS", 4)) {
 		(void) strncpy(tmp_levels, bufp, PATHLEN-1);
 
 	} else if (match_varname(buf, "SAVE", 4)) {
-#  ifdef MFLOPPY
-		extern	int saveprompt;
-#  endif
 		char *ptr;
 		if ((ptr = index(bufp, ';')) != 0) {
 			*ptr = '\0';
-#  ifdef MFLOPPY
-			if (*(ptr+1) == 'n' || *(ptr+1) == 'N') {
-				saveprompt = FALSE;
-			}
-#  endif
 		}
-# ifdef	MFLOPPY
-		else
-		    saveprompt = flags.asksavedisk;
-# endif
 
 		(void) strncpy(SAVEP, bufp, SAVESIZE-1);
 		append_slash(SAVEP);
@@ -1807,10 +1734,6 @@ const char *filename;
 #if defined(MICRO) || defined(WIN32)
 #undef tmp_levels
 	char	tmp_levels[PATHLEN];
-# ifdef MFLOPPY
-#undef tmp_ramdisk
-	char	tmp_ramdisk[PATHLEN];
-# endif
 #endif
 	char	buf[4*BUFSZ];
 	FILE	*fp;
@@ -1827,9 +1750,6 @@ const char *filename;
 #endif
 
 #if defined(MICRO) || defined(WIN32)
-# ifdef MFLOPPY
-	tmp_ramdisk[0] = 0;
-# endif
 	tmp_levels[0] = 0;
 #endif
 	/* begin detection of duplicate configfile options */
@@ -1890,20 +1810,6 @@ clnt_process:
 	if (!found) goto post_process;
 #endif
 
-#if defined(MICRO) && !defined(NOCWD_ASSUMPTIONS)
-	/* should be superseded by fqn_prefix[] */
-# ifdef MFLOPPY
-	strcpy(permbones, tmp_levels);
-	if (tmp_ramdisk[0]) {
-		strcpy(levels, tmp_ramdisk);
-		if (strcmp(permbones, levels))		/* if not identical */
-			ramdisk = TRUE;
-	} else
-		strcpy(levels, tmp_levels);
-
-	strcpy(bones, levels);
-# endif /* MFLOPPY */
-#endif /* MICRO */
 post_process:
 	if (!no_tilesets) {
 		for(i = 0; strlen(def_tilesets[i].name); i++) {

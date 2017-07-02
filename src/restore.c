@@ -514,43 +514,6 @@ xchar ltmp;
 		   save file if file creation is now failing... */
 		panic("restlevelfile: %s", whynot);
 	}
-#ifdef MFLOPPY
-	if (!savelev(nfd, ltmp, COUNT_SAVE)) {
-
-		/* The savelev can't proceed because the size required
-		 * is greater than the available disk space.
-		 */
-		pline("Not enough space on `%s' to restore your game.",
-			levels);
-
-		/* Remove levels and bones that may have been created.
-		 */
-		(void) close(nfd);
-		eraseall(levels, alllevels);
-		eraseall(levels, allbones);
-
-		/* Perhaps the person would like to play without a
-		 * RAMdisk.
-		 */
-		/* Maybe not [Tom] */                
-#if 0
-		if (ramdisk) {
-			/* PlaywoRAMdisk may not return, but if it does
-			 * it is certain that ramdisk will be 0.
-			 */
-			playwoRAMdisk();
-			/* Rewind save file and try again */
-			(void) lseek(fd, (off_t)0, 0);
-			(void) uptodate(fd, (char *)0);	/* skip version */
-			return dorecover(fd);	/* 0 or 1 */
-		} else
-#endif
-		{
-			pline("Be seeing you...");
-			terminate(EXIT_SUCCESS);
-		}
-	}
-#endif
 	bufon(nfd);
 	savelev(nfd, ltmp, WRITE_SAVE | FREE_SAVE);
 	bclose(nfd);
@@ -667,9 +630,6 @@ dorecover (register int fd)
 		flags.debug ? " while in debug mode" :
 		flags.explore ? " while in explore mode" : "");
 
-#ifdef MFLOPPY
-	gameDiskPrompt();
-#endif
 	max_rank_sz(); /* to recompute mrank_sz (botl.c) */
 	/* take care of iron ball & chain */
 	for(otmp = fobj; otmp; otmp = otmp->nobj)
