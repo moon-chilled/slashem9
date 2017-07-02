@@ -1450,14 +1450,14 @@ replmon (register struct monst *mtmp, register struct monst *mtmp2)
 	/* since this is so rare, we don't have any `mon_move_light_source' */
 	new_light_source(mtmp2->mx, mtmp2->my,
 			 emits_light(mtmp2->data),
-			 LS_MONSTER, (genericptr_t)mtmp2);
+			 LS_MONSTER, (void *)mtmp2);
 	/* here we rely on the fact that `mtmp' hasn't actually been deleted */
-	del_light_source(LS_MONSTER, (genericptr_t)mtmp);
+	del_light_source(LS_MONSTER, (void *)mtmp);
     }
     /* If poly'ed,  move polytimer along */
-    if (unpolytime = stop_timer(UNPOLY_MON, (genericptr_t) mtmp)) {
+    if (unpolytime = stop_timer(UNPOLY_MON, (void *) mtmp)) {
         (void) start_timer(unpolytime, TIMER_MONSTER, UNPOLY_MON,
-                        (genericptr_t) mtmp2);
+                        (void *) mtmp2);
     }
     mtmp2->nmon = fmon;
     fmon = mtmp2;
@@ -1503,7 +1503,7 @@ struct permonst *mptr;	/* reflects mtmp->data _prior_ to mtmp's death */
 	relobj(mtmp, 0, FALSE);
 	remove_monster(mtmp->mx, mtmp->my);
 	if (emits_light(mptr))
-	    del_light_source(LS_MONSTER, (genericptr_t)mtmp);
+	    del_light_source(LS_MONSTER, (void *)mtmp);
 	newsym(mtmp->mx,mtmp->my);
 	unstuck(mtmp);
 	fill_pit(mtmp->mx, mtmp->my);
@@ -1582,7 +1582,7 @@ unpoly_monster (struct monst *mtmp)
 	sprintf(buf, Monnam(mtmp));
 
 	/* If there is a timer == monster was poly'ed */
-	if (stop_timer(UNPOLY_MON, (genericptr_t) mtmp)) {
+	if (stop_timer(UNPOLY_MON, (void *) mtmp)) {
 	    /* [ALI] Always treat swallower as visible so that the message
 	     * indicating that the monster hasn't died comes _before_ any
 	     * message about breaking out of the "new" monster.
@@ -1895,7 +1895,7 @@ monstone (register struct monst *mdef)
 	if (cansee(x, y)) newsym(x,y);
 	/* We don't currently trap the hero in the statue in this case but we could */
 	if (u.uswallow && u.ustuck == mdef) wasinside = TRUE;
-	(void) stop_timer(UNPOLY_MON, (genericptr_t) mdef);
+	(void) stop_timer(UNPOLY_MON, (void *) mdef);
 	mondead(mdef);
 	if (wasinside) {
 		if (is_animal(mdef->data))
@@ -2572,12 +2572,12 @@ boolean construct;
 	 /* if (n == 0) animal_temp[n++] = NON_PM; */
 
 	    animal_list = (short *)alloc(n * sizeof *animal_list);
-	    (void) memcpy((genericptr_t)animal_list,
-			  (genericptr_t)animal_temp,
+	    (void) memcpy((void *)animal_list,
+			  (void *)animal_temp,
 			  n * sizeof *animal_list);
 	    animal_list_count = n;
 	} else {	/* release */
-	    if (animal_list) free((genericptr_t)animal_list), animal_list = 0;
+	    if (animal_list) free((void *)animal_list), animal_list = 0;
 	    animal_list_count = 0;
 	}
 }
@@ -2775,10 +2775,10 @@ boolean msg;
 	    /* used to give light, now doesn't, or vice versa,
 	       or light's range has changed */
 	    if (emits_light(olddata))
-		del_light_source(LS_MONSTER, (genericptr_t)mtmp);
+		del_light_source(LS_MONSTER, (void *)mtmp);
 	    if (emits_light(mtmp->data))
 		new_light_source(mtmp->mx, mtmp->my, emits_light(mtmp->data),
-				 LS_MONSTER, (genericptr_t)mtmp);
+				 LS_MONSTER, (void *)mtmp);
 	}
 	if (!mtmp->perminvis || pm_invisible(olddata))
 	    mtmp->perminvis = pm_invisible(mdat);

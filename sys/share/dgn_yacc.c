@@ -53,7 +53,7 @@ void init_branch(void);
 void init_level(void);
 void output_dgn(void);
 
-#define Free(ptr)		free((genericptr_t)ptr)
+#define Free(ptr)		free((void *)ptr)
 
 #define ERR		(-1)
 

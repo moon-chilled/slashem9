@@ -730,8 +730,8 @@ register struct obj *obj;
 			if (obj->oxlth && (obj->oattached == OATTACHED_M_ID)) {
 			    unsigned m_id;
 			    struct monst *ghost;
-			    (void) memcpy((genericptr_t)&m_id,
-				    (genericptr_t)obj->oextra, sizeof(m_id));
+			    (void) memcpy((void *)&m_id,
+				    (void *)obj->oextra, sizeof(m_id));
 			    ghost = find_mid(m_id, FM_FMON);
 		    	    if (ghost && ghost->data == &mons[PM_GHOST]) {
 		    		    int x2, y2;
@@ -3292,7 +3292,7 @@ struct obj **obj_p;			/* object tossed/used */
 				if (use_lights) {
 				    while (lits) {
 					del_light_source(LS_TEMP,
-						(genericptr_t) lits);
+						(void *) lits);
 					lits--;
 				    }
 				    vision_full_recalc = 1;
@@ -3387,7 +3387,7 @@ struct obj **obj_p;			/* object tossed/used */
 		if (use_lights) {
 		    lits++;
 		    new_light_source(bhitpos.x, bhitpos.y, 1,
-				LS_TEMP, (genericptr_t) lits);
+				LS_TEMP, (void *) lits);
 		    vision_full_recalc = 1;
 		    vision_recalc(0);
 		}
@@ -3437,7 +3437,7 @@ struct obj **obj_p;			/* object tossed/used */
                 tmp_at(DISP_END, 0);
 #ifdef LIGHT_SRC_SPELL
                 while (lits) {
-                        del_light_source(LS_TEMP, (genericptr_t) lits);
+                        del_light_source(LS_TEMP, (void *) lits);
                         lits--;
                 }
                 vision_full_recalc = 1;
@@ -3992,7 +3992,7 @@ register int dx,dy;
             if (((abstype == ZT_FIRE) || (abstype == ZT_LIGHTNING))
               && (!(type >= ZT_MEGA(ZT_FIRST) && type <= ZT_MEGA(ZT_LAST)))) {
                 lits++;
-                new_light_source(sx, sy, 1, LS_TEMP, (genericptr_t) lits);
+                new_light_source(sx, sy, 1, LS_TEMP, (void *) lits);
                 vision_full_recalc = 1;
                 vision_recalc(0);
             }
@@ -4026,7 +4026,7 @@ register int dx,dy;
             /*Clean for fireball*/
 #ifdef LIGHT_SRC_SPELL
 	    if (abs(type) == ZT_SPELL(ZT_FIRE)) {
-		del_light_source(LS_TEMP, (genericptr_t) lits);
+		del_light_source(LS_TEMP, (void *) lits);
 		lits--;
 	    }
 #endif
@@ -4269,7 +4269,7 @@ register int dx,dy;
         && (!(type >= ZT_MEGA(ZT_FIRST) && type <= ZT_MEGA(ZT_LAST))))
         {
         while (lits) {
-                del_light_source(LS_TEMP, (genericptr_t) lits);
+                del_light_source(LS_TEMP, (void *) lits);
                 lits--;
                 }
         vision_full_recalc = 1;

@@ -18,7 +18,7 @@ STATIC_DCL void breakmsg(struct obj *,boolean);
 STATIC_DCL boolean toss_up(struct obj *, boolean);
 STATIC_DCL boolean throwing_weapon(struct obj *);
 STATIC_DCL void sho_obj_return_to_u(struct obj *obj);
-STATIC_DCL boolean mhurtle_step(genericptr_t,int,int);
+STATIC_DCL boolean mhurtle_step(void *,int,int);
 static void autoquiver(void);	/* KMH -- automatically fill quiver */
 
 
@@ -488,8 +488,8 @@ boolean
 walk_path(src_cc, dest_cc, check_proc, arg)
     coord *src_cc;
     coord *dest_cc;
-    boolean (*check_proc)(genericptr_t, int, int);
-    genericptr_t arg;
+    boolean (*check_proc)(void *, int, int);
+    void * arg;
 {
     int x, y, dx, dy, x_change, y_change, err, i, prev_x, prev_y;
     boolean keep_going = TRUE;
@@ -570,7 +570,7 @@ walk_path(src_cc, dest_cc, check_proc, arg)
  */
 boolean
 hurtle_step(arg, x, y)
-    genericptr_t arg;
+    void * arg;
     int x, y;
 {
     int ox, oy, *range = (int *)arg;
@@ -689,7 +689,7 @@ hurtle_step(arg, x, y)
 
 STATIC_OVL boolean
 mhurtle_step(arg, x, y)
-    genericptr_t arg;
+    void * arg;
     int x, y;
 {
 	struct monst *mon = (struct monst *)arg;
@@ -767,7 +767,7 @@ hurtle(dx, dy, range, verbose)
     /* this setting of cc is only correct if dx and dy are [-1,0,1] only */
     cc.x = u.ux + (dx * range);
     cc.y = u.uy + (dy * range);
-    (void) walk_path(&uc, &cc, hurtle_step, (genericptr_t)&range);
+    (void) walk_path(&uc, &cc, hurtle_step, (void *)&range);
     teleds(cc.x, cc.y, FALSE);
 }
 
@@ -798,7 +798,7 @@ mhurtle (struct monst *mon, int dx, int dy, int range)
 	mc.y = mon->my;
 	cc.x = mon->mx + (dx * range);
 	cc.y = mon->my + (dy * range);
-	(void) walk_path(&mc, &cc, mhurtle_step, (genericptr_t)mon);
+	(void) walk_path(&mc, &cc, mhurtle_step, (void *)mon);
 	return;
 }
 

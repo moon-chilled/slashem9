@@ -35,9 +35,9 @@
 #define MAX_OF_TYPE	128
 
 #define New(type)		\
-	(type *) memset((genericptr_t)alloc(sizeof(type)), 0, sizeof(type))
+	(type *) memset((void *)alloc(sizeof(type)), 0, sizeof(type))
 #define NewTab(type, size)	(type **) alloc(sizeof(type *) * size)
-#define Free(ptr)		free((genericptr_t)ptr)
+#define Free(ptr)		free((void *)ptr)
 
 extern void yyerror(const char *);
 extern void yywarning(const char *);
@@ -193,8 +193,8 @@ maze_level	: maze_def flags lev_init messages regions
 					fname, fatal_error);
 			} else {
 				maze.flags = $2;
-				(void) memcpy((genericptr_t)&(maze.init_lev),
-						(genericptr_t)&(init_lev),
+				(void) memcpy((void *)&(maze.init_lev),
+						(void *)&(init_lev),
 						sizeof(lev_init));
 				maze.numpart = npart;
 				maze.parts = NewTab(mazepart, npart);
@@ -221,8 +221,8 @@ room_level	: level_def flags lev_init messages rreg_init rooms corridors_def
 			} else {
 				special_lev.flags = (long) $2;
 				(void) memcpy(
-					(genericptr_t)&(special_lev.init_lev),
-					(genericptr_t)&(init_lev),
+					(void *)&(special_lev.init_lev),
+					(void *)&(init_lev),
 					sizeof(lev_init));
 				special_lev.nroom = nrooms;
 				special_lev.rooms = NewTab(room, nrooms);
@@ -263,7 +263,7 @@ lev_init	: /* nothing */
 		  {
 			/* in case we're processing multiple files,
 			   explicitly clear any stale settings */
-			(void) memset((genericptr_t) &init_lev, 0,
+			(void) memset((void *) &init_lev, 0,
 					sizeof init_lev);
 			init_lev.init_present = FALSE;
 			$$ = 0;
@@ -345,8 +345,8 @@ init_rreg	: RANDOM_OBJECTS_ID ':' object_list
 			} else {
 			    special_lev.nrobjects = n_olist;
 			    special_lev.robjects = (char *) alloc(n_olist);
-			    (void) memcpy((genericptr_t)special_lev.robjects,
-					  (genericptr_t)olist, n_olist);
+			    (void) memcpy((void *)special_lev.robjects,
+					  (void *)olist, n_olist);
 			}
 		  }
 		| RANDOM_MONSTERS_ID ':' monster_list
@@ -356,8 +356,8 @@ init_rreg	: RANDOM_OBJECTS_ID ':' object_list
 			} else {
 			    special_lev.nrmonst = n_mlist;
 			    special_lev.rmonst = (char *) alloc(n_mlist);
-			    (void) memcpy((genericptr_t)special_lev.rmonst,
-					  (genericptr_t)mlist, n_mlist);
+			    (void) memcpy((void *)special_lev.rmonst,
+					  (void *)mlist, n_mlist);
 			  }
 		  }
 		;
@@ -735,8 +735,8 @@ init_reg	: RANDOM_OBJECTS_ID ':' object_list
 			    yyerror("Object registers already initialized!");
 			} else {
 			    tmppart[npart]->robjects = (char *)alloc(n_olist);
-			    (void) memcpy((genericptr_t)tmppart[npart]->robjects,
-					  (genericptr_t)olist, n_olist);
+			    (void) memcpy((void *)tmppart[npart]->robjects,
+					  (void *)olist, n_olist);
 			    tmppart[npart]->nrobjects = n_olist;
 			}
 		  }
@@ -762,8 +762,8 @@ init_reg	: RANDOM_OBJECTS_ID ':' object_list
 			    yyerror("Monster registers already initialized!");
 			} else {
 			    tmppart[npart]->rmonst = (char *) alloc(n_mlist);
-			    (void) memcpy((genericptr_t)tmppart[npart]->rmonst,
-					  (genericptr_t)mlist, n_mlist);
+			    (void) memcpy((void *)tmppart[npart]->rmonst,
+					  (void *)mlist, n_mlist);
 			    tmppart[npart]->nrmonst = n_mlist;
 			}
 		  }

@@ -34,7 +34,7 @@ STATIC_DCL boolean place_niche(struct mkroom *, int*, int*, int*);
 STATIC_DCL void makeniche(int);
 STATIC_DCL void make_niches(void);
 
-STATIC_PTR int CFDECLSPEC do_comp(const genericptr, const genericptr);
+STATIC_PTR int CFDECLSPEC do_comp(const void*, const void*);
 
 STATIC_DCL void dosdoor(xchar,xchar,struct mkroom *,int);
 STATIC_DCL void join(int,int,boolean);
@@ -52,12 +52,12 @@ static xchar		vault_x, vault_y;
 boolean goldseen;
 static boolean made_branch;	/* used only during level creation */
 
-/* Args must be (const genericptr) so that qsort will always be happy. */
+/* Args must be (const void*) so that qsort will always be happy. */
 
 STATIC_PTR int CFDECLSPEC
 do_comp(vx,vy)
-const genericptr vx;
-const genericptr vy;
+const void *vx;
+const void *vy;
 {
 	register const struct mkroom *x, *y;
 
@@ -99,9 +99,9 @@ void
 sort_rooms (void)
 {
 #if defined(SYSV) || defined(DGUX)
-	qsort((genericptr_t) rooms, (unsigned)nroom, sizeof(struct mkroom), do_comp);
+	qsort((void *) rooms, (unsigned)nroom, sizeof(struct mkroom), do_comp);
 #else
-	qsort((genericptr_t) rooms, nroom, sizeof(struct mkroom), do_comp);
+	qsort((void *) rooms, nroom, sizeof(struct mkroom), do_comp);
 #endif
 }
 
@@ -565,8 +565,8 @@ clear_level_structures()
 	    }
 	}
 #ifndef MICROPORT_BUG
-	(void) memset((genericptr_t)level.objects, 0, sizeof(level.objects));
-	(void) memset((genericptr_t)level.monsters, 0, sizeof(level.monsters));
+	(void) memset((void *)level.objects, 0, sizeof(level.objects));
+	(void) memset((void *)level.monsters, 0, sizeof(level.monsters));
 #endif
 	level.objlist = (struct obj *)0;
 	level.buriedobjlist = (struct obj *)0;

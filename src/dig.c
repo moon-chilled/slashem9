@@ -289,7 +289,7 @@ STATIC_OVL int dig(void) {
 
 		if (digging.effort > 250) {
 		    (void) dighole(FALSE);
-		    (void) memset((genericptr_t)&digging, 0, sizeof digging);
+		    (void) memset((void *)&digging, 0, sizeof digging);
 		    return(0);	/* done with digging */
 		}
 
@@ -1389,7 +1389,7 @@ struct obj *bury_an_obj(struct obj *otmp) {
 	} else if ((under_ice ? otmp->oclass == POTION_CLASS : is_organic(otmp))
 		&& !obj_resists(otmp, 5, 95)) {
 	    (void) start_timer((under_ice ? 0L : 250L) + (long)rnd(250),
-			       TIMER_OBJECT, ROT_ORGANIC, (genericptr_t)otmp);
+			       TIMER_OBJECT, ROT_ORGANIC, (void *)otmp);
 	}
 	add_to_buried(otmp);
 	return(otmp2);
@@ -1422,7 +1422,7 @@ void unearth_objs(int x, int y) {
 		if (otmp->ox == x && otmp->oy == y) {
 		    obj_extract_self(otmp);
 		    if (otmp->timed)
-			(void) stop_timer(ROT_ORGANIC, (genericptr_t)otmp);
+			(void) stop_timer(ROT_ORGANIC, (void *)otmp);
 		    place_object(otmp, x, y);
 		    stackobj(otmp);
 		}
@@ -1441,7 +1441,7 @@ void unearth_objs(int x, int y) {
  * away, any contents become newly buried objects.
  */
 /* ARGSUSED */
-void rot_organic(genericptr_t arg, long timeout) {
+void rot_organic(void * arg, long timeout) {
 #if defined(MAC_MPW)
 # pragma unused ( timeout )
 #endif
@@ -1463,7 +1463,7 @@ void rot_organic(genericptr_t arg, long timeout) {
 /*
  * Called when a corpse has rotted completely away.
  */
-void rot_corpse(genericptr_t arg, long timeout) {
+void rot_corpse(void * arg, long timeout) {
 	xchar x = 0, y = 0;
 	struct obj *obj = (struct obj *) arg;
 	boolean on_floor = obj->where == OBJ_FLOOR,

@@ -17,8 +17,8 @@ STATIC_DCL boolean check_map_spot(int,int,char,unsigned);
 STATIC_DCL boolean clear_stale_map(char,unsigned);
 STATIC_DCL void sense_trap(struct trap *,xchar,xchar,int);
 STATIC_DCL void show_map_spot(int,int);
-STATIC_PTR void findone(int,int,genericptr_t);
-STATIC_PTR void openone(int,int,genericptr_t);
+STATIC_PTR void findone(int,int,void *);
+STATIC_PTR void openone(int,int,void *);
 
 /* Recursively search obj for an object in class oclass and return 1st found */
 struct obj *o_in(struct obj *obj, char oclass) {
@@ -962,7 +962,7 @@ void cvt_sdoor_to_door(struct rm *lev) {
 	lev->doormask = newmask;
 }
 
-STATIC_PTR void findone(int zx, int zy, genericptr_t num) {
+STATIC_PTR void findone(int zx, int zy, void * num) {
 	struct trap *ttmp;
 	struct monst *mtmp;
 
@@ -1004,7 +1004,7 @@ STATIC_PTR void findone(int zx, int zy, genericptr_t num) {
 	}
 }
 
-STATIC_PTR void openone(int zx, int zy, genericptr_t num) {
+STATIC_PTR void openone(int zx, int zy, void * num) {
 	struct trap *ttmp;
 	struct obj *otmp;
 
@@ -1058,7 +1058,7 @@ int findit(void) {
 	int num = 0;
 
 	if(u.uswallow) return(0);
-	do_clear_area(u.ux, u.uy, BOLT_LIM, findone, (genericptr_t) &num);
+	do_clear_area(u.ux, u.uy, BOLT_LIM, findone, (void *) &num);
 	return(num);
 }
 
@@ -1075,7 +1075,7 @@ int openit(void) {
 		return(-1);
 	}
 
-	do_clear_area(u.ux, u.uy, BOLT_LIM, openone, (genericptr_t) &num);
+	do_clear_area(u.ux, u.uy, BOLT_LIM, openone, (void *) &num);
 	return(num);
 }
 

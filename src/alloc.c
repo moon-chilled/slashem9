@@ -11,21 +11,19 @@
 #include "config.h"
 
 #ifdef WIZARD
-char *fmt_ptr(const genericptr,char *);
+char *fmt_ptr(const void*,char *);
 #endif
 
-long *alloc(unsigned int);
+void *alloc(size_t);
 extern void panic(const char *,...) PRINTF_F(1,2);
 
 
-long *alloc (register unsigned int lth) {
-	register genericptr_t ptr;
-
-	ptr = malloc(lth);
+void *alloc(size_t lth) {
+	void *ptr = malloc(lth);
 
 	if (!ptr) panic("Memory allocation failure; cannot get %u bytes", lth);
 
-	return((long *) ptr);
+	return ptr;
 }
 
 
@@ -44,14 +42,14 @@ long *alloc (register unsigned int lth) {
 
 # ifdef MONITOR_PTR_FMT
 #  define PTR_FMT "%p"
-#  define PTR_TYP genericptr_t
+#  define PTR_TYP void*
 # else
 #  define PTR_FMT "%06lx"
 #  define PTR_TYP unsigned long
 # endif
 
 /* format a pointer for display purposes; caller supplies the result buffer */
-char * fmt_ptr(const genericptr ptr, char *buf) {
+char * fmt_ptr(const void *ptr, char *buf) {
 	sprintf(buf, PTR_FMT, (PTR_TYP)ptr);
 	return buf;
 }

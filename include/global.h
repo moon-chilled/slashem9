@@ -249,7 +249,7 @@ typedef xchar	boolean;		/* 0 or 1 */
 # endif
 #endif
 
-extern long *alloc(unsigned int);		/* alloc.c */
+void *alloc(size_t);		/* alloc.c */
 
 /* Used for consistency checks of various data files; declare it here so
    that utility programs which include config.h but not hack.h can see it. */

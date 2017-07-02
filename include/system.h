@@ -120,7 +120,7 @@ extern void exit(int);
    the former is naturally what flex tests for. */
 # if defined(__STDC__) || !defined(FLEX_SCANNER)
 #  ifndef OS2_CSET2
-extern void free(genericptr_t);
+extern void free(void *);
 #  endif
 # endif
 #if !defined(__SASC_60) && !defined(_DCC) && !defined(__SC__)
@@ -131,15 +131,15 @@ extern void perror(const char *);
 #endif
 #ifndef NeXT
 #ifdef POSIX_TYPES
-extern void qsort(genericptr_t,size_t,size_t,
-		     int(*)(const genericptr,const genericptr));
+extern void qsort(void *,size_t,size_t,
+		     int(*)(const void*,const void*));
 #else
 # if (defined(BSD) || defined(ULTRIX)) && (!defined(LINUX) && !defined(__CYGWIN__))
 extern  int qsort();
 # else
 #  if !defined(LATTICE) && !defined(AZTEC_50)
-extern   void qsort(genericptr_t,size_t,size_t,
-		       int(*)(const genericptr,const genericptr));
+extern   void qsort(void *,size_t,size_t,
+		       int(*)(const void*,const void*));
 #  endif
 # endif
 #endif
@@ -168,7 +168,7 @@ extern int write(int, const void *,unsigned);
 #   endif
 #  else
 #   ifndef __MWERKS__	/* metrowerks defines write via universal headers */
-extern int write(int,genericptr_t,unsigned);
+extern int write(int,void *,unsigned);
 #   endif
 #  endif
 # endif /* ULTRIX */
@@ -201,7 +201,7 @@ extern int open(const char *,int);
 #if defined(MICRO)
 extern int close(int);
 #ifndef __EMX__
-extern int read(int,genericptr_t,unsigned int);
+extern int read(int,void *,unsigned int);
 #endif
 extern int open(const char *,int,...);
 extern int dup2(int, int);
@@ -229,10 +229,10 @@ extern int chdir(const char *);
 extern int chmod(const char *,int);
 extern mode_t umask(int);
 # endif
-extern int read(int,genericptr_t,unsigned);
+extern int read(int,void *,unsigned);
 /* these aren't quite right, but this saves including lots of system files */
-extern int stty(int,genericptr_t);
-extern int gtty(int,genericptr_t);
+extern int stty(int,void *);
+extern int gtty(int,void *);
 extern int ioctl(int, int, char*);
 extern int isatty(int);	/* 1==yes, 0==no, -1==error */
 #include <sys/file.h>
@@ -466,7 +466,7 @@ extern char *tgoto(const char *,int,int);
 #endif
 
 #ifdef ALLOC_C
-extern genericptr_t malloc(size_t);
+extern void * malloc(size_t);
 #endif
 
 /* time functions */

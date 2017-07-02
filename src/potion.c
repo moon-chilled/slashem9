@@ -2793,7 +2793,7 @@ dodip (void)
 #ifdef UNPOLYPILE
 	} else if (potion->otyp == POT_RESTORE_ABILITY && is_hazy(obj)) {
 		/* KMH -- Restore ability will stop unpolymorphing */
-		stop_timer(UNPOLY_OBJ, (genericptr_t) obj);
+		stop_timer(UNPOLY_OBJ, (void *) obj);
 		obj->oldtyp = STRANGE_OBJECT;
 		if (!Blind)
 			pline("%s seems less hazy.", Yname2(obj));

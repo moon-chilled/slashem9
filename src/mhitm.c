@@ -1725,7 +1725,7 @@ physical:
 				mdef->data != &mons[PM_GREEN_SLIME]) {
 		    if (newcham(mdef, &mons[PM_GREEN_SLIME], FALSE, vis)) {
 			mdef->oldmonnm = PM_GREEN_SLIME;
-			(void) stop_timer(UNPOLY_MON, (genericptr_t) mdef);
+			(void) stop_timer(UNPOLY_MON, (void *) mdef);
 		    }
 		    mdef->mstrategy &= ~STRAT_WAITFORU;
 		    tmp = 0;

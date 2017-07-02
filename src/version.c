@@ -107,7 +107,7 @@ const char *name;
     struct version_info vers_info;
     boolean verbose = name ? TRUE : FALSE;
 
-    rlen = read(fd, (genericptr_t) &vers_info, sizeof vers_info);
+    rlen = read(fd, (void *) &vers_info, sizeof vers_info);
     minit();		/* ZEROCOMP */
     if (rlen == 0) {
 	if (verbose) {
@@ -133,7 +133,7 @@ store_version (int fd)
 
 	bufoff(fd);
 	/* bwrite() before bufon() uses plain write() */
-	bwrite(fd,(genericptr_t)&version_data,(unsigned)(sizeof version_data));
+	bwrite(fd,(void *)&version_data,(unsigned)(sizeof version_data));
 	bufon(fd);
 	return;
 }

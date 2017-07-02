@@ -4,7 +4,7 @@
 #include "hack.h"
 #include "tile.h"
 
-extern long *alloc(unsigned int);
+extern void *alloc(size_t);
 
 extern const char *tilename(int, int);
 

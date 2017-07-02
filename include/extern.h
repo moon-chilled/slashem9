@@ -8,9 +8,9 @@
 /* ### alloc.c ### */
 
 #if 0
-extern long *alloc(unsigned int);
+extern void *alloc(size_t);
 #endif
-extern char *fmt_ptr(const genericptr,char *);
+extern char *fmt_ptr(const void*,char *);
 
 /* This next pre-processor directive covers almost the entire file,
  * interrupted only occasionally to pick up specific functions as needed. */
@@ -46,7 +46,7 @@ extern boolean catch_lit(struct obj *);
 extern void use_unicorn_horn(struct obj *);
 extern boolean tinnable(struct obj *);
 extern void reset_trapset(void);
-extern void fig_transform(genericptr_t, long);
+extern void fig_transform(void *, long);
 extern int unfixable_trouble_count(boolean);
 extern int wand_explode(struct obj *,boolean);
 
@@ -248,8 +248,8 @@ extern void zap_dig(void);
 extern struct obj *bury_an_obj(struct obj *);
 extern void bury_objs(int,int);
 extern void unearth_objs(int,int);
-extern void rot_organic(genericptr_t, long);
-extern void rot_corpse(genericptr_t, long);
+extern void rot_organic(void *, long);
+extern void rot_corpse(void *, long);
 #if 0
 extern void bury_monst(struct monst *);
 extern void bury_you(void);
@@ -323,8 +323,8 @@ extern void schedule_goto(d_level *,boolean,boolean,int,
 			     const char *,const char *);
 extern void deferred_goto(void);
 extern boolean revive_corpse(struct obj *, boolean);
-extern void revive_mon(genericptr_t, long);
-extern void moldy_corpse(genericptr_t, long);
+extern void revive_mon(void *, long);
+extern void moldy_corpse(void *, long);
 extern int donull(void);
 extern int dowipe(void);
 extern void set_wounded_legs(long,int);
@@ -357,7 +357,7 @@ extern const char *rndcolor(void);
 #ifdef REINCARNATION
 extern const char *roguename(void);
 #endif
-extern struct obj *realloc_obj(struct obj *, int, genericptr_t, int, const char *);
+extern struct obj *realloc_obj(struct obj *, int, void *, int, const char *);
 extern char *coyotename(struct monst *,char *);
 
 
@@ -461,8 +461,8 @@ extern int thitmonst(struct monst *,struct obj *, int);
 extern int hero_breaks(struct obj *,xchar,xchar,boolean);
 extern int breaks(struct obj *,xchar,xchar);
 extern boolean breaktest(struct obj *);
-extern boolean walk_path(coord *, coord *, boolean (*)(genericptr_t,int,int), genericptr_t);
-extern boolean hurtle_step(genericptr_t, int, int);
+extern boolean walk_path(coord *, coord *, boolean (*)(void *,int,int), void *);
+extern boolean hurtle_step(void *, int, int);
 
 /* ### drawing.c ### */
 #endif /* !MAKEDEFS_C && !LEV_LEX_C */
@@ -879,8 +879,8 @@ extern int dosuspend(void);
 
 /* ### light.c ### */
 
-extern void new_light_source(xchar, xchar, int, int, genericptr_t);
-extern void del_light_source(int, genericptr_t);
+extern void new_light_source(xchar, xchar, int, int, void *);
+extern void del_light_source(int, void *);
 extern void do_light_sources(char **);
 extern struct monst *find_mid(unsigned, unsigned);
 extern void save_light_sources(int, int, int);
@@ -1717,9 +1717,9 @@ extern void getlev(int,int,xchar,boolean);
 extern void minit(void);
 extern boolean lookup_id_mapping(unsigned, unsigned *);
 #ifdef ZEROCOMP
-extern int mread(int,genericptr_t,unsigned int);
+extern int mread(int,void *,unsigned int);
 #else
-extern void mread(int,genericptr_t,unsigned int);
+extern void mread(int,void *,unsigned int);
 #endif
 
 /* ### rip.c ### */
@@ -1795,7 +1795,7 @@ extern void savelev(int,xchar,int);
 extern void bufon(int);
 extern void bufoff(int);
 extern void bflush(int);
-extern void bwrite(int,genericptr_t,unsigned int);
+extern void bwrite(int,void *,unsigned int);
 extern void bclose(int);
 extern void savefruitchn(int,int);
 extern void free_dungeons(void);
@@ -1972,9 +1972,9 @@ extern boolean goodpos(int,int,struct monst *,unsigned);
 extern boolean enexto(coord *,xchar,xchar,struct permonst *);
 extern boolean enexto_core(coord *,xchar,xchar,struct permonst *,unsigned);
 extern int epathto(coord *,int,xchar,xchar,struct permonst *);
-extern boolean wpathto(coord *, coord *, boolean (*)(genericptr_t, int, int),
-			  genericptr_t, struct permonst *, int);
-extern void xpathto(int,xchar,xchar,int (*)(genericptr_t,int,int),void *);
+extern boolean wpathto(coord *, coord *, boolean (*)(void *, int, int),
+			  void *, struct permonst *, int);
+extern void xpathto(int,xchar,xchar,int (*)(void *,int,int),void *);
 extern void teleds(int,int,boolean);
 extern boolean safe_teleds(boolean);
 extern boolean teleport_pet(struct monst *,boolean);
@@ -2005,19 +2005,19 @@ extern void nh_timeout(void);
 extern void fall_asleep(int, boolean);
 #ifdef UNPOLYPILE
 extern void set_obj_poly(struct obj *, struct obj *);
-extern void unpoly_obj(genericptr_t, long);
+extern void unpoly_obj(void *, long);
 #endif
 extern int mon_poly(struct monst *, boolean, const char *);
 extern int mon_spec_poly(struct monst *, struct permonst *, long,
 			    boolean, boolean, boolean, boolean);
-extern void unpoly_mon(genericptr_t, long);
+extern void unpoly_mon(void *, long);
 extern void attach_bomb_blow_timeout(struct obj *, int, boolean);
 extern void attach_egg_hatch_timeout(struct obj *);
 extern void attach_fig_transform_timeout(struct obj *);
 extern void kill_egg(struct obj *);
-extern void hatch_egg(genericptr_t, long);
+extern void hatch_egg(void *, long);
 extern void learn_egg_type(int);
-extern void burn_object(genericptr_t, long);
+extern void burn_object(void *, long);
 extern void begin_burn(struct obj *, boolean);
 extern void end_burn(struct obj *, boolean);
 extern void burn_faster(struct obj *, long);
@@ -2025,8 +2025,8 @@ extern void burn_faster(struct obj *, long);
 extern void lightsaber_deactivate(struct obj *, boolean);
 #endif
 extern void do_storms(void);
-extern boolean start_timer(long, short, short, genericptr_t);
-extern long stop_timer(short, genericptr_t);
+extern boolean start_timer(long, short, short, void *);
+extern long stop_timer(short, void *);
 extern void run_timers(void);
 extern void obj_move_timers(struct obj *, struct obj *);
 extern void obj_split_timers(struct obj *, struct obj *);
@@ -2224,7 +2224,7 @@ extern void block_point(int,int);
 extern void unblock_point(int,int);
 extern boolean clear_path(int,int,int,int);
 extern void do_clear_area(int,int,int,
-			     void (*)(int,int,genericptr_t),genericptr_t);
+			     void (*)(int,int,void *),void *);
 
 /* ### weapon.c ### */
 

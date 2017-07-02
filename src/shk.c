@@ -256,7 +256,7 @@ save_shk_bill (int fd, struct monst *shkp)
 
 	if (eshkp->bill_p && eshkp->bill_p != (struct bill_x *) -1000 &&
 		eshkp->billct)
-	    bwrite(fd, (genericptr_t)eshkp->bill_p,
+	    bwrite(fd, (void *)eshkp->bill_p,
 		    eshkp->billct * sizeof(struct bill_x));
 }
 
@@ -270,7 +270,7 @@ restore_shk_bill (int fd, struct monst *shkp)
 	    if (eshkp->billsz) {
 		eshkp->bill_p = (struct bill_x *)
 			alloc(eshkp->billsz * sizeof(struct bill_x));
-		mread(fd, (genericptr_t)eshkp->bill_p,
+		mread(fd, (void *)eshkp->bill_p,
 			eshkp->billct * sizeof(struct bill_x));
 	    } else
 		eshkp->bill_p = (struct bill_x *)0;
@@ -1078,8 +1078,8 @@ void
 shk_free (struct monst *shkp)
 {
 	if (ESHK(shkp)->bill_p && ESHK(shkp)->bill_p != (struct bill_x *) -1000)
-	    free((genericptr_t)ESHK(shkp)->bill_p);
-	free((genericptr_t)shkp);
+	    free((void *)ESHK(shkp)->bill_p);
+	free((void *)shkp);
 }
 #endif /* OVLB */
 #ifdef OVL3
@@ -2540,7 +2540,7 @@ int to_add;
 
 	if (bct > eshkp->billsz) {
 	    if (eshkp->bill_p)
-		new = (struct bill_x *)realloc((genericptr_t)eshkp->bill_p,
+		new = (struct bill_x *)realloc((void *)eshkp->bill_p,
 			bct * sizeof(struct bill_x));
 	    else
 		new = (struct bill_x *)malloc(bct * sizeof(struct bill_x));
@@ -3526,10 +3526,10 @@ register boolean croaked;
 
 	    tmp_dam = tmp_dam->next;
 	    if (!tmp2_dam) {
-		free((genericptr_t)level.damagelist);
+		free((void *)level.damagelist);
 		level.damagelist = tmp_dam;
 	    } else {
-		free((genericptr_t)tmp2_dam->next);
+		free((void *)tmp2_dam->next);
 		tmp2_dam->next = tmp_dam;
 	    }
 	}
@@ -3623,7 +3623,7 @@ boolean catchup;	/* restoring a level */
 	    /* No messages if player already replaced shop door */
 	    return(1);
 	levl[x][y].typ = tmp_dam->typ;
-	(void) memset((genericptr_t)litter, 0, sizeof(litter));
+	(void) memset((void *)litter, 0, sizeof(litter));
 	if ((otmp = level.objects[x][y]) != 0) {
 	    /* Scatter objects haphazardly into the shop */
 #define NEED_UPDATE 1
@@ -3972,7 +3972,7 @@ coord *mm;
 		(void) makemon(&mons[kop_pm[ik]], mc[cnt].x, mc[cnt].y, NO_MM_FLAGS);
 	}
 	}
-	free((genericptr_t)mc);
+	free((void *)mc);
 }
 #endif	/* KOPS */
 

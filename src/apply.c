@@ -453,7 +453,7 @@ STATIC_OVL void use_leash(struct obj **optr) {
 		    spotmon ? "your " : "", l_monnam(mtmp));
 		mtmp->mleashed = 1;
 		obj->leashmon = (int)mtmp->m_id;
-		*optr = realloc_obj(obj, sizeof(eleash), (genericptr_t) &eleash,
+		*optr = realloc_obj(obj, sizeof(eleash), (void *) &eleash,
 			obj->onamelth ? strlen(ONAME(obj)) + 1 : 0, ONAME(obj));
 		mtmp->msleeping = 0;
 		return;
@@ -469,7 +469,7 @@ STATIC_OVL void use_leash(struct obj **optr) {
 		}
 		mtmp->mleashed = 0;
 		obj->leashmon = 0;
-		*optr = realloc_obj(obj, 0, (genericptr_t)0,
+		*optr = realloc_obj(obj, 0, (void *)0,
 			obj->onamelth ? strlen(ONAME(obj)) + 1 : 0, ONAME(obj));
 		You("remove the leash from %s%s.",
 		    spotmon ? "your " : "", l_monnam(mtmp));
@@ -538,7 +538,7 @@ struct leash_check {
     boolean you_moving;		/* True if hero is the one moving */
 };
 
-STATIC_OVL boolean check_leash_pos(genericptr_t arg, int x, int y) {
+STATIC_OVL boolean check_leash_pos(void * arg, int x, int y) {
 	int i, d, n, lx, ly, xx, yy;
 	struct leash_check *check = (struct leash_check *)arg;
 	struct eleash *eleash = check->eleash;
@@ -674,7 +674,7 @@ STATIC_OVL void check_leashed_pet(struct obj *leash, struct monst *pet, boolean 
 	    dest.x = you_moving ? u.ux : pet->mx;
 	    dest.y = you_moving ? u.uy : pet->my;
 	}
-	if (wpathto(&start, &dest, check_leash_pos, (genericptr_t)&check,
+	if (wpathto(&start, &dest, check_leash_pos, (void *)&check,
 		pet->data, check.eleash->pathlen + ELEASH_PSZ)) {
 	    if (check.eleash->pathlen >= ELEASH_PSZ)
 		action_leash(leash, pet, check.eleash->pathlen > ELEASH_PSZ);
@@ -1568,7 +1568,7 @@ int jump( int magic /* 0=Physical, otherwise skill level */) {
 	    if (temp < 0) temp = -temp;
 	    if (range < temp)
 		range = temp;
-	    (void) walk_path(&uc, &cc, hurtle_step, (genericptr_t)&range);
+	    (void) walk_path(&uc, &cc, hurtle_step, (void *)&range);
 
 	    /* A little Sokoban guilt... */
 	    if (In_sokoban(&u.uz))
@@ -1830,7 +1830,7 @@ void use_unicorn_horn (struct obj *obj) {
 /*
  * Timer callback routine: turn figurine into monster
  */
-void fig_transform(genericptr_t arg, long timeout) {
+void fig_transform(void * arg, long timeout) {
 	struct obj *figurine = (struct obj *)arg;
 	struct monst *mtmp;
 	coord cc;
@@ -1854,7 +1854,7 @@ void fig_transform(genericptr_t arg, long timeout) {
 	    !figurine_location_checks(figurine,&cc, TRUE)) {
 		/* reset the timer to try again later */
 		(void) start_timer((long)rnd(5000), TIMER_OBJECT,
-				FIG_TRANSFORM, (genericptr_t)figurine);
+				FIG_TRANSFORM, (void *)figurine);
 		return;
 	}
 
@@ -1972,7 +1972,7 @@ STATIC_OVL void use_figurine(struct obj **optr) {
 		"toss the figurine into the air" :
 		"set the figurine on the ground"));
 	(void) make_familiar(obj, cc.x, cc.y, FALSE);
-	(void) stop_timer(FIG_TRANSFORM, (genericptr_t)obj);
+	(void) stop_timer(FIG_TRANSFORM, (void *)obj);
 	useup(obj);
 	*optr = 0;
 }
@@ -2999,7 +2999,7 @@ STATIC_OVL int use_grapple(struct obj *obj) {
 	    if (select_menu(tmpwin, PICK_ONE, &selected) > 0 &&
 			rn2(P_SKILL(typ) > P_SKILLED ? 20 : 2))
 		tohit = selected[0].item.a_int - 1;
-	    free((genericptr_t)selected);
+	    free((void *)selected);
 	    destroy_nhwindow(tmpwin);
 	}
 
