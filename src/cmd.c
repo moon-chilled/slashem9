@@ -166,7 +166,7 @@ STATIC_PTR int doconduct(void); /**/
 STATIC_PTR boolean minimal_enlightenment(void);
 STATIC_PTR int makemenu(const char *, struct menu_list *);
 
-static NEARDATA struct rm *maploc;
+static struct rm *maploc;
 
 #ifdef OVLB
 STATIC_DCL void enlght_line(const char *,const char *,const char *);
@@ -250,7 +250,7 @@ static char popch(void);
  */
 #define BSIZE 20
 static char pushq[BSIZE], saveq[BSIZE];
-static NEARDATA int phead, ptail, shead, stail;
+static int phead, ptail, shead, stail;
 
 static char popch(void) {
 	/* If occupied, return '\0', letting tgetch know a character should
@@ -3297,7 +3297,7 @@ int isok(int x, int y) {
 	return x >= 1 && x <= COLNO-1 && y >= 0 && y <= ROWNO-1;
 }
 
-static NEARDATA int last_multi;
+static int last_multi;
 
 /*
  * convert a MAP window position into a movecmd

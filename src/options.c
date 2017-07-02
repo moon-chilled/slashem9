@@ -2746,16 +2746,16 @@ parsetileset (register char *opts)
 }
 
 
-static NEARDATA const char *menutype[] = {
+static const char *menutype[] = {
 	"traditional", "combination", "partial", "full"
 };
 
-static NEARDATA const char *burdentype[] = {
+static const char *burdentype[] = {
 	"unencumbered", "burdened", "stressed",
 	"strained", "overtaxed", "overloaded"
 };
 
-static NEARDATA const char *runmodes[] = {
+static const char *runmodes[] = {
 	"teleport", "run", "walk", "crawl"
 };
 

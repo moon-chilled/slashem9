@@ -10,7 +10,7 @@ STATIC_DCL void shuffle(int,int,boolean);
 STATIC_DCL void shuffle_all(void);
 STATIC_DCL boolean interesting_to_discover(int);
 
-static NEARDATA short disco[NUM_OBJECTS] = DUMMY;
+static short disco[NUM_OBJECTS] = DUMMY;
 
 #ifdef USE_TILES
 STATIC_DCL void shuffle_tiles(void);

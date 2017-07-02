@@ -57,7 +57,7 @@ STATIC_DCL boolean mon_beside(int, int);
 /* A variable set in use_container(), to be used by the callback routines  */
 /* in_container() and out_container() from askchain() and use_container(). */
 /* Also used by memu_loot() and container_gone().			   */
-static NEARDATA struct obj *current_container;
+static struct obj *current_container;
 #define Icebox (current_container->otyp == ICE_BOX)
 
 static const char moderateloadmsg[] = "You have a little trouble lifting";
@@ -2136,7 +2136,7 @@ STATIC_OVL void
 observe_quantum_cat(box)
 struct obj *box;
 {
-    static NEARDATA const char sc[] = "Schroedinger's Cat";
+    static const char sc[] = "Schroedinger's Cat";
     struct obj *deadcat;
     struct monst *livecat;
     xchar ox, oy;

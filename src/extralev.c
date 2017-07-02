@@ -22,7 +22,7 @@ struct rogueroom {
 #define LEFT 4
 #define RIGHT 8
 
-static NEARDATA struct rogueroom r[3][3];
+static struct rogueroom r[3][3];
 STATIC_DCL void roguejoin(int,int,int,int,int);
 STATIC_DCL void roguecorr(int,int,int);
 STATIC_DCL void miniwalk(int,int);

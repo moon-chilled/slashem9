@@ -275,7 +275,7 @@ register int trouble;
 	int i;
 	struct obj *otmp = 0;
 	const char *what = (const char *)0;
-	static NEARDATA const char leftglow[] = "left ring softly glows",
+	static const char leftglow[] = "left ring softly glows",
 				   rightglow[] = "right ring softly glows";
 
 	switch (trouble) {
@@ -1121,8 +1121,8 @@ gods_upset(g_align)
 	angrygods(g_align);
 }
 
-static NEARDATA const char sacrifice_types[] = { FOOD_CLASS, AMULET_CLASS, 0 };
-static NEARDATA const char ext_sacrifice_types[] = { ALLOW_FLOOROBJ,
+static const char sacrifice_types[] = { FOOD_CLASS, AMULET_CLASS, 0 };
+static const char ext_sacrifice_types[] = { ALLOW_FLOOROBJ,
 	FOOD_CLASS, AMULET_CLASS, 0 };
 
 STATIC_OVL void

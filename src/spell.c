@@ -6,9 +6,9 @@
 #include "edog.h"
 
 /* Are now ints */
-static NEARDATA int delay;            /* moves left for this spell */
-static NEARDATA int end_delay;        /* when to stop studying */
-static NEARDATA struct obj *book;	/* last/current book being xscribed */
+static int delay;            /* moves left for this spell */
+static int end_delay;        /* when to stop studying */
+static struct obj *book;	/* last/current book being xscribed */
 
 /* spellmenu arguments; 0 thru n-1 used as spl_book[] index when swapping */
 #define SPELLMENU_CAST (-2)

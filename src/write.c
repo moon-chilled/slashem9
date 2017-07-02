@@ -66,7 +66,7 @@ register struct obj *otmp;
 	return(1000);
 }
 
-static NEARDATA const char write_on[] = { SCROLL_CLASS, SPBOOK_CLASS, 0 };
+static const char write_on[] = { SCROLL_CLASS, SPBOOK_CLASS, 0 };
 
 int 
 dowrite (register struct obj *pen)

@@ -60,7 +60,7 @@ STATIC_DCL void set_botl_warn(int);
 #ifndef OVLB
 STATIC_DCL int mrank_sz;
 #else /* OVLB */
-STATIC_OVL NEARDATA int mrank_sz = 0; /* loaded by max_rank_sz (from u_init) */
+STATIC_OVL int mrank_sz = 0; /* loaded by max_rank_sz (from u_init) */
 #endif /* OVLB */
 
 STATIC_DCL const char *rank(void);

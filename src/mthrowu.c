@@ -19,7 +19,7 @@ const char *breathwep[];
 /*
  * Keep consistent with breath weapons in zap.c, and AD_* in monattk.h.
  */
-NEARDATA const char *breathwep[] = {
+const char *breathwep[] = {
 				"fragments",
 				"fire",
 				"frost",

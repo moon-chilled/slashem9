@@ -549,7 +549,7 @@ moverock()
 
 	    {
 		/* note: reset to zero after save/restore cycle */
-		static NEARDATA long lastmovetime;
+		static long lastmovetime;
 #ifdef STEED
 		if (!u.usteed) {
 #endif
@@ -767,7 +767,7 @@ register xchar ox, oy;
 	newsym(ox, oy);
 }
 
-static NEARDATA const char fell_on_sink[] = "fell onto a sink";
+static const char fell_on_sink[] = "fell onto a sink";
 
 STATIC_OVL void
 dosinkfall()

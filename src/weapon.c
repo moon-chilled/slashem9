@@ -44,20 +44,20 @@ static void mon_ignite_lightsaber(struct obj *, struct monst *);
 #endif
 
 /*WAC practicing needs a delay counter*/
-static NEARDATA schar delay;            /* moves left for practice */
-static NEARDATA boolean speed_advance = FALSE;
+static schar delay;            /* moves left for practice */
+static boolean speed_advance = FALSE;
 
 STATIC_DCL void give_may_advance_msg(int);
 
 #ifndef OVLB
 
-STATIC_DCL NEARDATA const short skill_names_indices[];
-STATIC_DCL NEARDATA const char *odd_skill_names[];
+STATIC_DCL const short skill_names_indices[];
+STATIC_DCL const char *odd_skill_names[];
 
 #else	/* OVLB */
 
 /* KMH, balance patch -- updated */
-STATIC_OVL NEARDATA const short skill_names_indices[P_NUM_SKILLS] = {
+STATIC_OVL const short skill_names_indices[P_NUM_SKILLS] = {
 	0,                DAGGER,         KNIFE,        AXE,
 	PICK_AXE,         SHORT_SWORD,    BROADSWORD,   LONG_SWORD,
 	TWO_HANDED_SWORD, SCIMITAR,       PN_SABER,     CLUB,
@@ -81,7 +81,7 @@ STATIC_OVL NEARDATA const short skill_names_indices[P_NUM_SKILLS] = {
 };
 
 
-STATIC_OVL NEARDATA const char * const odd_skill_names[] = {
+STATIC_OVL const char * const odd_skill_names[] = {
     "no skill",
     "polearms",
     "saber",
@@ -144,7 +144,7 @@ STATIC_DCL void skill_advance(int);
 		      OBJ_NAME(objects[skill_names_indices[type]]) : \
 			odd_skill_names[-skill_names_indices[type]])
 
-static NEARDATA const char kebabable[] = {
+static const char kebabable[] = {
 	S_XORN, S_DRAGON, S_JABBERWOCK, S_NAGA, S_GIANT, '\0'
 };
 
@@ -429,7 +429,7 @@ int x;
 
 /* WAC added the Ya, increased priority of silver dagger, added Spoon */
 /* KMH -- added bullets */
-static NEARDATA const int rwep[] =
+static const int rwep[] =
 {	
 #ifdef SPOON
 	SPOON,
@@ -446,7 +446,7 @@ static NEARDATA const int rwep[] =
 	/* note: CREAM_PIE should NOT be #ifdef KOPS */
 };
 
-static NEARDATA const int pwep[] =
+static const int pwep[] =
 {	HALBERD, BARDICHE, SPETUM, BILL_GUISARME, VOULGE, RANSEUR, GUISARME,
 	GLAIVE, LUCERN_HAMMER, BEC_DE_CORBIN, FAUCHARD, PARTISAN, LANCE
 };
@@ -601,7 +601,7 @@ select_rwep (	/* select a ranged weapon for the monster */
 /* Weapons in order of preference */
 /* WAC -- added dark elven short sword here */
 /* WAC -- removed polearms */
-static const NEARDATA short hwep[] = {
+static const short hwep[] = {
 	  CORPSE,  /* cockatrice corpse */
 	  TSURUGI, RUNESWORD, HEAVY_HAMMER, 
 	  DWARVISH_MATTOCK, 

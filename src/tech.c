@@ -29,15 +29,15 @@ static int blitz_dash(void);
 static int blitz_power_surge(void);
 static int blitz_spirit_bomb(void);
 
-static NEARDATA schar delay;            /* moves left for tinker/energy draw */
-static NEARDATA const char revivables[] = { ALLOW_FLOOROBJ, FOOD_CLASS, 0 };
+static schar delay;            /* moves left for tinker/energy draw */
+static const char revivables[] = { ALLOW_FLOOROBJ, FOOD_CLASS, 0 };
 
 /* 
  * Do try to keep the names <= 25 chars long, or else the
  * menu will look bad :B  WAC
  */
  
-STATIC_OVL NEARDATA const char *tech_names[] = {
+STATIC_OVL const char *tech_names[] = {
 	"no technique",
 	"berserk",
 	"kiii",
@@ -526,7 +526,7 @@ dotech (void)
 	return 0;
 }
 
-static NEARDATA const char kits[] = { TOOL_CLASS, 0 };
+static const char kits[] = { TOOL_CLASS, 0 };
 
 static struct obj *
 use_medical_kit(type, feedback, verb)

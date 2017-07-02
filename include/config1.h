@@ -38,21 +38,6 @@
 #endif
 
 /*
- * Amiga setup.
- */
-#ifdef AZTEC_C	/* Manx auto-defines this */
-#endif
-#ifdef __SASC_60
-# define NEARDATA __near /* put some data close */
-#else
-# ifdef _DCC
-# define NEARDATA __near /* put some data close */
-# else
-# define NEARDATA
-# endif
-#endif
-
-/*
  * Windows NT Autodetection
  *
  */

@@ -22,17 +22,17 @@ extern char SAVEF[];
 extern char SAVEP[];
 #endif
 
-extern NEARDATA int bases[MAXOCLASSES];
+extern int bases[MAXOCLASSES];
 
-extern NEARDATA int multi;
+extern int multi;
 #if 0
-extern NEARDATA int warnlevel;
+extern int warnlevel;
 #endif
-extern NEARDATA int lastuse;
-extern NEARDATA int nextuse;
-extern NEARDATA int nroom;
-extern NEARDATA int nsubroom;
-extern NEARDATA int occtime;
+extern int lastuse;
+extern int nextuse;
+extern int nroom;
+extern int nsubroom;
+extern int occtime;
 
 #define WARNCOUNT 6			/* number of different warning levels */
 extern uchar warnsyms[WARNCOUNT];
@@ -41,7 +41,7 @@ extern int x_maze_max, y_maze_max;
 extern int otg_temp;
 
 #ifdef REDO
-extern NEARDATA int in_doagain;
+extern int in_doagain;
 #endif
 
 extern struct dgn_topology {		/* special dungeon levels for speed */
@@ -128,40 +128,40 @@ extern struct dgn_topology {		/* special dungeon levels for speed */
 #define chaotic_quest_level	(dungeon_topology.d_chaotic_quest_level)
 #define blackmarket_level	(dungeon_topology.d_blackmarket_level)
 
-extern NEARDATA stairway dnstair, upstair;		/* stairs up and down */
+extern stairway dnstair, upstair;		/* stairs up and down */
 #define xdnstair	(dnstair.sx)
 #define ydnstair	(dnstair.sy)
 #define xupstair	(upstair.sx)
 #define yupstair	(upstair.sy)
 
-extern NEARDATA stairway dnladder, upladder;		/* ladders up and down */
+extern stairway dnladder, upladder;		/* ladders up and down */
 #define xdnladder	(dnladder.sx)
 #define ydnladder	(dnladder.sy)
 #define xupladder	(upladder.sx)
 #define yupladder	(upladder.sy)
 
-extern NEARDATA stairway sstairs;
+extern stairway sstairs;
 
-extern NEARDATA dest_area updest, dndest;	/* level-change destination areas */
+extern dest_area updest, dndest;	/* level-change destination areas */
 
-extern NEARDATA coord inv_pos;
-extern NEARDATA dungeon dungeons[];
-extern NEARDATA s_level *sp_levchn;
+extern coord inv_pos;
+extern dungeon dungeons[];
+extern s_level *sp_levchn;
 #define dunlev_reached(x)	(dungeons[(x)->dnum].dunlev_ureached)
 
 #include "quest.h"
 extern struct q_score quest_status;
 
-extern NEARDATA char pl_fruit[PL_FSIZ];
-extern NEARDATA int current_fruit;
-extern NEARDATA struct fruit *ffruit;
+extern char pl_fruit[PL_FSIZ];
+extern int current_fruit;
+extern struct fruit *ffruit;
 
-extern NEARDATA char tune[6];
+extern char tune[6];
 
 #define MAXLINFO (MAXDUNGEON * MAXLEVEL)
 extern struct linfo level_info[MAXLINFO];
 
-extern NEARDATA struct sinfo {
+extern struct sinfo {
 	int gameover;		/* self explanatory? */
 	int stopprint;		/* inhibit further end of game disclosure */
 #if defined(UNIX) || defined (__EMX__) || defined(WIN32)
@@ -187,17 +187,17 @@ extern const char ynchars[];
 extern const char ynqchars[];
 extern const char ynaqchars[];
 extern const char ynNaqchars[];
-extern NEARDATA long yn_number;
+extern long yn_number;
 
 extern const char disclosure_options[];
 
-extern NEARDATA int smeq[];
-extern NEARDATA int doorindex;
-extern NEARDATA char *save_cm;
+extern int smeq[];
+extern int doorindex;
+extern char *save_cm;
 #define KILLED_BY_AN	 0
 #define KILLED_BY	 1
 #define NO_KILLER_PREFIX 2
-extern NEARDATA int killer_format;
+extern int killer_format;
 extern const char *killer;
 extern const char *delayed_killer;
 #ifdef GOLDOBJ
@@ -208,19 +208,19 @@ extern char killer_buf[BUFSZ];
 extern char dump_fn[];		/* dumpfile name (dump patch) */
 #endif
 extern const char *configfile;
-extern NEARDATA char plname[PL_NSIZ];
-extern NEARDATA char dogname[];
-extern NEARDATA char catname[];
-extern NEARDATA char ghoulname[];
-extern NEARDATA char horsename[];
-extern NEARDATA char wolfname[];
+extern char plname[PL_NSIZ];
+extern char dogname[];
+extern char catname[];
+extern char ghoulname[];
+extern char horsename[];
+extern char wolfname[];
 #if 0
-extern NEARDATA char batname[];
-extern NEARDATA char snakename[];
-extern NEARDATA char ratname[];
-extern NEARDATA char badgername[];
-extern NEARDATA char reddragonname[];
-extern NEARDATA char whitedragonname[];
+extern char batname[];
+extern char snakename[];
+extern char ratname[];
+extern char badgername[];
+extern char reddragonname[];
+extern char whitedragonname[];
 #endif
 extern char preferred_pet;
 extern const char *occtxt;			/* defined when occupation != NULL */
@@ -231,11 +231,11 @@ extern char lock[];
 extern const char sdir[], ndir[];
 extern const schar xdir[], ydir[], zdir[];
 
-extern NEARDATA schar tbx, tby;		/* set in mthrowu.c */
+extern schar tbx, tby;		/* set in mthrowu.c */
 
-extern NEARDATA struct multishot { int n, i; short o; boolean s; } m_shot;
+extern struct multishot { int n, i; short o; boolean s; } m_shot;
 
-extern NEARDATA struct dig_info {		/* apply.c, hack.c */
+extern struct dig_info {		/* apply.c, hack.c */
 	int	effort;
 	d_level level;
 	coord	pos;
@@ -243,17 +243,17 @@ extern NEARDATA struct dig_info {		/* apply.c, hack.c */
 	boolean down, chew, warned, quiet;
 } digging;
 
-extern NEARDATA long moves, monstermoves;
-extern NEARDATA long wailmsg;
+extern long moves, monstermoves;
+extern long wailmsg;
 
-extern NEARDATA boolean in_mklev;
-extern NEARDATA boolean stoned;
-extern NEARDATA boolean unweapon;
-extern NEARDATA boolean mrg_to_wielded;
-extern NEARDATA struct obj *current_wand;
-extern NEARDATA boolean defer_see_monsters;
+extern boolean in_mklev;
+extern boolean stoned;
+extern boolean unweapon;
+extern boolean mrg_to_wielded;
+extern struct obj *current_wand;
+extern boolean defer_see_monsters;
 
-extern NEARDATA boolean in_steed_dismounting;
+extern boolean in_steed_dismounting;
 
 extern const int shield_static[];
 
@@ -261,7 +261,7 @@ extern const int shield_static[];
 /*** Objects ***/
 #include "obj.h"
 
-extern NEARDATA struct obj *invent, *uarm, *uarmc, *uarmh, *uarms, *uarmg, *uarmf,
+extern struct obj *invent, *uarm, *uarmc, *uarmh, *uarms, *uarmg, *uarmf,
 #ifdef TOURIST
 	*uarmu,				/* under-wear, so to speak */
 #endif
@@ -271,33 +271,33 @@ extern NEARDATA struct obj *invent, *uarm, *uarmc, *uarmh, *uarms, *uarmg, *uarm
 	*uskin, *uamul, *uleft, *uright, *ublindf,
 	*uwep, *uswapwep, *uquiver;
 
-extern NEARDATA struct obj *uchain;		/* defined only when punished */
-extern NEARDATA struct obj *uball;
-extern NEARDATA struct obj *migrating_objs;
-extern NEARDATA struct obj *billobjs;
-extern NEARDATA struct obj zeroobj;		/* init'd and defined in decl.c */
-extern NEARDATA struct obj thisplace;	/* init'd and defined in decl.c */
+extern struct obj *uchain;		/* defined only when punished */
+extern struct obj *uball;
+extern struct obj *migrating_objs;
+extern struct obj *billobjs;
+extern struct obj zeroobj;		/* init'd and defined in decl.c */
+extern struct obj thisplace;	/* init'd and defined in decl.c */
 
 #include "spell.h"
-extern NEARDATA struct spell spl_book[];	/* sized in decl.c */
+extern struct spell spl_book[];	/* sized in decl.c */
 
 #ifndef TECH_H
 #include "tech.h"
 #endif
-extern NEARDATA struct tech tech_list[];     /* sized in decl.c */
+extern struct tech tech_list[];     /* sized in decl.c */
 
 
 /*** The player ***/
-extern NEARDATA char pl_character[PL_CSIZ];
-extern NEARDATA char pl_race;		/* character's race */
+extern char pl_character[PL_CSIZ];
+extern char pl_race;		/* character's race */
 /* KMH, role patch -- more maintainable when declared as an array */
 extern const char pl_classes[];
 
 #include "you.h"
 #include "onames.h"
 
-extern NEARDATA struct you u;
-extern NEARDATA struct Role urole;
+extern struct you u;
+extern struct Role urole;
 
 
 /*** Monsters ***/
@@ -305,18 +305,18 @@ extern NEARDATA struct Role urole;
 #include "pm.h"
 #endif
 
-extern NEARDATA struct permonst playermon, *uasmon;
+extern struct permonst playermon, *uasmon;
 					/* also decl'd extern in permonst.h */
 					/* init'd in monst.c */
 
-extern NEARDATA struct monst youmonst;	/* init'd and defined in decl.c */
-extern NEARDATA struct monst *mydogs, *migrating_mons;
+extern struct monst youmonst;	/* init'd and defined in decl.c */
+extern struct monst *mydogs, *migrating_mons;
 
-extern NEARDATA struct permonst upermonst;	/* init'd in decl.c, 
+extern struct permonst upermonst;	/* init'd in decl.c, 
 					 * defined in polyself.c 
 					 */
 
-extern NEARDATA struct mvitals {
+extern struct mvitals {
 	uchar	born;
 	uchar	died;
 	uchar	mvflags;
@@ -366,8 +366,8 @@ extern const char *materialnm[];
 
 
 /*** Vision ***/
-extern NEARDATA boolean vision_full_recalc;	/* TRUE if need vision recalc */
-extern NEARDATA char **viz_array;		/* could see/in sight row pointers */
+extern boolean vision_full_recalc;	/* TRUE if need vision recalc */
+extern char **viz_array;		/* could see/in sight row pointers */
 
 
 /*** Window system stuff ***/
@@ -381,7 +381,7 @@ extern uchar oc_syms[MAXOCLASSES];		/* current class symbols */
 extern const char def_monsyms[MAXMCLASSES];	/* default class symbols */
 extern uchar monsyms[MAXMCLASSES];		/* current class symbols */
 
-extern NEARDATA struct c_color_names {
+extern struct c_color_names {
     const char	*const c_black, *const c_amber, *const c_golden,
 		*const c_light_blue,*const c_red, *const c_green,
 		*const c_silver, *const c_blue, *const c_purple,
@@ -398,8 +398,8 @@ extern NEARDATA struct c_color_names {
 #define NH_PURPLE		c_color_names.c_purple
 #define NH_WHITE		c_color_names.c_white
 
-extern NEARDATA winid WIN_MESSAGE, WIN_STATUS;
-extern NEARDATA winid WIN_MAP, WIN_INVEN;
+extern winid WIN_MESSAGE, WIN_STATUS;
+extern winid WIN_MAP, WIN_INVEN;
 extern char toplines[];
 #ifndef TCAP_H
 extern struct tc_gbl_data {	/* also declared in tcap.h */

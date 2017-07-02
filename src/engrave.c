@@ -6,7 +6,7 @@
 #include "lev.h"
 #include <ctype.h>
 
-STATIC_VAR NEARDATA struct engr *head_engr;
+STATIC_VAR struct engr *head_engr;
 
 #ifdef OVLB
 /* random engravings */
@@ -431,7 +431,7 @@ freehand (void)
 		return(1);*/
 }
 
-static NEARDATA const char styluses[] =
+static const char styluses[] =
 	{ ALL_CLASSES, ALLOW_NONE, TOOL_CLASS, WEAPON_CLASS, WAND_CLASS,
 	  GEM_CLASS, RING_CLASS, 0 };
 

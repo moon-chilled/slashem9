@@ -103,7 +103,7 @@ void monst_init(void);
 /* [Tom] I made many monsters NOHELL -- mostly natural animals and stuff */
 
 #ifndef SPLITMON_2
-NEARDATA struct permonst mons[] = {
+struct permonst mons[] = {
 /*
  * ants
  */

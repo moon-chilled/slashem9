@@ -8,7 +8,7 @@
 
 #ifdef OVLB
 
-static NEARDATA boolean did_dig_msg;
+static boolean did_dig_msg;
 
 STATIC_DCL boolean rm_waslit(void);
 STATIC_DCL void mkcavepos(xchar,xchar,int,boolean,boolean);

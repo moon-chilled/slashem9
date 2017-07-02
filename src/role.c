@@ -761,7 +761,7 @@ STATIC_DCL int role_gendercount(int);
 STATIC_DCL int race_alignmentcount(int);
 
 /* used by str2XXX() */
-static char NEARDATA randomstr[] = "random";
+static char randomstr[] = "random";
 
 #ifdef MAC_MPW
 const size_t maxAlign = sizeof aligns/sizeof aligns[0];

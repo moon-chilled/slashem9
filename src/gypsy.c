@@ -718,7 +718,7 @@ ninetynine (mtmp)
 
 /*** Pawn gems ***/
 
-STATIC_OVL NEARDATA const char pawnables[] = { ALLOW_COUNT, GEM_CLASS, 0 };
+STATIC_OVL const char pawnables[] = { ALLOW_COUNT, GEM_CLASS, 0 };
 
 static void
 pawn (mtmp)

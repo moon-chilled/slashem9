@@ -1343,8 +1343,8 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 	return FALSE;
 }
 
-static NEARDATA const char recharge_type[] = { ALLOW_COUNT, ALL_CLASSES, 0 };
-static NEARDATA const char invoke_types[] = { ALL_CLASSES, 0 };
+static const char recharge_type[] = { ALLOW_COUNT, ALL_CLASSES, 0 };
+static const char invoke_types[] = { ALL_CLASSES, 0 };
 		/* #invoke: an "ugly check" filters out most objects */
 
 int doinvoke(void) {

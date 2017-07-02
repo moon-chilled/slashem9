@@ -21,7 +21,7 @@
 
 boolean	known;
 
-static NEARDATA const char readable[] = {
+static const char readable[] = {
 		   SCROLL_CLASS, SPBOOK_CLASS, RING_CLASS, 0 };
 static const char all_count[] = { ALLOW_COUNT, ALL_CLASSES, 0 };
 

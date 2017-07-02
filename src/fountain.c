@@ -671,12 +671,12 @@ drinktoilet (void)
 	}
 	switch(rn2(9)) {
 /*
-		static NEARDATA struct obj *otmp;
+		static struct obj *otmp;
  */
 		case 0: if (mvitals[PM_SEWER_RAT].mvflags & G_GONE)
 				pline("The toilet seems quite dirty.");
 			else {
-				static NEARDATA struct monst *mtmp;
+				static struct monst *mtmp;
 
 				mtmp = makemon(&mons[PM_SEWER_RAT], u.ux, u.uy,
 					NO_MM_FLAGS);
@@ -697,7 +697,7 @@ drinktoilet (void)
 		case 4: if (mvitals[PM_BABY_CROCODILE].mvflags & G_GONE)
 				pline("The toilet smells fishy.");
 			else {
-				static NEARDATA struct monst *mtmp;
+				static struct monst *mtmp;
 
 				mtmp = makemon(&mons[PM_BABY_CROCODILE], u.ux,
 					 u.uy, NO_MM_FLAGS);
