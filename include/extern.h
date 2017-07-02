@@ -683,7 +683,6 @@ extern void read_wizkit(void);
 #endif
 extern void paniclog(const char *, const char *);
 extern int validate_prefix_locations(char *);
-extern char** get_saved_games(void);
 extern void free_saved_games(char**);
 #ifdef SELF_RECOVER
 extern boolean recover_savefile(void);

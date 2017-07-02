@@ -1251,13 +1251,6 @@ $(O)wingem1.o: ..\win\gem\wingem1.c $(INCL)\gem_rsc.h $(INCL)\load_img.h \
 $(O)load_img.o: ..\win\gem\load_img.c $(INCL)\load_img.h
 	$(cc) $(CFLAGS) -o$@ ..\win\gem\load_img.c
 $(O)tile.o: tile.c $(HACK_H)
-$(O)qt_win.o: ..\win\Qt\qt_win.cpp $(HACK_H) $(INCL)\func_tab.h \
-		$(INCL)\dlb.h $(INCL)\patchlevel.h $(INCL)\qt_win.h \
-		$(INCL)\qt_clust.h $(INCL)\qt_kde0.h \
-		$(INCL)\qt_xpms.h qt_win.moc qt_kde0.moc
-	$(CXX) $(CXXFLAGS) -c ..\win\Qt\qt_win.cpp
-$(O)qt_clust.o: ..\win\Qt\qt_clust.cpp $(INCL)\qt_clust.h
-	$(CXX) $(CXXFLAGS) -c ..\win\Qt\qt_clust.cpp
 $(O)monstr.o: $(SRC)\monstr.c $(CONFIG_H)
 $(O)vis_tab.o: $(SRC)\vis_tab.c $(CONFIG_H) $(INCL)\vis_tab.h
 $(O)allmain.o: allmain.c $(HACK_H)

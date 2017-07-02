@@ -15,9 +15,6 @@ extern struct window_procs curses_procs;
 extern struct window_procs X11_procs;
 extern void win_X11_init(void);
 #endif
-#ifdef QT_GRAPHICS
-extern struct window_procs Qt_procs;
-#endif
 #ifdef GTK_GRAPHICS
 /*
  * GTK interface (By issei@guru.gr.jp)
@@ -76,9 +73,6 @@ struct win_choices {
 #endif
 #ifdef X11_GRAPHICS
     { &X11_procs, win_X11_init },
-#endif
-#ifdef QT_GRAPHICS
-    { &Qt_procs, 0 },
 #endif
 #ifdef GTK_GRAPHICS
     { &GTK_procs, win_GTK_init },

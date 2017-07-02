@@ -1679,16 +1679,6 @@ gl_win.o: ../win/gl/gl_win.c $(HACK_H) $(INCL)/dlb.h \
 		$(INCL)/patchlevel.h $(INCL)/winGL.h
 	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_win.c
 tile.o: tile.c $(HACK_H)
-qt_win.o: ../win/Qt/qt_win.cpp $(HACK_H) $(INCL)/func_tab.h \
-		$(INCL)/dlb.h $(INCL)/date.h $(INCL)/patchlevel.h \
-		$(INCL)/tile2x11.h $(INCL)/qt_win.h \
-		$(INCL)/qt_clust.h $(INCL)/qt_kde0.h \
-		$(INCL)/qt_xpms.h qt_win.moc qt_kde0.moc qttableview.moc
-	$(CXX) $(CXXFLAGS) -o$@ ../win/Qt/qt_win.cpp
-qt_clust.o: ../win/Qt/qt_clust.cpp $(INCL)/qt_clust.h
-	$(CXX) $(CXXFLAGS) -o$@ ../win/Qt/qt_clust.cpp
-qttableview.o: ../win/Qt/qttableview.cpp $(INCL)/qttableview.h
-	$(CXX) $(CXXFLAGS) -o$@ ../win/Qt/qttableview.cpp
 monstr.o: monstr.c $(CONFIG_H)
 vis_tab.o: vis_tab.c $(CONFIG_H) $(INCL)/vis_tab.h
 allmain.o: allmain.c $(HACK_H) $(INCL)/patchlevel.h

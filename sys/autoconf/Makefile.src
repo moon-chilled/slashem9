@@ -36,14 +36,7 @@ LFLAGS = @LFLAGS@
 # Only used for the Gnome interface.
 GNOMEINC=`gnome-config gnome --cflags` -I$(srcdir)/../win/gnome
 
-# QT windowing system
-QTLIBDIR=$(QTDIR)/lib
-QTINCDIR=$(QTDIR)/include
-QTBINDIR=$(QTDIR)/bin
-KDELIBDIR=/usr/lib
-KDEINCDIR=/usr/include/kde
-
-CXXFLAGS = $(CFLAGS) -I. -I$(QTINCDIR)
+CXXFLAGS = $(CFLAGS) -I. -I
 CXX=g++
 
 # Proxy windowing system
@@ -73,11 +66,7 @@ WINX11SRC = $(srcdir)/../win/X11/Window.c $(srcdir)/../win/X11/dialogs.c $(srcdi
 	$(srcdir)/../win/X11/winval.c
 WINX11OBJ = Window.o dialogs.o winX.o winmap.o winmenu.o winmesg.o \
 	winmisc.o winstat.o wintext.o winval.o nhwin.a
-#
-# Files for a Qt port
-#
-WINQTSRC = $(srcdir)/../win/Qt/qt_win.cpp $(srcdir)/../win/Qt/qt_clust.cpp $(srcdir)/../win/Qt/qttableview.cpp
-WINQTOBJ = qt_win.o qt_clust.o qttableview.o nhwin.a
+
 #
 # Files for a Gnome port
 #
@@ -95,13 +84,7 @@ WINGNOMEOBJ = gnaskstr.o gnbind.o gnglyph.o gnmain.o gnmap.o gnmenu.o \
 WINGEMSRC = $(srcdir)/../win/gem/wingem.c $(srcdir)/../win/gem/wingem1.c $(srcdir)/../win/gem/load_img.c \
 	$(srcdir)/../win/gem/gr_rect.c
 WINGEMOBJ = wingem.o wingem1.o load_img.o gr_rect.o nhwin.a
-#
-# Files for a BeOS InterfaceKit port -- not ready for prime time
-WINBESRC =
-WINBEOBJ =
-#WINBESRC = $(srcdir)/../win/BeOS/winbe.cpp $(srcdir)/../win/BeOS/NHWindow.cpp \
-#     $(srcdir)/../win/BeOS/NHMenuWindow.cpp $(srcdir)/../win/BeOS/NHMapWindow.cpp
-#WINBEOBJ = winbe.o NHWindow.o NHMenuWindow.o NHMapWindow.o nhwin.a
+
 #
 # Files for a proxy interface
 WINPROXYSRC = $(srcdir)/../win/proxy/winproxy.c $(srcdir)/../win/proxy/callback.c \
@@ -143,11 +126,6 @@ WINTTYLIB = @WINTTYLIB@
 WINCURSESLIB = -lncursesw
 WINX11LIB = -lXaw -lXmu -lXext -lXt -lX11
 
-# libraries for Qt
-WINQTLIB = -L$(QTLIBDIR) -lqt
-#
-# libraries for KDE (with Qt)
-WINKDELIB = -lkdecore -lkdeui -lXext
 #
 # libraries for Gnome
 WINGNOMELIB = -lgnomeui -lgnome -lart_lgpl -lgtk -lgdk -lpopt
@@ -237,7 +215,7 @@ GENCSRC = monstr.c vis_tab.c  #tile.c
 WINCSRC = $(WINTTYSRC) $(WINX11SRC) $(WINGNOMESRC) $(WINGEMSRC) \
 	$(WINPROXYSRC) $(WINGLSRC) $(WINMSSRC) tile.c
 # all windowing-system-dependent .cpp (for dependencies and such)
-WINCXXSRC = $(WINQTSRC) $(WINBESRC)
+WINCXXSRC = $(WINBESRC)
 
 # .c files for this version (for date.h)
 VERSOURCES = $(HACKCSRC) $(SYSSRC) $(WINSRC) $(GENCSRC)
@@ -378,16 +356,6 @@ objects.o:
 
 ../include/filename.h: $(MAKEDEFS) ../include/file.h
 	../util/makedefs -f
-
-# Qt windowport meta-object-compiler output
-qt_kde0.moc: ../include/qt_kde0.h
-	$(QTBINDIR)/moc -o qt_kde0.moc ../include/qt_kde0.h
-
-qt_win.moc: ../include/qt_win.h
-	$(QTBINDIR)/moc -o qt_win.moc ../include/qt_win.h
-
-qttableview.moc: ../include/qttableview.h
-	$(QTDIR)/bin/moc -o qttableview.moc ../include/qttableview.h
 
 # Microsoft Window's native port resources
 ../dat/tiles.bmp:
@@ -785,16 +753,6 @@ mhrip.o: $(srcdir)/../win/win32/mhrip.c ../win/win32/winMS.h \
 		../win/win32/mhmsg.h ../win/win32/mhfont.h
 	$(CC) $(CFLAGS) $(WINMSCFLAGS) -c $(srcdir)/../win/win32/mhrip.c
 tile.o: tile.c $(HACK_H)
-qt_win.o: $(srcdir)/../win/Qt/qt_win.cpp $(HACK_H) ../include/func_tab.h \
-		../include/dlb.h ../include/date.h ../include/patchlevel.h \
-		../include/tile2x11.h ../include/qt_win.h \
-		../include/qt_clust.h ../include/qt_kde0.h \
-		../include/qt_xpms.h qt_win.moc qt_kde0.moc qttableview.moc
-	$(CXX) $(CXXFLAGS) -c $(srcdir)/../win/Qt/qt_win.cpp
-qt_clust.o: $(srcdir)/../win/Qt/qt_clust.cpp ../include/qt_clust.h
-	$(CXX) $(CXXFLAGS) -c $(srcdir)/../win/Qt/qt_clust.cpp
-qttableview.o: $(srcdir)/../win/Qt/qttableview.cpp ../include/qttableview.h
-	$(CXX) $(CXXFLAGS) -c $(srcdir)/../win/Qt/qttableview.cpp
 monstr.o: monstr.c $(CONFIG_H)
 vis_tab.o: vis_tab.c $(CONFIG_H) ../include/vis_tab.h
 allmain.o: $(srcdir)/allmain.c $(HACK_H) ../include/patchlevel.h

@@ -422,7 +422,3 @@ spotless: clean
 	-rm -f makedefs lev_comp dgn_comp recover dlb
 	-rm -f gif2txt xpm2txt txt2ppm tile2x11 tile2img.ttp xpm2img.ttp tilemap
 	-rm -f magtile bigtile txtmerge txtfilt txtbg mapmerge tile2png
-
-tileedit: tileedit.cpp $(TEXT_IO)
-	$(QTDIR)/bin/moc -o tileedit.moc tileedit.h
-	$(CC) -o tileedit -I../include -I$(QTDIR)/include -L$(QTDIR)/lib tileedit.cpp $(TEXT_IO) -lqt

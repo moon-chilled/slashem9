@@ -49,7 +49,6 @@
 #define TTY_GRAPHICS		/* good old tty based graphics */
 #define CURSES_GRAPHICS		/* awful curses interface */
 /* #define X11_GRAPHICS */	/* X11 interface */
-/* #define QT_GRAPHICS */	/* Qt Interface */
 /* #define KDE */		/* KDE Interface */
 /* #define GNOME_GRAPHICS */	/* Gnome interface */
 /* #define PROXY_GRAPHICS */	/* Plug-in interfaces */
@@ -90,19 +89,6 @@
 #ifndef HACKDIR	/* override the default hackdir below */
 # define HACKDIR "/boot/apps/NetHack"
 #endif
-#endif
-
-#ifdef QT_GRAPHICS
-# define DEFAULT_WC_TILED_MAP   /* Default to tiles if users doesn't say wc_ascii_map */
-# define USER_SOUNDS		/* Use sounds */
-# ifndef __APPLE__
-#  define USER_SOUNDS_REGEX
-# endif
-# define USE_XPM		/* Use XPM format for images (required) */
-# define GRAPHIC_TOMBSTONE	/* Use graphical tombstone (rip.xpm) */
-# ifndef DEFAULT_WINDOW_SYS
-#  define DEFAULT_WINDOW_SYS "Qt"
-# endif
 #endif
 
 #ifdef GNOME_GRAPHICS

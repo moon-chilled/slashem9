@@ -850,9 +850,6 @@ static const char *window_opts[] = {
 #ifdef X11_GRAPHICS
 		"X11",
 #endif
-#ifdef QT_GRAPHICS
-		"Qt",
-#endif
 #ifdef GTK_GRAPHICS
 #ifdef GTK_PROXY
 		"proxified GTK",

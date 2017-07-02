@@ -867,22 +867,6 @@ SOURCE=..\include\prop.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\qt_clust.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\qt_kde0.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\qt_win.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\qt_xpms.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\qtext.h
 # End Source File
 # Begin Source File

@@ -301,7 +301,7 @@ struct authentication authentication = { "", "" };
 struct tileset tilesets[MAXNOTILESETS];
 int no_tilesets = 0;
 struct tileset def_tilesets[] = {
-#if defined(X11_GRAPHICS) || defined(QT_GRAPHICS) || defined(GTK_GRAPHICS) || \
+#if defined(X11_GRAPHICS) || defined(GTK_GRAPHICS) || \
     defined(GNOME_GRAPHICS) || defined(GL_GRAPHICS) || defined(SDL_GRAPHICS)
     { "Small tiles", "x11tiles", 0 },
     { "Big tiles", "x11bigtiles", TILESET_TRANSPARENT },

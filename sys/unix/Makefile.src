@@ -166,17 +166,6 @@ CFLAGS = -O -I../include -std=c99
 #GNOMEINC=-I/usr/lib/glib/include -I/usr/lib/gnome-libs/include -I../win/gnome
 GNOMEINC=`gnome-config gnome --cflags` -I../win/gnome
 
-# QT windowing system
-# Gentoo
-# QTDIR = /usr/qt/2
-# SuSE 6.1
-# QTDIR = /usr/lib/qt
-# RedHat 6.1
-# QTDIR = /usr/lib/qt-2.0.1
-#
-QTLIBDIR=$(QTDIR)/lib
-QTINCDIR=$(QTDIR)/include
-QTBINDIR=$(QTDIR)/bin
 # SuSE 6.1
 # KDELIBDIR=/opt/kde/lib
 # KDEINCDIR=/opt/kde/include
@@ -184,18 +173,6 @@ QTBINDIR=$(QTDIR)/bin
 KDELIBDIR=/usr/lib
 KDEINCDIR=/usr/include/kde
 # CFLAGS = -O -I../include
-# LFLAGS = -L/usr/X11/lib -L$(QTLIBDIR) -L$(KDELIBDIR)
-
-# The Qt and Be window systems are written in C++, while the rest of
-# NetHack is standard C.  If using Qt, uncomment the LINK line here to get
-# the C++ libraries linked in.
-CXXFLAGS = $(CFLAGS) -I. -I$(QTINCDIR)
-# Qt is C++, so define the compiler and linker thus required:
-CXX=g++
-#LINK=g++
-#	For cross-compiling, eg. with gcc on Linux (see also CC further up):
-#CXX=arm-linux-g++
-#LINK=arm-linux-gcc
 
 # Proxy windowing system
 WINPROXYCONFIG=pkg-config nhproxy
@@ -225,11 +202,7 @@ WINX11SRC = ../win/X11/Window.c ../win/X11/dialogs.c ../win/X11/winX.c \
 	../win/X11/winval.c
 WINX11OBJ = Window.o dialogs.o winX.o winmap.o winmenu.o winmesg.o \
 	winmisc.o winstat.o wintext.o winval.o nhwin.a
-#
-# Files for a Qt port
-#
-WINQTSRC = ../win/Qt/qt_win.cpp ../win/Qt/qt_clust.cpp ../win/Qt/qttableview.cpp
-WINQTOBJ = qt_win.o qt_clust.o qttableview.o nhwin.a
+
 #
 # Files for a Gnome port
 #
@@ -281,9 +254,6 @@ WINOBJ = $(WINTTYOBJ) $(WINCURSESOBJ)
 # Use these declarations if you want to support the X11 windowing system
 # WINSRC = $(WINTTYSRC) $(WINX11SRC)
 # WINOBJ = $(WINTTYOBJ) $(WINX11OBJ)
-# Use these declarations if you want to support the Qt windowing system
-# WINSRC = $(WINTTYSRC) $(WINQTSRC)
-# WINOBJ = $(WINTTYOBJ) $(WINQTOBJ)
 # Use these declarations to only support the SDL/GL windowing systems
 # WINSRC = $(WINGLSRC)
 # WINOBJ = $(WINGLOBJ)
@@ -291,9 +261,9 @@ WINOBJ = $(WINTTYOBJ) $(WINCURSESOBJ)
 # WINSRC = $(WINTTYSRC) $(WINPROXYSRC)
 # WINOBJ = $(WINTTYOBJ) $(WINPROXYOBJ)
 # Use these declarations if you want to support all standard windowing systems
-# WINSRC = $(WINTTYSRC) $(WINPROXYSRC) $(WINX11SRC) $(WINQTSRC) $(WINGLSRC) \
+# WINSRC = $(WINTTYSRC) $(WINPROXYSRC) $(WINX11SRC) $(WINGLSRC) \
 #	$(WINGNOMESRC)
-# WINOBJ = $(WINTTYOBJ) $(WINPROXYOBJ) $(WINX11OBJ) $(WINQTOBJ) $(WINGLOBJ) \
+# WINOBJ = $(WINTTYOBJ) $(WINPROXYOBJ) $(WINX11OBJ) $(WINGLOBJ) \
 #	$(WINGNOMEOBJ)
 #
 # You must also change the definition of WINLIB (below) to match these
@@ -328,10 +298,8 @@ WINX11LIB = -lXaw -lXmu -lXext -lXt -lX11
 # WINX11LIB = -lXaw -lXmu -lXext -lXt -lXpm -lX11 -lm
 # WINX11LIB = -lXaw -lXmu -lXpm -lXext -lXt -lX11 -lSM -lICE -lm # BSD/OS 2.0
 #
-# libraries for Qt
-WINQTLIB = -L$(QTLIBDIR) -lqt
 #
-# libraries for KDE (with Qt)
+# libraries for KDE
 WINKDELIB = -lkdecore -lkdeui -lXext
 #
 # libraries for Gnome
@@ -354,14 +322,12 @@ WINPROXYLIB = `$(WINPROXYCONFIG) --libs`
 WINLIB = $(WINTTYLIB) $(WINCURSESLIB)
 # Use this declaration if you want to support the X11 windowing system
 # WINLIB = $(WINTTYLIB) $(WINX11LIB)
-# Use this declaration if you want to support the Qt windowing system
-# WINLIB = $(WINTTYLIB) $(WINQTLIB)
 # Use this declaration to only support the SDL/GL windowing system
 # WINLIB = $(WINGLLIB)
 # Use this declaration if you want to support external windowing systems
 # WINLIB = $(WINTTYLIB) $(WINPROXYLIB)
 # Use this declaration if you want to support all standard windowing systems
-# WINLIB = $(WINTTYLIB) $(WINPROXYLIB) $(WINX11LIB) $(WINQTLIB) \
+# WINLIB = $(WINTTYLIB) $(WINPROXYLIB) $(WINX11LIB) \
 #	$(WINGNOMELIB) $(WINSDLLIB) $(WINGLLIB) 
 
 # any other strange libraries your system needs (for Sysunix only -- the more
@@ -448,8 +414,7 @@ GENCSRC = monstr.c vis_tab.c  #tile.c
 # all windowing-system-dependent .c (for dependencies and such)
 WINCSRC = $(WINTTYSRC) $(WINX11SRC) $(WINGNOMESRC) $(WINGEMSRC) \
 	$(WINPROXYSRC) $(WINGLSRC) tile.c
-# all windowing-system-dependent .cpp (for dependencies and such)
-WINCXXSRC = $(WINQTSRC) $(WINBESRC)
+WINCXXSRC = $(WINBESRC)
 
 # .c files for this version (for date.h)
 VERSOURCES = $(HACKCSRC) $(SYSSRC) $(WINSRC) $(GENCSRC)
@@ -570,16 +535,6 @@ objects.o:
 
 ../include/filename.h: $(MAKEDEFS)
 	../util/makedefs -f
-
-# Qt windowport meta-object-compiler output
-qt_kde0.moc: ../include/qt_kde0.h
-	$(QTBINDIR)/moc -o qt_kde0.moc ../include/qt_kde0.h
-
-qt_win.moc: ../include/qt_win.h
-	$(QTBINDIR)/moc -o qt_win.moc ../include/qt_win.h
-
-qttableview.moc: ../include/qttableview.h
-	$(QTDIR)/bin/moc -o qttableview.moc ../include/qttableview.h
 
 # NetHack windows library for modules needed by more than one windows
 # interface.
@@ -879,16 +834,6 @@ gl_win.o: ../win/gl/gl_win.c $(HACK_H) ../include/dlb.h \
 		../include/patchlevel.h ../include/winGL.h
 	$(CC) $(CFLAGS) $(SDLGL_CFLAGS) -c ../win/gl/gl_win.c
 tile.o: tile.c $(HACK_H)
-qt_win.o: ../win/Qt/qt_win.cpp $(HACK_H) ../include/func_tab.h \
-		../include/dlb.h ../include/date.h ../include/patchlevel.h \
-		../include/tile2x11.h ../include/qt_win.h \
-		../include/qt_clust.h ../include/qt_kde0.h \
-		../include/qt_xpms.h qt_win.moc qt_kde0.moc qttableview.moc
-	$(CXX) $(CXXFLAGS) -c ../win/Qt/qt_win.cpp
-qt_clust.o: ../win/Qt/qt_clust.cpp ../include/qt_clust.h
-	$(CXX) $(CXXFLAGS) -c ../win/Qt/qt_clust.cpp
-qttableview.o: ../win/Qt/qttableview.cpp ../include/qttableview.h
-	$(CXX) $(CXXFLAGS) -c ../win/Qt/qttableview.cpp
 monstr.o: monstr.c $(CONFIG_H)
 vis_tab.o: vis_tab.c $(CONFIG_H) ../include/vis_tab.h
 allmain.o: allmain.c $(HACK_H) ../include/patchlevel.h
