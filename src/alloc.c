@@ -2,24 +2,17 @@
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
-/* to get the malloc() prototype from system.h */
-#define ALLOC_C		/* comment line for pre-compiled headers */
-/* since this file is also used in auxiliary programs, don't include all the
- * function declarations for all of nethack
- */
-#define EXTERN_H	/* comment line for pre-compiled headers */
-#include "config.h"
+#include <stdlib.h>
+
+#include "tradstdc.h"
+#include "extern.h"
 
 #ifdef WIZARD
 char *fmt_ptr(const void*,char *);
 #endif
 
-void *alloc(size_t);
-extern void panic(const char *,...) PRINTF_F(1,2);
-
-
 void *alloc(size_t lth) {
-	void *ptr = malloc(lth);
+	void *ptr = calloc(1, lth);
 
 	if (!ptr) panic("Memory allocation failure; cannot get %zu bytes", lth);
 
