@@ -45,8 +45,6 @@ NetHack, except that rounddiv may call panic().
 	int		midnight	(void)
 =*/
 
-#define Static static
-
 boolean
 digit(c)		/* is 'c' a digit? */
     char c;
@@ -143,7 +141,7 @@ s_suffix (		/* return a name converted to possessive */
     const char *s
 )
 {
-    Static char buf[BUFSZ];
+    static char buf[BUFSZ];
 
     strcpy(buf, s);
     if(!strcmpi(buf, "it"))
@@ -211,7 +209,7 @@ visctrl (		/* make a displayable string from a character */
     char c
 )
 {
-    Static char ccc[3];
+    static char ccc[3];
 
     c &= 0177;
 
@@ -245,7 +243,7 @@ sitoa (		/* make a signed digit string from a number */
     int n
 )
 {
-    Static char buf[13];
+    static char buf[13];
 
     sprintf(buf, (n < 0) ? "%d" : "+%d", n);
     return buf;
@@ -511,7 +509,7 @@ char *
 yymmdd(date)
 time_t date;
 {
-	Static char datestr[10];
+	static char datestr[10];
 	struct tm *lt;
 
 	if (date == 0)
