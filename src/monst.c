@@ -102,7 +102,6 @@ void monst_init(void);
 
 /* [Tom] I made many monsters NOHELL -- mostly natural animals and stuff */
 
-#ifndef SPLITMON_2
 struct permonst mons[] = {
 /*
  * ants
@@ -2548,25 +2547,6 @@ struct permonst mons[] = {
 	M1_HIDE|M1_HUMANOID|M1_POIS|M1_SEE_INVIS|M1_OMNIVORE,
 	M2_NOPOLY|M2_HOSTILE|M2_COLLECT|M2_MAGIC|M2_GREEDY|M2_JEWELS,
 	M3_INFRAVISION|M3_TRAITOR, CLR_YELLOW),
-#ifdef SPLITMON_1
-};
-#endif
-#endif /* !SPLITMON_2 */
-
-/* horrible kludge alert:
- * This is a compiler-specific kludge to allow the compilation of monst.o in
- * two pieces, by defining first SPLITMON_1 and then SPLITMON_2. The
- * resulting assembler files (monst1.s and monst2.s) are then run through
- * sed to change local symbols, concatenated together, and assembled to
- * produce monst.o. THIS ONLY WORKS WITH THE ATARI GCC, and should only
- * be done if you don't have enough memory to compile monst.o the "normal"
- * way.  --ERS
- */
-
-#ifndef SPLITMON_1
-#ifdef SPLITMON_2
-struct permonst _mons2[] = {
-#endif
 /*
  * giant Humanoids
  */
@@ -5494,15 +5474,9 @@ struct permonst _mons2[] = {
 	A(NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(0, 0, 0, 0, 0), 0, 0, 0L, 0L, 0, 0)
 };
-#endif /* !SPLITMON_1 */
-
-#ifndef SPLITMON_1
 /* dummy routine used to force linkage */
-void 
-monst_init (void)
-{
+void monst_init(void) {
     return;
 }
-#endif
 
 /*monst.c*/
