@@ -551,7 +551,7 @@ const char *build_date;
 void
 do_date()
 {
-	long clocktim = 0;
+	unsigned long long clocktim = 0;
 	char *c,  *cbuf, buf[BUFSZ];
 	const char *ul_sfx;
 
@@ -568,13 +568,8 @@ do_date()
 	fprintf(ofp,"/*\tSCCS Id: @(#)date.h\t3.4\t2002/02/03 */\n\n");
 	fprintf(ofp, "%s", Dont_Edit_Code);
 
-#ifdef KR1ED
-	time(&clocktim);
-	strcpy(cbuf, ctime(&clocktim));
-#else
 	time((time_t *)&clocktim);
 	strcpy(cbuf, ctime((time_t *)&clocktim));
-#endif
 	for (c = cbuf; *c; c++) if (*c == '\n') break;
 	*c = '\0';	/* strip off the '\n' */
 #ifdef NHSTDC

@@ -150,12 +150,7 @@
  */
 
 #ifndef WIZARD		/* allow for compile-time or Makefile changes */
-# ifndef KR1ED
-#  define WIZARD  "wizard" /* the person allowed to use the -D option */
-# else
-#  define WIZARD
-#  define WIZARD_NAME "wizard"
-# endif
+# define WIZARD  "wizard" /* the person allowed to use the -D option */
 #endif
 
 #define XLOGFILE "xlogfile"

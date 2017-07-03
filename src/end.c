@@ -350,12 +350,7 @@ panic VA_DECL(const char *, str)
 	    raw_print("\nError save file being written.\n");
 # else
 	if (!wizard)
-	    raw_printf("Report error to \"%s\"%s.",
-#  ifdef WIZARD_NAME	/*(KR1ED)*/
-			WIZARD_NAME,
-#  else
-			WIZARD,
-#  endif
+	    raw_printf("Report error to \"%s\"%s.", WIZARD,
 			!program_state.something_worth_saving ? "" :
 			" and it may be possible to rebuild.");
 # endif
