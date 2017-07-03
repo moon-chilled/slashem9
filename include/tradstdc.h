@@ -132,34 +132,6 @@
 #endif /* NHSTDC */
 
 
-/*
- * According to ANSI, prototypes for old-style declarations must widen the
- * arguments to int.  However, the MSDOS compilers accept shorter arguments
- * (char, short, etc.) in prototypes and do typechecking with them.  Therefore
- * this mess to allow the better typechecking while also allowing some
- * prototypes for the ANSI compilers so people quit trying to fix the
- * prototypes to match the standard and thus lose the typechecking.
- */
-#if defined(MAC_MPW)
-#define WIDENED_PROTOTYPES
-#endif
-#if defined(WIN32)
-#define UNWIDENED_PROTOTYPES
-#endif
-
-#if defined(ULTRIX_PROTO) && defined(ULTRIX_CC20)
-#define UNWIDENED_PROTOTYPES
-#endif
-#if defined(apollo)
-#define UNWIDENED_PROTOTYPES
-#endif
-
-#ifndef UNWIDENED_PROTOTYPES
-# if defined(NHSTDC) || defined(ULTRIX_PROTO) || defined(THINK_C)
-# define WIDENED_PROTOTYPES
-# endif
-#endif
-
 	/* MetaWare High-C defaults to unsigned chars */
 	/* AIX 3.2 needs this also */
 #if defined(__HC__) || defined(_AIX32)

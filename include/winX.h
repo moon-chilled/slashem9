@@ -9,16 +9,6 @@
 #ifndef WINX_H
 #define WINX_H
 
-#if defined(BOS) || defined(NHSTDC)
-#define DIMENSION_P int
-#else
-# ifdef WIDENED_PROTOTYPES
-#define DIMENSION_P unsigned int
-# else
-#define DIMENSION_P Dimension
-# endif
-#endif
-
 /*
  * Generic text buffer.
  */
@@ -295,7 +285,7 @@ extern void check_cursor_visibility(struct xwindow*);
 extern void display_map_window(struct xwindow*);
 extern void clear_map_window(struct xwindow*);
 extern void map_input(Widget, XEvent*, String*, Cardinal*);
-extern void set_map_size(struct xwindow*, DIMENSION_P, DIMENSION_P);
+extern void set_map_size(struct xwindow*, Dimension, Dimension);
 extern void create_map_window(struct xwindow*, boolean, Widget);
 extern void destroy_map_window(struct xwindow*);
 extern int  x_event(int);

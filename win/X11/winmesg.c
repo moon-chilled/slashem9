@@ -37,7 +37,7 @@
 
 static struct line_element *get_previous(struct line_element *);
 static void set_circle_buf(struct mesg_info_t *,int);
-static char *split(char *,XFontStruct *,DIMENSION_P);
+static char *split(char *,XFontStruct *,Dimension);
 static void add_line(struct mesg_info_t *,const char *);
 static void redraw_message_window(struct xwindow *);
 static void mesg_check_size_change(struct xwindow *);
