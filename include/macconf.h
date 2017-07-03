@@ -11,7 +11,6 @@
  *
  *  __SC__			sc, a MPW 68k compiler
  *  __MRC__			mrc, a MPW PowerPC compiler
- *	THINK_C			Think C compiler
  *	__MWERKS__		Metrowerks' Codewarrior compiler
  *
  * We use these early in config.h to define some needed symbols,

@@ -83,10 +83,6 @@ extern void interject(int);
 
 #include <sys/types.h>
 #include <stdlib.h>
-#ifdef __BORLANDC__
-#undef randomize
-#undef random
-#endif
 
 #define PATHLEN		BUFSZ /* maximum pathlength */
 #define FILENAME	BUFSZ /* maximum filename length (conservative) */
@@ -151,11 +147,11 @@ extern void load_keyboard_handler(void);
 #include <fcntl.h>
 
 #ifndef CURSES_GRAPHICS
-# if !defined(__BORLANDC__) && !defined(__CYGWIN__)
+# ifndef __CYGWIN__
 #  include <io.h>
 #  include <direct.h>
 #  include <conio.h>
-# elif defined(__CYGWIN__)
+# else
 #  include <io.h>
 # else
 int  _RTLENTRY _EXPFUNC access  (const char _FAR *__path, int __amode);

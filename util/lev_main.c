@@ -58,9 +58,6 @@
 #define Free(ptr)		if(ptr) free((void *) (ptr))
 #define Write(fd, item, size)	if (write(fd, (void *)(item), size) != size) return FALSE;
 
-#if defined(__BORLANDC__) && !defined(_WIN32)
-extern unsigned _stklen = STKSIZ;
-#endif
 #define MAX_ERRORS	25
 
 extern int  yyparse(void);
@@ -227,7 +224,7 @@ char **argv;
 	FILE *fin;
 	int i;
 	boolean errors_encountered = FALSE;
-#if defined(MAC) && (defined(THINK_C) || defined(__MWERKS__))
+#if defined(MAC) && (defined(__MWERKS__))
 	static char *mac_argv[] = {	"lev_comp",	/* dummy argv[0] */
 	/* KMH -- had to add more from SLASH'EM */
 				":dat:Arch.des",
@@ -1273,11 +1270,11 @@ specialmaze *maze;
 	    for(j=0;j<pt->ysize;j++) {
 		if(!maze->init_lev.init_present ||
 		   pt->xsize > 1 || pt->ysize > 1) {
-#if !defined(_MSC_VER) && !defined(__BORLANDC__)
+#if !defined(_MSC_VER)
 			Write(fd, pt->map[j], pt->xsize * sizeof *pt->map[j]);
 #else
 			/*
-			 * On MSVC and Borland C compilers the Write macro above caused:
+			 * On MSVC the Write macro above caused:
 			 * warning '!=' : signed/unsigned mismatch
 			 */
 			unsigned reslt, sz = pt->xsize * sizeof *pt->map[j];

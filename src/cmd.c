@@ -59,9 +59,6 @@ static int wiz_show_seenv(void);
 static int wiz_show_vision(void);
 static int wiz_mon_polycontrol(void);
 static int wiz_show_wmodes(void);
-#if defined(__BORLANDC__) && !defined(_WIN32)
-extern void show_borlandc_stats(winid);
-#endif
 #ifdef DEBUG_MIGRATING_MONS
 static int wiz_migrate_mons(void);
 #endif
@@ -2683,10 +2680,6 @@ static int wiz_show_stats(void) {
 	putstr(win, 0, separator);
 	sprintf(buf, template, "Total", total_mon_count, total_mon_size);
 	putstr(win, 0, buf);
-
-#if defined(__BORLANDC__) && !defined(_WIN32)
-	show_borlandc_stats(win);
-#endif
 
 	display_nhwindow(win, FALSE);
 	destroy_nhwindow(win);

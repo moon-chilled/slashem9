@@ -8,7 +8,7 @@
  *  time NetHack creates those level files.
  */
 #include "config.h"
-#if !defined(O_WRONLY) && !defined(LSC) && !defined(AZTEC_C)
+#if !defined(O_WRONLY) && !defined(LSC)
 #include <fcntl.h>
 #endif
 #ifdef WIN32
@@ -36,9 +36,6 @@ void copy_bytes(int,int);
 char *exepath(char *);
 #endif
 
-#if defined(__BORLANDC__) && !defined(_WIN32)
-extern unsigned _stklen = STKSIZ;
-#endif
 char savename[SAVESIZE]; /* holds relative path of save file from playground */
 
 

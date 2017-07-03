@@ -5,21 +5,12 @@
 #ifndef CONFIG1_H
 #define CONFIG1_H
 
-#ifdef __TURBOC__
-# define __MSC		/* increase Borland C compatibility in libraries */
-#endif
-
 /*
  * Mac Stuff.
  */
 #if defined(__SC__) || defined(__MRC__) /* MPW compilers, but not Metrowerks */
 # define MAC
 # define MAC_MPW
-#endif
-
-#ifdef THINK_C		/* Think C auto-defined symbol */
-# define MAC
-# define NEED_VARARGS
 #endif
 
 #ifdef __MWERKS__	/* defined by Metrowerks' Codewarrior compiler */
@@ -57,8 +48,6 @@
 # define NEED_VARARGS
 
 #define STRNCMPI
-#define STRCMPI
-
 #endif
 
 

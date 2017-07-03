@@ -13,11 +13,6 @@
 #include <dialogs.h>
 #endif
 
-/* more headers */
-#ifdef THINK_C
-#include <pascal.h>	/* for CtoPStr and PtoCStr */
-#endif
-
 /* resources */
 #define PLAYER_NAME_RES_ID	1001
 

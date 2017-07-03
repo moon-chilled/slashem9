@@ -17,9 +17,7 @@
 #include "hack.h"
 #ifndef __CYGWIN__
 #include <dos.h>
-#ifndef __BORLANDC__
 #include <direct.h>
-#endif
 #endif
 #include <ctype.h>
 #include "win32api.h"

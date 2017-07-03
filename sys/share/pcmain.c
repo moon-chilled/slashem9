@@ -59,11 +59,6 @@ int main(int,char **);
 
 extern void pcmain(int,char **);
 
-#if defined(__BORLANDC__) && !defined(_WIN32)
-void  startup (void);
-unsigned _stklen = STKSIZ;
-#endif
-
 /* If the graphics version is built, we don't need a main; it is skipped
  * to help MinGW decide which entry point to choose. If both main and
  * WinMain exist, the resulting executable won't work correctly.
@@ -93,10 +88,6 @@ char *argv[];
 
 	register int fd;
 	register char *dir;
-
-#if defined(__BORLANDC__) && !defined(_WIN32)
-	startup();
-#endif
 
 #ifdef __DJGPP__
         if (*argv[0]) hname = argv[0];  /* DJGPP can give us argv[0] */

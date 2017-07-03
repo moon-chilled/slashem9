@@ -374,14 +374,6 @@ topten (int how)
 	FILE *xlfile;
 #endif /* XLOGFILE */
 
-/* Under DICE 3.0, this crashes the system consistently, apparently due to
- * corruption of *rfile somewhere.  Until I figure this out, just cut out
- * topten support entirely - at least then the game exits cleanly.  --AC
- */
-#ifdef _DCC
-	return;
-#endif
-
 /* If we are in the midst of a panic, cut out topten entirely.
  * topten uses alloc() several times, which will lead to
  * problems if the panic was the result of an alloc() failure.

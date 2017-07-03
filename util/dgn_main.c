@@ -44,13 +44,6 @@ int  yywrap(void);
 void init_yyin(FILE *);
 void init_yyout(FILE *);
 
-#ifdef AZTEC_36
-FILE *freopen(char *,char *,FILE *);
-#endif
-
-#if defined(__BORLANDC__) && !defined(_WIN32)
-extern unsigned _stklen = STKSIZ;
-#endif
 int
 main(argc, argv)
 int argc;
@@ -60,7 +53,7 @@ char **argv;
 	FILE	*fin, *fout;
 	int	i, len;
 	boolean errors_encountered = FALSE;
-#if defined(MAC) && (defined(THINK_C) || defined(__MWERKS__))
+#if defined(MAC) && (defined(__MWERKS__))
 	char	*mark;
 	static char *mac_argv[] = {	"dgn_comp",	/* dummy argv[0] */
 				":dat:dungeon.pdf"
@@ -99,7 +92,7 @@ char **argv;
 		}
 
 		/* build output file name */
-#if defined(MAC) && (defined(THINK_C) || defined(__MWERKS__))
+#if defined(MAC) && (defined(__MWERKS__))
 		/* extract basename from path to infile */
 		mark = strrchr(infile, ':');
 		mark = mark ? mark+1 : infile;

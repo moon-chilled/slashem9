@@ -11,7 +11,7 @@
  * in its ANSI keywords only mode, which prevents use of <dos.h> and
  * far pointer use.
  */
-#if (defined(__STDC__) || defined(__TURBOC__)) && !defined(NOTSTDC)
+#if defined(__STDC__) && !defined(NOTSTDC)
 #define NHSTDC
 #endif
 

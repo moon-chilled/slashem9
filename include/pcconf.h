@@ -34,16 +34,6 @@
 #define SELF_RECOVER		/* NetHack itself can recover games */
 #endif
 
-/* Borland Stuff */
-# if defined(__BORLANDC__)
-#  if !defined(STKSIZ)
-#define STKSIZ	5*1024	/* Use a default of 5K stack for Borland C	*/
-			/* This macro is used in any file that contains */
-			/* a main() function.				*/
-#  endif
-#define PC_LOCKING
-# endif
-
 #ifdef PC_LOCKING
 #define HLOCK "NHPERM"
 #endif
@@ -80,9 +70,6 @@
 #ifdef TIMED_DELAY
 # ifdef __DJGPP__
 # define msleep(k) (void) usleep((k)*1000)
-# endif
-# ifdef __BORLANDC__
-# define msleep(k) delay(k)
 # endif
 # ifdef __SC__
 # define msleep(k) (void) usleep((long)((k)*1000))

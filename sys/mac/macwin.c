@@ -2234,10 +2234,6 @@ mac_nhgetch(void) {
 	else
 		gClickedToMove = 0;
 
-#ifdef THINK_C
-	if (ch == '\r') ch = '\n';
-#endif
-
 	return ch;
 }
 

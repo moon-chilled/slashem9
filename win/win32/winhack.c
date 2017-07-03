@@ -12,26 +12,7 @@
 #include "mhmain.h"
 #include "mhmap.h"
 
-#ifndef __BORLANDC__
 #include <shlwapi.h>
-#else /* Borland redefines "boolean" in shlwapi.h so just use the little bit we need */
-typedef struct _DLLVERSIONINFO
-{
-    DWORD cbSize;
-    DWORD dwMajorVersion;                   // Major version
-    DWORD dwMinorVersion;                   // Minor version
-    DWORD dwBuildNumber;                    // Build number
-    DWORD dwPlatformID;                     // DLLVER_PLATFORM_*
-} DLLVERSIONINFO;
-
-//
-// The caller should always GetProcAddress("DllGetVersion"), not
-// implicitly link to it.
-//
-
-typedef HRESULT (CALLBACK* DLLGETVERSIONPROC)(DLLVERSIONINFO *);
-
-#endif
 
 #define SHARED_DCL
 
@@ -56,11 +37,6 @@ static HRESULT GetComCtlVersion(LPDWORD pdwMajor, LPDWORD pdwMinor);
 
 // Global Variables:
 NHWinApp _nethack_app;
-
-#ifdef __BORLANDC__
-#define _stricmp(s1,s2)     stricmp(s1,s2)
-#define _strdup(s1)         strdup(s1)
-#endif
 
 // Foward declarations of functions included in this code module:
 extern void pcmain(int,char **);

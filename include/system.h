@@ -39,7 +39,7 @@
 # endif
 #endif	// MICRO || ANCIENT_VAXC
 
-#if defined(__TURBOC__) || defined(MAC)
+#if defined(MAC)
 #include <time.h>	/* time_t is not in <sys/types.h> */
 #endif
 #if defined(ULTRIX) && !(defined(ULTRIX_PROTO) || defined(NHSTDC))
@@ -50,9 +50,6 @@
 #ifdef ULTRIX
 # define off_t long
 #endif
-#if defined(AZTEC) || defined(THINKC4) || defined(__TURBOC__)
-typedef long	off_t;
-#endif
 
 #endif /* !__cplusplus && !__GO32__ */
 
@@ -60,7 +57,7 @@ typedef long	off_t;
  * impossible to get right automatically.
  * This is the type of signal handling functions.
  */
-#if defined(_MSC_VER) || defined(__TURBOC__) || defined(__SC__) || defined(WIN32)
+#if defined(_MSC_VER) || defined(__SC__) || defined(WIN32)
 # define SIG_RET_TYPE void (__cdecl *)(int)
 #endif
 #ifndef SIG_RET_TYPE
@@ -110,7 +107,7 @@ extern void exit(int);
 # if defined(__STDC__) || !defined(FLEX_SCANNER)
 extern void free(void *);
 # endif
-#if !defined(__SASC_60) && !defined(_DCC) && !defined(__SC__)
+#if !defined(__SASC_60) && !defined(__SC__)
 #  if !(defined(ULTRIX_PROTO) && defined(__GNUC__))
 extern void perror(const char *);
 # endif
@@ -124,7 +121,7 @@ extern void qsort(void *,size_t,size_t,
 # if (defined(BSD) || defined(ULTRIX)) && (!defined(LINUX) && !defined(__CYGWIN__))
 extern  int qsort();
 # else
-#  if !defined(LATTICE) && !defined(AZTEC_50)
+#  if !defined(LATTICE)
 extern   void qsort(void *,size_t,size_t,
 		       int(*)(const void*,const void*));
 #  endif
@@ -133,7 +130,7 @@ extern   void qsort(void *,size_t,size_t,
 #endif /* NeXT */
 
 #ifndef __SASC_60
-#if !defined(AZTEC_50) && !defined(__GNUC__)
+#if !defined(__GNUC__)
 /* may already be defined */
 
 # ifdef ULTRIX
@@ -149,7 +146,7 @@ extern int link(const char *, const char*);
 # ifndef bsdi
 extern long lseek(int,long,int);
 # endif
-#  if defined(POSIX_TYPES) || defined(__TURBOC__) || defined(_MSC_VER)
+#  if defined(POSIX_TYPES) || defined(_MSC_VER)
 #   ifndef bsdi
 extern int write(int, const void *,unsigned);
 #   endif
@@ -159,7 +156,7 @@ extern int write(int,void *,unsigned);
 #   endif
 #  endif
 # endif /* ULTRIX */
-#endif /* AZTEC_50 && __GNUC__ */
+#endif /* __GNUC__ */
 
 #ifdef MAC
 #ifndef __CONDITIONALMACROS__	/* universal headers */
@@ -181,8 +178,8 @@ extern int open(const char *,int,...);
 extern int dup2(int, int);
 extern int setmode(int,int);
 extern int kbhit(void);
-# if !defined(_DCC) && !defined(__MINGW32__)
-#  if defined(__TURBOC__) || defined(_MSC_VER)
+# ifndef __MINGW32__
+#  ifdef _MSC_VER
 extern int chdir(const char *);
 #  else
 #   ifndef __EMX__
@@ -192,7 +189,7 @@ extern int chdir(char *);
 #  ifndef __EMX__
 extern char *getcwd(char *,int);
 #  endif
-# endif /* !_DCC */
+# endif /* !MINGW32 */
 #endif
 
 #ifdef ULTRIX
@@ -272,7 +269,7 @@ extern void *memset(char*,int,int);
 #endif /* POSIX_TYPES */
 
 #if defined(MICRO) && !defined(LATTICE)
-#  if defined(AZTEC_50) || defined(NHSTDC) || defined(WIN32)
+#  if defined(NHSTDC) || defined(WIN32)
 extern int  memcmp(const void *, const void *, size_t);
 extern void *memcpy(void *, const void *, size_t);
 extern void *memset(void *, int, size_t);
@@ -280,7 +277,7 @@ extern void *memset(void *, int, size_t);
 extern int memcmp(char *,char *,unsigned int);
 extern char *memcpy(char *,char *,unsigned int);
 extern char *memset(char*,int,int);
-#  endif /* AZTEC_50 || NHSTDC */
+#  endif /* NHSTDC */
 #endif /* MICRO */
 
 #if defined(BSD) && defined(ultrix)	/* i.e., old versions of Ultrix */
@@ -379,7 +376,7 @@ extern char	*rindex(const char *,int);
 #if (defined(SUNOS4) && defined(__STDC__)) || defined(_AIX32)
 #define SPRINTF_PROTO
 #endif
-#if defined(AZTEC_50) || defined(__sgi) || defined(__GNUC__)
+#if defined(__sgi) || defined(__GNUC__)
 	/* problem with prototype mismatches */
 #define SPRINTF_PROTO
 #endif
