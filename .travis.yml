@@ -11,6 +11,7 @@ notifications:
     channels:
       - "irc.freenode.net#em.slashem.me"
     skip_join: true
+  email: false
 
 matrix:
   include:
