@@ -247,7 +247,7 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'#', "sink",		C(CLR_GRAY)},	/* sink */
 /*30*/	{'#', "toilet",         C(CLR_WHITE)},  /* toilet */
 	{'#', "",		C(CLR_GRAY)},	/* sink */
-/*30*/	{'\\', "",              C(CLR_WHITE)},  /* toilet */
+	{'\\', "",              C(CLR_WHITE)},  /* toilet */
 	{'{', "fountain",       C(CLR_BLUE)},   /* fountain */
 	{'}', "water",		C(CLR_BLUE)},	/* pool */
 	{'.', "ice",		C(CLR_CYAN)},	/* ice */
@@ -255,9 +255,9 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'.', "lowered drawbridge",C(CLR_BROWN)},	/* vodbridge */
 	{'.', "lowered drawbridge",C(CLR_BROWN)},	/* hodbridge */
 	{'#', "raised drawbridge",C(CLR_BROWN)},/* vcdbridge */
-	{'#', "raised drawbridge",C(CLR_BROWN)},/* hcdbridge */
+/*40*/	{'#', "raised drawbridge",C(CLR_BROWN)},/* hcdbridge */
 	{' ', "air",		C(CLR_CYAN)},	/* open air */
-/*40*/	{'#', "cloud",		C(CLR_GRAY)},	/* [part of] a cloud */
+	{'#', "cloud",		C(CLR_GRAY)},	/* [part of] a cloud */
 	{'}', "water",		C(CLR_BLUE)},	/* under water */
 	{'^', "arrow trap",	C(HI_METAL)},	/* trap */
 	{'^', "dart trap",	C(HI_METAL)},	/* trap */
@@ -265,9 +265,9 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'^', "squeaky board",	C(CLR_BROWN)},	/* trap */
 	{'^', "bear trap",	C(HI_METAL)},	/* trap */
 	{'^', "land mine",	C(CLR_RED)},	/* trap */
-	{'^', "rolling boulder trap",	C(CLR_GRAY)},	/* trap */
+/*50*/	{'^', "rolling boulder trap",	C(CLR_GRAY)},	/* trap */
 	{'^', "sleeping gas trap",C(HI_ZAP)},	/* trap */
-/*50*/	{'^', "rust trap",	C(CLR_BLUE)},	/* trap */
+	{'^', "rust trap",	C(CLR_BLUE)},	/* trap */
 	{'^', "fire trap",	C(CLR_ORANGE)},	/* trap */
 	{'^', "pit",		C(CLR_BLACK)},	/* trap */
 	{'^', "spiked pit",	C(CLR_BLACK)},	/* trap */
@@ -275,9 +275,9 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'^', "trap door",	C(CLR_BROWN)},	/* trap */
 	{'^', "teleportation trap", C(CLR_MAGENTA)},	/* trap */
 	{'^', "level teleporter", C(CLR_MAGENTA)},	/* trap */
-	{'^', "magic portal",	C(CLR_BRIGHT_MAGENTA)},	/* trap */
+/*60*/	{'^', "magic portal",	C(CLR_BRIGHT_MAGENTA)},	/* trap */
 	{'"', "web",		C(CLR_GRAY)},	/* web */
-/*60*/	{'^', "statue trap",	C(CLR_GRAY)},	/* trap */
+	{'^', "statue trap",	C(CLR_GRAY)},	/* trap */
 	{'^', "magic trap",	C(HI_ZAP)},	/* trap */
 	{'^', "anti-magic field", C(HI_ZAP)},	/* trap */
 	{'^', "polymorph trap",	C(CLR_BRIGHT_GREEN)},	/* trap */
@@ -285,9 +285,9 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'-', "wall",		C(CLR_GRAY)},	/* hbeam */
 	{'\\',"wall",		C(CLR_GRAY)},	/* lslant */
 	{'/', "wall",		C(CLR_GRAY)},	/* rslant */
-	{'*', "",		C(CLR_WHITE)},	/* dig beam */
+/*70*/	{'*', "",		C(CLR_WHITE)},	/* dig beam */
 	{'!', "",		C(CLR_WHITE)},	/* camera flash beam */
-/*70*/	{')', "",		C(HI_WOOD)},	/* boomerang open left */
+	{')', "",		C(HI_WOOD)},	/* boomerang open left */
 	{'(', "",		C(HI_WOOD)},	/* boomerang open right */
 	{'0', "",		C(HI_ZAP)},	/* 4 magic shield symbols */
 	{'#', "",		C(HI_ZAP)},
@@ -295,9 +295,9 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'*', "",		C(HI_ZAP)},
 	{'/', "",		C(CLR_GREEN)},	/* swallow top left	*/
 	{'-', "",		C(CLR_GREEN)},	/* swallow top center	*/
-	{'\\', "",		C(CLR_GREEN)},	/* swallow top right	*/
+/*80*/	{'\\', "",		C(CLR_GREEN)},	/* swallow top right	*/
 	{'|', "",		C(CLR_GREEN)},	/* swallow middle left	*/
-/*80*/	{'|', "",		C(CLR_GREEN)},	/* swallow middle right	*/
+	{'|', "",		C(CLR_GREEN)},	/* swallow middle right	*/
 	{'\\', "",		C(CLR_GREEN)},	/* swallow bottom left	*/
 	{'-', "",		C(CLR_GREEN)},	/* swallow bottom center*/
 	{'/', "",		C(CLR_GREEN)},	/* swallow bottom right	*/
@@ -305,9 +305,9 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'-', "",		C(CLR_ORANGE)},	/* explosion top center   */
 	{'\\', "",		C(CLR_ORANGE)},	/* explosion top right    */
 	{'|', "",		C(CLR_ORANGE)},	/* explosion middle left  */
-	{' ', "",		C(CLR_ORANGE)},	/* explosion middle center*/
+/*90*/	{' ', "",		C(CLR_ORANGE)},	/* explosion middle center*/
 	{'|', "",		C(CLR_ORANGE)},	/* explosion middle right */
-/*90*/	{'\\', "",		C(CLR_ORANGE)},	/* explosion bottom left  */
+	{'\\', "",		C(CLR_ORANGE)},	/* explosion bottom left  */
 	{'-', "",		C(CLR_ORANGE)},	/* explosion bottom center*/
 	{'/', "",		C(CLR_ORANGE)},	/* explosion bottom right */
 
