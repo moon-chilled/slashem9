@@ -574,7 +574,7 @@ do_date()
 	ul_sfx = "L";
 #endif
 	fprintf(ofp,"#define BUILD_DATE \"%s\"\n", cbuf);
-	fprintf(ofp,"#define BUILD_TIME (%ldL)\n", clocktim);
+	fprintf(ofp,"#define BUILD_TIME (%lluL)\n", clocktim);
 	fprintf(ofp,"\n");
 	fprintf(ofp,"#define VERSION_NUMBER 0x%08lx%s\n",
 		version.incarnation, ul_sfx);
