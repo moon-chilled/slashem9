@@ -376,7 +376,6 @@ curses_init_nhcolors()
                 init_color(COLOR_MAGENTA + 8, 1000, 0, 1000);
                 init_color(COLOR_CYAN + 8, 0, 1000, 1000);
                 init_color(COLOR_WHITE + 8, 1000, 1000, 1000);
-# ifdef USE_DARKGRAY
                 if (COLORS > 16) {
                     color_content(CURSES_DARK_GRAY, &orig_darkgray.r,
                                   &orig_darkgray.g, &orig_darkgray.b);
@@ -384,7 +383,6 @@ curses_init_nhcolors()
                     /* just override black colorpair entry here */
                     init_pair(1, CURSES_DARK_GRAY, -1);
                 }
-# endif
             } else {
                 /* Set flag to use bold for bright colors */
             }
@@ -966,12 +964,10 @@ curses_cleanup()
                        orig_hicyan.b);
             init_color(COLOR_WHITE + 8, orig_hiwhite.r, orig_hiwhite.g,
                        orig_hiwhite.b);
-# ifdef USE_DARKGRAY
             if (COLORS > 16) {
                 init_color(CURSES_DARK_GRAY, orig_darkgray.r,
                            orig_darkgray.g, orig_darkgray.b);
             }
-# endif
         }
     }
 #endif
