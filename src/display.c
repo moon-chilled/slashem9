@@ -623,12 +623,12 @@ void feel_location(xchar x, xchar y) {
 		    show_glyph(x, y, memory_glyph(x, y));
 		}
 #ifdef DISPLAY_LAYERS
-	    } else if ((lev->mem_bg >= S_stone && lev->mem_bg < S_room) ||
+	    } else if ((lev->mem_bg >= S_stone && lev->mem_bg < S_darkroom) ||
 		       memory_is_invisible(x, y)) {
 		lev->mem_bg = lev->waslit ? S_room : S_darkroom;
 #else
-	    } else if ((lev->glyph >= cmap_to_glyph(S_darkroom) &&
-			lev->glyph < cmap_to_glyph(S_room)) ||
+	    } else if ((lev->glyph >= cmap_to_glyph(S_stone) &&
+			lev->glyph < cmap_to_glyph(S_darkroom)) ||
 		       glyph_is_invisible(levl[x][y].glyph)) {
 		lev->glyph = lev->waslit ? cmap_to_glyph(S_room) :
 					   cmap_to_glyph(S_darkroom);
@@ -677,7 +677,7 @@ void feel_location(xchar x, xchar y) {
 	/* Floor spaces are dark if unlit.  Corridors are dark if unlit. */
 #ifdef DISPLAY_LAYERS
 	if (lev->typ == ROOM && lev->mem_bg == S_room && !lev->waslit) {
-	    lev->mem_bg = S_stone;
+	    lev->mem_bg = S_darkroom;
 	    show_glyph(x,y, memory_glyph(x, y));
 	} else if (lev->typ == CORR &&
 		    lev->mem_bg == S_litcorr && !lev->waslit) {
@@ -835,7 +835,7 @@ void newsym(int x, int y) {
 		lev->mem_bg = S_corr;
 		show_glyph(x, y, memory_glyph(x, y));
 	    } else if (lev->mem_bg == S_room && lev->typ == ROOM) {
-		lev->mem_bg = S_stone;
+		lev->mem_bg = S_darkroom;
 		show_glyph(x, y, memory_glyph(x, y));
 	    }
 #else	/* DISPLAY_LAYERS */
