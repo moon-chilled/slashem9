@@ -214,7 +214,7 @@
   
 /* end effects */
   
-#define MAXPCHARS	96	/* maximum number of mapped characters */
+#define MAXPCHARS	94	/* maximum number of mapped characters */
 #define MAXDCHARS	43	/* maximum of mapped dungeon characters */
 #define MAXTCHARS	22	/* maximum of mapped trap characters */
 #define MAXECHARS       29      /* maximum of mapped effects characters */
