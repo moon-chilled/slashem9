@@ -39,6 +39,7 @@ NETHACK_WIN_ENABLE(mswin, no, [use Microsoft Windows' native graphics])
 
 dnl  ----- Figure out a C compiler to use; set @CC@
 AC_PROG_CC
+AC_PROG_CC_STDC
 AC_SUBST(LFLAGS)
 
 dnl  ----- Check OS
