@@ -33,12 +33,6 @@ WINDRES = @WINDRES@
 CFLAGS = -DAUTOCONF -I../include -I$(srcdir)/../include -std=c99 @CFLAGS@
 LFLAGS = @LFLAGS@
 
-# Only used for the Gnome interface.
-GNOMEINC=`gnome-config gnome --cflags` -I$(srcdir)/../win/gnome
-
-CXXFLAGS = $(CFLAGS) -I. -I
-CXX=g++
-
 # Proxy windowing system
 WINPROXYCFLAGS=@NETHACK_PROXY_CFLAGS@
 
@@ -55,35 +49,6 @@ WINCURSESSRC = $(srcdir)/../win/curses/cursmain.c $(srcdir)/../win/curses/curswi
 
 WINCURSESOBJ = cursmain.o curswins.o cursmisc.o cursdial.o cursstat.o \
 	cursinit.o cursmesg.o cursinvt.o
-
-
-
-# files for an X11 port
-# (tile.c is included in the defn. for WINCSRC, below)
-WINX11SRC = $(srcdir)/../win/X11/Window.c $(srcdir)/../win/X11/dialogs.c $(srcdir)/../win/X11/winX.c \
-	$(srcdir)/../win/X11/winmap.c  $(srcdir)/../win/X11/winmenu.c $(srcdir)/../win/X11/winmesg.c \
-	$(srcdir)/../win/X11/winmisc.c $(srcdir)/../win/X11/winstat.c $(srcdir)/../win/X11/wintext.c \
-	$(srcdir)/../win/X11/winval.c
-WINX11OBJ = Window.o dialogs.o winX.o winmap.o winmenu.o winmesg.o \
-	winmisc.o winstat.o wintext.o winval.o nhwin.a
-
-#
-# Files for a Gnome port
-#
-WINGNOMESRC = $(srcdir)/../win/gnome/gnaskstr.c $(srcdir)/../win/gnome/gnbind.c \
-      $(srcdir)/../win/gnome/gnglyph.c $(srcdir)/../win/gnome/gnmain.c $(srcdir)/../win/gnome/gnmap.c \
-      $(srcdir)/../win/gnome/gnmenu.c $(srcdir)/../win/gnome/gnmesg.c $(srcdir)/../win/gnome/gnopts.c \
-      $(srcdir)/../win/gnome/gnplayer.c $(srcdir)/../win/gnome/gnsignal.c \
-      $(srcdir)/../win/gnome/gnstatus.c $(srcdir)/../win/gnome/gntext.c $(srcdir)/../win/gnome/gnyesno.c \
-      $(srcdir)/../win/gnome/gnworn.c
-WINGNOMEOBJ = gnaskstr.o gnbind.o gnglyph.o gnmain.o gnmap.o gnmenu.o \
-      gnmesg.o gnopts.o gnplayer.o gnsignal.o gnstatus.o gntext.o \
-      gnyesno.o gnworn.o nhwin.a
-#
-# Files for a Gem port
-WINGEMSRC = $(srcdir)/../win/gem/wingem.c $(srcdir)/../win/gem/wingem1.c $(srcdir)/../win/gem/load_img.c \
-	$(srcdir)/../win/gem/gr_rect.c
-WINGEMOBJ = wingem.o wingem1.o load_img.o gr_rect.o nhwin.a
 
 #
 # Files for a proxy interface
@@ -124,11 +89,7 @@ WINSRC = @WINSRC@
 WINOBJ = @WINOBJ@
 WINTTYLIB = @WINTTYLIB@
 WINCURSESLIB = -lncursesw
-WINX11LIB = -lXaw -lXmu -lXext -lXt -lX11
 
-#
-# libraries for Gnome
-WINGNOMELIB = -lgnomeui -lgnome -lart_lgpl -lgtk -lgdk -lpopt
 #
 # libraries for SDL/GL window port
 WINSDLLIB = @SDL_CONFIG_LIBS@ -lz -lpng
@@ -206,10 +167,7 @@ SYSCSRC = $(srcdir)/../sys/share/nhlan.c $(srcdir)/../sys/share/ioctl.c \
 GENCSRC = monstr.c vis_tab.c  #tile.c
 
 # all windowing-system-dependent .c (for dependencies and such)
-WINCSRC = $(WINTTYSRC) $(WINX11SRC) $(WINGNOMESRC) $(WINGEMSRC) \
-	$(WINPROXYSRC) $(WINGLSRC) $(WINMSSRC) tile.c
-# all windowing-system-dependent .cpp (for dependencies and such)
-WINCXXSRC = $(WINBESRC)
+WINCSRC = $(WINTTYSRC) $(WINCURSESSRC) $(WINPROXYSRC) $(WINGLSRC) $(WINMSSRC) tile.c
 
 # .c files for this version (for date.h)
 VERSOURCES = $(HACKCSRC) $(SYSSRC) $(WINSRC) $(GENCSRC)
@@ -229,7 +187,7 @@ HACKINCL = align.h artifact.h artilist.h attrib.h color.h \
 	monattk.h mondata.h monflag.h monst.h monsym.h obj.h objclass.h \
 	patchlevel.h pcconf.h permonst.h prop.h rect.h region.h rm.h \
 	sp_lev.h spell.h system.h tcap.h timeout.h tradstdc.h \
-	trap.h unixconf.h vault.h vision.h wintty.h winX.h winprocs.h \
+	trap.h unixconf.h vault.h vision.h wintty.h winprocs.h \
 	wintype.h you.h youprop.h
 
 HSOURCES = $(HACKINCL) date.h onames.h pm.h vis_tab.h\
@@ -376,9 +334,6 @@ vis_tab.c: ../include/vis_tab.h
 tile.c: $(srcdir)/../win/share/tilemap.c $(HACK_H)
 	@( cd ../util ; $(MAKE) ../src/tile.c )
 
-$(srcdir)/../win/gnome/gn_rip.h: $(srcdir)/../win/X11/rip.xpm
-	cp $(srcdir)/../win/X11/rip.xpm $(srcdir)/../win/gnome/gn_rip.h
-
 #	date.h should be remade any time any of the source or include code
 #	is modified.  Unfortunately, this would make the contents of this
 #	file far more complex.  Since "hack.h" depends on most of the include
@@ -404,17 +359,16 @@ spotless: clean
 	-rm -f a.out core $(GAME) Sys*
 	-rm -f ../include/date.h ../include/onames.h ../include/pm.h
 	-rm -f monstr.c ../include/vis_tab.h vis_tab.c tile.c *.moc
-	-rm -f $(srcdir)/../win/gnome/gn_rip.h
 	-rm -f ../include/filename.h
 
 depend: ../sys/autoconf/depend.awk \
-		$(SYSCSRC) $(WINCSRC) $(WINCXXSRC) $(GENCSRC) $(HACKCSRC)
+		$(SYSCSRC) $(WINCSRC) $(GENCSRC) $(HACKCSRC)
 	@cp Makefile Makefile.bak
 	@sed -n '1,/^# DO NOT DELETE THIS LINE OR CHANGE ANYTHING BEYOND IT/p' \
 		< Makefile.bak > Makefile
 	@echo '' >> Makefile
 	@$(AWK) -f ../sys/autoconf/depend.awk ../include/*.h \
-		$(srcdir)/../include/*.h $(SYSCSRC) $(WINCSRC) $(WINCXXSRC) \
+		$(srcdir)/../include/*.h $(SYSCSRC) $(WINCSRC) \
 		$(GENCSRC) $(HACKCSRC) >> Makefile
 	@echo '# DEPENDENCIES MUST END AT END OF FILE' >> Makefile
 	@echo '# IF YOU PUT STUFF HERE IT WILL GO AWAY' >> Makefile
@@ -518,92 +472,6 @@ cursinvt.o:
 #        $(srcdir)/../win/curses/cursstat.c $(srcdir)/../win/curses/cursinit.c \
 #        $(srcdir)/../win/curses/cursmesg.c
 
-Window.o: $(srcdir)/../win/X11/Window.c ../include/xwindowp.h \
-		../include/xwindow.h $(CONFIG_H)
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/X11/Window.c
-dialogs.o: $(srcdir)/../win/X11/dialogs.c $(CONFIG_H)
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/X11/dialogs.c
-winX.o: $(srcdir)/../win/X11/winX.c $(HACK_H) ../include/winX.h \
-		../include/dlb.h ../include/patchlevel.h ../win/X11/nh72icon \
-		../win/X11/nh56icon ../win/X11/nh32icon
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/X11/winX.c
-winmap.o: $(srcdir)/../win/X11/winmap.c ../include/xwindow.h $(HACK_H) \
-		../include/dlb.h ../include/winX.h ../include/patchlevel.h \
-		../include/tile2x11.h
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/X11/winmap.c
-winmenu.o: $(srcdir)/../win/X11/winmenu.c $(HACK_H) ../include/winX.h
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/X11/winmenu.c
-winmesg.o: $(srcdir)/../win/X11/winmesg.c ../include/xwindow.h $(HACK_H) \
-		../include/winX.h
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/X11/winmesg.c
-winmisc.o: $(srcdir)/../win/X11/winmisc.c $(HACK_H) ../include/func_tab.h \
-		../include/winX.h
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/X11/winmisc.c
-winstat.o: $(srcdir)/../win/X11/winstat.c $(HACK_H) ../include/winX.h
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/X11/winstat.c
-wintext.o: $(srcdir)/../win/X11/wintext.c $(HACK_H) ../include/winX.h \
-		../include/xwindow.h
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/X11/wintext.c
-winval.o: $(srcdir)/../win/X11/winval.c $(HACK_H) ../include/winX.h
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/X11/winval.c
-gnaskstr.o: $(srcdir)/../win/gnome/gnaskstr.c ../win/gnome/gnaskstr.h \
-		../win/gnome/gnmain.h
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gnaskstr.c
-gnbind.o: $(srcdir)/../win/gnome/gnbind.c ../win/gnome/gnbind.h \
-		../win/gnome/gnmain.h ../win/gnome/gnmenu.h \
-		../win/gnome/gnaskstr.h ../win/gnome/gnyesno.h
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gnbind.c
-gnglyph.o: $(srcdir)/../win/gnome/gnglyph.c ../win/gnome/gnglyph.h
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gnglyph.c
-gnmain.o: $(srcdir)/../win/gnome/gnmain.c ../win/gnome/gnmain.h \
-		../win/gnome/gnsignal.h ../win/gnome/gnbind.h \
-		../win/gnome/gnopts.h $(HACK_H) ../include/date.h
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gnmain.c
-gnmap.o: $(srcdir)/../win/gnome/gnmap.c ../win/gnome/gnmap.h \
-		../win/gnome/gnglyph.h ../win/gnome/gnsignal.h $(HACK_H)
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gnmap.c
-gnmenu.o: $(srcdir)/../win/gnome/gnmenu.c ../win/gnome/gnmenu.h \
-		../win/gnome/gnmain.h ../win/gnome/gnbind.h \
-		../include/func_tab.h
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gnmenu.c
-gnmesg.o: $(srcdir)/../win/gnome/gnmesg.c ../win/gnome/gnmesg.h \
-		../win/gnome/gnsignal.h
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gnmesg.c
-gnopts.o: $(srcdir)/../win/gnome/gnopts.c ../win/gnome/gnopts.h \
-		../win/gnome/gnglyph.h ../win/gnome/gnmain.h \
-		../win/gnome/gnmap.h $(HACK_H)
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gnopts.c
-gnplayer.o: $(srcdir)/../win/gnome/gnplayer.c ../win/gnome/gnplayer.h \
-		../win/gnome/gnmain.h $(HACK_H)
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gnplayer.c
-gnsignal.o: $(srcdir)/../win/gnome/gnsignal.c ../win/gnome/gnsignal.h \
-		../win/gnome/gnmain.h
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gnsignal.c
-gnstatus.o: $(srcdir)/../win/gnome/gnstatus.c ../win/gnome/gnstatus.h \
-		../win/gnome/gnsignal.h ../win/gnome/gn_xpms.h \
-		../win/gnome/gnomeprv.h
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gnstatus.c
-gntext.o: $(srcdir)/../win/gnome/gntext.c ../win/gnome/gntext.h \
-		../win/gnome/gnmain.h ../win/gnome/gn_rip.h
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gntext.c
-gnyesno.o: $(srcdir)/../win/gnome/gnyesno.c ../win/gnome/gnbind.h \
-		../win/gnome/gnyesno.h
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gnyesno.c
-gnworn.o: $(srcdir)/../win/gnome/gnworn.c ../win/gnome/gnworn.h \
-		../win/gnome/gnglyph.h ../win/gnome/gnsignal.h \
-		../win/gnome/gnomeprv.h
-	$(CC) $(CFLAGS) $(GNOMEINC) -c $(srcdir)/../win/gnome/gnworn.c
-wingem.o: $(srcdir)/../win/gem/wingem.c $(HACK_H) ../include/func_tab.h \
-		../include/dlb.h ../include/patchlevel.h ../include/wingem.h
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/gem/wingem.c
-wingem1.o: $(srcdir)/../win/gem/wingem1.c ../include/gem_rsc.h \
-		../include/load_img.h ../include/gr_rect.h \
-		../include/wintype.h ../include/wingem.h
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/gem/wingem1.c
-load_img.o: $(srcdir)/../win/gem/load_img.c ../include/load_img.h
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/gem/load_img.c
-gr_rect.o: $(srcdir)/../win/gem/gr_rect.c ../include/gr_rect.h
-	$(CC) $(CFLAGS) -c $(srcdir)/../win/gem/gr_rect.c
 winproxy.o: $(srcdir)/../win/proxy/winproxy.c $(HACK_H) \
 		../include/patchlevel.h ../include/date.h \
 		../include/winproxy.h #../include/win32api.h
@@ -955,9 +823,6 @@ were.o: $(srcdir)/were.c $(HACK_H)
 	$(CC) $(CFLAGS) -c $(srcdir)/were.c
 wield.o: $(srcdir)/wield.c $(HACK_H)
 	$(CC) $(CFLAGS) -c $(srcdir)/wield.c
-windows.o: $(srcdir)/windows.c $(HACK_H) ../include/wingem.h \
-		../include/winGnome.h ../include/winGL.h ../include/winproxy.h
-	$(CC) $(CFLAGS) -c $(srcdir)/windows.c
 wizard.o: $(srcdir)/wizard.c $(HACK_H) ../include/qtext.h ../include/epri.h
 	$(CC) $(CFLAGS) -c $(srcdir)/wizard.c
 worm.o: $(srcdir)/worm.c $(HACK_H) ../include/lev.h

@@ -48,13 +48,6 @@ AC_CANONICAL_HOST
 dnl  ----- Early checks for libraries, as needed
 
 PKG_PROG_PKG_CONFIG([])
-if test "$enable_x11_graphics" != "no"; then
-    # We have to check for libXaw before we define SYSV,
-    # since the X11 include files change their behaviour
-    # depending on whether the compiler defines it or not.
-    NETHACK_CHECK_LIBXAW([LIBXAW], have_libXaw=yes, have_libXaw=no)
-fi
-
 dnl  ------ Main OS types
 case $host_os in
      mingw32 )		AC_DEFINE(WIN32,[],[An MS-Windows system])
@@ -200,19 +193,6 @@ if test "$enable_proxy_graphics" != "no"; then
     fi
 fi
 AC_SUBST(NETHACK_PROXY_CFLAGS)
-
-if test "$enable_x11_graphics" != "no"
-then
-    if test $have_libXaw != yes; then
-      AC_MSG_ERROR([Need X Athena Widgets Library for X11 graphics])
-    fi
-    CFLAGS="${CFLAGS} ${LIBXAW_CFLAGS}"
-    WINSRC="${WINSRC} \$(WINX11SRC)"
-    WINOBJ="${WINOBJ} \$(WINX11OBJ)"
-    WINLIB="${WINLIB} ${LIBXAW_LIBS}"
-    CNF_SHARE_DATND="${CNF_SHARE_DATND} \$(CNF_SHARE_X11ND)"
-    AC_DEFINE(X11_GRAPHICS, [], [X11 graphics])
-fi
 
 SDL_CONFIG_CFLAGS=
 SDL_CONFIG_LIBS=

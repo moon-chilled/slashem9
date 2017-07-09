@@ -197,16 +197,4 @@ nh_getegid()
 	egid = rgid;
     return egid;
 }
-
-#else	/* GETRES_SUPPORT */
-
-# ifdef GNOME_GRAPHICS 
-int
-hide_privileges(flag)
-boolean flag;
-{
-    return 0;
-}
-# endif
-
 #endif	/* GETRES_SUPPORT */

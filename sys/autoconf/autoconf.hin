@@ -210,9 +210,6 @@
 /* The person allowed to use the -D option */
 #undef WIZARD
 
-/* X11 graphics */
-#undef X11_GRAPHICS
-
 /* Yeoman class */
 #undef YEOMAN
 

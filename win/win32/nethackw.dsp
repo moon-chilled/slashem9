@@ -923,14 +923,6 @@ SOURCE=..\include\vision.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wingem.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\winGnome.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\winprocs.h
 # End Source File
 # Begin Source File
@@ -940,18 +932,6 @@ SOURCE=..\include\wintty.h
 # Begin Source File
 
 SOURCE=..\include\wintype.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\winX.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\xwindow.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\xwindowp.h
 # End Source File
 # Begin Source File
 

@@ -810,10 +810,7 @@ static const char *window_opts[] = {
 		"traditional tty-based graphics",
 #endif
 #ifdef CURSES_GRAPHICS
-        "curses",
-#endif
-#ifdef X11_GRAPHICS
-		"X11",
+	        "curses",
 #endif
 #ifdef GTK_GRAPHICS
 #ifdef GTK_PROXY
@@ -821,9 +818,6 @@ static const char *window_opts[] = {
 #else
 		"GTK",
 #endif
-#endif
-#ifdef GNOME_GRAPHICS
-		"Gnome",
 #endif
 #ifdef GL_GRAPHICS
 		"GL",

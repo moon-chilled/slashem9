@@ -88,8 +88,6 @@ CNF_SHARE_X11ND = x11bigtiles x11tiles SlashEM.ad pet_mark.xbm
 # for SDL/GL window port
 CNF_SHARE_GLND = gltile16.png gltile32.png gltile64.png gllogo.png glrip.png \
                  glfont8.png glfont14.png glfont20.png glfont22.png
-# for Gnome
-CNF_SHARE_GNOMEND = x11bigtiles x11tiles pet_mark.xbm rip.xpm mapbg.xpm
 # for Proxy
 CNF_SHARE_PROXYND = gltile64.png gltile32.png gltile16.png \
 	gltile64.map gltile32.map gltile16.map

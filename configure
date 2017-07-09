@@ -659,8 +659,6 @@ SYSSRC
 SYSTEM
 HOST_UNIX
 HOST_MSWIN
-LIBXAW_LIBS
-LIBXAW_CFLAGS
 PKG_CONFIG_LIBDIR
 PKG_CONFIG_PATH
 PKG_CONFIG
@@ -789,8 +787,6 @@ CPPFLAGS
 PKG_CONFIG
 PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
-LIBXAW_CFLAGS
-LIBXAW_LIBS
 YACC
 YFLAGS
 NETHACK__LIBPNG_CFLAGS
@@ -1486,9 +1482,6 @@ Some influential environment variables:
               directories to add to pkg-config's search path
   PKG_CONFIG_LIBDIR
               path overriding pkg-config's built-in search path
-  LIBXAW_CFLAGS
-              Compiler flags for libXaw, overriding pkg-config
-  LIBXAW_LIBS Linker flags for libXaw, overriding pkg-config
   YACC        The `Yet Another Compiler Compiler' implementation to use.
               Defaults to the first program found out of: `bison -y', `byacc',
               `yacc'.
@@ -3770,226 +3763,6 @@ $as_echo "no" >&6; }
 		PKG_CONFIG=""
 	fi
 fi
-if test "$enable_x11_graphics" != "no"; then
-    # We have to check for libXaw before we define SYSV,
-    # since the X11 include files change their behaviour
-    # depending on whether the compiler defines it or not.
-
-
-
-
-    # If the user has supplied flags, then believe them.
-    if test -n "$LIBXAW_CFLAGS" -o -n "$LIBXAW_LIBS"; then
-
-    nethack__cflags="$NETHACK__LIBXAW_CFLAGS"
-    for nethack__flag in $LIBXAW_CFLAGS; do
-
-    case "$nethack__flag" in
-	-I*|-L*|-l*)
-	    for nethack__eflag in ${nethack__cflags}; do
-		if test "$nethack__eflag" = "$nethack__flag"; then
-		    break
-		fi
-	    done
-	    if test "$nethack__eflag" = "$nethack__flag"; then
-		nethack__cflags="${nethack__cflags}"
-	    else
-		case "$nethack__flag" in
-		    -L*)nethack__cflags="$nethack__flag ${nethack__cflags}";;
-		    *)  nethack__cflags="${nethack__cflags} $nethack__flag";;
-		esac
-	    fi
-	    ;;
-	*)  nethack__cflags="${nethack__cflags} $nethack__flag";;
-    esac
-
-    done
-
-
-    nethack__libs="$NETHACK__LIBXAW_LIBS"
-    for nethack__flag in $LIBXAW_LIBS; do
-
-    case "$nethack__flag" in
-	-I*|-L*|-l*)
-	    for nethack__eflag in ${nethack__libs}; do
-		if test "$nethack__eflag" = "$nethack__flag"; then
-		    break
-		fi
-	    done
-	    if test "$nethack__eflag" = "$nethack__flag"; then
-		nethack__libs="${nethack__libs}"
-	    else
-		case "$nethack__flag" in
-		    -L*)nethack__libs="$nethack__flag ${nethack__libs}";;
-		    *)  nethack__libs="${nethack__libs} $nethack__flag";;
-		esac
-	    fi
-	    ;;
-	*)  nethack__libs="${nethack__libs} $nethack__flag";;
-    esac
-
-    done
-
-
-    nethack__save_cflags=$CFLAGS
-    nethack__save_libs=$LIBS
-    CFLAGS="$CFLAGS $nethack__cflags"
-    LIBS="$LIBS $nethack__libs"
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if libXaw is useable with $CFLAGS and $LIBS" >&5
-$as_echo_n "checking if libXaw is useable with $CFLAGS and $LIBS... " >&6; }
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <X11/Xaw/List.h>
-int
-main ()
-{
-XawListUnhighlight((Widget)0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  LIBXAW_CFLAGS="$nethack__cflags"; LIBXAW_LIBS="$nethack__libs"; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; nethack__succeeded=yes
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }; nethack__succeeded=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-    CFLAGS=$nethack__save_cflags
-    LIBS=$nethack__save_libs
-    else
-	nethack__succeeded=maybe
-    fi
-    if test $nethack__succeeded = maybe; then
-	if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"xaw8\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "xaw8") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  nethack__succeeded=yes
-fi
-    fi
-    if test $nethack__succeeded = maybe; then
-	if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"xaw7\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "xaw7") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  nethack__succeeded=yes
-fi
-    fi
-    if test $nethack__succeeded = maybe; then
-	if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"xaw6\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "xaw6") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  nethack__succeeded=yes
-fi
-    fi
-    if test $nethack__succeeded = maybe; then
-
-    nethack__cflags="$NETHACK__LIBXAW_CFLAGS"
-    for nethack__flag in -I/usr/X11R6/include; do
-
-    case "$nethack__flag" in
-	-I*|-L*|-l*)
-	    for nethack__eflag in ${nethack__cflags}; do
-		if test "$nethack__eflag" = "$nethack__flag"; then
-		    break
-		fi
-	    done
-	    if test "$nethack__eflag" = "$nethack__flag"; then
-		nethack__cflags="${nethack__cflags}"
-	    else
-		case "$nethack__flag" in
-		    -L*)nethack__cflags="$nethack__flag ${nethack__cflags}";;
-		    *)  nethack__cflags="${nethack__cflags} $nethack__flag";;
-		esac
-	    fi
-	    ;;
-	*)  nethack__cflags="${nethack__cflags} $nethack__flag";;
-    esac
-
-    done
-
-
-    nethack__libs="$NETHACK__LIBXAW_LIBS"
-    for nethack__flag in -L/usr/X11R6/lib -lXaw -lXmu -lXext -lXt -lX11; do
-
-    case "$nethack__flag" in
-	-I*|-L*|-l*)
-	    for nethack__eflag in ${nethack__libs}; do
-		if test "$nethack__eflag" = "$nethack__flag"; then
-		    break
-		fi
-	    done
-	    if test "$nethack__eflag" = "$nethack__flag"; then
-		nethack__libs="${nethack__libs}"
-	    else
-		case "$nethack__flag" in
-		    -L*)nethack__libs="$nethack__flag ${nethack__libs}";;
-		    *)  nethack__libs="${nethack__libs} $nethack__flag";;
-		esac
-	    fi
-	    ;;
-	*)  nethack__libs="${nethack__libs} $nethack__flag";;
-    esac
-
-    done
-
-
-    nethack__save_cflags=$CFLAGS
-    nethack__save_libs=$LIBS
-    CFLAGS="$CFLAGS $nethack__cflags"
-    LIBS="$LIBS $nethack__libs"
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if libXaw is useable with $CFLAGS and $LIBS" >&5
-$as_echo_n "checking if libXaw is useable with $CFLAGS and $LIBS... " >&6; }
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <X11/Xaw/List.h>
-int
-main ()
-{
-XawListUnhighlight((Widget)0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  LIBXAW_CFLAGS="$nethack__cflags"; LIBXAW_LIBS="$nethack__libs"; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; nethack__succeeded=yes
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }; nethack__succeeded=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-    CFLAGS=$nethack__save_cflags
-    LIBS=$nethack__save_libs
-    fi
-    if test $nethack__succeeded = yes; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking LIBXAW_CFLAGS" >&5
-$as_echo_n "checking LIBXAW_CFLAGS... " >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${LIBXAW_CFLAGS}" >&5
-$as_echo "${LIBXAW_CFLAGS}" >&6; }
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking LIBXAW_LIBS" >&5
-$as_echo_n "checking LIBXAW_LIBS... " >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${LIBXAW_LIBS}" >&5
-$as_echo "${LIBXAW_LIBS}" >&6; }
-
-	have_libXaw=yes
-    else have_libXaw=no
-    fi
-
-fi
-
 case $host_os in
      mingw32 )
 $as_echo "#define WIN32 /**/" >>confdefs.h
@@ -4056,6 +3829,7 @@ $as_echo "#define CYGWIN32 /**/" >>confdefs.h
 $as_echo "#define LINUX /**/" >>confdefs.h
 ;;
 esac
+
 
 
 for ac_prog in flex lex
@@ -5620,21 +5394,6 @@ $as_echo "#define PROXY_GRAPHICS /**/" >>confdefs.h
     fi
 fi
 
-
-if test "$enable_x11_graphics" != "no"
-then
-    if test $have_libXaw != yes; then
-      as_fn_error $? "Need X Athena Widgets Library for X11 graphics" "$LINENO" 5
-    fi
-    CFLAGS="${CFLAGS} ${LIBXAW_CFLAGS}"
-    WINSRC="${WINSRC} \$(WINX11SRC)"
-    WINOBJ="${WINOBJ} \$(WINX11OBJ)"
-    WINLIB="${WINLIB} ${LIBXAW_LIBS}"
-    CNF_SHARE_DATND="${CNF_SHARE_DATND} \$(CNF_SHARE_X11ND)"
-
-$as_echo "#define X11_GRAPHICS /**/" >>confdefs.h
-
-fi
 
 SDL_CONFIG_CFLAGS=
 SDL_CONFIG_LIBS=

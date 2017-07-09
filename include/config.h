@@ -35,9 +35,7 @@
  */
 #define TTY_GRAPHICS		/* good old tty based graphics */
 #define CURSES_GRAPHICS		/* awful curses interface */
-/* #define X11_GRAPHICS */	/* X11 interface */
 /* #define KDE */		/* KDE Interface */
-/* #define GNOME_GRAPHICS */	/* Gnome interface */
 /* #define PROXY_GRAPHICS */	/* Plug-in interfaces */
 /* #define MSWIN_GRAPHICS */	/* Windows NT, CE, Graphics */
 /* #define GL_GRAPHICS */	/* OpenGL graphics */
@@ -47,7 +45,7 @@
  * Define the default window system.  This should be one that is compiled
  * into your system (see defines above).  Known window systems are:
  *
- *	tty, X11, mac, Gnome, gtk, proxy, GL, SDL
+ *	tty, mac, Gnome, gtk, proxy, GL, SDL
  */
 
 /* MAC also means MAC windows */
@@ -62,14 +60,6 @@
 #ifdef WIN32
 #  define DEFAULT_WINDOW_SYS "tty"
 #endif
-#endif
-
-#ifdef GNOME_GRAPHICS
-# define USE_XPM		/* Use XPM format for images (required) */
-# define GRAPHIC_TOMBSTONE	/* Use graphical tombstone (rip.ppm) */
-# ifndef DEFAULT_WINDOW_SYS
-#  define DEFAULT_WINDOW_SYS "Gnome"
-# endif
 #endif
 
 #ifdef PROXY_GRAPHICS
@@ -106,25 +96,6 @@
 # if defined(VANILLA_GLHACK)
 #  define compress    nh_compress
 #  define uncompress  nh_uncompress
-# endif
-#endif
-
-#ifdef X11_GRAPHICS
-/*
- * There are two ways that X11 tiles may be defined.  (1) using a custom
- * format loaded by NetHack code, or (2) using the XPM format loaded by
- * the free XPM library.  The second option allows you to then use other
- * programs to generate tiles files.  For example, the PBMPlus tools
- * would allow:
- *  xpmtoppm <x11tiles.xpm | pnmscale 1.25 | pnmdepth 255 |
- *     ppmquant 90 | ppmtoxpm >x11tiles_big.xpm
- */
-/* # define USE_XPM */		/* Disable if you do not have the XPM library */
-# ifdef USE_XPM
-#  define GRAPHIC_TOMBSTONE	/* Use graphical tombstone (rip.xpm) */
-# endif
-# ifndef DEFAULT_WINDOW_SYS
-#  define DEFAULT_WINDOW_SYS "X11"
 # endif
 #endif
 

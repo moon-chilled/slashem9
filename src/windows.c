@@ -9,12 +9,6 @@
 #ifdef CURSES_GRAPHICS
 extern struct window_procs curses_procs;
 #endif
-#ifdef X11_GRAPHICS
-/* cannot just blindly include winX.h without including all of X11 stuff */
-/* and must get the order of include files right.  Don't bother */
-extern struct window_procs X11_procs;
-extern void win_X11_init(void);
-#endif
 #ifdef GTK_GRAPHICS
 /*
  * GTK interface (By issei@guru.gr.jp)
@@ -27,10 +21,6 @@ extern struct window_procs mac_procs;
 #endif
 #ifdef WIN32_GRAPHICS
 extern struct window_procs win32_procs;
-#endif
-#ifdef GNOME_GRAPHICS
-#include "winGnome.h"
-extern struct window_procs Gnome_procs;
 #endif
 #ifdef GL_GRAPHICS
 #include "winGL.h"
@@ -64,9 +54,6 @@ struct win_choices {
 #ifdef CURSES_GRAPHICS
     { &curses_procs, 0 },
 #endif
-#ifdef X11_GRAPHICS
-    { &X11_procs, win_X11_init },
-#endif
 #ifdef GTK_GRAPHICS
     { &GTK_procs, win_GTK_init },
 #endif
@@ -75,9 +62,6 @@ struct win_choices {
 #endif
 #ifdef WIN32_GRAPHICS
     { &win32_procs, 0 },
-#endif
-#ifdef GNOME_GRAPHICS
-    { &Gnome_procs, 0 },
 #endif
 #ifdef GL_GRAPHICS
     { &sdlgl_hardw_procs, 0 },

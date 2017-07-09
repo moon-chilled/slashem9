@@ -2147,14 +2147,6 @@ extern void unlock_file_area(const char *, const char *);
 extern int hide_privileges(boolean);
 #endif /* UNIX */
 
-/* ### unixres.c ### */
-
-#ifdef UNIX
-# ifdef GNOME_GRAPHICS
-extern int hide_privileges(boolean);
-# endif
-#endif /* UNIX */
-
 /* ### vault.c ### */
 
 extern boolean grddead(struct monst *);
