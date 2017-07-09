@@ -1120,7 +1120,7 @@ case 1:
 YY_RULE_SETUP
 {
 		  BEGIN(INITIAL);
-		  yylval.map = (char *) alloc(map_cnt + 1);
+		  yylval.map = alloc(map_cnt + 1);
 		  (void) strncpy(yylval.map, map, map_cnt);
 		  yylval.map[map_cnt] = 0;
 		  map_cnt = 0;
@@ -1587,7 +1587,7 @@ YY_RULE_SETUP
 case 114:
 YY_RULE_SETUP
 { yytext[yyleng-1] = 0; /* Discard the trailing \" */
-		  yylval.map = (char *) alloc(strlen(yytext+1)+1);
+		  yylval.map = alloc(strlen(yytext+1)+1);
 		  strcpy(yylval.map, yytext+1); /* Discard the first \" */
 		  return STRING; }
 	YY_BREAK

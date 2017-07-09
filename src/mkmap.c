@@ -448,7 +448,7 @@ mkmap(init_lev)
 	if(lit < 0)
 	    lit = (rnd(1+abs(depth(&u.uz))) < 11 && rn2(77)) ? 1 : 0;
 
-	new_locations = (char *)alloc((WIDTH+1) * HEIGHT);
+	new_locations = alloc((WIDTH+1) * HEIGHT);
 
 	init_map(bg_typ);
 	init_fill(bg_typ, fg_typ);

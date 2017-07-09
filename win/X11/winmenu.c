@@ -1054,7 +1054,7 @@ copy_of(s)
     const char *s;
 {
     if (!s) s = "";
-    return strcpy((char *) alloc((unsigned) (strlen(s) + 1)), s);
+    return strcpy(alloc((unsigned) (strlen(s) + 1)), s);
 }
 
 

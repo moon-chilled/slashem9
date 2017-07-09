@@ -120,7 +120,7 @@ char *argv[];
 		{
 		    int prefcnt;
 
-		    fqn_prefix[0] = (char *)alloc(strlen(hackdir)+2);
+		    fqn_prefix[0] = alloc(strlen(hackdir)+2);
 		    strcpy(fqn_prefix[0], hackdir);
 		    append_slash(fqn_prefix[0]);
 		    for (prefcnt = 1; prefcnt < PREFIX_COUNT; prefcnt++)

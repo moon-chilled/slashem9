@@ -396,7 +396,7 @@ add_line(mesg_info, s)
 	if (curr->line) free(curr->line);	/* free old line */
 
 	curr->buf_length = new_line_length + 1;
-	curr->line = (char *) alloc((unsigned)curr->buf_length);
+	curr->line = alloc((unsigned)curr->buf_length);
     }
 
     strcpy(curr->line, s);			/* copy info */

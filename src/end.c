@@ -97,7 +97,7 @@ dump_init (void)
     char *p = (char *) strstr(dump_fn, "%n");
     if (p) {
       int new_dump_fn_len = strlen(dump_fn)+strlen(plname)-2; /* %n */
-      char *new_dump_fn = (char *) alloc((unsigned)(new_dump_fn_len+1));
+      char *new_dump_fn = alloc((unsigned)(new_dump_fn_len+1));
       char *q = new_dump_fn;
       strncpy(q, dump_fn, p-dump_fn);
       q += p-dump_fn;

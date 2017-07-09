@@ -1507,7 +1507,7 @@ int prefixid;
 	/* Backward compatibility, ignore trailing ;n */ 
 	if ((ptr = index(bufp, ';')) != 0) *ptr = '\0';
 	if (strlen(bufp) > 0) {
-		fqn_prefix[prefixid] = (char *)alloc(strlen(bufp)+2);
+		fqn_prefix[prefixid] = alloc(strlen(bufp)+2);
 		strcpy(fqn_prefix[prefixid], bufp);
 		append_slash(fqn_prefix[prefixid]);
 	}

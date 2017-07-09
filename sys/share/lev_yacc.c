@@ -49,7 +49,7 @@ static int yygrowstack();
 #define MAX_OF_TYPE	128
 
 #define New(type)		\
-	(type *) memset((void *)alloc(sizeof(type)), 0, sizeof(type))
+	(type *) memset(alloc(sizeof(type)), 0, sizeof(type))
 #define NewTab(type, size)	(type **) alloc(sizeof(type *) * size)
 #define Free(ptr)		free((void *)ptr)
 
@@ -1357,7 +1357,7 @@ case 23:
 			    yyerror("Object registers already initialized!");
 			} else {
 			    special_lev.nrobjects = n_olist;
-			    special_lev.robjects = (char *) alloc(n_olist);
+			    special_lev.robjects = alloc(n_olist);
 			    (void) memcpy((void *)special_lev.robjects,
 					  (void *)olist, n_olist);
 			}
@@ -1369,7 +1369,7 @@ case 24:
 			    yyerror("Monster registers already initialized!");
 			} else {
 			    special_lev.nrmonst = n_mlist;
-			    special_lev.rmonst = (char *) alloc(n_mlist);
+			    special_lev.rmonst = alloc(n_mlist);
 			    (void) memcpy((void *)special_lev.rmonst,
 					  (void *)mlist, n_mlist);
 			  }
@@ -1642,7 +1642,7 @@ case 86:
 			tmppart[npart]->xsize = 1;
 			tmppart[npart]->ysize = 1;
 			tmppart[npart]->map = (char **) alloc(sizeof(char *));
-			tmppart[npart]->map[0] = (char *) alloc(1);
+			tmppart[npart]->map[0] = alloc(1);
 			tmppart[npart]->map[0][0] = STONE;
 			max_x_map = COLNO-1;
 			max_y_map = ROWNO;
@@ -1670,7 +1670,7 @@ case 95:
 			if (tmppart[npart]->nrobjects) {
 			    yyerror("Object registers already initialized!");
 			} else {
-			    tmppart[npart]->robjects = (char *)alloc(n_olist);
+			    tmppart[npart]->robjects = alloc(n_olist);
 			    (void) memcpy((void *)tmppart[npart]->robjects,
 					  (void *)olist, n_olist);
 			    tmppart[npart]->nrobjects = n_olist;
@@ -1700,7 +1700,7 @@ case 98:
 			if (tmppart[npart]->nrmonst) {
 			    yyerror("Monster registers already initialized!");
 			} else {
-			    tmppart[npart]->rmonst = (char *) alloc(n_mlist);
+			    tmppart[npart]->rmonst = alloc(n_mlist);
 			    (void) memcpy((void *)tmppart[npart]->rmonst,
 					  (void *)mlist, n_mlist);
 			    tmppart[npart]->nrmonst = n_mlist;

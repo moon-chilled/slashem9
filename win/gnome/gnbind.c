@@ -115,7 +115,7 @@ void gnome_init_nhwindows(int* argc, char** argv)
 	if (i == no_tilesets)
 	    g_error("ERROR: No valid tiles found\n");
     }
-    path = (char *)alloc(strlen(TILESETDIR) + strlen(tilesets[i].file) + 2);
+    path = alloc(strlen(TILESETDIR) + strlen(tilesets[i].file) + 2);
     sprintf(path, TILESETDIR "/%s", tilesets[i].file);
     if (ghack_init_glyphs(path))
 	g_error ("ERROR:  Could not initialize glyphs.\n");
@@ -151,7 +151,7 @@ gnome_player_selection()
 	/* select a role */
 	for (n = 0; roles[n].name.m; n++) continue;
 	choices = (const char **)alloc(sizeof(char *) * (n+1));
-	pickmap = (int*)alloc(sizeof(int) * (n+1));
+	pickmap = alloc(sizeof(int) * (n+1));
 	for (;;) {
 	    for (n = 0, i = 0; roles[i].name.m; i++) {
 		if (ok_role(i, flags.initrace,
@@ -214,7 +214,7 @@ gnome_player_selection()
 	    }
 
 	    choices = (const char **)alloc(sizeof(char *) * (n+1));
-	    pickmap = (int*)alloc(sizeof(int) * (n + 1));
+	    pickmap = alloc(sizeof(int) * (n + 1));
 	    for (n = 0, i = 0; races[i].noun; i++) {
 		if (ok_race(flags.initrole, i, flags.initgend,
 			    flags.initalign)) {
@@ -269,7 +269,7 @@ gnome_player_selection()
 	    }
 
 	    choices = (const char **)alloc(sizeof(char *) * (n+1));
-	    pickmap = (int*)alloc(sizeof(int) * (n + 1));
+	    pickmap = alloc(sizeof(int) * (n + 1));
 	    for (n = 0, i = 0; i < ROLE_GENDERS; i++) {
 		if (ok_gend(flags.initrole, flags.initrace, i,
 				flags.initalign)) {
@@ -322,7 +322,7 @@ gnome_player_selection()
 	    }
 
 	    choices = (const char **)alloc(sizeof(char *) * (n+1));
-	    pickmap = (int*)alloc(sizeof(int) * (n + 1));
+	    pickmap = alloc(sizeof(int) * (n + 1));
 	    for (n = 0, i = 0; i < ROLE_ALIGNS; i++) {
 		if (ok_align(flags.initrole,
 			     flags.initrace, flags.initgend, i)) {
@@ -669,7 +669,7 @@ void gnome_display_file(const char *filename,boolean must_exist)
 	  /*
 	   * Re-open the file and read the data into a buffer.  
 	   */
-	  textlines = (char *) alloc((unsigned int) charcount);
+	  textlines = alloc((unsigned int) charcount);
 	  textlines[0] = '\0';
 #ifdef FILE_AREAS
 	  f = dlb_fopen_area(filearea, filename, "r");

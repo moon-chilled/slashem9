@@ -605,7 +605,7 @@ char *map;
 
 	/* Then parse it now */
 	while (map && *map) {
-		tmpmap[max_hig] = (char *) alloc(max_len);
+		tmpmap[max_hig] = alloc(max_len);
 		s1 = index(map, '\n');
 		if (s1) {
 			len = (int) (s1 - map);
@@ -1045,7 +1045,7 @@ store_place_list(int npart, int nlist, int nloc, const struct coord *plist)
 	int i;
 	char msg[256];
 	if (!tmppart[npart]->nloc) {
-	    tmppart[npart]->nloc = (char *) alloc(MAX_REGISTERS);
+	    tmppart[npart]->nloc = alloc(MAX_REGISTERS);
 	    tmppart[npart]->rloc_x = NewTab(char, MAX_REGISTERS);
 	    tmppart[npart]->rloc_y = NewTab(char, MAX_REGISTERS);
 	}
@@ -1059,8 +1059,8 @@ store_place_list(int npart, int nlist, int nloc, const struct coord *plist)
 	    yyerror(msg);
 	} else {
 	    tmppart[npart]->nlocset++;
-	    tmppart[npart]->rloc_x[nlist] = (char *) alloc(n_plist);
-	    tmppart[npart]->rloc_y[nlist] = (char *) alloc(n_plist);
+	    tmppart[npart]->rloc_x[nlist] = alloc(n_plist);
+	    tmppart[npart]->rloc_y[nlist] = alloc(n_plist);
 	    for(i = 0; i < n_plist; i++) {
 		tmppart[npart]->rloc_x[nlist][i] = plist[i].x;
 		tmppart[npart]->rloc_y[nlist][i] = plist[i].y;

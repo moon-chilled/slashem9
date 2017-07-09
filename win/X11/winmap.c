@@ -544,7 +544,7 @@ init_tiles(wp)
 
     /* now we know the physical memory requirements, we can allocate space */
     tile_image->data =
-	(char *) alloc((unsigned)tile_image->bytes_per_line * image_height);
+	alloc((unsigned)tile_image->bytes_per_line * image_height);
 
     if (appResources.double_tile_size) {
 	unsigned long pixel;

@@ -3899,7 +3899,7 @@ coord *mm;
 	kop_cnt[2] = (cnt / 6);       /* maybe a lieutenant */
 	kop_cnt[3] = (cnt / 9);       /* and maybe a kaptain */
  
-	mc = (coord *)alloc(cnt * sizeof(coord));
+	mc = alloc(cnt * sizeof(coord));
 	for (ik=0; kop_pm[ik]; ik++) {
 	  if (!(mvitals[kop_pm[ik]].mvflags & G_GONE)) {
 	    cnt = epathto(mc, kop_cnt[ik], mm->x, mm->y, &mons[kop_pm[ik]]);

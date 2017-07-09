@@ -370,7 +370,7 @@ append_text_buffer(tb, str, concat)
 	printf("append_text_buffer: text buffer growing from %d to %d bytes\n",
 				tb->text_size, 2*tb->text_size);
 #endif
-	copy = (char *) alloc((unsigned)tb->text_size*2);
+	copy = alloc((unsigned)tb->text_size*2);
 	(void) memcpy(copy, tb->text, tb->text_last);
 	free(tb->text);
 	tb->text = copy;
@@ -409,7 +409,7 @@ void
 init_text_buffer(tb)
     struct text_buffer *tb;
 {
-    tb->text	  = (char *) alloc(START_SIZE);
+    tb->text	  = alloc(START_SIZE);
     tb->text[0]   = '\0';
     tb->text_size = START_SIZE;
     tb->text_last = 0;

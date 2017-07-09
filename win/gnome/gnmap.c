@@ -181,7 +181,7 @@ ghack_init_map_window ( )
 
   /* Tile the map background with a pretty image */ 
 #ifdef FILE_AREAS
-  path = (char *)alloc(strlen(FILE_AREA_SHARE) + 11);
+  path = alloc(strlen(FILE_AREA_SHARE) + 11);
   strcpy(path, FILE_AREA_SHARE "/mapbg.xpm");
 #else
   path = "mapbg.xpm";

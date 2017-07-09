@@ -632,7 +632,7 @@ curses_choose_character()
         for (n = 0; roles[n].name.m; n++)
             continue;
         choices = (const char **) alloc(sizeof (char *) * (n + 1));
-        pickmap = (int *) alloc(sizeof (int) * (n + 1));
+        pickmap = alloc(sizeof (int) * (n + 1));
         for (;;) {
             for (n = 0, i = 0; roles[i].name.m; i++) {
                 if (ok_role(i, flags.initrace, flags.initgend, flags.initalign)) {
@@ -707,7 +707,7 @@ curses_choose_character()
             }
 
             choices = (const char **) alloc(sizeof (char *) * (n + 1));
-            pickmap = (int *) alloc(sizeof (int) * (n + 1));
+            pickmap = alloc(sizeof (int) * (n + 1));
             for (n = 0, i = 0; races[i].noun; i++) {
                 if (ok_race(flags.initrole, i, flags.initgend, flags.initalign)) {
                     choices[n] = races[i].noun;
@@ -766,7 +766,7 @@ curses_choose_character()
             }
 
             choices = (const char **) alloc(sizeof (char *) * (n + 1));
-            pickmap = (int *) alloc(sizeof (int) * (n + 1));
+            pickmap = alloc(sizeof (int) * (n + 1));
             for (n = 0, i = 0; i < ROLE_GENDERS; i++) {
                 if (ok_gend(flags.initrole, flags.initrace, i, flags.initalign)) {
                     choices[n] = genders[i].adj;
@@ -823,7 +823,7 @@ curses_choose_character()
             }
 
             choices = (const char **) alloc(sizeof (char *) * (n + 1));
-            pickmap = (int *) alloc(sizeof (int) * (n + 1));
+            pickmap = alloc(sizeof (int) * (n + 1));
             for (n = 0, i = 0; i < ROLE_ALIGNS; i++) {
                 if (ok_align(flags.initrole, flags.initrace, flags.initgend, i)) {
                     choices[n] = aligns[i].adj;

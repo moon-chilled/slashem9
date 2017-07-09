@@ -380,13 +380,13 @@ const char *filearea, *filename;
 	if (filearea && filename[0]!='/')
 	{
 		lenarea = strlen(filearea);
-		buf = (char *)alloc(lenarea+strlen(filename)+1);
+		buf = alloc(lenarea+strlen(filename)+1);
 		strcpy(buf, filearea);
 		strcpy(buf+lenarea, filename);
 	}
 	else
 	{
-		buf = (char *)alloc(strlen(filename)+1);
+		buf = alloc(strlen(filename)+1);
 		strcpy(buf, filename);
 	}
 	return buf;

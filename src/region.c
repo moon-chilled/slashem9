@@ -692,7 +692,7 @@ boolean ghostly; /* If a bones file restore */
 
 	mread(fd, (void *) &n, sizeof n);
 	if (n > 0) {
-	    msg_buf = (char *) alloc(n + 1);
+	    msg_buf = alloc(n + 1);
 	    mread(fd, (void *) msg_buf, n);
 	    msg_buf[n] = '\0';
 	    regions[i]->enter_msg = (const char *) msg_buf;
@@ -701,7 +701,7 @@ boolean ghostly; /* If a bones file restore */
 
 	mread(fd, (void *) &n, sizeof n);
 	if (n > 0) {
-	    msg_buf = (char *) alloc(n + 1);
+	    msg_buf = alloc(n + 1);
 	    mread(fd, (void *) msg_buf, n);
 	    msg_buf[n] = '\0';
 	    regions[i]->leave_msg = (const char *) msg_buf;
@@ -727,7 +727,7 @@ boolean ghostly; /* If a bones file restore */
 	mread(fd, (void *) &regions[i]->n_monst, sizeof (short));
 	if (regions[i]->n_monst > 0)
 	    regions[i]->monsters =
-		(unsigned *) alloc(sizeof (unsigned) * regions[i]->n_monst);
+		alloc(sizeof (unsigned) * regions[i]->n_monst);
 	else
 	    regions[i]->monsters = NULL;
 	regions[i]->max_monst = regions[i]->n_monst;

@@ -996,14 +996,14 @@ set_duplicate_opt_detection (int on_or_off)
 		/*-- ON --*/
 		if (iflags.opt_booldup)
 			impossible("iflags.opt_booldup already on (memory leak)");
-		iflags.opt_booldup = (int *)alloc(SIZE(boolopt) * sizeof(int));
+		iflags.opt_booldup = alloc(SIZE(boolopt) * sizeof(int));
 		optptr = iflags.opt_booldup;
 		for (k = 0; k < SIZE(boolopt); ++k)
 			*optptr++ = 0;
 			
 		if (iflags.opt_compdup)
 			impossible("iflags.opt_compdup already on (memory leak)");
-		iflags.opt_compdup = (int *)alloc(SIZE(compopt) * sizeof(int));
+		iflags.opt_compdup = alloc(SIZE(compopt) * sizeof(int));
 		optptr = iflags.opt_compdup;
 		for (k = 0; k < SIZE(compopt); ++k)
 			*optptr++ = 0;
@@ -1170,7 +1170,7 @@ char *str;
 #  endif  
 # endif  
 #else
-   tmp->match = (char *)alloc(strlen(tmps)+1);
+   tmp->match = alloc(strlen(tmps)+1);
    (void) memcpy((void *)tmp->match, (void *)tmps, strlen(tmps)+1);
 #endif
    if (err) {
@@ -2243,7 +2243,7 @@ goodfruit:
 	if (match_optname(opts, fullname, sizeof("tile_file")-1, TRUE)) {
 		if ((op = string_for_opt(opts, FALSE)) != 0) {
 			if (iflags.wc_tile_file) free(iflags.wc_tile_file);
-			iflags.wc_tile_file = (char *)alloc(strlen(op) + 1);
+			iflags.wc_tile_file = alloc(strlen(op) + 1);
 			strcpy(iflags.wc_tile_file, op);
 		}
 		return;
@@ -3678,7 +3678,7 @@ add_autopickup_exception (const char *mapping)
 				   &iflags.autopickup_exceptions[AP_LEAVE];
 		ape = (struct autopickup_exception *)
 				alloc(sizeof(struct autopickup_exception));
-		ape->pattern = (char *) alloc(textsize+1);
+		ape->pattern = alloc(textsize+1);
 		strcpy(ape->pattern, text2);
 		ape->grab = grab;
 		if (!*apehead) ape->next = (struct autopickup_exception *)0;
@@ -3834,7 +3834,7 @@ const char *str;
 	int i;
 	char *s;
 
-	if (!buf) *(buf = (char *)alloc(BUFSZ)) = '\0';
+	if (!buf) *(buf = alloc(BUFSZ)) = '\0';
 
 	if (!*str) {
 		s = eos(buf);
@@ -4256,7 +4256,7 @@ char *fontname;
 	}
 	if (fn) {
 		if (*fn) free(*fn);
-		*fn = (char *)alloc(strlen(fontname) + 1);
+		*fn = alloc(strlen(fontname) + 1);
 		strcpy(*fn, fontname);
 	}
 	return;
@@ -4330,12 +4330,12 @@ char *op;
 			    !strcmpi(wn, shortnames[j])) {
 				if (tfg && !strstri(tfg, " ")) {
 					if (*fgp[j]) free(*fgp[j]);
-					*fgp[j] = (char *)alloc(strlen(tfg) + 1);
+					*fgp[j] = alloc(strlen(tfg) + 1);
 					strcpy(*fgp[j], tfg);
 				}
 				if (tbg && !strstri(tbg, " ")) {
 					if (*bgp[j]) free(*bgp[j]);
-					*bgp[j] = (char *)alloc(strlen(tbg) + 1);
+					*bgp[j] = alloc(strlen(tbg) + 1);
 					strcpy(*bgp[j], tbg);
 				}
  				break;

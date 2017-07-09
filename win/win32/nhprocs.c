@@ -118,7 +118,7 @@ char **argv;
 	UpdateWindow(BasehWnd);
 	
 
-	pchBuf = (char *)alloc(RINGBUFSIZE);   /* allocate the input buffer */
+	pchBuf = alloc(RINGBUFSIZE);   /* allocate the input buffer */
 	pchGet = pchBuf;
 	pchPut = pchBuf;
 	pchCount = 0;
@@ -344,11 +344,11 @@ int type;
 #endif
 	if (newwin->type != TYPE_UNDETERMINED) {
 		msize = newwin->maxrows * newwin->maxcols;
-		newwin->data  = (uchar *)alloc(msize * sizeof(uchar));
+		newwin->data  = alloc(msize * sizeof(uchar));
 		if (newwin->wflags & WFLAGS_TILED) 
-			newwin->glyph = (int *)alloc(msize * sizeof(int));
+			newwin->glyph = alloc(msize * sizeof(int));
 		memset(newwin->data,' ',msize * sizeof(uchar));
-		newwin->color = (int *)alloc(msize * sizeof(int));
+		newwin->color = alloc(msize * sizeof(int));
 		for (i = 0; i < msize; ++i)
 			*(newwin->color + i) = newwin->NormalTextColor;
 		newwin->hFnt = hDefFnt;
@@ -496,7 +496,7 @@ const char *str;
 
 	switch(wins[window]->type) {
 	    case NHW_MESSAGE:
-		tmp = (char *)alloc(strlen(str)+1);
+		tmp = alloc(strlen(str)+1);
 		strcpy(toplines, str); 		/* for Norep() */
 		strcpy(tmp, str);
 		if (MessageCount >= MAX_MESSAGE_COUNT) {
@@ -848,10 +848,10 @@ int part;
 		wins[window]->hFnt = hDefFnt;
 		msize = wins[window]->maxrows * wins[window]->maxcols;
 		wins[window]->data  = 
-			(uchar *)alloc(msize * sizeof(uchar));
+			alloc(msize * sizeof(uchar));
 		memset(wins[window]->data,' ',msize * sizeof(uchar));
 		wins[window]->color = 
-			(int *)alloc(msize * sizeof(int));
+			alloc(msize * sizeof(int));
 		for (i = 0; i < msize; ++i)
 		     *(wins[window]->color + i) = wins[window]->NormalTextColor;
 	} else if (part == 2) {
@@ -1008,7 +1008,7 @@ boolean preselected;
 		impossible("Window type %d in add_menu", 
 				wins[window]->type);
 	if (str) {
-		tmp = (char *)alloc(strlen(str) + 1 + strlen(extra));
+		tmp = alloc(strlen(str) + 1 + strlen(extra));
 	} else
 		tmp = NULL;
 	menuitem = 

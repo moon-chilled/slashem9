@@ -446,7 +446,7 @@ boolean wr;
 # ifdef VAR_PLAYGROUND
 	    int len = strlen(VAR_PLAYGROUND);
 
-	    fqn_prefix[SCOREPREFIX] = (char *)alloc(len+2);
+	    fqn_prefix[SCOREPREFIX] = alloc(len+2);
 	    strcpy(fqn_prefix[SCOREPREFIX], VAR_PLAYGROUND);
 	    if (fqn_prefix[SCOREPREFIX][len-1] != '/') {
 		fqn_prefix[SCOREPREFIX][len] = '/';

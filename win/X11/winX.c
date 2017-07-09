@@ -1394,7 +1394,7 @@ X11_display_file(str, complain)
      * Re-open the file and read the data into a buffer.  Cannot use
      * the XawAsciiFile type of widget, because that is not DLB-aware.
      */
-    textlines = (char *) alloc((unsigned int) charcount);
+    textlines = alloc((unsigned int) charcount);
     textlines[0] = '\0';
 
 #ifdef FILE_AREAS

@@ -441,7 +441,7 @@ win_proxy_init()
 	panic("Proxy: Failed to initialize window interface");
     windowtype = nhproxy_serv_get_windowtype();
     if (windowtype) {
-	name = (char *)alloc(strlen(windowtype) + 7);
+	name = alloc(strlen(windowtype) + 7);
 	sprintf(name, "proxy/%s", windowtype);
 	windowprocs.name = name;
     } else

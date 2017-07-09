@@ -143,7 +143,7 @@ getargs(char *cmdline)
 	if (strlen(cmdline) == 0)
 		return argcount;
 
-	tmpbuf = (char *)alloc(strlen(cmdline)+1);
+	tmpbuf = alloc(strlen(cmdline)+1);
 	strcpy(tmpbuf,cmdline);
 	
 	xargv[argcount] = (char *)&tmpbuf[0];

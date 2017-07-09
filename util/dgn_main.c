@@ -78,7 +78,7 @@ char **argv;
 	    infile = outfile = NULL;
 	    for(i=1; i<argc; i++) {
 		if (infile) free(infile);
-		infile = (char*)alloc(strlen(argv[i]) + 1);
+		infile = alloc(strlen(argv[i]) + 1);
 		fname = strcpy(infile, argv[i]);
 		/* the input file had better be a .pdf file */
 		len = strlen(fname) - 4;	/* length excluding suffix */
@@ -103,7 +103,7 @@ char **argv;
 #else
 		/* Use the whole name - strip off the last 3 or 4 chars. */
 
-		basename = (char*)alloc(len + 1);
+		basename = alloc(len + 1);
 		(void) strncpy(basename, infile, len);
 		basename[len] = '\0';
 #endif
@@ -113,7 +113,7 @@ char **argv;
 		outfile = alloc(strlen(PREFIX) + strlen(basename) + 1);
 		strcpy(outfile, PREFIX);
 #else
-		outfile = (char*)alloc(strlen(basename) + 1);
+		outfile = alloc(strlen(basename) + 1);
 		outfile[0] = '\0';
 #endif
 		(void) strcat(outfile, basename);

@@ -154,7 +154,7 @@ void restore_dungeon(int fd) {
 
     mread(fd, (void *) &count, sizeof(count));
     for (i = 0; i < count; i++) {
-	curr = (branch *) alloc(sizeof(branch));
+	curr = alloc(sizeof(branch));
 	mread(fd, (void *) curr, sizeof(branch));
 	curr->next = NULL;
 	if (last)
@@ -348,7 +348,7 @@ static branch *add_branch(int dgn, int branch_num, struct proto_dungeon *pd) {
     branch *new_branch;
     int entry_lev;
 
-    new_branch = (branch *) alloc(sizeof(branch));
+    new_branch = alloc(sizeof(branch));
     new_branch->next = NULL;
     new_branch->id = branch_id++;
     new_branch->type = correct_branch_type(&pd->tmpbranch[branch_num]);

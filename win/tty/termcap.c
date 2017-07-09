@@ -118,7 +118,7 @@ int assign_videocolors(char *colorvals)
 	init_ttycolor();
 
 	i = strlen(colorvals);
-	tmpcolor = (uchar *)alloc(i);
+	tmpcolor = alloc(i);
 	if (convert_uchars(colorvals,tmpcolor,i) < 0) return FALSE;
 
 	icolor = CLR_RED;
@@ -240,7 +240,7 @@ int *wid, *hgt;
 #  ifdef TEXTCOLOR
 		for (i = 0; i < CLR_MAX / 2; i++)
 		    if (i != CLR_BLACK) {
-			hilites[i|BRIGHT] = (char *) alloc(sizeof("\033[1;3%dm"));
+			hilites[i|BRIGHT] = alloc(sizeof("\033[1;3%dm"));
 			sprintf(hilites[i|BRIGHT], "\033[1;3%dm", i);
 #   ifndef VIDEOSHADES
 			if (i != CLR_GRAY)
@@ -250,7 +250,7 @@ int *wid, *hgt;
 #    endif
 #   endif
 			    {
-				hilites[i] = (char *) alloc(sizeof("\033[0;3%dm"));
+				hilites[i] = alloc(sizeof("\033[0;3%dm"));
 				sprintf(hilites[i], "\033[0;3%dm", i);
 			    }
 		    }
@@ -263,7 +263,7 @@ int *wid, *hgt;
 #endif /* ANSI_DEFAULT */
 
 #ifdef TERMLIB
-	tptr = (char *) alloc(1024);
+	tptr = alloc(1024);
 
 	tbufptr = tbuf;
 	if(!strncmp(term, "5620", 4))
@@ -363,8 +363,8 @@ int *wid, *hgt;
 	 * pager as a string - so how can you send it NULs???
 	 *  -jsb
 	 */
-	nh_HI = (char *) alloc((unsigned)(strlen(SO)+1));
-	nh_HE = (char *) alloc((unsigned)(strlen(ME)+1));
+	nh_HI = alloc((unsigned)(strlen(SO)+1));
+	nh_HE = alloc((unsigned)(strlen(ME)+1));
 	i = 0;
 	while (digit(SO[i])) i++;
 	strcpy(nh_HI, &SO[i]);
@@ -496,12 +496,12 @@ tty_ascgraphics_hilite_fixup()
 
     for (c = 0; c < CLR_MAX / 2; c++)
 	if (c != CLR_BLACK) {
-	    hilites[c|BRIGHT] = (char *) alloc(sizeof("\033[1;3%dm"));
+	    hilites[c|BRIGHT] = alloc(sizeof("\033[1;3%dm"));
 	    sprintf(hilites[c|BRIGHT], "\033[1;3%dm", c);
 #ifndef VIDEOSHADES
 	    if (c != CLR_GRAY) {
 #endif
-		    hilites[c] = (char *) alloc(sizeof("\033[0;3%dm"));
+		    hilites[c] = alloc(sizeof("\033[0;3%dm"));
 		    sprintf(hilites[c], "\033[0;3%dm", c);
 #ifndef VIDEOSHADES
 	    }
@@ -914,13 +914,13 @@ init_hilite()
 #ifndef VIDEOSHADES
 	    if (c != CLR_GRAY) {
 #endif
-		hilites[c] = (char *) alloc(strlen(scratch) + 1);
+		hilites[c] = alloc(strlen(scratch) + 1);
 		strcpy(hilites[c], scratch);
 #ifndef VIDEOSHADES
 	    }
 #endif
 	    if (c != CLR_BLACK) {
-		hilites[c|BRIGHT] = (char*) alloc(strlen(scratch)+strlen(MD)+1);
+		hilites[c|BRIGHT] = alloc(strlen(scratch)+strlen(MD)+1);
 		strcpy(hilites[c|BRIGHT], MD);
 		strcat(hilites[c|BRIGHT], scratch);
 	    }
@@ -1013,7 +1013,7 @@ init_hilite()
 		if (c == foreg)
 		    hilites[c] = NULL;
 		else if (c != hi_foreg || backg != hi_backg) {
-		    hilites[c] = (char *) alloc(sizeof("\033[%d;3%d;4%dm"));
+		    hilites[c] = alloc(sizeof("\033[%d;3%d;4%dm"));
 		    sprintf(hilites[c], "\033[%d", !!(c & BRIGHT));
 		    if ((c | BRIGHT) != (foreg | BRIGHT))
 			sprintf(eos(hilites[c]), ";3%d", c & ~BRIGHT);

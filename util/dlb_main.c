@@ -306,7 +306,7 @@ main(argc, argv)
 								MAX_DLB_FILES);
 		    break;
 		}
-		ld[nfiles].fname = (char *) alloc(strlen(argv[ap]) + 1);
+		ld[nfiles].fname = alloc(strlen(argv[ap]) + 1);
 		strcpy(ld[nfiles].fname, argv[ap]);
 	    }
 	}
@@ -327,7 +327,7 @@ main(argc, argv)
 		    break;
 		}
 		*(eos(buf)-1) = '\0';	/* strip newline */
-		ld[nfiles].fname = (char *) alloc(strlen(buf) + 1);
+		ld[nfiles].fname = alloc(strlen(buf) + 1);
 		strcpy(ld[nfiles].fname, buf);
 	    }
 	    fclose(list);
@@ -498,7 +498,7 @@ const char *filearea, *filename, *mode;
     if (filearea && filename[0]!='/')
     {
 	lenarea = strlen(filearea);
-	buf = (char *)alloc(lenarea+strlen(filename)+1);
+	buf = alloc(lenarea+strlen(filename)+1);
 	strcpy(buf, filearea);
 	strcpy(buf+lenarea, filename);
 	fp = fopen(buf, mode);

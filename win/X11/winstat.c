@@ -792,7 +792,7 @@ create_widget(parent, sv, sv_index)
 	    break;
 	case SV_LABEL:
 	    /* Labels get their own buffer. */
-	    sv->name = (char *) alloc(BUFSZ);
+	    sv->name = alloc(BUFSZ);
 	    sv->name[0] = '\0';
 
 	    num_args = 0;

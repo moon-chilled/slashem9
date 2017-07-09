@@ -41,7 +41,7 @@ const char *path, *mode;
 	if (!path[i])
 	    retval = -1;
 	else {
-	    name = (char *)alloc(i + 1);
+	    name = alloc(i + 1);
 	    memcpy(name, path, i);
 	    name[i] = '\0';
 	    subname = path + i + 1;
@@ -72,11 +72,11 @@ const char *path, *mode;
 	    else {
 		s = strrchr(subname, '.');
 		if (s) {
-		    buf = (char *)alloc(s - subname + 5);
+		    buf = alloc(s - subname + 5);
 		    (void)strncpy(buf, subname, s - subname);
 		    buf[s - subname] = '\0';
 		} else {
-		    buf = (char *)alloc(strlen(subname) + 5);
+		    buf = alloc(strlen(subname) + 5);
 		    strcpy(buf, subname);
 		}
 		strcat(buf, ".map");
@@ -341,10 +341,10 @@ cb_get_tilesets()
       alloc(no_tilesets * sizeof(*list->tilesets));
     for(i = 0; i < list->n_tilesets; i++) {
 	list->tilesets[i].name = tilesets[i].name;
-	file = (char *)alloc(strlen(tilesets[i].file) + 12);
+	file = alloc(strlen(tilesets[i].file) + 12);
 	sprintf(file, "$(TILEDIR)/%s", tilesets[i].file);
 	list->tilesets[i].file = file;
-	file = (char *)alloc(strlen(tilesets[i].file) + 16);
+	file = alloc(strlen(tilesets[i].file) + 16);
 	sprintf(file, "$(TILEMAPDIR)/%s", tilesets[i].file);
 	list->tilesets[i].mapfile = file;
 	list->tilesets[i].flags = tilesets[i].flags;
@@ -354,10 +354,10 @@ cb_get_tilesets()
     list->tilesets = (struct nhproxy_cb_get_tilesets_res_tileset *)
       alloc(1 * sizeof(*list->tilesets));
     list->tilesets[0].name = "Default";
-    file = (char *)alloc(strlen(tile_file) + 12);
+    file = alloc(strlen(tile_file) + 12);
     sprintf(file, "$(TILEDIR)/%s", tile_file);
     list->tilesets[0].file = file;
-    file = (char *)alloc(strlen(tile_file) + 16);
+    file = alloc(strlen(tile_file) + 16);
     sprintf(file, "$(TILEMAPDIR)/%s", tile_file);
     list->tilesets[0].mapfile = file;
     list->tilesets[0].flags = 0;

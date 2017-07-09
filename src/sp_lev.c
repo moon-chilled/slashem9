@@ -61,7 +61,7 @@ static boolean create_subroom(struct mkroom *, xchar, xchar,
 
 #define Fread	(void)dlb_fread
 #define Fgetc	(schar)dlb_fgetc
-#define New(type)		(type *) alloc(sizeof(type))
+#define New(type)		alloc(sizeof(type))
 #define NewTab(type, size)	(type **) alloc(sizeof(type *) * (unsigned)size)
 #define Free(ptr)		if(ptr) free((void *) (ptr))
 
@@ -1890,7 +1890,7 @@ int typ;
 	/* Read message */
 	Fread((void *) &n, 1, sizeof(n), fd);
 	if (n) {
-	    lev_message = (char *) alloc(n + 1);
+	    lev_message = alloc(n + 1);
 	    Fread((void *) lev_message, 1, (int) n, fd);
 	    lev_message[n] = 0;
 	}
@@ -1905,13 +1905,13 @@ monster *m;
 
 	Fread((void *) m, 1, sizeof *m, fd);
 	if ((size = m->name.len) != 0) {
-	    m->name.str = (char *) alloc((unsigned)size + 1);
+	    m->name.str = alloc((unsigned)size + 1);
 	    Fread((void *) m->name.str, 1, size, fd);
 	    m->name.str[size] = '\0';
 	} else
 	    m->name.str = NULL;
 	if ((size = m->appear_as.len) != 0) {
-	    m->appear_as.str = (char *) alloc((unsigned)size + 1);
+	    m->appear_as.str = alloc((unsigned)size + 1);
 	    Fread((void *) m->appear_as.str, 1, size, fd);
 	    m->appear_as.str[size] = '\0';
 	} else
@@ -1927,7 +1927,7 @@ object *o;
 
 	Fread((void *) o, 1, sizeof *o, fd);
 	if ((size = o->name.len) != 0) {
-	    o->name.str = (char *) alloc((unsigned)size + 1);
+	    o->name.str = alloc((unsigned)size + 1);
 	    Fread((void *) o->name.str, 1, size, fd);
 	    o->name.str[size] = '\0';
 	} else
@@ -1943,7 +1943,7 @@ engraving *e;
 
 	Fread((void *) e, 1, sizeof *e, fd);
 	size = e->engr.len;
-	e->engr.str = (char *) alloc((unsigned)size+1);
+	e->engr.str = alloc((unsigned)size+1);
 	Fread((void *) e->engr.str, 1, size, fd);
 	e->engr.str[size] = '\0';
 }
@@ -1984,7 +1984,7 @@ dlb *fd;
 		/* Let's see if this room has a name */
 		Fread((void *) &size, 1, sizeof(size), fd);
 		if (size > 0) {	/* Yup, it does! */
-			r->name = (char *) alloc((unsigned)size + 1);
+			r->name = alloc((unsigned)size + 1);
 			Fread((void *) r->name, 1, size, fd);
 			r->name[size] = 0;
 		} else
@@ -1993,7 +1993,7 @@ dlb *fd;
 		/* Let's see if this room has a parent */
 		Fread((void *) &size, 1, sizeof(size), fd);
 		if (size > 0) {	/* Yup, it does! */
-			r->parent = (char *) alloc((unsigned)size + 1);
+			r->parent = alloc((unsigned)size + 1);
 			Fread((void *) r->parent, 1, size, fd);
 			r->parent[size] = 0;
 		} else
@@ -2374,7 +2374,7 @@ dlb *fd;
 	    boolean found = TRUE;
 	    Fread((void *) &tmplregion, sizeof(tmplregion), 1, fd);
 	    if ((size = tmplregion.rname.len) != 0) {
-		tmplregion.rname.str = (char *) alloc((unsigned)size + 1);
+		tmplregion.rname.str = alloc((unsigned)size + 1);
 		Fread((void *) tmplregion.rname.str, size, 1, fd);
 		tmplregion.rname.str[size] = '\0';
 	    } else
@@ -2404,7 +2404,7 @@ dlb *fd;
 		boolean found = TRUE;
 		Fread((void *) &tmplregion, sizeof(tmplregion), 1, fd);
 		if ((size = tmplregion.rname.len) != 0) {
-		    tmplregion.rname.str = (char *) alloc((unsigned)size + 1);
+		    tmplregion.rname.str = alloc((unsigned)size + 1);
 		    Fread((void *) tmplregion.rname.str, size, 1, fd);
 		    tmplregion.rname.str[size] = '\0';
 		} else

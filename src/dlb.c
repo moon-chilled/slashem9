@@ -137,8 +137,8 @@ static boolean readlibdir(library *lp) {
 	return FALSE;
     if (lp->rev > DLB_MAX_VERS || lp->rev < DLB_MIN_VERS) return FALSE;
 
-    lp->dir = (libdir *) alloc(lp->nentries * sizeof(libdir));
-    lp->sspace = (char *) alloc(lp->strsize);
+    lp->dir = alloc(lp->nentries * sizeof(libdir));
+    lp->sspace = alloc(lp->strsize);
 
     /* read in each directory entry */
     for (i = 0, sp = lp->sspace; i < lp->nentries; i++) {
@@ -422,7 +422,7 @@ dlb_fopen_area (const char *area, const char *name, const char *mode)
 
     if (!dlb_initialized) return NULL;
 
-    dp = (dlb *) alloc(sizeof(dlb));
+    dp = alloc(sizeof(dlb));
     if (do_dlb_fopen(dp, name, mode))
     	dp->fp = NULL;
 #ifndef FILE_AREAS

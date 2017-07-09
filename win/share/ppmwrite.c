@@ -83,7 +83,7 @@ const char *type;
 
 	image = (pixel **)alloc(tile_y * sizeof(pixel *));
 	for (i = 0; i < tile_y; i++) {
-		image[i] = (pixel *) alloc(PpmScreen.Width * sizeof(pixel));
+		image[i] = alloc(PpmScreen.Width * sizeof(pixel));
 	}
 
 	return TRUE;

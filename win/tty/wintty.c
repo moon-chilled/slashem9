@@ -999,10 +999,10 @@ tty_create_nhwindow(type)
 	newwin->data =
 		(char **) alloc(sizeof(char *) * (unsigned)newwin->maxrow);
 	newwin->datlen =
-		(short *) alloc(sizeof(short) * (unsigned)newwin->maxrow);
+		alloc(sizeof(short) * (unsigned)newwin->maxrow);
 	if(newwin->maxcol) {
 	    for (i = 0; i < newwin->maxrow; i++) {
-		newwin->data[i] = (char *) alloc((unsigned)newwin->maxcol);
+		newwin->data[i] = alloc((unsigned)newwin->maxcol);
 		newwin->datlen[i] = newwin->maxcol;
 	    }
 	} else {
@@ -1288,7 +1288,7 @@ struct WinDesc *cw;
     curr_page = page_lines = 0;
     page_start = page_end = 0;
     msave = cw->morestr;	/* save the morestr */
-    cw->morestr = morestr = (char*) alloc((unsigned) QBUFSZ);
+    cw->morestr = morestr = alloc((unsigned) QBUFSZ);
     counting = FALSE;
     count = 0L;
     reset_count = TRUE;
@@ -2107,7 +2107,7 @@ tty_putstr(window, attr, str)
 	if(cw->data[cw->cury])
 	    free((void *)cw->data[cw->cury]);
 	n0 = strlen(str) + 1;
-	ob = cw->data[cw->cury] = (char *)alloc((unsigned)n0 + 1);
+	ob = cw->data[cw->cury] = alloc((unsigned)n0 + 1);
 	*ob++ = (char)(attr + 1);	/* avoid nuls, for convenience */
 	strcpy(ob, str);
 
@@ -2858,7 +2858,7 @@ copy_of(s)
     const char *s;
 {
     if (!s) s = "";
-    return strcpy((char *) alloc((unsigned) (strlen(s) + 1)), s);
+    return strcpy(alloc((unsigned) (strlen(s) + 1)), s);
 }
 
 #endif /* TTY_GRAPHICS */

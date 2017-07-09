@@ -197,7 +197,7 @@ remember_topl()
     if (len > (unsigned)cw->datlen[idx]) {
 	if (cw->data[idx]) free(cw->data[idx]);
 	len += (8 - (len & 7));		/* pad up to next multiple of 8 */
-	cw->data[idx] = (char *)alloc(len);
+	cw->data[idx] = alloc(len);
 	cw->datlen[idx] = (short)len;
     }
     strcpy(cw->data[idx], toplines);

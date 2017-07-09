@@ -218,7 +218,7 @@ curses_copy_of(const char *s)
 {
     if (!s)
         s = "";
-    return strcpy((char *) alloc((unsigned) (strlen(s) + 1)), s);
+    return strcpy(alloc((unsigned) (strlen(s) + 1)), s);
 }
 
 

@@ -564,12 +564,12 @@ const char *type;
 	    /* sigh -- hope this doesn't happen on micros */
 	    image = (pixel **)alloc(GifScreen.Height * sizeof(pixel *));
 	    for (i = 0; i < GifScreen.Height; i++) {
-		image[i] = (pixel *) alloc(GifScreen.Width * sizeof(pixel));
+		image[i] = alloc(GifScreen.Width * sizeof(pixel));
 	    }
 	} else {
 	    image = (pixel **)alloc(tile_y * sizeof(pixel *));
 	    for (i = 0; i < tile_y; i++) {
-		image[i] = (pixel *) alloc(GifScreen.Width * sizeof(pixel));
+		image[i] = alloc(GifScreen.Width * sizeof(pixel));
 	    }
 	}
 
