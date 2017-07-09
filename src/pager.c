@@ -280,7 +280,7 @@ lookat(x, y, buf, monbuf)
 	int tnum = what_trap(glyph_to_trap(glyph));
 	strcpy(buf, defsyms[trap_to_defsym(tnum)].explanation);
     } else if(!glyph_is_cmap(glyph)) {
-	strcpy(buf,"dark part of a room");
+	strcpy(buf,"unexplored area");
     } else switch(glyph_to_cmap(glyph)) {
     case S_altar:
 	if(!In_endgame(&u.uz))
@@ -654,8 +654,8 @@ do_look(quick)
 	for (hit_trap = FALSE, i = 0; i < MAXPCHARS; i++) {
 	    x_str = defsyms[i].explanation;
 	    if (sym == (from_screen ? showsyms[i] : defsyms[i].sym) && *x_str) {
-		/* avoid "an air", "a water", or "a floor of a room" */
-		int article = (i == S_room) ? 2 :		/* 2=>"the" */
+		/* avoid "an air", "a water", "a floor of a room", or "a dark part of a room" */
+		int article = ((i == S_room) || (i == S_darkroom)) ? 2 :	// 2=>"the"
 			      !(strcmp(x_str, "air") == 0 ||	/* 1=>"an"  */
 				strcmp(x_str, "water") == 0);	/* 0=>(none)*/
 

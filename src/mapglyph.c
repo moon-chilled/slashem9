@@ -112,7 +112,7 @@ mapglyph (int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int y)
 		color = CLR_MAGENTA;
 	    else if (offset == S_corr || offset == S_litcorr)
 		color = CLR_GRAY;
-	    else if (offset >= S_room && offset <= S_water)
+	    else if (offset >= S_room && offset <= S_water && offset != S_darkroom)
 		color = CLR_GREEN;
 	    else
 		color = NO_COLOR;
