@@ -10,15 +10,6 @@
 
 /* Initialization and startup functions for curses interface */
 
-/* Private declarations */
-
-#define NETHACK_CURSES      1
-#define SLASHEM_CURSES      2
-#define UNNETHACK_CURSES    3
-#define SPORKHACK_CURSES    4
-#define GRUNTHACK_CURSES    5
-#define DNETHACK_CURSES     6
-
 static void set_window_position(int *, int *, int *, int *, int,
                                 int *, int *, int *, int *, int,
                                 int, int);
@@ -44,102 +35,22 @@ nhrgb orig_hiwhite;
 
 /* Banners used for an optional ASCII splash screen */
 
-#define NETHACK_SPLASH_A \
-" _   _        _    _    _               _    "
+#define SPLASH_A "  _____  _              _     _  ______  __  __ "
+#define SPLASH_B " / ____|| |            | |   ( )|  ____||  \\/  |"
+#define SPLASH_C "| (___  | |  __ _  ___ | |__  \\|| |__   | \\  / |"
+#define SPLASH_D " \\___ \\ | | / _` |/ __|| '_ \\   |  __|  | |\\/| |"
+#define SPLASH_E " ____) || || (_| |\\__ \\| | | |  | |____ | |  | |"
+#define SPLASH_F "|_____/ |_| \\__,_||___/|_| |_|  |______||_|  |_|"
 
-#define NETHACK_SPLASH_B \
-"| \\ | |      | |  | |  | |             | |   "
 
-#define NETHACK_SPLASH_C \
-"|  \\| |  ___ | |_ | |__| |  __ _   ___ | | __"
+/*_____  _              _     _  ______  __  __ 
+ / ____|| |            | |   ( )|  ____||  \/  |
+| (___  | |  __ _  ___ | |__  \|| |__   | \  / |
+ \___ \ | | / _` |/ __|| '_ \   |  __|  | |\/| |
+ ____) || || (_| |\__ \| | | |  | |____ | |  | |
+|_____/ |_| \__,_||___/|_| |_|  |______||_|  |_|
+*/
 
-#define NETHACK_SPLASH_D \
-"| . ` | / _ \\| __||  __  | / _` | / __|| |/ /"
-
-#define NETHACK_SPLASH_E \
-"| |\\  ||  __/| |_ | |  | || (_| || (__ |   < "
-
-#define NETHACK_SPLASH_F \
-"|_| \\_| \\___| \\__||_|  |_| \\__,_| \\___||_|\\_\\"
-
-#define SLASHEM_SPLASH_A \
-"  _____  _              _     _  ______  __  __ "
-
-#define SLASHEM_SPLASH_B \
-" / ____|| |            | |   ( )|  ____||  \\/  |"
-
-#define SLASHEM_SPLASH_C \
-"| (___  | |  __ _  ___ | |__  \\|| |__   | \\  / |"
-
-#define SLASHEM_SPLASH_D \
-" \\___ \\ | | / _` |/ __|| '_ \\   |  __|  | |\\/| |"
-
-#define SLASHEM_SPLASH_E \
-" ____) || || (_| |\\__ \\| | | |  | |____ | |  | |"
-
-#define SLASHEM_SPLASH_F \
-"|_____/ |_| \\__,_||___/|_| |_|  |______||_|  |_|"
-
-#define UNNETHACK_SPLASH_A \
-" _    _         _   _        _    _    _               _"
-
-#define UNNETHACK_SPLASH_B \
-"| |  | |       | \\ | |      | |  | |  | |             | |"
-
-#define UNNETHACK_SPLASH_C \
-"| |  | | _ __  |  \\| |  ___ | |_ | |__| |  __ _   ___ | | __"
-
-#define UNNETHACK_SPLASH_D \
-"| |  | || '_ \\ | . ` | / _ \\| __||  __  | / _` | / __|| |/ /"
-
-#define UNNETHACK_SPLASH_E \
-"| |__| || | | || |\\  ||  __/| |_ | |  | || (_| || (__ |   <"
-
-#define UNNETHACK_SPLASH_F \
-" \\____/ |_| |_||_| \\_| \\___| \\__||_|  |_| \\__,_| \\___||_|\\_\\"
-
-#define SPORKHACK_SPLASH_A \
-"  _____                      _     _    _               _    "
-#define SPORKHACK_SPLASH_B \
-" / ____|                    | |   | |  | |             | |   "
-#define SPORKHACK_SPLASH_C \
-"| (___   _ __    ___   _ __ | | __| |__| |  __ _   ___ | | __"
-#define SPORKHACK_SPLASH_D \
-" \\___ \\ | '_ \\  / _ \\ | '__|| |/ /|  __  | / _` | / __|| |/ /"
-#define SPORKHACK_SPLASH_E \
-" ____) || |_) || (_) || |   |   < | |  | || (_| || (__ |   < "
-#define SPORKHACK_SPLASH_F \
-"|_____/ | .__/  \\___/ |_|   |_|\\_\\|_|  |_| \\__,_| \\___||_|\\_\\"
-#define SPORKHACK_SPLASH_G \
-"        | |                                                  "
-#define SPORKHACK_SPLASH_H \
-"        |_|                                                 "
-
-#define GRUNTHACK_SPLASH_A \
-" ______                      _    _    _               _    "
-#define GRUNTHACK_SPLASH_B \
-"/  ____)                    | |  | |  | |             | |   "
-#define GRUNTHACK_SPLASH_C \
-"| / ___  _ __  _   _  _ __  | |_ | |__| |  __ _   ___ | |  _"
-#define GRUNTHACK_SPLASH_D \
-"| | L  \\| '__)| | | || '_ \\ | __)|  __  | / _` | / __)| |/ /"
-#define GRUNTHACK_SPLASH_E \
-"| l__) || |   | |_| || | | || |_ | |  | || (_| || (__ |   < "
-#define GRUNTHACK_SPLASH_F \
-"\\______/|_|   \\___,_||_| |_| \\__)|_|  |_| \\__,_| \\___)|_|\\_\\"
-
-#define DNETHACK_SPLASH_A \
-"     _  _   _        _    _    _               _    "
-#define DNETHACK_SPLASH_B \
-"    | || \\ | |      | |  | |  | |             | |   "
-#define DNETHACK_SPLASH_C \
-"  __| ||  \\| |  ___ | |_ | |__| |  __ _   ___ | | __"
-#define DNETHACK_SPLASH_D \
-" / _` || . ` | / _ \\| __||  __  | / _` | / __|| |/ /"
-#define DNETHACK_SPLASH_E \
-"| (_| || |\\  ||  __/| |_ | |  | || (_| || (__ |   < "
-#define DNETHACK_SPLASH_F \
-" \\__,_||_| \\_| \\___| \\__||_|  |_| \\__,_| \\___||_|\\_\\"
 
 
 /* win* is size and placement of window to change, x/y/w/h is baseline which can
@@ -989,99 +900,21 @@ curses_display_splash_window()
 {
     int x_start;
     int y_start;
-    int which_variant = NETHACK_CURSES; /* Default to NetHack */
     curses_get_window_xy(MAP_WIN, &x_start, &y_start);
 
     if ((term_cols < 70) || (term_rows < 20)) {
         iflags.wc_splash_screen = FALSE;        /* No room for s.s. */
     }
-#ifdef DEF_GAME_NAME
-    if (strcmp(DEF_GAME_NAME, "SlashEM") == 0) {
-        which_variant = SLASHEM_CURSES;
-    }
-#endif
-
-#ifdef GAME_SHORT_NAME
-    if (strcmp(GAME_SHORT_NAME, "UNH") == 0) {
-        which_variant = UNNETHACK_CURSES;
-    }
-#endif
-
-    if (strncmp("SporkHack", COPYRIGHT_BANNER_A, 9) == 0) {
-        which_variant = SPORKHACK_CURSES;
-    }
-
-    if (strncmp("GruntHack", COPYRIGHT_BANNER_A, 9) == 0) {
-        which_variant = GRUNTHACK_CURSES;
-    }
-
-    if (strncmp("dNethack", COPYRIGHT_BANNER_A, 8) == 0) {
-        which_variant = DNETHACK_CURSES;
-    }
-
 
     curses_toggle_color_attr(stdscr, CLR_WHITE, A_NORMAL, ON);
     if (iflags.wc_splash_screen) {
-        switch (which_variant) {
-        case NETHACK_CURSES:
-            mvaddstr(y_start, x_start, NETHACK_SPLASH_A);
-            mvaddstr(y_start + 1, x_start, NETHACK_SPLASH_B);
-            mvaddstr(y_start + 2, x_start, NETHACK_SPLASH_C);
-            mvaddstr(y_start + 3, x_start, NETHACK_SPLASH_D);
-            mvaddstr(y_start + 4, x_start, NETHACK_SPLASH_E);
-            mvaddstr(y_start + 5, x_start, NETHACK_SPLASH_F);
-            y_start += 7;
-            break;
-        case SLASHEM_CURSES:
-            mvaddstr(y_start, x_start, SLASHEM_SPLASH_A);
-            mvaddstr(y_start + 1, x_start, SLASHEM_SPLASH_B);
-            mvaddstr(y_start + 2, x_start, SLASHEM_SPLASH_C);
-            mvaddstr(y_start + 3, x_start, SLASHEM_SPLASH_D);
-            mvaddstr(y_start + 4, x_start, SLASHEM_SPLASH_E);
-            mvaddstr(y_start + 5, x_start, SLASHEM_SPLASH_F);
-            y_start += 7;
-            break;
-        case UNNETHACK_CURSES:
-            mvaddstr(y_start, x_start, UNNETHACK_SPLASH_A);
-            mvaddstr(y_start + 1, x_start, UNNETHACK_SPLASH_B);
-            mvaddstr(y_start + 2, x_start, UNNETHACK_SPLASH_C);
-            mvaddstr(y_start + 3, x_start, UNNETHACK_SPLASH_D);
-            mvaddstr(y_start + 4, x_start, UNNETHACK_SPLASH_E);
-            mvaddstr(y_start + 5, x_start, UNNETHACK_SPLASH_F);
-            y_start += 7;
-            break;
-        case SPORKHACK_CURSES:
-            mvaddstr(y_start, x_start, SPORKHACK_SPLASH_A);
-            mvaddstr(y_start + 1, x_start, SPORKHACK_SPLASH_B);
-            mvaddstr(y_start + 2, x_start, SPORKHACK_SPLASH_C);
-            mvaddstr(y_start + 3, x_start, SPORKHACK_SPLASH_D);
-            mvaddstr(y_start + 4, x_start, SPORKHACK_SPLASH_E);
-            mvaddstr(y_start + 5, x_start, SPORKHACK_SPLASH_F);
-            mvaddstr(y_start + 6, x_start, SPORKHACK_SPLASH_G);
-            mvaddstr(y_start + 7, x_start, SPORKHACK_SPLASH_H);
-            y_start += 9;
-            break;
-        case GRUNTHACK_CURSES:
-            mvaddstr(y_start, x_start, GRUNTHACK_SPLASH_A);
-            mvaddstr(y_start + 1, x_start, GRUNTHACK_SPLASH_B);
-            mvaddstr(y_start + 2, x_start, GRUNTHACK_SPLASH_C);
-            mvaddstr(y_start + 3, x_start, GRUNTHACK_SPLASH_D);
-            mvaddstr(y_start + 4, x_start, GRUNTHACK_SPLASH_E);
-            mvaddstr(y_start + 5, x_start, GRUNTHACK_SPLASH_F);
-            y_start += 7;
-            break;
-        case DNETHACK_CURSES:
-            mvaddstr(y_start, x_start, DNETHACK_SPLASH_A);
-            mvaddstr(y_start + 1, x_start, DNETHACK_SPLASH_B);
-            mvaddstr(y_start + 2, x_start, DNETHACK_SPLASH_C);
-            mvaddstr(y_start + 3, x_start, DNETHACK_SPLASH_D);
-            mvaddstr(y_start + 4, x_start, DNETHACK_SPLASH_E);
-            mvaddstr(y_start + 5, x_start, DNETHACK_SPLASH_F);
-            y_start += 7;
-            break;
-        default:
-            impossible("which_variant number %d out of range", which_variant);
-        }
+        mvaddstr(y_start, x_start, SPLASH_A);
+        mvaddstr(y_start + 1, x_start, SPLASH_B);
+        mvaddstr(y_start + 2, x_start, SPLASH_C);
+        mvaddstr(y_start + 3, x_start, SPLASH_D);
+        mvaddstr(y_start + 4, x_start, SPLASH_E);
+        mvaddstr(y_start + 5, x_start, SPLASH_F);
+        y_start += 7;
     }
 
     curses_toggle_color_attr(stdscr, CLR_WHITE, A_NORMAL, OFF);
