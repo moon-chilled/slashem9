@@ -344,14 +344,14 @@ static uchar ibm_graphics[MAXPCHARS] = {
 /*10*/	0xb4,	/* S_tlwall:	meta-4, T left */
 	0xc3,	/* S_trwall:	meta-C, T right */
 	0xfa,	/* S_ndoor:	meta-z, centered dot */
-	g_FILLER(S_stone),	/* S_darkroom:	meta-z, centered dot */
 	0xfe,	/* S_vodoor:	meta-~, small centered square */
 	0xfe,	/* S_hodoor:	meta-~, small centered square */
 	g_FILLER(S_vcdoor),
 	g_FILLER(S_hcdoor),
 	240,	/* S_bars:	equivalency, courtesy Sascha */
 	241,	/* S_tree:	plus or minus symbol */
-/*20*/	0xfa,	/* S_room:	meta-z, centered dot */
+	0xfa,	/* S_room:	meta-z, centered dot */
+/*20*/	g_FILLER(S_stone),	/* S_darkroom:	meta-z, centered dot */
 	0xb0,	/* S_corr:	meta-0, light shading */
 	0xb1,	/* S_litcorr:	meta-1, medium shading */
 	g_FILLER(S_upstair),
