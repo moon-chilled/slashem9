@@ -72,7 +72,7 @@ register struct monst *mtmp;
 			    if (x == doors[i].x && y == doors[i].y)
 				break;
 			if (i < 0)
-			    i = add_door(x, y, (struct mkroom *)0);
+			    i = add_door(x, y, NULL);
 			if (i >= 0)
 			    levl[x][y].looted |= D_WARNED;
 		  }
@@ -436,7 +436,7 @@ dochug (register struct monst *mtmp)
 	/* [DS] Cthulhu also uses psychic blasts */
 	else if ((is_mind_flayer(mdat) || mdat == &mons[PM_CTHULHU]) 
 			&& !rn2(20)) {
-		struct monst *m2, *nmon = (struct monst *)0;
+		struct monst *m2, *nmon = NULL;
 
 		if (canseemon(mtmp))
 			pline("%s concentrates.", Monnam(mtmp));
@@ -1241,7 +1241,7 @@ postmov:
 		    if(likemagic) picked |= mpickstuff(mtmp, magical);
 		    if(likerock) picked |= mpickstuff(mtmp, boulder_class);
 		    if(likegems) picked |= mpickstuff(mtmp, gem_class);
-		    if(uses_items) picked |= mpickstuff(mtmp, (char *)0);
+		    if(uses_items) picked |= mpickstuff(mtmp, NULL);
 		    if(picked) mmoved = 3;
 		}
 

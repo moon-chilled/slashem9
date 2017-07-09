@@ -351,7 +351,7 @@ tty_player_selection()
 	    if (pick4u != 'y' && pick4u != 'n') {
 give_up:	/* Quit */
 		if (selected) free((void *) selected);
-		bail((char *)0);
+		bail(NULL);
 		/*NOTREACHED*/
 		return;
 	    }
@@ -931,7 +931,7 @@ tty_create_nhwindow(type)
     newwin->active = FALSE;
     newwin->curx = newwin->cury = 0;
     newwin->morestr = 0;
-    newwin->mlist = (tty_menu_item *) 0;
+    newwin->mlist = NULL;
     newwin->plist = (tty_menu_item **) 0;
     newwin->npages = newwin->plist_size = newwin->nitems = newwin->how = 0;
     switch(type) {
@@ -1007,7 +1007,7 @@ tty_create_nhwindow(type)
 	    }
 	} else {
 	    for (i = 0; i < newwin->maxrow; i++) {
-		newwin->data[i] = (char *) 0;
+		newwin->data[i] = NULL;
 		newwin->datlen[i] = 0;
 	    }
 	}
@@ -1015,7 +1015,7 @@ tty_create_nhwindow(type)
 	    newwin->maxrow = 0;
     } else {
 	newwin->data = (char **)0;
-	newwin->datlen = (short *)0;
+	newwin->datlen = NULL;
     }
 
     return newid;
@@ -1052,14 +1052,14 @@ free_window_info(cw, free_data)
 	for(i=0; i<cw->maxrow; i++)
 	    if(cw->data[i]) {
 		free((void *)cw->data[i]);
-		cw->data[i] = (char *)0;
+		cw->data[i] = NULL;
 		if (cw->datlen) cw->datlen[i] = 0;
 	    }
 	if (free_data) {
 	    free((void *)cw->data);
 	    cw->data = (char **)0;
 	    if (cw->datlen) free((void *)cw->datlen);
-	    cw->datlen = (short *)0;
+	    cw->datlen = NULL;
 	    cw->rows = 0;
 	}
     }
@@ -2161,7 +2161,7 @@ boolean complain;
 	    if(dup(fd)) {
 		if(complain) raw_printf("Cannot open %s as stdin.", fname);
 	    } else {
-		(void) execlp(catmore, "page", (char *)0);
+		(void) execlp(catmore, "page", NULL);
 		if(complain) raw_printf("Cannot exec %s.", catmore);
 	    }
 	    if(complain) sleep(10); /* want to wait_synch() but stdin is gone */
@@ -2412,7 +2412,7 @@ tty_select_menu(window, how, menu_list)
        || cw->type != NHW_MENU)
 	panic(winpanicstr,  window);
 
-    *menu_list = (menu_item *) 0;
+    *menu_list = NULL;
     cw->how = (short) how;
     morc = 0;
     tty_display_nhwindow(window, TRUE);

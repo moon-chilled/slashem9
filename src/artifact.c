@@ -156,7 +156,7 @@ const char *artiname(int artinum) {
    If no alignment is given, then 'otmp' is converted
    into an artifact of matching type, or returned as-is if that's not possible.
    For the 2nd case, caller should use ``obj = mk_artifact(obj, A_NONE);''
-   for the 1st, ``obj = mk_artifact((struct obj *)0, some_alignment);''.
+   for the 1st, ``obj = mk_artifact(NULL, some_alignment);''.
  */
 struct obj *mk_artifact(
 struct obj *otmp,	/* existing object; ignored if alignment specified */
@@ -434,7 +434,7 @@ void set_artifact_intrinsic(struct obj *otmp, boolean on, long wp_mask) {
 		if(obj != otmp && obj->oartifact) {
 		    register const struct artifact *art = get_artifact(obj);
 		    if(art->cary.adtyp == dtyp) {
-			mask = (long *) 0;
+			mask = NULL;
 			break;
 		    }
 		}
@@ -904,7 +904,7 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
 		nomul(-3);
 		nomovemsg = "";
 		if (magr && magr == u.ustuck && sticks(youmonst.data)) {
-		    setustuck((struct monst *)0);
+		    setustuck(NULL);
 		    You("release %s!", mon_nam(magr));
 		}
 	    }
@@ -1389,7 +1389,7 @@ static int arti_invoke(struct obj *obj) {
 						      if (Upolyd) u.mh += healamt;
 						      else u.uhp += healamt;
 					      }
-					      if(Sick) make_sick(0L,(char *)0,FALSE,SICK_ALL);
+					      if(Sick) make_sick(0L,NULL,FALSE,SICK_ALL);
 					      if(Slimed) Slimed = 0L;
 					      if (Blinded > creamed) make_blinded(creamed, FALSE);
 					      flags.botl = 1;
@@ -1523,7 +1523,7 @@ static int arti_invoke(struct obj *obj) {
 								 break;
 						 }
 						 mtmp = makemon(pm, u.ux, u.uy, NO_MM_FLAGS);
-						 if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0)
+						 if ((mtmp2 = tamedog(mtmp, NULL)) != 0)
 							 mtmp = mtmp2;
 						 mtmp->mtame = 30;
 						 summon_loop--;
@@ -1542,7 +1542,7 @@ static int arti_invoke(struct obj *obj) {
 
 					 pline("You summon an elemental.");
 
-					 if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0)
+					 if ((mtmp2 = tamedog(mtmp, NULL)) != 0)
 						 mtmp = mtmp2;
 					 mtmp->mtame = 30;
 					 break;
@@ -1552,7 +1552,7 @@ static int arti_invoke(struct obj *obj) {
 
 					 pline("You summon an elemental.");
 
-					 if ((mtmp2 = tamedog(mtmp, (struct obj *)0)) != 0)
+					 if ((mtmp2 = tamedog(mtmp, NULL)) != 0)
 						 mtmp = mtmp2;
 					 mtmp->mtame = 30;
 					 break;

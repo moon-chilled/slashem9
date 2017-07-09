@@ -841,7 +841,7 @@ ring:
 	if (!Hallucination && obj->unpaid) {
 		xchar ox, oy; 
 		long quotedprice = unpaid_cost(obj);
-		struct monst *shkp = (struct monst *)0;
+		struct monst *shkp = NULL;
 
 		if (Has_contents(obj) &&
 		    get_obj_location(obj, &ox, &oy, BURIED_TOO|CONTAINED_TOO) &&
@@ -1166,7 +1166,7 @@ otense (register struct obj *otmp, register const char *verb)
 	 * recomputing xname(otmp) at this time.
 	 */
 	if (!is_plural(otmp))
-	    return vtense((char *)0, verb);
+	    return vtense(NULL, verb);
 
 	buf = nextobuf();
 	strcpy(buf, verb);
@@ -1364,7 +1364,7 @@ makeplural (const char *oldstr)
 	/* Note: cannot use strcmpi here -- it'd give MATZot, CAVEMeN,... */
 	register char *spot;
 	char *str = nextobuf();
-	const char *excess = (char *)0;
+	const char *excess = NULL;
 	int len;
 
 	while (*oldstr==' ') oldstr++;
@@ -2212,7 +2212,7 @@ boolean from_user;
 	    (mntmp = name_to_mon(bp)) >= LOW_PM) {
 		int mntmptoo, mntmplen;	/* double check for rank title */
 		char *obp = bp;
-		mntmptoo = title_to_mon(bp, (int *)0, &mntmplen);
+		mntmptoo = title_to_mon(bp, NULL, &mntmplen);
 		bp += mntmp != mntmptoo ? (int)strlen(mons[mntmp].mname) : mntmplen;
 		if (*bp == ' ') bp++;
 		else if (!strncmpi(bp, "s ", 2)) bp += 2;
@@ -2368,7 +2368,7 @@ boolean from_user;
 		;	/* avoid false hit on "* glass" */
 	} else if (!BSTRCMPI(bp, p-6, " glass") || !strcmpi(bp, "glass")) {
 		register char *g = bp;
-		if (strstri(g, "broken")) return (struct obj *)0;
+		if (strstri(g, "broken")) return NULL;
 		if (!strncmpi(g, "worthless ", 10)) g += 10;
 		if (!strncmpi(g, "piece of ", 9)) g += 9;
 		if (!strncmpi(g, "colored ", 8)) g += 8;
@@ -2412,7 +2412,7 @@ srch:
 		if (dn && (zn = OBJ_DESCR(objects[i])) != 0 &&
 			    wishymatch(dn, zn, FALSE)) {
 			/* don't match extra descriptions (w/o real name) */
-			if (!OBJ_NAME(objects[i])) return (struct obj *)0;
+			if (!OBJ_NAME(objects[i])) return NULL;
 			typ = i;
 			goto typfnd;
 		}
@@ -2538,7 +2538,7 @@ srch:
 		}
 		if(!BSTRCMP(bp, p-9, "headstone") || !BSTRCMP(bp, p-5, "grave")) {
 			levl[u.ux][u.uy].typ = GRAVE;
-			make_grave(u.ux, u.uy, (char *) 0);
+			make_grave(u.ux, u.uy, NULL);
 			pline("A grave.");
 			newsym(u.ux, u.uy);
 			return(&zeroobj);
@@ -2602,7 +2602,7 @@ srch:
 		}
 
 		if(!BSTRCMP(bp, p-5, "grave") || !BSTRCMP(bp, p-9, "headstone")) {
-		    make_grave(u.ux, u.uy, (char *) 0);
+		    make_grave(u.ux, u.uy, NULL);
 		    pline("A grave.");
 		    newsym(u.ux, u.uy);
 		    return(&zeroobj);
@@ -2624,7 +2624,7 @@ srch:
 		}
 	}
 #endif
-	if(!oclass) return((struct obj *)0);
+	if(!oclass) return(NULL);
 any:
 	if(!oclass) oclass = wrpsym[rn2((int)sizeof(wrpsym))];
 typfnd:
@@ -2659,7 +2659,7 @@ typfnd:
 	    && !wizard
 #endif
 	    )
-	    return((struct obj *)0);
+	    return(NULL);
 
 	/* convert magic lamps to regular lamps before lighting them or setting
 	   the charges */
@@ -2973,7 +2973,7 @@ typfnd:
 	    artifact_exists(otmp, ONAME(otmp), FALSE);
 	    if (Has_contents(otmp))
 		delete_contents(otmp);
-	    obfree(otmp, (struct obj *) 0);
+	    obfree(otmp, NULL);
 	    otmp = &zeroobj;
 	    pline("For a moment, you feel %s in your %s, but it disappears!",
 		  something,

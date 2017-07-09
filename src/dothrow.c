@@ -39,24 +39,24 @@ extern boolean notonhead;	/* for long worms */
 
 struct obj *splitoneoff(struct obj **pobj) {
     struct obj *obj = *pobj;
-    struct obj *otmp = (struct obj *)0;
+    struct obj *otmp = NULL;
     if (obj == uquiver) {
 	if (obj->quan > 1L)
 	    setuqwep(otmp = splitobj(obj, 1L));
 	else
-	    setuqwep((struct obj *)0);
+	    setuqwep(NULL);
     } else if (obj == uswapwep) {
 	if (obj->quan > 1L)
 	    setuswapwep(otmp = splitobj(obj, 1L), FALSE);
 	else
-	    setuswapwep((struct obj *)0, FALSE);
+	    setuswapwep(NULL, FALSE);
     } else if (obj == uwep) {
 	if (obj->quan > 1L)
 	    setworn(otmp = splitobj(obj, 1L), W_WEP);
 	    /* not setuwep; do not change unweapon */
 	else {
-	    setuwep((struct obj *)0, FALSE);
-	    if (uwep) return (struct obj *)0; /* unwielded, died, rewielded */
+	    setuwep(NULL, FALSE);
+	    if (uwep) return NULL; /* unwielded, died, rewielded */
 	}
     } else if (obj->quan > 1L)
 	otmp = splitobj(obj, 1L);
@@ -79,11 +79,11 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 		launcher = uwep;
 	else if (thrown == 2 && uswapwep && ammo_and_launcher(obj, uswapwep))
 		launcher = uswapwep;
-	else launcher = (struct obj *)0;
+	else launcher = NULL;
 
 	/* ask "in what direction?" */
 #ifndef GOLDOBJ
-	if (!getdir((char *)0)) {
+	if (!getdir(NULL)) {
 		if (obj->oclass == COIN_CLASS) {
 		    u.ugold += obj->quan;
 		    flags.botl = 1;
@@ -94,7 +94,7 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 
 	if(obj->oclass == COIN_CLASS) return(throw_gold(obj));
 #else
-	if (!getdir((char *)0)) {
+	if (!getdir(NULL)) {
 	    /* obj might need to be merged back into the singular gold object */
 	    freeinv(obj);
 	    addinv(obj);
@@ -301,7 +301,7 @@ int dothrow(void) {
 	    return 0;
 	}
 
-	if(check_capacity((char *)0)) return(0);
+	if(check_capacity(NULL)) return(0);
 	obj = getobj(uslinging() ? bullets : toss_objs, "throw");
 	/* it is also possible to throw food */
 	/* (or jewels, or iron balls... ) */
@@ -395,7 +395,7 @@ int dofire(void) {
 	    return 0;
 	}
 
-	if(check_capacity((char *)0)) return(0);
+	if(check_capacity(NULL)) return(0);
 	if (!uquiver) {
 		if (!flags.autoquiver) {
 			/* Don't automatically fill the quiver */
@@ -408,7 +408,7 @@ int dofire(void) {
 			return(dothrow());
 		} else {
 			You("fill your quiver:");
-			prinv((char *)0, uquiver, 0L);
+			prinv(NULL, uquiver, 0L);
 		}
 	}
 
@@ -864,7 +864,7 @@ static boolean toss_up(struct obj *obj, boolean hitsroof) {
 
 	if (obj->oartifact)
 	    /* need a fake die roll here; rn1(18,2) avoids 1 and 20 */
-	    artimsg = artifact_hit((struct monst *)0, &youmonst,
+	    artimsg = artifact_hit(NULL, &youmonst,
 				   obj, &dmg, rn1(18,2));
 
 	if (!dmg) {	/* probably wasn't a weapon; base damage on weight */
@@ -938,7 +938,7 @@ boolean twoweap, /* used to restore twoweapon mode if wielded weapon returns */
 int thrown) {
 	struct monst *mon;
 	int range, urange;
-	struct obj *launcher = (struct obj*) 0;
+	struct obj *launcher = NULL;
 	boolean impaired = (Confusion || Stunned || Blind ||
 			   Hallucination || Fumbling);
 
@@ -1024,7 +1024,7 @@ int thrown) {
 			    WEAPON_CLASS, EXPL_FIERY);
 		}
 		check_shop_obj(obj, u.ux, u.uy, TRUE);
-		obfree(obj, (struct obj *)0);
+		obfree(obj, NULL);
 		return;
 	    }
 #endif
@@ -1034,7 +1034,7 @@ int thrown) {
 	    } else {
 		hitfloor(obj);
 	    }
-	    thrownobj = (struct obj*)0;
+	    thrownobj = NULL;
 	    return;
 
 	} else if(obj->otyp == BOOMERANG && !Underwater) {
@@ -1049,7 +1049,7 @@ int thrown) {
 			    setworn(obj, wep_mask);
 			    u.twoweap = twoweap;
 			}
-			thrownobj = (struct obj*)0;
+			thrownobj = NULL;
 			return;
 		}
 	} else {
@@ -1110,7 +1110,7 @@ int thrown) {
 		    hurtle(-u.dx, -u.dy, urange, TRUE);
 
 		if (!obj) {
-		    thrownobj = (struct obj *)0;
+		    thrownobj = NULL;
 		    return;
 		}
 	}
@@ -1120,7 +1120,7 @@ int thrown) {
 
 		if (mon->isshk &&
 		    obj->where == OBJ_MINVENT && obj->ocarry == mon) {
-		    thrownobj = (struct obj*)0;
+		    thrownobj = NULL;
 		    return;		/* alert shk caught it */
 		}
 		(void) snuff_candle(obj);
@@ -1153,7 +1153,7 @@ int thrown) {
 	if (is_bullet(obj) && (ammo_and_launcher(obj, launcher) &&
 		!is_grenade(obj))) {
 	    check_shop_obj(obj, bhitpos.x,bhitpos.y, TRUE);
-	    obfree(obj, (struct obj *)0);
+	    obfree(obj, NULL);
 	    return;
 	}
 #endif
@@ -1190,18 +1190,18 @@ int thrown) {
 					"%s back toward you, hitting your %s!",
 				  Tobjnam(obj, Blind ? "hit" : "fly"),
 				  body_part(ARM));
-			    (void) artifact_hit((struct monst *)0,
+			    (void) artifact_hit(NULL,
 						&youmonst, obj, &dmg, 0);
 			    losehp(dmg, xname(obj),
 				obj_is_pname(obj) ? KILLED_BY : KILLED_BY_AN);
 			}
 			if (ship_object(obj, u.ux, u.uy, FALSE)) {
-		    	    thrownobj = (struct obj*)0;
+		    	    thrownobj = NULL;
 			    return;
 			}
 			dropy(obj);
 		    }
-		    thrownobj = (struct obj*)0;
+		    thrownobj = NULL;
 		    return;
 		}
 
@@ -1224,15 +1224,15 @@ int thrown) {
 		    if(*u.ushops)
 			check_shop_obj(obj, bhitpos.x, bhitpos.y, FALSE);
 		    (void) mpickobj(mon, obj);	/* may merge and free obj */
-		    thrownobj = (struct obj*)0;
+		    thrownobj = NULL;
 		    return;
 		}
 		(void) snuff_candle(obj);
 		if (!mon && ship_object(obj, bhitpos.x, bhitpos.y, FALSE)) {
-		    thrownobj = (struct obj*)0;
+		    thrownobj = NULL;
 		    return;
 		}
-		thrownobj = (struct obj*)0;
+		thrownobj = NULL;
 		place_object(obj, bhitpos.x, bhitpos.y);
 		if(*u.ushops && obj != uball)
 		    check_shop_obj(obj, bhitpos.x, bhitpos.y, FALSE);
@@ -1333,7 +1333,7 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 
 	if (thrown == 1) launcher = uwep;
 	else if (thrown == 2) launcher = uswapwep;
-	else launcher = (struct obj *)0;
+	else launcher = NULL;
 
 	tmp = -1 + Luck + find_mac(mon) + u.uhitinc +
 			maybe_polyd(youmonst.data->mlevel, u.ulevel);
@@ -1518,14 +1518,14 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 			    else You_hear("an explosion");
 			    explode(bhitpos.x, bhitpos.y, ZT_SPELL(ZT_FIRE),
 				    d(3,8), WEAPON_CLASS, EXPL_FIERY);
-			    obfree(obj, (struct obj *)0);
+			    obfree(obj, NULL);
 			} else
 #endif
-			obfree(obj, (struct obj *)0);
+			obfree(obj, NULL);
 			return 1;
 		    }
 		}
-		passive_obj(mon, obj, (struct attack *)0);
+		passive_obj(mon, obj, NULL);
 	    } else {
 		tmiss(obj, mon);
 	    }

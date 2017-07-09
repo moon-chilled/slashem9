@@ -287,7 +287,7 @@ extern coord bhitpos;	/* place where throw or zap hits or stops */
 
 #if defined(MICRO) && !defined(__DJGPP__)
 #define getuid() 1
-#define getlogin() ((char *)0)
+#define getlogin() (NULL)
 #endif /* MICRO */
 
 /* For my clever ending messages... */

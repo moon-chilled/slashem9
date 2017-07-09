@@ -62,7 +62,7 @@ doread (void)
 	strcpy(cp, readable);
 
 	known = FALSE;
-	if(check_capacity((char *)0)) return (0);
+	if(check_capacity(NULL)) return (0);
 	scroll = getobj(class_list, "read");
 	if(!scroll) return(0);
 
@@ -78,7 +78,7 @@ doread (void)
 
 	/* KMH -- some rings can be read, even while illiterate */
 	if (scroll->oclass == RING_CLASS) {
-	    const char *clr = (char *)0;
+	    const char *clr = NULL;
 
 	    if (cant_see) {
 		You("cannot see it!");
@@ -236,7 +236,7 @@ doread (void)
 	if (scroll->otyp == SCR_TELEPORTATION) {
 	    otemp = *scroll;
 	    otemp.where = OBJ_FREE;
-	    otemp.nobj = (struct obj *)0;
+	    otemp.nobj = NULL;
 	    if (carried(scroll)) useup(scroll);
 	    else if (mcarried(scroll)) m_useup(scroll->ocarry, scroll);
 	    else useupf(scroll, 1L);
@@ -818,7 +818,7 @@ maybe_tame (struct monst *mtmp, struct obj *sobj)
 	    if (mtmp->isshk)
 		make_happy_shk(mtmp, FALSE);
 	    else if (!resist(mtmp, sobj->oclass, 0, NOTELL))
-		(void) tamedog(mtmp, (struct obj *) 0);
+		(void) tamedog(mtmp, NULL);
 	}
 }
 
@@ -932,7 +932,7 @@ seffects (register struct obj *sobj)
 					otmp->otyp <= YELLOW_DRAGON_SCALES) {
 			/* dragon scales get turned into dragon scale mail */
 			Your("%s merges and hardens!", xname(otmp));
-			setworn((struct obj *)0, W_ARM);
+			setworn(NULL, W_ARM);
 			/* assumes same order */
 			otmp->otyp = GRAY_DRAGON_SCALE_MAIL +
 						otmp->otyp - GRAY_DRAGON_SCALES;
@@ -1144,7 +1144,7 @@ seffects (register struct obj *sobj)
 	case SPE_CREATE_MONSTER:
 	    if (create_critters(1 + ((confused || sobj->cursed) ? 12 : 0) +
 				((sobj->blessed || rn2(73)) ? 0 : rnd(4)),
-			confused ? &mons[PM_ACID_BLOB] : (struct permonst *)0))
+			confused ? &mons[PM_ACID_BLOB] : NULL))
 		known = TRUE;
 	    /* no need to flush monsters; we ask for identification only if the
 	     * monsters are not visible
@@ -1191,7 +1191,7 @@ seffects (register struct obj *sobj)
 		    if (mtmp)
 			if (!sobj->cursed && Role_if(PM_NECROMANCER)) {
 			    if (!resist(mtmp, sobj->oclass, 0, TELL)) {
-				mtmp = tamedog(mtmp, (struct obj *) 0);
+				mtmp = tamedog(mtmp, NULL);
 				if (mtmp) You("dominate %s!", mon_nam(mtmp));
 			    }
 			} else setmangry(mtmp);
@@ -1687,7 +1687,7 @@ do_it:
 		for(rx = rooms[rnum].lx-1; rx <= rooms[rnum].hx+1; rx++)
 		    for(ry = rooms[rnum].ly-1; ry <= rooms[rnum].hy+1; ry++)
 			set_lit(rx, ry,
-				(void *)(on ? &is_lit : (char *)0));
+				(void *)(on ? &is_lit : NULL));
 		rooms[rnum].rlit = on;
 	    }
 	    /* hallways remain dark on the rogue level */
@@ -1696,7 +1696,7 @@ do_it:
 	    do_clear_area(u.ux,u.uy,
 		obj->oartifact ? 12 :
 		(obj && obj->oclass==SCROLL_CLASS && obj->blessed) ? 9 : 5,
-		set_lit, (void *)(on ? &is_lit : (char *)0));
+		set_lit, (void *)(on ? &is_lit : NULL));
 
 	/*
 	 *  If we are not blind, then force a redraw on all positions in sight
@@ -2084,10 +2084,10 @@ unpunish (void)
 
 	obj_extract_self(uchain);
 	newsym(uchain->ox,uchain->oy);
-	setworn((struct obj *)0, W_CHAIN);
+	setworn(NULL, W_CHAIN);
 	dealloc_obj(savechain);
 	uball->spe = 0;
-	setworn((struct obj *)0, W_BALL);
+	setworn(NULL, W_BALL);
 }
 
 /* some creatures have special data structures that only make sense in their
@@ -2126,7 +2126,7 @@ create_particular (void)
 	char buf[BUFSZ], *bufp, monclass = MAXMCLASSES;
 	int which, tries, i;
 	struct permonst *whichpm;
-	struct monst *mtmp = (struct monst *)0;
+	struct monst *mtmp = NULL;
 	boolean maketame, makepeaceful, makehostile;
 
 	tries = 0;
@@ -2136,7 +2136,7 @@ create_particular (void)
 	    getlin("Create what kind of monster? [type the name or symbol]",
 		   buf);
 	    bufp = mungspaces(buf);
-	    if (*bufp == '\033') return (struct monst *)0;
+	    if (*bufp == '\033') return NULL;
 	    /* allow the initial disposition to be specified */
 	    if (!strncmpi(bufp, "tame ", 5)) {
 		bufp += 5;

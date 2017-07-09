@@ -539,7 +539,7 @@ const char *type;
 		return FALSE;
 	}
 	gif_file = fopen(filename, type);
-	if (gif_file == (FILE *)0) {
+	if (gif_file == NULL) {
 		fprintf(stderr, "cannot open gif file %s\n", filename);
 		return FALSE;
 	}
@@ -715,7 +715,7 @@ char *argv[];
 		char tilename[BUFSZ];
 		char *bufp, *bufs;
 		
-	        if ((fp = fopen(argv[1], "r")) == (FILE *)0)
+	        if ((fp = fopen(argv[1], "r")) == NULL)
 	        {
 	                fprintf(stderr, "Could not open index file '%s'!\n", index_file);
 		        exit(EXIT_FAILURE);

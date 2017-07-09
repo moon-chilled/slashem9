@@ -688,9 +688,9 @@ switch_graphics (int gr_set_flag)
     switch (gr_set_flag) {
 	default:
 	case ASCII_GRAPHICS:
-	    assign_graphics((uchar *)0, 0, MAXPCHARS, 0);
+	    assign_graphics(NULL, 0, MAXPCHARS, 0);
 #ifdef USER_DUNGEONCOLOR
-	    assign_colors((uchar *)0, 0, MAXPCHARS, 0);
+	    assign_colors(NULL, 0, MAXPCHARS, 0);
 #endif
 #ifdef PC9800
 	    if (ascgraphics_mode_callback) (*ascgraphics_mode_callback)();
@@ -737,7 +737,7 @@ switch_graphics (int gr_set_flag)
 #endif
 #ifdef CURSES_GRAPHICS
     case CURS_GRAPHICS:
-	    assign_graphics((uchar *)0, 0, MAXPCHARS, 0);
+	    assign_graphics(NULL, 0, MAXPCHARS, 0);
         iflags.cursesgraphics = TRUE;
 	    iflags.IBMgraphics = FALSE;
 	    iflags.DECgraphics = FALSE;

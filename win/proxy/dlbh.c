@@ -117,7 +117,7 @@ int len;
 int fh;
 {
     struct dlb_node *n = dlbh_find_node(fh);
-    return n ? dlb_fgets(buf, len, n->handles[fh - n->offset]) : (char *)0;
+    return n ? dlb_fgets(buf, len, n->handles[fh - n->offset]) : NULL;
 }
 
 int

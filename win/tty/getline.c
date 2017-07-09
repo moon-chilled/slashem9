@@ -214,7 +214,7 @@ ext_cmd_getlin_hook(base)
 	int oindex, com_index;
 
 	com_index = -1;
-	for (oindex = 0; extcmdlist[oindex].ef_txt != (char *)0; oindex++) {
+	for (oindex = 0; extcmdlist[oindex].ef_txt != NULL; oindex++) {
 		if (!strncmpi(base, extcmdlist[oindex].ef_txt, strlen(base))) {
 			if (com_index == -1)	/* no matches yet */
 			    com_index = oindex;
@@ -252,7 +252,7 @@ tty_get_ext_cmd()
 	(void) mungspaces(buf);
 	if (buf[0] == 0 || buf[0] == '\033') return -1;
 
-	for (i = 0; extcmdlist[i].ef_txt != (char *)0; i++)
+	for (i = 0; extcmdlist[i].ef_txt != NULL; i++)
 		if (!strcmpi(buf, extcmdlist[i].ef_txt)) break;
 
 #ifdef REDO
@@ -264,7 +264,7 @@ tty_get_ext_cmd()
 	}
 #endif
 
-	if (extcmdlist[i].ef_txt == (char *)0) {
+	if (extcmdlist[i].ef_txt == NULL) {
 		pline("%s: unknown extended command.", buf);
 		i = -1;
 	}

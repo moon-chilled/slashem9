@@ -792,7 +792,7 @@ struct mkroom	*croom;
 	tm.x = x;
 	tm.y = y;
 
-	mktrap(t->type, 1, (struct mkroom*) 0, &tm);
+	mktrap(t->type, 1, NULL, &tm);
     }
 }
 
@@ -845,7 +845,7 @@ struct mkroom	*croom;
 		(m->align < 0 ? ralign[-m->align-1] : m->align);
 
 	if (!class)
-	    pm = (struct permonst *) 0;
+	    pm = NULL;
 	else if (m->id != NON_PM) {
 #if 0	/* OBSOLETE */
 	    if (flags.female && Role_if(PM_ELF) /*&& !u.uelf_drow*/ && m->id == PM_EARENDIL)
@@ -876,7 +876,7 @@ struct mkroom	*croom;
 	    if ((pm->geno & G_UNIQ) && (g_mvflags & G_EXTINCT))
 		goto m_done;
 	    else if (g_mvflags & G_GONE)	/* genocided or extinct */
-		pm = (struct permonst *) 0;	/* make random monster */
+		pm = NULL;	/* make random monster */
 	} else {
 	    pm = mkclass(class,G_NOGEN|MKC_ULIMIT);
 	    /* if we can't get a specific monster type (pm == 0) then all
@@ -1909,13 +1909,13 @@ monster *m;
 	    Fread((void *) m->name.str, 1, size, fd);
 	    m->name.str[size] = '\0';
 	} else
-	    m->name.str = (char *) 0;
+	    m->name.str = NULL;
 	if ((size = m->appear_as.len) != 0) {
 	    m->appear_as.str = (char *) alloc((unsigned)size + 1);
 	    Fread((void *) m->appear_as.str, 1, size, fd);
 	    m->appear_as.str[size] = '\0';
 	} else
-	    m->appear_as.str = (char *) 0;
+	    m->appear_as.str = NULL;
 }
 
 static void
@@ -1931,7 +1931,7 @@ object *o;
 	    Fread((void *) o->name.str, 1, size, fd);
 	    o->name.str[size] = '\0';
 	} else
-	    o->name.str = (char *) 0;
+	    o->name.str = NULL;
 }
 
 static void
@@ -1964,13 +1964,13 @@ dlb *fd;
 	Fread((void *) &n, 1, sizeof(n), fd); /* nrobjects */
 	if (n) {
 		Fread((void *)robjects, sizeof(*robjects), n, fd);
-		sp_lev_shuffle(robjects, (char *)0, (int)n);
+		sp_lev_shuffle(robjects, NULL, (int)n);
 	}
 
 	Fread((void *) &n, 1, sizeof(n), fd); /* nrmonst */
 	if (n) {
 		Fread((void *)rmonst, sizeof(*rmonst), n, fd);
-		sp_lev_shuffle(rmonst, (char *)0, (int)n);
+		sp_lev_shuffle(rmonst, NULL, (int)n);
 	}
 
 	Fread((void *) &nrooms, 1, sizeof(nrooms), fd);
@@ -1988,7 +1988,7 @@ dlb *fd;
 			Fread((void *) r->name, 1, size, fd);
 			r->name[size] = 0;
 		} else
-		    r->name = (char *) 0;
+		    r->name = NULL;
 
 		/* Let's see if this room has a parent */
 		Fread((void *) &size, 1, sizeof(size), fd);
@@ -1997,7 +1997,7 @@ dlb *fd;
 			Fread((void *) r->parent, 1, size, fd);
 			r->parent[size] = 0;
 		} else
-		    r->parent = (char *) 0;
+		    r->parent = NULL;
 
 		Fread((void *) &r->x, 1, sizeof(r->x), fd);
 					/* x pos on the grid (1-5) */
@@ -2156,7 +2156,7 @@ dlb *fd;
 
 	for (i=0; i < nrooms; i++)
 	    if(!tmproom[i]->parent)
-		build_room(tmproom[i], (room *) 0);
+		build_room(tmproom[i], NULL);
 
 	free_rooms(tmproom, nrooms);
 
@@ -2378,7 +2378,7 @@ dlb *fd;
 		Fread((void *) tmplregion.rname.str, size, 1, fd);
 		tmplregion.rname.str[size] = '\0';
 	    } else
-		tmplregion.rname.str = (char *) 0;
+		tmplregion.rname.str = NULL;
 	    if(!tmplregion.in_islev) {
 		found &= get_location(&tmplregion.inarea.x1,
 				      &tmplregion.inarea.y1, DRY|WET);
@@ -2408,7 +2408,7 @@ dlb *fd;
 		    Fread((void *) tmplregion.rname.str, size, 1, fd);
 		    tmplregion.rname.str[size] = '\0';
 		} else
-		    tmplregion.rname.str = (char *) 0;
+		    tmplregion.rname.str = NULL;
 		if (!found)
 		    panic("reading special level with random region located nowhere");
 		(void) memcpy((void *)&rarea[(int)tmpn - n - 1],
@@ -2420,7 +2420,7 @@ dlb *fd;
 						/* Random objects */
 	if(n) {
 		Fread((void *)robjects, sizeof(*robjects), (int) n, fd);
-		sp_lev_shuffle(robjects, (char *)0, (int)n);
+		sp_lev_shuffle(robjects, NULL, (int)n);
 	}
 
 	Fread((void *) &n, 1, sizeof(n), fd);
@@ -2441,7 +2441,7 @@ dlb *fd;
 						/* Random monsters */
 	if(n) {
 		Fread((void *)rmonst, sizeof(*rmonst), (int) n, fd);
-		sp_lev_shuffle(rmonst, (char *)0, (int)n);
+		sp_lev_shuffle(rmonst, NULL, (int)n);
 	}
 
 	(void) memset((void *)mustfill, 0, sizeof(mustfill));
@@ -2547,7 +2547,7 @@ dlb *fd;
 		    if (doorindex >= DOORMAX)
 			impossible("Too many doors?");
 		    else {
-			xi = add_door(x, y, (struct mkroom *)0);
+			xi = add_door(x, y, NULL);
 			doors[xi].arti_key = tmpdoor.arti_key;
 		    }
 		}
@@ -2645,7 +2645,7 @@ dlb *fd;
 		if (!found)
 		    continue;
 		if ((badtrap = t_at(x,y)) != 0) deltrap(badtrap);
-		mkstairs(x, y, (char)tmpstair.up, (struct mkroom *)0);
+		mkstairs(x, y, (char)tmpstair.up, NULL);
 		prevstair.x = x;
 		prevstair.y = y;
 	}
@@ -2655,7 +2655,7 @@ dlb *fd;
 	while(n--) {
 		Fread((void *)&tmpaltar, 1, sizeof(tmpaltar), fd);
 
-		create_altar(&tmpaltar, (struct mkroom *)0);
+		create_altar(&tmpaltar, NULL);
 	}
 
 	Fread((void *) &n, 1, sizeof(n), fd);
@@ -2664,7 +2664,7 @@ dlb *fd;
 		Fread((void *)&tmpfountain, 1, sizeof(tmpfountain), fd);
 
 		create_feature(tmpfountain.x, tmpfountain.y,
-			       (struct mkroom *)0, FOUNTAIN);
+			       NULL, FOUNTAIN);
 	}
 
 	Fread((void *) &n, 1, sizeof(n), fd);
@@ -2672,7 +2672,7 @@ dlb *fd;
 	while(n--) {
 		Fread((void *)&tmptrap, 1, sizeof(tmptrap), fd);
 
-		create_trap(&tmptrap, (struct mkroom *)0);
+		create_trap(&tmptrap, NULL);
 	}
 
 	Fread((void *) &n, 1, sizeof(n), fd);
@@ -2680,7 +2680,7 @@ dlb *fd;
 	while(n--) {
 		load_one_monster(fd, &tmpmons);
 
-		create_monster(&tmpmons, (struct mkroom *)0);
+		create_monster(&tmpmons, NULL);
 	}
 
 	Fread((void *) &n, 1, sizeof(n), fd);
@@ -2688,7 +2688,7 @@ dlb *fd;
 	while(n--) {
 		load_one_object(fd, &tmpobj);
 
-		create_object(&tmpobj, (struct mkroom *)0);
+		create_object(&tmpobj, NULL);
 	}
 
 	Fread((void *) &n, 1, sizeof(n), fd);
@@ -2696,7 +2696,7 @@ dlb *fd;
 	while (n--) {
 		Fread((void *)&tmpgold, 1, sizeof(tmpgold), fd);
 
-		create_gold(&tmpgold, (struct mkroom *)0);
+		create_gold(&tmpgold, NULL);
 	}
 
 	Fread((void *) &n, 1, sizeof(n), fd);
@@ -2704,7 +2704,7 @@ dlb *fd;
 	while(n--) {
 		load_one_engraving(fd, &tmpengraving);
 
-		create_engraving(&tmpengraving, (struct mkroom *)0);
+		create_engraving(&tmpengraving, NULL);
 	}
 
     }		/* numpart loop */
@@ -2786,7 +2786,7 @@ dlb *fd;
 	    }
 	    for(x = rnd((int) (12 * mapfact) / 100); x; x--) {
 		    maze1xy(&mm, WET|DRY);
-		    (void) makemon((struct permonst *) 0, mm.x, mm.y, NO_MM_FLAGS);
+		    (void) makemon(NULL, mm.x, mm.y, NO_MM_FLAGS);
 	    }
 	    for(x = rn2((int) (15 * mapfact) / 100); x; x--) {
 		    maze1xy(&mm, DRY);

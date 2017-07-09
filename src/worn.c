@@ -539,7 +539,7 @@ which_armor (struct monst *mon, long flag)
 
 	for(obj = mon->minvent; obj; obj = obj->nobj)
 		if (obj->owornmask & flag) return obj;
-	return((struct obj *)0);
+	return(NULL);
 }
 
 /* remove an item of armor and then drop it */

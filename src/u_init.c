@@ -934,7 +934,7 @@ u_init (void)
 	 * Note that some values may have been incorrectly set by a failed restore.
 	 */
 	(void) memset((void *)&u, 0, sizeof(u));
-	setustuck((struct monst *)0);
+	setustuck(NULL);
 #if 0	/* documentation of more zero values as desirable */
 	u.usick_cause[0] = 0;
 	u.uluck  = u.moreluck = 0;
@@ -1629,7 +1629,7 @@ register struct trobj *trop;
 			if (is_shield(obj) && !uarms) {
 				setworn(obj, W_ARMS);
 				if (uswapwep) 
-				  setuswapwep((struct obj *) 0, TRUE);
+				  setuswapwep(NULL, TRUE);
 			} else if (is_helmet(obj) && !uarmh)
 				setworn(obj, W_ARMH);
 			else if (is_gloves(obj) && !uarmg)

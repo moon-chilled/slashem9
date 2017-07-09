@@ -52,7 +52,7 @@ winid id;
     }
     mapid__windows[i].id = id;
     mapid__windows[i].no_identifiers = 0;
-    mapid__windows[i].identifiers = (anything *)0;
+    mapid__windows[i].identifiers = NULL;
     return i;
 }
 
@@ -151,7 +151,7 @@ winid id;
 	if (mapid__windows[i].id == id) {
 	    if (mapid__windows[i].no_identifiers)
 		free(mapid__windows[i].identifiers);
-	    mapid__windows[i].identifiers = (anything *)0;
+	    mapid__windows[i].identifiers = NULL;
 	    mapid__windows[i].no_identifiers = 0;
 	    break;
 	}

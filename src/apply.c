@@ -53,7 +53,7 @@ static int use_camera(struct obj *obj) {
 		pline("Using your camera underwater would void the warranty.");
 		return(0);
 	}
-	if(!getdir((char *)0)) return(0);
+	if(!getdir(NULL)) return(0);
 
 	if (obj->spe <= 0) {
 		pline("%s", nothing_happens);
@@ -204,7 +204,7 @@ static int use_stethoscope(struct obj *obj) {
 		You("have no free %s.", body_part(HAND));
 		return 0;
 	}
-	if (!getdir((char *)0)) return 0;
+	if (!getdir(NULL)) return 0;
 
 	res = (moves == last_used_move) &&
 	      (youmonst.movement == last_used_movement);
@@ -387,7 +387,7 @@ static void use_leash(struct obj **optr) {
 		return;
 	}
 
-	if(!get_adjacent_loc((char *)0, (char *)0, u.ux, u.uy, &cc)) return;
+	if(!get_adjacent_loc(NULL, NULL, u.ux, u.uy, &cc)) return;
 
 	if((cc.x == u.ux) && (cc.y == u.uy)) {
 #ifdef STEED
@@ -467,7 +467,7 @@ static void use_leash(struct obj **optr) {
 		}
 		mtmp->mleashed = 0;
 		obj->leashmon = 0;
-		*optr = realloc_obj(obj, 0, (void *)0,
+		*optr = realloc_obj(obj, 0, NULL,
 			obj->onamelth ? strlen(ONAME(obj)) + 1 : 0, ONAME(obj));
 		You("remove the leash from %s%s.",
 		    spotmon ? "your " : "", l_monnam(mtmp));
@@ -493,7 +493,7 @@ struct obj *get_mleash (struct monst *mtmp /* assuming mtmp->mleashed has been c
 			return(otmp);
 		otmp = otmp->nobj;
 	}
-	return((struct obj *)0);
+	return(NULL);
 }
 
 
@@ -727,7 +727,7 @@ static int use_mirror(struct obj *obj) {
 	boolean vis = !Blind;
 #endif
 
-	if(!getdir((char *)0)) return 0;
+	if(!getdir(NULL)) return 0;
 	if(obj->cursed && !rn2(2)) {
 		if (vis)
 			pline_The("mirror fogs up and doesn't reflect!");
@@ -749,7 +749,7 @@ static int use_mirror(struct obj *obj) {
 			pline("Huh?  That doesn't look like you!");
 			make_confused(HConfusion + d(3,4),FALSE);
 		    } else if (Hallucination)
-			You(look_str, hcolor((char *)0));
+			You(look_str, hcolor(NULL));
 		    else if (Sick)
 			You(look_str, "peaked");
 		    else if (u.uhs >= WEAK)
@@ -900,7 +900,7 @@ static void use_bell(struct obj **optr) {
 			default:
 				break;
 			case 1:
-				mon_adjust_speed(mtmp, 2, (struct obj *)0);
+				mon_adjust_speed(mtmp, 2, NULL);
 				break;
 			case 2: /* no explanation; it just happens... */
 				nomovemsg = "";
@@ -1770,7 +1770,7 @@ void use_unicorn_horn (struct obj *obj) {
 		if (rn2(10) < chance)	/* KMH */
 	    switch (idx) {
 	    case prop2trbl(SICK):
-		make_sick(0L, (char *) 0, TRUE, SICK_ALL);
+		make_sick(0L, NULL, TRUE, SICK_ALL);
 		did_prop++;
 		break;
 	    case prop2trbl(BLINDED):
@@ -1903,7 +1903,7 @@ void fig_transform(void * arg, long timeout) {
 	}
 	/* free figurine now */
 	obj_extract_self(figurine);
-	obfree(figurine, (struct obj *)0);
+	obfree(figurine, NULL);
 	if (redraw) newsym(cc.x, cc.y);
 }
 
@@ -1944,10 +1944,10 @@ static void use_figurine(struct obj **optr) {
 
 	if (u.uswallow) {
 		/* can't activate a figurine while swallowed */
-		if (!figurine_location_checks(obj, (coord *)0, FALSE))
+		if (!figurine_location_checks(obj, NULL, FALSE))
 			return;
 	}
-	if(!getdir((char *)0)) {
+	if(!getdir(NULL)) {
 		flags.move = multi = 0;
 		return;
 	}
@@ -2288,7 +2288,7 @@ static void use_stone(struct obj *tstone) {
 		    (Role_if(PM_ARCHEOLOGIST) || Race_if(PM_GNOME))))) {
 	    makeknown(TOUCHSTONE);
 	    makeknown(obj->otyp);
-	    prinv((char *)0, obj, 0L);
+	    prinv(NULL, obj, 0L);
 	    return;
 	} else {
 	    /* either a ring or the touchstone was not effective */
@@ -2353,7 +2353,7 @@ static void use_stone(struct obj *tstone) {
 /* Place a landmine/bear trap.  Helge Hafting */
 static void use_trap(struct obj *otmp) {
 	int ttyp, tmp;
-	const char *what = (char *)0;
+	const char *what = NULL;
 	char buf[BUFSZ];
 	const char *occutext = "setting the trap";
 
@@ -2492,7 +2492,7 @@ static int use_whip(struct obj *obj) {
 	if (!wield_tool(obj, "lash")) return 0;
 	else res = 1;
     }
-    if (!getdir((char *)0)) return res;
+    if (!getdir(NULL)) return res;
 
     if (Stunned || (Confusion && !rn2(5))) confdir();
     rx = u.ux + u.dx;
@@ -2577,7 +2577,7 @@ static int use_whip(struct obj *obj) {
 	 *		- you only end up hitting.
 	 *
 	 */
-	const char *wrapped_what = (char *)0;
+	const char *wrapped_what = NULL;
 
 	if (mtmp) {
 	    if (bigmonst(mtmp->data)) {
@@ -2664,7 +2664,7 @@ static int use_whip(struct obj *obj) {
 			hitvalu = 8 + otmp->spe;
 			hitu = thitu(hitvalu,
 				     dmgval(otmp, &youmonst),
-				     otmp, (char *)0);
+				     otmp, NULL);
 			if (hitu) {
 			    pline_The("%s hits you as you try to snatch it!",
 				the(onambuf));
@@ -2777,7 +2777,7 @@ static int use_pole(struct obj *obj) {
 	    pline("Too close!");
 	    return (res);
 	} else if (!cansee(cc.x, cc.y) &&
-		   ((mtmp = m_at(cc.x, cc.y)) == (struct monst *)0 ||
+		   ((mtmp = m_at(cc.x, cc.y)) == NULL ||
 		    !canseemon(mtmp))) {
 	    You(cant_see_spot);
 	    return (res);
@@ -2817,7 +2817,7 @@ static int use_pole(struct obj *obj) {
 		    break;
 		case 3:
 		    /* Snag an existing object */
-		    if ((otmp = level.objects[cc.x][cc.y]) != (struct obj *)0) {
+		    if ((otmp = level.objects[cc.x][cc.y]) != NULL) {
 			You("snag an object from the %s!", surface(cc.x, cc.y));
 			pickup_object(otmp, 1, FALSE);
 			/* If pickup fails, leave it alone */
@@ -2829,7 +2829,7 @@ static int use_pole(struct obj *obj) {
 		    /* Snag some garbage */
 		    if (fishing && flags.boot_count < 1 &&
 			    (otmp = mksobj(LOW_BOOTS, TRUE, FALSE)) !=
-			    (struct obj *)0) {
+			    NULL) {
 			flags.boot_count++;
 			You("snag some garbage from the %s!",
 				surface(cc.x, cc.y));
@@ -2854,7 +2854,7 @@ static int use_pole(struct obj *obj) {
 		case 5:
 		    /* Catch your dinner */
 		    if (fishing && (otmp = mksobj(CRAM_RATION, TRUE, FALSE)) !=
-			    (struct obj *)0) {
+			    NULL) {
 			You("catch tonight's dinner!");
 			if (pickup_object(otmp, 1, FALSE) <= 0) {
 			    obj_extract_self(otmp);
@@ -2906,7 +2906,7 @@ static int use_cream_pie(struct obj *obj) {
 		pline("You immerse your %s in %s%s.", body_part(FACE),
 			several ? "one of " : "",
 			several ? makeplural(the(xname(obj))) : the(xname(obj)));
-	if(can_blnd((struct monst*)0, &youmonst, AT_WEAP, obj)) {
+	if(can_blnd(NULL, &youmonst, AT_WEAP, obj)) {
 		int blindinc = rnd(25);
 		u.ucreamed += blindinc;
 		make_blinded(Blinded + (long)blindinc, FALSE);
@@ -3010,9 +3010,9 @@ static int use_grapple(struct obj *obj) {
 	    }
 	    break;
 	case 2:	/* Monster */
-	    if ((mtmp = m_at(cc.x, cc.y)) == (struct monst *)0) break;
+	    if ((mtmp = m_at(cc.x, cc.y)) == NULL) break;
 	    if (verysmall(mtmp->data) && !rn2(4) &&
-			enexto(&cc, u.ux, u.uy, (struct permonst *)0)) {
+			enexto(&cc, u.ux, u.uy, NULL)) {
 		You("pull in %s!", mon_nam(mtmp));
 		mtmp->mundetected = 0;
 		rloc_to(mtmp, cc.x, cc.y);
@@ -3045,7 +3045,7 @@ static int use_grapple(struct obj *obj) {
 }
 
 
-#define BY_OBJECT	((struct monst *)0)
+#define BY_OBJECT	(NULL)
 
 /* return 1 if the wand is broken, hence some time elapsed */
 static int do_break_wand(struct obj *obj) {
@@ -3209,7 +3209,7 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 		if (IS_WALL(levl[x][y].typ) || IS_DOOR(levl[x][y].typ)) {
 		    /* normally, pits and holes don't anger guards, but they
 		     * do if it's a wall or door that's being dug */
-		    watch_dig((struct monst *)0, x, y, TRUE);
+		    watch_dig(NULL, x, y, TRUE);
 		    if (*in_rooms(x,y,SHOPBASE)) shop_damage = TRUE;
 		}
 		digactualhole(x, y, BY_OBJECT,
@@ -3222,7 +3222,7 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 	} else if(obj->otyp == WAN_CREATE_MONSTER
                 || obj->otyp == WAN_CREATE_HORDE) {
 	    /* u.ux,u.uy creates it near you--x,y might create it in rock */
-	    (void) makemon((struct permonst *)0, u.ux, u.uy, NO_MM_FLAGS);
+	    (void) makemon(NULL, u.ux, u.uy, NO_MM_FLAGS);
 	    continue;
 	} else {
 	    if (x == u.ux && y == u.uy) {
@@ -3293,7 +3293,7 @@ int doapply(void) {
 	boolean can_use = FALSE;
 	char class_list[MAXOCLASSES+2];
 
-	if(check_capacity((char *)0)) return (0);
+	if(check_capacity(NULL)) return (0);
 
 	if (carrying(POT_OIL) || uhave_graystone())
 		strcpy(class_list, tools_too);
@@ -3568,7 +3568,7 @@ int doapply(void) {
 			    obj->owt = weight(obj);
 			} else {
 			    obj_extract_self(otmp);
-			    obfree(otmp, (struct obj *)0);
+			    obfree(otmp, NULL);
 			}
 			/*
 			 * Note that while white and pink pills share the
@@ -3577,7 +3577,7 @@ int doapply(void) {
 			You("take a white pill from %s and swallow it.",
 				yname(obj));
 			if (can_use) {
-			    if (Sick) make_sick(0L, (char *) 0,TRUE ,SICK_ALL);
+			    if (Sick) make_sick(0L, NULL,TRUE ,SICK_ALL);
 			    else if (Blinded > (long)(u.ucreamed+1))
 				make_blinded(u.ucreamed ?
 					(long)(u.ucreamed+1) : 0L, TRUE);

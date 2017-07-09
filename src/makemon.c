@@ -1205,21 +1205,21 @@ xchar x, y;	/* clone's preferred location or 0 (near mon) */
 
 	/* may be too weak or have been extinguished for population control */
 	if (mon->mhp <= 1 || (mvitals[monsndx(mon->data)].mvflags & G_EXTINCT))
-	    return (struct monst *)0;
+	    return NULL;
 
 	if (x == 0) {
 	    mm.x = mon->mx;
 	    mm.y = mon->my;
 	    if (!enexto(&mm, mm.x, mm.y, mon->data) || MON_AT(mm.x, mm.y))
-		return (struct monst *)0;
+		return NULL;
 	} else if (!isok(x, y)) {
-	    return (struct monst *)0;	/* paranoia */
+	    return NULL;	/* paranoia */
 	} else {
 	    mm.x = x;
 	    mm.y = y;
 	    if (MON_AT(mm.x, mm.y)) {
 		if (!enexto(&mm, mm.x, mm.y, mon->data) || MON_AT(mm.x, mm.y))
-		    return (struct monst *)0;
+		    return NULL;
 	    }
 	}
 	m2 = newmonst(0);
@@ -1231,7 +1231,7 @@ xchar x, y;	/* clone's preferred location or 0 (near mon) */
 	m2->mx = mm.x;
 	m2->my = mm.y;
 
-	m2->minvent = (struct obj *) 0; /* objects don't clone */
+	m2->minvent = NULL; /* objects don't clone */
 	m2->mleashed = FALSE;
 #ifndef GOLDOBJ
 	m2->mgold = 0L;
@@ -1295,7 +1295,7 @@ xchar x, y;	/* clone's preferred location or 0 (near mon) */
 		 * must be made non-tame to get initialized properly.
 		 */
 		m2->mtame = 0;
-		if ((m3 = tamedog(m2, (struct obj *)0)) != 0) {
+		if ((m3 = tamedog(m2, NULL)) != 0) {
 		    m2 = m3;
 		    *(EDOG(m2)) = *(EDOG(mon));
 		}
@@ -1373,7 +1373,7 @@ makemon (register struct permonst *ptr, register int x, register int y, register
 		do {
 			x = rn1(COLNO-3,2);
 			y = rn2(ROWNO);
-		} while(!goodpos(x, y, ptr ? &fakemon : (struct monst *)0, gpflags) ||
+		} while(!goodpos(x, y, ptr ? &fakemon : NULL, gpflags) ||
 			(!in_mklev && tryct++ < 50 && cansee(x, y)));
 	} else if (byyou && !in_mklev) {
 		coord bypos;
@@ -1382,7 +1382,7 @@ makemon (register struct permonst *ptr, register int x, register int y, register
 			x = bypos.x;
 			y = bypos.y;
 		} else
-			return((struct monst *)0);
+			return(NULL);
 	}
 
 	/* Does monster already exist at the position? */
@@ -1393,16 +1393,16 @@ makemon (register struct permonst *ptr, register int x, register int y, register
 				x = bypos.x;
 				y = bypos.y;
 			} else
-				return((struct monst *) 0);
+				return(NULL);
 		} else 
-			return((struct monst *) 0);
+			return(NULL);
 	}
 
 	if(ptr){
 		mndx = monsndx(ptr);
 		/* if you are to make a specific monster and it has
 		   already been genocided, return */
-		if (mvitals[mndx].mvflags & G_GENOD) return((struct monst *) 0);
+		if (mvitals[mndx].mvflags & G_GENOD) return(NULL);
 #if defined(WIZARD) && defined(DEBUG)
 		if (wizard && (mvitals[mndx].mvflags & G_EXTINCT))
 		    pline("Explicitly creating extinct monster %s.",
@@ -1421,7 +1421,7 @@ makemon (register struct permonst *ptr, register int x, register int y, register
 #ifdef DEBUG
 			    pline("Warning: no monster.");
 #endif
-			    return((struct monst *) 0);	/* no more monsters! */
+			    return(NULL);	/* no more monsters! */
 			}
 			fakemon.data = ptr;	/* set up for goodpos */
 		} while(!goodpos(x, y, &fakemon, gpflags) && tryct++ < 50);
@@ -1555,7 +1555,7 @@ makemon (register struct permonst *ptr, register int x, register int y, register
 			break;
 		case S_BAT:
 			if (Inhell && is_bat(ptr))
-			    mon_adjust_speed(mtmp, 2, (struct obj *)0);
+			    mon_adjust_speed(mtmp, 2, NULL);
 			break;
 		case S_VAMPIRE:
 			/* [DS] Star vampires are invisible until they feed */
@@ -1678,8 +1678,8 @@ makemon (register struct permonst *ptr, register int x, register int y, register
 	    m_dowear(mtmp, TRUE);
 	} else {
 	    if (mtmp->minvent) discard_minvent(mtmp);
-	    mtmp->minvent = (struct obj *)0;    /* caller expects this */
-	    mtmp->minvent = (struct obj *)0;    /* caller expects this */
+	    mtmp->minvent = NULL;    /* caller expects this */
+	    mtmp->minvent = NULL;    /* caller expects this */
 	}
 	if ((ptr->mflags3 & M3_WAITMASK) && !(mmflags & MM_NOWAIT)) {
 		if (ptr->mflags3 & M3_WAITFORU)
@@ -1827,7 +1827,7 @@ rndmonst (void)
 #ifdef DEBUG
 		pline("rndmonst: no common mons!");
 #endif
-		return (struct permonst *)0;
+		return NULL;
 	    } /* else `mndx' now ready for use below */
 	    zlevel = level_difficulty();
 	    /* determine the level of the weakest monster to make. */
@@ -1873,7 +1873,7 @@ loopback:
 #ifdef DEBUG
 	    Norep("rndmonst: choice_count=%d", rndmonst_state.choice_count);
 #endif
-	    return (struct permonst *)0;
+	    return NULL;
 	}
 
 /*
@@ -1885,7 +1885,7 @@ loopback:
 
 	if (mndx == SPECIAL_PM || uncommon(mndx)) {	/* shouldn't happen */
 	    impossible("rndmonst: bad `mndx' [#%d]", mndx);
-	    return (struct permonst *)0;
+	    return NULL;
 	}
 	return &mons[mndx];
 
@@ -1931,7 +1931,7 @@ mkclass (char class, int spc)
 
 	first = pm_mkclass(class,spc);
 	
-	if (first == -1) return((struct permonst *) 0);
+	if (first == -1) return(NULL);
 
 	return(&mons[first]);
 }
@@ -2037,7 +2037,7 @@ grow_up (	/* `mtmp' might "grow up" into a bigger version */
 	/* monster died after killing enemy but before calling this function */
 	/* currently possible if killing a gas spore */
 	if (mtmp->mhp <= 0)
-	    return ((struct permonst *)0);
+	    return (NULL);
 
 	if (mtmp->oldmonnm != monsndx(ptr))
 	    return ptr;		/* No effect if polymorphed */
@@ -2109,7 +2109,7 @@ grow_up (	/* `mtmp' might "grow up" into a bigger version */
 			nonliving(ptr) ? "expires" : "dies");
 		set_mon_data(mtmp, ptr, -1);	/* keep mvitals[] accurate */
 		mondied(mtmp);
-		return (struct permonst *)0;
+		return NULL;
 	    }
 	    set_mon_data(mtmp, ptr, 1);		/* preserve intrinsics */
 	    newsym(mtmp->mx, mtmp->my);		/* color may change */
@@ -2450,7 +2450,7 @@ assign_sym:
 				/* make sure container contents are free'ed */
 				if (Has_contents(otmp))
 					delete_contents(otmp);
-				obfree(otmp, (struct obj *) 0);
+				obfree(otmp, NULL);
 			}
 		}
 	}
@@ -2474,7 +2474,7 @@ bagotricks (struct obj *bag)
 
 	if (!rn2(23)) cnt += rn1(7, 1);
 	while (cnt-- > 0) {
-	    if (makemon((struct permonst *)0, u.ux, u.uy, NO_MM_FLAGS))
+	    if (makemon(NULL, u.ux, u.uy, NO_MM_FLAGS))
 		gotone = TRUE;
 	}
 	if (gotone) makeknown(BAG_OF_TRICKS);

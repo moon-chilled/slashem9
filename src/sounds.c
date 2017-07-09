@@ -319,7 +319,7 @@ pet_distress (register struct monst *mtmp, int lev)
 	panic("strange level of distress");
 
     if (verb) {
-	pline("%s %s%c", Monnam(mtmp), vtense((char *)0, verb),
+	pline("%s %s%c", Monnam(mtmp), vtense(NULL, verb),
 		lev>1?'!':'.');
 	if (flags.run) nomul(0);
 	wake_nearto(mtmp->mx,mtmp->my,mtmp->data->mlevel*6*lev);
@@ -797,7 +797,7 @@ domonnoise (register struct monst *mtmp)
 	case MS_SEDUCE:
 #ifdef SEDUCE
 	    if (ptr->mlet != S_NYMPH &&
-		could_seduce(mtmp, &youmonst, (struct attack *)0) == 1) {
+		could_seduce(mtmp, &youmonst, NULL) == 1) {
 			(void) doseduce(mtmp);
 			break;
 	    }
@@ -939,7 +939,7 @@ dochat (void)
 	return(0);
     }
 
-    if (!Blind && (otmp = shop_object(u.ux, u.uy)) != (struct obj *)0) {
+    if (!Blind && (otmp = shop_object(u.ux, u.uy)) != NULL) {
 	/* standing on something in a shop and chatting causes the shopkeeper
 	   to describe the price(s).  This can inhibit other chatting inside
 	   a shop, but that shouldn't matter much.  shop_object() returns an

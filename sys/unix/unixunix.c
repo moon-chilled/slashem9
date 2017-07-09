@@ -301,10 +301,10 @@ dosh()
 {
 	register char *str;
 	if(child(0)) {
-		if((str = getenv("SHELL")) != (char*)0)
-			(void) execl(str, str, (char *)0);
+		if((str = getenv("SHELL")) != NULL)
+			(void) execl(str, str, NULL);
 		else
-			(void) execl("/bin/sh", "sh", (char *)0);
+			(void) execl("/bin/sh", "sh", NULL);
 		raw_print("sh: cannot execute.");
 		exit(EXIT_FAILURE);
 	}
@@ -318,7 +318,7 @@ child(wt)
 int wt;
 {
 	register int f;
-	suspend_nhwindows((char *)0);	/* also calls end_screen() */
+	suspend_nhwindows(NULL);	/* also calls end_screen() */
 #ifdef _M_UNIX
 	sco_mapon();
 #endif
@@ -343,7 +343,7 @@ int wt;
 	/* fork succeeded; wait for child to exit */
 	(void) signal(SIGINT,SIG_IGN);
 	(void) signal(SIGQUIT,SIG_IGN);
-	(void) wait( (int *) 0);
+	(void) wait( NULL);
 #ifdef _M_UNIX
 	sco_mapoff();
 #endif

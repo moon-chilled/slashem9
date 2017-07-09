@@ -83,11 +83,11 @@ missmm(magr, mdef, target, roll, mattk)
 	const char *fmt;
         char buf[BUFSZ], mon_name[BUFSZ];
 
-	register struct obj *blocker = (struct obj *)0;
+	register struct obj *blocker = NULL;
 	long mwflags = mdef->misc_worn_check;
 
 		/* 3 values for blocker
-		 *	No blocker:  (struct obj *) 0  
+		 *	No blocker:  NULL  
 		 * 	Piece of armour:  object
 		 */
 
@@ -113,7 +113,7 @@ missmm(magr, mdef, target, roll, mattk)
 		if (flags.verbose && !nearmiss && blocker) {
 			fmt = "%s %s blocks";
 			sprintf(buf,fmt, s_suffix(Monnam(mdef)), 
-				aobjnam(blocker, (char *)0));
+				aobjnam(blocker, NULL));
 	                pline("%s %s.", buf, mon_nam_too(mon_name, magr, mdef));
 		} else {
 		fmt = (could_seduce(magr,mdef,mattk) && !magr->mcan) ?
@@ -288,7 +288,7 @@ mattackm (register struct monst *magr, register struct monst *mdef)
     for (i = 0; i < NATTK; i++) {
 	res[i] = MM_MISS;
 	mattk = getmattk(pa, i, res, &alt_attk);
-	otmp = (struct obj *)0;
+	otmp = NULL;
 	attk = 1;
 	switch (mattk->aatyp) {
 	    case AT_BREA:
@@ -806,12 +806,12 @@ gazemm(magr, mdef, mattk)
 	    return(MM_MISS);
 	}
 	/* call mon_reflects 2x, first test, then, if visible, print message */
-	if (magr->data == &mons[PM_MEDUSA] && mon_reflects(mdef, (char *)0)) {
+	if (magr->data == &mons[PM_MEDUSA] && mon_reflects(mdef, NULL)) {
 	    if (canseemon(mdef))
 		(void) mon_reflects(mdef,
 				    "The gaze is reflected away by %s %s.");
 	    if (mdef->mcansee) {
-		if (mon_reflects(magr, (char *)0)) {
+		if (mon_reflects(magr, NULL)) {
 		    if (canseemon(magr))
 			(void) mon_reflects(magr,
 					"The gaze is reflected away by %s %s.");
@@ -1113,7 +1113,7 @@ physical:
 				pline("As %s hits you, %s breaks into splinters.",
 				      mon_nam(mtmp), the(xname(otmp)));
 				useup(otmp);
-				otmp = (struct obj *) 0;
+				otmp = NULL;
 				possibly_unwield(mtmp);
 				if (pd != &mons[PM_SHADE])
 				    tmp++;
@@ -1337,7 +1337,7 @@ physical:
 		break;
 	    case AD_STON:
 		if (magr->mcan) break;
-		if (mattk->aatyp == AT_GAZE && mon_reflects(mdef, (char *)0)) {
+		if (mattk->aatyp == AT_GAZE && mon_reflects(mdef, NULL)) {
 		    tmp = 0;
 		    (void) mon_reflects(mdef, "But it reflects from %s %s!");
 		    if (poly_when_stoned(pa)) {
@@ -1392,7 +1392,7 @@ physical:
 		if (nohit) break;                
 		
 		if (cancelled) break;
-		if (mattk->aatyp == AT_GAZE && mon_reflects(mdef, (char *)0)) {
+		if (mattk->aatyp == AT_GAZE && mon_reflects(mdef, NULL)) {
 		    tmp = 0;
 		    (void) mon_reflects(mdef, "But it reflects from %s %s!");
 		    if (sleep_monst(magr, rnd(10), -1))
@@ -1418,7 +1418,7 @@ physical:
 		} 
 		if (vis && mattk->aatyp == AT_GAZE) 
 		    pline("%s gazes intently!", Monnam(magr));
-		if (mattk->aatyp == AT_GAZE && mon_reflects(mdef, (char *)0)) {
+		if (mattk->aatyp == AT_GAZE && mon_reflects(mdef, NULL)) {
 		    /* WAC reflected gaze 
 		     * Oooh boy...that was a bad move :B 
 		     */
@@ -1475,7 +1475,7 @@ physical:
 		if(!cancelled && vis && mdef->mspeed != MSLOW) {
 		    unsigned int oldspeed = mdef->mspeed;
 
-		    mon_adjust_speed(mdef, -1, (struct obj *)0);
+		    mon_adjust_speed(mdef, -1, NULL);
 		    mdef->mstrategy &= ~STRAT_WAITFORU;
 		    if (mdef->mspeed != oldspeed && vis)
 			pline("%s slows down.", Monnam(mdef));
@@ -1507,7 +1507,7 @@ physical:
 	    case AD_BLND:
 		if (nohit) break;                
 	       
-		if (can_blnd(magr, mdef, mattk->aatyp, (struct obj*)0)) {
+		if (can_blnd(magr, mdef, mattk->aatyp, NULL)) {
 		    register unsigned rnd_tmp;
 
 		    if (vis && mdef->mcansee)
@@ -1624,7 +1624,7 @@ physical:
 
 			/* make a special x_monnam() call that never omits
 			   the saddle, and save it for later messages */
-			strcpy(mdefnambuf, x_monnam(mdef, ARTICLE_THE, (char *)0, 0, FALSE));
+			strcpy(mdefnambuf, x_monnam(mdef, ARTICLE_THE, NULL, 0, FALSE));
 
 			otmp = obj;
 #ifdef STEED
@@ -1807,11 +1807,11 @@ physical:
 		/* various checks similar to dog_eat and meatobj.
 		 * after monkilled() to provide better message ordering */
 		if (mdef->cham != CHAM_ORDINARY) {
-		    (void) newcham(magr, (struct permonst *)0, FALSE, TRUE);
+		    (void) newcham(magr, NULL, FALSE, TRUE);
 		} else if (mdef->data == &mons[PM_GREEN_SLIME]) {
 		    (void) newcham(magr, &mons[PM_GREEN_SLIME], FALSE, TRUE);
 		} else if (mdef->data == &mons[PM_WRAITH]) {
-		    (void) grow_up(magr, (struct monst *)0);
+		    (void) grow_up(magr, NULL);
 		    /* don't grow up twice */
 		    return (MM_DEF_DIED | (magr->mhp > 0 ? 0 : MM_AGR_DIED));
 		} else if (mdef->data == &mons[PM_NURSE]) {
@@ -2001,7 +2001,7 @@ int mdead;
 			sprintf(buf, "%s gaze is reflected by %%s %%s.",
 				s_suffix(mon_nam(mdef)));
 			if (mon_reflects(magr,
-					 canseemon(magr) ? buf : (char *)0))
+					 canseemon(magr) ? buf : NULL))
 				return(mdead|mhit);
 			strcpy(buf, Monnam(magr));
 			if(canseemon(magr))

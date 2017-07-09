@@ -534,7 +534,7 @@ boolean your_fault;
 const char *change_fmt;
 {
 	if (change_fmt && canseemon(mtmp)) pline(change_fmt, Monnam(mtmp));
-	return mon_spec_poly(mtmp, (struct permonst *)0, 0L,
+	return mon_spec_poly(mtmp, NULL, 0L,
 		FALSE, canseemon(mtmp), TRUE, your_fault);
 }
 
@@ -657,7 +657,7 @@ long timeout;
 	struct obj *bomb;
 	xchar x,y;
 	boolean silent, underwater;
-	struct monst *mtmp = (struct monst *)0;
+	struct monst *mtmp = NULL;
 
 	bomb = (struct obj *) arg;
 
@@ -745,7 +745,7 @@ long timeout;
 
 free_bomb:
 	obj_extract_self(bomb);
-	obfree(bomb, (struct obj *)0);
+	obfree(bomb, NULL);
 }
 #endif
 
@@ -799,7 +799,7 @@ long timeout;
 	/* sterilized while waiting */
 	if (egg->corpsenm == NON_PM) return;
 
-	mon = mon2 = (struct monst *)0;
+	mon = mon2 = NULL;
 	mnum = big_to_little(egg->corpsenm);
 	/* The identity of one's father is learned, not innate */
 	yours = (egg->spe || (!flags.female && carried(egg) && !rn2(2)));
@@ -820,7 +820,7 @@ long timeout;
 		       while it's in your inventory */
 		    if ((yours && !silent) ||
 			(carried(egg) && mon->data->mlet == S_DRAGON)) {
-			if ((mon2 = tamedog(mon, (struct obj *)0)) != 0) {
+			if ((mon2 = tamedog(mon, NULL)) != 0) {
 			    mon = mon2;
 			    if (carried(egg) && mon->data->mlet != S_DRAGON)
 				mon->mtame = 20;
@@ -947,7 +947,7 @@ long timeout;
 	    } else {
 		/* free egg here because we use it above */
 		obj_extract_self(egg);
-		obfree(egg, (struct obj *)0);
+		obfree(egg, NULL);
 	    }
 	    if (redraw) newsym(x, y);
 	}
@@ -1023,7 +1023,7 @@ slip_or_trip()
 #ifdef STEED
 		u.usteed ? upstart(x_monnam(u.usteed,
 				u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
-				(char *)0, SUPPRESS_SADDLE, FALSE)) :
+				NULL, SUPPRESS_SADDLE, FALSE)) :
 #endif
 		"You", rn2(2) ? "slip" : "slide", on_foot ? "" : "s");
 	} else {
@@ -1136,8 +1136,8 @@ long timeout;
 		} else if (Is_candle(obj) || obj->otyp == POT_OIL) {
 		    /* get rid of candles and burning oil potions */
 		    obj_extract_self(obj);
-		    obfree(obj, (struct obj *)0);
-		    obj = (struct obj *) 0;
+		    obfree(obj, NULL);
+		    obj = NULL;
 #ifdef FIREARMS
 		} else if (obj->otyp == STICK_OF_DYNAMITE) {
 			bomb_blow((void *) obj, timeout);
@@ -1181,8 +1181,8 @@ long timeout;
 		    }
 		    end_burn(obj, FALSE);	/* turn off light source */
 		    obj_extract_self(obj);
-		    obfree(obj, (struct obj *)0);
-		    obj = (struct obj *) 0;
+		    obfree(obj, NULL);
+		    obj = NULL;
 		    break;
 		    
 	    case TORCH:
@@ -1368,8 +1368,8 @@ long timeout;
 			    obj->spe = 0;
 			} else {
 			    obj_extract_self(obj);
-			    obfree(obj, (struct obj *)0);
-			    obj = (struct obj *) 0;
+			    obfree(obj, NULL);
+			    obj = NULL;
 			}
 			break;
 

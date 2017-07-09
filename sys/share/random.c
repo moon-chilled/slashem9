@@ -255,7 +255,7 @@ initstate( seed, arg_state, n )
 	    if(  n  <  BREAK_0  )  {
 		impossible(
  "initstate: not enough state (%d bytes) with which to do jack; ignored.", n);
-		return (char *)0;
+		return NULL;
 	    }
 	    rand_type = TYPE_0;
 	    rand_deg = DEG_0;

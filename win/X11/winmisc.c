@@ -322,7 +322,7 @@ X11_player_selection()
 
 	if (ps_selected == PS_QUIT) {
 	    clearlocks();
-	    X11_exit_nhwindows((char *)0);
+	    X11_exit_nhwindows(NULL);
 	    terminate(0);
 	} else if (ps_selected == PS_RANDOM) {
 	    flags.initrole = ROLE_RANDOM;
@@ -387,7 +387,7 @@ X11_player_selection()
 
 	    if (ps_selected == PS_QUIT) {
 		clearlocks();
-		X11_exit_nhwindows((char *)0);
+		X11_exit_nhwindows(NULL);
 		terminate(0);
 	    } else if (ps_selected == PS_RANDOM) {
 		flags.initrace = ROLE_RANDOM;
@@ -452,7 +452,7 @@ X11_player_selection()
 
 	    if (ps_selected == PS_QUIT) {
 		clearlocks();
-		X11_exit_nhwindows((char *)0);
+		X11_exit_nhwindows(NULL);
 		terminate(0);
 	    } else if (ps_selected == PS_RANDOM) {
 		flags.initgend = ROLE_RANDOM;
@@ -516,7 +516,7 @@ X11_player_selection()
 
 	    if (ps_selected == PS_QUIT) {
 		clearlocks();
-		X11_exit_nhwindows((char *)0);
+		X11_exit_nhwindows(NULL);
 		terminate(0);
 	    } else if (ps_selected == PS_RANDOM) {
 		flags.initalign = ROLE_RANDOM;

@@ -316,7 +316,7 @@ raise_dead:
 			if (mtmp->mtame < 20)
 			    mtmp->mtame++;
 		    } else
-			(void) tamedog(mtmp, (struct obj *)0);
+			(void) tamedog(mtmp, NULL);
 		else monflee(mtmp, 0, FALSE, TRUE);
 	    }
 	}
@@ -579,7 +579,7 @@ study_book (register struct obj *spellbook)
 void 
 book_disappears (struct obj *obj)
 {
-	if (obj == book) book = (struct obj *)0;
+	if (obj == book) book = NULL;
 }
 
 /* renaming an object usually results in it having a different address;
@@ -647,7 +647,7 @@ getspell(spell_no)
 
 	    for(;;)  {
 		sprintf(qbuf, "Cast which spell? [%s ?]", lets);
-		if ((ilet = yn_function(qbuf, (char *)0, '\0')) == '?')
+		if ((ilet = yn_function(qbuf, NULL, '\0')) == '?')
 		    break;
 
 		if (index(quitchars, ilet))
@@ -967,7 +967,7 @@ boolean atme;
 	case SPE_STONE_TO_FLESH:
 		if (!(objects[pseudo->otyp].oc_dir == NODIR)) {
 			if (atme) u.dx = u.dy = u.dz = 0;
-			else if (!getdir((char *)0)) {
+			else if (!getdir(NULL)) {
 			    /* getdir cancelled, re-use previous direction */
 			    pline_The("magical energy is released!");
 			}
@@ -1040,7 +1040,7 @@ boolean atme;
 		healup(0, 0, TRUE, FALSE);
 		break;
 	case SPE_CREATE_FAMILIAR:
-		(void) make_familiar((struct obj *)0, u.ux, u.uy, FALSE);
+		(void) make_familiar(NULL, u.ux, u.uy, FALSE);
 		break;
 	case SPE_CLAIRVOYANCE:
 		if (!BClairvoyant)
@@ -1137,7 +1137,7 @@ boolean atme;
 
 	default:
 		impossible("Unknown spell %d attempted.", spell);
-		obfree(pseudo, (struct obj *)0);
+		obfree(pseudo, NULL);
 		return(0);
 	}
 
@@ -1147,7 +1147,7 @@ boolean atme;
 	/* WAC successful casting increases solidity of knowledge */
 	boostknow(spell,CAST_BOOST);
 
-	obfree(pseudo, (struct obj *)0);	/* now, get rid of it */
+	obfree(pseudo, NULL);	/* now, get rid of it */
 	return(1);
 }
 

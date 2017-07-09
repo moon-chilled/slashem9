@@ -21,7 +21,7 @@
 #endif
 #endif
 
-NhWindow *theWindows = (NhWindow *) 0;
+NhWindow *theWindows = NULL;
 Cursor qdarrow;
 
 #ifdef MAC_MPW
@@ -954,7 +954,7 @@ topl_key(unsigned char ch, Boolean ext) {
 			TEKey(ch, top_line);
 			if (ext) {
 				int com_index = -1, oindex = 0;
-				while(extcmdlist[oindex].ef_txt != (char *)0) {
+				while(extcmdlist[oindex].ef_txt != NULL) {
 					if(!strncmpi(*(*top_line)->hText + topl_query_len,
 								 extcmdlist[oindex].ef_txt,
 								 (*top_line)->teLength - topl_query_len)) {
@@ -1154,7 +1154,7 @@ mac_display_nhwindow (winid win, boolean f) {
 	}
 
 	if (f && inSelect == WIN_ERR && win == WIN_MESSAGE) {
-		topl_set_resp ((char *)0, 0);
+		topl_set_resp (NULL, 0);
 		if (aWin->windowTextLen > 0 &&
 			 (*aWin->windowText) [aWin->windowTextLen - 1] == CHAR_CR) {
 			-- aWin->windowTextLen;
@@ -1920,7 +1920,7 @@ macCursorTerm (EventRecord *theEvent, WindowPtr theWindow, RgnHandle mouseRgn) {
 	SetPortWindowPort(theWindow);
 
 	if (cursor_locked)
-		dir = (char *)0;
+		dir = NULL;
 	else {
 		Point where = theEvent->where;
 

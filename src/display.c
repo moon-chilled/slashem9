@@ -154,7 +154,7 @@ struct obj *vobj_at(xchar x, xchar y) {
 	if (!obj->oinvis || See_invisible) return obj;
 	obj = obj->nexthere;
     }
-    return ((struct obj *) 0);
+    return (NULL);
 }
 #endif	/* else vobj_at() is defined in display.h */
 

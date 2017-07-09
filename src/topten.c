@@ -1136,12 +1136,12 @@ struct obj *otmp;
 	FILE *rfile;
 	struct toptenentry tt_buf;
 
-	if (!otmp) return((struct obj *) 0);
+	if (!otmp) return(NULL);
 
 	rfile = fopen_datafile_area(NH_RECORD_AREA, NH_RECORD, "r", SCOREPREFIX);
 	if (!rfile) {
 		impossible("Cannot open record file!");
-		return (struct obj *)0;
+		return NULL;
 	}
 
 	tt = &tt_buf;
@@ -1158,7 +1158,7 @@ pickentry:
 			rewind(rfile);
 			goto pickentry;
 		}
-		otmp = (struct obj *) 0;
+		otmp = NULL;
 	} else {
 		/* reset timer in case corpse started out as lizard or troll */
 		if (otmp->otyp == CORPSE) obj_stop_timers(otmp);

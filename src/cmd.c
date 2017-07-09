@@ -267,7 +267,7 @@ static int doborgtoggle(void) {
 // here after # - now show pick-list of possible commands
 int extcmd_via_menu (void) {
     const struct ext_func_tab *efp;
-    menu_item *pick_list = (menu_item *)0;
+    menu_item *pick_list = NULL;
     winid win;
     anything any;
     const struct ext_func_tab *choices[MAX_EXT_CMD];
@@ -306,7 +306,7 @@ int extcmd_via_menu (void) {
 	    nchoices = i;
 	    /* if we're down to one, we have our selection so get out of here */
 	    if (nchoices == 1) {
-		for (i = 0; extcmdlist[i].ef_txt != (char *)0; i++)
+		for (i = 0; extcmdlist[i].ef_txt != NULL; i++)
 			if (!strncmpi(extcmdlist[i].ef_txt, cbuf, matchlevel)) {
 				ret = i;
 				break;
@@ -391,11 +391,11 @@ static int domonability(void) {
 	else if (is_mind_flayer(youmonst.data)) return domindblast();
 	else if (u.umonnum == PM_GREMLIN) {
 	    if(IS_FOUNTAIN(levl[u.ux][u.uy].typ)) {
-		if (split_mon(&youmonst, (struct monst *)0))
+		if (split_mon(&youmonst, NULL))
 		    dryup(u.ux, u.uy, TRUE);
 	    } else There("is no fountain here.");
 	} else if (is_unicorn(youmonst.data)) {
-	    use_unicorn_horn((struct obj *)0);
+	    use_unicorn_horn(NULL);
 	    return 1;
 	} else if (youmonst.data->msound == MS_SHRIEK) {
 	    You("shriek.");
@@ -711,7 +711,7 @@ static int specialpower(void) {
 		if ((Sick) || (Slimed)) {       /* WAC cure sliming too */
 		    if(carrying(SCALPEL)) {
 			pline("Using your scalpel (ow!), you cure your infection!");
-			make_sick(0L,(char *)0, TRUE,SICK_ALL);
+			make_sick(0L,NULL, TRUE,SICK_ALL);
 			Slimed = 0;
 			if(u.uhp > 6) u.uhp -= 5;
 			else          u.uhp = 1;
@@ -737,7 +737,7 @@ static int specialpower(void) {
 			pline("A warm glow spreads through your body!");
 			if (Slimed) pline_The("slime is removed.");
 			Slimed = 0;
-			if(Sick) make_sick(0L,(char*)0, TRUE, SICK_ALL);
+			if(Sick) make_sick(0L,NULL, TRUE, SICK_ALL);
 			else     u.uhp += (u.ulevel * 4);
 			if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 			u.unextuse = 3000;
@@ -755,7 +755,7 @@ static int specialpower(void) {
 #ifdef STEED
 			if (u.usteed) {
 				pline("%s gets tamer.", Monnam(u.usteed));
-				tamedog(u.usteed, (struct obj *) 0);
+				tamedog(u.usteed, NULL);
 				u.unextuse = rn1(1000,500);
 			} else
 				Your("special ability is only effective when riding a monster.");
@@ -849,7 +849,7 @@ static int wiz_genesis(void) {
 
 /* ^O command - display dungeon layout */
 static int wiz_where(void) {
-	if (wizard) print_dungeon(FALSE, (schar *)0, (xchar *)0);
+	if (wizard) print_dungeon(FALSE, NULL, NULL);
 	else	    pline("Unavailable command '^O'.");
 	return 0;
 }
@@ -1151,7 +1151,7 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	}
 #if defined(WIZARD) && defined(STEED)
 	if (Wounded_legs && u.usteed && wizard) {
-	    strcpy(buf, x_monnam(u.usteed, ARTICLE_YOUR, (char *)0,
+	    strcpy(buf, x_monnam(u.usteed, ARTICLE_YOUR, NULL,
 		    SUPPRESS_SADDLE | SUPPRESS_HALLUCINATION, FALSE));
 	    *buf = highc(*buf);
 	    enl_msg(buf, " has", " had", " wounded legs");
@@ -1401,7 +1401,7 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	if (final < 2) {    /* still in progress, or quit/escaped/ascended */
 	    p = "survived after being killed ";
 	    switch (u.umortality) {
-	    case 0:  p = !final ? (char *)0 : "survived";  break;
+	    case 0:  p = !final ? NULL : "survived";  break;
 	    case 1:  strcpy(buf, "once");  break;
 	    case 2:  strcpy(buf, "twice");  break;
 	    case 3:  strcpy(buf, "thrice");  break;
@@ -1528,7 +1528,7 @@ void dump_enlightenment(int final) {
 	}
 #ifdef STEED
 	if (Wounded_legs && u.usteed) {
-	    strcpy(buf, x_monnam(u.usteed, ARTICLE_YOUR, (char *)0,
+	    strcpy(buf, x_monnam(u.usteed, ARTICLE_YOUR, NULL,
 		    SUPPRESS_SADDLE | SUPPRESS_HALLUCINATION, FALSE));
 	    *buf = highc(*buf);
 	    strcat(buf, " had wounded legs");
@@ -1848,23 +1848,23 @@ static const struct menu_tab game_menu[] = {
 };
 
 static const struct menu_tab inv_menu[] = {
-	{(char)0, TRUE, (void *)0, "View Inventory"},
+	{(char)0, TRUE, NULL, "View Inventory"},
 	{'i', TRUE, ddoinv, "Inventory List"},
 	{'I', TRUE, dotypeinv, "Inventory List by Type"},
 	{'*', TRUE, doprinuse, "Items in use"},
-	{(char)0, TRUE, (void *)0, "Ready Items"},
+	{(char)0, TRUE, NULL, "Ready Items"},
 	{'w', FALSE, dowield, "Wield Weapon"},
 	{'W', FALSE, dowear, "Wear Protective Gear"},
 	{'Q', FALSE, dowieldquiver, "Prepare missile weapon (in Quiver)"},
 	{'T', FALSE, dotakeoff, "Take off Protective Gear"},
-	{(char)0, TRUE, (void *)0, "Manipulate Items"},
+	{(char)0, TRUE, NULL, "Manipulate Items"},
 	{'a', FALSE, doapply, "Apply an object"},
 	{'d', FALSE, dodip, "Dip an object [M-d]"},
 	{'E', FALSE, doengrave, "Engrave into the ground"},
 	{'f', FALSE, dofire, "Fire your prepared missile weapon"},
 	{'i', TRUE, doinvoke, "Invoke your weapon"},
 	{'t', FALSE, dothrow, "Throw an item"},
-	{(char)0, TRUE, (void *)0, "Drop Items"},
+	{(char)0, TRUE, NULL, "Drop Items"},
 	{'d', FALSE, dodrop, "Drop an object"},
 	{'D', FALSE, doddrop, "Multi-Drop"},
 	{0,0,0,0}
@@ -1939,15 +1939,15 @@ static const struct menu_tab help_menu[] = {
 };
 
 static const struct menu_tab main_menu[] = {
-	{'g', TRUE, (void *)0, "Game"},
-	{'i', TRUE, (void *)0, "Inventory"},
-	{'a', TRUE, (void *)0, "Action"},
-	{'p', TRUE, (void *)0, "Player"},
-	{'d', TRUE, (void *)0, "Discoveries"},
+	{'g', TRUE, NULL, "Game"},
+	{'i', TRUE, NULL, "Inventory"},
+	{'a', TRUE, NULL, "Action"},
+	{'p', TRUE, NULL, "Player"},
+	{'d', TRUE, NULL, "Discoveries"},
 #ifdef WIZARD
-	{'w', TRUE, (void *)0, "Wizard"},
+	{'w', TRUE, NULL, "Wizard"},
 #endif
-	{'?', TRUE, (void *)0, "Help"},
+	{'?', TRUE, NULL, "Help"},
 	{0,0,0,0},
 };
 
@@ -1968,7 +1968,7 @@ static struct menu_list main_menustruct[] = {
 	{"Wizard", "Main Menu", wizard_menu},
 #endif
 	{"Help", "Main Menu", help_menu},
-	{"Main Menu",(char *)0, main_menu},
+	{"Main Menu",NULL, main_menu},
 	{0,0,0},
 };
 
@@ -2014,7 +2014,7 @@ static int makemenu(const char *menuname, struct menu_list menu_struct[]) {
                 if (current_menu[i].m_text && !occupation && multi)
                       set_occupation(func, current_menu[i].m_text, multi);
                 /*WAC catch void into makemenu */
-                if (func == (void *)0)
+                if (func == NULL)
                         return (makemenu(current_menu[i].m_item, menu_struct));
                 else return (*func)();            /* perform the command */
         } else if (n < 0) {
@@ -2472,29 +2472,29 @@ struct ext_func_tab extcmdlist[] = {
 	 * below.
 	 */
 #ifdef DISPLAY_LAYERS
-	{(char *)0, (char *)0, donull, TRUE},
+	{NULL, NULL, donull, TRUE},
 #endif
-	{(char *)0, (char *)0, donull, TRUE},
-	{(char *)0, (char *)0, donull, TRUE},
+	{NULL, NULL, donull, TRUE},
+	{NULL, NULL, donull, TRUE},
 #ifdef DEBUG_MIGRATING_MONS
-	{(char *)0, (char *)0, donull, TRUE},
+	{NULL, NULL, donull, TRUE},
 #endif
-	{(char *)0, (char *)0, donull, TRUE},
-	{(char *)0, (char *)0, donull, TRUE},
+	{NULL, NULL, donull, TRUE},
+	{NULL, NULL, donull, TRUE},
 #ifdef PORT_DEBUG
-	{(char *)0, (char *)0, donull, TRUE},
+	{NULL, NULL, donull, TRUE},
 #endif
-	{(char *)0, (char *)0, donull, TRUE},
-	{(char *)0, (char *)0, donull, TRUE},
-        {(char *)0, (char *)0, donull, TRUE},
-	{(char *)0, (char *)0, donull, TRUE},
-	{(char *)0, (char *)0, donull, TRUE},
+	{NULL, NULL, donull, TRUE},
+	{NULL, NULL, donull, TRUE},
+        {NULL, NULL, donull, TRUE},
+	{NULL, NULL, donull, TRUE},
+	{NULL, NULL, donull, TRUE},
 #ifdef DEBUG
-	{(char *)0, (char *)0, donull, TRUE},
+	{NULL, NULL, donull, TRUE},
 #endif
-	{(char *)0, (char *)0, donull, TRUE},
+	{NULL, NULL, donull, TRUE},
 #endif
-	{(char *)0, (char *)0, donull, TRUE}	/* sentinel */
+	{NULL, NULL, donull, TRUE}	/* sentinel */
 };
 
 #if defined(WIZARD)
@@ -2521,7 +2521,7 @@ static const struct ext_func_tab debug_extcmdlist[] = {
 	{"wizdebug", "wizard debug command", wiz_debug_cmd, TRUE},
 #endif
 	{"wmode", "show wall modes", wiz_show_wmodes, TRUE},
-	{(char *)0, (char *)0, donull, TRUE}
+	{NULL, NULL, donull, TRUE}
 };
 
 /*
@@ -2787,7 +2787,7 @@ static int wiz_migrate_mons(void) {
 		ptr = rndmonst();
 		mtmp = makemon(ptr, 0, 0, NO_MM_FLAGS);
 		if (mtmp) migrate_to_level(mtmp, ledger_no(&tolevel),
-				MIGR_RANDOM, (coord *)0);
+				MIGR_RANDOM, NULL);
 		mcount--;
 	}
 	return 0;
@@ -2825,7 +2825,7 @@ void rhack(char *cmd) {
 	if (*cmd == DOAGAIN && !in_doagain && saveq[0]) {
 		in_doagain = TRUE;
 		stail = 0;
-		rhack((char *)0);	/* read and execute command */
+		rhack(NULL);	/* read and execute command */
 		in_doagain = FALSE;
 		return;
 	}
@@ -3081,7 +3081,7 @@ int getdir(const char *s) {
 	else
 #endif
 	do {
-	    dirsym = yn_function ((s && *s != '^') ? s : buf, (char *)0, '\0');
+	    dirsym = yn_function ((s && *s != '^') ? s : buf, NULL, '\0');
 	} while (!movecmd(dirsym) && !index(quitchars, dirsym)
                 && dirsym == '.' && dirsym == 's' && !u.dz);
 
@@ -3371,7 +3371,7 @@ static char *parse(void) {
 	    multi--;
 	    save_cm = in_line;
 	} else {
-	    save_cm = (char *)0;
+	    save_cm = NULL;
 	}
 	in_line[0] = foo;
 	in_line[1] = '\0';
@@ -3400,7 +3400,7 @@ static void end_of_input(void) {
 	if (!program_state.done_hup++ && program_state.something_worth_saving)
 	    dosave0();
 #endif
-	exit_nhwindows((char *)0);
+	exit_nhwindows(NULL);
 	clearlocks();
 	terminate(EXIT_SUCCESS);
 }
@@ -3495,7 +3495,7 @@ int wiz_port_debug(void) {
 		{"show keystroke handler information", "tty",
 				win32con_handler_info},
 #endif
-		{(char *)0, (char *)0, (void (*)())0}/* array terminator */
+		{NULL, NULL, (void (*)())0}/* array terminator */
 	};
 
 	num_menu_selections = SIZE(menu_selections) - 1;

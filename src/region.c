@@ -345,7 +345,7 @@ NhRegion *reg;
 
     free_region(reg);
     regions[i] = regions[n_regions - 1];
-    regions[n_regions - 1] = (NhRegion *) 0;
+    regions[n_regions - 1] = NULL;
     n_regions--;
 }
 
@@ -383,7 +383,7 @@ run_regions (void)
     for (i = n_regions - 1; i >= 0; i--) {
 	if (regions[i]->ttl == 0) {
 	    if ((f_indx = regions[i]->expire_f) == NO_CALLBACK ||
-		(*callbacks[f_indx])(regions[i], (void *) 0))
+		(*callbacks[f_indx])(regions[i], NULL))
 		remove_region(regions[i]);
 	}
     }
@@ -396,7 +396,7 @@ run_regions (void)
 	/* Check if player is inside region */
 	f_indx = regions[i]->inside_f;
 	if (f_indx != NO_CALLBACK && hero_inside(regions[i]))
-	    (void) (*callbacks[f_indx])(regions[i], (void *) 0);
+	    (void) (*callbacks[f_indx])(regions[i], NULL);
 	/* Check if any monster is inside region */
 	if (f_indx != NO_CALLBACK) {
 	    for (j = 0; j < regions[i]->n_monst; j++) {
@@ -430,14 +430,14 @@ xchar
 	if (inside_region(regions[i], x, y)
 	    && !hero_inside(regions[i]) && !regions[i]->attach_2_u) {
 	    if ((f_indx = regions[i]->can_enter_f) != NO_CALLBACK)
-		if (!(*callbacks[f_indx])(regions[i], (void *) 0))
+		if (!(*callbacks[f_indx])(regions[i], NULL))
 		    return FALSE;
 	} else
 	    if (hero_inside(regions[i])
 		&& !inside_region(regions[i], x, y)
 		&& !regions[i]->attach_2_u) {
 	    if ((f_indx = regions[i]->can_leave_f) != NO_CALLBACK)
-		if (!(*callbacks[f_indx])(regions[i], (void *) 0))
+		if (!(*callbacks[f_indx])(regions[i], NULL))
 		    return FALSE;
 	}
     }
@@ -450,7 +450,7 @@ xchar
 	    if (regions[i]->leave_msg != NULL)
 		pline(regions[i]->leave_msg);
 	    if ((f_indx = regions[i]->leave_f) != NO_CALLBACK)
-		(void) (*callbacks[f_indx])(regions[i], (void *) 0);
+		(void) (*callbacks[f_indx])(regions[i], NULL);
 	}
 
     /* Callbacks for the regions we do enter */
@@ -461,7 +461,7 @@ xchar
 	    if (regions[i]->enter_msg != NULL)
 		pline(regions[i]->enter_msg);
 	    if ((f_indx = regions[i]->enter_f) != NO_CALLBACK)
-		(void) (*callbacks[f_indx])(regions[i], (void *) 0);
+		(void) (*callbacks[f_indx])(regions[i], NULL);
 	}
     return TRUE;
 }
@@ -597,7 +597,7 @@ xchar x, y;
 	if (inside_region(regions[i], x, y) && regions[i]->visible &&
 		regions[i]->ttl != 0)
 	    return regions[i];
-    return (NhRegion *) 0;
+    return NULL;
 }
 
 void
@@ -784,7 +784,7 @@ const char *msg_enter;
 const char *msg_leave;
 {
     NhRect tmprect;
-    NhRegion *reg = create_region((NhRect *) 0, 0);
+    NhRegion *reg = create_region(NULL, 0);
 
     reg->enter_msg = msg_enter;
     reg->leave_msg = msg_leave;
@@ -836,7 +836,7 @@ int radius, ttl;
     int nrect;
     NhRect tmprect;
 
-    ff = create_region((NhRect *) 0, 0);
+    ff = create_region(NULL, 0);
     nrect = radius;
     tmprect.lx = x;
     tmprect.hx = x;
@@ -1002,7 +1002,7 @@ int damage;
     int i, nrect;
     NhRect tmprect;
 
-    cloud = create_region((NhRect *) 0, 0);
+    cloud = create_region(NULL, 0);
     nrect = radius;
     tmprect.lx = x;
     tmprect.hx = x;

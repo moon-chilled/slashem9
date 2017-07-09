@@ -404,7 +404,7 @@ int x;
 		    (!otmp->oartifact || touch_artifact(otmp,mtmp)))
 		return otmp;
 	}
-	return (struct obj *)0;
+	return NULL;
 }
 
 
@@ -576,7 +576,7 @@ select_rwep (	/* select a ranged weapon for the monster */
 	  }
 
 	/* failure */
-	return (struct obj *)0;
+	return NULL;
 }
 
 /* Weapons in order of preference */
@@ -644,7 +644,7 @@ select_hwep (	/* select a hand to hand weapon for the monster */
 	}
 
 	/* failure */
-	return (struct obj *)0;
+	return NULL;
 }
 
 /* Called after polymorphing a monster, robbing it, etc....  Monsters

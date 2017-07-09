@@ -105,7 +105,7 @@ void moveloop (void) {
 
 		    if(!rn2(u.uevent.udemigod ? 25 :
 			    (depth(&u.uz) > depth(&stronghold_level)) ? 50 : 70))
-			(void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
+			(void) makemon(NULL, 0, 0, NO_MM_FLAGS);
 
 		    /* calculate how much time passed. */
 #ifdef STEED
@@ -334,7 +334,7 @@ void moveloop (void) {
 		    /* when immobile, count is in turns */
 		    if(multi < 0) {
 			if (++multi == 0) {	/* finished yet? */
-			    unmul((char *)0);
+			    unmul(NULL);
 			    /* if unmul caused a level change, take it now */
 			    if (u.utotype) deferred_goto();
 			}
@@ -467,7 +467,7 @@ void moveloop (void) {
 #ifdef MAIL
 	    ckmailstatus();
 #endif
-	    rhack((char *)0);
+	    rhack(NULL);
 	}
 	if (u.utotype)		/* change dungeon level */
 	    deferred_goto();	/* after rhack() */
@@ -624,14 +624,14 @@ void welcome(boolean new_game /* false => restoring an old game */ ) {
 #if 0
     pline(new_game ? "%s %s, welcome to NetHack!  You are a%s %s %s."
 		   : "%s %s, the%s %s %s, welcome back to NetHack!",
-	  Hello((struct monst *) 0), plname, buf, urace.adj,
+	  Hello(NULL), plname, buf, urace.adj,
 	  (currentgend && urole.name.f) ? urole.name.f : urole.name.m);
 #endif
     if (new_game) pline("%s %s, welcome to %s!  You are a%s %s %s.",
-	  Hello((struct monst *) 0), plname, DEF_GAME_NAME, buf, urace.adj,
+	  Hello(NULL), plname, DEF_GAME_NAME, buf, urace.adj,
 	  (currentgend && urole.name.f) ? urole.name.f : urole.name.m);
     else pline("%s %s, the%s %s %s, welcome back to %s!",
-	  Hello((struct monst *) 0), plname, buf, urace.adj,
+	  Hello(NULL), plname, buf, urace.adj,
 	  (currentgend && urole.name.f) ? urole.name.f : urole.name.m, 
 	  DEF_GAME_NAME);
 }

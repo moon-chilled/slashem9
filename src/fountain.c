@@ -309,7 +309,7 @@ drinkfountain (void)
 
 		case 26: /* See Monsters */
 
-			(void) monster_detect((struct obj *)0, 0);
+			(void) monster_detect(NULL, 0);
 			exercise(A_WIS, TRUE);
 			break;
 
@@ -596,8 +596,8 @@ drinksink (void)
 		case 4: do {
 				otmp = mkobj(POTION_CLASS,FALSE);
 				if (otmp->otyp == POT_WATER) {
-					obfree(otmp, (struct obj *)0);
-					otmp = (struct obj *) 0;
+					obfree(otmp, NULL);
+					otmp = NULL;
 				}
 			} while(!otmp);
 			otmp->cursed = otmp->blessed = 0;

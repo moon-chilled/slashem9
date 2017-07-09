@@ -95,7 +95,7 @@ register struct obj *obj;
 boolean ohit;
 int x,y;
 {
-	struct obj *mwep = (struct obj *) 0;
+	struct obj *mwep = NULL;
 	
 	int retvalu = 1;
 	int create;
@@ -126,7 +126,7 @@ int x,y;
 			arm_bomb(obj, FALSE);
 		} else {
 			grenade_explode(obj, bhitpos.x, bhitpos.y, FALSE, 0);
-			obj = (struct obj *)0;
+			obj = NULL;
 		}
 	} else if (objects[obj->otyp].oc_dir & EXPLOSION) {
 	    	if (cansee(bhitpos.x,bhitpos.y)) 
@@ -166,12 +166,12 @@ int x,y;
 			    if (!mtmp && x == u.ux && y == u.uy)
 				mtmp = &youmonst;
 			    if (mtmp && ohit)
-				passive_obj(mtmp, obj, (struct attack *)0);
+				passive_obj(mtmp, obj, NULL);
 			    stackobj(obj);
 			    retvalu = 0;
 			}
 		}
-	} else if (obj) obfree(obj, (struct obj*) 0);
+	} else if (obj) obfree(obj, NULL);
 
 	return retvalu;
 }
@@ -274,7 +274,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 		else mondied(mtmp);
 	    }
 
-	    if (can_blnd((struct monst*)0, mtmp,
+	    if (can_blnd(NULL, mtmp,
 		    (uchar)(otmp->otyp == BLINDING_VENOM ? AT_SPIT : AT_WEAP),
 		    otmp)) {
 		if (vis && mtmp->mcansee)
@@ -340,7 +340,7 @@ m_throw (
 	    }
 	    obj_extract_self(obj);
 	    singleobj = obj;
-	    obj = (struct obj *) 0;
+	    obj = NULL;
 	} else {
 	    singleobj = splitobj(obj, 1L);
 	    obj_extract_self(singleobj);
@@ -349,7 +349,7 @@ m_throw (
 	singleobj->owornmask = 0; /* threw one of multiple weapons in hand? */
 
 	if (mon) mwep = MON_WEP(mon);
-	else mwep = (struct obj *) 0;
+	else mwep = NULL;
 	
 	/* D: Special launcher effects */
 	if (mwep && is_ammo(singleobj) && ammo_and_launcher(singleobj, mwep)) {
@@ -438,7 +438,7 @@ m_throw (
 			    /* fall through */
 			case CREAM_PIE:
 			case BLINDING_VENOM:
-			    hitu = thitu(8, 0, singleobj, (char *)0);
+			    hitu = thitu(8, 0, singleobj, NULL);
 			    break;
 			default:
 			    dam = dmgval(singleobj, &youmonst);
@@ -455,7 +455,7 @@ m_throw (
 			    if (bigmonst(youmonst.data)) hitv++;
 			    hitv += 8 + singleobj->spe;
 			    if (dam < 1) dam = 1;
-			    hitu = thitu(hitv, dam, singleobj, (char *)0);
+			    hitu = thitu(hitv, dam, singleobj, NULL);
 		    }
 		    if (hitu && singleobj->opoisoned &&
 			is_poisonable(singleobj)) {
@@ -466,7 +466,7 @@ m_throw (
 			poisoned(onmbuf, A_STR, knmbuf, -10);
 		    }
 		    if(hitu &&
-		       can_blnd((struct monst*)0, &youmonst,
+		       can_blnd(NULL, &youmonst,
 				(uchar)(singleobj->otyp == BLINDING_VENOM ?
 					AT_SPIT : AT_WEAP), singleobj)) {
 			blindinc = rnd(25);
@@ -490,7 +490,7 @@ m_throw (
 			    && !(poly_when_stoned(youmonst.data) &&
 				 polymon(PM_STONE_GOLEM))) {
 			    Stoned = 5;
-			    killer = (char *) 0;
+			    killer = NULL;
 			}
 		    }
 		    stop_occupation();
@@ -545,7 +545,7 @@ m_useup (struct monst *mon, struct obj *obj)
 		    mon->misc_worn_check &= ~(obj->owornmask);
 		    update_mon_intrinsics(mon, obj, FALSE, FALSE);
 		}
-		obfree(obj, (struct obj*) 0);
+		obfree(obj, NULL);
 	}
 }
 
@@ -592,7 +592,7 @@ thrwmu (struct monst *mtmp)
 	    hitv += 8 + otmp->spe;
 	    if (dam < 1) dam = 1;
 
-	    (void) thitu(hitv, dam, otmp, (char *)0);
+	    (void) thitu(hitv, dam, otmp, NULL);
 	    stop_occupation();
 	    return;
 	}
@@ -858,7 +858,7 @@ m_carrying (struct monst *mtmp, int type)
 	for(otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
 		if(otmp->otyp == type)
 			return(otmp);
-	return((struct obj *) 0);
+	return(NULL);
 }
 
 /* TRUE iff thrown/kicked/rolled object doesn't pass through iron bars */

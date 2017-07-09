@@ -598,7 +598,7 @@ char *map;
 			s1 = s2 + 1;
 		} else {
 			len = (int) strlen(s1);
-			s1 = (char *) 0;
+			s1 = NULL;
 		}
 		if (len > max_len) max_len = len;
 	}
@@ -1643,7 +1643,7 @@ splev *lev;
 			Free(r->golds);
 		}
 		Free(r);
-		lev->rooms[n] = (room *)0;
+		lev->rooms[n] = NULL;
 	}
 	Free(lev->rooms);
 	lev->rooms = (room **)0;
@@ -1651,17 +1651,17 @@ splev *lev;
 
 	for (j = 0; j < lev->ncorr; j++) {
 		Free(lev->corrs[j]);
-		lev->corrs[j] = (corridor *)0;
+		lev->corrs[j] = NULL;
 	}
 	Free(lev->corrs);
 	lev->corrs = (corridor **)0;
 	lev->ncorr = 0;
 
 	Free(lev->robjects);
-	lev->robjects = (char *)0;
+	lev->robjects = NULL;
 	lev->nrobjects = 0;
 	Free(lev->rmonst);
-	lev->rmonst = (char *)0;
+	lev->rmonst = NULL;
 	lev->nrmonst = 0;
 }
 

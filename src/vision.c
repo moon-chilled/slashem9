@@ -541,7 +541,7 @@ vision_recalc (int control)
 	 *	+ Monsters can see you even when you're in a pit.
 	 */
 	view_from(u.uy, u.ux, next_array, next_rmin, next_rmax,
-		0, (void (*)(int,int,void *))0 /* null function pointer */, (void *)0);
+		0, (void (*)(int,int,void *))0 /* null function pointer */, NULL);
 
 	/*
 	 * Our own version of the update loop below.  We know we can't see
@@ -605,7 +605,7 @@ vision_recalc (int control)
 	    }
 	} else
 	    view_from(u.uy, u.ux, next_array, next_rmin, next_rmax,
-                                        0,(void(*)(int, int, void *))0, (void *)0);
+                                        0,(void(*)(int, int, void *))0, NULL);
 
 	/*
 	 * Set the IN_SIGHT bit for xray and night vision.
@@ -2127,7 +2127,7 @@ view_from(srow,scol,loc_cs_rows,left_most,right_most, range, func, arg)
 	if(left < scol - range) left = scol - range;
 	if(right > scol + range) right = scol + range;
     } else
-	limits = (char*) 0;
+	limits = NULL;
 
     if(func) {
 	for (i = left; i <= right; i++) (*func)(i, srow, arg);
@@ -2544,7 +2544,7 @@ view_from(srow, scol, loc_cs_rows, left_most, right_most, range, func, arg)
 	if(left < scol - range) left = scol - range;
 	if(right > scol + range) right = scol + range;
     } else
-	limits = (char*) 0;
+	limits = NULL;
 
     if(func) {
 	for (i = left; i <= right; i++) (*func)(i, srow, arg);
@@ -2597,7 +2597,7 @@ do_clear_area(scol,srow,range,func,arg)
 {
 	/* If not centered on hero, do the hard work of figuring the area */
 	if (scol != u.ux || srow != u.uy)
-	    view_from(srow, scol, (char **)0, (char *)0, (char *)0,
+	    view_from(srow, scol, (char **)0, NULL, NULL,
 							range, func, arg);
 	else {
 	    register int x;

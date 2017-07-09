@@ -45,7 +45,7 @@ int argc;
 char *argv[];
 {
 	int argno;
-	const char *dir = (char *)0;
+	const char *dir = NULL;
 
 
 	if (!dir) dir = getenv("NETHACKDIR");
@@ -301,7 +301,7 @@ char *str;
 	char *tmp, *tmp2;
 	int bsize;
 
-	if (!str) return (char *)0;
+	if (!str) return NULL;
 	bsize = EXEPATHBUFSZ;
 	tmp = exepathbuf;
 #if !defined(WIN32)

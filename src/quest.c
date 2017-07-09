@@ -122,7 +122,7 @@ boolean talk;
 	} else if (u.ualign.record < MIN_QUEST_ALIGN) {
 	    You("are currently %d and require %d.",
 		u.ualign.record, MIN_QUEST_ALIGN);
-	    if (yn_function("adjust?", (char *)0, 'y') == 'y')
+	    if (yn_function("adjust?", NULL, 'y') == 'y')
 		u.ualign.record = MIN_QUEST_ALIGN;
 	}
     }
@@ -153,7 +153,7 @@ boolean seal;
     dest = (br->end1.dnum == u.uz.dnum) ? &br->end2 : &br->end1;
     portal_flag = u.uevent.qexpelled ? 0 :	/* returned via artifact? */
 		  !seal ? 1 : -1;
-    schedule_goto(dest, FALSE, FALSE, portal_flag, (char *)0, (char *)0);
+    schedule_goto(dest, FALSE, FALSE, portal_flag, NULL, NULL);
     if (seal) {	/* remove the portal to the quest - sealing it off */
 	int reexpelled = u.uevent.qexpelled;
 	u.uevent.qexpelled = 1;
@@ -215,7 +215,7 @@ chat_with_leader()
  */
 	if(Qstat(got_thanks)) {
 /*	Rule 1:	You've gone back with/without the amulet.	*/
-	    if(u.uhave.amulet)	finish_quest((struct obj *)0);
+	    if(u.uhave.amulet)	finish_quest(NULL);
 
 /*	Rule 2:	You've gone back before going for the amulet.	*/
 	    else		qt_pager(QT_POSTHANKS);

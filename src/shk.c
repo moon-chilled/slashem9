@@ -205,7 +205,7 @@ shkgone (				/* called in mon.c */
 	/*       even when the shk dies on a different level.] */
 	if (on_level(&eshk->shoplevel, &u.uz)) {
 	    remove_damage(mtmp, TRUE);
-	    sroom->resident = (struct monst *)0;
+	    sroom->resident = NULL;
 	    if (!search_special(ANY_SHOP))
 		level.flags.has_shop = 0;
 
@@ -235,7 +235,7 @@ register boolean zero_out;
 {
 	if (on_level(&(ESHK(shkp)->shoplevel), &u.uz))
 	    rooms[ESHK(shkp)->shoproom - ROOMOFFSET].resident =
-		(zero_out)? (struct monst *)0 : shkp;
+		(zero_out)? NULL : shkp;
 }
 
 void 
@@ -875,7 +875,7 @@ delete_contents (register struct obj *obj)
 		    case OBJ_ONBILL:
 			impossible("indestructible object %s",
 			  obj->where == OBJ_FREE ? "free" : "on bill");
-			obfree(curr, (struct obj *)0);
+			obfree(curr, NULL);
 			break;
 		    case OBJ_FLOOR:
 			place_object(curr, obj->ox, obj->oy);
@@ -911,7 +911,7 @@ delete_contents (register struct obj *obj)
 		}
 	    }
 	    else
-	    obfree(curr, (struct obj *)0);
+	    obfree(curr, NULL);
 	}
 }
 
@@ -1988,7 +1988,7 @@ boolean
 paybill(croaked)
 int croaked;	/* -1: escaped dungeon; 0: quit; 1: died */
 {
-	register struct monst *mtmp, *mtmp2, *resident= (struct monst *)0;
+	register struct monst *mtmp, *mtmp2, *resident= NULL;
 	register boolean taken = FALSE;
 	register int numsk = 0;
 
@@ -2227,7 +2227,7 @@ unsigned id;
 		if ((obj = o_on(id, mon->minvent)) != 0) return obj;
 
 	/* not found at all */
-	return (struct obj *)0;
+	return NULL;
 }
 
 /* calculate the value that the shk will charge for [one of] an object */
@@ -2659,7 +2659,7 @@ register boolean ininv, dummy, silent;
 	}
 
 	if(container) {
-	    if(obj->cobj == (struct obj *)0) {
+	    if(obj->cobj == NULL) {
 		if(obj->no_charge) {
 		    obj->no_charge = 0;
 		    return;
@@ -3245,7 +3245,7 @@ int mode;		/* 0: deliver count 1: paged */
 		totused += thisused;
 		obj->unpaid = 0;		/* ditto */
 		/* Why 'x'?  To match `I x', more or less. */
-		buf_p = xprname(obj, (char *)0, 'x', FALSE, thisused, uquan);
+		buf_p = xprname(obj, NULL, 'x', FALSE, thisused, uquan);
 #ifdef __SASC
 				/* SAS/C 6.2 can't cope for some reason */
 		sasc_bug(obj,save_unpaid);
@@ -3259,12 +3259,12 @@ int mode;		/* 0: deliver count 1: paged */
 	    /* additional shop debt which has no itemization available */
 	    if (totused) putstr(datawin, 0, "");
 	    totused += eshkp->debit;
-	    buf_p = xprname((struct obj *)0,
+	    buf_p = xprname(NULL,
 			    "usage charges and/or other fees",
 			    GOLD_SYM, FALSE, eshkp->debit, 0L);
 	    putstr(datawin, 0, buf_p);
 	}
-	buf_p = xprname((struct obj *)0, "Total:", '*', FALSE, totused, 0L);
+	buf_p = xprname(NULL, "Total:", '*', FALSE, totused, 0L);
 	putstr(datawin, 0, "");
 	putstr(datawin, 0, buf_p);
 	display_nhwindow(datawin, FALSE);
@@ -3359,7 +3359,7 @@ register xchar x, y;
 		(void) mpickobj(shkp, obj);
 		return shkp;
 	}
-	return (struct monst *)0;
+	return NULL;
 }
 
 void
@@ -3594,7 +3594,7 @@ boolean catchup;	/* restoring a level */
 		/* Don't mess w/ boulders -- just merge into wall */
 		if ((otmp->otyp == BOULDER) || (otmp->otyp == ROCK)) {
 		    obj_extract_self(otmp);
-		    obfree(otmp, (struct obj *)0);
+		    obfree(otmp, NULL);
 		} else {
 		    while (!(litter[i = rn2(9)] & INSHOP));
 			remove_object(otmp);
@@ -3916,7 +3916,7 @@ pay_for_damage(dmgstr, cant_mollify)
 const char *dmgstr;
 boolean cant_mollify;
 {
-	register struct monst *shkp = (struct monst *)0;
+	register struct monst *shkp = NULL;
 	char shops_affected[5];
 	register boolean uinshp = (*u.ushops != '\0');
 	char qbuf[80];
@@ -4093,7 +4093,7 @@ register xchar x, y;
     register struct monst *shkp;
 
     if(!(shkp = shop_keeper(*in_rooms(x, y, SHOPBASE))) || !inhishop(shkp))
-	return(struct obj *)0;
+	return NULL;
 
     for (otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
 	if (otmp->oclass != COIN_CLASS)
@@ -4101,7 +4101,7 @@ register xchar x, y;
     /* note: otmp might have ->no_charge set, but that's ok */
     return (otmp && costly_spot(x, y) && NOTANGRY(shkp)
 	    && shkp->mcanmove && !shkp->msleeping)
-		? otmp : (struct obj *)0;
+		? otmp : NULL;
 }
 
 /* give price quotes for all objects linked to this one (ie, on this spot) */
@@ -4122,7 +4122,7 @@ register struct obj *first_obj;
     for (otmp = first_obj; otmp; otmp = otmp->nexthere) {
 	if (otmp->oclass == COIN_CLASS) continue;
 	cost = (otmp->no_charge || otmp == uball || otmp == uchain) ? 0L :
-		get_cost(otmp, (struct monst *)0);
+		get_cost(otmp, NULL);
 	if (Has_contents(otmp))
 	    cost += contained_cost(otmp, shkp, 0L, FALSE, FALSE);
 	if (!cost) {
@@ -4141,7 +4141,7 @@ register struct obj *first_obj;
 	    pline("%s!", buf);	/* buf still contains the string */
 	} else {
 	    /* print cost in slightly different format, so can't reuse buf */
-	    cost = get_cost(first_obj, (struct monst *)0);
+	    cost = get_cost(first_obj, NULL);
 	    if (Has_contents(first_obj))
 		cost += contained_cost(first_obj, shkp, 0L, FALSE, FALSE);
 	    pline("%s, price %ld %s%s%s", doname(first_obj),
@@ -4544,7 +4544,7 @@ struct obj *obj;
 	    shkp = shop_keeper(inside_shop(x, y));
 	    return strcpy(buf, shkp ? s_suffix(shkname(shkp)) : "the");
 	}
-	return (char *)0;
+	return NULL;
 }
 
 static char *
@@ -4554,7 +4554,7 @@ struct obj *obj;
 {
 	if (obj->where == OBJ_MINVENT)
 	    return strcpy(buf, s_suffix(mon_nam(obj->ocarry)));
-	return (char *)0;
+	return NULL;
 }
 
 
@@ -4716,7 +4716,7 @@ shk_identify(slang, shkp)
 		/* Basic */
 		makeknown(obj->otyp);
 		obj->dknown = 1;
-    		prinv((char *)0, obj, 0L); /* Print result */
+    		prinv(NULL, obj, 0L); /* Print result */
 	}
 }
 
@@ -5148,7 +5148,7 @@ shk_armor_works(slang, shkp)
 					obj->otyp <= YELLOW_DRAGON_SCALES) {
 			/* dragon scales get turned into dragon scale mail */
 			Your("%s merges and hardens!", xname(obj));
-			setworn((struct obj *)0, W_ARM);
+			setworn(NULL, W_ARM);
 			/* assumes same order */
 			obj->otyp = GRAY_DRAGON_SCALE_MAIL +
 						obj->otyp - GRAY_DRAGON_SCALES;

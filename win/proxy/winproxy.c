@@ -121,7 +121,7 @@ proxy_player_selection()
       &flags.initgend, &flags.initalign))
     {
 	clearlocks();
-	nhproxy_proc_exit_nhwindows((char *)0);
+	nhproxy_proc_exit_nhwindows(NULL);
 	terminate(0);
     }
 }

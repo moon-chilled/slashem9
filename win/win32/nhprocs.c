@@ -132,7 +132,7 @@ win32_player_selection()
 
 
 	if ((pc = highc(pl_character[0])) != 0) {
-		if (index(pl_classes, pc) != (char *)0) {
+		if (index(pl_classes, pc) != NULL) {
 			pl_character[0] = pc;
 			return;
 		}
@@ -223,7 +223,7 @@ int type;
 	newwin->WindowHeight = 0;
 	newwin->dwCharX = DefCharWidth;
 	newwin->dwCharY = DefCharHeight;
-	newwin->morestr = (char *)0;
+	newwin->morestr = NULL;
 
 	/* Build the appropriate type of Win32 Window */
 	switch(type) {	
@@ -381,7 +381,7 @@ winid window;
 			*(wins[window]->color + i) =
 				RGB(140,140,140);
 	}
-	InvalidateRect(wins[window]->hWnd, (RECT *)0, FALSE);
+	InvalidateRect(wins[window]->hWnd, NULL, FALSE);
 }
 
 /*ARGSUSED*/
@@ -524,7 +524,7 @@ const char *str;
 			}
 			memcpy(pch, MessagePtr[i], strlen(MessagePtr[i]));
 		}
-		InvalidateRect(wins[window]->hWnd, (RECT *)0, FALSE);
+		InvalidateRect(wins[window]->hWnd, NULL, FALSE);
 		break;
 	    case NHW_MENU:
 		impossible("putstr to a menu window (%d)", window);
@@ -675,7 +675,7 @@ const char *str;
 #else
 				|MB_OKCANCEL);
 			if (button == IDCANCEL) 
-				button = *((int *)0); /* Bombs away ! */
+				button = *(NULL); /* Bombs away ! */
 #endif
 		}
 }
@@ -915,8 +915,8 @@ winid window;
 		wins[window]->maxcols = COLNO;
 		wins[window]->cursy = 0;
 		wins[window]->cursx = 0;
-		wins[window]->data = (uchar *)0;
-		wins[window]->color = (int *)0;
+		wins[window]->data = NULL;
+		wins[window]->color = NULL;
  		wins[window]->hWnd = CreateWindowEx(
 			0,
 			NHListboxClassName,
@@ -1010,7 +1010,7 @@ boolean preselected;
 	if (str) {
 		tmp = (char *)alloc(strlen(str) + 1 + strlen(extra));
 	} else
-		tmp = (char *)0;
+		tmp = NULL;
 	menuitem = 
 		(struct win32_menuitem *)alloc(sizeof(struct win32_menuitem));
 	if (!menuitem) return;
@@ -1026,10 +1026,10 @@ boolean preselected;
 	}
 	if (menuitem->identifier.a_void) {
 	    if (menuitem->str)
-		strcpy(menuitem->str, (str != (char *)0) ? str : "Oops!");
+		strcpy(menuitem->str, (str != NULL) ? str : "Oops!");
 	} else 
 		sprintf(menuitem->str,"%s",
-			 (str != (char *)0) ? str : "Oops");
+			 (str != NULL) ? str : "Oops");
 	MenuPtr[window][MenuCount[window]] = menuitem;
 	++MenuCount[window];
 }

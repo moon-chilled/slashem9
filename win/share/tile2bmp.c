@@ -161,7 +161,7 @@ char *argv[];
 
 #ifdef OBSOLETE
 	bmpfile2 = fopen(NETHACK_PACKED_TILEFILE, WRBMODE);
-	if (bmpfile2 == (FILE *)0) {
+	if (bmpfile2 == NULL) {
 		fprintf(stderr, "Unable to open output file %s\n",
 				NETHACK_PACKED_TILEFILE);
 		exit(EXIT_FAILURE);

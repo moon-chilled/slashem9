@@ -24,7 +24,7 @@ create_explode_region()
     ExplodeRegion *reg;
 
     reg = (ExplodeRegion *)alloc(sizeof(ExplodeRegion));
-    reg->locations = (ExplodeLocation *)0;
+    reg->locations = NULL;
     reg->nlocations = 0;
     reg->alocations = 0;
     return reg;
@@ -679,7 +679,7 @@ scatter (
 		qtmp = (long)rnd((int)qtmp);
 		otmp = splitobj(otmp, qtmp);
 	    } else {
-		obj = (struct obj *)0; /* all used */
+		obj = NULL; /* all used */
 	    }
 	    obj_extract_self(otmp);
 	    used_up = FALSE;
@@ -756,8 +756,8 @@ scatter (
 			} else if ((mtmp = m_at(bhitpos.x, bhitpos.y)) != 0) {
 				if (scflags & MAY_HITMON) {
 				    stmp->range--;
-				    if (ohitmon((struct monst *)0, mtmp, stmp->obj, 1, FALSE)) {
-					stmp->obj = (struct obj *)0;
+				    if (ohitmon(NULL, mtmp, stmp->obj, 1, FALSE)) {
+					stmp->obj = NULL;
 					stmp->stopped = TRUE;
 				    }
 				}
@@ -770,7 +770,7 @@ scatter (
 				    if (bigmonst(youmonst.data)) hitvalu++;
 				    hitu = thitu(hitvalu,
 						 dmgval(stmp->obj, &youmonst),
-						 stmp->obj, (char *)0);
+						 stmp->obj, NULL);
 				    if (hitu) {
 					stmp->range -= 3;
 					stop_occupation();
@@ -826,7 +826,7 @@ splatter_burning_oil (int x, int y)
 
 #ifdef FIREARMS
 
-#define BY_OBJECT       ((struct monst *)0)
+#define BY_OBJECT       (NULL)
 
 static int
 dp(n, p)		/* 0 <= dp(n, p) <= n */
@@ -870,7 +870,7 @@ int x, y;
     struct grenade_callback *gc = (struct grenade_callback *)data;
     if (is_accessible) {
 	add_location_to_explode_region(gc->fiery_area, x, y);
-	grenade_effects((struct obj *)0, x, y,
+	grenade_effects(NULL, x, y,
 		gc->fiery_area, gc->gas_area, gc->dig_area, gc->isyou);
     }
     return !is_accessible;
@@ -929,7 +929,7 @@ boolean isyou;
 	}
 	redraw = source->where == OBJ_FLOOR;
 	obj_extract_self(source);
-	obfree(source, (struct obj *)0);
+	obfree(source, NULL);
 	if (redraw) newsym(x, y);
     }
     mon = m_at(x, y);
@@ -1037,7 +1037,7 @@ int dest;
 	ox = dig_area->locations[i].x;
 	oy = dig_area->locations[i].y;
 	if (IS_WALL(levl[ox][oy].typ) || IS_DOOR(levl[ox][oy].typ)) {
-	    watch_dig((struct monst *)0, ox, oy, TRUE);
+	    watch_dig(NULL, ox, oy, TRUE);
 	    if (*in_rooms(ox, oy, SHOPBASE)) shop_damage = TRUE;
 	}
 	digactualhole(ox, oy, BY_OBJECT, PIT);

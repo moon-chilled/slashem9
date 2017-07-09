@@ -57,7 +57,7 @@ static char tbuf[512];
 char *hilites[CLR_MAX]; /* terminal escapes for the various colors */
 #endif
 
-static char *KS = (char *)0, *KE = (char *)0;	/* keypad sequences */
+static char *KS = NULL, *KE = NULL;	/* keypad sequences */
 static char nullstr[] = "";
 
 #if defined(ASCIIGRAPH) && !defined(NO_TERMS)
@@ -294,7 +294,7 @@ int *wid, *hgt;
 # endif
 
 # ifdef MINIMAL_TERM
-	HO = (char *)0;
+	HO = NULL;
 # else
 	HO = Tgetstr("ho");
 # endif
@@ -902,11 +902,11 @@ init_hilite()
 
 	for (c = 0; c < SIZE(hilites); c++)
 		hilites[c] = nh_HI;
-	hilites[CLR_GRAY] = hilites[NO_COLOR] = (char *)0;
+	hilites[CLR_GRAY] = hilites[NO_COLOR] = NULL;
 
 	if (tgetnum("Co") < 8
-	    || ((setf = tgetstr("AF", (char **)0)) == (char *)0
-		 && (setf = tgetstr("Sf", (char **)0)) == (char *)0))
+	    || ((setf = tgetstr("AF", (char **)0)) == NULL
+		 && (setf = tgetstr("Sf", (char **)0)) == NULL))
 		return;
 
 	for (c = 0; c < CLR_MAX / 2; c++) {
@@ -999,7 +999,7 @@ init_hilite()
 
 	for (c = 0; c < SIZE(hilites); c++)
 	    hilites[c] = nh_HI;
-	hilites[CLR_GRAY] = hilites[NO_COLOR] = (char *)0;
+	hilites[CLR_GRAY] = hilites[NO_COLOR] = NULL;
 
 	analyze_seq(nh_HI, &hi_foreg, &hi_backg);
 	analyze_seq(nh_HE, &foreg, &backg);
@@ -1011,7 +1011,7 @@ init_hilite()
 		if (c == CLR_BLUE) continue;
 #   endif
 		if (c == foreg)
-		    hilites[c] = (char *)0;
+		    hilites[c] = NULL;
 		else if (c != hi_foreg || backg != hi_backg) {
 		    hilites[c] = (char *) alloc(sizeof("\033[%d;3%d;4%dm"));
 		    sprintf(hilites[c], "\033[%d", !!(c & BRIGHT));
@@ -1169,7 +1169,7 @@ int color;
     if (windowprocs.name != NULL &&
      !strcmpi(windowprocs.name, "curses")) return iflags.wc_color;
 #endif
-	return hilites[color] != (char *)0;
+	return hilites[color] != NULL;
 }
 
 #endif /* TEXTCOLOR */

@@ -32,7 +32,7 @@ register xchar omx,omy,gx,gy;
 	coord poss[9];
 	long info[9];
 	long allowflags;
-	struct obj *ib = (struct obj *)0;
+	struct obj *ib = NULL;
 
 	if(omx == gx && omy == gy)
 		return(0);
@@ -223,10 +223,10 @@ boolean sanctum;   /* is it the seat of the high priest? */
 		    m_dowear(priest, TRUE);
 		    if (!(obj->owornmask & W_ARM)) {
 			obj_extract_self(obj);
-			obfree(obj, (struct obj *)0);
+			obfree(obj, NULL);
 		    } else if (otmp) {
 			obj_extract_self(otmp);
-			obfree(otmp, (struct obj *)0);
+			obfree(otmp, NULL);
 		    }
 		}
 	}
@@ -319,7 +319,7 @@ findpriest (char roomno)
 	       histemple_at(mtmp,mtmp->mx,mtmp->my))
 		return(mtmp);
 	}
-	return (struct monst *)0;
+	return NULL;
 }
 
 /* called from check_special_room() when the player enters the temple room */
@@ -327,7 +327,7 @@ void
 intemple (register int roomno)
 {
 	register struct monst *priest = findpriest((char)roomno);
-	boolean tended = (priest != (struct monst *)0);
+	boolean tended = (priest != NULL);
 	boolean shrined, sanctum, can_speak;
 	const char *msg1, *msg2;
 	char buf[BUFSZ];
@@ -542,12 +542,12 @@ boolean peaceful;
 	register boolean coaligned = (u.ualign.type == alignment);
 
 	if (ptr != &mons[PM_ALIGNED_PRIEST] && ptr != &mons[PM_ANGEL])
-		return((struct monst *)0);
+		return(NULL);
 	
 	if (MON_AT(x, y)) (void) rloc(m_at(x, y), FALSE);	/* insurance */
 
 	if (!(roamer = makemon(ptr, x, y, NO_MM_FLAGS)))
-		return((struct monst *)0);
+		return(NULL);
 
 	EPRI(roamer)->shralign = alignment;
 	if (coaligned && !peaceful)

@@ -139,7 +139,7 @@ boolean is_digging(void) {
 }
 
 #define BY_YOU		(&youmonst)
-#define BY_OBJECT	((struct monst *)0)
+#define BY_OBJECT	(NULL)
 
 boolean dig_check(struct monst *madeby, boolean verbose, int x, int y) {
 	struct trap *ttmp = t_at(x, y);
@@ -324,7 +324,7 @@ static int dig(void) {
 				/* it was a statue trap; break_statue()
 				 * printed a message and updated the screen
 				 */
-				digtxt = (char *)0;
+				digtxt = NULL;
 		} else if ((obj = sobj_at(BOULDER, dpx, dpy)) != 0) {
 			struct obj *bobj;
 
@@ -593,7 +593,7 @@ void digactualhole (int x, int y, struct monst *madeby, int ttyp) {
 		 */
 		if (u.ustuck || wont_fall) {
 		    if (newobjs)
-			impact_drop((struct obj *)0, x, y, 0);
+			impact_drop(NULL, x, y, 0);
 		    if (oldobjs != newobjs)
 			(void) pickup(1);
 		    if (shopdoor && madeby_u) pay_for_damage("ruin", FALSE);
@@ -615,7 +615,7 @@ void digactualhole (int x, int y, struct monst *madeby, int ttyp) {
 		    /* Cope with holes caused by monster's actions -- ALI */
 		    if (flags.mon_moving) {
 			schedule_goto(&newlevel, FALSE, TRUE, FALSE,
-			  You_fall, (char *)0);
+			  You_fall, NULL);
 		    } else {
 			pline("%s", You_fall);
 		    goto_level(&newlevel, FALSE, TRUE, FALSE);
@@ -626,7 +626,7 @@ void digactualhole (int x, int y, struct monst *madeby, int ttyp) {
 	    } else {
 		if (shopdoor && madeby_u) pay_for_damage("ruin", FALSE);
 		if (newobjs)
-		    impact_drop((struct obj *)0, x, y, 0);
+		    impact_drop(NULL, x, y, 0);
 		if (mtmp) {
 		     /*[don't we need special sokoban handling here?]*/
 		    if (is_flyer(mtmp->data) || is_floater(mtmp->data) ||
@@ -650,7 +650,7 @@ void digactualhole (int x, int y, struct monst *madeby, int ttyp) {
 			}
 			if (mtmp->isshk) make_angry_shk(mtmp, 0, 0);
 			migrate_to_level(mtmp, ledger_no(&tolevel),
-					 MIGR_RANDOM, (coord *)0);
+					 MIGR_RANDOM, NULL);
 		    }
 		}
 	    }
@@ -927,7 +927,7 @@ int use_pick_axe2 (struct obj *obj) {
 		ry = u.uy + u.dy;
 		if(!isok(rx, ry)) {
 			if (digtyp == 1) pline("Your %s bounces off harmlessly.",
-				aobjnam(obj, (char *)0));
+				aobjnam(obj, NULL));
 			else pline("Clash!");
 			return(1);
 		}
@@ -967,7 +967,7 @@ int use_pick_axe2 (struct obj *obj) {
 			}
 			else
 			    You("swing your %s through thin air.",
-				aobjnam(obj, (char *)0));
+				aobjnam(obj, NULL));
 		} else {
 			static const char * const d_action[6][2] = {
 			    {"swinging","slicing the air"},
@@ -1008,7 +1008,7 @@ int use_pick_axe2 (struct obj *obj) {
 		}
 	} else if (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)) {
 		/* it must be air -- water checked above */
-		You("swing your %s through thin air.", aobjnam(obj, (char *)0));
+		You("swing your %s through thin air.", aobjnam(obj, NULL));
 	} else if (!can_reach_floor()) {
 		You_cant("reach the %s.", surface(u.ux,u.uy));
 	} else if (is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) {
@@ -1017,7 +1017,7 @@ int use_pick_axe2 (struct obj *obj) {
 				is_pool(u.ux, u.uy) ? "water" : " the lava");
 	} else if (digtyp == 2) {
 		Your("%s merely scratches the %s.",
-				aobjnam(obj, (char *)0), surface(u.ux,u.uy));
+				aobjnam(obj, NULL), surface(u.ux,u.uy));
 		u_wipe_engr(3);
 	} else {
 		if (digging.pos.x != u.ux || digging.pos.y != u.uy ||
@@ -1207,7 +1207,7 @@ void zap_dig(void) {
 		    }
 		    newsym(u.ux, u.uy);
 		} else {
-		    watch_dig((struct monst *)0, u.ux, u.uy, TRUE);
+		    watch_dig(NULL, u.ux, u.uy, TRUE);
 		    (void) dighole(FALSE);
 		}
 	    }
@@ -1266,7 +1266,7 @@ void zap_dig(void) {
 		    room->typ = DOOR;
 		else if (cansee(zx, zy))
 		    pline_The("door is razed!");
-		watch_dig((struct monst *)0, zx, zy, TRUE);
+		watch_dig(NULL, zx, zy, TRUE);
 		room->doormask = D_NODOOR;
 		unblock_point(zx,zy); /* vision */
 		digdepth -= 2;
@@ -1305,7 +1305,7 @@ void zap_dig(void) {
 			add_damage(zx, zy, 200L);
 			shopwall = TRUE;
 		    }
-		    watch_dig((struct monst *)0, zx, zy, TRUE);
+		    watch_dig(NULL, zx, zy, TRUE);
 		    if (level.flags.is_cavernous_lev && !in_town(zx, zy)) {
 			room->typ = CORR;
 		    } else {
@@ -1371,7 +1371,7 @@ struct obj *bury_an_obj(struct obj *otmp) {
 	under_ice = is_ice(otmp->ox, otmp->oy);
 	if (otmp->otyp == ROCK && !under_ice) {
 		/* merges into burying material */
-		obfree(otmp, (struct obj *)0);
+		obfree(otmp, NULL);
 		return(otmp2);
 	}
 	/*
@@ -1393,7 +1393,7 @@ void bury_objs(int x, int y) {
 	struct obj *otmp, *otmp2;
 
 #ifdef DEBUG
-	if(level.objects[x][y] != (struct obj *)0)
+	if(level.objects[x][y] != NULL)
 		pline("bury_objs: at %d, %d", x, y);
 #endif
 	for (otmp = level.objects[x][y]; otmp; otmp = otmp2)
@@ -1451,7 +1451,7 @@ void rot_organic(void * arg, long timeout) {
 	    (void)bury_an_obj(obj->cobj);
 	}
 	obj_extract_self(obj);
-	obfree(obj, (struct obj *) 0);
+	obfree(obj, NULL);
 }
 
 /*

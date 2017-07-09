@@ -60,7 +60,7 @@ mac_speaker (struct obj *instr, char *melody) {
 	 * Set up the synth
 	 */
 	if (SndNewChannel(&theChannel, sampledSynth, initMono +
-		initNoInterp, (void *) 0) == noErr) {
+		initNoInterp, NULL) == noErr) {
 		char midi_note [] = {57, 59, 60, 62, 64, 65, 67};
 
 		short err;

@@ -193,7 +193,7 @@ free_bits (tty_record *record) {
 	} else {
 		s_err = dispose_ptr (record->its_bits.baseAddr);
 		if (!s_err) {
-			record->its_bits.baseAddr = (char *)0;
+			record->its_bits.baseAddr = NULL;
 			if (record->offscreen_port) {
 				ClosePort (record->offscreen_port);
 				s_err = dispose_ptr (record->offscreen_port);
@@ -244,7 +244,7 @@ create_tty (WindowRef *window, short resource_id, Boolean in_color)
 	record->its_window = *window;
 	SetWRefCon (*window, (long) record);
 	record->was_allocated = was_allocated;
-	record->its_bits.baseAddr = (char *)0;
+	record->its_bits.baseAddr = NULL;
 	record->curs_state = TRUE;
 
 /*
@@ -567,7 +567,7 @@ RECORD_EXISTS (record);
 /*
  * First, test that we actually have something to draw to...
  */
-	if ((((char *)0 == record->its_bits.baseAddr) && !record->uses_gworld) ||
+	if (((NULL == record->its_bits.baseAddr) && !record->uses_gworld) ||
 		(((GWorldPtr)0 == record->offscreen_world) && record->uses_gworld)) {
 		return general_failure;
 	}

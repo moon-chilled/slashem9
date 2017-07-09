@@ -76,7 +76,7 @@ mkshop()
 	register struct mkroom *sroom;
 	int i = -1, j;
 #ifdef WIZARD
-	char *ep = (char *)0;	/* (init == lint suppression) */
+	char *ep = NULL;	/* (init == lint suppression) */
 
 	/* first determine shoptype */
 	if(wizard){
@@ -210,7 +210,7 @@ register boolean strict;
 		if(sroom == &rooms[nroom])
 			sroom = &rooms[0];
 		if(sroom->hx < 0)
-			return (struct mkroom *)0;
+			return NULL;
 		if(sroom->rtype != OROOM)	continue;
 		if(!strict) {
 		    if(has_upstairs(sroom) || (has_dnstairs(sroom) && rn2(3)))
@@ -224,7 +224,7 @@ register boolean strict;
 							)
 			return sroom;
 	}
-	return (struct mkroom *)0;
+	return NULL;
 }
 
 static void
@@ -339,7 +339,7 @@ fill_zoo (struct mkroom *sroom)
 		    (type == BADFOODSHOP) ? mkclass(S_BAD_FOOD,0) :
 		    (type == REALZOO) ? realzoomon() :
 		    (type == GIANTCOURT) ? mkclass(S_GIANT,0) :
-		    (struct permonst *) 0,
+		    NULL,
 		   sx, sy, NO_MM_FLAGS);
 
 		if(mon) {
@@ -371,7 +371,7 @@ fill_zoo (struct mkroom *sroom)
 			    (void) mksobj_at((rn2(3)) ? LARGE_BOX : CHEST,
 					     sx, sy, TRUE, FALSE);
 			if (!rn2(5))
-			    make_grave(sx, sy, (char *)0);
+			    make_grave(sx, sy, NULL);
 			break;
 		    case BEEHIVE:
 			if(!rn2(3))
@@ -407,7 +407,7 @@ fill_zoo (struct mkroom *sroom)
 			    (void) mksobj_at((rn2(3)) ? LARGE_BOX : CHEST,
 					     sx, sy, TRUE, FALSE);
 			if (!rn2(5))
-			    make_grave(sx, sy, (char *)0);
+			    make_grave(sx, sy, NULL);
 			break;
 		    case COCKNEST:
 			if(!rn2(3)) {
@@ -520,7 +520,7 @@ antholemon (void)
 	case 2:		mtyp = PM_SNOW_ANT; break;
 	}
 	return ((mvitals[mtyp].mvflags & G_GONE) ?
-			(struct permonst *)0 : &mons[mtyp]);
+			NULL : &mons[mtyp]);
 }
 
 
@@ -554,7 +554,7 @@ fungus()
 	}
 
 	return ((mvitals[mtyp].mvflags & G_GONE) ?
-			(struct permonst *)0 : &mons[mtyp]);
+			NULL : &mons[mtyp]);
 }
 
 static void
@@ -763,7 +763,7 @@ schar type;
 	       (type == ANY_SHOP && croom->rtype >= SHOPBASE) ||
 	       croom->rtype == type)
 		return croom;
-	return (struct mkroom *) 0;
+	return NULL;
 }
 
 
@@ -824,7 +824,7 @@ squadmon()		/* return soldier types. */
 	mndx = squadprob[rn2(NSTYPES)].pm;
 gotone:
 	if (!(mvitals[mndx].mvflags & G_GONE)) return(&mons[mndx]);
-	else			    return((struct permonst *) 0);
+	else			    return(NULL);
 }
 
 /*
@@ -874,7 +874,7 @@ struct mkroom *r;
 	for(i=0; i<r->nsubrooms; i++) {
 		r->sbrooms[i] = &subrooms[nsubroom];
 		rest_room(fd, &subrooms[nsubroom]);
-		subrooms[nsubroom++].resident = (struct monst *)0;
+		subrooms[nsubroom++].resident = NULL;
 	}
 }
 
@@ -892,7 +892,7 @@ rest_rooms (int fd)
 	nsubroom = 0;
 	for(i = 0; i<nroom; i++) {
 	    rest_room(fd, &rooms[i]);
-	    rooms[i].resident = (struct monst *)0;
+	    rooms[i].resident = NULL;
 	}
 	rooms[nroom].hx = -1;		/* restore ending flags */
 	subrooms[nsubroom].hx = -1;

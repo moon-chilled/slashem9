@@ -83,7 +83,7 @@ char ***argv;
 	    j = i;
 	}
     }
-    (*argv)[*argc] = (char *)0;
+    (*argv)[*argc] = NULL;
     return 1;
 }
 
@@ -115,7 +115,7 @@ char ***env;
 	return 0;
     for(i = 0; environ[i]; i++)
 	(*env)[i] = environ[i];
-    (*env)[i] = (char *)0;
+    (*env)[i] = NULL;
     return 1;
 }
 
@@ -129,7 +129,7 @@ char *var;
     for(i = 0; i < enc; i++)
 	if (!str_cmpni(env[i], var, n) && env[i][n]=='=')
 	    return env[i];
-    return (char *)0;
+    return NULL;
 }
 
 static int
@@ -155,7 +155,7 @@ char *val;
 	return 0;
     *env = new;
     (*env)[(*enc)++] = val;
-    (*env)[*enc] = (char *)0;
+    (*env)[*enc] = NULL;
     return 1;
 }
 
@@ -360,7 +360,7 @@ char **argv;
 	for(i = 0; i < pcargc; i++)
 	    nargv[i + argc - n] = pcargv[i];
     }
-    nargv[nargc] = (char *)0;
+    nargv[nargc] = NULL;
     for(i = 0; i < nargc; i++) {
 	if (i)
 	    putc(' ', stderr);

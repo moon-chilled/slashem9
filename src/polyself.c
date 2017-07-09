@@ -219,7 +219,7 @@ newman()
 
 	redist_attr();
 	u.uhunger = rn1(500,500);
-	if (Sick) make_sick(0L, (char *) 0, FALSE, SICK_ALL);
+	if (Sick) make_sick(0L, NULL, FALSE, SICK_ALL);
 	Sick = 0;
 	Stoned = 0;
 	delayed_killer = 0;
@@ -503,7 +503,7 @@ polymon (	/* returns 1 if polymorph successful */
 		You("no longer seem to be petrifying.");
 	}
 	if (Sick_resistance && Sick) {
-		make_sick(0L, (char *) 0, FALSE, SICK_ALL);
+		make_sick(0L, NULL, FALSE, SICK_ALL);
 		You("no longer feel sick.");
 	}
 	if (Slimed) {
@@ -707,7 +707,7 @@ break_armor()
 	if ((otmp = uarmu) != 0) {
 	    if (controlled_change && !otmp->cursed && !uskin) {
 		You("take off your shirt just before it starts to rip.");
-		setworn((struct obj *)0, otmp->owornmask & W_ARMU);
+		setworn(NULL, otmp->owornmask & W_ARMU);
 		dropx(otmp);
 	    } else {                
 		Your("shirt rips to shreds!");
@@ -734,7 +734,7 @@ break_armor()
 		if (is_whirly(youmonst.data))
 			You("seep right through your shirt!");
 		else You("become much too small for your shirt!");
-		setworn((struct obj *)0, otmp->owornmask & W_ARMU);
+		setworn(NULL, otmp->owornmask & W_ARMU);
 		dropx(otmp);
 	}
 #endif
@@ -967,7 +967,7 @@ dobreathe (void)
 	    return(0);
 	}
 
-	if (!getdir((char *)0)) return(0);
+	if (!getdir(NULL)) return(0);
 
 	u.uen -= energy;
 	flags.botl = 1;
@@ -992,7 +992,7 @@ dospit (void)
 	struct obj *otmp;
 	struct attack *mattk;
 
-	if (!getdir((char *)0)) return(0);
+	if (!getdir(NULL)) return(0);
 	mattk = attacktype_fordmg(youmonst.data, AT_SPIT, AD_ANY);
 	if (!mattk)
 	    impossible("bad spit attack?");
@@ -1155,7 +1155,7 @@ dosummon (void)
 
 	You("call upon your brethren for help!");
 	exercise(A_WIS, TRUE);
-	if (!were_summon(youmonst.data, TRUE, &placeholder, (char *)0))
+	if (!were_summon(youmonst.data, TRUE, &placeholder, NULL))
 		pline("But none arrive.");
 	return(1);
 }
@@ -1362,7 +1362,7 @@ boolean silently;
 	if (uskin) {
 		if (!silently) Your("skin returns to its original form.");
 		uarm = uskin;
-		uskin = (struct obj *)0;
+		uskin = NULL;
 		/* undo save/restore hack */
 		uarm->owornmask &= ~I_SPECIAL;
 	}
@@ -1771,12 +1771,12 @@ merge_with_armor (void)
 	  !uarmu->cursed) {
 	    struct obj *otmp = uarmu;
 	    You("quickly remove your shirt as you start to change.");
-	    setworn((struct obj *)0, otmp->owornmask & W_ARMU);
+	    setworn(NULL, otmp->owornmask & W_ARMU);
 	    dropx(otmp);
 	}
 	You("merge with your scaly armor.");
 	uskin = uarm;
-	uarm = (struct obj *)0;
+	uarm = NULL;
 	/* save/restore hack */
 	uskin->owornmask |= I_SPECIAL;
 

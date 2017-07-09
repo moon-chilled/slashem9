@@ -365,7 +365,7 @@ gettech(tech_no)
 
 	    for(;;)  {
                 sprintf(qbuf, "Perform which technique? [%s ?]", lets);
-		if ((ilet = yn_function(qbuf, (char *)0, '\0')) == '?')
+		if ((ilet = yn_function(qbuf, NULL, '\0')) == '?')
 		    break;
 
 		if (index(quitchars, ilet))
@@ -538,7 +538,7 @@ char *verb;
     makeknown(MEDICAL_KIT);
     if (!(obj = carrying(MEDICAL_KIT))) {
 	if (feedback) You("need a medical kit to do that.");
-	return (struct obj *)0;
+	return NULL;
     }
     for (otmp = invent; otmp; otmp = otmp->nobj)
 	if (otmp->otyp == MEDICAL_KIT && otmp != obj)
@@ -546,7 +546,7 @@ char *verb;
     if (otmp) {	/* More than one medical kit */
 	obj = getobj(kits, verb);
 	if (!obj)
-	    return (struct obj *)0;
+	    return NULL;
     }
     for (otmp = obj->cobj; otmp; otmp = otmp->nobj)
 	if (otmp->otyp == type)
@@ -555,7 +555,7 @@ char *verb;
 	if (feedback)
 	    You_cant("find any more %s in %s.",
 		    makeplural(simple_typename(type)), yname(obj));
-	return (struct obj *)0;
+	return NULL;
     }
     return otmp;
 }
@@ -678,7 +678,7 @@ techeffects (int tech_no)
 		if (Sick || Slimed) {
 		    if (carrying(SCALPEL)) {
 			pline("Using your scalpel (ow!), you cure your infection!");
-			make_sick(0L, (char *)0, TRUE, SICK_ALL);
+			make_sick(0L, NULL, TRUE, SICK_ALL);
 			Slimed = 0;
 			if (Upolyd) {
 			    u.mh -= 5;
@@ -703,7 +703,7 @@ techeffects (int tech_no)
 			    otmp->ocontainer->owt = weight(otmp->ocontainer);
 			} else {
 			    obj_extract_self(otmp);
-			    obfree(otmp, (struct obj *)0);
+			    obfree(otmp, NULL);
 			}
 			pline("Using %s, you dress your wounds.", yname(otmp));
 			healup(techlev(tech_no) * (rnd(2)+1) + rn1(5,5),
@@ -723,7 +723,7 @@ techeffects (int tech_no)
 		    t_timeout = 3000;
 		} else if (Sick) {
 		    You("lay your hands on the foul sickness...");
-		    make_sick(0L, (char*)0, TRUE, SICK_ALL);
+		    make_sick(0L, NULL, TRUE, SICK_ALL);
 		    t_timeout = 3000;
 		} else if (Upolyd ? u.mh < u.mhmax : u.uhp < u.uhpmax) {
 		    pline("A warm glow spreads through your body!");
@@ -742,7 +742,7 @@ techeffects (int tech_no)
 	    case T_CALM_STEED:
                 if (u.usteed) {
                         pline("%s gets tamer.", Monnam(u.usteed));
-                        tamedog(u.usteed, (struct obj *) 0);
+                        tamedog(u.usteed, NULL);
                         t_timeout = rn1(1000,500);
                 } else
                         Your("technique is only effective when riding a monster.");
@@ -763,7 +763,7 @@ techeffects (int tech_no)
 		t_timeout = rn1(1000,500);
 		break;
 	    case T_CRIT_STRIKE:
-		if (!getdir((char *)0)) return(0);
+		if (!getdir(NULL)) return(0);
 		if (!u.dx && !u.dy) {
 		    /* Hopefully a mistake ;B */
 		    You("decide against that idea.");
@@ -803,7 +803,7 @@ techeffects (int tech_no)
 		    You("need a blade to perform cutthroat!");
 		    return 0;
 		}
-	    	if (!getdir((char *)0)) return 0;
+	    	if (!getdir(NULL)) return 0;
 		if (!u.dx && !u.dy) {
 		    /* Hopefully a mistake ;B */
 		    pline("Things may be going badly, but that's extreme.");
@@ -895,7 +895,7 @@ techeffects (int tech_no)
 		    	    int ttime = techt_inuse(tech_no);
 		    	    int type = little_to_big(monsndx(ptr));
 		    	    
-		    	    mtmp2 = tamedog(mtmp, (struct obj *) 0);
+		    	    mtmp2 = tamedog(mtmp, NULL);
 			    if (mtmp2)
 				mtmp = mtmp2;
 
@@ -1080,7 +1080,7 @@ techeffects (int tech_no)
 			    mtmp = revive(obj);
 			    if (mtmp) {
 				if (!resist(mtmp, SPBOOK_CLASS, 0, TELL)) {
-				   mtmp = tamedog(mtmp, (struct obj *) 0);
+				   mtmp = tamedog(mtmp, NULL);
 				   You("dominate %s!", mon_nam(mtmp));
 				} else setmangry(mtmp);
 			    }
@@ -1111,7 +1111,7 @@ techeffects (int tech_no)
 		    else if (mtmp->isshk)
 			make_happy_shk(mtmp, FALSE);
 		    else if (!resist(mtmp, SPBOOK_CLASS, 0, NOTELL))
-			(void) tamedog(mtmp, (struct obj *) 0);
+			(void) tamedog(mtmp, NULL);
 		}
             	if (Upolyd) u.mh -= num;
             	else u.uhp -= num;
@@ -1218,7 +1218,7 @@ techeffects (int tech_no)
 	    		return(0);
 		}
 
-	    	if (!getdir((char *)0)) return(0);
+	    	if (!getdir(NULL)) return(0);
 		if (!u.dx && !u.dy) {
 			/* Hopefully a mistake ;B */
 			pline("Why don't you try wielding something else instead.");
@@ -1340,7 +1340,7 @@ techeffects (int tech_no)
 	    		You("can't see anything!");
 	    		return(0);
 	    	}
-	    	if (!getdir((char *)0)) return(0);
+	    	if (!getdir(NULL)) return(0);
 		if (!u.dx && !u.dy) {
 			/* Hopefully a mistake ;B */
 			You("can't see yourself!");
@@ -1389,7 +1389,7 @@ techeffects (int tech_no)
 			You("can't do this while holding a shield!");
 	    		return(0);
 	    	}
-		if (!getdir((char *)0)) return(0);
+		if (!getdir(NULL)) return(0);
 		if (!u.dx && !u.dy) {
 			You("flex your muscles.");
 			return(0);
@@ -1405,7 +1405,7 @@ techeffects (int tech_no)
 			You("can't do this while holding a shield!");
 	    		return(0);
 	    	}
-		if (!getdir((char *)0)) return(0);
+		if (!getdir(NULL)) return(0);
 		if (!u.dx && !u.dy) {
 			You("flex your muscles.");
 			return(0);
@@ -1414,7 +1414,7 @@ techeffects (int tech_no)
                 t_timeout = rn1(1000,500);
 		break;
             case T_DASH:
-		if (!getdir((char *)0)) return(0);
+		if (!getdir(NULL)) return(0);
 		if (!u.dx && !u.dy) {
 			You("stretch.");
 			return(0);
@@ -1434,7 +1434,7 @@ techeffects (int tech_no)
 			You("can't do this while holding a shield!");
 	    		return(0);
 	    	}
-		if (!getdir((char *)0)) return(0);
+		if (!getdir(NULL)) return(0);
             	if (!blitz_spirit_bomb()) return(0);
 		t_timeout = rn1(1000,500);
 		break;            	
@@ -1461,7 +1461,7 @@ techeffects (int tech_no)
 		    obj->quan--;
 		else {
 		    obj_extract_self(obj);
-		    obfree(obj, (struct obj *)0);
+		    obfree(obj, NULL);
 		}
 		pline("Using your medical kit, you draw off a phial of your blood.");
 		losexp("drawing blood", TRUE);
@@ -1828,7 +1828,7 @@ static const struct blitz_tab blitzes[] = {
 	{"RLR", 3, blitz_pummel, T_PUMMEL, BLITZ_CHAIN},
 	{"DDDD", 4, blitz_g_slam, T_G_SLAM, BLITZ_END},
 	{"DUDUUDDD", 8, blitz_spirit_bomb, T_SPIRIT_BOMB, BLITZ_END},
-	{"", 0, (void *)0, 0, BLITZ_END} /* Array terminator */
+	{"", 0, NULL, 0, BLITZ_END} /* Array terminator */
 };
 
 #define MAX_BLITZ 50
@@ -1857,7 +1857,7 @@ doblitz (void)
 
 	bp = buf;
 	
-	if (!getdir((char *)0)) return(0);
+	if (!getdir(NULL)) return(0);
 	if (!u.dx && !u.dy) {
 		return(0);
 	}

@@ -152,7 +152,7 @@ tc_find(fp, term, buffer, bufsiz)
 	    ip += len,  in -= len;
 	} while (*(ip - 1) != '\n' && in > 0);
 	if (ferror(fp) || ip == buffer || *(ip - 1) != '\n')
-	    return (char *)0;
+	    return NULL;
 	*--ip = '\0';		/* strip newline */
 	if (!skip)  ip = tc_name(term, tcbuf);
     } while (skip || !ip);
@@ -175,7 +175,7 @@ tc_find(fp, term, buffer, bufsiz)
 	rewind(fp);
 	tc_fetch = tc_find(fp, tc_fetch, tcbuf, min(bufsiz,TCBUFSIZ));
 	if (!tc_fetch)
-	    return (char *)0;
+	    return NULL;
 	if (op > buffer && *(op - 1) == ':' && *tc_fetch == ':')
 	    ++tc_fetch;
 	strcpy(op, tc_fetch);
@@ -200,7 +200,7 @@ tc_name(nam, ent)
 	    return lst;
 	p = nxt + 1;
     }
-    return (char *)0;
+    return NULL;
 }
 
 /* look up a numeric entry */
@@ -243,7 +243,7 @@ tgetstr(which, outptr)
     const char *q, *p = tc_field(which, &q);
 
     if (!p || p[2] != '=')
-	return (char *)0;
+	return NULL;
     p += 3;
     if ((q = index(p, ':')) == 0)  q = p + strlen(p);
     r = result = *outptr;
@@ -403,7 +403,7 @@ tparam(ctl, buf, buflen, row, col, row2, col2)
 	    }
 	}
 	if (++r > bufend)
-	    return (char *)0;
+	    return NULL;
     }
 #ifndef NO_SPECIAL_CHARS_FIXUP
     if (bc || up) {
@@ -414,7 +414,7 @@ tparam(ctl, buf, buflen, row, col, row2, col2)
 	    for (z = UP; *z && r <= bufend; z++)
 		*r++ = *z;
 	if (r > bufend)
-	    return (char *)0;
+	    return NULL;
     }
 #endif	/* !NO_SPECIAL_CHARS_FIXUP */
     *r = '\0';

@@ -544,7 +544,7 @@ const char *filename;
 	FILE *fp;
 
 	fp = fopen(filename, RDTMODE);
-	if (fp == (FILE *)0) {
+	if (fp == NULL) {
 		fprintf(stderr, "cannot open text file %s\n", filename);
 		return FALSE;
 	}
@@ -578,13 +578,13 @@ const char *type;
 		return FALSE;
 	}
 
-	if ((write_mode ? out_file : in_file) != (FILE *)0) {
+	if ((write_mode ? out_file : in_file) != NULL) {
 		fprintf(stderr, "can only open one text file at at time\n");
 		return FALSE;
 	}
 
 	fp = fopen(filename, type);
-	if (fp == (FILE *)0) {
+	if (fp == NULL) {
 		fprintf(stderr, "cannot open text file %s\n", filename);
 		return FALSE;
 	}
@@ -685,12 +685,12 @@ fclose_text_file()
 	if (in_file)
 	{
 		ret |= !!fclose(in_file);
-		in_file = (FILE *)0;
+		in_file = NULL;
 	}
 	if (out_file)
 	{
 		ret |= !!fclose(out_file);
-		out_file = (FILE *)0;
+		out_file = NULL;
 	}
 	return ret;
 }

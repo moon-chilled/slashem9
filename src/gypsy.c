@@ -365,7 +365,7 @@ fortune (mtmp)
 			break;
 		case 10: /* Punishment */
 			if (!Punished)
-				punish((struct obj *)0);
+				punish(NULL);
 			else
 				rndcurse();
 			break;
@@ -395,7 +395,7 @@ fortune (mtmp)
 		case 15: /* the Star */
 			otyp = birthstones[getmonth()];
 			makeknown(otyp);
-			if ((otmp = mksobj(otyp, TRUE, FALSE)) != (struct obj *)0) {
+			if ((otmp = mksobj(otyp, TRUE, FALSE)) != NULL) {
 				pline("%s reaches behind your %s and pulls out %s.",
 						Monnam(mtmp), body_part(HEAD), doname(otmp));
 				if (pickup_object(otmp, otmp->quan, FALSE) <= 0) {

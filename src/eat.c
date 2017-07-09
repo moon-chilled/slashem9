@@ -369,7 +369,7 @@ static struct obj *touchfood(struct obj *otmp) {
  * in do_reset_eat().
  */
 void food_disappears(struct obj *obj) {
-	if (obj == victual.piece) victual.piece = (struct obj *)0;
+	if (obj == victual.piece) victual.piece = NULL;
 	if (obj->timed) obj_stop_timers(obj);
 }
 
@@ -453,7 +453,7 @@ static void done_eating(boolean message) {
 	else
 	if (carried(victual.piece)) useup(victual.piece);
 	else useupf(victual.piece, 1L);
-	victual.piece = (struct obj *) 0;
+	victual.piece = NULL;
 	victual.fullwarn = victual.eating = victual.doreset = FALSE;
 }
 
@@ -526,7 +526,7 @@ static void cprefx(int pm) {
 		    /* cannot appear in tins, victual.piece will always */
 		    /* be what we want, which is not generally true. */
 		    if (revive_corpse(victual.piece, FALSE))
-			victual.piece = (struct obj *)0;
+			victual.piece = NULL;
 		    return;
 		}
 	    case PM_GREEN_SLIME:
@@ -1069,7 +1069,7 @@ static void cpostfx(int pm) {
 			pline ("Oh wow!  Great stuff!");
 			make_hallucinated(HHallucination + 200,FALSE,0L);
 		}
-		if(is_giant(ptr) && !rn2(4)) gainstr((struct obj *)0, 0);
+		if(is_giant(ptr) && !rn2(4)) gainstr(NULL, 0);
 
 		/* Check the monster for all of the intrinsics.  If this
 		 * monster can give more than one, pick one to try to give
@@ -1220,7 +1220,7 @@ static int opentin(void) {
 		goto use_me;
 	    }
 	    /* in case stop_occupation() was called on previous meal */
-	    victual.piece = (struct obj *)0;
+	    victual.piece = NULL;
 	    victual.fullwarn = victual.eating = victual.doreset = FALSE;
 
 	    /* WAC - you only recognize if you've eaten this before */
@@ -1281,7 +1281,7 @@ static int opentin(void) {
 use_me:
 	if (carried(tin.tin)) useup(tin.tin);
 	else useupf(tin.tin, 1L);
-	tin.tin = (struct obj *) 0;
+	tin.tin = NULL;
 	return(0);
 }
 
@@ -1321,7 +1321,7 @@ static void start_tin(struct obj *otmp) {
 			goto no_opener;
 		}
 		pline("Using your %s you try to open the tin.",
-			aobjnam(uwep, (char *)0));
+			aobjnam(uwep, NULL));
 	} else {
 no_opener:
 		pline("It is not so easy to open this tin.");
@@ -1918,7 +1918,7 @@ static void eatspecial(void) {
 	set_occupation(eatfood, "eating non-food", 0);
 	lesshungry(victual.nmod);
 	occupation = 0;
-	victual.piece = (struct obj *)0;
+	victual.piece = NULL;
 	victual.eating = 0;
 	if (otmp->oclass == COIN_CLASS) {
 #ifdef GOLDOBJ
@@ -1997,7 +1997,7 @@ static void fpostfx(struct obj *otmp) {
 				if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 			}
 		}
-		if (Sick) make_sick(0L, (char *)0, TRUE, SICK_ALL);
+		if (Sick) make_sick(0L, NULL, TRUE, SICK_ALL);
 		if (u.ulycn != -1) {
 		    you_unwere(TRUE);
 		}
@@ -2076,7 +2076,7 @@ static void fpostfx(struct obj *otmp) {
 		break;
 	    case EUCALYPTUS_LEAF:
 		if (Sick && !otmp->cursed)
-		    make_sick(0L, (char *)0, TRUE, SICK_ALL);
+		    make_sick(0L, NULL, TRUE, SICK_ALL);
 		if (Vomiting && !otmp->cursed)
 		    make_vomiting(0L, TRUE);
 		break;
@@ -2228,7 +2228,7 @@ int doeat(void)	{
 		return 0;
 	}
 	if (!(otmp = floorfood("eat"))) return 0;
-	if (check_capacity((char *)0)) return 0;
+	if (check_capacity(NULL)) return 0;
 
 	if (u.uedibility) {
 		int res = edibility_prompts(otmp);
@@ -2346,14 +2346,14 @@ int doeat(void)	{
 	 */
 	if (otmp == victual.piece &&
 	  is_vampire(youmonst.data) != otmp->odrained)
-	    victual.piece = (struct obj *)0;	/* Can't resume */
+	    victual.piece = NULL;	/* Can't resume */
 
 	/* [ALI] Blood can coagulate during the interruption
 	 *       but not during the draining process.
 	 */
 	if(otmp == victual.piece && otmp->odrained &&
 	  (peek_at_iced_corpse_age(otmp) + victual.usedtime + 5) < monstermoves)
-	    victual.piece = (struct obj *)0;	/* Can't resume */
+	    victual.piece = NULL;	/* Can't resume */
 
 	if(otmp == victual.piece) {
 	/* If they weren't able to choke, they don't suddenly become able to
@@ -2391,7 +2391,7 @@ int doeat(void)	{
 	    int tmp = eatcorpse(otmp);
 	    if (tmp == 3) {
 		/* inedible */
-		victual.piece = (struct obj *)0;
+		victual.piece = NULL;
 		/*
 		 * The combination of odrained == TRUE and oeaten == cnutrit
 		 * represents the case of starting to drain a corpse but not
@@ -2407,7 +2407,7 @@ int doeat(void)	{
 		return 0;
 	    } else if (tmp == 2) {
 		/* used up */
-		victual.piece = (struct obj *)0;
+		victual.piece = NULL;
 		return(1);
 	    } else if (tmp)
 		dont_start = TRUE;
@@ -2445,7 +2445,7 @@ int doeat(void)	{
 		    dont_start = TRUE;
 		}
 		if (otmp->oeaten < 2) {
-		    victual.piece = (struct obj *)0;
+		    victual.piece = NULL;
 		    if (carried(otmp)) useup(otmp);
 		    else useupf(otmp, 1L);
 		    return 1;
@@ -2579,7 +2579,7 @@ void lesshungry(int num) {
 		    choke(victual.piece);
 		    reset_eat();
 		} else
-		    choke(occupation == opentin ? tin.tin : (struct obj *)0);
+		    choke(occupation == opentin ? tin.tin : NULL);
 		/* no reset_eat() */
 	    }
 	} else {
@@ -2598,7 +2598,7 @@ void lesshungry(int num) {
 			    /* a one-gulp food will not survive a stop */
 			    if (yn_function("Stop eating?",ynchars,'y')=='y') {
 				reset_eat();
-				nomovemsg = (char *)0;
+				nomovemsg = NULL;
 			    }
 			}
 		    }
@@ -2805,7 +2805,7 @@ static struct obj *floorfood(const char *verb) {
 		    deltrap(ttmp);
 		    return mksobj(BEARTRAP, TRUE, FALSE);
 		} else if (c == 'q') {
-		    return (struct obj *)0;
+		    return NULL;
 		}
 	    }
 	}
@@ -2820,7 +2820,7 @@ static struct obj *floorfood(const char *verb) {
 /* added nomul (MRS) - it makes sense, you're too busy being sick! */
 // A good idea from David Neves
 void vomit(void)	{
-	make_sick(0L, (char *) 0, TRUE, SICK_VOMITABLE);
+	make_sick(0L, NULL, TRUE, SICK_VOMITABLE);
 	nomul(-2);
 	nomovemsg = 0;
 }

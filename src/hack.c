@@ -635,7 +635,7 @@ still_chewing(x,y)
 {
     struct rm *lev = &levl[x][y];
     struct obj *boulder = sobj_at(BOULDER,x,y);
-    const char *digtxt = (char *)0, *dmgtxt = (char *)0;
+    const char *digtxt = NULL, *dmgtxt = NULL;
 
     if (digging.down)		/* not continuing previous dig (w/ pick-axe) */
 	(void) memset((void *)&digging, 0, sizeof digging);
@@ -660,7 +660,7 @@ still_chewing(x,y)
 	    (boulder || IS_TREE(lev->typ)) ? "on a" : "a hole in the",
 	    boulder ? "boulder" :
 	    IS_TREE(lev->typ) ? "tree" : IS_ROCK(lev->typ) ? "rock" : "door");
-	watch_dig((struct monst *)0, x, y, FALSE);
+	watch_dig(NULL, x, y, FALSE);
 	return 1;
     } else if ((digging.effort += (30 + u.udaminc)) <= 100)  {
 	if (flags.verbose)
@@ -670,7 +670,7 @@ still_chewing(x,y)
 		IS_TREE(lev->typ) ? "tree" :
 		IS_ROCK(lev->typ) ? "rock" : "door");
 	digging.chew = TRUE;
-	watch_dig((struct monst *)0, x, y, FALSE);
+	watch_dig(NULL, x, y, FALSE);
 	return 1;
     }
 
@@ -2218,7 +2218,7 @@ register boolean newlev;
 		case DELPHI:
 		    if(monstinroom(&mons[PM_ORACLE], roomno))
 			verbalize("%s, %s, welcome to Delphi!",
-					Hello((struct monst *) 0), plname);
+					Hello(NULL), plname);
 		    break;
 		case TEMPLE:
 		    intemple(roomno + ROOMOFFSET);
@@ -2297,7 +2297,7 @@ dopickup (void)
 		return(1);
 	    } else {
 	    	int tmpcount = -count;
-		return loot_mon(u.ustuck, &tmpcount, (boolean *)0);
+		return loot_mon(u.ustuck, &tmpcount, NULL);
 	    }
 	}
 	if(is_pool(u.ux, u.uy)) {

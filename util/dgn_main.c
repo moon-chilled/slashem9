@@ -75,7 +75,7 @@ char **argv;
 	    if (fatal_error > 0)
 		errors_encountered = TRUE;
 	} else {		/* Otherwise every argument is a filename */
-	    infile = outfile = (char *)0;
+	    infile = outfile = NULL;
 	    for(i=1; i<argc; i++) {
 		if (infile) free(infile);
 		infile = (char*)alloc(strlen(argv[i]) + 1);

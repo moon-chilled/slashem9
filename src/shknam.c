@@ -254,7 +254,7 @@ const struct shclass shtypes[] = {
 	    {16, -OIL_LAMP}, {3, -MAGIC_LAMP}, {5, -MAGIC_CANDLE}}, shklight},
 	{"black market", RANDOM_CLASS, 0, D_SHOP,
 	   {{100, RANDOM_CLASS}, {0, 0}, {0, 0}}, shkblack},
-	{(char *)0, 0, 0, 0, {{0, 0}, {0, 0}, {0, 0}}, 0}
+	{NULL, 0, 0, 0, {{0, 0}, {0, 0}, {0, 0}}, 0}
 };
 
 #if 0

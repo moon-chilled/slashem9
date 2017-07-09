@@ -63,7 +63,7 @@ char pl_race = '\0';
 
 char pl_fruit[PL_FSIZ] = DUMMY;
 int current_fruit = 0;
-struct fruit *ffruit = (struct fruit *)0;
+struct fruit *ffruit = NULL;
 
 char tune[6] = DUMMY;
 
@@ -132,32 +132,32 @@ struct mkroom* subrooms = &rooms[MAXNROFROOMS+1];
 struct mkroom *upstairs_room, *dnstairs_room, *sstairs_room;
 
 dlevel_t level;		/* level map */
-struct trap *ftrap = (struct trap *)0;
+struct trap *ftrap = NULL;
 struct monst youmonst = DUMMY;
 struct permonst upermonst = DUMMY;
 struct flag flags = DUMMY;
 struct instance_flags iflags = DUMMY;
 struct you u = DUMMY;
 
-struct obj *invent = (struct obj *)0,
-	*uwep = (struct obj *)0, *uarm = (struct obj *)0,
-	*uswapwep = (struct obj *)0,
-	*uquiver = (struct obj *)0, /* quiver */
+struct obj *invent = NULL,
+	*uwep = NULL, *uarm = NULL,
+	*uswapwep = NULL,
+	*uquiver = NULL, /* quiver */
 #ifdef TOURIST
-	*uarmu = (struct obj *)0, /* under-wear, so to speak */
+	*uarmu = NULL, /* under-wear, so to speak */
 #endif
-	*uskin = (struct obj *)0, /* dragon armor, if a dragon */
-	*uarmc = (struct obj *)0, *uarmh = (struct obj *)0,
-	*uarms = (struct obj *)0, *uarmg = (struct obj *)0,
-	*uarmf = (struct obj *)0, *uamul = (struct obj *)0,
-	*uright = (struct obj *)0,
-	*uleft = (struct obj *)0,
-	*ublindf = (struct obj *)0,
+	*uskin = NULL, /* dragon armor, if a dragon */
+	*uarmc = NULL, *uarmh = NULL,
+	*uarms = NULL, *uarmg = NULL,
+	*uarmf = NULL, *uamul = NULL,
+	*uright = NULL,
+	*uleft = NULL,
+	*ublindf = NULL,
 #ifdef STEED
-	*usaddle = (struct obj *)0,
+	*usaddle = NULL,
 #endif
-	*uchain = (struct obj *)0,
-	*uball = (struct obj *)0;
+	*uchain = NULL,
+	*uball = NULL;
 
 #ifdef TEXTCOLOR
 /*
@@ -190,9 +190,9 @@ long moves = 1L, monstermoves = 1L;
 long wailmsg = 0L;
 
 /* objects that are moving to another dungeon level */
-struct obj *migrating_objs = (struct obj *)0;
+struct obj *migrating_objs = NULL;
 /* objects not yet paid for */
-struct obj *billobjs = (struct obj *)0;
+struct obj *billobjs = NULL;
 
 /* used to zero all elements of a struct obj */
 struct obj zeroobj = DUMMY;
@@ -216,9 +216,9 @@ char whitedragonname[PL_PSIZ] = DUMMY;
 #endif
 char preferred_pet;	/* '\0', 'c', 'd', 'n' (none) */
 /* monsters that went down/up together with @ */
-struct monst *mydogs = (struct monst *)0;
+struct monst *mydogs = NULL;
 /* monsters that are moving to another dungeon level */
-struct monst *migrating_mons = (struct monst *)0;
+struct monst *migrating_mons = NULL;
 
 struct mvitals mvitals[NUMMONS];
 
@@ -311,8 +311,8 @@ struct tileset def_tilesets[] = {
 
 char tileset[PL_PSIZ] = DUMMY;
 
-char *fqn_prefix[PREFIX_COUNT] = { (char *)0, (char *)0, (char *)0, (char *)0,
-				(char *)0, (char *)0, (char *)0, (char *)0, (char *)0 };
+char *fqn_prefix[PREFIX_COUNT] = { NULL, NULL, NULL, NULL,
+				NULL, NULL, NULL, NULL, NULL };
 
 #ifdef PREFIXES_IN_USE
 char *fqn_prefix_names[PREFIX_COUNT] = { "hackdir", "leveldir", "savedir",

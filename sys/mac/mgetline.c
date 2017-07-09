@@ -63,9 +63,9 @@ mac_get_ext_cmd() {
 
 	if (iflags.extmenu) return extcmd_via_menu();
 	topl_getlin("# ", bufp, true);
-	for (i = 0; extcmdlist[i].ef_txt != (char *)0; i++)
+	for (i = 0; extcmdlist[i].ef_txt != NULL; i++)
 		if (!strcmp(bufp, extcmdlist[i].ef_txt)) break;
-	if (extcmdlist[i].ef_txt == (char *)0) i = -1;    /* not found */
+	if (extcmdlist[i].ef_txt == NULL) i = -1;    /* not found */
 
 	return i;
 }

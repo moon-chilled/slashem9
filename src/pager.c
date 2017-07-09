@@ -58,8 +58,8 @@ lookat(x, y, buf, monbuf)
     int x, y;
     char *buf, *monbuf;
 {
-    register struct monst *mtmp = (struct monst *) 0;
-    struct permonst *pm = (struct permonst *) 0;
+    register struct monst *mtmp = NULL;
+    struct permonst *pm = NULL;
     int glyph;
 
     buf[0] = monbuf[0] = 0;
@@ -143,7 +143,7 @@ lookat(x, y, buf, monbuf)
 	bhitpos.x = x;
 	bhitpos.y = y;
 	mtmp = m_at(x,y);
-	if (mtmp != (struct monst *) 0) {
+	if (mtmp != NULL) {
 	    char *name, monnambuf[BUFSZ];
 	    boolean accurate = !Hallucination;
 
@@ -308,7 +308,7 @@ lookat(x, y, buf, monbuf)
 	break;
     }
 
-    return ((pm && !Hallucination) ? pm : (struct permonst *) 0);
+    return ((pm && !Hallucination) ? pm : NULL);
 }
 
 /*
@@ -344,7 +344,7 @@ checkfile(inp, pm, user_typed_name, without_asking)
      * for Angel and angel, make the lookup string the same for both
      * user_typed_name and picked name.
      */
-    if (pm != (struct permonst *) 0 && !user_typed_name)
+    if (pm != NULL && !user_typed_name)
 	dbase_str = strcpy(newstr, pm->mname);
     else dbase_str = strcpy(newstr, inp);
     (void) lcase(dbase_str);
@@ -528,7 +528,7 @@ do_look(quick)
     do {
 	/* Reset some variables. */
 	need_to_look = FALSE;
-	pm = (struct permonst *)0;
+	pm = NULL;
 	skipped_venom = 0;
 	found = 0;
 	out_str[0] = '\0';
@@ -870,7 +870,7 @@ dowhatdoes_core (char q, char *cbuf)
 	    }
 	}
 	(void) dlb_fclose(fp);
-	return (char *)0;
+	return NULL;
 }
 
 int 
@@ -882,7 +882,7 @@ dowhatdoes (void)
 #ifdef UNIX
 	introff();
 #endif
-	q = yn_function("What command?", (char *)0, '\0');
+	q = yn_function("What command?", NULL, '\0');
 #ifdef UNIX
 	intron();
 #endif
@@ -916,7 +916,7 @@ static const char *help_menu_items[] = {
 	"List of wizard-mode commands.",
 #endif
 	"",
-	(char *)0
+	NULL
 };
 
 enum {
@@ -949,7 +949,7 @@ help_menu(sel)
 	start_menu(tmpwin);
 #ifdef WIZARD
 	if (!wizard) help_menu_items[WIZHLP_SLOT] = "",
-		     help_menu_items[WIZHLP_SLOT+1] = (char *)0;
+		     help_menu_items[WIZHLP_SLOT+1] = NULL;
 #endif
 	for (i = 0; help_menu_items[i]; i++)
 #ifdef PORT_HELP

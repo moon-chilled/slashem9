@@ -27,7 +27,7 @@ struct proto_dungeon {
 
 int n_dgns;				/* number of dungeons (used here,  */
 					/*   and mklev.c)		   */
-static branch *branches = (branch *) 0;	/* dungeon branch list		   */
+static branch *branches = NULL;	/* dungeon branch list		   */
 
 struct lchoice {
 	int idx;
@@ -150,13 +150,13 @@ void restore_dungeon(int fd) {
     mread(fd, (void *) &dungeon_topology, sizeof dungeon_topology);
     mread(fd, (void *) tune, sizeof tune);
 
-    last = branches = (branch *) 0;
+    last = branches = NULL;
 
     mread(fd, (void *) &count, sizeof(count));
     for (i = 0; i < count; i++) {
 	curr = (branch *) alloc(sizeof(branch));
 	mread(fd, (void *) curr, sizeof(branch));
-	curr->next = (branch *) 0;
+	curr->next = NULL;
 	if (last)
 	    last->next = curr;
 	else
@@ -314,7 +314,7 @@ void insert_branch(branch *new_branch, boolean extract_first) {
 	else
 	    branches = curr->next;
     }
-    new_branch->next = (branch *) 0;
+    new_branch->next = NULL;
 
 /* Convert the branch into a unique number so we can sort them. */
 #define branch_val(bp) \
@@ -325,7 +325,7 @@ void insert_branch(branch *new_branch, boolean extract_first) {
     /*
      * Insert the new branch into the correct place in the branch list.
      */
-    prev = (branch *) 0;
+    prev = NULL;
     prev_val = -1;
     new_val = branch_val(new_branch);
     for (curr = branches; curr;
@@ -349,7 +349,7 @@ static branch *add_branch(int dgn, int branch_num, struct proto_dungeon *pd) {
     int entry_lev;
 
     new_branch = (branch *) alloc(sizeof(branch));
-    new_branch->next = (branch *) 0;
+    new_branch->next = NULL;
     new_branch->id = branch_id++;
     new_branch->type = correct_branch_type(&pd->tmpbranch[branch_num]);
     new_branch->end1.dnum = pd->tmpparent[branch_num];
@@ -389,7 +389,7 @@ static branch *add_branch(int dgn, int branch_num, struct proto_dungeon *pd) {
 static void add_level(s_level *new_lev) {
 	s_level *prev, *curr;
 
-	prev = (s_level *) 0;
+	prev = NULL;
 	for (curr = sp_levchn; curr; curr = curr->next) {
 	    if (curr->dlevel.dnum == new_lev->dlevel.dnum &&
 		    curr->dlevel.dlevel > new_lev->dlevel.dlevel)
@@ -409,7 +409,7 @@ static void init_level(int dgn, int proto_index, struct proto_dungeon *pd) {
 	s_level	*new_level;
 	struct tmplevel *tlevel = &pd->tmplevel[proto_index];
 
-	pd->final_lev[proto_index] = (s_level *) 0; /* no "real" level */
+	pd->final_lev[proto_index] = NULL; /* no "real" level */
 #ifdef WIZARD
 /*      if (!wizard)   */
 #endif
@@ -433,7 +433,7 @@ static void init_level(int dgn, int proto_index, struct proto_dungeon *pd) {
 		((pd->tmpdungeon[dgn].flags & D_ALIGN_MASK) >> 4);
 
 	new_level->rndlevs = tlevel->rndlevs;
-	new_level->next    = (s_level *) 0;
+	new_level->next    = NULL;
 }
 
 static int possible_places(int idx, boolean *map, struct proto_dungeon *pd) {
@@ -564,7 +564,7 @@ struct level_map {
 	{ X_START,	&qstart_level },
 	{ X_LOCATE,	&qlocate_level },
 	{ X_GOAL,	&nemesis_level },
-	{ "",		(d_level *)0 }
+	{ "",		NULL }
 };
 
 void init_dungeons(void) {
@@ -623,7 +623,7 @@ void init_dungeons(void) {
 	 * Read in each dungeon and transfer the results to the internal
 	 * dungeon arrays.
 	 */
-	sp_levchn = (s_level *) 0;
+	sp_levchn = NULL;
 	Fread((void *)&n_dgns, sizeof(int), 1, dgn_file);
 	if (n_dgns >= MAXDUNGEON)
 	    panic("init_dungeons: too many dungeons");
@@ -945,7 +945,7 @@ s_level *Is_special(d_level *lev) {
 	for (levtmp = sp_levchn; levtmp; levtmp = levtmp->next)
 	    if (on_level(lev, &levtmp->dlevel)) return(levtmp);
 
-	return((s_level *)0);
+	return(NULL);
 }
 
 /*
@@ -959,7 +959,7 @@ branch *Is_branchlev(d_level *lev) {
 	    if (on_level(lev, &curr->end1) || on_level(lev, &curr->end2))
 		return curr;
 	}
-	return (branch *) 0;
+	return NULL;
 }
 
 /* goto the next level (or appropriate dungeon) */

@@ -35,7 +35,7 @@ attacktype_fordmg (struct permonst *ptr, int atyp, int dtyp)
 	if (a->aatyp == atyp && (dtyp == AD_ANY || a->adtyp == dtyp))
 	    return a;
 
-    return (struct attack *)0;
+    return NULL;
 }
 
 boolean
@@ -198,7 +198,7 @@ struct obj *obj;		/* aatyp == AT_WEAP, AT_SPIT */
 	    o = (mdef == &youmonst) ? invent : mdef->minvent;
 	    for ( ; o; o = o->nobj)
 		if ((o->owornmask & W_ARMH) &&
-		    (s = OBJ_DESCR(objects[o->otyp])) != (char *)0 &&
+		    (s = OBJ_DESCR(objects[o->otyp])) != NULL &&
 		    !strcmp(s, "visored helmet"))
 		    return FALSE;
 	}
@@ -312,7 +312,7 @@ dmgtype_fromattack (struct permonst *ptr, int dtyp, int atyp)
 	if (a->adtyp == dtyp && (atyp == AT_ANY || a->aatyp == atyp))
 	    return a;
 
-    return (struct attack *)0;
+    return NULL;
 }
 
 boolean
@@ -486,7 +486,7 @@ name_to_mon (const char *in_str)
 		}
 	    }
 	}
-	if (mntmp == NON_PM) mntmp = title_to_mon(str, (int *)0, (int *)0);
+	if (mntmp == NON_PM) mntmp = title_to_mon(str, NULL, NULL);
 	return mntmp;
 }
 

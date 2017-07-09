@@ -87,7 +87,7 @@ static const char *ends[] = {		/* "when you..." */
 };
 
 #ifdef DUMP_LOG
-FILE *dump_fp = (FILE *)0;  /* file pointer for dumps */
+FILE *dump_fp = NULL;  /* file pointer for dumps */
 /* functions dump_init, dump_exit and dump are from the dump patch */
 
 void 
@@ -197,7 +197,7 @@ done2 (void)
 # endif
 	    if ((c = ynq(tmp)) == 'y') {
 		(void) signal(SIGINT, (SIG_RET_TYPE) done1);
-		exit_nhwindows((char *)0);
+		exit_nhwindows(NULL);
 		NH_abort();
 	    } else if (c == 'q') done_stopprint++;
 	}
@@ -332,7 +332,7 @@ panic VA_DECL(const char *, str)
 	if (iflags.window_inited) {
 	    raw_print("\r\nOops...");
 	    wait_synch();	/* make sure all pending output gets flushed */
-	    exit_nhwindows((char *)0);
+	    exit_nhwindows(NULL);
 	    iflags.window_inited = 0; /* they're gone; force raw_print()ing */
 	}
 
@@ -446,10 +446,10 @@ boolean taken;
 			    obj->known = obj->bknown = obj->dknown = obj->rknown = 1;
 			}
 #ifdef DUMP_LOG
-			(void) dump_inventory((char *)0, TRUE);
+			(void) dump_inventory(NULL, TRUE);
 			do_containerconts(invent, TRUE, TRUE, TRUE);
 #else
-			(void) display_inventory((char *)0, TRUE);
+			(void) display_inventory(NULL, TRUE);
 			container_contents(invent, TRUE, TRUE);
 #endif /* DUMP_LOG */
 		}
@@ -641,7 +641,7 @@ done (int how)
 	char kilbuf[BUFSZ], pbuf[BUFSZ];
 	winid endwin = WIN_ERR;
 	boolean bones_ok, have_windows = iflags.window_inited;
-	struct obj *corpse = (struct obj *)0;
+	struct obj *corpse = NULL;
 	long umoney;
 
 	if (how == TRICKED) {
@@ -882,7 +882,7 @@ die:
 		savebones(corpse);
 	    /* corpse may be invalid pointer now so
 		ensure that it isn't used again */
-	    corpse = (struct obj *)0;
+	    corpse = NULL;
 	}
 
 	/* update gold for the rip output, which can't use hidden_gold()
@@ -1008,7 +1008,7 @@ die:
 			sprintf(pbuf, "%8ld %s (worth %ld %s),",
 				count, xname(otmp),
 				count * (long)objects[typ].oc_cost, currency(2L));
-			obfree(otmp, (struct obj *)0);
+			obfree(otmp, NULL);
 		    } else {
 			sprintf(pbuf,
 				"%8ld worthless piece%s of colored glass,",
@@ -1079,10 +1079,10 @@ die:
 	if (flags.toptenwin) {
 	    topten(how);
 	    if (have_windows)
-		exit_nhwindows((char *)0);
+		exit_nhwindows(NULL);
 	} else {
 	    if (have_windows)
-		exit_nhwindows((char *)0);
+		exit_nhwindows(NULL);
 	    topten(how);
 	}
 #ifdef DUMP_LOG

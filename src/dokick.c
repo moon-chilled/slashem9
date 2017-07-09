@@ -75,7 +75,7 @@ static void kickdmg(struct monst *mon, boolean clumsy) {
 		if (martial()) {
 		    if (dmg > 1) kick_skill = P_MARTIAL_ARTS;
 		    dmg += rn2(ACURR(A_DEX)/2 + 1);
-		    dmg += weapon_dam_bonus((struct obj *)0);
+		    dmg += weapon_dam_bonus(NULL);
 		}
 		/* a good kick exercises your dex */
 		exercise(A_DEX, TRUE);
@@ -373,7 +373,7 @@ void container_impact_dmg(struct obj *obj) {
 		   *in_rooms(x, y, SHOPBASE) == *u.ushops);
 
 	for (otmp = obj->cobj; otmp; otmp = otmp2) {
-	    const char *result = (char *)0;
+	    const char *result = NULL;
 
 	    otmp2 = otmp->nobj;
 	    if (objects[otmp->otyp].oc_material == GLASS &&
@@ -397,7 +397,7 @@ void container_impact_dmg(struct obj *obj) {
 		    useup(otmp);
 		else {
 		    obj_extract_self(otmp);
-		    obfree(otmp, (struct obj *) 0);
+		    obfree(otmp, NULL);
 		}
 	    }
 	}
@@ -697,7 +697,7 @@ int dokick(void) {
 		return 0;
 	}
 
-	if(!getdir((char *)0)) return(0);
+	if(!getdir(NULL)) return(0);
 	if(!u.dx && !u.dy) return(0);
 
 	x = u.ux + u.dx;
@@ -787,7 +787,7 @@ int dokick(void) {
 		return 1;
 	}
 
-	kickobj = (struct obj *)0;
+	kickobj = NULL;
 	if (OBJ_AT(x, y) &&
 	    (!Levitation || Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)
 	     || sobj_at(BOULDER,x,y))) {
@@ -1137,7 +1137,7 @@ dumb:
 				if (x == doors[i].x && y == doors[i].y)
 				    break;
 			    if (i < 0)
-				i = add_door(x, y, (struct mkroom *)0);
+				i = add_door(x, y, NULL);
 			    if (i >= 0)
 				levl[x][y].looted |= D_WARNED;
 			}
@@ -1202,7 +1202,7 @@ void impact_drop(struct obj *missile, xchar x, xchar y, xchar dlev) {
 	costly = costly_spot(x, y);
 	price = debit = robbed = 0L;
 	angry = FALSE;
-	shkp = (struct monst *) 0;
+	shkp = NULL;
 	/* if 'costly', we must keep a record of ESHK(shkp) before
 	 * it undergoes changes through the calls to stolen_value.
 	 * the angry bit must be reset, if needed, in this fn, since
@@ -1357,9 +1357,9 @@ boolean ship_object(struct obj *otmp, xchar x, xchar y, boolean shop_floor_obj) 
 		otmp->no_charge = 0;
 	}
 
-	if (otmp == uwep) setuwep((struct obj *)0, FALSE);
-	if (otmp == uswapwep) setuswapwep((struct obj *)0, FALSE);
-	if (otmp == uquiver) setuqwep((struct obj *)0);
+	if (otmp == uwep) setuwep(NULL, FALSE);
+	if (otmp == uswapwep) setuswapwep(NULL, FALSE);
+	if (otmp == uquiver) setuqwep(NULL);
 
 	/* some things break rather than ship */
 	if (breaktest(otmp)) {
@@ -1381,7 +1381,7 @@ boolean ship_object(struct obj *otmp, xchar x, xchar y, boolean shop_floor_obj) 
 	    }
 	    You_hear("a muffled %s.",result);
 	    obj_extract_self(otmp);
-	    obfree(otmp, (struct obj *) 0);
+	    obfree(otmp, NULL);
 	    return TRUE;
 	}
 

@@ -194,7 +194,7 @@ forcelock()	/* try to force a locked chest */
 					     (boolean)shkp->mpeaceful, TRUE,
 					     TRUE);
 		    if (otmp->quan == 1L) {
-			obfree(otmp, (struct obj *) 0);
+			obfree(otmp, NULL);
 			continue;
 		    }
 		    useup(otmp);
@@ -354,7 +354,7 @@ pick_lock ( /* pick a lock with a given object */
 	}
 	ch = 0;		/* lint suppression */
 
-	if(!get_adjacent_loc((char *)0, "Invalid location!", u.ux, u.uy, &cc)) return 0;
+	if(!get_adjacent_loc(NULL, "Invalid location!", u.ux, u.uy, &cc)) return 0;
 	if (cc.x == u.ux && cc.y == u.uy) {	/* pick lock on a container */
 	    const char *verb;
 	    boolean it;
@@ -413,7 +413,7 @@ pick_lock ( /* pick a lock with a given object */
 			    if(!rn2(20) && !pick->blessed && !pick->oartifact) {
 				Your("credit card breaks in half!");
 				useup(pick);
-				*pickp = (struct obj *)0;
+				*pickp = NULL;
 				return(1);
 			    }
 			    ch = ACURR(A_DEX) + 20*Role_if(PM_ROGUE);
@@ -424,7 +424,7 @@ pick_lock ( /* pick a lock with a given object */
 			    		!pick->blessed && !pick->oartifact) {
 				You("break your pick!");
 				useup(pick);
-				*pickp = (struct obj *)0;
+				*pickp = NULL;
 				return(1);
 			    }
 			    ch = 4*ACURR(A_DEX) + 25*Role_if(PM_ROGUE);
@@ -433,7 +433,7 @@ pick_lock ( /* pick a lock with a given object */
 			    if(!rn2(15) && !pick->blessed && !pick->oartifact) {
 				Your("key didn't quite fit the lock and snapped!");
 				useup(pick);
-				*pickp = (struct obj *)0;
+				*pickp = NULL;
 				return(1);
 			    }
 			    ch = 75 + ACURR(A_DEX);
@@ -516,7 +516,7 @@ pick_lock ( /* pick a lock with a given object */
 				    !pick->blessed && !pick->oartifact) {
 				You("break your card off in the door!");
 				useup(pick);
-				*pickp = (struct obj *)0;
+				*pickp = NULL;
 				return(0);
 			    }
 			    ch = 2*ACURR(A_DEX) + 20*Role_if(PM_ROGUE);
@@ -527,7 +527,7 @@ pick_lock ( /* pick a lock with a given object */
 				    !pick->blessed && !pick->oartifact) {
 				You("break your pick!");
 				useup(pick);
-				*pickp = (struct obj *)0;
+				*pickp = NULL;
 				return(0);
 			    }
 			    ch = 3*ACURR(A_DEX) + 30*Role_if(PM_ROGUE);
@@ -536,7 +536,7 @@ pick_lock ( /* pick a lock with a given object */
 			    if(!rn2(15) && !pick->blessed && !pick->oartifact) {
 				Your("key wasn't designed for this door and broke!");
 				useup(pick);
-				*pickp = (struct obj *)0;
+				*pickp = NULL;
 				return(0);
 			    }
 			    ch = 70 + ACURR(A_DEX);
@@ -633,9 +633,9 @@ doforce (void)		/* try to force a chest with your weapon */
 	}
 
 	/* A lock is made only for the honest man, the thief will break it. */
-	xlock.box = (struct obj *)0;
+	xlock.box = NULL;
 
-	if(!getdir((char *)0)) return(0);
+	if(!getdir(NULL)) return(0);
 
 	x = u.ux + u.dx;
 	y = u.uy + u.dy;
@@ -787,7 +787,7 @@ doopen (void)		/* try to open a door */
 	    return 0;
 	}
 
-	if(!get_adjacent_loc((char *)0, (char *)0, u.ux, u.uy, &cc)) return(0);
+	if(!get_adjacent_loc(NULL, NULL, u.ux, u.uy, &cc)) return(0);
 
 	if((cc.x == u.ux) && (cc.y == u.uy)) return(0);
 
@@ -893,7 +893,7 @@ doclose (void)		/* try to close a door */
 	    return 0;
 	}
 
-	if(!getdir((char *)0)) return(0);
+	if(!getdir(NULL)) return(0);
 
 	x = u.ux + u.dx;
 	y = u.uy + u.dy;

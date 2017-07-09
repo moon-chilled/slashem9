@@ -476,7 +476,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 			{
 			    /* User exited before the game started, e.g. during splash display */
 			    /* Just get out. */
-			    bail((char *)0);
+			    bail(NULL);
 			}
 			else
 			{

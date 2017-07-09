@@ -162,7 +162,7 @@ char *uname;
 		return;
 	}
 	mailthread = (HANDLE)_beginthreadex(
-			(void *)0,
+			NULL,
 			(unsigned)0,
 			start_mailthread,
 			(void *)&nhmail_param,
@@ -326,7 +326,7 @@ char *mID;
 		strncpy(received_msg.subject,
 			MAPIMessage->lpszSubject,
 			sizeof(received_msg.subject) - 1);
-		if((MAPIMessage->lpOriginator->lpszName != (char *)0)
+		if((MAPIMessage->lpOriginator->lpszName != NULL)
 		 && MAPIMessage->lpOriginator->lpszName[0] != '\0')
 			strncpy(received_msg.sender,
 				MAPIMessage->lpOriginator->lpszName,

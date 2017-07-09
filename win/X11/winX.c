@@ -276,7 +276,7 @@ XColor   *color;	/* the X color structure; changed only if successful */
     if((ncells = CellsOfScreen(screen)) < 256 || ncells > 4096)
 	return False;
 
-    if (str != (char *)0) {
+    if (str != NULL) {
 	if (!XParseColor(DisplayOfScreen(screen), colormap, str, &tmp))
 	    return False;
     } else {
@@ -352,7 +352,7 @@ XtPointer	*closure_ret;
      XtAppWarningMsg(app, "wrongParameters", "cvtStringToPixel",
 	"XtToolkitError",
 	"String to pixel conversion needs screen and colormap arguments",
-	(String *)0, (Cardinal *)0);
+	NULL, NULL);
      return False;
     }
 
@@ -439,7 +439,7 @@ Cardinal	*num_args;
      XtAppWarningMsg(app, "wrongParameters",
 		     "freePixel", "XtToolkitError",
 		     "Freeing a pixel requires screen and colormap arguments",
-		     (String *)0, (Cardinal *)0);
+		     NULL, NULL);
      return;
     }
 
@@ -801,7 +801,7 @@ X11_update_inventory()
 {
     if (x_inited && window_list[WIN_INVEN].menu_information->is_up) {
 	updated_inventory = 1;	/* hack to avoid mapping&raising window */
-	(void) display_inventory((char *)0, FALSE);
+	(void) display_inventory(NULL, FALSE);
 	updated_inventory = 0;
     }
 }
@@ -978,7 +978,7 @@ char** argv;
 		    DEF_GAME_NAME,		/* application class */
 		    (XrmOptionDescList)0, 0,	/* options list */
 		    argcp, (String *)argv,	/* command line args */
-		    (String *)0,		/* fallback resources */
+		    NULL,		/* fallback resources */
 		    (ArgList)args, num_args);
     XtOverrideTranslations(toplevel,
 	XtParseTranslationTable("<Message>WM_PROTOCOLS: X11_hangup()"));
@@ -1495,7 +1495,7 @@ key_event_to_char(key)
     boolean meta = !!(key->state & Mod1Mask);
 
     nbytes = XLookupString(key, keystring, MAX_KEY_STRING,
-			   (KeySym *)0, (XComposeStatus *)0);
+			   NULL, NULL);
 
     /* Modifier keys return a zero lengh string when pressed. */
     if (nbytes == 0) return '\0';
@@ -1724,7 +1724,7 @@ msgkey(w, data, event)
     XEvent *event;
 {
     Cardinal num = 0;
-    map_input(window_list[WIN_MAP].w, event, (String*) 0, &num);
+    map_input(window_list[WIN_MAP].w, event, NULL, &num);
 }
 
 /*ARGSUSED*/

@@ -143,7 +143,7 @@ struct obj *box;
 	register int n, minn = 0;
 	register struct obj *otmp;
 
-	box->cobj = (struct obj *) 0;
+	box->cobj = NULL;
 
 	switch (box->otyp) {
 	case MEDICAL_KIT:	n = 60;
@@ -715,7 +715,7 @@ boolean artif;
 	default:
 		impossible("impossible mkobj %d, sym '%c'.", otmp->otyp,
 						objects[otmp->otyp].oc_class);
-		return (struct obj *)0;
+		return NULL;
 	}
 
 	/* Some things must get done (timers) even if init = 0 */
@@ -1075,7 +1075,7 @@ obj_attach_mid (struct obj *obj, unsigned mid)
     struct obj *otmp;
     int lth, namelth;
 
-    if (!mid || !obj) return (struct obj *)0;
+    if (!mid || !obj) return NULL;
     lth = sizeof(mid);
     namelth = obj->onamelth ? strlen(ONAME(obj)) + 1 : 0;
     if (namelth) 
@@ -1105,9 +1105,9 @@ save_mtraits (struct obj *obj, struct monst *mtmp)
 		/* invalidate pointers */
 		/* m_id is needed to know if this is a revived quest leader */
 		/* but m_id must be cleared when loading bones */
-		mtmp2->nmon     = (struct monst *)0;
-		mtmp2->data     = (struct permonst *)0;
-		mtmp2->minvent  = (struct obj *)0;
+		mtmp2->nmon     = NULL;
+		mtmp2->data     = NULL;
+		mtmp2->minvent  = NULL;
 		otmp->oattached = OATTACHED_MONST;	/* mark it */
 	}
 	return otmp;
@@ -1121,8 +1121,8 @@ get_mtraits(obj, copyof)
 struct obj *obj;
 boolean copyof;
 {
-	struct monst *mtmp = (struct monst *)0;
-	struct monst *mnew = (struct monst *)0;
+	struct monst *mtmp = NULL;
+	struct monst *mnew = NULL;
 
 	if (obj->oxlth && obj->oattached == OATTACHED_MONST)
 		mtmp = (struct monst *)obj->oextra;
@@ -1174,7 +1174,7 @@ mk_named_object (
 {
 	struct obj *otmp;
 
-	otmp = mkcorpstat(objtype, (struct monst *)0, ptr,
+	otmp = mkcorpstat(objtype, NULL, ptr,
 				x, y, (boolean)(objtype != STATUE));
 	if (nm)
 		otmp = oname(otmp, nm);
@@ -1408,7 +1408,7 @@ discard_minvent (struct monst *mtmp)
 	    place_object(otmp, mtmp->mx, mtmp->my);
 	    continue;
 	}
-	obfree(otmp, (struct obj *)0);	/* dealloc_obj() isn't sufficient */
+	obfree(otmp, NULL);	/* dealloc_obj() isn't sufficient */
     }
 }
 
@@ -1466,7 +1466,7 @@ obj_extract_self (struct obj *obj)
 struct obj *
 container_extract_indestructable(struct obj *obj)
 {
-    struct obj *otmp = obj->cobj, *indestructable = (struct obj *)0;
+    struct obj *otmp = obj->cobj, *indestructable = NULL;
     while (!indestructable && otmp) {
 	if (Has_contents(otmp))
 	    indestructable = container_extract_indestructable(otmp);
@@ -1486,7 +1486,7 @@ extract_nobj (struct obj *obj, struct obj **head_ptr)
     struct obj *curr, *prev;
 
     curr = *head_ptr;
-    for (prev = (struct obj *) 0; curr; prev = curr, curr = curr->nobj) {
+    for (prev = NULL; curr; prev = curr, curr = curr->nobj) {
 	if (curr == obj) {
 	    if (prev)
 		prev->nobj = curr->nobj;
@@ -1512,7 +1512,7 @@ extract_nexthere (struct obj *obj, struct obj **head_ptr)
     struct obj *curr, *prev;
 
     curr = *head_ptr;
-    for (prev = (struct obj *) 0; curr; prev = curr, curr = curr->nexthere) {
+    for (prev = NULL; curr; prev = curr, curr = curr->nexthere) {
 	if (curr == obj) {
 	    if (prev)
 		prev->nexthere = curr->nexthere;
@@ -1636,7 +1636,7 @@ dealloc_obj (struct obj *obj)
     if (obj_sheds_light(obj))
 	del_light_source(LS_OBJECT, (void *) obj);
 
-    if (obj == thrownobj) thrownobj = (struct obj*)0;
+    if (obj == thrownobj) thrownobj = NULL;
 
     free((void *) obj);
 }

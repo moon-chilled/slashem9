@@ -357,7 +357,7 @@ void prompt_for_player_selection(void)
 	    if (pick4u != 'y' && pick4u != 'n') {
 give_up:	/* Quit */
 		if (selected) free((void *) selected);
-		bail((char *)0);
+		bail(NULL);
 		/*NOTREACHED*/
 		return;
 	    }
@@ -1629,10 +1629,10 @@ int mswin_get_ext_cmd()
                 case '\n':
                 case '\r':
                 case -115:
-                    for (i = 0; extcmdlist[i].ef_txt != (char *)0; i++)
+                    for (i = 0; extcmdlist[i].ef_txt != NULL; i++)
                         if (!strcmpi(cmd, extcmdlist[i].ef_txt)) break;
 
-                    if (extcmdlist[i].ef_txt == (char *)0) {
+                    if (extcmdlist[i].ef_txt == NULL) {
                         pline("%s: unknown extended command.", cmd);
                         i = -1;
                     }
@@ -1652,7 +1652,7 @@ int mswin_get_ext_cmd()
                         cmd[len] = '\0';
                         /* Find a command with this prefix in extcmdlist */
 	                    com_index = -1;
-	                    for (oindex = 0; extcmdlist[oindex].ef_txt != (char *)0; oindex++) {
+	                    for (oindex = 0; extcmdlist[oindex].ef_txt != NULL; oindex++) {
 		                    if (!strncmpi(cmd, extcmdlist[oindex].ef_txt, len)) {
 			                    if (com_index == -1)	/* no matches yet */
 			                        com_index = oindex;

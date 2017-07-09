@@ -52,7 +52,7 @@ static struct obj *DROPPABLES(struct monst *mon) {
 		}
 		if (!obj->owornmask && obj != wep) return obj;
 	}
-	return (struct obj *)0;
+	return NULL;
 }
 
 static const char nofetch[] = { BALL_CLASS, CHAIN_CLASS, ROCK_CLASS, 0 };
@@ -224,16 +224,16 @@ int dog_eat(struct monst *mtmp, struct obj *obj, int x, int y, boolean devour) {
 	    delobj(obj);
 
 	if (poly) {
-	    (void) mon_spec_poly(mtmp, (struct permonst *)0, 0L, FALSE,
+	    (void) mon_spec_poly(mtmp, NULL, 0L, FALSE,
 		    cansee(mtmp->mx, mtmp->my), FALSE, FALSE);
 #if 0
-	    (void) newcham(mtmp, (struct permonst *)0, FALSE,
+	    (void) newcham(mtmp, NULL, FALSE,
 			   cansee(mtmp->mx, mtmp->my));
 #endif
 	}
 	/* limit "instant" growth to prevent potential abuse */
 	if (grow && (int) mtmp->m_lev < (int)mtmp->data->mlevel + 15) {
-	    if (!grow_up(mtmp, (struct monst *)0)) return 2;
+	    if (!grow_up(mtmp, NULL)) return 2;
 	}
 	if (heal) mtmp->mhp = mtmp->mhpmax;
 	return 1;
@@ -619,7 +619,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 	int appr, whappr, udist;
 	int i, j, k;
 	register struct edog *edog = EDOG(mtmp);
-	struct obj *obj = (struct obj *) 0;
+	struct obj *obj = NULL;
 	xchar otyp;
 	boolean has_edog, cursemsg[9], is_spell, do_eat = FALSE;
 	xchar nix, niy;		/* position mtmp is (considering) moving to */
@@ -682,7 +682,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 	} else
 	    whappr = 0;
 
-	appr = dog_goal(mtmp, (has_edog && !is_spell) ? edog : (struct edog *)0,
+	appr = dog_goal(mtmp, (has_edog && !is_spell) ? edog : NULL,
 							after, udist, whappr);
 #ifdef DEBUG
 	{

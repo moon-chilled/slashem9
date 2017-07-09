@@ -8,7 +8,7 @@
 static struct monst *findgd(void);
 
 #define g_monnam(mtmp) \
-	x_monnam(mtmp, ARTICLE_NONE, (char *)0, SUPPRESS_IT, FALSE)
+	x_monnam(mtmp, ARTICLE_NONE, NULL, SUPPRESS_IT, FALSE)
 
 static boolean clear_fcorr(struct monst *,boolean);
 static void restfakecorr(struct monst *);
@@ -106,7 +106,7 @@ findgd()
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon)
 	    if(mtmp->isgd && !DEADMONSTER(mtmp) && on_level(&(EGD(mtmp)->gdlevel), &u.uz))
 		return(mtmp);
-	return((struct monst *)0);
+	return(NULL);
 }
 
 char 
@@ -254,7 +254,7 @@ fnd:
 	}
 
 	stop_occupation();		/* if occupied, stop it *now* */
-	if (multi > 0) { nomul(0); unmul((char *)0); }
+	if (multi > 0) { nomul(0); unmul(NULL); }
 	trycount = 5;
 	do {
 	    getlin("\"Hello stranger, who are you?\" -", buf);
@@ -801,6 +801,6 @@ gd_sound()  /* prevent "You hear footsteps.." when inappropriate */
 	register struct monst *grd = findgd();
 
 	if (vault_occupied(u.urooms)) return(FALSE);
-	else return((boolean)(grd == (struct monst *)0));
+	else return((boolean)(grd == NULL));
 }
 /*vault.c*/

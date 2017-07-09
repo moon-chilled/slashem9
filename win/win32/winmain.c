@@ -105,7 +105,7 @@ int WINAPI WinMain(HINSTANCE hInst,HINSTANCE hPreInst, LPSTR lpszCmdLine,
 	NHnCmdShow = nCmdShow;
 	argc = getargs(lpszCmdLine);
 	/* temporary */
-	if (getenv("WINMODE") != (char *)0) {
+	if (getenv("WINMODE") != NULL) {
 		if (strncmpi("WIN32",getenv("WINMODE"),5) == 0)
 			winmode = WINMODE_WIN32;
 	}
@@ -207,7 +207,7 @@ BOOL InitTextWindow(void)
 	wcNHText.lpfnWndProc  =TextWndProc;
 	wcNHText.hCursor      =LoadCursor((HINSTANCE)0,IDC_ARROW);
 	wcNHText.hIcon        =LoadIcon(0,IDI_APPLICATION);
-	wcNHText.lpszMenuName =(char *)0;
+	wcNHText.lpszMenuName =NULL;
 	wcNHText.hbrBackground=GetStockObject(BLACK_BRUSH);	
 	wcNHText.style        =CS_HREDRAW|CS_VREDRAW;
 	wcNHText.cbClsExtra   =0;
@@ -227,7 +227,7 @@ BOOL InitPopupWindow(void)
 	wcNHPopup.lpfnWndProc  =PopupWndProc;
 	wcNHPopup.hCursor      =LoadCursor((HINSTANCE)0,IDC_ARROW);
 	wcNHPopup.hIcon        =LoadIcon(0,IDI_APPLICATION);
-	wcNHPopup.lpszMenuName =(char *)0;
+	wcNHPopup.lpszMenuName =NULL;
 	wcNHPopup.hbrBackground=GetStockObject(BLACK_BRUSH);	
 	wcNHPopup.style        =CS_HREDRAW|CS_VREDRAW;
 	wcNHPopup.cbClsExtra   =0;
@@ -247,7 +247,7 @@ BOOL InitListboxWindow(void)
 	wcNHListbox.lpfnWndProc  =ListboxWndProc;
 	wcNHListbox.hCursor      =LoadCursor((HINSTANCE)0,IDC_ARROW);
 	wcNHListbox.hIcon        =LoadIcon(0,IDI_APPLICATION);
-	wcNHListbox.lpszMenuName =(char *)0;
+	wcNHListbox.lpszMenuName =NULL;
 	wcNHListbox.hbrBackground=GetStockObject(WHITE_BRUSH);	
 	wcNHListbox.style        =CS_HREDRAW|CS_VREDRAW;
 	wcNHListbox.cbClsExtra   =0;

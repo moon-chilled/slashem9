@@ -394,7 +394,7 @@ append_text_buffer(tb, str, concat)
 	if(length) {
 	    /* Remove all newlines. Otherwise we have a confused line count. */
 	    copy = (tb->text+tb->text_last);
-	    while ((copy = index(copy, '\n')) != (char*)0)
+	    while ((copy = index(copy, '\n')) != NULL)
 		*copy = ' ';
 	}
 
@@ -432,7 +432,7 @@ free_text_buffer(tb)
     struct text_buffer *tb;
 {
     free(tb->text);
-    tb->text = (char *) 0;
+    tb->text = NULL;
     tb->text_size = 0;
     tb->text_last = 0;
     tb->num_lines = 0;

@@ -344,7 +344,7 @@ sco_mapoff()
 	if (!strcmp(windowprocs.name, "tty") && sco_flag_console) {
 		sco_map_valid = ioctl(0,LDGMAP,sco_chanmap_buf);
 		if (sco_map_valid != -1) {
-			ioctl(0,LDNMAP,(char *)0);
+			ioctl(0,LDNMAP,NULL);
 		}
 	}
 # endif
@@ -441,7 +441,7 @@ error VA_DECL(const char *,s)
 	VA_START(s);
 	VA_INIT(s, const char *);
 	if(settty_needed)
-		settty((char *)0);
+		settty(NULL);
 	vprintf(s,VA_ARGS);
 	putchar('\n');
 	VA_END();

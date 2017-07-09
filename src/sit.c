@@ -122,7 +122,7 @@ dosit()
 	    else {
 			if (Role_if(PM_BARBARIAN) || Role_if(PM_CAVEMAN)) You("miss...");
 			else You("grunt.");
-			if (Sick) make_sick(0L, (char *)0, TRUE, SICK_ALL);
+			if (Sick) make_sick(0L, NULL, TRUE, SICK_ALL);
 			if (u.uhs == 0) morehungry(rn2(400)+200);
 	    }
 	} else if(IS_ALTAR(typ)) {
@@ -196,7 +196,7 @@ dosit()
 			if(u.uhp >= (u.uhpmax - 5))  u.uhpmax += 4;
 			u.uhp = u.uhpmax;
 			make_blinded(0L,TRUE);
-			make_sick(0L, (char *) 0, FALSE, SICK_ALL);
+			make_sick(0L, NULL, FALSE, SICK_ALL);
 			heal_legs();
 			flags.botl = 1;
 			break;

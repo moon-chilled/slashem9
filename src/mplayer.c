@@ -118,7 +118,7 @@ register boolean special;
 	char nam[PL_NSIZ];
 
 	if(!is_mplayer(ptr))
-		return((struct monst *)0);
+		return(NULL);
 
 	if(MON_AT(x, y))
 		(void) rloc(m_at(x, y), FALSE); /* insurance */

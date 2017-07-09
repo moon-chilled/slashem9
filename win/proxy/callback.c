@@ -12,7 +12,7 @@
 static void
 cb_display_inventory()
 {
-    display_inventory((char *)0, FALSE);
+    display_inventory(NULL, FALSE);
 }
 
 #ifndef FILE_AREAS

@@ -62,12 +62,12 @@ static long omoves;
 static void
 find_lev_obj()
 {
-	register struct obj *fobjtmp = (struct obj *)0;
+	register struct obj *fobjtmp = NULL;
 	register struct obj *otmp;
 	int x,y;
 
 	for(x=0; x<COLNO; x++) for(y=0; y<ROWNO; y++)
-		level.objects[x][y] = (struct obj *)0;
+		level.objects[x][y] = NULL;
 
 	/*
 	 * Reverse the entire fobj chain, which is necessary so that we can
@@ -125,7 +125,7 @@ register int fd;
 	int cnt;
 	s_level	*tmplev, *x;
 
-	sp_levchn = (s_level *) 0;
+	sp_levchn = NULL;
 	mread(fd, (void *) &cnt, sizeof(int));
 	for(; cnt > 0; cnt--) {
 
@@ -137,7 +137,7 @@ register int fd;
 		for(x = sp_levchn; x->next; x = x->next);
 		x->next = tmplev;
 	    }
-	    tmplev->next = (s_level *)0;
+	    tmplev->next = NULL;
 	}
 }
 
@@ -154,7 +154,7 @@ boolean ghostly;
 	    return;
 	tmp_dam = (struct damage *)alloc(sizeof(struct damage));
 	while (--counter >= 0) {
-	    char damaged_shops[5], *shp = (char *)0;
+	    char damaged_shops[5], *shp = NULL;
 
 	    mread(fd, (void *) tmp_dam, sizeof(*tmp_dam));
 	    if (ghostly)
@@ -190,7 +190,7 @@ register int fd;
 boolean ghostly, frozen;
 {
 	register struct obj *otmp, *otmp2 = 0;
-	register struct obj *first = (struct obj *)0;
+	register struct obj *first = NULL;
 	int xl;
 
 	while(1) {
@@ -240,7 +240,7 @@ register int fd;
 boolean ghostly;
 {
 	register struct monst *mtmp, *mtmp2 = 0;
-	register struct monst *first = (struct monst *)0;
+	register struct monst *first = NULL;
 	int xl;
 	struct permonst *monbegin;
 	boolean moved;
@@ -554,9 +554,9 @@ dorecover (register int fd)
 	 * afterwards, and in the meantime at least u.usteed may mislead
 	 * place_monster() on other levels
 	 */
-	setustuck((struct monst *)0);
+	setustuck(NULL);
 #ifdef STEED
-	u.usteed = (struct monst *)0;
+	u.usteed = NULL;
 #endif
 
 #ifdef MICRO
@@ -600,7 +600,7 @@ dorecover (register int fd)
 	(void) lseek(fd, 0L, 0);
 /*      (void) lseek(fd, (off_t)0, 0); */
 #endif
-	(void) uptodate(fd, (char *)0);		/* skip version info */
+	(void) uptodate(fd, NULL);		/* skip version info */
 #ifdef STORE_PLNAME_IN_FILE
 	mread(fd, (void *) plname, PL_NSIZ);
 #endif
@@ -814,7 +814,7 @@ boolean ghostly;
 	/* reset level.monsters for new level */
 	for (x = 0; x < COLNO; x++)
 	    for (y = 0; y < ROWNO; y++)
-		level.monsters[x][y] = (struct monst *) 0;
+		level.monsters[x][y] = NULL;
 	for (mtmp = level.monlist; mtmp; mtmp = mtmp->nmon) {
 	    if (mtmp->isshk)
 		set_residency(mtmp, FALSE);

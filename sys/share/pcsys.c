@@ -58,7 +58,7 @@ dosh()
 #  ifdef __GO32__
 		if (system(comspec) < 0) {  /* wsu@eecs.umich.edu */
 #  else
-		spawnstat = spawnl(P_WAIT, comspec, comspec, (char *)0);
+		spawnstat = spawnl(P_WAIT, comspec, comspec, NULL);
 
 		if ( spawnstat < 0) {
 #  endif
@@ -157,7 +157,7 @@ const char *name, *mode;
 				pp++;
 		}
 	}
-	return (FILE *)0;
+	return NULL;
 }
 
 #if defined(MICRO) || defined(WIN32)
@@ -211,7 +211,7 @@ void dircheck()
 {
 	char dirbuf[BUFSZ];
 	dirbuf[0] = '\0';
-	if (getcwd(dirbuf, sizeof dirbuf) != (char *)0)
+	if (getcwd(dirbuf, sizeof dirbuf) != NULL)
 		/* pline("%s,%s",dirbuf,hackdir); */
 		if (strcmp(dirbuf,hackdir) != 0)
 			chdir(hackdir);		/* chdir, not chdirx */

@@ -198,7 +198,7 @@ boolean talk;
 	    /* clearing temporary blindness without toggling blindness */
 	    if (talk) {
 		if (!haseyes(youmonst.data)) {
-		    strange_feeling((struct obj *)0, (char *)0);
+		    strange_feeling(NULL, NULL);
 		} else if (Blindfolded) {
 		    strcpy(buf, body_part(EYE));
 		    eyecnt = eyecount(youmonst.data);
@@ -224,7 +224,7 @@ boolean talk;
 	    /* setting temporary blindness without toggling blindness */
 	    if (talk) {
 		if (!haseyes(youmonst.data)) {
-		    strange_feeling((struct obj *)0, (char *)0);
+		    strange_feeling(NULL, NULL);
 		} else if (Blindfolded) {
 		    strcpy(buf, body_part(EYE));
 		    eyecnt = eyecount(youmonst.data);
@@ -273,7 +273,7 @@ long mask;	/* nonzero if resistance status should change by mask */
 	    /* clearing temporary hallucination without toggling vision */
 	    if (!changed && !HHallucination && old && talk) {
 		if (!haseyes(youmonst.data)) {
-		    strange_feeling((struct obj *)0, (char *)0);
+		    strange_feeling(NULL, NULL);
 		} else if (Blind) {
 		    char buf[BUFSZ];
 		    int eyecnt = eyecount(youmonst.data);
@@ -492,7 +492,7 @@ peffects (register struct obj *otmp)
 			    you_unwere(FALSE);
 			u.ulycn = NON_PM;	/* cure lycanthropy */
 		    }
-		    make_sick(0L, (char *) 0, TRUE, SICK_ALL);
+		    make_sick(0L, NULL, TRUE, SICK_ALL);
 
 		    /* You feel refreshed */
 		    u.uhunger += 50 + rnd(50);
@@ -531,7 +531,7 @@ peffects (register struct obj *otmp)
 		    if(otmp->blessed) {
 			You_feel("full of awe.");
 			if(u.ualign.type == A_LAWFUL) healup(d(6,6),0,0,0);                        
-			make_sick(0L, (char *) 0, TRUE, SICK_ALL);
+			make_sick(0L, NULL, TRUE, SICK_ALL);
 			exercise(A_WIS, TRUE);
 			exercise(A_CON, TRUE);
 			if (u.ulycn >= LOW_PM && !Race_if(PM_HUMAN_WEREWOLF)) {
@@ -1094,7 +1094,7 @@ healup(nhp, nxtra, curesick, cureblind)
 		}
 	}
 	if(cureblind)	make_blinded(0L,TRUE);
-	if(curesick)	make_sick(0L, (char *) 0, TRUE, SICK_ALL);
+	if(curesick)	make_sick(0L, NULL, TRUE, SICK_ALL);
 	flags.botl = 1;
 	return;
 }
@@ -1345,7 +1345,7 @@ boolean your_fault;
 		    }
 		} else if(mon->data == &mons[PM_GREMLIN]) {
 		    angermon = FALSE;
-		    (void)split_mon(mon, (struct monst *)0);
+		    (void)split_mon(mon, NULL);
 		} else if(mon->data == &mons[PM_FLAMING_SPHERE] ||
 			mon->data == &mons[PM_IRON_GOLEM]) {
 		    if (canseemon(mon))
@@ -1366,7 +1366,7 @@ boolean your_fault;
 		case PM_GREMLIN:
 		    /* Gremlins multiply... */
 		    mon->mtame = FALSE;	
-		    (void)split_mon(mon, (struct monst *)0);
+		    (void)split_mon(mon, NULL);
 		    break;
 		case PM_FLAMING_SPHERE:
 		case PM_IRON_GOLEM:
@@ -1491,7 +1491,7 @@ boolean your_fault;
 		    subfrombill(obj, shkp);
 		}
 	}
-	obfree(obj, (struct obj *)0);
+	obfree(obj, NULL);
 }
 
 /* vapors are inhaled or get in your eyes */
@@ -1600,7 +1600,7 @@ potionbreathe (register struct obj *obj)
 		break;
 	case POT_WATER:
 		if(u.umonnum == PM_GREMLIN) {
-		    (void)split_mon(&youmonst, (struct monst *)0);
+		    (void)split_mon(&youmonst, NULL);
 		} else if (u.ulycn >= LOW_PM) {
 		    /* vapor from [un]holy water will trigger
 		       transformation but won't cure lycanthropy */
@@ -1612,7 +1612,7 @@ potionbreathe (register struct obj *obj)
 		break;
 	case POT_AMNESIA:
 		if(u.umonnum == PM_GREMLIN)
-		    (void)split_mon(&youmonst, (struct monst *)0);
+		    (void)split_mon(&youmonst, NULL);
 		else if(u.umonnum == PM_FLAMING_SPHERE) {
 		    You("flicker!");
 		    losehp(d(1,6),"potion of amnesia", KILLED_BY_AN);
@@ -1930,7 +1930,7 @@ boolean amnesia;
 	if (snuff_lit(obj)) return(TRUE);
 
 	if (obj->greased) {
-		grease_protect(obj,(char *)0,&youmonst);
+		grease_protect(obj,NULL,&youmonst);
 		return(FALSE);
 	}
 	(void) Shk_Your(Your_buf, obj);
@@ -2780,7 +2780,7 @@ dodip (void)
 		if (obj->otyp != save_otyp) {
 			makeknown(POT_POLYMORPH);
 			useup(potion);
-			prinv((char *)0, obj, 0L);
+			prinv(NULL, obj, 0L);
 			return 1;
 		} else {
 			pline("Nothing seems to happen.");
@@ -2837,7 +2837,7 @@ dodip (void)
 				  struct obj *otmp;
 				  otmp = mkobj(POTION_CLASS,FALSE);
 				  obj->otyp = otmp->otyp;
-				  obfree(otmp, (struct obj *)0);
+				  obfree(otmp, NULL);
 				}
 				break;
 			default:
@@ -2914,8 +2914,8 @@ dodip (void)
 			    yname(obj));
 		    if (obj->oeroded == MAX_ERODE) {
 			obj_extract_self(obj);
-			obfree(obj, (struct obj *)0);
-			obj = (struct obj *) 0;
+			obfree(obj, NULL);
+			obj = NULL;
 		    } else {
 			/* we know it's carried */
 			if (obj->unpaid) {
@@ -2961,7 +2961,7 @@ dodip (void)
 		if (res == 1) {
 		    /* The object was upgraded */
 		    pline("Hmm!  You don't recall dipping that into the potion.");
-		    prinv((char *)0, obj, 0L);
+		    prinv(NULL, obj, 0L);
 		} /* else potion exploded */
 		if (!objects[potion->otyp].oc_name_known &&
 			!objects[potion->otyp].oc_uname)
@@ -3182,7 +3182,7 @@ djinni_from_bottle (register struct obj *obj)
 		mongone(mtmp);
 		break;
 	case 1 : verbalize("Thank you for freeing me!");
-		(void) tamedog(mtmp, (struct obj *)0);
+		(void) tamedog(mtmp, NULL);
 		break;
 	case 2 : verbalize("You freed me!");
 		mtmp->mpeaceful = TRUE;

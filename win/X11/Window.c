@@ -77,11 +77,11 @@ static XtResource resources[] = {
     { XtNfont, XtCFont, XtRFontStruct, sizeof(XFontStruct *),
 	  offset(font), XtRString, XtDefaultFont },
     { XtNexposeCallback, XtCCallback, XtRCallback, sizeof(XtCallbackList),
-	  offset(expose_callback), XtRCallback, (char *)0 },
+	  offset(expose_callback), XtRCallback, NULL },
     { XtNcallback, XtCCallback, XtRCallback, sizeof(XtCallbackList),
-	  offset(input_callback), XtRCallback, (char *)0 },
+	  offset(input_callback), XtRCallback, NULL },
     { XtNresizeCallback, XtCCallback, XtRCallback, sizeof(XtCallbackList),
-	  offset(resize_callback), XtRCallback, (char *)0 },
+	  offset(resize_callback), XtRCallback, NULL },
 #undef offset
 };
 

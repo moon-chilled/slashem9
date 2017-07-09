@@ -391,9 +391,9 @@ strstri (	/* case insensitive substring search */
     for (	s2 = sub; *s2; --k)  tsub[*s2++ & (TABSIZ-1)]++;
 
     /* evaluate the info we've collected */
-    if (k < 0)	return (char *) 0;  /* sub longer than str, so can't match */
+    if (k < 0)	return NULL;  /* sub longer than str, so can't match */
     for (i = 0; i < TABSIZ; i++)	/* does sub have more 'x's than str? */
-	if (tsub[i] > tstr[i])	return (char *) 0;  /* match not possible */
+	if (tsub[i] > tstr[i])	return NULL;  /* match not possible */
 
     /* now actually compare the substring repeatedly to parts of the string */
     for (i = 0; i <= k; i++) {
@@ -402,7 +402,7 @@ strstri (	/* case insensitive substring search */
 	while (lowc(*s1++) == lowc(*s2++))
 	    if (!*s2)  return (char *) &str[i];		/* full match */
     }
-    return (char *) 0;	/* not found */
+    return NULL;	/* not found */
 }
 #endif	/* STRSTRI */
 
@@ -452,22 +452,22 @@ setrandom (void)
 	 * routine names into one via #defines is even more confusing
 	 */
 #ifdef RANDOM	/* srandom() from sys/share/random.c */
-	srandom((unsigned int) time((time_t *)0));
+	srandom((unsigned int) time(NULL));
 #else
 # if defined(BSD) || defined(LINUX) || defined(ULTRIX) || defined(CYGWIN32) /* system srandom() */
 #  if defined(BSD) && !defined(POSIX_TYPES)
 #   if defined(SUNOS4)
 	(void)
 #   endif
-		srandom((int) time((long *)0));
+		srandom((int) time(NULL));
 #  else
-		srandom((int) time((time_t *)0));
+		srandom((int) time(NULL));
 #  endif
 # else
 #  ifdef UNIX	/* system srand48() */
-	srand48((long) time((time_t *)0));
+	srand48((long) time(NULL));
 #  else		/* poor quality system routine */
-	srand((int) time((time_t *)0));
+	srand((int) time(NULL));
 #  endif
 # endif
 #endif

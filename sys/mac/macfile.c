@@ -319,7 +319,7 @@ macgets (int fd, char *ptr, unsigned len)
 
         while (-- len > 0) {
                 if (macread (fd, ptr + idx, 1) <= 0)
-                        return (char *)0;
+                        return NULL;
                 c = ptr[idx++];
                 if (c  == '\n' || c == '\r')
                         break;

@@ -235,9 +235,9 @@ dosave0()
 	/* these pointers are no longer valid, and at least u.usteed
 	 * may mislead place_monster() on other levels
 	 */
-	setustuck((struct monst *)0);
+	setustuck(NULL);
 #ifdef STEED
-	u.usteed = (struct monst *)0;
+	u.usteed = NULL;
 #endif
 
 	for(ltmp = (xchar)1; ltmp <= maxledgerno(); ltmp++) {

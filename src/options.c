@@ -47,12 +47,12 @@ static struct Bool_Opt
 #ifdef MICRO
 	{"BIOS", &iflags.BIOS, FALSE, SET_IN_FILE},
 #else
-	{"BIOS", (boolean *)0, FALSE, SET_IN_FILE},
+	{"BIOS", NULL, FALSE, SET_IN_FILE},
 #endif
 #ifdef INSURANCE
 	{"checkpoint", &flags.ins_chkpt, TRUE, SET_IN_GAME},
 #else
-	{"checkpoint", (boolean *)0, FALSE, SET_IN_FILE},
+	{"checkpoint", NULL, FALSE, SET_IN_FILE},
 #endif
 	{"cmdassist", &iflags.cmdassist, TRUE, SET_IN_GAME},
 # if defined(MICRO) || defined(WIN32) || defined(CURSES_GRAPHICS)
@@ -65,24 +65,24 @@ static struct Bool_Opt
 	{"classic_status", &iflags.classic_status, TRUE, SET_IN_GAME},
 	{"cursesgraphics", &iflags.cursesgraphics, TRUE, SET_IN_GAME},
 #else
-	{"classic_status", (boolean *)0, TRUE, SET_IN_FILE},
-	{"cursesgraphics", (boolean *)0, FALSE, SET_IN_FILE},
+	{"classic_status", NULL, TRUE, SET_IN_FILE},
+	{"cursesgraphics", NULL, FALSE, SET_IN_FILE},
 #endif
 #if defined(TERMLIB) && !defined(MAC_GRAPHICS_ENV)
 	{"DECgraphics", &iflags.DECgraphics, FALSE, SET_IN_GAME},
 #else
-	{"DECgraphics", (boolean *)0, FALSE, SET_IN_FILE},
+	{"DECgraphics", NULL, FALSE, SET_IN_FILE},
 #endif
 	{"eight_bit_tty", &iflags.wc_eight_bit_input, FALSE, SET_IN_GAME},	/*WC*/
 #if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS)
 	{"extmenu", &iflags.extmenu, FALSE, SET_IN_GAME},
 #else
-	{"extmenu", (boolean *)0, FALSE, SET_IN_FILE},
+	{"extmenu", NULL, FALSE, SET_IN_FILE},
 #endif
 #ifdef OPT_DISPMAP
 	{"fast_map", &flags.fast_map, TRUE, SET_IN_GAME},
 #else
-	{"fast_map", (boolean *)0, TRUE, SET_IN_FILE},
+	{"fast_map", NULL, TRUE, SET_IN_FILE},
 #endif
 	{"female", &flags.female, FALSE, DISP_IN_GAME},
 	{"fixinv", &flags.invlet_constant, TRUE, SET_IN_GAME},
@@ -95,23 +95,23 @@ static struct Bool_Opt
 #ifdef ASCIIGRAPH
 	{"IBMgraphics", &iflags.IBMgraphics, FALSE, SET_IN_GAME},
 #else
-	{"IBMgraphics", (boolean *)0, FALSE, SET_IN_FILE},
+	{"IBMgraphics", NULL, FALSE, SET_IN_FILE},
 #endif
 #ifndef MAC
 	{"ignintr", &flags.ignintr, FALSE, SET_IN_GAME},
 #else
-	{"ignintr", (boolean *)0, FALSE, SET_IN_FILE},
+	{"ignintr", NULL, FALSE, SET_IN_FILE},
 #endif
 #ifdef SHOW_WEIGHT
 	{"invweight", &flags.invweight, FALSE, SET_IN_GAME},
 #else
-	{"invweight", (boolean *)0, FALSE, SET_IN_FILE},
+	{"invweight", NULL, FALSE, SET_IN_FILE},
 #endif
 /*WAC the keep savefile option...*/
 #ifdef KEEP_SAVE
 	{"keep_savefile", &flags.keep_savefile, FALSE, SET_IN_FILE},
 #else
-	{"keep_savefile", (boolean *)0, FALSE, DISP_IN_GAME},
+	{"keep_savefile", NULL, FALSE, DISP_IN_GAME},
 #endif
 	{"large_font", &iflags.obsolete, FALSE, SET_IN_FILE},	/* OBSOLETE */
 	{"legacy", &flags.legacy, TRUE, DISP_IN_GAME},
@@ -120,12 +120,12 @@ static struct Bool_Opt
 #ifdef MAC_GRAPHICS_ENV
 	{"Macgraphics", &iflags.MACgraphics, TRUE, SET_IN_GAME},
 #else
-	{"Macgraphics", (boolean *)0, FALSE, SET_IN_FILE},
+	{"Macgraphics", NULL, FALSE, SET_IN_FILE},
 #endif
 #ifdef MAIL
 	{"mail", &flags.biff, TRUE, SET_IN_GAME},
 #else
-	{"mail", (boolean *)0, TRUE, SET_IN_FILE},
+	{"mail", NULL, TRUE, SET_IN_FILE},
 #endif
 #ifdef MENU_COLOR
 # ifdef MICRO
@@ -134,20 +134,20 @@ static struct Bool_Opt
 	{"menucolors", &iflags.use_menu_color, FALSE, SET_IN_GAME},
 # endif
 #else
-	{"menucolors", (boolean *)0, FALSE, SET_IN_GAME},
+	{"menucolors", NULL, FALSE, SET_IN_GAME},
 #endif
 	{"menu_on_esc", &flags.menu_on_esc, TRUE, SET_IN_GAME},
 #ifdef WIZARD
 	/* for menu debugging only*/
 	{"menu_tab_sep", &iflags.menu_tab_sep, FALSE, SET_IN_GAME},
 #else
-	{"menu_tab_sep", (boolean *)0, FALSE, SET_IN_FILE},
+	{"menu_tab_sep", NULL, FALSE, SET_IN_FILE},
 #endif
 	{"menu_glyphs", &iflags.use_menu_glyphs, FALSE, SET_IN_GAME},
 #ifdef WIZARD
 	{"mon_polycontrol", &iflags.mon_polycontrol, FALSE, SET_IN_GAME},
 #else
-	{"mon_polycontrol", (boolean *)0, FALSE, SET_IN_FILE},
+	{"mon_polycontrol", NULL, FALSE, SET_IN_FILE},
 #endif
 #ifdef CURSES_GRAPHICS
 	{"mouse_support", &iflags.wc_mouse_support, FALSE, DISP_IN_GAME},	/*WC*/
@@ -157,13 +157,13 @@ static struct Bool_Opt
 #ifdef NEWS
 	{"news", &iflags.news, TRUE, DISP_IN_GAME},
 #else
-	{"news", (boolean *)0, FALSE, SET_IN_FILE},
+	{"news", NULL, FALSE, SET_IN_FILE},
 #endif
 	{"null", &flags.null, TRUE, SET_IN_GAME},
 #ifdef MAC
 	{"page_wait", &flags.page_wait, TRUE, SET_IN_GAME},
 #else
-	{"page_wait", (boolean *)0, FALSE, SET_IN_FILE},
+	{"page_wait", NULL, FALSE, SET_IN_FILE},
 #endif
 	{"perm_invent", &flags.perm_invent, FALSE, SET_IN_GAME},
 	{"pickup_thrown", &flags.pickup_thrown, TRUE, SET_IN_GAME},
@@ -171,23 +171,23 @@ static struct Bool_Opt
 	{"prayconfirm", &flags.prayconfirm, TRUE, SET_IN_GAME},
 	{"preload_tiles", &iflags.wc_preload_tiles, TRUE, DISP_IN_GAME},	/*WC*/
 	{"pushweapon", &flags.pushweapon, FALSE, SET_IN_GAME},
-	{"radar", (boolean *)0, FALSE, SET_IN_FILE},	/* OBSOLETE */
+	{"radar", NULL, FALSE, SET_IN_FILE},	/* OBSOLETE */
 #ifdef MICRO
 	{"rawio", &iflags.rawio, FALSE, DISP_IN_GAME},
 #else
-	{"rawio", (boolean *)0, FALSE, SET_IN_FILE},
+	{"rawio", NULL, FALSE, SET_IN_FILE},
 #endif
 	{"rest_on_space", &flags.rest_on_space, FALSE, SET_IN_GAME},
 	{"safe_pet", &flags.safe_dog, TRUE, SET_IN_GAME},
 #ifdef WIZARD
 	{"sanity_check", &iflags.sanity_check, FALSE, SET_IN_GAME},
 #else
-	{"sanity_check", (boolean *)0, FALSE, SET_IN_FILE},
+	{"sanity_check", NULL, FALSE, SET_IN_FILE},
 #endif
 #ifdef EXP_ON_BOTL
 	{"showexp", &flags.showexp, FALSE, SET_IN_GAME},
 #else
-	{"showexp", (boolean *)0, FALSE, SET_IN_FILE},
+	{"showexp", NULL, FALSE, SET_IN_FILE},
 #endif
 	{"showrace", &iflags.showrace, FALSE, SET_IN_GAME},
 #ifdef REALTIME_ON_BOTL
@@ -196,18 +196,18 @@ static struct Bool_Opt
 #ifdef SCORE_ON_BOTL
 	{"showscore", &flags.showscore, FALSE, SET_IN_GAME},
 #else
-	{"showscore", (boolean *)0, FALSE, SET_IN_FILE},
+	{"showscore", NULL, FALSE, SET_IN_FILE},
 #endif
 /* WAC made the [ xx pts]  dmg display optional */
 #ifdef SHOW_DMG
 	{"showdmg", &flags.showdmg, FALSE, SET_IN_GAME},
 #else
-	{"showdmg", (boolean *)0, FALSE, SET_IN_FILE},
+	{"showdmg", NULL, FALSE, SET_IN_FILE},
 #endif
 #ifdef SHOW_WEIGHT
 	{"showweight", &flags.showweight, FALSE, SET_IN_GAME},
 #else
-	{"showweight", (boolean *)0, FALSE, SET_IN_FILE},
+	{"showweight", NULL, FALSE, SET_IN_FILE},
 #endif
 	{"silent", &flags.silent, TRUE, SET_IN_GAME},
 	{"softkeyboard", &iflags.wc2_softkeyboard, FALSE, SET_IN_FILE},
@@ -221,7 +221,7 @@ static struct Bool_Opt
 #ifdef TIMED_DELAY
 	{"timed_delay", &flags.nap, TRUE, SET_IN_GAME},
 #else
-	{"timed_delay", (boolean *)0, FALSE, SET_IN_GAME},
+	{"timed_delay", NULL, FALSE, SET_IN_GAME},
 #endif
 	{"tombstone",&flags.tombstone, TRUE, SET_IN_GAME},
 	{"toptenwin",&flags.toptenwin, FALSE, SET_IN_GAME},
@@ -233,7 +233,7 @@ static struct Bool_Opt
 #endif
 	{"verbose", &flags.verbose, TRUE, SET_IN_GAME},
 	{"wraptext", &iflags.wc2_wraptext, FALSE, SET_IN_GAME},
-	{(char *)0, (boolean *)0, FALSE, 0}
+	{NULL, NULL, FALSE, 0}
 };
 
 void * nh_option_get_boolopt()
@@ -383,7 +383,7 @@ static struct Comp_Opt
 	{ "windowtype", "windowing system to use", WINTYPELEN, DISP_IN_GAME },
 	{ "wolfname",  "the name of your (first) wolf (e.g., wolfname:Beast)",
 						PL_PSIZ, DISP_IN_GAME },
-	{ (char *)0, (char *)0, 0, 0 }
+	{ NULL, NULL, 0, 0 }
 };
 
 static struct Bool_Tile_Opt
@@ -394,7 +394,7 @@ static struct Bool_Tile_Opt
 } booltileopt[] = {
 	{"transparent", TILESET_TRANSPARENT, 0},
 	{"pseudo3D", TILESET_PSEUDO3D, 0},
-	{(char *)0, 0, 0}
+	{NULL, 0, 0}
 };
 
 static boolean need_redraw; /* for doset() */
@@ -533,7 +533,7 @@ nh_getenv (const char *ev)
 	if (getev && strlen(getev) <= (BUFSZ / 2))
 		return getev;
 	else
-		return (char *)0;
+		return NULL;
 }
 
 void 
@@ -548,7 +548,7 @@ initoptions (void)
 	setrandom();
 
 	/* for detection of configfile options specified multiple times */
-	iflags.opt_booldup = iflags.opt_compdup = (int *)0;
+	iflags.opt_booldup = iflags.opt_compdup = NULL;
 	
 	for (i = 0; boolopt[i].name; i++) {
 		if (boolopt[i].addr)
@@ -638,7 +638,7 @@ initoptions (void)
 			if (strlen(opts) < BUFSZ/2)
 			    read_config_file(opts);
 		} else {
-			read_config_file((char *)0);
+			read_config_file(NULL);
 			/* let the total length of options be long;
 			 * parseoptions() will check each individually
 			 */
@@ -646,7 +646,7 @@ initoptions (void)
 		}
 	} else
 #endif
-		read_config_file((char *)0);
+		read_config_file(NULL);
 
 	(void)fruitadd(pl_fruit);
 	/* Remove "slime mold" from list of object names; this will	*/
@@ -809,7 +809,7 @@ boolean val_optional;
 
 	if (!colon || !*++colon) {
 		if (!val_optional) badoption(opts);
-		return (char *)0;
+		return NULL;
 	}
 	return colon;
 }
@@ -842,7 +842,7 @@ boolean val_optional;
 {
 	if(!initial) {
 		rejectoption(optname);
-		return (char *)0;
+		return NULL;
 	}
 	return string_for_opt(opts, val_optional);
 }
@@ -1010,9 +1010,9 @@ set_duplicate_opt_detection (int on_or_off)
 	} else {
 		/*-- OFF --*/
 		if (iflags.opt_booldup) free((void *) iflags.opt_booldup);
-		iflags.opt_booldup = (int *)0;
+		iflags.opt_booldup = NULL;
 		if (iflags.opt_compdup) free((void *) iflags.opt_compdup);
-		iflags.opt_compdup = (int *)0;
+		iflags.opt_compdup = NULL;
 	} 
 }
 
@@ -1105,7 +1105,7 @@ char *str;
    int i, c = NO_COLOR, a = ATR_NONE;
    struct menucoloring *tmp;
    char *tmps, *cs = strchr(str, '=');
-   const char *err = (char *)0;
+   const char *err = NULL;
 #ifdef POSIX_REGEX
    int errnum;
    char errbuf[80];
@@ -1543,7 +1543,7 @@ boolean tinitial, tfrom_file;
 # ifdef MAC
 	    }
 # endif
-	    if ((op = string_for_opt(opts, FALSE)) != (char *)0) {
+	    if ((op = string_for_opt(opts, FALSE)) != NULL) {
 		char *pt = op;
 		int cnt, tmp, reverse;
 		long rgb;
@@ -2945,7 +2945,7 @@ doset (void)
 		}
 	any.a_int = -1;
 	sprintf(buf, "autopickup exceptions (%d currently set)",
-		count_ape_maps((int *)0, (int *)0));
+		count_ape_maps(NULL, NULL));
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
 
 #ifdef PREFIXES_IN_USE
@@ -2999,7 +2999,7 @@ doset (void)
 		}
 	    }
 	    free((void *)pick_list);
-	    pick_list = (menu_item *)0;
+	    pick_list = NULL;
 	}
 
 	destroy_nhwindow(tmpwin);
@@ -3025,7 +3025,7 @@ boolean setinitial,setfromfile;
      */
     if (!strcmp("menustyle", optname)) {
 	const char *style_name;
-	menu_item *style_pick = (menu_item *)0;
+	menu_item *style_pick = NULL;
         tmpwin = create_nhwindow(NHW_MENU);
 	start_menu(tmpwin);
 	for (i = 0; i < SIZE(menutype); i++) {
@@ -3045,7 +3045,7 @@ boolean setinitial,setfromfile;
         retval = TRUE;
     } else if (!strcmp("pickup_burden", optname)) {
 	const char *burden_name, *burden_letters = "ubsntl";
-	menu_item *burden_pick = (menu_item *)0;
+	menu_item *burden_pick = NULL;
         tmpwin = create_nhwindow(NHW_MENU);
 	start_menu(tmpwin);
 	for (i = 0; i < SIZE(burdentype); i++) {
@@ -3067,7 +3067,7 @@ boolean setinitial,setfromfile;
 	retval = TRUE;
     } else if (!strcmp("disclose", optname)) {
 	int pick_cnt, pick_idx, opt_idx;
-	menu_item *disclosure_category_pick = (menu_item *)0;
+	menu_item *disclosure_category_pick = NULL;
 	/*
 	 * The order of disclose_names[]
          * must correspond to disclosure_options in decl.h
@@ -3094,14 +3094,14 @@ boolean setinitial,setfromfile;
 		disc_cat[opt_idx] = 1;
 	    }
 	    free((void *)disclosure_category_pick);
-	    disclosure_category_pick = (menu_item *)0;
+	    disclosure_category_pick = NULL;
 	}
 	destroy_nhwindow(tmpwin);
 
 	for (i = 0; i < NUM_DISCLOSURE_OPTIONS; i++) {
 	    if (disc_cat[i]) {
 	    	char dbuf[BUFSZ];
-		menu_item *disclosure_option_pick = (menu_item *)0;
+		menu_item *disclosure_option_pick = NULL;
 		sprintf(dbuf, "Disclosure options for %s:", disclosure_names[i]);
 	        tmpwin = create_nhwindow(NHW_MENU);
 		start_menu(tmpwin);
@@ -3131,7 +3131,7 @@ boolean setinitial,setfromfile;
 	retval = TRUE;
     } else if (!strcmp("runmode", optname)) {
 	const char *mode_name;
-	menu_item *mode_pick = (menu_item *)0;
+	menu_item *mode_pick = NULL;
 	tmpwin = create_nhwindow(NHW_MENU);
 	start_menu(tmpwin);
 	for (i = 0; i < SIZE(runmodes); i++) {
@@ -3151,7 +3151,7 @@ boolean setinitial,setfromfile;
 #ifdef TTY_GRAPHICS
       else if (!strcmp("msg_window", optname)) {
 	/* by Christian W. Cooper */
-	menu_item *window_pick = (menu_item *)0;
+	menu_item *window_pick = NULL;
 	tmpwin = create_nhwindow(NHW_MENU);
 	start_menu(tmpwin);
 	any.a_char = 's';
@@ -3177,7 +3177,7 @@ boolean setinitial,setfromfile;
 #endif
      else if (!strcmp("align_message", optname) ||
 		!strcmp("align_status", optname)) {
-	menu_item *window_pick = (menu_item *)0;
+	menu_item *window_pick = NULL;
 	char abuf[BUFSZ];
 	boolean msg = (*(optname+6) == 'm');
 
@@ -3209,7 +3209,7 @@ boolean setinitial,setfromfile;
 	static const char *npchoices[3] =
 		{"0 (off)", "1 (on)", "2 (on, DOS compatible)"};
 	const char *npletters = "abc";
-	menu_item *mode_pick = (menu_item *)0;
+	menu_item *mode_pick = NULL;
 
 	tmpwin = create_nhwindow(NHW_MENU);
 	start_menu(tmpwin);
@@ -3243,7 +3243,7 @@ boolean setinitial,setfromfile;
     } else if (!strcmp("menu_headings", optname)) {
 	static const char *mhchoices[3] = {"bold", "inverse", "underline"};
 	const char *npletters = "biu";
-	menu_item *mode_pick = (menu_item *)0;
+	menu_item *mode_pick = NULL;
 
 	tmpwin = create_nhwindow(NHW_MENU);
 	start_menu(tmpwin);
@@ -3274,7 +3274,7 @@ boolean setinitial,setfromfile;
     	boolean retval;
 	int pick_cnt, pick_idx, opt_idx, pass;
 	int totalapes = 0, numapes[2] = {0,0};
-	menu_item *pick_list = (menu_item *)0;
+	menu_item *pick_list = NULL;
 	anything any;
 	char apebuf[BUFSZ];
 	struct autopickup_exception *ape;
@@ -3302,7 +3302,7 @@ ape_again:
 			opt_idx = pick_list[pick_idx].item.a_int - 1;
 		}
 		free((void *)pick_list);
-		pick_list = (menu_item *)0;
+		pick_list = NULL;
 	}
 	destroy_nhwindow(tmpwin);
 	if (pick_cnt < 1) return FALSE;
@@ -3346,7 +3346,7 @@ ape_again:
 			 (struct autopickup_exception *)pick_list[pick_idx].item.a_void);
 	        }
 	        free((void *)pick_list);
-	        pick_list = (menu_item *)0;
+	        pick_list = NULL;
 		destroy_nhwindow(tmpwin);
 		goto ape_again;
 	}
@@ -3646,7 +3646,7 @@ dotogglepickup (void)
 	    sprintf(buf, "ON, for %s objects%s", ocl[0] ? ocl : "all",
 			(iflags.autopickup_exceptions[AP_LEAVE] ||
 			 iflags.autopickup_exceptions[AP_GRAB]) ?
-			 ((count_ape_maps((int *)0, (int *)0) == 1) ?
+			 ((count_ape_maps(NULL, NULL) == 1) ?
 			    ", with one exception" : ", with some exceptions") :
 			"");
 	} else {
@@ -3754,7 +3754,7 @@ static const char *opt_intro[] = {
 	"                 SlashEM Options Help:",
 	"",
 #define CONFIG_SLOT 3	/* fill in next value at run-time */
-	(char *)0,
+	NULL,
 #define ENV_SLOT 4	/* substitute variable name in next value at run-time */
 #if !defined(MICRO) && !defined(MAC)
 	"or use `%s=\"<options>\"' in your environment",
@@ -3763,14 +3763,14 @@ static const char *opt_intro[] = {
 	"or press \"O\" while playing and use the menu.",
 	"",
  "Boolean options (which can be negated by prefixing them with '!' or \"no\"):",
-	(char *)0
+	NULL
 };
 
 static const char *opt_epilog[] = {
 	"",
  "Some of the options can be set only before the game is started; those",
 	"items will not be selectable in the 'O' command's menu.",
-	(char *)0
+	NULL
 };
 
 void 
@@ -3972,7 +3972,7 @@ boolean way;
 char *class_list;
 char *class_select;
 {
-    menu_item *pick_list = (menu_item *)0;
+    menu_item *pick_list = NULL;
     winid win;
     anything any;
     char buf[BUFSZ];
@@ -3980,7 +3980,7 @@ char *class_select;
     int ret;
     int next_accelerator, accelerator;
 
-    if (class_list == (char *)0 || class_select == (char *)0) return 0;
+    if (class_list == NULL || class_select == NULL) return 0;
     accelerator = 0;
     next_accelerator = 'a';
     any.a_void = 0;
@@ -3990,7 +3990,7 @@ char *class_select;
 	const char *text;
 	boolean selected;
 
-	text = (char *)0;
+	text = NULL;
 	selected = FALSE;
 	switch (category) {
 		case 0:
@@ -4075,7 +4075,7 @@ struct wc_Opt wc_options[] = {
 	{"vary_msgcount",WC_VARY_MSGCOUNT},
 	{"windowcolors", WC_WINDOWCOLORS},
 	{"mouse_support", WC_MOUSE_SUPPORT},
-	{(char *)0, 0L}
+	{NULL, 0L}
 };
 
 struct wc_Opt wc2_options[] = {
@@ -4087,7 +4087,7 @@ struct wc_Opt wc2_options[] = {
 	{"windowborders", WC2_WINDOWBORDERS},
 	{"petattr", WC2_PETATTR},
 	{"guicolor", WC2_GUICOLOR},
-	{(char *)0, 0L}
+	{NULL, 0L}
 };
 
 
@@ -4292,7 +4292,7 @@ char *op;
 	newop = mungspaces(buf);
 	while (newop && *newop) {
 
-		wn = tfg = tbg = (char *)0;
+		wn = tfg = tbg = NULL;
 
 		/* until first non-space in case there's leading spaces - before colorname*/
 		while(*newop && isspace(*newop)) newop++;

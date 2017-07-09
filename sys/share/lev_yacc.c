@@ -1230,7 +1230,7 @@ case 7:
 				maze.parts = NewTab(mazepart, npart);
 				for(i=0;i<npart;i++)
 				    maze.parts[i] = tmppart[i];
-				if (!write_level_file(yyvsp[-4].map, (splev *)0, &maze)) {
+				if (!write_level_file(yyvsp[-4].map, NULL, &maze)) {
 					yyerror("Can't write output file!!");
 					exit(EXIT_FAILURE);
 				}
@@ -1262,8 +1262,7 @@ case 8:
 				for(i=0; i<ncorridor; i++)
 				    special_lev.corrs[i] = tmpcor[i];
 				if (check_subrooms()) {
-				    if (!write_level_file(yyvsp[-6].map, &special_lev,
-							  (specialmaze *)0)) {
+				    if (!write_level_file(yyvsp[-6].map, &special_lev, NULL)) {
 					yyerror("Can't write output file!!");
 					exit(EXIT_FAILURE);
 				    }
@@ -1379,8 +1378,8 @@ break;
 case 25:
 {
 			tmproom[nrooms] = New(room);
-			tmproom[nrooms]->name = (char *) 0;
-			tmproom[nrooms]->parent = (char *) 0;
+			tmproom[nrooms]->name = NULL;
+			tmproom[nrooms]->parent = NULL;
 			tmproom[nrooms]->rtype = 0;
 			tmproom[nrooms]->rlit = 0;
 			tmproom[nrooms]->xalign = ERR;
@@ -1453,7 +1452,7 @@ case 39:
 {
 			tmproom[nrooms] = New(room);
 			tmproom[nrooms]->parent = yyvsp[-1].map;
-			tmproom[nrooms]->name = (char *) 0;
+			tmproom[nrooms]->name = NULL;
 			tmproom[nrooms]->rtype = yyvsp[-9].i;
 			tmproom[nrooms]->rlit = yyvsp[-7].i;
 			tmproom[nrooms]->filled = yyvsp[0].i;
@@ -1469,8 +1468,8 @@ break;
 case 40:
 {
 			tmproom[nrooms] = New(room);
-			tmproom[nrooms]->name = (char *) 0;
-			tmproom[nrooms]->parent = (char *) 0;
+			tmproom[nrooms]->name = NULL;
+			tmproom[nrooms]->parent = NULL;
 			tmproom[nrooms]->rtype = yyvsp[-9].i;
 			tmproom[nrooms]->rlit = yyvsp[-7].i;
 			tmproom[nrooms]->filled = yyvsp[0].i;
@@ -2150,7 +2149,7 @@ case 174:
 			tmprndlreg[nrndlreg]->delarea.x2 = current_region.x2;
 			tmprndlreg[nrndlreg]->delarea.y2 = current_region.y2;
 			tmprndlreg[nrndlreg]->rtype = 0;
-			tmprndlreg[nrndlreg]->rname.str = (char *)0;
+			tmprndlreg[nrndlreg]->rname.str = NULL;
 			nrndlreg++;
 			if (nrndlreg >= MAX_REGISTERS) {
 				yyerror("Too many random regions!");
@@ -2472,12 +2471,12 @@ case 199:
 break;
 case 202:
 {
-			yyval.map = (char *) 0;
+			yyval.map = NULL;
 		  }
 break;
 case 204:
 {
-			yyval.map = (char *) 0;
+			yyval.map = NULL;
 		  }
 break;
 case 205:

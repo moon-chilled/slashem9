@@ -135,7 +135,7 @@ boolean put_away;
 	    /* No weapon */
 	    if (uwep) {
 		You("are empty %s.", body_part(HANDED));
-		setuwep((struct obj *) 0, put_away);
+		setuwep(NULL, put_away);
 		res++;
 	    } else
 		You("are already empty %s.", body_part(HANDED));
@@ -182,7 +182,7 @@ boolean put_away;
 		 */
 		long dummy = wep->owornmask;
 		wep->owornmask |= W_WEP;
-		prinv((char *)0, wep, 0L);
+		prinv(NULL, wep, 0L);
 		wep->owornmask = dummy;
 	    }
 	    setuwep(wep, put_away);
@@ -210,7 +210,7 @@ boolean put_away;
 		struct monst *this_shkp;
 
 		if ((this_shkp = shop_keeper(inside_shop(u.ux, u.uy))) !=
-		    (struct monst *)0) {
+		    NULL) {
 		    pline("%s says \"You be careful with my %s!\"",
 			  shkname(this_shkp),
 			  xname(wep));
@@ -280,11 +280,11 @@ dowield (void)
 
 	/* Handle no object, or object in other slot */
 	if (wep == &zeroobj)
-		wep = (struct obj *) 0;
+		wep = NULL;
 	else if (wep == uswapwep)
 		return (doswapweapon());
 	else if (wep == uquiver)
-		setuqwep((struct obj *) 0);
+		setuqwep(NULL);
 	else if (wep->owornmask & (W_ARMOR | W_RING | W_AMUL | W_TOOL
 #ifdef STEED
 			| W_SADDLE
@@ -328,7 +328,7 @@ doswapweapon (void)
 	if (uswapwep)
 		unwield(uswapwep, FALSE);
 	u.twoweap = 0;
-	setuswapwep((struct obj *) 0, FALSE);
+	setuswapwep(NULL, FALSE);
 
 	/* Set your new primary weapon */
 	result = ready_weapon(oldswap, TRUE);
@@ -340,7 +340,7 @@ doswapweapon (void)
 	else {
 		setuswapwep(oldwep, FALSE);
 		if (uswapwep)
-			prinv((char *)0, uswapwep, 0L);
+			prinv(NULL, uswapwep, 0L);
 		else
 			You("have no secondary weapon readied.");
 	}
@@ -379,7 +379,7 @@ dowieldquiver (void)
 		/* Explicitly nothing */
 		if (uquiver) {
 			You("now have no ammunition readied.");
-			setuqwep(newquiver = (struct obj *) 0);
+			setuqwep(newquiver = NULL);
 		} else {
 			You("already have no ammunition readied!");
 			return(0);
@@ -405,14 +405,14 @@ dowieldquiver (void)
 
 		/* Check if it's the secondary weapon */
 		if (newquiver == uswapwep) {
-			setuswapwep((struct obj *) 0, TRUE);
+			setuswapwep(NULL, TRUE);
 			untwoweapon();
 		}
 
 		/* Okay to put in quiver; print it */
 		dummy = newquiver->owornmask;
 		newquiver->owornmask |= W_QUIVER;
-		prinv((char *)0, newquiver, 0L);
+		prinv(NULL, newquiver, 0L);
 		newquiver->owornmask = dummy;
 	}
 
@@ -472,7 +472,7 @@ const char *verb;	/* "rub",&c */
 	    verb, (obj->oclass == WEAPON_CLASS) ? "weapon" : "tool");
 	return FALSE;
     }
-    if (uquiver == obj) setuqwep((struct obj *)0);
+    if (uquiver == obj) setuqwep(NULL);
     if (uswapwep == obj) {
 	(void) doswapweapon();
 	/* doswapweapon might fail */
@@ -586,7 +586,7 @@ drop_uswapwep (void)
 	/* Avoid trashing makeplural's static buffer */
 	strcpy(str, makeplural(body_part(HAND)));
 	Your("%s from your %s!",  aobjnam(obj, "slip"), str);
-	setuswapwep((struct obj *) 0, FALSE);
+	setuswapwep(NULL, FALSE);
 	dropx(obj);
 }
 
@@ -645,7 +645,7 @@ uwepgone (void)
 		    if (!Blind) pline("%s glowing.", Tobjnam(uwep, "stop"));
 		}
 		unwield(uwep, FALSE);
-		setworn((struct obj *)0, W_WEP);
+		setworn(NULL, W_WEP);
 		unweapon = TRUE;
 		update_inventory();
 	}
@@ -655,7 +655,7 @@ void
 uswapwepgone (void)
 {
 	if (uswapwep) {
-		setworn((struct obj *)0, W_SWAPWEP);
+		setworn(NULL, W_SWAPWEP);
 		update_inventory();
 	}
 }
@@ -664,7 +664,7 @@ void
 uqwepgone (void)
 {
 	if (uquiver) {
-		setworn((struct obj *)0, W_QUIVER);
+		setworn(NULL, W_QUIVER);
 		update_inventory();
 	}
 }
@@ -704,14 +704,14 @@ boolean fade_scrolls;
 	if (!target)
 	    return;
 	victim = carried(target) ? &youmonst :
-	    mcarried(target) ? target->ocarry : (struct monst *)0;
+	    mcarried(target) ? target->ocarry : NULL;
 	vismon = victim && (victim != &youmonst) && canseemon(victim);
 	visobj = !victim && cansee(bhitpos.x, bhitpos.y); /* assume thrown */
 
 	erosion = acid_dmg ? target->oeroded2 : target->oeroded;
 
 	if (target->greased) {
-	    grease_protect(target,(char *)0,victim);
+	    grease_protect(target,NULL,victim);
 	} else if (target->oclass == SCROLL_CLASS) {
 	    if(fade_scrolls && target->otyp != SCR_BLANK_PAPER
 #ifdef MAIL

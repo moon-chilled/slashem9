@@ -549,7 +549,7 @@ close (int fd)
 {
  	if (lftrack.fd == fd) {
 		really_close();	/* close it, but reopen it to hold it */
-		fd = open_levelfile(0, (char *)0);
+		fd = open_levelfile(0, NULL);
 		lftrack.nethack_thinks_it_is_open = FALSE;
 		return 0;
 	}
@@ -937,9 +937,9 @@ FILE *stream;
 boolean uncomp;
 {
 #ifndef FILE_AREAS
-	if (freopen(filename, mode, stream) == (FILE *)0) {
+	if (freopen(filename, mode, stream) == NULL) {
 #else
-	if (freopen_area(filearea, filename, mode, stream) == (FILE *)0) {
+	if (freopen_area(filearea, filename, mode, stream) == NULL) {
 #endif
 		(void) fprintf(stderr, "redirect of %s for %scompress failed\n",
 			filename, uncomp ? "un" : "");
@@ -978,7 +978,7 @@ boolean uncomp;
 	/* when compressing, we know the file exists */
 	if (uncomp) {
 	    if ((cf = fopen_datafile_area(filearea, cfn, RDBMODE, FALSE)) ==
-	      (FILE *)0)
+	      NULL)
 		    return;
 	    (void) fclose(cf);
 	}
@@ -1007,7 +1007,7 @@ boolean uncomp;
 	    }
 	}
 # endif
-	args[++i] = (char *)0;
+	args[++i] = NULL;
 
 # ifdef TTY_GRAPHICS
 	/* If we don't do this and we are right after a y/n question *and*
@@ -1046,12 +1046,12 @@ boolean uncomp;
 		(void) setgid(getgid());
 		(void) setuid(getuid());
 		(void) execv(args[0], (char *const *) args);
-		perror((char *)0);
+		perror(NULL);
 		(void) fprintf(stderr, "Exec to %scompress %s failed.\n",
 			uncomp ? "un" : "", filename);
 		terminate(EXIT_FAILURE);
 	} else if (f == -1) {
-		perror((char *)0);
+		perror(NULL);
 		pline("Fork to %scompress %s failed.",
 			uncomp ? "un" : "", filename);
 		return;
@@ -1164,7 +1164,7 @@ char *lockname;
 {
 #if defined(MAC_MPW) || defined(__MWERKS__)
 # pragma unused(filename,lockname)
-	return (char*)0;
+	return NULL;
 #else
 # if defined(UNIX) || defined(WIN32)
 #  ifdef NO_FILE_LINKS
@@ -1178,7 +1178,7 @@ char *lockname;
 	return lockname;
 # else
 	lockname[0] = '\0';
-	return (char*)0;
+	return NULL;
 # endif  /* UNIX || WIN32 */
 #endif
 }
@@ -1365,7 +1365,7 @@ const char *filename;
 			/* fall through to standard names */
 		} else
 #endif
-		if ((fp = fopenp(filename, "r")) != (FILE *)0) {
+		if ((fp = fopenp(filename, "r")) != NULL) {
 		    configfile = filename;
 		    return(fp);
 #ifdef UNIX
@@ -1381,7 +1381,7 @@ const char *filename;
 
 #if defined(MICRO) || defined(MAC) || defined(WIN32)
 	if ((fp = fopenp(fqname(configfile, CONFIGPREFIX, 0), "r"))
-								!= (FILE *)0)
+								!= NULL)
 		return(fp);
 #else
 	/* constructed full path names don't need fqname() */
@@ -1390,16 +1390,16 @@ const char *filename;
 		strcpy(tmp_config, configfile);
 	else
 		sprintf(tmp_config, "%s/%s", envp, configfile);
-	if ((fp = fopenp(tmp_config, "r")) != (FILE *)0)
+	if ((fp = fopenp(tmp_config, "r")) != NULL)
 		return(fp);
 # if defined(__APPLE__)
 	/* try an alternative */
 	if (envp) {
 		sprintf(tmp_config, "%s/%s", envp, "Library/Preferences/NetHack Defaults");
-		if ((fp = fopenp(tmp_config, "r")) != (FILE *)0)
+		if ((fp = fopenp(tmp_config, "r")) != NULL)
 			return(fp);
 		sprintf(tmp_config, "%s/%s", envp, "Library/Preferences/NetHack Defaults.txt");
-		if ((fp = fopenp(tmp_config, "r")) != (FILE *)0)
+		if ((fp = fopenp(tmp_config, "r")) != NULL)
 			return(fp);
 	}
 # endif
@@ -1419,7 +1419,7 @@ const char *filename;
 	}
 	else if (!strncmp(windowprocs.name, "proxy/", 6)) {
 	    fp = fopenp("/etc/slashem/proxy.slashemrc", "r");
-	    if (fp != (FILE *)0)
+	    if (fp != NULL)
 		return(fp);
 	    else if (errno != ENOENT) {
 		raw_printf("Couldn't open /etc/slashem/proxy.slashemrc (%d).",
@@ -1428,7 +1428,7 @@ const char *filename;
 	    }
 	}
 #endif
-	return (FILE *)0;
+	return NULL;
 
 }
 
@@ -1477,7 +1477,7 @@ get_uchars(fp, buf, bufp, list, modlist, size, name)
 		break;
 
 	    case '\\':
-		if (fp == (FILE *)0)
+		if (fp == NULL)
 		    goto gi_error;
 		do  {
 		    if (!fgets(buf, BUFSZ, fp)) goto gi_error;
@@ -1725,8 +1725,8 @@ void
 read_config_file(filename)
 const char *filename;
 {
-#define tmp_levels	(char *)0
-#define tmp_ramdisk	(char *)0
+#define tmp_levels	NULL
+#define tmp_ramdisk	NULL
 
 #if defined(MICRO) || defined(WIN32)
 #undef tmp_levels
@@ -1844,7 +1844,7 @@ fopen_wizkit_file()
 
 	envp = nh_getenv("WIZKIT");
 	if (envp && *envp) (void) strncpy(wizkit, envp, WIZKIT_MAX - 1);
-	if (!wizkit[0]) return (FILE *)0;
+	if (!wizkit[0]) return NULL;
 
 #ifdef UNIX
 	if (access(wizkit, 4) == -1) {
@@ -1860,7 +1860,7 @@ fopen_wizkit_file()
 		/* fall through to standard names */
 	} else
 #endif
-	if ((fp = fopenp(wizkit, "r")) != (FILE *)0) {
+	if ((fp = fopenp(wizkit, "r")) != NULL) {
 	    return(fp);
 #ifdef UNIX
 	} else {
@@ -1873,14 +1873,14 @@ fopen_wizkit_file()
 
 #if defined(MICRO) || defined(MAC) || defined(WIN32)
 	if ((fp = fopenp(fqname(wizkit, CONFIGPREFIX, 0), "r"))
-								!= (FILE *)0)
+								!= NULL)
 		return(fp);
 #else
 	envp = nh_getenv("HOME");
 	if (envp)
 		sprintf(tmp_wizkit, "%s/%s", envp, wizkit);
 	else 	strcpy(tmp_wizkit, wizkit);
-	if ((fp = fopenp(tmp_wizkit, "r")) != (FILE *)0)
+	if ((fp = fopenp(tmp_wizkit, "r")) != NULL)
 		return(fp);
 	else if (errno != ENOENT) {
 		/* e.g., problems when setuid NetHack can't search home
@@ -1890,7 +1890,7 @@ fopen_wizkit_file()
 		wait_synch();
 	}
 #endif
-	return (FILE *)0;
+	return NULL;
 }
 
 void
@@ -1912,7 +1912,7 @@ read_wizkit()
 		else *ep = '\0';		/* remove newline */
 
 		if (buf[0]) {
-			otmp = readobjnam(buf, (struct obj *)0, FALSE);
+			otmp = readobjnam(buf, NULL, FALSE);
 			if (otmp) {
 			    if (otmp != &zeroobj)
 				otmp = addinv(otmp);
@@ -2151,7 +2151,7 @@ recover_savefile()
 		 * maximum level number (for the endlevel) must be < 256
 		 */
 		if (lev != savelev) {
-			lfd = open_levelfile(lev, (char *)0);
+			lfd = open_levelfile(lev, NULL);
 			if (lfd >= 0) {
 				/* any or all of these may not exist */
 				levc = (xchar) lev;

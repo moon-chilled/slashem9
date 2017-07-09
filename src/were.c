@@ -23,7 +23,7 @@ were_change (register struct monst *mon)
 		    case PM_HUMAN_WEREJACKAL:	howler = "jackal";  break;
 		    case PM_HUMAN_WEREPANTHER:	howler = "panther"; break;
 		    case PM_HUMAN_WERETIGER:	howler = "tiger";   break;
-		    default:			howler = (char *)0; break;
+		    default:			howler = NULL; break;
 		    }
 		    if (howler)
 			You_hear("a %s howling at the moon.", howler);
@@ -155,7 +155,7 @@ char *genbuf;
 		if (canseemon(mtmp)) *visible += 1;
 	    }
 	    if (yours && mtmp)
-		(void) tamedog(mtmp, (struct obj *) 0);
+		(void) tamedog(mtmp, NULL);
 	}
 	return total;
 }

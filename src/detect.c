@@ -42,7 +42,7 @@ struct obj *o_in(struct obj *obj, char oclass) {
 		    (temp = o_in(otmp, oclass)))
 		return temp;
     }
-    return (struct obj *) 0;
+    return NULL;
 }
 
 /* Recursively search obj for an object made of specified material and return 1st found */
@@ -58,7 +58,7 @@ struct obj *o_material (struct obj *obj, unsigned int material) {
 	    else if (Has_contents(otmp) && (temp = o_material(otmp, material)))
 		return temp;
     }
-    return (struct obj *) 0;
+    return NULL;
 }
 
 static void do_dknown_of(struct obj *obj) {
@@ -389,7 +389,7 @@ int		class		/* an object class, 0 for all */ ) {
 				    detector->oclass == SPBOOK_CLASS) &&
 			detector->blessed);
     int ct = 0, ctu = 0;
-    register struct obj *obj, *otmp = (struct obj *)0;
+    register struct obj *obj, *otmp = NULL;
     register struct monst *mtmp;
     int uw = u.uinwater;
     int sym, boulder = 0;
@@ -698,13 +698,13 @@ outtrapmap:
 
     for (obj = fobj; obj; obj = obj->nobj)
 	if ((obj->otyp==LARGE_BOX || obj->otyp==CHEST) && obj->otrapped)
-	sense_trap((struct trap *)0, obj->ox, obj->oy, sobj && sobj->cursed);
+	sense_trap(NULL, obj->ox, obj->oy, sobj && sobj->cursed);
 
     for (door = 0; door < doorindex; door++) {
 	x = doors[door].x;
 	y = doors[door].y;
 	if (levl[x][y].doormask & D_TRAPPED)
-	sense_trap((struct trap *)0, x, y, sobj && sobj->cursed);
+	sense_trap(NULL, x, y, sobj && sobj->cursed);
     }
 
     newsym(u.ux,u.uy);
@@ -800,7 +800,7 @@ void use_crystal_ball(struct obj *obj) {
 
     if (Hallucination) {
 	if (!obj->spe) {
-	    pline("All you see is funky %s haze.", hcolor((char *)0));
+	    pline("All you see is funky %s haze.", hcolor(NULL));
 	} else {
 	    switch(rnd(6)) {
 	    case 1 : You("grok some groovy globs of incandescent lava.");
@@ -809,7 +809,7 @@ void use_crystal_ball(struct obj *obj) {
 			   poly_gender() == 1 ? "babe" : "dude");
 		break;
 	    case 3 : pline_The("crystal pulses with sinister %s light!",
-				hcolor((char *)0));
+				hcolor(NULL));
 		break;
 	    case 4 : You("see goldfish swimming above fluorescent rocks.");
 		break;
@@ -825,7 +825,7 @@ void use_crystal_ball(struct obj *obj) {
 
     /* read a single character */
     if (flags.verbose) You("may look for an object or monster symbol.");
-    ch = yn_function("What do you look for?", (char *)0, '\0');
+    ch = yn_function("What do you look for?", NULL, '\0');
     /* Don't filter out ' ' here; it has a use */
     if ((ch != def_monsyms[S_GHOST]) && index(quitchars,ch)) {
 	if (flags.verbose) pline("%s", Never_mind);
@@ -849,14 +849,14 @@ void use_crystal_ball(struct obj *obj) {
 	if (ch == DEF_MIMIC_DEF) ch = DEF_MIMIC;
 
 	if ((class = def_char_to_objclass(ch)) != MAXOCLASSES)
-		ret = object_detect((struct obj *)0, class);
+		ret = object_detect(NULL, class);
 	else if ((class = def_char_to_monclass(ch)) != MAXMCLASSES)
-		ret = monster_detect((struct obj *)0, class);
+		ret = monster_detect(NULL, class);
 	else if (iflags.bouldersym && (ch == iflags.bouldersym))
-		ret = object_detect((struct obj *)0, ROCK_CLASS);
+		ret = object_detect(NULL, ROCK_CLASS);
 	else switch(ch) {
 		case '^':
-		    ret = trap_detect((struct obj *)0);
+		    ret = trap_detect(NULL);
 		    break;
 		default:
 		    {
@@ -1194,7 +1194,7 @@ int dosearch0(int aflag) {
 
 			    if (trap->ttyp == STATUE_TRAP) {
  				mtmp = activate_statue_trap(trap, x, y, FALSE);
- 				if (mtmp != (struct monst *)0)
+ 				if (mtmp != NULL)
 				    exercise(A_WIS, TRUE);
 				return(1);
 			    } else {

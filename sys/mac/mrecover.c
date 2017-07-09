@@ -396,10 +396,10 @@ warmup()
 	}
 
 	/* load and align various dialog/alert templates */
-	(void) alignTemplate('ALRT', alidNote, 0, 4, (Point *) 0L);
-	(void) alignTemplate('ALRT', alidHelp, 0, 4, (Point *) 0L);
+	(void) alignTemplate('ALRT', alidNote, 0, 4, NULLL);
+	(void) alignTemplate('ALRT', alidHelp, 0, 4, NULLL);
 
-	thermoTHnd = (DialogTHndl) alignTemplate('DLOG', dlogProgress, 20, 8, (Point *) 0L);
+	thermoTHnd = (DialogTHndl) alignTemplate('DLOG', dlogProgress, 20, 8, NULLL);
 
 	(void) alignTemplate('DLOG', getDlgID, 0, 6, (Point *) &sfGetWhere);
 

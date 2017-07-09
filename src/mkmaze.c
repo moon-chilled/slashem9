@@ -392,7 +392,7 @@ d_level *lev;
 	break;
     case LR_DOWNSTAIR:
     case LR_UPSTAIR:
-	mkstairs(x, y, (char)rtype, (struct mkroom *)0);
+	mkstairs(x, y, (char)rtype, NULL);
 	break;
     case LR_BRANCH:
 	place_branch(Is_branchlev(&u.uz), x, y);
@@ -476,7 +476,7 @@ fixup_special()
 
     /* place dungeon branch if not placed above */
     if (!added_branch && Is_branchlev(&u.uz)) {
-	place_lregion(0,0,0,0,0,0,0,0,LR_BRANCH,(d_level *)0);
+	place_lregion(0,0,0,0,0,0,0,0,LR_BRANCH,NULL);
     }
 
 	/* KMH -- arboreal levels */
@@ -498,7 +498,7 @@ fixup_special()
 	croom = &rooms[0]; /* only one room on the medusa level */
 	for (tryct = rnd(4); tryct; tryct--) {
 	    x = somex(croom); y = somey(croom);
-	    if (goodpos(x, y, (struct monst *)0, 0)) {
+	    if (goodpos(x, y, NULL, 0)) {
 		otmp = mk_tt_object(STATUE, x, y);
 		while (otmp && (poly_when_stoned(&mons[otmp->corpsenm]) ||
 				pm_resistance(&mons[otmp->corpsenm],MR_STONE))) {
@@ -511,7 +511,7 @@ fixup_special()
 	if (rn2(2))
 	    otmp = mk_tt_object(STATUE, somex(croom), somey(croom));
 	else /* Medusa statues don't contain books */
-	    otmp = mkcorpstat(STATUE, (struct monst *)0, (struct permonst *)0,
+	    otmp = mkcorpstat(STATUE, NULL, NULL,
 			      somex(croom), somey(croom), FALSE);
 	if (otmp) {
 	    while (pm_resistance(&mons[otmp->corpsenm],MR_STONE)
@@ -649,10 +649,10 @@ makemaz (register const char *s)
 
 	wallification(2, 2, x_maze_max, y_maze_max, TRUE);
 	mazexy(&mm);
-	mkstairs(mm.x, mm.y, 1, (struct mkroom *)0);		/* up */
+	mkstairs(mm.x, mm.y, 1, NULL);		/* up */
 	if (!Invocation_lev(&u.uz)) {
 	    mazexy(&mm);
-	    mkstairs(mm.x, mm.y, 0, (struct mkroom *)0);	/* down */
+	    mkstairs(mm.x, mm.y, 0, NULL);	/* down */
 	} else {	/* choose "vibrating square" location */
 #define x_maze_min 2
 #define y_maze_min 2
@@ -714,14 +714,14 @@ makemaz (register const char *s)
 	}
 	for(x = rn1(5,7); x; x--) {
 		mazexy(&mm);
-		(void) makemon((struct permonst *) 0, mm.x, mm.y, NO_MM_FLAGS);
+		(void) makemon(NULL, mm.x, mm.y, NO_MM_FLAGS);
 	}
 	for(x = rn1(6,7); x; x--) {
 		mazexy(&mm);
 		(void) mkgold(0L,mm.x,mm.y);
 	}
 	for(x = rn1(6,7); x; x--)
-		mktrap(0,1,(struct mkroom *) 0, (coord*) 0);
+		mktrap(0,1,NULL, NULL);
 }
 
 #ifdef MICRO
@@ -1004,7 +1004,7 @@ movebubbles (void)
 
 			/* pick up objects, monsters, hero, and traps */
 			if (OBJ_AT(x,y)) {
-			    struct obj *olist = (struct obj *) 0, *otmp;
+			    struct obj *olist = NULL, *otmp;
 			    struct container *cons = (struct container *)
 				alloc(sizeof(struct container));
 
@@ -1050,7 +1050,7 @@ movebubbles (void)
 			    cons->x = x;
 			    cons->y = y;
 			    cons->what = CONS_HERO;
-			    cons->list = (void *) 0;
+			    cons->list = NULL;
 
 			    cons->next = b->cons;
 			    b->cons = cons;
@@ -1154,7 +1154,7 @@ void
 restore_waterlevel(fd)
 register int fd;
 {
-	register struct bubble *b = (struct bubble *)0, *btmp;
+	register struct bubble *b = NULL, *btmp;
 	register int i;
 	int n;
 
@@ -1175,12 +1175,12 @@ register int fd;
 			b->prev = btmp;
 		} else {
 			bbubbles = b;
-			b->prev = (struct bubble *)0;
+			b->prev = NULL;
 		}
 		mv_bubble(b,0,0,TRUE);
 	}
 	ebubbles = b;
-	b->next = (struct bubble *)0;
+	b->next = NULL;
 	was_waterlevel = TRUE;
 }
 
@@ -1260,7 +1260,7 @@ unsetup_waterlevel()
 		bb = b->next;
 		free((void *)b);
 	}
-	bbubbles = ebubbles = (struct bubble *)0;
+	bbubbles = ebubbles = NULL;
 }
 
 static void
@@ -1306,8 +1306,8 @@ register int x, y, n;
 		b->prev = ebubbles;
 	}
 	else
-		b->prev = (struct bubble *)0;
-	b->next =  (struct bubble *)0;
+		b->prev = NULL;
+	b->next =  NULL;
 	ebubbles = b;
 	mv_bubble(b,0,0,TRUE);
 }

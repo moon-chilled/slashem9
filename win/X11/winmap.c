@@ -305,12 +305,12 @@ init_tiles(wp)
     int errorcode;
     char *tile_file;
 #else
-    FILE *fp = (FILE *)0;
+    FILE *fp = NULL;
     x11_header header;
     unsigned char *cp, *colormap = (unsigned char *)0;
     unsigned char *tb, *tile_bytes = (unsigned char *)0;
     int size;
-    XColor *colors = (XColor *)0;
+    XColor *colors = NULL;
     int i, x, y;
     int bitmap_pad;
     int ddepth;
@@ -471,7 +471,7 @@ init_tiles(wp)
 
 	if (!XAllocColor(dpy, DefaultColormapOfScreen(screen), &colors[i]) &&
 	    !nhApproxColor(screen, DefaultColormapOfScreen(screen),
-			   (char *)0, &colors[i])) {
+			   NULL, &colors[i])) {
 	    sprintf(buf, "%dth out of %ld color allocation failed",
 		    i, header.ncolors);
 	    X11_raw_print(buf);
@@ -1157,7 +1157,7 @@ map_input(w, event, params, num_params)
 		meta = !!(key->state & Mod1Mask);
 		nbytes =
 		    XLookupString(key, keystring, MAX_KEY_STRING,
-				  (KeySym *)0, (XComposeStatus *)0);
+				  NULL, NULL);
 	    }
 	key_events:
 	    /* Modifier keys return a zero length string when pressed. */

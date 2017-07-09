@@ -91,9 +91,9 @@ register int roll;
 register struct attack *mattk;
 {
 	register boolean nearmiss = (target == roll);
-	register struct obj *blocker = (struct obj *)0;	
+	register struct obj *blocker = NULL;	
 		/* 3 values for blocker
-		 *	No blocker:  (struct obj *) 0  
+		 *	No blocker:  NULL  
 		 * 	Piece of armour:  object
 		 *	magical: &zeroobj
 		 */
@@ -236,7 +236,7 @@ wildmiss(mtmp, mattk)		/* monster attacked your displaced image */
 		/* maybe it's attacking an image around the corner? */
 
 	compat = (mattk->adtyp == AD_SEDU || mattk->adtyp == AD_SSEX) &&
-		 could_seduce(mtmp, &youmonst, (struct attack *)0);
+		 could_seduce(mtmp, &youmonst, NULL);
 
 	if (!mtmp->mcansee || (Invis && !perceives(mtmp->data))) {
 	    const char *swings =
@@ -1112,7 +1112,7 @@ hitmu(mtmp, mattk)
 				pline("As %s hits you, %s breaks into splinters.",
 				      mon_nam(mtmp), the(xname(otmp)));
 				useup(otmp);
-				otmp = (struct obj *) 0;
+				otmp = NULL;
 				possibly_unwield(mtmp);
 				if (u.umonnum != PM_SHADE)
 				    dmg++;
@@ -1292,7 +1292,7 @@ hitmu(mtmp, mattk)
 		}
 		break;
 	    case AD_BLND:
-		if (can_blnd(mtmp, &youmonst, mattk->aatyp, (struct obj*)0)) {
+		if (can_blnd(mtmp, &youmonst, mattk->aatyp, NULL)) {
 		    if (!Blind) pline("%s blinds you!", Monnam(mtmp));
 		    make_blinded(Blinded+(long)dmg,FALSE);
 		    if (!Blind) Your(vision_clears);
@@ -1715,7 +1715,7 @@ dopois:
 		    }
 		    if (!rn2(3)) exercise(A_STR, TRUE);
 		    if (!rn2(3)) exercise(A_CON, TRUE);
-		    if (Sick) make_sick(0L, (char *) 0, FALSE, SICK_ALL);
+		    if (Sick) make_sick(0L, NULL, FALSE, SICK_ALL);
 		    flags.botl = 1;
 		    if (goaway) {
 			mongone(mtmp);
@@ -2086,7 +2086,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 		    }	
 		    break;
 		case AD_BLND:
-		    if (can_blnd(mtmp, &youmonst, mattk->aatyp, (struct obj*)0)) {
+		    if (can_blnd(mtmp, &youmonst, mattk->aatyp, NULL)) {
 			if(!Blind) {
 			    You_cant("see in here!");
 			    make_blinded((long)tmp,FALSE);
@@ -2264,7 +2264,7 @@ gazemu (	/* monster gazes at you */
 		    if (useeit)
 			(void) ureflects("%s gaze is reflected by your %s.",
 					 s_suffix(Monnam(mtmp)));
-		    if (mon_reflects(mtmp, !useeit ? (char *)0 :
+		    if (mon_reflects(mtmp, !useeit ? NULL :
 				     "The gaze is reflected away by %s %s!"))
 			break;
 		    if (!m_canseeu(mtmp)) { /* probably you're invisible */
@@ -2670,9 +2670,9 @@ doseduce (register struct monst *mon)
 			Blind ? "She" : Monnam(mon), xname(ring));
 		makeknown(RIN_ADORNMENT);
 		if (ring==uleft || ring==uright) Ring_gone(ring);
-		if (ring==uwep) setuwep((struct obj *)0, FALSE);
-		if (ring==uswapwep) setuswapwep((struct obj *)0, FALSE);
-		if (ring==uquiver) setuqwep((struct obj *)0);
+		if (ring==uwep) setuwep(NULL, FALSE);
+		if (ring==uswapwep) setuswapwep(NULL, FALSE);
+		if (ring==uquiver) setuqwep(NULL);
 		freeinv(ring);
 		(void) mpickobj(mon,ring);
 	    } else {
@@ -2717,7 +2717,7 @@ doseduce (register struct monst *mon)
 		    setworn(ring, LEFT_RING);
 		} else impossible("ring replacement");
 		Ring_on(ring);
-		prinv((char *)0, ring, 0L);
+		prinv(NULL, ring, 0L);
 	    }
 	}
 
@@ -3098,8 +3098,8 @@ cloneu (void)
 	register struct monst *mon;
 	int mndx = monsndx(youmonst.data);
 
-	if (u.mh <= 1) return(struct monst *)0;
-	if (mvitals[mndx].mvflags & G_EXTINCT) return(struct monst *)0;
+	if (u.mh <= 1) return NULL;
+	if (mvitals[mndx].mvflags & G_EXTINCT) return NULL;
 	mon = makemon(youmonst.data, u.ux, u.uy, NO_MINVENT|MM_EDOG);
 	mon = christen_monst(mon, plname);
 	initedog(mon);

@@ -59,10 +59,10 @@ const char *type;
 		return FALSE;
 	}
 
-        if (ppm_file != (FILE*)0) return TRUE;
+        if (ppm_file != NULL) return TRUE;
          	
 	ppm_file = fopen(filename, type);
-	if (ppm_file == (FILE *)0) {
+	if (ppm_file == NULL) {
 		fprintf(stderr, "cannot open ppm file %s\n", filename);
 		return FALSE;
 	}

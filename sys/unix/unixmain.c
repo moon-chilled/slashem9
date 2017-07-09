@@ -307,7 +307,7 @@ char *argv[];
 			{
 			  char *user;
 			  int uid;
-			  struct passwd *pw = (struct passwd *)0;
+			  struct passwd *pw = NULL;
 
 			  uid = getuid();
 			  user = getlogin();

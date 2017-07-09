@@ -692,7 +692,7 @@ X11_select_menu(window, how, menu_list)
 #endif
     char gacc[QBUFSZ], *ap;
 
-    *menu_list = (menu_item *) 0;
+    *menu_list = NULL;
     check_winid(window);
     wp = &window_list[window];
     menu_info = wp->menu_information;
@@ -746,7 +746,7 @@ X11_select_menu(window, how, menu_list)
     for (curr = menu_info->new_menu.base; curr; boolp++, curr = curr->next)
 	*boolp = (curr->identifier.a_void != 0);
 #else
-    menu_info->new_menu.sensitive = (Boolean *) 0;
+    menu_info->new_menu.sensitive = NULL;
 #endif
     labeled = (menu_info->new_menu.query && *(menu_info->new_menu.query))
 	? TRUE : FALSE;
@@ -1095,8 +1095,8 @@ reset_menu_to_default(mp)
     mp->query = (const char *)0;
     mp->gacc = (const char *)0;
     mp->count = 0;
-    mp->list_pointer = (String *)0;
-    mp->sensitive = (Boolean *)0;
+    mp->list_pointer = NULL;
+    mp->sensitive = NULL;
     mp->curr_selector = 'a';	/* first accelerator */
 }
 

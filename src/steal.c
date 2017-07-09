@@ -188,7 +188,7 @@ boolean unchain_ball;	/* whether to unpunish or just unwield */
 	    else if (obj == uarmu) (void) Shirt_off();
 #endif
 	    /* catchall -- should never happen */
-	    else setworn((struct obj *)0, obj->owornmask & W_ARMOR);
+	    else setworn(NULL, obj->owornmask & W_ARMOR);
 	} else if (obj->owornmask & W_AMUL) {
 	    Amulet_off();
 	} else if (obj->owornmask & W_RING) {
@@ -361,7 +361,7 @@ gotobj:
 			}
 			otmp->cursed = 0;
 			/* can't charm you without first waking you */
-			if (multi < 0 && is_fainted()) unmul((char *)0);
+			if (multi < 0 && is_fainted()) unmul(NULL);
 			slowly = (armordelay >= 1 || multi < 0);
 			if (do_charm) {
 			    char action[15];
@@ -438,7 +438,7 @@ mpickobj (register struct monst *mtmp, register struct obj *otmp)
 #ifndef GOLDOBJ
     if (otmp->oclass == COIN_CLASS) {
 	mtmp->mgold += otmp->quan;
-	obfree(otmp, (struct obj *)0);
+	obfree(otmp, NULL);
 	freed_otmp = 1;
     } else {
 #endif
@@ -471,7 +471,7 @@ mpickobj (register struct monst *mtmp, register struct obj *otmp)
 void 
 stealamulet (struct monst *mtmp)
 {
-    struct obj *otmp = (struct obj *)0;
+    struct obj *otmp = NULL;
     int real=0, fake=0;
 
     /* select the artifact to steal */
@@ -604,7 +604,7 @@ boolean is_pet;		/* If true, pet should keep wielded/worn items */
 	}
 
 	/* put kept objects back */
-	while ((otmp = keepobj) != (struct obj *)0) {
+	while ((otmp = keepobj) != NULL) {
 	    keepobj = otmp->nobj;
 	    (void) add_to_minv(mtmp, otmp);
 	}

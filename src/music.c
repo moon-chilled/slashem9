@@ -190,7 +190,7 @@ int distance;
 
 	if (u.uswallow) {
 	    if (!resist(u.ustuck, TOOL_CLASS, 0, NOTELL))
-		(void) tamedog(u.ustuck, (struct obj *) 0);
+		(void) tamedog(u.ustuck, NULL);
 	} else {
 	    for (mtmp = fmon; mtmp; mtmp = mtmp2) {
 		mtmp2 = mtmp->nmon;
@@ -198,7 +198,7 @@ int distance;
 
 		if (distu(mtmp->mx, mtmp->my) <= distance) {
 		    if (!resist(mtmp, TOOL_CLASS, 0, NOTELL))
-			(void) tamedog(mtmp, (struct obj *) 0);
+			(void) tamedog(mtmp, NULL);
 		}
 	    }
 	}
@@ -403,7 +403,7 @@ struct obj *instr;
 	    if (do_spec && instr->spe > 0) {
 		consume_obj_charge(instr, TRUE);
 
-		if (!getdir((char *)0)) {
+		if (!getdir(NULL)) {
 		    pline("%s.", Tobjnam(instr, "vibrate"));
 		    break;
 		} else if (!u.dx && !u.dy && !u.dz) {
@@ -465,7 +465,7 @@ struct obj *instr;
 		instr->spe--;
 		cnt += rn2(4) + 3;
 		while(cnt--)
-		(void) makemon((struct permonst *) 0, u.ux, u.uy, NO_MM_FLAGS);
+		(void) makemon(NULL, u.ux, u.uy, NO_MM_FLAGS);
 	    }
 		break;
 	case PAN_PIPE_OF_THE_SEWERS:
@@ -477,7 +477,7 @@ struct obj *instr;
 		cnt += rn2(4) + 3;
 		while(cnt--) {
 		mtmp = makemon(&mons[PM_SEWER_RAT], u.ux, u.uy, NO_MM_FLAGS);
-		(void) tamedog(mtmp, (struct obj *) 0);
+		(void) tamedog(mtmp, NULL);
 		}
 	     }
 		break;

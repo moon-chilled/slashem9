@@ -173,7 +173,7 @@ other_mon_has_arti(mtmp, otyp)
 	    if(mtmp2 != mtmp)
 		if(mon_has_arti(mtmp2, otyp)) return(mtmp2);
 
-	return((struct monst *)0);
+	return(NULL);
 }
 
 static struct obj *
@@ -188,7 +188,7 @@ on_ground(otyp)
 		    return(otmp);
 	    } else if (is_quest_artifact(otmp))
 		return(otmp);
-	return((struct obj *)0);
+	return(NULL);
 }
 
 static boolean
@@ -419,7 +419,7 @@ nasty (struct monst *mcast)
     int count=0;
 
     if(!rn2(10) && Inhell) {
-	msummon((struct monst *) 0);	/* summons like WoY */
+	msummon(NULL);	/* summons like WoY */
 	count++;
     } else {
 	tmp = (u.ulevel > 3) ? u.ulevel/3 : 1; /* just in case -- rph */
@@ -446,7 +446,7 @@ nasty (struct monst *mcast)
 		    mtmp->msleeping = mtmp->mpeaceful = mtmp->mtame = 0;
 		    set_malign(mtmp);
 		} else /* GENOD? */
-		    mtmp = makemon((struct permonst *)0,
+		    mtmp = makemon(NULL,
 					bypos.x, bypos.y, NO_MM_FLAGS);
 		if(mtmp && (mtmp->data->maligntyp == 0 ||
 		            sgn(mtmp->data->maligntyp) == sgn(castalign)) ) {
@@ -525,7 +525,7 @@ intervene (void)
 			break;
 	    case 3:	aggravate();
 			break;
-	    case 4:	(void)nasty((struct monst *)0);
+	    case 4:	(void)nasty(NULL);
 			break;
 	    case 5:	resurrect();
 			break;

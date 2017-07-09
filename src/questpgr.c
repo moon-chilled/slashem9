@@ -113,7 +113,7 @@ load_qtlist (void)
 	 * on when we are actually paging the messages out.
 	 */
 
-	qt_list.common = qt_list.chrole = (struct qtmsg *)0;
+	qt_list.common = qt_list.chrole = NULL;
 
 	for (i = 0; i < n_classes; i++) {
 	    if (!strncmp(COMMON_ID, qt_classes[i], LEN_HDR))
@@ -219,7 +219,7 @@ int	msgnum;
 	for (qt_msg = qtm_list; qt_msg->msgnum > 0; qt_msg++)
 	    if (qt_msg->msgnum == msgnum) return(qt_msg);
 
-	return((struct qtmsg *)0);
+	return(NULL);
 }
 
 static void

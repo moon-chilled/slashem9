@@ -177,7 +177,7 @@ merge_choice (struct obj *objlist, struct obj *obj)
 	int save_nocharge;
 
 	if (obj->otyp == SCR_SCARE_MONSTER)	/* punt on these */
-	    return (struct obj *)0;
+	    return NULL;
 	/* if this is an item on the shop floor, the attributes it will
 	   have when carried are different from what they are now; prevent
 	   that from eliciting an incorrect result from mergable() */
@@ -192,7 +192,7 @@ merge_choice (struct obj *objlist, struct obj *obj)
 	       another unpaid object, but we can't check that here (depends
 	       too much upon shk's bill) and if it doesn't merge it would
 	       end up in the '#' overflow inventory slot, so reject it now. */
-	    else if (inhishop(shkp)) return (struct obj *)0;
+	    else if (inhishop(shkp)) return NULL;
 	}
 	while (objlist) {
 	    if (mergable(objlist, obj)) break;
@@ -518,7 +518,7 @@ useupall (struct obj *obj)
 	if (Has_contents(obj)) delete_contents(obj);
 	setnotworn(obj);
 	freeinv(obj);
-	obfree(obj, (struct obj *)0);
+	obfree(obj, NULL);
 }
 
 void 
@@ -644,7 +644,7 @@ delobj (register struct obj *obj)
 	if (Has_contents(obj)) delete_contents(obj);
 	obj_extract_self(obj);
 	if (update_map) newsym(obj->ox, obj->oy);
-	obfree(obj, (struct obj *) 0);
+	obfree(obj, NULL);
 }
 
 
@@ -656,7 +656,7 @@ sobj_at (register int n, register int x, register int y)
 	for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
 		if(otmp->otyp == n)
 		    return(otmp);
-	return((struct obj *)0);
+	return(NULL);
 }
 
 
@@ -668,7 +668,7 @@ carrying (register int type)
 	for(otmp = invent; otmp; otmp = otmp->nobj)
 		if(otmp->otyp == type)
 			return(otmp);
-	return((struct obj *) 0);
+	return(NULL);
 }
 
 const char *
@@ -700,7 +700,7 @@ o_on (unsigned int id, register struct obj *objchn)
 			return temp;
 		objchn = objchn->nobj;
 	}
-	return((struct obj *) 0);
+	return(NULL);
 }
 
 boolean
@@ -724,7 +724,7 @@ g_at (register int x, register int y)
 	    if (obj->oclass == COIN_CLASS) return obj;
 	    obj = obj->nexthere;
 	}
-	return((struct obj *)0);
+	return(NULL);
 }
 
 #ifndef GOLDOBJ
@@ -913,7 +913,7 @@ struct obj *obj;
 /*
  * getobj returns:
  *	struct obj *xxx:	object to do something with.
- *	(struct obj *) 0	error return: no object.
+ *	NULL	error return: no object.
  *	&zeroobj		explicitly no object (as in w-).
  *	&thisplace		this place (as in r.).
 #ifdef GOLDOBJ
@@ -973,7 +973,7 @@ getobj (register const char *let, register const char *word)
 	    let++;
 	    if (!u.uswallow) {
 		floorchain = can_reach_floorobj() ? level.objects[u.ux][u.uy] :
-			     (struct obj *)0;
+			     NULL;
 		floorfollow = BY_NEXTHERE;
 	    } else {
 		floorchain = u.ustuck->minvent;
@@ -1074,7 +1074,7 @@ getobj (register const char *let, register const char *word)
 	   !allowfloor && !allowthisplace) {
 		You("don't have anything %sto %s.",
 			foox ? "else " : "", word);
-		return((struct obj *)0);
+		return(NULL);
 	}
 	
 	for(;;) {
@@ -1104,7 +1104,7 @@ getobj (register const char *let, register const char *word)
 		    ilet = readchar();
 		else
 #endif
-		    ilet = yn_function(qbuf, (char *)0, '\0');
+		    ilet = yn_function(qbuf, NULL, '\0');
 		if(ilet == '0') prezero = TRUE;
 		while(digit(ilet) && allowcnt) {
 #ifdef REDO
@@ -1121,10 +1121,10 @@ getobj (register const char *let, register const char *word)
 		if(index(quitchars,ilet)) {
 		    if(flags.verbose)
 			pline(Never_mind);
-		    return((struct obj *)0);
+		    return(NULL);
 		}
 		if(ilet == '-') {
-			return(allownone ? &zeroobj : (struct obj *) 0);
+			return(allownone ? &zeroobj : NULL);
 		}
 		if(ilet == def_oc_syms[COIN_CLASS]) {
 			if (!usegold) {
@@ -1134,14 +1134,14 @@ getobj (register const char *let, register const char *word)
 			    } else {
 				You("cannot %s gold.", word);
 			    }
-			    return(struct obj *)0;
+			    return NULL;
 #ifndef GOLDOBJ
 			} else if (!allowgold) {
 				You("are not carrying any gold.");
-				return(struct obj *)0;
+				return NULL;
 #endif
 			} 
-			if(cnt == 0 && prezero) return((struct obj *)0);
+			if(cnt == 0 && prezero) return(NULL);
 			/* Historic note: early Nethack had a bug which was
 			 * first reported for Larn, where trying to drop 2^32-n
 			 * gold pieces was allowed, and did interesting things
@@ -1150,7 +1150,7 @@ getobj (register const char *let, register const char *word)
 			 */
 			if(cnt < 0) {
 	pline_The("LRS would be very interested to know you have that much.");
-				return(struct obj *)0;
+				return NULL;
 			}
 
 #ifndef GOLDOBJ
@@ -1164,7 +1164,7 @@ getobj (register const char *let, register const char *word)
 			return &thisplace;
 		    else {
 			pline(silly_thing_to, word);
-			return(struct obj *)0;
+			return NULL;
 		    }
 		}
 		if(ilet == ',') {
@@ -1173,13 +1173,13 @@ getobj (register const char *let, register const char *word)
 
 		    if (!usefloor) {
 			pline(silly_thing_to, word);
-			return(struct obj *)0;
+			return NULL;
 		    } else if (!allowfloor) {
 			if ((Levitation || Flying))
 				You("cannot reach the floor to %s while %sing.", word, Levitation ? "float" : "fly");
 			else
 				pline("There's nothing here to %s.", word);
-			return(struct obj *)0;
+			return NULL;
 		    }
 		    sprintf(qbuf, "%s what?", word);
 		    n = query_objlist(qbuf, floorchain,
@@ -1188,7 +1188,7 @@ getobj (register const char *let, register const char *word)
 		    if (n<0) {
 			if (flags.verbose)
 			    pline(Never_mind);
-			return (struct obj *)0;
+			return NULL;
 		    } else if (!n)
 			continue;
 		    otmp = pick_list->item.a_obj;
@@ -1198,13 +1198,13 @@ getobj (register const char *let, register const char *word)
 		    return otmp;
 		}
 		if(ilet == '?' || ilet == '*') {
-		    char *allowed_choices = (ilet == '?') ? lets : (char *)0;
+		    char *allowed_choices = (ilet == '?') ? lets : NULL;
 		    long ctmp = 0;
 
 		    if (ilet == '?' && !*lets && *altlets)
 			allowed_choices = altlets;
 		    ilet = display_pickinv(allowed_choices, TRUE,
-					   allowcnt ? &ctmp : (long *)0
+					   allowcnt ? &ctmp : NULL
 #ifdef DUMP_LOG
 					   , FALSE
 #endif
@@ -1218,7 +1218,7 @@ getobj (register const char *let, register const char *word)
 		    if(ilet == '\033') {
 			if(flags.verbose)
 			    pline(Never_mind);
-			return((struct obj *)0);
+			return(NULL);
 		    }
 		    /* they typed a letter (not a space) at the prompt */
 		}
@@ -1231,7 +1231,7 @@ getobj (register const char *let, register const char *word)
 		    if (ilet != def_oc_syms[COIN_CLASS])
 #endif
 			allowcnt = 1;
-		    if(cnt == 0 && prezero) return((struct obj *)0);
+		    if(cnt == 0 && prezero) return(NULL);
 		    if (cnt == 1) {
 			save_cm = (char *) 1; /* Non zero */
 			multi = 0;
@@ -1254,14 +1254,14 @@ getobj (register const char *let, register const char *word)
 		if(!otmp) {
 			You("don't have that object.");
 #ifdef REDO
-			if (in_doagain) return((struct obj *) 0);
+			if (in_doagain) return(NULL);
 #endif
 			continue;
 		} else if (cnt < 0 || otmp->quan < cnt) {
 			You("don't have that many!  You have only %ld.",
 			    otmp->quan);
 #ifdef REDO
-			if (in_doagain) return((struct obj *) 0);
+			if (in_doagain) return(NULL);
 #endif
 			continue;
 		}
@@ -1274,10 +1274,10 @@ getobj (register const char *let, register const char *word)
 #endif
 	   ) {
 		silly_thing(word, otmp);
-		return((struct obj *)0);
+		return(NULL);
 	}
 	if(allowcnt == 2) {	/* cnt given */
-	    if(cnt == 0) return (struct obj *)0;
+	    if(cnt == 0) return NULL;
 	    if(cnt != otmp->quan) {
 		/* don't split a stack of cursed loadstones */
 		if (otmp->otyp == LOADSTONE && otmp->cursed)
@@ -1441,7 +1441,7 @@ unsigned *resultflags;
 	    getlin(qbuf, buf);
 	    if (buf[0] == '\033') return(0);
 	    if (index(buf, 'i')) {
-		if (display_inventory((char *)0, TRUE) == '\033') return 0;
+		if (display_inventory(NULL, TRUE) == '\033') return 0;
 	    } else
 		break;
 	}
@@ -1596,7 +1596,7 @@ nextclass:
 		if (ckfn && !(*ckfn)(otmp)) continue;
 		if (!allflag) {
 			strcpy(qbuf, !ininv ? doname(otmp) :
-				xprname(otmp, (char *)0, ilet, !nodot, 0L, 0L));
+				xprname(otmp, NULL, ilet, !nodot, 0L, 0L));
 			strcat(qbuf, "?");
 			sym = (takeoff || ident || otmp->quan < 2L) ?
 				nyaq(qbuf) : nyNaq(qbuf);
@@ -1680,7 +1680,7 @@ identify(otmp)
 struct obj *otmp;
 {
     fully_identify_obj(otmp);
-    prinv((char *)0, otmp, 0L);
+    prinv(NULL, otmp, 0L);
     return 1;
 }
 
@@ -1745,7 +1745,7 @@ int id_limit;
 	n = 0;
 	if (flags.menu_style == MENU_TRADITIONAL)
 	    do {
-		n = ggetobj("identify", identify, id_limit, FALSE, (unsigned *)0);
+		n = ggetobj("identify", identify, id_limit, FALSE, NULL);
 		if (n < 0) break; /* quit or no eligible items */
 	    } while ((id_limit -= n) > 0);
 	if (n == 0 || n < -1)
@@ -1783,7 +1783,7 @@ long quan;
 	if (!prefix) prefix = "";
 	pline("%s%s%s",
 	      prefix, *prefix ? " " : "",
-	      xprname(obj, (char *)0, obj_to_let(obj), TRUE, 0L, quan));
+	      xprname(obj, NULL, obj_to_let(obj), TRUE, 0L, quan));
 }
 
 
@@ -1836,7 +1836,7 @@ long quan;		/* if non-0, print this quantity, not obj->quan */
 int
 ddoinv()
 {
-	(void) display_inventory((char *)0, FALSE);
+	(void) display_inventory(NULL, FALSE);
 	return 0;
 }
 
@@ -1860,7 +1860,7 @@ find_unpaid(list, last_found)
 	    if (*last_found) {
 		/* still looking for previous unpaid object */
 		if (list == *last_found)
-		    *last_found = (struct obj *) 0;
+		    *last_found = NULL;
 	    } else
 		return (*last_found = list);
 	}
@@ -1870,7 +1870,7 @@ find_unpaid(list, last_found)
 	}
 	list = list->nobj;
     }
-    return (struct obj *) 0;
+    return NULL;
 }
 
 /*
@@ -1966,14 +1966,14 @@ long* out_cnt;
 		if (otmp->invlet == lets[0]) {
 		    ret = message_menu(lets[0],
 			  want_reply ? PICK_ONE : PICK_NONE,
-			  xprname(otmp, (char *)0, lets[0], TRUE, 0L, 0L));
+			  xprname(otmp, NULL, lets[0], TRUE, 0L, 0L));
 		    if (out_cnt) *out_cnt = -1L;	/* select all */
 #ifdef DUMP_LOG
 		    if (want_dump) {
 			char letbuf[7];
 			sprintf(letbuf, "  %c - ", lets[0]);
 			dump(letbuf,
-			     xprname(otmp, (char *)0, lets[0], TRUE, 0L, 0L));
+			     xprname(otmp, NULL, lets[0], TRUE, 0L, 0L));
 		    }
 #endif
 		    break;
@@ -2026,7 +2026,7 @@ nextclass:
 		}
 #endif
 	}
-	end_menu(win, (char *) 0);
+	end_menu(win, NULL);
 
 	n = select_menu(win, want_reply ? PICK_ONE : PICK_NONE, &selected);
 	if (n > 0) {
@@ -2057,7 +2057,7 @@ display_inventory(lets, want_reply)
 register const char *lets;
 boolean want_reply;
 {
-	return display_pickinv(lets, want_reply, (long *)0
+	return display_pickinv(lets, want_reply, NULL
 #ifdef DUMP_LOG
 				, FALSE
 #endif
@@ -2071,7 +2071,7 @@ dump_inventory(lets, want_reply)
 register const char *lets;
 boolean want_reply;
 {
-  return display_pickinv(lets, want_reply, (long *)0, TRUE);
+  return display_pickinv(lets, want_reply, NULL, TRUE);
 }
 #endif
 
@@ -2148,7 +2148,7 @@ dounpaid()
     count = count_unpaid(invent);
 
     if (count == 1) {
-	marker = (struct obj *) 0;
+	marker = NULL;
 	otmp = find_unpaid(invent, &marker);
 
 	/* see if the unpaid item is in the top level inventory */
@@ -2201,7 +2201,7 @@ dounpaid()
 	 */
 	for (otmp = invent; otmp; otmp = otmp->nobj) {
 	    if (Has_contents(otmp)) {
-		marker = (struct obj *) 0;	/* haven't found any */
+		marker = NULL;	/* haven't found any */
 		while (find_unpaid(otmp->cobj, &marker)) {
 		    totcost += cost = unpaid_cost(marker);
 		    save_unpaid = marker->unpaid;
@@ -2216,7 +2216,7 @@ dounpaid()
     }
 
     putstr(win, 0, "");
-    putstr(win, 0, xprname((struct obj *)0, "Total:", '*', FALSE, totcost, 0L));
+    putstr(win, 0, xprname(NULL, "Total:", '*', FALSE, totcost, 0L));
     display_nhwindow(win, FALSE);
     destroy_nhwindow(win);
 }
@@ -2338,7 +2338,7 @@ dotypeinv()
 	    }
 	    this_type = oclass;
 	}
-	if (query_objlist((char *) 0, invent,
+	if (query_objlist(NULL, invent,
 		    (flags.invlet_constant ? USE_INVLET : 0)|INVORDER_SORT,
 		    &pick_list, PICK_NONE, this_type_only) > 0)
 	    free((void *)pick_list);
@@ -2421,7 +2421,7 @@ boolean picked_some;
 	struct obj *otmp;
 	struct trap *trap;
 	const char *verb = Blind ? "feel" : "see";
-	const char *dfeature = (char*) 0;
+	const char *dfeature = NULL;
 	char fbuf[BUFSZ], fbuf2[BUFSZ];
 	winid tmpwin;
 	boolean skip_objects = (obj_cnt >= 5), felt_cockatrice = FALSE;
@@ -2715,11 +2715,11 @@ doprwep()
 	}
 	Your("right %s is empty.", body_part(HAND));
     } else {
-	prinv((char *)0, uwep, 0L);
+	prinv(NULL, uwep, 0L);
     }
     if (u.twoweap) {
     	if (uswapwep)
-    	    prinv((char *)0, uswapwep, 0L);
+    	    prinv(NULL, uswapwep, 0L);
     	else
     	    Your("other %s is empty.", body_part(HAND));
     }
@@ -2791,7 +2791,7 @@ dopramulet()
 	if (!uamul)
 		You("are not wearing an amulet.");
 	else
-		prinv((char *)0, uamul, 0L);
+		prinv(NULL, uamul, 0L);
 	return 0;
 }
 
@@ -2894,7 +2894,7 @@ static const char *oth_names[] = {
 	"Bagged/Boxed items"
 };
 
-static char *invbuf = (char *)0;
+static char *invbuf = NULL;
 static unsigned invbufsiz = 0;
 
 char *
@@ -2930,7 +2930,7 @@ boolean unpaid;
 void
 free_invbuf()
 {
-	if (invbuf) free((void *)invbuf),  invbuf = (char *)0;
+	if (invbuf) free((void *)invbuf),  invbuf = NULL;
 	invbufsiz = 0;
 }
 
@@ -2987,7 +2987,7 @@ doorganize()	/* inventory organizer by Del Lamb */
 	/* get new letter to use as inventory letter */
 	for (;;) {
 		sprintf(qbuf, "Adjust letter to what [%s]?",buf);
-		let = yn_function(qbuf, (char *)0, '\0');
+		let = yn_function(qbuf, NULL, '\0');
 		if(index(quitchars,let)) {
 			pline(Never_mind);
 			return(0);
@@ -3048,7 +3048,7 @@ const char *hdr, *txt;
 	add_menu(win, NO_GLYPH, &any, 0, 0, iflags.menu_headings, hdr, MENU_UNSELECTED);
 	add_menu(win, NO_GLYPH, &any, 0, 0, ATR_NONE, "", MENU_UNSELECTED);
 	add_menu(win, NO_GLYPH, &any, 0, 0, ATR_NONE, txt, MENU_UNSELECTED);
-	end_menu(win, (char *)0);
+	end_menu(win, NULL);
 	if (select_menu(win, PICK_NONE, &selected) > 0)
 	    free((void *)selected);
 	destroy_nhwindow(win);
@@ -3153,10 +3153,10 @@ char *title;
 	     * gold object.  We'll have to work out a scheme where this
 	     * can happen.  Maybe even put gold in the inventory list...
 	     */
-	    if (ret == &m_gold) ret = (struct obj *) 0;
+	    if (ret == &m_gold) ret = NULL;
 #endif
 	} else
-	    ret = (struct obj *) 0;
+	    ret = NULL;
 	return ret;
 }
 
@@ -3187,7 +3187,7 @@ register struct obj *obj;
 	    ret = selected[0].item.a_obj;
 	    free((void *)selected);
 	} else
-	    ret = (struct obj *) 0;
+	    ret = NULL;
 	return ret;
 }
 

@@ -84,10 +84,10 @@ int attk;
 		    (void)rust_dmg(target, xname(target), hurt, TRUE, mdef);
 		    break;
 		}
-		if ((target = which_armor(mdef, W_ARM)) != (struct obj *)0) {
+		if ((target = which_armor(mdef, W_ARM)) != NULL) {
 		    (void)rust_dmg(target, xname(target), hurt, TRUE, mdef);
 #ifdef TOURIST
-		} else if ((target = which_armor(mdef, W_ARMU)) != (struct obj *)0) {
+		} else if ((target = which_armor(mdef, W_ARMU)) != NULL) {
 		    (void)rust_dmg(target, xname(target), hurt, TRUE, mdef);
 #endif
 		}
@@ -431,7 +431,7 @@ register struct monst *mtmp;
 	    if(flags.verbose) {
 		if(uwep)
 		    You("begin bashing monsters with your %s.",
-			aobjnam(uwep, (char *)0));
+			aobjnam(uwep, NULL));
 		else if (tech_inuse(T_EVISCERATE))
 		    You("begin slashing monsters with your claws.");
 		else if (!cantwield(youmonst.data)) {
@@ -939,10 +939,10 @@ int thrown;
 			    if (obj == uwep)
 				uwepgone();   /* set unweapon */
 			    else
-				setuswapwep((struct obj *)0, FALSE);
+				setuswapwep(NULL, FALSE);
 			}
 			useup(obj);
-			if (!more_than_1) obj = (struct obj *) 0;
+			if (!more_than_1) obj = NULL;
 			hittxt = TRUE;
 			if (mdat != &mons[PM_SHADE])
 			    tmp++;
@@ -1074,12 +1074,12 @@ int thrown;
 		if (obj->quan > 1L)
 		    obj = splitobj(obj, 1L);
 		else
-		    setuwep((struct obj *)0, FALSE);
+		    setuwep(NULL, FALSE);
 		} else if (u.twoweap && obj == uswapwep) {
 		    if (obj->quan > 1L)
 			setworn(splitobj(obj, 1L), W_SWAPWEP);
 		    else
-			setuswapwep((struct obj *)0, FALSE);
+			setuswapwep(NULL, FALSE);
 		}
 		freeinv(obj);
 		potionhit(mon, obj, TRUE);
@@ -1105,7 +1105,7 @@ int thrown;
 				shk_your(yourbuf, obj));
 			    change_luck(-2);
 			    useup(obj);
-			    obj = (struct obj *) 0;
+			    obj = NULL;
 			    unarmed = FALSE;	/* avoid obj==0 confusion */
 			    get_dmg_bonus = FALSE;
 			    hittxt = TRUE;
@@ -1145,9 +1145,9 @@ int thrown;
 			break;
 		    case EGG:
 		      {
-#define useup_eggs(o)	{ if (thrown) obfree(o,(struct obj *)0); \
+#define useup_eggs(o)	{ if (thrown) obfree(o,NULL); \
 			  else useupall(o); \
-			  o = (struct obj *)0; }	/* now gone */
+			  o = NULL; }	/* now gone */
 			long cnt = obj->quan;
 
 			tmp = 1;		/* nominal physical damage */
@@ -1247,7 +1247,7 @@ int thrown;
 			    pline(obj->otyp==CREAM_PIE ? "Splat!" : "Splash!");
 			    setmangry(mon);
 			}
-			if (thrown) obfree(obj, (struct obj *)0);
+			if (thrown) obfree(obj, NULL);
 			else useup(obj);
 			hittxt = TRUE;
 			get_dmg_bonus = FALSE;
@@ -1262,7 +1262,7 @@ int thrown;
 				Your("venom burns %s!", mon_nam(mon));
 				tmp = dmgval(obj, mon);
 			}
-			if (thrown) obfree(obj, (struct obj *)0);
+			if (thrown) obfree(obj, NULL);
 			else useup(obj);
 			hittxt = TRUE;
 			get_dmg_bonus = FALSE;
@@ -1709,7 +1709,7 @@ demonpet()
 	i = !rn2(6) ? ndemon(u.ualign.type) : NON_PM;
 	pm = i != NON_PM ? &mons[i] : youmonst.data;
 	if ((dtmp = makemon(pm, u.ux, u.uy, NO_MM_FLAGS)) != 0)
-	    (void)tamedog(dtmp, (struct obj *)0);
+	    (void)tamedog(dtmp, NULL);
 	exercise(A_WIS, TRUE);
 }
 
@@ -1736,7 +1736,7 @@ struct attack *mattk;
 	if (!mdef->minvent) return;		/* nothing to take */
 
 	/* look for worn body armor */
-	stealoid = (struct obj *)0;
+	stealoid = NULL;
 	if (could_seduce(&youmonst, mdef, mattk)) {
 	    /* find armor, and move it to end of inventory in the process */
 	    minvent_ptr = &mdef->minvent;
@@ -1745,7 +1745,7 @@ struct attack *mattk;
 		    if (stealoid) panic("steal_it: multiple worn suits");
 		    *minvent_ptr = otmp->nobj;	/* take armor out of minvent */
 		    stealoid = otmp;
-		    stealoid->nobj = (struct obj *)0;
+		    stealoid->nobj = NULL;
 		} else {
 		    minvent_ptr = &otmp->nobj;
 		}
@@ -1995,7 +1995,7 @@ register struct attack *mattk;
 		}
 		break;
 	    case AD_BLND:
-		if (can_blnd(&youmonst, mdef, mattk->aatyp, (struct obj*)0)) {
+		if (can_blnd(&youmonst, mdef, mattk->aatyp, NULL)) {
 		    if(!Blind && mdef->mcansee)
 			pline("%s is blinded.", Monnam(mdef));
 		    mdef->mcansee = 0;
@@ -2178,7 +2178,7 @@ register struct attack *mattk;
 		}
 		break;
 	    case AD_SLEE:
-		if (mattk->aatyp == AT_GAZE && mon_reflects(mdef, (char *)0)) {
+		if (mattk->aatyp == AT_GAZE && mon_reflects(mdef, NULL)) {
 		    tmp = 0;
 		    (void) mon_reflects(mdef, "But it reflects from %s %s!");
 		    if (Sleep_resistance || Free_action) {
@@ -2221,7 +2221,7 @@ register struct attack *mattk;
 		if (!negated && mdef->mspeed != MSLOW) {
 		    unsigned int oldspeed = mdef->mspeed;
 
-		    mon_adjust_speed(mdef, -1, (struct obj *)0);
+		    mon_adjust_speed(mdef, -1, NULL);
 		    if (mdef->mspeed != oldspeed && canseemon(mdef))
 			pline("%s slows down.", Monnam(mdef));
 		}
@@ -2270,7 +2270,7 @@ register struct attack *mattk;
 		}
 		if (mattk->aatyp == AT_GAZE) 
 		    You("look directly at %s!", mon_nam(mdef));
-		if ((mattk->aatyp == AT_GAZE) && (mon_reflects(mdef, (char *)0))) {
+		if ((mattk->aatyp == AT_GAZE) && (mon_reflects(mdef, NULL))) {
 		    /* WAC reflected gaze 
 		     * Oooh boy...that was a bad move :B 
 		     */
@@ -2542,7 +2542,7 @@ register struct attack *mattk;
 			}
 			break;
 		    case AD_BLND:
-			if (can_blnd(&youmonst, mdef, mattk->aatyp, (struct obj *)0)) {
+			if (can_blnd(&youmonst, mdef, mattk->aatyp, NULL)) {
 			    if (mdef->mcansee)
 				pline("%s can't see in there!", Monnam(mdef));
 			    mdef->mcansee = 0;
@@ -2614,11 +2614,11 @@ register int target;
 register int roll;
 {
 	register boolean nearmiss = (target == roll);
-	register struct obj *blocker = (struct obj *)0;
+	register struct obj *blocker = NULL;
 	long mwflags = mdef->misc_worn_check;
 
 		/* 3 values for blocker
-		 *	No blocker:  (struct obj *) 0  
+		 *	No blocker:  NULL  
 		 * 	Piece of armour:  object
 		 */
 
@@ -2643,7 +2643,7 @@ register int roll;
         	    /* Blocker */
         	    pline("%s %s %s your attack.", 
         		s_suffix(Monnam(mdef)),
-        		aobjnam(blocker, (char *)0),
+        		aobjnam(blocker, NULL),
         		(rn2(2) ? "blocks" : "deflects"));    
 		}
 	} else {
@@ -3013,7 +3013,7 @@ uchar aatyp;
 	register struct permonst *ptr = mon->data;
 	register int i, tmp;
 	struct obj *target = mhit & HIT_UWEP ? uwep :
-		mhit & HIT_USWAPWEP ? uswapwep : (struct obj *)0;
+		mhit & HIT_USWAPWEP ? uswapwep : NULL;
 /*	char buf[BUFSZ]; */
 
 
@@ -3393,7 +3393,7 @@ struct obj *otmp;	/* source of flash */
 			  "wails in agony" : "cries out in pain");
 		    if ((mtmp->mhp -= amt) <= 0) {
 			if (flags.mon_moving)
-			    monkilled(mtmp, (char *)0, AD_BLND);
+			    monkilled(mtmp, NULL, AD_BLND);
 			else
 			    killed(mtmp);
 		    } else if (cansee(mtmp->mx,mtmp->my) && !canspotmon(mtmp)){
