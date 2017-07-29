@@ -462,7 +462,7 @@ curses_create_nhmenu(winid wid)
         return;
     }
 
-    new_menu = malloc(sizeof (nhmenu));
+    new_menu = alloc(sizeof (nhmenu));
     new_menu->wid = wid;
     new_menu->prompt = NULL;
     new_menu->entries = NULL;
@@ -502,7 +502,7 @@ curses_add_nhmenu_item(winid wid, int glyph, const anything * identifier,
 
     new_str = curses_copy_of(str);
     curses_rtrim((char *) new_str);
-    new_item = malloc(sizeof (nhmenu_item));
+    new_item = alloc(sizeof (nhmenu_item));
     new_item->wid = wid;
     new_item->glyph = glyph;
     new_item->identifier = *identifier;
@@ -611,7 +611,7 @@ curses_display_nhmenu(winid wid, int how, menu_item ** _selected)
     curses_destroy_win(win);
 
     if (num_chosen > 0) {
-        selected = (menu_item *) malloc(num_chosen * sizeof (menu_item));
+        selected = alloc(num_chosen * sizeof (menu_item));
         count = 0;
 
         menu_item_ptr = current_menu->entries;
