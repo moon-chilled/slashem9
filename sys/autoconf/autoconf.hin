@@ -188,9 +188,6 @@
 /* A System V like system */
 #undef SYSV
 
-/* Tourist class */
-#undef TOURIST
-
 /* Console output */
 #undef TTY_GRAPHICS
 
@@ -209,9 +206,6 @@
 
 /* The person allowed to use the -D option */
 #undef WIZARD
-
-/* Yeoman class */
-#undef YEOMAN
 
 /* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
    `char[]'. */

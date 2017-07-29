@@ -299,8 +299,6 @@ typedef unsigned char	uchar;
 
 /* Roles */
 #define DWARF		/* Dwarf Patch, Osku Salerma (osku@iki.fi) */
-#define TOURIST		/* Tourist players with cameras and Hawaiian shirts */
-#define YEOMAN		/* KMH -- Yeoman class  */
 /* #define ZOUTHERN */	/* KMH -- Zoutherner class and its animals */
 
 /* I/O */

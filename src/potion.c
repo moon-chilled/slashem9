@@ -2392,7 +2392,6 @@ upgrade_obj (struct obj *obj)
 		case BAG_OF_HOLDING:
 			obj->otyp = OILSKIN_SACK;
 			break;
-#ifdef TOURIST
 		case TOWEL:
 			obj->otyp = BLINDFOLD;
 			break;
@@ -2400,7 +2399,6 @@ upgrade_obj (struct obj *obj)
 			obj->otyp = TOWEL;
 			break;
 		case CREDIT_CARD:
-#endif
 		case LOCK_PICK:
 			obj->otyp = SKELETON_KEY;
 			break;
@@ -2577,10 +2575,8 @@ upgrade_obj (struct obj *obj)
 		owornmask &= ~W_ARMG;
 	    if (owornmask & W_ARMF && !is_boots(obj))
 		owornmask &= ~W_ARMF;
-#ifdef TOURIST
 	    if (owornmask & W_ARMU && !is_shirt(obj))
 		owornmask &= ~W_ARMU;
-#endif
 	    if (owornmask & W_TOOL && obj->otyp != BLINDFOLD &&
 	      obj->otyp != TOWEL && obj->otyp != LENSES)
 		owornmask &= ~W_TOOL;

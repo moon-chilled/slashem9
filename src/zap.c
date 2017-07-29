@@ -1633,10 +1633,8 @@ poly_obj(obj, id)
 		otmp->owornmask &= ~W_ARMG;
 	    if (otmp->owornmask & W_ARMF && !is_boots(otmp))
 		otmp->owornmask &= ~W_ARMF;
-#ifdef TOURIST
 	    if (otmp->owornmask & W_ARMU && !is_shirt(otmp))
 		otmp->owornmask &= ~W_ARMU;
-#endif
 	    if (otmp->owornmask & W_TOOL && otmp->otyp != BLINDFOLD &&
 	      otmp->otyp != TOWEL && otmp->otyp != LENSES)
 		otmp->owornmask &= ~W_TOOL;
@@ -2569,9 +2567,8 @@ boolean ordinary;
 		case WAN_LIGHT:	/* (broken wand) */
 		 /* assert( !ordinary ); */
 		    damage = d(obj->spe, 25);
-#ifdef TOURIST
+		/* FALLTHROUGH */
 		case EXPENSIVE_CAMERA:
-#endif
 		    damage += rnd(25);
 		    if (!resists_blnd(&youmonst)) {
 			You(are_blinded_by_the_flash);
@@ -3567,10 +3564,8 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 			tmp = MAGIC_COOKIE;
 			if ((otmp2 = which_armor(mon, W_ARMC)) != 0)
 			    m_useup(mon, otmp2);
-#ifdef TOURIST
 			if ((otmp2 = which_armor(mon, W_ARMU)) != 0)
 			    m_useup(mon, otmp2);
-#endif
 		    }
 		    type = -1;	/* no saving throw wanted */
 		    break;	/* not ordinary damage */
@@ -3722,9 +3717,7 @@ xchar sx, sy;
 		/* no shield or suit, you're dead; wipe out cloak
 		   and/or shirt in case of life-saving or bones */
 		if (uarmc) (void) destroy_arm(uarmc);
-#ifdef TOURIST
 		if (uarmu) (void) destroy_arm(uarmu);
-#endif
                 if (Invulnerable) {
                         pline("You are unharmed!");
                         break;

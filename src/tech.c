@@ -145,13 +145,11 @@ static const struct innate_tech
 		       {   0, 0, 0} },
 	val_tech[] = { {   1, T_PRACTICE, 1},
 		       {   0, 0, 0} },
-#ifdef YEOMAN
 	yeo_tech[] = {
 #ifdef STEED
 		       {   1, T_CALM_STEED, 1},
 #endif
 		       {   0, 0, 0} },
-#endif
 	wiz_tech[] = { {   1, T_REINFORCE, 1},
 		       {   3, T_DRAW_ENERGY, 1},
 		       {   5, T_POWER_SURGE, 1},
@@ -1610,33 +1608,27 @@ hurtmon (struct monst *mtmp, int tmp)
 #endif
 }
 
-static const struct innate_tech *
-role_tech (void)
-{
+static const struct innate_tech *role_tech(void) {
 	switch (Role_switch) {
-		case PM_ARCHEOLOGIST:	return (arc_tech);
-		case PM_BARBARIAN:	return (bar_tech);
-		case PM_CAVEMAN:	return (cav_tech);
-		case PM_FLAME_MAGE:	return (fla_tech);
-		case PM_HEALER:		return (hea_tech);
-		case PM_ICE_MAGE:	return (ice_tech);
-		case PM_KNIGHT:		return (kni_tech);
-		case PM_MONK: 		return (mon_tech);
-		case PM_NECROMANCER:	return (nec_tech);
-		case PM_PRIEST:		return (pri_tech);
-		case PM_RANGER:		return (ran_tech);
-		case PM_ROGUE:		return (rog_tech);
-		case PM_SAMURAI:	return (sam_tech);
-#ifdef TOURIST
-		case PM_TOURIST:	return (tou_tech);
-#endif
-		case PM_UNDEAD_SLAYER:	return (und_tech);
-		case PM_VALKYRIE:	return (val_tech);
-		case PM_WIZARD:		return (wiz_tech);
-#ifdef YEOMAN
-		case PM_YEOMAN:		return (yeo_tech);
-#endif
-		default: 		return ((struct innate_tech *) 0);
+		case PM_ARCHEOLOGIST:	return arc_tech;
+		case PM_BARBARIAN:	return bar_tech;
+		case PM_CAVEMAN:	return cav_tech;
+		case PM_FLAME_MAGE:	return fla_tech;
+		case PM_HEALER:		return hea_tech;
+		case PM_ICE_MAGE:	return ice_tech;
+		case PM_KNIGHT:		return kni_tech;
+		case PM_MONK: 		return mon_tech;
+		case PM_NECROMANCER:	return nec_tech;
+		case PM_PRIEST:		return pri_tech;
+		case PM_RANGER:		return ran_tech;
+		case PM_ROGUE:		return rog_tech;
+		case PM_SAMURAI:	return sam_tech;
+		case PM_TOURIST:	return tou_tech;
+		case PM_UNDEAD_SLAYER:	return und_tech;
+		case PM_VALKYRIE:	return val_tech;
+		case PM_WIZARD:		return wiz_tech;
+		case PM_YEOMAN:		return yeo_tech;
+		default: 		return NULL;
 	}
 }
 

@@ -13,10 +13,7 @@ static const char *
 equipname(otmp)
 struct obj *otmp;
 {
-	return (
-#ifdef TOURIST
-		(otmp == uarmu) ? "shirt" :
-#endif
+	return ((otmp == uarmu) ? "shirt" :
 		(otmp == uarmf) ? "boots" :
 		(otmp == uarms) ? "shield" :
 		(otmp == uarmg) ? "gloves" :
@@ -178,15 +175,13 @@ boolean unchain_ball;	/* whether to unpunish or just unwield */
 		impossible("Removing embedded scales?");
 		skinback(TRUE);		/* uarm = uskin; uskin = 0; */
 	    }
-	    if (obj == uarm) (void) Armor_off();
-	    else if (obj == uarmc) (void) Cloak_off();
-	    else if (obj == uarmf) (void) Boots_off();
-	    else if (obj == uarmg) (void) Gloves_off();
-	    else if (obj == uarmh) (void) Helmet_off();
-	    else if (obj == uarms) (void) Shield_off();
-#ifdef TOURIST
-	    else if (obj == uarmu) (void) Shirt_off();
-#endif
+	    if (obj == uarm) Armor_off();
+	    else if (obj == uarmc) Cloak_off();
+	    else if (obj == uarmf) Boots_off();
+	    else if (obj == uarmg) Gloves_off();
+	    else if (obj == uarmh) Helmet_off();
+	    else if (obj == uarms) Shield_off();
+	    else if (obj == uarmu) Shirt_off();
 	    /* catchall -- should never happen */
 	    else setworn(NULL, obj->owornmask & W_ARMOR);
 	} else if (obj->owornmask & W_AMUL) {
@@ -283,13 +278,12 @@ nothing_to_steal:
 	if (otmp == uarmg && uwep)
 	    otmp = uwep;
 	/* can't steal armor while wearing cloak - so steal the cloak. */
-	else if(otmp == uarm && uarmc) otmp = uarmc;
-#ifdef TOURIST
-	else if(otmp == uarmu && uarmc) otmp = uarmc;
-	else if(otmp == uarmu && uarm) otmp = uarm;
-#endif
+	else if (otmp == uarm && uarmc) otmp = uarmc;
+	else if (otmp == uarmu && uarmc) otmp = uarmc;
+	else if (otmp == uarmu && uarm) otmp = uarm;
+
 gotobj:
-	if(otmp->o_id == stealoid) return(0);
+	if (otmp->o_id == stealoid) return(0);
 
 #ifdef STEED
 	if (otmp == usaddle) dismount_steed(DISMOUNT_FELL);

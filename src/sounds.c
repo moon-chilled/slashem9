@@ -447,14 +447,12 @@ beg (struct monst *mtmp)
 	if (!canspotmon(mtmp))
 	    map_invisible(mtmp->mx, mtmp->my);
 	verbalize("I'm hungry.");
-}
+    }
 }
 
-static int
-domonnoise (struct monst *mtmp)
-{
-    const char *pline_msg = 0,	/* Monnam(mtmp) will be prepended */
-			*verbl_msg = 0;	/* verbalize() */
+static int domonnoise (struct monst *mtmp) {
+    const char *pline_msg = NULL,	/* Monnam(mtmp) will be prepended */
+			*verbl_msg = NULL; /* verbalize() */
     struct permonst *ptr = mtmp->data;
     char verbuf[BUFSZ];
 
@@ -784,11 +782,9 @@ domonnoise (struct monst *mtmp)
 		case PM_ARCHEOLOGIST:
     pline_msg = "describes a recent article in \"Spelunker Today\" magazine.";
 		    break;
-#ifdef TOURIST
 		case PM_TOURIST:
 		    verbl_msg = "Aloha.";
 		    break;
-#endif
 		default:
 		    pline_msg = "discusses dungeon exploration.";
 		    break;
@@ -860,10 +856,8 @@ domonnoise (struct monst *mtmp)
 		verbl_msg = Role_if(PM_HEALER) ?
 			  "Doc, I can't help you unless you cooperate." :
 			  "Please undress so I can examine you.";
-#ifdef TOURIST
 	    else if (uarmu)
 		verbl_msg = "Take off your shirt, please.";
-#endif
 	    else verbl_msg = "Relax, this won't hurt a bit.";
 	    break;
 	case MS_GUARD:
@@ -878,17 +872,18 @@ domonnoise (struct monst *mtmp)
 	    break;
 	case MS_SOLDIER:
 	    {
-		static const char * const soldier_foe_msg[3] = {
+		static const char * const soldier_foe_msg[] = {
 		    "Resistance is useless!",
 		    "You're dog meat!",
 		    "Surrender!",
-		},		  * const soldier_pax_msg[3] = {
+		};
+		static const char * const soldier_pax_msg[] = {
 		    "What lousy pay we're getting here!",
 		    "The food's not fit for Orcs!",
 		    "My feet hurt, I've been on them all day!",
 		};
-		verbl_msg = mtmp->mpeaceful ? soldier_pax_msg[rn2(3)]
-					    : soldier_foe_msg[rn2(3)];
+		verbl_msg = mtmp->mpeaceful ? soldier_pax_msg[SIZE(soldier_pax_msg)]
+					    : soldier_foe_msg[SIZE(soldier_foe_msg)];
 	    }
 	    break;
 	case MS_RIDER:

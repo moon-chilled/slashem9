@@ -419,7 +419,6 @@ const struct Role roles[] = {
 	{  1, 0,  0, 1,  0, 1 },11,	/* Energy */
 	10, 10, 0, 0,  8, A_INT, SPE_CLAIRVOYANCE,    -4
 },
-#ifdef TOURIST
 {	{"Tourist", 0}, {
 	{"Rambler",     0},
 	{"Sightseer",   0},
@@ -448,7 +447,6 @@ const struct Role roles[] = {
 	{  1, 0,  0, 1,  0, 1 },14,	/* Energy */
 	0, 5, 1, 2, 10, A_INT, SPE_CHARM_MONSTER,   -4
 },
-#endif
 {	{"Undead Slayer", 0}, {
 	{"Assistant",    0},
 	{"Eliminator",   0},
@@ -535,7 +533,6 @@ const struct Role roles[] = {
 	{  4, 3,  0, 2,  0, 3 },12,	/* Energy */
 	0, 1, 0, 3, 10, A_INT, SPE_MAGIC_MISSILE,   -4
 },
-#ifdef YEOMAN
 {	{"Yeoman", 0}, {
 	/* Landowner titles, naval ranks and positions */
 	/* We intentionally avoid Lieutenant and Captain */
@@ -566,7 +563,6 @@ const struct Role roles[] = {
 	{  1, 4,  0, 1,  0, 2 },10,	/* Energy */
 	10, 8,-2, 0,  9, A_WIS, SPE_KNOCK,     -4
 },
-#endif
 /* Array terminator */
 {{0, 0}}
 };
@@ -1743,10 +1739,8 @@ Hello (struct monst *mtmp)
 	case PM_SAMURAI:
 	    return (mtmp && mtmp->data == &mons[PM_SHOPKEEPER] ?
 	    		"Irasshaimase" : "Konnichi wa"); /* Japanese */
-#ifdef TOURIST
 	case PM_TOURIST:
 	    return ("Aloha");       /* Hawaiian */
-#endif
 	case PM_VALKYRIE:
 	    return (
 #ifdef MAIL
@@ -1766,10 +1760,8 @@ Goodbye (void)
 	    return ("Fare thee well");  /* Olde English */
 	case PM_SAMURAI:
 	    return ("Sayonara");        /* Japanese */
-#ifdef TOURIST
 	case PM_TOURIST:
 	    return ("Aloha");           /* Hawaiian */
-#endif
 	case PM_VALKYRIE:
 	    return ("Farvel");          /* Norse */
 	default:

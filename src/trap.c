@@ -69,11 +69,9 @@ struct monst *victim;
 		(void) burn_dmg(item, xname(item));
 		return TRUE;
 	    }
-#ifdef TOURIST
 	    item = (victim == &youmonst) ? uarmu : which_armor(victim, W_ARMU);
 	    if (item)
 		(void) burn_dmg(item, "shirt");
-#endif
 	    return TRUE;
 	case 2:
 	    item = (victim == &youmonst) ? uarms : which_armor(victim, W_ARMS);
@@ -842,10 +840,8 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 						1, TRUE, &youmonst);
 			else if (uarm)
 			    (void) rust_dmg(uarm, "armor", 1, TRUE, &youmonst);
-#ifdef TOURIST
 			else if (uarmu)
 			    (void) rust_dmg(uarmu, "shirt", 1, TRUE, &youmonst);
-#endif
 		}
 		update_inventory();
 		break;
@@ -1871,14 +1867,12 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 						 1, TRUE, mtmp);
 			    else {
 				target = which_armor(mtmp, W_ARM);
-				if (target)
+				if (target) {
 				    (void) rust_dmg(target, "armor", 1, TRUE, mtmp);
-#ifdef TOURIST
-				else {
+				} else {
 				    target = which_armor(mtmp, W_ARMU);
 				    (void) rust_dmg(target, "shirt", 1, TRUE, mtmp);
 				}
-#endif
 			    }
 			}
 			if (mptr == &mons[PM_IRON_GOLEM]) {
@@ -2958,10 +2952,7 @@ boolean *lostsome;
 		    if (!((obj->otyp == LOADSTONE && obj->cursed) ||
 			  obj == uamul || obj == uleft || obj == uright ||
 			  obj == ublindf || obj == uarm || obj == uarmc ||
-			  obj == uarmg || obj == uarmf ||
-#ifdef TOURIST
-			  obj == uarmu ||
-#endif
+			  obj == uarmg || obj == uarmf || obj == uarmu ||
 			  (obj->cursed && (obj == uarmh || obj == uarms)) ||
 			  welded(obj)))
 			otmp = obj;
@@ -4207,22 +4198,20 @@ lava_effects()
 		    if (usurvive)
 			Your("%s into flame!", aobjnam(obj, "burst"));
 
-		    if(obj == uarm) (void) Armor_gone();
-		    else if(obj == uarmc) (void) Cloak_off();
-		    else if(obj == uarmh) (void) Helmet_off();
-		    else if(obj == uarms) (void) Shield_off();
-		    else if(obj == uarmg) (void) Gloves_off();
-		    else if(obj == uarmf) (void) Boots_off();
-#ifdef TOURIST
+		    if(obj == uarm) Armor_gone();
+		    else if(obj == uarmc) Cloak_off();
+		    else if(obj == uarmh) Helmet_off();
+		    else if(obj == uarms) Shield_off();
+		    else if(obj == uarmg) Gloves_off();
+		    else if(obj == uarmf) Boots_off();
 		    else if(obj == uarmu) setnotworn(obj);
-#endif
 		    else if(obj == uleft) Ring_gone(obj);
 		    else if(obj == uright) Ring_gone(obj);
 		    else if(obj == ublindf) Blindf_off(obj);
 		    else if(obj == uamul) Amulet_off();
 		    else if(obj == uwep) uwepgone();
-		    else if (obj == uquiver) uqwepgone();
-		    else if (obj == uswapwep) uswapwepgone();
+		    else if(obj == uquiver) uqwepgone();
+		    else if(obj == uswapwep) uswapwepgone();
 		}
 		useupall(obj);
 	    }

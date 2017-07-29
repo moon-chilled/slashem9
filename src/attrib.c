@@ -107,12 +107,10 @@ static const struct innate {
 		     {   7, &(HFast), "quick", "slow" },
 		     {	 0, 0, 0, 0 } },
 
-#ifdef YEOMAN
 	yeo_abil[] = {
 		     {   7, &(HFast), "quick", "slow" },
 		     {  15, &(HSwimming), "ready to swim","afraid of the water" },
 		     {   0, 0, 0, 0 } },
-#endif
 
 	wiz_abil[] = { {	15, &(HWarning), "sensitive", "" },
 		     {  17, &(HTeleport_control), "controlled","uncontrolled" },
@@ -589,15 +587,11 @@ void adjabil(int oldlevel, int newlevel) {
 	case PM_RANGER:         abil = ran_abil;	break;
 	case PM_ROGUE:          abil = rog_abil;	break;
 	case PM_SAMURAI:        abil = sam_abil;	break;
-#ifdef TOURIST
 	case PM_TOURIST:        abil = tou_abil;	break;
-#endif
 	case PM_UNDEAD_SLAYER:	abil = und_abil;	break;
 	case PM_VALKYRIE:       abil = val_abil;	break;
 	case PM_WIZARD:         abil = wiz_abil;	break;
-#ifdef YEOMAN
 	case PM_YEOMAN:		abil = yeo_abil;	break;
-#endif
 	default:                abil = 0;		break;
 	}
 

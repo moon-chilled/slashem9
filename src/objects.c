@@ -422,26 +422,19 @@ WEAPON("rubber hose", NULL,
 #define BOOTS(name,desc,kn,mgc,power,prob,delay,wt,cost,ac,can,metal,c) \
 	ARMOR(name,desc,kn,mgc,0,power,prob,delay,wt,cost,ac,can,ARM_BOOTS,metal,c)
 
-#ifdef TOURIST
 /* Shirts */
 ARMOR("Hawaiian shirt", NULL,
 	1, 0, 0, 0,	 8, 0,	 5,   3, 10, 0, ARM_SHIRT, CLOTH, CLR_MAGENTA),
 ARMOR("T-shirt", NULL,
 	1, 0, 0, 0,	 2, 0,	 5,   2, 10, 0, ARM_SHIRT, CLOTH, CLR_WHITE),
-#endif
 
 /* Suits of armor */
 ARMOR("plate mail", NULL,
 	1, 0, 1, 0,	40, 5, 450, 600,  3, 2, ARM_SUIT, IRON, HI_METAL),
 ARMOR("crystal plate mail", NULL,
 	1, 0, 1, 0,	10, 5, 450, 820,  3, 2, ARM_SUIT, GLASS, CLR_WHITE),
-#ifdef TOURIST
 ARMOR("bronze plate mail", NULL,
 	1, 0, 1, 0,	25, 5, 450, 400,  4, 0, ARM_SUIT, COPPER, HI_COPPER),
-#else
-ARMOR("bronze plate mail", NULL,
-	1, 0, 1, 0,	35, 5, 450, 400,  4, 0, ARM_SUIT, COPPER, HI_COPPER),
-#endif
 ARMOR("splint mail", NULL,
 	1, 0, 1, 0,	65, 5, 400,  80,  4, 1, ARM_SUIT, IRON, HI_METAL),
 ARMOR("banded mail", NULL,
@@ -748,12 +741,8 @@ CONTAINER("bag of tricks", "bag",       0, 1, 1, 0,  20, 15, 100, CLOTH, HI_CLOT
 
 /* Unlocking tools */
 TOOL("skeleton key", "key",     0, 0, 0, 0,  80,  3,  10, IRON, HI_METAL),
-#ifdef TOURIST
 TOOL("lock pick", NULL,    1, 0, 0, 0,  60,  4,  20, IRON, HI_METAL),
 TOOL("credit card", NULL,  1, 0, 0, 0,  15,  1,  10, PLASTIC, CLR_WHITE),
-#else
-TOOL("lock pick", NULL,    1, 0, 0, 0,  75,  4,  20, IRON, HI_METAL),
-#endif
 
 /* Light sources */
 /* [Tom] made candles cheaper & more common */
@@ -835,15 +824,9 @@ WEPTOOL("red double lightsaber",  "double lightsaber",
 #endif	/* LIGHTSABERS */
 
 /* Other tools */
-#ifdef TOURIST
-TOOL("expensive camera", NULL,
-				1, 0, 0, 1,  10, 12, 200, PLASTIC, CLR_BLACK),
+TOOL("expensive camera", NULL, 1, 0, 0, 1,  10, 12, 200, PLASTIC, CLR_BLACK),
 TOOL("mirror", "looking glass", 0, 0, 0, 0,  40, 13,  10, GLASS, HI_SILVER),
-#else
-TOOL("mirror", "looking glass", 0, 0, 0, 0,  50, 13,  10, GLASS, HI_SILVER),
-#endif
-TOOL("crystal ball", "glass orb",
-								0, 0, 1, 1,  10,150,  60, GLASS, HI_GLASS),
+TOOL("crystal ball", "glass orb", 0, 0, 1, 1,  10,150,  60, GLASS, HI_GLASS),
 #if 0
 /* STEPHEN WHITE'S NEW CODE */
 /* KMH -- removed because there's potential for abuse */

@@ -369,9 +369,7 @@ extern int Cloak_on(void);
 extern int Helmet_on(void);
 extern int Gloves_on(void);
 extern int Shield_on(void);
-#ifdef TOURIST
 extern int Shirt_on(void);
-#endif
 extern void Amulet_on(void);
 extern void off_msg(struct obj *);
 extern void set_wear(void);
@@ -384,9 +382,7 @@ extern int Gloves_off(void);
 extern int Boots_off(void);
 extern int Cloak_off(void);
 extern int Shield_off(void);
-#ifdef TOURIST
 extern int Shirt_off(void);
-#endif
 extern void Amulet_off(void);
 extern void Ring_on(struct obj *);
 extern void Ring_off(struct obj *);

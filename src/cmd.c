@@ -750,7 +750,6 @@ static int specialpower(void) {
 		u.unextuse = rn1(1000,500);
 		return(0);
 		break;
-#ifdef YEOMAN
 		case 'Y':
 #ifdef STEED
 			if (u.usteed) {
@@ -763,7 +762,6 @@ static int specialpower(void) {
 #else
 			You("don't have a special ability!");
 			return(0);
-#endif
 #endif
 	    default:
 		break;

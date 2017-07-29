@@ -441,9 +441,6 @@ make_version()
 			| (1L <<  7)
 #endif
 		/* objects (8..15) */
-#ifdef TOURIST
-			| (1L << 10)
-#endif
 #ifdef STEED
 			| (1L << 11)
 #endif
@@ -779,9 +776,6 @@ static const char *build_opts[] = {
 #ifdef FIREARMS
 		"firearms",
 #endif
-#ifdef TOURIST
-		"tourists",
-#endif
 #ifdef USER_SOUNDS
 # ifdef USER_SOUNDS_REGEX
 		"user sounds via regular expressions",
@@ -794,9 +788,6 @@ static const char *build_opts[] = {
 #endif
 #ifdef VISION_TABLES
 		"vision tables",
-#endif
-#ifdef YEOMAN
-		"yeomen",
 #endif
 #ifdef ZEROCOMP
 		"zero-compressed save files",
@@ -1831,11 +1822,9 @@ do_objs()
 
 		if (!strncmp(objnam, "THE_", 4))
 			objnam += 4;
-#ifdef TOURIST
 		/* fudge _platinum_ YENDORIAN EXPRESS CARD */
 		if (!strncmp(objnam, "PLATINUM_", 9))
 			objnam += 9;
-#endif
 		fprintf(ofp,"#define\tART_%s\t%d\n", limit(objnam, 1), i);
 	}
 

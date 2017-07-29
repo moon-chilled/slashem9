@@ -99,14 +99,12 @@ A("Snickersnee",                KATANA,
 	SPFX_RESTR, 0, 0,
 	PHYS(0,8),	NO_DFNS,	NO_CARY,	0, A_LAWFUL, PM_SAMURAI, NON_PM, 1200L ),
 
-#ifdef YEOMAN
 /* KMH -- Renamed from Holy Sword of Law (Stephen White)
  * This is an actual sword used in British coronations!
  */
 A("Sword of Justice",           LONG_SWORD,
 	(SPFX_RESTR|SPFX_DALIGN), 0, 0,
 	PHYS(5,12),     NO_DFNS,        NO_CARY,        0, A_LAWFUL, PM_YEOMAN, NON_PM, 1500L ),
-#endif
 
 A("Demonbane",			LONG_SWORD,
 	(SPFX_RESTR|SPFX_DFLAG2), 0, M2_DEMON,
@@ -132,11 +130,9 @@ A("Ogresmasher",		WAR_HAMMER,
 	(SPFX_RESTR|SPFX_DCLAS), 0, S_OGRE,
 	PHYS(5,0),	NO_DFNS,	NO_CARY,	0, A_NONE, NON_PM, NON_PM, 200L ),
 
-#ifdef YEOMAN
 A("Reaper",                     HALBERD,
 	SPFX_RESTR, 0, 0,
 	PHYS(5,20),      NO_DFNS,        NO_CARY,        0, A_LAWFUL, PM_YEOMAN, NON_PM, 1000L ),
-#endif
 
 A("Holy Spear of Light",        SILVER_SPEAR,
        (SPFX_RESTR|SPFX_INTEL|SPFX_DFLAG2), 0, M2_UNDEAD,
@@ -198,15 +194,9 @@ A("Deluder",               CLOAK_OF_DISPLACEMENT,
 	(SPFX_RESTR|SPFX_STLTH|SPFX_LUCK), 0, 0,
 	NO_ATTK,      NO_DFNS,        NO_CARY,        0, A_NEUTRAL, PM_WIZARD, NON_PM, 5000L ),
 
-#ifdef TOURIST
 A("Whisperfeet",               SPEED_BOOTS,
 	(SPFX_RESTR|SPFX_STLTH|SPFX_LUCK), 0, 0,
 	NO_ATTK,      NO_DFNS,        NO_CARY,        0, A_NEUTRAL, PM_TOURIST, NON_PM, 5000L ),
-#else
-A("Whisperfeet",               SPEED_BOOTS,
-	(SPFX_RESTR|SPFX_STLTH|SPFX_LUCK), 0, 0,
-	NO_ATTK,      NO_DFNS,        NO_CARY,        0, A_NEUTRAL, NON_PM, NON_PM, 5000L ),
-#endif
 
 /*** Chaotic artifacts ***/
 A("Grimtooth",                  ORCISH_DAGGER,
@@ -387,13 +377,11 @@ A("The Tsurugi of Muramasa",	TSURUGI,
 	NO_ATTK,        NO_DFNS,        NO_CARY,
 	0,		A_LAWFUL, PM_SAMURAI, NON_PM, 4500L ),
 
-# ifdef TOURIST
 A("The Platinum Yendorian Express Card", CREDIT_CARD,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN),
 		(SPFX_ESP|SPFX_HSPDAM), 0,
 	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
 	CHARGE_OBJ,	A_NEUTRAL, PM_TOURIST, NON_PM, 7000L ),
-# endif
 
 /* KMH -- More effective against normal monsters
  * Was +10 to-hit, +d20 damage only versus vampires
@@ -414,12 +402,10 @@ A("The Eye of the Aethiopica",	AMULET_OF_ESP,
 	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
 	CREATE_PORTAL,	A_NEUTRAL, PM_WIZARD, NON_PM, 4000L ),
 
-#ifdef YEOMAN
 A("The Crown of Saint Edward", HELM_OF_TELEPATHY,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_HSPDAM), 0,
 	NO_ATTK,        NO_DFNS,        CARY(AD_MAGM),
 	0,  A_LAWFUL, PM_YEOMAN, NON_PM, 5000L ),
-#endif
 
 /*
  *  terminator; otyp must be zero

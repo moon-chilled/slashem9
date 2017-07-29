@@ -248,9 +248,7 @@ newexplevel (void)
 			case PM_GNOME: u.uenbase += rnd(3); break;
 			case PM_HEALER: u.uenbase += rnd(6) + 2; break;
 			case PM_ICE_MAGE: u.uenbase += rnd(6) + 2; break;
-#ifdef YEOMAN
 			case PM_YEOMAN:
-#endif
 			case PM_KNIGHT: u.uenbase += rnd(3); break;
 			case PM_HUMAN_WEREWOLF: u.uenbase += rnd(5) + 1; break;
 			case PM_MONK: u.uenbase += rnd(5) + 1; break;
@@ -258,9 +256,7 @@ newexplevel (void)
 			case PM_PRIEST: u.uenbase += rnd(6) + 2; break;
 			case PM_ROGUE: u.uenbase += rnd(4) + 1; break;
 			case PM_SAMURAI: u.uenbase += rnd(2); break;
-#ifdef TOURIST
 			case PM_TOURIST: u.uenbase += rnd(4) + 1; break;
-#endif
 			case PM_UNDEAD_SLAYER: u.uenbase += rnd(3); break;
 			case PM_VALKYRIE: u.uenbase += rnd(2); break;
 			case PM_WIZARD: u.uenbase += rnd(6) + 2; break;

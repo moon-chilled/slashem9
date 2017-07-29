@@ -557,9 +557,7 @@ boolean artif;
 		case MEDICAL_KIT:
 			mkbox_cnts(otmp);
 					break;
-#ifdef TOURIST
 		case EXPENSIVE_CAMERA:
-#endif
 		case TINNING_KIT:
 		case MAGIC_MARKER:
 			otmp->spe = rn1(70,30);

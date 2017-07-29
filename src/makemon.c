@@ -235,10 +235,7 @@ struct monst *mtmp;
 		break;
 	    case S_HUMAN:
 		if(is_mercenary(ptr) || mm == PM_SHOPKEEPER
-#ifdef YEOMAN
-				|| mm == PM_CHIEF_YEOMAN_WARDER || mm == PM_YEOMAN_WARDER
-#endif
-		) {
+				|| mm == PM_CHIEF_YEOMAN_WARDER || mm == PM_YEOMAN_WARDER) {
 		    int w1 = 0, w2 = 0;
 		    switch (mm) {
 			case PM_SOLDIER:
@@ -301,9 +298,7 @@ struct monst *mtmp;
 			  if (!rn2(5)) (void) mongets(mtmp, GRENADE_LAUNCHER);
 			  break;
 #endif
-#ifdef YEOMAN
 			case PM_YEOMAN_WARDER:
-#endif
 			  w1 = rn2(2) ? FLAIL : MACE;
 			  break;
 			case PM_CAPTAIN:
@@ -335,9 +330,7 @@ struct monst *mtmp;
 			  }
 			  break;
 #endif
-#ifdef YEOMAN
 			case PM_CHIEF_YEOMAN_WARDER:
-#endif
 			  w1 = rn2(2) ? BROADSWORD : LONG_SWORD;
 			  break;
 			case PM_SHOPKEEPER:
@@ -484,15 +477,13 @@ struct monst *mtmp;
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
 #endif
 		   break;
-#ifdef YEOMAN
 		   case PM_YEOMAN:
-#endif
 		   case PM_KNIGHT:
-		     (void)mongets(mtmp, LONG_SWORD);
-		     (void)mongets(mtmp, PLATE_MAIL);
-		     (void)mongets(mtmp, LARGE_SHIELD);
-		     (void)mongets(mtmp, HELMET);
-		     (void)mongets(mtmp, LEATHER_GLOVES);
+		     mongets(mtmp, LONG_SWORD);
+		     mongets(mtmp, PLATE_MAIL);
+		     mongets(mtmp, LARGE_SHIELD);
+		     mongets(mtmp, HELMET);
+		     mongets(mtmp, LEATHER_GLOVES);
 #ifndef GOLDOBJ
 		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
 #else
@@ -560,7 +551,6 @@ struct monst *mtmp;
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
 #endif
 		   break;
-#ifdef TOURIST
 		   case PM_TOURIST:
 		     m_initthrow(mtmp, DART, 18);
 		     (void)mongets(mtmp, HAWAIIAN_SHIRT);
@@ -571,10 +561,9 @@ struct monst *mtmp;
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 20));
 #endif
 		   break;
-#endif
 		   case PM_UNDEAD_SLAYER:
-		     (void)mongets(mtmp, SILVER_SPEAR);
-		     (void)mongets(mtmp, CHAIN_MAIL);
+		     mongets(mtmp, SILVER_SPEAR);
+		     mongets(mtmp, CHAIN_MAIL);
 #ifndef GOLDOBJ
 		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
 #else
@@ -957,12 +946,9 @@ struct	monst	*mtmp;
  */
 	switch(ptr->mlet) {
 	    case S_HUMAN:
-		if(is_mercenary(ptr)
-#ifdef YEOMAN
+		if (is_mercenary(ptr)
 				|| ptr == &mons[PM_CHIEF_YEOMAN_WARDER]
-				|| ptr == &mons[PM_YEOMAN_WARDER]
-#endif
-		) {
+				|| ptr == &mons[PM_YEOMAN_WARDER]) {
 		    int mac;
 
 		    switch(monsndx(ptr)) {
@@ -971,14 +957,10 @@ struct	monst	*mtmp;
 			case PM_SERGEANT: mac = 0; break;
 			case PM_LIEUTENANT: mac = -2; break;
 			case PM_CAPTAIN: mac = -3; break;
-#ifdef YEOMAN
 			case PM_YEOMAN_WARDER:
-#endif
 			case PM_WATCHMAN: mac = 3; break;
-#ifdef YEOMAN
 			case PM_CHIEF_YEOMAN_WARDER:
 				mongets(mtmp, TALLOW_CANDLE);
-#endif
 			case PM_WATCH_CAPTAIN: mac = -2; break;
 			default: impossible("odd mercenary %d?", monsndx(ptr));
 				mac = 0;

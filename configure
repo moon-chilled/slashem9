@@ -747,8 +747,6 @@ enable_d_saber
 enable_firearms
 enable_steed
 enable_dwarf
-enable_tourist
-enable_yeoman
 enable_zouthern
 enable_redo
 enable_clipping
@@ -1429,8 +1427,6 @@ Optional Features:
   --enable-firearms       Guns and Bullets (default=yes)
   --enable-steed          Ability to ride monsters (default=yes)
   --enable-dwarf          Dwarf race (default=yes)
-  --enable-tourist        Tourist class (default=yes)
-  --enable-yeoman         Yeoman class (default=yes)
   --enable-zouthern       Zoutherner class (default=no)
   --enable-redo           Redo last command (default=yes)
   --enable-clipping       Allow smaller screens (default=yes)
@@ -6364,44 +6360,6 @@ $as_echo "$enable_dwarf" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define DWARF /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable tourist" >&5
-$as_echo_n "checking whether to enable tourist... " >&6; }
-   # Check whether --enable-tourist was given.
-if test "${enable_tourist+set}" = set; then :
-  enableval=$enable_tourist;
-else
-  enable_tourist="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_tourist" >&5
-$as_echo "$enable_tourist" >&6; }
-   if test "$enable_tourist" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define TOURIST /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable yeoman" >&5
-$as_echo_n "checking whether to enable yeoman... " >&6; }
-   # Check whether --enable-yeoman was given.
-if test "${enable_yeoman+set}" = set; then :
-  enableval=$enable_yeoman;
-else
-  enable_yeoman="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_yeoman" >&5
-$as_echo "$enable_yeoman" >&6; }
-   if test "$enable_yeoman" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define YEOMAN /**/
 _ACEOF
 
    fi

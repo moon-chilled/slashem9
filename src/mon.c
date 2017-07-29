@@ -87,9 +87,7 @@ undead_to_corpse (int mndx)
  * Return associated character class monster, rather than species
  * if mode is 1.
  */
-int
-genus (int mndx, int mode)
-{
+int genus (int mndx, int mode) {
 	switch (mndx) {
 /* Quest guardians */
 	case PM_STUDENT:     mndx = mode ? PM_ARCHEOLOGIST  : PM_HUMAN; break;
@@ -102,9 +100,7 @@ genus (int mndx, int mode)
 	case PM_HUNTER:      mndx = mode ? PM_RANGER    : PM_HUMAN; break;
 	case PM_THUG:        mndx = mode ? PM_ROGUE     : PM_HUMAN; break;
 	case PM_ROSHI:       mndx = mode ? PM_SAMURAI   : PM_HUMAN; break;
-#ifdef TOURIST
 	case PM_GUIDE:       mndx = mode ? PM_TOURIST   : PM_HUMAN; break;
-#endif
 	case PM_APPRENTICE:  mndx = mode ? PM_WIZARD    : PM_HUMAN; break;
 	case PM_WARRIOR:     mndx = mode ? PM_VALKYRIE  : PM_HUMAN; break;
 	default:
@@ -366,21 +362,14 @@ struct monst *mtmp;
 		mtmp->mnamelth = 0;
 		break;
 	    case PM_PLASTIC_GOLEM:
-		/* KMH -- Credit cards are #ifdef TOURIST */
 		num = d(2,2);
 		while (num--)
-			obj = mksobj_at(
-#ifdef TOURIST
-				CREDIT_CARD,
-#else
-				FAKE_AMULET_OF_YENDOR,
-#endif
-					x, y, TRUE, FALSE);
+			obj = mksobj_at(CREDIT_CARD, x, y, TRUE, FALSE);
 		mtmp->mnamelth = 0;
 		break;
 	    case PM_GOLD_GOLEM:
 		/* Good luck gives more coins */
-		obj = mkgold((long)(200 - rnl(101)), x, y);
+		obj = mkgold(200 - rnl(101), x, y);
 		mtmp->mnamelth = 0;
 		break;
 	    case PM_PAPER_GOLEM:

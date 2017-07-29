@@ -60,14 +60,6 @@ struct conditionals {
 	{ MON_GLYPH, PM_DJINNI, "dao" },
 	{ MON_GLYPH, PM_DJINNI, "marid" },
 
-#ifndef TOURIST
-	{ MON_GLYPH, PM_SAMURAI, "tourist" },
-#endif
-
-#ifndef YEOMAN
-	{ MON_GLYPH, PM_VALKYRIE, "yeoman" },
-#endif
-
 	/* commented out in monst.c at present */
 	{ MON_GLYPH, PM_SHAMAN_KARNOV, "Master Shifter" },
 	{ MON_GLYPH, PM_SHAMAN_KARNOV, "Thorin" },
@@ -76,16 +68,8 @@ struct conditionals {
 	{ MON_GLYPH, PM_HIPPOCRATES, "Bilbo Baggins" },
 	{ MON_GLYPH, PM_KING_ARTHUR, "High Lycanthrope" },
 
-#ifndef TOURIST
-	{ MON_GLYPH, PM_LORD_SATO, "Twoflower" },
-#endif
-
 	/* commented out in monst.c at present */
 	{ MON_GLYPH, PM_NEFERET_THE_GREEN, "Lolth" },
-
-#ifndef YEOMAN
-	{ MON_GLYPH, PM_NEFERET_THE_GREEN, "Chief Yeoman Warder" },
-#endif
 
 	/* commented out in monst.c at present */
 	{ MON_GLYPH, PM_CHROMATIC_DRAGON, "Transmuter" },
@@ -95,10 +79,6 @@ struct conditionals {
 	{ MON_GLYPH, PM_CYCLOPS, "Gollum" },
 	{ MON_GLYPH, PM_IXOTH, "Sir Lorimar" },
 
-#ifndef YEOMAN
-	{ MON_GLYPH, PM_DARK_ONE, "Colonel Blood" },
-#endif
-
 	/* commented out in monst.c at present */
 	{ MON_GLYPH, PM_NEANDERTHAL, "shifter" },
 	{ MON_GLYPH, PM_NEANDERTHAL, "dwarf warrior" },
@@ -107,18 +87,8 @@ struct conditionals {
 	{ MON_GLYPH, PM_ATTENDANT, "intern" },
 	{ MON_GLYPH, PM_NINJA, "ronin" },
 
-#ifndef TOURIST
-	{ MON_GLYPH, PM_ROSHI, "guide" },
-#endif
-
-#ifndef YEOMAN
-	{ MON_GLYPH, PM_APPRENTICE, "Yeoman Warder" },
-	/* commented out in monst.c at present */
-	{ MON_GLYPH, PM_APPRENTICE, "Farmer Maggot" },
-#else
 	/* commented out in monst.c at present */
 	{ MON_GLYPH, PM_YEOMAN_WARDER, "Farmer Maggot" },
-#endif
 
 #ifndef FIREARMS
 	{ OBJ_GLYPH, SLING, "pistol" },
@@ -143,17 +113,6 @@ struct conditionals {
 #ifndef KOPS
 	{ OBJ_GLYPH, BULLWHIP, "rubber hose" },
 #endif
-#ifndef TOURIST
-
-#ifdef KOPS
-	{ OBJ_GLYPH, RUBBER_HOSE, "Hawaiian shirt" },
-	{ OBJ_GLYPH, RUBBER_HOSE, "T-shirt" },
-#else
-	{ OBJ_GLYPH, BULLWHIP, "Hawaiian shirt" },
-	{ OBJ_GLYPH, BULLWHIP, "T-shirt" },
-#endif
-	{ OBJ_GLYPH, LOCK_PICK, "credit card" },
-#endif
 
 #ifndef LIGHTSABERS
 	{ OBJ_GLYPH, TORCH, "green lightsaber" },
@@ -161,14 +120,6 @@ struct conditionals {
 	{ OBJ_GLYPH, TORCH, "red lightsaber" },
 	{ OBJ_GLYPH, TORCH, "red double lightsaber" },
 #else
-#endif
-
-#ifndef TOURIST
-#ifdef LIGHTSABERS
-	{ OBJ_GLYPH, RED_DOUBLE_LIGHTSABER, "expensive camera" },
-#else
-	{ OBJ_GLYPH, TORCH, "expensive camera" },
-#endif
 #endif
 
 #ifndef STEED
