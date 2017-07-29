@@ -1,0 +1,33 @@
+giant ant:
+    sym: ant
+    level: 2
+    speed: 18
+    ac: 3
+    mr: 0
+    align: "neutral"
+
+    gen_flags:
+        - nohell
+        - genocidable
+        - smallgroup: 4
+
+    attacks: [ { attack type: bite, damage type: physical } ]
+    weight: 5
+    nutrition: 10
+
+    # ? what tf does this mean
+    extension_length: 0
+
+    sound: silent
+
+    size: tiny
+
+    m1_flags:
+        - animal
+        - nohands
+        - oviparous
+        - carnivore
+
+    m2_flags: [hostile]
+
+    color: brown
