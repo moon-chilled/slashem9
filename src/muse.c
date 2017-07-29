@@ -27,8 +27,8 @@ static void mzapmsg(struct monst *,struct obj *,boolean);
 static void mreadmsg(struct monst *,struct obj *);
 static void mquaffmsg(struct monst *,struct obj *);
 static int mbhitm(struct monst *,struct obj *);
-static void mbhit(struct monst *,int,int (*)(MONST_P,OBJ_P),
-	int (*)(OBJ_P,OBJ_P),struct obj *);
+static void mbhit(struct monst *,int,int (*)(struct monst*,struct obj*),
+	int (*)(struct obj*,struct obj*),struct obj *);
 static void you_aggravate(struct monst *);
 static void mon_consume_unstone(struct monst *,struct obj *,
 	boolean,boolean);
@@ -1326,8 +1326,8 @@ static void
 mbhit(mon,range,fhitm,fhito,obj)
 struct monst *mon;			/* monster shooting the wand */
 int range;			/* direction and range */
-int (*fhitm)(MONST_P,OBJ_P);
-int (*fhito)(OBJ_P,OBJ_P);	/* fns called when mon/obj hit */
+int (*fhitm)(struct monst*,struct obj*);
+int (*fhito)(struct obj*,struct obj*);	/* fns called when mon/obj hit */
 struct obj *obj;			/* 2nd arg to fhitm/fhito */
 {
 	struct monst *mtmp;

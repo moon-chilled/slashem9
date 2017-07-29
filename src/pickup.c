@@ -98,7 +98,7 @@ collect_obj_classes(ilets, otmp, here, incl_gold, filter, itemcount)
 char ilets[];
 struct obj *otmp;
 boolean here, incl_gold;
-boolean (*filter)(OBJ_P);
+boolean (*filter)(struct obj*);
 int *itemcount;
 #else
 int
@@ -106,7 +106,7 @@ collect_obj_classes(ilets, otmp, here, filter, itemcount)
 char ilets[];
 struct obj *otmp;
 boolean here;
-boolean (*filter)(OBJ_P);
+boolean (*filter)(struct obj*);
 int *itemcount;
 #endif
 {
@@ -177,7 +177,7 @@ int *menu_on_demand;
 #ifndef GOLDOBJ
 				     incl_gold,
 #endif
-				     (boolean (*)(OBJ_P)) 0, &itemcount);
+				     (boolean (*)(struct obj*)) 0, &itemcount);
 	if (iletct == 0) {
 		return FALSE;
 	} else if (iletct == 1) {
@@ -686,7 +686,7 @@ struct obj *olist;		/* the list to pick from */
 int qflags;			/* options to control the query */
 menu_item **pick_list;		/* return list of items picked */
 int how;			/* type of query */
-boolean (*allow)(OBJ_P);/* allow function */
+boolean (*allow)(struct obj*);/* allow function */
 {
 	int n;
 	winid win;
@@ -2178,7 +2178,7 @@ struct obj *box;
 /* used by askchain() to check for magic bag explosion */
 boolean
 container_gone(fn)
-int (*fn)(OBJ_P);
+int (*fn)(struct obj*);
 {
     /* result is only meaningful while use_container() is executing */
     return ((fn == in_container || fn == out_container) && !current_container);
@@ -2325,7 +2325,7 @@ ask_again2:
 			if (askchain((struct obj **)&current_container->cobj,
 				     (one_by_one ? NULL : select),
 				     allflag, out_container,
-				     (int (*)(OBJ_P))0,
+				     (int (*)(struct obj*))0,
 				     0, "nodot"))
 			    used = 1;
 		    } else if (menu_on_request < 0) {

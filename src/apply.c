@@ -72,8 +72,8 @@ static int use_camera(struct obj *obj) {
 	} else if (!u.dx && !u.dy) {
 		(void) zapyourself(obj, TRUE);
 	} else if ((mtmp = bhit(u.dx,u.dy,COLNO,FLASHED_LIGHT,
-				(int (*)(MONST_P,OBJ_P))0,
-				(int (*)(OBJ_P,OBJ_P))0,
+				(int (*)(struct monst*,struct obj*))0,
+				(int (*)(struct obj*,struct obj*))0,
 				&obj)) != 0) {
 		obj->ox = u.ux,  obj->oy = u.uy;
 		(void) flash_hits_mon(mtmp, obj);
@@ -788,8 +788,8 @@ static int use_mirror(struct obj *obj) {
 		return 1;
 	}
 	mtmp = bhit(u.dx, u.dy, COLNO, INVIS_BEAM,
-		    (int (*)(MONST_P,OBJ_P))0,
-		    (int (*)(OBJ_P,OBJ_P))0,
+		    (int (*)(struct monst*,struct obj*))0,
+		    (int (*)(struct obj*,struct obj*))0,
 		    &obj);
 	if (!mtmp || !haseyes(mtmp->data))
 		return 1;

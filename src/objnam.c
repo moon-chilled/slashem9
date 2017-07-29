@@ -186,7 +186,7 @@ struct obj *obj;
  * or doname() instead.
  */
 char *
-distant_name (struct obj *obj, char *(*func)( OBJ_P))
+distant_name (struct obj *obj, char *(*func)( struct obj*))
 {
 	char *str;
 
@@ -1004,7 +1004,7 @@ boolean ignore_oquan;	/* to force singular */
  * Used if only one of a collection of objects is named (e.g. in eat.c).
  */
 const char *
-singular (struct obj *otmp, char *(*func)( OBJ_P))
+singular (struct obj *otmp, char *(*func)( struct obj*))
 {
 	long savequan;
 #ifdef SHOW_WEIGHT

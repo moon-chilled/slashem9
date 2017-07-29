@@ -816,12 +816,12 @@ extern boolean is_worn(struct obj *);
 extern struct obj *g_at(int,int);
 extern struct obj *mkgoldobj(long);
 extern struct obj *getobj(const char *,const char *);
-extern int ggetobj(const char *,int (*)(OBJ_P),int,boolean,unsigned *);
+extern int ggetobj(const char *,int (*)(struct obj*),int,boolean,unsigned *);
 extern void fully_identify_obj(struct obj *);
 extern int identify(struct obj *);
 extern void identify_pack(int);
-extern int askchain(struct obj **,const char *,int,int (*)(OBJ_P),
-			int (*)(OBJ_P),int,const char *);
+extern int askchain(struct obj **,const char *,int,int (*)(struct obj*),
+			int (*)(struct obj*),int,const char *);
 extern void prinv(const char *,struct obj *,long);
 extern char *xprname(struct obj *,const char *,char,boolean,long,long);
 extern int ddoinv(void);
@@ -1375,7 +1375,7 @@ extern void objects_init(void);
 extern char *obj_typename(int);
 extern char *simple_typename(int);
 extern boolean obj_is_pname(struct obj *);
-extern char *distant_name(struct obj *,char *(*)(OBJ_P));
+extern char *distant_name(struct obj *,char *(*)(struct obj*));
 extern char *fruitname(boolean);
 extern char *xname(struct obj *);
 extern char *mshot_xname(struct obj *);
@@ -1386,7 +1386,7 @@ extern char *corpse_xname(struct obj *,boolean);
 extern char *cxname(struct obj *);
 extern char *killer_xname(struct obj *);
 extern char *killer_cxname(struct obj *,boolean);
-extern const char *singular(struct obj *,char *(*)(OBJ_P));
+extern const char *singular(struct obj *,char *(*)(struct obj*));
 extern char *an(const char *);
 extern char *An(const char *);
 extern char *The(const char *);
@@ -1486,9 +1486,9 @@ extern void getlock(void);
 /* ### pickup.c ### */
 
 #ifdef GOLDOBJ
-extern int collect_obj_classes(char *,struct obj *,boolean,boolean (*)(OBJ_P), int *);
+extern int collect_obj_classes(char *,struct obj *,boolean,boolean (*)(struct obj*), int *);
 #else
-extern int collect_obj_classes(char *,struct obj *,boolean,boolean,boolean (*)(OBJ_P), int *);
+extern int collect_obj_classes(char *,struct obj *,boolean,boolean,boolean (*)(struct obj*), int *);
 #endif
 extern void add_valid_menu_class(int);
 extern boolean allow_all(struct obj *);
@@ -1501,11 +1501,11 @@ extern int pickup_object(struct obj *, long, boolean);
 extern int query_category(const char *, struct obj *, int,
 				menu_item **, int);
 extern int query_objlist(const char *, struct obj *, int,
-				menu_item **, int, boolean (*)(OBJ_P));
+				menu_item **, int, boolean (*)(struct obj*));
 extern struct obj *pick_obj(struct obj *);
 extern int encumber_msg(void);
 extern int doloot(void);
-extern boolean container_gone(int (*)(OBJ_P));
+extern boolean container_gone(int (*)(struct obj*));
 extern int use_container(struct obj **,int);
 extern int loot_mon(struct monst *,int *,boolean *);
 extern const char *safe_qbuf(const char *,unsigned,
@@ -2337,7 +2337,7 @@ extern void obj_set_oinvis(struct obj *, boolean, boolean);
 #endif
 extern struct obj *poly_obj(struct obj *, int);
 extern int bhito(struct obj *,struct obj *);
-extern int bhitpile(struct obj *,int (*)(OBJ_P,OBJ_P),int,int);
+extern int bhitpile(struct obj *,int (*)(struct obj*,struct obj*),int,int);
 extern int zappable(struct obj *);
 extern void zapnodir(struct obj *);
 extern int dozap(void);
@@ -2349,8 +2349,8 @@ extern int spell_damage_bonus(int);
 extern const char *exclam(int force);
 extern void hit(const char *,struct monst *,const char *);
 extern void miss(const char *,struct monst *);
-extern struct monst *bhit(int,int,int,int,int (*)(MONST_P,OBJ_P),
-			     int (*)(OBJ_P,OBJ_P),struct obj **);
+extern struct monst *bhit(int,int,int,int,int (*)(struct monst*,struct obj*),
+			     int (*)(struct obj*,struct obj*),struct obj **);
 extern struct monst *boomhit(int,int);
 extern int burn_floor_paper(int,int,boolean,boolean);
 extern void buzz(int,int,xchar,xchar,int,int);

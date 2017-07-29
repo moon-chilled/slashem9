@@ -2028,7 +2028,7 @@ smell:
 int
 bhitpile(obj,fhito,tx,ty)
     struct obj *obj;
-    int (*fhito)(OBJ_P,OBJ_P);
+    int (*fhito)(struct obj*,struct obj*);
     int tx, ty;
 {
     int hitanything = 0;
@@ -3157,8 +3157,8 @@ struct monst *
 bhit(ddx,ddy,range,weapon,fhitm,fhito,obj_p)
 int ddx,ddy,range;		/* direction and range */
 int weapon;				/* see values in hack.h */
-int (*fhitm)(MONST_P, OBJ_P),	/* fns called when mon/obj hit */
-    (*fhito)(OBJ_P, OBJ_P);
+int (*fhitm)(struct monst*, struct obj*),	/* fns called when mon/obj hit */
+    (*fhito)(struct obj*, struct obj*);
 struct obj **obj_p;			/* object tossed/used */
 {
 	struct monst *mtmp;

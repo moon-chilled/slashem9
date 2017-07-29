@@ -1370,12 +1370,12 @@ static const char removeables[] =
 int
 ggetobj(word, fn, mx, combo, resultflags)
 const char *word;
-int (*fn)(OBJ_P), mx;
+int (*fn)(struct obj*), mx;
 boolean combo;		/* combination menu flag */
 unsigned *resultflags;
 {
-	int (*ckfn)(OBJ_P) = (int (*)(OBJ_P)) 0;
-	boolean (*filter)(OBJ_P) = (boolean (*)(OBJ_P)) 0;
+	int (*ckfn)(struct obj*) = (int (*)(struct obj*)) 0;
+	boolean (*filter)(struct obj*) = (boolean (*)(struct obj*)) 0;
 	boolean takeoff, ident, allflag, m_seen;
 	int itemcount;
 #ifndef GOLDOBJ
@@ -1566,7 +1566,7 @@ askchain(objchn, olets, allflag, fn, ckfn, mx, word)
 struct obj **objchn;
 int allflag, mx;
 const char *olets, *word;	/* olets is an Obj Class char array */
-int (*fn)(OBJ_P), (*ckfn)(OBJ_P);
+int (*fn)(struct obj*), (*ckfn)(struct obj*);
 {
 	struct obj *otmp, *otmp2, *otmpo;
 	char sym, ilet;
@@ -2274,7 +2274,7 @@ dotypeinv()
 #ifndef GOLDOBJ
 					      (u.ugold != 0),
 #endif
-					      (boolean (*)(OBJ_P)) 0, &itemcount);
+					      (boolean (*)(struct obj*)) 0, &itemcount);
 	    if (unpaid_count) {
 		strcat(types, "u");
 		class_count++;
