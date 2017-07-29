@@ -208,7 +208,7 @@ char *argv[];
 	else
 	    break;
     }
-    
+
     if (argc - argn != (split_mode ? 4 : 2)) {
 	fprintf(stderr, "usage: xpm2txt [-w#] [-h#] xpmfile txtfile\n");
 	fprintf(stderr, "       xpm2txt -s xpmfile montxt objtxt othtxt\n");

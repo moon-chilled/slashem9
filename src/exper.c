@@ -7,7 +7,7 @@
 /*static*/ long newuexp(int);
 static int enermod(int);
 
-/*static*/ long 
+/*static*/ long
 newuexp (int lev)
 {
 	/* KMH, balance patch -- changed again! */
@@ -80,7 +80,7 @@ int en;
 	}
 }
 
-int 
+int
 experience (	/* return # of exp points for mtmp after nk killed */
     struct monst *mtmp,
     int nk
@@ -140,7 +140,7 @@ experience (	/* return # of exp points for mtmp after nk killed */
 	return(tmp);
 }
 
-void 
+void
 more_experienced (int exp, int rexp)
 {
 	u.uexp += exp;
@@ -214,7 +214,7 @@ boolean force;		/* Force the loss of an experience level */
  * After all, how much real experience does one get shooting a wand of death
  * at a dragon created with a wand of polymorph??
  */
-void 
+void
 newexplevel (void)
 {
 	if (u.ulevel < MAXULEV && u.uexp >= newuexp(u.ulevel))
@@ -234,7 +234,7 @@ newexplevel (void)
 		/* give new intrinsics */
 		adjabil(u.ulevel - 1, u.ulevel);
 		reset_rndmonst(NON_PM); /* new monster selection */
-/* STEPHEN WHITE'S NEW CODE */                
+/* STEPHEN WHITE'S NEW CODE */
 		tmp = newhp();
 		u.uhpmax += tmp;
 		u.uhp += tmp;
@@ -295,7 +295,7 @@ boolean incr;	/* true iff via incremental experience growth */
 	num = enermod(num);	/* M. Stephenson */
 	u.uenmax += num;
 	u.uen += num;
-	
+
 	if(u.ulevel < MAXULEV) {
 	    if (incr) {
 		long tmp = newuexp(u.ulevel + 1);

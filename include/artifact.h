@@ -48,7 +48,7 @@ struct artifact {
 	short	    role;	/* character role associated with */
 	short	    race;	/* character race associated with */
 	long        cost;	/* price when sold to hero (default 100 x base cost) */
-	
+
 	Bitfield(questarti,1);	/* is quest artifact */
 };
 

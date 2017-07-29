@@ -47,7 +47,7 @@ int incr;
 }
 
 /* set the timeout field of intrinsic `which' */
-void 
+void
 set_itimeout (long *which, long val)
 {
     *which &= ~TIMEOUT;
@@ -55,7 +55,7 @@ set_itimeout (long *which, long val)
 }
 
 /* increment the timeout field of intrinsic `which' */
-void 
+void
 incr_itimeout (long *which, int incr)
 {
     set_itimeout(which, itimeout_incr(*which, incr));
@@ -330,7 +330,7 @@ ghost_from_bottle()
 
 /* "Quaffing is like drinking, except you spill more."  -- Terry Pratchett
  */
-int 
+int
 dodrink (void)
 {
 	struct obj *otmp;
@@ -394,7 +394,7 @@ dodrink (void)
 	return dopotion(otmp);
 }
 
-int 
+int
 dopotion (struct obj *otmp)
 {
 	int retval;
@@ -425,7 +425,7 @@ dopotion (struct obj *otmp)
 }
 
 /* return -1 if potion is used up,  0 if error,  1 not used */
-int 
+int
 peffects (struct obj *otmp)
 {
 	int i, ii, lim;
@@ -530,7 +530,7 @@ peffects (struct obj *otmp)
 		} else {
 		    if(otmp->blessed) {
 			You_feel("full of awe.");
-			if(u.ualign.type == A_LAWFUL) healup(d(6,6),0,0,0);                        
+			if(u.ualign.type == A_LAWFUL) healup(d(6,6),0,0,0);
 			make_sick(0L, NULL, TRUE, SICK_ALL);
 			exercise(A_WIS, TRUE);
 			exercise(A_CON, TRUE);
@@ -972,7 +972,7 @@ peffects (struct obj *otmp)
 			    You_feel("lackluster.");
 			else
 			    pline("Magical energies course through your body.");
-			num = rnd(25) + 5 * otmp->blessed + 10;                        
+			num = rnd(25) + 5 * otmp->blessed + 10;
 			num2 = rnd(2) + 2 * otmp->blessed + 1;
 			u.uenmax += (otmp->cursed) ? -num2 : num2;
 			u.uen += (otmp->cursed) ? -num : num;
@@ -1112,11 +1112,11 @@ healup_mon(mtmp, nhp, nxtra, curesick, cureblind)
 #if 0
 	if(cureblind) ; /* NOT DONE YET */
 	if(curesick)  ; /* NOT DONE YET */
-#endif 
+#endif
 	return;
 }
 
-void 
+void
 strange_feeling (struct obj *obj, const char *txt)
 {
 	if (flags.beginner || !txt)
@@ -1206,7 +1206,7 @@ boolean your_fault;
 		break;
 	case POT_AMNESIA:
 		/* Uh-oh! */
-		if (uarmh && is_helmet(uarmh) && 
+		if (uarmh && is_helmet(uarmh) &&
 			rn2(10 - (uarmh->cursed? 8 : 0)))
 		    get_wet(uarmh, TRUE);
 		break;
@@ -1272,10 +1272,10 @@ boolean your_fault;
 		break;
 #endif
 	case POT_POLYMORPH:
-	    /* [Tom] polymorph potion thrown 
-	     * [max] added poor victim a chance to resist 
+	    /* [Tom] polymorph potion thrown
+	     * [max] added poor victim a chance to resist
 	     * magic resistance protects from polymorph traps, so make
-	     * it guard against involuntary polymorph attacks too... 
+	     * it guard against involuntary polymorph attacks too...
 	     */
 	    if (resists_magm(mon)) {
                 shieldeff(mon->mx, mon->my);
@@ -1365,7 +1365,7 @@ boolean your_fault;
 		switch (monsndx(mon->data)) {
 		case PM_GREMLIN:
 		    /* Gremlins multiply... */
-		    mon->mtame = FALSE;	
+		    mon->mtame = FALSE;
 		    (void)split_mon(mon, NULL);
 		    break;
 		case PM_FLAMING_SPHERE:
@@ -1380,28 +1380,28 @@ boolean your_fault;
 			else
 			    monkilled(mon, "", AD_ACID);
 		    else
-			mon->mtame = FALSE;	
+			mon->mtame = FALSE;
 		    break;
 		case PM_WIZARD_OF_YENDOR:
 		    if (your_fault) {
-			if (canseemon(mon)) 
+			if (canseemon(mon))
 			    pline("%s laughs at you!", Monnam(mon));
 			forget(1);
 		    }
 		    break;
 		case PM_MEDUSA:
 		    if (canseemon(mon))
-			pline("%s looks like %s's having a bad hair day!", 
+			pline("%s looks like %s's having a bad hair day!",
 					Monnam(mon), mhe(mon));
 		    break;
 		case PM_CROESUS:
 		    if (canseemon(mon))
-		        pline("%s says: 'My gold! I must count my gold!'", 
+		        pline("%s says: 'My gold! I must count my gold!'",
 					Monnam(mon));
 		    break;
 		case PM_DEATH:
  		    if (canseemon(mon))
-		        pline("%s pauses, then looks at you thoughtfully!", 
+		        pline("%s pauses, then looks at you thoughtfully!",
 					Monnam(mon));
 		    break;
 		case PM_FAMINE:
@@ -1419,7 +1419,7 @@ boolean your_fault;
 		    else if (mon->isshk) {
 			angermon = FALSE;
 			if (canseemon(mon))
-			    pline("%s looks at you curiously!", 
+			    pline("%s looks at you curiously!",
 					    Monnam(mon));
 			make_happy_shk(mon, FALSE);
 		    } else if (!is_covetous(mon->data) && !rn2(4) &&
@@ -1428,12 +1428,12 @@ boolean your_fault;
 			if (canseemon(mon)) {
 			    if (mon->msleeping) {
 				wakeup(mon);
-				pline("%s wakes up looking bewildered!", 
+				pline("%s wakes up looking bewildered!",
 						Monnam(mon));
 			    } else
 				pline("%s looks bewildered!", Monnam(mon));
 			    mon->mpeaceful = TRUE;
-			    mon->mtame = FALSE;	
+			    mon->mtame = FALSE;
 			}
 		    }
 		    break;
@@ -1495,7 +1495,7 @@ boolean your_fault;
 }
 
 /* vapors are inhaled or get in your eyes */
-void 
+void
 potionbreathe (struct obj *obj)
 {
 	int i, ii, isdone, kn = 0;
@@ -2010,7 +2010,7 @@ boolean amnesia;
 			obj->otyp = SCR_BLANK_PAPER;
 			obj->spe = 0;
 			used = TRUE;
-		} 
+		}
 		break;
 	    case SPBOOK_CLASS:
 		if (obj->otyp != SPE_BLANK_PAPER) {
@@ -2048,7 +2048,7 @@ boolean amnesia;
 			    downgrade_obj(obj, OIL_LAMP, &used);
 			    break;
 			case MAGIC_CANDLE:
-			    downgrade_obj(obj, 
+			    downgrade_obj(obj,
 					    rn2(2)? WAX_CANDLE : TALLOW_CANDLE,
 					    &used);
 			    break;
@@ -2076,14 +2076,14 @@ boolean amnesia;
 			    /* Magic markers run... */
 			    if (obj->spe > 0) {
 				pre_downgrade_obj(obj, &used);
-				if ((obj->spe -= (3 + rn2(10))) < 0) 
+				if ((obj->spe -= (3 + rn2(10))) < 0)
 				    obj->spe = 0;
 			    }
 			    break;
 		    }
 		}
 
-		/* The only other tools that can be affected are pick axes and 
+		/* The only other tools that can be affected are pick axes and
 		 * unicorn horns... */
 		if (!is_weptool(obj)) break;
 		/* Drop through for disenchantment and rusting... */
@@ -2116,7 +2116,7 @@ boolean amnesia;
 			    bill_dummy_object(obj);
 			}
 			used = TRUE;
-		} 
+		}
 		break;
 	}
 	/* !ofAmnesia might strip away fooproofing... */
@@ -2141,9 +2141,9 @@ boolean amnesia;
 	    unbless(obj);
 	}
 
-	if (used) 
+	if (used)
 	    update_inventory();
-	else 
+	else
 	    pline("%s %s wet.", Your_buf, aobjnam(obj,"get"));
 
 	return used;
@@ -2156,11 +2156,11 @@ boolean amnesia;
  * potions, rings, and wands) should NOT be supported.
  * Polearms are not currently implemented.
  */
-int 
+int
 upgrade_obj (struct obj *obj)
-/* returns 1 if something happened (potion should be used up) 
+/* returns 1 if something happened (potion should be used up)
  * returns 0 if nothing happened
- * returns -1 if object exploded (potion should be used up) 
+ * returns -1 if object exploded (potion should be used up)
  */
 {
 	int chg, otyp = obj->otyp, otyp2;
@@ -2598,7 +2598,7 @@ upgrade_obj (struct obj *obj)
 	    explodes = FALSE;
 
 	    for (otmp = obj->cobj; otmp; otmp = otmp->nobj)
-		if (mbag_explodes(otmp, 0)) { 
+		if (mbag_explodes(otmp, 0)) {
 		    explodes = TRUE;
 		    break;
 		}
@@ -2617,7 +2617,7 @@ upgrade_obj (struct obj *obj)
 	return 1;
 }
 
-int 
+int
 dodip (void)
 {
 	struct obj *potion, *obj, *singlepotion;
@@ -2638,7 +2638,7 @@ dodip (void)
 			dipfountain(obj);
 			return(1);
 		}
-	} else if (IS_TOILET(here)) {        
+	} else if (IS_TOILET(here)) {
 		if(yn("Dip it into the toilet?") == 'y') {
 			diptoilet(obj);
 			return(1);
@@ -2674,7 +2674,7 @@ dodip (void)
 	  struct obj *otmp = potion;
 	  potion = obj;
 	  obj = otmp;
-	} 
+	}
 	potion->in_use = TRUE;          /* assume it will be used up */
 	if(potion->otyp == POT_WATER) {
 		boolean useeit = !Blind;
@@ -3046,16 +3046,16 @@ dodip (void)
 		if (potion->quan > 1L) {
 		    singlepotion = splitobj(potion, 1L);
 		} else singlepotion = potion;
-		
+
 		/* MRKR: Gems dissolve in acid to produce new potions */
 
 		if (obj->oclass == GEM_CLASS && potion->otyp == POT_ACID) {
-		    struct obj *singlegem = (obj->quan > 1L ? 
+		    struct obj *singlegem = (obj->quan > 1L ?
 					     splitobj(obj, 1L) : obj);
 
 		    singlegem->in_use = TRUE;
-		    if (potion->otyp == POT_ACID && 
-		      (obj->otyp == DILITHIUM_CRYSTAL || 
+		    if (potion->otyp == POT_ACID &&
+		      (obj->otyp == DILITHIUM_CRYSTAL ||
 		       potion->cursed || !rn2(10))) {
 			/* Just to keep them on their toes */
 
@@ -3072,12 +3072,12 @@ dodip (void)
 			useup(singlepotion);
 			/* MRKR: an alchemy smock ought to be */
 			/* some protection against this: */
-			losehp(Acid_resistance ? rnd(5) : rnd(10), 
+			losehp(Acid_resistance ? rnd(5) : rnd(10),
 			       "alchemic blast", KILLED_BY_AN);
-			return(1);	  
+			return(1);
 		    }
 
-		    pline("%s dissolves in %s.", The(xname(singlegem)), 
+		    pline("%s dissolves in %s.", The(xname(singlegem)),
 			  the(xname(singlepotion)));
 		    makeknown(POT_ACID);
 		    useup(singlegem);
@@ -3088,13 +3088,13 @@ dodip (void)
 		    bill_dummy_object(singlepotion);
 		}
 
-		if (singlepotion->otyp == mixture) {		  
+		if (singlepotion->otyp == mixture) {
 		    /* no change - merge it back in */
 		    if (more_than_one && !merged(&potion, &singlepotion)) {
 			/* should never happen */
 			impossible("singlepotion won't merge with parent potion.");
 		    }
-		} else {		  
+		} else {
 		singlepotion->otyp = mixture;
 		singlepotion->blessed = 0;
 		if (mixture == POT_WATER)
@@ -3139,11 +3139,11 @@ dodip (void)
 }
 
 
-void 
+void
 djinni_from_bottle (struct obj *obj)
 {
 	struct monst *mtmp;
-	int genie_type;        
+	int genie_type;
 	int chance;
 
 #if 0

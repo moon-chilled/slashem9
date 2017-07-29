@@ -95,7 +95,7 @@ gotit:
 	return;
 }
 
-void 
+void
 sort_rooms (void)
 {
 #if defined(SYSV) || defined(DGUX)
@@ -309,7 +309,7 @@ boolean nxcor;
 		smeq[a] = smeq[b];
 }
 
-void 
+void
 makecorridors (void)
 {
 	int a, b, i;
@@ -341,7 +341,7 @@ makecorridors (void)
 
 /* ALI - Artifact doors: Track doors in maze levels as well */
 
-int 
+int
 add_door (int x, int y, struct mkroom *aroom)
 {
 	struct mkroom *broom;
@@ -732,7 +732,7 @@ makelevel()
 	    u_depth < depth(&medusa_level) &&
 	    nroom >= room_threshold &&
 	    rn2(u_depth) < 3) mkroom(SHOPBASE);
- 
+
 	/* [Tom] totally reorganized this into categories... used
 	   to be only one special room on a level... now allows
 	   one of each major type */
@@ -744,7 +744,7 @@ makelevel()
 	    else if(depth(&u.uz) > 14 && !rn2(12)) mkroom(GIANTCOURT);
 	    else if(depth(&u.uz) > 14 && !rn2(7) &&
 		(mvitals[PM_SOLDIER].mvflags & G_GONE)) mkroom(BARRACKS);
-	
+
 	    /* hives */
 	    if(depth(&u.uz) > 9 && !rn2(12) &&
 		(mvitals[PM_KILLER_BEE].mvflags & G_GONE)) mkroom(BEEHIVE);
@@ -766,7 +766,7 @@ makelevel()
 	    if (u_depth > 16 && !rn2(8) &&
 	   !(mvitals[PM_COCKATRICE].mvflags & G_GONE)) mkroom(COCKNEST);
 	    else if(depth(&u.uz) > 20 && !rn2(20)) mkroom(DRAGONLAIR);
-	    else if (u_depth > 25 && !rn2(20) && 
+	    else if (u_depth > 25 && !rn2(20) &&
 		!(mvitals[PM_MIGO_DRONE].mvflags & G_GONE)) mkroom(MIGOHIVE);
 	    /* [DS] the restriction of lemure pits to Gehennom means they're
 	     *      never going to show up randomly (no random room+corridor

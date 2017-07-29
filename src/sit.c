@@ -204,7 +204,7 @@ dosit()
 			take_gold();
 			break;
 		    case 6:
-/* ------------===========STEPHEN WHITE'S NEW CODE============------------ */                                                
+/* ------------===========STEPHEN WHITE'S NEW CODE============------------ */
 			if(u.uluck < 7) {
 			    You_feel("your luck is changing.");
 			    change_luck(5);
@@ -320,7 +320,7 @@ dosit()
 	return(1);
 }
 
-void 
+void
 rndcurse (void)			/* curse a few inventory items at random! */
 {
 	int	nobj = 0;
@@ -394,7 +394,7 @@ rndcurse (void)			/* curse a few inventory items at random! */
 #endif	/*STEED*/
 }
 
-void 
+void
 attrcurse (void)			/* remove a random INTRINSIC ability */
 {
 	switch(rnd(11)) {

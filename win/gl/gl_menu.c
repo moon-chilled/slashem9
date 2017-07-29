@@ -27,12 +27,12 @@ extern char mapped_menu_cmds[]; /* from options.c */
 
 /* FORWARD DECLS */
 static void draw_menu_items(struct TextWindow *win, int how);
- 
+
 /*
  * A string containing all the default commands -- to add to a list
  * of acceptable inputs.
  */
-static const char default_menu_cmds[] = 
+static const char default_menu_cmds[] =
 {
   MENU_FIRST_PAGE,
   MENU_LAST_PAGE,
@@ -57,7 +57,7 @@ static void menu_set_all(struct TextWindow *win, char groupacc)
   {
     if (groupacc && groupacc != item->groupacc)
       continue;
-    
+
     if (item->identifier.a_void && !item->selected)
     {
       item->selected = 1;
@@ -74,7 +74,7 @@ static void menu_unset_all(struct TextWindow *win, char groupacc)
   {
     if (groupacc && groupacc != item->groupacc)
       continue;
-    
+
     if (item->identifier.a_void && item->selected)
     {
       item->selected = 0;
@@ -91,7 +91,7 @@ static void menu_invert_all(struct TextWindow *win, char groupacc)
   {
     if (groupacc && groupacc != item->groupacc)
       continue;
-    
+
     if (!item->identifier.a_void)
       continue;
 
@@ -146,9 +146,9 @@ static void collect_group_accelerators(int how, char *gacc,
 
     gcnt[accel]++;
   }
-  
+
   gacc[n] = 0;
- 
+
   if (how == PICK_ONE)
   {
     for(rp=gacc; *gacc; gacc++)
@@ -168,7 +168,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
 {
   struct MenuItem *item;
   struct TileWindow *kt_win = NULL;
-  
+
   int pixel_w, pixel_h;
   int total_choices;
 
@@ -178,7 +178,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
 
   int count = 0;
   int ch;
-  
+
   /* for group accelerators */
   char gacc[128] = { 0, };
   char kt_buf[16];
@@ -188,7 +188,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
   if (! win->items)
     return -1;
 
-  /* calc_w/h has already been calculated in end_menu(). 
+  /* calc_w/h has already been calculated in end_menu().
    */
   if (win->is_menu != 1 || win->calc_w <= 0 || win->calc_h <= 0)
   {
@@ -198,9 +198,9 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
 
   sdlgl_top_win = window;
 
-  win->base = sdlgl_new_tilewin(sdlgl_font_menu, win->calc_w, 
+  win->base = sdlgl_new_tilewin(sdlgl_font_menu, win->calc_w,
       win->calc_h, 1,0);
-  
+
   /* choose background color */
   win->base->background = (how == PICK_NONE) ? MENU_NONE_COL :
       (how == PICK_ONE) ? MENU_ONE_COL : MENU_ANY_COL;
@@ -213,7 +213,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
   win->show_w = pixel_w / win->base->scale_w;
   win->show_h = pixel_h / win->base->scale_h;
 
-  assert(0 < win->show_w && win->show_w <= win->calc_w); 
+  assert(0 < win->show_w && win->show_w <= win->calc_w);
   assert(0 < win->show_h && win->show_h <= win->calc_h);
 
   sdlgl_map_tilewin(win->base, sdlgl_width - pixel_w,
@@ -236,7 +236,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
       if (item->identifier.a_void)
         total_choices++;
   }
-   
+
 #if 0  /* DEBUGGING */
   fprintf(stderr, "GROUPACC: %c `%s'\n",
   (how == PICK_NONE) ? 'N' : (how == PICK_ONE) ? '1' : 'A', gacc);
@@ -253,7 +253,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
       sdlgl_free_tilewin(kt_win);
       kt_win = NULL;
     }
-    
+
     sdlgl_flush();
     ch = sdlgl_get_poskey(0, &bx, &by, &bmod);
 
@@ -282,7 +282,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
         }
         else
           item->selected = item->selected ? 0 : 1;
-          
+
         /* redraw menu */
         draw_menu_items(win, how);
         sdlgl_flush();
@@ -294,7 +294,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
       counting = 0;
       continue;
     }
-    
+
     if (ch == '\033')
     {
       if (counting)
@@ -306,7 +306,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
       cancelled = 1;
       break;
     }
-    
+
     if (ch == '\n' || ch == '\r' || ch == ' ')
     {
       /* handle counting.  Many times I have simply hit enter instead
@@ -358,7 +358,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
       {
         int x, y;
         int w, h;
-        
+
         kt_win = sdlgl_new_tilewin(sdlgl_font_menu, 16, 1, 1,0);
         kt_win->background = win->base->background;
 
@@ -377,7 +377,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
         {
           y -= h;
         }
-         
+
         sdlgl_map_tilewin(kt_win, x, y, w, h, 11+window);
       }
 
@@ -398,7 +398,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
        menu_invert_all(win, ch);
 
        /* if PICK_ONE, gacc only contains accels for single items */
-       if (how == PICK_ONE) 
+       if (how == PICK_ONE)
          finished = 1;
 
        draw_menu_items(win, how);
@@ -419,7 +419,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
           }
           else
             item->selected = item->selected ? 0 : 1;
-          
+
           /* redraw menu */
           draw_menu_items(win, how);
           sdlgl_flush();
@@ -433,7 +433,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
       counting = 0;
       continue;
     }
-    
+
     counting = 0;
 
     switch (ch)
@@ -467,7 +467,7 @@ int sdlgl_process_menu_window(int window, struct TextWindow *win, int how)
         break;
     }
   }
-  
+
   sdlgl_unmap_tilewin(win->base);
   sdlgl_free_tilewin(win->base);
   win->base = NULL;
@@ -513,10 +513,10 @@ static void draw_menu_items(struct TextWindow *win, int how)
   char buffer[BUFSZ];
 
   base = win->base;
-  
+
   assert(base);
   assert(base->is_text);
- 
+
   for (item=win->items,y=1; item; item=item->next,y++)
   {
     assert(y >= 0);
@@ -542,12 +542,12 @@ static void draw_menu_items(struct TextWindow *win, int how)
       /* padding character, looks better */
       strcpy(buffer, " ");
     }
-     
+
     strncpy(buffer+strlen(buffer), item->str, BUFSZ-strlen(buffer)-1);
     buffer[BUFSZ-1] = 0;
-        
+
     tilecol = sdlgl_attr_to_tilecol(item->attr);
-    
+
     x = 0;
 
     maxlen = win->calc_w - x;
@@ -566,7 +566,7 @@ static void draw_menu_items(struct TextWindow *win, int how)
 void Sdlgl_start_menu(winid window)
 {
   struct TextWindow *win;
-  
+
   if (window == WIN_ERR)
     return;
 
@@ -587,13 +587,13 @@ void Sdlgl_start_menu(winid window)
 /*
  * Add a menu item to the menu list.
  */
-void Sdlgl_add_menu(winid window, int glyph, const anything *identifier, 
-    char ch, char groupacc, int attr, const char *str, 
+void Sdlgl_add_menu(winid window, int glyph, const anything *identifier,
+    char ch, char groupacc, int attr, const char *str,
     boolean preselected)
 {
   struct TextWindow *win;
   struct MenuItem *item;
-  
+
   if (window == WIN_ERR)
     return;
 
@@ -608,7 +608,7 @@ void Sdlgl_add_menu(winid window, int glyph, const anything *identifier,
     attr = ATR_ULINE;
 
   /* create item record */
-   
+
   item = (struct MenuItem *) alloc(sizeof(struct MenuItem));
   memset(item, 0, sizeof(struct MenuItem));
 
@@ -623,7 +623,7 @@ void Sdlgl_add_menu(winid window, int glyph, const anything *identifier,
   item->count = -1;
 
   /* link it in (to head of list) */
-  
+
   item->next = win->items;
   win->items = item;
 }
@@ -638,7 +638,7 @@ void Sdlgl_end_menu(winid window, const char *prompt)
 {
   struct TextWindow *win;
   struct MenuItem *item;
-  
+
   int used_accs[52] = { 0, };
   int curr_acc = 0;
 
@@ -653,7 +653,7 @@ void Sdlgl_end_menu(winid window, const char *prompt)
 
   /* put the prompt at the beginning of the menu */
 
-  if (prompt) 
+  if (prompt)
   {
     anything any;
     any.a_void = 0; /* not selectable */
@@ -712,8 +712,8 @@ void Sdlgl_end_menu(winid window, const char *prompt)
 
     if (curr_acc >= 52)  /* none left */
       continue;
-    
-    item->accelerator = (curr_acc < 26) ? ('a' + curr_acc) : 
+
+    item->accelerator = (curr_acc < 26) ? ('a' + curr_acc) :
       ('A' + curr_acc - 26);
     used_accs[curr_acc++] = 1;
   }
@@ -726,7 +726,7 @@ int Sdlgl_select_menu(winid window, int how, menu_item **menu_list)
 {
   struct TextWindow *win;
   struct MenuItem *item;
-  
+
   menu_item *mi;
   int num;
 
@@ -771,7 +771,7 @@ int Sdlgl_select_menu(winid window, int how, menu_item **menu_list)
 char Sdlgl_message_menu(char let, int how, const char *mesg)
 {
   struct TextWindow *win;
-  
+
   if (WIN_MESSAGE == WIN_ERR)
     return 0;
 
@@ -797,12 +797,12 @@ char Sdlgl_message_menu(char let, int how, const char *mesg)
   /* force the [MORE] if the message didn't wrap */
   if (win->fresh_lines > 0 && win->more_ch != let)
     sdlgl_more(win);
-  
+
   win->dismiss_more = 0;
 
   if (win->more_ch == let || win->more_ch == '\033')
     return win->more_ch;
- 
+
   return 0;
 }
 
@@ -811,7 +811,7 @@ char Sdlgl_message_menu(char let, int how, const char *mesg)
  *   return; 'esc' returns 'q', or 'n', or the default, depending on
  *   what's in the string. The 'query' string is printed before the
  *   user is asked about the string.
- *   
+ *
  *   If resp is NULL, any single character is accepted and returned.
  *   If not-NULL, only characters in it are allowed (exceptions:  the
  *   quitchars are always allowed, and if it contains '#' then digits
@@ -821,14 +821,14 @@ char Sdlgl_message_menu(char let, int how, const char *mesg)
 char Sdlgl_yn_function(const char *query, const char *resp, char def)
 {
   struct TextWindow *win;
-  
+
   int ch = 'n';  /* value to keep compiler sweet */
   int allow_num;
 
-  char prompt[BUFSZ]; 
+  char prompt[BUFSZ];
   char respbuf[BUFSIZ];
   char *rb;
-  
+
   if (WIN_MESSAGE == WIN_ERR)
     return 'n';
 
@@ -843,14 +843,14 @@ char Sdlgl_yn_function(const char *query, const char *resp, char def)
     sdlgl_more(win);
 
   Sdlgl_clear_nhwindow(WIN_MESSAGE);
-  
+
   /* disable scrollback while we control the message win */
   win->scrollback_enable = 0;
 
   sdlgl_gotoxy(win, 0, 0);
 
   allow_num = (resp && strchr(resp, '#') != NULL);
-  
+
   /* make up the prompt */
   if (resp)
   {
@@ -859,14 +859,14 @@ char Sdlgl_yn_function(const char *query, const char *resp, char def)
     if (rb)
       *rb = 0;
     sprintf(prompt, "%s [%s] ", query, respbuf);
-    if (def) 
+    if (def)
       sprintf(prompt+strlen(prompt), "(%c) ", def);
   }
   else
     strcpy(prompt, query);
 
   sdlgl_puts(win, prompt);
-  
+
   for (;;)
   {
     sdlgl_flush();
@@ -885,7 +885,7 @@ char Sdlgl_yn_function(const char *query, const char *resp, char def)
       sdlgl_remove_scrollback();
 
     /* handle escape (yes, it's weird) */
-    if (ch == '\033') 
+    if (ch == '\033')
     {
       ch = strchr(resp, 'q') ? 'q' : (strchr(resp, 'n') ? 'n' : def);
       break;
@@ -941,7 +941,7 @@ char Sdlgl_yn_function(const char *query, const char *resp, char def)
           value = -1;
           break;
         }
-        
+
         /* backspace */
         if (nc == '\b')
         {
@@ -976,7 +976,7 @@ char Sdlgl_yn_function(const char *query, const char *resp, char def)
         sdlgl_puts(win, "\b \b");
 
       continue;
-      
+
       /* --- end of handle numbers --- */
     }
 

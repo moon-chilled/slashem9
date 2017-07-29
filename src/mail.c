@@ -80,7 +80,7 @@ static long laststattime;
 #  define MAILPATH "/usr/mail/"
 # endif
 
-void 
+void
 getmailstatus (void)
 {
 	if(!mailbox && !(mailbox = nh_getenv("MAIL"))) {
@@ -177,7 +177,7 @@ retry:
 		    max_distance = dd;
 		    startp->y = row;
 		    startp->x = viz_rmin[row];
-		
+
 		} else if (enexto(&testcc, (xchar)viz_rmin[row], row,
 						NULL) &&
 			   !cansee(testcc.x, testcc.y) &&
@@ -192,7 +192,7 @@ retry:
 		    max_distance = dd;
 		    startp->y = row;
 		    startp->x = viz_rmax[row];
-		
+
 		} else if (enexto(&testcc, (xchar)viz_rmax[row], row,
 						NULL) &&
 			   !cansee(testcc.x,testcc.y) &&
@@ -413,7 +413,7 @@ give_up:
 
 # if !defined(UNIX) && !defined(LAN_MAIL)
 
-void 
+void
 ckmailstatus (void)
 {
 	if (u.uswallow || !flags.biff) return;
@@ -429,7 +429,7 @@ ckmailstatus (void)
 }
 
 /*ARGSUSED*/
-void 
+void
 readmail (struct obj *otmp)
 {
     const char *line;
@@ -448,7 +448,7 @@ readmail (struct obj *otmp)
 
 # ifdef UNIX
 
-void 
+void
 ckmailstatus (void)
 {
 	if(!mailbox || u.uswallow || !flags.biff
@@ -484,7 +484,7 @@ ckmailstatus (void)
 }
 
 /*ARGSUSED*/
-void 
+void
 readmail (struct obj *otmp)
 {
 #  ifdef DEF_MAILREADER			/* This implies that UNIX is defined */
@@ -513,11 +513,11 @@ readmail (struct obj *otmp)
 
 # ifdef LAN_MAIL
 
-void 
+void
 ckmailstatus (void)
 {
 	static int laststattime = 0;
-	
+
 	if(u.uswallow || !flags.biff
 #  ifdef MAILCKFREQ
 		    || moves < laststattime + MAILCKFREQ
@@ -541,7 +541,7 @@ ckmailstatus (void)
 }
 
 /*ARGSUSED*/
-void 
+void
 readmail (struct obj *otmp)
 {
 	lan_mail_read(otmp);

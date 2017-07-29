@@ -32,7 +32,7 @@
  * but other programs such as zoo or arc may or may not require the file
  * to be "BILFed" (or "unBILFed" or whatever).  Also, unlike the other
  * flavors, VMS files don't get overwritten (a higher version is created).
- * 
+ *
  * Modified 13 April 1991 by Gary Mussar to be forgiving of systems that
  * appear to be stripping trailing blanks.
  *

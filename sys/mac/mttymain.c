@@ -119,14 +119,14 @@ int cnt = 3;
 
 void tty_change_background (int white_or_black) {
 	int i;
-	
+
 	for (i = 0; i < CLR_MAX; i++) {
 		if (white_or_black)
 			_mt_colors [i] [1] = 0xffffff;	/* white */
 		else
 			_mt_colors [i] [1] = 0x000000;	/* black */
 	}
-	
+
 	/* special cases */
 	if (white_or_black) {
 		_mt_colors [CLR_BLACK] [1] = 0x808080;	/* differentiate black from no color */
@@ -205,7 +205,7 @@ short hor, vert;
 	} else {
 		dprintf ("TTY Windows");
 	}
-	
+
 	/*
 	 * If there is at least one screen CAPABLE of color, and if
 	 * 32-bit QD is there, we use color. 32-bit QD is needed for the

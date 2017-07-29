@@ -42,7 +42,7 @@ winid id;
 	    break;
     if (i == mapid__no_windows) {
 	if (mapid__no_windows++)
-	    mapid__windows = (struct mapid__window *)realloc(mapid__windows, 
+	    mapid__windows = (struct mapid__window *)realloc(mapid__windows,
 	      mapid__no_windows * sizeof(*mapid__windows));
 	else
 	    mapid__windows = (struct mapid__window *)malloc(sizeof(*mapid__windows));
@@ -91,7 +91,7 @@ const anything *identifier;
     i = mapid__add_winid(id);
     if (j = mapid__windows[i].no_identifiers++)
 	mapid__windows[i].identifiers =
-	  (anything *)realloc(mapid__windows[i].identifiers, 
+	  (anything *)realloc(mapid__windows[i].identifiers,
 	  mapid__windows[i].no_identifiers * sizeof(*mapid__windows->identifiers));
     else
 	mapid__windows[i].identifiers =

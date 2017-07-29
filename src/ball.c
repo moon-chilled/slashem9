@@ -389,7 +389,7 @@ boolean drag_ball(xchar x, xchar y, int *bc_control, xchar *ballx, xchar *bally,
  */
 #define SKIP_TO_DRAG { *chainx = oldchainx; *chainy = oldchainy; \
     move_bc(0, *bc_control, *ballx, *bally, *chainx, *chainy); \
-    goto drag; } 
+    goto drag; }
 	    if (IS_CHAIN_ROCK(u.ux, u.uy) || IS_CHAIN_ROCK(*chainx, *chainy)
 			|| IS_CHAIN_ROCK(uball->ox, uball->oy))
 		already_in_rock = TRUE;
@@ -488,7 +488,7 @@ boolean drag_ball(xchar x, xchar y, int *bc_control, xchar *ballx, xchar *bally,
 		    if (IS_CHAIN_ROCK(*chainx, *chainy) && !already_in_rock)
 			SKIP_TO_DRAG;
 		    break;
-		
+
 		/* ball is one space diagonal from player.  Check for the
 		 * following special case:
 		 *   @
@@ -525,7 +525,7 @@ boolean drag_ball(xchar x, xchar y, int *bc_control, xchar *ballx, xchar *bally,
 		    *chainx = x;
 		    *chainy = y;
 		    break;
-		
+
 		default: impossible("bad chain movement");
 		    break;
 	    }

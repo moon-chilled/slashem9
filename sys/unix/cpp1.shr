@@ -232,7 +232,7 @@ Xcpp3.arc:
 X	cpp4.c		#define processor
 X	cpp5.c		#if <expr> processor
 X	cpp6.c		Support code (symbol table and I/O routines)
-X	
+X
 XCpp intentionally does not rely on the presence of a full-scale
 Xmacro preprocessor, it does require the simple parameter substitution
 Xpreprocessor capabilities of Unix V6 and Decus C.  If your C
@@ -675,7 +675,7 @@ X#define	T_SIGNED	 64
 X#define	T_UNSIGNED	128
 X#define	T_PTR		256		/* Pointer			*/
 X#define	T_FPTR		512		/* Pointer to functions		*/
-X
+X
 X/*
 X * The DEFBUF structure stores information about #defined
 X * macros.  Note that the defbuf->repl information is always
@@ -865,7 +865,7 @@ X#else
 X#ifdef os
 X#define HOST			SYS_OS
 X#else
-X#ifdef tss			
+X#ifdef tss
 X#define HOST			SYS_TSS
 X#endif
 X#endif
@@ -992,7 +992,7 @@ X#endif
 X#ifdef u3b
 X#define MACHINE			"u3b"
 X#endif
-X#ifdef u3b5	
+X#ifdef u3b5
 X#define MACHINE			"u3b5"
 X#endif
 X#ifdef u3b2
@@ -1019,13 +1019,13 @@ X#else
 X#define LINE_PREFIX		"line"
 X#endif
 X#endif
-X
+X
 X/*
 X * OLD_PREPROCESSOR forces the definition of OK_DOLLAR, OK_CONCAT,
 X * COMMENT_INVISIBLE, and STRING_FORMAL to values appropriate for
 X * an old-style preprocessor.
 X */
-X 
+X
 X#ifndef	OLD_PREPROCESSOR
 X#define	OLD_PREPROCESSOR	FALSE
 X#endif
@@ -1110,7 +1110,7 @@ X */
 X#ifndef	OK_DATE
 X#define	OK_DATE		TRUE
 X#endif
-X
+X
 X/*
 X * Some common definitions.
 X */
@@ -1434,7 +1434,7 @@ X	    while ((c = get()) != '\n' && c != EOF_CHAR)
 X		cput(c);
 X	    unget();
 X	    break;
-X 
+X
 X#if DEBUG
 X	case L_debug:
 X	    if (debug == 0)
@@ -1474,7 +1474,7 @@ X#endif
 X	}
 X	return (counter + 1);
 X}
-X
+X
 XFILE_LOCAL
 Xdoif(hash)
 Xint		hash;
@@ -1520,7 +1520,7 @@ X	unget();				/* Error message	*/
 X#endif
 X	return;
 X}
-X
+X
 XFILE_LOCAL
 Xdoinclude()
 X/*
@@ -1553,7 +1553,7 @@ X	workp = work;
 X	instring = TRUE;		/* Accept all characters	*/
 X	while ((c = get()) != '\n' && c != delim && c != EOF_CHAR)
 X	    save(c);			/* Put it away.			*/
-X	skipnl(); 
+X	skipnl();
 X	/*
 X	 * The draft is unclear if the following should be done.
 X	 */
@@ -1563,7 +1563,7 @@ X	    ;				/* Trim blanks from filename	*/
 X
 X/*
 X *	if (*workp != delim)
-X *	    goto incerr; 
+X *	    goto incerr;
 X */
 X 	*(workp + 1) = EOS;			/* Terminate filename	*/
 X	instring = FALSE;
@@ -1589,7 +1589,7 @@ X
 Xincerr:	cerror("#include syntax error", NULLST);
 X	return;
 X}
-X
+X
 XFILE_LOCAL int
 Xopeninclude(filename, searchlocal)
 Xchar		*filename;		/* Input file name		*/
@@ -1661,7 +1661,7 @@ X	    }
 X	}
 X	return (FALSE);
 X}
-X
+X
 XFILE_LOCAL int
 Xhasdirectory(source, result)
 Xchar		*source;	/* Directory to examine			*/
@@ -1707,7 +1707,7 @@ X	}
 X#endif
 X#endif
 X}
-X
+X
 X#if HOST == SYS_VMS
 X
 X/*

@@ -13,15 +13,15 @@
 # START
 
 /* Config Filename */
-#ifdef UNIX                
+#ifdef UNIX
 # define NH_CONFIG_FILE     ".@LOWER@rc"
 #else
 # ifdef MAC
 #  define NH_CONFIG_FILE     "Slash'EM Defaults"
-# else                     
+# else
 #   ifdef WIN32
 #    define NH_CONFIG_FILE     "defaults.nh";
-#   else                     
+#   else
 #    define NH_CONFIG_FILE     "@UPPER@.cnf"
 #  endif
 # endif

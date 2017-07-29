@@ -4,7 +4,7 @@
 
 #include "hack.h"
 
-void 
+void
 were_change (struct monst *mon)
 {
 	if (!is_were(mon->data))
@@ -34,7 +34,7 @@ were_change (struct monst *mon)
 	}
 }
 
-int 
+int
 counter_were (int pm)
 {
 	switch(pm) {
@@ -44,7 +44,7 @@ counter_were (int pm)
 	    case PM_HUMAN_WEREJACKAL: return(PM_WEREJACKAL);
 	    case PM_WERERAT:	      return(PM_HUMAN_WERERAT);
 	    case PM_HUMAN_WERERAT:    return(PM_WERERAT);
-	    case PM_WEREPANTHER:      return(PM_HUMAN_WEREPANTHER);            
+	    case PM_WEREPANTHER:      return(PM_HUMAN_WEREPANTHER);
 	    case PM_HUMAN_WEREPANTHER:return(PM_WEREPANTHER);
 	    case PM_WERETIGER:        return(PM_HUMAN_WERETIGER);
 	    case PM_HUMAN_WERETIGER:  return(PM_WERETIGER);
@@ -56,7 +56,7 @@ counter_were (int pm)
 	}
 }
 
-void 
+void
 new_were (struct monst *mon)
 {
 	int pm;
@@ -160,7 +160,7 @@ char *genbuf;
 	return total;
 }
 
-void 
+void
 you_were (void)
 {
 	char qbuf[QBUFSZ];

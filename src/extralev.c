@@ -194,7 +194,7 @@ int x,y;
 	}
 }
 
-void 
+void
 makeroguerooms (void) {
 	int x,y;
 	/* Rogue levels are structured 3 by 3, with each section containing
@@ -274,7 +274,7 @@ makeroguerooms (void) {
 	}
 }
 
-void 
+void
 corr (int x, int y)
 {
 	if (rn2(50)) {
@@ -284,7 +284,7 @@ corr (int x, int y)
 	}
 }
 
-void 
+void
 makerogueghost (void)
 {
 	struct monst *ghost;

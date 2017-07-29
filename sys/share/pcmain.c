@@ -464,7 +464,7 @@ char *argv[];
 	}
 }
 
-static void 
+static void
 nhusage()
 {
 	char buf1[BUFSZ];

@@ -295,7 +295,7 @@ struct obj *obj;
 /* List of valid menu classes for query_objlist() and allow_category callback */
 static char valid_menu_classes[MAXOCLASSES + 2];
 
-void 
+void
 add_valid_menu_class (int c)
 {
 	static int vmc_count = 0;
@@ -385,7 +385,7 @@ struct obj *otmp;
  * Returns 1 if tried to pick something up, whether
  * or not it succeeded.
  */
-int 
+int
 pickup (
     int what		/* should be a long */
 )
@@ -1137,7 +1137,7 @@ int *wt_before, *wt_after;
 
 /* determine whether character is able and player is willing to carry `obj' */
 static
-int 
+int
 lift_object(obj, container, cnt_p, telekinesis)
 struct obj *obj, *container;	/* object to pick up, bag it's coming out of */
 long *cnt_p;
@@ -1450,7 +1450,7 @@ boolean countem;
 {
 	struct obj *cobj, *nobj;
 	int container_count = 0;
-	
+
 	for(cobj = level.objects[x][y]; cobj; cobj = nobj) {
 		nobj = cobj->nexthere;
 		if(Is_container(cobj)) {
@@ -1708,7 +1708,7 @@ boolean *prev_loot;
 		    You("can't. The saddle seems to be stuck to %s.",
 			x_monnam(mtmp, ARTICLE_THE, NULL,
 				SUPPRESS_SADDLE, FALSE));
-			    
+
 		    /* the attempt costs you time */
 			return (1);
 		}
@@ -1772,7 +1772,7 @@ boolean silent;
     struct monst *mtmp = NULL;
 
     if (get_obj_location(bomb, &x, &y, BURIED_TOO | CONTAINED_TOO)) {
-	switch(bomb->where) {		
+	switch(bomb->where) {
 	    case OBJ_MINVENT:
 		mtmp = bomb->ocarry;
 		if (bomb == MON_WEP(mtmp)) {
@@ -1783,7 +1783,7 @@ boolean silent;
 		    You("see %s engulfed in an explosion!", mon_nam(mtmp));
 		mtmp->mhp -= d(6,6);
 		if (mtmp->mhp < 1) {
-		    if (!bomb->yours) 
+		    if (!bomb->yours)
 			monkilled(mtmp, silent ? "" : "explosion", AD_PHYS);
 		    else xkilled(mtmp, !silent);
 		}
@@ -2255,7 +2255,7 @@ int held;
 	if (loss)	/* magic bag lost some shop goods */
 	    You("owe %ld %s for lost merchandise.", loss, currency(loss));
 	obj->owt = weight(obj);	/* in case any items were lost */
-  
+
 	if (!cnt)
 	    sprintf(emptymsg, "%s is %sempty.", Yname2(obj),
 		    quantum_cat ? "now " : "");

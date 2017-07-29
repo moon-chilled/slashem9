@@ -107,7 +107,7 @@ pick_move:
 	return(0);
 }
 
-char 
+char
 temple_occupied (char *array)
 {
 	char *ptr;
@@ -131,7 +131,7 @@ xchar x, y;
 /*
  * pri_move: return 1: moved  0: didn't  -1: let m_move do it  -2: died
  */
-int 
+int
 pri_move (struct monst *priest)
 {
 	xchar gx,gy,omx,omy;
@@ -323,7 +323,7 @@ findpriest (char roomno)
 }
 
 /* called from check_special_room() when the player enters the temple room */
-void 
+void
 intemple (int roomno)
 {
 	struct monst *priest = findpriest((char)roomno);
@@ -401,7 +401,7 @@ intemple (int roomno)
        }
 }
 
-void 
+void
 priest_talk (struct monst *priest)
 {
 	boolean coaligned = p_coaligned(priest);
@@ -543,7 +543,7 @@ boolean peaceful;
 
 	if (ptr != &mons[PM_ALIGNED_PRIEST] && ptr != &mons[PM_ANGEL])
 		return(NULL);
-	
+
 	if (MON_AT(x, y)) (void) rloc(m_at(x, y), FALSE);	/* insurance */
 
 	if (!(roamer = makemon(ptr, x, y, NO_MM_FLAGS)))

@@ -187,12 +187,12 @@ UINT mswin_charset()
 {
 	CHARSETINFO cis;
 	if( iflags.IBMgraphics )
-		if( TranslateCharsetInfo((DWORD*)GetOEMCP(), &cis, TCI_SRCCODEPAGE) ) 
+		if( TranslateCharsetInfo((DWORD*)GetOEMCP(), &cis, TCI_SRCCODEPAGE) )
 			return cis.ciCharset;
 		else
 			return OEM_CHARSET;
-	else 
-		if( TranslateCharsetInfo((DWORD*)GetACP(), &cis, TCI_SRCCODEPAGE) ) 
+	else
+		if( TranslateCharsetInfo((DWORD*)GetACP(), &cis, TCI_SRCCODEPAGE) )
 			return cis.ciCharset;
 		else
 			return ANSI_CHARSET;

@@ -60,7 +60,7 @@ const char *type;
 	}
 
         if (ppm_file != NULL) return TRUE;
-         	
+
 	ppm_file = fopen(filename, type);
 	if (ppm_file == NULL) {
 		fprintf(stderr, "cannot open ppm file %s\n", filename);
@@ -172,10 +172,10 @@ char *argv[];
 	ppmfile=argv[fileargs++];
 
 	while (fileargs < argc) {
-	
+
 		if (!fopen_text_file(argv[fileargs++], RDTMODE))
 			exit(EXIT_FAILURE);
-          
+
 		init_colormap();
 		if (!fopen_ppm_file(ppmfile, WRBMODE)) {
 			(void) fclose_text_file();
@@ -187,7 +187,7 @@ char *argv[];
 
 		(void) fclose_text_file();
         }
-        
+
 	if (fclose_ppm_file())
 		exit(EXIT_FAILURE);
 	else

@@ -12,7 +12,7 @@
 	# make install
 
     Notes:
-    
+
     * You do _not_ need to have a copy of GNU autoconf to install Slash'EM.
 
 2.  If you do not like the default set of optional features, then you can

@@ -182,7 +182,7 @@ fname_encode (const char *legal, char quotechar, char *s, char *callerbuf, int b
 	sp = s;
 	op = callerbuf;
 	*op = '\0';
-	
+
 	while (*sp) {
 		/* Do we have room for one more character or encoding? */
 		if ((bufsz - cnt) <= 4) return callerbuf;
@@ -233,11 +233,11 @@ fname_decode (char quotechar, char *s, char *callerbuf, int bufsz)
 			sp++;
 			for (k=0; k < 16; ++k) if (*sp == hexdigits[k]) break;
 			if (k >= 16) return callerbuf;	/* impossible, so bail */
-			calc = k << 4; 
+			calc = k << 4;
 			sp++;
 			for (k=0; k < 16; ++k) if (*sp == hexdigits[k]) break;
 			if (k >= 16) return callerbuf;	/* impossible, so bail */
-			calc += k; 
+			calc += k;
 			sp++;
 			*op++ = calc;
 			*op = '\0';
@@ -281,7 +281,7 @@ fqname (const char *basename, int whichprefix, int buffnum)
 
 /* reasonbuf must be at least BUFSZ, supplied by caller */
 /*ARGSUSED*/
-int 
+int
 validate_prefix_locations (char *reasonbuf)
 {
 #if defined(NOCWD_ASSUMPTIONS)
@@ -313,7 +313,7 @@ validate_prefix_locations (char *reasonbuf)
 				fqn_prefix[prefcnt], errno, details);
 			paniclog(panicbuf1, panicbuf2);
 			failcount++;
-		}	
+		}
 	}
 	if (failcount)
 		return 0;
@@ -350,7 +350,7 @@ int prefix;
  * a two digit number.  This is true for 'level'
  * but be careful if you use it for other things -dgk
  */
-void 
+void
 set_levelfile_name (char *file, int lev)
 {
 	char *tf;
@@ -361,7 +361,7 @@ set_levelfile_name (char *file, int lev)
 	return;
 }
 
-int 
+int
 create_levelfile (int lev, char errbuf[])
 {
 	int fd;
@@ -414,7 +414,7 @@ create_levelfile (int lev, char errbuf[])
 }
 
 
-int 
+int
 open_levelfile (int lev, char errbuf[])
 {
 	int fd;
@@ -454,7 +454,7 @@ open_levelfile (int lev, char errbuf[])
 }
 
 
-void 
+void
 delete_levelfile (int lev)
 {
 	/*
@@ -476,7 +476,7 @@ delete_levelfile (int lev)
 }
 
 
-void 
+void
 clearlocks (void)
 {
 /* [Tom] Watcom.....
@@ -533,7 +533,7 @@ int lev, oflag;
 	return fd;
 }
 
-void 
+void
 really_close (void)
 {
 	int fd = lftrack.fd;
@@ -544,7 +544,7 @@ really_close (void)
 	return;
 }
 
-int 
+int
 close (int fd)
 {
  	if (lftrack.fd == fd) {
@@ -556,7 +556,7 @@ close (int fd)
 	return _close(fd);
 }
 #endif
-	
+
 /* ----------  END LEVEL FILE HANDLING ----------- */
 
 
@@ -727,7 +727,7 @@ d_level *lev;
 
 /* assume we're compressing the recently read or created bonesfile, so the
  * file name is already set properly */
-void 
+void
 compress_bonesfile (void)
 {
 #ifdef FILE_AREAS
@@ -744,7 +744,7 @@ compress_bonesfile (void)
 
 /* set savefile name in OS-dependent manner from pre-existing plname,
  * avoiding troublesome characters */
-void 
+void
 set_savefile_name (void)
 {
 #if defined(WIN32)
@@ -779,7 +779,7 @@ set_savefile_name (void)
 }
 
 #ifdef INSURANCE
-void 
+void
 save_savefile_name (int fd)
 {
 	(void) write(fd, (void *) SAVEF, sizeof(SAVEF));
@@ -789,7 +789,7 @@ save_savefile_name (int fd)
 
 #if defined(WIZARD) && !defined(MICRO)
 /* change pre-existing savefile name to indicate an error savefile */
-void 
+void
 set_error_savefile (void)
 {
       {
@@ -807,7 +807,7 @@ set_error_savefile (void)
 
 
 /* create save file, overwriting one if it already exists */
-int 
+int
 create_savefile (void)
 {
 #ifndef FILE_AREAS
@@ -840,7 +840,7 @@ create_savefile (void)
 
 
 /* open savefile for reading */
-int 
+int
 open_savefile (void)
 {
 	int fd;
@@ -861,7 +861,7 @@ open_savefile (void)
 
 
 /* delete savefile */
-int 
+int
 delete_savefile (void)
 {
 /*WAC OK...this is probably a contreversial addition.  It's an option tho*/
@@ -882,7 +882,7 @@ delete_savefile (void)
 
 
 /* try to open up a save file and prepare to restore it */
-int 
+int
 restore_saved_game (void)
 {
 #ifndef FILE_AREAS
@@ -1504,7 +1504,7 @@ int prefixid;
 	char *ptr;
 
 	if (!bufp) return;
-	/* Backward compatibility, ignore trailing ;n */ 
+	/* Backward compatibility, ignore trailing ;n */
 	if ((ptr = index(bufp, ';')) != 0) *ptr = '\0';
 	if (strlen(bufp) > 0) {
 		fqn_prefix[prefixid] = alloc(strlen(bufp)+2);
@@ -1759,7 +1759,7 @@ const char *filename;
 		}
 	}
 	(void) fclose(fp);
-	
+
 	/* turn off detection of duplicate configfile options */
 	set_duplicate_opt_detection(0);
 

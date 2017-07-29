@@ -68,7 +68,7 @@ static void Sdlgl_init_nhwindows_sdl(int *argcp, char **argv);
 
 /* Interface definition, Hardware version */
 #ifdef GL_GRAPHICS
-struct window_procs sdlgl_hardw_procs = 
+struct window_procs sdlgl_hardw_procs =
 {
     "GL", SDLGL_WC_FLAGS, 0L,
     Sdlgl_init_nhwindows_gl,
@@ -110,7 +110,7 @@ struct window_procs sdlgl_hardw_procs =
  * field and the init function.
  */
 #ifdef SDL_GRAPHICS
-struct window_procs sdlgl_softw_procs = 
+struct window_procs sdlgl_softw_procs =
 {
     "SDL", SDLGL_WC_FLAGS, 0L,
     Sdlgl_init_nhwindows_sdl,
@@ -155,9 +155,9 @@ struct window_procs sdlgl_softw_procs =
 void sdlgl_warning(const char *str, ...)
 {
   va_list argptr;
-   
+
   err_msg_buf[sizeof(err_msg_buf) - 1] = 0;
-  
+
   va_start(argptr, str);
   vsprintf(err_msg_buf, str, argptr);
   va_end(argptr);
@@ -173,9 +173,9 @@ void sdlgl_error(const char *str, ...)
   if (str[0])
   {
     va_list argptr;
-     
+
     err_msg_buf[sizeof(err_msg_buf) - 1] = 0;
-    
+
     va_start(argptr, str);
     vsprintf(err_msg_buf, str, argptr);
     va_end(argptr);
@@ -198,9 +198,9 @@ void sdlgl_hangup(const char *str, ...)
   if (str[0])
   {
     va_list argptr;
-     
+
     err_msg_buf[sizeof(err_msg_buf) - 1] = 0;
-    
+
     va_start(argptr, str);
     vsprintf(err_msg_buf, str, argptr);
     va_end(argptr);
@@ -214,7 +214,7 @@ void sdlgl_hangup(const char *str, ...)
   hangup(1);
 
   /* NOT REACHED */
-  
+
   clearlocks();
   Sdlgl_exit_nhwindows("");
   terminate(EXIT_SUCCESS);
@@ -251,7 +251,7 @@ int sdlgl_get_time(void)
 
   secs = tv.tv_sec - base_time.tv_sec;
   millis = (tv.tv_usec - base_time.tv_usec) / 1000;
-   
+
   /* fix for any "time going backwards" kernel bug */
   if (secs < 0 || (secs == 0 && millis < 0))
     return 0;
@@ -293,7 +293,7 @@ static int choose_best_video_mode(SDL_Rect **modes)
 
     dw = abs(w - DEF_SDLGL_WIDTH);
     dh = abs(h - DEF_SDLGL_HEIGHT);
-  
+
     /* modes smaller than 800x600 are a bit uncomfortable when using
      * the 32x32 or isometric tilesets.  Hence we add this penalty.
      */
@@ -302,7 +302,7 @@ static int choose_best_video_mode(SDL_Rect **modes)
       if (w < 800) dw = dw * 3 / 2;
       if (h < 600) dh = dh * 3 / 2;
     }
-     
+
     dist = dw * dw + dh * dh;
 
     if (dist < best_dist)
@@ -319,13 +319,13 @@ static void detect_video_modes(void)
 {
   const SDL_VideoInfo *info;
   SDL_Rect **modes;
-  
+
   int got_depth  = 0;
   int got_width  = 0;
   int got_height = 0;
 
   int flags = SDL_FULLSCREEN;
-  
+
   if (! sdlgl_software)
     flags |= SDL_OPENGL | SDL_DOUBLEBUF;
 
@@ -334,7 +334,7 @@ static void detect_video_modes(void)
 
   /* get name of video driver */
 
-  if (SDL_VideoDriverName(sdlgl_video_driver, 
+  if (SDL_VideoDriverName(sdlgl_video_driver,
         sizeof(sdlgl_video_driver)) == NULL)
   {
     strcpy(sdlgl_video_driver, "unknown");
@@ -358,7 +358,7 @@ static void detect_video_modes(void)
 
       default:
         sdlgl_warning("Strange autodetected video depth: %d\n", got_depth);
-        got_depth = (got_depth < 12) ? 8 : 
+        got_depth = (got_depth < 12) ? 8 :
                     (got_depth < 23) ? 16 : 32;
         sdlgl_warning("Trying %d instead...\n", got_depth);
         break;
@@ -416,7 +416,7 @@ static void detect_video_modes(void)
           got_width  = modes[best]->w;
           got_height = modes[best]->h;
 
-          sdlgl_warning("Selected %dx%d...\n", 
+          sdlgl_warning("Selected %dx%d...\n",
               got_width, got_height);
         }
         else
@@ -425,7 +425,7 @@ static void detect_video_modes(void)
           got_height = DEF_SDLGL_HEIGHT;
 
           sdlgl_warning("All modes were either too small or too big !\n");
-          sdlgl_warning("Trying %dx%d instead...\n", 
+          sdlgl_warning("Trying %dx%d instead...\n",
               got_width, got_height);
         }
       }
@@ -442,13 +442,13 @@ static void detect_video_modes(void)
       sdlgl_width  -= 20;
       sdlgl_height -= 60;
     }
-  } 
+  }
 }
 
 static void sdlgl_do_init_nhwindows(int *argcp, char **argv)
 {
   Uint32 flags;
-  
+
   CO = 80;
   LI = 25;
 
@@ -502,7 +502,7 @@ static void sdlgl_do_init_nhwindows(int *argcp, char **argv)
         SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,  8);
         break;
     }
-    
+
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,   0);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
@@ -518,7 +518,7 @@ static void sdlgl_do_init_nhwindows(int *argcp, char **argv)
     SDL_Quit();
 
     sdlgl_warning("Failed to set SDL/GL video mode %dx%d (%d bit, %s)\n",
-        sdlgl_width, sdlgl_height, sdlgl_depth, 
+        sdlgl_width, sdlgl_height, sdlgl_depth,
         sdlgl_windowed ? "windowed" : "fullscreen");
 
     sdlgl_error("Please try a different mode or depth (see --help).\n");
@@ -657,7 +657,7 @@ static int convert_keysym(int sym, int unicode, int mod)
   int alt   = mod & KMOD_ALT;
 
   (void) ctrl;
-  
+
   /* CTRL + letter ? */
   if (0x01 <= unicode && unicode <= 0x1F)
     return unicode;
@@ -671,7 +671,7 @@ static int convert_keysym(int sym, int unicode, int mod)
 
     return unicode;
   }
-  
+
   switch (sym)
   {
     /* standard control keys */
@@ -683,10 +683,10 @@ static int convert_keysym(int sym, int unicode, int mod)
     /* cursor keys & keypad */
     case SDLK_UP:
       return iflags.num_pad ? '8' : shift ? 'K' : 'k';
-     
+
     case SDLK_DOWN:
       return iflags.num_pad ? '2' : shift ? 'J' : 'j';
-     
+
     case SDLK_LEFT:
       return iflags.num_pad ? '4' : shift ? 'H' : 'h';
 
@@ -708,7 +708,7 @@ static int convert_keysym(int sym, int unicode, int mod)
     case SDLK_KP8: return '8';
     case SDLK_KP9: return '9';
     case SDLK_PERIOD: return '.';
-     
+
     /* stuff we should ignore */
     case SDLK_RSHIFT: case SDLK_LSHIFT:
     case SDLK_RCTRL:  case SDLK_LCTRL:
@@ -725,7 +725,7 @@ static int convert_keysym(int sym, int unicode, int mod)
 #if 0
   raw_printf("convert_keysym: UNKNOWN SDL KEY %d", sym);
 #endif
-  
+
   /* unknown key */
   return 0;
 }
@@ -755,13 +755,13 @@ int sdlgl_get_poskey(int flags, int *x, int *y, int *mod)
         int repeat = 0;
 
         int key;
-        
+
         /* check for auto-repeat */
         if (cur_key_sym == sym)
           repeat = 1;
         else
           cur_key_sym = sym;
-        
+
         if (repeat && sdlgl_key_repeat == 0)
           break;
 
@@ -778,9 +778,9 @@ int sdlgl_get_poskey(int flags, int *x, int *y, int *mod)
         {
           break;
         }
-  
+
         key = convert_keysym(sym, unicode, mod);
-        
+
         if (key == 0)
           break;
 
@@ -806,7 +806,7 @@ int sdlgl_get_poskey(int flags, int *x, int *y, int *mod)
             continue;
           }
         }
-            
+
         /* -AJA- filter out ^Z -- causes an apparent lock-up when in
          *       fullscreen mode (ugh).
          */
@@ -838,12 +838,12 @@ int sdlgl_get_poskey(int flags, int *x, int *y, int *mod)
 
         switch (ev.button.button)
         {
-          case SDL_BUTTON_LEFT: 
+          case SDL_BUTTON_LEFT:
             *mod = CLICK_1;
             break;
 
-          case SDL_BUTTON_MIDDLE: 
-          case SDL_BUTTON_RIGHT: 
+          case SDL_BUTTON_MIDDLE:
+          case SDL_BUTTON_RIGHT:
             *mod = CLICK_2;
             break;
 
@@ -897,7 +897,7 @@ int sdlgl_get_poskey(int flags, int *x, int *y, int *mod)
 int sdlgl_get_key(int flags)
 {
   int x, y, mod;
-  
+
   for (;;)
   {
     int key = sdlgl_get_poskey(flags, &x, &y, &mod);

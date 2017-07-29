@@ -146,7 +146,7 @@ char *uname;
 	mailthread_continue = 0;  /* no interlock needed yet */
 	mailthread_stopping = 0;  /* no interlock needed yet */
 #ifdef MAPI_VERBOSE
-	if (getenv("DEBUG_MAPI")) debugmapi = TRUE; 
+	if (getenv("DEBUG_MAPI")) debugmapi = TRUE;
 #endif
 	if (uname)
 		strcpy(MAPI_username, uname);

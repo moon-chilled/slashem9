@@ -32,7 +32,7 @@ static struct trobj Archeologist[] = {
 	{ LEATHER_JACKET, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ FEDORA, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
-	{ UNDEF_TYP, UNDEF_SPE, SPBOOK_CLASS, 1, 1 },        
+	{ UNDEF_TYP, UNDEF_SPE, SPBOOK_CLASS, 1, 1 },
 	{ UNDEF_TYP, UNDEF_SPE, SCROLL_CLASS, 2, UNDEF_BLESS },
 	{ PICK_AXE, UNDEF_SPE, TOOL_CLASS, 1, UNDEF_BLESS },
 	{ TINNING_KIT, UNDEF_SPE, TOOL_CLASS, 1, UNDEF_BLESS },
@@ -76,11 +76,11 @@ static struct trobj Healer[] = {
 	{ SCALPEL, 1, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ LEATHER_GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ STETHOSCOPE, 0, TOOL_CLASS, 1, 0 },
-	{ MEDICAL_KIT, 0, TOOL_CLASS, 1, 0 },        
+	{ MEDICAL_KIT, 0, TOOL_CLASS, 1, 0 },
 	{ POT_HEALING, 0, POTION_CLASS, 4, UNDEF_BLESS },
 	{ POT_EXTRA_HEALING, 0, POTION_CLASS, 4, UNDEF_BLESS },
 	{ WAN_SLEEP, UNDEF_SPE, WAND_CLASS, 1, UNDEF_BLESS },
-	/* [Tom] they might as well have a wand of healing, too */        
+	/* [Tom] they might as well have a wand of healing, too */
 	{ WAN_HEALING, UNDEF_SPE, WAND_CLASS, 1, UNDEF_BLESS },
 	/* always blessed, so it's guaranteed readable */
 	{ SPE_HEALING, UNDEF_SPE, SPBOOK_CLASS, 1, 1 },
@@ -610,7 +610,7 @@ static struct def_skill Skill_P[] = {
     { P_PROTECTION_SPELL, P_SKILLED },  { P_BODY_SPELL, P_BASIC },
     { P_MATTER_SPELL, P_BASIC },
 
-    { P_BARE_HANDED_COMBAT, P_BASIC },  /* the monk is added in slash */ 
+    { P_BARE_HANDED_COMBAT, P_BASIC },  /* the monk is added in slash */
     { P_NONE, 0 }
 };
 
@@ -856,7 +856,7 @@ char sym;
  * Currently only used by priests.
  */
 
-static void 
+static void
 spellbook_skill_raise (struct def_skill *class_skill, int spellbook)
 {
     int i, j;
@@ -915,7 +915,7 @@ spellbook_skill_raise (struct def_skill *class_skill, int spellbook)
     }
 }
 
-void 
+void
 u_init (void)
 {
 	int i, temp;
@@ -1011,7 +1011,7 @@ u_init (void)
 	/* Role-specific initializations */
 	switch (Role_switch) {
 	case PM_ARCHEOLOGIST:
-		switch (rnd(5)) {   
+		switch (rnd(5)) {
 		    case 1: Archeologist[A_BOOK].trotyp = SPE_DETECT_FOOD; break;
 		    case 2: Archeologist[A_BOOK].trotyp = SPE_DETECT_MONSTERS; break;
 		    case 3: Archeologist[A_BOOK].trotyp = SPE_LIGHT; break;
@@ -1051,7 +1051,7 @@ u_init (void)
 		skill_init(Skill_C);
 		break;
 	case PM_FLAME_MAGE:
-		switch (rnd(2)) {                
+		switch (rnd(2)) {
 			case 1: Flame_Mage[F_BOOK].trotyp = SPE_DETECT_MONSTERS; break;
 			case 2: Flame_Mage[F_BOOK].trotyp = SPE_LIGHT; break;
 			default: break;
@@ -1082,7 +1082,7 @@ u_init (void)
 		skill_init(Skill_H);
 		break;
 	case PM_ICE_MAGE:
-		switch (rnd(2)) {                
+		switch (rnd(2)) {
 			case 1: Ice_Mage[I_BOOK].trotyp = SPE_CONFUSE_MONSTER; break;
 			case 2: Ice_Mage[I_BOOK].trotyp = SPE_SLOW_MONSTER; break;
 			default: break;
@@ -1115,7 +1115,7 @@ u_init (void)
 		skill_init(Skill_Mon);
 		break;
 	case PM_NECROMANCER:
-		switch (rnd(5)) {   
+		switch (rnd(5)) {
                     case 1: Necromancer[N_BOOK].trotyp = SPE_FORCE_BOLT; break;
                     case 2: Necromancer[N_BOOK].trotyp = SPE_KNOCK; break;
                     case 3: Necromancer[N_BOOK].trotyp = SPE_MAGIC_MISSILE; break;
@@ -1130,7 +1130,7 @@ u_init (void)
 		skill_init(Skill_N);
 		break;
 	case PM_PRIEST:
-		switch (rnd(9)) {   
+		switch (rnd(9)) {
 		    case 1: Priest[P_BOOK].trotyp = SPE_FORCE_BOLT; break;
 		    case 2: Priest[P_BOOK].trotyp = SPE_SLEEP; break;
 		    case 3: Priest[P_BOOK].trotyp = SPE_RESIST_POISON; break;
@@ -1144,7 +1144,7 @@ u_init (void)
 		}
 		ini_inv(Priest);
 		if(!rn2(10)) ini_inv(Magicmarker);
-		else if(!rn2(10)) 
+		else if(!rn2(10))
 		  (rn2(100) > 50 ? ini_inv(Lamp) : ini_inv(Torch));
 		knows_object(POT_WATER);
 		spellbook_skill_raise(Skill_P, Priest[P_BOOK].trotyp);
@@ -1246,14 +1246,14 @@ u_init (void)
 		break;
 	case PM_VALKYRIE:
 		ini_inv(Valkyrie);
-		if(!rn2(6)) 
+		if(!rn2(6))
 		  (rn2(100) > 50 ? ini_inv(Lamp) : ini_inv(Torch));
 		knows_class(WEAPON_CLASS);
 		knows_class(ARMOR_CLASS);
 		skill_init(Skill_V);
 		break;
 	case PM_WIZARD:
-		switch (rnd(2)) {                
+		switch (rnd(2)) {
 		    case 1: Wizard[W_BOOK1].trotyp = SPE_FORCE_BOLT; break;
 		    case 2: Wizard[W_BOOK1].trotyp = SPE_SLEEP; break;
 		    default: break;
@@ -1263,7 +1263,7 @@ u_init (void)
 		    case 2: Wizard[W_BOOK2].trotyp = SPE_RESIST_SLEEP; break;
 		    default: break;
 		}
-		switch (rnd(5)) {   
+		switch (rnd(5)) {
 		    case 1: Wizard[W_BOOK3].trotyp = SPE_DETECT_FOOD; break;
 		    case 2: Wizard[W_BOOK3].trotyp = SPE_DETECT_MONSTERS; break;
 		    case 3: Wizard[W_BOOK3].trotyp = SPE_LIGHT; break;
@@ -1387,7 +1387,7 @@ u_init (void)
 	    break;
 	case PM_VAMPIRE:
 	    /* Vampires start off with gods not as pleased, luck penalty */
-	    adjalign(-5); 
+	    adjalign(-5);
 	    change_luck(-1);
 	    break;
 	default:	/* impossible */
@@ -1521,7 +1521,7 @@ struct trobj *trop;
 #endif
 				|| ((Role_if(PM_FLAME_MAGE) || Role_if(PM_ICE_MAGE))
 						&&
-				    (otyp == RIN_FIRE_RESISTANCE || 
+				    (otyp == RIN_FIRE_RESISTANCE ||
 				     otyp == RIN_COLD_RESISTANCE ||
 				     otyp == SPE_ENDURE_HEAT ||
 				     otyp == SPE_ENDURE_COLD))
@@ -1616,7 +1616,7 @@ struct trobj *trop;
 #endif
 		/* defined after setting otyp+quan + blessedness */
 		obj->owt = weight(obj);
-				
+
 		obj = addinv(obj);
 
 		/* Make the type known if necessary */
@@ -1628,7 +1628,7 @@ struct trobj *trop;
 		if(obj->oclass == ARMOR_CLASS){
 			if (is_shield(obj) && !uarms) {
 				setworn(obj, W_ARMS);
-				if (uswapwep) 
+				if (uswapwep)
 				  setuswapwep(NULL, TRUE);
 			} else if (is_helmet(obj) && !uarmh)
 				setworn(obj, W_ARMH);
@@ -1666,7 +1666,7 @@ struct trobj *trop;
 				continue;	/* make a similar object */
 		}
 #endif
-		
+
 		trop++;
 	}
 }

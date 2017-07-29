@@ -55,8 +55,8 @@ OPTIONS=time,noshowexp,number_pad,lit_corridor,rest_on_space
 
 #
 #HACKDIR=c:\games\nethack
-# 
-# Note: Under MSDOS ports HACKDIR defaults to the location 
+#
+# Note: Under MSDOS ports HACKDIR defaults to the location
 #       of the NetHack.exe file. Setting HACKDIR above will override that.
 #
 #   LEVELS and SAVE default to HACKDIR

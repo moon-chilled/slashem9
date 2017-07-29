@@ -343,7 +343,7 @@ tty_player_selection()
 		 * bottom of the window.
 		 */
 		tty_clear_nhwindow(BASE_WINDOW);
-	    
+
 	    if (pick4u != 'y' && pick4u != 'n') {
 give_up:	/* Quit */
 		if (selected) free((void *) selected);
@@ -574,9 +574,9 @@ char * plbuf;
 				strcpy(rolenamebuf, roles[i].name.m);
 				strcat(rolenamebuf, "/");
 				strcat(rolenamebuf, roles[i].name.f);
-			} else 
+			} else
 				strcpy(rolenamebuf, roles[i].name.m);
-		}	
+		}
 		add_menu(win, NO_GLYPH, &any, thisch,
 			    0, ATR_NONE, an(rolenamebuf), MENU_UNSELECTED);
 		lastch = thisch;
@@ -598,7 +598,7 @@ char * plbuf;
 
 	/* Process the choice */
 	if (n != 1 || selected[0].item.a_int == any.a_int) {
-	    free((void *) selected),	selected = 0;	
+	    free((void *) selected),	selected = 0;
 	    return (-1);		/* Selected quit */
 	}
 
@@ -673,10 +673,10 @@ char * plbuf;
 	    k = selected[0].item.a_int - 1;
 	    free((void *) selected),	selected = 0;
 	}
-	
+
 	flags.initrace = k;
 	return (k);
-	
+
 #if 0 /* This version deals with more than 2 races per letter */
 	int i, k, n, choicelet = 0;
 	char thisch;
@@ -713,9 +713,9 @@ char * plbuf;
 	    for (i = 0; races[i].noun; i++)
 		if (ok_race(flags.initrole, i, flags.initgend,
 						flags.initalign)
-			&& (!choicelet || !strncmpi(races[i].noun, 
+			&& (!choicelet || !strncmpi(races[i].noun,
 					choicestr, choicelet))) {
-		    
+
 		    thisch = lowc(races[i].noun[choicelet]);
 		    any.a_int = i+1;	/* must be non-zero */
 		    add_menu(win, NO_GLYPH, &any, thisch,
@@ -752,17 +752,17 @@ char * plbuf;
 		choicestr[choicelet] = races[k].noun[choicelet];
 		choicelet++;
 	    }
-	    
+
 	    /* Check whether there are at least 2 choices left */
 	    n = 0;
 	    for (i = 0; (races[i].noun && (n <= 1)); i++)
 		if (ok_race(flags.initrole, i, flags.initgend,
 						flags.initalign)
-			&& (!choicelet || !strncmpi(races[i].noun, 
-					choicestr, choicelet))) 
+			&& (!choicelet || !strncmpi(races[i].noun,
+					choicestr, choicelet)))
 		    n++;
 	} while (n > 1);
-	
+
 	flags.initrace = k;
 	return (k);
 #endif
@@ -2652,7 +2652,7 @@ tty_print_glyph(window, x, y, glyph)
     boolean reverse_on = FALSE;
     int	    color;
     unsigned special;
-    
+
 #ifdef CLIPPING
     if(clipping) {
 #if 0

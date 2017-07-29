@@ -28,7 +28,7 @@
 /* Port specific code needs to implement these routines for LAN_MAIL */
 extern char *get_username(int *);
 extern boolean mail_check(void);
-extern boolean mail_fetch(struct lan_mail_struct *); 
+extern boolean mail_fetch(struct lan_mail_struct *);
 extern void mail_init(char *);
 extern void mail_finish(void);
 
@@ -88,7 +88,7 @@ struct lan_mail_struct *msg;
 	winid datawin = create_nhwindow(NHW_TEXT);
 	char *get, *put;
 	int ccount = 0;
-	
+
 	get = msg->body;
 	put = buf;
 	while (*get) {
@@ -100,7 +100,7 @@ struct lan_mail_struct *msg;
 	     }
 	     if (*get == '\r') {
 		get++;
-	     } else if (*get == '\n') { 
+	     } else if (*get == '\n') {
 	     	*put = '\0';
 	     	putstr(datawin, 0, buf);
 	     	put = buf;
@@ -115,7 +115,7 @@ struct lan_mail_struct *msg;
 	}
 	*put = '\0';
 	putstr(datawin, 0, buf);
-	putstr(datawin, 0, "");	       
+	putstr(datawin, 0, "");
 	display_nhwindow(datawin, TRUE);
 	destroy_nhwindow(datawin);
 }

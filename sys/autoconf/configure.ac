@@ -200,7 +200,7 @@ if test "$enable_sdl_graphics" != "no"
 then
 dnl CHECK FOR libpng
   AC_CHECK_TOOL(SDL_CONFIG,sdl-config, no)
-  if test "SDL_CONFIG" = no 
+  if test "SDL_CONFIG" = no
   then
 	dnl --Maybe don't need sdl-config?
 	AC_CHECK_LIB(SDL,SDL_Init,,[SDL_CONFIG=])

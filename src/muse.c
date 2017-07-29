@@ -559,7 +559,7 @@ botm:	return((boolean)(!!m.has_defense));
  * after find_defensive().  Return values are 0: did something, 1: died,
  * 2: did something and can't attack again (i.e. teleported).
  */
-int 
+int
 use_defensive (struct monst *mtmp)
 {
 	int i, fleetim, how = 0;
@@ -984,7 +984,7 @@ mon_tele:
 #undef m_flee
 }
 
-int 
+int
 rnd_defensive_item (struct monst *mtmp)
 {
 	struct permonst *pm = mtmp->data;
@@ -1091,7 +1091,7 @@ struct monst *mtmp;
 /*WAC fixed*/
 /* [Tom] doesn't work...*/
 
-		    nomore(MUSE_WAN_FIREBALL);                    
+		    nomore(MUSE_WAN_FIREBALL);
 		    if(obj->otyp == WAN_FIREBALL && obj->spe > 0) {
 			m.offensive = obj;
 			m.has_offense = MUSE_WAN_FIREBALL;
@@ -1413,7 +1413,7 @@ struct obj *obj;			/* 2nd arg to fhitm/fhito */
 /* Perform an offensive action for a monster.  Must be called immediately
  * after find_offensive().  Return values are same as use_defensive().
  */
-int 
+int
 use_offensive (struct monst *mtmp)
 {
 	int i;
@@ -1682,7 +1682,7 @@ use_offensive (struct monst *mtmp)
 	return 0;
 }
 
-int 
+int
 rnd_offensive_item (struct monst *mtmp)
 {
 	struct permonst *pm = mtmp->data;
@@ -1866,7 +1866,7 @@ muse_newcham_mon (struct monst *mon)
 }
 #endif
 
-int 
+int
 use_misc (struct monst *mtmp)
 {
 	int i;
@@ -2092,7 +2092,7 @@ struct monst *mtmp;
 	    map_invisible(mtmp->mx, mtmp->my);
 }
 
-int 
+int
 rnd_misc_item (struct monst *mtmp)
 {
 	struct permonst *pm = mtmp->data;

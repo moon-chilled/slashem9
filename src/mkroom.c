@@ -40,7 +40,7 @@ struct mkroom *sroom;
 	return((boolean)( area > 20 ));
 }
 
-void 
+void
 mkroom (
 /* make and stock a room of a given type */
     int roomtype
@@ -245,7 +245,7 @@ int type;
 	}
 }
 
-void 
+void
 fill_zoo (struct mkroom *sroom)
 {
 	struct monst *mon;
@@ -325,13 +325,13 @@ fill_zoo (struct mkroom *sroom)
 			(sx == tx && sy == ty ? &mons[PM_QUEEN_BEE] :
 			 &mons[PM_KILLER_BEE]) :
 		    (type == LEPREHALL) ? &mons[PM_LEPRECHAUN] :
-		    (type == COCKNEST) ? 
+		    (type == COCKNEST) ?
 		    	(rn2(4) ? &mons[PM_COCKATRICE] :
 		    	 &mons[PM_CHICKATRICE]) :
 		    (type == ANTHOLE) ? antholemon() :
 		    (type == DRAGONLAIR) ? mkclass(S_DRAGON,0) :
-		    (type == LEMUREPIT)? 
-		    	(!rn2(10)? &mons[PM_HORNED_DEVIL] : 
+		    (type == LEMUREPIT)?
+		    	(!rn2(10)? &mons[PM_HORNED_DEVIL] :
 			           &mons[PM_LEMURE]) :
 		    (type == MIGOHIVE)?
 		      (sx == tx && sy == ty? &mons[PM_MIGO_QUEEN] :
@@ -444,7 +444,7 @@ fill_zoo (struct mkroom *sroom)
 	      case BARRACKS:
 		  level.flags.has_barracks = 1;
 		  break;
-	      case REALZOO:              
+	      case REALZOO:
 	      case ZOO:
 		  level.flags.has_zoo = 1;
 		  break;
@@ -533,7 +533,7 @@ fungus()
 
 	switch (i) {
 	case 0:
-	case 1: mtyp = PM_LICHEN; 		break;	
+	case 1: mtyp = PM_LICHEN; 		break;
 	case 2: mtyp = PM_BROWN_MOLD;		break;
 	case 3: mtyp = PM_YELLOW_MOLD;		break;
 	case 4: mtyp = PM_GREEN_MOLD;		break;
@@ -668,13 +668,13 @@ struct mkroom *sroom;
 }
 
 
-int 
+int
 somex (struct mkroom *croom)
 {
 	return rn2(croom->hx-croom->lx+1) + croom->lx;
 }
 
-int 
+int
 somey (struct mkroom *croom)
 {
 	return rn2(croom->hy-croom->ly+1) + croom->ly;
@@ -852,7 +852,7 @@ struct mkroom *r;
  * save_rooms : Save all the rooms on disk!
  */
 
-void 
+void
 save_rooms (int fd)
 {
 	short i;
@@ -883,7 +883,7 @@ struct mkroom *r;
  * the disk.
  */
 
-void 
+void
 rest_rooms (int fd)
 {
 	short i;

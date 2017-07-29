@@ -5,7 +5,7 @@ Installing Slash'EM with a SDL/GL interface
 
 This document describes the installation of Slash'EM with the SDL/GL
 interface on UNIX.  "SDL" refers to Simple Directmedia Layer, a
-library commonly used for games on Linux and other UNIX systems.  
+library commonly used for games on Linux and other UNIX systems.
 "GL" refers to OpenGL(R), which offers hardware accelerated graphics
 (usually 3D graphics, but that is not being used here).  OpenGL(R) is
 completely optional, there is a fully functional software renderer
@@ -30,7 +30,7 @@ To use this code:
       define SDL_GRAPHICS and GL_GRAPHICS (search for them).  If you
       don't have OpenGL(R) on your system, then leave GL_GRAPHICS
       commented out.
-      
+
       Comment out TTY_GRAPHICS, or leave it in if you want to support
       both interfaces (in which case be sure you have the right curses
       libraries etc. required for that interface).

@@ -20,13 +20,13 @@ static int armor_to_dragon(int);
 static void newman(void);
 static void merge_with_armor(void);
 
-/*  Not Used 
+/*  Not Used
 static void special_poly(void);
 */
 
 /* Assumes u.umonster is set up already */
 /* Use u.umonster since we might be restoring and you may be polymorphed */
-void 
+void
 init_uasmon (void)
 {
 	int i;
@@ -44,20 +44,20 @@ init_uasmon (void)
 
 	upermonst.mflags3 &= ~(mons[PM_HUMAN].mflags3);
 	upermonst.mflags3 |= (mons[urace.malenum].mflags3);
-	
+
 	/* Fix up the attacks */
 	for(i = 0; i < NATTK; i++) {
 	    upermonst.mattk[i] = mons[urace.malenum].mattk[i];
 	}
-	
+
 	set_uasmon();
 }
 
 /* update the youmonst.data structure pointer */
-void 
+void
 set_uasmon (void)
 {
-	set_mon_data(&youmonst, ((u.umonnum == u.umonster) ? 
+	set_mon_data(&youmonst, ((u.umonnum == u.umonster) ?
 					&upermonst : &mons[u.umonnum]), 0);
 	bot_reconfig();
 }
@@ -96,7 +96,7 @@ const char *fmt, *arg;
 
 	newsym(u.ux,u.uy);
 
-	
+
 	You(fmt, arg);
 	/* check whether player foolishly genocided self while poly'd */
 	if ((mvitals[urole.malenum].mvflags & G_GENOD) ||
@@ -134,7 +134,7 @@ const char *fmt, *arg;
 	see_monsters();
 }
 
-void 
+void
 change_sex (void)
 {
 	/* setting u.umonster for caveman/cavewoman or priest/priestess
@@ -223,7 +223,7 @@ newman()
 	Sick = 0;
 	Stoned = 0;
 	delayed_killer = 0;
-	if (Race_if(PM_DOPPELGANGER)) {        
+	if (Race_if(PM_DOPPELGANGER)) {
 		if (u.uhp <= 10) u.uhp = 10;
 		if (u.uhpmax <= 10) u.uhpmax = 10;
 		if (u.uen <= u.ulevel) u.uen = u.ulevel;
@@ -259,7 +259,7 @@ dead: /* we come directly here if their experience level went to 0 or less */
 
 void
 polyself(forcecontrol)
-boolean forcecontrol;     
+boolean forcecontrol;
 {
 	char buf[BUFSZ];
 	int old_light, new_light;
@@ -378,7 +378,7 @@ boolean forcecontrol;
         		(Race_if(PM_DOPPELGANGER) ? (
         			((u.ulevel < mons[mntmp].mlevel)
         			 || !mvitals[mntmp].eaten
-        			 ) && !rn2(20)) : 
+        			 ) && !rn2(20)) :
 				   !rn2(5)) || your_race(&mons[mntmp]))
 		newman();
 	else if(!polymon(mntmp)) return;
@@ -401,7 +401,7 @@ boolean forcecontrol;
 }
 
 /* (try to) make a mntmp monster out of the player */
-int 
+int
 polymon (	/* returns 1 if polymorph successful */
     int mntmp
 )
@@ -417,12 +417,12 @@ polymon (	/* returns 1 if polymorph successful */
 		return(0);
 	}
 
-	/* STEPHEN WHITE'S NEW CODE */        
-  
+	/* STEPHEN WHITE'S NEW CODE */
+
 	/* If your an Undead Slayer, you can't become undead! */
-  
+
 	if (is_undead(&mons[mntmp]) && Role_if(PM_UNDEAD_SLAYER)) {
-		if (Polymorph_control) { 
+		if (Polymorph_control) {
 			You("hear a voice boom out: \"How dare you take such a form!\"");
 			u.ualign.record -= 5;
 #ifdef NOARTIFACTWISH
@@ -664,7 +664,7 @@ static void
 break_armor()
 {
     struct obj *otmp;
-    boolean controlled_change = (Race_if(PM_DOPPELGANGER) || 
+    boolean controlled_change = (Race_if(PM_DOPPELGANGER) ||
     		(Race_if(PM_HUMAN_WEREWOLF) && u.umonnum == PM_WEREWOLF));
 
     if (breakarm(youmonst.data)) {
@@ -709,7 +709,7 @@ break_armor()
 		You("take off your shirt just before it starts to rip.");
 		setworn(NULL, otmp->owornmask & W_ARMU);
 		dropx(otmp);
-	    } else {                
+	    } else {
 		Your("shirt rips to shreds!");
 		useup(uarmu);
 	    }
@@ -825,11 +825,11 @@ int alone;
 	untwoweapon();
 }
 
-void 
+void
 rehumanize (void)
 {
 	boolean forced = (u.mh < 1);
-	
+
 	/* KMH, balance patch -- you can't revert back while unchanging */
 	if (Unchanging && forced) {
 		killer_format = NO_KILLER_PREFIX;
@@ -849,12 +849,12 @@ rehumanize (void)
 	    killer = kbuf;
 	    done(DIED);
 	}
-	
-	if (forced || (!Race_if(PM_DOPPELGANGER) && (rn2(20) > ACURR(A_CON)))) { 
-	/* Exhaustion for "forced" rehumaization & must pass con chack for 
-    	 * non-doppelgangers 
+
+	if (forced || (!Race_if(PM_DOPPELGANGER) && (rn2(20) > ACURR(A_CON)))) {
+	/* Exhaustion for "forced" rehumaization & must pass con chack for
+    	 * non-doppelgangers
     	 * Don't penalize doppelgangers/polymorph running out */
-    	 
+
    	/* WAC Polymorph Exhaustion 1/2 HP to prevent abuse */
 	    u.uhp = (u.uhp/2) + 1;
 	}
@@ -868,11 +868,11 @@ rehumanize (void)
 }
 
 
-/* WAC -- MUHAHAHAAHA - Gaze attacks! 
- * Note - you can only gaze at one monster at a time, to keep this 
+/* WAC -- MUHAHAHAAHA - Gaze attacks!
+ * Note - you can only gaze at one monster at a time, to keep this
  * from getting out of hand ;B  Also costs 20 energy.
  */
-int 
+int
 dogaze (void)
 {
 	coord cc;
@@ -902,10 +902,10 @@ dogaze (void)
 
 
 	if ((flags.safe_dog && !Confusion && !Hallucination
-		  && mtmp->mtame) || (flags.confirm && mtmp->mpeaceful 
+		  && mtmp->mtame) || (flags.confirm && mtmp->mpeaceful
 		  && !Confusion && !Hallucination)) {
 		  	char qbuf[QBUFSZ];
-		  	
+
 			sprintf(qbuf, "Really gaze at %s?", mon_nam(mtmp));
 			if (yn(qbuf) != 'y') return (0);
 			if (mtmp->mpeaceful) setmangry(mtmp);
@@ -943,7 +943,7 @@ dogaze (void)
 	return(1);
 }
 
-int 
+int
 dobreathe (void)
 {
 	struct attack *mattk;
@@ -986,7 +986,7 @@ dobreathe (void)
 	return(1);
 }
 
-int 
+int
 dospit (void)
 {
 	struct obj *otmp;
@@ -1015,7 +1015,7 @@ dospit (void)
 	return(1);
 }
 
-int 
+int
 doremove (void)
 {
 	if (!Punished) {
@@ -1026,7 +1026,7 @@ doremove (void)
 	return(1);
 }
 
-int 
+int
 dospinweb (void)
 {
 	struct trap *ttmp = t_at(u.ux,u.uy);
@@ -1131,7 +1131,7 @@ dospinweb (void)
 	    Your("web fails to impede access to the %s.",
 		 (levl[u.ux][u.uy].typ == STAIRS) ? "stairs" : "ladder");
 	    return(1);
-		 
+
 	}
 	ttmp = maketrap(u.ux, u.uy, WEB);
 	if (ttmp) {
@@ -1142,7 +1142,7 @@ dospinweb (void)
 	return(1);
 }
 
-int 
+int
 dosummon (void)
 {
 	int placeholder;
@@ -1163,7 +1163,7 @@ dosummon (void)
 
 #if 0
 /* WAC supplanted by dogaze (). */
-int 
+int
 dogaze (void)
 {
 	struct monst *mtmp;
@@ -1292,7 +1292,7 @@ dogaze (void)
 #endif
 
 
-int 
+int
 dohide (void)
 {
 	boolean ismimic = youmonst.data->mlet == S_MIMIC;
@@ -1311,7 +1311,7 @@ dohide (void)
 	return(1);
 }
 
-int 
+int
 domindblast (void)
 {
 	struct monst *mtmp, *nmon;
@@ -1487,7 +1487,7 @@ body_part (int part)
 }
 
 
-int 
+int
 poly_gender (void)
 {
 /* Returns gender of polymorphed player; 0/1=same meaning as flags.female,
@@ -1498,7 +1498,7 @@ poly_gender (void)
 }
 
 
-void 
+void
 ugolemeffects (int damtype, int dam)
 {
 	int heal = 0;
@@ -1586,13 +1586,13 @@ mage_transform()	/* called each move during transformation process */
     return 0;
 }
 
-int 
+int
 polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
 {
 #define EN_DOPP 	20 	/* This is the "base cost" for a polymorph
 				 * Actual cost is this base cost + 5 * monster level
 				 * of the final form you actually assume.
-				 * Energy will be taken first, then you will get 
+				 * Energy will be taken first, then you will get
 				 * more hungry if you do not have enough energy.
 				 */
 #define EN_WERE 	10
@@ -1603,9 +1603,9 @@ polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
 				&& Role_if(PM_FLAME_MAGE)) ||
 			  (uarm && uarm->otyp == WHITE_DRAGON_SCALES
 				&& Role_if(PM_ICE_MAGE)));
-	boolean scale_mail = ((uarm && uarm->otyp == RED_DRAGON_SCALE_MAIL   
+	boolean scale_mail = ((uarm && uarm->otyp == RED_DRAGON_SCALE_MAIL
 				&& Role_if(PM_FLAME_MAGE)) ||
-			  (uarm && uarm->otyp == WHITE_DRAGON_SCALE_MAIL 
+			  (uarm && uarm->otyp == WHITE_DRAGON_SCALE_MAIL
 				&& Role_if(PM_ICE_MAGE)));
 
 	/* KMH, balance patch -- new intrinsic */
@@ -1614,16 +1614,16 @@ polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
 	    return 0;
 	}
 
-	/* First, if in correct polymorphed form, rehumanize (for free) 
+	/* First, if in correct polymorphed form, rehumanize (for free)
 	 * Omit Lycanthropes,  who need to spend energy to change back and forth
 	 */
 	if (Upolyd && (Race_if(PM_DOPPELGANGER) ||
-			(Role_if(PM_FLAME_MAGE) && (u.umonnum == PM_RED_DRAGON || 
+			(Role_if(PM_FLAME_MAGE) && (u.umonnum == PM_RED_DRAGON ||
 				u.umonnum == PM_BABY_RED_DRAGON)) ||
-			(Role_if(PM_ICE_MAGE) && (u.umonnum == PM_WHITE_DRAGON || 
+			(Role_if(PM_ICE_MAGE) && (u.umonnum == PM_WHITE_DRAGON ||
 				u.umonnum == PM_BABY_WHITE_DRAGON)))) {
 	    rehumanize();
-	    return 1;	    
+	    return 1;
 	}
 
 	if ((Role_if(PM_ICE_MAGE) || Role_if(PM_FLAME_MAGE)) &&
@@ -1660,21 +1660,21 @@ polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
 	     * The transformation takes a few turns. If interrupted during this
 	     * period then the ritual must be begun again from the beginning.
 	     * We deliberately don't say what form the ritual takes since it
-	     * is unaffected by blindness, confusion, stun etc. 
+	     * is unaffected by blindness, confusion, stun etc.
 	     */
-	    if (yn("Transform into your draconic form?") == 'n') 
+	    if (yn("Transform into your draconic form?") == 'n')
 		return 0;
 	    else if (!scales && !scale_mail && u.uen <= EN_BABY_DRAGON) {
 		You("don't have the energy to polymorph.");
-		return 0;		
+		return 0;
 	    } else {
 		/* Check if you can do the adult form */
-		if (u.ulevel > 13 && u.uen > EN_ADULT_DRAGON || 
+		if (u.ulevel > 13 && u.uen > EN_ADULT_DRAGON ||
 			scales && u.uen > EN_BABY_DRAGON || scale_mail) {
 		    /* If you have scales, energy cost is less */
 		    /* If you have scale mail,  there is no cost! */
 		    if (!scale_mail) {
-			if (scales) u.uen -= EN_BABY_DRAGON; 
+			if (scales) u.uen -= EN_BABY_DRAGON;
 			else u.uen -= EN_ADULT_DRAGON;
 		    }
 
@@ -1699,7 +1699,7 @@ polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
 	    }
 	}
 	if (Race_if(PM_DOPPELGANGER)) {
-	    if (yn("Polymorph at will?") == 'n')	    
+	    if (yn("Polymorph at will?") == 'n')
 		return 0;
 	    else if (u.uen < EN_DOPP) {
 		You("don't have the energy to polymorph!");
@@ -1718,7 +1718,7 @@ polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
 			u.uen = 0;
 		    }
 		}
-		return 1;	
+		return 1;
 	    }
 	} else if (Race_if(PM_HUMAN_WEREWOLF) &&
 		(!Upolyd || u.umonnum == u.ulycn)) {
@@ -1729,7 +1729,7 @@ polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
 	    	You("are no longer a lycanthrope!");
 	    } else if (u.ulevel <= 2) {
 	    	You("can't invoke the change at will yet.");
-		return 0;		
+		return 0;
 	    } else if (u.uen < EN_WERE) {
 		You("don't have the energy to change form!");
 		return 0;
@@ -1748,8 +1748,8 @@ polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
 		return 1;
 	    }
 	} else {
-	    pline("You can't polymorph at will%s.", 
-		    ((Role_if(PM_FLAME_MAGE) || Role_if(PM_ICE_MAGE) || 
+	    pline("You can't polymorph at will%s.",
+		    ((Role_if(PM_FLAME_MAGE) || Role_if(PM_ICE_MAGE) ||
 		      Race_if(PM_HUMAN_WEREWOLF) || Race_if(PM_DOPPELGANGER)) ?
 		    " yet" : ""));
 	    return 0;
@@ -1759,10 +1759,10 @@ polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
 	return 1;
 }
 
-static void 
+static void
 merge_with_armor (void)
 {
-	/* This function does hides the armor being worn 
+	/* This function does hides the armor being worn
 	 * It currently assumes that you are changing into a dragon
 	 * Should check that monster being morphed into is not genocided
 	 * see do_merge above for correct use
@@ -1783,7 +1783,7 @@ merge_with_armor (void)
 }
 
 #if 0	/* What the f*** is this for? -- KMH */
-static void 
+static void
 special_poly (void)
 {
 	char buf[BUFSZ];

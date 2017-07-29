@@ -176,10 +176,10 @@ static void kick_monster(xchar x, xchar y) {
 
 	/*STEPHEN WHITE'S NEW CODE */
 	canhitmon = 0;
-	if (need_one(mon))    canhitmon = 1; 
-	if (need_two(mon))    canhitmon = 2;         
-	if (need_three(mon))  canhitmon = 3; 
-	if (need_four(mon))   canhitmon = 4;         
+	if (need_one(mon))    canhitmon = 1;
+	if (need_two(mon))    canhitmon = 2;
+	if (need_three(mon))  canhitmon = 3;
+	if (need_four(mon))   canhitmon = 4;
 
 	if (Role_if(PM_MONK) && !Upolyd) {
 		if (!uwep && !uarm && !uarms) objenchant = u.ulevel / 4;
@@ -464,7 +464,7 @@ static int kick_object(xchar x, xchar y) {
 	/* maybe dexterity should also figure here.     */
 	/* MAR - if there are multiple objects, range is calculated */
 	/* from a single object (not entire stack!) */
-	
+
 	if (kickobj->quan > 1L && (kickobj->oclass != COIN_CLASS)) /*MAR*/
 		range = (int)((ACURRSTR)/2 - kickobj->owt/kickobj->quan/40);
 	else range = (int)((ACURRSTR)/2 - kickobj->owt/40);
@@ -573,7 +573,7 @@ static int kick_object(xchar x, xchar y) {
 		   (int (*)(struct obj*,struct obj*))0,
 		   &kickobj);
 	if (!kickobj)
-	    return 1;		/* object broken (and charged for if costly) */ 
+	    return 1;		/* object broken (and charged for if costly) */
 	if(mon) {
 	    if (mon->isshk &&
 		    kickobj->where == OBJ_MINVENT && kickobj->ocarry == mon)
@@ -623,7 +623,7 @@ static char *kickstr(char *buf) {
 	else if (IS_FOUNTAIN(maploc->typ)) what = "a fountain";
 	else if (IS_GRAVE(maploc->typ)) what = "a headstone";
 	else if (IS_SINK(maploc->typ)) what = "a sink";
-        else if (IS_TOILET(maploc->typ)) what = "a toilet";        
+        else if (IS_TOILET(maploc->typ)) what = "a toilet";
 	else if (IS_ALTAR(maploc->typ)) what = "an altar";
 	else if (IS_DRAWBRIDGE(maploc->typ)) what = "a drawbridge";
 	else if (maploc->typ == STAIRS) what = "the stairs";

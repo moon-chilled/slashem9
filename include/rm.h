@@ -211,9 +211,9 @@
 #define S_explode7	91	/* explosion bottom left	 \-/	*/
 #define S_explode8	92	/* explosion bottom center		*/
 #define S_explode9	93	/* explosion bottom right		*/
-  
+
 /* end effects */
-  
+
 #define MAXPCHARS	94	/* maximum number of mapped characters */
 #define MAXDCHARS	43	/* maximum of mapped dungeon characters */
 #define MAXTCHARS	22	/* maximum of mapped trap characters */

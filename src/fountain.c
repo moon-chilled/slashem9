@@ -53,7 +53,7 @@ dowaterdemon() /* Water demon */
 		You_feel("the presence of evil.");
 /* ------------===========STEPHEN WHITE'S NEW CODE============------------ */
 	/* Give those on low levels a (slightly) better chance of survival */
-	/* 35% at level 1, 30% at level 2, 25% at level 3, etc... */            
+	/* 35% at level 1, 30% at level 2, 25% at level 3, etc... */
 	if (rnd(100) > (60 + 5*level_difficulty())) {
 		pline("Grateful for %s release, %s grants you a wish!",
 		      mhis(mtmp), mhe(mtmp));
@@ -87,7 +87,7 @@ dowaternymph() /* Water Nymph */
 		   You_hear("a loud pop.");
 }
 
-void 
+void
 dogushforth ( /* Gushing forth along LOS from (u.ux, u.uy) */
     int drinking
 )
@@ -193,7 +193,7 @@ boolean isyou;
 	}
 }
 
-void 
+void
 drinkfountain (void)
 {
 	/* What happens when you drink from a fountain? */
@@ -349,7 +349,7 @@ drinkfountain (void)
 	dryup(u.ux, u.uy, TRUE);
 }
 
-void 
+void
 dipfountain (struct obj *obj)
 {
 	if (Levitation) {
@@ -462,13 +462,13 @@ dipfountain (struct obj *obj)
 			    struct obj *otmp;
                             if (money > 10) {
 				/* Amount to loose.  Might get rounded up as fountains don't pay change... */
-			        money = somegold(money) / 10; 
+			        money = somegold(money) / 10;
 			        for (otmp = invent; otmp && money > 0; otmp = otmp->nobj) if (otmp->oclass == COIN_CLASS) {
 				    int denomination = objects[otmp->otyp].oc_cost;
 				    long coin_loss = (money + denomination - 1) / denomination;
                                     coin_loss = min(coin_loss, otmp->quan);
 				    otmp->quan -= coin_loss;
-				    money -= coin_loss * denomination;				  
+				    money -= coin_loss * denomination;
 				    if (!otmp->quan) delobj(otmp);
 				}
 			        You("lost some of your money in the fountain!");
@@ -499,7 +499,7 @@ dipfountain (struct obj *obj)
 	dryup(u.ux, u.uy, TRUE);
 }
 
-void 
+void
 diptoilet (struct obj *obj)
 {
 	if (Levitation) {
@@ -524,7 +524,7 @@ diptoilet (struct obj *obj)
 }
 
 
-void 
+void
 breaksink (int x, int y)
 {
     if(cansee(x,y) || (x == u.ux && y == u.uy))
@@ -536,7 +536,7 @@ breaksink (int x, int y)
     newsym(x,y);
 }
 
-void 
+void
 breaktoilet (int x, int y)
 {
     int num = rn1(5,2);
@@ -562,7 +562,7 @@ breaktoilet (int x, int y)
     }
 }
 
-void 
+void
 drinksink (void)
 {
 	struct obj *otmp;
@@ -657,7 +657,7 @@ drinksink (void)
 	}
 }
 
-void 
+void
 drinktoilet (void)
 {
 	if (Levitation) {
@@ -713,7 +713,7 @@ drinktoilet (void)
 }
 
 
-void 
+void
 whetstone_fountain_effects (struct obj *obj)
 {
 	if (Levitation) {
@@ -782,13 +782,13 @@ whetstone_fountain_effects (struct obj *obj)
 			    struct obj *otmp;
                             if (money > 10) {
 				/* Amount to loose.  Might get rounded up as fountains don't pay change... */
-			        money = somegold(money) / 10; 
+			        money = somegold(money) / 10;
 			        for (otmp = invent; otmp && money > 0; otmp = otmp->nobj) if (otmp->oclass == COIN_CLASS) {
 				    int denomination = objects[otmp->otyp].oc_cost;
 				    long coin_loss = (money + denomination - 1) / denomination;
                                     coin_loss = min(coin_loss, otmp->quan);
 				    otmp->quan -= coin_loss;
-				    money -= coin_loss * denomination;				  
+				    money -= coin_loss * denomination;
 				    if (!otmp->quan) delobj(otmp);
 				}
 			        You("lost some of your money in the fountain!");
@@ -820,7 +820,7 @@ whetstone_fountain_effects (struct obj *obj)
 }
 
 
-void 
+void
 whetstone_toilet_effects (struct obj *obj)
 {
 	if (Levitation) {
@@ -834,7 +834,7 @@ whetstone_toilet_effects (struct obj *obj)
 	if (flags.verbose)  pline("Yuck!");
 }
 
-void 
+void
 whetstone_sink_effects (struct obj *obj)
 {
 	struct monst *mtmp;

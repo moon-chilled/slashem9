@@ -463,21 +463,21 @@ void mon_catchup_elapsed_time(struct monst *mtmp, long nmv /* number of moves */
 	if (imv > mtmp->mspec_used) mtmp->mspec_used = 0;
 	else mtmp->mspec_used -= imv;
 
-		   /*                    
+		   /*
 			*      M1_MINDLESS __
 			*      M2_UNDEAD     |
 			*      M2_WERE       |-- These types will go ferral
 			*      M2_DEMON      |
 			*      M1_ANIMAL   --
 			*/
- 
+
 			if (is_animal(mtmp->data) || mindless(mtmp->data) ||
 			    is_demon(mtmp->data)  || is_undead(mtmp->data) ||
-			    is_were(mtmp->data)) { 
-				/* reduce tameness for every 
-				 * 150 moves you are away 
+			    is_were(mtmp->data)) {
+				/* reduce tameness for every
+				 * 150 moves you are away
 				 */
-				if (mtmp->mtame > nmv/150) 
+				if (mtmp->mtame > nmv/150)
 					mtmp->mtame -= nmv/150;
 				else mtmp->mtame = 0;
 	}
@@ -542,7 +542,7 @@ void keepdogs(boolean pets_only /* true for ascension or final escape */) {
 			if (canseemon(mtmp))
 			    pline("%s is still eating.", Monnam(mtmp));
 			stay_behind = TRUE;
-		} else if (mtmp->mtame && 
+		} else if (mtmp->mtame &&
 		    (Is_blackmarket(&new_dlevel) || Is_blackmarket(&u.uz))) {
 			pline("%s can't follow you %s.",
 			      Monnam(mtmp), Is_blackmarket(&u.uz) ?
@@ -694,7 +694,7 @@ int dogfood(struct monst *mon, struct obj *obj) {
 		  peek_at_iced_corpse_age(obj) + 5*rn1(20,10) <= monstermoves) ?
 			DOGFOOD : TABU;
 	    }
-	    /* vampires only "eat" very fresh corpses ... 
+	    /* vampires only "eat" very fresh corpses ...
 	     * Assume meat -> blood
 	     */
 	    if (is_vampire(mon->data)) {
@@ -940,7 +940,7 @@ void wary_dog(struct monst *mtmp, boolean was_dead) {
 				mtmp->mpeaceful ? "seems unable" :
 					    "refuses",
 				body_part(EYE));
-		else 
+		else
 			pline("%s avoids your gaze.",
 				Monnam(mtmp));
 	    }
@@ -995,7 +995,7 @@ void abuse_dog(struct monst *mtmp) {
 
 	    /* Give monster a chance to betray you now */
 	    if (mtmp->mtame) betrayed(mtmp);
-	
+
 	    if (!mtmp->mtame) newsym(mtmp->mx, mtmp->my);
 	}
 }

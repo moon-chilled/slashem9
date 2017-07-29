@@ -32,11 +32,11 @@ static int blitz_spirit_bomb(void);
 static schar delay;            /* moves left for tinker/energy draw */
 static const char revivables[] = { ALLOW_FLOOROBJ, FOOD_CLASS, 0 };
 
-/* 
+/*
  * Do try to keep the names <= 25 chars long, or else the
  * menu will look bad :B  WAC
  */
- 
+
 static const char *tech_names[] = {
 	"no technique",
 	"berserk",
@@ -83,7 +83,7 @@ static const char *tech_names[] = {
 	""
 };
 
-static const struct innate_tech 
+static const struct innate_tech
 	/* Roles */
 	arc_tech[] = { {   1, T_RESEARCH, 1},
 		       {   0, 0, 0} },
@@ -158,7 +158,7 @@ static const struct innate_tech
 		       {   7, T_SIGIL_CONTROL, 1},
 		       {  14, T_SIGIL_TEMPEST, 1},
 		       {  20, T_SIGIL_DISCHARGE, 1},
-		       {   0, 0, 0} },		       
+		       {   0, 0, 0} },
 	/* Races */
 	dop_tech[] = { {   1, T_LIQUID_LEAP, 1},
 		       {   0, 0, 0} },
@@ -179,8 +179,8 @@ static const struct innate_tech
 		       {   0, 0, 0} };
 	/* Orc */
 
-/* Local Macros 
- * these give you direct access to the player's list of techs.  
+/* Local Macros
+ * these give you direct access to the player's list of techs.
  * Are you sure you don't want to use tech_inuse,  which is the
  * extern function for checking whether a fcn is inuse
  */
@@ -195,11 +195,11 @@ static const struct innate_tech
 
 /* A simple pseudorandom number generator
  *
- * This should generate fairly random numbers that will be 
- * mod LP_HPMOD from 2 to 9,  with 0 mod LP_HPMOD 
+ * This should generate fairly random numbers that will be
+ * mod LP_HPMOD from 2 to 9,  with 0 mod LP_HPMOD
  * but can't use the normal RNG since can_limitbreak() must
  * return the same state on the same turn.
- * This also has to depend on things that do NOT change during 
+ * This also has to depend on things that do NOT change during
  * save and restore,  and also should only change between turns
  */
 #if 0 /* Probably overkill */
@@ -208,12 +208,12 @@ static const struct innate_tech
 #define LB_BASE2 ((long) (moves + u.uenmax + u.ulevel + 300L))
 #define LB_STRIP 6	/* Remove the last few bits as they tend to be less random */
 #endif
- 
+
 #define LB_CYCLE 101L	/* number of turns before the pattern repeats */
 #define LB_BASE1 ((long) (monstermoves + u.uhpmax + 10L))
 #define LB_BASE2 ((long) (moves + u.uenmax + u.ulevel + 10L))
 #define LB_STRIP 3	/* Remove the last few bits as they tend to be less random */
- 
+
 #define LB_HPMOD ((long) ((u.uhp * 10 / u.uhpmax > 2) ? \
         			(u.uhp * 10 / u.uhpmax) : 2))
 
@@ -221,7 +221,7 @@ static const struct innate_tech
         		  (u.uhp == 1 || (!((((LB_BASE1 * \
         		  LB_BASE2) % LB_CYCLE) >> LB_STRIP) \
         		  % LB_HPMOD))))
-        
+
 /* Whether you know the tech */
 boolean
 tech_known(tech)
@@ -229,14 +229,14 @@ tech_known(tech)
 {
 	int i;
 	for (i = 0; i < MAXTECH; i++) {
-		if (techid(i) == tech) 
+		if (techid(i) == tech)
 		     return TRUE;
 	}
 	return FALSE;
 }
 
 /* Called to prematurely stop a technique */
-void 
+void
 aborttech (int tech)
 {
 	int i;
@@ -266,7 +266,7 @@ aborttech (int tech)
 }
 
 /* Called to teach a new tech.  Level is starting tech level */
-void 
+void
 learntech (short tech, long mask, int tlevel)
 {
 	int i;
@@ -438,8 +438,8 @@ dotechmenu(how, tech_no)
 		any.a_int = 0;
 	    }
 #ifdef WIZARD
-	    if (wizard) 
-		if (!iflags.menu_tab_sep)			
+	    if (wizard)
+		if (!iflags.menu_tab_sep)
 		    sprintf(buf, "%s%-*s %2d%c%c%c   %s(%i)",
 			    prefix, longest, techname(i), tlevel,
 			    tech_list[i].t_intrinsic & FROMEXPER ? 'X' : ' ',
@@ -448,7 +448,7 @@ dotechmenu(how, tech_no)
 			    tech_inuse(techid(i)) ? "Active" :
 			    tlevel <= 0 ? "Beyond recall" :
 			    can_limitbreak() ? "LIMIT" :
-			    !techtout(i) ? "Prepared" : 
+			    !techtout(i) ? "Prepared" :
 			    techtout(i) > 100 ? "Not Ready" : "Soon",
 			    techtout(i));
 		else
@@ -460,18 +460,18 @@ dotechmenu(how, tech_no)
 			    tech_inuse(techid(i)) ? "Active" :
 			    tlevel <= 0 ? "Beyond recall" :
 			    can_limitbreak() ? "LIMIT" :
-			    !techtout(i) ? "Prepared" : 
+			    !techtout(i) ? "Prepared" :
 			    techtout(i) > 100 ? "Not Ready" : "Soon",
 			    techtout(i));
 	    else
 #endif
-	    if (!iflags.menu_tab_sep)			
+	    if (!iflags.menu_tab_sep)
 		sprintf(buf, "%s%-*s %5d   %s",
 			prefix, longest, techname(i), tlevel,
 			tech_inuse(techid(i)) ? "Active" :
 			tlevel <= 0 ? "Beyond recall" :
 			can_limitbreak() ? "LIMIT" :
-			!techtout(i) ? "Prepared" : 
+			!techtout(i) ? "Prepared" :
 			techtout(i) > 100 ? "Not Ready" : "Soon");
 	    else
 		sprintf(buf, "%s%s\t%5d\t%s",
@@ -479,7 +479,7 @@ dotechmenu(how, tech_no)
 			tech_inuse(techid(i)) ? "Active" :
 			tlevel <= 0 ? "Beyond recall" :
 			can_limitbreak() ? "LIMIT" :
-			!techtout(i) ? "Prepared" : 
+			!techtout(i) ? "Prepared" :
 			techtout(i) > 100 ? "Not Ready" : "Soon");
 
 	    add_menu(tmpwin, NO_GLYPH, &any,
@@ -487,7 +487,7 @@ dotechmenu(how, tech_no)
 	    if (let++ == 'z') let = 'A';
 	}
 
-	if (!techs_useable) 
+	if (!techs_useable)
 	    how = PICK_NONE;
 
 	end_menu(tmpwin, how == PICK_ONE ? "Choose a technique" :
@@ -503,7 +503,7 @@ dotechmenu(how, tech_no)
 	return FALSE;
 }
 
-static int 
+static int
 get_tech_no (int tech)
 {
 	int i;
@@ -516,7 +516,7 @@ get_tech_no (int tech)
 	return (-1);
 }
 
-int 
+int
 dotech (void)
 {
 	int tech_no;
@@ -563,7 +563,7 @@ char *verb;
 /* gettech is reworked getspell */
 /* reworked class special effects code */
 /* adapted from specialpower in cmd.c */
-static int 
+static int
 techeffects (int tech_no)
 {
 	/* These variables are used in various techs */
@@ -664,7 +664,7 @@ techeffects (int tech_no)
                                 You("discover it is %s",doname(uwep));
                                 } else
                      pline("Unfortunately, you didn't learn anything new.");
-                    } 
+                    }
                 /*WAC Added practicing code - in weapon.c*/
                     practice_weapon();
 		}
@@ -839,7 +839,7 @@ techeffects (int tech_no)
 		break;
 	    case T_BLESSING:
 		allowall[0] = ALL_CLASSES; allowall[1] = '\0';
-		
+
 		if ( !(obj = getobj(allowall, "bless"))) return(0);
 		pline("An aura of holiness surrounds your hands!");
                 if (!Blind) (void) Shk_Your(Your_buf, obj);
@@ -870,7 +870,7 @@ techeffects (int tech_no)
 		}
 		t_timeout = rn1(1000,500);
 		break;
-	    case T_E_FIST: 
+	    case T_E_FIST:
 	    	blitz_e_fist();
 #if 0
 		str = makeplural(body_part(HAND));
@@ -879,7 +879,7 @@ techeffects (int tech_no)
 #endif
 		t_timeout = rn1(1000,500);
 	    	break;
-	    case T_PRIMAL_ROAR:	    	
+	    case T_PRIMAL_ROAR:
 	    	You("let out a bloodcurdling roar!");
 	    	aggravate();
 
@@ -894,7 +894,7 @@ techeffects (int tech_no)
 			    struct monst *mtmp2;
 		    	    int ttime = techt_inuse(tech_no);
 		    	    int type = little_to_big(monsndx(ptr));
-		    	    
+
 		    	    mtmp2 = tamedog(mtmp, NULL);
 			    if (mtmp2)
 				mtmp = mtmp2;
@@ -942,7 +942,7 @@ techeffects (int tech_no)
 		    }
 		    if(u.utrap) {
 			switch(u.utraptype) {
-			    case TT_BEARTRAP: 
+			    case TT_BEARTRAP:
 				You("slide out of the bear trap.");
 				break;
 			    case TT_PIT:
@@ -965,13 +965,13 @@ techeffects (int tech_no)
 		    if (dx) range = dx;
 		    else range = dy;
 		    if (range < 0) range = -range;
-		    
+
 		    dx = sgn(dx);
 		    dy = sgn(dy);
-		    
+
 		    while (range-- > 0) {
 		    	int tmp_invul = 0;
-		    	
+
 		    	if (!Invulnerable) Invulnerable = tmp_invul = 1;
 			sx += dx; sy += dy;
 			tmp_at(DISP_BEAM, zapdir_to_glyph(dx, dy, AD_ACID-1));
@@ -979,7 +979,7 @@ techeffects (int tech_no)
 			delay_output(); /* wait a little */
 		    	if ((mtmp = m_at(sx, sy)) != 0) {
 			    int chance;
-			    
+
 			    chance = rn2(20);
 		    	    if (!chance || (3 - chance) > AC_VALUE(find_mac(mtmp)))
 		    	    	break;
@@ -1010,7 +1010,7 @@ techeffects (int tech_no)
 		t_timeout = rn1(1000,500);
 	    	break;
 	    }
-            case T_SIGIL_TEMPEST: 
+            case T_SIGIL_TEMPEST:
 		/* Have enough power? */
 		num = 50 - techlev(tech_no)/5;
 		if (u.uen < num) {
@@ -1091,7 +1091,7 @@ techeffects (int tech_no)
 		nomovemsg = 0;
 		t_timeout = rn1(1000,500);
 		break;
-            case T_REVIVE: 
+            case T_REVIVE:
 		if (u.uswallow) {
 		    You(no_elbow_room);
 		    return 0;
@@ -1162,7 +1162,7 @@ techeffects (int tech_no)
 		delay=-150 + techlev(tech_no);
 		set_occupation(tinker, "tinkering", 0);
 		break;
-	    case T_RAGE:     	
+	    case T_RAGE:
 		if (Upolyd) {
 			You("cannot focus your anger!");
 			return(0);
@@ -1173,7 +1173,7 @@ techeffects (int tech_no)
 		u.uhpmax += num;
 		u.uhp += num;
 		t_timeout = rn1(1000,500);
-		break;	    
+		break;
 	    case T_BLINK:
 	    	You("feel the flow of time slow down.");
                 techt_inuse(tech_no) = rnd(techlev(tech_no) + 1) + 2;
@@ -1187,11 +1187,11 @@ techeffects (int tech_no)
             	if (u.uen == u.uenmax) {
             		if (Hallucination) You("are fully charged!");
 			else You("cannot hold any more energy!");
-			return(0);           		
+			return(0);
             	}
                 You("begin drawing energy from your surroundings!");
 		delay=-15;
-		set_occupation(draw_energy, "drawing energy", 0);                
+		set_occupation(draw_energy, "drawing energy", 0);
                 t_timeout = rn1(1000,500);
 		break;
             case T_CHI_HEALING:
@@ -1202,7 +1202,7 @@ techeffects (int tech_no)
 		You("direct your internal energy to restoring your body!");
                 techt_inuse(tech_no) = techlev(tech_no)*2 + 4;
                 t_timeout = rn1(1000,500);
-		break;	
+		break;
 	    case T_DISARM:
 	    	if (P_SKILL(weapon_type(uwep)) == P_NONE) {
 	    		You("aren't wielding a proper weapon!");
@@ -1246,7 +1246,7 @@ techeffects (int tech_no)
 	    		You_cant("see %s weapon!", s_suffix(mon_nam(mtmp)));
 	    		return(0);
 		}
-		num = ((rn2(techlev(tech_no) + 15)) 
+		num = ((rn2(techlev(tech_no) + 15))
 			* (P_SKILL(weapon_type(uwep)) - P_SKILLED + 1)) / 10;
 
 		You("attempt to disarm %s...",mon_nam(mtmp));
@@ -1346,7 +1346,7 @@ techeffects (int tech_no)
 			You("can't see yourself!");
 			return(0);
 		}
-		for(i = 0; (i  <= ((techlev(tech_no) / 8) + 1) 
+		for(i = 0; (i  <= ((techlev(tech_no) / 8) + 1)
 			&& isok(u.ux + (i*u.dx), u.uy + (i*u.dy))); i++) {
 		    mtmp = m_at(u.ux + (i*u.dx), u.uy + (i*u.dy));
 		    if (mtmp && canseemon(mtmp)) break;
@@ -1377,8 +1377,8 @@ techeffects (int tech_no)
 			You("can't do this while holding a shield!");
 	    		return(0);
 	    	}
-	    	if (!doblitz()) return (0);		
-		
+	    	if (!doblitz()) return (0);
+
                 t_timeout = rn1(1000,500);
 	    	break;
             case T_PUMMEL:
@@ -1425,7 +1425,7 @@ techeffects (int tech_no)
             case T_POWER_SURGE:
             	if (!blitz_power_surge()) return(0);
 		t_timeout = rn1(1000,500);
-		break;            	
+		break;
             case T_SPIRIT_BOMB:
 	    	if (uwep || (u.twoweap && uswapwep)) {
 			You("can't do this while wielding a weapon!");
@@ -1437,7 +1437,7 @@ techeffects (int tech_no)
 		if (!getdir(NULL)) return(0);
             	if (!blitz_spirit_bomb()) return(0);
 		t_timeout = rn1(1000,500);
-		break;            	
+		break;
 	    case T_DRAW_BLOOD:
 		if (!maybe_polyd(is_vampire(youmonst.data),
 		  Race_if(PM_VAMPIRE))) {
@@ -1489,7 +1489,7 @@ techeffects (int tech_no)
 /* Whether or not a tech is in use.
  * 0 if not in use, turns left if in use. Tech is done when techinuse == 1
  */
-int 
+int
 tech_inuse (int tech_id)
 {
         int i;
@@ -1506,11 +1506,11 @@ tech_inuse (int tech_id)
 	return (0);
 }
 
-void 
+void
 tech_timeout (void)
 {
 	int i;
-	
+
         for (i = 0; i < MAXTECH; i++) {
 	    if (techid(i) == NO_TECH)
 		continue;
@@ -1578,13 +1578,13 @@ tech_timeout (void)
 	            default:
 	            	break;
 	        }
-	    } 
+	    }
 
 	    if (techtout(i) > 0) techtout(i)--;
         }
 }
 
-void 
+void
 docalm (void)
 {
 	int i, tech, n = 0;
@@ -1600,7 +1600,7 @@ docalm (void)
 	    You("calm down.");
 }
 
-static void 
+static void
 hurtmon (struct monst *mtmp, int tmp)
 {
 	mtmp->mhp -= tmp;
@@ -1627,9 +1627,9 @@ role_tech (void)
 		case PM_RANGER:		return (ran_tech);
 		case PM_ROGUE:		return (rog_tech);
 		case PM_SAMURAI:	return (sam_tech);
-#ifdef TOURIST        
+#ifdef TOURIST
 		case PM_TOURIST:	return (tou_tech);
-#endif        
+#endif
 		case PM_UNDEAD_SLAYER:	return (und_tech);
 		case PM_VALKYRIE:	return (val_tech);
 		case PM_WIZARD:		return (wiz_tech);
@@ -1658,10 +1658,10 @@ race_tech (void)
 	}
 }
 
-void 
+void
 adjtech (int oldlevel, int newlevel)
 {
-	const struct   innate_tech  
+	const struct   innate_tech
 		*tech = role_tech(), *rtech = race_tech();
 	long mask = FROMEXPER;
 
@@ -1674,7 +1674,7 @@ adjtech (int oldlevel, int newlevel)
 	    	rtech = (struct innate_tech *) 0;
 		mask = FROMRACE;
 	    }
-		
+
 	    for(; tech->tech_id; tech++)
 		if(oldlevel < tech->ulevel && newlevel >= tech->ulevel) {
 		    if (tech->ulevel != 1 && !tech_known(tech->tech_id))
@@ -1691,7 +1691,7 @@ adjtech (int oldlevel, int newlevel)
 	}
 }
 
-int 
+int
 mon_to_zombie (int monnum)
 {
 	if ((&mons[monnum])->mlet == S_ZOMBIE) return monnum;  /* is already zombie */
@@ -1735,7 +1735,7 @@ tinker()
 	You("finish your tinkering.");
 	chance = 5;
 /*	chance += PSKILL(P_TINKER); */
-	if (rnl(10) < chance) {		
+	if (rnl(10) < chance) {
 		upgrade_obj(otmp);
 	} else {
 		/* object downgrade  - But for now,  nothing :) */
@@ -1762,7 +1762,7 @@ draw_energy()
 				break;
 			    case THRONE: /* Regal == pseudo divine */
 			    	powbonus =  (u.uenmax > 36 ? u.uenmax / 6
-			    			: 6);			    		 	
+			    			: 6);
 				break;
 			    case CLOUD: /* Air */
 			    case TREE: /* Earth */
@@ -1809,13 +1809,13 @@ draw_energy()
 	return(0);
 }
 
-static const char 
+static const char
 	*Enter_Blitz = "Enter Blitz Command[. to end]: ";
 
-/* Keep commands that reference the same blitz together 
+/* Keep commands that reference the same blitz together
  * Keep the BLITZ_START before the BLITZ_CHAIN before the BLITZ_END
  */
-static const struct blitz_tab blitzes[] = { 	
+static const struct blitz_tab blitzes[] = {
 	{"LLDDR", 5, blitz_chi_strike, T_CHI_STRIKE, BLITZ_START},
 	{"LLDDRDR", 7, blitz_chi_strike, T_CHI_STRIKE, BLITZ_START},
 	{"RR",  2, blitz_dash, T_DASH, BLITZ_START},
@@ -1836,32 +1836,32 @@ static const struct blitz_tab blitzes[] = {
 #define MAX_CHAIN 5
 
 /* parse blitz input */
-static int 
+static int
 doblitz (void)
 {
 	int i, j, dx, dy, bdone = 0, tech_no;
 	char buf[BUFSZ];
 	char *bp;
 	int blitz_chain[MAX_CHAIN], blitz_num;
-        
+
 	tech_no = (get_tech_no(T_BLITZ));
 
 	if (tech_no == -1) {
 		return(0);
 	}
-	
+
 	if (u.uen < 10) {
 		You("are too weak to attempt this!");
             	return(0);
 	}
 
 	bp = buf;
-	
+
 	if (!getdir(NULL)) return(0);
 	if (!u.dx && !u.dy) {
 		return(0);
 	}
-	
+
 	dx = u.dx;
 	dy = u.dy;
 
@@ -1906,7 +1906,7 @@ doblitz (void)
     	while(strncmp(bp, ".", 1)) {
 	    bdone = 0;
 	    for (j = 0; blitzes[j].blitz_len; j++) {
-	    	if (blitz_num >= MAX_CHAIN || 
+	    	if (blitz_num >= MAX_CHAIN ||
 	    	    blitz_num >= (MIN_CHAIN + (techlev(tech_no) / 10)))
 	    		break; /* Trying to chain too many blitz commands */
 		else if (!strncmp(bp, blitzes[j].blitz_cmd, blitzes[j].blitz_len)) {
@@ -1914,22 +1914,22 @@ doblitz (void)
 			if (!tech_known(blitzes[j].blitz_tech))
 				break;
 	    		if (blitz_num) {
-				/* Check if trying to chain two of the exact same 
-				 * commands in a row 
+				/* Check if trying to chain two of the exact same
+				 * commands in a row
 				 */
-	    			if (j == blitz_chain[(blitz_num - 1)]) 
+	    			if (j == blitz_chain[(blitz_num - 1)])
 	    				break;
 	    			/* Trying to chain after chain finishing command */
-	    			if (blitzes[blitz_chain[(blitz_num - 1)]].blitz_type 
+	    			if (blitzes[blitz_chain[(blitz_num - 1)]].blitz_type
 	    							== BLITZ_END)
 	    				break;
 	    			/* Trying to put a chain starter after starting
 	    			 * a chain
-	    			 * Note that it's OK to put two chain starters in a 
+	    			 * Note that it's OK to put two chain starters in a
 	    			 * row
 	    			 */
 	    			if ((blitzes[j].blitz_type == BLITZ_START) &&
-	    			    (blitzes[blitz_chain[(blitz_num - 1)]].blitz_type 
+	    			    (blitzes[blitz_chain[(blitz_num - 1)]].blitz_type
 	    							!= BLITZ_START))
 	    				break;
 	    		}
@@ -1950,12 +1950,12 @@ doblitz (void)
 	    u.dy = dy;
 	    if (!( (*blitzes[blitz_chain[i]].blitz_funct)() )) break;
 	}
-	
+
     	/* done */
 	return(1);
 }
 
-static void 
+static void
 doblitzlist (void)
 {
 	winid tmpwin;
@@ -1973,7 +1973,7 @@ doblitzlist (void)
         sprintf(buf, "%16s %10s %-17s", "[L = Left]", "", "[R = Right]");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
         sprintf(buf, "%16s %10s %-17s", "[LD = Left Down]", "[D = Down]", "[RD = Right Down]");
-	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);        
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
 
         sprintf(buf, "%-30s %10s   %s", "Name", "Type", "Command");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
@@ -1982,12 +1982,12 @@ doblitzlist (void)
 	    if (tech_known(blitzes[i].blitz_tech)) {
                 sprintf(buf, "%-30s %10s   %s",
                     (i && blitzes[i].blitz_tech == blitzes[(i-1)].blitz_tech ?
-                    	"" : tech_names[blitzes[i].blitz_tech]), 
-                    (blitzes[i].blitz_type == BLITZ_START ? 
+                    	"" : tech_names[blitzes[i].blitz_tech]),
+                    (blitzes[i].blitz_type == BLITZ_START ?
                     	"starter" :
-                    	(blitzes[i].blitz_type == BLITZ_CHAIN ? 
-	                    	"chain" : 
-	                    	(blitzes[i].blitz_type == BLITZ_END ? 
+                    	(blitzes[i].blitz_type == BLITZ_CHAIN ?
+	                    	"chain" :
+	                    	(blitzes[i].blitz_type == BLITZ_END ?
                     			"finisher" : "unknown"))),
                     blitzes[i].blitz_cmd);
 
@@ -2002,11 +2002,11 @@ doblitzlist (void)
 	return;
 }
 
-static int 
+static int
 blitz_chi_strike (void)
 {
 	int tech_no;
-	
+
 	tech_no = (get_tech_no(T_CHI_STRIKE));
 
 	if (tech_no == -1) {
@@ -2022,18 +2022,18 @@ blitz_chi_strike (void)
 	return(1);
 }
 
-static int 
+static int
 blitz_e_fist (void)
 {
 	int tech_no;
 	const char *str;
-	
+
 	tech_no = (get_tech_no(T_E_FIST));
 
 	if (tech_no == -1) {
 		return(0);
 	}
-	
+
 	str = makeplural(body_part(HAND));
 	You("focus the powers of the elements into your %s.", str);
 	techt_inuse(tech_no) = rnd((int) (techlev(tech_no)/3 + 1)) + d(1,4) + 2;
@@ -2041,7 +2041,7 @@ blitz_e_fist (void)
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int 
+static int
 blitz_pummel (void)
 {
 	int i = 0, tech_no;
@@ -2064,7 +2064,7 @@ blitz_pummel (void)
 		return (0);
 	}
 	if (!attack(mtmp)) return (0);
-	
+
 	/* Perform the extra attacks
 	 */
 	for (i = 0; (i < 4); i++) {
@@ -2077,13 +2077,13 @@ blitz_pummel (void)
 
 	    if (!mtmp) return (1);
 	    if (!attack(mtmp)) return (1);
-	} 
-	
+	}
+
 	return(1);
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int 
+static int
 blitz_g_slam (void)
 {
 	int tech_no, tmp, canhitmon, objenchant;
@@ -2129,7 +2129,7 @@ blitz_g_slam (void)
 	    objenchant = u.ulevel / 4;
 
 	tmp = (5 + rnd(6) + (techlev(tech_no) / 5));
-	
+
 	chasm = maketrap(u.ux + u.dx, u.uy + u.dy, PIT);
 	if (chasm) {
 	    if (!is_flyer(mtmp->data) && !is_clinger(mtmp->data))
@@ -2148,7 +2148,7 @@ blitz_g_slam (void)
 		if(!cansee(u.ux + u.dx, u.uy + u.dy))
 		    pline("It is destroyed!");
 		else {
-		    You("destroy %s!", 	
+		    You("destroy %s!",
 		    	mtmp->mtame
 			    ? x_monnam(mtmp, ARTICLE_THE, "poor",
 				mtmp->mnamelth ? SUPPRESS_SADDLE : 0, FALSE)
@@ -2162,7 +2162,7 @@ blitz_g_slam (void)
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int 
+static int
 blitz_dash (void)
 {
 	int tech_no;
@@ -2171,7 +2171,7 @@ blitz_dash (void)
 	if (tech_no == -1) {
 		return(0);
 	}
-	
+
 	if ((!Punished || carried(uball)) && !u.utrap)
 	    You("dash forwards!");
 	hurtle(u.dx, u.dy, 2, FALSE);
@@ -2179,11 +2179,11 @@ blitz_dash (void)
 	return 1;
 }
 
-static int 
+static int
 blitz_power_surge (void)
 {
 	int tech_no, num;
-	
+
 	tech_no = (get_tech_no(T_POWER_SURGE));
 
 	if (tech_no == -1) {
@@ -2203,12 +2203,12 @@ blitz_power_surge (void)
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int 
+static int
 blitz_spirit_bomb (void)
 {
 	int tech_no, num;
 	int sx = u.ux, sy = u.uy, i;
-	
+
 	tech_no = (get_tech_no(T_SPIRIT_BOMB));
 
 	if (tech_no == -1) {
@@ -2216,7 +2216,7 @@ blitz_spirit_bomb (void)
 	}
 
 	You("gather your energy...");
-	
+
 	if (u.uen < 10) {
 		pline("But it fizzles out.");
 		u.uen = 0;
@@ -2224,11 +2224,11 @@ blitz_spirit_bomb (void)
 
 	num = 10 + (techlev(tech_no) / 5);
 	num = (u.uen < num ? u.uen : num);
-	
+
 	u.uen -= num;
-	
-	for( i = 0; i < 2; i++) {		
-	    if (!isok(sx,sy) || !cansee(sx,sy) || 
+
+	for( i = 0; i < 2; i++) {
+	    if (!isok(sx,sy) || !cansee(sx,sy) ||
 	    		IS_STWALL(levl[sx][sy].typ) || u.uswallow)
 	    	break;
 
@@ -2247,7 +2247,7 @@ blitz_spirit_bomb (void)
 }
 
 #ifdef DEBUG
-void 
+void
 wiz_debug_cmd (void) /* in this case, allow controlled loss of techniques */
 {
 	int tech_no, id, n = 0;

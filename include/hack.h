@@ -316,5 +316,5 @@ extern int repeat_hit;
  * in that environment.
  */
 # define CFDECLSPEC
- 
+
 #endif /* HACK_H */

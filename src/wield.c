@@ -79,8 +79,8 @@ static int ready_weapon(struct obj *, boolean);
  * responsibility to handle that.  It's also the caller's responsibility
  * to print the appropriate messages.
  *
- * MRKR: It now takes an extra flag put_away which is true if the 
- *       unwielded weapon is being put back into the inventory 
+ * MRKR: It now takes an extra flag put_away which is true if the
+ *       unwielded weapon is being put back into the inventory
  *       (rather than dropped, destroyed, etc)
  */
 void
@@ -115,7 +115,7 @@ boolean put_away;
 	} else
 		unweapon = TRUE;	/* for "bare hands" message */
 
-	
+
 	/* MRKR: Handle any special effects of unwielding a weapon */
 	if (olduwep && olduwep != uwep)
 	    unwield(olduwep, put_away);
@@ -220,7 +220,7 @@ boolean put_away;
 	return(res);
 }
 
-void 
+void
 setuqwep (struct obj *obj)
 {
 	setworn(obj, W_QUIVER);
@@ -250,7 +250,7 @@ static const char ready_objs[] =
 static const char bullets[] =	/* (note: different from dothrow.c) */
 	{ ALL_CLASSES, ALLOW_NONE, GEM_CLASS, WEAPON_CLASS, 0 };
 
-int 
+int
 dowield (void)
 {
 	struct obj *wep, *oldwep;
@@ -304,7 +304,7 @@ dowield (void)
 	return (result);
 }
 
-int 
+int
 doswapweapon (void)
 {
 	struct obj *oldwep, *oldswap;
@@ -351,7 +351,7 @@ doswapweapon (void)
 	return (result);
 }
 
-int 
+int
 dowieldquiver (void)
 {
 	struct obj *newquiver;
@@ -493,7 +493,7 @@ const char *verb;	/* "rub",&c */
 /* WAC
  * For the purposes of SLASH'EM, artifacts should be wieldable in either hand
  */
-int 
+int
 can_twoweapon (void)
 {
 	char buf[BUFSZ];
@@ -557,8 +557,8 @@ can_twoweapon (void)
 	    pline("%s resists being held second to another weapon!",
 		    Yname2(uswapwep));
 #endif
-	else if (!uarmg && !Stone_resistance && 
-		(uswapwep && uswapwep->otyp == CORPSE &&                   
+	else if (!uarmg && !Stone_resistance &&
+		(uswapwep && uswapwep->otyp == CORPSE &&
                 (touch_petrifies(&mons[uswapwep->corpsenm])))) {
 	    char kbuf[BUFSZ];
 
@@ -572,12 +572,12 @@ can_twoweapon (void)
 	    drop_uswapwep();
 	} else
 	    return (TRUE); /* Passes all the checks */
-	
+
 	/* Otherwise */
 	return (FALSE);
 }
 
-void 
+void
 drop_uswapwep (void)
 {
 	char str[BUFSZ];
@@ -590,7 +590,7 @@ drop_uswapwep (void)
 	dropx(obj);
 }
 
-int 
+int
 dotwoweapon (void)
 {
 	/* You can always toggle it off */
@@ -636,7 +636,7 @@ dotwoweapon (void)
  * 1.  The item has been eaten, stolen, burned away, or rotted away.
  * 2.  Making an item disappear for a bones pile.
  */
-void 
+void
 uwepgone (void)
 {
 	if (uwep) {
@@ -651,7 +651,7 @@ uwepgone (void)
 	}
 }
 
-void 
+void
 uswapwepgone (void)
 {
 	if (uswapwep) {
@@ -660,7 +660,7 @@ uswapwepgone (void)
 	}
 }
 
-void 
+void
 uqwepgone (void)
 {
 	if (uquiver) {
@@ -669,7 +669,7 @@ uqwepgone (void)
 	}
 }
 
-void 
+void
 untwoweapon (void)
 {
 	if (u.twoweap) {
@@ -779,7 +779,7 @@ boolean fade_scrolls;
 	}
 }
 
-int 
+int
 chwepon (struct obj *otmp, int amount)
 {
 	const char *color = hcolor((amount < 0) ? NH_BLACK : NH_BLUE);
@@ -866,7 +866,7 @@ chwepon (struct obj *otmp, int amount)
 	return(1);
 }
 
-int 
+int
 welded (struct obj *obj)
 {
 	if (obj && obj == uwep && will_weld(obj)) {
@@ -876,7 +876,7 @@ welded (struct obj *obj)
 	return 0;
 }
 
-void 
+void
 weldmsg (struct obj *obj)
 {
 	long savewornmask;

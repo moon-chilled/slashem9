@@ -320,7 +320,7 @@ curses_ext_cmd()
     if (iflags.extmenu) {
         return extcmd_via_menu();
     }
-    
+
     startx = 0;
     starty = 0;
     if (iflags.wc_popup_dialog) { /* Prompt in popup window */

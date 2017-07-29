@@ -69,7 +69,7 @@ static int merge_aligns(unsigned short *main, unsigned short *other)
 {
   int x;
   int count = 0;
-  
+
   for (x=0; x < MAX_ALGN; x++)
   {
     if (main[x] == 0)
@@ -109,12 +109,12 @@ static int choose_best_align(unsigned short *aligns, int cut_off)
 static void show_aligns(unsigned short *aligns)
 {
   int x;
-  
+
   fprintf(stderr, "<");
 
   for (x=0; x < MAX_ALGN; x++)
     fprintf(stderr, "%c", aligns[x] ? '|' : ' ');
-   
+
   fprintf(stderr, ">\n");
 }
 #endif
@@ -170,7 +170,7 @@ static int find_chopoff_point(const char *buf, int cur_align, int avail_w)
 {
   int len = strlen(buf);
   int x, min_x;
-  
+
   assert(cur_align < avail_w);
   assert(len > avail_w);
 
@@ -179,7 +179,7 @@ static int find_chopoff_point(const char *buf, int cur_align, int avail_w)
   for (x=avail_w - 1; x > min_x; x--)
     if (isspace(buf[x-1]) && ! isspace(buf[x]))
       return x;
- 
+
   return avail_w - 1;
 }
 
@@ -189,7 +189,7 @@ static void compute_text_bounds(struct TextWindow *win)
 
   /* compute height */
   win->calc_w = win->calc_h = 0;
-  
+
   for (item=win->lines; item; item=item->next)
   {
     int width = min(CO-1, strlen(item->str));
@@ -236,8 +236,8 @@ static void do_scan_text(struct TextWindow *win, int avail_w)
 
     if (! find_aligns(aligns, item->str))
     { item=item->next; continue; }
-    
-    for (y=1,succ=item->next; y < MIN_SCAN_Y && succ; 
+
+    for (y=1,succ=item->next; y < MIN_SCAN_Y && succ;
          y++,succ=succ->next)
     {
       if (is_line_blank(succ->str))
@@ -245,7 +245,7 @@ static void do_scan_text(struct TextWindow *win, int avail_w)
 
       if (! find_aligns(tmp_al, succ->str))
         break;
-      
+
       if (! merge_aligns(aligns, tmp_al))
         break;
     }
@@ -260,7 +260,7 @@ static void do_scan_text(struct TextWindow *win, int avail_w)
 
     if (pos_x == 0)
     { item=item->next; continue; }
-     
+
     assert(pos_x < sizeof(aligns));
 
     for (; y > 0; y--, item=item->next)
@@ -270,7 +270,7 @@ static void do_scan_text(struct TextWindow *win, int avail_w)
     {
       if (is_line_blank(item->str))
         break;
-          
+
       if (! find_aligns(tmp_al, item->str))
         break;
 
@@ -311,7 +311,7 @@ static void do_reformat_text(struct TextWindow *win, int avail_w)
       win->lines = item;  \
       item = succ;  \
     } while(0)
- 
+
 #undef  TRAIL_IT
 #define TRAIL_IT(buf)  do  \
     { int p;  \
@@ -325,10 +325,10 @@ static void do_reformat_text(struct TextWindow *win, int avail_w)
   /* Loop Invariants:
    *
    *    when `reformatting' is false:
-   *    
+   *
    *       +  item points at the current line to process.
    *       +  buf[], cur_align and cur_attr are unused.
-   *      
+   *
    *    when `reformatting' is true:
    *
    *       +  item points at the current line to process, which we
@@ -357,7 +357,7 @@ static void do_reformat_text(struct TextWindow *win, int avail_w)
 
       cur_align = item->align;
       cur_attr  = item->attr;
-       
+
       reformatting = 1;
       continue;
     }
@@ -372,12 +372,12 @@ static void do_reformat_text(struct TextWindow *win, int avail_w)
     if (len > avail_w)
     {
       pos_x = find_chopoff_point(item->str, cur_align, avail_w);
-       
+
       assert(pos_x > cur_align);
       assert(pos_x < len-1);
 
       len = pos_x;
-      
+
       /* build new line */
 
       while (item->str[pos_x] && isspace(item->str[pos_x]))
@@ -405,16 +405,16 @@ static void do_reformat_text(struct TextWindow *win, int avail_w)
 
       Z->next = item;
       item = Z;
-      
+
       continue;
     }
 
     /* is the next line part of the same block ? */
 
     if (! item->next ||
-        item->next->align != cur_align || 
+        item->next->align != cur_align ||
         item->next->attr  != cur_attr ||
-        is_line_blank(item->next->str) || 
+        is_line_blank(item->next->str) ||
         ! is_initial_blank(item->next->str, cur_align))
     {
       ADD_IT();
@@ -430,14 +430,14 @@ static void do_reformat_text(struct TextWindow *win, int avail_w)
     assert(succ->str);
 
     item->next = succ->next;
- 
+
     for (J=succ->str; *J && isspace(*J); J++)
     { /* nothing in here */ }
 
     strcpy(buf, item->str);
     strcat(buf, " ");
     strcat(buf, J);
-      
+
     TRAIL_IT(buf);
 
     free(item->str);
@@ -494,7 +494,7 @@ static struct TileSet * reformat_text_window(
    *          too long.
    */
   do_reformat_text(win, avail_w);
- 
+
   compute_text_bounds(win);
 
   return set;
@@ -513,7 +513,7 @@ static void draw_text_items(struct TextWindow *win)
   base = win->base;
   assert(base);
   assert(base->is_text);
- 
+
   /* choose background color */
   win->base->background = TEXT_BACK_COL;
 
@@ -524,7 +524,7 @@ static void draw_text_items(struct TextWindow *win)
     tilecol = sdlgl_attr_to_tilecol(item->attr);
 
     x = 0;
-    
+
     /* padding character */
     sdlgl_blank_area(base, x, y, 1, 1);
     x++;
@@ -547,7 +547,7 @@ void sdlgl_process_text_window(int window, struct TextWindow *win)
 
   int bottom_y;
   int pixel_w, pixel_h;
-  
+
   assert(! win->base);
 
   if (! win->lines)
@@ -559,12 +559,12 @@ void sdlgl_process_text_window(int window, struct TextWindow *win)
   sdlgl_top_win = window;
 
   compute_text_bounds(win);
-  
+
   font_set = reformat_text_window(win);
-  
-  win->base = sdlgl_new_tilewin(font_set, win->calc_w, 
+
+  win->base = sdlgl_new_tilewin(font_set, win->calc_w,
       win->calc_h, 1,0);
- 
+
   draw_text_items(win);
 
   /* here, strangely enough, is where we show the RIP image */
@@ -575,11 +575,11 @@ void sdlgl_process_text_window(int window, struct TextWindow *win)
 
   pixel_w = min(sdlgl_width, win->base->scale_w * win->calc_w);
   pixel_h = min(bottom_y,    win->base->scale_h * win->calc_h);
-   
+
   win->show_w = pixel_w / win->base->scale_w;
   win->show_h = pixel_h / win->base->scale_h;
 
-  assert(0 < win->show_w && win->show_w <= win->calc_w); 
+  assert(0 < win->show_w && win->show_w <= win->calc_w);
   assert(0 < win->show_h && win->show_h <= win->calc_h);
 
   sdlgl_map_tilewin(win->base, sdlgl_width - pixel_w,
@@ -588,7 +588,7 @@ void sdlgl_process_text_window(int window, struct TextWindow *win)
   /* set focus */
   win->focus_x = 0;
   win->focus_y = win->calc_h - win->show_h;
-  
+
   /* this flushes: */
   sdlgl_pan_window(window, 0, 0);
 
@@ -600,10 +600,10 @@ void sdlgl_process_text_window(int window, struct TextWindow *win)
         ch == 'q' || ch == 'n' || ch == 'y')
       break;
   }
- 
+
   if (win->is_rip)
     sdlgl_dismiss_RIP();
-  
+
   sdlgl_unmap_tilewin(win->base);
   sdlgl_free_tilewin(win->base);
   win->base = NULL;
@@ -640,9 +640,9 @@ void Sdlgl_display_file(const char *fname, boolean complain)
   f = dlb_fopen(fname, RDTMODE);
 #endif
 
-  if (!f) 
+  if (!f)
   {
-    if (complain) 
+    if (complain)
     {
       sprintf(buf, "Cannot open `%s' to display.", fname);
       Sdlgl_raw_print(buf);
@@ -653,13 +653,13 @@ void Sdlgl_display_file(const char *fname, boolean complain)
 
   datawin = Sdlgl_create_nhwindow(NHW_TEXT);
 
-  while (dlb_fgets(buf, BUFSZ, f) != NULL) 
+  while (dlb_fgets(buf, BUFSZ, f) != NULL)
   {
     /* NUL-terminate string */
     if ((cr = index(buf, '\n')) != 0) *cr = 0;
     if ((cr = index(buf, '\r')) != 0) *cr = 0;
 
-    if (index(buf, '\t') != 0) 
+    if (index(buf, '\t') != 0)
       tabexpand(buf);
 
     Sdlgl_putstr(datawin, 0, buf);

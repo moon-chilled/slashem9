@@ -26,7 +26,7 @@ msgpline_add(typ, pattern)
     pline_msg = tmp;
 }
 
-void 
+void
 msgpline_free (void)
 {
     struct _plinemsg *tmp = pline_msg;
@@ -40,7 +40,7 @@ msgpline_free (void)
     pline_msg = NULL;
 }
 
-int 
+int
 msgpline_type (char *msg)
 {
     struct _plinemsg *tmp = pline_msg;
@@ -139,7 +139,7 @@ You_buf (int siz)
 	return you_buf;
 }
 
-void 
+void
 free_youbuf (void)
 {
 	if (you_buf) free((void *) you_buf),  you_buf = NULL;
@@ -318,7 +318,7 @@ align_str(alignment)
     return "unknown";
 }
 
-void 
+void
 mstatusline (struct monst *mtmp)
 {
 	aligntyp alignment;
@@ -403,7 +403,7 @@ mstatusline (struct monst *mtmp)
 		info);
 }
 
-void 
+void
 ustatusline (void)
 {
 	char info[BUFSZ];
@@ -478,7 +478,7 @@ ustatusline (void)
 		info);
 }
 
-void 
+void
 self_invis_message (void)
 {
 	pline("%s %s.",

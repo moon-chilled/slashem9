@@ -261,7 +261,7 @@ X	.br;####'_\xNNN'             (Hexadecimal constant)
 X	.br;####'_\a'                (Ascii BELL)
 X	.br;####'_\v'                (Ascii Vertical Tab)
 X	.br;####_#if defined NAME    1 if defined, 0 if not
-X	.br;####_#if defined (NAME)  1 if defined, 0 if not  
+X	.br;####_#if defined (NAME)  1 if defined, 0 if not
 X	.br;####_#if sizeof (basic type)
 X	.br;####unary +
 X	.br;####123U, 123LU          Unsigned ints and longs.
@@ -346,7 +346,7 @@ X	The #if expression processor uses signed integers only.
 X	I.e, #if 0xFFFFu < 0 may be TRUE.
 X
 X#endif
-X
+X
 X#include	<stdio.h>
 X#include	<ctype.h>
 X#include	"cppdef.h"
@@ -489,7 +489,7 @@ X	"__LINE__",
 X	"__FILE__",
 X	NULL				/* Must be last			*/
 X};
-X
+X
 Xmain(argc, argv)
 Xint		argc;
 Xchar		*argv[];
@@ -570,7 +570,7 @@ X		exit(IO_ERROR);
 X	}
 X	exit(IO_NORMAL);		/* No errors or -E option set	*/
 X}
-X
+X
 XFILE_LOCAL
 Xcppmain()
 X/*
@@ -688,7 +688,7 @@ X		    wrongline = TRUE;		/* Output # line later	*/
 X	    }
 X	}					/* Continue until EOF	*/
 X}
-X
+X
 Xoutput(c)
 Xint		c;
 X/*
@@ -796,7 +796,7 @@ X	file->buffer[0] = EOS;		/* Initialize for first read	*/
 X	line = 1;			/* Working on line 1 now	*/
 X	wrongline = TRUE;		/* Force out initial #line	*/
 X}
-X
+X
 Xsetincdirs()
 X/*
 X * Append system-specific directories to the include directory list.
@@ -858,7 +858,7 @@ X	*incend++ = "SY:";			/* System (boot) disk	*/
 X#define	MAXINCLUDE	(NINCLUDE - 3 - IS_INCLUDE)
 X#endif
 X}
-X
+X
 Xint
 Xdooptions(argc, argv)
 Xint		argc;
@@ -998,7 +998,7 @@ X		NULLST);
 X	}
 X	return (j);			/* Return new argc		*/
 X}
-X
+X
 X#if HOST != SYS_UNIX
 XFILE_LOCAL
 Xzap_uc(ap)
@@ -1077,7 +1077,7 @@ X	    tp[24] = '"';			/* Overwrite newline	*/
 X#endif
 X	}
 X}
-X
+X
 X#if HOST == SYS_VMS
 X/*
 X * getredirection() is intended to aid in porting C programs
@@ -1366,14 +1366,14 @@ X		cerror("Redefining defined variable \"%s\"", dp->name);
 X	    }
 X	    if (old != NULL)			/* We don't need the	*/
 X		free(old);			/* old definition now.	*/
-X	}	 
+X	}
 X	return;
 X
 Xbad_define:
 X	cerror("#define syntax error", NULLST);
 X	inmacro = FALSE;			/* Stop <newline> hack	*/
 X}
-X
+X
 Xcheckparm(c, dp)
 Xint	c;
 XDEFBUF		*dp;
@@ -1400,7 +1400,7 @@ X	    save(DEF_MAGIC);			/* Save magic marker	*/
 X	for (cp = token; *cp != EOS;)		/* And save		*/
 X	    save(*cp++);			/* The token itself	*/
 X}
-X
+X
 X#if STRING_FORMAL
 Xstparmscan(delim, dp)
 Xint		delim;
@@ -1453,7 +1453,7 @@ X	wp = workp;			/* Here's where it starts	*/
 X	if (!scanstring(delim, save))
 X	    return;			/* Exit on scanstring error	*/
 X	workp[-1] = EOS;		/* Erase trailing quote		*/
-X	wp++;				/* -> first string content byte	*/ 
+X	wp++;				/* -> first string content byte	*/
 X	for (i = 0; i < nargs; i++) {
 X	    if (streq(parlist[i], wp)) {
 X		*wp++ = MAC_PARM + PAR_MAC;	/* Stuff a magic marker	*/
@@ -1466,7 +1466,7 @@ X	}
 X	workp[-1] = wp[-1];		/* Nope, reset end quote.	*/
 X}
 X#endif
-X
+X
 Xdoundef()
 X/*
 X * Remove the symbol from the defined list.
@@ -1514,7 +1514,7 @@ X	else {
 X	    *parmp++ = c;
 X	}
 X}
-X
+X
 X/*
 X *		M a c r o   E x p a n s i o n
 X */
@@ -1616,7 +1616,7 @@ X	case DEF_NOARGS:		/* No parameters just stuffs	*/
 X	    expstuff(tokenp);		/* Do actual parameters		*/
 X	}				/* nargs switch			*/
 X}
-X
+X
 XFILE_LOCAL int
 Xexpcollect()
 X/*
@@ -1679,7 +1679,7 @@ X#endif
 X	}					/* Collect all args.	*/
 X	return (TRUE);				/* Normal return	*/
 X}
-X
+X
 XFILE_LOCAL
 Xexpstuff(tokenp)
 XDEFBUF		*tokenp;		/* Current macro being expanded	*/
@@ -1741,7 +1741,7 @@ X	if (debug > 1)
 X	    printf("macroline: \"%s\"\n", file->buffer);
 X#endif
 X}
-X
+X
 X#if DEBUG
 Xdumpparm(why)
 Xchar		*why;

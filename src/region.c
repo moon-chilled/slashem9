@@ -315,7 +315,7 @@ NhRegion *reg;
 		newsym(i, j);
 	}
     /* Check for player now... */
-    if (inside_region(reg, u.ux, u.uy)) 
+    if (inside_region(reg, u.ux, u.uy))
 	set_hero_inside(reg);
     else
 	clear_hero_inside(reg);
@@ -353,7 +353,7 @@ NhRegion *reg;
  * Remove all regions and clear all related data (This must be down
  * when changing level, for instance).
  */
-void 
+void
 clear_regions (void)
 {
     int i;
@@ -372,7 +372,7 @@ clear_regions (void)
  * It makes the regions age, if necessary and calls the appropriate
  * callbacks when needed.
  */
-void 
+void
 run_regions (void)
 {
     int i, j, k;
@@ -517,7 +517,7 @@ xchar x, y;
 /*
  * Checks player's regions after a teleport for instance.
  */
-void 
+void
 update_player_regions (void)
 {
     int i;
@@ -532,7 +532,7 @@ update_player_regions (void)
 /*
  * Ditto for a specified monster.
  */
-void 
+void
 update_monster_region (struct monst *mon)
 {
     int i;
@@ -556,7 +556,7 @@ update_monster_region (struct monst *mon)
  * This happens, for instance, when a monster grows and
  * need a new structure (internally that is).
  */
-void 
+void
 replace_mon_regions (struct monst *monold, struct monst *monnew)
 {
     int i;
@@ -571,7 +571,7 @@ replace_mon_regions (struct monst *monold, struct monst *monnew)
 /*
  * Remove monster from all regions it was in (ie monster just died)
  */
-void 
+void
 remove_mon_from_regions (struct monst *mon)
 {
     int i;
@@ -611,7 +611,7 @@ xchar x, y;
 /**
  * save_regions :
  */
-void 
+void
 save_regions (int fd, int mode)
 {
     int i, j;
@@ -903,7 +903,7 @@ void * p2;
 	NhRegion *reg = (NhRegion *) p1;
 	struct monst *cthulhu = NULL;
 	coord cc;
-	
+
 	cx = (reg->bounding_box.lx + reg->bounding_box.hx) / 2;
 	cy = (reg->bounding_box.ly + reg->bounding_box.hy) / 2;
 
@@ -915,7 +915,7 @@ void * p2;
 	}
 
 	/* Make sure Cthulhu doesn't get the Amulet again! :-) */
-	cthulhu = makemon(&mons[PM_CTHULHU], cx, cy, 
+	cthulhu = makemon(&mons[PM_CTHULHU], cx, cy,
 				MM_NOCOUNTBIRTH | NO_MINVENT);
 	if (cthulhu && canseemon(cthulhu))
 	    pline("%s reforms!", Monnam(cthulhu));

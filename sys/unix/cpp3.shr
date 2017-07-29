@@ -115,7 +115,7 @@ X#else
 X#define	isbinary(op)	(op >= FIRST_BINOP && op <= LAST_BINOP)
 X#define	isunary(op)	(op >= FIRST_UNOP  && op <= LAST_UNOP)
 X#endif
-X
+X
 X/*
 X * The following definitions are used to specify basic variable sizes.
 X */
@@ -159,7 +159,7 @@ X#endif
 X#ifndef	S_PFPTR
 X#define S_PFPTR		(sizeof (int (*)()))
 X#endif
-X
+X
 Xtypedef struct types {
 X    short	type;			/* This is the bit if		*/
 X    char	*name;			/* this is the token word	*/
@@ -204,7 +204,7 @@ X    { T_DOUBLE,	S_DOUBLE,	S_PDOUBLE	},	/* double	*/
 X    { T_FPTR,	0,		S_PFPTR		},	/* int (*()) 	*/
 X    { 0,	0,		0		},	/* End of table	*/
 X};
-X
+X
 Xint
 Xeval()
 X/*
@@ -373,7 +373,7 @@ X#endif
 X	    }					/* op1 switch end	*/
 X	}					/* Stack unwind loop	*/
 X}
-X
+X
 XFILE_LOCAL int
 Xevallex(skip)
 Xint		skip;		/* TRUE if short-circuit evaluation	*/
@@ -492,7 +492,7 @@ X	    unget();
 X	}
 X	return (t);
 X}
-X
+X
 XFILE_LOCAL int
 Xdosizeof()
 X/*
@@ -615,7 +615,7 @@ X	 */
 X	return (value == 0 || value ^ (value - 1) == (value * 2 - 1));
 X#endif
 X}
-X
+X
 XFILE_LOCAL int
 Xevalnum(c)
 Xint	c;
@@ -654,7 +654,7 @@ X	    c = cget();
 X	unget();
 X	return (value);
 X}
-X
+X
 XFILE_LOCAL int
 Xevalchar(skip)
 Xint		skip;		/* TRUE if short-circuit evaluation	*/
@@ -757,7 +757,7 @@ X	}
 X	instring = FALSE;
 X	return (value);
 X}
-X
+X
 XFILE_LOCAL int *
 Xevaleval(valp, op, skip)
 Xint	*valp;
@@ -898,7 +898,7 @@ X	}
 X	*valp++ = v1;
 X	return (valp);
 X}
-X
+X
 X#ifdef	DEBUG_EVAL
 Xdumpstack(opstack, opp, value, valp)
 XOPTAB		opstack[NEXP];	/* Operand stack		*/
@@ -993,7 +993,7 @@ X *		cerror & cwarn take a format and a single string argument.
 X *		cierror & ciwarn take a format and a single int (char) argument.
 X *		cfatal takes a format and a single string argument.
 X */
-X
+X
 X/*
 X * This table must be rewritten for a non-Ascii machine.
 X *
@@ -1038,7 +1038,7 @@ X   000,   000,   000,   000,   000,   000,   000,   000, /*   80 .. FF	*/
 X   000,   000,   000,   000,   000,   000,   000,   000, /*   80 .. FF	*/
 X   000,   000,   000,   000,   000,   000,   000,   000, /*   80 .. FF	*/
 X};
-X
+X
 Xskipnl()
 X/*
 X * Skip to the end of the current input line.
@@ -1068,7 +1068,7 @@ X	} while (type[c] == SPA);
 X#endif
 X	return (c);
 X}
-X
+X
 Xscanid(c)
 Xint	c;				/* First char of id	*/
 X/*
@@ -1111,7 +1111,7 @@ X	    c = get();
 X	}
 X	return (c);
 X}
-X
+X
 Xint
 Xcatenate()
 X/*
@@ -1175,7 +1175,7 @@ X#else
 X	return (FALSE);				/* Not supported	*/
 X#endif
 X}
-X
+X
 Xint
 Xscanstring(delim, outfun)
 Xint	delim;			/* ' or "			*/
@@ -1208,7 +1208,7 @@ X	    unget();
 X	    return (FALSE);
 X	}
 X}
-X
+X
 Xscannumber(c, outfun)
 Xint	c;				/* First char of number	*/
 Xint	(*outfun)();			/* Output/store func	*/
@@ -1334,7 +1334,7 @@ Xnomore:	unget();				/* Not part of a number	*/
 X	if (octal89 && radix == 8)
 X	    cwarn("Illegal digit in octal number", NULLST);
 X}
-X
+X
 Xsave(c)
 Xint	c;
 X{
@@ -1399,7 +1399,7 @@ X	if ((result = malloc((unsigned) size)) == NULL)
 X	    cfatal("Out of memory", NULLST);
 X	return (result);
 X}
-X
+X
 X/*
 X *			C P P   S y m b o l   T a b l e s
 X */
@@ -1457,7 +1457,7 @@ X	    dp = dp->link;			/* Nope, try next one	*/
 X	}
 X	return ((temp == 0) ? dp : NULL);
 X}
-X
+X
 XDEFBUF *
 Xdefendel(name, delete)
 Xchar		*name;
@@ -1507,7 +1507,7 @@ X	    strcpy(dp->name, name);
 X	}
 X	return (dp);
 X}
-X
+X
 X#if DEBUG
 X
 Xdumpdef(why)
@@ -1556,7 +1556,7 @@ X	}
 X	putchar('\n');
 X}
 X#endif
-X
+X
 X/*
 X *			G E T
 X */
@@ -1742,7 +1742,7 @@ X	else if (c == '\f' || c == VT)		/* Form Feed, Vertical	*/
 X	    c = ' ';				/* Tab are whitespace	*/
 X	return (c);				/* Just return the char	*/
 X}
-X
+X
 Xunget()
 X/*
 X * Backup the pointer to reread the last character.  Fatal error
@@ -1793,7 +1793,7 @@ X	} while (c == TOK_SEP);
 X#endif
 X	return (c);
 X}
-X
+X
 X/*
 X * Error messages and other hacks.  The first byte of severity
 X * is 'S' for string arguments and 'I' for int arguments.  This

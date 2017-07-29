@@ -41,7 +41,7 @@ static enum
   LOGST_SHOW,
   LOGST_FADE_OUT,
   LOGST_DONE
-} 
+}
 logo_state = LOGST_NOT_BEGUN;
 
 static int logo_progress, logo_target, logo_epoch;
@@ -66,13 +66,13 @@ void sdlgl_tile_shutdown(void)
     sdlgl_free_tileset(sdlgl_tiles);
     sdlgl_tiles = NULL;
   }
-  
+
   if (rip_set)
   {
     sdlgl_free_tileset(rip_set);
     rip_set = NULL;
   }
-  
+
   if (logo_set)
   {
     sdlgl_free_tileset(logo_set);
@@ -81,7 +81,7 @@ void sdlgl_tile_shutdown(void)
 
   sdlgl_free_extra_shapes();
 }
-  
+
 /* ---------------------------------------------------------------- */
 
 
@@ -89,7 +89,7 @@ void sdlgl_add_extrashape(struct TileWindow *win,
     enum ShapeType type, short x, short y, int par1, int par2)
 {
   struct ExtraShape *shape;
-  
+
   if (win->extra_num >= win->extra_max)
     return;
 
@@ -146,12 +146,12 @@ static void do_load_tileset(void)
 void sdlgl_start_logo(void)
 {
   const char *pos;
-  const char *copyright_str = COPYRIGHT_BANNER_A "\n" 
+  const char *copyright_str = COPYRIGHT_BANNER_A "\n"
       COPYRIGHT_BANNER_B "\n" COPYRIGHT_BANNER_C;
 
   int x, y;
   int w1, h1, w2, h2;
-    
+
   logo_set = sdlgl_load_tileset("gllogo.png", 16,16, 0,0, &logo_w, &logo_h);
 
   assert(logo_set);
@@ -215,7 +215,7 @@ void sdlgl_start_logo(void)
   w2 = logo_copyright->total_w * logo_copyright->set->tile_w;
   h2 = logo_copyright->total_h * logo_copyright->set->tile_h;
 
-  sdlgl_map_tilewin(logo_copyright, 20, sdlgl_height - h1 - 40 - h2, 
+  sdlgl_map_tilewin(logo_copyright, 20, sdlgl_height - h1 - 40 - h2,
       w2, h2, 2);
 
   sdlgl_start_fading(sdlgl_width, logo_copyright->scr_y);
@@ -250,21 +250,21 @@ int sdlgl_iterate_logo(void)
   }
 
   /* draw it and wait */
-  sdlgl_mark_dirty(0, logo_copyright->scr_y, 
+  sdlgl_mark_dirty(0, logo_copyright->scr_y,
       sdlgl_width, sdlgl_height - logo_copyright->scr_y, 0);
   sdlgl_flush();
 
   last_progress = logo_progress;
   logo_progress = (sdlgl_get_time() - logo_epoch);
   assert(logo_progress >= 0);
-  
+
   /* when fading out, limit the jump to a bit over 1/3 */
-  if (logo_state == LOGST_FADE_OUT && 
+  if (logo_state == LOGST_FADE_OUT &&
       (logo_progress - last_progress) > 350)
   {
     logo_progress = last_progress + 350;
   }
-  
+
   if (logo_progress < logo_target)
     return 0;
 
@@ -283,7 +283,7 @@ int sdlgl_iterate_logo(void)
   /* all done.  Clean up the mess */
   logo_state  = LOGST_DONE;
   fade_amount = 0;
-  
+
   sdlgl_unmap_tilewin(logo_win);
   sdlgl_free_tilewin(logo_win);
   logo_win = NULL;
@@ -342,7 +342,7 @@ static void add_rip_info(const char *str, int len, int y)
 
   len = min(STONE_MAX_INFO, len);
   shift_x = (STONE_MAX_INFO - len) / 2;
-  
+
   if (len == 0)
     return;
 
@@ -355,8 +355,8 @@ static void add_rip_info(const char *str, int len, int y)
 
 static void add_rip_killer(const char *str, int y)
 {
-  struct TempLine 
-  { 
+  struct TempLine
+  {
     char s[STONE_MAX_INFO + 1 /* NUL */];
   }
   bufs[STONE_INFO_LINES];  /* NB: top down */
@@ -391,7 +391,7 @@ static void add_rip_killer(const char *str, int y)
 
     memcpy(bufs[line].s, str, len);
     bufs[line].s[len] = 0;
-    
+
     str += len;
 
     while (*str == ' ')
@@ -400,12 +400,12 @@ static void add_rip_killer(const char *str, int y)
 
   assert(line > 0 && line <= STONE_INFO_LINES);
 
-  if ('a' <= bufs[0].s[0] && bufs[0].s[0] <= 'z') 
+  if ('a' <= bufs[0].s[0] && bufs[0].s[0] <= 'z')
     bufs[0].s[0] += 'A' - 'a';
 
   /* center the lines vertically */
   y += (STONE_INFO_LINES - line + 1) / 2;
-  
+
   for (i=0; i < line; i++)
     add_rip_info(bufs[i].s, strlen(bufs[i].s), y + line - 1 - i);
 }
@@ -446,11 +446,11 @@ int sdlgl_display_RIP(int how)
   strcpy(name_buf, plname);
   name_buf[STONE_MAX_NAME] = 0;
 
-  if ('a' <= name_buf[0] && name_buf[0] <= 'z') 
+  if ('a' <= name_buf[0] && name_buf[0] <= 'z')
     name_buf[0] += 'A' - 'a';
 
   rip_name = sdlgl_new_tilewin(sdlgl_font_message, strlen(name_buf), 1, 1,0);
-  rip_info = sdlgl_new_tilewin(sdlgl_font_8, STONE_MAX_INFO, 
+  rip_info = sdlgl_new_tilewin(sdlgl_font_8, STONE_MAX_INFO,
       2 + STONE_INFO_LINES, 1,0);
 
   rip_name->see_through = 1;
@@ -466,7 +466,7 @@ int sdlgl_display_RIP(int how)
       rip_name->scale_w = sdlgl_font_message->tile_w * 4 / 2;
     if (rip_name->scale_h > sdlgl_font_message->tile_h * 4 / 2)
       rip_name->scale_h = sdlgl_font_message->tile_h * 4 / 2;
-     
+
     if (rip_name->scale_w > rip_name->scale_h * 2)
       rip_name->scale_w = rip_name->scale_h * 2;
     else if (rip_name->scale_h > rip_name->scale_w * 4)
@@ -477,28 +477,28 @@ int sdlgl_display_RIP(int how)
   }
 
   sdlgl_store_str(rip_name, 0, 0, name_buf, rip_name->total_w, BLACK);
-      
+
   /* Put $ on stone */
   sprintf(info_buf, "%ld Au", u.ugold);
   add_rip_info(info_buf, strlen(info_buf), 1 + STONE_INFO_LINES);
 
   /* Put death type on stone */
-  switch (killer_format) 
+  switch (killer_format)
   {
     case KILLED_BY_AN:
       strcpy(info_buf, killed_by_prefix[how]);
       strcat(info_buf, an(killer));
       break;
-    
+
     case KILLED_BY:
       strcpy(info_buf, killed_by_prefix[how]);
       strcat(info_buf, killer);
       break;
-    
+
     case NO_KILLER_PREFIX:
       strcpy(info_buf, killer);
       break;
-      
+
     default:
       strcpy(info_buf, "Killed by a bad switch");
       break;
@@ -536,7 +536,7 @@ void sdlgl_dismiss_RIP(void)
   sdlgl_unmap_tilewin(rip_win);
   sdlgl_free_tilewin(rip_win);
   rip_win = NULL;
-  
+
   sdlgl_unmap_tilewin(rip_name);
   sdlgl_free_tilewin(rip_name);
   rip_name = NULL;
@@ -549,7 +549,7 @@ void sdlgl_dismiss_RIP(void)
 /* ---------------------------------------------------------------- */
 
 
-struct TileWindow *sdlgl_new_tilewin(struct TileSet *set, 
+struct TileWindow *sdlgl_new_tilewin(struct TileSet *set,
     int total_w, int total_h, int is_text, int is_map)
 {
   int total = total_w * total_h;
@@ -581,16 +581,16 @@ struct TileWindow *sdlgl_new_tilewin(struct TileSet *set,
   win->curs_block = 0;
   win->curs_color = OUTLINE_COL;
   win->has_border = 0;
-   
+
   /* setup tile arrays */
   win->tiles  = (struct TilePair *) alloc(total * sizeof(struct TilePair));
- 
+
   sdlgl_blank_area(win, 0, 0, total_w, total_h);
 
   /* setup extra_shape array */
   win->extra_max = is_map ? 256 : 10;
   win->extra_num = 0;
-  
+
   win->extra_shapes = (struct ExtraShape *) alloc(win->extra_max *
       sizeof(struct ExtraShape));
 
@@ -655,7 +655,7 @@ static int tilewin_compare(const void *p1, const void *p2)
   return (A->scr_depth - B->scr_depth);
 }
 
-void sdlgl_map_tilewin(struct TileWindow *win, int x, int y, 
+void sdlgl_map_tilewin(struct TileWindow *win, int x, int y,
     int w, int h, int depth)
 {
   int i;
@@ -687,7 +687,7 @@ void sdlgl_map_tilewin(struct TileWindow *win, int x, int y,
 void sdlgl_unmap_tilewin(struct TileWindow *win)
 {
   int i;
-  
+
   assert(win->scr_depth > 0);
   assert(win->mapped_idx >= 0);
 
@@ -709,7 +709,7 @@ void sdlgl_unmap_tilewin(struct TileWindow *win)
   assert(i != mapped_num);
 
   mapped_num--;
-  
+
   /* if there's a gap, close it by shifting stuff down */
   for (; i < mapped_num; i++)
     mapped_tilewins[i] = mapped_tilewins[i+1];
@@ -747,7 +747,7 @@ static GH_INLINE void mark_dirty_tiles(struct TileWindow *win,
 
   if (x2 <= x || y2 <= y)
     return;
-   
+
   sdlgl_mark_dirty(x, y, x2 - x, y2 - y, win->scr_depth);
 }
 
@@ -758,7 +758,7 @@ void sdlgl_store_char(struct TileWindow *win, int x, int y,
 
   assert(0 <= x && x < win->total_w);
   assert(0 <= y && y < win->total_h);
-  
+
   win->tiles[offset].fg = CHAR_2_TILE(ch);
   win->tiles[offset].mg = TILE_EMPTY;
   win->tiles[offset].u.col = col;
@@ -778,7 +778,7 @@ int sdlgl_store_str(struct TileWindow *win, int x, int y,
 
   assert(0 <= x && x < win->total_w);
   assert(0 <= y && y < win->total_h);
-  
+
   /* NOTE: assumes string has been clipped to window bounds */
   for (; *str && maxlen > 0; str++, maxlen--, offset++)
   {
@@ -832,7 +832,7 @@ void sdlgl_blank_area(struct TileWindow *win, int x, int y, int w, int h)
   assert(w > 0 && h > 0);
   assert(0 <= x && x+w <= win->total_w);
   assert(0 <= y && y+h <= win->total_h);
-  
+
   mark_dirty_tiles(win, x, y, w, h);
 
   for (; h > 0; h--, y++)
@@ -863,7 +863,7 @@ void sdlgl_blank_area(struct TileWindow *win, int x, int y, int w, int h)
   }
 }
 
-void sdlgl_copy_area(struct TileWindow *win, int x, int y, 
+void sdlgl_copy_area(struct TileWindow *win, int x, int y,
     int w, int h, int x2, int y2)
 {
   int dx = x - x2;
@@ -877,7 +877,7 @@ void sdlgl_copy_area(struct TileWindow *win, int x, int y,
 
   mark_dirty_tiles(win, x2, y2, w, h);
 
-  /* diagonal moves not supported (yet). 
+  /* diagonal moves not supported (yet).
    */
   assert(dx == 0 || dy == 0);
 
@@ -895,7 +895,7 @@ void sdlgl_copy_area(struct TileWindow *win, int x, int y,
   {
     y  += h - 1;
     y2 += h - 1;
-    
+
     for (; h > 0; h--, y--, y2--)
     {
       struct TilePair *src = win->tiles + (y  * win->total_w + x);
@@ -918,7 +918,7 @@ void sdlgl_copy_area(struct TileWindow *win, int x, int y,
 
 /* transfer tiles between two _different_ tile windows.
  */
-void sdlgl_transfer_area(struct TileWindow *swin, int sx, int sy, 
+void sdlgl_transfer_area(struct TileWindow *swin, int sx, int sy,
       int w, int h, struct TileWindow *dwin, int dx, int dy)
 {
   assert(w > 0 && h > 0);
@@ -937,12 +937,12 @@ void sdlgl_transfer_area(struct TileWindow *swin, int sx, int sy,
     memcpy(dst, src, sizeof(struct TilePair) * w);
   }
 }
- 
+
 /* transfer a line of tiles between a tile window and a buffer.  If
  * `retrieve' is 1, the buffer is being filled, otherwise the buffer
  * is being transferred to the tile window.
  */
-void sdlgl_transfer_line(struct TileWindow *win, int x, int y, 
+void sdlgl_transfer_line(struct TileWindow *win, int x, int y,
       int w, struct TilePair *buffer, int retrieve)
 {
   struct TilePair *win_pos;
@@ -950,7 +950,7 @@ void sdlgl_transfer_line(struct TileWindow *win, int x, int y,
   assert(w > 0);
   assert(0 <= x && x+w <= win->total_w);
   assert(0 <= y && y < win->total_h);
-  
+
   win_pos = win->tiles + (y * win->total_w) + x;
 
   if (retrieve)
@@ -963,7 +963,7 @@ void sdlgl_transfer_line(struct TileWindow *win, int x, int y,
     mark_dirty_tiles(win, x, y, w, 1);
   }
 }
- 
+
 void sdlgl_set_scale(struct TileWindow *win, int h)
 {
   int th = win->set->tile_h;
@@ -1010,9 +1010,9 @@ int sdlgl_test_tile_visible(int start_idx, int x, int y, int w, int h)
 {
   int x2 = x + w - 1;
   int y2 = y + h - 1;
-  
+
   int scr_x2, scr_y2;
-  
+
   assert(start_idx >= 0);
 
   for (; start_idx < mapped_num; start_idx++)
@@ -1023,13 +1023,13 @@ int sdlgl_test_tile_visible(int start_idx, int x, int y, int w, int h)
 
     if (win->scr_depth < start_depth)
       continue;
-     
+
     if (win->see_through)
       continue;
 
     scr_x2 = win->scr_x + win->scr_w - 1;
     scr_y2 = win->scr_y + win->scr_h - 1;
-      
+
     if (win->scr_x <= x && x2 <= scr_x2 &&
         win->scr_y <= y && y2 <= scr_y2)
       return 0;
@@ -1053,7 +1053,7 @@ static void draw_tilewindow(struct TileWindow *win)
   if (! win->see_through)
     sdlgl_draw_background(win->scr_x, win->scr_y, win->scr_w, win->scr_h,
         win->background, win->mapped_idx + 1, win->scr_depth);
- 
+
   /* use scissor test to clip tiles to the window.  This is for tiles
    * that cross the window boundary -- we already skip tiles that lie
    * completely outside of the window.
@@ -1073,17 +1073,17 @@ static void draw_tilewindow(struct TileWindow *win)
   sh = win->scale_h;
   sfw = win->scale_full_w;
   sfh = win->scale_full_h;
- 
+
   top    = win->scr_y + win->scr_h;
   bottom = win->scr_y;
   left   = win->scr_x;
   right  = win->scr_x + win->scr_w;
-  
+
   /* TWO PASSES: first draw all floor tiles, which are guaranteed to
    * never overlap (in Isometric mode).  Secondly, draw the other
    * stuff on top.  Call this "poor man's Z buffering" :).
    */
- 
+
   if (! win->is_text)
   {
     sdlgl_begin_tile_draw(1, 0);
@@ -1106,7 +1106,7 @@ static void draw_tilewindow(struct TileWindow *win)
         cur = win->tiles + (y * win->total_w + x);
 
         if (cur->u.bg != TILE_EMPTY)
-            sdlgl_draw_tile(win, sx, sy, sfw, sfh, cur->u.bg, 0, 
+            sdlgl_draw_tile(win, sx, sy, sfw, sfh, cur->u.bg, 0,
                 /* flags */ 0, /* layer */ 0);
       }
     }
@@ -1129,10 +1129,10 @@ static void draw_tilewindow(struct TileWindow *win)
       sx = win->scr_x - win->pan_x + x * sw + y * win->scale_skew;
       if (sx + sfw <= left || sx >= right)
         continue;
-      
+
       if (!sdlgl_test_tile_visible(win->mapped_idx + 1, sx, sy, sfw, sfh))
         continue;
-      
+
       cur = win->tiles + (y * win->total_w + x);
 
       /* for non-text windows, tilecol is unused */
@@ -1167,11 +1167,11 @@ static void draw_tilewindow(struct TileWindow *win)
 void sdlgl_draw_mapped(void)
 {
   int i;
-  
+
   /* clear any parts of the screen that windows may not cover.  We are
    * using draw_background() to limit the amount to draw.
    */
-  sdlgl_draw_background(0, 0, sdlgl_width, sdlgl_height, 
+  sdlgl_draw_background(0, 0, sdlgl_width, sdlgl_height,
       RGB_MAKE(0, 0, 0), 0 /* start_idx */, 0 /* depth */);
 
   for (i=0; i < mapped_num; i++)

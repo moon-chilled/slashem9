@@ -85,7 +85,7 @@ development and improvement of Slash'EM but many others date back to
 earlier variants and patches.  Here is the original documentation of
 the various bits that went into the original creation of Slash'EM.
 
-From SLASHV6 
+From SLASHV6
 ------------
 (Quoted directly from a news post by Tom Proudfoot)
 The changes from Nethack Plus, except for:
@@ -279,7 +279,7 @@ This file contains information on the following topics:
 (1) CLASSES:       Abilities, Intrinsics and Maximum Stats.
 (2) OBJECTS:       New items list.
 (3) SHOPS:         List of "Special Services" and info on Shopkeepers.
-(4) ARTIFACTS:     List of new artifacts and info on how to get them. 
+(4) ARTIFACTS:     List of new artifacts and info on how to get them.
 (5) GENERAL:       Anything not covered above.
 (6) SPECIAL NOTES: Discalmers and information on Patches and Bugs
 
@@ -290,7 +290,7 @@ This file contains information on the following topics:
 A lot of the classes (new and old) have special abilites as of now, I'll
 list as many as I can remember:
 
-        "A" ->  Heheh ... when wielding you bullwhip try walking over a 
+        "A" ->  Heheh ... when wielding you bullwhip try walking over a
                 trapdoor some time :)
 
                 That fedora you are wearing .. there's something special
@@ -306,9 +306,9 @@ list as many as I can remember:
                 I mean next time you play.
 
         "D" ->  Well, the ability to polymorph with out risk of level change
-                or system shock is good enough, in addition you get the 
+                or system shock is good enough, in addition you get the
                 ability to polymorph at will (costs 10 energy) at level 6.
-                
+
         "E" ->  Pretty standard really, High Dexterity and Infravision.
 
         "F" ->  Ability to polymorph into a baby red dragon gained at level 7,
@@ -316,7 +316,7 @@ list as many as I can remember:
                 costs 25 mana, full costs 50. If you wear red dragon scale
                 mail you can polymorph into a full red dragon at level 7 and
                 above for a cost of 35 energy.
-        
+
         "H" ->  Spell casting suffers if a shield or body armor is worn.
 
         "I" ->  See "F" except it's a white dragon.
@@ -324,19 +324,19 @@ list as many as I can remember:
         "K" ->  Can get Excalibur via dipping a long sword into a fountain.
                 (All other lawful classes have a MUCH lower chanch)
 
-        "L" ->  Hehe .. is EVIL! Can eat humans without penelty (actually, 
-                it's GOOD to eat them :), ability to poly into a werewolf at 
+        "L" ->  Hehe .. is EVIL! Can eat humans without penelty (actually,
+                it's GOOD to eat them :), ability to poly into a werewolf at
                 level 3. Is immune to other forms of Lycanropy and doesn't
                 randomly change, you must use the CTRL-Y command (costs 10
                 energy to transform into/out of werewolf form)
 
         "M" ->  Definatly has the most benifits (and hinderances :). You
                 do 1d3 / 5 levels + 1 / level until 20 damage when not using
-                any weapon (ie, you bare hands), -1 Ac per 2 levels and a 
+                any weapon (ie, you bare hands), -1 Ac per 2 levels and a
                 chanch of stuning or seriously maiming an opponent with
                 bare hand attacks. Can hit monsters hit only by + level/4
-                weapons. Hinderances, can not wear body armor or a shield 
-                (well, you CAN but it's not recomended ... you bonuses are 
+                weapons. Hinderances, can not wear body armor or a shield
+                (well, you CAN but it's not recomended ... you bonuses are
                 severly diminished) may not eat ANYTHING he kills, if he uses
                 any form of weapon, he suffers a -4 hit and -2 damage (and
                 gets no bonus)
@@ -347,82 +347,82 @@ list as many as I can remember:
                 It's a good idea to wear light (or no) armor while doing so.
 
         "S" ->  No change.
-        
+
         "T" ->  Couldn't think of anything  ...
 
         "V" ->  Their good enough already!
 
         "W" ->  Best spellcasters in the game! See Healer armor restrictions
                 on spell casting.
-        
+
 As you may have noticed if you have played the game, the usual stat maximums
 of 18 have been altered for some classes allowing them to go as high as 21
 in one case and as low as 7 in another. Here is a chart containing the
 information for each class.
-                           
+
 
  CLASS:  STR:   INT:  WIS:  DEX:  CON:  CHR:   NOTE: Some classes may have
-  "A"    18     19    18    19    17    19           higher maximum averages   
+  "A"    18     19    18    19    17    19           higher maximum averages
   "B"    20     12    16    18    20    10           than others. This is
   "C"    20     14    16    18    20    15           done to reduce the power
-  "D"    18/**  18    18    18    18    18           of really powerful 
+  "D"    18/**  18    18    18    18    18           of really powerful
   "E"    18/50  19    16    21    13    19           classes (Like Barbarian)
-  "F"    15/50  19    17    19    16    18           and to increase weak 
+  "F"    15/50  19    17    19    16    18           and to increase weak
   "H"    14     19    19    19    19    18           ones (Like Healer)
-  "I"    18/50  19    17    19    16    18  
+  "I"    18/50  19    17    19    16    18
   "K"    19     17    19    13    18    19     Also, minimum for all classes
   "L"    20     20    18    18    20     7     are 3 for each stat.
-  "M"    10     20    20    18    20    18  
-  "P"    18/**  17    20    15    18    18  
-  "R"    18/**  17    17    20    17    16  
-  "S"    19     15    15    20    19    15  
-  "T"    18/50  19    19    15    18    19  
-  "V"    20     12    17    16    20    16  
-  "W"    12     20    20    19    16    18  
+  "M"    10     20    20    18    20    18
+  "P"    18/**  17    20    15    18    18
+  "R"    18/**  17    17    20    17    16
+  "S"    19     15    15    20    19    15
+  "T"    18/50  19    19    15    18    19
+  "V"    20     12    17    16    20    16
+  "W"    12     20    20    19    16    18
 
 Finally, Intrinsics.  Well, their self explanitory so here's the list.
 
  CLASS:    LEVEL:   INTRINSIC GAINED:
-  "A"        1      Stealth      
-             1      Fast      
-             5      See Invisible      
+  "A"        1      Stealth
+             1      Fast
+             5      See Invisible
             10      Searching
-      
-  "B"        1      Poison Resistance      
+
+  "B"        1      Poison Resistance
              4      Stealth
              7      Fast
 
   "C"        7      Fast
             15      Warning
-        
-  "D"        1      Polymorph      
+
+  "D"        1      Polymorph
              9      Polymorph Control
-       
-  "E"        1      Sleep Resistance      
-             1      See Invisible      
-             1      Searching      
+
+  "E"        1      Sleep Resistance
+             1      See Invisible
+             1      Searching
              7      Fast
-       
-  "F"        1      Fire Resistance      
+
+  "F"        1      Fire Resistance
              7      Shock Resistance
             13      Cold Resistance
-       
-  "H"        1      Poison Resistance      
+
+  "H"        1      Poison Resistance
             15      Warning
-       
-  "I"        1      Cold Resistance      
+
+  "I"        1      Cold Resistance
              7      Shock Resistance
             13      Fire Resistance
-       
+
   "K"        7      Fast
-       
-  "L"        1      Poison Resistance      
+
+  "L"        1      Poison Resistance
              7      Fast
-            13      Sleep Resistance      
-       
-  "M"        1      Fast      
-             1      Sleep Resistance      
-             1      See Invisible      
+            13      Sleep Resistance
+
+  "M"        1      Fast
+             1      Sleep Resistance
+             1      See Invisible
              3      Poison Resistance
              5      Stealth
              7      Warning
@@ -431,24 +431,24 @@ Finally, Intrinsics.  Well, their self explanitory so here's the list.
             13      Cold Resistance
             15      Shock Resistance
             17      Teleport Control
-      
-  "P"        1      Shock Resistance      
+
+  "P"        1      Shock Resistance
             15      Warning
             20      Fire Resistance
-      
+
   "R"        1      Stealth
             10      Searching
 
-  "S"        1      Fast      
+  "S"        1      Fast
             15      Stealth
 
   "T"       10      Searching
             20      Poison Resistance
 
-  "V"        1      Cold Resistance      
-             1      Stealth      
+  "V"        1      Cold Resistance
+             1      Stealth
              7      Fast
-   
+
   "W"       15      Warning
             17      Teleport Control
 
@@ -459,7 +459,7 @@ Finally, Intrinsics.  Well, their self explanitory so here's the list.
 A list of new items:
 
 WEAPONS:
-silver dagger      ------.     
+silver dagger      ------.
 silver short sword       |
 silver long sword        |- Pretty standard really, just new silver weapons.
 silver mace              |
@@ -467,7 +467,7 @@ silver spear       ------'
 heavy hammer (This one is special, like the runesword ... just for Mjollnir)
 
 ARMOR:
-robe               (Yup, just a robe. Wizards can wear this and cast spells)     
+robe               (Yup, just a robe. Wizards can wear this and cast spells)
 robe of protection (Gives Protection and same AC bonus as Cloak of Prot.)
 robe of power      (Makes spellcasting easier for all classes)
 robe of weakness   (Hehe ... Nasty one :)
@@ -482,11 +482,11 @@ orb of charging    (Charges things, but can't be charged :)
 orb of destruction (I'm not going to tell you, Ha!)
 
 SPELLBOOKS:
-resist poison      (Temperary imunity to poison)     
-resist sleep       (Temperary imunity to sleep)     
-endure heat        (Temperary imunity to fire)     
-endure cold        (Temperary imunity to cold)     
-insolate           (Temperary imunity to electricity)     
+resist poison      (Temperary imunity to poison)
+resist sleep       (Temperary imunity to sleep)
+endure heat        (Temperary imunity to fire)
+endure cold        (Temperary imunity to cold)
+insolate           (Temperary imunity to electricity)
 enlighten          (As per potion of enlightenment)
 enchant weapon     (Rarely works, and cost A LOT of energy, but sometimes...)
 enchant armor      (Rarely works, and cost A LOT of energy, but sometimes...)
@@ -509,8 +509,8 @@ All shops now have "Special Services" avaliable to the kind player who may
 want to purchase them. I will only give a list of them so you know they are
 there, I want to leave the actual discovery of them to you :)
 
-For starters, to "activate" them simply try to pay for something when you 
-owe nothing (in case you wondering, this is done so you just don't pick up 
+For starters, to "activate" them simply try to pay for something when you
+owe nothing (in case you wondering, this is done so you just don't pick up
 everything in the shop and identify it BEFORE paying for it :)
 
         Services: (Varies with shop)
@@ -519,18 +519,18 @@ everything in the shop and identify it BEFORE paying for it :)
         Charge Wand/Ring/Tool, Poison Weapons, Remove Curse, Apprase (This
         doesn't work very well)
 
-PLEASE NOTE: I didn't write this code, but I can not find the name of person 
+PLEASE NOTE: I didn't write this code, but I can not find the name of person
              who did anywhere in the source he gave me (It's been about 6
              months since I talked to him and I lost his address when my
-             systems mail was purged). However, I have done MAJOR revisions 
-             to it in my source to help balance this version, so please 
+             systems mail was purged). However, I have done MAJOR revisions
+             to it in my source to help balance this version, so please
              refere all question and comments to me.
 
 SHOPKEEPERS:
 A brief note on shopkeepers, they are CONSIDERABLY more powerful now.  This
 was done because of possable shopkeeper abuse due to the "Special Services"
 they provide. You will now find it nearly impossable to kill these buggers,
-they are now level 24 rather then level 10, have an 4 attacks per round, are 
+they are now level 24 rather then level 10, have an 4 attacks per round, are
 very fast AND immune to sleep, poison and death rays (Ha!) If you can kill
 one now, you TRULY deserve the abuse you can extract from them :)  This
 power enhancement is also done to ensure fewer pets can kill shopkeeper by
@@ -556,7 +556,7 @@ Holy Sword        TYPE: Long Sword         ALIGN: Lawful   CLASS: None
 
 ARMOR:
 Gauntlets of      TYPE: Gauntlets of Dex.  ALIGN: Neutral  CLASS: Monk
-        Defense   
+        Defense
 
 QUEST:
 Medallion of Shifters   (Doppelgangers)
@@ -568,11 +568,11 @@ The Mantle of Knowledge (Monk)
 Sacrificing for artifacts:
 
 This are has been changed to make it harder to obtain artifacts through
-sacrifice. My reasoning for this is all the people who say "Aww ... 
+sacrifice. My reasoning for this is all the people who say "Aww ...
 Dragonbane! Thats junk! I'll throw that away and wait for something better"
 or "Hmm ... Magicbane is good for a Wizard, but I'd rather have Mjollnir"
 
-Now if you get an artifact, be happy! I mean, think about it ... to get 
+Now if you get an artifact, be happy! I mean, think about it ... to get
 something SO powerful from just sacrificing a newt on level 2 is crazy!
 The gods don't have an infinite supply of artifacts to throw around, if
 you are good enough to get one you deserve it but you HAVE to be GOOD enough
@@ -586,10 +586,10 @@ Ok, here's how it works:
         If that sacrifice just converted an altar, you get 5 points. The
         same applies to sacrificing a unicorn of an opposing color.
 
-        You then have a chanch, based on the number of points you have 
+        You then have a chanch, based on the number of points you have
         obtained and the number of artifacts in the game, of being granted
         an artifact. A number from 1 to 100 + 25 per artifact in existance,
-        (ie. no artifacts -> 1 to 100, 1 artifact -> 26 - 125, etc) is 
+        (ie. no artifacts -> 1 to 100, 1 artifact -> 26 - 125, etc) is
         compared to your points. If your number is higher than the number
         picked, you get an artifact!
 
@@ -616,39 +616,39 @@ way to get artifacts in the game at present. There are four others:
                            SECTION 5: GENERAL
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-(1) Spells and Spellcasting:  I have totally overhalled the spellcasting 
-    system, certain classes are better than others and use different stats 
+(1) Spells and Spellcasting:  I have totally overhalled the spellcasting
+    system, certain classes are better than others and use different stats
     in determining sucess (ie. Wizard uses INT, Priest uses WIS). Instead of
-    a flat success or fail, there is now a percent chanch of casting a spell 
+    a flat success or fail, there is now a percent chanch of casting a spell
     based on class, level, spell level and for some classes armor worn.
 
-(2) Magical Creatures:  Certain creatures can only be hit by magic 
-    weapons (or spells) of various power. Simallarly, some powerful creatures 
-    strike as if they had magical weapons of various power. Ex: Unicorns are 
+(2) Magical Creatures:  Certain creatures can only be hit by magic
+    weapons (or spells) of various power. Simallarly, some powerful creatures
+    strike as if they had magical weapons of various power. Ex: Unicorns are
     now +2 or better to hit, and stike as if they had a +1 weapon. Another
     "common" monster hit only by +2 or better weapon is the Ghost
 
-(3) Monster Improvements:  Powerfull monsters are now harded to kill, 
-    including Shopkeepers. Some important monster may be immune to Wands of 
-    Death (new monster intrinsic, no Mr. Barbarian you CAN'T get it by eating 
+(3) Monster Improvements:  Powerfull monsters are now harded to kill,
+    including Shopkeepers. Some important monster may be immune to Wands of
+    Death (new monster intrinsic, no Mr. Barbarian you CAN'T get it by eating
     him! :) ... players arn't the ONLY all-powerful force in THIS dungeon!
 
 (4) Two New Commands:  There are two new commands avaliable in the game now,
     Steal (CRTL-B) and Polymorph (CTRL-Y). Anybody can attemp to steal, but
-    the chanchs of a non-Rogue succeding is very low. Only four classes can 
+    the chanchs of a non-Rogue succeding is very low. Only four classes can
     attempt to Polymorph: Doppelgangers (of course!), Flame Mages, Ice Mages
     and Lycanthropes (Duh!)
 
-(5) XP and Levels:  There has been a drastic change in the ammount of 
+(5) XP and Levels:  There has been a drastic change in the ammount of
     experence you need to gain a level, you now need a lot more. Many people
     have asked "Why so much? It's TOO hard!", the answer is simple: Power.
     There are two main reasons this was done: (A) To offset the powerful
     affects gain at the higher levels, like with Barbarians with a 20
     con ... they could have ~50 HP at level 4! So I made advancement slower
     to curb the rate of power increase, you will still have ~50 HP at level
-    four, but it will take a long time to get there. (B) You will now 
+    four, but it will take a long time to get there. (B) You will now
     appriciate gaining a level, rather than "Oh, great. Level 7" it will
-    be "YESSSS! I finally made Level 6 and it only took me three days, that 
+    be "YESSSS! I finally made Level 6 and it only took me three days, that
     must be a new record!"  ... (Well, maybe not THAT bad :)
 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -662,7 +662,7 @@ way to get artifacts in the game at present. There are four others:
    Also the Patch for the "Black Market" has been INCLUDED but not enabled
    in both the source and the executable. It turns out that it's a weee bit
    too buggy (Well, anything that has even ONE bug is too buggy. But thats
-   another topic all together) to be used in my version. Again, if the 
+   another topic all together) to be used in my version. Again, if the
    author is out there please contact me.
 
    There is (as far as my vast knowledge can see) only ONE bug contained
@@ -670,17 +670,17 @@ way to get artifacts in the game at present. There are four others:
    being restored properly, you will run into this problem. Just ignore it,
    the game will tell you the program is in disorder any perhapes you should
    quit but you don't need to as the problem is very minor and will have
-   no effect on the outcome of the game. If anyone knows what might cause 
+   no effect on the outcome of the game. If anyone knows what might cause
    this, PLEASE let me know
 
-   
+
    DISCLAMER: I am NOT responsable for any damages this program may cause
               on you computer, socal life, job or sanity. It is mostly
               bug free and shouldn't have any major problems, however if
               you descover what you think may be a bug, please report it
               to me, Stephen White (swhite@cs.mun.ca).
 
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-   
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
                             Tsanth's Modifications
                             ----------------------
@@ -780,7 +780,7 @@ way to get artifacts in the game at present. There are four others:
   Lines 837-843
         Added weight correction for WALLET OF P
 
-  
+
 
 ..\WIN\SHARE\OBJECTS.TXT
    Lines 891-909

@@ -108,8 +108,8 @@
  * FILE_AREA_BONES	For bones files (R/W)
  * FILE_AREA_LEVL	For level files (R/W)
  * FILE_AREA_VAR	For other files which may be modified by Slash'EM
- * FILE_AREA_SHARE	For read-only, architechure independent, files 
- * FILE_AREA_UNSHARE	For read-only, architechure dependent, files 
+ * FILE_AREA_SHARE	For read-only, architechure independent, files
+ * FILE_AREA_UNSHARE	For read-only, architechure dependent, files
  * FILE_AREA_DOC	For human-readable documentation
  */
 

@@ -102,7 +102,7 @@ void sdlgl_font_startup(void)
   sdlgl_font_menu = load_font(iflags.wc_fontsiz_menu);
   sdlgl_font_message = load_font(iflags.wc_fontsiz_message);
   sdlgl_font_status  = load_font(iflags.wc_fontsiz_status);
- 
+
   assert(sdlgl_font_8);
   assert(sdlgl_font_map);
   assert(sdlgl_font_text && sdlgl_font_menu);
@@ -117,7 +117,7 @@ void sdlgl_font_shutdown(void)
     sdlgl_free_tileset(sdlgl_font_8);
     sdlgl_font_8 = NULL;
   }
-  
+
   if (sdlgl_font_14)
   {
     sdlgl_free_tileset(sdlgl_font_14);
@@ -159,13 +159,13 @@ struct TileSet *sdlgl_next_narrower_font(int cur_h)
 {
   if (cur_h > 20 && sdlgl_font_20)
     return sdlgl_font_20;
-   
+
   if (sdlgl_font_14)
     return sdlgl_font_14;
-   
+
   return sdlgl_font_8;
 }
- 
+
 
 #endif /* GL_GRAPHICS */
 /*gl_font.c*/

@@ -141,7 +141,7 @@ main (void)
 	flags.move = 0;
 
 	UndimMenuBar (); /* Yes, this is the place for it (!) */
-	
+
 	moveloop();
 
 	exit(EXIT_SUCCESS);
@@ -208,10 +208,10 @@ void
 process_openfile (short src_vol, long src_dir, Str255 fName, OSType ftype)
 {
 	OSErr	err = noErr;
-	
+
 	if (ftype != SAVE_TYPE)
 		return;		/* only deal with save files */
-		
+
 	if (src_vol != theDirs.dataRefNum || src_dir != theDirs.dataDirID &&
 		 CatMove(src_vol, src_dir, fName, theDirs.dataDirID, "\p:") != noErr) {
 
@@ -263,7 +263,7 @@ finder_file_request(void)
 				if (macFlags.gotOpen)
 					break;
 			}
-		}	
+		}
 	}
 #if 0
 #ifdef MAC68K

@@ -714,7 +714,7 @@ char *argv[];
 		char buf[BUFSZ];
 		char tilename[BUFSZ];
 		char *bufp, *bufs;
-		
+
 	        if ((fp = fopen(argv[1], "r")) == NULL)
 	        {
 	                fprintf(stderr, "Could not open index file '%s'!\n", index_file);
@@ -741,7 +741,7 @@ char *argv[];
                 bufs = index(buf, '(');
                 if (!bufs)
                 	continue;
-                	
+
                 /* find the ')'*/
                 bufp = index(buf, ')');
                 if (!bufp)
@@ -756,7 +756,7 @@ char *argv[];
 		if (read_gif_tile(pixels))
 			(void) write_text_tile_info(pixels, "tile", i, tilename);
 		else break;
-		
+
                 i++;
         }
 

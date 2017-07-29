@@ -4,7 +4,7 @@ Building a PPC Slash'EM with the Metrowerks compilers
 You must be familiar with the Metrowerks compiler and know how to construct
 projects.  The Slash'EM source does not come with the four pre-made projects that
 are needed to build NetHack and the files it needs, due to license restrictions.
-These four projects go in :sys:mac and are MakeDefs.u, DgnComp.u, LevComp.u, and 
+These four projects go in :sys:mac and are MakeDefs.u, DgnComp.u, LevComp.u, and
 SlashEM.u.  If you wish to construct them yourself, see the section "Project
 Contents" below.
 
@@ -150,7 +150,7 @@ Some of the settings may not be necessary.  For example, Slash'EM doesn't use fl
 so we don't have to check 8 byte doubles.  Some are interrelated.  For example, the
 codegen and the Math and MSL libraries used.
 
-For MakeDefs.u, DgnComp.u, LevComp.u: 
+For MakeDefs.u, DgnComp.u, LevComp.u:
 1. Select File>>New Project...>>MacOS>>C_C++>>Standard Console>>Std C Console 68K
 2. 68K Settings:
 	Target Settings:
@@ -195,7 +195,7 @@ For SlashEM.u:
 	+ Change math library to MathLib68K Fa(4i_8d).Lib.
 	+ Change MSL C library to MSL C.68K Fa(4i_8d).Lib.
 	Note: The actual libraries used must match the CodeGen options in 68K Processor.
-	
+
 
 For Recover.u:
 1. Select File>>New Project...>>MacOS>>C_C++>>MacOS ToolBox>>MacOS ToolBox 68K
@@ -263,7 +263,7 @@ LevComp.u should contain the following source files:
 	util
 		lev_main.c
 		panic.c
-	
+
 
 SlashEM.u should contain the following source files:
 

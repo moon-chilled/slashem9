@@ -109,8 +109,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	InitCtrls.dwSize = sizeof(InitCtrls);
 	InitCtrls.dwICC = ICC_LISTVIEW_CLASSES;
 	InitCommonControlsEx(&InitCtrls);
-	
-	/* get command line parameters */	
+
+	/* get command line parameters */
 	p = _get_cmd_arg(GetCommandLine());
 	p = _get_cmd_arg(NULL); /* skip first paramter - command name */
 	for( argc = 1; p && argc<MAX_CMDLINE_PARAM; argc++ ) {
@@ -184,7 +184,7 @@ TCHAR* _get_cmd_arg(TCHAR* pCmdLine)
 			/* skip to whitespace */
 			for(pArgs = pRetArg; *pArgs && !_istspace(*pArgs); pArgs = CharNext(pArgs));
 		}
-		
+
 		if( pArgs && *pArgs ) {
 			TCHAR* p;
 			p = pArgs;

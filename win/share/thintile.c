@@ -37,7 +37,7 @@ const char *name;
 		for (i = 0; i < tile_x; i+=2) {
 			thinpixels[j][i/2] = pixels[j][i];
 		}
-	
+
 	tile_x /= 2;
 	retval = write_text_tile_info(thinpixels, ttype, number, name);
 	tile_x *= 2;

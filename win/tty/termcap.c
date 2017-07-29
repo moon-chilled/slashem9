@@ -156,7 +156,7 @@ convert_uchars(bufp,list,size)
 		if ((count==size) || !*bufp) return count;
 		bufp++;
 		break;
-	    case '#': 
+	    case '#':
 		if (num) {
 		    list[count++] = num;
 		    list[count] = 0;

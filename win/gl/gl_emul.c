@@ -89,7 +89,7 @@ static void copy_line_to_scrollback(struct TextWindow *win, int y)
 
   struct TileWindow *front = win->base;
   struct TileWindow *back  = win->scrollback;
-  
+
   assert(front && back);
 
   tw = front->total_w;
@@ -97,7 +97,7 @@ static void copy_line_to_scrollback(struct TextWindow *win, int y)
   assert(0 <= y && y < front->total_h);
 
   /* ignore empty lines */
-  
+
   for (x=0; x < tw; x++)
     if (front->tiles[y * tw + x].fg != TILE_EMPTY &&
         front->tiles[y * tw + x].fg != CHAR_2_TILE(' '))
@@ -107,9 +107,9 @@ static void copy_line_to_scrollback(struct TextWindow *win, int y)
     return;
 
   /* scroll up the scroll back */
-  
+
   sdlgl_copy_area(back, 0, 0, tw, back->total_h - 1, 0, 1);
-   
+
   sdlgl_transfer_area(front, 0, y, tw, 1, back, 0, 0);
 
   if (win->scrollback_size < back->total_h)
@@ -123,10 +123,10 @@ static void do_scroll_up(struct TextWindow *win)
 
   if (win->scrollback && win->scrollback_enable)
     copy_line_to_scrollback(win, th - 1);
-   
+
   /* copy lines upward */
   sdlgl_copy_area(win->base, 0, 0, tw, th - 1, 0, 1);
-      
+
   /* blank out bottom line */
   sdlgl_blank_area(win->base, 0, 0, tw, 1);
 }
@@ -146,13 +146,13 @@ static void do_wrapping(struct TextWindow *win)
       win->write_y += 1;
     }
   }
-  
+
   if (win->write_y >= th)
     win->write_y = th - 1;
 
   if (win->write_x >= tw)
   {
-    win->write_x = 0; 
+    win->write_x = 0;
     win->write_y -= 1;
   }
 
@@ -169,7 +169,7 @@ static void do_putc(struct TextWindow *win, char t)
 {
   int x = win->write_x;
   int y = win->write_y;
-  
+
   int tw = win->base->total_w;
   int th = win->base->total_h;
 
@@ -186,7 +186,7 @@ void sdlgl_putc(struct TextWindow *win, int c)
 {
   /* make sure character is in range */
   c = ((unsigned int) c) & 0xFF;
-   
+
   assert(c >= 0);
 
   /* handle special cases */
@@ -194,7 +194,7 @@ void sdlgl_putc(struct TextWindow *win, int c)
   {
     case 0:    /* NUL: do nothing */
       break;
-      
+
     case C('g'):   /* ^G: bel */
     {
       Sdlgl_nhbell();
@@ -236,7 +236,7 @@ void sdlgl_putc(struct TextWindow *win, int c)
 
     case C('m'):  /* ^M: CR */
     {
-      win->write_x = 0; 
+      win->write_x = 0;
       break;
     }
 
@@ -277,7 +277,7 @@ void sdlgl_gotoxy(struct TextWindow *win, int x, int y)
 
   if (y < 0)   y = 0;
   if (y >= th) y = th - 1;
-  
+
   win->write_x = x;
   win->write_y = th - 1 - y;
 
@@ -324,7 +324,7 @@ void sdlgl_clear_eos(struct TextWindow *win)
   {
     win->write_x = 0;
     win->write_y = y;
-    
+
     sdlgl_clear_end(win);
   }
 
@@ -337,7 +337,7 @@ void sdlgl_clear(struct TextWindow *win)
   int bu_x = win->write_x;
   int bu_y = win->write_y;
 
-  sdlgl_home(win);    
+  sdlgl_home(win);
   sdlgl_clear_eos(win);
 
   win->write_x = bu_x;
@@ -365,7 +365,7 @@ void sdlgl_enable_cursor(struct TextWindow *win, int enable)
 
 /* ---------------------------------------------------------------- */
 
-static void do_getlin(struct TextWindow *win, const char *query, 
+static void do_getlin(struct TextWindow *win, const char *query,
     char *bufp, int is_name)
 {
   int max = BUFSZ-1;
@@ -382,7 +382,7 @@ static void do_getlin(struct TextWindow *win, const char *query,
 
   /* loop invariant: bufp[len] == 0 */
   bufp[0] = 0;
-  
+
   for (;;)
   {
     sdlgl_flush();
@@ -477,7 +477,7 @@ void Sdlgl_getlin(const char *query, char *bufp)
 
   /* disable scrollback while we control the message win */
   win->scrollback_enable = 0;
-  
+
   do_getlin(win, query, bufp, 0);
 
   win->scrollback_enable = 1;
@@ -505,10 +505,10 @@ static int make_completion_text(const char *word, int len,
     strcpy(comp_tex, "[a-z?]");
     return -1;
   }
-  
+
   /* default to empty string */
   comp_tex[0] = 0;
-    
+
   for (i=matches=0; extcmdlist[i].ef_txt; i++)
   {
     const char *cmd = extcmdlist[i].ef_txt;
@@ -529,7 +529,7 @@ static int make_completion_text(const char *word, int len,
     matches++;
     last = i;
   }
-  
+
   if (matches == 0)
     return -1;
   else if (matches == 1)
@@ -537,7 +537,7 @@ static int make_completion_text(const char *word, int len,
 
   /* build match list string */
   pos = 0;
-  
+
   comp_tex[pos++] = '[';
 
   for (i=0; i < 26; i++)
@@ -569,7 +569,7 @@ static int do_get_ext_cmd(struct TextWindow *win)
   /* loop invariant: buffer[len] == 0 */
   buffer[0] = 0;
   comp_buf[0] = 0;
-  
+
   (void) make_completion_text(buffer, len, comp_buf);
 
   for (;;)
@@ -580,11 +580,11 @@ static int do_get_ext_cmd(struct TextWindow *win)
 
     sdlgl_putc(win, '#');
     sdlgl_putc(win, ' ');
-    sdlgl_puts(win, buffer); 
+    sdlgl_puts(win, buffer);
     sdlgl_puts(win, comp_buf);
 
     sdlgl_flush();
-    
+
     /* process a key */
     ch = sdlgl_get_key(POSKEY_ALLOW_REPEAT);
 
@@ -625,7 +625,7 @@ static int do_get_ext_cmd(struct TextWindow *win)
       use_menu = 1;
       break;
     }
-    
+
     /* only lowercase letters please */
     if (! VALID_EXT_CH(ch) || len >= MAX_EXT_CMD_LEN)
     {
@@ -679,7 +679,7 @@ int Sdlgl_get_ext_cmd(void)
   if (iflags.extmenu)
     return extcmd_via_menu();
 #endif
-   
+
   if (WIN_MESSAGE == WIN_ERR)
     return -1;
 
@@ -697,7 +697,7 @@ int Sdlgl_get_ext_cmd(void)
 
   /* disable scrollback while we control the message win */
   win->scrollback_enable = 0;
-  
+
   cmd = do_get_ext_cmd(win);
 
   win->scrollback_enable = 1;
@@ -720,15 +720,15 @@ void Sdlgl_askname(void)
 
   /* create text & tile windows */
   win = sdlgl_new_textwin(NHW_TEXT);  /* type unimportant */
-   
+
   win->show_w = sdlgl_width / sdlgl_font_message->tile_w;
   win->show_h = HEIGHT_ASKNAME;
 
   pixel_h = sdlgl_font_message->tile_h * win->show_h;
-  
-  win->base = sdlgl_new_tilewin(sdlgl_font_message, win->show_w, 
+
+  win->base = sdlgl_new_tilewin(sdlgl_font_message, win->show_w,
       win->show_h, 1,0);
-        
+
   sdlgl_map_tilewin(win->base, 0, sdlgl_height - pixel_h,
       sdlgl_width, pixel_h, DEPTH_ASKNAME);
 

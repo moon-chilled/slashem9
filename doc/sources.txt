@@ -2,7 +2,7 @@
 	 BEGINNER'S GUIDE TO NETHACK SOURCES
         ---------------------- by German Martin --
                                         german@spain.hp.com
-	
+
 	With additional material by J. Ali Harlow, ali@juiblex.co.uk
 
                   		   version 1.1  January '02
@@ -53,7 +53,7 @@ Contents
   the game I really wanted to add some new monsters & features, but the task
   was quite painful. I'm not a C newbie, but 100 (actually more) source
   files was more than I could manage: even trying to find the main() entry
-  to the code proved to be difficult. The help provided by the inlined 
+  to the code proved to be difficult. The help provided by the inlined
   comments is useless for the newcomer. Now, nine months later, I've learned
   a lot about the main structures in the code: I've been able to add new
   monsters, objects, rooms, levels and behaviours. I - not being a member of
@@ -167,7 +167,7 @@ Contents
                               -------------
 
    The lev_comp compiler has a manual page (have a look in the "doc" directory)
-   called 'lev_comp.6'. If you are in a unix machine a command like 
+   called 'lev_comp.6'. If you are in a unix machine a command like
                           nroff -man lev_comp.6 | more
    should give you a standard formatted man page. If not... well, you should
    have to get used to the .SH .PP etc... garbage in the file. This man page
@@ -200,7 +200,7 @@ Contents
 
    Sounds familiar? This file is the description from where the castle
    level is created. The part showed here just sets the level aspect: a
-   drawed castle centered between mazes (note the MAZE line). 
+   drawed castle centered between mazes (note the MAZE line).
 
    The rest of the file puts doors, traps, objects and monsters in a random
    or specific position (with coordinates relative to the previous map).
@@ -261,9 +261,9 @@ Contents
 
    As you probably knew, there are 'levels' and branches of the main dungeon,
    being composed of levels. The easiest thing is to add a simple level inside
-   the main dungeon: 
+   the main dungeon:
 
-   Suppose you created a new mylevel.des file where you define a 'mylevel' 
+   Suppose you created a new mylevel.des file where you define a 'mylevel'
    level:
 
    MAZE:"mylevel",' '
@@ -276,7 +276,7 @@ Contents
 
    LEVEL:	"mylevel" "none" @ (15,2)
 
-   That is, create the 'mylevel' level randomly at 15 +-2 level deep. The 
+   That is, create the 'mylevel' level randomly at 15 +-2 level deep. The
    level won't left bones files (the 'none' part).
 
    And run ../util/dgn_comp dungeon.def  to get the 'dungeon' file. Copy it
@@ -290,7 +290,7 @@ Contents
    put a line like:
 
    %MULDGN BRANCH: "newbranch" @ (18, 1)
-   
+
    and later on, the lines defining the levels in this new branch:
 
    DUNGEON:        "newbranch" "S" (4,0)
@@ -305,7 +305,7 @@ Contents
    and become familiar with the syntax. Creating new levels and dungeon wasn't
    difficult, was it?
 
-   Maybe this chapter covers all your needs; but if you really want 
+   Maybe this chapter covers all your needs; but if you really want
    exciting new emotions, read on.
 
 
@@ -313,7 +313,7 @@ Contents
 -------------------------
 
       "Beware, there will be no return! Still read? (y/n)"
-      
+
    Welcome to Darkness of Mordor... This is going to be painful but the
    reward is great: some modification could be blessed by the dev team and
    you will reach inmortality! And anyway, modifying nethack will give you
@@ -327,7 +327,7 @@ Contents
    file monst.c, under the src directory (by the way, after this point, I'll
    stop saying where the files are located: you should be familiar with the
    directory structure by now). The 'permonst' struct is defined in the
-   file permonst.h, and giving it a look should give you an idea of what 
+   file permonst.h, and giving it a look should give you an idea of what
    element of the struct is for, but, for your convenience here is an expla-
    nation of what to put in a new entry for the mons array, i.e:
 
@@ -354,7 +354,7 @@ Contents
 
    -alignment: (0). negative value means chaotic, positive lawful.
 
-   -creation/geno flags: (G_GENO | G_NOGEN) 
+   -creation/geno flags: (G_GENO | G_NOGEN)
 	these are flags or'ded, with this meaning:
 
         G_UNIQ          /* generated only once */
@@ -374,7 +374,7 @@ Contents
 
    -attack: ({ { AT_WEAP, AD_PHYS, 1, 6 }, NO_ATTK, NO_ATTK,
            NO_ATTK, NO_ATTK, NO_ATTK },)
-      This defines how the monster attacks. This element is composed of six 
+      This defines how the monster attacks. This element is composed of six
       'attack' struct, each one being the form:
 
 	  ( attack_type, damage_type, # of dice, # of sides of each )
@@ -619,22 +619,22 @@ Contents
 
    You should also follow this rules, as the glorious dev team says:
 
-  
+
         Rule #1:        monsters of a given class are contiguous in the
                         mons[] array.
-  
+
         Rule #2:        monsters of a given class are presented in ascending
                         order of strength.
-  
+
         Rule #3:        monster frequency is included in the geno mask;
                         the frequency can be from 0 to 7.  0's will also
                         be skipped during generation.
-  
+
         Rule #4:        monster subclasses (e.g. giants) should be kept
                         together, unless it violates Rule 2.  NOGEN monsters
                         won't violate Rule 2.
-  
-  
+
+
 
    And that's all. As usual it is easier to begin copying an existing monster.
    For example if you want to create a stronger centaur, get the plain one
@@ -669,7 +669,7 @@ Contents
 
    IMPORTANT NOTE:
       It is quite important to separate your own code with the appropriate
-   #ifdef, #ifndef statements. Just add the necessary #define SOMETHING 
+   #ifdef, #ifndef statements. Just add the necessary #define SOMETHING
    line at the end of include/config.h file.
 
 
@@ -688,7 +688,7 @@ Contents
    from the 'permonst' structure, where the capabilities of all monsters of
    a type are defined. The elements in 'monst' are defined in monst.h:
 
-   -nmon: All monsters in current level are organized in a chained list. 
+   -nmon: All monsters in current level are organized in a chained list.
    Starting with a first monster descriptor ('fmon') you can navigate through
    all of them, thanks to this pointer to the next monster:
 
@@ -709,7 +709,7 @@ Contents
     the PM_NAME_OF_MONSTER #define in include file pm.h.  It is unique to this
     type of monster.
 
-   -m_lev: Adjusted difficulty level of monster; that is, the level of a 
+   -m_lev: Adjusted difficulty level of monster; that is, the level of a
    monster can have changed from the default one (experience, potions,etc...)
 
    -malign: Alignment of this monster, relative to the player. A positive
@@ -735,8 +735,8 @@ Contents
     implies peacefulness (as it doesn't make sense a tamed monster aggresive
     to the player).
 
-   -mspec_used: Monster's special ability attack timeout. That is, monster 
-   won't use its special ability -like dragon's breath- until this counter 
+   -mspec_used: Monster's special ability attack timeout. That is, monster
+   won't use its special ability -like dragon's breath- until this counter
    reaches 0.
 
    -female: 1 = yes, 0 = no.
@@ -756,7 +756,7 @@ Contents
    -mpeaceful: monster is peaceful.
    -mtrapped: monster is now trapped.
    -mleashed: leashed is applied to it.
-   -isshk: This monster is a shopkeeper. 
+   -isshk: This monster is a shopkeeper.
    -isminion: Is a minion.
    -isgd: is a guard.
    -ispriest: is a priest.
@@ -765,9 +765,9 @@ Contents
     more than 31 per level).
    -mstrategy: Strategy to follow. (just applies to very special monsters).
    -mtrapseen: bitmap of traps we've been trapped in.
-   -mlstmv: flag to prevent two moves at once (?). 
+   -mlstmv: flag to prevent two moves at once (?).
    -mgold: How rich this monster is.
-   -minvent: It points to a 'obj' struct. The objects a monster has are 
+   -minvent: It points to a 'obj' struct. The objects a monster has are
     organized in a chained list, the same as the 'monst' struct. This is
     the beginning of that list. (obviously NULL if nothing being carried).
    -mw: If the monster is wielding a weapon, here it is.
@@ -780,13 +780,13 @@ Contents
    -mextra: Allows access to the 'extra' part of the struct. Profusely used
     with shopkeepers, for example.
 
-   
+
    Uffff! I'm sure you're impressed with this big struct. Don't worry, you
    don't have to deal with all the fields, at least at the beginning.
 
    First thing you should have to do is answer this question: Does this monster
-   need any object or special ability not reflected in the M-FLAGS? If the 
-   answer is yes, edit the file makemon.c and look for the 'm_initweap' 
+   need any object or special ability not reflected in the M-FLAGS? If the
+   answer is yes, edit the file makemon.c and look for the 'm_initweap'
    function.
 
    (NOTE to UNIX users:
@@ -810,7 +810,7 @@ Contents
    The m_initweap function is where the monster gets the objects it needs. A
    huge switch statement  (switch (mtmp->data->mlet) ) specify what it gets
    according to its type. This is done with the 'mongets' function. (See
-   Apendix A for a complete listing of nearly 100 useful functions). 
+   Apendix A for a complete listing of nearly 100 useful functions).
 
    The easiest thing to do is search for a monster similar than ours and
    copy the code. That way shouldn't be difficult to add a known object to
@@ -838,7 +838,7 @@ Contents
 
    Now go to the src directory and edit the mhitu.c (monster-hits-user) file.
    Inside the hitmsg() function you should add the code for your AT_HELLO
-   attack type. I.e: just add a line after 
+   attack type. I.e: just add a line after
 
                 case AT_EXPL:
                         pline("%s explodes!", Monnam(mtmp));
@@ -858,7 +858,7 @@ Contents
    add a case to the 'hand to hand' attacks.
 
    Now look for hitmu() function. There we have to add the code for AD_HELLO.
-   I.e., after 
+   I.e., after
 
             case AD_FAMN:
                 pline("%s reaches out, and your body shrivels.",
@@ -883,7 +883,7 @@ Contents
 
    7.2. Adding new monster's abilities
 
-   Within this chapter the method to add an action for a monster it is 
+   Within this chapter the method to add an action for a monster it is
    explained. For example, let's add the code so a monster can read a
    remove curse scroll.
 
@@ -904,7 +904,7 @@ Contents
                 if(obj->otyp == SCR_REMOVE_CURSE) {
                         m.misc =obj;
                         m.has_misc = MUSE_SCR_REMOVE_CURSE;
-                        }  
+                        }
 
    Now a monster is able to detect a remove curse scroll as a potential action.
    Inside use_misc() we'll add the code to execute that action:
@@ -973,7 +973,7 @@ Contents
 
 	#define MYMONSTER(mon)   ((struct onlymymonster *)&(mon)->mextra[0])
 
-   so we can use 
+   so we can use
 
 	MYMONSTER(mon)->praytime
 
@@ -1067,7 +1067,7 @@ Contents
    7.4.2. The descriptive text.
 
    The descriptive text consists of a number of lines with a tab character
-   as a prefix (this prefix will be stripped before the text is output). 
+   as a prefix (this prefix will be stripped before the text is output).
 
    ASCII mark-up conventions which should be followed:
 
@@ -1130,7 +1130,7 @@ Contents
 
    oc_class: object class, i.e. WEAPON_CLASS, FOOD_CLASS, etc...
    oc_delay: Delay when using such an object.
-   oc_color: Color of the object: Can be 
+   oc_color: Color of the object: Can be
            BLACK	RED		GREEN		BROWN
 	   BLUE		MAGENTA		CYAN		GRAY
 	   NO_COLOR	ORANGE_COLORED	BRIGHT_GREEN	YELLOW
@@ -1152,10 +1152,10 @@ Contents
 		#define HI_MINERAL      GRAY
 		#define HI_ZAP          BRIGHT_BLUE
 
-   oc_prob: probability of the object. The total sum of same class objects 
+   oc_prob: probability of the object. The total sum of same class objects
      should be 1000.
    oc_weight: its weight.
-   oc_cost: Base cost in shops. Actual price depends on charisma & hawaiian 
+   oc_cost: Base cost in shops. Actual price depends on charisma & hawaiian
      shirts.
    oc_wsdam:
    oc_wldam: max small/large monster damage.
@@ -1205,11 +1205,11 @@ CT( \
    of code in the form:
 
 		if ( (object > FIRST_OF_CLASS_X )
-		   && (object < LAST_OF_CLASS_X ) )  
-		   {   
+		   && (object < LAST_OF_CLASS_X ) )
+		   {
 			/* Assume object is of class x */
 		   }
-		   else 
+		   else
 		        /* Print some strange fatal error */
 
    b) Start with easy objects. Even better: add the object and put no effect
@@ -1226,7 +1226,7 @@ CT( \
    - eatspecial() in eat.c.
    - dropy() in do.c, when dropping an object (i.e: a crysknife).
 
-   
+
    8.1. Adding a tool
 
    Your new added tool should have an effect when a)pplying it. That's defined
@@ -1234,7 +1234,7 @@ CT( \
    There is a huge switch depending on the object type (switch(obj->otyp));
    note that different objects are referenced with its name in upper case; that
    constant is generated by the makedefs command (remember?) in the onames.h
-   file. 
+   file.
 
    What a tool does when applying is defined in its 'case'; if simple the
    code is directly put there, if not a 'use_<tool-name>' function is defined
@@ -1244,7 +1244,7 @@ CT( \
 
    8.2. Adding a wand
 
-   A wand must have extra code in two ocasions: engraving with it and 
+   A wand must have extra code in two ocasions: engraving with it and
    -obviously- zapping it.
 
    In engrave.c file we found the doengrave() function. There you should add
@@ -1301,13 +1301,13 @@ CT( \
    - eatring() in eat.c  Polymorphed player eats a ring.
 
 
-   8.6. Adding an amulet 
-   
+   8.6. Adding an amulet
+
    Quite similar to rings. Edit the functions Amulet_on() & Amulet_off in
    do_wear.c
 
 
-   8.7. Adding a spellbook 
+   8.7. Adding a spellbook
 
    First, in spell.c edit two functions:
 
@@ -1360,9 +1360,9 @@ CT( \
 		case CLINIC:     mkzoo(CLINIC); break;
 
    Take note that we are just adding a new non-shop room type, because the
-   previous mkshop() call if (roomtype >= SHOPBASE). We could define a 
+   previous mkshop() call if (roomtype >= SHOPBASE). We could define a
    complete 'mkclinic()' function (see for example mktemple) but it is quite
-   simpler to use the mkzoo() code. That function will create a room and 
+   simpler to use the mkzoo() code. That function will create a room and
    fill it -function fill_zoo- with the appropiate monsters.
 
    After that, we should edit the mkshop() function. Why? because in wizard
@@ -1372,7 +1372,7 @@ CT( \
    not necessary, but certainly a good idea to add a new SHOPTYPE for our
    new room, so we can test it quickly.
 
-   So, after 
+   So, after
 			if(*ep == 't' || *ep == 'T' || *ep == '\\'){
                                 mkzoo(COURT);
                                 return;
@@ -1399,7 +1399,7 @@ CT( \
 
   	#ifdef ARMY
                     	(type == BARRACKS) ? squadmon() :
-	#endif 
+	#endif
 
    Add
 			(type == CLINIC) ? &mons[PM_NURSE]:
@@ -1434,7 +1434,7 @@ CT( \
                   level.flags.has_clinic = 1;
                   break;
 
-   You could now recompile and try out your new room using the SHOPTYPE 
+   You could now recompile and try out your new room using the SHOPTYPE
    variable, but it will never generated in a normal dungeon. For that, we
    have to edit mklev.c
 
@@ -1459,7 +1459,7 @@ CT( \
 
    As you can see, here is where is defined when a certain room can be genera-
    ted: i.e. zoo's after level 6 one in 7 times, etc... So adding a line like
-   
+
         if (depth(&u.uz) > 10 && !rn2(4)) mkroom(CLINIC)
 
    will generate a clinic quite frecuently over dungeon level 10.
@@ -1542,10 +1542,10 @@ CT( \
 
    Adding a new shop is similar to adding a new room: we have to start with
    the mkroom.h file. After the
-	
+
 		#define BOOKSHOP 20
 
-   line add 
+   line add
 		#define PETSHOP 21
 
    and increase the numbers for UNIQUESHOP, CANDLESHOP & MAXRTYPE. (of course
@@ -1554,7 +1554,7 @@ CT( \
 
    Now edit the file shknam.c, where most of the shop code is located. First
    thing you'll note is several 'static const char *shksomething[]' arrays;
-   those are the shopkeeper names for each type of shop. So, after the 
+   those are the shopkeeper names for each type of shop. So, after the
    definition of shkgeneral[], add a new array with the names for our petshops:
 
    static const char *shkpetshop[] = {
@@ -1569,7 +1569,7 @@ CT( \
    the shop types, with these fields:
 
    - Name of the shop (i.e:"general store").
-   
+
    - Letter that identifies this type of shop. (i.e: SCROLL_CLASS). It is
     later used for the SHOPTYPE environment variable in wizard mode.
 
@@ -1618,7 +1618,7 @@ CT( \
 -----------
 
    Hundreds of other things can be added to the game, but this is the end;
-   from here you're on your own. I hope you found this reading useful. Just 
+   from here you're on your own. I hope you found this reading useful. Just
    some last recommendations:
 
       1. Put lots of comments in your code. From experience, in a week or two
@@ -1628,7 +1628,7 @@ CT( \
         newsgroup. They can help you to refine your ideas or coming up with
         new ones.
 
-      3. Send your modifications to the dev team (at the mail address 
+      3. Send your modifications to the dev team (at the mail address
         nethack-bugs@linc.cis.upenn.edu). You can possible win inmortality.
 
       4. Play nethack a lot.
@@ -1642,11 +1642,11 @@ CT( \
 		Apendix A. REFERENCE FUNCTION LISTING
 		-------------------------------------
 
-   For your convenience here go some interesting functions: 
+   For your convenience here go some interesting functions:
 
 Monster naming functions
 ------------------------
-		They all take a pointer to a monst structure as parameter and 
+		They all take a pointer to a monst structure as parameter and
 		return a string:
 
 char *mon_nam(struct monst *)
@@ -1678,10 +1678,10 @@ char *The(struct obj *)
 		"The poisoned arrow"
 char *the(struct obj *)
 		"the poisoned arrow"
-char *makeplural(char *) 
-		Takes a string an pluralizes it. It is quite smart, 
+char *makeplural(char *)
+		Takes a string an pluralizes it. It is quite smart,
 		so the "homunculus" plural becomes "humunculi", etc...
-char *makesingular(char *) 
+char *makesingular(char *)
 		Just the opposite.
 
 
@@ -1735,7 +1735,7 @@ void remove_object(struct obj *)
 void place_object(struct obj *,int,int)
 		Put object in x,y position.
 int bhito(struct obj *, struct obj *)
-		Object was hit by the effect of wand indicated in second 
+		Object was hit by the effect of wand indicated in second
 		parameter.
 void cancel_item(struct obj *)
 		Object has been hit by cancellation ray.
@@ -1762,7 +1762,7 @@ void relmon(struct monst *mon)
 		Release monster from display and monster list.
 boolean mnearto(struct monst *,xchar, xchar, boolean)
 		Put monster near (or at) location if possible. The boolean
-		parameter is for forcing another one to move. Returns 
+		parameter is for forcing another one to move. Returns
 		1 - if a monster was moved from x, y to put mtmp at x, y
 		0 - in most cases.
 struct permonst *grow_up(struct monst *, struct monst *)
@@ -1786,10 +1786,10 @@ void wake_nearby()
 void mon_to_stone(struct monst *)
 		Changes the monster into a stone monster of the same type.
 boolean monnear(struct monst *, x, y)
-		Is the square close enough for the monster to move or 
+		Is the square close enough for the monster to move or
 		attack into?
 int minwater(struct monst *)
-		Check monster and water for compatibility, 0 (survived), 
+		Check monster and water for compatibility, 0 (survived),
 		1 (drowned)
 int rndmonnum()
 		Select a random, common monster type.
@@ -1812,7 +1812,7 @@ int domonnoise(struct monst *)
 int dotalk()
 		The #chat command.
 
-		
+
 Monsters<->objects functions
 ----------------------------
 
@@ -1839,7 +1839,7 @@ void meatgold(struct monst *)
 boolean can_carry(struct monst *, struct obj *)
 		Returns TRUE if the monster can carry that object
 struct obj *make_corpse(struct monst *)
-		Creates a monster corpse, a "special" corpse, or nothing 
+		Creates a monster corpse, a "special" corpse, or nothing
 		if it doesn't leave corpses.
 
 Shop related functions
@@ -1875,7 +1875,7 @@ char *getrumor(int)
 void exercise(int, boolean)
 		Exercise an attribute (A_INT,A_CHA,A_WIS,A_STR,A_DEX). If
 		TRUE increases, FALSE decreases.
-find_misc() 
+find_misc()
 use_misc()
 		Both functions are used in muse.c to detect an object/action
 		that a monster can do and execute it.

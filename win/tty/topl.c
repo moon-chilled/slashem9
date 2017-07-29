@@ -159,7 +159,7 @@ tty_doprev_message()
             destroy_nhwindow(tmpwin);
 
             cw->maxcol = cw->maxrow;
-        } 
+        }
 
     } while (morc == C('p'));
     ttyDisplay->dismiss_more = 0;
@@ -324,7 +324,7 @@ topl_putsym(c)
     struct WinDesc *cw = wins[WIN_MESSAGE];
 
     if(cw == (struct WinDesc *) 0) panic("Putsym window MESSAGE nonexistant");
-	
+
     switch(c) {
     case '\b':
 	if(ttyDisplay->curx == 0 && ttyDisplay->cury > 0)

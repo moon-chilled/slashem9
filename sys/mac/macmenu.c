@@ -195,7 +195,7 @@ enum
 
 
 /******** Globals ********/
-static	unsigned char *menuErrStr[err_Menu_total] = 
+static	unsigned char *menuErrStr[err_Menu_total] =
 	{
 		"\pAbort: Bad \'MNU#\' resource!",		/* errGetMenuList */
 		"\pAbort: Bad \'MENU\' resource!",		/* errGetMenu */
@@ -1125,13 +1125,13 @@ aboutNetHack() {
 		}
 
 		aboutStr[++aboutStr[0]] = '0' + PATCHLEVEL % 10;
-		
-#ifdef FIXLEVEL		
+
+#ifdef FIXLEVEL
 		if (EDITLEVEL || FIXLEVEL) {
 			aboutStr[++aboutStr[0]] = 'E';
 			aboutStr[++aboutStr[0]] = '0' + EDITLEVEL;
 		}
-		
+
 		if (FIXLEVEL) {
 			aboutStr[++aboutStr[0]] = 'F';
 			aboutStr[++aboutStr[0]] = '0' + FIXLEVEL;
@@ -1141,7 +1141,7 @@ aboutNetHack() {
 			aboutStr[++aboutStr[0]] = 'E';
 			aboutStr[++aboutStr[0]] = '0' + EDITLEVEL;
 		}
-		
+
 #endif
 		aboutStr[++aboutStr[0]] = CHAR_CR;
 
@@ -1191,7 +1191,7 @@ askQuit()
 		winMac = 1;
 	else
 		winMac = 0;
-		
+
 	if (theMenubar < mbarRegular) {
 	short	itemHit;
 
@@ -1213,7 +1213,7 @@ askQuit()
 			quitinput = "#quit\r";
 		else
 			quitinput = "#q\r";
-			
+
 		/* KMH -- Ugly kludge */
 		while (*quitinput)
 			AddToKeyQueue(*quitinput++, 1);

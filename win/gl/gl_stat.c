@@ -37,7 +37,7 @@ struct BottomStat
   int turns;
 };
 
-static struct BottomStat 
+static struct BottomStat
   st_STR    = { STAT_INVALID, STAT_INVALID, 0 },
   st_DEX    = { STAT_INVALID, STAT_INVALID, 0 },
   st_CON    = { STAT_INVALID, STAT_INVALID, 0 },
@@ -53,7 +53,7 @@ static struct BottomStat
   st_ENMAX  = { STAT_INVALID, STAT_INVALID, 0 },
   st_AC     = { STAT_INVALID, STAT_INVALID, 0 },
   st_LEVEL  = { STAT_INVALID, STAT_INVALID, 0 };
- 
+
 /* ForestGreen (looks better than just pure green) */
 #define POS_COLOR_B  TXT_MAKE(1,4,1)
 #define NEG_COLOR_B  TXT_MAKE(4,0,0)
@@ -86,7 +86,7 @@ static void add_str(struct TextWindow *win, const char *str)
     sdlgl_putc(win, *str);
 }
 
-static void add_val(struct TextWindow *win, int val, int old, 
+static void add_val(struct TextWindow *win, int val, int old,
     int dark, int reverse)
 {
   char buffer[BUFSZ];
@@ -107,7 +107,7 @@ static void add_val(struct TextWindow *win, int val, int old,
     else
       win->write_col = dark ? POS_COLOR : POS_COLOR_B;
   }
-    
+
   add_str(win, buffer);
 
   win->write_col = dark ? GREY : L_GREY;
@@ -122,19 +122,19 @@ static void do_player(struct TextWindow *win, int *len)
   strncpy(buf, plname, 10);
   buf[10] = 0;
 
-  if ('a' <= buf[0] && buf[0] <= 'z') 
+  if ('a' <= buf[0] && buf[0] <= 'z')
     buf[0] += 'A' - 'a';
 
   add_str(win, buf);
   add_str(win, " the ");
 
-  if (Upolyd) 
+  if (Upolyd)
   {
     char mbot[BUFSZ];
     int k;
 
     strcpy(mbot, mons[u.umonnum].mname);
-    
+
     for (k=0; mbot[k] != 0; k++)
     {
       if ((k == 0 || (k > 0 && mbot[k-1] == ' ')) &&
@@ -144,7 +144,7 @@ static void do_player(struct TextWindow *win, int *len)
       }
     }
     add_str(win, mbot);
-  } 
+  }
   else
     add_str(win, rank_of(u.ulevel, Role_switch, flags.female));
 
@@ -160,7 +160,7 @@ static void do_player(struct TextWindow *win, int *len)
   }
   else
   {
-    add_str(win, Is_astralevel(&u.uz) ? " on Astral Plane" : 
+    add_str(win, Is_astralevel(&u.uz) ? " on Astral Plane" :
         " at End Game");
   }
 
@@ -173,7 +173,7 @@ static void do_characteristics(struct TextWindow *win, int *len)
 
   add_str(win, "St:");
 
-  if (st_STR.cur > 18) 
+  if (st_STR.cur > 18)
   {
     if (st_STR.cur > STR18(100))
       add_val(win, st_STR.cur-100, st_STR.last-100, 1, 0);
@@ -184,7 +184,7 @@ static void do_characteristics(struct TextWindow *win, int *len)
     }
     else
       add_str(win, "18/**");
-  } 
+  }
   else
     add_val(win, st_STR.cur, st_STR.last, 1, 0);
 
@@ -229,7 +229,7 @@ static void do_money_hp(struct TextWindow *win, int *len)
     add_str(win, "Dlvl:");
     add_val(win, st_DEPTH.cur, st_DEPTH.last, 0, 0);
   }
-  
+
   sprintf(buf, " %c:", oc_syms[COIN_CLASS]);
   add_str(win, buf);
   add_val(win, st_GOLD.cur, st_GOLD.last, 0, 0);
@@ -272,12 +272,12 @@ static void do_money_hp(struct TextWindow *win, int *len)
   if (flags.showweight)
   {
     add_str(win, " Wt:");
-    add_val(win, inv_weight()+weight_cap(), STAT_INVALID, 0, 0); 
+    add_val(win, inv_weight()+weight_cap(), STAT_INVALID, 0, 0);
     add_str(win, "/");
-    add_val(win, weight_cap(), STAT_INVALID, 0, 0); 
+    add_val(win, weight_cap(), STAT_INVALID, 0, 0);
   }
 #endif
- 
+
   if (flags.time)
   {
     add_str(win, " T:");
@@ -325,20 +325,20 @@ static void do_afflictions(struct TextWindow *win)
   if (Invulnerable)
     add_one_affliction(win, "Invul");
 #endif
-  
-  if (Levitation) 
+
+  if (Levitation)
     add_one_affliction(win, "Lev");
-  else if (Flying) 
+  else if (Flying)
     add_one_affliction(win, "Fly");
 
   /* add Hungry (etc) */
   if (hu_stat[u.uhs][0] != ' ')
     add_one_affliction(win, hu_stat[u.uhs]);
 
-  if (Blind) 
+  if (Blind)
     add_one_affliction(win, "Blind");
-  
-  if (Sick) 
+
+  if (Sick)
   {
     if (u.usick_type & SICK_VOMITABLE)
       add_one_affliction(win, "FoodPois");
@@ -346,18 +346,18 @@ static void do_afflictions(struct TextWindow *win)
       add_one_affliction(win, "Ill");
   }
 
-  if (Confusion) 
+  if (Confusion)
     add_one_affliction(win, "Conf");
 
-  if (Stunned) 
+  if (Stunned)
     add_one_affliction(win, "Stun");
-  
-  if (Hallucination)  
+
+  if (Hallucination)
     add_one_affliction(win, "Hallu");
-  
-  if (Slimed) 
+
+  if (Slimed)
     add_one_affliction(win, "Slime");
- 
+
   /* -AJA- this idea by Roderick Schertler */
   if (u.ustuck && !u.uswallow && !sticks(youmonst.data))
     add_one_affliction(win, "Held");
@@ -388,10 +388,10 @@ void sdlgl_write_status(struct TextWindow *win)
    * line (player and dungeon name) as a last resort.
    */
   afflict_spaces[2].x1 = 0;
-  
+
   afflict_spaces[0].x2 = afflict_spaces[1].x2 =
   afflict_spaces[2].x2 = win->show_w - 1;
- 
+
   do_afflictions(win);
 }
 
@@ -405,7 +405,7 @@ static void do_bottom_stat(int step, struct BottomStat *bot, int value)
     bot->last = bot->cur = value;
     return;
   }
-  
+
   if (value != bot->cur)
   {
     if (bot->turns > 0)

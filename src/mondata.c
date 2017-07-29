@@ -278,7 +278,7 @@ sticks(ptr)	/* creature sticks other creatures it hits */
 }
 
 /* number of horns this type of monster has on its head */
-int 
+int
 num_horns (struct permonst *ptr)
 {
     switch (monsndx(ptr)) {
@@ -325,7 +325,7 @@ int dtyp;
 
 /* returns the maximum damage a defender can do to the attacker via
  * a passive defense */
-int 
+int
 max_passive_dmg (struct monst *mdef, struct monst *magr)
 {
     int	i, dmg = 0;
@@ -351,7 +351,7 @@ max_passive_dmg (struct monst *mdef, struct monst *magr)
 }
 
 
-int 
+int
 monsndx (		/* return an index into the mons array */
     struct permonst *ptr
 )
@@ -373,7 +373,7 @@ monsndx (		/* return an index into the mons array */
 
 
 
-int 
+int
 name_to_mon (const char *in_str)
 {
 	/* Be careful.  We must check the entire string in case it was
@@ -492,7 +492,7 @@ name_to_mon (const char *in_str)
 
 
 /* returns 3 values (0=male, 1=female, 2=none) */
-int 
+int
 gender (struct monst *mtmp)
 {
 	if (is_neuter(mtmp->data)) return 2;
@@ -501,7 +501,7 @@ gender (struct monst *mtmp)
 
 /* Like gender(), but lower animals and such are still "it". */
 /* This is the one we want to use when printing messages. */
-int 
+int
 pronoun_gender (struct monst *mtmp)
 {
 	if (!mtmp->isshk && (is_neuter(mtmp->data) || !canspotmon(mtmp))) return 2;
@@ -545,7 +545,7 @@ static const short grownups[][2] = {
 	{PM_ELF_LORD, PM_ELVENKING},
 	{PM_LICH, PM_DEMILICH}, {PM_DEMILICH, PM_MASTER_LICH},
 	{PM_MASTER_LICH, PM_ARCH_LICH},
-	{PM_VAMPIRE, PM_VAMPIRE_LORD}, {PM_VAMPIRE_LORD, PM_VAMPIRE_MAGE}, 
+	{PM_VAMPIRE, PM_VAMPIRE_LORD}, {PM_VAMPIRE_LORD, PM_VAMPIRE_MAGE},
 	{PM_BAT, PM_GIANT_BAT},
 	{PM_CHICKATRICE, PM_COCKATRICE},
 	{PM_BABY_GRAY_DRAGON, PM_GRAY_DRAGON},
@@ -594,7 +594,7 @@ static const short grownups[][2] = {
 	{PM_GIANT_TICK, PM_GIANT_FLEA}, {PM_GIANT_FLEA, PM_GIANT_LOUSE},	/* RJ */
 	/* DS -- growing up, Lethe style */
 	{PM_DEEP_ONE, PM_DEEPER_ONE}, {PM_DEEPER_ONE, PM_DEEPEST_ONE},
-	{PM_LAMB, PM_SHEEP}, 
+	{PM_LAMB, PM_SHEEP},
 	{PM_SHOGGOTH, PM_GIANT_SHOGGOTH},
 	{PM_GNOLL, PM_GNOLL_WARRIOR}, {PM_GNOLL_WARRIOR, PM_GNOLL_CHIEFTAIN},
 	{PM_MIGO_DRONE, PM_MIGO_WARRIOR},
@@ -602,7 +602,7 @@ static const short grownups[][2] = {
 	{NON_PM,NON_PM}
 };
 
-int 
+int
 little_to_big (int montype)
 {
 #ifndef AIXPS2_BUG
@@ -628,7 +628,7 @@ little_to_big (int montype)
 #endif
 }
 
-int 
+int
 big_to_little (int montype)
 {
 	int i;

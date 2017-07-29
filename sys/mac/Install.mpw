@@ -20,22 +20,22 @@ keeping the folder structure intact.
 	  Other CVS clients should also work, or you can do without
 
 2)	Unpack the  source files onto your hard disk.  Make sure to keep the
-	folder structure the way it is. 
-	
+	folder structure the way it is.
+
 3)	Edit the make file :sys:mac:Macintosh.make to set the Top variable.
 
 4)	You may want to edit some of the options in :include:config.h to suit
 	your tastes.  However, using MPW, this file will self-configure for
 	the default Mac distribution.
 
-5)	Choose Update Dependencies from the Build menu. This should create the 
+5)	Choose Update Dependencies from the Build menu. This should create the
 	sub-makefiles. You can leave this step out, but then header dependencies
 	won't be added to the sub-makefiles, and the builds will stop at
 	each CreateMake.
-	
+
 6)	Make sure your current folder is :sys:mac,
-	choose Build from the Build menu and build "Macintosh". 
-	
+	choose Build from the Build menu and build "Macintosh".
+
 7)	When the build is done the results are in the DungeonPPC, DungeonFat or
     Dungeon68K folder, depending on which Processor you have chosen.  Enjoy!
 

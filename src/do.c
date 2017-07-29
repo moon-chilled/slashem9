@@ -64,7 +64,7 @@ boolean boulder_hits_pool(struct obj *otmp, int rx, int ry, boolean pushing) {
 
 		if (ttmp) (void) delfloortrap(ttmp);
 		bury_objs(rx, ry);
-		
+
 		newsym(rx,ry);
 		if (pushing) {
 		    You("push %s into the %s.", the(xname(otmp)), what);
@@ -406,7 +406,7 @@ boolean canletgo(struct obj *obj, const char *word) {
 				something);
 		return(FALSE);
 	}
-	/* KMH, balance patch -- removed stone of rotting */        
+	/* KMH, balance patch -- removed stone of rotting */
 	if (obj->otyp == LOADSTONE && obj->cursed) {
 		/* getobj() kludge sets corpsenm to user's specified count
 		   when refusing to split a stack of cursed loadstones */
@@ -939,7 +939,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 	 *	 -1    8.33   4.17   0.0	 -1    6.25   8.33  12.5
 	 *	 -2    8.33   4.17   0.0	 -2    6.25   8.33   0.0
 	 *	 -3    8.33   4.17   0.0	 -3    6.25   0.0    0.0
-	 * [Tom] I removed this... it's indescribably annoying.         
+	 * [Tom] I removed this... it's indescribably annoying.
 	 *
 	 * if (Inhell && up && u.uhave.amulet && !newdungeon && !portal &&
 	 *			(dunlev(&u.uz) < dunlevs_in_dungeon(&u.uz)-3)) {
@@ -1442,7 +1442,7 @@ boolean revive_corpse(struct obj *corpse, boolean moldy) {
     char *cname, cname_buf[BUFSZ];
     struct obj *container = NULL;
     int container_where = 0;
-    
+
     where = corpse->where;
     is_uwep = corpse == uwep;
     cname = eos(strcpy(cname_buf, "bite-covered "));
@@ -1508,7 +1508,7 @@ boolean revive_corpse(struct obj *corpse, boolean moldy) {
 		    mcarry && canseemon(mcarry) && container) {
 		        char sackname[BUFSZ];
 		        sprintf(sackname, "%s %s", s_suffix(mon_nam(mcarry)),
-				xname(container)); 
+				xname(container));
 	   		pline("%s writhes out of %s!", Amonnam(mtmp), sackname);
 	   	} else if (container_where == OBJ_INVENT && container) {
 		        char sackname[BUFSZ];
@@ -1583,7 +1583,7 @@ void moldy_corpse(void * arg, long timeout) {
 	    	body->corpsenm = pmtype;
 		body->onamelth = 0;	/* Molds shouldn't be named */
 
-		/* oeaten isn't used for hp calc here, and zeroing it 
+		/* oeaten isn't used for hp calc here, and zeroing it
 		 * prevents eaten_stat() from worrying when you've eaten more
 		 * from the corpse than the newly grown mold's nutrition
 		 * value.
@@ -1610,7 +1610,7 @@ void moldy_corpse(void * arg, long timeout) {
 		}
     	}
     }
-    
+
     /* If revive_corpse succeeds, it handles the reviving corpse.
      * If there was more than one corpse, or the revive failed,
      * set the remaining corpse(s) to rot away normally.

@@ -121,7 +121,7 @@ picklock()	/* try to open/close a lock */
 	    else xlock.door->doormask = D_LOCKED;
 	} else {
 	    xlock.box->olocked = !xlock.box->olocked;
-	    if(xlock.box->otrapped)	
+	    if(xlock.box->otrapped)
 		(void) chest_trap(xlock.box, FINGER, FALSE);
 	}
 	exercise(A_DEX, TRUE);
@@ -224,7 +224,7 @@ forcedoor()      /* try to break/pry open a door */
 
 	if(xlock.door != &(levl[u.ux+u.dx][u.uy+u.dy])) {
 	    return((xlock.usedtime = 0));           /* you moved */
-	} 
+	}
 	switch (xlock.door->doormask) {
 	    case D_NODOOR:
 		pline("This doorway has no door.");
@@ -236,10 +236,10 @@ forcedoor()      /* try to break/pry open a door */
 		pline("This door is broken.");
 		return((xlock.usedtime = 0));
 	}
-	
+
 	if (xlock.usedtime++ >= 50 || nohands(youmonst.data)) {
 	    You("give up your attempt at %s the door.",
-	    	(xlock.picktyp == 2 ? "melting" : xlock.picktyp == 1 ? 
+	    	(xlock.picktyp == 2 ? "melting" : xlock.picktyp == 1 ?
 	    		"prying open" : "breaking down"));
 	    exercise(A_STR, TRUE);      /* even if you don't succeed */
 	    return((xlock.usedtime = 0));
@@ -248,7 +248,7 @@ forcedoor()      /* try to break/pry open a door */
 	if(rn2(100) > xlock.chance) return(1);          /* still busy */
 
 	You("succeed in %s the door.",
-	    	(xlock.picktyp == 2 ? "melting" : xlock.picktyp == 1 ? 
+	    	(xlock.picktyp == 2 ? "melting" : xlock.picktyp == 1 ?
 	    		"prying open" : "breaking down"));
 
 	if(xlock.door->doormask & D_TRAPPED) {
@@ -285,13 +285,13 @@ forcedoor()      /* try to break/pry open a door */
 	    feel_location(u.ux+u.dx, u.uy+u.dy);    /* we know we broke it */
 	else
 	    newsym(u.ux+u.dx, u.uy+u.dy);
-	
+
 	exercise(A_STR, TRUE);
 	return((xlock.usedtime = 0));
 }
 
 
-void 
+void
 reset_pick (void)
 {
 	xlock.usedtime = xlock.chance = xlock.picktyp = 0;
@@ -300,7 +300,7 @@ reset_pick (void)
 }
 
 
-int 
+int
 pick_lock ( /* pick a lock with a given object */
     struct obj **pickp
 )
@@ -565,7 +565,7 @@ pick_lock ( /* pick a lock with a given object */
 	return(1);
 }
 
-int 
+int
 doforce (void)		/* try to force a chest with your weapon */
 {
 	struct obj *otmp;
@@ -707,7 +707,7 @@ doforce (void)		/* try to force a chest with your weapon */
 			&& mtmp->m_ap_type != M_AP_FURNITURE
 			&& mtmp->m_ap_type != M_AP_OBJECT) {
 
-		if (mtmp->isshk || mtmp->data == &mons[PM_ORACLE])		
+		if (mtmp->isshk || mtmp->data == &mons[PM_ORACLE])
 		    verbalize("What do you think you are, a Jedi?"); /* Phantom Menace */
 		else
 		    pline("I don't think %s would appreciate that.", mon_nam(mtmp));
@@ -718,10 +718,10 @@ doforce (void)		/* try to force a chest with your weapon */
 #ifdef LIGHTSABERS
 		    is_lightsaber(uwep) ||
 #endif
-		    is_axe(uwep)) 
+		    is_axe(uwep))
 	    	return use_pick_axe2(uwep);
 
-	    if(!IS_DOOR(door->typ)) { 
+	    if(!IS_DOOR(door->typ)) {
 		if (is_drawbridge_wall(x,y) >= 0)
 		    pline("The drawbridge is too solid to force open.");
 		else
@@ -759,7 +759,7 @@ doforce (void)		/* try to force a chest with your weapon */
 #endif
 			xlock.chance = uwep->spe + objects[uwep->otyp].oc_wldam;
 		    xlock.picktyp = picktyp;
-		    xlock.usedtime = 0;    
+		    xlock.usedtime = 0;
 		    xlock.door = door;
 		    xlock.box = 0;
 		    set_occupation(forcedoor, "forcing the door", 0);
@@ -770,7 +770,7 @@ doforce (void)		/* try to force a chest with your weapon */
 	return(0);
 }
 
-int 
+int
 doopen (void)		/* try to open a door */
 {
 	coord cc;
@@ -876,7 +876,7 @@ objhere:	pline("%s's in the way.", Something);
 	return(FALSE);
 }
 
-int 
+int
 doclose (void)		/* try to close a door */
 {
 	int x, y;
@@ -1019,7 +1019,7 @@ int x, y;
 	const char *dustcloud = "A cloud of dust";
 	const char *quickly_dissipates = "quickly dissipates";
 	int key = artifact_door(x, y);		/* ALI - Artifact doors */
-	
+
 	if (door->typ == SDOOR) {
 	    switch (otmp->otyp) {
 	    case WAN_OPENING:
@@ -1216,7 +1216,7 @@ struct obj *otmp;
  * implement trapped secret doors we will have to extend this.
  */
 
-int 
+int
 artifact_door (int x, int y)
 {
     int i;

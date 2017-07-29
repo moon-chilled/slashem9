@@ -55,7 +55,7 @@ represents this by somtimes allowing you to move while everything else stands
 still if you are fast or very fast.
 Zapping a wand of speed monster at yourself will give you intrinsic speed.
 FAST: If you are fast, every third move is a "free" move. As decribed below,
-you can use these free moves to hit a monster without it even being able to 
+you can use these free moves to hit a monster without it even being able to
 attack you.
 VERY FAST: If you are very fast, every other move is a "free" move.
 
@@ -336,7 +336,7 @@ don't even think of going until you get magic resistance, don't disturb Rodney
 until you have located the Vibrating Square and marked it by dropping something on
 the square NEXT TO IT (it moves if you drop something on it), and don't pray.
 Rodney does not trouble me very much any more because I save up any wands of
-death I find for the sole purpose of waxing him. It is especially effective to 
+death I find for the sole purpose of waxing him. It is especially effective to
 take an extra turn or two and get him lined up on a square where if he gets missed
 the first time he can get hit by the ricochet, and maybe even by a second bounce
 when it bounces off your silver dragon scale mail. (You DO have reflection, right?)

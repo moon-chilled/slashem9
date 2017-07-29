@@ -161,7 +161,7 @@ glrip.png:	../util/tile2png $(srcdir)/../win/gl/rip.txt
 	../util/txtmerge -p $(srcdir)/../win/share/palette.txt ../win/share/mon32-t.txt \
 		../win/share/monmag.txt -b $(srcdir)/../win/share/mon32mi.txt \
 		-b $(srcdir)/../win/share/mon32se.txt -bff00ff $(srcdir)/../win/share/mon32alg.txt \
-		-bff00ff $(srcdir)/../win/share/mon32aw.txt 
+		-bff00ff $(srcdir)/../win/share/mon32aw.txt
 
 ../win/share/obj32-t.txt:	../util/txtmerge ../win/share/objmag.txt \
 		$(srcdir)/../win/share/obj32mi.txt $(srcdir)/../win/share/obj32se.txt \

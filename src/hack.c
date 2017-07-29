@@ -25,7 +25,7 @@ xchar *y;
    if (*x >= COLNO) *x = COLNO;
    else if (*x == -1) *x = rn2(COLNO-1)+1;
    else if (*x < 1) *x = 1;
-   
+
    if (*y >= ROWNO) *y = ROWNO;
    else if (*y == -1) *y = rn2(ROWNO);
    else if (*y < 0) *y = 0;
@@ -36,9 +36,9 @@ xchar *y;
 static const struct herb_info {
    int herb;
    boolean in_water;
-} herb_info[] = { 
+} herb_info[] = {
    { SPRIG_OF_WOLFSBANE, FALSE },
-   { CLOVE_OF_GARLIC,    FALSE }, 
+   { CLOVE_OF_GARLIC,    FALSE },
    { CARROT,             FALSE },
    { KELP_FROND,         TRUE  }
 };
@@ -50,7 +50,7 @@ boolean watery;
 {
    int dd;
    long count = 0;
-   
+
    if (isok(x,y)) {
       for (dd = 0; dd < SIZE(herb_info); dd++) {
 	 if (watery == herb_info[dd].in_water) {
@@ -71,11 +71,11 @@ boolean watery;
 {
   struct rm *lev = &levl[x][y];
   if (inside_shop(x,y)) return FALSE;
-  if (watery) 
-     return (IS_POOL(lev->typ) && 
+  if (watery)
+     return (IS_POOL(lev->typ) &&
 	     ((count_herbs_at(x,y, watery)) < HERB_GROWTH_LIMIT));
    return (lev->lit && (lev->typ == ROOM || lev->typ == CORR ||
-			(IS_DOOR(lev->typ) && 
+			(IS_DOOR(lev->typ) &&
 			 ((lev->doormask == D_NODOOR) ||
 			 (lev->doormask == D_ISOPEN) ||
 			 (lev->doormask == D_BROKEN)))) &&
@@ -89,7 +89,7 @@ int herb;
 xchar x,y;
 {
    struct obj *otmp;
-   
+
    rndmappos(&x, &y);
    otmp = sobj_at(herb, x, y);
    if (otmp && herb_can_grow_at(x,y, TRUE)) {
@@ -113,7 +113,7 @@ boolean showmsg, update;
 {
    struct obj *otmp;
    struct rm *lev;
-   
+
    rndmappos(&x, &y);
    lev = &levl[x][y];
    otmp = sobj_at(herb, x, y);
@@ -127,7 +127,7 @@ boolean showmsg, update;
 	 /* check surroundings, maybe grow there? */
 	 for (dd = 0; dd < 8; dd++) {
 	    coord pos;
-	    
+
 	    dtoxy(&pos, (dd+dofs) % 8);
 	    pos.x += x;
 	    pos.y += y;
@@ -143,7 +143,7 @@ boolean showmsg, update;
 	       } else {
 		  otmp = mksobj(herb, TRUE, FALSE);
 		  otmp->quan = 1;
-		  otmp->owt = weight(otmp); 
+		  otmp->owt = weight(otmp);
 		  place_object(otmp, pos.x, pos.y);
 		  if (update) newsym(pos.x,pos.y);
 		  if (cansee(pos.x,pos.y)) {
@@ -151,22 +151,22 @@ boolean showmsg, update;
 			const char *what;
 			if (herb == CLOVE_OF_GARLIC)
 			  what = "some garlic";
-			else 
+			else
 			  what = an(xname(otmp));
 			Norep("Suddenly you notice %s growing on the %s.",
 			      what, surface(pos.x,pos.y));
 		     }
 		  }
 		  return TRUE;
-	       } 
+	       }
 	    }
 	 }
-      } 
+      }
    }
    return FALSE;
 }
 
-/* moves topmost object in water at (x,y) to dir. 
+/* moves topmost object in water at (x,y) to dir.
    return true if did something. */
 boolean
 water_current(x,y,dir,waterforce, showmsg, update)
@@ -182,14 +182,14 @@ boolean showmsg, update;
    dtoxy(&pos, dir);
    pos.x += x;
    pos.y += y;
-   if (isok(pos.x,pos.y) && IS_POOL(levl[x][y].typ) && 
+   if (isok(pos.x,pos.y) && IS_POOL(levl[x][y].typ) &&
        IS_POOL(levl[pos.x][pos.y].typ)) {
       otmp = level.objects[x][y];
       if (otmp && otmp->where == OBJ_FLOOR) {
-	 if (otmp->quan > 1) 
+	 if (otmp->quan > 1)
 	   otmp = splitobj(otmp, otmp->quan - 1);
 	 if (otmp->owt <= waterforce) {
-	    if (showmsg && Underwater && 
+	    if (showmsg && Underwater &&
 		(cansee(pos.x,pos.y) || cansee(x,y))) {
 	       Norep("%s floats%s in%s the murky water.",
 		     An(xname(otmp)),
@@ -219,7 +219,7 @@ xchar x,y;
 boolean showmsg, update;
 {
    struct rm *lev;
-   
+
    rndmappos(&x,&y);
    lev = &levl[x][y];
    if (IS_TREE(lev->typ) && !(lev->looted & TREE_LOOTED) && may_dig(x,y)) {
@@ -243,13 +243,13 @@ boolean showmsg, update;
 		     Norep("%s falls from %s%s.",
 			   cansee(pos.x,pos.y) ? An(xname(otmp)) : Something,
 			   cansee(x,y) ? "the tree" : "somewhere",
-			   (cansee(x,y) && IS_POOL(lev->typ)) ? 
+			   (cansee(x,y) && IS_POOL(lev->typ)) ?
 			   " into the water" : "");
-		  } else if (distu(pos.x,pos.y) < 9 && 
+		  } else if (distu(pos.x,pos.y) < 9 &&
 			     otmp->otyp != EUCALYPTUS_LEAF) {
 		     /* a leaf is too light to cause any sound */
 		     You_hear("a %s!",
-			      (IS_POOL(lev->typ) || IS_FOUNTAIN(lev->typ)) ? 
+			      (IS_POOL(lev->typ) || IS_FOUNTAIN(lev->typ)) ?
 			      "plop" : "splut"); /* rainforesty sounds */
 		  }
 	       }
@@ -274,7 +274,7 @@ xchar x,y;
 {
    coord pos, pos2;
    struct rm *lev;
-   
+
    rndmappos(&x,&y);
    if (IS_TREE(levl[x][y].typ) && may_dig(x,y)) {
       int dir = rn2(8);
@@ -290,13 +290,13 @@ xchar x,y;
       lev = &levl[pos.x][pos.y];
       if (lev->lit && !cansee(pos.x,pos.y) && !inside_shop(pos.x,pos.y) &&
 	  (lev->typ == ROOM || lev->typ == CORR) &&
-	  !(u.ux == pos.x && u.uy == pos.y) && !m_at(pos.x,pos.y) && 
+	  !(u.ux == pos.x && u.uy == pos.y) && !m_at(pos.x,pos.y) &&
 	  !t_at(pos.x,pos.y) && !OBJ_AT(pos.x,pos.y)) {
 	 int nogrow = 0;
 	 int dx,dy;
 	 for (dx = pos.x-1; dx <= pos.x+1; dx++) {
 	    for (dy = pos.y-1; dy <= pos.y+1; dy++) {
-	       if (!isok(dx,dy) || 
+	       if (!isok(dx,dy) ||
 		   (isok(dx,dy) && !SPACE_POS(levl[dx][dy].typ)))
 		 nogrow++;
 	    }
@@ -308,7 +308,7 @@ xchar x,y;
 	    return TRUE;
 	 }
       }
-   } 
+   }
    return FALSE;
 }
 
@@ -325,12 +325,12 @@ boolean update;  /* do newsym() */
      (void) grow_herbs(herb_info[herbnum].herb, -1,-1, showmsg, update);
    if (!rn2(30))
      (void) drop_ripe_treefruit(-1,-1, showmsg, update);
-   (void) water_current(-1,-1, rn2(8), 
+   (void) water_current(-1,-1, rn2(8),
 			Is_waterlevel(&u.uz) ? 200 : 25, showmsg, update);
 }
 
 /* catch up with growths when returning to a previously visited level */
-void 
+void
 catchup_dgn_growths (int mvs)
 {
    if (mvs < 0) mvs = 0;
@@ -556,7 +556,7 @@ moverock()
 			  the(xname(otmp)));
 		  exercise(A_STR, TRUE);
 #ifdef STEED
-		} else 
+		} else
 		    pline("%s moves %s.",
 			  upstart(y_monnam(u.usteed)), the(xname(otmp)));
 #endif
@@ -607,7 +607,7 @@ moverock()
 	    if (
 #ifdef STEED
 		!u.usteed &&
-#endif	    
+#endif
 		(((!invent || inv_weight() <= -850) &&
 		 (!u.dx || !u.dy || (IS_ROCK(levl[u.ux][sy].typ)
 				     && IS_ROCK(levl[sx][u.uy].typ))))
@@ -868,7 +868,7 @@ int repeat_hit = 0;
 /* return TRUE if (dx,dy) is an OK place to move
  * mode is one of DO_MOVE, TEST_MOVE or TEST_TRAV
  */
-boolean 
+boolean
 test_move(ux, uy, dx, dy, mode)
 int ux, uy, dx, dy;
 int mode;
@@ -1146,7 +1146,7 @@ boolean guess;
 		    }
 		}
 	    }
-	    
+
 	    n = nn;
 	    set = 1-set;
 	    radius++;
@@ -1204,7 +1204,7 @@ found:
     return FALSE;
 }
 
-void 
+void
 domove (void)
 {
 	struct monst *mtmp;
@@ -1295,7 +1295,7 @@ domove (void)
 		if(Stunned || (Confusion && !rn2(5))
 #ifdef STEED
 			|| (u.usteed && u.usteed->mconf)
-#endif	
+#endif
 		   ) {
 			int tries = 0;
 
@@ -1837,7 +1837,7 @@ domove (void)
 	}
 }
 
-void 
+void
 invocation_message (void)
 {
 	/* a special clue-msg when on the Invocation position */
@@ -2276,7 +2276,7 @@ boolean newlev;
 }
 
 
-int 
+int
 dopickup (void)
 {
 	int count;
@@ -2356,7 +2356,7 @@ dopickup (void)
 /* stop running if we see something interesting */
 /* turn around a corner if that is the only way we can proceed */
 /* do not turn left or right twice */
-void 
+void
 lookaround (void)
 {
     int x, y, i, x0 = 0, y0 = 0, m0 = 1, i0 = 9;
@@ -2482,7 +2482,7 @@ stop:
 
 /* something like lookaround, but we are not running */
 /* react only to monsters that might hit us */
-int 
+int
 monster_nearby (void)
 {
 	int x,y;
@@ -2538,7 +2538,7 @@ maybe_wail()
     }
 }
 
-void 
+void
 nomul (int nval)
 {
 	if(multi < nval) return;	/* This is a bug fix by ab@unido */
@@ -2549,7 +2549,7 @@ nomul (int nval)
 }
 
 /* called when a non-movement, multi-turn action has completed */
-void 
+void
 unmul (const char *msg_override)
 {
 	multi = 0;	/* caller will usually have done this already */
@@ -2564,10 +2564,10 @@ unmul (const char *msg_override)
 
 
 
-#ifdef SHOW_DMG                
+#ifdef SHOW_DMG
 /* Print the amount of damage inflicted */
 /* KMH -- Centralized to one function */
-void 
+void
 showdmg (int n)
 {
 	int lev;
@@ -2594,7 +2594,7 @@ showdmg (int n)
 #endif
 
 
-void 
+void
 losehp (
     int n,
     const char *knam,
@@ -2605,11 +2605,11 @@ losehp (
 	if (Invulnerable) {
 		n = 0;
 		pline("You are unharmed!");
-		/* NOTE: DO NOT RETURN - losehp is also called to check for death 
+		/* NOTE: DO NOT RETURN - losehp is also called to check for death
 		 * via u.uhp < 1
 		 */
-	}        
-#ifdef SHOW_DMG                
+	}
+#ifdef SHOW_DMG
 	else if (flags.showdmg && n > 0) pline("[%d pts.]", n); /* WAC see damage */
 #endif
 
@@ -2639,7 +2639,7 @@ losehp (
 	}
 }
 
-int 
+int
 weight_cap (void)
 {
 	long carrcap;
@@ -2677,7 +2677,7 @@ static int wc;	/* current weight_cap(); valid after call to inv_weight() */
 
 /* returns how far beyond the normal capacity the player is currently. */
 /* inv_weight() is negative if the player is below normal capacity. */
-int 
+int
 inv_weight (void)
 {
 	struct obj *otmp = invent;
@@ -2710,7 +2710,7 @@ inv_weight (void)
  * Returns 0 if below normal capacity, or the number of "capacity units"
  * over the normal capacity the player is loaded.  Max is 5.
  */
-int 
+int
 calc_capacity (int xtra_wt)
 {
     int cap, wt = inv_weight() + xtra_wt;
@@ -2721,13 +2721,13 @@ calc_capacity (int xtra_wt)
     return min(cap, OVERLOADED);
 }
 
-int 
+int
 near_capacity (void)
 {
     return calc_capacity(0);
 }
 
-int 
+int
 max_capacity (void)
 {
     int wt = inv_weight();
@@ -2750,7 +2750,7 @@ const char *str;
 }
 
 
-int 
+int
 inv_cnt (void)
 {
 	struct obj *otmp = invent;
@@ -2768,7 +2768,7 @@ inv_cnt (void)
 /* Intended use is for your or some monsters inventory, */
 /* now that u.gold/m.gold is gone.*/
 /* Counting money in a container might be possible too. */
-long 
+long
 money_cnt (struct obj *otmp)
 {
         while(otmp) {

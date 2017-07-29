@@ -4,8 +4,8 @@
 
 /* tty.c - (Windows NT) version */
 
-/*                                                  
- * Initial Creation 				M. Allison	1993/01/31 
+/*
+ * Initial Creation 				M. Allison	1993/01/31
  * Switch to low level console output routines	M. Allison	2003/10/01
  * Restrict cursor movement until input pending	M. Lehotay	2003/10/02
  *
@@ -75,7 +75,7 @@ static DWORD cmode;
  * a final RETURN at the end of the game when launched from the GUI
  * to prevent the scoreboard (or panic message :-|) from vanishing
  * immediately after it is displayed, yet not bother when started
- * from the command line. 
+ * from the command line.
  */
 int GUILaunched;
 static BOOL CtrlHandler(DWORD);
@@ -223,7 +223,7 @@ tty_end_screen()
 	{
 	    DWORD ccnt;
 	    COORD newcoord;
-	    
+
 	    newcoord.X = 0;
 	    newcoord.Y = 0;
 	    FillConsoleOutputAttribute(hConOut,
@@ -321,9 +321,9 @@ nttty_open()
 {
         HANDLE hStdOut;
         long mask;
-        
+
 	nttty_check_stdio();
-        /* The following 6 lines of code were suggested by 
+        /* The following 6 lines of code were suggested by
          * Bob Landau of Microsoft WIN32 Developer support,
          * as the only current means of determining whether
          * we were launched from the command prompt, or from
@@ -350,21 +350,21 @@ nttty_open()
 	hConIn = CreateFile("CONIN$",
 			GENERIC_READ |GENERIC_WRITE,
 			FILE_SHARE_READ |FILE_SHARE_WRITE,
-			0, OPEN_EXISTING, 0, 0);					
+			0, OPEN_EXISTING, 0, 0);
 	hConOut = CreateFile("CONOUT$",
 			GENERIC_READ |GENERIC_WRITE,
 			FILE_SHARE_READ |FILE_SHARE_WRITE,
 			0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,0);
-#endif       
+#endif
 
 	if (!GetConsoleMode(hConIn,&cmode))
 		cmode = 0;
 #ifdef NO_MOUSE_ALLOWED
 	mask = ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT |
-	       ENABLE_MOUSE_INPUT | ENABLE_ECHO_INPUT | ENABLE_WINDOW_INPUT;   
+	       ENABLE_MOUSE_INPUT | ENABLE_ECHO_INPUT | ENABLE_WINDOW_INPUT;
 #else
 	mask = ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT |
-	       ENABLE_ECHO_INPUT | ENABLE_WINDOW_INPUT;   
+	       ENABLE_ECHO_INPUT | ENABLE_WINDOW_INPUT;
 #endif
 	/* Turn OFF the settings specified in the mask */
 	cmode &= ~mask;
@@ -423,7 +423,7 @@ get_scr_size()
 
 	if ( (LI < 25) || (CO < 80) ) {
 		COORD newcoord;
-    
+
 		LI = 25;
 		CO = 80;
 
@@ -601,7 +601,7 @@ clear_screen()
 	if (GetConsoleScreenBufferInfo(hConOut,&csbi)) {
 	    DWORD ccnt;
 	    COORD newcoord;
-	    
+
 	    newcoord.X = 0;
 	    newcoord.Y = 0;
 	    FillConsoleOutputAttribute(hConOut,
@@ -641,7 +641,7 @@ cl_eos()
 	if (GetConsoleScreenBufferInfo(hConOut,&csbi)) {
 	    DWORD ccnt;
 	    COORD newcoord;
-	    
+
 	    newcoord.X = ttyDisplay->curx;
 	    newcoord.Y = ttyDisplay->cury;
 	    FillConsoleOutputAttribute(hConOut,
@@ -738,7 +738,7 @@ has_color(int color)
 	return 1;
     else
 	return 0;
-# endif 
+# endif
 }
 
 void
@@ -763,7 +763,7 @@ term_start_attr(int attrib)
         default:
 		foreground &= ~FOREGROUND_INTENSITY;
                 break;
-    }                
+    }
     attr = (foreground | background);
 }
 
@@ -782,7 +782,7 @@ term_end_attr(int attrib)
         case ATR_BOLD:
 		foreground &= ~FOREGROUND_INTENSITY;
 		break;
-    }                
+    }
     attr = (foreground | background);
 }
 
@@ -954,10 +954,10 @@ load_keyboard_handler()
 			FreeLibrary(hLibrary);
 			hLibrary = (HANDLE)0;
 		   pNHkbhit = (NHKBHIT)0;
-		   pCheckInput = (CHECKINPUT)0; 
-		   pSourceWhere = (SOURCEWHERE)0; 
-		   pSourceAuthor = (SOURCEAUTHOR)0; 
-		   pKeyHandlerName = (KEYHANDLERNAME)0; 
+		   pCheckInput = (CHECKINPUT)0;
+		   pSourceWhere = (SOURCEWHERE)0;
+		   pSourceAuthor = (SOURCEAUTHOR)0;
+		   pKeyHandlerName = (KEYHANDLERNAME)0;
 		   pProcessKeystroke = (PROCESS_KEYSTROKE)0;
 		}
 		if ((truncspot = strstri(iflags.altkeyhandler, suffx)) != 0)
@@ -987,11 +987,11 @@ load_keyboard_handler()
 		if (hLibrary) {
 			FreeLibrary(hLibrary);
 			hLibrary = (HANDLE)0;
-			pNHkbhit = (NHKBHIT)0; 
-			pCheckInput = (CHECKINPUT)0; 
-			pSourceWhere = (SOURCEWHERE)0; 
-			pSourceAuthor = (SOURCEAUTHOR)0; 
-			pKeyHandlerName = (KEYHANDLERNAME)0; 
+			pNHkbhit = (NHKBHIT)0;
+			pCheckInput = (CHECKINPUT)0;
+			pSourceWhere = (SOURCEWHERE)0;
+			pSourceAuthor = (SOURCEAUTHOR)0;
+			pKeyHandlerName = (KEYHANDLERNAME)0;
 			pProcessKeystroke = (PROCESS_KEYSTROKE)0;
 		}
 		(void)strncpy(kh, "nhdefkey.dll", (MAX_ALTKEYHANDLER - sizeof suffx) - 1);

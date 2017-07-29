@@ -326,9 +326,9 @@ struct monst *mtmp;
 				  w2 = ROCKET_LAUNCHER;
 			  	  m_initthrow(mtmp, ROCKET, 5);
 			  } else if (rn2(2)) {
-				  (void) mongets(mtmp, GRENADE_LAUNCHER);			  
-			  	  m_initthrow(mtmp, 
-			  	  	(rn2(2) ? FRAG_GRENADE : GAS_GRENADE), 
+				  (void) mongets(mtmp, GRENADE_LAUNCHER);
+			  	  m_initthrow(mtmp,
+			  	  	(rn2(2) ? FRAG_GRENADE : GAS_GRENADE),
 			  	  	5);
 			  } else {
 				  w2 = rn2(2) ? SILVER_SABER : DAGGER;
@@ -392,7 +392,7 @@ struct monst *mtmp;
 			    (void)mongets(mtmp, PICK_AXE);
 			if (!rn2(50)) (void)mongets(mtmp, CRYSTAL_BALL);
 		    }
-		    } /* normal elves */                
+		    } /* normal elves */
 		} else /* enemy characters! */
 		 if (mm >= PM_ARCHEOLOGIST && mm <= PM_WIZARD && rn2(4)) {
 		  switch (mm) {
@@ -604,7 +604,7 @@ struct monst *mtmp;
 		   break;
 		   default:
 		   break;
-		  } 
+		  }
 		  if ((int) mtmp->m_lev > rn2(40))
 		     (void) mongets(mtmp, rnd_offensive_item(mtmp));
 		  if ((int) mtmp->m_lev > rn2(40))
@@ -631,7 +631,7 @@ struct monst *mtmp;
 		    /* MRKR: Dwarves in the Mines sometimes carry torches */
 
 		    if (In_mines(&u.uz)) {
-		      if (!rn2(4)) {	
+		      if (!rn2(4)) {
 			otmp = mksobj(TORCH, TRUE, FALSE);
 			otmp->quan = 1;
 			(void) mpickobj(mtmp, otmp);
@@ -640,7 +640,7 @@ struct monst *mtmp;
 
 			if (!levl[mtmp->mx][mtmp->my].lit) {
 			  begin_burn(otmp, FALSE);
-			}		      
+			}
 		      }
 		    }
 		}
@@ -725,7 +725,7 @@ struct monst *mtmp;
 		    default:
 			m_initweap_normal(mtmp);
 			break;
-		}	
+		}
 		break;
 	    case S_HUMANOID:
 		if (is_dwarf(ptr)) {
@@ -756,7 +756,7 @@ struct monst *mtmp;
 				case 2:
 			            (void)mongets(mtmp, SLING);
 			            /* WAC give them some rocks to throw */
-			            m_initthrow(mtmp, ROCK, 2); 
+			            m_initthrow(mtmp, ROCK, 2);
 						break;
 			      }
 				/* WAC add 50% chance of leather */
@@ -782,7 +782,7 @@ struct monst *mtmp;
 			if (!rn2(2)) (void)mongets(mtmp, LEATHER_ARMOR);
 			break;
           default:
-	          break;                     
+	          break;
 		}
 		break;
 # ifdef KOPS
@@ -917,7 +917,7 @@ struct monst *mtmp;
 	      m_initweap_normal(mtmp);
 	      break;
 	}
-/*    if ((int) mtmp->m_lev > rn2(120)) */        
+/*    if ((int) mtmp->m_lev > rn2(120)) */
       if ((int) mtmp->m_lev > rn2(200))
 		(void) mongets(mtmp, rnd_offensive_item(mtmp));
 }
@@ -928,7 +928,7 @@ struct monst *mtmp;
  *   Makes up money for monster's inventory.
  *   This will change with silver & copper coins
  */
-void 
+void
 mkmonmoney (struct monst *mtmp, long amount)
 {
     struct obj *gold = mksobj(GOLD_PIECE, FALSE, FALSE);
@@ -1026,7 +1026,7 @@ struct	monst	*mtmp;
 				(void) mongets(mtmp, TIN_WHISTLE);
 		} else if (ptr == &mons[PM_SHOPKEEPER]) {
 		    (void) mongets(mtmp,SKELETON_KEY);
-		    /* STEPHEN WHITE'S NEW CODE                
+		    /* STEPHEN WHITE'S NEW CODE
 		     *
 		     * "Were here to pump *clap* YOU up!"  -Hans and Frans
 		     *                                      Saterday Night Live
@@ -1126,17 +1126,17 @@ struct	monst	*mtmp;
 		mkmonmoney(mtmp, (long) d(level_difficulty(), 30));
 #endif
 		break;
-	    case S_ELEMENTAL:        
+	    case S_ELEMENTAL:
   /*            if(ptr == &mons[PM_WATER_WEIRD]){
 			otmp = mksobj(WAN_WISHING,TRUE,FALSE);
 			otmp->spe=3;
 			otmp->blessed=0;
 			mpickobj(mtmp, otmp);
 		}*/
-		break;	
+		break;
 	    case S_VAMPIRE:
 		/* [Lethe] Star and fire vampires don't get this stuff */
-		if (ptr == &mons[PM_STAR_VAMPIRE] || 
+		if (ptr == &mons[PM_STAR_VAMPIRE] ||
 				ptr == &mons[PM_FIRE_VAMPIRE])
 		    break;
 	    	/* Get opera cloak */
@@ -1394,7 +1394,7 @@ makemon (struct permonst *ptr, int x, int y, int mmflags)
 				y = bypos.y;
 			} else
 				return(NULL);
-		} else 
+		} else
 			return(NULL);
 	}
 
@@ -1445,10 +1445,10 @@ makemon (struct permonst *ptr, int x, int y, int mmflags)
 	mtmp->mnum = mndx;
 
 	mtmp->m_lev = adj_lev(ptr);
-	
+
 	/* WAC set oldmonnm */
 	mtmp->oldmonnm = monsndx(ptr);
-	
+
 	if (ptr >= &mons[PM_ARCHEOLOGIST] && ptr <= &mons[PM_WIZARD]) {
 	   /* enemy characters are of varying level */
 	   int base_you, base_lev;
@@ -1459,7 +1459,7 @@ makemon (struct permonst *ptr, int x, int y, int mmflags)
 	   mtmp->m_lev = (1 + rn2(base_you) + rn2(base_lev) / 2)+1;
 	}
 
-	/* Set HP, HPmax */	
+	/* Set HP, HPmax */
 	if (is_golem(ptr)) {
 	    mtmp->mhpmax = mtmp->mhp = golemhp(mndx);
 	} else if (is_rider(ptr)) {
@@ -1480,10 +1480,10 @@ makemon (struct permonst *ptr, int x, int y, int mmflags)
 	    mtmp->mhpmax = mtmp->mhp = rnd(4);
 	} else {
 	    mtmp->mhpmax = mtmp->mhp = d((int)mtmp->m_lev, 8);
-	    
+
 	    if (is_home_elemental(ptr))
 		mtmp->mhpmax = (mtmp->mhp *= 3);
-	    else mtmp->mhpmax = mtmp->mhp = 
+	    else mtmp->mhpmax = mtmp->mhp =
 		d((int)mtmp->m_lev, 8) + (mtmp->m_lev*rnd(2));
 	}
 
@@ -1491,8 +1491,8 @@ makemon (struct permonst *ptr, int x, int y, int mmflags)
 	if (mindless(ptr)) {
 	    mtmp->m_enmax = mtmp->m_en = 0;
 	} else {
-	    /* This is actually quite similar to hit dice,  
-	     * but with more randomness 
+	    /* This is actually quite similar to hit dice,
+	     * but with more randomness
 	     */
 	    mtmp->m_enmax = mtmp->m_en =
 		d((int)mtmp->m_lev * 2, 4) + (mtmp->m_lev*rnd(2));
@@ -1540,7 +1540,7 @@ makemon (struct permonst *ptr, int x, int y, int mmflags)
 		case S_JABBERWOCK:
 		case S_NYMPH:
 			if (rn2(5) && !u.uhave.amulet) mtmp->msleeping = 1;
-			if (mndx == PM_PIXIE) {        
+			if (mndx == PM_PIXIE) {
 /*  			    mtmp->perminvis = TRUE;*/
   			    mtmp->minvis = TRUE;
 			}
@@ -1693,11 +1693,11 @@ makemon (struct permonst *ptr, int x, int y, int mmflags)
 	return(mtmp);
 }
 
-int 
+int
 mbirth_limit (int mndx)
 {
 	/* assert(MAXMONNO < 255); */
-	return (mndx == PM_NAZGUL ? 9 : mndx == PM_ERINYS ? 3 : MAXMONNO); 
+	return (mndx == PM_NAZGUL ? 9 : mndx == PM_ERINYS ? 3 : MAXMONNO);
 }
 
 /* used for wand/scroll/spell of create monster */
@@ -1821,7 +1821,7 @@ rndmonst (void)
 	    for (mndx = LOW_PM; mndx < SPECIAL_PM; mndx++) {
 		if (!uncommon(mndx)) break;
 		rndmonst_state.mchoices[mndx] = 0;
-	    }		
+	    }
 	    if (mndx == SPECIAL_PM) {
 		/* evidently they've all been exterminated */
 #ifdef DEBUG
@@ -1842,7 +1842,7 @@ rndmonst (void)
 /*
  *	Find out how many monsters exist in the range we have selected.
  */
-	     
+
 loopback:
 	    /* (`mndx' initialized above) */
 	    for ( ; mndx < SPECIAL_PM; mndx++) {
@@ -1902,7 +1902,7 @@ loopback:
 
 /* called when you change level (experience or dungeon depth) or when
    monster species can no longer be created (genocide or extinction) */
-void 
+void
 reset_rndmonst (
     int mndx	/* particular species that can no longer be created */
 )
@@ -1930,13 +1930,13 @@ mkclass (char class, int spc)
 	int    first;
 
 	first = pm_mkclass(class,spc);
-	
+
 	if (first == -1) return(NULL);
 
 	return(&mons[first]);
 }
 
-/* Called by mkclass() - returns the pm of the monster 
+/* Called by mkclass() - returns the pm of the monster
  * Returns -1 (PM_PLAYERMON) if can't find monster of the class
  *
  * spc may have G_UNIQ and/or G_NOGEN set to allow monsters of
@@ -1944,7 +1944,7 @@ mkclass (char class, int spc)
  * MKC_ULIMIT set to place an upper limit on the difficulty of
  * the monster returned.
  */
-int 
+int
 pm_mkclass (char class, int spc)
 {
 	int	first, last, num = 0;
@@ -1994,7 +1994,7 @@ pm_mkclass (char class, int spc)
 	return(first);
 }
 
-int 
+int
 adj_lev (	/* adjust strength of monsters based on u.uz and u.ulevel */
     struct permonst *ptr
 )
@@ -2087,7 +2087,7 @@ grow_up (	/* `mtmp' might "grow up" into a bigger version */
 
 	mtmp->m_enmax += max_increase;
 	mtmp->m_en += cur_increase;
-	
+
 	if (mtmp->mhpmax <= hp_threshold)
 	    return ptr;		/* doesn't gain a level */
 
@@ -2132,7 +2132,7 @@ grow_up (	/* `mtmp' might "grow up" into a bigger version */
 }
 
 
-int 
+int
 mongets (struct monst *mtmp, int otyp)
 {
 	struct obj *otmp;
@@ -2199,7 +2199,7 @@ mongets (struct monst *mtmp, int otyp)
 }
 
 
-int 
+int
 golemhp (int type)
 {
 	switch(type) {
@@ -2287,7 +2287,7 @@ struct permonst *ptr;
  *	peaceful monsters
  *   it's never bad to kill a hostile monster, although it may not be good
  */
-void 
+void
 set_malign (struct monst *mtmp)
 {
 	schar mal = mtmp->data->maligntyp;
@@ -2346,7 +2346,7 @@ static char syms[] = {
 	S_MIMIC_DEF, S_MIMIC_DEF, S_MIMIC_DEF,
 };
 
-void 
+void
 set_mimic_sym (		/* KAA, modified by ERS */
     struct monst *mtmp
 )
@@ -2459,7 +2459,7 @@ assign_sym:
 }
 
 /* release a monster from a bag of tricks */
-void 
+void
 bagotricks (struct obj *bag)
 {
     if (!bag || bag->otyp != BAG_OF_TRICKS) {

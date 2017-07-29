@@ -6,7 +6,7 @@
 #include "emin.h"
 #include "epri.h"
 
-void 
+void
 msummon (		/* mon summons a monster */
     struct monst *mon
 )
@@ -26,7 +26,7 @@ msummon (		/* mon summons a monster */
 	    ptr = &mons[PM_WIZARD_OF_YENDOR];
 	    atyp = (ptr->maligntyp==A_NONE) ? A_NONE : sgn(ptr->maligntyp);
 	}
-	    
+
 	if (is_dprince(ptr) || (ptr == &mons[PM_WIZARD_OF_YENDOR])) {
 	    dtype = (!rn2(20)) ? dprince(atyp) :
 				 (!rn2(4)) ? dlord(atyp) : ndemon(atyp);
@@ -138,7 +138,7 @@ boolean talk;
 }
 #define Athome	(Inhell && !mtmp->cham)
 
-int 
+int
 demon_talk (		/* returns 1 if it won't attack. */
     struct monst *mtmp
 )
@@ -277,7 +277,7 @@ int chaotic_minion(int difficulty)
    return PM_GREMLIN;
 }
 
-long 
+long
 bribe (struct monst *mtmp)
 {
 	char buf[BUFSZ];
@@ -351,7 +351,7 @@ aligntyp atyp;
 }
 
 /* create lawful (good) lord */
-int 
+int
 llord (void)
 {
 	if (!(mvitals[PM_ARCHON].mvflags & G_GONE))
@@ -360,7 +360,7 @@ llord (void)
 	return(lminion());	/* approximate */
 }
 
-int 
+int
 lminion (void)
 {
 	int	tryct;

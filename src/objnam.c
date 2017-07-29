@@ -492,7 +492,7 @@ xname (struct obj *obj)
 		hobj->quan = obj->quan;
 		/* WAC clean up */
 		buf = xname2(hobj);
-		obj_extract_self(hobj);                
+		obj_extract_self(hobj);
 		dealloc_obj(hobj);
 
 		return (buf);
@@ -532,7 +532,7 @@ struct obj *obj;
 			 (obj->known || obj->otyp == AMULET_OF_YENDOR));
 }
 
-static void 
+static void
 add_erosion_words (struct obj *obj, char *prefix)
 {
 	boolean iscrys = (obj->otyp == CRYSKNIFE);
@@ -547,14 +547,14 @@ add_erosion_words (struct obj *obj, char *prefix)
 		switch (obj->oeroded) {
 			case 2:	strcat(prefix, "very "); break;
 			case 3:	strcat(prefix, "thoroughly "); break;
-		}			
+		}
 		strcat(prefix, is_rustprone(obj) ? "rusty " : "burnt ");
 	}
 	if (obj->oeroded2 && !iscrys) {
 		switch (obj->oeroded2) {
 			case 2:	strcat(prefix, "very "); break;
 			case 3:	strcat(prefix, "thoroughly "); break;
-		}			
+		}
 		strcat(prefix, is_corrodeable(obj) ? "corroded " :
 			"rotted ");
 	}
@@ -664,7 +664,7 @@ plus:
 			obj->otyp == STICK_OF_DYNAMITE) {
 		    if (obj->lamplit) strcat(bp, " (lit)");
 #  ifdef DEBUG
-		    sprintf(eos(bp), " (%d)", obj->age);		
+		    sprintf(eos(bp), " (%d)", obj->age);
 #  endif
 		} else if (is_grenade(obj))
 		    if (obj->oarmed) strcat(bp, " (armed)");
@@ -673,7 +673,7 @@ plus:
 		if (is_lightsaber(obj)) {
 		    if (obj->lamplit) strcat(bp, " (lit)");
 #  ifdef DEBUG
-		    sprintf(eos(bp), " (%d)", obj->age);		
+		    sprintf(eos(bp), " (%d)", obj->age);
 #  endif
 		}
 # endif
@@ -839,7 +839,7 @@ ring:
 	}
 	if(obj->owornmask & W_QUIVER) strcat(bp, " (in quiver)");
 	if (!Hallucination && obj->unpaid) {
-		xchar ox, oy; 
+		xchar ox, oy;
 		long quotedprice = unpaid_cost(obj);
 		struct monst *shkp = NULL;
 
@@ -2180,7 +2180,7 @@ boolean from_user;
 	 * Find corpse type using "of" (figurine of an orc, tin of orc meat)
 	 * Don't check if it's a wand or spellbook.
 	 * (avoid "wand/finger of death" confusion).
-	 * (WAC avoid "hand/eye of vecna", "wallet of perseus" 
+	 * (WAC avoid "hand/eye of vecna", "wallet of perseus"
 	 *  "medallion of shifters", "stake of van helsing" similarly
 	 *  ALI "potion of vampire blood" also).
 	 */
@@ -2678,8 +2678,8 @@ typfnd:
 	}
 
 	if (islit &&
-		(typ == OIL_LAMP || typ == MAGIC_LAMP || 
-		 typ == BRASS_LANTERN || typ == TORCH || 
+		(typ == OIL_LAMP || typ == MAGIC_LAMP ||
+		 typ == BRASS_LANTERN || typ == TORCH ||
 		 Is_candle(otmp) || typ == POT_OIL)) {
 	    place_object(otmp, u.ux, u.uy);  /* make it viable light source */
 	    begin_burn(otmp, FALSE);
@@ -2919,7 +2919,7 @@ typfnd:
 		if (aname && objtyp == otmp->otyp) name = aname;
 
 # ifdef NOARTIFACTWISH
-		/* Tom -- not always getting what you're wishing for... */                
+		/* Tom -- not always getting what you're wishing for... */
 		if (restrict_name(otmp, nname) && !rn2(3) && !wizard) {
 		    int n = rn2((int)strlen(nname));
 		    char c1, c2;
@@ -3005,7 +3005,7 @@ typfnd:
 	return(otmp);
 }
 
-int 
+int
 rnd_class (int first, int last)
 {
 	int i, x, sum=0;

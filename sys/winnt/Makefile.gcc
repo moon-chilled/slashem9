@@ -4,7 +4,7 @@
 #       Copyright (c) Slash'EM Development Team 1999-2004
 #
 #       Slash'EM 0.0.8 Makefile for MinGW 2.0 and above
-#  
+#
 #       Win32 systems tested:
 #				- Windows 95
 #				- Windows 2000 SP1
@@ -20,7 +20,7 @@
 #              .l                           lex    (such as flex)
 #
 #
-#       If you have any questions read the sys/winnt/Install.gcc file included 
+#       If you have any questions read the sys/winnt/Install.gcc file included
 #       with the distribution.
 #
 #       Note that compiling will fail under WinNT (including Win2k and XP) if
@@ -37,7 +37,7 @@ GAMEDIR = \games\slam32d
 # Directories
 #
 
-# These are for MinGW's GCC,  which gets confused by \ 
+# These are for MinGW's GCC,  which gets confused by \
 DDAT  = ../dat
 DUTIL = ../util
 DSRC  = ../src
@@ -208,8 +208,8 @@ PKG_CONFIG_PATH = $(MW32GTK)/lib/pkgconfig;$(NHPROXY)/lib/pkgconfig
 #
 # files for a straight tty port using no native windowing system
 WINTTYSRC = ../win/tty/getline.c ../win/tty/termcap.c ../win/tty/topl.c \
-	../win/tty/wintty.c 
-WINTTYOBJ = getline.o termcap.o topl.o wintty.o 
+	../win/tty/wintty.c
+WINTTYOBJ = getline.o termcap.o topl.o wintty.o
 #
 # files for a native MS-Windows port
 # (tile.c is included in the defn. for WINCSRC, below)
@@ -336,13 +336,13 @@ TEXTIO       =
 TEXTIO2      =
 PLANAR_TIB   =
 OVERVIEW_TIB =
-TILEUTIL     = 
-TILEFILES    = 
-TILEFILES2   = 
-GIFREADERS   = 
-GIFREAD2     = 
-PPMWRITERS   = 
-PPMWRIT2     = 
+TILEUTIL     =
+TILEFILES    =
+TILEFILES2   =
+GIFREADERS   =
+GIFREAD2     =
+PPMWRITERS   =
+PPMWRIT2     =
 
 else
 
@@ -742,7 +742,7 @@ spotless: clean
 	-$(DEL) pet_mark.xbm
 	-$(DEL) $(WSHR)\monmag.txt
 	-$(DEL) $(WSHR)\mon32.txt
-	-$(DEL) $(WSHR)\objmag.txt 
+	-$(DEL) $(WSHR)\objmag.txt
 	-$(DEL) $(WSHR)\obj32.txt
 	-$(DEL) $(WSHR)\othmag.txt
 	-$(DEL) $(WSHR)\oth32.txt
@@ -985,7 +985,7 @@ $(INCL)\dgn_comp.h: $(SSHR)\dgn_comp.h
 
 dgn_$(LEX).c: $(SSHR)\dgn_lex.c
 	$(COPY) $(SSHR)\dgn_lex.c $@
- 
+
 endif
 
 #
@@ -1312,7 +1312,7 @@ sp_lev.tag:     utility.tag         $(DAT)\beholder.des $(DAT)\bigroom.des \
 		$(DAT)\priest.des   $(DAT)\rogue.des    $(DAT)\samurai.des \
 		$(DAT)\tourist.des  $(DAT)\slayer.des   $(DAT)\valkyrie.des \
 		$(DAT)\wizard.des   $(DAT)\yeoman.des   $(DAT)\frnknstn.des \
-		$(DAT)\nightmar.des $(DAT)\ranger.des 
+		$(DAT)\nightmar.des $(DAT)\ranger.des
 	lev_comp $(DDAT)/beholder.des
 	lev_comp $(DDAT)/bigroom.des
 	lev_comp $(DDAT)/blkmar.des
@@ -1367,7 +1367,7 @@ sp_lev.tag:     utility.tag         $(DAT)\beholder.des $(DAT)\bigroom.des \
 	lev_comp $(DDAT)/ranger.des
 	$(COPY) *.lev $(DAT)
 	$(ECHO) sp_levs done > sp_lev.tag
-	
+
 $(DAT)\dungeon:	  utility.tag  $(DAT)\dungeon.def
 	-makedefs -e
 	dgn_comp $(DAT)\dungeon.pdf

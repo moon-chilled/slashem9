@@ -25,7 +25,7 @@ struct icp {
 };
 
 
-/* STEPHEN WHITE'S NEW CODE */   
+/* STEPHEN WHITE'S NEW CODE */
 /* [Tom] tried to fix this back up a little... */
 /* KMH, balance patch -- changed again */
 const struct icp mkobjprobs[] = {
@@ -212,7 +212,7 @@ struct obj *box;
 	}
 }
 
-int 
+int
 rndmonnum (void)	/* select a random, common monster type */
 {
 	struct permonst *ptr;
@@ -280,7 +280,7 @@ splitobj (struct obj *obj, long num)
  * Note:  Don't use use obj_extract_self() -- we are doing an in-place swap,
  * not actually moving something.
  */
-void 
+void
 replace_object (struct obj *obj, struct obj *otmp)
 {
     otmp->where = obj->where;
@@ -350,7 +350,7 @@ replace_object (struct obj *obj, struct obj *otmp)
  * Note that check_unpaid_usage() should be used instead for partial
  * usage of an object.
  */
-void 
+void
 bill_dummy_object (struct obj *otmp)
 {
 	struct obj *dummy, *obj;
@@ -419,7 +419,7 @@ boolean artif;
 	  (otmp->otyp != BOULDER || !In_sokoban(&u.uz)), FALSE);
 #endif
 	if (init) switch (let) {
-/* -----------============STEPHEN WHITE'S NEW CODE============----------- */                   
+/* -----------============STEPHEN WHITE'S NEW CODE============----------- */
 	case WEAPON_CLASS:
 		/* KMH, balance patch -- new macros */
 		otmp->quan = is_multigen(otmp) ? (long) rn1(6,6) : 1L;
@@ -436,7 +436,7 @@ boolean artif;
 		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 #ifdef FIREARMS
 		if (otmp->otyp == STICK_OF_DYNAMITE) {
-			otmp->age = (otmp->cursed ? rn2(15) + 2 : 
+			otmp->age = (otmp->cursed ? rn2(15) + 2 :
 					(otmp->blessed ? 15 : rn2(10) + 10));
 		}
 #endif
@@ -529,7 +529,7 @@ boolean artif;
 					otmp->lamplit = 0;
 					blessorcurse(otmp, 5);
 					break;
-		case MAGIC_CANDLE:                
+		case MAGIC_CANDLE:
 		case MAGIC_LAMP:
 			otmp->spe = 1;
 					otmp->lamplit = 0;
@@ -631,10 +631,10 @@ boolean artif;
 		break;
 	case SPBOOK_CLASS:
 		/* WAC charged books are easier to read */
-		if (otmp->otyp != SPE_BOOK_OF_THE_DEAD) otmp->spe = rn1(3,2); 
+		if (otmp->otyp != SPE_BOOK_OF_THE_DEAD) otmp->spe = rn1(3,2);
 		blessorcurse(otmp, 17);
 		break;
-/* -----------============STEPHEN WHITE'S NEW CODE============----------- */           
+/* -----------============STEPHEN WHITE'S NEW CODE============----------- */
 	case ARMOR_CLASS:
 		if(rn2(10) && (otmp->otyp == FUMBLE_BOOTS ||
 		   otmp->otyp == LEVITATION_BOOTS ||
@@ -648,7 +648,7 @@ boolean artif;
 			otmp->blessed = rn2(2);
 			otmp->spe = rne(3);
 		} else	blessorcurse(otmp, 10);
-		if (artif && !rn2(40))                
+		if (artif && !rn2(40))
 		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 		/* simulate lacquered armor for samurai */
 		if (Role_if(PM_SAMURAI) && otmp->otyp == SPLINT_MAIL &&
@@ -663,7 +663,7 @@ boolean artif;
 		}
 		break;
 	case WAND_CLASS:
-		if(otmp->otyp == WAN_WISHING) {                 
+		if(otmp->otyp == WAN_WISHING) {
 		    otmp->spe = rnd(3);
 #ifdef INVISIBLE_OBJECTS
 		    if (Is_stronghold(&u.uz)) obj_set_oinvis(otmp, TRUE, FALSE);
@@ -736,7 +736,7 @@ boolean artif;
  * Start a corpse decay or revive timer.
  * This takes the age of the corpse into consideration as of 3.4.0.
  */
-void 
+void
 start_corpse_timeout (struct obj *body)
 {
 	long when; 		/* rot away when this old */
@@ -791,8 +791,8 @@ start_corpse_timeout (struct obj *body)
 			when = age;
 			break;
 		    }
-	} 
-	
+	}
+
 	if (action == ROT_CORPSE && !acidic(&mons[body->corpsenm])) {
 		/* Corpses get moldy
 		 */
@@ -804,12 +804,12 @@ start_corpse_timeout (struct obj *body)
 			break;
 		    }
 	}
-	
+
 	if (body->norevive) body->norevive = 0;
 	(void) start_timer(when, TIMER_OBJECT, action, (void *)body);
 }
 
-void 
+void
 bless (struct obj *otmp)
 {
 #ifdef GOLDOBJ
@@ -828,7 +828,7 @@ bless (struct obj *otmp)
 	return;
 }
 
-void 
+void
 unbless (struct obj *otmp)
 {
 	otmp->blessed = 0;
@@ -843,7 +843,7 @@ unbless (struct obj *otmp)
 	return;
 }
 
-void 
+void
 curse (struct obj *otmp)
 {
 #ifdef GOLDOBJ
@@ -873,7 +873,7 @@ curse (struct obj *otmp)
 	return;
 }
 
-void 
+void
 uncurse (struct obj *otmp)
 {
 	otmp->cursed = 0;
@@ -887,7 +887,7 @@ uncurse (struct obj *otmp)
 }
 
 
-void 
+void
 blessorcurse (struct obj *otmp, int chance)
 {
 	if(otmp->blessed || otmp->cursed) return;
@@ -903,7 +903,7 @@ blessorcurse (struct obj *otmp, int chance)
 }
 
 
-int 
+int
 bcsign (struct obj *otmp)
 {
 	return(!!otmp->blessed - !!otmp->cursed);
@@ -918,7 +918,7 @@ bcsign (struct obj *otmp)
  *	   of the code messes with a contained object and doesn't update the
  *	   container's weight.
  */
-int 
+int
 weight (struct obj *obj)
 {
 	int wt = objects[obj->otyp].oc_weight;
@@ -1078,7 +1078,7 @@ obj_attach_mid (struct obj *obj, unsigned mid)
     if (!mid || !obj) return NULL;
     lth = sizeof(mid);
     namelth = obj->onamelth ? strlen(ONAME(obj)) + 1 : 0;
-    if (namelth) 
+    if (namelth)
 	otmp = realloc_obj(obj, lth, (void *) &mid, namelth, ONAME(obj));
     else {
 	otmp = obj;
@@ -1211,7 +1211,7 @@ struct obj *otmp;
  */
 
 /* put the object at the given location */
-void 
+void
 place_object (struct obj *otmp, int x, int y)
 {
     struct obj *otmp2 = level.objects[x][y];
@@ -1275,11 +1275,11 @@ boolean do_buried;
  * rot timers pertaining to the object don't have to be stopped and
  * restarted etc.
  */
-long 
+long
 peek_at_iced_corpse_age (struct obj *otmp)
 {
     long age, retval = otmp->age;
-    
+
     if (otmp->otyp == CORPSE && ON_ICE(otmp)) {
 	/* Adjust the age; must be same as obj_timer_checks() for off ice*/
 	age = monstermoves - otmp->age;
@@ -1315,11 +1315,11 @@ int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
 	    if (tleft == 0L) {
 		action = REVIVE_MON;
 		tleft = stop_timer(action, (void *)otmp);
-	} 
-	} 
+	}
+	}
 	if (tleft != 0L) {
 	    long age;
-	    
+
 	    tleft = tleft - monstermoves;
 	    /* mark the corpse as being on ice */
 	    ON_ICE(otmp) = 1;
@@ -1363,7 +1363,7 @@ int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
 		otmp->age = otmp->age + (age / ROT_ICE_ADJUSTMENT);
 	}
     }
-    /* now re-start the timer with the appropriate modifications */ 
+    /* now re-start the timer with the appropriate modifications */
     if (restart_timer)
 	(void) start_timer(tleft, TIMER_OBJECT, action, (void *)otmp);
 }
@@ -1371,7 +1371,7 @@ int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
 #undef ON_ICE
 #undef ROT_ICE_ADJUSTMENT
 
-void 
+void
 remove_object (struct obj *otmp)
 {
     xchar x = otmp->ox;
@@ -1386,7 +1386,7 @@ remove_object (struct obj *otmp)
 }
 
 /* throw away all of a monster's inventory */
-void 
+void
 discard_minvent (struct monst *mtmp)
 {
     struct obj *otmp, *curr;
@@ -1428,7 +1428,7 @@ discard_minvent (struct monst *mtmp)
  *	OBJ_BURIED	level.buriedobjs chain
  *	OBJ_ONBILL	on billobjs chain
  */
-void 
+void
 obj_extract_self (struct obj *obj)
 {
     switch (obj->where) {
@@ -1480,7 +1480,7 @@ container_extract_indestructable(struct obj *obj)
 }
 
 /* Extract the given object from the chain, following nobj chain. */
-void 
+void
 extract_nobj (struct obj *obj, struct obj **head_ptr)
 {
     struct obj *curr, *prev;
@@ -1506,7 +1506,7 @@ extract_nobj (struct obj *obj, struct obj **head_ptr)
  * This does not set obj->where, this function is expected to be called
  * in tandem with extract_nobj, which does set it.
  */
-void 
+void
 extract_nexthere (struct obj *obj, struct obj **head_ptr)
 {
     struct obj *curr, *prev;
@@ -1530,7 +1530,7 @@ extract_nexthere (struct obj *obj, struct obj **head_ptr)
  * in the inventory, then the passed obj is deleted and 1 is returned.
  * Otherwise 0 is returned.
  */
-int 
+int
 add_to_minv (struct monst *mon, struct obj *obj)
 {
     struct obj *otmp;
@@ -1575,7 +1575,7 @@ add_to_container (struct obj *container, struct obj *obj)
     return (obj);
 }
 
-void 
+void
 add_to_migration (struct obj *obj)
 {
     if (obj->where != OBJ_FREE)
@@ -1586,7 +1586,7 @@ add_to_migration (struct obj *obj)
     migrating_objs = obj;
 }
 
-void 
+void
 add_to_buried (struct obj *obj)
 {
     if (obj->where != OBJ_FREE)
@@ -1615,7 +1615,7 @@ container_weight(container)
  * Deallocate the object.  _All_ objects should be run through here for
  * them to be deallocated.
  */
-void 
+void
 dealloc_obj (struct obj *obj)
 {
     if (obj->where != OBJ_FREE)
@@ -1643,7 +1643,7 @@ dealloc_obj (struct obj *obj)
 
 #ifdef WIZARD
 /* Check all object lists for consistency. */
-void 
+void
 obj_sanity_check (void)
 {
     int x, y;

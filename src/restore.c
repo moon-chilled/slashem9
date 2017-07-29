@@ -269,7 +269,7 @@ boolean ghostly;
 			int mndx = monsndx(mtmp->data);
 			if (propagate(mndx, TRUE, ghostly) == 0) {
 				/* cookie to trigger purge in getbones() */
-				mtmp->mhpmax = DEFUNCT_MONSTER;	
+				mtmp->mhpmax = DEFUNCT_MONSTER;
 			}
 		}
 		if (mtmp->isshk) restore_shk_bill(fd, mtmp);
@@ -461,9 +461,9 @@ unsigned int *stuckid, *steedid;	/* STEED */
 	restore_waterlevel(fd);
 
         mread(fd, (void *) &achieve, sizeof achieve);
-        mread(fd, (void *) &realtime_data.realtime, 
+        mread(fd, (void *) &realtime_data.realtime,
                   sizeof realtime_data.realtime);
-  
+
 	/* must come after all mons & objs are restored */
 	relink_timers(FALSE);
 	relink_light_sources(FALSE);
@@ -616,7 +616,7 @@ int dorecover (int fd) {
 	restlevelstate(stuckid, steedid);
 
 	/* WAC -- This needs to be after the second restlevelstate
-	 * You() writes to the message line,  which also updates the 
+	 * You() writes to the message line,  which also updates the
 	 * status line.  However,  u.usteed needs to be corrected or else
 	 * weight/carrying capacities will be calculated by dereferencing
 	 * garbage pointers.
@@ -666,7 +666,7 @@ int dorecover (int fd) {
 	return(1);
 }
 
-void 
+void
 trickery (char *reason)
 {
 	pline("Strange, this map is not as I remember it.");
@@ -720,7 +720,7 @@ boolean ghostly;
 		short	i, j;
 		uchar	len;
 		struct rm r;
-		
+
 #if defined(MAC)
 		/* Suppress warning about used before set */
 		(void) memset((void *) &r, 0, sizeof(r));
@@ -850,7 +850,7 @@ boolean ghostly;
 		case BR_NO_END1:
 		case BR_NO_END2: /* OK to assign to sstairs if it's not used */
 		    assign_level(&sstairs.tolev, &ltmp);
-		    break;		
+		    break;
 		case BR_PORTAL: /* max of 1 portal per level */
 		    {
 			struct trap *ttmp;
@@ -988,7 +988,7 @@ static unsigned short inbufsz = 0;
 static short inrunlength = -1;
 static int mreadfd;
 
-static int 
+static int
 mgetc (void)
 {
     if (inbufp >= inbufsz) {
@@ -1004,7 +1004,7 @@ mgetc (void)
     return inbuf[inbufp++];
 }
 
-void 
+void
 minit (void)
 {
     inbufsz = 0;
@@ -1039,7 +1039,7 @@ unsigned len;
 
 #else /* ZEROCOMP */
 
-void 
+void
 minit (void)
 {
     return;

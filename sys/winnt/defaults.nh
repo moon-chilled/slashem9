@@ -153,7 +153,7 @@ STATUSCOLOR=held:red&inverse,blind:red
 # General options.  You might also set "silent" so as not to attract
 # the boss's attention.
 #
-# number_pad option can have an optional value of 0 (off), 1 (on), 
+# number_pad option can have an optional value of 0 (off), 1 (on),
 # or 2(on,legacy-mode) which causes 5='g', alt-5='G', alt-0='I'
 OPTIONS=!time,noshowexp,number_pad:1,lit_corridor,topten
 #
@@ -210,9 +210,9 @@ OPTIONS=hilite_pet,!toptenwin
 # point at must exist.  NetHack will not create them for you.
 #
 # HACKDIR is the default location for everything.
-# Note: On Windows HACKDIR defaults to the location 
+# Note: On Windows HACKDIR defaults to the location
 #       of the NetHack.exe or NetHackw.exe file so
-#       setting HACKDIR below to override that is 
+#       setting HACKDIR below to override that is
 #       not usually necessary or recommended.
 #HACKDIR=c:\games\nethack
 #
@@ -232,7 +232,7 @@ OPTIONS=hilite_pet,!toptenwin
 # is kept (default=HACKDIR, writeable)
 #TROUBLEDIR=c:\nethack\trouble
 
-# Finnish keyboards might need these modifications uncommented. 
+# Finnish keyboards might need these modifications uncommented.
 # For  \, @, $, [, |
 #OPTIONS=subkeyvalue:171/92
 #OPTIONS=subkeyvalue:178/64

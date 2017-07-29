@@ -178,7 +178,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	 *    it fails with cursetxt() and loss of mspec_used.
 	 * -- monster isn't trying to attack.  Select a spell once.  Don't keep
 	 *    searching; if that spell is not useful (or if it's directed),
-	 *    return and do something else. 
+	 *    return and do something else.
 	 * Since most spells are directed, this means that a monster that isn't
 	 * attacking casts spells only a small portion of the time that an
 	 * attacking monster does.
@@ -305,7 +305,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	    pline("%s casts a spell%s!",
 		  canspotmon(mtmp) ? Monnam(mtmp) : "Something",
 		  is_undirected_spell(mattk->adtyp, spellnum) ? "" :
-		  (Invisible && !perceives(mtmp->data) && 
+		  (Invisible && !perceives(mtmp->data) &&
 		   (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
 		  " at a spot near you" :
 		  (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
@@ -464,14 +464,14 @@ int spellnum;
     }
 	case MGC_CALL_UNDEAD:
 	{
-		coord mm;   
-		mm.x = u.ux;   
-		mm.y = u.uy;   
-		pline("Undead creatures are called forth from the grave!");   
-		mkundead(&mm, FALSE, NO_MINVENT);   
+		coord mm;
+		mm.x = u.ux;
+		mm.y = u.uy;
+		pline("Undead creatures are called forth from the grave!");
+		mkundead(&mm, FALSE, NO_MINVENT);
 	}
-	dmg = 0;   
-	break;   
+	dmg = 0;
+	break;
     case MGC_AGGRAVATION:
 	You_feel("that monsters are aware of your presence.");
 	aggravate();

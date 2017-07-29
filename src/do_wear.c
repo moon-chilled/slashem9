@@ -184,7 +184,7 @@ int Cloak_on(void) {
 	case ROBE:
 	case LEATHER_CLOAK:
 	/* KMH, balance patch -- removed
-	case CLOAK_OF_DRAIN_RESISTANCE: */               
+	case CLOAK_OF_DRAIN_RESISTANCE: */
 		break;
 	/* KMH, balance patch -- lab coat gives poison _and_ acid resistance */
 	case LAB_COAT:
@@ -622,7 +622,7 @@ void Amulet_on(void) {
 		break;
 	    }
 	/* KMH, balance patch -- removed
-	case AMULET_OF_POLYMORPH:        
+	case AMULET_OF_POLYMORPH:
 		makeknown(AMULET_OF_POLYMORPH);
 		You("feel rather strange.");
 		polyself();
@@ -639,7 +639,7 @@ void Amulet_on(void) {
 		if(uamul->blessed) {
 			char buf[BUFSZ];
 			int sleeptime;
-  
+
 			makeknown(AMULET_OF_RESTFUL_SLEEP);
 			do {
 			getlin("How many moves do you wish to sleep for? [1-500]", buf);
@@ -651,7 +651,7 @@ void Amulet_on(void) {
 				u.usleep = 1;
 				nomovemsg = "You wake up from your refreshing nap.";
 		HSleeping = rnd(100);
-			}                
+			}
 		} else HSleeping = rnd(100);
 		break;
 	case AMULET_OF_YENDOR:
@@ -763,12 +763,12 @@ void Ring_on(struct obj *obj) {
 	case RIN_DRAIN_RESISTANCE: */
 	/* KMH -- added */
 	case RIN_MOOD:
-	case RIN_FREE_ACTION:                
+	case RIN_FREE_ACTION:
 	case RIN_SLOW_DIGESTION:
 	case RIN_SUSTAIN_ABILITY:
 	case MEAT_RING:
 		break;
-	case RIN_SLEEPING:        
+	case RIN_SLEEPING:
 		HSleeping = rnd(100);
 		break;
 #if 0
@@ -902,7 +902,7 @@ static void Ring_off_or_gone(struct obj *obj, boolean gone) {
 	case RIN_DRAIN_RESISTANCE: */
 	/* KMH, balance patch -- added */
 	case RIN_MOOD:
-	case RIN_FREE_ACTION:                
+	case RIN_FREE_ACTION:
 	case RIN_SLOW_DIGESTION:
 	case RIN_SUSTAIN_ABILITY:
 	case MEAT_RING:
@@ -925,7 +925,7 @@ static void Ring_off_or_gone(struct obj *obj, boolean gone) {
 		if (!See_invisible) {
 		    set_mimic_blocking(); /* do special mimic handling */
 		    see_monsters();
-#ifdef INVISIBLE_OBJECTS                
+#ifdef INVISIBLE_OBJECTS
 		    see_objects();
 #endif
 		}
@@ -1162,7 +1162,7 @@ int dotakeoff(void) {
 			      uskin->otyp >= GRAY_DRAGON_SCALES ?
 				"dragon scales are" : "dragon scale mail is");
 		else
-		    pline("Not wearing any armor.%s", (iflags.cmdassist && 
+		    pline("Not wearing any armor.%s", (iflags.cmdassist &&
 				(uleft || uright || uamul || ublindf)) ?
 			  "  Use 'R' command to remove accessories." : "");
 		return 0;
@@ -1376,7 +1376,7 @@ int canwearobj(struct obj *otmp, long *mask, boolean noisy) {
 	    if (noisy) already_wearing(an(c_shield));
 	    err++;
 	} else if (uwep && bimanual(uwep)) {
-	    if (noisy) 
+	    if (noisy)
 		You("cannot wear a shield while wielding a two-handed %s.",
 		    is_sword(uwep) ? c_sword :
 		    (uwep->otyp == BATTLE_AXE) ? c_axe : c_weapon);
@@ -1708,7 +1708,7 @@ void find_ac(void) {
 
 	/* Harlow - make sure it doesn't wrap around ;) */
 	uac = (uac < UAC_MIN ? UAC_MIN : (uac > UAC_LIM ? UAC_LIM : uac));
-	
+
 	if(uac != u.uac){
 		u.uac = uac;
 		flags.botl = 1;
@@ -1786,7 +1786,7 @@ struct obj *some_armor(struct monst *victim) {
 	if (!otmph)
 	    otmph = (victim == &youmonst) ? uarmu : which_armor(victim, W_ARMU);
 #endif
-	
+
 	otmp = (victim == &youmonst) ? uarmh : which_armor(victim, W_ARMH);
 	if(otmp && (!otmph || !rn2(4))) otmph = otmp;
 	otmp = (victim == &youmonst) ? uarmg : which_armor(victim, W_ARMG);

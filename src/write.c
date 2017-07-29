@@ -68,7 +68,7 @@ struct obj *otmp;
 
 static const char write_on[] = { SCROLL_CLASS, SPBOOK_CLASS, 0 };
 
-int 
+int
 dowrite (struct obj *pen)
 {
 	struct obj *paper;

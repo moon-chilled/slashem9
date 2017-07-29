@@ -66,7 +66,7 @@ static const short skill_names_indices[P_NUM_SKILLS] = {
 	PN_DIVINATION_SPELL, PN_ENCHANTMENT_SPELL,
 	PN_PROTECTION_SPELL,            PN_BODY_SPELL,
 	PN_MATTER_SPELL,
-	PN_BARE_HANDED, 		PN_MARTIAL_ARTS, 
+	PN_BARE_HANDED, 		PN_MARTIAL_ARTS,
 	PN_TWO_WEAPONS,
 #ifdef STEED
 	PN_RIDING,
@@ -136,7 +136,7 @@ static const char kebabable[] = {
  *	hitval returns an integer representing the "to hit" bonuses
  *	of "otmp" against the monster.
  */
-int 
+int
 hitval (struct obj *otmp, struct monst *mon)
 {
 	int	tmp = 0;
@@ -217,7 +217,7 @@ hitval (struct obj *otmp, struct monst *mon)
  *	dmgval returns an integer representing the damage bonuses
  *	of "otmp" against the monster.
  */
-int 
+int
 dmgval (struct obj *otmp, struct monst *mon)
 {
 	int tmp = 0, otyp = otmp->otyp;
@@ -260,7 +260,7 @@ dmgval (struct obj *otmp, struct monst *mon)
 #ifdef LIGHTSABERS
 		case GREEN_LIGHTSABER:  tmp +=13; break;
 		case BLUE_LIGHTSABER:   tmp +=12; break;
-		case RED_DOUBLE_LIGHTSABER: 
+		case RED_DOUBLE_LIGHTSABER:
 					if (otmp->altmode) tmp += rnd(11);
 					/* fallthrough */
 		case RED_LIGHTSABER:    tmp +=10; break;
@@ -355,11 +355,11 @@ dmgval (struct obj *otmp, struct monst *mon)
 	    /* concussion damage is better agains chitinous armour */
 	    if( (objects[otyp].oc_dir & (WHACK) ) &&
 	        (ptr->mlet == S_ANT || ptr->mlet == S_SPIDER || ptr->mlet == S_XAN))
-			bonus += 2; 
+			bonus += 2;
 	    /* flyers can better be reached with a polearm */
 	    if( (is_pole(otmp) || is_spear(otmp) ) && is_flyer(ptr) )
-			bonus += 2; 
-	    if (is_pick(otmp) && made_of_rock(ptr) ) 
+			bonus += 2;
+	    if (is_pick(otmp) && made_of_rock(ptr) )
 			bonus += 3;
 
 	    /* if the weapon is going to get a double damage bonus, adjust
@@ -411,7 +411,7 @@ int x;
 /* WAC added the Ya, increased priority of silver dagger, added Spoon */
 /* KMH -- added bullets */
 static const int rwep[] =
-{	
+{
 #ifdef SPOON
 	SPOON,
 #endif
@@ -419,9 +419,9 @@ static const int rwep[] =
 	FRAG_GRENADE, GAS_GRENADE, ROCKET, SILVER_BULLET, BULLET, SHOTGUN_SHELL,
 #endif
 	DWARVISH_SPEAR, SILVER_SPEAR, ELVEN_SPEAR, SPEAR, ORCISH_SPEAR,
-	JAVELIN, SHURIKEN, YA, SILVER_ARROW, ELVEN_ARROW, DARK_ELVEN_ARROW, 
-	ARROW, ORCISH_ARROW, CROSSBOW_BOLT, SILVER_DAGGER, ELVEN_DAGGER, 
-	DARK_ELVEN_DAGGER, DAGGER, ORCISH_DAGGER, KNIFE, FLINT, ROCK, 
+	JAVELIN, SHURIKEN, YA, SILVER_ARROW, ELVEN_ARROW, DARK_ELVEN_ARROW,
+	ARROW, ORCISH_ARROW, CROSSBOW_BOLT, SILVER_DAGGER, ELVEN_DAGGER,
+	DARK_ELVEN_DAGGER, DAGGER, ORCISH_DAGGER, KNIFE, FLINT, ROCK,
 	LOADSTONE, LUCKSTONE, DART,
 	/* BOOMERANG, */ CREAM_PIE
 	/* note: CREAM_PIE should NOT be #ifdef KOPS */
@@ -507,7 +507,7 @@ select_rwep (	/* select a ranged weapon for the monster */
 	    prop = (objects[rwep[i]]).oc_skill;
 	    if (prop < 0) {
 		switch (-prop) {
-			/* WAC NOTE: remember to always start the 1st item in 
+			/* WAC NOTE: remember to always start the 1st item in
 			 *   a list of propellors with a
 			 * 	propellor = ...
 			 *   and follow up with
@@ -584,8 +584,8 @@ select_rwep (	/* select a ranged weapon for the monster */
 /* WAC -- removed polearms */
 static const short hwep[] = {
 	  CORPSE,  /* cockatrice corpse */
-	  TSURUGI, RUNESWORD, HEAVY_HAMMER, 
-	  DWARVISH_MATTOCK, 
+	  TSURUGI, RUNESWORD, HEAVY_HAMMER,
+	  DWARVISH_MATTOCK,
 #ifdef LIGHTSABERS
 	  RED_DOUBLE_LIGHTSABER, RED_LIGHTSABER,
 	  BLUE_LIGHTSABER,
@@ -595,15 +595,15 @@ static const short hwep[] = {
 	  KATANA, UNICORN_HORN, CRYSKNIFE, TRIDENT, LONG_SWORD,
 	  ELVEN_BROADSWORD, BROADSWORD, SCIMITAR, SILVER_SABER,
 	  SILVER_SHORT_SWORD, SILVER_LONG_SWORD, SILVER_MACE,
-  	  MORNING_STAR, DARK_ELVEN_SHORT_SWORD, ELVEN_SHORT_SWORD, 
+  	  MORNING_STAR, DARK_ELVEN_SHORT_SWORD, ELVEN_SHORT_SWORD,
   	  DWARVISH_SHORT_SWORD, SHORT_SWORD,
 	  ORCISH_SHORT_SWORD, MACE, AXE, DWARVISH_SPEAR, SILVER_SPEAR,
 	  ELVEN_SPEAR, SPEAR, ORCISH_SPEAR, FLAIL, BULLWHIP, QUARTERSTAFF,
-	  JAVELIN, AKLYS, CLUB, PICK_AXE, FLY_SWATTER, 
+	  JAVELIN, AKLYS, CLUB, PICK_AXE, FLY_SWATTER,
 #ifdef KOPS
 	  RUBBER_HOSE,
 #endif /* KOPS */
-	  WAR_HAMMER, SILVER_DAGGER, ELVEN_DAGGER, WOODEN_STAKE, DAGGER, 
+	  WAR_HAMMER, SILVER_DAGGER, ELVEN_DAGGER, WOODEN_STAKE, DAGGER,
 	  ORCISH_DAGGER,
 	  ATHAME, SCALPEL, KNIFE, TORCH, WORM_TOOTH
 };
@@ -705,7 +705,7 @@ boolean polyspot;
 /* Let a monster try to wield a weapon, based on mon->weapon_check.
  * Returns 1 if the monster took time to do it, 0 if it did not.
  */
-int 
+int
 mon_wield_item (struct monst *mon)
 {
 	struct obj *obj;
@@ -719,7 +719,7 @@ mon_wield_item (struct monst *mon)
 		case NEED_RANGED_WEAPON:
 			(void)select_rwep(mon);
 			obj = propellor;
-			
+
 			break;
 		case NEED_PICK_AXE:
 			obj = m_carrying(mon, PICK_AXE);
@@ -748,7 +748,7 @@ mon_wield_item (struct monst *mon)
 	}
 	if (obj && obj != &zeroobj) {
 		struct obj *mw_tmp = MON_WEP(mon);
-		
+
 		if (mw_tmp && mw_tmp->otyp == obj->otyp) {
 		/* already wielding it */
 #ifdef LIGHTSABERS
@@ -808,7 +808,7 @@ mon_wield_item (struct monst *mon)
 		    begin_burn(obj, FALSE);
 		    if (canseemon(mon))
 			pline("%s brilliantly in %s %s!",
-			    Tobjnam(obj, "glow"), 
+			    Tobjnam(obj, "glow"),
 			    s_suffix(mon_nam(mon)), mbodypart(mon,HAND));
 		}
 		obj->owornmask = W_WEP;
@@ -823,7 +823,7 @@ mon_wield_item (struct monst *mon)
 }
 
 #ifdef LIGHTSABERS
-static void 
+static void
 mon_ignite_lightsaber (struct obj *obj, struct monst *mon)
 {
 	/* No obj or not lightsaber */
@@ -832,7 +832,7 @@ mon_ignite_lightsaber (struct obj *obj, struct monst *mon)
 	/* WAC - Check lightsaber is on */
 	if (!obj->lamplit) {
 	    if (obj->cursed && !rn2(2)) {
-		if (canseemon(mon)) pline("%s %s flickers and goes out.", 
+		if (canseemon(mon)) pline("%s %s flickers and goes out.",
 			s_suffix(Monnam(mon)), xname(obj));
 
 	    } else {
@@ -840,7 +840,7 @@ mon_ignite_lightsaber (struct obj *obj, struct monst *mon)
 			makeknown(obj->otyp);
 			pline("%s ignites %s.", Monnam(mon),
 				an(xname(obj)));
-		}	    	
+		}
 		begin_burn(obj, FALSE);
 	    }
 	} else {
@@ -848,7 +848,7 @@ mon_ignite_lightsaber (struct obj *obj, struct monst *mon)
 		if (obj->otyp == RED_DOUBLE_LIGHTSABER && !obj->altmode) {
 		    /* Do we want to activate dual bladed mode? */
 		    if (!obj->altmode && (!obj->cursed || rn2(4))) {
-			if (canseemon(mon)) pline("%s ignites the second blade of %s.", 
+			if (canseemon(mon)) pline("%s ignites the second blade of %s.",
 				Monnam(mon), an(xname(obj)));
 		    	obj->altmode = TRUE;
 		    	return;
@@ -861,14 +861,14 @@ mon_ignite_lightsaber (struct obj *obj, struct monst *mon)
 #endif
 
 /* STEPHEN WHITE'S NEW CODE */
-int 
+int
 abon (void)		/* attack bonus for strength & dexterity */
 {
 	int sbon;
 	int str = ACURR(A_STR), dex = ACURR(A_DEX);
 
 	if (Upolyd) return(adj_lev(&mons[u.umonnum]) - 3);
-	/* [Tom] lowered these a little */        
+	/* [Tom] lowered these a little */
 	if (str < 6) sbon = -2;
 	else if (str < 8) sbon = -1;
 	else if (str < 17) sbon = 0;
@@ -882,7 +882,7 @@ abon (void)		/* attack bonus for strength & dexterity */
 	else if (str == STR19(23)) sbon = 4;  /* 23 */
 	else if (str == STR19(24)) sbon = 5;  /* 24 */
 	else sbon = 5;
-  
+
 	if (dex < 5) sbon -= 2;
 	else if (dex < 7) sbon -= 1;
 	else if (dex < 15) sbon += 0;
@@ -904,7 +904,7 @@ abon (void)		/* attack bonus for strength & dexterity */
 }
 
 /* STEPHEN WHITE'S NEW CODE */
-int 
+int
 dbon (void)		/* damage bonus for strength */
 {
 	int str = ACURR(A_STR);
@@ -940,13 +940,13 @@ char *buf;
 	case P_SKILLED:	     ptr = "Skilled";   break;
 	case P_EXPERT:	     ptr = "Expert";    break;
 	case P_MASTER:	     ptr = "Master";    break;
-	case P_GRAND_MASTER: 
+	case P_GRAND_MASTER:
             if (skill <= P_LAST_WEAPON)
                     ptr = "Wizard" ;
             else if (skill <= P_LAST_SPELL)
                     ptr = "Legendary";
-	    else if (skill <= P_LAST_H_TO_H) 
-	    	    ptr = "Grand Master"; 
+	    else if (skill <= P_LAST_H_TO_H)
+	    	    ptr = "Grand Master";
 	    else ptr = "Unprecedented";
 	    break;
 	default:	     ptr = "Unknown";	break;
@@ -962,10 +962,10 @@ int skill;
 {
     int tmp = P_SKILL(skill);
 
-      /* WAC if you're over your class max,  it's twice as costly */      
+      /* WAC if you're over your class max,  it's twice as costly */
       if (tmp >= P_MAX_SKILL(skill)) tmp *=2;
       if (tmp < 0) tmp = 0; /* for Restricted skills */
-  
+
     /* The more difficult the training, the more slots it takes.
      *	unskilled -> basic	1
      *	basic -> skilled	2
@@ -1048,7 +1048,7 @@ int skill;
 	return;
     }
 #endif
-    
+
     u.weapon_slots -= slots_required(skill);
     P_SKILL(skill)++;
     u.skill_record[u.skills_advanced++] = skill;
@@ -1056,7 +1056,7 @@ int skill;
     You("are now %s skilled in %s.",
 	P_SKILL(skill) >= P_MAX_SKILL(skill) ? "most" : "more",
 	P_NAME(skill));
-    if (!tech_known(T_DISARM) && (P_SKILL(skill) == P_SKILLED) && 
+    if (!tech_known(T_DISARM) && (P_SKILL(skill) == P_SKILLED) &&
     		skill <= P_LAST_WEAPON && skill != P_WHIP) {
     	learntech(T_DISARM, FROMOUTSIDE, 1);
     	You("learn how to perform disarm!");
@@ -1080,14 +1080,14 @@ const static struct skill_range {
  * to be able to update the menu since selecting one item could make
  * others unselectable.
  */
-int 
+int
 enhance_weapon_skill (void)
 #ifdef DUMP_LOG
 {
 	return enhance_skill(FALSE);
 }
 
-void 
+void
 dump_weapon_skill (void)
 {
 	enhance_skill(TRUE);
@@ -1295,7 +1295,7 @@ int enhance_skill(boolean want_dump)
  * Change from restricted to unrestricted, allowing P_BASIC as max.  This
  * function may be called with with P_NONE.  Used in pray.c.
  */
-void 
+void
 unrestrict_weapon_skill (int skill)
 {
     if (skill < P_NUM_SKILLS && P_RESTRICTED(skill)) {
@@ -1305,7 +1305,7 @@ unrestrict_weapon_skill (int skill)
     }
 }
 
-void 
+void
 use_skill (int skill, int degree)
 {
     boolean advance_before;
@@ -1323,7 +1323,7 @@ use_skill (int skill, int degree)
     }
 }
 
-void 
+void
 add_weapon_skill (
     int n	/* number of slots to gain; normally one */
 )
@@ -1339,7 +1339,7 @@ add_weapon_skill (
 	give_may_advance_msg(P_NONE);
 }
 
-void 
+void
 lose_weapon_skill (
     int n	/* number of slots to lose; normally one */
 )
@@ -1380,7 +1380,7 @@ lose_weapon_skill (
     }
 }
 
-int 
+int
 weapon_type (struct obj *obj)
 {
 	/* KMH, balance patch -- now uses the object table */
@@ -1398,7 +1398,7 @@ weapon_type (struct obj *obj)
 	return ((type < 0) ? -type : type);
 }
 
-int 
+int
 uwep_skill_type (void)
 {
 	if (u.twoweap)
@@ -1410,7 +1410,7 @@ uwep_skill_type (void)
  * Return hit bonus/penalty based on skill of weapon.
  * Treat restricted weapons as unskilled.
  */
-int 
+int
 weapon_hit_bonus (struct obj *weapon)
 {
     int type, wep_type, bonus = 0;
@@ -1496,7 +1496,7 @@ weapon_hit_bonus (struct obj *weapon)
  * Return damage bonus/penalty based on skill of weapon.
  * Treat restricted weapons as unskilled.
  */
-int 
+int
 weapon_dam_bonus (struct obj *weapon)
 {
     int type, wep_type, bonus = 0;
@@ -1570,7 +1570,7 @@ weapon_dam_bonus (struct obj *weapon)
     return bonus;
 }
 
-int 
+int
 skill_bonus (int type)
 {
     int bonus = 0;
@@ -1609,20 +1609,20 @@ skill_bonus (int type)
 }
 
 /* Try to return an associated skill for the specified object */
-static int 
+static int
 get_obj_skill (struct obj *obj)
 {
 	int skill;
-	
+
 	/* Try for a weapon skill */
 	skill = weapon_type(obj);
 
 	/* Try for a spell type */
-	if (skill == P_NONE && obj->oclass == SPBOOK_CLASS) 
+	if (skill == P_NONE && obj->oclass == SPBOOK_CLASS)
 		skill = spell_skilltype(obj->otyp);
-	
-	/* Should be integrated into oc_subtyp as soon as more skills are 
-	 * invented 
+
+	/* Should be integrated into oc_subtyp as soon as more skills are
+	 * invented
 	 */
 #ifdef STEED
 	if (obj->otyp == SADDLE) skill = P_RIDING;
@@ -1639,7 +1639,7 @@ get_obj_skill (struct obj *obj)
  * hero is holding, finally reading the given array that sets
  * maximums.
  */
-void 
+void
 skill_init (const struct def_skill *class_skill)
 {
 	struct obj *obj;
@@ -1740,7 +1740,7 @@ practice()
 	return(0);
 }
 
-void 
+void
 practice_weapon (void)
 {
 	if (can_practice(weapon_type(uwep))
@@ -1748,7 +1748,7 @@ practice_weapon (void)
 	    || (wizard && (yn("Skill at normal max. Practice?") == 'y'))
 #endif
 	    ) {
-		if (uwep)    
+		if (uwep)
 		    You("start practicing intensely with %s",doname(uwep));
 		else
 		    You("start practicing intensely with your %s %s.",
@@ -1761,10 +1761,10 @@ practice_weapon (void)
 		You("cannot increase your skill in %s.", P_NAME(weapon_type(uwep)));
 	else You("cannot learn much about %s right now.",
                 P_NAME(weapon_type(uwep)));
-                
+
 }
 
-void 
+void
 setmnotwielded (struct monst *mon, struct obj *obj)
 {
     if (!obj) return;

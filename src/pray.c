@@ -203,7 +203,7 @@ in_trouble()
 	if(HStun) return (TROUBLE_STUNNED);
 	if(HConfusion) return (TROUBLE_CONFUSED);
 	if(Hallucination) return(TROUBLE_HALLUCINATION);
-        if((u.uen <= 5 || u.uen*7 <= u.uenmax) && (u.uen < u.uenmax)) 
+        if((u.uen <= 5 || u.uen*7 <= u.uenmax) && (u.uen < u.uenmax))
         	return(TROUBLE_LOW_ENERGY);
 	return(0);
 }
@@ -540,7 +540,7 @@ aligntyp resp_god;
 		summon_minion(resp_god, FALSE);
 		summon_minion(resp_god, FALSE);
 		summon_minion(resp_god, FALSE);
-		summon_minion(resp_god, FALSE);                
+		summon_minion(resp_god, FALSE);
 		summon_minion(resp_god, FALSE);
 		summon_minion(resp_god, FALSE);
 		summon_minion(resp_god, FALSE);
@@ -641,7 +641,7 @@ aligntyp resp_god;
 }
 
 /* helper to print "str appears at your feet", or appropriate */
-static void 
+static void
 at_your_feet (const char *str)
 {
 	if (Blind) str = Something;
@@ -1199,7 +1199,7 @@ aligntyp alignment;
     }
 }
 
-static void 
+static void
 lawful_god_gives_angel (void)
 {
 /*
@@ -1219,7 +1219,7 @@ lawful_god_gives_angel (void)
 
 
 /* KMH -- offerings to Oracle */
-static int 
+static int
 offer_oracle (struct monst *mtmp, struct obj *otmp)
 {
 	/* The Oracle doesn't care about the age or species of the corpse,
@@ -1252,7 +1252,7 @@ offer_oracle (struct monst *mtmp, struct obj *otmp)
 }
 
 
-int 
+int
 dosacrifice (void)
 {
     struct obj *otmp;
@@ -1383,12 +1383,12 @@ dosacrifice (void)
 			       for(octmp = invent; octmp ; octmp = octmp->nobj)
 				 if (!rn2(6)) curse(octmp);
 			       break;
-			  case 2: 
+			  case 2:
 			  case 3:
 			       You("are terrified, and unable to move.");
 			       nomul(-3);
 			       nomovemsg = 0;
-			       break;                
+			       break;
 			  case 4:
 			       pline("Amused, he grants you a wish!");
 			       makewish();
@@ -1582,7 +1582,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		    You_feel("the power of %s increase.", u_gname());
 		    if (rnl(u.ulevel) > 3) {
 		    	/* KMH -- Only a chance of this happening */
-				You("feel %s is very angry at you!", a_gname());                    
+				You("feel %s is very angry at you!", a_gname());
 				summon_minion(altaralign, FALSE);
 				summon_minion(altaralign, FALSE);
 		    }
@@ -1782,7 +1782,7 @@ boolean praying;	/* false means no messages should be given */
     return !praying ? (boolean)(p_type == 3 && !Inhell) : TRUE;
 }
 
-int 
+int
 dopray (void)
 {
     /* Confirm accidental slips of Alt-P */
@@ -1894,9 +1894,9 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
     return(1);
 }
 
-int 
+int
 doturn (void)
-{	
+{
 	/* WAC doturn is now a technique */
 	/* Try to use turn undead spell if you don't know the tech. */
 /*	if (!Role_if(PM_PRIEST) && !Role_if(PM_KNIGHT) && !Role_if(PM_UNDEAD_SLAYER)) {*/
@@ -1918,7 +1918,7 @@ doturn (void)
 	return(turn_undead());
 }
 
-int 
+int
 turn_undead (void)
 {
 	struct monst *mtmp, *mtmp2;
@@ -2079,7 +2079,7 @@ aligntyp alignment;
     return result;
 }
 
-void 
+void
 altar_wrath (int x, int y)
 {
     aligntyp altaralign = a_align(x,y);
@@ -2132,7 +2132,7 @@ aligntyp alignment;
 {
 	struct obj *otmp;
 	const char *what = (const char *)0;
-	
+
 	if (!rnl(30 + u.ulevel)) god_gives_pet(alignment);
 	else {
 		switch (rnl(4)) {

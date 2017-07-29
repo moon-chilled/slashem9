@@ -91,15 +91,15 @@ int roll;
 struct attack *mattk;
 {
 	boolean nearmiss = (target == roll);
-	struct obj *blocker = NULL;	
+	struct obj *blocker = NULL;
 		/* 3 values for blocker
-		 *	No blocker:  NULL  
+		 *	No blocker:  NULL
 		 * 	Piece of armour:  object
 		 *	magical: &zeroobj
 		 */
 
 	if (target < roll) {
-		/* get object responsible 
+		/* get object responsible
 		 * Work from the closest to the skin outwards
 		 */
 #ifdef TOURIST
@@ -144,7 +144,7 @@ struct attack *mattk;
 			/* Try spell protection */
 			target += u.uspellprot;
 			if (target > roll) blocker = &zeroobj;
-		}			
+		}
 	}
 
 	if (!canspotmon(mtmp))
@@ -160,7 +160,7 @@ struct attack *mattk;
 	    else if (blocker == &zeroobj)
 		pline("%s is stopped by the golden haze.", Monnam(mtmp));
 	    else
-		Your("%s %s%s %s attack.", 
+		Your("%s %s%s %s attack.",
 			simple_typename(blocker->otyp),
 			rn2(2) ? "block" : "deflect",
 			(blocker == uarmg || blocker == uarmf) ? "" : "s",
@@ -170,12 +170,12 @@ struct attack *mattk;
 		struct obj *obj = MON_WEP(mtmp);
 		obj->owornmask &= ~W_WEP;
 		if (rnd(100) < (obj->oeroded * 5 / 2)) {
-		    if (obj->spe > -5) {    
+		    if (obj->spe > -5) {
 			obj->spe--;
 			pline("%s %s is damaged further!",
 				s_suffix(Monnam(mtmp)), xname(obj));
 		    } else
-			pline("%s %s is badly battered!", 
+			pline("%s %s is badly battered!",
 				s_suffix(Monnam(mtmp)), xname(obj));
 		}
 	    }
@@ -211,7 +211,7 @@ mpoisons_subj (struct monst *mtmp, struct attack *mattk)
 }
 
 /* called when your intrinsic speed is taken away */
-void 
+void
 u_slow_down (void)
 {
 	HFast = 0L;
@@ -391,7 +391,7 @@ struct monst *mtmp;
  *		monster which it attacks by mistake, the caller had better
  *		take care of it...
  */
-int 
+int
 mattacku (struct monst *mtmp)
 {
 	struct	attack	*mattk, alt_attk;
@@ -407,7 +407,7 @@ mattacku (struct monst *mtmp)
 		/* Might be attacking your image around the corner, or
 		 * invisible, or you might be blind....
 		 */
-	
+
 	if(!ranged) nomul(0);
 	if(mtmp->mhp <= 0 || (Underwater && !is_swimmer(mtmp->data)))
 	    return(0);
@@ -879,7 +879,7 @@ int attk;
 		    continue;
 		break;
 	    }
-	    
+
 	    break; /* Out of while loop */
 	}
 }
@@ -944,7 +944,7 @@ struct attack *mattk;
 }
 
 /* armor that sufficiently covers the body might be able to block magic */
-int 
+int
 magic_negation (struct monst *mon)
 {
 	struct obj *armor;
@@ -1234,7 +1234,7 @@ hitmu(mtmp, mattk)
                         } else if (u.umonnum == PM_STRAW_GOLEM ||
 				   u.umonnum == PM_PAPER_GOLEM ||
 				   u.umonnum == PM_WAX_GOLEM) {
-				/* This code ASSUMES that you are polymorphed 
+				/* This code ASSUMES that you are polymorphed
 				 * Code will need to be changed if we ever implement
 				 * Golems as a class.
 				 */
@@ -1329,7 +1329,7 @@ dopois:
 		    Your("helmet blocks the attack to your head.");
 		    break;
 		}
-		
+
                 /* conflicted dog, perhaps? */
 		if (mtmp->mtame && !mtmp->isminion) {
 		    EDOG(mtmp)->hungrytime += rnd(60);
@@ -1383,7 +1383,7 @@ dopois:
 		hitmsg(mtmp, mattk);
 		if (uncancelled && multi >= 0 && !rn2(3)) {
 		    if (Free_action) {
-			You("momentarily stiffen.");            
+			You("momentarily stiffen.");
 		    } else {
 			if (Blind) You("are frozen!");
 			else You("are frozen by %s!", mon_nam(mtmp));
@@ -1420,7 +1420,7 @@ dopois:
 			    if (mtmp->mtame && !mtmp->isminion)
 			    	EDOG(mtmp)->hungrytime += ((int)((youmonst.data)->cnutrit / 20) + 1);
 		}
-		
+
 		if (uncancelled && !rn2(3) && !Drain_resistance) {
 		    losexp("life drainage", FALSE);
 		}
@@ -1695,7 +1695,7 @@ dopois:
 		    pline("%s hits!  (I hope you don't mind.)", Monnam(mtmp));
 		    if (Upolyd) {
 			u.mh += rnd(7);
-/* STEPHEN WHITE'S NEW CODE */                                            
+/* STEPHEN WHITE'S NEW CODE */
 			if (!rn2(7)) {
 			    /* no upper limit necessary; effect is temporary */
 			    u.mhmax++;
@@ -1852,7 +1852,7 @@ dopois:
 		    polyself(FALSE);
 		}
 		break;
-	    case AD_SLIM:    
+	    case AD_SLIM:
 		hitmsg(mtmp, mattk);
 		if (!uncancelled) break;
 		if (flaming(youmonst.data)) {
@@ -2076,14 +2076,14 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
                         || mtmp->data == &mons[PM_GIANT_SHOGGOTH]) {
 			for (otmp2 = invent; otmp2; otmp2 = otmp2->nobj)
 			    if (is_corrodeable(otmp2))
-				(void) rust_dmg(otmp2, xname(otmp2), 3, FALSE, 
+				(void) rust_dmg(otmp2, xname(otmp2), 3, FALSE,
 					&youmonst);
-		    } else {	
+		    } else {
 			for (otmp2 = invent; otmp2; otmp2 = otmp2->nobj)
 			    if (is_corrodeable(otmp2) && !rn2(9))
-		    		(void) rust_dmg(otmp2, xname(otmp2), 3, FALSE, 
+		    		(void) rust_dmg(otmp2, xname(otmp2), 3, FALSE,
 					&youmonst);
-		    }	
+		    }
 		    break;
 		case AD_BLND:
 		    if (can_blnd(mtmp, &youmonst, mattk->aatyp, NULL)) {
@@ -2240,7 +2240,7 @@ common:
     return(2);	/* it dies */
 }
 
-int 
+int
 gazemu (	/* monster gazes at you */
     struct monst *mtmp,
     struct attack *mattk
@@ -2502,13 +2502,13 @@ gazemu (	/* monster gazes at you */
 }
 
 
-void 
+void
 mdamageu (	/* mtmp hits you for n points damage */
     struct monst *mtmp,
     int n
 )
 {
-	 
+
 	if (Invulnerable) n=0;
 	if (n == 0) {
 		pline("You are unharmed.");
@@ -2523,13 +2523,13 @@ mdamageu (	/* mtmp hits you for n points damage */
 #ifdef SHOW_DMG
 	if (flags.showdmg) pline("[%d pts.]", n);
 #endif
-	flags.botl = 1; /* This needs to be AFTER the pline for botl to be 
+	flags.botl = 1; /* This needs to be AFTER the pline for botl to be
 	 		 * updated correctly -- Kelly Bailey
 	 		 */
 
 	if (Upolyd) {
 		u.mh -= n;
-		if (u.mh < 1) {                
+		if (u.mh < 1) {
 			if (Polymorph_control || !rn2(3)) {
 			    u.uhp -= mons[u.umonnum].mlevel;
 			    u.uhpmax -= mons[u.umonnum].mlevel;
@@ -2581,7 +2581,7 @@ struct obj *obj;
 }
 
 
-int 
+int
 could_seduce (struct monst *magr, struct monst *mdef, struct attack *mattk)
 /* returns 0 if seduction impossible,
  *	   1 if fine,
@@ -2623,7 +2623,7 @@ could_seduce (struct monst *magr, struct monst *mdef, struct attack *mattk)
 #endif
 		   ))
 		return 0;
-	
+
 	if(genagr == 1 - gendef)
 		return 1;
 	else
@@ -2633,7 +2633,7 @@ could_seduce (struct monst *magr, struct monst *mdef, struct attack *mattk)
 
 #ifdef SEDUCE
 /* Returns 1 if monster teleported */
-int 
+int
 doseduce (struct monst *mon)
 {
 	struct obj *ring, *nring;
@@ -2737,11 +2737,11 @@ doseduce (struct monst *mon)
 	mayberem(uarmf, "boots");
 	if(!uwep || !welded(uwep))
 		mayberem(uarmg, "gloves");
-	/* 
+	/*
 	 * STEPHEN WHITE'S NEW CODE
 	 *
 	 * This will cause a game crash should the if statment be removed.
-	 * It will try to de-referance a pointer that doesn't exist should 
+	 * It will try to de-referance a pointer that doesn't exist should
 	 * the player not have a shield
 	 */
 
@@ -2766,7 +2766,7 @@ doseduce (struct monst *mon)
 		noit_mon_nam(mon));
 	/* Well,  IT happened ... */
 	u.uconduct.celibacy++;
-	
+
 	if (rn2(35) > ACURR(A_CHA) + ACURR(A_INT)) {
 		/* Don't bother with mspec_used here... it didn't get tired! */
 		pline("%s seems to have enjoyed it more than you...",
@@ -2881,7 +2881,7 @@ doseduce (struct monst *mon)
 		}
 		if (cost > umoney) cost = umoney;
 		if (!cost) verbalize("It's on the house!");
-		else { 
+		else {
 		    pline("%s takes %ld %s for services rendered!",
 			    noit_Monnam(mon), cost, currency(cost));
                     money2mon(mon, cost);

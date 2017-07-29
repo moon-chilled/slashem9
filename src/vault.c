@@ -109,7 +109,7 @@ findgd()
 	return(NULL);
 }
 
-char 
+char
 vault_occupied (char *array)
 {
 	char *ptr;
@@ -120,7 +120,7 @@ vault_occupied (char *array)
 	return('\0');
 }
 
-void 
+void
 invault (void)
 {
 #ifdef BSD_43_BUG
@@ -424,7 +424,7 @@ struct monst *grd;
 /*
  * return  1: guard moved,  0: guard didn't,  -1: let m_move do it,  -2: died
  */
-int 
+int
 gd_move (struct monst *grd)
 {
 	int x, y, nx, ny, m, n;
@@ -721,7 +721,7 @@ cleanup:
 }
 
 /* Routine when dying or quitting with a vault guard around */
-void 
+void
 paygd (void)
 {
 	struct monst *grd = findgd();
@@ -781,7 +781,7 @@ paygd (void)
 	mongone(grd);
 }
 
-long 
+long
 hidden_gold (void)
 {
 	long value = 0L;

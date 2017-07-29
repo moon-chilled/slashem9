@@ -101,7 +101,7 @@ struct objclass {
 	schar	oc_wsdam, oc_wldam;	/* max small/large monster damage */
 #define oc_range	oc_wsdam	/* for strength independant ranged weapons */
 #define oc_rof		oc_wldam	/* rate of fire bonus for ranged weapons */
-	
+
 	schar	oc_oc1, oc_oc2;
 #define oc_hitbon	oc_oc1		/* weapons: "to hit" bonus */
 #define w_ammotyp	oc_oc2		/* type of ammo taken by ranged weapon */

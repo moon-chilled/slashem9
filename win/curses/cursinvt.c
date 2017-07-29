@@ -104,7 +104,7 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
             attr |= curses_color_attr(color, 0);
     }
 #endif
-    
+
     wattron(win, attr);
     wprintw(win, "%s", str);
     wattroff(win, attr);

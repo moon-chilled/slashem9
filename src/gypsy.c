@@ -14,7 +14,7 @@
 
 /*** Money-related functions ***/
 
-static void 
+static void
 gypsy_charge (struct monst *mtmp, long amount)
 {
 #ifdef GOLDOBJ
@@ -73,7 +73,7 @@ gypsy_offer (mtmp, cost, txt)
 	return (FALSE);
 }
 
-static long 
+static long
 gypsy_bet (struct monst *mtmp, long minimum)
 {
 	char prompt[BUFSZ], buf[BUFSZ];
@@ -83,11 +83,11 @@ gypsy_bet (struct monst *mtmp, long minimum)
 	umoney = money_cnt(invent);
 #endif
 
-	if (minimum > EGYP(mtmp)->credit + 
+	if (minimum > EGYP(mtmp)->credit +
 #ifndef GOLDOBJ
 													u.ugold) {
 #else
- 													umoney) {		
+ 													umoney) {
 #endif
 		You("don't have enough money for the minimum bet.");
 		return (0L);
@@ -95,11 +95,11 @@ gypsy_bet (struct monst *mtmp, long minimum)
 
 	/* Prompt for an amount */
 	sprintf(prompt, "Bet how much (%ld to %ld)?", minimum,
-			EGYP(mtmp)->credit + 
+			EGYP(mtmp)->credit +
 #ifndef GOLDOBJ
 													u.ugold);
 #else
-													umoney);													
+													umoney);
 #endif
 	getlin(prompt, buf);
 	(void) sscanf(buf, "%ld", &bet);
@@ -117,7 +117,7 @@ gypsy_bet (struct monst *mtmp, long minimum)
 #ifndef GOLDOBJ
 								u.ugold) {
 #else
-								umoney) {												
+								umoney) {
 #endif
 		You("don't have that much money to bet!");
 		return (0L);
@@ -377,7 +377,7 @@ fortune (mtmp)
 			incr_itimeout(&HHalf_spell_damage, rn1(500, 500));
 			break;
 		case 13: /* Death */
-			if (nonliving(youmonst.data) || is_demon(youmonst.data) 
+			if (nonliving(youmonst.data) || is_demon(youmonst.data)
 					|| Antimagic)
 				shieldeff(u.ux, u.uy);
 			else if(Hallucination)
@@ -598,7 +598,7 @@ nn_pref (card)
 	/* Computer's preferences for playing cards:
 	 * 3.  Get rid of Ace through 10 whenever we can.  Highest priority.
 	 * 2.  King will challenge the player.  High priority.
-	 * 1.  Jack and queen may help us, or the hero.  Low priority. 
+	 * 1.  Jack and queen may help us, or the hero.  Low priority.
 	 * 0.  Trumps can always be played (except the fool).  Lowest priority.
 	 */
 	if (card_istrump(card))
@@ -824,7 +824,7 @@ gypsy_chat (mtmp)
 #ifndef GOLDOBJ
 			u.ugold, plur(u.ugold));
 #else
-			umoney, plur(umoney));			
+			umoney, plur(umoney));
 #endif
 	money = EGYP(mtmp)->credit +
 #ifndef GOLDOBJ

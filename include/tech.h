@@ -8,19 +8,19 @@
 
 /* An array of this struct holds your current techs */
 struct tech {
-	int         t_id;                  /* tech id 
+	int         t_id;                  /* tech id
 					    * 	Unique number for the tech
 					    *	see the #defines below
 					    */
-	xchar       t_lev;                 /* power level 
-					    *   This is the level 
+	xchar       t_lev;                 /* power level
+					    *   This is the level
 					    *   you were when you got the tech
 				            */
-	
-	int         t_tout;                /* timeout - time until tech can be 
-					    * used again 
+
+	int         t_tout;                /* timeout - time until tech can be
+					    * used again
 					    */
-	int         t_inuse;               /* time till effect stops 
+	int         t_inuse;               /* time till effect stops
 					    */
 	long        t_intrinsic;           /* Source(s) */
 #define OUTSIDE_LEVEL	TIMEOUT            /* Level "from outside" started at */
@@ -28,7 +28,7 @@ struct tech {
 
 struct innate_tech {
 	schar   ulevel; /* gains tech at level */
-	short   tech_id; /* the tech unique ID*/ 
+	short   tech_id; /* the tech unique ID*/
 	int	tech_lev; /* starts at level */
 };
 

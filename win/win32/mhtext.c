@@ -45,7 +45,7 @@ HWND mswin_init_text_window () {
 void mswin_display_text_window (HWND hWnd)
 {
 	PNHTextWindow data;
-	
+
 	data = (PNHTextWindow)GetWindowLong(hWnd, GWL_USERDATA);
 	if( data && data->window_text ) {
 		HWND control;
@@ -57,16 +57,16 @@ void mswin_display_text_window (HWND hWnd)
 	mswin_popup_display(hWnd, NULL);
 	mswin_popup_destroy(hWnd);
 }
-    
+
 BOOL CALLBACK NHTextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	HWND control;
 	HDC hdc;
 	PNHTextWindow data;
     TCHAR title[MAX_LOADSTRING];
-	
+
 	data = (PNHTextWindow)GetWindowLong(hWnd, GWL_USERDATA);
-	switch (message) 
+	switch (message)
 	{
 	case WM_INITDIALOG:
 	    /* set text control font */
@@ -85,7 +85,7 @@ BOOL CALLBACK NHTextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
 		SetFocus(control);
 
-        /* Even though the dialog has no caption, you can still set the title 
+        /* Even though the dialog has no caption, you can still set the title
            which shows on Alt-Tab */
         LoadString(GetNHApp()->hApp, IDS_APP_TITLE, title, MAX_LOADSTRING);
         SetWindowText(hWnd, title);
@@ -100,12 +100,12 @@ BOOL CALLBACK NHTextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	return FALSE;
 
 	case WM_COMMAND:
-		switch (LOWORD(wParam)) 
-        { 
-          case IDOK: 
+		switch (LOWORD(wParam))
+        {
+          case IDOK:
 		  case IDCANCEL:
 			mswin_window_mark_dead(mswin_winid_from_handle(hWnd));
-			if( GetNHApp()->hMainWnd==hWnd ) 
+			if( GetNHApp()->hMainWnd==hWnd )
 				GetNHApp()->hMainWnd=NULL;
 			DestroyWindow(hWnd);
 			SetFocus(GetNHApp()->hMainWnd);
@@ -121,16 +121,16 @@ BOOL CALLBACK NHTextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	break;
 
 	case WM_CTLCOLORSTATIC: { /* sent by edit control before it is drawn */
-		HDC hdcEdit = (HDC) wParam; 
+		HDC hdcEdit = (HDC) wParam;
 		HWND hwndEdit = (HWND) lParam;
 		if( hwndEdit == GetDlgItem(hWnd, IDC_TEXT_CONTROL) ) {
-			SetBkColor(hdcEdit, 
+			SetBkColor(hdcEdit,
 				text_bg_brush ? text_bg_color : (COLORREF)GetSysColor(DEFAULT_COLOR_BG_TEXT)
 				);
-			SetTextColor(hdcEdit, 
-				text_fg_brush ? text_fg_color : (COLORREF)GetSysColor(DEFAULT_COLOR_FG_TEXT) 
-				); 
-			return (BOOL)(text_bg_brush 
+			SetTextColor(hdcEdit,
+				text_fg_brush ? text_fg_color : (COLORREF)GetSysColor(DEFAULT_COLOR_FG_TEXT)
+				);
+			return (BOOL)(text_bg_brush
 					? text_bg_brush : SYSCLR_TO_BRUSH(DEFAULT_COLOR_BG_TEXT));
 		}
 	} return FALSE;
@@ -150,7 +150,7 @@ BOOL CALLBACK NHTextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 void onMSNHCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
 	PNHTextWindow data;
-	
+
 	data = (PNHTextWindow)GetWindowLong(hWnd, GWL_USERDATA);
 	switch( wParam ) {
 	case MSNH_MSG_PUTSTR: {
@@ -167,15 +167,15 @@ void onMSNHCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
 			data->window_text = (TCHAR*)realloc(data->window_text, text_size*sizeof(data->window_text[0]));
 		}
 		if( !data->window_text ) break;
-		
-		_tcscat(data->window_text, NH_A2W(msg_data->text, wbuf, BUFSZ)); 
+
+		_tcscat(data->window_text, NH_A2W(msg_data->text, wbuf, BUFSZ));
 		_tcscat(data->window_text, TEXT("\r\n"));
 		break;
 	}
 	}
 }
 
-void LayoutText(HWND hWnd) 
+void LayoutText(HWND hWnd)
 {
 	HWND  btn_ok;
 	HWND  text;
@@ -188,7 +188,7 @@ void LayoutText(HWND hWnd)
 
 	/* get window coordinates */
 	GetClientRect(hWnd, &clrt );
-	
+
 	/* set window placements */
 	GetWindowRect(btn_ok, &rt);
 	sz_ok.cx = clrt.right - clrt.left;
@@ -216,7 +216,7 @@ LRESULT CALLBACK NHEditHookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     	/* close on space in Windows mode
            page down on space in NetHack mode */
         case VK_SPACE:
-        {   
+        {
             SCROLLINFO si;
 
             si.cbSize = sizeof(SCROLLINFO);
@@ -247,8 +247,8 @@ LRESULT CALLBACK NHEditHookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	break;
 	}
 
-	if( editControlWndProc ) 
+	if( editControlWndProc )
 		return CallWindowProc(editControlWndProc, hWnd, message, wParam, lParam);
-	else 
+	else
 		return 0;
 }

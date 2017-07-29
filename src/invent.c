@@ -47,7 +47,7 @@ static int lastinvnr = 51;	/* 0 ... 51 (never saved&restored) */
 static char venom_inv[] = { VENOM_CLASS, 0 };	/* (constant) */
 #endif
 
-void 
+void
 assigninvlet (struct obj *otmp)
 {
 	boolean inuse[52];
@@ -55,7 +55,7 @@ assigninvlet (struct obj *otmp)
 	struct obj *obj;
 
 #ifdef GOLDOBJ
-        /* There is only one of these in inventory... */        
+        /* There is only one of these in inventory... */
         if (otmp->oclass == COIN_CLASS) {
 	    otmp->invlet = GOLD_SYM;
 	    return;
@@ -124,7 +124,7 @@ reorder_invent()
  * Some players who depend upon fixinv complained.  They take damage
  * instead.
  */
-int 
+int
 jumble_pack (void)
 {
 	struct obj *obj, *nobj, *otmp;
@@ -203,7 +203,7 @@ merge_choice (struct obj *objlist, struct obj *obj)
 }
 
 /* merge obj with otmp and delete obj if types agree */
-int 
+int
 merged (struct obj **potmp, struct obj **pobj)
 {
 	struct obj *otmp = *potmp, *obj = *pobj;
@@ -288,7 +288,7 @@ in-place.
 
 It may be valid to merge this code with with addinv_core2().
 */
-void 
+void
 addinv_core1 (struct obj *obj)
 {
 	if (obj->oclass == COIN_CLASS) {
@@ -321,7 +321,7 @@ addinv_core1 (struct obj *obj)
 		    artitouch();
 		}
 		set_artifact_intrinsic(obj, 1, W_ART);
-	
+
 	}
 
         if(obj->otyp == LUCKSTONE && obj->record_achieve_special) {
@@ -344,7 +344,7 @@ This is called when adding objects to the hero's inventory normally (via
 addinv) or when an object in the hero's inventory has been polymorphed
 in-place.
 */
-void 
+void
 addinv_core2 (struct obj *obj)
 {
 	if (confers_luck(obj)) {
@@ -409,7 +409,7 @@ added:
  * has been added to the hero's or monster's inventory,
  * and after hero's intrinsics have been updated.
  */
-void 
+void
 carry_obj_effects (struct monst *mon, struct obj *obj)
 {
 	/* Cursed figurines can spontaneously transform
@@ -426,11 +426,11 @@ carry_obj_effects (struct monst *mon, struct obj *obj)
 	  /*       away. Should monsters do the same?  */
 
 	  if (mon == &youmonst) {
-	    You("extinguish %s before putting it away.", 
+	    You("extinguish %s before putting it away.",
 		yname(obj));
 	    end_burn(obj, TRUE);
 	  }
-	}	
+	}
 }
 
 
@@ -512,7 +512,7 @@ hold_another_object (struct obj *obj, const char *drop_fmt, const char *drop_arg
 }
 
 /* useup() all of an item regardless of its quantity */
-void 
+void
 useupall (struct obj *obj)
 {
 	if (Has_contents(obj)) delete_contents(obj);
@@ -521,7 +521,7 @@ useupall (struct obj *obj)
 	obfree(obj, NULL);
 }
 
-void 
+void
 useup (struct obj *obj)
 {
 	/*  Note:  This works correctly for containers because they */
@@ -555,7 +555,7 @@ where we are polymorphing an object already in the hero's inventory.
 
 Should think of a better name...
 */
-void 
+void
 freeinv_core (struct obj *obj)
 {
 	if (obj->oclass == COIN_CLASS) {
@@ -600,7 +600,7 @@ freeinv_core (struct obj *obj)
 }
 
 /* remove an object from the hero's inventory */
-void 
+void
 freeinv (struct obj *obj)
 {
 	extract_nobj(obj, &invent);
@@ -608,7 +608,7 @@ freeinv (struct obj *obj)
 	update_inventory();
 }
 
-void 
+void
 delallobj (int x, int y)
 {
 	struct obj *otmp, *otmp2;
@@ -626,7 +626,7 @@ delallobj (int x, int y)
 
 
 /* destroy object in fobj chain (if unpaid, it remains on the bill) */
-void 
+void
 delobj (struct obj *obj)
 {
 	boolean update_map;
@@ -830,7 +830,7 @@ struct obj *otmp;
 		|| (!strcmp(word, "revive") && otyp != CORPSE) /* revive */
 		|| (!strcmp(word, "sacrifice") &&
 		    (otyp != CORPSE &&
-		     otyp != SEVERED_HAND &&                    
+		     otyp != SEVERED_HAND &&
 		     otyp != EYEBALL &&	/* KMH -- fixed */
 		     otyp != AMULET_OF_YENDOR && otyp != FAKE_AMULET_OF_YENDOR))
 		|| (!strcmp(word, "write with") &&
@@ -868,7 +868,7 @@ struct obj *otmp;
 		     (otyp != POT_OIL || !otmp->dknown ||
 		      !objects[POT_OIL].oc_name_known) &&
 		      /* water is only for untrapping */
-		     (strcmp(word, "untrap with") || 
+		     (strcmp(word, "untrap with") ||
 		      otyp != POT_WATER || !otmp->dknown ||
 		      !objects[POT_WATER].oc_name_known)) ||
 		     (otmp->oclass == FOOD_CLASS &&
@@ -1076,7 +1076,7 @@ getobj (const char *let, const char *word)
 			foox ? "else " : "", word);
 		return(NULL);
 	}
-	
+
 	for(;;) {
 		cnt = 0;
 		if (allowcnt == 2) allowcnt = 1;  /* abort previous count */
@@ -1140,7 +1140,7 @@ getobj (const char *let, const char *word)
 				You("are not carrying any gold.");
 				return NULL;
 #endif
-			} 
+			}
 			if(cnt == 0 && prezero) return(NULL);
 			/* Historic note: early Nethack had a bug which was
 			 * first reported for Larn, where trying to drop 2^32-n
@@ -1290,7 +1290,7 @@ getobj (const char *let, const char *word)
 	return(otmp);
 }
 
-void 
+void
 silly_thing (const char *word, struct obj *otmp)
 {
 	const char *s1, *s2, *s3, *what;
@@ -1537,19 +1537,19 @@ unsigned *resultflags;
 	else {
 #else
 	else /*!!!! if (allowgold == 2 && !oletct)
-	    !!!! return 1;	 you dropped gold (or at least tried to) 
+	    !!!! return 1;	 you dropped gold (or at least tried to)
             !!!! test gold dropping
 	else*/ {
 #endif
-	    int cnt = askchain(&invent, olets, allflag, fn, ckfn, mx, word); 
+	    int cnt = askchain(&invent, olets, allflag, fn, ckfn, mx, word);
 	    /*
 	     * askchain() has already finished the job in this case
 	     * so set a special flag to convey that back to the caller
 	     * so that it won't continue processing.
-	     * Fix for bug C331-1 reported by Irina Rempt-Drijfhout. 
+	     * Fix for bug C331-1 reported by Irina Rempt-Drijfhout.
 	     */
 	    if (combo && allflag && resultflags)
-		*resultflags |= ALL_FINISHED; 
+		*resultflags |= ALL_FINISHED;
 	    return cnt;
 	}
 }
@@ -2095,7 +2095,7 @@ count_unpaid(list)
 }
 
 /*
- * Returns the number of items with b/u/c/unknown within the given list.  
+ * Returns the number of items with b/u/c/unknown within the given list.
  * This does NOT include contained objects.
  */
 int

@@ -94,7 +94,7 @@ winid Sdlgl_create_nhwindow(int type)
 void Sdlgl_destroy_nhwindow(winid window)
 {
   struct TextWindow *win;
-  
+
   if (window == WIN_ERR)
     return;
 
@@ -123,13 +123,13 @@ void Sdlgl_clear_nhwindow(winid window)
 {
   struct TextWindow *win;
   int x, y;
-  
+
   if (window == WIN_ERR)
     return;
 
   assert (0 <= window && window < MAXWIN && text_wins[window]);
   win = text_wins[window];
-    
+
   if (! win->base)
     return;
 
@@ -145,7 +145,7 @@ void Sdlgl_clear_nhwindow(winid window)
 
   sdlgl_blank_area(win->base, 0, 0, win->base->total_w,
       win->base->total_h);
-   
+
   for (y=0; y < win->base->total_h; y++)
   for (x=0; x < win->base->total_w; x++)
   {
@@ -179,7 +179,7 @@ void sdlgl_pan_window(int window, int dx, int dy)
   struct TileWindow *base;
 
   int x, y;
-  
+
   assert(0 <= window && window < MAXWIN);
 
   win = text_wins[window];
@@ -190,7 +190,7 @@ void sdlgl_pan_window(int window, int dx, int dy)
 
   x = win->focus_x;
   y = win->focus_y;
-  
+
   switch (abs(dx))
   {
     case 2:
@@ -215,7 +215,7 @@ void sdlgl_pan_window(int window, int dx, int dy)
     case 3:
       dy = sgn(dy) * (win->show_h - 1);
       break;
-        
+
     case 4:
       dy = sgn(dy) * win->calc_h;
       break;
@@ -223,13 +223,13 @@ void sdlgl_pan_window(int window, int dx, int dy)
 
   x += dx;
   y += dy;
-  
+
   /* limit new focus value */
   win->focus_x = max(0, min(win->calc_w - win->show_w, x));
   win->focus_y = max(0, min(win->calc_h - win->show_h, y));
 
   /* compute panning for tile window */
-  sdlgl_set_pan(base, 
+  sdlgl_set_pan(base,
       win->focus_x * base->scale_w,
       win->focus_y * base->scale_h);
 
@@ -249,7 +249,7 @@ static int compute_window_base_y(int type, int *h)
 
   int a_mesg = iflags.wc_align_message;
   int a_stat = iflags.wc_align_status;
-  
+
   /* we treat ALIGN_LEFT the same as ALIGN_TOP, and ALIGN_RIGHT the
    * same as ALIGN_BOTTOM.
    */
@@ -275,7 +275,7 @@ static int compute_window_base_y(int type, int *h)
         case 2: return sdlgl_height - (*h);
       }
       break;
-      
+
     case NHW_STATUS:
       (*h) = stat_h - pad;
       switch (stat_pos)
@@ -293,7 +293,7 @@ static int compute_window_base_y(int type, int *h)
 
       if (mesg_pos < 2 && stat_pos < 2)
         return sdlgl_height - (*h);
-      
+
       return (mesg_pos < 1) ? mesg_h : stat_h;
   }
 
@@ -305,7 +305,7 @@ void Sdlgl_display_nhwindow(winid window, boolean blocking)
 {
   struct TextWindow *win;
   int win_y, win_h;
-  
+
   if (window == WIN_ERR)
     return;
 
@@ -318,7 +318,7 @@ void Sdlgl_display_nhwindow(winid window, boolean blocking)
   if (win->base)
   {
     sdlgl_flush();
-    
+
     /* handle `blocking' special cases -- this fixes the bug with
      * detection potions only flashing very briefly.
      */
@@ -326,7 +326,7 @@ void Sdlgl_display_nhwindow(winid window, boolean blocking)
     {
       sdlgl_get_key(0);
     }
-    
+
     return;
   }
 
@@ -340,7 +340,7 @@ void Sdlgl_display_nhwindow(winid window, boolean blocking)
 
       win->base = sdlgl_new_tilewin(sdlgl_font_message, win->show_w,
           win->show_h, 1,0);
-      
+
       sdlgl_map_tilewin(win->base, 0, win_y, sdlgl_width, win_h,
           DEPTH_MESSAGE);
 
@@ -349,7 +349,7 @@ void Sdlgl_display_nhwindow(winid window, boolean blocking)
       /* create scroll-back window */
       assert(! win->scrollback);
       assert(iflags.msg_history >= MIN_HISTORY);
-          
+
       win->scrollback = sdlgl_new_tilewin(sdlgl_font_message,
           win->show_w, iflags.msg_history, 1,0);
       win->scrollback->background = PREV_BACK_COL;
@@ -366,7 +366,7 @@ void Sdlgl_display_nhwindow(winid window, boolean blocking)
 
       win->base = sdlgl_new_tilewin(sdlgl_font_status, win->show_w,
           win->show_h, 1,0);
-      
+
       sdlgl_map_tilewin(win->base, 0, win_y, sdlgl_width, win_h,
           DEPTH_STATUS);
 
@@ -387,7 +387,7 @@ void Sdlgl_display_nhwindow(winid window, boolean blocking)
       if (win->is_menu == 0)
         sdlgl_process_text_window(window, win);
       break;
-     
+
     case NHW_TEXT:
       sdlgl_process_text_window(window, win);
       break;
@@ -402,7 +402,7 @@ void Sdlgl_display_nhwindow(winid window, boolean blocking)
 void Sdlgl_dismiss_nhwindow(winid window)
 {
   struct TextWindow *win;
-  
+
   if (window == WIN_ERR)
     return;
 
@@ -632,7 +632,7 @@ static void do_message_putstr(struct TextWindow *win,
 
     is_bottom = (win->fresh_lines == win->show_h);
     width = win->show_w - (is_bottom ? MORE_LEN : 0);
- 
+
     /* does it fit yet ? */
     if (len < width)
     {
@@ -666,7 +666,7 @@ static void do_message_putstr(struct TextWindow *win,
 void Sdlgl_putstr(winid window, int attr, const char *str)
 {
   struct TextWindow *win;
-  
+
   if (window == WIN_ERR)
     return;
 
@@ -703,7 +703,7 @@ void Sdlgl_putstr(winid window, int attr, const char *str)
       sdlgl_insert_text_item(win, NULL, 0, attr, str);
       break;
     }
-     
+
     default:
       break;
   }
@@ -761,7 +761,7 @@ int Sdlgl_doprev_message(void)
     if (win->scrollback_pos == 0)
     {
       int top_y = win->base->scr_y + win->base->scr_h;
-       
+
       pixel_h = win->scrollback->scale_h;
       sdlgl_map_tilewin(win->scrollback, 0, top_y - pixel_h,
           sdlgl_width, pixel_h, DEPTH_SC_BACK);
@@ -770,14 +770,14 @@ int Sdlgl_doprev_message(void)
     sdlgl_adjust_scrollback(win, +1);
     return 0;
   }
-      
+
   /* NOTE: we don't set sdlgl_top_win here, since this does a
    *       different style of panning.
    */
   dy = sdlgl_prev_step;
 
   max_shown = min(win->scrollback->total_h, win->scrollback_size);
-   
+
   shown = min(dy, max_shown);
 
   assert(shown > 0);
@@ -829,12 +829,12 @@ void sdlgl_adjust_scrollback(struct TextWindow *win, int dy)
 {
   int old_pos;
   int new_pos;
- 
+
   assert(win && win->scrollback);
   assert(win->base);
 
   old_pos = win->scrollback_pos;
- 
+
   dy = sgn(dy) * sdlgl_prev_step;
 
   new_pos = old_pos + dy;
@@ -848,7 +848,7 @@ void sdlgl_adjust_scrollback(struct TextWindow *win, int dy)
   /* limit scrollback */
   if (new_pos > max(win->show_h, win->scrollback_size + abs(dy) - 1))
     return;
-   
+
   win->scrollback_pos = new_pos;
 
   if (old_pos < win->show_h || new_pos < win->show_h)
@@ -901,7 +901,7 @@ void sdlgl_update_mouse_location(int lost_focus)
 
   struct TextWindow *win;
   struct TileWindow *base;
- 
+
   (void) SDL_GetMouseState(&x, &y);
 
   y = sdlgl_height - 1 - y;
@@ -909,20 +909,20 @@ void sdlgl_update_mouse_location(int lost_focus)
   sdlgl_mouseloc.x = x;
   sdlgl_mouseloc.y = y;
 
-  if (lost_focus || x < 0 || y < 0 || 
+  if (lost_focus || x < 0 || y < 0 ||
       x >= sdlgl_width || y >= sdlgl_height)
   {
     sdlgl_mouseloc.action = MACT_AWAY;
     sdlgl_mouseloc.window = WIN_ERR;
-    
+
     if (old_action != sdlgl_mouseloc.action)
       SDL_SetCursor(sdlgl_cursor_main);
 
-    return;  
+    return;
   }
 
   /* find the containing window (if any) */
-  
+
   win = NULL;
   base = NULL;
 
@@ -950,7 +950,7 @@ void sdlgl_update_mouse_location(int lost_focus)
   if (idx >= 0)
   {
     int use_dirs = 0;
-    
+
     sdlgl_mouseloc.window = idx;
 
     alt = SDL_GetModState() & (KMOD_ALT | KMOD_META);
@@ -989,7 +989,7 @@ void sdlgl_update_mouse_location(int lost_focus)
       int py = y - base->scr_y;
 
       int A, B;
-      
+
       assert(base->scr_w > 0);
       assert(base->scr_h > 0);
 
@@ -1008,7 +1008,7 @@ void sdlgl_update_mouse_location(int lost_focus)
       }
     }
   }
-  
+
   /* set the mouse cursor */
 
   if (old_action != sdlgl_mouseloc.action)
@@ -1049,19 +1049,19 @@ int sdlgl_internal_key_handler(SDL_keysym *key, int repeat)
       case SDLK_LEFT:
         sdlgl_pan_map_window(-step, 0);
         return 1;
-       
+
       case SDLK_RIGHT:
         sdlgl_pan_map_window(+step, 0);
         return 1;
-          
+
       case SDLK_UP:
         sdlgl_pan_map_window(0, +step);
         return 1;
-          
+
       case SDLK_DOWN:
         sdlgl_pan_map_window(0, -step);
         return 1;
-       
+
       case SDLK_HOME:
         Sdlgl_cliparound(u.ux, u.uy);
         sdlgl_flush();
@@ -1086,7 +1086,7 @@ int sdlgl_internal_key_handler(SDL_keysym *key, int repeat)
   }
 
   step = ctrl ? 4 : shift ? 2 : 1;
-  
+
   if (sdlgl_top_win != WIN_ERR)
   {
     switch (key->sym)
@@ -1094,19 +1094,19 @@ int sdlgl_internal_key_handler(SDL_keysym *key, int repeat)
       case SDLK_LEFT:
         sdlgl_pan_window(sdlgl_top_win, -step, 0);
         return 1;
-          
+
       case SDLK_RIGHT:
         sdlgl_pan_window(sdlgl_top_win, +step, 0);
         return 1;
-          
+
       case SDLK_UP:
         sdlgl_pan_window(sdlgl_top_win, 0, +step);
         return 1;
-          
+
       case SDLK_DOWN:
         sdlgl_pan_window(sdlgl_top_win, 0, -step);
         return 1;
-          
+
       case SDLK_PAGEUP:
         sdlgl_pan_window(sdlgl_top_win, 0, +3);
         return 1;
@@ -1114,11 +1114,11 @@ int sdlgl_internal_key_handler(SDL_keysym *key, int repeat)
       case SDLK_PAGEDOWN:
         sdlgl_pan_window(sdlgl_top_win, 0, -3);
         return 1;
-      
+
       case SDLK_HOME:
         sdlgl_pan_window(sdlgl_top_win, -4, +4);
         return 1;
-      
+
       case SDLK_END:
         sdlgl_pan_window(sdlgl_top_win, -4, -4);
         return 1;
@@ -1145,7 +1145,7 @@ int sdlgl_internal_key_handler(SDL_keysym *key, int repeat)
         sdlgl_zoom_map(ctrl ? -2 : -1);
         sdlgl_flush();
         return 1;
-      
+
       case SDLK_HOME:
         sdlgl_center_screen_on_player();
         sdlgl_flush();
@@ -1162,7 +1162,7 @@ int sdlgl_internal_key_handler(SDL_keysym *key, int repeat)
         Sdlgl_cliparound(u.ux, u.uy);
         sdlgl_flush();
         return 1;
-        
+
       default:
         return 0;
     }
@@ -1214,7 +1214,7 @@ int sdlgl_internal_button_handler(SDL_MouseButtonEvent *but)
         break;
     }
   }
-  
+
   return 1;
 }
 
@@ -1226,7 +1226,7 @@ void sdlgl_internal_motion_handler(SDL_MouseMotionEvent *mot)
 void Sdlgl_outrip(winid window, int how)
 {
   struct TextWindow *win;
-  
+
   if (window == WIN_ERR)
     return;
 

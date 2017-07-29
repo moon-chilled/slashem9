@@ -130,7 +130,7 @@ struct tchars inittyb2, curttyb2;
 extern short ospeed;	// terminal baudrate; set by gettty
 			// it is defined in libtermlib (libtermcap)
 #else
-short ospeed = 0; // gets around "not defined" error message 
+short ospeed = 0; // gets around "not defined" error message
 #endif
 
 

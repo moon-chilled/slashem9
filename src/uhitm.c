@@ -251,7 +251,7 @@ boolean barehanded;
 /*
  * It is unchivalrous for a knight to attack the defenseless or from behind.
  */
-void 
+void
 check_caitiff (struct monst *mtmp)
 {
 	if (Role_if(PM_KNIGHT) && u.ualign.type == A_LAWFUL &&
@@ -315,10 +315,10 @@ struct monst *mtmp;
 #endif
 
 	if(Role_if(PM_MONK) && !Upolyd) {
-		if(!uwep && (!u.twoweap || !uswapwep) && !uarms && 
-		  (!uarm || (uarm && uarm->otyp >= ROBE && 
+		if(!uwep && (!u.twoweap || !uswapwep) && !uarms &&
+		  (!uarm || (uarm && uarm->otyp >= ROBE &&
 		  	uarm->otyp <= ROBE_OF_WEAKNESS)))
-		  	
+
 		  tmp += (u.ulevel / 3) + 2;
 		else if (!uwep && (!u.twoweap || !uswapwep)) {
 		   pline("Your armor is rather cumbersome...");
@@ -367,8 +367,8 @@ struct monst *mtmp;
 	 */
 	/* Intelligent chaotic weapons (Stormbringer) want blood */
 	if (is_safepet(mtmp) && !flags.forcefight) {
-	    if ((!uwep || uwep->oartifact != ART_STORMBRINGER) 
-		&& (!u.twoweap || !uswapwep 
+	    if ((!uwep || uwep->oartifact != ART_STORMBRINGER)
+		&& (!u.twoweap || !uswapwep
 		   || uswapwep->oartifact != ART_STORMBRINGER)){
 		/* there are some additional considerations: this won't work
 		 * if in a shop or Punished or you miss a random roll or
@@ -457,9 +457,9 @@ struct monst *mtmp;
 		return(FALSE);
 
 	tmp = find_roll_to_hit(mtmp);
-	
+
 	(void) hmonas(mtmp, tmp); /* hmonas handles all attacks now */
-	
+
 	/* berserk lycanthropes calm down after the enemy is dead */
 	if (mtmp->mhp <= 0) repeat_hit = 0;
 /*
@@ -467,7 +467,7 @@ struct monst *mtmp;
 		(void) hmonas(mtmp, tmp);
 	else
 		(void) hitum(mtmp, tmp, mhit, youmonst.data->mattk);
-*/		
+*/
 	mtmp->mstrategy &= ~STRAT_WAITMASK;
 
 atk_done:
@@ -564,7 +564,7 @@ struct attack *uattk;
 		}
 	    }
 
-	    /* Lycanthropes sometimes go a little berserk! 
+	    /* Lycanthropes sometimes go a little berserk!
 	     * If special is on,  they will multihit and stun!
 	     */
 	    if ((Race_if(PM_HUMAN_WEREWOLF) && (mon->mhp > 0)) ||
@@ -577,7 +577,7 @@ struct attack *uattk;
 						4 : (tech_inuse(T_EVISCERATE) - 2);
 			/* [max] limit to 4 */
 			mon->mfrozen = (tech_inuse(T_EVISCERATE) > 5) ?
-						4 : (tech_inuse(T_EVISCERATE) - 2); 
+						4 : (tech_inuse(T_EVISCERATE) - 2);
 		    }
 		    mon->mstun = 1;
 		    mon->mcanmove = 0;
@@ -591,7 +591,7 @@ struct attack *uattk;
 			case 3: pline("Grrarrgh!"); break;
 			case 4: pline("Rarggrrgh!"); break;
 			case 5: pline("Raaarrrrrr!"); break;
-			case 6: 
+			case 6:
 			default:pline("Grrrrrrarrrrg!"); break;
 		    }
 		}
@@ -615,9 +615,9 @@ struct attack *uattk;
 	if (mhit & HIT_UWEP)
 	{
 		if (uwep) tmp1 += hitval(uwep, mon);
-	
+
 		tohit(UWEP_ROLL) = tmp1;
-	
+
 		if (tmp1 <= (dice(UWEP_ROLL) = rnd(20)) && !u.uswallow)
 			mhit &= ~HIT_UWEP;
 
@@ -626,7 +626,7 @@ struct attack *uattk;
 		pline("(%i/20)", tmp1);
 #endif
 	}
-	
+
 	if (mhit & HIT_USWAPWEP && u.twoweap) {
 		if (uswapwep) tmp2 += hitval(uswapwep, mon) - 2;
 
@@ -640,7 +640,7 @@ struct attack *uattk;
 		pline("((%i/20))", tmp2);
 #endif
 	}
-	
+
 	malive = known_hitum(mon, mattack, &mhit, uattk);
 	(void) passive(mon, mhit, malive, AT_WEAP);
 	/* berserk lycanthropes calm down after the enemy is dead */
@@ -650,7 +650,7 @@ struct attack *uattk;
 #endif
 
 /* WAC Seperate martial arts damage function */
-int 
+int
 martial_dmg (void)
 {
         int damage;
@@ -664,7 +664,7 @@ martial_dmg (void)
 
         if ((Role_if(PM_MONK) && !Upolyd)
                 && (P_SKILL(P_MARTIAL_ARTS) == P_GRAND_MASTER)
-                && (u.ulevel > 16)) damage = d(6,2);                                
+                && (u.ulevel > 16)) damage = d(6,2);
         else if (u.ulevel > (2*(P_SKILL(P_MARTIAL_ARTS) - P_BASIC) + 5))
                 damage = d((int) (P_SKILL(P_MARTIAL_ARTS) - P_UNSKILLED),2);
         else
@@ -786,7 +786,7 @@ int thrown;
 	    /* blessed gloves give bonuses when fighting 'bare-handed' */
 	    if (uarmg && uarmg->blessed && (is_undead(mdat) || is_demon(mdat)))
 		tmp += rnd(4);
-	    
+
 	    if (uarmg && uarmg->spe) tmp += uarmg->spe; /* WAC plusses from gloves */
 
 	    /* So do silver rings.  Note: rings are worn under gloves, so you
@@ -807,12 +807,12 @@ int thrown;
 
 	    if ((tech_inuse(T_CHI_STRIKE))  && (u.uen > 0)) {
 		You("feel a surge of force.");
-		tmp += (u.uen > (10 + (u.ulevel / 5)) ? 
+		tmp += (u.uen > (10 + (u.ulevel / 5)) ?
 			 (10 + (u.ulevel / 5)) : u.uen);
 		u.uen -= (10 + (u.ulevel / 5));
 		if (u.uen < 0) u.uen = 0;
 	    }
-	    
+
 	    if (tech_inuse(T_E_FIST)) {
 	    	int dmgbonus = 0;
 		hittxt = TRUE;
@@ -825,7 +825,7 @@ int thrown;
 			if (noeffect || resists_fire(mon)) {
 			    if (!noeffect)
 				shieldeff(mon->mx, mon->my);
-			    if (!Blind) 
+			    if (!Blind)
 				pline_The("fire doesn't heat %s!", mon_nam(mon));
 			    golemeffects(mon, AD_FIRE, dmgbonus);
 			    if (!noeffect)
@@ -841,7 +841,7 @@ int thrown;
 			if (noeffect || resists_cold(mon)) {
 			    if (!noeffect)
 				shieldeff(mon->mx, mon->my);
-			    if (!Blind) 
+			    if (!Blind)
 				pline_The("frost doesn't chill %s!", mon_nam(mon));
 			    golemeffects(mon, AD_COLD, dmgbonus);
 			    dmgbonus = 0;
@@ -879,7 +879,7 @@ int thrown;
 		}
 		if (dmgbonus > 0)
 		    tmp += dmgbonus;
-	    } /* Techinuse Elemental Fist */		
+	    } /* Techinuse Elemental Fist */
 
 	} else {
 	    if (obj->oartifact == ART_MAGICBANE) objenchant = 4;
@@ -915,20 +915,20 @@ int thrown;
 		    (is_lightsaber(obj) && !obj->lamplit) ||
 #endif
 		    /* or throw a missile without the proper bow... */
-		    (thrown == 1 && is_ammo(obj) && 
-		    	!ammo_and_launcher(obj, launcher)) || 
-		    /* This case isn't actually needed so far since 
+		    (thrown == 1 && is_ammo(obj) &&
+		    	!ammo_and_launcher(obj, launcher)) ||
+		    /* This case isn't actually needed so far since
 		     * you can only throw in two-weapon mode when both
 		     * launchers take the same ammo
 		     */
-		    (thrown == 2 && is_ammo(obj) && 
+		    (thrown == 2 && is_ammo(obj) &&
 		    	!ammo_and_launcher(obj, launcher))) {
 		    /* then do only 1-2 points of damage */
 		    if (mdat == &mons[PM_SHADE] && obj->otyp != SILVER_ARROW)
 			tmp = 0;
 		    else
 			tmp = rnd(2);
-		    if (!thrown && (obj == uwep || obj == uswapwep) && 
+		    if (!thrown && (obj == uwep || obj == uswapwep) &&
 				obj->otyp == BOOMERANG && !rnl(4) == 4-1) {
 			boolean more_than_1 = (obj->quan > 1L);
 
@@ -1330,7 +1330,7 @@ int thrown;
 	}
 
 	if (ispoisoned) {
-	    int nopoison = (10 - (obj->owt/10));            
+	    int nopoison = (10 - (obj->owt/10));
 	    if(nopoison < 2) nopoison = 2;
 	    if Role_if(PM_SAMURAI) {
 		You("dishonorably use a poisoned weapon!");
@@ -1350,7 +1350,7 @@ int thrown;
 		tmp += rnd(6);
 	    else poiskilled = TRUE;
 	}
-	  
+
 	if (tmp < 1) {
 	    /* make sure that negative damage adjustment can't result
 	       in inadvertently boosting the victim's hit points */
@@ -1423,7 +1423,7 @@ int thrown;
         /* based off Poison Code */
         /* fixed stupid mistake - check that obj exists before comparing...*/
         if (obj && obj->otyp == WOODEN_STAKE && is_vampire(mdat)) {
-            if (Role_if(PM_UNDEAD_SLAYER) 
+            if (Role_if(PM_UNDEAD_SLAYER)
               || (P_SKILL(weapon_type(obj)) >= P_EXPERT)
               || obj->oartifact == ART_STAKE_OF_VAN_HELSING) {
                 if (!rn2(10)) {
@@ -1480,7 +1480,7 @@ int thrown;
 	if (mon->mhp > mon->mhpmax) mon->mhp = mon->mhpmax;
 	if (mon->mhp < 1)
 		destroyed = TRUE;
-	/* fixed bug with hitting tame monster with non-magic weapon */        
+	/* fixed bug with hitting tame monster with non-magic weapon */
 	if (mon->mtame && (!mon->mflee || mon->mfleetim) && tmp > 0) {
 
 		abuse_dog(mon);
@@ -1518,11 +1518,11 @@ int thrown;
 	  }
 
 	  if (!rn2(2) && burnarmor(mon)) {
-	    if (!rn2(3)) 
+	    if (!rn2(3))
 	      (void)destroy_mitem(mon, POTION_CLASS, AD_FIRE);
-	    if (!rn2(3)) 
+	    if (!rn2(3))
 	      (void)destroy_mitem(mon, SCROLL_CLASS, AD_FIRE);
-	    if (!rn2(5)) 
+	    if (!rn2(5))
 	      (void)destroy_mitem(mon, SPBOOK_CLASS, AD_FIRE);
 	  }
 
@@ -1533,11 +1533,11 @@ int thrown;
 	    end_burn(obj, TRUE);
 	  }
 	  else {
-	    /* use up the torch more quickly */	    
+	    /* use up the torch more quickly */
 	    burn_faster(obj, 1);
 	  }
 	}
-	
+
 	if (silvermsg) {
 		const char *fmt;
 		char *whom = mon_nam(mon);
@@ -1576,7 +1576,7 @@ int thrown;
         } else if (vapekilled) {
                 if (cansee(mon->mx, mon->my))
                     pline("%s%ss body vaporizes!", Monnam(mon),
-                            canseemon(mon) ? "'" : "");                
+                            canseemon(mon) ? "'" : "");
                 if (!already_killed) xkilled(mon, 2);
 		return FALSE;
 	} else if (destroyed) {
@@ -1820,15 +1820,15 @@ struct attack *mattk;
 	/* since hero can't be cancelled, only defender's armor applies */
 	negated = !((rn2(3) >= armpro) || !rn2(50));
 
-	if (hit_as_one(&youmonst))    enchantlvl = 1; 
-	if (hit_as_two(&youmonst))    enchantlvl = 2;         
-	if (hit_as_three(&youmonst))  enchantlvl = 3; 
-	if (hit_as_four(&youmonst))   enchantlvl = 4;         
+	if (hit_as_one(&youmonst))    enchantlvl = 1;
+	if (hit_as_two(&youmonst))    enchantlvl = 2;
+	if (hit_as_three(&youmonst))  enchantlvl = 3;
+	if (hit_as_four(&youmonst))   enchantlvl = 4;
 
-	if (need_one(mdef)   && enchantlvl < 1) noeffect = TRUE; 
-	if (need_two(mdef)   && enchantlvl < 2) noeffect = TRUE;      
-	if (need_three(mdef) && enchantlvl < 3) noeffect = TRUE;  
-	if (need_four(mdef)  && enchantlvl < 4) noeffect = TRUE;  
+	if (need_one(mdef)   && enchantlvl < 1) noeffect = TRUE;
+	if (need_two(mdef)   && enchantlvl < 2) noeffect = TRUE;
+	if (need_three(mdef) && enchantlvl < 3) noeffect = TRUE;
+	if (need_four(mdef)  && enchantlvl < 4) noeffect = TRUE;
 
 	if (is_demon(youmonst.data) && !rn2(13) && !uwep
 		&& u.umonnum != PM_SUCCUBUS && u.umonnum != PM_INCUBUS
@@ -1967,7 +1967,7 @@ struct attack *mattk;
 	        {
 		    struct obj *mongold = findgold(mdef->minvent);
 	            if (mongold) {
-		        obj_extract_self(mongold);  
+		        obj_extract_self(mongold);
 		        if (merge_choice(invent, mongold) || inv_cnt() < 52) {
 			    addinv(mongold);
 			    Your("purse feels heavier.");
@@ -2024,7 +2024,7 @@ struct attack *mattk;
 		if (!negated && !rn2(3) && !resists_drli(mdef)) {
 			int xtmp = d(2,6);
 			if (mdef->mhp < xtmp) xtmp = mdef->mhp;
-			if (maybe_polyd(is_vampire(youmonst.data), 
+			if (maybe_polyd(is_vampire(youmonst.data),
 			    Race_if(PM_VAMPIRE)) && mattk->aatyp == AT_BITE &&
 			    has_blood(pd)) {
 				/* For the life of a creature is in the blood
@@ -2257,7 +2257,7 @@ struct attack *mattk;
 #endif
 		    } else if (!mon_poly(mdef, TRUE,
 			    "%s undergoes a freakish metamorphosis!"))
-			/* prevent killing the monster again - 
+			/* prevent killing the monster again -
 			 * could be killed in mon_poly */
 			tmp = 0;
 		}
@@ -2268,11 +2268,11 @@ struct attack *mattk;
 		    /* Just damage */
 		    break;
 		}
-		if (mattk->aatyp == AT_GAZE) 
+		if (mattk->aatyp == AT_GAZE)
 		    You("look directly at %s!", mon_nam(mdef));
 		if ((mattk->aatyp == AT_GAZE) && (mon_reflects(mdef, NULL))) {
-		    /* WAC reflected gaze 
-		     * Oooh boy...that was a bad move :B 
+		    /* WAC reflected gaze
+		     * Oooh boy...that was a bad move :B
 		     */
 		    tmp = 0;
 		    shieldeff(mdef->mx, mdef->my);
@@ -2303,7 +2303,7 @@ struct attack *mattk;
 			pline("%s is unaffected.", Monnam(mdef));
 		    }
 	    	} else {
-	    	    mon_drain_en(mdef, 
+	    	    mon_drain_en(mdef,
 				((mdef->m_lev > 0) ? (rnd(mdef->m_lev)) : 0) + 1);
 	    	}
 		break;
@@ -2332,8 +2332,8 @@ struct attack *mattk;
 #ifdef SHOW_DMG
 	if (tmp < mdef->mhp) showdmg(tmp);
 #endif
-	
-	/* if tmp == 0, DON'T xkilled/killed the monster even if hp < 1 
+
+	/* if tmp == 0, DON'T xkilled/killed the monster even if hp < 1
 	 *	- xkilled/killed via other method... */
 
 	if((mdef->mhp -= tmp) < 1) {
@@ -2618,11 +2618,11 @@ int roll;
 	long mwflags = mdef->misc_worn_check;
 
 		/* 3 values for blocker
-		 *	No blocker:  NULL  
+		 *	No blocker:  NULL
 		 * 	Piece of armour:  object
 		 */
 
-	/* This is a hack,  since there is no fast equivalent for uarm, uarms, etc.  
+	/* This is a hack,  since there is no fast equivalent for uarm, uarms, etc.
 	 * Technically, we really should check from the inside out...
 	 */
 	if (target < roll) {
@@ -2633,7 +2633,7 @@ int roll;
 		}
 	    }
 	}
-	
+
 	if (could_seduce(&youmonst, mdef, mattk)) {
 		You("pretend to be friendly to %s.", mon_nam(mdef));
 	} else if(canspotmon(mdef) && flags.verbose) {
@@ -2641,10 +2641,10 @@ int roll;
 		    You("%smiss %s.", (nearmiss ? "just " : ""),mon_nam(mdef));
 		} else {
         	    /* Blocker */
-        	    pline("%s %s %s your attack.", 
+        	    pline("%s %s %s your attack.",
         		s_suffix(Monnam(mdef)),
         		aobjnam(blocker, NULL),
-        		(rn2(2) ? "blocks" : "deflects"));    
+        		(rn2(2) ? "blocks" : "deflects"));
 		}
 	} else {
 		You("%smiss it.", ((flags.verbose && nearmiss) ? "just " : ""));
@@ -2661,7 +2661,7 @@ int roll;
  *	-monster with several hand attacks will do primary weapon and secondary
  *		weapon attacks with the first 2 hand attacks,  then claw attacks
  *		for the rest
- *	-Code assumes that a single AT_WEAP or 2 AT_WEAP entries still mean 
+ *	-Code assumes that a single AT_WEAP or 2 AT_WEAP entries still mean
  *		at most 1 or 2 hands attack.  i.e. 1 handed monsters with AT_WEAP
  *		or monsters with 3+ handed monsters where more than 2 hands are
  *		AT_WEAP are not handled properly
@@ -2688,7 +2688,7 @@ int tmp;
 	boolean Old_Upolyd = Upolyd;
 	static const int hit_touch[] = {0, HIT_BODY, HIT_BODY|HIT_FATAL};
 	static const int hit_notouch[] = {0, HIT_OTHER, HIT_OTHER|HIT_FATAL};
-	
+
 	/* Keeps track of which weapon hands have been used */
 	boolean used_uwep = FALSE;
 
@@ -2697,10 +2697,10 @@ int tmp;
 
 	    sum[i] = 0;
 	    mattk = getmattk(youmonst.data, i, sum, &alt_attk);
-	    
+
 	    switch(mattk->aatyp) {
 		case AT_WEAP:
-use_weapon:	
+use_weapon:
 	/* Certain monsters don't use weapons when encountered as enemies,
 	 * but players who polymorph into them have hands or claws and thus
 	 * should be able to use weapons.  This shouldn't prohibit the use
@@ -2744,7 +2744,7 @@ use_weapon:
 			    if (tmp1 <= (dice(UWEP_ROLL) = rnd(20)) &&
 				    !u.uswallow)
 				dhit &= ~HIT_UWEP; /* missed */
-				
+
 			    if (tmp1 > dice(UWEP_ROLL)) exercise(A_DEX, TRUE);
 #ifdef DEBUG
 			    pline("(%i/20)", tmp1);

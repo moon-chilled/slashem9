@@ -50,8 +50,8 @@ int fd;
 	if(moves > 1) pline("Cannot get status of saved level? ");
 	else pline("Cannot get status of saved game");
 	return(0);
-    } 
-    if(comp_times(buf.st_mtime)) { 
+    }
+    if(comp_times(buf.st_mtime)) {
 	if(moves > 1) pline("Saved level is out of date");
 	else pline("Saved game is out of date. ");
 	/* This problem occurs enough times we need to give the player
@@ -107,13 +107,13 @@ getlock()
 		if(errno == ENOENT) goto gotlock;    /* no such file */
 		chdirx(orgdir, 0);
 		perror(fq_lock);
-		unlock_file(HLOCK); 
+		unlock_file(HLOCK);
 		error("Cannot open %s", fq_lock);
 	}
 
 	(void) close(fd);
 
-	if(iflags.window_inited) { 
+	if(iflags.window_inited) {
 	  pline("There is already a game in progress under your name.");
 	  pline("You may be able to use \"recover %s\" to get it back.\n",tbuf);
 	  c = yn("Do you want to destroy the old game?");
@@ -171,7 +171,7 @@ gotlock:
 			error("cannot close lock (%s)", fq_lock);
 		}
 	}
-}	
+}
 # endif /* PC_LOCKING */
 
 # ifndef WIN32

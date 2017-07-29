@@ -6,7 +6,7 @@
 #include "mhmsg.h"
 #include "mhfont.h"
 
-#define MSG_WRAP_TEXT 
+#define MSG_WRAP_TEXT
 
 #define MSG_VISIBLE_LINES     max(iflags.wc_vary_msgcount, 2)
 #define MAX_MSG_LINES		  32
@@ -73,7 +73,7 @@ HWND mswin_init_message_window () {
 		run_once = 1;
 	}
 
-#ifdef MSG_WRAP_TEXT			
+#ifdef MSG_WRAP_TEXT
 	style =	WS_CHILD | WS_CLIPSIBLINGS | WS_VSCROLL;
 #else
 	style = WS_CHILD | WS_CLIPSIBLINGS | WS_VSCROLL	| WS_HSCROLL;
@@ -82,7 +82,7 @@ HWND mswin_init_message_window () {
 	ret = CreateWindowEx(
 			WS_EX_CLIENTEDGE,
 			szMessageWindowClass,	/* registered class name */
-			NULL,					/* window name */			
+			NULL,					/* window name */
 			style, /* window style */
 			0,   /* horizontal position of window */
 			0,   /* vertical position of window */
@@ -116,20 +116,20 @@ void register_message_window_class()
 
 	RegisterClass(&wcex);
 }
-    
+
 LRESULT CALLBACK NHMessageWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch (message) 
+	switch (message)
 	{
 	case WM_CREATE:
 		onCreate( hWnd, wParam, lParam );
 		break;
 
-	case WM_MSNH_COMMAND: 
+	case WM_MSNH_COMMAND:
 		onMSNHCommand(hWnd, wParam, lParam);
 		break;
 
-	case WM_PAINT: 
+	case WM_PAINT:
 		onPaint(hWnd);
 		break;
 
@@ -147,7 +147,7 @@ LRESULT CALLBACK NHMessageWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 		onMSNH_VScroll(hWnd, wParam, lParam);
 		break;
 
-	case WM_DESTROY: 
+	case WM_DESTROY:
 	{
 		PNHMessageWindow data;
 		data = (PNHMessageWindow)GetWindowLong(hWnd, GWL_USERDATA);
@@ -155,17 +155,17 @@ LRESULT CALLBACK NHMessageWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 		SetWindowLong(hWnd, GWL_USERDATA, (LONG)0);
 	}	break;
 
-    case WM_SIZE: 
-    { 
+    case WM_SIZE:
+    {
 		SCROLLINFO si;
-        int xNewSize; 
-        int yNewSize; 
+        int xNewSize;
+        int yNewSize;
 		PNHMessageWindow data;
-	
+
 		data = (PNHMessageWindow)GetWindowLong(hWnd, GWL_USERDATA);
- 
-        xNewSize = LOWORD(lParam); 
-        yNewSize = HIWORD(lParam); 
+
+        xNewSize = LOWORD(lParam);
+        yNewSize = HIWORD(lParam);
 
 		if( xNewSize>0 || yNewSize>0 ) {
 
@@ -175,29 +175,29 @@ LRESULT CALLBACK NHMessageWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 			data->xPos = min(data->xPos, data->xMax);
 
 			ZeroMemory(&si, sizeof(si));
-			si.cbSize = sizeof(si); 
-			si.fMask  = SIF_RANGE | SIF_PAGE | SIF_POS; 
-			si.nMin   = 0; 
-			si.nMax   = data->max_text; 
-			si.nPage  = data->xPage; 
+			si.cbSize = sizeof(si);
+			si.fMask  = SIF_RANGE | SIF_PAGE | SIF_POS;
+			si.nMin   = 0;
+			si.nMax   = data->max_text;
+			si.nPage  = data->xPage;
 			si.nPos   = data->xPos;
-			SetScrollInfo(hWnd, SB_HORZ, &si, TRUE); 
+			SetScrollInfo(hWnd, SB_HORZ, &si, TRUE);
 #endif
-		
+
 			data->yMax = MSG_LINES-1;
  			data->yPos = min(data->yPos, data->yMax);
 
 			ZeroMemory(&si, sizeof(si));
-			si.cbSize = sizeof(si); 
-			si.fMask  = SIF_RANGE | SIF_PAGE | SIF_POS; 
-			si.nMin   = MSG_VISIBLE_LINES; 
-			si.nMax   = data->yMax + MSG_VISIBLE_LINES - 1; 
+			si.cbSize = sizeof(si);
+			si.fMask  = SIF_RANGE | SIF_PAGE | SIF_POS;
+			si.nMin   = MSG_VISIBLE_LINES;
+			si.nMax   = data->yMax + MSG_VISIBLE_LINES - 1;
 			si.nPage  = MSG_VISIBLE_LINES;
 			si.nPos   = data->yPos;
-			SetScrollInfo(hWnd, SB_VERT, &si, TRUE); 
+			SetScrollInfo(hWnd, SB_VERT, &si, TRUE);
 		}
-    } 
-    break; 
+    }
+    break;
 
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
@@ -208,17 +208,17 @@ LRESULT CALLBACK NHMessageWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 void onMSNHCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
 	PNHMessageWindow data;
-	
+
 	data = (PNHMessageWindow)GetWindowLong(hWnd, GWL_USERDATA);
 	switch( wParam ) {
-	case MSNH_MSG_PUTSTR: 
+	case MSNH_MSG_PUTSTR:
 	{
 		PMSNHMsgPutstr msg_data = (PMSNHMsgPutstr)lParam;
 		SCROLLINFO si;
 
 		if( msg_data->append == 1) {
 		    /* Forcibly append to line, even if we pass the edge */
-		    strncat(data->window_text[data->last_line].text, msg_data->text, 
+		    strncat(data->window_text[data->last_line].text, msg_data->text,
 			    MAXWINDOWTEXT - strlen(data->window_text[data->last_line].text));
 		} else if( msg_data->append < 0) {
             /* remove that many chars */
@@ -226,20 +226,20 @@ void onMSNHCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
             int newend = max(len + msg_data->append, 0);
 		    data->window_text[data->last_line].text[newend] = '\0';
         } else {
-		    /* Try to append but move the whole message to the next line if 
+		    /* Try to append but move the whole message to the next line if
 		       it doesn't fit */
 		    /* just schedule for displaying */
 		    data->new_line.attr = msg_data->attr;
 		    strncpy(data->new_line.text, msg_data->text, MAXWINDOWTEXT);
 		}
-		
+
 		/* reset V-scroll position to display new text */
 		data->yPos = data->yMax;
 
 		ZeroMemory(&si, sizeof(si));
         si.cbSize = sizeof(si);
-        si.fMask  = SIF_POS; 
-        si.nPos   = data->yPos; 
+        si.fMask  = SIF_POS;
+        si.nPos   = data->yPos;
         SetScrollInfo(hWnd, SB_VERT, &si, TRUE);
 
 		/* update window content */
@@ -279,151 +279,151 @@ void onMSNHCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
 void onMSNH_VScroll(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
 	PNHMessageWindow data;
-	SCROLLINFO si; 
+	SCROLLINFO si;
 	int yInc;
- 
+
 	/* get window data */
 	data = (PNHMessageWindow)GetWindowLong(hWnd, GWL_USERDATA);
-	
+
 	ZeroMemory(&si, sizeof(si));
 	si.cbSize = sizeof(si);
 	si.fMask = SIF_PAGE | SIF_POS;
 	GetScrollInfo(hWnd, SB_VERT, &si);
 
-	switch(LOWORD (wParam)) 
-	{ 
-    // User clicked the shaft above the scroll box. 
+	switch(LOWORD (wParam))
+	{
+    // User clicked the shaft above the scroll box.
 
-    case SB_PAGEUP: 
-         yInc = -(int)si.nPage; 
-         break; 
+    case SB_PAGEUP:
+         yInc = -(int)si.nPage;
+         break;
 
-    // User clicked the shaft below the scroll box. 
+    // User clicked the shaft below the scroll box.
 
-    case SB_PAGEDOWN: 
-         yInc = si.nPage; 
-         break; 
+    case SB_PAGEDOWN:
+         yInc = si.nPage;
+         break;
 
-    // User clicked the top arrow. 
+    // User clicked the top arrow.
 
-    case SB_LINEUP: 
-         yInc = -1; 
-         break; 
+    case SB_LINEUP:
+         yInc = -1;
+         break;
 
-    // User clicked the bottom arrow. 
+    // User clicked the bottom arrow.
 
-    case SB_LINEDOWN: 
-         yInc = 1; 
-         break; 
+    case SB_LINEDOWN:
+         yInc = 1;
+         break;
 
-    // User dragged the scroll box. 
+    // User dragged the scroll box.
 
-    case SB_THUMBTRACK: 
-         yInc = HIWORD(wParam) - data->yPos; 
-         break; 
+    case SB_THUMBTRACK:
+         yInc = HIWORD(wParam) - data->yPos;
+         break;
 
-    default: 
-         yInc = 0; 
+    default:
+         yInc = 0;
 	}
 
-	// If applying the vertical scrolling increment does not 
-	// take the scrolling position out of the scrolling range, 
-	// increment the scrolling position, adjust the position 
-	// of the scroll box, and update the window. UpdateWindow 
-	// sends the WM_PAINT message. 
+	// If applying the vertical scrolling increment does not
+	// take the scrolling position out of the scrolling range,
+	// increment the scrolling position, adjust the position
+	// of the scroll box, and update the window. UpdateWindow
+	// sends the WM_PAINT message.
 
-	if (yInc = max( MSG_VISIBLE_LINES - data->yPos, 
-		            min(yInc, data->yMax - data->yPos))) 
-	{ 
-		data->yPos += yInc; 
-		/* ScrollWindowEx(hWnd, 0, -data->yChar * yInc, 
-			(CONST RECT *) NULL, (CONST RECT *) NULL, 
-			(HRGN) NULL, (LPRECT) NULL, SW_INVALIDATE | SW_ERASE); 
+	if (yInc = max( MSG_VISIBLE_LINES - data->yPos,
+		            min(yInc, data->yMax - data->yPos)))
+	{
+		data->yPos += yInc;
+		/* ScrollWindowEx(hWnd, 0, -data->yChar * yInc,
+			(CONST RECT *) NULL, (CONST RECT *) NULL,
+			(HRGN) NULL, (LPRECT) NULL, SW_INVALIDATE | SW_ERASE);
 		*/
 		InvalidateRect(hWnd, NULL, TRUE);
 
 		ZeroMemory(&si, sizeof(si));
-		si.cbSize = sizeof(si); 
-		si.fMask  = SIF_POS; 
-		si.nPos   = data->yPos; 
-		SetScrollInfo(hWnd, SB_VERT, &si, TRUE); 
+		si.cbSize = sizeof(si);
+		si.fMask  = SIF_POS;
+		si.nPos   = data->yPos;
+		SetScrollInfo(hWnd, SB_VERT, &si, TRUE);
 
-		UpdateWindow (hWnd); 
-	} 
+		UpdateWindow (hWnd);
+	}
 }
 
 #ifndef MSG_WRAP_TEXT
 void onMSNH_HScroll(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
 	PNHMessageWindow data;
-	SCROLLINFO si; 
+	SCROLLINFO si;
 	int xInc;
- 
+
 	/* get window data */
 	data = (PNHMessageWindow)GetWindowLong(hWnd, GWL_USERDATA);
-	
+
 	ZeroMemory(&si, sizeof(si));
 	si.cbSize = sizeof(si);
 	si.fMask = SIF_PAGE;
 	GetScrollInfo(hWnd, SB_HORZ, &si);
 
-    switch(LOWORD (wParam)) 
-    { 
-        // User clicked shaft left of the scroll box. 
+    switch(LOWORD (wParam))
+    {
+        // User clicked shaft left of the scroll box.
 
-        case SB_PAGEUP: 
-             xInc = - (int)si.nPage; 
-             break; 
+        case SB_PAGEUP:
+             xInc = - (int)si.nPage;
+             break;
 
-        // User clicked shaft right of the scroll box. 
+        // User clicked shaft right of the scroll box.
 
-        case SB_PAGEDOWN: 
-             xInc = si.nPage; 
-             break; 
+        case SB_PAGEDOWN:
+             xInc = si.nPage;
+             break;
 
-        // User clicked the left arrow. 
+        // User clicked the left arrow.
 
-        case SB_LINEUP: 
-             xInc = -1; 
-             break; 
+        case SB_LINEUP:
+             xInc = -1;
+             break;
 
-        // User clicked the right arrow. 
+        // User clicked the right arrow.
 
-        case SB_LINEDOWN: 
-             xInc = 1; 
-             break; 
+        case SB_LINEDOWN:
+             xInc = 1;
+             break;
 
-        // User dragged the scroll box. 
+        // User dragged the scroll box.
 
-        case SB_THUMBTRACK: 
-             xInc = HIWORD(wParam) - data->xPos; 
-             break; 
+        case SB_THUMBTRACK:
+             xInc = HIWORD(wParam) - data->xPos;
+             break;
 
-        default: 
-             xInc = 0; 
+        default:
+             xInc = 0;
 
     }
 
-	
-    // If applying the horizontal scrolling increment does not 
-    // take the scrolling position out of the scrolling range, 
-    // increment the scrolling position, adjust the position 
-    // of the scroll box, and update the window. 
 
-    if (xInc = max (-data->xPos, min (xInc, data->xMax - data->xPos))) 
-    { 
-        data->xPos += xInc; 
-        ScrollWindowEx (hWnd, -data->xChar * xInc, 0, 
-            (CONST RECT *) NULL, (CONST RECT *) NULL, 
-            (HRGN) NULL, (LPRECT) NULL, SW_INVALIDATE | SW_ERASE); 
+    // If applying the horizontal scrolling increment does not
+    // take the scrolling position out of the scrolling range,
+    // increment the scrolling position, adjust the position
+    // of the scroll box, and update the window.
+
+    if (xInc = max (-data->xPos, min (xInc, data->xMax - data->xPos)))
+    {
+        data->xPos += xInc;
+        ScrollWindowEx (hWnd, -data->xChar * xInc, 0,
+            (CONST RECT *) NULL, (CONST RECT *) NULL,
+            (HRGN) NULL, (LPRECT) NULL, SW_INVALIDATE | SW_ERASE);
 
 		ZeroMemory(&si, sizeof(si));
-        si.cbSize = sizeof(si); 
-        si.fMask  = SIF_POS; 
-        si.nPos   = data->xPos; 
-        SetScrollInfo(hWnd, SB_HORZ, &si, TRUE); 
-        UpdateWindow (hWnd); 
-    } 
+        si.cbSize = sizeof(si);
+        si.fMask  = SIF_POS;
+        si.nPos   = data->xPos;
+        SetScrollInfo(hWnd, SB_HORZ, &si, TRUE);
+        UpdateWindow (hWnd);
+    }
 }
 #endif // MSG_WRAP_TEXT
 
@@ -438,7 +438,7 @@ COLORREF setMsgTextColor(HDC hdc, int gray)
 	    color1 = (COLORREF)GetSysColor(DEFAULT_COLOR_BG_MSG);
 	    color2 = (COLORREF)GetSysColor(DEFAULT_COLOR_FG_MSG);
 	}
-	/* Make a "gray" color by taking the average of the individual R,G,B 
+	/* Make a "gray" color by taking the average of the individual R,G,B
 	   components of two colors. Thanks to Jonathan del Strother */
 	fg = RGB((GetRValue(color1)+GetRValue(color2))/2,
 		(GetGValue(color1)+GetGValue(color2))/2,
@@ -476,12 +476,12 @@ void onPaint(HWND hWnd)
 	GetClientRect(hWnd, &client_rt);
 
 	if( !IsRectEmpty(&ps.rcPaint) ) {
-		FirstLine = max (0, data->yPos - (client_rt.bottom - ps.rcPaint.top)/data->yChar + 1); 
-		LastLine = min (MSG_LINES-1, data->yPos - (client_rt.bottom - ps.rcPaint.bottom)/data->yChar); 
-		y = min( ps.rcPaint.bottom, client_rt.bottom ); 
- 		for (i=LastLine; i>=FirstLine; i--) { 
+		FirstLine = max (0, data->yPos - (client_rt.bottom - ps.rcPaint.top)/data->yChar + 1);
+		LastLine = min (MSG_LINES-1, data->yPos - (client_rt.bottom - ps.rcPaint.bottom)/data->yChar);
+		y = min( ps.rcPaint.bottom, client_rt.bottom );
+ 		for (i=LastLine; i>=FirstLine; i--) {
 				int lineidx = (data->last_line + 1 + i) % MSG_LINES;
-				x = data->xChar * (2 - data->xPos); 
+				x = data->xChar * (2 - data->xPos);
 
 				draw_rt.left = x;
 				draw_rt.right = client_rt.right;
@@ -493,16 +493,16 @@ void onPaint(HWND hWnd)
 	    /* find out if we can concatenate the scheduled message without wrapping,
         but only if no clear_nhwindow was done just before putstr'ing this one,
         and only if not in a more prompt already (to prevent concatenating to
-        a line containing --More-- when resizing while --More-- is displayed.) 
+        a line containing --More-- when resizing while --More-- is displayed.)
 	       */
-	    if (i == MSG_LINES-1 
+	    if (i == MSG_LINES-1
   && strlen(data->new_line.text) > 0
   && !data->in_more) {
 		/* concatenate to the previous line if that is not empty, and
 		   if it has the same attribute, and no clear was done.
 		   */
 		if (strlen(data->window_text[lineidx].text) > 0
-			&& (data->window_text[lineidx].attr 
+			&& (data->window_text[lineidx].attr
 			    == data->new_line.attr)
 			&& !data->cleared) {
 		    RECT tmpdraw_rt = draw_rt;
@@ -511,18 +511,18 @@ void onPaint(HWND hWnd)
 		    TCHAR tmpwbuf[MAXWINDOWTEXT+2];
 
 		    strcpy(tmptext, data->window_text[lineidx].text);
-		    strncat(tmptext, "  ", 
+		    strncat(tmptext, "  ",
 			    MAXWINDOWTEXT - strlen(tmptext));
-		    strncat(tmptext, data->new_line.text, 
+		    strncat(tmptext, data->new_line.text,
 			    MAXWINDOWTEXT - strlen(tmptext));
 		    /* Always keep room for a --More-- */
-		    strncat(tmptext, MORE, 
+		    strncat(tmptext, MORE,
 			    MAXWINDOWTEXT - strlen(tmptext));
 		    NH_A2W(tmptext, tmpwbuf, sizeof(tmpwbuf));
-		    /* Find out how large the bounding rectangle of the text is */                
+		    /* Find out how large the bounding rectangle of the text is */
 		    DrawText(hdc, tmpwbuf, _tcslen(tmpwbuf), &tmpdraw_rt, DT_NOPREFIX | DT_WORDBREAK | DT_CALCRECT);
 		    if ((tmpdraw_rt.bottom - tmpdraw_rt.top) == (draw_rt.bottom - draw_rt.top)  /* fits pixelwise */
-			    && (strlen(data->window_text[lineidx].text) 
+			    && (strlen(data->window_text[lineidx].text)
 				+ strlen(data->new_line.text) < MAXWINDOWTEXT)) /* fits charwise */
 		    {
 			/* strip off --More-- of this combined line and make it so */
@@ -542,11 +542,11 @@ void onPaint(HWND hWnd)
 		    int new_screen_lines;
 		    int screen_lines_not_seen = 0;
 		    /* Count how many screen lines we haven't seen yet. */
-#ifdef MSG_WRAP_TEXT				
+#ifdef MSG_WRAP_TEXT
 		    {
 			int n;
 			for (n = data->lines_not_seen - 1; n >= 0; n--) {
-			    screen_lines_not_seen += 
+			    screen_lines_not_seen +=
 				data->window_text_lines[(data->last_line - n + MSG_LINES) % MSG_LINES];
 			}
 		    }
@@ -555,12 +555,12 @@ void onPaint(HWND hWnd)
 #endif
 		    /* Now find out how many screen lines we would like to add */
 		    NH_A2W(data->new_line.text, tmpwbuf, sizeof(tmpwbuf));
-		    /* Find out how large the bounding rectangle of the text is */                
+		    /* Find out how large the bounding rectangle of the text is */
 		    oldFont = SelectObject(hdc, mswin_get_font(NHW_MESSAGE, data->window_text[lineidx].attr, hdc, FALSE));
 		    DrawText(hdc, tmpwbuf, _tcslen(tmpwbuf), &tmpdraw_rt, DT_NOPREFIX | DT_WORDBREAK | DT_CALCRECT);
 		    SelectObject(hdc, oldFont);
 		    new_screen_lines = (tmpdraw_rt.bottom - tmpdraw_rt.top) / data->yChar;
-		    /* If this together is more than fits on the window, we must 
+		    /* If this together is more than fits on the window, we must
 		       --More--, unless:
 		       - We are in --More-- already (the user is scrolling the window)
 		       - The user pressed ESC
@@ -574,7 +574,7 @@ void onPaint(HWND hWnd)
 			do_more = 1;
 		    } else if (!data->in_more) {
 			data->last_line++;
-			data->last_line %= MSG_LINES; 
+			data->last_line %= MSG_LINES;
 			data->window_text[data->last_line].attr = data->new_line.attr;
 			strncpy(data->window_text[data->last_line].text, data->new_line.text, MAXWINDOWTEXT);
 			data->new_line.text[0] = '\0';
@@ -595,8 +595,8 @@ void onPaint(HWND hWnd)
 	    NH_A2W(data->window_text[lineidx].text, wbuf, sizeof(wbuf));
 	    wlen = _tcslen(wbuf);
 	    setMsgTextColor(hdc, i < (MSG_LINES - data->lines_last_turn));
-#ifdef MSG_WRAP_TEXT				
-	    /* Find out how large the bounding rectangle of the text is */                
+#ifdef MSG_WRAP_TEXT
+	    /* Find out how large the bounding rectangle of the text is */
 				DrawText(hdc, wbuf, wlen, &draw_rt, DT_NOPREFIX | DT_WORDBREAK | DT_CALCRECT);
 	    /* move that rectangle up, so that the bottom remains at the same height */
 				draw_rt.top = y - (draw_rt.bottom - draw_rt.top);
@@ -605,7 +605,7 @@ void onPaint(HWND hWnd)
 	    data->window_text_lines[lineidx] = (draw_rt.bottom - draw_rt.top) / data->yChar;
 	    /* Now really draw it */
 				DrawText(hdc, wbuf, wlen, &draw_rt, DT_NOPREFIX | DT_WORDBREAK);
-                
+
                 /* Find out the cursor (caret) position */
 	    if (i == MSG_LINES-1) {
                     int nnum, numfit;
@@ -671,7 +671,7 @@ void onPaint(HWND hWnd)
 			break;
 			}
 		}
-	    chop = strlen(data->window_text[data->last_line].text) 
+	    chop = strlen(data->window_text[data->last_line].text)
 		- strlen(MORE);
 	    data->window_text[data->last_line].text[chop] = '\0';
 	    data->in_more = 0;
@@ -706,7 +706,7 @@ void mswin_message_window_size (HWND hWnd, LPSIZE sz)
 {
 	HDC hdc;
 	HGDIOBJ saveFont;
-	TEXTMETRIC tm; 
+	TEXTMETRIC tm;
 	PNHMessageWindow data;
 	RECT rt, client_rt;
 
@@ -715,20 +715,20 @@ void mswin_message_window_size (HWND hWnd, LPSIZE sz)
 
 	/* -- Calculate the font size -- */
     /* Get the handle to the client area's device context. */
-    hdc = GetDC(hWnd); 
+    hdc = GetDC(hWnd);
 	saveFont = SelectObject(hdc, mswin_get_font(NHW_MESSAGE, ATR_NONE, hdc, FALSE));
 
     /* Extract font dimensions from the text metrics. */
-    GetTextMetrics (hdc, &tm); 
-    data->xChar = tm.tmAveCharWidth; 
-    data->xUpper = (tm.tmPitchAndFamily & 1 ? 3 : 2) * data->xChar/2; 
-    data->yChar = tm.tmHeight + tm.tmExternalLeading; 
+    GetTextMetrics (hdc, &tm);
+    data->xChar = tm.tmAveCharWidth;
+    data->xUpper = (tm.tmPitchAndFamily & 1 ? 3 : 2) * data->xChar/2;
+    data->yChar = tm.tmHeight + tm.tmExternalLeading;
 	data->xPage = 1;
 
     /* Free the device context.  */
 	SelectObject(hdc, saveFont);
-    ReleaseDC (hWnd, hdc); 
-	
+    ReleaseDC (hWnd, hdc);
+
 	/* -- calculate window size -- */
 	GetWindowRect(hWnd, &rt);
 	sz->cx = rt.right - rt.left;

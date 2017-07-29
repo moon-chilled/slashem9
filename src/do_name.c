@@ -552,7 +552,7 @@ char *x_monnam(struct monst *mtmp, int article, const char *adjective, int suppr
 
 	do_hallu = Hallucination && !(suppress & SUPPRESS_HALLUCINATION);
 	do_invis = mtmp->minvis && !(suppress & SUPPRESS_INVISIBLE);
-	do_it = !canspotmon(mtmp) && 
+	do_it = !canspotmon(mtmp) &&
 	    article != ARTICLE_YOUR &&
 	    !program_state.gameover &&
 #ifdef STEED
@@ -703,7 +703,7 @@ char *x_monnam(struct monst *mtmp, int article, const char *adjective, int suppr
 
 
 char *l_monnam(struct monst *mtmp) {
-	return(x_monnam(mtmp, ARTICLE_NONE, NULL, 
+	return(x_monnam(mtmp, ARTICLE_NONE, NULL,
 		mtmp->mnamelth ? SUPPRESS_SADDLE : 0, TRUE));
 }
 
@@ -845,7 +845,7 @@ static const char * const bogusmons[] = {
 	"Azog the Orc King", "Morgoth",		/* Angband */
 
 	/*[Tom] new wacky names */
-	"commando", "green beret", "sherman tank", 
+	"commando", "green beret", "sherman tank",
 						/* Military */
 	"Jedi knight", "tie fighter", "protocol droid", "R2 unit", "Emperor",
 						/* Star Wars */
@@ -856,7 +856,7 @@ static const char * const bogusmons[] = {
 	"Predator",				/* Movie */
 	"green light", "automobile", "invisible Wizard of Yendor",
 	"piece of yellowish-brown glass", "wand of nothing",
-	"ocean","ballpoint pen","paper cut",	
+	"ocean","ballpoint pen","paper cut",
 						/* misc */
 	"Rune", "Gurk", "Yuval",		/* people I know */
 	"mother-in-law"				/* common pest */
@@ -937,7 +937,7 @@ static const char * const coynames[] = {
 	"Caninus Nervous Rex","Grotesques Appetitus",
 	"Nemesis Riduclii","Canis latrans"
 };
-	
+
 char *coyotename(struct monst *mtmp, char *buf) {
     if (mtmp && buf) {
 	sprintf(buf, "%s - %s",

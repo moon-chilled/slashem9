@@ -150,7 +150,7 @@ int dog_eat(struct monst *mtmp, struct obj *obj, int x, int y, boolean devour) {
 	    mtmp->meating = (mtmp->meating + 4) / 5;
 	    nutrit = (nutrit + 4) / 5;
 	}
-	
+
 	edog->hungrytime += nutrit;
 	mtmp->mconf = 0;
 	if (edog->mhpmax_penalty) {
@@ -197,18 +197,18 @@ int dog_eat(struct monst *mtmp, struct obj *obj, int x, int y, boolean devour) {
 		    } else {
 		    	/* Carried */
 			obj = splitobj(obj, obj->quan - 1L);
-			
+
 			freeinv(obj);
 			if (inv_cnt() >= 52 && !merge_choice(invent, obj))
 			    dropy(obj);
 			else
-			    obj = addinv(obj); /* unlikely but a merge is possible */			
+			    obj = addinv(obj); /* unlikely but a merge is possible */
 		    }
 #ifdef DEBUG
 		    debugpline("split object,");
 #endif
 		}
-		
+
 		/* Take away blood nutrition */
 	    	obj->oeaten = drainlevel(obj);
 		obj->odrained = 1;
@@ -328,7 +328,7 @@ static int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 		    could_reach_item(mtmp, obj->ox, obj->oy))
 		    return dog_eat(mtmp, obj, omx, omy, FALSE);
 
-		/* [Tom] demonic & undead pets don't mind cursed items */                
+		/* [Tom] demonic & undead pets don't mind cursed items */
 		if(can_carry(mtmp, obj) &&
 		  could_reach_item(mtmp, obj->ox, obj->oy) &&
 		  (!obj->cursed || is_demon(mtmp->data) || is_undead(mtmp->data)) &&
@@ -345,7 +345,7 @@ static int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 			    obj_extract_self(obj);
 			    newsym(omx,omy);
 			    (void) mpickobj(mtmp,obj);
-			    }                            
+			    }
 			    else /* picking up a few objects from a pile... */
 				/* KMH -- fix picking up zero quantity */
 			    if (dogquan > 0) {
@@ -354,7 +354,7 @@ static int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 #ifndef GOLDOBJ
 				    obj->quan -= dogquan;
 				    if (cansee(omx, omy) && flags.verbose)
-					pline("%s picks up %d gold pieces.", 
+					pline("%s picks up %d gold pieces.",
 							Monnam(mtmp),
 							dogquan);
 				    mtmp->mgold += dogquan;
@@ -362,7 +362,7 @@ static int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 						if (obj->quan != dogquan)
 							obj = splitobj(obj, dogquan);
 				    if (cansee(omx, omy) && flags.verbose)
-							pline("%s picks up %s.", 
+							pline("%s picks up %s.",
 							Monnam(mtmp),
 							doname(obj));
 							obj_extract_self(obj);
@@ -809,10 +809,10 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 		    else if (mtmp2->ispriest) align2 = EPRI(mtmp2)->shralign;
 		    else align2 = A_NONE;
 
-		    /* Mindless monsters and spelled monsters have no fear of 
-		     * attacking higher level monsters 
+		    /* Mindless monsters and spelled monsters have no fear of
+		     * attacking higher level monsters
 		     */
-		    if (((int)mtmp2->m_lev >= (int)mtmp->m_lev+2 && !is_spell && 
+		    if (((int)mtmp2->m_lev >= (int)mtmp->m_lev+2 && !is_spell &&
 			    !mindless(mtmp->data)) ||
 			(mtmp2->data == &mons[PM_FLOATING_EYE] && rn2(10) &&
 			 mtmp->mcansee && haseyes(mtmp->data) && mtmp2->mcansee
@@ -874,13 +874,13 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 		}
 
 		/* dog eschews cursed objects, but likes dog food */
-		/* [Tom] except demons & undead, who don't care */  
+		/* [Tom] except demons & undead, who don't care */
 		/* (minion isn't interested; `cursemsg' stays FALSE) */
 		if (has_edog && !is_spell) {
 		for (obj = level.objects[nx][ny]; obj; obj = obj->nexthere) {
-		    if ((obj->cursed) && has_edog && !is_demon(mtmp->data) 
+		    if ((obj->cursed) && has_edog && !is_demon(mtmp->data)
 		    && !is_undead(mtmp->data)) cursemsg[i] = TRUE;
-		    if (obj->blessed && has_edog && (is_demon(mtmp->data) 
+		    if (obj->blessed && has_edog && (is_demon(mtmp->data)
 		    || is_undead(mtmp->data))) cursemsg[i] = TRUE;
 		    else if ((otyp = dogfood(mtmp, obj)) < MANFOOD &&
 			     (otyp < ACCFOOD || edog->hungrytime <= monstermoves)) {
@@ -1027,7 +1027,7 @@ static boolean can_reach_location(struct monst *mon, xchar mx, xchar my, xchar f
 
     if (mx == fx && my == fy) return TRUE;
     if (!isok(mx, my)) return FALSE; /* should not happen */
-    
+
     dist = dist2(mx, my, fx, fy);
     for(i=mx-1; i<=mx+1; i++) {
 	for(j=my-1; j<=my+1; j++) {

@@ -16,8 +16,8 @@
 
 #define DEBUG
 
-/* 
- *  Interface definition, for windows.c 
+/*
+ *  Interface definition, for windows.c
  */
 struct window_procs win32_procs = {
     "win32",
@@ -116,7 +116,7 @@ char **argv;
 	status = InitListboxWindow();
 	ShowWindow(BasehWnd,SW_SHOWDEFAULT);
 	UpdateWindow(BasehWnd);
-	
+
 
 	pchBuf = alloc(RINGBUFSIZE);   /* allocate the input buffer */
 	pchGet = pchBuf;
@@ -139,7 +139,7 @@ win32_player_selection()
 	}
 	DialogBox(wcNetHack.hInstance,"CHAR_SEL_DIALOG",BasehWnd,
 			(DLGPROC)PlayerSelectProc);
-	return;	
+	return;
 }
 
 /*
@@ -158,7 +158,7 @@ win32_askname()
 	}
 	strncpy(plname, input_text, input_text_size);
 	*(plname + input_text_size) = '\0';
-	return;	
+	return;
 }
 
 void
@@ -226,8 +226,8 @@ int type;
 	newwin->morestr = NULL;
 
 	/* Build the appropriate type of Win32 Window */
-	switch(type) {	
-		
+	switch(type) {
+
 		case NHW_BASE:
 				InitBaseWindow();
 				newwin->hWnd = BasehWnd;
@@ -236,7 +236,7 @@ int type;
 				newwin->BackGroundColor = colormap[CLR_BLACK];
 				newwin->NormalTextColor = colormap[CLR_GRAY];
 				break;
-	
+
 		case NHW_MESSAGE:
 				strcpy(WindowName,"NetHack Message Window");
  				newwin->hWnd=CreateWindowEx(
@@ -317,7 +317,7 @@ int type;
 		case NHW_TEXT:
 		case NHW_MENU:
 				/* This will be a menu or text window
-				 * The first call to place something into 
+				 * The first call to place something into
 				 * it is what determines the type, so all
 				 * we can do for now is allocate the structure
 			         * and flag that the type has not been
@@ -333,7 +333,7 @@ int type;
 				newwin->morestr = "--more--";
 				break;
 	}
-	if ((newwin->type != TYPE_UNDETERMINED) && 
+	if ((newwin->type != TYPE_UNDETERMINED) &&
 	   ((newwin == (struct win32_WinDesc *)0) || (!newwin->hWnd))) {
 		panic("Win32 Window creation failure!");
 		return WIN_ERR;
@@ -345,7 +345,7 @@ int type;
 	if (newwin->type != TYPE_UNDETERMINED) {
 		msize = newwin->maxrows * newwin->maxcols;
 		newwin->data  = alloc(msize * sizeof(uchar));
-		if (newwin->wflags & WFLAGS_TILED) 
+		if (newwin->wflags & WFLAGS_TILED)
 			newwin->glyph = alloc(msize * sizeof(int));
 		memset(newwin->data,' ',msize * sizeof(uchar));
 		newwin->color = alloc(msize * sizeof(int));
@@ -358,7 +358,7 @@ int type;
 		}
 		newwin->active = TRUE;
 	}
-	return newid; 
+	return newid;
 }
 
 void
@@ -391,7 +391,7 @@ winid window;
 boolean blocking;
 {
 	if (window == WIN_MESSAGE) iflags.window_inited = TRUE;
-	if (blocking && wins[window]->morestr) 
+	if (blocking && wins[window]->morestr)
 		win32_putstr(window, 1, wins[window]->morestr);
 
 	if (wins[window]->type == NHW_TEXT && !wins[window]->active) {
@@ -418,7 +418,7 @@ winid window;
 				free((void *)MenuPtr[window][i]);
 				MenuPtr[window][i] = (struct win32_menuitem *)0;
 			}
-		}	
+		}
 		MenuCount[window] = 0;
 		--MenuWindowCount;
 	}
@@ -532,7 +532,7 @@ const char *str;
 	    case NHW_STATUS:
 		for (cnt=0; cnt < strlen(str); ++cnt) {
 		win32_putsym(window,wins[window]->cursx++,wins[window]->cursy,
-				wins[window]->NormalTextColor,*(str + cnt), 
+				wins[window]->NormalTextColor,*(str + cnt),
 				TRUE);
 		}
 		break;
@@ -544,7 +544,7 @@ const char *str;
 		}
 		for (cnt=0; cnt < (int)strlen(str); ++cnt) {
 		win32_putsym(window,wins[window]->cursx++,wins[window]->cursy,
-				wins[window]->NormalTextColor,*(str + cnt), 
+				wins[window]->NormalTextColor,*(str + cnt),
 				FALSE);
 		}
 		win32_curs(window,0,wins[window]->cursy+1);
@@ -617,7 +617,7 @@ int glyph;
     /* In this routine 'color' is a NetHack color, not a WIN32 color */
     color = NO_COLOR;
     if (wins[window]->wflags & WFLAGS_TILED) {
-	ip = wins[window]->glyph + ((row * wins[window]->maxcols) + col); 
+	ip = wins[window]->glyph + ((row * wins[window]->maxcols) + col);
 	*ip = glyph;
     } else {
 	    /*
@@ -657,7 +657,7 @@ int glyph;
 	    win32_putsym(window,wins[window]->cursx,
 			 wins[window]->cursy,colormap[color],ch, TRUE);
     }
-        
+
 }
 
 void
@@ -674,7 +674,7 @@ const char *str;
 				|MB_OK);
 #else
 				|MB_OKCANCEL);
-			if (button == IDCANCEL) 
+			if (button == IDCANCEL)
 				button = *(NULL); /* Bombs away ! */
 #endif
 		}
@@ -847,10 +847,10 @@ int part;
 		wins[window]->maxcols = COLNO;
 		wins[window]->hFnt = hDefFnt;
 		msize = wins[window]->maxrows * wins[window]->maxcols;
-		wins[window]->data  = 
+		wins[window]->data  =
 			alloc(msize * sizeof(uchar));
 		memset(wins[window]->data,' ',msize * sizeof(uchar));
-		wins[window]->color = 
+		wins[window]->color =
 			alloc(msize * sizeof(int));
 		for (i = 0; i < msize; ++i)
 		     *(wins[window]->color + i) = wins[window]->NormalTextColor;
@@ -860,7 +860,7 @@ int part;
 		DEBUG_MSG("About to do deferred init part 2");
 #endif
 		wins[window]->WindowWidth = max((BaseWidth / COLNO) *
-					wins[window]->widest, 
+					wins[window]->widest,
 					(BaseWidth / COLNO) * 40);
 		wins[window]->WindowHeight = (BaseHeight / ROWNO) *
 					wins[window]->cursy;
@@ -885,7 +885,7 @@ int part;
 			DEBUG_MSG("Deferred init: Init of Window failed");
 		}
 		wins[window]->active = TRUE;	/* mark it active */
-	} 
+	}
 #ifdef DEBUG_FULL
 	else
 		DEBUG_MSG("Deferred init: Unrecognized part");
@@ -952,7 +952,7 @@ LBS_NOTIFY | WS_BORDER | WS_VISIBLE | LBS_WANTKEYBOARDINPUT | LBS_USETABSTOPS,
 				free((void *)MenuPtr[window][i]);
 				MenuPtr[window][i] = (struct win32_menuitem *)0;
 			}
-		}	
+		}
 		MenuCount[window] = 0;
 		SendMessage(wins[window]->hDlg,
 				LB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
@@ -1005,13 +1005,13 @@ boolean preselected;
 		return;
 	}
 	if (wins[window]->type != NHW_MENU)
-		impossible("Window type %d in add_menu", 
+		impossible("Window type %d in add_menu",
 				wins[window]->type);
 	if (str) {
 		tmp = alloc(strlen(str) + 1 + strlen(extra));
 	} else
 		tmp = NULL;
-	menuitem = 
+	menuitem =
 		(struct win32_menuitem *)alloc(sizeof(struct win32_menuitem));
 	if (!menuitem) return;
 	menuitem->glyph = glyph;
@@ -1027,7 +1027,7 @@ boolean preselected;
 	if (menuitem->identifier.a_void) {
 	    if (menuitem->str)
 		strcpy(menuitem->str, (str != NULL) ? str : "Oops!");
-	} else 
+	} else
 		sprintf(menuitem->str,"%s",
 			 (str != NULL) ? str : "Oops");
 	MenuPtr[window][MenuCount[window]] = menuitem;
@@ -1058,7 +1058,7 @@ const char *morestr;
 	boolean sflag;
 
 	if (wins[window]->type != NHW_MENU)
-		impossible("Window type %d in end_menu", 
+		impossible("Window type %d in end_menu",
 				wins[window]->type);
 /*	sprintf(buf,"Total items in menu: %d\r", MenuCount[window]); */
 	for (i = 0, j = 'a', junk = 0; i < MenuCount[window]; ++i) {
@@ -1078,7 +1078,7 @@ const char *morestr;
 				}
 				/* Win32 Listbox control messages */
 				SendMessage(wins[window]->hDlg,
-					LB_ADDSTRING, (WPARAM)0, 
+					LB_ADDSTRING, (WPARAM)0,
 					(LPARAM)buf);
 				SendMessage(wins[window]->hDlg,
 					LB_SETITEMDATA, (WPARAM)i,
@@ -1093,7 +1093,7 @@ const char *morestr;
 		}
 		if (j > 'z') j = 'A';
 		if ((j > 'Z') && (j < 'a')) j = '?';
-	}	
+	}
 #ifdef DEBUG_FULL
 	DEBUG_MSG(buf);
 #endif
@@ -1110,12 +1110,12 @@ const char *morestr;
  * not supply a count, then the count field is filled with
  * -1 (meaning all).  A count of zero is equivalent to not
  * being selected and should not be in the list.  If no items
- * were selected, then selected is NULL'ed out.  
+ * were selected, then selected is NULL'ed out.
  *
  * How is the mode of the menu.
  * PICK_NONE	Nothing is selectable,
  * PICK_ONE	Only one thing is selectable
- * PICK_N	Any number valid items may selected 
+ * PICK_N	Any number valid items may selected
  * (If how is PICK_NONE, this function should never return anything but 0)
  *
  * You may call select_menu() on a window multiple times --
@@ -1140,7 +1140,7 @@ menu_item **menu_list;
 	ShowWindow(wins[window]->hWnd,SW_SHOWDEFAULT);
 #endif
 	if (wins[window]->type != NHW_MENU)
-		impossible("Window type %d in select_menu", 
+		impossible("Window type %d in select_menu",
 				wins[window]->type);
 	ShowWindow(wins[window]->hWnd,SW_SHOWDEFAULT);
 #ifdef DEBUG_FULL

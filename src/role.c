@@ -44,7 +44,7 @@ const struct Role roles[] = {
 	ART_WEREBANE, ART_GRAYSWANDIR,
 #endif
 	ART_ORB_OF_DETECTION,
-	MH_HUMAN|MH_ELF|MH_DWARF|MH_GNOME|MH_HOBBIT|MH_VAMPIRE | 
+	MH_HUMAN|MH_ELF|MH_DWARF|MH_GNOME|MH_HOBBIT|MH_VAMPIRE |
 	  ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL|ROLE_NEUTRAL,
 	/* Str Int Wis Dex Con Cha */
 	{   7, 10, 10,  7,  7,  7 },
@@ -131,7 +131,7 @@ const struct Role roles[] = {
 	ART_FIREWALL, ART_FIRE_BRAND,
 #endif
 	ART_CANDLE_OF_ETERNAL_FLAME,
-	MH_HUMAN|MH_ELF|MH_GNOME|MH_ORC|MH_HOBBIT | 
+	MH_HUMAN|MH_ELF|MH_GNOME|MH_ORC|MH_HOBBIT |
 	ROLE_MALE|ROLE_FEMALE|ROLE_LAWFUL|ROLE_NEUTRAL|ROLE_CHAOTIC,
 	/* Str Int Wis Dex Con Cha */  /* Direct copy from Wizard */
 	{   7, 10,  7,  7,  7,  7 },
@@ -139,7 +139,7 @@ const struct Role roles[] = {
 	/* Init   Lower  Higher */
 	{ 10, 0,  0, 8,  1, 0 },	/* Hit points */
 	{  4, 3,  0, 2,  0, 3 },12,	/* Energy */
-	0, 1, 0, 
+	0, 1, 0,
 	2, 10, A_INT, SPE_FIREBALL,        -4 /* From old role.c */
 },
 {	{"Healer", 0}, {
@@ -190,7 +190,7 @@ const struct Role roles[] = {
 	ART_DEEP_FREEZE, ART_FROST_BRAND,
 #endif
 	ART_STORM_WHISTLE,
-	MH_HUMAN|MH_ELF|MH_GNOME|MH_ORC|MH_HOBBIT|MH_VAMPIRE | 
+	MH_HUMAN|MH_ELF|MH_GNOME|MH_ORC|MH_HOBBIT|MH_VAMPIRE |
 	ROLE_MALE|ROLE_FEMALE|ROLE_LAWFUL|ROLE_NEUTRAL|ROLE_CHAOTIC,
 	/* Str Int Wis Dex Con Cha */  /* Direct copy from Wizard */
 	{   7, 10,  7,  7,  7,  7 },
@@ -198,7 +198,7 @@ const struct Role roles[] = {
 	/* Init   Lower  Higher */
 	{ 10, 0,  0, 8,  1, 0 },	/* Hit points */
 	{  4, 3,  0, 2,  0, 3 },12,	/* Energy */
-	0, 1, 0, 
+	0, 1, 0,
 	2, 10, A_INT, SPE_CONE_OF_COLD,    -4 /* From old role.c */
 },
 {	{"Knight", 0}, {
@@ -285,7 +285,7 @@ const struct Role roles[] = {
 	/* Init   Lower  Higher */
 	{ 10, 0,  0, 8,  1, 0 },	/* Hit points */
 	{  4, 3,  0, 2,  0, 3 },12,	/* Energy */
-	0, 1, 0, 
+	0, 1, 0,
 	2, 10, A_INT, SPE_SUMMON_UNDEAD,   -4
 },
 {	{"Priest", "Priestess"}, {
@@ -580,7 +580,7 @@ struct Role urole =
 	{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0} },
 	"L", "N", "C", "Xxx", "home", "locate",
 	NON_PM, NON_PM, NON_PM, NON_PM, NON_PM, NON_PM,
-	NON_PM, NON_PM, 0, 0, 
+	NON_PM, NON_PM, 0, 0,
 #if 0
 	0, 0,
 #endif
@@ -775,14 +775,14 @@ validrole(rolenum)
 }
 
 
-int 
+int
 randrole (void)
 {
 	return (rn2(SIZE(roles)-1));
 }
 
 
-int 
+int
 str2role (char *str)
 {
 	int i, len;
@@ -819,7 +819,7 @@ validrace(rolenum, racenum)
 	int rolenum, racenum;
 {
 	/* Assumes validrole */
-	/* WAC -- checks ROLE_GENDMASK and ROLE_ALIGNMASK as well (otherwise, there 
+	/* WAC -- checks ROLE_GENDMASK and ROLE_ALIGNMASK as well (otherwise, there
 	 * might not be an allowed gender or alignment for that role
 	 */
 	return (racenum >= 0 && racenum < SIZE(races)-1 &&
@@ -829,7 +829,7 @@ validrace(rolenum, racenum)
 }
 
 
-int 
+int
 randrace (int rolenum)
 {
 	int i, n = 0;
@@ -858,7 +858,7 @@ randrace (int rolenum)
  * [ALI] Find the player equivalent race for a monster from its M2 flags.
  */
 
-int 
+int
 mrace2race (int mflags2)
 {
 	int i;
@@ -878,7 +878,7 @@ mrace2race (int mflags2)
 	return ROLE_NONE;
 }
 
-int 
+int
 str2race (char *str)
 {
 	int i, len;
@@ -918,7 +918,7 @@ validgend(rolenum, racenum, gendnum)
 }
 
 
-int 
+int
 randgend (int rolenum, int racenum)
 {
 	int i, n = 0;
@@ -945,7 +945,7 @@ randgend (int rolenum, int racenum)
 }
 
 
-int 
+int
 str2gend (char *str)
 {
 	int i, len;
@@ -984,7 +984,7 @@ validalign(rolenum, racenum, alignnum)
 }
 
 
-int 
+int
 randalign (int rolenum, int racenum)
 {
 	int i, n = 0;
@@ -1009,7 +1009,7 @@ randalign (int rolenum, int racenum)
 }
 
 
-int 
+int
 str2align (char *str)
 {
 	int i, len;
@@ -1083,7 +1083,7 @@ int rolenum, racenum, gendnum, alignnum;
 /* pick a random role subject to any racenum/gendnum/alignnum constraints */
 /* If pickhow == PICK_RIGID a role is returned only if there is  */
 /* a single possibility */
-int 
+int
 pick_role (int racenum, int gendnum, int alignnum, int pickhow)
 {
     int i;
@@ -1154,7 +1154,7 @@ int rolenum, racenum, gendnum, alignnum;
 /* pick a random race subject to any rolenum/gendnum/alignnum constraints */
 /* If pickhow == PICK_RIGID a race is returned only if there is  */
 /* a single possibility */
-int 
+int
 pick_race (int rolenum, int gendnum, int alignnum, int pickhow)
 {
     int i;
@@ -1194,7 +1194,7 @@ int rolenum, racenum, gendnum, alignnum;
 	    allow &= roles[rolenum].allow;
 	if (racenum >= 0 && racenum < SIZE(races)-1)
 	    allow &= races[racenum].allow;
-		    
+
 	if (!(allow & ROLE_GENDMASK))
 	    return FALSE;
 	return TRUE;
@@ -1216,7 +1216,7 @@ int rolenum, racenum, gendnum, alignnum;
 /* gender and alignment are not comparable (and also not constrainable) */
 /* If pickhow == PICK_RIGID a gender is returned only if there is  */
 /* a single possibility */
-int 
+int
 pick_gend (int rolenum, int racenum, int alignnum, int pickhow)
 {
     int i;
@@ -1256,7 +1256,7 @@ int rolenum, racenum, gendnum, alignnum;
 	    allow &= roles[rolenum].allow;
 	if (racenum >= 0 && racenum < SIZE(races)-1)
 	    allow &= races[racenum].allow;
-		    
+
 	if (!(allow & ROLE_ALIGNMASK))
 	    return FALSE;
 	return TRUE;
@@ -1278,7 +1278,7 @@ int rolenum, racenum, gendnum, alignnum;
 /* alignment and gender are not comparable (and also not constrainable) */
 /* If pickhow == PICK_RIGID an alignment is returned only if there is  */
 /* a single possibility */
-int 
+int
 pick_align (int rolenum, int racenum, int gendnum, int pickhow)
 {
     int i;
@@ -1302,7 +1302,7 @@ pick_align (int rolenum, int racenum, int gendnum, int pickhow)
     return ROLE_NONE;
 }
 
-void 
+void
 rigid_role_checks (void)
 {
     /* Some roles are limited to a single race, alignment, or gender and
@@ -1352,7 +1352,7 @@ int num_post_attribs;
 	const char *conj = "and ";
 	if (num_post_attribs > 1
 	    && post_attribs < num_post_attribs && post_attribs > 1)
-	 	strcat(buf, ","); 
+	 	strcat(buf, ",");
 	strcat(buf, " ");
 	--post_attribs;
 	if (!post_attribs && num_post_attribs > 1) strcat(buf, conj);
@@ -1401,7 +1401,7 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 		pa[k] = 0;
 	buf[0] = '\0';
 	*suppliedbuf = '\0';
-	
+
 	/* How many alignments are allowed for the desired race? */
 	if (racenum != ROLE_NONE && racenum != ROLE_RANDOM)
 		aligncount = race_alignmentcount(racenum);
@@ -1463,7 +1463,7 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 
 	if (racenum != ROLE_NONE && racenum != ROLE_RANDOM) {
 		if (validrole(rolenum) && ok_race(rolenum, racenum, gendnum, alignnum)) {
-			if (donefirst) strcat(buf, " "); 
+			if (donefirst) strcat(buf, " ");
 			strcat(buf, (rolenum == ROLE_NONE) ?
 				races[racenum].noun :
 				races[racenum].adj);
@@ -1494,7 +1494,7 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 				strcat(buf, roles[rolenum].name.m);
 				strcat(buf, "/");
 				strcat(buf, roles[rolenum].name.f);
-			} else 
+			} else
 				strcat(buf, roles[rolenum].name.m);
 		}
 		donefirst = TRUE;
@@ -1502,7 +1502,7 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 		pa[BP_ROLE] = 1;
 		post_attribs++;
 	}
-	
+
 	if ((racenum == ROLE_NONE || racenum == ROLE_RANDOM) && !validrole(rolenum)) {
 		if (donefirst) strcat(buf, " ");
 		strcat(buf, "character");
@@ -1524,7 +1524,7 @@ build_plselection_prompt (char *buf, int buflen, int rolenum, int racenum, int g
 	const char *defprompt = "Shall I pick a character for you? [ynq] ";
 	int num_post_attribs = 0;
 	char tmpbuf[BUFSZ];
-	
+
 	if (buflen < QBUFSZ)
 		return (char *)defprompt;
 
@@ -1576,7 +1576,7 @@ build_plselection_prompt (char *buf, int buflen, int rolenum, int racenum, int g
 #undef BP_ROLE
 #undef NUM_BP
 
-void 
+void
 plnamesuffix (void)
 {
 	char *sptr, *eptr;
@@ -1629,7 +1629,7 @@ plnamesuffix (void)
  *
  * This code also replaces quest_init().
  */
-void 
+void
 role_init (void)
 {
 	int alignmnt;

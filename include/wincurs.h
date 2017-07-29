@@ -94,7 +94,7 @@ extern void curses_display_file(const char *filename,boolean must_exist);
 extern void curses_start_menu(winid wid);
 
 extern void curses_add_menu(winid wid, int glyph, const anything * identifier,
-		char accelerator, char group_accel, int attr, 
+		char accelerator, char group_accel, int attr,
 		const char *str, boolean presel);
 
 extern void curses_end_menu(winid wid, const char *prompt);

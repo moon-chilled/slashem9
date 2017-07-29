@@ -88,7 +88,7 @@ const char *s;
 
 static int windows_lock = FALSE;
 
-int 
+int
 lock_windows (int flag)
 {
     int retval = windows_lock;
@@ -96,7 +96,7 @@ lock_windows (int flag)
     return retval;
 }
 
-void 
+void
 choose_windows (const char *s)
 {
     int i;
@@ -128,7 +128,7 @@ choose_windows (const char *s)
  * --More-- prompt; other interfaces generally don't need that.
  */
 /*ARGSUSED*/
-char 
+char
 genl_message_menu (char let, int how, const char *mesg)
 {
 #if defined(MAC_MPW)
@@ -139,7 +139,7 @@ genl_message_menu (char let, int how, const char *mesg)
 }
 
 /*ARGSUSED*/
-void 
+void
 genl_preference_update (const char *pref)
 {
 	/* window ports are expected to provide

@@ -15,7 +15,7 @@ clean:
 			 ..\win\share\oth128.txt ..\util\tile2bmp.exe
 	   chdir ..\src
 	   ..\util\tile2bmp.exe tiles128.bmp ..\win\share\mon128.txt ..\win\share\obj128.txt \
-			 ..\win\share\oth128.txt 
+			 ..\win\share\oth128.txt
 	   chdir ..\build
 
 ..\binary\tiles128.bmp: ..\src\tiles128.bmp

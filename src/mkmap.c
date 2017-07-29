@@ -372,7 +372,7 @@ finish_map(fg_typ, bg_typ, lit, walled)
  * region are already cleared, and roomno and irregular fields outside the
  * region are all set.
  */
-void 
+void
 remove_rooms (int lx, int ly, int hx, int hy)
 {
     int i;
@@ -416,7 +416,7 @@ remove_room(roomno)
 	 * that corridors have already been dug. */
 	(void) memcpy((void *)croom, (void *)maxroom,
 			sizeof(struct mkroom));
- 
+
 	/* since maxroom moved, update affected level roomno values */
 	oroomno = nroom + ROOMOFFSET;
 	roomno += ROOMOFFSET;

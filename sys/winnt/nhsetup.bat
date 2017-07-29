@@ -1,6 +1,6 @@
 @REM  SCCS Id: @(#)nhsetup.bat  3.4     $Date$
 @REM  Copyright (c) NetHack PC Development Team 1993, 1996, 2002
-@REM  NetHack may be freely redistributed.  See license for details. 
+@REM  NetHack may be freely redistributed.  See license for details.
 @REM  Win32 setup batch file, see Install.nt for details
 @REM
 @echo off
@@ -33,9 +33,9 @@ echo Microsoft Makefile copied ok.
 echo Copying Borland Makefile - Makefile.bcc to ..\..\src\Makefile.bcc
 if NOT exist ..\..\src\Makefile.bcc goto :dobor
 copy ..\..\src\Makefile.bcc ..\..\src\Makefile.bcc-orig >nul
-echo      Your existing 
-echo           ..\..\src\Makefile.bcc 
-echo      has been renamed to 
+echo      Your existing
+echo           ..\..\src\Makefile.bcc
+echo      has been renamed to
 echo           ..\..\src\Makefile.bcc-orig
 :dobor
 copy Makefile.bcc ..\..\src\Makefile.bcc >nul
@@ -87,7 +87,7 @@ goto :done
 :err_win
 echo Some of the files needed to build graphical NetHack
 echo for Windows are not in the expected places.
-echo Check "Install.nt" for a list of the steps required 
+echo Check "Install.nt" for a list of the steps required
 echo to build NetHack.
 goto :fini
 
@@ -105,7 +105,7 @@ goto :fini
 :done
 echo done!
 echo.
-echo Proceed with the next step documented in Install.nt 
+echo Proceed with the next step documented in Install.nt
 echo.
 
 :fini

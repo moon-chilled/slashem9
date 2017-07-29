@@ -42,7 +42,7 @@ pixel (*bitmap)[MAX_TILE_X];
 	    	bitmap[y][x].r = bg.r;
 	    	bitmap[y][x].g = bg.g;
 	    	bitmap[y][x].b = bg.b;
-	    }	    
+	    }
 }
 
 static void

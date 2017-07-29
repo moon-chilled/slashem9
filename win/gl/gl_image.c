@@ -202,14 +202,14 @@ int sdlgl_mon_tile_face_dir(tileidx_t fg)
 
   if (fg >= SIZE(tile_16_face_dirs))
     return 0;
- 
+
   if (iflags.wc_tile_height == 16)
     dir = tile_16_face_dirs[fg];
   else if (iflags.wc_tile_height == 32)
     dir = tile_32_face_dirs[fg];
   else
     return 0;
-    
+
   if (dir == 'L')
     return -1;
   else if (dir == 'R')
@@ -339,7 +339,7 @@ void sdlgl_generate_gamma_table(void)
     sdlgl_gamma_table[i] = min(255, max(0, result));
   }
 }
- 
+
 
 /* ---------------------------------------------------------------- */
 
@@ -366,18 +366,18 @@ void sdlgl_init_mouse_cursors(void)
 {
   sdlgl_cursor_main = SDL_GetCursor();
 
-  sdlgl_cursor_up    = make_sdl_cursor(cursor_up_bits); 
-  sdlgl_cursor_down  = make_sdl_cursor(cursor_down_bits); 
-  sdlgl_cursor_left  = make_sdl_cursor(cursor_left_bits); 
-  sdlgl_cursor_right = make_sdl_cursor(cursor_right_bits); 
-  sdlgl_cursor_hand  = make_sdl_cursor(cursor_hand_bits); 
-  sdlgl_cursor_cross = make_sdl_cursor(cursor_cross_bits); 
+  sdlgl_cursor_up    = make_sdl_cursor(cursor_up_bits);
+  sdlgl_cursor_down  = make_sdl_cursor(cursor_down_bits);
+  sdlgl_cursor_left  = make_sdl_cursor(cursor_left_bits);
+  sdlgl_cursor_right = make_sdl_cursor(cursor_right_bits);
+  sdlgl_cursor_hand  = make_sdl_cursor(cursor_hand_bits);
+  sdlgl_cursor_cross = make_sdl_cursor(cursor_cross_bits);
 }
 
 void sdlgl_free_mouse_cursors(void)
 {
   SDL_SetCursor(sdlgl_cursor_main);
-   
+
   /* the main cursor is made by SDL itself */
   sdlgl_cursor_main = NULL;
 
@@ -529,16 +529,16 @@ unsigned char *sdlgl_load_png_file(const char *filename,
 
   /* set alpha position and filler value */
   png_set_filler(png_ptr, 0xFF, PNG_FILLER_AFTER);
- 
+
   /* let all the above calls take effect */
   png_read_update_info(png_ptr, info_ptr);
-  
+
   /* allocate the memory for the image */
   stride = png_get_rowbytes(png_ptr, info_ptr);
 
   image_dat = (unsigned char *) alloc(height * stride);
   row_pointers = (png_bytep *) alloc(height * sizeof(png_bytep));
-   
+
   for (row=0; row < height; row++)
   {
      row_pointers[row] = image_dat + row * stride;
@@ -563,7 +563,7 @@ failed:
 
   if (image_dat)
     free(image_dat);
-  
+
   if (png_ptr)
   {
     /* assume NULLs not allowed (png docs don't say, bad bad) */
@@ -578,7 +578,7 @@ failed:
 
   if (fp)
     fclose(fp);
-  
+
   return NULL;
 }
 

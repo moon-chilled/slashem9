@@ -20,8 +20,8 @@
 static int zoom_sets[] =
 {
   10, 12,
-  16, 20, 24, 
-  32, 40, 48, 
+  16, 20, 24,
+  32, 40, 48,
   64, 80, 96,
   128
 };
@@ -94,7 +94,7 @@ static void center_on_player(struct TextWindow *win)
   th = win->base->scale_h;
   tk = win->base->scale_skew;
 
-  fx = win->focus_x * tw + tw / 2 - win->base->scr_w / 2 + 
+  fx = win->focus_x * tw + tw / 2 - win->base->scr_w / 2 +
        win->focus_y * tk;
   fy = win->focus_y * th + th / 2 - win->base->scr_h / 2;
 
@@ -127,7 +127,7 @@ void sdlgl_create_map(struct TextWindow *win, int w, int h)
 
   win->map_px = 0;
   win->map_py = 0;
-   
+
   if (sdlgl_def_zoom == TEXT_ZOOM)
   {
     win->zoom_h = iflags.wc_tile_height;
@@ -156,12 +156,12 @@ static int glyph_is_translucent(int glyph_fg, int lev_x, int lev_y)
    *   (d) if it wasn't invisible, the player would be able to see it
    *       using normal vision.
    */
-  
+
   struct monst *mtmp;
 
   if (glyph_fg == NO_GLYPH)
     return 0;
-  
+
   assert(glyph_fg <= MAX_GLYPH);
 
   /* handle the player */
@@ -231,7 +231,7 @@ static void make_double_glyph(struct GlyphPair *gpair,
     xchar lev_x, xchar lev_y, glyphidx_t glyph)
 {
   int back;
-  
+
   if (glyph_is_dungeon(glyph))
   {
     back  = glyph;
@@ -267,7 +267,7 @@ static void make_double_glyph(struct GlyphPair *gpair,
    */
   if (back == cmap_to_glyph(S_stone))
     back = NO_GLYPH;
-  
+
   if (back == glyph)
     glyph = NO_GLYPH;
 
@@ -280,7 +280,7 @@ static void glyph_to_character(struct TextWindow *win,
 {
   int ch;
   rgbcol_t rgb;
-   
+
   int glyph = (gpair->fg != NO_GLYPH) ? gpair->fg : gpair->bg;
 
   int color;
@@ -291,7 +291,7 @@ static void glyph_to_character(struct TextWindow *win,
     sdlgl_blank_area(win->base, x, y, 1, 1);
     return;
   }
-  
+
   /* Map the glyph back to a character */
 
   mapglyph(glyph, &ch, &color, &special, x, y);
@@ -326,7 +326,7 @@ static void glyph_to_tilepair(struct TextWindow *win,
   else
   {
     int glyph_fg = glyph->fg;  /* prevent glyph_is_monster() warning */
-     
+
     assert(glyph->fg <= MAX_GLYPH);
 
     fg = glyph2tile[glyph->fg];
@@ -384,14 +384,14 @@ static void glyph_to_tilepair(struct TextWindow *win,
   else
   {
     assert(glyph->bg <= MAX_GLYPH);
-    
+
     /* the ROOM tile always lets the BG shine through */
     if (glyph->bg == cmap_to_glyph(S_room))
       mg = TILE_EMPTY;
     else
       mg = glyph2tile[glyph->bg];
 
-    bg = 
+    bg =
 #ifdef VANILLA_GLHACK
       In_mines(&u.uz) ? Fl_Mine :
          In_sokoban(&u.uz) ? Fl_Sokoban :
@@ -429,7 +429,7 @@ static void update_map_extras(struct TextWindow *win,
   if (iflags.wc_hilite_pet && ! worm_tail)
   {
     int on_left = 0;
-    
+
     /* determine if heart is placed on left or right side */
     if (sdlgl_flipping && ! base->is_text &&
         (base->tiles[(int)y * base->total_w + x].flags & TILE_F_FLIPX))
@@ -457,7 +457,7 @@ void Sdlgl_print_glyph(winid window, xchar x, xchar y, int glyph)
   struct TextWindow *win;
 
   int xx, yy, offset;
-  
+
   if (window == WIN_ERR)
     return;
 
@@ -474,7 +474,7 @@ void Sdlgl_print_glyph(winid window, xchar x, xchar y, int glyph)
 
   xx = (int)x;
   yy = win->base->total_h - 1 - (int)y;
-    
+
   if (xx < 0 || xx >= win->base->total_w ||
       yy < 0 || yy >= win->base->total_h)
   {
@@ -494,7 +494,7 @@ void Sdlgl_print_glyph(winid window, xchar x, xchar y, int glyph)
     glyph_to_character(win, win->glyphs + offset, xx, yy);
   else
     glyph_to_tilepair(win, win->glyphs + offset, xx, yy);
-    
+
   update_map_extras(win, xx, yy, win->glyphs + offset);
 }
 
@@ -510,12 +510,12 @@ static void update_all_glyphs(struct TextWindow *win)
   for (x=0; x < win->base->total_w; x++)
   {
     offset = y * win->base->total_w + x;
- 
+
     if (win->base->is_text)
       glyph_to_character(win, win->glyphs + offset, x, y);
     else
       glyph_to_tilepair(win, win->glyphs + offset, x, y);
-    
+
     update_map_extras(win, x, y, win->glyphs + offset);
   }
 }
@@ -614,13 +614,13 @@ static void update_jail(struct TextWindow *win)
 
   extra_x = base->scr_w * (100 - sdlgl_jail_size) / 200 + 2;
   extra_y = base->scr_h * (100 - sdlgl_jail_size) / 200 + 2;
- 
+
   if (abs(win->jail_x) > extra_x)
     win->jail_x = sgn(win->jail_x) * extra_x;
-   
+
   if (abs(win->jail_y) > extra_y)
     win->jail_y = sgn(win->jail_y) * extra_y;
-   
+
   /* shift jail if focus has moved outside it, panning the map window
    * when necessary.
    *
@@ -628,7 +628,7 @@ static void update_jail(struct TextWindow *win)
    * the screen; the code here "auto-centers" it rather than panning.
    * Removing the loops is left as an exercise for the reader :).
    */
-  
+
   fx = win->focus_x * tw + tw / 2 + win->focus_y * tk;
   fy = win->focus_y * th + th / 2;
 
@@ -645,7 +645,7 @@ static void update_jail(struct TextWindow *win)
       win->jail_x -= tw;
     else
       win->map_px -= tw;
-    
+
     jx = win->map_px + base->scr_w/2 + win->jail_x - jw/2;
   }
 
@@ -655,7 +655,7 @@ static void update_jail(struct TextWindow *win)
       win->jail_y -= th;
     else
       win->map_py -= th;
-    
+
     jy = win->map_py + base->scr_h/2 + win->jail_y - jh/2;
   }
 
@@ -665,7 +665,7 @@ static void update_jail(struct TextWindow *win)
       win->jail_x += tw;
     else
       win->map_px += tw;
-    
+
     jx = win->map_px + base->scr_w/2 + win->jail_x - jw/2;
   }
 
@@ -675,31 +675,31 @@ static void update_jail(struct TextWindow *win)
       win->jail_y += th;
     else
       win->map_py += th;
-    
+
     jy = win->map_py + base->scr_h/2 + win->jail_y - jh/2;
   }
 
   /* auto-center the jail when possible.  Panning not affected.
    */
- 
+
   while (win->jail_x <= -tw && fx > jx + tw)
   {
     win->jail_x += tw;
     jx = win->map_px + base->scr_w/2 + win->jail_x - jw/2;
   }
- 
+
   while (win->jail_y <= -th && fy > jy + th)
   {
     win->jail_y += th;
     jy = win->map_py + base->scr_h/2 + win->jail_y - jh/2;
   }
- 
+
   while (win->jail_x >= tw && fx < jx + jw - tw)
   {
     win->jail_x -= tw;
     jx = win->map_px + base->scr_w/2 + win->jail_x - jw/2;
   }
- 
+
   while (win->jail_y >= th && fy < jy + jh - th)
   {
     win->jail_y -= th;
@@ -717,10 +717,10 @@ void Sdlgl_cliparound(int x, int y)
 
   if (sdlgl_map_win == WIN_ERR)
     return;
-  
+
   win = text_wins[sdlgl_map_win];
   assert(win);
-    
+
   if (! win->base)
     return;
 
@@ -759,10 +759,10 @@ int sdlgl_cursor_visible(void)
 
   if (sdlgl_map_win == WIN_ERR)
     return 0;
-  
+
   win = text_wins[sdlgl_map_win];
   assert(win);
-    
+
   if (! win->base)
     return 0;
 
@@ -772,7 +772,7 @@ int sdlgl_cursor_visible(void)
 static void do_zoom(struct TextWindow *win, int zoom_h)
 {
   struct TileWindow *base;
-  
+
   int tw, th, tk;
   int dx, dy;
   int cur_x, cur_y;
@@ -896,14 +896,14 @@ void sdlgl_zoom_map(int adjust)
       zoom_h = sdlgl_quantize_zoom(zoom_sets[i]);
     }
   }
- 
+
   do_zoom(win, zoom_h);
 }
 
 void sdlgl_center_screen_on_player(void)
 {
   struct TextWindow *win;
-  
+
   if (sdlgl_map_win == WIN_ERR)
     return;
 
@@ -962,7 +962,7 @@ int sdlgl_find_click(int window, int *x, int *y)
   struct TileWindow *base;
 
   int xx, yy;
-  
+
   if (window == WIN_ERR)
     return 0;
 
@@ -980,13 +980,13 @@ int sdlgl_find_click(int window, int *x, int *y)
 
   yy = (yy + base->pan_y) / base->scale_h;
   xx = (xx + base->pan_x - yy * base->scale_skew) / base->scale_w;
- 
+
   if (xx < 0 || yy < 0 || xx >= base->total_w || yy >= base->total_h)
     return 0;
-  
+
   *x = xx;
   *y = base->total_h - 1 - yy;
- 
+
   return 1;
 }
 
@@ -1052,7 +1052,7 @@ void sdlgl_pan_map_window(int dx, int dy)
     case 3:
       dy = sgn(dy) * (show_h - 1);
       break;
-        
+
     case 4:
       dy = sgn(dy) * 999;
       break;
@@ -1065,7 +1065,7 @@ void sdlgl_pan_map_window(int dx, int dy)
    */
   map_w = max(0, map_w - win->base->scr_w);
   map_h = max(0, map_h - win->base->scr_h);
-   
+
   if (dx < 0 && win->map_px + dx < -2 * tw)
     dx = min(0, -2 * tw - win->map_px);
 
@@ -1084,12 +1084,12 @@ void sdlgl_pan_map_window(int dx, int dy)
     win->jail_x = min(0, win->jail_x + -dx);
   else if (dx > 0)
     win->jail_x = max(0, win->jail_x - dx);
-   
+
   if (dy < 0)
     win->jail_y = min(0, win->jail_y + -dy);
   else if (dy > 0)
     win->jail_y = max(0, win->jail_y - dy);
-   
+
   /* update panning */
 
   win->map_px += dx;

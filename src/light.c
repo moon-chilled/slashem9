@@ -131,7 +131,7 @@ del_light_source(type, id)
 }
 
 /* Mark locations that are temporarily lit via mobile light sources. */
-void 
+void
 do_light_sources (char **cs_rows)
 {
     int x, y, min_x, max_x, max_y, offset;
@@ -149,11 +149,11 @@ do_light_sources (char **cs_rows)
 	 */
 	if (ls->flags & LSF_FLOATING) {
 	    if (ls->type == LS_OBJECT) {
-		if (get_obj_location((struct obj *) ls->id, &ls->x, &ls->y, 
+		if (get_obj_location((struct obj *) ls->id, &ls->x, &ls->y,
 		  CONTAINED_TOO | BURIED_TOO))
 		    ls->flags &= ~LSF_FLOATING;
 	    } else if (ls->type == LS_MONSTER) {
-		if (get_mon_location((struct monst *) ls->id, &ls->x, &ls->y, 
+		if (get_mon_location((struct monst *) ls->id, &ls->x, &ls->y,
 		  CONTAINED_TOO | BURIED_TOO))
 		    ls->flags &= ~LSF_FLOATING;
 	    }
@@ -253,7 +253,7 @@ find_mid (unsigned nid, unsigned fmflags)
 }
 
 /* Save all light sources of the given range. */
-void 
+void
 save_light_sources (int fd, int mode, int range)
 {
     int count, actual, is_global;
@@ -282,11 +282,11 @@ save_light_sources (int fd, int mode, int range)
 		is_global = !mon_is_local((struct monst *)curr->id);
 		break;
 	    case LS_TEMP:
-	    	/* Temp light sources should never be saved, but need to 
+	    	/* Temp light sources should never be saved, but need to
 	    	 * 	set next (or else you get caught in an infinite loop
 	    	 */
 		prev = &(*prev)->next;
-		continue; 
+		continue;
 	    default:
 		is_global = 0;
 		impossible("save_light_sources: bad type (%d) [range=%d]",
@@ -308,7 +308,7 @@ save_light_sources (int fd, int mode, int range)
  * Pull in the structures from disk, but don't recalculate the object
  * pointers.
  */
-void 
+void
 restore_light_sources (int fd)
 {
     int count;
@@ -445,7 +445,7 @@ write_ls(fd, ls)
 }
 
 /* Change light source's ID from src to dest. */
-void 
+void
 obj_move_light_source (struct obj *src, struct obj *dest)
 {
     light_source *ls;
@@ -468,7 +468,7 @@ any_light_source()
  * Snuff an object light source if at (x,y).  This currently works
  * only for burning light sources.
  */
-void 
+void
 snuff_light_source (int x, int y)
 {
     light_source *ls;
@@ -515,9 +515,9 @@ obj_is_burning(obj)
     struct obj *obj;
 {
     return (obj->lamplit &&
- 		(  obj->otyp == MAGIC_LAMP 
+ 		(  obj->otyp == MAGIC_LAMP
 		|| obj->otyp == MAGIC_CANDLE
-		|| ignitable(obj) 
+		|| ignitable(obj)
 #ifdef LIGHTSABERS
 		|| is_lightsaber(obj)
 #endif
@@ -525,7 +525,7 @@ obj_is_burning(obj)
 }
 
 /* copy the light source(s) attachted to src, and attach it/them to dest */
-void 
+void
 obj_split_light_source (struct obj *src, struct obj *dest)
 {
     light_source *ls, *new_ls;
@@ -554,7 +554,7 @@ obj_split_light_source (struct obj *src, struct obj *dest)
 
 /* light source `src' has been folded into light source `dest';
    used for merging lit candles and adding candle(s) to lit candelabrum */
-void 
+void
 obj_merge_light_sources (struct obj *src, struct obj *dest)
 {
     light_source *ls;
@@ -572,7 +572,7 @@ obj_merge_light_sources (struct obj *src, struct obj *dest)
 
 /* Candlelight is proportional to the number of candles;
    minimum range is 2 rather than 1 for playability. */
-int 
+int
 candle_light_range (struct obj *obj)
 {
     int radius;
@@ -613,7 +613,7 @@ candle_light_range (struct obj *obj)
 #ifdef WIZARD
 extern char *fmt_ptr(const void*, char *);  /* from alloc.c */
 
-int 
+int
 wiz_light_sources (void)
 {
     winid win;

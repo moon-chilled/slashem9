@@ -64,7 +64,7 @@ static int query_gender_name(int what, char *buf)
     return -1;
 
   strcpy(buf, genders[what].adj);
-  
+
   return ok_gend(flags.initrole, flags.initrace, what,
       flags.initalign) ? 1 : 0;
 }
@@ -91,7 +91,7 @@ static void raw_puts_split(struct TextWindow *win, const char *str)
   {
     int use_len;
     int width = win->show_w;
-    
+
     /* does it fit yet ? */
     if (len < width)
     {
@@ -140,7 +140,7 @@ static int do_player_selection_menu(const char *type,
 
   int used_accs[52] = { 0, };
   char accel;
-  
+
   char name[BUFSZ];
   char prompt[BUFSZ];
   char randstr[BUFSZ];
@@ -161,7 +161,7 @@ static int do_player_selection_menu(const char *type,
       last = i;
     }
   }
-  
+
   if (valid == 0)
     return ROLE_NONE;
 
@@ -175,12 +175,12 @@ static int do_player_selection_menu(const char *type,
   if (valid == 1)
     return last;
 #endif
- 
+
   /* create menu */
 
   sprintf(prompt,  "Pick your %s", type);
   sprintf(randstr, "Random %s", type);
- 
+
   window = Sdlgl_create_nhwindow(NHW_MENU);
   assert(window != WIN_ERR);
 
@@ -275,18 +275,18 @@ static int select_auto_pick(int *pick4u)
     (* pick4u) = 1;
     return 0;
   }
-  
+
   /* create text & tile windows */
   win = sdlgl_new_textwin(NHW_TEXT);  /* type unimportant */
-   
+
   win->show_w = sdlgl_width / sdlgl_font_message->tile_w;
   win->show_h = HEIGHT_PICKER;
 
   pixel_h = sdlgl_font_message->tile_h * win->show_h;
-  
+
   win->base = sdlgl_new_tilewin(sdlgl_font_message, win->show_w,
       win->show_h, 1,0);
-   
+
   sdlgl_map_tilewin(win->base, 0, sdlgl_height - pixel_h,
       sdlgl_width, pixel_h, DEPTH_PICKER);
 
@@ -294,7 +294,7 @@ static int select_auto_pick(int *pick4u)
   {
     char pbuf[QBUFSZ];
     const char *prompt = "Shall I pick a character for you? [ynq] ";
-    
+
     if (flags.initrole != ROLE_NONE || flags.initrace  != ROLE_NONE ||
         flags.initgend != ROLE_NONE || flags.initalign != ROLE_NONE)
     {
@@ -314,7 +314,7 @@ static int select_auto_pick(int *pick4u)
       sdlgl_puts(win, COPYRIGHT_BANNER_C "\n");
       sdlgl_puts(win, "\n");
     }
-    
+
     raw_puts_split(win, prompt);
   }
 
@@ -354,7 +354,7 @@ static int select_a_role(int pick4u)
     for (;;)
     {
       choice = do_player_selection_menu("role", query_role_name);
-      
+
       if (choice != ROLE_NONE)
         break;
 
@@ -395,7 +395,7 @@ static int select_a_race(int pick4u)
     for (;;)
     {
       choice = do_player_selection_menu("race", query_race_name);
-    
+
       if (choice != ROLE_NONE)
         break;
 
@@ -431,12 +431,12 @@ static int select_a_gender(int pick4u)
           flags.initalign, PICK_RANDOM);
       break;
     }
-    
+
     /* select a gender */
     for (;;)
     {
       choice = do_player_selection_menu("gender", query_gender_name);
-    
+
       if (choice != ROLE_NONE)
         break;
 
@@ -478,7 +478,7 @@ static int select_an_alignment(int pick4u)
     for (;;)
     {
       choice = do_player_selection_menu("alignment", query_align_name);
-    
+
       if (choice != ROLE_NONE)
         break;
 
@@ -502,7 +502,7 @@ static int select_an_alignment(int pick4u)
 #define INIT_IS_RANDOM(val)  \
     ((val) == ROLE_RANDOM || \
      (flags.randomall && (val) == ROLE_NONE))
- 
+
 static void do_random_role_checks(void)
 {
   if (INIT_IS_RANDOM(flags.initrole))
@@ -538,7 +538,7 @@ void Sdlgl_player_selection(void)
    *       may then be updated by the system code (sys/unixmain.c)
    *       depending on command line options.
    */
- 
+
   int pick4u;
 
   /* avoid unnecessary prompts further down */

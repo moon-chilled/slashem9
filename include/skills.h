@@ -49,7 +49,7 @@
 #define P_SHURIKEN			28
 #define P_BOOMERANG			29
 #define P_WHIP				30
-#define P_UNICORN_HORN			31	
+#define P_UNICORN_HORN			31
 #ifdef LIGHTSABERS
 #define P_LIGHTSABER			32	/* last weapon */
 #endif

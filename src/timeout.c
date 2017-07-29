@@ -145,7 +145,7 @@ slime_dialogue()
 	exercise(A_DEX, FALSE);
 }
 
-void 
+void
 burn_away_slime (void)
 {
 	if (Slimed) {
@@ -157,7 +157,7 @@ burn_away_slime (void)
 }
 
 
-void 
+void
 nh_timeout (void)
 {
 	struct prop *upp;
@@ -432,7 +432,7 @@ boolean wakeup_msg;
 /* WAC polymorph an object
  * Unlike monsters,  this function is called after the polymorph
  */
-void 
+void
 set_obj_poly (struct obj *obj, struct obj *old)
 {
 	/* Same unpolytime (500,500) as for player */
@@ -489,12 +489,12 @@ unpoly_obj(arg, timeout)
 		while (otmp2->where == OBJ_CONTAINED) {
 		    otmp2 = otmp2->ocontainer;
 
-		    if (otmp2->otyp == BAG_OF_HOLDING) 
+		    if (otmp2->otyp == BAG_OF_HOLDING)
 			otmp = otmp2;
 		}
 		destroy_mbag(otmp, silent);
 	    }
-	}	
+	}
 	return;
 }
 #endif /* UNPOLYPILE */
@@ -615,7 +615,7 @@ unpoly_mon(arg, timeout)
 	}
 
 #if 0
-	if (canseemon(mtmp)) pline ("%s changes into %s!", 
+	if (canseemon(mtmp)) pline ("%s changes into %s!",
 		oldname, an(mtmp->data->mname));
 #endif
 	return;
@@ -629,7 +629,7 @@ struct obj *bomb;
 int fuse;
 boolean yours;
 {
-	long expiretime;	
+	long expiretime;
 
 	if (bomb->cursed && !rn2(2)) return; /* doesn't arm if not armed */
 
@@ -664,7 +664,7 @@ long timeout;
 	silent = (timeout != monstermoves);     /* exploded while away */
 
 	if (get_obj_location(bomb, &x, &y, BURIED_TOO | CONTAINED_TOO)) {
-		switch(bomb->where) {		
+		switch(bomb->where) {
 		    case OBJ_MINVENT:
 		    	mtmp = bomb->ocarry;
 			if (bomb == MON_WEP(mtmp)) {
@@ -677,8 +677,8 @@ long timeout;
 			}
 		    	mtmp->mhp -= d(2,5);
 			if(mtmp->mhp < 1) {
-				if(!bomb->yours) 
-					monkilled(mtmp, 
+				if(!bomb->yours)
+					monkilled(mtmp,
 						  (silent ? "" : "explosion"),
 						  AD_PHYS);
 				else xkilled(mtmp, !silent);
@@ -750,7 +750,7 @@ free_bomb:
 #endif
 
 /* Attach an egg hatch timeout to the given egg. */
-void 
+void
 attach_egg_hatch_timeout (struct obj *egg)
 {
 	int i;
@@ -774,7 +774,7 @@ attach_egg_hatch_timeout (struct obj *egg)
 }
 
 /* prevent an egg from ever hatching */
-void 
+void
 kill_egg (struct obj *egg)
 {
 	/* stop previous timer, if any */
@@ -954,7 +954,7 @@ long timeout;
 }
 
 /* Learn to recognize eggs of the given type. */
-void 
+void
 learn_egg_type (int mnum)
 {
 	/* baby monsters hatch from grown-up eggs */
@@ -965,7 +965,7 @@ learn_egg_type (int mnum)
 }
 
 /* Attach a fig_transform timeout to the given figurine. */
-void 
+void
 attach_fig_transform_timeout (struct obj *figurine)
 {
 	int i;
@@ -1184,7 +1184,7 @@ long timeout;
 		    obfree(obj, NULL);
 		    obj = NULL;
 		    break;
-		    
+
 	    case TORCH:
 	    case BRASS_LANTERN:
 	    case OIL_LAMP:
@@ -1243,9 +1243,9 @@ long timeout;
 				    break;
 			    }
 			}
-			
+
 			/* MRKR: Burnt out torches are considered worthless */
-			
+
 			if (obj->otyp == TORCH) {
 			  if (obj->unpaid && costly_spot(u.ux, u.uy)) {
 			    const char *ithem = obj->quan > 1L ? "them" : "it";
@@ -1394,20 +1394,20 @@ long timeout;
 		    pline("%s %s reverts to single blade mode!",
 			    whose, xname(obj));
 	    	}
-	    case GREEN_LIGHTSABER: 
+	    case GREEN_LIGHTSABER:
 	    case BLUE_LIGHTSABER:
 	    case RED_LIGHTSABER:
-	        /* Callback is checked every 5 turns - 
+	        /* Callback is checked every 5 turns -
 	        	lightsaber automatically deactivates if not wielded */
 	        if ((obj->cursed && !rn2(50)) ||
-	            (obj->where == OBJ_FLOOR) || 
-		    (obj->where == OBJ_MINVENT && 
+	            (obj->where == OBJ_FLOOR) ||
+		    (obj->where == OBJ_MINVENT &&
 		    	(!MON_WEP(obj->ocarry) || MON_WEP(obj->ocarry) != obj)) ||
 		    (obj->where == OBJ_INVENT &&
 		    	((!uwep || uwep != obj) &&
 		    	 (!u.twoweap || !uswapwep || obj != uswapwep))))
 	            lightsaber_deactivate(obj, FALSE);
-		switch (obj->age) {			
+		switch (obj->age) {
 		    case 100:
 			/* Single warning time */
 			if (canseeit) {
@@ -1466,7 +1466,7 @@ lightsaber_deactivate (obj, timer_attached)
 	char whose[BUFSZ];
 
 	(void) Shk_Your(whose, obj);
-		
+
 	if (get_obj_location(obj, &x, &y, 0)) {
 	    if (cansee(x, y)) {
 		switch (obj->where) {
@@ -1545,7 +1545,7 @@ begin_burn(obj, already_lit)
 		break;
 #ifdef LIGHTSABERS
 	    case RED_DOUBLE_LIGHTSABER:
-	    	if (obj->altmode && obj->age > 1) 
+	    	if (obj->altmode && obj->age > 1)
 		    obj->age--; /* Double power usage */
 	    case RED_LIGHTSABER:
 	    case BLUE_LIGHTSABER:
@@ -1686,12 +1686,12 @@ cleanup_burn(arg, expire_time)
 	update_inventory();
 }
 
-/* 
- * MRKR: Use up some fuel quickly, eg: when hitting a monster with 
+/*
+ * MRKR: Use up some fuel quickly, eg: when hitting a monster with
  *       a torch.
  */
 
-void 
+void
 burn_faster (struct obj *obj, long adj)
 {
 
@@ -1703,7 +1703,7 @@ burn_faster (struct obj *obj, long adj)
   accelerate_timer(BURN_OBJECT, obj, adj);
 }
 
-void 
+void
 do_storms (void)
 {
     int nstrike;
@@ -1896,7 +1896,7 @@ print_queue(win, base)
     }
 }
 
-int 
+int
 wiz_timeout_queue (void)
 {
     winid win;
@@ -1918,7 +1918,7 @@ wiz_timeout_queue (void)
     return 0;
 }
 
-void 
+void
 timer_sanity_check (void)
 {
     timer_element *curr;
@@ -1942,7 +1942,7 @@ timer_sanity_check (void)
  * Pick off timeout elements from the global queue and call their functions.
  * Do this until their time is less than or equal to the move count.
  */
-void 
+void
 run_timers (void)
 {
     timer_element *curr;
@@ -2026,7 +2026,7 @@ void * arg;
 /*
  * Move all object timers from src to dest, leaving src untimed.
  */
-void 
+void
 obj_move_timers (struct obj *src, struct obj *dest)
 {
     int count;
@@ -2047,7 +2047,7 @@ obj_move_timers (struct obj *src, struct obj *dest)
 /*
  * Find all object timers and duplicate them for the new object "dest".
  */
-void 
+void
 obj_split_timers (struct obj *src, struct obj *dest)
 {
     timer_element *curr, *next_timer=0;
@@ -2066,7 +2066,7 @@ obj_split_timers (struct obj *src, struct obj *dest)
  * Stop all timers attached to this object.  We can get away with this because
  * all object pointers are unique.
  */
-void 
+void
 obj_stop_timers (struct obj *obj)
 {
     timer_element *curr, *prev, *next_timer=0;
@@ -2094,7 +2094,7 @@ obj_stop_timers (struct obj *obj)
  * Stop all timers attached to this monster.  We can get away with this because
  * all monster pointers are unique.
  */
-void 
+void
 mon_stop_timers (struct monst *mon)
 {
     timer_element *curr, *prev, *next_timer=0;
@@ -2210,17 +2210,17 @@ write_timer(fd, timer)
  */
 
 static void
-accelerate_timer(func_index, arg, adj) 
+accelerate_timer(func_index, arg, adj)
 short func_index;
 void * arg;
 long adj;
-{ 
+{
     timer_element *timer;
 
     /* This will effect the ordering, so we remove it from the list */
     /* and add it back in afterwards (if warranted) */
 
-    timer = remove_timer(&timer_base, func_index, arg);    
+    timer = remove_timer(&timer_base, func_index, arg);
 
     for (; adj > 0; adj--) {
       timer->timeout--;
@@ -2345,7 +2345,7 @@ maybe_write_timer(fd, range, write_it)
  *		+ timeouts that are level specific (e.g. storms)
  *		+ timeouts that stay with the level (obj & monst)
  */
-void 
+void
 save_timers (int fd, int mode, int range)
 {
     timer_element *curr, *prev, *next_timer=0;

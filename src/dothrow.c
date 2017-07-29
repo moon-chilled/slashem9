@@ -74,8 +74,8 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 	boolean twoweap;
 
 	multi = 0;		/* reset; it's been used up */
-	
-	if (thrown == 1 && uwep && ammo_and_launcher(obj, uwep)) 
+
+	if (thrown == 1 && uwep && ammo_and_launcher(obj, uwep))
 		launcher = uwep;
 	else if (thrown == 2 && uswapwep && ammo_and_launcher(obj, uswapwep))
 		launcher = uswapwep;
@@ -103,7 +103,7 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 
         /*
 	  Throwing money is usually for getting rid of it when
-          a leprechaun approaches, or for bribing an oncoming 
+          a leprechaun approaches, or for bribing an oncoming
           angry monster.  So throw the whole object.
 
           If the money is in quiver, throw one coin at a time,
@@ -159,7 +159,7 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 	    case P_SKILLED:	multishot++; break;
 	    case P_EXPERT:	multishot += 2; break;
 	    }
-	    
+
 	    /* ...or is using a good weapon... */
 	    /* Elven Craftsmanship makes for light, quick bows */
 	    if (obj->otyp == ELVEN_ARROW && !obj->cursed && !rn2(3)) multishot++;
@@ -170,7 +170,7 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 	    /* 1/3 of object enchantment */
 	    if (launcher && launcher->spe > 1)
 		multishot += (long) rounddiv(launcher->spe,3);
-	    
+
 	    /* ...or is using a special weapon for their role... */
 	    switch (Role_switch) {
 	    case PM_RANGER:
@@ -201,16 +201,16 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 
 	if ((long)multishot > obj->quan) multishot = (int)obj->quan;
 
-	    if (multishot > 0) 
+	    if (multishot > 0)
 	    	multishot = rnd(multishot); /* Some randomness */
 	    else multishot = 1;
-	       
+
 	    /* Tech: Flurry */
 	    if (objects[obj->otyp].oc_skill == -P_BOW && tech_inuse(T_FLURRY)) {
 		multishot += 1; /* Let'em rip! */
 
 		/* more than usual == volley */
-		if (((shotlimit <= 0) || (shotlimit >= multishot)) && 
+		if (((shotlimit <= 0) || (shotlimit >= multishot)) &&
 			(obj->quan >= multishot))
 		    You("let fly a volley of %s!", xname(obj));
 	    }
@@ -221,12 +221,12 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 #ifdef FIREARMS
 	    /* Rate of fire is intrinsic to the weapon - cannot be user selected
 	     * except via altmode
-	     * Only for valid launchers 
+	     * Only for valid launchers
 	     * (currently oc_rof conflicts with wsdam)
 	     */
 	    if (launcher && is_launcher(launcher))
 	    {
-		if (objects[(launcher->otyp)].oc_rof) 
+		if (objects[(launcher->otyp)].oc_rof)
 		    multishot += (objects[(launcher->otyp)].oc_rof - 1);
 		if (launcher->altmode == WP_MODE_SINGLE)
 		  /* weapons switchable b/w full/semi auto */
@@ -285,7 +285,7 @@ int dothrow(void) {
 
 	/*
 	 * Since some characters shoot multiple missiles at one time,
-	 * allow user to specify a count prefix for 'f' or or select 
+	 * allow user to specify a count prefix for 'f' or or select
 	 * a number of items in the item selection for 't' to limit
 	 * number of items thrown (to avoid possibly hitting something
 	 * behind target after killing it, or perhaps to conserve ammo).
@@ -312,7 +312,7 @@ int dothrow(void) {
 	shotlimit = (multi || save_cm) ? multi + 1 : 0;
 
         result = throw_obj(obj, shotlimit, THROW_UWEP);
-        
+
 	/*
 	 * [ALI] Bug fix: Temporary paralysis (eg., from hurtle) cancels
 	 * any count for the throw command.
@@ -367,7 +367,7 @@ static void autoquiver(void) {
 	    } else if (otmp->oclass == WEAPON_CLASS && throwing_weapon(otmp)) {
 		/* Ordinary weapon */
 		if (objects[otmp->otyp].oc_skill == P_DAGGER
-			&& !omissile) 
+			&& !omissile)
 		    omissile = otmp;
 		else
 		    omisc = otmp;
@@ -428,17 +428,17 @@ int dofire(void) {
 
 	if (u.twoweap) {
 		if (!can_twoweapon()) untwoweapon();
-		else if (ammo_and_launcher(uquiver,uwep) 
+		else if (ammo_and_launcher(uquiver,uwep)
 		    && ammo_and_launcher(uquiver, uswapwep)){
 			result = throw_obj(uquiver, shotlimit, THROW_UWEP);
-			if ((result == 1) && uquiver) 
+			if ((result == 1) && uquiver)
 			    result += throw_obj(uquiver, shotlimit, THROW_USWAPWEP);
 			if (result > 1) result--;
 			return(result);
 		}
 	}
 	result = (throw_obj(uquiver, shotlimit, THROW_UWEP));
-	
+
 	return result;
 }
 
@@ -553,7 +553,7 @@ boolean hurtle_step(void *arg, int x, int y) {
     struct monst *mon;
     boolean may_pass = TRUE;
     struct trap *ttmp;
-    
+
     if (!isok(x,y)) {
 	You_feel("the spirits holding you back.");
 	return FALSE;
@@ -944,7 +944,7 @@ int thrown) {
 
 	if (thrown == 1) launcher = uwep;
 	else if (thrown == 2) launcher = uswapwep;
-	
+
 	/* KMH -- Handle Plague here */
 	if (launcher && launcher->oartifact == ART_PLAGUE &&
 			ammo_and_launcher(obj, launcher) && is_poisonable(obj))
@@ -999,7 +999,7 @@ int thrown) {
 		(void) encumber_msg();
 		setuwep(obj, TRUE);
 		u.twoweap = twoweap;
-/*            if (!fire_weapon) setuwep(obj);                
+/*            if (!fire_weapon) setuwep(obj);
             else setuqwep(obj);*/
 		return;
 	    }
@@ -1073,8 +1073,8 @@ int thrown) {
 		if (is_ammo(obj)) {
 		    if (ammo_and_launcher(obj, launcher)) {
 #ifdef FIREARMS
-			if (is_launcher(launcher) && 
-					objects[(launcher->otyp)].oc_range) 
+			if (is_launcher(launcher) &&
+					objects[(launcher->otyp)].oc_range)
 				range = objects[(launcher->otyp)].oc_range;
 		    else
 #endif
@@ -1144,7 +1144,7 @@ int thrown) {
 	    arm_bomb(obj, TRUE);
 	} else if (ammo_and_launcher(obj, launcher) &&
 		(objects[obj->otyp].oc_dir & EXPLOSION)) {
-	    if (cansee(bhitpos.x,bhitpos.y)) 
+	    if (cansee(bhitpos.x,bhitpos.y))
 		pline("%s explodes in a ball of fire!", Doname2(obj));
 	    else You_hear("an explosion");
 	    explode(bhitpos.x, bhitpos.y, ZT_SPELL(ZT_FIRE),
@@ -1314,7 +1314,7 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 	int tmp; /* Base chance to hit */
 	int disttmp; /* distance modifier */
 	struct obj *launcher;
-	
+
 	int otyp = obj->otyp;
 	boolean guaranteed_hit = (u.uswallow && mon == u.ustuck);
 
@@ -1360,7 +1360,7 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 		tmp -= 3;
 		break;
 	    case LEATHER_GLOVES:
-	    case GAUNTLETS_OF_SWIMMING:            
+	    case GAUNTLETS_OF_SWIMMING:
 	    case GAUNTLETS_OF_DEXTERITY:
 		break;
 	    default:
@@ -1466,7 +1466,7 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 		/* Detonate bolts shot by Hellfire */
 		if (ammo_and_launcher(obj, launcher) &&
 			(launcher->oartifact == ART_HELLFIRE)) {
-		    if (cansee(bhitpos.x,bhitpos.y)) 
+		    if (cansee(bhitpos.x,bhitpos.y))
 			pline("%s explodes in a ball of fire!", Doname2(obj));
 		    else You_hear("an explosion");
 		    explode(bhitpos.x, bhitpos.y, ZT_SPELL(ZT_FIRE),
@@ -1477,13 +1477,13 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 		 * sometimes disappear when thrown
 		 * WAC - Spoon always disappears after doing damage
 		 */
-		if (((objects[otyp].oc_skill < P_NONE && 
+		if (((objects[otyp].oc_skill < P_NONE &&
 			objects[otyp].oc_skill > -P_BOOMERANG) ||
-			(obj->oclass == GEM_CLASS && 
+			(obj->oclass == GEM_CLASS &&
 			!objects[otyp].oc_magic))
 			|| (obj->oartifact == ART_HOUCHOU)
 			/* WAC catch Hellfire */
-			|| (launcher && launcher->oartifact == ART_HELLFIRE 
+			|| (launcher && launcher->oartifact == ART_HELLFIRE
 			&& is_ammo(obj) && ammo_and_launcher(obj, launcher))
 		   ) {
 		    /* we were breaking 2/3 of everything unconditionally.
@@ -1512,7 +1512,7 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 			    grenade_explode(obj, bhitpos.x, bhitpos.y, TRUE, 0);
 			} else if (ammo_and_launcher(obj, launcher) &&
 				(objects[obj->otyp].oc_dir & EXPLOSION)) {
-			    if (cansee(bhitpos.x,bhitpos.y)) 
+			    if (cansee(bhitpos.x,bhitpos.y))
 				pline("%s explodes in a ball of fire!",
 					Doname2(obj));
 			    else You_hear("an explosion");

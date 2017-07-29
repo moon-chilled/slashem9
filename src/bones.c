@@ -231,7 +231,7 @@ void savebones(struct obj *corpse) {
 		    mptr == &mons[PM_NIGHTMARE] ||
 		    mptr == &mons[PM_BEHOLDER] || mptr == &mons[PM_VECNA] ||
 		    mptr == &mons[PM_CTHULHU]) {
-		/* Since these monsters may be carrying indestructible 
+		/* Since these monsters may be carrying indestructible
 		 * artifacts, free inventory specifically here to avoid
 		 * the indestructible sanity check in discard_minvent.
 		 * Similar considerations cause the necessity to avoid
@@ -290,7 +290,7 @@ void savebones(struct obj *corpse) {
 		if (!mtmp) return;
 		mtmp = christen_monst(mtmp, plname);
 		if (corpse)
-			(void) obj_attach_mid(corpse, mtmp->m_id); 
+			(void) obj_attach_mid(corpse, mtmp->m_id);
 	} else {
 		/* give your possessions to the monster you become */
 		in_mklev = TRUE;

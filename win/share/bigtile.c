@@ -134,7 +134,7 @@ char *argv[];
 	char buf[BUFSZ], ttype[BUFSZ];
 	pixel pixels[MAX_TILE_Y][MAX_TILE_X];
 	boolean x;
-	
+
 	while (filenum < 3) {
 		tilecount_per_file = 0;
 		if (!fopen_text_file(tilefiles[filenum], RDTMODE))
@@ -148,7 +148,7 @@ char *argv[];
 		while (read_text_tile_info(pixels, ttype, &tile_no, buf)) {
 			if (filenum < 2)
 				write_padtile(pixels, ttype, tile_no, buf);
-			else 
+			else
 			{
 				for(i = 0; i < SIZE(no_slant); i++)
 					if (!strcmp(buf, no_slant[i]))

@@ -48,7 +48,7 @@ extern struct menucoloring *menu_colorings;
 /* need to preserve these during save to avoid accessing freed memory */
 static unsigned ustuck_id = 0, usteed_id = 0;
 
-int 
+int
 dosave (void)
 {
 #ifdef KEEP_SAVE
@@ -102,7 +102,7 @@ dosave (void)
 		flags.move = 0;
 /*WAC correct these after restore*/
 		if(flags.moonphase == FULL_MOON)
-			change_luck(1);         
+			change_luck(1);
 		if(flags.friday13)
 			change_luck(-1);
 		if(iflags.window_inited)
@@ -189,7 +189,7 @@ dosave0()
 
 	vision_recalc(2);	/* shut down vision to prevent problems
 				   in the event of an impossible() call */
-	
+
 	/* undo date-dependent luck adjustments made at startup time */
 	if(flags.moonphase == FULL_MOON)	/* ut-sally!fletcher */
 		change_luck(-1);		/* and unido!ab */
@@ -925,7 +925,7 @@ void
 free_menu_coloring()
 {
    struct menucoloring *tmp = menu_colorings;
-   
+
    while (tmp) {
       struct menucoloring *tmp2 = tmp->next;
 #ifdef USE_REGEX_MATCH

@@ -91,23 +91,23 @@ const char * const flash_types[] = {	/* also used in buzzmu(mcastu.c) */
 
 /* Yells for Megaspells*/
 const char *yell_types[] = {    /*10 different beam types*/
-	"With the wisdom of Merlin!",  /* Magic */ 
-		/* Merlin was the wizard who advised King Arthur */ 
-	"The rage of Huitzilopochtli!", /* Fire */ 
-		/* Huitzilopochtli is the god of the Sun of Aztec myth */ 
+	"With the wisdom of Merlin!",  /* Magic */
+		/* Merlin was the wizard who advised King Arthur */
+	"The rage of Huitzilopochtli!", /* Fire */
+		/* Huitzilopochtli is the god of the Sun of Aztec myth */
 	"The sorrow of Demeter!", /* Frost */
 		/* Demeter - when she is without her daughter Persephone
 		 * 	she caused winter
 		 */
-	"The rest of Hypnos", /* Sleep */ 
+	"The rest of Hypnos", /* Sleep */
 		/* Hypnos - Greek god of sleep */
 	"The wrath of Kali", /* Disint */
 		/* Kali is the Hindu god of dissolution and destruction */
-	"From the forge of Vulcan!", /* Lightning*/ 
+	"From the forge of Vulcan!", /* Lightning*/
 		/* Vulcan forged Zeus' lightning bolts [Greek] */
-	"From the Fangs of Jormungand", /* Poison gas */ 
-		/* Serpent of Viking Mythology.  Poisons the skies/seas during 
-		 * Ragnarok 
+	"From the Fangs of Jormungand", /* Poison gas */
+		/* Serpent of Viking Mythology.  Poisons the skies/seas during
+		 * Ragnarok
 		 */
 	"The anger of the Mad Chemist!", /* Acid */
 	"",
@@ -117,7 +117,7 @@ const char *yell_types[] = {    /*10 different beam types*/
 
 /* Routines for IMMEDIATE wands and spells. */
 /* bhitm: monster mtmp was hit by the effect of wand or spell otmp */
-int 
+int
 bhitm (struct monst *mtmp, struct obj *otmp)
 {
 	boolean wake = TRUE;	/* Most 'zaps' should wake monster */
@@ -133,7 +133,7 @@ bhitm (struct monst *mtmp, struct obj *otmp)
 
 	if (objects[otyp].oc_class == SPBOOK_CLASS) {
 	    /* Is a spell */
-	    skilldmg = spell_damage_bonus(otyp);  
+	    skilldmg = spell_damage_bonus(otyp);
 	    zap_type_text = "spell";
 	} else zap_type_text = "wand";
 
@@ -385,7 +385,7 @@ bhitm (struct monst *mtmp, struct obj *otmp)
 		dmg = rnd(8);
 		if(dbldam) dmg *= 2;
 		dmg += skilldmg;
-		
+
 		if (resists_drli(mtmp)) {
 			shieldeff(mtmp->mx, mtmp->my);
 			break;	/* skip makeknown */
@@ -427,7 +427,7 @@ bhitm (struct monst *mtmp, struct obj *otmp)
 	return 0;
 }
 
-void 
+void
 probe_monster (struct monst *mtmp)
 {
 	struct obj *otmp;
@@ -599,7 +599,7 @@ coord *cc;
 /*
  * get_container_location() returns the following information
  * about the outermost container:
- * loc argument gets set to: 
+ * loc argument gets set to:
  *	OBJ_INVENT	if in hero's inventory; return 0.
  *	OBJ_FLOOR	if on the floor; return 0.
  *	OBJ_BURIED	if buried; return 0.
@@ -2250,8 +2250,8 @@ int min, range, skilldmg;
 /*WAC Based off code that used to be the wizard patch mega fireball */
 	if (u.uinwater) {
 	    pline("You joking! In this weather?");
-	    return; 
-	} else if (Is_waterlevel(&u.uz)) { 
+	    return;
+	} else if (Is_waterlevel(&u.uz)) {
 	    You("better wait for the sun to come out.");
 	    return;
 	}
@@ -2382,7 +2382,7 @@ boolean ordinary;
 			pline("You've set yourself afire!");
 			damage = d(12,6);
 		    }
-		    if (Slimed) {                    
+		    if (Slimed) {
 			pline("The slime is burned away!");
 			Slimed = 0;
 		    }
@@ -2646,7 +2646,7 @@ zap_steed(obj)
 struct obj *obj;	/* wand or spell */
 {
 	int steedhit = FALSE;
-	
+
 	switch (obj->otyp) {
 
 	   /*
@@ -2719,7 +2719,7 @@ boolean			youattack, allow_cancel_kill, self_cancel;
 				"Some writing vanishes from %s head!";
 	static const char your[] = "your";	/* should be extern */
 
-	if (youdefend) 
+	if (youdefend)
 	    You(!Hallucination? "are covered in sparkling lights!"
 			      : "are enveloped by psychedelic fireworks!");
 
@@ -3002,7 +3002,7 @@ struct obj *obj;
 			if (((otyp >= SPE_MAGIC_MISSILE && otyp <= SPE_CONE_OF_COLD)
 		            || (otyp >= SPE_LIGHTNING && otyp <= SPE_ACID_STREAM))
 		            && (tech_inuse(T_SIGIL_TEMPEST))) {
-				/* sigil of tempest */                     
+				/* sigil of tempest */
 				throwstorm(obj, skilldmg, 2 , 2);
 			} else if (((otyp >= SPE_MAGIC_MISSILE && otyp <= SPE_CONE_OF_COLD)
 		            || (otyp >= SPE_LIGHTNING && otyp <= SPE_ACID_STREAM))
@@ -3051,7 +3051,7 @@ int booktype;
 	if (intell < 10) tmp = -1;      /* Punish low intell. before level else low */
 	else if (u.ulevel < 5) tmp = 0; /* intell. gets punished only when high level*/
 	else if (intell < 14)  tmp = 1;
-	else if (intell <= 18) tmp = 2;            
+	else if (intell <= 18) tmp = 2;
 	else tmp = 3;                   /* Hero may have helm of brilliance on */
 
 	switch (P_SKILL(spell_skilltype(booktype))) {
@@ -3485,7 +3485,7 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 	int tmp = 0;
 	int abstype = abs(type) % 10;
 	boolean sho_shieldeff = FALSE;
-	boolean spellcaster = (is_hero_spell(type) || is_mega_spell(type)); 
+	boolean spellcaster = (is_hero_spell(type) || is_mega_spell(type));
 				/* maybe get a bonus! */
     	int skilldmg = 0;
 
@@ -3624,7 +3624,7 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 	    pline("Damage = %d + %d", tmp, skilldmg);
 #endif
 	tmp += skilldmg;
-	    
+
 	if (tmp > 0 && type >= 0 &&
 		resist(mon, type < ZT_SPELL(0) ? WAND_CLASS : '\0', 0, NOTELL))
 	    tmp /= 2;
@@ -3675,7 +3675,7 @@ xchar sx, sy;
 	    } else {
 		dam = d(nd, 6);
 	    }
-	    if (Slimed) {            
+	    if (Slimed) {
 		pline("The slime is burned away!");
 		Slimed = 0;
 	    }
@@ -3894,7 +3894,7 @@ int dx,dy;
       /* LSZ/WWA The Wizard Patch July 96
        * If its a Hero Spell then get its SPE_TYPE
        */
-    /* horrible kludge for wands of fireball... */    
+    /* horrible kludge for wands of fireball... */
     if (type == ZT_WAND(ZT_LIGHTNING+1)) type = ZT_SPELL(ZT_FIRE);
     /*WAC kludge for monsters zapping wands of fireball*/
     if  ((type <= ZT_MONWAND(ZT_FIRST) && type >=ZT_MONWAND(ZT_LAST)) &&
@@ -4180,7 +4180,7 @@ int dx,dy;
 		break; /* fireballs explode before the wall */
 	    }
 	    bounce = 0;
-/*            range--;*/   
+/*            range--;*/
 	    if(range && isok(lsx, lsy) && cansee(lsx,lsy))
 		pline("%s bounces!", The(fltxt));
 	    if(!dx || !dy || !rn2(20)) {
@@ -4929,9 +4929,9 @@ throwspell()
 
 
 /*	if (u.uinwater) {
-		pline("You joking! In this weather?"); return 0; 
-	} else if (Is_waterlevel(&u.uz)) { 
-		You("better wait for the sun to come out."); return 0; 
+		pline("You joking! In this weather?"); return 0;
+	} else if (Is_waterlevel(&u.uz)) {
+		You("better wait for the sun to come out."); return 0;
 	} */
 	pline("Where do you want to cast the spell?");
 	cc.x = u.ux;

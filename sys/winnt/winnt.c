@@ -99,12 +99,12 @@ char *path;
 		 ffhandle = (HANDLE)0;
 	}
 	ffhandle = FindFirstFile(path,&ffd);
-	return 
+	return
 	  (ffhandle == INVALID_HANDLE_VALUE) ? 0 : 1;
 }
 
 int
-findnext() 
+findnext()
 {
 	return FindNextFile(ffhandle,&ffd) ? 1 : 0;
 }
@@ -135,20 +135,20 @@ char *str;
 {
 	char *ptr;
 	char drive;
-	if ((ptr = index(str, ':')) != NULL) 
+	if ((ptr = index(str, ':')) != NULL)
 	{
 		drive = toupper(*(ptr - 1));
 		_chdrive((drive - 'A') + 1);
 	}
 }
-#endif 
+#endif
 
 static int
 max_filename()
 {
 	DWORD maxflen;
 	int status=0;
-	
+
 	status = GetVolumeInformation((LPTSTR)0,(LPTSTR)0, 0
 			,(LPDWORD)0,&maxflen,(LPDWORD)0,(LPTSTR)0,0);
 	if (status) return maxflen;
@@ -161,7 +161,7 @@ def_kbhit()
 	return 0;
 }
 
-/* 
+/*
  * Strip out troublesome file system characters.
  */
 
@@ -189,7 +189,7 @@ int *lan_username_size;
 	DWORD i = BUFSZ - 1;
 
 	/* i gets updated with actual size */
-	status = GetUserName(username_buffer, &i);		
+	status = GetUserName(username_buffer, &i);
 	if (status) username_buffer[i] = '\0';
 	else strcpy(username_buffer, "NetHack");
 	if (lan_username_size) *lan_username_size = strlen(username_buffer);

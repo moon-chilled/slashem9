@@ -43,7 +43,7 @@ extern void init_linux_cons(void);
 extern void check_linux_console(void);
 extern void init_linux_cons(void);
 #endif
- 
+
 static void wd_message(void);
 #ifdef WIZARD
 static boolean wiz_error_flag = FALSE;

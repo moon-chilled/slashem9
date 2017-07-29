@@ -51,16 +51,16 @@ void sdlgl_unit_startup(void)
 #if 0  /* DEBUGGING */
   str = (const char *) glGetString(GL_VERSION);
   sdlgl_warning("OpenGL Version: %s\n", str);
-  
+
   str = (const char *) glGetString(GL_VENDOR);
   sdlgl_warning("OpenGL Vendor: %s\n", str);
-  
+
   str = (const char *) glGetString(GL_RENDERER);
   sdlgl_warning("OpenGL Renderer: %s\n", str);
 
   sdlgl_warning("OpenGL Texture Size: %d\n", sdlgl_tex_max);
 #endif
- 
+
   /* initialise all important GL state */
 
   glDisable(GL_FOG);
@@ -100,7 +100,7 @@ void sdlgl_unit_startup(void)
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(0.0, (float)sdlgl_width, 
+  glOrtho(0.0, (float)sdlgl_width,
           0.0, (float)sdlgl_height, -1.0, 1.0);
 
   glMatrixMode(GL_MODELVIEW);
@@ -138,10 +138,10 @@ static void flush_units(void)
   int i;
   int begun = 0;
   GLuint current_tex = 0x789ABCDE;
-  
+
   if (num_units < 1)
     return;
-  
+
   /* sort units into increasing texture ID */
   for (i=0; i < num_units; i++)
     unit_map[i] = i;
@@ -163,7 +163,7 @@ static void flush_units(void)
 
       current_tex = unit->tex_id;
       glBindTexture(GL_TEXTURE_2D, current_tex);
-      
+
       glBegin(GL_QUADS);
       begun = 1;
     }
@@ -209,12 +209,12 @@ void sdlgl_begin_units(int blending, int overlap)
   unit_overlap = overlap;
 }
 
-void sdlgl_add_unit(GLuint id, float tx1, float ty1, 
+void sdlgl_add_unit(GLuint id, float tx1, float ty1,
     float tx2, float ty2, short x, short y, short w, short h,
     short pass, rgbcol_t color, float trans)
 {
   struct GraphicUnit *unit;
-  
+
   if (num_units == MAX_UNITS)
     flush_units();
 
@@ -232,7 +232,7 @@ void sdlgl_add_unit(GLuint id, float tx1, float ty1,
   unit->color = color;
   unit->trans = trans;
 }
-  
+
 void sdlgl_finish_units(void)
 {
   if (num_units > 0)
@@ -251,7 +251,7 @@ void sdlgl_hw_make_screenshot(const char *prefix)
 {
   unsigned char *pixels;
   unsigned char *p;
-  
+
   char filename[256];
   char msgbuf[512];
 
@@ -263,7 +263,7 @@ void sdlgl_hw_make_screenshot(const char *prefix)
   glReadBuffer(GL_FRONT);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-  glReadPixels(0, 0, sdlgl_width, sdlgl_height, GL_RGB, 
+  glReadPixels(0, 0, sdlgl_width, sdlgl_height, GL_RGB,
       GL_UNSIGNED_BYTE, pixels);
 
   /* compute Adler CRC (per RFC 1950) on image.
@@ -282,7 +282,7 @@ void sdlgl_hw_make_screenshot(const char *prefix)
    */
   sprintf(filename, "%s%04X%04X.ppm", prefix, crc2, crc1);
 
-  success = sdlgl_save_ppm_file(filename, pixels, sdlgl_width, 
+  success = sdlgl_save_ppm_file(filename, pixels, sdlgl_width,
       sdlgl_height);
 
   free(pixels);

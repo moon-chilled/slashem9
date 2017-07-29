@@ -59,7 +59,7 @@ letter(c)		/* is 'c' a letter?  note: '@' classed as letter */
     return((boolean)(('@' <= c && c <= 'Z') || ('a' <= c && c <= 'z')));
 }
 
-char 
+char
 highc (			/* force 'c' into uppercase */
     char c
 )
@@ -67,7 +67,7 @@ highc (			/* force 'c' into uppercase */
     return((char)(('a' <= c && c <= 'z') ? (c & ~040) : c));
 }
 
-char 
+char
 lowc (			/* force 'c' into lowercase */
     char c
 )
@@ -249,7 +249,7 @@ sitoa (		/* make a signed digit string from a number */
     return buf;
 }
 
-int 
+int
 sgn (			/* return the sign of a number: -1, 0, or 1 */
     int n
 )
@@ -257,7 +257,7 @@ sgn (			/* return the sign of a number: -1, 0, or 1 */
     return (n < 0) ? -1 : (n != 0);
 }
 
-int 
+int
 rounddiv (		/* calculate x/y, rounding as appropriate */
     long x,
     int y
@@ -281,7 +281,7 @@ rounddiv (		/* calculate x/y, rounding as appropriate */
     return divsgn * r;
 }
 
-int 
+int
 distmin ( /* distance between two points, in moves */
     int x0,
     int y0,
@@ -298,7 +298,7 @@ distmin ( /* distance between two points, in moves */
     return (dx < dy) ? dy : dx;
 }
 
-int 
+int
 dist2 (	/* square of euclidean distance between pair of pts */
     int x0,
     int y0,
@@ -345,7 +345,7 @@ pmatch_top:
 }
 
 #ifndef STRNCMPI
-int 
+int
 strncmpi (	/* case insensitive counted string comparison */
     const char *s1,
     const char *s2,
@@ -445,7 +445,7 @@ fuzzymatch(s1, s2, ignore_chars, caseblind)
 
 static struct tm *getlt(void);
 
-void 
+void
 setrandom (void)
 {
 	/* the types are different enough here that sweeping the different
@@ -490,14 +490,14 @@ getlt (void)
 #endif
 }
 
-int 
+int
 getyear (void)
 {
 	return(1900 + getlt()->tm_year);
 }
 
 /* KMH -- Used by gypsies */
-int 
+int
 getmonth (void)
 {
 	return (getlt()->tm_mon);
@@ -569,7 +569,7 @@ time_t date;
  * 177 ~= 8 reported phases * 22
  * + 11/22 for rounding
  */
-int 
+int
 phase_of_the_moon (void)		/* 0-7, with 0: new, 4: full */
 {
 	struct tm *lt = getlt();
@@ -601,7 +601,7 @@ groundhog_day()
 	return((boolean)(lt->tm_mon == 1 && lt->tm_mday == 2));
 }
 
-int 
+int
 night (void)
 {
 	int hour = getlt()->tm_hour;
@@ -609,7 +609,7 @@ night (void)
 	return(hour < 6 || hour > 21);
 }
 
-int 
+int
 midnight (void)
 {
 	return(getlt()->tm_hour == 0);

@@ -49,14 +49,14 @@ resource 'SIZE' (-1) {
 };
 
 /* Classic help balloon information */
-resource 'hfdr' (-5696, purgeable) { 
-     HelpMgrVersion, hmDefaultOptions, 0, 0, /* header information */ 
-	    { HMSTRResItem { /* use 'STR ' resource 2000 */ 2000 } 
-	} 
+resource 'hfdr' (-5696, purgeable) {
+     HelpMgrVersion, hmDefaultOptions, 0, 0, /* header information */
+	    { HMSTRResItem { /* use 'STR ' resource 2000 */ 2000 }
+	}
 };
 
 resource 'STR ' (2000, purgeable) { /* Help message for app icon */
-   "Slash'EM\nThis is the famous Dungeons and Dragons*-like game ported to the Macintosh." 
+   "Slash'EM\nThis is the famous Dungeons and Dragons*-like game ported to the Macintosh."
 };
 
 resource 'STR '(-16396, purgeable) {	/* Will be copied to the saved file. */

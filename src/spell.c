@@ -22,7 +22,7 @@ static struct obj *book;	/* last/current book being xscribed */
 #define MAX_STUDY_TIME 	  300	/* Max time for one study session */
 #define MAX_SPELL_STUDY    30	/* Uses before spellbook crumbles */
 
-#define spellknow(spell)	spl_book[spell].sp_know 
+#define spellknow(spell)	spl_book[spell].sp_know
 
 #define incrnknow(spell)        spl_book[spell].sp_know = ((spl_book[spell].sp_know < 1) ? KEEN \
 				 : ((spl_book[spell].sp_know + KEEN) > MAX_KNOW) ? MAX_KNOW \
@@ -343,8 +343,8 @@ learn()
 	char splname[BUFSZ];
 	boolean costly = TRUE;
 
-	if (!book || !(carried(book) || 
-		(book->where == OBJ_FLOOR && 
+	if (!book || !(carried(book) ||
+		(book->where == OBJ_FLOOR &&
 			book->ox == u.ux && book->oy == u.uy))) {
 	    /* maybe it was stolen or polymorphed? */
 	    do_reset_learn();
@@ -425,7 +425,7 @@ learn()
 	return(0);
 }
 
-int 
+int
 study_book (struct obj *spellbook)
 {
 	int	 booktype = spellbook->otyp;
@@ -550,7 +550,7 @@ study_book (struct obj *spellbook)
 		if (multi) {
 			/* Count == practice reading :) */
 	        	char qbuf[QBUFSZ];
-	        	
+
 	        	if (multi + 1 > MAX_STUDY_TIME) multi = MAX_STUDY_TIME - 1;
 	        	sprintf(qbuf, "Study for at least %i turns?", (multi+1));
 			if (ynq(qbuf) != 'y') {
@@ -576,7 +576,7 @@ study_book (struct obj *spellbook)
 
 /* a spellbook has been destroyed or the character has changed levels;
    the stored address for the current book is no longer valid */
-void 
+void
 book_disappears (struct obj *obj)
 {
 	if (obj == book) book = NULL;
@@ -585,20 +585,20 @@ book_disappears (struct obj *obj)
 /* renaming an object usually results in it having a different address;
    so the sequence start reading, get interrupted, name the book, resume
    reading would read the "new" book from scratch */
-void 
+void
 book_substitution (struct obj *old_obj, struct obj *new_obj)
 {
 	if (old_obj == book) book = new_obj;
 }
 
-static void 
+static void
 do_reset_learn (void)
 {
 	stop_occupation();
 }
 
 /* called from moveloop() */
-void 
+void
 age_spells (void)
 {
 	int i;
@@ -666,7 +666,7 @@ getspell(spell_no)
 }
 
 /* the 'Z' command -- cast a spell */
-int 
+int
 docast (void)
 {
 	int spell_no;
@@ -700,7 +700,7 @@ spelltypemnemonic(int skill)
 	}
 }
 
-int 
+int
 spell_skilltype (int booktype)
 {
 	return (objects[booktype].oc_skill);
@@ -914,7 +914,7 @@ boolean atme;
 	}
 
 	u.uen -= energy;
-	
+
 	flags.botl = 1;
 	exercise(A_WIS, TRUE);
 
@@ -995,12 +995,12 @@ boolean atme;
 	case SPE_MAGIC_MAPPING:
 	case SPE_CREATE_MONSTER:
 	case SPE_IDENTIFY:
-	case SPE_COMMAND_UNDEAD:                
+	case SPE_COMMAND_UNDEAD:
 	case SPE_SUMMON_UNDEAD:
 		(void) seffects(pseudo);
 		break;
 
-	case SPE_ENCHANT_WEAPON:                
+	case SPE_ENCHANT_WEAPON:
 	case SPE_ENCHANT_ARMOR:
 		if (role_skill >= P_EXPERT) n = 8;
 		else if (role_skill >= P_SKILLED) n = 10;
@@ -1101,7 +1101,7 @@ boolean atme;
 				spell_damage_bonus(spellid(spell))*100);
 		} else pline(nothing_happens);	/* Already have as intrinsic */
 		break;
-	case SPE_ENLIGHTEN: 
+	case SPE_ENLIGHTEN:
 		You("feel self-knowledgeable...");
 		display_nhwindow(WIN_MESSAGE, FALSE);
 		enlightenment(FALSE);
@@ -1152,7 +1152,7 @@ boolean atme;
 }
 
 
-void 
+void
 losespells (void)
 {
 	boolean confused = (Confusion != 0);
@@ -1173,7 +1173,7 @@ losespells (void)
 
 
 /* the '+' command -- view known spells */
-int 
+int
 dovspell (void)
 {
 	char qbuf[QBUFSZ];
@@ -1273,7 +1273,7 @@ int *spell_no;
 }
 
 #ifdef DUMP_LOG
-void 
+void
 dump_spells (void)
 {
 	int i, n;
@@ -1335,7 +1335,7 @@ int spell;
 	/* Calculate armor penalties */
 	if (uarm && !(uarm->otyp == ROBE ||
 		      uarm->otyp == ROBE_OF_POWER ||
-		      uarm->otyp == ROBE_OF_PROTECTION)) 
+		      uarm->otyp == ROBE_OF_PROTECTION))
 	    splcaster += 5;
 
 	/* Robes are body armour in SLASH'EM */
@@ -1424,7 +1424,7 @@ int spell;
 }
 
 /* Learn a spell during creation of the initial inventory */
-void 
+void
 initialspell (struct obj *obj)
 {
 	int i;

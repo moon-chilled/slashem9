@@ -73,7 +73,7 @@
 
 #define S_WORM_TAIL     61
 #define S_MIMIC_DEF     62
-                        
+
 #define MAXMCLASSES 63  /* number of monster classes */
 #define MISCMCLASSES 2  /* currently only wormtail and mimicdef*/
 

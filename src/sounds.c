@@ -34,7 +34,7 @@ static const char *whimper_sound(struct monst *);
 # define mon_in_room(mon,rmtype) (rooms[ levl[(mon)->mx][(mon)->my].roomno \
 					- ROOMOFFSET].rtype == (rmtype))
 
-void 
+void
 dosounds (void)
 {
     struct mkroom *sroom;
@@ -299,7 +299,7 @@ static const char * const h_sounds[] = {
 
 /* make the sounds of a pet in any level of distress */
 /* (1 = "whimper", 2 = "yelp", 3 = "growl") */
-void 
+void
 pet_distress (struct monst *mtmp, int lev)
 {
     const char *verb;
@@ -433,7 +433,7 @@ whimper_sound (struct monst *mtmp)
 }
 
 /* pet makes "I'm hungry" noises */
-void 
+void
 beg (struct monst *mtmp)
 {
     if (mtmp->msleeping || !mtmp->mcanmove ||
@@ -450,7 +450,7 @@ beg (struct monst *mtmp)
 }
 }
 
-static int 
+static int
 domonnoise (struct monst *mtmp)
 {
     const char *pline_msg = 0,	/* Monnam(mtmp) will be prepended */
@@ -548,7 +548,7 @@ domonnoise (struct monst *mtmp)
 			    sprintf(verbuf, "%s! Your silver sheen does not frighten me!",
 					youmonst.data == &mons[PM_SILVER_DRAGON] ?
 					"Fool" : "Young Fool");
-			    verbl_msg = verbuf; 
+			    verbl_msg = verbuf;
 			} else {
 			    vampindex = rn2(SIZE(vampmsg));
 			    if (vampindex == 0) {
@@ -904,7 +904,7 @@ domonnoise (struct monst *mtmp)
 }
 
 
-int 
+int
 dotalk (void)
 {
     int result;
@@ -915,7 +915,7 @@ dotalk (void)
     return result;
 }
 
-static int 
+static int
 dochat (void)
 {
     struct monst *mtmp;
@@ -1029,7 +1029,7 @@ static audio_mapping *soundmap = 0;
 char* sounddir = ".";
 
 /* adds a sound file mapping, returns 0 on failure, 1 on success */
-int 
+int
 add_sound_mapping (const char *mapping)
 {
 	char text[256];
@@ -1090,7 +1090,7 @@ add_sound_mapping (const char *mapping)
 	return 1;
 }
 
-void 
+void
 play_sound_for_message (const char *msg)
 {
 	audio_mapping* cursor = soundmap;

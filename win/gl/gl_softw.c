@@ -57,19 +57,19 @@ static void create_iso_borders(struct TileSet *set)
 {
   int x, y;
   Uint32 c;
-  
+
   /* the surface consists of three tiles, one for the corners, one for
    * horizontal lines, and one for vertical lines.  "+ - |"
    */
   set->borders = SDL_CreateRGBSurface(SDL_SWSURFACE, 48 * 3, 64,
       8 /* bpp */, 0, 0, 0, 0);
- 
+
   if (! set->borders)
     sdlgl_error("Couldn't create SDL surface for iso borders.\n");
 
   sdlgl_set_surface_colors(set->borders);
   SDL_SetColorKey(set->borders, SDL_SRCCOLORKEY, TRANS_PIX);
- 
+
   c = rgb2sdl(set->borders->format, BORDER_COL);
 
   for (y=0; y < 64; y++)
@@ -165,7 +165,7 @@ static struct TileSet *sw_load_tileset(const char *filename,
 
   set->pack_w = num_w;
   set->pack_h = num_h;
- 
+
   set->has_alpha = NULL;
   if (! is_text && ! keep_rgba)
   {
@@ -183,7 +183,7 @@ static struct TileSet *sw_load_tileset(const char *filename,
   {
     create_iso_borders(set);
   }
-   
+
   if (across)
     *across = num_w;
   if (down)
@@ -217,7 +217,7 @@ static void sw_free_tileset(struct TileSet *set)
     sdlgl_free_font_cache(set);
     set->font_cache = NULL;
   }
- 
+
   free(set);
 }
 
@@ -226,16 +226,16 @@ static SDL_Surface *mark_to_surface(const unsigned char *bits,
 {
   int x, y;
   Uint32 c;
-  
-  SDL_Surface *surf = SDL_CreateRGBSurface(SDL_SWSURFACE, 8, 8, 
+
+  SDL_Surface *surf = SDL_CreateRGBSurface(SDL_SWSURFACE, 8, 8,
       8 /* bpp */, 0, 0, 0, 0);
- 
+
   if (! surf)
     sdlgl_error("Couldn't create SDL surface for pet mark.\n");
 
   sdlgl_set_surface_colors(surf);
   SDL_SetColorKey(surf, SDL_SRCCOLORKEY, TRANS_PIX);
- 
+
   c = SDL_MapRGB(surf->format, r, g, b);
 
   for (y=0; y < 8; y++)
@@ -253,7 +253,7 @@ static SDL_Surface *mark_to_surface(const unsigned char *bits,
 
   return surf;
 }
- 
+
 static void sw_create_extra_graphics(void)
 {
   pet_mark_surf = mark_to_surface(pet_mark_bits, 255, 0, 0);
@@ -328,7 +328,7 @@ static GH_INLINE void draw_line(int x1, int y1, int x2, int y2,
 
 #define BG_CELL  64
 
-static void sw_draw_background(int sx, int sy, int sw, int sh, 
+static void sw_draw_background(int sx, int sy, int sw, int sh,
     rgbcol_t color, int start_idx, int depth)
 {
   int x, y;
@@ -336,7 +336,7 @@ static void sw_draw_background(int sx, int sy, int sw, int sh,
   SDL_Rect r;
 
   Uint32 c = rgb2sdl(sdlgl_surf->format, color);
- 
+
   for (y=0; y < sh; y += BG_CELL)
   for (x=0; x < sw; x += BG_CELL)
   {
@@ -348,13 +348,13 @@ static void sw_draw_background(int sx, int sy, int sw, int sh,
 
     /* the for loop prevents zero sizes */
     assert(r.w > 0 && r.h > 0);
-    
+
     if (! sdlgl_test_tile_visible(start_idx, r.x, r.y, r.w, r.h))
       continue;
 
     r.y = sdlgl_height - r.y - r.h;
 
-    if (sdlgl_dirty_matrix_test(sdlgl_matrix, r.x, r.y, r.w, r.h, 
+    if (sdlgl_dirty_matrix_test(sdlgl_matrix, r.x, r.y, r.w, r.h,
         depth) == 0)
     {
       continue;
@@ -376,7 +376,7 @@ static void sw_draw_extra_shape(struct TileWindow *win, struct ExtraShape *shape
 
   sx = win->scr_x - win->pan_x + shape->x * sw + shape->y * win->scale_skew;
   sy = win->scr_y - win->pan_y + shape->y * sh;
-   
+
   /* trivial clipping */
   if (sx + sw <= win->scr_x || sx >= win->scr_x + win->scr_w)
     return;
@@ -391,7 +391,7 @@ static void sw_draw_extra_shape(struct TileWindow *win, struct ExtraShape *shape
 
     case SHAPE_Heart:
     case SHAPE_Ridden:
-      /* 
+      /*
        * par1: 0 is normal, 1 puts it on the left.
        */
 
@@ -411,7 +411,7 @@ static void sw_draw_extra_shape(struct TileWindow *win, struct ExtraShape *shape
       else
         surf = pet_mark_surf;
 
-      sdlgl_dirty_matrix_blit(sdlgl_matrix, surf, NULL, &drect, 
+      sdlgl_dirty_matrix_blit(sdlgl_matrix, surf, NULL, &drect,
           0, win->scr_depth);
       break;
 
@@ -429,7 +429,7 @@ static void sw_draw_cursor(struct TileWindow *win)
   int sx, sy, sw, sh;
 
   Uint32 c = rgb2sdl(sdlgl_surf->format, win->curs_color);
-   
+
   assert(x >= 0 && y >= 0 && w > 0);
 
   sw = win->scale_w;
@@ -458,7 +458,7 @@ static void sw_draw_cursor(struct TileWindow *win)
     r.x = sx; r.y = sy;
     r.w = sw; r.h = sh;
 
-    sdlgl_dirty_matrix_blit(sdlgl_matrix, NULL, NULL, &r, c, 
+    sdlgl_dirty_matrix_blit(sdlgl_matrix, NULL, NULL, &r, c,
         win->scr_depth);
   }
   else
@@ -511,7 +511,7 @@ static void sw_draw_tile(struct TileWindow *win, int sx, int sy,
   {
     return;
   }
-  
+
   trect.x = (tile % set->pack_w) * set->tile_w;
   trect.y = (tile / set->pack_w) * set->tile_h;
   trect.w = set->tile_w;
@@ -535,7 +535,7 @@ static void sw_draw_tile(struct TileWindow *win, int sx, int sy,
 
       trect.x = pos_x * set->tile_w;
       trect.y = pos_y * set->tile_h;
-      
+
       surf = set->font_cache->char_surf;
     }
   }
@@ -598,7 +598,7 @@ static void draw_iso_border_tile(struct TileWindow *win, int x, int y)
     tile = 2;
   else
     tile = 0;
- 
+
   trect.x = tile * 48;
   trect.y = 0;
   trect.w = 48;
@@ -719,7 +719,7 @@ static void sw_start_fading(int max_w, int min_y)
 static void sw_draw_fading(float fade_amount)
 {
   SDL_Rect drect;
- 
+
   if ((sdlgl_surf->flags & SDL_HWPALETTE) && sdlgl_depth == 8)
   {
     /* use the palette trick for fading (much smoother) */
@@ -769,7 +769,7 @@ static void sw_finish_fading(void)
     sdlgl_set_surface_colors(sdlgl_surf);
     return;
   }
-  
+
   SDL_FreeSurface(darkness);
   darkness = NULL;
 }
@@ -792,8 +792,8 @@ static void sw_set_pan(struct TileWindow *win, int x, int y)
   sdlgl_mark_dirty(win->scr_x, win->scr_y, win->scr_w, win->scr_h,
       win->scr_depth);
 }
- 
-static void sw_set_new_pos(struct TileWindow *win, int x, int y, 
+
+static void sw_set_new_pos(struct TileWindow *win, int x, int y,
     int w, int h)
 {
   int join_x, join_y;
@@ -811,10 +811,10 @@ static void sw_set_new_pos(struct TileWindow *win, int x, int y,
   win->scr_y = y;
   win->scr_w = w;
   win->scr_h = h;
- 
+
   sdlgl_mark_dirty(join_x, join_y, join_w, join_h, 0);
 }
- 
+
 static void sw_mark_dirty(int x, int y, int w, int h, int depth)
 {
   int x2 = x + w;  /* Note: not inclusive */
@@ -830,7 +830,7 @@ static void sw_mark_dirty(int x, int y, int w, int h, int depth)
 
   if (x2 <= x || y2 <= y)
     return;
-  
+
   w = x2 - x;
   h = y2 - y;
 

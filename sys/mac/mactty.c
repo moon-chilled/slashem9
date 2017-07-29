@@ -5,7 +5,7 @@
 /*
  * mactty.c
  *
- * This file contains the actual code for the tty library. For a 
+ * This file contains the actual code for the tty library. For a
  * description, see the file mactty.h, which contains all you
  * need to know to use the library.
  */
@@ -37,7 +37,7 @@ static void select_offscreen_port (tty_record *record);
 #define RECORD_EXISTS(record) \
 	tty_record * record; \
 	if (!window || !(record = (tty_record *) GetWRefCon (window))) \
-		return general_failure; 
+		return general_failure;
 
 
 /*
@@ -310,7 +310,7 @@ RECORD_EXISTS (record);
 #endif
 		s_err = dispose_ptr (record);
 	}
-	
+
 	return s_err;
 }
 
@@ -467,7 +467,7 @@ copy_bits(tty_record *record, Rect *bounds, short xfer_mode, RgnHandle mask_rgn)
 		source = (BitMapPtr) *GetGWorldPixMap(record->offscreen_world);
 	}
 	else	source = &record->its_bits;
-	
+
 #if !TARGET_API_MAC_CARBON
 	CopyBits (source, &(record->its_window->portBits), bounds, bounds, xfer_mode, mask_rgn);
 #else
@@ -489,7 +489,7 @@ static void
 erase_rect (tty_record *record, Rect *area) {
 	if (game_active && u.uhp > 0 && iflags.use_stone && record->its_window == _mt_window) {
 		PixPatHandle ppat;
-		
+
 		ppat = GetPixPat(iflags.use_stone + 127);	/* find which pat to get */
 		if (ppat) {	/* in game window, using backgroung pattern, and have pattern */
 			FillCRect (area, ppat);
@@ -591,7 +591,7 @@ RECORD_EXISTS (record);
 static void
 pos_rect (tty_record *record, Rect *r, short x_pos, short y_pos,
 	short x_end, short y_end) {
- 
+
 	SetRect (r, x_pos * (record->char_width), y_pos * (record->row_height),
 		(1 + x_end) * (record->char_width) , (1 + y_end) *
 		(record->row_height));
@@ -719,7 +719,7 @@ RECORD_EXISTS (record);
 #else
 	SetEmptyRgn (record->invalid_part);
 #endif
-	if (record->curs_state) {	
+	if (record->curs_state) {
 		pos_rect (record, &r, record->x_curs, record->y_curs,
 			record->x_curs, record->y_curs);
 		InvertRect (&r);
@@ -838,7 +838,7 @@ char is_control;
 char ch;
 RECORD_EXISTS (record);
 
-	if (!(record->attribute [TTY_ATTRIB_FLAGS] & TA_WRAP_AROUND) && 
+	if (!(record->attribute [TTY_ATTRIB_FLAGS] & TA_WRAP_AROUND) &&
 		record->x_curs >= record->x_size)
 		return noErr;		/* Optimize away drawing across border without wrap */
 
@@ -878,7 +878,7 @@ add_tty_string(WindowPtr window, const char *string)
 	tty_wrap = (record->attribute [TTY_ATTRIB_FLAGS] & TA_WRAP_AROUND);
 	for (;;) {
 		pos_x = record->x_curs;
-		if (!tty_wrap && pos_x >= max_x) 
+		if (!tty_wrap && pos_x >= max_x)
 			break;		/* Optimize away drawing across border without wrap */
 
 		start_c = the_c;

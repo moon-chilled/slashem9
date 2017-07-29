@@ -477,7 +477,7 @@ display_monster(
 		show_glyph(x,y, monnum_to_glyph(what_mon((int)mon->mappearance)));
 		break;
 	}
-	
+
     }
 
     /* If the mimic is unsucessfully mimicing something, display the monster */
@@ -805,7 +805,7 @@ void newsym(int x, int y) {
 	else if ((mon = m_at(x,y)) && mon_warning(mon) &&
 		 !is_worm_tail(mon)) {
 	        display_warning(mon);
-	}		
+	}
 
 	/*
 	 * If the location is remembered as being both dark (waslit is false)
@@ -1131,7 +1131,7 @@ void under_water(int mode) {
 	    if (isok(x,y) && is_pool(x,y)) {
 		if (Blind && !(x == u.ux && y == u.uy))
 		    show_glyph(x,y,cmap_to_glyph(S_stone));
-		else	
+		else
 		    newsym(x,y);
 	    }
     lastx = u.ux;
@@ -1171,7 +1171,7 @@ void under_ground(int mode) {
  * Loop through all of the monsters and update them.  Called when:
  *	+ going blind & telepathic
  *	+ regaining sight & telepathic
- *      + getting and losing infravision 
+ *      + getting and losing infravision
  *	+ hallucinating
  *	+ doing a full screen redraw
  *	+ see invisible times out or a ring of see invisible is taken off
@@ -1396,7 +1396,7 @@ void dump_screen(void) {
     /* D: botl.c has a closer approximation to the size, but we'll go with
      *    this */
     char buf[300], *ptr;
-    
+
     for (y = 0; y < ROWNO; y++) {
 	lastc = 0;
 	ptr = buf;

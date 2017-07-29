@@ -15,7 +15,7 @@
 #define FIRST_GEM    DILITHIUM_CRYSTAL
 #define FIRST_AMULET AMULET_OF_ESP
 #define LAST_AMULET  AMULET_OF_YENDOR
- 
+
 struct valuable_data { long count; int typ; };
 
 static struct valuable_data
@@ -79,7 +79,7 @@ static const char *deaths[] = {		/* the array of death */
 };
 
 static const char *ends[] = {		/* "when you..." */
-	"died", "were betrayed", "choked", "were poisoned", "starved", 
+	"died", "were betrayed", "choked", "were poisoned", "starved",
 	"drowned", "burned", "dissolved in the lava",
 	"were crushed", "turned to stone", "turned into slime",
 	"were genocided", "panicked", "were tricked",
@@ -90,7 +90,7 @@ static const char *ends[] = {		/* "when you..." */
 FILE *dump_fp = NULL;  /* file pointer for dumps */
 /* functions dump_init, dump_exit and dump are from the dump patch */
 
-void 
+void
 dump_init (void)
 {
   if (dump_fn[0]) {
@@ -127,14 +127,14 @@ dump_init (void)
   }
 }
 
-void 
+void
 dump_exit (void)
 {
   if (dump_fp)
     fclose (dump_fp);
 }
 
-void 
+void
 dump (char *pre, char *str)
 {
   if (dump_fp)
@@ -143,7 +143,7 @@ dump (char *pre, char *str)
 #endif  /* DUMP_LOG */
 
 /*ARGSUSED*/
-void 
+void
 done1 (   /* called as signal() handler, so sent at least one arg */
     int sig_unused
 )
@@ -170,7 +170,7 @@ done1 (   /* called as signal() handler, so sent at least one arg */
 extern const char * const killed_by_prefix[];	/* from topten.c */
 
 /* "#quit" command or keyboard interrupt */
-int 
+int
 done2 (void)
 {
 	if(yn("Really quit?") == 'n') {
@@ -224,7 +224,7 @@ int sig_unused;
 }
 
 # if defined(UNIX) || defined(__EMX__)
-static void 
+static void
 done_hangup (	/* signal() handler */
     int sig
 )
@@ -237,20 +237,20 @@ done_hangup (	/* signal() handler */
 # endif
 #endif /* NO_SIGNAL */
 
-void 
+void
 done_in_by (struct monst *mtmp)
 {
 	char buf[BUFSZ];
 	boolean distorted = (boolean)(Hallucination && canspotmon(mtmp));
 
 	You("die...");
-	/* for those wand o'death, touch o'death, poisoned spike times... */        
+	/* for those wand o'death, touch o'death, poisoned spike times... */
 	if (Instant_Death)
 	    You("were hosed!");
 	mark_synch();	/* flush buffered screen output */
 	buf[0] = '\0';
 	killer_format = KILLED_BY_AN;
-	if (!Blind || Blind_telepat) {        
+	if (!Blind || Blind_telepat) {
 	/* "killed by the high priest of Crom" is okay, "killed by the high
 	   priest" alone isn't */
 	if ((mtmp->data->geno & G_UNIQ) != 0 && !(mtmp->data == &mons[PM_HIGH_PRIEST] && !mtmp->ispriest)) {
@@ -634,7 +634,7 @@ winid endwin;
 }
 
 /* Be careful not to call panic from here! */
-void 
+void
 done (int how)
 {
 	boolean taken;
@@ -1165,7 +1165,7 @@ boolean identified, all_containers, want_dump;
 }
 
 /* should be called with either EXIT_SUCCESS or EXIT_FAILURE */
-void 
+void
 terminate (int status)
 {
 #ifdef MAC
@@ -1279,16 +1279,16 @@ boolean want_dump;
     return (boolean) (total_killed);
 }
 
-int 
+int
 dolistvanq (void)
 {
     if (!list_vanquished('y', FALSE))
         pline("No monsters have yet been killed.");
     return(0);
 }
-    
+
 /* number of monster species which have been genocided */
-int 
+int
 num_genocides (void)
 {
     int i, n = 0;

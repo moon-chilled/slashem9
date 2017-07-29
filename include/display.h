@@ -247,7 +247,7 @@
  *
  * corpse	One for each monster.  Count: NUMMONS
  *
- * ridden	Represents all monsters being ridden.  Count: NUMMONS 
+ * ridden	Represents all monsters being ridden.  Count: NUMMONS
  *
  * object	One for each object.  Count: NUM_OBJECTS
  *

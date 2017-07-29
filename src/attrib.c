@@ -261,7 +261,7 @@ int stone_luck(boolean parameter /* So I can't think up of a good name.  So sue 
 
 	/* STEPHEN WHITE'S NEW CODE */
 	if (uarmh && uarmh->otyp == FEDORA && !uarmh->cursed) bonchance += 2;
-	
+
 	return sgn(bonchance);
 }
 
@@ -401,7 +401,7 @@ static void exerper(void) {
 
 		if(Sick || Vomiting)     exercise(A_CON, FALSE);
 		if(Confusion || Hallucination)		exercise(A_WIS, FALSE);
-		if((Wounded_legs 
+		if((Wounded_legs
 #ifdef STEED
 		    && !u.usteed
 #endif
@@ -670,7 +670,7 @@ void adjabil(int oldlevel, int newlevel) {
 	    flags.warntype |= M2_UNDEAD;
 	else
 	    flags.warntype &= ~M2_UNDEAD;
-	
+
 	/* WAC -- adjust techniques */
 	adjtech(oldlevel, newlevel);
 }
@@ -709,13 +709,13 @@ int newhp(void) {
 	else if (ACURR(A_CON) == 17) conplus = 2;
 	else if (ACURR(A_CON) == 18) conplus = 3;
 	else conplus = 4;
-	
+
 	hp += conplus;
 	return (hp <= 0) ? 1 : hp;
 }
 
 
-/* STEPHEN WHITE'S NEW CODE */   
+/* STEPHEN WHITE'S NEW CODE */
 schar acurr(int x) {
 	int tmp = (u.abon.a[x] + u.atemp.a[x] + u.acurr.a[x]);
 
@@ -742,7 +742,7 @@ schar acurr(int x) {
 		if (tmp < 18 && (youmonst.data->mlet == S_NYMPH ||
 		    u.umonnum == PM_SUCCUBUS || u.umonnum == PM_INCUBUS))
 		    tmp = 18;
-		if (uarmh && uarmh->otyp == FEDORA) tmp += 1;        
+		if (uarmh && uarmh->otyp == FEDORA) tmp += 1;
 		return((tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp);
 	} else if (x == A_INT || x == A_WIS) {
 		/* yes, this may raise int/wis if player is sufficiently

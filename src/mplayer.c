@@ -332,7 +332,7 @@ boolean special;
 	}
 }
 
-void 
+void
 mplayer_talk (struct monst *mtmp)
 {
 	static const char *same_class_msg[3] = {

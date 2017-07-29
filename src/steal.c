@@ -25,14 +25,14 @@ struct obj *otmp;
 }
 
 #ifndef GOLDOBJ
-long 
+long
 somegold (void)
 {
 	return (long)( (u.ugold < 100) ? u.ugold :
 		(u.ugold > 10000) ? rnd(10000) : rnd((int) u.ugold) );
 }
 
-void 
+void
 stealgold (struct monst *mtmp)
 {
 	struct obj *gold = g_at(u.ux, u.uy);
@@ -62,7 +62,7 @@ stealgold (struct monst *mtmp)
 
 #else /* !GOLDOBJ */
 
-long 
+long
 somegold (long umoney)
 {
 	return (long)( (umoney < 100) ? umoney :
@@ -84,18 +84,18 @@ findgold (struct obj *chain)
         return chain;
 }
 
-/* 
+/*
 Steal gold coins only.  Leprechauns don't care for lesser coins.
 */
-void 
+void
 stealgold (struct monst *mtmp)
 {
 	struct obj *fgold = g_at(u.ux, u.uy);
 	struct obj *ygold;
 	long tmp;
 
-        /* skip lesser coins on the floor */        
-        while (fgold && fgold->otyp != GOLD_PIECE) fgold = fgold->nexthere; 
+        /* skip lesser coins on the floor */
+        while (fgold && fgold->otyp != GOLD_PIECE) fgold = fgold->nexthere;
 
         /* Do you have real gold? */
         ygold = findgold(invent);
@@ -139,7 +139,7 @@ stealarm()
 	    if(otmp->o_id == stealoid) {
 		for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 		    if(mtmp->m_id == stealmid) {
-			if(DEADMONSTER(mtmp)) impossible("stealarm(): dead monster stealing"); 
+			if(DEADMONSTER(mtmp)) impossible("stealarm(): dead monster stealing");
 			if(!dmgtype(mtmp->data, AD_SITM)) /* polymorphed */
 			    goto botm;
 			if(otmp->unpaid)
@@ -216,7 +216,7 @@ boolean unchain_ball;	/* whether to unpunish or just unwield */
  * Returns -1 if the monster died in the attempt
  * Avoid stealing the object stealoid
  */
-int 
+int
 steal (struct monst *mtmp, char *objnambuf)
 {
 	struct obj *otmp;
@@ -430,7 +430,7 @@ gotobj:
 
 
 /* Returns 1 if otmp is free'd, 0 otherwise. */
-int 
+int
 mpickobj (struct monst *mtmp, struct obj *otmp)
 {
     int freed_otmp;
@@ -468,7 +468,7 @@ mpickobj (struct monst *mtmp, struct obj *otmp)
 }
 
 
-void 
+void
 stealamulet (struct monst *mtmp)
 {
     struct obj *otmp = NULL;
@@ -530,7 +530,7 @@ boolean verbosely;
 	    if (obj->owornmask & W_WEP) setmnotwielded(mon, obj);
 #ifdef STEED
 	/* don't charge for an owned saddle on dead steed */
-	} else if (mon->mtame && (obj->owornmask & W_SADDLE) && 
+	} else if (mon->mtame && (obj->owornmask & W_SADDLE) &&
 		!obj->unpaid && costly_spot(omx, omy)) {
 	    obj->no_charge = 1;
 #endif
@@ -548,7 +548,7 @@ boolean verbosely;
 /* some monsters bypass the normal rules for moving between levels or
    even leaving the game entirely; when that happens, prevent them from
    taking the Amulet or invocation tools with them */
-void 
+void
 mdrop_special_objs (struct monst *mon)
 {
     struct obj *obj, *otmp;
@@ -618,7 +618,7 @@ boolean is_pet;		/* If true, pet should keep wielded/worn items */
 		mtmp->mgold = 0L;
 	}
 #endif
-	
+
 	if (show & cansee(omx, omy))
 		newsym(omx, omy);
 }

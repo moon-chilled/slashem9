@@ -312,8 +312,8 @@ extern struct permonst playermon, *uasmon;
 extern struct monst youmonst;	/* init'd and defined in decl.c */
 extern struct monst *mydogs, *migrating_mons;
 
-extern struct permonst upermonst;	/* init'd in decl.c, 
-					 * defined in polyself.c 
+extern struct permonst upermonst;	/* init'd in decl.c,
+					 * defined in polyself.c
 					 */
 
 extern struct mvitals {
@@ -478,19 +478,19 @@ struct autopickup_exception {
 };
 
 struct u_achieve {
-        Bitfield(get_bell,1);        /* You have obtained the bell of 
+        Bitfield(get_bell,1);        /* You have obtained the bell of
                                       * opening */
         Bitfield(get_candelabrum,1); /* You have obtained the candelabrum */
-        Bitfield(get_book,1);        /* You have obtained the book of 
+        Bitfield(get_book,1);        /* You have obtained the book of
                                       * the dead */
-        Bitfield(enter_gehennom,1);  /* Entered Gehennom (including the 
+        Bitfield(enter_gehennom,1);  /* Entered Gehennom (including the
                                       * Valley) by any means */
         Bitfield(perform_invocation,1); /* You have performed the invocation
                                          * ritual */
         Bitfield(get_amulet,1);      /* You have obtained the amulet
                                       * of Yendor */
         Bitfield(ascended,1);        /* You ascended to demigod[dess]hood.
-                                      * Not quite the same as 
+                                      * Not quite the same as
                                       * u.uevent.ascended. */
         Bitfield(get_luckstone,1);   /* You obtained the luckstone at the
                                       * end of the mines. */

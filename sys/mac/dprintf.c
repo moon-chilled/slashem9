@@ -31,7 +31,7 @@ int doit;
 			(WIN_MESSAGE != -1) && theWindows [WIN_MESSAGE].its_window) {
 			doit = DO_PLINE;
 		}
-		
+
 		if (doit) {
 			va_start (list, format);
 			vsprintf (&buffer [1], format, list);
@@ -40,7 +40,7 @@ int doit;
 			if (doit == DO_DEBUGSTR) {
 				buffer [0] = strlen (&buffer [1]);
 				DebugStr ((uchar *) buffer);
-			} else if (doit == DO_PLINE)		
+			} else if (doit == DO_PLINE)
 				pline ("%s", &buffer [1]);
 		}
 	}

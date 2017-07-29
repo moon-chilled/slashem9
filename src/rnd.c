@@ -12,7 +12,7 @@
 #endif
 
 
-int 
+int
 rn2 (		/* 0 <= rn2(x) < x */
     int x
 )
@@ -30,7 +30,7 @@ rn2 (		/* 0 <= rn2(x) < x */
 }
 
 
-int 
+int
 rnl (		/* 0 <= rnl(x) < x; sometimes subtracting Luck */
     int x	/* good luck approaches 0, bad luck approaches (x-1) */
 )
@@ -55,7 +55,7 @@ rnl (		/* 0 <= rnl(x) < x; sometimes subtracting Luck */
 }
 
 
-int 
+int
 rnd (		/* 1 <= rnd(x) <= x */
     int x
 )
@@ -73,7 +73,7 @@ rnd (		/* 1 <= rnd(x) <= x */
 }
 
 
-int 
+int
 d (		/* n <= d(n,x) <= (n*x) */
     int n,
     int x
@@ -92,7 +92,7 @@ d (		/* n <= d(n,x) <= (n*x) */
 }
 
 
-int 
+int
 rne (int x)
 {
 	int tmp, utmp;
@@ -112,7 +112,7 @@ rne (int x)
 	 */
 }
 
-int 
+int
 rnz (int i)
 {
 	long x = i;

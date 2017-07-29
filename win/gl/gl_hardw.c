@@ -72,7 +72,7 @@ static void copy_one_tile(struct TileSet *set, int is_text,
     const unsigned char *src = image_dat +
         (sy+dy) * s_stride + (sx+dx) * 4;
 
-    unsigned char *dst = tex_dat + 
+    unsigned char *dst = tex_dat +
         (ey+th+TILE_PAD-1-(dy+1)) * e_stride + (ex+(dx+1)) * 4;
 
     /* copy RGBA colors, handling alpha */
@@ -126,18 +126,18 @@ GLuint sdlgl_send_graphic_RGBA(unsigned char *data,
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-  glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, 
+  glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA,
                GL_UNSIGNED_BYTE, data);
-  
+
   return id;
 }
 
-/* 
+/*
  * Note: assumes image_dat is 4 bytes per pixel (RGBA)
  */
 static void create_tile_texture(struct TileSet *set, int is_text,
-    const unsigned char *image_dat, int image_w, int image_h, 
-    unsigned char *tex_dat, int num_w, int num_h, int n) 
+    const unsigned char *image_dat, int image_w, int image_h,
+    unsigned char *tex_dat, int num_w, int num_h, int n)
 {
   int dx, dy;
   int pack_total = set->pack_w * set->pack_h;
@@ -183,8 +183,8 @@ static void create_tile_texture(struct TileSet *set, int is_text,
 
   set->tex_ids[n] = id;
 }
- 
-static struct TileSet *hw_load_tileset(const char *filename, 
+
+static struct TileSet *hw_load_tileset(const char *filename,
     int tile_w, int tile_h, int is_text, int keep_rgba,
     int *across, int *down)
 {
@@ -198,7 +198,7 @@ static struct TileSet *hw_load_tileset(const char *filename,
 
   glEnable(GL_TEXTURE_2D);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  
+
   image_dat = sdlgl_load_png_file(filename, &image_w, &image_h);
 
   if (! image_dat)
@@ -226,14 +226,14 @@ static struct TileSet *hw_load_tileset(const char *filename,
   set->tile_num = num_h * num_w;
   set->tile_w = tile_w;
   set->tile_h = tile_h;
-  
+
   set->lap_w = (tile_h == 64) ? 16 : 0;
   set->lap_h = (tile_h == 64) ? 32 : 0;
   set->lap_skew = (tile_h == 64) ? 16 : 0;
 
   set->tex_size_w = sdlgl_tex_max;
   set->tex_size_h = sdlgl_tex_max;
- 
+
   /* tiles are packed into 256x256 GL textures */
   set->pack_w = set->tex_size_w / (tile_w + TILE_PAD);
   set->pack_h = set->tex_size_h / (tile_h + TILE_PAD);
@@ -267,7 +267,7 @@ static struct TileSet *hw_load_tileset(const char *filename,
   /* create textures & send to the GL */
   for (n=0; n < set->tex_num; n++)
   {
-    create_tile_texture(set, is_text, image_dat, image_w, image_h, 
+    create_tile_texture(set, is_text, image_dat, image_w, image_h,
         tex_dat, num_w, num_h, n);
   }
 
@@ -278,14 +278,14 @@ static struct TileSet *hw_load_tileset(const char *filename,
   glDisable(GL_TEXTURE_2D);
 
 #if 0  /* DEBUGGING */
-  sdlgl_warning("%s (%dx%d) loaded from %s\n", is_text ? "FONT" : 
+  sdlgl_warning("%s (%dx%d) loaded from %s\n", is_text ? "FONT" :
       "TILESET", set->tile_w, set->tile_h, filename);
 #endif
 
-  if (across) 
+  if (across)
     (*across) = num_w;
 
-  if (down) 
+  if (down)
     (*down) = num_h;
 
   return set;
@@ -316,7 +316,7 @@ static void hw_create_extra_graphics(void)
 {
   int x, y;
   unsigned char pet_dat[8 * 8 * 4];
-  
+
   assert(pet_mark_id == 0);
 
   glEnable(GL_TEXTURE_2D);
@@ -389,7 +389,7 @@ static void debug_jail(void)
     struct TileWindow *base;
 
     win = text_wins[sdlgl_map_win];
-    
+
     if (win && ((base = win->base)))
     {
       int jw = base->scr_w * sdlgl_jail_size / 200;
@@ -419,7 +419,7 @@ static void hw_blit_frame(void)
 
 /* ---------------------------------------------------------------- */
 
-  
+
 #define BG_STEP  32
 
 static void hw_set_rgb_color(rgbcol_t color, float trans)
@@ -433,12 +433,12 @@ static void hw_draw_background(int sx, int sy, int sw, int sh,
 {
   int x, y;
   int bx, by, bw, bh;
-  
+
   /* fill background color */
   hw_set_rgb_color(color, 1);
 
   glBegin(GL_QUADS);
-  
+
   /* break rectangle into 32x32 blocks, skipping any blocks that are
    * obscured by higher windows.  Note how we do this _inside_ the
    * glBegin/glEnd pair -- this is very important for speed.
@@ -468,7 +468,7 @@ static void hw_draw_background(int sx, int sy, int sw, int sh,
   glEnd();
 }
 
-static void hw_draw_extra_shape(struct TileWindow *win, 
+static void hw_draw_extra_shape(struct TileWindow *win,
     struct ExtraShape *shape)
 {
   int sx, sy, sw, sh;
@@ -479,7 +479,7 @@ static void hw_draw_extra_shape(struct TileWindow *win,
 
   sx = win->scr_x - win->pan_x + shape->x * sw + shape->y * win->scale_skew;
   sy = win->scr_y - win->pan_y + shape->y * sh;
-   
+
   /* trivial clipping */
   if (sx + sw <= win->scr_x || sx >= win->scr_x + win->scr_w)
     return;
@@ -494,7 +494,7 @@ static void hw_draw_extra_shape(struct TileWindow *win,
 
     case SHAPE_Heart:
     case SHAPE_Ridden:
-      /* 
+      /*
        * par1: 0 is normal, 1 puts it on the left.
        */
       sx += win->scale_full_w * (shape->par1 ? 1 : 3) / 4;
@@ -527,7 +527,7 @@ static void hw_draw_extra_shape(struct TileWindow *win,
       glTexCoord2f(0.99, 0.99);  glVertex2i(sx+size, sy+sh);
       glTexCoord2f(0.99, 0.01);  glVertex2i(sx+size, sy+sh-size);
       glEnd();
-      
+
       glDisable(GL_TEXTURE_2D);
       glDisable(GL_BLEND);
       break;
@@ -543,7 +543,7 @@ static void hw_draw_cursor(struct TileWindow *win)
   rgbcol_t col = win->curs_color;
 
   int sx, sy, sw, sh;
-  
+
   assert(x >= 0 && y >= 0 && w > 0);
 
   sw = win->scale_w;
@@ -551,7 +551,7 @@ static void hw_draw_cursor(struct TileWindow *win)
 
   sx = win->scr_x - win->pan_x + x * sw + y * win->scale_skew;
   sy = win->scr_y - win->pan_y + y * sh;
-   
+
   sw = sw * (w - 1) + win->scale_full_w;
   sh = win->scale_full_h;
 
@@ -588,14 +588,14 @@ static void hw_draw_border(struct TileWindow *win, rgbcol_t col)
 {
   int sx, sy, sw, sh;
   int skew;
-  
+
   sw = win->total_w * win->scale_w;
   sh = win->total_h * win->scale_h;
   skew = win->total_h * win->scale_skew;
 
   sx = win->scr_x - win->pan_x;
   sy = win->scr_y - win->pan_y;
-   
+
   hw_set_rgb_color(col, 1);
 
   glBegin(GL_LINE_LOOP);
@@ -617,7 +617,7 @@ static void hw_finish_tile_draw(void)
 }
 
 static void hw_draw_tile(struct TileWindow *win, int sx, int sy,
-    int sw, int sh, tileidx_t tile, tilecol_t tilecol, 
+    int sw, int sh, tileidx_t tile, tilecol_t tilecol,
     tileflags_t flags, short layer)
 {
   struct TileSet *set = win->set;
@@ -635,7 +635,7 @@ static void hw_draw_tile(struct TileWindow *win, int sx, int sy,
 
   assert(set);
   assert(tile < set->tile_num);
- 
+
   /* ignore spaces */
   if (win->is_text && TILE_2_CHAR(tile) == (unsigned char)' ')
     return;
@@ -656,15 +656,15 @@ static void hw_draw_tile(struct TileWindow *win, int sx, int sy,
   {
     float tmp = tx1; tx1 = tx2; tx2 = tmp;
   }
- 
+
   if (win->is_text)
     color = sdlgl_text_colors[tilecol & 0xFF];
   else
     color = RGB_MAKE(255, 255, 255);
 
   sdlgl_add_unit(set->tex_ids[til_idx], tx1, ty1, tx2, ty2,
-      sx, sy, sw, sh, layer, color, 
-      win->see_through ? RIP_ALPHA : 
+      sx, sy, sw, sh, layer, color,
+      win->see_through ? RIP_ALPHA :
       (flags & TILE_F_TRANS50) ? 0.5 : 1);
 }
 
@@ -677,7 +677,7 @@ static void hw_finish_fading(void)
 {
   /* not needed */
 }
- 
+
 static void hw_draw_fading(float fade_amount)
 {
   glEnable(GL_BLEND);
@@ -703,8 +703,8 @@ static void hw_set_pan(struct TileWindow *win, int x, int y)
   win->pan_x = x;
   win->pan_y = y;
 }
- 
-static void hw_set_new_pos(struct TileWindow *win, int x, int y, 
+
+static void hw_set_new_pos(struct TileWindow *win, int x, int y,
     int w, int h)
 {
   assert(w > 0 && h > 0);

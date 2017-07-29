@@ -32,9 +32,9 @@ extern char *tilename(int, int);
 #define MAX_X 640		/* 2 per byte, 4 bits per pixel */
 #define MAX_Y 960
 #else
-#define MAX_X (40 * 128)	
+#define MAX_X (40 * 128)
 #define MAX_Y (40 * 128) /* Arbitrarily large */
-#endif	
+#endif
 
 #define MAX_X_TILES 40
 #define MAX_Y_TILES 120
@@ -44,7 +44,7 @@ extern char *tilename(int, int);
 #define PACK		__attribute__((packed))
 #else
 #define PACK
-#endif 
+#endif
 
 static short leshort(short x)
 {
@@ -256,7 +256,7 @@ char *argv[];
 		bmaColors[i].rgbBlue = MainColorMap[CM_BLUE][i];
 		bmaColors[i].rgbReserved = 0;
 	}
-	
+
 
     build_bmfh(&bmp_head.bmfh);
     build_bmih(&bmp_head.bmih);
@@ -315,26 +315,26 @@ BITMAPINFOHEADER *pbmih;
 	pbmih->biBitCount = leshort(8);
 	cClrBits = 8;
 #endif
-	if (cClrBits == 1) 
-	        cClrBits = 1; 
-	else if (cClrBits <= 4) 
-		cClrBits = 4; 
-	else if (cClrBits <= 8) 
-		cClrBits = 8; 
-	else if (cClrBits <= 16) 
-		cClrBits = 16; 
-	else if (cClrBits <= 24) 
-		cClrBits = 24; 
-	else cClrBits = 32; 
+	if (cClrBits == 1)
+	        cClrBits = 1;
+	else if (cClrBits <= 4)
+		cClrBits = 4;
+	else if (cClrBits <= 8)
+		cClrBits = 8;
+	else if (cClrBits <= 16)
+		cClrBits = 16;
+	else if (cClrBits <= 24)
+		cClrBits = 24;
+	else cClrBits = 32;
 	pbmih->biCompression = lelong(BI_RGB);
 	pbmih->biXPelsPerMeter = lelong(0);
 	pbmih->biYPelsPerMeter = lelong(0);
 	if (tile_x == 32)
 	{
-		if (cClrBits < 24) 
+		if (cClrBits < 24)
         		pbmih->biClrUsed = lelong(1<<cClrBits);
 	} else {
-		pbmih->biClrUsed = lelong(rgbquad_count); 
+		pbmih->biClrUsed = lelong(rgbquad_count);
 	}
 
 	if (tile_x == 16) {

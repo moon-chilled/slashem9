@@ -15,7 +15,7 @@
 #define WINGL_INTERNAL
 #include "winGL.h"
 
- 
+
 #define SHRINK_FAST  0
 
 #define COLOR_CACHE_SIZE  512
@@ -26,7 +26,7 @@ struct ColorCacheEntry
 {
   /* index into sdlgl_palette[], or -1 if unused */
   short index;
-  
+
   /* color that was matched at the index */
   rgbcol_t color;
 };
@@ -175,7 +175,7 @@ void sdlgl_set_surface_colors(SDL_Surface *surf)
 
 static int fast_find_color(int r, int g, int b)
 {
-  rgbcol_t rgb = RGB_MAKE(r, g, b);  
+  rgbcol_t rgb = RGB_MAKE(r, g, b);
 
   int hash = COLOR_HASH(r, g, b) % COLOR_CACHE_SIZE;
 
@@ -220,7 +220,7 @@ static int fast_find_color(int r, int g, int b)
 
     c = best;
   }
- 
+
   color_cache[hash].index = c;
   color_cache[hash].color = rgb;
 
@@ -240,18 +240,18 @@ static GH_INLINE void setpixel(SDL_Surface *s, int x, int y, Uint32 c)
     case 1:
       *p = c;
       break;
-    
+
     case 2:
       *(Uint16 *)p = c;
       break;
-    
+
     case 3:
       if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
       {
         p[0] = (c >> 16) & 0xff;
         p[1] = (c >> 8)  & 0xff;
         p[2] = c & 0xff;
-      } 
+      }
       else
       {
         p[0] = c & 0xff;
@@ -259,11 +259,11 @@ static GH_INLINE void setpixel(SDL_Surface *s, int x, int y, Uint32 c)
         p[2] = (c >> 16) & 0xff;
       }
       break;
-    
+
     case 4:
       *(Uint32 *)p = c;
       break;
-    
+
     default:
       sdlgl_error("Bit depth not one of (8,16,24,32) (depth: %d)\n", bpp);
       break; /* NOT REACHED */
@@ -279,10 +279,10 @@ static GH_INLINE Uint32 getpixel(SDL_Surface *s, int x, int y)
   {
     case 1:
       return *p;
-    
+
     case 2:
       return *(Uint16 *)p;
-    
+
     case 3:
       if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
         return (p[0] << 16) | (p[1] << 8) | p[2];
@@ -291,7 +291,7 @@ static GH_INLINE Uint32 getpixel(SDL_Surface *s, int x, int y)
 
     case 4:
       return *(Uint32 *)p;
-      
+
     default:
       sdlgl_error("Bit depth not one of (8,16,24,32) (depth: %d)\n", bpp);
       return 0; /* NOT REACHED */
@@ -304,7 +304,7 @@ SDL_Surface *sdlgl_RGBA_to_truecolor(unsigned char *data,
   SDL_Surface *surf;
 
   Uint32 r, g, b, a;
- 
+
   if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
   {
     r = 0xFF000000;
@@ -319,7 +319,7 @@ SDL_Surface *sdlgl_RGBA_to_truecolor(unsigned char *data,
     b = 0x00FF0000;
     a = 0xFF000000;
   }
-  
+
   surf = SDL_CreateRGBSurfaceFrom(data, width, height, 32, 4 * width,
       r, g, b, a);
 
@@ -348,24 +348,24 @@ SDL_Surface *sdlgl_RGBA_to_palettised(unsigned char *data,
 
   sdlgl_set_surface_colors(surf);
   SDL_SetColorKey(surf, SDL_SRCCOLORKEY, TRANS_PIX);
-  
+
   if (SDL_MUSTLOCK(surf))
     SDL_LockSurface(surf);
- 
+
   for (y=0; y < height; y++)
   for (x=0; x < width;  x++)
   {
     unsigned char *src = data + (y * width * 4) + (x * 4);
 
-    int pix = (src[3] < 128) ? TRANS_PIX : 
+    int pix = (src[3] < 128) ? TRANS_PIX :
         fast_find_color(src[0], src[1], src[2]);
-     
+
     setpixel(surf, x, y, pix);
   }
 
   if (SDL_MUSTLOCK(surf))
     SDL_UnlockSurface(surf);
- 
+
   return surf;
 }
 
@@ -385,7 +385,7 @@ SDL_Surface *sdlgl_shrink_surface(SDL_Surface *src)
 
   sdlgl_set_surface_colors(dest);
   SDL_SetColorKey(dest, SDL_SRCCOLORKEY, TRANS_PIX);
-  
+
   assert((src->w % 2) == 0);
   assert((src->h % 2) == 0);
 
@@ -394,7 +394,7 @@ SDL_Surface *sdlgl_shrink_surface(SDL_Surface *src)
 
   if (SDL_MUSTLOCK(dest))
     SDL_LockSurface(dest);
- 
+
 #if SHRINK_FAST
   {
     for (y=0; y < src->h; y += 2)
@@ -411,7 +411,7 @@ SDL_Surface *sdlgl_shrink_surface(SDL_Surface *src)
       /* compute average of the four pixels */
 
       int sub;
-      
+
       Uint8 r, g, b;
       Uint32 c, r_tot=0, g_tot=0, b_tot=0, a_count=0;
 
@@ -458,7 +458,7 @@ SDL_Surface *sdlgl_shrink_surface(SDL_Surface *src)
 
   if (SDL_MUSTLOCK(dest))
     SDL_UnlockSurface(dest);
- 
+
   return dest;
 }
 
@@ -470,7 +470,7 @@ void sdlgl_sw_create_has_alpha(struct TileSet *set)
 
   if (surf->format->BytesPerPixel != 1)
     return;
-  
+
   set->has_alpha = (unsigned char *) alloc(set->tile_num);
   memset(set->has_alpha, 0, set->tile_num * sizeof(unsigned char));
 
@@ -484,7 +484,7 @@ void sdlgl_sw_create_has_alpha(struct TileSet *set)
 
     int dx, dy;
     int done = 0;
-    
+
     for (dy = 0; (dy < set->tile_h) && !done; dy++)
     for (dx = 0; (dx < set->tile_w) && !done; dx++)
     {
@@ -513,7 +513,7 @@ void sdlgl_create_font_cache(struct TileSet *set)
   cache->char_num = FONTCACHE_SIZE;
   cache->pack_w = FONTCACHE_PACK_W;
   cache->pack_h = (cache->char_num + cache->pack_w - 1) / cache->pack_w;
-  
+
   cache->char_surf = SDL_CreateRGBSurface(SDL_SWSURFACE,
       cache->pack_w * set->tile_w, cache->pack_h * set->tile_h,
       8, 0, 0, 0, 0);
@@ -532,7 +532,7 @@ void sdlgl_create_font_cache(struct TileSet *set)
 
   for (i=0; i < cache->char_num; i++)
     cache->what_cols[i] = TILECOL_UNUSED;
-  
+
   set->font_cache = cache;
 }
 
@@ -549,11 +549,11 @@ void sdlgl_free_font_cache(struct TileSet *set)
   set->font_cache = NULL;
 }
 
-void sdlgl_font_cache_lookup(struct TileSet *set, tileidx_t ch, 
+void sdlgl_font_cache_lookup(struct TileSet *set, tileidx_t ch,
     tilecol_t color, int *pos_x, int *pos_y)
 {
   struct FontCache *cache = set->font_cache;
-  
+
   int hash = FONTCACHE_HASH(ch,color) % cache->char_num;
 
   assert(hash >= 0);
@@ -562,7 +562,7 @@ void sdlgl_font_cache_lookup(struct TileSet *set, tileidx_t ch,
   (*pos_y) = hash / cache->pack_w;
 
   assert((*pos_y) < cache->pack_h);
-   
+
   if (cache->what_cols[hash] == color)
   {
     /* cache hit -- do nothing */
@@ -586,9 +586,9 @@ void sdlgl_font_cache_lookup(struct TileSet *set, tileidx_t ch,
 
     Uint32 c = SDL_MapRGB(cache->char_surf->format,
         GAMMA(RGB_RED(rgb)), GAMMA(RGB_GRN(rgb)), GAMMA(RGB_BLU(rgb)));
-    
+
     assert(src_y/th < set->pack_h);
-    
+
     if (SDL_MUSTLOCK(set->surf))
       SDL_LockSurface(set->surf);
 
@@ -599,7 +599,7 @@ void sdlgl_font_cache_lookup(struct TileSet *set, tileidx_t ch,
     for (x=0; x < tw; x++)
     {
       Uint32 pix = getpixel(set->surf, src_x + x, src_y + y);
-      
+
       if (pix != TRANS_PIX)
         pix = c;
 
@@ -643,7 +643,7 @@ struct DirtyMatrix *sdlgl_create_dirty_matrix(int pw, int ph)
   memset(mat->cells, 0 /* depth */, mat->cw * mat->ch);
 
   /* create the updating rectangles */
-  
+
   mat->max_rects = ((mat->cw + 1) / 2) * mat->ch;
   mat->updaters = (SDL_Rect *) alloc(mat->max_rects * sizeof(SDL_Rect));
 
@@ -693,7 +693,7 @@ void sdlgl_dirty_matrix_add(struct DirtyMatrix *mat, int x, int y,
 
   dx2 = (x + w - 1) / DIRTY_SIZE;
   dy2 = (y + h - 1) / DIRTY_SIZE;
-  
+
   for (y = dy1; y <= dy2; y++)
   for (x = dx1; x <= dx2; x++)
   {
@@ -753,7 +753,7 @@ int sdlgl_dirty_matrix_to_updaters(struct DirtyMatrix *mat)
 
     /* NOTE: Now 1-to-1, so it could read the matrix directly...
      */
-    if (sdlgl_dirty_matrix_test(mat, x, y, 
+    if (sdlgl_dirty_matrix_test(mat, x, y,
           DIRTY_SIZE, DIRTY_SIZE, CLEAN_CELL-1) == 0)
     {
       continue;
@@ -763,11 +763,11 @@ int sdlgl_dirty_matrix_to_updaters(struct DirtyMatrix *mat)
     for (;;)
     {
       int x2 = x + w * DIRTY_SIZE;
-      
+
       if (x2 >= mat->pw)
         break;
 
-      if (sdlgl_dirty_matrix_test(mat, x2, y, 
+      if (sdlgl_dirty_matrix_test(mat, x2, y,
             w * DIRTY_SIZE, DIRTY_SIZE, CLEAN_CELL-1) == 0)
       {
         break;
@@ -775,9 +775,9 @@ int sdlgl_dirty_matrix_to_updaters(struct DirtyMatrix *mat)
 
       w += 1;
     }
-    
+
     assert(num < mat->max_rects);
-    
+
     pix_w = w * DIRTY_SIZE;
     pix_h = 1 * DIRTY_SIZE;
 
@@ -803,7 +803,7 @@ int sdlgl_dirty_matrix_to_updaters(struct DirtyMatrix *mat)
 
 /*------------------------------------------------------------------------*/
 
-static GH_INLINE void low_level_blit(int sx, int sy, SDL_Surface *src, 
+static GH_INLINE void low_level_blit(int sx, int sy, SDL_Surface *src,
     int dx, int dy, int dw, int dh, Uint32 col,
     int px, int py, int pw, int ph)
 {
@@ -842,7 +842,7 @@ void sdlgl_dirty_matrix_blit(struct DirtyMatrix *mat, SDL_Surface *src,
    * surface.  When `src' is NULL, it fills with the given color,
    * otherwise we are blitting from the source surface.  Both cases
    * will limit drawing to areas marked as dirty.
-   * 
+   *
    * Algorithm:
    *
    * 1. Clip to matrix size.  Abort if result is empty.
@@ -853,7 +853,7 @@ void sdlgl_dirty_matrix_blit(struct DirtyMatrix *mat, SDL_Surface *src,
    * 3. Complex blit: iterate over dirty area.  For each dirty
    *    cell, set SDL's clipper and apply blit.
    */
- 
+
   int sx, sy;          /* source rect */
   int dx, dy, dw, dh;  /* dest rect */
 
@@ -876,7 +876,7 @@ void sdlgl_dirty_matrix_blit(struct DirtyMatrix *mat, SDL_Surface *src,
   {
     sx = sy = 0;  /* not needed */
   }
-  
+
   /* --- clipping --- */
 
   if (dx < 0)
@@ -918,7 +918,7 @@ void sdlgl_dirty_matrix_blit(struct DirtyMatrix *mat, SDL_Surface *src,
 
     dx2 = (dx + dw - 1) / DIRTY_SIZE;
     dy2 = (dy + dh - 1) / DIRTY_SIZE;
-    
+
     assert(0 <= dx1 && dx1 <= dx2 && dx2 < mat->cw);
     assert(0 <= dy1 && dy1 <= dy2 && dy2 < mat->ch);
 
@@ -962,7 +962,7 @@ void sdlgl_dirty_matrix_blit(struct DirtyMatrix *mat, SDL_Surface *src,
       for (;;)
       {
         int cx2 = cx + c_len;
-      
+
         if (cx2 >= mat->cw)
           break;
 
@@ -971,14 +971,14 @@ void sdlgl_dirty_matrix_blit(struct DirtyMatrix *mat, SDL_Surface *src,
 
         c_len++;
       }
-    
+
       clip.x = cx * DIRTY_SIZE;
       clip.y = cy * DIRTY_SIZE;
-      
+
       nw = c_len * DIRTY_SIZE;
       nh = DIRTY_SIZE;
 
-      /* compute intersection with old clip rectangle */ 
+      /* compute intersection with old clip rectangle */
 
       if (clip.x < old_clip.x)
       {
@@ -1003,7 +1003,7 @@ void sdlgl_dirty_matrix_blit(struct DirtyMatrix *mat, SDL_Surface *src,
 
       clip.w = nw;
       clip.h = nh;
-      
+
       SDL_SetClipRect(sdlgl_surf, &clip);
 
       low_level_blit(sx, sy, src, dx, dy, dw, dh, col, 0, 0, dw, dh);

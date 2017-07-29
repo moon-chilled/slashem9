@@ -81,7 +81,7 @@ int line_number = 1;
 #if defined(MAC_MPW) && !defined(FLEX_SCANNER) && !defined(FLEXHACK_SCANNER)
 #undef input
 #undef unput
-#define unput(c) { yytchar = (c); if (yytchar == 10) yylineno--; *yysptr++ = yytchar; }				
+#define unput(c) { yytchar = (c); if (yytchar == 10) yylineno--; *yysptr++ = yytchar; }
 # ifndef YYNEWLINE
 # define YYNEWLINE 10
 # endif

@@ -90,7 +90,7 @@ lookat(x, y, buf, monbuf)
 	/* if not polymorphed, show both the role and the race */
 	role[0] = 0;
 	race[0] = 0;
-	
+
 	if (!Upolyd) {
 	    sprintf(race, "%s ", urace.adj);
 	    sprintf(role, "%s ", urole.name);
@@ -707,7 +707,7 @@ do_look(quick)
 		break;	/* out of for loop*/
 	    }
 	}
-    
+
 	/* if we ignored venom and list turned out to be short, put it back */
 	if (skipped_venom && found < 2) {
 	    x_str = objexplain[VENOM_CLASS];
@@ -720,7 +720,7 @@ do_look(quick)
 	    }
 	}
 
-	/* handle optional boulder symbol as a special case */ 
+	/* handle optional boulder symbol as a special case */
 	if (iflags.bouldersym && sym == iflags.bouldersym) {
 	    if (!found) {
 		firstmatch = "boulder";
@@ -730,7 +730,7 @@ do_look(quick)
 		found += append_str(out_str, "boulder");
 	    }
 	}
-	
+
 	/*
 	 * If we are looking at the screen, follow multiple possibilities or
 	 * an ambiguous explanation by something more detailed.
@@ -771,7 +771,7 @@ do_look(quick)
 	    if (found == 1 && ans != LOOK_QUICK && ans != LOOK_ONCE &&
 			(ans == LOOK_VERBOSE || (flags.help && !quick))) {
 		char temp_buf[BUFSZ];
-		strcpy(temp_buf, level.flags.lethe 
+		strcpy(temp_buf, level.flags.lethe
 					&& !strcmp(firstmatch, "water")?
 				"lethe" : firstmatch);
 		checkfile(temp_buf, pm, FALSE, (boolean)(ans == LOOK_VERBOSE));
@@ -787,19 +787,19 @@ do_look(quick)
 }
 
 
-int 
+int
 dowhatis (void)
 {
 	return do_look(FALSE);
 }
 
-int 
+int
 doquickwhatis (void)
 {
 	return do_look(TRUE);
 }
 
-int 
+int
 doidtrap (void)
 {
 	struct trap *trap;
@@ -873,7 +873,7 @@ dowhatdoes_core (char q, char *cbuf)
 	return NULL;
 }
 
-int 
+int
 dowhatdoes (void)
 {
 	char bufr[BUFSZ];
@@ -977,7 +977,7 @@ help_menu(sel)
 	return FALSE;
 }
 
-int 
+int
 dohelp (void)
 {
 	int sel = 0;
@@ -1018,7 +1018,7 @@ dohelp (void)
 	return 0;
 }
 
-int 
+int
 dohistory (void)
 {
 	display_file_area(NH_HISTORY_AREA, NH_HISTORY, TRUE);

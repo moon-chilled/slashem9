@@ -16,7 +16,7 @@
 #  Set this equate to the folder containing all the Slash'EM source folders
 Top   		= Vance:SlashEM:SlashEM-OS9:slashem-cvs:slashem:
 
-#  Choose your target processor. There are bugs in the 68K version, so I 
+#  Choose your target processor. There are bugs in the 68K version, so I
 #  recommend you select 'PowerPC'
 Processor  = PowerPC
 #Processor	= 68K
@@ -46,7 +46,7 @@ Preserve   = {Top}:Preserve:					# Generated items for source distribution
 Results	   = {Top}:Dungeon{Processor}{Debug}:	# Where the game goes
 
 # Override the settings in "{Include}"config.h
-# NHConfig = -d PORT_LEVEL='¶".0¶"' 
+# NHConfig = -d PORT_LEVEL='¶".0¶"'
 
 # Type and creator - note that we use "PREF" for all non-save files
 # currently. Since we will integrate the data files into the game
@@ -74,7 +74,7 @@ DataFiles 	=	"{Results}"Guidebook		¶
 				"{Results}"Slash¶'EM¶ Defaults   ¶
 				"{Results}"README
 
-# The following files are generated, but included in the source distribution anyway				
+# The following files are generated, but included in the source distribution anyway
 Preserved	=	"{Preserve}"date.h 		¶
 				"{Preserve}"pm.h 		¶
 				"{Preserve}"onames.h 	¶
@@ -95,7 +95,7 @@ Macintosh Ä   	Setup				¶
 				{DataFiles} 		¶
 				Recover.lnk 		¶
 				SlashEM.lnk
-				
+
 Setup	Ä
 	If Not "`Exists -d "{Results}"`"
 		NewFolder "{Results}"
@@ -109,7 +109,7 @@ Setup	Ä
 	If Not "`Exists -d "{LibDir}"`"
 		NewFolder "{LibDir}"
 	End
-	
+
 COptions = {NHConfig}					¶
 		   -w 2 -w 3 -ansi relaxed -typecheck relaxed -align power
 
@@ -132,7 +132,7 @@ FileResources = ¶
 	"{LibDir}"oracles ¶
 	"{LibDir}"rumors ¶
 	Levels
-	
+
 #------------------- Slash'EM Sources -----------------
 
 SlashEMSrcs = ¶
@@ -287,7 +287,7 @@ DgnCompSrcs = 				¶
 "{ObjDir}"DgnComp.make	Ä	 "{Preserve}"dgn_lex.c "{Preserve}"dgn_yacc.c
 	CreateMake "{ObjDir}"DgnComp {DgnCompSrcs} -tool -powerpc -objdir "{ObjDir}" ¶
 		-i "{Preserve}" -i "{ObjDir}" -i {Include} -ppccoptions "{COptions}" {Debug} -depends
-	
+
 "{ObjDir}"DgnComp DgnComp.lnk Ä "{ObjDir}"DgnComp.make
 	BuildProgram "{ObjDir}"DgnComp
 
@@ -295,11 +295,11 @@ DgnCompSrcs = 				¶
 	{YACC} -d "{Util}"dgn_comp.y
 	Move -y "{YTabC}" "{Preserve}"dgn_yacc.c
 	Move -y "{YTabH}" "{Preserve}"dgn_comp.h
-	
+
 {Preserve}dgn_lex.c	Ä  {Util}dgn_comp.l
 	{LEX} {Util}dgn_comp.l
 	Move -y {LexYYC} {Preserve}dgn_lex.c
-	
+
 # -------- Build the special-level compiler, as an MPW tool ---------------
 
 LevCompSrcs= "{Src}"monst.c		¶
@@ -318,7 +318,7 @@ LevCompSrcs= "{Src}"monst.c		¶
 "{ObjDir}"LevComp.make	Ä	 "{Preserve}"lev_lex.c "{Preserve}"lev_yacc.c
 	CreateMake "{ObjDir}"LevComp {LevCompSrcs} -tool -powerpc -objdir "{ObjDir}" ¶
 		-i "{Preserve}" -i "{ObjDir}" -i {Include} -ppccoptions "{COptions}" {Debug} -depends
-	
+
 "{ObjDir}"LevComp LevComp.lnk Ä "{ObjDir}"LevComp.make
 	BuildProgram "{ObjDir}"LevComp
 
@@ -326,11 +326,11 @@ LevCompSrcs= "{Src}"monst.c		¶
 	{YACC} -d "{Util}"lev_comp.y
 	Move -y "{YTabH}" "{Preserve}"lev_comp.h
 	Move -y "{YTabC}" "{Preserve}"lev_yacc.c
-	
+
 "{Preserve}"lev_lex.c	Ä  {Util}lev_comp.l
 	{LEX} {Util}lev_comp.l
 	Move -y {LexYYC} {Preserve}lev_lex.c
-	
+
 # -------- Create list of actual levels ---------------
 
 "{LibDir}"Levels.r Ä Levels
@@ -339,7 +339,7 @@ LevCompSrcs= "{Src}"monst.c		¶
 	Echo "" > "{LibDir}"Levels.r
 	Set index 1200
 	For file in Å.lev
-		Echo "read 'File' ({index},¶"{file}¶") ¶"::lib:{file}¶";" >> "{LibDir}"Levels.r 
+		Echo "read 'File' ({index},¶"{file}¶") ¶"::lib:{file}¶";" >> "{LibDir}"Levels.r
 		Set index `Evaluate {index} + 1`
 	End
 	Echo "" >> "{LibDir}"Levels.list
@@ -375,7 +375,7 @@ MakeDefsSrcs= "{Src}"objects.c		¶
 	Directory "{Top}"
 	"{ObjDir}"MakeDefs -v
 	Directory "{Pwd}"
-	
+
 "{Preserve}"onames.h Ä	"{ObjDir}"MakeDefs
 	Set Pwd `Directory`
 	Directory "{Top}"
@@ -419,7 +419,7 @@ MakeDefsSrcs= "{Src}"objects.c		¶
 Levels Ä "{LibDir}"Levels.list "{MacDir}"Levels.make
 		Make -f "{MacDir}"Levels.make Levels -d Dat="{Dat}" -d ObjDir="{ObjDir}" -d LibDir="{LibDir}" > "{ObjDir}"Levels.makeout
 		"{ObjDir}"Levels.makeout
-		
+
 "{LibDir}"Data data Ä "{Dat}"Data.base "{ObjDir}"MakeDefs
 		Set Pwd `Directory`
 		Directory "{Top}"
@@ -441,18 +441,18 @@ Levels Ä "{LibDir}"Levels.list "{MacDir}"Levels.make
 		SetFile -t "{FileType}" -c "{SlashEMCreator}" "{LibDir}"Oracles
 		Directory "{Pwd}"
 
-"{Results}"Slash¶'EM¶ Defaults  Ä	"{MacDir}"NHDeflts 
+"{Results}"Slash¶'EM¶ Defaults  Ä	"{MacDir}"NHDeflts
 		Duplicate -y "{MacDir}"NHDeflts "{Results}"Slash¶'EM¶ Defaults
 		SetFile -c "ttxt" "{Results}"Slash¶'EM¶ Defaults
 
 "{Results}"Guidebook  Ä	"{Doc}"Guidebook.txt
 		Duplicate -y "{Doc}"Guidebook.txt "{Results}"Guidebook
 		SetFile -c "ttxt" -t "ttro" "{Results}"Guidebook
-		
+
 "{Results}"MacHelp  Ä	"{MacDir}"MacHelp
 		Duplicate -y "{MacDir}"MacHelp "{Results}"MacHelp
 		SetFile -c "ttxt" -t "ttro" "{Results}"MacHelp
-		
+
 "{Results}"README  Ä	"{MacDir}"README.txt
 		Duplicate -y "{MacDir}"README.txt "{Results}"README
 		SetFile -c "ttxt" -t "ttro" "{Results}"README
@@ -501,7 +501,7 @@ RecoverSrcs = "{MacDir}"MRecover.c
 RecoverRsrcs = ¶
 	"{MacDir}"MFiles.r ¶
 	"{MacDir}"MRecover.r
-	
+
 "{ObjDir}"Recover.make	Ä
 		CreateMake "{ObjDir}"Recover {RecoverSrcs} -{Processor} ¶
 			-i "{Preserve}" -i "{ObjDir}" -i {Include} ¶
@@ -529,11 +529,11 @@ RecoverRsrcs = ¶
 		Rez Types.r SysTypes.r {RecoverRsrcs} -o "{ObjDir}"Recover -c {RecoverCreator} ¶
 			-i "{MacDir}" -i "{ObjDir}"  -i "{Include}" -i "{Preserve}" -s "{Top}" -append
 		SetFile -a B "{ObjDir}"Recover
-		Move -y "{ObjDir}"Recover "{Results}"Recover 	
+		Move -y "{ObjDir}"Recover "{Results}"Recover
 
 #---------------- The Slash'EM application -------------------
 
-"{ObjDir}"SlashEM.make	Ä 
+"{ObjDir}"SlashEM.make	Ä
 		CreateMake "{ObjDir}"SlashEM {SlashEMSrcs} -{Processor} ¶
 			-i "{Preserve}" -i "{ObjDir}" -i {Include} ¶
 			-objdir "{ObjDir}" {Debug} -depends -c {SlashEMCreator} ¶
@@ -560,7 +560,7 @@ RecoverRsrcs = ¶
 		Rez Types.r SysTypes.r {SlashEMRsrcs} -o "{ObjDir}"SlashEM -c {SlashEMCreator} ¶
 			-i "{MacDir}" -i "{ObjDir}"  -i "{Include}" -i "{Preserve}" -s "{Top}" -append
 		SetFile -a B "{ObjDir}"SlashEM
-		Move -y "{ObjDir}"SlashEM "{Results}"Slash¶'EM 	
+		Move -y "{ObjDir}"SlashEM "{Results}"Slash¶'EM
 
 #---------------- Dependencies -------------------
 
@@ -589,7 +589,7 @@ Dependencies Ä	Setup					¶
 			StreamEdit "{file}" -d -e '/MAZE:[ ]*¶"(Å)¨1¶"/||/LEVEL:[ ]*¶"(Å)¨1¶"/ Change "    ¶"{LibDir}¶""¨1".lev ¶¶";Print;Exit' >> "{LibDir}"Levels.list
 		End
 		Echo "" >> "{LibDir}"Levels.list
-		
+
 #---------------- Clean -------------------
 
 Clean	Ä
@@ -636,4 +636,4 @@ Unpack	Ä	"{ObjDir}"NHrsrc.rsrc "{ObjDir}"NHsound.rsrc "{ObjDir}"MRecover.rsrc
 
 "{ObjDir}"MRecover.rsrc	Ä	"{MacDir}"MRecover.r
 		Rez Types.r SysTypes.r "{MacDir}"MRecover.r -o "{ObjDir}"MRecover.rsrc
-	
+

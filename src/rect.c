@@ -25,7 +25,7 @@ static int rect_cnt;
  * new level to be build...
  */
 
-void 
+void
 init_rect (void)
 {
 	rect_cnt = 1;
@@ -168,7 +168,7 @@ NhRect *r1, *r2;
 	for (i=rect_cnt-1; i>=0; i--)
 	    if (intersect(&rect[i], r2, &r))
 		split_rects(&rect[i], &r);
-	
+
 	if (r2->ly - old_r.ly-1 > (old_r.hy < ROWNO - 1 ? 2*YLIM : YLIM+1)+4) {
 		r = old_r;
 		r.hy = r2->ly - 2;

@@ -39,10 +39,10 @@ enum OptLineFlag
 {
   /* whether it is an option, otherwise comments (etc) */
   OFLG_Option = 0x0001,
-   
+
   /* the option is SDL/GL specific (otherwise standard) */
   OFLG_GL = 0x0002,
-   
+
   /* boolean option.  When true, the value string will be either "0"
    * or "1".
    */
@@ -55,7 +55,7 @@ enum OptLineFlag
    * "GL_OPTIONS" keyword.
    */
   OFLG_HadColon = 0x0040,
-  
+
   /* the option has been written to the config file */
   OFLG_Written = 0x0100
 };
@@ -79,7 +79,7 @@ static struct OptionLine *changed_option_list = NULL;
 
 
 static void add_opt(struct OptionLine **list,
-    struct OptionLine *pred, const char *name, const char *value, 
+    struct OptionLine *pred, const char *name, const char *value,
     int flags)
 {
   struct OptionLine *line = (struct OptionLine *)
@@ -123,10 +123,10 @@ static void free_opts(struct OptionLine **list)
 
     if (cur->name)
       free(cur->name);
-    
+
     if (cur->value)
       free(cur->value);
-    
+
     free(cur);
   }
 }
@@ -142,7 +142,7 @@ static struct OptionLine *find_changed_option(int flags, const char *name)
 
     if ((cur->flags & OFLG_GL) != (flags & OFLG_GL))
       continue;
-    
+
     /* !!! FIXME: should this be case insensitive ?? */
     if (strcmp(cur->name, name) == 0)
       return cur;
@@ -155,7 +155,7 @@ static struct OptionLine *find_changed_option(int flags, const char *name)
 
     if (! (name[0] == 'n' && name[1] == 'o' && letter(name[2])))
       continue;
-    
+
     if (strcmp(cur->name, name + 2) == 0)
       return cur;
   }
@@ -207,7 +207,7 @@ void bbb_parse_single_option(char *opts, int flags)
     add_opt(&config_line_list, NULL, opts, par, OFLG_Option | flags);
   }
 }
- 
+
 void bbb_parse_options(char *opts, int flags)
 {
   while (opts)
@@ -216,13 +216,13 @@ void bbb_parse_options(char *opts, int flags)
 
     if (par)
       *par++ = 0;
-  
+
     bbb_parse_single_option(opts, flags);
 
     opts = par;
   }
 }
- 
+
 static int bbb_parse_config_line(char *buf)
 {
   char *bufp, *altp;
@@ -262,18 +262,18 @@ static int bbb_parse_config_line(char *buf)
   }
 
   /* bad line ? */
-  if (!bufp) 
+  if (!bufp)
     return 0;
 
   /* skip whitespace between '=' and value */
   for (bufp++; isspace(*bufp); bufp++)
   { /* nothing here */ }
 
-  if (match_varname(buf, "OPTIONS", 4)) 
+  if (match_varname(buf, "OPTIONS", 4))
   {
     bbb_parse_options(bufp, flags);
     return 1;
-  } 
+  }
 
   if (match_varname(buf, "GL_OPTIONS", 10))
   {
@@ -334,7 +334,7 @@ static int merge_config_lines(void)
 
   struct OptionLine *cur;
   struct OptionLine *opt;
-  
+
   struct OptionLine *last_norm = NULL;
   struct OptionLine *last_gl   = NULL;
 
@@ -350,8 +350,8 @@ static int merge_config_lines(void)
     else
       last_norm = cur;
 
-    opt = find_changed_option(cur->flags, cur->name); 
-    
+    opt = find_changed_option(cur->flags, cur->name);
+
     if (! opt)
       continue;
 
@@ -364,11 +364,11 @@ static int merge_config_lines(void)
 
     cur->name  = strdup(opt->name);
     cur->value = strdup(opt->value);
-    
+
     if (opt->flags & OFLG_Written)
       sdlgl_warning("The %soption `%s' occurs twice in config file.\n",
           (opt->flags & OFLG_GL) ? "gl_" : "", opt->name);
-     
+
     opt->flags |= OFLG_Written;
   }
 
@@ -393,9 +393,9 @@ static int merge_config_lines(void)
       if (opt->flags & OFLG_Written)
         continue;
 
-      add_opt(&config_line_list, i ? last_gl : last_norm, 
+      add_opt(&config_line_list, i ? last_gl : last_norm,
           opt->name, opt->value, opt->flags);
-          
+
       opt->flags |= OFLG_Written;
     }
   }
@@ -427,7 +427,7 @@ static int write_config_lines(const char *conf_name)
    */
   within_line = 0;
   prev_flags = 0;
-  
+
   for (opt = config_line_list; opt; opt = opt->next)
   {
     if (! (opt->flags & OFLG_Option))
@@ -493,7 +493,7 @@ void sdlgl_update_config_file(const char *conf_name)
 
   free_opts(&config_line_list);
 }
- 
+
 
 /* ---------------------------------------------------------------- */
 
@@ -516,11 +516,11 @@ static void create_opt_titl(int what)
 
   sdlgl_store_str(opt_titl, 1, 0, str, 99, WHITE);
 
-  sdlgl_map_tilewin(opt_titl, 
+  sdlgl_map_tilewin(opt_titl,
       sdlgl_width - (width + 2) * opt_titl->scale_w,
-      sdlgl_height - opt_titl->scale_h, 
-      (width + 2) * opt_titl->scale_w, 
-      opt_titl->scale_h, 
+      sdlgl_height - opt_titl->scale_h,
+      (width + 2) * opt_titl->scale_w,
+      opt_titl->scale_h,
       DEPTH_OPT_TITL);
 }
 
@@ -528,7 +528,7 @@ static void create_opt_keys(void)
 {
   static int w = 50;
   static int h = 4;
-  
+
   static const char *key_lines[] =
   {
     "Use cursor keys or letters to select an option",
@@ -538,16 +538,16 @@ static void create_opt_keys(void)
   };
 
   int i;
-  
+
   opt_keys = sdlgl_new_tilewin(sdlgl_font_menu, w, h, 1,0);
   opt_keys->background = MENU_NONE_COL;  /* PREV_BACK_COL */
 
   for (i=0; i < h; i++)
     sdlgl_store_str(opt_keys, 1, i, key_lines[h-1-i], 99, L_GREY);
 
-  sdlgl_map_tilewin(opt_keys, 
-      sdlgl_width - w * opt_keys->scale_w, 0, 
-      w * opt_keys->scale_w, 
+  sdlgl_map_tilewin(opt_keys,
+      sdlgl_width - w * opt_keys->scale_w, 0,
+      w * opt_keys->scale_w,
       h * opt_keys->scale_h, DEPTH_OPT_KEYS);
 }
 
@@ -555,13 +555,13 @@ static void create_opt_main(void)
 {
   int w = 60;
   int h = 15;
-  
+
   opt_main = sdlgl_new_tilewin(sdlgl_font_menu, w, h, 1,0);
   opt_main->background = TEXT_BACK_COL;
 
-  sdlgl_map_tilewin(opt_main, 
-      sdlgl_width - w * opt_main->scale_w, opt_keys->scr_h + 20, 
-      w * opt_main->scale_w, h * opt_main->scale_h, 
+  sdlgl_map_tilewin(opt_main,
+      sdlgl_width - w * opt_main->scale_w, opt_keys->scr_h + 20,
+      w * opt_main->scale_w, h * opt_main->scale_h,
       DEPTH_OPT_MAIN);
 }
 
@@ -602,14 +602,14 @@ static void test_opt(int what)
   destroy_opt_titl();
   destroy_opt_keys();
   destroy_opt_main();
- 
+
   sdlgl_set_start_depth(0);
   sdlgl_flush();
 }
 
 static int handle_option_main_menu(void)
 {
-  static const char *items[] = 
+  static const char *items[] =
   {
     /* 1 */ "Nethack options.",
     /* 2 */ "SDL/GL options.",
@@ -648,13 +648,13 @@ static int handle_option_main_menu(void)
   return n;
 }
 
-/* called from src/options.c 
+/* called from src/options.c
  */
 int Sdlgl_doset()
 {
   int what;
   const char *conf_name = get_config_write_filename();
- 
+
   what = handle_option_main_menu();
 
   if (what == 0)
@@ -666,12 +666,12 @@ int Sdlgl_doset()
       /* !!! NetHack options */
       test_opt(1);
       break;
-    
+
     case 2:
       /* !!! SDL/GL options */
       test_opt(2);
       break;
-    
+
     case 3:
       /* !!! View miscellaneous */
       test_opt(3);
@@ -690,7 +690,7 @@ int Sdlgl_doset()
       sdlgl_update_config_file(conf_name);
 #endif
   }
-  
+
   free_opts(&changed_option_list);
   return 0;
 }

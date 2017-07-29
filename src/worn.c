@@ -51,7 +51,7 @@ const struct worn {
 /* KMH, intrinsic patch.
  * Updated to use the extrinsic and blocked fields.
  */
-void 
+void
 setworn (struct obj *obj, long mask)
 {
 	const struct worn *wp;
@@ -116,7 +116,7 @@ setworn (struct obj *obj, long mask)
 /* KMH, intrinsic patch.
  * Updated to use the extrinsic and blocked fields.
  */
-void 
+void
 setnotworn (struct obj *obj)
 {
 	const struct worn *wp;
@@ -142,7 +142,7 @@ setnotworn (struct obj *obj)
 	update_inventory();
 }
 
-void 
+void
 mon_set_minvis (struct monst *mon)
 {
 	mon->perminvis = 1;
@@ -153,7 +153,7 @@ mon_set_minvis (struct monst *mon)
 	}
 }
 
-void 
+void
 mon_adjust_speed (
     struct monst *mon,
     int adjust,	/* positive => increase speed, negative => decrease */
@@ -345,7 +345,7 @@ boolean on, silently;
 	newsym(mon->mx, mon->my);
 }
 
-int 
+int
 find_mac (struct monst *mon)
 {
 	struct obj *obj;
@@ -560,7 +560,7 @@ struct obj *obj;
 }
 
 /* all objects with their bypass bit set should now be reset to normal */
-void 
+void
 clear_bypasses (void)
 {
 	struct obj *otmp, *nobj;
@@ -600,7 +600,7 @@ clear_bypasses (void)
 	flags.bypasses = FALSE;
 }
 
-void 
+void
 bypass_obj (struct obj *obj)
 {
 	obj->bypass = 1;
@@ -772,7 +772,7 @@ boolean polyspot;
 /* bias a monster's preferences towards armor that has special benefits. */
 /* currently only does speed boots, but might be expanded if monsters get to
    use more armor abilities */
-static int 
+static int
 extra_pref (struct monst *mon, struct obj *obj)
 {
     if (obj) {
@@ -789,7 +789,7 @@ extra_pref (struct monst *mon, struct obj *obj)
  * 	 1 If the race/object combination is acceptable.
  *	-1 If the race/object combination is unacceptable.
  */
-int 
+int
 racial_exception (struct monst *mon, struct obj *obj)
 {
     const struct permonst *ptr = raceptr(mon);

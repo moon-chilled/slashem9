@@ -27,7 +27,7 @@ const char *breathwep[] = {
 };
 
 /* hero is hit by something other than a monster */
-int 
+int
 thitu (
     int tlev,
     int dam,
@@ -96,7 +96,7 @@ boolean ohit;
 int x,y;
 {
 	struct obj *mwep = NULL;
-	
+
 	int retvalu = 1;
 	int create;
 	struct monst *mtmp;
@@ -108,7 +108,7 @@ int x,y;
 /* WAC added Spoon throw code */
                     (obj->oartifact == ART_HOUCHOU) ||
 #ifdef FIREARMS
-		    /* WAC -- assume monsters don't throw without 
+		    /* WAC -- assume monsters don't throw without
 		    	using the right propellor */
                     (is_bullet(obj)) ||
 #endif
@@ -129,7 +129,7 @@ int x,y;
 			obj = NULL;
 		}
 	} else if (objects[obj->otyp].oc_dir & EXPLOSION) {
-	    	if (cansee(bhitpos.x,bhitpos.y)) 
+	    	if (cansee(bhitpos.x,bhitpos.y))
 	    		pline("%s explodes in a ball of fire!", Doname2(obj));
 	    	else You_hear("an explosion");
 		explode(bhitpos.x, bhitpos.y, -ZT_SPELL(ZT_FIRE), d(3,8),
@@ -140,10 +140,10 @@ int x,y;
 	/* D: Detonate crossbow bolts from Hellfire if they hit */
 	if (ohit && mwep && mwep->oartifact == ART_HELLFIRE
 		  && is_ammo(obj) && ammo_and_launcher(obj, mwep)) {
-	  
-		if (cansee(bhitpos.x,bhitpos.y)) 
+
+		if (cansee(bhitpos.x,bhitpos.y))
 			pline("%s explodes in a ball of fire!", Doname2(obj));
-		else 
+		else
 			You_hear("an explosion");
 
 		explode(bhitpos.x, bhitpos.y, -ZT_SPELL(ZT_FIRE),
@@ -302,7 +302,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 	return 0;
 }
 
-void 
+void
 m_throw (
     struct monst *mon,
     int x,
@@ -350,7 +350,7 @@ m_throw (
 
 	if (mon) mwep = MON_WEP(mon);
 	else mwep = NULL;
-	
+
 	/* D: Special launcher effects */
 	if (mwep && is_ammo(singleobj) && ammo_and_launcher(singleobj, mwep)) {
 	    if (mwep->oartifact == ART_PLAGUE && is_poisonable(singleobj))
@@ -532,7 +532,7 @@ m_throw (
 
 
 /* Remove an item from the monster's inventory and destroy it. */
-void 
+void
 m_useup (struct monst *mon, struct obj *obj)
 {
 	if (obj->quan > 1L) {
@@ -551,7 +551,7 @@ m_useup (struct monst *mon, struct obj *obj)
 
 
 /* monster attempts ranged weapon attack against player */
-void 
+void
 thrwmu (struct monst *mtmp)
 {
 	struct obj *otmp, *mwep;
@@ -708,7 +708,7 @@ thrwmu (struct monst *mtmp)
 }
 
 
-int 
+int
 spitmu (		/* monster spits substance at you */
     struct monst *mtmp,
     struct attack *mattk
@@ -749,7 +749,7 @@ spitmu (		/* monster spits substance at you */
 }
 
 
-int 
+int
 breamu (			/* monster breathes at you (ranged) */
     struct monst *mtmp,
     struct attack *mattk
@@ -810,7 +810,7 @@ xchar ax, ay;
 				breathwep[typ-1]);
 		/* Do the door first - monster is ON TOP so call direct */
 		zap_over_floor(mtmp->mx, mtmp->my, (int) (-20 - (typ-1)), NULL);
-		buzz((int) (-20 - (typ-1)), (int)mattk->damn, 
+		buzz((int) (-20 - (typ-1)), (int)mattk->damn,
 				mtmp->mx, mtmp->my, ax, ay);
 		nomul(0);
 		/* breath runs out sometimes. */

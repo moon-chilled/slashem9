@@ -1,5 +1,5 @@
 /*	SCCS Id: @(#)nhwin32.h	3.2	95/09/06	*/
-/* Copyright (c) NetHack MS Windows Porting Team 1995 */ 
+/* Copyright (c) NetHack MS Windows Porting Team 1995 */
 /* NetHack may be freely redistributed.  See license for details. */
 
 #ifndef WIN32_H

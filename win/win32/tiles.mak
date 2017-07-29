@@ -40,7 +40,7 @@ clean:
 			 ..\win\share\oth128.txt ..\util\tile2bmp.exe
 	   chdir ..\src
 	   ..\util\tile2bmp.exe tiles128.bmp ..\win\share\mon128.txt ..\win\share\obj128.txt \
-			 ..\win\share\oth128.txt 
+			 ..\win\share\oth128.txt
 	   chdir ..\build
 
 ..\win\win32\tiles.bmp: ..\src\tiles.bmp
@@ -81,10 +81,10 @@ clean:
 
 ..\win\share\mon32-t.txt:	..\util\txtmerge.exe ..\win\share\monmag.txt \
 		..\win\share\mon32mi.txt ..\win\share\mon32alg.txt \
-		..\win\share\mon32aw.txt 
+		..\win\share\mon32aw.txt
 	   chdir ..\win\share
-	   ..\..\util\txtmerge mon32-t.txt monmag.txt -b mon32mi.txt -bff00ff mon32alg.txt 
-	   ..\..\util\txtmerge mon32-t.txt mon32-t.txt -bff00ff mon32aw.txt 
+	   ..\..\util\txtmerge mon32-t.txt monmag.txt -b mon32mi.txt -bff00ff mon32alg.txt
+	   ..\..\util\txtmerge mon32-t.txt mon32-t.txt -bff00ff mon32aw.txt
 	   chdir ..\..\build
 
 ..\win\share\obj32-t.txt:	..\util\txtmerge.exe ..\win\share\objmag.txt \

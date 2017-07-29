@@ -19,7 +19,7 @@ initrack()
 
 
 /* add to track */
-void 
+void
 settrack (void)
 {
 	if(utcnt < UTSZ) utcnt++;

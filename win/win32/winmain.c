@@ -74,7 +74,7 @@ RECT rcClient;
 int inputstatus;
 char input_text[BUFSZ];
 int input_text_size;
-	     
+
 COLORREF colormap[] = {
 	RGB(  0,  0,  0),	/* BLACK      */
 	RGB(255,  0,  0),	/* RED        */
@@ -101,7 +101,7 @@ int WINAPI WinMain(HINSTANCE hInst,HINSTANCE hPreInst, LPSTR lpszCmdLine,
 
 	HaveConsole = 0;
 	wcNetHack.hInstance = hInst;
-	NHhPreInst = hPreInst; 
+	NHhPreInst = hPreInst;
 	NHnCmdShow = nCmdShow;
 	argc = getargs(lpszCmdLine);
 	/* temporary */
@@ -145,7 +145,7 @@ getargs(char *cmdline)
 
 	tmpbuf = alloc(strlen(cmdline)+1);
 	strcpy(tmpbuf,cmdline);
-	
+
 	xargv[argcount] = (char *)&tmpbuf[0];
 	++argcount;
 	maxchars = strlen(tmpbuf);
@@ -162,7 +162,7 @@ getargs(char *cmdline)
 				xargv[argcount] = (char *)&tmpbuf[count];
 				++argcount;
 			}
-		}		
+		}
 	}
 	return argcount;
 }
@@ -176,7 +176,7 @@ BOOL InitBaseWindow(void)
 		wcNetHack.hIcon        =LoadIcon(wcNetHack.hInstance,
 					"NETHACK_");
 		wcNetHack.lpszMenuName ="NHMenu";
-		wcNetHack.hbrBackground=GetStockObject(BLACK_BRUSH);	
+		wcNetHack.hbrBackground=GetStockObject(BLACK_BRUSH);
 		wcNetHack.style        =CS_HREDRAW|CS_VREDRAW;
 		wcNetHack.cbClsExtra   =0;
 		wcNetHack.cbWndExtra   =0;
@@ -208,11 +208,11 @@ BOOL InitTextWindow(void)
 	wcNHText.hCursor      =LoadCursor((HINSTANCE)0,IDC_ARROW);
 	wcNHText.hIcon        =LoadIcon(0,IDI_APPLICATION);
 	wcNHText.lpszMenuName =NULL;
-	wcNHText.hbrBackground=GetStockObject(BLACK_BRUSH);	
+	wcNHText.hbrBackground=GetStockObject(BLACK_BRUSH);
 	wcNHText.style        =CS_HREDRAW|CS_VREDRAW;
 	wcNHText.cbClsExtra   =0;
 	wcNHText.cbWndExtra   =0;
-	
+
 	status = RegisterClass(&wcNHText);
 	if (status == (ATOM)0) return 0;
 	else return 1;
@@ -228,11 +228,11 @@ BOOL InitPopupWindow(void)
 	wcNHPopup.hCursor      =LoadCursor((HINSTANCE)0,IDC_ARROW);
 	wcNHPopup.hIcon        =LoadIcon(0,IDI_APPLICATION);
 	wcNHPopup.lpszMenuName =NULL;
-	wcNHPopup.hbrBackground=GetStockObject(BLACK_BRUSH);	
+	wcNHPopup.hbrBackground=GetStockObject(BLACK_BRUSH);
 	wcNHPopup.style        =CS_HREDRAW|CS_VREDRAW;
 	wcNHPopup.cbClsExtra   =0;
 	wcNHPopup.cbWndExtra   =0;
-	
+
 	status = RegisterClass(&wcNHPopup);
 	if (status == (ATOM)0) return 0;
 	else return 1;
@@ -248,11 +248,11 @@ BOOL InitListboxWindow(void)
 	wcNHListbox.hCursor      =LoadCursor((HINSTANCE)0,IDC_ARROW);
 	wcNHListbox.hIcon        =LoadIcon(0,IDI_APPLICATION);
 	wcNHListbox.lpszMenuName =NULL;
-	wcNHListbox.hbrBackground=GetStockObject(WHITE_BRUSH);	
+	wcNHListbox.hbrBackground=GetStockObject(WHITE_BRUSH);
 	wcNHListbox.style        =CS_HREDRAW|CS_VREDRAW;
 	wcNHListbox.cbClsExtra   =0;
 	wcNHListbox.cbWndExtra   =0;
-	
+
 	status = RegisterClass(&wcNHListbox);
 	if (status == (ATOM)0) return 0;
 	else return 1;

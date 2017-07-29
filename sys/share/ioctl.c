@@ -29,7 +29,7 @@ struct termios termio;
 #   ifdef LINUX
 #    include <bsd/sgtty.h>
 #   else
-#    include <bsd/sgtty.h> 
+#    include <bsd/sgtty.h>
 #   endif
 #  endif
 # endif

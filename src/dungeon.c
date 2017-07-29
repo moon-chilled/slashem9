@@ -428,7 +428,7 @@ static void init_level(int dgn, int proto_index, struct proto_dungeon *pd) {
 	new_level->flags.maze_like = !!(tlevel->flags & MAZELIKE);
 	new_level->flags.rogue_like = !!(tlevel->flags & ROGUELIKE);
 	new_level->flags.align = ((tlevel->flags & D_ALIGN_MASK) >> 4);
-	if (!new_level->flags.align) 
+	if (!new_level->flags.align)
 	    new_level->flags.align =
 		((pd->tmpdungeon[dgn].flags & D_ALIGN_MASK) >> 4);
 
@@ -544,7 +544,7 @@ struct level_map {
 	{ "knox",	&knox_level },
 	{ "blkmar",     &blackmarket_level },
 	{ "medusa",	&medusa_level },
-	{ "mine_end",   &mineend_level },        
+	{ "mine_end",   &mineend_level },
 	{ "oracle",	&oracle_level },
 	{ "orcus",	&orcus_level },
 #ifdef REINCARNATION
@@ -688,7 +688,7 @@ void init_dungeons(void) {
 			br = add_branch(i, branch_num, &pd);
 			break;
 		    }
-		
+
 		/* Set the dungeon entry level from the first branch */
 		dungeons[i].entry_lev = br->end2.dlevel;
 
@@ -810,7 +810,7 @@ void init_dungeons(void) {
 	quest_dnum = dname_to_dnum("The Quest");
 	sokoban_dnum = dname_to_dnum("Sokoban");
 	mines_dnum = dname_to_dnum("The Gnomish Mines");
-	spiders_dnum = dname_to_dnum("The Spider Caves");        
+	spiders_dnum = dname_to_dnum("The Spider Caves");
 	tower_dnum = dname_to_dnum("Vlad's Tower");
 /*
 	blackmarket_dnum = dname_to_dnum("The Black Market");
@@ -841,7 +841,7 @@ xchar dunlev(d_level *lev) {
 
 // return the lowest level number for *this* dungeon
 xchar dunlevs_in_dungeon(d_level *lev) {
-	/* lowest level of Gnome Mines is gone for Gnomes */        
+	/* lowest level of Gnome Mines is gone for Gnomes */
 	if (Role_if(PM_GNOME) && lev->dnum == mines_dnum) {
 		return((dungeons[lev->dnum].num_dunlevs)-1);
 	} else return(dungeons[lev->dnum].num_dunlevs);

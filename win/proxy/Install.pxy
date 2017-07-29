@@ -27,7 +27,7 @@ To build:
 	   windowing ports in the same executable if you so desire.
 
 	2. [UNIX] Configure toplevel Makefile for proxy use:
-	
+
 	   Add $(CNF_SHARE_PROXYND) to the definition of CNF_SHARE_DATND.
 
 	3. Configure src/Makefile for proxy use:
@@ -93,7 +93,7 @@ To build:
 
 	      (you will need to alter the location of the server if it is
 	      installed in a different directory, or with a different name.)
-	
+
 	   c. Create a configuration file /etc/slashem/.slashemrc which is
 	      readable by user games. It is probably better if the file (and
 	      the /etc/slashem directory) is owned by root.

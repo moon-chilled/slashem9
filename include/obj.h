@@ -271,7 +271,7 @@ struct obj {
 				|| (otmp)->otyp == DWARVISH_ROUNDSHIELD)
 #define is_gnomish_armor(otmp)	(FALSE)
 
-				
+
 /* Eggs and other food */
 #define MAX_EGG_HATCH_TIME 200	/* longest an egg can remain unhatched */
 #define stale_egg(egg)	((monstermoves - (egg)->age) > (2*MAX_EGG_HATCH_TIME))

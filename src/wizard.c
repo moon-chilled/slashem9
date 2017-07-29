@@ -34,7 +34,7 @@ static const int nasties[] = {
 	PM_OLOG_HAI, PM_IRON_GOLEM, PM_OCHRE_JELLY,
         /* [Tom] added my "worst" monsters... heh heh */
         PM_RHAUMBUSUN, PM_BASILISK, PM_PYROLISK, PM_GREEN_SLIME, PM_DEMON_ORC,
-        PM_MASTODON, PM_ROT_WORM, PM_SNOW_ORC, PM_SILVER_DRAGON, 
+        PM_MASTODON, PM_ROT_WORM, PM_SNOW_ORC, PM_SILVER_DRAGON,
 	PM_DISENCHANTER
 	};
 
@@ -49,7 +49,7 @@ static const unsigned wizapp[] = {
 
 /* If you've found the Amulet, make the Wizard appear after some time */
 /* Also, give hints about portal locations, if amulet is worn/wielded -dlc */
-void 
+void
 amulet (void)
 {
 	struct monst *mtmp;
@@ -92,7 +92,7 @@ amulet (void)
 	    }
 }
 
-int 
+int
 mon_has_amulet (struct monst *mtmp)
 {
 	struct obj *otmp;
@@ -102,7 +102,7 @@ mon_has_amulet (struct monst *mtmp)
 	return(0);
 }
 
-int 
+int
 mon_has_special (struct monst *mtmp)
 {
 	struct obj *otmp;
@@ -288,7 +288,7 @@ strategy(mtmp)
 	return(dstrat);
 }
 
-int 
+int
 tactics (struct monst *mtmp)
 {
 	long strat = strategy(mtmp);
@@ -365,7 +365,7 @@ tactics (struct monst *mtmp)
 	return(0);
 }
 
-void 
+void
 aggravate (void)
 {
 	struct monst *mtmp;
@@ -380,7 +380,7 @@ aggravate (void)
 	    }
 }
 
-void 
+void
 clonewiz (void)
 {
 	struct monst *mtmp2;
@@ -399,7 +399,7 @@ clonewiz (void)
 }
 
 /* also used by newcham() */
-int 
+int
 pick_nasty (void)
 {
     /* To do?  Possibly should filter for appropriate forms when
@@ -409,7 +409,7 @@ pick_nasty (void)
 
 /* create some nasty monsters, aligned or neutral with the caster */
 /* a null caster defaults to a chaotic caster (e.g. the wizard) */
-int 
+int
 nasty (struct monst *mcast)
 {
     struct monst	*mtmp;
@@ -459,7 +459,7 @@ nasty (struct monst *mcast)
 }
 
 /*	Let's resurrect the wizard, for some unexpected fun.	*/
-void 
+void
 resurrect (void)
 {
 	struct monst *mtmp, **mmtmp;
@@ -509,7 +509,7 @@ resurrect (void)
 
 /*	Here, we make trouble for the poor shmuck who actually	*/
 /*	managed to do in the Wizard.				*/
-void 
+void
 intervene (void)
 {
 	int which = Is_astralevel(&u.uz) ? rnd(4) : rn2(6);
@@ -532,7 +532,7 @@ intervene (void)
 	}
 }
 
-void 
+void
 wizdead (void)
 {
 	flags.no_of_wizards--;
@@ -588,7 +588,7 @@ const char * const random_malediction[] = {
 };
 
 /* Insult or intimidate the player */
-void 
+void
 cuss (struct monst *mtmp)
 {
 	if (mtmp->iswiz) {

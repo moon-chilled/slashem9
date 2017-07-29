@@ -816,7 +816,7 @@ OBJECT(OBJ("torch", NULL),
 
 #ifdef LIGHTSABERS
 /* [WAC]
- * Lightsabers are -3 to hit 
+ * Lightsabers are -3 to hit
  * Double lightsaber is -4 to hit (only red)
  * DMG is increased: 10.5/15.5
  * green :9 + d3, 13 + d5
@@ -1218,8 +1218,8 @@ GEM("worthless piece of black glass",  "black",  76, 1, 0, 6, 5, GLASS, CLR_BLAC
 GEM("worthless piece of green glass", "green",   76, 1, 0, 6, 5, GLASS, CLR_GREEN),
 GEM("worthless piece of violet glass", "violet", 76, 1, 0, 6, 5, GLASS, CLR_MAGENTA),
 
-/* Placement note: there is a wishable subrange for   
- * "gray stones" in the o_ranges[] array in objnam.c  
+/* Placement note: there is a wishable subrange for
+ * "gray stones" in the o_ranges[] array in objnam.c
  * that is currently everything between luckstones and flint (inclusive).
  */
 ROCK("luckstone", "gray",	0, 10,  10, 60, 3, 3, 1, 10, 7, MINERAL, CLR_GRAY),

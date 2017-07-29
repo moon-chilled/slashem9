@@ -38,8 +38,8 @@ WINPROXYCFLAGS=@NETHACK_PROXY_CFLAGS@
 
 # files for a straight tty port using no native windowing system
 WINTTYSRC = $(srcdir)/../win/tty/getline.c $(srcdir)/../win/tty/termcap.c $(srcdir)/../win/tty/topl.c \
-	$(srcdir)/../win/tty/wintty.c 
-WINTTYOBJ = getline.o termcap.o topl.o wintty.o 
+	$(srcdir)/../win/tty/wintty.c
+WINTTYOBJ = getline.o termcap.o topl.o wintty.o
 
 # Files for curses interface
 WINCURSESSRC = $(srcdir)/../win/curses/cursmain.c $(srcdir)/../win/curses/curswins.c \

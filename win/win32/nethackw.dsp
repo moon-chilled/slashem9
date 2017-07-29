@@ -7,21 +7,21 @@
 CFG=NetHackW - Win32 GTK Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "NetHackW.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "NetHackW.mak" CFG="NetHackW - Win32 GTK Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "NetHackW - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "NetHackW - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE "NetHackW - Win32 GTK Debug" (based on "Win32 (x86) Application")
 !MESSAGE "NetHackW - Win32 GTK Release " (based on "Win32 (x86) Application")
-!MESSAGE 
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -170,7 +170,7 @@ PostBuild_Desc=Install exe
 PostBuild_Cmds=copy $(OutDir)\slashemw.exe ..\binary	 copy ..\dat\nhdat ..\binary	  copy ..\dat\license ..\binary	  if exist ..\src\tiles32.bmp copy ..\src\tiles32.bmp ..\binary	  if exist ..\doc\Guidebook.txt copy ..\doc\Guidebook.txt ..\binary\Guidebook.txt	 if exist ..\doc\slashem.txt copy ..\doc\slashem.txt ..\binary\SlashEM.txt	 copy ..\sys\winnt\defaults.nh ..\binary\defaults.nh
 # End Special Build Tool
 
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -1143,7 +1143,7 @@ SOURCE=..\win\proxy\dlbh.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1164,7 +1164,7 @@ SOURCE=..\win\proxy\getopt.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1185,7 +1185,7 @@ SOURCE=..\win\proxy\glyphmap.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1206,7 +1206,7 @@ SOURCE=..\win\gtk\gtk.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1227,7 +1227,7 @@ SOURCE=..\win\gtk\gtkext.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1248,7 +1248,7 @@ SOURCE=..\win\gtk\gtkextcmd.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1269,7 +1269,7 @@ SOURCE=..\win\gtk\gtkgetlin.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1290,7 +1290,7 @@ SOURCE=..\win\gtk\gtkhackrc.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1311,7 +1311,7 @@ SOURCE=..\win\gtk\gtkint.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1332,7 +1332,7 @@ SOURCE=..\win\gtk\gtkmap.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1353,7 +1353,7 @@ SOURCE=..\win\gtk\gtkmenu.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1374,7 +1374,7 @@ SOURCE=..\win\gtk\gtkmessage.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1395,7 +1395,7 @@ SOURCE=..\win\gtk\gtkmisc.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1412,7 +1412,7 @@ SOURCE=..\win\gtk\gtkprefs.c
 
 !ELSEIF  "$(CFG)" == "NetHackW - Win32 GTK Release "
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1433,7 +1433,7 @@ SOURCE=..\win\gtk\gtkstatus.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1454,7 +1454,7 @@ SOURCE=..\win\gtk\gtktile.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1475,7 +1475,7 @@ SOURCE=..\win\gtk\gtkyn.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1496,7 +1496,7 @@ SOURCE=..\win\proxy\mapid.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1517,7 +1517,7 @@ SOURCE=..\win\proxy\riputil.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1538,7 +1538,7 @@ SOURCE=..\include\winGTK.h
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # Begin Source File
@@ -1559,7 +1559,7 @@ SOURCE=..\win\gtk\xshmmap.c
 
 # PROP BASE Exclude_From_Build 1
 
-!ENDIF 
+!ENDIF
 
 # End Source File
 # End Group

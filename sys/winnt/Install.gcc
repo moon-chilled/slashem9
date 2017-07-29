@@ -21,8 +21,8 @@ You will need
   o A copy of MinGW 1.0 or later (2.0 or later recommended).
     You can download MinGW at http://www.mingw.org/
   o You may find it useful to obtain copies of lex (flex) and yacc (bison,
-    or byacc).  While not strictly necessary to compile Slash'EM, they are 
-    required should you desire to make any changes to the level and dungeon 
+    or byacc).  While not strictly necessary to compile Slash'EM, they are
+    required should you desire to make any changes to the level and dungeon
     compilers.
   o If you are running an early version of Windows 95 then you may need to
     get a copy of msvcrt.dll (which normally lives in c:\windows\system).

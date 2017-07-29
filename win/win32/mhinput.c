@@ -9,7 +9,7 @@
 
 #define NH_INPUT_BUFFER_SIZE  64
 
-/* as it stands right now we need only one slot 
+/* as it stands right now we need only one slot
    since events are processed almost the same time as
    they occur but I like large round numbers */
 
@@ -44,7 +44,7 @@ void mswin_input_push(PMSNHEvent event)
 	if( !nhi_init_input ) mswin_nh_input_init();
 
 	new_write_pos = (nhi_write_pos+1) % NH_INPUT_BUFFER_SIZE;
-	
+
 	if(new_write_pos!=nhi_read_pos) {
 		memcpy(nhi_input_buffer+nhi_write_pos, event, sizeof(*event));
 		nhi_write_pos = new_write_pos;

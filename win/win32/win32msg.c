@@ -3,7 +3,7 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 /*
- * The routines in this file build on the initial MS Windows NetHack 
+ * The routines in this file build on the initial MS Windows NetHack
  * groundwork done by Bill Dyer.
  *
  * This file contains all of the Win32 Window Procedures.
@@ -20,7 +20,7 @@
 #include <sys\stat.h>
 #include "win32api.h"
 #include "nhwin32.h"
-	
+
 #ifdef DEBUG_FULL
 static char debugbuf[256];
 #endif
@@ -48,12 +48,12 @@ LONG WINAPI BaseWndProc(HWND hWnd,UINT messg,UINT wParam,LONG lParam)
 	     BaseUnits = DefCharHeight;
 
 	     GetClientRect(hWnd, &rect);
-	     rect.top += GetSystemMetrics(SM_CYMENU) + 
+	     rect.top += GetSystemMetrics(SM_CYMENU) +
 			 (GetSystemMetrics(SM_CYFRAME) * 2) +
 			 GetSystemMetrics(SM_CYSIZE);
 	     rect.left += GetSystemMetrics(SM_CXFRAME) * 2;
 	     rect.right = rect.left + (COLNO * DefCharWidth);
-   	     rect.bottom = rect.top + ((5 + ROWNO + 2) * BaseUnits); 
+   	     rect.bottom = rect.top + ((5 + ROWNO + 2) * BaseUnits);
 	     (void) AdjustWindowRect(&rect,WS_OVERLAPPEDWINDOW, TRUE);
 	     BaseWidth = rect.right - rect.left + 1;
 	     BaseHeight = rect.bottom - rect.top + 1;
@@ -173,7 +173,7 @@ LONG WINAPI TextWndProc(HWND hWnd,UINT messg,UINT wParam,LONG lParam)
 		    SetBkColor(hdc,wins[idChild]->BackGroundColor);
 		    colcount = wins[idChild]->widest;
 		    for (row = srow; row <= srow + rowcount; ++row) {
-			for (col = scol; col <= scol + colcount; ++col) { 
+			for (col = scol; col <= scol + colcount; ++col) {
 		    		offset = (row * wins[idChild]->maxcols) + col;
 		    		pch = wins[idChild]->data + offset;
 		    		pcolor = wins[idChild]->color + offset;
@@ -192,7 +192,7 @@ LONG WINAPI TextWndProc(HWND hWnd,UINT messg,UINT wParam,LONG lParam)
 		    SetBkColor(hdc,wins[idChild]->BackGroundColor);
 		    colcount = wins[idChild]->maxcols;
 		    for (row = srow; row <= srow + rowcount; ++row) {
-			for (col = scol; col <= scol + colcount; ++col) { 
+			for (col = scol; col <= scol + colcount; ++col) {
 		    		offset = (row * wins[idChild]->maxcols) + col;
 		    		pch = wins[idChild]->data + offset;
 		    		pcolor = wins[idChild]->color + offset;
@@ -254,7 +254,7 @@ LONG WINAPI TextWndProc(HWND hWnd,UINT messg,UINT wParam,LONG lParam)
 		case SB_LINEUP:
 			break;
 	    }
-	    break;		
+	    break;
 	  case WM_HSCROLL:
 	  default:
 	    return(DefWindowProc(hWnd,messg,wParam,lParam));
@@ -458,7 +458,7 @@ BOOL WINAPI PlayerSelectProc(HWND hDlg, UINT messg, UINT wParam, LONG lParam)
 					i = rn2((int)strlen(pl_classes));
 					pl_character[0] = pl_classes[i];
 				} else	{
-					pl_character[0] = 
+					pl_character[0] =
 					   pl_classes[nCurrentChar-IDD_ARCH];
 				}
 				EndDialog(hDlg,TRUE);
@@ -522,7 +522,7 @@ LPARAM lParam;
 	idChild = GetWindowLong(hwndChild, GWL_ID);
 	rcParent = (LPRECT) lParam;
 
-	switch(idChild) {	
+	switch(idChild) {
 	   case NHW_MESSAGE:
 			MoveWindow(hwndChild,
 				   MessageX, MessageY,

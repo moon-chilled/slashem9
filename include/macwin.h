@@ -106,12 +106,12 @@ typedef struct NhWindow {
 	short			char_width;
 	short			row_height;
 	short			ascent_height;
-	
+
 	short			x_size;
 	short			y_size;
 	short			x_curs;
 	short			y_curs;
-	
+
 	short		last_more_lin; /* Used by message window */
 	short		save_lin;		/* Used by message window */
 
@@ -168,7 +168,7 @@ extern void showerror(char *,const char *);
 extern Boolean itworked(short);
 extern void mustwork(short);
 extern void attemptingto(char *);
-/* appear to be unused 
+/* appear to be unused
 extern void comment(char *,long);
 extern void pushattemptingto(char *);
 extern void popattempt(void);

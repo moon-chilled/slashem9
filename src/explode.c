@@ -169,9 +169,9 @@ static void do_explode(int,int,ExplodeRegion *,int,int,char,int,int,boolean);
  * Mega spells:
  *
  * src         nature          olet        expl    Comment
- * Your mega   FIRE            0           FIERY   
- * Your mega   COLD            0           FROSTY  
- * Your mega   MAGIC_MISSLE    0           MAGICAL 
+ * Your mega   FIRE            0           FIERY
+ * Your mega   COLD            0           FROSTY
+ * Your mega   MAGIC_MISSLE    0           MAGICAL
  *
  * Notes:
  *	Nature is encoded as (abs(type) % 10) and src is determined using the
@@ -215,7 +215,7 @@ int type; /* the same as in zap.c */
 int dam;
 char olet;
 int expltype;
-int dest; /* 0 = normal, 1 = silent, 2 = silent/remote */	
+int dest; /* 0 = normal, 1 = silent, 2 = silent/remote */
 boolean yours; /* is it your fault (for killing monsters) */
 {
 	int i, k, damu = dam;
@@ -232,7 +232,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 	boolean silent = FALSE, remote = FALSE;
 	xchar xi, yi;
 
-	if (dest > 0) silent = TRUE;	
+	if (dest > 0) silent = TRUE;
 	if (dest == 2) remote = TRUE;
 
 	if (olet == WAND_CLASS)		/* retributive strike */
@@ -299,7 +299,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 		yi = area->locations[i].y;
 		if (xi == u.ux && yi == u.uy) {
 		    switch(adtyp) {
-			case AD_PHYS:                        
+			case AD_PHYS:
 				break;
 			case AD_MAGM:
 				explmask = !!Antimagic;
@@ -337,7 +337,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 #endif
 		if (mtmp) {
 		    switch(adtyp) {
-			case AD_PHYS:                        
+			case AD_PHYS:
 				break;
 			case AD_MAGM:
 				explmask |= resists_magm(mtmp);
@@ -380,7 +380,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 
 	/* Not visible if remote */
 	if (remote) visible = FALSE;
-	
+
 	if (visible) {
 #ifdef ALLEG_FX
 	    if (iflags.usealleg) {
@@ -542,10 +542,10 @@ boolean yours; /* is it your fault (for killing monsters) */
 #endif
 
 	/* Do your injury last */
-	
+
 	/* You are not hurt if this is remote */
 	if (remote) uhurt = FALSE;
-	
+
 	if (uhurt) {
 		/* [ALI] Give message if it's a weapon (grenade) exploding */
 		if ((type >= 0 || adtyp == AD_PHYS || olet == WEAPON_CLASS) &&
@@ -574,7 +574,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 		    else
 			u.uhp -= damu;
 		    flags.botl = 1;
-#ifdef SHOW_DMG                
+#ifdef SHOW_DMG
 		    if (flags.showdmg) pline("[%d pts.]", damu);
 #endif
 		}
@@ -651,7 +651,7 @@ struct scatter_chain {
  */
 
 /* returns number of scattered objects */
-long 
+long
 scatter (
     int sx,
     int sy,				/* location of objects to scatter */
@@ -818,7 +818,7 @@ scatter (
  *
  * For now, just perform a "regular" explosion.
  */
-void 
+void
 splatter_burning_oil (int x, int y)
 {
     explode(x, y, ZT_SPELL(ZT_FIRE), d(4,4), BURNING_OIL, EXPL_FIERY);
@@ -1019,7 +1019,7 @@ int dest;
     int ox, oy;
     ExplodeRegion *fiery_area, *gas_area, *dig_area;
     struct trap *trap;
-    
+
     fiery_area = create_explode_region();
     gas_area = create_explode_region();
     dig_area = create_explode_region();
@@ -1064,10 +1064,10 @@ struct obj *obj;
 boolean yours;
 {
 	if (is_grenade(obj)) {
-		attach_bomb_blow_timeout(obj, 
-			    (obj->cursed ? rn2(5) + 2 : obj->blessed ? 4 : 
+		attach_bomb_blow_timeout(obj,
+			    (obj->cursed ? rn2(5) + 2 : obj->blessed ? 4 :
 			    	rn2(2) + 3)
-			     , yours);			
+			     , yours);
 	}
 	/* Otherwise, do nothing */
 }

@@ -129,7 +129,7 @@ unsigned long get_feature_notice_ver (char *str) {
 			if (j == 2) break;
 		} else if (index("0123456789", *str) != 0) {
 			str++;
-		} else 
+		} else
 			return 0L;
 	}
 	if (j != 2) return 0L;

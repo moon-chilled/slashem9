@@ -234,8 +234,8 @@ int x1, y1, x2, y2;
 }
 
 /*
- * Wall cleanup.  This selects an appropriate function to sort out the 
- * dungeon walls.                                                    
+ * Wall cleanup.  This selects an appropriate function to sort out the
+ * dungeon walls.
  */
 void
 wallification(x1, y1, x2, y2, initial)
@@ -573,7 +573,7 @@ fixup_special()
     num_lregions = 0;
 }
 
-void 
+void
 makemaz (const char *s)
 {
 	int x,y;
@@ -730,7 +730,7 @@ makemaz (const char *s)
  * the program.  This iterative version uses the minimum amount of stack
  * that is totally safe.
  */
-void 
+void
 walkfrom (int x, int y)
 {
 #define CELLS (ROWNO * COLNO) / 4		/* a maze cell is 4 squares */
@@ -769,7 +769,7 @@ walkfrom (int x, int y)
 }
 #else
 
-void 
+void
 walkfrom (int x, int y)
 {
 	int q,a,dir;
@@ -835,7 +835,7 @@ mazexy(cc)	/* find random point in generated corridors,
 	return;
 }
 
-void 
+void
 bound_digging (void)
 /* put a non-diggable boundary around the initial portion of a level map.
  * assumes that no level will initially put things beyond the isok() range.
@@ -964,7 +964,7 @@ static void set_wportal(void);
 static void mk_bubble(int,int,int);
 static void mv_bubble(struct bubble *,int,int,boolean);
 
-void 
+void
 movebubbles (void)
 {
 	static boolean up;

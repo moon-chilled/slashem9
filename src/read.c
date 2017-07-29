@@ -44,7 +44,7 @@ static void maybe_tame(struct monst *,struct obj *);
 
 static void set_lit(int,int,void *);
 
-int 
+int
 doread (void)
 {
 	struct obj *scroll;
@@ -251,7 +251,7 @@ doread (void)
 			docall(scroll);
 		}
 		if (spell_skilltype(scroll->otyp) != P_NONE) {
-			use_skill(spell_skilltype(scroll->otyp), 
+			use_skill(spell_skilltype(scroll->otyp),
 				(scroll->blessed ? 2 : 1));
 		}
 		if(scroll->otyp != SCR_BLANK_PAPER &&
@@ -265,7 +265,7 @@ doread (void)
 	return(1);
 }
 
-static void 
+static void
 stripspe (struct obj *obj)
 {
 	if (obj->blessed) pline(nothing_happens);
@@ -279,14 +279,14 @@ stripspe (struct obj *obj)
 	}
 }
 
-static void 
+static void
 p_glow1 (struct obj *otmp)
 {
 	Your("%s %s briefly.", xname(otmp),
 	     otense(otmp, Blind ? "vibrate" : "glow"));
 }
 
-static void 
+static void
 p_glow2 (struct obj *otmp, const char *color)
 {
 	Your("%s %s%s%s for a moment.",
@@ -322,7 +322,7 @@ struct obj *obj;
  * recharge an object; curse_bless is -1 if the recharging implement
  * was cursed, +1 if blessed, 0 otherwise.
  */
-void 
+void
 recharge (struct obj *obj, int curse_bless)
 {
 	int n;
@@ -387,7 +387,7 @@ recharge (struct obj *obj, int curse_bless)
 	    	pline(nothing_happens);
 		return;
 	    }
-   
+
 	    /*
 	     * Recharging might cause spellbooks to crumble.
 	     *	 v = number of previous recharges
@@ -617,7 +617,7 @@ recharge (struct obj *obj, int curse_bless)
 
 
 /* Forget known information about this object class. */
-static void 
+static void
 forget_single_object (int obj_id)
 {
 	objects[obj_id].oc_name_known = 0;
@@ -634,7 +634,7 @@ forget_single_object (int obj_id)
 
 #if 0	/* here if anyone wants it.... */
 /* Forget everything known about a particular object class. */
-static void 
+static void
 forget_objclass (int oclass)
 {
 	int i;
@@ -647,7 +647,7 @@ forget_objclass (int oclass)
 
 
 /* randomize the given list of numbers  0 <= i < count */
-static void 
+static void
 randomize (int *indices, int count)
 {
 	int i, iswap, temp;
@@ -662,7 +662,7 @@ randomize (int *indices, int count)
 
 
 /* Forget % of known objects. */
-void 
+void
 forget_objects (int percent)
 {
 	int i, count;
@@ -689,7 +689,7 @@ forget_objects (int percent)
 
 
 /* Forget some or all of map (depends on parameters). */
-void 
+void
 forget_map (int howmuch)
 {
 	int zx, zy;
@@ -708,7 +708,7 @@ forget_map (int howmuch)
 }
 
 /* Forget all traps on the level. */
-void 
+void
 forget_traps (void)
 {
 	struct trap *trap;
@@ -723,7 +723,7 @@ forget_traps (void)
  * Forget given % of all levels that the hero has visited and not forgotten,
  * except this one.
  */
-void 
+void
 forget_levels (int percent)
 {
 	int i, count;
@@ -754,7 +754,7 @@ forget_levels (int percent)
 		else
 		    indices[count++] = i;
 	    }
-	
+
 	if (percent > 100) percent = 100;
 
 	randomize(indices, count);
@@ -779,7 +779,7 @@ forget_levels (int percent)
  *	howmuch & ALL_MAP	= forget whole map
  *	howmuch & ALL_SPELLS	= forget all spells
  */
-void 
+void
 forget (int howmuch)
 {
 
@@ -809,7 +809,7 @@ forget (int howmuch)
 }
 
 /* monster is hit by scroll of taming's effect */
-static void 
+static void
 maybe_tame (struct monst *mtmp, struct obj *sobj)
 {
 	if (sobj->cursed || Is_blackmarket(&u.uz)) {
@@ -822,7 +822,7 @@ maybe_tame (struct monst *mtmp, struct obj *sobj)
 	}
 }
 
-int 
+int
 seffects (struct obj *sobj)
 {
 	int cval;
@@ -901,7 +901,7 @@ seffects (struct obj *sobj)
 
 		/* KMH -- catch underflow */
 		s = sobj->cursed ? -otmp->spe : otmp->spe;
-		
+
 		if (s > (special_armor ? 5 : 3) && rn2(s)) {
 		Your("%s violently %s%s%s for a while, then %s.",
 		     xname(otmp),
@@ -1114,7 +1114,7 @@ seffects (struct obj *sobj)
 				if (obj->oclass == WEAPON_CLASS) {
 				    /* mergeable weapon test covers ammo,
 				       missiles, spears, daggers & knives */
-				    if (!objects[obj->otyp].oc_merge) 
+				    if (!objects[obj->otyp].oc_merge)
 					wornmask = 0L;
 				} else if (obj->oclass == GEM_CLASS) {
 				    /* possibly ought to check whether
@@ -1150,12 +1150,12 @@ seffects (struct obj *sobj)
 	     * monsters are not visible
 	     */
 	    break;
-	case SPE_SUMMON_UNDEAD:        
+	case SPE_SUMMON_UNDEAD:
 	    {
 		int cnt = 1, oldmulti = multi;
                 struct monst *mtmp;
 		multi = 0;
-  
+
 		if(!rn2(73) && !sobj->blessed) cnt += rnd(4);
 		if(confused || sobj->cursed) cnt += 12;
 		while(cnt--) {
@@ -1444,7 +1444,7 @@ seffects (struct obj *sobj)
 	    /* TODO: handle steeds */
 	    if (
 #ifdef REINCARNATION
-		!Is_rogue_level(&u.uz) && 
+		!Is_rogue_level(&u.uz) &&
 #endif
 	    	 (!In_endgame(&u.uz) || Is_earthlevel(&u.uz))) {
 	    	int x, y;
@@ -1591,7 +1591,7 @@ seffects (struct obj *sobj)
 }
 
 #if 0
-static void 
+static void
 wand_explode (struct obj *obj)
 {
     obj->in_use = TRUE;	/* in case losehp() is fatal */
@@ -1715,7 +1715,7 @@ do_it:
 	vision_full_recalc = 1;	/* delayed vision recalculation */
 }
 
-static void 
+static void
 do_class_genocide (void)
 {
 /*WAC adding windowstuff*/
@@ -1746,7 +1746,7 @@ do_class_genocide (void)
 		    /*WAC adding "help" for those who use graphical displays*/
                     if (buf[0]=='?'){
                         tmpwin = create_nhwindow(NHW_MENU);
-                        start_menu(tmpwin);           
+                        start_menu(tmpwin);
                         any.a_void = 0;         /* zero out all bits */
                         for (i = 1; i < (MAXMCLASSES - MISCMCLASSES); i++) {
                            any.a_int = i;        /* must be non-zero */
@@ -1898,7 +1898,7 @@ do_class_genocide (void)
 #define REALLY 1
 #define PLAYER 2
 #define ONTHRONE 4
-void 
+void
 do_genocide (int how)
 /* 0 = no genocide; create monsters (cursed scroll) */
 /* 1 = normal genocide */
@@ -2046,7 +2046,7 @@ do_genocide (int how)
 	}
 }
 
-void 
+void
 punish (struct obj *sobj)
 {
 	/* KMH -- Punishment is still okay when you are riding */
@@ -2077,7 +2077,7 @@ punish (struct obj *sobj)
 	}
 }
 
-void 
+void
 unpunish (void)
 {	    /* remove the ball and chain */
 	struct obj *savechain = uchain;

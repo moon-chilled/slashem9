@@ -46,9 +46,9 @@ const char *name;
 			 *
 			 * Pixel E from a source image
 			 *
-			 *       B 
+			 *       B
 			 *     D E F
-			 *       H 
+			 *       H
 			 *
 			 * is magnified to a set of 4 destination pixels
 			 *
@@ -72,7 +72,7 @@ const char *name;
 			pixD = ( (i == 0) ? pixE : pixels[j][i-1]);
 			pixF = ( (i == (tile_x - 1)) ? pixE : pixels[j][i+1]);
 			pixH = ( (j == (tile_y - 1)) ? pixE : pixels[j+1][i]);
-			
+
 			bigpixels[2 * j][2 * i] = ((pixel_equal(pixD,pixB) && !pixel_equal(pixB,pixF) && !pixel_equal(pixD,pixH)) ? pixD : pixE);
 			bigpixels[2 * j][2 * i + 1] = ((pixel_equal(pixB,pixF) && !pixel_equal(pixB,pixD) && !pixel_equal(pixF,pixH)) ? pixF : pixE);
 			bigpixels[2 * j + 1][2 * i] = ((pixel_equal(pixD,pixH) && !pixel_equal(pixD,pixB) && !pixel_equal(pixH,pixF)) ? pixD : pixE);
@@ -105,7 +105,7 @@ char *argv[];
 
 	if (argc > 1)
 	  file_prefix = argv[1];
-	
+
 	while (filenum < 3) {
 		tilecount_per_file = 0;
 		filename[0]='\0';

@@ -7,19 +7,19 @@
 CFG=dlb_main - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "dlb_main.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "dlb_main.mak" CFG="dlb_main - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "dlb_main - Win32 Release" (based on "Win32 (x86) Console Application")
 !MESSAGE "dlb_main - Win32 Debug" (based on "Win32 (x86) Console Application")
-!MESSAGE 
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -87,7 +87,7 @@ PostBuild_Desc=Packaging via dlb
 PostBuild_Cmds=echo chdir ..\dat	 chdir ..\dat	 chdir	  echo data >dlb.lst	  echo oracles >>dlb.lst	  if exist options echo options >>dlb.lst	  if exist ttyoptions echo ttyoptions >>dlb.lst	  if exist guioptions echo guioptions >>dlb.lst	  if NOT exist porthelp copy ..\sys\winnt\porthelp porthelp	  if exist porthelp echo porthelp >>dlb.lst	  echo rumors >>dlb.lst	  echo help >>dlb.lst	  echo hh >>dlb.lst	  echo cmdhelp >>dlb.lst	  echo history >>dlb.lst	  echo opthelp >>dlb.lst	  echo wizhelp >>dlb.lst	  echo license >>dlb.lst	  ..\util\dlb_main.exe cIf dlb.lst nhshare	  echo quest.dat >dlb2.lst	  echo dungeon >>dlb2.lst	  for %%N in (*.lev) do echo %%N >>dlb2.lst	  ..\util\dlb_main.exe cIf dlb2.lst nhushare	 echo chdir ..\build	 chdir ..\build	 echo if NOT exist ..\binary\*.* mkdir ..\binary	 if NOT exist ..\binary\*.* mkdir ..\binary
 # End Special Build Tool
 
-!ENDIF 
+!ENDIF
 
 # Begin Target
 

@@ -166,7 +166,7 @@ void moveloop (void) {
 #endif
 
 		    if (u.ublesscnt)  u.ublesscnt--;
-		    
+
 		    if(flags.time && !flags.run)
 			flags.botl = 1;
 
@@ -249,11 +249,11 @@ void moveloop (void) {
 			}
 		    }
 
-		    
+
 		    /* KMH -- OK to regenerate if you don't move */
 		    if ((u.uen < u.uenmax) && (Energy_regeneration ||
 				((wtcap < MOD_ENCUMBER || !flags.mv) &&
-				(!(moves%((MAXULEV + 15 - u.ulevel) *                                    
+				(!(moves%((MAXULEV + 15 - u.ulevel) *
 				(Role_if(PM_WIZARD) ? 3 : 4) / 6)))))) {
 			u.uen += rn1((int)(ACURR(A_WIS) + ACURR(A_INT)) / 15 + 1,1);
 #ifdef WIZ_PATCH_DEBUG
@@ -373,7 +373,7 @@ void moveloop (void) {
                 flags.botl = 1;
         }
 #endif
-  
+
 	if(flags.botl || flags.botlx) bot();
 
 	flags.move = 1;
@@ -628,7 +628,7 @@ void welcome(boolean new_game /* false => restoring an old game */ ) {
 	  (currentgend && urole.name.f) ? urole.name.f : urole.name.m);
     else pline("%s %s, the%s %s %s, welcome back to %s!",
 	  Hello(NULL), plname, buf, urace.adj,
-	  (currentgend && urole.name.f) ? urole.name.f : urole.name.m, 
+	  (currentgend && urole.name.f) ? urole.name.f : urole.name.m,
 	  DEF_GAME_NAME);
 }
 
@@ -636,7 +636,7 @@ void welcome(boolean new_game /* false => restoring an old game */ ) {
 static void do_positionbar(void) {
 	static char pbar[COLNO];
 	char *p;
-	
+
 	p = pbar;
 	/* up stairway */
 	if (upstair.sx &&
@@ -724,7 +724,7 @@ time_t get_realtime(void) {
         curtime -= realtime_data.restoretime;
         curtime += realtime_data.realtime;
     }
- 
+
     return curtime;
 }
 

@@ -57,7 +57,7 @@ int explcolors[] = {
 #endif
 
 /*ARGSUSED*/
-void 
+void
 mapglyph (int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int y)
 {
 	int offset;

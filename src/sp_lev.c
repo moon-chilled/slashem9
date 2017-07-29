@@ -851,7 +851,7 @@ struct mkroom	*croom;
 	    if (flags.female && Role_if(PM_ELF) /*&& !u.uelf_drow*/ && m->id == PM_EARENDIL)
 		m->id = PM_ELWING;
 #endif
-	    /* in the Gnome Mines, make the gnomes & dwarves into            
+	    /* in the Gnome Mines, make the gnomes & dwarves into
 	       orcs, ogres, & zombies (because gnomes & dwarves are friendly...
 	       the mines would be hella easy otherwise) */
 		if (In_mines(&u.uz) && (
@@ -1144,7 +1144,7 @@ struct mkroom	*croom;
         if(otmp->otyp == LUCKSTONE && Is_mineend_level(&u.uz)) {
                 otmp->record_achieve_special = 1;
         } else if((otmp->otyp == AMULET_OF_REFLECTION ||
-                   otmp->otyp == BAG_OF_HOLDING) && 
+                   otmp->otyp == BAG_OF_HOLDING) &&
                   Is_sokoend_level(&u.uz)) {
                 otmp->record_achieve_special = 1;
         }
@@ -1212,7 +1212,7 @@ create_altar(a, croom)
 	schar		sproom,x,y;
 	aligntyp	amask;
 	boolean		croom_is_temple = TRUE;
-	int oldtyp; 
+	int oldtyp;
 
 	x = a->x; y = a->y;
 
@@ -2397,7 +2397,7 @@ dlb *fd;
 	}
 
 	/* random level region registers */
-	Fread((void *) &n, 1, sizeof(n), fd);	
+	Fread((void *) &n, 1, sizeof(n), fd);
 	if (n) {
 	    int tmpn = n;
 	    while(n--) {

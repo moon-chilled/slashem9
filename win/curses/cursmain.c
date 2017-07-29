@@ -70,7 +70,7 @@ struct window_procs curses_procs = {
    the inventory window. */
 static int inv_update = 0;
 
-/*  
+/*
 init_nhwindows(int* argcp, char** argv)
                 -- Initialize the windows used by NetHack.  This can also
                    create the standard windows listed at the top, but does
@@ -237,7 +237,7 @@ curses_resume_nhwindows()
     curses_refresh_nethack_windows();
 }
 
-/*  Create a window of type "type" which can be 
+/*  Create a window of type "type" which can be
         NHW_MESSAGE     (top line)
         NHW_STATUS      (bottom lines)
         NHW_MAP         (main dungeon)
@@ -301,7 +301,7 @@ curses_display_nhwindow(winid wid, boolean block)
 }
 
 
-/* Destroy will dismiss the window if the window has not 
+/* Destroy will dismiss the window if the window has not
  * already been dismissed.
 */
 void
@@ -625,8 +625,8 @@ int nh_poskey(int *x, int *y, int *mod)
                    a position in the MAP window is returned in x, y and mod.
                    mod may be one of
 
-                        CLICK_1         -- mouse click type 1 
-                        CLICK_2         -- mouse click type 2 
+                        CLICK_1         -- mouse click type 1
+                        CLICK_2         -- mouse click type 2
 
                    The different click types can map to whatever the
                    hardware supports.  If no mouse is supported, this
@@ -781,7 +781,7 @@ preference_update(preference)
                    port of that change.  If your window-port is capable of
                    dynamically adjusting to the change then it should do so.
                    Your window-port will only be notified of a particular
-                   change if it indicated that it wants to be by setting the 
+                   change if it indicated that it wants to be by setting the
                    corresponding bit in the wincap mask.
 */
 void

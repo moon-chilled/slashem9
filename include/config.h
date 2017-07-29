@@ -26,9 +26,9 @@
   			 * if you get compiler errors, don't define this. */
   			/* Hint: if you're not developing code, don't define
   			   ULTRIX_PROTO. */
-  
+
 #include "config1.h"	/* should auto-detect MAC and WIN32 */
-  
+
 /* Windowing systems...
  * Define all of those you want supported in your binary.
  * Some combinations make no sense.  See the installation document.

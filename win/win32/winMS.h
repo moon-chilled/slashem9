@@ -100,7 +100,7 @@ void mswin_putstr_ex(winid wid, int attr, const char *text, int);
 void mswin_display_file(const char *filename,boolean must_exist);
 void mswin_start_menu(winid wid);
 void mswin_add_menu(winid wid, int glyph, const anything * identifier,
-		char accelerator, char group_accel, int attr, 
+		char accelerator, char group_accel, int attr,
 		const char *str, boolean presel);
 void mswin_end_menu(winid wid, const char *prompt);
 int  mswin_select_menu(winid wid, int how, menu_item **selected);
@@ -134,7 +134,7 @@ winid mswin_winid_from_type(int type);
 winid mswin_winid_from_handle(HWND hWnd);
 void mswin_window_mark_dead(winid wid);
 void bail(const char *mesg);
-void nhapply_image_transparent( 
+void nhapply_image_transparent(
 	HDC hDC, int x, int y, int width, int height,
 	HDC sourceDC, int s_x, int s_y, int s_width, int s_height,
 	COLORREF cTransparent

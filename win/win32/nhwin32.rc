@@ -109,7 +109,7 @@ STYLE WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_VISIBLE
 {
 	PUSHBUTTON "EXIT", IDM_EXIT, 8, 82, 38, 16,
 		   WS_CHILD | WS_VISIBLE | WS_TABSTOP
-	LISTBOX IDD_LB1, 66, 5, 63, 33, LBS_NOTIFY | 
+	LISTBOX IDD_LB1, 66, 5, 63, 33, LBS_NOTIFY |
 		   WS_VISIBLE | WS_BORDER | WS_VSCROLL | WS_TABSTOP
 
 }
@@ -127,10 +127,10 @@ BEGIN
     LTEXT           COPYRIGHT_BANNER_C,
                     IDD_ABOUT4, 7, 43, 223, 8
     CTEXT           "NetHack 3.2 for Windows", 105, 8, 63, 214, 8
-    CTEXT           "Initial MS Windows port by Bill Dyer 1992", IDD_ABOUT5, 8, 78, 
+    CTEXT           "Initial MS Windows port by Bill Dyer 1992", IDD_ABOUT5, 8, 78,
                     215, 8
     CTEXT           "WIN32 port by Michael Allison 1995", IDD_ABOUT6, 8, 94, 212, 8
-    CTEXT           "Windows NT port by Michael Allison 1993", IDD_ABOUT7, 8, 86, 
+    CTEXT           "Windows NT port by Michael Allison 1993", IDD_ABOUT7, 8, 86,
                     211, 8
     PUSHBUTTON      "OK", IDOK, 95, 110, 40, 14
     CONTROL         "", IDD_ABOUT8, "Static", SS_BLACKFRAME, 101, 8, 37, 17

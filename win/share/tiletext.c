@@ -214,7 +214,7 @@ char name[BUFSZ];
 	if (fscanf(txtfile, "# %s %d (%[^)])", ttype, number, name) <= 0) {
 		return FALSE;
 	}
-	
+
 	/* look for non-whitespace at each stage */
 	if (fscanf(txtfile, "%1s", c) < 0) {
 		fprintf(stderr, "unexpected EOF\n");
@@ -273,7 +273,7 @@ pixel (*pixels)[MAX_TILE_X];
 
 	if (!read_txttile_info(txtfile, pixels, ttype, &i, buf))
 		return FALSE;
-	
+
 	ph = strcmp(ttype, "placeholder") == 0;
 
 	if (!ph && strcmp(ttype,"tile") != 0)
@@ -390,7 +390,7 @@ merge_colormap()
 			MainColorMap[CM_GREEN][j] == ColorMap[CM_GREEN][i] &&
 			MainColorMap[CM_BLUE][j] == ColorMap[CM_BLUE][i])
 			    break;
-		    
+
 		    /* [AJA] make sure that we DO NOT convert any
 		     *       colors into the transparency color.
 		     */
@@ -401,7 +401,7 @@ merge_colormap()
 		    }
 
 #ifdef FUZZ
-		    if ((fuzz == -1) || 
+		    if ((fuzz == -1) ||
 		    	((fuzz >= MAX3(
 		    		ABS(MainColorMap[CM_RED][j] - ColorMap[CM_RED][i]),
 		    		ABS(MainColorMap[CM_GREEN][j] - ColorMap[CM_GREEN][i]),
@@ -479,7 +479,7 @@ FILE *txtfile;
 		fprintf(stderr, "no tiles in file\n");
 		return FALSE;
 	}
-	
+
 	if (fscanf(txtfile, "%1s", c) < 0) {
 		fprintf(stderr, "unexpected EOF\n");
 		return FALSE;
@@ -572,7 +572,7 @@ const char *type;
 		type = "w+";
 #endif
 		write_mode = TRUE;
-		
+
 	} else {
 		fprintf(stderr, "bad mode (%s) for fopen_text_file\n", type);
 		return FALSE;

@@ -4,7 +4,7 @@
 /*                                                                  */
 /*
  * ntsound.c - Windows NT NetHack sound support
- *                                                  
+ *
  *Edit History:
  *     Initial Creation                              93/12/11
  *

@@ -18,7 +18,7 @@ static void mvault_tele(struct monst *);
  *
  * Returns: -1: Inaccessible, 0: Good pos, 1: Temporally inacessible
  */
-static int 
+static int
 badpos (int x, int y, struct monst *mtmp, unsigned gpflags)
 {
 	int is_badpos = 0, pool;
@@ -485,7 +485,7 @@ int x, y;
     return TRUE;
 }
 
-void 
+void
 wiz_debug_cmd (void) /* in this case, run wpathto on arbitary monster & goal */
 {
     struct permonst *ptr;
@@ -761,7 +761,7 @@ boolean force_it;
 	return TRUE;
 }
 
-void 
+void
 tele (void)
 {
 	coord cc;
@@ -831,7 +831,7 @@ tele (void)
 	(void) safe_teleds(FALSE);
 }
 
-int 
+int
 dotele (void)
 {
 	struct trap *trap;
@@ -938,7 +938,7 @@ dotele (void)
 	return(1);
 }
 
-void 
+void
 level_tele (void)
 {
 	int newlev;
@@ -1217,7 +1217,7 @@ level_tele (void)
 	if (u.utotype && !flags.mon_moving) deferred_goto();
 }
 
-void 
+void
 domagicportal (struct trap *ttmp)
 {
 	struct d_level target_level;
@@ -1248,7 +1248,7 @@ domagicportal (struct trap *ttmp)
 		      NULL);
 }
 
-void 
+void
 tele_trap (struct trap *trap)
 {
 	if (In_endgame(&u.uz) || Antimagic) {
@@ -1265,7 +1265,7 @@ tele_trap (struct trap *trap)
 		tele();
 }
 
-void 
+void
 level_tele_trap (struct trap *trap)
 {
 	You("%s onto a level teleport trap!",
@@ -1340,7 +1340,7 @@ struct monst *mtmp;
  * migrating_mon.  Worm tails are always placed randomly around the head of
  * the worm.
  */
-void 
+void
 rloc_to (struct monst *mtmp, int x, int y)
 {
 	int oldx = mtmp->mx, oldy = mtmp->my;
@@ -1464,7 +1464,7 @@ struct monst *mon;
 	return FALSE;
 }
 
-void 
+void
 mtele_trap (struct monst *mtmp, struct trap *trap, int in_sight)
 {
 	char *monname;
@@ -1571,7 +1571,7 @@ int in_sight;
 }
 
 
-void 
+void
 rloco (struct obj *obj)
 {
 	xchar tx, ty, otx, oty;
@@ -1619,7 +1619,7 @@ rloco (struct obj *obj)
 }
 
 /* Returns an absolute depth */
-int 
+int
 random_teleport_level (void)
 {
 	int nlev, max_depth, min_depth,

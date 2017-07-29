@@ -33,7 +33,7 @@ pixel (*bitmap)[MAX_TILE_X];
 
     if (tile_x != 48 || tile_y != 64 || retval) return retval;
 
-    /* 3D tiles - detected via tile_x = 48 and tile_y = 64 
+    /* 3D tiles - detected via tile_x = 48 and tile_y = 64
      * Remove recentered tiles
      */
 
@@ -74,7 +74,7 @@ pixel (*bitmap)[MAX_TILE_X];
     	if (x == tile_x) bottomblanks++;
     	else break;
     }
-    
+
     if ((topblanks + bottomblanks) < 32) return FALSE;
 
 
@@ -92,14 +92,14 @@ pixel (*bitmap)[MAX_TILE_X];
     		if (!pixel_eq(bitmap[y][x], def_background)) return FALSE;
     	}
     }
-   
+
     for(y = 48; y < 16; y++)
     	for(x = 0; x < tile_x; x++) {
     		if (!pixel_eq(bitmap[y][x], def_background)) return FALSE;
     	}
 
 #endif
-    	
+
     return TRUE;
 }
 

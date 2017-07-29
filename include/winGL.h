@@ -76,7 +76,7 @@ typedef unsigned int GLuint;
 #endif
 
 /* inlining */
-#ifdef GH_INLINE 
+#ifdef GH_INLINE
 /* keep current definition (from Makefile) */
 #elif defined(__GNUC__)
 #define GH_INLINE  __inline__
@@ -108,7 +108,7 @@ struct MenuItem
 {
   /* link in list */
   struct MenuItem *next;
-  
+
   /* stuff given by add_menu().  The string is copied */
   int glyph;
   anything identifier;
@@ -116,12 +116,12 @@ struct MenuItem
   char groupacc;
   int attr;
   char *str;
-  
+
   /* whether or not this item is selected.  When 0, the `count' field
    * will be ignored.
    */
   int selected;
-  
+
   /* count given by user.  -1 when no count given */
   int count;
 };
@@ -130,7 +130,7 @@ struct TextItem
 {
   /* link in list */
   struct TextItem *next;
-  
+
   /* stuff given by putstr().  The string is copied */
   int attr;
   char *str;
@@ -247,7 +247,7 @@ extern int sdlgl_tex_max;
 typedef unsigned int rgbcol_t;
 
 #define RGB_MAKE(r,g,b)  (((r) << 16) + ((g) << 8) + (b))
- 
+
 #define RGB_RED(rgb)  ((rgb >> 16) & 0xFF)
 #define RGB_GRN(rgb)  ((rgb >>  8) & 0xFF)
 #define RGB_BLU(rgb)  ((rgb      ) & 0xFF)
@@ -259,7 +259,7 @@ struct GraphicUnit
 
   /* texture coords */
   float tx1, ty1, tx2, ty2;
-    
+
   /* screen coordinates */
   short x, y, w, h;
 
@@ -305,7 +305,7 @@ struct TilePair
    * traps, and so forth).  FG contains everything else: objects,
    * monsters, zaps and swallows.
    */
- 
+
   tileidx_t fg;
   tileidx_t mg;  /* mid-ground */
 
@@ -391,10 +391,10 @@ struct ExtraShape
     SHAPE_Ridden
   }
   type;
- 
+
   /* position of shape, in terms of whole tiles */
   short x, y;
-  
+
   /* type-dependent parameters.
    * For SHAPE_Heart and SHAPE_Ridden, par1 means "on_left".
    */
@@ -419,7 +419,7 @@ struct TileWindow
 
   /* private field -- index of window in mapped array */
   int mapped_idx;
- 
+
   /* text window ? */
   int is_text;
 
@@ -450,7 +450,7 @@ struct TileWindow
    * downwards.  (negative values are useful too).
    */
   int pan_x, pan_y;
-  
+
   /* used for zooming.  The values represent the displayed size of
    * each tile (in screen pixels).  For NHW_MAP windows using the
    * pseudo 3D tileset, scale_w/h *ignore* the overlap portion of the
@@ -466,10 +466,10 @@ struct TileWindow
    * Negative values mean that no cursor should be drawn.
    */
   int curs_x, curs_y, curs_w;
- 
+
   /* cursor type: 1 for block, 0 for outline */
   int curs_block;
-   
+
   /* cursor color */
   rgbcol_t curs_color;
 
@@ -753,7 +753,7 @@ struct DirtyMatrix
   /* cell matrix.  Each cell is either CLEAN_CELL, or the depth of the
    * window that became dirty somewhere inside the cell.  If multiple
    * windows get dirty in the same cell, the *lowest* depth is
-   * remembered.  
+   * remembered.
    *
    * Note: using a high value of CLEAN_CELL is a nice trick,
    *       simplifying the marking and testing code.
@@ -789,7 +789,7 @@ extern void sdlgl_dirty_matrix_add(struct DirtyMatrix *, int, int,
 extern int sdlgl_dirty_matrix_test(struct DirtyMatrix *, int, int,
       int, int, int);
 extern int sdlgl_dirty_matrix_to_updaters(struct DirtyMatrix *);
-extern void sdlgl_dirty_matrix_blit(struct DirtyMatrix *, 
+extern void sdlgl_dirty_matrix_blit(struct DirtyMatrix *,
       SDL_Surface *, SDL_Rect *, SDL_Rect *, Uint32, int);
 
 
@@ -853,7 +853,7 @@ struct MouseLocation
    * (i.e. y goes from the bottom up).
    */
   int x, y;
-  
+
   /* the window that the mouse pointer is currently over.  Will be
    * WIN_ERR when not sitting over any window, e.g. a gap, or when the
    * focus has been lost.
@@ -878,18 +878,18 @@ struct TextWindow
   /* is this window (NHW_TEXT type) used for the RIP message ? */
   int is_rip;
   int how_died;
-  
+
   /* linked list of menu items.  Only valid when is_menu == 1.  Note
    * that this list goes upwards from the bottom of the window (not
    * top-down, as you might expect).
    */
   struct MenuItem *items;
-  
+
   /* linked list of text items.  Only valid when type is NHW_TEXT, or
    * NHW_MENU and is_menu == 0.  This one also goes upwards.
    */
   struct TextItem *lines;
-  
+
   /* computed width & height of the menu or text window.  For menus
    * (is_menu == 1), it's only valid after the end_menu() interface
    * routine has been called.  For text items, it is computed when
@@ -913,7 +913,7 @@ struct TextWindow
    * exactly the same as in the `base' field.
    */
   struct GlyphPair *glyphs;
- 
+
   /* tile coordinates for the "focus", which (for NHW_MAP windows) is
    * the tile that controls where the jail is (usually the focus is
    * where the player tile is).
@@ -927,7 +927,7 @@ struct TextWindow
    * graphical tiles when the text-mode view is active.
    */
   int map_px, map_py;
- 
+
   /* the JAIL...  This is an rectangular area that is meant to be kept
    * at the middle of the screen.  The player can move freely within
    * the jail without the map window panning -- when the player moves
@@ -945,7 +945,7 @@ struct TextWindow
    * base->is_text), as we assume the whole map fits on the screen.
    */
   int jail_x, jail_y;
- 
+
   /* current zoom factor.  Only used with NHW_MAP windows.
    * The value is the pixel height that the tiles are rendered at, so
    * higher values mean larger tiles.  The allowable sizes depends on
@@ -995,7 +995,7 @@ struct TextWindow
    * placed on a new line, even if it fits on the previous one.
    */
   int want_new_line;
- 
+
   /* for NHW_MESSAGE windows: this field is for the scroll-back
    * capability (^P).  The tile window is normally unmapped, silently
    * recording lines that scroll off the screen (except empty lines).
@@ -1008,7 +1008,7 @@ struct TextWindow
    * message window (get_ext_cmd, etc) are active.
    */
   int scrollback_enable;
- 
+
   /* this is 0 if the scrollback window is unmapped.  This value only
    * used in the `alt_prev' mode, and signifies how many lines back we
    * are showing.

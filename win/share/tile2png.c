@@ -7,9 +7,9 @@
 /*
  * Convert the given input tile files into the PNG file for use by
  * various windowing ports.
- * 
+ *
  * Based on win/X11/tile2x11.c
- * 
+ *
  * TODO HERE:
  *   + Would be nice if it didn't use so much memory...
  */
@@ -114,10 +114,10 @@ void save_png(const char *filename, int width, int height)
 
   png_set_compression_level(png_ptr, Z_BEST_COMPRESSION);
 
-  png_set_IHDR(png_ptr, info_ptr, width, height, 8, 
+  png_set_IHDR(png_ptr, info_ptr, width, height, 8,
       tile_palette ? PNG_COLOR_TYPE_PALETTE :
-      has_trans ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB, 
-      PNG_INTERLACE_NONE, 
+      has_trans ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB,
+      PNG_INTERLACE_NONE,
       PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 
   if (tile_palette)
@@ -138,7 +138,7 @@ void save_png(const char *filename, int width, int height)
     fprintf(stderr, "tile2png: Out of memory.\n");
     goto failed;
   }
-   
+
   if (tile_palette)
     for (row = 0; row < height; row++)
        row_pointers[row] = tile_bytes_i + row * width;
@@ -197,15 +197,15 @@ static int convert_tiles(void)
   int pix_w  = (has_trans ? 4 : 3);
   int stride = tile_x * num_across * pix_w;
 
-  while (read_text_tile(tile)) 
+  while (read_text_tile(tile))
   {
     count++;
 
     bx = ntiles % num_across;
     by = ntiles / num_across;
-    
+
     tb = tile_bytes_rgba + (by * tile_y * stride + bx * tile_x * pix_w);
-   
+
     for (y = 0; y < tile_y; y++, tb += stride)
       for (x = 0; x < tile_x; x++)
       {
@@ -260,19 +260,19 @@ static int convert_tiles(void)
 }
 
 
-/* Open the given file, read & merge the colormap, convert the tiles. 
+/* Open the given file, read & merge the colormap, convert the tiles.
  */
 static void process_file(const char *fname)
 {
   int count;
 
-  if (!fopen_text_file(fname, RDTMODE)) 
+  if (!fopen_text_file(fname, RDTMODE))
   {
     fprintf(stderr, "tile2png: Can't open file \"%s\"\n", fname);
     exit(1);
   }
 
-  if (!tile_bytes_rgba) 
+  if (!tile_bytes_rgba)
   {
     int size;
 
@@ -285,7 +285,7 @@ static void process_file(const char *fname)
     size = max_rows * num_across * tile_x * tile_y * (has_trans ? 4 : 3);
 
     tile_bytes_rgba = calloc(size, 1);
-    if (!tile_bytes_rgba) 
+    if (!tile_bytes_rgba)
     {
       fprintf(stderr, "tile2png: Not enough memory (%d KB).\n", size/1024);
       exit(1);
@@ -294,7 +294,7 @@ static void process_file(const char *fname)
     saved_tile_x = tile_x;
     saved_tile_y = tile_y;
   }
-  if (!tile_bytes_i) 
+  if (!tile_bytes_i)
   {
     int size;
 
@@ -303,7 +303,7 @@ static void process_file(const char *fname)
     size = max_rows * num_across * tile_x * tile_y;
 
     tile_bytes_i = calloc(size, 1);
-    if (!tile_bytes_i) 
+    if (!tile_bytes_i)
     {
       fprintf(stderr, "tile2png: Not enough memory (%d KB).\n", size/1024);
       exit(1);
@@ -312,7 +312,7 @@ static void process_file(const char *fname)
     saved_tile_x = tile_x;
     saved_tile_y = tile_y;
   }
-  if (!tile_palette) 
+  if (!tile_palette)
   {
     tile_palette = malloc(256 * sizeof(*tile_palette));
     if (!tile_palette)
@@ -359,23 +359,23 @@ int main(int argc, const char **argv)
 
   const char *outname = OUTNAME;
 
-  while (argn < argc) 
+  while (argn < argc)
   {
     if ((argv[argn][0] == '-' && argv[argn][1] == 'h') ||
-        (argv[argn][0] == '-' && argv[argn][1] == '-' && 
+        (argv[argn][0] == '-' && argv[argn][1] == '-' &&
          argv[argn][2] == 'h'))
     {
       usage();
       exit(1);
     }
 
-    if (argv[argn][0] == '-' && argv[argn][1] == 'o') 
+    if (argv[argn][0] == '-' && argv[argn][1] == 'o')
     {
       if (argv[argn][2])
         outname = argv[argn] + 2;
       else if (argn + 1 < argc)
         outname = argv[++argn];
-      else 
+      else
       {
         fprintf(stderr, "tile2png: -o option needs an argument\n");
         exit(EXIT_FAILURE);
@@ -384,13 +384,13 @@ int main(int argc, const char **argv)
       continue;
     }
 
-    if (argv[argn][0] == '-' && argv[argn][1] == 'a') 
+    if (argv[argn][0] == '-' && argv[argn][1] == 'a')
     {
       if (argv[argn][2])
         num_across = atoi(argv[argn] + 2);
       else if (argn + 1 < argc)
         num_across = atoi(argv[++argn]);
-      else 
+      else
       {
         fprintf(stderr, "tile2png: -a option needs an argument\n");
         exit(EXIT_FAILURE);
@@ -403,15 +403,15 @@ int main(int argc, const char **argv)
       argn++;
       continue;
     }
-    
-    if (argv[argn][0] == '-' && argv[argn][1] == 't') 
+
+    if (argv[argn][0] == '-' && argv[argn][1] == 't')
     {
       has_trans = 1;
       argn++;
       continue;
     }
-    
-    if (argv[argn][0] == '-' && argv[argn][1] == 'f') 
+
+    if (argv[argn][0] == '-' && argv[argn][1] == 'f')
     {
       has_trans = 1;
       trans_p.r = trans_p.g = trans_p.b = 0;
@@ -419,8 +419,8 @@ int main(int argc, const char **argv)
       argn++;
       continue;
     }
-    
-    if (argv[argn][0] == '-' && argv[argn][1] == 'b') 
+
+    if (argv[argn][0] == '-' && argv[argn][1] == 'b')
     {
       const char *val;
       int r, g, b;
@@ -429,7 +429,7 @@ int main(int argc, const char **argv)
         val = argv[argn] + 2;
       else if (argn + 1 < argc)
         val = argv[++argn];
-      else 
+      else
       {
         fprintf(stderr, "tile2png: -b option needs an argument\n");
         exit(EXIT_FAILURE);
@@ -447,11 +447,11 @@ int main(int argc, const char **argv)
       argn++;
       continue;
     }
-    
+
     break;
   }
 
-  if (argn == argc) 
+  if (argn == argc)
   {
     usage();
     exit(1);
@@ -465,7 +465,7 @@ int main(int argc, const char **argv)
   fprintf(stderr, "Total tiles: %d\n", ntiles);
 
   num_down = (ntiles + num_across - 1) / num_across;
-  
+
   save_png(outname, num_across * saved_tile_x, num_down * saved_tile_y);
 
   if (tile_bytes_rgba)

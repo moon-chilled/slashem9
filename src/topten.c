@@ -65,9 +65,9 @@ static void nsb_unmung_line(char*);
 
 /* must fit with end.c; used in rip.c */
 const char * const killed_by_prefix[] = {
-	"killed by ", "betrayed by ", "choked on ", "poisoned by ", "died of ", 
-	"drowned in ", "burned by ", "dissolved in ", "crushed to death by ", 
-	"petrified by ", "turned to slime by ", "killed by ", 
+	"killed by ", "betrayed by ", "choked on ", "poisoned by ", "died of ",
+	"drowned in ", "burned by ", "dissolved in ", "crushed to death by ",
+	"petrified by ", "turned to slime by ", "killed by ",
 	"", "", "", "", ""
 };
 
@@ -185,7 +185,7 @@ struct toptenentry *tt;
 						dp2++;
 						dp++;
 					}
-					
+
 					*dp = *dp2;
 				}
 			}
@@ -308,7 +308,7 @@ struct toptenentry *tt;
                 SEP "gender=%s"
                 SEP "align=%s",
                 tt->plrole, tt->plrace, tt->plgend, tt->plalign);
-   
+
    munge_xlstring(buf, plname, DTHSZ + 1);
   (void)fprintf(rfile, SEP "name=%s", buf);
 
@@ -328,7 +328,7 @@ struct toptenentry *tt;
 
   (void)fprintf(rfile, SEP "gender0=%s", genders[flags.initgend].filecode);
 
-  (void)fprintf(rfile, SEP "align0=%s", 
+  (void)fprintf(rfile, SEP "align0=%s",
           aligns[1 - u.ualignbase[A_ORIGINAL]].filecode);
 
   (void)fprintf(rfile, "\n");
@@ -352,7 +352,7 @@ struct toptenentry *tt;
 	dealloc_ttentry(tt);
 }
 
-void 
+void
 topten (int how)
 {
 	int uid = getuid();
@@ -719,13 +719,13 @@ boolean so;
 				"Food", "Vgn", "Vgt", "Ath", "Weap", "Pac",
 				"Ill", "Poly", "Form", "Wish", "Art", "Geno",
 				NULL };
-		
+
 			strcat(eos(linebuf), "(");
 			for(i = 0, m = 1; conduct_names[i]; i += skip + 1, m <<= (skip + 1)) {
 				skip = 0;
 				if(t1->conduct & m)
 					continue;
-		
+
 				/* Only show one of foodless, vegan, vegetarian */
 				if(i == 0) skip = 2;
 				if(i == 1) skip = 1;

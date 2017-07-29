@@ -35,7 +35,7 @@ static char	nambuf[sizeof cvt_buf];
 #ifdef DEBUG
 static void dump_qtlist(void);
 
-static void 
+static void
 dump_qtlist (void)	/* dump the character msg list to check appearance */
 {
 	struct	qtmsg	*msg;
@@ -87,7 +87,7 @@ long	hdr_offset;
 	return(msg_list);
 }
 
-void 
+void
 load_qtlist (void)
 {
 
@@ -135,7 +135,7 @@ load_qtlist (void)
 }
 
 /* called at program exit */
-void 
+void
 unload_qtlist (void)
 {
 	if (msg_file)
@@ -147,7 +147,7 @@ unload_qtlist (void)
 	return;
 }
 
-short 
+short
 quest_info (int typ)
 {
 	switch (typ) {
@@ -386,7 +386,7 @@ int how;
 	destroy_nhwindow(datawin);
 }
 
-void 
+void
 com_pager (int msgnum)
 {
 	struct qtmsg *qt_msg;
@@ -403,7 +403,7 @@ com_pager (int msgnum)
 	return;
 }
 
-void 
+void
 qt_pager (int msgnum)
 {
 	struct qtmsg *qt_msg;

@@ -894,11 +894,11 @@ Go forth, and return when you feel ready."
 "The world is in great need of your assistance, %p.
 
 "About six months ago, I learned that a mysterious sorcerer, known
-as %n, had begun to summon horrible elementals from the plane of 
+as %n, had begun to summon horrible elementals from the plane of
 Water.
 
 "%nC and his hordes of elementals swept down upon %H and stole
-%o, and seeks to bend it to his will.  
+%o, and seeks to bend it to his will.
 After many brave wizards were slain by his watery servants, I
 sent forth a summons for you!
 
@@ -1421,8 +1421,8 @@ Go forth, and return when you are ready."
 "About six months ago, I learned that a mysterious sorcerer, known
 as %n, had begun to summon a large group of elementals and monsters.
 
-"%nC and his horde swept down upon %H and stole 
-%o. He seeks to bend it to his will.  After we regrouped, 
+"%nC and his horde swept down upon %H and stole
+%o. He seeks to bend it to his will.  After we regrouped,
 I sent forth a summons for you.
 
 "If %n can bend %o to his will, he will become
@@ -1807,7 +1807,7 @@ As you approach %l, he beams at you and says:
     Well done!  Thou art truly the Champion of %H.  We
     have received word that Merlin is recovering, and shall soon
     rejoin Us.
-    
+
     He hath instructed Us that thou art now to be the guardian of
     %o.  He feeleth that thou mayst have need of
     its powers in thine adventures.  It is Our wish that thou keepest
@@ -4726,12 +4726,12 @@ essential in locating the Amulet of Yendor."
 #
 %Cc - 00060
 "You have betrayed all those who hold allegiance to %d, as you once did.
-My allegiance to %d holds fast and I cannot condone or accept what you 
+My allegiance to %d holds fast and I cannot condone or accept what you
 have done.
 
 Leave this place.  You shall never set foot at %H again.
-That which you seek is now lost forever, for without the Bell of Opening, 
-you will never be able to enter the place where he who has the Amulet 
+That which you seek is now lost forever, for without the Bell of Opening,
+you will never be able to enter the place where he who has the Amulet
 resides.
 
 Go now!  You are banished from this place.

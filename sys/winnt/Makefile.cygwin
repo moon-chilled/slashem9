@@ -31,7 +31,7 @@ GAMEDIR = /slam32d
 # Directories
 #
 
-# These are for Mingw32's GCC,  which gets confused by \ 
+# These are for Mingw32's GCC,  which gets confused by \
 DDAT  = ../dat
 DUTIL = ../util
 DSRC  = ../src
@@ -116,7 +116,7 @@ USE_DLB = Y
 # set SUPPRESS_GRAPHICS to Y
 # (Note: binary will require ANSI.SYS driver or equivalent loaded)
 # SUPPRESS_GRAPHICS = Y
-SUPPRESS_GRAPHICS = 
+SUPPRESS_GRAPHICS =
 
 
 #############################################################################
@@ -176,8 +176,8 @@ endif
 #
 # files for a straight tty port using no native windowing system
 WINTTYSRC = ../win/tty/getline.c ../win/tty/termcap.c ../win/tty/topl.c \
-	../win/tty/wintty.c 
-WINTTYOBJ = getline.o termcap.o topl.o wintty.o 
+	../win/tty/wintty.c
+WINTTYOBJ = getline.o termcap.o topl.o wintty.o
 #
 # files for a GTK port
 # (tile.c is included in the defn. for WINCSRC, below)
@@ -197,10 +197,10 @@ WINOBJ = $(WINTTYOBJ)
 #
 # You must also change the definition of WINLIB (below) to match these
 
-WINTTYLIB = 
+WINTTYLIB =
 # libraries for GTK
 # WINGTKLIB = `gtk-config --libs`
-WINGTKLIB = /mingw32/src/gtk+/gtk/libgtk~1.a /mingw32/src/gtk+/gdk/libgdk~1.a 
+WINGTKLIB = /mingw32/src/gtk+/gtk/libgtk~1.a /mingw32/src/gtk+/gdk/libgdk~1.a
 
 # Use this declaration if you only want to support the TTY windowing system
 WINLIB = $(WINTTYLIB)
@@ -245,13 +245,13 @@ TEXTIO       =
 TEXTIO2      =
 PLANAR_TIB   =
 OVERVIEW_TIB =
-TILEUTIL     = 
-TILEFILES    = 
-TILEFILES2   = 
-GIFREADERS   = 
-GIFREAD2     = 
-PPMWRITERS   = 
-PPMWRIT2     = 
+TILEUTIL     =
+TILEFILES    =
+TILEFILES2   =
+GIFREADERS   =
+GIFREAD2     =
+PPMWRITERS   =
+PPMWRIT2     =
 
 else
 
@@ -709,7 +709,7 @@ $(INCL)/dgn_comp.h: $(SSHR)/dgn_comp.h
 
 dgn_$(LEX).c: $(SSHR)/dgn_lex.c
 	$(COPY) $(SSHR)/dgn_lex.c $@
- 
+
 endif
 
 #
@@ -787,7 +787,7 @@ $(WSHR)/othmag.txt:	magtile.exe $(WSHR)/other.txt
 	./magtile.exe
 
 $(WSHR)/mon32.txt:	txtmerge.exe $(WSHR)/monmag.txt $(WSHR)/mon32mi.txt
-	./txtmerge ../win/share/mon32.txt ..\\win\\share\\monmag.txt -b ..\\win\\share\\mon32mi.txt 
+	./txtmerge ../win/share/mon32.txt ..\\win\\share\\monmag.txt -b ..\\win\\share\\mon32mi.txt
 
 $(WSHR)/obj32.txt:	txtmerge.exe $(WSHR)/objmag.txt \
 		../win/share/obj32mi.txt ../win/share/obj32se.txt
@@ -814,7 +814,7 @@ tiletext.o:  $(CONFIG_H) $(INCL)/tile.h $(WSHR)/tiletext.c
 
 tiletxt.o: $(CONFIG_H)	$(INCL)/tile.h tilemap.c
 	$(CC) $(CFLAGS) -DTILETEXT -o$@ tilemap.c
-  
+
 
 
 #
@@ -893,7 +893,7 @@ sp_lev.tag: utility.tag     $(DAT)/beholder.des $(DAT)/bigroom.des \
 	$(DAT)/necro.des    $(DAT)/priest.des   $(DAT)/rogue.des \
 	$(DAT)/samurai.des  $(DAT)/tourist.des  $(DAT)/slayer.des \
 	$(DAT)/valkyrie.des $(DAT)/wizard.des   $(DAT)/yeoman.des \
-	$(DAT)/frnknstn.des $(DAT)/nightmar.des $(DAT)/ranger.des 
+	$(DAT)/frnknstn.des $(DAT)/nightmar.des $(DAT)/ranger.des
 
 	./lev_comp $(DDAT)/beholder.des
 	./lev_comp $(DDAT)/bigroom.des
@@ -956,7 +956,7 @@ sp_lev.tag: utility.tag     $(DAT)/beholder.des $(DAT)/bigroom.des \
 	./lev_comp $(DDAT)/ranger.des
 	$(COPY) ./*.lev $(DAT)
 	$(ECHO) sp_levs done > sp_lev.tag
-	
+
 $(DAT)/dungeon:	  utility.tag  $(DAT)/dungeon.def
 	@$(COPY) $(SRC)/dgn_comp.exe $(DAT)/dgn_comp.exe
 	-./makedefs -e

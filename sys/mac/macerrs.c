@@ -46,7 +46,7 @@ void showerror(char * errdesc, const char * errcomment)
 	short		itemHit;
 	Str255		paserr,
 				pascomment;
-				
+
 	SetCursor(&qd.arrow);
 	if (errcomment == nil) errcomment = "";
 	C2P (errcomment, pascomment);
@@ -65,7 +65,7 @@ Boolean itworked(short errcode)
 		short		 itemHit;
 		Str255 		 errdesc;
 		StringHandle strh;
-	
+
 		errdesc[0] = '\0';
 		if (errcode > 0) GetIndString(errdesc,stdIOErrID,errcode);  /* STDIO file rres, etc */
 		else {
@@ -143,7 +143,7 @@ void comment(char *s, long n)
 {
 	Str255 paserr;
 	short itemHit;
-	
+
 	sprintf((char *)&paserr[1], "%s - %d",s,n);
 	paserr[0] = strlen ((char*)&paserr[1]);
 	ParamText(paserr,(StringPtr)"",(StringPtr)"",(StringPtr)"");

@@ -685,7 +685,7 @@ boolean dighole(boolean pit_only) {
 		if (pit_only) {
 		    pline_The("drawbridge seems too hard to dig through.");
 		    return FALSE;
-	} else if (IS_GRAVE(lev->typ)) {        
+	} else if (IS_GRAVE(lev->typ)) {
 	    digactualhole(u.ux, u.uy, BY_YOU, PIT);
 	    dig_up_grave();
 	    return TRUE;
@@ -713,7 +713,7 @@ boolean dighole(boolean pit_only) {
 		delobj(boulder_here);
 		return TRUE;
 
-	} else if (IS_GRAVE(lev->typ)) {        
+	} else if (IS_GRAVE(lev->typ)) {
 	    dig_up_grave();
 			digactualhole(u.ux, u.uy, BY_YOU, PIT);
 	    return TRUE;
@@ -909,7 +909,7 @@ int use_pick_axe2 (struct obj *obj) {
 			You_cant("reach the %s.",ceiling(u.ux,u.uy));
 	} else if(!u.dx && !u.dy && !u.dz) {
 		/* NOTREACHED for lightsabers/axes called from doforce */
-		
+
 		char buf[BUFSZ];
 		int dam;
 

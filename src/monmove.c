@@ -86,7 +86,7 @@ struct monst *mtmp;
 }
 
 
-int 
+int
 dochugw (struct monst *mtmp)
 {
 	int x = mtmp->mx, y = mtmp->my;
@@ -94,7 +94,7 @@ dochugw (struct monst *mtmp)
 	int rd = dochug(mtmp);
 #if 0
 	/* part of the original warning code which was replaced in 3.3.1 */
-	struct permonst *mdat = mtmp->data;        
+	struct permonst *mdat = mtmp->data;
 	int dd;
 	if(Warning && !rd && !mtmp->mpeaceful &&
 			(dd = distu(mtmp->mx,mtmp->my)) < distu(x,y) &&
@@ -111,8 +111,8 @@ dochugw (struct monst *mtmp)
 	} else if(Undead_warning && !rd && !mtmp->mpeaceful &&
 		  (dd = distu(mtmp->mx,mtmp->my)) < distu(x,y) &&
 		   dd < 100 && !canseemon(mtmp) && is_undead(mdat)) {
-			/* 
-			 * The value of warnlevel coresponds to the 8 
+			/*
+			 * The value of warnlevel coresponds to the 8
 			 * cardinal directions, see mon.c.
 			 */
 			if(((mtmp->mx - u.ux) < 0) && ((mtmp->my - u.uy) < 0))
@@ -182,7 +182,7 @@ boolean digest_meal;
 {
 	if (mon->mhp < mon->mhpmax && !is_golem(mon->data) &&
 	    (moves % 20 == 0 || regenerates(mon->data))) mon->mhp++;
-	if (mon->m_en < mon->m_enmax && 
+	if (mon->m_en < mon->m_enmax &&
 	    (moves % 20 == 0 || (rn2(mon->m_lev + 5) > 15))) {
 	    	mon->m_en += rn1((mon->m_lev % 10 + 1),1);
 	    	if (mon->m_en > mon->m_enmax) mon->m_en = mon->m_enmax;
@@ -322,7 +322,7 @@ struct monst *mon;
 /* The whole dochugw/m_move/distfleeck/mfndpos section is serious spaghetti
  * code. --KAA
  */
-int 
+int
 dochug (struct monst *mtmp)
 {
 	struct permonst *mdat;
@@ -434,7 +434,7 @@ dochug (struct monst *mtmp)
 		watch_on_duty(mtmp);
 
 	/* [DS] Cthulhu also uses psychic blasts */
-	else if ((is_mind_flayer(mdat) || mdat == &mons[PM_CTHULHU]) 
+	else if ((is_mind_flayer(mdat) || mdat == &mons[PM_CTHULHU])
 			&& !rn2(20)) {
 		struct monst *m2, *nmon = NULL;
 
@@ -495,7 +495,7 @@ toofar:
 	    struct obj *mw_tmp;
 
 	    /* The scared check is necessary.  Otherwise a monster that is
-	     * one square near the player but fleeing into a wall would keep	
+	     * one square near the player but fleeing into a wall would keep
 	     * switching between pick-axe and weapon.  If monster is stuck
 	     * in a trap, prefer ranged weapon (wielding is done in thrwmu).
 	     * This may cost the monster an attack, but keeps the monster
@@ -605,7 +605,7 @@ toofar:
 	return(tmp == 2);
 }
 
-static const char practical[] = { 
+static const char practical[] = {
 	WEAPON_CLASS, ARMOR_CLASS, GEM_CLASS, FOOD_CLASS, 0 };
 static const char magical[] = {
 	AMULET_CLASS, POTION_CLASS, SCROLL_CLASS, WAND_CLASS, RING_CLASS,
@@ -631,7 +631,7 @@ struct monst *mtmp;
  * 2: monster died.
  * 3: did not move, and can't do anything else either.
  */
-int 
+int
 m_move (struct monst *mtmp, int after)
 {
 	int appr;
@@ -783,7 +783,7 @@ not_special:
 #ifndef GOLDOBJ
 		   (mtmp->mgold > u.ugold))
 #else
-		   ( (lepgold = findgold(mtmp->minvent)) && 
+		   ( (lepgold = findgold(mtmp->minvent)) &&
                    (lepgold->quan > ((ygold = findgold(invent)) ? ygold->quan : 0L)) ))
 #endif
 			appr = -1;
@@ -1287,7 +1287,7 @@ int x, y;
 
 
 /* decide where the monster thinks you are standing */
-void 
+void
 set_apparxy (struct monst *mtmp)
 {
 	boolean notseen, gotu;
@@ -1409,12 +1409,12 @@ struct monst *mtmp;
 		    typ != SKELETON_KEY && typ != LOCK_PICK
 		) return FALSE;
 		if (Is_container(obj) && obj->cobj) return FALSE;
-		    
+
 	}
 	return TRUE;
 }
 
-static int 
+static int
 bust_door_breath (struct monst *mtmp)
 {
 	struct permonst *ptr = mtmp->data;

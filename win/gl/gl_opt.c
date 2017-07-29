@@ -113,7 +113,7 @@ static struct LocalOption local_option_list[] =
   { "msgdim",  "Dim the message window rather than clear it",
     &sdlgl_msg_dim, VALTYPE_BOOLEAN, LOPT_FILE_ONLY },
 #endif
-    
+
   { "altprev",  "Alternate previous history mode (^P)",
     &sdlgl_alt_prev, VALTYPE_BOOLEAN, LOPT_FILE_ONLY },
 
@@ -145,10 +145,10 @@ static struct LocalOption local_option_list[] =
 
   { "textfont", "Backwards Compatibility Only",
     &iflags.wc_fontsiz_message, VALTYPE_INTEGER, LOPT_BACKW_COMPAT },
- 
+
   { "mapfont", "Backwards Compatibility Only",
     &iflags.wc_fontsiz_map, VALTYPE_INTEGER, LOPT_BACKW_COMPAT },
- 
+
   { "msglines",  "Backwards Compatibility Only",
     &iflags.wc_vary_msgcount, VALTYPE_INTEGER, LOPT_BACKW_COMPAT },
 
@@ -175,7 +175,7 @@ static int find_local_option(const char *word, int *negated)
     return -1;
 
   word += 2;
-  
+
   for (i=0; (curname = local_option_list[i].name); i++)
   {
     if (strncmp(word, curname, strlen(curname)) == 0)
@@ -184,12 +184,12 @@ static int find_local_option(const char *word, int *negated)
       return i;
     }
   }
- 
+
   return -1;
 }
 
 static void parse_single_option(int optidx, const char *par,
-    int from_file, int negated) 
+    int from_file, int negated)
 {
   struct LocalOption *opt = local_option_list + optidx;
   int *intp;
@@ -206,10 +206,10 @@ static void parse_single_option(int optidx, const char *par,
     sdlgl_error("The %s%s option requires a parameter.\n",
         from_file ? "" : "--", opt->name);
   }
- 
+
   /* strings not handled yet */
   assert(opt->val_type != VALTYPE_STRING);
- 
+
   switch (opt->val_type)
   {
     case VALTYPE_VID_MODE:
@@ -248,7 +248,7 @@ static void parse_single_option(int optidx, const char *par,
           break;
 
         default:
-          sdlgl_warning("Bad %s syntax: %s:%s.\n", 
+          sdlgl_warning("Bad %s syntax: %s:%s.\n",
               from_file ? "GL_OPTIONS" : SDLGL_ENV_VAR,
               opt->name, par);
           Sdlgl_wait_synch();
@@ -259,7 +259,7 @@ static void parse_single_option(int optidx, const char *par,
     case VALTYPE_BOOLEAN:
       intp = (int *) opt->val_ptr;
       assert(intp);
-      
+
       if (! par)
         *intp = ! negated;
       else if (par[0] == '0' || lowc(par[0]) == 'f')
@@ -275,7 +275,7 @@ static void parse_single_option(int optidx, const char *par,
       assert(par);
       sscanf(par, "%d", intp);
       break;
-    
+
     case VALTYPE_DOUBLE:
       doubp = (double *) opt->val_ptr;
       assert(doubp);
@@ -283,9 +283,9 @@ static void parse_single_option(int optidx, const char *par,
       assert(par);
       sscanf(par, "%lf", doubp);
       break;
-    
+
     default:
-      sdlgl_error("parse_single_option INTERNAL error on --%s.", 
+      sdlgl_error("parse_single_option INTERNAL error on --%s.",
           opt->name);
   }
 }
@@ -312,7 +312,7 @@ static void show_help_message(void)
       "    -X              : enter non-scoring eXplore mode.\n"
       "    -s              : show list of high-scores and exit.\n"
       "\n"
-      
+
 #ifdef VANILLA_GLHACK
       "Some glHack specific options:\n"
 #else
@@ -356,7 +356,7 @@ void Sdlgl_parse_options(char *opts, int initial, int from_file)
   /* note the clever trick here using recursion to split and handle
    * NUL-terminated option strings.  Copied from src/options.c.
    */
-  if ((par = strchr(opts, ',')) != 0) 
+  if ((par = strchr(opts, ',')) != 0)
   {
     *par++ = 0;
     Sdlgl_parse_options(par, initial, from_file);
@@ -373,7 +373,7 @@ void Sdlgl_parse_options(char *opts, int initial, int from_file)
   optidx = find_local_option(opts, &negated);
   par = NULL;
 
-  if (optidx >= 0 && 
+  if (optidx >= 0 &&
       (local_option_list[optidx].flags & LOPT_CMDLINE_ONLY))
   {
     /* treat as though it wasn't found */
@@ -411,7 +411,7 @@ void Sdlgl_parse_options(char *opts, int initial, int from_file)
 
   parse_single_option(optidx, par, from_file, negated);
 }
- 
+
 void sdlgl_parse_cmdline_options(int *argcp, char **argv)
 {
   int num, opt;
@@ -419,7 +419,7 @@ void sdlgl_parse_cmdline_options(int *argcp, char **argv)
 
   char **dest_argv;
   const char *word, *par;
-  
+
   /* skip the program name */
   argv++;
   dest_argv = argv;
@@ -447,13 +447,13 @@ void sdlgl_parse_cmdline_options(int *argcp, char **argv)
       /* this exits the program */
       show_help_message();
     }
-     
+
     if (strcmp(word, "version") == 0)
     {
       /* this exits the program */
       show_version_message();
     }
-     
+
     negated = 0;
     opt = find_local_option(word, &negated);
     par = NULL;
@@ -544,7 +544,7 @@ void sdlgl_parse_cmdline_options(int *argcp, char **argv)
 void sdlgl_validate_wincap_options(void)
 {
   set_wc_option_mod_status(WC_SCROLL_MARGIN, SET_IN_GAME);
- 
+
   if (iflags.wc_align_message == 0)
   {
     iflags.wc_align_message = ALIGN_TOP;
@@ -564,7 +564,7 @@ void sdlgl_validate_wincap_options(void)
   {
     iflags.wc_tile_height = DEF_TILE_HEIGHT;
   }
-  else if (iflags.wc_tile_height != 16 && iflags.wc_tile_height != 32 
+  else if (iflags.wc_tile_height != 16 && iflags.wc_tile_height != 32
            && iflags.wc_tile_height != 64
            )
   {
@@ -620,11 +620,11 @@ void sdlgl_validate_wincap_options(void)
     FONT_CHK("Message font size", iflags.wc_fontsiz_message,
          DEF_FONTSIZ_TEXT);
 
-    FONT_CHK("Status font size", iflags.wc_fontsiz_status, 
+    FONT_CHK("Status font size", iflags.wc_fontsiz_status,
          iflags.wc_fontsiz_message);
-    FONT_CHK("Menu font size", iflags.wc_fontsiz_menu, 
+    FONT_CHK("Menu font size", iflags.wc_fontsiz_menu,
          iflags.wc_fontsiz_message);
-    FONT_CHK("Text font size", iflags.wc_fontsiz_text, 
+    FONT_CHK("Text font size", iflags.wc_fontsiz_text,
          iflags.wc_fontsiz_menu);
   }
 }
@@ -637,7 +637,7 @@ void sdlgl_validate_gl_options(void)
   }
   else
   {
-    if (sdlgl_width  < MIN_SDLGL_WIDTH || 
+    if (sdlgl_width  < MIN_SDLGL_WIDTH ||
         sdlgl_height < MIN_SDLGL_HEIGHT)
     {
       sdlgl_warning("Video mode %dx%d too small. Using %dx%d.\n",
@@ -646,7 +646,7 @@ void sdlgl_validate_gl_options(void)
       sdlgl_width  = MIN_SDLGL_WIDTH;
       sdlgl_height = MIN_SDLGL_HEIGHT;
     }
-    else if (sdlgl_width  > MAX_SDLGL_WIDTH || 
+    else if (sdlgl_width  > MAX_SDLGL_WIDTH ||
              sdlgl_height > MAX_SDLGL_HEIGHT)
     {
       sdlgl_warning("Video mode %dx%d too large. Using %dx%d.\n",
@@ -695,7 +695,7 @@ void sdlgl_validate_gl_options(void)
 
   if (sdlgl_prev_step <= 0)
   {
-    sdlgl_prev_step = sdlgl_alt_prev ? iflags.wc_vary_msgcount : 
+    sdlgl_prev_step = sdlgl_alt_prev ? iflags.wc_vary_msgcount :
         DEF_SDLGL_PREVSTEP;
   }
   else if (sdlgl_alt_prev)

@@ -234,7 +234,7 @@ const struct shclass shtypes[] = {
 #ifdef STEED
 	    {67, -FIGURINE}, {5, -LEASH},{10, -TRIPE_RATION}, {5, -SADDLE},
 #else
-	    {72, -FIGURINE}, {5, -LEASH},{10, -TRIPE_RATION}, 
+	    {72, -FIGURINE}, {5, -LEASH},{10, -TRIPE_RATION},
 #endif
 	    {10, -TIN_WHISTLE}, {3, -MAGIC_WHISTLE}}, shkpet},
 	/* Robin Johnson -- 4% taken from pet store */
@@ -429,7 +429,7 @@ struct mkroom	*sroom;
 	if(MON_AT(sx, sy)) (void) rloc(m_at(sx, sy), FALSE); /* insurance */
 
 	/* now initialize the shopkeeper monster structure */
-	  
+
 	shk = 0;
 	if (Is_blackmarket(&u.uz)) {
 	  shk = makemon(&mons[PM_BLACK_MARKETEER], sx, sy, NO_MM_FLAGS);
@@ -437,8 +437,8 @@ struct mkroom	*sroom;
 	if (!shk) {
 	  if(!(shk = makemon(&mons[PM_SHOPKEEPER], sx, sy, NO_MM_FLAGS)))
 		return(-1);
-	}        
-  
+	}
+
 	shk->isshk = shk->mpeaceful = 1;
 	set_malign(shk);
 	shk->msleeping = 0;
@@ -476,7 +476,7 @@ struct mkroom	*sroom;
 	shkmoney = 7*shkmoney + rn2(3*shkmoney);
 
 #ifndef GOLDOBJ
-	shk->mgold = shkmoney;	
+	shk->mgold = shkmoney;
 #else
   mkmonmoney(shk, shkmoney);
 #endif
@@ -679,7 +679,7 @@ int sh;
 
 	  break;
 	}
-	
+
       }
     }
 
@@ -701,7 +701,7 @@ struct monst *shk;
 	 * Requested by Dave <mitch45678@aol.com>
 	 */
 	if (Is_blackmarket(&u.uz)) {
-		ESHK(shk)->services = 
+		ESHK(shk)->services =
 		    SHK_ID_BASIC|SHK_ID_PREMIUM|SHK_UNCURSE|SHK_APPRAISE|
 		    SHK_SPECIAL_A|SHK_SPECIAL_B|SHK_SPECIAL_C;
 		return;

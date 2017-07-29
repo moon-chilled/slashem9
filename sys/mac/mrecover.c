@@ -22,7 +22,7 @@
  *   FAR CODE [no], FAR DATA [no], SEPARATE STRS [no], single segment,
  *   short macsbug symbols
  */
- 
+
 /*
  * To do (maybe, just maybe):
  * - Merge with the code in util/recover.c.
@@ -699,7 +699,7 @@ optionMemStats()
 		note(noErr, alidNote, "\pOops: Memory stats unavailable!");
 		return;
 	}
-	
+
 	SetString((StringHandle) strHnd, pFormat);
 	nOffset = 1L;
 
@@ -841,7 +841,7 @@ eventLoop()
 		case mouseDown:
 			{
 				WindowPtr	whichWindow;
-				
+
 				switch(FindWindow( wnEvt . where , &whichWindow))
 				{
 				case inMenuBar:
