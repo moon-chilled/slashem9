@@ -49,7 +49,7 @@ typedef struct dlb_library {
 #endif /* DLBLIB */
 
 
-typedef struct dlb_handle {
+typedef struct {
     FILE *fp;		/* pointer to an external file, use if non-null */
 #ifdef DLBLIB
     library *lib;	/* pointer to library structure */
@@ -62,15 +62,6 @@ typedef struct dlb_handle {
 #endif
 } dlb;
 
-#if defined(ULTRIX_PROTO) && !defined(__STDC__)
- /* buggy old Ultrix compiler wants this for the (*dlb_fread_proc)
-    and (*dlb_fgets_proc) prototypes in struct dlb_procs (dlb.c);
-    we'll use it in all the declarations for consistency */
-#define DLB_P struct dlb_handle *
-#else
-#define DLB_P dlb *
-#endif
-
 boolean dlb_init(void);
 void dlb_cleanup(void);
 
@@ -79,12 +70,12 @@ dlb *dlb_fopen(const char *,const char *);
 #else
 dlb *dlb_fopen_area(const char *,const char *,const char *);
 #endif
-int dlb_fclose(DLB_P);
-int dlb_fread(char *,int,int,DLB_P);
-int dlb_fseek(DLB_P,long,int);
-char *dlb_fgets(char *,int,DLB_P);
-int dlb_fgetc(DLB_P);
-long dlb_ftell(DLB_P);
+int dlb_fclose(dlb*);
+int dlb_fread(char *,int,int,dlb*);
+int dlb_fseek(dlb*,long,int);
+char *dlb_fgets(char *,int,dlb*);
+int dlb_fgetc(dlb*);
+long dlb_ftell(dlb*);
 
 
 /* Resource DLB entry points */

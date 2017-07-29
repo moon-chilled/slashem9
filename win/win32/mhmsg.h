@@ -42,7 +42,7 @@ typedef struct mswin_nhmsg_cliparound {
 
 typedef struct mswin_nhmsg_add_menu {
 	int				glyph;
-	const ANY_P*	identifier;
+	const anything*	identifier;
 	char			accelerator;
 	char			group_accel;
 	int				attr;

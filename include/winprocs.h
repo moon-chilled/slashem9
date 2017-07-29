@@ -28,10 +28,10 @@ struct window_procs {
     void (*win_display_file)(const char *, boolean);
 #endif
     void (*win_start_menu)(winid);
-    void (*win_add_menu)(winid,int,const ANY_P *,
+    void (*win_add_menu)(winid,int,const anything *,
 		char,char,int,const char *, boolean);
     void (*win_end_menu)(winid, const char *);
-    int (*win_select_menu)(winid, int, MENU_ITEM_P **);
+    int (*win_select_menu)(winid, int, menu_item **);
     char (*win_message_menu)(char,int,const char *);
     void (*win_update_inventory)(void);
     void (*win_mark_synch)(void);

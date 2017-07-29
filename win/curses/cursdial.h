@@ -17,14 +17,14 @@ int curses_character_input_dialog(const char *prompt, const char *choices,
                                   char def);
 int curses_ext_cmd(void);
 void curses_create_nhmenu(winid wid);
-void curses_add_nhmenu_item(winid wid, int glyph, const ANY_P * identifier,
+void curses_add_nhmenu_item(winid wid, int glyph, const anything * identifier,
                             char accelerator, char group_accel, int attr,
                             const char *str, boolean presel);
 # ifdef MENU_COLOR
 boolean get_menu_coloring(char *, int *, int *);
 # endif
 void curses_finalize_nhmenu(winid wid, const char *prompt);
-int curses_display_nhmenu(winid wid, int how, MENU_ITEM_P ** _selected);
+int curses_display_nhmenu(winid wid, int how, menu_item ** _selected);
 boolean curses_menu_exists(winid wid);
 void curses_del_menu(winid wid);
 

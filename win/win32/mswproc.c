@@ -816,7 +816,7 @@ void mswin_display_nhwindow(winid wid, boolean block)
 	if (GetNHApp()->windowlist[wid].win != NULL)
 	{
 		if (GetNHApp()->windowlist[wid].type == NHW_MENU) {
-			MENU_ITEM_P* p;
+			menu_item* p;
 			mswin_menu_window_select_menu(GetNHApp()->windowlist[wid].win, PICK_NONE, &p);
 		} if (GetNHApp()->windowlist[wid].type == NHW_TEXT) {
 			mswin_display_text_window(GetNHApp()->windowlist[wid].win);
@@ -1075,7 +1075,7 @@ add_menu(windid window, int glyph, const anything identifier,
                 -- If you want this choice to be preselected when the
                    menu is displayed, set preselected to TRUE.
 */
-void mswin_add_menu(winid wid, int glyph, const ANY_P * identifier,
+void mswin_add_menu(winid wid, int glyph, const anything * identifier,
 		char accelerator, char group_accel, int attr, 
 		const char *str, boolean presel)
 {
@@ -1155,7 +1155,7 @@ int select_menu(windid window, int how, menu_item **selected)
                    select_menu() will be called for the window at
                    create_nhwindow() time.
 */
-int mswin_select_menu(winid wid, int how, MENU_ITEM_P **selected)
+int mswin_select_menu(winid wid, int how, menu_item **selected)
 {
 	int nReturned = -1;
 

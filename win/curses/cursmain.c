@@ -408,7 +408,7 @@ add_menu(winid wid, int glyph, const anything identifier,
                    menu is displayed, set preselected to TRUE.
 */
 void
-curses_add_menu(winid wid, int glyph, const ANY_P * identifier,
+curses_add_menu(winid wid, int glyph, const anything * identifier,
                 char accelerator, char group_accel, int attr,
                 const char *str, boolean presel)
 {
@@ -468,7 +468,7 @@ int select_menu(winid window, int how, menu_item **selected)
                    create_nhwindow() time.
 */
 int
-curses_select_menu(winid wid, int how, MENU_ITEM_P ** selected)
+curses_select_menu(winid wid, int how, menu_item ** selected)
 {
     if (inv_update)
         return 0;

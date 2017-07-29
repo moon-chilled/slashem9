@@ -93,13 +93,13 @@ extern void curses_display_file(const char *filename,boolean must_exist);
 
 extern void curses_start_menu(winid wid);
 
-extern void curses_add_menu(winid wid, int glyph, const ANY_P * identifier,
+extern void curses_add_menu(winid wid, int glyph, const anything * identifier,
 		char accelerator, char group_accel, int attr, 
 		const char *str, boolean presel);
 
 extern void curses_end_menu(winid wid, const char *prompt);
 
-extern int curses_select_menu(winid wid, int how, MENU_ITEM_P **selected);
+extern int curses_select_menu(winid wid, int how, menu_item **selected);
 
 extern void curses_update_inventory(void);
 
@@ -247,13 +247,13 @@ extern void curses_create_nhmenu(winid wid);
 #ifdef MENU_COLOR
 extern boolean get_menu_coloring(char *, int *, int *);
 #endif
-extern void curses_add_nhmenu_item(winid wid, int glyph, const ANY_P *identifier,
+extern void curses_add_nhmenu_item(winid wid, int glyph, const anything *identifier,
  char accelerator, char group_accel, int attr, const char *str,
  boolean presel);
 
 extern void curses_finalize_nhmenu(winid wid, const char *prompt);
 
-extern int curses_display_nhmenu(winid wid, int how, MENU_ITEM_P **_selected);
+extern int curses_display_nhmenu(winid wid, int how, menu_item **_selected);
 
 extern boolean curses_menu_exists(winid wid);
 

@@ -1069,10 +1069,10 @@ extern void sdlgl_internal_motion_handler(SDL_MouseMotionEvent *);
  */
 
 extern void Sdlgl_start_menu(winid);
-extern void Sdlgl_add_menu(winid,int,const ANY_P *,
+extern void Sdlgl_add_menu(winid,int,const anything *,
     char,char,int,const char *, boolean);
 extern void Sdlgl_end_menu(winid, const char *);
-extern int Sdlgl_select_menu(winid, int, MENU_ITEM_P **);
+extern int Sdlgl_select_menu(winid, int, menu_item **);
 extern char Sdlgl_message_menu(char,int,const char *);
 extern char Sdlgl_yn_function(const char *, const char *, char);
 

@@ -24,7 +24,7 @@
 
 typedef struct mswin_menu_item {
 	int			glyph;
-	ANY_P			identifier;
+	anything			identifier;
 	char		accelerator;
 	char		group_accel;
 	int			attr;
@@ -101,11 +101,11 @@ HWND mswin_init_menu_window (int type) {
 	return ret;
 }
 /*-----------------------------------------------------------------------------*/
-int mswin_menu_window_select_menu (HWND hWnd, int how, MENU_ITEM_P ** _selected)
+int mswin_menu_window_select_menu (HWND hWnd, int how, menu_item ** _selected)
 {
 	PNHMenuWindow data;
 	int ret_val;
-    MENU_ITEM_P *selected = NULL;
+    menu_item *selected = NULL;
 	int i;
 	char* ap;
 
@@ -175,7 +175,7 @@ int mswin_menu_window_select_menu (HWND hWnd, int how, MENU_ITEM_P ** _selected)
 			if( ret_val > 0 ) {
 				int sel_ind;
 
-				selected = (MENU_ITEM_P*)malloc(ret_val*sizeof(MENU_ITEM_P));
+				selected = (menu_item*)malloc(ret_val*sizeof(menu_item));
 				if( !selected ) panic("out of memory");
 
 				sel_ind = 0;

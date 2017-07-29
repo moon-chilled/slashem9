@@ -363,10 +363,10 @@ extern void X11_display_file(const char *, const char *, boolean);
 extern void X11_display_file(const char *, boolean);
 #endif
 extern void X11_start_menu(winid);
-extern void X11_add_menu(winid,int,const ANY_P *,
+extern void X11_add_menu(winid,int,const anything *,
 			char, char, int, const char *, boolean);
 extern void X11_end_menu(winid, const char *);
-extern int X11_select_menu(winid, int, MENU_ITEM_P **);
+extern int X11_select_menu(winid, int, menu_item **);
 extern void X11_update_inventory(void);
 extern void X11_mark_synch(void);
 extern void X11_wait_synch(void);

@@ -256,10 +256,10 @@ extern void win32_display_file(const char *, const char *, boolean);
 extern void win32_display_file(const char *, boolean);
 #endif
 extern void win32_start_menu(winid);
-extern void win32_add_menu(winid,int,const ANY_P,
+extern void win32_add_menu(winid,int,const anything,
 			char,int,const char *, boolean);
 extern void win32_end_menu(winid, const char *);
-extern int win32_select_menu(winid, int, MENU_ITEM_P **);
+extern int win32_select_menu(winid, int, menu_item **);
 extern void win32_update_inventory(void);
 extern void win32_mark_synch(void);
 extern void win32_wait_synch(void);

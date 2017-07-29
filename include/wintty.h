@@ -185,10 +185,10 @@ extern void tty_display_file(const char *, const char *, boolean);
 extern void tty_display_file(const char *, boolean);
 #endif
 extern void tty_start_menu(winid);
-extern void tty_add_menu(winid,int,const ANY_P *,
+extern void tty_add_menu(winid,int,const anything *,
 			char,char,int,const char *, boolean);
 extern void tty_end_menu(winid, const char *);
-extern int tty_select_menu(winid, int, MENU_ITEM_P **);
+extern int tty_select_menu(winid, int, menu_item **);
 extern char tty_message_menu(char,int,const char *);
 extern void tty_update_inventory(void);
 extern void tty_mark_synch(void);

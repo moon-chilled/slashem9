@@ -99,11 +99,11 @@ void mswin_putstr(winid wid, int attr, const char *text);
 void mswin_putstr_ex(winid wid, int attr, const char *text, int);
 void mswin_display_file(const char *filename,boolean must_exist);
 void mswin_start_menu(winid wid);
-void mswin_add_menu(winid wid, int glyph, const ANY_P * identifier,
+void mswin_add_menu(winid wid, int glyph, const anything * identifier,
 		char accelerator, char group_accel, int attr, 
 		const char *str, boolean presel);
 void mswin_end_menu(winid wid, const char *prompt);
-int  mswin_select_menu(winid wid, int how, MENU_ITEM_P **selected);
+int  mswin_select_menu(winid wid, int how, menu_item **selected);
 void mswin_update_inventory(void);
 void mswin_mark_synch(void);
 void mswin_wait_synch(void);

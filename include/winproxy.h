@@ -34,10 +34,10 @@ extern void proxy_display_file(const char *, const char *, boolean);
 extern void proxy_display_file(const char *, boolean);
 #endif
 extern void proxy_start_menu(winid);
-extern void proxy_add_menu(winid, int, const ANY_P *,
+extern void proxy_add_menu(winid, int, const anything *,
 			char, char, int, const char *, boolean);
 extern void proxy_end_menu(winid, const char *);
-extern int proxy_select_menu(winid, int, MENU_ITEM_P **);
+extern int proxy_select_menu(winid, int, menu_item **);
 extern char proxy_message_menu(char, int, const char *);
 extern void proxy_update_inventory(void);
 extern void proxy_mark_synch(void);

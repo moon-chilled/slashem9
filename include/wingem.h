@@ -68,10 +68,10 @@ extern void Gem_curs(winid,int,int);
 extern void Gem_putstr(winid, int, const char *);
 extern void Gem_display_file(const char *, boolean);
 extern void Gem_start_menu(winid);
-extern void Gem_add_menu(winid,int,const ANY_P *,
+extern void Gem_add_menu(winid,int,const anything *,
 			char,char,int,const char *, boolean);
 extern void Gem_end_menu(winid, const char *);
-extern int Gem_select_menu(winid, int, MENU_ITEM_P **);
+extern int Gem_select_menu(winid, int, menu_item **);
 extern char Gem_message_menu(char,int,const char *);
 extern void Gem_update_inventory(void);
 extern void Gem_mark_synch(void);

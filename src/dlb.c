@@ -21,13 +21,13 @@
 typedef struct dlb_procs {
     boolean (*dlb_init_proc)(void);
     void (*dlb_cleanup_proc)(void);
-    boolean (*dlb_fopen_proc)(DLB_P,const char *,const char *);
-    int (*dlb_fclose_proc)(DLB_P);
-    int (*dlb_fread_proc)(char *,int,int,DLB_P);
-    int (*dlb_fseek_proc)(DLB_P,long,int);
-    char *(*dlb_fgets_proc)(char *,int,DLB_P);
-    int (*dlb_fgetc_proc)(DLB_P);
-    long (*dlb_ftell_proc)(DLB_P);
+    boolean (*dlb_fopen_proc)(dlb*,const char *,const char *);
+    int (*dlb_fclose_proc)(dlb*);
+    int (*dlb_fread_proc)(char *,int,int,dlb*);
+    int (*dlb_fseek_proc)(dlb*,long,int);
+    char *(*dlb_fgets_proc)(char *,int,dlb*);
+    int (*dlb_fgetc_proc)(dlb*);
+    long (*dlb_ftell_proc)(dlb*);
 } dlb_procs_t;
 
 /* without extern.h via hack.h, these haven't been declared for us */

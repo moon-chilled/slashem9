@@ -488,7 +488,7 @@ curses_create_nhmenu(winid wid)
 /* Add a menu item to the given menu window */
 
 void
-curses_add_nhmenu_item(winid wid, int glyph, const ANY_P * identifier,
+curses_add_nhmenu_item(winid wid, int glyph, const anything * identifier,
                        char accelerator, char group_accel, int attr,
                        const char *str, boolean presel)
 {
@@ -567,13 +567,13 @@ curses_finalize_nhmenu(winid wid, const char *prompt)
 /* Display a nethack menu, and return a selection, if applicable */
 
 int
-curses_display_nhmenu(winid wid, int how, MENU_ITEM_P ** _selected)
+curses_display_nhmenu(winid wid, int how, menu_item ** _selected)
 {
     nhmenu *current_menu = get_menu(wid);
     nhmenu_item *menu_item_ptr;
     int num_chosen, count;
     WINDOW *win;
-    MENU_ITEM_P *selected = NULL;
+    menu_item *selected = NULL;
 
     *_selected = NULL;
 
@@ -611,7 +611,7 @@ curses_display_nhmenu(winid wid, int how, MENU_ITEM_P ** _selected)
     curses_destroy_win(win);
 
     if (num_chosen > 0) {
-        selected = (MENU_ITEM_P *) malloc(num_chosen * sizeof (MENU_ITEM_P));
+        selected = (menu_item *) malloc(num_chosen * sizeof (menu_item));
         count = 0;
 
         menu_item_ptr = current_menu->entries;
