@@ -433,7 +433,7 @@ winid window;
 void
 win32_curs(window, col, row)
 winid window;
-register int col, row;	/* not xchar: perhaps xchar is unsigned and
+int col, row;	/* not xchar: perhaps xchar is unsigned and
 			   curx-x would be unsigned as well */
 {
 	wins[window]->cursx = col;
@@ -610,7 +610,7 @@ xchar col, row;
 int glyph;
 {
     uchar   ch;
-    register int offset;
+    int offset;
     int *ip;
     int color;
 
@@ -708,7 +708,7 @@ int *x, *y, *mod;
 int
 win32_doprev_message()
 {
-    register struct win32_WinDesc *cw = wins[WIN_MESSAGE];
+    struct win32_WinDesc *cw = wins[WIN_MESSAGE];
 
     return 0;
 }

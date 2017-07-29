@@ -169,7 +169,7 @@ long botl_score(void) {
 
 static char *botl_player(void) {
     static char player[MAXCO];
-	register char *nb;
+	char *nb;
     char mbot[MAXCO - 15];
     int k = 0;
 
@@ -216,8 +216,8 @@ static void bot1(void)
 #ifndef DUMP_LOG
 	char newbot1[MAXCO];
 #endif
-	register char *nb;
-	register int i,j;
+	char *nb;
+	int i,j;
 
 	strcpy(newbot1, botl_player());
 	sprintf(nb = eos(newbot1),"  ");
@@ -424,8 +424,8 @@ static void bot2(void) {
 const char *shorten_bot1(const char *str, int len) {
     static char cbuf[BUFSZ];
 
-    register const char *bp0 = str;
-    register char *bp1 = cbuf;
+    const char *bp0 = str;
+    char *bp1 = cbuf;
     int k = 0;
 
     do {

@@ -2951,7 +2951,7 @@ void rhack(char *cmd) {
 	    bad_command = TRUE;		/* skip cmdlist[] loop */
 	/* handle all other commands */
 	} else {
-	    register const struct func_tab *tlist;
+	    const struct func_tab *tlist;
 	    int res, (*func)(void);
 	    for (tlist = cmdlist; tlist->f_char; tlist++) {
 		if ((*cmd & 0xff) != (tlist->f_char & 0xff)) continue;
@@ -2978,7 +2978,7 @@ void rhack(char *cmd) {
 	}
 	if (bad_command) {
 	    char expcmd[10];
-	    register char *cp = expcmd;
+	    char *cp = expcmd;
 
 	    while (*cmd && (int)(cp - expcmd) < (int)(sizeof expcmd - 3)) {
 		if (*cmd >= 040 && *cmd < 0177) {
@@ -3297,7 +3297,7 @@ const char *click_to_cmd(int x, int y, int mod) {
 
 static char *parse(void) {
 	static char in_line[COLNO];
-	register int foo;
+	int foo;
 #ifdef BORG
 	char junk_char;
 #endif
@@ -3423,7 +3423,7 @@ char readchar(void) {
 #ifdef UNIX
 # ifdef NR_OF_EOFS
 	if (sym == EOF) {
-	    register int cnt = NR_OF_EOFS;
+	    int cnt = NR_OF_EOFS;
 	  /*
 	   * Some SYSV systems seem to return EOFs for various reasons
 	   * (?like when one hits break or for interrupted systemcalls?),

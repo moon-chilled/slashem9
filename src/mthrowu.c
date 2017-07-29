@@ -90,8 +90,8 @@ thitu (
 
 static int
 drop_throw(mon, obj, ohit, x, y)
-register struct monst *mon;
-register struct obj *obj;
+struct monst *mon;
+struct obj *obj;
 boolean ohit;
 int x,y;
 {
@@ -304,16 +304,16 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 
 void 
 m_throw (
-    register struct monst *mon,
-    register int x,
-    register int y,
-    register int dx,
-    register int dy,
-    register int range,		/* direction and range */
-    register struct obj *obj
+    struct monst *mon,
+    int x,
+    int y,
+    int dx,
+    int dy,
+    int range,		/* direction and range */
+    struct obj *obj
 )
 {
-	register struct monst *mtmp;
+	struct monst *mtmp;
 	struct obj *singleobj, *mwep;
 	char sym = obj->oclass;
 	int hitu, blindinc = 0;
@@ -710,11 +710,11 @@ thrwmu (struct monst *mtmp)
 
 int 
 spitmu (		/* monster spits substance at you */
-    register struct monst *mtmp,
-    register struct attack *mattk
+    struct monst *mtmp,
+    struct attack *mattk
 )
 {
-	register struct obj *otmp;
+	struct obj *otmp;
 
 	if(mtmp->mcan) {
 
@@ -751,8 +751,8 @@ spitmu (		/* monster spits substance at you */
 
 int 
 breamu (			/* monster breathes at you (ranged) */
-    register struct monst *mtmp,
-    register struct attack *mattk
+    struct monst *mtmp,
+    struct attack *mattk
 )
 {
 	/* if new breath types are added, change AD_ACID to max type */
@@ -796,8 +796,8 @@ breamu (			/* monster breathes at you (ranged) */
 /* WAC for doorbusting ONLY (at this point in time) No checks */
 boolean
 breamspot(mtmp, mattk, ax, ay)
-register struct monst *mtmp;
-register struct attack  *mattk;
+struct monst *mtmp;
+struct attack  *mattk;
 xchar ax, ay;
 {
 	/* if new breath types are added, change AD_ACID to max type */
@@ -823,7 +823,7 @@ xchar ax, ay;
 
 boolean
 linedup(ax, ay, bx, by)
-register xchar ax, ay, bx, by;
+xchar ax, ay, bx, by;
 {
 	tbx = ax - bx;	/* These two values are set for use */
 	tby = ay - by;	/* after successful return.	    */
@@ -842,7 +842,7 @@ register xchar ax, ay, bx, by;
 
 boolean
 lined_up(mtmp)		/* is mtmp in position to use ranged attack? */
-	register struct monst *mtmp;
+	struct monst *mtmp;
 {
 	return(linedup(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my));
 }
@@ -853,7 +853,7 @@ lined_up(mtmp)		/* is mtmp in position to use ranged attack? */
 struct obj *
 m_carrying (struct monst *mtmp, int type)
 {
-	register struct obj *otmp;
+	struct obj *otmp;
 
 	for(otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
 		if(otmp->otyp == type)

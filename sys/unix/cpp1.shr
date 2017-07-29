@@ -1244,9 +1244,9 @@ X * #pragma commands.  This prevents these commands from ending up at
 X * the end of the previous line if cpp is invoked with the -C option.
 X */
 X{
-X	register int		c;
-X	register char		*tp;
-X	register int		hash;
+X	int		c;
+X	char		*tp;
+X	int		hash;
 X	char			*ep;
 X
 X	c = skipws();
@@ -1487,8 +1487,8 @@ X * is always supressed, so we don't need to evaluate anything.  This
 X * supresses unnecessary warnings.
 X */
 X{
-X	register int		c;
-X	register int		found;
+X	int		c;
+X	int		found;
 X
 X	if ((c = skipws()) == '\n' || c == EOF_CHAR) {
 X	    unget();
@@ -1538,8 +1538,8 @@ X * Note: the November 12 draft forbids '>' in the #include <file> format.
 X * This restriction is unnecessary and not implemented.
 X */
 X{
-X	register int		c;
-X	register int		delim;
+X	int		c;
+X	int		delim;
 X#if HOST == SYS_VMS
 X	char			def_filename[NAM$C_MAXRSS + 1];
 X#endif
@@ -1603,7 +1603,7 @@ X * active files.  Returns TRUE if the file was opened, FALSE
 X * if openinclude() fails.  No error message is printed.
 X */
 X{
-X	register char		**incptr;
+X	char		**incptr;
 X#if HOST == SYS_VMS
 X#if NWORK < (NAM$C_MAXRSS + 1)
 X    << error, NWORK isn't greater than NAM$C_MAXRSS >>
@@ -1673,7 +1673,7 @@ X * hasdirectory returns TRUE.  Else, nothing is copied and it returns FALSE.
 X */
 X{
 X#if HOST == SYS_UNIX
-X	register char		*tp;
+X	char		*tp;
 X
 X	if ((tp = strrchr(source, '/')) == NULL)
 X	    return (FALSE);
@@ -1694,7 +1694,7 @@ X#else
 X	/*
 X	 * Random DEC operating system (RSX, RT11, RSTS/E)
 X	 */
-X	register char		*tp;
+X	char		*tp;
 X
 X	if ((tp = strrchr(source, ']')) == NULL
 X	 && (tp = strrchr(source, ':')) == NULL)
@@ -1734,7 +1734,7 @@ X{
 X	struct FAB	fab = cc$rms_fab;	/* File access block	*/
 X	struct NAM	nam = cc$rms_nam;	/* File name block	*/
 X	char		fullname[NAM$C_MAXRSS + 1];
-X	register char	*rp;			/* Result pointer	*/
+X	char	*rp;			/* Result pointer	*/
 X
 X	fab.fab$l_nam = &nam;			/* fab -> nam		*/
 X	fab.fab$l_fna = source;			/* Source filename	*/

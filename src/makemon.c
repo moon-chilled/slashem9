@@ -38,7 +38,7 @@ extern const int monstr[];
 
 boolean
 is_home_elemental(ptr)
-register struct permonst *ptr;
+struct permonst *ptr;
 {
 	if (ptr->mlet == S_ELEMENTAL)
 	    switch (monsndx(ptr)) {
@@ -55,7 +55,7 @@ register struct permonst *ptr;
  */
 static boolean
 wrong_elem_type(ptr)
-    register struct permonst *ptr;
+    struct permonst *ptr;
 {
     if (ptr->mlet == S_ELEMENTAL) {
 	return((boolean)(!is_home_elemental(ptr)));
@@ -76,11 +76,11 @@ wrong_elem_type(ptr)
 
 static void
 m_initgrp(mtmp, x, y, n)	/* make a group just like mtmp */
-register struct monst *mtmp;
-register int x, y, n;
+struct monst *mtmp;
+int x, y, n;
 {
 	coord mm;
-	register int cnt = rnd(n);
+	int cnt = rnd(n);
 	struct monst *mon;
 #if defined(__GNUC__) && (defined(HPUX) || defined(DGUX))
 	/* There is an unresolved problem with several people finding that
@@ -145,7 +145,7 @@ m_initthrow(mtmp,otyp,oquan)
 struct monst *mtmp;
 int otyp,oquan;
 {
-	register struct obj *otmp;
+	struct obj *otmp;
 
 	otmp = mksobj(otyp, TRUE, FALSE);
 	otmp->quan = (long) rn1(oquan, 3);
@@ -157,9 +157,9 @@ int otyp,oquan;
 
 static void
 m_initweap_normal(mtmp)
-register struct monst *mtmp;
+struct monst *mtmp;
 {
-	register struct permonst *ptr = mtmp->data;
+	struct permonst *ptr = mtmp->data;
 	int bias;
 
 	bias = is_lord(ptr) + is_prince(ptr) * 2 + extra_nasty(ptr);
@@ -209,10 +209,10 @@ register struct monst *mtmp;
 
 static void
 m_initweap(mtmp)
-register struct monst *mtmp;
+struct monst *mtmp;
 {
-	register struct permonst *ptr = mtmp->data;
-	register int mm = monsndx(ptr);
+	struct permonst *ptr = mtmp->data;
+	int mm = monsndx(ptr);
 	struct obj *otmp;
 
 #ifdef REINCARNATION
@@ -939,11 +939,11 @@ mkmonmoney (struct monst *mtmp, long amount)
 
 static void
 m_initinv(mtmp)
-register struct	monst	*mtmp;
+struct	monst	*mtmp;
 {
-	register int cnt;
-	register struct obj *otmp;
-	register struct permonst *ptr = mtmp->data;
+	int cnt;
+	struct obj *otmp;
+	struct permonst *ptr = mtmp->data;
 /* 	char *opera_cloak = "opera cloak";*/
 	int i;
 
@@ -963,7 +963,7 @@ register struct	monst	*mtmp;
 				|| ptr == &mons[PM_YEOMAN_WARDER]
 #endif
 		) {
-		    register int mac;
+		    int mac;
 
 		    switch(monsndx(ptr)) {
 			case PM_GUARD: mac = -1; break;
@@ -1143,7 +1143,7 @@ register struct	monst	*mtmp;
 /*	    	otmp = readobjnam(opera_cloak);
 		if (otmp && otmp != &zeroobj) mpickobj(mtmp, otmp);*/
 		for (i = STRANGE_OBJECT; i < NUM_OBJECTS; i++) {
-			register const char *zn;
+			const char *zn;
 			if ((zn = OBJ_DESCR(objects[i])) && !strcmpi(zn, "opera cloak")) {
 				if (!OBJ_NAME(objects[i])) i = STRANGE_OBJECT;
 				break;
@@ -1354,9 +1354,9 @@ boolean ghostly;
  *	In case we make a monster group, only return the one at [x,y].
  */
 struct monst *
-makemon (register struct permonst *ptr, register int x, register int y, register int mmflags)
+makemon (struct permonst *ptr, int x, int y, int mmflags)
 {
-	register struct monst *mtmp;
+	struct monst *mtmp;
 	int mndx, mcham, ct, mitem, xlth;
 	boolean anymon = (!ptr);
 	boolean byyou = (x == u.ux && y == u.uy);
@@ -1758,11 +1758,11 @@ int mndx;
  */
 static int
 align_shift(ptr)
-register struct permonst *ptr;
+struct permonst *ptr;
 {
     static long oldmoves = 0L;	/* != 1, starting value of moves */
     static s_level *lev;
-    register int alshift;
+    int alshift;
 
     if(oldmoves != moves) {
 	lev = Is_special(&u.uz);
@@ -1791,8 +1791,8 @@ static struct {
 struct permonst *
 rndmonst (void)
 {
-	register struct permonst *ptr;
-	register int mndx, ct;
+	struct permonst *ptr;
+	int mndx, ct;
 
 /* [Tom] this was locking up priest quest... who knows why? */
 /* fixed it! no 'W' class monsters with corpses! oops! */
@@ -1927,7 +1927,7 @@ reset_rndmonst (
 struct permonst *
 mkclass (char class, int spc)
 {
-	register int    first;
+	int    first;
 
 	first = pm_mkclass(class,spc);
 	
@@ -1947,7 +1947,7 @@ mkclass (char class, int spc)
 int 
 pm_mkclass (char class, int spc)
 {
-	register int	first, last, num = 0;
+	int	first, last, num = 0;
 	int maxmlev, mask = (G_NOGEN | G_UNIQ) & ~spc;
 
 	maxmlev = level_difficulty() >> 1;
@@ -1996,7 +1996,7 @@ pm_mkclass (char class, int spc)
 
 int 
 adj_lev (	/* adjust strength of monsters based on u.uz and u.ulevel */
-    register struct permonst *ptr
+    struct permonst *ptr
 )
 {
 	int	tmp, tmp2;
@@ -2133,9 +2133,9 @@ grow_up (	/* `mtmp' might "grow up" into a bigger version */
 
 
 int 
-mongets (register struct monst *mtmp, register int otyp)
+mongets (struct monst *mtmp, int otyp)
 {
-	register struct obj *otmp;
+	struct obj *otmp;
 	int spe;
 
 	if (!otyp) return 0;
@@ -2236,7 +2236,7 @@ golemhp (int type)
 
 boolean
 peace_minded(ptr)
-register struct permonst *ptr;
+struct permonst *ptr;
 {
 	aligntyp mal = ptr->maligntyp, ual = u.ualign.type;
 
@@ -2348,7 +2348,7 @@ static char syms[] = {
 
 void 
 set_mimic_sym (		/* KAA, modified by ERS */
-    register struct monst *mtmp
+    struct monst *mtmp
 )
 {
 	int typ, roomno, rt;

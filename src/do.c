@@ -1077,7 +1077,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 
 	if (portal && !In_endgame(&u.uz)) {
 	    /* find the portal on the new level */
-	    register struct trap *ttrap;
+	    struct trap *ttrap;
 
 	    for (ttrap = ftrap; ttrap; ttrap = ttrap->ntrap)
 		if (ttrap->ttyp == MAGIC_PORTAL) break;
@@ -1092,7 +1092,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 		} else {
 		    if (newdungeon) {
 			if (Is_stronghold(&u.uz)) {
-			    register xchar x, y;
+			    xchar x, y;
 
 			    do {
 				x = (COLNO - 2 - rnd(5));

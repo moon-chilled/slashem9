@@ -922,7 +922,7 @@ Contents
 
         case MUSE_SCR_REMOVE_CURSE:
                 {
-                register struct obj *obj;
+                struct obj *obj;
                 mreadmsg(mtmp,otmp);
                 pline("%s feels than someone is helping %s.",Monnam(mtmp),
                                  mtmp->female?"her":"him");
@@ -1773,7 +1773,7 @@ void mongone(struct monst *)
 		Monster dissapears. The struct is released.
 void setmangry(struct monst *)
 		Monster gets angry. If already was it, does nothing.
-boolean angry_guards(register boolean)
+boolean angry_guards(boolean)
 		Function used to angry guards in town. The parameter just indi-
 		cate to display messages if true. Returns TRUE if any guard
 		was there.

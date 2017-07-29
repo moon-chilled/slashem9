@@ -82,8 +82,8 @@ int argc;
 char *argv[];
 {
 
-	register int fd;
-	register char *dir;
+	int fd;
+	char *dir;
 
 #ifdef __DJGPP__
         if (*argv[0]) hname = argv[0];  /* DJGPP can give us argv[0] */

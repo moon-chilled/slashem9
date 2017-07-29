@@ -839,7 +839,7 @@ int dokick(void) {
 		    } else goto ouch;
 		}
 		if(IS_THRONE(maploc->typ)) {
-		    register int i;
+		    int i;
 		    if(Levitation) goto dumb;
 		    if((Luck < 0 || maploc->doormask) && !rn2(3)) {
 			maploc->typ = ROOM;

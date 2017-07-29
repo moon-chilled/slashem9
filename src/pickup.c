@@ -96,7 +96,7 @@ boolean here;		/* flag for type of obj list linkage */
 int
 collect_obj_classes(ilets, otmp, here, incl_gold, filter, itemcount)
 char ilets[];
-register struct obj *otmp;
+struct obj *otmp;
 boolean here, incl_gold;
 boolean (*filter)(OBJ_P);
 int *itemcount;
@@ -104,14 +104,14 @@ int *itemcount;
 int
 collect_obj_classes(ilets, otmp, here, filter, itemcount)
 char ilets[];
-register struct obj *otmp;
+struct obj *otmp;
 boolean here;
 boolean (*filter)(OBJ_P);
 int *itemcount;
 #endif
 {
-	register int iletct = 0;
-	register char c;
+	int iletct = 0;
+	char c;
 
 	*itemcount = 0;
 #ifndef GOLDOBJ
@@ -190,7 +190,7 @@ int *menu_on_demand;
 		}
 	} else  {	/* more than one choice available */
 		const char *where = 0;
-		register char sym, oc_of_sym, *p;
+		char sym, oc_of_sym, *p;
 		/* additional choices */
 		ilets[iletct++] = ' ';
 		ilets[iletct++] = 'a';
@@ -261,8 +261,8 @@ static void
 check_here(picked_some)
 boolean picked_some;
 {
-	register struct obj *obj;
-	register int ct = 0;
+	struct obj *obj;
+	int ct = 0;
 
 	/* count the objects here */
 	for (obj = level.objects[u.ux][u.uy]; obj; obj = obj->nexthere) {
@@ -366,7 +366,7 @@ struct obj *obj;
 /* query_objlist callback: return TRUE if valid class and worn */
 boolean
 is_worn_by_type(otmp)
-register struct obj *otmp;
+struct obj *otmp;
 {
 	return((boolean)(!!(otmp->owornmask &
 			(W_ARMOR | W_RING | W_AMUL | W_TOOL | W_WEP | W_SWAPWEP | W_QUIVER)))
@@ -1508,7 +1508,7 @@ int
 doloot()	/* loot a container on the floor or loot saddle from mon. */
 {
     struct obj *cobj, *nobj;
-    register int c = -1;
+    int c = -1;
     int timepassed = 0;
     coord cc;
     boolean underfoot = TRUE;
@@ -1857,7 +1857,7 @@ free_bomb:
 /* Returns: -1 to stop, 1 item was inserted, 0 item was not inserted. */
 static int
 in_container(obj)
-register struct obj *obj;
+struct obj *obj;
 {
 	boolean floor_container = !carried(current_container);
 	boolean was_unpaid = FALSE;
@@ -2025,9 +2025,9 @@ struct obj *obj;
 /* Returns: -1 to stop, 1 item was removed, 0 item was not removed. */
 static int
 out_container(obj)
-register struct obj *obj;
+struct obj *obj;
 {
-	register struct obj *otmp;
+	struct obj *otmp;
 	boolean is_gold = (obj->oclass == COIN_CLASS);
 	int res, loadlev;
 	long count;

@@ -415,7 +415,7 @@ int getbones(void) {
 #endif
 			trickery(errbuf);
 		} else {
-			register struct monst *mtmp;
+			struct monst *mtmp;
 
 			getlev(fd, 0, 0, TRUE);
 

@@ -119,7 +119,7 @@ int attk;
 
 int
 attack_checks(mtmp, barehanded)
-register struct monst *mtmp;
+struct monst *mtmp;
 boolean barehanded;
 {
 	int retval;
@@ -265,7 +265,7 @@ check_caitiff (struct monst *mtmp)
 
 schar
 find_roll_to_hit(mtmp)
-register struct monst *mtmp;
+struct monst *mtmp;
 {
 	schar tmp;
 	int tmp2;
@@ -350,10 +350,10 @@ register struct monst *mtmp;
 /* u.dx and u.dy must be set */
 boolean
 attack(mtmp)
-register struct monst *mtmp;
+struct monst *mtmp;
 {
 	schar tmp;
-	register struct permonst *mdat = mtmp->data;
+	struct permonst *mdat = mtmp->data;
 	int mhit;
 
 	/* This section of code provides protection against accidentally
@@ -486,12 +486,12 @@ atk_done:
 
 static boolean
 known_hitum(mon, mattack, mhit, uattk)   /* returns TRUE if monster still lives */
-register struct monst *mon;
+struct monst *mon;
 int mattack;			/* Which weapons you attacked with -ALI */
-register int *mhit;
+int *mhit;
 struct attack *uattk;
 {
-	register boolean malive = TRUE;
+	boolean malive = TRUE;
 
 	if (override_confirmation) {
 	    /* this may need to be generalized if weapons other than
@@ -1806,14 +1806,14 @@ struct attack *mattk;
 
 int
 damageum(mdef, mattk)
-register struct monst *mdef;
-register struct attack *mattk;
+struct monst *mdef;
+struct attack *mattk;
 {
-	register struct permonst *pd = mdef->data;
-	register int	tmp = d((int)mattk->damn, (int)mattk->damd);
+	struct permonst *pd = mdef->data;
+	int	tmp = d((int)mattk->damn, (int)mattk->damd);
 	int armpro;
 	boolean negated;
-	register int    enchantlvl = 0;
+	int    enchantlvl = 0;
 	boolean noeffect = FALSE;
 
 	armpro = magic_negation(mdef);
@@ -2352,10 +2352,10 @@ register struct attack *mattk;
 
 static int
 explum(mdef, mattk)
-register struct monst *mdef;
-register struct attack *mattk;
+struct monst *mdef;
+struct attack *mattk;
 {
-	register int tmp = d((int)mattk->damn, (int)mattk->damd);
+	int tmp = d((int)mattk->damn, (int)mattk->damd);
 
 	You("explode!");
 	switch(mattk->adtyp) {
@@ -2431,11 +2431,11 @@ end_engulf()
 
 static int
 gulpum(mdef,mattk)
-register struct monst *mdef;
-register struct attack *mattk;
+struct monst *mdef;
+struct attack *mattk;
 {
-	register int tmp;
-	register int dam = d((int)mattk->damn, (int)mattk->damd);
+	int tmp;
+	int dam = d((int)mattk->damn, (int)mattk->damd);
 	struct obj *otmp;
 	/* Not totally the same as for real monsters.  Specifically, these
 	 * don't take multiple moves.  (It's just too hard, for too little
@@ -2608,13 +2608,13 @@ register struct attack *mattk;
 
 void
 missum(mdef, target, roll, mattk)
-register struct monst *mdef;
-register struct attack *mattk;
-register int target;
-register int roll;
+struct monst *mdef;
+struct attack *mattk;
+int target;
+int roll;
 {
-	register boolean nearmiss = (target == roll);
-	register struct obj *blocker = NULL;
+	boolean nearmiss = (target == roll);
+	struct obj *blocker = NULL;
 	long mwflags = mdef->misc_worn_check;
 
 		/* 3 values for blocker
@@ -2673,8 +2673,8 @@ register int roll;
  */
 static boolean
 hmonas(mon, tmp)		/* attack monster as a monster. */
-register struct monst *mon;
-register int tmp;
+struct monst *mon;
+int tmp;
 {
 	struct attack *mattk, alt_attk;
 	int	i, sum[NATTK];
@@ -3005,13 +3005,13 @@ use_weapon:
 
 int
 passive(mon, mhit, malive, aatyp)
-register struct monst *mon;
-register int mhit;
-register int malive;
+struct monst *mon;
+int mhit;
+int malive;
 uchar aatyp;
 {
-	register struct permonst *ptr = mon->data;
-	register int i, tmp;
+	struct permonst *ptr = mon->data;
+	int i, tmp;
 	struct obj *target = mhit & HIT_UWEP ? uwep :
 		mhit & HIT_USWAPWEP ? uswapwep : NULL;
 /*	char buf[BUFSZ]; */
@@ -3234,12 +3234,12 @@ uchar aatyp;
  */
 void
 passive_obj(mon, obj, mattk)
-register struct monst *mon;
-register struct obj *obj;	/* null means pick uwep, uswapwep or uarmg */
+struct monst *mon;
+struct obj *obj;	/* null means pick uwep, uswapwep or uarmg */
 struct attack *mattk;		/* null means we find one internally */
 {
-	register struct permonst *ptr = mon->data;
-	register int i;
+	struct permonst *ptr = mon->data;
+	int i;
 
 #if 0
 	/* if caller hasn't specified an object, use uwep, uswapwep or uarmg */

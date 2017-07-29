@@ -22,7 +22,7 @@ const char *what;
 static void
 dowatersnakes() /* Fountain of snakes! */
 {
-    register int num = rn1(5,2);
+    int num = rn1(5,2);
     struct monst *mtmp;
 
     if (!(mvitals[PM_WATER_MOCCASIN].mvflags & G_GONE)) {
@@ -43,7 +43,7 @@ static
 void
 dowaterdemon() /* Water demon */
 {
-    register struct monst *mtmp;
+    struct monst *mtmp;
 
     if(!(mvitals[PM_WATER_DEMON].mvflags & G_GONE)) {
 	if((mtmp = makemon(&mons[PM_WATER_DEMON],u.ux,u.uy, NO_MM_FLAGS))) {
@@ -69,7 +69,7 @@ dowaterdemon() /* Water demon */
 static void
 dowaternymph() /* Water Nymph */
 {
-	register struct monst *mtmp;
+	struct monst *mtmp;
 
 	if(!(mvitals[PM_WATER_NYMPH].mvflags & G_GONE) &&
 	   (mtmp = makemon(&mons[PM_WATER_NYMPH],u.ux,u.uy, NO_MM_FLAGS))) {
@@ -108,8 +108,8 @@ gush(x, y, poolcnt)
 int x, y;
 void * poolcnt;
 {
-	register struct monst *mtmp;
-	register struct trap *ttmp;
+	struct monst *mtmp;
+	struct trap *ttmp;
 
 	if (((x+y)%2) || (x == u.ux && y == u.uy) ||
 	    (rn2(1 + distmin(u.ux, u.uy, x, y)))  ||
@@ -197,8 +197,8 @@ void
 drinkfountain (void)
 {
 	/* What happens when you drink from a fountain? */
-	register boolean mgkftn = (levl[u.ux][u.uy].blessedftn == 1);
-	register int fate = rnd(30);
+	boolean mgkftn = (levl[u.ux][u.uy].blessedftn == 1);
+	int fate = rnd(30);
 
 	if (Levitation) {
 		floating_above("fountain");
@@ -279,7 +279,7 @@ drinkfountain (void)
 			break;
 
 		case 24: /* Curse an item */ {
-			register struct obj *obj;
+			struct obj *obj;
 
 			pline("This water's no good!");
 			morehungry(rn1(20, 11));
@@ -326,7 +326,7 @@ drinkfountain (void)
 			break;
 
 		case 29: /* Scare */ {
-			register struct monst *mtmp;
+			struct monst *mtmp;
 
 			pline("This water gives you bad breath!");
 			for(mtmp = fmon; mtmp; mtmp = mtmp->nmon)
@@ -350,7 +350,7 @@ drinkfountain (void)
 }
 
 void 
-dipfountain (register struct obj *obj)
+dipfountain (struct obj *obj)
 {
 	if (Levitation) {
 		floating_above("fountain");
@@ -500,7 +500,7 @@ dipfountain (register struct obj *obj)
 }
 
 void 
-diptoilet (register struct obj *obj)
+diptoilet (struct obj *obj)
 {
 	if (Levitation) {
 	    floating_above("toilet");
@@ -539,7 +539,7 @@ breaksink (int x, int y)
 void 
 breaktoilet (int x, int y)
 {
-    register int num = rn1(5,2);
+    int num = rn1(5,2);
     struct monst *mtmp;
     pline("The toilet suddenly shatters!");
     level.flags.nsinks--;
@@ -714,7 +714,7 @@ drinktoilet (void)
 
 
 void 
-whetstone_fountain_effects (register struct obj *obj)
+whetstone_fountain_effects (struct obj *obj)
 {
 	if (Levitation) {
 		floating_above("fountain");
@@ -821,7 +821,7 @@ whetstone_fountain_effects (register struct obj *obj)
 
 
 void 
-whetstone_toilet_effects (register struct obj *obj)
+whetstone_toilet_effects (struct obj *obj)
 {
 	if (Levitation) {
 	    floating_above("toilet");
@@ -835,7 +835,7 @@ whetstone_toilet_effects (register struct obj *obj)
 }
 
 void 
-whetstone_sink_effects (register struct obj *obj)
+whetstone_sink_effects (struct obj *obj)
 {
 	struct monst *mtmp;
 

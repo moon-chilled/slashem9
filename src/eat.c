@@ -1061,7 +1061,7 @@ static void cpostfx(int pm) {
 		}
 		/* fall through to default case */
 	    default: {
-		register struct permonst *ptr = &mons[pm];
+		struct permonst *ptr = &mons[pm];
 		int i, count;
 
 		if (dmgtype(ptr, AD_STUN) || dmgtype(ptr, AD_HALU) ||

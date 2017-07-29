@@ -659,10 +659,10 @@ def_char_to_monclass (char ch)
 
 void
 assign_graphics(graph_chars, glth, maxlen, offset)
-register uchar *graph_chars;
+uchar *graph_chars;
 int glth, maxlen, offset;
 {
-    register int i;
+    int i;
 
     for (i = 0; i < maxlen; i++)
 	showsyms[i+offset] = (((i < glth) && graph_chars[i]) ?
@@ -672,10 +672,10 @@ int glth, maxlen, offset;
 #ifdef USER_DUNGEONCOLOR
 void
 assign_colors(graph_colors, glth, maxlen, offset)
-register uchar *graph_colors;
+uchar *graph_colors;
 int glth, maxlen, offset;
 {
-    register int i;
+    int i;
 
     for (i = 0; i < maxlen; i++)
 	showsymcolors[i+offset] =
@@ -831,7 +831,7 @@ boolean is_rlevel;
     /* Adjust graphics display characters on Rogue levels */
 
     if (is_rlevel) {
-	register int i;
+	int i;
 
 	(void) memcpy((void *)save_showsyms,
 		      (void *)showsyms, sizeof showsyms);

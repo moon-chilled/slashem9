@@ -271,7 +271,7 @@ chat_with_leader()
 }
 
 void 
-leader_speaks (register struct monst *mtmp)
+leader_speaks (struct monst *mtmp)
 {
 	/* maybe you attacked leader? */
 	if(!mtmp->mpeaceful) {
@@ -324,7 +324,7 @@ chat_with_guardian()
 
 static void
 prisoner_speaks (mtmp)
-	register struct monst *mtmp;
+	struct monst *mtmp;
 {
 	if (mtmp->data == &mons[PM_PRISONER] &&
 			(mtmp->mstrategy & STRAT_WAITMASK)) {
@@ -345,7 +345,7 @@ prisoner_speaks (mtmp)
 }
 
 void 
-quest_chat (register struct monst *mtmp)
+quest_chat (struct monst *mtmp)
 {
     if (mtmp->m_id == Qstat(leader_m_id)) {
 	chat_with_leader();
@@ -360,7 +360,7 @@ quest_chat (register struct monst *mtmp)
 }
 
 void 
-quest_talk (register struct monst *mtmp)
+quest_talk (struct monst *mtmp)
 {
     if (mtmp->m_id == Qstat(leader_m_id)) {
 	leader_speaks(mtmp);

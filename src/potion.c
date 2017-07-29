@@ -333,7 +333,7 @@ ghost_from_bottle()
 int 
 dodrink (void)
 {
-	register struct obj *otmp;
+	struct obj *otmp;
 	const char *potion_descr;
 	char quaffables[SIZE(beverages) + 2];
 	char *qp = quaffables;
@@ -395,7 +395,7 @@ dodrink (void)
 }
 
 int 
-dopotion (register struct obj *otmp)
+dopotion (struct obj *otmp)
 {
 	int retval;
 
@@ -426,9 +426,9 @@ dopotion (register struct obj *otmp)
 
 /* return -1 if potion is used up,  0 if error,  1 not used */
 int 
-peffects (register struct obj *otmp)
+peffects (struct obj *otmp)
 {
-	register int i, ii, lim;
+	int i, ii, lim;
 
 
 	/* KMH, balance patch -- this is too cruel for novices */
@@ -886,7 +886,7 @@ peffects (register struct obj *otmp)
 			        You(riseup, ceiling(u.ux,u.uy));
 				goto_level(&earth_level, FALSE, FALSE, FALSE);
 			    } else {
-			        register int newlev = depth(&u.uz)-1;
+			        int newlev = depth(&u.uz)-1;
 				d_level newlevel;
 
 				get_level(&newlevel, newlev);
@@ -967,7 +967,7 @@ peffects (register struct obj *otmp)
 		spoteffects(FALSE);	/* for sinks */
 		break;
 	case POT_GAIN_ENERGY:			/* M. Stephenson */
-		{       register int num , num2;
+		{       int num , num2;
 			if(otmp->cursed)
 			    You_feel("lackluster.");
 			else
@@ -1082,7 +1082,7 @@ peffects (register struct obj *otmp)
 void
 healup(nhp, nxtra, curesick, cureblind)
 	int nhp, nxtra;
-	register boolean curesick, cureblind;
+	boolean curesick, cureblind;
 {
 	if (nhp) {
 		if (Upolyd) {
@@ -1103,7 +1103,7 @@ void
 healup_mon(mtmp, nhp, nxtra, curesick, cureblind)
 	struct monst *mtmp;
 	int nhp, nxtra;
-	register boolean curesick, cureblind;
+	boolean curesick, cureblind;
 {
 	if (nhp) {
 		mtmp->mhp += nhp;
@@ -1117,7 +1117,7 @@ healup_mon(mtmp, nhp, nxtra, curesick, cureblind)
 }
 
 void 
-strange_feeling (register struct obj *obj, register const char *txt)
+strange_feeling (struct obj *obj, const char *txt)
 {
 	if (flags.beginner || !txt)
 		You("have a %s feeling for a moment, then it passes.",
@@ -1148,11 +1148,11 @@ bottlename (void)
 /* WAC -- monsters can throw potions around too! */
 void
 potionhit(mon, obj, your_fault)
-register struct monst *mon; /* Monster that got hit */
-register struct obj *obj;
+struct monst *mon; /* Monster that got hit */
+struct obj *obj;
 boolean your_fault;
 {
-	register const char *botlnam = bottlename();
+	const char *botlnam = bottlename();
 	boolean isyou = (mon == &youmonst);
 	int distance;
 
@@ -1311,7 +1311,7 @@ boolean your_fault;
 		break;
 	case POT_BLINDNESS:
 		if(haseyes(mon->data)) {
-		    register int btmp = 64 + rn2(32) +
+		    int btmp = 64 + rn2(32) +
 			rn2(32) * !resist(mon, POTION_CLASS, 0, NOTELL);
 		    btmp += mon->mblinded;
 		    mon->mblinded = min(btmp,127);
@@ -1480,7 +1480,7 @@ boolean your_fault;
 		   !objects[obj->otyp].oc_uname && cansee(mon->mx,mon->my))
 		docall(obj);
 	if(*u.ushops && obj->unpaid) {
-	        register struct monst *shkp =
+	        struct monst *shkp =
 			shop_keeper(*in_rooms(u.ux, u.uy, SHOPBASE));
 
 		if(!shkp)
@@ -1496,9 +1496,9 @@ boolean your_fault;
 
 /* vapors are inhaled or get in your eyes */
 void 
-potionbreathe (register struct obj *obj)
+potionbreathe (struct obj *obj)
 {
-	register int i, ii, isdone, kn = 0;
+	int i, ii, isdone, kn = 0;
 
 	switch(obj->otyp) {
 	case POT_RESTORE_ABILITY:
@@ -1658,7 +1658,7 @@ potionbreathe (register struct obj *obj)
 
 static short
 mixtype(o1, o2)
-register struct obj *o1, *o2;
+struct obj *o1, *o2;
 /* returns the potion type when o1 is dipped in o2 */
 {
 	/* cut down on the number of cases below */
@@ -1889,7 +1889,7 @@ register struct obj *o1, *o2;
 static
 void
 pre_downgrade_obj(obj, used)
-register struct obj *obj;
+struct obj *obj;
 boolean *used;
 {
     boolean dummy = FALSE;
@@ -1907,7 +1907,7 @@ boolean *used;
 static
 void
 downgrade_obj(obj, nomagic, used)
-register struct obj *obj;
+struct obj *obj;
 int nomagic;	/* The non-magical object to downgrade to */
 boolean *used;
 {
@@ -1920,7 +1920,7 @@ boolean *used;
 
 boolean
 get_wet(obj, amnesia)
-register struct obj *obj;
+struct obj *obj;
 boolean amnesia;
 /* returns TRUE if something happened (potion should be used up) */
 {
@@ -2157,7 +2157,7 @@ boolean amnesia;
  * Polearms are not currently implemented.
  */
 int 
-upgrade_obj (register struct obj *obj)
+upgrade_obj (struct obj *obj)
 /* returns 1 if something happened (potion should be used up) 
  * returns 0 if nothing happened
  * returns -1 if object exploded (potion should be used up) 
@@ -2520,7 +2520,7 @@ upgrade_obj (register struct obj *obj)
 		get_obj_location(obj, &ox, &oy, BURIED_TOO|CONTAINED_TOO) &&
 		costly_spot(ox, oy)) {
 	    char objroom = *in_rooms(ox, oy, SHOPBASE);
-	    register struct monst *shkp = shop_keeper(objroom);
+	    struct monst *shkp = shop_keeper(objroom);
 
 	    if ((!obj->no_charge ||
 		 (Has_contents(obj) &&
@@ -3140,7 +3140,7 @@ dodip (void)
 
 
 void 
-djinni_from_bottle (register struct obj *obj)
+djinni_from_bottle (struct obj *obj)
 {
 	struct monst *mtmp;
 	int genie_type;        

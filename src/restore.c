@@ -62,8 +62,8 @@ static long omoves;
 static void
 find_lev_obj()
 {
-	register struct obj *fobjtmp = NULL;
-	register struct obj *otmp;
+	struct obj *fobjtmp = NULL;
+	struct obj *otmp;
 	int x,y;
 
 	for(x=0; x<COLNO; x++) for(y=0; y<ROWNO; y++)
@@ -96,7 +96,7 @@ void
 inven_inuse(quietly)
 boolean quietly;
 {
-	register struct obj *otmp, *otmp2;
+	struct obj *otmp, *otmp2;
 
 	for (otmp = invent; otmp; otmp = otmp2) {
 	    otmp2 = otmp->nobj;
@@ -120,7 +120,7 @@ boolean quietly;
 
 static void
 restlevchn(fd)
-register int fd;
+int fd;
 {
 	int cnt;
 	s_level	*tmplev, *x;
@@ -186,11 +186,11 @@ boolean ghostly;
 
 static struct obj *
 restobjchn(fd, ghostly, frozen)
-register int fd;
+int fd;
 boolean ghostly, frozen;
 {
-	register struct obj *otmp, *otmp2 = 0;
-	register struct obj *first = NULL;
+	struct obj *otmp, *otmp2 = 0;
+	struct obj *first = NULL;
 	int xl;
 
 	while(1) {
@@ -236,11 +236,11 @@ boolean ghostly, frozen;
 
 static struct monst *
 restmonchn(fd, ghostly)
-register int fd;
+int fd;
 boolean ghostly;
 {
-	register struct monst *mtmp, *mtmp2 = 0;
-	register struct monst *first = NULL;
+	struct monst *mtmp, *mtmp2 = 0;
+	struct monst *first = NULL;
 	int xl;
 	struct permonst *monbegin;
 	boolean moved;
@@ -310,7 +310,7 @@ static struct fruit *
 loadfruitchn(fd)
 int fd;
 {
-	register struct fruit *flist, *fnext;
+	struct fruit *flist, *fnext;
 
 	flist = 0;
 	while (fnext = newfruit(),
@@ -325,9 +325,9 @@ int fd;
 
 static void
 freefruitchn(flist)
-register struct fruit *flist;
+struct fruit *flist;
 {
-	register struct fruit *fnext;
+	struct fruit *fnext;
 
 	while (flist) {
 	    fnext = flist->nextf;
@@ -338,9 +338,9 @@ register struct fruit *flist;
 
 static void
 ghostfruit(otmp)
-register struct obj *otmp;
+struct obj *otmp;
 {
-	register struct fruit *oldf;
+	struct fruit *oldf;
 
 	for (oldf = oldfruit; oldf; oldf = oldf->nextf)
 		if (oldf->fid == otmp->spe) break;
@@ -352,7 +352,7 @@ register struct obj *otmp;
 static
 boolean
 restgamestate(fd, stuckid, steedid)
-register int fd;
+int fd;
 unsigned int *stuckid, *steedid;	/* STEED */
 {
 	/* discover is actually flags.explore */
@@ -477,7 +477,7 @@ static void
 restlevelstate(stuckid, steedid)
 unsigned int stuckid, steedid;	/* STEED */
 {
-	register struct monst *mtmp;
+	struct monst *mtmp;
 
 	if (stuckid) {
 		for (mtmp = fmon; mtmp; mtmp = mtmp->nmon)
@@ -499,13 +499,13 @@ unsigned int stuckid, steedid;	/* STEED */
 /*ARGSUSED*/	/* fd used in MFLOPPY only */
 static int
 restlevelfile(fd, ltmp)
-register int fd;
+int fd;
 xchar ltmp;
 {
 #ifdef MAC_MPW
 # pragma unused(fd)
 #endif
-	register int nfd;
+	int nfd;
 	char whynot[BUFSZ];
 
 	nfd = create_levelfile(ltmp, whynot);
@@ -520,10 +520,8 @@ xchar ltmp;
 	return(2);
 }
 
-int 
-dorecover (register int fd)
-{
-	unsigned int stuckid = 0, steedid = 0;	/* not a register */
+int dorecover (int fd) {
+	unsigned int stuckid = 0, steedid = 0;
 	xchar ltmp;
 	int rtmp;
 	struct obj *otmp;
@@ -684,8 +682,8 @@ int fd, pid;
 xchar lev;
 boolean ghostly;
 {
-	register struct trap *trap;
-	register struct monst *mtmp;
+	struct trap *trap;
+	struct monst *mtmp;
 	branch *br;
 	int hpid;
 	xchar dlvl;
@@ -775,7 +773,7 @@ boolean ghostly;
 
 	/* regenerate animals while on another level */
 	if (u.uz.dlevel) {
-	    register struct monst *mtmp2;
+	    struct monst *mtmp2;
 
 	  for(mtmp = fmon; mtmp; mtmp = mtmp2) {
 		mtmp2 = mtmp->nmon;
@@ -855,7 +853,7 @@ boolean ghostly;
 		    break;		
 		case BR_PORTAL: /* max of 1 portal per level */
 		    {
-			register struct trap *ttmp;
+			struct trap *ttmp;
 			for(ttmp = ftrap; ttmp; ttmp = ttmp->ntrap)
 			    if (ttmp->ttyp == MAGIC_PORTAL)
 				break;
@@ -866,7 +864,7 @@ boolean ghostly;
 		}
 	    } else if (!br) {
 		/* Remove any dangling portals. */
-		register struct trap *ttmp;
+		struct trap *ttmp;
 		for (ttmp = ftrap; ttmp; ttmp = ttmp->ntrap)
 		    if (ttmp->ttyp == MAGIC_PORTAL) {
 			deltrap(ttmp);
@@ -1018,9 +1016,9 @@ int
 mread(fd, buf, len)
 int fd;
 void * buf;
-register unsigned len;
+unsigned len;
 {
-    /*register int readlen = 0;*/
+    /*int readlen = 0;*/
     if (fd < 0) error("Restore error; mread attempting to read file %d.", fd);
     mreadfd = fd;
     while (len--) {
@@ -1028,7 +1026,7 @@ register unsigned len;
 	    inrunlength--;
 	    *(*((char **)&buf))++ = '\0';
 	} else {
-	    register short ch = mgetc();
+	    short ch = mgetc();
 	    if (ch < 0) return -1; /*readlen;*/
 	    if ((*(*(char **)&buf)++ = (char)ch) == RLESC) {
 		inrunlength = mgetc();
@@ -1049,11 +1047,11 @@ minit (void)
 
 void
 mread(fd, buf, len)
-register int fd;
-register void * buf;
-register unsigned int len;
+int fd;
+void * buf;
+unsigned int len;
 {
-	register int rlen;
+	int rlen;
 
 #if defined(BSD) || defined(ULTRIX)
 	rlen = read(fd, buf, (int) len);

@@ -37,8 +37,8 @@ static const char *whimper_sound(struct monst *);
 void 
 dosounds (void)
 {
-    register struct mkroom *sroom;
-    register int hallu, vx, vy;
+    struct mkroom *sroom;
+    int hallu, vx, vy;
     struct monst *mtmp;
 
     if (!flags.soundok || u.uswallow || Underwater) return;
@@ -300,7 +300,7 @@ static const char * const h_sounds[] = {
 /* make the sounds of a pet in any level of distress */
 /* (1 = "whimper", 2 = "yelp", 3 = "growl") */
 void 
-pet_distress (register struct monst *mtmp, int lev)
+pet_distress (struct monst *mtmp, int lev)
 {
     const char *verb;
     if (mtmp->msleeping || !mtmp->mcanmove || !mtmp->data->msound)
@@ -330,7 +330,7 @@ pet_distress (register struct monst *mtmp, int lev)
 /* in extern.h: #define growl(mon) pet_distess((mon),3) */
 
 const char *
-growl_sound (register struct monst *mtmp)
+growl_sound (struct monst *mtmp)
 {
 	const char *ret;
 
@@ -377,7 +377,7 @@ growl_sound (register struct monst *mtmp)
 /* in extern.h: #define yelp(mon) pet_distress((mon),2) */
 
 static const char *
-yelp_sound (register struct monst *mtmp)
+yelp_sound (struct monst *mtmp)
 {
     const char *ret;
 
@@ -411,7 +411,7 @@ yelp_sound (register struct monst *mtmp)
 /* in extern.h: #define whimper(mon) pet_distress((mon),1) */
 
 static const char *
-whimper_sound (register struct monst *mtmp)
+whimper_sound (struct monst *mtmp)
 {
     const char *ret;
 
@@ -434,7 +434,7 @@ whimper_sound (register struct monst *mtmp)
 
 /* pet makes "I'm hungry" noises */
 void 
-beg (register struct monst *mtmp)
+beg (struct monst *mtmp)
 {
     if (mtmp->msleeping || !mtmp->mcanmove ||
 	    !(carnivorous(mtmp->data) || herbivorous(mtmp->data)))
@@ -451,9 +451,9 @@ beg (register struct monst *mtmp)
 }
 
 static int 
-domonnoise (register struct monst *mtmp)
+domonnoise (struct monst *mtmp)
 {
-    register const char *pline_msg = 0,	/* Monnam(mtmp) will be prepended */
+    const char *pline_msg = 0,	/* Monnam(mtmp) will be prepended */
 			*verbl_msg = 0;	/* verbalize() */
     struct permonst *ptr = mtmp->data;
     char verbuf[BUFSZ];
@@ -918,8 +918,8 @@ dotalk (void)
 static int 
 dochat (void)
 {
-    register struct monst *mtmp;
-    register int tx,ty;
+    struct monst *mtmp;
+    int tx,ty;
     struct obj *otmp;
 
     if (is_silent(youmonst.data)) {

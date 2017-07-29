@@ -32,7 +32,7 @@ static boolean can_reach_location(struct monst *,xchar,xchar,
 static boolean could_reach_item(struct monst *, xchar,xchar);
 
 static struct obj *DROPPABLES(struct monst *mon) {
-	register struct obj *obj;
+	struct obj *obj;
 	struct obj *wep = MON_WEP(mon);
 	boolean item1 = FALSE, item2 = FALSE;
 
@@ -433,7 +433,7 @@ static int dog_goal(struct monst *mtmp, struct edog *edog, int after, int udist,
 #define DDIST(x,y) (dist2(x,y,omx,omy))
 #define SQSRCHRADIUS 5
 	    int min_x, max_x, min_y, max_y;
-	    register int nx, ny;
+	    int nx, ny;
 
 	    gtyp = UNDEF;	/* no goal as yet */
 	    gx = gy = 0;	/* suppress 'used before set' message */
@@ -512,7 +512,7 @@ static int dog_goal(struct monst *mtmp, struct edog *edog, int after, int udist,
 
 #define FARAWAY (COLNO + 2)		/* position outside screen */
 	if (gx == u.ux && gy == u.uy && !in_masters_sight) {
-	    register coord *cp;
+	    coord *cp;
 
 	    cp = gettrack(omx,omy);
 	    if (cp) {
@@ -618,12 +618,12 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 	int omx, omy;		/* original mtmp position */
 	int appr, whappr, udist;
 	int i, j, k;
-	register struct edog *edog = EDOG(mtmp);
+	struct edog *edog = EDOG(mtmp);
 	struct obj *obj = NULL;
 	xchar otyp;
 	boolean has_edog, cursemsg[9], is_spell, do_eat = FALSE;
 	xchar nix, niy;		/* position mtmp is (considering) moving to */
-	register int nx, ny;	/* temporary coordinates */
+	int nx, ny;	/* temporary coordinates */
 	xchar cnt, uncursedcnt, chcnt;
 	int chi = -1, nidist, ndist;
 	coord poss[9];
@@ -795,7 +795,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 
 		if ((info[i] & ALLOW_M) && MON_AT(nx, ny)) {
 		    int mstatus;
-		    register struct monst *mtmp2 = m_at(nx,ny);
+		    struct monst *mtmp2 = m_at(nx,ny);
 		    aligntyp align1, align2; /* For priests, minions etc. */
 
 		    if (mtmp->isminion) align1 = EMIN(mtmp)->min_align;

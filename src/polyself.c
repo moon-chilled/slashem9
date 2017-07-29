@@ -663,7 +663,7 @@ polymon (	/* returns 1 if polymorph successful */
 static void
 break_armor()
 {
-    register struct obj *otmp;
+    struct obj *otmp;
     boolean controlled_change = (Race_if(PM_DOPPELGANGER) || 
     		(Race_if(PM_HUMAN_WEREWOLF) && u.umonnum == PM_WEREWOLF));
 
@@ -929,8 +929,8 @@ dogaze (void)
 	    pline("%s seems not to notice your gaze.", Monnam(mtmp));
 	    return (1);
 	} else {
-	    register struct attack *mattk;
-	    register int i;
+	    struct attack *mattk;
+	    int i;
 
 	    for(i = 0; i < NATTK; i++) {
 		mattk = &(youmonst.data->mattk[i]);
@@ -1029,7 +1029,7 @@ doremove (void)
 int 
 dospinweb (void)
 {
-	register struct trap *ttmp = t_at(u.ux,u.uy);
+	struct trap *ttmp = t_at(u.ux,u.uy);
 
 	if (Levitation || Is_airlevel(&u.uz)
 	    || Underwater || Is_waterlevel(&u.uz)) {
@@ -1166,7 +1166,7 @@ dosummon (void)
 int 
 dogaze (void)
 {
-	register struct monst *mtmp;
+	struct monst *mtmp;
 	int looked = 0;
 	char qbuf[QBUFSZ];
 	int i;

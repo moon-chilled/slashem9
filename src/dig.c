@@ -78,8 +78,8 @@ static void mkcavearea(boolean rockit) {
     int dist;
     xchar xmin = u.ux, xmax = u.ux;
     xchar ymin = u.uy, ymax = u.uy;
-    register xchar i;
-    register boolean waslit = rm_waslit();
+    xchar i;
+    boolean waslit = rm_waslit();
 
     if(rockit) pline("Crash!  The ceiling collapses around you!");
     else pline("A mysterious force %s cave around you!",
@@ -283,7 +283,7 @@ static int dig(void) {
 	digging.effort += bonus;
 
 	if (digging.down) {
-		register struct trap *ttmp;
+		struct trap *ttmp;
 
 		if (digging.effort > 250) {
 		    (void) dighole(FALSE);
@@ -313,9 +313,9 @@ static int dig(void) {
 	}
 
 	if (digging.effort > 100) {
-		register const char *digtxt, *dmgtxt = (const char*) 0;
-		register struct obj *obj;
-		register boolean shopedge = *in_rooms(dpx, dpy, SHOPBASE);
+		const char *digtxt, *dmgtxt = (const char*) 0;
+		struct obj *obj;
+		boolean shopedge = *in_rooms(dpx, dpy, SHOPBASE);
 
 		if ((obj = sobj_at(STATUE, dpx, dpy)) != 0) {
 			if (break_statue(obj))
@@ -396,7 +396,7 @@ static int dig(void) {
 		    pay_for_damage(dmgtxt, FALSE);
 
 		if(Is_earthlevel(&u.uz) && !rn2(3)) {
-		    register struct monst *mtmp;
+		    struct monst *mtmp;
 
 		    switch(rn2(2)) {
 		      case 0:

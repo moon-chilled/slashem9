@@ -452,7 +452,7 @@ display_monster(
 		 * mappearance is currently set to an S_ index value in
 		 * makemon.c.
 		 */
-		register int glyph = cmap_to_glyph(mon->mappearance);
+		int glyph = cmap_to_glyph(mon->mappearance);
 #ifdef DISPLAY_LAYERS
 		levl[x][y].mem_bg = mon->mappearance;
 #else
@@ -545,7 +545,7 @@ static void display_warning(struct monst *mon) {
 void feel_location(xchar x, xchar y) {
     struct rm *lev = &(levl[x][y]);
     struct obj *boulder;
-    register struct monst *mon;
+    struct monst *mon;
 
     /* If the hero's memory of an invisible monster is accurate, we want to keep
      * him from detecting the same monster over and over again on each turn.
@@ -968,7 +968,7 @@ void tmp_at(int x, int y) {
 
 	case DISP_END:
 	    if (tglyph->style == DISP_BEAM || tglyph->style == DISP_BEAM_ALWAYS) {
-		register int i;
+		int i;
 
 		/* Erase (reset) from source to end */
 		for (i = 0; i < tglyph->sidx; i++)
@@ -1104,7 +1104,7 @@ void swallowed(int first) {
 void under_water(int mode) {
     static xchar lastx, lasty;
     static boolean dela;
-    register int x, y;
+    int x, y;
 
     /* swallowing has a higher precedence than under water */
     if (Is_waterlevel(&u.uz) || u.uswallow) return;
@@ -1550,7 +1550,7 @@ void flush_screen(int cursor_on_u) {
      */
     static   boolean flushing = 0;
     static   boolean delay_flushing = 0;
-    register int x,y;
+    int x,y;
 
     if (cursor_on_u == -1) delay_flushing = !delay_flushing;
     if (delay_flushing) return;
@@ -1558,7 +1558,7 @@ void flush_screen(int cursor_on_u) {
     flushing = 1;
 
     for (y = 0; y < ROWNO; y++) {
-	register gbuf_entry *gptr = &gbuf[y][x = gbuf_start[y]];
+	gbuf_entry *gptr = &gbuf[y][x = gbuf_start[y]];
 	for (; x <= gbuf_stop[y]; gptr++, x++)
 	    if (gptr->new) {
 		print_glyph(WIN_MAP,x,y,gptr->glyph);

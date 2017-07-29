@@ -277,9 +277,9 @@ outgoldmap:
 // returns 1 if nothing was detected
 // returns 0 if something was detected
 int food_detect(struct obj *sobj) {
-    register struct obj *obj;
-    register struct monst *mtmp;
-    register int ct = 0, ctu = 0;
+    struct obj *obj;
+    struct monst *mtmp;
+    int ct = 0, ctu = 0;
     boolean confused = (Confusion || (sobj && sobj->cursed)), stale;
     char oclass = confused ? POTION_CLASS : FOOD_CLASS;
     const char *what = confused ? something : "food";
@@ -389,8 +389,8 @@ int		class		/* an object class, 0 for all */ ) {
 				    detector->oclass == SPBOOK_CLASS) &&
 			detector->blessed);
     int ct = 0, ctu = 0;
-    register struct obj *obj, *otmp = NULL;
-    register struct monst *mtmp;
+    struct obj *obj, *otmp = NULL;
+    struct monst *mtmp;
     int uw = u.uinwater;
     int sym, boulder = 0;
 

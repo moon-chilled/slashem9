@@ -140,8 +140,8 @@ static void
 mkbox_cnts(box)
 struct obj *box;
 {
-	register int n, minn = 0;
-	register struct obj *otmp;
+	int n, minn = 0;
+	struct obj *otmp;
 
 	box->cobj = NULL;
 
@@ -182,7 +182,7 @@ struct obj *box;
 		    (void) stop_timer(REVIVE_MON, (void *)otmp);
 		}
 	    } else {
-		register int tprob;
+		int tprob;
 		const struct icp *iprobs = boxiprobs;
 
 		for (tprob = rnd(100); (tprob -= iprobs->iprob) > 0; iprobs++)
@@ -215,8 +215,8 @@ struct obj *box;
 int 
 rndmonnum (void)	/* select a random, common monster type */
 {
-	register struct permonst *ptr;
-	register int	i;
+	struct permonst *ptr;
+	int	i;
 
 	/* Plan A: get a level-appropriate common monster */
 	ptr = rndmonst();
@@ -351,9 +351,9 @@ replace_object (struct obj *obj, struct obj *otmp)
  * usage of an object.
  */
 void 
-bill_dummy_object (register struct obj *otmp)
+bill_dummy_object (struct obj *otmp)
 {
-	register struct obj *dummy, *obj;
+	struct obj *dummy, *obj;
 
 	if (otmp->unpaid)
 	    subfrombill(otmp, shop_keeper(*u.ushops));
@@ -810,7 +810,7 @@ start_corpse_timeout (struct obj *body)
 }
 
 void 
-bless (register struct obj *otmp)
+bless (struct obj *otmp)
 {
 #ifdef GOLDOBJ
 	if (otmp->oclass == COIN_CLASS) return;
@@ -829,7 +829,7 @@ bless (register struct obj *otmp)
 }
 
 void 
-unbless (register struct obj *otmp)
+unbless (struct obj *otmp)
 {
 	otmp->blessed = 0;
 	if (carried(otmp) && confers_luck(otmp))
@@ -844,7 +844,7 @@ unbless (register struct obj *otmp)
 }
 
 void 
-curse (register struct obj *otmp)
+curse (struct obj *otmp)
 {
 #ifdef GOLDOBJ
 	if (otmp->oclass == COIN_CLASS) return;
@@ -874,7 +874,7 @@ curse (register struct obj *otmp)
 }
 
 void 
-uncurse (register struct obj *otmp)
+uncurse (struct obj *otmp)
 {
 	otmp->cursed = 0;
 	if (carried(otmp) && confers_luck(otmp))
@@ -888,7 +888,7 @@ uncurse (register struct obj *otmp)
 
 
 void 
-blessorcurse (register struct obj *otmp, register int chance)
+blessorcurse (struct obj *otmp, int chance)
 {
 	if(otmp->blessed || otmp->cursed) return;
 
@@ -904,7 +904,7 @@ blessorcurse (register struct obj *otmp, register int chance)
 
 
 int 
-bcsign (register struct obj *otmp)
+bcsign (struct obj *otmp)
 {
 	return(!!otmp->blessed - !!otmp->cursed);
 }
@@ -919,7 +919,7 @@ bcsign (register struct obj *otmp)
  *	   container's weight.
  */
 int 
-weight (register struct obj *obj)
+weight (struct obj *obj)
 {
 	int wt = objects[obj->otyp].oc_weight;
 
@@ -927,7 +927,7 @@ weight (register struct obj *obj)
 		wt += mons[PM_HOUSECAT].cwt;
 	if (Is_container(obj) || obj->otyp == STATUE) {
 		struct obj *contents;
-		register int cwt = 0;
+		int cwt = 0;
 
 		if (obj->otyp == STATUE && obj->corpsenm >= LOW_PM)
 		    wt = (int)obj->quan *
@@ -988,7 +988,7 @@ rnd_treefruit_at (int x, int y)
 struct obj *
 mkgold (long amount, int x, int y)
 {
-    register struct obj *gold = g_at(x,y);
+    struct obj *gold = g_at(x,y);
 
     if (amount <= 0L)
 	amount = (long)(1 + rnd(level_difficulty()+2) * rnd(30));
@@ -1029,7 +1029,7 @@ struct permonst *ptr;
 int x, y;
 boolean init;
 {
-	register struct obj *otmp;
+	struct obj *otmp;
 
 	if (objtype != CORPSE && objtype != STATUE)
 	    impossible("making corpstat type %d", objtype);
@@ -1146,11 +1146,11 @@ boolean copyof;
 struct obj *
 mk_tt_object (
     int objtype, /* CORPSE or STATUE */
-    register int x,
-    register int y
+    int x,
+    int y
 )
 {
-	register struct obj *otmp, *otmp2;
+	struct obj *otmp, *otmp2;
 	boolean initialize_it;
 
 	/* player statues never contain books */
@@ -1183,7 +1183,7 @@ mk_named_object (
 
 boolean
 is_flammable(otmp)
-register struct obj *otmp;
+struct obj *otmp;
 {
 	int otyp = otmp->otyp;
 	int omat = objects[otyp].oc_material;
@@ -1196,7 +1196,7 @@ register struct obj *otmp;
 
 boolean
 is_rottable(otmp)
-register struct obj *otmp;
+struct obj *otmp;
 {
 	int otyp = otmp->otyp;
 
@@ -1212,9 +1212,9 @@ register struct obj *otmp;
 
 /* put the object at the given location */
 void 
-place_object (register struct obj *otmp, int x, int y)
+place_object (struct obj *otmp, int x, int y)
 {
-    register struct obj *otmp2 = level.objects[x][y];
+    struct obj *otmp2 = level.objects[x][y];
 
     if (otmp->where != OBJ_FREE)
 	panic("place_object: obj not free");
@@ -1372,7 +1372,7 @@ int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
 #undef ROT_ICE_ADJUSTMENT
 
 void 
-remove_object (register struct obj *otmp)
+remove_object (struct obj *otmp)
 {
     xchar x = otmp->ox;
     xchar y = otmp->oy;

@@ -647,7 +647,7 @@ void drop_ball(xchar x, xchar y) {
 		pline(pullmsg, "lava");
 		break;
 	    case TT_BEARTRAP: {
-		register long side = rn2(3) ? LEFT_SIDE : RIGHT_SIDE;
+		long side = rn2(3) ? LEFT_SIDE : RIGHT_SIDE;
 		pline(pullmsg, "bear trap");
 		set_wounded_legs(side, rn1(1000, 500));
 #ifdef STEED

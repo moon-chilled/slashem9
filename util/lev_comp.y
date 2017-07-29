@@ -1474,7 +1474,7 @@ region_detail	: REGION_ID ':' region ',' light_state ',' room_type prefilled
 			   current_region.y2 < (int)max_y_map) {
 			    /* check for walls in the room */
 			    char ebuf[60];
-			    register int x, y, nrock = 0;
+			    int x, y, nrock = 0;
 
 			    for(y=current_region.y1; y<=current_region.y2; y++)
 				for(x=current_region.x1;

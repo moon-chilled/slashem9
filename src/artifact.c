@@ -283,7 +283,7 @@ void artifact_exists(struct obj *otmp, const char *name, boolean mod) {
 	if (otmp && *name)
 	    for (a = artilist+1; a->otyp; a++)
 		if (a->otyp == otmp->otyp && !strcmp(a->name, name)) {
-		    register int m = a - artilist;
+		    int m = a - artilist;
 		    otmp->oartifact = (char)(mod ? m : 0);
 		    if (mod) {
 			/* Light up Candle of Eternal Flame and
@@ -429,10 +429,10 @@ void set_artifact_intrinsic(struct obj *otmp, boolean on, long wp_mask) {
 	if (mask && wp_mask == W_ART && !on) {
 	    /* find out if some other artifact also confers this intrinsic */
 	    /* if so, leave the mask alone */
-	    register struct obj* obj;
+	    struct obj* obj;
 	    for(obj = invent; obj; obj = obj->nobj)
 		if(obj != otmp && obj->oartifact) {
-		    register const struct artifact *art = get_artifact(obj);
+		    const struct artifact *art = get_artifact(obj);
 		    if(art->cary.adtyp == dtyp) {
 			mask = NULL;
 			break;
@@ -448,10 +448,10 @@ void set_artifact_intrinsic(struct obj *otmp, boolean on, long wp_mask) {
 	spfx = (wp_mask != W_ART) ? oart->spfx : oart->cspfx;
 	if(spfx && wp_mask == W_ART && !on) {
 	    /* don't change any spfx also conferred by other artifacts */
-	    register struct obj* obj;
+	    struct obj* obj;
 	    for(obj = invent; obj; obj = obj->nobj)
 		if(obj != otmp && obj->oartifact) {
-		    register const struct artifact *art = get_artifact(obj);
+		    const struct artifact *art = get_artifact(obj);
 		    spfx &= ~art->cspfx;
 		}
 	}
@@ -680,7 +680,7 @@ static int spec_applies(const struct artifact *weap, struct monst *mtmp) {
 
 /* return the M2 flags of monster that an artifact's special attacks apply against */
 long spec_m2 (struct obj *otmp) {
-	register const struct artifact *artifact = get_artifact(otmp);
+	const struct artifact *artifact = get_artifact(otmp);
 	if (artifact)
 		return artifact->mtype;
 	return 0L;

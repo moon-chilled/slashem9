@@ -575,7 +575,7 @@ void keepdogs(boolean pets_only /* true for ascension or final escape */) {
 			set_residency(mtmp, TRUE);
 
 		if (mtmp->wormno) {
-		    register int cnt;
+		    int cnt;
 		    /* NOTE: worm is truncated to # segs = max wormno size */
 		    cnt = count_wsegs(mtmp);
 		    num_segs = min(cnt, MAX_NUM_WORMS - 1);
@@ -626,7 +626,7 @@ void migrate_to_level(
 	    set_residency(mtmp, TRUE);
 
 	if (mtmp->wormno) {
-	    register int cnt;
+	    int cnt;
 	  /* **** NOTE: worm is truncated to # segs = max wormno size **** */
 	    cnt = count_wsegs(mtmp);
 	    num_segs = min(cnt, MAX_NUM_WORMS - 1);
@@ -669,7 +669,7 @@ void migrate_to_level(
 
 /* return quality of food; the lower the better */
 /* fungi will eat even tainted food */
-int dogfood(struct monst *mon, register struct obj *obj) {
+int dogfood(struct monst *mon, struct obj *obj) {
 	boolean carni = carnivorous(mon->data);
 	boolean herbi = herbivorous(mon->data);
 	struct permonst *fptr = &mons[obj->corpsenm];

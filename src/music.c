@@ -58,8 +58,8 @@ static void
 awaken_monsters(distance)
 int distance;
 {
-	register struct monst *mtmp = fmon;
-	register int distm;
+	struct monst *mtmp = fmon;
+	int distm;
 
 	while(mtmp) {
 	    if (!DEADMONSTER(mtmp)) {
@@ -86,7 +86,7 @@ static void
 put_monsters_to_sleep(distance)
 int distance;
 {
-	register struct monst *mtmp = fmon;
+	struct monst *mtmp = fmon;
 
 	while(mtmp) {
 		if (!DEADMONSTER(mtmp) && distu(mtmp->mx, mtmp->my) < distance &&
@@ -106,7 +106,7 @@ static void
 charm_snakes(distance)
 int distance;
 {
-	register struct monst *mtmp = fmon;
+	struct monst *mtmp = fmon;
 	int could_see_mon, was_peaceful;
 
 	while (mtmp) {
@@ -140,7 +140,7 @@ static void
 calm_nymphs(distance)
 int distance;
 {
-	register struct monst *mtmp = fmon;
+	struct monst *mtmp = fmon;
 
 	while (mtmp) {
 	    if (!DEADMONSTER(mtmp) && mtmp->data->mlet == S_NYMPH && mtmp->mcanmove &&
@@ -162,7 +162,7 @@ int distance;
 void 
 awaken_soldiers (void)
 {
-	register struct monst *mtmp = fmon;
+	struct monst *mtmp = fmon;
 
 	while(mtmp) {
 	    if (!DEADMONSTER(mtmp) &&
@@ -213,7 +213,7 @@ static void
 do_earthquake(force)
 int force;
 {
-	register int x,y;
+	int x,y;
 	struct monst *mtmp;
 	struct obj *otmp;
 	struct trap *chasm;
@@ -461,7 +461,7 @@ struct obj *instr;
 #if 0
 	case PAN_PIPE_OF_SUMMONING: /* yikes! */
 	    if (instr->spe > 0) {
-		register int cnt = 1;
+		int cnt = 1;
 		instr->spe--;
 		cnt += rn2(4) + 3;
 		while(cnt--)
@@ -471,8 +471,8 @@ struct obj *instr;
 	case PAN_PIPE_OF_THE_SEWERS:
 	    You("call out the rats!");
 	    if (instr->spe > 0) {
-		register int cnt = 1;
-		register struct monst *mtmp;
+		int cnt = 1;
+		struct monst *mtmp;
 		instr->spe--;
 		cnt += rn2(4) + 3;
 		while(cnt--) {

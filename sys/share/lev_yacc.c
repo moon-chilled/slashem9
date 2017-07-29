@@ -1080,9 +1080,9 @@ int
 yyparse (YYPARSE_PARAM_ARG)
     YYPARSE_PARAM_DECL
 {
-    register int yym, yyn, yystate;
+    int yym, yyn, yystate;
 #if YYDEBUG
-    register const char *yys;
+    const char *yys;
 
     if ((yys = getenv("YYDEBUG")))
     {
@@ -2369,7 +2369,7 @@ case 191:
 			   current_region.y2 < (int)max_y_map) {
 			    /* check for walls in the room */
 			    char ebuf[60];
-			    register int x, y, nrock = 0;
+			    int x, y, nrock = 0;
 
 			    for(y=current_region.y1; y<=current_region.y2; y++)
 				for(x=current_region.x1;

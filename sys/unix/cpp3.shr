@@ -100,14 +100,14 @@ X
 X#ifdef	nomacargs
 XFILE_LOCAL int
 Xisbinary(op)
-Xregister int	op;
+Xint	op;
 X{
 X	return (op >= FIRST_BINOP && op <= LAST_BINOP);
 X}
 X
 XFILE_LOCAL int
 Xisunary(op)
-Xregister int	op;
+Xint	op;
 X{
 X	return (op >= FIRST_UNOP && op <= LAST_UNOP);
 X}
@@ -220,9 +220,9 @@ X * For compatiblity with older cpp's, this return returns 1 (TRUE)
 X * if a syntax error is detected.
 X */
 X{
-X	register int	op;		/* Current operator		*/
-X	register int	*valp;		/* -> value vector		*/
-X	register OPTAB	*opp;		/* Operator stack		*/
+X	int	op;		/* Current operator		*/
+X	int	*valp;		/* -> value vector		*/
+X	OPTAB	*opp;		/* Operator stack		*/
 X	int		prec;		/* Op precedence		*/
 X	int		binop;		/* Set if binary op. needed	*/
 X	int		op1;		/* Operand from stack		*/
@@ -385,7 +385,7 @@ X * evalchar	called to evaluate 'x'
 X * evalnum	called to evaluate numbers.
 X */
 X{
-X	register int	c, c1, t;
+X	int	c, c1, t;
 X
 Xagain:  do {					/* Collect the token	*/
 X	    c = skipws();
@@ -502,10 +502,10 @@ X *	DIG		success
 X *	OP_FAIL		bad parse or something.
 X */
 X{
-X	register int	c;
-X	register TYPES	*tp;
-X	register SIZES	*sizp;
-X	register short	*testp;
+X	int	c;
+X	TYPES	*tp;
+X	SIZES	*sizp;
+X	short	*testp;
 X	short		typecode;
 X
 X	if ((c = skipws()) != '(')
@@ -618,15 +618,15 @@ X}
 X
 XFILE_LOCAL int
 Xevalnum(c)
-Xregister int	c;
+Xint	c;
 X/*
 X * Expand number for #if lexical analysis.  Note: evalnum recognizes
 X * the unsigned suffix, but only returns a signed int value.
 X */
 X{
-X	register int	value;
-X	register int	base;
-X	register int	c1;
+X	int	value;
+X	int	base;
+X	int	c1;
 X
 X	if (c != '0')
 X	    base = 10;
@@ -662,9 +662,9 @@ X/*
 X * Get a character constant
 X */
 X{
-X	register int	c;
-X	register int	value;
-X	register int	count;
+X	int	c;
+X	int	value;
+X	int	count;
 X
 X	instring = TRUE;
 X	if ((c = cget()) == '\\') {
@@ -760,7 +760,7 @@ X}
 X
 XFILE_LOCAL int *
 Xevaleval(valp, op, skip)
-Xregister int	*valp;
+Xint	*valp;
 Xint		op;
 Xint		skip;		/* TRUE if short-circuit evaluation	*/
 X/*
@@ -773,7 +773,7 @@ X *
 X * evaleval() returns the new pointer to the top of the value stack.
 X */
 X{
-X	register int	v1, v2;
+X	int	v1, v2;
 X
 X	if (isbinary(op))
 X	    v2 = *--valp;
@@ -902,9 +902,9 @@ X
 X#ifdef	DEBUG_EVAL
 Xdumpstack(opstack, opp, value, valp)
 XOPTAB		opstack[NEXP];	/* Operand stack		*/
-Xregister OPTAB	*opp;		/* Operator stack		*/
+XOPTAB	*opp;		/* Operator stack		*/
 Xint		value[NEXP];	/* Value stack			*/
-Xregister int	*valp;		/* -> value vector		*/
+Xint	*valp;		/* -> value vector		*/
 X{
 X	printf("index op prec skip name -- op stack at %s", infile->bptr);
 X	while (opp > opstack) {
@@ -1044,7 +1044,7 @@ X/*
 X * Skip to the end of the current input line.
 X */
 X{
-X	register int		c;
+X	int		c;
 X
 X	do {				/* Skip to newline	*/
 X	    c = get();
@@ -1057,7 +1057,7 @@ X/*
 X * Skip over whitespace
 X */
 X{
-X	register int		c;
+X	int		c;
 X
 X	do {				/* Skip whitespace	*/
 X	    c = get();
@@ -1070,14 +1070,14 @@ X	return (c);
 X}
 X
 Xscanid(c)
-Xregister int	c;				/* First char of id	*/
+Xint	c;				/* First char of id	*/
 X/*
 X * Get the next token (an id) into the token buffer.
 X * Note: this code is duplicated in lookid().
 X * Change one, change both.
 X */
 X{
-X	register char	*bp;
+X	char	*bp;
 X
 X	if (c == DEF_MAGIC)			/* Eat the magic token	*/
 X	    c = get();				/* undefiner.		*/
@@ -1093,7 +1093,7 @@ X}
 X
 Xint
 Xmacroid(c)
-Xregister int		c;
+Xint		c;
 X/*
 X * If c is a letter, scan the id.  if it's #defined, expand it and scan
 X * the next character and try again.
@@ -1101,7 +1101,7 @@ X *
 X * Else, return the character.  If type[c] is a LET, the token is in token.
 X */
 X{
-X	register DEFBUF	*dp;
+X	DEFBUF	*dp;
 X
 X	if (infile != NULL && infile->fp != NULL)
 X	    recursion = 0;
@@ -1122,8 +1122,8 @@ X * macroid's argument.  If it is not TOK_SEP, unget() the character
 X * and return FALSE.
 X */
 X{
-X	register int		c;
-X	register char		*token1;
+X	int		c;
+X	char		*token1;
 X
 X#if OK_CONCAT
 X	if (get() != TOK_SEP) {			/* Token concatenation	*/
@@ -1178,7 +1178,7 @@ X}
 X
 Xint
 Xscanstring(delim, outfun)
-Xregister int	delim;			/* ' or "			*/
+Xint	delim;			/* ' or "			*/
 Xint		(*outfun)();		/* Output function		*/
 X/*
 X * Scan off a string.  Warning if terminated by newline or EOF.
@@ -1186,7 +1186,7 @@ X * outfun() outputs the character -- to a buffer if in a macro.
 X * TRUE if ok, FALSE if error.
 X */
 X{
-X	register int		c;
+X	int		c;
 X
 X	instring = TRUE;		/* Don't strip comments		*/
 X	(*outfun)(delim);
@@ -1210,14 +1210,14 @@ X	}
 X}
 X
 Xscannumber(c, outfun)
-Xregister int	c;				/* First char of number	*/
-Xregister int	(*outfun)();			/* Output/store func	*/
+Xint	c;				/* First char of number	*/
+Xint	(*outfun)();			/* Output/store func	*/
 X/*
 X * Process a number.  We know that c is from 0 to 9 or dot.
 X * Algorithm from Dave Conroy's Decus C.
 X */
 X{
-X	register int	radix;			/* 8, 10, or 16		*/
+X	int	radix;			/* 8, 10, or 16		*/
 X	int		expseen;		/* 'e' seen in floater	*/
 X	int		signseen;		/* '+' or '-' seen	*/
 X	int		octal89;		/* For bad octal test	*/
@@ -1336,7 +1336,7 @@ X	    cwarn("Illegal digit in octal number", NULLST);
 X}
 X
 Xsave(c)
-Xregister int	c;
+Xint	c;
 X{
 X	if (workp >= &work[NWORK])
 X	    cfatal("Work buffer overflow", NULLST);
@@ -1350,7 +1350,7 @@ X/*
 X * Store a string into free memory.
 X */
 X{
-X	register char	*result;
+X	char	*result;
 X
 X	result = getmem(strlen(text) + 1);
 X	strcpy(result, text);
@@ -1365,8 +1365,8 @@ X/*
 X * Common FILEINFO buffer initialization for a new file or macro.
 X */
 X{
-X	register FILEINFO	*file;
-X	register int		size;
+X	FILEINFO	*file;
+X	int		size;
 X
 X	size = strlen(name);			/* File/macro name	*/
 X	file = (FILEINFO *) getmem(sizeof (FILEINFO) + bufsize + size);
@@ -1392,7 +1392,7 @@ X/*
 X * Get a block of free memory.
 X */
 X{
-X	register char	*result;
+X	char	*result;
 X	extern char	*malloc();
 X
 X	if ((result = malloc((unsigned) size)) == NULL)
@@ -1426,9 +1426,9 @@ X * Look for the next token in the symbol table.  Returns token in "token".
 X * If found, returns the table pointer;  Else returns NULL.
 X */
 X{
-X	register int		nhash;
-X	register DEFBUF		*dp;
-X	register char		*np;
+X	int		nhash;
+X	DEFBUF		*dp;
+X	char		*np;
 X	int			temp;
 X	int			isrecurse;	/* For #define foo foo	*/
 X
@@ -1469,9 +1469,9 @@ X * Returns a pointer to the define block (delete = FALSE)
 X * Returns NULL if the symbol wasn't defined (delete = TRUE).
 X */
 X{
-X	register DEFBUF		*dp;
-X	register DEFBUF		**prevp;
-X	register char		*np;
+X	DEFBUF		*dp;
+X	DEFBUF		**prevp;
+X	char		*np;
 X	int			nhash;
 X	int			temp;
 X	int			size;
@@ -1513,8 +1513,8 @@ X
 Xdumpdef(why)
 Xchar		*why;
 X{
-X	register DEFBUF		*dp;
-X	register DEFBUF		**syp;
+X	DEFBUF		*dp;
+X	DEFBUF		**syp;
 X
 X	printf("CPP symbol table dump %s\n", why);
 X	for (syp = symtab; syp < &symtab[SBSIZE]; syp++) {
@@ -1529,10 +1529,10 @@ X}
 X
 Xdumpadef(why, dp)
 Xchar		*why;			/* Notation			*/
-Xregister DEFBUF	*dp;
+XDEFBUF	*dp;
 X{
-X	register char		*cp;
-X	register int		c;
+X	char		*cp;
+X	int		c;
 X
 X	printf(" \"%s\" [%d]", dp->name, dp->nargs);
 X	if (why != NULL)
@@ -1568,9 +1568,9 @@ X * Return the next character from a macro or the current file.
 X * Handle end of file from #include files.
 X */
 X{
-X	register int		c;
-X	register FILEINFO	*file;
-X	register int		popped;		/* Recursion fixup	*/
+X	int		c;
+X	FILEINFO	*file;
+X	int		popped;		/* Recursion fixup	*/
 X
 X	popped = 0;
 Xget_from_file:
@@ -1751,7 +1751,7 @@ X * without problems, at end of file.  Only one character may
 X * be ungotten.  If you need to unget more, call ungetstring().
 X */
 X{
-X	register FILEINFO	*file;
+X	FILEINFO	*file;
 X
 X	if ((file = infile) == NULL)
 X	    return;			/* Unget after EOF		*/
@@ -1768,7 +1768,7 @@ X * Push a string back on the input stream.  This is done by treating
 X * the text as if it were a macro.
 X */
 X{
-X	register FILEINFO	*file;
+X	FILEINFO	*file;
 X	extern FILEINFO		*getfile();
 X
 X	file = getfile(strlen(text) + 1, "");
@@ -1782,7 +1782,7 @@ X * Get one character, absorb "funny space" after comments or
 X * token concatenation
 X */
 X{
-X	register int	c;
+X	int	c;
 X
 X	do {
 X	    c = get();
@@ -1810,8 +1810,8 @@ X/*
 X * Print filenames, macro names, and line numbers for error messages.
 X */
 X{
-X	register char		*tp;
-X	register FILEINFO	*file;
+X	char		*tp;
+X	FILEINFO	*file;
 X
 X	fprintf(stderr, "%sline %d, %s: ", MSG_PREFIX, line, &severity[1]);
 X	if (*severity == 'S')

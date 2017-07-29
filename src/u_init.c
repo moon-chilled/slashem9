@@ -820,7 +820,7 @@ static const struct def_skill Skill_Y[] = {
 
 static void
 knows_object(obj)
-register int obj;
+int obj;
 {
 	discover_object(obj,TRUE,FALSE);
 	objects[obj].oc_pre_discovered = 1;	/* not a "discovery" */
@@ -831,9 +831,9 @@ register int obj;
  */
 static void
 knows_class(sym)
-register char sym;
+char sym;
 {
-	register int ct;
+	int ct;
 	for (ct = 1; ct < NUM_OBJECTS; ct++)
 		if (objects[ct].oc_class == sym && !objects[ct].oc_magic)
 			knows_object(ct);
@@ -857,9 +857,9 @@ register char sym;
  */
 
 static void 
-spellbook_skill_raise (register struct def_skill *class_skill, int spellbook)
+spellbook_skill_raise (struct def_skill *class_skill, int spellbook)
 {
-    register int i, j;
+    int i, j;
     j = spell_skilltype(spellbook);
     for(i = 0; class_skill[i].skill != P_NONE; i++)
 	if (class_skill[i].skill == j)
@@ -918,7 +918,7 @@ spellbook_skill_raise (register struct def_skill *class_skill, int spellbook)
 void 
 u_init (void)
 {
-	register int i, temp;
+	int i, temp;
 	int no_extra_food = FALSE;
 
 	flags.female = flags.initgend;
@@ -1418,7 +1418,7 @@ u_init (void)
  */
 	for(i = 0; i < A_MAX; i++)
 	    if(!rn2(20)) {
-		register int xd = rn2(7) - 2;	/* biased variation */
+		int xd = rn2(7) - 2;	/* biased variation */
 		(void) adjattrib(i, xd, TRUE);
 		if (ABASE(i) < AMAX(i)) AMAX(i) = ABASE(i);
 	    }
@@ -1470,7 +1470,7 @@ int otyp;
 
 static void
 ini_inv(trop)
-register struct trobj *trop;
+struct trobj *trop;
 {
 	struct obj *obj;
 	int otyp, i;

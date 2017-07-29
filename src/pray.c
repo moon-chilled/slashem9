@@ -212,7 +212,7 @@ in_trouble()
 static struct obj *
 worst_cursed_item()
 {
-    register struct obj *otmp;
+    struct obj *otmp;
 
     /* if strained or worse, check for loadstone first */
     if (near_capacity() >= HVY_ENCUMBER) {
@@ -270,7 +270,7 @@ worst_cursed_item()
 
 static void
 fix_worst_trouble(trouble)
-register int trouble;
+int trouble;
 {
 	int i;
 	struct obj *otmp = 0;
@@ -574,7 +574,7 @@ static void
 angrygods(resp_god)
 aligntyp resp_god;
 {
-	register int	maxanger;
+	int	maxanger;
 
 	if(Inhell) resp_god = A_NONE;
 	u.ublessed = 0;
@@ -965,7 +965,7 @@ pleased(g_align)
 	    flags.botl = 1;
 	    break;
 	case 4: {
-	    register struct obj *otmp;
+	    struct obj *otmp;
 	    int any = 0;
 
 	    if (Blind)
@@ -1064,8 +1064,8 @@ static boolean
 water_prayer(bless_water)
     boolean bless_water;
 {
-    register struct obj* otmp;
-    register long changed = 0;
+    struct obj* otmp;
+    long changed = 0;
     boolean other = FALSE, bc_known = !(Blind || Hallucination);
 
     for(otmp = level.objects[u.ux][u.uy]; otmp; otmp = otmp->nexthere) {
@@ -1127,7 +1127,7 @@ static const char ext_sacrifice_types[] = { ALLOW_FLOOROBJ,
 
 static void
 consume_offering(otmp)
-register struct obj *otmp;
+struct obj *otmp;
 {
     if (Hallucination)
 	switch (rn2(3)) {
@@ -1155,8 +1155,8 @@ god_gives_pet(alignment)
 aligntyp alignment;
 {
 /*
-    register struct monst *mtmp2;
-    register struct permonst *pm;
+    struct monst *mtmp2;
+    struct permonst *pm;
  */
     int mnum;
     int mon;
@@ -1203,8 +1203,8 @@ static void
 lawful_god_gives_angel (void)
 {
 /*
-    register struct monst *mtmp2;
-    register struct permonst *pm;
+    struct monst *mtmp2;
+    struct permonst *pm;
 */
     int mnum;
     int mon;
@@ -1255,7 +1255,7 @@ offer_oracle (struct monst *mtmp, struct obj *otmp)
 int 
 dosacrifice (void)
 {
-    register struct obj *otmp;
+    struct obj *otmp;
     int value = 0;
     int pm;
     aligntyp altaralign = a_align(u.ux,u.uy);
@@ -1305,7 +1305,7 @@ dosacrifice (void)
     }
 
     if (otmp->otyp == CORPSE) {
-	register struct permonst *ptr = &mons[otmp->corpsenm];
+	struct permonst *ptr = &mons[otmp->corpsenm];
 	struct monst *mtmp;
 	extern const int monstr[];
 
@@ -1345,7 +1345,7 @@ dosacrifice (void)
 	    } else {
 		struct monst *dmon;
 		const char *demonless_msg;
-		register struct obj *octmp;
+		struct obj *octmp;
 
 		/* Human sacrifice on a chaotic or unaligned altar */
 		/* is equivalent to demon summoning */
@@ -1902,7 +1902,7 @@ doturn (void)
 /*	if (!Role_if(PM_PRIEST) && !Role_if(PM_KNIGHT) && !Role_if(PM_UNDEAD_SLAYER)) {*/
 	if (!tech_known(T_TURN_UNDEAD)) {
 		if (objects[SPE_TURN_UNDEAD].oc_name_known) {
-		    register int sp_no;
+		    int sp_no;
 		    for (sp_no = 0; sp_no < MAXSPELL &&
 			 spl_book[sp_no].sp_id != NO_SPELL &&
 			 spl_book[sp_no].sp_id != SPE_TURN_UNDEAD; sp_no++);
@@ -2080,7 +2080,7 @@ aligntyp alignment;
 }
 
 void 
-altar_wrath (register int x, register int y)
+altar_wrath (int x, int y)
 {
     aligntyp altaralign = a_align(x,y);
 
@@ -2100,7 +2100,7 @@ static boolean
 blocked_boulder(dx,dy)
 int dx,dy;
 {
-    register struct obj *otmp;
+    struct obj *otmp;
     long count = 0L;
 
     for(otmp = level.objects[u.ux+dx][u.uy+dy]; otmp; otmp = otmp->nexthere) {
@@ -2130,7 +2130,7 @@ void
 god_gives_benefit(alignment)
 aligntyp alignment;
 {
-	register struct obj *otmp;
+	struct obj *otmp;
 	const char *what = (const char *)0;
 	
 	if (!rnl(30 + u.ulevel)) god_gives_pet(alignment);

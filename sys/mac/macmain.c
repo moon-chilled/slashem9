@@ -35,7 +35,7 @@ QDGlobals qd;
 int
 main (void)
 {
-	register int fd = -1;
+	int fd = -1;
 	int argc = 1;
 
 	windowprocs = mac_procs;

@@ -494,7 +494,7 @@ Xmain(argc, argv)
 Xint		argc;
 Xchar		*argv[];
 X{
-X	register int	i;
+X	int	i;
 X
 X#if HOST == SYS_VMS
 X	argc = getredirection(argc, argv);	/* vms >file and <file	*/
@@ -579,8 +579,8 @@ X * stream (main file, include file, or a macro) to the output
 X * file.
 X */
 X{
-X	register int		c;		/* Current character	*/
-X	register int		counter;	/* newlines and spaces	*/
+X	int		c;		/* Current character	*/
+X	int		counter;	/* newlines and spaces	*/
 X	extern int		output();	/* Output one character	*/
 X
 X	/*
@@ -712,7 +712,7 @@ X/*
 X * Output a line number line.
 X */
 X{
-X	register char		*name;
+X	char		*name;
 X
 X	if (keepcomments)			/* Make sure # comes on	*/
 X	    putchar('\n');			/* a fresh, new line.	*/
@@ -760,7 +760,7 @@ X * Open a file, add it to the linked list of open files.
 X * This is called only from openfile() above.
 X */
 X{
-X	register FILE		*fp;
+X	FILE		*fp;
 X
 X	if ((fp = fopen(filename, "r")) == NULL) {
 X#if DEBUG
@@ -787,7 +787,7 @@ X * structure which is used to read characters.  (getfile() is also called
 X * to setup a macro replacement.)
 X */
 X{
-X	register FILEINFO	*file;
+X	FILEINFO	*file;
 X	extern FILEINFO		*getfile();
 X
 X	file = getfile(NBUFF, filename);
@@ -868,9 +868,9 @@ X * dooptions is called to process command line arguments (-Detc).
 X * It is called only at cpp startup.
 X */
 X{
-X	register char		*ap;
-X	register DEFBUF		*dp;
-X	register int		c;
+X	char		*ap;
+X	DEFBUF		*dp;
+X	int		c;
 X	int			i, j;
 X	char			*arg;
 X	SIZES			*sizp;		/* For -S		*/
@@ -1002,7 +1002,7 @@ X
 X#if HOST != SYS_UNIX
 XFILE_LOCAL
 Xzap_uc(ap)
-Xregister char	*ap;
+Xchar	*ap;
 X/*
 X * Dec operating systems mangle upper-lower case in command lines.
 X * This routine forces the -D and -U arguments to uppercase.
@@ -1031,9 +1031,9 @@ X * Note: the built-in static definitions are supressed by the -N option.
 X * __LINE__, __FILE__, and __DATE__ are always present.
 X */
 X{
-X	register char		**pp;
-X	register char		*tp;
-X	register DEFBUF		*dp;
+X	char		**pp;
+X	char		*tp;
+X	DEFBUF		*dp;
 X	int			i;
 X	long			tvec;
 X	extern char		*ctime();
@@ -1109,7 +1109,7 @@ X *		argc = getredirection(argc, argv);
 X *	}
 X */
 X{
-X	register char		*ap;	/* Argument pointer	*/
+X	char		*ap;	/* Argument pointer	*/
 X	int			i;	/* argv[] index		*/
 X	int			j;	/* Output index		*/
 X	int			file;	/* File_descriptor 	*/
@@ -1239,8 +1239,8 @@ X * charput	puts a single character in the macro work area (parm[])
 X *		in a manner analogous to textput().
 X */
 X{
-X	register int		c;
-X	register DEFBUF		*dp;		/* -> new definition	*/
+X	int		c;
+X	DEFBUF		*dp;		/* -> new definition	*/
 X	int			isredefine;	/* TRUE if redefined	*/
 X	char			*old;		/* Remember redefined	*/
 X	extern int		save();		/* Save char in work[]	*/
@@ -1375,7 +1375,7 @@ X	inmacro = FALSE;			/* Stop <newline> hack	*/
 X}
 X
 Xcheckparm(c, dp)
-Xregister int	c;
+Xint	c;
 XDEFBUF		*dp;
 X/*
 X * Replace this param if it's defined.  Note that the macro name is a
@@ -1385,8 +1385,8 @@ X * the output routine.  This prevents the macro expander from
 X * looping if someone writes "#define foo foo".
 X */
 X{
-X	register int		i;
-X	register char		*cp;
+X	int		i;
+X	char		*cp;
 X
 X	scanid(c);				/* Get parm to token[]	*/
 X	for (i = 0; i < nargs; i++) {		/* For each argument	*/
@@ -1404,7 +1404,7 @@ X
 X#if STRING_FORMAL
 Xstparmscan(delim, dp)
 Xint		delim;
-Xregister DEFBUF	*dp;
+XDEFBUF	*dp;
 X/*
 X * Scan the string (starting with the given delimiter).
 X * The token is replaced if it is the only text in this string or
@@ -1412,7 +1412,7 @@ X * character constant.  The algorithm follows checkparm() above.
 X * Note that scanstring() has approved of the string.
 X */
 X{
-X	register int		c;
+X	int		c;
 X
 X	/*
 X	 * Warning -- this code hasn't been tested for a while.
@@ -1445,8 +1445,8 @@ X/*
 X * Normal string parameter scan.
 X */
 X{
-X	register char		*wp;
-X	register int		i;
+X	char		*wp;
+X	int		i;
 X	extern int		save();
 X
 X	wp = workp;			/* Here's where it starts	*/
@@ -1473,7 +1473,7 @@ X * Remove the symbol from the defined list.
 X * Called from the #control processor.
 X */
 X{
-X	register int		c;
+X	int		c;
 X
 X	if (type[(c = skipws())] != LET)
 X	    cerror("Illegal #undef argument", NULLST);
@@ -1491,7 +1491,7 @@ X/*
 X * Put the string in the parm[] buffer.
 X */
 X{
-X	register int	size;
+X	int	size;
 X
 X	size = strlen(text) + 1;
 X	if ((parmp + size) >= &parm[NPARMWORK])
@@ -1503,7 +1503,7 @@ X	}
 X}
 X
 Xcharput(c)
-Xregister int	c;
+Xint	c;
 X/*
 X * Put the byte in the parm[] buffer.
 X */
@@ -1522,7 +1522,7 @@ X
 Xstatic DEFBUF	*macro;		/* Catches start of infinite macro	*/
 X
 Xexpand(tokenp)
-Xregister DEFBUF	*tokenp;
+XDEFBUF	*tokenp;
 X/*
 X * Expand a macro.  Called from the cpp mainline routine (via subroutine
 X * macroid()) when a token is found in the symbol table.  It calls
@@ -1533,8 +1533,8 @@ X * "pushed back" onto the input stream.  (When the get() routine runs
 X * off the end of the macro line, it will dismiss the macro itself.)
 X */
 X{
-X	register int		c;
-X	register FILEINFO	*file;
+X	int		c;
+X	FILEINFO	*file;
 X	extern FILEINFO		*getfile();
 X
 X#if DEBUG
@@ -1623,8 +1623,8 @@ X/*
 X * Collect the actual parameters for this macro.  TRUE if ok.
 X */
 X{
-X	register int	c;
-X	register int	paren;			/* For embedded ()'s	*/
+X	int	c;
+X	int	paren;			/* For embedded ()'s	*/
 X	extern int	charput();
 X
 X	for (;;) {
@@ -1687,9 +1687,9 @@ X/*
 X * Stuff the macro body, replacing formal parameters by actual parameters.
 X */
 X{
-X	register int	c;			/* Current character	*/
-X	register char	*inp;			/* -> repl string	*/
-X	register char	*defp;			/* -> macro output buff	*/
+X	int	c;			/* Current character	*/
+X	char	*inp;			/* -> repl string	*/
+X	char	*defp;			/* -> macro output buff	*/
 X	int		size;			/* Actual parm. size	*/
 X	char		*defend;		/* -> output buff end	*/
 X	int		string_magic;		/* String formal hack	*/
@@ -1749,7 +1749,7 @@ X/*
 X * Dump parameter list.
 X */
 X{
-X	register int	i;
+X	int	i;
 X
 X	printf("dump of %d parameters (%d bytes total) %s\n",
 X	    nargs, parmp - parm, why);

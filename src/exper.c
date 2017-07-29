@@ -82,14 +82,14 @@ int en;
 
 int 
 experience (	/* return # of exp points for mtmp after nk killed */
-    register struct monst *mtmp,
-    register int nk
+    struct monst *mtmp,
+    int nk
 )
 #if defined(MAC_MPW)
 # pragma unused(nk)
 #endif
 {
-	register struct permonst *ptr = mtmp->data;
+	struct permonst *ptr = mtmp->data;
 	int	i, tmp, tmp2;
 
 	tmp = 1 + mtmp->m_lev * mtmp->m_lev;
@@ -141,7 +141,7 @@ experience (	/* return # of exp points for mtmp after nk killed */
 }
 
 void 
-more_experienced (register int exp, register int rexp)
+more_experienced (int exp, int rexp)
 {
 	u.uexp += exp;
 	u.urexp += 4*exp + rexp;
@@ -159,7 +159,7 @@ losexp(drainer,force)	/* e.g., hit by drain life attack */
 const char *drainer;	/* cause of death, if drain should be fatal */
 boolean force;		/* Force the loss of an experience level */
 {
-	register int num;
+	int num;
 
 #ifdef WIZARD
 	/* explicit wizard mode requests to reduce level are never fatal. */
@@ -223,7 +223,7 @@ newexplevel (void)
 
 #if 0 /* The old newexplevel() */
 {
-	register int tmp;
+	int tmp;
 
 	if(u.ulevel < MAXULEV && u.uexp >= newuexp(u.ulevel)) {
 
@@ -275,7 +275,7 @@ void
 pluslvl(incr)
 boolean incr;	/* true iff via incremental experience growth */
 {		/*	(false for potion of gain level)      */
-	register int num;
+	int num;
 
 	if (!incr) You_feel("more experienced.");
 	num = newhp();

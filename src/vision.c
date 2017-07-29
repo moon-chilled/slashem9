@@ -155,7 +155,7 @@ vision_init (void)
  * sight.
  */
 int 
-does_block (int x, int y, register struct rm *lev)
+does_block (int x, int y, struct rm *lev)
 {
     struct obj   *obj;
     struct monst *mon;
@@ -194,8 +194,8 @@ void
 vision_reset (void)
 {
     int y;
-    register int x, i, dig_left, block;
-    register struct rm    *lev;
+    int x, i, dig_left, block;
+    struct rm    *lev;
 
     /* Start out with cs0 as our current array */
     viz_array = cs_rows0;
@@ -257,8 +257,8 @@ get_unused_cs(rows, rmin, rmax)
     char ***rows;
     char **rmin, **rmax;
 {
-    register int  row;
-    register char *nrmin, *nrmax;
+    int  row;
+    char *nrmin, *nrmax;
 
     if (viz_array == cs_rows0) {
 	*rows = cs_rows1;
@@ -302,7 +302,7 @@ rogue_vision(next, rmin, rmax)
 {
     int rnum = levl[u.ux][u.uy].roomno - ROOMOFFSET; /* no SHARED... */
     int start, stop, in_door, xhi, xlo, yhi, ylo;
-    register int zx, zy;
+    int zx, zy;
 
     /* If in a lit room, we are able to see to its boundaries. */
     /* If dark, set COULD_SEE so various spells work -dlc */
@@ -401,7 +401,7 @@ new_angle(lev, sv, row, col)
     unsigned char *sv;
     int row, col;
 {
-    register int res = *sv;
+    int res = *sv;
 
     /*
      * Do extra checks for crosswalls and T walls if we see them from
@@ -502,8 +502,8 @@ vision_recalc (int control)
     int row;		/* row counter (outer loop)  */
     int start, stop;	/* inner loop starting/stopping index */
     int dx, dy;		/* one step from a lit door or lit wall (see below) */
-    register int col;	/* inner loop counter */
-    register struct rm *lev;	/* pointer to current pos */
+    int col;	/* inner loop counter */
+    struct rm *lev;	/* pointer to current pos */
     struct rm *flev;	/* pointer to position in "front" of current pos */
     extern unsigned char seenv_matrix[3][3];	/* from display.c */
     static unsigned char colbump[COLNO+1];	/* cols to bump sv */
@@ -1127,7 +1127,7 @@ static void * varg;
 #define q1_path(srow,scol,y2,x2,label)			\
 {							\
     int dx, dy;						\
-    register int k, err, x, y, dxs, dys;		\
+    int k, err, x, y, dxs, dys;		\
 							\
     x  = (scol);	y  = (srow);			\
     dx = (x2) - x;	dy = y - (y2);			\
@@ -1171,7 +1171,7 @@ static void * varg;
 #define q4_path(srow,scol,y2,x2,label)			\
 {							\
     int dx, dy;						\
-    register int k, err, x, y, dxs, dys;		\
+    int k, err, x, y, dxs, dys;		\
 							\
     x  = (scol);	y  = (srow);			\
     dx = (x2) - x;	dy = (y2) - y;			\
@@ -1216,7 +1216,7 @@ static void * varg;
 #define q2_path(srow,scol,y2,x2,label)			\
 {							\
     int dx, dy;						\
-    register int k, err, x, y, dxs, dys;		\
+    int k, err, x, y, dxs, dys;		\
 							\
     x  = (scol);	y  = (srow);			\
     dx = x - (x2);	dy = y - (y2);			\
@@ -1260,7 +1260,7 @@ static void * varg;
 #define q3_path(srow,scol,y2,x2,label)			\
 {							\
     int dx, dy;						\
-    register int k, err, x, y, dxs, dys;		\
+    int k, err, x, y, dxs, dys;		\
 							\
     x  = (scol);	y  = (srow);			\
     dx = x - (x2);	dy = (y2) - y;			\
@@ -1319,7 +1319,7 @@ _q1_path(srow,scol,y2,x2)
     int scol, srow, y2, x2;
 {
     int dx, dy;
-    register int k, err, x, y, dxs, dys;
+    int k, err, x, y, dxs, dys;
 
     x  = scol;		y  = srow;
     dx = x2 - x;	dy = y - y2;
@@ -1363,7 +1363,7 @@ _q4_path(srow,scol,y2,x2)
     int scol, srow, y2, x2;
 {
     int dx, dy;
-    register int k, err, x, y, dxs, dys;
+    int k, err, x, y, dxs, dys;
 
     x  = scol;		y  = srow;
     dx = x2 - x;	dy = y2 - y;
@@ -1407,7 +1407,7 @@ _q2_path(srow,scol,y2,x2)
     int scol, srow, y2, x2;
 {
     int dx, dy;
-    register int k, err, x, y, dxs, dys;
+    int k, err, x, y, dxs, dys;
 
     x  = scol;		y  = srow;
     dx = x - x2;	dy = y - y2;
@@ -1451,7 +1451,7 @@ _q3_path(srow,scol,y2,x2)
     int scol, srow, y2, x2;
 {
     int dx, dy;
-    register int k, err, x, y, dxs, dys;
+    int k, err, x, y, dxs, dys;
 
     x  = scol;		y  = srow;
     dx = x - x2;	dy = y2 - y;
@@ -1580,7 +1580,7 @@ static int
 close_shadow(side,this_row,block_row,block_col)
     int side,this_row,block_row,block_col;
 {
-    register int sdy, sdx, pdy, offset;
+    int sdy, sdx, pdy, offset;
 
     /*
      * If on the same column (block_row = -1), then we can see it.
@@ -1609,7 +1609,7 @@ static int
 far_shadow(side,this_row,block_row,block_col)
     int side,this_row,block_row,block_col;
 {
-    register int sdy, sdx, pdy, offset;
+    int sdy, sdx, pdy, offset;
 
     /*
      * Take care of a bug that shows up only on the borders.
@@ -1654,8 +1654,8 @@ right_side(row, cb_row, cb_col, fb_row, fb_col, left, right_mark, limits)
     int	right_mark;	/* right mark of previous row */
     char *limits;	/* points at range limit for current row, or NULL */
 {
-    register int  i;
-    register char *rowp;
+    int  i;
+    char *rowp;
     int  hit_stone = 0;
     int  left_shadow, right_shadow, loc_right;
     int  lblock_col;		/* local block column (current row) */
@@ -1913,8 +1913,8 @@ left_side(row, cb_row, cb_col, fb_row, fb_col, left_mark, right, limits)
     int right;		/* right mark of the previous row */
     char *limits;
 {
-    register int  i;
-    register char *rowp;
+    int  i;
+    char *rowp;
     int  hit_stone = 0;
     int  left_shadow, right_shadow, loc_left;
     int  lblock_col;		/* local block column (current row) */
@@ -2095,7 +2095,7 @@ view_from(srow,scol,loc_cs_rows,left_most,right_most, range, func, arg)
     void (*func)(int,int,void *);
     void * arg;
 {
-    register int i;
+    int i;
     char	 *rowp;
     int		 nrow, left, right, left_row, right_row;
     char	 *limits;
@@ -2202,8 +2202,8 @@ right_side(row, left, right_mark, limits)
     int		  nrow;		/* new row (calculate once) */
     int		  deeper;	/* if TRUE, call self as needed */
     int		  result;	/* set by q?_path() */
-    register int  i;		/* loop counter */
-    register char *rowp;	/* row optimization */
+    int  i;		/* loop counter */
+    char *rowp;	/* row optimization */
     char	  *row_min;	/* left most  [used by macro set_min()] */
     char	  *row_max;	/* right most [used by macro set_max()] */
     int		  lim_max;	/* right most limit of circle */
@@ -2378,8 +2378,8 @@ left_side(row, left_mark, right, limits)
     char *limits;
 {
     int		  left, left_edge, nrow, deeper, result;
-    register int  i;
-    register char *rowp;
+    int  i;
+    char *rowp;
     char	  *row_min, *row_max;
     int		  lim_min;
 
@@ -2504,7 +2504,7 @@ view_from(srow, scol, loc_cs_rows, left_most, right_most, range, func, arg)
     void (*func)(int,int,void *);
     void * arg;
 {
-    register int i;		/* loop counter */
+    int i;		/* loop counter */
     char         *rowp;		/* optimization for setting could_see */
     int		 nrow;		/* the next row */
     int		 left;		/* the left-most visible column */
@@ -2600,7 +2600,7 @@ do_clear_area(scol,srow,range,func,arg)
 	    view_from(srow, scol, (char **)0, NULL, NULL,
 							range, func, arg);
 	else {
-	    register int x;
+	    int x;
 	    int y, min_x, max_x, max_y, offset;
 	    char *limits;
 

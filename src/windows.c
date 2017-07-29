@@ -99,7 +99,7 @@ lock_windows (int flag)
 void 
 choose_windows (const char *s)
 {
-    register int i;
+    int i;
 
     if (windows_lock)
 	return;

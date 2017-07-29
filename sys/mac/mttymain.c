@@ -118,7 +118,7 @@ int cnt = 3;
 }
 
 void tty_change_background (int white_or_black) {
-	register int i;
+	int i;
 	
 	for (i = 0; i < CLR_MAX; i++) {
 		if (white_or_black)

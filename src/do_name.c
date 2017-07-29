@@ -291,7 +291,7 @@ static void do_oname(struct obj *obj) {
 		return;
 	} else if (restrict_name(obj, buf) || exist_artifact(obj->otyp, buf)) {
 		int n = rn2((int)strlen(buf));
-		register char c1, c2;
+		char c1, c2;
 
 		c1 = lowc(buf[n]);
 		do c2 = 'a' + rn2('z'-'a'); while (c1 == c2);
