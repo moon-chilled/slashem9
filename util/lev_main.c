@@ -56,7 +56,7 @@
 
 #define NewTab(type, size)	(type **) alloc(sizeof(type *) * size)
 #define Free(ptr)		if(ptr) free((void *) (ptr))
-#define Write(fd, item, size)	if (write(fd, (void *)(item), size) != size) return FALSE;
+#define Write(fd, item, size)	if (write(fd, (void *)(item), size) != size) return false;
 
 #define MAX_ERRORS	25
 
@@ -223,7 +223,7 @@ char **argv;
 {
 	FILE *fin;
 	int i;
-	boolean errors_encountered = FALSE;
+	boolean errors_encountered = false;
 #if defined(MAC) && (defined(__MWERKS__))
 	static char *mac_argv[] = {	"lev_comp",	/* dummy argv[0] */
 	/* KMH -- had to add more from SLASH'EM */
@@ -304,7 +304,7 @@ char **argv;
 	    init_yyin(stdin);
 	    (void) yyparse();
 	    if (fatal_error > 0) {
-		    errors_encountered = TRUE;
+		    errors_encountered = true;
 	    }
 	} else {			/* Otherwise every argument is a filename */
 	    for(i=1; i<argc; i++) {
@@ -318,13 +318,13 @@ char **argv;
 			(void) fprintf(stderr,"Can't open \"%s\" for input.\n",
 						fname);
 			perror(fname);
-			errors_encountered = TRUE;
+			errors_encountered = true;
 		    } else {
 			init_yyin(fin);
 			(void) yyparse();
 			line_number = 1;
 			if (fatal_error > 0) {
-				errors_encountered = TRUE;
+				errors_encountered = true;
 				fatal_error = 0;
 			}
 		    }
@@ -681,16 +681,16 @@ boolean
 check_subrooms()
 {
 	unsigned i, j, n_subrooms;
-	boolean	found, ok = TRUE;
+	boolean	found, ok = true;
 	char	*last_parent, msg[256];
 
 	for (i = 0; i < nrooms; i++)
 	    if (tmproom[i]->parent) {
-		found = FALSE;
+		found = false;
 		for(j = 0; j < nrooms; j++)
 		    if (tmproom[j]->name &&
 			    !strcmp(tmproom[i]->parent, tmproom[j]->name)) {
-			found = TRUE;
+			found = true;
 			break;
 		    }
 		if (!found) {
@@ -698,7 +698,7 @@ check_subrooms()
 			    "Subroom error : parent room '%s' not found!",
 			    tmproom[i]->parent);
 		    yyerror(msg);
-		    ok = FALSE;
+		    ok = false;
 		}
 	    }
 
@@ -725,7 +725,7 @@ check_subrooms()
 				    tmproom[i]->parent);
 			    yyerror(msg);
 			    last_parent = tmproom[i]->parent;
-			    ok = FALSE;
+			    ok = false;
 			    break;
 			}
 		    }
@@ -1091,7 +1091,7 @@ long flgs;
 	Write(fd, &len, sizeof len);
 	if (len) Write(fd, tmpmessage, (int) len);
 	tmpmessage[0] = '\0';
-	return TRUE;
+	return true;
 }
 
 /*
@@ -1131,7 +1131,7 @@ monster ***monsters_p;
 	    *monsters_p = 0;
 	}
 	*nmonster_p = 0;
-	return TRUE;
+	return true;
 }
 
 /*
@@ -1165,7 +1165,7 @@ object ***objects_p;
 	    *objects_p = 0;
 	}
 	*nobject_p = 0;
-	return TRUE;
+	return true;
 }
 
 /*
@@ -1197,12 +1197,12 @@ engraving ***engravings_p;
 	    *engravings_p = 0;
 	}
 	*nengraving_p = 0;
-	return TRUE;
+	return true;
 }
 
 /*
  * Open and write maze or rooms file, based on which pointer is non-null.
- * Return TRUE on success, FALSE on failure.
+ * Return true on success, false on failure.
  */
 boolean
 write_level_file(filename, room_level, maze_level)
@@ -1221,19 +1221,19 @@ specialmaze *maze_level;
 	strcat(lbuf, LEV_EXT);
 
 	fout = open(lbuf, O_WRONLY|O_CREAT|O_BINARY, OMASK);
-	if (fout < 0) return FALSE;
+	if (fout < 0) return false;
 
 	if (room_level) {
 	    if (!write_rooms(fout, room_level))
-		return FALSE;
+		return false;
 	} else if (maze_level) {
 	    if (!write_maze(fout, maze_level))
-		return FALSE;
+		return false;
 	} else
 	    panic("write_level_file");
 
 	(void) close(fout);
-	return TRUE;
+	return true;
 }
 
 /*
@@ -1249,7 +1249,7 @@ specialmaze *maze;
 	mazepart *pt;
 
 	if (!write_common_data(fd, SP_LEV_MAZE, &(maze->init_lev), maze->flags))
-	    return FALSE;
+	    return false;
 
 	Write(fd, &(maze->filling), sizeof(maze->filling));
 	Write(fd, &(maze->numpart), sizeof(maze->numpart));
@@ -1275,7 +1275,7 @@ specialmaze *maze;
 			 */
 			unsigned reslt, sz = pt->xsize * sizeof *pt->map[j];
 			reslt = write(fd, (void *)(pt->map[j]), sz);
-			if (reslt != sz) return FALSE;
+			if (reslt != sz) return false;
 #endif
 		}
 		Free(pt->map[j]);
@@ -1442,11 +1442,11 @@ specialmaze *maze;
 
 	    /* The monsters */
 	    if (!write_monsters(fd, &pt->nmonster, &pt->monsters))
-		    return FALSE;
+		    return false;
 
 	    /* The objects */
 	    if (!write_objects(fd, &pt->nobject, &pt->objects))
-		    return FALSE;
+		    return false;
 
 	    /* The gold piles */
 	    Write(fd, &(pt->ngold), sizeof(pt->ngold));
@@ -1459,7 +1459,7 @@ specialmaze *maze;
 
 	    /* The engravings */
 	    if (!write_engravings(fd, &pt->nengraving, &pt->engravings))
-		    return FALSE;
+		    return false;
 
 	    Free(pt);
 	}
@@ -1467,7 +1467,7 @@ specialmaze *maze;
 	Free(maze->parts);
 	maze->parts = (mazepart **)0;
 	maze->numpart = 0;
-	return TRUE;
+	return true;
 }
 
 /*
@@ -1482,7 +1482,7 @@ splev *lev;
 	room *pt;
 
 	if (!write_common_data(fd, SP_LEV_ROOMS, &(lev->init_lev), lev->flags))
-		return FALSE;
+		return false;
 
 	/* Random registers */
 
@@ -1558,11 +1558,11 @@ splev *lev;
 
 		/* The monsters */
 		if (!write_monsters(fd, &pt->nmonster, &pt->monsters))
-			return FALSE;
+			return false;
 
 		/* The objects */
 		if (!write_objects(fd, &pt->nobject, &pt->objects))
-			return FALSE;
+			return false;
 
 		/* The gold piles */
 		Write(fd, &(pt->ngold), sizeof(pt->ngold));
@@ -1571,7 +1571,7 @@ splev *lev;
 
 		/* The engravings */
 		if (!write_engravings(fd, &pt->nengraving, &pt->engravings))
-			return FALSE;
+			return false;
 
 	}
 
@@ -1579,7 +1579,7 @@ splev *lev;
 	Write(fd, &lev->ncorr, sizeof(lev->ncorr));
 	for (i=0; i < lev->ncorr; i++)
 		Write(fd, lev->corrs[i], sizeof(corridor));
-	return TRUE;
+	return true;
 }
 
 /*

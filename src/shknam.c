@@ -299,9 +299,9 @@ int sx, sy;
 	} else {
 	    atype = get_shop_item(shp - shtypes);
 	    if (atype < 0)
-		(void) mksobj_at(-atype, sx, sy, TRUE, TRUE);
+		(void) mksobj_at(-atype, sx, sy, true, true);
 	    else
-		(void) mkobj_at(atype, sx, sy, TRUE);
+		(void) mkobj_at(atype, sx, sy, true);
 	}
 }
 
@@ -321,11 +321,11 @@ const char * const *nlp;
 		&& (sptr = Is_special(&u.uz)) != 0 && sptr->flags.town) {
 	    /* special-case minetown lighting shk */
 	    shname = "Izchak";
-	    shk->female = FALSE;
+	    shk->female = false;
 	} else if (nlp == shkblack) {
 	    /* special-case black marketeer */
 	    shname = "One-eyed Sam";
-	    shk->female = shk->data->mflags2 & M2_MALE ? FALSE : TRUE;
+	    shk->female = shk->data->mflags2 & M2_MALE ? false : true;
 	} else {
 	    /* We want variation from game to game, without needing the save
 	       and restore support which would be necessary for randomization;
@@ -419,14 +419,14 @@ struct mkroom	*sroom;
 		    pline("door [%d,%d]", doors[sh].x, doors[sh].y);
 		    sh++;
 		}
-		display_nhwindow(WIN_MESSAGE, FALSE);
+		display_nhwindow(WIN_MESSAGE, false);
 	    }
 # endif
 #endif
 	    return(-1);
 	}
 
-	if(MON_AT(sx, sy)) (void) rloc(m_at(sx, sy), FALSE); /* insurance */
+	if(MON_AT(sx, sy)) (void) rloc(m_at(sx, sy), false); /* insurance */
 
 	/* now initialize the shopkeeper monster structure */
 
@@ -486,24 +486,24 @@ struct mkroom	*sroom;
 /* make sure black marketeer can wield Thiefbane */
 	  shk->data->maligntyp = -1;
 /* black marketeer's equipment */
-	  otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+	  otmp = mksobj(LONG_SWORD, false, false);
 	  otmp = oname(otmp, artiname(ART_THIEFBANE));
 	  mpickobj(shk, otmp);
 	  if (otmp->spe < 5) otmp->spe += rnd(5);
-	  otmp = mksobj(SHIELD_OF_REFLECTION, FALSE, FALSE);
+	  otmp = mksobj(SHIELD_OF_REFLECTION, false, false);
 	  mpickobj(shk, otmp);
 	  if (otmp->spe < 5) otmp->spe += rnd(5);
-	  otmp = mksobj(GRAY_DRAGON_SCALE_MAIL, FALSE, FALSE);
+	  otmp = mksobj(GRAY_DRAGON_SCALE_MAIL, false, false);
 	  mpickobj(shk, otmp);
 	  if (otmp->spe < 5) otmp->spe += rnd(5);
-	  otmp = mksobj(SPEED_BOOTS, FALSE, FALSE);
+	  otmp = mksobj(SPEED_BOOTS, false, false);
 	  mpickobj(shk, otmp);
 	  if (otmp->spe < 5) otmp->spe += rnd(5);
-	  otmp = mksobj(AMULET_OF_LIFE_SAVING, FALSE, FALSE);
+	  otmp = mksobj(AMULET_OF_LIFE_SAVING, false, false);
 	  mpickobj(shk, otmp);
 /* wear armor and amulet */
-	  m_dowear(shk, TRUE);
-	  otmp = mksobj(SKELETON_KEY, FALSE, FALSE);
+	  m_dowear(shk, true);
+	  otmp = mksobj(SKELETON_KEY, false, false);
 	  mpickobj(shk, otmp);
 	}
 
@@ -560,7 +560,7 @@ struct mkroom *sroom;
 
     if (Is_blackmarket(&u.uz)) {
       stock_blkmar(shp, sroom, sh);
-      level.flags.has_shop = TRUE;
+      level.flags.has_shop = true;
       return;
     }
 
@@ -582,7 +582,7 @@ struct mkroom *sroom;
      * monsters will sit on top of objects and not the other way around.
      */
 
-    level.flags.has_shop = TRUE;
+    level.flags.has_shop = true;
 }
 
 /* stock a newly-created black market with objects */
@@ -661,11 +661,11 @@ int sh;
 	      objects[typ].oc_nowish || typ==0)
 	    continue;
 
-	  otmp = mkobj_at(RANDOM_CLASS,sx,sy,TRUE);
+	  otmp = mkobj_at(RANDOM_CLASS,sx,sy,true);
 /* generate multiple copies with decreasing probabilities */
 /*        if (rn2(blkmar_gen[typ]+1) && i<49)  continue; */
 
-/*        otmp = mksobj_at(typ, sx, sy, TRUE, TRUE);
+/*        otmp = mksobj_at(typ, sx, sy, true, true);
 	  blkmar_gen[typ]++;*/
 
 /* prevent wishing abuse */
@@ -746,13 +746,13 @@ struct obj *obj;
     int i, shp_indx = ESHK(shkp)->shoptype - SHOPBASE;
     const struct shclass *shp = &shtypes[shp_indx];
 
-    if (shp->symb == RANDOM_CLASS) return TRUE;
+    if (shp->symb == RANDOM_CLASS) return true;
     else for (i = 0; i < SIZE(shtypes[0].iprobs) && shp->iprobs[i].iprob; i++)
 		if (shp->iprobs[i].itype < 0 ?
 			shp->iprobs[i].itype == - obj->otyp :
-			shp->iprobs[i].itype == obj->oclass) return TRUE;
+			shp->iprobs[i].itype == obj->oclass) return true;
     /* not found */
-    return FALSE;
+    return false;
 }
 
 /* positive value: class; negative value: specific object type */

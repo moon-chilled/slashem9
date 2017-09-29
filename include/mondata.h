@@ -164,7 +164,7 @@
 				 (ptr) == &mons[PM_GIANT] || \
 				 (ptr) == &mons[PM_ELF] || \
 				 (ptr) == &mons[PM_HUMAN])
-/* return TRUE if the monster tends to revive */
+/* return true if the monster tends to revive */
 #define is_reviver(ptr)		(is_rider(ptr) || (ptr)->mlet == S_FUNGUS && \
 				 (ptr) != &mons[PM_LICHEN] || \
 				 (ptr)->mlet == S_TROLL)

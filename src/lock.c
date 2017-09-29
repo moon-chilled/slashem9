@@ -29,10 +29,10 @@ picking_lock(x, y)
 	if (occupation == picklock || occupation == forcedoor) {
 	    *x = u.ux + u.dx;
 	    *y = u.uy + u.dy;
-	    return TRUE;
+	    return true;
 	} else {
 	    *x = *y = 0;
-	    return FALSE;
+	    return false;
 	}
 }
 
@@ -99,7 +99,7 @@ picklock()	/* try to open/close a lock */
 
 	if (xlock.usedtime++ >= 50 || nohands(youmonst.data)) {
 	    You("give up your attempt at %s.", lock_action());
-	    exercise(A_DEX, TRUE);	/* even if you don't succeed */
+	    exercise(A_DEX, true);	/* even if you don't succeed */
 	    return((xlock.usedtime = 0));
 	}
 
@@ -120,9 +120,9 @@ picklock()	/* try to open/close a lock */
 	} else {
 	    xlock.box->olocked = !xlock.box->olocked;
 	    if(xlock.box->otrapped)
-		(void) chest_trap(xlock.box, FINGER, FALSE);
+		(void) chest_trap(xlock.box, FINGER, false);
 	}
-	exercise(A_DEX, TRUE);
+	exercise(A_DEX, true);
 	return((xlock.usedtime = 0));
 }
 
@@ -139,7 +139,7 @@ forcelock()	/* try to force a locked chest */
 	if (xlock.usedtime++ >= 50 || !uwep || nohands(youmonst.data)) {
 	    You("give up your attempt to force the lock.");
 	    if(xlock.usedtime >= 50)		/* you made the effort */
-	      exercise((xlock.picktyp) ? A_DEX : A_STR, TRUE);
+	      exercise((xlock.picktyp) ? A_DEX : A_STR, true);
 	    return((xlock.usedtime = 0));
 	}
 
@@ -154,7 +154,7 @@ forcelock()	/* try to force a locked chest */
 		      (uwep->quan > 1L) ? "One of y" : "Y", xname(uwep));
 		useup(uwep);
 		You("give up your attempt to force the lock.");
-		exercise(A_DEX, TRUE);
+		exercise(A_DEX, true);
 		return((xlock.usedtime = 0));
 	    }
 	} else if(xlock.picktyp == 0)                 /* blunt */
@@ -189,8 +189,8 @@ forcelock()	/* try to force a locked chest */
 		    chest_shatter_msg(otmp);
 		    if (costly)
 		        loss += stolen_value(otmp, u.ux, u.uy,
-					     (boolean)shkp->mpeaceful, TRUE,
-					     TRUE);
+					     (boolean)shkp->mpeaceful, true,
+					     true);
 		    if (otmp->quan == 1L) {
 			obfree(otmp, NULL);
 			continue;
@@ -207,11 +207,11 @@ forcelock()	/* try to force a locked chest */
 
 	    if (costly)
 		loss += stolen_value(xlock.box, u.ux, u.uy,
-				     (boolean)shkp->mpeaceful, TRUE, TRUE);
+				     (boolean)shkp->mpeaceful, true, true);
 	    if(loss) You("owe %ld %s for objects destroyed.", loss, currency(loss));
 	    delobj(xlock.box);
 	}
-	exercise((xlock.picktyp) ? A_DEX : A_STR, TRUE);
+	exercise((xlock.picktyp) ? A_DEX : A_STR, true);
 	return((xlock.usedtime = 0));
 }
 
@@ -239,7 +239,7 @@ forcedoor()      /* try to break/pry open a door */
 	    You("give up your attempt at %s the door.",
 	    	(xlock.picktyp == 2 ? "melting" : xlock.picktyp == 1 ?
 	    		"prying open" : "breaking down"));
-	    exercise(A_STR, TRUE);      /* even if you don't succeed */
+	    exercise(A_STR, true);      /* even if you don't succeed */
 	    return((xlock.usedtime = 0));
 	}
 
@@ -258,7 +258,7 @@ forcedoor()      /* try to break/pry open a door */
 	unblock_point(u.ux+u.dx, u.uy+u.dy);
 	if (*in_rooms(u.ux+u.dx, u.uy+u.dy, SHOPBASE)) {
 	    add_damage(u.ux+u.dx, u.uy+u.dy, 400L);
-	    pay_for_damage("break", FALSE);
+	    pay_for_damage("break", false);
 
 	    if (in_town(u.ux+u.dx, u.uy+u.dy)) {
 		struct monst *mtmp;
@@ -273,7 +273,7 @@ forcedoor()      /* try to break/pry open a door */
 			else
 			    You_hear("someone yell:");
 			verbalize("Halt, thief!  You're under arrest!");
-			(void) angry_guards(FALSE);
+			(void) angry_guards(false);
 			break;
 		    }
 		}
@@ -284,7 +284,7 @@ forcedoor()      /* try to break/pry open a door */
 	else
 	    newsym(u.ux+u.dx, u.uy+u.dy);
 
-	exercise(A_STR, TRUE);
+	exercise(A_STR, true);
 	return((xlock.usedtime = 0));
 }
 
@@ -829,7 +829,7 @@ doopen (void)		/* try to open a door */
 		newsym(cc.x,cc.y);
 	    unblock_point(cc.x,cc.y);		/* vision: new see through there */
 	} else {
-	    exercise(A_STR, TRUE);
+	    exercise(A_STR, true);
 	    pline_The("door resists!");
 	}
 
@@ -849,13 +849,13 @@ int x, y;
 			"Some creature" : Monnam(mtmp));
 		if (!canspotmon(mtmp))
 		    map_invisible(mtmp->mx, mtmp->my);
-		return(TRUE);
+		return(true);
 	}
 	if (OBJ_AT(x, y)) {
 objhere:	pline("%s's in the way.", Something);
-		return(TRUE);
+		return(true);
 	}
-	return(FALSE);
+	return(false);
 }
 
 int
@@ -945,7 +945,7 @@ doclose (void)		/* try to close a door */
 		block_point(x,y);	/* vision:  no longer see there */
 	    }
 	    else {
-	        exercise(A_STR, TRUE);
+	        exercise(A_STR, true);
 	        pline_The("door resists!");
 	    }
 	}
@@ -995,7 +995,7 @@ struct obj *otmp;
 int x, y;
 {
 	struct rm *door = &levl[x][y];
-	boolean res = TRUE;
+	boolean res = true;
 	int loudness = 0;
 	const char *msg = (const char *)0;
 	const char *dustcloud = "A cloud of dust";
@@ -1017,12 +1017,12 @@ int x, y;
 		newsym(x,y);
 		if (cansee(x,y)) pline("A door appears in the wall!");
 		if (otmp->otyp == WAN_OPENING || otmp->otyp == SPE_KNOCK)
-		    return TRUE;
+		    return true;
 		break;		/* striking: continue door handling below */
 	    case WAN_LOCKING:
 	    case SPE_WIZARD_LOCK:
 	    default:
-		return FALSE;
+		return false;
 	    }
 	}
 
@@ -1039,16 +1039,16 @@ int x, y;
 			You_hear("a swoosh.");
 		if (obstructed(x,y)) {
 			if (vis) pline_The("cloud %s.",quickly_dissipates);
-			return FALSE;
+			return false;
 		}
 		block_point(x, y);
 		door->typ = SDOOR;
 		if (vis) pline_The("doorway vanishes!");
 		newsym(x,y);
-		return TRUE;
+		return true;
 	    }
 #endif
-	    if (obstructed(x,y)) return FALSE;
+	    if (obstructed(x,y)) return false;
 	    /* Don't allow doors to close over traps.  This is for pits */
 	    /* & trap doors, but is it ever OK for anything else? */
 	    if (t_at(x,y)) {
@@ -1056,7 +1056,7 @@ int x, y;
 		pline(
 		"%s springs up in the doorway, but %s.",
 		dustcloud, quickly_dissipates);
-		return FALSE;
+		return false;
 	    }
 
 	    switch (door->doormask & ~D_TRAPPED) {
@@ -1083,7 +1083,7 @@ int x, y;
 		"A cloud of dust springs up and assembles itself into a door!";
 		break;
 	    default:
-		res = FALSE;
+		res = false;
 		break;
 	    }
 	    block_point(x, y);
@@ -1098,7 +1098,7 @@ int x, y;
 	    if (!key && door->doormask & D_LOCKED) {
 		msg = "The door unlocks!";
 		door->doormask = D_CLOSED | (door->doormask & D_TRAPPED);
-	    } else res = FALSE;
+	    } else res = false;
 	    break;
 	case WAN_STRIKING:
 	case SPE_FORCE_BOLT:
@@ -1130,7 +1130,7 @@ int x, y;
 		/* force vision recalc before printing more messages */
 		if (vision_full_recalc) vision_recalc(0);
 		loudness = 20;
-	    } else res = FALSE;
+	    } else res = false;
 	    break;
 	default: impossible("magic (%d) attempted on door.", otmp->otyp);
 	    break;

@@ -83,7 +83,7 @@ const char *fmt, *arg;
 
 	u.mh = u.mhmax = 0;
 	u.mtimedone = 0;
-	skinback(FALSE);
+	skinback(false);
 	u.uundetected = 0;
 	newsym(u.ux,u.uy);
 
@@ -124,12 +124,12 @@ const char *fmt, *arg;
 	}
 	if (was_blind && !Blind) {	/* reverting from eyeless */
 	    Blinded = 1L;
-	    make_blinded(0L, TRUE);	/* remove blindness */
+	    make_blinded(0L, true);	/* remove blindness */
 	}
 
 	if(!Levitation && !u.ustuck &&
 	   (is_pool(u.ux,u.uy) || is_lava(u.ux,u.uy)))
-		spoteffects(TRUE);
+		spoteffects(true);
 
 	see_monsters();
 }
@@ -198,7 +198,7 @@ newman()
 	reset_rndmonst(NON_PM);	/* new monster generation criteria */
 
 	/* random experience points for the new experience level */
-	u.uexp = rndexp(FALSE);
+	u.uexp = rndexp(false);
 
 	/* u.uhpmax * u.ulevel / oldlvl: proportionate hit points to new level
 	 * -10 and +10: don't apply proportionate HP to 10 of a starting
@@ -219,7 +219,7 @@ newman()
 
 	redist_attr();
 	u.uhunger = rn1(500,500);
-	if (Sick) make_sick(0L, NULL, FALSE, SICK_ALL);
+	if (Sick) make_sick(0L, NULL, false, SICK_ALL);
 	Sick = 0;
 	Stoned = 0;
 	delayed_killer = 0;
@@ -239,11 +239,11 @@ dead: /* we come directly here if their experience level went to 0 or less */
 		    killer_format = KILLED_BY_AN;
 		    killer="unsuccessful polymorph";
 		    done(DIED);
-		    newuhs(FALSE);
+		    newuhs(false);
 		    return; /* lifesaved */
 		}
 	}
-	newuhs(FALSE);
+	newuhs(false);
 	polyman("feel like a new %s!",
 		(flags.female && urace.individual.f) ? urace.individual.f :
 		(urace.individual.m) ? urace.individual.m : urace.noun);
@@ -280,7 +280,7 @@ boolean forcecontrol;
 		if (rn2(12) > ACURR(A_CON)) {
 		You(shudder_for_moment);
 		losehp(rnd(30), "system shock", KILLED_BY_AN);
-		exercise(A_CON, FALSE);
+		exercise(A_CON, false);
 		return;
 	    }
 	}
@@ -407,13 +407,13 @@ polymon (	/* returns 1 if polymorph successful */
 )
 {
 	boolean sticky = sticks(youmonst.data) && u.ustuck && !u.uswallow,
-		was_blind = !!Blind, dochange = FALSE;
+		was_blind = !!Blind, dochange = false;
 	boolean could_pass_walls = Passes_walls;
 	int mlvl;
 
 	if (mvitals[mntmp].mvflags & G_GENOD) {	/* allow G_EXTINCT */
 		You_feel("rather %s-ish.",mons[mntmp].mname);
-		exercise(A_WIS, TRUE);
+		exercise(A_WIS, true);
 		return(0);
 	}
 
@@ -428,7 +428,7 @@ polymon (	/* returns 1 if polymorph successful */
 #ifdef NOARTIFACTWISH
 			u.usacrifice = 0;
 #endif
-			exercise(A_WIS, FALSE);
+			exercise(A_WIS, false);
 		 } else {
 			You("start to change into %s, but a voice booms out:", an(mons[mntmp].mname));
 			pline("\"No, I will not allow such a change!\"");
@@ -461,11 +461,11 @@ polymon (	/* returns 1 if polymorph successful */
 	    youmonst.m_ap_type = M_AP_NOTHING;
 	}
 	if (is_male(&mons[mntmp])) {
-		if(flags.female) dochange = TRUE;
+		if(flags.female) dochange = true;
 	} else if (is_female(&mons[mntmp])) {
-		if(!flags.female) dochange = TRUE;
+		if(!flags.female) dochange = true;
 	} else if (!is_neuter(&mons[mntmp]) && mntmp != u.ulycn) {
-		if(!rn2(10)) dochange = TRUE;
+		if(!rn2(10)) dochange = true;
 	}
 	if (dochange) {
 		flags.female = !flags.female;
@@ -503,7 +503,7 @@ polymon (	/* returns 1 if polymorph successful */
 		You("no longer seem to be petrifying.");
 	}
 	if (Sick_resistance && Sick) {
-		make_sick(0L, NULL, FALSE, SICK_ALL);
+		make_sick(0L, NULL, false, SICK_ALL);
 		You("no longer feel sick.");
 	}
 	if (Slimed) {
@@ -548,7 +548,7 @@ polymon (	/* returns 1 if polymorph successful */
 	}
 
 	if (uskin && mntmp != armor_to_dragon(uskin->otyp))
-		skinback(FALSE);
+		skinback(false);
 	break_armor();
 	drop_weapon(1);
 	if (hides_under(youmonst.data))
@@ -567,7 +567,7 @@ polymon (	/* returns 1 if polymorph successful */
 	}
 	if (was_blind && !Blind) {	/* previous form was eyeless */
 	    Blinded = 1L;
-	    make_blinded(0L, TRUE);	/* remove blindness */
+	    make_blinded(0L, true);	/* remove blindness */
 	}
 	newsym(u.ux,u.uy);		/* Change symbol */
 
@@ -619,13 +619,13 @@ polymon (	/* returns 1 if polymorph successful */
 	/* you now know what an egg of your type looks like */
 	if (lays_eggs(youmonst.data)) {
 	    /* make queen bees recognize killer bee eggs */
-	    learn_egg_type(egg_type_from_parent(u.umonnum, TRUE));
+	    learn_egg_type(egg_type_from_parent(u.umonnum, true));
 	}
 	find_ac();
 	if((!Levitation && !u.ustuck && !Flying &&
 	    (is_pool(u.ux,u.uy) || is_lava(u.ux,u.uy))) ||
 	   (Underwater && !Swimming))
-	    spoteffects(TRUE);
+	    spoteffects(true);
 	if (Passes_walls && u.utrap && u.utraptype == TT_INFLOOR) {
 	    u.utrap = 0;
 	    pline_The("rock seems to no longer trap you.");
@@ -654,8 +654,8 @@ polymon (	/* returns 1 if polymorph successful */
 	flags.botl = 1;
 	vision_full_recalc = 1;
 	see_monsters();
-	exercise(A_CON, FALSE);
-	exercise(A_WIS, TRUE);
+	exercise(A_CON, false);
+	exercise(A_WIS, true);
 	(void) encumber_msg();
 	return(1);
 }
@@ -682,7 +682,7 @@ break_armor()
 	    } else {
 		if (donning(otmp)) cancel_don();
 		You("break out of your armor!");
-		exercise(A_STR, FALSE);
+		exercise(A_STR, false);
 		(void) Armor_gone();
 		useup(otmp);
 	}
@@ -885,7 +885,7 @@ dogaze (void)
 	pline("Where do you wish to look?");
 	cc.x = u.ux;
 	cc.y = u.uy;
-	getpos(&cc, TRUE, "the spot to look");
+	getpos(&cc, true, "the spot to look");
 
 	if (cc.x == -10) return (0); /* user pressed esc */
 
@@ -996,17 +996,17 @@ dospit (void)
 	    switch (mattk->adtyp) {
 		case AD_BLND:
 		case AD_DRST:
-		    otmp = mksobj(BLINDING_VENOM, TRUE, FALSE);
+		    otmp = mksobj(BLINDING_VENOM, true, false);
 		    break;
 		default:
 		    impossible("bad attack type in do_spit");
 		    /* fall through */
 		case AD_ACID:
-		    otmp = mksobj(ACID_VENOM, TRUE, FALSE);
+		    otmp = mksobj(ACID_VENOM, true, false);
 		    break;
 	    }
 	    otmp->spe = 1; /* to indicate it's yours */
-	    throwit(otmp, 0L, FALSE, 0);
+	    throwit(otmp, 0L, false, 0);
 	}
 	return(1);
 }
@@ -1035,7 +1035,7 @@ dospinweb (void)
 	if (u.uswallow) {
 		You("release web fluid inside %s.", mon_nam(u.ustuck));
 		if (is_animal(u.ustuck->data)) {
-			expels(u.ustuck, u.ustuck->data, TRUE);
+			expels(u.ustuck, u.ustuck->data, true);
 			return(0);
 		}
 		if (is_whirly(u.ustuck->data)) {
@@ -1073,7 +1073,7 @@ dospinweb (void)
 		You("cannot spin webs while stuck in a trap.");
 		return(0);
 	}
-	exercise(A_DEX, TRUE);
+	exercise(A_DEX, true);
 	if (ttmp) switch (ttmp->ttyp) {
 		case PIT:
 		case SPIKED_PIT: You("spin a web, covering up the pit.");
@@ -1150,8 +1150,8 @@ dosummon (void)
 	flags.botl = 1;
 
 	You("call upon your brethren for help!");
-	exercise(A_WIS, TRUE);
-	if (!were_summon(youmonst.data, TRUE, &placeholder, NULL))
+	exercise(A_WIS, true);
+	if (!were_summon(youmonst.data, true, &placeholder, NULL))
 		pline("But none arrive.");
 	return(1);
 }
@@ -1517,7 +1517,7 @@ ugolemeffects (int damtype, int dam)
 		if (u.mh > u.mhmax) u.mh = u.mhmax;
 		flags.botl = 1;
 		pline("Strangely, you feel better than before.");
-		exercise(A_STR, TRUE);
+		exercise(A_STR, true);
 	}
 }
 
@@ -1687,7 +1687,7 @@ polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
 		}
 		draconic.reqtime = 2;
 		if (mvitals[draconic.mon].mvflags & G_GENOD)
-		    draconic.merge = FALSE;
+		    draconic.merge = false;
 		set_occupation(mage_transform,
 			"transforming into your draconic form", 0);
 		You("begin the transformation ritual.");
@@ -1706,7 +1706,7 @@ polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
 		    if (occupation) stop_occupation();
 		    else nomul(0);
 		}
-		polyself(FALSE);
+		polyself(false);
 		if (Upolyd) { /* You actually polymorphed */
 		    u.uen -= 5 * mons[u.umonnum].mlevel;
 		    if (u.uen < 0) {

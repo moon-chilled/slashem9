@@ -20,7 +20,7 @@ char *catmore = 0;		/* default pager */
 int bases[MAXOCLASSES] = DUMMY;
 
 int multi = 0;
-boolean multi_one = FALSE;	/* used by dofire() and throw_the_obj() */
+boolean multi_one = false;	/* used by dofire() and throw_the_obj() */
 #if 0
 int warnlevel = 0;		/* used by movemon and dochugw */
 #endif
@@ -101,7 +101,7 @@ schar tbx = 0, tby = 0;	/* mthrowu: target */
 
 /* for xname handling of multiple shot missile volleys:
    number of shots, index of current one, validity check, shoot vs throw */
-struct multishot m_shot = { 0, 0, STRANGE_OBJECT, FALSE };
+struct multishot m_shot = { 0, 0, STRANGE_OBJECT, false };
 
 struct dig_info digging;
 
@@ -114,15 +114,15 @@ dest_area updest = { 0, 0, 0, 0, 0, 0, 0, 0 };
 dest_area dndest = { 0, 0, 0, 0, 0, 0, 0, 0 };
 coord inv_pos = { 0, 0 };
 
-boolean defer_see_monsters = FALSE;
-boolean in_mklev = FALSE;
-boolean stoned = FALSE;	/* done to monsters hit by 'c' */
-boolean unweapon = FALSE;
-boolean mrg_to_wielded = FALSE;
+boolean defer_see_monsters = false;
+boolean in_mklev = false;
+boolean stoned = false;	/* done to monsters hit by 'c' */
+boolean unweapon = false;
+boolean mrg_to_wielded = false;
 			 /* weapon picked is merged with wielded one */
 struct obj *current_wand = 0;	/* wand currently zapped/applied */
 
-boolean in_steed_dismounting = FALSE;
+boolean in_steed_dismounting = false;
 
 coord bhitpos = DUMMY;
 struct door doors[DOORMAX] = {DUMMY};

@@ -9,7 +9,7 @@
 #include "edog.h"
 #endif
 
-static boolean no_repeat = FALSE;
+static boolean no_repeat = false;
 
 static char *You_buf(int);
 
@@ -109,7 +109,7 @@ pline VA_DECL(const char *, line)
 	if (typ == MSGTYP_NOREP && !strcmp(line, prevmsg)) return;
 	putstr(WIN_MESSAGE, 0, line);
 	strncpy(prevmsg, line, BUFSZ);
-	if (typ == MSGTYP_STOP) display_nhwindow(WIN_MESSAGE, TRUE); /* --more-- */
+	if (typ == MSGTYP_STOP) display_nhwindow(WIN_MESSAGE, true); /* --more-- */
 }
 
 /*VARARGS1*/
@@ -117,9 +117,9 @@ void
 Norep VA_DECL(const char *, line)
 	VA_START(line);
 	VA_INIT(line, const char *);
-	no_repeat = TRUE;
+	no_repeat = true;
 	vpline(line, VA_ARGS);
-	no_repeat = FALSE;
+	no_repeat = false;
 	VA_END();
 	return;
 }
@@ -389,7 +389,7 @@ mstatusline (struct monst *mtmp)
 	/* avoid "Status of the invisible newt ..., invisible" */
 	/* and unlike a normal mon_nam, use "saddled" even if it has a name */
 	strcpy(monnambuf, x_monnam(mtmp, ARTICLE_THE, NULL,
-	    (SUPPRESS_IT|SUPPRESS_INVISIBLE), FALSE));
+	    (SUPPRESS_IT|SUPPRESS_INVISIBLE), false));
 
 	pline("Status of %s (%s):  Level %d  HP %d(%d)  Pw %d(%d)  AC %d%s.",
 		monnambuf,

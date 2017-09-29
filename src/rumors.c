@@ -158,7 +158,7 @@ outrumor (
 	    	return;
 	    }
 	}
-	line = getrumor(truth, buf, reading ? FALSE : TRUE);
+	line = getrumor(truth, buf, reading ? false : true);
 	if (!*line)
 		line = "NetHack rumors file closed for renovation.";
 	switch (mechanism) {
@@ -168,7 +168,7 @@ outrumor (
 		  (!rn2(4) ? "offhandedly " : (!rn2(3) ? "casually " :
 		  (rn2(2) ? "nonchalantly " : ""))));
 		verbalize("%s", line);
-		exercise(A_WIS, TRUE);
+		exercise(A_WIS, true);
 		return;
 	    case BY_COOKIE:
 		pline(fortune_msg);
@@ -273,7 +273,7 @@ boolean delphi;
 			if ((endp = index(line, '\n')) != 0) *endp = 0;
 			putstr(tmpwin, 0, xcrypt(line, xbuf));
 		}
-		display_nhwindow(tmpwin, TRUE);
+		display_nhwindow(tmpwin, true);
 		destroy_nhwindow(tmpwin);
 		(void) dlb_fclose(oracles);
 	} else {
@@ -360,14 +360,14 @@ doconsult (struct monst *oracl)
 		if (!u.uevent.minor_oracle)
 		    add_xpts = u_pay / (u.uevent.major_oracle ? 25 : 10);
 		    /* 5 pts if very 1st, or 2 pts if major already done */
-		u.uevent.minor_oracle = TRUE;
+		u.uevent.minor_oracle = true;
 	} else {
 		boolean cheapskate = u_pay < major_cost;
-		outoracle(cheapskate, TRUE);
+		outoracle(cheapskate, true);
 		if (!cheapskate && !u.uevent.major_oracle)
 		    add_xpts = u_pay / (u.uevent.minor_oracle ? 25 : 10);
 		    /* ~100 pts if very 1st, ~40 pts if minor already done */
-		u.uevent.major_oracle = TRUE;
+		u.uevent.major_oracle = true;
 		exercise(A_WIS, !cheapskate);
 	}
 	if (add_xpts) {

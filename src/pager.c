@@ -25,8 +25,8 @@ int c;
 {
     int i;
     for (i = S_sw_tl; i <= S_sw_br; i++)
-	if ((int)showsyms[i] == c) return TRUE;
-    return FALSE;
+	if ((int)showsyms[i] == c) return true;
+    return false;
 }
 
 /*
@@ -255,7 +255,7 @@ lookat(x, y, buf, monbuf)
 
 	if (!otmp || otmp->otyp != glyph_to_obj(glyph)) {
 	    if (glyph_to_obj(glyph) != STRANGE_OBJECT) {
-		otmp = mksobj(glyph_to_obj(glyph), FALSE, FALSE);
+		otmp = mksobj(glyph_to_obj(glyph), false, false);
 		if (otmp->oclass == COIN_CLASS)
 		    otmp->quan = 2L; /* to force pluralization */
 		else if (otmp->otyp == SLIME_MOLD)
@@ -313,10 +313,10 @@ lookat(x, y, buf, monbuf)
 
 /*
  * Look in the "data" file for more info.  Called if the user typed in the
- * whole name (user_typed_name == TRUE), or we've found a possible match
- * with a character/glyph and flags.help is TRUE.
+ * whole name (user_typed_name == true), or we've found a possible match
+ * with a character/glyph and flags.help is true.
  *
- * NOTE: when (user_typed_name == FALSE), inp is considered read-only and
+ * NOTE: when (user_typed_name == false), inp is considered read-only and
  *	 must not be changed directly, e.g. via lcase(). We want to force
  *	 lcase() for data.base lookup so that we can have a clean key.
  *	 Therefore, we create a copy of inp _just_ for data.base lookup.
@@ -332,7 +332,7 @@ checkfile(inp, pm, user_typed_name, without_asking)
     char *ep, *dbase_str;
     long txt_offset;
     int chk_skip;
-    boolean found_in_file = FALSE, skipping_entry = FALSE;
+    boolean found_in_file = false, skipping_entry = false;
 
     fp = dlb_fopen_area(NH_DATAAREA, NH_DATAFILE, "r");
     if (!fp) {
@@ -409,7 +409,7 @@ checkfile(inp, pm, user_typed_name, without_asking)
 
 	    if (digit(*buf)) {
 		/* a number indicates the end of current entry */
-		skipping_entry = FALSE;
+		skipping_entry = false;
 	    } else if (!skipping_entry) {
 		if (!(ep = index(buf, '\n'))) goto bad_data_file;
 		*ep = 0;
@@ -418,10 +418,10 @@ checkfile(inp, pm, user_typed_name, without_asking)
 		if (pmatch(&buf[chk_skip], dbase_str) ||
 			(alt && pmatch(&buf[chk_skip], alt))) {
 		    if (chk_skip) {
-			skipping_entry = TRUE;
+			skipping_entry = true;
 			continue;
 		    } else {
-			found_in_file = TRUE;
+			found_in_file = true;
 			break;
 		    }
 		}
@@ -459,7 +459,7 @@ bad_data_file:	impossible("'data' file in wrong format");
 		if (index(buf+1, '\t') != 0) (void) tabexpand(buf+1);
 		putstr(datawin, 0, buf+1);
 	    }
-	    display_nhwindow(datawin, FALSE);
+	    display_nhwindow(datawin, false);
 	    destroy_nhwindow(datawin);
 	}
     } else if (user_typed_name)
@@ -496,7 +496,7 @@ do_look(quick)
     static const char *mon_interior = "the interior of a monster";
 
     if (quick) {
-	from_screen = TRUE;	/* yes, we want to use the cursor */
+	from_screen = true;	/* yes, we want to use the cursor */
     } else {
 	i = ynq("Specify unknown object by cursor?");
 	if (i == 'q') return 0;
@@ -513,7 +513,7 @@ do_look(quick)
 	    return 0;
 
 	if (out_str[1]) {	/* user typed in a complete string */
-	    checkfile(out_str, pm, TRUE, TRUE);
+	    checkfile(out_str, pm, true, true);
 	    return 0;
 	}
 	sym = out_str[0];
@@ -527,7 +527,7 @@ do_look(quick)
      */
     do {
 	/* Reset some variables. */
-	need_to_look = FALSE;
+	need_to_look = false;
 	pm = NULL;
 	skipped_venom = 0;
 	found = 0;
@@ -547,7 +547,7 @@ do_look(quick)
 		flags.verbose = save_verbose;
 		return 0;	/* done */
 	    }
-	    flags.verbose = FALSE;	/* only print long question once */
+	    flags.verbose = false;	/* only print long question once */
 
 	    /* Convert the glyph at the selected position to a symbol. */
 	    glyph = glyph_at(cc.x,cc.y);
@@ -585,7 +585,7 @@ do_look(quick)
 	for (i = 0; i < MAXMCLASSES; i++) {
 	    if (sym == (from_screen ? monsyms[i] : def_monsyms[i]) &&
 		monexplain[i]) {
-		need_to_look = TRUE;
+		need_to_look = true;
 		if (!found) {
 		    sprintf(out_str, "%c       %s", sym, an(monexplain[i]));
 		    firstmatch = monexplain[i];
@@ -616,13 +616,13 @@ do_look(quick)
 	    } else {
 		found += append_str(out_str, mon_interior);
 	    }
-	    need_to_look = TRUE;
+	    need_to_look = true;
 	}
 
 	/* Now check for objects */
 	for (i = 1; i < MAXOCLASSES; i++) {
 	    if (sym == (from_screen ? oc_syms[i] : def_oc_syms[i])) {
-		need_to_look = TRUE;
+		need_to_look = true;
 		if (from_screen && i == VENOM_CLASS) {
 		    skipped_venom++;
 		    continue;
@@ -651,7 +651,7 @@ do_look(quick)
 #define is_cmap_drawbridge(i) ((i) >= S_vodbridge && (i) <= S_hcdbridge)
 
 	/* Now check for graphics symbols */
-	for (hit_trap = FALSE, i = 0; i < MAXPCHARS; i++) {
+	for (hit_trap = false, i = 0; i < MAXPCHARS; i++) {
 	    x_str = defsyms[i].explanation;
 	    if (sym == (from_screen ? showsyms[i] : defsyms[i].sym) && *x_str) {
 		/* avoid "an air", "a water", "a floor of a room", or "a dark part of a room" */
@@ -662,7 +662,7 @@ do_look(quick)
 		if (!found) {
 		    if (is_cmap_trap(i)) {
 			sprintf(out_str, "%c       a trap", sym);
-			hit_trap = TRUE;
+			hit_trap = true;
 		    } else if (level.flags.lethe && !strcmp(x_str, "water")) {
 			sprintf(out_str, "%c       sparkling water", sym);
 		    } else {
@@ -680,11 +680,11 @@ do_look(quick)
 		    	found += append_str(out_str,
 					article == 2 ? the(x_str) :
 					article == 1 ? an(x_str) : x_str);
-		    if (is_cmap_trap(i)) hit_trap = TRUE;
+		    if (is_cmap_trap(i)) hit_trap = true;
 		}
 
 		if (i == S_altar || is_cmap_trap(i))
-		    need_to_look = TRUE;
+		    need_to_look = true;
 	    }
 	}
 
@@ -774,7 +774,7 @@ do_look(quick)
 		strcpy(temp_buf, level.flags.lethe
 					&& !strcmp(firstmatch, "water")?
 				"lethe" : firstmatch);
-		checkfile(temp_buf, pm, FALSE, (boolean)(ans == LOOK_VERBOSE));
+		checkfile(temp_buf, pm, false, (boolean)(ans == LOOK_VERBOSE));
 	    }
 	} else {
 	    pline("I've never heard of such things.");
@@ -790,13 +790,13 @@ do_look(quick)
 int
 dowhatis (void)
 {
-	return do_look(FALSE);
+	return do_look(false);
 }
 
 int
 doquickwhatis (void)
 {
-	return do_look(TRUE);
+	return do_look(true);
 }
 
 int
@@ -972,9 +972,9 @@ help_menu(sel)
 	if (n > 0) {
 	    *sel = selected[0].item.a_int - 1;
 	    free((void *)selected);
-	    return TRUE;
+	    return true;
 	}
-	return FALSE;
+	return false;
 }
 
 int
@@ -984,25 +984,25 @@ dohelp (void)
 
 	if (help_menu(&sel)) {
 		switch (sel) {
-			case  0:  display_file_area(NH_HELP_AREA, NH_HELP, TRUE);
+			case  0:  display_file_area(NH_HELP_AREA, NH_HELP, true);
 				  break;
-			case  1:  display_file_area(NH_SHELP_AREA, NH_SHELP, TRUE);
+			case  1:  display_file_area(NH_SHELP_AREA, NH_SHELP, true);
 				  break;
 			case  2:  (void) dohistory();  break;
 			case  3:  (void) dowhatis();  break;
 			case  4:  (void) dowhatdoes();  break;
 			case  5:  option_help();  break;
 			case  6:  display_file_area(NH_OPTIONAREA,
-				    NH_OPTIONFILE, TRUE);
+				    NH_OPTIONFILE, true);
 				  break;
 			case  7:  (void) doextlist();  break;
 			case  8:  display_file_area(NH_LICENSE_AREA,
-				    NH_LICENSE, TRUE);
+				    NH_LICENSE, true);
 				  break;
 #ifndef MAC
 /*WAC add guidebook.*/
                         case  GUIDEBOOK_SLOT:  display_file_area(NH_GUIDEBOOK_AREA,
-				    NH_GUIDEBOOK, TRUE);
+				    NH_GUIDEBOOK, true);
 				  break;
 #endif
 #ifdef PORT_HELP
@@ -1010,7 +1010,7 @@ dohelp (void)
 #endif
 #ifdef WIZARD
                         case  WIZHLP_SLOT:  display_file_area(NH_DEBUGHELP_AREA,
-				    NH_DEBUGHELP, TRUE);
+				    NH_DEBUGHELP, true);
 				  break;
 #endif
 		}
@@ -1021,7 +1021,7 @@ dohelp (void)
 int
 dohistory (void)
 {
-	display_file_area(NH_HISTORY_AREA, NH_HISTORY, TRUE);
+	display_file_area(NH_HISTORY_AREA, NH_HISTORY, true);
 	return 0;
 }
 

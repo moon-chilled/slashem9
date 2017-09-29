@@ -18,7 +18,7 @@ static void watch_on_duty(struct monst *);
 static int bust_door_breath(struct monst *);
 
 
-boolean /* TRUE : mtmp died */
+boolean /* true : mtmp died */
 mb_trapped(mtmp)
 struct monst *mtmp;
 {
@@ -34,11 +34,11 @@ struct monst *mtmp;
 	if(mtmp->mhp <= 0) {
 		mondied(mtmp);
 		if (mtmp->mhp > 0) /* lifesaved */
-			return(FALSE);
+			return(false);
 		else
-			return(TRUE);
+			return(true);
 	}
-	return(FALSE);
+	return(false);
 }
 
 
@@ -80,7 +80,7 @@ struct monst *mtmp;
 		}
 	    } else if (is_digging()) {
 		/* chewing, wand/spell of digging are checked elsewhere */
-		watch_dig(mtmp, digging.pos.x, digging.pos.y, FALSE);
+		watch_dig(mtmp, digging.pos.x, digging.pos.y, false);
 	    }
 	}
 }
@@ -163,7 +163,7 @@ struct monst *mtmp;
 	    is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
 	    mtmp->data == &mons[PM_CTHULHU] ||
 	    is_rider(mtmp->data) || mtmp->data == &mons[PM_MINOTAUR])
-		return(FALSE);
+		return(false);
 
 	return (boolean)(sobj_at(SCR_SCARE_MONSTER, x, y)
 #ifdef ELBERETH
@@ -246,7 +246,7 @@ boolean fleemsg;
 {
 	if (u.ustuck == mtmp) {
 	    if (u.uswallow)
-		expels(mtmp, mtmp->data, TRUE);
+		expels(mtmp, mtmp->data, true);
 	    else if (!sticks(youmonst.data)) {
 		unstuck(mtmp);	/* monster lets go when fleeing */
 		You("get released!");
@@ -300,9 +300,9 @@ int *inrange, *nearby, *scared;
 
 	if(*scared) {
 		if (rn2(7))
-		    monflee(mtmp, rnd(10), TRUE, TRUE);
+		    monflee(mtmp, rnd(10), true, true);
 		else
-		    monflee(mtmp, rnd(100), TRUE, TRUE);
+		    monflee(mtmp, rnd(100), true, true);
 	}
 
 }
@@ -375,7 +375,7 @@ dochug (struct monst *mtmp)
 	/* some monsters teleport */
 	if (mtmp->mflee && !rn2(40) && can_teleport(mdat) && !mtmp->iswiz &&
 	    !level.flags.noteleport) {
-		(void) rloc(mtmp, FALSE);
+		(void) rloc(mtmp, false);
 		return(0);
 	}
 	if (mdat->msound == MS_SHRIEK && !um_dist(mtmp->mx, mtmp->my, 1))
@@ -418,7 +418,7 @@ dochug (struct monst *mtmp)
 
 			if (is_demon(youmonst.data)) {
 			  /* "Good hunting, brother" */
-			    if (!tele_restrict(mtmp)) (void) rloc(mtmp, FALSE);
+			    if (!tele_restrict(mtmp)) (void) rloc(mtmp, false);
 			} else {
 			    mtmp->minvis = mtmp->perminvis = 0;
 			    /* Why?  For the same reason in real demon talk */
@@ -541,7 +541,7 @@ toofar:
 
 		    for (a = &mdat->mattk[0]; a < &mdat->mattk[NATTK]; a++) {
 			if (a->aatyp == AT_MAGC && (a->adtyp == AD_SPEL || a->adtyp == AD_CLRC)) {
-			    if (castmu(mtmp, a, FALSE, FALSE)) {
+			    if (castmu(mtmp, a, false, false)) {
 				tmp = 3;
 				break;
 			    }
@@ -620,9 +620,9 @@ struct monst *mtmp;
 {
 	if (sticks(youmonst.data) && mtmp==u.ustuck && !u.uswallow) {
 		pline("%s cannot escape from you!", Monnam(mtmp));
-		return(TRUE);
+		return(true);
 	}
-	return(FALSE);
+	return(false);
 }
 
 /* Return values:
@@ -641,7 +641,7 @@ m_move (struct monst *mtmp, int after)
 	boolean likerock=0, can_tunnel=0;
 	boolean can_open=0, can_unlock=0, doorbuster=0;
 	boolean uses_items=0, setlikes=0;
-	boolean avoid=FALSE;
+	boolean avoid=false;
 	struct permonst *ptr;
 	struct monst *mtoo;
 	schar mmoved = 0;	/* not strictly nec.: chi >= 0 will do */
@@ -746,7 +746,7 @@ m_move (struct monst *mtmp, int after)
 	if(ptr == &mons[PM_TENGU] && !rn2(5) && !mtmp->mcan &&
 	   !tele_restrict(mtmp)) {
 	    if(mtmp->mhp < 7 || mtmp->mpeaceful || rn2(2))
-		(void) rloc(mtmp, FALSE);
+		(void) rloc(mtmp, false);
 	    else
 		mnexto(mtmp);
 	    mmoved = 1;
@@ -826,7 +826,7 @@ not_special:
 		likemagic = (likes_magic(ptr) && pctload < 85);
 		likerock = (throws_rocks(ptr) && pctload < 50 && !In_sokoban(&u.uz));
 		conceals = hides_under(ptr);
-		setlikes = TRUE;
+		setlikes = true;
 	    }
 	}
 
@@ -927,7 +927,7 @@ not_special:
 	if (can_tunnel && needspick(ptr) &&
 	    ((!mtmp->mpeaceful || Conflict) &&
 	     dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 8))
-	    can_tunnel = FALSE;
+	    can_tunnel = false;
 
 	nix = omx;
 	niy = omy;
@@ -965,7 +965,7 @@ not_special:
 	    if (is_unicorn(ptr) && level.flags.noteleport) {
 		/* on noteleport levels, perhaps we cannot avoid hero */
 		for(i = 0; i < cnt; i++)
-		    if(!(info[i] & NOTONL)) avoid=TRUE;
+		    if(!(info[i] & NOTONL)) avoid=true;
 	    }
 
 	    for(i=0; i < cnt; i++) {
@@ -1081,7 +1081,7 @@ not_special:
 	    if (mtmp->wormno) worm_move(mtmp);
 	} else {
 	    if(is_unicorn(ptr) && rn2(2) && !tele_restrict(mtmp)) {
-		(void) rloc(mtmp, FALSE);
+		(void) rloc(mtmp, false);
 		return(1);
 	    }
 	    if(mtmp->wormno) worm_nomove(mtmp);
@@ -1235,7 +1235,7 @@ postmov:
 		if (ptr == &mons[PM_GHOUL] || ptr == &mons[PM_GHAST]) meatcorpse(mtmp);
 
 		if(!*in_rooms(mtmp->mx, mtmp->my, SHOPBASE) || !rn2(25)) {
-		    boolean picked = FALSE;
+		    boolean picked = false;
 
 		    if(likeobjs) picked |= mpickstuff(mtmp, practical);
 		    if(likemagic) picked |= mpickstuff(mtmp, magical);
@@ -1328,7 +1328,7 @@ set_apparxy (struct monst *mtmp)
 
 	/* without something like the following, invis. and displ.
 	   are too powerful */
-	gotu = notseen ? !rn2(3) : Displaced ? !rn2(4) : FALSE;
+	gotu = notseen ? !rn2(3) : Displaced ? !rn2(4) : false;
 
 #if 0		/* this never worked as intended & isn't needed anyway */
 	/* If invis but not displaced, staying around gets you 'discovered' */
@@ -1364,15 +1364,15 @@ struct monst *mtmp;
 {
 	struct obj *chain, *obj;
 
-	if (!amorphous(mtmp->data)) return FALSE;
+	if (!amorphous(mtmp->data)) return false;
 	if (mtmp == &youmonst) {
 #ifndef GOLDOBJ
-		if (u.ugold > 100L) return FALSE;
+		if (u.ugold > 100L) return false;
 #endif
 		chain = invent;
 	} else {
 #ifndef GOLDOBJ
-		if (mtmp->mgold > 100L) return FALSE;
+		if (mtmp->mgold > 100L) return false;
 #endif
 		chain = mtmp->minvent;
 	}
@@ -1380,7 +1380,7 @@ struct monst *mtmp;
 		int typ = obj->otyp;
 
 #ifdef GOLDOBJ
-                if (typ == COIN_CLASS && obj->quan > 100L) return FALSE;
+                if (typ == COIN_CLASS && obj->quan > 100L) return false;
 #endif
 		if (obj->oclass != GEM_CLASS &&
 		    !(typ >= ARROW && typ <= BOOMERANG) &&
@@ -1405,11 +1405,11 @@ struct monst *mtmp;
 		    typ != TIN_WHISTLE && typ != MAGIC_WHISTLE &&
 		    typ != MAGIC_MARKER && typ != TIN_OPENER &&
 		    typ != SKELETON_KEY && typ != LOCK_PICK
-		) return FALSE;
-		if (Is_container(obj) && obj->cobj) return FALSE;
+		) return false;
+		if (Is_container(obj) && obj->cobj) return false;
 
 	}
-	return TRUE;
+	return true;
 }
 
 static int

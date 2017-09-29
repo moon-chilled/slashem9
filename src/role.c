@@ -1047,15 +1047,15 @@ int rolenum, racenum, gendnum, alignnum;
 	    allow &= races[racenum].allow;
 	if (gendnum >= 0 && gendnum < ROLE_GENDERS &&
 		!(allow & genders[gendnum].allow & ROLE_GENDMASK))
-	    return FALSE;
+	    return false;
 	if (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
 		!(allow & aligns[alignnum].allow & ROLE_ALIGNMASK))
-	    return FALSE;
+	    return false;
 
 	if (!(allow & ROLE_RACEMASK) || !(allow & ROLE_GENDMASK) ||
 		!(allow & ROLE_ALIGNMASK))
-	    return FALSE;
-	return TRUE;
+	    return false;
+	return true;
     } else {
 	for (i = 0; i < SIZE(roles)-1; i++) {
 	    allow = roles[i].allow;
@@ -1070,9 +1070,9 @@ int rolenum, racenum, gendnum, alignnum;
 	    if (!(allow & ROLE_RACEMASK) || !(allow & ROLE_GENDMASK) ||
 		    !(allow & ROLE_ALIGNMASK))
 		continue;
-	    return TRUE;
+	    return true;
 	}
-	return FALSE;
+	return false;
     }
 }
 
@@ -1118,15 +1118,15 @@ int rolenum, racenum, gendnum, alignnum;
 	    allow &= roles[rolenum].allow;
 	if (gendnum >= 0 && gendnum < ROLE_GENDERS &&
 		!(allow & genders[gendnum].allow & ROLE_GENDMASK))
-	    return FALSE;
+	    return false;
 	if (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
 		!(allow & aligns[alignnum].allow & ROLE_ALIGNMASK))
-	    return FALSE;
+	    return false;
 
 	if (!(allow & ROLE_RACEMASK) || !(allow & ROLE_GENDMASK) ||
 		!(allow & ROLE_ALIGNMASK))
-	    return FALSE;
-	return TRUE;
+	    return false;
+	return true;
     } else {
 	for (i = 0; i < SIZE(races)-1; i++) {
 	    allow = races[i].allow;
@@ -1141,9 +1141,9 @@ int rolenum, racenum, gendnum, alignnum;
 	    if (!(allow & ROLE_RACEMASK) || !(allow & ROLE_GENDMASK) ||
 		    !(allow & ROLE_ALIGNMASK))
 		continue;
-	    return TRUE;
+	    return true;
 	}
-	return FALSE;
+	return false;
     }
 }
 
@@ -1192,8 +1192,8 @@ int rolenum, racenum, gendnum, alignnum;
 	    allow &= races[racenum].allow;
 
 	if (!(allow & ROLE_GENDMASK))
-	    return FALSE;
-	return TRUE;
+	    return false;
+	return true;
     } else {
 	for (i = 0; i < ROLE_GENDERS; i++) {
 	    allow = genders[i].allow;
@@ -1202,9 +1202,9 @@ int rolenum, racenum, gendnum, alignnum;
 	    if (racenum >= 0 && racenum < SIZE(races)-1)
 		allow &= races[racenum].allow;
 	    if (allow & ROLE_GENDMASK)
-	    return TRUE;
+	    return true;
 	}
-	return FALSE;
+	return false;
     }
 }
 
@@ -1254,8 +1254,8 @@ int rolenum, racenum, gendnum, alignnum;
 	    allow &= races[racenum].allow;
 
 	if (!(allow & ROLE_ALIGNMASK))
-	    return FALSE;
-	return TRUE;
+	    return false;
+	return true;
     } else {
 	for (i = 0; i < ROLE_ALIGNS; i++) {
 	    allow = races[i].allow;
@@ -1264,9 +1264,9 @@ int rolenum, racenum, gendnum, alignnum;
 	    if (racenum >= 0 && racenum < SIZE(races)-1)
 		allow &= races[racenum].allow;
 	    if (allow & ROLE_ALIGNMASK)
-	    return TRUE;
+	    return true;
 	}
-	return FALSE;
+	return false;
     }
 }
 
@@ -1387,7 +1387,7 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 	int k, gendercount = 0, aligncount = 0;
 	char buf[BUFSZ];
 	static char err_ret[] = " character's";
-	boolean donefirst = FALSE;
+	boolean donefirst = false;
 
 	if (!suppliedbuf || buflen < 1) return err_ret;
 
@@ -1407,11 +1407,11 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 		if ((racenum >= 0) && (aligncount > 1)) {
 			if (donefirst) strcat(buf, " ");
 			strcat(buf, aligns[alignnum].adj);
-			donefirst = TRUE;
+			donefirst = true;
 		} else {
 			if (donefirst) strcat(buf, " ");
 			strcat(buf, aligns[alignnum].adj);
-			donefirst = TRUE;
+			donefirst = true;
 		}
 	} else {
 		/* if alignment not specified, but race is specified
@@ -1439,12 +1439,12 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 						&& !roles[rolenum].name.f) {
 				if (donefirst) strcat(buf, " ");
 				strcat(buf, genders[gendnum].adj);
-				donefirst = TRUE;
+				donefirst = true;
 			}
 	        } else {
 			if (donefirst) strcat(buf, " ");
 	        	strcat(buf, genders[gendnum].adj);
-			donefirst = TRUE;
+			donefirst = true;
 	        }
 	} else {
 		/* if gender not specified, but role is specified
@@ -1463,11 +1463,11 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 			strcat(buf, (rolenum == ROLE_NONE) ?
 				races[racenum].noun :
 				races[racenum].adj);
-			donefirst = TRUE;
+			donefirst = true;
 		} else if (!validrole(rolenum)) {
 			if (donefirst) strcat(buf, " ");
 			strcat(buf, races[racenum].noun);
-			donefirst = TRUE;
+			donefirst = true;
 		} else {
 			pa[BP_RACE] = 1;
 			post_attribs++;
@@ -1493,7 +1493,7 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 			} else
 				strcat(buf, roles[rolenum].name.m);
 		}
-		donefirst = TRUE;
+		donefirst = true;
 	} else if (rolenum == ROLE_NONE) {
 		pa[BP_ROLE] = 1;
 		post_attribs++;
@@ -1502,7 +1502,7 @@ root_plselection_prompt (char *suppliedbuf, int buflen, int rolenum, int racenum
 	if ((racenum == ROLE_NONE || racenum == ROLE_RANDOM) && !validrole(rolenum)) {
 		if (donefirst) strcat(buf, " ");
 		strcat(buf, "character");
-		donefirst = TRUE;
+		donefirst = true;
 	}
 	/* <your lawful female gnomish cavewoman> || <your lawful female gnome>
 	 *    || <your lawful female character>

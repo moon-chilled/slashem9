@@ -34,20 +34,20 @@ static boolean could_reach_item(struct monst *, xchar,xchar);
 static struct obj *DROPPABLES(struct monst *mon) {
 	struct obj *obj;
 	struct obj *wep = MON_WEP(mon);
-	boolean item1 = FALSE, item2 = FALSE;
+	boolean item1 = false, item2 = false;
 
 	if (is_animal(mon->data) || mindless(mon->data))
-		item1 = item2 = TRUE;
+		item1 = item2 = true;
 	if (!tunnels(mon->data) || !needspick(mon->data))
-		item1 = TRUE;
+		item1 = true;
 	for(obj = mon->minvent; obj; obj = obj->nobj) {
 		if (!item1 && is_pick(obj) && (obj->otyp != DWARVISH_MATTOCK
 						|| !which_armor(mon, W_ARMS))) {
-			item1 = TRUE;
+			item1 = true;
 			continue;
 		}
 		if (!item2 && obj->otyp == UNICORN_HORN && !obj->cursed) {
-			item2 = TRUE;
+			item2 = true;
 			continue;
 		}
 		if (!obj->owornmask && obj != wep) return obj;
@@ -76,9 +76,9 @@ static boolean cursed_object_at(struct monst *mtmp, int x, int y) {
 		debugpline("%s thinks %s at (%d,%d) is `cursed'",
 		  noit_Monnam(mtmp), doname(otmp), x, y);
 #endif
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 int dog_nutrition (struct monst *mtmp, struct obj *obj) {
@@ -129,7 +129,7 @@ int dog_nutrition (struct monst *mtmp, struct obj *obj) {
 /* returns 2 if pet dies, otherwise 1 */
 int dog_eat(struct monst *mtmp, struct obj *obj, int x, int y, boolean devour) {
 	struct edog *edog = EDOG(mtmp);
-	boolean poly = FALSE, grow = FALSE, heal = FALSE;
+	boolean poly = false, grow = false, heal = false;
 	int nutrit;
 	boolean vis = (cansee(x, y) || cansee(mtmp->mx, mtmp->my));
 	boolean vampiric = is_vampire(mtmp->data);
@@ -224,10 +224,10 @@ int dog_eat(struct monst *mtmp, struct obj *obj, int x, int y, boolean devour) {
 	    delobj(obj);
 
 	if (poly) {
-	    (void) mon_spec_poly(mtmp, NULL, 0L, FALSE,
-		    cansee(mtmp->mx, mtmp->my), FALSE, FALSE);
+	    (void) mon_spec_poly(mtmp, NULL, 0L, false,
+		    cansee(mtmp->mx, mtmp->my), false, false);
 #if 0
-	    (void) newcham(mtmp, NULL, FALSE,
+	    (void) newcham(mtmp, NULL, false,
 			   cansee(mtmp->mx, mtmp->my));
 #endif
 	}
@@ -240,7 +240,7 @@ int dog_eat(struct monst *mtmp, struct obj *obj, int x, int y, boolean devour) {
 }
 
 
-/* hunger effects -- returns TRUE on starvation */
+/* hunger effects -- returns true on starvation */
 static boolean dog_hunger(struct monst *mtmp, struct edog *edog) {
 	if (monstermoves > edog->hungrytime + 500) {
 	    if (!carnivorous(mtmp->data) && !herbivorous(mtmp->data)) {
@@ -276,10 +276,10 @@ static boolean dog_hunger(struct monst *mtmp, struct edog *edog) {
 		    You_feel("%s for a moment.",
 			Hallucination ? "bummed" : "sad");
 		mondied(mtmp);
-		return(TRUE);
+		return(true);
 	    }
 	}
-	return(FALSE);
+	return(false);
 }
 
 /* do something with object (drop, pick up, eat) at current position
@@ -309,7 +309,7 @@ static int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 #endif
 	    if (!rn2(udist+1) || !rn2(edog->apport))
 		if(rn2(10) < edog->apport){
-		    relobj(mtmp, (int)mtmp->minvis, TRUE);
+		    relobj(mtmp, (int)mtmp->minvis, true);
 		    if(edog->apport > 1) edog->apport--;
 		    edog->dropdist = udist;		/* hpscdi!jon */
 		    edog->droptime = moves;
@@ -326,7 +326,7 @@ static int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 			/* starving pet is more aggressive about eating */
 			(edog->mhpmax_penalty && edible == ACCFOOD)) &&
 		    could_reach_item(mtmp, obj->ox, obj->oy))
-		    return dog_eat(mtmp, obj, omx, omy, FALSE);
+		    return dog_eat(mtmp, obj, omx, omy, false);
 
 		/* [Tom] demonic & undead pets don't mind cursed items */
 		if(can_carry(mtmp, obj) &&
@@ -390,7 +390,7 @@ static int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 				mtmp->weapon_check = NEED_HTH_WEAPON;
 				(void) mon_wield_item(mtmp);
 			    }
-			    m_dowear(mtmp, FALSE);
+			    m_dowear(mtmp, false);
 			}
 		    }
 		}
@@ -604,13 +604,13 @@ boolean betrayed(struct monst *mtmp) {
 	    pline("You feel uneasy about %s.", y_monnam(mtmp));
 	mtmp->mpeaceful = 0;
 	mtmp->mtame = 0;
-	mtmp->mtraitor = TRUE;
+	mtmp->mtraitor = true;
 
 	/* Do we need to call newsym() here? */
 	newsym(mtmp->mx, mtmp->my);
-	return TRUE;
+	return true;
     }
-    return FALSE;
+    return false;
 }
 
 /* return 0 (no move), 1 (move) or 2 (dead) */
@@ -621,7 +621,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 	struct edog *edog = EDOG(mtmp);
 	struct obj *obj = NULL;
 	xchar otyp;
-	boolean has_edog, cursemsg[9], is_spell, do_eat = FALSE;
+	boolean has_edog, cursemsg[9], is_spell, do_eat = false;
 	xchar nix, niy;		/* position mtmp is (considering) moving to */
 	int nx, ny;	/* temporary coordinates */
 	xchar cnt, uncursedcnt, chcnt;
@@ -670,7 +670,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 
 	nix = omx;	/* set before newdogpos */
 	niy = omy;
-	cursemsg[0] = FALSE;	/* lint suppression */
+	cursemsg[0] = false;	/* lint suppression */
 	info[0] = 0;		/* ditto */
 
 	if (has_edog && !is_spell) {
@@ -728,7 +728,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 		    mm.y = u.uy;
 		    if(enexto(&mm, mm.x, mm.y, &mons[PM_ANGEL]))
 			(void) mk_roamer(&mons[PM_ANGEL], u.ualign.type,
-					 mm.x, mm.y, FALSE);
+					 mm.x, mm.y, false);
 		}
 		return(2);
 
@@ -784,7 +784,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 	for (i = 0; i < cnt; i++) {
 		nx = poss[i].x;
 		ny = poss[i].y;
-		cursemsg[i] = FALSE;
+		cursemsg[i] = false;
 
 		/* if leashed, we drag him along. */
 		if (mtmp->mleashed && distu(nx, ny) > 4) continue;
@@ -875,13 +875,13 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 
 		/* dog eschews cursed objects, but likes dog food */
 		/* [Tom] except demons & undead, who don't care */
-		/* (minion isn't interested; `cursemsg' stays FALSE) */
+		/* (minion isn't interested; `cursemsg' stays false) */
 		if (has_edog && !is_spell) {
 		for (obj = level.objects[nx][ny]; obj; obj = obj->nexthere) {
 		    if ((obj->cursed) && has_edog && !is_demon(mtmp->data)
-		    && !is_undead(mtmp->data)) cursemsg[i] = TRUE;
+		    && !is_undead(mtmp->data)) cursemsg[i] = true;
 		    if (obj->blessed && has_edog && (is_demon(mtmp->data)
-		    || is_undead(mtmp->data))) cursemsg[i] = TRUE;
+		    || is_undead(mtmp->data))) cursemsg[i] = true;
 		    else if ((otyp = dogfood(mtmp, obj)) < MANFOOD &&
 			     (otyp < ACCFOOD || edog->hungrytime <= monstermoves)) {
 			/* Note: our dog likes the food so much that he
@@ -889,8 +889,8 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 			nix = nx;
 			niy = ny;
 			chi = i;
-			do_eat = TRUE;
-			cursemsg[i] = FALSE;	/* not reluctant */
+			do_eat = true;
+			cursemsg[i] = false;	/* not reluctant */
 			goto newdogpos;
 		    }
 		}
@@ -928,7 +928,7 @@ newdogpos:
 			if (mtmp->mleashed) { /* play it safe */
 				pline("%s breaks loose of %s leash!",
 				      Monnam(mtmp), mhis(mtmp));
-				m_unleash(mtmp, FALSE);
+				m_unleash(mtmp, false);
 			}
 			(void) mattacku(mtmp);
 			return(0);
@@ -962,13 +962,13 @@ newdogpos:
 		mtmp->mtrack[0].x = omx;
 		mtmp->mtrack[0].y = omy;
 		if (mtmp->mleashed)
-		    check_leash(mtmp, omx, omy, FALSE);
+		    check_leash(mtmp, omx, omy, false);
 		/* We have to know if the pet's gonna do a combined eat and
 		 * move before moving it, but it can't eat until after being
 		 * moved.  Thus the do_eat flag.
 		 */
 		if (do_eat) {
-		    if (dog_eat(mtmp, obj, omx, omy, FALSE) == 2) return 2;
+		    if (dog_eat(mtmp, obj, omx, omy, false) == 2) return 2;
 		}
 	} else if (mtmp->mleashed && distu(omx, omy) > 4) {
 		/* an incredible kludge, but the only way to keep pooch near
@@ -998,7 +998,7 @@ dognext:
 		  return 1;
 		remove_monster(mtmp->mx, mtmp->my);
 		place_monster(mtmp, cc.x, cc.y);
-		check_leash(mtmp, omx, omy, TRUE);
+		check_leash(mtmp, omx, omy, true);
 		newsym(cc.x,cc.y);
 		set_apparxy(mtmp);
 	}
@@ -1010,8 +1010,8 @@ static boolean could_reach_item(struct monst *mon, xchar nx, xchar ny) {
     if ((!is_pool(nx,ny) || is_swimmer(mon->data)) &&
 	(!is_lava(nx,ny) || likes_lava(mon->data)) &&
 	(!sobj_at(BOULDER,nx,ny) || throws_rocks(mon->data)))
-    	return TRUE;
-    return FALSE;
+    	return true;
+    return false;
 }
 
 /* Hack to prevent a dog from being endlessly stuck near an object that
@@ -1025,8 +1025,8 @@ static boolean can_reach_location(struct monst *mon, xchar mx, xchar my, xchar f
     int i, j;
     int dist;
 
-    if (mx == fx && my == fy) return TRUE;
-    if (!isok(mx, my)) return FALSE; /* should not happen */
+    if (mx == fx && my == fy) return true;
+    if (!isok(mx, my)) return false; /* should not happen */
 
     dist = dist2(mx, my, fx, fy);
     for(i=mx-1; i<=mx+1; i++) {
@@ -1044,10 +1044,10 @@ static boolean can_reach_location(struct monst *mon, xchar mx, xchar my, xchar f
 	    if (!could_reach_item(mon, i, j))
 		continue;
 	    if (can_reach_location(mon, i, j, fx, fy))
-		return TRUE;
+		return true;
 	}
     }
-    return FALSE;
+    return false;
 }
 
 

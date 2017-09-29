@@ -150,7 +150,7 @@ void max_rank_sz(void) {
 
 #ifdef SCORE_ON_BOTL
 long botl_score(void) {
-    int deepest = deepest_lev_reached(FALSE);
+    int deepest = deepest_lev_reached(false);
 #ifndef GOLDOBJ
     long ugold = u.ugold + hidden_gold();
 
@@ -307,7 +307,7 @@ bot2str(char *newbot2) {
 
 	if(hp < 0) hp = 0;
 	if (bot2_abbrev < 4)
-		(void) describe_level(newbot2, FALSE);
+		(void) describe_level(newbot2, false);
 	else
 		newbot2[0] = '\0';
 	if (bot2_abbrev < 1)
@@ -491,7 +491,7 @@ static void bot_raw(boolean reconfig) {
 #endif
     uhp = Upolyd ? u.mh : u.uhp;
     if (uhp < 0) uhp = 0;
-    (void) describe_level(dlevel, TRUE);
+    (void) describe_level(dlevel, true);
     eos(dlevel)[-1] = 0;
     *rv++ = reconfig ? "dlevel" : dlevel;
     *rv++ = reconfig ? "gold" : (sprintf(gold, "%ld",
@@ -541,7 +541,7 @@ static void bot_raw(boolean reconfig) {
 
 void bot_reconfig(void) {
     if (raw_handler)
-	bot_raw(TRUE);
+	bot_raw(true);
     flags.botl = 1;
 }
 
@@ -561,7 +561,7 @@ void bot(void) {
 	if (!youmonst.data)
 		return;
 	if (raw_handler)
-		bot_raw(FALSE);
+		bot_raw(false);
 	else {
 	bot1();
 	bot2();

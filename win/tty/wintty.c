@@ -121,13 +121,13 @@ extern struct menucoloring *menu_colorings;
 #endif
 
 #ifdef CLIPPING
-static boolean clipping = FALSE;	/* clipping on? */
+static boolean clipping = false;	/* clipping on? */
 static int clipx = 0, clipxmax = 0;
 static int clipy = 0, clipymax = 0;
 #endif /* CLIPPING */
 
 #if defined(ASCIIGRAPH) && !defined(NO_TERMS)
-boolean GFlag = FALSE;
+boolean GFlag = false;
 boolean HE_resets_AS;	/* see termcap.c */
 #endif
 
@@ -213,7 +213,7 @@ winch()
 		    setclipped();
 		    tty_cliparound(u.ux, u.uy);
 		} else {
-		    clipping = FALSE;
+		    clipping = false;
 		    clipx = clipy = 0;
 		}
 #endif
@@ -301,7 +301,7 @@ char** argv;
     tty_putstr(BASE_WINDOW, 0, COPYRIGHT_BANNER_B);
     tty_putstr(BASE_WINDOW, 0, COPYRIGHT_BANNER_C);
     tty_putstr(BASE_WINDOW, 0, "");
-    tty_display_nhwindow(BASE_WINDOW, FALSE);
+    tty_display_nhwindow(BASE_WINDOW, false);
 }
 
 void
@@ -536,7 +536,7 @@ give_up:	/* Quit */
 	    }
 	}
 	/* Success! */
-	tty_display_nhwindow(BASE_WINDOW, FALSE);
+	tty_display_nhwindow(BASE_WINDOW, false);
 }
 
 static int
@@ -899,7 +899,7 @@ tty_exit_nhwindows(str)
     for(i=0; i<MAXWIN; i++)
 	if (wins[i] && (i != BASE_WINDOW)) {
 #ifdef FREE_ALL_MEMORY
-	    free_window_info(wins[i], TRUE);
+	    free_window_info(wins[i], true);
 	    free((void *) wins[i]);
 #endif
 	    wins[i] = 0;
@@ -924,7 +924,7 @@ tty_create_nhwindow(type)
     newwin = (struct WinDesc*) alloc(sizeof(struct WinDesc));
     newwin->type = type;
     newwin->flags = 0;
-    newwin->active = FALSE;
+    newwin->active = false;
     newwin->curx = newwin->cury = 0;
     newwin->morestr = 0;
     newwin->mlist = NULL;
@@ -1115,8 +1115,8 @@ tty_clear_nhwindow(window)
     case NHW_MENU:
     case NHW_TEXT:
 	if(cw->active)
-	    erase_menu_or_text(window, cw, TRUE);
-	free_window_info(cw, FALSE);
+	    erase_menu_or_text(window, cw, true);
+	free_window_info(cw, false);
 	break;
     }
     cw->curx = cw->cury = 0;
@@ -1166,7 +1166,7 @@ set_all_on_page(window, page_start, page_end)
 
     for (n = 0, curr = page_start; curr != page_end; n++, curr = curr->next)
 	if (curr->identifier.a_void && !curr->selected) {
-	    curr->selected = TRUE;
+	    curr->selected = true;
 	    set_item_state(window, n, curr);
 	}
 }
@@ -1181,7 +1181,7 @@ unset_all_on_page(window, page_start, page_end)
 
     for (n = 0, curr = page_start; curr != page_end; n++, curr = curr->next)
 	if (curr->identifier.a_void && curr->selected) {
-	    curr->selected = FALSE;
+	    curr->selected = false;
 	    curr->count = -1L;
 	    set_item_state(window, n, curr);
 	}
@@ -1199,10 +1199,10 @@ invert_all_on_page(window, page_start, page_end, acc)
     for (n = 0, curr = page_start; curr != page_end; n++, curr = curr->next)
 	if (curr->identifier.a_void && (acc == 0 || curr->gselector == acc)) {
 	    if (curr->selected) {
-		curr->selected = FALSE;
+		curr->selected = false;
 		curr->count = -1L;
 	    } else
-		curr->selected = TRUE;
+		curr->selected = true;
 	    set_item_state(window, n, curr);
 	}
 }
@@ -1224,19 +1224,19 @@ invert_all(window, page_start, page_end, acc)
     invert_all_on_page(window, page_start, page_end, acc);
 
     /* invert the rest */
-    for (on_curr_page = FALSE, curr = cw->mlist; curr; curr = curr->next) {
+    for (on_curr_page = false, curr = cw->mlist; curr; curr = curr->next) {
 	if (curr == page_start)
-	    on_curr_page = TRUE;
+	    on_curr_page = true;
 	else if (curr == page_end)
-	    on_curr_page = FALSE;
+	    on_curr_page = false;
 
 	if (!on_curr_page && curr->identifier.a_void
 				&& (acc == 0 || curr->gselector == acc)) {
 	    if (curr->selected) {
-		curr->selected = FALSE;
+		curr->selected = false;
 		curr->count = -1;
 	    } else
-		curr->selected = TRUE;
+		curr->selected = true;
 	}
     }
 }
@@ -1263,9 +1263,9 @@ int *color, *attr;
 #endif
 	  *color = tmpmc->color;
 	  *attr = tmpmc->attr;
-	 return TRUE;
+	 return true;
        }
-   return FALSE;
+   return false;
 }
 #endif /* MENU_COLOR */
 
@@ -1285,10 +1285,10 @@ struct WinDesc *cw;
     page_start = page_end = 0;
     msave = cw->morestr;	/* save the morestr */
     cw->morestr = morestr = alloc((unsigned) QBUFSZ);
-    counting = FALSE;
+    counting = false;
     count = 0L;
-    reset_count = TRUE;
-    finished = FALSE;
+    reset_count = true;
+    finished = false;
 
     /* collect group accelerators; for PICK_NONE, they're ignored;
        for PICK_ONE, only those which match exactly one entry will be
@@ -1318,10 +1318,10 @@ struct WinDesc *cw;
     /* loop until finished */
     while (!finished) {
 	if (reset_count) {
-	    counting = FALSE;
+	    counting = false;
 	    count = 0;
 	} else
-	    reset_count = TRUE;
+	    reset_count = true;
 
 	if (!page_start) {
 	    /* new page to be displayed */
@@ -1347,7 +1347,7 @@ struct WinDesc *cw;
 			page_lines++, curr = curr->next) {
 #ifdef MENU_COLOR
 		   int color = NO_COLOR, attr = ATR_NONE;
-		   boolean menucolr = FALSE;
+		   boolean menucolr = false;
 #endif
 		    if (curr->selector)
 			*rp++ = curr->selector;
@@ -1483,19 +1483,19 @@ struct WinDesc *cw;
 		 * At present I don't know which is better.
 		 */
 		if (count != 0L) {	/* ignore leading zeros */
-		    counting = TRUE;
-		    reset_count = FALSE;
+		    counting = true;
+		    reset_count = false;
 		}
 		break;
 	    case '\033':	/* cancel - from counting or loop */
 		if (!counting) {
 		    /* deselect everything */
 		    for (curr = cw->mlist; curr; curr = curr->next) {
-			curr->selected = FALSE;
+			curr->selected = false;
 			curr->count = -1L;
 		    }
 		    cw->flags |= WIN_CANCELLED;
-		    finished = TRUE;
+		    finished = true;
 		}
 		/* else only stop count */
 		break;
@@ -1504,7 +1504,7 @@ struct WinDesc *cw;
 	    case '\r':
 		/* only finished if we are actually picking something */
 		if (cw->how != PICK_NONE) {
-		    finished = TRUE;
+		    finished = true;
 		    break;
 		}
 		/* else fall through */
@@ -1513,7 +1513,7 @@ struct WinDesc *cw;
 		    curr_page++;
 		    page_start = 0;
 		} else
-		    finished = TRUE;	/* questionable behavior */
+		    finished = true;	/* questionable behavior */
 		break;
 	    case MENU_PREVIOUS_PAGE:
 		if (cw->npages > 0 && curr_page != 0) {
@@ -1550,7 +1550,7 @@ struct WinDesc *cw;
 		    /* set the rest */
 		    for (curr = cw->mlist; curr; curr = curr->next)
 			if (curr->identifier.a_void && !curr->selected)
-			    curr->selected = TRUE;
+			    curr->selected = true;
 		}
 		break;
 	    case MENU_UNSELECT_ALL:
@@ -1558,7 +1558,7 @@ struct WinDesc *cw;
 		/* unset the rest */
 		for (curr = cw->mlist; curr; curr = curr->next)
 		    if (curr->identifier.a_void && curr->selected) {
-			curr->selected = FALSE;
+			curr->selected = false;
 			curr->count = -1;
 		    }
 		break;
@@ -1576,7 +1576,7 @@ struct WinDesc *cw;
 		    /* group accelerator; for the PICK_ONE case, we know that
 		       it matches exactly one item in order to be in gacc[] */
 		    invert_all(window, page_start, page_end, morc);
-		    if (cw->how == PICK_ONE) finished = TRUE;
+		    if (cw->how == PICK_ONE) finished = true;
 		    break;
 		}
 		/* find, toggle, and possibly update */
@@ -1589,23 +1589,23 @@ struct WinDesc *cw;
 				curr->count = count;
 				set_item_state(window, n, curr);
 			    } else { /* change state */
-				curr->selected = FALSE;
+				curr->selected = false;
 				curr->count = -1L;
 				set_item_state(window, n, curr);
 			    }
 			} else {	/* !selected */
 			    if (counting && count > 0) {
 				curr->count = count;
-				curr->selected = TRUE;
+				curr->selected = true;
 				set_item_state(window, n, curr);
 			    } else if (!counting) {
-				curr->selected = TRUE;
+				curr->selected = true;
 				set_item_state(window, n, curr);
 			    }
 			    /* do nothing counting&&count==0 */
 			}
 
-			if (cw->how == PICK_ONE) finished = TRUE;
+			if (cw->how == PICK_ONE) finished = true;
 			break;	/* from `for' loop */
 		    }
 		break;
@@ -1695,13 +1695,13 @@ tty_display_nhwindow(window, blocking)
 	    ttyDisplay->toplin = 0;
 	cw->curx = cw->cury = 0;
 	if(!cw->active)
-	    iflags.window_inited = TRUE;
+	    iflags.window_inited = true;
 	break;
     case NHW_MAP:
 	end_glyphout();
 	if(blocking) {
 	    if(!ttyDisplay->toplin) ttyDisplay->toplin = 1;
-	    tty_display_nhwindow(WIN_MESSAGE, TRUE);
+	    tty_display_nhwindow(WIN_MESSAGE, true);
 	    return;
 	}
     case NHW_BASE:
@@ -1718,7 +1718,7 @@ tty_display_nhwindow(window, blocking)
 	if(cw->type == NHW_MENU)
 	    cw->offy = 0;
 	if(ttyDisplay->toplin == 1)
-	    tty_display_nhwindow(WIN_MESSAGE, TRUE);
+	    tty_display_nhwindow(WIN_MESSAGE, true);
 	if(cw->offx == 10 || cw->maxrow >= (int) ttyDisplay->rows) {
 	    cw->offx = 0;
 	    if(cw->offy) {
@@ -1751,7 +1751,7 @@ tty_dismiss_nhwindow(window)
     switch(cw->type) {
     case NHW_MESSAGE:
 	if (ttyDisplay->toplin)
-	    tty_display_nhwindow(WIN_MESSAGE, TRUE);
+	    tty_display_nhwindow(WIN_MESSAGE, true);
 	/*FALLTHRU*/
     case NHW_STATUS:
     case NHW_BASE:
@@ -1773,7 +1773,7 @@ tty_dismiss_nhwindow(window)
 		 * leave the ending window on the screen, we don't want to
 		 * erase it anyway.
 		 */
-		erase_menu_or_text(window, cw, FALSE);
+		erase_menu_or_text(window, cw, false);
 	    }
 	    cw->active = 0;
 	}
@@ -1798,7 +1798,7 @@ tty_destroy_nhwindow(window)
     if(cw->type == NHW_MAP)
 	clear_screen();
 
-    free_window_info(cw, TRUE);
+    free_window_info(cw, true);
     free((void *)cw);
     wins[window] = 0;
 }
@@ -2077,7 +2077,7 @@ tty_putstr(window, attr, str)
 	if(cw->type == NHW_TEXT && cw->cury == ttyDisplay->rows-1) {
 	    /* not a menu, so save memory and output 1 page at a time */
 	    cw->maxcol = ttyDisplay->cols; /* force full-screen mode */
-	    tty_display_nhwindow(window, TRUE);
+	    tty_display_nhwindow(window, true);
 	    for(i=0; i<cw->maxrow; i++)
 		if(cw->data[i]){
 		    free((void *)cw->data[i]);
@@ -2185,7 +2185,7 @@ boolean complain;
 	    } else if(u.ux) docrt();
 	} else {
 	    winid datawin = tty_create_nhwindow(NHW_TEXT);
-	    boolean empty = TRUE;
+	    boolean empty = true;
 
 	    if(complain
 #ifndef NO_TERMS
@@ -2200,12 +2200,12 @@ boolean complain;
 	    while (dlb_fgets(buf, BUFSZ, f)) {
 		if ((cr = index(buf, '\n')) != 0) *cr = 0;
 		if (index(buf, '\t') != 0) (void) tabexpand(buf);
-		empty = FALSE;
+		empty = false;
 		tty_putstr(datawin, 0, buf);
 		if(wins[datawin]->flags & WIN_CANCELLED)
 		    break;
 	    }
-	    if (!empty) tty_display_nhwindow(datawin, FALSE);
+	    if (!empty) tty_display_nhwindow(datawin, false);
 	    tty_destroy_nhwindow(datawin);
 	    (void) dlb_fclose(f);
 	}
@@ -2411,7 +2411,7 @@ tty_select_menu(window, how, menu_list)
     *menu_list = NULL;
     cw->how = (short) how;
     morc = 0;
-    tty_display_nhwindow(window, TRUE);
+    tty_display_nhwindow(window, true);
     cancelled = !!(cw->flags & WIN_CANCELLED);
     tty_dismiss_nhwindow(window);	/* does not destroy window data */
 
@@ -2488,7 +2488,7 @@ tty_wait_synch()
 	getret();
 	if(ttyDisplay) ttyDisplay->rawprint = 0;
     } else {
-	tty_display_nhwindow(WIN_MAP, FALSE);
+	tty_display_nhwindow(WIN_MAP, false);
 	if(ttyDisplay->inmore) {
 	    addtopl("--More--");
 	    (void) fflush(stdout);
@@ -2545,7 +2545,7 @@ end_glyphout()
 {
 #if defined(ASCIIGRAPH) && !defined(NO_TERMS)
     if (GFlag) {
-	GFlag = FALSE;
+	GFlag = false;
 	graph_off();
     }
 #endif
@@ -2571,13 +2571,13 @@ int in_ch;
     } else if (ch & 0x80) {
 	if (!GFlag || HE_resets_AS) {
 	    graph_on();
-	    GFlag = TRUE;
+	    GFlag = true;
 	}
 	(void) putchar((ch ^ 0x80)); /* Strip 8th bit */
     } else {
 	if (GFlag) {
 	    graph_off();
-	    GFlag = FALSE;
+	    GFlag = false;
 	}
 	(void) putchar(ch);
     }
@@ -2595,7 +2595,7 @@ int in_ch;
 void
 setclipped()
 {
-	clipping = TRUE;
+	clipping = true;
 	clipx = clipy = 0;
 	clipxmax = CO;
 	clipymax = LI - 3;
@@ -2649,7 +2649,7 @@ tty_print_glyph(window, x, y, glyph)
     int glyph;
 {
     int ch;
-    boolean reverse_on = FALSE;
+    boolean reverse_on = false;
     int	    color;
     unsigned special;
 
@@ -2691,7 +2691,7 @@ tty_print_glyph(window, x, y, glyph)
     if (((special & MG_PET) && iflags.hilite_pet) ||
 	((special & MG_DETECT) && iflags.use_inverse)) {
 	term_start_attr(ATR_INVERSE);
-	reverse_on = TRUE;
+	reverse_on = true;
     }
 
 #ifdef TEXTCOLOR

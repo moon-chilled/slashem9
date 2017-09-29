@@ -201,7 +201,7 @@ const char *s;	/* chars allowed besides return */
  * identify an extended command, expand the string to the whole
  * command.
  *
- * Return TRUE if we've extended the string at base.  Otherwise return FALSE.
+ * Return true if we've extended the string at base.  Otherwise return false.
  * Assumptions:
  *
  *	+ we don't change the characters that are already in base
@@ -219,15 +219,15 @@ ext_cmd_getlin_hook(base)
 			if (com_index == -1)	/* no matches yet */
 			    com_index = oindex;
 			else			/* more than 1 match */
-			    return FALSE;
+			    return false;
 		}
 	}
 	if (com_index >= 0) {
 		strcpy(base, extcmdlist[com_index].ef_txt);
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;	/* didn't match anything */
+	return false;	/* didn't match anything */
 }
 
 /*

@@ -454,26 +454,26 @@ ask_filter (DialogRef wind, EventRecord *event, DialogItemIndex *item)
 					*item = RSRC_ASK_PLAY;
 				} else
 					*item = 0;
-				return (TRUE);
+				return (true);
 			}
 			/* Handle equivalents for Normal/Explore/Debug */
 			if ((event->modifiers & cmdKey) && (ch == 'n')) {
 				currmode = 0;
 				ask_redraw(wind, RSRC_ASK_MODE);
 				*item = RSRC_ASK_MODE;
-				return (TRUE);
+				return (true);
 			}
 			if ((event->modifiers & cmdKey) && (ch == 'e')) {
 				currmode = 1;
 				ask_redraw(wind, RSRC_ASK_MODE);
 				*item = RSRC_ASK_MODE;
-				return (TRUE);
+				return (true);
 			}
 			if ((event->modifiers & cmdKey) && (ch == 'd')) {
 				currmode = 2;
 				ask_redraw(wind, RSRC_ASK_MODE);
 				*item = RSRC_ASK_MODE;
-				return (TRUE);
+				return (true);
 			}
 			/* Handle equivalents for Cancel and Quit */
 			if ((ch == CH_ESCAPE) || (key == KEY_ESCAPE) ||
@@ -481,14 +481,14 @@ ask_filter (DialogRef wind, EventRecord *event, DialogItemIndex *item)
 				((event->modifiers & cmdKey) && (ch == '.'))) {
 				FlashButton(wind, RSRC_ASK_QUIT);
 				*item = RSRC_ASK_QUIT;
-				return (TRUE);
+				return (true);
 			}
-			return (FALSE);
+			return (false);
 		case updateEvt:
 			ask_redraw(wind, RSRC_ASK_NAME);
-			return (FALSE);
+			return (false);
 		default:
-			return (FALSE);
+			return (false);
 	}
 }
 
@@ -644,7 +644,7 @@ void mac_askname ()
 	    				currrace == j);
 	    	} else {
 	    		DisableMenuItem(askmenu[RSRC_ASK_RACE], j+1);
-	    		CheckMenuItem(askmenu[RSRC_ASK_RACE], j+1, FALSE);
+	    		CheckMenuItem(askmenu[RSRC_ASK_RACE], j+1, false);
 	    		if ((currrace == j) && !races[++currrace].noun)
 	    			currrace = 0;
 	    	}
@@ -664,7 +664,7 @@ void mac_askname ()
 	    				currgend == j);
 	    	} else {
 	    		DisableMenuItem(askmenu[RSRC_ASK_GEND], j+1);
-	    		CheckMenuItem(askmenu[RSRC_ASK_GEND], j+1, FALSE);
+	    		CheckMenuItem(askmenu[RSRC_ASK_GEND], j+1, false);
 	    		if ((currgend == j) && (++currgend >= ROLE_GENDERS))
 	    			currgend = 0;
 	    	}
@@ -684,7 +684,7 @@ void mac_askname ()
 	    				curralign == j);
 	    	} else {
 	    		DisableMenuItem(askmenu[RSRC_ASK_ALIGN], j+1);
-	    		CheckMenuItem(askmenu[RSRC_ASK_ALIGN], j+1, FALSE);
+	    		CheckMenuItem(askmenu[RSRC_ASK_ALIGN], j+1, false);
 	    		if ((curralign == j) && (++curralign >= ROLE_ALIGNS))
 	    			curralign = 0;
 	    	}

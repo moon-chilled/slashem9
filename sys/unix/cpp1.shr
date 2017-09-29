@@ -40,10 +40,10 @@ X# preprocessors.  This is needed to rebuild 4.2bsd, for example, as
 X# the preprocessor is used to modify assembler code, rather than C.
 X# This is not recommended for current development.  OLD_PREPROCESSOR
 X# forces the following definitions:
-X#   OK_DOLLAR		FALSE	$ is not allowed in variables
-X#   OK_CONCAT		FALSE	# cannot concatenate tokens
-X#   COMMENT_INVISIBLE	TRUE	old-style comment concatenation
-X#   STRING_FORMAL	TRUE	old-style string expansion
+X#   OK_DOLLAR		false	$ is not allowed in variables
+X#   OK_CONCAT		false	# cannot concatenate tokens
+X#   COMMENT_INVISIBLE	true	old-style comment concatenation
+X#   STRING_FORMAL	true	old-style string expansion
 X#
 XOLDDEFINE = -DOLD_PREPROCESSOR=1
 X#
@@ -552,7 +552,7 @@ X
 X        BUGS:
 X
 X                The #if expression processor uses signed integers  only.
-X                I.e, #if 0xFFFFu < 0 may be TRUE.
+X                I.e, #if 0xFFFFu < 0 may be true.
 X
 END-of-cpp.mem
 echo x - cpp.h
@@ -564,9 +564,9 @@ X *
 X * In general, definitions in this file should not be changed.
 X */
 X
-X#ifndef	TRUE
-X#define	TRUE		1
-X#define	FALSE		0
+X#ifndef	true
+X#define	true		1
+X#define	false		0
 X#endif
 X#ifndef	EOS
 X/*
@@ -657,9 +657,9 @@ X
 X/*
 X * These bits are set in ifstack[]
 X */
-X#define	WAS_COMPILING	1		/* TRUE if compile set at entry	*/
-X#define	ELSE_SEEN	2		/* TRUE when #else processed	*/
-X#define	TRUE_SEEN	4		/* TRUE when #if TRUE processed	*/
+X#define	WAS_COMPILING	1		/* true if compile set at entry	*/
+X#define	ELSE_SEEN	2		/* true when #else processed	*/
+X#define	true_SEEN	4		/* true when #if true processed	*/
 X
 X/*
 X * Define bits for the basic types and their adjectives
@@ -763,8 +763,8 @@ Xextern int	line;			/* Current line number		*/
 Xextern int	wrongline;		/* Force #line to cc pass 1	*/
 Xextern char	type[];			/* Character classifier		*/
 Xextern char	token[IDMAX + 1];	/* Current input token		*/
-Xextern int	instring;		/* TRUE if scanning string	*/
-Xextern int	inmacro;		/* TRUE if scanning #define	*/
+Xextern int	instring;		/* true if scanning string	*/
+Xextern int	inmacro;		/* true if scanning #define	*/
 Xextern int	errors;			/* Error counter		*/
 Xextern int	recursion;		/* Macro depth counter		*/
 Xextern char	ifstack[BLK_NEST];	/* #if information		*/
@@ -815,12 +815,12 @@ X * If this is not the case, you will have to do some editing here and there.
 X */
 X
 X/*
-X * This redundant definition of TRUE and FALSE works around
+X * This redundant definition of true and false works around
 X * a limitation of Decus C.
 X */
-X#ifndef	TRUE
-X#define	TRUE			1
-X#define	FALSE			0
+X#ifndef	true
+X#define	true			1
+X#define	false			0
 X#endif
 X
 X/*
@@ -908,16 +908,16 @@ X *		file they reside.  Some C compilers allow these
 X *		to be marked "static" even though they are referenced
 X *		by "extern" statements elsewhere.
 X *
-X * OK_DOLLAR	Should be set TRUE if $ is a valid alphabetic character
+X * OK_DOLLAR	Should be set true if $ is a valid alphabetic character
 X *		in identifiers (default), or zero if $ is invalid.
-X *		Default is TRUE.
+X *		Default is true.
 X *
-X * OK_CONCAT	Should be set TRUE if # may be used to concatenate
+X * OK_CONCAT	Should be set true if # may be used to concatenate
 X *		tokens in macros (per the Ansi Draft Standard) or
-X *		FALSE for old-style # processing (needed if cpp is
+X *		false for old-style # processing (needed if cpp is
 X *		to process assembler source code).
 X *
-X * OK_DATE	Predefines the compilation date if set TRUE.
+X * OK_DATE	Predefines the compilation date if set true.
 X *		Not permitted by the Nov. 12, 1984 Draft Standard.
 X *
 X * S_CHAR etc.	Define the sizeof the basic TARGET machine word types.
@@ -1027,14 +1027,14 @@ X * an old-style preprocessor.
 X */
 X
 X#ifndef	OLD_PREPROCESSOR
-X#define	OLD_PREPROCESSOR	FALSE
+X#define	OLD_PREPROCESSOR	false
 X#endif
 X
 X#if	OLD_PREPROCESSOR
-X#define	OK_DOLLAR		FALSE
-X#define	OK_CONCAT		FALSE
-X#define	COMMENT_INVISIBLE	TRUE
-X#define	STRING_FORMAL		TRUE
+X#define	OK_DOLLAR		false
+X#define	OK_CONCAT		false
+X#define	COMMENT_INVISIBLE	true
+X#define	STRING_FORMAL		true
 X#endif
 X
 X/*
@@ -1053,14 +1053,14 @@ X#define	BITS_CHAR		8
 X#endif
 X
 X/*
-X * BIG_ENDIAN is set TRUE on machines (such as the IBM 360 series)
+X * BIG_ENDIAN is set true on machines (such as the IBM 360 series)
 X * where 'ab' stores 'a' in the high-bits and 'b' in the low-bits.
-X * It is set FALSE on machines (such as the PDP-11 and Vax-11)
+X * It is set false on machines (such as the PDP-11 and Vax-11)
 X * where 'ab' stores 'a' in the low-bits and 'b' in the high-bits.
 X * (Or is it the other way around?) -- Warning: BIG_ENDIAN code is untested.
 X */
 X#ifndef	BIG_ENDIAN
-X#define	BIG_ENDIAN 		FALSE
+X#define	BIG_ENDIAN 		false
 X#endif
 X
 X/*
@@ -1070,7 +1070,7 @@ X * delimiter.  This permitted tokens to be concatenated in macro
 X * expansions.  This was removed from the Draft Ansi Standard.
 X */
 X#ifndef	COMMENT_INVISIBLE
-X#define	COMMENT_INVISIBLE	FALSE
+X#define	COMMENT_INVISIBLE	false
 X#endif
 X
 X/*
@@ -1079,27 +1079,27 @@ X * anywhere in replacement strings.  This was removed from the Draft Ansi
 X * Standard and a limited recognition capability added.
 X */
 X#ifndef	STRING_FORMAL
-X#define	STRING_FORMAL		FALSE
+X#define	STRING_FORMAL		false
 X#endif
 X
 X/*
 X * OK_DOLLAR enables use of $ as a valid "letter" in identifiers.
 X * This is a permitted extension to the Ansi Standard and is required
-X * for e.g., VMS, RSX-11M, etc.   It should be set FALSE if cpp is
+X * for e.g., VMS, RSX-11M, etc.   It should be set false if cpp is
 X * used to preprocess assembler source on Unix systems.  OLD_PREPROCESSOR
-X * sets OK_DOLLAR FALSE for that reason.
+X * sets OK_DOLLAR false for that reason.
 X */
 X#ifndef	OK_DOLLAR
-X#define	OK_DOLLAR		TRUE
+X#define	OK_DOLLAR		true
 X#endif
 X
 X/*
 X * OK_CONCAT enables (one possible implementation of) token concatenation.
 X * If cpp is used to preprocess Unix assembler source, this should be
-X * set FALSE as the concatenation character, #, is used by the assembler.
+X * set false as the concatenation character, #, is used by the assembler.
 X */
 X#ifndef	OK_CONCAT
-X#define	OK_CONCAT		TRUE
+X#define	OK_CONCAT		true
 X#endif
 X
 X/*
@@ -1108,7 +1108,7 @@ X * at the start of each compilation.  This is apparently not permitted
 X * by the Draft Ansi Standard.
 X */
 X#ifndef	OK_DATE
-X#define	OK_DATE		TRUE
+X#define	OK_DATE		true
 X#endif
 X
 X/*
@@ -1116,7 +1116,7 @@ X * Some common definitions.
 X */
 X
 X#ifndef	DEBUG
-X#define	DEBUG			FALSE
+X#define	DEBUG			false
 X#endif
 X
 X/*
@@ -1350,7 +1350,7 @@ X		if (infile->progname != NULL)	/* Give up the old name	*/
 X		    free(infile->progname);	/* if it's allocated.	*/
 X	        infile->progname = savestring(tp);
 X	    }
-X	    wrongline = TRUE;			/* Force output later	*/
+X	    wrongline = true;			/* Force output later	*/
 X	    break;
 X
 X	case L_include:
@@ -1372,10 +1372,10 @@ X	    else if ((*ifptr & ELSE_SEEN) != 0)
 X		goto else_seen_err;
 X	    *ifptr |= ELSE_SEEN;
 X	    if ((*ifptr & WAS_COMPILING) != 0) {
-X		if (compiling || (*ifptr & TRUE_SEEN) != 0)
-X		    compiling = FALSE;
+X		if (compiling || (*ifptr & true_SEEN) != 0)
+X		    compiling = false;
 X		else {
-X		    compiling = TRUE;
+X		    compiling = true;
 X		}
 X	    }
 X	    break;
@@ -1387,8 +1387,8 @@ X	    else if ((*ifptr & ELSE_SEEN) != 0) {
 Xelse_seen_err:	cerror("#%s may not follow #else", token);
 X		goto dump_line;
 X	    }
-X	    if ((*ifptr & (WAS_COMPILING | TRUE_SEEN)) != WAS_COMPILING) {
-X		compiling = FALSE;		/* Done compiling stuff	*/
+X	    if ((*ifptr & (WAS_COMPILING | true_SEEN)) != WAS_COMPILING) {
+X		compiling = false;		/* Done compiling stuff	*/
 X		goto dump_line;			/* Skip this clause	*/
 X	    }
 X	    doif(L_if);
@@ -1409,7 +1409,7 @@ Xnest_err:	cerror("#%s must be in an #if", token);
 X		goto dump_line;
 X	    }
 X	    if (!compiling && (*ifptr & WAS_COMPILING) != 0)
-X		wrongline = TRUE;
+X		wrongline = true;
 X	    compiling = ((*ifptr & WAS_COMPILING) != 0);
 X	    --ifptr;
 X	    break;
@@ -1482,7 +1482,7 @@ X/*
 X * Process an #if, #ifdef, or #ifndef.  The latter two are straightforward,
 X * while #if needs a subroutine of its own to evaluate the expression.
 X *
-X * doif() is called only if compiling is TRUE.  If false, compilation
+X * doif() is called only if compiling is true.  If false, compilation
 X * is always supressed, so we don't need to evaluate anything.  This
 X * supresses unnecessary warnings.
 X */
@@ -1496,7 +1496,7 @@ X	    goto badif;
 X	}
 X	if (hash == L_if) {
 X	    unget();
-X	    found = (eval() != 0);	/* Evaluate expr, != 0 is  TRUE	*/
+X	    found = (eval() != 0);	/* Evaluate expr, != 0 is  true	*/
 X	    hash = L_ifdef;		/* #if is now like #ifdef	*/
 X	}
 X	else {
@@ -1505,11 +1505,11 @@ X		goto badif;		/* ... is an error		*/
 X	    found = (lookid(c) != NULL); /* Look for it in symbol table	*/
 X	}
 X	if (found == (hash == L_ifdef)) {
-X	    compiling = TRUE;
-X	    *ifptr |= TRUE_SEEN;
+X	    compiling = true;
+X	    *ifptr |= true_SEEN;
 X	}
 X	else {
-X	    compiling = FALSE;
+X	    compiling = false;
 X	}
 X	return;
 X
@@ -1550,7 +1550,7 @@ X	    goto incerr;
 X	if (delim == '<')
 X	    delim = '>';
 X	workp = work;
-X	instring = TRUE;		/* Accept all characters	*/
+X	instring = true;		/* Accept all characters	*/
 X	while ((c = get()) != '\n' && c != delim && c != EOF_CHAR)
 X	    save(c);			/* Put it away.			*/
 X	skipnl();
@@ -1566,7 +1566,7 @@ X *	if (*workp != delim)
 X *	    goto incerr;
 X */
 X 	*(workp + 1) = EOS;			/* Terminate filename	*/
-X	instring = FALSE;
+X	instring = false;
 X#if HOST == SYS_VMS
 X	/*
 X	 * Assume the default .h filetype.
@@ -1593,13 +1593,13 @@ X
 XFILE_LOCAL int
 Xopeninclude(filename, searchlocal)
 Xchar		*filename;		/* Input file name		*/
-Xint		searchlocal;		/* TRUE if #include "file"	*/
+Xint		searchlocal;		/* true if #include "file"	*/
 X/*
 X * Actually open an include file.  This routine is only called from
 X * doinclude() above, but was written as a separate subroutine for
 X * programmer convenience.  It searches the list of directories
 X * and actually opens the file, linking it into the list of
-X * active files.  Returns TRUE if the file was opened, FALSE
+X * active files.  Returns true if the file was opened, false
 X * if openinclude() fails.  No error message is printed.
 X */
 X{
@@ -1635,7 +1635,7 @@ X		strcpy(tmpname, filename);
 X	    }
 X#endif
 X	    if (openfile(tmpname))
-X		return (TRUE);
+X		return (true);
 X	}
 X	/*
 X	 * Look in any directories specified by -I command line
@@ -1656,10 +1656,10 @@ X		if (!hasdirectory(filename, tmpname))
 X		    sprintf(tmpname, "%s%s", *incptr, filename);
 X#endif
 X		if (openfile(tmpname))
-X		    return (TRUE);
+X		    return (true);
 X	    }
 X	}
-X	return (FALSE);
+X	return (false);
 X}
 X
 XFILE_LOCAL int
@@ -1669,26 +1669,26 @@ Xchar		*result;	/* Put directory stuff here		*/
 X/*
 X * If a device or directory is found in the source filename string, the
 X * node/device/directory part of the string is copied to result and
-X * hasdirectory returns TRUE.  Else, nothing is copied and it returns FALSE.
+X * hasdirectory returns true.  Else, nothing is copied and it returns false.
 X */
 X{
 X#if HOST == SYS_UNIX
 X	char		*tp;
 X
 X	if ((tp = strrchr(source, '/')) == NULL)
-X	    return (FALSE);
+X	    return (false);
 X	else {
 X	    strncpy(result, source, tp - source + 1);
 X	    result[tp - source + 1] = EOS;
-X	    return (TRUE);
+X	    return (true);
 X	}
 X#else
 X#if HOST == SYS_VMS
 X	if (vmsparse(source, NULLST, result)
 X	 && result[0] != EOS)
-X	    return (TRUE);
+X	    return (true);
 X	else {
-X	    return (FALSE);
+X	    return (false);
 X	}
 X#else
 X	/*
@@ -1698,11 +1698,11 @@ X	char		*tp;
 X
 X	if ((tp = strrchr(source, ']')) == NULL
 X	 && (tp = strrchr(source, ':')) == NULL)
-X	    return (FALSE);
+X	    return (false);
 X	else {
 X	    strncpy(result, source, tp - source + 1);
 X	    result[tp - source + 1] = EOS;
-X	    return (TRUE);
+X	    return (true);
 X	}
 X#endif
 X#endif
@@ -1725,7 +1725,7 @@ Xchar		*result;	/* Size is at least NAM$C_MAXRSS + 1	*/
 X/*
 X * Parse the source string, applying the default (properly, using
 X * the system parse routine), storing it in result.
-X * TRUE if it parsed, FALSE on error.
+X * true if it parsed, false on error.
 X *
 X * If defstring is NULL, there are no defaults and result gets
 X * (just) the node::[directory] part of the string (possibly "")
@@ -1773,9 +1773,9 @@ X		    strncpy(rp, nam.nam$l_ver, nam.nam$b_ver);
 X		    rp[nam.nam$b_ver] = EOS;
 X		}
 X	    }
-X	    return (TRUE);
+X	    return (true);
 X	}
-X	return (FALSE);
+X	return (false);
 X}
 X#endif
 X

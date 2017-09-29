@@ -665,7 +665,7 @@ void Sdlgl_display_file(const char *fname, boolean complain)
     Sdlgl_putstr(datawin, 0, buf);
   }
 
-  Sdlgl_display_nhwindow(datawin, FALSE);
+  Sdlgl_display_nhwindow(datawin, false);
   Sdlgl_destroy_nhwindow(datawin);
 
   dlb_fclose(f);

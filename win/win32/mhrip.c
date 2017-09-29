@@ -76,7 +76,7 @@ void mswin_display_RIP_window (HWND hWnd)
 	if (data->window_text)
 	{
 	    hdc = GetDC (hWnd);
-	    OldFont = SelectObject (hdc, mswin_get_font(NHW_TEXT, 0, hdc, FALSE));
+	    OldFont = SelectObject (hdc, mswin_get_font(NHW_TEXT, 0, hdc, false));
 	    DrawText (hdc, data->window_text, strlen(data->window_text), &textrect,
 		DT_LEFT | DT_NOPREFIX | DT_CALCRECT);
 	    SelectObject (hdc, OldFont);
@@ -98,11 +98,11 @@ void mswin_display_RIP_window (HWND hWnd)
 	rt.left += (rt.right - rt.left - riprt.right) / 2;
 	rt.top += (rt.bottom - rt.top - riprt.bottom) / 2;
 
-	MoveWindow(hWnd, rt.left, rt.top, riprt.right, riprt.bottom, TRUE);
+	MoveWindow(hWnd, rt.left, rt.top, riprt.right, riprt.bottom, true);
 	GetClientRect (hWnd, &clientrect);
 	MoveWindow (GetDlgItem(hWnd, IDOK),
 	    (clientrect.right - clientrect.left - textrect.right) / 2,
-	    clientrect.bottom - textrect.bottom - RIP_OFFSET_Y, textrect.right, textrect.bottom, TRUE);
+	    clientrect.bottom - textrect.bottom - RIP_OFFSET_Y, textrect.right, textrect.bottom, true);
 	ShowWindow(hWnd, SW_SHOW);
 
 	while( IsWindow(hWnd) &&
@@ -128,11 +128,11 @@ BOOL CALLBACK NHRIPWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 	    /* set text control font */
 		hdc = GetDC(hWnd);
 		SendMessage(hWnd, WM_SETFONT,
-			(WPARAM)mswin_get_font(NHW_TEXT, ATR_NONE, hdc, FALSE), 0);
+			(WPARAM)mswin_get_font(NHW_TEXT, ATR_NONE, hdc, false), 0);
 		ReleaseDC(hWnd, hdc);
 
 		SetFocus(GetDlgItem(hWnd, IDOK));
-	return FALSE;
+	return false;
 
 	case WM_MSNH_COMMAND:
 		onMSNHCommand(hWnd, wParam, lParam);
@@ -149,7 +149,7 @@ BOOL CALLBACK NHRIPWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 		HFONT OldFont;
 
 		hdc = BeginPaint (hWnd, &ps);
-		OldFont = SelectObject (hdc, mswin_get_font(NHW_TEXT, 0, hdc, FALSE));
+		OldFont = SelectObject (hdc, mswin_get_font(NHW_TEXT, 0, hdc, false));
 		hdcBitmap = CreateCompatibleDC(hdc);
 		SetBkMode (hdc, TRANSPARENT);
 		GetClientRect (hWnd, &clientrect);
@@ -195,7 +195,7 @@ BOOL CALLBACK NHRIPWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 				GetNHApp()->hMainWnd=NULL;
 			DestroyWindow(hWnd);
 			SetFocus(GetNHApp()->hMainWnd);
-			return TRUE;
+			return true;
 		}
 	break;
 
@@ -208,7 +208,7 @@ BOOL CALLBACK NHRIPWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 	    DestroyWindow(hWnd);
 	    SetFocus(GetNHApp()->hMainWnd);
 	    program_state.stopprint++;
-	    return TRUE;
+	    return true;
 
 	case WM_DESTROY:
 		if( data ) {
@@ -221,7 +221,7 @@ BOOL CALLBACK NHRIPWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 	break;
 
 	}
-	return FALSE;
+	return false;
 }
 
 void onMSNHCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)

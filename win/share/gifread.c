@@ -47,7 +47,7 @@ struct {
 	int	disposal;
 } Gif89 = { -1, -1, -1, 0 };
 
-int	ZeroDataBlock = FALSE;
+int	ZeroDataBlock = false;
 
 static FILE *gif_file;
 static int tiles_across, tiles_down, curr_tiles_across, curr_tiles_down;
@@ -175,7 +175,7 @@ int		number;
 
 	for (i = 0; i < number; ++i) {
 		if (!ReadOK(fd, rgb, sizeof(rgb))) {
-			return(FALSE);
+			return(false);
 		}
 
 		ColorMap[CM_RED][i] = rgb[0] ;
@@ -183,7 +183,7 @@ int		number;
 		ColorMap[CM_BLUE][i] = rgb[2] ;
 	}
 	colorsinmap = number;
-	return TRUE;
+	return true;
 }
 
 /*
@@ -306,7 +306,7 @@ int	flag;
 	if (flag) {
 		curbit = 0;
 		lastbit = 0;
-		done = FALSE;
+		done = false;
 		return 0;
 	}
 
@@ -320,7 +320,7 @@ int	flag;
 		buf[1] = buf[last_byte-1];
 
 		if ((count = GetDataBlock(fd, &buf[2])) == 0)
-			done = TRUE;
+			done = true;
 
 		last_byte = 2 + count;
 		curbit = (curbit - lastbit) + 16;
@@ -342,7 +342,7 @@ FILE	*fd;
 int	flag;
 int	input_code_size;
 {
-	static int	fresh = FALSE;
+	static int	fresh = false;
 	int		code, incode;
 	static int	code_size, set_code_size;
 	static int	max_code, max_code_size;
@@ -360,9 +360,9 @@ int	input_code_size;
 		max_code_size = 2*clear_code;
 		max_code = clear_code+2;
 
-		(void) GetCode(fd, 0, TRUE);
+		(void) GetCode(fd, 0, true);
 
-		fresh = TRUE;
+		fresh = true;
 
 		for (i = 0; i < clear_code; ++i) {
 			table[0][i] = 0;
@@ -375,9 +375,9 @@ int	input_code_size;
 
 		return 0;
 	} else if (fresh) {
-		fresh = FALSE;
+		fresh = false;
 		do {
-			firstcode = oldcode = GetCode(fd, code_size, FALSE);
+			firstcode = oldcode = GetCode(fd, code_size, false);
 		} while (firstcode == clear_code);
 		return firstcode;
 	}
@@ -385,7 +385,7 @@ int	input_code_size;
 	if (sp > stack)
 		return *--sp;
 
-	while ((code = GetCode(fd, code_size, FALSE)) >= 0) {
+	while ((code = GetCode(fd, code_size, false)) >= 0) {
 		if (code == clear_code) {
 			for (i = 0; i < clear_code; ++i) {
 				table[0][i] = 0;
@@ -397,7 +397,7 @@ int	input_code_size;
 			max_code_size = 2*clear_code;
 			max_code = clear_code+2;
 			sp = stack;
-			firstcode = oldcode = GetCode(fd, code_size, FALSE);
+			firstcode = oldcode = GetCode(fd, code_size, false);
 			return firstcode;
 		} else if (code == end_code) {
 			int		count;
@@ -461,7 +461,7 @@ int	len, height;
 	int		v;
 	int		xpos = 0, ypos = 0, pass = 0;
 
-	while ((v = LWZReadByte(fd,FALSE,(int)input_code_size)) >= 0 ) {
+	while ((v = LWZReadByte(fd,false,(int)input_code_size)) >= 0 ) {
 		PPM_ASSIGN(image[ypos][xpos], ColorMap[CM_RED][v],
 				ColorMap[CM_GREEN][v], ColorMap[CM_BLUE][v]);
 
@@ -497,7 +497,7 @@ int	len, height;
 	}
 
 fini:
-	if (LWZReadByte(fd,FALSE,(int)input_code_size)>=0)
+	if (LWZReadByte(fd,false,(int)input_code_size)>=0)
 		fprintf(stderr, "too much input data, ignoring extra...\n");
 }
 
@@ -510,7 +510,7 @@ int len;
 	int	v;
 	int	xpos = 0, ypos = 0;
 
-	while ((v = LWZReadByte(fd,FALSE,(int)input_code_size)) >= 0 ) {
+	while ((v = LWZReadByte(fd,false,(int)input_code_size)) >= 0 ) {
 		PPM_ASSIGN(image[ypos][xpos], ColorMap[CM_RED][v],
 				ColorMap[CM_GREEN][v], ColorMap[CM_BLUE][v]);
 
@@ -536,12 +536,12 @@ const char *type;
 
 	if (strcmp(type, RDBMODE)) {
 		fprintf(stderr, "using reading routine for non-reading?\n");
-		return FALSE;
+		return false;
 	}
 	gif_file = fopen(filename, type);
 	if (gif_file == NULL) {
 		fprintf(stderr, "cannot open gif file %s\n", filename);
-		return FALSE;
+		return false;
 	}
 
 	read_header(gif_file);
@@ -581,7 +581,7 @@ const char *type;
 		exit(EXIT_FAILURE);
 	}
 
-	if (LWZReadByte(gif_file, TRUE, (int)input_code_size) < 0) {
+	if (LWZReadByte(gif_file, true, (int)input_code_size) < 0) {
 		fprintf(stderr, "error reading image\n");
 		exit(EXIT_FAILURE);
 	}
@@ -593,21 +593,21 @@ const char *type;
 	} else {
 		ReadTileStrip(gif_file,GifScreen.Width);
 	}
-	return TRUE;
+	return true;
 }
 
-/* Read a tile.  Returns FALSE when there are no more tiles */
+/* Read a tile.  Returns false when there are no more tiles */
 boolean
 read_gif_tile(pixels)
 pixel (*pixels)[MAX_TILE_X];
 {
 	int i, j;
 
-	if (curr_tiles_down >= tiles_down) return FALSE;
+	if (curr_tiles_down >= tiles_down) return false;
 	if (curr_tiles_across == tiles_across) {
 		curr_tiles_across = 0;
 		curr_tiles_down++;
-		if (curr_tiles_down >= tiles_down) return FALSE;
+		if (curr_tiles_down >= tiles_down) return false;
 		if (!GifScreen.Interlace)
 			ReadTileStrip(gif_file,GifScreen.Width);
 	}
@@ -636,10 +636,10 @@ pixel (*pixels)[MAX_TILE_X];
 			    pixels[j][i+1].r != ColorMap[CM_RED][1] ||
 			    pixels[j][i+1].g != ColorMap[CM_GREEN][1] ||
 			    pixels[j][i+1].b != ColorMap[CM_BLUE][1])
-				return TRUE;
+				return true;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 int

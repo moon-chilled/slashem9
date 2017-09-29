@@ -199,10 +199,10 @@ aligntyp alignment	/* target alignment, or A_NONE */ ) {
 		 * grant artifacts which would be hostile to the player
 		 * _in their normal form_.
 		 */
-		boolean hostile = FALSE;
+		boolean hostile = false;
 		if (by_align) {
 		    if (a->race != NON_PM && race_hostile(&mons[a->race]))
-			hostile = TRUE;		/* enemies' equipment */
+			hostile = true;		/* enemies' equipment */
 		    else if (a->spfx & SPFX_DBONUS) {
 			struct artifact tmp;
 
@@ -211,7 +211,7 @@ aligntyp alignment	/* target alignment, or A_NONE */ ) {
 			if (Upolyd)
 			    set_mon_data(&youmonst, &upermonst, 0);
 			if (spec_applies(&tmp, &youmonst))
-			    hostile = TRUE;	/* can blast unpolyd player */
+			    hostile = true;	/* can blast unpolyd player */
 			if (Upolyd)
 			    set_mon_data(&youmonst, &mons[u.umonnum], 0);
 		    }
@@ -229,10 +229,10 @@ aligntyp alignment	/* target alignment, or A_NONE */ ) {
 	    a = &artilist[m];
 
 	    /* make an appropriate object if necessary, then christen it */
-make_artif: if (by_align) otmp = mksobj((int)a->otyp, TRUE, FALSE);
+make_artif: if (by_align) otmp = mksobj((int)a->otyp, true, false);
 	    otmp = oname(otmp, a->name);
 	    otmp->oartifact = m;
-	    artiexist[m] = TRUE;
+	    artiexist[m] = true;
 	} else {
 	    /* nothing appropriate could be found; return the original object */
 	    if (by_align) otmp = 0;	/* (there was no original object) */
@@ -274,7 +274,7 @@ boolean exist_artifact(int otyp, const char *name) {
 	    for (a = artilist+1,arex = artiexist+1; a->otyp; a++,arex++)
 		if ((int) a->otyp == otyp && !strcmp(a->name, name))
 		    return *arex;
-	return FALSE;
+	return false;
 }
 
 void artifact_exists(struct obj *otmp, const char *name, boolean mod) {
@@ -291,7 +291,7 @@ void artifact_exists(struct obj *otmp, const char *name, boolean mod) {
 			 */
 			if (!artiexist[m] && artifact_light(otmp) &&
 			  otmp->oartifact != ART_SUNSWORD)
-			    begin_burn(otmp, FALSE);
+			    begin_burn(otmp, false);
 			otmp->quan = 1; /* guarantee only one of this artifact */
 #ifdef UNPOLYPILE	/* Artifacts are immune to unpolypile --ALI */
 			if (is_hazy(otmp)) {
@@ -328,9 +328,9 @@ boolean spec_ability(struct obj *otmp, unsigned long abil) {
 /* used so that callers don't need to known about SPFX_ codes */
 boolean confers_luck(struct obj *obj) {
     /* might as well check for this too */
-    if (obj->otyp == LUCKSTONE) return TRUE;
+    if (obj->otyp == LUCKSTONE) return true;
 
-    if (obj->otyp == FEDORA && obj == uarmh) return TRUE;
+    if (obj->otyp == FEDORA && obj == uarmh) return true;
 
     return (obj->oartifact && spec_ability(obj, SPFX_LUCK));
 }
@@ -342,11 +342,11 @@ boolean arti_reflects(struct obj *obj) {
     if (arti) {
 	/* while being worn */
 	if ((obj->owornmask & ~W_ART) && (arti->spfx & SPFX_REFLECT))
-	    return TRUE;
+	    return true;
 	/* just being carried */
-	if (arti->cspfx & SPFX_REFLECT) return TRUE;
+	if (arti->cspfx & SPFX_REFLECT) return true;
     }
-    return FALSE;
+    return false;
 }
 
 boolean
@@ -354,7 +354,7 @@ restrict_name(struct obj *otmp, const char *name) /* returns 1 if name is restri
 	const struct artifact *a;
 	const char *aname;
 
-	if (!*name) return FALSE;
+	if (!*name) return false;
 	if (!strncmpi(name, "the ", 4)) name += 4;
 
 		/* Since almost every artifact is SPFX_RESTR, it doesn't cost
@@ -370,7 +370,7 @@ restrict_name(struct obj *otmp, const char *name) /* returns 1 if name is restri
 			otmp->quan > 1L));
 	}
 
-	return FALSE;
+	return false;
 }
 
 static boolean attacks(int adtyp, struct obj *otmp) {
@@ -378,7 +378,7 @@ static boolean attacks(int adtyp, struct obj *otmp) {
 
 	if ((weap = get_artifact(otmp)) != 0)
 		return (weap->attk.adtyp == adtyp);
-	return FALSE;
+	return false;
 }
 
 boolean defends(int adtyp, struct obj *otmp) {
@@ -386,7 +386,7 @@ boolean defends(int adtyp, struct obj *otmp) {
 
 	if ((weap = get_artifact(otmp)) != 0)
 		return (weap->defn.adtyp == adtyp);
-	return FALSE;
+	return false;
 }
 
 /* used for monsters */
@@ -395,7 +395,7 @@ boolean protects(int adtyp, struct obj *otmp) {
 
 	if ((weap = get_artifact(otmp)) != 0)
 		return (weap->cary.adtyp == adtyp);
-	return FALSE;
+	return false;
 }
 
 /*
@@ -467,7 +467,7 @@ void set_artifact_intrinsic(struct obj *otmp, boolean on, long wp_mask) {
 	     * that can print a message--need to guard against being printed
 	     * when restoring a game
 	     */
-	    (void) make_hallucinated((long)!on, restoring ? FALSE : TRUE, wp_mask);
+	    (void) make_hallucinated((long)!on, restoring ? false : true, wp_mask);
 	}
 	if (spfx & SPFX_ESP) {
 	    if(on) ETelepat |= wp_mask;
@@ -568,7 +568,7 @@ int touch_artifact (struct obj *obj, struct monst *mon) {
     } else {    /* an M3_WANTSxxx monster or a fake player */
 	/* special monsters trying to take the Amulet, invocation tools or
 	   quest item can touch anything except for `spec_applies' artifacts */
-	badclass = badalign = FALSE;
+	badclass = badalign = false;
     }
     /* weapons which attack specific categories of monsters are
        bad for them even if their alignments happen to match */
@@ -590,7 +590,7 @@ int touch_artifact (struct obj *obj, struct monst *mon) {
 	dmg = d((Antimagic ? 6 : 8), (self_willed ? 10 : 6));
 	sprintf(buf, "touching %s", oart->name);
 	losehp(dmg, buf, KILLED_BY);
-	exercise(A_WIS, FALSE);
+	exercise(A_WIS, false);
     }
 
     /* can pick it up unless you're totally non-synch'd with the artifact */
@@ -604,7 +604,7 @@ int touch_artifact (struct obj *obj, struct monst *mon) {
 
 /* decide whether an artifact's special attacks apply against mtmp */
 static int spec_applies(const struct artifact *weap, struct monst *mtmp) {
-	int retval = TRUE;
+	int retval = true;
 	struct permonst *ptr;
 	boolean yours;
 
@@ -641,36 +641,36 @@ static int spec_applies(const struct artifact *weap, struct monst *mtmp) {
 
 	    if (defending_weapon && defending_weapon->oartifact &&
 		    defends((int)weap->attk.adtyp, defending_weapon))
-		return FALSE;
+		return false;
 	    switch(weap->attk.adtyp) {
 		case AD_FIRE:
 			if (yours ? Fire_resistance : resists_fire(mtmp))
-			    retval = FALSE;
+			    retval = false;
 			break;
 		case AD_COLD:
 			if (yours ? Cold_resistance : resists_cold(mtmp))
-			    retval = FALSE;
+			    retval = false;
 			break;
 		case AD_ELEC:
 			if (yours ? Shock_resistance : resists_elec(mtmp))
-			    retval = FALSE;
+			    retval = false;
 			break;
 		case AD_MAGM:
 		case AD_STUN:
 			if (yours ? Antimagic : (rn2(100) < ptr->mr))
-			    retval = FALSE;
+			    retval = false;
 			break;
 		case AD_DRST:
 			if (yours ? Poison_resistance : resists_poison(mtmp))
-			    retval = FALSE;
+			    retval = false;
 			break;
 		case AD_DRLI:
 			if (yours ? Drain_resistance : resists_drli(mtmp))
-			    retval = FALSE;
+			    retval = false;
 			break;
 		case AD_STON:
 			if (yours ? Stone_resistance : resists_ston(mtmp))
-			    retval = FALSE;
+			    retval = false;
 			break;
 		default:	impossible("Weird weapon special attack.");
 	    }
@@ -704,7 +704,7 @@ int spec_dbon (struct obj *otmp, struct monst *mon, int tmp) {
 
 	if (!weap || (weap->attk.adtyp == AD_PHYS && /* check for `NO_ATTK' */
 			weap->attk.damn == 0 && weap->attk.damd == 0))
-	    spec_dbon_applies = FALSE;
+	    spec_dbon_applies = false;
 	else
 	    spec_dbon_applies = spec_applies(weap, mon);
 
@@ -741,10 +741,10 @@ boolean undiscovered_artifact(xchar m) {
        if we hit an empty slot then it's undiscovered */
     for (i = 0; i < NROFARTIFACTS; i++)
 	if (artidisco[i] == m)
-	    return FALSE;
+	    return false;
 	else if (artidisco[i] == 0)
 	    break;
-    return TRUE;
+    return true;
 }
 
 /* display a list of discovered artifacts; return their count */
@@ -811,10 +811,10 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
     const char *verb;
     boolean youattack = (magr == &youmonst),
 	    youdefend = (mdef == &youmonst),
-	    resisted = FALSE, do_stun, do_confuse, result;
+	    resisted = false, do_stun, do_confuse, result;
     int attack_indx, scare_dieroll = MB_MAX_DIEROLL / 2;
 
-    result = FALSE;		/* no message given yet */
+    result = false;		/* no message given yet */
     /* the most severe effects are less likely at higher enchantment */
     if (mb->spe >= 3)
 	scare_dieroll /= (1 << (mb->spe / 3));
@@ -853,7 +853,7 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
     /* give the hit message prior to inflicting the effects */
     verb = mb_verb[!!Hallucination][attack_indx];
     if (youattack || youdefend || vis) {
-	result = TRUE;
+	result = true;
 	pline_The("magic-absorbing blade %s %s!",
 		  vtense((const char *)0, verb), hittee);
 	/* assume probing has some sort of noticeable feedback
@@ -870,10 +870,10 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
 	 * into a golem, and the "cancel" effect acts as if some magical
 	 * energy remains in spellcasting defenders to be absorbed later.
 	 */
-	if (!cancel_monst(mdef, mb, youattack, FALSE, FALSE)) {
-	    resisted = TRUE;
+	if (!cancel_monst(mdef, mb, youattack, false, false)) {
+	    resisted = true;
 	} else {
-	    do_stun = FALSE;
+	    do_stun = false;
 	    if (youdefend) {
 		if (youmonst.data != old_uasmon)
 		    *dmgptr = 0;    /* rehumanized, so no more damage */
@@ -899,7 +899,7 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
     case MB_INDEX_SCARE:
 	if (youdefend) {
 	    if (Antimagic) {
-		resisted = TRUE;
+		resisted = true;
 	    } else {
 		nomul(-3);
 		nomovemsg = "";
@@ -910,15 +910,15 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
 	    }
 	} else {
 	    if (rn2(2) && resist(mdef, WEAPON_CLASS, 0, NOTELL))
-		resisted = TRUE;
+		resisted = true;
 	    else
-		monflee(mdef, 3, FALSE, (mdef->mhp > *dmgptr));
+		monflee(mdef, 3, false, (mdef->mhp > *dmgptr));
 	}
-	if (!resisted) do_stun = FALSE;
+	if (!resisted) do_stun = false;
 	break;
 
     case MB_INDEX_STUN:
-	do_stun = TRUE;		/* (this is redundant...) */
+	do_stun = true;		/* (this is redundant...) */
 	break;
 
     case MB_INDEX_PROBE:
@@ -932,17 +932,17 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
     /* stun if that was selected and a worse effect didn't occur */
     if (do_stun) {
 	if (youdefend)
-	    make_stunned((HStun + 3), FALSE);
+	    make_stunned((HStun + 3), false);
 	else
 	    mdef->mstun = 1;
 	/* avoid extra stun message below if we used mb_verb["stun"] above */
-	if (attack_indx == MB_INDEX_STUN) do_stun = FALSE;
+	if (attack_indx == MB_INDEX_STUN) do_stun = false;
     }
     /* lastly, all this magic can be confusing... */
     do_confuse = !rn2(12);
     if (do_confuse) {
 	if (youdefend)
-	    make_confused(HConfusion + 4, FALSE);
+	    make_confused(HConfusion + 4, false);
 	else
 	    mdef->mconf = 1;
     }
@@ -998,7 +998,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 	*dmgptr += spec_dbon(otmp, mdef, *dmgptr);
 
 	if (spec_dbon_applies)
-	    special_applies = TRUE;
+	    special_applies = true;
 	else {
 	    const struct artifact *weap = get_artifact(otmp);
 	    special_applies = weap && spec_applies(weap, mdef);
@@ -1006,7 +1006,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 
 	if (youattack && youdefend) {
 	    impossible("attacking yourself with weapon?");
-	    return FALSE;
+	    return false;
 	}
 
 	realizes_damage = (youdefend || vis ||
@@ -1065,12 +1065,12 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 	    /* [ALI] The Tsurugi of Muramasa has no damage bonus but
 	       is handled below so avoid early exit if SPFX_BEHEAD set
 	       and the defender is vulnerable */
-	    return FALSE;
+	    return false;
 	}
 
 	/* STEPHEN WHITE'S NEW CODE */
 	if (otmp->oartifact == ART_SERPENT_S_TONGUE) {
-	    otmp->dknown = TRUE;
+	    otmp->dknown = true;
 	    pline_The("twisted blade poisons %s!",
 		    youdefend ? "you" : mon_nam(mdef));
 	    if (youdefend ? Poison_resistance : resists_poison(mdef)) {
@@ -1078,7 +1078,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 		    You("are not affected by the poison.");
 		else
 		    pline("%s seems unaffected by the poison.", Monnam(mdef));
-		return TRUE;
+		return true;
 	    }
 	    switch (rnd(10)) {
 		case 1:
@@ -1103,7 +1103,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 			    FATAL_DAMAGE_MODIFIER;
 		    break;
 	    }
-	    return TRUE;
+	    return true;
 	}
 
        if (otmp->oartifact == ART_DOOMBLADE && dieroll < 6) {
@@ -1114,7 +1114,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 		pline("%s plunges the Doomblade deeply into %s!",
 			Monnam(magr), hittee);
 	    *dmgptr += rnd(4) * 5;
-	    return TRUE;
+	    return true;
        }
       /* END OF STEPHEN WHITE'S NEW CODE */
 
@@ -1149,12 +1149,12 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 		if (youattack && u.uswallow && mdef == u.ustuck) {
 		    You("slice %s wide open!", mon_nam(mdef));
 		    *dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
-		    return TRUE;
+		    return true;
 		}
 		if (!youdefend) {
 			/* allow normal cutworm() call to add extra damage */
 			if(notonhead)
-			    return FALSE;
+			    return false;
 
 			if (bigmonst(mdef->data)) {
 				if (youattack)
@@ -1164,19 +1164,19 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 					pline("%s cuts deeply into %s!",
 					      Monnam(magr), hittee);
 				*dmgptr *= 2;
-				return TRUE;
+				return true;
 			}
 			*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 			pline("%s cuts %s in half!", wepdesc, mon_nam(mdef));
-			otmp->dknown = TRUE;
-			return TRUE;
+			otmp->dknown = true;
+			return true;
 		} else {
 			/* Invulnerable player won't be bisected */
 			if (bigmonst(youmonst.data) || Invulnerable) {
 				pline("%s cuts deeply into you!",
 				      magr ? Monnam(magr) : wepdesc);
 				*dmgptr *= 2;
-				return TRUE;
+				return true;
 			}
 
 			/* Players with negative AC's take less damage instead
@@ -1186,8 +1186,8 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 			 */
 			*dmgptr = 2 * (Upolyd ? u.mh : u.uhp) + FATAL_DAMAGE_MODIFIER;
 			pline("%s cuts you in half!", wepdesc);
-			otmp->dknown = TRUE;
-			return TRUE;
+			otmp->dknown = true;
+			return true;
 		}
 	    } else if ((dieroll < 3 || otmp->oartifact == ART_VORPAL_BLADE) &&
 				      mdef->data == &mons[PM_JABBERWOCK]) {
@@ -1197,7 +1197,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 		};
 
 		if (youattack && u.uswallow && mdef == u.ustuck)
-			return FALSE;
+			return false;
 		wepdesc = artilist[otmp->oartifact].name;
 		if (!youdefend) {
 			if (!has_head(mdef->data) || notonhead || u.uswallow) {
@@ -1214,37 +1214,37 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 				pline("%s slices through %s %s.", wepdesc,
 				      s_suffix(mon_nam(mdef)),
 				      mbodypart(mdef,NECK));
-				return TRUE;
+				return true;
 			}
 			*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 			pline(behead_msg[rn2(SIZE(behead_msg))],
 			      wepdesc, mon_nam(mdef));
-			otmp->dknown = TRUE;
-			return TRUE;
+			otmp->dknown = true;
+			return true;
 		} else {
 			if (!has_head(youmonst.data)) {
 				pline("Somehow, %s misses you wildly.",
 				      magr ? mon_nam(magr) : wepdesc);
 				*dmgptr = 0;
-				return TRUE;
+				return true;
 			}
 			if (noncorporeal(youmonst.data) || amorphous(youmonst.data)) {
 				pline("%s slices through your %s.",
 				      wepdesc, body_part(NECK));
-				return TRUE;
+				return true;
 			}
 			*dmgptr = 2 * (Upolyd ? u.mh : u.uhp)
 				  + FATAL_DAMAGE_MODIFIER;
 			if (Invulnerable) {
 				pline("%s slices into your %s.",
 				      wepdesc, body_part(NECK));
-				return TRUE;
+				return true;
 			}
 			pline(behead_msg[rn2(SIZE(behead_msg))],
 			      wepdesc, "you");
-			otmp->dknown = TRUE;
+			otmp->dknown = true;
 			/* Should amulets fall off? */
-			return TRUE;
+			return true;
 		}
 	    }
 	}
@@ -1274,7 +1274,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 			    mdef->mhpmax -= drain;
 			    mdef->m_lev--;
 			    drain /= 2;
-			    if (drain) healup(drain, 0, FALSE, FALSE);
+			    if (drain) healup(drain, 0, false, false);
 			}
 			return vis;
 		    }
@@ -1291,12 +1291,12 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 			else
 				pline("%s drains your life!",
 				      The(distant_name(otmp, xname)));
-			losexp("life drainage", FALSE);
+			losexp("life drainage", false);
 			if (magr && magr->mhp < magr->mhpmax) {
 			    magr->mhp += (oldhpmax - u.uhpmax)/2;
 			    if (magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
 			}
-			return TRUE;
+			return true;
 		}
 	}
 	/* WAC -- 1/6 chance of cancellation with foobane weapons */
@@ -1315,11 +1315,11 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 				"roars deafeningly" : "shines brilliantly");
 			pline("It strikes %s!", hittee);
 		    }
-		    cancel_monst(mdef, otmp, youattack, TRUE, magr == mdef);
-		    return TRUE;
+		    cancel_monst(mdef, otmp, youattack, true, magr == mdef);
+		    return true;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 static const char recharge_type[] = { ALLOW_COUNT, ALL_CLASSES, 0 };
@@ -1389,9 +1389,9 @@ static int arti_invoke(struct obj *obj) {
 						      if (Upolyd) u.mh += healamt;
 						      else u.uhp += healamt;
 					      }
-					      if(Sick) make_sick(0L,NULL,FALSE,SICK_ALL);
+					      if(Sick) make_sick(0L,NULL,false,SICK_ALL);
 					      if(Slimed) Slimed = 0L;
-					      if (Blinded > creamed) make_blinded(creamed, FALSE);
+					      if (Blinded > creamed) make_blinded(creamed, false);
 					      flags.botl = 1;
 					      break;
 				      }
@@ -1408,7 +1408,7 @@ static int arti_invoke(struct obj *obj) {
 						   break;
 					   }
 			case UNTRAP: {
-					     if(!untrap(TRUE)) {
+					     if(!untrap(true)) {
 						     obj->age = 0; /* don't charge for changing their mind */
 						     return 0;
 					     }
@@ -1436,7 +1436,7 @@ static int arti_invoke(struct obj *obj) {
 						 pline("%s shines brightly for an instant!", The(xname(obj)));
 					 else
 						 pline("%s grows warm for a second!", The(xname(obj)));
-					 litroom(TRUE, obj);
+					 litroom(true, obj);
 					 vision_recalc(0);
 					 if (is_undead(youmonst.data)) {
 						 You("burn in the radiance!");
@@ -1615,7 +1615,7 @@ static int arti_invoke(struct obj *obj) {
 						    } else {
 							    if(!Blind) You("are surrounded by a shimmering sphere!");
 							    else You_feel("weightless for a moment.");
-							    goto_level(&newlev, FALSE, FALSE, FALSE);
+							    goto_level(&newlev, false, false, false);
 						    }
 						    break;
 					    }
@@ -1623,7 +1623,7 @@ static int arti_invoke(struct obj *obj) {
 					    enlightenment(0);
 					    break;
 			case CREATE_AMMO: {
-						  struct obj *otmp = mksobj(ARROW, TRUE, FALSE);
+						  struct obj *otmp = mksobj(ARROW, true, false);
 
 						  if (!otmp) goto nothing_special;
 						  otmp->blessed = obj->blessed;
@@ -1676,7 +1676,7 @@ nothing_special:
 			case LEVITATION:
 				if(on) {
 					float_up();
-					spoteffects(FALSE);
+					spoteffects(false);
 				} else (void) float_down(I_SPECIAL|TIMEOUT, W_ARTI);
 				break;
 			case INVIS:
@@ -1736,7 +1736,7 @@ int artifact_wet(struct obj *obj, boolean silent) {
 	return (-1);
 }
 
-/* WAC return TRUE if artifact is always lit */
+/* WAC return true if artifact is always lit */
 boolean artifact_light(struct obj *obj) {
     return get_artifact(obj) && (obj->oartifact == ART_SUNSWORD ||
 	    obj->oartifact == ART_HOLY_SPEAR_OF_LIGHT ||
@@ -1754,7 +1754,7 @@ void arti_speak (struct obj *obj) {
 	if (!oart || !(oart->spfx & SPFX_SPEAK))
 		return;
 
-	line = getrumor(bcsign(obj), buf, TRUE);
+	line = getrumor(bcsign(obj), buf, true);
 	if (!*line)
 		line = "Slash'EM rumors file closed for renovation.";
 	pline("%s:", Tobjnam(obj, "whisper"));

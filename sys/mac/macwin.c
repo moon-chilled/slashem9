@@ -371,7 +371,7 @@ InitMac(void) {
 		if (AEInstallEventHandler (kCoreEventClass, typeWildCard,
 							NewAEEventHandlerUPP(AppleEventHandler),
 							0,
-							FALSE) == noErr)
+							false) == noErr)
 			macFlags.hasAE = 1;
 	}
 
@@ -655,7 +655,7 @@ got1 :
 	}
 	aWin->x_size = aWin->y_size = 0;
 	aWin->x_curs = aWin->y_curs = 0;
-	aWin->drawn = TRUE;
+	aWin->drawn = true;
 	mac_clear_nhwindow (i);
 
 	SetPortWindowPort(aWin->its_window);
@@ -720,7 +720,7 @@ mac_init_nhwindows (int *argcp, char **argv)
 	DimMenuBar ();
 
 	tty_init_nhwindows(argcp, argv);
-	iflags.window_inited = TRUE;
+	iflags.window_inited = true;
 
 	/* Some ugly hacks to make both interfaces happy:
 	 * Mac port uses both tty interface (for main map) and extra windows.  The winids need to
@@ -813,7 +813,7 @@ mac_clear_nhwindow (winid win) {
 	}
 	aWin->y_curs = 0;
 	aWin->x_curs = 0;
-	aWin->drawn = FALSE;
+	aWin->drawn = false;
 	InvalWindowRect(theWindow, &r);
 }
 
@@ -873,7 +873,7 @@ enter_topl_mode(char *query) {
 	TECalText(top_line);
 
 	DimMenuBar();
-	mac_display_nhwindow(WIN_MESSAGE, FALSE);
+	mac_display_nhwindow(WIN_MESSAGE, false);
 }
 
 
@@ -1285,7 +1285,7 @@ GeneralKey (EventRecord *theEvent, WindowPtr theWindow) {
 #if 0
 	trans_num_keys (theEvent);
 #endif
-	AddToKeyQueue (topl_resp_key (theEvent->message & 0xff), TRUE);
+	AddToKeyQueue (topl_resp_key (theEvent->message & 0xff), true);
 }
 
 
@@ -1420,7 +1420,7 @@ macClickMenu (EventRecord *theEvent, WindowRef theWindow) {
 	if (inSelect != WIN_ERR && aWin->how != PICK_NONE) {
 		short		currentRow = -1, previousRow = -1;
 		short		previousItem = -1, item = -1;
-		Boolean		majorSelectState, firstRow = TRUE;
+		Boolean		majorSelectState, firstRow = true;
 
 		do {
 #if !TARGET_API_MAC_CARBON
@@ -1444,7 +1444,7 @@ macClickMenu (EventRecord *theEvent, WindowRef theWindow) {
 				if (firstRow) {
 					/* this is first valid row, so major state is opposite of what this row is */
 					majorSelectState = !itemIsSelected;
-					firstRow = FALSE;
+					firstRow = false;
 				}
 
 				if (aWin->how == PICK_ONE && previousItem != -1) {
@@ -1566,7 +1566,7 @@ macClickTerm (EventRecord *theEvent, WindowPtr theWindow) {
 				SystemTask();
 #endif
 
-		gClickedToMove = TRUE;
+		gClickedToMove = true;
 		clicked_pos = where;
 	}
 }
@@ -1677,7 +1677,7 @@ int
 mac_doprev_message(void) {
 	if (WIN_MESSAGE) {
 		NhWindow *winToScroll = &theWindows[WIN_MESSAGE];
-		mac_display_nhwindow(WIN_MESSAGE, FALSE);
+		mac_display_nhwindow(WIN_MESSAGE, false);
 		SetPortWindowPort(winToScroll->its_window);
 		MoveScrollBar(winToScroll->scrollBar, kControlUpButtonPart);
 	}
@@ -2064,7 +2064,7 @@ HandleClick (EventRecord *theEvent) {
 			if (aWin == theWindows + WIN_MESSAGE)
 				r.top += SBARHEIGHT;
 			l = GrowWindow (theWindow, theEvent->where, &r);
-			SizeWindow (theWindow, l & 0xffff, l >> 16, FALSE);
+			SizeWindow (theWindow, l & 0xffff, l >> 16, false);
 			SaveWindowSize(theWindow);
 			SetPortWindowPort(theWindow);
 			GetWindowBounds(theWindow, kWindowContentRgn, &r);
@@ -2103,7 +2103,7 @@ HandleUpdate (EventRecord *theEvent) {
 	Rect r;
 
 
-	char existing_update_region = FALSE;
+	char existing_update_region = false;
 	Rect rect;
 
 	if (theWindow == _mt_window) {
@@ -2120,7 +2120,7 @@ HandleUpdate (EventRecord *theEvent) {
 	if (theWindow == _mt_window && existing_update_region) {
 		set_invalid_region (theWindow, &rect);
 	}
-	aWin->drawn = TRUE;
+	aWin->drawn = true;
 	EndUpdate (theWindow);
 }
 
@@ -2304,7 +2304,7 @@ mac_putstr (winid win, int attr, const char *str) {
 		if (flags.page_wait &&
 			aWin->last_more_lin <= aWin->y_size - (r.bottom - r.top) / aWin->row_height) {
 			aWin->last_more_lin = aWin->y_size;
-			mac_display_nhwindow(win, TRUE);
+			mac_display_nhwindow(win, true);
 		}
 	}
 
@@ -2510,7 +2510,7 @@ mac_select_menu (winid win, int how, menu_item **selected_list) {
 
 	inSelect = win;
 
-	mac_display_nhwindow (win, FALSE);
+	mac_display_nhwindow (win, false);
 
 	aWin->how = (short) how;
 	for (;;) {
@@ -2574,7 +2574,7 @@ boolean complain;
 					if (complain) error ("Cannot make window.");
 				} else {
 					putstr(win, 0, buf);
-					display_nhwindow(win, FALSE);
+					display_nhwindow(win, false);
 				}
 			}
 			DisposePtr(buf);
@@ -2587,7 +2587,7 @@ boolean complain;
 
 void
 port_help () {
-	display_file (PORT_HELP, TRUE);
+	display_file (PORT_HELP, true);
 }
 
 

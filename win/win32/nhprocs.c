@@ -82,7 +82,7 @@ winid  WIN_BASE;
 static int maxwin = 0;			/* number of windows in use */
 static char winpanicstr[] = "Bad window id %d";
 # ifdef CLIPPING
-static boolean clipping = FALSE;	/* clipping on? */
+static boolean clipping = false;	/* clipping on? */
 static int clipx = 0, clipy = 0, clipxmax = 0, clipymax = 0;
 # endif
 #define PICK_PROMPT "Shall I pick a character for you? [Y, N, or Q(quit)] "
@@ -356,7 +356,7 @@ int type;
 		    GetClientRect(BasehWnd, &rcClient);
 		    EnumChildWindows(BasehWnd, EnumChildProc,(LPARAM)&rcClient);
 		}
-		newwin->active = TRUE;
+		newwin->active = true;
 	}
 	return newid;
 }
@@ -381,7 +381,7 @@ winid window;
 			*(wins[window]->color + i) =
 				RGB(140,140,140);
 	}
-	InvalidateRect(wins[window]->hWnd, NULL, FALSE);
+	InvalidateRect(wins[window]->hWnd, NULL, false);
 }
 
 /*ARGSUSED*/
@@ -390,7 +390,7 @@ win32_display_nhwindow(window, blocking)
 winid window;
 boolean blocking;
 {
-	if (window == WIN_MESSAGE) iflags.window_inited = TRUE;
+	if (window == WIN_MESSAGE) iflags.window_inited = true;
 	if (blocking && wins[window]->morestr)
 		win32_putstr(window, 1, wins[window]->morestr);
 
@@ -470,7 +470,7 @@ boolean flushflag;
 		rect.right  = col * DefCharWidth + DefCharWidth;
 		rect.bottom = row * DefCharHeight + DefCharHeight;
 
-		InvalidateRect(wins[window]->hWnd, &rect, FALSE);
+		InvalidateRect(wins[window]->hWnd, &rect, false);
 	}
 }
 
@@ -524,7 +524,7 @@ const char *str;
 			}
 			memcpy(pch, MessagePtr[i], strlen(MessagePtr[i]));
 		}
-		InvalidateRect(wins[window]->hWnd, NULL, FALSE);
+		InvalidateRect(wins[window]->hWnd, NULL, false);
 		break;
 	    case NHW_MENU:
 		impossible("putstr to a menu window (%d)", window);
@@ -533,7 +533,7 @@ const char *str;
 		for (cnt=0; cnt < strlen(str); ++cnt) {
 		win32_putsym(window,wins[window]->cursx++,wins[window]->cursy,
 				wins[window]->NormalTextColor,*(str + cnt),
-				TRUE);
+				true);
 		}
 		break;
 	    case NHW_TEXT:
@@ -545,7 +545,7 @@ const char *str;
 		for (cnt=0; cnt < (int)strlen(str); ++cnt) {
 		win32_putsym(window,wins[window]->cursx++,wins[window]->cursy,
 				wins[window]->NormalTextColor,*(str + cnt),
-				FALSE);
+				false);
 		}
 		win32_curs(window,0,wins[window]->cursy+1);
 	}
@@ -655,7 +655,7 @@ int glyph;
 #endif
 	    win32_curs(window,col,row);
 	    win32_putsym(window,wins[window]->cursx,
-			 wins[window]->cursy,colormap[color],ch, TRUE);
+			 wins[window]->cursy,colormap[color],ch, true);
     }
 
 }
@@ -840,7 +840,7 @@ int part;
 #ifdef DEBUG_FULL
 		DEBUG_MSG("About to do deferred init part 1");
 #endif
-		wins[window]->active = FALSE;
+		wins[window]->active = false;
 		wins[window]->type = NHW_TEXT;
 		wins[window]->wflags = 0L;
 		wins[window]->maxrows = ROWNO;
@@ -884,7 +884,7 @@ int part;
 			status = GetLastError();
 			DEBUG_MSG("Deferred init: Init of Window failed");
 		}
-		wins[window]->active = TRUE;	/* mark it active */
+		wins[window]->active = true;	/* mark it active */
 	}
 #ifdef DEBUG_FULL
 	else
@@ -1062,7 +1062,7 @@ const char *morestr;
 				wins[window]->type);
 /*	sprintf(buf,"Total items in menu: %d\r", MenuCount[window]); */
 	for (i = 0, j = 'a', junk = 0; i < MenuCount[window]; ++i) {
-		sflag = FALSE;
+		sflag = false;
 		if (MenuPtr[window][i]) {
 			if (MenuPtr[window][i]->str) {
 				if (MenuPtr[window][i]->identifier.a_void) {

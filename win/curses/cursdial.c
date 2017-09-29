@@ -156,8 +156,8 @@ curses_character_input_dialog(const char *prompt, const char *choices,
     char choicestr[QBUFSZ];
     int prompt_width = strlen(prompt);
     int prompt_height = 1;
-    boolean any_choice = FALSE;
-    boolean accept_count = FALSE;
+    boolean any_choice = false;
+    boolean accept_count = false;
 
     if (invent || (moves > 1)) {
         curses_get_window_size(MAP_WIN, &map_height, &map_width);
@@ -171,7 +171,7 @@ curses_character_input_dialog(const char *prompt, const char *choices,
     if (choices != NULL) {
         for (count = 0; choices[count] != '\0'; count++) {
             if (choices[count] == '#') { /* Accept a count */
-                accept_count = TRUE;
+                accept_count = true;
             }
         }
         choicestr[0] = ' ';
@@ -198,7 +198,7 @@ curses_character_input_dialog(const char *prompt, const char *choices,
         strcat(askstr, choicestr);
     } else {
         strcpy(askstr, prompt);
-        any_choice = TRUE;
+        any_choice = true;
     }
 
     prompt_width = strlen(askstr);
@@ -469,7 +469,7 @@ curses_create_nhmenu(winid wid)
     new_menu->num_pages = 0;
     new_menu->height = 0;
     new_menu->width = 0;
-    new_menu->reuse_accels = FALSE;
+    new_menu->reuse_accels = false;
     new_menu->next_menu = NULL;
 
     if (nhmenus == NULL) {      /* no menus in memory yet */
@@ -511,7 +511,7 @@ curses_add_nhmenu_item(winid wid, int glyph, const anything * identifier,
     new_item->attr = attr;
     new_item->str = new_str;
     new_item->presel = presel;
-    new_item->selected = FALSE;
+    new_item->selected = false;
     new_item->page_num = 0;
     new_item->line_num = 0;
     new_item->num_lines = 0;
@@ -645,9 +645,9 @@ boolean
 curses_menu_exists(winid wid)
 {
     if (get_menu(wid) != NULL) {
-        return TRUE;
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 }
 
@@ -772,10 +772,10 @@ menu_is_multipage(nhmenu *menu, int width, int height)
             }
         }
         if (menu_item_ptr == NULL) {
-            return FALSE;
+            return false;
         }
     }
-    return TRUE;
+    return true;
 }
 
 
@@ -916,12 +916,12 @@ menu_display_page(nhmenu *menu, WINDOW * win, int page_num)
 {
     nhmenu_item *menu_item_ptr;
     int count, curletter, entry_cols, start_col, num_lines, footer_x;
-    boolean first_accel = TRUE;
+    boolean first_accel = true;
 
 #ifdef MENU_COLOR
     int color = NO_COLOR;
     int attr = A_NORMAL;
-    boolean menu_color = FALSE;
+    boolean menu_color = false;
 #endif /* MENU_COLOR */
 
     /* Cycle through entries until we are on the correct page */
@@ -961,13 +961,13 @@ menu_display_page(nhmenu *menu, WINDOW * win, int page_num)
                 curletter = menu_item_ptr->accelerator;
             } else {
                 if (first_accel) {
-                    curletter = menu_get_accel(TRUE);
-                    first_accel = FALSE;
+                    curletter = menu_get_accel(true);
+                    first_accel = false;
                     if (!menu->reuse_accels && (menu->num_pages > 1)) {
-                        menu->reuse_accels = TRUE;
+                        menu->reuse_accels = true;
                     }
                 } else {
-                    curletter = menu_get_accel(FALSE);
+                    curletter = menu_get_accel(false);
                 }
                 menu_item_ptr->accelerator = curletter;
             }
@@ -1069,7 +1069,7 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
     int count_letter = '\0';
     int curpage = 1;
     int num_selected = 0;
-    boolean dismiss = FALSE;
+    boolean dismiss = false;
     char search_key[BUFSZ];
     nhmenu_item *menu_item_ptr = menu->entries;
 
@@ -1080,7 +1080,7 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
 
         if (curletter == ERR) {
             num_selected = -1;
-            dismiss = TRUE;
+            dismiss = true;
         }
 
         if (curletter == DOESCAPE) {
@@ -1096,7 +1096,7 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
                     num_selected = 0;
 
                 }
-                dismiss = TRUE;
+                dismiss = true;
                 break;
             }
             break;
@@ -1136,11 +1136,11 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
         switch (curletter) {
         case KEY_ESC:
             num_selected = -1;
-            dismiss = TRUE;
+            dismiss = true;
             break;
         case '\n':
         case '\r':
-            dismiss = TRUE;
+            dismiss = true;
             break;
         case KEY_RIGHT:
         case KEY_NPAGE:
@@ -1150,7 +1150,7 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
                 curpage++;
                 menu_display_page(menu, win, curpage);
             } else if (curletter == ' ') {
-                dismiss = TRUE;
+                dismiss = true;
                 break;
             }
             break;
@@ -1196,7 +1196,7 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
                         menu_clear_selections(menu);
                         menu_select_deselect(win, menu_item_ptr, SELECT);
                         num_selected = 1;
-                        dismiss = TRUE;
+                        dismiss = true;
                         break;
                     } else {
                         menu_select_deselect(win, menu_item_ptr, INVERT);
@@ -1211,7 +1211,7 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
         default:
             if (how == PICK_NONE) {
                 num_selected = 0;
-                dismiss = TRUE;
+                dismiss = true;
                 break;
             }
         }
@@ -1234,7 +1234,7 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
                         menu_clear_selections(menu);
                         menu_select_deselect(win, menu_item_ptr, SELECT);
                         num_selected = 1;
-                        dismiss = TRUE;
+                        dismiss = true;
                         break;
                     } else if ((how == PICK_ANY) && (curletter == count_letter)) {
                         menu_select_deselect(win, menu_item_ptr, SELECT);
@@ -1276,14 +1276,14 @@ menu_select_deselect(WINDOW * win, nhmenu_item *item, menu_op operation)
     int curletter = item->accelerator;
 
     if ((operation == DESELECT) || (item->selected && (operation == INVERT))) {
-        item->selected = FALSE;
+        item->selected = false;
         mvwaddch(win, item->line_num + 1, 1, ' ');
         curses_toggle_color_attr(win, HIGHLIGHT_COLOR, NONE, ON);
         mvwaddch(win, item->line_num + 1, 2, curletter);
         curses_toggle_color_attr(win, HIGHLIGHT_COLOR, NONE, OFF);
         mvwaddch(win, item->line_num + 1, 3, ')');
     } else {
-        item->selected = TRUE;
+        item->selected = true;
         curses_toggle_color_attr(win, HIGHLIGHT_COLOR, A_REVERSE, ON);
         mvwaddch(win, item->line_num + 1, 1, '<');
         mvwaddch(win, item->line_num + 1, 2, curletter);
@@ -1362,7 +1362,7 @@ menu_clear_selections(nhmenu *menu)
     nhmenu_item *menu_item_ptr = menu->entries;
 
     while (menu_item_ptr != NULL) {
-        menu_item_ptr->selected = FALSE;
+        menu_item_ptr->selected = false;
         menu_item_ptr = menu_item_ptr->next_item;
     }
 }
@@ -1391,9 +1391,9 @@ get_menu_coloring(char *str, int *color, int *attr)
 # endif
                 *color = tmpmc->color;
                 *attr = curses_convert_attr(tmpmc->attr);
-                return TRUE;
+                return true;
             }
-    return FALSE;
+    return false;
 }
 #endif /* MENU_COLOR */
 

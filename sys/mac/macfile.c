@@ -387,7 +387,7 @@ macunlink(const char *name)
 /* ---------------------------------------------------------------------- */
 
 boolean rsrc_dlb_init(void) {
-	return TRUE;
+	return true;
 }
 
 void rsrc_dlb_cleanup(void) {

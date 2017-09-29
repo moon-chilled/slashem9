@@ -154,7 +154,7 @@ pass_three(bg_typ, fg_typ)
 /*
  * use a flooding algorithm to find all locations that should
  * have the same rm number as the current location.
- * if anyroom is TRUE, use IS_ROOM to check room membership instead of
+ * if anyroom is true, use IS_ROOM to check room membership instead of
  * exactly matching levl[sx][sy].typ and walls are included as well.
  */
 void
@@ -282,11 +282,11 @@ join_map(bg_typ, fg_typ)
 		min_rx = max_rx = i;
 		min_ry = max_ry = j;
 		n_loc_filled = 0;
-		flood_fill_rm(i,j,nroom+ROOMOFFSET,FALSE,FALSE);
+		flood_fill_rm(i,j,nroom+ROOMOFFSET,false,false);
 		if(n_loc_filled > 3) {
 		    add_room(min_rx, min_ry, max_rx, max_ry,
-			     FALSE, OROOM, TRUE);
-		    rooms[nroom-1].irregular = TRUE;
+			     false, OROOM, true);
+		    rooms[nroom-1].irregular = true;
 		    if(nroom >= (MAXNROFROOMS*2))
 			goto joinm;
 		} else {
@@ -324,7 +324,7 @@ joinm:
 	    em.y = croom2->ly + ((croom2->hy - croom2->ly) / 2);
 	}
 
-	(void) dig_corridor(&sm, &em, FALSE, fg_typ, bg_typ);
+	(void) dig_corridor(&sm, &em, false, fg_typ, bg_typ);
 
 	/* choose next region to join */
 	/* only increment croom if croom and croom2 are non-overlapping */
@@ -352,7 +352,7 @@ finish_map(fg_typ, bg_typ, lit, walled)
 		       (!IS_ROCK(bg_typ) && levl[i][j].typ == bg_typ) ||
 		       (bg_typ == TREE && levl[i][j].typ == bg_typ) ||
 			(walled && IS_WALL(levl[i][j].typ)))
-			levl[i][j].lit = TRUE;
+			levl[i][j].lit = true;
 	    for(i = 0; i < nroom; i++)
 		rooms[i].rlit = 1;
 	}
@@ -360,7 +360,7 @@ finish_map(fg_typ, bg_typ, lit, walled)
 	for(i=1; i<COLNO; i++)
 	    for(j=0; j<ROWNO; j++)
 		if (levl[i][j].typ == LAVAPOOL)
-		    levl[i][j].lit = TRUE;
+		    levl[i][j].lit = true;
 }
 
 /*
@@ -469,8 +469,8 @@ mkmap(init_lev)
 	finish_map(fg_typ, bg_typ, (boolean)lit, (boolean)walled);
 	/* a walled, joined level is cavernous, not mazelike -dlc */
 	if (walled && join) {
-	    level.flags.is_maze_lev = FALSE;
-	    level.flags.is_cavernous_lev = TRUE;
+	    level.flags.is_maze_lev = false;
+	    level.flags.is_cavernous_lev = true;
 	}
 	free(new_locations);
 }

@@ -912,7 +912,7 @@ Contents
    After the lines
 
         case MUSE_WAN_POLYMORPH:
-                mzapmsg(mtmp, otmp, TRUE);
+                mzapmsg(mtmp, otmp, true);
                 otmp->spe--;
                 (void) newcham(mtmp, rndmonst());
                 if (oseen) makeknown(WAN_POLYMORPH);
@@ -1415,14 +1415,14 @@ CT( \
                     case BARRACKS:
                         if(!rn2(20))    /* the payroll and some loot */
                             (void) mksobj_at((rn2(3)) ? LARGE_BOX : CHEST,
-                                             sx, sy, TRUE);
+                                             sx, sy, true);
                         break;
 
    That is, 1 in 20 make a large box or a chest. We could put something like:
 
 		    case CLINIC:
 			if(!rn2(10))
-			    (void) mksobj_at(ICE_BOX,sx,sy,TRUE);
+			    (void) mksobj_at(ICE_BOX,sx,sy,true);
 			break;
 
    To create random ice boxes. It doesn't have to be a container, can be any
@@ -1520,13 +1520,13 @@ CT( \
    Last of all, edit sp_lev.c and after
 	#ifdef ARMY
 		    case BARRACKS:
-			level.flags.has_barracks = TRUE;
+			level.flags.has_barracks = true;
 			break;
 	#endif
    add
 	#ifdef CLINIC
 		    case CLINIC:
-			level.flags.has_clinic = TRUE;
+			level.flags.has_clinic = true;
 			break;
 	#endif
 
@@ -1775,7 +1775,7 @@ void setmangry(struct monst *)
 		Monster gets angry. If already was it, does nothing.
 boolean angry_guards(boolean)
 		Function used to angry guards in town. The parameter just indi-
-		cate to display messages if true. Returns TRUE if any guard
+		cate to display messages if true. Returns true if any guard
 		was there.
 void pacify_guards()
 		The name says it all.
@@ -1837,7 +1837,7 @@ void meatobj(struct monst *)
 void meatgold(struct monst *)
 		A expensive meal :-)
 boolean can_carry(struct monst *, struct obj *)
-		Returns TRUE if the monster can carry that object
+		Returns true if the monster can carry that object
 struct obj *make_corpse(struct monst *)
 		Creates a monster corpse, a "special" corpse, or nothing
 		if it doesn't leave corpses.
@@ -1856,7 +1856,7 @@ void mkshobj_at(const struct shclass *,int,int)
 int shkinit(const struct shclass *,struct mkroom *sroom)
 		Create a new shopkeeper in the given room.
 boolean saleable(int,struct obj *)
-		Returns TRUE if the shop -indicated by the index - stocks that
+		Returns true if the shop -indicated by the index - stocks that
 		type of objects.
 
 Other interesting functions
@@ -1874,7 +1874,7 @@ char *getrumor(int)
 		-1 means false and 0 is random.
 void exercise(int, boolean)
 		Exercise an attribute (A_INT,A_CHA,A_WIS,A_STR,A_DEX). If
-		TRUE increases, FALSE decreases.
+		true increases, FALSE decreases.
 find_misc()
 use_misc()
 		Both functions are used in muse.c to detect an object/action

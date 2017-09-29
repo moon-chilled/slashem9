@@ -707,10 +707,10 @@ switch_graphics (int gr_set_flag)
  * to the ISO 8859 character set.  We should probably do a VioSetCp() call to
  * set the codepage to 437.
  */
-	    iflags.IBMgraphics = TRUE;
-	    iflags.DECgraphics = FALSE;
+	    iflags.IBMgraphics = true;
+	    iflags.DECgraphics = false;
 #ifdef CURSES_GRAPHICS
-        iflags.cursesgraphics = FALSE;
+        iflags.cursesgraphics = false;
 #endif
 	    assign_graphics(ibm_graphics, SIZE(ibm_graphics), MAXPCHARS, 0);
 #ifdef PC9800
@@ -723,10 +723,10 @@ switch_graphics (int gr_set_flag)
 /*
  * Use the VT100 line drawing character set.
  */
-	    iflags.DECgraphics = TRUE;
-	    iflags.IBMgraphics = FALSE;
+	    iflags.DECgraphics = true;
+	    iflags.IBMgraphics = false;
 #ifdef CURSES_GRAPHICS
-        iflags.cursesgraphics = FALSE;
+        iflags.cursesgraphics = false;
 #endif
 	    assign_graphics(dec_graphics, SIZE(dec_graphics), MAXPCHARS, 0);
 	    if (decgraphics_mode_callback) (*decgraphics_mode_callback)();
@@ -740,9 +740,9 @@ switch_graphics (int gr_set_flag)
 #ifdef CURSES_GRAPHICS
     case CURS_GRAPHICS:
 	    assign_graphics(NULL, 0, MAXPCHARS, 0);
-        iflags.cursesgraphics = TRUE;
-	    iflags.IBMgraphics = FALSE;
-	    iflags.DECgraphics = FALSE;
+        iflags.cursesgraphics = true;
+	    iflags.IBMgraphics = false;
+	    iflags.DECgraphics = false;
         break;
 #endif
 	}

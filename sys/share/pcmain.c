@@ -136,7 +136,7 @@ char *argv[];
 	    set_binary_mode(0, O_RDONLY | O_BINARY);
 	    set_binary_mode(1, O_WRONLY | O_BINARY);
 	    choose_windows("proxy");
-	    lock_windows(TRUE);		/* Can't be overridden from options */
+	    lock_windows(true);		/* Can't be overridden from options */
 	}
 #endif
 	initoptions();
@@ -222,8 +222,8 @@ char *argv[];
 		if(!strcmp(plname, WIZARD))
 			strcpy(plname, "wizard");
 		else {
-			wizard = FALSE;
-			discover = TRUE;
+			wizard = false;
+			discover = true;
 		}
 	}
 #endif /* WIZARD */
@@ -287,7 +287,7 @@ char *argv[];
 
 	display_gamewindows();
 #ifdef WIN32
-	getreturn_enabled = TRUE;
+	getreturn_enabled = true;
 #endif
 
 	if ((fd = restore_saved_game()) >= 0) {
@@ -302,8 +302,8 @@ char *argv[];
 #endif
 #ifdef NEWS
 		if(iflags.news){
-		    display_file_area(NEWS_AREA, NEWS, FALSE);
-		    iflags.news = FALSE;
+		    display_file_area(NEWS_AREA, NEWS, false);
+		    iflags.news = false;
 		}
 #endif
 		pline("Restoring save file...");
@@ -312,9 +312,9 @@ char *argv[];
 		if(!dorecover(fd))
 			goto not_recovered;
 #ifdef WIZARD
-		if(!wizard && remember_wiz_mode) wizard = TRUE;
+		if(!wizard && remember_wiz_mode) wizard = true;
 #endif
-		check_special_room(FALSE);
+		check_special_room(false);
 		if (discover)
 			You("are in non-scoring discovery mode.");
 
@@ -335,7 +335,7 @@ not_recovered:
 		flags.move = 0;
 		set_wear();
 		(void) pickup(1);
-		sense_engr_at(u.ux,u.uy,FALSE);
+		sense_engr_at(u.ux,u.uy,false);
 	}
 #ifdef __DJGPP__
         /* WAC try to set title bar for Win95 DOS Boxes */
@@ -386,15 +386,15 @@ char *argv[];
 			 * validity of the name right now--it might have a
 			 * character class suffix, for instance.
 			 */
-				wizard = TRUE;
+				wizard = true;
 				break;
 # endif
 		case 'X':
-			discover = TRUE;
+			discover = true;
 			break;
 #ifdef NEWS
 		case 'n':
-			iflags.news = FALSE;
+			iflags.news = false;
 			break;
 #endif
 		case 'u':

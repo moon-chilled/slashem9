@@ -82,8 +82,8 @@ new_were (struct monst *mon)
 	/* regenerate by 1/4 of the lost hit points */
 	mon->mhp += (mon->mhpmax - mon->mhp) / 4;
 	newsym(mon->mx,mon->my);
-	mon_break_armor(mon, FALSE);
-	possibly_unwield(mon, FALSE);
+	mon_break_armor(mon, false);
+	possibly_unwield(mon, false);
 	(void) stop_timer(UNPOLY_MON, (void *) mon);
 	(void) start_timer(rn1(1000,1000), TIMER_MONSTER,
 		UNPOLY_MON, (void *) mon);

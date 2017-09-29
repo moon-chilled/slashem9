@@ -52,11 +52,11 @@ static struct bucket *id_map = 0;
 
 #include "quest.h"
 
-boolean restoring = FALSE;
+boolean restoring = false;
 static struct fruit *oldfruit;
 static long omoves;
 
-#define Is_IceBox(o) ((o)->otyp == ICE_BOX ? TRUE : FALSE)
+#define Is_IceBox(o) ((o)->otyp == ICE_BOX ? true : false)
 
 /* Recalculate level.objects[x][y], since this info was not saved. */
 static void
@@ -107,7 +107,7 @@ boolean quietly;
 		    impossible("inven_inuse: !in_use gold in inventory");
 		}
 		extract_nobj(otmp, &invent);
-		otmp->in_use = FALSE;
+		otmp->in_use = false;
 		dealloc_obj(otmp);
 	    } else
 #endif /* GOLDOBJ */
@@ -171,7 +171,7 @@ boolean ghostly;
 		    struct monst *shkp = shop_keeper(*shp);
 
 		    if (shkp && inhishop(shkp) &&
-			    repair_damage(shkp, tmp_dam, TRUE))
+			    repair_damage(shkp, tmp_dam, true))
 			break;
 		}
 	    }
@@ -267,7 +267,7 @@ boolean ghostly;
 		}
 		if (ghostly) {
 			int mndx = monsndx(mtmp->data);
-			if (propagate(mndx, TRUE, ghostly) == 0) {
+			if (propagate(mndx, true, ghostly) == 0) {
 				/* cookie to trigger purge in getbones() */
 				mtmp->mhpmax = DEFUNCT_MONSTER;
 			}
@@ -275,7 +275,7 @@ boolean ghostly;
 		if (mtmp->isshk) restore_shk_bill(fd, mtmp);
 		if(mtmp->minvent) {
 			struct obj *obj;
-			mtmp->minvent = restobjchn(fd, ghostly, FALSE);
+			mtmp->minvent = restobjchn(fd, ghostly, false);
 			/* restore monster back pointer */
 			for (obj = mtmp->minvent; obj; obj = obj->nobj)
 				obj->ocarry = mtmp;
@@ -368,7 +368,7 @@ unsigned int *stuckid, *steedid;	/* STEED */
 #ifdef WIZARD
 	if(!wizard)
 #endif
-		return FALSE;
+		return false;
 	}
 
 	mread(fd, (void *) &flags, sizeof(struct flag));
@@ -391,15 +391,15 @@ unsigned int *stuckid, *steedid;	/* STEED */
 	    wiz1_level.dlevel = 0;
 	    u.uz.dnum = 0;
 	    u.uz.dlevel = 1;
-	    return(FALSE);
+	    return(false);
 	}
 
 	/* this stuff comes after potential aborted restore attempts */
-	restore_timers(fd, RANGE_GLOBAL, FALSE, 0L);
+	restore_timers(fd, RANGE_GLOBAL, false, 0L);
 	restore_light_sources(fd);
-	invent = restobjchn(fd, FALSE, FALSE);
-	migrating_objs = restobjchn(fd, FALSE, FALSE);
-	migrating_mons = restmonchn(fd, FALSE);
+	invent = restobjchn(fd, false, false);
+	migrating_objs = restobjchn(fd, false, false);
+	migrating_mons = restmonchn(fd, false);
 	mread(fd, (void *) mvitals, sizeof(mvitals));
 
 	/*
@@ -407,7 +407,7 @@ unsigned int *stuckid, *steedid;	/* STEED */
 	 * side-effects too early in the game.
 	 * Disable see_monsters() here, re-enable it at the top of moveloop()
 	 */
-	defer_see_monsters = TRUE;
+	defer_see_monsters = true;
 
 	/* this comes after inventory has been loaded */
 	for(otmp = invent; otmp; otmp = otmp->nobj)
@@ -426,11 +426,11 @@ unsigned int *stuckid, *steedid;	/* STEED */
 	   applied or wielded it, so be conservative and assume the former */
 	otmp = uwep;	/* `uwep' usually init'd by setworn() in loop above */
 	uwep = 0;	/* clear it and have setuwep() reinit */
-	setuwep(otmp,FALSE);	/* (don't need any null check here) */
+	setuwep(otmp,false);	/* (don't need any null check here) */
 	/* KMH, balance patch -- added fishing pole */
 	if (!uwep || uwep->otyp == PICK_AXE || uwep->otyp == GRAPPLING_HOOK ||
 		     uwep->otyp == FISHING_POLE)
-	    unweapon = TRUE;
+	    unweapon = true;
 
 	restore_dungeon(fd);
 
@@ -465,9 +465,9 @@ unsigned int *stuckid, *steedid;	/* STEED */
                   sizeof realtime_data.realtime);
 
 	/* must come after all mons & objs are restored */
-	relink_timers(FALSE);
-	relink_light_sources(FALSE);
-	return(TRUE);
+	relink_timers(false);
+	relink_light_sources(false);
+	return(true);
 }
 
 /* update game state pointers to those valid for the current level (so we
@@ -530,14 +530,14 @@ int dorecover (int fd) {
 	mread(fd, (void *) plname, PL_NSIZ);
 #endif
 
-	restoring = TRUE;
-	getlev(fd, 0, (xchar)0, FALSE);
+	restoring = true;
+	getlev(fd, 0, (xchar)0, false);
 	if (!restgamestate(fd, &stuckid, &steedid)) {
-		display_nhwindow(WIN_MESSAGE, TRUE);
+		display_nhwindow(WIN_MESSAGE, true);
 		savelev(-1, 0, FREE_SAVE);	/* discard current level */
 		(void) close(fd);
 		(void) delete_savefile();
-		restoring = FALSE;
+		restoring = false;
 		return(0);
 	}
 	restlevelstate(stuckid, steedid);
@@ -576,7 +576,7 @@ int dorecover (int fd) {
 		if(read(fd, (void *) &ltmp, sizeof ltmp) != sizeof ltmp)
 #endif
 			break;
-		getlev(fd, 0, ltmp, FALSE);
+		getlev(fd, 0, ltmp, false);
 #if defined(MICRO) && defined(TTY_GRAPHICS)
 		if (!strncmpi("tty", windowprocs.name, 3)) {
 		curs(WIN_MAP, 1+dotcnt++, dotrow);
@@ -602,13 +602,13 @@ int dorecover (int fd) {
 #ifdef STORE_PLNAME_IN_FILE
 	mread(fd, (void *) plname, PL_NSIZ);
 #endif
-	getlev(fd, 0, (xchar)0, FALSE);
+	getlev(fd, 0, (xchar)0, false);
 	(void) close(fd);
 
 	if (!wizard && !discover)
 		(void) delete_savefile();
 #ifdef REINCARNATION
-	if (Is_rogue_level(&u.uz)) assign_rogue_graphics(TRUE);
+	if (Is_rogue_level(&u.uz)) assign_rogue_graphics(true);
 #endif
 #ifdef USE_TILES
 	substitute_tiles(&u.uz);
@@ -639,7 +639,7 @@ int dorecover (int fd) {
 	 *    + The current level has been restored so billing information
 	 *	is available.
 	 */
-	inven_inuse(FALSE);
+	inven_inuse(false);
 
 	load_qtlist();	/* re-load the quest text info */
 	reset_attribute_clock();
@@ -650,7 +650,7 @@ int dorecover (int fd) {
 
 	run_timers();	/* expire all timers that have gone off while away */
 	docrt();
-	restoring = FALSE;
+	restoring = false;
 	clear_nhwindow(WIN_MESSAGE);
 	program_state.something_worth_saving++;	/* useful data now exists */
 
@@ -662,7 +662,7 @@ int dorecover (int fd) {
 #endif
 
 	/* Success! */
-	welcome(FALSE);
+	welcome(false);
 	return(1);
 }
 
@@ -801,12 +801,12 @@ boolean ghostly;
 		ftrap = trap;
 	}
 	dealloc_trap(trap);
-	fobj = restobjchn(fd, ghostly, FALSE);
+	fobj = restobjchn(fd, ghostly, false);
 	find_lev_obj();
 	/* restobjchn()'s `frozen' argument probably ought to be a callback
 	   routine so that we can check for objects being buried under ice */
-	level.buriedobjlist = restobjchn(fd, ghostly, FALSE);
-	billobjs = restobjchn(fd, ghostly, FALSE);
+	level.buriedobjlist = restobjchn(fd, ghostly, false);
+	billobjs = restobjchn(fd, ghostly, false);
 	rest_engravings(fd);
 
 	/* reset level.monsters for new level */
@@ -815,7 +815,7 @@ boolean ghostly;
 		level.monsters[x][y] = NULL;
 	for (mtmp = level.monlist; mtmp; mtmp = mtmp->nmon) {
 	    if (mtmp->isshk)
-		set_residency(mtmp, FALSE);
+		set_residency(mtmp, false);
 	    place_monster(mtmp, mtmp->mx, mtmp->my);
 	    if (mtmp->wormno) place_wsegs(mtmp);
 	}
@@ -920,7 +920,7 @@ add_id_mapping(gid, nid)
 }
 
 /*
- * Global routine to look up a mapping.  If found, return TRUE and fill
+ * Global routine to look up a mapping.  If found, return true and fill
  * in the new ID value.  Otherwise, return false and return -1 in the new
  * ID.
  */
@@ -943,11 +943,11 @@ lookup_id_mapping(gid, nidp)
 	    while (--i >= 0)
 		if (gid == curr->map[i].gid) {
 		    *nidp = curr->map[i].nid;
-		    return TRUE;
+		    return true;
 		}
 	}
 
-    return FALSE;
+    return false;
 }
 
 static void

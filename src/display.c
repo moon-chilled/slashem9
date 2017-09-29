@@ -340,14 +340,14 @@ void unmap_object (int x, int y) {
 									\
     if (level.flags.hero_memory) {					\
 	if ((obj = vobj_at(x, y)) && !covers_objects(x, y))		\
-	    map_object(obj, FALSE);					\
+	    map_object(obj, false);					\
 	else								\
 	    levl[x][y].mem_corpse = levl[x][y].mem_obj = 0;		\
 	if ((trap = t_at(x, y)) && trap->tseen && !covers_traps(x, y))	\
-	    map_trap(trap, FALSE);					\
+	    map_trap(trap, false);					\
 	else								\
 	    levl[x][y].mem_trap = 0;					\
-	map_background(x, y, FALSE);					\
+	map_background(x, y, false);					\
 	if (show) show_glyph(x, y, memory_glyph(x, y));			\
     } else if ((obj = vobj_at(x,y)) && !covers_objects(x,y))		\
 	map_object(obj,show);						\
@@ -770,7 +770,7 @@ void newsym(int x, int y) {
 		    /* if monster is in a physical trap, you see the trap too */
 		    if (tt == BEAR_TRAP || tt == PIT ||
 			tt == SPIKED_PIT ||tt == WEB) {
-			trap->tseen = TRUE;
+			trap->tseen = true;
 		    }
 		}
 		_map_location(x,y,0);	/* map under the monster */
@@ -1112,11 +1112,11 @@ void under_water(int mode) {
     /* full update */
     if (mode == 1 || dela) {
 	cls();
-	dela = FALSE;
+	dela = false;
     }
     /* delayed full update */
     else if (mode == 2) {
-	dela = TRUE;
+	dela = true;
 	return;
     }
     /* limited update */
@@ -1152,11 +1152,11 @@ void under_ground(int mode) {
     /* full update */
     if (mode == 1 || dela) {
 	cls();
-	dela = FALSE;
+	dela = false;
     }
     /* delayed full update */
     else if (mode == 2) {
-	dela = TRUE;
+	dela = true;
 	return;
     }
     /* limited update */
@@ -1263,7 +1263,7 @@ void docrt(void) {
 
     if (!u.ux) return; /* display isn't ready yet */
 
-    transp = FALSE;
+    transp = false;
     if (tileset[0])
 	for(i = 0; i < no_tilesets; ++i)
 	    if (!strcmpi(tileset, tilesets[i].name)) {
@@ -1535,7 +1535,7 @@ void row_refresh(int start, int stop, int y) {
 }
 
 void cls(void) {
-    display_nhwindow(WIN_MESSAGE, FALSE); /* flush messages */
+    display_nhwindow(WIN_MESSAGE, false); /* flush messages */
     flags.botlx = 1;		/* force update of botl window */
     clear_nhwindow(WIN_MAP);	/* clear physical screen */
     clear_glyph_buffer();	/* this is sort of an extra effort, but OK */
@@ -1567,7 +1567,7 @@ void flush_screen(int cursor_on_u) {
     }
 
     if (cursor_on_u) curs(WIN_MAP, u.ux,u.uy); /* move cursor to the hero */
-    display_nhwindow(WIN_MAP, FALSE);
+    display_nhwindow(WIN_MAP, false);
     reset_glyph_bbox();
 #ifdef ALLEG_FX
     if (iflags.usealleg) alleg_vid_refresh();
@@ -1789,7 +1789,7 @@ static int check_pos(int x, int y, int which) {
     return 0;
 }
 
-/* Return TRUE if more than one is non-zero. */
+/* Return true if more than one is non-zero. */
 /*ARGSUSED*/
 #ifdef WA_VERBOSE
 static boolean more_than_one(int x, int y, int a, int b, int c) {
@@ -1798,9 +1798,9 @@ static boolean more_than_one(int x, int y, int a, int b, int c) {
 #endif
     if ((a && (b|c)) || (b && (a|c)) || (c && (a|b))) {
 	error4(x,y,a,b,c,0);
-	return TRUE;
+	return true;
     }
-    return FALSE;
+    return false;
 }
 #else
 #define more_than_one(x, y, a, b, c) (((a) && ((b)|(c))) || ((b) && ((a)|(c))) || ((c) && ((a)|(b))))

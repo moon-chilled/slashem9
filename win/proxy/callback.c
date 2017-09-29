@@ -12,7 +12,7 @@
 static void
 cb_display_inventory()
 {
-    display_inventory(NULL, FALSE);
+    display_inventory(NULL, false);
 }
 
 #ifndef FILE_AREAS
@@ -151,7 +151,7 @@ long mode;
 static void
 cb_parse_options(char *opts)
 {
-    parseoptions(opts, FALSE, FALSE);
+    parseoptions(opts, false, false);
 }
 
 static struct nhproxy_cb_get_player_choices_res *
@@ -282,7 +282,7 @@ cb_display_score()
 
     proxy_rawprint_win = create_toptenwin();
     prscore(2, argv);
-    display_nhwindow(proxy_rawprint_win, TRUE);
+    display_nhwindow(proxy_rawprint_win, true);
     destroy_toptenwin();
     dlb_init();                         /* Re-initialise DLB */
     proxy_rawprint_win = WIN_ERR;

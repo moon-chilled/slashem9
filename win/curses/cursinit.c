@@ -109,22 +109,22 @@ curses_create_main_windows()
     int status_orientation = 0;
     int border_space = 0;
     int hspace = term_cols - 80;
-    boolean borders = FALSE;
+    boolean borders = false;
 
     switch (iflags.wc2_windowborders) {
     case 1:                     /* On */
-        borders = TRUE;
+        borders = true;
         break;
     case 2:                     /* Off */
-        borders = FALSE;
+        borders = false;
         break;
     case 3:                     /* Auto */
         if ((term_cols > 81) && (term_rows > 25)) {
-            borders = TRUE;
+            borders = true;
         }
         break;
     default:
-        borders = FALSE;
+        borders = false;
     }
 
 
@@ -193,14 +193,14 @@ curses_create_main_windows()
     int map_height = (term_rows - border_space);
     int map_width = (term_cols - border_space);
 
-    boolean status_vertical = FALSE;
-    boolean msg_vertical = FALSE;
+    boolean status_vertical = false;
+    boolean msg_vertical = false;
     if (status_orientation == ALIGN_LEFT ||
         status_orientation == ALIGN_RIGHT)
-        status_vertical = TRUE;
+        status_vertical = true;
     if (message_orientation == ALIGN_LEFT ||
         message_orientation == ALIGN_RIGHT)
-        msg_vertical = TRUE;
+        msg_vertical = true;
 
     int statusheight = 3;
     if (iflags.classic_status)
@@ -276,7 +276,7 @@ curses_create_main_windows()
         if (flags.perm_invent)
             curses_update_inventory();
     } else {
-        iflags.window_inited = TRUE;
+        iflags.window_inited = true;
     }
 }
 
@@ -315,9 +315,9 @@ curses_init_nhcolors()
                 init_pair(17 + (i * 2) + 1, clr_remap[i], COLOR_BLUE);
             }
 
-            boolean hicolor = FALSE;
+            boolean hicolor = false;
             if (COLORS >= 16)
-                hicolor = TRUE;
+                hicolor = true;
 
             /* Work around the crazy definitions above for more background colors... */
             for (i = 0; i < (COLORS >= 16 ? 16 : 8); i++) {
@@ -473,7 +473,7 @@ curses_choose_character()
     }
 
     if (pick4u == 'y') {
-        flags.randomall = TRUE;
+        flags.randomall = true;
     }
 #ifdef TUTORIAL_MODE
     else if (pick4u == 't') {   /* Tutorial mode in UnNetHack */
@@ -792,19 +792,19 @@ curses_character_dialog(const char **choices, const char *prompt)
 
         identifier.a_int = (count + 1); /* Must be non-zero */
         curses_add_menu(wid, NO_GLYPH, &identifier, curletter, 0,
-                        A_NORMAL, choices[count], FALSE);
+                        A_NORMAL, choices[count], false);
         used_letters[count] = curletter;
     }
 
     /* Random Selection */
     identifier.a_int = ROLE_RANDOM;
     curses_add_menu(wid, NO_GLYPH, &identifier, '*', 0, A_NORMAL, "Random",
-                    FALSE);
+                    false);
 
     /* Quit prompt */
     identifier.a_int = ROLE_NONE;
     curses_add_menu(wid, NO_GLYPH, &identifier, 'q', 0, A_NORMAL, "Quit",
-                    FALSE);
+                    false);
     curses_end_menu(wid, prompt);
     ret = curses_select_menu(wid, PICK_ONE, &selected);
     if (ret == 1) {
@@ -880,7 +880,7 @@ curses_init_options()
         iflags.wc2_petattr = A_REVERSE;
     } else {                    /* Pet attribute specified, so hilite_pet should be true */
 
-        iflags.hilite_pet = TRUE;
+        iflags.hilite_pet = true;
     }
 
 #ifdef NCURSES_MOUSE_VERSION
@@ -901,7 +901,7 @@ curses_display_splash_window()
     curses_get_window_xy(MAP_WIN, &x_start, &y_start);
 
     if ((term_cols < 70) || (term_rows < 20)) {
-        iflags.wc_splash_screen = FALSE;        /* No room for s.s. */
+        iflags.wc_splash_screen = false;        /* No room for s.s. */
     }
 
     curses_toggle_color_attr(stdscr, CLR_WHITE, A_NORMAL, ON);

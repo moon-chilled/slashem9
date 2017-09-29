@@ -89,7 +89,7 @@ use_saddle (struct obj *otmp)
 	}
 	if (ptr == &mons[PM_INCUBUS] || ptr == &mons[PM_SUCCUBUS]) {
 	    pline("Shame on you!");
-	    exercise(A_WIS, FALSE);
+	    exercise(A_WIS, false);
 	    return 1;
 	}
 	if (mtmp->isminion || mtmp->isshk || mtmp->ispriest ||
@@ -138,7 +138,7 @@ use_saddle (struct obj *otmp)
 	/* Make the attempt */
 	if (rn2(100) < chance) {
 	    You("put the saddle on %s.", mon_nam(mtmp));
-	    if (otmp->owornmask) remove_worn_item(otmp, FALSE);
+	    if (otmp->owornmask) remove_worn_item(otmp, false);
 	    freeinv(otmp);
 	    /* mpickobj may free otmp it if merges, but we have already
 	       checked for a saddle above, so no merger should happen */
@@ -146,7 +146,7 @@ use_saddle (struct obj *otmp)
 	    mtmp->misc_worn_check |= W_SADDLE;
 	    otmp->owornmask = W_SADDLE;
 	    otmp->leashmon = mtmp->m_id;
-	    update_mon_intrinsics(mtmp, otmp, TRUE, FALSE);
+	    update_mon_intrinsics(mtmp, otmp, true, false);
 	} else
 	    pline("%s resists!", Monnam(mtmp));
 	return 1;
@@ -169,14 +169,14 @@ can_ride(mtmp)
 int
 doride (void)
 {
-	boolean forcemount = FALSE;
+	boolean forcemount = false;
 
 	if (u.usteed)
 	    dismount_steed(DISMOUNT_BYCHOICE);
 	else if (getdir(NULL) && isok(u.ux+u.dx, u.uy+u.dy)) {
 #ifdef WIZARD
 	if (wizard && yn("Force the mount to succeed?") == 'y')
-		forcemount = TRUE;
+		forcemount = true;
 #endif
 	    return (mount_steed(m_at(u.ux+u.dx, u.uy+u.dy), forcemount));
 	} else
@@ -198,13 +198,13 @@ mount_steed(mtmp, force)
 	/* Sanity checks */
 	if (u.usteed) {
 	    You("are already riding %s.", mon_nam(u.usteed));
-	    return (FALSE);
+	    return (false);
 	}
 
 	/* Is the player in the right form? */
 	if (Hallucination && !force) {
 	    pline("Maybe you should find a designated driver.");
-	    return (FALSE);
+	    return (false);
 	}
 	/* While riding Wounded_legs refers to the steed's,
 	 * not the hero's legs.
@@ -223,17 +223,17 @@ mount_steed(mtmp, force)
 		HWounded_legs = EWounded_legs = 0;
 	    else
 #endif
-	    return (FALSE);
+	    return (false);
 	}
 
 	if (Upolyd && (!humanoid(youmonst.data) || verysmall(youmonst.data) ||
 			bigmonst(youmonst.data) || slithy(youmonst.data))) {
 	    You("won't fit on a saddle.");
-	    return (FALSE);
+	    return (false);
 	}
 	if(!force && (near_capacity() > SLT_ENCUMBER)) {
 	    You_cant("do that while carrying so much stuff.");
-	    return (FALSE);
+	    return (false);
 	}
 
 	/* Can the player reach and see the monster? */
@@ -242,7 +242,7 @@ mount_steed(mtmp, force)
 		mtmp->m_ap_type == M_AP_FURNITURE ||
 		mtmp->m_ap_type == M_AP_OBJECT))) {
 	    pline("I see nobody there.");
-	    return (FALSE);
+	    return (false);
 	}
 	if (u.uswallow || u.ustuck || u.utrap || Punished ||
 	    !test_move(u.ux, u.uy, mtmp->mx-u.ux, mtmp->my-u.uy, TEST_MOVE)) {
@@ -250,14 +250,14 @@ mount_steed(mtmp, force)
 		You("are unable to swing your %s over.", body_part(LEG));
 	    else
 		You("are stuck here for now.");
-	    return (FALSE);
+	    return (false);
 	}
 
 	/* Is this a valid monster? */
 	otmp = which_armor(mtmp, W_SADDLE);
 	if (!otmp) {
 	    pline("%s is not saddled.", Monnam(mtmp));
-	    return (FALSE);
+	    return (false);
 	}
 	ptr = mtmp->data;
 	if (touch_petrifies(ptr) && !Stone_resistance) {
@@ -269,7 +269,7 @@ mount_steed(mtmp, force)
 	}
 	if (!mtmp->mtame || mtmp->isminion) {
 	    pline("I think %s would mind.", mon_nam(mtmp));
-	    return (FALSE);
+	    return (false);
 	}
 	if (mtmp->mtrapped) {
 	    struct trap *t = t_at(mtmp->mx, mtmp->my);
@@ -277,7 +277,7 @@ mount_steed(mtmp, force)
 	    You_cant("mount %s while %s's trapped in %s.",
 		     mon_nam(mtmp), mhe(mtmp),
 		     an(defsyms[trap_to_defsym(t->ttyp)].explanation));
-	    return (FALSE);
+	    return (false);
 	}
 
 	if (!force && !Role_if(PM_KNIGHT) && !(--mtmp->mtame)) {
@@ -285,12 +285,12 @@ mount_steed(mtmp, force)
 	    newsym(mtmp->mx, mtmp->my);
 	    pline("%s resists%s!", Monnam(mtmp),
 		  mtmp->mleashed ? " and its leash comes off" : "");
-	    if (mtmp->mleashed) m_unleash(mtmp, FALSE);
-	    return (FALSE);
+	    if (mtmp->mleashed) m_unleash(mtmp, false);
+	    return (false);
 	}
 	if (!force && Underwater && !is_swimmer(ptr)) {
 	    You_cant("ride that creature while under water.");
-	    return (FALSE);
+	    return (false);
 	}
 	if (!can_saddle(mtmp) || !can_ride(mtmp)) {
 	    You_cant("ride such a creature.");
@@ -301,20 +301,20 @@ mount_steed(mtmp, force)
 	if (!force && !is_floater(ptr) && !is_flyer(ptr) &&
 			Levitation && !Lev_at_will) {
 	    You("cannot reach %s.", mon_nam(mtmp));
-	    return (FALSE);
+	    return (false);
 	}
 	if (!force && uarm && is_metallic(uarm) &&
 			greatest_erosion(uarm)) {
 	    Your("%s armor is too stiff to be able to mount %s.",
 			uarm->oeroded ? "rusty" : "corroded",
 			mon_nam(mtmp));
-	    return (FALSE);
+	    return (false);
 	}
 	if (!force && (Confusion || Fumbling || Glib || Wounded_legs ||
 		otmp->cursed || (u.ulevel+mtmp->mtame < rnd(MAXULEV/2+5)))) {
 	    if (Levitation) {
 		pline("%s slips away from you.", Monnam(mtmp));
-		return FALSE;
+		return false;
 	    }
 	    You("slip while trying to get on %s.", mon_nam(mtmp));
 
@@ -322,9 +322,9 @@ mount_steed(mtmp, force)
 		    /* "a saddled mumak" or "a saddled pony called Dobbin" */
 		    x_monnam(mtmp, ARTICLE_A, NULL,
 			SUPPRESS_IT|SUPPRESS_INVISIBLE|SUPPRESS_HALLUCINATION,
-			     TRUE));
+			     true));
 	    losehp(rn1(5,10), buf, NO_KILLER_PREFIX);
-	    return (FALSE);
+	    return (false);
 	}
 
 	/* Success */
@@ -335,11 +335,11 @@ mount_steed(mtmp, force)
 	    You("mount %s.", mon_nam(mtmp));
 	}
 	/* setuwep handles polearms differently when you're mounted */
-	if (uwep && is_pole(uwep)) unweapon = FALSE;
+	if (uwep && is_pole(uwep)) unweapon = false;
 	u.usteed = mtmp;
 	remove_monster(mtmp->mx, mtmp->my);
-	teleds(mtmp->mx, mtmp->my, TRUE);
-	return (TRUE);
+	teleds(mtmp->mx, mtmp->my, true);
+	return (true);
 }
 
 
@@ -372,7 +372,7 @@ int reason;
 int forceit;
 {
     int i = 0, x, y, distance, min_distance = -1;
-    boolean found = FALSE;
+    boolean found = false;
     struct trap *t;
 
     /* avoid known traps (i == 0) and boulders, but allow them as a backup */
@@ -393,7 +393,7 @@ int forceit;
 			    spot->x = x;
 			    spot->y = y;
 			    min_distance = distance;
-			    found = TRUE;
+			    found = true;
 			}
 		    }
 		}
@@ -403,7 +403,7 @@ int forceit;
     /* If we didn't find a good spot and forceit is on, try enexto(). */
     if (forceit && min_distance < 0 &&
 		!enexto(spot, u.ux, u.uy, youmonst.data))
-	return FALSE;
+	return false;
 
     return found;
 }
@@ -443,7 +443,7 @@ kick_steed (void)
 
 	/* Make the steed less tame and check if it resists */
 	if (u.usteed->mtame) u.usteed->mtame--;
-	if (!u.usteed->mtame && u.usteed->mleashed) m_unleash(u.usteed, TRUE);
+	if (!u.usteed->mtame && u.usteed->mleashed) m_unleash(u.usteed, true);
 	if (!u.usteed->mtame || (u.ulevel+u.usteed->mtame < rnd(MAXULEV/2+5))) {
 	    newsym(u.usteed->mx, u.usteed->my);
 	    dismount_steed(DISMOUNT_THROWN);
@@ -465,7 +465,7 @@ dismount_steed (
 	struct obj *otmp;
 	coord cc;
 	const char *verb = "fall";
-	boolean repair_leg_damage = TRUE;
+	boolean repair_leg_damage = true;
 	unsigned save_utrap = u.utrap;
 	boolean have_spot = landing_spot(&cc,reason,0);
 
@@ -484,7 +484,7 @@ dismount_steed (
 		if (!have_spot) have_spot = landing_spot(&cc,reason,1);
 		losehp(rn1(10,10), "riding accident", KILLED_BY_AN);
 		set_wounded_legs(BOTH_SIDES, (int)HWounded_legs + rn1(5,5));
-		repair_leg_damage = FALSE;
+		repair_leg_damage = false;
 		break;
 	    case DISMOUNT_POLY:
 		You("can no longer ride %s.", mon_nam(u.usteed));
@@ -504,7 +504,7 @@ dismount_steed (
 		if (otmp && otmp->cursed) {
 		    You("can't.  The saddle %s cursed.",
 			otmp->bknown ? "is" : "seems to be");
-		    otmp->bknown = TRUE;
+		    otmp->bknown = true;
 		    return;
 		}
 		if (!have_spot) {
@@ -536,7 +536,7 @@ dismount_steed (
 	    if (enexto(&cc, u.ux, u.uy, mtmp->data))
 		rloc_to(mtmp, cc.x, cc.y);
 	    else	/* evidently no room nearby; move steed elsewhere */
-		(void) rloc(mtmp, FALSE);
+		(void) rloc(mtmp, false);
 	    return;
 	}
 	if (!DEADMONSTER(mtmp)) {
@@ -584,9 +584,9 @@ dismount_steed (
 		    /* Keep steed here, move the player to cc;
 		     * teleds() clears u.utrap
 		     */
-		    in_steed_dismounting = TRUE;
-		    teleds(cc.x, cc.y, TRUE);
-		    in_steed_dismounting = FALSE;
+		    in_steed_dismounting = true;
+		    teleds(cc.x, cc.y, true);
+		    in_steed_dismounting = false;
 
 		    /* Put your steed in your trap */
 		    if (save_utrap)
@@ -606,16 +606,16 @@ dismount_steed (
 
 	/* Return the player to the floor */
 	if (reason != DISMOUNT_ENGULFED) {
-	    in_steed_dismounting = TRUE;
+	    in_steed_dismounting = true;
 	    (void) float_down(0L, W_SADDLE);
-	    in_steed_dismounting = FALSE;
+	    in_steed_dismounting = false;
 	    flags.botl = 1;
 	    (void)encumber_msg();
 	    vision_full_recalc = 1;
 	} else
 	    flags.botl = 1;
 	/* polearms behave differently when not mounted */
-	if (uwep && is_pole(uwep)) unweapon = TRUE;
+	if (uwep && is_pole(uwep)) unweapon = true;
 	return;
 }
 

@@ -264,12 +264,12 @@ lev_init	: /* nothing */
 			   explicitly clear any stale settings */
 			(void) memset((void *) &init_lev, 0,
 					sizeof init_lev);
-			init_lev.init_present = FALSE;
+			init_lev.init_present = false;
 			$$ = 0;
 		  }
 		| LEV_INIT_ID ':' CHAR ',' CHAR ',' BOOLEAN ',' BOOLEAN ',' light_state ',' walled
 		  {
-			init_lev.init_present = TRUE;
+			init_lev.init_present = true;
 			init_lev.fg = what_map_char((char) $3);
 			if (init_lev.fg == INVALID_TYPE)
 			    yyerror("Invalid foreground type.");

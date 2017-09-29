@@ -181,7 +181,7 @@ BOOL InitBaseWindow(void)
 		wcNetHack.cbClsExtra   =0;
 		wcNetHack.cbWndExtra   =0;
 		if (!RegisterClass (&wcNetHack)) {
-			return FALSE;
+			return false;
 		}
 	}
 	BasehWnd = CreateWindow("NHBaseWin",

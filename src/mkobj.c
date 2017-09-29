@@ -133,7 +133,7 @@ boolean artif;
 	if(objects[i].oc_class != oclass || !OBJ_NAME(objects[i]))
 		panic("probtype error, oclass=%d i=%d", (int) oclass, i);
 
-	return(mksobj(i, TRUE, artif));
+	return(mksobj(i, true, artif));
 }
 
 static void
@@ -165,13 +165,13 @@ struct obj *box;
 	for (n = rn1(n+1 - minn, minn); n > 0; n--) {
 	    if (box->otyp == MEDICAL_KIT) {
 		int supplies[] = { PHIAL, BANDAGE, PILL };
-		if (!(otmp = mksobj(supplies[rn2(SIZE(supplies))], TRUE, TRUE)))
+		if (!(otmp = mksobj(supplies[rn2(SIZE(supplies))], true, true)))
 		    continue;
 		else
-		    obj_set_oinvis(otmp, FALSE, FALSE);
+		    obj_set_oinvis(otmp, false, false);
 	    } else
 	    if (box->otyp == ICE_BOX) {
-		if (!(otmp = mksobj(CORPSE, TRUE, TRUE))) continue;
+		if (!(otmp = mksobj(CORPSE, true, true))) continue;
 		/* Note: setting age to 0 is correct.  Age has a different
 		 * from usual meaning for objects stored in ice boxes. -KAA
 		 */
@@ -187,7 +187,7 @@ struct obj *box;
 
 		for (tprob = rnd(100); (tprob -= iprobs->iprob) > 0; iprobs++)
 		    ;
-		if (!(otmp = mkobj(iprobs->iclass, TRUE))) continue;
+		if (!(otmp = mkobj(iprobs->iclass, true))) continue;
 
 		/* handle a couple of special cases */
 		if (otmp->oclass == COIN_CLASS) {
@@ -374,7 +374,7 @@ bill_dummy_object (struct obj *otmp)
 	if (otmp->onamelth)
 	    (void)strncpy(ONAME(dummy), ONAME(otmp), (int)otmp->onamelth);
 	if (Is_candle(dummy)) dummy->lamplit = 0;
-	addtobill(dummy, FALSE, TRUE, TRUE);
+	addtobill(dummy, false, true, true);
 	if (otmp->where != OBJ_INVENT)
 	    otmp->no_charge = 1;
 	otmp->unpaid = 0;
@@ -407,7 +407,7 @@ boolean artif;
 	otmp->otyp = otyp;
 	otmp->where = OBJ_FREE;
 	otmp->dknown = index(dknowns, let) ? 0 : 1;
-	otmp->olocked = FALSE; /* ->recharged */
+	otmp->olocked = false; /* ->recharged */
 	otmp->altmode = WP_MODE_AUTO;
 	if ((otmp->otyp >= ELVEN_SHIELD && otmp->otyp <= ORCISH_SHIELD) ||
 			otmp->otyp == SHIELD_OF_REFLECTION)
@@ -416,7 +416,7 @@ boolean artif;
 		otmp->known = 1;
 #ifdef INVISIBLE_OBJECTS
 	obj_set_oinvis(otmp, !rn2(1250) &&
-	  (otmp->otyp != BOULDER || !In_sokoban(&u.uz)), FALSE);
+	  (otmp->otyp != BOULDER || !In_sokoban(&u.uz)), false);
 #endif
 	if (init) switch (let) {
 /* -----------============STEPHEN WHITE'S NEW CODE============----------- */
@@ -461,7 +461,7 @@ boolean artif;
 		otmp->corpsenm = NON_PM;	/* generic egg */
 		if (!rn2(3)) for (tryct = 200; tryct > 0; --tryct) {
 		    mndx = can_be_hatched(rndmonnum());
-		    if (mndx != NON_PM && !dead_species(mndx, TRUE)) {
+		    if (mndx != NON_PM && !dead_species(mndx, true)) {
 			otmp->corpsenm = mndx;		/* typed egg */
 			attach_egg_hatch_timeout(otmp);
 			break;
@@ -537,7 +537,7 @@ boolean artif;
 					break;
 #ifdef LIGHTSABERS
 		case RED_DOUBLE_LIGHTSABER:
-					otmp->altmode = FALSE;
+					otmp->altmode = false;
 		case GREEN_LIGHTSABER:
 		case BLUE_LIGHTSABER:
 		case RED_LIGHTSABER:
@@ -607,7 +607,7 @@ boolean artif;
 	    }
 	    break;
 	case AMULET_CLASS:
-		if (otmp->otyp == AMULET_OF_YENDOR) flags.made_amulet = TRUE;
+		if (otmp->otyp == AMULET_OF_YENDOR) flags.made_amulet = true;
 		if(rn2(10) && (otmp->otyp == AMULET_OF_STRANGULATION ||
 		   otmp->otyp == AMULET_OF_CHANGE ||
 		   otmp->otyp == AMULET_OF_RESTFUL_SLEEP)) {
@@ -664,7 +664,7 @@ boolean artif;
 		if(otmp->otyp == WAN_WISHING) {
 		    otmp->spe = rnd(3);
 #ifdef INVISIBLE_OBJECTS
-		    if (Is_stronghold(&u.uz)) obj_set_oinvis(otmp, TRUE, FALSE);
+		    if (Is_stronghold(&u.uz)) obj_set_oinvis(otmp, true, false);
 #endif
 		    if(!rn2(2)) otmp->recharged = 1;
 		} else otmp->spe = rn1(5,
@@ -705,7 +705,7 @@ boolean artif;
 			if (!verysmall(&mons[otmp->corpsenm]) &&
 				rn2(level_difficulty()/2 + 10) > 10)
 			    (void) add_to_container(otmp,
-						    mkobj(SPBOOK_CLASS,FALSE));
+						    mkobj(SPBOOK_CLASS,false));
 		}
 		break;
 	case COIN_CLASS:
@@ -864,7 +864,7 @@ curse (struct obj *otmp)
 	    otmp->owt = weight(otmp);
 	else if (otmp->otyp == FIGURINE) {
 		if (otmp->corpsenm != NON_PM
-		    && !dead_species(otmp->corpsenm,TRUE)
+		    && !dead_species(otmp->corpsenm,true)
 		    && (carried(otmp) || mcarried(otmp)))
 			attach_fig_transform_timeout(otmp);
 	}
@@ -980,7 +980,7 @@ static int treefruits[] = {APPLE,ORANGE,PEAR,BANANA,EUCALYPTUS_LEAF};
 struct obj *
 rnd_treefruit_at (int x, int y)
 {
-	return mksobj_at(treefruits[rn2(SIZE(treefruits))], x, y, TRUE, FALSE);
+	return mksobj_at(treefruits[rn2(SIZE(treefruits))], x, y, true, false);
 }
 
 struct obj *
@@ -993,7 +993,7 @@ mkgold (long amount, int x, int y)
     if (gold) {
 	gold->quan += amount;
     } else {
-	gold = mksobj_at(GOLD_PIECE, x, y, TRUE, FALSE);
+	gold = mksobj_at(GOLD_PIECE, x, y, true, false);
 	gold->quan = amount;
     }
     gold->owt = weight(gold);
@@ -1001,7 +1001,7 @@ mkgold (long amount, int x, int y)
 }
 
 
-/* return TRUE if the corpse has special timing */
+/* return true if the corpse has special timing */
 /* special timing is a timing that is not rotting or molding */
 
 #define special_corpse(num)  (((num) == PM_LIZARD)		\
@@ -1032,10 +1032,10 @@ boolean init;
 	if (objtype != CORPSE && objtype != STATUE)
 	    impossible("making corpstat type %d", objtype);
 	if (x == 0 && y == 0) {		/* special case - random placement */
-		otmp = mksobj(objtype, init, FALSE);
+		otmp = mksobj(objtype, init, false);
 		if (otmp) rloco(otmp);
 	} else
-		otmp = mksobj_at(objtype, x, y, init, FALSE);
+		otmp = mksobj_at(objtype, x, y, init, false);
 	if (otmp) {
 	    if (mtmp) {
 		struct obj *otmp2;
@@ -1153,7 +1153,7 @@ mk_tt_object (
 
 	/* player statues never contain books */
 	initialize_it = (objtype != STATUE);
-	if ((otmp = mksobj_at(objtype, x, y, initialize_it, FALSE)) != 0) {
+	if ((otmp = mksobj_at(objtype, x, y, initialize_it, false)) != 0) {
 	    /* tt_oname will return null if the scoreboard is empty */
 	    if ((otmp2 = tt_oname(otmp)) != 0) otmp = otmp2;
 	}
@@ -1187,7 +1187,7 @@ struct obj *otmp;
 	int omat = objects[otyp].oc_material;
 
 	if (objects[otyp].oc_oprop == FIRE_RES || otyp == WAN_FIRE)
-		return FALSE;
+		return false;
 
 	return((boolean)((omat <= WOOD && omat != LIQUID) || omat == PLASTIC));
 }
@@ -1300,7 +1300,7 @@ int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
 {
     long tleft = 0L;
     short action = ROT_CORPSE;
-    boolean restart_timer = FALSE;
+    boolean restart_timer = false;
     boolean on_floor = (otmp->where == OBJ_FLOOR);
     boolean buried = (otmp->where == OBJ_BURIED);
 
@@ -1326,7 +1326,7 @@ int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
 #endif
 	    /* Adjust the time remaining */
 	    tleft *= ROT_ICE_ADJUSTMENT;
-	    restart_timer = TRUE;
+	    restart_timer = true;
 	    /* Adjust the age; must be same as in obj_ice_age() */
 	    age = monstermoves - otmp->age;
 	    otmp->age = monstermoves - (age * ROT_ICE_ADJUSTMENT);
@@ -1355,7 +1355,7 @@ int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
 #endif
 		/* Adjust the remaining time */
 		tleft /= ROT_ICE_ADJUSTMENT;
-		restart_timer = TRUE;
+		restart_timer = true;
 		/* Adjust the age */
 		age = monstermoves - otmp->age;
 		otmp->age = otmp->age + (age / ROT_ICE_ADJUSTMENT);

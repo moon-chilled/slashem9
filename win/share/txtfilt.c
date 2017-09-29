@@ -20,15 +20,15 @@ pixel (*bitmap)[MAX_TILE_X];
 {
     int x, y;
     pixel def_background = DEFAULT_BACKGROUND;
-    boolean retval = TRUE;
+    boolean retval = true;
     int blanks;
     int topblanks, bottomblanks;
 
     for(y = 0; y < tile_y - 1; y += 2)
     	for(x = 0; x < tile_x - 1; x += 2) {
-    		if (!pixel_eq(bitmap[y][x], bitmap[y][x+1])) retval = FALSE;
-    		if (!pixel_eq(bitmap[y][x], bitmap[y+1][x])) retval = FALSE;
-    		if (!pixel_eq(bitmap[y][x], bitmap[y+1][x+1])) retval = FALSE;
+    		if (!pixel_eq(bitmap[y][x], bitmap[y][x+1])) retval = false;
+    		if (!pixel_eq(bitmap[y][x], bitmap[y+1][x])) retval = false;
+    		if (!pixel_eq(bitmap[y][x], bitmap[y+1][x+1])) retval = false;
     	}
 
     if (tile_x != 48 || tile_y != 64 || retval) return retval;
@@ -43,7 +43,7 @@ pixel (*bitmap)[MAX_TILE_X];
     	for(x = 0; x < tile_x; x++) {
     		if (pixel_eq(bitmap[y][x], def_background)) blanks++;
     	}
-    	if (blanks < 16) return FALSE;
+    	if (blanks < 16) return false;
     }
 
 #if 0
@@ -75,32 +75,32 @@ pixel (*bitmap)[MAX_TILE_X];
     	else break;
     }
 
-    if ((topblanks + bottomblanks) < 32) return FALSE;
+    if ((topblanks + bottomblanks) < 32) return false;
 
 
 #if 0
     for(y = 0; y < 16; y++)
     	for(x = 0; x < tile_x; x++) {
-    		if (!pixel_eq(bitmap[y][x], def_background)) return FALSE;
+    		if (!pixel_eq(bitmap[y][x], def_background)) return false;
     	}
 
     for(y = 16; y < 48; y++) {
     	for(x = 0; x < 8; x++) {
-    		if (!pixel_eq(bitmap[y][x], def_background)) return FALSE;
+    		if (!pixel_eq(bitmap[y][x], def_background)) return false;
     	}
     	for(x = 40; x < 48; x++) {
-    		if (!pixel_eq(bitmap[y][x], def_background)) return FALSE;
+    		if (!pixel_eq(bitmap[y][x], def_background)) return false;
     	}
     }
 
     for(y = 48; y < 16; y++)
     	for(x = 0; x < tile_x; x++) {
-    		if (!pixel_eq(bitmap[y][x], def_background)) return FALSE;
+    		if (!pixel_eq(bitmap[y][x], def_background)) return false;
     	}
 
 #endif
 
-    return TRUE;
+    return true;
 }
 
 #if 0
@@ -112,14 +112,14 @@ pixel (*bitmap)[MAX_TILE_X];
 
     for(y = 0; y < tile_y - 1; y += 2)
 	if (memcmp(bitmap[y], bitmap[y + 1], sizeof(*bitmap)))
-	    return FALSE;
+	    return false;
 
     for(x = 0; x < tile_x - 1; x += 2)
 	for(y = 0; y < tile_y; y++)
 	    if (memcmp(&bitmap[y][x],&bitmap[y][x + 1],sizeof(bitmap[y][x])))
-		return FALSE;
+		return false;
 
-    return TRUE;
+    return true;
 }
 #endif
 
@@ -182,9 +182,9 @@ match_found(char *name)
     for(i = 0; i < match_np; i++)
     {
 	if (!strcmp(match_p[i], name))
-	    return TRUE;
+	    return true;
     }
-    return FALSE;
+    return false;
 }
 
 int
@@ -193,7 +193,7 @@ int argc;
 char **argv;
 {
     int argn = 1;
-    boolean match_mode = FALSE;
+    boolean match_mode = false;
     FILE *match_fp;
     char ttype[BUFSZ];
     int number;
@@ -202,7 +202,7 @@ char **argv;
 
     while (argn < argc) {
 	if (!strcmp(argv[argn], "-f")) {
-	    match_mode = TRUE;
+	    match_mode = true;
 	    argn ++;
 	    if (argn >= argc)
 	    {

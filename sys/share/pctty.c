@@ -19,7 +19,7 @@ void
 gettty(){
 	erase_char = '\b';
 	kill_char = 21;		/* cntl-U */
-	iflags.cbreak = TRUE;
+	iflags.cbreak = true;
 	disable_ctrlP();	/* turn off ^P processing */
 }
 

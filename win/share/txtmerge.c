@@ -104,27 +104,27 @@ const char *name1, *name2;
     int n;
     char *s1, *s2;
     if (!strcmp(name1, "unknown") || !strcmp(name2, "unknown"))
-	return FALSE;
+	return false;
     if (!strcmp(name1, name2))
-	return TRUE;
+	return true;
     s1 = strchr(name1, '/');
     s2 = strchr(name2, '/');
     if (s1 && !s2) {
 	n = s1 - name1 - 1;
 	if (strlen(name2) == n && !strncmp(name1, name2, n))
-	    return TRUE;
+	    return true;
 	else
 	    return !strcmp(s1 + 2, name2);
     }
     else if (s2 && !s1) {
 	n = s2 - name2 - 1;
 	if (strlen(name1) == n && !strncmp(name1, name2, n))
-	    return TRUE;
+	    return true;
 	else
 	    return !strcmp(name1, s2 + 2);
     }
     else
-	return FALSE;
+	return false;
 }
 
 static void

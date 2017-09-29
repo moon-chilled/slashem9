@@ -188,7 +188,7 @@ display_file(area, str, boolean complain)
 display_file(str, boolean complain)
 #endif
 		-- Display the file named str.  Complain about missing files
-		   iff complain is TRUE. If FILE_AREAS is defined then the
+		   iff complain is true. If FILE_AREAS is defined then the
 		   file should be found in the named area. Note that vanilla
 		   does not define FILE_AREAS and therefore window ports
 		   defined in this way will be compatible with both Slash'EM
@@ -224,7 +224,7 @@ init_nhwindows(int* argcp, char** argv)
 		   should be interpreted, and *argcp and *argv should
 		   be changed to remove those arguments.
 		-- When the message window is created, the variable
-		   iflags.window_inited needs to be set to TRUE.  Otherwise
+		   iflags.window_inited needs to be set to true.  Otherwise
 		   all plines() will be done via raw_print().
 		** Why not have init_nhwindows() create all of the "standard"
 		** windows?  Or at least all but WIN_INFO?	-dean
@@ -239,7 +239,7 @@ clear_nhwindow(window)
 display_nhwindow(window, boolean blocking)
 		-- Display the window on the screen.  If there is data
 		   pending for output in that window, it should be sent.
-		   If blocking is TRUE, display_nhwindow() will not
+		   If blocking is true, display_nhwindow() will not
 		   return until the data has been displayed on the screen,
 		   and acknowledged by the user where appropriate.
 		-- All calls are blocking in the tty window-port.
@@ -283,7 +283,7 @@ add_menu(windid window, int glyph, const anything identifier,
 		   The menu commands and aliases take care not to interfere
 		   with the default object class symbols.
 		-- If you want this choice to be preselected when the
-		   menu is displayed, set preselected to TRUE.
+		   menu is displayed, set preselected to true.
 
 end_menu(window, prompt)
 		-- Stop adding entries to the menu and flushes the window

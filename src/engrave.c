@@ -61,7 +61,7 @@ char *random_engraving(char *outbuf) {
 
 	/* a random engraving may come from the "rumors" file,
 	   or from the list above */
-	if (!rn2(4) || !(rumor = getrumor(0, outbuf, TRUE)) || !*rumor)
+	if (!rn2(4) || !(rumor = getrumor(0, outbuf, true)) || !*rumor)
 	    strcpy(outbuf, random_mesg[rn2(SIZE(random_mesg))]);
 
 	wipeout_text(outbuf, strlen(outbuf) / 4, 0);
@@ -335,10 +335,10 @@ boolean sense_engr_at(int x, int y, boolean read_it /* Read any sensed engraving
 		You("%s: \"%s\".",
 		      (Blind) ? "feel the words" : "read",  et);
 		if(flags.run > 1) nomul(0);
-		return TRUE;
+		return true;
 	    }
 	}
-	return FALSE;
+	return false;
 }
 
 
@@ -355,7 +355,7 @@ void make_engr_at(int x, int y, const char *s, long e_time, xchar e_type) {
 	ep->engr_txt = (char *)(ep + 1);
 	strcpy(ep->engr_txt, s);
 	/* engraving Elbereth shows wisdom */
-	if (!in_mklev && !strcmp(s, "Elbereth")) exercise(A_WIS, TRUE);
+	if (!in_mklev && !strcmp(s, "Elbereth")) exercise(A_WIS, true);
 	ep->engr_time = e_time;
 	ep->engr_type = e_type > 0 ? e_type : rnd(N_ENGRAVE-1);
 	ep->engr_lth = strlen(s) + 1;
@@ -415,14 +415,14 @@ static const char styluses[] =
 
 /* return 1 if action took 1 (or more) moves, 0 if error or aborted */
 int doengrave(void) {
-	boolean dengr = FALSE;	/* TRUE if we wipe out the current engraving */
-	boolean doblind = FALSE;/* TRUE if engraving blinds the player */
-	boolean doknown = FALSE;/* TRUE if we identify the stylus */
-	boolean eow = FALSE;	/* TRUE if we are overwriting oep */
-	boolean jello = FALSE;	/* TRUE if we are engraving in slime */
-	boolean ptext = TRUE;	/* TRUE if we must prompt for engrave text */
-	boolean teleengr =FALSE;/* TRUE if we move the old engraving */
-	boolean zapwand = FALSE;/* TRUE if we remove a wand charge */
+	boolean dengr = false;	/* true if we wipe out the current engraving */
+	boolean doblind = false;/* true if engraving blinds the player */
+	boolean doknown = false;/* true if we identify the stylus */
+	boolean eow = false;	/* true if we are overwriting oep */
+	boolean jello = false;	/* true if we are engraving in slime */
+	boolean ptext = true;	/* true if we must prompt for engrave text */
+	boolean teleengr =false;/* true if we move the old engraving */
+	boolean zapwand = false;/* true if we remove a wand charge */
 	xchar type = DUST;	/* Type of engraving made */
 	char buf[BUFSZ];	/* Buffer for final/poly engraving text */
 	char ebuf[BUFSZ];	/* Buffer for initial engraving text */
@@ -453,35 +453,35 @@ int doengrave(void) {
 	if(u.uswallow) {
 		if (is_animal(u.ustuck->data)) {
 			pline("What would you write?  \"Jonah was here\"?");
-			return FALSE;
+			return false;
 		} else if (is_whirly(u.ustuck->data)) {
 			You_cant("reach the %s.", surface(u.ux,u.uy));
-			return FALSE;
+			return false;
 		} else
-			jello = TRUE;
+			jello = true;
 	} else if (is_lava(u.ux, u.uy)) {
 		You_cant("write on the lava!");
-		return FALSE;
+		return false;
 	} else if (is_pool(u.ux,u.uy) || IS_FOUNTAIN(levl[u.ux][u.uy].typ)) {
 		You_cant("write on the water!");
-		return FALSE;
+		return false;
 	}
 	if(Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)/* in bubble */) {
 		You_cant("write in thin air!");
-		return FALSE;
+		return false;
 	}
 	if (cantwield(youmonst.data)) {
 		You_cant("even hold anything!");
-		return FALSE;
+		return false;
 	}
-	if (check_capacity(NULL)) return FALSE;
+	if (check_capacity(NULL)) return false;
 
 	/* One may write with finger, or weapon, or wand, or..., or...
 	 * Edited by GAN 10/20/86 so as not to change weapon wielded.
 	 */
 
 	otmp = getobj(styluses, "write with");
-	if(!otmp) return FALSE;		/* otmp == zeroobj if fingers */
+	if(!otmp) return false;		/* otmp == zeroobj if fingers */
 
 	if (otmp == &zeroobj) writer = makeplural(body_part(FINGER));
 	else writer = xname(otmp);
@@ -491,34 +491,34 @@ int doengrave(void) {
 	 */
 	if (!freehand() && otmp != uwep && !otmp->owornmask) {
 		You("have no free %s to write with!", body_part(HAND));
-		return FALSE;
+		return false;
 	}
 
 	if (jello) {
 		You("tickle %s with your %s.", mon_nam(u.ustuck), writer);
 		Your("message dissolves...");
-		return FALSE;
+		return false;
 	}
 	if (otmp->oclass != WAND_CLASS && !can_reach_floor()) {
 		You_cant("reach the %s!", surface(u.ux,u.uy));
-		return FALSE;
+		return false;
 	}
 	if (IS_ALTAR(levl[u.ux][u.uy].typ)) {
 		You("make a motion towards the altar with your %s.", writer);
 		altar_wrath(u.ux, u.uy);
-		return FALSE;
+		return false;
 	}
 	if (IS_GRAVE(levl[u.ux][u.uy].typ)) {
 	    if (otmp == &zeroobj) { /* using only finger */
 		You("would only make a small smudge on the %s.",
 			surface(u.ux, u.uy));
-		return FALSE;
+		return false;
 	    } else if (!levl[u.ux][u.uy].disturbed) {
 		You("disturb the undead!");
 		levl[u.ux][u.uy].disturbed = 1;
 		makemon(&mons[PM_GHOUL], u.ux, u.uy, NO_MM_FLAGS);
-		exercise(A_WIS, FALSE);
-		return TRUE;
+		exercise(A_WIS, false);
+		return true;
 	    }
 	}
 
@@ -552,7 +552,7 @@ int doengrave(void) {
 	    case BALL_CLASS:
 	    case ROCK_CLASS:
 		You_cant("engrave with such a large object!");
-		ptext = FALSE;
+		ptext = false;
 		break;
 
 	    /* Objects too silly to engrave with */
@@ -561,7 +561,7 @@ int doengrave(void) {
 	    case SPBOOK_CLASS:
 		Your("%s would get %s.", xname(otmp),
 			is_ice(u.ux,u.uy) ? "all frosty" : "too dirty");
-		ptext = FALSE;
+		ptext = false;
 		break;
 
 	    case RANDOM_CLASS:	/* This should mean fingers */
@@ -577,8 +577,8 @@ int doengrave(void) {
 	    case WAND_CLASS:
 		if (zappable(otmp)) {
 		    check_unpaid(otmp);
-		    zapwand = TRUE;
-		    if (Levitation) ptext = FALSE;
+		    zapwand = true;
+		    if (Levitation) ptext = false;
 
 		    switch (otmp->otyp) {
 		    /* DUST wands */
@@ -639,7 +639,7 @@ int doengrave(void) {
 				type = (xchar)0;	/* random */
 				(void) random_engraving(buf);
 			    }
-			    dengr = TRUE;
+			    dengr = true;
 			}
 			break;
 		    case WAN_DRAINING:	/* KMH */
@@ -660,7 +660,7 @@ int doengrave(void) {
 				      surface(u.ux,u.uy));
 				else {
 				    strcpy(buf, oep->engr_txt);
-				    dengr = TRUE;
+				    dengr = true;
 				}
 			    }
 			}
@@ -674,7 +674,7 @@ int doengrave(void) {
 
 			/* RAY wands */
 		    case WAN_MAGIC_MISSILE:
-			ptext = TRUE;
+			ptext = true;
 			if (!Blind) {
 			   sprintf(post_engr_text,
 				   "The %s is riddled by bullet holes!",
@@ -704,7 +704,7 @@ int doengrave(void) {
 			    if (!Blind)
 				pline_The("engraving on the %s vanishes!",
 					surface(u.ux,u.uy));
-			    dengr = TRUE;
+			    dengr = true;
 			}
 			break;
 		    case WAN_TELEPORTATION:
@@ -712,19 +712,19 @@ int doengrave(void) {
 			    if (!Blind)
 				pline_The("engraving on the %s vanishes!",
 					surface(u.ux,u.uy));
-			    teleengr = TRUE;
+			    teleengr = true;
 			}
 			break;
 
 		    /* type = ENGRAVE wands */
 		    case WAN_DIGGING:
-			ptext = TRUE;
+			ptext = true;
 			type  = ENGRAVE;
 			if(!objects[otmp->otyp].oc_name_known) {
 			    if (flags.verbose)
 				pline("This %s is a wand of digging!",
 				xname(otmp));
-			    doknown = TRUE;
+			    doknown = true;
 			}
 			if (!Blind)
 			    strcpy(post_engr_text,
@@ -739,42 +739,42 @@ int doengrave(void) {
 
 		    /* type = BURN wands */
 		    case WAN_FIRE:
-			ptext = TRUE;
+			ptext = true;
 			type  = BURN;
 			if(!objects[otmp->otyp].oc_name_known) {
 			if (flags.verbose)
 			    pline("This %s is a wand of fire!", xname(otmp));
-			    doknown = TRUE;
+			    doknown = true;
 			}
 			strcpy(post_engr_text,
 				Blind ? "You feel the wand heat up." :
 					"Flames fly from the wand.");
 			break;
 		    case WAN_FIREBALL:
-			ptext = TRUE;
+			ptext = true;
 			type  = BURN;
 			if(!objects[otmp->otyp].oc_name_known) {
 			if (flags.verbose)
 			    pline("This %s is a wand of fireballs!", xname(otmp));
-			    doknown = TRUE;
+			    doknown = true;
 			}
 			strcpy(post_engr_text,
 				Blind ? "You feel the wand heat up." :
 					"Flames fly from the wand.");
 			break;
 		    case WAN_LIGHTNING:
-			ptext = TRUE;
+			ptext = true;
 			type  = BURN;
 			if(!objects[otmp->otyp].oc_name_known) {
 			    if (flags.verbose)
 				pline("This %s is a wand of lightning!",
 					xname(otmp));
-			    doknown = TRUE;
+			    doknown = true;
 			}
 			if (!Blind) {
 			    strcpy(post_engr_text,
 				    "Lightning arcs from the wand.");
-			    doblind = TRUE;
+			    doblind = true;
 			} else
 			    strcpy(post_engr_text, "You hear crackling!");
 			break;
@@ -785,7 +785,7 @@ int doengrave(void) {
 		} else /* end if zappable */
 		    if (!can_reach_floor()) {
 			You_cant("reach the %s!", surface(u.ux,u.uy));
-			return FALSE;
+			return false;
 		    }
 		break;
 
@@ -802,7 +802,7 @@ int doengrave(void) {
 		if(otmp == ublindf) {
 		    pline(
 		"That is a bit difficult to engrave with, don't you think?");
-		    return FALSE;
+		    return false;
 		}
 
 #ifdef LIGHTSABERS
@@ -820,7 +820,7 @@ int doengrave(void) {
 			break;
 		    case TOWEL:
 			/* Can't really engrave with a towel */
-			ptext = FALSE;
+			ptext = false;
 			if (oep)
 			    if ((oep->engr_type == DUST ) ||
 				(oep->engr_type == ENGR_BLOOD) ||
@@ -832,7 +832,7 @@ int doengrave(void) {
 					 otense(otmp, "get"),
 					 is_ice(u.ux,u.uy) ?
 					 "frosty" : "dusty");
-				dengr = TRUE;
+				dengr = true;
 			    } else
 				Your("%s can't wipe out this engraving.",
 				     xname(otmp));
@@ -863,8 +863,8 @@ int doengrave(void) {
 	    else {
 		/* ensures the "cannot wipe out" case */
 		type = DUST;
-		dengr = FALSE;
-		teleengr = FALSE;
+		dengr = false;
+		teleengr = false;
 		buf[0] = 0;
 	    }
 	}
@@ -891,7 +891,7 @@ int doengrave(void) {
 	if (*buf) {
 	    make_engr_at(u.ux, u.uy, buf, moves, type);
 	    pline_The("engraving looks different now.");
-	    ptext = FALSE;
+	    ptext = false;
 	}
 
 	if (zapwand && (otmp->spe < 0)) {
@@ -901,13 +901,13 @@ int doengrave(void) {
 		You("are not going to get anywhere trying to write in the %s with your dust.",
 		    is_ice(u.ux,u.uy) ? "frost" : "dust");
 	    useup(otmp);
-	    ptext = FALSE;
+	    ptext = false;
 	}
 
 	if (!ptext) {		/* Early exit for some implements. */
 	    if (otmp->oclass == WAND_CLASS && !can_reach_floor())
 		You_cant("reach the %s!", surface(u.ux,u.uy));
-	    return TRUE;
+	    return true;
 	}
 
 	/* Special effects should have deleted the current engraving (if
@@ -928,7 +928,7 @@ int doengrave(void) {
 				ynqchars, 'y');
 		if (c == 'q') {
 		    pline(Never_mind);
-		    return FALSE;
+		    return false;
 		}
 	    }
 
@@ -945,7 +945,7 @@ int doengrave(void) {
 			oep = NULL;
 		    } else
 		   /* Don't delete engr until after we *know* we're engraving */
-			eow = TRUE;
+			eow = true;
 		} else
 		    if ( (type == DUST) || (type == MARK) || (type == ENGR_BLOOD) ) {
 			You(
@@ -953,12 +953,12 @@ int doengrave(void) {
 			 oep->engr_type == BURN ?
 			   (is_ice(u.ux,u.uy) ? "melted into" : "burned into") :
 			   "engraved in", surface(u.ux,u.uy));
-			return TRUE;
+			return true;
 		    } else
 			if ( (type != oep->engr_type) || (c == 'n') ) {
 			    if (!Blind || can_reach_floor())
 				You("will overwrite the current message.");
-			    eow = TRUE;
+			    eow = true;
 			}
 	    }
 	}
@@ -1018,10 +1018,10 @@ int doengrave(void) {
 		if (!Blind)
 		    pline("%s, then %s.",
 			  Tobjnam(otmp, "glow"), otense(otmp, "fade"));
-		return TRUE;
+		return true;
 	    } else {
 		pline(Never_mind);
-		return FALSE;
+		return false;
 	    }
 	}
 
@@ -1141,11 +1141,11 @@ int doengrave(void) {
 
 	if (doblind && !resists_blnd(&youmonst)) {
 	    You("are blinded by the flash!");
-	    make_blinded((long)rnd(50),FALSE);
+	    make_blinded((long)rnd(50),false);
 	    if (!Blind) Your(vision_clears);
 	}
 
-	return TRUE;
+	return true;
 }
 
 void save_engravings(int fd, int mode) {

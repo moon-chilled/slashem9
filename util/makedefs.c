@@ -898,8 +898,8 @@ static boolean
 d_filter(line)
     char *line;
 {
-    if (*line == '#') return TRUE;	/* ignore comment lines */
-    return FALSE;
+    if (*line == '#') return true;	/* ignore comment lines */
+    return false;
 }
 
    /*
@@ -1025,19 +1025,19 @@ static boolean
 h_filter(line)
     char *line;
 {
-    static boolean skip = FALSE;
+    static boolean skip = false;
     char tag[sizeof in_line];
 
     SpinCursor(3);
 
-    if (*line == '#') return TRUE;	/* ignore comment lines */
+    if (*line == '#') return true;	/* ignore comment lines */
     if (sscanf(line, "----- %s", tag) == 1) {
-	skip = FALSE;
+	skip = false;
 #ifndef ELBERETH
-	if (!strcmp(tag, "ELBERETH")) skip = TRUE;
+	if (!strcmp(tag, "ELBERETH")) skip = true;
 #endif
     } else if (skip && !strncmp(line, "-----", 5))
-	skip = FALSE;
+	skip = false;
     return skip;
 }
 
@@ -1114,7 +1114,7 @@ do_oracles()
 	oracle_cnt = 1;
 	fputs("---\n", tfp);
 	fprintf(ofp, "%05lx\n", ftell(tfp));	/* start pos of first oracle */
-	in_oracle = FALSE;
+	in_oracle = false;
 
 	while (fgets(in_line, sizeof in_line, ifp)) {
 	    SpinCursor(3);
@@ -1122,13 +1122,13 @@ do_oracles()
 	    if (h_filter(in_line)) continue;
 	    if (!strncmp(in_line, "-----", 5)) {
 		if (!in_oracle) continue;
-		in_oracle = FALSE;
+		in_oracle = false;
 		oracle_cnt++;
 		fputs("---\n", tfp);
 		fprintf(ofp, "%05lx\n", ftell(tfp));
 		/* start pos of this oracle */
 	    } else {
-		in_oracle = TRUE;
+		in_oracle = true;
 		fputs(xcrypt(in_line), tfp);
 	    }
 	}
@@ -1209,9 +1209,9 @@ static	struct deflist {
 	boolean	true_or_false;
 } deflist[] = {
 #ifdef REINCARNATION
-	      {	"REINCARNATION", TRUE },
+	      {	"REINCARNATION", true },
 #else
-	      {	"REINCARNATION", FALSE },
+	      {	"REINCARNATION", false },
 #endif
 	      { 0, 0 } };
 
@@ -1287,7 +1287,7 @@ recheck:
 }
 
 static boolean
-ranged_attk(ptr)	/* returns TRUE if monster can attack at range */
+ranged_attk(ptr)	/* returns true if monster can attack at range */
 	struct permonst *ptr;
 {
 	int	i, j;
@@ -1295,10 +1295,10 @@ ranged_attk(ptr)	/* returns TRUE if monster can attack at range */
 
 	for(i = 0; i < NATTK; i++) {
 	    if((j=ptr->mattk[i].aatyp) >= AT_WEAP || (atk_mask & (1<<j)))
-		return TRUE;
+		return true;
 	}
 
-	return(FALSE);
+	return(false);
 }
 
 /* This routine is designed to return an integer value which represents
@@ -1462,7 +1462,7 @@ static boolean
 qt_comment(s)
 	char *s;
 {
-	if(s[0] == '#') return(TRUE);
+	if(s[0] == '#') return(true);
 	return((boolean)(!in_msg  && strlen(s) == NO_MSG));
 }
 
@@ -1491,13 +1491,13 @@ new_id (code)
 {
 	if(qt_hdr.n_hdr >= N_HDR) {
 	    fprintf(stderr, OUT_OF_HEADERS, qt_line);
-	    return(FALSE);
+	    return(false);
 	}
 
 	strncpy(&qt_hdr.id[qt_hdr.n_hdr][0], code, LEN_HDR);
 	msg_hdr[qt_hdr.n_hdr].n_msg = 0;
 	qt_hdr.offset[qt_hdr.n_hdr++] = 0L;
-	return(TRUE);
+	return(true);
 }
 
 static boolean
@@ -1507,9 +1507,9 @@ known_msg(num, id)
 	int i;
 
 	for(i = 0; i < msg_hdr[num].n_msg; i++)
-	    if(msg_hdr[num].qt_msg[i].msgnum == id) return(TRUE);
+	    if(msg_hdr[num].qt_msg[i].msgnum == id) return(true);
 
-	return(FALSE);
+	return(false);
 }
 
 
@@ -1545,7 +1545,7 @@ do_qt_control(s)
 			    fprintf(stderr, CREC_IN_MSG, qt_line);
 			    break;
 			} else {
-			    in_msg = TRUE;
+			    in_msg = true;
 			    if (sscanf(&s[4], "%s %5d", code, &id) != 2) {
 			    	fprintf(stderr, UNREC_CREC, qt_line);
 			    	break;
@@ -1563,7 +1563,7 @@ do_qt_control(s)
 	    case 'E':	if(!in_msg) {
 			    fprintf(stderr, END_NOT_IN_MSG, qt_line);
 			    break;
-			} else in_msg = FALSE;
+			} else in_msg = false;
 			break;
 
 	    default:	fprintf(stderr, UNREC_CREC, qt_line);
@@ -1673,7 +1673,7 @@ do_questtxt()
 
 	qt_hdr.n_hdr = 0;
 	qt_line = 0;
-	in_msg = FALSE;
+	in_msg = false;
 
 	while (fgets(in_line, 80, ifp) != 0) {
 	    SpinCursor (3);
@@ -1685,7 +1685,7 @@ do_questtxt()
 	}
 
 	rewind(ifp);
-	in_msg = FALSE;
+	in_msg = false;
 	adjust_qt_hdrs();
 	put_qt_hdrs();
 	while (fgets(in_line, 80, ifp) != 0) {
@@ -1725,7 +1725,7 @@ do_objs()
 	int nspell = 0;
 	int prefix = 0;
 	char class = '\0';
-	boolean	sumerr = FALSE;
+	boolean	sumerr = false;
 
 	filename[0]='\0';
 #ifdef FILE_PREFIX
@@ -1752,7 +1752,7 @@ do_objs()
 			    fprintf(stderr, "prob error for class %d (%d%%)",
 				    class, sum);
 			    fflush(stderr);
-			    sumerr = TRUE;
+			    sumerr = true;
 			}
 			class = objects[i].oc_class;
 			sum = 0;
@@ -1804,7 +1804,7 @@ do_objs()
 	if (sum && sum != 1000) {
 	    fprintf(stderr, "prob error for class %d (%d%%)", class, sum);
 	    fflush(stderr);
-	    sumerr = TRUE;
+	    sumerr = true;
 	}
 
 	fprintf(ofp,"#define\tLAST_GEM\t(JADE)\n");

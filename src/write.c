@@ -78,7 +78,7 @@ dowrite (struct obj *pen)
 	int curseval;
 	char qbuf[QBUFSZ];
 	int first, last, i;
-	boolean by_descr = FALSE;
+	boolean by_descr = false;
 	const char *typeword;
 
 	if (nohands(youmonst.data)) {
@@ -103,7 +103,7 @@ dowrite (struct obj *pen)
 	paper->dknown = 1;
 	if(paper->otyp != SCR_BLANK_PAPER && paper->otyp != SPE_BLANK_PAPER) {
 		pline("That %s is not blank!", typeword);
-		exercise(A_WIS, FALSE);
+		exercise(A_WIS, false);
 		return(1);
 	}
 
@@ -132,7 +132,7 @@ dowrite (struct obj *pen)
 		if (!strcmpi(OBJ_NAME(objects[i]), nm))
 			goto found;
 		if (!strcmpi(OBJ_DESCR(objects[i]), nm)) {
-			by_descr = TRUE;
+			by_descr = true;
 			goto found;
 		}
 	}
@@ -159,10 +159,10 @@ found:
 	/* KMH, conduct */
 	u.uconduct.literate++;
 
-	new_obj = mksobj(i, FALSE, FALSE);
+	new_obj = mksobj(i, false, false);
 	new_obj->bknown = (paper->bknown && pen->bknown);
 #ifdef INVISIBLE_OBJECTS
-	obj_set_oinvis(new_obj, paper->oinvis, FALSE);
+	obj_set_oinvis(new_obj, paper->oinvis, false);
 #endif
 
 	/* shk imposes a flat rate per use, not based on actual charges used */
@@ -180,7 +180,7 @@ found:
 	 */
 	actualcost = rn1(basecost/2,basecost/2);
 	curseval = bcsign(pen) + bcsign(paper);
-	exercise(A_WIS, TRUE);
+	exercise(A_WIS, true);
 	/* dry out marker */
 	if (pen->spe < actualcost) {
 		pen->spe = 0;

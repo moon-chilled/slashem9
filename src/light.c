@@ -260,9 +260,9 @@ save_light_sources (int fd, int mode, int range)
     light_source **prev, *curr;
 
     if (perform_bwrite(mode)) {
-	count = maybe_write_ls(fd, range, FALSE);
+	count = maybe_write_ls(fd, range, false);
 	bwrite(fd, (void *) &count, sizeof count);
-	actual = maybe_write_ls(fd, range, TRUE);
+	actual = maybe_write_ls(fd, range, true);
 	if (actual != count)
 	    panic("counted %d light sources, wrote %d! [range=%d]",
 		  count, actual, range);
@@ -500,7 +500,7 @@ snuff_light_source (int x, int y)
 	}
 }
 
-/* Return TRUE if object sheds any light at all. */
+/* Return true if object sheds any light at all. */
 boolean
 obj_sheds_light(obj)
     struct obj *obj;
@@ -509,7 +509,7 @@ obj_sheds_light(obj)
     return obj_is_burning(obj);
 }
 
-/* Return TRUE if sheds light AND will be snuffed by end_burn(). */
+/* Return true if sheds light AND will be snuffed by end_burn(). */
 boolean
 obj_is_burning(obj)
     struct obj *obj;
@@ -560,7 +560,7 @@ obj_merge_light_sources (struct obj *src, struct obj *dest)
     light_source *ls;
 
     /* src == dest implies adding to candelabrum */
-    if (src != dest) end_burn(src, TRUE);		/* extinguish candles */
+    if (src != dest) end_burn(src, true);		/* extinguish candles */
 
     for (ls = light_base; ls; ls = ls->next)
 	if (ls->type == LS_OBJECT && ls->id == (void *) dest) {
@@ -646,7 +646,7 @@ wiz_light_sources (void)
 	putstr(win, 0, "<none>");
 
 
-    display_nhwindow(win, FALSE);
+    display_nhwindow(win, false);
     destroy_nhwindow(win);
 
     return 0;

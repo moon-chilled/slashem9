@@ -48,7 +48,7 @@ curses_update_inv(void)
     wmove(win, y + 1, x);
     wprintw(win, "Not carrying anything");
 
-    display_inventory(NULL, FALSE);
+    display_inventory(NULL, false);
 
     if (border)
         box(win, 0, 0);
@@ -95,7 +95,7 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
     if (accelerator && /* Don't colorize categories */
         iflags.use_menu_color) {
         int color = NO_COLOR;
-        boolean menu_color = FALSE;
+        boolean menu_color = false;
         char str_mutable[BUFSZ];
         strcpy(str_mutable, str);
         attr = 0;

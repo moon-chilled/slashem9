@@ -134,10 +134,10 @@ struct menu_info_t {
     Dimension internal_height;	/* Internal height between widget & border */
     Dimension internal_width;	/* Internal width between widget & border */
     short how;			/* Menu mode PICK_NONE, PICK_ONE, PICK_ANY */
-    boolean valid_widgets;	/* TRUE if widgets have been created. */
+    boolean valid_widgets;	/* true if widgets have been created. */
     boolean is_menu;		/* Has been confirmed to being a menu window. */
-    boolean is_active;		/* TRUE when waiting for user input. */
-    boolean is_up;		/* TRUE when window is popped-up. */
+    boolean is_active;		/* true when waiting for user input. */
+    boolean is_up;		/* true when window is popped-up. */
     boolean cancelled;	/* Menu has been explicitly cancelled. */
     boolean counting;	/* true when menu_count has a valid value */
 };

@@ -98,9 +98,9 @@ boolean mail_check()
 {
 	if (!mailthread_stopping) {
 		if (mail_fetched > 0)
-			return TRUE;
+			return true;
 	} else lan_mail_terminate();
-	return FALSE;
+	return false;
 }
 
 
@@ -110,12 +110,12 @@ struct lan_mail_struct *msg;
 	/* shouldn't need to check mailthread_stopping here
 	   as the data should be valid anyway */
 	*msg = received_msg;
-	iflags.lan_mail_fetched = TRUE;
+	iflags.lan_mail_fetched = true;
 	/* clear the marker now so new messages can arrive */
 	InterlockedDecrement(&mail_fetched);
 	/* check to see if the MAPI-mail thread is saying "stop" */
 	if (mailthread_stopping) lan_mail_terminate();
-	return TRUE;
+	return true;
 }
 
 void mail_finish()
@@ -146,7 +146,7 @@ char *uname;
 	mailthread_continue = 0;  /* no interlock needed yet */
 	mailthread_stopping = 0;  /* no interlock needed yet */
 #ifdef MAPI_VERBOSE
-	if (getenv("DEBUG_MAPI")) debugmapi = TRUE;
+	if (getenv("DEBUG_MAPI")) debugmapi = true;
 #endif
 	if (uname)
 		strcpy(MAPI_username, uname);
@@ -269,9 +269,9 @@ char *mID;
 #endif
 	if (mail_fetched) {
 #ifdef MAPI_VERBOSE
-	if (debugmapi) fprintf(dbgfile, "returning FALSE (buffer occupied)\n");
+	if (debugmapi) fprintf(dbgfile, "returning false (buffer occupied)\n");
 #endif
-		return FALSE; /* buffer occupied, don't bother */
+		return false; /* buffer occupied, don't bother */
 	}
 	/* Get the ID of the next unread message if there is one */
 	status = fpMAPIFindNext(MAPISession, 0, 0, MAPIMessageID,
@@ -280,21 +280,21 @@ char *mID;
 	if (status == SUCCESS_SUCCESS) {
 		strcpy(mID, tmpID);
 #ifdef MAPI_VERBOSE
-	if (debugmapi) fprintf(dbgfile, "returning TRUE\n");
+	if (debugmapi) fprintf(dbgfile, "returning true\n");
 #endif
-		return TRUE;
+		return true;
 	}
 	if (status == MAPI_E_NO_MESSAGES) {
 #ifdef MAPI_VERBOSE
-		if (debugmapi) fprintf(dbgfile, "returning FALSE\n");
+		if (debugmapi) fprintf(dbgfile, "returning false\n");
 #endif
-		return FALSE;
+		return false;
 	}
 #ifdef MAPI_VERBOSE
 	if (debugmapi) fprintf(dbgfile,"Error, check_newmail() status: %d\n", status);
 	MAPI_mail_abort(status);
 #endif
-	return FALSE;
+	return false;
 }
 
 static boolean
@@ -314,9 +314,9 @@ char *mID;
 
 	if (mail_fetched) {
 #ifdef MAPI_VERBOSE
-	if (debugmapi) fprintf(dbgfile, "returning FALSE (buffer occupied)\n");
+	if (debugmapi) fprintf(dbgfile, "returning false (buffer occupied)\n");
 #endif
-		 return FALSE;  /* buffer occupied */
+		 return false;  /* buffer occupied */
 	}
 
 	status = fpMAPIReadMail(MAPISession, 0, mID,
@@ -338,20 +338,20 @@ char *mID;
 		strncpy(received_msg.body,
 			MAPIMessage->lpszNoteText,MAX_BODY_SIZE - 1);
 		received_msg.body[MAX_BODY_SIZE - 1] = '\0';
-		received_msg.body_in_ram = TRUE;
+		received_msg.body_in_ram = true;
 		status = fpMAPIFreeBuffer(MAPIMessage);
 		InterlockedIncrement(&mail_fetched);
 #ifdef MAPI_VERBOSE
-		if (debugmapi) fprintf(dbgfile, "returning TRUE\n");
+		if (debugmapi) fprintf(dbgfile, "returning true\n");
 #endif
-		return TRUE;
+		return true;
 	}
 #ifdef MAPI_VERBOSE
 	else
 		if (debugmapi) fprintf(dbgfile,"MAPIRead failed, status = %d\n", status);
-	if (debugmapi) fprintf(dbgfile, "returning FALSE (failed)\n");
+	if (debugmapi) fprintf(dbgfile, "returning false (failed)\n");
 #endif
-	return FALSE;
+	return false;
 }
 
 static void
@@ -394,14 +394,14 @@ char *uname;
 #ifdef MAPI_VERBOSE
 	    if (debugmapi) fprintf(dbgfile,"Error initializing MAPI %d\n", status);
 #endif
-	    return FALSE;
+	    return false;
 	}
 	status = fpMAPILogon(0,uname,0L,0L,0L,(LPLHANDLE)&MAPISession);
 	if (status != SUCCESS_SUCCESS) {
 #ifdef MAPI_VERBOSE
 	    if (debugmapi) fprintf(dbgfile,"Status of MAPI logon is %d\n", status);
 #endif
-	    return FALSE;
+	    return false;
 	}
 #ifdef MAPI_VERBOSE
 	if (debugmapi) fprintf(dbgfile,
@@ -416,7 +416,7 @@ char *uname;
 	    if (debugmapi) fprintf(dbgfile,"Detected %d old unread messages.\n",
 		    count);
 #endif
-	    return TRUE;
+	    return true;
 	}
 #ifdef MAPI_VERBOSE
 	if (debugmapi) fprintf(dbgfile,
@@ -426,7 +426,7 @@ char *uname;
 		"Dismantling MAPI interface and cleaning up.\n");
 #endif
 	MAPI_mail_finish();
-	return FALSE;
+	return false;
 }
 
 int InitMAPI()

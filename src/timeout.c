@@ -38,7 +38,7 @@ stoned_dialogue()
 		nomul(-3);
 		nomovemsg = 0;
 	}
-	exercise(A_DEX, FALSE);
+	exercise(A_DEX, false);
 }
 
 
@@ -66,13 +66,13 @@ vomiting_dialogue()
 		morehungry(20);
 		break;
 	case 2:
-		make_stunned(HStun + d(2,4), FALSE);
+		make_stunned(HStun + d(2,4), false);
 		/* fall through */
 	case 3:
-		make_confused(HConfusion + d(2,4), FALSE);
+		make_confused(HConfusion + d(2,4), false);
 		break;
 	}
-	exercise(A_CON, FALSE);
+	exercise(A_CON, false);
 }
 
 static const char * const choke_texts[] = {
@@ -108,7 +108,7 @@ choke_dialogue()
 		    pline(str);
 	    }
 	}
-	exercise(A_STR, FALSE);
+	exercise(A_STR, false);
 }
 
 static const char * const slime_texts[] = {
@@ -142,7 +142,7 @@ slime_dialogue()
 	    stop_occupation();
 	    if (multi > 0) nomul(0);
 	}
-	exercise(A_DEX, FALSE);
+	exercise(A_DEX, false);
 }
 
 void
@@ -177,8 +177,8 @@ nh_timeout (void)
 	 * neither is stopped if you don't have a luckstone.
 	 * Luck is based at 0 usually, +1 if a full moon and -1 on Friday 13th
 	 */
-	    int time_luck = stone_luck(FALSE);
-	    boolean nostone = !carrying(LUCKSTONE) && !stone_luck(TRUE);
+	    int time_luck = stone_luck(false);
+	    boolean nostone = !carrying(LUCKSTONE) && !stone_luck(true);
 
 	    if(u.uluck > baseluck && (nostone || time_luck < 0))
 		u.uluck--;
@@ -249,7 +249,7 @@ nh_timeout (void)
 			done(TURNED_SLIME);
 			break;
 		case VOMITING:
-			make_vomiting(0L, TRUE);
+			make_vomiting(0L, true);
 			break;
 		case SICK:
 			You("die from your illness.");
@@ -322,17 +322,17 @@ nh_timeout (void)
 			break;
 		case CONFUSION:
 			HConfusion = 1; /* So make_confused works properly */
-			make_confused(0L, TRUE);
+			make_confused(0L, true);
 			stop_occupation();
 			break;
 		case STUNNED:
 			HStun = 1;
-			make_stunned(0L, TRUE);
+			make_stunned(0L, true);
 			stop_occupation();
 			break;
 		case BLINDED:
 			Blinded = 1;
-			make_blinded(0L, TRUE);
+			make_blinded(0L, true);
 			stop_occupation();
 			break;
 		case INVIS:
@@ -356,7 +356,7 @@ nh_timeout (void)
 			break;
 		case HALLUC:
 			HHallucination = 1;
-			(void) make_hallucinated(0L, TRUE, 0L);
+			(void) make_hallucinated(0L, true, 0L);
 			stop_occupation();
 			break;
 		case SLEEPING:
@@ -365,7 +365,7 @@ nh_timeout (void)
 			else if (Sleeping) {
 				You("fall asleep.");
 				sleeptime = rnd(20);
-				fall_asleep(-sleeptime, TRUE);
+				fall_asleep(-sleeptime, true);
 				HSleeping += sleeptime + rnd(100);
 			}
 			break;
@@ -463,7 +463,7 @@ unpoly_obj(arg, timeout)
 	if (!is_hazy(obj)) return;
 	oldobj = obj->oldtyp;
 
-	if (carried(obj) && !silent) /* silent == TRUE is a strange case... */
+	if (carried(obj) && !silent) /* silent == true is a strange case... */
 		pline("Suddenly, your %s!", aobjnam(obj, "transmute"));
 
 	(void) stop_timer(UNPOLY_OBJ, (void *) obj);
@@ -473,7 +473,7 @@ unpoly_obj(arg, timeout)
 	if (obj->otyp == WAN_CANCELLATION || Is_mbag(obj)) {
 	    otmp = obj;
 	    depthin = 0;
-	    explodes = FALSE;
+	    explodes = false;
 
 	    while (otmp->where == OBJ_CONTAINED) {
 		otmp = otmp->ocontainer;
@@ -535,7 +535,7 @@ const char *change_fmt;
 {
 	if (change_fmt && canseemon(mtmp)) pline(change_fmt, Monnam(mtmp));
 	return mon_spec_poly(mtmp, NULL, 0L,
-		FALSE, canseemon(mtmp), TRUE, your_fault);
+		false, canseemon(mtmp), true, your_fault);
 }
 
 
@@ -598,7 +598,7 @@ unpoly_mon(arg, timeout)
 
 	(void) stop_timer(UNPOLY_MON, (void *) mtmp);
 
-	if (!newcham(mtmp, &mons[oldmon], FALSE, (canseemon(mtmp) && !silent))) {
+	if (!newcham(mtmp, &mons[oldmon], false, (canseemon(mtmp) && !silent))) {
 	    /* Wasn't able to unpolymorph */
 	    if (canseemon(mtmp) && !silent) pline("%s shudders.", oldname);
 	    mondead(mtmp);
@@ -643,7 +643,7 @@ boolean yours;
 	expiretime = stop_timer(BOMB_BLOW, (void *) bomb);
 	if (expiretime > 0L) fuse = fuse - (expiretime - monstermoves);
 	bomb->yours = yours;
-	bomb->oarmed = TRUE;
+	bomb->oarmed = true;
 
 	(void) start_timer((long)fuse, TIMER_OBJECT, BOMB_BLOW, (void *)bomb);
 }
@@ -791,8 +791,8 @@ long timeout;
 	struct monst *mon, *mon2;
 	coord cc;
 	xchar x, y;
-	boolean yours, silent, knows_egg = FALSE;
-	boolean cansee_hatchspot = FALSE;
+	boolean yours, silent, knows_egg = false;
+	boolean cansee_hatchspot = false;
 	int i, mnum, hatchcount = 0;
 
 	egg = (struct obj *) arg;
@@ -857,14 +857,14 @@ long timeout;
 	    + Or just kill any egg which gets sent to another level.
 	      Falling is the usual reason such transportation occurs.
 	    */
-	    cansee_hatchspot = FALSE;
+	    cansee_hatchspot = false;
 	    mon = ???
 	    }
 #endif
 
 	if (mon) {
 	    char monnambuf[BUFSZ], carriedby[BUFSZ];
-	    boolean siblings = (hatchcount > 1), redraw = FALSE;
+	    boolean siblings = (hatchcount > 1), redraw = false;
 
 	    if (cansee_hatchspot) {
 		sprintf(monnambuf, "%s%s",
@@ -880,7 +880,7 @@ long timeout;
 	    }
 	    switch (egg->where) {
 		case OBJ_INVENT:
-		    knows_egg = TRUE; /* true even if you are blind */
+		    knows_egg = true; /* true even if you are blind */
 		    if (!cansee_hatchspot)
 			You_feel("%s %s from your pack!", something,
 			    locomotion(mon->data, "drop"));
@@ -899,9 +899,9 @@ long timeout;
 
 		case OBJ_FLOOR:
 		    if (cansee_hatchspot) {
-			knows_egg = TRUE;
+			knows_egg = true;
 			You("see %s hatch.", monnambuf);
-			redraw = TRUE;	/* update egg's map location */
+			redraw = true;	/* update egg's map location */
 		    }
 		    break;
 
@@ -911,7 +911,7 @@ long timeout;
 			if (canseemon(egg->ocarry)) {
 			    sprintf(carriedby, "%s pack",
 				     s_suffix(a_monnam(egg->ocarry)));
-			    knows_egg = TRUE;
+			    knows_egg = true;
 			}
 			else if (is_pool(mon->mx, mon->my))
 			    strcpy(carriedby, "empty water");
@@ -989,9 +989,9 @@ slip_or_trip()
 	struct obj *otmp = vobj_at(u.ux, u.uy);
 	const char *what, *pronoun;
 	char buf[BUFSZ];
-	boolean on_foot = TRUE;
+	boolean on_foot = true;
 #ifdef STEED
-	if (u.usteed) on_foot = FALSE;
+	if (u.usteed) on_foot = false;
 #endif
 
 	if (otmp && on_foot && !u.uinwater && is_pool(u.ux, u.uy)) otmp = 0;
@@ -1023,7 +1023,7 @@ slip_or_trip()
 #ifdef STEED
 		u.usteed ? upstart(x_monnam(u.usteed,
 				u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
-				NULL, SUPPRESS_SADDLE, FALSE)) :
+				NULL, SUPPRESS_SADDLE, false)) :
 #endif
 		"You", rn2(2) ? "slip" : "slide", on_foot ? "" : "s");
 	} else {
@@ -1129,7 +1129,7 @@ long timeout;
 
 	    if (how_long >= obj->age) {
 		obj->age = 0;
-		end_burn(obj, FALSE);
+		end_burn(obj, false);
 
 		if (menorah) {
 		    obj->spe = 0;	/* no more candles */
@@ -1147,7 +1147,7 @@ long timeout;
 
 	    } else {
 		obj->age -= how_long;
-		begin_burn(obj, TRUE);
+		begin_burn(obj, true);
 	    }
 	    return;
 	}
@@ -1158,9 +1158,9 @@ long timeout;
 	    /* set up `whose[]' to be "Your" or "Fred's" or "The goblin's" */
 	    (void) Shk_Your(whose, obj);
 	} else {
-	    canseeit = FALSE;
+	    canseeit = false;
 	}
-	need_newsym = FALSE;
+	need_newsym = false;
 
 	/* obj->age is the age remaining at this point.  */
 	switch (obj->otyp) {
@@ -1175,11 +1175,11 @@ long timeout;
 				break;
 			    case OBJ_FLOOR:
 				You("see a burning potion of oil go out.");
-				need_newsym = TRUE;
+				need_newsym = true;
 				break;
 			}
 		    }
-		    end_burn(obj, FALSE);	/* turn off light source */
+		    end_burn(obj, false);	/* turn off light source */
 		    obj_extract_self(obj);
 		    obfree(obj, NULL);
 		    obj = NULL;
@@ -1253,7 +1253,7 @@ long timeout;
 			    bill_dummy_object(obj);
 			  }
 			}
-			end_burn(obj, FALSE);
+			end_burn(obj, false);
 			break;
 
 		    default:
@@ -1266,7 +1266,7 @@ long timeout;
 		}
 
 		if (obj->age)
-		    begin_burn(obj, TRUE);
+		    begin_burn(obj, true);
 
 		break;
 
@@ -1349,7 +1349,7 @@ long timeout;
 					You("see %s%s consumed!",
 					    many ? "some " : "",
 					    many ? xname(obj):an(xname(obj)));
-					need_newsym = TRUE;
+					need_newsym = true;
 					break;
 				}
 
@@ -1362,7 +1362,7 @@ long timeout;
 						    "Its flame dies."));
 			    }
 			}
-			end_burn(obj, FALSE);
+			end_burn(obj, false);
 
 			if (menorah) {
 			    obj->spe = 0;
@@ -1383,14 +1383,14 @@ long timeout;
 		}
 
 		if (obj && obj->age)
-		    begin_burn(obj, TRUE);
+		    begin_burn(obj, true);
 
 		break;
 
 #ifdef LIGHTSABERS
 	    case RED_DOUBLE_LIGHTSABER:
 	    	if (obj->altmode && obj->cursed && !rn2(25)) {
-		    obj->altmode = FALSE;
+		    obj->altmode = false;
 		    pline("%s %s reverts to single blade mode!",
 			    whose, xname(obj));
 	    	}
@@ -1406,7 +1406,7 @@ long timeout;
 		    (obj->where == OBJ_INVENT &&
 		    	((!uwep || uwep != obj) &&
 		    	 (!u.twoweap || !uswapwep || obj != uswapwep))))
-	            lightsaber_deactivate(obj, FALSE);
+	            lightsaber_deactivate(obj, false);
 		switch (obj->age) {
 		    case 100:
 			/* Single warning time */
@@ -1425,7 +1425,7 @@ long timeout;
 			}
 			break;
 		    case 0:
-			lightsaber_deactivate(obj, FALSE);
+			lightsaber_deactivate(obj, false);
 			break;
 
 		    default:
@@ -1437,13 +1437,13 @@ long timeout;
 			break;
 		}
 		if (obj && obj->age && obj->lamplit) /* might be deactivated */
-		    begin_burn(obj, TRUE);
+		    begin_burn(obj, true);
 		break;
 #endif
 
 #ifdef FIREARMS
 	    case STICK_OF_DYNAMITE:
-		end_burn(obj, FALSE);
+		end_burn(obj, false);
 		bomb_blow((void *) obj, timeout);
 		return;
 #endif
@@ -1482,8 +1482,8 @@ lightsaber_deactivate (obj, timer_attached)
 		You("hear a lightsaber deactivate.");
 	    }
 	}
-	if (obj->otyp == RED_DOUBLE_LIGHTSABER) obj->altmode = FALSE;
-	if ((obj == uwep) || (u.twoweap && obj != uswapwep)) unweapon = TRUE;
+	if (obj->otyp == RED_DOUBLE_LIGHTSABER) obj->altmode = false;
+	if ((obj == uwep) || (u.twoweap && obj != uswapwep)) unweapon = true;
 	end_burn(obj, timer_attached);
 }
 #endif
@@ -1530,7 +1530,7 @@ begin_burn(obj, already_lit)
 {
 	int radius = 3;
 	long turns = 0;
-	boolean do_timer = TRUE;
+	boolean do_timer = true;
 
 	if (obj->age == 0 && obj->otyp != MAGIC_LAMP &&
 		obj->otyp != MAGIC_CANDLE && !artifact_light(obj))
@@ -1540,7 +1540,7 @@ begin_burn(obj, already_lit)
 	    case MAGIC_LAMP:
 	    case MAGIC_CANDLE:
 		obj->lamplit = 1;
-		do_timer = FALSE;
+		do_timer = false;
 		if (obj->otyp == MAGIC_CANDLE) obj->age = 300L;
 		break;
 #ifdef LIGHTSABERS
@@ -1598,7 +1598,7 @@ begin_burn(obj, already_lit)
                 /* [ALI] Support artifact light sources */
 		if (obj->oartifact && artifact_light(obj)) {
 		    obj->lamplit = 1;
-		    do_timer = FALSE;
+		    do_timer = false;
 		    radius = 2;
 		}
 		else {
@@ -1649,7 +1649,7 @@ end_burn(obj, timer_attached)
 
 	if (obj->otyp == MAGIC_LAMP || obj->otyp == MAGIC_CANDLE ||
 		artifact_light(obj))
-	    timer_attached = FALSE;
+	    timer_attached = false;
 
 	if (!timer_attached) {
 	    /* [DS] Cleanup explicitly, since timer cleanup won't happen */
@@ -1756,7 +1756,7 @@ do_storms (void)
  *							void * arg)
  *		Start a timer of kind 'kind' that will expire at time
  *		monstermoves+'timeout'.  Call the function at 'func_index'
- *		in the timeout table using argument 'arg'.  Return TRUE if
+ *		in the timeout table using argument 'arg'.  Return true if
  *		a timer was started.  This places the timer on a list ordered
  *		"sooner" to "later".  If an object, increment the object's
  *		timer count.
@@ -1912,7 +1912,7 @@ wiz_timeout_queue (void)
     putstr(win, 0, "");
     print_queue(win, timer_base);
 
-    display_nhwindow(win, FALSE);
+    display_nhwindow(win, false);
     destroy_nhwindow(win);
 
     return 0;
@@ -1964,7 +1964,7 @@ run_timers (void)
 
 
 /*
- * Start a timer.  Return TRUE if successful.
+ * Start a timer.  Return true if successful.
  */
 boolean
 start_timer(when, kind, func_index, arg)
@@ -1992,7 +1992,7 @@ void * arg;
 	((struct obj *)arg)->timed++;
 
     /* should check for duplicates and fail if any */
-    return TRUE;
+    return true;
 }
 
 
@@ -2238,7 +2238,7 @@ long adj;
 }
 
 /*
- * Return TRUE if the object will stay on the level when the level is
+ * Return true if the object will stay on the level when the level is
  * saved.
  */
 boolean
@@ -2247,19 +2247,19 @@ obj_is_local(obj)
 {
     switch (obj->where) {
 	case OBJ_INVENT:
-	case OBJ_MIGRATING:	return FALSE;
+	case OBJ_MIGRATING:	return false;
 	case OBJ_FLOOR:
-	case OBJ_BURIED:	return TRUE;
+	case OBJ_BURIED:	return true;
 	case OBJ_CONTAINED:	return obj_is_local(obj->ocontainer);
 	case OBJ_MINVENT:	return mon_is_local(obj->ocarry);
     }
     panic("obj_is_local");
-    return FALSE;
+    return false;
 }
 
 
 /*
- * Return TRUE if the given monster will stay on the level when the
+ * Return true if the given monster will stay on the level when the
  * level is saved.
  */
 static boolean
@@ -2269,16 +2269,16 @@ struct monst *mon;
     struct monst *curr;
 
     for (curr = migrating_mons; curr; curr = curr->nmon)
-	if (curr == mon) return FALSE;
+	if (curr == mon) return false;
     /* `mydogs' is used during level changes, never saved and restored */
     for (curr = mydogs; curr; curr = curr->nmon)
-	if (curr == mon) return FALSE;
-    return TRUE;
+	if (curr == mon) return false;
+    return true;
 }
 
 
 /*
- * Return TRUE if the timer is attached to something that will stay on the
+ * Return true if the timer is attached to something that will stay on the
  * level when the level is saved.
  */
 static boolean
@@ -2286,13 +2286,13 @@ timer_is_local(timer)
     timer_element *timer;
 {
     switch (timer->kind) {
-	case TIMER_LEVEL:	return TRUE;
-	case TIMER_GLOBAL:	return FALSE;
+	case TIMER_LEVEL:	return true;
+	case TIMER_GLOBAL:	return false;
 	case TIMER_OBJECT:	return obj_is_local((struct obj *)timer->arg);
 	case TIMER_MONSTER:	return mon_is_local((struct monst *)timer->arg);
     }
     panic("timer_is_local");
-    return FALSE;
+    return false;
 }
 
 
@@ -2355,9 +2355,9 @@ save_timers (int fd, int mode, int range)
 	if (range == RANGE_GLOBAL)
 	    bwrite(fd, (void *) &timer_id, sizeof(timer_id));
 
-	count = maybe_write_timer(fd, range, FALSE);
+	count = maybe_write_timer(fd, range, false);
 	bwrite(fd, (void *) &count, sizeof count);
-	(void) maybe_write_timer(fd, range, TRUE);
+	(void) maybe_write_timer(fd, range, true);
     }
 
     if (release_data(mode)) {

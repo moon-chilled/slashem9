@@ -5,9 +5,9 @@
 /*
  * Entry points:
  *	mkroom() -- make and stock a room of a given type
- *	nexttodoor() -- return TRUE if adjacent to a door
- *	has_dnstairs() -- return TRUE if given room has a down staircase
- *	has_upstairs() -- return TRUE if given room has an up staircase
+ *	nexttodoor() -- return true if adjacent to a door
+ *	has_dnstairs() -- return true if given room has a down staircase
+ *	has_upstairs() -- return true if given room has an up staircase
  *	courtmon() -- generate a court monster
  *	save_rooms() -- save rooms into file fd
  *	rest_rooms() -- restore rooms from file fd
@@ -189,7 +189,7 @@ mkshop()
 
 	/* set room bits before stocking the shop */
 #ifdef SPECIALIZATION
-	topologize(sroom, FALSE); /* doesn't matter - this is a special room */
+	topologize(sroom, false); /* doesn't matter - this is a special room */
 #else
 	topologize(sroom);
 #endif
@@ -234,12 +234,12 @@ int type;
 	struct mkroom *sroom;
 
 	if (type == BADFOODSHOP) {
-	   if ((sroom = pick_room(TRUE)) != 0) {
+	   if ((sroom = pick_room(true)) != 0) {
 		sroom->rtype = type;
 		fill_zoo(sroom);
 	   }
 	}
-	else if ((sroom = pick_room(FALSE)) != 0) {
+	else if ((sroom = pick_room(false)) != 0) {
 		sroom->rtype = type;
 		fill_zoo(sroom);
 	}
@@ -369,34 +369,34 @@ fill_zoo (struct mkroom *sroom)
 			    (void) mk_tt_object(CORPSE, sx, sy);
 			if(!rn2(10))	/* lots of treasure buried with dead */
 			    (void) mksobj_at((rn2(3)) ? LARGE_BOX : CHEST,
-					     sx, sy, TRUE, FALSE);
+					     sx, sy, true, false);
 			if (!rn2(5))
 			    make_grave(sx, sy, NULL);
 			break;
 		    case BEEHIVE:
 			if(!rn2(3))
 			    (void) mksobj_at(LUMP_OF_ROYAL_JELLY,
-					     sx, sy, TRUE, FALSE);
+					     sx, sy, true, false);
 			break;
 		    case FUNGUSFARM:
 			if (!rn2(3))
-			    (void) mksobj_at(SLIME_MOLD, sx, sy, TRUE, FALSE);
+			    (void) mksobj_at(SLIME_MOLD, sx, sy, true, false);
 			break;
 		    case MIGOHIVE:
 			switch (rn2(10)) {
 			    case 9:
-				mksobj_at(DIAMOND, sx, sy, TRUE, FALSE);
+				mksobj_at(DIAMOND, sx, sy, true, false);
 				break;
 			    case 8:
-				mksobj_at(RUBY, sx, sy, TRUE, FALSE);
+				mksobj_at(RUBY, sx, sy, true, false);
 				break;
 			    case 7:
 			    case 6:
-				mksobj_at(AGATE, sx, sy, TRUE, FALSE);
+				mksobj_at(AGATE, sx, sy, true, false);
 				break;
 			    case 5:
 			    case 4:
-				mksobj_at(FLUORITE, sx, sy, TRUE, FALSE);
+				mksobj_at(FLUORITE, sx, sy, true, false);
 				break;
 			    default:
 				break;
@@ -405,7 +405,7 @@ fill_zoo (struct mkroom *sroom)
 		    case BARRACKS:
 			if(!rn2(20))	/* the payroll and some loot */
 			    (void) mksobj_at((rn2(3)) ? LARGE_BOX : CHEST,
-					     sx, sy, TRUE, FALSE);
+					     sx, sy, true, false);
 			if (!rn2(5))
 			    make_grave(sx, sy, NULL);
 			break;
@@ -416,14 +416,14 @@ fill_zoo (struct mkroom *sroom)
 			    if (sobj) {
 				for (i = rn2(5); i; i--)
 				    (void) add_to_container(sobj,
-						mkobj(RANDOM_CLASS, FALSE));
+						mkobj(RANDOM_CLASS, false));
 				sobj->owt = weight(sobj);
 			    }
 			}
 			break;
 		    case ANTHOLE:
 			if(!rn2(3))
-			    (void) mkobj_at(FOOD_CLASS, sx, sy, FALSE);
+			    (void) mkobj_at(FOOD_CLASS, sx, sy, false);
 			break;
 		}
 	    }
@@ -436,7 +436,7 @@ fill_zoo (struct mkroom *sroom)
 		  (void) somexy(sroom, &mm);
 		  (void) mkgold((long) rn1(50 * level_difficulty(),10), mm.x, mm.y);
 		  /* the royal coffers */
-		  chest = mksobj_at(CHEST, mm.x, mm.y, TRUE, FALSE);
+		  chest = mksobj_at(CHEST, mm.x, mm.y, true, false);
 		  chest->spe = 2; /* so it can be found later */
 		  level.flags.has_court = 1;
 		  break;
@@ -489,7 +489,7 @@ int mm_flags;
 		     !revive(otmp)))
 		(void) makemon(mdat, cc.x, cc.y, mm_flags);
 	}
-	level.flags.graveyard = TRUE;	/* reduced chance for undead corpse */
+	level.flags.graveyard = true;	/* reduced chance for undead corpse */
 }
 
 static struct permonst *
@@ -613,7 +613,7 @@ mktemple()
 	coord *shrine_spot;
 	struct rm *lev;
 
-	if(!(sroom = pick_room(TRUE))) return;
+	if(!(sroom = pick_room(true))) return;
 
 	/* set up Priest and shrine */
 	sroom->rtype = TEMPLE;
@@ -625,7 +625,7 @@ mktemple()
 	lev = &levl[shrine_spot->x][shrine_spot->y];
 	lev->typ = ALTAR;
 	lev->altarmask = induced_align(80);
-	priestini(&u.uz, sroom, shrine_spot->x, shrine_spot->y, FALSE);
+	priestini(&u.uz, sroom, shrine_spot->x, shrine_spot->y, false);
 	lev->altarmask |= AM_SHRINE;
 	level.flags.has_temple = 1;
 }
@@ -640,9 +640,9 @@ int sx, sy;
 		if(!isok(sx+dx, sy+dy)) continue;
 		if(IS_DOOR((lev = &levl[sx+dx][sy+dy])->typ) ||
 		    lev->typ == SDOOR)
-			return(TRUE);
+			return(true);
 	}
-	return(FALSE);
+	return(false);
 }
 
 boolean
@@ -650,10 +650,10 @@ has_dnstairs(sroom)
 struct mkroom *sroom;
 {
 	if (sroom == dnstairs_room)
-		return TRUE;
+		return true;
 	if (sstairs.sx && !sstairs.up)
 		return((boolean)(sroom == sstairs_room));
-	return FALSE;
+	return false;
 }
 
 boolean
@@ -661,10 +661,10 @@ has_upstairs(sroom)
 struct mkroom *sroom;
 {
 	if (sroom == upstairs_room)
-		return TRUE;
+		return true;
 	if (sstairs.sx && sstairs.up)
 		return((boolean)(sroom == sstairs_room));
-	return FALSE;
+	return false;
 }
 
 
@@ -705,21 +705,21 @@ coord *c;
 		c->y = somey(croom);
 		if (!levl[c->x][c->y].edge &&
 			(int) levl[c->x][c->y].roomno == i)
-		    return TRUE;
+		    return true;
 	    }
 	    /* try harder; exhaustively search until one is found */
 	    for(c->x = croom->lx; c->x <= croom->hx; c->x++)
 		for(c->y = croom->ly; c->y <= croom->hy; c->y++)
 		    if (!levl[c->x][c->y].edge &&
 			    (int) levl[c->x][c->y].roomno == i)
-			return TRUE;
-	    return FALSE;
+			return true;
+	    return false;
 	}
 
 	if (!croom->nsubrooms) {
 		c->x = somex(croom);
 		c->y = somey(croom);
-		return TRUE;
+		return true;
 	}
 
 	/* Check that coords doesn't fall into a subroom or into a wall */
@@ -736,8 +736,8 @@ coord *c;
 you_lose:	;
 	}
 	if (try_cnt >= 100)
-	    return FALSE;
-	return TRUE;
+	    return false;
+	return true;
 }
 
 /*

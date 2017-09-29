@@ -369,9 +369,9 @@ boolean
 curses_is_menu(winid wid)
 {
     if ((wid > 19) && !(wid % 2)) {     /* Even number */
-        return TRUE;
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 }
 
@@ -382,9 +382,9 @@ boolean
 curses_is_text(winid wid)
 {
     if ((wid > 19) && (wid % 2)) {      /* Odd number */
-        return TRUE;
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 }
 
@@ -523,7 +523,7 @@ void
 curses_posthousekeeping()
 {
     curs_set(0);
-    curses_decrement_highlights(FALSE);
+    curses_decrement_highlights(false);
     curses_clear_unhighlight_message_window();
 }
 
@@ -551,7 +551,7 @@ curses_view_file(const char *filename, boolean must_exist)
     identifier->a_void = NULL;
 
     while (dlb_fgets(buf, BUFSZ, fp) != NULL) {
-        curses_add_menu(wid, NO_GLYPH, identifier, 0, 0, A_NORMAL, buf, FALSE);
+        curses_add_menu(wid, NO_GLYPH, identifier, 0, 0, A_NORMAL, buf, false);
     }
 
     dlb_fclose(fp);
@@ -786,7 +786,7 @@ curses_get_mouse(int *mousex, int *mousey, int *mod)
     if (getmouse(&event) == OK) {       /* When the user clicks left mouse button */
         if (event.bstate & BUTTON1_CLICKED) {
             /* See if coords are in map window & convert coords */
-            if (wmouse_trafo(mapwin, &event.y, &event.x, TRUE)) {
+            if (wmouse_trafo(mapwin, &event.y, &event.x, true)) {
                 key = 0;        /* Flag mouse click */
                 *mousex = event.x;
                 *mousey = event.y;

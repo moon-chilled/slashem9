@@ -34,9 +34,9 @@ void mswin_init_splashfonts(HWND hWnd)
 	lgfnt.lfEscapement	=	0;					 // angle of escapement
 	lgfnt.lfOrientation		=	0;					 // base-line orientation angle
 	lgfnt.lfWeight		=	FW_BOLD;   // font weight
-	lgfnt.lfItalic			=	FALSE;		     // italic attribute option
-	lgfnt.lfUnderline		=	FALSE;		 // underline attribute option
-	lgfnt.lfStrikeOut		=	FALSE;			     // strikeout attribute option
+	lgfnt.lfItalic			=	false;		     // italic attribute option
+	lgfnt.lfUnderline		=	false;		 // underline attribute option
+	lgfnt.lfStrikeOut		=	false;			     // strikeout attribute option
 	lgfnt.lfCharSet		=	ANSI_CHARSET;     // character set identifier
 	lgfnt.lfOutPrecision	=	OUT_DEFAULT_PRECIS;  // output precision
 	lgfnt.lfClipPrecision	=	CLIP_DEFAULT_PRECIS; // clipping precision
@@ -60,10 +60,10 @@ HGDIOBJ mswin_get_font(int win_type, int attr, HDC hdc, BOOL replace)
 	LOGFONT lgfnt;
 	int font_size;
 	int font_index;
-	static BOOL once = FALSE;
+	static BOOL once = false;
 
 	if( !once ) {
-		once = TRUE;
+		once = true;
 		atexit(font_table_cleanup);
 	}
 
@@ -84,9 +84,9 @@ HGDIOBJ mswin_get_font(int win_type, int attr, HDC hdc, BOOL replace)
 		lgfnt.lfEscapement		=	0;					 // angle of escapement
 		lgfnt.lfOrientation		=	0;					 // base-line orientation angle
 		lgfnt.lfWeight			=	FW_BOLD;             // font weight
-		lgfnt.lfItalic			=	FALSE;		         // italic attribute option
-		lgfnt.lfUnderline		=	FALSE;			     // underline attribute option
-		lgfnt.lfStrikeOut		=	FALSE;			     // strikeout attribute option
+		lgfnt.lfItalic			=	false;		         // italic attribute option
+		lgfnt.lfUnderline		=	false;			     // underline attribute option
+		lgfnt.lfStrikeOut		=	false;			     // strikeout attribute option
 		lgfnt.lfCharSet			=	mswin_charset();     // character set identifier
 		lgfnt.lfOutPrecision	=	OUT_DEFAULT_PRECIS;  // output precision
 		lgfnt.lfClipPrecision	=	CLIP_DEFAULT_PRECIS; // clipping precision
@@ -106,9 +106,9 @@ HGDIOBJ mswin_get_font(int win_type, int attr, HDC hdc, BOOL replace)
 		lgfnt.lfEscapement		=	0;					 // angle of escapement
 		lgfnt.lfOrientation		=	0;					 // base-line orientation angle
 		lgfnt.lfWeight			=	(attr==ATR_BOLD || attr==ATR_INVERSE)? FW_BOLD : FW_NORMAL;   // font weight
-		lgfnt.lfItalic			=	(attr==ATR_BLINK)? TRUE: FALSE;		     // italic attribute option
-		lgfnt.lfUnderline		=	(attr==ATR_ULINE)? TRUE : FALSE;		 // underline attribute option
-		lgfnt.lfStrikeOut		=	FALSE;				// strikeout attribute option
+		lgfnt.lfItalic			=	(attr==ATR_BLINK)? true: false;		     // italic attribute option
+		lgfnt.lfUnderline		=	(attr==ATR_ULINE)? true : false;		 // underline attribute option
+		lgfnt.lfStrikeOut		=	false;				// strikeout attribute option
 		lgfnt.lfCharSet			=	mswin_charset();     // character set identifier
 		lgfnt.lfOutPrecision	=	OUT_DEFAULT_PRECIS;  // output precision
 		lgfnt.lfClipPrecision	=	CLIP_DEFAULT_PRECIS; // clipping precision
@@ -129,9 +129,9 @@ HGDIOBJ mswin_get_font(int win_type, int attr, HDC hdc, BOOL replace)
 		lgfnt.lfEscapement		=	0;					 // angle of escapement
 		lgfnt.lfOrientation		=	0;					 // base-line orientation angle
 		lgfnt.lfWeight			=	(attr==ATR_BOLD || attr==ATR_INVERSE)? FW_BOLD : FW_NORMAL;   // font weight
-		lgfnt.lfItalic			=	(attr==ATR_BLINK)? TRUE: FALSE;		     // italic attribute option
-		lgfnt.lfUnderline		=	(attr==ATR_ULINE)? TRUE : FALSE;		 // underline attribute option
-		lgfnt.lfStrikeOut		=	FALSE;			     // strikeout attribute option
+		lgfnt.lfItalic			=	(attr==ATR_BLINK)? true: false;		     // italic attribute option
+		lgfnt.lfUnderline		=	(attr==ATR_ULINE)? true : false;		 // underline attribute option
+		lgfnt.lfStrikeOut		=	false;			     // strikeout attribute option
 		lgfnt.lfCharSet			=	mswin_charset();     // character set identifier
 		lgfnt.lfOutPrecision	=	OUT_DEFAULT_PRECIS;  // output precision
 		lgfnt.lfClipPrecision	=	CLIP_DEFAULT_PRECIS; // clipping precision
@@ -151,9 +151,9 @@ HGDIOBJ mswin_get_font(int win_type, int attr, HDC hdc, BOOL replace)
 		lgfnt.lfEscapement		=	0;					 // angle of escapement
 		lgfnt.lfOrientation		=	0;					 // base-line orientation angle
 		lgfnt.lfWeight			=	(attr==ATR_BOLD || attr==ATR_INVERSE)? FW_BOLD : FW_NORMAL;   // font weight
-		lgfnt.lfItalic			=	(attr==ATR_BLINK)? TRUE: FALSE;		     // italic attribute option
-		lgfnt.lfUnderline		=	(attr==ATR_ULINE)? TRUE : FALSE;		 // underline attribute option
-		lgfnt.lfStrikeOut		=	FALSE;			     // strikeout attribute option
+		lgfnt.lfItalic			=	(attr==ATR_BLINK)? true: false;		     // italic attribute option
+		lgfnt.lfUnderline		=	(attr==ATR_ULINE)? true : false;		 // underline attribute option
+		lgfnt.lfStrikeOut		=	false;			     // strikeout attribute option
 		lgfnt.lfCharSet			=	mswin_charset();     // character set identifier
 		lgfnt.lfOutPrecision	=	OUT_DEFAULT_PRECIS;  // output precision
 		lgfnt.lfClipPrecision	=	CLIP_DEFAULT_PRECIS; // clipping precision

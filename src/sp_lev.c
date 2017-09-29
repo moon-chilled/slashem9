@@ -183,7 +183,7 @@ int humidity;
 	    char ry = rloc_y[ - *x - 1][ - *y - 1];
 	    char rx = rloc_x[ - *x - 1][ - *y - 1];
 	    if (ry == (char)-1 || rx == (char)-1)
-		return FALSE;		/* nowhere */
+		return false;		/* nowhere */
 	    else {
 		*y = ystart + ry;
 		*x = xstart + rx;
@@ -265,7 +265,7 @@ found_it:;
 	    impossible("get_location:  (%d,%d) out of bounds", *x, *y);
 	    *x = x_maze_max; *y = y_maze_max;
 	}
-	return TRUE;
+	return true;
 }
 
 static boolean
@@ -275,23 +275,23 @@ int humidity;
 {
 	int typ;
 
-	if (Is_waterlevel(&u.uz)) return TRUE;	/* accept any spot */
+	if (Is_waterlevel(&u.uz)) return true;	/* accept any spot */
 
 	if (humidity & DRY) {
 	    typ = levl[x][y].typ;
 	    if (typ == ROOM || typ == AIR ||
 		    typ == CLOUD || typ == ICE || typ == CORR)
-		return TRUE;
+		return true;
 	}
 	if (humidity & WET) {
 	    if (is_pool(x,y))
-		return TRUE;
+		return true;
 	}
 	if (humidity & MOLTEN) {
 	    if (is_lava(x,y))
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 /*
@@ -387,7 +387,7 @@ boolean vault;
 	if (hix > COLNO-3)	hix = COLNO-3;
 	if (hiy > ROWNO-3)	hiy = ROWNO-3;
 chk:
-	if (hix <= *lowx || hiy <= *lowy)	return FALSE;
+	if (hix <= *lowx || hiy <= *lowy)	return false;
 
 	/* check area around room (and make room smaller if necessary) */
 	for (x = *lowx - xlim; x<= hix + xlim; x++) {
@@ -402,7 +402,7 @@ chk:
 				if(!vault)
 				    debugpline("strange area [%d,%d] in check_room.",x,y);
 #endif
-				if (!rn2(3))	return FALSE;
+				if (!rn2(3))	return false;
 				if (x < *lowx)
 				    *lowx = x + xlim + 1;
 				else
@@ -417,7 +417,7 @@ chk:
 	}
 	*ddx = hix - *lowx;
 	*ddy = hiy - *lowy;
-	return TRUE;
+	return true;
 }
 
 /*
@@ -436,14 +436,14 @@ xchar	rtype, rlit;
 	int	wtmp, htmp, xaltmp, yaltmp, xtmp, ytmp;
 	NhRect	*r1 = 0, r2;
 	int	trycnt = 0;
-	boolean	vault = FALSE;
+	boolean	vault = false;
 	int	xlim = XLIM, ylim = YLIM;
 
 	if (rtype == -1)	/* Is the type random ? */
 	    rtype = OROOM;
 
 	if (rtype == VAULT) {
-		vault = TRUE;
+		vault = true;
 		xlim++;
 		ylim++;
 	}
@@ -453,7 +453,7 @@ xchar	rtype, rlit;
 
 	/* is light state random ? */
 	if (rlit == -1)
-	    rlit = (rnd(1+abs(depth(&u.uz))) < 11 && rn2(77)) ? TRUE : FALSE;
+	    rlit = (rnd(1+abs(depth(&u.uz))) < 11 && rn2(77)) ? true : false;
 
 	/*
 	 * Here we will try to create a room. If some parameters are
@@ -477,7 +477,7 @@ xchar	rtype, rlit;
 #ifdef DEBUG
 				debugpline("No more rects...");
 #endif
-				return FALSE;
+				return false;
 			}
 			hx = r1->hx;
 			hy = r1->hy;
@@ -575,19 +575,19 @@ xchar	rtype, rlit;
 		}
 	} while (++trycnt <= 100 && !r1);
 	if (!r1) {	/* creation of room failed ? */
-		return FALSE;
+		return false;
 	}
 	split_rects(r1, &r2);
 
 	if (!vault) {
 		smeq[nroom] = nroom;
 		add_room(xabs, yabs, xabs+wtmp-1, yabs+htmp-1,
-			 rlit, rtype, FALSE);
+			 rlit, rtype, false);
 	} else {
 		rooms[nroom].lx = xabs;
 		rooms[nroom].ly = yabs;
 	}
-	return TRUE;
+	return true;
 }
 
 /*
@@ -609,7 +609,7 @@ xchar rtype, rlit;
 
 	/* There is a minimum size for the parent room */
 	if (width < 4 || height < 4)
-	    return FALSE;
+	    return false;
 
 	/* Check for random position, size, etc... */
 
@@ -632,11 +632,11 @@ xchar rtype, rlit;
 	if (rtype == -1)
 	    rtype = OROOM;
 	if (rlit == -1)
-	    rlit = (rnd(1+abs(depth(&u.uz))) < 11 && rn2(77)) ? TRUE : FALSE;
+	    rlit = (rnd(1+abs(depth(&u.uz))) < 11 && rn2(77)) ? true : false;
 	add_subroom(proom, proom->lx + x, proom->ly + y,
 		    proom->lx + x + w - 1, proom->ly + y + h - 1,
-		    rlit, rtype, FALSE);
-	return TRUE;
+		    rlit, rtype, false);
+	return true;
 }
 
 /*
@@ -907,7 +907,7 @@ struct mkroom	*croom;
 	if(m->align != -12)
 	    mtmp = mk_roamer(pm, Amask2align(amask), x, y, m->peaceful);
 	else if(PM_ARCHEOLOGIST <= m->id && m->id <= PM_WIZARD)
-	         mtmp = mk_mplayer(pm, x, y, FALSE);
+	         mtmp = mk_mplayer(pm, x, y, false);
 	else mtmp = makemon(pm, x, y, NO_MM_FLAGS);
 
 	if (mtmp) {
@@ -1010,7 +1010,7 @@ struct mkroom	*croom;
     boolean named;	/* has a name been supplied in level description? */
 
     if (rn2(100) < o->chance) {
-	named = o->name.str ? TRUE : FALSE;
+	named = o->name.str ? true : false;
 
 	x = o->x; y = o->y;
 	if (croom)
@@ -1029,7 +1029,7 @@ struct mkroom	*croom;
 	if (!c)
 	    otmp = mkobj_at(RANDOM_CLASS, x, y, !named);
 	else if (o->id != -1)
-	    otmp = mksobj_at(o->id, x, y, TRUE, !named);
+	    otmp = mksobj_at(o->id, x, y, true, !named);
 	else {
 	    /*
 	     * The special levels are compiled with the default "text" object
@@ -1074,7 +1074,7 @@ struct mkroom	*croom;
 	/* assume we wouldn't be given an egg corpsenm unless it was
 	   hatchable */
 	if (otmp->otyp == EGG && otmp->corpsenm != NON_PM) {
-	    if (dead_species(otmp->otyp, TRUE))
+	    if (dead_species(otmp->otyp, true))
 		kill_egg(otmp);	/* make sure nothing hatches */
 	    else
 		attach_egg_hatch_timeout(otmp);	/* attach new hatch timeout */
@@ -1152,7 +1152,7 @@ struct mkroom	*croom;
 	stackobj(otmp);
 
 	if (o->oflags & OBJF_LIT)
-	    begin_burn(otmp, FALSE);
+	    begin_burn(otmp, false);
 	if (o->oflags & OBJF_BURIED)
 	    otmp = bury_an_obj(otmp);
 
@@ -1170,7 +1170,7 @@ engraving *e;
 struct mkroom *croom;
 {
 	xchar x, y;
-	boolean found = TRUE;
+	boolean found = true;
 
 	x = e->x,  y = e->y;
 	if (croom)
@@ -1211,7 +1211,7 @@ create_altar(a, croom)
 {
 	schar		sproom,x,y;
 	aligntyp	amask;
-	boolean		croom_is_temple = TRUE;
+	boolean		croom_is_temple = true;
 	int oldtyp;
 
 	x = a->x; y = a->y;
@@ -1219,14 +1219,14 @@ create_altar(a, croom)
 	if (croom) {
 	    get_free_room_loc(&x, &y, croom);
 	    if (croom->rtype != TEMPLE)
-		croom_is_temple = FALSE;
+		croom_is_temple = false;
 	} else {
 	    if (!get_location(&x, &y, DRY))
 		return;		/* nowhere */
 	    if ((sproom = (schar) *in_rooms(x, y, TEMPLE)) != 0)
 		croom = &rooms[sproom - ROOMOFFSET];
 	    else
-		croom_is_temple = FALSE;
+		croom_is_temple = false;
 	}
 
 	/* check for existing features */
@@ -1267,7 +1267,7 @@ create_altar(a, croom)
 	if (a->shrine) {	/* Is it a shrine  or sanctum? */
 	    priestini(&u.uz, croom, x, y, (a->shrine > 1));
 	    levl[x][y].altarmask |= AM_SHRINE;
-	    level.flags.has_temple = TRUE;
+	    level.flags.has_temple = true;
 	}
 }
 
@@ -1383,12 +1383,12 @@ int cnt;
 			*x = xx;
 			*y = yy;
 			if (cnt-- <= 0)
-			    return TRUE;
+			    return true;
 		}
 		xx += dx;
 		yy += dy;
 	}
-	return FALSE;
+	return false;
 }
 
 /*
@@ -1414,7 +1414,7 @@ schar ftyp, btyp;
 		debugpline("dig_corridor: bad coords : (%d,%d) (%d,%d).",
 			   xx,yy,tx,ty);
 #endif
-		return FALSE;
+		return false;
 	}
 	if (tx > xx)		dx = 1;
 	else if (ty > yy)	dy = 1;
@@ -1427,27 +1427,27 @@ schar ftyp, btyp;
 	while(xx != tx || yy != ty) {
 	    /* loop: dig corridor at [xx,yy] and find new [xx,yy] */
 	    if(cct++ > 500 || (nxcor && !rn2(35)))
-		return FALSE;
+		return false;
 
 	    xx += dx;
 	    yy += dy;
 
 	    if(xx >= COLNO-1 || xx <= 0 || yy <= 0 || yy >= ROWNO-1)
-		return FALSE;		/* impossible */
+		return false;		/* impossible */
 
 	    crm = &levl[xx][yy];
 	    if(crm->typ == btyp) {
 		if(ftyp != CORR || rn2(100)) {
 			crm->typ = ftyp;
 			if(nxcor && !rn2(50))
-				(void) mksobj_at(BOULDER, xx, yy, TRUE, FALSE);
+				(void) mksobj_at(BOULDER, xx, yy, true, false);
 		} else {
 			crm->typ = SCORR;
 		}
 	    } else
 	    if(crm->typ != ftyp && crm->typ != SCORR) {
 		/* strange ... */
-		return FALSE;
+		return false;
 	    }
 
 	    /* find next corridor position */
@@ -1494,7 +1494,7 @@ schar ftyp, btyp;
 	    dy = -dy;
 	    dx = -dx;
 	}
-	return TRUE;
+	return true;
 }
 
 /*
@@ -1578,7 +1578,7 @@ corridor	*c;
 		      case W_WEST:  dest.x--; break;
 		      case W_EAST:  dest.x++; break;
 		}
-		(void) dig_corridor(&org, &dest, FALSE, CORR, STONE);
+		(void) dig_corridor(&org, &dest, false, CORR, STONE);
 	}
 }
 
@@ -1601,7 +1601,7 @@ boolean prefilled;
 	    /* Shop ? */
 	    if (croom->rtype >= SHOPBASE) {
 		    stock_room(croom->rtype - SHOPBASE, croom);
-		    level.flags.has_shop = TRUE;
+		    level.flags.has_shop = true;
 		    return;
 	    }
 
@@ -1625,37 +1625,37 @@ boolean prefilled;
 	}
 	switch (croom->rtype) {
 	    case VAULT:
-		level.flags.has_vault = TRUE;
+		level.flags.has_vault = true;
 		break;
 	    case ZOO:
-		level.flags.has_zoo = TRUE;
+		level.flags.has_zoo = true;
 		break;
 	    case COURT:
-		level.flags.has_court = TRUE;
+		level.flags.has_court = true;
 		break;
 	    case MORGUE:
-		level.flags.has_morgue = TRUE;
+		level.flags.has_morgue = true;
 		break;
 	    case BEEHIVE:
-		level.flags.has_beehive = TRUE;
+		level.flags.has_beehive = true;
 		break;
 	    case LEMUREPIT:
-		level.flags.has_lemurepit = TRUE;
+		level.flags.has_lemurepit = true;
 		break;
 	    case MIGOHIVE:
-		level.flags.has_migohive = TRUE;
+		level.flags.has_migohive = true;
 		break;
 	    case FUNGUSFARM:
-		level.flags.has_fungusfarm = TRUE;
+		level.flags.has_fungusfarm = true;
 		break;
 	    case BARRACKS:
-		level.flags.has_barracks = TRUE;
+		level.flags.has_barracks = true;
 		break;
 	    case TEMPLE:
-		level.flags.has_temple = TRUE;
+		level.flags.has_temple = true;
 		break;
 	    case SWAMP:
-		level.flags.has_swamp = TRUE;
+		level.flags.has_swamp = true;
 		break;
 	}
 }
@@ -1799,7 +1799,7 @@ room *r, *pr;
 		    create_engraving(r->engravings[i], aroom);
 
 #ifdef SPECIALIZATION
-		topologize(aroom,FALSE);		/* set roomno */
+		topologize(aroom,false);		/* set roomno */
 #else
 		topologize(aroom);			/* set roomno */
 #endif
@@ -1808,7 +1808,7 @@ room *r, *pr;
 		 * DLC - this can fail if corridors are added to this room
 		 * at a later point.  Currently no good way to fix this.
 		 */
-		if(aroom->rtype != OROOM && r->filled) fill_room(aroom, FALSE);
+		if(aroom->rtype != OROOM && r->filled) fill_room(aroom, false);
 	}
 }
 
@@ -2168,7 +2168,7 @@ dlb *fd;
 		create_corridor(&tmpcor);
 	}
 
-	return TRUE;
+	return true;
 }
 
 /*
@@ -2297,7 +2297,7 @@ dlb *fd;
 	 * are laid out.  CROSSWALLS are used to specify "invisible"
 	 * boundaries where DOOR syms look bad or aren't desirable.
 	 */
-	has_bounds = FALSE;
+	has_bounds = false;
 
 	if(init_lev.init_present && xsize <= 1 && ysize <= 1) {
 	    xstart = 1;
@@ -2309,7 +2309,7 @@ dlb *fd;
 	    for(y = ystart; y < ystart+ysize; y++)
 		for(x = xstart; x < xstart+xsize; x++) {
 		    levl[x][y].typ = Fgetc(fd);
-		    levl[x][y].lit = FALSE;
+		    levl[x][y].lit = false;
 		    /* clear out levl: load_common_data may set them */
 		    levl[x][y].flags = 0;
 		    levl[x][y].horizontal = 0;
@@ -2343,7 +2343,7 @@ dlb *fd;
 		    else if(levl[x][y].typ == LAVAPOOL)
 			levl[x][y].lit = 1;
 		    else if(levl[x][y].typ == CROSSWALL)
-			has_bounds = TRUE;
+			has_bounds = true;
 		    Map[x][y] = 1;
 		}
 	    if (init_lev.init_present && init_lev.joined)
@@ -2371,7 +2371,7 @@ dlb *fd;
 	}
 
 	while(n--) {
-	    boolean found = TRUE;
+	    boolean found = true;
 	    Fread((void *) &tmplregion, sizeof(tmplregion), 1, fd);
 	    if ((size = tmplregion.rname.len) != 0) {
 		tmplregion.rname.str = alloc((unsigned)size + 1);
@@ -2401,7 +2401,7 @@ dlb *fd;
 	if (n) {
 	    int tmpn = n;
 	    while(n--) {
-		boolean found = TRUE;
+		boolean found = true;
 		Fread((void *) &tmplregion, sizeof(tmplregion), 1, fd);
 		if ((size = tmplregion.rname.len) != 0) {
 		    tmplregion.rname.str = alloc((unsigned)size + 1);
@@ -2454,13 +2454,13 @@ dlb *fd;
 
 		if(tmpregion.rtype > MAXRTYPE) {
 		    tmpregion.rtype -= MAXRTYPE+1;
-		    prefilled = TRUE;
+		    prefilled = true;
 		} else
-		    prefilled = FALSE;
+		    prefilled = false;
 
 		if(tmpregion.rlit < 0)
 		    tmpregion.rlit = (rnd(1+abs(depth(&u.uz))) < 11 && rn2(77))
-			? TRUE : FALSE;
+			? true : false;
 
 		if (!get_location(&tmpregion.x1, &tmpregion.y1, DRY|WET) ||
 		  !get_location(&tmpregion.x2, &tmpregion.y2, DRY|WET))
@@ -2488,17 +2488,17 @@ dlb *fd;
 		    min_rx = max_rx = tmpregion.x1;
 		    min_ry = max_ry = tmpregion.y1;
 		    flood_fill_rm(tmpregion.x1, tmpregion.y1,
-				  nroom+ROOMOFFSET, tmpregion.rlit, TRUE);
+				  nroom+ROOMOFFSET, tmpregion.rlit, true);
 		    add_room(min_rx, min_ry, max_rx, max_ry,
-			     FALSE, tmpregion.rtype, TRUE);
+			     false, tmpregion.rtype, true);
 		    troom->rlit = tmpregion.rlit;
-		    troom->irregular = TRUE;
+		    troom->irregular = true;
 		} else {
 		    add_room(tmpregion.x1, tmpregion.y1,
 			     tmpregion.x2, tmpregion.y2,
-			     tmpregion.rlit, tmpregion.rtype, TRUE);
+			     tmpregion.rlit, tmpregion.rtype, true);
 #ifdef SPECIALIZATION
-		    topologize(troom,FALSE);		/* set roomno */
+		    topologize(troom,false);		/* set roomno */
 #else
 		    topologize(troom);			/* set roomno */
 #endif
@@ -2754,7 +2754,7 @@ dlb *fd;
 
 	    walkfrom(x, y);
     }
-    wallification(1, 0, COLNO-1, ROWNO-1, FALSE);
+    wallification(1, 0, COLNO-1, ROWNO-1, false);
 
     /*
      * If there's a significant portion of maze unused by the special level,
@@ -2774,11 +2774,11 @@ dlb *fd;
 	    for(x = rnd((int) (20 * mapfact) / 100); x; x--) {
 		    maze1xy(&mm, DRY);
 		    (void) mkobj_at(rn2(2) ? GEM_CLASS : RANDOM_CLASS,
-							mm.x, mm.y, TRUE);
+							mm.x, mm.y, true);
 	    }
 	    for(x = rnd((int) (12 * mapfact) / 100); x; x--) {
 		    maze1xy(&mm, DRY);
-		    (void) mksobj_at(BOULDER, mm.x, mm.y, TRUE, FALSE);
+		    (void) mksobj_at(BOULDER, mm.x, mm.y, true, false);
 	    }
 	    for (x = rn2(2); x; x--) {
 		maze1xy(&mm, DRY);
@@ -2804,7 +2804,7 @@ dlb *fd;
 		    (void) maketrap(mm.x, mm.y, trytrap);
 	    }
     }
-    return TRUE;
+    return true;
 }
 
 /*
@@ -2816,15 +2816,15 @@ load_special(name)
 const char *name;
 {
 	dlb *fd;
-	boolean result = FALSE;
+	boolean result = false;
 	char c;
 	struct version_info vers_info;
 
 	fd = dlb_fopen_area(FILE_AREA_UNSHARE, name, RDBMODE);
-	if (!fd) return FALSE;
+	if (!fd) return false;
 
 	Fread((void *) &vers_info, sizeof vers_info, 1, fd);
-	if (!check_version(&vers_info, name, TRUE))
+	if (!check_version(&vers_info, name, true))
 	    goto give_up;
 
 	Fread((void *) &c, sizeof c, 1, fd); /* c Header */
@@ -2837,7 +2837,7 @@ const char *name;
 		    result = load_maze(fd);
 		    break;
 		default:	/* ??? */
-		    result = FALSE;
+		    result = false;
 	}
  give_up:
 	(void)dlb_fclose(fd);

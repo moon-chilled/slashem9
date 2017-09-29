@@ -24,7 +24,7 @@ X *			don't print unnecessary error messages for
 X *			#if !defined(FOO) && FOO != 0 && 10 / FOO ...
 X * 31-Oct-84	ado/MM	Added token concatenation
 X *  6-Nov-84	MM	Split from #define stuff, added sizeof stuff
-X * 19-Nov-84	ado	#if error returns TRUE for (sigh) compatibility
+X * 19-Nov-84	ado	#if error returns true for (sigh) compatibility
 X */
 X
 X#include	<stdio.h>
@@ -93,7 +93,7 @@ X
 Xtypedef struct optab {
 X    char	op;			/* Operator			*/
 X    char	prec;			/* Its precedence		*/
-X    char	skip;			/* Short-circuit: TRUE to skip	*/
+X    char	skip;			/* Short-circuit: true to skip	*/
 X} OPTAB;
 Xstatic int	evalue;			/* Current value from evallex()	*/
 X
@@ -216,7 +216,7 @@ X *		the next input token.
 X * evaleval	Evaluate the current operator, given the values on
 X *		the value stack.  Returns a pointer to the (new)
 X *		value stack.
-X * For compatiblity with older cpp's, this return returns 1 (TRUE)
+X * For compatiblity with older cpp's, this return returns 1 (true)
 X * if a syntax error is detected.
 X */
 X{
@@ -376,7 +376,7 @@ X}
 X
 XFILE_LOCAL int
 Xevallex(skip)
-Xint		skip;		/* TRUE if short-circuit evaluation	*/
+Xint		skip;		/* true if short-circuit evaluation	*/
 X/*
 X * Return next eval operator or value.  Called from eval().  It
 X * calls a special-purpose routines for 'char' strings and
@@ -603,7 +603,7 @@ X
 XFILE_LOCAL int
 Xbittest(value)
 X/*
-X * TRUE if value is zero or exactly one bit is set in value.
+X * true if value is zero or exactly one bit is set in value.
 X */
 X{
 X#if (4096 & ~(-4096)) == 0
@@ -657,7 +657,7 @@ X}
 X
 XFILE_LOCAL int
 Xevalchar(skip)
-Xint		skip;		/* TRUE if short-circuit evaluation	*/
+Xint		skip;		/* true if short-circuit evaluation	*/
 X/*
 X * Get a character constant
 X */
@@ -666,7 +666,7 @@ X	int	c;
 X	int	value;
 X	int	count;
 X
-X	instring = TRUE;
+X	instring = true;
 X	if ((c = cget()) == '\\') {
 X	    switch ((c = cget())) {
 X	    case 'a':				/* New in Standard	*/
@@ -754,7 +754,7 @@ X	    value <<= BITS_CHAR;
 X	    value += c;
 X#endif
 X	}
-X	instring = FALSE;
+X	instring = false;
 X	return (value);
 X}
 X
@@ -762,7 +762,7 @@ XFILE_LOCAL int *
 Xevaleval(valp, op, skip)
 Xint	*valp;
 Xint		op;
-Xint		skip;		/* TRUE if short-circuit evaluation	*/
+Xint		skip;		/* true if short-circuit evaluation	*/
 X/*
 X * Apply the argument operator to the data on the value stack.
 X * One or two values are popped from the value stack and the result
@@ -956,8 +956,8 @@ X *		the identifier.  Unlike macroid(), the token is
 X *		never expanded.
 X * macroid()	reads the next token (C identifier) into token[].
 X *		If it is a #defined macro, it is expanded, and
-X *		macroid() returns TRUE, otherwise, FALSE.
-X * catenate()	Does the dirty work of token concatenation, TRUE if it did.
+X *		macroid() returns true, otherwise, false.
+X * catenate()	Does the dirty work of token concatenation, true if it did.
 X * scanstring()	Reads a string from the input stream, calling
 X *		a user-supplied function for each character.
 X *		This function may be output() to write the
@@ -1117,9 +1117,9 @@ Xcatenate()
 X/*
 X * A token was just read (via macroid).
 X * If the next character is TOK_SEP, concatenate the next token
-X * return TRUE -- which should recall macroid after refreshing
+X * return true -- which should recall macroid after refreshing
 X * macroid's argument.  If it is not TOK_SEP, unget() the character
-X * and return FALSE.
+X * and return false.
 X */
 X{
 X	int		c;
@@ -1128,7 +1128,7 @@ X
 X#if OK_CONCAT
 X	if (get() != TOK_SEP) {			/* Token concatenation	*/
 X	    unget();
-X	    return (FALSE);
+X	    return (false);
 X	}
 X	else {
 X	    token1 = savestring(token);		/* Save first token	*/
@@ -1169,10 +1169,10 @@ X	     * Finally, setup to read the new token.
 X	     */
 X	    free(token1);			/* Free up memory	*/
 X	    ungetstring(work);			/* Unget the new thing,	*/
-X	    return (TRUE);
+X	    return (true);
 X	}
 X#else
-X	return (FALSE);				/* Not supported	*/
+X	return (false);				/* Not supported	*/
 X#endif
 X}
 X
@@ -1183,12 +1183,12 @@ Xint		(*outfun)();		/* Output function		*/
 X/*
 X * Scan off a string.  Warning if terminated by newline or EOF.
 X * outfun() outputs the character -- to a buffer if in a macro.
-X * TRUE if ok, FALSE if error.
+X * true if ok, false if error.
 X */
 X{
 X	int		c;
 X
-X	instring = TRUE;		/* Don't strip comments		*/
+X	instring = true;		/* Don't strip comments		*/
 X	(*outfun)(delim);
 X	while ((c = get()) != delim
 X	     && c != '\n'
@@ -1197,15 +1197,15 @@ X	    (*outfun)(c);
 X	    if (c == '\\')
 X		(*outfun)(get());
 X	}
-X	instring = FALSE;
+X	instring = false;
 X	if (c == delim) {
 X	    (*outfun)(c);
-X	    return (TRUE);
+X	    return (true);
 X	}
 X	else {
 X	    cerror("Unterminated string", NULLST);
 X	    unget();
-X	    return (FALSE);
+X	    return (false);
 X	}
 X}
 X
@@ -1221,13 +1221,13 @@ X	int	radix;			/* 8, 10, or 16		*/
 X	int		expseen;		/* 'e' seen in floater	*/
 X	int		signseen;		/* '+' or '-' seen	*/
 X	int		octal89;		/* For bad octal test	*/
-X	int		dotflag;		/* TRUE if '.' was seen	*/
+X	int		dotflag;		/* true if '.' was seen	*/
 X
-X	expseen = FALSE;			/* No exponent seen yet	*/
-X	signseen = TRUE;			/* No +/- allowed yet	*/
-X	octal89 = FALSE;			/* No bad octal yet	*/
+X	expseen = false;			/* No exponent seen yet	*/
+X	signseen = true;			/* No +/- allowed yet	*/
+X	octal89 = false;			/* No bad octal yet	*/
 X	radix = 10;				/* Assume decimal	*/
-X	if ((dotflag = (c == '.')) != FALSE) {	/* . something?		*/
+X	if ((dotflag = (c == '.')) != false) {	/* . something?		*/
 X	    (*outfun)('.');			/* Always out the dot	*/
 X	    if (type[(c = get())] != DIG) {	/* If not a float numb,	*/
 X		unget();			/* Rescan strange char	*/
@@ -1252,25 +1252,25 @@ X	     */
 X	    if (radix != 16 && (c == 'e' || c == 'E')) {
 X		if (expseen)			/* Already saw 'E'?	*/
 X		    break;			/* Exit loop, bad nbr.	*/
-X		expseen = TRUE;			/* Set exponent seen	*/
-X		signseen = FALSE;		/* We can read '+' now	*/
+X		expseen = true;			/* Set exponent seen	*/
+X		signseen = false;		/* We can read '+' now	*/
 X		radix = 10;			/* Decimal exponent	*/
 X	    }
 X	    else if (radix != 16 && c == '.') {
 X		if (dotflag)			/* Saw dot already?	*/
 X		    break;			/* Exit loop, two dots	*/
-X		dotflag = TRUE;			/* Remember the dot	*/
+X		dotflag = true;			/* Remember the dot	*/
 X		radix = 10;			/* Decimal fraction	*/
 X	    }
 X	    else if (c == '+' || c == '-') {	/* 1.0e+10		*/
 X		if (signseen)			/* Sign in wrong place?	*/
 X		    break;			/* Exit loop, not nbr.	*/
-X		/* signseen = TRUE; */		/* Remember we saw it	*/
+X		/* signseen = true; */		/* Remember we saw it	*/
 X	    }
 X	    else {				/* Check the digit	*/
 X		switch (c) {
 X		case '8': case '9':		/* Sometimes wrong	*/
-X		    octal89 = TRUE;		/* Do check later	*/
+X		    octal89 = true;		/* Do check later	*/
 X		case '0': case '1': case '2': case '3':
 X		case '4': case '5': case '6': case '7':
 X		    break;			/* Always ok		*/
@@ -1284,7 +1284,7 @@ X		    goto done;			/* Break from for loop	*/
 X		}				/* End of switch	*/
 X	    }					/* End general case	*/
 X	    (*outfun)(c);			/* Accept the character	*/
-X	    signseen = TRUE;			/* Don't read sign now	*/
+X	    signseen = true;			/* Don't read sign now	*/
 X	    c = get();				/* Read another char	*/
 X	}					/* End of scan loop	*/
 X	/*
@@ -1313,14 +1313,14 @@ X		case 'l':
 X		case 'L':
 X		    if (dotflag)
 X			goto nomore;
-X		    dotflag = TRUE;
+X		    dotflag = true;
 X		    break;
 X
 X		case 'u':
 X		case 'U':
 X		    if (expseen)
 X			goto nomore;
-X		    expseen = TRUE;
+X		    expseen = true;
 X		    break;
 X
 X		default:
@@ -1461,12 +1461,12 @@ X
 XDEFBUF *
 Xdefendel(name, delete)
 Xchar		*name;
-Xint		delete;			/* TRUE to delete a symbol	*/
+Xint		delete;			/* true to delete a symbol	*/
 X/*
-X * Enter this name in the lookup table (delete = FALSE)
-X * or delete this name (delete = TRUE).
-X * Returns a pointer to the define block (delete = FALSE)
-X * Returns NULL if the symbol wasn't defined (delete = TRUE).
+X * Enter this name in the lookup table (delete = false)
+X * or delete this name (delete = true).
+X * Returns a pointer to the define block (delete = false)
+X * Returns NULL if the symbol wasn't defined (delete = true).
 X */
 X{
 X	DEFBUF		*dp;
@@ -1623,7 +1623,7 @@ X			 * cpp1.c).  Thus, we know that the mainline code
 X			 * is skipping over blank lines and will do a
 X			 * #line at its convenience.
 X			 */
-X			wrongline = TRUE;	/* Need a #line now	*/
+X			wrongline = true;	/* Need a #line now	*/
 X		    }
 X		}
 X	    }
@@ -1660,9 +1660,9 @@ X	    ++line;				/* line counter		*/
 X	if (instring)				/* Strings just return	*/
 X	    return (c);				/* the character.	*/
 X	else if (c == '/') {			/* Comment?		*/
-X	    instring = TRUE;			/* So get() won't loop	*/
+X	    instring = true;			/* So get() won't loop	*/
 X	    if ((c = get()) != '*') {		/* Next byte '*'?	*/
-X		instring = FALSE;		/* Nope, no comment	*/
+X		instring = false;		/* Nope, no comment	*/
 X		unget();			/* Push the char. back	*/
 X		return ('/');			/* Return the slash	*/
 X	    }
@@ -1689,7 +1689,7 @@ X						/* Fall into * stuff	*/
 X		case '*':
 X		    if ((c = get()) != '/')	/* If comment doesn't	*/
 X			goto test;		/* end, look at next	*/
-X		    instring = FALSE;		/* End of comment,	*/
+X		    instring = false;		/* End of comment,	*/
 X		    if (keepcomments) {		/* Put out the comment	*/
 X			cput(c);		/* terminator, too	*/
 X		    }
@@ -1722,7 +1722,7 @@ X#endif
 X
 X		case '\n':			/* we'll need a #line	*/
 X		    if (!keepcomments)
-X			wrongline = TRUE;	/* later...		*/
+X			wrongline = true;	/* later...		*/
 X		default:			/* Anything else is	*/
 X		    break;			/* Just a character	*/
 X		}				/* End switch		*/
@@ -1730,7 +1730,7 @@ X	    }					/* End comment loop	*/
 X	}					/* End if in comment	*/
 X	else if (!inmacro && c == '\\') {	/* If backslash, peek 	*/
 X	    if ((c = get()) == '\n') {		/* for a <nl>.  If so,	*/
-X		wrongline = TRUE;
+X		wrongline = true;
 X		goto newline;
 X	    }
 X	    else {				/* Backslash anything	*/

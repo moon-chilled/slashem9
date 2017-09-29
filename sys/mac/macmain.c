@@ -103,8 +103,8 @@ main (void)
 #endif
 #ifdef NEWS
 		if(iflags.news) {
-			display_file(NEWS, FALSE);
-			iflags.news = FALSE;	/* in case dorecover() fails */
+			display_file(NEWS, false);
+			iflags.news = false;	/* in case dorecover() fails */
 		}
 #endif
 		pline("Restoring save file...");
@@ -112,9 +112,9 @@ main (void)
 		game_active = 1;
 		if (dorecover(fd)) {
 #ifdef WIZARD
-			if(!wizard && remember_wiz_mode) wizard = TRUE;
+			if(!wizard && remember_wiz_mode) wizard = true;
 #endif
-			check_special_room(FALSE);
+			check_special_room(false);
 
 			if (discover || wizard) {
 				if(yn("Do you want to keep the save file?") == 'n')

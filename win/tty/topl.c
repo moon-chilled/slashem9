@@ -53,7 +53,7 @@ tty_doprev_message()
                 i = (i + 1) % cw->rows;
             } while (i != cw->maxcol);
             putstr(prevmsg_win, 0, toplines);
-            display_nhwindow(prevmsg_win, TRUE);
+            display_nhwindow(prevmsg_win, true);
             destroy_nhwindow(prevmsg_win);
         } else if (iflags.prevmsg_window == 'c') {		/* combination */
             do {
@@ -84,7 +84,7 @@ tty_doprev_message()
                         i = (i + 1) % cw->rows;
                     } while (i != cw->maxcol);
                     putstr(prevmsg_win, 0, toplines);
-                    display_nhwindow(prevmsg_win, TRUE);
+                    display_nhwindow(prevmsg_win, true);
                     destroy_nhwindow(prevmsg_win);
                 }
 
@@ -106,7 +106,7 @@ tty_doprev_message()
                     cw->maxcol = cw->maxrow;
             } while (cw->maxcol != cw->maxrow);
 
-            display_nhwindow(prevmsg_win, TRUE);
+            display_nhwindow(prevmsg_win, true);
             destroy_nhwindow(prevmsg_win);
             cw->maxcol = cw->maxrow;
             ttyDisplay->dismiss_more = 0;
@@ -155,7 +155,7 @@ tty_doprev_message()
                         cw->maxcol = cw->maxrow;
             } while (cw->maxcol != cw->maxrow);
 
-            display_nhwindow(tmpwin, TRUE);
+            display_nhwindow(tmpwin, true);
             destroy_nhwindow(tmpwin);
 
             cw->maxcol = cw->maxrow;

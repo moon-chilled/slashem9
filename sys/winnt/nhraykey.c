@@ -194,7 +194,7 @@ int WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved)
 	bogus_key.Event.KeyEvent.wVirtualScanCode = 0;
 	bogus_key.Event.KeyEvent.uChar.AsciiChar = (uchar)0x80;
 	bogus_key.Event.KeyEvent.dwControlKeyState = 0;
-	return TRUE;
+	return true;
 }
 
 /*
@@ -303,7 +303,7 @@ int portdebug;
 	if (scan == 0 && vk == 0) {
 	    /* It's the bogus_key */
 	    ReadConsoleInput(hConIn,ir,1,&count);
-	    *valid = FALSE;
+	    *valid = false;
 	    return 0;
 	}
 
@@ -312,7 +312,7 @@ int portdebug;
 		else altseq = -1;	/* invalid altseq */
 	}
 	if (ch || (iskeypad(scan)) || (altseq > 0))
-		*valid = TRUE;
+		*valid = true;
 	/* if (!valid) return 0; */
     	/*
 	 * shiftstate can be checked to see if various special
@@ -362,10 +362,10 @@ int portdebug;
 		/* Prevent high characters from being interpreted as alt
 		 * sequences; also filter the bogus_key */
 		if (ch2 & 0x80)
-		    *valid = FALSE;
+		    *valid = false;
 		else
 		    ch = ch2;
-                if (ch == 0) *valid = FALSE;
+                if (ch == 0) *valid = false;
 	}
 	if (ch == '\r') ch = '\n';
 #ifdef PORT_DEBUG
@@ -403,13 +403,13 @@ boolean *valid;
 	if (scan == 0 && vk == 0) {
 	    /* It's the bogus_key */
 	    ReadConsoleInput(hConIn,ir,1,&count);
-	    *valid = FALSE;
+	    *valid = false;
 	    return 0;
 	}
 
 	altseq = is_altseq(shiftstate);
 	if (ch || (iskeypad(scan)) || altseq)
-		*valid = TRUE;
+		*valid = true;
 	/* if (!valid) return 0; */
     	/*
 	 * shiftstate can be checked to see if various special
@@ -439,7 +439,7 @@ boolean *valid;
 		CHAR ch2;
 		ReadConsole(hConIn,&ch2,1,&count,NULL);
 		ch = ch2 & 0xFF;
-                if (ch == 0) *valid = FALSE;
+                if (ch == 0) *valid = false;
 	}
 	if (ch == '\r') ch = '\n';
 	return ch;

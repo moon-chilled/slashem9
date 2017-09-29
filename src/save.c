@@ -67,9 +67,9 @@ dosave (void)
 		program_state.done_hup = 0;
 #endif
 #ifdef KEEP_SAVE
-                saverestore = FALSE;
+                saverestore = false;
                 if (flags.keep_savefile)
-                        if(yn("Really quit?") == 'n') saverestore = TRUE;
+                        if(yn("Really quit?") == 'n') saverestore = true;
                 if(dosave0() && !saverestore) {
 #else
 		if(dosave0()) {
@@ -77,7 +77,7 @@ dosave (void)
 			program_state.something_worth_saving = 0;
 			u.uhp = -1;		/* universal game's over indicator */
 			/* make sure they see the Saving message */
-			display_nhwindow(WIN_MESSAGE, TRUE);
+			display_nhwindow(WIN_MESSAGE, true);
 			exit_nhwindows("Be seeing you...");
 			terminate(EXIT_SUCCESS);
 	}
@@ -98,7 +98,7 @@ dosave (void)
 
 		fd = restore_saved_game();
 		if (fd >= 0) dorecover(fd);
-		check_special_room(FALSE);
+		check_special_room(false);
 		flags.move = 0;
 /*WAC correct these after restore*/
 		if(flags.moonphase == FULL_MOON)
@@ -108,7 +108,7 @@ dosave (void)
 		if(iflags.window_inited)
 			clear_nhwindow(WIN_MESSAGE);
 	}
-	saverestore = FALSE;
+	saverestore = false;
 #endif
 	(void)doredraw();
 	return 0;
@@ -171,7 +171,7 @@ dosave0()
 		    compress_area(fq_save, SAVEF);
 #ifdef KEEP_SAVE
 /*WAC don't restore if you didn't save*/
-			saverestore = FALSE;
+			saverestore = false;
 #endif
 		    return 0;
 		}
@@ -262,7 +262,7 @@ dosave0()
 		    return(0);
 		}
 		minit();	/* ZEROCOMP */
-		getlev(ofd, hackpid, ltmp, FALSE);
+		getlev(ofd, hackpid, ltmp, false);
 		(void) close(ofd);
 		bwrite(fd, (void *) &ltmp, sizeof ltmp); /* level number*/
 		savelev(fd, ltmp, WRITE_SAVE | FREE_SAVE);     /* actual level*/
@@ -343,7 +343,7 @@ void
 savestateinlock()
 {
 	int fd, hpid;
-	static boolean havestate = TRUE;
+	static boolean havestate = true;
 	char whynot[BUFSZ];
 
 	/* When checkpointing is on, the full state needs to be written
@@ -549,7 +549,7 @@ static unsigned char outbuf[ZEROCOMP_BUFSIZ];
 static unsigned short outbufp = 0;
 static short outrunlength = -1;
 static int bwritefd;
-static boolean compressing = FALSE;
+static boolean compressing = false;
 
 /*dbg()
 {
@@ -572,7 +572,7 @@ void
 bufon(fd)
 int fd;
 {
-    compressing = TRUE;
+    compressing = true;
     return;
 }
 
@@ -586,7 +586,7 @@ int fd;
 	panic("closing file with buffered data still unwritten");
     }
     outrunlength = -1;
-    compressing = FALSE;
+    compressing = false;
     return;
 }
 
@@ -659,7 +659,7 @@ int fd;
 
 static int bw_fd = -1;
 static FILE *bw_FILE = 0;
-static boolean buffering = FALSE;
+static boolean buffering = false;
 
 void
 bufon(fd)
@@ -672,7 +672,7 @@ bufon(fd)
     if((bw_FILE = fdopen(fd, "w")) == 0)
 	panic("buffering of file %d failed", fd);
 #endif
-    buffering = TRUE;
+    buffering = true;
 }
 
 void
@@ -680,7 +680,7 @@ bufoff(fd)
 int fd;
 {
     bflush(fd);
-    buffering = FALSE;
+    buffering = false;
 }
 
 void
@@ -915,7 +915,7 @@ free_dungeons()
 {
 #if defined(FREE_ALL_MEMORY) || defined(GTK_GRAPHICS) || defined(PROXY_GRAPHICS)
 	savelevchn(0, FREE_SAVE);
-	save_dungeon(0, FALSE, TRUE);
+	save_dungeon(0, false, true);
 #endif
 	return;
 }
@@ -964,7 +964,7 @@ freedynamicdata()
 # define free_light_sources(R) save_light_sources(0, FREE_SAVE, R);
 # define free_engravings() save_engravings(0, FREE_SAVE)
 # define freedamage()	 savedamage(0, FREE_SAVE)
-# define free_animals()	 mon_animal_list(FALSE)
+# define free_animals()	 mon_animal_list(false)
 
 	/* move-specific data */
 	dmonsfree();		/* release dead monsters */

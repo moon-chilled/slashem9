@@ -71,7 +71,7 @@ int distance;
 		    /* May scare some monsters */
 		    if (distm < distance/3 &&
 			    !resist(mtmp, TOOL_CLASS, 0, NOTELL))
-			monflee(mtmp, 0, FALSE, TRUE);
+			monflee(mtmp, 0, false, true);
 		}
 	    }
 	    mtmp = mtmp->nmon;
@@ -301,7 +301,7 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 				pline("%s falls into a chasm!", Monnam(mtmp));
 			    else if (flags.soundok && humanoid(mtmp->data))
 				You_hear("a scream!");
-			    mselftouch(mtmp, "Falling, ", TRUE);
+			    mselftouch(mtmp, "Falling, ", true);
 			    if (mtmp->mhp > 0)
 				if ((mtmp->mhp -= rnd(6)) <= 0) {
 				    if(!cansee(x,y))
@@ -309,7 +309,7 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 				    else {
 					You("destroy %s!", mtmp->mtame ?
 					    x_monnam(mtmp, ARTICLE_THE, "poor",
-				mtmp->mnamelth ? SUPPRESS_SADDLE : 0, FALSE):
+				mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false):
 					    mon_nam(mtmp));
 				    }
 				    xkilled(mtmp,0);
@@ -383,11 +383,11 @@ struct obj *instr;
 	switch (instr->otyp) {
 	case MAGIC_FLUTE:		/* Make monster fall asleep */
 	    if (do_spec && instr->spe > 0) {
-		consume_obj_charge(instr, TRUE);
+		consume_obj_charge(instr, true);
 
 		You("produce soft music.");
 		put_monsters_to_sleep(u.ulevel * 5);
-		exercise(A_DEX, TRUE);
+		exercise(A_DEX, true);
 		break;
 	    } /* else FALLTHRU */
 	case WOODEN_FLUTE:		/* May charm snakes */
@@ -396,18 +396,18 @@ struct obj *instr;
 	    do_spec &= (rn2(ACURR(A_DEX)) + u.ulevel > 25);
 	    pline("%s.", Tobjnam(instr, do_spec ? "trill" : "toot"));
 	    if (do_spec) charm_snakes(u.ulevel * 3);
-	    exercise(A_DEX, TRUE);
+	    exercise(A_DEX, true);
 	    break;
 	case FROST_HORN:		/* Idem wand of cold */
 	case FIRE_HORN:			/* Idem wand of fire */
 	    if (do_spec && instr->spe > 0) {
-		consume_obj_charge(instr, TRUE);
+		consume_obj_charge(instr, true);
 
 		if (!getdir(NULL)) {
 		    pline("%s.", Tobjnam(instr, "vibrate"));
 		    break;
 		} else if (!u.dx && !u.dy && !u.dz) {
-		    if ((damage = zapyourself(instr, TRUE)) != 0) {
+		    if ((damage = zapyourself(instr, true)) != 0) {
 			char buf[BUFSZ];
 			sprintf(buf, "using a magical horn on %sself", uhim());
 			losehp(damage, buf, KILLED_BY);
@@ -422,20 +422,20 @@ struct obj *instr;
 	case TOOLED_HORN:		/* Awaken or scare monsters */
 	    You("produce a frightful, grave sound.");
 	    awaken_monsters(u.ulevel * 30);
-	    exercise(A_WIS, FALSE);
+	    exercise(A_WIS, false);
 	    break;
 	case BUGLE:			/* Awaken & attract soldiers */
 	    You("extract a loud noise from %s.", the(xname(instr)));
 	    awaken_soldiers();
-	    exercise(A_WIS, FALSE);
+	    exercise(A_WIS, false);
 	    break;
 	case MAGIC_HARP:		/* Charm monsters */
 	    if (do_spec && instr->spe > 0) {
-		consume_obj_charge(instr, TRUE);
+		consume_obj_charge(instr, true);
 
 		pline("%s very attractive music.", Tobjnam(instr, "produce"));
 		charm_monsters((u.ulevel - 1) / 3 + 1);
-		exercise(A_DEX, TRUE);
+		exercise(A_DEX, true);
 		break;
 	    } /* else FALLTHRU */
 	case WOODEN_HARP:		/* May calm Nymph */
@@ -443,11 +443,11 @@ struct obj *instr;
 	    pline("%s %s.", The(xname(instr)),
 		  do_spec ? "produces a lilting melody" : "twangs");
 	    if (do_spec) calm_nymphs(u.ulevel * 3);
-	    exercise(A_DEX, TRUE);
+	    exercise(A_DEX, true);
 	    break;
 	case DRUM_OF_EARTHQUAKE:	/* create several pits */
 	    if (do_spec && instr->spe > 0) {
-		consume_obj_charge(instr, TRUE);
+		consume_obj_charge(instr, true);
 
 		You("produce a heavy, thunderous rolling!");
 		pline_The("entire dungeon is shaking around you!");
@@ -485,7 +485,7 @@ struct obj *instr;
 	case LEATHER_DRUM:		/* Awaken monsters */
 	    You("beat a deafening row!");
 	    awaken_monsters(u.ulevel * 40);
-	    exercise(A_WIS, FALSE);
+	    exercise(A_WIS, false);
 	    break;
 	default:
 	    impossible("What a weird instrument (%d)!", instr->otyp);
@@ -545,7 +545,7 @@ do_play_instrument (struct obj *instr)
 	 * and if the tune conforms to what we're waiting for.
 	 */
 	if(Is_stronghold(&u.uz)) {
-	    exercise(A_WIS, TRUE);		/* just for trying */
+	    exercise(A_WIS, true);		/* just for trying */
 	    if(!strcmp(buf,tune)) {
 		/* Search for the drawbridge */
 		for(y=u.uy-1; y<=u.uy+1; y++)
@@ -564,33 +564,33 @@ do_play_instrument (struct obj *instr)
 		/* Okay, it wasn't the right tune, but perhaps
 		 * we can give the player some hints like in the
 		 * Mastermind game */
-		ok = FALSE;
+		ok = false;
 		for(y = u.uy-1; y <= u.uy+1 && !ok; y++)
 		    for(x = u.ux-1; x <= u.ux+1 && !ok; x++)
 			if(isok(x,y))
 			if(IS_DRAWBRIDGE(levl[x][y].typ) ||
 			   is_drawbridge_wall(x,y) >= 0)
-				ok = TRUE;
+				ok = true;
 		if(ok) { /* There is a drawbridge near */
 		    int tumblers, gears;
 		    boolean matched[5];
 
 		    tumblers = gears = 0;
 		    for(x=0; x < 5; x++)
-			matched[x] = FALSE;
+			matched[x] = false;
 
 		    for(x=0; x < (int)strlen(buf); x++)
 			if(x < 5) {
 			    if(buf[x] == tune[x]) {
 				gears++;
-				matched[x] = TRUE;
+				matched[x] = true;
 			    } else
 				for(y=0; y < 5; y++)
 				    if(!matched[y] &&
 				       buf[x] == tune[y] &&
 				       buf[y] != tune[y]) {
 					tumblers++;
-					matched[y] = TRUE;
+					matched[y] = true;
 					break;
 				    }
 			}

@@ -86,7 +86,7 @@ const char *s;
     puts(s);
 }
 
-static int windows_lock = FALSE;
+static int windows_lock = false;
 
 int
 lock_windows (int flag)

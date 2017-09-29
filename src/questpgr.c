@@ -382,7 +382,7 @@ int how;
 	    convert_line();
 	    putstr(datawin, 0, out_line);
 	}
-	display_nhwindow(datawin, TRUE);
+	display_nhwindow(datawin, true);
 	destroy_nhwindow(datawin);
 }
 

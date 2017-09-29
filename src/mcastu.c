@@ -423,8 +423,8 @@ int spellnum;
 	    pline("A pool appears beneath you!");
 	    levl[u.ux][u.uy].typ = POOL;
 	    del_engr_at(u.ux, u.uy);
-	    water_damage(level.objects[u.ux][u.uy], FALSE, TRUE);
-	    spoteffects(FALSE);  /* possibly drown, notice objects */
+	    water_damage(level.objects[u.ux][u.uy], false, true);
+	    spoteffects(false);  /* possibly drown, notice objects */
 	}
 	else
 	    impossible("bad pool creation?");
@@ -468,7 +468,7 @@ int spellnum;
 		mm.x = u.ux;
 		mm.y = u.uy;
 		pline("Undead creatures are called forth from the grave!");
-		mkundead(&mm, FALSE, NO_MINVENT);
+		mkundead(&mm, false, NO_MINVENT);
 	}
 	dmg = 0;
 	break;
@@ -520,12 +520,12 @@ int spellnum;
 	    shieldeff(u.ux, u.uy);
 	    if (!Stunned)
 		You_feel("momentarily disoriented.");
-	    make_stunned(1L, FALSE);
+	    make_stunned(1L, false);
 	} else {
 	    You(Stunned ? "struggle to keep your balance." : "reel...");
 	    dmg = d(ACURR(A_DEX) < 12 ? 6 : 4, 4);
 	    if (Half_spell_damage) dmg = (dmg + 1) / 2;
-	    make_stunned(HStun + dmg, FALSE);
+	    make_stunned(HStun + dmg, false);
 	}
 	dmg = 0;
 	break;
@@ -600,7 +600,7 @@ int spellnum;
 	destroy_item(SCROLL_CLASS, AD_FIRE);
 	destroy_item(POTION_CLASS, AD_FIRE);
 	destroy_item(SPBOOK_CLASS, AD_FIRE);
-	(void) burn_floor_paper(u.ux, u.uy, TRUE, FALSE);
+	(void) burn_floor_paper(u.ux, u.uy, true, false);
 	break;
     case CLC_LIGHTNING:
     {
@@ -612,7 +612,7 @@ int spellnum;
 	reflects = ureflects("It bounces off your %s%s.", "");
 	if (!Blind) {
 	    pline("You are blinded by the flash!");
-	    make_blinded(Half_spell_damage ? 10L : 20L, FALSE);
+	    make_blinded(Half_spell_damage ? 10L : 20L, false);
 	}
 	if (reflects || Shock_resistance) {
 	    shieldeff(u.ux, u.uy);
@@ -645,13 +645,13 @@ int spellnum;
 
 	quan = (mtmp->m_lev < 2) ? 1 : rnd((int)mtmp->m_lev / 2);
 	if (quan < 3) quan = 3;
-	success = pm ? TRUE : FALSE;
+	success = pm ? true : false;
 	for (i = 0; i <= quan; i++) {
 	    if (!enexto(&bypos, mtmp->mux, mtmp->muy, mtmp->data))
 		break;
 	    if ((pm = mkclass(let,0)) != 0 &&
 		    (mtmp2 = makemon(pm, bypos.x, bypos.y, NO_MM_FLAGS)) != 0) {
-		success = TRUE;
+		success = true;
 		mtmp2->msleeping = mtmp2->mpeaceful = mtmp2->mtame = 0;
 		set_malign(mtmp2);
 	    }
@@ -688,7 +688,7 @@ int spellnum;
 	    pline("Scales cover your %s!",
 		  (num_eyes == 1) ?
 		  body_part(EYE) : makeplural(body_part(EYE)));
-	    make_blinded(Half_spell_damage ? 100L : 200L, FALSE);
+	    make_blinded(Half_spell_damage ? 100L : 200L, false);
 	    if (!Blind) Your(vision_clears);
 	    dmg = 0;
 	} else
@@ -719,7 +719,7 @@ int spellnum;
 
 	    dmg = (int)mtmp->m_lev;
 	    if (Half_spell_damage) dmg = (dmg + 1) / 2;
-	    make_confused(HConfusion + dmg, TRUE);
+	    make_confused(HConfusion + dmg, true);
 	    if (Hallucination)
 		You_feel("%s!", oldprop ? "trippier" : "trippy");
 	    else
@@ -775,7 +775,7 @@ int spellnum;
 	case MGC_HASTE_SELF:
 	case MGC_CURE_SELF:
 	case MGC_CALL_UNDEAD:
-	    return TRUE;
+	    return true;
 	default:
 	    break;
 	}
@@ -783,12 +783,12 @@ int spellnum;
 	switch (spellnum) {
 	case CLC_INSECTS:
 	case CLC_CURE_SELF:
-	    return TRUE;
+	    return true;
 	default:
 	    break;
 	}
     }
-    return FALSE;
+    return false;
 }
 
 /* Some spells are useless under some circumstances. */
@@ -812,54 +812,54 @@ int spellnum;
 	if (mtmp->mpeaceful && (spellnum == MGC_AGGRAVATION ||
                spellnum == MGC_SUMMON_MONS || spellnum == MGC_CLONE_WIZ ||
                spellnum == MGC_CALL_UNDEAD))
-	    return TRUE;
+	    return true;
 	/* haste self when already fast */
 	if (mtmp->permspeed == MFAST && spellnum == MGC_HASTE_SELF)
-	    return TRUE;
+	    return true;
 	/* invisibility when already invisible */
 	if ((mtmp->minvis || mtmp->invis_blkd) && spellnum == MGC_DISAPPEAR)
-	    return TRUE;
+	    return true;
 	/* peaceful monster won't cast invisibility if you can't see invisible,
 	   same as when monsters drink potions of invisibility.  This doesn't
 	   really make a lot of sense, but lets the player avoid hitting
 	   peaceful monsters by mistake */
 	if (mtmp->mpeaceful && !See_invisible && spellnum == MGC_DISAPPEAR)
-	    return TRUE;
+	    return true;
 	/* healing when already healed */
 	if (mtmp->mhp == mtmp->mhpmax && spellnum == MGC_CURE_SELF)
-	    return TRUE;
+	    return true;
 	/* don't summon monsters if it doesn't think you're around */
 	if (!mcouldseeu && (spellnum == MGC_SUMMON_MONS ||
 		spellnum == MGC_CALL_UNDEAD ||
 		(!mtmp->iswiz && spellnum == MGC_CLONE_WIZ)))
-	    return TRUE;
+	    return true;
 	/* only lichs can cast call undead */
 	if (mtmp->data->mlet != S_LICH && spellnum == MGC_CALL_UNDEAD)
-	    return TRUE;
+	    return true;
 	/* pools can only be created in certain locations and then only
 	 * rarely unless you're carrying the amulet.
 	 */
 	if ((levl[u.ux][u.uy].typ != ROOM && levl[u.ux][u.uy].typ != CORR
 		|| !u.uhave.amulet && rn2(10)) && spellnum == MGC_CREATE_POOL)
-	    return TRUE;
+	    return true;
 	if ((!mtmp->iswiz || flags.no_of_wizards > 1)
 						&& spellnum == MGC_CLONE_WIZ)
-	    return TRUE;
+	    return true;
     } else if (adtyp == AD_CLRC) {
 	/* summon insects/sticks to snakes won't be cast by peaceful monsters */
 	if (mtmp->mpeaceful && spellnum == CLC_INSECTS)
-	    return TRUE;
+	    return true;
 	/* healing when already healed */
 	if (mtmp->mhp == mtmp->mhpmax && spellnum == CLC_CURE_SELF)
-	    return TRUE;
+	    return true;
 	/* don't summon insects if it doesn't think you're around */
 	if (!mcouldseeu && spellnum == CLC_INSECTS)
-	    return TRUE;
+	    return true;
 	/* blindness spell on blinded player */
 	if (Blinded && spellnum == CLC_BLIND_YOU)
-	    return TRUE;
+	    return true;
     }
-    return FALSE;
+    return false;
 }
 
 
@@ -877,7 +877,7 @@ buzzmu(mtmp, mattk)		/* monster uses spell (ranged) */
 	    return(0);
 
 	if (mtmp->mcan) {
-	    cursetxt(mtmp, FALSE);
+	    cursetxt(mtmp, false);
 	    return(0);
 	}
 	if(lined_up(mtmp) && rn2(3)) {

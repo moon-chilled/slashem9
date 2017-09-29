@@ -170,7 +170,7 @@ int done2(void) {
 		wait_synch();
 		if(multi > 0) nomul(0);
 		if(multi == 0) {
-		    u.uinvulnerable = FALSE;	/* avoid ctrl-C bug -dlc */
+		    u.uinvulnerable = false;	/* avoid ctrl-C bug -dlc */
 		    u.usleep = 0;
 		}
 		return 0;
@@ -365,34 +365,34 @@ static boolean should_query_disclose_option(int category, char *defquery) {
 		   "should_query_disclose_option: bad disclosure index %d %c",
 		       idx, category);
 	    *defquery = DISCLOSE_PROMPT_DEFAULT_YES;
-	    return TRUE;
+	    return true;
 	}
 	if (flags.end_disclose[idx] == DISCLOSE_YES_WITHOUT_PROMPT) {
 	    *defquery = 'y';
-	    return FALSE;
+	    return false;
 	} else if (flags.end_disclose[idx] == DISCLOSE_NO_WITHOUT_PROMPT) {
 	    *defquery = 'n';
-	    return FALSE;
+	    return false;
 	} else if (flags.end_disclose[idx] == DISCLOSE_PROMPT_DEFAULT_YES) {
 	    *defquery = 'y';
-	    return TRUE;
+	    return true;
 	} else if (flags.end_disclose[idx] == DISCLOSE_PROMPT_DEFAULT_NO) {
 	    *defquery = 'n';
-	    return TRUE;
+	    return true;
 	}
     }
     if (defquery)
 	impossible("should_query_disclose_option: bad category %c", category);
     else
 	impossible("should_query_disclose_option: null defquery");
-    return TRUE;
+    return true;
 }
 
 static void disclose(int how, boolean taken) {
 	char	c = 0, defquery;
 	char	qbuf[QBUFSZ];
 	boolean ask;
-	boolean hallu=FALSE;
+	boolean hallu=false;
 
 	if (invent) {
 	    if(taken)
@@ -408,25 +408,25 @@ static void disclose(int how, boolean taken) {
 			struct obj *obj;
 
 			if (Hallucination) {
-			    make_hallucinated(0L, FALSE, 0L);
-			    hallu = TRUE;
+			    make_hallucinated(0L, false, 0L);
+			    hallu = true;
 			}
 			for (obj = invent; obj; obj = obj->nobj) {
 			    makeknown(obj->otyp);
 			    obj->known = obj->bknown = obj->dknown = obj->rknown = 1;
 			}
 #ifdef DUMP_LOG
-			(void) dump_inventory(NULL, TRUE);
-			do_containerconts(invent, TRUE, TRUE, TRUE);
+			(void) dump_inventory(NULL, true);
+			do_containerconts(invent, true, true, true);
 #else
-			(void) display_inventory(NULL, TRUE);
-			container_contents(invent, TRUE, TRUE);
+			(void) display_inventory(NULL, true);
+			container_contents(invent, true, true);
 #endif /* DUMP_LOG */
 		}
 		if (c == 'q')  done_stopprint++;
 	    }
 	}
-	if (hallu) make_hallucinated(20L, FALSE, 0L);
+	if (hallu) make_hallucinated(20L, false, 0L);
 
 	ask = should_query_disclose_option('a', &defquery);
 	if (!done_stopprint) {
@@ -446,7 +446,7 @@ static void disclose(int how, boolean taken) {
 	ask = should_query_disclose_option('v', &defquery);
 	if (!done_stopprint)
 #ifdef DUMP_LOG
-	    do_vanquished(defquery, ask, TRUE);
+	    do_vanquished(defquery, ask, true);
 #else
 	    list_vanquished(defquery, ask);
 #endif
@@ -454,7 +454,7 @@ static void disclose(int how, boolean taken) {
 	ask = should_query_disclose_option('g', &defquery);
 	if (!done_stopprint)
 #ifdef DUMP_LOG
-	    list_genocided(defquery, ask,TRUE);
+	    list_genocided(defquery, ask,true);
 #else
 	    list_genocided(defquery, ask);
 #endif
@@ -481,7 +481,7 @@ static void savelife(int how) {
 	u.uhp = u.uhpmax;
 	if (u.uhunger < 500) {
 	    u.uhunger = 500;
-	    newuhs(FALSE);
+	    newuhs(false);
 	}
 	/* cure impending doom of sickness hero won't have time to fix */
 	if ((Sick & TIMEOUT) == 1) {
@@ -639,7 +639,7 @@ void done(int how) {
 			curse(uamul);
 
 		uunstone();
-		(void) adjattrib(A_CON, -1, TRUE);
+		(void) adjattrib(A_CON, -1, true);
 		if(u.uhpmax <= 0) u.uhpmax = 1;
 		savelife(how);
 		killer = 0;
@@ -658,7 +658,7 @@ void done(int how) {
 		if (uamul)
 			useup(uamul);
 
-		(void) adjattrib(A_CON, -1, TRUE);
+		(void) adjattrib(A_CON, -1, true);
 		if(u.uhpmax <= 0) u.uhpmax = 10;	/* arbitrary */
 		savelife(how);
 		if (how == GENOCIDED)
@@ -712,7 +712,7 @@ die:
 	iflags.vision_inited = 0;
 	/* might have been killed while using a disposable item, so make sure
 	   it's gone prior to inventory disclosure and creation of bones data */
-	inven_inuse(TRUE);
+	inven_inuse(true);
 
         /* Update the realtime counter to reflect the playtime of the current
          * game. */
@@ -790,11 +790,11 @@ die:
 	    taken = paybill((how == ESCAPED) ? -1 : (how != QUIT));
 	    paygd();
 	    clearpriests();
-	} else	taken = FALSE;	/* lint; assert( !bones_ok ); */
+	} else	taken = false;	/* lint; assert( !bones_ok ); */
 
 	clearlocks();
 
-	if (have_windows) display_nhwindow(WIN_MESSAGE, FALSE);
+	if (have_windows) display_nhwindow(WIN_MESSAGE, false);
 
 	if (strcmp(flags.end_disclose, "none") && how != PANICKED)
 		disclose(how, taken);
@@ -804,7 +804,7 @@ die:
 	/* calculate score, before creating bones [container gold] */
 	{
 	    long tmp;
-	    int deepest = deepest_lev_reached(FALSE);
+	    int deepest = deepest_lev_reached(false);
 
 #ifndef GOLDOBJ
 	    umoney = u.ugold;
@@ -849,7 +849,7 @@ die:
 	/* clean up unneeded windows */
 	if (have_windows) {
 	    wait_synch();
-	    display_nhwindow(WIN_MESSAGE, TRUE);
+	    display_nhwindow(WIN_MESSAGE, true);
 	    destroy_nhwindow(WIN_MAP);
 	    destroy_nhwindow(WIN_STATUS);
 	    destroy_nhwindow(WIN_MESSAGE);
@@ -908,9 +908,9 @@ die:
 				  * (long)objects[val->list[i].typ].oc_cost;
 
 	    /* count the points for artifacts */
-	    artifact_score(invent, TRUE, endwin);
+	    artifact_score(invent, true, endwin);
 
-	    keepdogs(TRUE);
+	    keepdogs(true);
 	    viz_array[0][0] |= IN_SIGHT; /* need visibility for naming */
 	    mtmp = mydogs;
 	    strcpy(pbuf, "You");
@@ -941,7 +941,7 @@ die:
 	    }
 
 	    if (!done_stopprint)
-		artifact_score(invent, FALSE, endwin);	/* list artifacts */
+		artifact_score(invent, false, endwin);	/* list artifacts */
 
 	    /* list valuables here */
 	    for (val = valuables; val->list; val++) {
@@ -952,7 +952,7 @@ die:
 
 		    if (count == 0L) continue;
 		    if (objects[typ].oc_class != GEM_CLASS || typ <= LAST_GEM) {
-			otmp = mksobj(typ, FALSE, FALSE);
+			otmp = mksobj(typ, false, false);
 			makeknown(otmp->otyp);
 			otmp->known = 1;	/* for fake amulets */
 			otmp->dknown = 1;	/* seen it (blindness fix) */
@@ -1023,7 +1023,7 @@ die:
 #endif
 	}
 	if (!done_stopprint)
-	    display_nhwindow(endwin, TRUE);
+	    display_nhwindow(endwin, true);
 	if (endwin != WIN_ERR)
 	    destroy_nhwindow(endwin);
 
@@ -1050,7 +1050,7 @@ die:
 void container_contents(struct obj *list, boolean identified, boolean all_containers)
 #ifdef DUMP_LOG
 {
-	do_containerconts(list, identified, all_containers, FALSE);
+	do_containerconts(list, identified, all_containers, false);
 }
 
 void do_containerconts(struct obj *list, boolean identified, boolean all_containers, boolean want_dump)
@@ -1086,19 +1086,19 @@ void do_containerconts(struct obj *list, boolean identified, boolean all_contain
 #ifdef DUMP_LOG
 		    if (want_dump)  dump("","");
 #endif
-		    display_nhwindow(tmpwin, TRUE);
+		    display_nhwindow(tmpwin, true);
 		    destroy_nhwindow(tmpwin);
 		    if (all_containers) {
 #ifdef DUMP_LOG
-			do_containerconts(box->cobj, identified, TRUE,
+			do_containerconts(box->cobj, identified, true,
 					  want_dump);
 #else
-			container_contents(box->cobj, identified, TRUE);
+			container_contents(box->cobj, identified, true);
 #endif /* DUMP_LOG */
 		    }
 		} else {
 		    pline("%s empty.", Tobjnam(box, "are"));
-		    display_nhwindow(WIN_MESSAGE, FALSE);
+		    display_nhwindow(WIN_MESSAGE, false);
 #ifdef DUMP_LOG
 		    if (want_dump) {
 		      dump(The(xname(box)), " is empty.");
@@ -1130,7 +1130,7 @@ void terminate(int status) {
 static boolean list_vanquished(char defquery, boolean ask)
 #ifdef DUMP_LOG
 {
-  do_vanquished(defquery, ask, FALSE);
+  do_vanquished(defquery, ask, false);
 }
 
 void do_vanquished(int defquery, boolean ask, boolean want_dump)
@@ -1208,7 +1208,7 @@ void do_vanquished(int defquery, boolean ask, boolean want_dump)
 		if (want_dump)  dump("  ", buf);
 #endif
 	    }
-	    display_nhwindow(klwin, TRUE);
+	    display_nhwindow(klwin, true);
 	    destroy_nhwindow(klwin);
 #ifdef DUMP_LOG
 	    if (want_dump)  dump("", "");
@@ -1219,7 +1219,7 @@ void do_vanquished(int defquery, boolean ask, boolean want_dump)
 }
 
 int dolistvanq(void) {
-    if (!list_vanquished('y', FALSE))
+    if (!list_vanquished('y', false))
         pline("No monsters have yet been killed.");
     return(0);
 }
@@ -1283,7 +1283,7 @@ static void list_genocided(char defquery, boolean ask)
 	    if (want_dump)  dump("  ", buf);
 #endif
 
-	    display_nhwindow(klwin, TRUE);
+	    display_nhwindow(klwin, true);
 	    destroy_nhwindow(klwin);
 	}
     }

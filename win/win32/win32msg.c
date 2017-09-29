@@ -54,10 +54,10 @@ LONG WINAPI BaseWndProc(HWND hWnd,UINT messg,UINT wParam,LONG lParam)
 	     rect.left += GetSystemMetrics(SM_CXFRAME) * 2;
 	     rect.right = rect.left + (COLNO * DefCharWidth);
    	     rect.bottom = rect.top + ((5 + ROWNO + 2) * BaseUnits);
-	     (void) AdjustWindowRect(&rect,WS_OVERLAPPEDWINDOW, TRUE);
+	     (void) AdjustWindowRect(&rect,WS_OVERLAPPEDWINDOW, true);
 	     BaseWidth = rect.right - rect.left + 1;
 	     BaseHeight = rect.bottom - rect.top + 1;
-	     MoveWindow(hWnd, rect.left, rect.top, BaseWidth, BaseHeight, TRUE);
+	     MoveWindow(hWnd, rect.left, rect.top, BaseWidth, BaseHeight, true);
 	     GetClientRect(hWnd, &rcClient);
 
 	     MessageHeight  = BaseUnits * 5;
@@ -387,13 +387,13 @@ LRESULT CALLBACK MenuDialogProc(HWND hdlg,UINT messg,UINT wParam,LONG lParam)
 					EndDialog(hdlg,0);
 					break;
 				default:
-					return FALSE;
+					return false;
 			}
 			break;
 		default:
-			return FALSE;
+			return false;
 		}
-	return TRUE;
+	return true;
 }
 
 BOOL WINAPI AskNameProc(HWND hDlg, UINT messg, UINT wParam, LONG lParam)
@@ -409,7 +409,7 @@ BOOL WINAPI AskNameProc(HWND hDlg, UINT messg, UINT wParam, LONG lParam)
 		maxsize = (WPARAM)((sizeof plname) - 1);
 		hEditBox = GetDlgItem(hDlg, IDD_NAME);
 		SendMessage(hEditBox, EM_LIMITTEXT, maxsize, (LPARAM)0);
-		return TRUE;
+		return true;
 	    case WM_COMMAND:
 		switch(LOWORD(wParam)) {
 		    case IDOK:
@@ -430,15 +430,15 @@ BOOL WINAPI AskNameProc(HWND hDlg, UINT messg, UINT wParam, LONG lParam)
 					(WPARAM)0,
 					(LPARAM)(LPCSTR)input_text);
 			}
-			EndDialog(hDlg, TRUE);
-			return TRUE;
+			EndDialog(hDlg, true);
+			return true;
 		    case IDCANCEL:
 			EndDialog(hDlg, 0);
-			return TRUE;
+			return true;
 		}
 		return 0;
 	}
-	return FALSE;
+	return false;
 }
 static int nCurrentChar;
 
@@ -450,7 +450,7 @@ BOOL WINAPI PlayerSelectProc(HWND hDlg, UINT messg, UINT wParam, LONG lParam)
 		case WM_INITDIALOG:
 			CheckRadioButton(hDlg,IDD_ARCH,IDD_RAND,IDD_RAND);
 			nCurrentChar = IDD_RAND;
-			return TRUE;
+			return true;
 		case WM_COMMAND:
 			switch (wParam) {
 			   case IDOK:
@@ -461,13 +461,13 @@ BOOL WINAPI PlayerSelectProc(HWND hDlg, UINT messg, UINT wParam, LONG lParam)
 					pl_character[0] =
 					   pl_classes[nCurrentChar-IDD_ARCH];
 				}
-				EndDialog(hDlg,TRUE);
-				return TRUE;
+				EndDialog(hDlg,true);
+				return true;
 				break;
 			   case IDCANCEL:
 				pl_character[0] = 0;
-				EndDialog(hDlg,FALSE);
-				return TRUE;
+				EndDialog(hDlg,false);
+				return true;
 				break;
 			   case IDD_ARCH:
 			   case IDD_BARB:
@@ -485,11 +485,11 @@ BOOL WINAPI PlayerSelectProc(HWND hDlg, UINT messg, UINT wParam, LONG lParam)
 				nCurrentChar = wParam;
 				CheckRadioButton(hDlg,IDD_ARCH,
 						 IDD_RAND,wParam);
-				return TRUE;
+				return true;
 				break;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 BOOL WINAPI CopyrightProc(HWND hDlg, UINT messg, UINT wParam, LONG lParam)
@@ -500,16 +500,16 @@ BOOL WINAPI CopyrightProc(HWND hDlg, UINT messg, UINT wParam, LONG lParam)
 			switch (wParam)
 			{
 			   case IDOK:
-				EndDialog(hDlg,TRUE);
-				return TRUE;
+				EndDialog(hDlg,true);
+				return true;
 				break;
 			}
 			break;
 
 		default:
-			return FALSE;
+			return false;
 	}
-	return FALSE;
+	return false;
 }
 
 BOOL CALLBACK EnumChildProc(hwndChild, lParam)
@@ -526,7 +526,7 @@ LPARAM lParam;
 	   case NHW_MESSAGE:
 			MoveWindow(hwndChild,
 				   MessageX, MessageY,
-				   MessageWidth, MessageHeight, TRUE);
+				   MessageWidth, MessageHeight, true);
 			wins[NHW_MESSAGE]->WindowWidth = MessageWidth;
 			wins[NHW_MESSAGE]->WindowHeight = MessageHeight;
 			wins[NHW_MESSAGE]->nWindowX = MessageX;
@@ -536,7 +536,7 @@ LPARAM lParam;
 	   case NHW_MAP:
 			MoveWindow(hwndChild,
 				   MapX, MapY,
-				   MapWidth, MapHeight, TRUE);
+				   MapWidth, MapHeight, true);
 			wins[NHW_MAP]->WindowWidth = MapWidth;
 			wins[NHW_MAP]->WindowHeight = MapHeight;
 			wins[NHW_MAP]->nWindowX = MapX;
@@ -546,7 +546,7 @@ LPARAM lParam;
 	   case NHW_STATUS:
 			MoveWindow(hwndChild,
 				   0, StatusY,
-				   StatusWidth, StatusHeight, TRUE);
+				   StatusWidth, StatusHeight, true);
 			wins[NHW_STATUS]->WindowWidth = StatusWidth;
 			wins[NHW_STATUS]->WindowHeight = StatusHeight;
 			wins[NHW_STATUS]->nWindowX = 0;
@@ -554,7 +554,7 @@ LPARAM lParam;
 			break;
 	}
 	ShowWindow(hwndChild, SW_SHOW);
-	return TRUE;
+	return true;
 }
 
 BOOL WINAPI AboutDiaProc(HWND hdlg,UINT messg,UINT wParam,LONG lParam)
@@ -568,13 +568,13 @@ BOOL WINAPI AboutDiaProc(HWND hdlg,UINT messg,UINT wParam,LONG lParam)
 					EndDialog(hdlg,0);
 					break;
 				default:
-					return FALSE;
+					return false;
 			}
 			break;
 		default:
-			return FALSE;
+			return false;
 		}
-	return TRUE;
+	return true;
 }
 
 

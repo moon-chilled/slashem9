@@ -127,7 +127,7 @@ md_start(startp)
 {
     coord testcc;	/* scratch coordinates */
     int row;		/* current row we are checking */
-    int lax;		/* if TRUE, pick a position in sight. */
+    int lax;		/* if true, pick a position in sight. */
     int dd;		/* distance to current point */
     int max_distance;	/* max distance found so far */
 
@@ -137,8 +137,8 @@ md_start(startp)
      */
     if (Blind && !Blind_telepat) {
 	if (!enexto(startp, u.ux, u.uy, NULL))
-	    return FALSE;	/* no good posiitons */
-	return TRUE;
+	    return false;	/* no good posiitons */
+	return true;
     }
 
     /*
@@ -148,12 +148,12 @@ md_start(startp)
     if (couldsee(upstair.sx, upstair.sy)) {
 	startp->x = upstair.sx;
 	startp->y = upstair.sy;
-	return TRUE;
+	return true;
     }
     if (couldsee(dnstair.sx, dnstair.sy)) {
 	startp->x = dnstair.sx;
 	startp->y = dnstair.sy;
-	return TRUE;
+	return true;
     }
 
     /*
@@ -210,10 +210,10 @@ retry:
 	    lax = 1;		/* just find a position */
 	    goto retry;
 	}
-	return FALSE;
+	return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -247,9 +247,9 @@ md_stop(stopp, startp)
     /* If we didn't find a good spot, try enexto(). */
     if (min_distance < 0 &&
 		!enexto(stopp, u.ux, u.uy, &mons[PM_MAIL_DAEMON]))
-	return FALSE;
+	return false;
 
-    return TRUE;
+    return true;
 }
 
 /* Let the mail daemon have a larger vocabulary. */
@@ -263,8 +263,8 @@ static const char *mail_text[] = {
 /*
  * Make the mail daemon run through the dungeon.  The daemon will run over
  * any monsters that are in its path, but will replace them later.  Return
- * FALSE if the md gets stuck in a position where there is a monster.  Return
- * TRUE otherwise.
+ * false if the md gets stuck in a position where there is a monster.  Return
+ * true otherwise.
  */
 static boolean
 md_rush(md,tx,ty)
@@ -349,7 +349,7 @@ md_rush(md,tx,ty)
 	    place_monster(mon, fx, fy);
 
 	newsym(fx, fy);
-	return FALSE;
+	return false;
     }
 
     place_monster(md, fx, fy);	/* place at final spot */
@@ -357,7 +357,7 @@ md_rush(md,tx,ty)
     flush_screen(0);
     delay_output();			/* wait a little bit */
 
-    return TRUE;
+    return true;
 }
 
 /* Deliver a scroll of mail. */
@@ -368,7 +368,7 @@ struct mail_info *info;
 {
     struct monst *md;
     coord start, stop;
-    boolean message_seen = FALSE;
+    boolean message_seen = false;
 
     /* Try to find good starting and stopping places. */
     if (!md_start(&start) || !md_stop(&stop,&start)) goto give_up;
@@ -378,14 +378,14 @@ struct mail_info *info;
 	 goto give_up;
     if (!md_rush(md, stop.x, stop.y)) goto go_back;
 
-    message_seen = TRUE;
+    message_seen = true;
     verbalize("%s, %s!  %s.", Hello(md), plname, info->display_txt);
 
     if (info->message_typ) {
-	struct obj *obj = mksobj(SCR_MAIL, FALSE, FALSE);
+	struct obj *obj = mksobj(SCR_MAIL, false, false);
 	if (distu(md->mx,md->my) > 2)
 	    verbalize("Catch!");
-	display_nhwindow(WIN_MESSAGE, FALSE);
+	display_nhwindow(WIN_MESSAGE, false);
 	if (info->object_nam) {
 	    obj = oname(obj, info->object_nam);
 	    if (info->response_cmd) {	/*(hide extension of the obj name)*/
@@ -434,7 +434,7 @@ readmail (struct obj *otmp)
 {
     const char *line;
     char buf[BUFSZ];
-    line = getrumor(bcsign(otmp), buf, TRUE);
+    line = getrumor(bcsign(otmp), buf, true);
     if (!*line)
 	   line = "NetHack rumors file closed for renovation.";
     if (Blind) {
@@ -490,7 +490,7 @@ readmail (struct obj *otmp)
 #  ifdef DEF_MAILREADER			/* This implies that UNIX is defined */
 	const char *mr = 0;
 
-	display_nhwindow(WIN_MESSAGE, FALSE);
+	display_nhwindow(WIN_MESSAGE, false);
 	if(!(mr = nh_getenv("MAILREADER")))
 		mr = DEF_MAILREADER;
 
@@ -500,7 +500,7 @@ readmail (struct obj *otmp)
 	}
 #  else
 #   ifndef AMS				/* AMS mailboxes are directories */
-	display_file_area(NULL, mailbox, TRUE);
+	display_file_area(NULL, mailbox, true);
 #   endif /* AMS */
 #  endif /* DEF_MAILREADER */
 

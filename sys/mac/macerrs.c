@@ -56,7 +56,7 @@ void showerror(char * errdesc, const char * errcomment)
 }
 
 Boolean itworked(short errcode)
-/* Return TRUE if it worked, do an error message and return false if it didn't. Error
+/* Return true if it worked, do an error message and return false if it didn't. Error
    strings for native C errors are in STR#1999, Mac errs in STR 2000-errcode, e.g
    2108 for not enough memory */
 

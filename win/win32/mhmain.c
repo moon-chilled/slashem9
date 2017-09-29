@@ -655,7 +655,7 @@ void mswin_layout_main_window(HWND changed_child)
 						   status_org.y,
 						   status_size.cx,
 						   status_size.cy,
-						   TRUE );
+						   true );
 				break;
 
 			case NHW_TEXT: // same as the map window
@@ -665,7 +665,7 @@ void mswin_layout_main_window(HWND changed_child)
 						   map_org.y,
 						   map_size.cx,
 						   map_size.cy,
-						   TRUE );
+						   true );
 				break;
 
 			case NHW_MESSAGE:
@@ -674,7 +674,7 @@ void mswin_layout_main_window(HWND changed_child)
 						   msg_org.y,
 						   msg_size.cx,
 						   msg_size.cy,
-						   TRUE );
+						   true );
 				break;
 
 			case NHW_MENU:
@@ -688,7 +688,7 @@ void mswin_layout_main_window(HWND changed_child)
 						   pt.y,
 						   min(menu_size.cx, map_size.cx),
 						   map_size.cy,
-						   TRUE );
+						   true );
 				break;
 			}
 			ShowWindow(GetNHApp()->windowlist[i].win, SW_SHOW);
@@ -709,7 +709,7 @@ LRESULT onWMCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
 	switch (wmId)
 	{
 		case IDM_ABOUT:
-     mswin_display_splash_window(TRUE);
+     mswin_display_splash_window(true);
 		   break;
 
 		case IDM_EXIT:
@@ -766,11 +766,11 @@ LRESULT onWMCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
             break;
         }
 		case IDM_HELP_LONG:
-			display_file(NH_HELP, TRUE);
+			display_file(NH_HELP, true);
 			break;
 
 		case IDM_HELP_COMMANDS:
-			display_file(NH_SHELP, TRUE);
+			display_file(NH_SHELP, true);
 			break;
 
 		case IDM_HELP_HISTORY:
@@ -790,7 +790,7 @@ LRESULT onWMCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case IDM_HELP_OPTIONS_LONG:
-			display_file(NH_OPTIONFILE, TRUE);
+			display_file(NH_OPTIONFILE, true);
 			break;
 
 		case IDM_HELP_EXTCMD:
@@ -798,11 +798,11 @@ LRESULT onWMCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case IDM_HELP_LICENSE:
-			display_file(NH_LICENSE, TRUE);
+			display_file(NH_LICENSE, true);
 			break;
 
 		case IDM_HELP_PORTHELP:
-			display_file(PORT_HELP, TRUE);
+			display_file(PORT_HELP, true);
 			break;
 
 		default:
@@ -850,19 +850,19 @@ LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 							(main_rt.top+main_rt.bottom-dlg_sz.cy)/2,
 							dlg_sz.cx,
 							dlg_sz.cy,
-							TRUE );
+							true );
 
-				return TRUE;
+				return true;
 
 		case WM_COMMAND:
 			if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
 			{
 				EndDialog(hDlg, LOWORD(wParam));
-				return TRUE;
+				return true;
 			}
 			break;
 	}
-    return FALSE;
+    return false;
 }
 
 void mswin_menu_check_intf_mode()

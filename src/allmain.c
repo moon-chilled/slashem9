@@ -24,7 +24,7 @@ void moveloop(void) {
 	int abort_lev;
 #endif
 	int moveamt = 0, wtcap = 0, change = 0;
-	boolean didmove = FALSE, monscanmove = FALSE;
+	boolean didmove = false, monscanmove = false;
 
 	flags.moonphase = phase_of_the_moon();
 	if (flags.moonphase == FULL_MOON) {
@@ -60,7 +60,7 @@ void moveloop(void) {
 
 	(void) encumber_msg(); /* in case they auto-picked up something */
 	if (defer_see_monsters) {
-		defer_see_monsters = FALSE;
+		defer_see_monsters = false;
 		see_monsters();
 	}
 
@@ -81,13 +81,13 @@ void moveloop(void) {
 			do { /* hero can't move this turn loop */
 				wtcap = encumber_msg();
 
-				flags.mon_moving = TRUE;
+				flags.mon_moving = true;
 				do {
 					monscanmove = movemon();
 					if (youmonst.movement > NORMAL_SPEED)
 						break;	/* it's now your turn */
 				} while (monscanmove);
-				flags.mon_moving = FALSE;
+				flags.mon_moving = false;
 
 				if (!monscanmove && youmonst.movement < NORMAL_SPEED) {
 					/* both you and the monsters are out of steam this round */
@@ -162,7 +162,7 @@ void moveloop(void) {
 					run_regions();
 
 #ifdef DUNGEON_GROWTH
-					dgn_growths(TRUE, TRUE);
+					dgn_growths(true, true);
 #endif
 
 					if (u.ublesscnt)  u.ublesscnt--;
@@ -243,8 +243,8 @@ void moveloop(void) {
 								u.uhp--;
 							} else {
 								You("pass out from exertion!");
-								exercise(A_CON, FALSE);
-								fall_asleep(-10, FALSE);
+								exercise(A_CON, false);
+								fall_asleep(-10, false);
 							}
 						}
 					}
@@ -270,7 +270,7 @@ void moveloop(void) {
 							tele();
 							if (u.ux != old_ux || u.uy != old_uy) {
 								if (!next_to_u()) {
-									check_leash(&youmonst, old_ux, old_uy, TRUE);
+									check_leash(&youmonst, old_ux, old_uy, true);
 								}
 #ifdef REDO
 								/* clear doagain keystrokes */
@@ -294,7 +294,7 @@ void moveloop(void) {
 									stop_occupation();
 								else
 									nomul(0);
-								if (change == 1) polyself(FALSE);
+								if (change == 1) polyself(false);
 								else you_were();
 								change = 0;
 							}
@@ -404,7 +404,7 @@ void moveloop(void) {
 			}
 #if defined(MICRO) || defined(WIN32)
 			if (!(++occtime % 7))
-				display_nhwindow(WIN_MAP, FALSE);
+				display_nhwindow(WIN_MAP, false);
 #endif
 			continue;
 		}
@@ -441,7 +441,7 @@ void moveloop(void) {
 		cliparound(u.ux, u.uy);
 #endif
 
-		u.umoved = FALSE;
+		u.umoved = false;
 
 		if (multi > 0) {
 			lookaround();
@@ -476,14 +476,14 @@ void moveloop(void) {
 		if ((!flags.run || iflags.runmode == RUN_TPORT) &&
 				(multi && (!flags.travel ? !(multi % 7) : !(moves % 7L)))) {
 			if (flags.time && flags.run) flags.botl = 1;
-			display_nhwindow(WIN_MAP, FALSE);
+			display_nhwindow(WIN_MAP, false);
 		}
 	}
 }
 
 void stop_occupation(void) {
 	if(occupation) {
-		if (!maybe_finished_meal(TRUE))
+		if (!maybe_finished_meal(true))
 		    You("stop %s.", occtxt);
 		occupation = 0;
 		flags.botl = 1; /* in case u.uhs changed */
@@ -518,10 +518,10 @@ void display_gamewindows(void) {
      * The mac port is not DEPENDENT on the order of these
      * displays, but it looks a lot better this way...
      */
-    display_nhwindow(WIN_STATUS, FALSE);
-    display_nhwindow(WIN_MESSAGE, FALSE);
+    display_nhwindow(WIN_STATUS, false);
+    display_nhwindow(WIN_MESSAGE, false);
     clear_glyph_buffer();
-    display_nhwindow(WIN_MAP, FALSE);
+    display_nhwindow(WIN_MAP, false);
 }
 
 void newgame(void) {
@@ -550,7 +550,7 @@ void newgame(void) {
 	(void) signal(SIGINT, (SIG_RET_TYPE) done1);
 #endif
 #ifdef NEWS
-	if(iflags.news) display_file_area(NEWS_AREA, NEWS, FALSE);
+	if(iflags.news) display_file_area(NEWS_AREA, NEWS, false);
 #endif
 
 	load_qtlist();	/* load up the quest text info */
@@ -559,7 +559,7 @@ void newgame(void) {
 	mklev();
 	u_on_upstairs();
 	vision_reset();		/* set up internals for level (after mklev) */
-	check_special_room(FALSE);
+	check_special_room(false);
 
 	flags.botlx = 1;
 
@@ -592,7 +592,7 @@ void newgame(void) {
 #endif
 
 	/* Success! */
-	welcome(TRUE);
+	welcome(true);
 	return;
 }
 

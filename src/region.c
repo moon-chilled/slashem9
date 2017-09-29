@@ -75,11 +75,11 @@ int x, y;
     int i;
 
     if (reg == NULL || !inside_rect(&(reg->bounding_box), x, y))
-	return FALSE;
+	return false;
     for (i = 0; i < reg->nrects; i++)
 	if (inside_rect(&(reg->rects[i]), x, y))
-	    return TRUE;
-    return FALSE;
+	    return true;
+    return false;
 }
 
 /*
@@ -117,7 +117,7 @@ int nrect;
 	reg->rects[i] = rects[i];
     }
     reg->ttl = -1;		/* Defaults */
-    reg->attach_2_u = FALSE;
+    reg->attach_2_u = false;
     reg->attach_2_m = 0;
     /* reg->attach_2_o = NULL; */
     reg->enter_msg = NULL;
@@ -224,8 +224,8 @@ struct monst *mon;
 
     for (i = 0; i < reg->n_monst; i++)
 	if (reg->monsters[i] == mon->m_id)
-	    return TRUE;
-    return FALSE;
+	    return true;
+    return false;
 }
 
 #if 0
@@ -431,14 +431,14 @@ xchar
 	    && !hero_inside(regions[i]) && !regions[i]->attach_2_u) {
 	    if ((f_indx = regions[i]->can_enter_f) != NO_CALLBACK)
 		if (!(*callbacks[f_indx])(regions[i], NULL))
-		    return FALSE;
+		    return false;
 	} else
 	    if (hero_inside(regions[i])
 		&& !inside_region(regions[i], x, y)
 		&& !regions[i]->attach_2_u) {
 	    if ((f_indx = regions[i]->can_leave_f) != NO_CALLBACK)
 		if (!(*callbacks[f_indx])(regions[i], NULL))
-		    return FALSE;
+		    return false;
 	}
     }
 
@@ -463,7 +463,7 @@ xchar
 	    if ((f_indx = regions[i]->enter_f) != NO_CALLBACK)
 		(void) (*callbacks[f_indx])(regions[i], NULL);
 	}
-    return TRUE;
+    return true;
 }
 
 /*
@@ -483,13 +483,13 @@ xchar x, y;
 		regions[i]->attach_2_m != mon->m_id) {
 	    if ((f_indx = regions[i]->can_enter_f) != NO_CALLBACK)
 		if (!(*callbacks[f_indx])(regions[i], mon))
-		    return FALSE;
+		    return false;
 	} else if (mon_in_region(regions[i], mon) &&
 		!inside_region(regions[i], x, y) &&
 		regions[i]->attach_2_m != mon->m_id) {
 	    if ((f_indx = regions[i]->can_leave_f) != NO_CALLBACK)
 		if (!(*callbacks[f_indx])(regions[i], mon))
-		    return FALSE;
+		    return false;
 	}
     }
 
@@ -511,7 +511,7 @@ xchar x, y;
 	    if ((f_indx = regions[i]->enter_f) != NO_CALLBACK)
 		(void) (*callbacks[f_indx])(regions[i], mon);
 	}
-    return TRUE;
+    return true;
 }
 
 /*
@@ -823,7 +823,7 @@ void * p2;
 	if (canseemon(mtmp))
 	    pline("%s bumps into %s!", Monnam(mtmp), something);
     }
-    return FALSE;
+    return false;
 }
 
 NhRegion *
@@ -886,9 +886,9 @@ void * p2;
 	damage /= 2;		/* It dissipates, let's do less damage */
 	reg->arg = (void *) damage;
 	reg->ttl = 2;		/* Here's the trick : reset ttl */
-	return FALSE;		/* THEN return FALSE, means "still there" */
+	return false;		/* THEN return false, means "still there" */
     }
-    return TRUE;		/* OK, it's gone, you can free it! */
+    return true;		/* OK, it's gone, you can free it! */
 }
 
 boolean
@@ -936,17 +936,17 @@ void * p2;
     dam = (int) reg->arg;
     if (p2 == NULL) {		/* This means *YOU* Bozo! */
 	if (nonliving(youmonst.data) || Breathless)
-	    return FALSE;
+	    return false;
 	if (!Blind)
-	    make_blinded(1L, FALSE);
+	    make_blinded(1L, false);
 	if (!Poison_resistance) {
 	    pline("%s is burning your %s!", Something, makeplural(body_part(LUNG)));
 	    You("cough and spit blood!");
 	    losehp(rnd(dam) + 5, "gas cloud", KILLED_BY_AN);
-	    return FALSE;
+	    return false;
 	} else {
 	    You("cough!");
-	    return FALSE;
+	    return false;
 	}
     } else {			/* A monster is inside the cloud */
 	mtmp = (struct monst *) p2;
@@ -962,7 +962,7 @@ void * p2;
 		mtmp->mcansee = 0;
 	    }
 	    if (resists_poison(mtmp))
-		return FALSE;
+		return false;
 	    mtmp->mhp -= rnd(dam) + 5;
 	    if (mtmp->mhp <= 0) {
 		if (heros_fault(reg))
@@ -970,12 +970,12 @@ void * p2;
 		else
 		    monkilled(mtmp, "gas cloud", AD_DRST);
 		if (mtmp->mhp <= 0) {	/* not lifesaved */
-		    return TRUE;
+		    return true;
 		}
 	    }
 	}
     }
-    return FALSE;		/* Monster is still alive */
+    return false;		/* Monster is still alive */
 }
 
 NhRegion *
@@ -1021,7 +1021,7 @@ int damage;
     cloud->inside_f = INSIDE_GAS_CLOUD;
     cloud->expire_f = EXPIRE_GAS_CLOUD;
     cloud->arg = (void *) damage;
-    cloud->visible = TRUE;
+    cloud->visible = true;
     cloud->glyph = cmap_to_glyph(S_cloud);
     add_region(cloud);
     return cloud;

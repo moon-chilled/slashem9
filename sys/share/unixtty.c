@@ -109,7 +109,7 @@ static void setctty(void);
 # define CBRKMASK	CBREAK
 # define CBRKON		/* empty */
 # define inputflags	sg_flags	/* don't know how enabling meta bits */
-# define IS_7BIT(x)	(FALSE)
+# define IS_7BIT(x)	(false)
 # define STRIPHI	0		/* should actually be done on BSD */
 # define OSPEED(x)	(x).sg_ospeed
 # if defined(bsdi) || defined(__386BSD) || defined(SUNOS4)
@@ -138,7 +138,7 @@ short ospeed = 0; // gets around "not defined" error message
 unsigned
 #endif
 	char erase_char, intr_char, kill_char;
-static boolean settty_needed = FALSE;
+static boolean settty_needed = false;
 struct termstruct inittyb, curttyb;
 
 #ifdef POSIX_TYPES
@@ -199,7 +199,7 @@ gettty()
 		curttyb.tabflgs &= ~EXTABS;
 		setctty();
 	}
-	settty_needed = TRUE;
+	settty_needed = true;
 }
 
 /* reset terminal to original state */
@@ -368,7 +368,7 @@ init_sco_cons()
 		switch_graphics(IBM_GRAPHICS);
 #  ifdef TEXTCOLOR
 		if (has_colors())
-			iflags.use_color = TRUE;
+			iflags.use_color = true;
 #  endif
 	}
 # endif
@@ -425,7 +425,7 @@ init_linux_cons()
 		linux_mapoff();
 #  ifdef TEXTCOLOR
 		if (has_colors())
-			iflags.use_color = TRUE;
+			iflags.use_color = true;
 #  endif
 	}
 # endif

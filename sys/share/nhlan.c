@@ -116,17 +116,17 @@ struct lan_mail_struct *msg;
 	*put = '\0';
 	putstr(datawin, 0, buf);
 	putstr(datawin, 0, "");
-	display_nhwindow(datawin, TRUE);
+	display_nhwindow(datawin, true);
 	destroy_nhwindow(datawin);
 }
 
-/* this returns TRUE if there is mail ready to be read */
+/* this returns true if there is mail ready to be read */
 boolean lan_mail_check()
 {
 	if (flags.biff) {
-		if (mail_check()) return TRUE;
+		if (mail_check()) return true;
 	}
-	return FALSE;
+	return false;
 }
 
 void lan_mail_read(otmp)
@@ -135,7 +135,7 @@ struct obj *otmp;
 	if (flags.biff) {
 		(void) mail_fetch(&mailmessage);
 		/* after a successful fetch iflags.lan_mail_fetched
-		 * should be TRUE.  If it isn't then we don't
+		 * should be true.  If it isn't then we don't
 		 * trust the contents of mailmessage.  This
 		 * ensures that things work correctly across
 		 * save/restores where mailmessage isn't
@@ -173,10 +173,10 @@ void lan_mail_finish()
 void lan_mail_terminate()
 {
 	/* Step 1. Clear iflags.lan_mail to indicate "not inited" */
-	iflags.lan_mail = FALSE;
+	iflags.lan_mail = false;
 
 	/* Step 2. Clear iflags.lan_mail_fetched */
-	iflags.lan_mail_fetched = FALSE;
+	iflags.lan_mail_fetched = false;
 
 	/* Once having gotten to this point, the only
 	   way to resume NetHack mail features again is

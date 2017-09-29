@@ -42,7 +42,7 @@ int WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved)
 		tmp2++;
 		shortdllname = tmp2;
 	}
-	return TRUE;
+	return true;
 }
 
 /*
@@ -130,7 +130,7 @@ int portdebug;
 		else altseq = -1;	/* invalid altseq */
 	}
 	if (ch || (iskeypad(scan)) || (altseq > 0))
-		*valid = TRUE;
+		*valid = true;
 	/* if (!valid) return 0; */
     	/*
 	 * shiftstate can be checked to see if various special
@@ -170,15 +170,15 @@ int portdebug;
 		    switch(k) {
 			case 2:  /* two characters */
 				ch = (unsigned char)chr[1];
-				*valid = TRUE;
+				*valid = true;
 				break;
 			case 1:  /* one character */
 				ch = (unsigned char)chr[0];
-				*valid = TRUE;
+				*valid = true;
 				break;
 			case 0:  /* no translation */
 			default: /* negative */
-				*valid = FALSE;
+				*valid = false;
 		    }
 	}
 	if (ch == '\r') ch = '\n';

@@ -363,7 +363,7 @@ extern const char *materialnm[];
 
 
 /*** Vision ***/
-extern boolean vision_full_recalc;	/* TRUE if need vision recalc */
+extern boolean vision_full_recalc;	/* true if need vision recalc */
 extern char **viz_array;		/* could see/in sight row pointers */
 
 

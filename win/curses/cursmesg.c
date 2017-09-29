@@ -123,7 +123,7 @@ curses_message_win_puts(const char *message, boolean recursed)
         }
         wrefresh(win);
         curses_message_win_puts(tmpstr = curses_str_remainder(message, (width - 2), 1),
-                                TRUE);
+                                true);
         free(tmpstr);
     } else {
         mvwprintw(win, my, mx, "%s", message);
@@ -145,11 +145,11 @@ curses_block(boolean require_tab)
     mvwprintw(win, my, mx, require_tab ? "<TAB!>" : ">>");
     curses_toggle_color_attr(win, MORECOLOR, NONE, OFF);
     if (require_tab)
-        curses_alert_main_borders(TRUE);
+        curses_alert_main_borders(true);
     wrefresh(win);
     while ((ret = wgetch(win) != '\t') && require_tab);
     if (require_tab)
-        curses_alert_main_borders(FALSE);
+        curses_alert_main_borders(false);
     if (height == 1) {
         curses_clear_unhighlight_message_window();
     } else {
@@ -167,7 +167,7 @@ curses_block(boolean require_tab)
 int
 curses_more()
 {
-    return curses_block(FALSE);
+    return curses_block(false);
 }
 
 
@@ -230,11 +230,11 @@ curses_last_messages()
     nhprev_mesg *mesg;
     int i;
     for (i = (num_messages - 1); i > 0; i--) {
-        mesg = get_msg_line(TRUE, i);
+        mesg = get_msg_line(true, i);
         if (mesg && mesg->str && strcmp(mesg->str, ""))
-            curses_message_win_puts(mesg->str, TRUE);
+            curses_message_win_puts(mesg->str, true);
     }
-    curses_message_win_puts(toplines, TRUE);
+    curses_message_win_puts(toplines, true);
 }
 
 
@@ -273,13 +273,13 @@ curses_prev_mesg()
     identifier->a_void = NULL;
 
     for (count = 0; count < num_messages; count++) {
-        mesg = get_msg_line(TRUE, count);
+        mesg = get_msg_line(true, count);
         if ((turn != mesg->turn) && (count != 0)) {
             curses_add_menu(wid, NO_GLYPH, identifier, 0, 0, A_NORMAL,
-                            "---", FALSE);
+                            "---", false);
         }
         curses_add_menu(wid, NO_GLYPH, identifier, 0, 0, A_NORMAL,
-                        mesg->str, FALSE);
+                        mesg->str, false);
         turn = mesg->turn;
     }
 
@@ -301,11 +301,11 @@ curses_count_window(const char *count_text)
     if ((count_text == NULL) && (countwin != NULL)) {
         delwin(countwin);
         countwin = NULL;
-        counting = FALSE;
+        counting = false;
         return;
     }
 
-    counting = TRUE;
+    counting = true;
 
     if (iflags.wc_popup_dialog) {       /* Display count in popup window */
         startx = 1;
@@ -538,10 +538,10 @@ directional_scroll(winid wid, int nlines)
         s_top = 0;
         s_bottom = wh - 1;
     }
-    scrollok(win, TRUE);
+    scrollok(win, true);
     wsetscrreg(win, s_top, s_bottom);
     wscrl(win, nlines);
-    scrollok(win, FALSE);
+    scrollok(win, false);
     if (wid == MESSAGE_WIN) {
         if (border)
             mx = 1;

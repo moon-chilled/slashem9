@@ -32,7 +32,7 @@ static void kill_hilite(void);
 
 	/* (see tcap.h) -- nh_CM, nh_ND, nh_CD, nh_HI,nh_HE, nh_US,nh_UE,
 				ul_hack */
-struct tc_lcl_data tc_lcl_data = { 0, 0, 0, 0,0, 0,0, FALSE };
+struct tc_lcl_data tc_lcl_data = { 0, 0, 0, 0,0, 0,0, false };
 
 int allow_bgcolor = 0;
 
@@ -72,7 +72,7 @@ static char tgotobuf[20];
 static void init_ttycolor(void);
 
 #ifdef VIDEOSHADES
-boolean colorflag = FALSE;			/* colors are initialized */
+boolean colorflag = false;			/* colors are initialized */
 char ttycolors[CLR_MAX];
 #endif
 
@@ -119,7 +119,7 @@ int assign_videocolors(char *colorvals)
 
 	i = strlen(colorvals);
 	tmpcolor = alloc(i);
-	if (convert_uchars(colorvals,tmpcolor,i) < 0) return FALSE;
+	if (convert_uchars(colorvals,tmpcolor,i) < 0) return false;
 
 	icolor = CLR_RED;
 	for( i = 0; tmpcolor[i] != 0; ++i) {
@@ -127,7 +127,7 @@ int assign_videocolors(char *colorvals)
 		ttycolors[icolor++] = tmpcolor[i];
 	}
 
-	colorflag = TRUE;
+	colorflag = true;
 	free((void *)tmpcolor);
 	return 1;
 }
@@ -267,7 +267,7 @@ int *wid, *hgt;
 
 	tbufptr = tbuf;
 	if(!strncmp(term, "5620", 4))
-		flags.null = FALSE;	/* this should be a termcap flag */
+		flags.null = false;	/* this should be a termcap flag */
 	if(tgetent(tptr, term) < 1) {
 		char buf[BUFSZ];
 		(void) strncpy(buf, term,
@@ -320,7 +320,7 @@ int *wid, *hgt;
 	if(tgetflag("os"))
 		error("NetHack can't have OS.");
 	if(tgetflag("ul"))
-		ul_hack = TRUE;
+		ul_hack = true;
 	CE = Tgetstr("ce");
 	UP = Tgetstr("up");
 	/* It seems that xd is no longer supported, and we should use
@@ -471,7 +471,7 @@ tty_decgraphics_termcap_fixup()
 	ae_length = strlen(ae), he_limit = strlen(nh_he);
 	while (he_limit >= ae_length) {
 	    if (strncmp(nh_he, ae, ae_length) == 0) {
-		HE_resets_AS = TRUE;
+		HE_resets_AS = true;
 		break;
 	    }
 	    ++nh_he, --he_limit;
@@ -850,8 +850,8 @@ cl_eos()			/* free after Robert Viduya */
 	    not needed beyond this point, so we don't need to worry
 	    about reconstructing them after the header file inclusion. */
 #undef delay_output
-#undef TRUE
-#undef FALSE
+#undef true
+#undef false
 #define m_move curses_m_move	/* Some curses.h decl m_move(), not used here */
 
 #include <curses.h>

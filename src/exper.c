@@ -202,7 +202,7 @@ void losexp(const char *drainer /* cause of death, if drain should be fatal */, 
  */
 void newexplevel(void) {
 	if (u.ulevel < MAXULEV && u.uexp >= newuexp(u.ulevel))
-	    pluslvl(TRUE);
+	    pluslvl(true);
 }
 
 #if 0 /* The old newexplevel() */

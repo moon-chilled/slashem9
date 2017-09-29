@@ -343,7 +343,7 @@ X
 Xbugs
 X
 X	The #if expression processor uses signed integers only.
-X	I.e, #if 0xFFFFu < 0 may be TRUE.
+X	I.e, #if 0xFFFFu < 0 may be true.
 X
 X#endif
 X
@@ -373,7 +373,7 @@ Xchar		token[IDMAX + 1];	/* Current input token		*/
 Xint		errors;			/* cpp error counter		*/
 XFILEINFO	*infile = NULL;		/* Current input file		*/
 X#if DEBUG
-Xint		debug;			/* TRUE if debugging now	*/
+Xint		debug;			/* true if debugging now	*/
 X#endif
 X/*
 X * This counter is incremented when a macro expansion is initiated.
@@ -386,10 +386,10 @@ X * This can be disabled by falsifying rec_recover.  (Nothing does this
 X * currently: it is a hook for an eventual invocation flag.)
 X */
 Xint		recursion;		/* Infinite recursion counter	*/
-Xint		rec_recover = TRUE;	/* Unwind recursive macros	*/
+Xint		rec_recover = true;	/* Unwind recursive macros	*/
 X
 X/*
-X * instring is set TRUE when a string is scanned.  It modifies the
+X * instring is set true when a string is scanned.  It modifies the
 X * behavior of the "get next character" routine, causing all characters
 X * to be passed to the caller (except <DEF_MAGIC>).  Note especially that
 X * comments and \<newline> are not removed from the source.  (This
@@ -404,8 +404,8 @@ X *
 X * instring and inmarcor are parameters to the get() routine which
 X * were made global for speed.
 X */
-Xint		instring = FALSE;	/* TRUE if scanning string	*/
-Xint		inmacro = FALSE;	/* TRUE if #defining a macro	*/
+Xint		instring = false;	/* true if scanning string	*/
+Xint		inmacro = false;	/* true if #defining a macro	*/
 X
 X/*
 X * work[] and workp are used to store one piece of text in a temporay
@@ -420,7 +420,7 @@ Xchar		work[NWORK + 1];	/* Work buffer			*/
 Xchar		*workp;			/* Work buffer pointer		*/
 X
 X/*
-X * keepcomments is set TRUE by the -C option.  If TRUE, comments
+X * keepcomments is set true by the -C option.  If true, comments
 X * are written directly to the output stream.  This is needed if
 X * the output from cpp is to be passed to lint (which uses commands
 X * embedded in comments).  cflag contains the permanent state of the
@@ -434,21 +434,21 @@ X * If nflag is non-zero, no symbols are predefined except __LINE__.
 X * __FILE__, and __DATE__.  If nflag > 1, absolutely no symbols
 X * are predefined.
 X */
-Xint		keepcomments = FALSE;	/* Write out comments flag	*/
-Xint		cflag = FALSE;		/* -C option (keep comments)	*/
-Xint		eflag = FALSE;		/* -E option (never fail)	*/
+Xint		keepcomments = false;	/* Write out comments flag	*/
+Xint		cflag = false;		/* -C option (keep comments)	*/
+Xint		eflag = false;		/* -E option (never fail)	*/
 Xint		nflag = 0;		/* -N option (no predefines)	*/
 X
 X/*
 X * ifstack[] holds information about nested #if's.  It is always
 X * accessed via *ifptr.  The information is as follows:
 X *	WAS_COMPILING	state of compiling flag at outer level.
-X *	ELSE_SEEN	set TRUE when #else seen to prevent 2nd #else.
-X *	TRUE_SEEN	set TRUE when #if or #elif succeeds
-X * ifstack[0] holds the compiling flag.  It is TRUE if compilation
-X * is currently enabled.  Note that this must be initialized TRUE.
+X *	ELSE_SEEN	set true when #else seen to prevent 2nd #else.
+X *	true_SEEN	set true when #if or #elif succeeds
+X * ifstack[0] holds the compiling flag.  It is true if compilation
+X * is currently enabled.  Note that this must be initialized true.
 X */
-Xchar		ifstack[BLK_NEST] = { TRUE };	/* #if information	*/
+Xchar		ifstack[BLK_NEST] = { true };	/* #if information	*/
 Xchar		*ifptr = ifstack;		/* -> current ifstack[] */
 X
 X/*
@@ -592,7 +592,7 @@ X	 */
 X	sharp();
 X	/*
 X	 * This loop is started "from the top" at the beginning of each line
-X	 * wrongline is set TRUE in many places if it is necessary to write
+X	 * wrongline is set true in many places if it is necessary to write
 X	 * a #line record.  (But we don't write them when expanding macros.)
 X	 *
 X	 * The counter variable has two different uses:  at
@@ -612,7 +612,7 @@ X		    ;				/* in this line.	*/
 X		if (c == '\n')			/* If line's all blank,	*/
 X		    ++counter;			/* Do nothing now	*/
 X		else if (c == '#') {		/* Is 1st non-space '#'	*/
-X		    keepcomments = FALSE;	/* Don't pass comments	*/
+X		    keepcomments = false;	/* Don't pass comments	*/
 X		    counter = control(counter);	/* Yes, do a #command	*/
 X		    keepcomments = (cflag && compiling);
 X		}
@@ -684,7 +684,7 @@ X	    }					/* Line for loop	*/
 Xend_line:   if (c == '\n') {			/* Compiling at EOL?	*/
 X		putchar('\n');			/* Output newline, if	*/
 X		if (infile->fp == NULL)		/* Expanding a macro,	*/
-X		    wrongline = TRUE;		/* Output # line later	*/
+X		    wrongline = true;		/* Output # line later	*/
 X	    }
 X	}					/* Continue until EOF	*/
 X}
@@ -729,7 +729,7 @@ X		printf(" \"%s\"", name);
 X	     }
 X	}
 X	putchar('\n');
-X	wrongline = FALSE;
+X	wrongline = false;
 X}
 END-of-cpp1.c
 echo x - cpp3.c
@@ -766,14 +766,14 @@ X	if ((fp = fopen(filename, "r")) == NULL) {
 X#if DEBUG
 X	    perror(filename);
 X#endif
-X	    return (FALSE);
+X	    return (false);
 X	}
 X#if DEBUG
 X	if (debug)
 X	    fprintf(stderr, "Reading from \"%s\"\n", filename);
 X#endif
 X	addfile(fp, filename);
-X	return (TRUE);
+X	return (true);
 X}
 X
 Xaddfile(fp, filename)
@@ -794,7 +794,7 @@ X	file = getfile(NBUFF, filename);
 X	file->fp = fp;			/* Better remember FILE *	*/
 X	file->buffer[0] = EOS;		/* Initialize for first read	*/
 X	line = 1;			/* Working on line 1 now	*/
-X	wrongline = TRUE;		/* Force out initial #line	*/
+X	wrongline = true;		/* Force out initial #line	*/
 X}
 X
 Xsetincdirs()
@@ -826,9 +826,9 @@ X#define	MAXINCLUDE	(NINCLUDE - 2 - IS_INCLUDE)
 X#endif
 X
 X#if HOST == SYS_RSX
-X	extern int	$$rsts;			/* TRUE on RSTS/E	*/
-X	extern int	$$pos;			/* TRUE on PRO-350 P/OS	*/
-X	extern int	$$vms;			/* TRUE on VMS compat.	*/
+X	extern int	$$rsts;			/* true on RSTS/E	*/
+X	extern int	$$pos;			/* true on PRO-350 P/OS	*/
+X	extern int	$$vms;			/* true on VMS compat.	*/
 X
 X	if ($$pos) {				/* P/OS?		*/
 X	    *incend++ = "SY:[ZZDECUSC]";	/* C #includes		*/
@@ -875,7 +875,7 @@ X	int			i, j;
 X	char			*arg;
 X	SIZES			*sizp;		/* For -S		*/
 X	int			size;		/* For -S		*/
-X	int			isdatum;	/* FALSE for -S*	*/
+X	int			isdatum;	/* false for -S*	*/
 X	int			endtest;	/* For -S		*/
 X
 X	for (i = j = 1; i < argc; i++) {
@@ -888,8 +888,8 @@ X		if (islower(c))			/* Normalize case	*/
 X		    c = toupper(c);
 X		switch (c) {			/* Command character	*/
 X		case 'C':			/* Keep comments	*/
-X		    cflag = TRUE;
-X		    keepcomments = TRUE;
+X		    cflag = true;
+X		    keepcomments = true;
 X		    break;
 X
 X		case 'D':			/* Define symbol	*/
@@ -908,13 +908,13 @@ X			*ap++ = EOS;
 X		    /*
 X		     * Now, save the word and its definition.
 X		     */
-X		    dp = defendel(argv[i] + 2, FALSE);
+X		    dp = defendel(argv[i] + 2, false);
 X		    dp->repl = savestring(ap);
 X		    dp->nargs = DEF_NOARGS;
 X		    break;
 X
 X		case 'E':			/* Ignore non-fatal	*/
-X		    eflag = TRUE;		/* errors.		*/
+X		    eflag = true;		/* errors.		*/
 X		    break;
 X
 X		case 'I':			/* Include directory	*/
@@ -961,7 +961,7 @@ X		case 'U':			/* Undefine symbol	*/
 X#if HOST != SYS_UNIX
 X		    zap_uc(ap);
 X#endif
-X		    if (defendel(ap, TRUE) == NULL)
+X		    if (defendel(ap, true) == NULL)
 X			cwarn("\"%s\" wasn't defined", ap);
 X		    break;
 X
@@ -1046,7 +1046,7 @@ X	 */
 X	if (nflag == 0) {
 X	    for (pp = preset; *pp != NULL; pp++) {
 X		if (*pp[0] != EOS) {
-X		    dp = defendel(*pp, FALSE);
+X		    dp = defendel(*pp, false);
 X		    dp->repl = savestring("1");
 X		    dp->nargs = DEF_NOARGS;
 X		}
@@ -1060,14 +1060,14 @@ X	 * DEF_NOARGS is one greater than the first "magic" definition.
 X	 */
 X	if (nflag < 2) {
 X	    for (pp = magic, i = DEF_NOARGS; *pp != NULL; pp++) {
-X		dp = defendel(*pp, FALSE);
+X		dp = defendel(*pp, false);
 X		dp->nargs = --i;
 X	    }
 X#if OK_DATE
 X	    /*
 X	     * Define __DATE__ as today's date.
 X	     */
-X	    dp = defendel("__DATE__", FALSE);
+X	    dp = defendel("__DATE__", false);
 X	    dp->repl = tp = getmem(27);
 X	    dp->nargs = DEF_NOARGS;
 X	    time(&tvec);
@@ -1241,17 +1241,17 @@ X */
 X{
 X	int		c;
 X	DEFBUF		*dp;		/* -> new definition	*/
-X	int			isredefine;	/* TRUE if redefined	*/
+X	int			isredefine;	/* true if redefined	*/
 X	char			*old;		/* Remember redefined	*/
 X	extern int		save();		/* Save char in work[]	*/
 X
 X	if (type[(c = skipws())] != LET)
 X	    goto bad_define;
-X	isredefine = FALSE;			/* Set if redefining	*/
+X	isredefine = false;			/* Set if redefining	*/
 X	if ((dp = lookid(c)) == NULL)		/* If not known now	*/
-X	    dp = defendel(token, FALSE);	/* Save the name	*/
+X	    dp = defendel(token, false);	/* Save the name	*/
 X	else {					/* It's known:		*/
-X	    isredefine = TRUE;			/* Remember this fact	*/
+X	    isredefine = true;			/* Remember this fact	*/
 X	    old = dp->repl;			/* Remember replacement	*/
 X	    dp->repl = NULL;			/* No replacement now	*/
 X	}
@@ -1283,7 +1283,7 @@ X	}
 X	if (type[c] == SPA)			/* At whitespace?	*/
 X	    c = skipws();			/* Not any more.	*/
 X	workp = work;				/* Replacement put here	*/
-X	inmacro = TRUE;				/* Keep \<newline> now	*/
+X	inmacro = true;				/* Keep \<newline> now	*/
 X	while (c != EOF_CHAR && c != '\n') {	/* Compile macro body	*/
 X#if OK_CONCAT
 X	    if (c == '#') {			/* Token concatenation?	*/
@@ -1327,7 +1327,7 @@ X
 X	    case BSH:				/* Backslash		*/
 X		save('\\');
 X		if ((c = get()) == '\n')
-X		    wrongline = TRUE;
+X		    wrongline = true;
 X		save(c);
 X		break;
 X
@@ -1347,7 +1347,7 @@ X		break;
 X	    }
 X	    c = get();
 X	}
-X	inmacro = FALSE;			/* Stop newline hack	*/
+X	inmacro = false;			/* Stop newline hack	*/
 X	unget();				/* For control check	*/
 X	if (workp > work && workp[-1] == ' ')	/* Drop trailing blank	*/
 X	    workp--;
@@ -1371,7 +1371,7 @@ X	return;
 X
 Xbad_define:
 X	cerror("#define syntax error", NULLST);
-X	inmacro = FALSE;			/* Stop <newline> hack	*/
+X	inmacro = false;			/* Stop <newline> hack	*/
 X}
 X
 Xcheckparm(c, dp)
@@ -1421,7 +1421,7 @@ X	 * implementations of cpp.  It is not part of the Draft
 X	 * ANSI Standard C language.
 X	 */
 X	save(delim);
-X	instring = TRUE;
+X	instring = true;
 X	while ((c = get()) != delim
 X	     && c != '\n'
 X	     && c != EOF_CHAR) {
@@ -1433,7 +1433,7 @@ X		if (c == '\\')
 X		    save(get());
 X	    }
 X	}
-X	instring = FALSE;
+X	instring = false;
 X	if (c != delim)
 X	    cerror("Unterminated string in macro body", NULLST);
 X	save(c);
@@ -1479,7 +1479,7 @@ X	if (type[(c = skipws())] != LET)
 X	    cerror("Illegal #undef argument", NULLST);
 X	else {
 X	    scanid(c);				/* Get name to token[]	*/
-X	    if (defendel(token, TRUE) == NULL) {
+X	    if (defendel(token, true) == NULL) {
 X		cwarn("Symbol \"%s\" not defined in #undef", token);
 X	    }
 X	}
@@ -1588,7 +1588,7 @@ X	     */
 X	    if (tokenp->nargs < 0)
 X		cfatal("Bug: Illegal __ macro \"%s\"", tokenp->name);
 X	    while ((c = skipws()) == '\n')	/* Look for (, skipping	*/
-X		wrongline = TRUE;		/* spaces and newlines	*/
+X		wrongline = true;		/* spaces and newlines	*/
 X	    if (c != '(') {
 X		/*
 X		 * If the programmer writes
@@ -1620,7 +1620,7 @@ X
 XFILE_LOCAL int
 Xexpcollect()
 X/*
-X * Collect the actual parameters for this macro.  TRUE if ok.
+X * Collect the actual parameters for this macro.  true if ok.
 X */
 X{
 X	int	c;
@@ -1630,7 +1630,7 @@ X
 X	for (;;) {
 X	    paren = 0;				/* Collect next arg.	*/
 X	    while ((c = skipws()) == '\n')	/* Skip over whitespace	*/
-X		wrongline = TRUE;		/* and newlines.	*/
+X		wrongline = true;		/* and newlines.	*/
 X	    if (c == ')') {			/* At end of all args?	*/
 X		/*
 X		 * Note that there is a guard byte in parm[]
@@ -1645,7 +1645,7 @@ X	    parlist[nargs++] = parmp;		/* At start of new arg	*/
 X	    for (;; c = cget()) {		/* Collect arg's bytes	*/
 X		if (c == EOF_CHAR) {
 X		    cerror("end of file within macro argument", NULLST);
-X		    return (FALSE);		/* Sorry.		*/
+X		    return (false);		/* Sorry.		*/
 X		}
 X		else if (c == '\\') {		/* Quote next character	*/
 X		    charput(c);			/* Save the \ for later	*/
@@ -1668,7 +1668,7 @@ X		}
 X		else if (c == ',' && paren == 0) /* Comma delimits args	*/
 X		    break;
 X		else if (c == '\n')		/* Newline inside arg?	*/
-X		    wrongline = TRUE;		/* We'll need a #line	*/
+X		    wrongline = true;		/* We'll need a #line	*/
 X		charput(c);			/* Store this one	*/
 X	    }					/* Collect an argument	*/
 X	    charput(EOS);			/* Terminate argument	*/
@@ -1677,7 +1677,7 @@ X	    if (debug)
 X	        printf("parm[%d] = \"%s\"\n", nargs, parlist[nargs - 1]);
 X#endif
 X	}					/* Collect all args.	*/
-X	return (TRUE);				/* Normal return	*/
+X	return (true);				/* Normal return	*/
 X}
 X
 XFILE_LOCAL

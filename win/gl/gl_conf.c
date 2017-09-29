@@ -169,7 +169,7 @@ static struct OptionLine *find_changed_option(int flags, const char *name)
 static struct OptionLine *config_line_list = NULL;
 static int config_is_new = 0;
 
-#define match_varname(INP,NAM,LEN)  match_optname(INP,NAM,LEN,TRUE)
+#define match_varname(INP,NAM,LEN)  match_optname(INP,NAM,LEN,true)
 
 
 void bbb_parse_single_option(char *opts, int flags)

@@ -211,10 +211,10 @@ int fd, mode;
      */
     h = (HANDLE)_get_osfhandle(fd);
     if (h == INVALID_HANDLE_VALUE)
-	return FALSE;
+	return false;
     if (!DuplicateHandle(GetCurrentProcess(), h, GetCurrentProcess(), &dh,
-      0, FALSE, DUPLICATE_SAME_ACCESS))
-	return FALSE;
+      0, false, DUPLICATE_SAME_ACCESS))
+	return false;
     switch(fd) {
 	case 0:
 	    SetStdHandle(STD_INPUT_HANDLE, dh);
@@ -229,7 +229,7 @@ int fd, mode;
     dfd = _open_osfhandle((long)dh, mode);
     if (dfd < 0) {
 	CloseHandle(dh);
-	return FALSE;
+	return false;
     }
     retval = (dup2(dfd, fd) >= 0);
     close(dfd);

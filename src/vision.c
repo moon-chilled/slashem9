@@ -210,7 +210,7 @@ vision_reset (void)
     /* Dig the level */
     for (y = 0; y < ROWNO; y++) {
 	dig_left = 0;
-	block = TRUE;	/* location (0,y) is always stone; it's !isok() */
+	block = true;	/* location (0,y) is always stone; it's !isok() */
 	lev = &levl[1][y];
 	for (x = 1; x < COLNO; x++, lev += ROWNO)
 	    if (block != (IS_ROCK(lev->typ) || does_block(x,y,lev))) {
@@ -1078,7 +1078,7 @@ static void * varg;
 /*
  * Both Algorithms C and D use the following macros.
  *
- *      good_row(z)	  - Return TRUE if the argument is a legal row.
+ *      good_row(z)	  - Return true if the argument is a legal row.
  *      set_cs(rowp,col)  - Set the local could see array.
  *      set_min(z)	  - Save the min value of the argument and the current
  *			      row minimum.
@@ -2200,7 +2200,7 @@ right_side(row, left, right_mark, limits)
     int		  right;	/* right limit of "could see" */
     int		  right_edge;	/* right edge of an opening */
     int		  nrow;		/* new row (calculate once) */
-    int		  deeper;	/* if TRUE, call self as needed */
+    int		  deeper;	/* if true, call self as needed */
     int		  result;	/* set by q?_path() */
     int  i;		/* loop counter */
     char *rowp;	/* row optimization */

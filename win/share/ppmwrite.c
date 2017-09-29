@@ -26,11 +26,11 @@ write_header()
 	if (PpmScreen.Width > 9999 || PpmScreen.Height > 9999) {
 		/* Just increase the number of digits written to solve */
 		fprintf(stderr, "PPM dimensions too large\n");
-		return FALSE;
+		return false;
 	}
 	(void) fprintf(ppm_file, "P6 %04d %04d 255\n",
 				PpmScreen.Width, PpmScreen.Height);
-	return TRUE;
+	return true;
 }
 
 static void
@@ -56,20 +56,20 @@ const char *type;
 
 	if (strcmp(type, WRBMODE)) {
 		fprintf(stderr, "using writing routine for non-writing?\n");
-		return FALSE;
+		return false;
 	}
 
-        if (ppm_file != NULL) return TRUE;
+        if (ppm_file != NULL) return true;
 
 	ppm_file = fopen(filename, type);
 	if (ppm_file == NULL) {
 		fprintf(stderr, "cannot open ppm file %s\n", filename);
-		return FALSE;
+		return false;
 	}
 
 	if (!colorsinmainmap) {
 		fprintf(stderr, "no colormap set yet\n");
-		return FALSE;
+		return false;
 	}
 
 	curr_tiles_across = 0;
@@ -79,14 +79,14 @@ const char *type;
 	PpmScreen.Height = 0;	/* will be rewritten later */
 
 	if (!write_header())
-		return FALSE;
+		return false;
 
 	image = (pixel **)alloc(tile_y * sizeof(pixel *));
 	for (i = 0; i < tile_y; i++) {
 		image[i] = alloc(PpmScreen.Width * sizeof(pixel));
 	}
 
-	return TRUE;
+	return true;
 }
 
 boolean
@@ -106,7 +106,7 @@ pixel (*pixels)[MAX_TILE_X];
 		curr_tiles_across = 0;
 		tiles_down++;
 	}
-	return TRUE;
+	return true;
 }
 
 int

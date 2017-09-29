@@ -71,13 +71,13 @@ void mswin_display_splash_window (BOOL show_ver)
 	/* On the screen, not on the parent window */
 	left = (GetSystemMetrics(SM_CXSCREEN) - splashrt.right) / 2;
 	top = (GetSystemMetrics(SM_CYSCREEN) - splashrt.bottom) / 2;
-	MoveWindow(hWnd, left, top, splashrt.right, splashrt.bottom, TRUE);
+	MoveWindow(hWnd, left, top, splashrt.right, splashrt.bottom, true);
 	/* Place the OK control */
 	GetClientRect (hWnd, &clientrt);
 	MoveWindow (GetDlgItem(hWnd, IDOK),
 	    (clientrt.right - clientrt.left - controlrt.right) / 2,
 	    clientrt.bottom - controlrt.bottom - SPLASH_OFFSET_Y,
-	    controlrt.right, controlrt.bottom, TRUE);
+	    controlrt.right, controlrt.bottom, true);
 	buttop = clientrt.bottom - controlrt.bottom - SPLASH_OFFSET_Y;
 	/* Place the text control */
 	GetWindowRect (GetDlgItem(hWnd, IDC_EXTRAINFO), &controlrt);
@@ -87,7 +87,7 @@ void mswin_display_splash_window (BOOL show_ver)
 	MoveWindow (GetDlgItem(hWnd, IDC_EXTRAINFO),
 	    clientrt.left + SPLASH_OFFSET_X,
 	    buttop - controlrt.bottom - SPLASH_OFFSET_Y,
-	    clientrt.right - 2 * SPLASH_OFFSET_X, controlrt.bottom, TRUE);
+	    clientrt.right - 2 * SPLASH_OFFSET_X, controlrt.bottom, true);
 	/* Fill the text control */
 	sprintf(buf, "%s\r\n%s\r\n%s\r\n\r\n", COPYRIGHT_BANNER_A, COPYRIGHT_BANNER_B,
 	    COPYRIGHT_BANNER_C);
@@ -189,11 +189,11 @@ BOOL CALLBACK NHSplashWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 	    /* set text control font */
 		hdc = GetDC(hWnd);
 		SendMessage(hWnd, WM_SETFONT,
-			(WPARAM)mswin_get_font(NHW_TEXT, ATR_NONE, hdc, FALSE), 0);
+			(WPARAM)mswin_get_font(NHW_TEXT, ATR_NONE, hdc, false), 0);
 		ReleaseDC(hWnd, hdc);
 
 		SetFocus(GetDlgItem(hWnd, IDOK));
-	return FALSE;
+	return false;
 
 	case WM_PAINT:
 	{
@@ -257,9 +257,9 @@ BOOL CALLBACK NHSplashWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 				GetNHApp()->hMainWnd=NULL;
 			DestroyWindow(hWnd);
 			SetFocus(GetNHApp()->hMainWnd);
-			return TRUE;
+			return true;
 		}
 	break;
 	}
-	return FALSE;
+	return false;
 }

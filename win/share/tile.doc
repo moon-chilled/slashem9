@@ -112,12 +112,12 @@ boolean peek_text_tile_info(ttype, number, name);
 	otherwise fills in the type, number and name of the next tile
 boolean read_text_tile_info(pixel[TILE_Y][TILE_X], ttype, number, name);
 	returns FALSE if no next tile in current file
-	otherwise TRUE and insert the tile in the provided array.
+	otherwise true and insert the tile in the provided array.
 	The tile type, number and name are also filled in.
 	The application program is responsible for checking these
 boolean read_text_tile(pixel[TILE_Y][TILE_X]);
 	returns FALSE if no next tile in current file
-	otherwise TRUE and insert the tile in the provided array.
+	otherwise true and insert the tile in the provided array.
 boolean write_text_tile_info(pixel[TILE_Y][TILE_X], ttype, number, name);
 	writes tile with supplied type, number and name
 boolean write_text_tile(pixel[TILE_Y][TILE_X]);
@@ -179,7 +179,7 @@ int fclose_gif_file();
 boolean read_gif_tile(pixel[TILE_Y][TILE_X]);
 	returns FALSE if no next tile in current file (including when any
 	remaining tiles are "blank"),
-	otherwise TRUE and insert the tile in the provided array
+	otherwise true and insert the tile in the provided array
 
 The xpm I/O routines are:
 
@@ -194,7 +194,7 @@ int fclose_xpm_file();
 boolean read_xpm_tile(pixel[TILE_Y][TILE_X]);
 	returns FALSE if no next tile in current file (including when any
 	remaining tiles are "blank"),
-	otherwise TRUE and insert the tile in the provided array
+	otherwise true and insert the tile in the provided array
 
 
 Array provided by shared code for NetHack use, by compiling and running

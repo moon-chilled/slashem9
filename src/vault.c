@@ -8,7 +8,7 @@
 static struct monst *findgd(void);
 
 #define g_monnam(mtmp) \
-	x_monnam(mtmp, ARTICLE_NONE, NULL, SUPPRESS_IT, FALSE)
+	x_monnam(mtmp, ARTICLE_NONE, NULL, SUPPRESS_IT, false)
 
 static boolean clear_fcorr(struct monst *,boolean);
 static void restfakecorr(struct monst *);
@@ -24,25 +24,25 @@ boolean forceshow;
 	int fcx, fcy, fcbeg;
 	struct monst *mtmp;
 
-	if (!on_level(&(EGD(grd)->gdlevel), &u.uz)) return TRUE;
+	if (!on_level(&(EGD(grd)->gdlevel), &u.uz)) return true;
 
 	while((fcbeg = EGD(grd)->fcbeg) < EGD(grd)->fcend) {
 		fcx = EGD(grd)->fakecorr[fcbeg].fx;
 		fcy = EGD(grd)->fakecorr[fcbeg].fy;
 		if((grd->mhp <= 0 || !in_fcorridor(grd, u.ux, u.uy)) &&
 				   EGD(grd)->gddone)
-			forceshow = TRUE;
+			forceshow = true;
 		if((u.ux == fcx && u.uy == fcy && grd->mhp > 0)
 			|| (!forceshow && couldsee(fcx,fcy))
 			|| (Punished && !carried(uball)
 				&& uball->ox == fcx && uball->oy == fcy))
-			return FALSE;
+			return false;
 
 		if ((mtmp = m_at(fcx,fcy)) != 0) {
-			if(mtmp->isgd) return(FALSE);
+			if(mtmp->isgd) return(false);
 			else if(!in_fcorridor(grd, u.ux, u.uy)) {
 			    if(mtmp->mtame) yelp(mtmp);
-			    (void) rloc(mtmp, FALSE);
+			    (void) rloc(mtmp, false);
 			}
 		}
 		levl[fcx][fcy].typ = EGD(grd)->fakecorr[fcbeg].ftyp;
@@ -54,7 +54,7 @@ boolean forceshow;
 	    pline_The("corridor disappears.");
 	    if(IS_ROCK(levl[u.ux][u.uy].typ)) You("are encased in rock.");
 	}
-	return(TRUE);
+	return(true);
 }
 
 static void
@@ -62,14 +62,14 @@ restfakecorr(grd)
 struct monst *grd;
 {
 	/* it seems you left the corridor - let the guard disappear */
-	if(clear_fcorr(grd, FALSE)) mongone(grd);
+	if(clear_fcorr(grd, false)) mongone(grd);
 }
 
 boolean
 grddead(grd)				/* called in mon.c */
 struct monst *grd;
 {
-	boolean dispose = clear_fcorr(grd, TRUE);
+	boolean dispose = clear_fcorr(grd, true);
 
 	if(!dispose) {
 		/* see comment by newpos in gd_move() */
@@ -78,7 +78,7 @@ struct monst *grd;
 		place_monster(grd, 0, 0);
 		EGD(grd)->ogx = grd->mx;
 		EGD(grd)->ogy = grd->my;
-		dispose = clear_fcorr(grd, TRUE);
+		dispose = clear_fcorr(grd, true);
 	}
 	return(dispose);
 }
@@ -93,8 +93,8 @@ int x, y;
 	for(fci = EGD(grd)->fcbeg; fci < EGD(grd)->fcend; fci++)
 		if(x == EGD(grd)->fakecorr[fci].fx &&
 				y == EGD(grd)->fakecorr[fci].fy)
-			return(TRUE);
-	return(FALSE);
+			return(true);
+	return(false);
 }
 
 static
@@ -364,8 +364,8 @@ struct monst *grd;
 	struct monst *mon;
 	struct obj *gold;
 	struct trap *trap;
-	boolean fixed = FALSE;
-	boolean movedgold = FALSE;
+	boolean fixed = false;
+	boolean movedgold = false;
 
 	for (x = lox; x <= hix; x++)
 	    for (y = loy; y <= hiy; y++) {
@@ -375,11 +375,11 @@ struct monst *grd;
 		if (!IS_WALL(levl[x][y].typ) && !in_fcorridor(grd, x, y)) {
 		    if ((mon = m_at(x, y)) != 0 && mon != grd) {
 			if (mon->mtame) yelp(mon);
-			(void) rloc(mon, FALSE);
+			(void) rloc(mon, false);
 		    }
 		    if ((gold = g_at(x, y)) != 0) {
 			move_gold(gold, EGD(grd)->vroom);
-			movedgold = TRUE;
+			movedgold = true;
 		    }
 		    if ((trap = t_at(x, y)) != 0)
 			deltrap(trap);
@@ -402,7 +402,7 @@ struct monst *grd;
 		    newsym(x,y);
 		    viz_array[y][x] = tmp_viz;
 		    block_point(x,y);
-		    fixed = TRUE;
+		    fixed = true;
 		}
 	    }
 
@@ -429,11 +429,11 @@ gd_move (struct monst *grd)
 	struct fakecorridor *fcp;
 	struct egd *egrd = EGD(grd);
 	struct rm *crm;
-	boolean goldincorridor = FALSE,
-			 u_in_vault = vault_occupied(u.urooms)? TRUE : FALSE,
+	boolean goldincorridor = false,
+			 u_in_vault = vault_occupied(u.urooms)? true : false,
 			 grd_in_vault = *in_rooms(grd->mx, grd->my, VAULT)?
-					TRUE : FALSE;
-	boolean disappear_msg_seen = FALSE, semi_dead = (grd->mhp <= 0);
+					true : false;
+	boolean disappear_msg_seen = false, semi_dead = (grd->mhp <= 0);
 #ifndef GOLDOBJ
 	boolean u_carry_gold = ((u.ugold + hidden_gold()) > 0L);
 #else
@@ -455,13 +455,13 @@ gd_move (struct monst *grd)
 	       (grd_in_vault ||
 		(in_fcorridor(grd, grd->mx, grd->my) &&
 		 !in_fcorridor(grd, u.ux, u.uy)))) {
-		(void) rloc(grd, FALSE);
+		(void) rloc(grd, false);
 		wallify_vault(grd);
-		(void) clear_fcorr(grd, TRUE);
+		(void) clear_fcorr(grd, true);
 		goto letknow;
 	    }
 	    if(!in_fcorridor(grd, grd->mx, grd->my))
-		(void) clear_fcorr(grd, TRUE);
+		(void) clear_fcorr(grd, true);
 	    return(-1);
 	}
 	if(abs(egrd->ogx - grd->mx) > 1 ||
@@ -501,7 +501,7 @@ gd_move (struct monst *grd)
 		if (u_carry_gold) {	/* player teleported */
 		    m = grd->mx;
 		    n = grd->my;
-		    (void) rloc(grd, FALSE);
+		    (void) rloc(grd, false);
 		    levl[m][n].typ = egrd->fakecorr[0].ftyp;
 		    newsym(m,n);
 		    grd->mpeaceful = 0;
@@ -529,7 +529,7 @@ letknow:
 		  levl[egrd->fakecorr[0].fx][egrd->fakecorr[0].fy].typ
 				 == egrd->fakecorr[0].ftyp) {
 		pline_The("%s, confused, disappears.", g_monnam(grd));
-		disappear_msg_seen = TRUE;
+		disappear_msg_seen = true;
 		goto cleanup;
 	    }
 	    if(u_carry_gold &&
@@ -555,7 +555,7 @@ letknow:
 	    if(g_at(egrd->fakecorr[fci].fx, egrd->fakecorr[fci].fy)){
 		m = egrd->fakecorr[fci].fx;
 		n = egrd->fakecorr[fci].fy;
-		goldincorridor = TRUE;
+		goldincorridor = true;
 	    }
 	if(goldincorridor && !egrd->gddone) {
 		x = grd->mx;
@@ -577,7 +577,7 @@ letknow:
 		    /* just for insurance... */
 		    if (MON_AT(m, n) && m != grd->mx && n != grd->my) {
 			verbalize("Out of my way, scum!");
-			(void) rloc(m_at(m, n), FALSE);
+			(void) rloc(m_at(m, n), false);
 		    }
 		    remove_monster(grd->mx, grd->my);
 		    newsym(grd->mx, grd->my);
@@ -796,7 +796,7 @@ gd_sound()  /* prevent "You hear footsteps.." when inappropriate */
 {
 	struct monst *grd = findgd();
 
-	if (vault_occupied(u.urooms)) return(FALSE);
+	if (vault_occupied(u.urooms)) return(false);
 	else return((boolean)(grd == NULL));
 }
 /*vault.c*/

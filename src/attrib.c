@@ -152,18 +152,18 @@ static long next_check = 600L;	/* arbitrary first setting */
 static void exerper(void);
 static void postadjabil(long *);
 
-/* adjust an attribute; return TRUE if change is made, FALSE otherwise */
+/* adjust an attribute; return true if change is made, false otherwise */
 boolean adjattrib(int ndx, int incr, int msgflg	/* 2 => no message at all, 1 => no message */
 						/* except encumber, zero => message, and */
 						/* negative => conditional (msg if change made) */ ) {
 
-	if (Fixed_abil || !incr) return FALSE;
+	if (Fixed_abil || !incr) return false;
 
 	if ((ndx == A_INT || ndx == A_WIS)
 				&& uarmh && uarmh->otyp == DUNCE_CAP) {
 		if (msgflg == 0)
 		    Your("cap constricts briefly, then relaxes again.");
-		return FALSE;
+		return false;
 	}
 
 	if (incr > 0) {
@@ -172,7 +172,7 @@ boolean adjattrib(int ndx, int incr, int msgflg	/* 2 => no message at all, 1 => 
 		    pline("You're already as %s as you can get.",
 			  plusattr[ndx]);
 		ABASE(ndx) = AMAX(ndx) = ATTRMAX(ndx); /* just in case */
-		return FALSE;
+		return false;
 	    }
 
 	    ABASE(ndx) += incr;
@@ -189,7 +189,7 @@ boolean adjattrib(int ndx, int incr, int msgflg	/* 2 => no message at all, 1 => 
 		    pline("You're already as %s as you can get.",
 			  minusattr[ndx]);
 		ABASE(ndx) = ATTRMIN(ndx); /* just in case */
-		return FALSE;
+		return false;
 	    }
 
 	    ABASE(ndx) += incr;
@@ -208,7 +208,7 @@ boolean adjattrib(int ndx, int incr, int msgflg	/* 2 => no message at all, 1 => 
 	flags.botl = 1;
 	if (msgflg <= 1 && moves > 1 && (ndx == A_STR || ndx == A_CON))
 		(void)encumber_msg();
-	return TRUE;
+	return true;
 }
 
 void gainstr(struct obj *otmp, int incr) {
@@ -219,7 +219,7 @@ void gainstr(struct obj *otmp, int incr) {
 	    if(ABASE(A_STR) < 18) num = (rn2(4) ? 1 : rnd(6) );
 	    else if (ABASE(A_STR) < STR18(85)) num = rnd(10);
 	}
-	adjattrib(A_STR, (otmp && otmp->cursed) ? -num : num, TRUE);
+	adjattrib(A_STR, (otmp && otmp->cursed) ? -num : num, true);
 }
 
 // may kill you; cause may be poison or monster like 'a'
@@ -237,7 +237,7 @@ void losestr(int num) {
 		u.uhpmax -= 6;
 	    }
 	}
-	adjattrib(A_STR, -num, TRUE);
+	adjattrib(A_STR, -num, true);
 }
 
 void change_luck(schar n) {
@@ -265,7 +265,7 @@ int stone_luck(boolean parameter /* So I can't think up of a good name.  So sue 
 
 /* there has just been an inventory change affecting a luck-granting item */
 void set_moreluck(void) {
-	int luckbon = stone_luck(TRUE);
+	int luckbon = stone_luck(true);
 
 	if (!luckbon && !carrying(LUCKSTONE)) u.moreluck = 0;
 	else if (luckbon >= 0) u.moreluck = LUCKADD;
@@ -360,17 +360,17 @@ static void exerper(void) {
 		pline("exerper: Hunger checks");
 #endif
 		switch (hs) {
-		    case SATIATED:	exercise(A_DEX, FALSE);
+		    case SATIATED:	exercise(A_DEX, false);
 					if (Role_if(PM_MONK))
-					    exercise(A_WIS, FALSE);
+					    exercise(A_WIS, false);
 					break;
-		    case NOT_HUNGRY:	exercise(A_CON, TRUE); break;
-		    case WEAK:		exercise(A_STR, FALSE);
+		    case NOT_HUNGRY:	exercise(A_CON, true); break;
+		    case WEAK:		exercise(A_STR, false);
 					if (Role_if(PM_MONK))	/* fasting */
-					    exercise(A_WIS, TRUE);
+					    exercise(A_WIS, true);
 					break;
 		    case FAINTING:
-		    case FAINTED:	exercise(A_CON, FALSE); break;
+		    case FAINTED:	exercise(A_CON, false); break;
 		}
 
 		/* Encumberance Checks */
@@ -378,11 +378,11 @@ static void exerper(void) {
 		pline("exerper: Encumber checks");
 #endif
 		switch (near_capacity()) {
-		    case MOD_ENCUMBER:	exercise(A_STR, TRUE); break;
-		    case HVY_ENCUMBER:	exercise(A_STR, TRUE);
-					exercise(A_DEX, FALSE); break;
-		    case EXT_ENCUMBER:	exercise(A_DEX, FALSE);
-					exercise(A_CON, FALSE); break;
+		    case MOD_ENCUMBER:	exercise(A_STR, true); break;
+		    case HVY_ENCUMBER:	exercise(A_STR, true);
+					exercise(A_DEX, false); break;
+		    case EXT_ENCUMBER:	exercise(A_DEX, false);
+					exercise(A_CON, false); break;
 		}
 
 	}
@@ -394,16 +394,16 @@ static void exerper(void) {
 #endif
 		/* KMH, intrinsic patch */
 		if ((HClairvoyant & (INTRINSIC|TIMEOUT)) &&
-			!BClairvoyant)                      exercise(A_WIS, TRUE);
-		if (HRegeneration)			exercise(A_STR, TRUE);
+			!BClairvoyant)                      exercise(A_WIS, true);
+		if (HRegeneration)			exercise(A_STR, true);
 
-		if(Sick || Vomiting)     exercise(A_CON, FALSE);
-		if(Confusion || Hallucination)		exercise(A_WIS, FALSE);
+		if(Sick || Vomiting)     exercise(A_CON, false);
+		if(Confusion || Hallucination)		exercise(A_WIS, false);
 		if((Wounded_legs
 #ifdef STEED
 		    && !u.usteed
 #endif
-			    ) || Fumbling || HStun)	exercise(A_DEX, FALSE);
+			    ) || Fumbling || HStun)	exercise(A_DEX, false);
 	}
 }
 

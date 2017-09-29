@@ -114,13 +114,13 @@ boolean talk;
 	struct permonst *pm = &mons[mnum];
 	mon = makemon(pm, u.ux, u.uy, MM_EMIN);
 	if (mon) {
-	    mon->isminion = TRUE;
+	    mon->isminion = true;
 	    EMIN(mon)->min_align = alignment;
 	}
     } else if (mnum == PM_ANGEL) {
 	mon = makemon(&mons[mnum], u.ux, u.uy, NO_MM_FLAGS);
 	if (mon) {
-	    mon->isminion = TRUE;
+	    mon->isminion = true;
 	    EPRI(mon)->shralign = alignment;	/* always A_LAWFUL here */
 	}
     } else
@@ -132,7 +132,7 @@ boolean talk;
 	    if (!Blind)
 		pline("%s appears before you.", Amonnam(mon));
 	}
-	mon->mpeaceful = FALSE;
+	mon->mpeaceful = false;
 	/* don't call set_malign(); player was naughty */
     }
 }
@@ -162,7 +162,7 @@ demon_talk (		/* returns 1 if it won't attack. */
 	if (youmonst.data->mlet == S_DEMON) {	/* Won't blackmail their own. */
 	    pline("%s says, \"Good hunting, %s.\"",
 		  Amonnam(mtmp), flags.female ? "Sister" : "Brother");
-	    if (!tele_restrict(mtmp)) (void) rloc(mtmp, FALSE);
+	    if (!tele_restrict(mtmp)) (void) rloc(mtmp, false);
 	    return(1);
 	}
 #ifndef GOLDOBJ

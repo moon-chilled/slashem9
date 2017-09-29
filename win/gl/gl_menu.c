@@ -660,8 +660,8 @@ void Sdlgl_end_menu(winid window, const char *prompt)
 
     win->items = reverse_items(win->items);
 
-    Sdlgl_add_menu(window, NO_GLYPH, &any, 0,0, ATR_BOLD, "", FALSE);
-    Sdlgl_add_menu(window, NO_GLYPH, &any, 0,0, ATR_BOLD, prompt, FALSE);
+    Sdlgl_add_menu(window, NO_GLYPH, &any, 0,0, ATR_BOLD, "", false);
+    Sdlgl_add_menu(window, NO_GLYPH, &any, 0,0, ATR_BOLD, prompt, false);
 
     /* this double reversal... bit of a hack */
     win->items = reverse_items(win->items);

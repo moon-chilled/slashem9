@@ -45,7 +45,7 @@ static void mon_ignite_lightsaber(struct obj *, struct monst *);
 
 /*WAC practicing needs a delay counter*/
 static schar delay;            /* moves left for practice */
-static boolean speed_advance = FALSE;
+static boolean speed_advance = false;
 
 static void give_may_advance_msg(int);
 
@@ -805,7 +805,7 @@ mon_wield_item (struct monst *mon)
 		    }
 		}
 		if (artifact_light(obj) && !obj->lamplit) {
-		    begin_burn(obj, FALSE);
+		    begin_burn(obj, false);
 		    if (canseemon(mon))
 			pline("%s brilliantly in %s %s!",
 			    Tobjnam(obj, "glow"),
@@ -841,7 +841,7 @@ mon_ignite_lightsaber (struct obj *obj, struct monst *mon)
 			pline("%s ignites %s.", Monnam(mon),
 				an(xname(obj)));
 		}
-		begin_burn(obj, FALSE);
+		begin_burn(obj, false);
 	    }
 	} else {
 		/* Double Lightsaber in single mode? Ignite second blade */
@@ -850,10 +850,10 @@ mon_ignite_lightsaber (struct obj *obj, struct monst *mon)
 		    if (!obj->altmode && (!obj->cursed || rn2(4))) {
 			if (canseemon(mon)) pline("%s ignites the second blade of %s.",
 				Monnam(mon), an(xname(obj)));
-		    	obj->altmode = TRUE;
+		    	obj->altmode = true;
 		    	return;
-		    } else obj->altmode = FALSE;
-		    lightsaber_deactivate(obj, TRUE);
+		    } else obj->altmode = false;
+		    lightsaber_deactivate(obj, true);
 		}
 		return;
 	}
@@ -1084,13 +1084,13 @@ int
 enhance_weapon_skill (void)
 #ifdef DUMP_LOG
 {
-	return enhance_skill(FALSE);
+	return enhance_skill(false);
 }
 
 void
 dump_weapon_skill (void)
 {
-	enhance_skill(TRUE);
+	enhance_skill(true);
 }
 
 int enhance_skill(boolean want_dump)
@@ -1108,7 +1108,7 @@ int enhance_skill(boolean want_dump)
     menu_item *selected;
     anything any;
     winid win;
-    boolean speedy = FALSE;
+    boolean speedy = false;
 #ifdef DUMP_LOG
     char buf2[BUFSZ];
     boolean logged;
@@ -1119,7 +1119,7 @@ int enhance_skill(boolean want_dump)
 	if (!want_dump)
 #endif
 	if (wizard && yn("Advance skills without practice?") == 'y')
-	    speedy = TRUE;
+	    speedy = true;
 #endif
 
 	do {
@@ -1186,7 +1186,7 @@ int enhance_skill(boolean want_dump)
 #ifdef DUMP_LOG
 		if (want_dump) {
 		    dump("  ",(char *)skill_ranges[pass].name);
-		    logged=FALSE;
+		    logged=false;
 		} else
 #endif
 		    add_menu(win, NO_GLYPH, &any, 0, 0, iflags.menu_headings,
@@ -1197,7 +1197,7 @@ int enhance_skill(boolean want_dump)
 		 	sprintf(buf2,"%-*s [%s]",
 			    longest, P_NAME(i),skill_level_name(i, buf));
 			dump("    ",buf2);
-			logged=TRUE;
+			logged=true;
 		    } else if (i == skill_ranges[pass].last && !logged) {
 			dump("    ","(none)");
 		    }
@@ -1312,9 +1312,9 @@ use_skill (int skill, int degree)
 
 /*    if (skill != P_NONE && !P_RESTRICTED(skill)) {*/
     if (skill != P_NONE) {
-	advance_before = can_advance(skill, FALSE);
+	advance_before = can_advance(skill, false);
 	P_ADVANCE(skill) += degree;
-	if (!advance_before && can_advance(skill, FALSE)) {
+	if (!advance_before && can_advance(skill, false)) {
 	    give_may_advance_msg(skill);
 	    if (P_RESTRICTED(skill)) {
 	    	unrestrict_weapon_skill(skill);
@@ -1331,10 +1331,10 @@ add_weapon_skill (
     int i, before, after;
 
     for (i = 0, before = 0; i < P_NUM_SKILLS; i++)
-	if (can_advance(i, FALSE)) before++;
+	if (can_advance(i, false)) before++;
     u.weapon_slots += n;
     for (i = 0, after = 0; i < P_NUM_SKILLS; i++)
-	if (can_advance(i, FALSE)) after++;
+	if (can_advance(i, false)) after++;
     if (before < after)
 	give_may_advance_msg(P_NONE);
 }
@@ -1345,7 +1345,7 @@ lose_weapon_skill (
 )
 {
     int skill;
-    boolean maybe_loose_disarm = FALSE;
+    boolean maybe_loose_disarm = false;
 
     while (--n >= 0) {
 	/* deduct first from unused slots, then from last placed slot, if any */
@@ -1357,7 +1357,7 @@ lose_weapon_skill (
 		panic("lose_weapon_skill (%d)", skill);
 	    if (skill <= P_LAST_WEAPON && skill != P_WHIP &&
 		    P_SKILL(skill) == P_SKILLED)
-		maybe_loose_disarm = TRUE;
+		maybe_loose_disarm = true;
 	    P_SKILL(skill)--;	/* drop skill one level */
 	    /* Lost skill might have taken more than one slot; refund rest. */
 	    u.weapon_slots = slots_required(skill) - 1;
@@ -1769,7 +1769,7 @@ setmnotwielded (struct monst *mon, struct obj *obj)
 {
     if (!obj) return;
     if (artifact_light(obj) && obj->lamplit) {
-	end_burn(obj, FALSE);
+	end_burn(obj, false);
 	if (canseemon(mon))
 	    pline("%s in %s %s %s glowing.", The(xname(obj)),
 		  s_suffix(mon_nam(mon)), mbodypart(mon,HAND),

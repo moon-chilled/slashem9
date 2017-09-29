@@ -52,7 +52,7 @@ char **argv;
 	char	*infile, *outfile, *basename;
 	FILE	*fin, *fout;
 	int	i, len;
-	boolean errors_encountered = FALSE;
+	boolean errors_encountered = false;
 #if defined(MAC) && (defined(__MWERKS__))
 	char	*mark;
 	static char *mac_argv[] = {	"dgn_comp",	/* dummy argv[0] */
@@ -73,7 +73,7 @@ char **argv;
 	    init_yyout(fout);
 	    (void) yyparse();
 	    if (fatal_error > 0)
-		errors_encountered = TRUE;
+		errors_encountered = true;
 	} else {		/* Otherwise every argument is a filename */
 	    infile = outfile = NULL;
 	    for(i=1; i<argc; i++) {
@@ -86,7 +86,7 @@ char **argv;
 		    fprintf(stderr,
 			    "Error - file name \"%s\" in wrong format.\n",
 			    fname);
-		    errors_encountered = TRUE;
+		    errors_encountered = true;
 		    free(infile);
 		    continue;
 		}
@@ -123,14 +123,14 @@ char **argv;
 		if (!fin) {
 		    fprintf(stderr, "Can't open %s for input.\n", infile);
 		    perror(infile);
-		    errors_encountered = TRUE;
+		    errors_encountered = true;
 		    continue;
 		}
 		fout = freopen(outfile, WRBMODE, stdout);
 		if (!fout) {
 		    fprintf(stderr, "Can't open %s for output.\n", outfile);
 		    perror(outfile);
-		    errors_encountered = TRUE;
+		    errors_encountered = true;
 		    continue;
 		}
 		init_yyin(fin);
@@ -138,7 +138,7 @@ char **argv;
 		(void) yyparse();
 		line_number = 1;
 		if (fatal_error > 0) {
-			errors_encountered = TRUE;
+			errors_encountered = true;
 			fatal_error = 0;
 		}
 	    }
@@ -146,7 +146,7 @@ char **argv;
 	if (fout && fout != stdout && fclose(fout) < 0) {
 	    fprintf(stderr, "Can't finish output file.");
 	    perror(outfile);
-	    errors_encountered = TRUE;
+	    errors_encountered = true;
 	}
 	exit(errors_encountered ? EXIT_FAILURE : EXIT_SUCCESS);
 	/*NOTREACHED*/

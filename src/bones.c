@@ -60,7 +60,7 @@ static void resetobjs(struct obj *ochain, boolean restore) {
 			otmp->onamelth = 0;
 			*ONAME(otmp) = '\0';
 		} else if (otmp->oartifact && restore)
-			artifact_exists(otmp,ONAME(otmp),TRUE);
+			artifact_exists(otmp,ONAME(otmp),true);
 		if (!restore) {
 			/* do not zero out o_ids for ghost levels anymore */
 
@@ -87,7 +87,7 @@ static void resetobjs(struct obj *ochain, boolean restore) {
 			    curse(otmp);
 			} else if (otmp->otyp == CANDELABRUM_OF_INVOCATION) {
 			    if (otmp->lamplit)
-				end_burn(otmp, TRUE);
+				end_burn(otmp, true);
 			    otmp->otyp = WAX_CANDLE;
 			    otmp->age = 50L;  /* assume used */
 			    if (otmp->spe > 0)
@@ -128,7 +128,7 @@ static void drop_upon_death(struct monst *mtmp, struct obj *cont) {
 		otmp->owornmask = 0;
 		/* lamps don't go out when dropped */
 		if ((cont || artifact_light(otmp)) && obj_is_burning(otmp))
-		    end_burn(otmp, TRUE);	/* smother in statue */
+		    end_burn(otmp, true);	/* smother in statue */
 
 		if(otmp->otyp == SLIME_MOLD) goodfruit(otmp->spe);
 
@@ -157,20 +157,20 @@ boolean can_make_bones(void) {
 	struct trap *ttmp;
 
 #ifdef NO_BONES
-	return FALSE;
+	return false;
 #endif
 
 	if (ledger_no(&u.uz) <= 0 || ledger_no(&u.uz) > maxledgerno())
-	    return FALSE;
+	    return false;
 	if (no_bones_level(&u.uz))
-	    return FALSE;		/* no bones for specific levels */
+	    return false;		/* no bones for specific levels */
 	if (u.uswallow) {
-	    return FALSE;		/* no bones when swallowed */
+	    return false;		/* no bones when swallowed */
 	}
 	if (!Is_branchlev(&u.uz)) {
 	    /* no bones on non-branches with portals */
 	    for(ttmp = ftrap; ttmp; ttmp = ttmp->ntrap)
-		if (ttmp->ttyp == MAGIC_PORTAL) return FALSE;
+		if (ttmp->ttyp == MAGIC_PORTAL) return false;
 	}
 
 	/* Several variant authors have experimented with bones probabilities */
@@ -181,12 +181,12 @@ boolean can_make_bones(void) {
 #ifdef WIZARD
 		&& !wizard
 #endif
-		)) return FALSE;
+		)) return false;
 
 	/* don't let multiple restarts generate multiple copies of objects
 	 * in bones files */
-	if (discover) return FALSE;
-	return TRUE;
+	if (discover) return false;
+	return true;
 }
 
 /* save bones and possessions of a deceased adventurer */
@@ -284,18 +284,18 @@ void savebones(struct obj *corpse) {
 		/* trick makemon() into allowing monster creation
 		 * on your location
 		 */
-		in_mklev = TRUE;
+		in_mklev = true;
 		mtmp = makemon(&mons[PM_GHOST], u.ux, u.uy, MM_NONAME);
-		in_mklev = FALSE;
+		in_mklev = false;
 		if (!mtmp) return;
 		mtmp = christen_monst(mtmp, plname);
 		if (corpse)
 			(void) obj_attach_mid(corpse, mtmp->m_id);
 	} else {
 		/* give your possessions to the monster you become */
-		in_mklev = TRUE;
+		in_mklev = true;
 		mtmp = makemon(&mons[u.ugrave_arise], u.ux, u.uy, NO_MM_FLAGS);
-		in_mklev = FALSE;
+		in_mklev = false;
 		if (!mtmp) {
 			drop_upon_death(NULL, NULL);
 			return;
@@ -304,9 +304,9 @@ void savebones(struct obj *corpse) {
 		newsym(u.ux, u.uy);
 		Your("body rises from the dead as %s...",
 			an(mons[u.ugrave_arise].mname));
-		display_nhwindow(WIN_MESSAGE, FALSE);
+		display_nhwindow(WIN_MESSAGE, false);
 		drop_upon_death(mtmp, NULL);
-		m_dowear(mtmp, TRUE);
+		m_dowear(mtmp, true);
 	}
 	if (mtmp) {
 		mtmp->m_lev = (u.ulevel ? u.ulevel : 1);
@@ -315,7 +315,7 @@ void savebones(struct obj *corpse) {
 		mtmp->msleeping = 1;
 	}
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-		resetobjs(mtmp->minvent,FALSE);
+		resetobjs(mtmp->minvent,false);
 		/* do not zero out m_ids for bones levels any more */
 		mtmp->mlstmv = 0L;
 		if(mtmp->mtame) mtmp->mtame = mtmp->mpeaceful = 0;
@@ -324,8 +324,8 @@ void savebones(struct obj *corpse) {
 		ttmp->madeby_u = 0;
 		ttmp->tseen = (ttmp->ttyp == HOLE);
 	}
-	resetobjs(fobj,FALSE);
-	resetobjs(level.buriedobjlist, FALSE);
+	resetobjs(fobj,false);
+	resetobjs(level.buriedobjlist, false);
 
 	/* Hero is no longer on the map. */
 	u.ux = u.uy = 0;
@@ -410,14 +410,14 @@ int getbones(void) {
 #ifdef WIZARD
 			if (wizard) {
 				pline("%s", errbuf);
-				ok = FALSE;	/* won't die of trickery */
+				ok = false;	/* won't die of trickery */
 			}
 #endif
 			trickery(errbuf);
 		} else {
 			struct monst *mtmp;
 
-			getlev(fd, 0, 0, TRUE);
+			getlev(fd, 0, 0, true);
 
 			/* Note that getlev() now keeps tabs on unique
 			 * monsters such as demon lords, and tracks the
@@ -436,10 +436,10 @@ int getbones(void) {
 				mongone(mtmp);
 			    } else
 				/* to correctly reset named artifacts on the level */
-				resetobjs(mtmp->minvent,TRUE);
+				resetobjs(mtmp->minvent,true);
 			}
-			resetobjs(fobj,TRUE);
-			resetobjs(level.buriedobjlist,TRUE);
+			resetobjs(fobj,true);
+			resetobjs(level.buriedobjlist,true);
 		}
 	}
 	(void) close(fd);

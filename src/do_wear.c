@@ -8,7 +8,7 @@ static long takeoff_mask = 0L;
 static long taking_off = 0L;
 
 static int todelay;
-static boolean cancelled_don = FALSE;
+static boolean cancelled_don = false;
 
 static const char see_yourself[] = "see yourself";
 static const char unknown_type[] = "Unknown type of %s (%d)";
@@ -75,7 +75,7 @@ int Boots_on(void) {
 	case KICKING_BOOTS:
 		break;
 	case WATER_WALKING_BOOTS:
-		if (u.uinwater) spoteffects(TRUE);
+		if (u.uinwater) spoteffects(true);
 		break;
 	case SPEED_BOOTS:
 		/* Speed boots are still better than intrinsic speed, */
@@ -101,7 +101,7 @@ int Boots_on(void) {
 			flags.botl = 1;
 			makeknown(uarmf->otyp);
 			float_up();
-			spoteffects(FALSE);
+			spoteffects(false);
 		}
 		break;
 	default: impossible(unknown_type, c_boots, uarmf->otyp);
@@ -131,7 +131,7 @@ int Boots_off(void) {
 		    !is_clinger(youmonst.data) && !cancelled_don) {
 			makeknown(otyp);
 			/* make boots known in case you survive the drowning */
-			spoteffects(TRUE);
+			spoteffects(true);
 		}
 		break;
 	case ELVEN_BOOTS:
@@ -159,7 +159,7 @@ int Boots_off(void) {
 		break;
 	default: impossible(unknown_type, c_boots, otyp);
     }
-    cancelled_don = FALSE;
+    cancelled_don = false;
     return 0;
 }
 
@@ -381,7 +381,7 @@ int Helmet_off(void) {
 	default: impossible(unknown_type, c_helmet, uarmh->otyp);
     }
     setworn(NULL, W_ARMH);
-    cancelled_don = FALSE;
+    cancelled_don = false;
     return 0;
 }
 
@@ -395,7 +395,7 @@ int Gloves_on(void) {
 	case GAUNTLETS_OF_SWIMMING:
 		if (u.uinwater) {
 		   pline("Hey! You can swim!");
-		   spoteffects(TRUE);
+		   spoteffects(true);
 		}
 		break;
 	case GAUNTLETS_OF_FUMBLING:
@@ -426,7 +426,7 @@ int Gloves_off(void) {
 	case GAUNTLETS_OF_SWIMMING:
 	    if (u.uinwater) {
 	       You("begin to thrash about!");
-	       spoteffects(TRUE);
+	       spoteffects(true);
 	    }
 	    break;
 	case GAUNTLETS_OF_FUMBLING:
@@ -443,7 +443,7 @@ int Gloves_off(void) {
 	default: impossible(unknown_type, c_gloves, uarmg->otyp);
     }
     setworn(NULL, W_ARMG);
-    cancelled_don = FALSE;
+    cancelled_don = false;
     (void) encumber_msg();		/* immediate feedback for GoP */
 
     /* Prevent wielding cockatrice when not wearing gloves */
@@ -452,8 +452,8 @@ int Gloves_off(void) {
 	char kbuf[BUFSZ];
 
 	You("wield the %s in your bare %s.",
-	    corpse_xname(uwep, TRUE), makeplural(body_part(HAND)));
-	strcpy(kbuf, an(killer_cxname(uwep, TRUE)));
+	    corpse_xname(uwep, true), makeplural(body_part(HAND)));
+	strcpy(kbuf, an(killer_cxname(uwep, true)));
 	instapetrify(kbuf);
 	uwepgone();  /* life-saved still doesn't allow touching cockatrice */
     }
@@ -464,9 +464,9 @@ int Gloves_off(void) {
 	char kbuf[BUFSZ];
 
 	You("wield the %s in your bare %s.",
-	    corpse_xname(uswapwep, TRUE), body_part(HAND));
+	    corpse_xname(uswapwep, true), body_part(HAND));
 
-	strcpy(kbuf, an(killer_cxname(uswapwep, TRUE)));
+	strcpy(kbuf, an(killer_cxname(uswapwep, true)));
 	instapetrify(kbuf);
 	uswapwepgone();	/* lifesaved still doesn't allow touching cockatrice */
     }
@@ -554,7 +554,7 @@ int Armor_on(void) {
 int Armor_off(void) {
     takeoff_mask &= ~W_ARM;
     setworn(NULL, W_ARM);
-    cancelled_don = FALSE;
+    cancelled_don = false;
     return 0;
 }
 
@@ -564,7 +564,7 @@ int Armor_off(void) {
 int Armor_gone(void) {
     takeoff_mask &= ~W_ARM;
     setnotworn(uarm);
-    cancelled_don = FALSE;
+    cancelled_don = false;
     return 0;
 }
 
@@ -729,8 +729,8 @@ void Ring_on(struct obj *obj) {
     long oldprop = u.uprops[objects[obj->otyp].oc_oprop].extrinsic;
     int old_attrib, which;
 
-    if (obj == uwep) setuwep(NULL, TRUE);
-    if (obj == uswapwep) setuswapwep(NULL, TRUE);
+    if (obj == uwep) setuwep(NULL, true);
+    if (obj == uswapwep) setuswapwep(NULL, true);
     if (obj == uquiver) setuqwep(NULL);
 
     /* only mask out W_RING when we don't have both
@@ -799,7 +799,7 @@ void Ring_on(struct obj *obj) {
 		    flags.botl = 1;
 		    float_up();
 		    makeknown(RIN_LEVITATION);
-		    spoteffects(FALSE);	/* for sinks */
+		    spoteffects(false);	/* for sinks */
 		}
 		break;
 	case RIN_GAIN_STRENGTH:
@@ -827,7 +827,7 @@ void Ring_on(struct obj *obj) {
 		flags.botl = 1;
 		if (obj->spe || objects[RIN_GAIN_INTELLIGENCE].oc_name_known) {
 			makeknown(RIN_GAIN_INTELLIGENCE);
-			obj->known = TRUE;
+			obj->known = true;
 		}
 		break;
 	case RIN_GAIN_WISDOM:
@@ -835,7 +835,7 @@ void Ring_on(struct obj *obj) {
 		flags.botl = 1;
 		if (obj->spe || objects[RIN_GAIN_WISDOM].oc_name_known) {
 			makeknown(RIN_GAIN_WISDOM);
-			obj->known = TRUE;
+			obj->known = true;
 		}
 		break;
 	case RIN_GAIN_DEXTERITY:
@@ -843,7 +843,7 @@ void Ring_on(struct obj *obj) {
 		flags.botl = 1;
 		if (obj->spe || objects[RIN_GAIN_DEXTERITY].oc_name_known) {
 			makeknown(RIN_GAIN_DEXTERITY);
-			obj->known = TRUE;
+			obj->known = true;
 		}
 		break;
 	case RIN_INCREASE_ACCURACY:	/* KMH */
@@ -993,32 +993,32 @@ static void Ring_off_or_gone(struct obj *obj, boolean gone) {
 }
 
 void Ring_off(struct obj *obj) {
-	Ring_off_or_gone(obj,FALSE);
+	Ring_off_or_gone(obj,false);
 }
 
 void Ring_gone(struct obj *obj) {
-	Ring_off_or_gone(obj,TRUE);
+	Ring_off_or_gone(obj,true);
 }
 
 void Blindf_on(struct obj *otmp) {
-	long already_blind = Blind, changed = FALSE;
+	long already_blind = Blind, changed = false;
 
 	if (otmp == uwep)
-	    setuwep(NULL, TRUE);
+	    setuwep(NULL, true);
 	if (otmp == uswapwep)
-	    setuswapwep(NULL, TRUE);
+	    setuswapwep(NULL, true);
 	if (otmp == uquiver)
 	    setuqwep(NULL);
 	setworn(otmp, W_TOOL);
 	on_msg(otmp);
 
 	if (Blind && !already_blind) {
-	    changed = TRUE;
+	    changed = true;
 	    if (flags.verbose) You_cant("see any more.");
 	    /* set ball&chain variables before the hero goes blind */
 	    if (Punished) set_bc(0);
 	} else if (already_blind && !Blind) {
-	    changed = TRUE;
+	    changed = true;
 	    /* "You are now wearing the Eyes of the Overworld." */
 	    You("can see!");
 	}
@@ -1031,7 +1031,7 @@ void Blindf_on(struct obj *otmp) {
 }
 
 void Blindf_off(struct obj *otmp) {
-	boolean was_blind = Blind, changed = FALSE;
+	boolean was_blind = Blind, changed = false;
 
 	takeoff_mask &= ~W_TOOL;
 	setworn(NULL, otmp->owornmask);
@@ -1044,14 +1044,14 @@ void Blindf_off(struct obj *otmp) {
 		if (otmp->otyp != LENSES)
 		    You("still cannot see.");
 	    } else {
-		changed = TRUE;	/* !was_blind */
+		changed = true;	/* !was_blind */
 		/* "You were wearing the Eyes of the Overworld." */
 		You_cant("see anything now!");
 		/* set ball&chain variables before the hero goes blind */
 		if (Punished) set_bc(0);
 	    }
 	} else if (was_blind) {
-	    changed = TRUE;	/* !Blind */
+	    changed = true;	/* !Blind */
 	    You("can see again.");
 	}
 	if (changed) {
@@ -1078,7 +1078,7 @@ void set_wear(void) {
 boolean donning(struct obj *otmp)		{
  /* long what = (occupation == take_off) ? taking_off : 0L; */
     long what = taking_off;	/* if nonzero, occupation is implied */
-    boolean result = FALSE;
+    boolean result = false;
 
     if (otmp == uarm)
 	result = (afternmv == Armor_on || afternmv == Armor_off ||
@@ -1235,7 +1235,7 @@ int cursed(struct obj *otmp) {
 		You("can't.  %s cursed.",
 			(is_boots(otmp) || is_gloves(otmp) || otmp->quan > 1L)
 			? "They are" : "It is");
-		otmp->bknown = TRUE;
+		otmp->bknown = true;
 		return(1);
 	}
 	return(0);
@@ -1305,7 +1305,7 @@ static void already_wearing2(const char *cc1, const char *cc2) {
  * canwearobj checks to see whether the player can wear a piece of armor
  *
  * inputs: otmp (the piece of armor)
- *         noisy (if TRUE give error messages, otherwise be quiet about it)
+ *         noisy (if true give error messages, otherwise be quiet about it)
  * output: mask (otmp's armor type)
  */
 int canwearobj(struct obj *otmp, long *mask, boolean noisy) {
@@ -1463,7 +1463,7 @@ int dowear(void) {
 	otmp = getobj(clothes, "wear");
 	if(!otmp) return(0);
 
-	if (!canwearobj(otmp,&mask,TRUE)) return(0);
+	if (!canwearobj(otmp,&mask,true)) return(0);
 
 	if (otmp->oartifact && !touch_artifact(otmp, &youmonst))
 	    return 1;	/* costs a turn even though it didn't get worn */
@@ -1480,11 +1480,11 @@ int dowear(void) {
 		return 1;
 	}
 
-	otmp->known = TRUE;
+	otmp->known = true;
 	if(otmp == uwep)
-		setuwep(NULL, TRUE);
+		setuwep(NULL, true);
 	if (otmp == uswapwep)
-		setuswapwep(NULL, TRUE);
+		setuswapwep(NULL, true);
 	if (otmp == uquiver)
 		setuqwep(NULL);
 	setworn(otmp, mask);
@@ -1529,9 +1529,9 @@ int doputon(void) {
 		return(0);
 	}
 	if(otmp == uwep)
-		setuwep(NULL, TRUE);
+		setuwep(NULL, true);
 	if(otmp == uswapwep)
-		setuswapwep(NULL, TRUE);
+		setuswapwep(NULL, true);
 	if(otmp == uquiver)
 		setuqwep(NULL);
 	if(otmp->oclass == RING_CLASS || otmp->otyp == MEAT_RING) {
@@ -1568,7 +1568,7 @@ int doputon(void) {
 			}
 		} while(!mask);
 		if (uarmg && uarmg->cursed) {
-			uarmg->bknown = TRUE;
+			uarmg->bknown = true;
 		    You("cannot remove your gloves to put on the ring.");
 			return(0);
 		}
@@ -1720,7 +1720,7 @@ void glibr(void) {
 			otherwep,
 			xfl ? "also " : "",
 			makeplural(body_part(HAND)));
-		setuswapwep(NULL, FALSE);
+		setuswapwep(NULL, false);
 		xfl++;
 		if (otmp->otyp != LOADSTONE || !otmp->cursed)
 			dropx(otmp);
@@ -1739,7 +1739,7 @@ void glibr(void) {
 			otherwep ? "other " : "", thiswep,
 			xfl ? "also " : "",
 			makeplural(body_part(HAND)));
-		setuwep(NULL, FALSE);
+		setuwep(NULL, false);
 		if (otmp->otyp != LOADSTONE || !otmp->cursed)
 			dropx(otmp);
 	}
@@ -1770,7 +1770,7 @@ void erode_armor(struct monst *victim, boolean acid_dmg) {
 	struct obj *otmph = some_armor(victim);
 
 	if (otmph && (otmph != uarmf)) {
-	    erode_obj(otmph, acid_dmg, FALSE);
+	    erode_obj(otmph, acid_dmg, false);
 	    if (carried(otmph)) update_inventory();
 	}
 }
@@ -1826,7 +1826,7 @@ static int select_off(struct obj *otmp) {
 	    }
 	    if (why) {
 		You("cannot %s to remove the ring.", buf);
-		why->bknown = TRUE;
+		why->bknown = true;
 		return 0;
 	    }
 	}
@@ -1835,7 +1835,7 @@ static int select_off(struct obj *otmp) {
 	    if (welded(uwep)) {
 		You("are unable to take off your %s while wielding that %s.",
 		    c_gloves, is_sword(uwep) ? c_sword : c_weapon);
-		uwep->bknown = TRUE;
+		uwep->bknown = true;
 		return 0;
 	    } else if (Glib) {
 		You_cant("take off the slippery %s with your slippery %s.",
@@ -1872,7 +1872,7 @@ static int select_off(struct obj *otmp) {
 	    }
 	    if (why) {
 		You("cannot %s to take off %s.", buf, the(xname(otmp)));
-		why->bknown = TRUE;
+		why->bknown = true;
 		return 0;
 	    }
 	}
@@ -1909,14 +1909,14 @@ static struct obj *do_takeoff() {
 
 	if (taking_off == W_WEP) {
 	  if(!cursed(uwep)) {
-	    setuwep(NULL, TRUE);
+	    setuwep(NULL, true);
 	    You("are empty %s.", body_part(HANDED));
-	    u.twoweap = FALSE;
+	    u.twoweap = false;
 	  }
 	} else if (taking_off == W_SWAPWEP) {
-	  setuswapwep(NULL, TRUE);
+	  setuswapwep(NULL, true);
 	  You("no longer have a second weapon readied.");
-	  u.twoweap = FALSE;
+	  u.twoweap = false;
 	} else if (taking_off == W_QUIVER) {
 	  setuqwep(NULL);
 	  You("no longer have ammunition readied.");
@@ -2061,7 +2061,7 @@ int doddoremarm(void) {
 
     add_valid_menu_class(0); /* reset */
     if (flags.menu_style != MENU_TRADITIONAL ||
-	    (result = ggetobj("take off", select_off, 0, FALSE, NULL)) < -1)
+	    (result = ggetobj("take off", select_off, 0, false, NULL)) < -1)
 	result = menu_remarm(result);
 
     if (takeoff_mask) {
@@ -2083,26 +2083,26 @@ int doddoremarm(void) {
 static int menu_remarm(int retry) {
     int n, i = 0;
     menu_item *pick_list;
-    boolean all_worn_categories = TRUE;
+    boolean all_worn_categories = true;
 
     if (retry) {
 	all_worn_categories = (retry == -2);
     } else if (flags.menu_style == MENU_FULL) {
-	all_worn_categories = FALSE;
+	all_worn_categories = false;
 	n = query_category("What type of things do you want to take off?",
 			   invent, WORN_TYPES|ALL_TYPES, &pick_list, PICK_ANY);
 	if (!n) return 0;
 	for (i = 0; i < n; i++) {
 	    if (pick_list[i].item.a_int == ALL_TYPES_SELECTED)
-		all_worn_categories = TRUE;
+		all_worn_categories = true;
 	    else
 		add_valid_menu_class(pick_list[i].item.a_int);
 	}
 	free((void *) pick_list);
     } else if (flags.menu_style == MENU_COMBINATION) {
-	all_worn_categories = FALSE;
-	if (ggetobj("take off", select_off, 0, TRUE, NULL) == -2)
-	    all_worn_categories = TRUE;
+	all_worn_categories = false;
+	if (ggetobj("take off", select_off, 0, true, NULL) == -2)
+	    all_worn_categories = true;
     }
 
     n = query_objlist("What do you want to take off?", invent,

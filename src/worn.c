@@ -68,7 +68,7 @@ setworn (struct obj *obj, long mask)
 		if(oobj) {
 		    if (u.twoweap && (oobj->owornmask & (W_WEP|W_SWAPWEP))) {
 			if (uswapwep)
-			    unwield(uswapwep, FALSE);
+			    unwield(uswapwep, false);
 			u.twoweap = 0;
 		    }
 		    oobj->owornmask &= ~wp->w_mask;
@@ -123,7 +123,7 @@ setnotworn (struct obj *obj)
 	if (!obj) return;
 	if (obj == uwep || obj == uswapwep) {
 	    if (uswapwep)
-		unwield(uswapwep, FALSE);
+		unwield(uswapwep, false);
 	    u.twoweap = 0;
 	}
 	for(wp = worn; wp->w_mask; wp++)
@@ -159,13 +159,13 @@ mon_adjust_speed (
 )
 {
     struct obj *otmp;
-    boolean give_msg = !in_mklev, petrify = FALSE;
+    boolean give_msg = !in_mklev, petrify = false;
     unsigned int oldspeed = mon->mspeed;
 
     switch (adjust) {
      case  2:
 	mon->permspeed = MFAST;
-	give_msg = FALSE;	/* special case monster creation */
+	give_msg = false;	/* special case monster creation */
 	break;
      case  1:
 	if (mon->permspeed == MSLOW) mon->permspeed = 0;
@@ -179,12 +179,12 @@ mon_adjust_speed (
 	break;
      case -2:
 	mon->permspeed = MSLOW;
-	give_msg = FALSE;	/* (not currently used) */
+	give_msg = false;	/* (not currently used) */
 	break;
      case -3:			/* petrification */
 	/* take away intrinsic speed but don't reduce normal speed */
 	if (mon->permspeed == MFAST) mon->permspeed = 0;
-	petrify = TRUE;
+	petrify = true;
 	break;
     }
 
@@ -241,7 +241,7 @@ boolean on, silently;
 	 case FAST:
 	  {
 	    boolean save_in_mklev = in_mklev;
-	    if (silently) in_mklev = TRUE;
+	    if (silently) in_mklev = true;
 	    mon_adjust_speed(mon, 0, obj);
 	    in_mklev = save_in_mklev;
 	    break;
@@ -284,7 +284,7 @@ boolean on, silently;
 	 case FAST:
 	  {
 	    boolean save_in_mklev = in_mklev;
-	    if (silently) in_mklev = TRUE;
+	    if (silently) in_mklev = true;
 	    mon_adjust_speed(mon, 0, obj);
 	    in_mklev = save_in_mklev;
 	    break;
@@ -378,7 +378,7 @@ m_dowear(mon, creation)
 struct monst *mon;
 boolean creation;
 {
-#define RACE_EXCEPTION TRUE
+#define RACE_EXCEPTION true
 	/* Note the restrictions here are the same as in dowear in do_wear.c
 	 * except for the additional restriction on intelligence.  (Players
 	 * are always intelligent, even if polymorphed).
@@ -391,24 +391,24 @@ boolean creation;
 	    (mon->data->mlet != S_MUMMY && mon->data != &mons[PM_SKELETON])))
 		return;
 
-	m_dowear_type(mon, W_AMUL, creation, FALSE);
+	m_dowear_type(mon, W_AMUL, creation, false);
 
 	/* can't put on shirt if already wearing suit */
 	if (!cantweararm(mon->data) || (mon->misc_worn_check & W_ARM))
-	    m_dowear_type(mon, W_ARMU, creation, FALSE);
+	    m_dowear_type(mon, W_ARMU, creation, false);
 
 	/* treating small as a special case allows
 	   hobbits, gnomes, and kobolds to wear cloaks */
 	if (!cantweararm(mon->data) || mon->data->msize == MZ_SMALL)
-	    m_dowear_type(mon, W_ARMC, creation, FALSE);
-	m_dowear_type(mon, W_ARMH, creation, FALSE);
+	    m_dowear_type(mon, W_ARMC, creation, false);
+	m_dowear_type(mon, W_ARMH, creation, false);
 	if (!MON_WEP(mon) || !bimanual(MON_WEP(mon)))
-	    m_dowear_type(mon, W_ARMS, creation, FALSE);
-	m_dowear_type(mon, W_ARMG, creation, FALSE);
+	    m_dowear_type(mon, W_ARMS, creation, false);
+	m_dowear_type(mon, W_ARMG, creation, false);
 	if (!slithy(mon->data) && mon->data->mlet != S_CENTAUR)
-	    m_dowear_type(mon, W_ARMF, creation, FALSE);
+	    m_dowear_type(mon, W_ARMF, creation, false);
 	if (!cantweararm(mon->data))
-	    m_dowear_type(mon, W_ARM, creation, FALSE);
+	    m_dowear_type(mon, W_ARM, creation, false);
 	else
 	    m_dowear_type(mon, W_ARM, creation, RACE_EXCEPTION);
 }
@@ -510,10 +510,10 @@ outer_break:
 	    if (mon->mfrozen) mon->mcanmove = 0;
 	}
 	if (old)
-	    update_mon_intrinsics(mon, old, FALSE, creation);
+	    update_mon_intrinsics(mon, old, false, creation);
 	mon->misc_worn_check |= flag;
 	best->owornmask |= flag;
-	update_mon_intrinsics(mon, best, TRUE, creation);
+	update_mon_intrinsics(mon, best, true, creation);
 	/* if couldn't see it but now can, or vice versa, */
 	if (!creation && (unseen ^ !canseemon(mon))) {
 		if (mon->minvis && !See_invisible) {
@@ -542,7 +542,7 @@ struct obj *obj;
 {
 	mon->misc_worn_check &= ~obj->owornmask;
 	if (obj->owornmask)
-	    update_mon_intrinsics(mon, obj, FALSE, FALSE);
+	    update_mon_intrinsics(mon, obj, false, false);
 	obj->owornmask = 0L;
 
 	obj_extract_self(obj);
@@ -589,14 +589,14 @@ clear_bypasses (void)
 	    for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
 		otmp->bypass = 0;
 	}
-	flags.bypasses = FALSE;
+	flags.bypasses = false;
 }
 
 void
 bypass_obj (struct obj *obj)
 {
 	obj->bypass = 1;
-	flags.bypasses = TRUE;
+	flags.bypasses = true;
 }
 
 void

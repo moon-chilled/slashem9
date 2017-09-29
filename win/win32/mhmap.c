@@ -113,9 +113,9 @@ void mswin_map_stretch(HWND hWnd, LPSIZE lpsz, BOOL redraw)
 
 	if( data->xPageSize >= COLNO ) {
 		data->xPos = 0;
-		GetNHApp()->bNoHScroll = TRUE;
+		GetNHApp()->bNoHScroll = true;
 	} else {
-		GetNHApp()->bNoHScroll = FALSE;
+		GetNHApp()->bNoHScroll = false;
 		data->xPos = max(0, min(COLNO-data->xPageSize+1, u.ux - data->xPageSize/2));
 	}
 
@@ -125,7 +125,7 @@ void mswin_map_stretch(HWND hWnd, LPSIZE lpsz, BOOL redraw)
     si.nMax   = COLNO;
     si.nPage  = data->xPageSize;
     si.nPos   = data->xPos;
-    SetScrollInfo(hWnd, SB_HORZ, &si, TRUE);
+    SetScrollInfo(hWnd, SB_HORZ, &si, true);
 
 	/* adjust vertical scroll bar */
 	if( data->bFitToScreenMode )
@@ -135,9 +135,9 @@ void mswin_map_stretch(HWND hWnd, LPSIZE lpsz, BOOL redraw)
 
 	if( data->yPageSize >= ROWNO ) {
 		data->yPos = 0;
-		GetNHApp()->bNoVScroll = TRUE;
+		GetNHApp()->bNoVScroll = true;
 	} else {
-		GetNHApp()->bNoVScroll = FALSE;
+		GetNHApp()->bNoVScroll = false;
 		data->yPos = max(0, min(ROWNO-data->yPageSize+1, u.uy - data->yPageSize/2));
 	}
 
@@ -147,7 +147,7 @@ void mswin_map_stretch(HWND hWnd, LPSIZE lpsz, BOOL redraw)
     si.nMax   = ROWNO;
     si.nPage  = data->yPageSize;
     si.nPos   = data->yPos;
-    SetScrollInfo(hWnd, SB_VERT, &si, TRUE);
+    SetScrollInfo(hWnd, SB_VERT, &si, true);
 
 	/* create font */
 	if( data->hMapFont ) DeleteObject(data->hMapFont);
@@ -157,9 +157,9 @@ void mswin_map_stretch(HWND hWnd, LPSIZE lpsz, BOOL redraw)
 	lgfnt.lfEscapement		=	0;					 // angle of escapement
 	lgfnt.lfOrientation		=	0;					 // base-line orientation angle
 	lgfnt.lfWeight			=	FW_NORMAL;			 // font weight
-	lgfnt.lfItalic			=	FALSE;				 // italic attribute option
-	lgfnt.lfUnderline		=	FALSE;				 // underline attribute option
-	lgfnt.lfStrikeOut		=	FALSE;			     // strikeout attribute option
+	lgfnt.lfItalic			=	false;				 // italic attribute option
+	lgfnt.lfUnderline		=	false;				 // underline attribute option
+	lgfnt.lfStrikeOut		=	false;			     // strikeout attribute option
 	lgfnt.lfCharSet			=	mswin_charset();     // character set identifier
 	lgfnt.lfOutPrecision	=	OUT_DEFAULT_PRECIS;  // output precision
 	lgfnt.lfClipPrecision	=	CLIP_DEFAULT_PRECIS; // clipping precision
@@ -176,7 +176,7 @@ void mswin_map_stretch(HWND hWnd, LPSIZE lpsz, BOOL redraw)
 
 	mswin_cliparound(data->xCur, data->yCur);
 
-	if(redraw) InvalidateRect(hWnd, NULL, TRUE);
+	if(redraw) InvalidateRect(hWnd, NULL, true);
 }
 
 /* set map mode */
@@ -195,64 +195,64 @@ int mswin_map_mode(HWND hWnd, int mode)
 	switch( data->mapMode ) {
 
 	case MAP_MODE_ASCII4x6:
-		data->bAsciiMode = TRUE;
-		data->bFitToScreenMode = FALSE;
+		data->bAsciiMode = true;
+		data->bFitToScreenMode = false;
 		mapSize.cx = 4*COLNO;
 		mapSize.cy = 6*ROWNO;
 	break;
 
 	case MAP_MODE_ASCII6x8:
-		data->bAsciiMode = TRUE;
-		data->bFitToScreenMode = FALSE;
+		data->bAsciiMode = true;
+		data->bFitToScreenMode = false;
 		mapSize.cx = 6*COLNO;
 		mapSize.cy = 8*ROWNO;
 	break;
 
 	case MAP_MODE_ASCII8x8:
-		data->bAsciiMode = TRUE;
-		data->bFitToScreenMode = FALSE;
+		data->bAsciiMode = true;
+		data->bFitToScreenMode = false;
 		mapSize.cx = 8*COLNO;
 		mapSize.cy = 8*ROWNO;
 	break;
 
 	case MAP_MODE_ASCII16x8:
-		data->bAsciiMode = TRUE;
-		data->bFitToScreenMode = FALSE;
+		data->bAsciiMode = true;
+		data->bFitToScreenMode = false;
 		mapSize.cx = 16*COLNO;
 		mapSize.cy = 8*ROWNO;
 	break;
 
 	case MAP_MODE_ASCII7x12:
-		data->bAsciiMode = TRUE;
-		data->bFitToScreenMode = FALSE;
+		data->bAsciiMode = true;
+		data->bFitToScreenMode = false;
 		mapSize.cx = 7*COLNO;
 		mapSize.cy = 12*ROWNO;
 	break;
 
 	case MAP_MODE_ASCII8x12:
-		data->bAsciiMode = TRUE;
-		data->bFitToScreenMode = FALSE;
+		data->bAsciiMode = true;
+		data->bFitToScreenMode = false;
 		mapSize.cx = 8*COLNO;
 		mapSize.cy = 12*ROWNO;
 	break;
 
 	case MAP_MODE_ASCII16x12:
-		data->bAsciiMode = TRUE;
-		data->bFitToScreenMode = FALSE;
+		data->bAsciiMode = true;
+		data->bFitToScreenMode = false;
 		mapSize.cx = 16*COLNO;
 		mapSize.cy = 12*ROWNO;
 	break;
 
 	case MAP_MODE_ASCII12x16:
-		data->bAsciiMode = TRUE;
-		data->bFitToScreenMode = FALSE;
+		data->bAsciiMode = true;
+		data->bFitToScreenMode = false;
 		mapSize.cx = 12*COLNO;
 		mapSize.cy = 16*ROWNO;
 	break;
 
 	case MAP_MODE_ASCII10x18:
-		data->bAsciiMode = TRUE;
-		data->bFitToScreenMode = FALSE;
+		data->bAsciiMode = true;
+		data->bFitToScreenMode = false;
 		mapSize.cx = 10*COLNO;
 		mapSize.cy = 18*ROWNO;
 	break;
@@ -263,8 +263,8 @@ int mswin_map_mode(HWND hWnd, int mode)
 		mapSize.cx = client_rt.right - client_rt.left;
 		mapSize.cy = client_rt.bottom - client_rt.top;
 
-		data->bAsciiMode = TRUE;
-		data->bFitToScreenMode = TRUE;
+		data->bAsciiMode = true;
+		data->bFitToScreenMode = true;
 	} break;
 
 	case MAP_MODE_TILES_FIT_TO_SCREEN: {
@@ -273,20 +273,20 @@ int mswin_map_mode(HWND hWnd, int mode)
 		mapSize.cx = client_rt.right - client_rt.left;
 		mapSize.cy = client_rt.bottom - client_rt.top;
 
-		data->bAsciiMode = FALSE;
-		data->bFitToScreenMode = TRUE;
+		data->bAsciiMode = false;
+		data->bFitToScreenMode = true;
 	} break;
 
 	case MAP_MODE_TILES:
 	default:
-		data->bAsciiMode = FALSE;
-		data->bFitToScreenMode = FALSE;
+		data->bAsciiMode = false;
+		data->bFitToScreenMode = false;
 		mapSize.cx = GetNHApp()->mapTile_X*COLNO;
 		mapSize.cy = GetNHApp()->mapTile_Y*ROWNO;
 	break;
 	}
 
-	mswin_map_stretch(hWnd, &mapSize, TRUE);
+	mswin_map_stretch(hWnd, &mapSize, true);
 
 	return oldMode;
 }
@@ -359,7 +359,7 @@ LRESULT CALLBACK MapWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 			size.cx = data->xScrTile*COLNO;
 			size.cy = data->yScrTile*ROWNO;
 		}
-		mswin_map_stretch(hWnd, &size, TRUE);
+		mswin_map_stretch(hWnd, &size, true);
     }
     break;
 
@@ -406,7 +406,7 @@ void onMSNHCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
 
 		/* invalidate the update area */
 		nhcoord2display(data, msg_data->x, msg_data->y, &rt);
-		InvalidateRect(hWnd, &rt, TRUE);
+		InvalidateRect(hWnd, &rt, true);
 	}
 	break;
 
@@ -461,7 +461,7 @@ void onMSNHCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
 			for(j=0; j<ROWNO; j++) {
 			data->map[i][j] = -1;
 		}
-		InvalidateRect(hWnd, NULL, TRUE);
+		InvalidateRect(hWnd, NULL, true);
 	} break;
 
 	case MSNH_MSG_CURSOR:
@@ -511,7 +511,7 @@ void onCreate(HWND hWnd, WPARAM wParam, LPARAM lParam)
 		data->map[i][j] = -1;
 	}
 
-	data->bAsciiMode = FALSE;
+	data->bAsciiMode = false;
 
 	data->xScrTile = GetNHApp()->mapTile_X;
 	data->yScrTile = GetNHApp()->mapTile_Y;
@@ -760,7 +760,7 @@ void onMSNH_VScroll(HWND hWnd, WPARAM wParam, LPARAM lParam)
     si.cbSize = sizeof(si);
     si.fMask  = SIF_POS;
     si.nPos   = data->yPos;
-    SetScrollInfo(hWnd, SB_VERT, &si, TRUE);
+    SetScrollInfo(hWnd, SB_VERT, &si, true);
 }
 
 /* on WM_HSCROLL */
@@ -819,7 +819,7 @@ void onMSNH_HScroll(HWND hWnd, WPARAM wParam, LPARAM lParam)
     si.cbSize = sizeof(si);
     si.fMask  = SIF_POS;
     si.nPos   = data->xPos;
-    SetScrollInfo(hWnd, SB_HORZ, &si, TRUE);
+    SetScrollInfo(hWnd, SB_HORZ, &si, true);
 }
 
 /* map nethack map coordinates to the screen location */

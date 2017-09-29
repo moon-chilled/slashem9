@@ -81,8 +81,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	_nethack_app.mapTile_Y = TILE_Y;
 	_nethack_app.mapTilesPerLine = TILES_PER_LINE;
 
-	_nethack_app.bNoHScroll = FALSE;
-	_nethack_app.bNoVScroll = FALSE;
+	_nethack_app.bNoHScroll = false;
+	_nethack_app.bNoVScroll = false;
 	_nethack_app.saved_text = strdup("");
 
     // init controls
@@ -177,7 +177,7 @@ TCHAR* _get_cmd_arg(TCHAR* pCmdLine)
 
         /* check for quote */
         if( *pRetArg==TEXT('"') ) {
-                bQuoted = TRUE;
+                bQuoted = true;
                 pRetArg = CharNext(pRetArg);
 				pArgs = _tcschr(pRetArg, TEXT('"'));
 	    } else {

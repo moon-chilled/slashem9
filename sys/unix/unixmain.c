@@ -46,7 +46,7 @@ extern void init_linux_cons(void);
 
 static void wd_message(void);
 #ifdef WIZARD
-static boolean wiz_error_flag = FALSE;
+static boolean wiz_error_flag = false;
 #endif
 
 int
@@ -132,7 +132,7 @@ char *argv[];
 	    argc--;
 	    argv++;
 	    choose_windows("proxy");
-	    lock_windows(TRUE);         /* Can't be overridden from options */
+	    lock_windows(true);         /* Can't be overridden from options */
 	}
 #endif
 	initoptions();
@@ -241,8 +241,8 @@ char *argv[];
 		(void) signal(SIGINT, (SIG_RET_TYPE) done1);
 #ifdef NEWS
 		if(iflags.news) {
-		    display_file_area(NEWS_AREA, NEWS, FALSE);
-		    iflags.news = FALSE; /* in case dorecover() fails */
+		    display_file_area(NEWS_AREA, NEWS, false);
+		    iflags.news = false; /* in case dorecover() fails */
 		}
 #endif
 		pline("Restoring save file...");
@@ -250,9 +250,9 @@ char *argv[];
 		if(!dorecover(fd))
 			goto not_recovered;
 #ifdef WIZARD
-		if(!wizard && remember_wiz_mode) wizard = TRUE;
+		if(!wizard && remember_wiz_mode) wizard = true;
 #endif
-		check_special_room(FALSE);
+		check_special_room(false);
 		wd_message();
 
 		if (discover || wizard) {
@@ -326,19 +326,19 @@ char *argv[];
 			      }
 			  }
 			  if (pw && !strcmp(pw->pw_name,WIZARD)) {
-			      wizard = TRUE;
+			      wizard = true;
 			      break;
 			  }
 			}
 			/* otherwise fall thru to discover */
-			wiz_error_flag = TRUE;
+			wiz_error_flag = true;
 #endif
 		case 'X':
-			discover = TRUE;
+			discover = true;
 			break;
 #ifdef NEWS
 		case 'n':
-			iflags.news = FALSE;
+			iflags.news = false;
 			break;
 #endif
 		case 'u':
@@ -496,14 +496,14 @@ whoami() {
 	 */
 	char *s;
 
-	if (*plname) return FALSE;
+	if (*plname) return false;
 	if(/* !*plname && */ (s = nh_getenv("USER")))
 		(void) strncpy(plname, s, sizeof(plname)-1);
 	if(!*plname && (s = nh_getenv("LOGNAME")))
 		(void) strncpy(plname, s, sizeof(plname)-1);
 	if(!*plname && (s = getlogin()))
 		(void) strncpy(plname, s, sizeof(plname)-1);
-	return TRUE;
+	return true;
 }
 
 #ifdef PORT_HELP
@@ -514,7 +514,7 @@ port_help()
 	 * Display unix-specific help.   Just show contents of the helpfile
 	 * named by PORT_HELP.
 	 */
-	display_file_area(FILE_AREA_SHARE, PORT_HELP, TRUE);
+	display_file_area(FILE_AREA_SHARE, PORT_HELP, true);
 }
 #endif
 

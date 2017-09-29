@@ -20,7 +20,7 @@ int explcolors[] = {
 };
 
 #if !defined(TTY_GRAPHICS)
-#define has_color(n)  TRUE
+#define has_color(n)  true
 #endif
 
 #ifdef TEXTCOLOR
@@ -193,7 +193,7 @@ mapglyph (int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int y)
 #endif
 	    mon_color(offset);
 	/* Disabled for now; anyone want to get reverse video to work? */
-	/* is_reverse = TRUE; */
+	/* is_reverse = true; */
 	    special |= MG_DETECT;
     } else if ((offset = (glyph - GLYPH_INVIS_OFF)) >= 0) {	/* invisible */
 	ch = DEF_INVISIBLE;

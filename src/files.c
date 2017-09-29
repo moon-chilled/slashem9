@@ -489,27 +489,27 @@ static int open_levelfile_exclusively(const char *name, int lev, int oflag) {
 			reslt = lseek(fd, 0L, SEEK_SET);
 			if (reslt == -1L)
 			    panic("open_levelfile_exclusively: lseek failed %d", errno);
-			lftrack.nethack_thinks_it_is_open = TRUE;
+			lftrack.nethack_thinks_it_is_open = true;
 		} else {
 			really_close();
 			fd = sopen(name, oflag,SH_DENYRW, FCMASK);
 			lftrack.fd = fd;
 			lftrack.oflag = oflag;
-			lftrack.nethack_thinks_it_is_open = TRUE;
+			lftrack.nethack_thinks_it_is_open = true;
 		}
 	} else {
 			fd = sopen(name, oflag,SH_DENYRW, FCMASK);
 			lftrack.fd = fd;
 			lftrack.oflag = oflag;
 			if (fd >= 0)
-			    lftrack.nethack_thinks_it_is_open = TRUE;
+			    lftrack.nethack_thinks_it_is_open = true;
 	}
 	return fd;
 }
 
 void really_close(void) {
 	int fd = lftrack.fd;
-	lftrack.nethack_thinks_it_is_open = FALSE;
+	lftrack.nethack_thinks_it_is_open = false;
 	lftrack.fd = -1;
 	lftrack.oflag = 0;
 	_close(fd);
@@ -520,7 +520,7 @@ int close(int fd) {
  	if (lftrack.fd == fd) {
 		really_close();	/* close it, but reopen it to hold it */
 		fd = open_levelfile(0, NULL);
-		lftrack.nethack_thinks_it_is_open = FALSE;
+		lftrack.nethack_thinks_it_is_open = false;
 		return 0;
 	}
 	return _close(fd);
@@ -900,7 +900,7 @@ static void docompress_file(const char *filearea, const char *filename, boolean 
 # endif
 	/* when compressing, we know the file exists */
 	if (uncomp) {
-	    if ((cf = fopen_datafile_area(filearea, cfn, RDBMODE, FALSE)) ==
+	    if ((cf = fopen_datafile_area(filearea, cfn, RDBMODE, false)) ==
 	      NULL)
 		    return;
 	    (void) fclose(cf);
@@ -912,7 +912,7 @@ static void docompress_file(const char *filearea, const char *filename, boolean 
 	{
 	    /* we can't guarantee there's only one additional option, sigh */
 	    char *opt;
-	    boolean inword = FALSE;
+	    boolean inword = false;
 
 	    strcpy(opts, COMPRESS_OPTIONS);
 	    opt = opts;
@@ -920,11 +920,11 @@ static void docompress_file(const char *filearea, const char *filename, boolean 
 		if ((*opt == ' ') || (*opt == '\t')) {
 		    if (inword) {
 			*opt = '\0';
-			inword = FALSE;
+			inword = false;
 		    }
 		} else if (!inword) {
 		    args[++i] = opt;
-		    inword = TRUE;
+		    inword = true;
 		}
 		opt++;
 	    }
@@ -1039,7 +1039,7 @@ void compress_area(const char *filearea, const char *filename) {
 # pragma unused(filename)
 #endif
 #else
-	docompress_file(filearea, filename, FALSE);
+	docompress_file(filearea, filename, false);
 #endif
 }
 
@@ -1051,7 +1051,7 @@ void uncompress_area(const char *filearea, const char *filename) {
 # pragma unused(filename)
 #endif
 #else
-	docompress_file(filearea, filename, TRUE);
+	docompress_file(filearea, filename, true);
 #endif
 }
 
@@ -1108,7 +1108,7 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
 	nesting++;
 	if (nesting > 1) {
 	    impossible("TRIED TO NEST LOCKS");
-	    return TRUE;
+	    return true;
 	}
 
 	lockname = make_lockname(filename, locknambuf);
@@ -1140,25 +1140,25 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
 		    HUP raw_printf("Perhaps there is an old %s around?",
 					lockname);
 		    nesting--;
-		    return FALSE;
+		    return false;
 		}
 
 		break;
 	    case ENOENT:
 		HUP raw_printf("Can't find file %s to lock!", filename);
 		nesting--;
-		return FALSE;
+		return false;
 	    case EACCES:
 		HUP raw_printf("No write permission to lock %s!", filename);
 		nesting--;
-		return FALSE;
+		return false;
 	    default:
 		HUP perror(lockname);
 		HUP raw_printf(
 			     "Cannot lock %s for unknown reason (%d).",
 			       filename, errnosv);
 		nesting--;
-		return FALSE;
+		return false;
 	    }
 
 	}
@@ -1180,10 +1180,10 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
     if (!retryct) {
 	raw_printf("I give up.  Sorry.");
 	nesting--;
-	return FALSE;
+	return false;
     }
 #endif // WIN32
-	return TRUE;
+	return true;
 }
 
 
@@ -1320,21 +1320,21 @@ static FILE *fopen_config_file(const char *filename) {
 /*
  * Retrieve a list of integers from a file into a uchar array.
  *
- * NOTE: zeros are inserted unless modlist is TRUE, in which case the list
- *  location is unchanged.  Callers must handle zeros if modlist is FALSE.
+ * NOTE: zeros are inserted unless modlist is true, in which case the list
+ *  location is unchanged.  Callers must handle zeros if modlist is false.
  */
 static int get_uchars(
     FILE *fp,		/* input file pointer */
     char *buf,		/* read buffer, must be of size BUFSZ */
     char *bufp,		/* current pointer */
     uchar *list,	/* return list */
-    boolean modlist,	/* TRUE: list is being modified in place */
+    boolean modlist,	/* true: list is being modified in place */
     int  size,		/* return list size */
     const char *name	/* name of option for error message */) {
 
     unsigned int num = 0;
     int count = 0;
-    boolean havenum = FALSE;
+    boolean havenum = false;
 
     while (1) {
 	switch(*bufp) {
@@ -1345,7 +1345,7 @@ static int get_uchars(
 		    if (num || !modlist) list[count] = num;
 		    count++;
 		    num = 0;
-		    havenum = FALSE;
+		    havenum = false;
 		}
 		if (count == size || !*bufp) return count;
 		bufp++;
@@ -1354,7 +1354,7 @@ static int get_uchars(
 	    case '0': case '1': case '2': case '3':
 	    case '4': case '5': case '6': case '7':
 	    case '8': case '9':
-		havenum = TRUE;
+		havenum = true;
 		num = num*10 + (*bufp-'0');
 		bufp++;
 		break;
@@ -1393,7 +1393,7 @@ static void adjust_prefix(char *bufp, int prefixid) {
 }
 #endif
 
-#define match_varname(INP,NAM,LEN) match_optname(INP, NAM, LEN, TRUE)
+#define match_varname(INP,NAM,LEN) match_optname(INP, NAM, LEN, true)
 
 /*ARGSUSED*/
 int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) {
@@ -1431,7 +1431,7 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 	 * appropriate fqn_prefix[] rather than specialized variables
 	 */
 	if (match_varname(buf, "OPTIONS", 4)) {
-		parseoptions(bufp, TRUE, TRUE);
+		parseoptions(bufp, true, true);
 		if (plname[0])		/* If a name was given */
 			plnamesuffix();	/* set the character class */
 	} else if (match_varname(buf, "TILESETS", 7)) {
@@ -1521,49 +1521,49 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 #endif
 
 	} else if (match_varname(buf, "BOULDER", 3)) {
-	    (void) get_uchars(fp, buf, bufp, &iflags.bouldersym, TRUE,
+	    (void) get_uchars(fp, buf, bufp, &iflags.bouldersym, true,
 			      1, "BOULDER");
 	} else if (match_varname(buf, "MENUCOLOR", 9)) {
 #ifdef MENU_COLOR
 	   add_menu_coloring(bufp);
 #endif
 	} else if (match_varname(buf, "GRAPHICS", 4)) {
-	    len = get_uchars(fp, buf, bufp, translate, FALSE,
+	    len = get_uchars(fp, buf, bufp, translate, false,
 			     MAXPCHARS, "GRAPHICS");
 	    assign_graphics(translate, len, MAXPCHARS, 0);
 	} else if (match_varname(buf, "DUNGEON", 4)) {
-	    len = get_uchars(fp, buf, bufp, translate, FALSE,
+	    len = get_uchars(fp, buf, bufp, translate, false,
 			     MAXDCHARS, "DUNGEON");
 	    assign_graphics(translate, len, MAXDCHARS, 0);
 	} else if (match_varname(buf, "TRAPS", 4)) {
-	    len = get_uchars(fp, buf, bufp, translate, FALSE,
+	    len = get_uchars(fp, buf, bufp, translate, false,
 			     MAXTCHARS, "TRAPS");
 	    assign_graphics(translate, len, MAXTCHARS, MAXDCHARS);
 	} else if (match_varname(buf, "EFFECTS", 4)) {
-	    len = get_uchars(fp, buf, bufp, translate, FALSE,
+	    len = get_uchars(fp, buf, bufp, translate, false,
 			     MAXECHARS, "EFFECTS");
 	    assign_graphics(translate, len, MAXECHARS, MAXDCHARS+MAXTCHARS);
 #ifdef USER_DUNGEONCOLOR
 	} else if (match_varname(buf, "DUNGEONCOLOR", 10)) {
-	    len = get_uchars(fp, buf, bufp, translate, FALSE,
+	    len = get_uchars(fp, buf, bufp, translate, false,
 			     MAXDCHARS, "DUNGEONCOLOR");
 	    assign_colors(translate, len, MAXDCHARS, 0);
 	} else if (match_varname(buf, "TRAPCOLORS", 7)) {
-	    len = get_uchars(fp, buf, bufp, translate, FALSE,
+	    len = get_uchars(fp, buf, bufp, translate, false,
 			     MAXTCHARS, "TRAPCOLORS");
 	    assign_colors(translate, len, MAXTCHARS, MAXDCHARS);
 #endif
 
 	} else if (match_varname(buf, "OBJECTS", 3)) {
 	    /* oc_syms[0] is the RANDOM object, unused */
-	    (void) get_uchars(fp, buf, bufp, &(oc_syms[1]), TRUE,
+	    (void) get_uchars(fp, buf, bufp, &(oc_syms[1]), true,
 					MAXOCLASSES-1, "OBJECTS");
 	} else if (match_varname(buf, "MONSTERS", 3)) {
 	    /* monsyms[0] is unused */
-	    (void) get_uchars(fp, buf, bufp, &(monsyms[1]), TRUE,
+	    (void) get_uchars(fp, buf, bufp, &(monsyms[1]), true,
 					MAXMCLASSES-1, "MONSTERS");
 	} else if (match_varname(buf, "WARNINGS", 5)) {
-	    (void) get_uchars(fp, buf, bufp, translate, TRUE,
+	    (void) get_uchars(fp, buf, bufp, translate, true,
 					WARNCOUNT, "WARNINGS");
 	    assign_warnings(translate);
 #ifdef WIZARD
@@ -1578,7 +1578,7 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 #endif
 #if defined(GL_GRAPHICS) || defined(SDL_GRAPHICS)
 	} else if (match_varname(buf, "GL_OPTIONS", 10)) {
-		Sdlgl_parse_options(bufp, TRUE, TRUE);
+		Sdlgl_parse_options(bufp, true, true);
 #endif
 	} else
 		return 0;
@@ -1603,12 +1603,12 @@ void read_config_file(const char *filename) {
 	FILE	*fp;
 	int     i;
 #ifdef PROXY_GRAPHICS
-	int	found = FALSE;
+	int	found = false;
 
 	if (!(fp = fopen_config_file(filename)))
 	    goto clnt_process;
 	else
-	    found = TRUE;
+	    found = true;
 #else
 	if (!(fp = fopen_config_file(filename))) goto post_process;
 #endif
@@ -1640,7 +1640,7 @@ clnt_process:
 	 */
 	if (!strncmp(windowprocs.name, "proxy/", 6) &&
 		(fp = proxy_config_file_open())) {
-	    found = TRUE;
+	    found = true;
 	    set_duplicate_opt_detection(1);
 	    while (fgets(buf, 4*BUFSZ, fp)) {
 		if (match_varname(buf, "TILESETS", 7) ||
@@ -1762,27 +1762,27 @@ void read_wizkit(void) {
 	FILE *fp;
 	char *ep, buf[BUFSZ];
 	struct obj *otmp;
-	boolean bad_items = FALSE, skip = FALSE;
+	boolean bad_items = false, skip = false;
 
 	if (!wizard || !(fp = fopen_wizkit_file())) return;
 
 	while (fgets(buf, (int)(sizeof buf), fp)) {
 	    ep = index(buf, '\n');
 	    if (skip) {	/* in case previous line was too long */
-		if (ep) skip = FALSE; /* found newline; next line is normal */
+		if (ep) skip = false; /* found newline; next line is normal */
 	    } else {
-		if (!ep) skip = TRUE; /* newline missing; discard next fgets */
+		if (!ep) skip = true; /* newline missing; discard next fgets */
 		else *ep = '\0';		/* remove newline */
 
 		if (buf[0]) {
-			otmp = readobjnam(buf, NULL, FALSE);
+			otmp = readobjnam(buf, NULL, false);
 			if (otmp) {
 			    if (otmp != &zeroobj)
 				otmp = addinv(otmp);
 			} else {
 			    /* .60 limits output line width to 79 chars */
 			    raw_printf("Bad wizkit item: \"%.60s\"", buf);
-			    bad_items = TRUE;
+			    bad_items = true;
 			}
 		}
 	    }
@@ -1928,20 +1928,20 @@ boolean recover_savefile(void) {
 	gfd = open_levelfile(0, errbuf);
 	if (gfd < 0) {
 	    raw_printf("%s\n", errbuf);
-	    return FALSE;
+	    return false;
 	}
 	if (read(gfd, (void *) &hpid, sizeof hpid) != sizeof hpid) {
 	    raw_printf(
 "\nCheckpoint data incompletely written or subsequently clobbered. Recovery impossible.");
 	    (void)close(gfd);
-	    return FALSE;
+	    return false;
 	}
 	if (read(gfd, (void *) &savelev, sizeof(savelev))
 							!= sizeof(savelev)) {
 	    raw_printf("\nCheckpointing was not in effect for %s -- recovery impossible.\n",
 			lock);
 	    (void)close(gfd);
-	    return FALSE;
+	    return false;
 	}
 	if ((read(gfd, (void *) savename, sizeof savename)
 		!= sizeof savename) ||
@@ -1949,7 +1949,7 @@ boolean recover_savefile(void) {
 		!= sizeof version_data)) {
 	    raw_printf("\nError reading %s -- can't recover.\n", lock);
 	    (void)close(gfd);
-	    return FALSE;
+	    return false;
 	}
 
 	/* save file should contain:
@@ -1963,7 +1963,7 @@ boolean recover_savefile(void) {
 	if (sfd < 0) {
 	    raw_printf("\nCannot recover savefile %s.\n", SAVEF);
 	    (void)close(gfd);
-	    return FALSE;
+	    return false;
 	}
 
 	lfd = open_levelfile(savelev, errbuf);
@@ -1972,7 +1972,7 @@ boolean recover_savefile(void) {
 	    (void)close(gfd);
 	    (void)close(sfd);
 	    delete_savefile();
-	    return FALSE;
+	    return false;
 	}
 
 	if (write(sfd, (void *) &version_data, sizeof version_data)
@@ -1981,14 +1981,14 @@ boolean recover_savefile(void) {
 	    (void)close(gfd);
 	    (void)close(sfd);
 	    delete_savefile();
-	    return FALSE;
+	    return false;
 	}
 
 	if (!copy_bytes(lfd, sfd)) {
 		(void) close(lfd);
 		(void) close(sfd);
 		delete_savefile();
-		return FALSE;
+		return false;
 	}
 	(void)close(lfd);
 	processed[savelev] = 1;
@@ -1997,7 +1997,7 @@ boolean recover_savefile(void) {
 		(void) close(lfd);
 		(void) close(sfd);
 		delete_savefile();
-		return FALSE;
+		return false;
 	}
 	(void)close(gfd);
 	processed[0] = 1;
@@ -2016,7 +2016,7 @@ boolean recover_savefile(void) {
 					(void) close(lfd);
 					(void) close(sfd);
 					delete_savefile();
-					return FALSE;
+					return false;
 				}
 				(void)close(lfd);
 				processed[lev] = 1;
@@ -2040,7 +2040,7 @@ boolean recover_savefile(void) {
 			(void) unlink(fq_lock);
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 boolean copy_bytes(int ifd, ofd) {
@@ -2050,9 +2050,9 @@ boolean copy_bytes(int ifd, ofd) {
 	do {
 		nfrom = read(ifd, buf, BUFSIZ);
 		nto = write(ofd, buf, nfrom);
-		if (nto != nfrom) return FALSE;
+		if (nto != nfrom) return false;
 	} while (nfrom == BUFSIZ);
-	return TRUE;
+	return true;
 }
 
 /* ----------  END INTERNAL RECOVER ----------- */

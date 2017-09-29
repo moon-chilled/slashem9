@@ -76,7 +76,7 @@ BOOL CALLBACK NHTextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		}
 
 		hdc = GetDC(control);
-		SendMessage(control, WM_SETFONT, (WPARAM)mswin_get_font(NHW_TEXT, ATR_NONE, hdc, FALSE), 0);
+		SendMessage(control, WM_SETFONT, (WPARAM)mswin_get_font(NHW_TEXT, ATR_NONE, hdc, false), 0);
 		ReleaseDC(control, hdc);
 
 		/* subclass edit control */
@@ -89,7 +89,7 @@ BOOL CALLBACK NHTextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
            which shows on Alt-Tab */
         LoadString(GetNHApp()->hApp, IDS_APP_TITLE, title, MAX_LOADSTRING);
         SetWindowText(hWnd, title);
-	return FALSE;
+	return false;
 
 	case WM_MSNH_COMMAND:
 		onMSNHCommand(hWnd, wParam, lParam);
@@ -97,7 +97,7 @@ BOOL CALLBACK NHTextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
 	case WM_SIZE:
 		LayoutText(hWnd);
-	return FALSE;
+	return false;
 
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
@@ -109,13 +109,13 @@ BOOL CALLBACK NHTextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 				GetNHApp()->hMainWnd=NULL;
 			DestroyWindow(hWnd);
 			SetFocus(GetNHApp()->hMainWnd);
-			return TRUE;
+			return true;
           case IDC_TEXT_CONTROL:
             switch (HIWORD(wParam))
             {
               case EN_SETFOCUS:
                 HideCaret((HWND)lParam);
-                return TRUE;
+                return true;
             }
 		}
 	break;
@@ -133,7 +133,7 @@ BOOL CALLBACK NHTextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 			return (BOOL)(text_bg_brush
 					? text_bg_brush : SYSCLR_TO_BRUSH(DEFAULT_COLOR_BG_TEXT));
 		}
-	} return FALSE;
+	} return false;
 
 	case WM_DESTROY:
 		if( data ) {
@@ -144,7 +144,7 @@ BOOL CALLBACK NHTextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	break;
 
 	}
-	return FALSE;
+	return false;
 }
 
 void onMSNHCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
@@ -201,8 +201,8 @@ void LayoutText(HWND hWnd)
 	sz_elem.cx = clrt.right - clrt.left;
 	sz_elem.cy = pt_ok.y;
 
-	MoveWindow(text, pt_elem.x, pt_elem.y, sz_elem.cx, sz_elem.cy, TRUE );
-	MoveWindow(btn_ok, pt_ok.x, pt_ok.y, sz_ok.cx, sz_ok.cy, TRUE );
+	MoveWindow(text, pt_elem.x, pt_elem.y, sz_elem.cx, sz_elem.cy, true );
+	MoveWindow(btn_ok, pt_ok.x, pt_ok.y, sz_ok.cx, sz_ok.cy, true );
 }
 
 /* Edit box hook */

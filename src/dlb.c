@@ -125,7 +125,7 @@ extern char *eos(char *);
  * fill in our globals.  The file pointer is reset back to position
  * zero.  If any part fails, leave nothing that needs to be deallocated.
  *
- * Return TRUE on success, FALSE on failure.
+ * Return true on success, false on failure.
  */
 static boolean readlibdir(library *lp) {
     int i;
@@ -134,8 +134,8 @@ static boolean readlibdir(library *lp) {
 
     if (fscanf(lp->fdata, "%ld %ld %ld %ld %ld\n",
 	    &lp->rev,&lp->nentries,&lp->strsize,&liboffset,&totalsize) != 5)
-	return FALSE;
-    if (lp->rev > DLB_MAX_VERS || lp->rev < DLB_MIN_VERS) return FALSE;
+	return false;
+    if (lp->rev > DLB_MAX_VERS || lp->rev < DLB_MIN_VERS) return false;
 
     lp->dir = alloc(lp->nentries * sizeof(libdir));
     lp->sspace = alloc(lp->strsize);
@@ -149,7 +149,7 @@ static boolean readlibdir(library *lp) {
 	    free((void *) lp->sspace);
 	    lp->dir = NULL;
 	    lp->sspace = NULL;
-	    return FALSE;
+	    return false;
 	}
 	sp = eos(sp) + 1;
     }
@@ -165,7 +165,7 @@ static boolean readlibdir(library *lp) {
     fseek(lp->fdata, 0L, SEEK_SET);	/* reset back to zero */
     lp->fmark = 0;
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -183,26 +183,26 @@ static boolean find_file(const char *name, library **lib, long *startp, long *si
 		*lib = lp;
 		*startp = lp->dir[j].foffset;
 		*sizep = lp->dir[j].fsize;
-		return TRUE;
+		return true;
 	    }
 	}
     }
     *lib = NULL;
     *startp = *sizep = 0;
-    return FALSE;
+    return false;
 }
 
 /*
  * Open the library of the given name and fill in the given library
- * structure.  Return TRUE if successful, FALSE otherwise.
+ * structure.  Return true if successful, false otherwise.
  */
 boolean open_library(const char *lib_area, const char *lib_name, library *lp) {
-    boolean status = FALSE;
+    boolean status = false;
 
     lp->fdata = fopen_datafile_area(lib_area, lib_name, RDBMODE, DATAPREFIX);
     if (lp->fdata) {
 	if (readlibdir(lp)) {
-	    status = TRUE;
+	    status = true;
 	} else {
 	    (void) fclose(lp->fdata);
 	    lp->fdata = NULL;
@@ -228,14 +228,14 @@ static boolean lib_dlb_init(void) {
     memset((char *)&dlb_libs[0], 0, sizeof(dlb_libs));
 
     /* To open more than one library, add open library calls here. */
-    if (!open_library(DLBAREA, DLBFILE, &dlb_libs[0])) return FALSE;
+    if (!open_library(DLBAREA, DLBFILE, &dlb_libs[0])) return false;
 #ifdef DLBFILE2
     if (!open_library(DLBAREA2, DLBFILE2, &dlb_libs[1]))  {
 	close_library(&dlb_libs[0]);
-	return FALSE;
+	return false;
     }
 #endif
-    return TRUE;
+    return true;
 }
 
 static void lib_dlb_cleanup(void) {
@@ -256,10 +256,10 @@ static boolean lib_dlb_fopen(dlb *dp, const char *name, const char *mode) {
 	dp->start = start;
 	dp->size = size;
 	dp->mark = 0;
-	return TRUE;
+	return true;
 	}
 
-    return FALSE;	/* failed */
+    return false;	/* failed */
 }
 
 static int lib_dlb_fclose(dlb *dp) {
@@ -384,7 +384,7 @@ const dlb_procs_t rsrc_dlb_procs = {
 #define do_dlb_ftell (*dlb_procs->dlb_ftell_proc)
 
 static const dlb_procs_t *dlb_procs;
-static boolean dlb_initialized = FALSE;
+static boolean dlb_initialized = false;
 
 boolean dlb_init(void) {
     if (!dlb_initialized) {
@@ -405,7 +405,7 @@ boolean dlb_init(void) {
 void dlb_cleanup(void) {
     if (dlb_initialized) {
 	do_dlb_cleanup();
-	dlb_initialized = FALSE;
+	dlb_initialized = false;
     }
 }
 

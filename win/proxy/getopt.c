@@ -31,7 +31,7 @@ get_option_bool(const char *option)
 	boolopt = (struct Bool_Opt *)nh_option_get_boolopt();
     for(i = 0; boolopt[i].name; i++)
 	if (!strcmp(option, boolopt[i].name)) {
-	    return boolopt[i].addr ? *(boolopt[i].addr) : FALSE;
+	    return boolopt[i].addr ? *(boolopt[i].addr) : false;
 	}
     if (!strcmp(option, "female"))  return flags.female;
     if (!strcmp(option, "male"))  return !flags.female;

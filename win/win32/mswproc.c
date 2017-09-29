@@ -133,7 +133,7 @@ init_nhwindows(int* argcp, char** argv)
                    should be interpreted, and *argcp and *argv should
                    be changed to remove those arguments.
                 -- When the message window is created, the variable
-                   iflags.window_inited needs to be set to TRUE.  Otherwise
+                   iflags.window_inited needs to be set to true.  Otherwise
                    all plines() will be done via raw_print().
                 ** Why not have init_nhwindows() create all of the "standard"
                 ** windows?  Or at least all but WIN_INFO?      -dean
@@ -243,8 +243,8 @@ void mswin_init_nhwindows(int* argc, char** argv)
 	mswin_color_from_string(iflags.wc_backgrnd_status, &status_bg_brush, &status_bg_color);
 	mswin_color_from_string(iflags.wc_backgrnd_text, &text_bg_brush, &text_bg_color);
 
- if (iflags.wc_splash_screen) mswin_display_splash_window(FALSE);
-	iflags.window_inited = TRUE;
+ if (iflags.wc_splash_screen) mswin_display_splash_window(false);
+	iflags.window_inited = true;
 }
 
 
@@ -648,7 +648,7 @@ give_up:	/* Quit */
 	    }
 	}
 	/* Success! */
-	/* tty_display_nhwindow(BASE_WINDOW, FALSE); */
+	/* tty_display_nhwindow(BASE_WINDOW, false); */
 }
 
 /* Ask the user for a player name. */
@@ -803,7 +803,7 @@ void mswin_clear_nhwindow(winid wid)
 
 /* -- Display the window on the screen.  If there is data
                    pending for output in that window, it should be sent.
-                   If blocking is TRUE, display_nhwindow() will not
+                   If blocking is true, display_nhwindow() will not
                    return until the data has been displayed on the screen,
                    and acknowledged by the user where appropriate.
                 -- All calls are blocking in the tty window-port.
@@ -984,7 +984,7 @@ void mswin_putstr_ex(winid wid, int attr, const char *text, int app)
 }
 
 /* Display the file named str.  Complain about missing files
-                   iff complain is TRUE.
+                   iff complain is true.
 */
 void mswin_display_file(const char *filename,boolean must_exist)
 {
@@ -1073,7 +1073,7 @@ add_menu(windid window, int glyph, const anything identifier,
                    The menu commands and aliases take care not to interfere
                    with the default object class symbols.
                 -- If you want this choice to be preselected when the
-                   menu is displayed, set preselected to TRUE.
+                   menu is displayed, set preselected to true.
 */
 void mswin_add_menu(winid wid, int glyph, const anything * identifier,
 		char accelerator, char group_accel, int attr,
@@ -1546,7 +1546,7 @@ void mswin_getlin(const char *question, char *input)
         input[0] = '\0';
         len = 0;
         ShowCaret(mswin_hwnd_from_winid(WIN_MESSAGE));
-        done = FALSE;
+        done = false;
         while (!done)
         {
             c = mswin_nhgetch();
@@ -1554,12 +1554,12 @@ void mswin_getlin(const char *question, char *input)
             {
                 case VK_ESCAPE:
                     strcpy(input, "\033");
-                    done = TRUE;
+                    done = true;
                     break;
                 case '\n':
                 case '\r':
                 case -115:
-                    done = TRUE;
+                    done = true;
                     break;
                 default:
                     if (input[0])
@@ -1808,12 +1808,12 @@ void mswin_preference_update(const char *pref)
 			iflags.wc_fontsiz_menu = NHFONT_DEFAULT_SIZE;
 
 		hdc = GetDC(GetNHApp()->hMainWnd);
-		mswin_get_font(NHW_MENU, ATR_NONE, hdc, TRUE);
-		mswin_get_font(NHW_MENU, ATR_BOLD, hdc, TRUE);
-		mswin_get_font(NHW_MENU, ATR_DIM, hdc, TRUE);
-		mswin_get_font(NHW_MENU, ATR_ULINE, hdc, TRUE);
-		mswin_get_font(NHW_MENU, ATR_BLINK, hdc, TRUE);
-		mswin_get_font(NHW_MENU, ATR_INVERSE, hdc, TRUE);
+		mswin_get_font(NHW_MENU, ATR_NONE, hdc, true);
+		mswin_get_font(NHW_MENU, ATR_BOLD, hdc, true);
+		mswin_get_font(NHW_MENU, ATR_DIM, hdc, true);
+		mswin_get_font(NHW_MENU, ATR_ULINE, hdc, true);
+		mswin_get_font(NHW_MENU, ATR_BLINK, hdc, true);
+		mswin_get_font(NHW_MENU, ATR_INVERSE, hdc, true);
 		ReleaseDC(GetNHApp()->hMainWnd, hdc);
 
 		mswin_layout_main_window(NULL);
@@ -1828,15 +1828,15 @@ void mswin_preference_update(const char *pref)
 			iflags.wc_fontsiz_status = NHFONT_DEFAULT_SIZE;
 
 		hdc = GetDC(GetNHApp()->hMainWnd);
-		mswin_get_font(NHW_STATUS, ATR_NONE, hdc, TRUE);
-		mswin_get_font(NHW_STATUS, ATR_BOLD, hdc, TRUE);
-		mswin_get_font(NHW_STATUS, ATR_DIM, hdc, TRUE);
-		mswin_get_font(NHW_STATUS, ATR_ULINE, hdc, TRUE);
-		mswin_get_font(NHW_STATUS, ATR_BLINK, hdc, TRUE);
-		mswin_get_font(NHW_STATUS, ATR_INVERSE, hdc, TRUE);
+		mswin_get_font(NHW_STATUS, ATR_NONE, hdc, true);
+		mswin_get_font(NHW_STATUS, ATR_BOLD, hdc, true);
+		mswin_get_font(NHW_STATUS, ATR_DIM, hdc, true);
+		mswin_get_font(NHW_STATUS, ATR_ULINE, hdc, true);
+		mswin_get_font(NHW_STATUS, ATR_BLINK, hdc, true);
+		mswin_get_font(NHW_STATUS, ATR_INVERSE, hdc, true);
 		ReleaseDC(GetNHApp()->hMainWnd, hdc);
 
-		InvalidateRect(mswin_hwnd_from_winid(WIN_STATUS), NULL, TRUE);
+		InvalidateRect(mswin_hwnd_from_winid(WIN_STATUS), NULL, true);
 		mswin_layout_main_window(NULL);
 		return;
 	}
@@ -1849,15 +1849,15 @@ void mswin_preference_update(const char *pref)
 			iflags.wc_fontsiz_message = NHFONT_DEFAULT_SIZE;
 
 		hdc = GetDC(GetNHApp()->hMainWnd);
-		mswin_get_font(NHW_MESSAGE, ATR_NONE, hdc, TRUE);
-		mswin_get_font(NHW_MESSAGE, ATR_BOLD, hdc, TRUE);
-		mswin_get_font(NHW_MESSAGE, ATR_DIM, hdc, TRUE);
-		mswin_get_font(NHW_MESSAGE, ATR_ULINE, hdc, TRUE);
-		mswin_get_font(NHW_MESSAGE, ATR_BLINK, hdc, TRUE);
-		mswin_get_font(NHW_MESSAGE, ATR_INVERSE, hdc, TRUE);
+		mswin_get_font(NHW_MESSAGE, ATR_NONE, hdc, true);
+		mswin_get_font(NHW_MESSAGE, ATR_BOLD, hdc, true);
+		mswin_get_font(NHW_MESSAGE, ATR_DIM, hdc, true);
+		mswin_get_font(NHW_MESSAGE, ATR_ULINE, hdc, true);
+		mswin_get_font(NHW_MESSAGE, ATR_BLINK, hdc, true);
+		mswin_get_font(NHW_MESSAGE, ATR_INVERSE, hdc, true);
 		ReleaseDC(GetNHApp()->hMainWnd, hdc);
 
-		InvalidateRect(mswin_hwnd_from_winid(WIN_MESSAGE), NULL, TRUE);
+		InvalidateRect(mswin_hwnd_from_winid(WIN_MESSAGE), NULL, true);
 		mswin_layout_main_window(NULL);
 		return;
 	}
@@ -1870,12 +1870,12 @@ void mswin_preference_update(const char *pref)
 			iflags.wc_fontsiz_text = NHFONT_DEFAULT_SIZE;
 
 		hdc = GetDC(GetNHApp()->hMainWnd);
-		mswin_get_font(NHW_TEXT, ATR_NONE, hdc, TRUE);
-		mswin_get_font(NHW_TEXT, ATR_BOLD, hdc, TRUE);
-		mswin_get_font(NHW_TEXT, ATR_DIM, hdc, TRUE);
-		mswin_get_font(NHW_TEXT, ATR_ULINE, hdc, TRUE);
-		mswin_get_font(NHW_TEXT, ATR_BLINK, hdc, TRUE);
-		mswin_get_font(NHW_TEXT, ATR_INVERSE, hdc, TRUE);
+		mswin_get_font(NHW_TEXT, ATR_NONE, hdc, true);
+		mswin_get_font(NHW_TEXT, ATR_BOLD, hdc, true);
+		mswin_get_font(NHW_TEXT, ATR_DIM, hdc, true);
+		mswin_get_font(NHW_TEXT, ATR_ULINE, hdc, true);
+		mswin_get_font(NHW_TEXT, ATR_BLINK, hdc, true);
+		mswin_get_font(NHW_TEXT, ATR_INVERSE, hdc, true);
 		ReleaseDC(GetNHApp()->hMainWnd, hdc);
 
 		mswin_layout_main_window(NULL);
@@ -1898,7 +1898,7 @@ void mswin_preference_update(const char *pref)
 	}
 
 	if( stricmp( pref, "hilite_pet")==0 ) {
-		InvalidateRect(mswin_hwnd_from_winid(WIN_MAP), NULL, TRUE);
+		InvalidateRect(mswin_hwnd_from_winid(WIN_MAP), NULL, true);
 		return;
 	}
 
@@ -1909,7 +1909,7 @@ void mswin_preference_update(const char *pref)
 	}
 
 	if( stricmp( pref, "vary_msgcount")==0 ) {
-		InvalidateRect(mswin_hwnd_from_winid(WIN_MESSAGE), NULL, TRUE);
+		InvalidateRect(mswin_hwnd_from_winid(WIN_MESSAGE), NULL, true);
 		mswin_layout_main_window(NULL);
 		return;
 	}
@@ -1952,7 +1952,7 @@ BOOL initMapTiles(void)
 
 	/* no file - no tile */
 	if( !(iflags.wc_tile_file && *iflags.wc_tile_file) )
-		return TRUE;
+		return true;
 
 	/* load bitmap */
 	hBmp = LoadImage(
@@ -1965,7 +1965,7 @@ BOOL initMapTiles(void)
 			);
 	if( hBmp==NULL ) {
 		raw_print("Cannot load tiles from the file. Reverting back to default.");
-		return FALSE;
+		return false;
 	}
 
 	/* calculate tile dimensions */
@@ -1974,7 +1974,7 @@ BOOL initMapTiles(void)
 		bm.bmHeight%iflags.wc_tile_height ) {
 		DeleteObject(hBmp);
 		raw_print("Tiles bitmap does not match tile_width and tile_height options. Reverting back to default.");
-		return FALSE;
+		return false;
 	}
 
 	tl_num = (bm.bmWidth/iflags.wc_tile_width)*
@@ -1982,7 +1982,7 @@ BOOL initMapTiles(void)
 	if( tl_num<total_tiles_used ) {
 		DeleteObject(hBmp);
 		raw_print("Number of tiles in the bitmap is less than required by the game. Reverting back to default.");
-		return FALSE;
+		return false;
 	}
 
 	/* set the tile information */
@@ -2000,9 +2000,9 @@ BOOL initMapTiles(void)
 	mswin_map_stretch(
 		mswin_hwnd_from_winid(WIN_MAP),
 		&map_size,
-		TRUE
+		true
 	);
-	return TRUE;
+	return true;
 }
 
 void mswin_popup_display(HWND hWnd, int* done_indicator)
@@ -2022,7 +2022,7 @@ void mswin_popup_display(HWND hWnd, int* done_indicator)
 	for( hChild=GetWindow(GetNHApp()->hMainWnd, GW_CHILD);
 		 hChild;
 		 hChild = GetWindow(hChild, GW_HWNDNEXT) ) {
-		if( hChild!= hWnd) EnableWindow(hChild, FALSE);
+		if( hChild!= hWnd) EnableWindow(hChild, false);
 	}
 
 	/* disable menu */
@@ -2061,7 +2061,7 @@ void mswin_popup_destroy(HWND hWnd)
 		 hChild;
 		 hChild = GetWindow(hChild, GW_HWNDNEXT) ) {
 		if( hChild!= hWnd) {
-			EnableWindow(hChild, TRUE);
+			EnableWindow(hChild, true);
 		}
 	}
 

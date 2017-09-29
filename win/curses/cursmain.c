@@ -79,7 +79,7 @@ init_nhwindows(int* argcp, char** argv)
                    should be interpreted, and *argcp and *argv should
                    be changed to remove those arguments.
                 -- When the message window is created, the variable
-                   iflags.window_inited needs to be set to TRUE.  Otherwise
+                   iflags.window_inited needs to be set to true.  Otherwise
                    all plines() will be done via raw_print().
                 ** Why not have init_nhwindows() create all of the "standard"
                 ** windows?  Or at least all but WIN_INFO?      -dean
@@ -101,22 +101,22 @@ curses_init_nhwindows(int *argcp, char **argv)
         start_color();
         curses_init_nhcolors();
     } else {
-        iflags.use_color = FALSE;
+        iflags.use_color = false;
         set_option_mod_status("color", SET_IN_FILE);
-        iflags.wc2_guicolor = FALSE;
+        iflags.wc2_guicolor = false;
         set_wc2_option_mod_status(WC2_GUICOLOR, SET_IN_FILE);
     }
 #else
-    iflags.use_color = FALSE;
+    iflags.use_color = false;
     set_option_mod_status("color", SET_IN_FILE);
-    iflags.wc2_guicolor = FALSE;
+    iflags.wc2_guicolor = false;
     set_wc2_option_mod_status(WC2_GUICOLOR, SET_IN_FILE);
 #endif
     noecho();
     raw();
-    meta(stdscr, TRUE);
+    meta(stdscr, true);
     orig_cursor = curs_set(0);
-    keypad(stdscr, TRUE);
+    keypad(stdscr, true);
 #ifdef NCURSES_VERSION
 # ifdef __APPLE__
     ESCDELAY = 25;
@@ -141,13 +141,13 @@ curses_init_nhwindows(int *argcp, char **argv)
        /* VERSION_STRING */
 # endif/* DEF_GAME_NAME */
     PDC_set_title(window_title);
-    PDC_set_blink(TRUE);        /* Only if the user asks for it! */
+    PDC_set_blink(true);        /* Only if the user asks for it! */
     timeout(1);
     (void) getch();
     timeout(-1);
 #endif /* PDCURSES */
     getmaxyx(base_term, term_rows, term_cols);
-    counting = FALSE;
+    counting = false;
     curses_init_options();
     if ((term_rows < 15) || (term_cols < 40)) {
         panic("Terminal too small.  Must be minumum 40 width and 15 height");
@@ -269,7 +269,7 @@ curses_clear_nhwindow(winid wid)
 
 /* -- Display the window on the screen.  If there is data
                    pending for output in that window, it should be sent.
-                   If blocking is TRUE, display_nhwindow() will not
+                   If blocking is true, display_nhwindow() will not
                    return until the data has been displayed on the screen,
                    and acknowledged by the user where appropriate.
                 -- All calls are blocking in the tty window-port.
@@ -287,7 +287,7 @@ curses_display_nhwindow(winid wid, boolean block)
 
     if ((wid == MESSAGE_WIN) && block) {
         if (u.uhp != -1 && program_state.gameover != 1)
-            (void) curses_block(TRUE);
+            (void) curses_block(true);
         /* don't bug player with TAB prompt on "Saving..." or endgame */
         else
             (void) curses_more();
@@ -354,7 +354,7 @@ curses_putstr(winid wid, int attr, const char *text)
 }
 
 /* Display the file named str.  Complain about missing files
-                   iff complain is TRUE.
+                   iff complain is true.
 */
 void
 curses_display_file(const char *filename, boolean must_exist)
@@ -405,7 +405,7 @@ add_menu(winid wid, int glyph, const anything identifier,
                    The menu commands and aliases take care not to interfere
                    with the default object class symbols.
                 -- If you want this choice to be preselected when the
-                   menu is displayed, set preselected to TRUE.
+                   menu is displayed, set preselected to true.
 */
 void
 curses_add_menu(winid wid, int glyph, const anything * identifier,

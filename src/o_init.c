@@ -235,24 +235,24 @@ shuffle_all()
 			 * and one-of-a-kind magical artifacts at the end of
 			 * their class in objects[] have fixed descriptions.
 			 */
-			shuffle(first, j, TRUE);
+			shuffle(first, j, true);
 		}
 	}
 
 	/* shuffle the helmets */
-	shuffle(HELMET, HELM_OF_TELEPATHY, FALSE);
+	shuffle(HELMET, HELM_OF_TELEPATHY, false);
 
 	/* shuffle the gloves */
-	shuffle(LEATHER_GLOVES, GAUNTLETS_OF_DEXTERITY, FALSE);
+	shuffle(LEATHER_GLOVES, GAUNTLETS_OF_DEXTERITY, false);
 
     /* shuffle the robes */
-    shuffle(ROBE, ROBE_OF_WEAKNESS, FALSE);
+    shuffle(ROBE, ROBE_OF_WEAKNESS, false);
 
 	/* shuffle the cloaks */
-	shuffle(CLOAK_OF_PROTECTION, CLOAK_OF_DISPLACEMENT, FALSE);
+	shuffle(CLOAK_OF_PROTECTION, CLOAK_OF_DISPLACEMENT, false);
 
 	/* shuffle the boots [if they change, update find_skates() below] */
-	shuffle(SPEED_BOOTS, LEVITATION_BOOTS, FALSE);
+	shuffle(SPEED_BOOTS, LEVITATION_BOOTS, false);
 }
 
 /* find the object index for snow boots; used [once] by slippery ice code */
@@ -350,7 +350,7 @@ boolean credit_hero;
 
 	if (mark_as_known) {
 	    objects[oindx].oc_name_known = 1;
-	    if (credit_hero) exercise(A_WIS, TRUE);
+	    if (credit_hero) exercise(A_WIS, true);
 	}
 	if (moves > 1L) update_inventory();
     }
@@ -362,7 +362,7 @@ undiscover_object (int oindx)
 {
     if (!objects[oindx].oc_name_known) {
 	int dindx, acls = objects[oindx].oc_class;
-	boolean found = FALSE;
+	boolean found = false;
 
 	/* find the object; shift those behind it forward one slot */
 	for (dindx = bases[acls];
@@ -371,7 +371,7 @@ undiscover_object (int oindx)
 	    if (found)
 		disco[dindx-1] = disco[dindx];
 	    else if (disco[dindx] == oindx)
-		found = TRUE;
+		found = true;
 
 	/* clear last slot */
 	if (found) disco[dindx-1] = 0;
@@ -453,7 +453,7 @@ dodiscovered (void)				/* free after Robert Viduya */
 		ct++;
 		if (oclass != prev_class) {
 		    add_menu(tmpwin, NO_GLYPH, &any, 0, 0, iflags.menu_headings,
-		      let_to_name(oclass, FALSE), MENU_UNSELECTED);
+		      let_to_name(oclass, false), MENU_UNSELECTED);
 		    prev_class = oclass;
 		}
 		sprintf(buf, "%s %s",(objects[dis].oc_pre_discovered ? "*" : " "),

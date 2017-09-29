@@ -302,10 +302,10 @@ tactics (struct monst *mtmp)
 		mtmp->mavenge = 1; /* covetous monsters attack while fleeing */
 		if (In_W_tower(mtmp->mx, mtmp->my, &u.uz) ||
 			(mtmp->iswiz && !xupstair && !mon_has_amulet(mtmp))) {
-		    if (!rn2(3 + mtmp->mhp/10)) (void) rloc(mtmp, FALSE);
+		    if (!rn2(3 + mtmp->mhp/10)) (void) rloc(mtmp, false);
 		} else if (xupstair &&
 			 (mtmp->mx != xupstair || mtmp->my != yupstair)) {
-		    (void) mnearto(mtmp, xupstair, yupstair, TRUE);
+		    (void) mnearto(mtmp, xupstair, yupstair, true);
 		}
 		/* if you're not around, cast healing spells */
 		if (distu(mtmp->mx,mtmp->my) > (BOLT_LIM * BOLT_LIM))
@@ -356,7 +356,7 @@ tactics (struct monst *mtmp)
 			return(0);
 		    }
 	        } else { /* a monster has it - 'port beside it. */
-		    (void) mnearto(mtmp, tx, ty, FALSE);
+		    (void) mnearto(mtmp, tx, ty, false);
 		    return(0);
 		}
 	    }
@@ -390,7 +390,7 @@ clonewiz (void)
 	    mtmp2->msleeping = mtmp2->mtame = mtmp2->mpeaceful = 0;
 	    if (!u.uhave.amulet && rn2(2)) {  /* give clone a fake */
 		(void) add_to_minv(mtmp2, mksobj(FAKE_AMULET_OF_YENDOR,
-					TRUE, FALSE));
+					true, false));
 	    }
 	    mtmp2->m_ap_type = M_AP_MONSTER;
 	    mtmp2->mappearance = wizapp[rn2(SIZE(wizapp))];
@@ -488,7 +488,7 @@ resurrect (void)
 			mtmp->mfrozen = 0,  mtmp->mcanmove = 1;
 		    if (mtmp->mcanmove && !mtmp->msleeping) {
 			*mmtmp = mtmp->nmon;
-			mon_arrive(mtmp, TRUE);
+			mon_arrive(mtmp, true);
 			/* note: there might be a second Wizard; if so,
 			   he'll have to wait til the next resurrection */
 			break;
@@ -537,7 +537,7 @@ wizdead (void)
 {
 	flags.no_of_wizards--;
 	if (!u.uevent.udemigod) {
-		u.uevent.udemigod = TRUE;
+		u.uevent.udemigod = true;
 		u.udg_cnt = rn1(250, 50);
 	}
 }

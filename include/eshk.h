@@ -58,7 +58,7 @@ struct eshk {
 /*
  * FUNCTION shk_class_match
  *
- * Return TRUE if a object class matches the shop type.
+ * Return true if a object class matches the shop type.
  * I.e. shk_class_match(WEAPON_CLASS, shkp)
  *
  * Return:      SHK_MATCH, SHK_NOMATCH, SHK_GENERAL

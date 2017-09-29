@@ -30,13 +30,13 @@ char *type;
 
     if (strcmp(type, RDBMODE)) {
 	fprintf(stderr, "using reading routine for non-reading?\n");
-	return FALSE;
+	return false;
     }
     errorcode = XpmReadFileToXpmImage(filename, &image, &info);
     if (errorcode != XpmSuccess) {
 	fprintf(stderr, "cannot open xpm file %s: %s\n", filename,
 	  XpmGetErrorString(errorcode));
-	return FALSE;
+	return false;
     }
 
     if (image.width % tile_x) {
@@ -100,10 +100,10 @@ char *type;
     }
     colorsinmap = image.ncolors;
 
-    return TRUE;
+    return true;
 }
 
-/* Read a tile.  Returns FALSE when there are no more tiles */
+/* Read a tile.  Returns false when there are no more tiles */
 boolean
 read_xpm_tile(pixels)
 pixel (*pixels)[MAX_TILE_X];
@@ -111,11 +111,11 @@ pixel (*pixels)[MAX_TILE_X];
     int i, j;
     unsigned int *src;
 
-    if (curr_tiles_down >= tiles_down) return FALSE;
+    if (curr_tiles_down >= tiles_down) return false;
     if (curr_tiles_across == tiles_across) {
 	curr_tiles_across = 0;
 	curr_tiles_down++;
-	if (curr_tiles_down >= tiles_down) return FALSE;
+	if (curr_tiles_down >= tiles_down) return false;
     }
     src = image.data + curr_tiles_down * tile_y * image.width +
       curr_tiles_across * tile_x;
@@ -137,10 +137,10 @@ pixel (*pixels)[MAX_TILE_X];
 		pixels[j][i+1].r != ColorMap[CM_RED][1] ||
 		pixels[j][i+1].g != ColorMap[CM_GREEN][1] ||
 		pixels[j][i+1].b != ColorMap[CM_BLUE][1])
-		    return TRUE;
+		    return true;
 	}
     }
-    return FALSE;
+    return false;
 }
 
 int
@@ -151,7 +151,7 @@ fclose_xpm_file()
     XpmFreeXpmImage(&image);
     XpmFreeXpmInfo(&info);
 
-    return FALSE;
+    return false;
 }
 
 static char *std_args[] = { "tilemap",	/* dummy argv[0] */
@@ -165,7 +165,7 @@ int argc;
 char *argv[];
 {
     int i, argn = 1;
-    boolean split_mode = FALSE;
+    boolean split_mode = false;
     int tile_set = 0;
     const char *name;
     pixel pixels[MAX_TILE_Y][MAX_TILE_X];
@@ -202,7 +202,7 @@ char *argv[];
 	    argn ++;
 	}
 	if (!strcmp(argv[argn], "-s")) {
-	    split_mode = TRUE;
+	    split_mode = true;
 	    argn ++;
 	}
 	else

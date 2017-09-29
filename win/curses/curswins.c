@@ -50,7 +50,7 @@ curses_create_window(int width, int height, orient orientation)
     int startx = 0;
     int starty = 0;
     WINDOW *win;
-    boolean map_border = FALSE;
+    boolean map_border = false;
     int mapb_offset = 0;
 
     if ((orientation == UP) || (orientation == DOWN) ||
@@ -60,7 +60,7 @@ curses_create_window(int width, int height, orient orientation)
             curses_get_window_xy(MAP_WIN, &mapx, &mapy);
             curses_get_window_size(MAP_WIN, &maph, &mapw);
         } else {
-            map_border = TRUE;
+            map_border = true;
             mapx = 0;
             mapy = 0;
             maph = term_rows;
@@ -229,9 +229,9 @@ curses_add_nhwin(winid wid, int height, int width, int y, int x,
         mapwin = win;
 
         if ((width < COLNO) || (height < ROWNO)) {
-            map_clipped = TRUE;
+            map_clipped = true;
         } else {
-            map_clipped = FALSE;
+            map_clipped = false;
         }
 
         break;
@@ -339,7 +339,7 @@ curses_putch(winid wid, int x, int y, int ch, int color, int attr)
     int sx, sy, ex, ey;
     boolean border = curses_window_has_border(wid);
     nethack_char nch;
-    static boolean map_initted = FALSE;
+    static boolean map_initted = false;
 
     if (wid == STATUS_WIN) {
         curses_update_stats();
@@ -351,7 +351,7 @@ curses_putch(winid wid, int x, int y, int ch, int color, int attr)
 
     if (!map_initted) {
         clear_map();
-        map_initted = TRUE;
+        map_initted = true;
     }
 
     map[y][x].ch = ch;
@@ -416,13 +416,13 @@ curses_window_exists(winid wid)
 
     while (widptr != NULL) {
         if (widptr->nhwid == wid) {
-            return TRUE;
+            return true;
         }
 
         widptr = widptr->next_wid;
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -454,7 +454,7 @@ curses_puts(winid wid, int attr, const char *text)
     }
 
     if (wid == MESSAGE_WIN) {
-        curses_message_win_puts(text, FALSE);
+        curses_message_win_puts(text, false);
         return;
     }
 
@@ -473,7 +473,7 @@ curses_puts(winid wid, int attr, const char *text)
         identifier = alloc(sizeof (anything));
         identifier->a_void = NULL;
         curses_add_nhmenu_item(wid, NO_GLYPH, identifier, 0, 0, attr, text,
-                               FALSE);
+                               false);
     } else {
         waddstr(win, text);
         wrefresh(win);
@@ -490,7 +490,7 @@ curses_clear_nhwin(winid wid)
     boolean border = curses_window_has_border(wid);
 
     if (wid == MAP_WIN) {
-        clearok(win, TRUE);     /* Redraw entire screen when refreshed */
+        clearok(win, true);     /* Redraw entire screen when refreshed */
         clear_map();
     }
 
@@ -532,9 +532,9 @@ static boolean
 is_main_window(winid wid)
 {
     if ((wid == MESSAGE_WIN) || (wid == MAP_WIN) || (wid == STATUS_WIN) || wid == INV_WIN) {
-        return TRUE;
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 }
 
@@ -735,8 +735,8 @@ curses_map_borders(int *sx, int *sy, int *ex, int *ey, int ux, int uy)
         osy = *sy;
         oex = *ex;
         oey = *ey;
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }

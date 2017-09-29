@@ -209,13 +209,13 @@ do_explode(
 	struct monst *mtmp;
 	uchar adtyp;
 	boolean explmask;
-	boolean shopdamage = FALSE;
-	boolean generic = FALSE;
-	boolean silent = FALSE, remote = FALSE;
+	boolean shopdamage = false;
+	boolean generic = false;
+	boolean silent = false, remote = false;
 	xchar xi, yi;
 
-	if (dest > 0) silent = TRUE;
-	if (dest == 2) remote = TRUE;
+	if (dest > 0) silent = true;
+	if (dest == 2) remote = true;
 
 	if (olet == WAND_CLASS)		/* retributive strike */
 		switch (Role_switch) {
@@ -274,9 +274,9 @@ do_explode(
         }
 #endif
 
-	any_shield = visible = FALSE;
+	any_shield = visible = false;
 	for(i = 0; i < area->nlocations; i++) {
-		explmask = FALSE;
+		explmask = false;
 		xi = area->locations[i].x;
 		yi = area->locations[i].y;
 		if (xi == u.ux && yi == u.uy) {
@@ -355,13 +355,13 @@ do_explode(
 		    unmap_object(xi, yi);
 		    newsym(xi, yi);
 		}
-		if (cansee(xi, yi)) visible = TRUE;
-		if (explmask) any_shield = TRUE;
+		if (cansee(xi, yi)) visible = true;
+		if (explmask) any_shield = true;
 		area->locations[i].shielded = explmask;
 	}
 
 	/* Not visible if remote */
-	if (remote) visible = FALSE;
+	if (remote) visible = false;
 
 	if (visible) {
 #ifdef ALLEG_FX
@@ -423,7 +423,7 @@ do_explode(
 	} else if (!remote) {
 	    if (olet == MON_EXPLODE) {
 		str = "explosion";
-		generic = TRUE;
+		generic = true;
 	    }
 	    if (flags.soundok)
 		You_hear(is_pool(x, y) ? "a muffled explosion." : "a blast.");
@@ -491,7 +491,7 @@ do_explode(
 		 */
 			int mdam = dam;
 
-			if (resist(mtmp, olet, 0, FALSE)) {
+			if (resist(mtmp, olet, 0, false)) {
 			    if (!silent && cansee(xi,yi))
 				pline("%s resists the %s!", Monnam(mtmp), str);
 			    mdam = dam/2;
@@ -526,7 +526,7 @@ do_explode(
 	/* Do your injury last */
 
 	/* You are not hurt if this is remote */
-	if (remote) uhurt = FALSE;
+	if (remote) uhurt = false;
 
 	if (uhurt) {
 		/* [ALI] Give message if it's a weapon (grenade) exploding */
@@ -592,14 +592,14 @@ do_explode(
 			done((adtyp == AD_FIRE) ? BURNING : DIED);
 		    }
 		}
-		exercise(A_STR, FALSE);
+		exercise(A_STR, false);
 	}
 
 	if (shopdamage) {
 		pay_for_damage(adtyp == AD_FIRE ? "burn away" :
 			       adtyp == AD_COLD ? "shatter" :
 			       adtyp == AD_DISN ? "disintegrate" : "destroy",
-			       FALSE);
+			       false);
 	}
 
 	/* explosions are noisy */
@@ -646,7 +646,7 @@ long scatter(
 	uchar typ;
 	long qtmp;
 	boolean used_up;
-	boolean individual_object = obj ? TRUE : FALSE;
+	boolean individual_object = obj ? true : false;
 	struct monst *mtmp;
 	struct scatter_chain *stmp, *stmp2 = 0;
 	struct scatter_chain *schain = (struct scatter_chain *)0;
@@ -662,7 +662,7 @@ long scatter(
 		obj = NULL; /* all used */
 	    }
 	    obj_extract_self(otmp);
-	    used_up = FALSE;
+	    used_up = false;
 
 	    /* 9 in 10 chance of fracturing boulders or statues */
 	    if ((scflags & MAY_FRACTURE)
@@ -686,13 +686,13 @@ long scatter(
 		    (void) break_statue(otmp);
 		    place_object(otmp, sx, sy);	/* put fragments on floor */
 		}
-		used_up = TRUE;
+		used_up = true;
 
 	    /* 1 in 10 chance of destruction of obj; glass, egg destruction */
 	    } else if ((scflags & MAY_DESTROY) && (!rn2(10)
 			|| (objects[otmp->otyp].oc_material == GLASS
 			|| otmp->otyp == EGG))) {
-		if (breaks(otmp, (xchar)sx, (xchar)sy)) used_up = TRUE;
+		if (breaks(otmp, (xchar)sx, (xchar)sy)) used_up = true;
 	    }
 
 	    if (!used_up) {
@@ -709,7 +709,7 @@ long scatter(
 		if (tmp < 1) tmp = 1;
 		stmp->range = rnd(tmp); /* anywhere up to that determ. by wt */
 		if (farthest < stmp->range) farthest = stmp->range;
-		stmp->stopped = FALSE;
+		stmp->stopped = false;
 		if (!schain)
 		    schain = stmp;
 		else
@@ -727,18 +727,18 @@ long scatter(
 			if(!isok(bhitpos.x, bhitpos.y)) {
 				bhitpos.x -= stmp->dx;
 				bhitpos.y -= stmp->dy;
-				stmp->stopped = TRUE;
+				stmp->stopped = true;
 			} else if(!ZAP_POS(typ) ||
 					closed_door(bhitpos.x, bhitpos.y)) {
 				bhitpos.x -= stmp->dx;
 				bhitpos.y -= stmp->dy;
-				stmp->stopped = TRUE;
+				stmp->stopped = true;
 			} else if ((mtmp = m_at(bhitpos.x, bhitpos.y)) != 0) {
 				if (scflags & MAY_HITMON) {
 				    stmp->range--;
-				    if (ohitmon(NULL, mtmp, stmp->obj, 1, FALSE)) {
+				    if (ohitmon(NULL, mtmp, stmp->obj, 1, false)) {
 					stmp->obj = NULL;
-					stmp->stopped = TRUE;
+					stmp->stopped = true;
 				    }
 				}
 			} else if (bhitpos.x==u.ux && bhitpos.y==u.uy) {
@@ -861,7 +861,7 @@ static int grenade_gas_callback(void *data, int x, int y) {
 
 static int grenade_dig_callback(void *data, int x, int y) {
     struct grenade_callback *gc = (struct grenade_callback *)data;
-    if (dig_check(BY_OBJECT, FALSE, x, y))
+    if (dig_check(BY_OBJECT, false, x, y))
 	add_location_to_explode_region(gc->dig_area, x, y);
     return !ZAP_POS(levl[x][y].typ);
 }
@@ -876,7 +876,7 @@ static void grenade_effects(struct obj *source, xchar x, xchar y, ExplodeRegion 
      */
     int no_gas = 0, no_fiery = 0, no_dig = 0;
     int delquan;
-    boolean shielded = FALSE, redraw;
+    boolean shielded = false, redraw;
     struct grenade_callback gc;
 
     if (source) {
@@ -900,7 +900,7 @@ static void grenade_effects(struct obj *source, xchar x, xchar y, ExplodeRegion 
 #endif
     if (mon && !DEADMONSTER(mon))
 	if (resists_fire(mon))
-	    shielded = TRUE;
+	    shielded = true;
 	else
 	    for(obj = mon->minvent; obj; obj = obj2) {
 		obj2 = obj->nobj;
@@ -910,7 +910,7 @@ static void grenade_effects(struct obj *source, xchar x, xchar y, ExplodeRegion 
 	    }
     if (x == u.ux && y == u.uy)
 	if (Fire_resistance)
-	    shielded = TRUE;
+	    shielded = true;
 	else
 	    for(obj = invent; obj; obj = obj2) {
 		obj2 = obj->nobj;
@@ -971,7 +971,7 @@ static void grenade_effects(struct obj *source, xchar x, xchar y, ExplodeRegion 
 void
 grenade_explode(struct obj *obj, int x, int y, boolean isyou, int dest) {
     int i, ztype;
-    boolean shop_damage = FALSE;
+    boolean shop_damage = false;
     int ox, oy;
     ExplodeRegion *fiery_area, *gas_area, *dig_area;
     struct trap *trap;
@@ -993,8 +993,8 @@ grenade_explode(struct obj *obj, int x, int y, boolean isyou, int dest) {
 	ox = dig_area->locations[i].x;
 	oy = dig_area->locations[i].y;
 	if (IS_WALL(levl[ox][oy].typ) || IS_DOOR(levl[ox][oy].typ)) {
-	    watch_dig(NULL, ox, oy, TRUE);
-	    if (*in_rooms(ox, oy, SHOPBASE)) shop_damage = TRUE;
+	    watch_dig(NULL, ox, oy, true);
+	    if (*in_rooms(ox, oy, SHOPBASE)) shop_damage = true;
 	}
 	digactualhole(ox, oy, BY_OBJECT, PIT);
     }
@@ -1012,7 +1012,7 @@ grenade_explode(struct obj *obj, int x, int y, boolean isyou, int dest) {
 	  EXPL_NOXIOUS, dest, isyou);
     }
     free_explode_region(gas_area);
-    if (shop_damage) pay_for_damage("damage", FALSE);
+    if (shop_damage) pay_for_damage("damage", false);
 }
 
 void arm_bomb(struct obj *obj, boolean yours) {

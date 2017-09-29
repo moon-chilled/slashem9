@@ -51,7 +51,7 @@ static boolean gypsy_offer(struct monst *mtmp, long cost, char *txt) {
 	if (EGYP(mtmp)->credit >= cost) {
 		if (yn("Accept this offer?") == 'y') {
 			EGYP(mtmp)->credit -= cost;
-			return (TRUE);
+			return (true);
 		}
 #ifndef GOLDOBJ
 	} else if (EGYP(mtmp)->credit + u.ugold >= cost)
@@ -63,7 +63,7 @@ static boolean gypsy_offer(struct monst *mtmp, long cost, char *txt) {
 		/* Maybe you could try gambling some of it for credit... */
 	else
 		verbalize("What a pity that you don't have enough!");
-	return (FALSE);
+	return (false);
 }
 
 static long gypsy_bet(struct monst *mtmp, long minimum) {
@@ -342,7 +342,7 @@ static void fortune(struct monst *mtmp) {
 				rndcurse();
 			break;
 		case 11: /* the Devil */
-			summon_minion(A_NONE, TRUE);
+			summon_minion(A_NONE, true);
 			break;
 		case 12: /* Sorcery */
 			adjattrib(urole.spelstat, 1, 0);
@@ -367,10 +367,10 @@ static void fortune(struct monst *mtmp) {
 		case 15: /* the Star */
 			otyp = birthstones[getmonth()];
 			makeknown(otyp);
-			if ((otmp = mksobj(otyp, TRUE, FALSE)) != NULL) {
+			if ((otmp = mksobj(otyp, true, false)) != NULL) {
 				pline("%s reaches behind your %s and pulls out %s.",
 						Monnam(mtmp), body_part(HEAD), doname(otmp));
-				if (pickup_object(otmp, otmp->quan, FALSE) <= 0) {
+				if (pickup_object(otmp, otmp->quan, false) <= 0) {
 					obj_extract_self(otmp);
 					place_object(otmp, u.ux, u.uy);
 					newsym(u.ux, u.uy);
@@ -421,7 +421,7 @@ static void fortune(struct monst *mtmp) {
 				verbalize("I wish I wasn't here!");
 				mongone(mtmp);
 			} else if (gypsy_offer(mtmp, 10000L, "grant you a wish")) {
-				mtmp->mcan = TRUE;
+				mtmp->mcan = true;
 				makewish();
 			}
 			break;
@@ -526,7 +526,7 @@ static boolean nn_playable(xchar card, int total) {
 		case 12:	/* Queen */
 			return (total >= 10);
 		case 13:	/* King */
-			return (TRUE);
+			return (true);
 		default:	/* Ace through 10 */
 			return ((total + card_rank(card) + 1) <= NINETYNINE_GOAL);
 	}
@@ -732,8 +732,8 @@ static void tarocchi(struct monst *mtmp) {
 /*** Monster-related functions ***/
 
 void gypsy_init(struct monst *mtmp) {
-	mtmp->isgyp = TRUE;
-	mtmp->mpeaceful = TRUE;
+	mtmp->isgyp = true;
+	mtmp->mpeaceful = true;
 	mtmp->msleeping = 0;
 	mtmp->mtrapseen = ~0;	/* traps are known */
 	EGYP(mtmp)->credit = 0L;
@@ -836,7 +836,7 @@ void gypsy_chat(struct monst *mtmp) {
 			tarocchi(mtmp);
 			break;
 		case '?':
-			display_file_area(FILE_AREA_SHARE, "gypsy.txt", TRUE);
+			display_file_area(FILE_AREA_SHARE, "gypsy.txt", true);
 			break;
 	}
 

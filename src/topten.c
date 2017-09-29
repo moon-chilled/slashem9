@@ -388,7 +388,7 @@ topten (int how)
 #endif
 
 	/* create a new 'topten' entry */
-	t0_used = FALSE;
+	t0_used = false;
 	t0 = newttentry();
 	/* deepest_lev_reached() is in terms of depth(), and reporting the
 	 * deepest level reached in the dungeon death occurred in doesn't
@@ -402,7 +402,7 @@ topten (int how)
 	t0->points = u.urexp;
 	t0->deathdnum = u.uz.dnum;
 	t0->deathlev = observable_depth(&u.uz);
-	t0->maxlvl = deepest_lev_reached(TRUE);
+	t0->maxlvl = deepest_lev_reached(true);
 	t0->hp = u.uhp;
 	t0->maxhp = u.uhpmax;
 	t0->deaths = u.umortality;
@@ -530,7 +530,7 @@ topten (int how)
 		else
 			tprev->tt_next = t0;
 		t0->tt_next = t1;
-		t0_used = TRUE;
+		t0_used = true;
 		occ_cnt--;
 		flg++;		/* ask for a rewrite */
 	    } else tprev = t1;
@@ -631,16 +631,16 @@ topten (int how)
 #endif
 	    }
 	    if(rank != rank0)
-		outentry(rank, t1, FALSE);
+		outentry(rank, t1, false);
 	    else if(!rank1)
-		outentry(rank, t1, TRUE);
+		outentry(rank, t1, true);
 	    else {
-		outentry(rank, t1, TRUE);
-		outentry(0, t0, TRUE);
+		outentry(rank, t1, true);
+		outentry(0, t0, true);
 	    }
 	}
 	if(rank0 >= rank) if(!done_stopprint)
-		outentry(0, t0, TRUE);
+		outentry(0, t0, true);
 	(void) fclose(rfile);
 	unlock_file_area(NH_RECORD_AREA, NH_RECORD);
 	free_ttlist(tt_head);
@@ -678,7 +678,7 @@ struct toptenentry *t1;
 int rank;
 boolean so;
 {
-	boolean second_line = TRUE;
+	boolean second_line = true;
 	char linebuf[BUFSZ];
 	char *bp, hpbuf[24], linebuf3[BUFSZ];
 	int hppos, lngr;
@@ -708,7 +708,7 @@ boolean so;
 	    /* fixup for closing paren in "escaped... with...Amulet)[max..." */
 	    if ((bp = index(linebuf, ')')) != 0)
 		*bp = (t1->deathdnum == astral_level.dnum) ? '\0' : ' ';
-	    second_line = FALSE;
+	    second_line = false;
 	} else if (!strncmp("ascended", t1->death, 8)) {
 
 		/* Add a notation for conducts kept */
@@ -743,14 +743,14 @@ boolean so;
 
 	    sprintf(eos(linebuf), "ascended to demigod%s-hood",
 		    (t1->plgend[0] == 'F') ? "dess" : "");
-	    second_line = FALSE;
+	    second_line = false;
 	} else {
 	    if (!strncmp(t1->death, "quit", 4)) {
 		strcat(linebuf, "quit");
-		second_line = FALSE;
+		second_line = false;
 	    } else if (!strncmp(t1->death, "died of st", 10)) {
 		strcat(linebuf, "starved to death");
-		second_line = FALSE;
+		second_line = false;
 	    } else if (!strncmp(t1->death, "choked", 6)) {
 		sprintf(eos(linebuf), "choked on h%s food",
 			(t1->plgend[0] == 'F') ? "er" : "is");
@@ -979,10 +979,10 @@ char **argv;
 {
 	const char **players;
 	int playerct, rank;
-	boolean current_ver = TRUE, init_done = FALSE;
+	boolean current_ver = true, init_done = false;
 	struct toptenentry *t1;
 	FILE *rfile;
-	boolean match_found = FALSE;
+	boolean match_found = false;
 	int i;
 	char pbuf[BUFSZ];
 	int uid = -1;
@@ -1007,7 +1007,7 @@ char **argv;
 	if (wiz1_level.dlevel == 0) {
 		dlb_init();
 		init_dungeons();
-		init_done = TRUE;
+		init_done = true;
 	}
 
 	if (!argv[1][2]){	/* plain "-s" */
@@ -1016,7 +1016,7 @@ char **argv;
 	} else	argv[1] += 2;
 
 	if (argc > 1 && !strcmp(argv[1], "-v")) {
-		current_ver = FALSE;
+		current_ver = false;
 		argc--;
 		argv++;
 	}
@@ -1045,7 +1045,7 @@ char **argv;
 	    if (t1->points == 0) break;
 	    if (!match_found &&
 		    score_wanted(current_ver, rank, t1, playerct, players, uid))
-		match_found = TRUE;
+		match_found = true;
 	    t1->tt_next = newttentry();
 	    t1 = t1->tt_next;
 	}

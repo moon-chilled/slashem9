@@ -45,7 +45,7 @@ HWND mswin_init_status_window () {
 			NULL );
 	if( !ret ) panic("Cannot create status window");
 
-	EnableWindow(ret, FALSE);
+	EnableWindow(ret, false);
 
 	data = (PNHStatusWindow)malloc(sizeof(NHStatusWindow));
 	if( !data ) panic("out of memory");
@@ -95,13 +95,13 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 			strncat(data->window_text[data->index], "\n",
 				    MAXWINDOWTEXT-strlen(data->window_text[data->index]));
 			data->index = (data->index+1) % NHSW_LINES;
-			InvalidateRect(hWnd, NULL, TRUE);
+			InvalidateRect(hWnd, NULL, true);
 			break;
 		}
 		case MSNH_MSG_CLEAR_WINDOW:
 			data->index = 0;
 			ZeroMemory(data->window_text, sizeof(data->window_text));
-			InvalidateRect(hWnd, NULL, TRUE);
+			InvalidateRect(hWnd, NULL, true);
 			break;
 		}
 	} break;
@@ -116,7 +116,7 @@ LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 			hdc = BeginPaint(hWnd, &ps);
 			GetClientRect(hWnd, &rt);
 
-			oldFont = SelectObject(hdc, mswin_get_font(NHW_STATUS, ATR_NONE, hdc, FALSE));
+			oldFont = SelectObject(hdc, mswin_get_font(NHW_STATUS, ATR_NONE, hdc, false));
 
 			OldBg = SetBkColor(hdc, status_bg_brush
 				? status_bg_color : (COLORREF)GetSysColor(DEFAULT_COLOR_BG_STATUS));
@@ -165,7 +165,7 @@ void mswin_status_window_size (HWND hWnd, LPSIZE sz)
 	data = (PNHStatusWindow)GetWindowLong(hWnd, GWL_USERDATA);
 	if(data) {
 		hdc = GetDC(hWnd);
-		saveFont = SelectObject(hdc, mswin_get_font(NHW_STATUS, ATR_NONE, hdc, FALSE));
+		saveFont = SelectObject(hdc, mswin_get_font(NHW_STATUS, ATR_NONE, hdc, false));
 		GetTextMetrics(hdc, &tm);
 
 		sz->cy = tm.tmHeight * NHSW_LINES;

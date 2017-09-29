@@ -85,7 +85,7 @@ char *upstart(char *s) {
 /* remove excess whitespace from a string buffer (in place) */
 char *mungspaces(char *bp) {
     char c, *p, *p2;
-    boolean was_space = TRUE;
+    boolean was_space = true;
 
     for (p = p2 = bp; (c = *p) != '\0'; p++) {
 	if (c == '\t') c = ' ';
@@ -146,9 +146,9 @@ char *xcrypt(const char *str, char *buf) {
 boolean onlyspace(const char *s) {
     for (; *s; s++)
 	if (*s != ' ' && *s != '\t')
-		return FALSE;
+		return false;
 
-    return TRUE;
+    return true;
 }
 
 // expand tabs into proper number of spaces
@@ -264,17 +264,17 @@ boolean pmatch(const char *patrn, const char *strng) {
     char s, p;
   /*
    :  Simple pattern matcher:  '*' matches 0 or more characters, '?' matches
-   :  any single character.  Returns TRUE if 'strng' matches 'patrn'.
+   :  any single character.  Returns true if 'strng' matches 'patrn'.
    */
 pmatch_top:
     s = *strng++;  p = *patrn++;	/* get next chars and pre-advance */
     if (!p)			/* end of pattern */
 	return((boolean)(s == '\0'));		/* matches iff end of string too */
     else if (p == '*')		/* wildcard reached */
-	return((boolean)((!*patrn || pmatch(patrn, strng-1)) ? TRUE :
-		s ? pmatch(patrn-1, strng) : FALSE));
+	return((boolean)((!*patrn || pmatch(patrn, strng-1)) ? true :
+		s ? pmatch(patrn-1, strng) : false));
     else if (p != s && (p != '?' || !s))  /* check single character */
-	return FALSE;		/* doesn't match */
+	return false;		/* doesn't match */
     else				/* return pmatch(patrn, strng); */
 	goto pmatch_top;	/* optimize tail recursion */
 }

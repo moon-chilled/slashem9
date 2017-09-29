@@ -6,6 +6,7 @@
 #define GLOBAL_H
 
 #include <stdio.h>
+#include <stdbool.h>
 
 #define ALPHA		/* if an alpha-test copy */
 #define BETA		/* if an alpha- or beta-test copy */
@@ -56,11 +57,6 @@
 typedef schar	xchar;
 #ifndef SKIP_BOOLEAN
 typedef xchar	boolean;		/* 0 or 1 */
-#endif
-
-#ifndef TRUE		/* defined in some systems' native include files */
-#define TRUE	((boolean)1)
-#define FALSE	((boolean)0)
 #endif
 
 #ifndef STRNCMPI

@@ -224,7 +224,7 @@ BOOL CALLBACK MenuWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		/* set font for the text cotrol */
 		control = GetDlgItem(hWnd, IDC_MENU_TEXT);
 		hdc = GetDC(control);
-		SendMessage(control, WM_SETFONT, (WPARAM)mswin_get_font(NHW_MENU, ATR_NONE, hdc, FALSE), (LPARAM)0);
+		SendMessage(control, WM_SETFONT, (WPARAM)mswin_get_font(NHW_MENU, ATR_NONE, hdc, false), (LPARAM)0);
 		ReleaseDC(control, hdc);
 
 		/* subclass edit control */
@@ -243,16 +243,16 @@ BOOL CALLBACK MenuWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	case WM_SIZE:
 		LayoutMenu(hWnd);
-	return FALSE;
+	return false;
 
 	case WM_CLOSE:
 	    if (program_state.gameover) {
 		data->result = -1;
 		data->done = 1;
 		program_state.stopprint++;
-		return TRUE;
+		return true;
 	    } else
-	        return FALSE;
+	        return false;
 
 	case WM_COMMAND:
 	{
@@ -271,24 +271,24 @@ BOOL CALLBACK MenuWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				if( i>=0 ) {
 					SelectMenuItem(list, data, i,  0);
 				}
-				return TRUE;
+				return true;
 			} else {
 				data->result = -1;
 				data->done = 1;
 			}
-		return TRUE;
+		return true;
 
 		case IDOK:
 			data->done = 1;
 			data->result = 0;
-		return TRUE;
+		return true;
 
         case IDC_MENU_TEXT:
           switch (HIWORD(wParam))
           {
             case EN_SETFOCUS:
               HideCaret((HWND)lParam);
-              return TRUE;
+              return true;
           }
 		}
 	} break;
@@ -317,7 +317,7 @@ BOOL CALLBACK MenuWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						);
 						data->done = 1;
 						data->result = 0;
-						return TRUE;
+						return true;
 					}
 				}
 			} break;
@@ -384,13 +384,13 @@ BOOL CALLBACK MenuWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		if( wParam==IDC_MENU_LIST )
 			return onMeasureItem(hWnd, wParam, lParam);
 		else
-			return FALSE;
+			return false;
 
     case WM_DRAWITEM:
 		if( wParam==IDC_MENU_LIST )
 			return onDrawItem(hWnd, wParam, lParam);
 		else
-			return FALSE;
+			return false;
 
 	case WM_CTLCOLORSTATIC: { /* sent by edit control before it is drawn */
 		HDC hdcEdit = (HDC) wParam;
@@ -405,7 +405,7 @@ BOOL CALLBACK MenuWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			return (BOOL)(text_bg_brush
 					? text_bg_brush : SYSCLR_TO_BRUSH(DEFAULT_COLOR_BG_TEXT));
 		}
-	} return FALSE;
+	} return false;
 
 	case WM_DESTROY:
 		if( data ) {
@@ -418,9 +418,9 @@ BOOL CALLBACK MenuWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			free(data);
 			SetWindowLong(hWnd, GWL_USERDATA, (LONG)0);
 		}
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 /*-----------------------------------------------------------------------------*/
 void onMSNHCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
@@ -503,7 +503,7 @@ void onMSNHCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
 
 		/* calculate tabstop size */
 		hDC = GetDC(hWnd);
-		saveFont = SelectObject(hDC, mswin_get_font(NHW_MENU, msg_data->attr, hDC, FALSE));
+		saveFont = SelectObject(hDC, mswin_get_font(NHW_MENU, msg_data->attr, hDC, false));
 		p1 = data->menu.items[new_item].str;
 		p = strchr(data->menu.items[new_item].str, '\t');
 		column = 0;
@@ -581,9 +581,9 @@ void LayoutMenu(HWND hWnd)
 	sz_elem.cx = (clrt.right - clrt.left) - 2*MENU_MARGIN;
 	sz_elem.cy = min(pt_cancel.y, pt_ok.y) - 2*MENU_MARGIN;
 
-	MoveWindow(GetMenuControl(hWnd), pt_elem.x, pt_elem.y, sz_elem.cx, sz_elem.cy, TRUE );
-	MoveWindow(menu_ok, pt_ok.x, pt_ok.y, sz_ok.cx, sz_ok.cy, TRUE );
-	MoveWindow(menu_cancel, pt_cancel.x, pt_cancel.y, sz_cancel.cx, sz_cancel.cy, TRUE );
+	MoveWindow(GetMenuControl(hWnd), pt_elem.x, pt_elem.y, sz_elem.cx, sz_elem.cy, true );
+	MoveWindow(menu_ok, pt_ok.x, pt_ok.y, sz_ok.cx, sz_ok.cy, true );
+	MoveWindow(menu_cancel, pt_cancel.x, pt_cancel.y, sz_cancel.cx, sz_cancel.cy, true );
 }
 /*-----------------------------------------------------------------------------*/
 void SetMenuType(HWND hWnd, int type)
@@ -599,14 +599,14 @@ void SetMenuType(HWND hWnd, int type)
 	list = GetDlgItem(hWnd, IDC_MENU_LIST);
 	if(data->type==MENU_TYPE_TEXT) {
 		ShowWindow(list, SW_HIDE);
-		EnableWindow(list, FALSE);
-		EnableWindow(text, TRUE);
+		EnableWindow(list, false);
+		EnableWindow(text, true);
 		ShowWindow(text, SW_SHOW);
 		SetFocus(text);
 	} else {
 		ShowWindow(text, SW_HIDE);
-		EnableWindow(text, FALSE);
-		EnableWindow(list, TRUE);
+		EnableWindow(text, false);
+		EnableWindow(list, true);
 		ShowWindow(list, SW_SHOW);
 		SetFocus(list);
 	}
@@ -738,7 +738,7 @@ BOOL onMeasureItem(HWND hWnd, WPARAM wParam, LPARAM lParam)
 	GetClientRect(GetMenuControl(hWnd), &list_rect);
 
 	hdc = GetDC(GetMenuControl(hWnd));
-	saveFont = SelectObject(hdc, mswin_get_font(NHW_MENU, ATR_INVERSE, hdc, FALSE));
+	saveFont = SelectObject(hdc, mswin_get_font(NHW_MENU, ATR_INVERSE, hdc, false));
 	GetTextMetrics(hdc, &tm);
 
     /* Set the height of the list box items. */
@@ -747,7 +747,7 @@ BOOL onMeasureItem(HWND hWnd, WPARAM wParam, LPARAM lParam)
 
 	SelectObject(hdc, saveFont);
 	ReleaseDC(GetMenuControl(hWnd), hdc);
-	return TRUE;
+	return true;
 }
 /*-----------------------------------------------------------------------------*/
 BOOL onDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam)
@@ -770,14 +770,14 @@ BOOL onDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam)
 	lpdis = (LPDRAWITEMSTRUCT) lParam;
 
     /* If there are no list box items, skip this message. */
-    if (lpdis->itemID == -1) return FALSE;
+    if (lpdis->itemID == -1) return false;
 
 	data = (PNHMenuWindow)GetWindowLong(hWnd, GWL_USERDATA);
 
     item = &data->menu.items[lpdis->itemID];
 
 	tileDC = CreateCompatibleDC(lpdis->hDC);
-	saveFont = SelectObject(lpdis->hDC, mswin_get_font(NHW_MENU, item->attr, lpdis->hDC, FALSE));
+	saveFont = SelectObject(lpdis->hDC, mswin_get_font(NHW_MENU, item->attr, lpdis->hDC, false));
 	NewBg = menu_bg_brush ? menu_bg_color : (COLORREF)GetSysColor(DEFAULT_COLOR_BG_MENU);
 	OldBg = SetBkColor(lpdis->hDC, NewBg);
 	OldFg = SetTextColor(lpdis->hDC,
@@ -882,7 +882,7 @@ BOOL onDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam)
 				_stprintf(wbuf, TEXT("Count: %d"), data->menu.items[lpdis->itemID].count );
 			}
 
-			SelectObject(lpdis->hDC, mswin_get_font(NHW_MENU, ATR_BLINK, lpdis->hDC, FALSE));
+			SelectObject(lpdis->hDC, mswin_get_font(NHW_MENU, ATR_BLINK, lpdis->hDC, false));
 
 			/* calculate text rectangle */
 			SetRect( &drawRect, client_rt.left, lpdis->rcItem.top, client_rt.right, lpdis->rcItem.bottom );
@@ -915,7 +915,7 @@ BOOL onDrawItem(HWND hWnd, WPARAM wParam, LPARAM lParam)
 	SetBkColor (lpdis->hDC, OldBg);
 	SelectObject(lpdis->hDC, saveFont);
 	DeleteDC(tileDC);
-	return TRUE;
+	return true;
 }
 /*-----------------------------------------------------------------------------*/
 BOOL onListChar(HWND hWnd, HWND hwndList, WORD ch)
@@ -923,7 +923,7 @@ BOOL onListChar(HWND hWnd, HWND hwndList, WORD ch)
 	int i = 0;
 	PNHMenuWindow data;
 	int curIndex, topIndex, pageSize;
-	boolean is_accelerator = FALSE;
+	boolean is_accelerator = false;
 
 	data = (PNHMenuWindow)GetWindowLong(hWnd, GWL_USERDATA);
 
@@ -931,13 +931,13 @@ BOOL onListChar(HWND hWnd, HWND hwndList, WORD ch)
 	case MENU_FIRST_PAGE:
 		i = 0;
 		ListView_SetItemState(hwndList, i, LVIS_FOCUSED, LVIS_FOCUSED);
-		ListView_EnsureVisible(hwndList, i, FALSE);
+		ListView_EnsureVisible(hwndList, i, false);
 	return -2;
 
 	case MENU_LAST_PAGE:
 		i = max(0, data->menu.size-1);
 		ListView_SetItemState(hwndList, i, LVIS_FOCUSED, LVIS_FOCUSED);
-		ListView_EnsureVisible(hwndList, i, FALSE);
+		ListView_EnsureVisible(hwndList, i, false);
 	return -2;
 
 	case MENU_NEXT_PAGE:
@@ -949,7 +949,7 @@ BOOL onListChar(HWND hWnd, HWND hwndList, WORD ch)
 		ListView_SetItemState(hwndList, i, LVIS_FOCUSED, LVIS_FOCUSED);
         /* Scrollpos down one page */
         i = min(topIndex+(2*pageSize - 1), data->menu.size-1);
-		ListView_EnsureVisible(hwndList, i, FALSE);
+		ListView_EnsureVisible(hwndList, i, false);
 	return -2;
 
 	case MENU_PREVIOUS_PAGE:
@@ -961,7 +961,7 @@ BOOL onListChar(HWND hWnd, HWND hwndList, WORD ch)
 		ListView_SetItemState(hwndList, i, LVIS_FOCUSED, LVIS_FOCUSED);
         /* Scrollpos up one page */
 		i = max(topIndex-pageSize, 0);
-		ListView_EnsureVisible(hwndList, i, FALSE);
+		ListView_EnsureVisible(hwndList, i, false);
 	break;
 
 	case MENU_SELECT_ALL:
@@ -1077,7 +1077,7 @@ BOOL onListChar(HWND hWnd, HWND hwndList, WORD ch)
 							-1
 						);
 						ListView_SetItemState(hwndList, i, LVIS_FOCUSED, LVIS_FOCUSED);
-						ListView_EnsureVisible(hwndList, i, FALSE);
+						ListView_EnsureVisible(hwndList, i, false);
 						break;
 					}
 				}
@@ -1112,7 +1112,7 @@ BOOL onListChar(HWND hWnd, HWND hwndList, WORD ch)
 		    ListView_SetItemState(hwndList, i, LVIS_FOCUSED, LVIS_FOCUSED);
             /* Scrollpos down one page */
             i = min(topIndex+(2*pageSize - 1), data->menu.size-1);
-		    ListView_EnsureVisible(hwndList, i, FALSE);
+		    ListView_EnsureVisible(hwndList, i, false);
 
         	return -2;
         } else {
@@ -1184,7 +1184,7 @@ BOOL onListChar(HWND hWnd, HWND hwndList, WORD ch)
 				count *= 10L;
 				count += (int)(ch - '0');
 				if (count != 0)	/* ignore leading zeros */ {
-					data->menu.counting = TRUE;
+					data->menu.counting = true;
 					data->menu.items[i].count = min(100000, count);
 					ListView_RedrawItems( hwndList, i, i ); /* update count mark */
 				}
@@ -1192,10 +1192,10 @@ BOOL onListChar(HWND hWnd, HWND hwndList, WORD ch)
 			return -2;
 		}
 
-		is_accelerator = FALSE;
+		is_accelerator = false;
 		for(i=0; i<data->menu.size; i++) {
 			if( data->menu.items[i].accelerator == ch ) {
-				is_accelerator = TRUE;
+				is_accelerator = true;
 				break;
 			}
 		}
@@ -1213,7 +1213,7 @@ BOOL onListChar(HWND hWnd, HWND hwndList, WORD ch)
 								NHMENU_IS_SELECTED(data->menu.items[i])? 0 : -1
 							);
 							ListView_SetItemState(hwndList, i, LVIS_FOCUSED, LVIS_FOCUSED);
-							ListView_EnsureVisible(hwndList, i, FALSE);
+							ListView_EnsureVisible(hwndList, i, false);
 							return -2;
 						} else if( data->how == PICK_ONE ) {
 							SelectMenuItem(
@@ -1262,7 +1262,7 @@ void mswin_menu_window_size (HWND hWnd, LPSIZE sz)
 
 		if( data->type==MENU_TYPE_MENU ) {
 			/* Calculate the width of the list box. */
-			saveFont = SelectObject(hdc, mswin_get_font(NHW_MENU, ATR_NONE, hdc, FALSE));
+			saveFont = SelectObject(hdc, mswin_get_font(NHW_MENU, ATR_NONE, hdc, false));
 			GetTextMetrics(hdc, &tm);
 			for(i=0; i<data->menu.size; i++ ) {
 				LONG menuitemwidth = 0;
@@ -1305,7 +1305,7 @@ void mswin_menu_window_size (HWND hWnd, LPSIZE sz)
 		} else {
 			/* Calculate the width of the text box. */
 			RECT text_rt;
-			saveFont = SelectObject(hdc, mswin_get_font(NHW_MENU, ATR_NONE, hdc, FALSE));
+			saveFont = SelectObject(hdc, mswin_get_font(NHW_MENU, ATR_NONE, hdc, false));
 			GetTextMetrics(hdc, &tm);
 			SetRect(&text_rt, 0, 0, sz->cx, sz->cy);
 			DrawText(hdc, data->text.text, _tcslen(data->text.text), &text_rt, DT_CALCRECT | DT_TOP | DT_LEFT | DT_NOPREFIX);
@@ -1340,7 +1340,7 @@ void SelectMenuItem(HWND hwndList, PNHMenuWindow data, int item, int count)
 void reset_menu_count(HWND hwndList, PNHMenuWindow data)
 {
 	int i;
-	data->menu.counting = FALSE;
+	data->menu.counting = false;
 	if( IsWindow(hwndList) ) {
 		i = ListView_GetNextItem((hwndList), -1, LVNI_FOCUSED);
 		if( i>=0 ) ListView_RedrawItems( hwndList, i, i );
@@ -1352,7 +1352,7 @@ LRESULT CALLBACK NHMenuListWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 {
 	BOOL bUpdateFocusItem;
 
-	bUpdateFocusItem = FALSE;
+	bUpdateFocusItem = false;
 
 	switch(message) {
 
@@ -1362,21 +1362,21 @@ LRESULT CALLBACK NHMenuListWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		MSG msg;
 		BOOL processed;
 
-		processed = FALSE;
+		processed = false;
 		if( PeekMessage(&msg, hWnd, WM_CHAR, WM_CHAR, PM_REMOVE) ) {
 			if( onListChar(GetParent(hWnd), hWnd, msg.wParam)==-2 ) {
-				processed = TRUE;
+				processed = true;
 			}
 		}
 		if( processed ) return 0;
 
 		if( wParam==VK_LEFT || wParam==VK_RIGHT )
-			bUpdateFocusItem = TRUE;
+			bUpdateFocusItem = true;
 	} break;
 
 	case WM_SIZE:
 	case WM_HSCROLL:
-		bUpdateFocusItem = TRUE;
+		bUpdateFocusItem = true;
 	break;
 
 	}
@@ -1389,7 +1389,7 @@ LRESULT CALLBACK NHMenuListWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		i = ListView_GetNextItem(hWnd, -1,	LVNI_FOCUSED);
 		if( i!=-1 ) {
 			ListView_GetItemRect(hWnd, i, &rt, LVIR_BOUNDS);
-			InvalidateRect(hWnd, &rt, TRUE);
+			InvalidateRect(hWnd, &rt, true);
 		}
 	}
 

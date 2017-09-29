@@ -36,7 +36,7 @@ int WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved)
 		tmp2++;
 		shortdllname = tmp2;
 	}
-	return TRUE;
+	return true;
 }
 
 /*
@@ -118,7 +118,7 @@ int portdebug;
 		else altseq = -1;	/* invalid altseq */
 	}
 	if (ch || (iskeypad(scan)) || (altseq > 0))
-		*valid = TRUE;
+		*valid = true;
 	/* if (!valid) return 0; */
     	/*
 	 * shiftstate can be checked to see if various special

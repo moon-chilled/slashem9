@@ -44,7 +44,7 @@ extern const struct percent_color_option *pw_colors;
 
 /* Whether or not we have printed status window content at least once.
    Used to ensure that prev* doesn't end up highlighted on game start. */
-static boolean first = TRUE;
+static boolean first = true;
 static nhstat prevdepth;
 static nhstat prevstr;
 static nhstat prevint;
@@ -268,9 +268,9 @@ curses_color_attr(int nh_color, int bg_color)
             if (bg_color == CLR_RED)
                 color--;
         } else {
-            boolean hicolor = FALSE;
+            boolean hicolor = false;
             if (COLORS >= 16)
-                hicolor = TRUE;
+                hicolor = true;
 
             switch (bg_color) {
             case CLR_GREEN:
@@ -360,7 +360,7 @@ hpen_color(boolean is_hp, int cur, int max)
 }
 
 /* Draws a bar
-   is_hp: TRUE if we're drawing HP, Pw otherwise (determines colors)
+   is_hp: true if we're drawing HP, Pw otherwise (determines colors)
    cur/max: Current/max HP/Pw
    title: Not NULL if we are drawing as part of an existing title.
    Otherwise, the format is as follows: [   11 / 11   ] */
@@ -419,9 +419,9 @@ curses_update_stats(void)
     WINDOW *win = curses_get_nhwin(STATUS_WIN);
     int orient = curses_get_window_orientation(STATUS_WIN);
 
-    boolean horiz = FALSE;
+    boolean horiz = false;
     if ((orient != ALIGN_RIGHT) && (orient != ALIGN_LEFT))
-        horiz = TRUE;
+        horiz = true;
 
     boolean border = curses_window_has_border(STATUS_WIN);
 
@@ -481,10 +481,10 @@ curses_update_stats(void)
     wrefresh(win);
 
     if (first) {
-        first = FALSE;
+        first = false;
 
         /* Zero highlight timers. This will call curses_update_status again if needed */
-        curses_decrement_highlights(TRUE);
+        curses_decrement_highlights(true);
     }
 }
 
@@ -507,7 +507,7 @@ draw_horizontal(int x, int y, int hp, int hpmax)
     sprintf(buf, "%s the %s", plname, rank);
 
     /* Use the title as HP bar (similar to hitpointbar) */
-    draw_bar(TRUE, hp, hpmax, buf);
+    draw_bar(true, hp, hpmax, buf);
 
     /* Attributes */
     print_statdiff(" St:", &prevstr, ACURR(A_STR), STAT_STR);
@@ -532,7 +532,7 @@ draw_horizontal(int x, int y, int hp, int hpmax)
     y++;
     wmove(win, y, x);
 
-    describe_level(buf, FALSE);
+    describe_level(buf, false);
 
     wprintw(win, "%s", buf);
 
@@ -545,12 +545,12 @@ draw_horizontal(int x, int y, int hp, int hpmax)
     /* HP/Pw use special coloring rules */
     attr_t hpattr, pwattr;
 #ifdef STATUS_COLORS
-    hpattr = hpen_color_attr(TRUE, hp, hpmax);
-    pwattr = hpen_color_attr(FALSE, u.uen, u.uenmax);
+    hpattr = hpen_color_attr(true, hp, hpmax);
+    pwattr = hpen_color_attr(false, u.uen, u.uenmax);
 #else
     int hpcolor, pwcolor;
-    hpcolor = hpen_color(TRUE, hp, hpmax);
-    pwcolor = hpen_color(FALSE, u.uen, u.uenmax);
+    hpcolor = hpen_color(true, hp, hpmax);
+    pwcolor = hpen_color(false, u.uen, u.uenmax);
     hpattr = curses_color_attr(hpcolor, 0);
     pwattr = curses_color_attr(pwcolor, 0);
 #endif
@@ -581,7 +581,7 @@ draw_horizontal(int x, int y, int hp, int hpmax)
     if (flags.time)
         print_statdiff(" T:", &prevtime, moves, STAT_TIME);
 
-    curses_add_statuses(win, FALSE, FALSE, NULL, NULL);
+    curses_add_statuses(win, false, false, NULL, NULL);
 }
 
 static void
@@ -610,7 +610,7 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
     y++;
     wmove(win, y, x);
     wprintw(win, "HP:");
-    draw_bar(TRUE, hp, hpmax, NULL);
+    draw_bar(true, hp, hpmax, NULL);
     print_statdiff(" AC:", &prevac, u.uac, STAT_AC);
     if (Upolyd)
         print_statdiff(" HD:", &prevlevel, mons[u.umonnum].mlevel, STAT_OTHER);
@@ -645,7 +645,7 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
         print_statdiff(" Exp:", &prevlevel, u.ulevel, STAT_OTHER);
 
     waddch(win, ' ');
-    describe_level(buf, FALSE);
+    describe_level(buf, false);
 
     wprintw(win, "%s", buf);
     wclrtoeol(win);
@@ -655,7 +655,7 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
     y++;
     wmove(win, y, x);
     wprintw(win, "Pw:");
-    draw_bar(FALSE, u.uen, u.uenmax, NULL);
+    draw_bar(false, u.uen, u.uenmax, NULL);
 
 #ifndef GOLDOBJ
     print_statdiff(" $", &prevau, u.ugold, STAT_GOLD);
@@ -672,7 +672,7 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
         print_statdiff(" T:", &prevtime, moves, STAT_TIME);
 
     wclrtoeol(win);
-    curses_add_statuses(win, TRUE, FALSE, &x, &y);
+    curses_add_statuses(win, true, false, &x, &y);
 
     /* Right-aligned attributes */
     int stat_length = 6; /* " Dx:xx" */
@@ -748,7 +748,7 @@ draw_vertical(int x, int y, int hp, int hpmax)
             ranklen--; /* Still doesn't fit, strip rank */
     }
     sprintf(buf, "%-*s the %-*s", namelen, plname, ranklen, rank);
-    draw_bar(TRUE, hp, hpmax, buf);
+    draw_bar(true, hp, hpmax, buf);
     wmove(win, y++, x);
     wprintw(win, "%s", dungeons[u.uz.dnum].dname);
 
@@ -791,12 +791,12 @@ draw_vertical(int x, int y, int hp, int hpmax)
     /* HP/Pw use special coloring rules */
     attr_t hpattr, pwattr;
 #ifdef STATUS_COLORS
-    hpattr = hpen_color_attr(TRUE, hp, hpmax);
-    pwattr = hpen_color_attr(FALSE, u.uen, u.uenmax);
+    hpattr = hpen_color_attr(true, hp, hpmax);
+    pwattr = hpen_color_attr(false, u.uen, u.uenmax);
 #else
     int hpcolor, pwcolor;
-    hpcolor = hpen_color(TRUE, hp, hpmax);
-    pwcolor = hpen_color(FALSE, u.uen, u.uenmax);
+    hpcolor = hpen_color(true, hp, hpmax);
+    pwcolor = hpen_color(false, u.uen, u.uenmax);
     hpattr = curses_color_attr(hpcolor, 0);
     pwattr = curses_color_attr(pwcolor, 0);
 #endif
@@ -841,7 +841,7 @@ draw_vertical(int x, int y, int hp, int hpmax)
     }
 #endif /* SCORE_ON_BOTL */
 
-    curses_add_statuses(win, FALSE, TRUE, &x, &y);
+    curses_add_statuses(win, false, true, &x, &y);
 }
 
 static void
@@ -886,10 +886,10 @@ static void
 curses_add_status(WINDOW *win, boolean align_right, boolean vertical,
                   int *x, int *y, const char *str, int trouble)
 {
-    /* If vertical is TRUE here with no x/y, that's an error. But handle
+    /* If vertical is true here with no x/y, that's an error. But handle
        it gracefully since NH3 doesn't recover well in crashes. */
     if (!x || !y)
-        vertical = FALSE;
+        vertical = false;
 
     if (!trouble)
         return;
@@ -917,7 +917,7 @@ curses_add_status(WINDOW *win, boolean align_right, boolean vertical,
     }
 }
 
-/* Decrement a single highlight, return 1 if decremented to zero. zero is TRUE if we're
+/* Decrement a single highlight, return 1 if decremented to zero. zero is true if we're
    zeroing the highlight. */
 static int
 decrement_highlight(nhstat *stat, boolean zero)

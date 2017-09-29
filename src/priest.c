@@ -37,7 +37,7 @@ xchar omx,omy,gx,gy;
 	if(omx == gx && omy == gy)
 		return(0);
 	if(mtmp->mconf) {
-		avoid = FALSE;
+		avoid = false;
 		appr = 0;
 	}
 
@@ -58,7 +58,7 @@ xchar omx,omy,gx,gy;
 	if(mtmp->isshk && avoid && uondoor) { /* perhaps we cannot avoid him */
 		for(i=0; i<cnt; i++)
 		    if(!(info[i] & NOTONL)) goto pick_move;
-		avoid = FALSE;
+		avoid = false;
 	}
 
 #define GDIST(x,y)	(dist2(x,y,gx,gy))
@@ -85,7 +85,7 @@ pick_move:
 			nix == omx && niy == omy && onlineu(omx,omy)) {
 		/* might as well move closer as long it's going to stay
 		 * lined up */
-		avoid = FALSE;
+		avoid = false;
 		goto pick_move;
 	}
 
@@ -94,7 +94,7 @@ pick_move:
 		place_monster(mtmp, nix, niy);
 		newsym(nix,niy);
 		if (mtmp->isshk && !in_his_shop && inhishop(mtmp))
-		    check_special_room(FALSE);
+		    check_special_room(false);
 		if(ib) {
 			if (cansee(mtmp->mx,mtmp->my))
 			    pline("%s picks up %s.", Monnam(mtmp),
@@ -136,7 +136,7 @@ pri_move (struct monst *priest)
 {
 	xchar gx,gy,omx,omy;
 	schar temple;
-	boolean avoid = TRUE;
+	boolean avoid = true;
 
 	omx = priest->mx;
 	omy = priest->my;
@@ -165,11 +165,11 @@ pri_move (struct monst *priest)
 				gx = u.ux;
 				gy = u.uy;
 			}
-			avoid = FALSE;
+			avoid = false;
 		}
-	} else if(Invis) avoid = FALSE;
+	} else if(Invis) avoid = false;
 
-	return(move_special(priest,FALSE,TRUE,FALSE,avoid,omx,omy,gx,gy));
+	return(move_special(priest,false,true,false,avoid,omx,omy,gx,gy));
 }
 
 /* exclusively for mktemple() */
@@ -185,7 +185,7 @@ boolean sanctum;   /* is it the seat of the high priest? */
 	int cnt;
 
 	if(MON_AT(sx+1, sy))
-		(void) rloc(m_at(sx+1, sy), FALSE); /* insurance */
+		(void) rloc(m_at(sx+1, sy), false); /* insurance */
 
 	priest = makemon(&mons[sanctum ? PM_HIGH_PRIEST : PM_ALIGNED_PRIEST],
 			 sx + 1, sy, NO_MM_FLAGS);
@@ -208,19 +208,19 @@ boolean sanctum;   /* is it the seat of the high priest? */
 		}
 		/* 2 to 4 spellbooks */
 		for (cnt = rn1(3,2); cnt > 0; --cnt) {
-		    (void) mpickobj(priest, mkobj(SPBOOK_CLASS, FALSE));
+		    (void) mpickobj(priest, mkobj(SPBOOK_CLASS, false));
 		}
 		/* [ALI] Upgrade existing robe or aquire new */
 		if (rn2(2) || (otmp = which_armor(priest, W_ARM)) == 0) {
 		    struct obj *obj;
 		    obj = mksobj(rn2(p_coaligned(priest) ? 2 : 5) ?
-			    ROBE_OF_PROTECTION : ROBE_OF_POWER, TRUE, FALSE);
+			    ROBE_OF_PROTECTION : ROBE_OF_POWER, true, false);
 		    if (p_coaligned(priest))
 			uncurse(obj);
 		    else
 			curse(obj);
 		    (void) mpickobj(priest, obj);
-		    m_dowear(priest, TRUE);
+		    m_dowear(priest, true);
 		    if (!(obj->owornmask & W_ARM)) {
 			obj_extract_self(obj);
 			obfree(obj, NULL);
@@ -301,10 +301,10 @@ struct monst *pri;
 	struct rm *lev;
 
 	if(!pri)
-		return(FALSE);
+		return(false);
 	lev = &levl[EPRI(pri)->shrpos.x][EPRI(pri)->shrpos.y];
 	if (!IS_ALTAR(lev->typ) || !(lev->altarmask & AM_SHRINE))
-		return(FALSE);
+		return(false);
 	return((boolean)(EPRI(pri)->shralign == Amask2align(lev->altarmask & ~AM_SHRINE)));
 }
 
@@ -469,7 +469,7 @@ priest_talk (struct monst *priest)
 #endif
 		} else
 		    pline("%s preaches the virtues of poverty.", Monnam(priest));
-		exercise(A_WIS, TRUE);
+		exercise(A_WIS, true);
 	    } else
 		pline("%s is not interested.", Monnam(priest));
 	    return;
@@ -490,7 +490,7 @@ priest_talk (struct monst *priest)
 		else {
 		    verbalize("I thank thee for thy contribution.");
 		    /*  give player some token  */
-		    exercise(A_WIS, TRUE);
+		    exercise(A_WIS, true);
 		}
 	    } else if(offer < (u.ulevel * 400)) {
 		verbalize("Thou art indeed a pious individual.");
@@ -544,16 +544,16 @@ boolean peaceful;
 	if (ptr != &mons[PM_ALIGNED_PRIEST] && ptr != &mons[PM_ANGEL])
 		return(NULL);
 
-	if (MON_AT(x, y)) (void) rloc(m_at(x, y), FALSE);	/* insurance */
+	if (MON_AT(x, y)) (void) rloc(m_at(x, y), false);	/* insurance */
 
 	if (!(roamer = makemon(ptr, x, y, NO_MM_FLAGS)))
 		return(NULL);
 
 	EPRI(roamer)->shralign = alignment;
 	if (coaligned && !peaceful)
-		EPRI(roamer)->renegade = TRUE;
-	/* roamer->ispriest == FALSE naturally */
-	roamer->isminion = TRUE;	/* borrowing this bit */
+		EPRI(roamer)->renegade = true;
+	/* roamer->ispriest == false naturally */
+	roamer->isminion = true;	/* borrowing this bit */
 	roamer->mtrapseen = ~0;		/* traps are known */
 	roamer->mpeaceful = peaceful;
 	roamer->msleeping = 0;
@@ -587,16 +587,16 @@ xchar x, y;
 	struct monst *priest;
 
 	if (mon) {
-	    if (is_minion(mon->data) || is_rider(mon->data)) return FALSE;
+	    if (is_minion(mon->data) || is_rider(mon->data)) return false;
 	    x = mon->mx, y = mon->my;
 	}
 	if (u.ualign.record <= ALGN_SINNED)	/* sinned or worse */
-	    return FALSE;
+	    return false;
 	if ((roomno = temple_occupied(u.urooms)) == 0 ||
 		roomno != *in_rooms(x, y, TEMPLE))
-	    return FALSE;
+	    return false;
 	if ((priest = findpriest(roomno)) == 0)
-	    return FALSE;
+	    return false;
 	return (boolean)(has_shrine(priest) &&
 			 p_coaligned(priest) &&
 			 priest->mpeaceful);
@@ -765,7 +765,7 @@ struct monst *priest;
 	}
 
 	buzz(-10-(AD_ELEC-1), 6, x, y, sgn(tbx), sgn(tby)); /* bolt of lightning */
-	exercise(A_WIS, FALSE);
+	exercise(A_WIS, false);
 }
 
 void

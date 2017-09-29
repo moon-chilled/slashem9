@@ -29,7 +29,7 @@ on_start()
 {
   if(!Qstat(first_start)) {
     qt_pager(QT_FIRSTTIME);
-    Qstat(first_start) = TRUE;
+    Qstat(first_start) = true;
   } else if((u.uz0.dnum != u.uz.dnum) || (u.uz0.dlevel < u.uz.dlevel)) {
     if(Qstat(not_ready) <= 2) qt_pager(QT_NEXTTIME);
     else	qt_pager(QT_OTHERTIME);
@@ -41,7 +41,7 @@ on_locate()
 {
   if(!Qstat(first_locate)) {
     qt_pager(QT_FIRSTLOCATE);
-    Qstat(first_locate) = TRUE;
+    Qstat(first_locate) = true;
   } else if(u.uz0.dlevel < u.uz.dlevel && !Qstat(killed_nemesis))
 	qt_pager(QT_NEXTLOCATE);
 }
@@ -76,7 +76,7 @@ void
 nemdead (void)
 {
 	if(!Qstat(killed_nemesis)) {
-	    Qstat(killed_nemesis) = TRUE;
+	    Qstat(killed_nemesis) = true;
 	    qt_pager(QT_KILLEDNEM);
 	}
 }
@@ -85,9 +85,9 @@ void
 artitouch (void)
 {
 	if(!Qstat(touched_artifact)) {
-	    Qstat(touched_artifact) = TRUE;
+	    Qstat(touched_artifact) = true;
 	    qt_pager(QT_GOTIT);
-	    exercise(A_WIS, TRUE);
+	    exercise(A_WIS, true);
 	}
 }
 
@@ -96,7 +96,7 @@ boolean
 ok_to_quest()
 {
 	return((boolean)((Qstat(got_quest) || Qstat(got_thanks)))
-			&& (is_pure(FALSE) > 0));
+			&& (is_pure(false) > 0));
 }
 
 static boolean
@@ -153,7 +153,7 @@ boolean seal;
     dest = (br->end1.dnum == u.uz.dnum) ? &br->end2 : &br->end1;
     portal_flag = u.uevent.qexpelled ? 0 :	/* returned via artifact? */
 		  !seal ? 1 : -1;
-    schedule_goto(dest, FALSE, FALSE, portal_flag, NULL, NULL);
+    schedule_goto(dest, false, false, portal_flag, NULL, NULL);
     if (seal) {	/* remove the portal to the quest - sealing it off */
 	int reexpelled = u.uevent.qexpelled;
 	u.uevent.qexpelled = 1;
@@ -192,7 +192,7 @@ finish_quest (
 	    if ((otmp = carrying(BELL_OF_OPENING)) == 0)
 		com_pager(5);
 	}
-	Qstat(got_thanks) = TRUE;
+	Qstat(got_thanks) = true;
 
 	if (obj) {
 	    u.uevent.qcompleted = 1;	/* you did it! */
@@ -208,7 +208,7 @@ chat_with_leader()
 {
 /*	Rule 0:	Cheater checks.					*/
 	if(u.uhave.questart && !Qstat(met_nemesis))
-	    Qstat(cheater) = TRUE;
+	    Qstat(cheater) = true;
 
 /*	It is possible for you to get the amulet without completing
  *	the quest.  If so, try to induce the player to quest.
@@ -238,7 +238,7 @@ chat_with_leader()
 	} else {
 	  if(!Qstat(met_leader)) {
 	    qt_pager(QT_FIRSTLEADER);
-	    Qstat(met_leader) = TRUE;
+	    Qstat(met_leader) = true;
 	    Qstat(not_ready) = 0;
 	  } else qt_pager(QT_NEXTLEADER);
 	  /* the quest leader might have passed through the portal into
@@ -247,25 +247,25 @@ chat_with_leader()
 
 	  if(not_capable()) {
 	    qt_pager(QT_BADLEVEL);
-	    exercise(A_WIS, TRUE);
-	    expulsion(FALSE);
-	  } else if(is_pure(TRUE) < 0) {
+	    exercise(A_WIS, true);
+	    expulsion(false);
+	  } else if(is_pure(true) < 0) {
 	    com_pager(QT_BANISHED);
-	    expulsion(TRUE);
-	  } else if(is_pure(TRUE) == 0) {
+	    expulsion(true);
+	  } else if(is_pure(true) == 0) {
 	    qt_pager(QT_BADALIGN);
 	    if(Qstat(not_ready) == MAX_QUEST_TRIES) {
 	      qt_pager(QT_LASTLEADER);
-	      expulsion(TRUE);
+	      expulsion(true);
 	    } else {
 	      Qstat(not_ready)++;
-	      exercise(A_WIS, TRUE);
-	      expulsion(FALSE);
+	      exercise(A_WIS, true);
+	      expulsion(false);
 	    }
 	  } else {	/* You are worthy! */
 	    qt_pager(QT_ASSIGNQUEST);
-	    exercise(A_WIS, TRUE);
-	    Qstat(got_quest) = TRUE;
+	    exercise(A_WIS, true);
+	    Qstat(got_quest) = true;
 	  }
 	}
 }
@@ -275,7 +275,7 @@ leader_speaks (struct monst *mtmp)
 {
 	/* maybe you attacked leader? */
 	if(!mtmp->mpeaceful) {
-		Qstat(pissed_off) = TRUE;
+		Qstat(pissed_off) = true;
 		mtmp->mstrategy &= ~STRAT_WAITMASK;	/* end the inaction */
 	}
 	/* the quest leader might have passed through the portal into the
@@ -284,7 +284,7 @@ leader_speaks (struct monst *mtmp)
 
 	if(Qstat(pissed_off)) {
 	  qt_pager(QT_LASTLEADER);
-	  expulsion(TRUE);
+	  expulsion(true);
 	} else chat_with_leader();
 }
 
@@ -307,7 +307,7 @@ nemesis_speaks (void)
 	  else if(Qstat(made_goal) < 7) qt_pager(QT_OTHERNEMESIS);
 	  else if(!rn2(5))	qt_pager(rn1(10, QT_DISCOURAGE));
 	  if(Qstat(made_goal) < 7) Qstat(made_goal)++;
-	  Qstat(met_nemesis) = TRUE;
+	  Qstat(met_nemesis) = true;
 	} else /* he will spit out random maledictions */
 	  if(!rn2(5))	qt_pager(rn1(10, QT_DISCOURAGE));
 }
@@ -339,7 +339,7 @@ prisoner_speaks (mtmp)
 	    adjalign(3);
 
 		/* ...But the guards are not */
-	    (void) angry_guards(FALSE);
+	    (void) angry_guards(false);
 	}
 	return;
 }

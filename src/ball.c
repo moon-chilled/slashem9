@@ -19,13 +19,13 @@ void ballfall(void) {
 	boolean gets_hit;
 
 	gets_hit = (((uball->ox != u.ux) || (uball->oy != u.uy)) &&
-		    ((uwep == uball)? FALSE : (boolean)rn2(5)));
+		    ((uwep == uball)? false : (boolean)rn2(5)));
 	if (carried(uball)) {
 		pline("Startled, you drop the iron ball.");
 		if (uwep == uball)
-			setuwep(NULL, FALSE);
+			setuwep(NULL, false);
 		if (uswapwep == uball)
-			setuswapwep(NULL, FALSE);
+			setuswapwep(NULL, false);
 		if (uquiver == uball)
 			setuqwep(NULL);;
 		if (uwep != uball)
@@ -334,7 +334,7 @@ void move_bc(int before, int control, xchar ballx, xchar bally, xchar chainx, xc
     }
 }
 
-/* return TRUE if the caller needs to place the ball and chain down again
+/* return true if the caller needs to place the ball and chain down again
  *
  *  Should not be called while swallowed.  Should be called before movement,
  *  because we might want to move the ball or chain to the hero's old position.
@@ -356,11 +356,11 @@ boolean drag_ball(xchar x, xchar y, int *bc_control, xchar *ballx, xchar *bally,
 	*chainx = uchain->ox;
 	*chainy = uchain->oy;
 	*bc_control = 0;
-	*cause_delay = FALSE;
+	*cause_delay = false;
 
 	if (dist2(x, y, uchain->ox, uchain->oy) <= 2) {	/* nothing moved */
 	    move_bc(1, *bc_control, *ballx, *bally, *chainx, *chainy);
-	    return TRUE;
+	    return true;
 	}
 
 	/* only need to move the chain? */
@@ -374,7 +374,7 @@ boolean drag_ball(xchar x, xchar y, int *bc_control, xchar *ballx, xchar *bally,
 		    *chainx = u.ux;
 		    *chainy = u.uy;
 		}
-		return TRUE;
+		return true;
 	    }
 #define CHAIN_IN_MIDDLE(chx, chy) \
 (distmin(x, y, chx, chy) <= 1 && distmin(chx, chy, uball->ox, uball->oy) <= 1)
@@ -392,9 +392,9 @@ boolean drag_ball(xchar x, xchar y, int *bc_control, xchar *ballx, xchar *bally,
     goto drag; }
 	    if (IS_CHAIN_ROCK(u.ux, u.uy) || IS_CHAIN_ROCK(*chainx, *chainy)
 			|| IS_CHAIN_ROCK(uball->ox, uball->oy))
-		already_in_rock = TRUE;
+		already_in_rock = true;
 	    else
-		already_in_rock = FALSE;
+		already_in_rock = false;
 
 	    switch(dist2(x, y, uball->ox, uball->oy)) {
 		/* two spaces diagonal from ball, move chain inbetween */
@@ -532,7 +532,7 @@ boolean drag_ball(xchar x, xchar y, int *bc_control, xchar *ballx, xchar *bally,
 #undef SKIP_TO_DRAG
 #undef IS_CHAIN_ROCK
 #undef CHAIN_IN_MIDDLE
-	    return TRUE;
+	    return true;
 	}
 
 drag:
@@ -541,7 +541,7 @@ drag:
 	    You("cannot %sdrag the heavy iron ball.",
 			    invent ? "carry all that and also " : "");
 	    nomul(0);
-	    return FALSE;
+	    return false;
 	}
 
 	if ((is_pool(uchain->ox, uchain->oy) &&
@@ -566,7 +566,7 @@ drag:
 		    int tmp;
 
 		    tmp = -2 + Luck + find_mac(victim);
-		    tmp += omon_adj(victim, uball, TRUE);
+		    tmp += omon_adj(victim, uball, true);
 		    if (tmp >= rnd(20))
 			(void) hmon(victim,uball,3);
 		    else
@@ -585,8 +585,8 @@ drag:
 		*ballx = uchain->ox;
 		*bally = uchain->oy;
 		move_bc(0, *bc_control, *ballx, *bally, *chainx, *chainy);
-		spoteffects(TRUE);
-		return FALSE;
+		spoteffects(true);
+		return false;
 	    }
 	}
 
@@ -609,8 +609,8 @@ drag:
 	    *chainx = u.ux;
 	    *chainy = u.uy;
 	}
-	*cause_delay = TRUE;
-	return TRUE;
+	*cause_delay = true;
+	return true;
 }
 
 /*
@@ -696,7 +696,7 @@ void drop_ball(xchar x, xchar y) {
 	}
 	newsym(u.ux0,u.uy0);		/* clean up old position */
 	if (u.ux0 != u.ux || u.uy0 != u.uy) {
-	    spoteffects(TRUE);
+	    spoteffects(true);
 	    if (In_sokoban(&u.uz))
 		change_luck(-1);	/* Sokoban guilt */
 	}
@@ -750,14 +750,14 @@ void drag_down(void) {
 		if(rn2(2)) {
 			pline_The("iron ball smacks into you!");
 			losehp(rnd(20), "iron ball collision", KILLED_BY_AN);
-			exercise(A_STR, FALSE);
+			exercise(A_STR, false);
 			dragchance -= 2;
 		}
 		if( (int) dragchance >= rnd(6)) {
 			pline_The("iron ball drags you downstairs!");
 			losehp(rnd(3), "dragged downstairs by an iron ball",
 				NO_KILLER_PREFIX);
-			exercise(A_STR, FALSE);
+			exercise(A_STR, false);
 			litter();
 		}
 	}

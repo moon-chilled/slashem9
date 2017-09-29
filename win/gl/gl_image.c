@@ -226,9 +226,9 @@ void sdlgl_load_face_dirs(const char *filename, char *face_dirs)
   int ch;
 
 #ifdef FILE_AREAS
-  fp = fopen_datafile_area(FILE_AREA_SHARE, filename, RDTMODE, FALSE);
+  fp = fopen_datafile_area(FILE_AREA_SHARE, filename, RDTMODE, false);
 #else
-  fp = fopen_datafile(filename, RDTMODE, FALSE);
+  fp = fopen_datafile(filename, RDTMODE, false);
 #endif
   if (!fp)
   {
@@ -450,9 +450,9 @@ unsigned char *sdlgl_load_png_file(const char *filename,
 
   /* open the prospective PNG file */
 #ifdef FILE_AREAS
-  fp = fopen_datafile_area(FILE_AREA_SHARE, filename, RDBMODE, FALSE);
+  fp = fopen_datafile_area(FILE_AREA_SHARE, filename, RDBMODE, false);
 #else
-  fp = fopen_datafile(filename, RDBMODE, FALSE);
+  fp = fopen_datafile(filename, RDBMODE, false);
 #endif
   if (!fp)
   {

@@ -105,7 +105,7 @@ char **argv;
     extern struct wc_Opt wc_options[];
     if (nhproxy_proc_init_nhwindows(argcp, argv))
     {
-	iflags.window_inited = TRUE;
+	iflags.window_inited = true;
 	nhproxy_serv_get_capabilities(&capc, &capv);
 	for(i = 0; i < capc; i++)
 	    for(j = 0; wc_options[j].wc_name; j++)
@@ -153,7 +153,7 @@ winid window;
     mapid_del_winid(window);
 }
 
-int proxy_curs_on_u = FALSE;
+int proxy_curs_on_u = false;
 
 void
 proxy_curs(window, x, y)

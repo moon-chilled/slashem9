@@ -245,7 +245,7 @@ create_tty (WindowRef *window, short resource_id, Boolean in_color)
 	SetWRefCon (*window, (long) record);
 	record->was_allocated = was_allocated;
 	record->its_bits.baseAddr = NULL;
-	record->curs_state = TRUE;
+	record->curs_state = true;
 
 /*
  * We need to keep the window world around if we switch worlds

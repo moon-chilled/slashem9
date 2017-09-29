@@ -291,7 +291,7 @@ main(argc, argv)
 	char buf[BUFSIZ];
 	int fd, out, nfiles = 0;
 	long dir_size, slen, flen, fsiz;
-	boolean rewrite_directory = FALSE;
+	boolean rewrite_directory = false;
 
 	/*
 	 * Get names from either/both an argv list and a file
@@ -395,7 +395,7 @@ main(argc, argv)
 		fsiz += r;
 	    }
 	    (void) close(fd);
-	    if (fsiz != ld[i].fsize) rewrite_directory = TRUE;
+	    if (fsiz != ld[i].fsize) rewrite_directory = true;
 	    /* in case directory rewrite is needed */
 	    ld[i].fsize = fsiz;
 	    ld[i].foffset = flen;

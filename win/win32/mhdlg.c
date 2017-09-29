@@ -101,7 +101,7 @@ BOOL CALLBACK GetlinDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 					(main_rt.top+main_rt.bottom-dlg_sz.cy)/2,
 					dlg_sz.cx,
 					dlg_sz.cy,
-					TRUE );
+					true );
 
 		/* set focus and size of the edit control */
 		ControlHWND = GetDlgItem(hWnd, IDC_GETLIN_EDIT);
@@ -110,7 +110,7 @@ BOOL CALLBACK GetlinDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		GetWindowRect (ControlHWND, &ControlRect);
 		MoveWindow (ControlHWND, 0, 0,
 			ClientRect.right - ClientRect.left,
-			ControlRect.bottom - ControlRect.top, TRUE);
+			ControlRect.bottom - ControlRect.top, true);
 		ButtonOffset = ControlRect.bottom - ControlRect.top;
 
 		/* Now get the OK and CANCEL buttons */
@@ -121,16 +121,16 @@ BOOL CALLBACK GetlinDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		MoveWindow (ControlHWND, Division,
 			ButtonOffset,
 			ControlRect.right - ControlRect.left,
-			ControlRect.bottom - ControlRect.top, TRUE);
+			ControlRect.bottom - ControlRect.top, true);
 		ControlHWND = GetDlgItem(hWnd, IDCANCEL);
 		MoveWindow (ControlHWND,
 			Division * 2 + ControlRect.right - ControlRect.left,
 			ButtonOffset,
 			ControlRect.right - ControlRect.left,
-			ControlRect.bottom - ControlRect.top, TRUE);
+			ControlRect.bottom - ControlRect.top, true);
 
 		/* tell windows that we've set the focus */
-		return FALSE;
+		return false;
 	break;
 
 	case WM_COMMAND:
@@ -150,12 +150,12 @@ BOOL CALLBACK GetlinDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 			/* cancel button was pressed */
 			case IDCANCEL:
 				EndDialog(hWnd, wParam);
-			return TRUE;
+			return true;
 		}
 	} break;
 
 	} /* end switch (message) */
-	return FALSE;
+	return false;
 }
 
 
@@ -219,7 +219,7 @@ BOOL CALLBACK ExtCmdDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 					(main_rt.top+main_rt.bottom-dlg_sz.cy)/2,
 					dlg_sz.cx,
 					dlg_sz.cy,
-					TRUE );
+					true );
 
 		/* fill combobox with extended commands */
 		for(i=0; (ptr=extcmdlist[i].ef_txt); i++) {
@@ -230,7 +230,7 @@ BOOL CALLBACK ExtCmdDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		SetFocus(GetDlgItem(hWnd, IDC_EXTCMD_LIST));
 
 		/* tell windows we set the focus */
-		return FALSE;
+		return false;
 	break;
 
 	case WM_COMMAND:
@@ -247,7 +247,7 @@ BOOL CALLBACK ExtCmdDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		  /* CANCEL button ws clicked */
 		  case IDCANCEL:
 				EndDialog(hWnd, wParam);
-		  return TRUE;
+		  return true;
 
 		  /* list control events */
 		  case IDC_EXTCMD_LIST:
@@ -265,12 +265,12 @@ BOOL CALLBACK ExtCmdDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 				   if( *data->selection==LB_ERR )
 					   *data->selection = -1;
 				   EndDialog(hWnd, IDOK);
-		   	       return TRUE;
+		   	       return true;
 				}
 		  break;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 /*---------------------------------------------------------------*/
@@ -334,7 +334,7 @@ BOOL CALLBACK PlayerSelectorDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 					(main_rt.top+main_rt.bottom-dlg_sz.cy)/2,
 					dlg_sz.cx,
 					dlg_sz.cy,
-					TRUE );
+					true );
 
 		/* init dialog */
 		plselInitDialog(hWnd);
@@ -343,7 +343,7 @@ BOOL CALLBACK PlayerSelectorDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		SetFocus(GetDlgItem(hWnd, IDC_PLSEL_ROLE_RANDOM));
 
 		/* tell windows we set the focus */
-		return FALSE;
+		return false;
 	break;
 
 	case WM_COMMAND:
@@ -357,13 +357,13 @@ BOOL CALLBACK PlayerSelectorDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 			} else {
 				NHMessageBox(hWnd, TEXT("Cannot match this role. Try something else."), MB_ICONSTOP | MB_OK );
 			}
-		return TRUE;
+		return true;
 
 		/* CANCEL button was clicked */
 		case IDCANCEL:
 			*data->selection = -1;
 			EndDialog(hWnd, wParam);
-		return TRUE;
+		return true;
 
 		/* following are events from dialog controls:
 		   "random" checkboxes send BN_CLICKED messages;
@@ -444,7 +444,7 @@ BOOL CALLBACK PlayerSelectorDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		}
 	break;
 	}
-	return FALSE;
+	return false;
 }
 
 void setComboBoxValue(HWND hWnd, int combo_box, int value)
@@ -490,40 +490,40 @@ void plselInitDialog(HWND hWnd)
 	/* intialize roles list */
 	if( flags.initrole<0 || !ok_role(flags.initrole, ROLE_NONE, ROLE_NONE, ROLE_NONE)) {
 		CheckDlgButton(hWnd, IDC_PLSEL_ROLE_RANDOM, BST_CHECKED);
-		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_ROLE_LIST), FALSE);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_ROLE_LIST), false);
 	} else {
 		CheckDlgButton(hWnd, IDC_PLSEL_ROLE_RANDOM, BST_UNCHECKED);
-		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_ROLE_LIST), TRUE);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_ROLE_LIST), true);
 		setComboBoxValue(hWnd, IDC_PLSEL_ROLE_LIST, flags.initrole);
 	}
 
 	/* intialize races list */
 	if( flags.initrace<0 || !ok_race(flags.initrole, flags.initrace, ROLE_NONE, ROLE_NONE) ) {
 		CheckDlgButton(hWnd, IDC_PLSEL_RACE_RANDOM, BST_CHECKED);
-		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_RACE_LIST), FALSE);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_RACE_LIST), false);
 	} else {
 		CheckDlgButton(hWnd, IDC_PLSEL_RACE_RANDOM, BST_UNCHECKED);
-		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_RACE_LIST), TRUE);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_RACE_LIST), true);
 		setComboBoxValue(hWnd, IDC_PLSEL_RACE_LIST, flags.initrace);
 	}
 
 	/* intialize genders list */
 	if( flags.initgend<0 || !ok_gend(flags.initrole, flags.initrace, flags.initgend, ROLE_NONE)) {
 		CheckDlgButton(hWnd, IDC_PLSEL_GENDER_RANDOM, BST_CHECKED);
-		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_GENDER_LIST), FALSE);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_GENDER_LIST), false);
 	} else {
 		CheckDlgButton(hWnd, IDC_PLSEL_GENDER_RANDOM, BST_UNCHECKED);
-		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_GENDER_LIST), TRUE);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_GENDER_LIST), true);
 		setComboBoxValue(hWnd, IDC_PLSEL_GENDER_LIST, flags.initgend);
 	}
 
 	/* intialize alignments list */
 	if( flags.initalign<0 || !ok_align(flags.initrole, flags.initrace, flags.initgend, flags.initalign) ) {
 		CheckDlgButton(hWnd, IDC_PLSEL_ALIGN_RANDOM, BST_CHECKED);
-		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_ALIGN_LIST), FALSE);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_ALIGN_LIST), false);
 	} else {
 		CheckDlgButton(hWnd, IDC_PLSEL_ALIGN_RANDOM, BST_UNCHECKED);
-		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_ALIGN_LIST), TRUE);
+		EnableWindow(GetDlgItem(hWnd, IDC_PLSEL_ALIGN_LIST), true);
 		setComboBoxValue(hWnd, IDC_PLSEL_ALIGN_LIST, flags.initalign);
 	}
 }
@@ -678,7 +678,7 @@ int	plselFinalSelection(HWND hWnd, int* selection)
 		flags.initrole = pick_role(flags.initrace, flags.initgend, flags.initalign, PICK_RANDOM);
 		if (flags.initrole < 0) {
 			NHMessageBox(hWnd, TEXT("Incompatible role!"), MB_ICONSTOP | MB_OK);
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -692,7 +692,7 @@ int	plselFinalSelection(HWND hWnd, int* selection)
 
 		if (flags.initrace < 0) {
 			NHMessageBox(hWnd, TEXT("Incompatible race!"), MB_ICONSTOP | MB_OK);
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -708,7 +708,7 @@ int	plselFinalSelection(HWND hWnd, int* selection)
 
 		if (flags.initgend < 0) {
 			NHMessageBox(hWnd, TEXT("Incompatible gender!"), MB_ICONSTOP | MB_OK);
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -721,9 +721,9 @@ int	plselFinalSelection(HWND hWnd, int* selection)
 			flags.initalign = pick_align(flags.initrole, flags.initrace, flags.initgend, PICK_RANDOM);
 		} else {
 			NHMessageBox(hWnd, TEXT("Incompatible alignment!"), MB_ICONSTOP | MB_OK);
-			return FALSE;
+			return false;
 		}
 	}
 
-	return TRUE;
+	return true;
 }

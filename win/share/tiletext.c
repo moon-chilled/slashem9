@@ -164,7 +164,7 @@ FILE *txtfile;
 	num_colors = colorsinmainmap;
 	if (num_colors > MAXCOLORMAPSIZE) {
 		fprintf(stderr, "too many colors (%d)\n", num_colors);
-		return FALSE;
+		return false;
 	}
 	for (i = 0; i < num_colors; i++) {
 		if (num_colors > 62)
@@ -181,7 +181,7 @@ FILE *txtfile;
 						(int)MainColorMap[CM_GREEN][i],
 						(int)MainColorMap[CM_BLUE][i]);
 	}
-	return TRUE;
+	return true;
 }
 
 static boolean
@@ -212,24 +212,24 @@ char name[BUFSZ];
 	char c[3];
 
 	if (fscanf(txtfile, "# %s %d (%[^)])", ttype, number, name) <= 0) {
-		return FALSE;
+		return false;
 	}
 
 	/* look for non-whitespace at each stage */
 	if (fscanf(txtfile, "%1s", c) < 0) {
 		fprintf(stderr, "unexpected EOF\n");
-		return FALSE;
+		return false;
 	}
 	if (c[0] != '{') {
 		fprintf(stderr, "didn't find expected '{'\n");
-		return FALSE;
+		return false;
 	}
 	fmt_string = colorsinmap > 64 ? "%2s" : "%1s";
 	for (j = 0; j < tile_y; j++) {
 		for (i = 0; i < tile_x; i++) {
 			if (fscanf(txtfile, fmt_string, c) < 0) {
 				fprintf(stderr, "unexpected EOF\n");
-				return FALSE;
+				return false;
 			}
 			if (c[1])
 				n=char2bysx(c[0]) * 64 + char2bysx(c[1]);
@@ -252,13 +252,13 @@ char name[BUFSZ];
 	}
 	if (fscanf(txtfile, "%1s ", c) < 0) {
 		fprintf(stderr, "unexpected EOF\n");
-		return FALSE;
+		return false;
 	}
 	if (c[0] != '}') {
 		fprintf(stderr, "didn't find expected '}'\n");
-		return FALSE;
+		return false;
 	}
-	return TRUE;
+	return true;
 }
 
 static boolean
@@ -272,7 +272,7 @@ pixel (*pixels)[MAX_TILE_X];
 	char buf[BUFSZ], ttype[BUFSZ];
 
 	if (!read_txttile_info(txtfile, pixels, ttype, &i, buf))
-		return FALSE;
+		return false;
 
 	ph = strcmp(ttype, "placeholder") == 0;
 
@@ -300,7 +300,7 @@ pixel (*pixels)[MAX_TILE_X];
 	    /* remember it for later */
 	    memcpy( placeholder, pixels, sizeof(placeholder) );
 	}
-	return TRUE;
+	return true;
 }
 
 static void
@@ -477,16 +477,16 @@ FILE *txtfile;
 
 	if (fscanf(txtfile, "# %*s %*d (%*[^)]%c",c) <= 0 || c[0] != ')') {
 		fprintf(stderr, "no tiles in file\n");
-		return FALSE;
+		return false;
 	}
 
 	if (fscanf(txtfile, "%1s", c) < 0) {
 		fprintf(stderr, "unexpected EOF\n");
-		return FALSE;
+		return false;
 	}
 	if (c[0] != '{') {
 		fprintf(stderr, "didn't find expected '{'\n");
-		return FALSE;
+		return false;
 	}
 	do
 		ch = getc(txtfile);
@@ -505,14 +505,14 @@ FILE *txtfile;
 			break;
 		if (ch != '\n' && ch != '\r') {
 			fprintf(stderr, "unexpected character %c\n",ch);
-			return FALSE;
+			return false;
 		}
 		else
 			ch = getc(txtfile);
 		if (colorsinmap > 64) {
 			if (i & 1) {
 				fprintf(stderr, "half a pixel?\n");
-				return FALSE;
+				return false;
 			}
 			i /= 2;
 		}
@@ -522,7 +522,7 @@ FILE *txtfile;
 		{
 			fprintf(stderr, "tile width mismatch %d != %d\n",
 			  tile_x, i);
-			return FALSE;
+			return false;
 		}
 	}
 	if (tile_y < 0)
@@ -531,10 +531,10 @@ FILE *txtfile;
 	{
 		fprintf(stderr, "tile height mismatch %d != %d\n",
 		  tile_y, j);
-		return FALSE;
+		return false;
 	}
 	fseek(txtfile, pos, SEEK_SET);
-	return TRUE;
+	return true;
 }
 
 boolean
@@ -546,11 +546,11 @@ const char *filename;
 	fp = fopen(filename, RDTMODE);
 	if (fp == NULL) {
 		fprintf(stderr, "cannot open text file %s\n", filename);
-		return FALSE;
+		return false;
 	}
 	read_text_colormap(fp);
 	fclose(fp);
-	return TRUE;
+	return true;
 }
 
 boolean
@@ -564,29 +564,29 @@ const char *type;
 	FILE *fp;
 
 	if (!strcmp(type, RDTMODE))
-		write_mode = FALSE;
+		write_mode = false;
 	else if (!strcmp(type, WRTMODE)) {
 		/* Seems like Mingw32's fscanf is confused by the CR/LF issue */
 		/* Force text output in this case only */
 #ifdef WIN32
 		type = "w+";
 #endif
-		write_mode = TRUE;
+		write_mode = true;
 
 	} else {
 		fprintf(stderr, "bad mode (%s) for fopen_text_file\n", type);
-		return FALSE;
+		return false;
 	}
 
 	if ((write_mode ? out_file : in_file) != NULL) {
 		fprintf(stderr, "can only open one text file at at time\n");
-		return FALSE;
+		return false;
 	}
 
 	fp = fopen(filename, type);
 	if (fp == NULL) {
 		fprintf(stderr, "cannot open text file %s\n", filename);
-		return FALSE;
+		return false;
 	}
 
 	p = rindex(filename, '/');
@@ -604,7 +604,7 @@ const char *type;
 
 		read_text_colormap(in_file);
 		if (!set_tile_size(in_file))
-			return FALSE;
+			return false;
 		if (!colorsinmainmap)
 			init_colormap();
 		else
@@ -613,14 +613,14 @@ const char *type;
 		out_file = fp;
 		if (!colorsinmainmap) {
 			fprintf(stderr, "no colormap set yet\n");
-			return FALSE;
+			return false;
 		}
 		if (tile_x < 0 || tile_y < 0) {
 			fprintf(stderr, "no tile size set yet\n");
-			return FALSE;
+			return false;
 		}
 		if (!write_text_colormap(out_file))
-			return FALSE;
+			return false;
 	}
 
 	tile_set = 0;
@@ -630,7 +630,7 @@ const char *type;
 	}
 	tile_set_indx = 0;
 
-	return TRUE;
+	return true;
 }
 
 boolean
@@ -667,7 +667,7 @@ int number;
 const char *name;
 {
 	write_txttile_info(out_file, pixels, ttype, number, name);
-	return TRUE;
+	return true;
 }
 
 boolean
@@ -675,13 +675,13 @@ write_text_tile(pixels)
 pixel (*pixels)[MAX_TILE_X];
 {
 	write_txttile(out_file, pixels);
-	return TRUE;
+	return true;
 }
 
 boolean
 fclose_text_file()
 {
-	boolean ret = FALSE;
+	boolean ret = false;
 	if (in_file)
 	{
 		ret |= !!fclose(in_file);

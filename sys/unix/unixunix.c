@@ -533,11 +533,11 @@ const char *filename, *lockname;
 	if (errno == EXDEV)
 	    return (lockfd = open(lockname, O_RDWR|O_CREAT|O_EXCL, 0666)) != -1;
 	else
-	    return FALSE;
+	    return false;
     else
     {
 	lockfd=-1;
-	return TRUE;
+	return true;
     }
 # endif
 }
@@ -553,14 +553,14 @@ lock_file_area(filearea, filename, retryct)
 const char *filearea, *filename;
 int retryct;
 {
-	int retval=TRUE;
+	int retval=true;
 	char *lockname, locknambuf[BUFSZ];
 	char *buf;
 
 	nesting++;
 	if (nesting > 1) {
 	    impossible("TRIED TO NEST LOCKS");
-	    return TRUE;
+	    return true;
 	}
 
 	buf = make_file_name(filearea, filename);
@@ -584,25 +584,25 @@ int retryct;
 		    HUP raw_printf("Perhaps there is an old %s around?",
 					lockname);
 		    nesting--;
-		    retval = FALSE;
+		    retval = false;
 		}
 
 		break;
 	    case ENOENT:
 		HUP raw_printf("Can't find file %s to lock!", filename);
 		nesting--;
-		retval = FALSE;
+		retval = false;
 	    case EACCES:
 		HUP raw_printf("No write permission to lock %s!", filename);
 		nesting--;
-		retval = FALSE;
+		retval = false;
 	    default:
 		HUP perror(lockname);
 		HUP raw_printf(
 			     "Cannot lock %s for unknown reason (%d).",
 			       filename, errnosv);
 		nesting--;
-		retval = FALSE;
+		retval = false;
 	    }
 
 	}

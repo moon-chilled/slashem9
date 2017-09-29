@@ -65,7 +65,7 @@ INPUT_RECORD ir;
  * because we shouldn't call tty_ routines unless the tty interface is active
  * (nttty_open() is called by the tty interface initialization routine).
  */
-static int TTYInitialized = FALSE;
+static int TTYInitialized = false;
 
 /* [ALI] Flag for whether hConIn is actually a console */
 static DWORD cmode;
@@ -81,7 +81,7 @@ int GUILaunched;
 static BOOL CtrlHandler(DWORD);
 
 #ifdef PORT_DEBUG
-static boolean display_cursor_info = FALSE;
+static boolean display_cursor_info = false;
 #endif
 
 extern boolean getreturn_enabled;	/* from sys/share/pcsys.c */
@@ -164,7 +164,7 @@ gettty()
 #endif
 	erase_char = '\b';
 	kill_char = 21;		/* cntl-U */
-	iflags.cbreak = TRUE;
+	iflags.cbreak = true;
 #ifdef TEXTCOLOR
 	init_ttycolor();
 #else
@@ -247,7 +247,7 @@ DWORD ctrltype;
 		case CTRL_CLOSE_EVENT:
 		case CTRL_LOGOFF_EVENT:
 		case CTRL_SHUTDOWN_EVENT:
-			getreturn_enabled = FALSE;
+			getreturn_enabled = false;
 #ifndef NOSAVEONHANGUP
 			hangup(0);
 #endif
@@ -256,7 +256,7 @@ DWORD ctrltype;
 			terminate(EXIT_FAILURE);
 #endif
 		default:
-			return FALSE;
+			return false;
 	}
 }
 
@@ -374,7 +374,7 @@ nttty_open()
 	if (!SetConsoleMode(hConIn,cmode))
 		/* Unable to set control mode */
 		cmode = 0;
-	if (!SetConsoleCtrlHandler((PHANDLER_ROUTINE)CtrlHandler, TRUE))
+	if (!SetConsoleCtrlHandler((PHANDLER_ROUTINE)CtrlHandler, true))
 		/* Unable to set control handler */
 		cmode = 0;
 	if (cmode) {
@@ -387,7 +387,7 @@ nttty_open()
 	get_scr_size();
 	cursor.X = cursor.Y = 0;
 	really_move_cursor();
-	TTYInitialized = TRUE;
+	TTYInitialized = true;
 }
 
 int process_keystroke(ir, valid, numberpad, portdebug)

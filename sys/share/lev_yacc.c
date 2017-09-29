@@ -1291,13 +1291,13 @@ case 10:
 			   explicitly clear any stale settings */
 			(void) memset((void *) &init_lev, 0,
 					sizeof init_lev);
-			init_lev.init_present = FALSE;
+			init_lev.init_present = false;
 			yyval.i = 0;
 		  }
 break;
 case 11:
 {
-			init_lev.init_present = TRUE;
+			init_lev.init_present = true;
 			init_lev.fg = what_map_char((char) yyvsp[-10].i);
 			if (init_lev.fg == INVALID_TYPE)
 			    yyerror("Invalid foreground type.");

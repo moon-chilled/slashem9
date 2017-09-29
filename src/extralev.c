@@ -92,7 +92,7 @@ static void roguecorr(int x, int y, int dir) {
 			levl[tox][toy].doormask = D_NODOOR;
 			toy--;
 		}
-		roguejoin(fromx, fromy, tox, toy, FALSE);
+		roguejoin(fromx, fromy, tox, toy, false);
 		return;
 	} else if (dir == RIGHT) {
 		r[x][y].doortable &= ~RIGHT;
@@ -129,7 +129,7 @@ static void roguecorr(int x, int y, int dir) {
 			levl[tox][toy].doormask = D_NODOOR;
 			tox--;
 		}
-		roguejoin(fromx, fromy, tox, toy, TRUE);
+		roguejoin(fromx, fromy, tox, toy, true);
 		return;
 	} else impossible("corridor in direction %d?",dir);
 }
@@ -210,11 +210,11 @@ void makeroguerooms(void) {
 			/* Arbitrary: dummy rooms may only go where real
 			 * ones do.
 			 */
-			here.real = FALSE;
+			here.real = false;
 			here.rlx = rn1(22, 2);
 			here.rly = rn1((y==2)?4:3, 2);
 		} else {
-			here.real = TRUE;
+			here.real = true;
 			here.dx = rn1(22, 2); /* 2-23 long, plus walls */
 			here.dy = rn1((y==2)?4:3, 2); /* 2-5 high, plus walls */
 
@@ -243,7 +243,7 @@ void makeroguerooms(void) {
 			 * encountered below level 10, use !rn2(7).
 			 */
 			add_room(lowx, lowy, hix, hiy,
-				 (boolean) !rn2(7), OROOM, FALSE);
+				 (boolean) !rn2(7), OROOM, false);
 		}
 	}
 
@@ -283,43 +283,43 @@ void makerogueghost(void) {
 	ghost = christen_monst(ghost, roguename());
 
 	if (rn2(4)) {
-		ghostobj = mksobj_at(FOOD_RATION, x, y, FALSE, FALSE);
+		ghostobj = mksobj_at(FOOD_RATION, x, y, false, false);
 		ghostobj->quan = (long) rnd(7);
 		ghostobj->owt = weight(ghostobj);
 	}
 	if (rn2(2)) {
-		ghostobj = mksobj_at(MACE, x, y, FALSE, FALSE);
+		ghostobj = mksobj_at(MACE, x, y, false, false);
 		ghostobj->spe = rnd(3);
 		if (rn2(4)) curse(ghostobj);
 	} else {
-		ghostobj = mksobj_at(TWO_HANDED_SWORD, x, y, FALSE, FALSE);
+		ghostobj = mksobj_at(TWO_HANDED_SWORD, x, y, false, false);
 		ghostobj->spe = rnd(5) - 2;
 		if (rn2(4)) curse(ghostobj);
 	}
-	ghostobj = mksobj_at(BOW, x, y, FALSE, FALSE);
+	ghostobj = mksobj_at(BOW, x, y, false, false);
 	ghostobj->spe = 1;
 	if (rn2(4)) curse(ghostobj);
 
-	ghostobj = mksobj_at(ARROW, x, y, FALSE, FALSE);
+	ghostobj = mksobj_at(ARROW, x, y, false, false);
 	ghostobj->spe = 0;
 	ghostobj->quan = (long) rn1(10,25);
 	ghostobj->owt = weight(ghostobj);
 	if (rn2(4)) curse(ghostobj);
 
 	if (rn2(2)) {
-		ghostobj = mksobj_at(RING_MAIL, x, y, FALSE, FALSE);
+		ghostobj = mksobj_at(RING_MAIL, x, y, false, false);
 		ghostobj->spe = rn2(3);
-		if (!rn2(3)) ghostobj->oerodeproof = TRUE;
+		if (!rn2(3)) ghostobj->oerodeproof = true;
 		if (rn2(4)) curse(ghostobj);
 	} else {
-		ghostobj = mksobj_at(PLATE_MAIL, x, y, FALSE, FALSE);
+		ghostobj = mksobj_at(PLATE_MAIL, x, y, false, false);
 		ghostobj->spe = rnd(5) - 2;
-		if (!rn2(3)) ghostobj->oerodeproof = TRUE;
+		if (!rn2(3)) ghostobj->oerodeproof = true;
 		if (rn2(4)) curse(ghostobj);
 	}
 	if (rn2(2)) {
-		ghostobj = mksobj_at(FAKE_AMULET_OF_YENDOR, x, y, TRUE, FALSE);
-		ghostobj->known = TRUE;
+		ghostobj = mksobj_at(FAKE_AMULET_OF_YENDOR, x, y, true, false);
+		ghostobj->known = true;
 	}
 }
 #endif /* REINCARNATION */

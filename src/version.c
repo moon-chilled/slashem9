@@ -37,7 +37,7 @@ int doversion(void) {
 }
 
 int doextversion(void) {
-	display_file_area(NH_OPTIONS_USED_AREA, NH_OPTIONS_USED, TRUE);
+	display_file_area(NH_OPTIONS_USED_AREA, NH_OPTIONS_USED, true);
 	return 0;
 }
 
@@ -58,7 +58,7 @@ boolean check_version(struct version_info *version_data, const char *filename, b
 	  ) {
 	    if (complain)
 		pline("Version mismatch for file \"%s\".", filename);
-	    return FALSE;
+	    return false;
 	} else if (
 #ifndef IGNORED_FEATURES
 		   version_data->feature_set != VERSION_FEATURES ||
@@ -71,9 +71,9 @@ boolean check_version(struct version_info *version_data, const char *filename, b
 	    if (complain)
 		pline("Configuration incompatibility for file \"%s\".",
 		      filename);
-	    return FALSE;
+	    return false;
 	}
-	return TRUE;
+	return true;
 }
 
 /* this used to be based on file date and somewhat OS-dependant,
@@ -81,7 +81,7 @@ boolean check_version(struct version_info *version_data, const char *filename, b
 boolean uptodate(int fd, const char *name) {
     int rlen;
     struct version_info vers_info;
-    boolean verbose = name ? TRUE : FALSE;
+    boolean verbose = name ? true : false;
 
     rlen = read(fd, (void *) &vers_info, sizeof vers_info);
     minit();		/* ZEROCOMP */
@@ -90,13 +90,13 @@ boolean uptodate(int fd, const char *name) {
 	    pline("File \"%s\" is empty?", name);
 	    wait_synch();
 	}
-	return FALSE;
+	return false;
     }
     if (!check_version(&vers_info, name, verbose)) {
 	if (verbose) wait_synch();
-	return FALSE;
+	return false;
     }
-    return TRUE;
+    return true;
 }
 
 void store_version(int fd) {

@@ -180,7 +180,7 @@ shrink_worm(wnum)
     seg = wtails[wnum];
     wtails[wnum] = seg->nseg;
     seg->nseg = NULL;
-    toss_wsegs(seg, TRUE);
+    toss_wsegs(seg, true);
 }
 
 /*
@@ -267,7 +267,7 @@ wormgone (struct monst *worm)
     /*  This will also remove the real monster (ie 'w') from the its
      *  position in level.monsters[][].
      */
-    toss_wsegs(wtails[wnum], TRUE);
+    toss_wsegs(wtails[wnum], true);
 
     wheads[wnum] = wtails[wnum] = NULL;
 }
@@ -368,7 +368,7 @@ cutworm(worm, x, y, weap)
 	    pline("Part of the tail of %s is cut off.", mon_nam(worm));
 	else
 	    You("cut part of the tail off of %s.", mon_nam(worm));
-	toss_wsegs(new_tail, TRUE);
+	toss_wsegs(new_tail, true);
 	if (worm->mhp > 1) worm->mhp /= 2;
 	return 1;
     }
@@ -622,7 +622,7 @@ place_worm_tail_randomly(worm, x, y)
 	    new_tail = wtails[wnum];
 	    newsym(nx, ny);
 	} else {			/* Oops.  Truncate because there was */
-	    toss_wsegs(curr, FALSE);    /* no place for the rest of it */
+	    toss_wsegs(curr, false);    /* no place for the rest of it */
 	    curr = NULL;
 	}
     }
@@ -731,10 +731,10 @@ struct monst *worm;
     struct wseg *curr = wtails[worm->wormno];
 
     while (curr) {
-	if(cansee(curr->wx,curr->wy)) return TRUE;
+	if(cansee(curr->wx,curr->wy)) return true;
 	curr = curr->nseg;
     }
-    return FALSE;
+    return false;
 }
 
 /*worm.c*/

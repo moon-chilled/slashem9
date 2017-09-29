@@ -134,12 +134,12 @@ dosounds (void)
 	if(gd_sound())
 	    switch (rn2(2)+hallu) {
 		case 1: {
-		    boolean gold_in_vault = FALSE;
+		    boolean gold_in_vault = false;
 
 		    for (vx = sroom->lx;vx <= sroom->hx; vx++)
 			for (vy = sroom->ly; vy <= sroom->hy; vy++)
 			    if (g_at(vx, vy))
-				gold_in_vault = TRUE;
+				gold_in_vault = true;
 		    if (vault_occupied(u.urooms) !=
 			 (ROOM_INDEX(sroom) + ROOMOFFSET))
 		    {

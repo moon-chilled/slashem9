@@ -181,7 +181,7 @@ LRESULT CALLBACK NHMessageWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 			si.nMax   = data->max_text;
 			si.nPage  = data->xPage;
 			si.nPos   = data->xPos;
-			SetScrollInfo(hWnd, SB_HORZ, &si, TRUE);
+			SetScrollInfo(hWnd, SB_HORZ, &si, true);
 #endif
 
 			data->yMax = MSG_LINES-1;
@@ -194,7 +194,7 @@ LRESULT CALLBACK NHMessageWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 			si.nMax   = data->yMax + MSG_VISIBLE_LINES - 1;
 			si.nPage  = MSG_VISIBLE_LINES;
 			si.nPos   = data->yPos;
-			SetScrollInfo(hWnd, SB_VERT, &si, TRUE);
+			SetScrollInfo(hWnd, SB_VERT, &si, true);
 		}
     }
     break;
@@ -240,10 +240,10 @@ void onMSNHCommand(HWND hWnd, WPARAM wParam, LPARAM lParam)
         si.cbSize = sizeof(si);
         si.fMask  = SIF_POS;
         si.nPos   = data->yPos;
-        SetScrollInfo(hWnd, SB_VERT, &si, TRUE);
+        SetScrollInfo(hWnd, SB_VERT, &si, true);
 
 		/* update window content */
-		InvalidateRect(hWnd, NULL, TRUE);
+		InvalidateRect(hWnd, NULL, true);
 
 #ifdef USER_SOUNDS
 		play_sound_for_message(msg_data->text);
@@ -340,13 +340,13 @@ void onMSNH_VScroll(HWND hWnd, WPARAM wParam, LPARAM lParam)
 			(CONST RECT *) NULL, (CONST RECT *) NULL,
 			(HRGN) NULL, (LPRECT) NULL, SW_INVALIDATE | SW_ERASE);
 		*/
-		InvalidateRect(hWnd, NULL, TRUE);
+		InvalidateRect(hWnd, NULL, true);
 
 		ZeroMemory(&si, sizeof(si));
 		si.cbSize = sizeof(si);
 		si.fMask  = SIF_POS;
 		si.nPos   = data->yPos;
-		SetScrollInfo(hWnd, SB_VERT, &si, TRUE);
+		SetScrollInfo(hWnd, SB_VERT, &si, true);
 
 		UpdateWindow (hWnd);
 	}
@@ -421,7 +421,7 @@ void onMSNH_HScroll(HWND hWnd, WPARAM wParam, LPARAM lParam)
         si.cbSize = sizeof(si);
         si.fMask  = SIF_POS;
         si.nPos   = data->xPos;
-        SetScrollInfo(hWnd, SB_HORZ, &si, TRUE);
+        SetScrollInfo(hWnd, SB_HORZ, &si, true);
         UpdateWindow (hWnd);
     }
 }
@@ -488,7 +488,7 @@ void onPaint(HWND hWnd)
 				draw_rt.top = y - data->yChar;
 				draw_rt.bottom = y;
 
-	    oldFont = SelectObject(hdc, mswin_get_font(NHW_MESSAGE, data->window_text[lineidx].attr, hdc, FALSE));
+	    oldFont = SelectObject(hdc, mswin_get_font(NHW_MESSAGE, data->window_text[lineidx].attr, hdc, false));
 
 	    /* find out if we can concatenate the scheduled message without wrapping,
         but only if no clear_nhwindow was done just before putstr'ing this one,
@@ -556,7 +556,7 @@ void onPaint(HWND hWnd)
 		    /* Now find out how many screen lines we would like to add */
 		    NH_A2W(data->new_line.text, tmpwbuf, sizeof(tmpwbuf));
 		    /* Find out how large the bounding rectangle of the text is */
-		    oldFont = SelectObject(hdc, mswin_get_font(NHW_MESSAGE, data->window_text[lineidx].attr, hdc, FALSE));
+		    oldFont = SelectObject(hdc, mswin_get_font(NHW_MESSAGE, data->window_text[lineidx].attr, hdc, false));
 		    DrawText(hdc, tmpwbuf, _tcslen(tmpwbuf), &tmpdraw_rt, DT_NOPREFIX | DT_WORDBREAK | DT_CALCRECT);
 		    SelectObject(hdc, oldFont);
 		    new_screen_lines = (tmpdraw_rt.bottom - tmpdraw_rt.top) / data->yChar;
@@ -678,7 +678,7 @@ void onPaint(HWND hWnd)
 	    data->lines_not_seen = 0;
 	    /* We did the --More--, reset the lines_not_seen; now draw that
 	       new line. This is the easiest method */
-	    InvalidateRect(hWnd, NULL, TRUE);
+	    InvalidateRect(hWnd, NULL, true);
 	}
 	}
 	SetTextColor (hdc, OldFg);
@@ -716,7 +716,7 @@ void mswin_message_window_size (HWND hWnd, LPSIZE sz)
 	/* -- Calculate the font size -- */
     /* Get the handle to the client area's device context. */
     hdc = GetDC(hWnd);
-	saveFont = SelectObject(hdc, mswin_get_font(NHW_MESSAGE, ATR_NONE, hdc, FALSE));
+	saveFont = SelectObject(hdc, mswin_get_font(NHW_MESSAGE, ATR_NONE, hdc, false));
 
     /* Extract font dimensions from the text metrics. */
     GetTextMetrics (hdc, &tm);

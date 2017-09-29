@@ -228,9 +228,9 @@ tech_known(tech)
 	int i;
 	for (i = 0; i < MAXTECH; i++) {
 		if (techid(i) == tech)
-		     return TRUE;
+		     return true;
 	}
-	return FALSE;
+	return false;
 }
 
 /* Called to prematurely stop a technique */
@@ -339,8 +339,8 @@ learntech (short tech, long mask, int tlevel)
 }
 
 /*
- * Return TRUE if a tech was picked, with the tech index in the return
- * parameter.  Otherwise return FALSE.
+ * Return true if a tech was picked, with the tech index in the return
+ * parameter.  Otherwise return false.
  */
 static boolean
 gettech(tech_no)
@@ -353,7 +353,7 @@ gettech(tech_no)
 	    if (techid(i) != NO_TECH) ntechs++;
 	if (ntechs == 0)  {
             You("don't know any techniques right now.");
-	    return FALSE;
+	    return false;
 	}
 	if (flags.menu_style == MENU_TRADITIONAL) {
             if (ntechs == 1)  strcpy(lets, "a");
@@ -367,7 +367,7 @@ gettech(tech_no)
 		    break;
 
 		if (index(quitchars, ilet))
-		    return FALSE;
+		    return false;
 
 		if (letter(ilet) && ilet != '@') {
 		    /* in a-zA-Z, convert back to an index */
@@ -381,7 +381,7 @@ gettech(tech_no)
 			    if (techid(i) != NO_TECH) {
 				if (idx-- == 0) {
 				    *tech_no = i;
-				    return TRUE;
+				    return true;
 				}
 			    }
 		}
@@ -496,9 +496,9 @@ dotechmenu(how, tech_no)
 	if (n > 0) {
 	    *tech_no = selected[0].item.a_int - 1;
 	    free((void *)selected);
-	    return TRUE;
+	    return true;
 	}
-	return FALSE;
+	return false;
 }
 
 static int
@@ -651,14 +651,14 @@ techeffects (int tech_no)
                 if(!uwep || (weapon_type(uwep) == P_NONE)) {
 		    You("are not wielding a weapon!");
 		    return(0);
-		} else if(uwep->known == TRUE) {
+		} else if(uwep->known == true) {
                     practice_weapon();
 		} else {
                     if (not_fully_identified(uwep)) {
                         You("examine %s.", doname(uwep));
                             if (rnd(15) <= ACURR(A_INT)) {
                                 makeknown(uwep->otyp);
-                                uwep->known = TRUE;
+                                uwep->known = true;
                                 You("discover it is %s",doname(uwep));
                                 } else
                      pline("Unfortunately, you didn't learn anything new.");
@@ -676,7 +676,7 @@ techeffects (int tech_no)
 		if (Sick || Slimed) {
 		    if (carrying(SCALPEL)) {
 			pline("Using your scalpel (ow!), you cure your infection!");
-			make_sick(0L, NULL, TRUE, SICK_ALL);
+			make_sick(0L, NULL, true, SICK_ALL);
 			Slimed = 0;
 			if (Upolyd) {
 			    u.mh -= 5;
@@ -687,12 +687,12 @@ techeffects (int tech_no)
 			else
 			    u.uhp = 1;
                         t_timeout = rn1(500,500);
-			flags.botl = TRUE;
+			flags.botl = true;
 			break;
 		    } else pline("If only you had a scalpel...");
 		}
 		if (Upolyd ? u.mh < u.mhmax : u.uhp < u.uhpmax) {
-		    otmp = use_medical_kit(BANDAGE, FALSE,
+		    otmp = use_medical_kit(BANDAGE, false,
 			    "dress your wounds with");
 		    if (otmp) {
 			check_unpaid(otmp);
@@ -705,13 +705,13 @@ techeffects (int tech_no)
 			}
 			pline("Using %s, you dress your wounds.", yname(otmp));
 			healup(techlev(tech_no) * (rnd(2)+1) + rn1(5,5),
-			  0, FALSE, FALSE);
+			  0, false, false);
 		    } else {
 			You("strap your wounds as best you can.");
-			healup(techlev(tech_no) + rn1(5,5), 0, FALSE, FALSE);
+			healup(techlev(tech_no) + rn1(5,5), 0, false, false);
 		    }
                     t_timeout = rn1(1000,500);
-		    flags.botl = TRUE;
+		    flags.botl = true;
 		} else You("don't need your healing powers!");
 		break;
             case T_HEAL_HANDS:
@@ -721,11 +721,11 @@ techeffects (int tech_no)
 		    t_timeout = 3000;
 		} else if (Sick) {
 		    You("lay your hands on the foul sickness...");
-		    make_sick(0L, NULL, TRUE, SICK_ALL);
+		    make_sick(0L, NULL, true, SICK_ALL);
 		    t_timeout = 3000;
 		} else if (Upolyd ? u.mh < u.mhmax : u.uhp < u.uhpmax) {
 		    pline("A warm glow spreads through your body!");
-		    healup(techlev(tech_no) * 4, 0, FALSE, FALSE);
+		    healup(techlev(tech_no) * 4, 0, false, false);
 		    t_timeout = 3000;
 		} else
 		    pline(nothing_happens);
@@ -899,8 +899,8 @@ techeffects (int tech_no)
 
 		    	    if (type && type != monsndx(ptr)) {
 				ptr = &mons[type];
-		    	    	mon_spec_poly(mtmp, ptr, ttime, FALSE,
-					canseemon(mtmp), FALSE, TRUE);
+		    	    	mon_spec_poly(mtmp, ptr, ttime, false,
+					canseemon(mtmp), false, true);
 		    	    }
 		    	}
 		    }
@@ -914,7 +914,7 @@ techeffects (int tech_no)
     		cc.x = sx = u.ux;
 		cc.y = sy = u.uy;
 
-		getpos(&cc, TRUE, "the desired position");
+		getpos(&cc, true, "the desired position");
 		if (cc.x == -10) return 0; /* user pressed esc */
 
 		dx = cc.x - u.ux;
@@ -1001,7 +1001,7 @@ techeffects (int tech_no)
 		    if (In_sokoban(&u.uz))
 			change_luck(-1);
 		    You("reform!");
-		    teleds(cc.x, cc.y, FALSE);
+		    teleds(cc.x, cc.y, false);
 		    nomul(-1);
 		    nomovemsg = "";
 	    	}
@@ -1065,7 +1065,7 @@ techeffects (int tech_no)
 			if (obj->otyp != CORPSE) continue;
 			/* Only generate undead */
 			corpsenm = mon_to_zombie(obj->corpsenm);
-			if (corpsenm != -1 && !cant_create(&corpsenm, TRUE) &&
+			if (corpsenm != -1 && !cant_create(&corpsenm, true) &&
 			  (!obj->oxlth || obj->oattached != OATTACHED_MONST)) {
 			    /* Maintain approx. proportion of oeaten to cnutrit
 			     * so that the zombie's HP relate roughly to how
@@ -1107,7 +1107,7 @@ techeffects (int tech_no)
 		    if (Is_blackmarket(&u.uz))
 			setmangry(mtmp);
 		    else if (mtmp->isshk)
-			make_happy_shk(mtmp, FALSE);
+			make_happy_shk(mtmp, false);
 		    else if (!resist(mtmp, SPBOOK_CLASS, 0, NOTELL))
 			(void) tamedog(mtmp, NULL);
 		}
@@ -1252,7 +1252,7 @@ techeffects (int tech_no)
                 if (num > 0 && (!Fumbling || !rn2(10)) && !obj->cursed) {
 		    int roll;
 		    obj_extract_self(obj);
-		    possibly_unwield(mtmp, FALSE);
+		    possibly_unwield(mtmp, false);
 		    setmnotwielded(mtmp, obj);
 		    roll = rn2(num + 1);
 		    if (roll > 3) roll = 3;
@@ -1447,7 +1447,7 @@ techeffects (int tech_no)
 		    You("must be in your natural form to draw blood.");
 		    return(0);
 		}
-		obj = use_medical_kit(PHIAL, TRUE, "draw blood with");
+		obj = use_medical_kit(PHIAL, true, "draw blood with");
 		if (!obj)
 		    return 0;
 		if (u.ulevel <= 1) {
@@ -1462,10 +1462,10 @@ techeffects (int tech_no)
 		    obfree(obj, NULL);
 		}
 		pline("Using your medical kit, you draw off a phial of your blood.");
-		losexp("drawing blood", TRUE);
+		losexp("drawing blood", true);
 		if (u.uexp > 0)
 		    u.uexp = newuexp(u.ulevel - 1);
-		otmp = mksobj(POT_VAMPIRE_BLOOD, FALSE, FALSE);
+		otmp = mksobj(POT_VAMPIRE_BLOOD, false, false);
 		otmp->cursed = obj->cursed;
 		otmp->blessed = obj->blessed;
 		(void) hold_another_object(otmp,
@@ -1519,7 +1519,7 @@ tech_timeout (void)
 		    case T_EVISCERATE:
 			You("retract your claws.");
 			/* You're using bare hands now,  so new msg for next attack */
-			unweapon=TRUE;
+			unweapon=true;
 			/* Lose berserk status */
 			repeat_hit = 0;
 			break;
@@ -1733,7 +1733,7 @@ tinker()
 		/* object downgrade  - But for now,  nothing :) */
 	}
 
-	setuwep(otmp, FALSE);
+	setuwep(otmp, false);
 	You("now hold %s!", doname(otmp));
 	return(0);
 }
@@ -2132,7 +2132,7 @@ blitz_g_slam (void)
 	    tmp *= 2;
 	}
 
-	mselftouch(mtmp, "Falling, ", TRUE);
+	mselftouch(mtmp, "Falling, ", true);
 	if (!DEADMONSTER(mtmp)) {
 	    if (objenchant < canhitmon)
 		pline("%s doesn't seem to be harmed.", Monnam(mtmp));
@@ -2143,7 +2143,7 @@ blitz_g_slam (void)
 		    You("destroy %s!",
 		    	mtmp->mtame
 			    ? x_monnam(mtmp, ARTICLE_THE, "poor",
-				mtmp->mnamelth ? SUPPRESS_SADDLE : 0, FALSE)
+				mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false)
 			    : mon_nam(mtmp));
 		}
 		xkilled(mtmp,0);
@@ -2166,7 +2166,7 @@ blitz_dash (void)
 
 	if ((!Punished || carried(uball)) && !u.utrap)
 	    You("dash forwards!");
-	hurtle(u.dx, u.dy, 2, FALSE);
+	hurtle(u.dx, u.dy, 2, false);
 	multi = 0;		/* No paralysis with dash */
 	return 1;
 }

@@ -46,13 +46,13 @@ dev_name()
 	boolean match;
 
 	do {
-	    match = FALSE;
+	    match = false;
 	    i = rn2(n);
 	    for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 		if(!is_mplayer(mtmp->data)) continue;
 		if(!strncmp(developers[i], NAME(mtmp),
 			               strlen(developers[i]))) {
-		    match = TRUE;
+		    match = true;
 		    break;
 	        }
 	    }
@@ -96,7 +96,7 @@ short typ;
 	struct obj *obj;
 
 	if (typ == STRANGE_OBJECT) return;
-	obj = mksobj(typ, FALSE, FALSE);
+	obj = mksobj(typ, false, false);
 	if (!rn2(3)) obj->oerodeproof = 1;
 	if (!rn2(3)) curse(obj);
 	if (!rn2(3)) bless(obj);
@@ -121,9 +121,9 @@ boolean special;
 		return(NULL);
 
 	if(MON_AT(x, y))
-		(void) rloc(m_at(x, y), FALSE); /* insurance */
+		(void) rloc(m_at(x, y), false); /* insurance */
 
-	if(!In_endgame(&u.uz)) special = FALSE;
+	if(!In_endgame(&u.uz)) special = false;
 
 	if ((mtmp = makemon(ptr, x, y, NO_MM_FLAGS)) != 0) {
 	    short weapon = rn2(2) ? LONG_SWORD : rnd_class(SPEAR, BULLWHIP);
@@ -232,7 +232,7 @@ boolean special;
 	    }
 
 	    if (weapon != STRANGE_OBJECT) {
-		otmp = mksobj(weapon, TRUE, FALSE);
+		otmp = mksobj(weapon, true, false);
 		otmp->spe = (special ? rn1(5,4) : rn2(4));
 		if (!rn2(3)) otmp->oerodeproof = 1;
 		else if (!rn2(2)) otmp->greased = 1;
@@ -256,7 +256,7 @@ boolean special;
 					       GAUNTLETS_OF_DEXTERITY));
 		if (rn2(8))
 		    mk_mplayer_armor(mtmp, rnd_class(LOW_BOOTS, LEVITATION_BOOTS));
-		m_dowear(mtmp, TRUE);
+		m_dowear(mtmp, true);
 
 		quan = rn2(3) ? rn2(3) : rn2(16);
 		while(quan--)
@@ -270,7 +270,7 @@ boolean special;
 #endif
 		quan = rn2(10);
 		while(quan--)
-		    (void) mpickobj(mtmp, mkobj(RANDOM_CLASS, FALSE));
+		    (void) mpickobj(mtmp, mkobj(RANDOM_CLASS, false));
 	    } else { /* wandering characters... */
 #ifndef GOLDOBJ
 	       mtmp->mgold = rn2((mtmp->m_lev)*100);
