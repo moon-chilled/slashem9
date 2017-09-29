@@ -14,9 +14,7 @@
 
 /*** Money-related functions ***/
 
-static void
-gypsy_charge (struct monst *mtmp, long amount)
-{
+static void gypsy_charge(struct monst *mtmp, long amount) {
 #ifdef GOLDOBJ
 	struct obj *gypgold;
 #endif
@@ -44,12 +42,7 @@ gypsy_charge (struct monst *mtmp, long amount)
 	return;
 }
 
-static boolean
-gypsy_offer (mtmp, cost, txt)
-	struct monst *mtmp;
-	long cost;
-	char *txt;
-{
+static boolean gypsy_offer(struct monst *mtmp, long cost, char *txt) {
 #ifdef GOLDOBJ
 	long umoney;
 	umoney = money_cnt(invent);
@@ -73,9 +66,7 @@ gypsy_offer (mtmp, cost, txt)
 	return (FALSE);
 }
 
-static long
-gypsy_bet (struct monst *mtmp, long minimum)
-{
+static long gypsy_bet(struct monst *mtmp, long minimum) {
 	char prompt[BUFSZ], buf[BUFSZ];
 	long bet = 0L;
 #ifdef GOLDOBJ
@@ -102,7 +93,7 @@ gypsy_bet (struct monst *mtmp, long minimum)
 													umoney);
 #endif
 	getlin(prompt, buf);
-	(void) sscanf(buf, "%ld", &bet);
+	sscanf(buf, "%ld", &bet);
 
 	/* Validate the amount */
 	if (bet == 0L) {
@@ -170,10 +161,7 @@ static const char *trumps[CARD_TRUMPS] =
 };
 
 
-static void
-card_shuffle (mtmp)
-	struct monst *mtmp;
-{
+static void card_shuffle(struct monst *mtmp) {
 	xchar *cards = &EGYP(mtmp)->cards[0];
 	int i, j, k;
 
@@ -192,23 +180,15 @@ card_shuffle (mtmp)
 	EGYP(mtmp)->top = CARD_TOTAL;
 }
 
-static xchar
-card_draw (mtmp)
-	struct monst *mtmp;
-{
+static xchar card_draw(struct monst *mtmp) {
 	if (EGYP(mtmp)->top <= 0)
 		/* The deck is empty */
 		return (-1);
 	return (EGYP(mtmp)->cards[--EGYP(mtmp)->top]);
 }
 
-static void
-card_name (num, buf)
-	xchar num;
-	char *buf;
-{
+static void card_name(xchar num, char *buf) {
 	int r, s;
-
 
 	if (!buf) return;
 	if (Hallucination) num = rn2(CARD_TOTAL);
@@ -237,8 +217,7 @@ card_name (num, buf)
 
 #define FORTUNE_COST	50			/* Cost to play */
 
-static short birthstones[12] =
-{
+static short birthstones[12] = {
 	/* Jan */  GARNET,      /* Feb */  AMETHYST,
 	/* Mar */  AQUAMARINE,  /* Apr */  DIAMOND,
 	/* May */  EMERALD,     /* Jun */  OPAL,
@@ -248,11 +227,7 @@ static short birthstones[12] =
 };
 
 
-static void
-fortune_lev (mtmp, name, txt)
-	struct monst *mtmp;
-	char *name, *txt;
-{
+static void fortune_lev(struct monst *mtmp, char *name, char *txt) {
 	/*** FIXME -- still very buggy ***/
 /*	d_level *lev;*/
 	schar dep;
@@ -275,10 +250,7 @@ fortune_lev (mtmp, name, txt)
 	return;
 }
 
-static void
-fortune (mtmp)
-	struct monst *mtmp;
-{
+static void fortune(struct monst *mtmp) {
 	xchar card;
 	char buf[BUFSZ];
 	short otyp;
@@ -471,10 +443,7 @@ fortune (mtmp)
 #define MONTE_MAX	10			/* Maximum value of monteluck */
 
 
-static void
-monte (mtmp)
-	struct monst *mtmp;
-{
+static void monte(struct monst *mtmp) {
 	long bet, n;
 	char buf[BUFSZ];
 	winid win;
@@ -548,11 +517,7 @@ monte (mtmp)
 #define NINETYNINE_HAND		3	/* Number of cards in hand */
 #define NINETYNINE_GOAL		99	/* Limit of the total */
 
-static boolean
-nn_playable (card, total)
-	xchar card;
-	int total;
-{
+static boolean nn_playable(xchar card, int total) {
 	if (card_istrump(card))
 		/* The fool always loses; other trumps are always playable */
 		return (card != CARD_SUITED);
@@ -567,11 +532,7 @@ nn_playable (card, total)
 	}
 }
 
-static int
-nn_play (card, total)
-	xchar card;
-	int total;
-{
+static int nn_play(xchar card, int total) {
 	if (card_istrump(card)) {
 		if (card == CARD_SUITED)
 			/* The Fool always loses */
@@ -591,10 +552,7 @@ nn_play (card, total)
 	}
 }
 
-static int
-nn_pref (card)
-	xchar card;
-{
+static int nn_pref(xchar card) {
 	/* Computer's preferences for playing cards:
 	 * 3.  Get rid of Ace through 10 whenever we can.  Highest priority.
 	 * 2.  King will challenge the player.  High priority.
@@ -616,10 +574,7 @@ nn_pref (card)
 }
 
 
-static void
-ninetynine (mtmp)
-	struct monst *mtmp;
-{
+static void ninetynine(struct monst *mtmp) {
 	long bet;
 	int i, n, which, total = 0;
 	xchar uhand[NINETYNINE_HAND], ghand[NINETYNINE_HAND];
@@ -720,10 +675,7 @@ ninetynine (mtmp)
 
 static const char pawnables[] = { ALLOW_COUNT, GEM_CLASS, 0 };
 
-static void
-pawn (mtmp)
-	struct monst *mtmp;
-{
+static void pawn(struct monst *mtmp) {
 	struct obj *otmp;
 	long value;
 
@@ -762,10 +714,7 @@ pawn (mtmp)
 #define TAROCCHI_COST	500		/* Cost to play */
 #define TAROCCHI_HAND	10		/* Number of cards in hand */
 
-static void
-tarocchi (mtmp)
-	struct monst *mtmp;
-{
+static void tarocchi(struct monst *mtmp) {
 	int turn;
 
 	/* Shuffle the deck and deal */
@@ -782,10 +731,7 @@ tarocchi (mtmp)
 
 /*** Monster-related functions ***/
 
-void
-gypsy_init (mtmp)
-	struct monst *mtmp;
-{
+void gypsy_init(struct monst *mtmp) {
 	mtmp->isgyp = TRUE;
 	mtmp->mpeaceful = TRUE;
 	mtmp->msleeping = 0;
@@ -796,10 +742,7 @@ gypsy_init (mtmp)
 }
 
 
-void
-gypsy_chat (mtmp)
-	struct monst *mtmp;
-{
+void gypsy_chat(struct monst *mtmp) {
 	long money;
 	winid win;
 	anything any;

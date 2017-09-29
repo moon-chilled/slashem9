@@ -45,41 +45,28 @@ NetHack, except that rounddiv may call panic().
 	int		midnight	(void)
 =*/
 
-boolean
-digit(c)		/* is 'c' a digit? */
-    char c;
-{
-    return((boolean)('0' <= c && c <= '9'));
+// is 'c' a digit?
+boolean digit(char c) {
+    return '0' <= c && c <= '9';
 }
 
-boolean
-letter(c)		/* is 'c' a letter?  note: '@' classed as letter */
-    char c;
-{
-    return((boolean)(('@' <= c && c <= 'Z') || ('a' <= c && c <= 'z')));
+// is 'c' a letter?  note: '@' classed as letter
+boolean letter(char c) {
+    return ('@' <= c && c <= 'Z') || ('a' <= c && c <= 'z');
 }
 
-char
-highc (			/* force 'c' into uppercase */
-    char c
-)
-{
-    return((char)(('a' <= c && c <= 'z') ? (c & ~040) : c));
+// force 'c' into uppercase
+char highc(char c) {
+    return ('a' <= c && c <= 'z') ? (c & ~040) : c;
 }
 
-char
-lowc (			/* force 'c' into lowercase */
-    char c
-)
-{
-    return((char)(('A' <= c && c <= 'Z') ? (c | 040) : c));
+// force 'c' into lowercase
+char lowc(char c) {
+    return ('A' <= c && c <= 'Z') ? (c | 040) : c;
 }
 
-char *
-lcase (		/* convert a string into all lowercase */
-    char *s
-)
-{
+// convert a string into all lowercase
+char *lcase(char *s) {
     char *p;
 
     for (p = s; *p; p++)
@@ -87,19 +74,16 @@ lcase (		/* convert a string into all lowercase */
     return s;
 }
 
-char *
-upstart (		/* convert first character of a string to uppercase */
-    char *s
-)
-{
-    if (s) *s = highc(*s);
+// convert first character of a string to uppercase
+char *upstart(char *s) {
+    if (s)
+	s[0] = highc(s[0]);
+
     return s;
 }
 
 /* remove excess whitespace from a string buffer (in place) */
-char *
-mungspaces (char *bp)
-{
+char *mungspaces(char *bp) {
     char c, *p, *p2;
     boolean was_space = TRUE;
 
@@ -113,22 +97,15 @@ mungspaces (char *bp)
     return bp;
 }
 
-char *
-eos (			/* return the end of a string (pointing at '\0') */
-    char *s
-)
-{
-    while (*s) s++;	/* s += strlen(s); */
+// return the end of a string (pointing at '\0')
+char *eos(char *s) {
+    while (*s) s++;	// s += strlen(s);
     return s;
 }
 
-/* strcat(s, {c,'\0'}); */
-char *
-strkitten (		/* append a character to a string (in place) */
-    char *s,
-    char c
-)
-{
+// strcat(s, {c,'\0'});
+// append a character to a string (in place)
+char *strkitten(char *s, char c) {
     char *p = eos(s);
 
     *p++ = c;
@@ -136,11 +113,8 @@ strkitten (		/* append a character to a string (in place) */
     return s;
 }
 
-char *
-s_suffix (		/* return a name converted to possessive */
-    const char *s
-)
-{
+// return a name converted to possessive
+char *s_suffix(const char *s) {
     static char buf[BUFSZ];
 
     strcpy(buf, s);
@@ -153,12 +127,8 @@ s_suffix (		/* return a name converted to possessive */
     return buf;
 }
 
-char *
-xcrypt (	/* trivial text encryption routine (see makedefs) */
-    const char *str,
-    char *buf
-)
-{
+// trivial text encryption routine (see makedefs)
+char *xcrypt(const char *str, char *buf) {
     const char *p;
     char *q;
     int bitmask;
@@ -172,20 +142,17 @@ xcrypt (	/* trivial text encryption routine (see makedefs) */
     return buf;
 }
 
-boolean
-onlyspace(s)		/* is a string entirely whitespace? */
-    const char *s;
-{
+// is a string entirely whitespace?
+boolean onlyspace(const char *s) {
     for (; *s; s++)
-	if (*s != ' ' && *s != '\t') return FALSE;
+	if (*s != ' ' && *s != '\t')
+		return FALSE;
+
     return TRUE;
 }
 
-char *
-tabexpand (		/* expand tabs into proper number of spaces */
-    char *sbuf
-)
-{
+// expand tabs into proper number of spaces
+char *tabexpand(char *sbuf) {
     char buf[BUFSZ];
     char *bp, *s = sbuf;
     int idx;
@@ -204,11 +171,8 @@ tabexpand (		/* expand tabs into proper number of spaces */
     return strcpy(sbuf, buf);
 }
 
-char *
-visctrl (		/* make a displayable string from a character */
-    char c
-)
-{
+// make a displayable string from a character
+char *visctrl(char c) {
     static char ccc[3];
 
     c &= 0177;
@@ -227,42 +191,29 @@ visctrl (		/* make a displayable string from a character */
     return ccc;
 }
 
-const char *
-ordin (		/* return the ordinal suffix of a number */
-    int n			/* note: should be non-negative */
-)
-{
+// return the ordinal suffix of a number
+const char *ordin (unsigned int n) {
     int dd = n % 10;
 
     return (dd == 0 || dd > 3 || (n % 100) / 10 == 1) ? "th" :
 	    (dd == 1) ? "st" : (dd == 2) ? "nd" : "rd";
 }
 
-char *
-sitoa (		/* make a signed digit string from a number */
-    int n
-)
-{
+// make a signed digit string from a number
+char *sitoa(int n) {
     static char buf[13];
 
     sprintf(buf, (n < 0) ? "%d" : "+%d", n);
     return buf;
 }
 
-int
-sgn (			/* return the sign of a number: -1, 0, or 1 */
-    int n
-)
-{
+// return the sign of a number: -1, 0, or 1
+int sgn(int n) {
     return (n < 0) ? -1 : (n != 0);
 }
 
-int
-rounddiv (		/* calculate x/y, rounding as appropriate */
-    long x,
-    int y
-)
-{
+// calculate x/y, rounding as appropriate
+int rounddiv(long x, int y) {
     int r, m;
     int divsgn = 1;
 
@@ -281,14 +232,8 @@ rounddiv (		/* calculate x/y, rounding as appropriate */
     return divsgn * r;
 }
 
-int
-distmin ( /* distance between two points, in moves */
-    int x0,
-    int y0,
-    int x1,
-    int y1
-)
-{
+// distance between two points, in moves
+int distmin(int x0, int y0, int x1, int y1) {
     int dx = x0 - x1, dy = y0 - y1;
     if (dx < 0) dx = -dx;
     if (dy < 0) dy = -dy;
@@ -298,34 +243,24 @@ distmin ( /* distance between two points, in moves */
     return (dx < dy) ? dy : dx;
 }
 
-int
-dist2 (	/* square of euclidean distance between pair of pts */
-    int x0,
-    int y0,
-    int x1,
-    int y1
-)
-{
+// square of euclidean distance between pair of pts
+int dist2(int x0, int y0, int x1, int y1) {
     int dx = x0 - x1, dy = y0 - y1;
     return dx * dx + dy * dy;
 }
 
-boolean
-online2(x0, y0, x1, y1) /* are two points lined up (on a straight line)? */
-    int x0, y0, x1, y1;
-{
+// are two points lined up (on a straight line)?
+boolean online2(int x0, int y0, int x1, int y1) {
     int dx = x0 - x1, dy = y0 - y1;
     /*  If either delta is zero then they're on an orthogonal line,
      *  else if the deltas are equal (signs ignored) they're on a diagonal.
      */
-    return((boolean)(!dy || !dx || (dy == dx) || (dy + dx == 0)));	/* (dy == -dx) */
+    return !dy || !dx || (dy == dx) || (dy + dx == 0);	/* (dy == -dx) */
 }
 
 
-boolean
-pmatch(patrn, strng)	/* match a string against a pattern */
-    const char *patrn, *strng;
-{
+// match a string against a pattern
+boolean pmatch(const char *patrn, const char *strng) {
     char s, p;
   /*
    :  Simple pattern matcher:  '*' matches 0 or more characters, '?' matches
@@ -345,13 +280,9 @@ pmatch_top:
 }
 
 #ifndef STRNCMPI
-int
-strncmpi (	/* case insensitive counted string comparison */
-    const char *s1,
-    const char *s2,
-    int n /*(should probably be size_t, which is usually unsigned)*/
-)
-{					/*{ aka strncasecmp }*/
+// case insensitive counted string comparison
+int strncmpi(const char *s1, const char *s2, size_t n) {
+    //{ aka strncasecmp }
     char t1, t2;
 
     while (n--) {
@@ -367,12 +298,8 @@ strncmpi (	/* case insensitive counted string comparison */
 
 #ifndef STRSTRI
 
-char *
-strstri (	/* case insensitive substring search */
-    const char *str,
-    const char *sub
-)
-{
+// case insensitive substring search
+char *strstri(const char *str, const char *sub) {
     const char *s1, *s2;
     int i, k;
 # define TABSIZ 0x20	/* 0x40 would be case-sensitive */
@@ -408,12 +335,7 @@ strstri (	/* case insensitive substring search */
 
 /* compare two strings for equality, ignoring the presence of specified
    characters (typically whitespace) and possibly ignoring case */
-boolean
-fuzzymatch(s1, s2, ignore_chars, caseblind)
-    const char *s1, *s2;
-    const char *ignore_chars;
-    boolean caseblind;
-{
+boolean fuzzymatch(const char *s1, const char *s2, const char *ignore_chars, boolean caseblind) {
     char c1, c2;
 
     do {
@@ -428,7 +350,7 @@ fuzzymatch(s1, s2, ignore_chars, caseblind)
     } while (c1 == c2);
 
     /* match occurs only when the end of both strings has been reached */
-    return (boolean)(!c1 && !c2);
+    return !c1 && !c2;
 }
 
 
@@ -445,9 +367,7 @@ fuzzymatch(s1, s2, ignore_chars, caseblind)
 
 static struct tm *getlt(void);
 
-void
-setrandom (void)
-{
+void setrandom(void) {
 	/* the types are different enough here that sweeping the different
 	 * routine names into one via #defines is even more confusing
 	 */
@@ -459,56 +379,48 @@ setrandom (void)
 #   if defined(SUNOS4)
 	(void)
 #   endif
-		srandom((int) time(NULL));
+		srandom(time(NULL));
 #  else
-		srandom((int) time(NULL));
+		srandom(time(NULL));
 #  endif
 # else
 #  ifdef UNIX	/* system srand48() */
-	srand48((long) time(NULL));
+	srand48(time(NULL));
 #  else		/* poor quality system routine */
-	srand((int) time(NULL));
+	srand(time(NULL));
 #  endif
 # endif
 #endif
 }
 
-static struct tm *
-getlt (void)
-{
+static struct tm *getlt(void) {
 	time_t date;
 
 #if defined(BSD) && !defined(POSIX_TYPES)
-	(void) time((long *)(&date));
+	time((long *)(&date));
 #else
-	(void) time(&date);
+	time(&date);
 #endif
 #if (defined(ULTRIX) && !(defined(ULTRIX_PROTO) || defined(NHSTDC))) || (defined(BSD) && !defined(POSIX_TYPES))
-	return(localtime((long *)(&date)));
+	return localtime((long *)(&date));
 #else
-	return(localtime(&date));
+	return localtime(&date);
 #endif
 }
 
-int
-getyear (void)
-{
-	return(1900 + getlt()->tm_year);
+int getyear(void) {
+	return 1900 + getlt()->tm_year;
 }
 
 /* KMH -- Used by gypsies */
-int
-getmonth (void)
-{
-	return (getlt()->tm_mon);
+int getmonth(void) {
+	return getlt()->tm_mon;
 }
 
 #if 0
 /* This routine is no longer used since in 2000 it will yield "100mmdd". */
-char *
-yymmdd(date)
-time_t date;
-{
+// Hey, I wrote code after 2000, when it yielded that!! --ELR
+char *yymmdd(time_t date) {
 	static char datestr[10];
 	struct tm *lt;
 
@@ -527,10 +439,7 @@ time_t date;
 }
 #endif
 
-long
-yyyymmdd(date)
-time_t date;
-{
+long yyyymmdd(time_t date) {
 	long datenum;
 	struct tm *lt;
 
@@ -569,9 +478,8 @@ time_t date;
  * 177 ~= 8 reported phases * 22
  * + 11/22 for rounding
  */
-int
-phase_of_the_moon (void)		/* 0-7, with 0: new, 4: full */
-{
+// 0-7, with 0: new, 4: full
+int phase_of_the_moon(void) {
 	struct tm *lt = getlt();
 	int epact, diy, goldn;
 
@@ -581,38 +489,30 @@ phase_of_the_moon (void)		/* 0-7, with 0: new, 4: full */
 	if ((epact == 25 && goldn > 11) || epact == 24)
 		epact++;
 
-	return( (((((diy + epact) * 6) + 11) % 177) / 22) & 7 );
+	return (((((diy + epact) * 6) + 11) % 177) / 22) & 7;
 }
 
-boolean
-friday_13th()
-{
+boolean friday_13th(void) {
 	struct tm *lt = getlt();
 
-	return((boolean)(lt->tm_wday == 5 /* friday */ && lt->tm_mday == 13));
+	return lt->tm_wday == 5 /* friday */ && lt->tm_mday == 13;
 }
 
-boolean
-groundhog_day()
-{
+boolean groundhog_day(void) {
 	struct tm *lt = getlt();
 
 	/* KMH -- Groundhog Day is February 2 */
-	return((boolean)(lt->tm_mon == 1 && lt->tm_mday == 2));
+	return lt->tm_mon == 1 && lt->tm_mday == 2;
 }
 
-int
-night (void)
-{
+int night(void) {
 	int hour = getlt()->tm_hour;
 
-	return(hour < 6 || hour > 21);
+	return hour < 6 || hour > 21;
 }
 
-int
-midnight (void)
-{
-	return(getlt()->tm_hour == 0);
+int midnight(void) {
+	return getlt()->tm_hour == 0;
 }
 
 /*hacklib.c*/

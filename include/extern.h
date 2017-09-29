@@ -758,7 +758,7 @@ extern char *xcrypt(const char *,char *);
 extern boolean onlyspace(const char *);
 extern char *tabexpand(char *);
 extern char *visctrl(char);
-extern const char *ordin(int);
+extern const char *ordin(unsigned int);
 extern char *sitoa(int);
 extern int sgn(int);
 extern int rounddiv(long,int);
@@ -767,7 +767,7 @@ extern int distmin(int,int,int,int);
 extern boolean online2(int,int,int,int);
 extern boolean pmatch(const char *,const char *);
 #ifndef STRNCMPI
-extern int strncmpi(const char *,const char *,int);
+extern int strncmpi(const char *,const char *, size_t);
 #endif
 #ifndef STRSTRI
 extern char *strstri(const char *,const char *);
@@ -790,7 +790,7 @@ extern int midnight(void);
 
 extern void assigninvlet(struct obj *);
 extern struct obj *merge_choice(struct obj *,struct obj *);
-extern int merged(struct obj **,struct obj **);
+extern boolean merged(struct obj **,struct obj **);
 extern void addinv_core1(struct obj *);
 extern void addinv_core2(struct obj *);
 extern struct obj *addinv(struct obj *);

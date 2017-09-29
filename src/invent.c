@@ -47,9 +47,7 @@ static int lastinvnr = 51;	/* 0 ... 51 (never saved&restored) */
 static char venom_inv[] = { VENOM_CLASS, 0 };	/* (constant) */
 #endif
 
-void
-assigninvlet (struct obj *otmp)
-{
+void assigninvlet(struct obj *otmp) {
 	boolean inuse[52];
 	int i;
 	struct obj *obj;
@@ -86,9 +84,7 @@ assigninvlet (struct obj *otmp)
 #define inv_rank(o) ((o)->invlet ^ 040)
 
 /* sort the inventory; used by addinv() and doorganize() */
-static void
-reorder_invent()
-{
+static void reorder_invent(void) {
 	struct obj *otmp, *prev, *next;
 	boolean need_more_sorting;
 
@@ -124,9 +120,7 @@ reorder_invent()
  * Some players who depend upon fixinv complained.  They take damage
  * instead.
  */
-int
-jumble_pack (void)
-{
+int jumble_pack(void) {
 	struct obj *obj, *nobj, *otmp;
 	char let;
 	int dmg = 0;
@@ -170,9 +164,7 @@ jumble_pack (void)
 /* scan a list of objects to see whether another object will merge with
    one of them; used in pickup.c when all 52 inventory slots are in use,
    to figure out whether another object could still be picked up */
-struct obj *
-merge_choice (struct obj *objlist, struct obj *obj)
-{
+struct obj *merge_choice(struct obj *objlist, struct obj *obj) {
 	struct monst *shkp;
 	int save_nocharge;
 
@@ -203,9 +195,7 @@ merge_choice (struct obj *objlist, struct obj *obj)
 }
 
 /* merge obj with otmp and delete obj if types agree */
-int
-merged (struct obj **potmp, struct obj **pobj)
-{
+boolean merged(struct obj **potmp, struct obj **pobj) {
 	struct obj *otmp = *potmp, *obj = *pobj;
 
 	if(mergable(otmp, obj)) {
@@ -272,9 +262,9 @@ merged (struct obj **potmp, struct obj **pobj)
 #endif /*0*/
 
 		obfree(obj,otmp);	/* free(obj), bill->otmp */
-		return(1);
+		return TRUE;
 	}
-	return 0;
+	return FALSE;
 }
 
 /*

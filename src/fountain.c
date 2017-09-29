@@ -12,17 +12,13 @@ static void dowaternymph(void);
 static void gush(int,int,void *);
 static void dofindgem(void);
 
-void
-floating_above(what)
-const char *what;
-{
+void floating_above(const char *what) {
     You("are floating high above the %s.", what);
 }
 
-static void
-dowatersnakes() /* Fountain of snakes! */
-{
-    int num = rn1(5,2);
+// Fountain of snakes!
+static void dowatersnakes(void) {
+    int num = rn1(5, 2);
     struct monst *mtmp;
 
     if (!(mvitals[PM_WATER_MOCCASIN].mvflags & G_GONE)) {
@@ -39,10 +35,8 @@ dowatersnakes() /* Fountain of snakes! */
 	pline_The("fountain bubbles furiously for a moment, then calms.");
 }
 
-static
-void
-dowaterdemon() /* Water demon */
-{
+// Water demon
+static void dowaterdemon(void) {
     struct monst *mtmp;
 
     if(!(mvitals[PM_WATER_DEMON].mvflags & G_GONE)) {
@@ -66,9 +60,8 @@ dowaterdemon() /* Water demon */
 	pline_The("fountain bubbles furiously for a moment, then calms.");
 }
 
-static void
-dowaternymph() /* Water Nymph */
-{
+// Water Nymph
+static void dowaternymph(void) {
 	struct monst *mtmp;
 
 	if(!(mvitals[PM_WATER_NYMPH].mvflags & G_GONE) &&
@@ -87,11 +80,8 @@ dowaternymph() /* Water Nymph */
 		   You_hear("a loud pop.");
 }
 
-void
-dogushforth ( /* Gushing forth along LOS from (u.ux, u.uy) */
-    int drinking
-)
-{
+// Gushing forth along LOS from (u.ux, u.uy)
+void dogushforth (int drinking) {
 	int madepool = 0;
 
 	do_clear_area(u.ux, u.uy, 7, gush, (void *)&madepool);
@@ -103,11 +93,7 @@ dogushforth ( /* Gushing forth along LOS from (u.ux, u.uy) */
 	}
 }
 
-static void
-gush(x, y, poolcnt)
-int x, y;
-void * poolcnt;
-{
+static void gush(int x, int y, void *poolcnt) {
 	struct monst *mtmp;
 	struct trap *ttmp;
 
@@ -135,23 +121,18 @@ void * poolcnt;
 		newsym(x,y);
 }
 
-static void
-dofindgem() /* Find a gem in the sparkling waters. */
-{
+// Find a gem in the sparkling waters.
+static void dofindgem(void) {
 	if (!Blind) You("spot a gem in the sparkling waters!");
 	else You_feel("a gem here!");
-	(void) mksobj_at(rnd_class(DILITHIUM_CRYSTAL, LUCKSTONE-1),
+	mksobj_at(rnd_class(DILITHIUM_CRYSTAL, LUCKSTONE-1),
 			 u.ux, u.uy, FALSE, FALSE);
 	SET_FOUNTAIN_LOOTED(u.ux,u.uy);
 	newsym(u.ux, u.uy);
 	exercise(A_WIS, TRUE);			/* a discovery! */
 }
 
-void
-dryup(x, y, isyou)
-xchar x, y;
-boolean isyou;
-{
+void dryup(xchar x, xchar y, boolean isyou) {
 	if (IS_FOUNTAIN(levl[x][y].typ) &&
 	    (!rn2(3) || FOUNTAIN_IS_WARNED(x,y))) {
 		if(isyou && in_town(x, y) && !FOUNTAIN_IS_WARNED(x,y)) {
@@ -189,13 +170,11 @@ boolean isyou;
 		newsym(x, y);
 		level.flags.nfountains--;
 		if(isyou && in_town(x, y))
-		    (void) angry_guards(FALSE);
+		    angry_guards(FALSE);
 	}
 }
 
-void
-drinkfountain (void)
-{
+void drinkfountain(void) {
 	/* What happens when you drink from a fountain? */
 	boolean mgkftn = (levl[u.ux][u.uy].blessedftn == 1);
 	int fate = rnd(30);
@@ -349,9 +328,7 @@ drinkfountain (void)
 	dryup(u.ux, u.uy, TRUE);
 }
 
-void
-dipfountain (struct obj *obj)
-{
+void dipfountain(struct obj *obj) {
 	if (Levitation) {
 		floating_above("fountain");
 		return;
@@ -499,14 +476,12 @@ dipfountain (struct obj *obj)
 	dryup(u.ux, u.uy, TRUE);
 }
 
-void
-diptoilet (struct obj *obj)
-{
+void diptoilet(struct obj *obj) {
 	if (Levitation) {
 	    floating_above("toilet");
 	    return;
 	}
-	(void) get_wet(obj, FALSE);
+	get_wet(obj, FALSE);
 	/* KMH -- acid and water don't mix */
 	if (obj->otyp == POT_ACID) {
 	    useup(obj);
@@ -524,9 +499,7 @@ diptoilet (struct obj *obj)
 }
 
 
-void
-breaksink (int x, int y)
-{
+void breaksink(int x, int y) {
     if(cansee(x,y) || (x == u.ux && y == u.uy))
 	pline_The("pipes break!  Water spurts out!");
     level.flags.nsinks--;
@@ -536,10 +509,8 @@ breaksink (int x, int y)
     newsym(x,y);
 }
 
-void
-breaktoilet (int x, int y)
-{
-    int num = rn1(5,2);
+void breaktoilet(int x, int y) {
+    int num = rn1(5, 2);
     struct monst *mtmp;
     pline("The toilet suddenly shatters!");
     level.flags.nsinks--;
@@ -562,9 +533,7 @@ breaktoilet (int x, int y)
     }
 }
 
-void
-drinksink (void)
-{
+void drinksink(void) {
 	struct obj *otmp;
 	struct monst *mtmp;
 
@@ -657,9 +626,7 @@ drinksink (void)
 	}
 }
 
-void
-drinktoilet (void)
-{
+void drinktoilet(void) {
 	if (Levitation) {
 		floating_above("toilet");
 		return;
@@ -713,9 +680,7 @@ drinktoilet (void)
 }
 
 
-void
-whetstone_fountain_effects (struct obj *obj)
-{
+void whetstone_fountain_effects(struct obj *obj) {
 	if (Levitation) {
 		floating_above("fountain");
 		return;
@@ -820,9 +785,7 @@ whetstone_fountain_effects (struct obj *obj)
 }
 
 
-void
-whetstone_toilet_effects (struct obj *obj)
-{
+void whetstone_toilet_effects(struct obj *obj) {
 	if (Levitation) {
 	    floating_above("toilet");
 	    return;
@@ -834,9 +797,7 @@ whetstone_toilet_effects (struct obj *obj)
 	if (flags.verbose)  pline("Yuck!");
 }
 
-void
-whetstone_sink_effects (struct obj *obj)
-{
+void whetstone_sink_effects(struct obj *obj) {
 	struct monst *mtmp;
 
 	if (Levitation) {
