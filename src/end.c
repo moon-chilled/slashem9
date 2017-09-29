@@ -90,14 +90,12 @@ static const char *ends[] = {		/* "when you..." */
 FILE *dump_fp = NULL;  /* file pointer for dumps */
 /* functions dump_init, dump_exit and dump are from the dump patch */
 
-void
-dump_init (void)
-{
+void dump_init(void) {
   if (dump_fn[0]) {
-    char *p = (char *) strstr(dump_fn, "%n");
+    char *p = strstr(dump_fn, "%n");
     if (p) {
       int new_dump_fn_len = strlen(dump_fn)+strlen(plname)-2; /* %n */
-      char *new_dump_fn = alloc((unsigned)(new_dump_fn_len+1));
+      char *new_dump_fn = alloc(new_dump_fn_len+1);
       char *q = new_dump_fn;
       strncpy(q, dump_fn, p-dump_fn);
       q += p-dump_fn;
@@ -127,55 +125,45 @@ dump_init (void)
   }
 }
 
-void
-dump_exit (void)
-{
+void dump_exit(void) {
   if (dump_fp)
     fclose (dump_fp);
 }
 
-void
-dump (char *pre, char *str)
-{
+void dump(char *pre, char *str) {
   if (dump_fp)
     fprintf (dump_fp, "%s%s\n", pre, str);
 }
 #endif  /* DUMP_LOG */
 
 /*ARGSUSED*/
-void
-done1 (   /* called as signal() handler, so sent at least one arg */
-    int sig_unused
-)
-{
+void done1(int sig_unused /* called as signal() handler, so sent at least one arg */) {
 #if defined(MAC_MPW)
 # pragma unused ( sig_unused )
 #endif
 #ifndef NO_SIGNAL
-	(void) signal(SIGINT,SIG_IGN);
+	signal(SIGINT,SIG_IGN);
 #endif
 	if(flags.ignintr) {
 #ifndef NO_SIGNAL
-		(void) signal(SIGINT, (SIG_RET_TYPE) done1);
+		signal(SIGINT, (SIG_RET_TYPE) done1);
 #endif
 		clear_nhwindow(WIN_MESSAGE);
 		curs_on_u();
 		wait_synch();
 		if(multi > 0) nomul(0);
 	} else {
-		(void)done2();
+		done2();
 	}
 }
 
 extern const char * const killed_by_prefix[];	/* from topten.c */
 
 /* "#quit" command or keyboard interrupt */
-int
-done2 (void)
-{
+int done2(void) {
 	if(yn("Really quit?") == 'n') {
 #ifndef NO_SIGNAL
-		(void) signal(SIGINT, (SIG_RET_TYPE) done1);
+		signal(SIGINT, (SIG_RET_TYPE) done1);
 #endif
 		clear_nhwindow(WIN_MESSAGE);
 		curs_on_u();
@@ -208,40 +196,31 @@ done2 (void)
 
 #ifndef NO_SIGNAL
 /*ARGSUSED*/
-static void
-done_intr(sig_unused) /* called as signal() handler, so sent at least one arg */
-int sig_unused;
-{
+static void done_intr(int sig_unused /* called as signal() handler, so sent at least one arg */) {
 #if defined(MAC_MPW)
 # pragma unused ( sig_unused )
 #endif
 	done_stopprint++;
-	(void) signal(SIGINT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 # ifdef UNIX
-	(void) signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 # endif
 	return;
 }
 
 # if defined(UNIX) || defined(__EMX__)
-static void
-done_hangup (	/* signal() handler */
-    int sig
-)
-{
+static void done_hangup(int sig /* signal() handler */) {
 	program_state.done_hup++;
-	(void)signal(SIGHUP, SIG_IGN);
+	signal(SIGHUP, SIG_IGN);
 	done_intr(sig);
 	return;
 }
 # endif
 #endif /* NO_SIGNAL */
 
-void
-done_in_by (struct monst *mtmp)
-{
+void done_in_by(struct monst *mtmp) {
 	char buf[BUFSZ];
-	boolean distorted = (boolean)(Hallucination && canspotmon(mtmp));
+	boolean distorted = Hallucination && canspotmon(mtmp);
 
 	You("die...");
 	/* for those wand o'death, touch o'death, poisoned spike times... */
@@ -316,15 +295,14 @@ done_in_by (struct monst *mtmp)
 	return;
 }
 
-#if defined(WIN32)
+#ifdef WIN32
 #define NOTIFY_NETHACK_BUGS
 #endif
 
 /*VARARGS1*/
-void
-panic VA_DECL(const char *, str)
-	VA_START(str);
-	VA_INIT(str, char *);
+void panic (const char *str, ...) {
+	va_list the_args;
+	va_start(the_args, str);
 
 	if (program_state.panicking++)
 	    NH_abort();	/* avoid loops - this should never happen*/
@@ -356,12 +334,12 @@ panic VA_DECL(const char *, str)
 # endif
 	if (program_state.something_worth_saving) {
 	    set_error_savefile();
-	    (void) dosave0();
+	    dosave0();
 	}
 #endif
 	{
 	    char buf[BUFSZ];
-	    vsprintf(buf,str,VA_ARGS);
+	    vsprintf(buf, str, the_args);
 	    raw_print(buf);
 	    paniclog("panic", buf);
 	}
@@ -372,15 +350,11 @@ panic VA_DECL(const char *, str)
 	if (wizard)
 	    NH_abort();	/* generate core dump */
 #endif
-	VA_END();
+	va_end(the_args);
 	done(PANICKED);
 }
 
-static boolean
-should_query_disclose_option(category, defquery)
-int category;
-char *defquery;
-{
+static boolean should_query_disclose_option(int category, char *defquery) {
     int idx;
     char *dop = index(disclosure_options, category);
 
@@ -414,11 +388,7 @@ char *defquery;
     return TRUE;
 }
 
-static void
-disclose(how,taken)
-int how;
-boolean taken;
-{
+static void disclose(int how, boolean taken) {
 	char	c = 0, defquery;
 	char	qbuf[QBUFSZ];
 	boolean ask;
@@ -506,10 +476,7 @@ boolean taken;
 }
 
 /* try to get the player back in a viable state after being killed */
-static void
-	savelife(how)
-int how;
-{
+static void savelife(int how) {
 	u.uswldtim = 0;
 	u.uhp = u.uhpmax;
 	if (u.uhunger < 500) {
@@ -536,10 +503,7 @@ int how;
  * Get valuables from the given list.  Revised code: the list always remains
  * intact.
  */
-static void
-get_valuables(list)
-struct obj *list;	/* inventory or container contents */
-{
+static void get_valuables(struct obj *list /* inventory or container contents */) {
     struct obj *obj;
     int i;
 
@@ -569,11 +533,7 @@ struct obj *list;	/* inventory or container contents */
  *  Sort collected valuables, most frequent to least.  We could just
  *  as easily use qsort, but we don't care about efficiency here.
  */
-static void
-sort_valuables(list, size)
-struct valuable_data list[];
-int size;		/* max value is less than 20 */
-{
+static void sort_valuables(struct valuable_data list[/*size*/], int size /* max value is less than 20 */) {
     int i, j;
     struct valuable_data ltmp;
 
@@ -592,12 +552,7 @@ int size;		/* max value is less than 20 */
 }
 
 /* called twice; first to calculate total, then to list relevant items */
-static void
-artifact_score(list, counting, endwin)
-struct obj *list;
-boolean counting;	/* true => add up points; false => display them */
-winid endwin;
-{
+static void artifact_score(struct obj *list, boolean counting /* true => add up points; false => display them **/, winid endwin) {
     char pbuf[BUFSZ];
     struct obj *otmp;
     long value, points;
@@ -634,9 +589,7 @@ winid endwin;
 }
 
 /* Be careful not to call panic from here! */
-void
-done (int how)
-{
+void done(int how) {
 	boolean taken;
 	char kilbuf[BUFSZ], pbuf[BUFSZ];
 	winid endwin = WIN_ERR;
@@ -1094,18 +1047,13 @@ die:
 }
 
 
-void
-container_contents(list, identified, all_containers)
-struct obj *list;
-boolean identified, all_containers;
+void container_contents(struct obj *list, boolean identified, boolean all_containers)
 #ifdef DUMP_LOG
 {
 	do_containerconts(list, identified, all_containers, FALSE);
 }
 
-void do_containerconts(list, identified, all_containers, want_dump)
-struct obj *list;
-boolean identified, all_containers, want_dump;
+void do_containerconts(struct obj *list, boolean identified, boolean all_containers, boolean want_dump)
 #endif
 /* The original container_contents function */
 {
@@ -1165,9 +1113,7 @@ boolean identified, all_containers, want_dump;
 }
 
 /* should be called with either EXIT_SUCCESS or EXIT_FAILURE */
-void
-terminate (int status)
-{
+void terminate(int status) {
 #ifdef MAC
 	getreturn("to exit");
 #endif
@@ -1181,20 +1127,13 @@ terminate (int status)
 	nethack_exit(status);
 }
 
-static boolean
-list_vanquished(defquery, ask)
-char defquery;
-boolean ask;
+static boolean list_vanquished(char defquery, boolean ask)
 #ifdef DUMP_LOG
 {
   do_vanquished(defquery, ask, FALSE);
 }
 
-void
-do_vanquished(defquery, ask, want_dump)
-int defquery;
-boolean ask;
-boolean want_dump;
+void do_vanquished(int defquery, boolean ask, boolean want_dump)
 #endif
 {
     int i, lev;
@@ -1276,21 +1215,17 @@ boolean want_dump;
 #endif
 	}
     }
-    return (boolean) (total_killed);
+    return total_killed;
 }
 
-int
-dolistvanq (void)
-{
+int dolistvanq(void) {
     if (!list_vanquished('y', FALSE))
         pline("No monsters have yet been killed.");
     return(0);
 }
 
 /* number of monster species which have been genocided */
-int
-num_genocides (void)
-{
+int num_genocides(void) {
     int i, n = 0;
 
     for (i = LOW_PM; i < NUMMONS; ++i)
@@ -1300,16 +1235,9 @@ num_genocides (void)
 }
 
 #ifdef DUMP_LOG
-static void
-list_genocided(defquery, ask, want_dump)
-int defquery;
-boolean ask;
-boolean want_dump;
+static void list_genocided(int defquery, boolean ask, boolean want_dump)
 #else
-static void
-list_genocided(defquery, ask)
-char defquery;
-boolean ask;
+static void list_genocided(char defquery, boolean ask)
 #endif
 {
     int i;

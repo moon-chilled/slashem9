@@ -7,9 +7,7 @@
 /*static*/ long newuexp(int);
 static int enermod(int);
 
-/*static*/ long
-newuexp (int lev)
-{
+/*static*/ long newuexp(int lev) {
 	/* KMH, balance patch -- changed again! */
 	if (lev < 9) return (20L * (1L << lev));
 	if (lev < 13) return (10000L * (1L << (lev - 9)));
@@ -58,10 +56,7 @@ newuexp (int lev)
 #endif
 }
 
-static int
-enermod(en)
-int en;
-{
+static int enermod(int en) {
 	switch (Role_switch) {
 		/* WAC 'F' and 'I' get bonus similar to 'W' */
 		case PM_FLAME_MAGE:
@@ -80,15 +75,11 @@ int en;
 	}
 }
 
-int
-experience (	/* return # of exp points for mtmp after nk killed */
-    struct monst *mtmp,
-    int nk
-)
+// return # of exp points for mtmp after nk killed
+int experience (struct monst *mtmp, int nk) {
 #if defined(MAC_MPW)
 # pragma unused(nk)
 #endif
-{
 	struct permonst *ptr = mtmp->data;
 	int	i, tmp, tmp2;
 
@@ -140,9 +131,7 @@ experience (	/* return # of exp points for mtmp after nk killed */
 	return(tmp);
 }
 
-void
-more_experienced (int exp, int rexp)
-{
+void more_experienced(int exp, int rexp) {
 	u.uexp += exp;
 	u.urexp += 4*exp + rexp;
 	if(exp
@@ -154,11 +143,8 @@ more_experienced (int exp, int rexp)
 		flags.beginner = 0;
 }
 
-void
-losexp(drainer,force)	/* e.g., hit by drain life attack */
-const char *drainer;	/* cause of death, if drain should be fatal */
-boolean force;		/* Force the loss of an experience level */
-{
+// e.g., hit by drain life attack
+void losexp(const char *drainer /* cause of death, if drain should be fatal */, boolean force /* Force the loss of an experience level */) {
 	int num;
 
 #ifdef WIZARD
@@ -214,9 +200,7 @@ boolean force;		/* Force the loss of an experience level */
  * After all, how much real experience does one get shooting a wand of death
  * at a dragon created with a wand of polymorph??
  */
-void
-newexplevel (void)
-{
+void newexplevel(void) {
 	if (u.ulevel < MAXULEV && u.uexp >= newuexp(u.ulevel))
 	    pluslvl(TRUE);
 }
@@ -267,10 +251,8 @@ newexplevel (void)
 }
 #endif /* old newexplevel() */
 
-void
-pluslvl(incr)
-boolean incr;	/* true iff via incremental experience growth */
-{		/*	(false for potion of gain level)      */
+void pluslvl(boolean incr /* true iff via incremental experience growth
+				(false for potion of gain level */) {
 	int num;
 
 	if (!incr) You_feel("more experienced.");
@@ -311,10 +293,7 @@ boolean incr;	/* true iff via incremental experience growth */
 /* compute a random amount of experience points suitable for the hero's
    experience level:  base number of points needed to reach the current
    level plus a random portion of what it takes to get to the next level */
-long
-rndexp(gaining)
-boolean gaining;	/* gaining XP via potion vs setting XP for polyself */
-{
+long rndexp(boolean gaining /* gaining XP via potion vs setting XP for polyself */) {
 	long minexp, maxexp, diff, factor, result;
 
 	minexp = (u.ulevel == 1) ? 0L : newuexp(u.ulevel - 1);

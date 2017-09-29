@@ -590,8 +590,8 @@ extern void wipe_engr_at(xchar,xchar,xchar);
 extern boolean sense_engr_at(int,int,boolean);
 extern void make_engr_at(int,int,const char *,long,xchar);
 extern void del_engr_at(int,int);
-extern int freehand(void);
-extern int doengrave(void);
+extern boolean freehand(void);
+extern int   doengrave(void);
 extern void save_engravings(int,int);
 extern void rest_engravings(int);
 extern void del_engr(struct engr *);
@@ -610,7 +610,7 @@ extern long rndexp(boolean);
 
 /* ### explode.c ### */
 
-extern void explode(int,int,int,int,char,int);
+extern void explode(xchar,xchar,int,int,char,int);
 extern long scatter(int, int, int, unsigned int, struct obj *);
 extern void splatter_burning_oil(int, int);
 #ifdef FIREARMS
@@ -644,7 +644,7 @@ extern void clearlocks(void);
 extern int create_bonesfile(d_level*,char **, char *);
 extern void commit_bonesfile(d_level *);
 extern int open_bonesfile(d_level*,char **);
-extern int delete_bonesfile(d_level*);
+extern boolean delete_bonesfile(d_level*);
 extern void compress_bonesfile(void);
 extern void set_savefile_name(void);
 #ifdef INSURANCE

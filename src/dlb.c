@@ -162,7 +162,7 @@ static boolean readlibdir(library *lp) {
 	    lp->dir[i].fsize = lp->dir[i+1].foffset - lp->dir[i].foffset;
     }
 
-    (void) fseek(lp->fdata, 0L, SEEK_SET);	/* reset back to zero */
+    fseek(lp->fdata, 0L, SEEK_SET);	/* reset back to zero */
     lp->fmark = 0;
 
     return TRUE;

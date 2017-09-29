@@ -172,9 +172,7 @@ static int open_levelfile_exclusively(const char *, int, int);
  *	results in this encoding:
  *	    "This%20is%20a%20%25%20test%21"
  */
-char *
-fname_encode (const char *legal, char quotechar, char *s, char *callerbuf, int bufsz)
-{
+char *fname_encode(const char *legal, char quotechar, char *s, char *callerbuf, int bufsz) {
 	char *sp, *op;
 	int cnt = 0;
 	static char hexdigits[] = "0123456789ABCDEF";
@@ -214,9 +212,7 @@ fname_encode (const char *legal, char quotechar, char *s, char *callerbuf, int b
  *	callerbuf	buffer to house result
  *	bufsz		size of callerbuf
  */
-char *
-fname_decode (char quotechar, char *s, char *callerbuf, int bufsz)
-{
+char *fname_decode(char quotechar, char *s, char *callerbuf, int bufsz) {
 	char *sp, *op;
 	int k,calc,cnt = 0;
 	static char hexdigits[] = "0123456789ABCDEF";
@@ -253,9 +249,7 @@ fname_decode (char quotechar, char *s, char *callerbuf, int bufsz)
 #ifndef PREFIXES_IN_USE
 /*ARGSUSED*/
 #endif
-const char *
-fqname (const char *basename, int whichprefix, int buffnum)
-{
+const char *fqname(const char *basename, int whichprefix, int buffnum) {
 #ifndef PREFIXES_IN_USE
 	return basename;
 #else
@@ -281,9 +275,7 @@ fqname (const char *basename, int whichprefix, int buffnum)
 
 /* reasonbuf must be at least BUFSZ, supplied by caller */
 /*ARGSUSED*/
-int
-validate_prefix_locations (char *reasonbuf)
-{
+int validate_prefix_locations(char *reasonbuf) {
 #if defined(NOCWD_ASSUMPTIONS)
 	FILE *fp;
 	const char *filename;
@@ -326,21 +318,17 @@ validate_prefix_locations (char *reasonbuf)
  * When file areas are in use, fopen_datafile_area is used instead.
  */
 
-#ifndef FILE_AREA
+#ifndef FILE_AREAS
 /* fopen a file, with OS-dependent bells and whistles */
 /* NOTE: a simpler version of this routine also exists in util/dlb_main.c */
-FILE *
-fopen_datafile(filename, mode, prefix)
-const char *filename, *mode;
-int prefix;
-{
+FILE *fopen_datafile(const char *filename, const char *mode, int prefix) {
 	FILE *fp;
 
 	filename = fqname(filename, prefix, prefix == TROUBLEPREFIX ? 3 : 0);
 	fp = fopen(filename, mode);
 	return fp;
 }
-#endif	/* FILE_AREA */
+#endif	/* FILE_AREAS */
 
 /* ----------  BEGIN LEVEL FILE HANDLING ----------- */
 
@@ -350,9 +338,7 @@ int prefix;
  * a two digit number.  This is true for 'level'
  * but be careful if you use it for other things -dgk
  */
-void
-set_levelfile_name (char *file, int lev)
-{
+void set_levelfile_name(char *file, int lev) {
 	char *tf;
 
 	tf = rindex(file, '.');
@@ -361,9 +347,7 @@ set_levelfile_name (char *file, int lev)
 	return;
 }
 
-int
-create_levelfile (int lev, char errbuf[])
-{
+int create_levelfile(int lev, char errbuf[]) {
 	int fd;
 #ifndef FILE_AREAS
 	const char *fq_lock;
@@ -414,9 +398,7 @@ create_levelfile (int lev, char errbuf[])
 }
 
 
-int
-open_levelfile (int lev, char errbuf[])
-{
+int open_levelfile(int lev, char errbuf[]) {
 	int fd;
 #ifndef FILE_AREAS
 	const char *fq_lock;
@@ -454,9 +436,7 @@ open_levelfile (int lev, char errbuf[])
 }
 
 
-void
-delete_levelfile (int lev)
-{
+void delete_levelfile(int lev) {
 	/*
 	 * Level 0 might be created by port specific code that doesn't
 	 * call create_levfile(), so always assume that it exists.
@@ -476,9 +456,7 @@ delete_levelfile (int lev)
 }
 
 
-void
-clearlocks (void)
-{
+void clearlocks(void) {
 /* [Tom] Watcom.....
 #if !defined(PC_LOCKING)
 	eraseall(levels, alllevels);
@@ -498,11 +476,7 @@ clearlocks (void)
 }
 
 #ifdef HOLD_LOCKFILE_OPEN
-static int
-open_levelfile_exclusively(name, lev, oflag)
-const char *name;
-int lev, oflag;
-{
+static int open_levelfile_exclusively(const char *name, int lev, int oflag) {
 	int reslt, fd;
 	if (!lftrack.init) {
 		lftrack.init = 1;
@@ -533,20 +507,16 @@ int lev, oflag;
 	return fd;
 }
 
-void
-really_close (void)
-{
+void really_close(void) {
 	int fd = lftrack.fd;
 	lftrack.nethack_thinks_it_is_open = FALSE;
 	lftrack.fd = -1;
 	lftrack.oflag = 0;
-	(void)_close(fd);
+	_close(fd);
 	return;
 }
 
-int
-close (int fd)
-{
+int close(int fd) {
  	if (lftrack.fd == fd) {
 		really_close();	/* close it, but reopen it to hold it */
 		fd = open_levelfile(0, NULL);
@@ -565,11 +535,7 @@ close (int fd)
 /* set up "file" to be file name for retrieving bones, and return a
  * bonesid to be read/written in the bones file.
  */
-static char *
-set_bonesfile_name(file, lev)
-char *file;
-d_level *lev;
-{
+static char *set_bonesfile_name(char *file, d_level *lev) {
 	s_level *sptr;
 	char *dptr;
 
@@ -589,9 +555,7 @@ d_level *lev;
  * (we are not reading or writing level files while writing bones files, so
  * the same array may be used instead of copying.)
  */
-static char *
-set_bonestemp_name()
-{
+static char *set_bonestemp_name(void) {
 	char *tf;
 
 	tf = rindex(lock, '.');
@@ -600,12 +564,7 @@ set_bonestemp_name()
 	return lock;
 }
 
-int
-create_bonesfile(lev, bonesid, errbuf)
-d_level *lev;
-char **bonesid;
-char errbuf[];
-{
+int create_bonesfile(d_level *lev, char **bonesid, char errbuf[]) {
 	const char *file;
 	int fd;
 
@@ -646,10 +605,7 @@ char errbuf[];
 }
 
 /* move completed bones file to proper name */
-void
-commit_bonesfile(lev)
-d_level *lev;
-{
+void commit_bonesfile(d_level *lev) {
 	const char *fq_bones, *tempname;
 	int ret;
 
@@ -687,11 +643,7 @@ d_level *lev;
 }
 
 
-int
-open_bonesfile(lev, bonesid)
-d_level *lev;
-char **bonesid;
-{
+int open_bonesfile(d_level *lev, char **bonesid) {
 	const char *fq_bones;
 	int fd;
 
@@ -712,11 +664,8 @@ char **bonesid;
 }
 
 
-int
-delete_bonesfile(lev)
-d_level *lev;
-{
-	(void) set_bonesfile_name(bones, lev);
+boolean delete_bonesfile(d_level *lev) {
+	set_bonesfile_name(bones, lev);
 #ifdef FILE_AREAS
 	return !(remove_area(FILE_AREA_BONES, bones) < 0);
 #else
@@ -727,9 +676,7 @@ d_level *lev;
 
 /* assume we're compressing the recently read or created bonesfile, so the
  * file name is already set properly */
-void
-compress_bonesfile (void)
-{
+void compress_bonesfile(void) {
 #ifdef FILE_AREAS
 	compress_area(FILE_AREA_BONES, bones);
 #else
@@ -744,9 +691,7 @@ compress_bonesfile (void)
 
 /* set savefile name in OS-dependent manner from pre-existing plname,
  * avoiding troublesome characters */
-void
-set_savefile_name (void)
-{
+void set_savefile_name(void) {
 #if defined(WIN32)
 	char fnamebuf[BUFSZ], encodedfnamebuf[BUFSZ];
 #endif
@@ -779,19 +724,15 @@ set_savefile_name (void)
 }
 
 #ifdef INSURANCE
-void
-save_savefile_name (int fd)
-{
-	(void) write(fd, (void *) SAVEF, sizeof(SAVEF));
+void save_savefile_name(int fd) {
+	write(fd, (void *) SAVEF, sizeof(SAVEF));
 }
 #endif
 
 
 #if defined(WIZARD) && !defined(MICRO)
 /* change pre-existing savefile name to indicate an error savefile */
-void
-set_error_savefile (void)
-{
+void set_error_savefile(void) {
       {
 	char *semi_colon = rindex(SAVEF, ';');
 	if (semi_colon) *semi_colon = '\0';
@@ -807,9 +748,7 @@ set_error_savefile (void)
 
 
 /* create save file, overwriting one if it already exists */
-int
-create_savefile (void)
-{
+int create_savefile(void) {
 #ifndef FILE_AREAS
 	const char *fq_save;
 #endif
@@ -840,9 +779,7 @@ create_savefile (void)
 
 
 /* open savefile for reading */
-int
-open_savefile (void)
-{
+int open_savefile(void) {
 	int fd;
 
 #ifdef FILE_AREAS
@@ -861,9 +798,7 @@ open_savefile (void)
 
 
 /* delete savefile */
-int
-delete_savefile (void)
-{
+int delete_savefile(void) {
 /*WAC OK...this is probably a contreversial addition.  It's an option tho*/
 #ifdef KEEP_SAVE
 /* Wizard mode already has prompt*/
@@ -882,9 +817,7 @@ delete_savefile (void)
 
 
 /* try to open up a save file and prepare to restore it */
-int
-restore_saved_game (void)
-{
+int restore_saved_game(void) {
 #ifndef FILE_AREAS
 	const char *fq_save;
 #endif
@@ -905,20 +838,18 @@ restore_saved_game (void)
 #else
 	if (!uptodate(fd, SAVEF)) {
 #endif
-	    (void) close(fd),  fd = -1;
-	    (void) delete_savefile();
+	    close(fd);
+ 	    fd = -1;
+	    delete_savefile();
 	}
 	return fd;
 }
 
-void
-free_saved_games(saved)
-char** saved;
-{
-    if ( saved ) {
-	int i=0;
+void free_saved_games(char** saved) {
+    if (saved) {
+	int i = 0;
 	while (saved[i]) free((void *)saved[i++]);
-	free((void *)saved);
+	free(saved);
     }
 }
 
@@ -931,17 +862,13 @@ char** saved;
 #ifdef COMPRESS
 
 static void
-redirect(filearea, filename, mode, stream, uncomp)
-const char *filearea, *filename, *mode;
-FILE *stream;
-boolean uncomp;
-{
+redirect(const char *filearea, const char *filename, const char *mode, FILE *stream, boolean uncomp) {
 #ifndef FILE_AREAS
 	if (freopen(filename, mode, stream) == NULL) {
 #else
 	if (freopen_area(filearea, filename, mode, stream) == NULL) {
 #endif
-		(void) fprintf(stderr, "redirect of %s for %scompress failed\n",
+		fprintf(stderr, "redirect of %s for %scompress failed\n",
 			filename, uncomp ? "un" : "");
 		terminate(EXIT_FAILURE);
 	}
@@ -954,11 +881,7 @@ boolean uncomp;
  *
  * cf. child() in unixunix.c.
  */
-static void
-docompress_file(filearea, filename, uncomp)
-const char *filearea, *filename;
-boolean uncomp;
-{
+static void docompress_file(const char *filearea, const char *filename, boolean uncomp) {
 	char cfn[80];
 	FILE *cf;
 	const char *args[10];
@@ -1110,10 +1033,7 @@ boolean uncomp;
 #endif	/* COMPRESS */
 
 /* compress file */
-void
-compress_area(filearea, filename)
-const char *filearea, *filename;
-{
+void compress_area(const char *filearea, const char *filename) {
 #ifndef COMPRESS
 #if defined(MAC_MPW) || defined(__MWERKS__)
 # pragma unused(filename)
@@ -1125,10 +1045,7 @@ const char *filearea, *filename;
 
 
 /* uncompress file if it exists */
-void
-uncompress_area(filearea, filename)
-const char *filearea, *filename;
-{
+void uncompress_area(const char *filearea, const char *filename) {
 #ifndef COMPRESS
 #if defined(MAC_MPW) || defined(__MWERKS__)
 # pragma unused(filename)
@@ -1157,11 +1074,7 @@ static int lockfd;	/* for lock_file() to pass to unlock_file() */
 
 #define HUP	if (!program_state.done_hup)
 
-static char *
-make_lockname(filename, lockname)
-const char *filename;
-char *lockname;
-{
+static char *make_lockname(const char *filename, char *lockname) {
 #if defined(MAC_MPW) || defined(__MWERKS__)
 # pragma unused(filename,lockname)
 	return NULL;
@@ -1185,12 +1098,7 @@ char *lockname;
 
 
 /* lock a file */
-boolean
-lock_file(filename, whichprefix, retryct)
-const char *filename;
-int whichprefix;
-int retryct;
-{
+boolean lock_file(const char *filename, int whichprefix, int retryct) {
 #if defined(MAC_MPW) || defined(__MWERKS__)
 # pragma unused(filename, retryct)
 #endif
@@ -1280,10 +1188,7 @@ int retryct;
 
 
 /* unlock file, which must be currently locked by lock_file */
-void
-unlock_file(filename)
-const char *filename;
-{
+void unlock_file(const char *filename) {
 	char locknambuf[BUFSZ];
 	const char *lockname;
 
@@ -1318,30 +1223,9 @@ const char *filename;
 
 /* ----------  BEGIN CONFIG FILE HANDLING ----------- */
 
-const char *configfile =
-                        NH_CONFIG_FILE;
-/* WAC This stuff is in filename.h now
-#ifdef UNIX
-			".nethackrc";
-#else
-# ifdef MAC
-			"NetHack Defaults";
-#  ifdef WIN32
-			"defaults.nh";
-#  else
-			"NetHack.cnf";
-#  endif
-# endif
-#endif
-*/
+const char *configfile = NH_CONFIG_FILE;
 
-
-#define fopenp fopen
-
-static FILE *
-fopen_config_file(filename)
-const char *filename;
-{
+static FILE *fopen_config_file(const char *filename) {
 	FILE *fp;
 #ifdef UNIX
 	char	tmp_config[BUFSZ];
@@ -1365,7 +1249,7 @@ const char *filename;
 			/* fall through to standard names */
 		} else
 #endif
-		if ((fp = fopenp(filename, "r")) != NULL) {
+		if ((fp = fopen(filename, "r")) != NULL) {
 		    configfile = filename;
 		    return(fp);
 #ifdef UNIX
@@ -1380,7 +1264,7 @@ const char *filename;
 	}
 
 #if defined(MICRO) || defined(MAC) || defined(WIN32)
-	if ((fp = fopenp(fqname(configfile, CONFIGPREFIX, 0), "r"))
+	if ((fp = fopen(fqname(configfile, CONFIGPREFIX, 0), "r"))
 								!= NULL)
 		return(fp);
 #else
@@ -1390,16 +1274,16 @@ const char *filename;
 		strcpy(tmp_config, configfile);
 	else
 		sprintf(tmp_config, "%s/%s", envp, configfile);
-	if ((fp = fopenp(tmp_config, "r")) != NULL)
+	if ((fp = fopen(tmp_config, "r")) != NULL)
 		return(fp);
 # if defined(__APPLE__)
 	/* try an alternative */
 	if (envp) {
 		sprintf(tmp_config, "%s/%s", envp, "Library/Preferences/NetHack Defaults");
-		if ((fp = fopenp(tmp_config, "r")) != NULL)
+		if ((fp = fopen(tmp_config, "r")) != NULL)
 			return(fp);
 		sprintf(tmp_config, "%s/%s", envp, "Library/Preferences/NetHack Defaults.txt");
-		if ((fp = fopenp(tmp_config, "r")) != NULL)
+		if ((fp = fopen(tmp_config, "r")) != NULL)
 			return(fp);
 	}
 # endif
@@ -1418,7 +1302,7 @@ const char *filename;
 	    wait_synch();
 	}
 	else if (!strncmp(windowprocs.name, "proxy/", 6)) {
-	    fp = fopenp("/etc/slashem/proxy.slashemrc", "r");
+	    fp = fopen("/etc/slashem/proxy.slashemrc", "r");
 	    if (fp != NULL)
 		return(fp);
 	    else if (errno != ENOENT) {
@@ -1439,16 +1323,15 @@ const char *filename;
  * NOTE: zeros are inserted unless modlist is TRUE, in which case the list
  *  location is unchanged.  Callers must handle zeros if modlist is FALSE.
  */
-static int
-get_uchars(fp, buf, bufp, list, modlist, size, name)
-    FILE *fp;		/* input file pointer */
-    char *buf;		/* read buffer, must be of size BUFSZ */
-    char *bufp;		/* current pointer */
-    uchar *list;	/* return list */
-    boolean modlist;	/* TRUE: list is being modified in place */
-    int  size;		/* return list size */
-    const char *name;		/* name of option for error message */
-{
+static int get_uchars(
+    FILE *fp,		/* input file pointer */
+    char *buf,		/* read buffer, must be of size BUFSZ */
+    char *bufp,		/* current pointer */
+    uchar *list,	/* return list */
+    boolean modlist,	/* TRUE: list is being modified in place */
+    int  size,		/* return list size */
+    const char *name	/* name of option for error message */) {
+
     unsigned int num = 0;
     int count = 0;
     boolean havenum = FALSE;
@@ -1496,11 +1379,7 @@ gi_error:
 }
 
 #ifdef NOCWD_ASSUMPTIONS
-static void
-adjust_prefix(bufp, prefixid)
-char *bufp;
-int prefixid;
-{
+static void adjust_prefix(char *bufp, int prefixid) {
 	char *ptr;
 
 	if (!bufp) return;
@@ -1517,13 +1396,7 @@ int prefixid;
 #define match_varname(INP,NAM,LEN) match_optname(INP, NAM, LEN, TRUE)
 
 /*ARGSUSED*/
-int
-parse_config_line(fp, buf, tmp_ramdisk, tmp_levels)
-FILE		*fp;
-char		*buf;
-char		*tmp_ramdisk;
-char		*tmp_levels;
-{
+int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) {
 #if defined(MAC_MPW) || defined(__MWERKS__)
 # pragma unused(tmp_ramdisk,tmp_levels)
 #endif
@@ -1713,18 +1586,12 @@ char		*tmp_levels;
 }
 
 #ifdef USER_SOUNDS
-boolean
-can_read_file(filename)
-const char *filename;
-{
-	return (access(filename, 4) == 0);
+boolean can_read_file(const char *filename) {
+	return access(filename, 4) == 0;
 }
 #endif /* USER_SOUNDS */
 
-void
-read_config_file(filename)
-const char *filename;
-{
+void read_config_file(const char *filename) {
 #define tmp_levels	NULL
 #define tmp_ramdisk	NULL
 
@@ -1833,9 +1700,7 @@ post_process:
 }
 
 #ifdef WIZARD
-static FILE *
-fopen_wizkit_file()
-{
+static FILE *fopen_wizkit_file(void) {
 	FILE *fp;
 #ifdef UNIX
 	char	tmp_wizkit[BUFSZ];
@@ -1860,7 +1725,7 @@ fopen_wizkit_file()
 		/* fall through to standard names */
 	} else
 #endif
-	if ((fp = fopenp(wizkit, "r")) != NULL) {
+	if ((fp = fopen(wizkit, "r")) != NULL) {
 	    return(fp);
 #ifdef UNIX
 	} else {
@@ -1872,7 +1737,7 @@ fopen_wizkit_file()
 	}
 
 #if defined(MICRO) || defined(MAC) || defined(WIN32)
-	if ((fp = fopenp(fqname(wizkit, CONFIGPREFIX, 0), "r"))
+	if ((fp = fopen(fqname(wizkit, CONFIGPREFIX, 0), "r"))
 								!= NULL)
 		return(fp);
 #else
@@ -1880,7 +1745,7 @@ fopen_wizkit_file()
 	if (envp)
 		sprintf(tmp_wizkit, "%s/%s", envp, wizkit);
 	else 	strcpy(tmp_wizkit, wizkit);
-	if ((fp = fopenp(tmp_wizkit, "r")) != NULL)
+	if ((fp = fopen(tmp_wizkit, "r")) != NULL)
 		return(fp);
 	else if (errno != ENOENT) {
 		/* e.g., problems when setuid NetHack can't search home
@@ -1893,9 +1758,7 @@ fopen_wizkit_file()
 	return NULL;
 }
 
-void
-read_wizkit()
-{
+void read_wizkit(void) {
 	FILE *fp;
 	char *ep, buf[BUFSZ];
 	struct obj *otmp;
@@ -1926,7 +1789,7 @@ read_wizkit()
 	}
 	if (bad_items)
 	    wait_synch();
-	(void) fclose(fp);
+	fclose(fp);
 	return;
 }
 
@@ -1937,10 +1800,7 @@ read_wizkit()
 /* ----------  BEGIN SCOREBOARD CREATION ----------- */
 
 /* verify that we can write to the scoreboard file; if not, try to create one */
-void
-check_recordfile(dir)
-const char *dir;
-{
+void check_recordfile(const char *dir) {
 #if defined(MAC_MPW) || defined(__MWERKS__)
 # pragma unused(dir)
 #endif
@@ -2021,11 +1881,9 @@ const char *dir;
 /* ----------  BEGIN PANIC/IMPOSSIBLE LOG ----------- */
 
 /*ARGSUSED*/
-void
-paniclog(type, reason)
-const char *type;	/* panic, impossible, trickery */
-const char *reason;	/* explanation */
-{
+void paniclog(const char *type,	/* panic, impossible, trickery */
+		const char *reason	/* explanation */) {
+
 #ifdef PANICLOG
 	FILE *lfile;
 	char buf[BUFSZ];
@@ -2050,9 +1908,7 @@ const char *reason;	/* explanation */
 #ifdef SELF_RECOVER
 
 /* ----------  BEGIN INTERNAL RECOVER ----------- */
-boolean
-recover_savefile()
-{
+boolean recover_savefile(void) {
 	int gfd, lfd, sfd;
 	int lev, savelev, hpid;
 	xchar levc;
@@ -2187,10 +2043,7 @@ recover_savefile()
 	return TRUE;
 }
 
-boolean
-copy_bytes(ifd, ofd)
-int ifd, ofd;
-{
+boolean copy_bytes(int ifd, ofd) {
 	char buf[BUFSIZ];
 	int nfrom, nto;
 

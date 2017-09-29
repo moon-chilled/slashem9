@@ -44,7 +44,7 @@ void *alloc(size_t lth) {
 # endif
 
 /* format a pointer for display purposes; caller supplies the result buffer */
-char * fmt_ptr(const void *ptr, char *buf) {
+char *fmt_ptr(const void *ptr, char *buf) {
 	sprintf(buf, PTR_FMT, (PTR_TYP)ptr);
 	return buf;
 }

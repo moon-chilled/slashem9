@@ -18,9 +18,7 @@ typedef struct {
     short nlocations, alocations;
 } ExplodeRegion;
 
-static ExplodeRegion *
-create_explode_region()
-{
+static ExplodeRegion *create_explode_region(void) {
     ExplodeRegion *reg;
 
     reg = (ExplodeRegion *)alloc(sizeof(ExplodeRegion));
@@ -30,11 +28,7 @@ create_explode_region()
     return reg;
 }
 
-static void
-add_location_to_explode_region(reg, x, y)
-ExplodeRegion *reg;
-xchar x, y;
-{
+static void add_location_to_explode_region(ExplodeRegion *reg, xchar x, xchar y) {
     int i;
     ExplodeLocation *new;
     for(i = 0; i < reg->nlocations; i++)
@@ -56,17 +50,11 @@ xchar x, y;
     reg->nlocations++;
 }
 
-static int
-compare_explode_location(loc1, loc2)
-ExplodeLocation *loc1, *loc2;
-{
+static int compare_explode_location(ExplodeLocation *loc1, ExplodeLocation *loc2) {
     return loc1->y == loc2->y ? loc1->x - loc2->x : loc1->y - loc2->y;
 }
 
-static void
-set_blast_symbols(reg)
-ExplodeRegion *reg;
-{
+static void set_blast_symbols(ExplodeRegion *reg) {
     int i, j, bitmask;
     /* The index into the blast symbol array is a bitmask containing 4 bits:
      * bit 3: True if the location immediately to the north is present
@@ -109,16 +97,13 @@ ExplodeRegion *reg;
 	reg->locations[i].blast = blast_symbols[reg->locations[i].blast];
 }
 
-static void
-free_explode_region(reg)
-ExplodeRegion *reg;
-{
-    free((void *)reg->locations);
-    free((void *)reg);
+static void free_explode_region(ExplodeRegion *reg) {
+    free(reg->locations);
+    free(reg);
 }
 
 /* This is the "do-it-all" explosion command */
-static void do_explode(int,int,ExplodeRegion *,int,int,char,int,int,boolean);
+static void do_explode(xchar, xchar, ExplodeRegion *, int, int, char, int, int, boolean);
 
 /* Note: I had to choose one of three possible kinds of "type" when writing
  * this function: a wand type (like in zap.c), an adtyp, or an object type.
@@ -188,14 +173,11 @@ static void do_explode(int,int,ExplodeRegion *,int,int,char,int,int,boolean);
  *	There is only one special type currently defined:
  *		-1		Exploding gas spore
  */
-void
-explode(x, y, type, dam, olet, expltype)
-xchar x, y; /* WAC was int...i think it's supposed to be xchar */
-int type; /* the same as in zap.c */
-int dam;
-char olet;
-int expltype;
-{
+void explode(xchar x, xchar y, /* WAC was int...i think it's supposed to be xchar */
+	int type, /* the same as in zap.c */
+	int dam,
+	char olet,
+	int expltype) {
     int i, j;
     ExplodeRegion *area;
     area = create_explode_region();
@@ -208,16 +190,16 @@ int expltype;
 }
 
 void
-do_explode(x, y, area, type, dam, olet, expltype, dest, yours)
-xchar x, y; /* WAC was int...i think it's supposed to be xchar */
-ExplodeRegion *area;
-int type; /* the same as in zap.c */
-int dam;
-char olet;
-int expltype;
-int dest; /* 0 = normal, 1 = silent, 2 = silent/remote */
-boolean yours; /* is it your fault (for killing monsters) */
-{
+do_explode(
+	xchar x, xchar y, /* WAC was int...i think it's supposed to be xchar */
+	ExplodeRegion *area,
+	int type, /* the same as in zap.c */
+	int dam,
+	char olet,
+	int expltype,
+	int dest, /* 0 = normal, 1 = silent, 2 = silent/remote */
+	boolean yours /* is it your fault (for killing monsters) */) {
+
 	int i, k, damu = dam;
 	boolean starting = 1;
 	boolean visible, any_shield;
@@ -651,15 +633,13 @@ struct scatter_chain {
  */
 
 /* returns number of scattered objects */
-long
-scatter (
+long scatter(
     int sx,
     int sy,				/* location of objects to scatter */
     int blastforce,				/* force behind the scattering	*/
     unsigned int scflags,
-    struct obj *obj			/* only scatter this obj        */
-)
-{
+    struct obj *obj			/* only scatter this obj        */) {
+
 	struct obj *otmp;
 	int tmp;
 	int farthest = 0;
@@ -818,9 +798,7 @@ scatter (
  *
  * For now, just perform a "regular" explosion.
  */
-void
-splatter_burning_oil (int x, int y)
-{
+void splatter_burning_oil(int x, int y) {
     explode(x, y, ZT_SPELL(ZT_FIRE), d(4,4), BURNING_OIL, EXPL_FIERY);
 }
 
@@ -828,12 +806,13 @@ splatter_burning_oil (int x, int y)
 
 #define BY_OBJECT       (NULL)
 
-static int
-dp(n, p)		/* 0 <= dp(n, p) <= n */
-int n, p;
-{
+// 0 <= dp(n, p) <= n
+static int dp(int n, int p) {
     int tmp = 0;
-    while (n--) tmp += !rn2(p);
+
+    while (n--)
+	tmp += !rn2(p);
+
     return tmp;
 }
 
@@ -861,11 +840,7 @@ struct grenade_callback {
 static void grenade_effects(struct obj *,xchar,xchar,
 	ExplodeRegion *,ExplodeRegion *,ExplodeRegion *,boolean);
 
-static int
-grenade_fiery_callback(data, x, y)
-void * data;
-int x, y;
-{
+static int grenade_fiery_callback(void *data, int x, int y) {
     int is_accessible = ZAP_POS(levl[x][y].typ);
     struct grenade_callback *gc = (struct grenade_callback *)data;
     if (is_accessible) {
@@ -876,11 +851,7 @@ int x, y;
     return !is_accessible;
 }
 
-static int
-grenade_gas_callback(data, x, y)
-void * data;
-int x, y;
-{
+static int grenade_gas_callback(void *data, int x, int y) {
     int is_accessible = ZAP_POS(levl[x][y].typ);
     struct grenade_callback *gc = (struct grenade_callback *)data;
     if (is_accessible)
@@ -888,24 +859,14 @@ int x, y;
     return !is_accessible;
 }
 
-static int
-grenade_dig_callback(data, x, y)
-void * data;
-int x, y;
-{
+static int grenade_dig_callback(void *data, int x, int y) {
     struct grenade_callback *gc = (struct grenade_callback *)data;
     if (dig_check(BY_OBJECT, FALSE, x, y))
 	add_location_to_explode_region(gc->dig_area, x, y);
     return !ZAP_POS(levl[x][y].typ);
 }
 
-static void
-grenade_effects(source, x, y, fiery_area, gas_area, dig_area, isyou)
-struct obj *source;
-xchar x, y;
-ExplodeRegion *fiery_area, *gas_area, *dig_area;
-boolean isyou;
-{
+static void grenade_effects(struct obj *source, xchar x, xchar y, ExplodeRegion *fiery_area, ExplodeRegion *gas_area, ExplodeRegion *dig_area, boolean isyou) {
     int i, r;
     struct obj *obj, *obj2;
     struct monst *mon;
@@ -1008,12 +969,7 @@ boolean isyou;
  */
 
 void
-grenade_explode(obj, x, y, isyou, dest)
-struct obj *obj;
-int x, y;
-boolean isyou;
-int dest;
-{
+grenade_explode(struct obj *obj, int x, int y, boolean isyou, int dest) {
     int i, ztype;
     boolean shop_damage = FALSE;
     int ox, oy;
@@ -1059,10 +1015,7 @@ int dest;
     if (shop_damage) pay_for_damage("damage", FALSE);
 }
 
-void arm_bomb(obj, yours)
-struct obj *obj;
-boolean yours;
-{
+void arm_bomb(struct obj *obj, boolean yours) {
 	if (is_grenade(obj)) {
 		attach_bomb_blow_timeout(obj,
 			    (obj->cursed ? rn2(5) + 2 : obj->blessed ? 4 :

@@ -30,36 +30,36 @@ static boolean e_jumps(struct entity *);
 static void do_entity(struct entity *);
 
 boolean is_pool(int x, int y) {
-    schar ltyp;
+	schar ltyp;
 
-    if (!isok(x,y)) return FALSE;
-    ltyp = levl[x][y].typ;
-    if (ltyp == POOL || ltyp == MOAT || ltyp == WATER) return TRUE;
-    if (ltyp == DRAWBRIDGE_UP &&
-	(levl[x][y].drawbridgemask & DB_UNDER) == DB_MOAT) return TRUE;
-    return FALSE;
+	if (!isok(x,y)) return FALSE;
+	ltyp = levl[x][y].typ;
+	if (ltyp == POOL || ltyp == MOAT || ltyp == WATER) return TRUE;
+	if (ltyp == DRAWBRIDGE_UP &&
+			(levl[x][y].drawbridgemask & DB_UNDER) == DB_MOAT) return TRUE;
+	return FALSE;
 }
 
 boolean is_lava(int x,int y) {
-    schar ltyp;
+	schar ltyp;
 
-    if (!isok(x,y)) return FALSE;
-    ltyp = levl[x][y].typ;
-    if (ltyp == LAVAPOOL
-	|| (ltyp == DRAWBRIDGE_UP
-	    && (levl[x][y].drawbridgemask & DB_UNDER) == DB_LAVA)) return TRUE;
-    return FALSE;
+	if (!isok(x,y)) return FALSE;
+	ltyp = levl[x][y].typ;
+	if (ltyp == LAVAPOOL
+			|| (ltyp == DRAWBRIDGE_UP
+				&& (levl[x][y].drawbridgemask & DB_UNDER) == DB_LAVA)) return TRUE;
+	return FALSE;
 }
 
 boolean is_ice(int x, int y) {
-    schar ltyp;
+	schar ltyp;
 
-    if (!isok(x,y)) return FALSE;
-    ltyp = levl[x][y].typ;
-    if (ltyp == ICE
+	if (!isok(x,y)) return FALSE;
+	ltyp = levl[x][y].typ;
+	if (ltyp == ICE
 	|| (ltyp == DRAWBRIDGE_UP
-	    && (levl[x][y].drawbridgemask & DB_UNDER) == DB_ICE)) return TRUE;
-    return FALSE;
+	&& (levl[x][y].drawbridgemask & DB_UNDER) == DB_ICE)) return TRUE;
+	return FALSE;
 }
 
 
@@ -90,7 +90,7 @@ int is_drawbridge_wall (int x, int y) {
 	    (levl[x][y+1].drawbridgemask & DB_DIR) == DB_NORTH)
 		return (DB_NORTH);
 
-	return (-1);
+	return -1;
 }
 
 /*

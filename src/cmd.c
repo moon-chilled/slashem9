@@ -39,7 +39,7 @@ static int playersteal(void);
 #if 0
 static int specialpower(void); /* WAC -- use techniques */
 #endif
-# ifdef WIZARD
+#ifdef WIZARD
 static int wiz_wish(void);
 static int wiz_identify(void);
 static int wiz_map(void);
@@ -59,22 +59,22 @@ static int wiz_show_seenv(void);
 static int wiz_show_vision(void);
 static int wiz_mon_polycontrol(void);
 static int wiz_show_wmodes(void);
-#ifdef DEBUG_MIGRATING_MONS
+# ifdef DEBUG_MIGRATING_MONS
 static int wiz_migrate_mons(void);
-#endif
+# endif
 static void count_obj(struct obj *, long *, long *, boolean, boolean);
 static void obj_chain(winid, const char *, struct obj *, long *, long *);
 static void mon_invent_chain(winid, const char *, struct monst *, long *, long *);
 static void mon_chain(winid, const char *, struct monst *, long *, long *);
 static void contained(winid, const char *, long *, long *);
 static int wiz_show_stats(void);
-#ifdef DISPLAY_LAYERS
+# ifdef DISPLAY_LAYERS
 static int wiz_show_display(void);
-#endif
-#  ifdef PORT_DEBUG
-static int wiz_port_debug(void);
-#  endif
 # endif
+# ifdef PORT_DEBUG
+static int wiz_port_debug(void);
+# endif
+#endif
 static int enter_explore_mode(void);
 static int doattributes(void);
 static int doconduct(void); /**/

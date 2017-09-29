@@ -765,7 +765,7 @@ schar acurrstr(void) {
 /* avoid possible problems with alignment overflow, and provide a centralized
  * location for any future alignment limits
  */
-void adjalign (int n) {
+void adjalign(int n) {
 	int newalign = u.ualign.record + n;
 
 	if (n < 0) {
