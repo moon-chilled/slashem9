@@ -1471,7 +1471,7 @@ int ggetobj(const char *word, int (*fn)(struct obj*), int mx, boolean combo /* c
  * If allflag then no questions are asked. Max gives the max nr of
  * objects to be treated. Return the number of objects treated.
  */
-int askchain(struct obj **objchn, int allflag, int mx, const char *olets /* olets is an Obj Class char array */, const char *word, int (*fn)(struct obj*), int (*ckfn)(struct obj*)) {
+int askchain(struct obj **objchn, const char *olets, int allflag, int (*fn)(struct obj*), int (*ckfn)(struct obj*), int mx, const char *word) {
 	struct obj *otmp, *otmp2, *otmpo;
 	char sym, ilet;
 	int cnt = 0, dud = 0, tmp;
@@ -2723,7 +2723,7 @@ char *let_to_name(char let, boolean unpaid) {
 
 void free_invbuf(void) {
 	if (invbuf) {
-		free(invbuf)
+		free(invbuf);
 		invbuf = NULL;
 	}
 
@@ -2974,7 +2974,7 @@ struct obj *display_cinventory(struct obj *obj) {
 /* query objlist callback: return true if obj is at given location */
 static coord only;
 
-static boolean only_here struct obj *obj) {
+static boolean only_here(struct obj *obj) {
     return (obj->ox == only.x && obj->oy == only.y);
 }
 
