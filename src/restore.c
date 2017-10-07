@@ -129,7 +129,7 @@ int fd;
 	mread(fd, (void *) &cnt, sizeof(int));
 	for(; cnt > 0; cnt--) {
 
-	    tmplev = (s_level *)alloc(sizeof(s_level));
+	    tmplev = new(s_level);
 	    mread(fd, (void *) tmplev, sizeof(s_level));
 	    if(!sp_levchn) sp_levchn = tmplev;
 	    else {
@@ -149,14 +149,14 @@ boolean ghostly;
 	int counter;
 	struct damage *tmp_dam;
 
-	mread(fd, (void *) &counter, sizeof(counter));
+	mread(fd, &counter, sizeof(counter));
 	if (!counter)
 	    return;
-	tmp_dam = (struct damage *)alloc(sizeof(struct damage));
+	tmp_dam = new(struct damage);
 	while (--counter >= 0) {
 	    char damaged_shops[5], *shp = NULL;
 
-	    mread(fd, (void *) tmp_dam, sizeof(*tmp_dam));
+	    mread(fd, tmp_dam, sizeof(*tmp_dam));
 	    if (ghostly)
 		tmp_dam->when += (monstermoves - omoves);
 	    strcpy(damaged_shops,
@@ -178,10 +178,10 @@ boolean ghostly;
 	    if (!shp || !*shp) {
 		tmp_dam->next = level.damagelist;
 		level.damagelist = tmp_dam;
-		tmp_dam = (struct damage *)alloc(sizeof(*tmp_dam));
+		tmp_dam = new(struct damage);
 	    }
 	}
-	free((void *)tmp_dam);
+	free(tmp_dam);
 }
 
 static struct obj *
@@ -909,7 +909,7 @@ add_id_mapping(gid, nid)
     /* idx is zero on first time through, as well as when a new bucket is */
     /* needed */
     if (idx == 0) {
-	struct bucket *gnu = (struct bucket *) alloc(sizeof(struct bucket));
+	struct bucket *gnu = new(struct bucket);
 	gnu->next = id_map;
 	id_map = gnu;
     }

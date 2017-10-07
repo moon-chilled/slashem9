@@ -50,8 +50,9 @@ static void add_location_to_explode_region(ExplodeRegion *reg, xchar x, xchar y)
     reg->nlocations++;
 }
 
-static int compare_explode_location(ExplodeLocation *loc1, ExplodeLocation *loc2) {
-    return loc1->y == loc2->y ? loc1->x - loc2->x : loc1->y - loc2->y;
+static int compare_explode_location(const void *loc1, const void *loc2) {
+    const ExplodeLocation *lo1 = loc1, *lo2 = loc2;
+    return lo1->y == lo2->y ? lo1->x - lo2->x : lo1->y - lo2->y;
 }
 
 static void set_blast_symbols(ExplodeRegion *reg) {
