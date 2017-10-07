@@ -43,7 +43,10 @@ typedef struct ls_t {
     short range;	/* source's current range */
     short flags;
     short type;		/* type of light source */
-    void * id;	/* source's identifier */
+    union {
+        void *idptr;	/* source's identifier */
+        int id;
+    };
 } light_source;
 
 #endif /* LEV_H */
