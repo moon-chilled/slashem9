@@ -1,0 +1,8 @@
+* ANSI-ify everything (~half done)
+* Remove support for platforms no one uses, and in doing so improve maintainability and support on platforms people actually use
+* Delete and later rewrite MAIL (actual email checking doesn't make sense, but there are a couple of other things that we might want):
+ * Dgl mail
+ * In-game chat system (integrate with #shout)
+ * IRC notifications (write IRC plugin to make it log messages to a file and slashem pick them up)
+
+* Delete and later rewrite FILE_AREAS
