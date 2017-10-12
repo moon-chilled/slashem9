@@ -56,10 +56,7 @@ int explcolors[] = {
 #define HAS_ROGUE_IBM_GRAPHICS (iflags.IBMgraphics && Is_rogue_level(&u.uz))
 #endif
 
-/*ARGSUSED*/
-void
-mapglyph (int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int y)
-{
+void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int y) {
 	int offset;
 #if defined(TEXTCOLOR) || defined(ROGUE_COLOR)
 	int color = NO_COLOR;

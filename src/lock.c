@@ -22,10 +22,7 @@ static const char *lock_action(void);
 static boolean obstructed(int,int);
 static void chest_shatter_msg(struct obj *);
 
-boolean
-picking_lock(x, y)
-	int *x, *y;
-{
+boolean picking_lock(int *x, int *y) {
 	if (occupation == picklock || occupation == forcedoor) {
 	    *x = u.ux + u.dx;
 	    *y = u.uy + u.dy;
@@ -36,17 +33,12 @@ picking_lock(x, y)
 	}
 }
 
-boolean
-picking_at(x, y)
-int x, y;
-{
-	return (boolean)(occupation == picklock && xlock.door == &levl[x][y]);
+boolean picking_at(int x, int y) {
+	return occupation == picklock && xlock.door == &levl[x][y];
 }
 
-/* produce an occupation string appropriate for the current activity */
-static const char *
-lock_action()
-{
+// produce an occupation string appropriate for the current activity
+static const char *lock_action(void) {
 	/* "unlocking"+2 == "locking" */
 	static const char *actions[] = {
 		/* [0] */	"unlocking the door",
@@ -71,10 +63,8 @@ lock_action()
 		return xlock.box->otyp == CHEST ? actions[1] : actions[2];
 }
 
-static
-int
-picklock()	/* try to open/close a lock */
-{
+// try to open/close a lock
+static int picklock(void) {
 
 	if (xlock.box) {
 	    if((xlock.box->ox != u.ux) || (xlock.box->oy != u.uy)) {
@@ -119,17 +109,15 @@ picklock()	/* try to open/close a lock */
 	    else xlock.door->doormask = D_LOCKED;
 	} else {
 	    xlock.box->olocked = !xlock.box->olocked;
-	    if(xlock.box->otrapped)
-		(void) chest_trap(xlock.box, FINGER, false);
+	    if (xlock.box->otrapped)
+		chest_trap(xlock.box, FINGER, false);
 	}
 	exercise(A_DEX, true);
 	return((xlock.usedtime = 0));
 }
 
-static
-int
-forcelock()	/* try to force a locked chest */
-{
+// try to force a locked chest
+static int forcelock(void) {
 
 	struct obj *otmp;
 
@@ -215,11 +203,8 @@ forcelock()	/* try to force a locked chest */
 	return((xlock.usedtime = 0));
 }
 
-static
-int
-forcedoor()      /* try to break/pry open a door */
-{
-
+// try to break/pry open a door
+static int forcedoor(void) {
 	if(xlock.door != &(levl[u.ux+u.dx][u.uy+u.dy])) {
 	    return((xlock.usedtime = 0));           /* you moved */
 	}
@@ -289,20 +274,15 @@ forcedoor()      /* try to break/pry open a door */
 }
 
 
-void
-reset_pick (void)
-{
+void reset_pick(void) {
 	xlock.usedtime = xlock.chance = xlock.picktyp = 0;
 	xlock.door = 0;
 	xlock.box = 0;
 }
 
 
-int
-pick_lock ( /* pick a lock with a given object */
-    struct obj **pickp
-)
-{
+// pick a lock with a given object
+int pick_lock (struct obj **pickp) {
 	int picktyp, c, ch;
 	coord cc;
 	int key;
@@ -549,9 +529,8 @@ pick_lock ( /* pick a lock with a given object */
 	return(1);
 }
 
-int
-doforce (void)		/* try to force a chest with your weapon */
-{
+// try to force a chest with your weapon
+int doforce(void)		{
 	struct obj *otmp;
 	int x, y, c, picktyp;
 	struct rm       *door;
@@ -752,9 +731,8 @@ doforce (void)		/* try to force a chest with your weapon */
 	return(0);
 }
 
-int
-doopen (void)		/* try to open a door */
-{
+// try to open a door
+int doopen(void) {
 	coord cc;
 	struct rm *door;
 	struct monst *mtmp;
@@ -836,11 +814,7 @@ doopen (void)		/* try to open a door */
 	return(1);
 }
 
-static
-boolean
-obstructed(x,y)
-int x, y;
-{
+static boolean obstructed(int x, int y) {
 	struct monst *mtmp = m_at(x, y);
 
 	if(mtmp && mtmp->m_ap_type != M_AP_FURNITURE) {
@@ -849,18 +823,17 @@ int x, y;
 			"Some creature" : Monnam(mtmp));
 		if (!canspotmon(mtmp))
 		    map_invisible(mtmp->mx, mtmp->my);
-		return(true);
+		return true;
 	}
 	if (OBJ_AT(x, y)) {
 objhere:	pline("%s's in the way.", Something);
 		return(true);
 	}
-	return(false);
+	return false;
 }
 
-int
-doclose (void)		/* try to close a door */
-{
+// try to close a door
+int doclose(void) {
 	int x, y;
 	struct rm *door;
 	struct monst *mtmp;
@@ -953,10 +926,10 @@ doclose (void)		/* try to close a door */
 	return(1);
 }
 
-boolean			/* box obj was hit with spell effect otmp */
-boxlock(obj, otmp)	/* returns true if something happened */
-struct obj *obj, *otmp;	/* obj *is* a box */
-{
+// box obj was hit with spell effect otmp
+// returns true if something happened
+// obj *is* a box
+boolean boxlock(struct obj *obj, struct obj *otmp) {
 	boolean res = 0;
 
 	switch(otmp->otyp) {
@@ -989,11 +962,10 @@ struct obj *obj, *otmp;	/* obj *is* a box */
 	return res;
 }
 
-boolean			/* Door/secret door was hit with spell effect otmp */
-doorlock(otmp,x,y)	/* returns true if something happened */
-struct obj *otmp;
-int x, y;
-{
+
+// Door/secret door was hit with spell effect otmp
+// returns true if something happened
+boolean doorlock(struct obj *otmp, int x, int y) {
 	struct rm *door = &levl[x][y];
 	boolean res = true;
 	int loudness = 0;
@@ -1150,10 +1122,7 @@ int x, y;
 	return res;
 }
 
-static void
-chest_shatter_msg(otmp)
-struct obj *otmp;
-{
+static void chest_shatter_msg(struct obj *otmp) {
 	const char *disposition;
 	const char *thing;
 	long save_Blinded;
@@ -1186,6 +1155,8 @@ struct obj *otmp;
 	default:	disposition = "is destroyed";
 		break;
 	}
+
+
 	pline("%s %s!", An(thing), disposition);
 }
 
@@ -1197,10 +1168,7 @@ struct obj *otmp;
  * and artifact doors are needed this isn't a problem. If we ever
  * implement trapped secret doors we will have to extend this.
  */
-
-int
-artifact_door (int x, int y)
-{
+int artifact_door(int x, int y) {
     int i;
 
     for(i = 0; i < doorindex; i++) {

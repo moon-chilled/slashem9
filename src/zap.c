@@ -3257,8 +3257,7 @@ struct obj **obj_p;			/* object tossed/used */
 #ifdef LIGHT_SRC_SPELL
 				if (use_lights) {
 				    while (lits) {
-					del_light_source(LS_TEMP,
-						(void *) lits);
+					del_light_source(LS_TEMP, (void *)(size_t)lits);
 					lits--;
 				    }
 				    vision_full_recalc = 1;
@@ -3352,8 +3351,7 @@ struct obj **obj_p;			/* object tossed/used */
 #ifdef LIGHT_SRC_SPELL
 		if (use_lights) {
 		    lits++;
-		    new_light_source(bhitpos.x, bhitpos.y, 1,
-				LS_TEMP, (void *) lits);
+		    new_light_source(bhitpos.x, bhitpos.y, 1, LS_TEMP, (void *)(size_t)lits);
 		    vision_full_recalc = 1;
 		    vision_recalc(0);
 		}
@@ -3403,7 +3401,7 @@ struct obj **obj_p;			/* object tossed/used */
                 tmp_at(DISP_END, 0);
 #ifdef LIGHT_SRC_SPELL
                 while (lits) {
-                        del_light_source(LS_TEMP, (void *) lits);
+                        del_light_source(LS_TEMP, (void *)(size_t)lits);
                         lits--;
                 }
                 vision_full_recalc = 1;
@@ -3951,7 +3949,7 @@ int dx,dy;
             if (((abstype == ZT_FIRE) || (abstype == ZT_LIGHTNING))
               && (!(type >= ZT_MEGA(ZT_FIRST) && type <= ZT_MEGA(ZT_LAST)))) {
                 lits++;
-                new_light_source(sx, sy, 1, LS_TEMP, (void *) lits);
+                new_light_source(sx, sy, 1, LS_TEMP, (void *)(size_t)lits);
                 vision_full_recalc = 1;
                 vision_recalc(0);
             }
@@ -3985,7 +3983,7 @@ int dx,dy;
             /*Clean for fireball*/
 #ifdef LIGHT_SRC_SPELL
 	    if (abs(type) == ZT_SPELL(ZT_FIRE)) {
-		del_light_source(LS_TEMP, (void *) lits);
+		del_light_source(LS_TEMP, (void *)(size_t)lits);
 		lits--;
 	    }
 #endif
@@ -4228,7 +4226,7 @@ int dx,dy;
         && (!(type >= ZT_MEGA(ZT_FIRST) && type <= ZT_MEGA(ZT_LAST))))
         {
         while (lits) {
-                del_light_source(LS_TEMP, (void *) lits);
+                del_light_source(LS_TEMP, (void *)(size_t)lits);
                 lits--;
                 }
         vision_full_recalc = 1;

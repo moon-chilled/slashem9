@@ -80,9 +80,7 @@ static long laststattime;
 #  define MAILPATH "/usr/mail/"
 # endif
 
-void
-getmailstatus (void)
-{
+void getmailstatus(void) {
 	if(!mailbox && !(mailbox = nh_getenv("MAIL"))) {
 #  ifdef MAILPATH
 #   ifdef AMS
@@ -121,10 +119,7 @@ getmailstatus (void)
  * Pick coordinates for a starting position for the mail daemon.  Called
  * from newmail() and newphone().
  */
-static boolean
-md_start(startp)
-    coord *startp;
-{
+static boolean md_start(coord *startp) {
     coord testcc;	/* scratch coordinates */
     int row;		/* current row we are checking */
     int lax;		/* if true, pick a position in sight. */
@@ -222,11 +217,7 @@ retry:
  * enexto().  Use enexto() as a last resort because enexto() chooses
  * its point randomly, which is not what we want.
  */
-static boolean
-md_stop(stopp, startp)
-    coord *stopp;	/* stopping position (we fill it in) */
-    coord *startp;	/* starting positon (read only) */
-{
+static boolean md_stop(coord *stopp /* stopping position (we fill it in) */, coord *startp /* starting positon (read only) */) {
     int x, y, distance, min_distance = -1;
 
     for (x = u.ux-1; x <= u.ux+1; x++)
@@ -252,13 +243,13 @@ md_stop(stopp, startp)
     return true;
 }
 
-/* Let the mail daemon have a larger vocabulary. */
+// TODO: Let the mail daemon have a larger vocabulary
 static const char *mail_text[] = {
     "Gangway!",
     "Look out!",
     "Pardon me!"
 };
-#define md_exclamations()	(mail_text[rn2(3)])
+#define md_exclamations()	(mail_text[SIZE(mail_text)])
 
 /*
  * Make the mail daemon run through the dungeon.  The daemon will run over
@@ -266,11 +257,8 @@ static const char *mail_text[] = {
  * false if the md gets stuck in a position where there is a monster.  Return
  * true otherwise.
  */
-static boolean
-md_rush(md,tx,ty)
-    struct monst *md;
-    int tx, ty;		/* destination of mail daemon */
-{
+// (tx, ty) is the destination of the mail daemon
+static boolean md_rush(struct monst *md, int tx, int ty) {
     struct monst *mon;			/* displaced monster */
     int dx, dy;		/* direction counters */
     int fx = md->mx, fy = md->my;	/* current location */
@@ -361,11 +349,7 @@ md_rush(md,tx,ty)
 }
 
 /* Deliver a scroll of mail. */
-/*ARGSUSED*/
-static void
-newmail(info)
-struct mail_info *info;
-{
+static void newmail(struct mail_info *info) {
     struct monst *md;
     coord start, stop;
     boolean message_seen = false;
@@ -413,9 +397,7 @@ give_up:
 
 # if !defined(UNIX) && !defined(LAN_MAIL)
 
-void
-ckmailstatus (void)
-{
+void ckmailstatus(void) {
 	if (u.uswallow || !flags.biff) return;
 	if (mustgetmail < 0) {
 	    return;
@@ -428,10 +410,7 @@ ckmailstatus (void)
 	}
 }
 
-/*ARGSUSED*/
-void
-readmail (struct obj *otmp)
-{
+void readmail(struct obj *otmp) {
     const char *line;
     char buf[BUFSZ];
     line = getrumor(bcsign(otmp), buf, true);
@@ -448,9 +427,7 @@ readmail (struct obj *otmp)
 
 # ifdef UNIX
 
-void
-ckmailstatus (void)
-{
+void ckmailstatus(void) {
 	if(!mailbox || u.uswallow || !flags.biff
 #  ifdef MAILCKFREQ
 		    || moves < laststattime + MAILCKFREQ
@@ -483,10 +460,7 @@ ckmailstatus (void)
 	}
 }
 
-/*ARGSUSED*/
-void
-readmail (struct obj *otmp)
-{
+void readmail(struct obj *otmp) {
 #  ifdef DEF_MAILREADER			/* This implies that UNIX is defined */
 	const char *mr = 0;
 
@@ -513,9 +487,7 @@ readmail (struct obj *otmp)
 
 # ifdef LAN_MAIL
 
-void
-ckmailstatus (void)
-{
+void ckmailstatus(void) {
 	static int laststattime = 0;
 
 	if(u.uswallow || !flags.biff
@@ -540,10 +512,7 @@ ckmailstatus (void)
 	}
 }
 
-/*ARGSUSED*/
-void
-readmail (struct obj *otmp)
-{
+void readmail(struct obj *otmp) {
 	lan_mail_read(otmp);
 }
 

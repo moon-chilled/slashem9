@@ -57,12 +57,7 @@ extern char circle_start[];
 extern boolean obj_special_light(struct obj *);
 
 /* Create a new light source.  */
-void
-new_light_source(x, y, range, type, id)
-    xchar x, y;
-    int range, type;
-    void * id;
-{
+void new_light_source(xchar x, xchar y, int range, int type, void *id) {
     light_source *ls;
 
     if (range > MAX_RADIUS || range < 1) {
@@ -70,7 +65,7 @@ new_light_source(x, y, range, type, id)
 	return;
     }
 
-    ls = (light_source *) alloc(sizeof(light_source));
+    ls = new(light_source);
 
     ls->next = light_base;
     ls->x = x;
@@ -91,13 +86,9 @@ new_light_source(x, y, range, type, id)
  * Delete a light source. This assumes only one light source is attached
  * to an object at a time.
  */
-void
-del_light_source(type, id)
-    int type;
-    void * id;
-{
+void del_light_source(int type, void *id) {
     light_source *curr, *prev;
-    void * tmp_id;
+    void *tmp_id;
 
     /* need to be prepared for dealing a with light source which
        has only been partially restored during a level change
@@ -132,9 +123,7 @@ del_light_source(type, id)
 }
 
 /* Mark locations that are temporarily lit via mobile light sources. */
-void
-do_light_sources (char **cs_rows)
-{
+void do_light_sources (char **cs_rows) {
     int x, y, min_x, max_x, max_y, offset;
     char *limits;
     short at_hero_range = 0;
@@ -234,9 +223,7 @@ do_light_sources (char **cs_rows)
 /* (mon->mx == 0) implies migrating */
 #define mon_is_local(mon)	((mon)->mx > 0)
 
-struct monst *
-find_mid (unsigned nid, unsigned fmflags)
-{
+struct monst *find_mid(unsigned nid, unsigned fmflags) {
 	struct monst *mtmp;
 
 	if (!nid)
@@ -254,9 +241,7 @@ find_mid (unsigned nid, unsigned fmflags)
 }
 
 /* Save all light sources of the given range. */
-void
-save_light_sources (int fd, int mode, int range)
-{
+void save_light_sources(int fd, int mode, int range) {
     int count, actual, is_global;
     light_source **prev, *curr;
 
@@ -309,9 +294,7 @@ save_light_sources (int fd, int mode, int range)
  * Pull in the structures from disk, but don't recalculate the object
  * pointers.
  */
-void
-restore_light_sources (int fd)
-{
+void restore_light_sources(int fd) {
     int count;
     light_source *ls;
 
@@ -319,18 +302,15 @@ restore_light_sources (int fd)
     mread(fd, (void *) &count, sizeof count);
 
     while (count-- > 0) {
-	ls = (light_source *) alloc(sizeof(light_source));
-	mread(fd, (void *) ls, sizeof(light_source));
+	ls = new(light_source);
+	mread(fd, ls, sizeof(light_source));
 	ls->next = light_base;
 	light_base = ls;
     }
 }
 
 /* Relink all lights that are so marked. */
-void
-relink_light_sources(ghostly)
-    boolean ghostly;
-{
+void relink_light_sources(boolean ghostly) {
     char which;
     unsigned nid;
     light_source *ls;
@@ -366,11 +346,7 @@ relink_light_sources(ghostly)
  * sources that would be written.  If write_it is true, actually write
  * the light source out.
  */
-static int
-maybe_write_ls(fd, range, write_it)
-    int fd, range;
-    boolean write_it;
-{
+static int maybe_write_ls(int fd, int range, boolean write_it) {
     int count = 0, is_global;
     light_source *ls;
 
@@ -405,18 +381,14 @@ maybe_write_ls(fd, range, write_it)
 }
 
 /* Write a light source structure to disk. */
-static void
-write_ls(fd, ls)
-    int fd;
-    light_source *ls;
-{
-    void * arg_save;
+static void write_ls(int fd, light_source *ls) {
+    void *arg_save;
     struct obj *otmp;
     struct monst *mtmp;
 
     if (ls->type == LS_OBJECT || ls->type == LS_MONSTER) {
 	if (ls->flags & LSF_NEEDS_FIXUP)
-	    bwrite(fd, (void *)ls, sizeof(light_source));
+	    bwrite(fd, ls, sizeof(light_source));
 	else {
 	    /* replace object pointer with id for write, then put back */
 	    arg_save = ls->idptr;
@@ -446,9 +418,7 @@ write_ls(fd, ls)
 }
 
 /* Change light source's ID from src to dest. */
-void
-obj_move_light_source (struct obj *src, struct obj *dest)
-{
+void obj_move_light_source(struct obj *src, struct obj *dest) {
     light_source *ls;
 
     for (ls = light_base; ls; ls = ls->next)
@@ -459,9 +429,7 @@ obj_move_light_source (struct obj *src, struct obj *dest)
 }
 
 /* return true if there exist any light sources */
-boolean
-any_light_source()
-{
+boolean any_light_source(void) {
     return light_base != NULL;
 }
 
@@ -469,9 +437,7 @@ any_light_source()
  * Snuff an object light source if at (x,y).  This currently works
  * only for burning light sources.
  */
-void
-snuff_light_source (int x, int y)
-{
+void snuff_light_source(int x, int y) {
     light_source *ls;
     struct obj *obj;
 
@@ -501,20 +467,14 @@ snuff_light_source (int x, int y)
 	}
 }
 
-/* Return true if object sheds any light at all. */
-boolean
-obj_sheds_light(obj)
-    struct obj *obj;
-{
+// Return true if object sheds any light at all.
+boolean obj_sheds_light(struct obj *obj) {
     /* so far, only burning objects shed light */
     return obj_is_burning(obj);
 }
 
 /* Return true if sheds light AND will be snuffed by end_burn(). */
-boolean
-obj_is_burning(obj)
-    struct obj *obj;
-{
+boolean obj_is_burning(struct obj *obj) {
     return (obj->lamplit &&
  		(  obj->otyp == MAGIC_LAMP
 		|| obj->otyp == MAGIC_CANDLE
@@ -526,9 +486,7 @@ obj_is_burning(obj)
 }
 
 /* copy the light source(s) attachted to src, and attach it/them to dest */
-void
-obj_split_light_source (struct obj *src, struct obj *dest)
-{
+void obj_split_light_source(struct obj *src, struct obj *dest) {
     light_source *ls, *new_ls;
 
     for (ls = light_base; ls; ls = ls->next)
@@ -538,7 +496,7 @@ obj_split_light_source (struct obj *src, struct obj *dest)
 	     * never interfere us walking down the list - we are already
 	     * past the insertion point.
 	     */
-	    new_ls = alloc(sizeof(light_source));
+	    new_ls = new(light_source);
 	    *new_ls = *ls;
 	    if (Is_candle(src)) {
 		/* split candles may emit less light than original group */
@@ -555,9 +513,7 @@ obj_split_light_source (struct obj *src, struct obj *dest)
 
 /* light source `src' has been folded into light source `dest';
    used for merging lit candles and adding candle(s) to lit candelabrum */
-void
-obj_merge_light_sources (struct obj *src, struct obj *dest)
-{
+void obj_merge_light_sources(struct obj *src, struct obj *dest) {
     light_source *ls;
 
     /* src == dest implies adding to candelabrum */
@@ -573,9 +529,7 @@ obj_merge_light_sources (struct obj *src, struct obj *dest)
 
 /* Candlelight is proportional to the number of candles;
    minimum range is 2 rather than 1 for playability. */
-int
-candle_light_range (struct obj *obj)
-{
+int candle_light_range(struct obj *obj) {
     int radius;
 
     if (obj->otyp == CANDELABRUM_OF_INVOCATION) {
@@ -614,9 +568,7 @@ candle_light_range (struct obj *obj)
 #ifdef WIZARD
 extern char *fmt_ptr(const void*, char *);  /* from alloc.c */
 
-int
-wiz_light_sources (void)
-{
+int wiz_light_sources(void) {
     winid win;
     char buf[BUFSZ], arg_address[20];
     light_source *ls;

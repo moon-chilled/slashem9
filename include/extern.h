@@ -984,14 +984,14 @@ extern void mapglyph(int, int *, int *, unsigned *, int, int);
 /* ### mcastu.c ### */
 
 extern int castmu(struct monst *,struct attack *,boolean,boolean);
-extern int buzzmu(struct monst *,struct attack *);
+extern bool buzzmu(struct monst *,struct attack *);
 
 /* ### mhitm.c ### */
 
-extern int fightm(struct monst *);
-extern int mattackm(struct monst *,struct monst *);
-extern int noattacks(struct permonst *);
-extern int sleep_monst(struct monst *,int,int);
+extern int  fightm(struct monst *);
+extern int  mattackm(struct monst *,struct monst *);
+extern bool noattacks(struct permonst *);
+extern int  sleep_monst(struct monst *,int,int);
 extern void slept_monst(struct monst *);
 extern long attk_protection(int);
 
