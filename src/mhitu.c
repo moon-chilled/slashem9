@@ -12,9 +12,7 @@ static void urustm(struct monst *, struct obj *);
 static boolean u_slip_free(struct monst *,struct attack *);
 static int passiveum(struct permonst *,struct monst *,struct attack *);
 
-# ifdef SEDUCE
 static void mayberem(struct obj *, const char *);
-# endif
 
 static boolean diseasemu(struct permonst *);
 static int hitmu(struct monst *,struct attack *);
@@ -1564,11 +1562,7 @@ dopois:
 			hitmsg(mtmp, mattk);
 			if (mtmp->mcan) break;
 			/* Continue below */
-		} else if (dmgtype(youmonst.data, AD_SEDU)
-#ifdef SEDUCE
-			|| dmgtype(youmonst.data, AD_SSEX)
-#endif
-						) {
+		} else if (dmgtype(youmonst.data, AD_SEDU) || dmgtype(youmonst.data, AD_SSEX)) {
 			pline("%s %s.", Monnam(mtmp), mtmp->minvent ?
 		    "brags about the goods some dungeon explorer provided" :
 		    "makes some remarks about how difficult theft is lately");
@@ -1614,14 +1608,12 @@ dopois:
 			return 3;
 		}
 		break;
-#ifdef SEDUCE
 	    case AD_SSEX:
 		if(could_seduce(mtmp, &youmonst, mattk) == 1
 			&& !mtmp->mcan)
 		    if (doseduce(mtmp))
 			return 3;
 		break;
-#endif
 	    case AD_SAMU:
 		hitmsg(mtmp, mattk);
 		/* when the Wiz hits, 1/20 steals the amulet */
@@ -2600,19 +2592,11 @@ could_seduce (struct monst *magr, struct monst *mdef, struct attack *mattk)
 		gendef = gender(mdef);
 	}
 
-	if(agrinvis && !defperc
-#ifdef SEDUCE
-		&& mattk && mattk->adtyp != AD_SSEX
-#endif
-		)
+	if(agrinvis && !defperc && mattk && mattk->adtyp != AD_SSEX)
 		return 0;
 
 	if(pagr->mlet != S_NYMPH
-		&& ((pagr != &mons[PM_INCUBUS] && pagr != &mons[PM_SUCCUBUS])
-#ifdef SEDUCE
-		    || (mattk && mattk->adtyp != AD_SSEX)
-#endif
-		   ))
+		&& ((pagr != &mons[PM_INCUBUS] && pagr != &mons[PM_SUCCUBUS]) || (mattk && mattk->adtyp != AD_SSEX)))
 		return 0;
 
 	if(genagr == 1 - gendef)
@@ -2622,11 +2606,8 @@ could_seduce (struct monst *magr, struct monst *mdef, struct attack *mattk)
 }
 
 
-#ifdef SEDUCE
 /* Returns 1 if monster teleported */
-int
-doseduce (struct monst *mon)
-{
+int doseduce (struct monst *mon) {
 	struct obj *ring, *nring;
 	boolean fem = (mon->data == &mons[PM_SUCCUBUS]); /* otherwise incubus */
 	char qbuf[QBUFSZ];
@@ -2909,7 +2890,6 @@ const char *str;
 	}
 	remove_worn_item(obj, true);
 }
-#endif  /* SEDUCE */
 
 
 static int

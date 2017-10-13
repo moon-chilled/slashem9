@@ -1645,21 +1645,20 @@ mondead (struct monst *mtmp)
 	if (tmp == PM_MAIL_DAEMON) mvitals[tmp].mvflags |= G_GENOD;
 #endif
 
-#ifdef KOPS
 	if (mtmp->data->mlet == S_KOP) {
 	    /* Dead Kops may come back. */
 	    switch(rnd(5)) {
 		case 1:	     /* returns near the stairs */
-			(void) makemon(mtmp->data,xdnstair,ydnstair,NO_MM_FLAGS);
+			makemon(mtmp->data,xdnstair,ydnstair,NO_MM_FLAGS);
 			break;
 		case 2:	     /* randomly */
-			(void) makemon(mtmp->data,0,0,NO_MM_FLAGS);
+			makemon(mtmp->data,0,0,NO_MM_FLAGS);
 			break;
 		default:
 			break;
 	    }
 	}
-#endif
+
 	if(mtmp->iswiz) wizdead();
 	if(mtmp->data->msound == MS_NEMESIS) nemdead();
 
@@ -2037,10 +2036,7 @@ xkilled (struct monst *mtmp, int dest)
 	} else if(x != u.ux || y != u.uy) {
 		/* might be here after swallowed */
 		if (!rn2(6) && !(mvitals[mndx].mvflags & G_NOCORPSE) && !(nohands(mdat))
-#ifdef KOPS
-					&& mdat->mlet != S_KOP
-#endif
-							) {
+					&& mdat->mlet != S_KOP) {
 			int typ;
 
 			otmp = mkobj_at(RANDOM_CLASS, x, y, true);

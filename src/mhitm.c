@@ -1556,10 +1556,8 @@ physical:
 			/* Automatic kill if drained past level 0 */
 		}
 		break;
-#ifdef SEDUCE
 	    case AD_SSEX:
-#endif
-	    case AD_SITM:	/* for now these are the same */
+	    case AD_SITM:	// for now these are the same
 	    case AD_SEDU:
 		if (magr->mcan) break;
 		/* find an object to steal, non-cursed if magr is tame */

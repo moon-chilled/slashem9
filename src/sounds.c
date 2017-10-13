@@ -791,17 +791,12 @@ static int domonnoise (struct monst *mtmp) {
 	    }
 	    break;
 	case MS_SEDUCE:
-#ifdef SEDUCE
 	    if (ptr->mlet != S_NYMPH &&
 		could_seduce(mtmp, &youmonst, NULL) == 1) {
 			(void) doseduce(mtmp);
 			break;
 	    }
-	    switch ((poly_gender() != (int) mtmp->female) ? rn2(3) : 0)
-#else
-	    switch ((poly_gender() == 0) ? rn2(3) : 0)
-#endif
-	    {
+	    switch ((poly_gender() != (int) mtmp->female) ? rn2(3) : 0) {
 		case 2:
 			verbl_msg = "Hello, sailor.";
 			break;
@@ -812,24 +807,22 @@ static int domonnoise (struct monst *mtmp) {
 			pline_msg = "cajoles you.";
 	    }
 	    break;
-#ifdef KOPS
 	case MS_ARREST:
 	    if (mtmp->mpeaceful)
 		verbalize("Just the facts, %s.",
 		      flags.female ? "Ma'am" : "Sir");
 	    else {
-		static const char * const arrest_msg[3] = {
+		static const char * const arrest_msg[] = {
 		    "Anything you say can be used against you.",
 		    "You're under arrest!",
 		    "Stop in the name of the Law!",
 		};
-		verbl_msg = arrest_msg[rn2(3)];
+		verbl_msg = arrest_msg[rn2(SIZE(arrest_msg))];
 	    }
 	    break;
-#endif
 	case MS_BRIBE:
 	    if (mtmp->mpeaceful && !mtmp->mtame) {
-		(void) demon_talk(mtmp);
+		demon_talk(mtmp);
 		break;
 	    }
 	    /* fall through */

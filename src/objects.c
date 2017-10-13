@@ -383,10 +383,8 @@ WEAPON("boomerang", NULL,
 /* Whips */
 WEAPON("bullwhip", NULL,
 	1, 0, 0,  2, 20,  4,  2,  1, 0, 0,   P_WHIP, LEATHER, CLR_BROWN),
-#ifdef KOPS
 WEAPON("rubber hose", NULL,
 	1, 0, 0,  0, 20,  3,  4,  3, 0, B,   P_WHIP, PLASTIC, CLR_BROWN),
-#endif
 
 /* With shuffled appearances... */
 #undef P

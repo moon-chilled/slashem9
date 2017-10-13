@@ -40,12 +40,6 @@ struct conditionals {
 	/* commented out in monst.c at present */
 	{ MON_GLYPH, PM_BLACK_LIGHT, "zruty" },
 
-#ifndef KOPS
-	{ MON_GLYPH, PM_VORPAL_JABBERWOCK, "Keystone Kop" },
-	{ MON_GLYPH, PM_VORPAL_JABBERWOCK, "Kop Sergeant" },
-	{ MON_GLYPH, PM_VORPAL_JABBERWOCK, "Kop Lieutenant" },
-	{ MON_GLYPH, PM_VORPAL_JABBERWOCK, "Kop Kaptain" },
-#endif
 
 #ifndef CHARON /* not supported yet */
 	{ MON_GLYPH, PM_CROESUS, "Charon" },
@@ -108,10 +102,6 @@ struct conditionals {
 	{ OBJ_GLYPH, SLING, "frag grenade" },
 	{ OBJ_GLYPH, SLING, "gas grenade" },
 	{ OBJ_GLYPH, SLING, "stick of dynamite" },
-#endif
-
-#ifndef KOPS
-	{ OBJ_GLYPH, BULLWHIP, "rubber hose" },
 #endif
 
 #ifndef LIGHTSABERS

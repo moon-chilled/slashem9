@@ -434,9 +434,6 @@ make_version()
 			| (1L <<  1)
 #endif
 		/* monsters (4..7) */
-#ifdef KOPS
-			| (1L <<  6)
-#endif
 #ifdef MAIL
 			| (1L <<  7)
 #endif
@@ -683,9 +680,6 @@ static const char *build_opts[] = {
 #ifdef KEEP_SAVE
                 "keep savefiles",
 #endif
-#ifdef KOPS
-		"Keystone Kops",
-#endif
 #ifdef HOLD_LOCKFILE_OPEN
 		"exclusive lock on level 0 file",
 #endif
@@ -744,9 +738,6 @@ static const char *build_opts[] = {
 		"screen control via WIN32 console I/O",
 #  endif
 # endif
-#endif
-#ifdef SEDUCE
-		"seduction",
 #endif
 #ifdef SHELL
 		"shell command",

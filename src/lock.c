@@ -556,16 +556,13 @@ int doforce(void)		{
 	    uwep->otyp == SKELETON_KEY) {
 	    	return pick_lock(&uwep);
 	/* not a lightsaber or lockpicking device*/
-	} else if(!uwep ||     /* proper type test */
+	} else if (!uwep ||     /* proper type test */
 	   (uwep->oclass != WEAPON_CLASS && !is_weptool(uwep) &&
 	    uwep->oclass != ROCK_CLASS) ||
 	   (objects[uwep->otyp].oc_skill < P_DAGGER) ||
 	   (objects[uwep->otyp].oc_skill > P_LANCE) ||
-	   uwep->otyp == FLAIL || uwep->otyp == AKLYS
-#ifdef KOPS
-	   || uwep->otyp == RUBBER_HOSE
-#endif
-	  ) {
+	   uwep->otyp == FLAIL || uwep->otyp == AKLYS ||
+	   uwep->otyp == RUBBER_HOSE) {
 	    You_cant("force anything without a %sweapon.",
 		  (uwep) ? "proper " : "");
 	    return(0);

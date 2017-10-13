@@ -104,9 +104,6 @@
 /* Keep save files after restore */
 #undef KEEP_SAVE
 
-/* Keystone Kops */
-#undef KOPS
-
 /* Dimsabers */
 #undef LIGHTSABERS
 
@@ -166,9 +163,6 @@
 
 /* Software SDL graphics */
 #undef SDL_GRAPHICS
-
-/* Succubi/incubi seduction */
-#undef SEDUCE
 
 /* Display damage reports */
 #undef SHOW_DMG

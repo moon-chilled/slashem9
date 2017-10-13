@@ -13,11 +13,9 @@
 #define PAY_SKIP  (-1)
 #define PAY_BROKE (-2)
 
-#ifdef KOPS
 static void makekops(coord *);
 static void call_kops(struct monst *,boolean);
 static void kops_gone(boolean);
-#endif /* KOPS */
 
 #define IS_SHOP(x)	(rooms[x].rtype >= SHOPBASE)
 #define no_cheat      ((ACURR(A_CHA) - rnl(3)) > 7)
@@ -352,7 +350,6 @@ struct monst *shkp;
 }
 
 
-#ifdef KOPS
 static void
 call_kops(shkp, nearshop)
 struct monst *shkp;
@@ -426,7 +423,6 @@ boolean nearshop;
 	    makekops(&mm);
 	}
 }
-#endif	/* KOPS */
 
 
 void
@@ -517,11 +513,7 @@ boolean newlev;
 	    if (Is_blackmarket(&u.uz))
 		blkmar_guards(shkp);
 
-#ifdef KOPS
 	    call_kops(shkp, (!newlev && levl[u.ux0][u.uy0].edge));
-#else
-	    (void) angry_guards(false);
-#endif
 	}
 }
 
@@ -546,12 +538,8 @@ xchar x, y;
 	    if (Is_blackmarket(&u.uz))
 		blkmar_guards(shkp);
 
-#ifdef KOPS
 	    /*[might want to set 2nd arg based on distance from shop doorway]*/
 	    call_kops(shkp, false);
-#else
-	    (void) angry_guards(false);
-#endif
 	}
 }
 
@@ -1115,11 +1103,8 @@ boolean killkops;
 	(void) mnearto(shkp, x, y, true);
 	level.flags.has_shop = 1;
 	if (killkops) {
-#ifdef KOPS
 		kops_gone(true);
-#else
-		You_feel("vaguely apprehensive.");
-#endif
+
 		pacify_guards();
 	}
 	after_shk_move(shkp);
@@ -1132,8 +1117,8 @@ angry_shk_exists()
 
 	for (shkp = next_shkp(fmon, false);
 		shkp; shkp = next_shkp(shkp->nmon, false))
-	    if (ANGRY(shkp)) return(true);
-	return(false);
+	    if (ANGRY(shkp)) return true;
+	return false;
 }
 
 /* remove previously applied surcharge from all billed items */
@@ -1233,9 +1218,8 @@ boolean silentkops;
 		pline("%s calms down.", Monnam(shkp));
 
 	if(!angry_shk_exists()) {
-#ifdef KOPS
 		kops_gone(silentkops);
-#endif
+
 		pacify_guards();
 	}
 }
@@ -3855,7 +3839,6 @@ int fall;
         rile_shk(shkp);
 }
 
-#ifdef KOPS
 /* modified by M. Campostrini (campo@sunthpi3.difi.unipi.it) */
 /* to allow for multiple choices of kops */
 static void
@@ -3900,7 +3883,6 @@ coord *mm;
 	}
 	free((void *)mc);
 }
-#endif	/* KOPS */
 
 void
 pay_for_damage(dmgstr, cant_mollify)
@@ -4252,7 +4234,6 @@ struct monst *shkp;
 		pline("%s talks about the problem of shoplifters.",shkname(shkp));
 }
 
-#ifdef KOPS
 static void
 kops_gone(silent)
 boolean silent;
@@ -4271,7 +4252,6 @@ boolean silent;
 	    pline_The("Kop%s (disappointed) vanish%s into thin air.",
 		      plur(cnt), cnt == 1 ? "es" : "");
 }
-#endif	/* KOPS */
 
 
 static long

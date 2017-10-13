@@ -1940,9 +1940,7 @@ struct attack *mattk;
 		    minstapetrify(mdef, true);
 		tmp = 0;
 		break;
-#ifdef SEDUCE
 	    case AD_SSEX:
-#endif
 	    case AD_SEDU:
 	    case AD_SITM:
 		steal_it(mdef, mattk);
@@ -2797,14 +2795,12 @@ use_weapon:
 			if (!cantwield(youmonst.data) &&
 				u.umonnum != PM_MARILITH)
 			    goto use_weapon;
-#ifdef SEDUCE
 #if 0	/* Shouldn't matter where the first AT_CLAW is anymore
 			/* succubi/incubi are humanoid, but their _second_
 			 * attack is AT_CLAW, not their first...
 			 */
 			if (i==1 && uwep && (u.umonnum == PM_SUCCUBUS ||
 				u.umonnum == PM_INCUBUS)) goto use_weapon;
-#endif
 #endif
 		case AT_BITE:
 			/* [ALI] Vampires are also smart. They avoid biting

@@ -738,8 +738,6 @@ with_compression
 enable_data_librarian
 enable_light_src_spell
 enable_reincarnation
-enable_kops
-enable_seduce
 enable_invisible_objects
 enable_unpolypile
 enable_lightsabers
@@ -1417,8 +1415,6 @@ Optional Features:
   --enable-light-src-spell
                           Spells are light sources (default=yes)
   --enable-reincarnation  Special Rogue-like levels (default=no)
-  --enable-kops           Keystone Kops (default=yes)
-  --enable-seduce         Succubi/incubi seduction (default=yes)
   --enable-invisible-objects
                           Invisible objects (default=yes)
   --enable-unpolypile     Object unpolymorphing (default=yes)
@@ -6189,44 +6185,6 @@ $as_echo "$enable_reincarnation" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define REINCARNATION /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable kops" >&5
-$as_echo_n "checking whether to enable kops... " >&6; }
-   # Check whether --enable-kops was given.
-if test "${enable_kops+set}" = set; then :
-  enableval=$enable_kops;
-else
-  enable_kops="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_kops" >&5
-$as_echo "$enable_kops" >&6; }
-   if test "$enable_kops" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define KOPS /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable seduce" >&5
-$as_echo_n "checking whether to enable seduce... " >&6; }
-   # Check whether --enable-seduce was given.
-if test "${enable_seduce+set}" = set; then :
-  enableval=$enable_seduce;
-else
-  enable_seduce="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_seduce" >&5
-$as_echo "$enable_seduce" >&6; }
-   if test "$enable_seduce" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define SEDUCE /**/
 _ACEOF
 
    fi
