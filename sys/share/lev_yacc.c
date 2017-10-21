@@ -48,10 +48,7 @@ static int yygrowstack();
  */
 #define MAX_OF_TYPE	128
 
-#define New(type)		\
-	(type *) memset(alloc(sizeof(type)), 0, sizeof(type))
 #define NewTab(type, size)	(type **) alloc(sizeof(type *) * size)
-#define Free(ptr)		free((void *)ptr)
 
 extern void yyerror(const char *);
 extern void yywarning(const char *);
@@ -1236,7 +1233,7 @@ case 7:
 				}
 				npart = 0;
 			}
-			Free(yyvsp[-4].map);
+			free(yyvsp[-4].map);
 		  }
 break;
 case 8:
@@ -1271,7 +1268,7 @@ case 8:
 				nrooms = 0;
 				ncorridor = 0;
 			}
-			Free(yyvsp[-6].map);
+			free(yyvsp[-6].map);
 		  }
 break;
 case 9:
@@ -1348,7 +1345,7 @@ case 20:
 			    (void) strncpy(tmpmessage+j, yyvsp[0].map, i - 1);
 			    tmpmessage[j + i - 1] = 0;
 			}
-			Free(yyvsp[0].map);
+			free(yyvsp[0].map);
 		  }
 break;
 case 23:
@@ -1377,7 +1374,7 @@ case 24:
 break;
 case 25:
 {
-			tmproom[nrooms] = New(room);
+			tmproom[nrooms] = new(room);
 			tmproom[nrooms]->name = NULL;
 			tmproom[nrooms]->parent = NULL;
 			tmproom[nrooms]->rtype = 0;
@@ -1393,14 +1390,14 @@ case 25:
 break;
 case 31:
 {
-			tmpcor[0] = New(corridor);
+			tmpcor[0] = new(corridor);
 			tmpcor[0]->src.room = -1;
 			ncorridor = 1;
 		  }
 break;
 case 34:
 {
-			tmpcor[ncorridor] = New(corridor);
+			tmpcor[ncorridor] = new(corridor);
 			tmpcor[ncorridor]->src.room = yyvsp[-2].corpos.room;
 			tmpcor[ncorridor]->src.wall = yyvsp[-2].corpos.wall;
 			tmpcor[ncorridor]->src.door = yyvsp[-2].corpos.door;
@@ -1416,7 +1413,7 @@ case 34:
 break;
 case 35:
 {
-			tmpcor[ncorridor] = New(corridor);
+			tmpcor[ncorridor] = new(corridor);
 			tmpcor[ncorridor]->src.room = yyvsp[-2].corpos.room;
 			tmpcor[ncorridor]->src.wall = yyvsp[-2].corpos.wall;
 			tmpcor[ncorridor]->src.door = yyvsp[-2].corpos.door;
@@ -1450,7 +1447,7 @@ case 38:
 break;
 case 39:
 {
-			tmproom[nrooms] = New(room);
+			tmproom[nrooms] = new(room);
 			tmproom[nrooms]->parent = yyvsp[-1].map;
 			tmproom[nrooms]->name = NULL;
 			tmproom[nrooms]->rtype = yyvsp[-9].i;
@@ -1467,7 +1464,7 @@ case 39:
 break;
 case 40:
 {
-			tmproom[nrooms] = New(room);
+			tmproom[nrooms] = new(room);
 			tmproom[nrooms]->name = NULL;
 			tmproom[nrooms]->parent = NULL;
 			tmproom[nrooms]->rtype = yyvsp[-9].i;
@@ -1572,7 +1569,7 @@ case 69:
 		     yyerror("If the door wall is random, so must be its pos!");
 			    tmprdoor[ndoor] = (struct room_door *)0;
 			} else {
-			    tmprdoor[ndoor] = New(room_door);
+			    tmprdoor[ndoor] = new(room_door);
 			    tmprdoor[ndoor]->secret = yyvsp[-6].i;
 			    tmprdoor[ndoor]->mask = yyvsp[-4].i;
 			    tmprdoor[ndoor]->wall = yyvsp[-2].i;
@@ -1633,7 +1630,7 @@ case 85:
 break;
 case 86:
 {
-			tmppart[npart] = New(mazepart);
+			tmppart[npart] = new(mazepart);
 			tmppart[npart]->halign = 1;
 			tmppart[npart]->valign = 1;
 			tmppart[npart]->nrobjects = 0;
@@ -1650,14 +1647,14 @@ case 86:
 break;
 case 87:
 {
-			tmppart[npart] = New(mazepart);
+			tmppart[npart] = new(mazepart);
 			tmppart[npart]->halign = yyvsp[-1].i % 10;
 			tmppart[npart]->valign = yyvsp[-1].i / 10;
 			tmppart[npart]->nrobjects = 0;
 			tmppart[npart]->nloc = 0;
 			tmppart[npart]->nrmonst = 0;
 			scan_map(yyvsp[0].map);
-			Free(yyvsp[0].map);
+			free(yyvsp[0].map);
 		  }
 break;
 case 88:
@@ -1762,7 +1759,7 @@ case 105:
 break;
 case 130:
 {
-			tmpmonst[nmons] = New(monster);
+			tmpmonst[nmons] = new(monster);
 			tmpmonst[nmons]->x = current_coord.x;
 			tmpmonst[nmons]->y = current_coord.y;
 			tmpmonst[nmons]->class = yyvsp[-4].i;
@@ -1784,7 +1781,7 @@ case 130:
 			      "Invalid monster name!  Making random monster.");
 			    else
 				tmpmonst[nmons]->id = token;
-			    Free(yyvsp[-2].map);
+			    free(yyvsp[-2].map);
 			}
 		  }
 break;
@@ -1836,7 +1833,7 @@ case 140:
 break;
 case 141:
 {
-			tmpobj[nobj] = New(object);
+			tmpobj[nobj] = new(object);
 			tmpobj[nobj]->class = yyvsp[-2].i;
 			tmpobj[nobj]->corpsenm = NON_PM;
 			tmpobj[nobj]->curse_state = -1;
@@ -1851,7 +1848,7 @@ case 141:
 				"Illegal object name!  Making random object.");
 			     else
 				tmpobj[nobj]->id = token;
-			    Free(yyvsp[0].map);
+			    free(yyvsp[0].map);
 			}
 		  }
 break;
@@ -1938,7 +1935,7 @@ case 154:
 			    tmpobj[nobj]->corpsenm = NON_PM - 1;
 			else
 			    tmpobj[nobj]->corpsenm = token;
-			Free(yyvsp[0].map);
+			free(yyvsp[0].map);
 		  }
 break;
 case 155:
@@ -1962,7 +1959,7 @@ case 159:
 break;
 case 160:
 {
-			tmpdoor[ndoor] = New(door);
+			tmpdoor[ndoor] = new(door);
 			tmpdoor[ndoor]->x = current_coord.x;
 			tmpdoor[ndoor]->y = current_coord.y;
 			tmpdoor[ndoor]->mask = yyvsp[-2].i;
@@ -1995,7 +1992,7 @@ case 164:
 break;
 case 165:
 {
-			tmptrap[ntrap] = New(trap);
+			tmptrap[ntrap] = new(trap);
 			tmptrap[ntrap]->x = current_coord.x;
 			tmptrap[ntrap]->y = current_coord.y;
 			tmptrap[ntrap]->type = yyvsp[-2].i;
@@ -2013,7 +2010,7 @@ case 166:
 {
 		        int x, y, dir;
 
-			tmpdb[ndb] = New(drawbridge);
+			tmpdb[ndb] = new(drawbridge);
 			x = tmpdb[ndb]->x = current_coord.x;
 			y = tmpdb[ndb]->y = current_coord.y;
 			/* convert dir from a DIRECTION to a DB_DIR */
@@ -2052,7 +2049,7 @@ case 166:
 break;
 case 167:
 {
-			tmpwalk[nwalk] = New(walk);
+			tmpwalk[nwalk] = new(walk);
 			tmpwalk[nwalk]->x = current_coord.x;
 			tmpwalk[nwalk]->y = current_coord.y;
 			tmpwalk[nwalk]->dir = yyvsp[0].i;
@@ -2070,7 +2067,7 @@ case 168:
 break;
 case 169:
 {
-			tmplad[nlad] = New(lad);
+			tmplad[nlad] = new(lad);
 			tmplad[nlad]->x = current_coord.x;
 			tmplad[nlad]->y = current_coord.y;
 			tmplad[nlad]->up = yyvsp[0].i;
@@ -2086,7 +2083,7 @@ case 169:
 break;
 case 170:
 {
-			tmpstair[nstair] = New(stair);
+			tmpstair[nstair] = new(stair);
 			tmpstair[nstair]->x = current_coord.x;
 			tmpstair[nstair]->y = current_coord.y;
 			tmpstair[nstair]->up = yyvsp[0].i;
@@ -2102,7 +2099,7 @@ case 170:
 break;
 case 171:
 {
-			tmplreg[nlreg] = New(lev_region);
+			tmplreg[nlreg] = new(lev_region);
 			tmplreg[nlreg]->in_islev = yyvsp[0].i;
 			tmplreg[nlreg]->inarea.x1 = current_region.x1;
 			tmplreg[nlreg]->inarea.y1 = current_region.y1;
@@ -2133,7 +2130,7 @@ case 173:
 {
 		   	if ((unsigned) yyvsp[-3].i != nrndlreg)
 			    yyerror("Wrong random region number!");
-			tmprndlreg[nrndlreg] = New(lev_region);
+			tmprndlreg[nrndlreg] = new(lev_region);
 			tmprndlreg[nrndlreg]->in_islev = yyvsp[0].i;
 			tmprndlreg[nrndlreg]->inarea.x1 = current_region.x1;
 			tmprndlreg[nrndlreg]->inarea.y1 = current_region.y1;
@@ -2159,7 +2156,7 @@ case 174:
 break;
 case 175:
 {
-			tmplreg[nlreg] = New(lev_region);
+			tmplreg[nlreg] = new(lev_region);
 			tmplreg[nlreg]->in_islev = yyvsp[0].i;
 			tmplreg[nlreg]->inarea.x1 = current_region.x1;
 			tmplreg[nlreg]->inarea.y1 = current_region.y1;
@@ -2185,7 +2182,7 @@ case 176:
 break;
 case 177:
 {
-			tmplreg[nlreg] = New(lev_region);
+			tmplreg[nlreg] = new(lev_region);
 			tmplreg[nlreg]->in_islev = yyvsp[0].i;
 			tmplreg[nlreg]->inarea.x1 = current_region.x1;
 			tmplreg[nlreg]->inarea.y1 = current_region.y1;
@@ -2219,7 +2216,7 @@ case 179:
 break;
 case 180:
 {
-			tmplreg[nlreg] = New(lev_region);
+			tmplreg[nlreg] = new(lev_region);
 			tmplreg[nlreg]->in_islev = yyvsp[0].i;
 			tmplreg[nlreg]->inarea.x1 = current_region.x1;
 			tmplreg[nlreg]->inarea.y1 = current_region.y1;
@@ -2279,7 +2276,7 @@ case 185:
 break;
 case 186:
 {
-			tmpfountain[nfountain] = New(fountain);
+			tmpfountain[nfountain] = new(fountain);
 			tmpfountain[nfountain]->x = current_coord.x;
 			tmpfountain[nfountain]->y = current_coord.y;
 			if (!in_room)
@@ -2294,7 +2291,7 @@ case 186:
 break;
 case 187:
 {
-			tmpsink[nsink] = New(sink);
+			tmpsink[nsink] = new(sink);
 			tmpsink[nsink]->x = current_coord.x;
 			tmpsink[nsink]->y = current_coord.y;
 			nsink++;
@@ -2306,7 +2303,7 @@ case 187:
 break;
 case 188:
 {
-			tmppool[npool] = New(pool);
+			tmppool[npool] = new(pool);
 			tmppool[npool]->x = current_coord.x;
 			tmppool[npool]->y = current_coord.y;
 			npool++;
@@ -2318,7 +2315,7 @@ case 188:
 break;
 case 189:
 {
-			tmpdig[ndig] = New(digpos);
+			tmpdig[ndig] = new(digpos);
 			tmpdig[ndig]->x1 = current_region.x1;
 			tmpdig[ndig]->y1 = current_region.y1;
 			tmpdig[ndig]->x2 = current_region.x2;
@@ -2332,7 +2329,7 @@ case 189:
 break;
 case 190:
 {
-			tmppass[npass] = New(digpos);
+			tmppass[npass] = new(digpos);
 			tmppass[npass]->x1 = current_region.x1;
 			tmppass[npass]->y1 = current_region.y1;
 			tmppass[npass]->x2 = current_region.x2;
@@ -2346,7 +2343,7 @@ case 190:
 break;
 case 191:
 {
-			tmpreg[nreg] = New(region);
+			tmpreg[nreg] = new(region);
 			tmpreg[nreg]->x1 = current_region.x1;
 			tmpreg[nreg]->y1 = current_region.y1;
 			tmpreg[nreg]->x2 = current_region.x2;
@@ -2411,7 +2408,7 @@ case 191:
 break;
 case 192:
 {
-			tmpaltar[naltar] = New(altar);
+			tmpaltar[naltar] = new(altar);
 			tmpaltar[naltar]->x = current_coord.x;
 			tmpaltar[naltar]->y = current_coord.y;
 			tmpaltar[naltar]->align = yyvsp[-2].i;
@@ -2428,7 +2425,7 @@ case 192:
 break;
 case 193:
 {
-			tmpgold[ngold] = New(gold);
+			tmpgold[ngold] = new(gold);
 			tmpgold[ngold]->x = current_coord.x;
 			tmpgold[ngold]->y = current_coord.y;
 			tmpgold[ngold]->amount = yyvsp[-2].i;
@@ -2444,7 +2441,7 @@ case 193:
 break;
 case 194:
 {
-			tmpengraving[nengraving] = New(engraving);
+			tmpengraving[nengraving] = new(engraving);
 			tmpengraving[nengraving]->x = current_coord.x;
 			tmpengraving[nengraving]->y = current_coord.y;
 			tmpengraving[nengraving]->engr.str = yyvsp[0].map;
@@ -2485,7 +2482,7 @@ case 205:
 			if (token == ERR)
 				yyerror("Unknown trap type!");
 			yyval.i = token;
-			Free(yyvsp[0].map);
+			free(yyvsp[0].map);
 		  }
 break;
 case 207:
@@ -2496,7 +2493,7 @@ case 207:
 				yyval.i = OROOM;
 			} else
 				yyval.i = token;
-			Free(yyvsp[0].map);
+			free(yyvsp[0].map);
 		  }
 break;
 case 209:
