@@ -192,6 +192,9 @@
    */
 #undef USER_SOUNDS
 
+/* FCNTL file locking */
+#undef USE_FCNTL
+
 /* Use regular expressions */
 #undef USE_REGEX_MATCH
 

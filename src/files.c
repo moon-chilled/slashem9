@@ -23,7 +23,7 @@
 
 #include <ctype.h>
 
-#if !defined(MAC) && !defined(O_WRONLY)
+#if (!defined(MAC) && !defined(O_WRONLY)) || defined(USE_FCNTL)
 #include <fcntl.h>
 #endif
 
@@ -135,7 +135,7 @@ static void redirect(const char *,const char *,const char *,
 	FILE *,boolean);
 static void docompress_file(const char *,const char *,boolean);
 #endif
-#ifndef FILE_AREAS
+#if !defined(FILE_AREAS) && !defined(USE_FCNTL)
 static char *make_lockname(const char *,char *);
 #endif
 static FILE *fopen_config_file(const char *);
@@ -1068,12 +1068,18 @@ void uncompress_area(const char *filearea, const char *filename) {
 
 static int nesting = 0;
 
-#ifdef NO_FILE_LINKS	/* implies UNIX */
-static int lockfd;	/* for lock_file() to pass to unlock_file() */
+#if defined(NO_FILE_LINKS) || defined(USE_FCNTL) // implies UNIX
+static int lockfd;	// for lock_file() to pass to unlock_file()
+#endif
+
+#ifdef USE_FCNTL
+struct flock sflock; // for unlocking, sae as above
 #endif
 
 #define HUP	if (!program_state.done_hup)
 
+
+#if !defined(FILE_AREAS) && !defined(USE_FCNTL)
 static char *make_lockname(const char *filename, char *lockname) {
 #if defined(MAC_MPW) || defined(__MWERKS__)
 # pragma unused(filename,lockname)
@@ -1095,6 +1101,7 @@ static char *make_lockname(const char *filename, char *lockname) {
 # endif  /* UNIX || WIN32 */
 #endif
 }
+#endif // !FILE_AREAS && !USE_FCNTL
 
 
 /* lock a file */
@@ -1102,8 +1109,11 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
 #if defined(MAC_MPW) || defined(__MWERKS__)
 # pragma unused(filename, retryct)
 #endif
+
+#ifndef USE_FCNTL
 	char locknambuf[BUFSZ];
 	const char *lockname;
+#endif
 
 	nesting++;
 	if (nesting > 1) {
@@ -1111,18 +1121,53 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
 	    return true;
 	}
 
+#ifndef USE_FCNTL
 	lockname = make_lockname(filename, locknambuf);
-	filename = fqname(filename, whichprefix, 0);
 #ifndef NO_FILE_LINKS	/* LOCKDIR should be subsumed by LOCKPREFIX */
 	lockname = fqname(lockname, LOCKPREFIX, 2);
 #endif
+#endif
+	filename = fqname(filename, whichprefix, 0);
+
+
+#ifdef USE_FCNTL
+	lockfd = open(filename,O_RDWR);
+	if (lockfd == -1) {
+		HUP raw_printf("Cannot open file %s. This is a program bug.",
+				filename);
+	}
+	sflock.l_type = F_WRLCK;
+	sflock.l_whence = SEEK_SET;
+	sflock.l_start = 0;
+	sflock.l_len = 0;
+#endif
 
 #ifdef UNIX
-# ifdef NO_FILE_LINKS
+# ifdef USE_FCNTL
+	while (fcntl(lockfd,F_SETLK,&sflock) == -1) {
+# else 
+#  ifdef NO_FILE_LINKS
 	while ((lockfd = open(lockname, O_RDWR|O_CREAT|O_EXCL, 0666)) == -1) {
-# else
+#  else
 	while (link(filename, lockname) == -1) {
+#  endif
 # endif
+
+# ifdef USE_FCNTL
+		if (retryct--) {
+			HUP raw_printf(
+					"Waiting for release of fcntl lock on %s. (%d retries left).",
+					filename, retryct);
+			sleep(1);
+		} else {
+			HUP (void) raw_print("I give up.  Sorry.");
+			HUP raw_printf("Some other process has an unnatural grip on %s.",
+					filename);
+			nesting--;
+			return false;
+		}
+# else
+
 	    int errnosv = errno;
 
 	    switch (errnosv) {	/* George Barbanis */
@@ -1131,9 +1176,6 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
 		    HUP raw_printf(
 			    "Waiting for access to %s.  (%d retries left).",
 			    filename, retryct);
-# if defined(SYSV) || defined(ULTRIX)
-		    (void)
-# endif
 			sleep(1);
 		} else {
 		    HUP (void) raw_print("I give up.  Sorry.");
@@ -1160,12 +1202,13 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
 		nesting--;
 		return false;
 	    }
+# endif // USE_FCNTL
 
 	}
 #endif  // UNIX
 
-#ifdef WIN32
-#define OPENFAILURE(fd) (fd < 0)
+#if defined(WIN32) && !defined(USE_FCNTL)
+# define OPENFAILURE(fd) (fd < 0)
 
     lockptr = -1;
     while (--retryct && OPENFAILURE(lockptr)) {
@@ -1182,21 +1225,31 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
 	nesting--;
 	return false;
     }
-#endif // WIN32
+#endif // WIN32 && !USE_FCNTL
 	return true;
 }
 
 
 /* unlock file, which must be currently locked by lock_file */
 void unlock_file(const char *filename) {
+#ifndef USE_FCNTL
 	char locknambuf[BUFSZ];
 	const char *lockname;
+#endif
 
 	if (nesting == 1) {
+#ifdef USE_FCNTL
+		sflock.l_type = F_UNLCK;
+		if (fcntl(lockfd,F_SETLK,&sflock) == -1) {
+			HUP raw_printf("Can't remove fcntl lock on %s.", filename);                                                    
+			close(lockfd);
+		}
+#else
+
 		lockname = make_lockname(filename, locknambuf);
-#ifndef NO_FILE_LINKS	/* LOCKDIR should be subsumed by LOCKPREFIX */
+# ifndef NO_FILE_LINKS	/* LOCKDIR should be subsumed by LOCKPREFIX */
 		lockname = fqname(lockname, LOCKPREFIX, 2);
-#endif
+# endif
 
 #ifdef UNIX
 		if (unlink(lockname) < 0)
@@ -1211,7 +1264,8 @@ void unlock_file(const char *filename) {
 		if (lockptr) Close(lockptr);
 		DeleteFile(lockname);
 		lockptr = 0;
-#endif /* WIN32 */
+#endif // WIN32
+#endif // USE_FCNTL
 	}
 
 	nesting--;

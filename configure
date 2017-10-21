@@ -736,6 +736,7 @@ enable_gl_graphics
 enable_mswin_graphics
 with_compression
 enable_data_librarian
+enable_fcntl
 enable_light_src_spell
 enable_reincarnation
 enable_invisible_objects
@@ -1412,6 +1413,7 @@ Optional Features:
   --enable-gl-graphics    use gl-graphics (enables sdl-graphics) (default=no)
   --enable-mswin-graphics use Microsoft Windows' native graphics (default=no)
   --enable-data-librarian Data librarian (default=auto)
+  --enable-fcntl          FCNTL file locking (default=yes)
   --enable-light-src-spell
                           Spells are light sources (default=yes)
   --enable-reincarnation  Special Rogue-like levels (default=no)
@@ -6147,6 +6149,25 @@ $as_echo "$enable_data_librarian" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define DLB /**/
+_ACEOF
+
+   fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable fcntl" >&5
+$as_echo_n "checking whether to enable fcntl... " >&6; }
+   # Check whether --enable-fcntl was given.
+if test "${enable_fcntl+set}" = set; then :
+  enableval=$enable_fcntl;
+else
+  enable_fcntl="yes"
+fi
+
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_fcntl" >&5
+$as_echo "$enable_fcntl" >&6; }
+   if test "$enable_fcntl" != "no" ; then
+
+cat >>confdefs.h <<_ACEOF
+#define USE_FCNTL /**/
 _ACEOF
 
    fi

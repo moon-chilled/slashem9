@@ -297,6 +297,7 @@ dnl  ----- Check for compile-time options
 # that support autoconf also support DLB, so the automatic choice is always yes.
 NETHACK_ARG(data-librarian,[Data librarian],DLB,auto,
   [enable_data_librarian=yes])
+NETHACK_ARG(fcntl,[FCNTL file locking],USE_FCNTL,yes)
 NETHACK_ARG(light-src-spell,[Spells are light sources],LIGHT_SRC_SPELL,yes)
 NETHACK_ARG(reincarnation,[Special Rogue-like levels],REINCARNATION,no)
 NETHACK_ARG(invisible-objects,[Invisible objects],INVISIBLE_OBJECTS,yes)
