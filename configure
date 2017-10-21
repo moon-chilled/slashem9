@@ -751,8 +751,6 @@ enable_elbereth
 enable_noartifactwish
 enable_no_bones
 enable_user_sounds
-enable_exp_on_botl
-enable_score_on_botl
 enable_keep_save
 enable_charon
 enable_show_dmg
@@ -1428,8 +1426,6 @@ Optional Features:
   --enable-no-bones       Disable loading and saving bones levels (default=no)
   --enable-user-sounds    Allow user-defined regex mapping from messages to
                           sounds (Qt with NAS only) (default=no)
-  --enable-exp-on-botl    Show experience on bottom line (default=yes)
-  --enable-score-on-botl  Show score on bottom line (default=no)
   --enable-keep-save      Keep save files after restore (default=no)
   --enable-charon         Charon's boat, enables Cerebus (not implemented)
                           (default=no)
@@ -6428,44 +6424,6 @@ $as_echo "$enable_user_sounds" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define USER_SOUNDS /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable exp-on-botl" >&5
-$as_echo_n "checking whether to enable exp-on-botl... " >&6; }
-   # Check whether --enable-exp-on-botl was given.
-if test "${enable_exp_on_botl+set}" = set; then :
-  enableval=$enable_exp_on_botl;
-else
-  enable_exp_on_botl="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_exp_on_botl" >&5
-$as_echo "$enable_exp_on_botl" >&6; }
-   if test "$enable_exp_on_botl" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define EXP_ON_BOTL /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable score-on-botl" >&5
-$as_echo_n "checking whether to enable score-on-botl... " >&6; }
-   # Check whether --enable-score-on-botl was given.
-if test "${enable_score_on_botl+set}" = set; then :
-  enableval=$enable_score_on_botl;
-else
-  enable_score_on_botl="no"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_score_on_botl" >&5
-$as_echo "$enable_score_on_botl" >&6; }
-   if test "$enable_score_on_botl" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define SCORE_ON_BOTL /**/
 _ACEOF
 
    fi

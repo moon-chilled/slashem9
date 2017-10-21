@@ -148,7 +148,6 @@ void max_rank_sz(void) {
 }
 
 
-#ifdef SCORE_ON_BOTL
 long botl_score(void) {
     int deepest = deepest_lev_reached(false);
 #ifndef GOLDOBJ
@@ -165,7 +164,6 @@ long botl_score(void) {
 			  + (long)(deepest > 30 ? 10000 :
 				   deepest > 20 ? 1000*(deepest - 20) : 0);
 }
-#endif
 
 static char *botl_player(void) {
     static char player[MAXCO];
@@ -232,10 +230,10 @@ static void bot1(void)
 		ACURR(A_DEX), ACURR(A_CON), ACURR(A_INT), ACURR(A_WIS), ACURR(A_CHA));
 	sprintf(nb = eos(nb), (u.ualign.type == A_CHAOTIC) ? "  Chaotic" :
 			(u.ualign.type == A_NEUTRAL) ? "  Neutral" : "  Lawful");
-#ifdef SCORE_ON_BOTL
+
 	if (flags.showscore)
 	    sprintf(nb = eos(nb), " S:%ld", botl_score());
-#endif
+
 #ifdef DUMP_LOG
 }
 static void bot1(void) {
@@ -327,10 +325,8 @@ bot2str(char *newbot2) {
 	if (Upolyd)
 		sprintf(nb = eos(nb), " HD:%d", ((u.ulycn == u.umonnum) ?
 						u.ulevel : mons[u.umonnum].mlevel));
-#ifdef EXP_ON_BOTL
-	else if(flags.showexp && bot2_abbrev < 3)
+	else if (flags.showexp && bot2_abbrev < 3)
 		sprintf(nb = eos(nb), " Xp:%u/%-1ld", u.ulevel,u.uexp);
-#endif
 	else
 		sprintf(nb = eos(nb), " Exp:%u", u.ulevel);
 
@@ -372,11 +368,9 @@ bot2str(char *newbot2) {
 	}
 
 /* WAC further Up
-#ifdef SCORE_ON_BOTL
 	if (flags.showscore)
                 sprintf(nb,"%c:%-2ld  Score:%ld", oc_syms[COIN_CLASS],
                    u.ugold, botl_score());
-#endif
 */
 	/* KMH -- changed to Lev */
 	if (Levitation)    sprintf(nb = eos(nb), " Lev");
@@ -484,11 +478,9 @@ static void bot_raw(boolean reconfig) {
     *rv++ = reconfig ? "charisma" : (sprintf(cha, "%d", ACURR(A_CHA)), cha);
     *rv++ = reconfig ? "alignment" : u.ualign.type == A_CHAOTIC ? "Chaotic" :
 	    u.ualign.type == A_NEUTRAL ? "Neutral" : "Lawful";
-#ifdef SCORE_ON_BOTL
     if (flags.showscore)
 	*rv++ = reconfig ? "score" :
 		(sprintf(score, "%ld", botl_score()), score);
-#endif
     uhp = Upolyd ? u.mh : u.uhp;
     if (uhp < 0) uhp = 0;
     (void) describe_level(dlevel, true);
@@ -510,10 +502,9 @@ static void bot_raw(boolean reconfig) {
     sprintf(elevel, "%u",
 	    Upolyd && u.ulycn != u.umonnum ? mons[u.umonnum].mlevel : u.ulevel);
     *rv++ = reconfig ? (Upolyd ? "hitdice" : "elevel") : elevel;
-#ifdef EXP_ON_BOTL
+
     if (flags.showexp)
 	*rv++ = reconfig ? "experience" : (sprintf(expr, "%ld", u.uexp), expr);
-#endif
 #ifdef SHOW_WEIGHT
     if (flags.showweight) {
 	*rv++ = reconfig ? "weight" : (sprintf(iweight,

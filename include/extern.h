@@ -138,9 +138,7 @@ extern char borg_input(void); */
 extern int xlev_to_rank(int);
 extern int title_to_mon(const char *,int *,int *);
 extern void max_rank_sz(void);
-#ifdef SCORE_ON_BOTL
 extern long botl_score(void);
-#endif
 extern int describe_level(char *, int);
 extern const char *rank_of(int,short,boolean);
 extern void bot_set_handler(void (*)());

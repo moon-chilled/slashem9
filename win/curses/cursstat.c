@@ -58,9 +58,7 @@ static nhstat prevac;
 static nhstat prevexp;
 static nhstat prevtime;
 
-#ifdef SCORE_ON_BOTL
 static nhstat prevscore;
-#endif
 
 extern const char *hu_stat[];   /* from eat.c */
 extern const char *enc_stat[];  /* from botl.c */
@@ -520,10 +518,8 @@ draw_horizontal(int x, int y, int hp, int hpmax)
     wprintw(win, (u.ualign.type == A_CHAOTIC ? " Chaotic" :
                   u.ualign.type == A_NEUTRAL ? " Neutral" : " Lawful"));
 
-#ifdef SCORE_ON_BOTL
     if (flags.showscore)
         print_statdiff(" S:", &prevscore, botl_score(), STAT_OTHER);
-#endif /* SCORE_ON_BOTL */
 
     wclrtoeol(win);
 
@@ -568,13 +564,11 @@ draw_horizontal(int x, int y, int hp, int hpmax)
 
     if (Upolyd)
         print_statdiff(" HD:", &prevlevel, mons[u.umonnum].mlevel, STAT_OTHER);
-#ifdef EXP_ON_BOTL
     else if (flags.showexp) {
         print_statdiff(" Xp:", &prevlevel, u.ulevel, STAT_OTHER);
         /* use waddch, we don't want to highlight the '/' */
         waddch(win, '/');
         print_statdiff("", &prevexp, u.uexp, STAT_OTHER);
-#endif
     } else
         print_statdiff(" Exp:", &prevlevel, u.ulevel, STAT_OTHER);
 
@@ -614,7 +608,6 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
     print_statdiff(" AC:", &prevac, u.uac, STAT_AC);
     if (Upolyd)
         print_statdiff(" HD:", &prevlevel, mons[u.umonnum].mlevel, STAT_OTHER);
-#ifdef EXP_ON_BOTL
     else if (flags.showexp) {
         /* Ensure that Xp have proper highlight on level change. */
         int levelchange = 0;
@@ -640,9 +633,9 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
         }
         print_statdiff("", &prevexp, xp_left, STAT_AC);
         waddch(win, ')');
-#endif
-    } else
+    } else {
         print_statdiff(" Exp:", &prevlevel, u.ulevel, STAT_OTHER);
+    }
 
     waddch(win, ' ');
     describe_level(buf, false);
@@ -663,10 +656,8 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
     print_statdiff(" $", &prevau, money_cnt(invent), STAT_GOLD);
 #endif
 
-#ifdef SCORE_ON_BOTL
     if (flags.showscore)
         print_statdiff(" S:", &prevscore, botl_score(), STAT_OTHER);
-#endif /* SCORE_ON_BOTL */
 
     if (flags.time)
         print_statdiff(" T:", &prevtime, moves, STAT_TIME);
@@ -818,15 +809,14 @@ draw_vertical(int x, int y, int hp, int hpmax)
 
     if (Upolyd)
         print_statdiff("Hit Dice:      ", &prevlevel, mons[u.umonnum].mlevel, STAT_OTHER);
-#ifdef EXP_ON_BOTL
     else if (flags.showexp) {
         print_statdiff("Experience:    ", &prevlevel, u.ulevel, STAT_OTHER);
         /* use waddch, we don't want to highlight the '/' */
         waddch(win, '/');
         print_statdiff("", &prevexp, u.uexp, STAT_OTHER);
-#endif
-    } else
+    } else {
         print_statdiff("Level:         ", &prevlevel, u.ulevel, STAT_OTHER);
+    }
     wmove(win, y++, x);
 
     if (flags.time) {
@@ -834,12 +824,10 @@ draw_vertical(int x, int y, int hp, int hpmax)
         wmove(win, y++, x);
     }
 
-#ifdef SCORE_ON_BOTL
     if (flags.showscore) {
         print_statdiff("Score:         ", &prevscore, botl_score(), STAT_OTHER);
         wmove(win, y++, x);
     }
-#endif /* SCORE_ON_BOTL */
 
     curses_add_statuses(win, false, true, &x, &y);
 }
@@ -937,9 +925,7 @@ decrement_highlight(nhstat *stat, boolean zero)
 
 /* Decrement the highlight_turns for all stats.  Call curses_update_stats
    if needed to unhighlight a stat */
-void
-curses_decrement_highlights(boolean zero)
-{
+void curses_decrement_highlights(boolean zero) {
     int unhighlight = 0;
 
     unhighlight |= decrement_highlight(&prevdepth, zero);
@@ -952,13 +938,9 @@ curses_decrement_highlights(boolean zero)
     unhighlight |= decrement_highlight(&prevau, zero);
     unhighlight |= decrement_highlight(&prevlevel, zero);
     unhighlight |= decrement_highlight(&prevac, zero);
-#ifdef EXP_ON_BOTL
     unhighlight |= decrement_highlight(&prevexp, zero);
-#endif
     unhighlight |= decrement_highlight(&prevtime, zero);
-#ifdef SCORE_ON_BOTL
     unhighlight |= decrement_highlight(&prevscore, zero);
-#endif
 
     if (unhighlight)
         curses_update_stats();

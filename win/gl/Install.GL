@@ -89,7 +89,6 @@ To use this code:
       (b) uncomment DLB.
       (c) change HACKDIR define from "." to match GAMEDIR in the
           top-level Makefile (e.g. "/usr/local/slashemdir").
-      (d) uncomment out SCORE_ON_BOTL.
 
       unixconf.h:
 

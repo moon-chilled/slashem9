@@ -42,9 +42,6 @@
 /* Engraving the E-word repels monsters */
 #undef ELBERETH
 
-/* Show experience on bottom line */
-#undef EXP_ON_BOTL
-
 /* OpenGL graphics */
 #undef GL_GRAPHICS
 
@@ -151,9 +148,6 @@
 
 /* Special Rogue-like levels */
 #undef REINCARNATION
-
-/* Show score on bottom line */
-#undef SCORE_ON_BOTL
 
 /* Software SDL graphics */
 #undef SDL_GRAPHICS
