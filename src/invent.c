@@ -776,9 +776,7 @@ static int ugly_checks(const char *let, const char *word, struct obj *otmp) {
 		     otyp != AMULET_OF_YENDOR && otyp != FAKE_AMULET_OF_YENDOR))
 		|| (!strcmp(word, "write with") &&
 		    (otmp->oclass == TOOL_CLASS &&
-#ifdef LIGHTSABERS
 		     (!is_lightsaber(otmp) || !otmp->lamplit) &&
-#endif
 		     otyp != MAGIC_MARKER && otyp != TOWEL))
 		|| (!strcmp(word, "tin") &&
 		    (otyp != CORPSE || !tinnable(otmp)))
@@ -794,14 +792,12 @@ static int ugly_checks(const char *let, const char *word, struct obj *otmp) {
 			!strcmp(word, "untrap with")) &&
 		     /* Picks, axes, pole-weapons, bullwhips */
 		    ((otmp->oclass == WEAPON_CLASS && !is_pick(otmp) &&
-#ifdef FIREARMS
 		      otyp != SUBMACHINE_GUN &&
 		      otyp != AUTO_SHOTGUN &&
 		      otyp != ASSAULT_RIFLE &&
 		      otyp != FRAG_GRENADE &&
 		      otyp != GAS_GRENADE &&
 		      otyp != STICK_OF_DYNAMITE &&
-#endif
 		      !is_axe(otmp) && !is_pole(otmp) && otyp != BULLWHIP) ||
 		    (otmp->oclass == POTION_CLASS &&
 		     /* only applicable potion is oil, and it will only

@@ -1088,10 +1088,8 @@ hitmu(mtmp, mattk)
 				is_launcher(otmp) ||
 				/* or strike with a missile in your hand... */
 				(is_missile(otmp) || is_ammo(otmp)) ||
-#ifdef LIGHTSABERS
 				/* lightsaber that isn't lit ;) */
 				(is_lightsaber(otmp) && !otmp->lamplit) ||
-#endif
 				/* WAC -- or using a pole at short range... */
 				(is_pole(otmp))) {
 			    /* then do only 1-2 points of damage */

@@ -805,43 +805,42 @@ int doengrave(void) {
 		    return false;
 		}
 
-#ifdef LIGHTSABERS
 		if (is_lightsaber(otmp)) {
 		    if (otmp->lamplit) type = BURN;
 		    else Your("%s is deactivated!", aobjnam(otmp,"are"));
-		} else
-#endif
-		switch (otmp->otyp)  {
-		    case MAGIC_MARKER:
-			if (otmp->spe <= 0)
-			    Your("marker has dried out.");
-			else
-			    type = MARK;
-			break;
-		    case TOWEL:
-			/* Can't really engrave with a towel */
-			ptext = false;
-			if (oep)
-			    if ((oep->engr_type == DUST ) ||
-				(oep->engr_type == ENGR_BLOOD) ||
-				(oep->engr_type == MARK )) {
-				if (!Blind)
-				    You("wipe out the message here.");
-				else
-				    Your("%s %s %s.", xname(otmp),
-					 otense(otmp, "get"),
-					 is_ice(u.ux,u.uy) ?
-					 "frosty" : "dusty");
-				dengr = true;
-			    } else
-				Your("%s can't wipe out this engraving.",
-				     xname(otmp));
-			else
-			    Your("%s %s %s.", xname(otmp), otense(otmp, "get"),
-				  is_ice(u.ux,u.uy) ? "frosty" : "dusty");
-			break;
-		    default:
-			break;
+		} else {
+			switch (otmp->otyp)  {
+				case MAGIC_MARKER:
+					if (otmp->spe <= 0)
+						Your("marker has dried out.");
+					else
+						type = MARK;
+					break;
+				case TOWEL:
+					/* Can't really engrave with a towel */
+					ptext = false;
+					if (oep)
+						if ((oep->engr_type == DUST ) ||
+								(oep->engr_type == ENGR_BLOOD) ||
+								(oep->engr_type == MARK )) {
+							if (!Blind)
+								You("wipe out the message here.");
+							else
+								Your("%s %s %s.", xname(otmp),
+										otense(otmp, "get"),
+										is_ice(u.ux,u.uy) ?
+										"frosty" : "dusty");
+							dengr = true;
+						} else
+							Your("%s can't wipe out this engraving.",
+									xname(otmp));
+						else
+							Your("%s %s %s.", xname(otmp), otense(otmp, "get"),
+									is_ice(u.ux,u.uy) ? "frosty" : "dusty");
+					break;
+				default:
+					break;
+			}
 		}
 		break;
 

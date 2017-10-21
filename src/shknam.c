@@ -206,14 +206,16 @@ const struct shclass shtypes[] = {
 	    {{90, SCROLL_CLASS}, {10, SPBOOK_CLASS}, {0, 0}}, shkbooks},
 	{"liquor emporium", POTION_CLASS, 4, D_SHOP,
 	    {{100, POTION_CLASS}, {0, 0}, {0, 0}}, shkliquors},
-#ifdef FIREARMS	/* KMH -- no longer "antique" */
+	/* KMH -- no longer "antique" */
 	{"weapons outlet", WEAPON_CLASS, 20, D_SHOP, {
 	    {80, WEAPON_CLASS}, {6, -BULLET}, {3, -BULLET}, {1, -SILVER_BULLET},
-#else
+	    {10, ARMOR_CLASS}, {0, 0}}, shkweapons},
+
+	// TODO, add back antique weapons outlet, but without firearms/etc. --ELR
 	{"antique weapons outlet", WEAPON_CLASS, 20, D_SHOP, {
 	    {90, WEAPON_CLASS},
-#endif
 	    {10, ARMOR_CLASS}, {0, 0}}, shkweapons},
+
 	{"delicatessen", FOOD_CLASS, 4, D_SHOP,
 	    {{83, FOOD_CLASS}, {5, -POT_FRUIT_JUICE}, {4, -POT_BOOZE},
 	     {5, -POT_WATER}, {3, -ICE_BOX}}, shkfoods},

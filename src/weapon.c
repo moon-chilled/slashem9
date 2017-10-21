@@ -31,17 +31,13 @@ static int enhance_skill(boolean);
 #define PN_MARTIAL_ARTS		(-15)
 #define PN_RIDING		(-16)
 #define PN_TWO_WEAPONS		(-17)
-#ifdef LIGHTSABERS
 #define PN_LIGHTSABER		(-18)
-#endif
 
 static void give_may_advance_msg(int);
 static int practice(void);
 static int get_obj_skill(struct obj *);
 
-#ifdef LIGHTSABERS
 static void mon_ignite_lightsaber(struct obj *, struct monst *);
-#endif
 
 /*WAC practicing needs a delay counter*/
 static schar delay;            /* moves left for practice */
@@ -59,9 +55,8 @@ static const short skill_names_indices[P_NUM_SKILLS] = {
 	JAVELIN,          TRIDENT,        LANCE,        BOW,
 	SLING,            PN_FIREARMS,    CROSSBOW,       DART,
 	SHURIKEN,         BOOMERANG,      PN_WHIP,      UNICORN_HORN,
-#ifdef LIGHTSABERS
 	PN_LIGHTSABER,
-#endif
+
 	PN_ATTACK_SPELL,     PN_HEALING_SPELL,
 	PN_DIVINATION_SPELL, PN_ENCHANTMENT_SPELL,
 	PN_PROTECTION_SPELL,            PN_BODY_SPELL,
@@ -93,9 +88,7 @@ static const char * const odd_skill_names[] = {
     "martial arts",
     "riding",
     "two-handed combat",
-#ifdef LIGHTSABERS
     "lightsaber"
-#endif
 };
 
 
@@ -257,14 +250,12 @@ dmgval (struct obj *otmp, struct monst *mon)
 		case DWARVISH_MATTOCK:
 		case TWO_HANDED_SWORD:	tmp += d(2,6); break;
 
-#ifdef LIGHTSABERS
 		case GREEN_LIGHTSABER:  tmp +=13; break;
 		case BLUE_LIGHTSABER:   tmp +=12; break;
 		case RED_DOUBLE_LIGHTSABER:
 					if (otmp->altmode) tmp += rnd(11);
 					/* fallthrough */
 		case RED_LIGHTSABER:    tmp +=10; break;
-#endif
 	    }
 	} else {
 	    if (objects[otyp].oc_wsdam)
@@ -291,14 +282,12 @@ dmgval (struct obj *otmp, struct monst *mon)
 		case RUNESWORD:
 		case VOULGE:		tmp += rnd(4); break;
 
-#ifdef LIGHTSABERS
 		case GREEN_LIGHTSABER:  tmp +=9; break;
 		case BLUE_LIGHTSABER:   tmp +=8; break;
 		case RED_DOUBLE_LIGHTSABER:
 					if (otmp->altmode) tmp += rnd(9);
 					/* fallthrough */
 		case RED_LIGHTSABER: 	tmp +=6; break;
-#endif
 
 		case ACID_VENOM:	tmp += rnd(6); break;
 	    }
@@ -386,11 +375,7 @@ dmgval (struct obj *otmp, struct monst *mon)
 static struct obj *oselect(struct monst *,int);
 #define Oselect(x)	if ((otmp = oselect(mtmp, x)) != 0) return(otmp);
 
-static struct obj *
-oselect(mtmp, x)
-struct monst *mtmp;
-int x;
-{
+static struct obj *oselect(struct monst *mtmp, int x) {
 	struct obj *otmp;
 
 	for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
@@ -398,9 +383,7 @@ int x;
 		    /* never select non-cockatrice corpses */
 		    !((x == CORPSE || x == EGG) &&
 			!touch_petrifies(&mons[otmp->corpsenm])) &&
-#ifdef LIGHTSABERS
                     (!is_lightsaber(otmp) || otmp->age) &&
-#endif
 		    (!otmp->oartifact || touch_artifact(otmp,mtmp)))
 		return otmp;
 	}
@@ -415,9 +398,7 @@ static const int rwep[] =
 #ifdef SPOON
 	SPOON,
 #endif
-#ifdef FIREARMS
 	FRAG_GRENADE, GAS_GRENADE, ROCKET, SILVER_BULLET, BULLET, SHOTGUN_SHELL,
-#endif
 	DWARVISH_SPEAR, SILVER_SPEAR, ELVEN_SPEAR, SPEAR, ORCISH_SPEAR,
 	JAVELIN, SHURIKEN, YA, SILVER_ARROW, ELVEN_ARROW, DARK_ELVEN_ARROW,
 	ARROW, ORCISH_ARROW, CROSSBOW_BOLT, SILVER_DAGGER, ELVEN_DAGGER,
@@ -524,7 +505,6 @@ select_rwep (	/* select a ranged weapon for the monster */
 		  break;
 		case P_CROSSBOW:
 		  propellor = (oselect(mtmp, CROSSBOW));
-#ifdef FIREARMS
 		case P_FIREARM:
 		  if ((objects[rwep[i]].w_ammotyp) == WP_BULLET) {
 			propellor = (oselect(mtmp, HEAVY_MACHINE_GUN));
@@ -543,7 +523,6 @@ select_rwep (	/* select a ranged weapon for the monster */
 			if (!propellor) propellor = &zeroobj;  /* can toss grenades */
 		  }
 		  break;
-#endif
 		}
 		if ((otmp = MON_WEP(mtmp)) && otmp->cursed && otmp != propellor
 				&& mtmp->weapon_check == NO_WEAPON_WANTED)
@@ -584,11 +563,11 @@ static const short hwep[] = {
 	  CORPSE,  /* cockatrice corpse */
 	  TSURUGI, RUNESWORD, HEAVY_HAMMER,
 	  DWARVISH_MATTOCK,
-#ifdef LIGHTSABERS
+
 	  RED_DOUBLE_LIGHTSABER, RED_LIGHTSABER,
 	  BLUE_LIGHTSABER,
 	  GREEN_LIGHTSABER,
-#endif
+
 	  TWO_HANDED_SWORD, BATTLE_AXE,
 	  KATANA, UNICORN_HORN, CRYSKNIFE, TRIDENT, LONG_SWORD,
 	  ELVEN_BROADSWORD, BROADSWORD, SCIMITAR, SILVER_SABER,
@@ -700,19 +679,19 @@ boolean polyspot;
 /* Let a monster try to wield a weapon, based on mon->weapon_check.
  * Returns 1 if the monster took time to do it, 0 if it did not.
  */
-int
-mon_wield_item (struct monst *mon)
-{
+int mon_wield_item(struct monst *mon) {
 	struct obj *obj;
 
-	/* This case actually should never happen */
-	if (mon->weapon_check == NO_WEAPON_WANTED) return 0;
+	// This case actually should never happen
+	if (mon->weapon_check == NO_WEAPON_WANTED)
+		return 0;
+
 	switch(mon->weapon_check) {
 		case NEED_HTH_WEAPON:
 			obj = select_hwep(mon);
 			break;
 		case NEED_RANGED_WEAPON:
-			(void)select_rwep(mon);
+			select_rwep(mon);
 			obj = propellor;
 
 			break;
@@ -745,11 +724,10 @@ mon_wield_item (struct monst *mon)
 		struct obj *mw_tmp = MON_WEP(mon);
 
 		if (mw_tmp && mw_tmp->otyp == obj->otyp) {
-		/* already wielding it */
-#ifdef LIGHTSABERS
+		// already wielding it */
 			if (is_lightsaber(obj))
 			    mon_ignite_lightsaber(obj, mon);
-#endif
+
 			mon->weapon_check = NEED_WEAPON;
 			return 0;
 		}
@@ -807,20 +785,17 @@ mon_wield_item (struct monst *mon)
 			    s_suffix(mon_nam(mon)), mbodypart(mon,HAND));
 		}
 		obj->owornmask = W_WEP;
-#ifdef LIGHTSABERS
+
 		if (is_lightsaber(obj))
 		    mon_ignite_lightsaber(obj, mon);
-#endif
+
 		return 1;
 	}
 	mon->weapon_check = NEED_WEAPON;
 	return 0;
 }
 
-#ifdef LIGHTSABERS
-static void
-mon_ignite_lightsaber (struct obj *obj, struct monst *mon)
-{
+static void mon_ignite_lightsaber(struct obj *obj, struct monst *mon) {
 	/* No obj or not lightsaber */
 	if (!obj || !is_lightsaber(obj)) return;
 
@@ -853,7 +828,6 @@ mon_ignite_lightsaber (struct obj *obj, struct monst *mon)
 		return;
 	}
 }
-#endif
 
 /* STEPHEN WHITE'S NEW CODE */
 int

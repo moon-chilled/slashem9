@@ -190,14 +190,12 @@ static void m_initweap(struct monst *mtmp) {
 		    int w1 = 0, w2 = 0;
 		    switch (mm) {
 			case PM_SOLDIER:
-#ifdef FIREARMS
 			  w1 = rn2(2) ? RIFLE : SUBMACHINE_GUN;
 		  	  m_initthrow(mtmp, BULLET, 25);
 		  	  m_initthrow(mtmp, BULLET, 25);
 			  w2 = rn2(2) ? KNIFE : DAGGER;
 			  (void) mongets(mtmp, FRAG_GRENADE);
 			  break;
-#endif
 			case PM_WATCHMAN:
 			  if (!rn2(3)) {
 			      w1 = rn1(BEC_DE_CORBIN - PARTISAN + 1, PARTISAN);
@@ -208,7 +206,6 @@ static void m_initweap(struct monst *mtmp) {
 			  w1 = rn2(2) ? LONG_SWORD : SILVER_SABER;
 			  break;
 			case PM_LIEUTENANT:
-#ifdef FIREARMS
 			  if (rn2(2)) {
 			  	w1 = HEAVY_MACHINE_GUN;
 			  	m_initthrow(mtmp, BULLET, 50);
@@ -228,9 +225,7 @@ static void m_initweap(struct monst *mtmp) {
 			  	(void) mongets(mtmp, GAS_GRENADE);
 			  }
 			  break;
-#endif
 			case PM_SERGEANT:
-#ifdef FIREARMS
 			  if (rn2(2)) {
 			  	w1 = AUTO_SHOTGUN;
 			  	m_initthrow(mtmp, SHOTGUN_SHELL, 10);
@@ -246,14 +241,13 @@ static void m_initweap(struct monst *mtmp) {
 			  } else {
 			  	m_initthrow(mtmp, GAS_GRENADE, 5);
 			  }
-			  if (!rn2(5)) (void) mongets(mtmp, GRENADE_LAUNCHER);
+			  if (!rn2(5))
+				  mongets(mtmp, GRENADE_LAUNCHER);
 			  break;
-#endif
 			case PM_YEOMAN_WARDER:
 			  w1 = rn2(2) ? FLAIL : MACE;
 			  break;
 			case PM_CAPTAIN:
-#ifdef FIREARMS
 			  if (rn2(2)) {
 			  	w1 = AUTO_SHOTGUN;
 			  	m_initthrow(mtmp, SHOTGUN_SHELL, 20);
@@ -280,17 +274,14 @@ static void m_initweap(struct monst *mtmp) {
 				  w2 = rn2(2) ? SILVER_SABER : DAGGER;
 			  }
 			  break;
-#endif
 			case PM_CHIEF_YEOMAN_WARDER:
 			  w1 = rn2(2) ? BROADSWORD : LONG_SWORD;
 			  break;
 			case PM_SHOPKEEPER:
-#ifdef FIREARMS
-			  (void) mongets(mtmp,SHOTGUN);
+			  mongets(mtmp,SHOTGUN);
 			  m_initthrow(mtmp, SHOTGUN_SHELL, 20);
 			  m_initthrow(mtmp, SHOTGUN_SHELL, 20);
 			  m_initthrow(mtmp, SHOTGUN_SHELL, 20);
-#endif
 			  /* Fallthrough */
 			default:
 			  if (!rn2(4)) w1 = DAGGER;
@@ -957,7 +948,6 @@ static void m_initinv(struct monst *mtmp) {
 		     * "Were here to pump *clap* YOU up!"  -Hans and Frans
 		     *                                      Saterday Night Live
 		     */
-#ifndef FIREARMS
 		    switch (rn2(4)) {
 		    /* MAJOR fall through ... */
 		    case 0: (void) mongets(mtmp, WAN_MAGIC_MISSILE);
@@ -965,7 +955,6 @@ static void m_initinv(struct monst *mtmp) {
 		    case 2: (void) mongets(mtmp, POT_HEALING);
 		    case 3: (void) mongets(mtmp, WAN_STRIKING);
 		    }
-#endif
 		    switch (rnd(4)) {
 			/* MAJOR fall through ... */
 			case 1: (void) mongets(mtmp,POT_HEALING);

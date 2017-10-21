@@ -544,13 +544,11 @@ int doforce(void)		{
 	if (u.utrap && u.utraptype == TT_WEB) {
 	    You("are entangled in a web!");
 	    return(0);
-#ifdef LIGHTSABERS
 	} else if (uwep && is_lightsaber(uwep)) {
 	    if (!uwep->lamplit) {
 		Your("lightsaber is deactivated!");
 		return(0);
 	    }
-#endif
 	} else if(uwep->otyp == LOCK_PICK ||
 	    uwep->otyp == CREDIT_CARD ||
 	    uwep->otyp == SKELETON_KEY) {
@@ -568,13 +566,12 @@ int doforce(void)		{
 	    return(0);
 	}
 
-#ifdef LIGHTSABERS
 	if (is_lightsaber(uwep))
-	    picktyp = 2;
+		picktyp = 2;
 	else
-#endif
-	picktyp = is_blade(uwep) ? 1 : 0;
-	if(xlock.usedtime && picktyp == xlock.picktyp) {
+		picktyp = is_blade(uwep) ? 1 : 0;
+
+	if (xlock.usedtime && picktyp == xlock.picktyp) {
 	    if (xlock.box) {
 		if (!can_reach_floor()) {
 		    pline("Unfortunately, you can no longer reach the lock.");
@@ -632,22 +629,20 @@ int doforce(void)		{
 		if(c == 'q') return(0);
 		if(c == 'n') continue;
 
-#ifdef LIGHTSABERS
-		if(picktyp == 2)
+		if (picktyp == 2)
 		    You("begin melting it with your %s.", xname(uwep));
-		else
-#endif
-		if(picktyp)
+		else if (picktyp)
 		    You("force your %s into a crack and pry.", xname(uwep));
 		else
 		    You("start bashing it with your %s.", xname(uwep));
+
 		xlock.box = otmp;
-#ifdef LIGHTSABERS
+
 		if (is_lightsaber(uwep))
 		    xlock.chance = uwep->spe * 2 + 75;
 		else
-#endif
 		    xlock.chance = (uwep->spe + objects[uwep->otyp].oc_wldam) * 2;
+
 		xlock.picktyp = picktyp;
 		xlock.usedtime = 0;
 		break;
@@ -671,12 +666,8 @@ int doforce(void)		{
 		    pline("I don't think %s would appreciate that.", mon_nam(mtmp));
 		return(0);
 	    }
-	    /* Lightsabers dig through doors and walls via dig.c */
-	    if (is_pick(uwep) ||
-#ifdef LIGHTSABERS
-		    is_lightsaber(uwep) ||
-#endif
-		    is_axe(uwep))
+	    // Lightsabers dig through doors and walls via dig.c
+	    if (is_pick(uwep) || is_lightsaber(uwep) || is_axe(uwep))
 	    	return use_pick_axe2(uwep);
 
 	    if(!IS_DOOR(door->typ)) {
@@ -710,12 +701,12 @@ int doforce(void)		{
 			You("force your %s into a crack and pry.", xname(uwep));
 		    else
 			You("start bashing it with your %s.", xname(uwep));
-#ifdef LIGHTSABERS
+
 		    if (is_lightsaber(uwep))
 			xlock.chance = uwep->spe + 38;
 		    else
-#endif
 			xlock.chance = uwep->spe + objects[uwep->otyp].oc_wldam;
+
 		    xlock.picktyp = picktyp;
 		    xlock.usedtime = 0;
 		    xlock.door = door;

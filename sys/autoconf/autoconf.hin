@@ -45,9 +45,6 @@
 /* Show experience on bottom line */
 #undef EXP_ON_BOTL
 
-/* Guns and Bullets */
-#undef FIREARMS
-
 /* OpenGL graphics */
 #undef GL_GRAPHICS
 
@@ -103,9 +100,6 @@
 
 /* Keep save files after restore */
 #undef KEEP_SAVE
-
-/* Dimsabers */
-#undef LIGHTSABERS
 
 /* Spells are light sources */
 #undef LIGHT_SRC_SPELL

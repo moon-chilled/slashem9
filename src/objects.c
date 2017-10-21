@@ -334,7 +334,6 @@ PROJECTILE("ya", "bamboo arrow",
 BOW("sling", NULL,		1, 0, 40,  3, 20, 0, WOOD, P_SLING, HI_LEATHER),
 
 /* Firearms */
-#ifdef FIREARMS
 GUN("pistol", NULL,	   1,  0, 0,  20,  100, 15,  0,  0, WP_BULLET, IRON, P_FIREARM, HI_METAL),
 GUN("submachine gun", NULL,   1,  0, 0,  25,  250, 10,  3, -1, WP_BULLET, IRON, P_FIREARM, HI_METAL),
 GUN("heavy machine gun", NULL,1,  1, 0, 500, 2000, 20,  8, -4, WP_BULLET, IRON, P_FIREARM, HI_METAL),
@@ -359,7 +358,6 @@ BULLET("gas grenade", NULL,
 	1,  0,  25, 350, 0, 0, 0,  WP_GRENADE, B|E,   IRON, -P_FIREARM, CLR_ORANGE),
 BULLET("stick of dynamite", "red stick",
 	0,  0,  30, 150, 0, 0, 0,  WP_GENERIC,   B,   PLASTIC, P_NONE, CLR_RED),
-#endif
 
 /* Crossbows (and bolts) */
 /* Crossbow range is now independant of strength */
@@ -779,13 +777,8 @@ TOOL("beartrap", NULL,     1, 0, 0, 0,   0,200,  60, IRON, HI_METAL),
 /* KMH -- Not randomly generated (no damage!) */
 WEPTOOL("spoon", NULL,
 	1, 0, 0, 0,  0,  1, 5000,  0,  0, 0, WHACK,  -P_DART, PLATINUM, HI_METAL),
-#ifdef LIGHTSABERS
 WEPTOOL("pick-axe", NULL,
 	1, 0, 0, 0, 17, 80,   50,  6,  3, 0, WHACK,  P_PICK_AXE, IRON, HI_METAL),
-#else	/* LIGHTSABERS */
-WEPTOOL("pick-axe", NULL,
-	1, 0, 0, 0, 20, 80,   50,  6,  3, 0, WHACK,  P_PICK_AXE, IRON, HI_METAL),
-#endif
 WEPTOOL("fishing pole", NULL,
 	1, 0, 0, 0,  5,  30,  50,  2,  6, 0, WHACK,  P_POLEARMS, METAL, HI_METAL),
 WEPTOOL("grappling hook", "iron hook",
@@ -801,7 +794,6 @@ OBJECT(OBJ("torch", NULL),
 	0, TOOL_CLASS, 25, 0,
 	20, 8, 2, 5, WHACK, 0, 20, HI_WOOD ),
 
-#ifdef LIGHTSABERS
 /* [WAC]
  * Lightsabers are -3 to hit
  * Double lightsaber is -4 to hit (only red)
@@ -819,9 +811,9 @@ WEPTOOL("red lightsaber",  "lightsaber",
 	0, 0, 1, 0,  1, 60, 500, 9,  11, -3, SLASH, P_LIGHTSABER, PLATINUM, HI_METAL),
 WEPTOOL("red double lightsaber",  "double lightsaber",
 	0, 0, 1, 1,  0, 60,1000, 9,  11, -4, SLASH, P_LIGHTSABER, PLATINUM, HI_METAL),
-#endif	/* LIGHTSABERS */
 
-/* Other tools */
+
+// Other tools
 TOOL("expensive camera", NULL, 1, 0, 0, 1,  10, 12, 200, PLASTIC, CLR_BLACK),
 TOOL("mirror", "looking glass", 0, 0, 0, 0,  40, 13,  10, GLASS, HI_SILVER),
 TOOL("crystal ball", "glass orb", 0, 0, 1, 1,  10,150,  60, GLASS, HI_GLASS),

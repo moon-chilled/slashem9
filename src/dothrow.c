@@ -218,14 +218,12 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 	    /* Shotlimit controls your rate of fire */
 	    if ((shotlimit > 0) && (multishot > shotlimit)) multishot = shotlimit;
 
-#ifdef FIREARMS
 	    /* Rate of fire is intrinsic to the weapon - cannot be user selected
 	     * except via altmode
 	     * Only for valid launchers
 	     * (currently oc_rof conflicts with wsdam)
 	     */
-	    if (launcher && is_launcher(launcher))
-	    {
+	    if (launcher && is_launcher(launcher)) {
 		if (objects[(launcher->otyp)].oc_rof)
 		    multishot += (objects[(launcher->otyp)].oc_rof - 1);
 		if (launcher->altmode == WP_MODE_SINGLE)
@@ -237,7 +235,6 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 	    }
 
 	    if ((long)multishot > obj->quan) multishot = (int)obj->quan;
-#endif
 	}
 
 	if (multishot < 1) multishot = 1;
@@ -1003,7 +1000,7 @@ int thrown) {
             else setuqwep(obj);*/
 		return;
 	    }
-#ifdef FIREARMS
+
 	    /* [ALI]
 	     * Grenades are armed but are then processed by toss_up/hitfloor
 	     * as normal.
@@ -1027,10 +1024,10 @@ int thrown) {
 		obfree(obj, NULL);
 		return;
 	    }
-#endif
+
 	    if (u.dz < 0 && !Is_airlevel(&u.uz) &&
 		    !Underwater && !Is_waterlevel(&u.uz)) {
-		(void) toss_up(obj, rn2(5));
+		toss_up(obj, rn2(5));
 	    } else {
 		hitfloor(obj);
 	    }
@@ -1071,16 +1068,15 @@ int thrown) {
 
 		/* KMH, balance patch -- new macros */
 		if (is_ammo(obj)) {
-		    if (ammo_and_launcher(obj, launcher)) {
-#ifdef FIREARMS
-			if (is_launcher(launcher) &&
-					objects[(launcher->otyp)].oc_range)
-				range = objects[(launcher->otyp)].oc_range;
-		    else
-#endif
-			range++;
-		    } else if (obj->oclass != GEM_CLASS)
-			range /= 2;
+			if (ammo_and_launcher(obj, launcher)) {
+				if (is_launcher(launcher) && objects[(launcher->otyp)].oc_range) {
+					range = objects[(launcher->otyp)].oc_range;
+				} else {
+					range++;
+				}
+			} else if (obj->oclass != GEM_CLASS) {
+				range /= 2;
+			}
 		}
 
 		if (Is_airlevel(&u.uz) || Levitation) {
@@ -1138,7 +1134,6 @@ int thrown) {
 		if (obj_gone) return;
 	}
 
-#ifdef FIREARMS
 	/* Handle grenades or rockets */
 	if (is_grenade(obj)) {
 	    arm_bomb(obj, true);
@@ -1156,7 +1151,7 @@ int thrown) {
 	    obfree(obj, NULL);
 	    return;
 	}
-#endif
+
 
 	if (u.uswallow) {
 		/* ball is not picked up by monster */
@@ -1502,26 +1497,27 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 		    if (broken) {
 			if (*u.ushops)
 			    check_shop_obj(obj, bhitpos.x,bhitpos.y, true);
-#ifdef FIREARMS
+
 			/*
 			 * Thrown grenades and explosive ammo used with the
 			 * relevant launcher explode rather than simply
 			 * breaking.
 			 */
 			if ((thrown == 1 || thrown == 2) && is_grenade(obj)) {
-			    grenade_explode(obj, bhitpos.x, bhitpos.y, true, 0);
+				grenade_explode(obj, bhitpos.x, bhitpos.y, true, 0);
 			} else if (ammo_and_launcher(obj, launcher) &&
-				(objects[obj->otyp].oc_dir & EXPLOSION)) {
-			    if (cansee(bhitpos.x,bhitpos.y))
-				pline("%s explodes in a ball of fire!",
-					Doname2(obj));
-			    else You_hear("an explosion");
-			    explode(bhitpos.x, bhitpos.y, ZT_SPELL(ZT_FIRE),
-				    d(3,8), WEAPON_CLASS, EXPL_FIERY);
-			    obfree(obj, NULL);
-			} else
-#endif
-			obfree(obj, NULL);
+					(objects[obj->otyp].oc_dir & EXPLOSION)) {
+				if (cansee(bhitpos.x,bhitpos.y))
+					pline("%s explodes in a ball of fire!",
+							Doname2(obj));
+				else You_hear("an explosion");
+				explode(bhitpos.x, bhitpos.y, ZT_SPELL(ZT_FIRE),
+						d(3,8), WEAPON_CLASS, EXPL_FIERY);
+				obfree(obj, NULL);
+			} else {
+				obfree(obj, NULL);
+			}
+
 			return 1;
 		    }
 		}

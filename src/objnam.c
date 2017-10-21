@@ -661,28 +661,14 @@ plus:
 			strcat(prefix, sitoa(obj->spe));
 			strcat(prefix, " ");
 		}
-#ifdef FIREARMS
-		if (
-# ifdef LIGHTSABERS
-			is_lightsaber(obj) ||
-# endif
-			obj->otyp == STICK_OF_DYNAMITE) {
+		if (is_lightsaber(obj) ||
+				obj->otyp == STICK_OF_DYNAMITE) {
 		    if (obj->lamplit) strcat(bp, " (lit)");
 #  ifdef DEBUG
 		    sprintf(eos(bp), " (%d)", obj->age);
 #  endif
 		} else if (is_grenade(obj))
 		    if (obj->oarmed) strcat(bp, " (armed)");
-#else	/* FIREARMS */
-# ifdef LIGHTSABERS
-		if (is_lightsaber(obj)) {
-		    if (obj->lamplit) strcat(bp, " (lit)");
-#  ifdef DEBUG
-		    sprintf(eos(bp), " (%d)", obj->age);
-#  endif
-		}
-# endif
-#endif	/* FIREARMS */
 		break;
 	case ARMOR_CLASS:
 		if(obj->owornmask & W_ARMOR)
@@ -1606,14 +1592,10 @@ static const struct o_range o_ranges[] = {
 			ARMOR_CLASS,  GRAY_DRAGON_SCALE_MAIL, YELLOW_DRAGON_SCALE_MAIL },
 	{ "sword",      WEAPON_CLASS, ORCISH_SHORT_SWORD,    TSURUGI },
 	{ "polearm",    WEAPON_CLASS, PARTISAN, LANCE },
-#ifdef LIGHTSABERS
 	{ "lightsaber", WEAPON_CLASS, GREEN_LIGHTSABER, RED_DOUBLE_LIGHTSABER },
-#endif
-#ifdef FIREARMS
 	{ "firearm", 	WEAPON_CLASS, PISTOL, AUTO_SHOTGUN },
 	{ "gun", 	WEAPON_CLASS, PISTOL, AUTO_SHOTGUN },
 	{ "grenade", 	WEAPON_CLASS, FRAG_GRENADE, GAS_GRENADE },
-#endif
 #ifdef WIZARD
 	{ "venom",	VENOM_CLASS,  BLINDING_VENOM, ACID_VENOM },
 #endif
@@ -1839,14 +1821,12 @@ struct alt_spellings {
 	{ "amulet versus stoning", AMULET_VERSUS_STONE },
 	{ "amulet of stone resistance", AMULET_VERSUS_STONE },
 	{ "health stone", HEALTHSTONE },
-#ifdef FIREARMS
 	{ "handgun", PISTOL },
 	{ "hand gun", PISTOL },
 	{ "revolver", PISTOL },
 	{ "bazooka", ROCKET_LAUNCHER },
 	{ "hand grenade", FRAG_GRENADE },
 	{ "dynamite", STICK_OF_DYNAMITE },
-#endif
 #ifdef ZOUTHERN
 	{ "kiwifruit", APPLE },
 	{ "kiwi fruit", APPLE },

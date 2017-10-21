@@ -296,23 +296,20 @@ p_glow2 (struct obj *otmp, const char *color)
 
 /* Is the object chargeable?  For purposes of inventory display; it is */
 /* possible to be able to charge things for which this returns false. */
-boolean
-is_chargeable(obj)
-struct obj *obj;
-{
+boolean is_chargeable(struct obj *obj) {
 	if (obj->oclass == WAND_CLASS || obj->oclass == SPBOOK_CLASS) return true;
 	/* known && !uname is possible after amnesia/mind flayer */
 	if (obj->oclass == RING_CLASS)
-	    return (boolean)(objects[obj->otyp].oc_charged &&
+	    return (objects[obj->otyp].oc_charged &&
 			(obj->known || objects[obj->otyp].oc_uname));
-#ifdef LIGHTSABERS
+
 	if (is_lightsaber(obj))
 	    return true;
-#endif
+
 	if (is_weptool(obj))	/* specific check before general tools */
 	    return false;
 	if (obj->oclass == TOOL_CLASS)
-	    return (boolean)(objects[obj->otyp].oc_charged);
+	    return objects[obj->otyp].oc_charged;
 	return false; /* why are weapons/armor considered charged anyway? */
 }
 
@@ -531,7 +528,6 @@ recharge (struct obj *obj, int curse_bless)
 		    p_glow1(obj);
 		}
 		break;
-#ifdef LIGHTSABERS
 	    case GREEN_LIGHTSABER:
 	    case BLUE_LIGHTSABER:
 	    case RED_LIGHTSABER:
@@ -553,7 +549,6 @@ recharge (struct obj *obj, int curse_bless)
 		    p_glow1(obj);
 		}
 		break;
-#endif
 	    case CRYSTAL_BALL:
 		if (is_cursed) stripspe(obj);
 		else if (is_blessed) {

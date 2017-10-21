@@ -1174,7 +1174,6 @@ static void use_lamp(struct obj *obj) {
 		if(obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
 				obj->otyp == BRASS_LANTERN) {
 		    pline("%s lamp is now off.", Shk_Your(buf, obj));
-#ifdef LIGHTSABERS
 		} else if(is_lightsaber(obj)) {
 		    if (obj->otyp == RED_DOUBLE_LIGHTSABER) {
 			/* Do we want to activate dual bladed mode? */
@@ -1186,7 +1185,6 @@ static void use_lamp(struct obj *obj) {
 		    }
 		    lightsaber_deactivate(obj, true);
 		    return;
-#endif
 		} else if (artifact_light(obj)) {
 		    You_cant("snuff out %s.", yname(obj));
 		    return;
@@ -1200,10 +1198,7 @@ static void use_lamp(struct obj *obj) {
 	if ((!Is_candle(obj) && obj->age == 0)
 			|| (obj->otyp == MAGIC_LAMP && obj->spe == 0)) {
 		if ((obj->otyp == BRASS_LANTERN)
-#ifdef LIGHTSABERS
-			|| is_lightsaber(obj)
-#endif
-			)
+			|| is_lightsaber(obj))
 			Your("%s has run out of power.", xname(obj));
 		else if (obj->otyp == TORCH) {
 		        Your("torch has burnt out and cannot be relit.");
@@ -1226,7 +1221,6 @@ static void use_lamp(struct obj *obj) {
 			plur(obj->quan),
 			obj->quan > 1L ? "" : "s",
 			Blind ? "." : " brightly!");
-#ifdef LIGHTSABERS
 		} else if (is_lightsaber(obj)) {
 		    /* WAC -- lightsabers */
 		    /* you can see the color of the blade */
@@ -1234,7 +1228,6 @@ static void use_lamp(struct obj *obj) {
 		    if (!Blind) makeknown(obj->otyp);
 		    You("ignite %s.", yname(obj));
 		    unweapon = false;
-#endif
 		} else {	/* candle(s) */
 		    sprintf(qbuf, "Light all of %s?", the(xname(obj)));
 		    if (obj->quan > 1L && (yn(qbuf) == 'n')) {
@@ -1243,7 +1236,7 @@ static void use_lamp(struct obj *obj) {
 			rest = splitobj(obj, obj->quan - 1L);
 			obj_extract_self(rest);	     /* free from inv */
 			obj->spe++;	/* this prevents merging */
-			(void)hold_another_object(rest, "You drop %s!",
+			hold_another_object(rest, "You drop %s!",
 					  doname(rest), (const char *)0);
 			obj->spe--;
 		    }
@@ -1292,12 +1285,7 @@ static int use_torch(struct obj *obj) {
 
 static void light_cocktail(struct obj *obj /* obj is a potion of oil or a stick of dynamite */ ) {
 	char buf[BUFSZ];
-	const char *objnam =
-#ifdef FIREARMS
-	    obj->otyp == POT_OIL ? "potion" : "stick";
-#else
-	    "potion";
-#endif
+	const char *objnam = obj->otyp == POT_OIL ? "potion" : "stick";
 
 	if (u.uswallow) {
 	    You(no_elbow_room);
@@ -1318,7 +1306,7 @@ static void light_cocktail(struct obj *obj /* obj is a potion of oil or a stick 
 	     * but its easy.
 	     */
 	    freeinv(obj);
-	    (void) addinv(obj);
+	    addinv(obj);
 	    return;
 	} else if (Underwater) {
 	    There("is not enough oxygen to sustain a fire.");
@@ -1331,23 +1319,20 @@ static void light_cocktail(struct obj *obj /* obj is a potion of oil or a stick 
 	    /* Normally, we shouldn't both partially and fully charge
 	     * for an item, but (Yendorian Fuel) Taxes are inevitable...
 	     */
-#ifdef FIREARMS
-	    if (obj->otyp != STICK_OF_DYNAMITE) {
-#endif
-	    check_unpaid(obj);
-	    verbalize("That's in addition to the cost of the potion, of course.");
-#ifdef FIREARMS
-	    } else {
-		const char *ithem = obj->quan > 1L ? "them" : "it";
-		verbalize("You burn %s, you bought %s!", ithem, ithem);
+		if (obj->otyp != STICK_OF_DYNAMITE) {
+
+			check_unpaid(obj);
+			verbalize("That's in addition to the cost of the potion, of course.");
+		} else {
+		    const char *ithem = obj->quan > 1L ? "them" : "it";
+		    verbalize("You burn %s, you bought %s!", ithem, ithem);
 	    }
-#endif
 	    bill_dummy_object(obj);
 	}
 	makeknown(obj->otyp);
-#ifdef FIREARMS
-	if (obj->otyp == STICK_OF_DYNAMITE) obj->yours=true;
-#endif
+
+	if (obj->otyp == STICK_OF_DYNAMITE)
+		obj->yours=true;
 
 	if (obj->quan > 1L) {
 	    obj = splitobj(obj, 1L);
@@ -3413,14 +3398,12 @@ int doapply(void) {
 	case TALLOW_CANDLE:
 		use_candle(&obj);
 		break;
-#ifdef LIGHTSABERS
 	case GREEN_LIGHTSABER:
   	case BLUE_LIGHTSABER:
 	case RED_LIGHTSABER:
 	case RED_DOUBLE_LIGHTSABER:
-		if (uwep != obj && !wield_tool(obj, (const char *)0)) break;
+		if (uwep != obj && !wield_tool(obj, NULL)) break;
 		/* Fall through - activate via use_lamp */
-#endif
 	case OIL_LAMP:
 	case MAGIC_LAMP:
 	case BRASS_LANTERN:
@@ -3643,7 +3626,6 @@ int doapply(void) {
 	case WHETSTONE:
 		use_stone(obj);
 		break;
-#ifdef FIREARMS
 	case ASSAULT_RIFLE:
 		/* Switch between WP_MODE_SINGLE, WP_MODE_BURST and WP_MODE_AUTO */
 
@@ -3677,7 +3659,6 @@ int doapply(void) {
 	case STICK_OF_DYNAMITE:
 		light_cocktail(obj);
 		break;
-#endif
 	default:
 		/* KMH, balance patch -- polearms can strike at a distance */
 		if (is_pole(obj)) {

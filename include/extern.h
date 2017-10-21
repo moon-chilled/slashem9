@@ -613,10 +613,8 @@ extern long rndexp(boolean);
 extern void explode(xchar,xchar,int,int,char,int);
 extern long scatter(int, int, int, unsigned int, struct obj *);
 extern void splatter_burning_oil(int, int);
-#ifdef FIREARMS
 extern void grenade_explode(struct obj *, int, int, boolean, int);
 extern void arm_bomb(struct obj *, boolean);
-#endif
 
 /* ### extralev.c ### */
 
@@ -1996,9 +1994,7 @@ extern void burn_object(void *, long);
 extern void begin_burn(struct obj *, boolean);
 extern void end_burn(struct obj *, boolean);
 extern void burn_faster(struct obj *, long);
-#ifdef LIGHTSABERS
 extern void lightsaber_deactivate(struct obj *, boolean);
-#endif
 extern void do_storms(void);
 extern boolean start_timer(long, short, short, void *);
 extern long stop_timer(short, void *);

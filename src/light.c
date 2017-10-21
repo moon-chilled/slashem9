@@ -479,9 +479,7 @@ boolean obj_is_burning(struct obj *obj) {
  		(  obj->otyp == MAGIC_LAMP
 		|| obj->otyp == MAGIC_CANDLE
 		|| ignitable(obj)
-#ifdef LIGHTSABERS
 		|| is_lightsaber(obj)
-#endif
 		|| artifact_light(obj)));
 }
 

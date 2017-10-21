@@ -434,12 +434,10 @@ boolean artif;
 			otmp->opoisoned = 1;
 		if (artif && !rn2(20))
 		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
-#ifdef FIREARMS
 		if (otmp->otyp == STICK_OF_DYNAMITE) {
 			otmp->age = (otmp->cursed ? rn2(15) + 2 :
 					(otmp->blessed ? 15 : rn2(10) + 10));
 		}
-#endif
 		break;
 	case FOOD_CLASS:
 	    otmp->odrained = 0;
@@ -535,17 +533,16 @@ boolean artif;
 					otmp->lamplit = 0;
 					blessorcurse(otmp, 2);
 					break;
-#ifdef LIGHTSABERS
 		case RED_DOUBLE_LIGHTSABER:
 					otmp->altmode = false;
 		case GREEN_LIGHTSABER:
 		case BLUE_LIGHTSABER:
 		case RED_LIGHTSABER:
 					otmp->lamplit = 0;
-					otmp->age = (long) rn1(500,1000);
+					otmp->age = rn1(500,1000);
 					blessorcurse(otmp, 2);
 					break;
-#endif
+
 		case CHEST:
 		case LARGE_BOX:
 			otmp->olocked = !!(rn2(5));

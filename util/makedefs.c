@@ -444,12 +444,6 @@ make_version()
 #ifdef GOLDOBJ
 			| (1L << 12)
 #endif
-#ifdef FIREARMS
-			| (1L << 13)
-#endif
-#ifdef LIGHTSABERS
-			| (1L << 14)
-#endif
 		/* flag bits and/or other global variables (16..26) */
 #ifdef DISPLAY_LAYERS
 			| (1L << 16)
@@ -760,12 +754,6 @@ static const char *build_opts[] = {
 #endif
 #ifdef TIMED_DELAY
 		"timed wait for display effects",
-#endif
-#ifdef LIGHTSABERS
-		"lightsabers",
-#endif
-#ifdef FIREARMS
-		"firearms",
 #endif
 #ifdef USER_SOUNDS
 # ifdef USER_SOUNDS_REGEX

@@ -803,8 +803,6 @@ void splatter_burning_oil(int x, int y) {
     explode(x, y, ZT_SPELL(ZT_FIRE), d(4,4), BURNING_OIL, EXPL_FIERY);
 }
 
-#ifdef FIREARMS
-
 #define BY_OBJECT       (NULL)
 
 // 0 <= dp(n, p) <= n
@@ -969,8 +967,7 @@ static void grenade_effects(struct obj *source, xchar x, xchar y, ExplodeRegion 
  * Note: obj is not valid after return
  */
 
-void
-grenade_explode(struct obj *obj, int x, int y, boolean isyou, int dest) {
+void grenade_explode(struct obj *obj, int x, int y, boolean isyou, int dest) {
     int i, ztype;
     boolean shop_damage = false;
     int ox, oy;
@@ -1025,7 +1022,5 @@ void arm_bomb(struct obj *obj, boolean yours) {
 	}
 	/* Otherwise, do nothing */
 }
-
-#endif /* FIREARMS */
 
 /*explode.c*/

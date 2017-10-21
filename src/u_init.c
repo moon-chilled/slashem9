@@ -345,9 +345,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_HUMAN_WEREWOLF,FOOD_RATION,		TRIPE_RATION	      },
     { PM_HUMAN_WEREWOLF,SILVER_SPEAR,		SPEAR		      },
     { PM_HUMAN_WEREWOLF,SILVER_DAGGER,		DAGGER		      },
-#ifdef FIREARMS
     { PM_HUMAN_WEREWOLF,SILVER_BULLET,		BULLET		      },
-#endif
     { PM_DROW,		DAGGER,			DARK_ELVEN_DAGGER     },
     { PM_DROW,		SHORT_SWORD,		DARK_ELVEN_SHORT_SWORD},
     { PM_DROW,		BOW,			DARK_ELVEN_BOW	      },
@@ -384,9 +382,7 @@ static const struct def_skill Skill_A[] = {
     { P_SCIMITAR, P_SKILLED },		{ P_SABER, P_EXPERT },
     { P_CLUB, P_SKILLED },              { P_PADDLE, P_BASIC },
     { P_QUARTERSTAFF, P_SKILLED },
-#ifdef FIREARMS
     { P_FIREARM, P_SKILLED },
-#endif
     { P_SLING, P_SKILLED },		{ P_DART, P_BASIC },
     { P_BOOMERANG, P_EXPERT },		{ P_WHIP, P_EXPERT },
     { P_UNICORN_HORN, P_SKILLED },
@@ -618,9 +614,7 @@ static const struct def_skill Skill_R[] = {
     { P_MACE, P_SKILLED },              { P_MORNING_STAR, P_BASIC },
     { P_FLAIL, P_BASIC },               { P_HAMMER, P_BASIC },
     { P_POLEARMS, P_BASIC },            { P_SPEAR, P_BASIC },
-#ifdef FIREARMS
     { P_FIREARM, P_EXPERT },
-#endif
     { P_CROSSBOW, P_EXPERT },
     { P_DART, P_EXPERT },		{ P_SHURIKEN, P_SKILLED },
     { P_DIVINATION_SPELL, P_SKILLED },        { P_BODY_SPELL, P_SKILLED },
@@ -688,9 +682,7 @@ static const struct def_skill Skill_T[] = {
     { P_SPEAR, P_BASIC },		{ P_JAVELIN, P_BASIC },
     { P_TRIDENT, P_BASIC },		{ P_LANCE, P_BASIC },
     { P_BOW, P_BASIC },			{ P_SLING, P_BASIC },
-#ifdef FIREARMS
     { P_FIREARM, P_BASIC },
-#endif
     { P_CROSSBOW, P_BASIC },		{ P_DART, P_EXPERT },
     { P_SHURIKEN, P_BASIC },		{ P_BOOMERANG, P_BASIC },
     { P_WHIP, P_BASIC },		{ P_UNICORN_HORN, P_SKILLED },
@@ -724,9 +716,7 @@ static const struct def_skill Skill_U[] = {
     { P_QUARTERSTAFF, P_SKILLED },      { P_POLEARMS, P_SKILLED },
     { P_SPEAR, P_EXPERT },              { P_JAVELIN, P_SKILLED },
     { P_BOW, P_BASIC },			        { P_SLING, P_BASIC },
-#ifdef FIREARMS
     { P_FIREARM, P_EXPERT },
-#endif
     { P_CROSSBOW, P_EXPERT },           { P_DART, P_BASIC },
     { P_SHURIKEN, P_BASIC },		{ P_BOOMERANG, P_BASIC },
     { P_WHIP, P_EXPERT },               { P_UNICORN_HORN, P_SKILLED },
@@ -793,9 +783,7 @@ static const struct def_skill Skill_Y[] = {
     { P_JAVELIN, P_SKILLED },           { P_TRIDENT, P_SKILLED },
     { P_LANCE, P_SKILLED },             { P_BOW, P_EXPERT },
     { P_SLING, P_BASIC },
-#ifdef FIREARMS
     { P_FIREARM, P_SKILLED },
-#endif
     { P_CROSSBOW, P_SKILLED },          { P_DART, P_BASIC },
     { P_WHIP, P_BASIC },                { P_UNICORN_HORN, P_BASIC },
 
@@ -1153,13 +1141,11 @@ u_init (void)
 	case PM_ROGUE:
 		Rogue[R_DAGGERS].trquan = rn1(10, 6);
 		Rogue[R_DARTS].trquan = rn1(10, 25);
-#ifdef FIREARMS
 		if (rn2(100) < 30) {
 			Rogue[R_DAGGERS].trotyp = PISTOL;
 			Rogue[R_DAGGERS].trquan = 1;
 			Rogue[R_DARTS].trotyp = BULLET;
 		}
-#endif
 #ifndef GOLDOBJ
 		u.ugold = u.ugold0 = rn1(500 ,1500);
 #else
@@ -1195,12 +1181,10 @@ u_init (void)
 	case PM_UNDEAD_SLAYER:
 		switch (rn2(100) / 25) {
 		    case 0:	/* Pistol and silver bullets */
-#ifdef FIREARMS
 			UndeadSlayer[U_MINOR].trotyp = PISTOL;
 			UndeadSlayer[U_RANGE].trotyp = SILVER_BULLET;
 			UndeadSlayer[U_RANGE].trquan = rn1(10, 30);
 			break;
-#endif
 		    case 1:	/* Crossbow and bolts */
 			UndeadSlayer[U_MINOR].trotyp = CROSSBOW;
 			UndeadSlayer[U_RANGE].trotyp = CROSSBOW_BOLT;

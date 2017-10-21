@@ -84,34 +84,6 @@ struct conditionals {
 	/* commented out in monst.c at present */
 	{ MON_GLYPH, PM_YEOMAN_WARDER, "Farmer Maggot" },
 
-#ifndef FIREARMS
-	{ OBJ_GLYPH, SLING, "pistol" },
-	{ OBJ_GLYPH, SLING, "submachine gun" },
-	{ OBJ_GLYPH, SLING, "heavy machine gun" },
-	{ OBJ_GLYPH, SLING, "rifle" },
-	{ OBJ_GLYPH, SLING, "assault rifle" },
-	{ OBJ_GLYPH, SLING, "sniper rifle" },
-	{ OBJ_GLYPH, SLING, "shotgun" },
-	{ OBJ_GLYPH, SLING, "auto shotgun" },
-	{ OBJ_GLYPH, SLING, "rocket launcher" },
-	{ OBJ_GLYPH, SLING, "grenade launcher" },
-	{ OBJ_GLYPH, SLING, "bullet" },
-	{ OBJ_GLYPH, SLING, "silver bullet" },
-	{ OBJ_GLYPH, SLING, "shotgun shell" },
-	{ OBJ_GLYPH, SLING, "rocket" },
-	{ OBJ_GLYPH, SLING, "frag grenade" },
-	{ OBJ_GLYPH, SLING, "gas grenade" },
-	{ OBJ_GLYPH, SLING, "stick of dynamite" },
-#endif
-
-#ifndef LIGHTSABERS
-	{ OBJ_GLYPH, TORCH, "green lightsaber" },
-	{ OBJ_GLYPH, TORCH, "blue lightsaber" },
-	{ OBJ_GLYPH, TORCH, "red lightsaber" },
-	{ OBJ_GLYPH, TORCH, "red double lightsaber" },
-#else
-#endif
-
 #ifndef STEED
 	{ OBJ_GLYPH, TOWEL, "saddle" },
 #endif

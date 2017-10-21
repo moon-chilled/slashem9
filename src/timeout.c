@@ -621,14 +621,8 @@ unpoly_mon(arg, timeout)
 	return;
 }
 
-#ifdef FIREARMS
-/* Attach an explosion timeout to a given explosive device */
-void
-attach_bomb_blow_timeout(bomb, fuse, yours)
-struct obj *bomb;
-int fuse;
-boolean yours;
-{
+// Attach an explosion timeout to a given explosive device
+void attach_bomb_blow_timeout(struct obj *bomb, int fuse, boolean yours) {
 	long expiretime;
 
 	if (bomb->cursed && !rn2(2)) return; /* doesn't arm if not armed */
@@ -645,15 +639,11 @@ boolean yours;
 	bomb->yours = yours;
 	bomb->oarmed = true;
 
-	(void) start_timer((long)fuse, TIMER_OBJECT, BOMB_BLOW, (void *)bomb);
+	start_timer((long)fuse, TIMER_OBJECT, BOMB_BLOW, (void *)bomb);
 }
 
-/* timer callback routine: detonate the explosives */
-void
-bomb_blow(arg, timeout)
-void * arg;
-long timeout;
-{
+// timer callback routine: detonate the explosives
+void bomb_blow(void * arg, long timeout) {
 	struct obj *bomb;
 	xchar x,y;
 	boolean silent, underwater;
@@ -747,12 +737,9 @@ free_bomb:
 	obj_extract_self(bomb);
 	obfree(bomb, NULL);
 }
-#endif
 
-/* Attach an egg hatch timeout to the given egg. */
-void
-attach_egg_hatch_timeout (struct obj *egg)
-{
+// Attach an egg hatch timeout to the given egg.
+void attach_egg_hatch_timeout(struct obj *egg) {
 	int i;
 
 	/* stop previous timer, if any */
@@ -1138,11 +1125,9 @@ long timeout;
 		    obj_extract_self(obj);
 		    obfree(obj, NULL);
 		    obj = NULL;
-#ifdef FIREARMS
 		} else if (obj->otyp == STICK_OF_DYNAMITE) {
-			bomb_blow((void *) obj, timeout);
+			bomb_blow(obj, timeout);
 			return;
-#endif
 		}
 
 	    } else {
@@ -1387,7 +1372,6 @@ long timeout;
 
 		break;
 
-#ifdef LIGHTSABERS
 	    case RED_DOUBLE_LIGHTSABER:
 	    	if (obj->altmode && obj->cursed && !rn2(25)) {
 		    obj->altmode = false;
@@ -1439,14 +1423,12 @@ long timeout;
 		if (obj && obj->age && obj->lamplit) /* might be deactivated */
 		    begin_burn(obj, true);
 		break;
-#endif
 
-#ifdef FIREARMS
 	    case STICK_OF_DYNAMITE:
 		end_burn(obj, false);
-		bomb_blow((void *) obj, timeout);
+		bomb_blow(obj, timeout);
 		return;
-#endif
+
 	    default:
 		impossible("burn_object: unexpeced obj %s", xname(obj));
 		break;
@@ -1454,18 +1436,13 @@ long timeout;
 	if (need_newsym) newsym(x, y);
 }
 
-#ifdef LIGHTSABERS
 /* lightsabers deactivate when they hit the ground/not wielded */
 /* assumes caller checks for correct conditions */
-void
-lightsaber_deactivate (obj, timer_attached)
-	struct obj *obj;
-	boolean timer_attached;
-{
+void lightsaber_deactivate(struct obj *obj, boolean timer_attached) {
 	xchar x,y;
 	char whose[BUFSZ];
 
-	(void) Shk_Your(whose, obj);
+	Shk_Your(whose, obj);
 
 	if (get_obj_location(obj, &x, &y, 0)) {
 	    if (cansee(x, y)) {
@@ -1486,7 +1463,6 @@ lightsaber_deactivate (obj, timer_attached)
 	if ((obj == uwep) || (u.twoweap && obj != uswapwep)) unweapon = true;
 	end_burn(obj, timer_attached);
 }
-#endif
 
 /*
  * Start a burn timeout on the given object. If not "already lit" then
@@ -1543,7 +1519,6 @@ begin_burn(obj, already_lit)
 		do_timer = false;
 		if (obj->otyp == MAGIC_CANDLE) obj->age = 300L;
 		break;
-#ifdef LIGHTSABERS
 	    case RED_DOUBLE_LIGHTSABER:
 	    	if (obj->altmode && obj->age > 1)
 		    obj->age--; /* Double power usage */
@@ -1553,17 +1528,14 @@ begin_burn(obj, already_lit)
 	    	turns = 1;
     	    	radius = 1;
 		break;
-#endif
 	    case POT_OIL:
 		turns = obj->age;
 		radius = 1;	/* very dim light */
 		break;
-#ifdef FIREARMS
 	    case STICK_OF_DYNAMITE:
 		turns = obj->age;
 		radius = 1;     /* very dim light */
 		break;
-#endif
 
 	    case BRASS_LANTERN:
 	    case OIL_LAMP:
@@ -1842,9 +1814,7 @@ static const ttable timeout_funcs[NUM_TIME_FUNCS] = {
     TTAB(hatch_egg,	(timeout_proc)0,	"hatch_egg"),
     TTAB(fig_transform, (timeout_proc)0,	"fig_transform"),
     TTAB(unpoly_mon,    (timeout_proc)0,	"unpoly_mon"),
-#ifdef FIREARMS
     TTAB(bomb_blow,     (timeout_proc)0,	"bomb_blow"),
-#endif
 #ifdef UNPOLYPILE
     TTAB(unpoly_obj,    cleanup_unpoly,		"unpoly_obj"),
 #endif

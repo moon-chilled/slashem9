@@ -30,7 +30,6 @@ typedef void (*timeout_proc)(void *, long);
 #define HATCH_EGG	5
 #define FIG_TRANSFORM	6
 #define UNPOLY_MON      7
-# ifdef FIREARMS
 #define BOMB_BLOW	8
 #  ifdef UNPOLYPILE
 #define UNPOLY_OBJ      9
@@ -38,14 +37,6 @@ typedef void (*timeout_proc)(void *, long);
 #  else
 #define NUM_TIME_FUNCS  9
 #  endif
-# else /* FIREARMS */
-#  ifdef UNPOLYPILE
-#define UNPOLY_OBJ      8
-#define NUM_TIME_FUNCS  9
-#  else
-#define NUM_TIME_FUNCS  8
-#  endif
-# endif /* FIREARMS */
 
 /* used in timeout.c */
 typedef struct fe {
