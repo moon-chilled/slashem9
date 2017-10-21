@@ -3296,9 +3296,6 @@ const char *click_to_cmd(int x, int y, int mod) {
 static char *parse(void) {
 	static char in_line[COLNO];
 	int foo;
-#ifdef BORG
-	char junk_char;
-#endif
 	static char repeat_char;
 	boolean prezero = false;
 
@@ -3308,12 +3305,12 @@ static char *parse(void) {
 
 #ifdef BORG
 	if (borg_on) {
-	/* KMH -- Danger!  kbhit() is non-standard! */
-	   if (!kbhit()) {
+		// TODO: implement kbhit for other windowports --ELR
+	   if (kbhit()) {
 	       borg_input();
 	       return(borg_line);
 	   } else {
-		 junk_char = readchar();
+		 nhgetch();
 		 pline("Cyborg terminated.");
 		 borg_on = 0;
 	   }

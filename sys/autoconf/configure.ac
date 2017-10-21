@@ -315,7 +315,7 @@ NETHACK_ARG(no-bones,[Disable loading and saving bones levels],NO_BONES,no)
 NETHACK_ARG(user-sounds,
   [Allow user-defined regex mapping from messages to sounds (Qt with NAS only)],
   USER_SOUNDS,no)
-#NETHACK_ARG(borg,[Borg player (only under DOS)],BORG,no)
+NETHACK_ARG(borg,[Borg player (only under DOS)],BORG,yes)
 NETHACK_ARG(keep-save,[Keep save files after restore],KEEP_SAVE,no)
 NETHACK_ARG(charon,[Charon's boat, enables Cerebus (not implemented)],CHARON,no)
 NETHACK_ARG(show-dmg,[Display damage reports],SHOW_DMG,yes)

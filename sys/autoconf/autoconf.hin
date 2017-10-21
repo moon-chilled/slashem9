@@ -1,5 +1,8 @@
 /* sys/autoconf/autoconf.hin.  Generated from sys/autoconf/configure.ac by autoheader.  */
 
+/* Borg player (only under DOS) */
+#undef BORG
+
 /* A BSD like system */
 #undef BSD
 
