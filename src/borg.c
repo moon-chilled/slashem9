@@ -8,7 +8,7 @@
 #define HP_TRACK 25
 #define HP_TREND 3
 
-char borg_on=0;
+bool borg_on=false;
 char borg_line[80] = {0};
 int predicted_hp;
 
@@ -30,6 +30,10 @@ void adjust_hp_list(void) {
 }
 
 char borg_input(void) {
+	delay_output();
+	delay_output();
+	delay_output(); // 150ms delay
+
 	char c;
 	adjust_hp_list();
 	if (predicted_hp <= 0 || (u.uhp < u.uhpmax / 8)) pline("Emergency!");

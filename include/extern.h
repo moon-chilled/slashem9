@@ -129,9 +129,9 @@ extern int getbones(void);
 
 /* ### borg.c ### */
 
-/* extern char borg_on;
+extern bool borg_on;
 extern char borg_line[80];
-extern char borg_input(void); */
+extern char borg_input(void);
 
 /* ### botl.c ### */
 

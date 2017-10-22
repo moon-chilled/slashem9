@@ -96,13 +96,6 @@ static boolean help_dir(char,const char *);
 
 static int domenusystem(void); /* WAC the menus*/
 
-#ifdef BORG
-/* in borg.c */
-extern char borg_on;
-extern char borg_line[80];
-char borg_input(void);
-#endif
-
 static int doprev_message(void) {
     return nh_doprev_message();
 }
@@ -245,13 +238,11 @@ int doextlist(void) {
 
 #ifdef BORG
 static int doborgtoggle(void) {
-	char    qbuf[QBUFSZ];
-	char    c;
-	strcpy(qbuf,"Really enable cyborg?");
-	if ((c = yn_function(qbuf, ynqchars, 'n')) == 'y') {
-		borg_on = 1;
+	if (yn_function("Really enable cyborg?", ynqchars, 'n') == 'y') {
+		borg_on = true;
 		pline("The cyborg is enabled.... Good luck!");
 	}
+
 	return 0;
 }
 #endif
