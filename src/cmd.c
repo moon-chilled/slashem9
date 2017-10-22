@@ -3306,7 +3306,7 @@ static char *parse(void) {
 #ifdef BORG
 	if (borg_on) {
 		// TODO: implement kbhit for other windowports --ELR
-	   if (kbhit()) {
+	   if (!kbhit()) {
 	       borg_input();
 	       return(borg_line);
 	   } else {
