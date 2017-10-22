@@ -1370,6 +1370,55 @@ static FILE *fopen_config_file(const char *filename) {
 
 }
 
+/* 
+ * Retrieve a list of one-byte integers from a buffer into a uchar array.
+ *
+ * It can accept 3-digit decimal integers, characters (ascii), or
+ * certain character symbols (see txt2key)
+ *
+ * return value of +x indicates x uchars read, -x indicates x-1 uchars read
+ * 
+ * Note: there is no way to read value 0
+ */
+int
+get_uchar_list(buf, list, size)
+    char *buf;		/* read buffer */
+   uchar *list;	/* return list */
+    int size;		/* return list size */
+{
+    int cnt = 0;
+    char* next;
+    uchar orig;
+    uchar mkey;
+    
+    while (1) { /* one loop for each uchar */
+	if (cnt == size) return cnt;
+	
+	/* take off leading whiltespace */
+	while (isspace(*buf)) buf++;
+	if (!*buf) return cnt;
+	
+	/* strip trailing whitespace / other uchars */
+	next = buf;
+	while(*next && !isspace(*next)) next++;
+	orig = *next;
+	*next = 0;
+	
+	/* interpret the character */
+	mkey = (uchar)txt2key(buf);
+	if (!mkey) {
+		raw_printf("Invalid uchar %s on %i.", buf, cnt+1);
+		return -(cnt+1);
+	}
+	list[cnt] = mkey;
+	cnt++;
+	
+	/* prepare for the next uchar */
+	*next = orig;
+	buf = next;
+    }
+    /* NOT REACHED */
+}
 
 /*
  * Retrieve a list of integers from a file into a uchar array.
@@ -1386,48 +1435,37 @@ static int get_uchars(
     int  size,		/* return list size */
     const char *name	/* name of option for error message */) {
 
-    unsigned int num = 0;
     int count = 0;
-    boolean havenum = false;
 
-    while (1) {
-	switch(*bufp) {
-	    case ' ':  case '\0':
-	    case '\t': case '\n':
-		if (havenum) {
-		    /* if modifying in place, don't insert zeros */
-		    if (num || !modlist) list[count] = num;
-		    count++;
-		    num = 0;
-		    havenum = false;
-		}
-		if (count == size || !*bufp) return count;
-		bufp++;
-		break;
+    int num_read;
+    char* buf_end;
+    boolean another;   /* expect another line? */
 
-	    case '0': case '1': case '2': case '3':
-	    case '4': case '5': case '6': case '7':
-	    case '8': case '9':
-		havenum = true;
-		num = num*10 + (*bufp-'0');
-		bufp++;
-		break;
+    while (1) { /* JDS: one loop for each line of input */
+	    if ((buf_end = index(bufp, '\\')) != 0) {
+		    *buf_end = 0;
+		    another = true;
+	    } else another = false;
 
-	    case '\\':
-		if (fp == NULL)
-		    goto gi_error;
-		do  {
-		    if (!fgets(buf, BUFSZ, fp)) goto gi_error;
-		} while (buf[0] == '#');
-		bufp = buf;
-		break;
-
-	    default:
+	    num_read = get_uchar_list(bufp, list, size-count);
+	    if (num_read < 0) {
+		    count -= num_read + 1;
 gi_error:
 		raw_printf("Syntax error in %s", name);
 		wait_synch();
 		return count;
 	}
+	    count += num_read;
+	    list += num_read;
+
+	    if (count == size || !another) return count;
+
+	    if (fp == NULL)
+		    goto gi_error;
+	    do {
+		    if (!fgets(buf, BUFSZ, fp)) goto gi_error;
+	    } while (buf[0] == '#');
+	    bufp = buf;
     }
     /*NOTREACHED*/
 }
@@ -1492,6 +1530,13 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 		parsetileset(bufp);
 	} else if (match_varname(buf, "AUTOPICKUP_EXCEPTION", 5)) {
 		add_autopickup_exception(bufp);
+	} else if (match_varname(buf, "BINDINGS", 4)) {                                                                                
+		/* JDS: hmmm, should these be in NOCWD_ASSUMPTIONS? */
+		parsebindings(bufp);
+	} else if (match_varname(buf, "AUTOCOMPLETE", 5)) {
+		parseautocomplete(bufp, true);
+	} else if (match_varname(buf, "MAPPINGS", 3)) {
+		parsemappings(bufp);
 #ifdef NOCWD_ASSUMPTIONS
 	} else if (match_varname(buf, "HACKDIR", 4)) {
 		adjust_prefix(bufp, HACKPREFIX);

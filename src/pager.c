@@ -903,11 +903,13 @@ static const char *help_menu_items[] = {
 /* 4*/	"Info on what a given key does.",
 /* 5*/	"List of game options.",
 /* 6*/	"Longer explanation of game options.",
-/* 7*/	"List of extended commands.",
-/* 8*/	"The NetHack license.",
+/* 7*/  "Full list of keyboard commands.",
+/* 8*/  "List of extended commands.",
+/* 9*/  "The NetHack license.",
+
 #ifndef MAC
 /*WAC Add access to txt guidebook*/
-/* 9*/  "The Slash'EM Guidebook.",
+/* 10*/  "The Slash'EM Guidebook.",
 #endif
 #ifdef PORT_HELP
 	"%s-specific help and commands.",
@@ -920,7 +922,7 @@ static const char *help_menu_items[] = {
 };
 
 enum {
-  LICENSE_SLOT=8,
+  LICENSE_SLOT=9,
 #ifndef MAC
   GUIDEBOOK_SLOT,
 #endif
@@ -988,17 +990,17 @@ dohelp (void)
 				  break;
 			case  1:  display_file_area(NH_SHELP_AREA, NH_SHELP, true);
 				  break;
-			case  2:  (void) dohistory();  break;
-			case  3:  (void) dowhatis();  break;
-			case  4:  (void) dowhatdoes();  break;
+			case  2:  dohistory();  break;
+			case  3:  dowhatis();  break;
+			case  4:  dowhatdoes();  break;
 			case  5:  option_help();  break;
 			case  6:  display_file_area(NH_OPTIONAREA,
 				    NH_OPTIONFILE, true);
 				  break;
-			case  7:  (void) doextlist();  break;
-			case  8:  display_file_area(NH_LICENSE_AREA,
-				    NH_LICENSE, true);
-				  break;
+			case  7:  dokeylist(); break;
+			case  8:  doextlist();  break;
+			case  9:  display_file(NH_LICENSE, true);  break;
+
 #ifndef MAC
 /*WAC add guidebook.*/
                         case  GUIDEBOOK_SLOT:  display_file_area(NH_GUIDEBOOK_AREA,

@@ -91,11 +91,16 @@ struct linfo level_info[MAXLINFO];
 struct sinfo program_state;
 
 /* 'rogue'-like direction commands (cmd.c) */
-const char sdir[] = "hykulnjb><";
+char sdir[] = "hykulnjb><";
 const char ndir[] = "47896321><";	/* number pad mode */
 const schar xdir[10] = { -1,-1, 0, 1, 1, 1, 0,-1, 0, 0 };
 const schar ydir[10] = {  0,-1,-1,-1, 0, 1, 1, 1, 0, 0 };
 const schar zdir[10] = {  0, 0, 0, 0, 0, 0, 0, 0, 1,-1 };
+char misc_cmds[] = {'g', 'G', 'F', 'm', 'M', '\033'
+#ifdef REDO
+		    , '\001'
+#endif
+};
 
 schar tbx = 0, tby = 0;	/* mthrowu: target */
 

@@ -95,8 +95,9 @@ typedef xchar	boolean;		/* 0 or 1 */
 
 #ifdef REDO
 #define Getchar pgetchar
+#else
+#define Getchar nhgetch
 #endif
-
 
 #include "coord.h"
 /*

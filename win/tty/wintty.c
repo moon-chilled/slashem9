@@ -798,7 +798,7 @@ tty_askname()
 	tty_curs(BASE_WINDOW, (int)(sizeof who_are_you),
 		 wins[BASE_WINDOW]->cury - 1);
 	ct = 0;
-	while((c = tty_nhgetch()) != '\n') {
+	while((c = nhgetch()) != '\n') {
 		if(c == EOF) error("End of input\n");
 		if (c == '\033') { ct = 0; break; }  /* continue outer loop */
 #if defined(WIN32CON)
@@ -2827,7 +2827,7 @@ tty_nh_poskey(x, y, mod)
 		ttyDisplay->toplin = 2;
     return i;
 # else
-    return tty_nhgetch();
+    return nhgetch();
 # endif
 }
 

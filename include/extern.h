@@ -165,10 +165,9 @@ extern char pgetchar(void);
 extern void pushch(char);
 extern void savech(char);
 #endif
-#ifdef WIZARD
-extern void add_debug_extended_commands(void);
-#endif /* WIZARD */
+extern char nhgetch(void);
 extern void rhack(char *);
+extern void dokeylist(void);
 extern int doextlist(void);
 extern int extcmd_via_menu(void);
 extern void enlightenment(int);
@@ -189,6 +188,14 @@ extern char readchar(void);
 #ifdef WIZARD
 extern void sanity_check(void);
 #endif
+extern void commands_init(void);
+extern char *stripspace(char*);
+extern void parsebindings(char*);
+extern void parseautocomplete(char*,boolean);
+extern void parsemappings(char*);
+extern char txt2key(char*);
+extern char *key2txt(char, char*);
+extern char *str2txt(char*, char*);
 extern char yn_function(const char *, const char *, char);
 
 /* ### dbridge.c ### */
@@ -664,6 +671,7 @@ extern boolean can_read_file(const char *);
 #endif
 extern void read_config_file(const char *);
 extern void check_recordfile(const char *);
+extern int get_uchar_list(char*, uchar*, int);
 #if defined(WIZARD)
 extern void read_wizkit(void);
 #endif

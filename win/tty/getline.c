@@ -182,7 +182,7 @@ const char *s;	/* chars allowed besides return */
 
     morc = 0;
 
-    while((c = tty_nhgetch()) != '\n') {
+    while((c = nhgetch()) != '\n') {
 	if(iflags.cbreak) {
 	    if ((s && index(s,c)) || c == x) {
 		morc = (char) c;
@@ -215,6 +215,7 @@ ext_cmd_getlin_hook(base)
 
 	com_index = -1;
 	for (oindex = 0; extcmdlist[oindex].ef_txt != NULL; oindex++) {
+		if (!extcmdlist[oindex].autocomplete) continue; // TODO add this to curses too
 		if (!strncmpi(base, extcmdlist[oindex].ef_txt, strlen(base))) {
 			if (com_index == -1)	/* no matches yet */
 			    com_index = oindex;

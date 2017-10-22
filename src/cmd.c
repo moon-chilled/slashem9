@@ -2,6 +2,8 @@
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
+#include <ctype.h>
+
 #include "hack.h"
 #include "func_tab.h"
 /* #define DEBUG */	/* uncomment for debugging */
@@ -80,6 +82,15 @@ static int doattributes(void);
 static int doconduct(void); /**/
 static boolean minimal_enlightenment(void);
 static int makemenu(const char *, struct menu_list *);
+
+static void bind_key(unsigned char, char*);
+static void init_bind_list(void);
+static void change_bind_list(void);
+static void verify_key_list(void);
+#ifdef WIZARD
+static void add_debug_extended_commands(void);
+#endif /* WIZARD */
+static void addchar(char);
 
 static struct rm *maploc;
 
@@ -199,6 +210,43 @@ void savech(char ch) {
 }
 #endif /* REDO */
 
+/* mappings are held in a circular queue */
+#define CQ_SIZE 100
+static int cq_tail = 0;                /* exit point; index for oldest element */
+static int cq_head = 0;                /* entry point; index for next element */
+static char cq_list[CQ_SIZE];
+
+/* This is intended to come "in front of" the old nhgetch so that if there's
+ * a mapping/macro, it will insert the necessary keys instead.
+ * However, most window-specific code doesn't call nhgetch, but instead calls
+ * <win>_nhgetch.  I've tried to change all of the appropriate
+ * <win>_nhgetch's to nhgetch's in win/<win>, but there's a good chance of
+ * bugs here.
+ */
+char nhgetch(void) {
+	int ch;
+
+	if (cq_head != cq_tail) {
+		ch = cq_list[cq_tail];
+		cq_tail = (cq_tail + 1) % CQ_SIZE;
+	} else {
+		ch = nhwingetch(); /* old definition */
+	}
+
+	return ch;
+}
+
+static void addchar(char ch) {
+	cq_list[cq_head] = ch;
+	cq_head = (cq_head + 1) % CQ_SIZE;
+	if (cq_head == cq_tail) {
+		/* character dropped */
+		cq_head = (cq_head + CQ_SIZE - 1) % CQ_SIZE;
+	}
+}
+
+
+
 // here after # - now read a full-word command
 static int doextcmd(void) {
 	int idx, retval;
@@ -228,9 +276,17 @@ int doextlist(void) {
 	putstr(datawin, 0, "");
 
 	for(efp = extcmdlist; efp->ef_txt; efp++) {
-		sprintf(buf, "    %-15s - %s.", efp->ef_txt, efp->ef_desc);
+		/* Show name and text for each command.  Autocompleted                                                                 
+		 * commands are marked with an asterisk ('*'). */
+		sprintf(buf, "  %c %-15s - %s.",
+				efp->autocomplete ? '*' : ' ',
+				efp->ef_txt, efp->ef_desc);
+
 		putstr(datawin, 0, buf);
 	}
+	putstr(datawin, 0, "");
+	putstr(datawin, 0, "    Commands marked with a * will be autocompleted.");
+
 	display_nhwindow(datawin, false);
 	destroy_nhwindow(datawin);
 	return 0;
@@ -248,7 +304,7 @@ static int doborgtoggle(void) {
 #endif
 
 #if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS) || defined(GL_GRAPHICS) || defined(SDL_GRAPHICS)
-#define MAX_EXT_CMD 40		/* Change if we ever have > 40 ext cmds */
+#define MAX_EXT_CMD 200		/* Change if we ever have more ext cmds */
 /*
  * This is currently used only by the tty port and is
  * controlled via runtime option 'extmenu'
@@ -2254,6 +2310,12 @@ void dump_conduct(int final) {
 }
 #endif /* DUMP_LOG */
 
+/* Macros for meta and ctrl modifiers:
+ *   M and C return the meta/ctrl code for the given character;
+ *     e.g., (C('c') is ctrl-c
+ *   ISMETA and ISCTRL return TRUE iff the code is a meta/ctrl code
+ *   UNMETA and UNCTRL are the opposite of M/C and return the key for a given
+ *     meta/ctrl code. */
 #ifndef M
 # ifndef NHSTDC
 #  define M(c)		(0x80 | (c))
@@ -2261,10 +2323,22 @@ void dump_conduct(int final) {
 #  define M(c)		((c) - 128)
 # endif /* NHSTDC */
 #endif
+
+#define ISMETA(c) (((c) & 0x80) != 0)
+#define UNMETA(c) ((c) & 0x7f)
+
+
 #ifndef C
 #define C(c)		(0x1f & (c))
 #endif
 
+#define ISCTRL(c) ((uchar)(c) < 0x20)
+#define UNCTRL(c) (ISCTRL(c) ? (0x60 | (c)) : (c))
+
+
+
+// TODO make sure all these commands make it into the ext cmd list
+#if 0
 static const struct func_tab cmdlist[] = {
 	{C('d'), false, dokick}, /* "D" is for door!...?  Msg is in dokick.c */
 #ifdef WIZARD
@@ -2414,104 +2488,361 @@ static const struct func_tab cmdlist[] = {
 	{'_', true, dotravel},
 	{0,0,0,0}
 };
+#endif
+
+/* maps extended ascii codes for key presses to either
+ *   - extended command entries in extcmdlist
+ *   - other key press entries */
+static struct key_tab cmdlist[256];
+
+/* list built upon option loading; holds list of keys to be rebound later
+ * see "crappy hack" below */
+static struct binding_list_tab *bindinglist = NULL;
+
+#define AUTOCOMPLETE true
+#define IFBURIED true
+
+#define EXTCMDLIST_SIZE (sizeof(extcmdlist) / sizeof(extcmdlist[0]))
+
 
 struct ext_func_tab extcmdlist[] = {
-	{"2weapon", "toggle two-weapon combat", dotwoweapon, false},
-	{"adjust", "adjust inventory letters", doorganize, true},
-	{"borrow", "steal from monsters", playersteal, false},  /* jla */
-	{"chat", "talk to someone", dotalk, true},	/* converse? */
-	{"conduct", "list which challenges you have adhered to", doconduct, true},
-	{"dip", "dip an object into something", dodip, false},
-	{"enhance", "advance or check weapons skills", enhance_weapon_skill,
-							true},
-#if 0
-	{"ethics", "list which challenges you have adhered to", doethics, true},
+	{"2weapon", "toggle two-weapon combat", dotwoweapon, !IFBURIED, AUTOCOMPLETE},
+	{"apply", "apply (use) a tool (pick-axe, key, lamp...)", doapply, !IFBURIED},
+	{"attributes", "show your attributes (intrinsic ones included in debug or explore mode)", doattributes, IFBURIED},
+	{"borrow", "steal from monsters", playersteal, !IFBURIED},  /* jla */
+	{"close", "close a door", doclose, !IFBURIED},
+	{"cast", "zap (cast) a spell", docast, IFBURIED},
+	{"discoveries", "show what object types have been discovered", dodiscovered, IFBURIED},
+	{"down", "go down a staircase", dodown, !IFBURIED},
+	{"drop", "drop an item", dodrop, !IFBURIED},
+	{"dropall", "drop specific item types", doddrop, !IFBURIED},
+	{"takeoffall", "remove all armor", doddoremarm, !IFBURIED},
+	{"inventory", "show your inventory", ddoinv, IFBURIED},
+	{"quaff", "quaff (drink) something", dodrink, !IFBURIED},
+	{"#", "perform an extended command", doextcmd, IFBURIED},
+	{"travel", "Travel to a specific location", dotravel, !IFBURIED},
+	{"eat", "eat something", doeat, !IFBURIED},
+	{"engrave", "engrave writing on the floor", doengrave, !IFBURIED},
+	{"fire", "fire ammunition from quiver", dofire, !IFBURIED},
+	{"history", "show long version and game history", dohistory, IFBURIED},
+	{"help", "give a help message", dohelp, IFBURIED},
+	{"seetrap", "show the type of a trap", doidtrap, IFBURIED},
+	{"kick", "kick something", dokick, !IFBURIED},
+	{"look", "loot a box on the floor", dolook, IFBURIED},
+	{"call", "call (name) a particular monster", do_mname, IFBURIED},
+	{"wait", "rest one move while doing nothing", donull, IFBURIED},
+	{"previous", "toggle through previously displayed game messages", doprev_message, IFBURIED},
+	{"open", "open a door", doopen, !IFBURIED},
+	{"pickup", "pick up things at the current location", dopickup, !IFBURIED},
+	{"pay", "pay your shopping bill", dopay, !IFBURIED},
+	{"puton", "put on an accessory (ring amulet, etc)", doputon, !IFBURIED},
+	{"seeweapon", "show the weapon currently wielded", doprwep, IFBURIED},
+	{"seearmor", "show the armor currently worn", doprarm, IFBURIED},
+	{"seerings", "show the ring(s) currently worn", doprring, IFBURIED},
+	{"seeamulet", "show the amulet currently worn", dopramulet, IFBURIED},
+	{"seetools", "show the tools currently in use", doprtool, IFBURIED},
+	{"seeall", "show all equipment in use (generally, ),[,=,\",( commands", doprinuse, IFBURIED},
+	{"seegold", "count your gold", doprgold, IFBURIED},
+	{"glance", "show what type of thing a map symbol on the level corresponds to", doquickwhatis, IFBURIED},
+	{"remove", "remove an accessory (ring, amulet, etc)", doremring, !IFBURIED},
+	{"read", "read a scroll or spellbook", doread, !IFBURIED},
+	{"redraw", "redraw screen", doredraw, IFBURIED},
+#ifdef SUSPEND
+	{"suspend", "suspend game (only if defined)", dosuspend, IFBURIED},
+#endif /* SUSPEND */
+	{"setoptions", "show option settings, possibly change them", doset, IFBURIED},
+	{"search", "search for traps and secret doors", dosearch, IFBURIED, !AUTOCOMPLETE, "searching"},
+	{"save", "save the game", dosave, IFBURIED},
+	{"swap", "swap wielded and secondary weapons", doswapweapon, !IFBURIED},
+	{"shell", "do a shell escape (only if defined)", dosh, IFBURIED},
+	{"throw", "throw something", dothrow, !IFBURIED},
+	{"takeoff", "take off one piece of armor", dotakeoff, !IFBURIED},
+	{"teleport", "teleport around level", dotele, IFBURIED},
+	{"inventoryall", "inventory specific item types", dotypeinv, IFBURIED},
+	{"autopickup", "toggle the pickup option on/off", dotogglepickup, IFBURIED},
+	{"up", "go up a staircase", doup, !IFBURIED},
+	{"version", "show version", doversion, IFBURIED},
+	{"seespells", "list known spells", dovspell, IFBURIED},
+	{"quiver", "select ammunition for quiver", dowieldquiver, !IFBURIED},
+	{"whatis", "show what type of thing a symbol corresponds to", dowhatis, IFBURIED},
+	{"whatdoes", "tell what a command does", dowhatdoes, IFBURIED},
+	{"wield", "wield (put in use) a weapon", dowield, !IFBURIED},
+	{"wear", "wear a piece of armor", dowear, !IFBURIED},
+	{"zap", "zap a wand", dozap, !IFBURIED},
+	{"explore_mode", "enter explore (discovery) mode (only if defined)", enter_explore_mode, IFBURIED},
+
+	{"adjust", "adjust inventory letters", doorganize, IFBURIED, AUTOCOMPLETE},
+	{"chat", "talk to someone", dotalk, IFBURIED, AUTOCOMPLETE},    /* converse? */
+	{"conduct", "list which challenges you have adhered to", doconduct, IFBURIED, AUTOCOMPLETE},
+	{"dip", "dip an object into something", dodip, !IFBURIED, AUTOCOMPLETE},
+	{"enhance", "advance or check weapons skills", enhance_weapon_skill, IFBURIED, AUTOCOMPLETE},
+	{"force", "force a lock", doforce, !IFBURIED, AUTOCOMPLETE},
+	{"invoke", "invoke an object's powers", doinvoke, IFBURIED, AUTOCOMPLETE},
+	{"jump", "jump to a location", dojump, !IFBURIED, AUTOCOMPLETE},
+	{"loot", "loot a box on the floor", doloot, !IFBURIED, AUTOCOMPLETE},
+	{"monster", "use a monster's special ability", domonability, IFBURIED, AUTOCOMPLETE},
+	{"name", "name an item or type of object", ddocall, IFBURIED, AUTOCOMPLETE},
+	{"offer", "offer a sacrifice to the gods", dosacrifice, !IFBURIED, AUTOCOMPLETE},
+	{"pray", "pray to the gods for help", dopray, IFBURIED, AUTOCOMPLETE},
+	{"quit", "exit without saving current game", done2, IFBURIED, AUTOCOMPLETE},
+#ifdef STEED                                                                                                                          
+	{"ride", "ride (or stop riding) a monster", doride, !IFBURIED, AUTOCOMPLETE},
 #endif
-	{"explore", "enter explore mode", enter_explore_mode, true},
-	{"force", "force a lock", doforce, false},
-	{"invoke", "invoke an object's powers", doinvoke, true},
-	{"jump", "jump to a location", dojump, false},
-	{"loot", "loot a box on the floor", doloot, false},
-	{"monster", "use a monster's special ability", domonability, true},
-	{"name", "name an item or type of object", ddocall, true},
-	{"offer", "offer a sacrifice to the gods", dosacrifice, false},
-	{"pray", "pray to the gods for help", dopray, true},
-	{"quit", "exit without saving current game", done2, true},
-#ifdef STEED
-	{"ride", "ride (or stop riding) a monster", doride, false},
-#endif
-	{"rub", "rub a lamp or a stone", dorub, false},
-	{"sit", "sit down", dosit, false},
-#ifdef SHOUT
-	{"shout", "say something loud", doyell, true}, /* jrn */
-#endif
-	{"technique", "perform a technique", dotech, true},
-	{"turn", "turn undead", doturn, true},
-	{"twoweapon", "toggle two-weapon combat", dotwoweapon, false},
-	{"untrap", "untrap something", dountrap, false},
+
+
+	{"rub", "rub a lamp", dorub, !IFBURIED, AUTOCOMPLETE},
+	{"sit", "sit down", dosit, !IFBURIED, AUTOCOMPLETE},
+#ifdef STICKY_COMMAND
+	{"sticky", "set 'sticky' inventory slots", dosticky, IFBURIED, AUTOCOMPLETE},
+#endif /* STICKY_COMMAND */
+	{"technique", "perform a technique", dotech, IFBURIED, AUTOCOMPLETE},
+	{"turn", "turn undead", doturn, IFBURIED, AUTOCOMPLETE},
+	{"twoweapon", "toggle two-weapon combat", dotwoweapon, !IFBURIED, AUTOCOMPLETE},
+	{"untrap", "untrap something", dountrap, !IFBURIED, AUTOCOMPLETE},
 	{"vanquished", "list vanquished monsters", dolistvanq, true},
-	{"version", "list compile time options for this version of Slash'EM",
-		doextversion, true},
-	{"wipe", "wipe off your face", dowipe, false},
-	{"youpoly", "polymorph at will", polyatwill, false},  /* jla */
-	{"?", "get this list of extended commands", doextlist, true},
+	{"versionext", "list compile time options for this version of NetHack",
+		doextversion, IFBURIED, AUTOCOMPLETE},
+	{"wipe", "wipe off your face", dowipe, !IFBURIED, AUTOCOMPLETE},
+	{"youpoly", "polymorph at will", polyatwill, !IFBURIED},  /* jla */
+	{"?", "get this list of extended commands", doextlist, IFBURIED, AUTOCOMPLETE},
+#if 0
+	{"ethics", "list which challenges you have adhered to", doethics, IFBURIED},
+#endif
+#ifdef SHOUT
+	{"shout", "say something loud", doyell, IFBURIED}, /* jrn */
+#endif
+
 #if defined(WIZARD)
 	/*
 	 * There must be a blank entry here for every entry in the table
 	 * below.
 	 */
+
 #ifdef DISPLAY_LAYERS
-	{NULL, NULL, donull, true},
+	{NULL, NULL, donull, true}, // #display
 #endif
-	{NULL, NULL, donull, true},
-	{NULL, NULL, donull, true},
+	{NULL, NULL, donull, true}, // #levelchange
+	{NULL, NULL, donull, true}, // #lightsources
 #ifdef DEBUG_MIGRATING_MONS
-	{NULL, NULL, donull, true},
+	{NULL, NULL, donull, true}, // #migratemons
 #endif
-	{NULL, NULL, donull, true},
-	{NULL, NULL, donull, true},
+	{NULL, NULL, donull, true}, // #monpolycontrol
+	{NULL, NULL, donull, true}, // #panic
+	{NULL, NULL, donull, true}, // #polyself
 #ifdef PORT_DEBUG
-	{NULL, NULL, donull, true},
+	{NULL, NULL, donull, true}, // #portdebug
 #endif
-	{NULL, NULL, donull, true},
-	{NULL, NULL, donull, true},
-        {NULL, NULL, donull, true},
-	{NULL, NULL, donull, true},
-	{NULL, NULL, donull, true},
+	{NULL, NULL, donull, true}, // #seenv
+	{NULL, NULL, donull, true}, // #stats
+	{NULL, NULL, donull, true}, // #timeout
+	{NULL, NULL, donull, true}, // #vision
 #ifdef DEBUG
-	{NULL, NULL, donull, true},
+	{NULL, NULL, donull, true}, // #wizdebug
 #endif
-	{NULL, NULL, donull, true},
+	{NULL, NULL, donull, true}, // #wmode
+	{NULL, NULL, donull, true}, // #detect
+	{NULL, NULL, donull, true}, // #map
+	{NULL, NULL, donull, true}, // #genesis
+	{NULL, NULL, donull, true}, // #identify
+	{NULL, NULL, donull, true}, // #levelport
+	{NULL, NULL, donull, true}, // #wish
+	{NULL, NULL, donull, true}, // #where
 #endif
-	{NULL, NULL, donull, true}	/* sentinel */
 };
 
 #if defined(WIZARD)
-static const struct ext_func_tab debug_extcmdlist[] = {
+static struct ext_func_tab debug_extcmdlist[] = {
 #ifdef DISPLAY_LAYERS
-	{"display", "detail display layers", wiz_show_display, true},
+	{"display", "detail display layers", wiz_show_display, IFBURIED, !AUTOCOMPLETE},
 #endif
-	{"levelchange", "change experience level", wiz_level_change, true},
-	{"lightsources", "show mobile light sources", wiz_light_sources, true},
+	{"levelchange", "change experience level", wiz_level_change, IFBURIED, AUTOCOMPLETE},
+	{"lightsources", "show mobile light sources", wiz_light_sources, IFBURIED, AUTOCOMPLETE},
 #ifdef DEBUG_MIGRATING_MONS
-	{"migratemons", "migrate n random monsters", wiz_migrate_mons, true},
+	{"migratemons", "migrate n random monsters", wiz_migrate_mons, IFBURIED, AUTOCOMPLETE},
 #endif
-	{"monpolycontrol", "control monster polymorphs", wiz_mon_polycontrol, true},
-	{"panic", "test panic routine (fatal to game)", wiz_panic, true},
-	{"polyself", "polymorph self", wiz_polyself, true},
+	{"monpolycontrol", "control monster polymorphs", wiz_mon_polycontrol, IFBURIED, AUTOCOMPLETE},
+	{"panic", "test panic routine (fatal to game)", wiz_panic, IFBURIED, AUTOCOMPLETE},
+	{"polyself", "polymorph self", wiz_polyself, IFBURIED, AUTOCOMPLETE},
 #ifdef PORT_DEBUG
-	{"portdebug", "wizard port debug command", wiz_port_debug, true},
+	{"portdebug", "wizard port debug command", wiz_port_debug, IFBURIED, AUTOCOMPLETE},
 #endif
-	{"seenv", "show seen vectors", wiz_show_seenv, true},
-	{"stats", "show memory statistics", wiz_show_stats, true},
-	{"timeout", "look at timeout queue", wiz_timeout_queue, true},
-	{"vision", "show vision array", wiz_show_vision, true},
+	{"seenv", "show seen vectors", wiz_show_seenv, IFBURIED, AUTOCOMPLETE},
+	{"stats", "show memory statistics", wiz_show_stats, IFBURIED, AUTOCOMPLETE},
+	{"timeout", "look at timeout queue", wiz_timeout_queue, IFBURIED, AUTOCOMPLETE},
+	{"vision", "show vision array", wiz_show_vision, IFBURIED, AUTOCOMPLETE},
 #ifdef DEBUG
-	{"wizdebug", "wizard debug command", wiz_debug_cmd, true},
+	{"wizdebug", "wizard debug command", wiz_debug_cmd, IFBURIED, AUTOCOMPLETE},
 #endif
-	{"wmode", "show wall modes", wiz_show_wmodes, true},
-	{NULL, NULL, donull, true}
+	{"wmode", "show wall modes", wiz_show_wmodes, IFBURIED, AUTOCOMPLETE},
+	{"detect", "detect secret doors and traps", wiz_detect, IFBURIED},
+	{"map", "do magic mapping", wiz_map, IFBURIED},
+	{"genesis", "create monster", wiz_genesis, IFBURIED},
+	{"identify", "identify items in pack", wiz_identify, IFBURIED},
+	{"levelport", "to trans-level teleport", wiz_level_tele, IFBURIED},
+	{"wish", "make wish", wiz_wish, IFBURIED},
+	{"where", "tell locations of special levels", wiz_where, IFBURIED},
+	{NULL, NULL, donull, IFBURIED}
 };
+
+
+static void bind_key(unsigned char key, char* command) {
+	struct ext_func_tab * extcmd;
+
+	/* special case: "nothing" is reserved for unbinding */
+	if (!strcmp(command, "nothing")) {
+		cmdlist[key].bind_cmd = NULL;
+		return;
+	}
+
+	for(extcmd = extcmdlist; extcmd->ef_txt; extcmd++) {
+		if (strcmp(command, extcmd->ef_txt)) continue;
+		cmdlist[key].bind_cmd = extcmd;
+		return;
+	}
+
+	pline("Bad command %s matched with key %c (ASCII %i). "
+			"Ignoring command.\n", command, key, key);
+}
+
+static void init_bind_list(void) {
+	bind_key(C('d'), "kick" ); /* "D" is for door!...?  Msg is in dokick.c */
+#ifdef WIZARD
+	if (wizard) {
+		bind_key(C('e'), "detect" );
+		bind_key(C('f'), "map" );
+		bind_key(C('g'), "genesis" );
+		bind_key(C('i'), "identify" );
+		bind_key(C('o'), "where" );
+		bind_key(C('v'), "levelport" );
+		bind_key(C('w'), "wish" );
+	}
+#endif
+	bind_key(C('l'), "redraw" ); /* if number_pad is set */
+	bind_key(C('p'), "previous" );
+	bind_key(C('r'), "redraw" );
+	bind_key(C('t'), "teleport" );
+	bind_key(C('x'), "attributes" );
+#ifdef SUSPEND
+	bind_key(C('z'), "suspend" );
+#endif
+	bind_key('a',    "apply" );
+	bind_key('A',    "takeoffall" );
+	bind_key(M('a'), "adjust" );
+	/*       'b', 'B' : go sw */
+	bind_key('c',    "close" );
+	bind_key('C',    "call" );
+	bind_key(M('c'), "chat" );
+	bind_key('d',    "drop" );
+	bind_key('D',    "dropall" );
+	bind_key(M('d'), "dip" );
+	bind_key('e',    "eat" );
+	bind_key('E',    "engrave" );
+	bind_key(M('e'), "enhance" );
+	bind_key('f',    "fire" );
+	/*       'F' : fight (one time) */
+	bind_key(M('f'), "force" );
+	/*       'g', 'G' : multiple go */
+	/*       'h', 'H' : go west */
+	bind_key('h',    "help" ); /* if number_pad is set */
+	bind_key('i',    "inventory" );
+	bind_key('I',    "inventoryall" ); /* Robert Viduya */
+	bind_key(M('i'), "invoke" );
+	bind_key('j',    "jump" );
+	/*       'j', 'J', 'k', 'K', 'l', 'L', 'm', 'M', 'n', 'N' : move commands */
+	bind_key(M('j'), "jump" ); /* if number_pad is on */
+	bind_key('k',    "kick" ); /* if number_pad is on */
+	bind_key('l',    "loot" ); /* if number_pad is on */
+	bind_key(M('l'), "loot" );
+	bind_key(M('m'), "monster" );
+	bind_key('N',    "name" );
+	/*       'n' prefixes a count if number_pad is on */
+	bind_key(M('n'), "name" );
+	bind_key(M('N'), "name" ); /* if number_pad is on */
+	bind_key('o',    "open" );
+	bind_key('O',    "setoptions" );
+	bind_key(M('o'), "offer" );
+	bind_key('p',    "pay" );
+	bind_key('P',    "puton" );
+	bind_key(M('p'), "pray" );
+	bind_key('q',    "quaff" );
+	bind_key('Q',    "quiver" );
+	bind_key(M('q'), "quit" );
+	bind_key('r',    "read" );
+	bind_key('R',    "remove" );
+	bind_key(M('r'), "rub" );
+	bind_key('s',    "search" );
+	bind_key('S',    "save" );
+	bind_key(M('s'), "sit" );
+	bind_key('t',    "throw" );
+	bind_key('T',    "takeoff" );
+	bind_key(M('t'), "turn" );
+	/*        'u', 'U' : go ne */
+	bind_key('u',    "untrap" ); /* if number_pad is on */
+	bind_key(M('u'), "untrap" );
+	bind_key('v',    "version" );
+	bind_key('V',    "history" );
+	bind_key(M('v'), "versionext" );
+	bind_key('w',    "wield" );
+	bind_key('W',    "wear" );
+	bind_key(M('w'), "wipe" );
+	bind_key('x',    "swap" );
+	bind_key('X',    "explore_mode" );
+	/*        'y', 'Y' : go nw */
+#ifdef STICKY_COMMAND
+	bind_key(M('y'), "sticky" );
+#endif /* STICKY_COMMAND */
+	bind_key('z',    "zap" );
+	bind_key('Z',    "cast" );
+	bind_key('<',    "up" );
+	bind_key('>',    "down" );
+	bind_key('/',    "whatis" );
+	bind_key('&',    "whatdoes" );
+	bind_key('?',    "help" );
+	bind_key(M('?'), "?" );
+#ifdef SHELL
+	bind_key('!',    "shell" );
+#endif
+	bind_key('.',    "wait" );
+	bind_key(' ',    "wait" );
+	bind_key(',',    "pickup" );
+	bind_key(':',    "look" );
+	bind_key(';',    "glance" );
+	bind_key('^',    "seetrap" );
+	bind_key('\\',   "discoveries" ); /* Robert Viduya */
+	bind_key('@',    "autopickup" );
+	bind_key(M('2'), "twoweapon" );
+	bind_key(WEAPON_SYM, "seeweapon" );
+	bind_key(ARMOR_SYM,  "seearmor" );
+	bind_key(RING_SYM,   "seerings" );
+	bind_key(AMULET_SYM, "seeamulet" );
+	bind_key(TOOL_SYM,   "seetools" );
+	bind_key('*',        "seeall" ); /* inventory of all equipment in use */
+	bind_key(GOLD_SYM,   "seegold" );
+	bind_key(SPBOOK_SYM, "seespells" ); /* Mike Stephenson */
+	bind_key('#', "#");
+	bind_key('_', "travel");
+}
+
+/* takes the list of bindings loaded from the options file, and changes cmdlist
+ * to match it */
+static void change_bind_list(void) {
+	struct binding_list_tab *binding;
+
+	/* TODO: they must be loaded forward,
+	 * not backward as they are now */
+	while ((binding = bindinglist)) {
+		bindinglist = bindinglist->next;
+		bind_key(binding->key, binding->extcmd);
+		free(binding->extcmd);
+		free(binding);
+	}
+}
+		
+/* mapping a key to itself should cause an infinite loop... */
+static void verify_key_list(void) {
+	// TODO
+}
+
 
 /*
  * Insert debug commands into the extended command list.  This function
@@ -2520,12 +2851,13 @@ static const struct ext_func_tab debug_extcmdlist[] = {
  * You must add entries in ext_func_tab every time you add one to the
  * debug_extcmdlist().
  */
-void add_debug_extended_commands(void) {
+static void add_debug_extended_commands(void) {
 	int i, j, k, n;
 
 	/* count the # of help entries */
-	for (n = 0; extcmdlist[n].ef_txt[0] != '?'; n++)
+	for (n = 0; extcmdlist[n].ef_txt[0]; n++)
 	    ;
+	n--; // n is index of the last entry
 
 	for (i = 0; debug_extcmdlist[i].ef_txt; i++) {
 	    for (j = 0; j < n; j++)
@@ -2539,7 +2871,116 @@ void add_debug_extended_commands(void) {
 	}
 }
 
+/* list all keys and their bindings, like dat/hh but dynamic */
+void
+dokeylist(void)
+{
+	char	buf[BUFSZ], buf2[BUFSZ];
+	uchar	key;
+	boolean keys_used[256] = {0};
+	register const char*	dir_keys;
+	winid	datawin;
+	int	i;
+	char*	dir_desc[10] = {"move west",
+				"move northwest",
+				"move north",
+				"move northeast",
+				"move east",
+				"move southeast",
+				"move south",
+				"move southwest",
+				"move downward",
+				"move upward"};
+	char*	misc_desc[MISC_CMD_COUNT] = 
+		{"rush until something interesting is seen",
+		 "run until something extremely interesting is seen",
+		 "fight even if you don't see a monster",
+		 "move without picking up objects/fighting",
+		 "run without picking up objects/fighting",
+		 "escape from the current query/action"
+#ifdef REDO
+		 , "redo the previous command"
+#endif
+		};
 
+
+	datawin = create_nhwindow(NHW_TEXT);
+	putstr(datawin, 0, "");
+	putstr(datawin, 0, "            Full Current Key Bindings List");
+	putstr(datawin, 0, "");
+	
+	/* directional keys */
+	if (iflags.num_pad) dir_keys = ndir;
+	else dir_keys = sdir;
+	putstr(datawin, 0, "Directional keys:");
+	for (i = 0; i < 10; i++) {
+		key = dir_keys[i];
+		keys_used[key] = true;
+		if (!iflags.num_pad) {
+			keys_used[toupper(key)] = true;
+			keys_used[C(key)] = true;
+		}
+		sprintf(buf, "%c\t%s", key, dir_desc[i]);
+		putstr(datawin, 0, buf);
+	}
+	if (!iflags.num_pad) {
+		putstr(datawin, 0, "Shift-<direction> will move in specified direction until you hit");
+		putstr(datawin, 0, "        a wall or run into something.");
+		putstr(datawin, 0, "Ctrl-<direction> will run in specified direction until something");
+		putstr(datawin, 0, "        very interesting is seen.");
+	}
+	putstr(datawin, 0, "");
+
+	/* special keys -- theoretically modifiable but many are still hard-coded*/
+	putstr(datawin, 0, "Miscellaneous keys:");
+	for (i = 0; i < MISC_CMD_COUNT; i++) {
+		key = misc_cmds[i];
+		keys_used[key] = true;
+		sprintf(buf, "%s\t%s", key2txt(key, buf2), misc_desc[i]);
+		putstr(datawin, 0, buf);
+	}
+	putstr(datawin, 0, "");
+
+	/* more special keys -- all hard-coded */
+#ifndef NO_SIGNAL
+	putstr(datawin, 0, "^c\tbreak out of nethack (SIGINT)");
+	keys_used[C('c')] = true;
+	if (!iflags.num_pad) putstr(datawin, 0, "");
+#endif
+	if (iflags.num_pad) {
+		putstr(datawin, 0, "-\tforce fight (same as above)");
+		putstr(datawin, 0, "5\trun (same as above)");
+		putstr(datawin, 0, "0\tinventory (as #inventory)");
+		keys_used['-'] = keys_used['5'] = keys_used['0'] = true;
+		putstr(datawin, 0, "");
+	}
+
+	/* command keys - can be rebound or remapped*/
+	putstr(datawin, 0, "Command keys:");
+	for(i=0; i<=255; i++) {
+		struct ext_func_tab * extcmd;
+		char* mapping;
+		key = i;
+		/* JDS: not the most efficient way, perhaps */
+		if (keys_used[i]) continue;
+		if (key == ' ' && !flags.rest_on_space) continue;
+		if ((extcmd = cmdlist[i].bind_cmd)) {
+			sprintf(buf, "%s\t%s", key2txt(key, buf2), 
+				extcmd->ef_desc);
+			putstr(datawin, 0, buf);
+		} else if ((mapping = cmdlist[i].map_list)) {
+			sprintf(buf, "%s\tmapped to ", 
+				key2txt(key, buf2));
+			str2txt(mapping, eos(buf));
+			putstr(datawin, 0, buf);
+		}
+	}
+	putstr(datawin, 0, "");
+
+	display_nhwindow(datawin, false);
+	destroy_nhwindow(datawin);
+}
+ 
 static const char template[] = "%-18s %4ld  %6ld";
 static const char count_str[] = "                   count  bytes";
 static const char separator[] = "------------------ -----  ------";
@@ -2785,9 +3226,273 @@ static int wiz_migrate_mons(void) {
 
 #endif /* WIZARD */
 
-#define unctrl(c)	((c) <= C('z') ? (0x60 | (c)) : (c))
-#define unmeta(c)	(0x7f & (c))
+static int
+compare_commands(_cmd1, _cmd2)
+     /* a wrapper function for strcmp.  Can this be done more simply? */
+     void *_cmd1, *_cmd2;
+{
+	struct ext_func_tab *cmd1 = _cmd1, *cmd2 = _cmd2;
 
+	return strcmp(cmd1->ef_txt, cmd2->ef_txt);
+}
+
+void
+commands_init(void)
+{
+	int count = 0;
+
+	while(extcmdlist[count].ef_txt) count++;
+		
+	qsort(extcmdlist, count, sizeof(struct ext_func_tab),
+	      &compare_commands);
+
+#ifdef WIZARD
+	if (wizard) add_debug_extended_commands();
+#endif
+	init_bind_list();	/* initialize all keyboard commands */
+	change_bind_list();	/* change keyboard commands based on options */
+	verify_key_list();
+}
+
+/* returns a one-byte character from the text (it may massacre the txt
+ * buffer) */
+char
+txt2key(txt)
+     char* txt;
+{
+	txt = stripspace(txt);
+	if (!*txt) return 0;
+
+	/* simple character */
+	if (!txt[1]) return txt[0];
+
+	/* a few special entries */
+	if (!strcmp(txt, "<enter>")) return '\n';
+	if (!strcmp(txt, "<space>")) return ' ';
+	if (!strcmp(txt, "<esc>"))   return '\033';
+
+	/* control and meta keys */
+	switch (*txt) {
+	    case 'm': /* can be mx, Mx, m-x, M-x */
+	    case 'M':
+		    txt++;
+		    if(*txt == '-' && txt[1]) txt++;
+		    if (txt[1]) return 0;
+		    return M( *txt );
+	    case 'c': /* can be cx, Cx, ^x, c-x, C-x, ^-x */
+	    case 'C':
+	    case '^':
+		    txt++;
+		    if(*txt == '-' && txt[1]) txt++;
+		    if (txt[1]) return 0;
+		    return C( *txt );
+	}
+
+	/* ascii codes: must be three-digit decimal */
+	if (*txt >= '0' && *txt <= '9') {
+		uchar key = 0;
+		int i;
+		for(i = 0; i < 3; i++) {
+			if(txt[i]<'0' || txt[i]>'9') return 0;
+			key = 10 * key + txt[i]-'0';
+		}
+		return key;
+	}
+
+	return 0;
+}
+
+/* returns the text for a one-byte encoding
+ * must be shorter than a tab for proper formatting */
+char *key2txt(char c, char* txt /* sufficiently long buffer */) {
+	if (c == ' ')
+		sprintf(txt, "<space>");
+	else if (c == '\033')
+		sprintf(txt, "<esc>");
+	else if (c == '\n')
+		sprintf(txt, "<enter>");
+	else if (ISCTRL(c))
+		sprintf(txt, "^%c", UNCTRL(c));
+	else if (ISMETA(c))
+		sprintf(txt, "M-%c", UNMETA(c));
+	else if (c >= 33 && c <= 126)
+		sprintf(txt, "%c", c);		/* regular keys: ! through ~ */
+	else
+		sprintf(txt, "A-%i", c);	/* arbitrary ascii combinations */
+	return txt;
+}
+
+/* returns the text for a string of one-byte encodings */
+char *str2txt(char* s, char* txt) {
+	char* buf = txt;
+	
+	while (*s) {
+		key2txt(*s, buf);
+		buf = eos(buf);
+		*buf = ' ';
+		buf++;
+		*buf = 0;
+		s++;
+      	}
+	return txt;
+}
+
+
+/* strips leading and trailing whitespace */
+char*
+stripspace(txt)
+     char* txt;
+{
+	char* end;
+	while (isspace(*txt)) txt++;
+	end = eos(txt);
+	while (--end >= txt && isspace(*end)) *end = 0;
+	return txt;
+}
+
+void
+parsebindings(bindings)
+     /* closely follows parseoptions in options.c */
+     char* bindings;
+{
+	char *bind;
+	char key;
+	struct binding_list_tab *newbinding = NULL;
+
+	/* break off first binding from the rest; parse the rest */
+	if ((bind = index(bindings, ',')) != 0) {
+		*bind++ = 0;
+		parsebindings(bind);
+	}
+ 
+	/* parse a single binding: first split around : */
+	if (! (bind = index(bindings, ':'))) return; /* it's not a binding */
+	*bind++ = 0;
+
+	/* read the key to be bound */
+	key = txt2key(bindings);
+	if (!key) {
+		raw_printf("Bad binding %s.", bindings);
+		wait_synch();
+		return;
+	}
+	
+	/* JDS: crappy hack because wizard mode information
+	 * isn't read until _after_ key bindings are read,
+	 * and to change this would cause numerous side effects.
+	 * instead, I save a list of rebindings, which are later
+	 * bound. */
+	bind = stripspace(bind);
+	newbinding = (struct binding_list_tab *)alloc(sizeof(*newbinding));
+	newbinding->key = key;
+	newbinding->extcmd = (char *)alloc(strlen(bind)+1);
+	strcpy(newbinding->extcmd, bind);;
+	newbinding->next = bindinglist;
+	bindinglist = newbinding;
+}
+ 
+// closesly follows parsebindings and parseoptions
+void parseautocomplete(char* autocomplete, boolean condition) {
+	char *autoc;
+	int i;
+	
+	/* break off first autocomplete from the rest; parse the rest */
+	if ((autoc = index(autocomplete, ','))
+	    || (autoc = index(autocomplete, ':'))) {
+		*autoc++ = 0;
+		parseautocomplete(autoc, condition);
+	}
+
+	/* strip leading and trailing white space */
+	autocomplete = stripspace(autocomplete);
+	
+	if (!*autocomplete) return;
+
+	/* take off negations */
+	while (*autocomplete == '!') {
+		/* unlike most options, a leading "no" might actually be a part of
+		 * the extended command.  Thus you have to use ! */
+		autocomplete++;
+		condition = !condition;
+	}
+
+	/* find and modify the extended command */
+	/* JDS: could be much faster [O(log n) vs O(n)] if done differently */
+	for (i=0; extcmdlist[i].ef_txt; i++) {
+		if (strcmp(autocomplete, extcmdlist[i].ef_txt)) continue;
+		extcmdlist[i].autocomplete = condition;
+		return;
+	}
+
+#ifdef WIZARD
+	/* do the exact same thing with the wizmode list */
+	/* this is a hack because wizard-mode commands haven't been loaded yet when
+	 * this code is run.  See "crappy hack" elsewhere. */
+	for (i=0; debug_extcmdlist[i].ef_txt; i++) {
+		if (strcmp(autocomplete, debug_extcmdlist[i].ef_txt)) continue;
+		debug_extcmdlist[i].autocomplete = condition;
+		return;
+	}
+#endif
+
+	/* not a real extended command */
+	raw_printf ("Bad autocomplete: invalid extended command '%s'.", autocomplete);
+	wait_synch();
+}
+
+void
+parsemappings(mapping)
+     /* closely follows parsebindings and parseoptions */
+     char* mapping;
+{
+	register char *map;
+	unsigned char key;
+	unsigned char map_to[BUFSZ] = "";
+	int cnt;
+	struct key_tab * keytab;
+
+	/* break off first mapping from the rest; parse the rest */
+	if ((map = index(mapping, ','))) {
+		*map++ = 0;
+		parsemappings(map);
+	}
+
+	/* parse a single mapping: first split around : */
+	if (! (map = index(mapping, ':'))) return; /* it's not a mapping */
+	*map++ = 0;
+
+	/* read the key to be mapped */
+	key = txt2key(mapping);
+	if (!key) {
+		raw_printf("Bad mapping for key %s.", mapping);
+		wait_synch();
+		return;
+	}
+
+	/* read the mapping list */
+	cnt = get_uchar_list(map, map_to, BUFSZ-1);
+	if (cnt < 0) {
+		cnt = -cnt - 1;
+		raw_printf("Bad mapping for key %s - %i at %s", 
+			   mapping, cnt, map);
+		wait_synch();
+		return;
+	}
+	if (cnt == 0) {
+		raw_printf("You can't map %s to nothing (%s).",
+			   mapping, map);
+		wait_synch();
+		return;
+			   
+	}
+	map_to[cnt] = 0;
+
+	/* store in cmdlist */
+	keytab = &(cmdlist[key]);
+	if (keytab->map_list != NULL) free(keytab->map_list);
+	keytab->map_list = (char*)alloc(cnt+1);
+	strcpy(keytab->map_list, (char *)map_to);
+}
 
 void rhack(char *cmd) {
 	boolean do_walk, do_rush, prefix_seen, bad_command,
@@ -2798,7 +3503,7 @@ void rhack(char *cmd) {
 		flags.nopick = 0;
 		cmd = parse();
 	}
-	if (*cmd == '\033') { /* <esc> key - user might be panicking */
+	if (*cmd == DOESCAPE) { /* <esc> key - user might be panicking */
 		/* Bring up the menu */
 		if (multi || !flags.menu_on_esc || !(domenusystem())) {
 		flags.move = false;
@@ -2843,74 +3548,60 @@ void rhack(char *cmd) {
 	/* handle most movement commands */
 	do_walk = do_rush = prefix_seen = false;
 	flags.travel = iflags.travel1 = 0;
-	switch (*cmd) {
-	 case 'g':  if (movecmd(cmd[1])) {
+
+	if (*cmd == DORUSH) {
+		if (movecmd(cmd[1])) {
 			flags.run = 2;
 			do_rush = true;
-		    } else
+		} else
 			prefix_seen = true;
-		    break;
-	 case '5':  if (!iflags.num_pad) break;	/* else FALLTHRU */
-	 case 'G':  if (movecmd(lowc(cmd[1]))) {
+	} else if ( (*cmd == '5' && iflags.num_pad) || *cmd == DORUN) {
+		if (movecmd(lowc(cmd[1]))) {
 			flags.run = 3;
 			do_rush = true;
-		    } else
+		} else
 			prefix_seen = true;
-		    break;
-	 case '-':  if (!iflags.num_pad) break;	/* else FALLTHRU */
-	/* Effects of movement commands and invisible monsters:
-	 * m: always move onto space (even if 'I' remembered)
-	 * F: always attack space (even if 'I' not remembered)
-	 * normal movement: attack if 'I', move otherwise
-	 */
-	 case 'F':  if (movecmd(cmd[1])) {
+	} else if ( (*cmd == '-' && iflags.num_pad) || *cmd == DOFORCEFIGHT) {
+		/* Effects of movement commands and invisible monsters:
+		 * m: always move onto space (even if 'I' remembered)
+		 * F: always attack space (even if 'I' not remembered)
+		 * normal movement: attack if 'I', move otherwise
+		 */
+		if (movecmd(cmd[1])) {
 			flags.forcefight = 1;
 			do_walk = true;
-		    } else
+		} else
 			prefix_seen = true;
-		    break;
-	 case 'm':  if (movecmd(cmd[1]) || u.dz) {
+	} else if (*cmd == DONOPICKUP) {
+		if (movecmd(cmd[1]) || u.dz) {
 			flags.run = 0;
 			flags.nopick = 1;
 			if (!u.dz) do_walk = true;
-			else cmd[0] = cmd[1];	/* "m<" or "m>" */
-		    } else
+			else cmd[0] = cmd[1];   /* "m<" or "m>" */
+		} else
 			prefix_seen = true;
-		    break;
-	 case 'M':  if (movecmd(lowc(cmd[1]))) {
+	} else if (*cmd == DORUN_NOPICKUP) {
+		if (movecmd(lowc(cmd[1]))) {
 			flags.run = 1;
 			flags.nopick = 1;
 			do_rush = true;
-		    } else
+		} else
 			prefix_seen = true;
-		    break;
-	 case '0':  if (!iflags.num_pad) break;
-		    (void)ddoinv(); /* a convenience borrowed from the PC */
-		    flags.move = false;
-		    multi = 0;
-		    return;
-	 case CMD_TRAVEL:
-		    if (iflags.travelcmd) {
-			    flags.travel = 1;
-			    iflags.travel1 = 1;
-			    flags.run = 8;
-			    flags.nopick = 1;
-			    do_rush = true;
-			    break;
-		    }
-		    /*FALLTHRU*/
-	 default:   if (movecmd(*cmd)) {	/* ordinary movement */
-			flags.run = 0;	/* only matters here if it was 8 */
+	} else if (*cmd == '0' && iflags.num_pad) {
+		ddoinv(); /* a convenience borrowed from the PC */
+		flags.move = false;
+		multi = 0;
+	} else {
+		if (movecmd(*cmd)) {        /* ordinary movement */
 			do_walk = true;
-		    } else if (movecmd(iflags.num_pad ?
-				       unmeta(*cmd) : lowc(*cmd))) {
+		} else if (movecmd(iflags.num_pad ?
+					UNMETA(*cmd) : lowc(*cmd))) {
 			flags.run = 1;
 			do_rush = true;
-		    } else if (movecmd(unctrl(*cmd))) {
+		} else if (movecmd(UNCTRL(*cmd))) {
 			flags.run = 3;
 			do_rush = true;
-		    }
-		    break;
+		}
 	}
 
 	/* some special prefix handling */
@@ -2933,37 +3624,53 @@ void rhack(char *cmd) {
 	    flags.mv = true;
 	    domove();
 	    return;
-	} else if (prefix_seen && cmd[1] == '\033') {	/* <prefix><escape> */
+	} else if (prefix_seen && cmd[1] == DOESCAPE) {	/* <prefix><escape> */
 	    /* don't report "unknown command" for change of heart... */
 	    bad_command = false;
 	} else if (*cmd == ' ' && !flags.rest_on_space) {
 	    bad_command = true;		/* skip cmdlist[] loop */
-	/* handle all other commands */
+	/* handle bound/mapped commands */
 	} else {
-	    const struct func_tab *tlist;
-	    int res, (*func)(void);
-	    for (tlist = cmdlist; tlist->f_char; tlist++) {
-		if ((*cmd & 0xff) != (tlist->f_char & 0xff)) continue;
+		const struct key_tab *keytab = &cmdlist[(unsigned char)*cmd];
 
-		if (u.uburied && !tlist->can_if_buried) {
-		    You_cant("do that while you are buried!");
-		    res = 0;
-		} else {
-		    /* we discard 'const' because some compilers seem to have
-		       trouble with the pointer passed to set_occupation() */
-		    func = ((struct func_tab *)tlist)->f_funct;
-		    if (tlist->f_text && !occupation && multi)
-			set_occupation(func, tlist->f_text, multi);
-		    res = (*func)();		/* perform the command */
+		if (keytab->bind_cmd != NULL) {
+			struct ext_func_tab *extcmd = keytab->bind_cmd;
+			int res;
+			int (*func)(void);
+
+
+			if (u.uburied && !extcmd->can_if_buried) {
+				You_cant("do that while you are buried!");
+				res = 0;
+			} else {
+				func = extcmd->ef_funct;
+				if (extcmd->f_text && !occupation && multi)
+					set_occupation(func, extcmd->f_text, multi);
+
+				res = (*func)();		/* perform the command */
+			}
+			if (!res) {
+				flags.move = false;
+				multi = 0;
+			}
+			return;
 		}
-		if (!res) {
-		    flags.move = false;
-		    multi = 0;
+		if (keytab->map_list != NULL) {
+			char buf[BUFSZ];
+			char* mapping = keytab->map_list;
+			pline("Mapping char %s.", key2txt(*cmd, buf));
+			while (*mapping) {
+				pline("Mapping to %s.", 
+						key2txt(*mapping, buf));
+				addchar(*mapping);
+				mapping++;
+			}
+			flags.move = false;
+			return;
 		}
-		return;
-	    }
-	    /* if we reach here, cmd wasn't found in cmdlist[] */
-	    bad_command = true;
+
+		/* if we reach here, cmd wasn't found in cmdlist[] */
+		bad_command = true;
 	}
 	if (bad_command) {
 	    char expcmd[10];
@@ -3340,7 +4047,7 @@ static char *parse(void) {
 		} else break;	/* not a digit */
 	    }
 
-	if (foo == '\033') {   /* esc cancels count (TH) */
+	if (foo == DOESCAPE) {   /* esc cancels count (TH) */
 	    clear_nhwindow(WIN_MESSAGE);
 	    /* multi = */ last_multi = 0;  /* WAC multi is cleared later in rhack */
 # ifdef REDO
@@ -3362,8 +4069,9 @@ static char *parse(void) {
 	in_line[0] = foo;
 	in_line[1] = '\0';
 
-	if (foo == 'g' || foo == 'G' || foo == 'm' || foo == 'M' ||
-	    foo == 'F' || (iflags.num_pad && (foo == '5' || foo == '-'))) {
+	if (foo == DORUSH || foo == DORUN || foo == DOFORCEFIGHT
+		|| foo == DONOPICKUP || foo == DORUN_NOPICKUP
+		|| (iflags.num_pad && (foo == '5' || foo == '-'))) {
 	    foo = readchar();
 #ifdef REDO
 	    savech((char)foo);
@@ -3373,7 +4081,7 @@ static char *parse(void) {
 	}
 	clear_nhwindow(WIN_MESSAGE);
 
-	if (prezero) in_line[0] = '\033';
+	if (prezero) in_line[0] = DOESCAPE;
 	repeat_char = in_line[0];
 
 	return(in_line);

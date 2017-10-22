@@ -54,11 +54,9 @@ void moveloop(void) {
 	monstr_init();	/* monster strengths */
 	objects_init();
 
-#ifdef WIZARD
-	if (wizard) add_debug_extended_commands();
-#endif
+	commands_init();
 
-	(void) encumber_msg(); /* in case they auto-picked up something */
+	encumber_msg(); /* in case they auto-picked up something */
 	if (defer_see_monsters) {
 		defer_see_monsters = false;
 		see_monsters();

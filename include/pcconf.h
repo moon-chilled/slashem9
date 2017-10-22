@@ -58,11 +58,6 @@
 
 #include <fcntl.h>
 
-#ifndef REDO
-# undef Getchar
-# define Getchar nhgetch
-#endif
-
 #ifdef MSC7_WARN	/* define with cl /DMSC7_WARN	*/
 #pragma warning(disable:4131)
 #endif

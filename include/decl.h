@@ -228,8 +228,36 @@ extern const char *nomovemsg;
 extern const char nul[];
 extern char lock[];
 
-extern const char sdir[], ndir[];
+/* sdir is the regular direction keys (modifyable).
+ * ndir is the number_pad direction keys.
+ * xdir/ydir/zdir holds the directions of movement for each of the sdir and
+ *     ndir keys.
+ * misc_cmds holds all other special keyboard commands.
+ */
+extern char sdir[];
+extern const char ndir[];
+
 extern const schar xdir[], ydir[], zdir[];
+
+extern char misc_cmds[];
+
+#define DORUSH                 misc_cmds[0]
+#define DORUN                  misc_cmds[1]
+#define DOFORCEFIGHT           misc_cmds[2]
+#define DONOPICKUP             misc_cmds[3]
+#define DORUN_NOPICKUP         misc_cmds[4]
+#define DOESCAPE               misc_cmds[5]
+#ifdef REDO                    /* JDS: moved from config.h */
+# undef  DOAGAIN /* remove previous definition from config.h */
+# define DOAGAIN               misc_cmds[6]
+#endif
+
+/* the number of miscellaneous commands */
+#ifdef REDO
+# define MISC_CMD_COUNT                7
+#else
+# define MISC_CMD_COUNT                6
+#endif
 
 extern schar tbx, tby;		/* set in mthrowu.c */
 
