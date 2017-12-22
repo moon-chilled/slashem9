@@ -59,6 +59,10 @@ typedef schar	xchar;
 typedef xchar	boolean;		/* 0 or 1 */
 #endif
 
+typedef unsigned short ushort;
+typedef unsigned int uint;
+typedef unsigned long ulong;
+
 #ifndef STRNCMPI
 # if !defined(__SASC_60) && !defined(__MINGW32__) /* SAS/C already shifts to stricmp */
 #  define strcmpi(a,b) strncmpi((a),(b),-1)

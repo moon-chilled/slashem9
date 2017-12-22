@@ -98,16 +98,7 @@ extern void tty_startup(int*, int*);
 #ifndef NO_TERMS
 extern void tty_shutdown(void);
 #endif
-#if defined(apollo)
-/* Apollos don't widen old-style function definitions properly -- they try to
- * be smart and use the prototype, or some such strangeness.  So we have to
- * define UNWIDENDED_PROTOTYPES (in tradstdc.h), which makes char below a
- * char.  But the tputs termcap call was compiled as if xputc's argument
- * actually would be expanded.	So here, we have to make an exception. */
-extern void xputc(int);
-#else
 extern void xputc(char);
-#endif
 extern void xputs(const char *);
 #if defined(SCREEN_VGA) || defined(SCREEN_8514) || defined(ALLEG_FX)
 extern void xputg(int, int, unsigned);

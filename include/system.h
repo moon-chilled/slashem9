@@ -400,7 +400,7 @@ extern  char *sprintf();
 #ifndef __SASC_60
 #ifdef NEED_VARARGS
 # if defined(USE_STDARG) || defined(USE_VARARGS)
-#  if !defined(SVR4) && !defined(apollo)
+#  if !defined(SVR4)
 #   if !(defined(ULTRIX_PROTO) && defined(__GNUC__))
 #    if !(defined(SUNOS4) && defined(__STDC__)) /* Solaris unbundled cc (acc) */
 extern int vsprintf(char *, const char *, va_list);

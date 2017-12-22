@@ -47,10 +47,6 @@
 /* #define USE_VARARGS */	/* use <varargs.h> instead of <stdarg.h> */
 /* #define USE_OLDARGS */	/* don't use any variable argument facilites */
 
-#if defined(apollo)             /* Apollos have stdarg(3) but not stdarg.h */
-# define USE_VARARGS
-#endif
-
 #if defined(NHSTDC) || defined(ULTRIX_PROTO) || defined(MAC)
 # if !defined(USE_VARARGS) && !defined(USE_OLDARGS) && !defined(USE_STDARG)
 #   define USE_STDARG
@@ -113,7 +109,7 @@
  * because some compilers choke on `defined(const)'.
  * This has been observed with Lattice, MPW, and High C.
  */
-# if (defined(ULTRIX_PROTO) && !defined(NHSTDC)) || defined(apollo)
+# if defined(ULTRIX_PROTO) && !defined(NHSTDC)
 	/* the system header files don't use `const' properly */
 #  ifndef const
 #   define const

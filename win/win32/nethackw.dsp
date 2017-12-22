@@ -771,18 +771,6 @@ SOURCE=..\include\macconf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\macpopup.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\mactty.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\macwin.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\mail.h
 # End Source File
 # Begin Source File

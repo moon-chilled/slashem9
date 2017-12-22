@@ -1713,12 +1713,12 @@ extern void genl_outrip(winid,int);
 
 /* ### rnd.c ### */
 
-extern int rn2(int);
-extern int rnl(int);
-extern int rnd(int);
-extern int d(int,int);
-extern int rne(int);
-extern int rnz(int);
+extern uint rn2(uint x);
+extern uint rnl(uint x);
+extern uint rnd(uint x);
+extern uint d(uint n, uint x);
+extern uint rne(uint x);
+extern uint rnz(uint i);
 
 /* ### role.c ### */
 

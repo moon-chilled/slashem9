@@ -320,10 +320,6 @@ const struct symdef defsyms[MAXPCHARS] = {
 
 #ifdef ASCIIGRAPH
 
-#ifdef PC9800
-void (*ibmgraphics_mode_callback)(void) = 0;	/* set in tty_start_screen() */
-#endif /* PC9800 */
-
 #ifdef CURSES_GRAPHICS
 void (*cursesgraphics_mode_callback)(void) = 0;
 #endif
@@ -626,127 +622,111 @@ static uchar mac_graphics[MAXPCHARS] = {
 };
 #endif	/* MAC_GRAPHICS_ENV */
 
-#ifdef PC9800
-void (*ascgraphics_mode_callback)(void) = 0;	/* set in tty_start_screen() */
-#endif
-
 /*
  * Convert the given character to an object class.  If the character is not
  * recognized, then MAXOCLASSES is returned.  Used in detect.c invent.c,
  * options.c, pickup.c, sp_lev.c, and lev_main.c.
  */
-int
-def_char_to_objclass (char ch)
-{
-    int i;
-    for (i = 1; i < MAXOCLASSES; i++)
-	if (ch == def_oc_syms[i]) break;
-    return i;
+int def_char_to_objclass(char ch) {
+	int i;
+	for (i = 1; i < MAXOCLASSES; i++) {
+		if (ch == def_oc_syms[i])
+			break;
+	}
+
+	return i;
 }
 
 /*
  * Convert a character into a monster class.  This returns the _first_
  * match made.  If there are are no matches, return MAXMCLASSES.
  */
-int
-def_char_to_monclass (char ch)
-{
-    int i;
-    for (i = 1; i < MAXMCLASSES; i++)
-	if (def_monsyms[i] == ch) break;
-    return i;
+int def_char_to_monclass(char ch) {
+	int i;
+	for (i = 1; i < MAXMCLASSES; i++) {
+		if (def_monsyms[i] == ch)
+			break;
+	}
+
+	return i;
 }
 
-void
-assign_graphics(graph_chars, glth, maxlen, offset)
-uchar *graph_chars;
-int glth, maxlen, offset;
-{
-    int i;
+void assign_graphics(uchar *graph_chars, int glth, int maxlen, int offset) {
+	int i;
 
-    for (i = 0; i < maxlen; i++)
-	showsyms[i+offset] = (((i < glth) && graph_chars[i]) ?
-		       graph_chars[i] : defsyms[i+offset].sym);
+	for (i = 0; i < maxlen; i++) {
+		showsyms[i+offset] = (((i < glth) && graph_chars[i]) ?
+				graph_chars[i] : defsyms[i+offset].sym);
+	}
 }
 
 #ifdef USER_DUNGEONCOLOR
-void
-assign_colors(graph_colors, glth, maxlen, offset)
-uchar *graph_colors;
-int glth, maxlen, offset;
-{
-    int i;
+void assign_colors(uchar *graph_colors, int glth, int maxlen, int offset) {
+	int i;
 
-    for (i = 0; i < maxlen; i++)
-	showsymcolors[i+offset] =
-	    (((i < glth) && (graph_colors[i] < CLR_MAX)) ?
-	     graph_colors[i] : defsyms[i+offset].color);
+	for (i = 0; i < maxlen; i++) {
+		showsymcolors[i+offset] =
+			(((i < glth) && (graph_colors[i] < CLR_MAX)) ?
+			 graph_colors[i] : defsyms[i+offset].color);
+	}
 }
 #endif
 
-void
-switch_graphics (int gr_set_flag)
-{
-    switch (gr_set_flag) {
-	default:
-	case ASCII_GRAPHICS:
-	    assign_graphics(NULL, 0, MAXPCHARS, 0);
+void switch_graphics(int gr_set_flag) {
+	switch (gr_set_flag) {
+		default:
+		case ASCII_GRAPHICS:
+			assign_graphics(NULL, 0, MAXPCHARS, 0);
 #ifdef USER_DUNGEONCOLOR
-	    assign_colors(NULL, 0, MAXPCHARS, 0);
+			assign_colors(NULL, 0, MAXPCHARS, 0);
 #endif
-#ifdef PC9800
-	    if (ascgraphics_mode_callback) (*ascgraphics_mode_callback)();
-#endif
-	    break;
+			break;
 #ifdef ASCIIGRAPH
-	case IBM_GRAPHICS:
-/*
- * Use the nice IBM Extended ASCII line-drawing characters (codepage 437).
- *
- * OS/2 defaults to a multilingual character set (codepage 850, corresponding
- * to the ISO 8859 character set.  We should probably do a VioSetCp() call to
- * set the codepage to 437.
- */
-	    iflags.IBMgraphics = true;
-	    iflags.DECgraphics = false;
+		case IBM_GRAPHICS:
+			/*
+			 * Use the nice IBM Extended ASCII line-drawing characters (codepage 437).
+			 *
+			 * OS/2 defaults to a multilingual character set (codepage 850, corresponding
+			 * to the ISO 8859 character set.  We should probably do a VioSetCp() call to
+			 * set the codepage to 437.
+			 */
+			iflags.IBMgraphics = true;
+			iflags.DECgraphics = false;
 #ifdef CURSES_GRAPHICS
-        iflags.cursesgraphics = false;
+			iflags.cursesgraphics = false;
 #endif
-	    assign_graphics(ibm_graphics, SIZE(ibm_graphics), MAXPCHARS, 0);
-#ifdef PC9800
-	    if (ibmgraphics_mode_callback) (*ibmgraphics_mode_callback)();
-#endif
-	    break;
+			assign_graphics(ibm_graphics, SIZE(ibm_graphics), MAXPCHARS, 0);
+			break;
 #endif /* ASCIIGRAPH */
 #ifdef TERMLIB
-	case DEC_GRAPHICS:
-/*
- * Use the VT100 line drawing character set.
- */
-	    iflags.DECgraphics = true;
-	    iflags.IBMgraphics = false;
+		case DEC_GRAPHICS:
+			/*
+			 * Use the VT100 line drawing character set.
+			 */
+			iflags.DECgraphics = true;
+			iflags.IBMgraphics = false;
 #ifdef CURSES_GRAPHICS
-        iflags.cursesgraphics = false;
+			iflags.cursesgraphics = false;
 #endif
-	    assign_graphics(dec_graphics, SIZE(dec_graphics), MAXPCHARS, 0);
-	    if (decgraphics_mode_callback) (*decgraphics_mode_callback)();
-	    break;
+			assign_graphics(dec_graphics, SIZE(dec_graphics), MAXPCHARS, 0);
+			if (decgraphics_mode_callback) (*decgraphics_mode_callback)();
+			break;
 #endif /* TERMLIB */
 #ifdef MAC_GRAPHICS_ENV
-	case MAC_GRAPHICS:
-	    assign_graphics(mac_graphics, SIZE(mac_graphics), MAXPCHARS, 0);
-	    break;
+		case MAC_GRAPHICS:
+			assign_graphics(mac_graphics, SIZE(mac_graphics), MAXPCHARS, 0);
+			break;
 #endif
 #ifdef CURSES_GRAPHICS
-    case CURS_GRAPHICS:
-	    assign_graphics(NULL, 0, MAXPCHARS, 0);
-        iflags.cursesgraphics = true;
-	    iflags.IBMgraphics = false;
-	    iflags.DECgraphics = false;
-        break;
+		case CURS_GRAPHICS:
+			assign_graphics(NULL, 0, MAXPCHARS, 0);
+			iflags.cursesgraphics = true;
+			iflags.IBMgraphics = false;
+			iflags.DECgraphics = false;
+			break;
 #endif
 	}
-    return;
+	return;
 }
 
 
@@ -824,108 +804,99 @@ static const uchar IBM_r_oc_syms[MAXOCLASSES] = {	/* a la EPYX Rogue */
 };
 # endif /* ASCIIGRAPH */
 
-void
-assign_rogue_graphics(is_rlevel)
-boolean is_rlevel;
-{
-    /* Adjust graphics display characters on Rogue levels */
+void assign_rogue_graphics(boolean is_rlevel) {
+	/* Adjust graphics display characters on Rogue levels */
 
-    if (is_rlevel) {
-	int i;
+	if (is_rlevel) {
+		int i;
 
-	(void) memcpy((void *)save_showsyms,
-		      (void *)showsyms, sizeof showsyms);
-	(void) memcpy((void *)save_oc_syms,
-		      (void *)oc_syms, sizeof oc_syms);
-	(void) memcpy((void *)save_monsyms,
-		      (void *)monsyms, sizeof monsyms);
+		memcpy(save_showsyms, showsyms, sizeof showsyms);
+		memcpy(save_oc_syms, oc_syms, sizeof oc_syms);
+		memcpy(save_monsyms, monsyms, sizeof monsyms);
 
-	/* Use a loop: char != uchar on some machines. */
-	for (i = 0; i < MAXMCLASSES; i++)
-	    monsyms[i] = def_monsyms[i];
+		/* Use a loop: char != uchar on some machines. */
+		for (i = 0; i < MAXMCLASSES; i++)
+			monsyms[i] = def_monsyms[i];
 # if defined(ASCIIGRAPH) && !defined(MSWIN_GRAPHICS)
-	if (iflags.IBMgraphics)
-	    monsyms[S_HUMAN] = 0x01; /* smiley face */
+		if (iflags.IBMgraphics)
+			monsyms[S_HUMAN] = 0x01; /* smiley face */
 # endif
-	for (i = 0; i < MAXPCHARS; i++)
-	    showsyms[i] = defsyms[i].sym;
+		for (i = 0; i < MAXPCHARS; i++)
+			showsyms[i] = defsyms[i].sym;
 
-/*
- * Some day if these rogue showsyms get much more extensive than this,
- * we may want to create r_showsyms, and IBM_r_showsyms arrays to hold
- * all of this info and to simply initialize it via a for() loop like r_oc_syms.
- */
+		/*
+		 * Some day if these rogue showsyms get much more extensive than this,
+		 * we may want to create r_showsyms, and IBM_r_showsyms arrays to hold
+		 * all of this info and to simply initialize it via a for() loop like r_oc_syms.
+		 */
 
 # ifdef ASCIIGRAPH
-	if (!iflags.IBMgraphics) {
+		if (!iflags.IBMgraphics) {
 # endif
-	    showsyms[S_vodoor]  = showsyms[S_hodoor]  = showsyms[S_ndoor] = '+';
-	    showsyms[S_upstair] = showsyms[S_dnstair] = '%';
+			showsyms[S_vodoor]  = showsyms[S_hodoor]  = showsyms[S_ndoor] = '+';
+			showsyms[S_upstair] = showsyms[S_dnstair] = '%';
 # ifdef ASCIIGRAPH
-	} else {
-	    /* a la EPYX Rogue */
-	    showsyms[S_vwall]   = 0xba; /* all walls now use	*/
-	    showsyms[S_hwall]   = 0xcd; /* double line graphics	*/
-	    showsyms[S_tlcorn]  = 0xc9;
-	    showsyms[S_trcorn]  = 0xbb;
-	    showsyms[S_blcorn]  = 0xc8;
-	    showsyms[S_brcorn]  = 0xbc;
-	    showsyms[S_crwall]  = 0xce;
-	    showsyms[S_tuwall]  = 0xca;
-	    showsyms[S_tdwall]  = 0xcb;
-	    showsyms[S_tlwall]  = 0xb9;
-	    showsyms[S_trwall]  = 0xcc;
-	    showsyms[S_ndoor]   = 0xce;
-	    showsyms[S_vodoor]  = 0xce;
-	    showsyms[S_hodoor]  = 0xce;
-	    showsyms[S_room]    = 0xfa; /* centered dot */
-	    showsyms[S_corr]    = 0xb1;
-	    showsyms[S_litcorr] = 0xb2;
-	    showsyms[S_upstair] = 0xf0; /* Greek Xi */
-	    showsyms[S_dnstair] = 0xf0;
+		} else {
+			/* a la EPYX Rogue */
+			showsyms[S_vwall]   = 0xba; /* all walls now use	*/
+			showsyms[S_hwall]   = 0xcd; /* double line graphics	*/
+			showsyms[S_tlcorn]  = 0xc9;
+			showsyms[S_trcorn]  = 0xbb;
+			showsyms[S_blcorn]  = 0xc8;
+			showsyms[S_brcorn]  = 0xbc;
+			showsyms[S_crwall]  = 0xce;
+			showsyms[S_tuwall]  = 0xca;
+			showsyms[S_tdwall]  = 0xcb;
+			showsyms[S_tlwall]  = 0xb9;
+			showsyms[S_trwall]  = 0xcc;
+			showsyms[S_ndoor]   = 0xce;
+			showsyms[S_vodoor]  = 0xce;
+			showsyms[S_hodoor]  = 0xce;
+			showsyms[S_room]    = 0xfa; /* centered dot */
+			showsyms[S_corr]    = 0xb1;
+			showsyms[S_litcorr] = 0xb2;
+			showsyms[S_upstair] = 0xf0; /* Greek Xi */
+			showsyms[S_dnstair] = 0xf0;
 #ifndef MSWIN_GRAPHICS
-	    showsyms[S_arrow_trap] = 0x04; /* diamond (cards) */
-	    showsyms[S_dart_trap] = 0x04;
-	    showsyms[S_falling_rock_trap] = 0x04;
-	    showsyms[S_squeaky_board] = 0x04;
-	    showsyms[S_bear_trap] = 0x04;
-	    showsyms[S_land_mine] = 0x04;
-	    showsyms[S_rolling_boulder_trap] = 0x04;
-	    showsyms[S_sleeping_gas_trap] = 0x04;
-	    showsyms[S_rust_trap] = 0x04;
-	    showsyms[S_fire_trap] = 0x04;
-	    showsyms[S_pit] = 0x04;
-	    showsyms[S_spiked_pit] = 0x04;
-	    showsyms[S_hole] = 0x04;
-	    showsyms[S_trap_door] = 0x04;
-	    showsyms[S_teleportation_trap] = 0x04;
-	    showsyms[S_level_teleporter] = 0x04;
-	    showsyms[S_magic_portal] = 0x04;
-	    showsyms[S_web] = 0x04;
-	    showsyms[S_statue_trap] = 0x04;
-	    showsyms[S_magic_trap] = 0x04;
-	    showsyms[S_anti_magic_trap] = 0x04;
-	    showsyms[S_polymorph_trap] = 0x04;
+			showsyms[S_arrow_trap] = 0x04; /* diamond (cards) */
+			showsyms[S_dart_trap] = 0x04;
+			showsyms[S_falling_rock_trap] = 0x04;
+			showsyms[S_squeaky_board] = 0x04;
+			showsyms[S_bear_trap] = 0x04;
+			showsyms[S_land_mine] = 0x04;
+			showsyms[S_rolling_boulder_trap] = 0x04;
+			showsyms[S_sleeping_gas_trap] = 0x04;
+			showsyms[S_rust_trap] = 0x04;
+			showsyms[S_fire_trap] = 0x04;
+			showsyms[S_pit] = 0x04;
+			showsyms[S_spiked_pit] = 0x04;
+			showsyms[S_hole] = 0x04;
+			showsyms[S_trap_door] = 0x04;
+			showsyms[S_teleportation_trap] = 0x04;
+			showsyms[S_level_teleporter] = 0x04;
+			showsyms[S_magic_portal] = 0x04;
+			showsyms[S_web] = 0x04;
+			showsyms[S_statue_trap] = 0x04;
+			showsyms[S_magic_trap] = 0x04;
+			showsyms[S_anti_magic_trap] = 0x04;
+			showsyms[S_polymorph_trap] = 0x04;
 #endif
-	}
+		}
 #endif /* ASCIIGRAPH */
 
-	for (i = 0; i < MAXOCLASSES; i++) {
+		for (i = 0; i < MAXOCLASSES; i++) {
 #if defined(ASCIIGRAPH) && !defined(LINUX)
-	    if (iflags.IBMgraphics)
-		oc_syms[i] = IBM_r_oc_syms[i];
-	    else
+			if (iflags.IBMgraphics)
+				oc_syms[i] = IBM_r_oc_syms[i];
+			else
 #endif /* ASCIIGRAPH && !LINUX */
-		oc_syms[i] = r_oc_syms[i];
+				oc_syms[i] = r_oc_syms[i];
+		}
+	} else {
+		memcpy(showsyms, save_showsyms, sizeof showsyms);
+		memcpy(oc_syms, save_oc_syms, sizeof oc_syms);
+		memcpy(monsyms, save_monsyms, sizeof monsyms);
 	}
-    } else {
-	(void) memcpy((void *)showsyms,
-		      (void *)save_showsyms, sizeof showsyms);
-	(void) memcpy((void *)oc_syms,
-		      (void *)save_oc_syms, sizeof oc_syms);
-	(void) memcpy((void *)monsyms,
-		      (void *)save_monsyms, sizeof monsyms);
-    }
 }
 #endif /* REINCARNATION */
 

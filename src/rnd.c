@@ -12,35 +12,26 @@
 #endif
 
 
-int
-rn2 (		/* 0 <= rn2(x) < x */
-    int x
-)
-{
+// 0 <= rn2(x) < x
+uint rn2(uint x) {
 #ifdef DEBUG
-	if (x <= 0) {
-		impossible("rn2(%d) attempted", x);
-		return(0);
+	if (x == 0) {
+		impossible("rn2(0) attempted");
 	}
-	x = RND(x);
-	return(x);
-#else
-	return(RND(x));
 #endif
+	return RND(x);
 }
 
 
-int
-rnl (		/* 0 <= rnl(x) < x; sometimes subtracting Luck */
-    int x	/* good luck approaches 0, bad luck approaches (x-1) */
-)
-{
+/* 0 <= rnl(x) < x; sometimes subtracting Luck *
+ * good luck approaches 0, bad luck approaches (x-1) */
+uint rnl(uint x) {
 	int i;
 
 #ifdef DEBUG
-	if (x <= 0) {
-		impossible("rnl(%d) attempted", x);
-		return(0);
+	if (x == 0) {
+		impossible("rnl(0) attempted");
+		return 0;
 	}
 #endif
 	i = RND(x);
@@ -55,52 +46,47 @@ rnl (		/* 0 <= rnl(x) < x; sometimes subtracting Luck */
 }
 
 
-int
-rnd (		/* 1 <= rnd(x) <= x */
-    int x
-)
-{
+// 1 <= rnd(x) <= x
+uint rnd(uint x) {
 #ifdef DEBUG
-	if (x <= 0) {
-		impossible("rnd(%d) attempted", x);
-		return(1);
+	if (x == 0) {
+		impossible("rnd(0) attempted");
+		return 1;
 	}
-	x = RND(x)+1;
-	return(x);
-#else
-	return(RND(x)+1);
 #endif
+	return RND(x)+1;
 }
 
 
-int
-d (		/* n <= d(n,x) <= (n*x) */
-    int n,
-    int x
-)
-{
-	int tmp = n;
+/* n <= d(n,x) <= (n*x) */
+uint d(uint n, uint x) {
+	uint tmp = n;
 
 #ifdef DEBUG
-	if (x < 0 || n < 0 || (x == 0 && n != 0)) {
-		impossible("d(%d,%d) attempted", n, x);
-		return(1);
+	if (x == 0 && n != 0) {
+		impossible("d(%u,%u) attempted", n, x);
+		return 1;
 	}
 #endif
-	while(n--) tmp += RND(x);
-	return(tmp); /* Alea iacta est. -- J.C. */
+	while(n--) {
+		tmp += rn2(x); // yes, this should be rn2(x).  tmp = n so 1 is already added for each die.  Curse you 1970s hackers and your evil tricks to squeeze every last cycle out of the cpu! --ELR
+		// No, I'm not going to fix it.  It's a cool relic of times past.  It's not the performance cost -- even though that's barely existent, compilers can literally optimize that away.  Probably --ELR
+	}
+
+	return tmp; /* Alea iacta est. -- J.C. */
 }
 
 
-int
-rne (int x)
-{
-	int tmp, utmp;
+uint rne(uint x) {
+	uint tmp, utmp;
 
 	utmp = (u.ulevel < 15) ? 5 : u.ulevel/3;
 	tmp = 1;
-	while (tmp < utmp && !rn2(x))
+
+	while (tmp < utmp && !rn2(x)) {
 		tmp++;
+	}
+
 	return tmp;
 
 	/* was:
@@ -112,17 +98,22 @@ rne (int x)
 	 */
 }
 
-int
-rnz (int i)
-{
-	long x = i;
-	long tmp = 1000;
+uint rnz(uint i) {
+	ulong x = i;
+	ulong tmp = 1000;
 
 	tmp += rn2(1000);
 	tmp *= rne(4);
-	if (rn2(2)) { x *= tmp; x /= 1000; }
-	else { x *= 1000; x /= tmp; }
-	return((int)x);
+
+	if (rn2(2)) {
+		x *= tmp;
+		x /= 1000;
+	} else {
+		x *= 1000;
+		x /= tmp;
+	}
+
+	return x;
 }
 
 /*rnd.c*/

@@ -232,12 +232,12 @@ static unsigned int dec_to_unicode[] = {
 };
 
 
-void pututf8char(unsigned int c) {
-	char out[5];
+void putunicodechar(uint32_t c) {
+	char out[4];
 
-	size_t len = encodechar(0x2592, out);
+	size_t len = encodechar(c, out);
 
-	for (int i = 0; i < len; i++) {
+	for (size_t i = 0; i < len; i++) {
 		putchar(out[i]);
 	}
 }

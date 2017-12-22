@@ -449,10 +449,8 @@ tty_decgraphics_termcap_fixup()
 	 * Do not select NA ASCII as the primary font since people may
 	 * reasonably be using the UK character set.
 	 */
-	if (iflags.DECgraphics) xputs("\033)0");
-#ifdef PC9800
-	init_hilite();
-#endif
+	if (iflags.DECgraphics)
+		xputs("\033)0");
 
 #if defined(ASCIIGRAPH) && !defined(NO_TERMS)
 	/* some termcaps suffer from the bizarre notion that resetting
@@ -481,51 +479,11 @@ tty_decgraphics_termcap_fixup()
 }
 #endif	/* TERMLIB */
 
-#if defined(ASCIIGRAPH) && defined(PC9800)
-extern void (*ibmgraphics_mode_callback)(void);    /* defined in drawing.c */
-#endif
-
-#ifdef PC9800
-extern void (*ascgraphics_mode_callback)(void);    /* defined in drawing.c */
-static void tty_ascgraphics_hilite_fixup(void);
-
-static void
-tty_ascgraphics_hilite_fixup()
-{
-    int c;
-
-    for (c = 0; c < CLR_MAX / 2; c++)
-	if (c != CLR_BLACK) {
-	    hilites[c|BRIGHT] = alloc(sizeof("\033[1;3%dm"));
-	    sprintf(hilites[c|BRIGHT], "\033[1;3%dm", c);
-#ifndef VIDEOSHADES
-	    if (c != CLR_GRAY) {
-#endif
-		    hilites[c] = alloc(sizeof("\033[0;3%dm"));
-		    sprintf(hilites[c], "\033[0;3%dm", c);
-#ifndef VIDEOSHADES
-	    }
-#endif
-	}
-}
-#endif /* PC9800 */
-
 void
 tty_start_screen()
 {
 	xputs(TI);
 	xputs(VS);
-#ifdef PC9800
-    if (!iflags.IBMgraphics && !iflags.DECgraphics)
-	    tty_ascgraphics_hilite_fixup();
-    /* set up callback in case option is not set yet but toggled later */
-    ascgraphics_mode_callback = tty_ascgraphics_hilite_fixup;
-# ifdef ASCIIGRAPH
-    if (iflags.IBMgraphics) init_hilite();
-    /* set up callback in case option is not set yet but toggled later */
-    ibmgraphics_mode_callback = init_hilite;
-# endif
-#endif /* PC9800 */
 
 #ifdef TERMLIB
 	if (iflags.DECgraphics) tty_decgraphics_termcap_fixup();
@@ -601,15 +559,8 @@ int x, y;
 }
 
 /* See note at OVLx ifdef above.   xputc() is a special function. */
-void
-xputc(c)
-#if defined(apollo)
-int c;
-#else
-char c;
-#endif
-{
-	(void) putchar(c);
+void xputc(char c) {
+	putchar(c);
 }
 
 void
