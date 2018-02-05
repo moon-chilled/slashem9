@@ -603,8 +603,8 @@ void delobj(struct obj *obj) {
 		 */
 		return;
 	}
-	update_map = (obj->where == OBJ_FLOOR || Has_contents(obj) &&
-		(obj->where == OBJ_INVENT || obj->where == OBJ_MINVENT));
+	update_map = (obj->where == OBJ_FLOOR || (Has_contents(obj) &&
+		(obj->where == OBJ_INVENT || obj->where == OBJ_MINVENT)));
 	if (Has_contents(obj)) delete_contents(obj);
 	obj_extract_self(obj);
 	if (update_map) newsym(obj->ox, obj->oy);
@@ -1049,8 +1049,8 @@ struct obj *getobj(const char *let, const char *word) {
 		}
 		if(index(quitchars,ilet)) {
 		    if(flags.verbose)
-			pline(Never_mind);
-		    return(NULL);
+			pline("%s", Never_mind);
+		    return NULL;
 		}
 		if(ilet == '-') {
 			return(allownone ? &zeroobj : NULL);
@@ -1116,7 +1116,7 @@ struct obj *getobj(const char *let, const char *word) {
 			    PICK_ONE, allowall ? allow_all : allow_ugly);
 		    if (n<0) {
 			if (flags.verbose)
-			    pline(Never_mind);
+			    pline("%s", Never_mind);
 			return NULL;
 		    } else if (!n)
 			continue;
@@ -1146,7 +1146,7 @@ struct obj *getobj(const char *let, const char *word) {
 		    }
 		    if(ilet == '\033') {
 			if(flags.verbose)
-			    pline(Never_mind);
+			    pline("%s", Never_mind);
 			return(NULL);
 		    }
 		    /* they typed a letter (not a space) at the prompt */
@@ -2320,7 +2320,7 @@ int look_here(int obj_cnt /* obj_cnt > 0 implies that autopickup is in progess *
 	}
 
 	if (!otmp || is_lava(u.ux,u.uy) || (is_pool(u.ux,u.uy) && !Underwater)) {
-		if (dfeature) pline(fbuf);
+		if (dfeature) pline("%s", fbuf);
 		sense_engr_at(u.ux, u.uy, false); /* Eric Backus */
 		if (!skip_objects && (Blind || !dfeature))
 		    You("%s no objects here.", verb);
@@ -2329,14 +2329,14 @@ int look_here(int obj_cnt /* obj_cnt > 0 implies that autopickup is in progess *
 	/* we know there is something here */
 
 	if (skip_objects) {
-	    if (dfeature) pline(fbuf);
+	    if (dfeature) pline("%s", fbuf);
 	    sense_engr_at(u.ux, u.uy, false); /* Eric Backus */
 	    There("are %s%s objects here.",
 		  (obj_cnt <= 10) ? "several" : "many",
 		  picked_some ? " more" : "");
 	} else if (!otmp->nexthere) {
 	    /* only one object */
-	    if (dfeature) pline(fbuf);
+	    if (dfeature) pline("%s", fbuf);
 	    sense_engr_at(u.ux, u.uy, false); /* Eric Backus */
 #ifdef INVISIBLE_OBJECTS
 	    if (otmp->oinvis && !See_invisible) verb = "feel";
@@ -2425,7 +2425,7 @@ static boolean mergable(struct obj *otmp, struct obj *obj) {
 	    obj->obroken != otmp->obroken ||
 	    obj->otrapped != otmp->otrapped ||
 	    obj->lamplit != otmp->lamplit ||
-	    flags.pickup_thrown && obj->was_thrown != otmp->was_thrown ||
+	    (flags.pickup_thrown && obj->was_thrown != otmp->was_thrown) ||
 #ifdef INVISIBLE_OBJECTS
 	    obj->oinvis != otmp->oinvis ||
 #endif
@@ -2779,7 +2779,7 @@ int doorganize(void) {
 		sprintf(qbuf, "Adjust letter to what [%s]?",buf);
 		let = yn_function(qbuf, NULL, '\0');
 		if(index(quitchars,let)) {
-			pline(Never_mind);
+			pline("%s", Never_mind);
 			return(0);
 		}
 		if (let == '@' || !letter(let))

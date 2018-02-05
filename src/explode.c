@@ -449,7 +449,7 @@ do_explode(
 		if (!mtmp) continue;
 		if (DEADMONSTER(mtmp)) continue;
 		if (u.uswallow && mtmp == u.ustuck) {
-			if (is_animal(u.ustuck->data))
+			if (is_animal(u.ustuck->data)) {
 				if (!silent) pline("%s gets %s!",
 				      Monnam(u.ustuck),
 				      (adtyp == AD_FIRE) ? "heartburn" :
@@ -460,7 +460,7 @@ do_explode(
 				      (adtyp == AD_DRST) ? "poisoned" :
 				      (adtyp == AD_ACID) ? "an upset stomach" :
 				       "fried");
-			else
+			} else {
 				if (!silent) pline("%s gets slightly %s!",
 				      Monnam(u.ustuck),
 				      (adtyp == AD_FIRE) ? "toasted" :
@@ -471,6 +471,7 @@ do_explode(
 				      (adtyp == AD_DRST) ? "intoxicated" :
 				      (adtyp == AD_ACID) ? "burned" :
 				       "fried");
+			}
 		} else if (!silent && cansee(xi, yi)) {
 		    if(mtmp->m_ap_type) seemimic(mtmp);
 		    pline("%s is caught in the %s!", Monnam(mtmp), str);
@@ -897,27 +898,31 @@ static void grenade_effects(struct obj *source, xchar x, xchar y, ExplodeRegion 
     if (!mon && x == u.ux && y == u.uy)
 	mon = u.usteed;
 #endif
-    if (mon && !DEADMONSTER(mon))
-	if (resists_fire(mon))
+    if (mon && !DEADMONSTER(mon)) {
+	if (resists_fire(mon)) {
 	    shielded = true;
-	else
+	} else {
 	    for(obj = mon->minvent; obj; obj = obj2) {
 		obj2 = obj->nobj;
 		GRENADE_TRIGGER(obj);
 		for(i = 0; i < delquan; i++)
 		    m_useup(mon, obj);
 	    }
-    if (x == u.ux && y == u.uy)
-	if (Fire_resistance)
+	}
+    }
+    if (x == u.ux && y == u.uy) {
+	if (Fire_resistance) {
 	    shielded = true;
-	else
+	} else {
 	    for(obj = invent; obj; obj = obj2) {
 		obj2 = obj->nobj;
 		GRENADE_TRIGGER(obj);
 		for(i = 0; i < delquan; i++)
 		    useup(obj);
 	    }
-    if (!shielded)
+	}
+    }
+    if (!shielded) {
 	for(obj = level.objects[x][y]; obj; obj = obj2) {
 	    obj2 = obj->nexthere;
 	    GRENADE_TRIGGER(obj);
@@ -930,6 +935,8 @@ static void grenade_effects(struct obj *source, xchar x, xchar y, ExplodeRegion 
 		    delobj(obj);
 	    }
 	}
+    }
+
     gc.fiery_area = fiery_area;
     gc.gas_area = gas_area;
     gc.dig_area = dig_area;

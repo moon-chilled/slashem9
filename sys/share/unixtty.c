@@ -79,7 +79,7 @@
 #  define GTTY2(x)	1
 #  define STTY2(x)	1
 # ifdef POSIX_TYPES
-#  if defined(BSD) && !defined(__DGUX__)
+#  ifdef BSD
 #   define nonesuch	_POSIX_VDISABLE
 #  else
 #   define nonesuch	(fpathconf(0, _PC_VDISABLE))

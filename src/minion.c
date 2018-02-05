@@ -6,11 +6,8 @@
 #include "emin.h"
 #include "epri.h"
 
-void
-msummon (		/* mon summons a monster */
-    struct monst *mon
-)
-{
+// mon summons a monster
+void msummon(struct monst *mon) {
 	struct permonst *ptr;
 	int dtype = NON_PM, cnt = 0;
 	aligntyp atyp;
@@ -84,11 +81,7 @@ msummon (		/* mon summons a monster */
 	}
 }
 
-void
-summon_minion(alignment, talk)
-aligntyp alignment;
-boolean talk;
-{
+void summon_minion(aligntyp alignment, boolean talk) {
     struct monst *mon;
     int mnum;
 
@@ -138,11 +131,8 @@ boolean talk;
 }
 #define Athome	(Inhell && !mtmp->cham)
 
-int
-demon_talk (		/* returns 1 if it won't attack. */
-    struct monst *mtmp
-)
-{
+// returns true if it won't attack.
+bool demon_talk(struct monst *mtmp) {
 	long cash, demand, offer;
 
 	if (uwep && uwep->oartifact == ART_EXCALIBUR) {
@@ -150,7 +140,7 @@ demon_talk (		/* returns 1 if it won't attack. */
 	    mtmp->mpeaceful = mtmp->mtame = 0;
 	    set_malign(mtmp);
 	    newsym(mtmp->mx, mtmp->my);
-	    return 0;
+	    return false;
 	}
 
 	/* Slight advantage given. */
@@ -176,7 +166,7 @@ demon_talk (		/* returns 1 if it won't attack. */
 	if (!demand) {		/* you have no gold */
 	    mtmp->mpeaceful = 0;
 	    set_malign(mtmp);
-	    return 0;
+	    return false;
 	} else {
 	    /* make sure that the demand is unmeetable if the monster
 	       has the Amulet, preventing monster from being satisified
@@ -197,17 +187,17 @@ demon_talk (		/* returns 1 if it won't attack. */
 		pline("%s gets angry...", Amonnam(mtmp));
 		mtmp->mpeaceful = 0;
 		set_malign(mtmp);
-		return 0;
+		return false;
 	    }
 	}
 	mongone(mtmp);
-	return(1);
+	return true;
 }
 
-int lawful_minion(int difficulty)
+
 /* this routine returns the # of an appropriate minion,
    given a difficulty rating from 1 to 30 */
-{
+int lawful_minion(int difficulty) {
    difficulty = difficulty + rn2(5) - 2;
    if (difficulty < 0) difficulty = 0;
    if (difficulty > 30) difficulty = 30;
@@ -229,10 +219,10 @@ int lawful_minion(int difficulty)
    }
 }
 
-int neutral_minion(int difficulty)
+
 /* this routine returns the # of an appropriate minion,
    given a difficulty rating from 1 to 30 */
-{
+int neutral_minion(int difficulty) {
    difficulty = difficulty + rn2(9) - 4;
    if (difficulty < 0) difficulty = 0;
    if (difficulty > 30) difficulty = 30;
@@ -241,10 +231,10 @@ int neutral_minion(int difficulty)
    return (PM_DJINNI /* +rn2(4) */);
 }
 
-int chaotic_minion(int difficulty)
+
 /* this routine returns the # of an appropriate minion,
    given a difficulty rating from 1 to 30 */
-{
+int chaotic_minion(int difficulty) {
    difficulty = difficulty + rn2(5) - 2;
    if (difficulty < 0) difficulty = 0;
    if (difficulty > 30) difficulty = 30;
@@ -277,9 +267,7 @@ int chaotic_minion(int difficulty)
    return PM_GREMLIN;
 }
 
-long
-bribe (struct monst *mtmp)
-{
+long bribe(struct monst *mtmp) {
 	char buf[BUFSZ];
 	long offer;
 #ifdef GOLDOBJ
@@ -314,16 +302,13 @@ bribe (struct monst *mtmp)
 	} else {
 		You("give %s %ld %s.", mon_nam(mtmp), offer, currency(offer));
 	}
-	(void) money2mon(mtmp, offer);
+	money2mon(mtmp, offer);
 #endif
 	flags.botl = 1;
 	return(offer);
 }
 
-int
-dprince(atyp)
-aligntyp atyp;
-{
+int dprince(aligntyp atyp) {
 	int tryct, pm;
 
 	for (tryct = 0; tryct < 20; tryct++) {
@@ -332,13 +317,10 @@ aligntyp atyp;
 		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
 		return(pm);
 	}
-	return(dlord(atyp));	/* approximate */
+	return dlord(atyp);	/* approximate */
 }
 
-int
-dlord(atyp)
-aligntyp atyp;
-{
+int dlord(aligntyp atyp) {
 	int tryct, pm;
 
 	for (tryct = 0; tryct < 20; tryct++) {
@@ -347,22 +329,18 @@ aligntyp atyp;
 		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
 		return(pm);
 	}
-	return(ndemon(atyp));	/* approximate */
+	return ndemon(atyp);	/* approximate */
 }
 
-/* create lawful (good) lord */
-int
-llord (void)
-{
+// create lawful (good) lord
+int llord(void) {
 	if (!(mvitals[PM_ARCHON].mvflags & G_GONE))
 		return(PM_ARCHON);
 
-	return(lminion());	/* approximate */
+	return lminion();	/* approximate */
 }
 
-int
-lminion (void)
-{
+int lminion(void) {
 	int	tryct;
 	struct	permonst *ptr;
 
@@ -375,10 +353,7 @@ lminion (void)
 	return NON_PM;
 }
 
-int
-ndemon(atyp)
-aligntyp atyp;
-{
+int ndemon(aligntyp atyp) {
 	int	tryct;
 	struct	permonst *ptr;
 

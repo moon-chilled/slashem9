@@ -660,7 +660,7 @@ static void cast_cleric_spell(struct monst *mtmp, int dmg, int spellnum) {
 		  (num_eyes == 1) ?
 		  body_part(EYE) : makeplural(body_part(EYE)));
 	    make_blinded(Half_spell_damage ? 100L : 200L, false);
-	    if (!Blind) Your(vision_clears);
+	    if (!Blind) Your("%s", vision_clears);
 	    dmg = 0;
 	} else
 	    impossible("no reason for monster to cast blindness spell?");
@@ -799,8 +799,8 @@ static boolean spell_would_be_useless(struct monst *mtmp, unsigned int adtyp, in
 	/* pools can only be created in certain locations and then only
 	 * rarely unless you're carrying the amulet.
 	 */
-	if ((levl[u.ux][u.uy].typ != ROOM && levl[u.ux][u.uy].typ != CORR
-		|| !u.uhave.amulet && rn2(10)) && spellnum == MGC_CREATE_POOL)
+	if (((levl[u.ux][u.uy].typ != ROOM && levl[u.ux][u.uy].typ != CORR)
+		|| (!u.uhave.amulet && rn2(10))) && spellnum == MGC_CREATE_POOL)
 	    return true;
 	if ((!mtmp->iswiz || flags.no_of_wizards > 1)
 						&& spellnum == MGC_CLONE_WIZ)

@@ -245,7 +245,7 @@
 #   endif
 #  endif
 #else
-# if (defined(SYSV) || defined(DGUX) || defined(HPUX)) && !defined(LINUX)
+# if (defined(SYSV) || defined(HPUX)) && !defined(LINUX)
 #  if defined(M_XENIX)
 #define DEF_MAILREADER	"/usr/bin/mail"
 #  else
@@ -365,7 +365,7 @@
 #endif
 
 #if defined(BSD) || defined(ULTRIX)
-# if !defined(DGUX) && !defined(SUNOS4)
+# if !defined(SUNOS4)
 #define memcpy(d, s, n)		bcopy(s, d, n)
 #define memcmp(s1, s2, n)	bcmp(s2, s1, n)
 # endif

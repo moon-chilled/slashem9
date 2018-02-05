@@ -143,8 +143,7 @@ void wipeout_text( char *engr, int cnt, unsigned seed /* for semi-controlled ran
 	while (lth && engr[lth-1] == ' ') engr[--lth] = 0;
 }
 
-boolean can_reach_floor(void)
-{
+boolean can_reach_floor(void) {
 	return !u.uswallow &&
 #ifdef STEED
 			/* Restricted/unskilled riders can't reach the floor */
@@ -636,8 +635,8 @@ int doengrave(void) {
 		    case WAN_POLYMORPH:
 			if(oep)  {
 			    if (!Blind) {
-				type = (xchar)0;	/* random */
-				(void) random_engraving(buf);
+				type = 0;	/* random */
+				random_engraving(buf);
 			    }
 			    dengr = true;
 			}
@@ -926,7 +925,7 @@ int doengrave(void) {
 		c = yn_function("Do you want to add to the current engraving?",
 				ynqchars, 'y');
 		if (c == 'q') {
-		    pline(Never_mind);
+		    pline("%s", Never_mind);
 		    return false;
 		}
 	    }
@@ -1019,7 +1018,7 @@ int doengrave(void) {
 			  Tobjnam(otmp, "glow"), otense(otmp, "fade"));
 		return true;
 	    } else {
-		pline(Never_mind);
+		pline("%s", Never_mind);
 		return false;
 	    }
 	}
@@ -1136,12 +1135,13 @@ int doengrave(void) {
 
 	make_engr_at(u.ux, u.uy, buf, (moves - multi), type);
 
-	if (post_engr_text[0]) pline(post_engr_text);
+	if (post_engr_text[0])
+		pline("%s", post_engr_text);
 
 	if (doblind && !resists_blnd(&youmonst)) {
-	    You("are blinded by the flash!");
-	    make_blinded((long)rnd(50),false);
-	    if (!Blind) Your(vision_clears);
+		You("are blinded by the flash!");
+		make_blinded((long)rnd(50),false);
+		if (!Blind) Your("%s", vision_clears);
 	}
 
 	return true;

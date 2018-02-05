@@ -54,7 +54,7 @@ static const char *br_string(int);
 static void print_branch(winid, int, int, int, boolean, struct lchoice *);
 #endif
 
-#if defined(DEBUG) || defined(DEBUG_420942)
+#ifdef DEBUG
 #define DD	dungeons[i]
 static void dumpit(void);
 
@@ -112,29 +112,28 @@ void save_dungeon(int fd, boolean perform_write, boolean free_data) {
     int    count;
 
     if (perform_write) {
-	bwrite(fd, (void *) &n_dgns, sizeof n_dgns);
-	bwrite(fd, (void *) dungeons, sizeof(dungeon) * (unsigned)n_dgns);
-	bwrite(fd, (void *) &dungeon_topology, sizeof dungeon_topology);
-	bwrite(fd, (void *) tune, sizeof tune);
+	bwrite(fd, &n_dgns, sizeof n_dgns);
+	bwrite(fd, dungeons, sizeof(dungeon) * n_dgns);
+	bwrite(fd, &dungeon_topology, sizeof dungeon_topology);
+	bwrite(fd, tune, sizeof tune);
 
 	for (count = 0, curr = branches; curr; curr = curr->next)
 	    count++;
-	bwrite(fd, (void *) &count, sizeof(count));
+	bwrite(fd, &count, sizeof(count));
 
 	for (curr = branches; curr; curr = curr->next)
-	    bwrite(fd, (void *) curr, sizeof (branch));
+	    bwrite(fd, curr, sizeof (branch));
 
 	count = maxledgerno();
-	bwrite(fd, (void *) &count, sizeof count);
-	bwrite(fd, (void *) level_info,
-			(unsigned)count * sizeof (struct linfo));
-	bwrite(fd, (void *) &inv_pos, sizeof inv_pos);
+	bwrite(fd, &count, sizeof count);
+	bwrite(fd, level_info, count * sizeof (struct linfo));
+	bwrite(fd, &inv_pos, sizeof inv_pos);
     }
 
     if (free_data) {
 	for (curr = branches; curr; curr = next) {
 	    next = curr->next;
-	    free((void *) curr);
+	    free(curr);
 	}
 	branches = 0;
     }
@@ -145,10 +144,10 @@ void restore_dungeon(int fd) {
     branch *curr, *last;
     int    count, i;
 
-    mread(fd, (void *) &n_dgns, sizeof(n_dgns));
-    mread(fd, (void *) dungeons, sizeof(dungeon) * (unsigned)n_dgns);
-    mread(fd, (void *) &dungeon_topology, sizeof dungeon_topology);
-    mread(fd, (void *) tune, sizeof tune);
+    mread(fd, &n_dgns, sizeof(n_dgns));
+    mread(fd, dungeons, sizeof(dungeon) * (unsigned)n_dgns);
+    mread(fd, &dungeon_topology, sizeof dungeon_topology);
+    mread(fd, tune, sizeof tune);
 
     last = branches = NULL;
 
@@ -164,11 +163,11 @@ void restore_dungeon(int fd) {
 	last = curr;
     }
 
-    mread(fd, (void *) &count, sizeof(count));
+    mread(fd, &count, sizeof(count));
     if (count >= MAXLINFO)
 	panic("level information count larger (%d) than allocated size", count);
-    mread(fd, (void *) level_info, (unsigned)count*sizeof(struct linfo));
-    mread(fd, (void *) &inv_pos, sizeof inv_pos);
+    mread(fd, level_info, count*sizeof(struct linfo));
+    mread(fd, &inv_pos, sizeof inv_pos);
 }
 
 static void Fread(void *ptr, int size, int nitems, dlb *stream) {
@@ -190,7 +189,7 @@ static xchar dname_to_dnum(const char *s) {
 
 	panic("Couldn't resolve dungeon number for name \"%s\".", s);
 	/*NOT REACHED*/
-	return (xchar)0;
+	return 0;
 }
 
 s_level *find_level(const char *s) {

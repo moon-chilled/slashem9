@@ -386,7 +386,7 @@ extern char	*rindex(const char *,int);
 #endif
 
 #ifndef SPRINTF_PROTO
-# if defined(POSIX_TYPES) || defined(DGUX) || defined(NeXT) || !defined(BSD)
+# if defined(POSIX_TYPES) || defined(NeXT) || !defined(BSD)
 extern  int sprintf(char *,const char *,...);
 # else
 #  define OLD_SPRINTF

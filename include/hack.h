@@ -311,10 +311,4 @@ extern int repeat_hit;
 #define RAW_STAT_HALLUCINATION	0x00000040
 #define RAW_STAT_SLIMED		0x00000080
 
-/* The function argument to qsort() requires a particular
- * calling convention under WINCE which is not the default
- * in that environment.
- */
-# define CFDECLSPEC
-
 #endif /* HACK_H */

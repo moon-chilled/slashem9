@@ -2116,8 +2116,8 @@ boolean peace_minded(struct permonst *ptr) {
 		/* Light and dark elves are always hostile to each other.
 		 * Suggested by Dr. Eva R. Myers.
 		 */
-		 if (ual > A_NEUTRAL && mal < A_NEUTRAL ||
-		   ual < A_NEUTRAL && mal > A_NEUTRAL)
+		if ((ual > A_NEUTRAL && mal < A_NEUTRAL) ||
+			(ual < A_NEUTRAL && mal > A_NEUTRAL))
 			return false;
 	}
 
@@ -2323,7 +2323,7 @@ void bagotricks(struct obj *bag) {
     if (!bag || bag->otyp != BAG_OF_TRICKS) {
 	impossible("bad bag o' tricks");
     } else if (bag->spe < 1) {
-	pline(nothing_happens);
+	pline("%s", nothing_happens);
     } else {
 	boolean gotone = false;
 	int cnt = 1;

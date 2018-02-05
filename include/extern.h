@@ -1017,7 +1017,7 @@ extern int doseduce(struct monst *);
 
 extern void msummon(struct monst *);
 extern void summon_minion(aligntyp,boolean);
-extern int demon_talk(struct monst *);
+extern bool demon_talk(struct monst *);
 extern int lawful_minion(int);
 extern int neutral_minion(int);
 extern int chaotic_minion(int);
