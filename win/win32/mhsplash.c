@@ -89,8 +89,8 @@ void mswin_display_splash_window (BOOL show_ver)
 	    buttop - controlrt.bottom - SPLASH_OFFSET_Y,
 	    clientrt.right - 2 * SPLASH_OFFSET_X, controlrt.bottom, true);
 	/* Fill the text control */
-	sprintf(buf, "%s\r\n%s\r\n%s\r\n\r\n", COPYRIGHT_BANNER_A, COPYRIGHT_BANNER_B,
-	    COPYRIGHT_BANNER_C);
+	sprintf(buf, "%s\r\n%s\r\n%s\r\n%s\r\n\r\n", COPYRIGHT_BANNER_A, COPYRIGHT_BANNER_B,
+	    COPYRIGHT_BANNER_C, COPYRIGHT_BANNER_D);
 	strsize = strlen(buf);
 
 	if (show_ver) {
