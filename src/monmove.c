@@ -166,9 +166,7 @@ struct monst *mtmp;
 		return(false);
 
 	return (boolean)(sobj_at(SCR_SCARE_MONSTER, x, y)
-#ifdef ELBERETH
 			 || sengr_at("Elbereth", x, y)
-#endif
 			 || (is_vampire(mtmp->data)
 			     && IS_ALTAR(levl[x][y].typ)));
 }

@@ -744,7 +744,6 @@ enable_zouthern
 enable_redo
 enable_clipping
 enable_menu_color
-enable_elbereth
 enable_noartifactwish
 enable_no_bones
 enable_user_sounds
@@ -1418,7 +1417,6 @@ Optional Features:
   --enable-redo           Redo last command (default=yes)
   --enable-clipping       Allow smaller screens (default=yes)
   --enable-menu-color     TTY graphics menu color (default=yes)
-  --enable-elbereth       Engraving the E-word repels monsters (default=yes)
   --enable-noartifactwish Prevent wishing for special artifacts (default=no)
   --enable-no-bones       Disable loading and saving bones levels (default=no)
   --enable-user-sounds    Allow user-defined regex mapping from messages to
@@ -6128,25 +6126,6 @@ $as_echo "$enable_menu_color" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define MENU_COLOR /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable elbereth" >&5
-$as_echo_n "checking whether to enable elbereth... " >&6; }
-   # Check whether --enable-elbereth was given.
-if test "${enable_elbereth+set}" = set; then :
-  enableval=$enable_elbereth;
-else
-  enable_elbereth="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_elbereth" >&5
-$as_echo "$enable_elbereth" >&6; }
-   if test "$enable_elbereth" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define ELBERETH /**/
 _ACEOF
 
    fi

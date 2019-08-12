@@ -587,9 +587,7 @@ extern boolean can_reach_floor(void);
 extern const char *surface(int,int);
 extern const char *ceiling(int,int);
 extern struct engr *engr_at(xchar,xchar);
-#ifdef ELBERETH
 extern int sengr_at(const char *,xchar,xchar);
-#endif
 extern void u_wipe_engr(int);
 extern void wipe_engr_at(xchar,xchar,xchar);
 extern boolean sense_engr_at(int,int,boolean);

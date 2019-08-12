@@ -1118,7 +1118,6 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	putstr(en_win, 0, final ? "Final Attributes:" : "Current Attributes:");
 	putstr(en_win, 0, "");
 
-#ifdef ELBERETH
 	if (u.uevent.uhand_of_elbereth) {
 	    static const char * const hofe_titles[3] = {
 				"the Hand of Elbereth",
@@ -1127,7 +1126,6 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	    };
 	    you_are(hofe_titles[u.uevent.uhand_of_elbereth - 1]);
 	}
-#endif
 
 	/* note: piousness 20 matches MIN_QUEST_ALIGN (quest.h) */
 	if (u.ualign.record >= 20)	you_are("piously aligned");
@@ -1491,7 +1489,6 @@ void dump_enlightenment(int final) {
 
 	dump("", "Final attributes");
 
-#ifdef ELBERETH
 	if (u.uevent.uhand_of_elbereth) {
 	    static const char * const hofe_titles[3] = {
 				"the Hand of Elbereth",
@@ -1501,7 +1498,6 @@ void dump_enlightenment(int final) {
 	    dump(youwere,
 		(char *)hofe_titles[u.uevent.uhand_of_elbereth - 1]);
 	}
-#endif
 
 	if (u.ualign.record >= 20)
 		dump(youwere, "piously aligned");

@@ -11,9 +11,7 @@ static int in_trouble(void);
 static void fix_worst_trouble(int);
 static void angrygods(aligntyp);
 static void at_your_feet(const char *);
-#ifdef ELBERETH
 static void gcrownu(void);
-#endif	/*ELBERETH*/
 static void pleased(aligntyp);
 static void godvoice(aligntyp,const char*);
 static void god_zaps_you(aligntyp);
@@ -653,7 +651,6 @@ at_your_feet (const char *str)
 	}
 }
 
-#ifdef ELBERETH
 static void
 gcrownu()
 {
@@ -805,7 +802,6 @@ gcrownu()
     update_inventory();
     return;
 }
-#endif	/*ELBERETH*/
 
 static void
 pleased(g_align)
@@ -985,12 +981,10 @@ pleased(g_align)
 	case 7:
 	case 8:
 	case 9:		/* KMH -- can occur during full moons */
-#ifdef ELBERETH
 	    if (u.ualign.record >= PIOUS && !u.uevent.uhand_of_elbereth) {
 		gcrownu();
 		break;
 	    } /* else FALLTHRU */
-#endif	/*ELBERETH*/
 	case 6:	{
 	    struct obj *otmp;
 	    int sp_no, trycnt = u.ulevel + 1;
@@ -1045,9 +1039,7 @@ pleased(g_align)
 
 	u.ublesscnt = rnz(350);
 	kick_on_butt = u.uevent.udemigod ? 1 : 0;
-#ifdef ELBERETH
 	if (u.uevent.uhand_of_elbereth) kick_on_butt++;
-#endif
 	if (kick_on_butt) u.ublesscnt += kick_on_butt * rnz(1000);
 
 	return;

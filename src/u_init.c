@@ -930,9 +930,7 @@ u_init (void)
 	/* WAC not needed - use techs */
 /*	u.unextuse = 0;
 	u.ulastuse = 0;*/
-# ifdef ELBERETH
 	u.uevent.uhand_of_elbereth = 0;
-# endif
 	u.uevent.uheard_tune = 0;
 	u.uevent.uopened_dbridge = 0;
 	u.uevent.udemigod = 0;		/* not a demi-god yet... */
@@ -1481,9 +1479,7 @@ struct trobj *trop;
 				|| otyp == nocreate2
 				|| otyp == nocreate3
 				|| otyp == nocreate4
-#ifdef ELBERETH
 				|| otyp == RIN_LEVITATION
-#endif
 				|| ((Role_if(PM_FLAME_MAGE) || Role_if(PM_ICE_MAGE))
 						&&
 				    (otyp == RIN_FIRE_RESISTANCE ||

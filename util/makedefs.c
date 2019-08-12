@@ -454,9 +454,6 @@ make_version()
 #ifdef INSURANCE
 			| (1L << 18)
 #endif
-#ifdef ELBERETH
-			| (1L << 19)
-#endif
 		/* data format (27..31) */
 #ifdef ZEROCOMP
 			| (1L << 27)
@@ -642,9 +639,6 @@ static const char *build_opts[] = {
 #endif
 #ifdef REALTIME_ON_BOTL
                 "elapsed time on status line",
-#endif
-#ifdef ELBERETH
-		"Elbereth",
 #endif
 #ifdef GOLDOBJ
 		"gold object in inventories",
@@ -997,9 +991,6 @@ h_filter(line)
     if (*line == '#') return true;	/* ignore comment lines */
     if (sscanf(line, "----- %s", tag) == 1) {
 	skip = false;
-#ifndef ELBERETH
-	if (!strcmp(tag, "ELBERETH")) skip = true;
-#endif
     } else if (skip && !strncmp(line, "-----", 5))
 	skip = false;
     return skip;

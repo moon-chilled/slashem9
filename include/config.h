@@ -289,7 +289,6 @@ typedef unsigned char	uchar;
 #endif
 
 /* difficulty */
-#define ELBERETH	/* Engraving the E-word repels monsters */
 /* #define NOARTIFACTWISH */  /* No wishing for special artifacts -- swhite@cs.mun.ca */
 /* #define NO_BONES */	/*Disables loading and saving bones levels*/
 
