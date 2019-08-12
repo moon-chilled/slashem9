@@ -457,7 +457,7 @@ make_version()
 #ifdef ELBERETH
 			| (1L << 19)
 #endif
-		/* data format [COMPRESS excluded] (27..31) */
+		/* data format (27..31) */
 #ifdef ZEROCOMP
 			| (1L << 27)
 #endif
@@ -633,9 +633,6 @@ static const char *build_opts[] = {
 #endif
 #ifdef COM_COMPL
 		"command line completion",
-#endif
-#ifdef COMPRESS
-		"data file compression",
 #endif
 #ifdef DLB
 		"data librarian",

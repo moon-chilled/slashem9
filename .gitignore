@@ -3,15 +3,14 @@
 .*.swn
 .*.swm
 .*.swl
-build
+
+build/
 
 # leftovers from patches
 *.rej
 *.orig
 
-
 # artifacts of an in-tree build
-
 config.log
 config.status
 

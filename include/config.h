@@ -128,34 +128,9 @@
 #define NEWS_AREA FILE_AREA_SHARE
 #define PANICLOG "paniclog"	/* log of panic and impossible events */
 
-/*
- *	If COMPRESS is defined, it should contain the full path name of your
- *	'compress' program.  Defining INTERNAL_COMP causes NetHack to do
- *	simpler byte-stream compression internally.  Both COMPRESS and
- *	INTERNAL_COMP create smaller bones/level/save files, but require
- *	additional code and time.  Currently, only UNIX fully implements
- *	COMPRESS; other ports should be able to uncompress save files a
- *	la unixmain.c if so inclined.
- *	If you define COMPRESS, you must also define COMPRESS_EXTENSION
- *	as the extension your compressor appends to filenames after
- *	compression.
- */
 
-#ifdef UNIX
-/* path and file name extension for compression program */
-# define COMPRESS "/usr/bin/compress" /* Lempel-Ziv compression */
-# define COMPRESS_EXTENSION ".Z"	     /* compress's extension */
+#define INTERNAL_COMP	/* control use of NetHack's compression routines */
 
-/* An example of one alternative you might want to use: */
-/* # define COMPRESS "/usr/local/bin/gzip" */   /* FSF gzip compression */
-/* # define COMPRESS_EXTENSION ".gz" */	     /* normal gzip extension */
-
-/* # define COMPRESS "/usr/bin/bzip2"	*//* bzip2 compression */
-/* # define COMPRESS_EXTENSION ".bz2"	*//* bzip2 extension */
-#endif
-#ifndef COMPRESS
-# define INTERNAL_COMP	/* control use of NetHack's compression routines */
-#endif
 
 /*
  *	Data librarian.  Defining DLB places most of the support files into

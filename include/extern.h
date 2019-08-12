@@ -648,7 +648,6 @@ extern int create_bonesfile(d_level*,char **, char *);
 extern void commit_bonesfile(d_level *);
 extern int open_bonesfile(d_level*,char **);
 extern boolean delete_bonesfile(d_level*);
-extern void compress_bonesfile(void);
 extern void set_savefile_name(void);
 #ifdef INSURANCE
 extern void save_savefile_name(int);
@@ -660,8 +659,6 @@ extern int create_savefile(void);
 extern int open_savefile(void);
 extern int delete_savefile(void);
 extern int restore_saved_game(void);
-extern void compress_area(const char *, const char *);
-extern void uncompress_area(const char *, const char *);
 #ifndef FILE_AREAS
 extern boolean lock_file(const char *,int,int);
 extern void unlock_file(const char *);

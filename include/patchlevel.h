@@ -18,7 +18,7 @@
 #define FIXLEVEL        1
 
 #define COPYRIGHT_BANNER_A \
-"This is SuperLotsoAddedStuffHack-Extended Magic-Next 2017-2018"
+"This is SuperLotsoAddedStuffHack-Extended Magic-Next 2017-2019"
 
 #define COPYRIGHT_BANNER_B \
 "SuperLotsoAddedStuffHack-Extended Magic 1997-2007"

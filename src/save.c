@@ -161,14 +161,12 @@ dosave0()
 #endif
 
 	HUP if (iflags.window_inited) {
-	    uncompress_area(fq_save, SAVEF);
 	    fd = open_savefile();
 	    if (fd > 0) {
 		(void) close(fd);
 		clear_nhwindow(WIN_MESSAGE);
 		There("seems to be an old save file.");
 		if (yn("Overwrite the old file?") == 'n') {
-		    compress_area(fq_save, SAVEF);
 #ifdef KEEP_SAVE
 /*WAC don't restore if you didn't save*/
 			saverestore = false;
@@ -276,7 +274,6 @@ dosave0()
 
 	delete_levelfile(ledger_no(&u.uz));
 	delete_levelfile(0);
-	compress_area(FILE_AREA_SAVE, fq_save);
 	return(1);
 }
 

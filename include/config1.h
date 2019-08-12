@@ -5,20 +5,6 @@
 #ifndef CONFIG1_H
 #define CONFIG1_H
 
-/*
- * Mac Stuff.
- */
-#if defined(__SC__) || defined(__MRC__) /* MPW compilers, but not Metrowerks */
-# define MAC
-# define MAC_MPW
-#endif
-
-#ifdef __MWERKS__	/* defined by Metrowerks' Codewarrior compiler */
-# define MAC
-# define NEED_VARARGS
-# define USE_STDARG
-#endif
-
 #ifdef MAC
 # define DLB
 # undef UNIX
@@ -32,38 +18,26 @@
  * Windows NT Autodetection
  *
  */
-#ifdef _WIN32_WCE
-# ifndef WIN32
-#  define WIN32
-# endif
-#endif
-
 #if defined(__CYGWIN__) && !defined(UNIX)
 # define WIN32
 #endif
+#ifdef _WIN32
+# define WIN32
+#endif
+
 #ifdef WIN32
 # undef UNIX
 # define NHSTDC
 # define USE_STDARG
 # define NEED_VARARGS
 
-#define STRNCMPI
+# define STRNCMPI
 #endif
 
 
 #if defined(__linux__) && defined(__GNUC__) && !defined(_GNU_SOURCE)
 /* ensure _GNU_SOURCE is defined before including any system headers */
 # define _GNU_SOURCE
-#endif
-
-#ifdef vax
-/* just in case someone thinks a DECstation is a vax. It's not, it's a mips */
-# ifdef ULTRIX_PROTO
-#  undef ULTRIX_PROTO
-# endif
-# ifdef ULTRIX_CC20
-#  undef ULTRIX_CC20
-# endif
 #endif
 
 #endif	/* CONFIG1_H */

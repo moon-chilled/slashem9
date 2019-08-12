@@ -22,4 +22,5 @@ fi
 (cd ../.. && autoheader -I sys/autoconf sys/autoconf/configure.ac)
 mv ../../autom4te.cache .
 autoconf configure.ac > ../../configure
+chmod 755 ../../configure
 rm -rf autom4te.cache aclocal.m4
