@@ -269,7 +269,6 @@ typedef unsigned char	uchar;
 #define STEED		/* The ability to ride monsters */
 
 /* Roles */
-#define DWARF		/* Dwarf Patch, Osku Salerma (osku@iki.fi) */
 /* #define ZOUTHERN */	/* KMH -- Zoutherner class and its animals */
 
 /* I/O */

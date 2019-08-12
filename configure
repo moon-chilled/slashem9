@@ -740,7 +740,6 @@ enable_reincarnation
 enable_invisible_objects
 enable_unpolypile
 enable_steed
-enable_dwarf
 enable_zouthern
 enable_redo
 enable_clipping
@@ -1415,7 +1414,6 @@ Optional Features:
                           Invisible objects (default=yes)
   --enable-unpolypile     Object unpolymorphing (default=yes)
   --enable-steed          Ability to ride monsters (default=yes)
-  --enable-dwarf          Dwarf race (default=yes)
   --enable-zouthern       Zoutherner class (default=no)
   --enable-redo           Redo last command (default=yes)
   --enable-clipping       Allow smaller screens (default=yes)
@@ -6054,25 +6052,6 @@ $as_echo "$enable_steed" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define STEED /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable dwarf" >&5
-$as_echo_n "checking whether to enable dwarf... " >&6; }
-   # Check whether --enable-dwarf was given.
-if test "${enable_dwarf+set}" = set; then :
-  enableval=$enable_dwarf;
-else
-  enable_dwarf="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_dwarf" >&5
-$as_echo "$enable_dwarf" >&6; }
-   if test "$enable_dwarf" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define DWARF /**/
 _ACEOF
 
    fi

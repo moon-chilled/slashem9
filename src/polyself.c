@@ -1803,9 +1803,7 @@ special_poly (void)
 	                        so add an extra check */
 		else if (!polyok(&mons[mntmp]) &&
 				(Role_elven ? !is_elf(&mons[mntmp]) :
-#ifdef DWARF
 				Role_if(PM_DWARF) ? !is_gnome(&mons[mntmp]) :
-#endif
 				/* WAC
 				 * should always fail (for now) gnome check
 				 * unless gnomes become not polyok.  Then, it'll

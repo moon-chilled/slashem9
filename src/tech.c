@@ -1636,17 +1636,14 @@ static const struct innate_tech *
 race_tech (void)
 {
 	switch (Race_switch) {
-		case PM_DOPPELGANGER:	return (dop_tech);
-#ifdef DWARF
-		case PM_DWARF:		return (dwa_tech);
-#endif
-		case PM_ELF:
-		case PM_DROW:		return (elf_tech);
-		case PM_GNOME:		return (gno_tech);
-		case PM_HOBBIT:		return (hob_tech);
-		case PM_HUMAN_WEREWOLF:	return (lyc_tech);
-		case PM_VAMPIRE:	return (vam_tech);
-		default: 		return ((struct innate_tech *) 0);
+		case PM_DOPPELGANGER:	return dop_tech;
+		case PM_DWARF:		return dwa_tech;
+		case PM_ELF: case PM_DROW: return elf_tech;
+		case PM_GNOME:		return gno_tech;
+		case PM_HOBBIT:		return hob_tech;
+		case PM_HUMAN_WEREWOLF:	return lyc_tech;
+		case PM_VAMPIRE:	return vam_tech;
+		default: 		return NULL;
 	}
 }
 

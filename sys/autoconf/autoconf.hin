@@ -30,9 +30,6 @@
 /* Dungeon growth */
 #undef DUNGEON_GROWTH
 
-/* Dwarf race */
-#undef DWARF
-
 /* Engraving the E-word repels monsters */
 #undef ELBERETH
 
