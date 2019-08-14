@@ -22,7 +22,7 @@ static char * e_atr2str(int);
 
 void cmov(int, int);
 void nocmov(int, int);
-#if defined(TEXTCOLOR) && defined(TERMLIB)
+#ifdef TERMLIB
 # if !defined(UNIX) || !defined(TERMINFO)
 static void analyze_seq(char *, int *, int *);
 # endif
@@ -45,17 +45,13 @@ static char *MB, *MH;
 static char *MD;     /* may already be in use below */
 #endif
 #ifdef TERMLIB
-# ifdef TEXTCOLOR
 static char *MD;
-# endif
 static int SG;
 static char PC = '\0';
 static char tbuf[512];
 #endif
 
-#ifdef TEXTCOLOR
 char *hilites[CLR_MAX]; /* terminal escapes for the various colors */
-#endif
 
 static char *KS = NULL, *KE = NULL;	/* keypad sequences */
 static char nullstr[] = "";
@@ -187,9 +183,7 @@ int *wid, *hgt;
 	char *tbufptr, *pc;
 #endif
 
-#ifdef TEXTCOLOR
 	init_ttycolor();
-#endif
 
 #ifdef TERMLIB
 
@@ -237,7 +231,6 @@ int *wid, *hgt;
 		AE = "\017";
 #  endif
 		TE = VS = VE = nullstr;
-#  ifdef TEXTCOLOR
 		for (i = 0; i < CLR_MAX / 2; i++)
 		    if (i != CLR_BLACK) {
 			hilites[i|BRIGHT] = alloc(sizeof("\033[1;3%dm"));
@@ -254,7 +247,6 @@ int *wid, *hgt;
 				sprintf(hilites[i], "\033[0;3%dm", i);
 			    }
 		    }
-#  endif
 		*wid = CO;
 		*hgt = LI;
 		CL = "\033[2J";		/* last thing set */
@@ -375,12 +367,8 @@ int *wid, *hgt;
 	AE = Tgetstr("ae");
 	nh_CD = Tgetstr("cd");
 	allow_bgcolor = 1;
-# ifdef TEXTCOLOR
 	MD = Tgetstr("md");
-# endif
-# ifdef TEXTCOLOR
 	init_hilite();
-# endif
 	*wid = CO;
 	*hgt = LI;
 	if (!(CL = Tgetstr("cl")))	/* last thing set */
@@ -396,7 +384,7 @@ int *wid, *hgt;
 void
 tty_shutdown()
 {
-#if defined(TEXTCOLOR) && defined(TERMLIB)
+#ifdef TERMLIB
 	kill_hilite();
 #endif
 	/* we don't attempt to clean up individual termcap variables [yet?] */
@@ -770,7 +758,7 @@ cl_eos()			/* free after Robert Viduya */
 	}
 }
 
-#if defined(TEXTCOLOR) && defined(TERMLIB)
+#ifdef TERMLIB
 # if defined(UNIX) && defined(TERMINFO)
 /*
  * Sets up color highlighting, using terminfo(4) escape sequences.
@@ -995,7 +983,7 @@ kill_hilite()
 	}
 	return;
 }
-#endif /* TEXTCOLOR */
+#endif /* TERMLIB */
 
 
 static char nulstr[] = "";
@@ -1009,7 +997,7 @@ int n;
 		    if(nh_US) return nh_US;
 	    case ATR_BOLD:
 	    case ATR_BLINK:
-#if defined(TERMLIB) && defined(TEXTCOLOR)
+#if defined(TERMLIB)
 		    if (MD) return MD;
 #endif
 		    return nh_HI;
@@ -1070,8 +1058,6 @@ term_end_raw_bold()
 }
 
 
-#ifdef TEXTCOLOR
-
 void
 term_start_bgcolor(color)
 int color;
@@ -1117,8 +1103,6 @@ int color;
 #endif
 	return hilites[color] != NULL;
 }
-
-#endif /* TEXTCOLOR */
 
 #endif /* TTY_GRAPHICS */
 

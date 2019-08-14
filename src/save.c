@@ -41,15 +41,10 @@ static long nulls[10];
 #define HUP
 #endif
 
-#ifdef MENU_COLOR
 extern struct menucoloring *menu_colorings;
-#endif
-
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
 extern const struct percent_color_option *hp_colors;
 extern const struct percent_color_option *pw_colors;
 extern const struct text_color_option *text_colors;
-#endif
 
 /* need to preserve these during save to avoid accessing freed memory */
 static unsigned ustuck_id = 0, usteed_id = 0;
@@ -907,8 +902,6 @@ int fd, mode;
 	    ffruit = 0;
 }
 
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
-
 void
 free_percent_color_options(list_head)
      const struct percent_color_option *list_head;
@@ -935,7 +928,6 @@ free_status_colors()
     free_percent_color_options(pw_colors); pw_colors = NULL;
     free_text_color_options(text_colors); text_colors = NULL;
 }
-#endif
 
 
 /* also called by prscore(); this probably belongs in dungeon.c... */
@@ -954,7 +946,6 @@ free_dungeons()
 	return;
 }
 
-#ifdef MENU_COLOR
 void
 free_menu_coloring()
 {
@@ -963,7 +954,7 @@ free_menu_coloring()
    while (tmp) {
       struct menucoloring *tmp2 = tmp->next;
 #ifdef USE_REGEX_MATCH
-      (void) regfree(&tmp->match);
+       regfree(&tmp->match);
 #else
       free(tmp->match);
 #endif
@@ -972,21 +963,16 @@ free_menu_coloring()
    }
    return;
 }
-#endif
 
 void
 freedynamicdata()
 {
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
-    free_status_colors();
-#endif
+	free_status_colors();
 	unload_qtlist();
 	free_invbuf();	/* let_to_name (invent.c) */
 	free_youbuf();	/* You_buf,&c (pline.c) */
 	msgpline_free();
-#ifdef MENU_COLOR
         free_menu_coloring();
-#endif
 	tmp_at(DISP_FREEMEM, 0);	/* temporary display effects */
 #ifdef FREE_ALL_MEMORY
 # define freeobjchn(X)	(saveobjchn(0, X, FREE_SAVE),  X = 0)

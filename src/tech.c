@@ -1603,9 +1603,7 @@ hurtmon (struct monst *mtmp, int tmp)
 {
 	mtmp->mhp -= tmp;
 	if (mtmp->mhp < 1) killed (mtmp);
-#ifdef SHOW_DMG
 	else showdmg(tmp);
-#endif
 }
 
 static const struct innate_tech *role_tech(void) {

@@ -2439,9 +2439,8 @@ void mdamageu(struct monst *mtmp, int n) {
 		n *= 2; /* Double Damage! */
 	}
 
-#ifdef SHOW_DMG
 	if (flags.showdmg) pline("[%d pts.]", n);
-#endif
+
 	flags.botl = 1; /* This needs to be AFTER the pline for botl to be
 	 		 * updated correctly -- Kelly Bailey
 	 		 */

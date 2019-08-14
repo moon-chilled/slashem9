@@ -99,11 +99,7 @@ static struct Bool_Opt
 #else
 	{"ignintr", NULL, false, SET_IN_FILE},
 #endif
-#ifdef SHOW_WEIGHT
 	{"invweight", &flags.invweight, false, SET_IN_GAME},
-#else
-	{"invweight", NULL, false, SET_IN_FILE},
-#endif
 /*WAC the keep savefile option...*/
 #ifdef KEEP_SAVE
 	{"keep_savefile", &flags.keep_savefile, false, SET_IN_FILE},
@@ -124,15 +120,7 @@ static struct Bool_Opt
 #else
 	{"mail", NULL, true, SET_IN_FILE},
 #endif
-#ifdef MENU_COLOR
-# ifdef MICRO
 	{"menucolors", &iflags.use_menu_color, true,  SET_IN_GAME},
-# else
-	{"menucolors", &iflags.use_menu_color, false, SET_IN_GAME},
-# endif
-#else
-	{"menucolors", NULL, false, SET_IN_GAME},
-#endif
 	{"menu_on_esc", &flags.menu_on_esc, true, SET_IN_GAME},
 #ifdef WIZARD
 	/* for menu debugging only*/
@@ -189,27 +177,15 @@ static struct Bool_Opt
 #endif
 	{"showscore", &flags.showscore, false, SET_IN_GAME},
 /* WAC made the [ xx pts]  dmg display optional */
-#ifdef SHOW_DMG
 	{"showdmg", &flags.showdmg, false, SET_IN_GAME},
-#else
-	{"showdmg", NULL, false, SET_IN_FILE},
-#endif
-#ifdef SHOW_WEIGHT
 	{"showweight", &flags.showweight, false, SET_IN_GAME},
-#else
-	{"showweight", NULL, false, SET_IN_FILE},
-#endif
 	{"silent", &flags.silent, true, SET_IN_GAME},
 	{"softkeyboard", &iflags.wc2_softkeyboard, false, SET_IN_FILE},
 	{"sortpack", &flags.sortpack, true, SET_IN_GAME},
 	{"sound", &flags.soundok, true, SET_IN_GAME},
 	{"sparkle", &flags.sparkle, true, SET_IN_GAME},
 	{"standout", &flags.standout, false, SET_IN_GAME},
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
 	{"statuscolors", &iflags.use_status_colors, true, SET_IN_GAME},
-#else
-	{"statuscolors", (boolean *)0, true, SET_IN_GAME},
-#endif
 	{"splash_screen",     &iflags.wc_splash_screen, true, DISP_IN_GAME},	/*WC*/
 	{"tiled_map",     &iflags.wc_tiled_map, PREFER_TILED, DISP_IN_GAME},	/*WC*/
 	{"time", &flags.time, false, SET_IN_GAME},
@@ -594,9 +570,7 @@ initoptions (void)
 	/* this detects the IBM-compatible console on most 386 boxes */
 	if ((opts = nh_getenv("TERM")) && !strncmp(opts, "AT", 2)) {
 		switch_graphics(IBM_GRAPHICS);
-# ifdef TEXTCOLOR
 		iflags.use_color = true;
-# endif
 	}
 #endif /* UNIX && TTY_GRAPHICS */
 #ifdef UNIX
@@ -976,8 +950,6 @@ const char *optn;
 	return 1;
 }
 
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
-
 struct name_value {
     char *name;
     int value;
@@ -1132,8 +1104,6 @@ parse_status_color_options(start)
     return ok;
 }
 
-#endif /* STATUS_COLORS */
-
 
 void
 set_duplicate_opt_detection (int on_or_off)
@@ -1207,7 +1177,6 @@ int bool_or_comp;	/* 0 == boolean option, 1 == compound */
 	}
 }
 
-#ifdef MENU_COLOR
 extern struct menucoloring *menu_colorings;
 
 static const struct {
@@ -1333,7 +1302,6 @@ char *str;
       return true;
    }
 }
-#endif /* MENU_COLOR */
 
 void
 parseoptions(opts, tinitial, tfrom_file)
@@ -1486,12 +1454,10 @@ boolean tinitial, tfrom_file;
 	/* menucolor:"regex_string"=color */
 	fullname = "menucolor";
 	if (match_optname(opts, fullname, 9, true)) {
-#ifdef MENU_COLOR
 		if (negated) bad_negation(fullname, false);
 		else if ((op = string_for_env_opt(fullname, opts, false)) != 0)
 			if (!add_menu_coloring(op))
 				badoption(opts);
-#endif
  		return;
  	}
 
@@ -2253,12 +2219,10 @@ goodfruit:
 
 	fullname = "statuscolor";
 	if (match_optname(opts, fullname, 11, true)) {
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
 		if (negated) bad_negation(fullname, false);
 		else if ((op = string_for_env_opt(fullname, opts, false)) != 0)
 			if (!parse_status_color_options(op))
 				badoption(opts);
-#endif
 		return;
 	}
 
@@ -2672,10 +2636,7 @@ goodfruit:
 			if ((boolopt[i].addr) == &flags.time
 			 || (boolopt[i].addr) == &flags.showexp
 			 || (boolopt[i].addr) == &flags.showscore
-#ifdef SHOW_WEIGHT
-			 || (boolopt[i].addr) == &flags.showweight
-#endif
-			    )
+			 || (boolopt[i].addr) == &flags.showweight)
 			    bot_reconfig();
 
 			else if ((boolopt[i].addr) == &flags.invlet_constant) {
@@ -2712,11 +2673,9 @@ goodfruit:
 			    need_redraw = true;
 			}
 #endif
-#ifdef TEXTCOLOR
 			else if ((boolopt[i].addr) == &iflags.use_color) {
 			    need_redraw = true;
 			}
-#endif
                         else if ((boolopt[i].addr) == &flags.perm_invent)
                             update_inventory();
 

@@ -30,7 +30,6 @@ static void curses_add_status(WINDOW *, boolean, boolean, int *, int *,
                               const char *, int);
 static int decrement_highlight(nhstat *, boolean);
 
-#ifdef STATUS_COLORS
 static attr_t hpen_color_attr(boolean, int, int);
 extern struct color_option text_color_of(const char *text,
                                          const struct text_color_option *color_options);
@@ -40,7 +39,6 @@ struct color_option percentage_color_of(int value, int max,
 extern const struct text_color_option *text_colors;
 extern const struct percent_color_option *hp_colors;
 extern const struct percent_color_option *pw_colors;
-#endif
 
 /* Whether or not we have printed status window content at least once.
    Used to ensure that prev* doesn't end up highlighted on game start. */
@@ -70,7 +68,7 @@ extern const char *enc_stat[];  /* from botl.c */
 
 struct statcolor {
     const char *txt; /* For status problems */
-    int color; /* Default color assuming STATUS_COLORS isn't enabled */
+    int color; /* Default color */
 };
 
 static const struct statcolor default_colors[] = {
@@ -101,7 +99,6 @@ get_trouble_color(const char *stat)
     const struct statcolor *clr;
     for (clr = default_colors; clr->txt; clr++) {
         if (stat && !strcmp(clr->txt, stat)) {
-#ifdef STATUS_COLORS
             /* Check if we have a color enabled with statuscolors */
             if (!iflags.use_status_colors)
                 return curses_color_attr(CLR_GRAY, 0); /* no color configured */
@@ -124,9 +121,6 @@ get_trouble_color(const char *stat)
             }
 
             return res;
-#else
-            return curses_color_attr(clr->color, 0);
-#endif
         }
     }
 
@@ -304,7 +298,6 @@ curses_color_attr(int nh_color, int bg_color)
 }
 
 /* Returns a complete curses attribute. Used to possibly bold/underline/etc HP/Pw. */
-#ifdef STATUS_COLORS
 static attr_t
 hpen_color_attr(boolean is_hp, int cur, int max)
 {
@@ -326,7 +319,6 @@ hpen_color_attr(boolean is_hp, int cur, int max)
 
     return attr;
 }
-#endif
 
 /* Return color for the HP bar.
    With status colors ON, this respect its configuration (defaulting to gray), but
@@ -336,7 +328,6 @@ hpen_color_attr(boolean is_hp, int cur, int max)
 static int
 hpen_color(boolean is_hp, int cur, int max)
 {
-#ifdef STATUS_COLORS
     if (iflags.use_status_colors) {
         struct color_option stat_color;
         stat_color = percentage_color_of(cur, max, is_hp ? hp_colors : pw_colors);
@@ -347,7 +338,6 @@ hpen_color(boolean is_hp, int cur, int max)
             return stat_color.color;
     } else
         return CLR_GRAY;
-#endif
 
     int color = CLR_GRAY;
     if (cur == max)
@@ -374,12 +364,10 @@ draw_bar(boolean is_hp, int cur, int max, const char *title)
 {
     WINDOW *win = curses_get_nhwin(STATUS_WIN);
 
-#ifdef STATUS_COLORS
     if (!iflags.hitpointbar) {
         wprintw(win, "%s", !title ? "---" : title);
         return;
     }
-#endif
 
     char buf[BUFSZ];
     if (title)
@@ -551,16 +539,9 @@ draw_horizontal(int x, int y, int hp, int hpmax)
 
     /* HP/Pw use special coloring rules */
     attr_t hpattr, pwattr;
-#ifdef STATUS_COLORS
     hpattr = hpen_color_attr(true, hp, hpmax);
     pwattr = hpen_color_attr(false, u.uen, u.uenmax);
-#else
-    int hpcolor, pwcolor;
-    hpcolor = hpen_color(true, hp, hpmax);
-    pwcolor = hpen_color(false, u.uen, u.uenmax);
-    hpattr = curses_color_attr(hpcolor, 0);
-    pwattr = curses_color_attr(pwcolor, 0);
-#endif
+
     wprintw(win, " HP:");
     wattron(win, hpattr);
     wprintw(win, "%d(%d)", (hp < 0) ? 0 : hp, hpmax);
@@ -733,10 +714,9 @@ draw_vertical(int x, int y, int hp, int hpmax)
     int ranklen = strlen(rank);
     int namelen = strlen(plname);
     int maxlen = 19;
-#ifdef STATUS_COLORS
+
     if (!iflags.hitpointbar)
         maxlen += 2; /* With no hitpointbar, we can fit more since there's no "[]" */
-#endif
 
     if ((ranklen + namelen) > maxlen) {
         /* The result doesn't fit. Strip name if >10 characters, then strip title */
@@ -791,16 +771,9 @@ draw_vertical(int x, int y, int hp, int hpmax)
 
     /* HP/Pw use special coloring rules */
     attr_t hpattr, pwattr;
-#ifdef STATUS_COLORS
+
     hpattr = hpen_color_attr(true, hp, hpmax);
     pwattr = hpen_color_attr(false, u.uen, u.uenmax);
-#else
-    int hpcolor, pwcolor;
-    hpcolor = hpen_color(true, hp, hpmax);
-    pwcolor = hpen_color(false, u.uen, u.uenmax);
-    hpattr = curses_color_attr(hpcolor, 0);
-    pwattr = curses_color_attr(pwcolor, 0);
-#endif
 
     wprintw(win,   "Hit Points:    ");
     wattron(win, hpattr);

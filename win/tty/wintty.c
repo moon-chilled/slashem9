@@ -121,9 +121,7 @@ static char obuf[BUFSIZ];	/* BUFSIZ is defined in stdio.h */
 static char winpanicstr[] = "Bad window id %d";
 char defmorestr[] = "--More--";
 
-#ifdef MENU_COLOR
 extern struct menucoloring *menu_colorings;
-#endif
 
 #ifdef CLIPPING
 static boolean clipping = false;	/* clipping on? */
@@ -281,9 +279,7 @@ char** argv;
     ttyDisplay->curx = ttyDisplay->cury = 0;
     ttyDisplay->inmore = ttyDisplay->inread = ttyDisplay->intr = 0;
     ttyDisplay->dismiss_more = 0;
-#ifdef TEXTCOLOR
     ttyDisplay->color = NO_COLOR;
-#endif
     ttyDisplay->attrs = 0;
 
     /* set up the default windows */
@@ -1247,7 +1243,6 @@ invert_all(window, page_start, page_end, acc)
     }
 }
 
-#ifdef MENU_COLOR
 static boolean
 get_menu_coloring(str, color, attr)
 char *str;
@@ -1273,7 +1268,6 @@ int *color, *attr;
        }
    return false;
 }
-#endif /* MENU_COLOR */
 
 static void
 process_menu_window(window, cw)
@@ -1351,10 +1345,10 @@ struct WinDesc *cw;
 		for (page_lines = 0, curr = page_start;
 			curr != page_end;
 			page_lines++, curr = curr->next) {
-#ifdef MENU_COLOR
+
 		   int color = NO_COLOR, attr = ATR_NONE;
 		   boolean menucolr = false;
-#endif
+
 		    if (curr->selector)
 			*rp++ = curr->selector;
 
@@ -1405,13 +1399,11 @@ struct WinDesc *cw;
 #endif
 
 
-#ifdef MENU_COLOR
 		   if (iflags.use_menu_color &&
 		       (menucolr = get_menu_coloring(curr->str, &color,&attr))) {
 		      term_start_attr(attr);
 		      if (color != NO_COLOR) term_start_color(color);
 		   } else
-#endif
 		    term_start_attr(curr->attr);
 		    for (n = 0, cp = curr->str;
 #ifndef WIN32CON
@@ -1422,12 +1414,11 @@ struct WinDesc *cw;
 			  cp++, n++, ttyDisplay->curx++)
 #endif
 			(void) putchar(*cp);
-#ifdef MENU_COLOR
+
 		   if (iflags.use_menu_color && menucolr) {
 		      if (color != NO_COLOR) term_end_color();
 		      term_end_attr(attr);
 		   } else
-#endif
 		    term_end_attr(curr->attr);
 		}
 	    } else {
@@ -2555,12 +2546,10 @@ end_glyphout()
 	graph_off();
     }
 #endif
-#ifdef TEXTCOLOR
     if(ttyDisplay->color != NO_COLOR) {
 	term_end_color();
 	ttyDisplay->color = NO_COLOR;
     }
-#endif
 }
 
 #ifndef WIN32
@@ -2683,7 +2672,6 @@ tty_print_glyph(window, x, y, glyph)
     }
 #endif
 
-#ifdef TEXTCOLOR
     if (color != ttyDisplay->color) {
 	if(ttyDisplay->color != NO_COLOR)
 	    term_end_color();
@@ -2691,7 +2679,6 @@ tty_print_glyph(window, x, y, glyph)
 	if(color != NO_COLOR)
 	    term_start_color(color);
     }
-#endif /* TEXTCOLOR */
 
     /* must be after color check; term_end_color may turn off inverse too */
     if (((special & MG_PET) && iflags.hilite_pet) ||
@@ -2700,31 +2687,25 @@ tty_print_glyph(window, x, y, glyph)
 	reverse_on = true;
     }
 
-#ifdef TEXTCOLOR
     if (!reverse_on && (special & (MG_STAIRS|MG_OBJPILE))) {
 	if ((special & MG_STAIRS) && iflags.hilite_hidden_stairs)
 	    term_start_bgcolor(CLR_RED);
 	else if ((special & MG_OBJPILE) && iflags.hilite_obj_piles)
 	    term_start_bgcolor(CLR_BLUE);
     }
-#endif
 
 		g_putch(ch);		/* print the character */
 
     if (reverse_on) {
 	term_end_attr(ATR_INVERSE);
-#ifdef TEXTCOLOR
 	/* turn off color as well, ATR_INVERSE may have done this already */
 	if(ttyDisplay->color != NO_COLOR) {
 	    term_end_color();
 	    ttyDisplay->color = NO_COLOR;
 	}
-#endif
     }
 
-#ifdef TEXTCOLOR
     if (!reverse_on && (special & (MG_STAIRS|MG_OBJPILE))) term_end_color();
-#endif
 
     wins[window]->curx++;	/* one character over */
     ttyDisplay->curx++;		/* the real cursor moved too */

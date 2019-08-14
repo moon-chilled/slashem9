@@ -83,9 +83,6 @@
 /* GNU Linux */
 #undef LINUX
 
-/* TTY graphics menu color */
-#undef MENU_COLOR
-
 /* Prevent wishing for special artifacts */
 #undef NOARTIFACTWISH
 
@@ -124,12 +121,6 @@
 
 /* Special Rogue-like levels */
 #undef REINCARNATION
-
-/* Display damage reports */
-#undef SHOW_DMG
-
-/* Display object weight */
-#undef SHOW_WEIGHT
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS

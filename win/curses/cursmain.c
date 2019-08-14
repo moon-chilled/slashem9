@@ -96,7 +96,6 @@ curses_init_nhwindows(int *argcp, char **argv)
 #else
     base_term = initscr();
 #endif
-#ifdef TEXTCOLOR
     if (has_colors()) {
         start_color();
         curses_init_nhcolors();
@@ -106,12 +105,6 @@ curses_init_nhwindows(int *argcp, char **argv)
         iflags.wc2_guicolor = false;
         set_wc2_option_mod_status(WC2_GUICOLOR, SET_IN_FILE);
     }
-#else
-    iflags.use_color = false;
-    set_option_mod_status("color", SET_IN_FILE);
-    iflags.wc2_guicolor = false;
-    set_wc2_option_mod_status(WC2_GUICOLOR, SET_IN_FILE);
-#endif
     noecho();
     raw();
     meta(stdscr, true);

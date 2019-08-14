@@ -366,10 +366,8 @@ init_sco_cons()
 		atexit(sco_mapon);
 		sco_mapoff();
 		switch_graphics(IBM_GRAPHICS);
-#  ifdef TEXTCOLOR
 		if (has_colors())
 			iflags.use_color = true;
-#  endif
 	}
 # endif
 }
@@ -423,10 +421,8 @@ init_linux_cons()
 	if (!strcmp(windowprocs.name, "tty") && linux_flag_console) {
 		atexit(linux_mapon);
 		linux_mapoff();
-#  ifdef TEXTCOLOR
 		if (has_colors())
 			iflags.use_color = true;
-#  endif
 	}
 # endif
 }

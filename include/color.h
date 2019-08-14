@@ -58,7 +58,6 @@
 #define DRAGON_SILVER	CLR_BRIGHT_CYAN
 #define HI_ZAP		CLR_BRIGHT_BLUE
 
-#ifdef MENU_COLOR
 struct menucoloring {
 #ifdef USE_REGEX_MATCH
 # ifdef GNU_REGEX
@@ -74,13 +73,11 @@ struct menucoloring {
    int color, attr;
    struct menucoloring *next;
 };
-#endif
 
 #ifdef VIDEOSHADES
 extern char ttycolors[CLR_MAX];
 #endif
 
-#ifdef STATUS_COLORS
 struct color_option {
     int color;
     int attr_bits;
@@ -97,7 +94,6 @@ struct text_color_option {
     struct color_option color_option;
     const struct text_color_option *next;
 };
-#endif
 
 
 #endif /* COLOR_H */

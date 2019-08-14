@@ -85,9 +85,7 @@ static void kickdmg(struct monst *mon, boolean clumsy) {
 	dmg += u.udaminc;	/* add ring(s) of increase damage */
 	if (dmg > 0) {
 		mon->mhp -= dmg;
-#ifdef SHOW_DMG
 		showdmg(dmg);
-#endif
 	}
 	if (mon->mhp > 0 && martial() && !bigmonst(mon->data) && !rn2(3) &&
 	    mon->mcanmove && mon != u.ustuck && !mon->mtrapped) {

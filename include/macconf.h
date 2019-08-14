@@ -38,7 +38,6 @@
 #define FILENAMELEN 256
 #define NO_TERMS		/* For tty port (see wintty.h) */
 
-#define TEXTCOLOR		/* For Mac TTY interface */
 #define CHANGE_COLOR
 
 /* Use these two includes instead of system.h. */

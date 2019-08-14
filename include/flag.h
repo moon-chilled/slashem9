@@ -42,9 +42,7 @@ struct flag {
 	boolean  ins_chkpt;	/* checkpoint as appropriate */
 #endif
 	boolean  invlet_constant; /* let objects keep their inventory symbol */
-#ifdef SHOW_WEIGHT
 	boolean  invweight;    /* show weight in inventory and when picking up */
-#endif
 
 /*WAC keep_save option*/
 #ifdef KEEP_SAVE
@@ -73,12 +71,8 @@ struct flag {
 	boolean  safe_dog;	/* give complete protection to the dog */
 	boolean  showexp;	/* show experience points */
 	boolean  showscore;	/* show score */
-#ifdef SHOW_DMG
 	boolean  showdmg;       /* show damage */
-#endif
-#ifdef SHOW_WEIGHT
 	boolean  showweight;    /* show weight on status line */
-#endif
 	boolean  silent;	/* whether the bell rings or not */
 	boolean  sortpack;	/* sorted inventory */
 	boolean  soundok;	/* ok to tell about sounds heard */
@@ -195,12 +189,8 @@ struct instance_flags {
 #if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS)
 	boolean  extmenu;	/* extended commands use menu interface */
 #endif
-#ifdef MENU_COLOR
         boolean use_menu_color; /* use color in menus; only if wc_color */
-#endif
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
 	boolean use_status_colors; /* use color in status line; only if wc_color */
-#endif
 	boolean hitpointbar;
 #ifdef MICRO
 	boolean  BIOS;		/* use IBM or ST BIOS calls when appropriate */
@@ -304,9 +294,7 @@ struct instance_flags {
 #ifdef TTY_GRAPHICS
 #define eight_bit_tty wc_eight_bit_input
 #endif
-#ifdef TEXTCOLOR
 #define use_color wc_color
-#endif
 #define hilite_pet wc_hilite_pet
 #define use_inverse wc_inverse
 #ifdef MAC_GRAPHICS_ENV

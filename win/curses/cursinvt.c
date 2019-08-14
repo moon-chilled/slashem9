@@ -91,7 +91,7 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
         wattroff(win, glyphclr);
     }
 
-#ifdef MENU_COLOR
+
     if (accelerator && /* Don't colorize categories */
         iflags.use_menu_color) {
         int color = NO_COLOR;
@@ -103,7 +103,6 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
         if (color != NO_COLOR)
             attr |= curses_color_attr(color, 0);
     }
-#endif
 
     wattron(win, attr);
     wprintw(win, "%s", str);

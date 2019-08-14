@@ -856,13 +856,11 @@ ring:
 		strcpy(prefix+3, tmpbuf+2);
 	}
 
-#ifdef SHOW_WEIGHT
 	  /* [max] weight inventory */
 	if ((obj->otyp != BOULDER) || !throws_rocks (youmonst.data))
 	  if ((obj->otyp < LUCKSTONE) && (obj->otyp != CHEST) && (obj->otyp != LARGE_BOX) &&
 	      (obj->otyp != ICE_BOX) && (!Hallucination && flags.invweight))
 		        sprintf (eos(bp), " {%d}", obj->owt);
-#endif
 
 	bp = strprepend(bp, prefix);
 	return(bp);
@@ -998,9 +996,7 @@ const char *
 singular (struct obj *otmp, char *(*func)( struct obj*))
 {
 	long savequan;
-#ifdef SHOW_WEIGHT
 	unsigned saveowt;
-#endif
 	char *nam;
 
 	/* Note: using xname for corpses will not give the monster type */
@@ -1009,15 +1005,15 @@ singular (struct obj *otmp, char *(*func)( struct obj*))
 
 	savequan = otmp->quan;
 	otmp->quan = 1L;
-#ifdef SHOW_WEIGHT
+
 	saveowt = otmp->owt;
 	otmp->owt = weight(otmp);
-#endif
+
 	nam = (*func)(otmp);
 	otmp->quan = savequan;
-#ifdef SHOW_WEIGHT
+
 	otmp->owt = saveowt;
-#endif
+
 	return nam;
 }
 

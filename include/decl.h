@@ -397,9 +397,7 @@ extern char **viz_array;		/* could see/in sight row pointers */
 
 /*** Window system stuff ***/
 #include "color.h"
-#ifdef TEXTCOLOR
 extern const int zapcolors[];
-#endif
 
 extern const char def_oc_syms[MAXOCLASSES];	/* default class symbols */
 extern uchar oc_syms[MAXOCLASSES];		/* current class symbols */

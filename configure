@@ -736,15 +736,12 @@ enable_steed
 enable_zouthern
 enable_redo
 enable_clipping
-enable_menu_color
 enable_noartifactwish
 enable_no_bones
 enable_user_sounds
 enable_borg
 enable_keep_save
 enable_charon
-enable_show_dmg
-enable_show_weight
 enable_other_services
 enable_dungeon_growth
 enable_display_layers
@@ -1405,7 +1402,6 @@ Optional Features:
   --enable-zouthern       Zoutherner class (default=no)
   --enable-redo           Redo last command (default=yes)
   --enable-clipping       Allow smaller screens (default=yes)
-  --enable-menu-color     TTY graphics menu color (default=yes)
   --enable-noartifactwish Prevent wishing for special artifacts (default=no)
   --enable-no-bones       Disable loading and saving bones levels (default=no)
   --enable-user-sounds    Allow user-defined regex mapping from messages to
@@ -1414,8 +1410,6 @@ Optional Features:
   --enable-keep-save      Keep save files after restore (default=no)
   --enable-charon         Charon's boat, enables Cerebus (not implemented)
                           (default=no)
-  --enable-show-dmg       Display damage reports (default=yes)
-  --enable-show-weight    Display object weight (default=yes)
   --enable-other-services Shopkeeper services (default=yes)
   --enable-dungeon-growth Dungeon growth (default=yes)
   --enable-display-layers Support transparent tilesets (default=yes)
@@ -5827,25 +5821,6 @@ _ACEOF
 
    fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable menu-color" >&5
-$as_echo_n "checking whether to enable menu-color... " >&6; }
-   # Check whether --enable-menu-color was given.
-if test "${enable_menu_color+set}" = set; then :
-  enableval=$enable_menu_color;
-else
-  enable_menu_color="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_menu_color" >&5
-$as_echo "$enable_menu_color" >&6; }
-   if test "$enable_menu_color" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define MENU_COLOR /**/
-_ACEOF
-
-   fi
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable noartifactwish" >&5
 $as_echo_n "checking whether to enable noartifactwish... " >&6; }
    # Check whether --enable-noartifactwish was given.
@@ -5956,44 +5931,6 @@ $as_echo "$enable_charon" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define CHARON /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable show-dmg" >&5
-$as_echo_n "checking whether to enable show-dmg... " >&6; }
-   # Check whether --enable-show-dmg was given.
-if test "${enable_show_dmg+set}" = set; then :
-  enableval=$enable_show_dmg;
-else
-  enable_show_dmg="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_show_dmg" >&5
-$as_echo "$enable_show_dmg" >&6; }
-   if test "$enable_show_dmg" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define SHOW_DMG /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable show-weight" >&5
-$as_echo_n "checking whether to enable show-weight... " >&6; }
-   # Check whether --enable-show-weight was given.
-if test "${enable_show_weight+set}" = set; then :
-  enableval=$enable_show_weight;
-else
-  enable_show_weight="yes"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_show_weight" >&5
-$as_echo "$enable_show_weight" >&6; }
-   if test "$enable_show_weight" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define SHOW_WEIGHT /**/
 _ACEOF
 
    fi

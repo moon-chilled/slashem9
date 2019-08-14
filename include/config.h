@@ -246,10 +246,6 @@ typedef long glyph_t;
 #if !defined(MAC)
 # define CLIPPING	/* allow smaller screens -- ERS */
 #endif
-#ifdef TTY_GRAPHICS
-# define MENU_COLOR
-#endif
-#define STATUS_COLORS   // Shachaf and Oren Ben-Kiki
 
 #if defined(UNIX)
 #define USE_REGEX_MATCH
@@ -291,10 +287,6 @@ typedef long glyph_t;
 #define BORG            // Fixed for non-DOS --ELR
 /* #define KEEP_SAVE */       /* Keep savefiles after Restore (wac@intergate.bc.ca)*/
 /* #define CHARON */	/* Charon's boat, enables Cerebus - not implemented */
-#define SHOW_DMG        /* WAC made dmg reports optional (wac@intergate.bc.ca)*/
-#define SHOW_WEIGHT     /* [max] added display of object weight when picking up */
-                        /* and in inventory (madmax@fly.cc.fer.hr). */
-                        /* Originally added by zaga. */
 #define OTHER_SERVICES  /* shopkeeper services */
 #define DUNGEON_GROWTH
 

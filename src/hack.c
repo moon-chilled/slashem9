@@ -2454,7 +2454,6 @@ void unmul(const char *msg_override) {
 
 
 
-#ifdef SHOW_DMG
 /* Print the amount of damage inflicted */
 /* KMH -- Centralized to one function */
 void showdmg(int n) {
@@ -2479,8 +2478,6 @@ void showdmg(int n) {
     }
 	return;
 }
-#endif
-
 
 void losehp(int n, const char *knam, int k_format /* WAC k_format is an int */) {
 	/* [max] Invulnerable no dmg */
@@ -2491,9 +2488,7 @@ void losehp(int n, const char *knam, int k_format /* WAC k_format is an int */) 
 		 * via u.uhp < 1
 		 */
 	}
-#ifdef SHOW_DMG
 	else if (flags.showdmg && n > 0) pline("[%d pts.]", n); /* WAC see damage */
-#endif
 
 	if (Upolyd) {
 		u.mh -= n;

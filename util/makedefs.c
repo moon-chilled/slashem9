@@ -448,9 +448,6 @@ make_version()
 #ifdef DISPLAY_LAYERS
 			| (1L << 16)
 #endif
-#ifdef TEXTCOLOR
-			| (1L << 17)
-#endif
 #ifdef INSURANCE
 			| (1L << 18)
 #endif
@@ -625,9 +622,6 @@ static const char *build_opts[] = {
 #ifdef BORG
 		"borg",
 #endif
-#ifdef TEXTCOLOR
-		"color",
-#endif
 #ifdef COM_COMPL
 		"command line completion",
 #endif
@@ -709,12 +703,6 @@ static const char *build_opts[] = {
 #endif
 #ifdef SHELL
 		"shell command",
-#endif
-#ifdef SHOW_DMG
-		"show damage amounts",
-#endif
-#ifdef SHOW_WEIGHT
-		"show weight of inventory",
 #endif
 #ifdef SUSPEND
 		"suspend command",

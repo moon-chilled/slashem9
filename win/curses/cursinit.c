@@ -284,7 +284,6 @@ curses_create_main_windows()
 void
 curses_init_nhcolors()
 {
-#ifdef TEXTCOLOR
     if (has_colors()) {
         use_default_colors();
         init_pair(1, COLOR_BLACK, -1);
@@ -388,7 +387,6 @@ curses_init_nhcolors()
             }
         }
     }
-#endif
 }
 
 
@@ -946,7 +944,6 @@ curses_display_splash_window()
 void
 curses_cleanup()
 {
-#ifdef TEXTCOLOR
     if (has_colors() && can_change_color()) {
         init_color(COLOR_YELLOW, orig_yellow.r, orig_yellow.g, orig_yellow.b);
         init_color(COLOR_WHITE, orig_white.r, orig_white.g, orig_white.b);
@@ -973,5 +970,4 @@ curses_cleanup()
 # endif
         }
     }
-#endif
 }

@@ -18,7 +18,6 @@ boolean counting;   /* Count window is active */
 # define DOESCAPE '\033'
 #endif
 
-#define TEXTCOLOR   /* Allow color */
 #define NHW_END 19
 #define OFF 0
 #define ON 1
@@ -244,9 +243,7 @@ extern int curses_character_input_dialog(const char *prompt, const char *choices
 extern int curses_ext_cmd(void);
 
 extern void curses_create_nhmenu(winid wid);
-#ifdef MENU_COLOR
 extern boolean get_menu_coloring(char *, int *, int *);
-#endif
 extern void curses_add_nhmenu_item(winid wid, int glyph, const anything *identifier,
  char accelerator, char group_accel, int attr, const char *str,
  boolean presel);

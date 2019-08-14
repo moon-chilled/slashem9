@@ -9,18 +9,13 @@
 /* #define DEBUG */
 
 /* Glyph mapping ignores the value of iflags.use_color. This flag should be
- * checked by the window port where appropriate. However, we must take account
- * of TEXTCOLOR because colours will not be available when this is not defined.
+ * checked by the window port where appropriate.
  */
 
 #ifdef C
 #undef C
 #endif
-#ifdef TEXTCOLOR
 #define C(n)	n
-#else
-#define C(n)	NO_COLOR
-#endif
 
 #define RGB(r, g, b)	((r)<<16 | (g)<<8 | (b))
 

@@ -23,7 +23,6 @@ int explcolors[] = {
 #define has_color(n)  true
 #endif
 
-#ifdef TEXTCOLOR
 #define zap_color(n)  color = iflags.use_color ? zapcolors[n] : NO_COLOR
 #ifndef USER_DUNGEONCOLOR
 #define cmap_color(n) color = iflags.use_color ? defsyms[n].color : NO_COLOR
@@ -40,27 +39,13 @@ int explcolors[] = {
 #  define ROGUE_COLOR
 # endif
 
-#else	/* no text color */
-
-#define zap_color(n)
-#define cmap_color(n)
-#define obj_color(n)
-#define mon_color(n)
-#define invis_color(n)
-#define pet_color(c)
-#define warn_color(n)
-#define explode_color(n)
-#endif
-
 #ifdef ROGUE_COLOR
 #define HAS_ROGUE_IBM_GRAPHICS (iflags.IBMgraphics && Is_rogue_level(&u.uz))
 #endif
 
 void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int y) {
 	int offset;
-#if defined(TEXTCOLOR) || defined(ROGUE_COLOR)
 	int color = NO_COLOR;
-#endif
 	uchar ch;
 	unsigned special = 0;
 
@@ -115,7 +100,6 @@ void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int
 		color = NO_COLOR;
 	} else
 #endif
-#ifdef TEXTCOLOR
 	    /* provide a visible difference if normal and lit corridor
 	     * use the same symbol */
 	    if (iflags.use_color &&
@@ -133,7 +117,6 @@ void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int
     }
 #endif /* USER_DUNGEONCOLOR */
 	    else
-#endif
 	    cmap_color(offset);
     } else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
 	if (On_stairs(x,y) && levl[x][y].seenv) special |= MG_STAIRS;
@@ -224,15 +207,12 @@ void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int
 	{
 	    mon_color(glyph);
 	    /* special case the hero for `showrace' option */
-#ifdef TEXTCOLOR
 	    if (iflags.use_color && x == u.ux && y == u.uy &&
 		    iflags.showrace && !Upolyd)
 		color = HI_DOMESTIC;
-#endif
 	}
     }
 
-#ifdef TEXTCOLOR
     /* Turn off color if no color defined, or rogue level w/o PC graphics. */
 # ifdef REINCARNATION
 #  ifdef ASCIIGRAPH
@@ -244,13 +224,10 @@ void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int
     if (!has_color(color))
 # endif
 	color = NO_COLOR;
-#endif
 
     *ochar = (int)ch;
     *ospecial = special;
-#ifdef TEXTCOLOR
     *ocolor = color;
-#endif
     return;
 }
 

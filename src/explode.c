@@ -506,10 +506,8 @@ do_explode(
 				mdam *= 2;
 			mtmp->mhp -= mdam;
 			mtmp->mhp -= (idamres + idamnonres);
-#ifdef SHOW_DMG
 			if (mtmp->mhp > 0 && !remote)
 				showdmg(mdam + idamres + idamnonres);
-#endif
 		}
 		if (mtmp->mhp <= 0) {
 			/* KMH -- Don't blame the player for pets killing gas spores */
@@ -558,9 +556,7 @@ do_explode(
 		    else
 			u.uhp -= damu;
 		    flags.botl = 1;
-#ifdef SHOW_DMG
 		    if (flags.showdmg) pline("[%d pts.]", damu);
-#endif
 		}
 
 		if (u.uhp <= 0 || (Upolyd && u.mh <= 0)) {

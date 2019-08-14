@@ -48,7 +48,6 @@ static void bot2(void);
 static void set_botl_warn(int);
 #endif
 
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
 extern const struct percent_color_option *hp_colors;
 extern const struct percent_color_option *pw_colors;
 extern const struct text_color_option *text_colors;
@@ -138,8 +137,6 @@ void add_colored_text_match(const char *text, const char *match, char *newbot2) 
 void add_colored_text(const char *text, char *newbot2) {
 	add_colored_text_match(text, text, newbot2);
 }
-
-#endif
 
 
 static int mrank_sz = 0; /* loaded by max_rank_sz (from u_init) */
@@ -304,12 +301,9 @@ static void bot1(void)
 	char *nb;
 	int i=0,j;
 
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
 	int save_botlx = flags.botlx;
-#endif
 
 	strcpy(newbot1, "");
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
 	if (iflags.hitpointbar) {
 		flags.botlx = 0;
 		curs(WIN_STATUS, 1, 0);
@@ -319,11 +313,9 @@ static void bot1(void)
 		curs(WIN_STATUS, 1, 0);
 		putstr(WIN_STATUS, 0, newbot1);
 	}
-#endif
 
 
 	strcat(newbot1, botl_player());
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
 	if (iflags.hitpointbar) {
 		int bar_length = strlen(newbot1)-1;
 		char tmp[MAXCO];
@@ -348,7 +340,6 @@ static void bot1(void)
 
 		strcat(newbot1, "]");
 	}
-#endif
 
 	sprintf(nb = eos(newbot1),"  ");
 	i = mrank_sz + 15;
@@ -429,9 +420,7 @@ bot2str(char *newbot2) {
 	char *nb;
 	int hp, hpmax;
 	int cap = near_capacity();
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
 	int save_botlx = flags.botlx;
-#endif
 
 #ifdef ALLEG_FX
 	int w;
@@ -458,7 +447,6 @@ bot2str(char *newbot2) {
 		nb = newbot2;
 
 
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
 	strcat(nb = eos(newbot2), "HP:");
 	curs(WIN_STATUS, 1, 1);
 	putstr(WIN_STATUS, 0, newbot2);
@@ -466,20 +454,14 @@ bot2str(char *newbot2) {
 
 	sprintf(nb = eos(nb), "%d(%d)", hp, hpmax);
 	apply_color_option(percentage_color_of(hp, hpmax, hp_colors), newbot2, 2);
-#else
-	sprintf(nb = eos(nb), " HP:%d(%d)", hp, hpmax);
-#endif
 
-#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
 	strcat(nb = eos(nb), " Pw:");
 	curs(WIN_STATUS, 1, 1);
 	putstr(WIN_STATUS, 0, newbot2);
 
 	sprintf(nb = eos(nb), "%d(%d)", u.uen, u.uenmax);
 	apply_color_option(percentage_color_of(u.uen, u.uenmax, pw_colors), newbot2, 2);
-#else
-	sprintf(nb = eos(nb), " Pw:%d(%d)", u.uen, u.uenmax);
-#endif
+
 	sprintf(nb = eos(nb), " AC:%-2d", u.uac);
 
 	if (Upolyd)
@@ -490,11 +472,9 @@ bot2str(char *newbot2) {
 	else
 		sprintf(nb = eos(nb), "Exp:%u", u.ulevel);
 
-#ifdef SHOW_WEIGHT
 	if (flags.showweight && bot2_abbrev < 3)
 		sprintf(nb = eos(nb), " Wt:%ld/%ld", (long)(inv_weight()+weight_cap()),
 				(long)weight_cap());
-#endif
 
 	if(flags.time && bot2_abbrev < 3)
 	        sprintf(nb = eos(nb), " T:%ld ", moves);
@@ -516,22 +496,9 @@ bot2str(char *newbot2) {
         }
 #endif
 
-#ifdef STATUS_COLORS
 	if (hu_stat[u.uhs][0]) {
 		add_colored_text_match((bot2_abbrev >= 2) ? hu_abbrev_stat[u.uhs] : hu_stat[u.uhs], hu_stat[u.uhs], newbot2);
 	}
-#else
-        if (bot2_abbrev >= 2) {
-		if (hu_abbrev_stat[u.uhs][0]!='\0') {
-			sprintf(nb = eos(nb), " ");
-			strcat(newbot2, hu_abbrev_stat[u.uhs]);
-		}
-	}
-	else if (hu_stat[u.uhs][0] != '\0') {
-		sprintf(nb = eos(nb), " ");
-		strcat(newbot2, hu_stat[u.uhs]);
-	}
-#endif
 
 /* WAC further Up
 	if (flags.showscore)
@@ -673,14 +640,14 @@ static void bot_raw(boolean reconfig) {
 
     if (flags.showexp)
 	*rv++ = reconfig ? "experience" : (sprintf(expr, "%ld", u.uexp), expr);
-#ifdef SHOW_WEIGHT
+
     if (flags.showweight) {
 	*rv++ = reconfig ? "weight" : (sprintf(iweight,
 		"%ld", (long)(inv_weight() + weight_cap())), iweight);
 	*rv++ = reconfig ? "capacity" : (sprintf(capacity,
 		"%ld", (long)weight_cap()), capacity);
     }
-#endif
+
     if (flags.time)
 	*rv++ = reconfig ? "time" : (sprintf(tim, "%ld", moves), tim);
     *rv++ = reconfig ? "hunger" : strcmp(hu_stat[u.uhs], "        ") ?

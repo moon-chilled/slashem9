@@ -1589,10 +1589,9 @@ int thrown;
 		}
 	}
 
-#ifdef SHOW_DMG
 	if (!destroyed) showdmg(tmp);
-#endif
-	return((boolean)(destroyed ? false : true));
+
+	return !destroyed;
 }
 
 static boolean
@@ -2032,9 +2031,7 @@ struct attack *mattk;
 			}
 			pline("%s suddenly seems weaker!", Monnam(mdef));
 			mdef->mhpmax -= xtmp;
-#ifdef SHOW_DMG
 			if (xtmp < mdef->mhp) showdmg(xtmp);
-#endif
 			if ((mdef->mhp -= xtmp) <= 0 || !mdef->m_lev) {
 				pline("%s dies!", Monnam(mdef));
 				xkilled(mdef,0);
@@ -2322,9 +2319,7 @@ struct attack *mattk;
 	     return 1;
 	}
 
-#ifdef SHOW_DMG
 	if (tmp < mdef->mhp) showdmg(tmp);
-#endif
 
 	/* if tmp == 0, DON'T xkilled/killed the monster even if hp < 1
 	 *	- xkilled/killed via other method... */

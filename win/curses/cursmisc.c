@@ -80,7 +80,6 @@ curses_read_char()
 void
 curses_toggle_color_attr(WINDOW * win, int color, int attr, int onoff)
 {
-#ifdef TEXTCOLOR
     int curses_color;
 
     /* Map color disabled */
@@ -147,7 +146,6 @@ curses_toggle_color_attr(WINDOW * win, int color, int attr, int onoff)
             wattroff(win, attr);
         }
     }
-#endif /* TEXTCOLOR */
 }
 
 
@@ -853,7 +851,7 @@ parse_escape_sequence(void)
 functions, which causes a compiler error if TTY_GRAPHICS is not
 defined.  Adding stub functions to avoid this. */
 
-#if defined(STATUS_COLORS) && !defined(TTY_GRAPHICS)
+#ifndef TTY_GRAPHICS
 extern void
 term_start_color(int color)
 {
@@ -873,4 +871,4 @@ extern void
 term_end_attr(int attr)
 {
 }
-#endif /* STATUS_COLORS && !TTY_GRAPGICS */
+#endif /* !TTY_GRAPGICS */

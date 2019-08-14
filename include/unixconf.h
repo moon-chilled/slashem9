@@ -54,9 +54,6 @@
 			 * particular, it should NOT be defined for the UNIXPC
 			 * unless you remove the use of the shared library in
 			 * the Makefile */
-#define TEXTCOLOR	/* Use System V r3.2 terminfo color support */
-			/* and/or ANSI color support on termcap systems */
-			/* and/or X11 color */
 #define POSIX_JOB_CONTROL /* use System V / Solaris 2.x / POSIX job control */
 			/* (e.g., VSUSP) */
 #define POSIX_TYPES	/* use POSIX types for system calls and termios */
@@ -197,9 +194,7 @@
  */
 /* #define TIMED_DELAY */	/* usleep() */
 
-# ifdef TEXTCOLOR
 #  define VIDEOSHADES
-# endif
 #endif
 
 /*
@@ -387,7 +382,7 @@
 # undef hc
 #endif
 
-#if defined(MENU_COLOR) && defined(USE_REGEX_MATCH)
+#ifdef USE_REGEX_MATCH
 # include <regex.h>
 # ifndef RE_NO_GNU_OPS
 #  define POSIX_REGEX

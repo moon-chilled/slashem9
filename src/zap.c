@@ -1867,9 +1867,7 @@ struct obj *obj, *otmp;
 	case WAN_CANCELLATION:
 	case SPE_CANCELLATION:
 		cancel_item(obj);
-#ifdef TEXTCOLOR
 		newsym(obj->ox,obj->oy);	/* might change color */
-#endif
 		break;
 	case SPE_DRAIN_LIFE:
 	case WAN_DRAINING:	/* KMH */
@@ -3626,9 +3624,7 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 
 	mon->mhp -= tmp;
 
-#ifdef SHOW_DMG
 	if (mon->mhp > 0) showdmg(tmp);
-#endif
 
 	return(tmp);
 }
