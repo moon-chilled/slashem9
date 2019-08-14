@@ -188,7 +188,7 @@ static struct Bool_Opt
 	{"showexp", &flags.showexp, false, SET_IN_GAME},
 	{"showrace", &iflags.showrace, false, SET_IN_GAME},
 #ifdef REALTIME_ON_BOTL
-  {"showrealtime", &iflags.showrealtime, false, SET_IN_GAME},
+	{"showrealtime", &iflags.showrealtime, false, SET_IN_GAME},
 #endif
 	{"showscore", &flags.showscore, false, SET_IN_GAME},
 /* WAC made the [ xx pts]  dmg display optional */
@@ -224,11 +224,7 @@ static struct Bool_Opt
 	{"tombstone",&flags.tombstone, true, SET_IN_GAME},
 	{"toptenwin",&flags.toptenwin, false, SET_IN_GAME},
 	{"travel", &iflags.travelcmd, true, SET_IN_GAME},
-#ifdef WIN32CON
-	{"use_inverse",   &iflags.wc_inverse, true, SET_IN_GAME},		/*WC*/
-#else
-	{"use_inverse",   &iflags.wc_inverse, false, SET_IN_GAME},		/*WC*/
-#endif
+	{"use_inverse", &iflags.wc_inverse, true, SET_IN_GAME},		/*WC*/
 	{"verbose", &flags.verbose, true, SET_IN_GAME},
 	{"wraptext", &iflags.wc2_wraptext, false, SET_IN_GAME},
 	{NULL, NULL, false, 0}
