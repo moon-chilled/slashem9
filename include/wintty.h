@@ -138,6 +138,9 @@ extern void term_start_bgcolor(int color);
 extern int has_color(int color);
 #endif /* TEXTCOLOR */
 
+#ifdef STATUS_COLORS
+extern boolean parse_status_color_options(char *);
+#endif /* STATUS_COLOR */
 
 /* ### topl.c ### */
 

@@ -852,9 +852,9 @@ static int _curses_kbhit(int count) {
 }
 
 int curses_kbhit(void) {
-    nodelay(stdscr, TRUE);
+    nodelay(stdscr, true);
     int ret = _curses_kbhit(0);
-    nodelay(stdscr, FALSE);
+    nodelay(stdscr, false);
     return ret;
 }
 

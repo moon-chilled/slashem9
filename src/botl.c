@@ -4,9 +4,16 @@
 
 #include "hack.h"
 
-extern const char *hu_stat[];	/* defined in eat.c */
-
-const char *hu_abbrev_stat[] = {	/* must be kept consistent with eat.c */
+const char *hu_stat[] = {
+	"Satiated",
+	"",
+	"Hungry",
+	"Weak",
+	"Fainting",
+	"Fainted",
+	"Starved"
+};
+const char *hu_abbrev_stat[] = {
 	"Sat",
 	"",
 	"Hun",
@@ -16,7 +23,7 @@ const char *hu_abbrev_stat[] = {	/* must be kept consistent with eat.c */
 	"Sta"
 };
 
-const char * const enc_stat[] = {
+const char *enc_stat[] = {
 	"",
 	"Burdened",
 	"Stressed",
@@ -24,7 +31,6 @@ const char * const enc_stat[] = {
 	"Overtaxed",
 	"Overloaded"
 };
-
 const char *enc_abbrev_stat[] = {
 	"",
 	"Brd",
@@ -40,20 +46,99 @@ static void bot2(void);
 static void set_botl_warn(int);
 #endif
 
-/* MAXCO must hold longest uncompressed status line, and must be larger
- * than COLNO
- *
- * longest practical second status line at the moment is
- *	Astral Plane $:12345 HP:700(700) Pw:111(111) AC:-127 Xp:30/123456789
- *      Wt:5000/1000 T:123456 Satiated Lev Conf FoodPois Ill Blind Stun Hallu
- *      Slime Held Overloaded
- * -- or somewhat over 160 characters
- */
-#if COLNO <= 170
-#define MAXCO 190
-#else
-#define MAXCO (COLNO+20)
+#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
+extern const struct percent_color_option *hp_colors;
+extern const struct percent_color_option *pw_colors;
+extern const struct text_color_option *text_colors;
+
+struct color_option text_color_of(const char *text, const struct text_color_option *color_options) {
+	if (color_options == NULL) {
+		struct color_option result = {NO_COLOR, 0};
+		return result;
+	}
+	if (strstri(color_options->text, text)
+			|| strstri(text, color_options->text))
+		return color_options->color_option;
+	return text_color_of(text, color_options->next);
+}
+
+struct color_option percentage_color_of(int value, int max, const struct percent_color_option *color_options) {
+	if (color_options == NULL) {
+		struct color_option result = {NO_COLOR, 0};
+		return result;
+	}
+	if (100 * value <= color_options->percentage * max)
+		return color_options->color_option;
+	return percentage_color_of(value, max, color_options->next);
+}
+
+void start_color_option(struct color_option color_option) {
+#ifdef TTY_GRAPHICS
+	int i;
+	if (color_option.color != NO_COLOR)
+		term_start_color(color_option.color);
+	for (i = 0; (1 << i) <= color_option.attr_bits; ++i)
+		if (i != ATR_NONE && color_option.attr_bits & (1 << i))
+			term_start_attr(i);
+#endif  /* TTY_GRAPHICS */
+}
+
+void end_color_option(struct color_option color_option) {
+#ifdef TTY_GRAPHICS
+	int i;
+	if (color_option.color != NO_COLOR)
+		term_end_color();
+	for (i = 0; (1 << i) <= color_option.attr_bits; ++i)
+		if (i != ATR_NONE && color_option.attr_bits & (1 << i))
+			term_end_attr(i);
+#endif  /* TTY_GRAPHICS */
+}
+
+static void apply_color_option(struct color_option color_option, const char *newbot2, int statusline /* apply color on this statusline: 1 or 2 */) {
+	if (!iflags.use_status_colors || !iflags.use_color) return;
+	curs(WIN_STATUS, 1, statusline-1);
+	start_color_option(color_option);
+	putstr(WIN_STATUS, 0, newbot2);
+	end_color_option(color_option);
+}
+
+void add_colored_text_match(const char *text, const char *match, char *newbot2) {
+	char *nb;
+	struct color_option color_option;
+
+	if ((*text == '\0') || (*match == '\0')) return;
+
+	/* don't add anything if it can't be displayed.
+	 * Otherwise the color of invisible text may bleed into
+	 * the statusline. */
+	if (strlen(newbot2) >= min(MAXCO, CO)-1) return;
+
+	if (!iflags.use_status_colors) {
+		sprintf(nb = eos(newbot2), " %s", text);
+		return;
+	}
+
+	strcat(nb = eos(newbot2), " ");
+	curs(WIN_STATUS, 1, 1);
+	putstr(WIN_STATUS, 0, newbot2);
+
+	strcat(nb = eos(nb), text);
+	curs(WIN_STATUS, 1, 1);
+	color_option = text_color_of(match, text_colors);
+	start_color_option(color_option);
+	/* Trim the statusline to always have the end color
+	 * to have effect. */
+	newbot2[min(MAXCO, CO)-1] = '\0';
+	putstr(WIN_STATUS, 0, newbot2);
+	end_color_option(color_option);
+}
+
+void add_colored_text(const char *text, char *newbot2) {
+	add_colored_text_match(text, text, newbot2);
+}
+
 #endif
+
 
 static int mrank_sz = 0; /* loaded by max_rank_sz (from u_init) */
 
@@ -215,9 +300,54 @@ static void bot1(void)
 	char newbot1[MAXCO];
 #endif
 	char *nb;
-	int i,j;
+	int i=0,j;
 
-	strcpy(newbot1, botl_player());
+#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
+	int save_botlx = flags.botlx;
+#endif
+
+	strcpy(newbot1, "");
+#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
+	if (iflags.hitpointbar) {
+		flags.botlx = 0;
+		curs(WIN_STATUS, 1, 0);
+		putstr(WIN_STATUS, 0, newbot1);
+		strcat(newbot1, "[");
+		i = 1; /* don't overwrite the string in front */
+		curs(WIN_STATUS, 1, 0);
+		putstr(WIN_STATUS, 0, newbot1);
+	}
+#endif
+
+
+	strcat(newbot1, botl_player());
+#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
+	if (iflags.hitpointbar) {
+		int bar_length = strlen(newbot1)-1;
+		char tmp[MAXCO];
+		char *p = tmp;
+		int filledbar = uhp() * bar_length / uhpmax();
+		strcpy(tmp, newbot1);
+		p++;
+
+		/* draw hp bar */
+		if (iflags.use_inverse) term_start_attr(ATR_INVERSE);
+		p[filledbar] = '\0';
+		if (iflags.use_color) {
+			/* draw in color mode */
+			apply_color_option(percentage_color_of(uhp(), uhpmax(), hp_colors), tmp, 1);
+		} else {
+			/* draw in inverse mode */
+			curs(WIN_STATUS, 1, 0);
+			putstr(WIN_STATUS, 0, tmp);
+		}
+		term_end_color();
+		if (iflags.use_inverse) term_end_attr(ATR_INVERSE);
+
+		strcat(newbot1, "]");
+	}
+#endif
+
 	sprintf(nb = eos(newbot1),"  ");
 	i = mrank_sz + 15;
 	j = (nb + 2) - newbot1; /* aka strlen(newbot1) but less computation */
@@ -239,10 +369,12 @@ static void bot1(void)
 static void bot1(void) {
 	char newbot1[MAXCO];
 
+	int save_botlx = flags.botlx;
 	bot1str(newbot1);
 #endif
 	curs(WIN_STATUS, 1, 0);
 	putstr(WIN_STATUS, 0, newbot1);
+	flags.botlx = save_botlx;
 }
 
 /* provide the name of the current level for display by various ports */
@@ -262,7 +394,7 @@ int describe_level(char *buf, int verbose) {
 			sprintf(buf, "%s, level %d ",
 				dungeons[u.uz.dnum].dname, depth(&u.uz));
 		else
-		sprintf(buf, "Dlvl:%-2d ", depth(&u.uz));
+		sprintf(buf, "Dlvl:%-2d", depth(&u.uz));
 		ret = 0;
 	}
 	return ret;
@@ -296,6 +428,10 @@ bot2str(char *newbot2) {
 	char *nb;
 	int hp, hpmax;
 	int cap = near_capacity();
+#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
+	int save_botlx = flags.botlx;
+#endif
+
 #ifdef ALLEG_FX
 	int w;
 #endif
@@ -305,11 +441,11 @@ bot2str(char *newbot2) {
 
 	if(hp < 0) hp = 0;
 	if (bot2_abbrev < 4)
-		(void) describe_level(newbot2, false);
+		describe_level(newbot2, false);
 	else
 		newbot2[0] = '\0';
 	if (bot2_abbrev < 1)
-		sprintf(nb = eos(newbot2), "%c:%-2ld ",
+		sprintf(nb = eos(newbot2), "%c:%-2ld",
 		  oc_syms[COIN_CLASS],
 #ifndef GOLDOBJ
 		u.ugold
@@ -319,25 +455,48 @@ bot2str(char *newbot2) {
 		  );
 	else
 		nb = newbot2;
-	sprintf(nb = eos(nb), "HP:%d(%d) Pw:%d(%d) AC:%-2d",
-		hp, hpmax, u.uen, u.uenmax, u.uac);
+
+
+#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
+	strcat(nb = eos(newbot2), "HP:");
+	curs(WIN_STATUS, 1, 1);
+	putstr(WIN_STATUS, 0, newbot2);
+	flags.botlx = 0;
+
+	sprintf(nb = eos(nb), "%d(%d)", hp, hpmax);
+	apply_color_option(percentage_color_of(hp, hpmax, hp_colors), newbot2, 2);
+#else
+	sprintf(nb = eos(nb), " HP:%d(%d)", hp, hpmax);
+#endif
+
+#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
+	strcat(nb = eos(nb), " Pw:");
+	curs(WIN_STATUS, 1, 1);
+	putstr(WIN_STATUS, 0, newbot2);
+
+	sprintf(nb = eos(nb), "%d(%d)", u.uen, u.uenmax);
+	apply_color_option(percentage_color_of(u.uen, u.uenmax, pw_colors), newbot2, 2);
+#else
+	sprintf(nb = eos(nb), " Pw:%d(%d)", u.uen, u.uenmax);
+#endif
+	sprintf(nb = eos(nb), " AC:%-2d", u.uac);
 
 	if (Upolyd)
-		sprintf(nb = eos(nb), " HD:%d", ((u.ulycn == u.umonnum) ?
+		sprintf(nb = eos(nb), "HD:%d", ((u.ulycn == u.umonnum) ?
 						u.ulevel : mons[u.umonnum].mlevel));
 	else if (flags.showexp && bot2_abbrev < 3)
-		sprintf(nb = eos(nb), " Xp:%u/%-1ld", u.ulevel,u.uexp);
+		sprintf(nb = eos(nb), "Xp:%u/%-1ld", u.ulevel,u.uexp);
 	else
-		sprintf(nb = eos(nb), " Exp:%u", u.ulevel);
+		sprintf(nb = eos(nb), "Exp:%u", u.ulevel);
 
 #ifdef SHOW_WEIGHT
 	if (flags.showweight && bot2_abbrev < 3)
-		sprintf(nb = eos(nb), "  Wt:%ld/%ld", (long)(inv_weight()+weight_cap()),
+		sprintf(nb = eos(nb), " Wt:%ld/%ld", (long)(inv_weight()+weight_cap()),
 				(long)weight_cap());
 #endif
 
 	if(flags.time && bot2_abbrev < 3)
-	        sprintf(nb = eos(nb), "  T:%ld ", moves);
+	        sprintf(nb = eos(nb), " T:%ld ", moves);
 
 #ifdef REALTIME_ON_BOTL
 	if(iflags.showrealtime) {
@@ -356,16 +515,22 @@ bot2str(char *newbot2) {
         }
 #endif
 
+#ifdef STATUS_COLORS
+	if (hu_stat[u.uhs][0]) {
+		add_colored_text_match((bot2_abbrev >= 2) ? hu_abbrev_stat[u.uhs] : hu_stat[u.uhs], hu_stat[u.uhs], newbot2);
+	}
+#else
         if (bot2_abbrev >= 2) {
 		if (hu_abbrev_stat[u.uhs][0]!='\0') {
 			sprintf(nb = eos(nb), " ");
 			strcat(newbot2, hu_abbrev_stat[u.uhs]);
 		}
 	}
-	else if(strcmp(hu_stat[u.uhs], "        ")) {
+	else if (hu_stat[u.uhs][0] != '\0') {
 		sprintf(nb = eos(nb), " ");
 		strcat(newbot2, hu_stat[u.uhs]);
 	}
+#endif
 
 /* WAC further Up
 	if (flags.showscore)
@@ -373,33 +538,34 @@ bot2str(char *newbot2) {
                    u.ugold, botl_score());
 */
 	/* KMH -- changed to Lev */
-	if (Levitation)    sprintf(nb = eos(nb), " Lev");
-	if(Confusion)
-		sprintf(nb = eos(nb), bot2_abbrev >= 2 ? " Cnf" : " Conf");
+
+	if (Levitation) add_colored_text("Lev", newbot2);
+
+	if(Confusion) add_colored_text_match(bot2_abbrev >= 2 ? "Cnf" : "Conf", "Conf", newbot2);
+
 	if(Sick) {
 		if (u.usick_type & SICK_VOMITABLE)
-			   sprintf(nb = eos(nb),
-			     bot2_abbrev >= 2 ? " FPs" : " FoodPois");
+			   add_colored_text_match(bot2_abbrev >= 2 ? "FPs" : "FoodPois", "FoodPois", newbot2);
 		if (u.usick_type & SICK_NONVOMITABLE)
-			   sprintf(nb = eos(nb), " Ill");
+			   add_colored_text("Ill", newbot2);
 	}
 
 	if(Blind)
-		sprintf(nb = eos(nb), bot2_abbrev >= 2 ? " Bnd" : " Blind");
+		add_colored_text_match(bot2_abbrev >= 2 ? "Bnd" : "Blind", "Blind", newbot2);
 	if(Stunned)
-		sprintf(nb = eos(nb), bot2_abbrev >= 2 ? " Stn" : " Stun");
+		add_colored_text_match(bot2_abbrev >= 2 ? "Stn" : "Stun", "Stun", newbot2);
 	if(Hallucination)
-		sprintf(nb = eos(nb), bot2_abbrev >= 2 ? " Hal" : " Hallu");
+		add_colored_text_match(bot2_abbrev >= 2 ? "Hal" : "Hallu", "Hallu", newbot2);
 	if(Slimed)
-		sprintf(nb = eos(nb), bot2_abbrev >= 2 ? " Slm" : " Slime");
+		add_colored_text_match(bot2_abbrev >= 2 ? "Slm" : "Slime", "Slime", newbot2);
 	if(u.ustuck && !u.uswallow && !sticks(youmonst.data))
-		sprintf(nb = eos(nb), " Held");
+		add_colored_text("Held", newbot2);
 	if(cap > UNENCUMBERED)
-		sprintf(nb = eos(nb), " %s",
-		  bot2_abbrev >= 2 ? enc_abbrev_stat[cap] : enc_stat[cap]);
+		add_colored_text_match(bot2_abbrev >= 2 ? enc_abbrev_stat[cap] : enc_stat[cap], enc_stat[cap], newbot2);
 }
 
 static void bot2(void) {
+	int save_botlx = flags.botlx;
 	char  newbot2[MAXCO];
 
 	bot2str(newbot2);
@@ -407,6 +573,7 @@ static void bot2(void) {
 
 	putstr(WIN_STATUS, 0, newbot2);
 	return;
+	flags.botlx = save_botlx;
 }
 
 /* WAC -- Shorten bot1 to fit in len spaces.

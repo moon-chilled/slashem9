@@ -108,6 +108,8 @@ extern schar acurrstr(void);
 extern void adjalign(int);
 /* KMH, balance patch -- new function */
 extern void recalc_health(void);
+extern int uhp(void);
+extern int uhpmax(void);
 
 /* ### ball.c ### */
 

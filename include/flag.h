@@ -158,10 +158,10 @@ struct flag {
  */
 
 struct instance_flags {
-    boolean  cbreak;	/* in cbreak mode, rogue format */
+	boolean  cbreak;	/* in cbreak mode, rogue format */
 #ifdef CURSES_GRAPHICS
-    boolean  classic_status;    /* What kind of horizontal statusbar to use */
-    boolean  cursesgraphics;    /* Use portable curses extended characters */
+	boolean  classic_status;    /* What kind of horizontal statusbar to use */
+	boolean  cursesgraphics;    /* Use portable curses extended characters */
 #endif
 	boolean  DECgraphics;	/* use DEC VT-xxx extended character set */
 	boolean  echo;		/* 1 to echo characters */
@@ -197,6 +197,10 @@ struct instance_flags {
 #ifdef MENU_COLOR
         boolean use_menu_color; /* use color in menus; only if wc_color */
 #endif
+#if defined(STATUS_COLORS) && defined(TEXTCOLOR)
+	boolean use_status_colors; /* use color in status line; only if wc_color */
+#endif
+	boolean hitpointbar;
 #ifdef MICRO
 	boolean  BIOS;		/* use IBM or ST BIOS calls when appropriate */
 #endif

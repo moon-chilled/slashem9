@@ -279,6 +279,7 @@ typedef unsigned char	uchar;
 #ifdef TTY_GRAPHICS
 # define MENU_COLOR
 #endif
+#define STATUS_COLORS   // Shachaf and Oren Ben-Kiki
 
 #if defined(UNIX)
 #define USE_REGEX_MATCH
