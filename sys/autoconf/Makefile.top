@@ -250,8 +250,8 @@ dofiles:
 	cp util/recover$(EXEEXT) $(FILE_AREA_UNSHARE)
 	cp $(srcdir)/dat/license $(srcdir)/doc/Guidebook.txt $(FILE_AREA_DOC)
 	@HOST_UNIX@-rm -f $(SHELLDIR)/$(SCRIPT)
-	@HOST_UNIX@sed -e 's;/usr/games/lib/nethackdir;$(FILE_AREA_UNSHARE);' \
-	@HOST_UNIX@	-e 's;HACKDIR/nethack;HACKDIR/$(GAME);' \
+	@HOST_UNIX@sed -e 's;@HACKDIR@;$(FILE_AREA_UNSHARE);' \
+	@HOST_UNIX@	-e 's;HACKDIR/@GAME@;HACKDIR/$(GAME);' \
 	@HOST_UNIX@	< $(srcdir)/sys/unix/nethack.sh \
 	@HOST_UNIX@	> $(SHELLDIR)/$(SCRIPT)
 # set up their permissions

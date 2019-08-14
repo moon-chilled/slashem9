@@ -435,7 +435,7 @@ bot2str(char *newbot2) {
 	else
 		newbot2[0] = '\0';
 	if (bot2_abbrev < 1)
-		sprintf(nb = eos(newbot2), "%c:%-2ld",
+		sprintf(nb = eos(newbot2), "%c:%ld",
 		  oc_syms[COIN_CLASS],
 #ifndef GOLDOBJ
 		u.ugold
@@ -447,7 +447,7 @@ bot2str(char *newbot2) {
 		nb = newbot2;
 
 
-	strcat(nb = eos(newbot2), "HP:");
+	strcat(nb = eos(newbot2), " HP:");
 	curs(WIN_STATUS, 1, 1);
 	putstr(WIN_STATUS, 0, newbot2);
 	flags.botlx = 0;

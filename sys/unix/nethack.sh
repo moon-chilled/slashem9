@@ -1,9 +1,9 @@
 #!/bin/sh
 #	SCCS Id: @(#)nethack.sh	3.4	1990/02/26
 
-HACKDIR=/usr/games/lib/nethackdir
+HACKDIR=@HACKDIR@
 export HACKDIR
-HACK=$HACKDIR/nethack
+HACK=$HACKDIR/@GAME@
 MAXNROFPLAYERS=4
 
 # Since Nethack.ad is installed in HACKDIR, add it to XUSERFILESEARCHPATH
@@ -56,6 +56,9 @@ then
 	fi
 fi
 
+if [ x$NH_USE_GDB != x ]; then
+	HACK="gdb $HACK"
+fi
 
 cd $HACKDIR
 case $1 in
