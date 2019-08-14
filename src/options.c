@@ -151,6 +151,7 @@ static struct Bool_Opt
 #else
 	{"mouse_support", &iflags.wc_mouse_support, true, DISP_IN_GAME},	/*WC*/
 #endif
+	{"msg_is_alert", &iflags.msg_is_alert, false, SET_IN_GAME},
 #ifdef NEWS
 	{"news", &iflags.news, true, DISP_IN_GAME},
 #else

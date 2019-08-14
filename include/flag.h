@@ -167,6 +167,7 @@ struct instance_flags {
 	boolean  echo;		/* 1 to echo characters */
 	boolean  IBMgraphics;	/* use IBM extended character set */
 	unsigned msg_history;	/* hint: # of top lines to save */
+	boolean  msg_is_alert;  /* need to press an extra key to get rid of a --More-- prompt.  Only in curses */
 	boolean  num_pad;	/* use numbers for movement commands */
 	boolean  news;		/* print news */
 	boolean  window_inited; /* true if init_nhwindows() completed */

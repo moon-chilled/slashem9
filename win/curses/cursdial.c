@@ -1,7 +1,6 @@
 /* vim:set cin ft=c sw=4 sts=4 ts=8 et ai cino=Ls\:0t0(0 : -*- mode:c;fill-column:80;tab-width:8;c-basic-offset:4;indent-tabs-mode:nil;c-file-style:"k&r" -*-*/
 
 #include "curses.h"
-#include <strings.h>
 #include "hack.h"
 #include "wincurs.h"
 #include "cursdial.h"
@@ -17,11 +16,11 @@ typedef struct nhmi {
     winid wid;                  /* NetHack window id */
     int glyph;                  /* Menu glyphs */
     anything identifier;        /* Value returned if item selected */
-    char accelerator;         /* Character used to select item from menu */
-    char group_accel;         /* Group accelerator for menu item, if any */
+    char accelerator;           /* Character used to select item from menu */
+    char group_accel;           /* Group accelerator for menu item, if any */
     int attr;                   /* Text attributes for item */
     const char *str;            /* Text of menu item */
-    boolean presel;           /* Whether menu item should be preselected */
+    boolean presel;             /* Whether menu item should be preselected */
     boolean selected;           /* Whether item is currently selected */
     int page_num;               /* Display page number for entry */
     int line_num;               /* Line number on page where entry begins */
@@ -72,8 +71,6 @@ static nhmenu *nhmenus = NULL;  /* NetHack menu array */
 
 
 /* Get a line of text from the player, such as asking for a character name or a wish */
-
-static boolean curses_stupid_hack = 0;
 
 void
 curses_line_input_dialog(const char *prompt, char *answer, int buffer)
@@ -146,8 +143,7 @@ curses_line_input_dialog(const char *prompt, char *answer, int buffer)
 /* Get a single character response from the player, such as a y/n prompt */
 
 int
-curses_character_input_dialog(const char *prompt, const char *choices,
-                              char def)
+curses_character_input_dialog(const char *prompt, const char *choices, char def)
 {
     WINDOW *askwin = NULL;
     int answer, count, maxwidth, map_height, map_width;
@@ -405,10 +401,8 @@ curses_ext_cmd()
             ret = -1;
         }
         for (count = 0; extcmdlist[count].ef_txt; count++) {
-#if 0
             if (!extcmdlist[count].autocomplete)
                 continue;
-#endif
             if (strlen(extcmdlist[count].ef_txt) > prompt_width) {
                 if (strncasecmp(cur_choice, extcmdlist[count].ef_txt,
                                 prompt_width) == 0) {
@@ -462,7 +456,7 @@ curses_create_nhmenu(winid wid)
         return;
     }
 
-    new_menu = alloc(sizeof (nhmenu));
+    new_menu = alloc(sizeof(nhmenu));
     new_menu->wid = wid;
     new_menu->prompt = NULL;
     new_menu->entries = NULL;
@@ -496,13 +490,19 @@ curses_add_nhmenu_item(winid wid, int glyph, const anything * identifier,
     nhmenu_item *new_item, *current_items, *menu_item_ptr;
     nhmenu *current_menu = get_menu(wid);
 
+    if (current_menu == NULL) {
+        impossible
+            ("curses_add_nhmenu_item: attempt to add item to nonexistent menu");
+        return;
+    }
+
     if (str == NULL) {
         return;
     }
 
     new_str = curses_copy_of(str);
     curses_rtrim((char *) new_str);
-    new_item = alloc(sizeof (nhmenu_item));
+    new_item = alloc(sizeof(nhmenu_item));
     new_item->wid = wid;
     new_item->glyph = glyph;
     new_item->identifier = *identifier;
@@ -517,11 +517,6 @@ curses_add_nhmenu_item(winid wid, int glyph, const anything * identifier,
     new_item->num_lines = 0;
     new_item->count = -1;
     new_item->next_item = NULL;
-
-    if (current_menu == NULL) {
-        panic
-            ("curses_add_nhmenu_item: attempt to add item to nonexistant menu");
-    }
 
     current_items = current_menu->entries;
     menu_item_ptr = current_items;
@@ -547,12 +542,13 @@ curses_finalize_nhmenu(winid wid, const char *prompt)
 {
     int count = 0;
     nhmenu *current_menu = get_menu(wid);
-    nhmenu_item *menu_item_ptr = current_menu->entries;
 
     if (current_menu == NULL) {
-        panic("curses_finalize_nhmenu: attempt to finalize nonexistant menu");
+        impossible("curses_finalize_nhmenu: attempt to finalize nonexistent menu");
+        return;
     }
 
+    nhmenu_item *menu_item_ptr = current_menu->entries;
     while (menu_item_ptr != NULL) {
         menu_item_ptr = menu_item_ptr->next_item;
         count++;
@@ -578,13 +574,15 @@ curses_display_nhmenu(winid wid, int how, menu_item ** _selected)
     *_selected = NULL;
 
     if (current_menu == NULL) {
-        panic("curses_display_nhmenu: attempt to display nonexistant menu");
+        impossible("curses_display_nhmenu: attempt to display nonexistent menu");
+        return '\033';
     }
 
     menu_item_ptr = current_menu->entries;
 
     if (menu_item_ptr == NULL) {
-        panic("curses_display_nhmenu: attempt to display empty menu");
+        impossible("curses_display_nhmenu: attempt to display empty menu");
+        return '\033';
     }
 
     /* Reset items to unselected to clear out selections from previous
@@ -619,8 +617,9 @@ curses_display_nhmenu(winid wid, int how, menu_item ** _selected)
         while (menu_item_ptr != NULL) {
             if (menu_item_ptr->selected) {
                 if (count == num_chosen) {
-                    panic("curses_display_nhmenu: Selected items "
+                    impossible("curses_display_nhmenu: Selected items "
                           "exceeds expected number");
+                     break;
                 }
                 selected[count].item = menu_item_ptr->identifier;
                 selected[count].count = menu_item_ptr->count;
@@ -630,7 +629,7 @@ curses_display_nhmenu(winid wid, int how, menu_item ** _selected)
         }
 
         if (count != num_chosen) {
-            panic("curses_display_nhmenu: Selected items less than "
+            impossible("curses_display_nhmenu: Selected items less than "
                   "expected number");
         }
     }
@@ -860,7 +859,8 @@ menu_win_size(nhmenu *menu)
         } else {
             /* Add space for accelerator */
             curentrywidth = strlen(menu_item_ptr->str) + 4;
-            if (menu_item_ptr->glyph != NO_GLYPH && iflags.use_menu_glyphs)
+            if (menu_item_ptr->glyph != NO_GLYPH
+                        && iflags.use_menu_glyphs)
                 curentrywidth += 2;
         }
         if (curentrywidth > maxentrywidth) {
@@ -936,7 +936,8 @@ menu_display_page(nhmenu *menu, WINDOW * win, int page_num)
     }
 
     if (menu_item_ptr == NULL) {        /* Page not found */
-        panic("menu_display_page: attempt to display nonexistant page");
+        impossible("menu_display_page: attempt to display nonexistent page");
+        return;
     }
 
     werase(win);
@@ -1330,7 +1331,8 @@ menu_operation(WINDOW * win, nhmenu *menu, menu_op
     }
 
     if (menu_item_ptr == NULL) {        /* Page not found */
-        panic("menu_display_page: attempt to display nonexistant page");
+        impossible("menu_display_page: attempt to display nonexistent page");
+        return 0;
     }
 
     while (menu_item_ptr != NULL) {

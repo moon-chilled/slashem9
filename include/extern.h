@@ -216,6 +216,7 @@ extern void destroy_drawbridge(int,int);
 /* ### decl.c ### */
 
 extern void decl_init(void);
+extern bool curses_stupid_hack;
 
 /* ### detect.c ### */
 

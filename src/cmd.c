@@ -276,7 +276,7 @@ int doextlist(void) {
 	putstr(datawin, 0, "");
 
 	for(efp = extcmdlist; efp->ef_txt; efp++) {
-		/* Show name and text for each command.  Autocompleted                                                                 
+		/* Show name and text for each command.  Autocompleted
 		 * commands are marked with an asterisk ('*'). */
 		sprintf(buf, "  %c %-15s - %s.",
 				efp->autocomplete ? '*' : ' ',
@@ -2580,7 +2580,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"offer", "offer a sacrifice to the gods", dosacrifice, !IFBURIED, AUTOCOMPLETE},
 	{"pray", "pray to the gods for help", dopray, IFBURIED, AUTOCOMPLETE},
 	{"quit", "exit without saving current game", done2, IFBURIED, AUTOCOMPLETE},
-#ifdef STEED                                                                                                                          
+#ifdef STEED
 	{"ride", "ride (or stop riding) a monster", doride, !IFBURIED, AUTOCOMPLETE},
 #endif
 
@@ -2886,7 +2886,7 @@ dokeylist(void)
 				"move southwest",
 				"move downward",
 				"move upward"};
-	char*	misc_desc[MISC_CMD_COUNT] = 
+	char*	misc_desc[MISC_CMD_COUNT] =
 		{"rush until something interesting is seen",
 		 "run until something extremely interesting is seen",
 		 "fight even if you don't see a monster",
@@ -2960,11 +2960,11 @@ dokeylist(void)
 		if (keys_used[i]) continue;
 		if (key == ' ' && !flags.rest_on_space) continue;
 		if ((extcmd = cmdlist[i].bind_cmd)) {
-			sprintf(buf, "%s\t%s", key2txt(key, buf2), 
+			sprintf(buf, "%s\t%s", key2txt(key, buf2),
 				extcmd->ef_desc);
 			putstr(datawin, 0, buf);
 		} else if ((mapping = cmdlist[i].map_list)) {
-			sprintf(buf, "%s\tmapped to ", 
+			sprintf(buf, "%s\tmapped to ",
 				key2txt(key, buf2));
 			str2txt(mapping, eos(buf));
 			putstr(datawin, 0, buf);
@@ -2975,7 +2975,7 @@ dokeylist(void)
 	display_nhwindow(datawin, false);
 	destroy_nhwindow(datawin);
 }
- 
+
 static const char template[] = "%-18s %4ld  %6ld";
 static const char count_str[] = "                   count  bytes";
 static const char separator[] = "------------------ -----  ------";
@@ -3359,7 +3359,7 @@ parsebindings(bindings)
 		*bind++ = 0;
 		parsebindings(bind);
 	}
- 
+
 	/* parse a single binding: first split around : */
 	if (! (bind = index(bindings, ':'))) return; /* it's not a binding */
 	*bind++ = 0;
@@ -3385,7 +3385,7 @@ parsebindings(bindings)
 	newbinding->next = bindinglist;
 	bindinglist = newbinding;
 }
- 
+
 // closesly follows parsebindings and parseoptions
 void parseautocomplete(char* autocomplete, boolean condition) {
 	char *autoc;
@@ -3468,7 +3468,7 @@ parsemappings(mapping)
 	cnt = get_uchar_list(map, map_to, BUFSZ-1);
 	if (cnt < 0) {
 		cnt = -cnt - 1;
-		raw_printf("Bad mapping for key %s - %i at %s", 
+		raw_printf("Bad mapping for key %s - %i at %s",
 			   mapping, cnt, map);
 		wait_synch();
 		return;
@@ -3478,7 +3478,7 @@ parsemappings(mapping)
 			   mapping, map);
 		wait_synch();
 		return;
-			   
+
 	}
 	map_to[cnt] = 0;
 
@@ -3655,7 +3655,7 @@ void rhack(char *cmd) {
 			char* mapping = keytab->map_list;
 			pline("Mapping char %s.", key2txt(*cmd, buf));
 			while (*mapping) {
-				pline("Mapping to %s.", 
+				pline("Mapping to %s.",
 						key2txt(*mapping, buf));
 				addchar(*mapping);
 				mapping++;

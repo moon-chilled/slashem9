@@ -4,7 +4,7 @@
 # define CURSDIAL_H
 
 # ifdef MENU_COLOR
-#  ifdef MENU_COLOR_REGEX
+#  ifdef USE_REGEX_MATCH
 #   include <regex.h>
 #  endif
 # endif

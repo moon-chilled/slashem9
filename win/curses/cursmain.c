@@ -5,7 +5,6 @@
 #include "patchlevel.h"
 #include "color.h"
 #include "wincurs.h"
-#include "cursmisc.h"
 
 /* Public functions for curses NetHack interface */
 
@@ -64,7 +63,6 @@ struct window_procs curses_procs = {
     curses_end_screen,
     genl_outrip,
     curses_preference_update,
-    curses_kbhit,
 };
 
 /* Track if we're performing an update to the permanent window.
@@ -282,7 +280,16 @@ void
 curses_display_nhwindow(winid wid, boolean block)
 {
     menu_item *selected = NULL;
+    if (curses_is_menu(wid) || curses_is_text(wid)) {
+        curses_end_menu(wid, "");
+        curses_select_menu(wid, PICK_NONE, &selected);
+        return;
+    }
 
+    /* actually display the window */
+    wnoutrefresh(curses_get_nhwin(wid));
+    /* flush pending writes from other windows too */
+    doupdate();
     if ((wid == MAP_WIN) && block) {
         (void) curses_more();
     }
@@ -293,12 +300,6 @@ curses_display_nhwindow(winid wid, boolean block)
         /* don't bug player with TAB prompt on "Saving..." or endgame */
         else
             (void) curses_more();
-    }
-
-    if (curses_is_menu(wid) || curses_is_text(wid)) {
-        curses_end_menu(wid, "");
-        curses_select_menu(wid, PICK_NONE, &selected);
-        return;
     }
 }
 
@@ -548,7 +549,7 @@ print_glyph(window, x, y, glyph)
 void
 curses_print_glyph(winid wid, xchar x, xchar y, int glyph)
 {
-    int ch;
+    glyph_t ch;
     int color;
     unsigned int special;
     int attr = -1;
@@ -742,6 +743,9 @@ delay_output()  -- Causes a visible delay of 50ms in the output.
 void
 curses_delay_output()
 {
+    /* refreshing the whole display is a waste of time,
+     * but that's why we're here */
+    refresh();
     napms(50);
 }
 

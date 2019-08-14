@@ -58,7 +58,9 @@ static nhstat prevac;
 static nhstat prevexp;
 static nhstat prevtime;
 
+#ifdef SCORE_ON_BOTL
 static nhstat prevscore;
+#endif
 
 extern const char *hu_stat[];   /* from eat.c */
 extern const char *enc_stat[];  /* from botl.c */
@@ -215,8 +217,13 @@ curses_color_attr(int nh_color, int bg_color)
     attr_t cattr = A_NORMAL;
 
     if (!nh_color) {
+#ifdef USE_DARKGRAY
+        if (iflags.wc2_darkgray) {
             if (!can_change_color() || COLORS <= 16)
                 cattr |= A_BOLD;
+        } else
+#endif
+            color = COLOR_BLUE;
     }
 
     if (COLORS < 16 && color > 8) {
@@ -415,6 +422,10 @@ void
 curses_update_stats(void)
 {
     WINDOW *win = curses_get_nhwin(STATUS_WIN);
+
+    /* Clear the window */
+    werase(win);
+
     int orient = curses_get_window_orientation(STATUS_WIN);
 
     boolean horiz = false;
@@ -476,7 +487,7 @@ curses_update_stats(void)
     if (border)
         box(win, 0, 0);
 
-    wrefresh(win);
+    wnoutrefresh(win);
 
     if (first) {
         first = false;
@@ -518,10 +529,10 @@ draw_horizontal(int x, int y, int hp, int hpmax)
     wprintw(win, (u.ualign.type == A_CHAOTIC ? " Chaotic" :
                   u.ualign.type == A_NEUTRAL ? " Neutral" : " Lawful"));
 
+#ifdef SCORE_ON_BOTL
     if (flags.showscore)
         print_statdiff(" S:", &prevscore, botl_score(), STAT_OTHER);
-
-    wclrtoeol(win);
+#endif /* SCORE_ON_BOTL */
 
 
     /* Line 2 */
@@ -564,12 +575,15 @@ draw_horizontal(int x, int y, int hp, int hpmax)
 
     if (Upolyd)
         print_statdiff(" HD:", &prevlevel, mons[u.umonnum].mlevel, STAT_OTHER);
+#ifdef EXP_ON_BOTL
     else if (flags.showexp) {
         print_statdiff(" Xp:", &prevlevel, u.ulevel, STAT_OTHER);
         /* use waddch, we don't want to highlight the '/' */
         waddch(win, '/');
         print_statdiff("", &prevexp, u.uexp, STAT_OTHER);
-    } else
+    }
+#endif
+    else
         print_statdiff(" Exp:", &prevlevel, u.ulevel, STAT_OTHER);
 
     if (flags.time)
@@ -598,8 +612,6 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
             Upolyd ? "" : race, Upolyd ? "" : " ",
             rank);
 
-    wclrtoeol(win);
-
     /* Line 2 */
     y++;
     wmove(win, y, x);
@@ -608,6 +620,7 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
     print_statdiff(" AC:", &prevac, u.uac, STAT_AC);
     if (Upolyd)
         print_statdiff(" HD:", &prevlevel, mons[u.umonnum].mlevel, STAT_OTHER);
+#ifdef EXP_ON_BOTL
     else if (flags.showexp) {
         /* Ensure that Xp have proper highlight on level change. */
         int levelchange = 0;
@@ -633,16 +646,15 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
         }
         print_statdiff("", &prevexp, xp_left, STAT_AC);
         waddch(win, ')');
-    } else {
-        print_statdiff(" Exp:", &prevlevel, u.ulevel, STAT_OTHER);
     }
+#endif
+    else
+        print_statdiff(" Exp:", &prevlevel, u.ulevel, STAT_OTHER);
 
     waddch(win, ' ');
     describe_level(buf, false);
 
     wprintw(win, "%s", buf);
-    wclrtoeol(win);
-
 
     /* Line 3 */
     y++;
@@ -656,13 +668,14 @@ draw_horizontal_new(int x, int y, int hp, int hpmax)
     print_statdiff(" $", &prevau, money_cnt(invent), STAT_GOLD);
 #endif
 
+#ifdef SCORE_ON_BOTL
     if (flags.showscore)
         print_statdiff(" S:", &prevscore, botl_score(), STAT_OTHER);
+#endif /* SCORE_ON_BOTL */
 
     if (flags.time)
         print_statdiff(" T:", &prevtime, moves, STAT_TIME);
 
-    wclrtoeol(win);
     curses_add_statuses(win, true, false, &x, &y);
 
     /* Right-aligned attributes */
@@ -712,9 +725,6 @@ draw_vertical(int x, int y, int hp, int hpmax)
     char buf[BUFSZ];
     char rank[BUFSZ];
     WINDOW *win = curses_get_nhwin(STATUS_WIN);
-
-    /* Clear the window */
-    werase(win);
 
     /* Print title and dungeon branch */
     wmove(win, y++, x);
@@ -809,14 +819,16 @@ draw_vertical(int x, int y, int hp, int hpmax)
 
     if (Upolyd)
         print_statdiff("Hit Dice:      ", &prevlevel, mons[u.umonnum].mlevel, STAT_OTHER);
+#ifdef EXP_ON_BOTL
     else if (flags.showexp) {
         print_statdiff("Experience:    ", &prevlevel, u.ulevel, STAT_OTHER);
         /* use waddch, we don't want to highlight the '/' */
         waddch(win, '/');
         print_statdiff("", &prevexp, u.uexp, STAT_OTHER);
-    } else {
-        print_statdiff("Level:         ", &prevlevel, u.ulevel, STAT_OTHER);
     }
+#endif
+    else
+        print_statdiff("Level:         ", &prevlevel, u.ulevel, STAT_OTHER);
     wmove(win, y++, x);
 
     if (flags.time) {
@@ -824,10 +836,12 @@ draw_vertical(int x, int y, int hp, int hpmax)
         wmove(win, y++, x);
     }
 
+#ifdef SCORE_ON_BOTL
     if (flags.showscore) {
         print_statdiff("Score:         ", &prevscore, botl_score(), STAT_OTHER);
         wmove(win, y++, x);
     }
+#endif /* SCORE_ON_BOTL */
 
     curses_add_statuses(win, false, true, &x, &y);
 }
@@ -925,7 +939,9 @@ decrement_highlight(nhstat *stat, boolean zero)
 
 /* Decrement the highlight_turns for all stats.  Call curses_update_stats
    if needed to unhighlight a stat */
-void curses_decrement_highlights(boolean zero) {
+void
+curses_decrement_highlights(boolean zero)
+{
     int unhighlight = 0;
 
     unhighlight |= decrement_highlight(&prevdepth, zero);
@@ -938,9 +954,13 @@ void curses_decrement_highlights(boolean zero) {
     unhighlight |= decrement_highlight(&prevau, zero);
     unhighlight |= decrement_highlight(&prevlevel, zero);
     unhighlight |= decrement_highlight(&prevac, zero);
+#ifdef EXP_ON_BOTL
     unhighlight |= decrement_highlight(&prevexp, zero);
+#endif
     unhighlight |= decrement_highlight(&prevtime, zero);
+#ifdef SCORE_ON_BOTL
     unhighlight |= decrement_highlight(&prevscore, zero);
+#endif
 
     if (unhighlight)
         curses_update_stats();

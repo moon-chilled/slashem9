@@ -183,6 +183,8 @@ typedef signed char	schar;
 typedef unsigned char	uchar;
 #endif
 
+typedef long glyph_t;
+
 #define REALTIME_ON_BOTL        /* Show elapsed time on bottom line.  Note:
                                  * this breaks savefile compatibility. */
 

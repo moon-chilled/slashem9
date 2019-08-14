@@ -496,30 +496,31 @@ void stop_occupation(void) {
 }
 
 void display_gamewindows(void) {
-    WIN_MESSAGE = create_nhwindow(NHW_MESSAGE);
-    WIN_STATUS = create_nhwindow(NHW_STATUS);
-    WIN_MAP = create_nhwindow(NHW_MAP);
-    WIN_INVEN = create_nhwindow(NHW_MENU);
+	curses_stupid_hack = false;
+	WIN_MESSAGE = create_nhwindow(NHW_MESSAGE);
+	WIN_STATUS = create_nhwindow(NHW_STATUS);
+	WIN_MAP = create_nhwindow(NHW_MAP);
+	WIN_INVEN = create_nhwindow(NHW_MENU);
 
 #ifdef MAC
-    /*
-     * This _is_ the right place for this - maybe we will
-     * have to split display_gamewindows into create_gamewindows
-     * and show_gamewindows to get rid of this ifdef...
-     */
+	/*
+	 * This _is_ the right place for this - maybe we will
+	 * have to split display_gamewindows into create_gamewindows
+	 * and show_gamewindows to get rid of this ifdef...
+	 */
 	if ( ! strcmp ( windowprocs . name , "mac" ) ) {
-	    SanePositions ( ) ;
+		SanePositions ( ) ;
 	}
 #endif
 
-    /*
-     * The mac port is not DEPENDENT on the order of these
-     * displays, but it looks a lot better this way...
-     */
-    display_nhwindow(WIN_STATUS, false);
-    display_nhwindow(WIN_MESSAGE, false);
-    clear_glyph_buffer();
-    display_nhwindow(WIN_MAP, false);
+	/*
+	 * The mac port is not DEPENDENT on the order of these
+	 * displays, but it looks a lot better this way...
+	 */
+	display_nhwindow(WIN_STATUS, false);
+	display_nhwindow(WIN_MESSAGE, false);
+	clear_glyph_buffer();
+	display_nhwindow(WIN_MAP, false);
 }
 
 void newgame(void) {

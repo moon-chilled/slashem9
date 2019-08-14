@@ -4,6 +4,8 @@
 
 #include "hack.h"
 
+#include "wintty.h"
+
 const char *hu_stat[] = {
 	"Satiated",
 	"",
@@ -391,10 +393,9 @@ int describe_level(char *buf, int verbose) {
 			Is_astralevel(&u.uz) ? "Astral Plane " : "End Game ");
 	else {
 		if (verbose)
-			sprintf(buf, "%s, level %d ",
-				dungeons[u.uz.dnum].dname, depth(&u.uz));
+			sprintf(buf, "%s, level %d ", dungeons[u.uz.dnum].dname, depth(&u.uz));
 		else
-		sprintf(buf, "Dlvl:%-2d", depth(&u.uz));
+			sprintf(buf, "Dlvl:%-2d", depth(&u.uz));
 		ret = 0;
 	}
 	return ret;

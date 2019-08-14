@@ -51,8 +51,6 @@ nhrgb orig_hiwhite;
 |_____/ |_| \__,_||___/|_| |_|  |______||_|  |_|
 */
 
-
-
 /* win* is size and placement of window to change, x/y/w/h is baseline which can
    decrease depending on alignment of win* in orientation.
    Negative minh/minw: as much as possible, but at least as much as specified. */
@@ -376,6 +374,7 @@ curses_init_nhcolors()
                 init_color(COLOR_MAGENTA + 8, 1000, 0, 1000);
                 init_color(COLOR_CYAN + 8, 0, 1000, 1000);
                 init_color(COLOR_WHITE + 8, 1000, 1000, 1000);
+# ifdef USE_DARKGRAY
                 if (COLORS > 16) {
                     color_content(CURSES_DARK_GRAY, &orig_darkgray.r,
                                   &orig_darkgray.g, &orig_darkgray.b);
@@ -383,6 +382,7 @@ curses_init_nhcolors()
                     /* just override black colorpair entry here */
                     init_pair(1, CURSES_DARK_GRAY, -1);
                 }
+# endif
             } else {
                 /* Set flag to use bold for bright colors */
             }
@@ -527,7 +527,7 @@ curses_choose_character()
             panic("Impossible menu selection");
             break;
         }
-        free((void *) selected);
+        free(selected);
         selected = 0;
         flags.tutorial = 1;
     }
@@ -540,7 +540,7 @@ curses_choose_character()
         /* select a role */
         for (n = 0; roles[n].name.m; n++)
             continue;
-        choices = (const char **) alloc(sizeof (char *) * (n + 1));
+        choices = alloc(sizeof (char *) * (n + 1));
         pickmap = alloc(sizeof (int) * (n + 1));
         for (;;) {
             for (n = 0, i = 0; roles[i].name.m; i++) {
@@ -615,7 +615,7 @@ curses_choose_character()
                 }
             }
 
-            choices = (const char **) alloc(sizeof (char *) * (n + 1));
+            choices = alloc(sizeof (char *) * (n + 1));
             pickmap = alloc(sizeof (int) * (n + 1));
             for (n = 0, i = 0; races[i].noun; i++) {
                 if (ok_race(flags.initrole, i, flags.initgend, flags.initalign)) {
@@ -674,7 +674,7 @@ curses_choose_character()
                 }
             }
 
-            choices = (const char **) alloc(sizeof (char *) * (n + 1));
+            choices = alloc(sizeof (char *) * (n + 1));
             pickmap = alloc(sizeof (int) * (n + 1));
             for (n = 0, i = 0; i < ROLE_GENDERS; i++) {
                 if (ok_gend(flags.initrole, flags.initrace, i, flags.initalign)) {
@@ -731,7 +731,7 @@ curses_choose_character()
                         n++;
             }
 
-            choices = (const char **) alloc(sizeof (char *) * (n + 1));
+            choices = alloc(sizeof (char *) * (n + 1));
             pickmap = alloc(sizeof (int) * (n + 1));
             for (n = 0, i = 0; i < ROLE_ALIGNS; i++) {
                 if (ok_align(flags.initrole, flags.initrace, flags.initgend, i)) {
@@ -739,7 +739,7 @@ curses_choose_character()
                     pickmap[n++] = i;
                 }
             }
-            choices[n] = (const char *) 0;
+            choices[n] = NULL;
             /* Permit the user to pick, if there is more than one */
             if (n > 1)
                 sel =
@@ -913,6 +913,7 @@ curses_display_splash_window()
         mvaddstr(y_start + 4, x_start, SPLASH_E);
         mvaddstr(y_start + 5, x_start, SPLASH_F);
         y_start += 7;
+
     }
 
     curses_toggle_color_attr(stdscr, CLR_WHITE, A_NORMAL, OFF);
@@ -964,10 +965,12 @@ curses_cleanup()
                        orig_hicyan.b);
             init_color(COLOR_WHITE + 8, orig_hiwhite.r, orig_hiwhite.g,
                        orig_hiwhite.b);
+# ifdef USE_DARKGRAY
             if (COLORS > 16) {
                 init_color(CURSES_DARK_GRAY, orig_darkgray.r,
                            orig_darkgray.g, orig_darkgray.b);
             }
+# endif
         }
     }
 #endif

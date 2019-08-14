@@ -53,7 +53,7 @@ curses_update_inv(void)
     if (border)
         box(win, 0, 0);
 
-    wrefresh(win);
+    wnoutrefresh(win);
 }
 
 /* Adds an inventory item. */
@@ -85,10 +85,10 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
         int symbol = 0;
         mapglyph(glyph, &symbol, &color, &dummy,
                      u.ux, u.uy);
-        attr_t glyph = curses_color_attr(color, 0);
-        wattron(win, glyph);
+        attr_t glyphclr = curses_color_attr(color, 0);
+        wattron(win, glyphclr);
         wprintw(win, "%c ", symbol);
-        wattroff(win, glyph);
+        wattroff(win, glyphclr);
     }
 
 #ifdef MENU_COLOR
@@ -99,7 +99,7 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
         char str_mutable[BUFSZ];
         strcpy(str_mutable, str);
         attr = 0;
-        get_menu_coloring(str_mutable, &color, (int*)&attr);
+        get_menu_coloring(str_mutable, &color, &attr);
         if (color != NO_COLOR)
             attr |= curses_color_attr(color, 0);
     }

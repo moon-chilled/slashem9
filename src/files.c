@@ -912,7 +912,7 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
 #ifdef UNIX
 # ifdef USE_FCNTL
 	while (fcntl(lockfd,F_SETLK,&sflock) == -1) {
-# else 
+# else
 #  ifdef NO_FILE_LINKS
 	while ((lockfd = open(lockname, O_RDWR|O_CREAT|O_EXCL, 0666)) == -1) {
 #  else
@@ -1008,7 +1008,7 @@ void unlock_file(const char *filename) {
 #ifdef USE_FCNTL
 		sflock.l_type = F_UNLCK;
 		if (fcntl(lockfd,F_SETLK,&sflock) == -1) {
-			HUP raw_printf("Can't remove fcntl lock on %s.", filename);                                                    
+			HUP raw_printf("Can't remove fcntl lock on %s.", filename);
 			close(lockfd);
 		}
 #else
@@ -1137,14 +1137,14 @@ static FILE *fopen_config_file(const char *filename) {
 
 }
 
-/* 
+/*
  * Retrieve a list of one-byte integers from a buffer into a uchar array.
  *
  * It can accept 3-digit decimal integers, characters (ascii), or
  * certain character symbols (see txt2key)
  *
  * return value of +x indicates x uchars read, -x indicates x-1 uchars read
- * 
+ *
  * Note: there is no way to read value 0
  */
 int
@@ -1157,7 +1157,7 @@ get_uchar_list(buf, list, size)
     char* next;
     uchar orig;
     uchar mkey;
-    
+
     while (1) { /* one loop for each uchar */
 	if (cnt == size) return cnt;
 	
@@ -1297,7 +1297,7 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 		parsetileset(bufp);
 	} else if (match_varname(buf, "AUTOPICKUP_EXCEPTION", 5)) {
 		add_autopickup_exception(bufp);
-	} else if (match_varname(buf, "BINDINGS", 4)) {                                                                                
+	} else if (match_varname(buf, "BINDINGS", 4)) {
 		/* JDS: hmmm, should these be in NOCWD_ASSUMPTIONS? */
 		parsebindings(bufp);
 	} else if (match_varname(buf, "AUTOCOMPLETE", 5)) {
