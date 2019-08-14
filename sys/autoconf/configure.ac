@@ -28,14 +28,6 @@ nethack_default_win=""
 # Note: Order is important: The last listed enabled port will be the default.
 NETHACK_WIN_ENABLE(tty, yes)
 NETHACK_WIN_ENABLE(curses, yes)
-NETHACK_WIN_ENABLE(x11, no)
-NETHACK_WIN_ENABLE(sdl, no)
-NETHACK_WIN_ENABLE(gl, no, [use gl-graphics (enables sdl-graphics)])
-if test "$enable_gl_graphics" != no -a "$enable_sdl_graphics" = no; then
-    enable_sdl_graphics="yes"
-    nethack_wins=`echo $nethack_wins | sed 's/^gl/gl sdl/'`
-fi
-NETHACK_WIN_ENABLE(mswin, no, [use Microsoft Windows' native graphics])
 
 dnl  ----- Figure out a C compiler to use; set @CC@
 AC_PROG_CC
@@ -192,54 +184,6 @@ if test "$enable_proxy_graphics" != "no"; then
     fi
 fi
 AC_SUBST(NETHACK_PROXY_CFLAGS)
-
-SDL_CONFIG_CFLAGS=
-SDL_CONFIG_LIBS=
-if test "$enable_sdl_graphics" != "no"
-then
-dnl CHECK FOR libpng
-  AC_CHECK_TOOL(SDL_CONFIG,sdl-config, no)
-  if test "SDL_CONFIG" = no
-  then
-	dnl --Maybe don't need sdl-config?
-	AC_CHECK_LIB(SDL,SDL_Init,,[SDL_CONFIG=])
-  fi
-  if test "SDL_CONFIG" != "no"
-  then
-	 SDL_CONFIG_CFLAGS="`${SDL_CONFIG} --cflags`"
-	 SDL_CONFIG_LIBS="`${SDL_CONFIG} --libs`"
-	 WINSRC="${WINSRC} \$(WINGLSRC)"
-	 WINOBJ="${WINOBJ} \$(WINGLOBJ)"
-	 WINLIB="${WINLIB} \$(WINSDLLIB)"
-	 CNF_SHARE_DATND="${CNF_SHARE_DATND} \$(CNF_SHARE_GLND)"
-	 AC_DEFINE(SDL_GRAPHICS, [], [Software SDL graphics])
-	 if test "$enable_gl_graphics" != "no"
-	 then
-		GL_LIB_VARIANTS="GL opengl32"
-		for gl_lib in ${GL_LIB_VARIANTS}; do
-		  AC_CHECK_LIB(${gl_lib}, glBegin,
-		  [WINGLLIB="-l${gl_lib}"
-		   WINLIB="${WINLIB} \$(WINGLLIB)"
-		   AC_DEFINE(GL_GRAPHICS, [], [OpenGL graphics])
-		   break])
-		done
-	 fi
-  fi
-fi
-AC_SUBST(SDL_CONFIG_CFLAGS)
-AC_SUBST(SDL_CONFIG_LIBS)
-
-if test "$enable_mswin_graphics" != "no"; then
-    if test "$WINDRES" = "no"; then
-	AC_MSG_ERROR([Need windres for Microsoft Window's native graphics])
-    fi
-    WINSRC="${WINSRC} \$(WINMSSRC)"
-    WINOBJ="${WINOBJ} \$(WINMSOBJ)"
-    WINLIB="${WINLIB} \$(WINMSLIB)"
-    CNF_SHARE_DATND="${CNF_SHARE_DATND} \$(CNF_SHARE_MSND)"
-    AC_DEFINE(MSWIN_GRAPHICS, [], [Microsoft Window's native graphics])
-fi
-
 
 AC_SUBST(WINSRC)
 AC_SUBST(WINOBJ)

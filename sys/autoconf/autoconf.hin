@@ -30,9 +30,6 @@
 /* Dungeon growth */
 #undef DUNGEON_GROWTH
 
-/* OpenGL graphics */
-#undef GL_GRAPHICS
-
 /* GNU regex is available */
 #undef GNU_REGEX
 
@@ -49,9 +46,6 @@
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
-
-/* Define to 1 if you have the `SDL' library (-lSDL). */
-#undef HAVE_LIBSDL
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
@@ -92,9 +86,6 @@
 /* TTY graphics menu color */
 #undef MENU_COLOR
 
-/* Microsoft Window's native graphics */
-#undef MSWIN_GRAPHICS
-
 /* Prevent wishing for special artifacts */
 #undef NOARTIFACTWISH
 
@@ -133,9 +124,6 @@
 
 /* Special Rogue-like levels */
 #undef REINCARNATION
-
-/* Software SDL graphics */
-#undef SDL_GRAPHICS
 
 /* Display damage reports */
 #undef SHOW_DMG

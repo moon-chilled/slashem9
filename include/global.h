@@ -168,11 +168,7 @@ typedef unsigned long ulong;
 # ifdef WIN32
 #  define PORT_ID	"Windows"
 #  ifndef PORT_SUB_ID
-#   if defined(MSWIN_GRAPHICS) || defined(GTK_GRAPHICS)
-#    define PORT_SUB_ID	"graphical"
-#   else
-#    define PORT_SUB_ID	"tty"
-#   endif
+#   define PORT_SUB_ID	"tty"
 #  endif
 # endif
 #endif
@@ -182,22 +178,6 @@ typedef unsigned long ulong;
 #endif
 #ifndef EXIT_FAILURE
 # define EXIT_FAILURE 1
-#endif
-
-#ifdef MSWIN_GRAPHICS
-# ifndef USE_TILES
-#  define USE_TILES		/* glyph2tile[] will be available */
-# endif
-#endif
-#ifdef GTK_GRAPHICS
-# ifndef USE_TILES
-#  define USE_TILES
-# endif
-#endif
-#if defined(GL_GRAPHICS) || defined(SDL_GRAPHICS)
-# ifndef USE_TILES
-#  define USE_TILES
-# endif
 #endif
 
 void *alloc(size_t);		/* alloc.c */

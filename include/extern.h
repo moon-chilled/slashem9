@@ -2020,7 +2020,7 @@ extern void timer_sanity_check(void);
 extern void topten(int);
 extern void prscore(int,char **);
 extern struct obj *tt_oname(struct obj *);
-#ifdef GTK_GRAPHICS
+#ifdef PROXY_GRAPHICS
 extern winid create_toptenwin(void);
 extern void destroy_toptenwin(void);
 #endif

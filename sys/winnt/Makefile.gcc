@@ -1517,55 +1517,6 @@ getopt.o: ../win/proxy/getopt.c $(HACK_H)
 	$(CCOMPILE) $(CFLAGS) -o$@ ../win/proxy/getopt.c
 glyphmap.o: ../win/proxy/glyphmap.c $(HACK_H) $(INCL)/winproxy.h
 	$(CCOMPILE) $(CFLAGS) -o$@ ../win/proxy/glyphmap.c
-gl_conf.o: ../win/gl/gl_conf.c $(HACK_H) $(INCL)/dlb.h \
-		$(INCL)/patchlevel.h $(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_conf.c
-gl_emul.o: ../win/gl/gl_emul.c $(HACK_H) $(INCL)/winGL.h \
-		$(INCL)/func_tab.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_emul.c
-gl_font.o: ../win/gl/gl_font.c $(HACK_H) $(INCL)/patchlevel.h \
-		$(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_font.c
-gl_hardw.o: ../win/gl/gl_hardw.c $(HACK_H) $(INCL)/patchlevel.h \
-		$(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_hardw.c
-gl_image.o: ../win/gl/gl_image.c $(HACK_H) $(INCL)/patchlevel.h \
-		$(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_image.c
-gl_main.o: ../win/gl/gl_main.c $(HACK_H) $(INCL)/dlb.h \
-		$(INCL)/patchlevel.h $(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_main.c
-gl_map.o: ../win/gl/gl_map.c $(HACK_H) $(INCL)/patchlevel.h \
-		$(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_map.c
-gl_menu.o: ../win/gl/gl_menu.c $(HACK_H) $(INCL)/dlb.h \
-		$(INCL)/patchlevel.h $(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_menu.c
-gl_opt.o: ../win/gl/gl_opt.c $(HACK_H) $(INCL)/dlb.h \
-		$(INCL)/patchlevel.h $(INCL)/date.h $(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_opt.c
-gl_role.o: ../win/gl/gl_role.c $(HACK_H) $(INCL)/dlb.h \
-		$(INCL)/patchlevel.h $(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_role.c
-gl_rendu.o: ../win/gl/gl_rendu.c $(HACK_H) $(INCL)/patchlevel.h \
-		$(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_rendu.c
-gl_softw.o: ../win/gl/gl_softw.c $(HACK_H) $(INCL)/patchlevel.h \
-		$(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_softw.c
-gl_stat.o: ../win/gl/gl_stat.c $(HACK_H) $(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_stat.c
-gl_text.o: ../win/gl/gl_text.c $(HACK_H) $(INCL)/dlb.h \
-		$(INCL)/patchlevel.h $(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_text.c
-gl_tile.o: ../win/gl/gl_tile.c $(HACK_H) $(INCL)/patchlevel.h \
-		$(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_tile.c
-gl_unit.o: ../win/gl/gl_unit.c $(HACK_H) $(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_unit.c
-gl_win.o: ../win/gl/gl_win.c $(HACK_H) $(INCL)/dlb.h \
-		$(INCL)/patchlevel.h $(INCL)/winGL.h
-	$(CCOMPILE) $(CFLAGS) $(SDLGL_CFLAGS) -o$@ ../win/gl/gl_win.c
 tile.o: tile.c $(HACK_H)
 monstr.o: monstr.c $(CONFIG_H)
 vis_tab.o: vis_tab.c $(CONFIG_H) $(INCL)/vis_tab.h

@@ -43,10 +43,6 @@ extern void nethack_exit(int);
 extern boolean getreturn_enabled;	/* from sys/share/pcsys.c */
 #endif
 
-#if defined(MSWIN_GRAPHICS)
-extern void mswin_destroy_reg(void);
-#endif
-
 #ifdef EXEPATH
 static char *exepath(char *);
 #endif
@@ -59,7 +55,6 @@ extern void pcmain(int,char **);
  * to help MinGW decide which entry point to choose. If both main and
  * WinMain exist, the resulting executable won't work correctly.
  */
-#ifndef MSWIN_GRAPHICS
 int
 main(argc,argv)
 int argc;
@@ -74,7 +69,6 @@ char *argv[];
      /*NOTREACHED*/
      return 0;
 }
-#endif /*MSWIN_GRAPHICS*/
 
 void
 pcmain(argc,argv)
@@ -179,12 +173,6 @@ char *argv[];
 			nethack_exit(EXIT_SUCCESS);
 		}
 
-#ifdef MSWIN_GRAPHICS
-		if (!strncmpi(argv[1], "-clearreg", 6)) {	/* clear registry */
-			mswin_destroy_reg();
-			nethack_exit(EXIT_SUCCESS);
-		}
-#endif
 		/* Don't initialize the window system just to print usage */
                 /* WAC '--help' inits help */
 		if (!strncmp(argv[1], "-?", 2)

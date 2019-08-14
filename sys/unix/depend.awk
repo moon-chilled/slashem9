@@ -40,10 +40,7 @@ FNR == 1	{ output_dep()			#finish previous file
 		  incl = $2;
 		  #[3.4.0: gnomehack headers currently aren't in include]
 		  if (incl ~ /\.h$/) {
-		    if (incl ~ /^gn/)	# gnomehack special case
-		      incl = "../win/gnome/" incl
-		    else
-		      incl = "../include/" incl
+		    incl = "../include/" incl
 		  }
 		  deps[file] = deps[file] " " incl
 		}
@@ -116,8 +113,6 @@ function format_dep(target, source,		n, i, list)
       print "\t$(CXX) $(CXXFLAGS) -c " source
     else if (source ~ /^..\/win\/proxy\// )
       print "\t$(CC) $(CFLAGS) $(WINPROXYCFLAGS) -c " source
-    else if (source ~ /^..\/win\/gl\// )
-      print "\t$(CC) $(CFLAGS) $(SDLGL_CFLAGS) -c " source
     else
       print "\t$(CC) $(CFLAGS) -c " source
   }

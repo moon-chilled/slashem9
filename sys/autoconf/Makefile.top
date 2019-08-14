@@ -56,45 +56,13 @@ FILE_AREA_BONES = $(FILE_AREA_VAR)
 FILE_AREA_LEVL = $(FILE_AREA_VAR)
 SHELLDIR = $(PREFIX)/bin
 
-# Defs. compatible with Linux's FSSTND 1.2
-# FILE_AREA_VAR = /var/lib/games/slashem
-# FILE_AREA_SAVE = /var/lib/games/slashem/save
-# FILE_AREA_SHARE = /usr/lib/games/slashem
-# FILE_AREA_UNSHARE = /usr/lib/games/slashem
-# FILE_AREA_DOC = /usr/doc/slashem
-# FILE_AREA_BONES = $(FILE_AREA_VAR)
-# FILE_AREA_LEVL = $(FILE_AREA_VAR)
-# SHELLDIR = /usr/games
-
-# Defs. compatible with FHS 2.0
-# FILE_AREA_VAR = /var/games/slashem
-# FILE_AREA_SAVE = /var/games/slashem/save
-# FILE_AREA_SHARE = /usr/share/games/slashem
-# FILE_AREA_UNSHARE = /usr/lib/games/slashem
-# FILE_AREA_DOC = /usr/share/doc/slashem
-# FILE_AREA_BONES = $(FILE_AREA_VAR)
-# FILE_AREA_LEVL = $(FILE_AREA_VAR)
-# SHELLDIR = /usr/games
-
-# KDEDIR = /opt/kde
-# SHELLDIR = $(KDEDIR)/bin
-
 # Shareable (architecture independent) data files which are not candidates
-# for inclusion in DLB libraries (ND) and which are (D). Port specific files
-# per discussions in Install.X11 and Install.Qt
-CNF_SHARE_QTND = x11tiles rip.xpm nhsplash.xpm
-CNF_SHARE_X11ND = x11bigtiles x11tiles SlashEM.ad pet_mark.xbm
-# CNF_SHARE_X11ND = x11bigtiles x11tiles SlashEM.ad pet_mark.xbm rip.xpm
-# for SDL/GL window port
-CNF_SHARE_GLND = gltile16.png gltile32.png gltile64.png gllogo.png glrip.png \
-                 glfont8.png glfont14.png glfont20.png glfont22.png
+# for inclusion in DLB libraries (ND) and which are (D).
+
 # for Proxy
 CNF_SHARE_PROXYND = gltile64.png gltile32.png gltile16.png \
 	gltile64.map gltile32.map gltile16.map
 
-# CNF_SHARE_DATND = $(CNF_SHARE_X11ND)
-# CNF_SHARE_DATND = $(CNF_SHARE_QTND)
-# CNF_SHARE_DATND = $(CNF_SHARE_GLND)
 # CNF_SHARE_DATND = $(CNF_SHARE_PROXYND)
 CNF_SHARE_DATND = @CNF_SHARE_DATND@
 
@@ -281,7 +249,6 @@ dofiles:
 	@HOST_MSWIN@cp $(srcdir)/sys/winnt/defaults.nh $(FILE_AREA_UNSHARE)
 	cp util/recover$(EXEEXT) $(FILE_AREA_UNSHARE)
 	cp $(srcdir)/dat/license $(srcdir)/doc/Guidebook.txt $(FILE_AREA_DOC)
-#	cp win/Qt/KDE/kslashem.kdelnk $(KDEDIR)/share/applnk/Games
 	@HOST_UNIX@-rm -f $(SHELLDIR)/$(SCRIPT)
 	@HOST_UNIX@sed -e 's;/usr/games/lib/nethackdir;$(FILE_AREA_UNSHARE);' \
 	@HOST_UNIX@	-e 's;HACKDIR/nethack;HACKDIR/$(GAME);' \

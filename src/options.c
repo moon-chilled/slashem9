@@ -6,10 +6,6 @@
 #include "tcap.h"
 #include <ctype.h>
 
-#if defined(GL_GRAPHICS) || defined(SDL_GRAPHICS)
-#include "winGL.h"  /* Sdlgl_parse_options */
-#endif
-
 #include "filename.h"
 
 #define WINTYPELEN 16
@@ -648,15 +644,6 @@ initoptions (void)
 	/* as a named (or default) fruit.  Wishing for "fruit" will	*/
 	/* result in the player's preferred fruit [better than "\033"].	*/
 	obj_descr[SLIME_MOLD].oc_name = "fruit";
-
-#if defined(GL_GRAPHICS) || defined(SDL_GRAPHICS)
-	/* -AJA- SDL/GL support.  Needs to happen after main config
-	 *       file has been read.
-	 */
-	opts = getenv(SDLGL_ENV_VAR);
-	if (opts)
-		Sdlgl_parse_options(opts, true, false);
-#endif
 
 	if (flags.lit_corridor && iflags.use_color) {
 		showsyms[S_darkroom]=showsyms[S_room];

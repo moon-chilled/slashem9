@@ -23,9 +23,6 @@ OPTIONS=tiles:Big tiles
 # Use the IBM character set rather than just plain ascii characters
 # for tty window-port.
 #
-# This also works for the curses interface compiled with the PDCurses-SDL
-# library.
-#
 OPTIONS=IBMGraphics
 #
 # cursesgraphics may be set for the curses interface if the IBMGraphics

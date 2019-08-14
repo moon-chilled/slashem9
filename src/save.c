@@ -947,7 +947,7 @@ free_status_colors()
 void
 free_dungeons()
 {
-#if defined(FREE_ALL_MEMORY) || defined(GTK_GRAPHICS) || defined(PROXY_GRAPHICS)
+#if defined(FREE_ALL_MEMORY) || defined(PROXY_GRAPHICS)
 	savelevchn(0, FREE_SAVE);
 	save_dungeon(0, false, true);
 #endif

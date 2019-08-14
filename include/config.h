@@ -35,17 +35,13 @@
  */
 #define TTY_GRAPHICS		/* good old tty based graphics */
 #define CURSES_GRAPHICS		/* awful curses interface */
-/* #define KDE */		/* KDE Interface */
 /* #define PROXY_GRAPHICS */	/* Plug-in interfaces */
-/* #define MSWIN_GRAPHICS */	/* Windows NT, CE, Graphics */
-/* #define GL_GRAPHICS */	/* OpenGL graphics */
-/* #define SDL_GRAPHICS */	/* Software SDL graphics */
 
 /*
  * Define the default window system.  This should be one that is compiled
  * into your system (see defines above).  Known window systems are:
  *
- *	tty, mac, Gnome, gtk, proxy, GL, SDL
+ *	tty, curses, proxy
  */
 
 /* MAC also means MAC windows */
@@ -69,34 +65,6 @@
  * This will cause it to always be initialized with undesirable side
  * effects. Instead, use the windowtype option.  --ALI
  */
-#endif
-
-#ifdef MSWIN_GRAPHICS
-# ifndef DEFAULT_WINDOW_SYS
-#  define DEFAULT_WINDOW_SYS "mswin"
-# endif
-# define HACKDIR "\\nethack"
-#endif
-
-#ifdef GL_GRAPHICS
-# ifndef DEFAULT_WINDOW_SYS
-#  define DEFAULT_WINDOW_SYS "GL"
-# endif
-#endif
-
-#ifdef SDL_GRAPHICS
-# ifndef DEFAULT_WINDOW_SYS
-#  define DEFAULT_WINDOW_SYS "SDL"
-# endif
-#endif
-
-#if defined(GL_GRAPHICS) || defined(SDL_GRAPHICS)
-# define GRAPHIC_TOMBSTONE     /* Use graphical tombstone */
-/* -AJA- workaround for clash with ZLIB headers */
-# if defined(VANILLA_GLHACK)
-#  define compress    nh_compress
-#  define uncompress  nh_uncompress
-# endif
 #endif
 
 #ifdef CURSES_GRAPHICS

@@ -46,11 +46,10 @@
 #endif
 #if defined(AUTOCONF)
 #define NH_OPTIONS_USED	"options"
-#elif defined(MSWIN_GRAPHICS) || defined(GTK_GRAPHICS)
-#define NH_OPTIONS_USED	"guioptions"
 #else
 #define NH_OPTIONS_USED	"ttyoptions"
 #endif
+
 #define NH_OPTIONS_FILE NH_OPTIONS_USED
 
 #define PORT_HELP	"porthelp"

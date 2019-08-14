@@ -296,19 +296,7 @@ struct authentication authentication = { "", "" };
 struct tileset tilesets[MAXNOTILESETS];
 int no_tilesets = 0;
 struct tileset def_tilesets[] = {
-#if defined(GTK_GRAPHICS) || defined(GL_GRAPHICS) || defined(SDL_GRAPHICS)
-    { "Small tiles", "x11tiles", 0 },
-    { "Big tiles", "x11bigtiles", TILESET_TRANSPARENT },
-#endif
-#if defined(GTK_GRAPHICS)
-    { "Big 3D tiles", "x11big3dtiles", TILESET_TRANSPARENT | TILESET_PSEUDO3D },
-#endif
-#if defined(ALLEG_FX)
-    { "Small tiles", "slam16.bmp", 0 },
-    { "Big tiles", "slam32.bmp", TILESET_TRANSPARENT },
-    { "Big 3D tiles", "slam3D.bmp", TILESET_TRANSPARENT | TILESET_PSEUDO3D },
-#endif
-    { "", "", 0, }
+    {"", "", 0,}
 };
 
 char tileset[PL_PSIZ] = DUMMY;

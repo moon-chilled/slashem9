@@ -9,34 +9,10 @@
 #ifdef CURSES_GRAPHICS
 extern struct window_procs curses_procs;
 #endif
-#ifdef GTK_GRAPHICS
-/*
- * GTK interface (By issei@guru.gr.jp)
- */
-extern struct window_procs GTK_procs;
-extern void win_GTK_init(void);
-#endif
-#ifdef MAC
-extern struct window_procs mac_procs;
-#endif
-#ifdef WIN32_GRAPHICS
-extern struct window_procs win32_procs;
-#endif
-#ifdef GL_GRAPHICS
-#include "winGL.h"
-extern struct window_procs sdlgl_hardw_procs;
-#endif
-#ifdef SDL_GRAPHICS
-#include "winGL.h"
-extern struct window_procs sdlgl_softw_procs;
-#endif
 #ifdef PROXY_GRAPHICS
 #include "winproxy.h"
 extern struct window_procs proxy_procs;
 extern void win_proxy_init(void);
-#endif
-#ifdef MSWIN_GRAPHICS
-extern struct window_procs mswin_procs;
 #endif
 
 static void def_raw_print(const char *s);
@@ -54,26 +30,8 @@ struct win_choices {
 #ifdef CURSES_GRAPHICS
     { &curses_procs, 0 },
 #endif
-#ifdef GTK_GRAPHICS
-    { &GTK_procs, win_GTK_init },
-#endif
-#ifdef MAC
-    { &mac_procs, 0 },
-#endif
-#ifdef WIN32_GRAPHICS
-    { &win32_procs, 0 },
-#endif
-#ifdef GL_GRAPHICS
-    { &sdlgl_hardw_procs, 0 },
-#endif
-#ifdef SDL_GRAPHICS
-    { &sdlgl_softw_procs, 0 },
-#endif
 #ifdef PROXY_GRAPHICS
     { &proxy_procs, win_proxy_init },
-#endif
-#ifdef MSWIN_GRAPHICS
-    { &mswin_procs, 0 },
 #endif
     { 0, 0 }		/* must be last */
 };

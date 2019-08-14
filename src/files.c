@@ -13,10 +13,6 @@
 #include "wintty.h" /* more() */
 #endif
 
-#if defined(GL_GRAPHICS) || defined(SDL_GRAPHICS)
-#include "winGL.h"  /* Sdlgl_parse_options */
-#endif
-
 #ifdef PROXY_GRAPHICS
 #include "winproxy.h" /* proxy_config_open() */
 #endif
@@ -1450,10 +1446,6 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 		sounddir = (char *)strdup(bufp);
 	} else if (match_varname(buf, "SOUND", 5)) {
 		add_sound_mapping(bufp);
-#endif
-#if defined(GL_GRAPHICS) || defined(SDL_GRAPHICS)
-	} else if (match_varname(buf, "GL_OPTIONS", 10)) {
-		Sdlgl_parse_options(bufp, true, true);
 #endif
 	} else
 		return 0;

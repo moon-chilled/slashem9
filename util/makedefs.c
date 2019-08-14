@@ -706,11 +706,6 @@ static const char *build_opts[] = {
 # ifdef ALLEG_FX
 		"screen control via Allegro library",
 # endif
-# ifndef MSWIN_GRAPHICS
-#  ifdef WIN32CON
-		"screen control via WIN32 console I/O",
-#  endif
-# endif
 #endif
 #ifdef SHELL
 		"shell command",
@@ -760,25 +755,6 @@ static const char *window_opts[] = {
 #endif
 #ifdef CURSES_GRAPHICS
 	        "curses",
-#endif
-#ifdef GTK_GRAPHICS
-#ifdef GTK_PROXY
-		"proxified GTK",
-#else
-		"GTK",
-#endif
-#endif
-#ifdef GL_GRAPHICS
-		"GL",
-#endif
-#ifdef SDL_GRAPHICS
-		"SDL",
-#endif
-#ifdef MAC
-		"Mac",
-#endif
-#ifdef MSWIN_GRAPHICS
-		"mswin",
 #endif
 #ifdef PROXY_GRAPHICS
 		"Plug-in modules",

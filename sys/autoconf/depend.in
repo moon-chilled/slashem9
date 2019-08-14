@@ -36,15 +36,7 @@ FNR == 1	{ output_dep()			#finish previous file
 		}
 /^\#[ \t]*include[ \t]+\"/  {			#find `#include "X"'
 		  incl = $2;
-		  #[3.4.0: gnomehack headers currently aren't in include]
-		  #[0.0.8: win32 headers aren't in include either]
 		  if (incl ~ /\.h$/) {
-		    if (incl ~ /^gn/)	# gnomehack special case
-		      incl = "../win/gnome/" incl
-		    else if (incl == "winMS.h" || incl == "resource.h" ||
-			incl ~ /^mh/)	# win32 special cases
-		      incl = "../win/win32/" incl
-		    else
 		      incl = "../include/" incl
 		  }
 		  deps[file] = deps[file] " " incl
@@ -120,10 +112,6 @@ function format_dep(target, source,		n, i, list)
       print "\t$(CXX) $(CXXFLAGS) -c " source
     else if (source ~ /..\/win\/proxy\// )
       print "\t$(CC) $(CFLAGS) $(WINPROXYCFLAGS) -c " source
-    else if (source ~ /..\/win\/win32\// )
-      print "\t$(CC) $(CFLAGS) $(WINMSCFLAGS) -c " source
-    else if (source ~ /..\/win\/gl\// )
-      print "\t$(CC) $(CFLAGS) $(SDLGL_CFLAGS) -c " source
     else
       print "\t$(CC) $(CFLAGS) -c " source
   }

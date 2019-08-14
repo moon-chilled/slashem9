@@ -303,12 +303,11 @@ static int doborgtoggle(void) {
 }
 #endif
 
-#if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS) || defined(GL_GRAPHICS) || defined(SDL_GRAPHICS)
+#if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS)
 #define MAX_EXT_CMD 200		/* Change if we ever have more ext cmds */
 /*
  * This is currently used only by the tty port and is
  * controlled via runtime option 'extmenu'
- * -AJA- The SDL/GL window systems use it too.
  */
 
 // here after # - now show pick-list of possible commands
