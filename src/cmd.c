@@ -2850,7 +2850,7 @@ static void add_debug_extended_commands(void) {
 	int i, j, k, n;
 
 	/* count the # of help entries */
-	for (n = 0; extcmdlist[n].ef_txt[0]; n++)
+	for (n = 0; extcmdlist[n].ef_txt; n++)
 	    ;
 	n--; // n is index of the last entry
 
