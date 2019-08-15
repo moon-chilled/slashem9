@@ -2832,7 +2832,7 @@ static void change_bind_list(void) {
 		free(binding);
 	}
 }
-		
+
 /* mapping a key to itself should cause an infinite loop... */
 static void verify_key_list(void) {
 	// TODO
@@ -2903,7 +2903,7 @@ dokeylist(void)
 	putstr(datawin, 0, "");
 	putstr(datawin, 0, "            Full Current Key Bindings List");
 	putstr(datawin, 0, "");
-	
+
 	/* directional keys */
 	if (iflags.num_pad) dir_keys = ndir;
 	else dir_keys = sdir;
@@ -3237,7 +3237,7 @@ commands_init(void)
 	int count = 0;
 
 	while(extcmdlist[count].ef_txt) count++;
-		
+
 	qsort(extcmdlist, count, sizeof(struct ext_func_tab),
 	      &compare_commands);
 
@@ -3320,7 +3320,7 @@ char *key2txt(char c, char* txt /* sufficiently long buffer */) {
 /* returns the text for a string of one-byte encodings */
 char *str2txt(char* s, char* txt) {
 	char* buf = txt;
-	
+
 	while (*s) {
 		key2txt(*s, buf);
 		buf = eos(buf);
@@ -3371,7 +3371,7 @@ parsebindings(bindings)
 		wait_synch();
 		return;
 	}
-	
+
 	/* JDS: crappy hack because wizard mode information
 	 * isn't read until _after_ key bindings are read,
 	 * and to change this would cause numerous side effects.
@@ -3390,7 +3390,7 @@ parsebindings(bindings)
 void parseautocomplete(char* autocomplete, boolean condition) {
 	char *autoc;
 	int i;
-	
+
 	/* break off first autocomplete from the rest; parse the rest */
 	if ((autoc = index(autocomplete, ','))
 	    || (autoc = index(autocomplete, ':'))) {
@@ -3400,7 +3400,7 @@ void parseautocomplete(char* autocomplete, boolean condition) {
 
 	/* strip leading and trailing white space */
 	autocomplete = stripspace(autocomplete);
-	
+
 	if (!*autocomplete) return;
 
 	/* take off negations */
@@ -3587,6 +3587,14 @@ void rhack(char *cmd) {
 		flags.move = false;
 		multi = 0;
 	} else {
+		if (*cmd == CMD_TRAVEL && iflags.travelcmd) {
+			flags.travel = 1;
+			iflags.travel1 = 1;
+			flags.run = 8;
+			flags.nopick = 1;
+			do_rush = true;
+		}
+
 		if (movecmd(*cmd)) {        /* ordinary movement */
 			do_walk = true;
 		} else if (movecmd(iflags.num_pad ?
@@ -3655,8 +3663,7 @@ void rhack(char *cmd) {
 			char* mapping = keytab->map_list;
 			pline("Mapping char %s.", key2txt(*cmd, buf));
 			while (*mapping) {
-				pline("Mapping to %s.",
-						key2txt(*mapping, buf));
+				pline("Mapping to %s.", key2txt(*mapping, buf));
 				addchar(*mapping);
 				mapping++;
 			}

@@ -1160,17 +1160,17 @@ get_uchar_list(buf, list, size)
 
     while (1) { /* one loop for each uchar */
 	if (cnt == size) return cnt;
-	
+
 	/* take off leading whiltespace */
 	while (isspace(*buf)) buf++;
 	if (!*buf) return cnt;
-	
+
 	/* strip trailing whitespace / other uchars */
 	next = buf;
 	while(*next && !isspace(*next)) next++;
 	orig = *next;
 	*next = 0;
-	
+
 	/* interpret the character */
 	mkey = (uchar)txt2key(buf);
 	if (!mkey) {
@@ -1179,7 +1179,7 @@ get_uchar_list(buf, list, size)
 	}
 	list[cnt] = mkey;
 	cnt++;
-	
+
 	/* prepare for the next uchar */
 	*next = orig;
 	buf = next;
