@@ -458,19 +458,18 @@ bot2str(char *newbot2) {
 	strcat(nb = eos(nb), " Pw:");
 	curs(WIN_STATUS, 1, 1);
 	putstr(WIN_STATUS, 0, newbot2);
-
 	sprintf(nb = eos(nb), "%d(%d)", u.uen, u.uenmax);
 	apply_color_option(percentage_color_of(u.uen, u.uenmax, pw_colors), newbot2, 2);
 
-	sprintf(nb = eos(nb), " AC:%-2d", u.uac);
+	sprintf(nb = eos(nb), " AC:%d", u.uac);
 
 	if (Upolyd)
-		sprintf(nb = eos(nb), "HD:%d", ((u.ulycn == u.umonnum) ?
+		sprintf(nb = eos(nb), " HD:%d", ((u.ulycn == u.umonnum) ?
 						u.ulevel : mons[u.umonnum].mlevel));
 	else if (flags.showexp && bot2_abbrev < 3)
-		sprintf(nb = eos(nb), "Xp:%u/%-1ld", u.ulevel,u.uexp);
+		sprintf(nb = eos(nb), " Xp:%u/%-1ld", u.ulevel,u.uexp);
 	else
-		sprintf(nb = eos(nb), "Exp:%u", u.ulevel);
+		sprintf(nb = eos(nb), " Exp:%u", u.ulevel);
 
 	if (flags.showweight && bot2_abbrev < 3)
 		sprintf(nb = eos(nb), " Wt:%ld/%ld", (long)(inv_weight()+weight_cap()),
