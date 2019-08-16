@@ -1,5 +1,7 @@
 /* vim:set cin ft=c sw=4 sts=4 ts=8 et ai cino=Ls\:0t0(0 : -*- mode:c;fill-column:80;tab-width:8;c-basic-offset:4;indent-tabs-mode:nil;c-file-style:"k&r" -*-*/
 
+#include <locale.h>
+
 #include "curses.h"
 #include "hack.h"
 #include "patchlevel.h"
@@ -84,9 +86,8 @@ init_nhwindows(int* argcp, char** argv)
                 ** Why not have init_nhwindows() create all of the "standard"
                 ** windows?  Or at least all but WIN_INFO?      -dean
 */
-void
-curses_init_nhwindows(int *argcp, char **argv)
-{
+void curses_init_nhwindows(int *argcp, char **argv) {
+    setlocale(LC_ALL, "");
 #ifdef PDCURSES
     char window_title[BUFSZ];
 #endif

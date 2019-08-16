@@ -1,5 +1,6 @@
 /* vim:set cin ft=c sw=4 sts=4 ts=8 et ai cino=Ls\:0t0(0 : -*- mode:c;fill-column:80;tab-width:8;c-basic-offset:4;indent-tabs-mode:nil;c-file-style:"k&r" -*-*/
 
+#define NCURSES_WIDECHAR 1
 #include "curses.h"
 #include "hack.h"
 #include "wincurs.h"
@@ -27,7 +28,7 @@ typedef struct nhwd {
 } nethack_wid;
 
 typedef struct nhchar {
-    int ch;                     /* character */
+    glyph_t ch;                 /* character */
     int color;                  /* color info for character */
     int attr;                   /* attributes of character */
 } nethack_char;
@@ -560,16 +561,13 @@ is_main_window(winid wid)
 
 /* Unconditionally write a single character to a window at the given
 coordinates without a refresh.  Currently only used for the map. */
-
-static void
-write_char(WINDOW * win, int x, int y, nethack_char nch)
-{
+static void write_char(WINDOW * win, int x, int y, nethack_char nch) {
     curses_toggle_color_attr(win, nch.color, nch.attr, ON);
-#ifdef PDCURSES
-    mvwaddrawch(win, y, x, nch.ch);
-#else
-    mvwaddch(win, y, x, nch.ch);
-#endif
+
+    cchar_t ch = {0};
+    ch.chars[0] = nch.ch;
+    mvwadd_wch(win, y, x, &ch);
+
     curses_toggle_color_attr(win, nch.color, nch.attr, OFF);
 }
 
