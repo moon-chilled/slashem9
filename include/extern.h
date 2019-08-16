@@ -7,9 +7,9 @@
 
 /* ### alloc.c ### */
 
-#if 0
 extern void *alloc(size_t);
-#endif
+extern void nhfree(const void*);
+#define free nhfree
 extern char *fmt_ptr(const void*,char *);
 
 /* This next pre-processor directive covers almost the entire file,
@@ -708,6 +708,10 @@ extern void gypsy_chat(struct monst *);
 
 /* ### hack.c ### */
 
+extern anything int_to_any(int);
+extern anything uint_to_any(uint);
+extern anything monst_to_any(struct monst*);
+extern anything obj_to_any(struct obj*);
 #ifdef DUNGEON_GROWTH
 extern void catchup_dgn_growths(int);
 extern void dgn_growths(boolean,boolean);
@@ -871,7 +875,7 @@ extern int dosuspend(void);
 /* ### light.c ### */
 
 extern void new_light_source(xchar, xchar, int, int, void *);
-extern void del_light_source(int, void *);
+extern void del_light_source(int, anything);
 extern void do_light_sources(char **);
 extern struct monst *find_mid(unsigned, unsigned);
 extern void save_light_sources(int, int, int);
@@ -1410,6 +1414,9 @@ extern const char *mimic_obj_name(struct monst *);
 
 extern boolean match_optname(const char *,const char *,int,boolean);
 extern void initoptions(void);
+extern bool parse_monster_symbol(const char*);
+extern bool parse_object_symbol(const char*);
+extern bool parse_symbol(const char*);
 extern void parseoptions(char *,boolean,boolean);
 extern void parsetileset(char *);
 extern int doset(void);
@@ -2001,8 +2008,8 @@ extern void end_burn(struct obj *, boolean);
 extern void burn_faster(struct obj *, long);
 extern void lightsaber_deactivate(struct obj *, boolean);
 extern void do_storms(void);
-extern boolean start_timer(long, short, short, void *);
-extern long stop_timer(short, void *);
+extern boolean start_timer(long, short, short, anything);
+extern long stop_timer(short, anything);
 extern void run_timers(void);
 extern void obj_move_timers(struct obj *, struct obj *);
 extern void obj_split_timers(struct obj *, struct obj *);

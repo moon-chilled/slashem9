@@ -101,12 +101,6 @@ extern void srand48(long);
 # ifndef MICRO
 extern void exit(int);
 # endif /* MICRO */
-/* If flex thinks that we're not __STDC__ it declares free() to return
-   int and we die.  We must use __STDC__ instead of NHSTDC because
-   the former is naturally what flex tests for. */
-# if defined(__STDC__) || !defined(FLEX_SCANNER)
-extern void free(void *);
-# endif
 #if !defined(__SASC_60) && !defined(__SC__)
 #  if !(defined(ULTRIX_PROTO) && defined(__GNUC__))
 extern void perror(const char *);

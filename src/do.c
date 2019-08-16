@@ -1535,18 +1535,17 @@ boolean revive_corpse(struct obj *corpse, boolean moldy) {
 
 /* Revive the corpse via a timeout. */
 /*ARGSUSED*/
-void revive_mon(void * arg, long timeout) {
+void revive_mon(void *arg, long timeout) {
 #if defined(MAC_MPW)
 # pragma unused ( timeout )
 #endif
-    struct obj *body = (struct obj *) arg;
+    struct obj *body = arg;
 
     /* if we succeed, the corpse is gone, otherwise, rot it away */
     if (!revive_corpse(body, false)) {
 	if (is_rider(&mons[body->corpsenm]))
 	    You_feel("less hassled.");
-	start_timer(250L - (monstermoves-body->age),
-					TIMER_OBJECT, ROT_CORPSE, arg);
+	start_timer(250 - (monstermoves-body->age), TIMER_OBJECT, ROT_CORPSE, obj_to_any(body));
     }
 }
 
@@ -1619,8 +1618,7 @@ void moldy_corpse(void * arg, long timeout) {
     	body->corpsenm = oldtyp; /* Fixup corpse after (attempted) revival */
 	body->onamelth = oldnamelth;
 	body->owt = weight(body);
-	(void) start_timer(250L - (monstermoves-peek_at_iced_corpse_age(body)),
-					TIMER_OBJECT, ROT_CORPSE, arg);
+	start_timer(250L - (monstermoves-peek_at_iced_corpse_age(body)), TIMER_OBJECT, ROT_CORPSE, obj_to_any(body));
     }
 }
 

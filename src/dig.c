@@ -1363,8 +1363,7 @@ struct obj *bury_an_obj(struct obj *otmp) {
 	    ;		/* should cancel timer if under_ice */
 	} else if ((under_ice ? otmp->oclass == POTION_CLASS : is_organic(otmp))
 		&& !obj_resists(otmp, 5, 95)) {
-	    (void) start_timer((under_ice ? 0L : 250L) + (long)rnd(250),
-			       TIMER_OBJECT, ROT_ORGANIC, (void *)otmp);
+		start_timer((under_ice ? 0L : 250L) + rnd(250), TIMER_OBJECT, ROT_ORGANIC, obj_to_any(otmp));
 	}
 	add_to_buried(otmp);
 	return(otmp2);
@@ -1397,7 +1396,7 @@ void unearth_objs(int x, int y) {
 		if (otmp->ox == x && otmp->oy == y) {
 		    obj_extract_self(otmp);
 		    if (otmp->timed)
-			(void) stop_timer(ROT_ORGANIC, (void *)otmp);
+			(void) stop_timer(ROT_ORGANIC, obj_to_any(otmp));
 		    place_object(otmp, x, y);
 		    stackobj(otmp);
 		}

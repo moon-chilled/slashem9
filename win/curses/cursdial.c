@@ -6,6 +6,7 @@
 #include "cursdial.h"
 #include "func_tab.h"
 #include <ctype.h>
+#include <strings.h>
 
 /* Dialog windows for curses interface */
 
@@ -913,7 +914,8 @@ static void
 menu_display_page(nhmenu *menu, WINDOW * win, int page_num)
 {
     nhmenu_item *menu_item_ptr;
-    int count, curletter, entry_cols, start_col, num_lines, footer_x;
+    int count, entry_cols, start_col, num_lines, footer_x;
+    glyph_t curletter;
     boolean first_accel = true;
 
     int color = NO_COLOR;

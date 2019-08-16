@@ -21,6 +21,10 @@ void *alloc(size_t lth) {
 	return ptr;
 }
 
+void nhfree(const void *ptr) {
+	free((void*)ptr);
+}
+
 
 #ifdef WIZARD
 

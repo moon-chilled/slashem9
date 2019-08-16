@@ -11,11 +11,14 @@ typedef int winid;              /* a window identifier */
 typedef union {
     void *a_void;
     struct obj *a_obj;
+    struct monst *a_monst;
     int  a_int;
+    uint a_uint;
     char a_char;
     schar a_schar;
     /* add types as needed */
 } anything;
+#define anything_zero ((anything){0})
 
 /* menu return list */
 typedef struct {

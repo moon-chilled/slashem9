@@ -389,7 +389,7 @@ boolean forcecontrol;
 	new_light = Upolyd ? emits_light(youmonst.data) : 0;
 	if (old_light != new_light) {
 	    if (old_light)
-		del_light_source(LS_MONSTER, (void *)&youmonst);
+		del_light_source(LS_MONSTER, monst_to_any(&youmonst));
 	    if (new_light == 1) ++new_light;  /* otherwise it's undetectable */
 	    if (new_light)
 		new_light_source(u.ux, u.uy, new_light,
@@ -834,7 +834,7 @@ rehumanize (void)
 	}
 
 	if (emits_light(youmonst.data))
-	    del_light_source(LS_MONSTER, (void *)&youmonst);
+	    del_light_source(LS_MONSTER, monst_to_any(&youmonst));
 	polyman("return to %s form!", urace.adj);
 
 	if (u.uhp < 1) {
@@ -1828,7 +1828,7 @@ special_poly (void)
 		new_light = (u.umonnum >= LOW_PM) ? emits_light(youmonst.data) : 0;
 		if (old_light != new_light) {
 		    if (old_light)
-			del_light_source(LS_MONSTER, (void *)&youmonst);
+			del_light_source(LS_MONSTER, monst_to_any(&youmonst));
 		    if (new_light == 1) ++new_light;  /* otherwise it's undetectable */
 		    if (new_light)
 			new_light_source(u.ux, u.uy, new_light,

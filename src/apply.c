@@ -1826,8 +1826,7 @@ void fig_transform(void * arg, long timeout) {
 	if (!okay_spot ||
 	    !figurine_location_checks(figurine,&cc, true)) {
 		/* reset the timer to try again later */
-		(void) start_timer((long)rnd(5000), TIMER_OBJECT,
-				FIG_TRANSFORM, (void *)figurine);
+		start_timer(rnd(5000), TIMER_OBJECT, FIG_TRANSFORM, obj_to_any(figurine));
 		return;
 	}
 
@@ -1945,7 +1944,7 @@ static void use_figurine(struct obj **optr) {
 		"toss the figurine into the air" :
 		"set the figurine on the ground"));
 	(void) make_familiar(obj, cc.x, cc.y, false);
-	(void) stop_timer(FIG_TRANSFORM, (void *)obj);
+	(void) stop_timer(FIG_TRANSFORM, obj_to_any(obj));
 	useup(obj);
 	*optr = 0;
 }

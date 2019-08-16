@@ -17,9 +17,9 @@ static int max_regions = 0;
 
 #define NO_CALLBACK (-1)
 
-boolean inside_gas_cloud(void*,void*);
-boolean expire_gas_cloud(void*,void*);
-boolean revive_cthulhu(void*, void*);
+bool inside_gas_cloud(void*,void*);
+bool expire_gas_cloud(void*,void*);
+bool revive_cthulhu(void*, void*);
 boolean inside_rect(NhRect *,int,int);
 boolean inside_region(NhRegion *,int,int);
 NhRegion *create_region(NhRect *,int);
@@ -133,7 +133,7 @@ int nrect;
     reg->n_monst = 0;
     reg->max_monst = 0;
     reg->monsters = NULL;
-    reg->arg = NULL;
+    reg->arg = anything_zero;
     return reg;
 }
 
@@ -870,70 +870,58 @@ int radius, ttl;
  * Here is an example of an expire function that may prolong
  * region life after some mods...
  */
-boolean
-expire_gas_cloud(p1, p2)
-void * p1;
-void * p2;
-{
-    NhRegion *reg;
-    int damage;
+bool expire_gas_cloud(void * p1, void * p2) {
+	NhRegion *reg;
+	int damage;
 
-    reg = (NhRegion *) p1;
-    damage = (int) reg->arg;
+	reg = (NhRegion *) p1;
+	damage = reg->arg.a_int;
 
-    /* If it was a thick cloud, it dissipates a little first */
-    if (damage >= 5) {
-	damage /= 2;		/* It dissipates, let's do less damage */
-	reg->arg = (void *) damage;
-	reg->ttl = 2;		/* Here's the trick : reset ttl */
-	return false;		/* THEN return false, means "still there" */
-    }
-    return true;		/* OK, it's gone, you can free it! */
-}
-
-boolean
-revive_cthulhu(p1, p2)
-void * p1;
-void * p2;
-{
-    boolean ret = expire_gas_cloud(p1, p2);
-    if (ret) {
-	/* Bring back Cthulhu! */
-	int cx, cy;
-	NhRegion *reg = (NhRegion *) p1;
-	struct monst *cthulhu = NULL;
-	coord cc;
-
-	cx = (reg->bounding_box.lx + reg->bounding_box.hx) / 2;
-	cy = (reg->bounding_box.ly + reg->bounding_box.hy) / 2;
-
-	if (enexto(&cc, cx, cy, &mons[PM_CTHULHU])) {
-	    cx = cc.x;
-	    cy = cc.y;
-	} else {
-	    cx = cy = 0;	/* Place Cthulhu randomly */
+	/* If it was a thick cloud, it dissipates a little first */
+	if (damage >= 5) {
+		damage /= 2;		/* It dissipates, let's do less damage */
+		reg->arg.a_int = damage;
+		reg->ttl = 2;		/* Here's the trick : reset ttl */
+		return false;		/* THEN return false, means "still there" */
 	}
-
-	/* Make sure Cthulhu doesn't get the Amulet again! :-) */
-	cthulhu = makemon(&mons[PM_CTHULHU], cx, cy,
-				MM_NOCOUNTBIRTH | NO_MINVENT);
-	if (cthulhu && canseemon(cthulhu))
-	    pline("%s reforms!", Monnam(cthulhu));
-    }
-    return ret;
+	return true;		/* OK, it's gone, you can free it! */
 }
 
-boolean
-inside_gas_cloud(p1, p2)
-void * p1;
-void * p2;
-{
+bool revive_cthulhu(void *p1, void * p2) {
+	bool ret = expire_gas_cloud(p1, p2);
+	if (ret) {
+		/* Bring back Cthulhu! */
+		int cx, cy;
+		NhRegion *reg = (NhRegion *) p1;
+		struct monst *cthulhu = NULL;
+		coord cc;
+
+		cx = (reg->bounding_box.lx + reg->bounding_box.hx) / 2;
+		cy = (reg->bounding_box.ly + reg->bounding_box.hy) / 2;
+
+		if (enexto(&cc, cx, cy, &mons[PM_CTHULHU])) {
+			cx = cc.x;
+			cy = cc.y;
+		} else {
+			cx = cy = 0;	/* Place Cthulhu randomly */
+		}
+
+		/* Make sure Cthulhu doesn't get the Amulet again! :-) */
+		cthulhu = makemon(&mons[PM_CTHULHU], cx, cy,
+				MM_NOCOUNTBIRTH | NO_MINVENT);
+		if (cthulhu && canseemon(cthulhu))
+			pline("%s reforms!", Monnam(cthulhu));
+	}
+	return ret;
+}
+
+bool inside_gas_cloud(void *p1, void * p2) {
     NhRegion *reg;
     struct monst *mtmp;
     int dam;
 
     reg = (NhRegion *) p1;
-    dam = (int) reg->arg;
+    dam = reg->arg.a_int;
     if (p2 == NULL) {		/* This means *YOU* Bozo! */
 	if (nonliving(youmonst.data) || Breathless)
 	    return false;
@@ -1020,7 +1008,7 @@ int damage;
 	set_heros_fault(cloud);		/* assume player has created it */
     cloud->inside_f = INSIDE_GAS_CLOUD;
     cloud->expire_f = EXPIRE_GAS_CLOUD;
-    cloud->arg = (void *) damage;
+    cloud->arg.a_int = damage;
     cloud->visible = true;
     cloud->glyph = cmap_to_glyph(S_cloud);
     add_region(cloud);

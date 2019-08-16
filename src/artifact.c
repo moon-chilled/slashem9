@@ -295,7 +295,7 @@ void artifact_exists(struct obj *otmp, const char *name, boolean mod) {
 			otmp->quan = 1; /* guarantee only one of this artifact */
 #ifdef UNPOLYPILE	/* Artifacts are immune to unpolypile --ALI */
 			if (is_hazy(otmp)) {
-			    (void) stop_timer(UNPOLY_OBJ, (void *) otmp);
+			    (void) stop_timer(UNPOLY_OBJ, obj_to_any(otmp));
 			    otmp->oldtyp = STRANGE_OBJECT;
 			}
 #endif

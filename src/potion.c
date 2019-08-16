@@ -2163,7 +2163,8 @@ upgrade_obj (struct obj *obj)
  * returns -1 if object exploded (potion should be used up)
  */
 {
-	int chg, otyp = obj->otyp, otyp2;
+	int chg, otyp = obj->otyp;
+	short otyp2;
 	xchar ox, oy;
 	long owornmask;
 	struct obj *otmp;
@@ -2173,7 +2174,7 @@ upgrade_obj (struct obj *obj)
 	/* Check to see if object is valid */
 	if (!obj)
 		return 0;
-	(void)snuff_lit(obj);
+	snuff_lit(obj);
 	if (obj->oartifact)
 		/* WAC -- Could have some funky fx */
 		return 0;
@@ -2547,7 +2548,7 @@ upgrade_obj (struct obj *obj)
 		if (costly_spot(u.ux, u.uy) && objroom == *u.ushops)
 		    bill_dummy_object(obj);
 		else
-		    (void) stolen_value(obj, ox, oy, false, false, false);
+		    stolen_value(obj, ox, oy, false, false, false);
 		obj->otyp = otyp2;
 		obj->cobj = otmp;
 	    }
@@ -2788,7 +2789,7 @@ dodip (void)
 #ifdef UNPOLYPILE
 	} else if (potion->otyp == POT_RESTORE_ABILITY && is_hazy(obj)) {
 		/* KMH -- Restore ability will stop unpolymorphing */
-		stop_timer(UNPOLY_OBJ, (void *) obj);
+		stop_timer(UNPOLY_OBJ, obj_to_any(obj));
 		obj->oldtyp = STRANGE_OBJECT;
 		if (!Blind)
 			pline("%s seems less hazy.", Yname2(obj));

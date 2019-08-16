@@ -565,7 +565,7 @@ void freeinv_core(struct obj *obj) {
 	/* KMH, balance patch -- recalculate health if you've lost healthstones */
 		recalc_health();
 	} else if (obj->otyp == FIGURINE && obj->timed) {
-		stop_timer(FIG_TRANSFORM, (void *) obj);
+		stop_timer(FIG_TRANSFORM, obj_to_any(obj));
 	}
 }
 

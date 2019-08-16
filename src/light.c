@@ -86,28 +86,28 @@ void new_light_source(xchar x, xchar y, int range, int type, void *id) {
  * Delete a light source. This assumes only one light source is attached
  * to an object at a time.
  */
-void del_light_source(int type, void *id) {
+void del_light_source(int type, anything id) {
     light_source *curr, *prev;
-    void *tmp_id;
+    anything tmp_id;
 
     /* need to be prepared for dealing a with light source which
        has only been partially restored during a level change
        (in particular: chameleon vs prot. from shape changers) */
     switch (type) {
     // TODO
-    case LS_OBJECT:	tmp_id = (void *)(((struct obj *)id)->o_id);
+    case LS_OBJECT:	tmp_id.a_uint = id.a_obj->o_id;
 			break;
-    case LS_MONSTER:	tmp_id = (void *)(((struct monst *)id)->m_id);
+    case LS_MONSTER:	tmp_id.a_uint = id.a_monst->m_id;
 			break;
-    case LS_TEMP:       tmp_id = id;
+    case LS_TEMP:       tmp_id.a_uint = id.a_uint;
     			break;
-    default:		tmp_id = 0;
+    default:		tmp_id.a_uint = 0;
 			break;
     }
 
     for (prev = 0, curr = light_base; curr; prev = curr, curr = curr->next) {
 	if (curr->type != type) continue;
-        if (curr->idptr == ((curr->flags & LSF_NEEDS_FIXUP) ? tmp_id : id))
+        if (curr->idptr == ((curr->flags & LSF_NEEDS_FIXUP) ? tmp_id.a_obj : id.a_obj))
           {
 	    if (prev)
 		prev->next = curr->next;
@@ -119,7 +119,7 @@ void del_light_source(int type, void *id) {
 	    return;
 	}
     }
-    impossible("del_light_source: not found type=%d, id=0x%lx", type, (long)id);
+    impossible("del_light_source: not found type=%d, id=0x%p", type, id.a_void);
 }
 
 /* Mark locations that are temporarily lit via mobile light sources. */

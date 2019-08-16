@@ -519,7 +519,7 @@ do_explode(
 #ifdef LIGHT_SRC_SPELL
         /*WAC kill the light source*/
         if ((!remote) && ((adtyp == AD_FIRE) || (adtyp == AD_ELEC))) {
-            del_light_source(LS_TEMP, (void *) 1);
+            del_light_source(LS_TEMP, uint_to_any(1));
 	}
 #endif
 

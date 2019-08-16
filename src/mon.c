@@ -1422,12 +1422,11 @@ replmon (struct monst *mtmp, struct monst *mtmp2)
 			 emits_light(mtmp2->data),
 			 LS_MONSTER, (void *)mtmp2);
 	/* here we rely on the fact that `mtmp' hasn't actually been deleted */
-	del_light_source(LS_MONSTER, (void *)mtmp);
+	del_light_source(LS_MONSTER, monst_to_any(mtmp));
     }
     /* If poly'ed,  move polytimer along */
-    if (unpolytime = stop_timer(UNPOLY_MON, (void *) mtmp)) {
-        (void) start_timer(unpolytime, TIMER_MONSTER, UNPOLY_MON,
-                        (void *) mtmp2);
+    if (unpolytime = stop_timer(UNPOLY_MON, monst_to_any(mtmp))) {
+	    start_timer(unpolytime, TIMER_MONSTER, UNPOLY_MON, monst_to_any(mtmp2));
     }
     mtmp2->nmon = fmon;
     fmon = mtmp2;
@@ -1473,7 +1472,7 @@ struct permonst *mptr;	/* reflects mtmp->data _prior_ to mtmp's death */
 	relobj(mtmp, 0, false);
 	remove_monster(mtmp->mx, mtmp->my);
 	if (emits_light(mptr))
-	    del_light_source(LS_MONSTER, (void *)mtmp);
+	    del_light_source(LS_MONSTER, monst_to_any(mtmp));
 	newsym(mtmp->mx,mtmp->my);
 	unstuck(mtmp);
 	fill_pit(mtmp->mx, mtmp->my);
@@ -1552,7 +1551,7 @@ unpoly_monster (struct monst *mtmp)
 	sprintf(buf, Monnam(mtmp));
 
 	/* If there is a timer == monster was poly'ed */
-	if (stop_timer(UNPOLY_MON, (void *) mtmp)) {
+	if (stop_timer(UNPOLY_MON, monst_to_any(mtmp))) {
 	    /* [ALI] Always treat swallower as visible so that the message
 	     * indicating that the monster hasn't died comes _before_ any
 	     * message about breaking out of the "new" monster.
@@ -1864,7 +1863,7 @@ monstone (struct monst *mdef)
 	if (cansee(x, y)) newsym(x,y);
 	/* We don't currently trap the hero in the statue in this case but we could */
 	if (u.uswallow && u.ustuck == mdef) wasinside = true;
-	(void) stop_timer(UNPOLY_MON, (void *) mdef);
+	(void) stop_timer(UNPOLY_MON, monst_to_any(mdef));
 	mondead(mdef);
 	if (wasinside) {
 		if (is_animal(mdef->data))
@@ -2739,7 +2738,7 @@ boolean msg;
 	    /* used to give light, now doesn't, or vice versa,
 	       or light's range has changed */
 	    if (emits_light(olddata))
-		del_light_source(LS_MONSTER, (void *)mtmp);
+		del_light_source(LS_MONSTER, monst_to_any(mtmp));
 	    if (emits_light(mtmp->data))
 		new_light_source(mtmp->mx, mtmp->my, emits_light(mtmp->data),
 				 LS_MONSTER, (void *)mtmp);

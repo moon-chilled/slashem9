@@ -177,9 +177,9 @@ struct obj *box;
 		 */
 		otmp->age = 0L;
 		if (otmp->timed) {
-		    (void) stop_timer(ROT_CORPSE, (void *)otmp);
-		    (void) stop_timer(MOLDY_CORPSE, (void *)otmp);
-		    (void) stop_timer(REVIVE_MON, (void *)otmp);
+		    (void) stop_timer(ROT_CORPSE, obj_to_any(otmp));
+		    (void) stop_timer(MOLDY_CORPSE, obj_to_any(otmp));
+		    (void) stop_timer(REVIVE_MON, obj_to_any(otmp));
 		}
 	    } else {
 		int tprob;
@@ -731,9 +731,7 @@ boolean artif;
  * Start a corpse decay or revive timer.
  * This takes the age of the corpse into consideration as of 3.4.0.
  */
-void
-start_corpse_timeout (struct obj *body)
-{
+void start_corpse_timeout (struct obj *body) {
 	long when; 		/* rot away when this old */
 	long corpse_age;	/* age of corpse          */
 	int rot_adjust;
@@ -801,7 +799,7 @@ start_corpse_timeout (struct obj *body)
 	}
 
 	if (body->norevive) body->norevive = 0;
-	(void) start_timer(when, TIMER_OBJECT, action, (void *)body);
+	(void) start_timer(when, TIMER_OBJECT, action, obj_to_any(body));
 }
 
 void
@@ -819,7 +817,7 @@ bless (struct obj *otmp)
 	else if (otmp->otyp == BAG_OF_HOLDING)
 	    otmp->owt = weight(otmp);
 	else if (otmp->otyp == FIGURINE && otmp->timed)
-	    (void) stop_timer(FIG_TRANSFORM, (void *) otmp);
+	    (void) stop_timer(FIG_TRANSFORM, obj_to_any(otmp));
 	return;
 }
 
@@ -834,7 +832,7 @@ unbless (struct obj *otmp)
 	else if (otmp->otyp == BAG_OF_HOLDING)
 	    otmp->owt = weight(otmp);
 	else if (otmp->otyp == FIGURINE && otmp->timed)
-	    (void) stop_timer(FIG_TRANSFORM, (void *) otmp);
+	    (void) stop_timer(FIG_TRANSFORM, obj_to_any(otmp));
 	return;
 }
 
@@ -1303,13 +1301,13 @@ int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
 
     /* Check for corpses just placed on or in ice */
     if (otmp->otyp == CORPSE && (on_floor || buried) && is_ice(x,y)) {
-	tleft = stop_timer(action, (void *)otmp);
+	tleft = stop_timer(action, obj_to_any(otmp));
 	if (tleft == 0L) {
 	    action = MOLDY_CORPSE;
-	    tleft = stop_timer(action, (void *)otmp);
+	    tleft = stop_timer(action, obj_to_any(otmp));
 	    if (tleft == 0L) {
 		action = REVIVE_MON;
-		tleft = stop_timer(action, (void *)otmp);
+		tleft = stop_timer(action, obj_to_any(otmp));
 	}
 	}
 	if (tleft != 0L) {
@@ -1333,13 +1331,13 @@ int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
     else if ((force < 0) ||
 	     (otmp->otyp == CORPSE && ON_ICE(otmp) &&
 	     ((on_floor && !is_ice(x,y)) || !on_floor))) {
-	tleft = stop_timer(action, (void *)otmp);
+	tleft = stop_timer(action, obj_to_any(otmp));
 	if (tleft == 0L) {
 	    action = MOLDY_CORPSE;
-	    tleft = stop_timer(action, (void *)otmp);
+	    tleft = stop_timer(action, obj_to_any(otmp));
 	    if (tleft == 0L) {
 		action = REVIVE_MON;
-		tleft = stop_timer(action, (void *)otmp);
+		tleft = stop_timer(action, obj_to_any(otmp));
 	}
 	}
 	if (tleft != 0L) {
@@ -1360,7 +1358,7 @@ int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
     }
     /* now re-start the timer with the appropriate modifications */
     if (restart_timer)
-	(void) start_timer(tleft, TIMER_OBJECT, action, (void *)otmp);
+	(void) start_timer(tleft, TIMER_OBJECT, action, obj_to_any(otmp));
 }
 
 #undef ON_ICE
@@ -1610,127 +1608,123 @@ container_weight(container)
  * Deallocate the object.  _All_ objects should be run through here for
  * them to be deallocated.
  */
-void
-dealloc_obj (struct obj *obj)
-{
-    if (obj->where != OBJ_FREE)
-	panic("dealloc_obj: obj not free");
+void dealloc_obj(struct obj *obj) {
+	if (obj->where != OBJ_FREE)
+		panic("dealloc_obj: obj not free");
 
-    /* free up any timers attached to the object */
-    if (obj->timed)
-	obj_stop_timers(obj);
+	/* free up any timers attached to the object */
+	if (obj->timed)
+		obj_stop_timers(obj);
 
-    /*
-     * Free up any light sources attached to the object.
-     *
-     * We may want to just call del_light_source() without any
-     * checks (requires a code change there).  Otherwise this
-     * list must track all objects that can have a light source
-     * attached to it (and also requires lamplit to be set).
-     */
-    if (obj_sheds_light(obj))
-	del_light_source(LS_OBJECT, (void *) obj);
+	/*
+	 * Free up any light sources attached to the object.
+	 *
+	 * We may want to just call del_light_source() without any
+	 * checks (requires a code change there).  Otherwise this
+	 * list must track all objects that can have a light source
+	 * attached to it (and also requires lamplit to be set).
+	 */
+	if (obj_sheds_light(obj))
+		del_light_source(LS_OBJECT, obj_to_any(obj));
 
-    if (obj == thrownobj) thrownobj = NULL;
+	if (obj == thrownobj) thrownobj = NULL;
 
-    free((void *) obj);
+	free(obj);
 }
 
 #ifdef WIZARD
 /* Check all object lists for consistency. */
-void
-obj_sanity_check (void)
-{
-    int x, y;
-    struct obj *obj;
-    struct monst *mon;
-    const char *mesg;
-    char obj_address[20], mon_address[20];  /* room for formatted pointers */
+void obj_sanity_check(void) {
+	int x, y;
+	struct obj *obj;
+	struct monst *mon;
+	const char *mesg;
+	char obj_address[20], mon_address[20];  /* room for formatted pointers */
 
-    mesg = "fobj sanity";
-    for (obj = fobj; obj; obj = obj->nobj) {
-	if (obj->where != OBJ_FLOOR) {
-	    pline("%s obj %s %s@(%d,%d): %s\n", mesg,
-		fmt_ptr((void *)obj, obj_address),
-		where_name(obj->where),
-		obj->ox, obj->oy, doname(obj));
-	}
-	check_contained(obj, mesg);
-    }
-
-    mesg = "location sanity";
-    for (x = 0; x < COLNO; x++)
-	for (y = 0; y < ROWNO; y++)
-	    for (obj = level.objects[x][y]; obj; obj = obj->nexthere)
+	mesg = "fobj sanity";
+	for (obj = fobj; obj; obj = obj->nobj) {
 		if (obj->where != OBJ_FLOOR) {
-		    pline("%s obj %s %s@(%d,%d): %s\n", mesg,
-			fmt_ptr((void *)obj, obj_address),
-			where_name(obj->where),
-			obj->ox, obj->oy, doname(obj));
+			pline("%s obj %s %s@(%d,%d): %s\n", mesg,
+					fmt_ptr((void *)obj, obj_address),
+					where_name(obj->where),
+					obj->ox, obj->oy, doname(obj));
 		}
+		check_contained(obj, mesg);
+	}
 
-    mesg = "invent sanity";
-    for (obj = invent; obj; obj = obj->nobj) {
-	if (obj->where != OBJ_INVENT) {
-	    pline("%s obj %s %s: %s\n", mesg,
-		fmt_ptr((void *)obj, obj_address),
-		where_name(obj->where), doname(obj));
-	}
-	check_contained(obj, mesg);
-    }
+	mesg = "location sanity";
+	for (x = 0; x < COLNO; x++)
+		for (y = 0; y < ROWNO; y++)
+			for (obj = level.objects[x][y]; obj; obj = obj->nexthere)
+				if (obj->where != OBJ_FLOOR) {
+					pline("%s obj %s %s@(%d,%d): %s\n", mesg,
+							fmt_ptr((void *)obj, obj_address),
+							where_name(obj->where),
+							obj->ox, obj->oy, doname(obj));
+				}
 
-    mesg = "migrating sanity";
-    for (obj = migrating_objs; obj; obj = obj->nobj) {
-	if (obj->where != OBJ_MIGRATING) {
-	    pline("%s obj %s %s: %s\n", mesg,
-		fmt_ptr((void *)obj, obj_address),
-		where_name(obj->where), doname(obj));
+	mesg = "invent sanity";
+	for (obj = invent; obj; obj = obj->nobj) {
+		if (obj->where != OBJ_INVENT) {
+			pline("%s obj %s %s: %s\n", mesg,
+					fmt_ptr((void *)obj, obj_address),
+					where_name(obj->where), doname(obj));
+		}
+		check_contained(obj, mesg);
 	}
-	check_contained(obj, mesg);
-    }
 
-    mesg = "buried sanity";
-    for (obj = level.buriedobjlist; obj; obj = obj->nobj) {
-	if (obj->where != OBJ_BURIED) {
-	    pline("%s obj %s %s: %s\n", mesg,
-		fmt_ptr((void *)obj, obj_address),
-		where_name(obj->where), doname(obj));
+	mesg = "migrating sanity";
+	for (obj = migrating_objs; obj; obj = obj->nobj) {
+		if (obj->where != OBJ_MIGRATING) {
+			pline("%s obj %s %s: %s\n", mesg,
+					fmt_ptr((void *)obj, obj_address),
+					where_name(obj->where), doname(obj));
+		}
+		check_contained(obj, mesg);
 	}
-	check_contained(obj, mesg);
-    }
 
-    mesg = "bill sanity";
-    for (obj = billobjs; obj; obj = obj->nobj) {
-	if (obj->where != OBJ_ONBILL) {
-	    pline("%s obj %s %s: %s\n", mesg,
-		fmt_ptr((void *)obj, obj_address),
-		where_name(obj->where), doname(obj));
+	mesg = "buried sanity";
+	for (obj = level.buriedobjlist; obj; obj = obj->nobj) {
+		if (obj->where != OBJ_BURIED) {
+			pline("%s obj %s %s: %s\n", mesg,
+					fmt_ptr((void *)obj, obj_address),
+					where_name(obj->where), doname(obj));
+		}
+		check_contained(obj, mesg);
 	}
-	/* shouldn't be a full container on the bill */
-	if (obj->cobj) {
-	    pline("%s obj %s contains %s! %s\n", mesg,
-		fmt_ptr((void *)obj, obj_address),
-		something, doname(obj));
-	}
-    }
 
-    mesg = "minvent sanity";
-    for (mon = fmon; mon; mon = mon->nmon)
-	for (obj = mon->minvent; obj; obj = obj->nobj) {
-	    if (obj->where != OBJ_MINVENT) {
-		pline("%s obj %s %s: %s\n", mesg,
-			fmt_ptr((void *)obj, obj_address),
-			where_name(obj->where), doname(obj));
-	    }
-	    if (obj->ocarry != mon) {
-		pline("%s obj %s (%s) not held by mon %s (%s)\n", mesg,
-			fmt_ptr((void *)obj, obj_address),
-			doname(obj),
-			fmt_ptr((void *)mon, mon_address),
-			mon_nam(mon));
-	    }
-	    check_contained(obj, mesg);
+	mesg = "bill sanity";
+	for (obj = billobjs; obj; obj = obj->nobj) {
+		if (obj->where != OBJ_ONBILL) {
+			pline("%s obj %s %s: %s\n", mesg,
+					fmt_ptr((void *)obj, obj_address),
+					where_name(obj->where), doname(obj));
+		}
+		/* shouldn't be a full container on the bill */
+		if (obj->cobj) {
+			pline("%s obj %s contains %s! %s\n", mesg,
+					fmt_ptr((void *)obj, obj_address),
+					something, doname(obj));
+		}
 	}
+
+	mesg = "minvent sanity";
+	for (mon = fmon; mon; mon = mon->nmon)
+		for (obj = mon->minvent; obj; obj = obj->nobj) {
+			if (obj->where != OBJ_MINVENT) {
+				pline("%s obj %s %s: %s\n", mesg,
+						fmt_ptr((void *)obj, obj_address),
+						where_name(obj->where), doname(obj));
+			}
+			if (obj->ocarry != mon) {
+				pline("%s obj %s (%s) not held by mon %s (%s)\n", mesg,
+						fmt_ptr((void *)obj, obj_address),
+						doname(obj),
+						fmt_ptr((void *)mon, mon_address),
+						mon_nam(mon));
+			}
+			check_contained(obj, mesg);
+		}
 }
 
 /* This must stay consistent with the defines in obj.h. */
@@ -1739,16 +1733,12 @@ static const char *obj_state_names[NOBJ_STATES] = {
 	"minvent",	"migrating",	"buried",	"onbill"
 };
 
-static const char *
-where_name(where)
-    int where;
-{
-    return (where<0 || where>=NOBJ_STATES) ? "unknown" : obj_state_names[where];
+static const char *where_name(int where) {
+	return (where<0 || where>=NOBJ_STATES) ? "unknown" : obj_state_names[where];
 }
 
 /* obj sanity check: check objs contained by container */
-static void
-check_contained(container, mesg)
+static void check_contained(container, mesg)
     struct obj *container;
     const char *mesg;
 {

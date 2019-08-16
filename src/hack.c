@@ -15,6 +15,33 @@ static void move_update(boolean);
 
 #define IS_SHOP(x)	(rooms[x].rtype >= SHOPBASE)
 
+//FIXME: this is currently used for destroying LS_TEMPs.  Which take the form of
+//an int.  But del_light_source uses uint.  I doub tthey get big enough that
+//actually an issue but...
+anything int_to_any(int i) {
+	anything ret = {0};
+	ret.a_int = i;
+	return ret;
+}
+anything uint_to_any(uint ui) {
+	anything ret = {0};
+	ret.a_uint = ui;
+	return ret;
+}
+
+anything monst_to_any(struct monst *mtmp) {
+	anything ret = {0};
+	ret.a_monst = mtmp;
+	return ret;
+}
+
+anything obj_to_any(struct obj *obj) {
+	anything ret = {0};
+	ret.a_obj = obj;
+	return ret;
+}
+
+
 
 #ifdef DUNGEON_GROWTH
 // guaranteed to return a valid coord

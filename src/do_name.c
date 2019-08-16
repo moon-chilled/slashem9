@@ -280,7 +280,7 @@ static void do_oname(struct obj *obj) {
 	getlin(qbuf, buf);
 	if(!*buf || *buf == '\033')	return;
 	/* strip leading and trailing spaces; unnames item if all spaces */
-	(void)mungspaces(buf);
+	mungspaces(buf);
 
 	/* relax restrictions over proper capitalization for artifacts */
 	if ((aname = artifact_name(buf, &objtyp)) != 0 && objtyp == obj->otyp)
