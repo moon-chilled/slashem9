@@ -485,11 +485,12 @@ do_look(quick)
     const char *x_str, *firstmatch = 0;
     struct permonst *pm = 0;
     int     i, ans = 0;
-    int     sym;		/* typed symbol or converted glyph */
+    glyph_t sym;		/* typed symbol or converted glyph */
     int	    found;		/* count of matching syms found */
     coord   cc;			/* screen pos of unknown glyph */
     boolean save_verbose;	/* saved value of flags.verbose */
     boolean from_screen;	/* question from the screen */
+    bool    force_defsyms = false;/* force using glyphs from defsyms[].sym */
     boolean need_to_look;	/* need to get explan. from glyph */
     boolean hit_trap;		/* true if found trap explanation */
     int skipped_venom;		/* non-zero if we ignored "splash of venom" */
@@ -552,7 +553,14 @@ do_look(quick)
 	    /* Convert the glyph at the selected position to a symbol. */
 	    glyph = glyph_at(cc.x,cc.y);
 	    if (glyph_is_cmap(glyph)) {
-		sym = showsyms[glyph_to_cmap(glyph)];
+		    if (iflags.UTF8graphics) {
+			    // FIXME: display utf-8 on topl
+			    force_defsyms = true;
+			    sym = defsyms[glyph_to_cmap(glyph)].sym;
+		    } else {
+			    sym = showsyms[glyph_to_cmap(glyph)];
+		    }
+
 	    } else if (glyph_is_trap(glyph)) {
 		sym = showsyms[trap_to_defsym(glyph_to_trap(glyph))];
 	    } else if (glyph_is_object(glyph)) {
@@ -653,7 +661,7 @@ do_look(quick)
 	/* Now check for graphics symbols */
 	for (hit_trap = false, i = 0; i < MAXPCHARS; i++) {
 	    x_str = defsyms[i].explanation;
-	    if (sym == (from_screen ? showsyms[i] : defsyms[i].sym) && *x_str) {
+	    if (sym == (force_defsyms ? defsyms[i].sym : (from_screen ? showsyms[i] : defsyms[i].sym)) && *x_str) {
 		/* avoid "an air", "a water", "a floor of a room", or "a dark part of a room" */
 		int article = ((i == S_room) || (i == S_darkroom)) ? 2 :	// 2=>"the"
 			      !(strcmp(x_str, "air") == 0 ||	/* 1=>"an"  */

@@ -15,7 +15,7 @@
 #define g_FILLER(symbol) 0
 
 uchar oc_syms[MAXOCLASSES] = DUMMY; /* the current object  display symbols */
-uchar showsyms[MAXPCHARS]  = DUMMY; /* the current feature display symbols */
+glyph_t showsyms[MAXPCHARS]  = DUMMY; /* the current feature display symbols */
 uchar monsyms[MAXMCLASSES] = DUMMY; /* the current monster display symbols */
 uchar warnsyms[WARNCOUNT]  = DUMMY;  /* the current warning display symbols */
 
@@ -320,7 +320,7 @@ const struct symdef defsyms[MAXPCHARS] = {
 void (*cursesgraphics_mode_callback)(void) = 0;
 #endif
 
-static uchar ibm_graphics[MAXPCHARS] = {
+static glyph_t ibm_graphics[MAXPCHARS] = {
 /* 0*/	g_FILLER(S_stone),
 	0xb3,	/* S_vwall:	meta-3, vertical rule */
 	0xc4,	/* S_hwall:	meta-D, horizontal rule */
@@ -421,7 +421,7 @@ static uchar ibm_graphics[MAXPCHARS] = {
 #ifdef TERMLIB
 void (*decgraphics_mode_callback)(void) = 0;  /* set in tty_start_screen() */
 
-static uchar dec_graphics[MAXPCHARS] = {
+static glyph_t dec_graphics[MAXPCHARS] = {
 /* 0*/	g_FILLER(S_stone),
 	0xf8,	/* S_vwall:	meta-x, vertical rule */
 	0xf1,	/* S_hwall:	meta-q, horizontal rule */
@@ -520,7 +520,7 @@ static uchar dec_graphics[MAXPCHARS] = {
 #endif  /* TERMLIB */
 
 #ifdef MAC_GRAPHICS_ENV
-static uchar mac_graphics[MAXPCHARS] = {
+static glyph_t mac_graphics[MAXPCHARS] = {
 /* 0*/	g_FILLER(S_stone),
 	0xba,	/* S_vwall */
 	0xcd,	/* S_hwall */
@@ -618,6 +618,106 @@ static uchar mac_graphics[MAXPCHARS] = {
 };
 #endif	/* MAC_GRAPHICS_ENV */
 
+/* Probably best to only use characters from this list
+ * http://en.wikipedia.org/wiki/WGL4 */
+static glyph_t utf8_graphics[MAXPCHARS] = {
+/* 0*/	g_FILLER(S_stone),
+	0x2502, /* S_vwall:     BOX DRAWINGS LIGHT VERTICAL */
+	0x2500, /* S_hwall:     BOX DRAWINGS LIGHT HORIZONTAL */
+	0x250c, /* S_tlcorn:    BOX DRAWINGS LIGHT DOWN AND RIGHT */
+	0x2510, /* S_trcorn:    BOX DRAWINGS LIGHT DOWN AND LEFT */
+	0x2514, /* S_blcorn:    BOX DRAWINGS LIGHT UP AND RIGHT */
+	0x2518, /* S_brcorn:    BOX DRAWINGS LIGHT UP AND LEFT */
+	0x253c, /* S_crwall:    BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL */
+	0x2534, /* S_tuwall:    BOX DRAWINGS LIGHT UP AND HORIZONTAL */
+	0x252c, /* S_tdwall:    BOX DRAWINGS LIGHT DOWN AND HORIZONTAL */
+/*10*/	0x2524, /* S_tlwall:    BOX DRAWINGS LIGHT VERTICAL AND LEFT */
+	0x251c, /* S_trwall:    BOX DRAWINGS LIGHT VERTICAL AND RIGHT */
+	0x00b7, /* S_ndoor:     MIDDLE DOT */
+	0x2592, /* S_vodoor:    MEDIUM SHADE */
+	0x2592, /* S_hodoor:    MEDIUM SHADE */
+	g_FILLER(S_vcdoor),
+	g_FILLER(S_hcdoor),
+	0x2261, /* S_bars:      IDENTICAL TO */
+	0x03a8, /* S_tree:      GREEK CAPITAL LETTER PSI */
+	0x00b7, /* S_room:      MIDDLE DOT */
+/*20*/	g_FILLER(S_stone),
+	g_FILLER(S_corr),
+	g_FILLER(S_litcorr),
+	g_FILLER(S_upstair),
+	g_FILLER(S_dnstair),
+	0x2264, /* S_upladder:  LESS-THAN OR EQUAL TO */
+	0x2265, /* S_dnladder:  GREATER-THAN OR EQUAL TO */
+	0x03A9, /* S_altar:     GREEK CAPITAL LETTER OMEGA */
+	0x2020, /* S_grave:     DAGGER */
+	g_FILLER(S_throne),
+/*30*/	g_FILLER(S_sink),
+	g_FILLER(S_toilet),
+	0x00b6, /* S_fountain:  PILCROW SIGN */
+	0x224b, /* S_pool:      TRIPLE TILDE */
+	0x00b7, /* S_ice:       MIDDLE DOT */
+	0x224b, /* S_lava:      TRIPLE TILDE */
+	0x00b7, /* S_vodbridge: MIDDLE DOT */
+	0x00b7, /* S_hodbridge: MIDDLE DOT */
+	g_FILLER(S_vcdbridge),
+	g_FILLER(S_hcdbridge),
+/*40*/	g_FILLER(S_air),
+	g_FILLER(S_cloud),
+	0x2248, /* S_water:     ALMOST EQUAL TO */
+	g_FILLER(S_arrow_trap),
+	g_FILLER(S_dart_trap),
+	g_FILLER(S_falling_rock_trap),
+	g_FILLER(S_squeaky_board),
+	g_FILLER(S_bear_trap),
+	g_FILLER(S_land_mine),
+	g_FILLER(S_rolling_boulder_trap),
+/*50*/	g_FILLER(S_sleeping_gas_trap),
+	g_FILLER(S_rust_trap),
+	g_FILLER(S_fire_trap),
+	g_FILLER(S_pit),
+	g_FILLER(S_spiked_pit),
+	g_FILLER(S_hole),
+	g_FILLER(S_trap_door),
+	g_FILLER(S_teleportation_trap),
+	g_FILLER(S_level_teleporter),
+	g_FILLER(S_magic_portal),
+/*60*/	0x00A4, /* S_web:       CURRENCY SIGN */
+	g_FILLER(S_statue_trap),
+	g_FILLER(S_magic_trap),
+	g_FILLER(S_anti_magic_trap),
+	g_FILLER(S_polymorph_trap),
+	0x2502, /* S_vbeam:     BOX DRAWINGS LIGHT VERTICAL */
+	0x2500, /* S_hbeam:     BOX DRAWINGS LIGHT HORIZONTAL */
+	g_FILLER(S_lslant),
+	g_FILLER(S_rslant),
+	g_FILLER(S_digbeam),
+/*70*/	g_FILLER(S_flashbeam),
+	g_FILLER(S_boomleft),
+	g_FILLER(S_boomright),
+	g_FILLER(S_ss1),
+	g_FILLER(S_ss2),
+	g_FILLER(S_ss3),
+	g_FILLER(S_ss4),
+	g_FILLER(S_sw_tl),
+	0x2594, /* S_sw_tc:     UPPER ONE EIGHTH BLOCK */
+	g_FILLER(S_sw_tr),
+/*80*/	0x258f, /* S_sw_ml:     LEFT ONE EIGHTH BLOCK */
+	0x2595, /* S_sw_mr:     RIGHT ONE EIGHTH BLOCK */
+	g_FILLER(S_sw_bl),
+	0x2581, /* S_sw_bc:     LOWER ONE EIGHTH BLOCK */
+	g_FILLER(S_sw_br),
+	g_FILLER(S_explode1),
+	0x2594, /* S_explode2:  UPPER ONE EIGHTH BLOCK */
+	g_FILLER(S_explode3),
+	0x258f, /* S_explode4:  LEFT ONE EIGHTH BLOCK */
+	g_FILLER(S_explode5),
+/*90*/	0x2595, /* S_explode6:  RIGHT ONE EIGHTH BLOCK */
+	g_FILLER(S_explode7),
+	0x2581, /* S_explode8:  LOWER ONE EIGHTH BLOCK */
+	g_FILLER(S_explode9)
+};
+
+
 /*
  * Convert the given character to an object class.  If the character is not
  * recognized, then MAXOCLASSES is returned.  Used in detect.c invent.c,
@@ -647,7 +747,7 @@ int def_char_to_monclass(char ch) {
 	return i;
 }
 
-void assign_graphics(uchar *graph_chars, int glth, int maxlen, int offset) {
+void assign_graphics(glyph_t *graph_chars, int glth, int maxlen, int offset) {
 	int i;
 
 	for (i = 0; i < maxlen; i++) {
@@ -669,6 +769,11 @@ void assign_colors(uchar *graph_colors, int glth, int maxlen, int offset) {
 #endif
 
 void switch_graphics(int gr_set_flag) {
+	iflags.IBMgraphics = false;
+	iflags.DECgraphics = false;
+	iflags.cursesgraphics = false;
+	iflags.UTF8graphics = false;
+
 	switch (gr_set_flag) {
 		default:
 		case ASCII_GRAPHICS:
@@ -687,10 +792,6 @@ void switch_graphics(int gr_set_flag) {
 			 * set the codepage to 437.
 			 */
 			iflags.IBMgraphics = true;
-			iflags.DECgraphics = false;
-#ifdef CURSES_GRAPHICS
-			iflags.cursesgraphics = false;
-#endif
 			assign_graphics(ibm_graphics, SIZE(ibm_graphics), MAXPCHARS, 0);
 			break;
 #endif /* ASCIIGRAPH */
@@ -700,10 +801,6 @@ void switch_graphics(int gr_set_flag) {
 			 * Use the VT100 line drawing character set.
 			 */
 			iflags.DECgraphics = true;
-			iflags.IBMgraphics = false;
-#ifdef CURSES_GRAPHICS
-			iflags.cursesgraphics = false;
-#endif
 			assign_graphics(dec_graphics, SIZE(dec_graphics), MAXPCHARS, 0);
 			if (decgraphics_mode_callback) (*decgraphics_mode_callback)();
 			break;
@@ -717,25 +814,39 @@ void switch_graphics(int gr_set_flag) {
 		case CURS_GRAPHICS:
 			assign_graphics(NULL, 0, MAXPCHARS, 0);
 			iflags.cursesgraphics = true;
-			iflags.IBMgraphics = false;
-			iflags.DECgraphics = false;
 			break;
 #endif
+		case UTF8_GRAPHICS:
+			assign_graphics(utf8_graphics, SIZE(utf8_graphics), MAXPCHARS, 0);
+			iflags.UTF8graphics = true;
+			break;
 	}
 	return;
 }
 
+// Change the UTF8graphics symbol at position with codepoint "value".
+void assign_utf8graphics_symbol(int position, glyph_t value) {
+	if (position < MAXPCHARS) {
+		utf8_graphics[position] = value;
+		/* need to update showsym */
+		if (iflags.UTF8graphics) {
+			switch_graphics(UTF8_GRAPHICS);
+		}
+	}
+}
+
+
+
 
 #ifdef REINCARNATION
-
 /*
  * saved display symbols for objects & features.
  */
-static uchar save_oc_syms[MAXOCLASSES] = DUMMY;
-static uchar save_showsyms[MAXPCHARS]  = DUMMY;
-static uchar save_monsyms[MAXPCHARS]   = DUMMY;
+static uchar save_oc_syms[MAXOCLASSES]  = DUMMY;
+static glyph_t save_showsyms[MAXPCHARS] = DUMMY;
+static uchar save_monsyms[MAXPCHARS]    = DUMMY;
 
-static const uchar r_oc_syms[MAXOCLASSES] = {
+static const glyph_t r_oc_syms[MAXOCLASSES] = {
 /* 0*/	'\0',
 	ILLOBJ_SYM,
 	WEAPON_SYM,

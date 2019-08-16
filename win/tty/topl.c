@@ -17,7 +17,7 @@
 
 
 static void redotoplin(const char*);
-static void topl_putsym(char);
+static void topl_putsym(glyph_t);
 static void remember_topl(void);
 static void removetopl(int);
 
@@ -303,11 +303,7 @@ update_topl(bp)
         if(!(cw->flags & WIN_STOP)) redotoplin(toplines);
 }
 
-static
-void
-topl_putsym(c)
-    char c;
-{
+static void topl_putsym(glyph_t c) {
     struct WinDesc *cw = wins[WIN_MESSAGE];
 
     if(cw == (struct WinDesc *) 0) panic("Putsym window MESSAGE nonexistant");
@@ -326,7 +322,7 @@ topl_putsym(c)
 	ttyDisplay->cury++;
 	cw->cury = ttyDisplay->cury;
 #ifdef WIN32CON
-    (void) putchar(c);
+	pututf8char(c);
 #endif
 	break;
     default:

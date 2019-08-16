@@ -312,6 +312,12 @@ struct realtime_data realtime_data = { 0, 0, 0 };
 
 struct _plinemsg *pline_msg = NULL;
 
+/* FIXME: These should be integrated into objclass and permonst structs,
+   but that invalidates saves */
+glyph_t objclass_unicode_codepoint[NUM_OBJECTS] = DUMMY;
+glyph_t permonst_unicode_codepoint[NUMMONS] = DUMMY;
+
+
 /* FIXME: The curses windowport requires this stupid hack, in the
    case where a game is in progress and the user is asked if he
    wants to destroy old game.

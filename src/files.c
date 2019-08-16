@@ -1391,25 +1391,27 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 			      1, "BOULDER");
 	} else if (match_varname(buf, "MENUCOLOR", 9)) {
 	   add_menu_coloring(bufp);
+	} else if (match_varname(buf, "MONSTERSYMBOL", 13)) {
+		return parse_monster_symbol(bufp);
+	} else if (match_varname(buf, "OBJECTSYMBOL", 12)) {
+		return parse_object_symbol(bufp);
+	} else if (match_varname(buf, "SYMBOL", 6)) {
+		return parse_symbol(bufp);
 	} else if (match_varname(buf, "GRAPHICS", 4)) {
-	    len = get_uchars(fp, buf, bufp, translate, false,
-			     MAXPCHARS, "GRAPHICS");
-	    assign_graphics(translate, len, MAXPCHARS, 0);
+	    len = get_uchars(fp, buf, bufp, translate, false, MAXPCHARS, "GRAPHICS");
+	    assign_graphics((glyph_t*)translate, len, MAXPCHARS, 0);
         } else if (match_varname(buf, "STATUSCOLOR", 11)) {
             /* ignore statuscolor entries if not compiled in */
             parse_status_color_options(bufp);
 	} else if (match_varname(buf, "DUNGEON", 4)) {
-	    len = get_uchars(fp, buf, bufp, translate, false,
-			     MAXDCHARS, "DUNGEON");
-	    assign_graphics(translate, len, MAXDCHARS, 0);
+	    len = get_uchars(fp, buf, bufp, translate, false, MAXDCHARS, "DUNGEON");
+	    assign_graphics((glyph_t*)translate, len, MAXDCHARS, 0);
 	} else if (match_varname(buf, "TRAPS", 4)) {
-	    len = get_uchars(fp, buf, bufp, translate, false,
-			     MAXTCHARS, "TRAPS");
-	    assign_graphics(translate, len, MAXTCHARS, MAXDCHARS);
+	    len = get_uchars(fp, buf, bufp, translate, false, MAXTCHARS, "TRAPS");
+	    assign_graphics((glyph_t*)translate, len, MAXTCHARS, MAXDCHARS);
 	} else if (match_varname(buf, "EFFECTS", 4)) {
-	    len = get_uchars(fp, buf, bufp, translate, false,
-			     MAXECHARS, "EFFECTS");
-	    assign_graphics(translate, len, MAXECHARS, MAXDCHARS+MAXTCHARS);
+	    len = get_uchars(fp, buf, bufp, translate, false, MAXECHARS, "EFFECTS");
+	    assign_graphics((glyph_t*)translate, len, MAXECHARS, MAXDCHARS+MAXTCHARS);
 #ifdef USER_DUNGEONCOLOR
 	} else if (match_varname(buf, "DUNGEONCOLOR", 10)) {
 	    len = get_uchars(fp, buf, bufp, translate, false,

@@ -5,6 +5,7 @@
 #include "hack.h"
 #include "tcap.h"
 #include <ctype.h>
+#include <errno.h>
 
 #include "filename.h"
 
@@ -197,6 +198,7 @@ static struct Bool_Opt
 	{"tombstone",&flags.tombstone, true, SET_IN_GAME},
 	{"toptenwin",&flags.toptenwin, false, SET_IN_GAME},
 	{"travel", &iflags.travelcmd, true, SET_IN_GAME},
+	{"UTF8graphics", &iflags.UTF8graphics, false, SET_IN_GAME},
 	{"use_inverse", &iflags.wc_inverse, true, SET_IN_GAME},		/*WC*/
 	{"verbose", &flags.verbose, true, SET_IN_GAME},
 	{"wraptext", &iflags.wc2_wraptext, false, SET_IN_GAME},
@@ -545,6 +547,12 @@ initoptions (void)
 		monsyms[i] = (uchar) def_monsyms[i];
 	for (i = 0; i < WARNCOUNT; i++)
 		warnsyms[i] = def_warnsyms[i].sym;
+
+	/* FIXME: These should be integrated into objclass and permonst structs,
+	   but that invalidates saves */
+	memset(objclass_unicode_codepoint, 0, sizeof(objclass_unicode_codepoint));
+	memset(permonst_unicode_codepoint, 0, sizeof(permonst_unicode_codepoint));
+
 	iflags.bouldersym = 0;
 	iflags.travelcc.x = iflags.travelcc.y = -1;
 	flags.warnlevel = 1;
@@ -872,7 +880,7 @@ char *opts;
 const char *optype;
 int maxlen, offset;
 {
-	uchar translate[MAXPCHARS+1];
+	glyph_t translate[MAXPCHARS+1];
 	int length, i;
 
 	if (!(opts = string_for_env_opt(optype, opts, false)))
@@ -883,7 +891,7 @@ int maxlen, offset;
 	if (length > maxlen) length = maxlen;
 	/* match the form obtained from PC configuration files */
 	for (i = 0; i < length; i++)
-		translate[i] = (uchar) opts[i];
+		translate[i] = opts[i];
 	assign_graphics(translate, length, maxlen, offset);
 }
 
@@ -1303,11 +1311,175 @@ char *str;
    }
 }
 
-void
-parseoptions(opts, tinitial, tfrom_file)
-char *opts;
-boolean tinitial, tfrom_file;
-{
+/** Split up a string that matches name:value or 'name':value and
+ * return name and value separately. */
+static bool parse_extended_option(const char *str, char *option_name, char *option_value) {
+	int i;
+	char *tmps, *cs;
+	char buf[BUFSZ];
+
+	if (!str) return false;
+
+	strncpy(buf, str, BUFSZ);
+
+	/* remove comment*/
+	cs = strrchr(buf, '#');
+	if (cs) *cs = '\0';
+
+	/* trim whitespace at end of string */
+	i = strlen(buf)-1;
+	while (i>=0 && isspace(buf[i])) {
+		buf[i--] = '\0';
+	}
+
+	/* extract value */
+	cs = strchr(buf, ':');
+	if (!cs) return false;
+
+	tmps = cs;
+	tmps++;
+	/* skip whitespace at start of string */
+	while (*tmps && isspace(*tmps)) tmps++;
+
+	strncpy(option_value, tmps, BUFSZ);
+
+	/* extract option name */
+	*cs = '\0';
+	tmps = buf;
+	if ((*tmps == '"') || (*tmps == '\'')) {
+		cs--;
+		while (isspace(*cs)) cs--;
+		if (*cs == *tmps) {
+			*cs = '\0';
+			tmps++;
+		}
+	}
+
+	strncpy(option_name, tmps, BUFSZ);
+
+	return true;
+}
+
+/** Parse a string as Unicode codepoint and return the numerical codepoint.
+ * Valid codepoints are decimal numbers or U+FFFF and 0xFFFF for hexadecimal
+ * values. */
+static int parse_codepoint(char *codepoint) {
+	char *ptr, *endptr;
+	int num=0, base;
+
+	/* parse codepoint */
+	if (!strncmpi(codepoint, "u+", 2) ||
+			!strncmpi(codepoint, "0x", 2)) {
+		/* hexadecimal */
+		ptr = &codepoint[2];
+		base = 16;
+	} else {
+		/* decimal */
+		ptr = &codepoint[0];
+		base = 10;
+	}
+	errno = 0;
+	num = strtol(ptr, &endptr, base);
+	if (errno != 0 || *endptr != 0 || endptr == ptr) {
+		return false;
+	}
+	return num;
+}
+
+/** Parse '"monster name":unicode_codepoint' and change symbol in
+ * monster list. */
+bool parse_monster_symbol(const char *str) {
+       char monster[BUFSZ];
+       char codepoint[BUFSZ];
+       int i, num=0;
+
+       if (!parse_extended_option(str, monster, codepoint)) {
+               return false;
+       }
+
+       num = parse_codepoint(codepoint);
+       if (num < 0) {
+               return false;
+       }
+
+       /* find monster */
+       for (i=0; mons[i].mlet != 0; i++) {
+               if (!strcmpi(monster, mons[i].mname)) {
+                       permonst_unicode_codepoint[i] = num;
+                       return true;
+               }
+       }
+
+       return false;
+}
+
+/** Parse '"object name":unicode_codepoint' and change symbol in
+ * object list. */
+bool parse_object_symbol(const char *str) {
+       char object[BUFSZ];
+       char codepoint[BUFSZ];
+       int i, num=0;
+
+       if (!parse_extended_option(str, object, codepoint)) {
+               return false;
+       }
+
+       num = parse_codepoint(codepoint);
+       if (num < 0) {
+               return false;
+       }
+
+       /* find object */
+       for (i=0; obj_descr[i].oc_name || obj_descr[i].oc_descr; i++) {
+               if ((obj_descr[i].oc_name && obj_descr[i].oc_descr) ||
+                   (obj_descr[i].oc_descr)) {
+                       /* Items with both descriptive and actual name or only
+                        * descriptive name. */
+                       if (!strcmpi(object, obj_descr[i].oc_descr)) {
+                               objclass_unicode_codepoint[i] = num;
+                               return true;
+                       }
+               } else if (obj_descr[i].oc_name) {
+                       /* items with only actual name like "carrot" */
+                       if (!strcmpi(object, obj_descr[i].oc_name)) {
+                               objclass_unicode_codepoint[i] = num;
+                               return true;
+                       }
+               }
+       }
+       return false;
+}
+
+
+/** Parse '"dungeon feature":unicode_codepoint' and change symbol in
+ * UTF8graphics. */
+bool parse_symbol(const char *str) {
+       char feature[BUFSZ];
+       char codepoint[BUFSZ];
+       int i, num;
+
+       if (!parse_extended_option(str, feature, codepoint)) {
+               return false;
+       }
+
+       num = parse_codepoint(codepoint);
+       if (num < 0) {
+               return false;
+       }
+
+       /* find dungeon feature */
+       for (i=0; i < MAXPCHARS; i++) {
+               if (!strcmpi(feature, defsyms[i].explanation)) {
+                       assign_utf8graphics_symbol(i, num);
+                       return true;
+               }
+       }
+
+       return false;
+}
+
+
+void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 	char *op;
 	unsigned num;
 	boolean negated;
@@ -2579,7 +2751,7 @@ goodfruit:
 			duplicate_opt_detection(boolopt[i].name, 0);
 
 #if defined(TERMLIB) || defined(ASCIIGRAPH) || defined(MAC_GRAPHICS_ENV) || defined(CURSES_GRAPHICS)
-			if (false
+			if (boolopt[i].addr == &iflags.UTF8graphics
 # ifdef TERMLIB
 				 || (boolopt[i].addr) == &iflags.DECgraphics
 # endif
@@ -2604,23 +2776,21 @@ goodfruit:
 			    need_redraw = true;
 # ifdef TERMLIB
 			    if ((boolopt[i].addr) == &iflags.DECgraphics)
-				switch_graphics(iflags.DECgraphics ?
-						DEC_GRAPHICS : ASCII_GRAPHICS);
+				switch_graphics(iflags.DECgraphics ?  DEC_GRAPHICS : ASCII_GRAPHICS);
 # endif
 # ifdef ASCIIGRAPH
 			    if ((boolopt[i].addr) == &iflags.IBMgraphics)
-				switch_graphics(iflags.IBMgraphics ?
-						IBM_GRAPHICS : ASCII_GRAPHICS);
+				switch_graphics(iflags.IBMgraphics ?  IBM_GRAPHICS : ASCII_GRAPHICS);
 # endif
 # ifdef MAC_GRAPHICS_ENV
 			    if ((boolopt[i].addr) == &iflags.MACgraphics)
-				switch_graphics(iflags.MACgraphics ?
-						MAC_GRAPHICS : ASCII_GRAPHICS);
+				switch_graphics(iflags.MACgraphics ?  MAC_GRAPHICS : ASCII_GRAPHICS);
 # endif
+			    if ((boolopt[i].addr) == &iflags.UTF8graphics)
+				    switch_graphics(iflags.UTF8graphics ? UTF8_GRAPHICS : ASCII_GRAPHICS); 
 # ifdef CURSES_GRAPHICS
 			    if ((boolopt[i].addr) == &iflags.cursesgraphics)
-				switch_graphics(iflags.cursesgraphics ?
-						CURS_GRAPHICS : ASCII_GRAPHICS);
+				switch_graphics(iflags.cursesgraphics ?  CURS_GRAPHICS : ASCII_GRAPHICS);
 # endif
 # ifdef REINCARNATION
 			    if (!initial && u.uz.dlevel &&
@@ -2687,9 +2857,7 @@ goodfruit:
 	badoption(opts);
 }
 
-static void
-parseauthopt (char *opts)
-{
+static void parseauthopt(char *opts) {
 	char *op;
 	boolean negated;
 	const char *fullname;

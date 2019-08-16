@@ -261,7 +261,11 @@ extern char misc_cmds[];
 
 extern schar tbx, tby;		/* set in mthrowu.c */
 
-extern struct multishot { int n, i; short o; boolean s; } m_shot;
+extern struct multishot {
+	int n, i;
+	short o;
+	boolean s;
+} m_shot;
 
 extern struct dig_info {		/* apply.c, hack.c */
 	int	effort;
@@ -542,5 +546,10 @@ extern struct _plinemsg *pline_msg;
 #define MSGTYP_NOREP	1
 #define MSGTYP_NOSHOW	2
 #define MSGTYP_STOP	3
+
+/* FIXME: These should be integrated into objclass and permonst structs,
+   but that invalidates saves */
+extern glyph_t objclass_unicode_codepoint[NUM_OBJECTS];
+extern glyph_t permonst_unicode_codepoint[NUMMONS];
 
 #endif /* DECL_H */

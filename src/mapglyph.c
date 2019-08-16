@@ -43,10 +43,33 @@ int explcolors[] = {
 #define HAS_ROGUE_IBM_GRAPHICS (iflags.IBMgraphics && Is_rogue_level(&u.uz))
 #endif
 
-void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int y) {
+/** Returns the correct monster glyph.
+ *  Returns a Unicode codepoint in UTF8graphics and an ASCII character otherwise. */
+static glyph_t get_monsym(int glyph) {
+	if (iflags.UTF8graphics && permonst_unicode_codepoint[glyph]) {
+		/* only return a Unicode codepoint when there is one configured */
+		return permonst_unicode_codepoint[glyph];
+	} else {
+		return monsyms[mons[glyph].mlet];
+	}
+}
+
+/** Returns the correct object glyph.
+ *  Returns a Unicode codepoint in UTF8graphics and an ASCII character otherwise. */
+static glyph_t get_objsym(int glyph) {
+	if (iflags.UTF8graphics && objclass_unicode_codepoint[glyph]) {
+		/* only return a Unicode codepoint when there is one configured */
+		return objclass_unicode_codepoint[glyph];
+	} else {
+		return oc_syms[(int)objects[glyph].oc_class];
+	}
+}
+
+
+void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x, int y) {
 	int offset;
 	int color = NO_COLOR;
-	uchar ch;
+	glyph_t ch;
 	unsigned special = 0;
 
     /*
@@ -65,7 +88,7 @@ void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int
 	    warn_color(offset);
     } else if ((offset = (glyph - GLYPH_SWALLOW_OFF)) >= 0) {	/* swallow */
 	/* see swallow_to_glyph() in display.c */
-	ch = (uchar) showsyms[S_sw_tl + (offset & 0x7)];
+	ch = showsyms[S_sw_tl + (offset & 0x7)];
 #ifdef ROGUE_COLOR
 	if (HAS_ROGUE_IBM_GRAPHICS && iflags.use_color)
 	    color = NO_COLOR;
@@ -121,7 +144,7 @@ void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int
     } else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
 	if (On_stairs(x,y) && levl[x][y].seenv) special |= MG_STAIRS;
 	if (offset == BOULDER && iflags.bouldersym) ch = iflags.bouldersym;
-	else ch = oc_syms[(int)objects[offset].oc_class];
+	else ch = get_objsym(offset);
 #ifdef ROGUE_COLOR
 	if (HAS_ROGUE_IBM_GRAPHICS && iflags.use_color) {
 	    switch(objects[offset].oc_class) {
@@ -138,7 +161,7 @@ void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int
 	    special |= MG_OBJPILE;
 	}
     } else if ((offset = (glyph - GLYPH_RIDDEN_OFF)) >= 0) {	/* mon ridden */
-	ch = monsyms[(int)mons[offset].mlet];
+	ch = get_monsym(offset);
 #ifdef ROGUE_COLOR
 	if (HAS_ROGUE_IBM_GRAPHICS)
 	    /* This currently implies that the hero is here -- monsters */
@@ -151,7 +174,7 @@ void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int
 	    special |= MG_RIDDEN;
     } else if ((offset = (glyph - GLYPH_BODY_OFF)) >= 0) {	/* a corpse */
 	if (On_stairs(x,y) && levl[x][y].seenv) special |= MG_STAIRS;
-	ch = oc_syms[(int)objects[CORPSE].oc_class];
+	ch = get_objsym(CORPSE);
 #ifdef ROGUE_COLOR
 	if (HAS_ROGUE_IBM_GRAPHICS && iflags.use_color)
 	    color = CLR_RED;
@@ -165,7 +188,7 @@ void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int
 	    special |= MG_OBJPILE;
 	}
     } else if ((offset = (glyph - GLYPH_DETECT_OFF)) >= 0) {	/* mon detect */
-	ch = monsyms[(int)mons[offset].mlet];
+	ch = get_monsym(offset);
 #ifdef ROGUE_COLOR
 	if (HAS_ROGUE_IBM_GRAPHICS)
 	    color = NO_COLOR;	/* no need to check iflags.use_color */
@@ -185,7 +208,7 @@ void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int
 	    invis_color(offset);
 	    special |= MG_INVIS;
     } else if ((offset = (glyph - GLYPH_PET_OFF)) >= 0) {	/* a pet */
-	ch = monsyms[(int)mons[offset].mlet];
+	ch = get_monsym(offset);
 #ifdef ROGUE_COLOR
 	if (HAS_ROGUE_IBM_GRAPHICS)
 	    color = NO_COLOR;	/* no need to check iflags.use_color */
@@ -194,7 +217,7 @@ void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int
 	    pet_color(offset);
 	    special |= MG_PET;
     } else {							/* a monster */
-	ch = monsyms[(int)mons[glyph].mlet];
+	ch = get_monsym(glyph);
 #ifdef ROGUE_COLOR
 	if (HAS_ROGUE_IBM_GRAPHICS && iflags.use_color) {
 	    if (x == u.ux && y == u.uy)
@@ -225,7 +248,7 @@ void mapglyph(int glyph, int *ochar, int *ocolor, unsigned *ospecial, int x, int
 # endif
 	color = NO_COLOR;
 
-    *ochar = (int)ch;
+    *ochar = ch;
     *ospecial = special;
     *ocolor = color;
     return;

@@ -110,7 +110,7 @@ HACKCSRC = $(srcdir)/allmain.c $(srcdir)/alloc.c $(srcdir)/apply.c \
 	$(srcdir)/version.c $(srcdir)/vision.c $(srcdir)/weapon.c \
 	$(srcdir)/were.c $(srcdir)/wield.c $(srcdir)/windows.c \
 	$(srcdir)/wizard.c $(srcdir)/worm.c $(srcdir)/worn.c $(srcdir)/write.c \
-	$(srcdir)/zap.c $(srcdir)/gypsy.c $(srcdir)/tech.c
+	$(srcdir)/zap.c $(srcdir)/gypsy.c $(srcdir)/tech.c $(srcdir)/unicode.c
 
 # all operating-system-dependent .c (for dependencies and such)
 SYSCSRC = $(srcdir)/../sys/share/nhlan.c $(srcdir)/../sys/share/ioctl.c \
@@ -169,8 +169,7 @@ HOBJ = $(FIRSTOBJ) allmain.o apply.o artifact.o attrib.o ball.o \
 	role.o rumors.o save.o shk.o shknam.o sit.o sounds.o sp_lev.o spell.o \
 	steal.o steed.o teleport.o timeout.o topten.o track.o trap.o u_init.o \
 	uhitm.o vault.o vision.o vis_tab.o weapon.o were.o wield.o windows.o \
-	wizard.o worm.o worn.o write.o zap.o \
-	gypsy.o tech.o \
+	wizard.o worm.o worn.o write.o zap.o gypsy.o tech.o unicode.o \
 	$(RANDOBJ) $(SYSOBJ) $(WINOBJ) version.o
 # the .o files from the HACKCSRC, SYSSRC, and WINSRC lists
 
@@ -673,6 +672,8 @@ gypsy.o: $(srcdir)/gypsy.c $(HACK_H) ../include/egyp.h ../include/qtext.h
 	$(CC) $(CFLAGS) -c $(srcdir)/gypsy.c
 tech.o: $(srcdir)/tech.c $(HACK_H)
 	$(CC) $(CFLAGS) -c $(srcdir)/tech.c
+unicode.o: $(srcdir)/unicode.c $(HACK_H)
+	$(CC) $(CFLAGS) -c $(srcdir)/unicode.c
 # DEPENDENCIES MUST END AT END OF FILE
 # IF YOU PUT STUFF HERE IT WILL GO AWAY
 # see make depend above

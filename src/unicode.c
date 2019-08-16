@@ -1,64 +1,8 @@
 /* Copyright (c) Patric Mueller.			*/
-/* Last modified 2017-07-09, Elijah Stone */
 /* NetHack may be freely redistributed.  See license for details. */
 
-#include <stdint.h>
 #include <stdio.h>
 #include "hack.h"
-
-/* This function is taken from "utf8proc" (https://github.com/JuliaLang/utf8proc)
- * Copyright (c) 2015 Steven G. Johnson, Jiahao Chen, Peter Colberg, Tony Kelman, Scott P. Jones, and other contributors.
- * Copyright (c) 2009 Public Software Group e. V., Berlin, Germany
- *
- * Licensed under the MIT license, which is as follows:
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- */
-
-static size_t encodechar(uint32_t uc, uint8_t *dst) {
-	if (uc < 0x80) {
-		dst[0] = (uint8_t)uc;
-		return 1;
-	} else if (uc < 0x800) {
-		dst[0] = (uint8_t)(0xC0 + (uc >> 6));
-		dst[1] = (uint8_t)(0x80 + (uc & 0x3F));
-		return 2;
-	} else if (uc == 0xFFFF) {
-		dst[0] = (uint8_t)0xFF;
-		return 1;
-	} else if (uc == 0xFFFE) {
-		dst[0] = (uint8_t)0xFE;
-		return 1;
-	} else if (uc < 0x10000) {
-		dst[0] = (uint8_t)(0xE0 + (uc >> 12));
-		dst[1] = (uint8_t)(0x80 + ((uc >> 6) & 0x3F));
-		dst[2] = (uint8_t)(0x80 + (uc & 0x3F));
-		return 3;
-	} else if (uc < 0x110000) {
-		dst[0] = (uint8_t)(0xF0 + (uc >> 18));
-		dst[1] = (uint8_t)(0x80 + ((uc >> 12) & 0x3F));
-		dst[2] = (uint8_t)(0x80 + ((uc >> 6) & 0x3F));
-		dst[3] = (uint8_t)(0x80 + (uc & 0x3F));
-		return 4;
-	} else return 0;
-}
-// The rest of this file is licensed under the nethack general public license.
-
 
 /** CP437 to Unicode mapping according to the Unicode Consortium
  * http://unicode.org/Public/MAPPINGS/VENDORS/MICSFT/PC/CP437.TXT */
@@ -232,18 +176,26 @@ static unsigned int dec_to_unicode[] = {
 };
 
 
-void putunicodechar(uint32_t c) {
-	char out[4];
-
-	size_t len = encodechar(c, out);
-
-	for (size_t i = 0; i < len; i++) {
-		putchar(out[i]);
+void pututf8char(glyph_t c) {
+	if (c < 0x80) {
+		putchar(c);
+	} else if(c < 0x800) {
+		putchar(0xC0 | (c>>6));
+		putchar(0x80 | (c & 0x3F));
+	} else if (c < 0x10000) {
+		putchar(0xE0 | (c>>12));
+		putchar(0x80 | (c>>6 & 0x3F));
+		putchar(0x80 | (c & 0x3F));
+	} else if (c < 0x200000) {
+		putchar(0xF0 | (c>>18));
+		putchar(0x80 | (c>>12 & 0x3F));
+		putchar(0x80 | (c>>6 & 0x3F));
+		putchar(0x80 | (c & 0x3F));
 	}
 }
 
 /** Returns unicode codepoint of character according to selected graphics mode. */
-unsigned int get_unicode_codepoint(unsigned int ch) {
+glyph_t get_unicode_codepoint(int ch) {
 	if (ch <= 0xFF) {
 		if (ch < 0x80) {
 			return ch;
