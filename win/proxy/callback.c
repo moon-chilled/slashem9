@@ -73,7 +73,7 @@ const char *path, *mode;
 		s = strrchr(subname, '.');
 		if (s) {
 		    buf = alloc(s - subname + 5);
-		    (void)strncpy(buf, subname, s - subname);
+		    strncpy(buf, subname, s - subname);
 		    buf[s - subname] = '\0';
 		} else {
 		    buf = alloc(strlen(subname) + 5);

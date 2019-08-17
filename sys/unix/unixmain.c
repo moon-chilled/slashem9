@@ -62,7 +62,7 @@ char *argv[];
 
 	hname = argv[0];
 	hackpid = getpid();
-	(void) umask(0777 & ~FCMASK);
+	umask(0777 & ~FCMASK);
 
 	choose_windows(DEFAULT_WINDOW_SYS);
 
@@ -148,12 +148,12 @@ char *argv[];
 	 * It seems you really want to play.
 	 */
 	u.uhp = 1;	/* prevent RIP on early quits */
-	(void) signal(SIGHUP, (SIG_RET_TYPE) hangup);
+	signal(SIGHUP, (SIG_RET_TYPE) hangup);
 #ifdef SIGXCPU
-	(void) signal(SIGXCPU, (SIG_RET_TYPE) hangup);
+	signal(SIGXCPU, (SIG_RET_TYPE) hangup);
 #endif
 #ifdef SIGPIPE		/* eg., a lost proxy connection */
-	(void) signal(SIGPIPE, (SIG_RET_TYPE) hangup);
+	signal(SIGPIPE, (SIG_RET_TYPE) hangup);
 #endif
 
 	process_options(argc, argv);	/* command line options */
@@ -178,7 +178,7 @@ char *argv[];
 		int len = strlen(plname);
 		/* append the current role, if any, so that last dash is ours */
 		if (++len < sizeof plname)
-			(void)strncat(strcat(plname, "-"),
+			strncat(strcat(plname, "-"),
 				      pl_character, sizeof plname - len - 1);
 	}
 	plnamesuffix();		/* strip suffix from name; calls askname() */
@@ -191,8 +191,8 @@ char *argv[];
 		 * check for multiple games under the same name
 		 * (if !locknum) or check max nr of players (otherwise)
 		 */
-		(void) signal(SIGQUIT,SIG_IGN);
-		(void) signal(SIGINT,SIG_IGN);
+		signal(SIGQUIT,SIG_IGN);
+		signal(SIGINT,SIG_IGN);
 		if(!locknum)
 			sprintf(lock, "%d%s", (int)getuid(), plname);
 		getlock();
@@ -234,11 +234,11 @@ char *argv[];
 #ifndef FILE_AREAS
 		const char *fq_save = fqname(SAVEF, SAVEPREFIX, 1);
 
-		(void) chmod(fq_save,0);	/* disallow parallel restores */
+		chmod(fq_save,0);	/* disallow parallel restores */
 #else
-		(void) chmod_area(FILE_AREA_SAVE, SAVEF, 0);
+		chmod_area(FILE_AREA_SAVE, SAVEF, 0);
 #endif
-		(void) signal(SIGINT, (SIG_RET_TYPE) done1);
+		signal(SIGINT, (SIG_RET_TYPE) done1);
 #ifdef NEWS
 		if(iflags.news) {
 		    display_file_area(NEWS_AREA, NEWS, false);
@@ -257,12 +257,12 @@ char *argv[];
 
 		if (discover || wizard) {
 			if(yn("Do you want to keep the save file?") == 'n')
-			    (void) delete_savefile();
+			    delete_savefile();
 			else {
 #ifdef FILE_AREAS
-			    (void) chmod_area(FILE_AREA_SAVE, SAVEF, FCMASK);
+			    chmod_area(FILE_AREA_SAVE, SAVEF, FCMASK);
 #else
-			    (void) chmod(fq_save,FCMASK); /* back to readable */
+			    chmod(fq_save,FCMASK); /* back to readable */
 #endif
 			}
 		}
@@ -275,7 +275,7 @@ not_recovered:
 
 		flags.move = 0;
 		set_wear();
-		(void) pickup(1);
+		pickup(1);
 	}
 
 	moveloop();
@@ -341,11 +341,11 @@ char *argv[];
 #endif
 		case 'u':
 			if(argv[0][2])
-			  (void) strncpy(plname, argv[0]+2, sizeof(plname)-1);
+			  strncpy(plname, argv[0]+2, sizeof(plname)-1);
 			else if(argc > 1) {
 			  argc--;
 			  argv++;
-			  (void) strncpy(plname, argv[0], sizeof(plname)-1);
+			  strncpy(plname, argv[0], sizeof(plname)-1);
 			} else
 				raw_print("Player name expected after -u");
 			break;
@@ -433,8 +433,8 @@ boolean wr;
 # endif
 		) {
 # ifdef SECURE
-	    (void) setgid(getgid());
-	    (void) setuid(getuid());		/* Ron Wessels */
+	    setgid(getgid());
+	    setuid(getuid());		/* Ron Wessels */
 # endif
 	} else {
 	    /* non-default data files is a sign that scores may not be
@@ -496,11 +496,11 @@ whoami() {
 
 	if (*plname) return false;
 	if(/* !*plname && */ (s = nh_getenv("USER")))
-		(void) strncpy(plname, s, sizeof(plname)-1);
+		strncpy(plname, s, sizeof(plname)-1);
 	if(!*plname && (s = nh_getenv("LOGNAME")))
-		(void) strncpy(plname, s, sizeof(plname)-1);
+		strncpy(plname, s, sizeof(plname)-1);
 	if(!*plname && (s = getlogin()))
-		(void) strncpy(plname, s, sizeof(plname)-1);
+		strncpy(plname, s, sizeof(plname)-1);
 	return true;
 }
 

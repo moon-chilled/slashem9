@@ -1761,7 +1761,7 @@ const char *str;
 	static char buf[128];
 
 	if (!str) return NULL;
-	(void)strncpy(buf, str, 127);
+	strncpy(buf, str, 127);
 	return buf;
 }
 

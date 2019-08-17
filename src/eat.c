@@ -1040,7 +1040,7 @@ static void cpostfx(int pm) {
 		if (ABASE(A_INT) < ATTRMAX(A_INT)) {
 			if (!rn2(2)) {
 				pline("Yum! That was real brain food!");
-				(void) adjattrib(A_INT, 1, false);
+				adjattrib(A_INT, 1, false);
 				break;	/* don't give them telepathy, too */
 			}
 		}
@@ -1502,7 +1502,7 @@ static int eatcorpse(struct obj *otmp) {
 			(otmp->orotten || !rn2(7))) {
 	    if (rottenfood(otmp)) {
 		otmp->orotten = true;
-		(void)touchfood(otmp);
+		touchfood(otmp);
 		retcode = 1;
 	    }
 
@@ -1884,7 +1884,7 @@ static void eataccessory(struct obj *otmp) {
 		break;
 	    case AMULET_VERSUS_STONE:
 		/* no message--this gives no permanent effect */
-		(void)uunstone();
+		uunstone();
 		break;
 	    case RIN_SUSTAIN_ABILITY:
 	    case AMULET_OF_FLYING: /* Intrinsic flying not supported --ALI */
@@ -1923,7 +1923,7 @@ static void eatspecial(void) {
 	}
 	if (otmp->oclass == POTION_CLASS) {
 		otmp->quan++; /* dopotion() does a useup() */
-		(void)dopotion(otmp);
+		dopotion(otmp);
 	}
 	if (otmp->oclass == RING_CLASS || otmp->oclass == AMULET_CLASS)
 		eataccessory(otmp);
@@ -2251,7 +2251,7 @@ int doeat(void)	{
 	    	otmp->rknown = true;
 		if (otmp->quan > 1L) {
 		    if(!carried(otmp))
-			(void) splitobj(otmp, otmp->quan - 1L);
+			splitobj(otmp, otmp->quan - 1L);
 		    else
 			otmp = splitobj(otmp, 1L);
 		}
@@ -2276,7 +2276,7 @@ int doeat(void)	{
 	/* KMH -- Slow digestion is... indigestible */
 	if (otmp->otyp == RIN_SLOW_DIGESTION) {
 		pline("This ring is indigestible!");
-		(void) rottenfood(otmp);
+		rottenfood(otmp);
 		if (otmp->dknown && !objects[otmp->otyp].oc_name_known
 				&& !objects[otmp->otyp].oc_uname)
 			docall(otmp);
@@ -2884,7 +2884,7 @@ boolean maybe_finished_meal(boolean stopping) {
 	/* in case consume_oeaten() has decided that the food is all gone */
 	if (occupation == eatfood && victual.usedtime >= victual.reqtime) {
 	    if (stopping) occupation = 0;	/* for do_reset_eat */
-	    (void) eatfood(); /* calls done_eating() to use up victual.piece */
+	    eatfood(); /* calls done_eating() to use up victual.piece */
 	    return true;
 	}
 	return false;

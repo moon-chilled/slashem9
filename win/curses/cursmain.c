@@ -137,7 +137,7 @@ void curses_init_nhwindows(int *argcp, char **argv) {
     PDC_set_title(window_title);
     PDC_set_blink(true);        /* Only if the user asks for it! */
     timeout(1);
-    (void) getch();
+    getch();
     timeout(-1);
 #endif /* PDCURSES */
     getmaxyx(base_term, term_rows, term_cols);
@@ -285,15 +285,15 @@ curses_display_nhwindow(winid wid, boolean block)
     /* flush pending writes from other windows too */
     doupdate();
     if ((wid == MAP_WIN) && block) {
-        (void) curses_more();
+        curses_more();
     }
 
     if ((wid == MESSAGE_WIN) && block) {
         if (u.uhp != -1 && program_state.gameover != 1)
-            (void) curses_block(true);
+            curses_block(true);
         /* don't bug player with TAB prompt on "Saving..." or endgame */
         else
-            (void) curses_more();
+            curses_more();
     }
 }
 

@@ -38,7 +38,7 @@ static void add_location_to_explode_region(ExplodeRegion *reg, xchar x, xchar y)
 	reg->alocations = reg->alocations ? 2 * reg->alocations : 32;
 	new = (ExplodeLocation *)
 		alloc(reg->alocations * sizeof(ExplodeLocation));
-	(void) memcpy((void *)new, (void *)reg->locations,
+	memcpy((void *)new, (void *)reg->locations,
 		reg->nlocations * sizeof(ExplodeLocation));
 	free((void *)reg->locations);
 	reg->locations = new;
@@ -439,7 +439,7 @@ do_explode(
 
 		/* DS: Allow monster induced explosions also */
 		if (type >= 0 || type <= -10)
-		    (void)zap_over_floor(xi, yi, type, &shopdamage);
+		    zap_over_floor(xi, yi, type, &shopdamage);
 
 		mtmp = m_at(xi, yi);
 #ifdef STEED
@@ -681,7 +681,7 @@ long scatter(
 		    if ((trap = t_at(sx,sy)) && trap->ttyp == STATUE_TRAP)
 			    deltrap(trap);
 		    pline("%s.", Tobjnam(otmp, "crumble"));
-		    (void) break_statue(otmp);
+		    break_statue(otmp);
 		    place_object(otmp, sx, sy);	/* put fragments on floor */
 		}
 		used_up = true;

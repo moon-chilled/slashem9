@@ -372,7 +372,7 @@ curses_putch(winid wid, int x, int y, int ch, int color, int attr)
     map[y][x].attr = attr;
     nch = map[y][x];
 
-    (void) curses_map_borders(&sx, &sy, &ex, &ey, -1, -1);
+    curses_map_borders(&sx, &sy, &ex, &ey, -1, -1);
 
     if ((x >= sx) && (x <= ex) && (y >= sy) && (y <= ey)) {
         if (border) {

@@ -617,7 +617,7 @@ static void bot_raw(boolean reconfig) {
 		(sprintf(score, "%ld", botl_score()), score);
     uhp = Upolyd ? u.mh : u.uhp;
     if (uhp < 0) uhp = 0;
-    (void) describe_level(dlevel, true);
+    describe_level(dlevel, true);
     eos(dlevel)[-1] = 0;
     *rv++ = reconfig ? "dlevel" : dlevel;
     *rv++ = reconfig ? "gold" : (sprintf(gold, "%ld",

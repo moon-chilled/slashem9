@@ -79,7 +79,7 @@ tgetent(entbuf, term)
 	char wrkbuf[TCBUFSIZ];
 	tc = tc_find(fp, term, wrkbuf, (int)(sizeof wrkbuf - strlen(term)));
 	result = tc_store(term, tc);
-	(void) fclose(fp);
+	fclose(fp);
     } else {
 	result = -1;
     }
@@ -98,15 +98,15 @@ tc_store(trm, ent)
 
     if (!ent || !*ent || !trm || !*trm || (col = index(ent, ':')) == 0)
 	return 0;
-    (void) strcpy(tc_entry, trm);
+    strcpy(tc_entry, trm);
     if (((bar = index(ent, '|')) != 0 && bar < col)
      || ((long)(n = strlen(trm)) == (long)(col - ent)
 	    && strncmp(ent, trm, n) == 0))
-	(void) strcat(tc_entry, col);
+	strcat(tc_entry, col);
     else if (*ent == ':')
-	(void) strcat(tc_entry, ent);
+	strcat(tc_entry, ent);
     else
-	(void) strcat(strcat(tc_entry, ":"), ent);
+	strcat(strcat(tc_entry, ":"), ent);
 
     /* initialize global variables */
     k = tgetnum("pc");
@@ -114,7 +114,7 @@ tc_store(trm, ent)
     BC = s = bc_up_buf;
     if (!tgetstr("bc", &s))  (void)strcpy(s, "\b"),  s += 2;
     UP = s;
-    (void)tgetstr("up", &s);
+    tgetstr("up", &s);
 #ifndef NO_DELAY_PADDING
     /* caller must set `ospeed' */
     if ((int)ospeed >= (int)SIZE(baud_rates))
@@ -217,7 +217,7 @@ tgetnum(which)
     p += 3;
     if ((n = (size_t)(q - p)) >= sizeof numbuf)
 	return -1;
-    (void) strncpy(numbuf, p, n);
+    strncpy(numbuf, p, n);
     numbuf[n] = '\0';
     return atoi(numbuf);
 }
@@ -396,7 +396,7 @@ tparam(ctl, buf, buflen, row, col, row2, col2)
 	     default:	*++r = c;	break;	/* erroneous entry... */
 	    }
 	    if (fmt) {
-		(void) sprintf(numbuf, fmt, av[ac++]);
+		sprintf(numbuf, fmt, av[ac++]);
 		for (z = numbuf; *z && r <= bufend; z++)
 		    *r++ = *z;
 		--r;		/* will be re-incremented below */
@@ -448,7 +448,7 @@ int (*output_func)();	/* actual output routine; return value ignored */
     /* output the string */
     while ((c = *p++) != '\0') {
 	if (c == '\200')  c = '\0';	/* undo tgetstr's encoding */
-	(void) (*output_func)(c);
+	(*output_func)(c);
     }
 
 #ifndef NO_DELAY_PADDING
@@ -465,7 +465,7 @@ int (*output_func)();	/* actual output routine; return value ignored */
 
 	c = PC;		/* assume output_func isn't allowed to change PC */
 	while (--num >= 0)
-	    (void) (*output_func)(c);
+	    (*output_func)(c);
     }
 #endif	/* !NO_DELAY_PADDING */
 

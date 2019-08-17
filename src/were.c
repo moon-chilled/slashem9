@@ -84,8 +84,8 @@ new_were (struct monst *mon)
 	newsym(mon->mx,mon->my);
 	mon_break_armor(mon, false);
 	possibly_unwield(mon, false);
-	(void) stop_timer(UNPOLY_MON, monst_to_any(mon));
-	(void) start_timer(rn1(1000,1000), TIMER_MONSTER, UNPOLY_MON, monst_to_any(mon));
+	stop_timer(UNPOLY_MON, monst_to_any(mon));
+	start_timer(rn1(1000,1000), TIMER_MONSTER, UNPOLY_MON, monst_to_any(mon));
 }
 
 int
@@ -154,7 +154,7 @@ char *genbuf;
 		if (canseemon(mtmp)) *visible += 1;
 	    }
 	    if (yours && mtmp)
-		(void) tamedog(mtmp, NULL);
+		tamedog(mtmp, NULL);
 	}
 	return total;
 }
@@ -171,7 +171,7 @@ you_were (void)
 		    an(mons[u.ulycn].mname+4));
 	    if(yn(qbuf) == 'n') return;
 	}
-	(void) polymon(u.ulycn);
+	polymon(u.ulycn);
 }
 
 void
@@ -192,8 +192,8 @@ boolean purify;
 		    You_feel("very bad!");
 		    if (in_wereform)
 			rehumanize();
-		    (void) adjattrib(A_STR, -rn1(3,3), 2);
-		    (void) adjattrib(A_CON, -rn1(3,3), 1);
+		    adjattrib(A_STR, -rn1(3,3), 2);
+		    adjattrib(A_CON, -rn1(3,3), 1);
 		    losehp(u.uhp - (u.uhp > 10 ? rnd(5) : 1), "purification",
 			    KILLED_BY);
 		}

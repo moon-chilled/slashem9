@@ -28,7 +28,7 @@ write_header()
 		fprintf(stderr, "PPM dimensions too large\n");
 		return false;
 	}
-	(void) fprintf(ppm_file, "P6 %04d %04d 255\n",
+	fprintf(ppm_file, "P6 %04d %04d 255\n",
 				PpmScreen.Width, PpmScreen.Height);
 	return true;
 }
@@ -40,9 +40,9 @@ WriteTileStrip()
 
 	for (j = 0; j < tile_y; j++) {
 		for (i = 0; i < PpmScreen.Width; i++) {
-			(void) fputc((char)image[j][i].r, ppm_file);
-			(void) fputc((char)image[j][i].g, ppm_file);
-			(void) fputc((char)image[j][i].b, ppm_file);
+			fputc((char)image[j][i].r, ppm_file);
+			fputc((char)image[j][i].g, ppm_file);
+			fputc((char)image[j][i].b, ppm_file);
 		}
 	}
 }
@@ -178,14 +178,14 @@ char *argv[];
 
 		init_colormap();
 		if (!fopen_ppm_file(ppmfile, WRBMODE)) {
-			(void) fclose_text_file();
+			fclose_text_file();
 			exit(EXIT_FAILURE);
 		}
 
 		while (read_text_tile(pixels))
-			(void) write_ppm_tile(pixels);
+			write_ppm_tile(pixels);
 
-		(void) fclose_text_file();
+		fclose_text_file();
         }
 
 	if (fclose_ppm_file())

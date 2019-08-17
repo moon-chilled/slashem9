@@ -267,7 +267,7 @@ static void fortune(struct monst *mtmp) {
 		long t = -1;
 
 		getlin("Which trump?", buf);
-		(void) sscanf(buf, "%ld", &t);
+		sscanf(buf, "%ld", &t);
 		if (t >= 0) card = t + CARD_SUITED;
 	}
 #endif

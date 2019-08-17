@@ -356,7 +356,7 @@ nh_timeout (void)
 			break;
 		case HALLUC:
 			HHallucination = 1;
-			(void) make_hallucinated(0L, true, 0L);
+			make_hallucinated(0L, true, 0L);
 			stop_occupation();
 			break;
 		case SLEEPING:
@@ -370,7 +370,7 @@ nh_timeout (void)
 			}
 			break;
 		case LEVITATION:
-			(void) float_down(I_SPECIAL|TIMEOUT, 0L);
+			float_down(I_SPECIAL|TIMEOUT, 0L);
 			break;
 		case STRANGLED:
 			killer_format = KILLED_BY;
@@ -441,7 +441,7 @@ void set_obj_poly(struct obj *obj, struct obj *old) {
 	if (obj->oldtyp == obj->otyp)
 	    obj->oldtyp = STRANGE_OBJECT;
 	else
-	    (void) start_timer(rn1(500,500), TIMER_OBJECT, UNPOLY_OBJ, obj_to_any(obj));
+	    start_timer(rn1(500,500), TIMER_OBJECT, UNPOLY_OBJ, obj_to_any(obj));
 	return;
 }
 
@@ -459,7 +459,7 @@ void unpoly_obj(void * arg, long timeout) {
 	if (carried(obj) && !silent) /* silent == true is a strange case... */
 		pline("Suddenly, your %s!", aobjnam(obj, "transmute"));
 
-	(void) stop_timer(UNPOLY_OBJ, obj_to_any(obj));
+	stop_timer(UNPOLY_OBJ, obj_to_any(obj));
 
 	obj = poly_obj(obj, oldobj);
 
@@ -564,9 +564,9 @@ boolean your_fault;
 	}
 	if (i > 0) {
 	    /* Stop any old timers.   */
-	    (void) stop_timer(UNPOLY_MON, monst_to_any(mtmp));
+	    stop_timer(UNPOLY_MON, monst_to_any(mtmp));
 	    /* Lengthen unpolytime - was 500,500  for player */
-	    (void) start_timer(when ? when : rn1(1000, 1000), TIMER_MONSTER, UNPOLY_MON, monst_to_any(mtmp));
+	    start_timer(when ? when : rn1(1000, 1000), TIMER_MONSTER, UNPOLY_MON, monst_to_any(mtmp));
 	}
 	return i;
 }
@@ -584,7 +584,7 @@ void unpoly_mon(void *arg, long timeout) {
 
 	strcpy(oldname, Monnam(mtmp));
 
-	(void) stop_timer(UNPOLY_MON, monst_to_any(mtmp));
+	stop_timer(UNPOLY_MON, monst_to_any(mtmp));
 
 	if (!newcham(mtmp, &mons[oldmon], false, (canseemon(mtmp) && !silent))) {
 	    /* Wasn't able to unpolymorph */
@@ -729,7 +729,7 @@ void attach_egg_hatch_timeout(struct obj *egg) {
 	int i;
 
 	/* stop previous timer, if any */
-	(void) stop_timer(HATCH_EGG, obj_to_any(egg));
+	stop_timer(HATCH_EGG, obj_to_any(egg));
 
 	/*
 	 * Decide if and when to hatch the egg.  The old hatch_it() code tried
@@ -740,7 +740,7 @@ void attach_egg_hatch_timeout(struct obj *egg) {
 	for (i = (MAX_EGG_HATCH_TIME-50)+1; i <= MAX_EGG_HATCH_TIME; i++)
 	    if (rnd(i) > 150) {
 		/* egg will hatch */
-		(void) start_timer((long)i, TIMER_OBJECT, HATCH_EGG, obj_to_any(egg));
+		start_timer((long)i, TIMER_OBJECT, HATCH_EGG, obj_to_any(egg));
 		break;
 	    }
 }
@@ -748,7 +748,7 @@ void attach_egg_hatch_timeout(struct obj *egg) {
 /* prevent an egg from ever hatching */
 void kill_egg(struct obj *egg) {
 	/* stop previous timer, if any */
-	(void) stop_timer(HATCH_EGG, obj_to_any(egg));
+	stop_timer(HATCH_EGG, obj_to_any(egg));
 }
 
 /* timer callback routine: hatch the given egg */
@@ -903,8 +903,8 @@ void hatch_egg(void *arg, long timeout) {
 		attach_egg_hatch_timeout(egg);
 		if (egg->timed) {
 		    /* replace ordinary egg timeout with a short one */
-		    (void) stop_timer(HATCH_EGG, obj_to_any(egg));
-		    (void) start_timer((long)rnd(12), TIMER_OBJECT, HATCH_EGG, obj_to_any(egg));
+		    stop_timer(HATCH_EGG, obj_to_any(egg));
+		    start_timer((long)rnd(12), TIMER_OBJECT, HATCH_EGG, obj_to_any(egg));
 		}
 	    } else if (carried(egg)) {
 		useup(egg);
@@ -935,14 +935,14 @@ attach_fig_transform_timeout (struct obj *figurine)
 	int i;
 
 	/* stop previous timer, if any */
-	(void) stop_timer(FIG_TRANSFORM, obj_to_any(figurine));
+	stop_timer(FIG_TRANSFORM, obj_to_any(figurine));
 
 	/*
 	 * Decide when to transform the figurine.
 	 */
 	i = rnd(9000) + 200;
 	/* figurine will transform */
-	(void) start_timer((long)i, TIMER_OBJECT, FIG_TRANSFORM, obj_to_any(figurine));
+	start_timer((long)i, TIMER_OBJECT, FIG_TRANSFORM, obj_to_any(figurine));
 }
 
 /* give a fumble message */
@@ -1117,7 +1117,7 @@ long timeout;
 	if (get_obj_location(obj, &x, &y, 0)) {
 	    canseeit = !Blind && cansee(x, y);
 	    /* set up `whose[]' to be "Your" or "Fred's" or "The goblin's" */
-	    (void) Shk_Your(whose, obj);
+	    Shk_Your(whose, obj);
 	} else {
 	    canseeit = false;
 	}
@@ -1986,7 +1986,7 @@ void obj_split_timers (struct obj *src, struct obj *dest) {
     for (curr = timer_base; curr; curr = next_timer) {
 	next_timer = curr->next;	/* things may be inserted */
 	if (curr->kind == TIMER_OBJECT && curr->arg.a_obj == src) {
-	    (void) start_timer(curr->timeout-monstermoves, TIMER_OBJECT, curr->func_index, obj_to_any(dest));
+	    start_timer(curr->timeout-monstermoves, TIMER_OBJECT, curr->func_index, obj_to_any(dest));
 	}
     }
 }
@@ -2277,7 +2277,7 @@ save_timers (int fd, int mode, int range)
 
 	count = maybe_write_timer(fd, range, false);
 	bwrite(fd, (void *) &count, sizeof count);
-	(void) maybe_write_timer(fd, range, true);
+	maybe_write_timer(fd, range, true);
     }
 
     if (release_data(mode)) {

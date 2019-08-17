@@ -100,7 +100,7 @@ pick_move:
 			    pline("%s picks up %s.", Monnam(mtmp),
 				distant_name(ib,doname));
 			obj_extract_self(ib);
-			(void) mpickobj(mtmp, ib);
+			mpickobj(mtmp, ib);
 		}
 		return(1);
 	}
@@ -157,7 +157,7 @@ pri_move (struct monst *priest)
 			if(Displaced)
 				Your("displaced image doesn't fool %s!",
 					mon_nam(priest));
-			(void) mattacku(priest);
+			mattacku(priest);
 			return(0);
 		} else if(index(u.urooms, temple)) {
 			/* chase player if inside temple & can see him */
@@ -185,7 +185,7 @@ boolean sanctum;   /* is it the seat of the high priest? */
 	int cnt;
 
 	if(MON_AT(sx+1, sy))
-		(void) rloc(m_at(sx+1, sy), false); /* insurance */
+		rloc(m_at(sx+1, sy), false); /* insurance */
 
 	priest = makemon(&mons[sanctum ? PM_HIGH_PRIEST : PM_ALIGNED_PRIEST],
 			 sx + 1, sy, NO_MM_FLAGS);
@@ -204,11 +204,11 @@ boolean sanctum;   /* is it the seat of the high priest? */
 		/* now his/her goodies... */
 		if(sanctum && EPRI(priest)->shralign == A_NONE &&
 		     on_level(&sanctum_level, &u.uz)) {
-			(void) mongets(priest, AMULET_OF_YENDOR);
+			mongets(priest, AMULET_OF_YENDOR);
 		}
 		/* 2 to 4 spellbooks */
 		for (cnt = rn1(3,2); cnt > 0; --cnt) {
-		    (void) mpickobj(priest, mkobj(SPBOOK_CLASS, false));
+		    mpickobj(priest, mkobj(SPBOOK_CLASS, false));
 		}
 		/* [ALI] Upgrade existing robe or aquire new */
 		if (rn2(2) || (otmp = which_armor(priest, W_ARM)) == 0) {
@@ -219,7 +219,7 @@ boolean sanctum;   /* is it the seat of the high priest? */
 			uncurse(obj);
 		    else
 			curse(obj);
-		    (void) mpickobj(priest, obj);
+		    mpickobj(priest, obj);
 		    m_dowear(priest, true);
 		    if (!(obj->owornmask & W_ARM)) {
 			obj_extract_self(obj);

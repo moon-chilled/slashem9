@@ -115,7 +115,7 @@ input()		/* Under MPW \n is chr(13)! Compensate for this. */
 <MAPC>ENDMAP	{
 		  BEGIN(INITIAL);
 		  yylval.map = (char *) alloc(map_cnt + 1);
-		  (void) strncpy(yylval.map, map, map_cnt);
+		  strncpy(yylval.map, map, map_cnt);
 		  yylval.map[map_cnt] = 0;
 		  map_cnt = 0;
 		  return MAP_ID;
@@ -125,7 +125,7 @@ input()		/* Under MPW \n is chr(13)! Compensate for this. */
 		  /* convert \r\n to \n */
 		  if (len >= 2 && yytext[len - 2] == '\r') len -= 1;
 		  line_number++;
-		  (void) strncpy(map + map_cnt, yytext, len);
+		  strncpy(map + map_cnt, yytext, len);
 		  map_cnt += len;
 		  map[map_cnt - 1] = '\n';
 		  map[map_cnt] = '\0';

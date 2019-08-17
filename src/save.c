@@ -111,7 +111,7 @@ dosave (void)
 	}
 	saverestore = false;
 #endif
-	(void)doredraw();
+	doredraw();
 	return 0;
 }
 
@@ -123,13 +123,13 @@ hangup(sig_unused)  /* called as signal() handler, so sent at least one arg */
 int sig_unused;
 {
 # ifdef NOSAVEONHANGUP
-	(void) signal(SIGINT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	clearlocks();
 	terminate(EXIT_FAILURE);
 # else	/* SAVEONHANGUP */
 	if (!program_state.done_hup++) {
 	    if (program_state.something_worth_saving)
-		(void) dosave0();
+		dosave0();
 	    {
 		clearlocks();
 		terminate(EXIT_FAILURE);
@@ -155,16 +155,16 @@ dosave0()
 	fq_save = fqname(SAVEF, SAVEPREFIX, 1);	/* level files take 0 */
 
 #ifdef UNIX
-	(void) signal(SIGHUP, SIG_IGN);
+	signal(SIGHUP, SIG_IGN);
 #endif
 #ifndef NO_SIGNAL
-	(void) signal(SIGINT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 #endif
 
 	HUP if (iflags.window_inited) {
 	    fd = open_savefile();
 	    if (fd > 0) {
-		(void) close(fd);
+		close(fd);
 		clear_nhwindow(WIN_MESSAGE);
 		There("seems to be an old save file.");
 		if (yn("Overwrite the old file?") == 'n') {
@@ -182,7 +182,7 @@ dosave0()
 	fd = create_savefile();
 	if(fd < 0) {
 		HUP pline("Cannot open save file.");
-		(void) delete_savefile();	/* ab@unido */
+		delete_savefile();	/* ab@unido */
 		return(0);
 	}
 
@@ -254,15 +254,15 @@ dosave0()
 		ofd = open_levelfile(ltmp, whynot);
 		if (ofd < 0) {
 		    HUP pline("%s", whynot);
-		    (void) close(fd);
-		    (void) delete_savefile();
+		    close(fd);
+		    delete_savefile();
 		    HUP killer = whynot;
 		    HUP done(TRICKED);
 		    return(0);
 		}
 		minit();	/* ZEROCOMP */
 		getlev(ofd, hackpid, ltmp, false);
-		(void) close(ofd);
+		close(ofd);
 		bwrite(fd, (void *) &ltmp, sizeof ltmp); /* level number*/
 		savelev(fd, ltmp, WRITE_SAVE | FREE_SAVE);     /* actual level*/
 		delete_levelfile(ltmp);
@@ -371,7 +371,7 @@ savestateinlock()
 		    return;
 		}
 
-		(void) read(fd, (void *) &hpid, sizeof(hpid));
+		read(fd, (void *) &hpid, sizeof(hpid));
 		if (hackpid != hpid) {
 		    sprintf(whynot,
 			    "Level #0 pid (%d) doesn't match ours (%d)!",
@@ -380,7 +380,7 @@ savestateinlock()
 		    killer = whynot;
 		    done(TRICKED);
 		}
-		(void) close(fd);
+		close(fd);
 
 		fd = create_levelfile(0, whynot);
 		if (fd < 0) {
@@ -389,11 +389,11 @@ savestateinlock()
 		    done(TRICKED);
 		    return;
 		}
-		(void) write(fd, (void *) &hackpid, sizeof(hackpid));
+		write(fd, (void *) &hackpid, sizeof(hackpid));
 		if (flags.ins_chkpt) {
 		    int currlev = ledger_no(&u.uz);
 
-		    (void) write(fd, (void *) &currlev, sizeof(currlev));
+		    write(fd, (void *) &currlev, sizeof(currlev));
 		    save_savefile_name(fd);
 		    store_version(fd);
 #ifdef STORE_PLNAME_IN_FILE
@@ -559,7 +559,7 @@ bputc(c)
 int c;
 {
     if (outbufp >= sizeof outbuf) {
-	(void) write(bwritefd, outbuf, sizeof outbuf);
+	write(bwritefd, outbuf, sizeof outbuf);
 	outbufp = 0;
     }
     outbuf[outbufp++] = (unsigned char)c;
@@ -649,7 +649,7 @@ bclose(fd)
 int fd;
 {
     bufoff(fd);
-    (void) close(fd);
+    close(fd);
     return;
 }
 
@@ -736,12 +736,12 @@ bclose(fd)
     bufoff(fd);
 #ifdef UNIX
     if (fd == bw_fd) {
-	(void) fclose(bw_FILE);
+	fclose(bw_FILE);
 	bw_fd = -1;
 	bw_FILE = 0;
     } else
 #endif
-	(void) close(fd);
+	close(fd);
     return;
 }
 #endif /* ZEROCOMP */

@@ -219,7 +219,7 @@ ask_again:
 			simple_look(objs, here);  /* dumb if objs==invent */
 			goto ask_again;
 		    } else if (sym == 'i') {
-			(void) display_inventory(NULL, true);
+			display_inventory(NULL, true);
 			goto ask_again;
 		    } else if (sym == 'm') {
 			m_seen = true;
@@ -274,7 +274,7 @@ boolean picked_some;
 	if (ct) {
 	    if (flags.run) nomul(0);
 	    flush_screen(1);
-	    (void) look_here(ct, picked_some);
+	    look_here(ct, picked_some);
 	} else {
 	    sense_engr_at(u.ux, u.uy, false);
 	}
@@ -732,7 +732,7 @@ boolean (*allow)(struct obj*);/* allow function */
 		if ((qflags & FEEL_COCKATRICE) && curr->otyp == CORPSE &&
 		     will_feel_cockatrice(curr, false)) {
 			destroy_nhwindow(win);	/* stop the menu and revert */
-			(void) look_here(0, false);
+			look_here(0, false);
 			return 0;
 		}
 		if ((!(qflags & INVORDER_SORT) || curr->oclass == *pack)
@@ -1320,7 +1320,7 @@ boolean telekinesis;	/* not picking it up directly by hand */
 	    } else if (is_rider(&mons[obj->corpsenm])) {
 		pline("At your %s, the corpse suddenly moves...",
 			telekinesis ? "attempted acquisition" : "touch");
-		(void) revive_corpse(obj, false);
+		revive_corpse(obj, false);
 		exercise(A_WIS, false);
 		return -1;
 	    }
@@ -1598,7 +1598,7 @@ lootcont:
 gotit:
 		if (coffers) {
 	    verbalize("Thank you for your contribution to reduce the debt.");
-		    (void) add_to_container(coffers, goldob);
+		    add_to_container(coffers, goldob);
 		    coffers->owt = weight(coffers);
 		} else {
 		    struct monst *mon = makemon(courtmon(),
@@ -1943,7 +1943,7 @@ struct obj *obj;
 	freeinv(obj);
 
 	if (obj_is_burning(obj))	/* this used to be part of freeinv() */
-		(void) snuff_lit(obj);
+		snuff_lit(obj);
 
 	if (floor_container && costly_spot(u.ux, u.uy)) {
 	    if (current_container->no_charge && !obj->unpaid) {
@@ -1963,8 +1963,8 @@ struct obj *obj;
 		/* stop any corpse timeouts when frozen */
 		if (obj->otyp == CORPSE && obj->timed) {
 			long rot_alarm = stop_timer(ROT_CORPSE, obj_to_any(obj));
-			(void) stop_timer(MOLDY_CORPSE, obj_to_any(obj));
-			(void) stop_timer(REVIVE_MON, obj_to_any(obj));
+			stop_timer(MOLDY_CORPSE, obj_to_any(obj));
+			stop_timer(REVIVE_MON, obj_to_any(obj));
 			/* mark a non-reviving corpse as such */
 			if (rot_alarm) obj->norevive = 1;
 		}
@@ -2003,7 +2003,7 @@ struct obj *obj;
 	    /* gold in container always needs to be added to credit */
 	    if (floor_container && obj->oclass == COIN_CLASS)
 		sellobj(obj, current_container->ox, current_container->oy);
-	    (void) add_to_container(current_container, obj);
+	    add_to_container(current_container, obj);
 	    current_container->owt = weight(current_container);
 	}
 	/* gold needs this, and freeinv() many lines above may cause
@@ -2158,13 +2158,13 @@ struct obj *box;
 	    You("think %s brushed your %s.", something, body_part(FOOT));
 	else
 	    pline("%s inside the box is still alive!", Monnam(livecat));
-	(void) christen_monst(livecat, sc);
+	christen_monst(livecat, sc);
     } else {
 	deadcat = mk_named_object(CORPSE, &mons[PM_HOUSECAT],
 				  box->ox, box->oy, sc);
 	if (deadcat) {
 	    obj_extract_self(deadcat);
-	    (void) add_to_container(box, deadcat);
+	    add_to_container(box, deadcat);
 	}
 	pline_The("%s inside the box is dead!",
 	    Hallucination ? rndmonnam() : "housecat");
@@ -2216,7 +2216,7 @@ int held;
 	    return 0;
 	} else if (obj->otrapped) {
 	    if (held) You("open %s...", the(xname(obj)));
-	    (void) chest_trap(obj, HAND, false);
+	    chest_trap(obj, HAND, false);
 	    /* even if the trap fails, you've used up this turn */
 	    if (multi >= 0) {	/* in case we didn't become paralyzed */
 		nomul(-1);
@@ -2263,7 +2263,7 @@ int held;
 	    if (!cnt)
 		pline("%s", emptymsg);
 	    else
-		(void) display_cinventory(current_container);
+		display_cinventory(current_container);
 	    return 0;
 	}
 	if (cnt || flags.menu_style == MENU_FULL) {
@@ -2409,7 +2409,7 @@ ask_again2:
 				   (u.ugold != 0L),
 #endif
 				   &menu_on_request)) {
-		    (void) askchain((struct obj **)&invent,
+		    askchain((struct obj **)&invent,
 				    (one_by_one ? NULL : select), allflag,
 				    in_container, ck_bag, 0, "nodot");
 		    used = 1;
@@ -2503,7 +2503,7 @@ boolean put_in;
 			    otmp = 0;		/* and break loop */
 			} else if (otmp && otmp != pick_list[i].item.a_obj) {
 			    /* split occurred, merge again */
-			    (void) merged(&pick_list[i].item.a_obj, &otmp);
+			    merged(&pick_list[i].item.a_obj, &otmp);
 			}
 			break;
 		    }

@@ -195,7 +195,7 @@ char name[BUFSZ];
 	int retval;
 	offset = ftell(txtfile);
 	retval = fscanf(txtfile, "# %s %d (%[^)])", ttype, number, name) == 3;
-	(void) fseek(txtfile, offset, SEEK_SET);
+	fseek(txtfile, offset, SEEK_SET);
 	return retval;
 }
 
@@ -330,7 +330,7 @@ const char *name;
 			}
 			if (k >= colorsinmainmap)
 				fprintf(stderr, "color not in colormap!\n");
-			(void) fputs(charcolors[k], txtfile);
+			fputs(charcolors[k], txtfile);
 		}
 		fprintf(txtfile, "\n");
 	}

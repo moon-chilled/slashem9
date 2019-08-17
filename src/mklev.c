@@ -438,7 +438,7 @@ static void makeniche(int trap_type) {
 		    dosdoor(xx, yy, aroom, rn2(5) ? SDOOR : DOOR);
 		else {
 		    if (!level.flags.noteleport)
-			(void) mksobj_at(SCR_TELEPORTATION,
+			mksobj_at(SCR_TELEPORTATION,
 					 xx, yy+dy, true, false);
 		    if (!rn2(3)) (void) mkobj_at(0, xx, yy+dy, true);
 		}
@@ -494,8 +494,8 @@ static void clear_level_structures(void) {
 	    }
 	}
 #ifndef MICROPORT_BUG
-	(void) memset((void *)level.objects, 0, sizeof(level.objects));
-	(void) memset((void *)level.monsters, 0, sizeof(level.monsters));
+	memset((void *)level.objects, 0, sizeof(level.objects));
+	memset((void *)level.monsters, 0, sizeof(level.monsters));
 #endif
 	level.objlist = NULL;
 	level.buriedobjlist = NULL;
@@ -729,7 +729,7 @@ skip0:
 		    tmonst = makemon(NULL, x,y,NO_MM_FLAGS);
 		    if (tmonst && tmonst->data == &mons[PM_GIANT_SPIDER] &&
 			    !occupied(x, y))
-			(void) maketrap(x, y, WEB);
+			maketrap(x, y, WEB);
 		}
 		/* put traps and mimics inside */
 		goldseen = false;
@@ -738,7 +738,7 @@ skip0:
 		while (!rn2(x))
 		    mktrap(0,0,croom,NULL);
 		if (!goldseen && !rn2(3))
-		    (void) mkgold(0L, somex(croom), somey(croom));
+		    mkgold(0L, somex(croom), somey(croom));
 #ifdef REINCARNATION
 		x = 80 - (depth(&u.uz) * 2);
 		if (x < 2) x = 2;
@@ -758,7 +758,7 @@ skip0:
 
 		/* put statues inside */
 		if(!rn2(20))
-		    (void) mkcorpstat(STATUE, NULL,
+		    mkcorpstat(STATUE, NULL,
 				      NULL,
 				      somex(croom), somey(croom), true);
 		/* put box/chest inside;
@@ -767,7 +767,7 @@ skip0:
 		 *  when few rooms; chance for 3 or more is neglible.
 		 */
 		if(!rn2(nroom * 5 / 2))
-		    (void) mksobj_at((rn2(3)) ? LARGE_BOX : CHEST,
+		    mksobj_at((rn2(3)) ? LARGE_BOX : CHEST,
 				     somex(croom), somey(croom), true, false);
 
 		/* maybe make some graffiti */
@@ -790,14 +790,14 @@ skip0:
 
 /* STEPHEN WHITE'S NEW CODE */
 		if(!rn2(5)) {
-		    (void) mkobj_at(0, somex(croom), somey(croom), true);
+		    mkobj_at(0, somex(croom), somey(croom), true);
 		    tryct = 0;
 		    while(!rn2(4)) {
 			if(++tryct > 100) {
 			    impossible("tryct overflow4");
 			    break;
 			}
-			(void) mkobj_at(0, somex(croom), somey(croom), true);
+			mkobj_at(0, somex(croom), somey(croom), true);
 		    }
 		}
 	}
@@ -822,7 +822,7 @@ static void mineralize(void) {
 	    for (y = 1; y < (ROWNO - 1); y++)
 		if ((levl[x][y].typ == POOL && !rn2(10)) ||
 			(levl[x][y].typ == MOAT && !rn2(30)))
-	    	    (void)mksobj_at(KELP_FROND, x, y, true, false);
+	    	    mksobj_at(KELP_FROND, x, y, true, false);
 
 	/* determine if it is even allowed;
 	   almost all special levels are excluded */
@@ -1203,7 +1203,7 @@ void mktrap(int num, int mazeflag, struct mkroom *croom, coord *tm) {
 			(avoid_boulder && sobj_at(BOULDER, m.x, m.y)));
 	}
 
-	(void) maketrap(m.x, m.y, kind);
+	maketrap(m.x, m.y, kind);
 	if (kind == WEB) (void) makemon(&mons[PM_GIANT_SPIDER],
 						m.x, m.y, NO_MM_FLAGS);
 }

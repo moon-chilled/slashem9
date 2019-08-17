@@ -302,7 +302,7 @@ char **argv;
 	init_yyout(stdout);
 	if (argc == 1) {		/* Read standard input */
 	    init_yyin(stdin);
-	    (void) yyparse();
+	    yyparse();
 	    if (fatal_error > 0) {
 		    errors_encountered = true;
 	    }
@@ -315,13 +315,13 @@ char **argv;
 		    }
 		    fin = freopen(fname, "r", stdin);
 		    if (!fin) {
-			(void) fprintf(stderr,"Can't open \"%s\" for input.\n",
+			fprintf(stderr,"Can't open \"%s\" for input.\n",
 						fname);
 			perror(fname);
 			errors_encountered = true;
 		    } else {
 			init_yyin(fin);
-			(void) yyparse();
+			yyparse();
 			line_number = 1;
 			if (fatal_error > 0) {
 				errors_encountered = true;
@@ -347,7 +347,7 @@ void
 yyerror(s)
 const char *s;
 {
-	(void) fprintf(stderr,
+	fprintf(stderr,
 #ifndef MAC_MPW
 	  "%s: line %d : %s\n",
 #else
@@ -355,7 +355,7 @@ const char *s;
 #endif
 	  fname, (*s >= 'A' && *s <= 'Z') ? colon_line_number : line_number, s);
 	if (++fatal_error > MAX_ERRORS) {
-		(void) fprintf(stderr,"Too many errors, good bye!\n");
+		fprintf(stderr,"Too many errors, good bye!\n");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -367,7 +367,7 @@ void
 yywarning(s)
 const char *s;
 {
-	(void) fprintf(stderr,
+	fprintf(stderr,
 #ifndef MAC_MPW
 	  "%s: line %d : WARNING : %s\n",
 #else
@@ -1232,7 +1232,7 @@ specialmaze *maze_level;
 	} else
 	    panic("write_level_file");
 
-	(void) close(fout);
+	close(fout);
 	return true;
 }
 

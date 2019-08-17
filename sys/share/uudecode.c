@@ -104,7 +104,7 @@ char **argv;
 		if (strncmp(buf, "begin ", 6) == 0)
 			break;
 	}
-	(void)sscanf(buf, "begin %o %s", &mode, dest);
+	sscanf(buf, "begin %o %s", &mode, dest);
 
 #ifndef WIN32
 	/* handle ~user/file format */

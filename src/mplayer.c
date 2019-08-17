@@ -105,7 +105,7 @@ short typ;
 	 * chances of having plusses is the same as usual....
 	 */
 	obj->spe = rn2(10) ? (rn2(3) ? rn2(5) : rn1(4,4)) : -rnd(3);
-	(void) mpickobj(mon, obj);
+	mpickobj(mon, obj);
 }
 
 struct monst *
@@ -121,7 +121,7 @@ boolean special;
 		return(NULL);
 
 	if(MON_AT(x, y))
-		(void) rloc(m_at(x, y), false); /* insurance */
+		rloc(m_at(x, y), false); /* insurance */
 
 	if(!In_endgame(&u.uz)) special = false;
 
@@ -144,7 +144,7 @@ boolean special;
 	        get_mplname(mtmp, nam);
 	        mtmp = christen_monst(mtmp, nam);
 		/* that's why they are "stuck" in the endgame :-) */
-		(void)mongets(mtmp, FAKE_AMULET_OF_YENDOR);
+		mongets(mtmp, FAKE_AMULET_OF_YENDOR);
 	    }
 	    mtmp->mpeaceful = 0;
 	    set_malign(mtmp); /* peaceful may have changed again */
@@ -241,12 +241,12 @@ boolean special;
 		/* mplayers knew better than to overenchant Magicbane */
 		if (otmp->oartifact == ART_MAGICBANE)
 		    otmp->spe = rnd(4);
-		(void) mpickobj(mtmp, otmp);
+		mpickobj(mtmp, otmp);
 	    }
 
 	    if(special) {
 		if (!rn2(10))
-		    (void) mongets(mtmp, rn2(3) ? LUCKSTONE : LOADSTONE);
+		    mongets(mtmp, rn2(3) ? LUCKSTONE : LOADSTONE);
 		mk_mplayer_armor(mtmp, armor);
 		mk_mplayer_armor(mtmp, cloak);
 		mk_mplayer_armor(mtmp, helm);
@@ -260,7 +260,7 @@ boolean special;
 
 		quan = rn2(3) ? rn2(3) : rn2(16);
 		while(quan--)
-		    (void)mongets(mtmp, rnd_class(DILITHIUM_CRYSTAL, JADE));
+		    mongets(mtmp, rnd_class(DILITHIUM_CRYSTAL, JADE));
 		/* To get the gold "right" would mean a player can double his */
 		/* gold supply by killing one mplayer.  Not good. */
 #ifndef GOLDOBJ
@@ -270,7 +270,7 @@ boolean special;
 #endif
 		quan = rn2(10);
 		while(quan--)
-		    (void) mpickobj(mtmp, mkobj(RANDOM_CLASS, false));
+		    mpickobj(mtmp, mkobj(RANDOM_CLASS, false));
 	    } else { /* wandering characters... */
 #ifndef GOLDOBJ
 	       mtmp->mgold = rn2((mtmp->m_lev)*100);
@@ -280,13 +280,13 @@ boolean special;
 	    }
 	    quan = rnd(3);
 	    while(quan--)
-		(void)mongets(mtmp, rnd_offensive_item(mtmp));
+		mongets(mtmp, rnd_offensive_item(mtmp));
 	    quan = rnd(3);
 	    while(quan--)
-		(void)mongets(mtmp, rnd_defensive_item(mtmp));
+		mongets(mtmp, rnd_defensive_item(mtmp));
 	    quan = rnd(3);
 	    while(quan--)
-		(void)mongets(mtmp, rnd_misc_item(mtmp));
+		mongets(mtmp, rnd_misc_item(mtmp));
 	}
 
 	return(mtmp);
@@ -323,7 +323,7 @@ boolean special;
 		/* if pos not found in 50 tries, don't bother to continue */
 		if(tryct > 50) return;
 
-		(void) mk_mplayer(&mons[pm], (xchar)x, (xchar)y, special);
+		mk_mplayer(&mons[pm], (xchar)x, (xchar)y, special);
 		num--;
 	}
 }

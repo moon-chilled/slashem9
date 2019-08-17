@@ -1215,12 +1215,12 @@ case 7:
 			unsigned i;
 
 			if (fatal_error > 0) {
-				(void) fprintf(stderr,
+				fprintf(stderr,
 				"%s : %d errors detected. No output created!\n",
 					fname, fatal_error);
 			} else {
 				maze.flags = yyvsp[-3].i;
-				(void) memcpy((void *)&(maze.init_lev),
+				memcpy((void *)&(maze.init_lev),
 						(void *)&(init_lev),
 						sizeof(lev_init));
 				maze.numpart = npart;
@@ -1241,12 +1241,12 @@ case 8:
 			unsigned i;
 
 			if (fatal_error > 0) {
-			    (void) fprintf(stderr,
+			    fprintf(stderr,
 			      "%s : %d errors detected. No output created!\n",
 					fname, fatal_error);
 			} else {
 				special_lev.flags = (long) yyvsp[-5].i;
-				(void) memcpy(
+				memcpy(
 					(void *)&(special_lev.init_lev),
 					(void *)&(init_lev),
 					sizeof(lev_init));
@@ -1286,7 +1286,7 @@ case 10:
 {
 			/* in case we're processing multiple files,
 			   explicitly clear any stale settings */
-			(void) memset((void *) &init_lev, 0,
+			memset((void *) &init_lev, 0,
 					sizeof init_lev);
 			init_lev.init_present = false;
 			yyval.i = 0;
@@ -1342,7 +1342,7 @@ case 20:
 			   yyerror("Message string too long (>256 characters)");
 			} else {
 			    if (j) tmpmessage[j++] = '\n';
-			    (void) strncpy(tmpmessage+j, yyvsp[0].map, i - 1);
+			    strncpy(tmpmessage+j, yyvsp[0].map, i - 1);
 			    tmpmessage[j + i - 1] = 0;
 			}
 			free(yyvsp[0].map);
@@ -1355,7 +1355,7 @@ case 23:
 			} else {
 			    special_lev.nrobjects = n_olist;
 			    special_lev.robjects = alloc(n_olist);
-			    (void) memcpy((void *)special_lev.robjects,
+			    memcpy((void *)special_lev.robjects,
 					  (void *)olist, n_olist);
 			}
 		  }
@@ -1367,7 +1367,7 @@ case 24:
 			} else {
 			    special_lev.nrmonst = n_mlist;
 			    special_lev.rmonst = alloc(n_mlist);
-			    (void) memcpy((void *)special_lev.rmonst,
+			    memcpy((void *)special_lev.rmonst,
 					  (void *)mlist, n_mlist);
 			  }
 		  }
@@ -1668,7 +1668,7 @@ case 95:
 			    yyerror("Object registers already initialized!");
 			} else {
 			    tmppart[npart]->robjects = alloc(n_olist);
-			    (void) memcpy((void *)tmppart[npart]->robjects,
+			    memcpy((void *)tmppart[npart]->robjects,
 					  (void *)olist, n_olist);
 			    tmppart[npart]->nrobjects = n_olist;
 			}
@@ -1698,7 +1698,7 @@ case 98:
 			    yyerror("Monster registers already initialized!");
 			} else {
 			    tmppart[npart]->rmonst = alloc(n_mlist);
-			    (void) memcpy((void *)tmppart[npart]->rmonst,
+			    memcpy((void *)tmppart[npart]->rmonst,
 					  (void *)mlist, n_mlist);
 			    tmppart[npart]->nrmonst = n_mlist;
 			}

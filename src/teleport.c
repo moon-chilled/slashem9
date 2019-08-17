@@ -236,7 +236,7 @@ struct permonst *mdat;
     struct monst fakemon;	/* dummy monster */
     fakemon.data = mdat;	/* set up for badpos */
     map = (unsigned char *)alloc(COLNO * (ROWNO + 2));
-    (void) memset((void *)map, EPATHTO_INACCESSIBLE, COLNO * (ROWNO + 2));
+    memset((void *)map, EPATHTO_INACCESSIBLE, COLNO * (ROWNO + 2));
     for(i = 1; i < COLNO; i++)
 	for(j = 0; j < ROWNO; j++)
 	    map[EPATHTO_XY(i, j)] = EPATHTO_UNSEEN;
@@ -361,7 +361,7 @@ int max_pathlen;
     struct monst fakemon;	/* dummy monster */
     fakemon.data = mdat;	/* set up for badpos */
     map = (unsigned char *)alloc(COLNO * (ROWNO + 2));
-    (void) memset((void *)map, EPATHTO_INACCESSIBLE, COLNO * (ROWNO + 2));
+    memset((void *)map, EPATHTO_INACCESSIBLE, COLNO * (ROWNO + 2));
     for(i = 1; i < COLNO; i++)
 	for(j = 0; j < ROWNO; j++)
 	    map[EPATHTO_XY(i, j)] = EPATHTO_UNSEEN;
@@ -435,7 +435,7 @@ void * data;
       /* N, S, E, W, NW, NE, SE, SW */
       { -COLNO, COLNO, 1, -1, -COLNO-1, -COLNO+1, COLNO+1, COLNO-1};
     map = (unsigned char *)alloc(COLNO * (ROWNO + 2));
-    (void) memset((void *)map, EPATHTO_INACCESSIBLE, COLNO * (ROWNO + 2));
+    memset((void *)map, EPATHTO_INACCESSIBLE, COLNO * (ROWNO + 2));
     for(i = 1; i < COLNO; i++)
 	for(j = 0; j < ROWNO; j++)
 	    map[EPATHTO_XY(i, j)] = EPATHTO_UNSEEN;
@@ -828,7 +828,7 @@ tele (void)
 		}
 	}
 
-	(void) safe_teleds(false);
+	safe_teleds(false);
 }
 
 int
@@ -929,7 +929,7 @@ dotele (void)
 	if (next_to_u()) {
 		if (trap && trap->once) vault_tele();
 		else tele();
-		(void) next_to_u();
+		next_to_u();
 	} else {
 		You(shudder_for_moment);
 		return(0);
@@ -1448,7 +1448,7 @@ struct monst *mtmp;
 		rloc_to(mtmp, c.x, c.y);
 		return;
 	}
-	(void) rloc(mtmp, false);
+	rloc(mtmp, false);
 }
 
 boolean

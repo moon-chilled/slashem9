@@ -205,7 +205,7 @@ boolean adjattrib(int ndx, int incr, int msgflg	/* 2 => no message at all, 1 => 
 		  (incr > 0) ? plusattr[ndx] : minusattr[ndx]);
 	flags.botl = 1;
 	if (msgflg <= 1 && moves > 1 && (ndx == A_STR || ndx == A_CON))
-		(void)encumber_msg();
+		encumber_msg();
 	return true;
 }
 

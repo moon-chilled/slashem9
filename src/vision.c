@@ -135,7 +135,7 @@ vision_init (void)
     viz_rmax  = cs_rmax0;
 
     vision_full_recalc = 0;
-    (void) memset((void *) could_see, 0, sizeof(could_see));
+    memset((void *) could_see, 0, sizeof(could_see));
 
     /* Initialize the vision algorithm (currently C or D). */
     view_init();
@@ -202,10 +202,10 @@ vision_reset (void)
     viz_rmin  = cs_rmin0;
     viz_rmax  = cs_rmax0;
 
-    (void) memset((void *) could_see, 0, sizeof(could_see));
+    memset((void *) could_see, 0, sizeof(could_see));
 
     /* Reset the pointers and clear so that we have a "full" dungeon. */
-    (void) memset((void *) viz_clear,        0, sizeof(viz_clear));
+    memset((void *) viz_clear,        0, sizeof(viz_clear));
 
     /* Dig the level */
     for (y = 0; y < ROWNO; y++) {
@@ -274,7 +274,7 @@ get_unused_cs(rows, rmin, rmax)
     nrmin = *rmin;
     nrmax = *rmax;
 
-    (void) memset((void *)**rows, 0, ROWNO*COLNO);  /* we see nothing */
+    memset((void *)**rows, 0, ROWNO*COLNO);  /* we see nothing */
     for (row = 0; row < ROWNO; row++) {		/* set row min & max */
 	*nrmin++ = COLNO-1;
 	*nrmax++ = 0;

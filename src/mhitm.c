@@ -176,7 +176,7 @@ int fightm(struct monst *mtmp) {
 			rn2(4) && mon->movement >= NORMAL_SPEED) {
 			mon->movement -= NORMAL_SPEED;
 			notonhead = 0;
-			(void) mattackm(mon, mtmp);	/* return attack */
+			mattackm(mon, mtmp);	/* return attack */
 		    }
 
 		    return ((result & MM_HIT) ? 1 : 0);
@@ -765,12 +765,12 @@ static int gazemm(struct monst *magr, struct monst *mdef, struct attack *mattk) 
 	/* call mon_reflects 2x, first test, then, if visible, print message */
 	if (magr->data == &mons[PM_MEDUSA] && mon_reflects(mdef, NULL)) {
 	    if (canseemon(mdef))
-		(void) mon_reflects(mdef,
+		mon_reflects(mdef,
 				    "The gaze is reflected away by %s %s.");
 	    if (mdef->mcansee) {
 		if (mon_reflects(magr, NULL)) {
 		    if (canseemon(magr))
-			(void) mon_reflects(magr,
+			mon_reflects(magr,
 					"The gaze is reflected away by %s %s.");
 		    return (MM_MISS);
 		}
@@ -806,7 +806,7 @@ static int gulpmm(struct monst *magr, struct monst *mdef, struct attack *mattk) 
 		pline("%s %s.", buf, mon_nam(mdef));
 	}
 	for (obj = mdef->minvent; obj; obj = obj->nobj)
-	    (void) snuff_lit(obj);
+	    snuff_lit(obj);
 
 	/*
 	 *  All of this maniuplation is needed to keep the display correct.
@@ -1092,11 +1092,11 @@ physical:
 
 			  if (!rn2(2) && burnarmor(mdef)) {
 			    if (!rn2(3))
-			      (void)destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+			      destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 			    if (!rn2(3))
-			      (void)destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+			      destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
 			    if (!rn2(5))
-			      (void)destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+			      destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
 			  }
 			}
 
@@ -1138,7 +1138,7 @@ physical:
                         }
 
                         if (otmp && otmp->oartifact) {
-			    (void)artifact_hit(magr,mdef, otmp, &tmp, dieroll);
+			    artifact_hit(magr,mdef, otmp, &tmp, dieroll);
 			    if (mdef->mhp <= 0)
 				return (MM_DEF_DIED |
 					(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
@@ -1284,7 +1284,7 @@ physical:
 		if (magr->mcan) break;
 		if (mattk->aatyp == AT_GAZE && mon_reflects(mdef, NULL)) {
 		    tmp = 0;
-		    (void) mon_reflects(mdef, "But it reflects from %s %s!");
+		    mon_reflects(mdef, "But it reflects from %s %s!");
 		    if (poly_when_stoned(pa)) {
 			mon_to_stone(magr);
 			break;
@@ -1324,7 +1324,7 @@ physical:
 		       we'll get "it" in the suddenly disappears message */
 		    if (vis) strcpy(mdef_Monnam, Monnam(mdef));
 		    mdef->mstrategy &= ~STRAT_WAITFORU;
-		    (void) rloc(mdef, false);
+		    rloc(mdef, false);
 		    if (vis && !canspotmon(mdef)
 #ifdef STEED
 		    	&& mdef != u.usteed
@@ -1339,7 +1339,7 @@ physical:
 		if (cancelled) break;
 		if (mattk->aatyp == AT_GAZE && mon_reflects(mdef, NULL)) {
 		    tmp = 0;
-		    (void) mon_reflects(mdef, "But it reflects from %s %s!");
+		    mon_reflects(mdef, "But it reflects from %s %s!");
 		    if (sleep_monst(magr, rnd(10), -1))
 			if (vis) pline("%s is put to sleep!", Monnam(magr));
 		    break;
@@ -1370,7 +1370,7 @@ physical:
 		    tmp = 0;
 		    if (vis) {
 			shieldeff(mdef->mx, mdef->my);
-			(void) mon_reflects(mdef, "But it reflects from %s %s!");
+			mon_reflects(mdef, "But it reflects from %s %s!");
 		    }
 		    if (resists_magm(magr)) {
 			if (vis) pline("%s shudders momentarily...", Monnam(magr));
@@ -1529,7 +1529,7 @@ physical:
 		    pline("%s steals some gold from %s.", buf, mon_nam(mdef));
 		}
 		if (!tele_restrict(magr)) {
-		    (void) rloc(magr, false);
+		    rloc(magr, false);
 		    if (vis && !canspotmon(magr))
 			pline("%s suddenly disappears!", buf);
 		}
@@ -1587,7 +1587,7 @@ physical:
 			/* add_to_minv() might free otmp [if it merges] */
 			if (vis)
 				strcpy(onambuf, doname(otmp));
-			(void) add_to_minv(magr, otmp);
+			add_to_minv(magr, otmp);
 			if (vis) {
 				strcpy(buf, Monnam(magr));
 				pline("%s steals %s from %s!", buf,
@@ -1601,7 +1601,7 @@ physical:
 							0 : MM_AGR_DIED));
 			if (magr->data->mlet == S_NYMPH &&
 			    !tele_restrict(magr)) {
-			    (void) rloc(magr, false);
+			    rloc(magr, false);
 			    if (vis && !canspotmon(magr))
 				pline("%s suddenly disappears!", buf);
 			}
@@ -1666,7 +1666,7 @@ physical:
 				mdef->data != &mons[PM_GREEN_SLIME]) {
 		    if (newcham(mdef, &mons[PM_GREEN_SLIME], false, vis)) {
 			mdef->oldmonnm = PM_GREEN_SLIME;
-			(void) stop_timer(UNPOLY_MON, monst_to_any(mdef));
+			stop_timer(UNPOLY_MON, monst_to_any(mdef));
 		    }
 		    mdef->mstrategy &= ~STRAT_WAITFORU;
 		    tmp = 0;
@@ -1699,7 +1699,7 @@ physical:
 			tmp = rnd(30);
 		    } else
 #endif
-		    (void) mon_poly(mdef, false,
+		    mon_poly(mdef, false,
 			    "%s undergoes a freakish metamorphosis!");
 		}
 		break;
@@ -1750,11 +1750,11 @@ physical:
 		/* various checks similar to dog_eat and meatobj.
 		 * after monkilled() to provide better message ordering */
 		if (mdef->cham != CHAM_ORDINARY) {
-		    (void) newcham(magr, NULL, false, true);
+		    newcham(magr, NULL, false, true);
 		} else if (mdef->data == &mons[PM_GREEN_SLIME]) {
-		    (void) newcham(magr, &mons[PM_GREEN_SLIME], false, true);
+		    newcham(magr, &mons[PM_GREEN_SLIME], false, true);
 		} else if (mdef->data == &mons[PM_WRAITH]) {
-		    (void) grow_up(magr, NULL);
+		    grow_up(magr, NULL);
 		    /* don't grow up twice */
 		    return (MM_DEF_DIED | (magr->mhp > 0 ? 0 : MM_AGR_DIED));
 		} else if (mdef->data == &mons[PM_NURSE]) {
@@ -1955,7 +1955,7 @@ static int passivemm(struct monst *magr, struct monst *mdef, boolean mhit, int m
 		mdef->mhp += tmp / 2;
 		if (mdef->mhpmax < mdef->mhp) mdef->mhpmax = mdef->mhp;
 		if (mdef->mhpmax > ((int) (mdef->m_lev+1) * 8))
-		    (void)split_mon(mdef, magr);
+		    split_mon(mdef, magr);
 		break;
 	    case AD_STUN:
 		if (!magr->mstun) {

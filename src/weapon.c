@@ -1193,7 +1193,7 @@ int enhance_skill(boolean want_dump)
 		else
 		    prefix = (to_advance + eventually_advance +
 				maxxed_cnt > 0) ? "    " : "";
-		(void) skill_level_name(i, sklnambuf);
+		skill_level_name(i, sklnambuf);
 #ifdef WIZARD
 		if (wizard) {
 		    if (!iflags.menu_tab_sep)

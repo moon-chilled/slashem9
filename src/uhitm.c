@@ -81,7 +81,7 @@ int attk;
 	    case 1:
 		target = which_armor(mdef, W_ARMC);
 		if (target) {
-		    (void)rust_dmg(target, xname(target), hurt, true, mdef);
+		    rust_dmg(target, xname(target), hurt, true, mdef);
 		    break;
 		}
 		if ((target = which_armor(mdef, W_ARM)) != NULL) {
@@ -456,15 +456,15 @@ struct monst *mtmp;
 
 	tmp = find_roll_to_hit(mtmp);
 
-	(void) hmonas(mtmp, tmp); /* hmonas handles all attacks now */
+	hmonas(mtmp, tmp); /* hmonas handles all attacks now */
 
 	/* berserk lycanthropes calm down after the enemy is dead */
 	if (mtmp->mhp <= 0) repeat_hit = 0;
 /*
 	if (Upolyd)
-		(void) hmonas(mtmp, tmp);
+		hmonas(mtmp, tmp);
 	else
-		(void) hitum(mtmp, tmp, mhit, youmonst.data->mattk);
+		hitum(mtmp, tmp, mhit, youmonst.data->mattk);
 */
 	mtmp->mstrategy &= ~STRAT_WAITMASK;
 
@@ -558,7 +558,7 @@ struct attack *uattk;
 			    dohit = 0;	/* Don't try and cut a worm twice */
 		    }
 		    if (u.twoweap && (dohit & HIT_USWAPWEP))
-			(void) cutworm(mon, x, y, uswapwep);
+			cutworm(mon, x, y, uswapwep);
 		}
 	    }
 
@@ -640,7 +640,7 @@ struct attack *uattk;
 	}
 
 	malive = known_hitum(mon, mattack, &mhit, uattk);
-	(void) passive(mon, mhit, malive, AT_WEAP);
+	passive(mon, mhit, malive, AT_WEAP);
 	/* berserk lycanthropes calm down after the enemy is dead */
 	if (!malive) repeat_hit = 0;
 	return(malive);
@@ -1516,11 +1516,11 @@ int thrown;
 
 	  if (!rn2(2) && burnarmor(mon)) {
 	    if (!rn2(3))
-	      (void)destroy_mitem(mon, POTION_CLASS, AD_FIRE);
+	      destroy_mitem(mon, POTION_CLASS, AD_FIRE);
 	    if (!rn2(3))
-	      (void)destroy_mitem(mon, SCROLL_CLASS, AD_FIRE);
+	      destroy_mitem(mon, SCROLL_CLASS, AD_FIRE);
 	    if (!rn2(5))
-	      (void)destroy_mitem(mon, SPBOOK_CLASS, AD_FIRE);
+	      destroy_mitem(mon, SPBOOK_CLASS, AD_FIRE);
 	  }
 
 	  if (mon->data == &mons[PM_WATER_ELEMENTAL]) {
@@ -1703,7 +1703,7 @@ demonpet()
 	i = !rn2(6) ? ndemon(u.ualign.type) : NON_PM;
 	pm = i != NON_PM ? &mons[i] : youmonst.data;
 	if ((dtmp = makemon(pm, u.ux, u.uy, NO_MM_FLAGS)) != 0)
-	    (void)tamedog(dtmp, NULL);
+	    tamedog(dtmp, NULL);
 	exercise(A_WIS, true);
 }
 
@@ -2170,7 +2170,7 @@ struct attack *mattk;
 	    case AD_SLEE:
 		if (mattk->aatyp == AT_GAZE && mon_reflects(mdef, NULL)) {
 		    tmp = 0;
-		    (void) mon_reflects(mdef, "But it reflects from %s %s!");
+		    mon_reflects(mdef, "But it reflects from %s %s!");
 		    if (Sleep_resistance || Free_action) {
 			pline("You yawn.");
 			break;
@@ -2199,7 +2199,7 @@ struct attack *mattk;
 		if (!rn2(4) && !flaming(mdef->data) &&
 				mdef->data != &mons[PM_GREEN_SLIME]) {
 		    You("turn %s into slime.", mon_nam(mdef));
-		    (void) newcham(mdef, &mons[PM_GREEN_SLIME], false, !Blind);
+		    newcham(mdef, &mons[PM_GREEN_SLIME], false, !Blind);
 		    tmp = 0;
 		}
 		break;
@@ -2266,7 +2266,7 @@ struct attack *mattk;
 		     */
 		    tmp = 0;
 		    shieldeff(mdef->mx, mdef->my);
-		    (void) mon_reflects(mdef, "But it reflects from %s %s!");
+		    mon_reflects(mdef, "But it reflects from %s %s!");
 		    if (Antimagic) {
 			You("shudder momentarily...");
 			break;
@@ -2437,7 +2437,7 @@ struct attack *mattk;
 
 	if(u.uhunger < 1500 && !u.uswallow) {
 	    for (otmp = mdef->minvent; otmp; otmp = otmp->nobj)
-		(void) snuff_lit(otmp);
+		snuff_lit(otmp);
 
 	    if(!touch_petrifies(mdef->data) || Stone_resistance) {
 		static char msgbuf[BUFSZ];
@@ -2976,7 +2976,7 @@ use_weapon:
 		return((boolean)passive(mon, sum[i], 0, mattk->aatyp));
 							/* defender dead */
 	    else {
-		(void) passive(mon, sum[i], 1, mattk->aatyp);
+		passive(mon, sum[i], 1, mattk->aatyp);
 		nsum |= sum[i];
 	    }
 	    if (Upolyd != Old_Upolyd)
@@ -3036,7 +3036,7 @@ uchar aatyp;
 	    if (mhit) {
 		if (aatyp == AT_KICK) {
 		    if (uarmf && !rn2(6))
-			(void)rust_dmg(uarmf, xname(uarmf), 3, true, &youmonst);
+			rust_dmg(uarmf, xname(uarmf), 3, true, &youmonst);
 		} else if (aatyp == AT_WEAP || aatyp == AT_CLAW ||
 			   aatyp == AT_MAGC || aatyp == AT_TUCH)
 		    passive_obj(mon, target, &(ptr->mattk[i]));
@@ -3073,7 +3073,7 @@ uchar aatyp;
 	    if(mhit && !mon->mcan) {
 		if (aatyp == AT_KICK) {
 		    if (uarmf)
-			(void)rust_dmg(uarmf, xname(uarmf), 1, true, &youmonst);
+			rust_dmg(uarmf, xname(uarmf), 1, true, &youmonst);
 		} else if (aatyp == AT_WEAP || aatyp == AT_CLAW ||
 			   aatyp == AT_MAGC || aatyp == AT_TUCH)
 		    passive_obj(mon, target, &(ptr->mattk[i]));
@@ -3083,7 +3083,7 @@ uchar aatyp;
 	    if(mhit && !mon->mcan) {
 		if (aatyp == AT_KICK) {
 		    if (uarmf)
-			(void)rust_dmg(uarmf, xname(uarmf), 3, true, &youmonst);
+			rust_dmg(uarmf, xname(uarmf), 3, true, &youmonst);
 		} else if (aatyp == AT_WEAP || aatyp == AT_CLAW ||
 			   aatyp == AT_MAGC || aatyp == AT_TUCH)
 		    passive_obj(mon, target, &(ptr->mattk[i]));
@@ -3163,7 +3163,7 @@ uchar aatyp;
 		    if (mon->mhpmax < mon->mhp) mon->mhpmax = mon->mhp;
 		/* at a certain point, the monster will reproduce! */
 		    if(mon->mhpmax > ((int) (mon->m_lev+1) * 8))
-			(void)split_mon(mon, &youmonst);
+			split_mon(mon, &youmonst);
 		}
 		break;
 	      case AD_STUN:		/* specifically yellow mold */

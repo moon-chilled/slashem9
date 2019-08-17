@@ -301,9 +301,9 @@ int sx, sy;
 	} else {
 	    atype = get_shop_item(shp - shtypes);
 	    if (atype < 0)
-		(void) mksobj_at(-atype, sx, sy, true, true);
+		mksobj_at(-atype, sx, sy, true, true);
 	    else
-		(void) mkobj_at(atype, sx, sy, true);
+		mkobj_at(atype, sx, sy, true);
 	}
 }
 
@@ -369,7 +369,7 @@ const char * const *nlp;
 		if (!mtmp) break;	/* new name */
 	    }
 	}
-	(void) strncpy(ESHK(shk)->shknam, shname, PL_NSIZ);
+	strncpy(ESHK(shk)->shknam, shname, PL_NSIZ);
 	ESHK(shk)->shknam[PL_NSIZ-1] = 0;
 }
 
@@ -471,7 +471,7 @@ struct mkroom	*sroom;
   						   another money object, if GOLDOBJ is defined */
 
 	if (shp->shknms == shkrings)
-	    (void) mongets(shk, TOUCHSTONE);
+	    mongets(shk, TOUCHSTONE);
 	nameshk(shk, shp->shknms);
 
     if (Is_blackmarket(&u.uz))

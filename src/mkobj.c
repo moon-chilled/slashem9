@@ -177,9 +177,9 @@ struct obj *box;
 		 */
 		otmp->age = 0L;
 		if (otmp->timed) {
-		    (void) stop_timer(ROT_CORPSE, obj_to_any(otmp));
-		    (void) stop_timer(MOLDY_CORPSE, obj_to_any(otmp));
-		    (void) stop_timer(REVIVE_MON, obj_to_any(otmp));
+		    stop_timer(ROT_CORPSE, obj_to_any(otmp));
+		    stop_timer(MOLDY_CORPSE, obj_to_any(otmp));
+		    stop_timer(REVIVE_MON, obj_to_any(otmp));
 		}
 	    } else {
 		int tprob;
@@ -208,7 +208,7 @@ struct obj *box;
 			    otmp->otyp = rnd_class(WAN_LIGHT, WAN_FIREBALL);
 		}
 	    }
-	    (void) add_to_container(box, otmp);
+	    add_to_container(box, otmp);
 	}
 }
 
@@ -261,10 +261,10 @@ splitobj (struct obj *obj, long num)
 	if (obj->where == OBJ_FLOOR)
 	    obj->nexthere = otmp;
 	if (obj->oxlth)
-	    (void)memcpy((void *)otmp->oextra, (void *)obj->oextra,
+	    memcpy((void *)otmp->oextra, (void *)obj->oextra,
 			obj->oxlth);
 	if (obj->onamelth)
-	    (void)strncpy(ONAME(otmp), ONAME(obj), (int)obj->onamelth);
+	    strncpy(ONAME(otmp), ONAME(obj), (int)obj->onamelth);
 	if (obj->unpaid) splitbill(obj,otmp);
 	if (obj->timed) obj_split_timers(obj, otmp);
 	if (obj_sheds_light(obj)) obj_split_light_source(obj, otmp);
@@ -369,10 +369,10 @@ bill_dummy_object (struct obj *otmp)
 	if (!dummy->o_id) dummy->o_id = flags.ident++;	/* ident overflowed */
 	dummy->timed = 0;
 	if (otmp->oxlth)
-	    (void)memcpy((void *)dummy->oextra,
+	    memcpy((void *)dummy->oextra,
 			(void *)otmp->oextra, otmp->oxlth);
 	if (otmp->onamelth)
-	    (void)strncpy(ONAME(dummy), ONAME(otmp), (int)otmp->onamelth);
+	    strncpy(ONAME(dummy), ONAME(otmp), (int)otmp->onamelth);
 	if (Is_candle(dummy)) dummy->lamplit = 0;
 	addtobill(dummy, false, true, true);
 	if (otmp->where != OBJ_INVENT)
@@ -701,7 +701,7 @@ boolean artif;
 			otmp->corpsenm = rndmonnum();
 			if (!verysmall(&mons[otmp->corpsenm]) &&
 				rn2(level_difficulty()/2 + 10) > 10)
-			    (void) add_to_container(otmp,
+			    add_to_container(otmp,
 						    mkobj(SPBOOK_CLASS,false));
 		}
 		break;
@@ -799,7 +799,7 @@ void start_corpse_timeout (struct obj *body) {
 	}
 
 	if (body->norevive) body->norevive = 0;
-	(void) start_timer(when, TIMER_OBJECT, action, obj_to_any(body));
+	start_timer(when, TIMER_OBJECT, action, obj_to_any(body));
 }
 
 void
@@ -817,7 +817,7 @@ bless (struct obj *otmp)
 	else if (otmp->otyp == BAG_OF_HOLDING)
 	    otmp->owt = weight(otmp);
 	else if (otmp->otyp == FIGURINE && otmp->timed)
-	    (void) stop_timer(FIG_TRANSFORM, obj_to_any(otmp));
+	    stop_timer(FIG_TRANSFORM, obj_to_any(otmp));
 	return;
 }
 
@@ -832,7 +832,7 @@ unbless (struct obj *otmp)
 	else if (otmp->otyp == BAG_OF_HOLDING)
 	    otmp->owt = weight(otmp);
 	else if (otmp->otyp == FIGURINE && otmp->timed)
-	    (void) stop_timer(FIG_TRANSFORM, obj_to_any(otmp));
+	    stop_timer(FIG_TRANSFORM, obj_to_any(otmp));
 	return;
 }
 
@@ -1076,7 +1076,7 @@ obj_attach_mid (struct obj *obj, unsigned mid)
     else {
 	otmp = obj;
 	otmp->oxlth = sizeof(mid);
-	(void) memcpy((void *)otmp->oextra, (void *)&mid,
+	memcpy((void *)otmp->oextra, (void *)&mid,
 								sizeof(mid));
     }
     if (otmp && otmp->oxlth) otmp->oattached = OATTACHED_M_ID;	/* mark it */
@@ -1124,7 +1124,7 @@ boolean copyof;
 		int lth = mtmp->mxlth + mtmp->mnamelth;
 		mnew = newmonst(lth);
 		lth += sizeof(struct monst);
-		(void) memcpy((void *)mnew,
+		memcpy((void *)mnew,
 				(void *)mtmp, lth);
 	    } else {
 	      /* Never insert this returned pointer into mon chains! */
@@ -1358,7 +1358,7 @@ int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
     }
     /* now re-start the timer with the appropriate modifications */
     if (restart_timer)
-	(void) start_timer(tleft, TIMER_OBJECT, action, obj_to_any(otmp));
+	start_timer(tleft, TIMER_OBJECT, action, obj_to_any(otmp));
 }
 
 #undef ON_ICE
@@ -1392,7 +1392,7 @@ discard_minvent (struct monst *mtmp)
 	while (Has_contents((otmp = mtmp->minvent))) {
 	    curr = otmp->cobj;
 	    obj_extract_self(curr);
-	    (void) add_to_minv(mtmp, curr);
+	    add_to_minv(mtmp, curr);
 	}
 	obj_extract_self(otmp);
 	if (evades_destruction(otmp)) {

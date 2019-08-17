@@ -149,7 +149,7 @@ NhRect *rect;
 
     tmp_rect = (NhRect *) alloc(sizeof (NhRect) * (reg->nrects + 1));
     if (reg->nrects > 0) {
-	(void) memcpy((void *) tmp_rect, (void *) reg->rects,
+	memcpy((void *) tmp_rect, (void *) reg->rects,
 		      (sizeof (NhRect) * reg->nrects));
 	free((void *) reg->rects);
     }
@@ -255,7 +255,7 @@ NhRegion *reg;
     if (reg->n_monst > 0) {
 	ret_reg->monsters = (unsigned *)
 				alloc((sizeof (unsigned)) * reg->n_monst);
-	(void) memcpy((void *) ret_reg->monsters, (void *) reg->monsters,
+	memcpy((void *) ret_reg->monsters, (void *) reg->monsters,
 		      sizeof (unsigned) * reg->n_monst);
     } else
 	ret_reg->monsters = NULL;
@@ -295,7 +295,7 @@ NhRegion *reg;
 	tmp_reg = regions;
 	regions = (NhRegion **)alloc(sizeof (NhRegion *) * (max_regions + 10));
 	if (max_regions > 0) {
-	    (void) memcpy((void *) regions, (void *) tmp_reg,
+	    memcpy((void *) regions, (void *) tmp_reg,
 			  max_regions * sizeof (NhRegion *));
 	    free((void *) tmp_reg);
 	}
@@ -396,7 +396,7 @@ run_regions (void)
 	/* Check if player is inside region */
 	f_indx = regions[i]->inside_f;
 	if (f_indx != NO_CALLBACK && hero_inside(regions[i]))
-	    (void) (*callbacks[f_indx])(regions[i], NULL);
+	    (*callbacks[f_indx])(regions[i], NULL);
 	/* Check if any monster is inside region */
 	if (f_indx != NO_CALLBACK) {
 	    for (j = 0; j < regions[i]->n_monst; j++) {
@@ -450,7 +450,7 @@ xchar
 	    if (regions[i]->leave_msg != NULL)
 		pline(regions[i]->leave_msg);
 	    if ((f_indx = regions[i]->leave_f) != NO_CALLBACK)
-		(void) (*callbacks[f_indx])(regions[i], NULL);
+		(*callbacks[f_indx])(regions[i], NULL);
 	}
 
     /* Callbacks for the regions we do enter */
@@ -461,7 +461,7 @@ xchar
 	    if (regions[i]->enter_msg != NULL)
 		pline(regions[i]->enter_msg);
 	    if ((f_indx = regions[i]->enter_f) != NO_CALLBACK)
-		(void) (*callbacks[f_indx])(regions[i], NULL);
+		(*callbacks[f_indx])(regions[i], NULL);
 	}
     return true;
 }
@@ -500,7 +500,7 @@ xchar x, y;
 		!inside_region(regions[i], x, y)) {
 	    remove_mon_from_reg(regions[i], mon);
 	    if ((f_indx = regions[i]->leave_f) != NO_CALLBACK)
-		(void) (*callbacks[f_indx])(regions[i], mon);
+		(*callbacks[f_indx])(regions[i], mon);
 	}
 
     /* Callbacks for the regions we do enter */
@@ -509,7 +509,7 @@ xchar x, y;
 		!regions[i]->attach_2_u && inside_region(regions[i], x, y)) {
 	    add_mon_to_reg(regions[i], mon);
 	    if ((f_indx = regions[i]->enter_f) != NO_CALLBACK)
-		(void) (*callbacks[f_indx])(regions[i], mon);
+		(*callbacks[f_indx])(regions[i], mon);
 	}
     return true;
 }

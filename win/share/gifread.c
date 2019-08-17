@@ -142,7 +142,7 @@ int	label;
 		return;
 	case 0xf9:		/* Graphic Control Extension */
 		str = "Graphic Control Extension";
-		(void) GetDataBlock(fd, (unsigned char*) buf);
+		GetDataBlock(fd, (unsigned char*) buf);
 		Gif89.disposal    = (buf[0] >> 2) & 0x7;
 		Gif89.inputFlag   = (buf[0] >> 1) & 0x1;
 		Gif89.delayTime   = LM_to_uint(buf[1],buf[2]);
@@ -208,7 +208,7 @@ FILE	*fd;
 		exit(EXIT_FAILURE);
 	}
 
-	(void) strncpy(version, (char *)buf + 3, 3);
+	strncpy(version, (char *)buf + 3, 3);
 	version[3] = '\0';
 
 	if ((strcmp(version, "87a") != 0) && (strcmp(version, "89a") != 0)) {
@@ -360,7 +360,7 @@ int	input_code_size;
 		max_code_size = 2*clear_code;
 		max_code = clear_code+2;
 
-		(void) GetCode(fd, 0, true);
+		GetCode(fd, 0, true);
 
 		fresh = true;
 
@@ -730,7 +730,7 @@ char *argv[];
 		init_colormap();
 
 		if (!fopen_text_file(argv[2], WRTMODE)) {
-			(void) fclose_gif_file();
+			fclose_gif_file();
 			exit(EXIT_FAILURE);
 		}
 
@@ -754,7 +754,7 @@ char *argv[];
                 fprintf(stdout, "# tile %d (%s)\n", i, tilename);
 
 		if (read_gif_tile(pixels))
-			(void) write_text_tile_info(pixels, "tile", i, tilename);
+			write_text_tile_info(pixels, "tile", i, tilename);
 		else break;
 
                 i++;
@@ -762,12 +762,12 @@ char *argv[];
 
 #else
 		while (read_gif_tile(pixels))
-			(void) write_text_tile(pixels);
+			write_text_tile(pixels);
 
 #endif
 
-		(void) fclose_gif_file();
-		(void) fclose_text_file();
+		fclose_gif_file();
+		fclose_text_file();
 
 		argc -= 2;
 		argv += 2;

@@ -99,7 +99,7 @@ void moveloop(void) {
 
 					if(!rn2(u.uevent.udemigod ? 25 :
 								(depth(&u.uz) > depth(&stronghold_level)) ? 50 : 70))
-						(void) makemon(NULL, 0, 0, NO_MM_FLAGS);
+						makemon(NULL, 0, 0, NO_MM_FLAGS);
 
 					/* calculate how much time passed. */
 #ifdef STEED
@@ -546,7 +546,7 @@ void newgame(void) {
 	init_artifacts1();	/* must be after u_init() */
 
 #ifndef NO_SIGNAL
-	(void) signal(SIGINT, (SIG_RET_TYPE) done1);
+	signal(SIGINT, (SIG_RET_TYPE) done1);
 #endif
 #ifdef NEWS
 	if(iflags.news) display_file_area(NEWS_AREA, NEWS, false);
@@ -568,7 +568,7 @@ void newgame(void) {
 	 */
 
 	if(MON_AT(u.ux, u.uy)) mnexto(m_at(u.ux, u.uy));
-	(void) makedog();
+	makedog();
 
 	docrt();
 
@@ -585,9 +585,9 @@ void newgame(void) {
         realtime_data.realtime = (time_t)0L;
 
 #if defined(BSD) && !defined(POSIX_TYPES)
-        (void) time((long *)&realtime_data.restoretime);
+        time((long *)&realtime_data.restoretime);
 #else
-        (void) time(&realtime_data.restoretime);
+        time(&realtime_data.restoretime);
 #endif
 
 	/* Success! */
@@ -710,9 +710,9 @@ time_t get_realtime(void) {
 
     /* Get current time */
 #if defined(BSD) && !defined(POSIX_TYPES)
-    (void) time((long *)&curtime);
+    time((long *)&curtime);
 #else
-    (void) time(&curtime);
+    time(&curtime);
 #endif
 
     /* Since the timer isn't set until the game starts, this prevents us

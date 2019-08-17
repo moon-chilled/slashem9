@@ -1533,7 +1533,7 @@ nextclass:
 				otmp = 0;		/* and return */
 			    } else if (otmp && otmp != otmpo) {
 				/* split occurred, merge again */
-				(void) merged(&otmpo, &otmp);
+				merged(&otmpo, &otmp);
 			    }
 			    goto ret;
 			}
@@ -1594,7 +1594,7 @@ static void menu_identify(int id_limit) {
 	if (n > 0) {
 	    if (n > id_limit) n = id_limit;
 	    for (i = 0; i < n; i++, id_limit--)
-		(void) identify(pick_list[i].item.a_obj);
+		identify(pick_list[i].item.a_obj);
 	    free((void *) pick_list);
 	    mark_synch(); /* Before we loop to pop open another menu */
 	} else {
@@ -1620,7 +1620,7 @@ void identify_pack(int id_limit) {
     } else if (!id_limit) {
 	/* identify everything */
 	if (unid_cnt == 1) {
-	    (void) identify(the_obj);
+	    identify(the_obj);
 	} else {
 
 	    /* TODO:  use fully_identify_obj and cornline/menu/whatever here */
@@ -2159,7 +2159,7 @@ int dotypeinv(void) {
 	}
 	if (c == 'x') {
 	    if (billx)
-		(void) doinvbill(1);
+		doinvbill(1);
 	    else
 		pline("No used-up objects on your shopping bill.");
 	    return 0;
@@ -2276,7 +2276,7 @@ int look_here(int obj_cnt /* obj_cnt > 0 implies that autopickup is in progess *
 		}
 		if (Blind) strcpy(fbuf, "You feel");
 		strcat(fbuf,":");
-	    	(void) display_minventory(mtmp, MINV_ALL, fbuf);
+	    	display_minventory(mtmp, MINV_ALL, fbuf);
 	    } else {
 		You("%s no objects here.", verb);
 	    }
@@ -2552,7 +2552,7 @@ int doprwep(void) {
 		if(uswapwep) lets[ct++] = obj_to_let(uswapwep);
 		if(uquiver) lets[ct++] = obj_to_let(uquiver);
 		lets[ct] = 0;
-		(void) display_inventory(lets, false);
+		display_inventory(lets, false);
     }
     return 0;
 #endif

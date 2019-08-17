@@ -190,7 +190,7 @@ int distance;
 
 	if (u.uswallow) {
 	    if (!resist(u.ustuck, TOOL_CLASS, 0, NOTELL))
-		(void) tamedog(u.ustuck, NULL);
+		tamedog(u.ustuck, NULL);
 	} else {
 	    for (mtmp = fmon; mtmp; mtmp = mtmp2) {
 		mtmp2 = mtmp->nmon;
@@ -198,7 +198,7 @@ int distance;
 
 		if (distu(mtmp->mx, mtmp->my) <= distance) {
 		    if (!resist(mtmp, TOOL_CLASS, 0, NOTELL))
-			(void) tamedog(mtmp, NULL);
+			tamedog(mtmp, NULL);
 		}
 	    }
 	}
@@ -287,7 +287,7 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 			if (mtmp)
 				mtmp->mtrapped = 0;
 			obj_extract_self(otmp);
-			(void) flooreffects(otmp, x, y, "");
+			flooreffects(otmp, x, y, "");
 			break;
 		    }
 
@@ -465,7 +465,7 @@ struct obj *instr;
 		instr->spe--;
 		cnt += rn2(4) + 3;
 		while(cnt--)
-		(void) makemon(NULL, u.ux, u.uy, NO_MM_FLAGS);
+		makemon(NULL, u.ux, u.uy, NO_MM_FLAGS);
 	    }
 		break;
 	case PAN_PIPE_OF_THE_SEWERS:
@@ -477,7 +477,7 @@ struct obj *instr;
 		cnt += rn2(4) + 3;
 		while(cnt--) {
 		mtmp = makemon(&mons[PM_SEWER_RAT], u.ux, u.uy, NO_MM_FLAGS);
-		(void) tamedog(mtmp, NULL);
+		tamedog(mtmp, NULL);
 		}
 	     }
 		break;
@@ -518,7 +518,7 @@ do_play_instrument (struct obj *instr)
 	    strcpy(buf, tune);
 	} else {
 	    getlin("What tune are you playing? [5 notes, A-G]", buf);
-	    (void)mungspaces(buf);
+	    mungspaces(buf);
 	    /* convert to uppercase and change any "H" to the expected "B" */
 	    for (s = buf; *s; s++) {
 		*s = highc(*s);
@@ -659,23 +659,23 @@ char	*buf;
 	{
 	case WOODEN_FLUTE:
 	case MAGIC_FLUTE:
-	    (void) write(fd, ">ol", 1); /* up one octave & lock */
+	    write(fd, ">ol", 1); /* up one octave & lock */
 	    break;
 	case TOOLED_HORN:
 	case FROST_HORN:
 	case FIRE_HORN:
-	    (void) write(fd, "<<ol", 2); /* drop two octaves & lock */
+	    write(fd, "<<ol", 2); /* drop two octaves & lock */
 	    break;
 	case BUGLE:
-	    (void) write(fd, "ol", 2); /* octave lock */
+	    write(fd, "ol", 2); /* octave lock */
 	    break;
 	case WOODEN_HARP:
 	case MAGIC_HARP:
-	    (void) write(fd, "l8mlol", 4); /* fast, legato, octave lock */
+	    write(fd, "l8mlol", 4); /* fast, legato, octave lock */
 	    break;
 	}
-	(void) write(fd, buf, strlen(buf));
-	(void) close(fd);
+	write(fd, buf, strlen(buf));
+	close(fd);
     }
 }
 #endif /* UNIX386MUSIC */

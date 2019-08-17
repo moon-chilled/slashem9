@@ -226,7 +226,7 @@ char *argv[];
     while (argc > argn) {
 
 	if (!fopen_text_file(argv[argn++], WRTMODE)) {
-	    (void) fclose_xpm_file();
+	    fclose_xpm_file();
 	    exit(EXIT_FAILURE);
 	}
 
@@ -242,14 +242,14 @@ char *argv[];
 		name = "unknown";
 	    if (!read_xpm_tile(pixels))
 		break;
-	    (void) write_text_tile_info(pixels, "tile", i, name);
+	    write_text_tile_info(pixels, "tile", i, name);
 	}
 	if (tile_set)
 	    tile_set++;
 
-	(void) fclose_text_file();
+	fclose_text_file();
     }
-    (void) fclose_xpm_file();
+    fclose_xpm_file();
     exit(EXIT_SUCCESS);
     /*NOTREACHED*/
     return 0;

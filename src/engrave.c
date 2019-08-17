@@ -319,7 +319,7 @@ boolean sense_engr_at(int x, int y, boolean read_it /* Read any sensed engraving
 	    	unsigned len, maxelen = BUFSZ - sizeof("You feel the words: \"\". ");
 	    	len = strlen(ep->engr_txt);
 	    	if (len > maxelen) {
-	    		(void)strncpy(buf,  ep->engr_txt, (int)maxelen);
+	    		strncpy(buf,  ep->engr_txt, (int)maxelen);
 			buf[maxelen] = '\0';
 			et = buf;
 		} else

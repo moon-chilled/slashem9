@@ -117,7 +117,7 @@ int getpos(coord *cc, boolean force, const char *goal) {
 	    if (!index(quitchars, c)) {
 		char matching[MAXPCHARS];
 		int pass, lo_x, lo_y, hi_x, hi_y, k = 0;
-		(void)memset((void *)matching, 0, sizeof matching);
+		memset((void *)matching, 0, sizeof matching);
 		for (sidx = 1; sidx < MAXPCHARS; sidx++)
 		    if (c == defsyms[sidx].sym || c == (int)showsyms[sidx])
 			matching[sidx] = (char) ++k;
@@ -198,7 +198,7 @@ struct monst *christen_monst(struct monst *mtmp, const char *name) {
 	}
 	mtmp2 = newmonst(mtmp->mxlth + lth);
 	*mtmp2 = *mtmp;
-	(void) memcpy((void *)mtmp2->mextra,
+	memcpy((void *)mtmp2->mextra,
 		      (void *)mtmp->mextra, mtmp->mxlth);
 	mtmp2->mnamelth = lth;
 	if (lth) strcpy(NAME(mtmp2), name);
@@ -251,17 +251,17 @@ int do_mname(void) {
 		return(0);
 	}
 	/* special case similar to the one in lookat() */
-	(void) distant_monnam(mtmp, ARTICLE_THE, buf);
+	distant_monnam(mtmp, ARTICLE_THE, buf);
 	sprintf(qbuf, "What do you want to call %s?", buf);
 	getlin(qbuf,buf);
 	if(!*buf || *buf == '\033') return(0);
 	/* strip leading and trailing spaces; unnames monster if all spaces */
-	(void)mungspaces(buf);
+	mungspaces(buf);
 
 	if (mtmp->data->geno & G_UNIQ)
 	    pline("%s doesn't like being called names!", Monnam(mtmp));
 	else
-	    (void) christen_monst(mtmp, buf);
+	    christen_monst(mtmp, buf);
 	return(0);
 }
 
@@ -313,7 +313,7 @@ struct obj *realloc_obj(struct obj *obj, int oextra_size, void *oextra_src, int 
 	*otmp = *obj;	/* the cobj pointer is copied to otmp */
 	if (oextra_size) {
 	    if (oextra_src)
-		(void) memcpy((void *)otmp->oextra, oextra_src,
+		memcpy((void *)otmp->oextra, oextra_src,
 							oextra_size);
 	} else {
 	    otmp->oattached = OATTACHED_NOTHING;
@@ -439,7 +439,7 @@ int ddocall(void) {
 			/* behave as if examining it in inventory;
 			   this might set dknown if it was picked up
 			   while blind and the hero can now see */
-			(void) xname(obj);
+			xname(obj);
 
 			if (!obj->dknown) {
 				You("would never recognize another one.");
@@ -477,7 +477,7 @@ void docall(struct obj *obj) {
 	if(*str1) free((void *)*str1);
 
 	/* strip leading and trailing spaces; uncalls item if all spaces */
-	(void)mungspaces(buf);
+	mungspaces(buf);
 	if (!*buf) {
 	    if (*str1) {	/* had name, so possibly remove from disco[] */
 		/* strip name first, for the update_inventory() call

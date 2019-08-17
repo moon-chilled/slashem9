@@ -927,7 +927,7 @@ static int wiz_level_change(void) {
     int ret;
 
     getlin("To what experience level do you want to be set?", buf);
-    (void)mungspaces(buf);
+    mungspaces(buf);
     if (buf[0] == '\033' || buf[0] == '\0') ret = 0;
     else ret = sscanf(buf, "%d", &newlevel);
 
@@ -4240,7 +4240,7 @@ char yn_function(const char *query, const char *resp, char def) {
 	paniclog("Query truncated: ", query);
 	reduction += sizeof("...");
 	truncspot = QBUFSZ - reduction;
-	(void) strncpy(qbuf, query, (int)truncspot);
+	strncpy(qbuf, query, (int)truncspot);
 	qbuf[truncspot] = '\0';
 	strcat(qbuf,"...");
 	return (*windowprocs.win_yn_function)(qbuf, resp, def);

@@ -72,7 +72,7 @@ struct lan_mail_struct *msg;
 	long	size;
 
 	for (size = 0; size < qt_msg->size; size += (long)strlen(in_line)) {
-	    (void) dlb_fgets(in_line, 80, msg_file);
+	    dlb_fgets(in_line, 80, msg_file);
 	    convert_line();
 	    pline(out_line);
 	}
@@ -133,7 +133,7 @@ void lan_mail_read(otmp)
 struct obj *otmp;
 {
 	if (flags.biff) {
-		(void) mail_fetch(&mailmessage);
+		mail_fetch(&mailmessage);
 		/* after a successful fetch iflags.lan_mail_fetched
 		 * should be true.  If it isn't then we don't
 		 * trust the contents of mailmessage.  This
@@ -155,13 +155,13 @@ struct obj *otmp;
 void lan_mail_init()
 {
 	if (!flags.biff) return;
-	(void) mail_init(lusername);
+	mail_init(lusername);
 }
 
 void lan_mail_finish()
 {
 	if (iflags.lan_mail)
-		(void) mail_finish();
+		mail_finish();
 }
 
 /* If ever called, the underlying mail system ran into trouble

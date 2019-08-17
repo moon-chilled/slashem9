@@ -1121,7 +1121,7 @@ YY_RULE_SETUP
 {
 		  BEGIN(INITIAL);
 		  yylval.map = alloc(map_cnt + 1);
-		  (void) strncpy(yylval.map, map, map_cnt);
+		  strncpy(yylval.map, map, map_cnt);
 		  yylval.map[map_cnt] = 0;
 		  map_cnt = 0;
 		  return MAP_ID;
@@ -1134,7 +1134,7 @@ YY_RULE_SETUP
 		  /* convert \r\n to \n */
 		  if (len >= 2 && yytext[len - 2] == '\r') len -= 1;
 		  line_number++;
-		  (void) strncpy(map + map_cnt, yytext, len);
+		  strncpy(map + map_cnt, yytext, len);
 		  map_cnt += len;
 		  map[map_cnt - 1] = '\n';
 		  map[map_cnt] = '\0';
@@ -2396,7 +2396,7 @@ static void yy_fatal_error( msg )
 char msg[];
 #endif
 	{
-	(void) fprintf( stderr, "%s\n", msg );
+	fprintf( stderr, "%s\n", msg );
 	exit( YY_EXIT_FAILURE );
 	}
 

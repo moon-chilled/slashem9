@@ -1109,7 +1109,7 @@ techeffects (int tech_no)
 		    else if (mtmp->isshk)
 			make_happy_shk(mtmp, false);
 		    else if (!resist(mtmp, SPBOOK_CLASS, 0, NOTELL))
-			(void) tamedog(mtmp, NULL);
+			tamedog(mtmp, NULL);
 		}
             	if (Upolyd) u.mh -= num;
             	else u.uhp -= num;
@@ -1468,7 +1468,7 @@ techeffects (int tech_no)
 		otmp = mksobj(POT_VAMPIRE_BLOOD, false, false);
 		otmp->cursed = obj->cursed;
 		otmp->blessed = obj->blessed;
-		(void) hold_another_object(otmp,
+		hold_another_object(otmp,
 			"You fill, but have to drop, %s!", doname(otmp),
 			(const char *)0);
 		t_timeout = rn1(1000, 500);

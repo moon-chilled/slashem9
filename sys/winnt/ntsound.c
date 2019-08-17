@@ -21,7 +21,7 @@ const char* filename;
 int volume;
 {
 /*    pline("play_usersound: %s (%d).", filename, volume); */
-	(void)sndPlaySound(filename, SND_ASYNC | SND_NODEFAULT);
+	sndPlaySound(filename, SND_ASYNC | SND_NODEFAULT);
 }
 
 #endif /*USER_SOUNDS*/

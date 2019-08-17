@@ -45,7 +45,7 @@ dump_qtlist (void)	/* dump the character msg list to check appearance */
 		pline("msgnum %d: delivery %c",
 			msg->msgnum, msg->delivery);
 		more();
-		(void) dlb_fseek(msg_file, msg->offset, SEEK_SET);
+		dlb_fseek(msg_file, msg->offset, SEEK_SET);
 		deliver_by_window(msg, NHW_TEXT);
 	}
 }
@@ -73,7 +73,7 @@ long	hdr_offset;
 	struct qtmsg *msg_list;
 	int	n_msgs;
 
-	(void) dlb_fseek(msg_file, hdr_offset, SEEK_SET);
+	dlb_fseek(msg_file, hdr_offset, SEEK_SET);
 	Fread(&n_msgs, sizeof(int), 1, msg_file);
 	msg_list = (struct qtmsg *)
 		alloc((unsigned)(n_msgs+1)*sizeof(struct qtmsg));
@@ -139,7 +139,7 @@ void
 unload_qtlist (void)
 {
 	if (msg_file)
-	    (void) dlb_fclose(msg_file),  msg_file = 0;
+	    dlb_fclose(msg_file),  msg_file = 0;
 	if (qt_list.common)
 	    free((void *) qt_list.common),  qt_list.common = 0;
 	if (qt_list.chrole)
@@ -362,7 +362,7 @@ struct qtmsg *qt_msg;
 	long	size;
 
 	for (size = 0; size < qt_msg->size; size += (long)strlen(in_line)) {
-	    (void) dlb_fgets(in_line, 80, msg_file);
+	    dlb_fgets(in_line, 80, msg_file);
 	    convert_line();
 	    pline(out_line);
 	}
@@ -378,7 +378,7 @@ int how;
 	winid datawin = create_nhwindow(how);
 
 	for (size = 0; size < qt_msg->size; size += (long)strlen(in_line)) {
-	    (void) dlb_fgets(in_line, 80, msg_file);
+	    dlb_fgets(in_line, 80, msg_file);
 	    convert_line();
 	    putstr(datawin, 0, out_line);
 	}
@@ -396,7 +396,7 @@ com_pager (int msgnum)
 		return;
 	}
 
-	(void) dlb_fseek(msg_file, qt_msg->offset, SEEK_SET);
+	dlb_fseek(msg_file, qt_msg->offset, SEEK_SET);
 	if (qt_msg->delivery == 'p') deliver_by_pline(qt_msg);
 	else if (msgnum == 1) deliver_by_window(qt_msg, NHW_MENU);
 	else		     deliver_by_window(qt_msg, NHW_TEXT);
@@ -413,7 +413,7 @@ qt_pager (int msgnum)
 		return;
 	}
 
-	(void) dlb_fseek(msg_file, qt_msg->offset, SEEK_SET);
+	dlb_fseek(msg_file, qt_msg->offset, SEEK_SET);
 	if (qt_msg->delivery == 'p' && strcmp(windowprocs.name, "X11"))
 		deliver_by_pline(qt_msg);
 	else	deliver_by_window(qt_msg, NHW_TEXT);

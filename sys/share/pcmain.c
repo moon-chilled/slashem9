@@ -104,7 +104,7 @@ char *argv[];
 		dir = exepath(argv[0]);
 #endif
 	if (dir != NULL) {
-		(void) strncpy(hackdir, dir, PATHLEN - 1);
+		strncpy(hackdir, dir, PATHLEN - 1);
 		hackdir[PATHLEN-1] = '\0';
 #ifdef NOCWD_ASSUMPTIONS
 		{
@@ -286,7 +286,7 @@ char *argv[];
 		boolean remember_wiz_mode = wizard;
 #endif
 #ifndef NO_SIGNAL
-		(void) signal(SIGINT, (SIG_RET_TYPE) done1);
+		signal(SIGINT, (SIG_RET_TYPE) done1);
 #endif
 #ifdef NEWS
 		if(iflags.news){
@@ -308,7 +308,7 @@ char *argv[];
 
 		if (discover || wizard) {
 			if(yn("Do you want to keep the save file?") == 'n'){
-				(void) delete_savefile();
+				delete_savefile();
 			}
 		}
 
@@ -322,7 +322,7 @@ not_recovered:
 
 		flags.move = 0;
 		set_wear();
-		(void) pickup(1);
+		pickup(1);
 		sense_engr_at(u.ux,u.uy,false);
 	}
 #ifdef __DJGPP__
@@ -330,12 +330,12 @@ not_recovered:
 /*        {
                 char titlebuf[BUFSZ];
                 sprintf(titlebuf,"%s - %s", DEF_GAME_NAME, plname);
-                (void) w95_setapptitle (titlebuf);
+                w95_setapptitle (titlebuf);
         }*/
 #endif
 
 #ifndef NO_SIGNAL
-	(void) signal(SIGINT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 #endif
 	return;
 }
@@ -387,11 +387,11 @@ char *argv[];
 #endif
 		case 'u':
 			if(argv[0][2])
-			  (void) strncpy(plname, argv[0]+2, sizeof(plname)-1);
+			  strncpy(plname, argv[0]+2, sizeof(plname)-1);
 			else if(argc > 1) {
 			  argc--;
 			  argv++;
-			  (void) strncpy(plname, argv[0], sizeof(plname)-1);
+			  strncpy(plname, argv[0], sizeof(plname)-1);
 			} else
 				raw_print("Player name expected after -u");
 			break;
@@ -460,14 +460,14 @@ nhusage()
 	/* -role still works for those cases which aren't already taken, but
 	 * is deprecated and will not be listed here.
 	 */
-	(void) sprintf(buf1,
+	sprintf(buf1,
 "\nUsage: %s [-d dir] -s [-r race] [-p profession] [maxrank] [name]...\n       or",
 		hname);
 	if (!iflags.window_inited)
 		raw_printf(buf1);
 	else
-		(void)	printf(buf1);
-	(void) sprintf(buf1,
+		printf(buf1);
+	sprintf(buf1,
 	 "\n       %s [-d dir] [-u name] [-r race] [-p profession] [-[DX]]",
 		hname);
 #ifdef NEWS
@@ -477,7 +477,7 @@ nhusage()
 	if (!iflags.window_inited)
 		raw_printf("%s\n",buf1);
 	else
-		(void) printf("%s\n",buf1);
+		printf("%s\n",buf1);
 }
 
 #ifdef CHDIR

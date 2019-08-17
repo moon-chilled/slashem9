@@ -204,7 +204,7 @@ void savebones(struct obj *corpse) {
 	clear_bypasses();
 	fd = open_bonesfile(&u.uz, &bonesid);
 	if (fd >= 0) {
-		(void) close(fd);
+		close(fd);
 #ifdef WIZARD
 		if (wizard) {
 		    if (yn("Bones file already exists.  Replace it?") == 'y') {
@@ -289,7 +289,7 @@ void savebones(struct obj *corpse) {
 		if (!mtmp) return;
 		mtmp = christen_monst(mtmp, plname);
 		if (corpse)
-			(void) obj_attach_mid(corpse, mtmp->m_id);
+			obj_attach_mid(corpse, mtmp->m_id);
 	} else {
 		/* give your possessions to the monster you become */
 		in_mklev = true;
@@ -392,7 +392,7 @@ int getbones(void) {
 #ifdef WIZARD
 		if(wizard)  {
 			if(yn("Get bones?") == 'n') {
-				(void) close(fd);
+				close(fd);
 				return(0);
 			}
 		}
@@ -439,7 +439,7 @@ int getbones(void) {
 			resetobjs(level.buriedobjlist,true);
 		}
 	}
-	(void) close(fd);
+	close(fd);
 
 #ifdef WIZARD
 	if(wizard) {

@@ -463,7 +463,7 @@ dodiscovered (void)				/* free after Robert Viduya */
     if (ct == 0) {
 	You("haven't discovered anything yet...");
     } else
-	(void) select_menu(tmpwin, PICK_NONE, &selected);
+	select_menu(tmpwin, PICK_NONE, &selected);
     destroy_nhwindow(tmpwin);
 
     return 0;

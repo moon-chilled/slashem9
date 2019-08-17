@@ -156,7 +156,7 @@ uid_t
 nh_getuid()
 {
     uid_t ruid, euid, suid;
-    (void) real_getresuid(&ruid, &euid, &suid);
+    real_getresuid(&ruid, &euid, &suid);
     return ruid;
 }
 
@@ -164,7 +164,7 @@ uid_t
 nh_geteuid()
 {
     uid_t ruid, euid, suid;
-    (void) real_getresuid(&ruid, &euid, &suid);
+    real_getresuid(&ruid, &euid, &suid);
     if (hiding_privileges)
 	euid = ruid;
     return euid;
@@ -184,7 +184,7 @@ gid_t
 nh_getgid()
 {
     gid_t rgid, egid, sgid;
-    (void) real_getresgid(&rgid, &egid, &sgid);
+    real_getresgid(&rgid, &egid, &sgid);
     return rgid;
 }
 
@@ -192,7 +192,7 @@ gid_t
 nh_getegid()
 {
     gid_t rgid, egid, sgid;
-    (void) real_getresgid(&rgid, &egid, &sgid);
+    real_getresgid(&rgid, &egid, &sgid);
     if (hiding_privileges)
 	egid = rgid;
     return egid;

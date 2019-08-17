@@ -474,7 +474,7 @@ const char *verb;	/* "rub",&c */
     }
     if (uquiver == obj) setuqwep(NULL);
     if (uswapwep == obj) {
-	(void) doswapweapon();
+	doswapweapon();
 	/* doswapweapon might fail */
 	if (uswapwep == obj) return false;
     } else {

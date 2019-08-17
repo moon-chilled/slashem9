@@ -338,7 +338,7 @@ int trouble;
 	    case TROUBLE_STUCK_IN_WALL:
 		    Your("surroundings change.");
 		    /* no control, but works on no-teleport levels */
-		    (void) safe_teleds(false);
+		    safe_teleds(false);
 		    break;
 	    case TROUBLE_CURSED_LEVITATION:
 		    if (Cursed_obj(uarmf, LEVITATION_BOOTS)) {
@@ -415,7 +415,7 @@ decurse:
 				flags.botl = 1;
 			}
 		    }
-		    (void) encumber_msg();
+		    encumber_msg();
 		    break;
 	    case TROUBLE_BLIND:
 	    	    {
@@ -440,7 +440,7 @@ decurse:
 		    break;
 	    case TROUBLE_HALLUCINATION:
 		    pline ("Looks like you are back in Kansas.");
-		    (void) make_hallucinated(0L,false,0L);
+		    make_hallucinated(0L,false,0L);
 		    break;
 	    case TROUBLE_LOW_ENERGY:
 		    You_feel("revitalised.");
@@ -490,7 +490,7 @@ aligntyp resp_god;
 		shieldeff(u.ux, u.uy);
 		if (Blind) pline("For some reason you're unaffected.");
 		else
-		    (void) ureflects("%s reflects from your %s.", "It");
+		    ureflects("%s reflects from your %s.", "It");
 	    } else if (Shock_resistance) {
 		shieldeff(u.ux, u.uy);
 		pline("It seems not to affect you.");
@@ -597,7 +597,7 @@ aligntyp resp_god;
 						"art arrogant",
 			      youmonst.data->mlet == S_HUMAN ? "mortal" : "creature");
 			verbalize("Thou must relearn thy lessons!");
-			(void) adjattrib(A_WIS, -3, false);
+			adjattrib(A_WIS, -3, false);
 			losexp(NULL, false);
 			break;
 	    case 6:	if (!Punished) {
@@ -1389,7 +1389,7 @@ dosacrifice (void)
 	    if (u.ualign.type != A_CHAOTIC) {
 		adjalign(-5);
 		u.ugangr += 3;
-		(void) adjattrib(A_WIS, -1, true);
+		adjattrib(A_WIS, -1, true);
 		if (!Inhell) angrygods(u.ualign.type);
 		change_luck(-5);
 	    } else adjalign(5);
@@ -1416,7 +1416,7 @@ dosacrifice (void)
 		pline("Such an action is an insult to %s!",
 		      (unicalign == A_CHAOTIC)
 		      ? "chaos" : unicalign ? "law" : "balance");
-		(void) adjattrib(A_WIS, -1, true);
+		adjattrib(A_WIS, -1, true);
 		value = -5;
 	    } else if (u.ualign.type == altaralign) {
 		/* If different from altar, and altar is same as yours, */
@@ -1557,7 +1557,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		    pline("%s rejects your sacrifice!", a_gname());
 		    godvoice(altaralign, "Suffer, infidel!");
 		    change_luck(-5);
-		    (void) adjattrib(A_WIS, -2, true);
+		    adjattrib(A_WIS, -2, true);
 		    if (!Inhell) angrygods(u.ualign.type);
 		}
 		return(1);
@@ -1858,13 +1858,13 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
 
     if (p_type == 0) {
 	if(on_altar() && u.ualign.type != alignment)
-	    (void) water_prayer(false);
+	    water_prayer(false);
 	u.ublesscnt += rnz(250);
 	change_luck(-3);
 	gods_upset(u.ualign.type);
     } else if(p_type == 1) {
 	if(on_altar() && u.ualign.type != alignment)
-	    (void) water_prayer(false);
+	    water_prayer(false);
 	angrygods(u.ualign.type);	/* naughty */
     } else if(p_type == 2) {
 	if(water_prayer(false)) {
@@ -1876,7 +1876,7 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
     } else {
 	/* coaligned */
 	if(on_altar())
-	    (void) water_prayer(true);
+	    water_prayer(true);
 	pleased(alignment); /* nice */
     }
     return(1);
@@ -2074,7 +2074,7 @@ altar_wrath (int x, int y)
 
     if(!strcmp(align_gname(altaralign), u_gname())) {
 	godvoice(altaralign, "How darest thou desecrate my altar!");
-	(void) adjattrib(A_WIS, -1, false);
+	adjattrib(A_WIS, -1, false);
     } else {
 	pline("A voice (could it be %s?) whispers:",
 	      align_gname(altaralign));

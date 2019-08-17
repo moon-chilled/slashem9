@@ -559,7 +559,7 @@ initoptions (void)
 	flags.warntype = 0L;
 
      /* assert( sizeof flags.inv_order == sizeof def_inv_order ); */
-	(void)memcpy((void *)flags.inv_order,
+	memcpy((void *)flags.inv_order,
 		     (void *)def_inv_order, sizeof flags.inv_order);
 	flags.pickup_types[0] = '\0';
 	flags.pickup_burden = MOD_ENCUMBER;
@@ -621,7 +621,7 @@ initoptions (void)
 #endif
 		read_config_file(NULL);
 
-	(void)fruitadd(pl_fruit);
+	fruitadd(pl_fruit);
 	/* Remove "slime mold" from list of object names; this will	*/
 	/* prevent it from being wished unless it's actually present	*/
 	/* as a named (or default) fruit.  Wishing for "fruit" will	*/
@@ -1295,7 +1295,7 @@ char *str;
 # endif
 #else
    tmp->match = alloc(strlen(tmps)+1);
-   (void) memcpy((void *)tmp->match, (void *)tmps, strlen(tmps)+1);
+   memcpy((void *)tmp->match, (void *)tmps, strlen(tmps)+1);
 #endif
    if (err) {
       raw_printf("\nMenucolor regex error: %s\n", err);
@@ -1899,7 +1899,7 @@ goodfruit:
 		if (!*pl_fruit)
 		    nmcpy(pl_fruit, "slime mold", PL_FSIZ);
 		if (!initial)
-		    (void)fruitadd(pl_fruit);
+		    fruitadd(pl_fruit);
 		/* If initial, then initoptions is allowed to do it instead
 		 * of here (initoptions always has to do it even if there's
 		 * no fruit option at all.  Also, we don't want people
@@ -2087,7 +2087,7 @@ goodfruit:
 		if (negated) bad_negation(fullname, false);
 		else if ((op = string_for_opt(opts, negated))) {
 #ifdef WIN32CON
-		    (void)strncpy(iflags.altkeyhandler, op, MAX_ALTKEYHANDLER - 5);
+		    strncpy(iflags.altkeyhandler, op, MAX_ALTKEYHANDLER - 5);
 		    load_keyboard_handler();
 #endif
 		}
@@ -2228,7 +2228,7 @@ goodfruit:
 			    use_menu = true;
 		    }
 		    if (use_menu) {
-			(void) choose_classes_menu("Auto-Pickup what?", 1,
+			choose_classes_menu("Auto-Pickup what?", 1,
 						   true, ocl, tbuf);
 			op = tbuf;
 		    }

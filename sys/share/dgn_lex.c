@@ -1735,7 +1735,7 @@ static void yy_fatal_error( msg )
 char msg[];
 #endif
 	{
-	(void) fprintf( stderr, "%s\n", msg );
+	fprintf( stderr, "%s\n", msg );
 	exit( YY_EXIT_FAILURE );
 	}
 

@@ -298,7 +298,7 @@ raise_dead:
 	    set_malign(mtmp);
 	}
 	/* next handle the affect on things you're carrying */
-	(void) unturn_dead(&youmonst);
+	unturn_dead(&youmonst);
 	/* last place some monsters around you */
 	mm.x = u.ux;
 	mm.y = u.uy;
@@ -316,7 +316,7 @@ raise_dead:
 			if (mtmp->mtame < 20)
 			    mtmp->mtame++;
 		    } else
-			(void) tamedog(mtmp, NULL);
+			tamedog(mtmp, NULL);
 		else monflee(mtmp, 0, false, true);
 	    }
 	}
@@ -354,7 +354,7 @@ learn()
 	if (delay < end_delay && ublindf && ublindf->otyp == LENSES && rn2(2))
 	    delay++;
 	if (Confusion) {		/* became confused while learning */
-	    (void) confused_book(book);
+	    confused_book(book);
 	    book = 0;			/* no longer studying */
 	    nomul(delay - end_delay);	/* remaining delay is uninterrupted */
 	    delay = end_delay;
@@ -997,7 +997,7 @@ boolean atme;
 	case SPE_IDENTIFY:
 	case SPE_COMMAND_UNDEAD:
 	case SPE_SUMMON_UNDEAD:
-		(void) seffects(pseudo);
+		seffects(pseudo);
 		break;
 
 	case SPE_ENCHANT_WEAPON:
@@ -1008,7 +1008,7 @@ boolean atme;
 		else n = 14;	/* Unskilled or restricted */
 		if (!rn2(n)) {
 		    pseudo->blessed = 0;
-		    (void) seffects(pseudo);
+		    seffects(pseudo);
 		} else
 		    Your("enchantment failed!");
 		break;
@@ -1025,7 +1025,7 @@ boolean atme;
 #endif
 		/* fall through */
 	case SPE_INVISIBILITY:
-		(void) peffects(pseudo);
+		peffects(pseudo);
 		break;
 	case SPE_CURE_BLINDNESS:
 		healup(0, 0, false, true);
@@ -1040,7 +1040,7 @@ boolean atme;
 		healup(0, 0, true, false);
 		break;
 	case SPE_CREATE_FAMILIAR:
-		(void) make_familiar(NULL, u.ux, u.uy, false);
+		make_familiar(NULL, u.ux, u.uy, false);
 		break;
 	case SPE_CLAIRVOYANCE:
 		if (!BClairvoyant)

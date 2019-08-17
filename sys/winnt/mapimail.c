@@ -358,12 +358,12 @@ static void
 MAPI_mail_finish()
 {
 	InterlockedIncrement(&mailthread_stopping);
-	(void) fpMAPILogoff(MAPISession,0,0,0);
-	(void) DeInitMAPI();
+	fpMAPILogoff(MAPISession,0,0,0);
+	DeInitMAPI();
 #ifdef MAPI_VERBOSE
 	if (debugmapi) fclose(dbgfile);
 #endif
-	(void) _endthreadex(0);
+	_endthreadex(0);
 }
 
 static void

@@ -337,7 +337,7 @@ const char *str;
     else if (!nhproxy_proc_raw_print(str)) {
 	fputs(str, stderr);
 	fputc('\n', stderr);
-	(void) fflush(stderr);
+	fflush(stderr);
     }
 }
 
@@ -350,7 +350,7 @@ const char *str;
     else if (!nhproxy_proc_raw_print_bold(str)) {
 	fputs(str, stderr);
 	fputc('\n', stderr);
-	(void) fflush(stderr);
+	fflush(stderr);
     }
 }
 
@@ -419,7 +419,7 @@ const char *error;
     if (class == NHPROXY_ERROR_COMMS) {
 	fputs(error, stderr);
 	fputc('\n', stderr);
-	(void) fflush(stderr);
+	fflush(stderr);
 	hangup(0);
     } else {
 	pline(error);
@@ -433,7 +433,7 @@ void
 win_proxy_init()
 {
     char *windowtype, *name;
-    (void)nhproxy_rpc_set_errhandler(win_proxy_errhandler);
+    nhproxy_rpc_set_errhandler(win_proxy_errhandler);
     set_glyph_mapping();
     nhproxy_serv_set_callbacks(&win_proxy_callbacks);
     nhproxy_serv_set_extensions(win_proxy_extents);

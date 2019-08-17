@@ -204,7 +204,7 @@ boolean open_library(const char *lib_area, const char *lib_name, library *lp) {
 	if (readlibdir(lp)) {
 	    status = true;
 	} else {
-	    (void) fclose(lp->fdata);
+	    fclose(lp->fdata);
 	    lp->fdata = NULL;
 	}
     }

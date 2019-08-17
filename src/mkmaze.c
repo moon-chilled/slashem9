@@ -533,9 +533,9 @@ fixup_special()
 	/* stock the main vault */
 	for(x = croom->lx; x <= croom->hx; x++)
 	    for(y = croom->ly; y <= croom->hy; y++) {
-		(void) mkgold((long) rn1(300, 600), x, y);
+		mkgold((long) rn1(300, 600), x, y);
 		if (!rn2(3) && !is_pool(x,y))
-		    (void)maketrap(x, y, rn2(3) ? LANDMINE : SPIKED_PIT);
+		    maketrap(x, y, rn2(3) ? LANDMINE : SPIKED_PIT);
 	    }
     } else if (Role_if(PM_PRIEST) && In_quest(&u.uz)) {
 	/* less chance for undead corpses (lured from lower morgues) */
@@ -645,7 +645,7 @@ makemaz (const char *s)
 	maze0xy(&mm);
 	walkfrom((int) mm.x, (int) mm.y);
 	/* put a boulder at the maze center */
-	(void) mksobj_at(BOULDER, (int) mm.x, (int) mm.y, true, false);
+	mksobj_at(BOULDER, (int) mm.x, (int) mm.y, true, false);
 
 	wallification(2, 2, x_maze_max, y_maze_max, true);
 	mazexy(&mm);
@@ -702,23 +702,23 @@ makemaz (const char *s)
 
 	for(x = rn1(8,11); x; x--) {
 		mazexy(&mm);
-		(void) mkobj_at(rn2(2) ? GEM_CLASS : 0, mm.x, mm.y, true);
+		mkobj_at(rn2(2) ? GEM_CLASS : 0, mm.x, mm.y, true);
 	}
 	for(x = rn1(10,2); x; x--) {
 		mazexy(&mm);
-		(void) mksobj_at(BOULDER, mm.x, mm.y, true, false);
+		mksobj_at(BOULDER, mm.x, mm.y, true, false);
 	}
 	for (x = rn2(3); x; x--) {
 		mazexy(&mm);
-		(void) makemon(&mons[PM_MINOTAUR], mm.x, mm.y, NO_MM_FLAGS);
+		makemon(&mons[PM_MINOTAUR], mm.x, mm.y, NO_MM_FLAGS);
 	}
 	for(x = rn1(5,7); x; x--) {
 		mazexy(&mm);
-		(void) makemon(NULL, mm.x, mm.y, NO_MM_FLAGS);
+		makemon(NULL, mm.x, mm.y, NO_MM_FLAGS);
 	}
 	for(x = rn1(6,7); x; x--) {
 		mazexy(&mm);
-		(void) mkgold(0L,mm.x,mm.y);
+		mkgold(0L,mm.x,mm.y);
 	}
 	for(x = rn1(6,7); x; x--)
 		mktrap(0,1,NULL, NULL);
@@ -1399,7 +1399,7 @@ boolean ini;
 
 		case CONS_MON: {
 		    struct monst *mon = (struct monst *) cons->list;
-		    (void) mnearto(mon, cons->x, cons->y, true);
+		    mnearto(mon, cons->x, cons->y, true);
 		    break;
 		}
 

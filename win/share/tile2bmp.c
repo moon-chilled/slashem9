@@ -220,7 +220,7 @@ char *argv[];
 				}
 			}
 		}
-		(void) fclose_text_file();
+		fclose_text_file();
 		++filenum;
 	}
 

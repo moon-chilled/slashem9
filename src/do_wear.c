@@ -147,7 +147,7 @@ int Boots_off(void) {
 	case LEVITATION_BOOTS:
 		if (!oldprop && !HLevitation && !cancelled_don) {
 			flags.botl = 1;
-			(void) float_down(0L, 0L);
+			float_down(0L, 0L);
 			makeknown(otyp);
 		}
 		break;
@@ -444,7 +444,7 @@ int Gloves_off(void) {
     }
     setworn(NULL, W_ARMG);
     cancelled_don = false;
-    (void) encumber_msg();		/* immediate feedback for GoP */
+    encumber_msg();		/* immediate feedback for GoP */
 
     /* Prevent wielding cockatrice when not wearing gloves */
     if (uwep && uwep->otyp == CORPSE &&
@@ -697,7 +697,7 @@ void Amulet_off(void) {
 		    if (!breathless(youmonst.data) && !amphibious(youmonst.data)
 						&& !Swimming) {
 			You("suddenly inhale an unhealthy amount of water!");
-		    	(void) drown();
+		    	drown();
 		    }
 		    return;
 		}
@@ -716,7 +716,7 @@ void Amulet_off(void) {
 	/* KMH, balance patch -- added */
 	case AMULET_OF_FLYING:
 		setworn(NULL, W_AMUL);
-		(void) float_down(0L, 0L);
+		float_down(0L, 0L);
 		return;
 	case AMULET_OF_YENDOR:
 		break;
@@ -939,7 +939,7 @@ static void Ring_off_or_gone(struct obj *obj, boolean gone) {
 		break;
 	case RIN_LEVITATION:
 		flags.botl = 1;
-		(void) float_down(0L, 0L);
+		float_down(0L, 0L);
 		if (!Levitation) makeknown(RIN_LEVITATION);
 		break;
 	case RIN_GAIN_STRENGTH:
@@ -1170,11 +1170,11 @@ int dotakeoff(void) {
 	}
 
 	reset_remarm();		/* clear takeoff_mask and taking_off */
-	(void) select_off(otmp);
+	select_off(otmp);
 	if (!takeoff_mask) return 0;
 	reset_remarm();		/* armoroff() doesn't use takeoff_mask */
 
-	(void) armoroff(otmp);
+	armoroff(otmp);
 	return(1);
 }
 
@@ -1204,7 +1204,7 @@ int doremring(void) {
 	}
 
 	reset_remarm();		/* clear takeoff_mask and taking_off */
-	(void) select_off(otmp);
+	select_off(otmp);
 	if (!takeoff_mask) return 0;
 	reset_remarm();		/* not used by Ring_/Amulet_/Blindf_off() */
 
@@ -1280,12 +1280,12 @@ int armoroff(struct obj *otmp) {
 		 * fire resistance is not needed for Gehennom.
 		 */
 		if(is_cloak(otmp))
-			(void) Cloak_off();
+			Cloak_off();
 		else if(is_shield(otmp))
-			(void) Shield_off();
+			Shield_off();
 		else if (is_helmet(otmp))
 			/* [Finn E. Theodorsen] For fedoras */
-			(void) Helmet_off();
+			Helmet_off();
 		else setworn(NULL, otmp->owornmask & W_ARMOR);
 		off_msg(otmp);
 	}
@@ -2071,7 +2071,7 @@ int doddoremarm(void) {
 	/* specific activity when handling weapons only */
 	if (!(takeoff_mask & ~(W_WEP|W_SWAPWEP|W_QUIVER)))
 	    disrobing = "disarming";
-	(void) take_off();
+	take_off();
     }
     /* The time to perform the command is already completely accounted for
      * in take_off(); if we return 1, that would add an extra turn to each
@@ -2111,7 +2111,7 @@ static int menu_remarm(int retry) {
 			all_worn_categories ? is_worn : is_worn_by_type);
     if (n > 0) {
 	for (i = 0; i < n; i++)
-	    (void) select_off(pick_list[i].item.a_obj);
+	    select_off(pick_list[i].item.a_obj);
 	free((void *) pick_list);
     } else if (n < 0 && flags.menu_style != MENU_COMBINATION) {
 	There("is nothing else you can remove or unwield.");

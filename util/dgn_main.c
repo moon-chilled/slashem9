@@ -71,7 +71,7 @@ char **argv;
 	if (argc == 1) {	/* Read standard input */
 	    init_yyin(fin);
 	    init_yyout(fout);
-	    (void) yyparse();
+	    yyparse();
 	    if (fatal_error > 0)
 		errors_encountered = true;
 	} else {		/* Otherwise every argument is a filename */
@@ -104,7 +104,7 @@ char **argv;
 		/* Use the whole name - strip off the last 3 or 4 chars. */
 
 		basename = alloc(len + 1);
-		(void) strncpy(basename, infile, len);
+		strncpy(basename, infile, len);
 		basename[len] = '\0';
 #endif
 
@@ -116,7 +116,7 @@ char **argv;
 		outfile = alloc(strlen(basename) + 1);
 		outfile[0] = '\0';
 #endif
-		(void) strcat(outfile, basename);
+		strcat(outfile, basename);
 		free(basename);
 
 		fin = freopen(infile, "r", stdin);
@@ -135,7 +135,7 @@ char **argv;
 		}
 		init_yyin(fin);
 		init_yyout(fout);
-		(void) yyparse();
+		yyparse();
 		line_number = 1;
 		if (fatal_error > 0) {
 			errors_encountered = true;
@@ -170,7 +170,7 @@ const char *s;
 #endif
 	  fname, line_number, s);
 	if (++fatal_error > MAX_ERRORS) {
-		(void) fprintf(stderr,"Too many errors, good bye!\n");
+		fprintf(stderr,"Too many errors, good bye!\n");
 		exit(EXIT_FAILURE);
 	}
 }

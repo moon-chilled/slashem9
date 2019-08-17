@@ -622,7 +622,7 @@ u_entered_shop (char *enterstring)
 	    /* You seem to be new here */
 	    eshkp->visitct = 0;
 	    eshkp->following = 0;
-	    (void) strncpy(eshkp->customer,plname,PL_NSIZ);
+	    strncpy(eshkp->customer,plname,PL_NSIZ);
 	    pacify_shk(shkp);
 	}
 
@@ -930,30 +930,30 @@ obfree (struct obj *obj, struct obj *merge)
 	    pline("BUG: obfree() called on non-empty container.  See buglog for details.");
 	    fp = fopen_datafile("buglog", "a", TROUBLEPREFIX);
 	    if (fp) {
-		(void) fprintf(fp,
+		fprintf(fp,
 		  "%08ld: BUG: obfree() called on non-empty container.\n",
 		  yyyymmdd((time_t)0L));
 		known = objects[obj->otyp].oc_name_known;
 		objects[obj->otyp].oc_name_known = 1;
 		obj->known = obj->bknown = obj->dknown = obj->rknown = 1;
-		(void) fprintf(fp, "Container: %s\n", doname(obj));
+		fprintf(fp, "Container: %s\n", doname(obj));
 		objects[obj->otyp].oc_name_known = known;
-		(void) fprintf(fp, "ID: %d\n", obj->o_id);
-		(void) fprintf(fp, "Contents of %s:\n", the(xname(obj)));
+		fprintf(fp, "ID: %d\n", obj->o_id);
+		fprintf(fp, "Contents of %s:\n", the(xname(obj)));
 		for(otmp = obj->cobj; otmp; otmp = obj->nobj) {
 		    known = objects[otmp->otyp].oc_name_known;
 		    objects[otmp->otyp].oc_name_known = 1;
 		    otmp->known = otmp->bknown =
 			    otmp->dknown = otmp->rknown = 1;
-		    (void) fprintf(fp, "\t%s\n", doname(otmp));
+		    fprintf(fp, "\t%s\n", doname(otmp));
 		    objects[otmp->otyp].oc_name_known = known;
 		}
 		switch (obj->where) {
 		    case OBJ_FREE:
-			(void) fprintf(fp, "Container is on free list.\n");
+			fprintf(fp, "Container is on free list.\n");
 			break;
 		    case OBJ_FLOOR:
-			(void) fprintf(fp,
+			fprintf(fp,
 				"Container is on the floor at (%d, %d)\n",
 				obj->ox, obj->oy);
 			break;
@@ -965,39 +965,39 @@ obfree (struct obj *obj, struct obj *merge)
 				otmp->dknown = otmp->rknown = 1;
 			get_obj_location(otmp, &x, &y,
 				BURIED_TOO | CONTAINED_TOO);
-			(void) fprintf(fp,
+			fprintf(fp,
 				"Container is contained in %s at (%d, %d)\n",
 				doname(otmp), x, y);
 			objects[otmp->otyp].oc_name_known = known;
 			break;
 		    case OBJ_INVENT:
-			(void) fprintf(fp,
+			fprintf(fp,
 				"Container is in hero's inventory\n");
 			break;
 		    case OBJ_MINVENT:
 			get_obj_location(otmp, &x, &y, 0);
-			(void) fprintf(fp,
+			fprintf(fp,
 				"Container is in %s's inventory at (%d, %d)\n",
 				s_suffix(noit_mon_nam(obj->ocarry)), x, y);
 			break;
 		    case OBJ_MIGRATING:
-			(void) fprintf(fp,
+			fprintf(fp,
 				"Container is migrating to level %d of %s\n",
 				otmp->oy, dungeons[otmp->ox].dname);
 			break;
 		    case OBJ_BURIED:
-			(void) fprintf(fp, "Container is buried at (%d, %d)\n",
+			fprintf(fp, "Container is buried at (%d, %d)\n",
 				obj->ox, obj->oy);
 			break;
 		    case OBJ_ONBILL:
-			(void) fprintf(fp, "Container is on shopping bill.\n");
+			fprintf(fp, "Container is on shopping bill.\n");
 			break;
 		    default:
-			(void) fprintf(fp,
+			fprintf(fp,
 				"Container is nowhere (%d).\n", obj->where);
 			break;
 		}
-		(void) fprintf(fp, "\n");
+		fprintf(fp, "\n");
 		fclose(fp);
 	    }
 	}
@@ -1100,7 +1100,7 @@ boolean killkops;
 {
 	xchar x = ESHK(shkp)->shk.x, y = ESHK(shkp)->shk.y;
 
-	(void) mnearto(shkp, x, y, true);
+	mnearto(shkp, x, y, true);
 	level.flags.has_shop = 1;
 	if (killkops) {
 		kops_gone(true);
@@ -1230,7 +1230,7 @@ hot_pursuit (struct monst *shkp)
 	if(!shkp->isshk) return;
 
 	rile_shk(shkp);
-	(void) strncpy(ESHK(shkp)->customer, plname, PL_NSIZ);
+	strncpy(ESHK(shkp)->customer, plname, PL_NSIZ);
 	ESHK(shkp)->following = 1;
 }
 
@@ -2915,7 +2915,7 @@ boolean peaceful, silent, destruction;
 		} else  Norep("You hear a scream, \"Thief!\"");
 	    }
 	    hot_pursuit(shkp);
-	    (void) angry_guards(false);
+	    angry_guards(false);
 	}
 	return(value);
 }
@@ -3329,7 +3329,7 @@ xchar x, y;
 		    mark_synch();
 		}
 		subfrombill(obj, shkp);
-		(void) mpickobj(shkp, obj);
+		mpickobj(shkp, obj);
 		return shkp;
 	}
 	return NULL;
@@ -3513,7 +3513,7 @@ boolean catchup;	/* restoring a level */
 				BEARTRAP, true, false);
 		otmp->quan= 1;
 		otmp->owt = weight(otmp);
-		(void) mpickobj(shkp, otmp);
+		mpickobj(shkp, otmp);
 	    }
 	    deltrap(ttmp);
 	    if(IS_DOOR(tmp_dam->typ)) {
@@ -3535,7 +3535,7 @@ boolean catchup;	/* restoring a level */
 	    /* No messages if player already replaced shop door */
 	    return(1);
 	levl[x][y].typ = tmp_dam->typ;
-	(void) memset((void *)litter, 0, sizeof(litter));
+	memset((void *)litter, 0, sizeof(litter));
 	if ((otmp = level.objects[x][y]) != 0) {
 	    /* Scatter objects haphazardly into the shop */
 #define NEED_UPDATE 1
@@ -3630,7 +3630,7 @@ struct monst *shkp;
 			if(Displaced)
 			  Your("displaced image doesn't fool %s!",
 				mon_nam(shkp));
-			(void) mattacku(shkp);
+			mattacku(shkp);
 			return(0);
 		}
 		if(eshkp->following) {
@@ -3830,7 +3830,7 @@ int fall;
 		setnotworn(obj);
 		freeinv(obj);
 		subfrombill(obj, shkp);
-		(void) add_to_minv(shkp, obj);	/* may free obj */
+		add_to_minv(shkp, obj);	/* may free obj */
 	    }
    } else
         /* WAC He may not be here now,  but... */
@@ -3876,7 +3876,7 @@ coord *mm;
 	  if (!(mvitals[kop_pm[ik]].mvflags & G_GONE)) {
 	    cnt = epathto(mc, kop_cnt[ik], mm->x, mm->y, &mons[kop_pm[ik]]);
 	    while(--cnt >= 0)
-		(void) makemon(&mons[kop_pm[ik]], mc[cnt].x, mc[cnt].y, NO_MM_FLAGS);
+		makemon(&mons[kop_pm[ik]], mc[cnt].x, mc[cnt].y, NO_MM_FLAGS);
 	}
 	}
 	free((void *)mc);
@@ -3950,7 +3950,7 @@ boolean cant_mollify;
 	y = appear_here->place.y;
 
 	/* not the best introduction to the shk... */
-	(void) strncpy(ESHK(shkp)->customer,plname,PL_NSIZ);
+	strncpy(ESHK(shkp)->customer,plname,PL_NSIZ);
 
 	/* if the shk is already on the war path, be sure it's all out */
 	if(ANGRY(shkp) || ESHK(shkp)->following) {
@@ -3986,13 +3986,13 @@ boolean cant_mollify;
 		    wait_synch();
 #ifdef UNIX
 # if defined(SYSV) || defined(ULTRIX)
-		    (void)
+		    
 # endif
 			sleep(1);
 #endif
 		}
 	    }
-	    (void) mnearto(shkp, x, y, true);
+	    mnearto(shkp, x, y, true);
 	}
 
 	if((um_dist(x, y, 1) && !uinshp) || cant_mollify ||
@@ -4491,7 +4491,7 @@ Shk_Your(buf, obj)
 char *buf;
 struct obj *obj;
 {
-	(void) shk_your(buf, obj);
+	shk_your(buf, obj);
 	*buf = highc(*buf);
 	return buf;
 }

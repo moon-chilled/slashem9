@@ -171,7 +171,7 @@ char *fname_encode(const char *legal, char quotechar, char *s, char *callerbuf, 
 		if ((bufsz - cnt) <= 4) return callerbuf;
 
 		if (*sp == quotechar) {
-			(void)sprintf(op, "%c%02X", quotechar, *sp);
+			sprintf(op, "%c%02X", quotechar, *sp);
 			 op += 3;
 			 cnt += 3;
 		} else if ((index(legal, *sp) != 0) || (index(hexdigits, *sp) != 0)) {
@@ -179,7 +179,7 @@ char *fname_encode(const char *legal, char quotechar, char *s, char *callerbuf, 
 			*op = '\0';
 			cnt++;
 		} else {
-			(void)sprintf(op,"%c%02X", quotechar, *sp);
+			sprintf(op,"%c%02X", quotechar, *sp);
 			op += 3;
 			cnt += 3;
 		}
@@ -274,7 +274,7 @@ int validate_prefix_locations(char *reasonbuf) {
 		filename = fqname("validate", prefcnt, 3);
 		if ((fp = fopen(filename, "w"))) {
 			fclose(fp);
-			(void) unlink(filename);
+			unlink(filename);
 		} else {
 			if (reasonbuf) {
 				if (failcount) strcat(reasonbuf,", ");
@@ -429,12 +429,12 @@ void delete_levelfile(int lev) {
 	if (lev == 0 || (level_info[lev].flags & LFILE_EXISTS)) {
 		set_levelfile_name(lock, lev);
 #ifdef FILE_AREAS
-		(void) remove_area(FILE_AREA_LEVL, lock, 0);
+		remove_area(FILE_AREA_LEVL, lock, 0);
 #else
 # ifdef HOLD_LOCKFILE_OPEN
 		if (lev == 0) really_close();
 # endif
-		(void) unlink(fqname(lock, LEVELPREFIX, 0));
+		unlink(fqname(lock, LEVELPREFIX, 0));
 #endif
 		level_info[lev].flags &= ~LFILE_EXISTS;
 	}
@@ -451,7 +451,7 @@ void clearlocks(void) {
 	int x;
 
 # ifdef UNIX
-	(void) signal(SIGHUP, SIG_IGN);
+	signal(SIGHUP, SIG_IGN);
 # endif */
 	/* can't access maxledgerno() before dungeons are created -dlc */
 	int x;
@@ -594,7 +594,7 @@ void commit_bonesfile(d_level *lev) {
 	const char *fq_bones, *tempname;
 	int ret;
 
-	(void) set_bonesfile_name(bones, lev);
+	set_bonesfile_name(bones, lev);
 #ifndef FILE_AREAS
 	fq_bones = fqname(bones, BONESPREFIX, 0);
 #endif
@@ -610,7 +610,7 @@ void commit_bonesfile(d_level *lev) {
 	/* old SYSVs don't have rename.  Some SVR3's may, but since they
 	 * also have link/unlink, it doesn't matter. :-)
 	 */
-	(void) unlink(fq_bones);
+	unlink(fq_bones);
 	ret = link(tempname, fq_bones);
 	ret += unlink(tempname);
 # else
@@ -670,7 +670,7 @@ void set_savefile_name(void) {
 	strcpy(SAVEF, SAVEP);
 	{
 		int i = strlen(SAVEP);
-		(void)strncat(SAVEF, plname, 8);
+		strncat(SAVEF, plname, 8);
 		regularize(SAVEF+i);
 	}
 	strcat(SAVEF, ".sav");
@@ -680,7 +680,7 @@ void set_savefile_name(void) {
 	/* Obtain the name of the logged on user and incorporate
 	 * it into the name. */
 	sprintf(fnamebuf, "%s-%s", get_username(0), plname);
-	(void)fname_encode("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-.",
+	fname_encode("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-.",
 				'%', fnamebuf, encodedfnamebuf, BUFSZ);
 	sprintf(SAVEF, "%s.NetHack-saved-game", encodedfnamebuf);
 #  else
@@ -779,9 +779,9 @@ int delete_savefile(void) {
 #endif
 
 #ifdef FILE_AREAS
-	(void) remove_area(FILE_AREA_SAVE, SAVEF);
+	remove_area(FILE_AREA_SAVE, SAVEF);
 #else
-	(void) unlink(fqname(SAVEF, SAVEPREFIX, 0));
+	unlink(fqname(SAVEF, SAVEPREFIX, 0));
 #endif
 	return 0;	/* for restore_saved_game() (ex-xxxmain.c) test */
 }
@@ -1022,7 +1022,7 @@ void unlock_file(const char *filename) {
 		if (unlink(lockname) < 0)
 			HUP raw_printf("Can't unlink %s.", lockname);
 # ifdef NO_FILE_LINKS
-		(void) close(lockfd);
+		close(lockfd);
 # endif
 
 #endif  /* UNIX */
@@ -1327,9 +1327,9 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 #else /*NOCWD_ASSUMPTIONS*/
 # ifdef MICRO
 	} else if (match_varname(buf, "HACKDIR", 4)) {
-		(void) strncpy(hackdir, bufp, PATHLEN-1);
+		strncpy(hackdir, bufp, PATHLEN-1);
 	} else if (match_varname(buf, "LEVELS", 4)) {
-		(void) strncpy(tmp_levels, bufp, PATHLEN-1);
+		strncpy(tmp_levels, bufp, PATHLEN-1);
 
 	} else if (match_varname(buf, "SAVE", 4)) {
 		char *ptr;
@@ -1337,13 +1337,13 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 			*ptr = '\0';
 		}
 
-		(void) strncpy(SAVEP, bufp, SAVESIZE-1);
+		strncpy(SAVEP, bufp, SAVESIZE-1);
 		append_slash(SAVEP);
 # endif /* MICRO */
 #endif /*NOCWD_ASSUMPTIONS*/
 
 	} else if (match_varname(buf, "NAME", 4)) {
-	    (void) strncpy(plname, bufp, PL_NSIZ-1);
+	    strncpy(plname, bufp, PL_NSIZ-1);
 	    plnamesuffix();
 	} else if (match_varname(buf, "MSGTYPE", 7)) {
 	    char pattern[256];
@@ -1364,26 +1364,26 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 	    if ((len = str2role(bufp)) >= 0)
 	    	flags.initrole = len;
 	} else if (match_varname(buf, "DOGNAME", 3)) {
-	    (void) strncpy(dogname, bufp, PL_PSIZ-1);
+	    strncpy(dogname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "CATNAME", 3)) {
-	    (void) strncpy(catname, bufp, PL_PSIZ-1);
+	    strncpy(catname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "WOLFNAME", 3)) {
-            (void) strncpy(wolfname, bufp, PL_PSIZ-1);
+            strncpy(wolfname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "GHOULNAME", 3)) {
-            (void) strncpy(ghoulname, bufp, PL_PSIZ-1);
+            strncpy(ghoulname, bufp, PL_PSIZ-1);
 #if 0
 	} else if (match_varname(buf, "BATNAME", 3)) {
-            (void) strncpy(batname, bufp, PL_PSIZ-1);
+            strncpy(batname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "SNAKENAME", 3)) {
-            (void) strncpy(batname, bufp, PL_PSIZ-1);
+            strncpy(batname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "RATNAME", 3)) {
-            (void) strncpy(batname, bufp, PL_PSIZ-1);
+            strncpy(batname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "BADGERNAME", 3)) {
-            (void) strncpy(batname, bufp, PL_PSIZ-1);
+            strncpy(batname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "REDDRAGONNAME", 3)) {
-            (void) strncpy(batname, bufp, PL_PSIZ-1);
+            strncpy(batname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "WHITEDRAGONNAME", 3)) {
-            (void) strncpy(batname, bufp, PL_PSIZ-1);
+            strncpy(batname, bufp, PL_PSIZ-1);
 #endif
 
 	} else if (match_varname(buf, "BOULDER", 3)) {
@@ -1425,19 +1425,19 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 
 	} else if (match_varname(buf, "OBJECTS", 3)) {
 	    /* oc_syms[0] is the RANDOM object, unused */
-	    (void) get_uchars(fp, buf, bufp, &(oc_syms[1]), true,
+	    get_uchars(fp, buf, bufp, &(oc_syms[1]), true,
 					MAXOCLASSES-1, "OBJECTS");
 	} else if (match_varname(buf, "MONSTERS", 3)) {
 	    /* monsyms[0] is unused */
-	    (void) get_uchars(fp, buf, bufp, &(monsyms[1]), true,
+	    get_uchars(fp, buf, bufp, &(monsyms[1]), true,
 					MAXMCLASSES-1, "MONSTERS");
 	} else if (match_varname(buf, "WARNINGS", 5)) {
-	    (void) get_uchars(fp, buf, bufp, translate, true,
+	    get_uchars(fp, buf, bufp, translate, true,
 					WARNCOUNT, "WARNINGS");
 	    assign_warnings(translate);
 #ifdef WIZARD
 	} else if (match_varname(buf, "WIZKIT", 6)) {
-	    (void) strncpy(wizkit, bufp, WIZKIT_MAX-1);
+	    strncpy(wizkit, bufp, WIZKIT_MAX-1);
 #endif
 #ifdef USER_SOUNDS
 	} else if (match_varname(buf, "SOUNDDIR", 8)) {
@@ -1490,7 +1490,7 @@ void read_config_file(const char *filename) {
 			wait_synch();
 		}
 	}
-	(void) fclose(fp);
+	fclose(fp);
 
 	/* turn off detection of duplicate configfile options */
 	set_duplicate_opt_detection(0);
@@ -1683,13 +1683,13 @@ void check_recordfile(const char *dir) {
 # endif
 
 	if (fd >= 0) {
-	    (void) close(fd);   /* NH_RECORD is accessible */
+	    close(fd);   /* NH_RECORD is accessible */
 #  ifdef FILE_AREAS
 	} else if ((fd = open_area(NH_RECORD_AREA, NH_RECORD, O_CREAT|O_RDWR, FCMASK)) >= 0) {
 #  else
 	} else if ((fd = open(fq_record, O_CREAT|O_RDWR, FCMASK)) >= 0) {
 #  endif
-	    (void) close(fd);   /* NH_RECORD newly created */
+	    close(fd);   /* NH_RECORD newly created */
 	} else {
 # ifdef FILE_AREAS
 	    raw_printf("Warning: cannot write scoreboard file %s", NH_RECORD);
@@ -1721,9 +1721,9 @@ void check_recordfile(const char *dir) {
 	raw_printf("Warning: cannot write record %s", tmp);
 		wait_synch();
 		} else          /* create succeeded */
-		(void) close(fd);
+		close(fd);
 	} else		/* open succeeded */
-	    (void) close(fd);
+	    close(fd);
 #else /* MICRO || WIN32*/
 
 # ifdef MAC
@@ -1757,10 +1757,10 @@ void paniclog(const char *type,	/* panic, impossible, trickery */
 		program_state.in_paniclog = 1;
 		lfile = fopen_datafile(PANICLOG, "a", TROUBLEPREFIX);
 		if (lfile) {
-		    (void) fprintf(lfile, "%s %08ld: %s %s\n",
+		    fprintf(lfile, "%s %08ld: %s %s\n",
 				   version_string(buf), yyyymmdd((time_t)0L),
 				   type, reason);
-		    (void) fclose(lfile);
+		    fclose(lfile);
 		}
 		program_state.in_paniclog = 0;
 	}
@@ -1798,14 +1798,14 @@ boolean recover_savefile(void) {
 	if (read(gfd, (void *) &hpid, sizeof hpid) != sizeof hpid) {
 	    raw_printf(
 "\nCheckpoint data incompletely written or subsequently clobbered. Recovery impossible.");
-	    (void)close(gfd);
+	    close(gfd);
 	    return false;
 	}
 	if (read(gfd, (void *) &savelev, sizeof(savelev))
 							!= sizeof(savelev)) {
 	    raw_printf("\nCheckpointing was not in effect for %s -- recovery impossible.\n",
 			lock);
-	    (void)close(gfd);
+	    close(gfd);
 	    return false;
 	}
 	if ((read(gfd, (void *) savename, sizeof savename)
@@ -1813,7 +1813,7 @@ boolean recover_savefile(void) {
 	    (read(gfd, (void *) &version_data, sizeof version_data)
 		!= sizeof version_data)) {
 	    raw_printf("\nError reading %s -- can't recover.\n", lock);
-	    (void)close(gfd);
+	    close(gfd);
 	    return false;
 	}
 
@@ -1827,15 +1827,15 @@ boolean recover_savefile(void) {
 	sfd = create_savefile();
 	if (sfd < 0) {
 	    raw_printf("\nCannot recover savefile %s.\n", SAVEF);
-	    (void)close(gfd);
+	    close(gfd);
 	    return false;
 	}
 
 	lfd = open_levelfile(savelev, errbuf);
 	if (lfd < 0) {
 	    raw_printf("\n%s\n", errbuf);
-	    (void)close(gfd);
-	    (void)close(sfd);
+	    close(gfd);
+	    close(sfd);
 	    delete_savefile();
 	    return false;
 	}
@@ -1843,28 +1843,28 @@ boolean recover_savefile(void) {
 	if (write(sfd, (void *) &version_data, sizeof version_data)
 		!= sizeof version_data) {
 	    raw_printf("\nError writing %s; recovery failed.", SAVEF);
-	    (void)close(gfd);
-	    (void)close(sfd);
+	    close(gfd);
+	    close(sfd);
 	    delete_savefile();
 	    return false;
 	}
 
 	if (!copy_bytes(lfd, sfd)) {
-		(void) close(lfd);
-		(void) close(sfd);
+		close(lfd);
+		close(sfd);
 		delete_savefile();
 		return false;
 	}
-	(void)close(lfd);
+	close(lfd);
 	processed[savelev] = 1;
 
 	if (!copy_bytes(gfd, sfd)) {
-		(void) close(lfd);
-		(void) close(sfd);
+		close(lfd);
+		close(sfd);
 		delete_savefile();
 		return false;
 	}
-	(void)close(gfd);
+	close(gfd);
 	processed[0] = 1;
 
 	for (lev = 1; lev < 256; lev++) {
@@ -1878,17 +1878,17 @@ boolean recover_savefile(void) {
 				levc = (xchar) lev;
 				write(sfd, (void *) &levc, sizeof(levc));
 				if (!copy_bytes(lfd, sfd)) {
-					(void) close(lfd);
-					(void) close(sfd);
+					close(lfd);
+					close(sfd);
 					delete_savefile();
 					return false;
 				}
-				(void)close(lfd);
+				close(lfd);
 				processed[lev] = 1;
 			}
 		}
 	}
-	(void)close(sfd);
+	close(sfd);
 
 #ifdef HOLD_LOCKFILE_OPEN
 	really_close();
@@ -1902,7 +1902,7 @@ boolean recover_savefile(void) {
 			const char *fq_lock;
 			set_levelfile_name(lock, lev);
 			fq_lock = fqname(lock, LEVELPREFIX, 3);
-			(void) unlink(fq_lock);
+			unlink(fq_lock);
 		}
 	}
 	return true;

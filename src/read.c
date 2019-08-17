@@ -67,7 +67,7 @@ doread (void)
 	if(!scroll) return(0);
 
 	if (scroll == &thisplace) {
-	    (void) sense_engr_at(u.ux, u.uy, true);
+	    sense_engr_at(u.ux, u.uy, true);
 	    return 0;
 	}
 
@@ -809,7 +809,7 @@ maybe_tame (struct monst *mtmp, struct obj *sobj)
 	    if (mtmp->isshk)
 		make_happy_shk(mtmp, false);
 	    else if (!resist(mtmp, sobj->oclass, 0, NOTELL))
-		(void) tamedog(mtmp, NULL);
+		tamedog(mtmp, NULL);
 	}
 }
 
@@ -1571,7 +1571,7 @@ seffects (struct obj *sobj)
 		    You("smell rotten eggs.");
 		    return 0;
 		}
-		(void) create_gas_cloud(cc.x, cc.y, 3+bcsign(sobj),
+		create_gas_cloud(cc.x, cc.y, 3+bcsign(sobj),
 						8+4*bcsign(sobj));
 		break;
 	}
@@ -1637,7 +1637,7 @@ struct obj *obj;
 		/* the magic douses lamps, et al, too */
 		for(otmp = invent; otmp; otmp = otmp->nobj)
 		    if (otmp->lamplit)
-			(void) snuff_lit(otmp);
+			snuff_lit(otmp);
 		if (Blind) goto do_it;
 	} else {
 		if (Blind) goto do_it;
@@ -1727,7 +1727,7 @@ do_class_genocide (void)
 		do {
                     getlin("What class of monsters do you wish to genocide? [? for help]",
 			buf);
-		    (void)mungspaces(buf);
+		    mungspaces(buf);
 		} while (buf[0]=='\033' || !buf[0]);
 		/* choosing "none" preserves genocideless conduct */
 		if (!strcmpi(buf, "none") ||
@@ -1915,7 +1915,7 @@ do_genocide (int how)
 		}
 		getlin("What monster do you want to genocide? [type the name]",
 			buf);
-		(void)mungspaces(buf);
+		mungspaces(buf);
 		/* choosing "none" preserves genocideless conduct */
 		if (!strcmpi(buf, "none") || !strcmpi(buf, "nothing")) {
 		    /* ... but no free pass if cursed */
@@ -2154,7 +2154,7 @@ create_particular (void)
 	if (tries == 5) {
 	    pline(thats_enough_tries);
 	} else {
-	    (void) cant_create(&which, false);
+	    cant_create(&which, false);
 	    whichpm = &mons[which];
 	    for (i = 0; i <= multi; i++) {
 		if (monclass != MAXMCLASSES)

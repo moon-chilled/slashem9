@@ -533,10 +533,10 @@ void dropy(struct obj *obj) {
 		    could_grow = (obj->corpsenm == PM_WRAITH);
 		    could_heal = (obj->corpsenm == PM_NURSE);
 		}
-		(void) mpickobj(u.ustuck,obj);
+		mpickobj(u.ustuck,obj);
 		if (is_animal(u.ustuck->data)) {
 		    if (could_poly || could_slime) {
-			(void) newcham(u.ustuck,
+			newcham(u.ustuck,
 				       could_poly ? NULL :
 				       &mons[PM_GREEN_SLIME],
 				       false, could_slime);
@@ -546,7 +546,7 @@ void dropy(struct obj *obj) {
 			/* Don't leave a cockatrice corpse in a statue */
 			if (!u.uswallow) delobj(obj);
 		    } else if (could_grow) {
-			(void) grow_up(u.ustuck, NULL);
+			grow_up(u.ustuck, NULL);
 			delobj(obj);	/* corpse is digested */
 		    } else if (could_heal) {
 			u.ustuck->mhp = u.ustuck->mhpmax;
@@ -682,7 +682,7 @@ static int menu_drop(int retry) {
 		    } else {
 #ifndef GOLDOBJ
 			if (otmp->oclass == COIN_CLASS)
-			    (void) splitobj(otmp, otmp->quan - cnt);
+			    splitobj(otmp, otmp->quan - cnt);
 			else
 #endif
 			    otmp = splitobj(otmp, cnt);
@@ -1038,8 +1038,8 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 
 	/* set default level change destination areas */
 	/* the special level code may override these */
-	(void) memset((void *) &updest, 0, sizeof updest);
-	(void) memset((void *) &dndest, 0, sizeof dndest);
+	memset((void *) &updest, 0, sizeof updest);
+	memset((void *) &dndest, 0, sizeof dndest);
 
 	if (!(level_info[new_ledger].flags & LFILE_EXISTS)) {
 		/* entering this level for first time; make it now */
@@ -1062,7 +1062,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 		}
 		minit();	/* ZEROCOMP */
 		getlev(fd, hackpid, new_ledger, false);
-		(void) close(fd);
+		close(fd);
 	}
 
 #ifdef ALLEG_FX
@@ -1203,7 +1203,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 
 	    if ((mtmp = m_at(u.ux, u.uy)) != 0) {
 		impossible("mnexto failed (do.c)?");
-		(void) rloc(mtmp, false);
+		rloc(mtmp, false);
 	    }
 	}
 
@@ -1342,7 +1342,7 @@ static void final_level(void) {
 		mm.x = u.ux;
 		mm.y = u.uy;
 		if(enexto(&mm, mm.x, mm.y, &mons[PM_ANGEL]))
-		    (void) mk_roamer(&mons[PM_ANGEL], u.ualign.type,
+		    mk_roamer(&mons[PM_ANGEL], u.ualign.type,
 				     mm.x, mm.y, false);
 	    }
 	} else if (u.ualign.record > 8) {	/* fervent */
@@ -1374,7 +1374,7 @@ static void final_level(void) {
 		    if (otmp->spe < 4) otmp->spe += rnd(4);
 		    if ((otmp = which_armor(mtmp, W_ARMS)) == 0 ||
 			    otmp->otyp != SHIELD_OF_REFLECTION) {
-			(void) mongets(mtmp, AMULET_OF_REFLECTION);
+			mongets(mtmp, AMULET_OF_REFLECTION);
 			m_dowear(mtmp, true);
 		    }
 		}

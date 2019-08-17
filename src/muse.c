@@ -630,7 +630,7 @@ mon_tele:
 		    return 2;
 		}
 		if (oseen && how) makeknown(how);
-		(void) rloc(mtmp, false);
+		rloc(mtmp, false);
 		return 2;
 	case MUSE_WAN_TELEPORTATION:
 		zap_oseen = oseen;
@@ -1243,7 +1243,7 @@ struct obj *otmp;
 		} else if (rnd(20) < 10+find_mac(mtmp)) {
 			tmp = d(2,12);
 			hit("wand", mtmp, exclam(tmp));
-			(void) resist(mtmp, otmp->oclass, tmp, TELL);
+			resist(mtmp, otmp->oclass, tmp, TELL);
 			if (cansee(mtmp->mx, mtmp->my) && zap_oseen)
 				makeknown(WAN_STRIKING);
 		} else {
@@ -1265,12 +1265,12 @@ struct obj *otmp;
 			    mtmp->msleeping = 0;
 			    if(mtmp->m_ap_type) seemimic(mtmp);
 			} else if (!tele_restrict(mtmp))
-			    (void) rloc(mtmp, false);
+			    rloc(mtmp, false);
 		}
 		break;
 	case WAN_CANCELLATION:
 	case SPE_CANCELLATION:
-		(void) cancel_monst(mtmp, otmp, false, true, false);
+		cancel_monst(mtmp, otmp, false, true, false);
 		break;
 	case WAN_DRAINING:	/* KMH */
 		tmp = d(2,6);
@@ -1618,9 +1618,9 @@ use_offensive (struct monst *mtmp)
 			    pline_The("scroll erupts in a tower of flame!");
 			shieldeff(mtmp->mx, mtmp->my);
 			pline("%s is uninjured.", Monnam(mtmp));
-			(void) destroy_mitem(mtmp, SCROLL_CLASS, AD_FIRE);
-			(void) destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
-			(void) destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
+			destroy_mitem(mtmp, SCROLL_CLASS, AD_FIRE);
+			destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
+			destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
 			num = (2*(rn1(3, 3) + 2 * bcsign(otmp)) + 1)/3;
 			if (Slimed) {
 			      Your("slimy parts are burned away!");
@@ -1954,9 +1954,9 @@ skipmsg:
 		mzapmsg(mtmp, otmp, true);
 		otmp->spe--;
 #if 0
-		(void) newcham(mtmp, muse_newcham_mon(), true, vismon);
+		newcham(mtmp, muse_newcham_mon(), true, vismon);
 #else
-		(void) mon_poly(mtmp, false, "%s changes!");
+		mon_poly(mtmp, false, "%s changes!");
 #endif
 		if (oseen) makeknown(WAN_POLYMORPH);
 		return 2;
@@ -1964,9 +1964,9 @@ skipmsg:
 		mquaffmsg(mtmp, otmp);
 #if 0
 		if (vismon) pline("%s suddenly mutates!", Monnam(mtmp));
-		(void) newcham(mtmp, muse_newcham_mon(mtmp), false, vismon);
+		newcham(mtmp, muse_newcham_mon(mtmp), false, vismon);
 #else
-		(void) mon_poly(mtmp, false, "%s suddenly mutates!");
+		mon_poly(mtmp, false, "%s suddenly mutates!");
 #endif
 		if (oseen) makeknown(POT_POLYMORPH);
 		m_useup(mtmp, otmp);
@@ -1986,9 +1986,9 @@ skipmsg:
 		newsym(trapx, trapy);
 
 #if 0
-		(void) newcham(mtmp, NULL, false, vismon);
+		newcham(mtmp, NULL, false, vismon);
 #else
-		(void) mon_poly(mtmp, false, "%s changes!");
+		mon_poly(mtmp, false, "%s changes!");
 #endif
 		return 2;
 	case MUSE_BULLWHIP:
@@ -2046,7 +2046,7 @@ skipmsg:
 			case 3:		/* into mon's inventory */
 			    pline("%s snatches %s!", Monnam(mtmp),
 				  the_weapon);
-			    (void) mpickobj(mtmp,obj);
+			    mpickobj(mtmp,obj);
 			    break;
 		    }
 		    return 1;

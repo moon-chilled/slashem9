@@ -339,9 +339,9 @@ void
 init_dungeon()
 {
 	if(++n_dgns > MAXDUNGEON) {
-	    (void) fprintf(stderr, "FATAL - Too many dungeons (limit: %d).\n",
+	    fprintf(stderr, "FATAL - Too many dungeons (limit: %d).\n",
 		    MAXDUNGEON);
-	    (void) fprintf(stderr, "To increase the limit edit MAXDUNGEON in global.h\n");
+	    fprintf(stderr, "To increase the limit edit MAXDUNGEON in global.h\n");
 	    exit(EXIT_FAILURE);
 	}
 
@@ -560,23 +560,23 @@ output_dgn()
 	    exit(EXIT_FAILURE);
 	}
 
-	(void) fwrite((char *)&n_dgns, sizeof(int), 1, yyout);
+	fwrite((char *)&n_dgns, sizeof(int), 1, yyout);
 	for (nd = 0; nd < n_dgns; nd++) {
-	    (void) fwrite((char *)&tmpdungeon[nd], sizeof(struct tmpdungeon),
+	    fwrite((char *)&tmpdungeon[nd], sizeof(struct tmpdungeon),
 							1, yyout);
 
 	    nl += tmpdungeon[nd].levels;
 	    for(; cl < nl; cl++)
-		(void) fwrite((char *)&tmplevel[cl], sizeof(struct tmplevel),
+		fwrite((char *)&tmplevel[cl], sizeof(struct tmplevel),
 							1, yyout);
 
 	    nb += tmpdungeon[nd].branches;
 	    for(; cb < nb; cb++)
-		(void) fwrite((char *)&tmpbranch[cb], sizeof(struct tmpbranch),
+		fwrite((char *)&tmpbranch[cb], sizeof(struct tmpbranch),
 							1, yyout);
 	}
 	/* apparently necessary for Think C 5.x, otherwise harmless */
-	(void) fflush(yyout);
+	fflush(yyout);
 }
 
 /*dgn_comp.y*/

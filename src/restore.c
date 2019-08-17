@@ -535,8 +535,8 @@ int dorecover (int fd) {
 	if (!restgamestate(fd, &stuckid, &steedid)) {
 		display_nhwindow(WIN_MESSAGE, true);
 		savelev(-1, 0, FREE_SAVE);	/* discard current level */
-		(void) close(fd);
-		(void) delete_savefile();
+		close(fd);
+		delete_savefile();
 		restoring = false;
 		return(0);
 	}
@@ -593,20 +593,20 @@ int dorecover (int fd) {
 	}
 
 #ifdef BSD
-	(void) lseek(fd, 0L, 0);
+	lseek(fd, 0L, 0);
 #else
-	(void) lseek(fd, 0L, 0);
+	lseek(fd, 0L, 0);
 /*      (void) lseek(fd, (off_t)0, 0); */
 #endif
-	(void) uptodate(fd, NULL);		/* skip version info */
+	uptodate(fd, NULL);		/* skip version info */
 #ifdef STORE_PLNAME_IN_FILE
 	mread(fd, (void *) plname, PL_NSIZ);
 #endif
 	getlev(fd, 0, (xchar)0, false);
-	(void) close(fd);
+	close(fd);
 
 	if (!wizard && !discover)
-		(void) delete_savefile();
+		delete_savefile();
 #ifdef REINCARNATION
 	if (Is_rogue_level(&u.uz)) assign_rogue_graphics(true);
 #endif
@@ -656,9 +656,9 @@ int dorecover (int fd) {
 
 /* Start the timer here (realtime has already been set) */
 #if defined(BSD) && !defined(POSIX_TYPES)
-        (void) time((long *)&realtime_data.restoretime);
+        time((long *)&realtime_data.restoretime);
 #else
-        (void) time(&realtime_data.restoretime);
+        time(&realtime_data.restoretime);
 #endif
 
 	/* Success! */
@@ -723,7 +723,7 @@ boolean ghostly;
 
 #if defined(MAC)
 		/* Suppress warning about used before set */
-		(void) memset((void *) &r, 0, sizeof(r));
+		memset((void *) &r, 0, sizeof(r));
 #endif
 		i = 0; j = 0; len = 0;
 		while(i < ROWNO) {
@@ -964,10 +964,10 @@ boolean ghostly;
 	    mtmp->mpeaceful = mtmp->mtame = 0;	/* pet's owner died! */
 	}
 	if (ghostly && otmp->oattached == OATTACHED_M_ID) {
-	    (void) memcpy((void *)&oldid, (void *)otmp->oextra,
+	    memcpy((void *)&oldid, (void *)otmp->oextra,
 								sizeof(oldid));
 	    if (lookup_id_mapping(oldid, &nid))
-		(void) memcpy((void *)otmp->oextra, (void *)&nid,
+		memcpy((void *)otmp->oextra, (void *)&nid,
 								sizeof(nid));
 	    else
 		otmp->oattached = OATTACHED_NOTHING;
@@ -1062,8 +1062,8 @@ unsigned int len;
 #endif
 		pline("Read %d instead of %u bytes.", rlen, len);
 		if(restoring) {
-			(void) close(fd);
-			(void) delete_savefile();
+			close(fd);
+			delete_savefile();
 			error("Error restoring old game.");
 		}
 		panic("Error reading level file.");

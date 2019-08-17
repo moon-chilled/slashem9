@@ -617,7 +617,7 @@ static int still_chewing(xchar x, xchar y) {
     const char *digtxt = NULL, *dmgtxt = NULL;
 
     if (digging.down)		/* not continuing previous dig (w/ pick-axe) */
-	(void) memset((void *)&digging, 0, sizeof digging);
+	memset((void *)&digging, 0, sizeof digging);
 
     if (!boulder && IS_ROCK(lev->typ) && !may_dig(x,y)) {
 	You("hurt your teeth on the %s.",
@@ -671,7 +671,7 @@ static int still_chewing(xchar x, xchar y) {
 	if (IS_ROCK(lev->typ) || closed_door(x,y) || sobj_at(BOULDER,x,y)) {
 	    block_point(x,y);	/* delobj will unblock the point */
 	    /* reset dig state */
-	    (void) memset((void *)&digging, 0, sizeof digging);
+	    memset((void *)&digging, 0, sizeof digging);
 	    return 1;
 	}
 
@@ -724,7 +724,7 @@ static int still_chewing(xchar x, xchar y) {
     newsym(x, y);
     if (digtxt) You("%s", digtxt);	/* after newsym */
     if (dmgtxt) pay_for_damage(dmgtxt, false);
-    (void) memset((void *)&digging, 0, sizeof digging);
+    memset((void *)&digging, 0, sizeof digging);
     return 0;
 }
 
@@ -782,7 +782,7 @@ static void dosinkfall(void) {
 	}
 	if(uarmf && uarmf->otyp == LEVITATION_BOOTS) {
 	    obj = uarmf;
-	    (void)Boots_off();
+	    Boots_off();
 	    off_msg(obj);
 	}
 	HLevitation--;
@@ -856,7 +856,7 @@ boolean test_move(int ux, int uy, int dx, int dy, int mode) {
 		   uwep && is_pick(uwep)) {
 	/* MRKR: Automatic digging when wielding the appropriate tool */
 	    if (mode == DO_MOVE)
-		(void) use_pick_axe2(uwep);
+		use_pick_axe2(uwep);
 	    return false;
 	} else {
 	    if (mode == DO_MOVE) {
@@ -1044,7 +1044,7 @@ static boolean findtravelpath(boolean guess) {
 	}
 
     noguess:
-	(void) memset((void *)travel, 0, sizeof(travel));
+	memset((void *)travel, 0, sizeof(travel));
 	travelstepx[0][0] = tx;
 	travelstepy[0][0] = ty;
 
@@ -1174,7 +1174,7 @@ void domove(void) {
 
 	if (flags.travel) {
 	    if (!findtravelpath(false))
-		(void) findtravelpath(true);
+		findtravelpath(true);
 	    iflags.travel1 = 0;
 	}
 

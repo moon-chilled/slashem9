@@ -87,8 +87,8 @@ char *argv[];
 		&& strcmp(dir, HACKDIR)
 # endif
 		) {
-		(void) setgid(getgid());
-		(void) setuid(getuid());
+		setgid(getgid());
+		setuid(getuid());
 	}
 #endif	/* SECURE */
 
@@ -122,7 +122,7 @@ int lev;
 
 	tf = rindex(lock, '.');
 	if (!tf) tf = lock + strlen(lock);
-	(void) sprintf(tf, ".%d", lev);
+	sprintf(tf, ".%d", lev);
 }
 
 int
@@ -185,7 +185,7 @@ char *basename;
 	 *	name of save file nethack would have created
 	 *	and game state
 	 */
-	(void) strcpy(lock, basename);
+	strcpy(lock, basename);
 	gfd = open_levelfile(0);
 	if (gfd < 0) {
 #ifdef WIN32
@@ -256,12 +256,12 @@ char *basename;
 
 	copy_bytes(lfd, sfd);
 	close(lfd);
-	(void) unlink(lock);
+	unlink(lock);
 
 	copy_bytes(gfd, sfd);
 	close(gfd);
 	set_levelfile_name(0);
-	(void) unlink(lock);
+	unlink(lock);
 
 	for (lev = 1; lev < 256; lev++) {
 		/* level numbers are kept in xchars in save.c, so the
@@ -275,7 +275,7 @@ char *basename;
 				write(sfd, (void *) &levc, sizeof(levc));
 				copy_bytes(lfd, sfd);
 				close(lfd);
-				(void) unlink(lock);
+				unlink(lock);
 			}
 		}
 	}

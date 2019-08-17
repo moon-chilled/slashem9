@@ -59,7 +59,7 @@ struct monst *mtmp;
 		  pline("%s yells:", Amonnam(mtmp));
 		  if(levl[x][y].looted & D_WARNED) {
 			verbalize("Halt, thief!  You're under arrest!");
-			(void) angry_guards(!(flags.soundok));
+			angry_guards(!(flags.soundok));
 		  } else {
 			int i;
 			verbalize("Hey, stop picking that lock!");
@@ -373,7 +373,7 @@ dochug (struct monst *mtmp)
 	/* some monsters teleport */
 	if (mtmp->mflee && !rn2(40) && can_teleport(mdat) && !mtmp->iswiz &&
 	    !level.flags.noteleport) {
-		(void) rloc(mtmp, false);
+		rloc(mtmp, false);
 		return(0);
 	}
 	if (mdat->msound == MS_SHRIEK && !um_dist(mtmp->mx, mtmp->my, 1))
@@ -744,7 +744,7 @@ m_move (struct monst *mtmp, int after)
 	if(ptr == &mons[PM_TENGU] && !rn2(5) && !mtmp->mcan &&
 	   !tele_restrict(mtmp)) {
 	    if(mtmp->mhp < 7 || mtmp->mpeaceful || rn2(2))
-		(void) rloc(mtmp, false);
+		rloc(mtmp, false);
 	    else
 		mnexto(mtmp);
 	    mmoved = 1;
@@ -1079,7 +1079,7 @@ not_special:
 	    if (mtmp->wormno) worm_move(mtmp);
 	} else {
 	    if(is_unicorn(ptr) && rn2(2) && !tele_restrict(mtmp)) {
-		(void) rloc(mtmp, false);
+		rloc(mtmp, false);
 		return(1);
 	    }
 	    if(mtmp->wormno) worm_nomove(mtmp);
@@ -1148,7 +1148,7 @@ postmov:
 			/* mfndpos guarantees this must be a doorbuster */
 				/* WAC do dragons and breathers */
 				if (bust_door_breath(mtmp) != -1) {
-				        (void) breamspot(mtmp,
+				        breamspot(mtmp,
 				                 &ptr->mattk[bust_door_breath(mtmp)],
 				                 (nix-omx), (niy-omy));
 				} else

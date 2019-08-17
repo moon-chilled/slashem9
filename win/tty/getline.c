@@ -56,7 +56,7 @@ getlin_hook_proc hook;
 	pline("%s ", query);
 	*obufp = 0;
 	for(;;) {
-		(void) fflush(stdout);
+		fflush(stdout);
 		sprintf(toplines, "%s ", query);
 		strcat(toplines, obufp);
 		if((c = Getchar()) == EOF) {
@@ -78,7 +78,7 @@ getlin_hook_proc hook;
 		    if (iflags.prevmsg_window != 's') {
 				int sav = ttyDisplay->inread;
 				ttyDisplay->inread = 0;
-				(void) tty_doprev_message();
+				tty_doprev_message();
 				ttyDisplay->inread = sav;
 				tty_clear_nhwindow(WIN_MESSAGE);
 				cw->maxcol = cw->maxrow;
@@ -88,8 +88,8 @@ getlin_hook_proc hook;
 				addtopl(obufp);
 			} else {
 				if (!doprev)
-				    (void) tty_doprev_message();/* need two initially */
-				(void) tty_doprev_message();
+				    tty_doprev_message();/* need two initially */
+				tty_doprev_message();
 				doprev = 1;
 				continue;
 		    }
@@ -246,7 +246,7 @@ tty_get_ext_cmd()
 #else
 	hooked_tty_getlin("#", buf, ext_cmd_getlin_hook);
 #endif
-	(void) mungspaces(buf);
+	mungspaces(buf);
 	if (buf[0] == 0 || buf[0] == '\033') return -1;
 
 	for (i = 0; extcmdlist[i].ef_txt != NULL; i++)

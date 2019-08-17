@@ -48,9 +48,9 @@ int fd;
 	if(buf.st_size != sizeof(int)) return(0);	/* not an xlock file */
 #endif
 #if defined(BSD) && !defined(POSIX_TYPES)
-	(void) time((long *)(&date));
+	time((long *)(&date));
 #else
-	(void) time(&date);
+	time(&date);
 #endif
 	if(date - buf.st_mtime < 3L*24L*60L*60L) {	/* recent */
 		int lockedpid;	/* should be the same size as hackpid */
@@ -70,7 +70,7 @@ int fd;
 #endif
 			return(0);
 	}
-	(void) close(fd);
+	close(fd);
 	return(1);
 }
 
@@ -87,9 +87,9 @@ eraseoldlocks()
 		/* try to remove all */
 		set_levelfile_name(lock, i);
 #ifdef FILE_AREAS
-		(void) remove_area(FILE_AREA_LEVL, lock);
+		remove_area(FILE_AREA_LEVL, lock);
 #else
-		(void) unlink(fqname(lock, LEVELPREFIX, 0));
+		unlink(fqname(lock, LEVELPREFIX, 0));
 #endif
 	}
 	set_levelfile_name(lock, 0);
@@ -163,7 +163,7 @@ getlock()
 			if(veryold(fd) /* closes fd if true */
 							&& eraseoldlocks())
 				goto gotlock;
-			(void) close(fd);
+			close(fd);
 		} while(i < locknum);
 
 		unlock_file_area(HLOCK_AREA, HLOCK);
@@ -189,17 +189,17 @@ getlock()
 
 		if(veryold(fd) /* closes fd if true */ && eraseoldlocks())
 			goto gotlock;
-		(void) close(fd);
+		close(fd);
 
 		if(iflags.window_inited) {
 		    c = yn("There is already a game in progress under your name.  Destroy old game?");
 		} else {
-		    (void) printf("\nThere is already a game in progress under your name.");
-		    (void) printf("  Destroy old game? [yn] ");
-		    (void) fflush(stdout);
+		    printf("\nThere is already a game in progress under your name.");
+		    printf("  Destroy old game? [yn] ");
+		    fflush(stdout);
 		    c = getchar();
-		    (void) putchar(c);
-		    (void) fflush(stdout);
+		    putchar(c);
+		    fflush(stdout);
 		    while (getchar() != '\n') ; /* eat rest of line and newline */
 		}
 		if(c == 'y' || c == 'Y')
@@ -277,7 +277,7 @@ unsigned msec;				/* milliseconds */
 	int msecs = msec;		/* poll API is signed */
 
 	if (msecs < 0) msecs = 0;	/* avoid infinite sleep */
-	(void) poll(&unused, (unsigned long)0, msecs);
+	poll(&unused, (unsigned long)0, msecs);
 }
 #endif /* TIMED_DELAY for SYSV */
 
@@ -288,9 +288,9 @@ dosh()
 	char *str;
 	if(child(0)) {
 		if((str = getenv("SHELL")) != NULL)
-			(void) execl(str, str, NULL);
+			execl(str, str, NULL);
 		else
-			(void) execl("/bin/sh", "sh", NULL);
+			execl("/bin/sh", "sh", NULL);
 		raw_print("sh: cannot execute.");
 		exit(EXIT_FAILURE);
 	}
@@ -315,10 +315,10 @@ int wt;
 	linux_mapon();
 #endif
 	if((f = fork()) == 0){		/* child */
-		(void) setgid(getgid());
-		(void) setuid(getuid());
+		setgid(getgid());
+		setuid(getuid());
 #ifdef CHDIR
-		(void) chdir(getenv("HOME"));
+		chdir(getenv("HOME"));
 #endif
 		return(1);
 	}
@@ -327,9 +327,9 @@ int wt;
 		return(0);
 	}
 	/* fork succeeded; wait for child to exit */
-	(void) signal(SIGINT,SIG_IGN);
-	(void) signal(SIGQUIT,SIG_IGN);
-	(void) wait( NULL);
+	signal(SIGINT,SIG_IGN);
+	signal(SIGQUIT,SIG_IGN);
+	wait( NULL);
 #ifdef _M_UNIX
 	sco_mapoff();
 #endif
@@ -339,7 +339,7 @@ int wt;
 #ifdef LINUX
 	linux_mapoff();
 #endif
-	(void) signal(SIGINT, (SIG_RET_TYPE) done1);
+	signal(SIGINT, (SIG_RET_TYPE) done1);
 #ifdef WIZARD
 	if(wizard) (void) signal(SIGQUIT,SIG_DFL);
 #endif
@@ -561,12 +561,9 @@ int retryct;
 		    HUP raw_printf(
 			    "Waiting for access to %s.  (%d retries left).",
 			    filename, retryct);
-# if defined(SYSV) || defined(ULTRIX)
-		    (void)
-# endif
 			sleep(1);
 		} else {
-		    HUP (void) raw_print("I give up.  Sorry.");
+		    HUP raw_print("I give up.  Sorry.");
 		    HUP raw_printf("Perhaps there is an old %s around?",
 					lockname);
 		    nesting--;
@@ -611,7 +608,7 @@ const char *filearea, *filename;
 			HUP raw_printf("Can't unlink %s.", lockname);
 		if (lockfd!=-1)
 		{
-			(void) close(lockfd);
+			close(lockfd);
 			lockfd=-1;
 		}
 	}

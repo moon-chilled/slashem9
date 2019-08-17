@@ -314,10 +314,10 @@ static void e_died(struct entity *etmp, int dest, int how) {
 	if (is_u(etmp)) {
 		if (how == DROWNING) {
 			killer = 0;	/* drown() sets its own killer */
-			(void) drown();
+			drown();
 		} else if (how == BURNING) {
 			killer = 0;	/* lava_effects() sets its own killer */
-			(void) lava_effects();
+			lava_effects();
 		} else {
 			coord xy;
 
@@ -526,7 +526,7 @@ static void do_entity(struct entity *etmp) {
 #endif
 	newx = oldx;
 	newy = oldy;
-	(void)find_drawbridge(&newx, &newy);
+	find_drawbridge(&newx, &newy);
 	if ((newx == oldx) && (newy == oldy))
 		get_wall_for_db(&newx, &newy);
 #ifdef D_DEBUG
@@ -696,8 +696,8 @@ void close_drawbridge (int x, int y) {
 	do_entity(&(occupants[1]));
 	if(OBJ_AT(x,y) && flags.soundok)
 	    You_hear("smashing and crushing.");
-	(void) revive_nasty(x,y,NULL);
-	(void) revive_nasty(x2,y2,NULL);
+	revive_nasty(x,y,NULL);
+	revive_nasty(x2,y2,NULL);
 	delallobj(x, y);
 	delallobj(x2, y2);
 	if ((t = t_at(x, y)) != 0) deltrap(t);
@@ -732,7 +732,7 @@ void open_drawbridge (int x, int y) {
 	do_entity(&(occupants[0]));		/* do set_entity after first */
 	set_entity(x2, y2, &(occupants[1]));	/* do_entity for worm tails */
 	do_entity(&(occupants[1]));
-	(void) revive_nasty(x,y,NULL);
+	revive_nasty(x,y,NULL);
 	delallobj(x, y);
 	if ((t = t_at(x, y)) != 0) deltrap(t);
 	if ((t = t_at(x2, y2)) != 0) deltrap(t);
@@ -780,7 +780,7 @@ void destroy_drawbridge (int x, int y) {
 		lev1->drawbridgemask = 0;
 		if ((otmp = sobj_at(BOULDER,x,y)) != 0) {
 		    obj_extract_self(otmp);
-		    (void) flooreffects(otmp,x,y,"fall");
+		    flooreffects(otmp,x,y,"fall");
 		}
 	} else {
 		if (cansee(x,y))

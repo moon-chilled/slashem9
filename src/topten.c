@@ -217,9 +217,9 @@ struct toptenentry *tt;
 	nsb_mung_line(tt->name);
 	nsb_mung_line(tt->death);
 	                   /* Version_ Pts DgnLevs_ Hp___ Died__Born id */
-	(void) fprintf(rfile,"%d %d %d %ld %d %d %d %d %d %d %ld %ld %d ",
+	fprintf(rfile,"%d %d %d %ld %d %d %d %d %d %d %ld %ld %d ",
 #else
-	(void) fprintf(rfile,"%d.%d.%d %ld %d %d %d %d %d %d %ld %ld %d ",
+	fprintf(rfile,"%d.%d.%d %ld %d %d %d %d %d %d %ld %ld %d ",
 #endif
 		tt->ver_major, tt->ver_minor, tt->patchlevel,
 		tt->points, tt->deathdnum, tt->deathlev,
@@ -227,17 +227,17 @@ struct toptenentry *tt;
 		tt->deathdate, tt->birthdate, tt->uid);
 	if (!tt->ver_major && !tt->ver_minor && tt->patchlevel < 6)
 #ifdef NO_SCAN_BRACK
-		(void) fprintf(rfile,"%s %c %s %s\n",
+		fprintf(rfile,"%s %c %s %s\n",
 #else
-		(void) fprintf(rfile,"%s %c %s,%s\n",
+		fprintf(rfile,"%s %c %s,%s\n",
 #endif
 			tt->plrole, tt->plgend[0],
 			onlyspace(tt->name) ? "_" : tt->name, tt->death);
 	else
 #ifdef NO_SCAN_BRACK
-		(void) fprintf(rfile,"%s %s %s %s %s %s\n",
+		fprintf(rfile,"%s %s %s %s %s %s\n",
 #else
-		(void) fprintf(rfile,"%s %s %s %s %s,%s\n",
+		fprintf(rfile,"%s %s %s %s %s,%s\n",
 #endif
 			tt->plrole, tt->plrace, tt->plgend, tt->plalign,
 			onlyspace(tt->name) ? "_" : tt->name, tt->death);
@@ -285,7 +285,7 @@ struct toptenentry *tt;
   char buf[DTHSZ+1];
 
   /* Log all of the data found in the regular logfile */
-  (void)fprintf(rfile,
+  fprintf(rfile,
                 "version=%d.%d.%d"
                 SEP "points=%ld"
                 SEP "deathdnum=%d"
@@ -302,7 +302,7 @@ struct toptenentry *tt;
                 tt->maxlvl, tt->hp, tt->maxhp, tt->deaths,
                 tt->deathdate, tt->birthdate, tt->uid);
 
-  (void)fprintf(rfile,
+  fprintf(rfile,
                 SEP "role=%s"
                 SEP "race=%s"
                 SEP "gender=%s"
@@ -310,28 +310,28 @@ struct toptenentry *tt;
                 tt->plrole, tt->plrace, tt->plgend, tt->plalign);
 
    munge_xlstring(buf, plname, DTHSZ + 1);
-  (void)fprintf(rfile, SEP "name=%s", buf);
+  fprintf(rfile, SEP "name=%s", buf);
 
    munge_xlstring(buf, tt->death, DTHSZ + 1);
-  (void)fprintf(rfile, SEP "death=%s", buf);
+  fprintf(rfile, SEP "death=%s", buf);
 
-  (void)fprintf(rfile, SEP "conduct=0x%lx", encodeconduct());
+  fprintf(rfile, SEP "conduct=0x%lx", encodeconduct());
 
-  (void)fprintf(rfile, SEP "turns=%ld", moves);
+  fprintf(rfile, SEP "turns=%ld", moves);
 
-  (void)fprintf(rfile, SEP "achieve=0x%lx", encodeachieve());
+  fprintf(rfile, SEP "achieve=0x%lx", encodeachieve());
 
-  (void)fprintf(rfile, SEP "realtime=%ld", (long)realtime_data.realtime);
+  fprintf(rfile, SEP "realtime=%ld", (long)realtime_data.realtime);
 
-  (void)fprintf(rfile, SEP "starttime=%ld", (long)u.ubirthday);
-  (void)fprintf(rfile, SEP "endtime=%ld", (long)deathtime);
+  fprintf(rfile, SEP "starttime=%ld", (long)u.ubirthday);
+  fprintf(rfile, SEP "endtime=%ld", (long)deathtime);
 
-  (void)fprintf(rfile, SEP "gender0=%s", genders[flags.initgend].filecode);
+  fprintf(rfile, SEP "gender0=%s", genders[flags.initgend].filecode);
 
-  (void)fprintf(rfile, SEP "align0=%s",
+  fprintf(rfile, SEP "align0=%s",
           aligns[1 - u.ualignbase[A_ORIGINAL]].filecode);
 
-  (void)fprintf(rfile, "\n");
+  fprintf(rfile, "\n");
 
 }
 
@@ -407,31 +407,31 @@ topten (int how)
 	t0->maxhp = u.uhpmax;
 	t0->deaths = u.umortality;
 	t0->uid = uid;
-	(void) strncpy(t0->plrole, urole.filecode, ROLESZ);
+	strncpy(t0->plrole, urole.filecode, ROLESZ);
 	t0->plrole[ROLESZ] = '\0';
-	(void) strncpy(t0->plrace, urace.filecode, ROLESZ);
+	strncpy(t0->plrace, urace.filecode, ROLESZ);
 	t0->plrace[ROLESZ] = '\0';
-	(void) strncpy(t0->plgend, genders[flags.female].filecode, ROLESZ);
+	strncpy(t0->plgend, genders[flags.female].filecode, ROLESZ);
 	t0->plgend[ROLESZ] = '\0';
-	(void) strncpy(t0->plalign, aligns[1-u.ualign.type].filecode, ROLESZ);
+	strncpy(t0->plalign, aligns[1-u.ualign.type].filecode, ROLESZ);
 	t0->plalign[ROLESZ] = '\0';
-	(void) strncpy(t0->name, plname, NAMSZ);
+	strncpy(t0->name, plname, NAMSZ);
 	t0->name[NAMSZ] = '\0';
 	t0->death[0] = '\0';
 	switch (killer_format) {
 		default: impossible("bad killer format?");
 		case KILLED_BY_AN:
 			strcat(t0->death, killed_by_prefix[how]);
-			(void) strncat(t0->death, an(killer),
+			strncat(t0->death, an(killer),
 						DTHSZ-strlen(t0->death));
 			break;
 		case KILLED_BY:
 			strcat(t0->death, killed_by_prefix[how]);
-			(void) strncat(t0->death, killer,
+			strncat(t0->death, killer,
 						DTHSZ-strlen(t0->death));
 			break;
 		case NO_KILLER_PREFIX:
-			(void) strncat(t0->death, killer, DTHSZ);
+			strncat(t0->death, killer, DTHSZ);
 			break;
 	}
 	t0->birthdate = yyyymmdd(u.ubirthday);
@@ -439,9 +439,9 @@ topten (int how)
   /* Make sure that deathdate and deathtime refer to the same time; it
    * wouldn't be good to have deathtime refer to the day after deathdate. */
 # if defined(BSD) && !defined(POSIX_TYPES)
-	(void) time((long *)&deathtime);
+	time((long *)&deathtime);
 # else
-	(void) time(&deathtime);
+	time(&deathtime);
 # endif
 	t0->deathdate = yyyymmdd(deathtime);
 
@@ -458,7 +458,7 @@ topten (int how)
 		HUP raw_print("Cannot open log file!");
 	    } else {
 		writeentry(lfile, t0);
-		(void) fclose(lfile);
+		fclose(lfile);
 	    }
 	    unlock_file_area(LOGAREA, LOGFILE);
 	}
@@ -470,7 +470,7 @@ topten (int how)
                   HUP raw_print("Cannot open extended log file!");
              } else {
                   write_xlentry(xlfile, t0);
-                  (void) fclose(xlfile);
+                  fclose(xlfile);
              }
              unlock_file(XLOGFILE);
          }
@@ -576,7 +576,7 @@ topten (int how)
 	    }
 	}
 	if(flg) {	/* rewrite record file */
-		(void) fclose(rfile);
+		fclose(rfile);
 		if(!(rfile = fopen_datafile_area(NH_RECORD_AREA, NH_RECORD, "w", SCOREPREFIX))){
 			HUP raw_print("Cannot write record file");
 			unlock_file_area(NH_RECORD_AREA, NH_RECORD);
@@ -641,7 +641,7 @@ topten (int how)
 	}
 	if(rank0 >= rank) if(!done_stopprint)
 		outentry(0, t0, true);
-	(void) fclose(rfile);
+	fclose(rfile);
 	unlock_file_area(NH_RECORD_AREA, NH_RECORD);
 	free_ttlist(tt_head);
 
@@ -1050,7 +1050,7 @@ char **argv;
 	    t1 = t1->tt_next;
 	}
 
-	(void) fclose(rfile);
+	fclose(rfile);
 	if (init_done) {
 	    free_dungeons();
 	    dlb_cleanup();
@@ -1061,7 +1061,7 @@ char **argv;
 	    t1 = tt_head;
 	    for (rank = 1; t1->points != 0; rank++, t1 = t1->tt_next) {
 		if (score_wanted(current_ver, rank, t1, playerct, players, uid))
-		    (void) outentry(rank, t1, 0);
+		    outentry(rank, t1, 0);
 	    }
 	} else {
 	    sprintf(pbuf, "Cannot find any %sentries for ",
@@ -1164,7 +1164,7 @@ pickentry:
 		if (otmp->otyp == CORPSE) start_corpse_timeout(otmp);
 	}
 
-	(void) fclose(rfile);
+	fclose(rfile);
 	return otmp;
 }
 

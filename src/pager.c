@@ -44,8 +44,8 @@ append_str(buf, new_str)
     if (strstri(buf, new_str)) return 0;
 
     space_left = BUFSZ - strlen(buf) - 1;
-    (void) strncat(buf, " or ", space_left);
-    (void) strncat(buf, new_str, space_left - 4);
+    strncat(buf, " or ", space_left);
+    strncat(buf, new_str, space_left - 4);
     return 1;
 }
 
@@ -347,7 +347,7 @@ checkfile(inp, pm, user_typed_name, without_asking)
     if (pm != NULL && !user_typed_name)
 	dbase_str = strcpy(newstr, pm->mname);
     else dbase_str = strcpy(newstr, inp);
-    (void) lcase(dbase_str);
+    lcase(dbase_str);
 
     if (!strncmp(dbase_str, "interior of ", 12))
 	dbase_str += 12;
@@ -392,13 +392,13 @@ checkfile(inp, pm, user_typed_name, without_asking)
 	    alt = makesingular(dbase_str);
 	else
 	    if (user_typed_name)
-		(void) lcase(alt);
+		lcase(alt);
 
 	/* skip first record; read second */
 	txt_offset = 0L;
 	if (!dlb_fgets(buf, BUFSZ, fp) || !dlb_fgets(buf, BUFSZ, fp)) {
 	    impossible("can't read 'data' file");
-	    (void) dlb_fclose(fp);
+	    dlb_fclose(fp);
 	    return;
 	} else if (sscanf(buf, "%8lx\n", &txt_offset) < 1 || txt_offset <= 0)
 	    goto bad_data_file;
@@ -440,7 +440,7 @@ checkfile(inp, pm, user_typed_name, without_asking)
 	} while (!digit(*buf));
 	if (sscanf(buf, "%ld,%d\n", &entry_offset, &entry_count) < 2) {
 bad_data_file:	impossible("'data' file in wrong format");
-		(void) dlb_fclose(fp);
+		dlb_fclose(fp);
 		return;
 	}
 
@@ -449,7 +449,7 @@ bad_data_file:	impossible("'data' file in wrong format");
 
 	    if (dlb_fseek(fp, txt_offset + entry_offset, SEEK_SET) < 0) {
 		pline("? Seek error on 'data' file!");
-		(void) dlb_fclose(fp);
+		dlb_fclose(fp);
 		return;
 	    }
 	    datawin = create_nhwindow(NHW_MENU);
@@ -465,7 +465,7 @@ bad_data_file:	impossible("'data' file in wrong format");
     } else if (user_typed_name)
 	pline("I don't have any information on those things.");
 
-    (void) dlb_fclose(fp);
+    dlb_fclose(fp);
 }
 
 /* getpos() return values */
@@ -752,12 +752,12 @@ do_look(quick)
 		firstmatch = look_buf;
 		if (*firstmatch) {
 		    sprintf(temp_buf, " (%s)", firstmatch);
-		    (void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
+		    strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
 		    found = 1;	/* we have something to look up */
 		}
 		if (monbuf[0]) {
 		    sprintf(temp_buf, " [seen: %s]", monbuf);
-		    (void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
+		    strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
 		}
 #ifdef WIZARD
 		if (wizard && pm) {
@@ -765,7 +765,7 @@ do_look(quick)
 		    if (mtmp && mtmp->oldmonnm != monsndx(pm)) {
 			sprintf(temp_buf, " [polymorphed from a %s]",
 				mons[mtmp->oldmonnm].mname);
-			(void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
+			strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
 		    }
 		}
 #endif
@@ -861,23 +861,23 @@ dowhatdoes_core (char q, char *cbuf)
 		if ((ep = index(buf, '\n')) != 0) *ep = 0;
 		if (ctrl && buf[2] == '\t'){
 			buf = bufr + 1;
-			(void) strncpy(buf, "^?      ", 8);
+			strncpy(buf, "^?      ", 8);
 			buf[1] = ctrl;
 		} else if (meta && buf[3] == '\t'){
 			buf = bufr + 2;
-			(void) strncpy(buf, "M-?     ", 8);
+			strncpy(buf, "M-?     ", 8);
 			buf[2] = meta;
 		} else if(buf[1] == '\t'){
 			buf = bufr;
 			buf[0] = q;
-			(void) strncpy(buf+1, "       ", 7);
+			strncpy(buf+1, "       ", 7);
 		}
-		(void) dlb_fclose(fp);
+		dlb_fclose(fp);
 		strcpy(cbuf, buf);
 		return cbuf;
 	    }
 	}
-	(void) dlb_fclose(fp);
+	dlb_fclose(fp);
 	return NULL;
 }
 

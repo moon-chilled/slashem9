@@ -143,7 +143,7 @@ stealarm()
 			    subfrombill(otmp, shop_keeper(*u.ushops));
 			freeinv(otmp);
 			pline("%s steals %s!", Monnam(mtmp), doname(otmp));
-			(void) mpickobj(mtmp,otmp);	/* may free otmp */
+			mpickobj(mtmp,otmp);	/* may free otmp */
 			/* Implies seduction, "you gladly hand over ..."
 			   so we don't set mavenge bit here. */
 			monflee(mtmp, 0, false, false);
@@ -414,7 +414,7 @@ gotobj:
 	pline("%s stole %s.", named ? "It" : Monnam(mtmp), doname(otmp));
 	could_petrify = (otmp->otyp == CORPSE &&
 			 touch_petrifies(&mons[otmp->corpsenm]));
-	(void) mpickobj(mtmp,otmp);	/* may free otmp */
+	mpickobj(mtmp,otmp);	/* may free otmp */
 	if (could_petrify && !(mtmp->misc_worn_check & W_ARMG)) {
 	    minstapetrify(mtmp, true);
 	    return -1;
@@ -498,10 +498,10 @@ stealamulet (struct monst *mtmp)
 	freeinv(otmp);
 	/* mpickobj wont merge otmp because none of the above things
 	   to steal are mergable */
-	(void) mpickobj(mtmp,otmp);	/* may merge and free otmp */
+	mpickobj(mtmp,otmp);	/* may merge and free otmp */
 	pline("%s stole %s!", Monnam(mtmp), doname(otmp));
 	if (can_teleport(mtmp->data) && !tele_restrict(mtmp))
-	    (void) rloc(mtmp, false);
+	    rloc(mtmp, false);
     }
 }
 
@@ -600,12 +600,12 @@ boolean is_pet;		/* If true, pet should keep wielded/worn items */
 	/* put kept objects back */
 	while ((otmp = keepobj) != NULL) {
 	    keepobj = otmp->nobj;
-	    (void) add_to_minv(mtmp, otmp);
+	    add_to_minv(mtmp, otmp);
 	}
 #ifndef GOLDOBJ
 	if (mtmp->mgold) {
 		long g = mtmp->mgold;
-		(void) mkgold(g, omx, omy);
+		mkgold(g, omx, omy);
 		if (is_pet && cansee(omx, omy) && flags.verbose)
 			pline("%s drops %ld gold piece%s.", Monnam(mtmp),
 				g, plur(g));

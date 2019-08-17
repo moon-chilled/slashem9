@@ -271,11 +271,11 @@ char ***pcargv;
     config[config_bytes - 1] = '\0';
     close(p[0]);
 #ifdef WIN32
-    (void)cwait(&status, pid, WAIT_CHILD);
+    cwait(&status, pid, WAIT_CHILD);
     if (status)
 	exit(1);
 #else
-    (void)waitpid(pid, &status, 0);
+    waitpid(pid, &status, 0);
     if (!WIFEXITED(status) || WEXITSTATUS(status))
 	exit(1);
 #endif

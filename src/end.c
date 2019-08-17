@@ -184,7 +184,7 @@ int done2(void) {
 	    const char *tmp = "Dump core?";
 # endif
 	    if ((c = ynq(tmp)) == 'y') {
-		(void) signal(SIGINT, (SIG_RET_TYPE) done1);
+		signal(SIGINT, (SIG_RET_TYPE) done1);
 		exit_nhwindows(NULL);
 		NH_abort();
 	    } else if (c == 'q') done_stopprint++;
@@ -416,10 +416,10 @@ static void disclose(int how, boolean taken) {
 			    obj->known = obj->bknown = obj->dknown = obj->rknown = 1;
 			}
 #ifdef DUMP_LOG
-			(void) dump_inventory(NULL, true);
+			dump_inventory(NULL, true);
 			do_containerconts(invent, true, true, true);
 #else
-			(void) display_inventory(NULL, true);
+			display_inventory(NULL, true);
 			container_contents(invent, true, true);
 #endif /* DUMP_LOG */
 		}
@@ -639,7 +639,7 @@ void done(int how) {
 			curse(uamul);
 
 		uunstone();
-		(void) adjattrib(A_CON, -1, true);
+		adjattrib(A_CON, -1, true);
 		if(u.uhpmax <= 0) u.uhpmax = 1;
 		savelife(how);
 		killer = 0;
@@ -658,7 +658,7 @@ void done(int how) {
 		if (uamul)
 			useup(uamul);
 
-		(void) adjattrib(A_CON, -1, true);
+		adjattrib(A_CON, -1, true);
 		if(u.uhpmax <= 0) u.uhpmax = 10;	/* arbitrary */
 		savelife(how);
 		if (how == GENOCIDED)
@@ -727,10 +727,10 @@ die:
 
 	if (have_windows) wait_synch();	/* flush screen output */
 #ifndef NO_SIGNAL
-	(void) signal(SIGINT, (SIG_RET_TYPE) done_intr);
+	signal(SIGINT, (SIG_RET_TYPE) done_intr);
 # if defined(UNIX) || defined (__EMX__)
-	(void) signal(SIGQUIT, (SIG_RET_TYPE) done_intr);
-	(void) signal(SIGHUP, (SIG_RET_TYPE) done_hangup);
+	signal(SIGQUIT, (SIG_RET_TYPE) done_intr);
+	signal(SIGHUP, (SIG_RET_TYPE) done_hangup);
 # endif
 #endif /* NO_SIGNAL */
 

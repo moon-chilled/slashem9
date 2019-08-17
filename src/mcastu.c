@@ -567,11 +567,11 @@ static void cast_cleric_spell(struct monst *mtmp, int dmg, int spellnum) {
 	    dmg = d(8, 6);
 	if (Half_spell_damage) dmg = (dmg + 1) / 2;
 	burn_away_slime();
-	(void) burnarmor(&youmonst);
+	burnarmor(&youmonst);
 	destroy_item(SCROLL_CLASS, AD_FIRE);
 	destroy_item(POTION_CLASS, AD_FIRE);
 	destroy_item(SPBOOK_CLASS, AD_FIRE);
-	(void) burn_floor_paper(u.ux, u.uy, true, false);
+	burn_floor_paper(u.ux, u.uy, true, false);
 	break;
     case CLC_LIGHTNING:
     {

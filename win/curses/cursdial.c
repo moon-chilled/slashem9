@@ -1101,19 +1101,19 @@ menu_get_selections(WINDOW * win, nhmenu *menu, int how)
         case PICK_ANY:
             switch (curletter) {
             case MENU_SELECT_PAGE:
-                (void) menu_operation(win, menu, SELECT, curpage);
+                menu_operation(win, menu, SELECT, curpage);
                 break;
             case MENU_SELECT_ALL:
                 curpage = menu_operation(win, menu, SELECT, 0);
                 break;
             case MENU_UNSELECT_PAGE:
-                (void) menu_operation(win, menu, DESELECT, curpage);
+                menu_operation(win, menu, DESELECT, curpage);
                 break;
             case MENU_UNSELECT_ALL:
                 curpage = menu_operation(win, menu, DESELECT, 0);
                 break;
             case MENU_INVERT_PAGE:
-                (void) menu_operation(win, menu, INVERT, curpage);
+                menu_operation(win, menu, INVERT, curpage);
                 break;
             case MENU_INVERT_ALL:
                 curpage = menu_operation(win, menu, INVERT, 0);

@@ -86,7 +86,7 @@ void getmailstatus(void) {
 #   ifdef AMS
 	        struct passwd ppasswd;
 
-		(void) memcpy(&ppasswd, getpwuid(getuid()), sizeof(struct passwd));
+		memcpy(&ppasswd, getpwuid(getuid()), sizeof(struct passwd));
 		if (ppasswd.pw_dir) {
 		     mailbox = alloc((unsigned) strlen(ppasswd.pw_dir)+sizeof(AMS_MAILBOX));
 		     strcpy(mailbox, ppasswd.pw_dir);
@@ -387,7 +387,7 @@ static void newmail(struct mail_info *info) {
 
     /* zip back to starting location */
 go_back:
-    (void) md_rush(md, start.x, start.y);
+    md_rush(md, start.x, start.y);
     mongone(md);
     /* deliver some classes of messages even if no daemon ever shows up */
 give_up:
@@ -469,7 +469,7 @@ void readmail(struct obj *otmp) {
 		mr = DEF_MAILREADER;
 
 	if(child(1)){
-		(void) execl(mr, mr, NULL);
+		execl(mr, mr, NULL);
 		terminate(EXIT_FAILURE);
 	}
 #  else

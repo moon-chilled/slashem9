@@ -19,19 +19,13 @@ panic VA_DECL(char *,str)
 	VA_START(str);
 	VA_INIT(str, char *);
 	if(panicking++)
-#ifdef SYSV
-	    (void)
-#endif
 		abort();    /* avoid loops - this should never happen*/
 
 	fputs(" ERROR:  ", stderr);
 	vfprintf(stderr, str, VA_ARGS);
-	(void) fflush(stderr);
+	fflush(stderr);
 #ifdef UNIX
-# ifdef SYSV
-		(void)
-# endif
-		    abort();	/* generate core dump */
+		abort();	/* generate core dump */
 #endif
 	VA_END();
 	exit(EXIT_FAILURE);		/* redundant */

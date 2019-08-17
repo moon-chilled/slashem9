@@ -78,7 +78,7 @@ eraseoldlocks()
 	for(i = 1; i <= MAXDUNGEON*MAXLEVEL + 1; i++) {
 		/* try to remove all */
 		set_levelfile_name(lock, i);
-		(void) unlink(fqname(lock, LEVELPREFIX, 0));
+		unlink(fqname(lock, LEVELPREFIX, 0));
 	}
 	set_levelfile_name(lock, 0);
 	if(unlink(fqname(lock, LEVELPREFIX, 0)))
@@ -111,7 +111,7 @@ getlock()
 		error("Cannot open %s", fq_lock);
 	}
 
-	(void) close(fd);
+	close(fd);
 
 	if(iflags.window_inited) {
 	  pline("There is already a game in progress under your name.");

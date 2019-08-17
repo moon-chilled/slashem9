@@ -570,7 +570,7 @@ clear_bypasses (void)
 		if (objects[otmp->otyp].oc_merge) {
 		    xchar ox, oy;
 
-		    (void) get_obj_location(otmp, &ox, &oy, 0);
+		    get_obj_location(otmp, &ox, &oy, 0);
 		    stack_object(otmp);
 		    newsym(ox, oy);
 		}

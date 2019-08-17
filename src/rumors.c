@@ -43,14 +43,14 @@ dlb *fp;
 {
 	char line[BUFSZ];
 
-	(void) dlb_fgets(line, sizeof line, fp); /* skip "don't edit" comment */
-	(void) dlb_fgets(line, sizeof line, fp);
+	dlb_fgets(line, sizeof line, fp); /* skip "don't edit" comment */
+	dlb_fgets(line, sizeof line, fp);
 	if (sscanf(line, "%6lx\n", &true_rumor_size) == 1 &&
 	    true_rumor_size > 0L) {
-	    (void) dlb_fseek(fp, 0L, SEEK_CUR);
+	    dlb_fseek(fp, 0L, SEEK_CUR);
 	    true_rumor_start  = dlb_ftell(fp);
 	    true_rumor_end    = true_rumor_start + true_rumor_size;
-	    (void) dlb_fseek(fp, 0L, SEEK_END);
+	    dlb_fseek(fp, 0L, SEEK_END);
 	    false_rumor_end   = dlb_ftell(fp);
 	    false_rumor_start = true_rumor_end;	/* ok, so it's redundant... */
 	    false_rumor_size  = false_rumor_end - false_rumor_start;
@@ -111,18 +111,18 @@ boolean exclude_cookie;
 			    impossible("strange truth value for rumor");
 			return strcpy(rumor_buf, "Oops...");
 		}
-		(void) dlb_fseek(rumors, beginning + tidbit, SEEK_SET);
-		(void) dlb_fgets(line, sizeof line, rumors);
+		dlb_fseek(rumors, beginning + tidbit, SEEK_SET);
+		dlb_fgets(line, sizeof line, rumors);
 		if (!dlb_fgets(line, sizeof line, rumors) ||
 		    (adjtruth > 0 && dlb_ftell(rumors) > true_rumor_end)) {
 			/* reached end of rumors -- go back to beginning */
-			(void) dlb_fseek(rumors, beginning, SEEK_SET);
-			(void) dlb_fgets(line, sizeof line, rumors);
+			dlb_fseek(rumors, beginning, SEEK_SET);
+			dlb_fgets(line, sizeof line, rumors);
 		}
 		if ((endp = index(line, '\n')) != 0) *endp = 0;
 		strcat(rumor_buf, xcrypt(line, xbuf));
 	    } while(count++ < 50 && exclude_cookie && (strstri(rumor_buf, "fortune") || strstri(rumor_buf, "pity")));
-	    (void) dlb_fclose(rumors);
+	    dlb_fclose(rumors);
 	    if (count >= 50)
 		impossible("Can't find non-cookie rumor?");
 	    else
@@ -189,14 +189,14 @@ dlb *fp;
 	int cnt = 0;
 
 	/* this assumes we're only called once */
-	(void) dlb_fgets(line, sizeof line, fp); /* skip "don't edit" comment*/
-	(void) dlb_fgets(line, sizeof line, fp);
+	dlb_fgets(line, sizeof line, fp); /* skip "don't edit" comment*/
+	dlb_fgets(line, sizeof line, fp);
 	if (sscanf(line, "%5d\n", &cnt) == 1 && cnt > 0) {
 	    oracle_cnt = (unsigned) cnt;
 	    oracle_loc = alloc((unsigned)cnt * sizeof (long));
 	    for (i = 0; i < cnt; i++) {
-		(void) dlb_fgets(line, sizeof line, fp);
-		(void) sscanf(line, "%5lx\n", &oracle_loc[i]);
+		dlb_fgets(line, sizeof line, fp);
+		sscanf(line, "%5lx\n", &oracle_loc[i]);
 	    }
 	}
 	return;
@@ -257,7 +257,7 @@ boolean delphi;
 		/* oracle_loc[1..oracle_cnt-1] are normal ones	*/
 		if (oracle_cnt <= 1 && !special) return;  /*(shouldn't happen)*/
 		oracle_idx = special ? 0 : rnd((int) oracle_cnt - 1);
-		(void) dlb_fseek(oracles, oracle_loc[oracle_idx], SEEK_SET);
+		dlb_fseek(oracles, oracle_loc[oracle_idx], SEEK_SET);
 		if (!special) oracle_loc[oracle_idx] = oracle_loc[--oracle_cnt];
 
 		tmpwin = create_nhwindow(NHW_TEXT);
@@ -275,7 +275,7 @@ boolean delphi;
 		}
 		display_nhwindow(tmpwin, true);
 		destroy_nhwindow(tmpwin);
-		(void) dlb_fclose(oracles);
+		dlb_fclose(oracles);
 	} else {
 		pline("Can't open oracles file!");
 		oracle_flg = -1;	/* don't try to open it again */

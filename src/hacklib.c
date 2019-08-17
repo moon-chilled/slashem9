@@ -377,7 +377,7 @@ void setrandom(void) {
 # if defined(BSD) || defined(LINUX) || defined(ULTRIX) || defined(CYGWIN32) /* system srandom() */
 #  if defined(BSD) && !defined(POSIX_TYPES)
 #   if defined(SUNOS4)
-	(void)
+	
 #   endif
 		srandom(time(NULL));
 #  else

@@ -199,7 +199,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 		else if (verbose) pline("It is missed.");
 	    }
 	    if (!range) { /* Last position; object drops */
-		(void) drop_throw(mon, otmp, 0, mtmp->mx, mtmp->my);
+		drop_throw(mon, otmp, 0, mtmp->mx, mtmp->my);
 		return 1;
 	    }
 	} else if (otmp->oclass == POTION_CLASS) {
@@ -367,7 +367,7 @@ m_throw (
 	    dy = rn2(3)-1;
 	    /* check validity of new direction */
 	    if (!dx && !dy) {
-		(void) drop_throw(mon, singleobj, 0, bhitpos.x, bhitpos.y);
+		drop_throw(mon, singleobj, 0, bhitpos.x, bhitpos.y);
 		return;
 	    }
 	}
@@ -381,7 +381,7 @@ m_throw (
 	    || closed_door(bhitpos.x+dx, bhitpos.y+dy)
 	    || (levl[bhitpos.x + dx][bhitpos.y + dy].typ == IRONBARS &&
 	        hits_bars(&singleobj, bhitpos.x, bhitpos.y, 0, 0))) {
-	    (void) drop_throw(mon, singleobj, 0, bhitpos.x, bhitpos.y);
+	    drop_throw(mon, singleobj, 0, bhitpos.x, bhitpos.y);
 	    return;
 	}
 
@@ -411,7 +411,7 @@ m_throw (
 			} else {
 			    You("accept %s gift in the spirit in which it was intended.",
 				s_suffix(mon_nam(mon)));
-			    (void)hold_another_object(singleobj,
+			    hold_another_object(singleobj,
 				"You catch, but drop, %s.", xname(singleobj),
 				"You catch:");
 			}
@@ -491,7 +491,7 @@ m_throw (
 		    }
 		    stop_occupation();
 		    if (hitu || !range) {
-                        (void) drop_throw(mon, singleobj, hitu, u.ux, u.uy);
+                        drop_throw(mon, singleobj, hitu, u.ux, u.uy);
 			break;
 		    }
 		}
@@ -509,7 +509,7 @@ m_throw (
 			|| IS_SINK(levl[bhitpos.x][bhitpos.y].typ)
 								) {
 		    if (singleobj) /* hits_bars might have destroyed it */
-			(void) drop_throw(mon, singleobj, 0, bhitpos.x, bhitpos.y);
+			drop_throw(mon, singleobj, 0, bhitpos.x, bhitpos.y);
 		    break;
 		}
 		tmp_at(bhitpos.x, bhitpos.y);
@@ -588,7 +588,7 @@ thrwmu (struct monst *mtmp)
 	    hitv += 8 + otmp->spe;
 	    if (dam < 1) dam = 1;
 
-	    (void) thitu(hitv, dam, otmp, NULL);
+	    thitu(hitv, dam, otmp, NULL);
 	    stop_occupation();
 	    return;
 	}

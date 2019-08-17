@@ -912,7 +912,7 @@ u_init (void)
 	/* Initialize the "u" structure.
 	 * Note that some values may have been incorrectly set by a failed restore.
 	 */
-	(void) memset((void *)&u, 0, sizeof(u));
+	memset((void *)&u, 0, sizeof(u));
 	setustuck(NULL);
 #if 0	/* documentation of more zero values as desirable */
 	u.usick_cause[0] = 0;
@@ -972,9 +972,9 @@ u_init (void)
 			aligns[flags.initalign].value;
 	u.ulycn = NON_PM;
 #if defined(BSD) && !defined(POSIX_TYPES)
-	(void) time((long *)&u.ubirthday);
+	time((long *)&u.ubirthday);
 #else
-	(void) time(&u.ubirthday);
+	time(&u.ubirthday);
 #endif
 	/*
 	 *  For now, everyone but elves, cavemen and lycanthropes starts
@@ -1384,7 +1384,7 @@ u_init (void)
 	for(i = 0; i < A_MAX; i++)
 	    if(!rn2(20)) {
 		int xd = rn2(7) - 2;	/* biased variation */
-		(void) adjattrib(i, xd, true);
+		adjattrib(i, xd, true);
 		if (ABASE(i) < AMAX(i)) AMAX(i) = ABASE(i);
 	    }
 	/* make sure you can carry all you have - especially for Tourists */

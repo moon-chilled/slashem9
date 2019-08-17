@@ -295,7 +295,7 @@ void artifact_exists(struct obj *otmp, const char *name, boolean mod) {
 			otmp->quan = 1; /* guarantee only one of this artifact */
 #ifdef UNPOLYPILE	/* Artifacts are immune to unpolypile --ALI */
 			if (is_hazy(otmp)) {
-			    (void) stop_timer(UNPOLY_OBJ, obj_to_any(otmp));
+			    stop_timer(UNPOLY_OBJ, obj_to_any(otmp));
 			    otmp->oldtyp = STRANGE_OBJECT;
 			}
 #endif
@@ -467,7 +467,7 @@ void set_artifact_intrinsic(struct obj *otmp, boolean on, long wp_mask) {
 	     * that can print a message--need to guard against being printed
 	     * when restoring a game
 	     */
-	    (void) make_hallucinated((long)!on, restoring ? false : true, wp_mask);
+	    make_hallucinated((long)!on, restoring ? false : true, wp_mask);
 	}
 	if (spfx & SPFX_ESP) {
 	    if(on) ETelepat |= wp_mask;
@@ -948,7 +948,7 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
     }
 
     if (youattack || youdefend || vis) {
-	(void) upstart(hittee);	/* capitalize */
+	upstart(hittee);	/* capitalize */
 	if (resisted) {
 	    pline("%s %s!", hittee, vtense(hittee, "resist"));
 	    shieldeff(youdefend ? u.ux : mdef->mx,
@@ -1373,7 +1373,7 @@ static int arti_invoke(struct obj *obj) {
 
 					     pseudo = zeroobj;	/* neither cursed nor blessed */
 					     pseudo.otyp = SCR_TAMING;
-					     (void) seffects(&pseudo);
+					     seffects(&pseudo);
 					     break;
 				     }
 			case HEALING: {
@@ -1557,7 +1557,7 @@ static int arti_invoke(struct obj *obj) {
 					 mtmp->mtame = 30;
 					 break;
 			case OBJ_DETECTION:
-					 (void)object_detect(obj, 0);
+					 object_detect(obj, 0);
 					 break;
 			case CREATE_PORTAL: {
 						    int i, num_ok_dungeons, last_ok_dungeon = 0;

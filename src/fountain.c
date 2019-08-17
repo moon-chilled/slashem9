@@ -30,7 +30,7 @@ static void dowatersnakes(void) {
 	while(num-- > 0)
 	    if((mtmp = makemon(&mons[PM_WATER_MOCCASIN],
 			u.ux, u.uy, NO_MM_FLAGS)) && t_at(mtmp->mx, mtmp->my))
-		(void) mintrap(mtmp);
+		mintrap(mtmp);
     } else
 	pline_The("fountain bubbles furiously for a moment, then calms.");
 }
@@ -54,7 +54,7 @@ static void dowaterdemon(void) {
 		makewish();
 		mongone(mtmp);
 	    } else if (t_at(mtmp->mx, mtmp->my))
-		(void) mintrap(mtmp);
+		mintrap(mtmp);
 	}
     } else
 	pline_The("fountain bubbles furiously for a moment, then calms.");
@@ -72,7 +72,7 @@ static void dowaternymph(void) {
 		   You_hear("a seductive voice.");
 		mtmp->msleeping = 0;
 		if (t_at(mtmp->mx, mtmp->my))
-		    (void) mintrap(mtmp);
+		    mintrap(mtmp);
 	} else
 		if (!Blind)
 		   pline("A large bubble rises to the surface and pops.");
@@ -116,7 +116,7 @@ static void gush(int x, int y, void *poolcnt) {
 	water_damage(level.objects[x][y], false, true);
 
 	if ((mtmp = m_at(x, y)) != 0)
-		(void) minliquid(mtmp);
+		minliquid(mtmp);
 	else
 		newsym(x,y);
 }
@@ -288,7 +288,7 @@ void drinkfountain(void) {
 
 		case 26: /* See Monsters */
 
-			(void) monster_detect(NULL, 0);
+			monster_detect(NULL, 0);
 			exercise(A_WIS, true);
 			break;
 
@@ -367,7 +367,7 @@ void dipfountain(struct obj *obj) {
 		newsym(u.ux, u.uy);
 		level.flags.nfountains--;
 		if(in_town(u.ux, u.uy))
-		    (void) angry_guards(false);
+		    angry_guards(false);
 		return;
 	} else if (get_wet(obj, false) && !rn2(2))
 		return;
@@ -463,7 +463,7 @@ void dipfountain(struct obj *obj) {
 
 		    if (FOUNTAIN_IS_LOOTED(u.ux,u.uy)) break;
 		    SET_FOUNTAIN_LOOTED(u.ux,u.uy);
-		    (void) mkgold((long)
+		    mkgold((long)
 			(rnd((dunlevs_in_dungeon(&u.uz)-dunlev(&u.uz)+1)*2)+5),
 			u.ux, u.uy);
 		    if (!Blind)
@@ -527,7 +527,7 @@ void breaktoilet(int x, int y) {
 	while(num-- > 0)
 	    if((mtmp = makemon(&mons[PM_BABY_CROCODILE],u.ux,u.uy, NO_MM_FLAGS)) &&
 	       t_at(mtmp->mx, mtmp->my))
-		(void) mintrap(mtmp);
+		mintrap(mtmp);
       } else
 	pline("The sewers seem strangely quiet.");
     }
@@ -576,11 +576,11 @@ void drinksink(void) {
 			otmp->dknown = !(Blind || Hallucination);
 			otmp->fromsink = 1; /* kludge for docall() */
 			/* dopotion() deallocs dummy potions */
-			(void) dopotion(otmp);
+			dopotion(otmp);
 			break;
 		case 5: if (!(levl[u.ux][u.uy].looted & S_LRING)) {
 			    You("find a ring in the sink!");
-			    (void) mkobj_at(RING_CLASS, u.ux, u.uy, true);
+			    mkobj_at(RING_CLASS, u.ux, u.uy, true);
 			    levl[u.ux][u.uy].looted |= S_LRING;
 			    exercise(A_WIS, true);
 			    newsym(u.ux,u.uy);
@@ -771,7 +771,7 @@ void whetstone_fountain_effects(struct obj *obj) {
 
 		    if (levl[u.ux][u.uy].looted) break;
 		    levl[u.ux][u.uy].looted |= F_LOOTED;
-		    (void) mkgold((long)
+		    mkgold((long)
 			(rnd((dunlevs_in_dungeon(&u.uz)-dunlev(&u.uz)+1)*2)+5),
 			u.ux, u.uy);
 		    if (!Blind)
@@ -817,7 +817,7 @@ void whetstone_sink_effects(struct obj *obj) {
 			break;
 		case 1: if (!(levl[u.ux][u.uy].looted & S_LRING)) {
 			    You("find a ring in the sink!");
-			    (void) mkobj_at(RING_CLASS, u.ux, u.uy, true);
+			    mkobj_at(RING_CLASS, u.ux, u.uy, true);
 			    levl[u.ux][u.uy].looted |= S_LRING;
 			    exercise(A_WIS, true);
 			    newsym(u.ux,u.uy);

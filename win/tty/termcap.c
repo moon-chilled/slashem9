@@ -262,7 +262,7 @@ int *wid, *hgt;
 		flags.null = false;	/* this should be a termcap flag */
 	if(tgetent(tptr, term) < 1) {
 		char buf[BUFSZ];
-		(void) strncpy(buf, term,
+		strncpy(buf, term,
 				(BUFSZ - 1) - (sizeof("Unknown terminal type: .  ")));
 		buf[BUFSZ-1] = '\0';
 		error("Unknown terminal type: %s.", term);
@@ -556,7 +556,7 @@ xputs(s)
 const char *s;
 {
 # ifndef TERMLIB
-	(void) fputs(s, stdout);
+	fputs(s, stdout);
 # else
 #  if defined(NHSTDC) || defined(ULTRIX_PROTO)
 	tputs(s, 1, (int (*)())xputc);
@@ -664,8 +664,8 @@ void
 tty_nhbell()
 {
 	if (flags.silent) return;
-	(void) putchar('\007');		/* curx does not change */
-	(void) fflush(stdout);
+	putchar('\007');		/* curx does not change */
+	fflush(stdout);
 }
 
 #ifdef ASCIIGRAPH
@@ -695,7 +695,7 @@ tty_delay_output()
 #endif
 #ifdef TIMED_DELAY
 	if (flags.nap) {
-		(void) fflush(stdout);
+		fflush(stdout);
 		msleep(50);		/* sleep for 50 milliseconds */
 		return;
 	}
@@ -704,7 +704,7 @@ tty_delay_output()
 	/* simulate the delay with "cursor here" */
 	for (i = 0; i < 3; i++) {
 		cmov(ttyDisplay->curx, ttyDisplay->cury);
-		(void) fflush(stdout);
+		fflush(stdout);
 	}
 #else /* MICRO */
 	/* BUG: if the padding character is visible, as it is on the 5620

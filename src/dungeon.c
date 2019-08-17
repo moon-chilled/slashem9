@@ -763,12 +763,12 @@ void init_dungeons(void) {
 		pd.tmpparent[cb] = i;
 		for (dgn = 0; dgn < i; dgn++)
 		    if (!strcmp(pd.tmpbranch[cb].name, dungeons[dgn].dname)) {
-			(void)add_branch(dgn, cb, &pd);
+			add_branch(dgn, cb, &pd);
 			break;
 		    }
 	    }
 	}
-	(void) dlb_fclose(dgn_file);
+	dlb_fclose(dgn_file);
 
 	for (i = 0; i < 5; i++) tune[i] = 'A' + rn2(7);
 	tune[5] = 0;

@@ -258,7 +258,7 @@ static int forcedoor(void) {
 			else
 			    You_hear("someone yell:");
 			verbalize("Halt, thief!  You're under arrest!");
-			(void) angry_guards(false);
+			angry_guards(false);
 			break;
 		    }
 		}
@@ -1065,7 +1065,7 @@ boolean doorlock(struct obj *otmp, int x, int y) {
 	    if (!key && door->doormask & (D_LOCKED | D_CLOSED)) {
 		if (door->doormask & D_TRAPPED) {
 		    if (MON_AT(x, y))
-			(void) mb_trapped(m_at(x,y));
+			mb_trapped(m_at(x,y));
 		    else if (flags.verbose) {
 			if (cansee(x,y))
 			    pline("KABOOM!!  You see a door explode.");

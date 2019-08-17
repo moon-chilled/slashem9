@@ -671,7 +671,7 @@ static boolean mhurtle_step(void *arg, int x, int y) {
 	    place_monster(mon, x, y);
 	    newsym(mon->mx, mon->my);
 	    set_apparxy(mon);
-	    (void) mintrap(mon);
+	    mintrap(mon);
 	    return true;
 	}
 	return false;
@@ -731,7 +731,7 @@ void hurtle(int dx, int dy, int range, boolean verbose) {
     /* this setting of cc is only correct if dx and dy are [-1,0,1] only */
     cc.x = u.ux + (dx * range);
     cc.y = u.uy + (dy * range);
-    (void) walk_path(&uc, &cc, hurtle_step, (void *)&range);
+    walk_path(&uc, &cc, hurtle_step, (void *)&range);
     teleds(cc.x, cc.y, false);
 }
 
@@ -760,7 +760,7 @@ void mhurtle(struct monst *mon, int dx, int dy, int range) {
 	mc.y = mon->my;
 	cc.x = mon->mx + (dx * range);
 	cc.y = mon->my + (dy * range);
-	(void) walk_path(&mc, &cc, mhurtle_step, (void *)mon);
+	walk_path(&mc, &cc, mhurtle_step, (void *)mon);
 	return;
 }
 
@@ -771,7 +771,7 @@ static void check_shop_obj(struct obj *obj, xchar x, xchar y, boolean broken) {
 
 	if(broken) {
 		if (obj->unpaid) {
-		    (void)stolen_value(obj, u.ux, u.uy,
+		    stolen_value(obj, u.ux, u.uy,
 				       (boolean)shkp->mpeaceful, false, true);
 		    subfrombill(obj, shkp);
 		}
@@ -782,7 +782,7 @@ static void check_shop_obj(struct obj *obj, xchar x, xchar y, boolean broken) {
 	if (!costly_spot(x, y) || *in_rooms(x, y, SHOPBASE) != *u.ushops) {
 		/* thrown out of a shop or into a different shop */
 		if (obj->unpaid) {
-		    (void)stolen_value(obj, u.ux, u.uy,
+		    stolen_value(obj, u.ux, u.uy,
 				       (boolean)shkp->mpeaceful, false, false);
 		    subfrombill(obj, shkp);
 		}
@@ -993,7 +993,7 @@ int thrown) {
 		pline("%s the %s and returns to your hand!",
 		      Tobjnam(obj, "hit"), ceiling(u.ux,u.uy));
 		obj = addinv(obj);
-		(void) encumber_msg();
+		encumber_msg();
 		setuwep(obj, true);
 		u.twoweap = twoweap;
 /*            if (!fire_weapon) setuwep(obj);
@@ -1041,7 +1041,7 @@ int thrown) {
 		if(mon == &youmonst) {		/* the thing was caught */
 			exercise(A_DEX, true);
 			obj = addinv(obj);
-			(void) encumber_msg();
+			encumber_msg();
 			if (wep_mask && !(obj->owornmask & wep_mask)) {
 			    setworn(obj, wep_mask);
 			    u.twoweap = twoweap;
@@ -1119,7 +1119,7 @@ int thrown) {
 		    thrownobj = NULL;
 		    return;		/* alert shk caught it */
 		}
-		(void) snuff_candle(obj);
+		snuff_candle(obj);
 		notonhead = (bhitpos.x != mon->mx || bhitpos.y != mon->my);
 		obj_gone = thitmonst(mon, obj, thrown);
 		/* Monster may have been tamed; this frees old mon */
@@ -1166,7 +1166,7 @@ int thrown) {
 		    if (!impaired && rn2(100)) {
 			pline("%s to your hand!", Tobjnam(obj, "return"));
 			obj = addinv(obj);
-			(void) encumber_msg();
+			encumber_msg();
 			setuwep(obj, true);
 			u.twoweap = twoweap;
 			if(cansee(bhitpos.x, bhitpos.y))
@@ -1185,7 +1185,7 @@ int thrown) {
 					"%s back toward you, hitting your %s!",
 				  Tobjnam(obj, Blind ? "hit" : "fly"),
 				  body_part(ARM));
-			    (void) artifact_hit(NULL,
+			    artifact_hit(NULL,
 						&youmonst, obj, &dmg, 0);
 			    losehp(dmg, xname(obj),
 				obj_is_pname(obj) ? KILLED_BY : KILLED_BY_AN);
@@ -1218,11 +1218,11 @@ int thrown) {
 			      Monnam(mon), the(xname(obj)));
 		    if(*u.ushops)
 			check_shop_obj(obj, bhitpos.x, bhitpos.y, false);
-		    (void) mpickobj(mon, obj);	/* may merge and free obj */
+		    mpickobj(mon, obj);	/* may merge and free obj */
 		    thrownobj = NULL;
 		    return;
 		}
-		(void) snuff_candle(obj);
+		snuff_candle(obj);
 		if (!mon && ship_object(obj, bhitpos.x, bhitpos.y, false)) {
 		    thrownobj = NULL;
 		    return;
@@ -1400,10 +1400,10 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 			  (next2u ? "hands" : "tosses"), the(xname(obj)));
 		    if (!next2u) sho_obj_return_to_u(obj);
 		    obj = addinv(obj);	/* back into your inventory */
-		    (void) encumber_msg();
+		    encumber_msg();
 		} else {
 		    /* angry leader caught it and isn't returning it */
-		    (void) mpickobj(mon, obj);
+		    mpickobj(mon, obj);
 		}
 		return 1;		/* caller doesn't need to place it */
 	    }
@@ -1454,7 +1454,7 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 
 	    if (tmp >= rnd(20)) {
 		if (hmon(mon,obj,thrown?thrown:3)) {  /* mon still alive */
-		    (void) cutworm(mon, bhitpos.x, bhitpos.y, obj);
+		    cutworm(mon, bhitpos.x, bhitpos.y, obj);
 		}
 		exercise(A_DEX, true);
 
@@ -1544,7 +1544,7 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 	    exercise(A_STR, true);
 	    if (tmp >= rnd(20)) {
 		exercise(A_DEX, true);
-		(void) hmon(mon,obj,thrown?thrown:3);
+		hmon(mon,obj,thrown?thrown:3);
 	    } else {
 		tmiss(obj, mon);
 	    }
@@ -1552,7 +1552,7 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 	} else if ((otyp == EGG || otyp == CREAM_PIE ||
 		    otyp == BLINDING_VENOM || otyp == ACID_VENOM) &&
 		(guaranteed_hit || ACURR(A_DEX) > rnd(25))) {
-	    (void) hmon(mon, obj, thrown?thrown:3);
+	    hmon(mon, obj, thrown?thrown:3);
 	    return 1;	/* hmon used it up */
 
 	} else if (obj->oclass == POTION_CLASS &&
@@ -1651,7 +1651,7 @@ static int gem_accept(struct monst *mon, struct obj *obj) {
 	}
 	strcat(buf,acceptgift);
 	if(*u.ushops) check_shop_obj(obj, mon->mx, mon->my, true);
-	(void) mpickobj(mon, obj);	/* may merge and free obj */
+	mpickobj(mon, obj);	/* may merge and free obj */
 	ret = 1;
 
 nopick:

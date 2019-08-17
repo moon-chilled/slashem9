@@ -109,9 +109,9 @@ dosit()
  in_water:
 	    You("sit in the water.");
 	    if (!rn2(10) && uarm)
-		(void) rust_dmg(uarm, "armor", 1, true, &youmonst);
+		rust_dmg(uarm, "armor", 1, true, &youmonst);
 	    else if (!rn2(10) && uarmf && uarmf->otyp != WATER_WALKING_BOOTS)
-		(void) rust_dmg(uarm, "armor", 1, true, &youmonst);
+		rust_dmg(uarm, "armor", 1, true, &youmonst);
 	} else if(IS_SINK(typ)) {
 
 	    You(sit_message, defsyms[S_sink].explanation);
@@ -174,11 +174,11 @@ dosit()
 	    if (rnd(6) > 4)  {
 		switch (rnd(13))  {
 		    case 1:
-			(void) adjattrib(rn2(A_MAX), -rn1(4,3), false);
+			adjattrib(rn2(A_MAX), -rn1(4,3), false);
 			losehp(rnd(10), "cursed throne", KILLED_BY_AN);
 			break;
 		    case 2:
-			(void) adjattrib(rn2(A_MAX), 1, false);
+			adjattrib(rn2(A_MAX), 1, false);
 			break;
 		    case 3:
 			pline("A%s electric shock shoots through your body!",
@@ -218,7 +218,7 @@ dosit()
 			verbalize("Thy audience hath been summoned, %s!",
 				  flags.female ? "Dame" : "Sire");
 			while(cnt--)
-			    (void) makemon(courtmon(), u.ux, u.uy, NO_MM_FLAGS);
+			    makemon(courtmon(), u.ux, u.uy, NO_MM_FLAGS);
 			break;
 			}
 		    case 8:

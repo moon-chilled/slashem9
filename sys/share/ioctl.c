@@ -117,16 +117,16 @@ getioctls()
 {
 #define POSIX_TYPES
 #ifdef BSD_JOB_CONTROL
-	(void) ioctl(fileno(stdin), (int) TIOCGLTC, (char *) &ltchars);
-	(void) ioctl(fileno(stdin), (int) TIOCSLTC, (char *) &ltchars0);
+	ioctl(fileno(stdin), (int) TIOCGLTC, (char *) &ltchars);
+	ioctl(fileno(stdin), (int) TIOCSLTC, (char *) &ltchars0);
 #else
 # ifdef POSIX_TYPES
-	(void) tcgetattr(fileno(stdin), &termio);
+	tcgetattr(fileno(stdin), &termio);
 # else
 #  if defined(TCSETS) && !defined(AIX_31)
-	(void) ioctl(fileno(stdin), (int) TCGETS, &termio);
+	ioctl(fileno(stdin), (int) TCGETS, &termio);
 #  else
-	(void) ioctl(fileno(stdin), (int) TCGETA, &termio);
+	ioctl(fileno(stdin), (int) TCGETA, &termio);
 #  endif
 # endif
 #endif
@@ -140,15 +140,15 @@ void
 setioctls()
 {
 #ifdef BSD_JOB_CONTROL
-	(void) ioctl(fileno(stdin), (int) TIOCSLTC, (char *) &ltchars);
+	ioctl(fileno(stdin), (int) TIOCSLTC, (char *) &ltchars);
 #else
 # ifdef POSIX_TYPES
-	(void) tcsetattr(fileno(stdin), TCSADRAIN, &termio);
+	tcsetattr(fileno(stdin), TCSADRAIN, &termio);
 # else
 #  if defined(TCSETS) && !defined(AIX_31)
-	(void) ioctl(fileno(stdin), (int) TCSETSW, &termio);
+	ioctl(fileno(stdin), (int) TCSETSW, &termio);
 #  else
-	(void) ioctl(fileno(stdin), (int) TCSETAW, &termio);
+	ioctl(fileno(stdin), (int) TCSETAW, &termio);
 #  endif
 # endif
 #endif
@@ -171,11 +171,11 @@ dosuspend()
 #  ifdef __linux__
 		linux_mapon();
 #  endif
-		(void) signal(SIGTSTP, SIG_DFL);
+		signal(SIGTSTP, SIG_DFL);
 #  ifdef AUX
 		( void ) kill ( 0 , SIGSTOP ) ;
 #  else
-		(void) kill(0, SIGTSTP);
+		kill(0, SIGTSTP);
 #  endif
 #  ifdef LINUX
 		linux_mapoff();

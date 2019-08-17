@@ -171,7 +171,7 @@ int set, entry;
 	*/
 	monst_init();
 	objects_init();
-	(void) def_char_to_objclass(']');
+	def_char_to_objclass(']');
 
 	condnum = tilenum = 0;
 
@@ -683,7 +683,7 @@ int main()
     fprintf(ofp,"#define TILES_PER_COL %d\n\n", (lastothtile + i) / i);
 
     while (fgets(in_line, sizeof in_line, ifp) != 0)
-	(void) fputs(in_line, ofp);
+	fputs(in_line, ofp);
 
     fprintf(ofp,"\n/*tile.h*/\n");
 

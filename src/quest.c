@@ -339,7 +339,7 @@ prisoner_speaks (mtmp)
 	    adjalign(3);
 
 		/* ...But the guards are not */
-	    (void) angry_guards(false);
+	    angry_guards(false);
 	}
 	return;
 }
