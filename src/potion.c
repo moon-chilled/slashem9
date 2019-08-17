@@ -3124,7 +3124,7 @@ dodip (void)
 		obj_extract_self(singlepotion);
 		singlepotion = hold_another_object(singlepotion,
 					"You juggle and drop %s!",
-					doname(singlepotion), (const char *)0);
+					doname(singlepotion), NULL);
 		update_inventory();
 		}
 

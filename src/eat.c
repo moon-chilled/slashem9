@@ -1167,7 +1167,7 @@ static int opentin(void) {
 	    if (tin.tin->corpsenm == NON_PM) {
 		pline("It turns out to be empty.");
 		tin.tin->dknown = tin.tin->known = true;
-		costly_tin((const char*)0);
+		costly_tin(NULL);
 		goto use_me;
 	    }
 	    r = tin.tin->cursed ? ROTTEN_TIN :	/* always rotten if cursed */
@@ -1205,7 +1205,7 @@ static int opentin(void) {
 		if (mvitals[tin.tin->corpsenm].eaten)
 		if (!Hallucination) tin.tin->dknown = tin.tin->known = true;
 		if (flags.verbose) You("discard the open tin.");
-		costly_tin((const char*)0);
+		costly_tin(NULL);
 		goto use_me;
 	    }
 	    /* in case stop_occupation() was called on previous meal */
@@ -1229,7 +1229,7 @@ static int opentin(void) {
 	    cprefx(tin.tin->corpsenm); cpostfx(tin.tin->corpsenm);
 
 	    /* charge for one at pre-eating cost */
-	    costly_tin((const char*)0);
+	    costly_tin(NULL);
 
 	    /* check for vomiting added by GAN 01/16/87 */
 	    if(tintxts[r].nut < 0) make_vomiting((long)rn1(15,10), false);
@@ -1253,12 +1253,12 @@ static int opentin(void) {
 		    tin.tin->dknown = tin.tin->known = true;
 		if (flags.verbose)
 		    You("discard the open tin.");
-		costly_tin((const char*)0);
+		costly_tin(NULL);
 		goto use_me;
 	    }
 
 	    tin.tin->dknown = tin.tin->known = true;
-	    costly_tin((const char*)0);
+	    costly_tin(NULL);
 
 	    if (!tin.tin->cursed)
 		pline("This makes you feel like %s!",

@@ -59,7 +59,7 @@ dev_name()
 	    m++;
 	} while (match && m < 100); /* m for insurance */
 
-	if (match) return (const char *)0;
+	if (match) return NULL;
 	return(developers[i]);
 }
 

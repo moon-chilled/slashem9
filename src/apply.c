@@ -1237,7 +1237,7 @@ static void use_lamp(struct obj *obj) {
 			obj_extract_self(rest);	     /* free from inv */
 			obj->spe++;	/* this prevents merging */
 			hold_another_object(rest, "You drop %s!",
-					  doname(rest), (const char *)0);
+					  doname(rest), NULL);
 			obj->spe--;
 		    }
 		    pline("%s flame%s %s%s",
@@ -1274,12 +1274,12 @@ static int use_torch(struct obj *obj) {
     }
     /* You can use a torch in either wielded weapon slot */
     if (obj != uwep && (obj != uswapwep || !u.twoweap))
-	if (!wield_tool(obj, (const char *)0)) return 0;
+	if (!wield_tool(obj, NULL)) return 0;
     use_lamp(obj);
     /* shouldn't merge */
     if (otmp)
 	otmp = hold_another_object(otmp, "You drop %s!",
-				   doname(otmp), (const char *)0);
+				   doname(otmp), NULL);
     return 1;
 }
 
@@ -1341,7 +1341,7 @@ static void light_cocktail(struct obj *obj /* obj is a potion of oil or a stick 
 
 	    /* shouldn't merge */
 	    obj = hold_another_object(obj, "You drop %s!",
-				      doname(obj), (const char *)0);
+				      doname(obj), NULL);
 	} else
 	    begin_burn(obj, false);
 }
@@ -1636,7 +1636,7 @@ static void use_tinning_kit(struct obj *obj) {
 		useupf(corpse, 1L);
 	    }
 	    can = hold_another_object(can, "You make, but cannot pick up, %s.",
-				      doname(can), (const char *)0);
+				      doname(can), NULL);
 	} else impossible("Tinning failed.");
 }
 
@@ -2667,7 +2667,7 @@ static int use_whip(struct obj *obj) {
 			instapetrify(kbuf);
 		    }
 		    otmp = hold_another_object(otmp, "You drop %s!",
-					       doname(otmp), (const char *)0);
+					       doname(otmp), NULL);
 		    break;
 		default:
 		    /* to floor beneath mon */
@@ -3608,7 +3608,7 @@ int doapply(void) {
 					       "Oops!  %s away from you!" :
 					       "Oops!  %s to the floor!",
 					       The(aobjnam(otmp, "slip")),
-					       (const char *)0);
+					       NULL);
 		    makeknown(HORN_OF_PLENTY);
 		} else
 		    pline("%s", nothing_happens);

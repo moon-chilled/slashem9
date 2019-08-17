@@ -1340,10 +1340,10 @@ schar lev_by_name(const char *nam) {
 	    lev = depth(&slev->dlevel);
 	}
     } else {	/* not a specific level; try branch names */
-	idx = find_branch(nam, (struct proto_dungeon *)0);
+	idx = find_branch(nam, NULL);
 	/* "<branch> to Xyzzy" */
 	if (idx < 0 && (p = strstri(nam, " to ")) != 0)
-	    idx = find_branch(p + 4, (struct proto_dungeon *)0);
+	    idx = find_branch(p + 4, NULL);
 
 	if (idx >= 0) {
 	    idxtoo = (idx >> 8) & 0x00FF;

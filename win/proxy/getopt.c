@@ -21,7 +21,7 @@ static struct Bool_Opt
     const char *name;
     boolean *addr, initvalue;
     int optflags;
-} *boolopt = (struct Bool_Opt *)0;
+} *boolopt = NULL;
 
 static int
 get_option_bool(const char *option)

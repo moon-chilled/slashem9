@@ -4899,7 +4899,7 @@ retry:
 				       The(aobjnam(otmp,
 					     Is_airlevel(&u.uz) || u.uinwater ?
 						   "slip" : "drop")),
-				       (const char *)0);
+				       NULL);
 	    u.ublesscnt += rn1(100,50);  /* the gods take notice */
 	}
 }

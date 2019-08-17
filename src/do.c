@@ -135,7 +135,7 @@ boolean flooreffects(struct obj *obj, int x, int y, const char *verb) {
 			(u.utrap && u.ux == x && u.uy == y)) {
 		    if (*verb)
 			pline_The("boulder %s into the pit%s.",
-				vtense((const char *)0, verb),
+				vtense(NULL, verb),
 				(mtmp) ? "" : " with you");
 		    if (mtmp) {
 			if (!passes_walls(mtmp->data) &&

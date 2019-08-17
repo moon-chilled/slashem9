@@ -1306,7 +1306,7 @@ techeffects (int tech_no)
 				instapetrify(kbuf);
 			    }
 			    obj = hold_another_object(obj, "You drop %s!",
-				    doname(obj), (const char *)0);
+				    doname(obj), NULL);
 			    break;
 			default:
 			    /* to floor beneath mon */
@@ -1470,7 +1470,7 @@ techeffects (int tech_no)
 		otmp->blessed = obj->blessed;
 		hold_another_object(otmp,
 			"You fill, but have to drop, %s!", doname(otmp),
-			(const char *)0);
+			NULL);
 		t_timeout = rn1(1000, 500);
 		break;
 	    default:
@@ -1658,7 +1658,7 @@ adjtech (int oldlevel, int newlevel)
 	    	/* Try the race intrinsics */
 	    	if (!rtech || !rtech->tech_id) break;
 	    	tech = rtech;
-	    	rtech = (struct innate_tech *) 0;
+	    	rtech = NULL;
 		mask = FROMRACE;
 	    }
 

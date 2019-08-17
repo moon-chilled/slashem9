@@ -348,7 +348,7 @@ int extcmd_via_menu (void) {
 #endif
 		}
 	    }
-	    choices[i] = (struct ext_func_tab *)0;
+	    choices[i] = NULL;
 	    nchoices = i;
 	    /* if we're down to one, we have our selection so get out of here */
 	    if (nchoices == 1) {

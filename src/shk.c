@@ -219,7 +219,7 @@ shkgone (				/* called in mon.c */
 		setpaid(mtmp);
 		free(eshk->bill_p);
 		eshk->billsz = 0;
-		eshk->bill_p = (struct bill_x *)0;
+		eshk->bill_p = NULL;
 		/* remove eshk->shoproom from u.ushops */
 		do { *p = *(p + 1); } while (*++p);
 	    }
@@ -266,7 +266,7 @@ restore_shk_bill (int fd, struct monst *shkp)
 		mread(fd, (void *)eshkp->bill_p,
 			eshkp->billct * sizeof(struct bill_x));
 	    } else
-		eshkp->bill_p = (struct bill_x *)0;
+		eshkp->bill_p = NULL;
 	}
 }
 
@@ -615,7 +615,7 @@ u_entered_shop (char *enterstring)
 	}
 
 	eshkp->billsz = 0;
-	eshkp->bill_p = (struct bill_x *)0;
+	eshkp->bill_p = NULL;
 
 	if ((!eshkp->visitct || *eshkp->customer) &&
 	    strncmpi(eshkp->customer, plname, PL_NSIZ)) {
@@ -845,7 +845,7 @@ boolean silent;
 		    } else bp++;
 	}
 	if(obj->unpaid & !silent) pline("onbill: unpaid obj not on bill?");
-	return (struct bill_x *)0;
+	return NULL;
 }
 
 /* Delete the contents of the given object. */
@@ -2445,7 +2445,7 @@ long
 unpaid_cost(unp_obj)
 struct obj *unp_obj;	/* known to be unpaid */
 {
-	struct bill_x *bp = (struct bill_x *)0;
+	struct bill_x *bp = NULL;
 	struct monst *shkp;
 
 	for(shkp = next_shkp(fmon, true); shkp;
@@ -3730,7 +3730,7 @@ struct monst *shkp;
 	if (eshkp->bill_p == (struct bill_x *) -1000 && inhishop(shkp)) {
 	    /* reset bill_p, need to re-calc player's occupancy too */
 	    eshkp->billsz = 0;
-	    eshkp->bill_p = (struct bill_x *)0;
+	    eshkp->bill_p = NULL;
 	    check_special_room(false);
 	}
 }

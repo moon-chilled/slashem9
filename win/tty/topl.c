@@ -291,7 +291,7 @@ void update_topl(const char *bp) {
 static void topl_putsym(glyph_t c) {
     struct WinDesc *cw = wins[WIN_MESSAGE];
 
-    if(cw == (struct WinDesc *) 0) panic("Putsym window MESSAGE nonexistant");
+    if(cw == NULL) panic("Putsym window MESSAGE nonexistant");
 
     switch(c) {
     case '\b':

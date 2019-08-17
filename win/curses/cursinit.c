@@ -561,7 +561,7 @@ curses_choose_character()
             else
                 panic("no available ROLE+race+gender+alignment combinations");
         }
-        choices[n] = (const char *) 0;
+        choices[n] = NULL;
         if (n > 1)
             sel =
                 curses_character_dialog(choices,
@@ -621,7 +621,7 @@ curses_choose_character()
                     pickmap[n++] = i;
                 }
             }
-            choices[n] = (const char *) 0;
+            choices[n] = NULL;
             /* Permit the user to pick, if there is more than one */
             if (n > 1)
                 sel =
@@ -680,7 +680,7 @@ curses_choose_character()
                     pickmap[n++] = i;
                 }
             }
-            choices[n] = (const char *) 0;
+            choices[n] = NULL;
             /* Permit the user to pick, if there is more than one */
             if (n > 1)
                 sel =

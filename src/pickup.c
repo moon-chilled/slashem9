@@ -1719,7 +1719,7 @@ boolean *prev_loot;
 		    update_mon_intrinsics(mtmp, otmp, false, false);
 		}
 		otmp = hold_another_object(otmp, "You drop %s!", doname(otmp),
-					(const char *)0);
+					NULL);
 		timepassed = rnd(3);
 		if (prev_loot) *prev_loot = true;
 	} else if (c == 'q') {

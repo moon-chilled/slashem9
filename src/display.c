@@ -919,7 +919,7 @@ static struct tmp_glyph {
     struct tmp_glyph *cont;	/* Used if saved[] is full */
     struct tmp_glyph *prev;
 } tgfirst;
-static struct tmp_glyph *tglyph = (struct tmp_glyph *)0;
+static struct tmp_glyph *tglyph = NULL;
 
 void tmp_at(int x, int y) {
     struct tmp_glyph *tmp, *cont;
@@ -938,7 +938,7 @@ void tmp_at(int x, int y) {
 	    tglyph->sidx = 0;
 	    tglyph->style = x;
 	    tglyph->glyph = y;
-	    tglyph->cont = (struct tmp_glyph *)0;
+	    tglyph->cont = NULL;
 	    flush_screen(0);	/* flush buffered glyphs */
 	    return;
 	case DISP_FREEMEM:  /* in case game ends with tmp_at() in progress */
@@ -981,7 +981,7 @@ void tmp_at(int x, int y) {
 		    if (cont != &tgfirst) free((void *)cont);
 		    cont = tmp;
 		}
-	     /* tglyph->cont = (struct tmp_glyph *)0; */
+	     /* tglyph->cont = NULL; */
 	    } else {		/* DISP_FLASH or DISP_ALWAYS */
 		if (tglyph->sidx)	/* been called at least once */
 		    newsym(tglyph->saved[0].x, tglyph->saved[0].y);
@@ -999,7 +999,7 @@ void tmp_at(int x, int y) {
 		if (tglyph->sidx >= SIZE(tglyph->saved)) {
 		    tmp = (struct tmp_glyph *)alloc(sizeof (struct tmp_glyph));
 		    *tmp = *tglyph;
-		    tglyph->prev = (struct tmp_glyph *)0;
+		    tglyph->prev = NULL;
 		    tmp->cont = tglyph;
 		    tglyph = tmp;
 		    tglyph->sidx = 0;

@@ -15,7 +15,7 @@ struct dlb_node {
     struct dlb_node *next;
     int offset;
     dlb *handles[HANDLES_PER_NODE];
-} *nodes = (struct dlb_node *)0;
+} *nodes = NULL;
 
 int
 #ifndef FILE_AREAS
@@ -57,11 +57,11 @@ dlbh_find_node(int fh)
 {
     struct dlb_node *n;
     if (!nodes || fh >= nodes->offset + HANDLES_PER_NODE)
-	return (struct dlb_node *)0;
+	return NULL;
     for(n = nodes; n; n = n->next)
 	if (fh >= n->offset)
 	    return n;
-    return (struct dlb_node *)0;
+    return NULL;
 }
 
 int

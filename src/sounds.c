@@ -402,7 +402,7 @@ yelp_sound (struct monst *mtmp)
 	ret = "wail";
 	    break;
     default:
-	ret = (const char*) 0;
+	ret = NULL;
     }
     return ret;
 }
@@ -427,7 +427,7 @@ whimper_sound (struct monst *mtmp)
 	ret = "squeal";
 	    break;
     default:
-	ret = (const char *)0;
+	ret = NULL;
     }
     return ret;
 }

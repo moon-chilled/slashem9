@@ -855,7 +855,7 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
     if (youattack || youdefend || vis) {
 	result = true;
 	pline_The("magic-absorbing blade %s %s!",
-		  vtense((const char *)0, verb), hittee);
+		  vtense(NULL, verb), hittee);
 	/* assume probing has some sort of noticeable feedback
 	   even if it is being done by one monster to another */
 	if (attack_indx == MB_INDEX_PROBE && !canspotmon(mdef))
@@ -1638,7 +1638,7 @@ static int arti_invoke(struct obj *obj) {
 							  otmp->quan += rnd(5);
 						  otmp->owt = weight(otmp);
 						  otmp = hold_another_object(otmp, "Suddenly %s out.",
-								  aobjnam(otmp, "fall"), (const char *)0);
+								  aobjnam(otmp, "fall"), NULL);
 						  break;
 					  }
 		}

@@ -238,7 +238,7 @@ found:
 #endif
 	new_obj = hold_another_object(new_obj, "Oops!  %s out of your grasp!",
 					       The(aobjnam(new_obj, "slip")),
-					       (const char *)0);
+					       NULL);
 	return(1);
 }
 

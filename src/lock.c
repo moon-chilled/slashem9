@@ -957,7 +957,7 @@ boolean doorlock(struct obj *otmp, int x, int y) {
 	struct rm *door = &levl[x][y];
 	boolean res = true;
 	int loudness = 0;
-	const char *msg = (const char *)0;
+	const char *msg = NULL;
 	const char *dustcloud = "A cloud of dust";
 	const char *quickly_dissipates = "quickly dissipates";
 	int key = artifact_door(x, y);		/* ALI - Artifact doors */

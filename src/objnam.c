@@ -1195,7 +1195,7 @@ vtense (const char *subj, const char *verb)
 	if (subj) {
 	    if (!strncmpi(subj, "a ", 2) || !strncmpi(subj, "an ", 3))
 		goto sing;
-	    spot = (const char *)0;
+	    spot = NULL;
 	    for (sp = subj; (sp = index(sp, ' ')) != 0; ++sp) {
 		if (!strncmp(sp, " of ", 4) ||
 		    !strncmp(sp, " from ", 6) ||
@@ -3011,7 +3011,7 @@ int i;
 			return j->name;
 		j++;
 	}
-	return (const char *)0;
+	return NULL;
 }
 
 const char *

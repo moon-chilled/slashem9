@@ -3969,7 +3969,7 @@ add_autopickup_exception (const char *mapping)
 		ape->pattern = alloc(textsize+1);
 		strcpy(ape->pattern, text2);
 		ape->grab = grab;
-		if (!*apehead) ape->next = (struct autopickup_exception *)0;
+		if (!*apehead) ape->next = NULL;
 		else ape->next = *apehead;
 		*apehead = ape;
 	} else {

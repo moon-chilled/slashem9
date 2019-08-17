@@ -382,7 +382,7 @@ static void newmail(struct mail_info *info) {
 	    }
 	}
 	obj = hold_another_object(obj, "Oops!",
-				  (const char *)0, (const char *)0);
+				  NULL, NULL);
     }
 
     /* zip back to starting location */

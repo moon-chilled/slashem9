@@ -270,7 +270,7 @@ int trouble;
 {
 	int i;
 	struct obj *otmp = 0;
-	const char *what = (const char *)0;
+	const char *what = NULL;
 	static const char leftglow[] = "left ring softly glows",
 				   rightglow[] = "right ring softly glows";
 
@@ -2119,7 +2119,7 @@ god_gives_benefit(alignment)
 aligntyp alignment;
 {
 	struct obj *otmp;
-	const char *what = (const char *)0;
+	const char *what = NULL;
 
 	if (!rnl(30 + u.ulevel)) god_gives_pet(alignment);
 	else {

@@ -647,7 +647,7 @@ long scatter(
 	boolean individual_object = obj ? true : false;
 	struct monst *mtmp;
 	struct scatter_chain *stmp, *stmp2 = 0;
-	struct scatter_chain *schain = (struct scatter_chain *)0;
+	struct scatter_chain *schain = NULL;
 	long total = 0L;
 
 	while ((otmp = individual_object ? obj : level.objects[sx][sy]) != 0) {
@@ -696,7 +696,7 @@ long scatter(
 	    if (!used_up) {
 		stmp = (struct scatter_chain *)
 					alloc(sizeof(struct scatter_chain));
-		stmp->next = (struct scatter_chain *)0;
+		stmp->next = NULL;
 		stmp->obj = otmp;
 		stmp->ox = sx;
 		stmp->oy = sy;

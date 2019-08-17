@@ -1789,7 +1789,7 @@ struct attack *mattk;
 	    if (unwornmask & W_WEP) {		/* stole wielded weapon */
 		possibly_unwield(mdef, false);
 	    } else if (unwornmask & W_ARMG) {	/* stole worn gloves */
-		mselftouch(mdef, (const char *)0, true);
+		mselftouch(mdef, NULL, true);
 		if (mdef->mhp <= 0)	/* it's now a statue */
 		    return;		/* can't continue stealing */
 	    }

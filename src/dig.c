@@ -302,7 +302,7 @@ static int dig(void) {
 	}
 
 	if (digging.effort > 100) {
-		const char *digtxt, *dmgtxt = (const char*) 0;
+		const char *digtxt, *dmgtxt = NULL;
 		struct obj *obj;
 		boolean shopedge = *in_rooms(dpx, dpy, SHOPBASE);
 

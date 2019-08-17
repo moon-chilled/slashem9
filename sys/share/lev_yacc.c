@@ -1567,7 +1567,7 @@ case 69:
 			/* ERR means random here */
 			if (yyvsp[-2].i == ERR && yyvsp[0].i != ERR) {
 		     yyerror("If the door wall is random, so must be its pos!");
-			    tmprdoor[ndoor] = (struct room_door *)0;
+			    tmprdoor[ndoor] = NULL;
 			} else {
 			    tmprdoor[ndoor] = new(room_door);
 			    tmprdoor[ndoor]->secret = yyvsp[-6].i;

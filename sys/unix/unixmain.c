@@ -454,7 +454,7 @@ boolean wr;
 	}
 
 # ifdef HACKDIR
-	if (dir == (const char *)0)
+	if (dir == NULL)
 	    dir = HACKDIR;
 # endif
 
