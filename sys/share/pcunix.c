@@ -31,44 +31,39 @@ static int eraseoldlocks(void);
 #endif
 
 #if 0
-int
-uptodate(fd)
-int fd;
-{
+int uptodate(int fd) {
 # ifdef WANT_GETHDATE
-    if(fstat(fd, &buf)) {
-	pline("Cannot get status of saved level? ");
-	return(0);
-    }
-    if(buf.st_mtime < hbuf.st_mtime) {
-	pline("Saved level is out of date. ");
-	return(0);
-    }
+	if(fstat(fd, &buf)) {
+		pline("Cannot get status of saved level? ");
+		return(0);
+	}
+	if(buf.st_mtime < hbuf.st_mtime) {
+		pline("Saved level is out of date. ");
+		return(0);
+	}
 # else
 #  if defined(MICRO) && !defined(NO_FSTAT)
-    if(fstat(fd, &buf)) {
-	if(moves > 1) pline("Cannot get status of saved level? ");
-	else pline("Cannot get status of saved game");
-	return(0);
-    }
-    if(comp_times(buf.st_mtime)) {
-	if(moves > 1) pline("Saved level is out of date");
-	else pline("Saved game is out of date. ");
-	/* This problem occurs enough times we need to give the player
-	 * some more information about what causes it, and how to fix.
-	 */
-	return(0);
-    }
+	if(fstat(fd, &buf)) {
+		if(moves > 1) pline("Cannot get status of saved level? ");
+		else pline("Cannot get status of saved game");
+		return(0);
+	}
+	if(comp_times(buf.st_mtime)) {
+		if(moves > 1) pline("Saved level is out of date");
+		else pline("Saved game is out of date. ");
+		/* This problem occurs enough times we need to give the player
+		 * some more information about what causes it, and how to fix.
+		 */
+		return(0);
+	}
 #  endif  /* MICRO */
 # endif /* WANT_GETHDATE */
-    return(1);
+	return(1);
 }
 #endif
 
 #ifdef PC_LOCKING
-static int
-eraseoldlocks()
-{
+static int eraseoldlocks(void) {
 	int i;
 
 	/* cannot use maxledgerno() here, because we need to find a lock name
@@ -86,9 +81,7 @@ eraseoldlocks()
 	return(1);					/* success! */
 }
 
-void
-getlock()
-{
+void getlock(void) {
 	int fd, c, ci, ct;
 	char tbuf[BUFSZ];
 	const char *fq_lock;
@@ -114,9 +107,9 @@ getlock()
 	close(fd);
 
 	if(iflags.window_inited) {
-	  pline("There is already a game in progress under your name.");
-	  pline("You may be able to use \"recover %s\" to get it back.\n",tbuf);
-	  c = yn("Do you want to destroy the old game?");
+		pline("There is already a game in progress under your name.");
+		pline("You may be able to use \"recover %s\" to get it back.\n",tbuf);
+		c = yn("Do you want to destroy the old game?");
 	} else {
 		c = 'n';
 		ct = 0;
@@ -125,16 +118,16 @@ getlock()
 		msmsg("\"recover %s\" to get it back.",tbuf);
 		msmsg("\nDo you want to destroy the old game? [yn] ");
 		while ((ci=nhgetch()) != '\n') {
-		    if (ct > 0) {
-			msmsg("\b \b");
-			ct = 0;
-			c = 'n';
-		    }
-		    if (ci == 'y' || ci == 'n' || ci == 'Y' || ci == 'N') {
-		    	ct = 1;
-		        c = ci;
-		        msmsg("%c",c);
-		    }
+			if (ct > 0) {
+				msmsg("\b \b");
+				ct = 0;
+				c = 'n';
+			}
+			if (ci == 'y' || ci == 'n' || ci == 'Y' || ci == 'N') {
+				ct = 1;
+				c = ci;
+				msmsg("%c",c);
+			}
 		}
 	}
 	if(c == 'y' || c == 'Y')
@@ -148,11 +141,11 @@ getlock()
 			chdirx(orgdir, 0);
 			error("Couldn't destroy old game.");
 		}
-	else {
-		unlock_file(HLOCK);
-		chdirx(orgdir, 0);
-		error("%s", "");
-	}
+		else {
+			unlock_file(HLOCK);
+			chdirx(orgdir, 0);
+			error("%s", "");
+		}
 
 gotlock:
 	fd = creat(fq_lock, FCMASK);
@@ -162,7 +155,7 @@ gotlock:
 		error("cannot creat lock file (%s.)", fq_lock);
 	} else {
 		if(write(fd, (char *) &hackpid, sizeof(hackpid))
-		    != sizeof(hackpid)){
+				!= sizeof(hackpid)){
 			chdirx(orgdir, 0);
 			error("cannot write lock (%s)", fq_lock);
 		}
@@ -175,14 +168,11 @@ gotlock:
 # endif /* PC_LOCKING */
 
 # ifndef WIN32
-void
-regularize(s)
 /*
  * normalize file name - we don't like .'s, /'s, spaces, and
  * lots of other things
  */
-char *s;
-{
+void regularize(char *s) {
 	char *lp;
 
 	for (lp = s; *lp; lp++)
@@ -194,5 +184,5 @@ char *s;
 # endif /* WIN32 */
 
 #ifdef __EMX__
-void seteuid(int i){;}
+void seteuid(int i) {}
 #endif

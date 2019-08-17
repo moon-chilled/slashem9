@@ -1336,7 +1336,7 @@ extern int do_play_instrument(struct obj *);
 extern void init_lan_features(void);
 extern char *lan_username(void);
 # ifdef LAN_MAIL
-extern boolean lan_mail_check(void);
+extern bool lan_mail_check(void);
 extern void lan_mail_read(struct obj *);
 extern void lan_mail_init(void);
 extern void lan_mail_finish(void);
@@ -1451,7 +1451,7 @@ extern int dohistory(void);
 
 #if defined(MICRO) || defined(WIN32)
 # ifdef CHDIR
-extern void chdirx(char *,boolean);
+extern void chdirx(char *, bool);
 # endif /* CHDIR */
 #endif /* MICRO || WIN32 */
 

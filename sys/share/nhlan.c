@@ -36,8 +36,7 @@ struct lan_mail_struct mailmessage;
 #endif /* LAN_MAIL */
 
 
-void init_lan_features()
-{
+void init_lan_features(void) {
 	lan_username();
 #ifdef LAN_MAIL
 	lan_mail_init();
@@ -53,37 +52,32 @@ void init_lan_features()
 char lusername[MAX_LAN_USERNAME];
 int lusername_size = MAX_LAN_USERNAME;
 
-char *lan_username()
-{
+char *lan_username(void) {
 	char *lu;
 	lu = get_username(&lusername_size);
 	if (lu) {
-	 strcpy(lusername, lu);
-	 return lusername;
-	} else return NULL;
+		strcpy(lusername, lu);
+		return lusername;
+	} else {
+		return NULL;
+	}
 }
 
 # ifdef LAN_MAIL
 #if 0
-static void
-mail_by_pline(msg)
-struct lan_mail_struct *msg;
-{
-	long	size;
+static void mail_by_pline(struct lan_mail_struct *msg) {
+	long size;
 
 	for (size = 0; size < qt_msg->size; size += (long)strlen(in_line)) {
-	    dlb_fgets(in_line, 80, msg_file);
-	    convert_line();
-	    pline(out_line);
+		dlb_fgets(in_line, 80, msg_file);
+		convert_line();
+		pline(out_line);
 	}
 
 }
 #endif /* 0 */
 
-static void
-mail_by_window(msg)
-struct lan_mail_struct *msg;
-{
+static void mail_by_window(struct lan_mail_struct *msg) {
 	char buf[BUFSZ];
 	winid datawin = create_nhwindow(NHW_TEXT);
 	char *get, *put;
@@ -92,26 +86,26 @@ struct lan_mail_struct *msg;
 	get = msg->body;
 	put = buf;
 	while (*get) {
-	     if (ccount > 79) {
-	     	*put = '\0';
-	     	putstr(datawin, 0, buf);
-	     	put = buf;
-		ccount = 0;
-	     }
-	     if (*get == '\r') {
-		get++;
-	     } else if (*get == '\n') {
-	     	*put = '\0';
-	     	putstr(datawin, 0, buf);
-	     	put = buf;
-	     	get++;
-		ccount = 0;
-	     } else if (!isprint(*get)) {
-		get++;
-	     } else {
-	 	*put++ = *get++;
-		ccount++;
-	     }
+		if (ccount > 79) {
+			*put = '\0';
+			putstr(datawin, 0, buf);
+			put = buf;
+			ccount = 0;
+		}
+		if (*get == '\r') {
+			get++;
+		} else if (*get == '\n') {
+			*put = '\0';
+			putstr(datawin, 0, buf);
+			put = buf;
+			get++;
+			ccount = 0;
+		} else if (!isprint(*get)) {
+			get++;
+		} else {
+			*put++ = *get++;
+			ccount++;
+		}
 	}
 	*put = '\0';
 	putstr(datawin, 0, buf);
@@ -121,17 +115,14 @@ struct lan_mail_struct *msg;
 }
 
 /* this returns true if there is mail ready to be read */
-boolean lan_mail_check()
-{
+bool lan_mail_check(void) {
 	if (flags.biff) {
 		if (mail_check()) return true;
 	}
 	return false;
 }
 
-void lan_mail_read(otmp)
-struct obj *otmp;
-{
+void lan_mail_read(struct obj *otmp) {
 	if (flags.biff) {
 		mail_fetch(&mailmessage);
 		/* after a successful fetch iflags.lan_mail_fetched
@@ -142,24 +133,22 @@ struct obj *otmp;
 		 * saved (nor should it be since it may be
 		 * way out of context by then).
 		 */
-		 if (iflags.lan_mail_fetched) {
-		    if (mailmessage.body_in_ram) {
-		    	mail_by_window(&mailmessage);
-		 	return;
-		    }
-		 }
+		if (iflags.lan_mail_fetched) {
+			if (mailmessage.body_in_ram) {
+				mail_by_window(&mailmessage);
+				return;
+			}
+		}
 	}
 	pline_The("text has faded and is no longer readable.");
 }
 
-void lan_mail_init()
-{
+void lan_mail_init(void) {
 	if (!flags.biff) return;
 	mail_init(lusername);
 }
 
-void lan_mail_finish()
-{
+void lan_mail_finish(void) {
 	if (iflags.lan_mail)
 		mail_finish();
 }
@@ -170,8 +159,7 @@ void lan_mail_finish()
  * may already be unavailable. Just clean up the NetHack side
  * of things to prevent a crash.
  */
-void lan_mail_terminate()
-{
+void lan_mail_terminate(void) {
 	/* Step 1. Clear iflags.lan_mail to indicate "not inited" */
 	iflags.lan_mail = false;
 

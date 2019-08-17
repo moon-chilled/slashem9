@@ -47,43 +47,34 @@ extern boolean getreturn_enabled;	/* from sys/share/pcsys.c */
 static char *exepath(char *);
 #endif
 
-int main(int,char **);
+int main(int, char**);
 
-extern void pcmain(int,char **);
+extern void pcmain(int, char**);
 
 /* If the graphics version is built, we don't need a main; it is skipped
  * to help MinGW decide which entry point to choose. If both main and
  * WinMain exist, the resulting executable won't work correctly.
  */
-int
-main(argc,argv)
-int argc;
-char *argv[];
-{
-     pcmain(argc,argv);
+int main(int argc, char **argv) {
+	pcmain(argc,argv);
 #ifdef LAN_FEATURES
-     init_lan_features();
+	init_lan_features();
 #endif
-     moveloop();
-     nethack_exit(EXIT_SUCCESS);
-     /*NOTREACHED*/
-     return 0;
+	moveloop();
+	nethack_exit(EXIT_SUCCESS);
+	/*NOTREACHED*/
+	return 0;
 }
 
-void
-pcmain(argc,argv)
-int argc;
-char *argv[];
-{
-
+void pcmain(int argc, char **argv) { {
 	int fd;
 	char *dir;
 
 #ifdef __DJGPP__
-        if (*argv[0]) hname = argv[0];  /* DJGPP can give us argv[0] */
-        else
+	if (*argv[0]) hname = argv[0];  /* DJGPP can give us argv[0] */
+	else
 #endif
-                hname = "NetHack";      /* used for syntax messages */
+		hname = "NetHack";      /* used for syntax messages */
 
 	choose_windows(DEFAULT_WINDOW_SYS);
 
@@ -108,13 +99,13 @@ char *argv[];
 		hackdir[PATHLEN-1] = '\0';
 #ifdef NOCWD_ASSUMPTIONS
 		{
-		    int prefcnt;
+			int prefcnt;
 
-		    fqn_prefix[0] = alloc(strlen(hackdir)+2);
-		    strcpy(fqn_prefix[0], hackdir);
-		    append_slash(fqn_prefix[0]);
-		    for (prefcnt = 1; prefcnt < PREFIX_COUNT; prefcnt++)
-			fqn_prefix[prefcnt] = fqn_prefix[0];
+			fqn_prefix[0] = alloc(strlen(hackdir)+2);
+			strcpy(fqn_prefix[0], hackdir);
+			append_slash(fqn_prefix[0]);
+			for (prefcnt = 1; prefcnt < PREFIX_COUNT; prefcnt++)
+				fqn_prefix[prefcnt] = fqn_prefix[0];
 		}
 #endif
 #ifdef CHDIR
@@ -124,13 +115,13 @@ char *argv[];
 #if defined(WIN32) && defined(PROXY_GRAPHICS)
 	/* Handle --proxy before options, if supported */
 	if (argc > 1 && !strcmp(argv[1], "--proxy")) {
-	    argv[1] = argv[0];
-	    argc--;
-	    argv++;
-	    set_binary_mode(0, O_RDONLY | O_BINARY);
-	    set_binary_mode(1, O_WRONLY | O_BINARY);
-	    choose_windows("proxy");
-	    lock_windows(true);		/* Can't be overridden from options */
+		argv[1] = argv[0];
+		argc--;
+		argv++;
+		set_binary_mode(0, O_RDONLY | O_BINARY);
+		set_binary_mode(1, O_WRONLY | O_BINARY);
+		choose_windows("proxy");
+		lock_windows(true);		/* Can't be overridden from options */
 	}
 #endif
 	initoptions();
@@ -139,49 +130,49 @@ char *argv[];
 #ifndef LATTICE
 		strcpy(hackdir, orgdir);
 #else
-		strcpy(hackdir, HACKDIR);
+	strcpy(hackdir, HACKDIR);
 #endif
 	if(argc > 1) {
-	    if (!strncmp(argv[1], "-d", 2) && argv[1][2] != 'e') {
-		/* avoid matching "-dec" for DECgraphics; since the man page
-		 * says -d directory, hope nobody's using -desomething_else
-		 */
-		argc--;
-		argv++;
-		dir = argv[0]+2;
-		if(*dir == '=' || *dir == ':') dir++;
-		if(!*dir && argc > 1) {
+		if (!strncmp(argv[1], "-d", 2) && argv[1][2] != 'e') {
+			/* avoid matching "-dec" for DECgraphics; since the man page
+			 * says -d directory, hope nobody's using -desomething_else
+			 */
 			argc--;
 			argv++;
-			dir = argv[0];
+			dir = argv[0]+2;
+			if(*dir == '=' || *dir == ':') dir++;
+			if(!*dir && argc > 1) {
+				argc--;
+				argv++;
+				dir = argv[0];
+			}
+			if(!*dir)
+				error("Flag -d must be followed by a directory name.");
+			strcpy(hackdir, dir);
 		}
-		if(!*dir)
-		    error("Flag -d must be followed by a directory name.");
-		strcpy(hackdir, dir);
-	    }
-	    if (argc > 1) {
+		if (argc > 1) {
 
-		/*
-		 * Now we know the directory containing 'record' and
-		 * may do a prscore().
-		 */
-		if (!strncmp(argv[1], "-s", 2)) {
+			/*
+			 * Now we know the directory containing 'record' and
+			 * may do a prscore().
+			 */
+			if (!strncmp(argv[1], "-s", 2)) {
 #ifdef CHDIR
-			chdirx(hackdir,0);
+				chdirx(hackdir,0);
 #endif
-			prscore(argc, argv);
-			nethack_exit(EXIT_SUCCESS);
-		}
+				prscore(argc, argv);
+				nethack_exit(EXIT_SUCCESS);
+			}
 
-		/* Don't initialize the window system just to print usage */
-                /* WAC '--help' inits help */
-		if (!strncmp(argv[1], "-?", 2)
-                    || !strncmp(argv[1], "--help", 6)
-                    || !strncmp(argv[1], "/?", 2)) {
-			nhusage();
-			nethack_exit(EXIT_SUCCESS);
+			/* Don't initialize the window system just to print usage */
+			/* WAC '--help' inits help */
+			if (!strncmp(argv[1], "-?", 2)
+					|| !strncmp(argv[1], "--help", 6)
+					|| !strncmp(argv[1], "/?", 2)) {
+				nhusage();
+				nethack_exit(EXIT_SUCCESS);
+			}
 		}
-	    }
 	}
 
 	/*
@@ -203,8 +194,8 @@ char *argv[];
 	if (!*plname)
 		askname();
 	plnamesuffix(); 	/* strip suffix from name; calls askname() */
-				/* again if suffix was whole name */
-				/* accepts any suffix */
+	/* again if suffix was whole name */
+	/* accepts any suffix */
 #ifdef WIZARD
 	if (wizard) {
 		if(!strcmp(plname, WIZARD))
@@ -243,7 +234,7 @@ char *argv[];
 #endif
 
 	/* Set up level 0 file to keep the game state.
-	 */
+	*/
 	fd = create_levelfile(0, NULL);
 	if (fd < 0) {
 		raw_print("Cannot create lock file");
@@ -290,8 +281,8 @@ char *argv[];
 #endif
 #ifdef NEWS
 		if(iflags.news){
-		    display_file_area(NEWS_AREA, NEWS, false);
-		    iflags.news = false;
+			display_file_area(NEWS_AREA, NEWS, false);
+			iflags.news = false;
 		}
 #endif
 		pline("Restoring save file...");
@@ -326,12 +317,12 @@ not_recovered:
 		sense_engr_at(u.ux,u.uy,false);
 	}
 #ifdef __DJGPP__
-        /* WAC try to set title bar for Win95 DOS Boxes */
-/*        {
-                char titlebuf[BUFSZ];
-                sprintf(titlebuf,"%s - %s", DEF_GAME_NAME, plname);
-                w95_setapptitle (titlebuf);
-        }*/
+	/* WAC try to set title bar for Win95 DOS Boxes */
+	/*        {
+		  char titlebuf[BUFSZ];
+		  sprintf(titlebuf,"%s - %s", DEF_GAME_NAME, plname);
+		  w95_setapptitle (titlebuf);
+		  }*/
 #endif
 
 #ifndef NO_SIGNAL
@@ -340,11 +331,7 @@ not_recovered:
 	return;
 }
 
-static void
-process_options(argc, argv)
-int argc;
-char *argv[];
-{
+static void process_options(int argc, char **argv) {
 	int i;
 
 
@@ -355,137 +342,130 @@ char *argv[];
 		argv++;
 		argc--;
 		switch(argv[0][1]){
-		case 'a':
-			if (argv[0][2]) {
-			    if ((i = str2align(&argv[0][2])) >= 0)
-			    	flags.initalign = i;
-			} else if (argc > 1) {
-				argc--;
-				argv++;
-			    if ((i = str2align(argv[0])) >= 0)
-			    	flags.initalign = i;
-			}
-			break;
-		case 'D':
-		case 'Z':
+			case 'a':
+				if (argv[0][2]) {
+					if ((i = str2align(&argv[0][2])) >= 0)
+						flags.initalign = i;
+				} else if (argc > 1) {
+					argc--;
+					argv++;
+					if ((i = str2align(argv[0])) >= 0)
+						flags.initalign = i;
+				}
+				break;
+			case 'D':
+			case 'Z':
 # ifdef WIZARD
-			/* If they don't have a valid wizard name, it'll be
-			 * changed to discover later.  Cannot check for
-			 * validity of the name right now--it might have a
-			 * character class suffix, for instance.
-			 */
+				/* If they don't have a valid wizard name, it'll be
+				 * changed to discover later.  Cannot check for
+				 * validity of the name right now--it might have a
+				 * character class suffix, for instance.
+				 */
 				wizard = true;
 				break;
 # endif
-		case 'X':
-			discover = true;
-			break;
-#ifdef NEWS
-		case 'n':
-			iflags.news = false;
-			break;
-#endif
-		case 'u':
-			if(argv[0][2])
-			  strncpy(plname, argv[0]+2, sizeof(plname)-1);
-			else if(argc > 1) {
-			  argc--;
-			  argv++;
-			  strncpy(plname, argv[0], sizeof(plname)-1);
-			} else
-				raw_print("Player name expected after -u");
-			break;
-		case 'i':
-			if (!strncmpi(argv[0]+1, "IBM", 3))
-				switch_graphics(IBM_GRAPHICS);
-			break;
-		case 'd':
-			if (!strncmpi(argv[0]+1, "DEC", 3))
-				switch_graphics(DEC_GRAPHICS);
-			break;
-		case 'g':
-			if (argv[0][2]) {
-			    if ((i = str2gend(&argv[0][2])) >= 0)
-			    	flags.initgend = i;
-			} else if (argc > 1) {
-				argc--;
-				argv++;
-			    if ((i = str2gend(argv[0])) >= 0)
-			    	flags.initgend = i;
-			}
-			break;
-		case 'p': /* profession (role) */
-			if (argv[0][2]) {
-			    if ((i = str2role(&argv[0][2])) >= 0)
-			    	flags.initrole = i;
-			} else if (argc > 1) {
-				argc--;
-				argv++;
-			    if ((i = str2role(argv[0])) >= 0)
-			    	flags.initrole = i;
-			}
-			break;
-		case 'r': /* race */
-			if (argv[0][2]) {
-			    if ((i = str2race(&argv[0][2])) >= 0)
-			    	flags.initrace = i;
-			} else if (argc > 1) {
-				argc--;
-				argv++;
-			    if ((i = str2race(argv[0])) >= 0)
-			    	flags.initrace = i;
-			}
-			break;
-		case '@':
-			flags.randomall = 1;
-			break;
-		default:
-			if ((i = str2role(&argv[0][1])) >= 0) {
-			    flags.initrole = i;
+			case 'X':
+				discover = true;
 				break;
-			} else raw_printf("\nUnknown switch: %s", argv[0]);
-			/* FALL THROUGH */
-		case '?':
-			nhusage();
-			nethack_exit(EXIT_SUCCESS);
+#ifdef NEWS
+			case 'n':
+				iflags.news = false;
+				break;
+#endif
+			case 'u':
+				if(argv[0][2])
+					strncpy(plname, argv[0]+2, sizeof(plname)-1);
+				else if(argc > 1) {
+					argc--;
+					argv++;
+					strncpy(plname, argv[0], sizeof(plname)-1);
+				} else
+					raw_print("Player name expected after -u");
+				break;
+			case 'i':
+				if (!strncmpi(argv[0]+1, "IBM", 3))
+					switch_graphics(IBM_GRAPHICS);
+				break;
+			case 'd':
+				if (!strncmpi(argv[0]+1, "DEC", 3))
+					switch_graphics(DEC_GRAPHICS);
+				break;
+			case 'g':
+				if (argv[0][2]) {
+					if ((i = str2gend(&argv[0][2])) >= 0)
+						flags.initgend = i;
+				} else if (argc > 1) {
+					argc--;
+					argv++;
+					if ((i = str2gend(argv[0])) >= 0)
+						flags.initgend = i;
+				}
+				break;
+			case 'p': /* profession (role) */
+				if (argv[0][2]) {
+					if ((i = str2role(&argv[0][2])) >= 0)
+						flags.initrole = i;
+				} else if (argc > 1) {
+					argc--;
+					argv++;
+					if ((i = str2role(argv[0])) >= 0)
+						flags.initrole = i;
+				}
+				break;
+			case 'r': /* race */
+				if (argv[0][2]) {
+					if ((i = str2race(&argv[0][2])) >= 0)
+						flags.initrace = i;
+				} else if (argc > 1) {
+					argc--;
+					argv++;
+					if ((i = str2race(argv[0])) >= 0)
+						flags.initrace = i;
+				}
+				break;
+			case '@':
+				flags.randomall = 1;
+				break;
+			default:
+				if ((i = str2role(&argv[0][1])) >= 0) {
+					flags.initrole = i;
+					break;
+				} else raw_printf("\nUnknown switch: %s", argv[0]);
+				/* FALL THROUGH */
+			case '?':
+				nhusage();
+				nethack_exit(EXIT_SUCCESS);
 		}
 	}
 }
 
-static void
-nhusage()
-{
+static void nhusage(void) {
 	char buf1[BUFSZ];
 
 	/* -role still works for those cases which aren't already taken, but
 	 * is deprecated and will not be listed here.
 	 */
-	sprintf(buf1,
-"\nUsage: %s [-d dir] -s [-r race] [-p profession] [maxrank] [name]...\n       or",
-		hname);
+	sprintf(buf1, "\nUsage: %s [-d dir] -s [-r race] [-p profession] [maxrank] [name]...\n       or", hname);
 	if (!iflags.window_inited)
 		raw_printf(buf1);
 	else
 		printf(buf1);
-	sprintf(buf1,
-	 "\n       %s [-d dir] [-u name] [-r race] [-p profession] [-[DX]]",
-		hname);
+
+	sprintf(buf1, "\n       %s [-d dir] [-u name] [-r race] [-p profession] [-[DX]]", hname);
 #ifdef NEWS
 	strcat(buf1," [-n]");
 #endif
 	strcat(buf1," [-I] [-i] [-d]");
-	if (!iflags.window_inited)
+
+	if (!iflags.window_inited) {
 		raw_printf("%s\n",buf1);
-	else
+	} else {
 		printf("%s\n",buf1);
+	}
 }
 
 #ifdef CHDIR
-void
-chdirx(dir, wr)
-char *dir;
-boolean wr;
-{
+void chdirx(char *dir, bool wr) {
 	static char thisdir[] = ".";
 	if(dir && chdir(dir) < 0) {
 		error("Cannot chdir to %s.", dir);
@@ -506,11 +486,9 @@ boolean wr;
 
 #ifdef PORT_HELP
 # ifdef WIN32
-void
-port_help()
-{
-    /* display port specific help file */
-    display_file_area(FILE_AREA_SHARE, PORT_HELP, 1 );
+void port_help(void) {
+	/* display port specific help file */
+	display_file_area(FILE_AREA_SHARE, PORT_HELP, 1 );
 }
 # endif /* WIN32 */
 #endif /* PORT_HELP */
@@ -525,9 +503,7 @@ port_help()
 #define EXEPATHBUFSZ 256
 char exepathbuf[EXEPATHBUFSZ];
 
-char *exepath(str)
-char *str;
-{
+char *exepath(char *str) {
 	char *tmp, *tmp2;
 	int bsize;
 
@@ -535,17 +511,16 @@ char *str;
 	bsize = EXEPATHBUFSZ;
 	tmp = exepathbuf;
 #ifndef WIN32
-	strcpy (tmp, str);
-#else
-	#ifdef UNICODE
+	strcpy(tmp, str);
+#elif defined(UNICODE)
 	{
 		TCHAR wbuf[BUFSZ];
 		GetModuleFileName((HANDLE)0, wbuf, BUFSZ);
 		WideCharToMultiByte(CP_ACP, 0, wbuf, -1, tmp, bsize, NULL, NULL);
 	}
-	#else
-		*(tmp + GetModuleFileName((HANDLE)0, tmp, bsize)) = '\0';
-	#endif
+#else
+	*(tmp + GetModuleFileName((HANDLE)0, tmp, bsize)) = '\0';
+#endif
 #endif
 	tmp2 = strrchr(tmp, PATH_SEPARATOR);
 	if (tmp2) *tmp2 = '\0';

@@ -71,10 +71,7 @@ static void outdec(char *, FILE *, int);
 /* single-character decode */
 #define DEC(c)	(((c) - ' ') & 077)
 
-int main(argc, argv)
-int argc;
-char **argv;
-{
+int main(int argc, char **argv) {
 	FILE *in, *out;
 	int mode;
 	char dest[128];
@@ -158,11 +155,7 @@ char **argv;
 /*
  * copy from in to out, decoding as you go along.
  */
-void
-decode(in, out)
-FILE *in;
-FILE *out;
-{
+void decode(FILE *in, FILE *out) {
 	char buf[80];
 	char *bp;
 	int n, i, expected;
@@ -196,12 +189,7 @@ FILE *out;
  * be output to file f.  n is used to tell us not to
  * output all of them at the end of the file.
  */
-void
-outdec(p, f, n)
-char *p;
-FILE *f;
-int n;
-{
+void outdec(char *p, FILE *f, int n) {
 	int c1, c2, c3;
 
 	c1 = DEC(*p) << 2 | DEC(p[1]) >> 4;
@@ -225,10 +213,7 @@ int n;
 #define	NULL	0
 #endif
 
-char *
-index(sp, c)
-char *sp, c;
-{
+char *index(char *sp, char c) {
 	do {
 		if (*sp == c)
 			return(sp);
@@ -236,4 +221,3 @@ char *sp, c;
 	return(NULL);
 }
 #endif
-

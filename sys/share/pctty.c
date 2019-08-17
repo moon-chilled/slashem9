@@ -14,8 +14,7 @@ char erase_char, kill_char;
  * and switch off tab expansion if necessary.
  * Called by startup() in termcap.c and after returning from ! or ^Z
  */
-void
-gettty(){
+void gettty(void) {
 	erase_char = '\b';
 	kill_char = 21;		/* cntl-U */
 	iflags.cbreak = true;
@@ -23,19 +22,14 @@ gettty(){
 }
 
 /* reset terminal to original state */
-void
-settty(s)
-const char *s;
-{
+void settty(const char *s) {
 	end_screen();
 	if(s) raw_print(s);
 	enable_ctrlP();		/* turn on ^P processing */
 }
 
 /* called by init_nhwindows() and resume_nhwindows() */
-void
-setftty()
-{
+void setftty(void) {
 	start_screen();
 }
 

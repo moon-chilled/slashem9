@@ -31,9 +31,7 @@ extern int GUILaunched;    /* from nttty.c */
 
 #if defined(MICRO) || defined(WIN32)
 
-void
-flushout()
-{
+void flushout(void) {
 	fflush(stdout);
 	return;
 }
@@ -43,9 +41,7 @@ static const char *COMSPEC = "COMSPEC";
 #define getcomspec() nh_getenv(COMSPEC)
 
 # ifdef SHELL
-int
-dosh()
-{
+int dosh(void) {
 	extern char orgdir[];
 	char *comspec;
 # ifndef __GO32__
@@ -78,10 +74,7 @@ dosh()
  * Add a backslash to any name not ending in /, \ or :	 There must
  * be room for the \
  */
-void
-append_slash(name)
-char *name;
-{
+void append_slash(char *name) {
 	char *ptr;
 
 	if (!*name)
@@ -98,10 +91,7 @@ char *name;
 boolean getreturn_enabled;
 #endif
 
-void
-getreturn(str)
-const char *str;
-{
+void getreturn(const char *str) {
 #ifdef WIN32
 	if (!getreturn_enabled) return;
 #endif
@@ -125,7 +115,7 @@ FILE *fopenp(const char *name, const char *mode) {
 	FILE *fp;
 
 	/* Try the default directory first.  Then look along PATH.
-	 */
+	*/
 	strncpy(buf, name, BUFSIZ - 1);
 	buf[BUFSIZ-1] = '\0';
 	if ((fp = fopen(buf, mode))) {
@@ -198,8 +188,7 @@ static void msexit(void) {
  *
  * A more elegant solution will be sought after 3.3.0 is released.
  */
-void dircheck()
-{
+void dircheck(void) {
 	char dirbuf[BUFSZ];
 	dirbuf[0] = '\0';
 	if (getcwd(dirbuf, sizeof dirbuf) != NULL)

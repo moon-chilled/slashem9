@@ -201,24 +201,22 @@ static  long		*end_ptr		= &randtbl[ DEG_3 + 1 ];
  * values produced by this routine.
  */
 
-void
-srandom( x )
+void srandom(unsigned x) {
+	int i;
 
-    unsigned		x;
-{
-    	 int		i;
+	if (rand_type == TYPE_0) {
+		state[0] = x;
+	} else {
+		state[0] = x;
+		for (i = 1; i < rand_deg; i++) {
+			state[i] = 1103515245*state[i - 1] + 12345;
+		}
+		fptr = &state[rand_sep];
+		rptr = &state[0];
 
-	if(  rand_type  ==  TYPE_0  )  {
-	    state[ 0 ] = x;
-	}
-	else  {
-	    state[ 0 ] = x;
-	    for( i = 1; i < rand_deg; i++ )  {
-		state[i] = 1103515245*state[i - 1] + 12345;
-	    }
-	    fptr = &state[ rand_sep ];
-	    rptr = &state[ 0 ];
-	    for( i = 0; i < 10*rand_deg; i++ )  random();
+		for (i = 0; i < 10*rand_deg; i++) {
+			random();
+		}
 	}
 }
 
@@ -240,58 +238,52 @@ srandom( x )
  * Returns a pointer to the old state.
  */
 
-char  *
-initstate( seed, arg_state, n )
+char *initstate(unsigned seed, char *arg_state, int n) {
+	char *ostate = (char *)( &state[ -1 ] );
 
-    unsigned		seed;			/* seed for R. N. G. */
-    char		*arg_state;		/* pointer to state array */
-    int			n;			/* # bytes of state info */
-{
-	 char		*ostate		= (char *)( &state[ -1 ] );
-
-	if(  rand_type  ==  TYPE_0  )  state[ -1 ] = rand_type;
-	else  state[ -1 ] = MAX_TYPES*(rptr - state) + rand_type;
-	if(  n  <  BREAK_1  )  {
-	    if(  n  <  BREAK_0  )  {
-		impossible(
- "initstate: not enough state (%d bytes) with which to do jack; ignored.", n);
-		return NULL;
-	    }
-	    rand_type = TYPE_0;
-	    rand_deg = DEG_0;
-	    rand_sep = SEP_0;
-	}
-	else  {
-	    if(  n  <  BREAK_2  )  {
-		rand_type = TYPE_1;
-		rand_deg = DEG_1;
-		rand_sep = SEP_1;
-	    }
-	    else  {
-		if(  n  <  BREAK_3  )  {
-		    rand_type = TYPE_2;
-		    rand_deg = DEG_2;
-		    rand_sep = SEP_2;
+	if( rand_type == TYPE_0 ) state[ -1 ] = rand_type;
+	else state[ -1 ] = MAX_TYPES*(rptr - state) + rand_type;
+	if( n < BREAK_1 ) {
+		if( n < BREAK_0 ) {
+			impossible(
+					"initstate: not enough state (%d bytes) with which to do jack; ignored.", n);
+			return NULL;
 		}
-		else  {
-		    if(  n  <  BREAK_4  )  {
-			rand_type = TYPE_3;
-			rand_deg = DEG_3;
-			rand_sep = SEP_3;
-		    }
-		    else  {
-			rand_type = TYPE_4;
-			rand_deg = DEG_4;
-			rand_sep = SEP_4;
-		    }
-		}
-	    }
+		rand_type = TYPE_0;
+		rand_deg = DEG_0;
+		rand_sep = SEP_0;
 	}
-	state = &(  ( (long *)arg_state )[1]  );	/* first location */
-	end_ptr = &state[ rand_deg ];	/* must set end_ptr before srandom */
+	else {
+		if( n < BREAK_2 ) {
+			rand_type = TYPE_1;
+			rand_deg = DEG_1;
+			rand_sep = SEP_1;
+		}
+		else {
+			if( n < BREAK_3 ) {
+				rand_type = TYPE_2;
+				rand_deg = DEG_2;
+				rand_sep = SEP_2;
+			}
+			else {
+				if( n < BREAK_4 ) {
+					rand_type = TYPE_3;
+					rand_deg = DEG_3;
+					rand_sep = SEP_3;
+				}
+				else {
+					rand_type = TYPE_4;
+					rand_deg = DEG_4;
+					rand_sep = SEP_4;
+				}
+			}
+		}
+	}
+	state = &( ( (long *)arg_state )[1] ); /* first location */
+	end_ptr = &state[ rand_deg ]; /* must set end_ptr before srandom */
 	srandom( seed );
-	if(  rand_type  ==  TYPE_0  )  state[ -1 ] = rand_type;
-	else  state[ -1 ] = MAX_TYPES*(rptr - state) + rand_type;
+	if( rand_type == TYPE_0 ) state[ -1 ] = rand_type;
+	else state[ -1 ] = MAX_TYPES*(rptr - state) + rand_type;
 	return( ostate );
 }
 
@@ -309,11 +301,7 @@ initstate( seed, arg_state, n )
  * Returns a pointer to the old state information.
  */
 
-char  *
-setstate( arg_state )
-
-    char		*arg_state;
-{
+char *setstate( char		*arg_state) {
 	 long		*new_state	= (long *)arg_state;
 	 int		type		= new_state[0]%MAX_TYPES;
 	 int		rear		= new_state[0]/MAX_TYPES;
@@ -362,9 +350,7 @@ setstate( arg_state )
  * Returns a 31-bit random number.
  */
 
-long
-random()
-{
+long random(void) {
 	long		i;
 
 	if(  rand_type  ==  TYPE_0  )  {
@@ -383,4 +369,3 @@ random()
 	}
 	return( i );
 }
-

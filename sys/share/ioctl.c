@@ -80,41 +80,35 @@ extern void linux_mapoff(void);
 #endif
 
 #ifdef AUX
-void
-catch_stp()
-{
-    signal(SIGTSTP, SIG_DFL);
-    dosuspend();
+void catch_stp(void) {
+	signal(SIGTSTP, SIG_DFL);
+	dosuspend();
 }
 #endif /* AUX */
 
-void
-getwindowsz()
-{
+void getwindowsz(void) {
 #undef USW_WIN_IOCTL
 #ifdef USE_WIN_IOCTL
-    /*
-     * ttysize is found on Suns and BSD
-     * winsize is found on Suns, BSD, and Ultrix
-     */
-    struct winsize ttsz;
-
-    if (ioctl(fileno(stdin), (int)TIOCGWINSZ, (char *)&ttsz) != -1) {
 	/*
-	 * Use the kernel's values for lines and columns if it has
-	 * any idea.
+	 * ttysize is found on Suns and BSD
+	 * winsize is found on Suns, BSD, and Ultrix
 	 */
-	if (ttsz.ws_row)
-	    LI = ttsz.ws_row;
-	if (ttsz.ws_col)
-	    CO = ttsz.ws_col;
-    }
+	struct winsize ttsz;
+
+	if (ioctl(fileno(stdin), (int)TIOCGWINSZ, (char *)&ttsz) != -1) {
+		/*
+		 * Use the kernel's values for lines and columns if it has
+		 * any idea.
+		 */
+		if (ttsz.ws_row)
+			LI = ttsz.ws_row;
+		if (ttsz.ws_col)
+			CO = ttsz.ws_col;
+	}
 #endif
 }
 
-void
-getioctls()
-{
+void getioctls(void) {
 #define POSIX_TYPES
 #ifdef BSD_JOB_CONTROL
 	ioctl(fileno(stdin), (int) TIOCGLTC, (char *) &ltchars);
@@ -132,13 +126,11 @@ getioctls()
 #endif
 	getwindowsz();
 #ifdef AUX
-	( void ) signal ( SIGTSTP , catch_stp ) ;
+	signal(SIGTSTP, catch_stp);
 #endif
 }
 
-void
-setioctls()
-{
+void setioctls(void) {
 #ifdef BSD_JOB_CONTROL
 	ioctl(fileno(stdin), (int) TIOCSLTC, (char *) &ltchars);
 #else
@@ -155,9 +147,7 @@ setioctls()
 }
 
 #ifdef SUSPEND		/* No longer implies BSD */
-int
-dosuspend()
-{
+int dosuspend(void) {
 
 # ifdef SIGTSTP
 	if(signal(SIGTSTP, SIG_IGN) == SIG_DFL) {
@@ -173,7 +163,7 @@ dosuspend()
 #  endif
 		signal(SIGTSTP, SIG_DFL);
 #  ifdef AUX
-		( void ) kill ( 0 , SIGSTOP ) ;
+		kill(0,SIGSTOP);
 #  else
 		kill(0, SIGTSTP);
 #  endif
