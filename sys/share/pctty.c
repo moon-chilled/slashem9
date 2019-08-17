@@ -1,10 +1,9 @@
-/*	SCCS Id: @(#)pctty.c	3.4	1990/22/02
+/*	SCCS Id: @(#)pctty.c	3.4	1990/22/02                */
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
 /* tty.c - (PC) version */
 
-#define NEED_VARARGS /* Uses ... */	/* comment line for pre-compiled headers */
 #include "hack.h"
 #include "wintty.h"
 
@@ -41,27 +40,20 @@ setftty()
 }
 
 #if defined(TIMED_DELAY) && defined(_MSC_VER)
-void
-msleep(mseconds)
-unsigned mseconds;
-{
+void msleep(unsigned mseconds) {
 	/* now uses clock() which is ANSI C */
 	clock_t goal;
 
 	goal = mseconds + clock();
-	while ( goal > clock()) {
-	    /* do nothing */
+	while (goal > clock()) {
+		/* do nothing */
 	}
 }
 #endif
 
 /* fatal error */
-/*VARARGS1*/
-
-void
-error VA_DECL(const char *,s)
+void error(const char *s, ...) {
 	VA_START(s);
-	VA_INIT(s, const char *);
 	/* error() may get called before tty is initialized */
 	if (iflags.window_inited) end_screen();
 	putchar('\n');

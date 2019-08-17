@@ -7,25 +7,20 @@
  *	mode for the makedefs / drg code.
  */
 
-#define NEED_VARARGS
 #include "config.h"
 
-/*VARARGS1*/
 boolean panicking;
-void panic(char *,...);
 
-void
-panic VA_DECL(char *,str)
+void panic(char *str, ...) {
 	VA_START(str);
-	VA_INIT(str, char *);
-	if(panicking++)
+	if (panicking++)
 		abort();    /* avoid loops - this should never happen*/
 
 	fputs(" ERROR:  ", stderr);
 	vfprintf(stderr, str, VA_ARGS);
 	fflush(stderr);
 #ifdef UNIX
-		abort();	/* generate core dump */
+	abort();	/* generate core dump */
 #endif
 	VA_END();
 	exit(EXIT_FAILURE);		/* redundant */

@@ -2,7 +2,6 @@
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
-#define NEED_VARARGS /* Uses ... */	/* comment line for pre-compiled headers */
 #include "hack.h"
 #include "epri.h"
 #ifdef WIZARD
@@ -49,43 +48,12 @@ static int msgpline_type(const char *msg) {
     return MSGTYP_NORMAL;
 }
 
-/*VARARGS1*/
-/* Note that these declarations rely on knowledge of the internals
- * of the variable argument handling stuff in "tradstdc.h"
- */
-
-#if defined(USE_STDARG) || defined(USE_VARARGS)
-static void vpline(const char *, va_list);
-
-void
-pline VA_DECL(const char *, line)
-	VA_START(line);
-	VA_INIT(line, char *);
-	vpline(line, VA_ARGS);
-	VA_END();
-}
 
 char prevmsg[BUFSZ];
 
-# ifdef USE_STDARG
-static void
-vpline(const char *line, va_list the_args) {
-# else
-static void
-vpline(line, the_args) const char *line; va_list the_args; {
-# endif
-
-#else	/* USE_STDARG | USE_VARARG */
-
-#define vpline pline
-
-void
-pline VA_DECL(const char *, line)
-#endif	/* USE_STDARG | USE_VARARG */
-
+static void vpline(const char *line, va_list the_args) {
 	char pbuf[BUFSZ];
 	int typ;
-/* Do NOT use VA_START and VA_END in here... see above */
 
 	if (!line || !*line) return;
 	if (index(line, '%')) {
@@ -110,11 +78,16 @@ pline VA_DECL(const char *, line)
 	if (typ == MSGTYP_STOP) display_nhwindow(WIN_MESSAGE, true); /* --more-- */
 }
 
-/*VARARGS1*/
-void
-Norep VA_DECL(const char *, line)
+void pline(const char *line, ...) {
 	VA_START(line);
-	VA_INIT(line, const char *);
+	vpline(line, VA_ARGS);
+	VA_END();
+}
+
+
+
+void Norep(const char *line, ...) {
+	VA_START(line);
 	no_repeat = true;
 	vpline(line, VA_ARGS);
 	no_repeat = false;
@@ -126,9 +99,7 @@ Norep VA_DECL(const char *, line)
 static char *you_buf = 0;
 static int you_buf_siz = 0;
 
-static char *
-You_buf (int siz)
-{
+static char *You_buf(int siz) {
 	if (siz > you_buf_siz) {
 		if (you_buf) free((void *) you_buf);
 		you_buf_siz = siz + 10;
@@ -137,9 +108,7 @@ You_buf (int siz)
 	return you_buf;
 }
 
-void
-free_youbuf (void)
-{
+void free_youbuf(void) {
 	if (you_buf) free((void *) you_buf),  you_buf = NULL;
 	you_buf_siz = 0;
 }
@@ -151,73 +120,52 @@ free_youbuf (void)
 #define YouMessage(pointer,prefix,text) \
  strcat((YouPrefix(pointer, prefix, text), pointer), text)
 
-/*VARARGS1*/
-void
-You VA_DECL(const char *, line)
+void You(const char *line, ...) {
 	char *tmp;
 	VA_START(line);
-	VA_INIT(line, const char *);
 	vpline(YouMessage(tmp, "You ", line), VA_ARGS);
 	VA_END();
 }
 
-/*VARARGS1*/
-void
-Your VA_DECL(const char *,line)
+void Your(const char *line, ...) {
 	char *tmp;
 	VA_START(line);
-	VA_INIT(line, const char *);
 	vpline(YouMessage(tmp, "Your ", line), VA_ARGS);
 	VA_END();
 }
 
-/*VARARGS1*/
-void
-You_feel VA_DECL(const char *,line)
+void You_feel(const char *line, ...) {
 	char *tmp;
 	VA_START(line);
-	VA_INIT(line, const char *);
 	vpline(YouMessage(tmp, "You feel ", line), VA_ARGS);
 	VA_END();
 }
 
 
-/*VARARGS1*/
-void
-You_cant VA_DECL(const char *,line)
+void You_cant(const char *line, ...) {
 	char *tmp;
 	VA_START(line);
-	VA_INIT(line, const char *);
 	vpline(YouMessage(tmp, "You can't ", line), VA_ARGS);
 	VA_END();
 }
 
-/*VARARGS1*/
-void
-pline_The VA_DECL(const char *,line)
+void pline_The(const char *line, ...) {
 	char *tmp;
 	VA_START(line);
-	VA_INIT(line, const char *);
 	vpline(YouMessage(tmp, "The ", line), VA_ARGS);
 	VA_END();
 }
 
-/*VARARGS1*/
-void
-There VA_DECL(const char *,line)
+void There(const char *line, ...) {
 	char *tmp;
 	VA_START(line);
-	VA_INIT(line, const char *);
 	vpline(YouMessage(tmp, "There ", line), VA_ARGS);
 	VA_END();
 }
 
-/*VARARGS1*/
-void
-You_hear VA_DECL(const char *,line)
+void You_hear(const char *line, ...) {
 	char *tmp;
 	VA_START(line);
-	VA_INIT(line, const char *);
 	if (Underwater)
 		YouPrefix(tmp, "You barely hear ", line);
 	else if (u.usleep)
@@ -228,13 +176,10 @@ You_hear VA_DECL(const char *,line)
 	VA_END();
 }
 
-/*VARARGS1*/
-void
-verbalize VA_DECL(const char *,line)
+void verbalize(const char *line, ...) {
 	char *tmp;
 	if (!flags.soundok) return;
 	VA_START(line);
-	VA_INIT(line, const char *);
 	tmp = You_buf((int)strlen(line) + sizeof "\"\"");
 	strcpy(tmp, "\"");
 	strcat(tmp, line);
@@ -243,59 +188,34 @@ verbalize VA_DECL(const char *,line)
 	VA_END();
 }
 
-/*VARARGS1*/
-/* Note that these declarations rely on knowledge of the internals
- * of the variable argument handling stuff in "tradstdc.h"
- */
+static void vraw_printf(const char *, va_list);
 
-#if defined(USE_STDARG) || defined(USE_VARARGS)
-static void vraw_printf(const char *,va_list);
-
-void
-raw_printf VA_DECL(const char *, line)
+void raw_printf(const char *line, ...) {
 	VA_START(line);
-	VA_INIT(line, char *);
 	vraw_printf(line, VA_ARGS);
 	VA_END();
 }
 
-# ifdef USE_STDARG
-static void
-vraw_printf(const char *line, va_list the_args) {
-# else
-static void
-vraw_printf(line, the_args) const char *line; va_list the_args; {
-# endif
-
-#else  /* USE_STDARG | USE_VARARG */
-
-void
-raw_printf VA_DECL(const char *, line)
-#endif
-/* Do NOT use VA_START and VA_END in here... see above */
-
-	if(!index(line, '%'))
-	    raw_print(line);
-	else {
-	    char pbuf[BUFSZ];
-	    vsprintf(pbuf,line,VA_ARGS);
-	    raw_print(pbuf);
+static void vraw_printf(const char *line, va_list the_args) {
+	if (!index(line, '%')) {
+		raw_print(line);
+	} else {
+		char pbuf[BUFSZ];
+		vsprintf(pbuf,line,VA_ARGS);
+		raw_print(pbuf);
 	}
 }
 
 
-/*VARARGS1*/
-void
-impossible VA_DECL(const char *, s)
+void impossible(const char *s, ...) {
 	VA_START(s);
-	VA_INIT(s, const char *);
 	if (program_state.in_impossible)
 		panic("impossible called impossible");
 	program_state.in_impossible = 1;
 	{
-	    char pbuf[BUFSZ];
-	    vsprintf(pbuf,s,VA_ARGS);
-	    paniclog("impossible", pbuf);
+		char pbuf[BUFSZ];
+		vsprintf(pbuf,s,VA_ARGS);
+		paniclog("impossible", pbuf);
 	}
 	vpline(s,VA_ARGS);
 	pline("Program in disorder - perhaps you'd better #quit.");
@@ -303,11 +223,8 @@ impossible VA_DECL(const char *, s)
 	VA_END();
 }
 
-const char *
-align_str(alignment)
-    aligntyp alignment;
-{
-    switch ((int)alignment) {
+const char *align_str(aligntyp alignment) {
+    switch (alignment) {
 	case A_CHAOTIC: return "chaotic";
 	case A_NEUTRAL: return "neutral";
 	case A_LAWFUL:	return "lawful";
@@ -316,9 +233,7 @@ align_str(alignment)
     return "unknown";
 }
 
-void
-mstatusline (struct monst *mtmp)
-{
+void mstatusline(struct monst *mtmp) {
 	aligntyp alignment;
 	char info[BUFSZ], monnambuf[BUFSZ];
 
@@ -401,9 +316,7 @@ mstatusline (struct monst *mtmp)
 		info);
 }
 
-void
-ustatusline (void)
-{
+void ustatusline(void) {
 	char info[BUFSZ];
 
 	info[0] = '\0';
@@ -476,12 +389,10 @@ ustatusline (void)
 		info);
 }
 
-void
-self_invis_message (void)
-{
+void self_invis_message(void) {
 	pline("%s %s.",
-	    Hallucination ? "Far out, man!  You" : "Gee!  All of a sudden, you",
-	    See_invisible ? "can see right through yourself" :
-		"can't see yourself");
+			Hallucination ? "Far out, man!  You" : "Gee!  All of a sudden, you",
+			See_invisible ? "can see right through yourself" :
+			"can't see yourself");
 }
 /*pline.c*/

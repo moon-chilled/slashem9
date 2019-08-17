@@ -8,7 +8,6 @@
  * arnold@ucsf-cgl, wcs@bo95b, cbcephus!pds and others.
  */
 
-#define NEED_VARARGS
 #include "hack.h"
 
 /*
@@ -414,9 +413,7 @@ check_linux_console()
 	}
 }
 
-void
-init_linux_cons()
-{
+void init_linux_cons(void) {
 # ifdef TTY_GRAPHICS
 	if (!strcmp(windowprocs.name, "tty") && linux_flag_console) {
 		atexit(linux_mapon);
@@ -429,13 +426,9 @@ init_linux_cons()
 #endif	/* __linux__ */
 
 
-#ifndef __begui__	/* the Be GUI will define its own error proc */
 /* fatal error */
-/*VARARGS1*/
-void
-error VA_DECL(const char *,s)
+void error(const char *s, ...) {
 	VA_START(s);
-	VA_INIT(s, const char *);
 	if(settty_needed)
 		settty(NULL);
 	vprintf(s,VA_ARGS);
@@ -443,4 +436,3 @@ error VA_DECL(const char *,s)
 	VA_END();
 	exit(EXIT_FAILURE);
 }
-#endif /* !__begui__ */

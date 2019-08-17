@@ -12,7 +12,6 @@
  */
 
 #ifdef WIN32CON
-#define NEED_VARARGS /* Uses ... */
 #include "hack.h"
 #include "wintty.h"
 #include <sys\types.h>
@@ -1001,11 +1000,9 @@ load_keyboard_handler()
 /* this is used as a printf() replacement when the window
  * system isn't initialized yet
  */
-void
-msmsg VA_DECL(const char *, fmt)
+void msmsg(const char *fmt, ...) {
 	char buf[ROWNO * COLNO];	/* worst case scenario */
 	VA_START(fmt);
-	VA_INIT(fmt, const char *);
 	vsprintf(buf, fmt, VA_ARGS);
 	VA_END();
 	nttty_check_stdio();
@@ -1015,12 +1012,9 @@ msmsg VA_DECL(const char *, fmt)
 }
 
 /* fatal error */
-/*VARARGS1*/
-void
-error VA_DECL(const char *,s)
+void error(const char *s, ...) {
 	char buf[BUFSZ];
 	VA_START(s);
-	VA_INIT(s, const char *);
 	/* error() may get called before tty is initialized */
 	if (iflags.window_inited) end_screen();
 	buf[0] = '\n';

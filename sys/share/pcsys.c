@@ -5,7 +5,6 @@
  *  System related functions for OS/2, and Windows NT
  */
 
-#define NEED_VARARGS
 #include "hack.h"
 #include "wintty.h"
 
@@ -112,10 +111,8 @@ const char *str;
 }
 
 #ifndef WIN32CON
-void
-msmsg VA_DECL(const char *, fmt)
+void msmsg(const char *fmt, ...) {
 	VA_START(fmt);
-	VA_INIT(fmt, const char *);
 	vprintf(fmt, VA_ARGS);
 	flushout();
 	VA_END();
@@ -123,10 +120,7 @@ msmsg VA_DECL(const char *, fmt)
 }
 #endif
 
-FILE *
-fopenp(name, mode)
-const char *name, *mode;
-{
+FILE *fopenp(const char *name, const char *mode) {
 	char buf[BUFSIZ], *bp, *pp, lastch = 0;
 	FILE *fp;
 
@@ -134,9 +128,9 @@ const char *name, *mode;
 	 */
 	strncpy(buf, name, BUFSIZ - 1);
 	buf[BUFSIZ-1] = '\0';
-	if ((fp = fopen(buf, mode)))
+	if ((fp = fopen(buf, mode))) {
 		return fp;
-	else {
+	} else {
 		int ccnt = 0;
 		pp = getenv("PATH");
 		while (pp && *pp) {
@@ -161,15 +155,12 @@ const char *name, *mode;
 }
 
 #if defined(MICRO) || defined(WIN32)
-void nethack_exit(code)
-int code;
-{
+void nethack_exit(int code) {
 	msexit();
 	exit(code);
 }
 
-static void msexit()
-{
+static void msexit(void) {
 #ifdef CHDIR
 	extern char orgdir[];
 #endif

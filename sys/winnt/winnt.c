@@ -13,7 +13,6 @@
  *
  */
 
-#define NEED_VARARGS
 #include "hack.h"
 #ifndef __CYGWIN__
 #include <dos.h>
@@ -249,12 +248,9 @@ return &szFullPath[0];
 
 #ifndef WIN32CON
 /* fatal error */
-/*VARARGS1*/
-void
-error VA_DECL(const char *,s)
+void error(const char *s, ...) {
 	char buf[BUFSZ];
 	VA_START(s);
-	VA_INIT(s, const char *);
 	/* error() may get called before tty is initialized */
 	if (iflags.window_inited) end_screen();
 	if (!strncmpi(windowprocs.name, "tty", 3)) {

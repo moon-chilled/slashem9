@@ -392,7 +392,6 @@ extern  char *sprintf();
 #endif
 
 #ifndef __SASC_60
-#ifdef NEED_VARARGS
 # if defined(USE_STDARG) || defined(USE_VARARGS)
 #  if !defined(SVR4)
 #   if !(defined(ULTRIX_PROTO) && defined(__GNUC__))
@@ -408,7 +407,6 @@ extern int vprintf(const char *, va_list);
 #  define vfprintf	fprintf
 #  define vsprintf	sprintf
 # endif
-#endif /* NEED_VARARGS */
 #endif
 
 

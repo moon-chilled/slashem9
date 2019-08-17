@@ -2,8 +2,6 @@
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
-#define NEED_VARARGS	/* comment line for pre-compiled headers */
-
 #include "hack.h"
 #include "eshk.h"
 #ifndef NO_SIGNAL
