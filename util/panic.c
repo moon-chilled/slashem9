@@ -36,7 +36,7 @@ void panic(char *str, ...) {
 long *alloca(cnt)
 unsigned cnt;
 {
-	return cnt ? malloc(cnt) : NULL;
+	return cnt ? alloc(cnt) : NULL;
 }
 #endif
 

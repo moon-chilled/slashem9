@@ -3378,9 +3378,9 @@ parsebindings(bindings)
 	 * instead, I save a list of rebindings, which are later
 	 * bound. */
 	bind = stripspace(bind);
-	newbinding = (struct binding_list_tab *)alloc(sizeof(*newbinding));
+	newbinding = alloc(sizeof(*newbinding));
 	newbinding->key = key;
-	newbinding->extcmd = (char *)alloc(strlen(bind)+1);
+	newbinding->extcmd = alloc(strlen(bind)+1);
 	strcpy(newbinding->extcmd, bind);;
 	newbinding->next = bindinglist;
 	bindinglist = newbinding;
@@ -3485,7 +3485,7 @@ parsemappings(mapping)
 	/* store in cmdlist */
 	keytab = &(cmdlist[key]);
 	if (keytab->map_list != NULL) free(keytab->map_list);
-	keytab->map_list = (char*)alloc(cnt+1);
+	keytab->map_list = alloc(cnt+1);
 	strcpy(keytab->map_list, (char *)map_to);
 }
 

@@ -1915,7 +1915,7 @@ boolean start_timer(long when, short kind, short func_index, anything arg) {
     if (func_index < 0 || func_index >= NUM_TIME_FUNCS)
 	panic("start_timer");
 
-    gnu = (timer_element *) alloc(sizeof(timer_element));
+    gnu = alloc(sizeof(timer_element));
     gnu->next = 0;
     gnu->tid = timer_id++;
     gnu->timeout = monstermoves + when;
@@ -2318,7 +2318,7 @@ restore_timers(fd, range, ghostly, adjust)
     /* restore elements */
     mread(fd, (void *) &count, sizeof count);
     while (count-- > 0) {
-	curr = (timer_element *) alloc(sizeof(timer_element));
+	curr = alloc(sizeof(timer_element));
 	mread(fd, (void *) curr, sizeof(timer_element));
 	if (ghostly)
 	    curr->timeout += adjust;

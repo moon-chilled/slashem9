@@ -648,7 +648,7 @@ menu_item **pick_list;	/* list of objects and counts to pick up */
 		n++;
 
 	if (n) {
-	    *pick_list = pi = (menu_item *) alloc(sizeof(menu_item) * n);
+	    *pick_list = pi = alloc(sizeof(menu_item) * n);
 	    for (n = 0, curr = olist; curr; curr = FOLLOW(curr, follow))
 		if ((!*otypes || index(otypes, curr->oclass) ||
 			flags.pickup_thrown && curr->was_thrown ||
@@ -709,7 +709,7 @@ boolean (*allow)(struct obj*);/* allow function */
 	    return (qflags & SIGNAL_NOMENU) ? -1 : 0;
 
 	if (n == 1 && (qflags & AUTOSELECT_SINGLE)) {
-	    *pick_list = (menu_item *) alloc(sizeof(menu_item));
+	    *pick_list = alloc(sizeof(menu_item));
 	    (*pick_list)->item.a_obj = last;
 	    (*pick_list)->count = last->quan;
 	    return 1;
@@ -830,7 +830,7 @@ int how;			/* type of query */
 		break;
 	    }
 	    if (curr) {
-		*pick_list = (menu_item *) alloc(sizeof(menu_item));
+		*pick_list = alloc(sizeof(menu_item));
 		(*pick_list)->item.a_int = curr->oclass;
 		return 1;
 	    } else {

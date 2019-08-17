@@ -36,7 +36,7 @@ const char *area, *file, *mode;
 	    break;
     }
     if (!n) {
-	n = (struct dlb_node *) alloc(sizeof(struct dlb_node));
+	n = alloc(sizeof(struct dlb_node));
 	n->next = nodes;
 	n->offset = nodes ? nodes->offset + HANDLES_PER_NODE : 0;
 	for(i = 0; i < HANDLES_PER_NODE; i++)

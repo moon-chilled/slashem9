@@ -175,7 +175,7 @@ struct monst {
  * exception being the guardian angels which are tame on creation).
  */
 
-#define newmonst(xl) (struct monst *)alloc((unsigned)(xl) + sizeof(struct monst))
+#define newmonst(xl) alloc((unsigned)(xl) + sizeof(struct monst))
 #define dealloc_monst(mon) if ((mon)->isshk) shk_free(mon); else \
 				free((void *)(mon))
 

@@ -56,7 +56,7 @@ char ***argv;
 	    (*argc)++;
 	was_space = isspace(cmd[i]);
     }
-    *argv = (char **)malloc((*argc + 1) * sizeof(char *));
+    *argv = (char **)alloc((*argc + 1) * sizeof(char *));
     if (!*argv)
 	return 0;
     *argc = 0;
@@ -66,7 +66,7 @@ char ***argv;
 	    if (was_space)
 		j = i;
 	    else {
-		(*argv)[*argc] = (char *)malloc(i - j + 1);
+		(*argv)[*argc] = alloc(i - j + 1);
 		if (!(*argv)[*argc]) {
 		    free(*argv);
 		    return 0;
@@ -110,7 +110,7 @@ char ***env;
     for(i = 0; environ[i]; i++)
 	;
     *enc = i;
-    *env = (char **)malloc((i + 1) * sizeof(char *));
+    *env = (char **)alloc((i + 1) * sizeof(char *));
     if (!*env)
 	return 0;
     for(i = 0; environ[i]; i++)
@@ -186,7 +186,7 @@ char ***pcargv;
 	s = "PKG_CONFIG_PATH";
 	sep = '=';
     }
-    pcp = (char *)malloc(strlen(s) + strlen(PKG_CONFIG_PATH) + 2);
+    pcp = alloc(strlen(s) + strlen(PKG_CONFIG_PATH) + 2);
     sprintf(pcp, "%s%c%s", s, sep, PKG_CONFIG_PATH);
     /* Re-write PKG_CONFIG_PATH to use backslashes so that
      * pkg-config's prefix re-writing will work.
@@ -202,7 +202,7 @@ char ***pcargv;
 	s = "PATH";
 	sep = '=';
     }
-    path = (char *)malloc(strlen(s) + strlen(PKG_CONFIG_DLL) + 2);
+    path = alloc(strlen(s) + strlen(PKG_CONFIG_DLL) + 2);
     sprintf(path, "%s%c%s", s, sep, PKG_CONFIG_DLL);
     env_put(&enc, &env, path);
     argc = 3;
@@ -249,7 +249,7 @@ char ***pcargv;
 	if (config_bytes)
 	    config = (char *)realloc(config, config_bytes + i);
 	else
-	    config = (char *)malloc(i);
+	    config = alloc(i);
 	memcpy(config + config_bytes, buf, i);
 	config_bytes += i;
     }
@@ -312,7 +312,7 @@ char **argv;
 				strcat(packages, argv[n+1]);
 			    }
 			} else {
-			    packages = malloc(strlen(argv[n+1]) + 1);
+			    packages = alloc(strlen(argv[n+1]) + 1);
 			    if (packages)
 				strcpy(packages, argv[n+1]);
 			}
@@ -341,7 +341,7 @@ char **argv;
 	usage();
     pkg_config(&pcargc, &pcargv);
     nargc = argc - n + pcargc;
-    nargv = (char **)malloc((nargc + 1) * sizeof(char *));
+    nargv = (char **)alloc((nargc + 1) * sizeof(char *));
     if (!nargv) {
 	fprintf(stderr, "cc-pkg: Not enough memory\n");
 	exit(1);

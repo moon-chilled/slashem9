@@ -1031,13 +1031,13 @@ static int yygrowstack()
         newsize = YYMAXDEPTH;
     i = yyssp - yyss;
     newss = yyss ? (short *)realloc(yyss, newsize * sizeof *newss) :
-      (short *)malloc(newsize * sizeof *newss);
+      alloc(newsize * sizeof *newss);
     if (newss == NULL)
         return -1;
     yyss = newss;
     yyssp = newss + i;
     newvs = yyvs ? (YYSTYPE *)realloc(yyvs, newsize * sizeof *newvs) :
-      (YYSTYPE *)malloc(newsize * sizeof *newvs);
+      alloc(newsize * sizeof *newvs);
     if (newvs == NULL)
         return -1;
     yyvs = newvs;

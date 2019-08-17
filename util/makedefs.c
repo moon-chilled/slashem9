@@ -99,7 +99,7 @@ static const char *data_template()
 	static char *result;
 	if (result)
 		return result;
-	result = malloc(strlen(getenv("ObjDir"))+3);
+	result = alloc(strlen(getenv("ObjDir"))+3);
 	strcpy(result, getenv("ObjDir"));
 	strcat(result, "%s");
 	return result;
@@ -344,7 +344,7 @@ do_rumors()
 	char    *infile;
 	long	true_rumor_size;
 
-	infile = malloc(strlen(DATA_IN_TEMPLATE) - 2 + strlen(RUMOR_FILE) + 5);
+	infile = alloc(strlen(DATA_IN_TEMPLATE) - 2 + strlen(RUMOR_FILE) + 5);
 	filename[0]='\0';
 #ifdef FILE_PREFIX
 	strcat(filename,file_prefix);
@@ -523,7 +523,7 @@ do_date()
 	char *c,  *cbuf, buf[BUFSZ];
 	const char *ul_sfx;
 
-	cbuf = malloc(600);
+	cbuf = alloc(600);
 	filename[0]='\0';
 #ifdef FILE_PREFIX
 	strcat(filename,file_prefix);
@@ -854,8 +854,8 @@ do_data()
 	long	txt_offset;
 	int	entry_cnt, line_cnt;
 
-	infile = malloc(strlen(DATA_IN_TEMPLATE) - 2 + strlen(DATA_FILE) + 6);
-	tempfile = malloc(strlen(DATA_TEMPLATE) - 2 + strlen("database.tmp") + 1);
+	infile = alloc(strlen(DATA_IN_TEMPLATE) - 2 + strlen(DATA_FILE) + 6);
+	tempfile = alloc(strlen(DATA_TEMPLATE) - 2 + strlen("database.tmp") + 1);
 	sprintf(tempfile, DATA_TEMPLATE, "database.tmp");
 	filename[0]='\0';
 #ifdef FILE_PREFIX
@@ -990,8 +990,8 @@ do_oracles()
 	int	oracle_cnt;
 	int i;
 
-	infile = malloc(strlen(DATA_IN_TEMPLATE) - 2 + strlen(ORACLE_FILE) + 5);
-	tempfile = malloc(strlen(DATA_TEMPLATE) - 2 + strlen("oracles.tmp") + 1);
+	infile = alloc(strlen(DATA_IN_TEMPLATE) - 2 + strlen(ORACLE_FILE) + 5);
+	tempfile = alloc(strlen(DATA_TEMPLATE) - 2 + strlen("oracles.tmp") + 1);
 	sprintf(tempfile, DATA_TEMPLATE, "oracles.tmp");
 	filename[0]='\0';
 #ifdef FILE_PREFIX
@@ -2148,7 +2148,7 @@ do_filenames()
 	char lname[20] = DEF_GAME_NAME;
 	char uname[20] = DEF_GAME_NAME;
 
-	infile = malloc(strlen(INCLUDE_TEMPLATE) - 2 + strlen(FILE_H) + 1);
+	infile = alloc(strlen(INCLUDE_TEMPLATE) - 2 + strlen(FILE_H) + 1);
 	lcase(lname);
 	ucase(uname);
 

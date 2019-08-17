@@ -189,7 +189,7 @@ struct fruit {
 	int fid;
 	struct fruit *nextf;
 };
-#define newfruit() (struct fruit *)alloc(sizeof(struct fruit))
+#define newfruit() alloc(sizeof(struct fruit))
 #define dealloc_fruit(rind) free((void *) (rind))
 
 #define OBJ_NAME(obj)  (obj_descr[(obj).oc_name_idx].oc_name)

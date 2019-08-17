@@ -1058,7 +1058,7 @@ parse_status_color_option(start)
     *middle++ = '\0';
     if (middle - start > 2 && start[2] == '%') {
                 struct percent_color_option *percent_color_option =
-		    (struct percent_color_option *)alloc(sizeof(*percent_color_option));
+		    alloc(sizeof(*percent_color_option));
                 percent_color_option->next = NULL;
                 percent_color_option->percentage = atoi(start + 3);
                 percent_color_option->color_option = parse_color_option(middle);
@@ -1079,9 +1079,9 @@ parse_status_color_option(start)
     } else {
 	int length = strlen(start) + 1;
                 struct text_color_option *text_color_option =
-		    (struct text_color_option *)alloc(sizeof(*text_color_option));
+		    alloc(sizeof(*text_color_option));
                 text_color_option->next = NULL;
-                text_color_option->text = (char *)alloc(length);
+                text_color_option->text = alloc(length);
                 memcpy((char *)text_color_option->text, start, length);
                 text_color_option->color_option = parse_color_option(middle);
                 if (text_color_option->color_option.color >= 0
@@ -1275,7 +1275,7 @@ char *str;
       }
    }
 
-   tmp = (struct menucoloring *)alloc(sizeof(struct menucoloring));
+   tmp = alloc(sizeof(struct menucoloring));
 #ifdef USE_REGEX_MATCH
 # ifdef GNU_REGEX
    tmp->match.translate = 0;

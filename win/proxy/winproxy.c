@@ -239,7 +239,7 @@ menu_item **menu_list;
     struct nhproxy_mi *selected;
     n = nhproxy_proc_select_menu(window, how, &selected);
     if (n) {
-	*menu_list = (menu_item *) alloc(n * sizeof(menu_item));
+	*menu_list = alloc(n * sizeof(menu_item));
 	for(i = 0; i < n; i++) {
 	    mapid_unmap_identifier(window, selected[i].item,
 	      &(*menu_list)[i].item);

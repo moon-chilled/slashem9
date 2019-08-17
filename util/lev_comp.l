@@ -114,7 +114,7 @@ input()		/* Under MPW \n is chr(13)! Compensate for this. */
 %%
 <MAPC>ENDMAP	{
 		  BEGIN(INITIAL);
-		  yylval.map = (char *) alloc(map_cnt + 1);
+		  yylval.map = alloc(map_cnt + 1);
 		  strncpy(yylval.map, map, map_cnt);
 		  yylval.map[map_cnt] = 0;
 		  map_cnt = 0;
@@ -242,7 +242,7 @@ lethe		{ yylval.i=LETHE; return FLAG_TYPE; }
 \[\ *[0-9]+\%\ *\] { yylval.i = atoi(yytext + 1); return PERCENT; }
 [+\-]?[0-9]+	{ yylval.i=atoi(yytext); return INTEGER; }
 \"[^"]*\"	{ yytext[yyleng-1] = 0; /* Discard the trailing \" */
-		  yylval.map = (char *) alloc(strlen(yytext+1)+1);
+		  yylval.map = alloc(strlen(yytext+1)+1);
 		  strcpy(yylval.map, yytext+1); /* Discard the first \" */
 		  return STRING; }
 \r?\n		{ line_number++; }

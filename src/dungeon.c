@@ -415,7 +415,7 @@ static void init_level(int dgn, int proto_index, struct proto_dungeon *pd) {
 	    if (tlevel->chance <= rn2(100)) return;
 
 	pd->final_lev[proto_index] = new_level =
-					(s_level *) alloc(sizeof(s_level));
+					alloc(sizeof(s_level));
 	/* load new level with data */
 	strcpy(new_level->proto, tlevel->name);
 	new_level->boneid = tlevel->boneschar;

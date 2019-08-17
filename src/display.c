@@ -932,7 +932,7 @@ void tmp_at(int x, int y) {
 	    if (!tglyph)
 		tmp = &tgfirst;
 	    else	/* nested effect; we need dynamic memory */
-		tmp = (struct tmp_glyph *)alloc(sizeof (struct tmp_glyph));
+		tmp = alloc(sizeof (struct tmp_glyph));
 	    tmp->prev = tglyph;
 	    tglyph = tmp;
 	    tglyph->sidx = 0;
@@ -997,7 +997,7 @@ void tmp_at(int x, int y) {
 		if (!cansee(x,y) && tglyph->style == DISP_BEAM) break;
 		/* save pos for later erasing */
 		if (tglyph->sidx >= SIZE(tglyph->saved)) {
-		    tmp = (struct tmp_glyph *)alloc(sizeof (struct tmp_glyph));
+		    tmp = alloc(sizeof (struct tmp_glyph));
 		    *tmp = *tglyph;
 		    tglyph->prev = NULL;
 		    tmp->cont = tglyph;

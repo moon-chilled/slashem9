@@ -2350,7 +2350,7 @@ dlb *fd;
 	    if(num_lregions) {
 		/* realloc the lregion space to add the new ones */
 		/* don't really free it up until the whole level is done */
-		lev_region *newl = (lev_region *) alloc(sizeof(lev_region) *
+		lev_region *newl = alloc(sizeof(lev_region) *
 						(unsigned)(n+num_lregions));
 		memcpy((void *)(newl+n), (void *)lregions,
 					sizeof(lev_region) * num_lregions);

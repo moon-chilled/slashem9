@@ -45,7 +45,7 @@ winid id;
 	    mapid__windows = (struct mapid__window *)realloc(mapid__windows,
 	      mapid__no_windows * sizeof(*mapid__windows));
 	else
-	    mapid__windows = (struct mapid__window *)malloc(sizeof(*mapid__windows));
+	    mapid__windows = alloc(sizeof(*mapid__windows));
 	if (!mapid__windows)
 	    panic("proxy: can't get %d bytes",
 	      mapid__no_windows * sizeof(*mapid__windows));
@@ -95,7 +95,7 @@ const anything *identifier;
 	  mapid__windows[i].no_identifiers * sizeof(*mapid__windows->identifiers));
     else
 	mapid__windows[i].identifiers =
-	  (anything *)malloc(sizeof(*mapid__windows->identifiers));
+	  alloc(sizeof(*mapid__windows->identifiers));
     if (!mapid__windows[i].identifiers)
 	panic("proxy: can't get %d bytes",
 	  mapid__windows[i].no_identifiers * sizeof(*mapid__windows->identifiers));

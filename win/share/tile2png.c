@@ -132,7 +132,7 @@ void save_png(const char *filename, int width, int height)
 
   png_write_info(png_ptr, info_ptr);
 
-  row_pointers = (png_bytep *) malloc(height * sizeof(png_bytep));
+  row_pointers = alloc(height * sizeof(png_bytep));
   if (!row_pointers)
   {
     fprintf(stderr, "tile2png: Out of memory.\n");
@@ -314,7 +314,7 @@ static void process_file(const char *fname)
   }
   if (!tile_palette)
   {
-    tile_palette = malloc(256 * sizeof(*tile_palette));
+    tile_palette = alloc(256 * sizeof(*tile_palette));
     if (!tile_palette)
     {
       fprintf(stderr, "tile2png: Not enough memory (%d bytes).\n",

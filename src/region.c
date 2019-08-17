@@ -93,7 +93,7 @@ int nrect;
     int i;
     NhRegion *reg;
 
-    reg = (NhRegion *) alloc(sizeof (NhRegion));
+    reg = alloc(sizeof (NhRegion));
     /* Determines bounding box */
     if (nrect > 0) {
 	reg->bounding_box = rects[0];
@@ -104,7 +104,7 @@ int nrect;
 	reg->bounding_box.hy = 0;
     }
     reg->nrects = nrect;
-    reg->rects = nrect > 0 ? (NhRect *)alloc((sizeof (NhRect)) * nrect) : NULL;
+    reg->rects = nrect > 0 ? alloc((sizeof (NhRect)) * nrect) : NULL;
     for (i = 0; i < nrect; i++) {
 	if (rects[i].lx < reg->bounding_box.lx)
 	    reg->bounding_box.lx = rects[i].lx;
@@ -147,7 +147,7 @@ NhRect *rect;
 {
     NhRect *tmp_rect;
 
-    tmp_rect = (NhRect *) alloc(sizeof (NhRect) * (reg->nrects + 1));
+    tmp_rect = alloc(sizeof (NhRect) * (reg->nrects + 1));
     if (reg->nrects > 0) {
 	memcpy((void *) tmp_rect, (void *) reg->rects,
 		      (sizeof (NhRect) * reg->nrects));
@@ -678,7 +678,7 @@ boolean ghostly; /* If a bones file restore */
     if (n_regions > 0)
 	regions = (NhRegion **) alloc(sizeof (NhRegion *) * n_regions);
     for (i = 0; i < n_regions; i++) {
-	regions[i] = (NhRegion *) alloc(sizeof (NhRegion));
+	regions[i] = alloc(sizeof (NhRegion));
 	mread(fd, (void *) &regions[i]->bounding_box, sizeof (NhRect));
 	mread(fd, (void *) &regions[i]->nrects, sizeof (short));
 

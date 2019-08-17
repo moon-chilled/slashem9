@@ -33,7 +33,7 @@ struct trap {
 };
 
 extern struct trap *ftrap;
-#define newtrap()	(struct trap *) alloc(sizeof(struct trap))
+#define newtrap()	alloc(sizeof(struct trap))
 #define dealloc_trap(trap) free((void *) (trap))
 
 /* reasons for statue animation */

@@ -132,7 +132,7 @@ struct obj {
  *	leash		leashmon != 0			struct eleash
  */
 
-#define newobj(xl)	(struct obj *)alloc((unsigned)(xl) + sizeof(struct obj))
+#define newobj(xl)	alloc((unsigned)(xl) + sizeof(struct obj))
 #define ONAME(otmp)	(((char *)(otmp)->oextra) + (otmp)->oxlth)
 
 /* All objects */

@@ -235,7 +235,7 @@ struct permonst *mdat;
       { -COLNO, COLNO, 1, -1, -COLNO-1, -COLNO+1, COLNO+1, COLNO-1};
     struct monst fakemon;	/* dummy monster */
     fakemon.data = mdat;	/* set up for badpos */
-    map = (unsigned char *)alloc(COLNO * (ROWNO + 2));
+    map = alloc(COLNO * (ROWNO + 2));
     memset((void *)map, EPATHTO_INACCESSIBLE, COLNO * (ROWNO + 2));
     for(i = 1; i < COLNO; i++)
 	for(j = 0; j < ROWNO; j++)
@@ -360,7 +360,7 @@ int max_pathlen;
       { -COLNO, COLNO, 1, -1, -COLNO-1, -COLNO+1, COLNO+1, COLNO-1};
     struct monst fakemon;	/* dummy monster */
     fakemon.data = mdat;	/* set up for badpos */
-    map = (unsigned char *)alloc(COLNO * (ROWNO + 2));
+    map = alloc(COLNO * (ROWNO + 2));
     memset((void *)map, EPATHTO_INACCESSIBLE, COLNO * (ROWNO + 2));
     for(i = 1; i < COLNO; i++)
 	for(j = 0; j < ROWNO; j++)
@@ -434,7 +434,7 @@ void * data;
     static const int dirs[8] =
       /* N, S, E, W, NW, NE, SE, SW */
       { -COLNO, COLNO, 1, -1, -COLNO-1, -COLNO+1, COLNO+1, COLNO-1};
-    map = (unsigned char *)alloc(COLNO * (ROWNO + 2));
+    map = alloc(COLNO * (ROWNO + 2));
     memset((void *)map, EPATHTO_INACCESSIBLE, COLNO * (ROWNO + 2));
     for(i = 1; i < COLNO; i++)
 	for(j = 0; j < ROWNO; j++)

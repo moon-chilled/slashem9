@@ -21,7 +21,7 @@ typedef struct {
 static ExplodeRegion *create_explode_region(void) {
     ExplodeRegion *reg;
 
-    reg = (ExplodeRegion *)alloc(sizeof(ExplodeRegion));
+    reg = alloc(sizeof(ExplodeRegion));
     reg->locations = NULL;
     reg->nlocations = 0;
     reg->alocations = 0;

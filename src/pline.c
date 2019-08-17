@@ -17,7 +17,7 @@ msgpline_add(typ, pattern)
      int typ;
      char *pattern;
 {
-    struct _plinemsg *tmp = (struct _plinemsg *) alloc(sizeof(struct _plinemsg));
+    struct _plinemsg *tmp = alloc(sizeof(struct _plinemsg));
     if (!tmp) return;
     tmp->msgtype = typ;
     tmp->pattern = strdup(pattern);

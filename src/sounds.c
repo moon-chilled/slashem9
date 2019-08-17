@@ -1037,7 +1037,7 @@ add_sound_mapping (const char *mapping)
 	    sprintf(filespec, "%s/%s", sounddir, filename);
 
 	    if (can_read_file(filespec)) {
-		new_map = (audio_mapping *)alloc(sizeof(audio_mapping));
+		new_map = alloc(sizeof(audio_mapping));
 #ifdef USER_SOUNDS_REGEX
 		new_map->regex.translate = 0;
 		new_map->regex.fastmap = 0;

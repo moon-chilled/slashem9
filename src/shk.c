@@ -2471,7 +2471,7 @@ int to_add;
 		new = (struct bill_x *)realloc((void *)eshkp->bill_p,
 			bct * sizeof(struct bill_x));
 	    else
-		new = (struct bill_x *)malloc(bct * sizeof(struct bill_x));
+		new = alloc(bct * sizeof(struct bill_x));
 	    if (!new)
 		return 0;
 	    eshkp->billsz = bct;
@@ -3358,7 +3358,7 @@ long cost;
 		tmp_dam->cost += cost;
 		return;
 	    }
-	tmp_dam = (struct damage *)alloc((unsigned)sizeof(struct damage));
+	tmp_dam = alloc((unsigned)sizeof(struct damage));
 	tmp_dam->when = monstermoves;
 	tmp_dam->place.x = x;
 	tmp_dam->place.y = y;

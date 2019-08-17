@@ -1165,7 +1165,7 @@ int fd;
 	mread(fd,(void *)&ymax,sizeof(int));
 	for (i = 0; i < n; i++) {
 		btmp = b;
-		b = (struct bubble *)alloc(sizeof(struct bubble));
+		b = alloc(sizeof(struct bubble));
 		mread(fd,(void *)b,sizeof(struct bubble));
 		if (bbubbles) {
 			btmp->next = b;
@@ -1288,7 +1288,7 @@ int x, y, n;
 		impossible("n too large (mk_bubble)");
 		n = SIZE(bmask) - 1;
 	}
-	b = (struct bubble *)alloc(sizeof(struct bubble));
+	b = alloc(sizeof(struct bubble));
 	if ((x + (int) bmask[n][0] - 1) > bxmax) x = bxmax - bmask[n][0] + 1;
 	if ((y + (int) bmask[n][1] - 1) > bymax) y = bymax - bmask[n][1] + 1;
 	b->x = x;

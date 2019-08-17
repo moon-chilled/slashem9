@@ -59,7 +59,7 @@ read_tiles()
 	    else
 		alloc_tiles = 1024;
 	    if (!tiles)
-		tiles = (struct tile *)malloc(alloc_tiles * sizeof(*tiles));
+		tiles = alloc(alloc_tiles * sizeof(*tiles));
 	    else
 		tiles = (struct tile *)realloc(tiles,
 		  alloc_tiles * sizeof(*tiles));
@@ -69,7 +69,7 @@ read_tiles()
 	    }
 	    for(i = no_tiles; i < alloc_tiles; i++) {
 		tiles[i].bitmap = (pixel *)
-		  malloc(tile_x * tile_y * sizeof(pixel));
+		  alloc(tile_x * tile_y * sizeof(pixel));
 		if (!tiles[i].bitmap) {
 		    fprintf(stderr, "Not enough memory\n");
 		    exit(EXIT_FAILURE);

@@ -161,7 +161,7 @@ cb_get_player_choices()
     static const char *aligns_adj[ROLE_ALIGNS], *genders_adj[ROLE_GENDERS];
     struct nhproxy_cb_get_player_choices_res *choices;
     choices =
-      (struct nhproxy_cb_get_player_choices_res *)alloc(sizeof(*choices));
+      alloc(sizeof(*choices));
     choices->n_aligns = ROLE_ALIGNS;
     choices->aligns = aligns_adj;
     for(i = 0; i < ROLE_ALIGNS; i++)
@@ -213,7 +213,7 @@ cb_get_valid_selections()
     const int pack = 32 / ROLE_GENDERS;	/* No. masks packed in each element */
     int i, k;
     struct nhproxy_cb_get_valid_selections_res *vs;
-    vs = (struct nhproxy_cb_get_valid_selections_res *)alloc(sizeof(*vs));
+    vs = alloc(sizeof(*vs));
     for(vs->no_roles = 0; roles[vs->no_roles].name.m; vs->no_roles++)
 	;
     for(vs->no_races = 0; races[vs->no_races].noun; vs->no_races++)
@@ -221,7 +221,7 @@ cb_get_valid_selections()
     vs->no_aligns = ROLE_ALIGNS;
     vs->no_genders = ROLE_GENDERS;
     vs->n_masks = (vs->no_roles * vs->no_races * ROLE_ALIGNS + pack - 1) / pack;
-    vs->masks = (unsigned long *)alloc(vs->n_masks * sizeof(unsigned long));
+    vs->masks = alloc(vs->n_masks * sizeof(unsigned long));
     memset((void *)vs->masks, 0, vs->n_masks * sizeof(unsigned long));
     for(role = 0, i = 0, k = 0; role < vs->no_roles; role++)
 	if (!validrole(role))
@@ -294,7 +294,7 @@ cb_get_extended_commands()
     int i;
     extern struct ext_func_tab extcmdlist[];
     struct nhproxy_cb_get_extended_commands_res *list;
-    list = (struct nhproxy_cb_get_extended_commands_res *)alloc(sizeof(*list));
+    list = alloc(sizeof(*list));
     for(i = 0; extcmdlist[i].ef_txt; i++)
 	;
     list->n_commands = i;
@@ -334,7 +334,7 @@ cb_get_tilesets()
     int i;
     char *file;
     struct nhproxy_cb_get_tilesets_res *list;
-    list = (struct nhproxy_cb_get_tilesets_res *)alloc(sizeof(*list));
+    list = alloc(sizeof(*list));
 #ifdef MAXNOTILESETS
     list->n_tilesets = no_tilesets;
     list->tilesets = (struct nhproxy_cb_get_tilesets_res_tileset *)

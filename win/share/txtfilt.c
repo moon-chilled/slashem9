@@ -136,7 +136,7 @@ int match_load(char *file)
     if (!fp)
 	return -1;
     free(match_p);
-    match_p = malloc(no_alloc * sizeof (*match_p));
+    match_p = alloc(no_alloc * sizeof (*match_p));
     if (!match_p)
     {
 	errno = ENOMEM;			/* Not all mallocs set errno */

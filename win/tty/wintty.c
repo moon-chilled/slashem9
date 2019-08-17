@@ -263,7 +263,7 @@ void tty_init_nhwindows(int* argcp, char** argv) {
     setftty();			/* calls start_screen */
 
     /* set up tty descriptor */
-    ttyDisplay = (struct DisplayDesc*) alloc(sizeof(struct DisplayDesc));
+    ttyDisplay = alloc(sizeof(struct DisplayDesc));
     ttyDisplay->toplin = 0;
     ttyDisplay->rows = hgt;
     ttyDisplay->cols = wid;
@@ -890,7 +890,7 @@ winid tty_create_nhwindow(int type) {
     if(maxwin == MAXWIN)
 	return WIN_ERR;
 
-    newwin = (struct WinDesc*) alloc(sizeof(struct WinDesc));
+    newwin = alloc(sizeof(struct WinDesc));
     newwin->type = type;
     newwin->flags = 0;
     newwin->active = false;
@@ -2140,7 +2140,7 @@ void tty_add_menu(
 
 	cw->nitems++;
 
-	item = (tty_menu_item *) alloc(sizeof(tty_menu_item));
+	item = alloc(sizeof(tty_menu_item));
 	item->identifier = *identifier;
 	item->count = -1L;
 	item->selected = preselected;
@@ -2299,7 +2299,7 @@ int tty_select_menu(winid window, int how, menu_item **menu_list) {
 	}
 
 	if (n > 0) {
-		*menu_list = (menu_item *) alloc(n * sizeof(menu_item));
+		*menu_list = alloc(n * sizeof(menu_item));
 		for (mi = *menu_list, curr = cw->mlist; curr; curr = curr->next)
 			if (curr->selected) {
 				mi->item = curr->identifier;
