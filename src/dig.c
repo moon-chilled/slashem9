@@ -29,11 +29,11 @@ static boolean rm_waslit(void) {
     xchar x, y;
 
     if(levl[u.ux][u.uy].typ == ROOM && levl[u.ux][u.uy].waslit)
-	return(true);
+	return true;
     for(x = u.ux-2; x < u.ux+3; x++)
 	for(y = u.uy-1; y < u.uy+2; y++)
-	    if(isok(x,y) && levl[x][y].waslit) return(true);
-    return(false);
+	    if(isok(x,y) && levl[x][y].waslit) return true;
+    return false;
 }
 
 /* Change level topology.  Messes with vision tables and ignores things like
@@ -151,35 +151,35 @@ boolean dig_check(struct monst *madeby, boolean verbose, int x, int y) {
 	    if (x == xdnladder || x == xupladder) {
 		if(verbose) pline_The("ladder resists your effort.");
 	    } else if(verbose) pline_The("stairs are too hard to %s.", verb);
-	    return(false);
+	    return false;
 	/* ALI - Artifact doors */
 	} else if (IS_DOOR(levl[x][y].typ) && artifact_door(x, y)) {
 	    if(verbose) pline_The("%s here is too hard to dig in.",
 				  surface(x,y));
-	    return(false);
+	    return false;
 	} else if (IS_THRONE(levl[x][y].typ) && madeby != BY_OBJECT) {
 	    if(verbose) pline_The("throne is too hard to break apart.");
-	    return(false);
+	    return false;
 	} else if (IS_ALTAR(levl[x][y].typ) && (madeby != BY_OBJECT ||
 				Is_astralevel(&u.uz) || Is_sanctum(&u.uz))) {
 	    if(verbose) pline_The("altar is too hard to break apart.");
-	    return(false);
+	    return false;
 	} else if (Is_airlevel(&u.uz)) {
 	    if(verbose) You("cannot %s thin air.", verb);
-	    return(false);
+	    return false;
 	} else if (Is_waterlevel(&u.uz)) {
 	    if(verbose) pline_The("water splashes and subsides.");
-	    return(false);
+	    return false;
 	} else if ((IS_ROCK(levl[x][y].typ) && levl[x][y].typ != SDOOR &&
 		      (levl[x][y].wall_info & W_NONDIGGABLE) != 0)
 		|| (ttmp &&
 		      (ttmp->ttyp == MAGIC_PORTAL || !Can_dig_down(&u.uz)))) {
 	    if(verbose) pline_The("%s here is too hard to %s.",
 				  surface(x,y), verb);
-	    return(false);
+	    return false;
 	} else if (sobj_at(BOULDER, x, y)) {
 	    if(verbose) There("isn't enough room to %s here.", verb);
-	    return(false);
+	    return false;
 	} else if (madeby == BY_OBJECT &&
 		    /* the block against existing traps is mainly to
 		       prevent broken wands from turning holes into pits */
@@ -187,7 +187,7 @@ boolean dig_check(struct monst *madeby, boolean verbose, int x, int y) {
 	    /* digging by player handles pools separately */
 	    return false;
 	}
-	return(true);
+	return true;
 }
 
 static int dig(void) {
@@ -210,15 +210,15 @@ static int dig(void) {
 	    !on_level(&digging.level, &u.uz) ||
 	    ((digging.down ? (dpx != u.ux || dpy != u.uy)
 			   : (distu(dpx,dpy) > 2))))
-		return(0);
+		return 0;
 
 	if (digging.down) {
-	    if(!dig_check(BY_YOU, true, u.ux, u.uy)) return(0);
+	    if(!dig_check(BY_YOU, true, u.ux, u.uy)) return 0;
 	} else { /* !digging.down */
 	    if (IS_TREE(lev->typ) && !may_dig(dpx,dpy) &&
 			dig_typ(uwep, dpx, dpy) == DIGTYP_TREE) {
 		pline("This tree seems to be petrified.");
-		return(0);
+		return 0;
 	    }
 	    /* ALI - Artifact doors */
 	    if ((IS_ROCK(lev->typ) && !may_dig(dpx,dpy) &&
@@ -226,7 +226,7 @@ static int dig(void) {
 		    (IS_DOOR(lev->typ) && artifact_door(dpx, dpy))) {
 		pline("This %s is too hard to %s.",
 			IS_DOOR(lev->typ) ? "door" : "wall", verb);
-		return(0);
+		return 0;
 	    }
 	}
 	if(Fumbling &&
@@ -260,7 +260,7 @@ static int dig(void) {
 	    default: Your("swing misses its mark.");
 		break;
 	    }
-	    return(0);
+	    return 0;
 	}
 
 	bonus = 10 + rn2(5) + abon() + uwep->spe - greatest_erosion(uwep) + u.udaminc;
@@ -278,7 +278,7 @@ static int dig(void) {
 		if (digging.effort > 250) {
 		    dighole(false);
 		    memset((void *)&digging, 0, sizeof digging);
-		    return(0);	/* done with digging */
+		    return 0;	/* done with digging */
 		}
 
 		if (digging.effort <= 50
@@ -287,7 +287,7 @@ static int dig(void) {
 			(ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT
 			 || ttmp->ttyp == TRAPDOOR || ttmp->ttyp == HOLE)))
 
-		    return(1);
+		    return 1;
 
 		if (IS_ALTAR(lev->typ)) {
 		    altar_wrath(dpx, dpy);
@@ -298,7 +298,7 @@ static int dig(void) {
 		    digging.level.dnum = 0;
 		    digging.level.dlevel = -1;
 		}
-		return(0);
+		return 0;
 	}
 
 	if (digging.effort > 100) {
@@ -372,7 +372,7 @@ static int dig(void) {
 			}
 			if(!(lev->doormask & D_TRAPPED))
 				lev->doormask = D_BROKEN;
-		} else return(0); /* statue or boulder got taken */
+		} else return 0; /* statue or boulder got taken */
 
 		if(!does_block(dpx,dpy,&levl[dpx][dpy]))
 		    unblock_point(dpx,dpy);	/* vision:  can see through */
@@ -409,7 +409,7 @@ cleanup:
 		digging.quiet = false;
 		digging.level.dnum = 0;
 		digging.level.dlevel = -1;
-		return(0);
+		return 0;
 	} else {		/* not enough effort has been spent yet */
 		static const char *const d_target[6] = {
 			"", "rock", "statue", "boulder", "door", "tree"
@@ -420,10 +420,10 @@ cleanup:
 		    if(*in_rooms(dpx, dpy, SHOPBASE)) {
 			pline("This %s seems too hard to %s.",
 			      IS_DOOR(lev->typ) ? "door" : "wall", verb);
-			return(0);
+			return 0;
 		    }
 		} else if (!IS_ROCK(lev->typ) && dig_target == DIGTYP_ROCK)
-		    return(0); /* statue or boulder got taken */
+		    return 0; /* statue or boulder got taken */
 		if(!did_dig_msg) {
 			if (is_lightsaber(uwep))
 				You("burn steadily through %s.", the(d_target[dig_target]));
@@ -432,13 +432,13 @@ cleanup:
 			did_dig_msg = true;
 		}
 	}
-	return(1);
+	return 1;
 }
 
 /* When will hole be finished? Very rough indication used by shopkeeper. */
 int holetime(void) {
-	if(occupation != dig || !*u.ushops) return(-1);
-	return ((250 - digging.effort) / 20);
+	if(occupation != dig || !*u.ushops) return -1;
+	return (250 - digging.effort) / 20;
 }
 
 /* Return typ of liquid to fill a hole with, or ROOM, if no liquid nearby */
@@ -849,9 +849,9 @@ int use_pick_axe (struct obj *obj) {
 	*dsp = 0;
 	sprintf(qbuf, "In what direction do you want to %s? [%s]", verb, dirsyms);
 	if(!getdir(qbuf))
-		return(res);
+		return res;
 
-	return (use_pick_axe2(obj));
+	return use_pick_axe2(obj);
 }
 
 /* general dig through doors/etc. function
@@ -901,7 +901,7 @@ int use_pick_axe2 (struct obj *obj) {
 				OBJ_NAME(objects[obj->otyp]));
 		losehp(dam, buf, KILLED_BY);
 		flags.botl=1;
-		return(1);
+		return 1;
 	} else if(u.dz == 0) {
 		if(Stunned || (Confusion && !rn2(5))) confdir();
 		rx = u.ux + u.dx;
@@ -910,11 +910,11 @@ int use_pick_axe2 (struct obj *obj) {
 			if (digtyp == 1) pline("Your %s bounces off harmlessly.",
 				aobjnam(obj, NULL));
 			else pline("Clash!");
-			return(1);
+			return 1;
 		}
 		lev = &levl[rx][ry];
 		if(MON_AT(rx, ry) && attack(m_at(rx, ry)))
-			return(1);
+			return 1;
 		dig_target = dig_typ(obj, rx, ry);
 		if (dig_target == DIGTYP_UNDIGGABLE) {
 			/* ACCESSIBLE or POOL */
@@ -1017,7 +1017,7 @@ int use_pick_axe2 (struct obj *obj) {
 		did_dig_msg = false;
 		set_occupation(dig, verbing, 0);
 	}
-	return(1);
+	return 1;
 }
 
 /*
@@ -1334,7 +1334,7 @@ struct obj *bury_an_obj(struct obj *otmp) {
 	 * completely different.
 	 */
 	if (otmp == uchain || obj_resists(otmp, 0, 0))
-		return(otmp2);
+		return otmp2;
 
 	if (otmp->otyp == LEASH && otmp->leashmon != 0)
 		o_unleash(otmp);
@@ -1353,7 +1353,7 @@ struct obj *bury_an_obj(struct obj *otmp) {
 	if (otmp->otyp == ROCK && !under_ice) {
 		/* merges into burying material */
 		obfree(otmp, NULL);
-		return(otmp2);
+		return otmp2;
 	}
 	/*
 	 * Start a rot on organic material.  Not corpses -- they
@@ -1366,7 +1366,7 @@ struct obj *bury_an_obj(struct obj *otmp) {
 		start_timer((under_ice ? 0L : 250L) + rnd(250), TIMER_OBJECT, ROT_ORGANIC, obj_to_any(otmp));
 	}
 	add_to_buried(otmp);
-	return(otmp2);
+	return otmp2;
 }
 
 void bury_objs(int x, int y) {

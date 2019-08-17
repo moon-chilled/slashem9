@@ -722,28 +722,28 @@ schar acurr(int x) {
                         if ((uarmg->spe > 7)
                              || ((118 + bonus + uarmg->spe) > 125)
                              || ((tmp + uarmg->spe) > 125))
-                                return(125);
-                        else if (base > 118) return (base + uarmg->spe + bonus);
-                        else return(118 + uarmg->spe + bonus);
+                                return 125;
+                        else if (base > 118) return base + uarmg->spe + bonus;
+                        else return 118 + uarmg->spe + bonus;
                 } else if (uarm && uarm->otyp == ROBE_OF_WEAKNESS && !nobonus)
-                        return(3 + bonus);
-		else return((tmp >= 125) ? 125 : (tmp <= 3) ? 3 : tmp);
+                        return 3 + bonus;
+		else return (tmp >= 125) ? 125 : (tmp <= 3) ? 3 : tmp;
 	} else if (x == A_CHA) {
 		if (tmp < 18 && (youmonst.data->mlet == S_NYMPH ||
 		    u.umonnum == PM_SUCCUBUS || u.umonnum == PM_INCUBUS))
 		    tmp = 18;
 		if (uarmh && uarmh->otyp == FEDORA) tmp += 1;
-		return((tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp);
+		return (tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp;
 	} else if (x == A_INT || x == A_WIS) {
 		/* yes, this may raise int/wis if player is sufficiently
 		 * stupid.  there are lower levels of cognition than "dunce".
 		 */
-		if (uarmh && uarmh->otyp == DUNCE_CAP) return(6);
+		if (uarmh && uarmh->otyp == DUNCE_CAP) return 6;
 	}
 #ifdef WIN32_BUG
-	return(x=((tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp));
+	return x=((tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp);
 #else
-	return((schar)((tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp));
+	return (tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp;
 #endif
 }
 
@@ -753,7 +753,7 @@ schar acurrstr(void) {
 	int str = ACURR(A_STR);
 
 	if (str <= 18) return str;
-	if (str <= 121) return (19 + str / 50); /* map to 19-21 */
+	if (str <= 121) return 19 + str / 50; /* map to 19-21 */
 	else return str - 100;
 }
 
@@ -779,14 +779,14 @@ void adjalign(int n) {
 int
 uhp()
 {
-    return (Upolyd ? u.mh : u.uhp);
+    return Upolyd ? u.mh : u.uhp;
 }
 
 /** Returns the maximal hitpoints of your current form. */
 int
 uhpmax()
 {
-    return (Upolyd ? u.mhmax : u.uhpmax);
+    return Upolyd ? u.mhmax : u.uhpmax;
 }
 
 

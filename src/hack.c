@@ -357,7 +357,7 @@ boolean revive_nasty(int x, int y, const char *msg) {
 	/* else impossible? */
     }
 
-    return (revived);
+    return revived;
 }
 
 static int moverock(void) {
@@ -409,7 +409,7 @@ static int moverock(void) {
 	    }
 
 	    if (revive_nasty(rx, ry, "You sense movement on the other side."))
-		return (-1);
+		return -1;
 
 	    if (mtmp && !noncorporeal(mtmp->data) &&
 		    (!mtmp->mtrapped ||
@@ -599,10 +599,10 @@ static int moverock(void) {
 		    change_luck(-1);	/* Sokoban guilt */
 		break;
 	    } else
-		return (-1);
+		return -1;
 	}
     }
-    return (0);
+    return 0;
 }
 
 /*
@@ -1947,7 +1947,7 @@ char *in_rooms(xchar x, xchar y, int typewanted) {
 
 	switch (rno = levl[x][y].roomno) {
 		case NO_ROOM:
-			return(ptr);
+			return ptr;
 		case SHARED:
 			step = 2;
 			break;
@@ -1957,7 +1957,7 @@ char *in_rooms(xchar x, xchar y, int typewanted) {
 		default:			/* i.e. a regular room # */
 			if (goodtype(rno))
 				*(--ptr) = rno;
-			return(ptr);
+			return ptr;
 	}
 
 	min_x = x - 1;
@@ -1996,7 +1996,7 @@ char *in_rooms(xchar x, xchar y, int typewanted) {
 		    !index(ptr, rno) && goodtype(rno))
 			*(--ptr) = rno;
 	}
-	return(ptr);
+	return ptr;
 }
 
 /* is (x,y) in a town? */
@@ -2221,7 +2221,7 @@ int dopickup(void) {
 		} else
 		    You("don't %s anything in here to pick up.",
 			  Blind ? "feel" : "see");
-		return(1);
+		return 1;
 	    } else {
 	    	int tmpcount = -count;
 		return loot_mon(u.ustuck, &tmpcount, NULL);
@@ -2231,26 +2231,26 @@ int dopickup(void) {
 	    if (Wwalking || is_floater(youmonst.data) || is_clinger(youmonst.data)
 			|| (Flying && !Breathless)) {
 		You("cannot dive into the water to pick things up.");
-		return(0);
+		return 0;
 	    } else if (!Underwater) {
 		You_cant("even see the bottom, let alone pick up %s.",
 				something);
-		return(0);
+		return 0;
 	    }
 	}
 	if (is_lava(u.ux, u.uy)) {
 	    if (Wwalking || is_floater(youmonst.data) || is_clinger(youmonst.data)
 			|| (Flying && !Breathless)) {
 		You_cant("reach the bottom to pick things up.");
-		return(0);
+		return 0;
 	    } else if (!likes_lava(youmonst.data)) {
 		You("would burn to a crisp trying to pick things up.");
-		return(0);
+		return 0;
 	    }
 	}
 	if(!OBJ_AT(u.ux, u.uy)) {
 		There("is nothing here to pick up.");
-		return(0);
+		return 0;
 	}
 	if (!can_reach_floor()) {
 #ifdef STEED
@@ -2260,7 +2260,7 @@ int dopickup(void) {
 		else
 #endif
 		You("cannot reach the %s.", surface(u.ux,u.uy));
-		return(0);
+		return 0;
 	}
 
  	if (traphere && traphere->tseen) {
@@ -2272,11 +2272,11 @@ int dopickup(void) {
 		if ((traphere->ttyp == PIT || traphere->ttyp == SPIKED_PIT) &&
 		     (!u.utrap || (u.utrap && u.utraptype != TT_PIT))) {
 			You("cannot reach the bottom of the pit.");
-			return(0);
+			return 0;
 		}
 	}
 
-	return (pickup(-count));
+	return pickup(-count);
 }
 
 
@@ -2572,7 +2572,7 @@ int weight_cap(void) {
 		}
 		if (carrcap < 0) carrcap = 0;
 	}
-	return((int) carrcap);
+	return (int) carrcap;
 }
 
 static int wc;	/* current weight_cap(); valid after call to inv_weight() */
@@ -2603,7 +2603,7 @@ int inv_weight(void) {
 		otmp = otmp->nobj;
 	}
 	wc = weight_cap();
-	return (wt - wc);
+	return wt - wc;
 }
 
 /*

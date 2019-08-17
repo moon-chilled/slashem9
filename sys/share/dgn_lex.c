@@ -562,15 +562,15 @@ int line_number = 1;
 char
 input()		/* Under MPW \n is chr(13)! Compensate for this. */
 {
-	if (yysptr > yysbuf) return(*--yysptr);
+	if (yysptr > yysbuf) return *--yysptr;
 	else {
 		yytchar = getc(yyin);
 		if (yytchar == '\n') {
 		    yylineno++;
-		    return(YYNEWLINE);
+		    return YYNEWLINE;
 		}
-		if (yytchar == EOF) return(0);
-		else		    return(yytchar);
+		if (yytchar == EOF) return 0;
+		else		    return yytchar;
 	}
 }
 #endif	/* MAC_MPW && !FLEX_SCANNER && !FLEXHACK_SCANNER */
@@ -814,126 +814,126 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-return(A_DUNGEON);
+return A_DUNGEON;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-{ yylval.i=1; return(UP_OR_DOWN); }
+{ yylval.i=1; return UP_OR_DOWN; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-{ yylval.i=0; return(UP_OR_DOWN); }
+{ yylval.i=0; return UP_OR_DOWN; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-return(ENTRY);
+return ENTRY;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-return(STAIR);
+return STAIR;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-return(NO_UP);
+return NO_UP;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-return(NO_DOWN);
+return NO_DOWN;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-return(PORTAL);
+return PORTAL;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-return(PROTOFILE);
+return PROTOFILE;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-return(DESCRIPTION);
+return DESCRIPTION;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-return(LEVELDESC);
+return LEVELDESC;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-return(ALIGNMENT);
+return ALIGNMENT;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-return(LEVALIGN);
+return LEVALIGN;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-{ yylval.i=TOWN ; return(DESCRIPTOR); }
+{ yylval.i=TOWN ; return DESCRIPTOR; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-{ yylval.i=HELLISH ; return(DESCRIPTOR); }
+{ yylval.i=HELLISH ; return DESCRIPTOR; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-{ yylval.i=MAZELIKE ; return(DESCRIPTOR); }
+{ yylval.i=MAZELIKE ; return DESCRIPTOR; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-{ yylval.i=ROGUELIKE ; return(DESCRIPTOR); }
+{ yylval.i=ROGUELIKE ; return DESCRIPTOR; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-{ yylval.i=D_ALIGN_NONE ; return(DESCRIPTOR); }
+{ yylval.i=D_ALIGN_NONE ; return DESCRIPTOR; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-{ yylval.i=D_ALIGN_NONE ; return(DESCRIPTOR); }
+{ yylval.i=D_ALIGN_NONE ; return DESCRIPTOR; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-{ yylval.i=D_ALIGN_LAWFUL ; return(DESCRIPTOR); }
+{ yylval.i=D_ALIGN_LAWFUL ; return DESCRIPTOR; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-{ yylval.i=D_ALIGN_NEUTRAL ; return(DESCRIPTOR); }
+{ yylval.i=D_ALIGN_NEUTRAL ; return DESCRIPTOR; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-{ yylval.i=D_ALIGN_CHAOTIC ; return(DESCRIPTOR); }
+{ yylval.i=D_ALIGN_CHAOTIC ; return DESCRIPTOR; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-return(BRANCH);
+return BRANCH;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-return(CHBRANCH);
+return CHBRANCH;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-return(LEVEL);
+return LEVEL;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-return(RNDLEVEL);
+return RNDLEVEL;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-return(CHLEVEL);
+return CHLEVEL;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-return(RNDCHLEVEL);
+return RNDCHLEVEL;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-{ yylval.i=atoi(yytext); return(INTEGER); }
+{ yylval.i=atoi(yytext); return INTEGER; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 { yytext[yyleng-1] = 0; /* Discard the trailing \" */
 		  yylval.str = alloc(strlen(yytext+1)+1);
 		  strcpy(yylval.str, yytext+1); /* Discard the first \" */
-		  return(STRING); }
+		  return STRING; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
@@ -1799,7 +1799,7 @@ static void *yy_flex_alloc( size )
 yy_size_t size;
 #endif
 	{
-	return (void *) malloc( size );
+	return void *) malloc( size ;
 	}
 
 #ifdef YY_USE_PROTOS
@@ -1817,7 +1817,7 @@ yy_size_t size;
 	 * any pointer type to void*, and deal with argument conversions
 	 * as though doing an assignment.
 	 */
-	return (void *) realloc( (char *) ptr, size );
+	return void *) realloc( (char *) ptr, size ;
 	}
 
 #ifdef YY_USE_PROTOS

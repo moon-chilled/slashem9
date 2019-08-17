@@ -551,7 +551,7 @@ struct monst *mtmp;
 			m.has_defense = MUSE_SCR_CREATE_MONSTER;
 		}
 	}
-botm:	return((boolean)(!!m.has_defense));
+botm:	return m.has_defense;
 #undef nomore
 }
 
@@ -1204,7 +1204,7 @@ struct monst *mtmp;
 		}
 #endif
 	}
-	return((boolean)(!!m.has_offense));
+	return m.has_offense;
 #undef nomore
 }
 
@@ -1837,7 +1837,7 @@ struct monst *mtmp;
 			m.has_misc = MUSE_POT_POLYMORPH;
 		}
 	}
-	return((boolean)(!!m.has_misc));
+	return m.has_misc;
 #undef nomore
 }
 
@@ -2131,18 +2131,18 @@ struct obj *obj;
 	    return false;
 
 	if (typ == WAN_MAKE_INVISIBLE || typ == POT_INVISIBILITY)
-	    return (boolean)(!mon->minvis && !mon->invis_blkd && !attacktype(mon->data, AT_GAZE));
+	    return !mon->minvis && !mon->invis_blkd && !attacktype(mon->data, AT_GAZE);
 	if (typ == WAN_SPEED_MONSTER || typ == POT_SPEED)
-	    return (boolean)(mon->mspeed != MFAST);
+	    return mon->mspeed != MFAST;
 
 	switch (obj->oclass) {
 	case WAND_CLASS:
 	    if (obj->spe <= 0)
 		return false;
 	    if (typ == WAN_DIGGING)
-		return (boolean)(!is_floater(mon->data));
+		return !is_floater(mon->data);
 	    if (typ == WAN_POLYMORPH)
-		return (boolean)(monstr[monsndx(mon->data)] < 6);
+		return monstr[monsndx(mon->data)] < 6;
 	    if (objects[typ].oc_dir == RAY ||
 		    typ == WAN_STRIKING ||
 		    typ == WAN_TELEPORTATION ||
@@ -2178,30 +2178,30 @@ struct obj *obj;
 	    break;
 	case AMULET_CLASS:
 	    if (typ == AMULET_OF_LIFE_SAVING)
-		return (boolean)(!nonliving(mon->data));
+		return !nonliving(mon->data);
 	    if (typ == AMULET_OF_REFLECTION)
 		return true;
 	    break;
 	case TOOL_CLASS:
 	    if (typ == PICK_AXE)
-		return (boolean)needspick(mon->data);
+		return needspick(mon->data);
 	    if (typ == UNICORN_HORN)
-		return (boolean)(!obj->cursed && !is_unicorn(mon->data));
+		return !obj->cursed && !is_unicorn(mon->data);
 	    if (typ == FROST_HORN || typ == FIRE_HORN)
-		return (obj->spe > 0);
+		return obj->spe > 0;
 	    if (is_weptool(obj))
-	    	return (boolean)likes_objs(mon->data);
+	    	return likes_objs(mon->data);
 	    break;
 	case FOOD_CLASS:
 	    if (typ == CORPSE)
-		return (boolean)(((mon->misc_worn_check & W_ARMG) &&
+		    return ((mon->misc_worn_check & W_ARMG) &&
 				    touch_petrifies(&mons[obj->corpsenm])) ||
-				(!resists_ston(mon) &&
-				    (obj->corpsenm == PM_LIZARD ||
-					(acidic(&mons[obj->corpsenm]) &&
-					 obj->corpsenm != PM_GREEN_SLIME))));
+			    (!resists_ston(mon) &&
+			     (obj->corpsenm == PM_LIZARD ||
+			      (acidic(&mons[obj->corpsenm]) &&
+			       obj->corpsenm != PM_GREEN_SLIME)));
 	    if (typ == EGG)
-		return (boolean)(touch_petrifies(&mons[obj->corpsenm]));
+		return touch_petrifies(&mons[obj->corpsenm]);
 	    break;
 	default:
 	    break;

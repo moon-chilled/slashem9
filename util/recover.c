@@ -199,14 +199,14 @@ char *basename;
 			"\nTrouble accessing level 0 (errno = %d).\n", errno);
 #endif
 	    fprintf(stderr, "Cannot open level 0 for %s.\n", basename);
-	    return(-1);
+	    return -1;
 	}
 	if (read(gfd, (void *) &hpid, sizeof hpid) != sizeof hpid) {
 	    fprintf(stderr, "%s\n%s%s%s\n",
 	     "Checkpoint data incompletely written or subsequently clobbered;",
 		    "recovery for \"", basename, "\" impossible.");
 	    close(gfd);
-	    return(-1);
+	    return -1;
 	}
 	if (read(gfd, (void *) &savelev, sizeof(savelev))
 							!= sizeof(savelev)) {
@@ -214,7 +214,7 @@ char *basename;
 	    "Checkpointing was not in effect for %s -- recovery impossible.\n",
 		    basename);
 	    close(gfd);
-	    return(-1);
+	    return -1;
 	}
 	if ((read(gfd, (void *) savename, sizeof savename)
 		!= sizeof savename) ||
@@ -222,7 +222,7 @@ char *basename;
 		!= sizeof version_data)) {
 	    fprintf(stderr, "Error reading %s -- can't recover.\n", lock);
 	    close(gfd);
-	    return(-1);
+	    return -1;
 	}
 
 	/* save file should contain:
@@ -235,7 +235,7 @@ char *basename;
 	if (sfd < 0) {
 	    fprintf(stderr, "Cannot create savefile %s.\n", savename);
 	    close(gfd);
-	    return(-1);
+	    return -1;
 	}
 
 	lfd = open_levelfile(savelev);
@@ -243,7 +243,7 @@ char *basename;
 	    fprintf(stderr, "Cannot open level of save for %s.\n", basename);
 	    close(gfd);
 	    close(sfd);
-	    return(-1);
+	    return -1;
 	}
 
 	if (write(sfd, (void *) &version_data, sizeof version_data)
@@ -251,7 +251,7 @@ char *basename;
 	    fprintf(stderr, "Error writing %s; recovery failed.\n", savename);
 	    close(gfd);
 	    close(sfd);
-	    return(-1);
+	    return -1;
 	}
 
 	copy_bytes(lfd, sfd);
@@ -282,7 +282,7 @@ char *basename;
 
 	close(sfd);
 
-	return(0);
+	return 0;
 }
 
 #ifdef EXEPATH

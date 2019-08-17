@@ -51,7 +51,7 @@ static boolean gypsy_offer(struct monst *mtmp, long cost, char *txt) {
 	if (EGYP(mtmp)->credit >= cost) {
 		if (yn("Accept this offer?") == 'y') {
 			EGYP(mtmp)->credit -= cost;
-			return (true);
+			return true;
 		}
 #ifndef GOLDOBJ
 	} else if (EGYP(mtmp)->credit + u.ugold >= cost)
@@ -63,7 +63,7 @@ static boolean gypsy_offer(struct monst *mtmp, long cost, char *txt) {
 		/* Maybe you could try gambling some of it for credit... */
 	else
 		verbalize("What a pity that you don't have enough!");
-	return (false);
+	return false;
 }
 
 static long gypsy_bet(struct monst *mtmp, long minimum) {
@@ -81,7 +81,7 @@ static long gypsy_bet(struct monst *mtmp, long minimum) {
  													umoney) {
 #endif
 		You("don't have enough money for the minimum bet.");
-		return (0L);
+		return 0L;
 	}
 
 	/* Prompt for an amount */
@@ -98,11 +98,11 @@ static long gypsy_bet(struct monst *mtmp, long minimum) {
 	/* Validate the amount */
 	if (bet == 0L) {
 		pline("Never mind.");
-		return (0L);
+		return 0L;
 	}
 	if (bet < minimum) {
 		You("must bet at least %ld.", minimum);
-		return (0L);
+		return 0L;
 	}
 	if (bet > EGYP(mtmp)->credit +
 #ifndef GOLDOBJ
@@ -111,9 +111,9 @@ static long gypsy_bet(struct monst *mtmp, long minimum) {
 								umoney) {
 #endif
 		You("don't have that much money to bet!");
-		return (0L);
+		return 0L;
 	}
-	return (bet);
+	return bet;
 }
 
 
@@ -183,8 +183,8 @@ static void card_shuffle(struct monst *mtmp) {
 static xchar card_draw(struct monst *mtmp) {
 	if (EGYP(mtmp)->top <= 0)
 		/* The deck is empty */
-		return (-1);
-	return (EGYP(mtmp)->cards[--EGYP(mtmp)->top]);
+		return -1;
+	return EGYP(mtmp)->cards[--EGYP(mtmp)->top];
 }
 
 static void card_name(xchar num, char *buf) {
@@ -520,15 +520,15 @@ static void monte(struct monst *mtmp) {
 static boolean nn_playable(xchar card, int total) {
 	if (card_istrump(card))
 		/* The fool always loses; other trumps are always playable */
-		return (card != CARD_SUITED);
+		return card != CARD_SUITED;
 	switch (card_rank(card)+1) {
 		case 11:	/* Jack */
 		case 12:	/* Queen */
-			return (total >= 10);
+			return total >= 10;
 		case 13:	/* King */
-			return (true);
+			return true;
 		default:	/* Ace through 10 */
-			return ((total + card_rank(card) + 1) <= NINETYNINE_GOAL);
+			return (total + card_rank(card) + 1) <= NINETYNINE_GOAL;
 	}
 }
 
@@ -536,19 +536,19 @@ static int nn_play(xchar card, int total) {
 	if (card_istrump(card)) {
 		if (card == CARD_SUITED)
 			/* The Fool always loses */
-			return (NINETYNINE_GOAL+1);
+			return NINETYNINE_GOAL+1;
 		else
 			/* Other trumps leave the total unchanged */
-			return (total);
+			return total;
 	}
 	switch (card_rank(card)+1) {
 		case 11:	/* Jack */
 		case 12:	/* Queen */
-			return (total - 10);
+			return total - 10;
 		case 13:	/* King */
-			return (NINETYNINE_GOAL);
+			return NINETYNINE_GOAL;
 		default:	/* Ace through 10 */
-			return (total + card_rank(card) + 1);
+			return total + card_rank(card) + 1;
 	}
 }
 
@@ -561,15 +561,15 @@ static int nn_pref(xchar card) {
 	 */
 	if (card_istrump(card))
 		/* The fool always loses; other trumps are always playable */
-		return (0);
+		return 0;
 	switch (card_rank(card)+1) {
 		case 11:	/* Jack */
 		case 12:	/* Queen */
-			return (1);
+			return 1;
 		case 13:	/* King */
-			return (2);
+			return 2;
 		default:	/* Ace through 10 */
-			return (3);
+			return 3;
 	}
 }
 

@@ -739,7 +739,7 @@ boolean force_it;
 
 #ifdef STEED
 	if (mtmp == u.usteed)
-		return (false);
+		return false;
 #endif
 
 	if (mtmp->mleashed) {
@@ -874,7 +874,7 @@ dotele (void)
 			if (!Teleportation)
 			    You("don't know that spell.");
 			else You("are not able to teleport at will.");
-			return(0);
+			return 0;
 		    }
 #ifdef WIZARD
 		}
@@ -914,12 +914,12 @@ dotele (void)
 	    if (castit) {
 		exercise(A_WIS, true);
 		if (spelleffects(sp_no, true))
-			return(1);
+			return 1;
 		else
 #ifdef WIZARD
 		    if (!wizard)
 #endif
-			return(0);
+			return 0;
 	    } else {
 		u.uen -= energy;
 		flags.botl = 1;
@@ -932,10 +932,10 @@ dotele (void)
 		next_to_u();
 	} else {
 		You(shudder_for_moment);
-		return(0);
+		return 0;
 	}
 	if (!trap) morehungry(10);
-	return(1);
+	return 1;
 }
 
 void

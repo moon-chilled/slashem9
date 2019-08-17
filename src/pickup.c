@@ -289,7 +289,7 @@ n_or_more(obj)
 struct obj *obj;
 {
     if (obj == uchain) return false;
-    return (obj->quan >= val_for_n_or_more);
+    return obj->quan >= val_for_n_or_more;
 }
 
 /* List of valid menu classes for query_objlist() and allow_category callback */
@@ -312,7 +312,7 @@ static boolean
 all_but_uchain(obj)
 struct obj *obj;
 {
-    return (obj != uchain);
+    return obj != uchain;
 }
 
 /* query_objlist callback: return true */
@@ -407,14 +407,14 @@ pickup (
 		if (autopickup && (flags.nopick || !OBJ_AT(u.ux, u.uy) ||
 			(is_pool(u.ux, u.uy) && !Underwater) || is_lava(u.ux, u.uy))) {
 			sense_engr_at(u.ux, u.uy, false);
-			return (0);
+			return 0;
 		}
 
 		/* no pickup if levitating & not on air or water level */
 		if (!can_reach_floor()) {
 		    if ((multi && !flags.run) || (autopickup && !flags.pickup))
 			sense_engr_at(u.ux, u.uy, false);
-		    return (0);
+		    return 0;
 		}
 		if (ttmp && ttmp->tseen) {
 		    /* Allow pickup from holes and trap doors that you escaped
@@ -425,7 +425,7 @@ pickup (
 		    if ((ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT) &&
 			(!u.utrap || (u.utrap && u.utraptype != TT_PIT))) {
 			sense_engr_at(u.ux, u.uy, false);
-			return(0);
+			return 0;
 		    }
 		}
 		/* multi && !flags.run means they are in the middle of some other
@@ -434,14 +434,14 @@ pickup (
 		 */
 		if ((multi && !flags.run) || (autopickup && !flags.pickup)) {
 		    check_here(false);
-		    return (0);
+		    return 0;
 		}
 		if (notake(youmonst.data)) {
 		    if (!autopickup)
 			You("are physically incapable of picking anything up.");
 		    else
 			check_here(false);
-		    return (0);
+		    return 0;
 		}
 
 		/* if there's anything here, stop running */
@@ -533,7 +533,7 @@ menu_pickup:
 				   false,
 #endif
 				   &via_menu)) {
-		    if (!via_menu) return (0);
+		    if (!via_menu) return 0;
 		    n = query_objlist("Pick up what?",
 				  objchain,
 				  traverse_how|(selective ? 0 : INVORDER_SORT),
@@ -597,7 +597,7 @@ end_query:
 		/* see whether there's anything else here, after auto-pickup is done */
 		if (autopickup) check_here(n_picked > 0);
 	}
-	return (n_tried > 0);
+	return n_tried > 0;
 }
 
 boolean
@@ -1439,7 +1439,7 @@ encumber_msg()
     }
 
     oldcap = newcap;
-    return (newcap);
+    return newcap;
 }
 
 /* Is there a container at x,y. Optional: return count of containers at x,y */
@@ -1543,7 +1543,7 @@ lootcont:
 			     doname(cobj), an(simple_typename(cobj->otyp)),
 			     "a container"));
 		c = ynq(qbuf);
-		if (c == 'q') return (timepassed);
+		if (c == 'q') return timepassed;
 		if (c == 'n') continue;
 		any = true;
 
@@ -1674,7 +1674,7 @@ gotit:
 	You("%s %s to loot.", dont_find_anything,
 		    underfoot ? "here" : "there");
     }
-    return (timepassed);
+    return timepassed;
 }
 
 /* loot_mon() returns amount of time passed.
@@ -1702,7 +1702,7 @@ boolean *prev_loot;
 	if ((c = yn_function(qbuf, ynqchars, 'n')) == 'y') {
 		if (nolimbs(youmonst.data)) {
 		    You_cant("do that without limbs."); /* not body_part(HAND) */
-		    return (0);
+		    return 0;
 		}
 		if (otmp->cursed) {
 		    You("can't. The saddle seems to be stuck to %s.",
@@ -1710,7 +1710,7 @@ boolean *prev_loot;
 				SUPPRESS_SADDLE, false));
 
 		    /* the attempt costs you time */
-			return (1);
+			return 1;
 		}
 		obj_extract_self(otmp);
 		if ((unwornmask = otmp->owornmask) != 0L) {
@@ -1723,7 +1723,7 @@ boolean *prev_loot;
 		timepassed = rnd(3);
 		if (prev_loot) *prev_loot = true;
 	} else if (c == 'q') {
-		return (0);
+		return 0;
 	}
     }
 #endif	/* STEED */
@@ -2012,7 +2012,7 @@ struct obj *obj;
 	 */
 	bot();
 
-	return(current_container ? 1 : -1);
+	return current_container ? 1 : -1;
 }
 
 static int
@@ -2181,7 +2181,7 @@ container_gone(fn)
 int (*fn)(struct obj*);
 {
     /* result is only meaningful while use_container() is executing */
-    return ((fn == in_container || fn == out_container) && !current_container);
+    return (fn == in_container || fn == out_container) && !current_container;
 }
 
 int

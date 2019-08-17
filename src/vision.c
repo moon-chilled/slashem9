@@ -1520,7 +1520,7 @@ clear_path(col1,row1,col2,row2)
 #ifdef MACRO_CPATH
 cleardone:
 #endif
-    return((boolean)result);
+    return (boolean)result;
 }
 
 #ifdef VISION_TABLES

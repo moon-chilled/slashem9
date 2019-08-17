@@ -60,7 +60,7 @@ thitu (
 	if(u.uac + tlev <= rnd(20)) {
 		if(Blind || !flags.verbose) pline("It misses.");
 		else You("are almost hit by %s.", onm);
-		return(0);
+		return 0;
 	} else {
 		if(Blind || !flags.verbose) You("are hit!");
 		else You("are hit by %s%s", onm, exclam(dam));
@@ -79,7 +79,7 @@ thitu (
 			losehp(dam, knm, kprefix);
 			exercise(A_STR, false);
 		}
-		return(1);
+		return 1;
 	}
 }
 
@@ -757,7 +757,7 @@ breamu (			/* monster breathes at you (ranged) */
 		    else
 			You_hear("a cough.");
 		}
-		return(0);
+		return 0;
 	    }
 	    if(!mtmp->mspec_used && rn2(3)) {
 
@@ -779,7 +779,7 @@ breamu (			/* monster breathes at you (ranged) */
 		} else impossible("Breath weapon %d used", typ-1);
 	    }
 	}
-	return(1);
+	return 1;
 }
 
 
@@ -807,7 +807,7 @@ xchar ax, ay;
 		if(!rn2(3))
 			mtmp->mspec_used = 10+rn2(20);
 	} else impossible("Breath weapon %d used", typ-1);
-	return(true);
+	return true;
 }
 
 
@@ -824,7 +824,7 @@ xchar ax, ay, bx, by;
 
 	if((!tbx || !tby || abs(tbx) == abs(tby)) /* straight line or diagonal */
 	   && distmin(tbx, tby, 0, 0) < BOLT_LIM) {
-	    if(ax == u.ux && ay == u.uy) return((boolean)(couldsee(bx,by)));
+	    if(ax == u.ux && ay == u.uy) return couldsee(bx,by);
 	    else if(clear_path(ax,ay,bx,by)) return true;
 	}
 	return false;
@@ -834,7 +834,7 @@ boolean
 lined_up(mtmp)		/* is mtmp in position to use ranged attack? */
 	struct monst *mtmp;
 {
-	return(linedup(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my));
+	return linedup(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my);
 }
 
 
@@ -847,8 +847,8 @@ m_carrying (struct monst *mtmp, int type)
 
 	for(otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
 		if(otmp->otyp == type)
-			return(otmp);
-	return(NULL);
+			return otmp;
+	return NULL;
 }
 
 /* true iff thrown/kicked/rolled object doesn't pass through iron bars */

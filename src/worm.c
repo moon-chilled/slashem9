@@ -93,7 +93,7 @@ get_wormno (void)
 	new_wormno++;
     }
 
-    return(0);	/* level infested with worms */
+    return 0;	/* level infested with worms */
 }
 
 /*
@@ -715,7 +715,7 @@ create_worm_tail(num_segs)
 	i++;
     }
 
-    return (new_tail);
+    return new_tail;
 }
 
 /*  worm_known()

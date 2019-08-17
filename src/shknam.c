@@ -425,7 +425,7 @@ struct mkroom	*sroom;
 	    }
 # endif
 #endif
-	    return(-1);
+	    return -1;
 	}
 
 	if(MON_AT(sx, sy)) (void) rloc(m_at(sx, sy), false); /* insurance */
@@ -438,7 +438,7 @@ struct mkroom	*sroom;
 	}
 	if (!shk) {
 	  if(!(shk = makemon(&mons[PM_SHOPKEEPER], sx, sy, NO_MM_FLAGS)))
-		return(-1);
+		return -1;
 	}
 
 	shk->isshk = shk->mpeaceful = 1;
@@ -509,7 +509,7 @@ struct mkroom	*sroom;
 	  mpickobj(shk, otmp);
 	}
 
-	return(sh);
+	return sh;
 }
 
 /* stock a newly-created room with objects */

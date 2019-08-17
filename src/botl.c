@@ -179,14 +179,14 @@ const char *rank_of(int lev, short monnum, boolean female) {
 
 	/* Find the rank */
 	for (i = xlev_to_rank((int)lev); i >= 0; i--) {
-	    if (female && role->rank[i].f) return (role->rank[i].f);
-	    if (role->rank[i].m) return (role->rank[i].m);
+	    if (female && role->rank[i].f) return role->rank[i].f;
+	    if (role->rank[i].m) return role->rank[i].m;
 	}
 
 	/* Try the role name, instead */
-	if (female && role->name.f) return (role->name.f);
-	else if (role->name.m) return (role->name.m);
-	return ("Player");
+	if (female && role->name.f) return role->name.f;
+	else if (role->name.m) return role->name.m;
+	return "Player";
 }
 
 

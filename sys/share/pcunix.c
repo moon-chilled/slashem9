@@ -35,18 +35,18 @@ int uptodate(int fd) {
 # ifdef WANT_GETHDATE
 	if(fstat(fd, &buf)) {
 		pline("Cannot get status of saved level? ");
-		return(0);
+		return 0;
 	}
 	if(buf.st_mtime < hbuf.st_mtime) {
 		pline("Saved level is out of date. ");
-		return(0);
+		return 0;
 	}
 # else
 #  if defined(MICRO) && !defined(NO_FSTAT)
 	if(fstat(fd, &buf)) {
 		if(moves > 1) pline("Cannot get status of saved level? ");
 		else pline("Cannot get status of saved game");
-		return(0);
+		return 0;
 	}
 	if(comp_times(buf.st_mtime)) {
 		if(moves > 1) pline("Saved level is out of date");
@@ -54,11 +54,11 @@ int uptodate(int fd) {
 		/* This problem occurs enough times we need to give the player
 		 * some more information about what causes it, and how to fix.
 		 */
-		return(0);
+		return 0;
 	}
 #  endif  /* MICRO */
 # endif /* WANT_GETHDATE */
-	return(1);
+	return 1;
 }
 #endif
 
@@ -78,7 +78,7 @@ static int eraseoldlocks(void) {
 	set_levelfile_name(lock, 0);
 	if(unlink(fqname(lock, LEVELPREFIX, 0)))
 		return 0;				/* cannot remove it */
-	return(1);					/* success! */
+	return 1;					/* success! */
 }
 
 void getlock(void) {

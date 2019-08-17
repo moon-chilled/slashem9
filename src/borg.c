@@ -42,6 +42,6 @@ char borg_input(void) {
 	c = rand()%9 + '1';
 	if (c == '5') c = '.';
 	sprintf(borg_line,"%c",c);
-	return ('.');
+	return '.';
 }
 #endif

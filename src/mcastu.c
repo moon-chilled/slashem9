@@ -208,7 +208,7 @@ int castmu(struct monst *mtmp, struct attack *mattk, boolean thinks_it_foundyou,
 	/* monster unable to cast spells? */
 	if (mtmp->mcan || mtmp->m_en < 5 || mtmp->mspec_used || !ml) {
 	    cursetxt(mtmp, is_undirected_spell(mattk->adtyp, spellnum));
-	    return(0);
+	    return 0;
 	}
 
 	if (mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) {
@@ -235,7 +235,7 @@ int castmu(struct monst *mtmp, struct attack *mattk, boolean thinks_it_foundyou,
 		canseemon(mtmp) ? Monnam(mtmp) : "Something",
 		levl[mtmp->mux][mtmp->muy].typ == WATER
 		    ? "empty water" : "thin air");
-	    return(0);
+	    return 0;
 	}
 
 	nomul(0);
@@ -282,7 +282,7 @@ int castmu(struct monst *mtmp, struct attack *mattk, boolean thinks_it_foundyou,
 #endif
 	    if (canseemon(mtmp) && flags.soundok)
 		pline_The("air crackles around %s.", mon_nam(mtmp));
-	    return(0);
+	    return 0;
 	}
 	if (canspotmon(mtmp) || !is_undirected_spell(mattk->adtyp, spellnum)) {
 	    pline("%s casts a spell%s!",
@@ -306,7 +306,7 @@ int castmu(struct monst *mtmp, struct attack *mattk, boolean thinks_it_foundyou,
 		impossible(
 	      "%s casting non-hand-to-hand version of hand-to-hand spell %d?",
 			   Monnam(mtmp), mattk->adtyp);
-		return(0);
+		return 0;
 	    }
 	} else if (mattk->damd)
 	    dmg = d((int)((ml/2) + mattk->damn), (int)mattk->damd);
@@ -358,7 +358,7 @@ int castmu(struct monst *mtmp, struct attack *mattk, boolean thinks_it_foundyou,
 	    }
 	}
 	if(dmg) mdamageu(mtmp, dmg);
-	return(ret);
+	return ret;
 }
 
 /* monster wizard and cleric spellcasting functions

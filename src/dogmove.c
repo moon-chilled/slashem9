@@ -276,10 +276,10 @@ static boolean dog_hunger(struct monst *mtmp, struct edog *edog) {
 		    You_feel("%s for a moment.",
 			Hallucination ? "bummed" : "sad");
 		mondied(mtmp);
-		return(true);
+		return true;
 	    }
 	}
-	return(false);
+	return false;
 }
 
 /* do something with object (drop, pick up, eat) at current position
@@ -294,7 +294,7 @@ static int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 	struct obj *floor_obj;
 	int temp_quan;
  */
-	if (mtmp->msleeping || !mtmp->mcanmove) return(0);
+	if (mtmp->msleeping || !mtmp->mcanmove) return 0;
 
 	omx = mtmp->mx;
 	omy = mtmp->my;
@@ -412,7 +412,7 @@ static int dog_goal(struct monst *mtmp, struct edog *edog, int after, int udist,
 #ifdef STEED
 	/* Steeds don't move on their own will */
 	if (mtmp == u.usteed)
-		return (-2);
+		return -2;
 #endif
 
 	omx = mtmp->mx;
@@ -486,7 +486,7 @@ static int dog_goal(struct monst *mtmp, struct edog *edog, int after, int udist,
 		gx = u.ux;
 		gy = u.uy;
 		if (after && udist <= 4 && gx == u.ux && gy == u.uy)
-			return(-2);
+			return -2;
 		appr = (udist >= 9) ? 1 : (mtmp->mflee) ? -1 : 0;
 		if (udist > 1) {
 			if (!IS_ROOM(levl[u.ux][u.uy].typ) || !rn2(4) ||
@@ -649,7 +649,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 
 	omx = mtmp->mx;
 	omy = mtmp->my;
-	if (has_edog && !is_spell && dog_hunger(mtmp, edog)) return(2);      /* starved */
+	if (has_edog && !is_spell && dog_hunger(mtmp, edog)) return 2;      /* starved */
 
 	udist = distu(omx,omy);
 #ifdef STEED
@@ -657,13 +657,13 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 	if (mtmp == u.usteed) {
 	    if (Conflict && !resist(mtmp, RING_CLASS, 0, 0)) {
 		dismount_steed(DISMOUNT_THROWN);
-		return (1);
+		return 1;
 	    }
 	    udist = 1;
 	} else
 #endif
 	/* maybe we tamed him while being swallowed --jgm */
-	if (!udist) return(0);
+	if (!udist) return 0;
 
 	/* Intelligent pets may rebel (apart from minions, spell beings) */
 	if (!rn2(850) && betrayed(mtmp)) return 1;
@@ -703,7 +703,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 	      mon_nam(mtmp), goal, gx, gy, appr);
 	}
 #endif
-	if (appr == -2) return(0);
+	if (appr == -2) return 0;
 
 	allowflags = ALLOW_M | ALLOW_TRAPS | ALLOW_SSM | ALLOW_SANCT;
 	if (passes_walls(mtmp->data)) allowflags |= (ALLOW_ROCK | ALLOW_WALL);
@@ -730,7 +730,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 			mk_roamer(&mons[PM_ANGEL], u.ualign.type,
 					 mm.x, mm.y, false);
 		}
-		return(2);
+		return 2;
 
 	    }
 	}
@@ -833,7 +833,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 				!resists_ston(mtmp)))
 			continue;
 
-		    if (after) return(0); /* hit only once each move */
+		    if (after) return 0; /* hit only once each move */
 
 		    notonhead = 0;
 		    mstatus = mattackm(mtmp, mtmp2);
@@ -931,7 +931,7 @@ newdogpos:
 				m_unleash(mtmp, false);
 			}
 			mattacku(mtmp);
-			return(0);
+			return 0;
 		}
 		if (!m_in_out_region(mtmp, nix, niy))
 		    return 1;
@@ -1002,7 +1002,7 @@ dognext:
 		newsym(cc.x,cc.y);
 		set_apparxy(mtmp);
 	}
-	return(1);
+	return 1;
 }
 
 /* check if a monster could pick up objects from a location */

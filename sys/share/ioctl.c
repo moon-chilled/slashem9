@@ -183,6 +183,6 @@ int dosuspend(void) {
 # else
 	pline("Sorry, it seems we have no SIGTSTP here.  Try ! or S.");
 # endif
-	return(0);
+	return 0;
 }
 #endif /* SUSPEND */

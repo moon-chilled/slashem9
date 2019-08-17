@@ -60,7 +60,7 @@ dev_name()
 	} while (match && m < 100); /* m for insurance */
 
 	if (match) return NULL;
-	return(developers[i]);
+	return developers[i];
 }
 
 static void
@@ -118,7 +118,7 @@ boolean special;
 	char nam[PL_NSIZ];
 
 	if(!is_mplayer(ptr))
-		return(NULL);
+		return NULL;
 
 	if(MON_AT(x, y))
 		rloc(m_at(x, y), false); /* insurance */
@@ -289,7 +289,7 @@ boolean special;
 		mongets(mtmp, rnd_misc_item(mtmp));
 	}
 
-	return(mtmp);
+	return mtmp;
 }
 
 /* create the indicated number (num) of monster-players,

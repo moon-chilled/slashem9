@@ -57,11 +57,11 @@ const char *pref;
 
 	if(i > PREFIX) {
 		impossible("PREFIX too short (for %d).", i);
-		return(s);
+		return s;
 	}
 	s -= i;
 	strncpy(s, pref, i);	/* do not copy trailing 0 */
-	return(s);
+	return s;
 }
 
 
@@ -116,7 +116,7 @@ obj_typename (int otyp)
 			sprintf(eos(buf)," called %s",un);
 		if(dn)
 			sprintf(eos(buf)," (%s)",dn);
-		return(buf);
+		return buf;
 	default:
 		if(nn) {
 			strcpy(buf, actualn);
@@ -134,7 +134,7 @@ obj_typename (int otyp)
 			if(un)
 				sprintf(eos(buf), " called %s", un);
 		}
-		return(buf);
+		return buf;
 	}
 	/* here for ring/scroll/potion/wand */
 	if(nn) {
@@ -150,7 +150,7 @@ obj_typename (int otyp)
 		sprintf(eos(buf), " called %s", un);
 	if(dn)
 		sprintf(eos(buf), " (%s)", dn);
-	return(buf);
+	return buf;
 }
 
 /* less verbose result than obj_typename(); either the actual name
@@ -475,7 +475,7 @@ nameit:
 	}
 
 	if (!strncmpi(buf, "the ", 4)) buf += 4;
-	return(buf);
+	return buf;
 } /* end Hallu */
 
 /* WAC calls the above xname2 */
@@ -500,7 +500,7 @@ xname (struct obj *obj)
 		obj_extract_self(hobj);
 		dealloc_obj(hobj);
 
-		return (buf);
+		return buf;
 	} else return xname2(obj);
 }
 
@@ -863,7 +863,7 @@ ring:
 		        sprintf (eos(bp), " {%d}", obj->owt);
 
 	bp = strprepend(bp, prefix);
-	return(bp);
+	return bp;
 }
 
 
@@ -1125,7 +1125,7 @@ aobjnam (struct obj *otmp, const char *verb)
 	    strcat(bp, " ");
 	    strcat(bp, otense(otmp, verb));
 	}
-	return(bp);
+	return bp;
 }
 
 /* like aobjnam, but prepend "The", not count, and use xname */
@@ -1138,7 +1138,7 @@ Tobjnam (struct obj *otmp, const char *verb)
 	    strcat(bp, " ");
 	    strcat(bp, otense(otmp, verb));
 	}
-	return(bp);
+	return bp;
 }
 
 /* return form of the verb (input plural) if xname(otmp) were the subject */
@@ -1273,7 +1273,7 @@ Doname2 (struct obj *obj)
 	char *s = doname(obj);
 
 	*s = highc(*s);
-	return(s);
+	return s;
 }
 
 /* returns "your xname(obj)" or "Foobar's xname(obj)" or "the xname(obj)" */
@@ -2270,13 +2270,13 @@ boolean from_user;
 		    pline("%d gold piece%s.", cnt, plur(cnt));
 		u.ugold += cnt;
 		flags.botl=1;
-		return (&zeroobj);
+		return &zeroobj;
 #else
                 otmp = mksobj(GOLD_PIECE, false, false);
 		otmp->quan = cnt;
                 otmp->owt = weight(otmp);
 		flags.botl=1;
-		return (otmp);
+		return otmp;
 #endif
 	}
 	if (strlen(bp) == 1 &&
@@ -2492,7 +2492,7 @@ srch:
 				      && !Can_fall_thru(&u.uz)) trap = ROCKTRAP;
 				maketrap(u.ux, u.uy, trap);
 				pline("%s.", An(tname));
-				return(&zeroobj);
+				return &zeroobj;
 			}
 		}
 		/* or some other dungeon features -dlc */
@@ -2505,20 +2505,20 @@ srch:
 			pline("A %sfountain.",
 			      levl[u.ux][u.uy].blessedftn ? "magic " : "");
 			newsym(u.ux, u.uy);
-			return(&zeroobj);
+			return &zeroobj;
 		}
 		if(!BSTRCMP(bp, p-6, "throne")) {
 			levl[u.ux][u.uy].typ = THRONE;
 			pline("A throne.");
 			newsym(u.ux, u.uy);
-			return(&zeroobj);
+			return &zeroobj;
 		}
 		if(!BSTRCMP(bp, p-9, "headstone") || !BSTRCMP(bp, p-5, "grave")) {
 			levl[u.ux][u.uy].typ = GRAVE;
 			make_grave(u.ux, u.uy, NULL);
 			pline("A grave.");
 			newsym(u.ux, u.uy);
-			return(&zeroobj);
+			return &zeroobj;
 		}
 		if(!BSTRCMP(bp, p-4, "tree")) {
 			levl[u.ux][u.uy].typ = TREE;
@@ -2575,14 +2575,14 @@ srch:
 		    levl[u.ux][u.uy].altarmask = Align2amask( al );
 		    pline("%s altar.", An(align_str(al)));
 		    newsym(u.ux, u.uy);
-		    return(&zeroobj);
+		    return &zeroobj;
 		}
 
 		if(!BSTRCMP(bp, p-5, "grave") || !BSTRCMP(bp, p-9, "headstone")) {
 		    make_grave(u.ux, u.uy, NULL);
 		    pline("A grave.");
 		    newsym(u.ux, u.uy);
-		    return(&zeroobj);
+		    return &zeroobj;
 		}
 
 		if(!BSTRCMP(bp, p-4, "tree")) {
@@ -2601,7 +2601,7 @@ srch:
 		}
 	}
 #endif
-	if(!oclass) return(NULL);
+	if(!oclass) return NULL;
 any:
 	if(!oclass) oclass = wrpsym[rn2((int)sizeof(wrpsym))];
 typfnd:
@@ -2636,7 +2636,7 @@ typfnd:
 	    && !wizard
 #endif
 	    )
-	    return(NULL);
+	    return NULL;
 
 	/* convert magic lamps to regular lamps before lighting them or setting
 	   the charges */
@@ -2979,7 +2979,7 @@ typfnd:
 	otmp->owt = weight(otmp);
 	if (very && otmp->otyp == HEAVY_IRON_BALL) otmp->owt += 160;
 
-	return(otmp);
+	return otmp;
 }
 
 int
@@ -2988,7 +2988,7 @@ rnd_class (int first, int last)
 	int i, x, sum=0;
 
 	if (first == last)
-	    return (first);
+	    return first;
 	for(i=first; i<=last; i++)
 		sum += objects[i].oc_prob;
 	if (!sum) /* all zero */

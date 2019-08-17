@@ -423,7 +423,7 @@ static int kick_object(xchar x, xchar y) {
 	/* kickobj should always be set due to conditions of call */
 	if(!kickobj || kickobj->otyp == BOULDER
 			|| kickobj == uball || kickobj == uchain)
-		return(0);
+		return 0;
 
 	if ((trap = t_at(x,y)) != 0 &&
 			(((trap->ttyp == PIT ||
@@ -438,7 +438,7 @@ static int kick_object(xchar x, xchar y) {
 
 	if(Fumbling && !rn2(3)) {
 		Your("clumsy kick missed.");
-		return(1);
+		return 1;
 	}
 
 	if(kickobj->otyp == CORPSE && touch_petrifies(&mons[kickobj->corpsenm])
@@ -497,7 +497,7 @@ static int kick_object(xchar x, xchar y) {
 		    pline("%s %sn't come loose.",
 			  The(distant_name(kickobj, xname)),
 			  otense(kickobj, "do"));
-		return (!rn2(3) || martial());
+		return !rn2(3) || martial();
 	    }
 	    if (Blind)
 		pline("It comes loose.");
@@ -532,16 +532,16 @@ static int kick_object(xchar x, xchar y) {
 			kickobj->olocked = 0;
 			kickobj->obroken = 1;
 			if (otrp) (void) chest_trap(kickobj, LEG, false);
-			return(1);
+			return 1;
 		    }
 		} else {
 		    if (!rn2(3) || (martial() && !rn2(2))) {
 			pline_The("lid slams open, then falls shut.");
 			if (otrp) (void) chest_trap(kickobj, LEG, false);
-			return(1);
+			return 1;
 		    }
 		}
-		if(range < 2) return(1);
+		if(range < 2) return 1;
 		/* else let it fall through to the next cases... */
 	}
 
@@ -554,7 +554,7 @@ static int kick_object(xchar x, xchar y) {
 	 */
 	if(range < 2 || (isgold && kickobj->quan > 300L)) {
 	    if(!Is_box(kickobj)) pline("Thump!");
-	    return(!rn2(3) || martial());
+	    return !rn2(3) || martial();
 	}
 
 	if (kickobj->quan > 1L && !isgold) kickobj = splitobj(kickobj, 1L);
@@ -579,7 +579,7 @@ static int kick_object(xchar x, xchar y) {
 	    notonhead = (mon->mx != bhitpos.x || mon->my != bhitpos.y);
 	    if(isgold ? ghitm(mon, kickobj) :   /* caught? */
 		thitmonst(mon, kickobj, 3))        /* hit && used up? */
-		return(1);
+		return 1;
 	}
 
 	/* the object might have fallen down a hole */
@@ -602,11 +602,11 @@ static int kick_object(xchar x, xchar y) {
 				    (boolean)shkp->mpeaceful, false, false);
 	}
 
-	if(flooreffects(kickobj,bhitpos.x,bhitpos.y,"fall")) return(1);
+	if(flooreffects(kickobj,bhitpos.x,bhitpos.y,"fall")) return 1;
 	place_object(kickobj, bhitpos.x, bhitpos.y);
 	stackobj(kickobj);
 	newsym(kickobj->ox, kickobj->oy);
-	return(1);
+	return 1;
 }
 
 static char *kickstr(char *buf) {
@@ -695,8 +695,8 @@ int dokick(void) {
 		return 0;
 	}
 
-	if(!getdir(NULL)) return(0);
-	if(!u.dx && !u.dy) return(0);
+	if(!getdir(NULL)) return 0;
+	if(!u.dx && !u.dy) return 0;
 
 	x = u.ux + u.dx;
 	y = u.uy + u.dy;
@@ -717,7 +717,7 @@ int dokick(void) {
 			 }
 		default: Your("feeble kick has no effect."); break;
 		}
-		return(1);
+		return 1;
 	}
 	if (Levitation) {
 		int xx, yy;
@@ -732,7 +732,7 @@ int dokick(void) {
 			!IS_DOOR(levl[xx][yy].typ) &&
 			(!Is_airlevel(&u.uz) || !OBJ_AT(xx,yy))) {
 		    You("have nothing to brace yourself against.");
-		    return(0);
+		    return 0;
 		}
 	}
 
@@ -773,7 +773,7 @@ int dokick(void) {
 		    if(range < 1) range = 1;
 		    hurtle(-u.dx, -u.dy, range, true);
 		}
-		return(1);
+		return 1;
 	}
 	if (memory_is_invisible(x, y)) {
 		unmap_object(x, y);
@@ -792,7 +792,7 @@ int dokick(void) {
 		if(kick_object(x, y)) {
 		    if(Is_airlevel(&u.uz))
 			hurtle(-u.dx, -u.dy, 1, true); /* assume it's light */
-		    return(1);
+		    return 1;
 		}
 		goto ouch;
 	}
@@ -820,7 +820,7 @@ int dokick(void) {
 			if (maploc->doormask == D_ISOPEN ||
 			    maploc->doormask == D_NODOOR)
 			    unblock_point(x,y);	/* vision */
-			return(1);
+			return 1;
 		    } else goto ouch;
 		}
 		if(maploc->typ == SCORR) {
@@ -833,7 +833,7 @@ int dokick(void) {
 			else
 			    newsym(x,y);
 			unblock_point(x,y);	/* vision */
-			return(1);
+			return 1;
 		    } else goto ouch;
 		}
 		if(IS_THRONE(maploc->typ)) {
@@ -850,7 +850,7 @@ int dokick(void) {
 			    newsym(x, y);
 			}
 			exercise(A_DEX, true);
-			return(1);
+			return 1;
 		    } else if(Luck > 0 && !rn2(3) && !maploc->looted) {
 			mkgold((long) rn1(201, 300), x, y);
 			i = Luck + 1;
@@ -866,11 +866,11 @@ int dokick(void) {
 			}
 			/* prevent endless milking */
 			maploc->looted = T_LOOTED;
-			return(1);
+			return 1;
 		    } else if (!rn2(4)) {
 			if(dunlev(&u.uz) < dunlevs_in_dungeon(&u.uz)) {
 			    fall_through(false);
-			    return(1);
+			    return 1;
 			} else goto ouch;
 		    }
 		    goto ouch;
@@ -881,7 +881,7 @@ int dokick(void) {
 		    if(!rn2(3)) goto ouch;
 		    altar_wrath(x, y);
 		    exercise(A_DEX, true);
-		    return(1);
+		    return 1;
 		}
 		if(IS_FOUNTAIN(maploc->typ)) {
 		    if(Levitation) goto dumb;
@@ -894,7 +894,7 @@ int dokick(void) {
 				/* could cause short-lived fumbling here */
 			}
 		    exercise(A_DEX, true);
-		    return(1);
+		    return 1;
 		}
 		if(IS_GRAVE(maploc->typ) || maploc->typ == IRONBARS)
 		    goto ouch;
@@ -929,7 +929,7 @@ int dokick(void) {
 			exercise(A_WIS, true);	/* discovered a new food source! */
 			newsym(x, y);
 			maploc->looted |= TREE_LOOTED;
-			return(1);
+			return 1;
 		    } else if (!(maploc->looted & TREE_SWARM)) {
 		    	int cnt = rnl(4) + 2;
 			int made = 0;
@@ -946,7 +946,7 @@ int dokick(void) {
 			else
 			    You("smell stale honey.");
 			maploc->looted |= TREE_SWARM;
-			return(1);
+			return 1;
 		    }
 		    goto ouch;
 		}
@@ -954,7 +954,7 @@ int dokick(void) {
 		   if(Levitation) goto dumb;
 		   pline("Klunk!");
 		   if (!rn2(4)) breaktoilet(x,y);
-		   return(1);
+		   return 1;
 		}
 		if(IS_GRAVE(maploc->typ)) {
 		   goto ouch;
@@ -970,7 +970,7 @@ int dokick(void) {
 			    pline("Klunk!  The pipes vibrate noisily.");
 			else pline("Klunk!");
 			exercise(A_DEX, true);
-			return(1);
+			return 1;
 		    } else if(!(maploc->looted & S_LPUDDING) && !rn2(3) &&
 			  !(mvitals[PM_BLACK_PUDDING].mvflags & G_GONE)) {
 			if (Blind)
@@ -983,7 +983,7 @@ int dokick(void) {
 			exercise(A_DEX, true);
 			newsym(x,y);
 			maploc->looted |= S_LPUDDING;
-			return(1);
+			return 1;
 		    } else if(!(maploc->looted & S_LDWASHER) && !rn2(3) &&
 			      !(mvitals[washerndx].mvflags & G_GONE)) {
 			/* can't resist... */
@@ -993,7 +993,7 @@ int dokick(void) {
 			    newsym(x,y);
 			maploc->looted |= S_LDWASHER;
 			exercise(A_DEX, true);
-			return(1);
+			return 1;
 		    } else if(!rn2(3)) {
 			pline("Flupp!  %s.", (Blind ?
 				      "You hear a sloshing sound" :
@@ -1007,7 +1007,7 @@ int dokick(void) {
 			    exercise(A_WIS, true);	/* a discovery! */
 			    maploc->looted |= S_LRING;
 			}
-			return(1);
+			return 1;
 		    }
 		    goto ouch;
 		}
@@ -1031,7 +1031,7 @@ ouch:
 			KILLED_BY);
 		    if(Is_airlevel(&u.uz) || Levitation)
 			hurtle(-u.dx, -u.dy, rn1(2,4), true); /* assume it's heavy */
-		    return(1);
+		    return 1;
 		}
 		goto dumb;
 	}
@@ -1053,7 +1053,7 @@ dumb:
 		    hurtle(-u.dx, -u.dy, 1, true);
 		    return 1;		/* you moved, so use up a turn */
 		}
-		return(0);
+		return 0;
 	}
 
 	/* not enough leverage to kick open doors while levitating */
@@ -1143,7 +1143,7 @@ dumb:
 		    }
 		}
 	}
-	return(1);
+	return 1;
 }
 
 static void drop_to(coord *cc, schar loc) {
@@ -1302,10 +1302,10 @@ boolean ship_object(struct obj *otmp, xchar x, xchar y, boolean shop_floor_obj) 
 	boolean nodrop, unpaid, container, impact = false;
 	long n = 0L;
 
-	if (!otmp) return(false);
-	if ((toloc = down_gate(x, y)) == MIGR_NOWHERE) return(false);
+	if (!otmp) return false;
+	if ((toloc = down_gate(x, y)) == MIGR_NOWHERE) return false;
 	drop_to(&cc, toloc);
-	if (!cc.y) return(false);
+	if (!cc.y) return false;
 
 	/* objects other than attached iron ball always fall down ladder,
 	   but have a chance of staying otherwise */
@@ -1333,7 +1333,7 @@ boolean ship_object(struct obj *otmp, xchar x, xchar y, boolean shop_floor_obj) 
 
 	if (nodrop) {
 	    if (impact) impact_drop(otmp, x, y, 0);
-	    return(false);
+	    return false;
 	}
 
 	if(unpaid || shop_floor_obj) {
@@ -1400,7 +1400,7 @@ boolean ship_object(struct obj *otmp, xchar x, xchar y, boolean shop_floor_obj) 
 	    impact_drop(otmp, x, y, 0);
 	    newsym(x,y);
 	}
-	return(true);
+	return true;
 }
 
 void obj_delivery(void) {

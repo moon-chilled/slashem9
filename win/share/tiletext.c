@@ -639,7 +639,7 @@ char ttype[BUFSZ];
 int *number;
 char name[BUFSZ];
 {
-	return(peek_txttile_info(in_file, ttype, number, name));
+	return peek_txttile_info(in_file, ttype, number, name);
 }
 
 boolean
@@ -656,7 +656,7 @@ boolean
 read_text_tile(pixels)
 pixel (*pixels)[MAX_TILE_X];
 {
-	return(read_txttile(in_file, pixels));
+	return read_txttile(in_file, pixels);
 }
 
 boolean

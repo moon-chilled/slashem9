@@ -175,8 +175,8 @@ static char popch(void) {
 	 * pushed back on the pushq.
 	 */
 	if (occupation) return '\0';
-	if (in_doagain) return(char)((shead != stail) ? saveq[stail++] : '\0');
-	else		return(char)((phead != ptail) ? pushq[ptail++] : '\0');
+	if (in_doagain) return (shead != stail) ? saveq[stail++] : '\0';
+	else		return (phead != ptail) ? pushq[ptail++] : '\0';
 }
 
 char pgetchar(void) {		/* curtesy of aeb@cwi.nl */
@@ -184,7 +184,7 @@ char pgetchar(void) {		/* curtesy of aeb@cwi.nl */
 
 	if(!(ch = popch()))
 		ch = nhgetch();
-	return((char)ch);
+	return ch;
 }
 
 /* A ch == 0 resets the pushq */
@@ -487,18 +487,18 @@ static int playersteal(void) {
 	if (no_steal) {
 		/* discard direction typeahead, if any */
 		display_nhwindow(WIN_MESSAGE, true);    /* --More-- */
-		return(0);
+		return 0;
 	}
 
-	if(!getdir(NULL)) return(0);
-	if(!u.dx && !u.dy) return(0);
+	if(!getdir(NULL)) return 0;
+	if(!u.dx && !u.dy) return 0;
 
 	x = u.ux + u.dx;
 	y = u.uy + u.dy;
 
 	if(u.uswallow) {
 		pline("You search around but don't find anything.");
-		return(1);
+		return 1;
 	}
 
 	u_wipe_engr(2);
@@ -577,18 +577,18 @@ static int playersteal(void) {
 				You("don't find anything to steal.");
 
 			if (!mdat->mtame) exercise(A_DEX, true);
-			return(1);
+			return 1;
 		} else {
 			You("failed to steal anything.");
 			setmangry(mdat);
-			return(1);
+			return 1;
 	       }
 	} else {
 		pline("I don't see anybody to rob there!");
-		return(0);
+		return 0;
 	}
 
-	return(0);
+	return 0;
 }
 
 #ifdef WIZARD
@@ -627,7 +627,7 @@ static int specialpower(void) {
 #ifdef WIZARD
             if (!wizard || (yn("Use ability anyways?") == 'n'))
 #endif
-                return(0);
+                return 0;
 	}
 
 	switch (u.role) {
@@ -659,15 +659,15 @@ static int specialpower(void) {
 		break;
 	    case 'G':
 			Your("ability, gem identification, is automatic.");
-			return(0);
+			return 0;
 		case 'P':
 			Your("ability, bless and curse detection, is automatic.");
-			return(0);
+			return 0;
 	    case 'D':
 			/* KMH -- Just do it!  (Besides, Alt isn't portable...) */
-			return (polyatwill());
+			return polyatwill();
 			/*Your("ability, polymorphing, uses the alt-y key.");*/
-			/*return(0);*/
+			/*return 0;*/
 	    case 'L':
 		/*only when empty handed, in human form!*/
 		if (Upolyd) {
@@ -684,25 +684,25 @@ static int specialpower(void) {
 		break;
 	    case 'R':
 	    /* KMH -- Just do it!  (Besides, Alt isn't portable...) */
-	    return (playersteal());
+	    return playersteal();
 		/*Your("ability, stealing, uses the alt-b key.");*/
-        /*return(0);*/
+        /*return 0;*/
 		break;
 	    case 'M':
 		Your("special ability is unarmed combat, and it is automatic.");
-                return(0);
+                return 0;
 		break;
 	    case 'C':
 	    case 'T':
 		You("don't have a special ability!");
-                return(0);
+                return 0;
 		break;
 	    case 'B':
 		You("fly into a berserk rage!");
 		u.ulastuse = d(2,8) + (u.ulevel/5) + 1;
 		incr_itimeout(&HFast, u.ulastuse);
 		u.unextuse = rn1(1000,500);
-		return(0);
+		return 0;
 		break;
 	    case 'F':
 	    case 'I':
@@ -794,7 +794,7 @@ static int specialpower(void) {
 		aggravate();
 		u.ulastuse = rnd((int) (u.ulevel/6 + 1)) + 1;
 		u.unextuse = rn1(1000,500);
-		return(0);
+		return 0;
 		break;
 		case 'Y':
 #ifdef STEED
@@ -807,13 +807,13 @@ static int specialpower(void) {
 			break;
 #else
 			You("don't have a special ability!");
-			return(0);
+			return 0;
 #endif
 	    default:
 		break;
 	  }
 /*By default,  action should take a turn*/
-	return(1);
+	return 1;
 }
 #endif
 
@@ -1864,7 +1864,7 @@ static boolean minimal_enlightenment(void) {
 	end_menu(tmpwin, "Base Attributes");
 	n = select_menu(tmpwin, PICK_NONE, &selected);
 	destroy_nhwindow(tmpwin);
-	return (n != -1);
+	return n != -1;
 }
 
 static int doattributes(void) {
@@ -2055,14 +2055,14 @@ static int makemenu(const char *menuname, struct menu_list menu_struct[]) {
                       set_occupation(func, current_menu[i].m_text, multi);
                 /*WAC catch void into makemenu */
                 if (func == NULL)
-                        return (makemenu(current_menu[i].m_item, menu_struct));
+                        return makemenu(current_menu[i].m_item, menu_struct);
                 else return (*func)();            /* perform the command */
         } else if (n < 0) {
                 for (i = 0; menu_struct[i].m_header; i++){
                    if (menuname == menu_struct[i].m_header) {
                     if (menu_struct[i].m_parent)
-                      return (makemenu(menu_struct[i].m_parent, menu_struct));
-                    else return (0);
+                      return makemenu(menu_struct[i].m_parent, menu_struct);
+                    else return 0;
                 }
         }
         }
@@ -2070,7 +2070,7 @@ static int makemenu(const char *menuname, struct menu_list menu_struct[]) {
 }
 
 static int domenusystem(void) {
-        return (makemenu("Main Menu", main_menustruct));
+        return makemenu("Main Menu", main_menustruct);
 }
 
 /* KMH, #conduct
@@ -4008,7 +4008,7 @@ static char *parse(void) {
 		// TODO: implement kbhit for other windowports --ELR
 	   if (!kbhit()) {
 	       borg_input();
-	       return(borg_line);
+	       return borg_line;
 	   } else {
 		 nhgetch();
 		 pline("Cyborg terminated.");
@@ -4028,7 +4028,7 @@ static char *parse(void) {
 			repeat_hit--;
 			in_line[0] = repeat_char;
 			in_line[1] = 0;
-			return (in_line);
+			return in_line;
 		}
 	}
 
@@ -4086,7 +4086,7 @@ static char *parse(void) {
 	if (prezero) in_line[0] = DOESCAPE;
 	repeat_char = in_line[0];
 
-	return(in_line);
+	return in_line;
 }
 
 
@@ -4140,7 +4140,7 @@ char readchar(void) {
 	    readchar_queue = click_to_cmd(x, y, mod);
 	    sym = *readchar_queue++;
 	}
-	return((char) sym);
+	return sym;
 }
 
 static int dotravel(void) {

@@ -531,7 +531,7 @@ static char *set_bonesfile_name(char *file, d_level *lev) {
 	    sprintf(dptr, ".%c", sptr->boneid);
 	else
 	    sprintf(dptr, ".%d", lev->dlevel);
-	return(dptr-2);
+	return dptr-2;
 }
 
 /* set up temporary file name for writing bones, to avoid another game's
@@ -1072,7 +1072,7 @@ static FILE *fopen_config_file(const char *filename) {
 #endif
 		if ((fp = fopen(filename, "r")) != NULL) {
 		    configfile = filename;
-		    return(fp);
+		    return fp;
 #ifdef UNIX
 		} else {
 		    /* access() above probably caught most problems for UNIX */
@@ -1087,7 +1087,7 @@ static FILE *fopen_config_file(const char *filename) {
 #if defined(MICRO) || defined(MAC) || defined(WIN32)
 	if ((fp = fopen(fqname(configfile, CONFIGPREFIX, 0), "r"))
 								!= NULL)
-		return(fp);
+		return fp;
 #else
 	/* constructed full path names don't need fqname() */
 	envp = nh_getenv("HOME");
@@ -1096,16 +1096,16 @@ static FILE *fopen_config_file(const char *filename) {
 	else
 		sprintf(tmp_config, "%s/%s", envp, configfile);
 	if ((fp = fopen(tmp_config, "r")) != NULL)
-		return(fp);
+		return fp;
 # if defined(__APPLE__)
 	/* try an alternative */
 	if (envp) {
 		sprintf(tmp_config, "%s/%s", envp, "Library/Preferences/NetHack Defaults");
 		if ((fp = fopen(tmp_config, "r")) != NULL)
-			return(fp);
+			return fp;
 		sprintf(tmp_config, "%s/%s", envp, "Library/Preferences/NetHack Defaults.txt");
 		if ((fp = fopen(tmp_config, "r")) != NULL)
-			return(fp);
+			return fp;
 	}
 # endif
 	if (errno != ENOENT) {
@@ -1125,7 +1125,7 @@ static FILE *fopen_config_file(const char *filename) {
 	else if (!strncmp(windowprocs.name, "proxy/", 6)) {
 	    fp = fopen("/etc/slashem/proxy.slashemrc", "r");
 	    if (fp != NULL)
-		return(fp);
+		return fp;
 	    else if (errno != ENOENT) {
 		raw_printf("Couldn't open /etc/slashem/proxy.slashemrc (%d).",
 				errno);
@@ -1591,7 +1591,7 @@ static FILE *fopen_wizkit_file(void) {
 	} else
 #endif
 	if ((fp = fopen(wizkit, "r")) != NULL) {
-	    return(fp);
+	    return fp;
 #ifdef UNIX
 	} else {
 	    /* access() above probably caught most problems for UNIX */
@@ -1604,14 +1604,14 @@ static FILE *fopen_wizkit_file(void) {
 #if defined(MICRO) || defined(MAC) || defined(WIN32)
 	if ((fp = fopen(fqname(wizkit, CONFIGPREFIX, 0), "r"))
 								!= NULL)
-		return(fp);
+		return fp;
 #else
 	envp = nh_getenv("HOME");
 	if (envp)
 		sprintf(tmp_wizkit, "%s/%s", envp, wizkit);
 	else 	strcpy(tmp_wizkit, wizkit);
 	if ((fp = fopen(tmp_wizkit, "r")) != NULL)
-		return(fp);
+		return fp;
 	else if (errno != ENOENT) {
 		/* e.g., problems when setuid NetHack can't search home
 		 * directory restricted to user */

@@ -1113,7 +1113,7 @@ void do_containerconts(struct obj *list, boolean identified, boolean all_contain
 /* should be called with either EXIT_SUCCESS or EXIT_FAILURE */
 void terminate(int status) {
 #ifdef MAC
-	getreturn("to exit");
+	getreturn "to exit";
 #endif
 	/* don't bother to try to release memory if we're in panic mode, to
 	   avoid trouble in case that happens to be due to memory problems */
@@ -1219,7 +1219,7 @@ void do_vanquished(int defquery, boolean ask, boolean want_dump)
 int dolistvanq(void) {
     if (!list_vanquished('y', false))
         pline("No monsters have yet been killed.");
-    return(0);
+    return 0;
 }
 
 /* number of monster species which have been genocided */

@@ -397,7 +397,7 @@ char *s;
 	SpinCursor(3);
 	for(i=0; artifact_names[i]; i++)
 	    if (!strcmp(s, artifact_names[i]))
-		return ((int) i);
+		return (int) i;
 	return ERR;
 }
 
@@ -431,7 +431,7 @@ char *s;
 	SpinCursor(3);
 	for(i=0; room_types[i].name; i++)
 	    if (!strcmp(s, room_types[i].name))
-		return ((int) room_types[i].type);
+		return (int) room_types[i].type;
 	return ERR;
 }
 
@@ -517,7 +517,7 @@ boolean
 check_monster_char(c)
 char c;
 {
-	return (def_char_to_monclass(c) != MAXMCLASSES);
+	return def_char_to_monclass(c) != MAXMCLASSES;
 }
 
 /*
@@ -527,7 +527,7 @@ boolean
 check_object_char(c)
 char c;
 {
-	return (def_char_to_objclass(c) != MAXOCLASSES);
+	return def_char_to_objclass(c) != MAXOCLASSES;
 }
 
 /*
@@ -539,30 +539,30 @@ char c;
 {
 	SpinCursor(3);
 	switch(c) {
-		  case ' '  : return(STONE);
-		  case '#'  : return(CORR);
-		  case '.'  : return(ROOM);
-		  case '-'  : return(HWALL);
-		  case '|'  : return(VWALL);
-		  case '+'  : return(DOOR);
-		  case 'A'  : return(AIR);
-		  case 'B'  : return(CROSSWALL); /* hack: boundary location */
-		  case 'C'  : return(CLOUD);
-		  case 'S'  : return(SDOOR);
-		  case 'H'  : return(SCORR);
-		  case '{'  : return(FOUNTAIN);
-		  case '\\' : return(THRONE);
-		  case 'K'  : return(SINK);
-		  case '}'  : return(MOAT);
-		  case 'P'  : return(POOL);
-		  case 'L'  : return(LAVAPOOL);
-		  case 'I'  : return(ICE);
-		  case 'W'  : return(WATER);
-		  case 'T'  : return(TREE);
-		  case 'F'  : return(IRONBARS);	/* Fe = iron */
-		  case 'Z'  : return(TOILET);
+		  case ' '  : return STONE;
+		  case '#'  : return CORR;
+		  case '.'  : return ROOM;
+		  case '-'  : return HWALL;
+		  case '|'  : return VWALL;
+		  case '+'  : return DOOR;
+		  case 'A'  : return AIR;
+		  case 'B'  : return CROSSWALL; /* hack: boundary location */
+		  case 'C'  : return CLOUD;
+		  case 'S'  : return SDOOR;
+		  case 'H'  : return SCORR;
+		  case '{'  : return FOUNTAIN;
+		  case '\\' : return THRONE;
+		  case 'K'  : return SINK;
+		  case '}'  : return MOAT;
+		  case 'P'  : return POOL;
+		  case 'L'  : return LAVAPOOL;
+		  case 'I'  : return ICE;
+		  case 'W'  : return WATER;
+		  case 'T'  : return TREE;
+		  case 'F'  : return IRONBARS;	/* Fe = iron */
+		  case 'Z'  : return TOILET;
 	    }
-	return(INVALID_TYPE);
+	return INVALID_TYPE;
 }
 
 /*

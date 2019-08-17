@@ -89,16 +89,16 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 		    flags.botl = 1;
 		    dealloc_obj(obj);
 		}
-		return(0);
+		return 0;
 	}
 
-	if(obj->oclass == COIN_CLASS) return(throw_gold(obj));
+	if(obj->oclass == COIN_CLASS) return throw_gold(obj);
 #else
 	if (!getdir(NULL)) {
 	    /* obj might need to be merged back into the singular gold object */
 	    freeinv(obj);
 	    addinv(obj);
-	    return(0);
+	    return 0;
 	}
 
         /*
@@ -109,30 +109,30 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
           If the money is in quiver, throw one coin at a time,
           possibly using a sling.
         */
-	if(obj->oclass == COIN_CLASS && obj != uquiver) return(throw_gold(obj));
+	if(obj->oclass == COIN_CLASS && obj != uquiver) return throw_gold(obj);
 #endif
 
 	if(!canletgo(obj,"throw"))
-		return(0);
+		return 0;
 
 	if(obj == uwep && welded(obj)) {
 		weldmsg(obj);
-		return(1);
+		return 1;
 	}
 
 	if (obj->oartifact == ART_MJOLLNIR && obj != uwep) {
 	    pline("%s must be wielded before it can be thrown.",
 		The(xname(obj)));
-		return(0);
+		return 0;
 	}
 	if ((obj->oartifact == ART_MJOLLNIR && ACURR(A_STR) < STR19(25))
 	   || (obj->otyp == BOULDER && !throws_rocks(youmonst.data))) {
 		pline("It's too heavy.");
-		return(1);
+		return 1;
 	}
 	if(!u.dx && !u.dy && !u.dz) {
 		You("cannot throw an object at yourself.");
-		return(0);
+		return 0;
 	}
 	u_wipe_engr(2);
 	if (!uarmg && !Stone_resistance && (obj->otyp == CORPSE &&
@@ -298,12 +298,12 @@ int dothrow(void) {
 	    return 0;
 	}
 
-	if(check_capacity(NULL)) return(0);
+	if(check_capacity(NULL)) return 0;
 	obj = getobj(uslinging() ? bullets : toss_objs, "throw");
 	/* it is also possible to throw food */
 	/* (or jewels, or iron balls... ) */
 
-	if (!obj) return(0);
+	if (!obj) return 0;
 
 	/* kludge to work around parse()'s pre-decrement of 'multi' */
 	shotlimit = (multi || save_cm) ? multi + 1 : 0;
@@ -317,7 +317,7 @@ int dothrow(void) {
 	if (multi >= 0)
 	    multi = oldmulti;
         save_cm = oldsave_cm;
-        return (result);
+        return result;
 }
 
 
@@ -392,17 +392,17 @@ int dofire(void) {
 	    return 0;
 	}
 
-	if(check_capacity(NULL)) return(0);
+	if(check_capacity(NULL)) return 0;
 	if (!uquiver) {
 		if (!flags.autoquiver) {
 			/* Don't automatically fill the quiver */
 			You("have no ammunition readied!");
-			return(dothrow());
+			return dothrow();
 		}
 		autoquiver();
 		if (!uquiver) {
 			You("have nothing appropriate for your quiver!");
-			return(dothrow());
+			return dothrow();
 		} else {
 			You("fill your quiver:");
 			prinv(NULL, uquiver, 0L);
@@ -431,7 +431,7 @@ int dofire(void) {
 			if ((result == 1) && uquiver)
 			    result += throw_obj(uquiver, shotlimit, THROW_USWAPWEP);
 			if (result > 1) result--;
-			return(result);
+			return result;
 		}
 	}
 	result = (throw_obj(uquiver, shotlimit, THROW_UWEP));
@@ -1407,7 +1407,7 @@ int thitmonst (struct monst *mon, struct obj *obj, int thrown) {
 		}
 		return 1;		/* caller doesn't need to place it */
 	    }
-	    return(0);
+	    return 0;
 	}
 
 	if (obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
@@ -1657,7 +1657,7 @@ static int gem_accept(struct monst *mon, struct obj *obj) {
 nopick:
 	if(!Blind) pline("%s", buf);
 	if (!tele_restrict(mon)) (void) rloc(mon, false);
-	return(ret);
+	return ret;
 }
 
 /*
@@ -1882,7 +1882,7 @@ static int throw_gold(struct obj *obj) {
 		dealloc_obj(obj);
 #endif
 		You("cannot throw gold at yourself.");
-		return(0);
+		return 0;
 	}
 #ifdef GOLDOBJ
         freeinv(obj);
@@ -1898,7 +1898,7 @@ static int throw_gold(struct obj *obj) {
 			"The money disappears", mon_nam(u.ustuck));
 		add_to_minv(u.ustuck, obj);
 #endif
-		return(1);
+		return 1;
 	}
 
 	if(u.dz) {
@@ -1938,14 +1938,14 @@ static int throw_gold(struct obj *obj) {
 		}
 	}
 
-	if(flooreffects(obj,bhitpos.x,bhitpos.y,"fall")) return(1);
+	if(flooreffects(obj,bhitpos.x,bhitpos.y,"fall")) return 1;
 	if(u.dz > 0)
 		pline_The("gold hits the %s.", surface(bhitpos.x,bhitpos.y));
 	place_object(obj,bhitpos.x,bhitpos.y);
 	if(*u.ushops) sellobj(obj, bhitpos.x, bhitpos.y);
 	stackobj(obj);
 	newsym(bhitpos.x,bhitpos.y);
-	return(1);
+	return 1;
 }
 
 /*dothrow.c*/

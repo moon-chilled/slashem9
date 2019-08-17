@@ -586,7 +586,7 @@ static int tty_role_select(char * pbuf, char * plbuf) {
 	/* Process the choice */
 	if (n != 1 || selected[0].item.a_int == any.a_int) {
 		free(selected),	selected = 0;
-		return (-1);		/* Selected quit */
+		return -1;		/* Selected quit */
 	}
 
 	flags.initrole = selected[0].item.a_int - 1;
@@ -594,7 +594,7 @@ static int tty_role_select(char * pbuf, char * plbuf) {
 	free(selected);
 	selected = NULL;
 
-	return (flags.initrole);
+	return flags.initrole;
 }
 
 static int tty_race_select(char * pbuf, char * plbuf) {
@@ -654,14 +654,14 @@ static int tty_race_select(char * pbuf, char * plbuf) {
 		n = select_menu(win, PICK_ONE, &selected);
 		destroy_nhwindow(win);
 		if (n != 1 || selected[0].item.a_int == any.a_int)
-			return(-1);		/* Selected quit */
+			return -1;		/* Selected quit */
 
 		k = selected[0].item.a_int - 1;
 		free(selected),	selected = 0;
 	}
 
 	flags.initrace = k;
-	return (k);
+	return k;
 
 #if 0 /* This version deals with more than 2 races per letter */
 	int i, k, n, choicelet = 0;
@@ -726,7 +726,7 @@ static int tty_race_select(char * pbuf, char * plbuf) {
 		if (n != 1 || selected[0].item.a_int == any.a_int) {
 			free(selected),	selected = 0;
 			if (!choicelet) {
-				return (-1);		/* Selected quit */
+				return -1;		/* Selected quit */
 			} else {
 				choicelet--;
 				n = 2; /* there are at least 2 */
@@ -750,7 +750,7 @@ static int tty_race_select(char * pbuf, char * plbuf) {
 	} while (n > 1);
 
 	flags.initrace = k;
-	return (k);
+	return k;
 #endif
 }
 

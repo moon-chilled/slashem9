@@ -58,7 +58,7 @@ int dosh(void) {
 		if ( spawnstat < 0) {
 #  endif
 			raw_printf("Can't spawn \"%s\"!", comspec);
-			getreturn("to continue");
+			getreturn "to continue";
 		}
 		chdirx(hackdir, 0);
 		get_scr_size(); /* maybe the screen mode changed (TH) */
@@ -172,7 +172,7 @@ static void msexit(void) {
 	 * GUILaunched is defined and set in nttty.c.
 	 */
 	synch_cursor();
-	if (GUILaunched) getreturn("to end");
+	if (GUILaunched) getreturn "to end";
 	synch_cursor();
 #endif
 	return;

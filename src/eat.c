@@ -99,22 +99,22 @@ boolean is_edible(struct obj *obj) {
 
 	/* Koalas only eat Eucalyptus leaves */
 	if (u.umonnum == PM_KOALA)
-		return (boolean)(obj->otyp == EUCALYPTUS_LEAF);
+		return obj->otyp == EUCALYPTUS_LEAF;
 
 	/* Ghouls, ghasts only eat corpses */
 	if (u.umonnum == PM_GHOUL || u.umonnum == PM_GHAST)
-	   	return (boolean)(obj->otyp == CORPSE);
+	   	return obj->otyp == CORPSE;
 	/* Vampires drink the blood of meaty corpses */
 	/* [ALI] (fully) drained food is not presented as an option,
 	 * but partly eaten food is (even though you can't drain it).
 	 */
 	if (is_vampire(youmonst.data))
-		return (boolean)(obj->otyp == CORPSE &&
-		  has_blood(&mons[obj->corpsenm]) && (!obj->odrained ||
-		  obj->oeaten > drainlevel(obj)));
+		return obj->otyp == CORPSE &&
+			has_blood(&mons[obj->corpsenm]) && (!obj->odrained ||
+					obj->oeaten > drainlevel(obj));
 
-     /* return((boolean)(!!index(comestibles, obj->oclass))); */
-	return (boolean)(obj->oclass == FOOD_CLASS);
+     /* return index(comestibles, obj->oclass); */
+	return obj->oclass == FOOD_CLASS;
 }
 
 
@@ -349,7 +349,7 @@ static struct obj *touchfood(struct obj *otmp) {
 		otmp->oxlth--;
 	    }
 	}
-	return(otmp);
+	return otmp;
 }
 
 /* When food decays, in the middle of your meal, we don't want to dereference
@@ -394,18 +394,18 @@ static int eatfood(void) {
 	 (!carried(victual.piece) && !obj_here(victual.piece, u.ux, u.uy))) {
 		/* maybe it was stolen? */
 		do_reset_eat();
-		return(0);
+		return 0;
 	}
 	if (is_vampire(youmonst.data) != victual.piece->odrained) {
 	    /* Polymorphed while eating/draining */
 	    do_reset_eat();
-	    return(0);
+	    return 0;
 	}
-	if(!victual.eating) return(0);
+	if(!victual.eating) return 0;
 
 	if(++victual.usedtime <= victual.reqtime) {
-	    if(bite()) return(0);
-	    return(1);	/* still busy */
+	    if(bite()) return 0;
+	    return 1;	/* still busy */
 	} else {	/* done */
 	    int crumbs = victual.piece->oeaten;		/* The last crumbs */
 	    if (victual.piece->odrained) crumbs -= drainlevel(victual.piece);
@@ -414,7 +414,7 @@ static int eatfood(void) {
 		victual.piece->oeaten -= crumbs;
 	    }
 	    done_eating(true);
-	    return(0);
+	    return 0;
 	}
 }
 
@@ -592,85 +592,85 @@ static int intrinsic_possible(int type, struct permonst *ptr) {
 #ifdef DEBUG
 		if (ptr->mconveys & MR_FIRE) {
 			debugpline("can get fire resistance");
-			return(true);
-		} else  return(false);
+			return true;
+		} else  return false;
 #else
-		return(ptr->mconveys & MR_FIRE);
+		return ptr->mconveys & MR_FIRE;
 #endif
 	    case SLEEP_RES:
 #ifdef DEBUG
 		if (ptr->mconveys & MR_SLEEP) {
 			debugpline("can get sleep resistance");
-			return(true);
-		} else  return(false);
+			return true;
+		} else  return false;
 #else
-		return(ptr->mconveys & MR_SLEEP);
+		return ptr->mconveys & MR_SLEEP;
 #endif
 	    case COLD_RES:
 #ifdef DEBUG
 		if (ptr->mconveys & MR_COLD) {
 			debugpline("can get cold resistance");
-			return(true);
-		} else  return(false);
+			return true;
+		} else  return false;
 #else
-		return(ptr->mconveys & MR_COLD);
+		return ptr->mconveys & MR_COLD;
 #endif
 	    case DISINT_RES:
 #ifdef DEBUG
 		if (ptr->mconveys & MR_DISINT) {
 			debugpline("can get disintegration resistance");
-			return(true);
-		} else  return(false);
+			return true;
+		} else  return false;
 #else
-		return(ptr->mconveys & MR_DISINT);
+		return ptr->mconveys & MR_DISINT;
 #endif
 	    case SHOCK_RES:	/* shock (electricity) resistance */
 #ifdef DEBUG
 		if (ptr->mconveys & MR_ELEC) {
 			debugpline("can get shock resistance");
-			return(true);
-		} else  return(false);
+			return true;
+		} else  return false;
 #else
-		return(ptr->mconveys & MR_ELEC);
+		return ptr->mconveys & MR_ELEC;
 #endif
 	    case POISON_RES:
 #ifdef DEBUG
 		if (ptr->mconveys & MR_POISON) {
 			debugpline("can get poison resistance");
-			return(true);
-		} else  return(false);
+			return true;
+		} else  return false;
 #else
-		return(ptr->mconveys & MR_POISON);
+		return ptr->mconveys & MR_POISON;
 #endif
 	    case TELEPORT:
 #ifdef DEBUG
 		if (can_teleport(ptr)) {
 			debugpline("can get teleport");
-			return(true);
-		} else  return(false);
+			return true;
+		} else  return false;
 #else
-		return(can_teleport(ptr));
+		return can_teleport(ptr);
 #endif
 	    case TELEPORT_CONTROL:
 #ifdef DEBUG
 		if (control_teleport(ptr)) {
 			debugpline("can get teleport control");
-			return(true);
-		} else  return(false);
+			return true;
+		} else  return false;
 #else
-		return(control_teleport(ptr));
+		return control_teleport(ptr);
 #endif
 	    case TELEPAT:
 #ifdef DEBUG
 		if (telepathic(ptr)) {
 			debugpline("can get telepathy");
-			return(true);
-		} else  return(false);
+			return true;
+		} else  return false;
 #else
-		return(telepathic(ptr));
+		return telepathic(ptr);
 #endif
 	    default:
-		return(false);
+		return false;
 	}
 	/*NOTREACHED*/
 }
@@ -1149,13 +1149,13 @@ static int opentin(void) {
 
 	if(!carried(tin.tin) && !obj_here(tin.tin, u.ux, u.uy))
 					/* perhaps it was stolen? */
-		return(0);		/* %% probably we should use tinoid */
+		return 0;		/* %% probably we should use tinoid */
 	if(tin.usedtime++ >= 50) {
 		You("give up your attempt to open the tin.");
-		return(0);
+		return 0;
 	}
 	if(tin.usedtime < tin.reqtime)
-		return(1);		/* still busy */
+		return 1;		/* still busy */
 	if(tin.tin->otrapped ||
 	   (tin.tin->cursed && tin.tin->spe != -1 && !rn2(8))) {
 		b_trapped("tin", 0);
@@ -1271,7 +1271,7 @@ use_me:
 	if (carried(tin.tin)) useup(tin.tin);
 	else useupf(tin.tin, 1L);
 	tin.tin = NULL;
-	return(0);
+	return 0;
 }
 
 // called when starting to open a tin
@@ -1368,9 +1368,9 @@ static int rottenfood(struct obj *obj) {
 		nomul(-rnd(10));
 		nomovemsg = "You are conscious again.";
 		afternmv = Hear_again;
-		return(1);
+		return 1;
 	}
-	return(0);
+	return 0;
 }
 
 /* [ALI] Return codes:
@@ -1469,7 +1469,7 @@ static int eatcorpse(struct obj *otmp) {
 		}
 		if (carried(otmp)) useup(otmp);
 		else useupf(otmp, 1L);
-		return(2);
+		return 2;
 	    }
 	} else if (youmonst.data == &mons[PM_GHOUL] ||
 		   youmonst.data == &mons[PM_GHAST]) {
@@ -1532,7 +1532,7 @@ static int eatcorpse(struct obj *otmp) {
 	/* WAC Track food types eaten */
 	if (mvitals[mnum].eaten < 255) mvitals[mnum].eaten++;
 
-	return(retcode);
+	return retcode;
 }
 
 // called as you start to eat
@@ -2280,7 +2280,7 @@ int doeat(void)	{
 		if (otmp->dknown && !objects[otmp->otyp].oc_name_known
 				&& !objects[otmp->otyp].oc_uname)
 			docall(otmp);
-		return (1);
+		return 1;
 	}
 
 	if (otmp->oclass != FOOD_CLASS) {
@@ -2354,7 +2354,7 @@ int doeat(void)	{
 	    victual.piece = touchfood(otmp);
 	    You("resume your meal.");
 	    start_eating(victual.piece);
-	    return(1);
+	    return 1;
 	}
 
 	/* nothing in progress - so try to find something. */
@@ -2362,7 +2362,7 @@ int doeat(void)	{
 	/* tins must also check conduct separately in case they're discarded */
 	if(otmp->otyp == TIN) {
 	    start_tin(otmp);
-	    return(1);
+	    return 1;
 	}
 
 	/* KMH, conduct */
@@ -2397,7 +2397,7 @@ int doeat(void)	{
 	    } else if (tmp == 2) {
 		/* used up */
 		victual.piece = NULL;
-		return(1);
+		return 1;
 	    } else if (tmp)
 		dont_start = true;
 	    /* if not used up, eatcorpse sets up reqtime and may modify
@@ -2477,7 +2477,7 @@ int doeat(void)	{
 	victual.canchoke = (u.uhs == SATIATED);
 
 	if (!dont_start) start_eating(otmp);
-	return(1);
+	return 1;
 }
 
 /* Take a single bite from a piece of food, checking for choking and

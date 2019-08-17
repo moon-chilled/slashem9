@@ -119,7 +119,7 @@ filesize(file)
 char *file;
 {
 	if (findfirst(file)) {
-		return ((long)ffd.nFileSizeLow);
+		return (long)ffd.nFileSizeLow;
 	} else
 		return -1L;
 }

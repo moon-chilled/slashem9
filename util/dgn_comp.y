@@ -513,9 +513,9 @@ getchain(s)
 		if(!strcmp(tmplevel[i].name, s)) return i;
 
 	    yyerror("Can't locate the specified chain level.");
-	    return(-2);
+	    return -2;
 	}
-	return(-1);
+	return -1;
 }
 
 /*
@@ -535,7 +535,7 @@ check_dungeon()
 	for(i = 0; i < n_dgns; i++)
 	    if(!strcmp(tmpdungeon[i].name, tmpdungeon[n_dgns].name)) {
 		yyerror("Duplicate dungeon name.");
-		return(0);
+		return 0;
 	    }
 
 	if(n_dgns)
@@ -544,16 +544,16 @@ check_dungeon()
 
 	    if(i >= n_brs - tmpdungeon[n_dgns].branches) {
 		yyerror("Dungeon cannot be reached.");
-		return(0);
+		return 0;
 	    }
 	  }
 
 	if(tmpdungeon[n_dgns].lev.base <= 0 ||
 	   tmpdungeon[n_dgns].lev.rand < 0) {
 		yyerror("Invalid dungeon depth specified.");
-		return(0);
+		return 0;
 	}
-	return(1);	/* OK */
+	return 1;	/* OK */
 }
 
 /*
@@ -571,29 +571,29 @@ check_level()
 
 	if(!in_dungeon) {
 		yyerror("Level defined outside of dungeon.");
-		return(0);
+		return 0;
 	}
 
 	for(i = 0; i < n_levs; i++)
 	    if(!strcmp(tmplevel[i].name, tmplevel[n_levs].name)) {
 		yyerror("Duplicate level name.");
-		return(0);
+		return 0;
 	    }
 
 	if(tmplevel[i].chain == -2) {
 		yyerror("Invalid level chain reference.");
-		return(0);
+		return 0;
 	} else if(tmplevel[i].chain != -1) {	/* there is a chain */
 		/* KMH -- tmplevel[tmpbranch[i].chain].chance was in error */
 	    if(tmplevel[tmplevel[i].chain].chance != 100) {
 		yyerror("Level cannot chain from a probabilistic level.");
-		return(0);
+		return 0;
 	    } else if(tmplevel[i].chain == n_levs) {
 		yyerror("A level cannot chain to itself!");
-		return(0);
+		return 0;
 	    }
 	}
-	return(1);	/* OK */
+	return 1;	/* OK */
 }
 
 /*
@@ -613,28 +613,28 @@ check_branch()
 
 	if(!in_dungeon) {
 		yyerror("Branch defined outside of dungeon.");
-		return(0);
+		return 0;
 	}
 #if 0
 	for(i = 0; i < n_dgns; i++)
 	    if(!strcmp(tmpdungeon[i].name, tmpbranch[n_brs].name)) {
 
 		yyerror("Reverse branching not allowed.");
-		return(0);
+		return 0;
 	    }
 #endif
 	if(tmpbranch[n_dgns].chain == -2) {
 
 		yyerror("Invalid branch chain reference.");
-		return(0);
+		return 0;
 	} else if(tmpbranch[n_dgns].chain != -1) {	/* it is chained */
 
 	    if(tmplevel[tmpbranch[n_dgns].chain].chance != 100) {
 		yyerror("Branch cannot chain from a probabilistic level.");
-		return(0);
+		return 0;
 	    }
 	}
-	return(1);	/* OK */
+	return 1;	/* OK */
 }
 
 /*

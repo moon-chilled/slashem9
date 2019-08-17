@@ -1140,20 +1140,20 @@ check_control(s)
 {
 	int	i;
 
-	if(s[0] != '%') return(-1);
+	if(s[0] != '%') return -1;
 
 	for(i = 0; deflist[i].defname; i++)
 	    if(!strncmp(deflist[i].defname, s+1, strlen(deflist[i].defname)))
-		return(i);
+		return i;
 
-	return(-1);
+	return -1;
 }
 
 static char *
 without_control(s)
 	char *s;
 {
-	return(s + 1 + strlen(deflist[check_control(in_line)].defname));
+	return s + 1 + strlen(deflist[check_control(in_line)].defname);
 }
 
 void
@@ -1217,7 +1217,7 @@ ranged_attk(ptr)	/* returns true if monster can attack at range */
 		return true;
 	}
 
-	return(false);
+	return false;
 }
 
 /* This routine is designed to return an integer value which represents
@@ -1279,7 +1279,7 @@ struct permonst *ptr;
 	else if(n >= 6) tmp += ( n / 2 );
 	else tmp += ( n / 3 + 1);
 
-	return((tmp >= 0) ? tmp : 0);
+	return (tmp >= 0) ? tmp : 0;
 }
 
 void
@@ -1381,15 +1381,15 @@ static boolean
 qt_comment(s)
 	char *s;
 {
-	if(s[0] == '#') return(true);
-	return((boolean)(!in_msg  && strlen(s) == NO_MSG));
+	if(s[0] == '#') return true;
+	return !in_msg  && strlen(s) == NO_MSG;
 }
 
 static boolean
 qt_control(s)
 	char *s;
 {
-	return((boolean)(s[0] == '%' && (s[1] == 'C' || s[1] == 'E')));
+	return s[0] == '%' && (s[1] == 'C' || s[1] == 'E');
 }
 
 static int
@@ -1399,9 +1399,9 @@ get_hdr (code)
 	int	i;
 
 	for(i = 0; i < qt_hdr.n_hdr; i++)
-	    if(!strncmp(code, qt_hdr.id[i], LEN_HDR)) return (++i);
+	    if(!strncmp(code, qt_hdr.id[i], LEN_HDR)) return ++i;
 
-	return(0);
+	return 0;
 }
 
 static boolean
@@ -1410,13 +1410,13 @@ new_id (code)
 {
 	if(qt_hdr.n_hdr >= N_HDR) {
 	    fprintf(stderr, OUT_OF_HEADERS, qt_line);
-	    return(false);
+	    return false;
 	}
 
 	strncpy(&qt_hdr.id[qt_hdr.n_hdr][0], code, LEN_HDR);
 	msg_hdr[qt_hdr.n_hdr].n_msg = 0;
 	qt_hdr.offset[qt_hdr.n_hdr++] = 0L;
-	return(true);
+	return true;
 }
 
 static boolean
@@ -1426,9 +1426,9 @@ known_msg(num, id)
 	int i;
 
 	for(i = 0; i < msg_hdr[num].n_msg; i++)
-	    if(msg_hdr[num].qt_msg[i].msgnum == id) return(true);
+	    if(msg_hdr[num].qt_msg[i].msgnum == id) return true;
 
-	return(false);
+	return false;
 }
 
 

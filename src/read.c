@@ -62,9 +62,9 @@ doread (void)
 	strcpy(cp, readable);
 
 	known = false;
-	if(check_capacity(NULL)) return (0);
+	if(check_capacity(NULL)) return 0;
 	scroll = getobj(class_list, "read");
-	if(!scroll) return(0);
+	if(!scroll) return 0;
 
 	if (scroll == &thisplace) {
 	    sense_engr_at(u.ux, u.uy, true);
@@ -133,7 +133,7 @@ doread (void)
 	    if (!cant_see) u.uconduct.literate++;
 	    if (carried(scroll)) useup(scroll);
 	    else useupf(scroll, 1L);
-	    return(1);
+	    return 1;
 	} else if (scroll->otyp == T_SHIRT) {
 	    static const char *shirt_msgs[] = { /* Scott Bigham */
     "I explored the Dungeons of Doom and all I got was this lousy T-shirt!",
@@ -174,7 +174,7 @@ doread (void)
 	} else if (scroll->oclass != SCROLL_CLASS
 		&& scroll->oclass != SPBOOK_CLASS) {
 	    pline(silly_thing_to, "read");
-	    return(0);
+	    return 0;
 	} else if (Blind) {
 	    const char *what = 0;
 	    if (scroll->oclass == SPBOOK_CLASS)
@@ -183,18 +183,18 @@ doread (void)
 		what = "formula on the scroll";
 	    if (what) {
 		pline("Being blind, you cannot read the %s.", what);
-		return(0);
+		return 0;
 	    }
 	} else if (cant_see) {
 	    if (scroll->oclass == SPBOOK_CLASS)
 	    {
 		You_cant("read the mystic runes in the invisible spellbook.");
-		return(0);
+		return 0;
 	    }
 	    else if (!scroll->dknown)
 	    {
 		You_cant("read the formula on the invisible scroll.");
-		return(0);
+		return 0;
 	    }
 	}
 
@@ -209,7 +209,7 @@ doread (void)
 	if (scroll->otyp == SCR_MAIL) confused = false;
 #endif
 	if(scroll->oclass == SPBOOK_CLASS) {
-	    return(study_book(scroll));
+	    return study_book(scroll);
 	}
 	scroll->in_use = true;	/* scroll, not spellbook, now being read */
 	if(scroll->otyp != SCR_BLANK_PAPER) {
@@ -260,7 +260,7 @@ doread (void)
 		}
 		else scroll->in_use = false;
 	}
-	return(1);
+	return 1;
 }
 
 static void
@@ -848,7 +848,7 @@ seffects (struct obj *sobj)
 					"Your skin feels warm for a moment.");
 			exercise(A_CON, !sobj->cursed);
 			exercise(A_STR, !sobj->cursed);
-			return(1);
+			return 1;
 		}
 		if(confused) {
 			otmp->oerodeproof = !(sobj->cursed);
@@ -967,7 +967,7 @@ seffects (struct obj *sobj)
 				strange_feeling(sobj,"Your bones itch.");
 				exercise(A_STR, false);
 				exercise(A_CON, false);
-				return(1);
+				return 1;
 			}
 			otmp->oerodeproof = sobj->cursed;
 			p_glow2(otmp, NH_PURPLE);
@@ -978,7 +978,7 @@ seffects (struct obj *sobj)
 			strange_feeling(sobj,"Your skin itches.");
 			exercise(A_STR, false);
 			exercise(A_CON, false);
-			return(1);
+			return 1;
 		    } else
 			known = true;
 		} else {	/* armor and scroll both cursed */
@@ -1069,7 +1069,7 @@ seffects (struct obj *sobj)
 	    break;
 	/* KMH, balance patch -- removed
 	case SCR_TRAP_DETECTION:
-		if (!sobj->cursed) return(trap_detect(sobj));
+		if (!sobj->cursed) return trap_detect(sobj);
 	    break;*/
 	case SCR_REMOVE_CURSE:
 	case SPE_REMOVE_CURSE:
@@ -1300,12 +1300,12 @@ seffects (struct obj *sobj)
 		}
 		break;
 	case SCR_GOLD_DETECTION:
-		if (confused || sobj->cursed) return(trap_detect(sobj));
-		else return(gold_detect(sobj));
+		if (confused || sobj->cursed) return trap_detect(sobj);
+		else return gold_detect(sobj);
 	case SCR_FOOD_DETECTION:
 	case SPE_DETECT_FOOD:
 		if (food_detect(sobj))
-			return(1);	/* nothing detected */
+			return 1;	/* nothing detected */
 		break;
 	case SPE_IDENTIFY:
 		cval = rn2(5);
@@ -1329,7 +1329,7 @@ seffects (struct obj *sobj)
 		if(invent && !confused) {
 		    identify_pack(cval);
 		}
-		return(1);
+		return 1;
 	case SCR_CHARGING:
 		if (confused) {
 		    You_feel("charged up!");
@@ -1420,7 +1420,7 @@ seffects (struct obj *sobj)
 				makeplural(body_part(HAND)));
 			losehp(1, "scroll of fire", KILLED_BY_AN);
 		    }
-		    return(1);
+		    return 1;
 		}
 		if (Underwater)
 			pline_The("water around you vaporizes violently!");
@@ -1430,7 +1430,7 @@ seffects (struct obj *sobj)
 		}
 		explode(u.ux, u.uy, ZT_SPELL(ZT_FIRE), (2*(rn1(3, 3) + 2 * cval) + 1)/3,
 							SCROLL_CLASS, EXPL_FIERY);
-		return(1);
+		return 1;
 	case SCR_EARTH:
 	    /* TODO: handle steeds */
 	    if (
@@ -1578,7 +1578,7 @@ seffects (struct obj *sobj)
 	default:
 		impossible("What weird effect is this? (%u)", sobj->otyp);
 	}
-	return(0);
+	return 0;
 }
 
 #if 0

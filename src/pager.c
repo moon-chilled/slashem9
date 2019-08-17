@@ -308,7 +308,7 @@ lookat(x, y, buf, monbuf)
 	break;
     }
 
-    return ((pm && !Hallucination) ? pm : NULL);
+    return (pm && !Hallucination) ? pm : NULL;
 }
 
 /*

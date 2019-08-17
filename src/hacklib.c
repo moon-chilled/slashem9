@@ -269,10 +269,10 @@ boolean pmatch(const char *patrn, const char *strng) {
 pmatch_top:
     s = *strng++;  p = *patrn++;	/* get next chars and pre-advance */
     if (!p)			/* end of pattern */
-	return((boolean)(s == '\0'));		/* matches iff end of string too */
+	return s == '\0';		/* matches iff end of string too */
     else if (p == '*')		/* wildcard reached */
-	return((boolean)((!*patrn || pmatch(patrn, strng-1)) ? true :
-		s ? pmatch(patrn-1, strng) : false));
+	    return (!*patrn || pmatch(patrn, strng-1)) ? true :
+		    s ? pmatch(patrn-1, strng) : false;
     else if (p != s && (p != '?' || !s))  /* check single character */
 	return false;		/* doesn't match */
     else				/* return pmatch(patrn, strng); */
@@ -286,7 +286,7 @@ int strncmpi(const char *s1, const char *s2, size_t n) {
     char t1, t2;
 
     while (n--) {
-	if (!*s2) return (*s1 != 0);	/* s1 >= s2 */
+	if (!*s2) return *s1 != 0;	/* s1 >= s2 */
 	else if (!*s1) return -1;	/* s1  < s2 */
 	t1 = lowc(*s1++);
 	t2 = lowc(*s2++);
@@ -435,7 +435,7 @@ char *yymmdd(time_t date) {
 
 	sprintf(datestr, "%02d%02d%02d",
 		lt->tm_year, lt->tm_mon + 1, lt->tm_mday);
-	return(datestr);
+	return datestr;
 }
 #endif
 

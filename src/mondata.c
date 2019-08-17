@@ -51,8 +51,8 @@ boolean
 poly_when_stoned(ptr)
     struct permonst *ptr;
 {
-    return((boolean)(is_golem(ptr) && ptr != &mons[PM_STONE_GOLEM] &&
-	    !(mvitals[PM_STONE_GOLEM].mvflags & G_GENOD)));
+    return is_golem(ptr) && ptr != &mons[PM_STONE_GOLEM] &&
+	    !(mvitals[PM_STONE_GOLEM].mvflags & G_GENOD);
 	    /* allow G_EXTINCT */
 }
 
@@ -63,10 +63,10 @@ struct monst *mon;
 	struct permonst *ptr = mon->data;
 	struct obj *wep = ((mon == &youmonst) ? uwep : MON_WEP(mon));
 
-	return (boolean)(is_undead(ptr) || is_demon(ptr) || is_were(ptr) ||
-			 ptr == &mons[PM_DEATH] || is_golem(ptr) ||
-			 resists_drain(mon) ||
-			 (wep && wep->oartifact && defends(AD_DRLI, wep)));
+	return is_undead(ptr) || is_demon(ptr) || is_were(ptr) ||
+		ptr == &mons[PM_DEATH] || is_golem(ptr) ||
+		resists_drain(mon) ||
+		(wep && wep->oartifact && defends(AD_DRLI, wep));
 }
 
 boolean
@@ -234,9 +234,9 @@ boolean
 passes_bars(mptr)
 struct permonst *mptr;
 {
-    return (boolean) (passes_walls(mptr) || amorphous(mptr) ||
-		      is_whirly(mptr) || verysmall(mptr) ||
-		      (slithy(mptr) && !bigmonst(mptr)));
+    return passes_walls(mptr) || amorphous(mptr) ||
+	    is_whirly(mptr) || verysmall(mptr) ||
+	    (slithy(mptr) && !bigmonst(mptr));
 }
 
 
@@ -247,7 +247,7 @@ can_track(ptr)		/* returns true if monster can track well */
 	if (uwep && uwep->oartifact == ART_EXCALIBUR)
 		return true;
 	else
-		return((boolean)haseyes(ptr));
+		return haseyes(ptr);
 }
 
 
@@ -255,26 +255,24 @@ boolean
 sliparm(ptr)	/* creature will slide out of armor */
 	struct permonst *ptr;
 {
-	return((boolean)(is_whirly(ptr) || ptr->msize <= MZ_SMALL ||
-			 noncorporeal(ptr)));
+	return is_whirly(ptr) || ptr->msize <= MZ_SMALL || noncorporeal(ptr);
 }
 
 boolean
 breakarm(ptr)	/* creature will break out of armor */
 	struct permonst *ptr;
 {
-	return ((bigmonst(ptr) || (ptr->msize > MZ_SMALL && !humanoid(ptr)) ||
+	return (bigmonst(ptr) || (ptr->msize > MZ_SMALL && !humanoid(ptr)) ||
 		/* special cases of humanoids that cannot wear body armor */
 		ptr == &mons[PM_MARILITH] || ptr == &mons[PM_WINGED_GARGOYLE])
-	      && !sliparm(ptr));
+	      && !sliparm(ptr);
 }
 
 boolean
 sticks(ptr)	/* creature sticks other creatures it hits */
 	struct permonst *ptr;
 {
-	return((boolean)(dmgtype(ptr,AD_STCK) || dmgtype(ptr,AD_WRAP) ||
-		attacktype(ptr,AT_HUGS)));
+	return dmgtype(ptr,AD_STCK) || dmgtype(ptr,AD_WRAP) || attacktype(ptr,AT_HUGS);
 }
 
 /* number of horns this type of monster has on its head */
@@ -368,7 +366,7 @@ monsndx (		/* return an index into the mons array */
 	    return NON_PM;		/* will not get here */
 	}
 
-	return(i);
+	return i;
 }
 
 
@@ -523,8 +521,7 @@ struct monst *mtmp;
 
 	/* stalking types follow, but won't when fleeing unless you hold
 	   the Amulet */
-	return (boolean)((mtmp->data->mflags2 & M2_STALK) &&
-				(!mtmp->mflee || u.uhave.amulet));
+	return (mtmp->data->mflags2 & M2_STALK) && (!mtmp->mflee || u.uhave.amulet);
 }
 
 static const short grownups[][2] = {
@@ -645,8 +642,8 @@ big_to_little (int montype)
 const struct permonst *
 raceptr (struct monst *mtmp)
 {
-    if (mtmp == &youmonst && !Upolyd) return(&mons[urace.malenum]);
-    else return(mtmp->data);
+    if (mtmp == &youmonst && !Upolyd) return &mons[urace.malenum];
+    else return mtmp->data;
 }
 
 static const char *levitate[4]	= { "float", "Float", "wobble", "Wobble" };
@@ -662,16 +659,14 @@ locomotion (const struct permonst *ptr, const char *def)
 {
 	int capitalize = (*def == highc(*def));
 
-	return (
-		is_floater(ptr) ? levitate[capitalize] :
+	return is_floater(ptr) ? levitate[capitalize] :
 		(is_flyer(ptr) && ptr->msize <= MZ_SMALL) ? flys[capitalize] :
 		(is_flyer(ptr) && ptr->msize > MZ_SMALL)  ? flyl[capitalize] :
 		slithy(ptr)     ? slither[capitalize] :
 		amorphous(ptr)  ? ooze[capitalize] :
 		!ptr->mmove	? immobile[capitalize] :
 		nolimbs(ptr)    ? crawl[capitalize] :
-		def
-	       );
+		def;
 
 }
 
@@ -680,16 +675,14 @@ stagger (const struct permonst *ptr, const char *def)
 {
 	int capitalize = 2 + (*def == highc(*def));
 
-	return (
-		is_floater(ptr) ? levitate[capitalize] :
+	return is_floater(ptr) ? levitate[capitalize] :
 		(is_flyer(ptr) && ptr->msize <= MZ_SMALL) ? flys[capitalize] :
 		(is_flyer(ptr) && ptr->msize > MZ_SMALL)  ? flyl[capitalize] :
 		slithy(ptr)     ? slither[capitalize] :
 		amorphous(ptr)  ? ooze[capitalize] :
 		!ptr->mmove	? immobile[capitalize] :
 		nolimbs(ptr)    ? crawl[capitalize] :
-		def
-	       );
+		def;
 
 }
 

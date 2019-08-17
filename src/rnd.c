@@ -92,7 +92,7 @@ uint rne(uint x) {
 	/* was:
 	 *	tmp = 1;
 	 *	while(!rn2(x)) tmp++;
-	 *	return(min(tmp,(u.ulevel < 15) ? 5 : u.ulevel/3));
+	 *	return min(tmp,(u.ulevel < 15) ? 5 : u.ulevel/3);
 	 * which is clearer but less efficient and stands a vanishingly
 	 * small chance of overflowing tmp
 	 */

@@ -175,7 +175,7 @@ int		number;
 
 	for (i = 0; i < number; ++i) {
 		if (!ReadOK(fd, rgb, sizeof(rgb))) {
-			return(false);
+			return false;
 		}
 
 		ColorMap[CM_RED][i] = rgb[0] ;
@@ -658,7 +658,7 @@ fclose_gif_file()
 		}
 		free(image);
 	}
-	return(fclose(gif_file));
+	return fclose(gif_file);
 }
 
 static char *std_args[] = { "tilemap",	/* dummy argv[0] */

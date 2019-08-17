@@ -144,8 +144,8 @@ void restore_artifacts(int fd) {
 }
 
 const char *artiname(int artinum) {
-	if (artinum <= 0 || artinum > NROFARTIFACTS) return("");
-	return(artilist[artinum].name);
+	if (artinum <= 0 || artinum > NROFARTIFACTS) return "";
+	return artilist[artinum].name;
 }
 
 /*
@@ -332,7 +332,7 @@ boolean confers_luck(struct obj *obj) {
 
     if (obj->otyp == FEDORA && obj == uarmh) return true;
 
-    return (obj->oartifact && spec_ability(obj, SPFX_LUCK));
+    return obj->oartifact && spec_ability(obj, SPFX_LUCK);
 }
 
 /* used to check whether a monster is getting reflection from an artifact */
@@ -366,8 +366,8 @@ restrict_name(struct obj *otmp, const char *name) /* returns 1 if name is restri
 	    aname = a->name;
 	    if (!strncmpi(aname, "the ", 4)) aname += 4;
 	    if (!strcmp(aname, name))
-		return ((boolean)((a->spfx & (SPFX_NOGEN|SPFX_RESTR)) != 0 ||
-			otmp->quan > 1L));
+		return  (a->spfx & (SPFX_NOGEN|SPFX_RESTR)) != 0 ||
+			otmp->quan > 1L;
 	}
 
 	return false;
@@ -377,7 +377,7 @@ static boolean attacks(int adtyp, struct obj *otmp) {
 	const struct artifact *weap;
 
 	if ((weap = get_artifact(otmp)) != 0)
-		return (weap->attk.adtyp == adtyp);
+		return weap->attk.adtyp == adtyp;
 	return false;
 }
 
@@ -385,7 +385,7 @@ boolean defends(int adtyp, struct obj *otmp) {
 	const struct artifact *weap;
 
 	if ((weap = get_artifact(otmp)) != 0)
-		return (weap->defn.adtyp == adtyp);
+		return weap->defn.adtyp == adtyp;
 	return false;
 }
 
@@ -394,7 +394,7 @@ boolean protects(int adtyp, struct obj *otmp) {
 	const struct artifact *weap;
 
 	if ((weap = get_artifact(otmp)) != 0)
-		return (weap->cary.adtyp == adtyp);
+		return weap->cary.adtyp == adtyp;
 	return false;
 }
 
@@ -609,7 +609,7 @@ static int spec_applies(const struct artifact *weap, struct monst *mtmp) {
 	boolean yours;
 
 	if(!(weap->spfx & (SPFX_DBONUS | SPFX_ATTK)))
-	    return(weap->attk.adtyp == AD_PHYS);
+	    return weap->attk.adtyp == AD_PHYS;
 
 	yours = (mtmp == &youmonst);
 	ptr = mtmp->data;
@@ -1208,7 +1208,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 					pline("Somehow, %s misses wildly.",
 						mon_nam(magr));
 				*dmgptr = 0;
-				return ((boolean)(youattack || vis));
+				return youattack || vis;
 			}
 			if (noncorporeal(mdef->data) || amorphous(mdef->data)) {
 				pline("%s slices through %s %s.", wepdesc,
@@ -1705,35 +1705,35 @@ nothing_special:
  */
 
 int artifact_wet(struct obj *obj, boolean silent) {
-	 if (!obj->oartifact) return (-1);
+	 if (!obj->oartifact) return -1;
 	 switch (artilist[(int) (obj)->oartifact].attk.adtyp) {
 		 case AD_FIRE:
 			 if (!silent) {
 				pline("A cloud of steam rises.");
 				pline("%s is untouched.", The(xname(obj)));
 			 }
-			 return (AD_FIRE);
+			 return AD_FIRE;
 		 case AD_COLD:
 			 if (!silent) {
 				pline("Icicles form and fall from the freezing %s.",
 			             the(xname(obj)));
 			 }
-			 return (AD_COLD);
+			 return AD_COLD;
 		 case AD_ELEC:
 			 if (!silent) {
 				pline_The("humid air crackles with electricity from %s.",
 						the(xname(obj)));
 			 }
-			 return (AD_ELEC);
+			 return AD_ELEC;
 		 case AD_DRLI:
 			 if (!silent) {
 				pline("%s absorbs the water!", The(xname(obj)));
 			 }
-			 return (AD_DRLI);
+			 return AD_DRLI;
 		 default:
 			 break;
 	}
-	return (-1);
+	return -1;
 }
 
 /* WAC return true if artifact is always lit */
@@ -1765,16 +1765,16 @@ void arti_speak (struct obj *obj) {
 boolean artifact_has_invprop(struct obj *otmp, uchar inv_prop) {
 	const struct artifact *arti = get_artifact(otmp);
 
-	return (arti && (arti->inv_prop == inv_prop));
+	return arti && (arti->inv_prop == inv_prop);
 }
 
 /* Return the price sold to the hero of a given artifact or unique item */
 long arti_cost(struct obj *otmp) {
 	if (!otmp->oartifact)
-	    return (objects[otmp->otyp].oc_cost);
+	    return objects[otmp->otyp].oc_cost;
 	else if (artilist[otmp->oartifact].cost)
-	    return (artilist[otmp->oartifact].cost);
+	    return artilist[otmp->oartifact].cost;
 	else
-	    return (100L * objects[otmp->otyp].oc_cost);
+	    return 100L * objects[otmp->otyp].oc_cost;
 }
 /*artifact.c*/

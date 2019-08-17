@@ -37,7 +37,7 @@ struct mkroom *sroom;
 {
 	int area = (sroom->hx - sroom->lx + 1)
 			   * (sroom->hy - sroom->ly + 1);
-	return((boolean)( area > 20 ));
+	return area > 20;
 }
 
 void
@@ -498,13 +498,13 @@ morguemon()
 	int i = rn2(100), hd = rn2(level_difficulty());
 
 	if(hd > 10 && i < 10)
-		return((Inhell || In_endgame(&u.uz)) ? mkclass(S_DEMON,0) :
-						       &mons[ndemon(A_NONE)]);
+		return (Inhell || In_endgame(&u.uz)) ? mkclass(S_DEMON,0) :
+						       &mons[ndemon(A_NONE)];
 	if(hd > 8 && i > 85)
-		return(mkclass(S_VAMPIRE,0));
+		return mkclass(S_VAMPIRE,0);
 
-	return((i < 20) ? &mons[PM_GHOST]
-			: (i < 40) ? &mons[PM_WRAITH] : mkclass(S_ZOMBIE,0));
+	return (i < 20) ? &mons[PM_GHOST]
+			: (i < 40) ? &mons[PM_WRAITH] : mkclass(S_ZOMBIE,0);
 }
 
 struct permonst *
@@ -519,8 +519,7 @@ antholemon (void)
 	case 1:		mtyp = PM_FIRE_ANT; break;
 	case 2:		mtyp = PM_SNOW_ANT; break;
 	}
-	return ((mvitals[mtyp].mvflags & G_GONE) ?
-			NULL : &mons[mtyp]);
+	return (mvitals[mtyp].mvflags & G_GONE) ?  NULL : &mons[mtyp];
 }
 
 
@@ -553,8 +552,7 @@ fungus()
 	case 16: mtyp = PM_OCHRE_JELLY;		break;
 	}
 
-	return ((mvitals[mtyp].mvflags & G_GONE) ?
-			NULL : &mons[mtyp]);
+	return (mvitals[mtyp].mvflags & G_GONE) ?  NULL : &mons[mtyp];
 }
 
 static void
@@ -603,7 +601,7 @@ int roomno;
 
 	buf.x = troom->lx + ((troom->hx - troom->lx) / 2);
 	buf.y = troom->ly + ((troom->hy - troom->ly) / 2);
-	return(&buf);
+	return &buf;
 }
 
 static void
@@ -640,9 +638,9 @@ int sx, sy;
 		if(!isok(sx+dx, sy+dy)) continue;
 		if(IS_DOOR((lev = &levl[sx+dx][sy+dy])->typ) ||
 		    lev->typ == SDOOR)
-			return(true);
+			return true;
 	}
-	return(false);
+	return false;
 }
 
 boolean
@@ -652,7 +650,7 @@ struct mkroom *sroom;
 	if (sroom == dnstairs_room)
 		return true;
 	if (sstairs.sx && !sstairs.up)
-		return((boolean)(sroom == sstairs_room));
+		return sroom == sstairs_room;
 	return false;
 }
 
@@ -663,7 +661,7 @@ struct mkroom *sroom;
 	if (sroom == upstairs_room)
 		return true;
 	if (sstairs.sx && sstairs.up)
-		return((boolean)(sroom == sstairs_room));
+		return sroom == sstairs_room;
 	return false;
 }
 
@@ -685,8 +683,8 @@ inside_room(croom, x, y)
 struct mkroom *croom;
 xchar x, y;
 {
-	return((boolean)(x >= croom->lx-1 && x <= croom->hx+1 &&
-		y >= croom->ly-1 && y <= croom->hy+1));
+	return x >= croom->lx-1 && x <= croom->hx+1 &&
+		y >= croom->ly-1 && y <= croom->hy+1;
 }
 
 boolean
@@ -771,30 +769,30 @@ struct permonst *
 courtmon (void)
 {
 	int     i = rn2(60) + rn2(3*level_difficulty());
-	if (i > 200)            return(mkclass(S_DRAGON,0));
-	else if (i > 130)       return(mkclass(S_GIANT,0));
-	else if (i > 85)	return(mkclass(S_TROLL,0));
-	else if (i > 75)	return(mkclass(S_CENTAUR,0));
-	else if (i > 60)	return(mkclass(S_ORC,0));
-	else if (i > 45)	return(&mons[PM_BUGBEAR]);
-	else if (i > 30)	return(&mons[PM_HOBGOBLIN]);
-	else if (i > 15)	return(mkclass(S_GNOME,0));
-	else			return(mkclass(S_KOBOLD,0));
+	if (i > 200)            return mkclass(S_DRAGON,0);
+	else if (i > 130)       return mkclass(S_GIANT,0);
+	else if (i > 85)	return mkclass(S_TROLL,0);
+	else if (i > 75)	return mkclass(S_CENTAUR,0);
+	else if (i > 60)	return mkclass(S_ORC,0);
+	else if (i > 45)	return &mons[PM_BUGBEAR];
+	else if (i > 30)	return &mons[PM_HOBGOBLIN];
+	else if (i > 15)	return mkclass(S_GNOME,0);
+	else			return mkclass(S_KOBOLD,0);
 }
 
 struct permonst *
 realzoomon (void)
 {
 	int     i = rn2(60) + rn2(3*level_difficulty());
-	if (i > 175)    return(&mons[PM_JUMBO_THE_ELEPHANT]);
-	else if (i > 115)       return(&mons[PM_MASTODON]);
-	else if (i > 85)        return(&mons[PM_PYTHON]);
-	else if (i > 70)        return(&mons[PM_MUMAK]);
-	else if (i > 55)        return(&mons[PM_TIGER]);
-	else if (i > 45)        return(&mons[PM_PANTHER]);
-	else if (i > 25)        return(&mons[PM_JAGUAR]);
-	else if (i > 15)        return(&mons[PM_APE]);
-	else                    return(&mons[PM_MONKEY]);
+	if (i > 175)    return &mons[PM_JUMBO_THE_ELEPHANT];
+	else if (i > 115)       return &mons[PM_MASTODON];
+	else if (i > 85)        return &mons[PM_PYTHON];
+	else if (i > 70)        return &mons[PM_MUMAK];
+	else if (i > 55)        return &mons[PM_TIGER];
+	else if (i > 45)        return &mons[PM_PANTHER];
+	else if (i > 25)        return &mons[PM_JAGUAR];
+	else if (i > 15)        return &mons[PM_APE];
+	else                    return &mons[PM_MONKEY];
 }
 
 #define NSTYPES (PM_CAPTAIN - PM_SOLDIER + 1)
@@ -823,8 +821,8 @@ squadmon()		/* return soldier types. */
 	}
 	mndx = squadprob[rn2(NSTYPES)].pm;
 gotone:
-	if (!(mvitals[mndx].mvflags & G_GONE)) return(&mons[mndx]);
-	else			    return(NULL);
+	if (!(mvitals[mndx].mvflags & G_GONE)) return &mons[mndx];
+	else			    return NULL;
 }
 
 /*

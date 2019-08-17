@@ -403,7 +403,7 @@ boolean canletgo(struct obj *obj, const char *word) {
 		if (*word)
 			Norep("You cannot %s %s you are wearing.",word,
 				something);
-		return(false);
+		return false;
 	}
 	/* KMH, balance patch -- removed stone of rotting */
 	if (obj->otyp == LOADSTONE && obj->cursed) {
@@ -420,33 +420,33 @@ boolean canletgo(struct obj *obj, const char *word) {
 		}
 		obj->corpsenm = 0;		/* reset */
 		obj->bknown = 1;
-		return(false);
+		return false;
 	}
 	if (obj->otyp == LEASH && obj->leashmon != 0) {
 		if (*word)
 			pline_The("leash is tied around your %s.",
 					body_part(HAND));
-		return(false);
+		return false;
 	}
 #ifdef STEED
 	if (obj->owornmask & W_SADDLE) {
 		if (*word)
 			You("cannot %s %s you are sitting on.", word,
 				something);
-		return (false);
+		return false;
 	}
 #endif
-	return(true);
+	return true;
 }
 
 static int drop(struct obj *obj) {
-	if(!obj) return(0);
+	if(!obj) return 0;
 	if(!canletgo(obj,"drop"))
-		return(0);
+		return 0;
 	if(obj == uwep) {
 		if(welded(uwep)) {
 			weldmsg(obj);
-			return(0);
+			return 0;
 		}
 		setuwep(NULL, false);
 	}
@@ -472,7 +472,7 @@ static int drop(struct obj *obj) {
 	    if((obj->oclass == RING_CLASS || obj->otyp == MEAT_RING) &&
 			IS_SINK(levl[u.ux][u.uy].typ)) {
 		dosinkring(obj);
-		return(1);
+		return 1;
 	    }
 	    if (!can_reach_floor()) {
 		if(flags.verbose) You("drop %s.", doname(obj));
@@ -484,13 +484,13 @@ static int drop(struct obj *obj) {
 		freeinv(obj);
 #endif
 		hitfloor(obj);
-		return(1);
+		return 1;
 	    }
 	    if (!IS_ALTAR(levl[u.ux][u.uy].typ) && flags.verbose)
 		You("drop %s.", doname(obj));
 	}
 	dropx(obj);
-	return(1);
+	return 1;
 }
 
 /* Called in several places - may produce output */
@@ -721,16 +721,16 @@ int dodown(void) {
 	if (Role_if(PM_GNOME) && on_level(&mineend_level,&u.uz)) {
 		pline("The staircase is filled with tons of rubble and debris.");
 		pline("Poor Ruggo!");
-		return (0);
+		return 0;
 	}
 
 #ifdef STEED
 	if (u.usteed && !u.usteed->mcanmove) {
 		pline("%s won't move!", Monnam(u.usteed));
-		return(0);
+		return 0;
 	} else if (u.usteed && u.usteed->meating) {
 		pline("%s is still eating.", Monnam(u.usteed));
-		return(0);
+		return 0;
 	} else
 #endif
 	if (Levitation) {
@@ -750,11 +750,11 @@ int dodown(void) {
 		    }
 		}
 		if (float_down(I_SPECIAL|TIMEOUT, W_ARTI))
-		    return (1);   /* came down, so moved */
+		    return 1;   /* came down, so moved */
 	    }
 	    floating_above(stairs_down ? "stairs" : ladder_down ?
 			   "ladder" : surface(u.ux, u.uy));
-	    return (0);   /* didn't move */
+	    return 0;   /* didn't move */
 	}
 	if (!stairs_down && !ladder_down) {
 		if (!(trap = t_at(u.ux,u.uy)) ||
@@ -766,7 +766,7 @@ int dodown(void) {
 				return use_pick_axe2(uwep);
 			} else {
 				You_cant("go down here.");
-				return(0);
+				return 0;
 			}
 		}
 	}
@@ -774,20 +774,20 @@ int dodown(void) {
 		You("are %s, and cannot go down.",
 			!u.uswallow ? "being held" : is_animal(u.ustuck->data) ?
 			"swallowed" : "engulfed");
-		return(1);
+		return 1;
 	}
 	if (on_level(&valley_level, &u.uz) && !u.uevent.gehennom_entered) {
 		You("are standing at the gate to Gehennom.");
 		pline("Unspeakable cruelty and harm lurk down there.");
 		if (yn("Are you sure you want to enter?") != 'y')
-			return(0);
+			return 0;
 		else pline("So be it.");
 		u.uevent.gehennom_entered = 1;	/* don't ask again */
 	}
 
 	if(!next_to_u()) {
 		You("are held back by your pet!");
-		return(0);
+		return 0;
 	}
 
 	if (trap)
@@ -801,7 +801,7 @@ int dodown(void) {
 		next_level(!trap);
 		at_ladder = false;
 	}
-	return(1);
+	return 1;
 }
 
 int doup(void) {
@@ -811,41 +811,41 @@ int doup(void) {
 			|| !sstairs.up)
 	  ) {
 		You_cant("go up here.");
-		return(0);
+		return 0;
 	}
 #ifdef STEED
 	if (u.usteed && !u.usteed->mcanmove) {
 		pline("%s won't move!", Monnam(u.usteed));
-		return(0);
+		return 0;
 	} else if (u.usteed && u.usteed->meating) {
 		pline("%s is still eating.", Monnam(u.usteed));
-		return(0);
+		return 0;
 	} else
 #endif
 	if(u.ustuck) {
 		You("are %s, and cannot go up.",
 			!u.uswallow ? "being held" : is_animal(u.ustuck->data) ?
 			"swallowed" : "engulfed");
-		return(1);
+		return 1;
 	}
 	if(near_capacity() > SLT_ENCUMBER) {
 		/* No levitation check; inv_weight() already allows for it */
 		Your("load is too heavy to climb the %s.",
 			levl[u.ux][u.uy].typ == STAIRS ? "stairs" : "ladder");
-		return(1);
+		return 1;
 	}
 	if(ledger_no(&u.uz) == 1) {
 		if (yn("Beware, there will be no return! Still climb?") != 'y')
-			return(0);
+			return 0;
 	}
 	if(!next_to_u()) {
 		You("are held back by your pet!");
-		return(0);
+		return 0;
 	}
 	at_ladder = (boolean) (levl[u.ux][u.uy].typ == LADDER);
 	prev_level(true);
 	at_ladder = false;
-	return(1);
+	return 1;
 }
 
 d_level save_dlevel = {0, 0};
@@ -1623,7 +1623,7 @@ void moldy_corpse(void * arg, long timeout) {
 }
 
 int donull(void) {
-	return(1);	// Do nothing, but let other things happen
+	return 1;	// Do nothing, but let other things happen
 }
 
 static int wipeoff(void) {
@@ -1636,12 +1636,12 @@ static int wipeoff(void) {
 		u.ucreamed = 0;
 		Blinded = 1;
 		make_blinded(0L,true);
-		return(0);
+		return 0;
 	} else if (!u.ucreamed) {
 		Your("%s feels clean now.", body_part(FACE));
-		return(0);
+		return 0;
 	}
-	return(1);		/* still busy */
+	return 1;		/* still busy */
 }
 
 int dowipe(void) {
@@ -1653,10 +1653,10 @@ int dowipe(void) {
 		/* Not totally correct; what if they change back after now
 		 * but before they're finished wiping?
 		 */
-		return(1);
+		return 1;
 	}
 	Your("%s is already clean.", body_part(FACE));
-	return(1);
+	return 1;
 }
 
 void set_wounded_legs(long side, int timex) {

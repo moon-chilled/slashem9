@@ -216,8 +216,8 @@ void outdec(char *p, FILE *f, int n) {
 char *index(char *sp, char c) {
 	do {
 		if (*sp == c)
-			return(sp);
+			return sp;
 	} while (*sp++);
-	return(NULL);
+	return NULL;
 }
 #endif

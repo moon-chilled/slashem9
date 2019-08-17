@@ -379,34 +379,34 @@ int mattacku(struct monst *mtmp) {
 
 	if(!ranged) nomul(0);
 	if(mtmp->mhp <= 0 || (Underwater && !is_swimmer(mtmp->data)))
-	    return(0);
+	    return 0;
 
 	/* If swallowed, can only be affected by u.ustuck */
 	if(u.uswallow) {
-		if(mtmp != u.ustuck) return(0);
+		if(mtmp != u.ustuck) return 0;
 	    u.ustuck->mux = u.ux;
 	    u.ustuck->muy = u.uy;
 	    range2 = 0;
 	    foundyou = 1;
-	    if(u.uinvulnerable) return (0); /* stomachs can't hurt you! */
+	    if(u.uinvulnerable) return 0; /* stomachs can't hurt you! */
 	}
 
 #ifdef STEED
 	else if (u.usteed) {
 		if (mtmp == u.usteed)
 			/* Your steed won't attack you */
-			return (0);
+			return 0;
 		/* Orcs like to steal and eat horses and the like */
 		if (!rn2(is_orc(mtmp->data) ? 2 : 4) &&
 				distu(mtmp->mx, mtmp->my) <= 2) {
 			/* Attack your steed instead */
 			i = mattackm(mtmp, u.usteed);
 			if ((i & MM_AGR_DIED))
-				return (1);
+				return 1;
 			if (i & MM_DEF_DIED || u.umoved)
-				return (0);
+				return 0;
 			/* Let your steed retaliate */
-			return (!!(mattackm(u.usteed, mtmp) & MM_DEF_DIED));
+			return !!(mattackm(u.usteed, mtmp) & MM_DEF_DIED);
 		}
 	}
 #endif
@@ -435,7 +435,7 @@ int mattacku(struct monst *mtmp) {
 			else return 1;
 		    }
 		    if (youmonst.data->mlet != S_PIERCER)
-			return(0);	/* trappers don't attack */
+			return 0;	/* trappers don't attack */
 
 		    obj = which_armor(mtmp, WORN_HELMET);
 		    if (obj && is_metallic(obj)) {
@@ -483,7 +483,7 @@ int mattacku(struct monst *mtmp) {
 		    }
 		    newsym(u.ux,u.uy);
 		}
-		return(0);
+		return 0;
 	}
 	if (youmonst.data->mlet == S_MIMIC && youmonst.m_ap_type &&
 		    !range2 && foundyou && !u.uswallow) {
@@ -494,7 +494,7 @@ int mattacku(struct monst *mtmp) {
 		youmonst.m_ap_type = M_AP_NOTHING;
 		youmonst.mappearance = 0;
 		newsym(u.ux,u.uy);
-		return(0);
+		return 0;
 	}
 
 	/* player might be mimicking an object */
@@ -600,14 +600,14 @@ int mattacku(struct monst *mtmp) {
 		else
 		    You_feel("%s move nearby.", something);
 	    }
-	    return (0);
+	    return 0;
 	}
 
 	/* Unlike defensive stuff, don't let them use item _and_ attack. */
 	if(!blue_on_blue(mtmp) && find_offensive(mtmp)) {
 		int foo = use_offensive(mtmp);
 
-		if (foo != 0) return(foo==1);
+		if (foo != 0) return foo==1;
 	}
 
 	for(i = 0; i < NATTK; i++) {
@@ -781,7 +781,7 @@ int mattacku(struct monst *mtmp) {
 	    if(sum[i] == 3) break;  /* attacker teleported, no more attacks */
 	    /* sum[i] == 0: unsuccessful attack */
 	}
-	return(0);
+	return 0;
 }
 
 
@@ -1440,7 +1440,7 @@ dopois:
 				    }
 				    killer_format = KILLED_BY;
 				} else killer_format = KILLED_BY_AN;
-				return(1);
+				return 1;
 				/* You("turn to stone..."); */
 				/* done_in_by(mtmp); */
 			    }
@@ -1897,10 +1897,10 @@ static int gulpmu(struct monst *mtmp, struct attack  *mattk) {
 	int	i;
 
 	if (!u.uswallow) {	/* swallows you */
-		if (youmonst.data->msize >= MZ_HUGE) return(0);
+		if (youmonst.data->msize >= MZ_HUGE) return 0;
 		if ((t && ((t->ttyp == PIT) || (t->ttyp == SPIKED_PIT))) &&
 		    sobj_at(BOULDER, u.ux, u.uy))
-			return(0);
+			return 0;
 
 		if (Punished) unplacebc();	/* ball&chain go away */
 		remove_monster(mtmp->mx, mtmp->my);
@@ -1958,7 +1958,7 @@ static int gulpmu(struct monst *mtmp, struct attack  *mattk) {
 		    snuff_lit(otmp2);
 	}
 
-	if (mtmp != u.ustuck) return(0);
+	if (mtmp != u.ustuck) return 0;
 	if (u.uswldtim > 0) u.uswldtim -= 1;
 
 	switch(mattk->adtyp) {
@@ -2084,7 +2084,7 @@ static int gulpmu(struct monst *mtmp, struct attack  *mattk) {
 		pline("Obviously %s doesn't like your taste.", mon_nam(mtmp));
 	    expels(mtmp, mtmp->data, false);
 	}
-	return(1);
+	return 1;
 }
 
 // monster explodes in your face
@@ -2163,8 +2163,8 @@ common:
     }
     mondead(mtmp);
     wake_nearto(mtmp->mx, mtmp->my, 7*7);
-    if (mtmp->mhp > 0) return(0);
-    return(2);	/* it dies */
+    if (mtmp->mhp > 0) return 0;
+    return 2;	/* it dies */
 }
 
 // monster gazes at you
@@ -2421,7 +2421,7 @@ int gazemu(struct monst *mtmp, struct attack *mattk) {
 	    default: impossible("Gaze attack %d?", mattk->adtyp);
 		break;
 	}
-	return(0);
+	return 0;
 }
 
 
@@ -2504,7 +2504,7 @@ int could_seduce(struct monst *magr, struct monst *mdef, struct attack *mattk) {
 	boolean agrinvis, defperc;
 	xchar genagr, gendef;
 
-	if (is_animal(magr->data)) return (0);
+	if (is_animal(magr->data)) return 0;
 	if(magr == &youmonst) {
 		pagr = youmonst.data;
 		agrinvis = (Invis != 0);
@@ -2860,7 +2860,7 @@ static int passiveum(struct permonst *olduasmon, struct monst *mtmp, struct atta
 			    (wornitems & protector) != protector))) {
 		    if (poly_when_stoned(mtmp->data)) {
 			mon_to_stone(mtmp);
-			return (1);
+			return 1;
 		    }
 		    pline("%s turns to stone!", Monnam(mtmp));
 		    stoned = 1;
@@ -2875,7 +2875,7 @@ static int passiveum(struct permonst *olduasmon, struct monst *mtmp, struct atta
 	    	    drain_item(otmp);
 	    	    /* No message */
 	    	}
-	    	return (1);
+	    	return 1;
 	    default:
 		break;
 	}
@@ -2990,7 +2990,7 @@ struct monst *cloneu(void) {
 	mon->mhp = u.mh / 2;
 	u.mh -= mon->mhp;
 	flags.botl = 1;
-	return(mon);
+	return mon;
 }
 
 /*mhitu.c*/

@@ -252,10 +252,10 @@ static int level_range(xchar dgn, int base, int rand, int chain, struct proto_du
 	*adjusted_base = base;
 
 	if (rand == -1) {	/* from base to end of dungeon */
-	    return (lmax - base + 1);
+	    return lmax - base + 1;
 	} else if (rand) {
 	    /* make sure we don't run off the end of the dungeon */
-	    return (((base + rand - 1) > lmax) ? lmax-base+1 : rand);
+	    return ((base + rand - 1) > lmax) ? lmax-base+1 : rand;
 	} /* else only one choice */
 	return 1;
 }
@@ -278,7 +278,7 @@ static xchar parent_dlevel(int i, struct proto_dungeon *pd) {
 				(curr->end2.dnum == dnum && curr->end2.dlevel == base+i))
 				break;
 	} while (curr && i != j);
-	return (base + i);
+	return base + i;
 }
 
 /* Convert from the temporary branch type to the dungeon branch type. */
@@ -465,7 +465,7 @@ static int possible_places(int idx, boolean *map, struct proto_dungeon *pd) {
 static xchar pick_level(boolean *map, int nth) {
     int i;
     for (i = 1; i <= MAXLEVEL; i++)
-	if (map[i] && !nth--) return (xchar) i;
+	if (map[i] && !nth--) return i;
     panic("pick_level:  ran out of valid levels");
     return 0;
 }
@@ -835,21 +835,21 @@ void init_dungeons(void) {
 
 // return the level number for lev in *this* dungeon
 xchar dunlev(d_level *lev) {
-	return(lev->dlevel);
+	return lev->dlevel;
 }
 
 // return the lowest level number for *this* dungeon
 xchar dunlevs_in_dungeon(d_level *lev) {
 	/* lowest level of Gnome Mines is gone for Gnomes */
 	if (Role_if(PM_GNOME) && lev->dnum == mines_dnum) {
-		return((dungeons[lev->dnum].num_dunlevs)-1);
-	} else return(dungeons[lev->dnum].num_dunlevs);
+		return (dungeons[lev->dnum].num_dunlevs)-1;
+	} else return dungeons[lev->dnum].num_dunlevs;
 }
 
 // return the lowest level number for *this* dungeon
 xchar real_dunlevs_in_dungeon(d_level *lev) {
      /* this one is not altered for Gnomes */
-	return(dungeons[lev->dnum].num_dunlevs);
+	return dungeons[lev->dnum].num_dunlevs;
 }
 
 // return the lowest level explored in the game
@@ -880,13 +880,13 @@ xchar deepest_lev_reached(boolean noquest) {
 	    tmp.dnum = i;
 	    if(depth(&tmp) > ret) ret = depth(&tmp);
 	}
-	return((xchar) ret);
+	return ret;
 }
 
 /* return a bookkeeping level number for purpose of comparisons and
  * save/restore */
 xchar ledger_no(d_level *lev) {
-	return((xchar)(lev->dlevel + dungeons[lev->dnum].ledger_start));
+	return lev->dlevel + dungeons[lev->dnum].ledger_start;
 }
 
 /*
@@ -900,8 +900,7 @@ xchar ledger_no(d_level *lev) {
  * depth visited by the player.
  */
 xchar maxledgerno(void) {
-    return (xchar) (dungeons[n_dgns-1].ledger_start +
-				dungeons[n_dgns-1].num_dunlevs);
+    return dungeons[n_dgns-1].ledger_start + dungeons[n_dgns-1].num_dunlevs;
 }
 
 /* return the dungeon that this ledgerno exists in */
@@ -912,23 +911,23 @@ xchar ledger_to_dnum(xchar ledgerno) {
 	for (i = 0; i < n_dgns; i++)
 	    if (dungeons[i].ledger_start < ledgerno &&
 		ledgerno <= dungeons[i].ledger_start + dungeons[i].num_dunlevs)
-		return (xchar)i;
+		return i;
 
 	panic("level number out of range [ledger_to_dnum(%d)]", (int)ledgerno);
 	/*NOT REACHED*/
-	return (xchar)0;
+	return 0;
 }
 
 /* return the level of the dungeon this ledgerno exists in */
 xchar ledger_to_dlev(xchar ledgerno) {
-	return((xchar)(ledgerno - dungeons[ledger_to_dnum(ledgerno)].ledger_start));
+	return ledgerno - dungeons[ledger_to_dnum(ledgerno)].ledger_start;
 }
 
 
 /* returns the depth of a level, in floors below the surface	*/
 /* (note levels in different dungeons can have the same depth).	*/
 schar depth(d_level *lev) {
-	return((schar)( dungeons[lev->dnum].depth_start + lev->dlevel - 1));
+	return dungeons[lev->dnum].depth_start + lev->dlevel - 1;
 }
 
 // are "lev1" and "lev2" actually the same?
@@ -942,9 +941,9 @@ s_level *Is_special(d_level *lev) {
 	s_level *levtmp;
 
 	for (levtmp = sp_levchn; levtmp; levtmp = levtmp->next)
-	    if (on_level(lev, &levtmp->dlevel)) return(levtmp);
+	    if (on_level(lev, &levtmp->dlevel)) return levtmp;
 
-	return(NULL);
+	return NULL;
 }
 
 /*
@@ -1085,9 +1084,9 @@ boolean Can_rise_up(int x, int y, d_level *lev) {
     if (In_endgame(lev) || In_sokoban(lev) ||
 			(Is_wiz1_level(lev) && In_W_tower(x, y, lev)))
 	return false;
-    return (boolean)(lev->dlevel > 1 ||
-		(dungeons[lev->dnum].entry_lev == 1 && ledger_no(lev) != 1 &&
-		 sstairs.sx && sstairs.up));
+    return lev->dlevel > 1 ||
+	    (dungeons[lev->dnum].entry_lev == 1 && ledger_no(lev) != 1 &&
+	     sstairs.sx && sstairs.up);
 }
 
 /*
@@ -1221,8 +1220,7 @@ boolean In_W_tower(int x, int y, d_level *lev) {
 	 *	assert( updest.nIJ == dndest.nIJ for I={l|h},J={x|y} );
 	 */
 	if (dndest.nlx > 0)
-	    return (boolean)within_bounded_area(x, y, dndest.nlx, dndest.nly,
-						dndest.nhx, dndest.nhy);
+	    return within_bounded_area(x, y, dndest.nlx, dndest.nly, dndest.nhx, dndest.nhy);
 	else
 	    impossible("No boundary for Wizard's Tower?");
 	return false;
@@ -1272,13 +1270,13 @@ int induced_align(int pct) {
 	aligntyp al;
 
 	if (lev && lev->flags.align)
-		if(rn2(100) < pct) return(lev->flags.align);
+		if(rn2(100) < pct) return lev->flags.align;
 
 	if(dungeons[u.uz.dnum].flags.align)
-		if(rn2(100) < pct) return(dungeons[u.uz.dnum].flags.align);
+		if(rn2(100) < pct) return dungeons[u.uz.dnum].flags.align;
 
 	al = rn2(3) - 1;
-	return(Align2amask(al));
+	return Align2amask(al);
 }
 
 
@@ -1291,12 +1289,12 @@ boolean Invocation_lev(d_level *lev) {
  */
 xchar level_difficulty(void) {
 	if (In_endgame(&u.uz))
-		return((xchar)(depth(&sanctum_level) + u.ulevel/2));
+		return depth(&sanctum_level) + u.ulevel/2;
 	else
 		if (u.uhave.amulet)
-			return(deepest_lev_reached(false));
+			return deepest_lev_reached(false);
 		else
-			return((xchar) depth(&u.uz));
+			return depth(&u.uz);
 }
 
 /* Take one word and try to match it to a level.

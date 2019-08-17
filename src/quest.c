@@ -95,14 +95,13 @@ artitouch (void)
 boolean
 ok_to_quest()
 {
-	return((boolean)((Qstat(got_quest) || Qstat(got_thanks)))
-			&& (is_pure(false) > 0));
+	return (Qstat(got_quest) || Qstat(got_thanks)) && (is_pure(false) > 0);
 }
 
 static boolean
 not_capable()
 {
-	return((boolean)(u.ulevel < MIN_QUEST_LEVEL));
+	return u.ulevel < MIN_QUEST_LEVEL;
 }
 
 static int

@@ -61,7 +61,7 @@ inside_rect(r, x, y)
 NhRect *r;
 int x, y;
 {
-    return (x >= r->lx && x <= r->hx && y >= r->ly && y <= r->hy);
+    return x >= r->lx && x <= r->hx && y >= r->ly && y <= r->hy;
 }
 
 /*

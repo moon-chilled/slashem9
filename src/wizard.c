@@ -98,8 +98,8 @@ mon_has_amulet (struct monst *mtmp)
 	struct obj *otmp;
 
 	for(otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
-		if(otmp->otyp == AMULET_OF_YENDOR) return(1);
-	return(0);
+		if(otmp->otyp == AMULET_OF_YENDOR) return 1;
+	return 0;
 }
 
 int
@@ -110,7 +110,7 @@ mon_has_special (struct monst *mtmp)
 	for(otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
 		if (evades_destruction(otmp) || is_quest_artifact(otmp))
 			return 1;
-	return(0);
+	return 0;
 }
 
 /*
@@ -129,13 +129,13 @@ which_arti(mask)
 	int mask;
 {
 	switch(mask) {
-	    case M3_WANTSAMUL:	return(AMULET_OF_YENDOR);
-	    case M3_WANTSBELL:	return(BELL_OF_OPENING);
-	    case M3_WANTSCAND:	return(CANDELABRUM_OF_INVOCATION);
-	    case M3_WANTSBOOK:	return(SPE_BOOK_OF_THE_DEAD);
+	    case M3_WANTSAMUL:	return AMULET_OF_YENDOR;
+	    case M3_WANTSBELL:	return BELL_OF_OPENING;
+	    case M3_WANTSCAND:	return CANDELABRUM_OF_INVOCATION;
+	    case M3_WANTSBOOK:	return SPE_BOOK_OF_THE_DEAD;
 	    default:		break;	/* 0 signifies quest artifact */
 	}
-	return(0);
+	return 0;
 }
 
 /*
@@ -153,11 +153,11 @@ mon_has_arti(mtmp, otyp)
 	for(otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
 	    if(otyp) {
 		if(otmp->otyp == otyp)
-			return(1);
+			return 1;
 	    }
-	     else if(is_quest_artifact(otmp)) return(1);
+	     else if(is_quest_artifact(otmp)) return 1;
 	}
-	return(0);
+	return 0;
 
 }
 
@@ -171,9 +171,9 @@ other_mon_has_arti(mtmp, otyp)
 	for(mtmp2 = fmon; mtmp2; mtmp2 = mtmp2->nmon)
 	    /* no need for !DEADMONSTER check here since they have no inventory */
 	    if(mtmp2 != mtmp)
-		if(mon_has_arti(mtmp2, otyp)) return(mtmp2);
+		if(mon_has_arti(mtmp2, otyp)) return mtmp2;
 
-	return(NULL);
+	return NULL;
 }
 
 static struct obj *
@@ -185,10 +185,10 @@ on_ground(otyp)
 	for (otmp = fobj; otmp; otmp = otmp->nobj)
 	    if (otyp) {
 		if (otmp->otyp == otyp)
-		    return(otmp);
+		    return otmp;
 	    } else if (is_quest_artifact(otmp))
-		return(otmp);
-	return(NULL);
+		return otmp;
+	return NULL;
 }
 
 static boolean
@@ -196,14 +196,14 @@ you_have(mask)
 	int mask;
 {
 	switch(mask) {
-	    case M3_WANTSAMUL:	return(boolean)(u.uhave.amulet);
-	    case M3_WANTSBELL:	return(boolean)(u.uhave.bell);
-	    case M3_WANTSCAND:	return(boolean)(u.uhave.menorah);
-	    case M3_WANTSBOOK:	return(boolean)(u.uhave.book);
-	    case M3_WANTSARTI:	return(boolean)(u.uhave.questart);
+	    case M3_WANTSAMUL:	return u.uhave.amulet;
+	    case M3_WANTSBELL:	return u.uhave.bell;
+	    case M3_WANTSCAND:	return u.uhave.menorah;
+	    case M3_WANTSBOOK:	return u.uhave.book;
+	    case M3_WANTSARTI:	return u.uhave.questart;
 	    default:		break;
 	}
-	return(0);
+	return 0;
 }
 
 static long
@@ -215,18 +215,18 @@ target_on(mask, mtmp)
 	struct obj *otmp;
 	struct monst *mtmp2;
 
-	if(!M_Wants(mask))	return(STRAT_NONE);
+	if(!M_Wants(mask))	return STRAT_NONE;
 
 	otyp = which_arti(mask);
 	if(!mon_has_arti(mtmp, otyp)) {
 	    if(you_have(mask))
-		return(STRAT(STRAT_PLAYER, u.ux, u.uy, mask));
+		return STRAT(STRAT_PLAYER, u.ux, u.uy, mask);
 	    else if((otmp = on_ground(otyp)))
-		return(STRAT(STRAT_GROUND, otmp->ox, otmp->oy, mask));
+		return STRAT(STRAT_GROUND, otmp->ox, otmp->oy, mask);
 	    else if((mtmp2 = other_mon_has_arti(mtmp, otyp)))
-		return(STRAT(STRAT_MONSTR, mtmp2->mx, mtmp2->my, mask));
+		return STRAT(STRAT_MONSTR, mtmp2->mx, mtmp2->my, mask);
 	}
-	return(STRAT_NONE);
+	return STRAT_NONE;
 }
 
 static long
@@ -246,11 +246,11 @@ strategy(mtmp)
 
 	   default:
 	    case 0:	/* panic time - mtmp is almost snuffed */
-			return(STRAT_HEAL);
+			return STRAT_HEAL;
 
 	    case 1:	/* the wiz is less cautious */
 			if(mtmp->data != &mons[PM_WIZARD_OF_YENDOR])
-			    return(STRAT_HEAL);
+			    return STRAT_HEAL;
 			/* else fall through */
 
 	    case 2:	dstrat = STRAT_HEAL;
@@ -262,30 +262,30 @@ strategy(mtmp)
 
 	if(flags.made_amulet)
 	    if((strat = target_on(M3_WANTSAMUL, mtmp)) != STRAT_NONE)
-		return(strat);
+		return strat;
 
 	if(u.uevent.invoked) {		/* priorities change once gate opened */
 
 	    if((strat = target_on(M3_WANTSARTI, mtmp)) != STRAT_NONE)
-		return(strat);
+		return strat;
 	    if((strat = target_on(M3_WANTSBOOK, mtmp)) != STRAT_NONE)
-		return(strat);
+		return strat;
 	    if((strat = target_on(M3_WANTSBELL, mtmp)) != STRAT_NONE)
-		return(strat);
+		return strat;
 	    if((strat = target_on(M3_WANTSCAND, mtmp)) != STRAT_NONE)
-		return(strat);
+		return strat;
 	} else {
 
 	    if((strat = target_on(M3_WANTSBOOK, mtmp)) != STRAT_NONE)
-		return(strat);
+		return strat;
 	    if((strat = target_on(M3_WANTSBELL, mtmp)) != STRAT_NONE)
-		return(strat);
+		return strat;
 	    if((strat = target_on(M3_WANTSCAND, mtmp)) != STRAT_NONE)
-		return(strat);
+		return strat;
 	    if((strat = target_on(M3_WANTSARTI, mtmp)) != STRAT_NONE)
-		return(strat);
+		return strat;
 	}
-	return(dstrat);
+	return dstrat;
 }
 
 int
@@ -311,13 +311,13 @@ tactics (struct monst *mtmp)
 		if (distu(mtmp->mx,mtmp->my) > (BOLT_LIM * BOLT_LIM))
 		    if(mtmp->mhp <= mtmp->mhpmax - 8) {
 			mtmp->mhp += rnd(8);
-			return(1);
+			return 1;
 		    }
 		/* fall through :-) */
 
 	    case STRAT_NONE:	/* harrass */
 		if (!rn2(!mtmp->mflee ? 5 : 33)) mnexto(mtmp);
-		return(0);
+		return 0;
 
 	    default:		/* kill, maim, pillage! */
 	    {
@@ -328,12 +328,12 @@ tactics (struct monst *mtmp)
 		struct obj *otmp;
 
 		if(!targ) { /* simply wants you to close */
-		    return(0);
+		    return 0;
 		}
 		if((u.ux == tx && u.uy == ty) || where == STRAT_PLAYER) {
 		    /* player is standing on it (or has it) */
 		    mnexto(mtmp);
-		    return(0);
+		    return 0;
 		}
 		if(where == STRAT_GROUND) {
 		    if(!MON_AT(tx, ty) || (mtmp->mx == tx && mtmp->my == ty)) {
@@ -348,21 +348,21 @@ tactics (struct monst *mtmp)
 				     doname(otmp) : distant_name(otmp, doname));
 			    obj_extract_self(otmp);
 			    mpickobj(mtmp, otmp);
-			    return(1);
-			} else return(0);
+			    return 1;
+			} else return 0;
 		    } else {
 			/* a monster is standing on it - cause some trouble */
 			if (!rn2(5)) mnexto(mtmp);
-			return(0);
+			return 0;
 		    }
 	        } else { /* a monster has it - 'port beside it. */
 		    mnearto(mtmp, tx, ty, false);
-		    return(0);
+		    return 0;
 		}
 	    }
 	}
 	/*NOTREACHED*/
-	return(0);
+	return 0;
 }
 
 void

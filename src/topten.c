@@ -1115,7 +1115,7 @@ classmon(plch, fem)
 	if (!strcmp(plch, "E")) return PM_RANGER;
 
 	impossible("What weird role is this? (%s)", plch);
-	return (PM_HUMAN_MUMMY);
+	return PM_HUMAN_MUMMY;
 }
 
 /*
@@ -1132,7 +1132,7 @@ struct obj *otmp;
 	FILE *rfile;
 	struct toptenentry tt_buf;
 
-	if (!otmp) return(NULL);
+	if (!otmp) return NULL;
 
 	rfile = fopen_datafile_area(NH_RECORD_AREA, NH_RECORD, "r", SCOREPREFIX);
 	if (!rfile) {

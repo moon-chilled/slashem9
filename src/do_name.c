@@ -203,7 +203,7 @@ struct monst *christen_monst(struct monst *mtmp, const char *name) {
 	mtmp2->mnamelth = lth;
 	if (lth) strcpy(NAME(mtmp2), name);
 	replmon(mtmp,mtmp2);
-	return(mtmp2);
+	return mtmp2;
 }
 
 int do_mname(void) {
@@ -235,7 +235,7 @@ int do_mname(void) {
 		(flags.female ? "beautiful" : "handsome") :
 		"ugly",
 		plname);
-		return(0);
+		return 0;
 #ifdef STEED
 	    }
 #endif
@@ -248,13 +248,13 @@ int do_mname(void) {
 			|| mtmp->m_ap_type == M_AP_OBJECT
 			|| (mtmp->minvis && !See_invisible)))) {
 		pline("I see no monster there.");
-		return(0);
+		return 0;
 	}
 	/* special case similar to the one in lookat() */
 	distant_monnam(mtmp, ARTICLE_THE, buf);
 	sprintf(qbuf, "What do you want to call %s?", buf);
 	getlin(qbuf,buf);
-	if(!*buf || *buf == '\033') return(0);
+	if(!*buf || *buf == '\033') return 0;
 	/* strip leading and trailing spaces; unnames monster if all spaces */
 	mungspaces(buf);
 
@@ -262,7 +262,7 @@ int do_mname(void) {
 	    pline("%s doesn't like being called names!", Monnam(mtmp));
 	else
 	    christen_monst(mtmp, buf);
-	return(0);
+	return 0;
 }
 
 /*
@@ -693,7 +693,7 @@ char *x_monnam(struct monst *mtmp, int article, const char *adjective, int suppr
 		    strcpy(buf, buf2);
 		    return buf;
 		case ARTICLE_A:
-		    return(an(buf));
+		    return an(buf);
 		case ARTICLE_NONE:
 		default:
 		    return buf;
@@ -727,14 +727,14 @@ char *Monnam(struct monst *mtmp) {
 	char *bp = mon_nam(mtmp);
 
 	*bp = highc(*bp);
-	return(bp);
+	return bp;
 }
 
 char *noit_Monnam(struct monst *mtmp) {
 	char *bp = noit_mon_nam(mtmp);
 
 	*bp = highc(*bp);
-	return(bp);
+	return bp;
 }
 
 // monster's own name
@@ -763,7 +763,7 @@ char *Adjmonnam(struct monst *mtmp, const char *adj) {
 		mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false);
 
 	*bp = highc(*bp);
-	return(bp);
+	return bp;
 }
 
 char *a_monnam(struct monst *mtmp) {
@@ -775,7 +775,7 @@ char *Amonnam(struct monst *mtmp) {
 	char *bp = a_monnam(mtmp);
 
 	*bp = highc(*bp);
-	return(bp);
+	return bp;
 }
 
 /* used for monster ID by the '/', ';', and 'C' commands to block remote

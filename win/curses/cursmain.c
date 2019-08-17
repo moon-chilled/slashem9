@@ -688,7 +688,7 @@ char yn_function(const char *ques, const char *choices, char default)
 char
 curses_yn_function(const char *question, const char *choices, char def)
 {
-    return (char) curses_character_input_dialog(question, choices, def);
+    return char) curses_character_input_dialog(question, choices, def;
 }
 
 /*

@@ -394,12 +394,12 @@ struct monst *mtmp;
 		    strcpy(buf, y_monnam(mtmp));
 		    buf[0] = highc(buf[0]);
 		    You("stop.  %s is in the way!", buf);
-		    return(true);
+		    return true;
 		} else if ((mtmp->mfrozen || (! mtmp->mcanmove)
 				|| (mtmp->data->mmove == 0)) && rn2(6)) {
 		    pline("%s doesn't seem to move!", Monnam(mtmp));
-		    return(true);
-		} else return(false);
+		    return true;
+		} else return false;
 	    }
 	}
 
@@ -407,7 +407,7 @@ struct monst *mtmp;
 	   examined in known_hitum, called via hitum or hmonas below */
 	override_confirmation = 0;
 	mhit = attack_checks(mtmp, !uwep);
-	if (!mhit) return(true);
+	if (!mhit) return true;
 
 	if (Upolyd) {
 		/* certain "pacifist" monsters don't attack */
@@ -452,7 +452,7 @@ struct monst *mtmp;
 	   !mtmp->mconf && mtmp->mcansee && !rn2(7) &&
 	   (m_move(mtmp, 0) == 2 ||			    /* it died */
 	   mtmp->mx != u.ux+u.dx || mtmp->my != u.uy+u.dy)) /* it moved */
-		return(false);
+		return false;
 
 	tmp = find_roll_to_hit(mtmp);
 
@@ -479,7 +479,7 @@ atk_done:
 	    !(u.uswallow && mtmp == u.ustuck))
 		map_invisible(u.ux+u.dx, u.uy+u.dy);
 
-	return(true);
+	return true;
 }
 
 static boolean
@@ -595,7 +595,7 @@ struct attack *uattk;
 		}
 	    }
 	}
-	return(malive);
+	return malive;
 }
 
 #if 0 /* Obsolete */
@@ -643,7 +643,7 @@ struct attack *uattk;
 	passive(mon, mhit, malive, AT_WEAP);
 	/* berserk lycanthropes calm down after the enemy is dead */
 	if (!malive) repeat_hit = 0;
-	return(malive);
+	return malive;
 }
 #endif
 
@@ -672,7 +672,7 @@ martial_dmg (void)
             uarm->otyp <= ROBE_OF_WEAKNESS))) && (!uarms))
                 damage *= 2;
         else damage += 2;
-        return (damage);
+        return damage;
 }
 
 boolean			/* general "damage monster" routine */
@@ -1115,7 +1115,7 @@ int thrown;
 			You("succeed in destroying %s camera.  Congratulations!",
 			    shk_your(yourbuf, obj));
 			useup(obj);
-			return(true);
+			return true;
 			/*NOTREACHED*/
 			break;
 		    case CORPSE:		/* fixed by polder@cs.vu.nl */
@@ -1131,7 +1131,7 @@ int thrown;
 				minstapetrify(mon, true);
 			    if (resists_ston(mon)) break;
 			    /* note: hp may be <= 0 even if munstoned==true */
-			    return (boolean) (mon->mhp > 0);
+			    return mon->mhp > 0;
 #if 0
 			} else if (touch_petrifies(mdat)) {
 			    /* maybe turn the corpse into a statue? */
@@ -1174,7 +1174,7 @@ int thrown;
 			    if (!munstone(mon, true))
 				minstapetrify(mon, true);
 			    if (resists_ston(mon)) break;
-			    return (boolean) (mon->mhp > 0);
+			    return mon->mhp > 0;
 			} else {	/* ordinary egg(s) */
 			    const char *eggp =
 				     (obj->corpsenm != NON_PM && obj->known) ?
@@ -1828,7 +1828,7 @@ struct attack *mattk;
 		&& u.umonnum != PM_SUCCUBUS && u.umonnum != PM_INCUBUS
 		&& u.umonnum != PM_BALROG) {
 	    demonpet();
-	    return(0);
+	    return 0;
 	}
 	switch(mattk->adtyp) {
 	    case AD_STUN:
@@ -1886,7 +1886,7 @@ struct attack *mattk;
 		    if (!Blind)
 			pline("%s falls to pieces!", Monnam(mdef));
 			xkilled(mdef,3);
-			return(2);
+			return 2;
 		}
 		tmp += destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
 		tmp += destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
@@ -2333,9 +2333,9 @@ struct attack *mattk;
 		if (tmp) xkilled(mdef, 0);
 	    } else
 		if (tmp) killed(mdef);
-	    return(2);
+	    return 2;
 	}
-	return(1);
+	return 1;
 }
 
 static int
@@ -2377,7 +2377,7 @@ common:
 		    mdef->mhp -= tmp;
 		    if (mdef->mhp <= 0) {
 			 killed(mdef);
-			 return(2);
+			 return 2;
 		    }
 		} else {
 		    shieldeff(mdef->mx, mdef->my);
@@ -2391,7 +2391,7 @@ common:
 	    default:
 		break;
 	}
-	return(1);
+	return 1;
 }
 
 static void
@@ -2508,7 +2508,7 @@ struct attack *mattk;
 			    exercise(A_CON, true);
 			}
 			end_engulf();
-			return(2);
+			return 2;
 		    case AD_PHYS:
 			if (youmonst.data == &mons[PM_FOG_CLOUD]) {
 			    pline("%s is laden with your moisture.",
@@ -2575,7 +2575,7 @@ struct attack *mattk;
 		if ((mdef->mhp -= dam) <= 0) {
 		    killed(mdef);
 		    if (mdef->mhp <= 0)	/* not lifesaved */
-			return(2);
+			return 2;
 		}
 		You("%s %s!", is_animal(youmonst.data) ? "regurgitate"
 			: "expel", mon_nam(mdef));
@@ -2591,7 +2591,7 @@ struct attack *mattk;
 		instapetrify(kbuf);
 	    }
 	}
-	return(0);
+	return 0;
 }
 
 void
@@ -2778,7 +2778,7 @@ use_weapon:
 			    break;
 			} else sum[i] = dhit;
 			/* might be a worm that gets cut in half */
-			if (m_at(u.ux+u.dx, u.uy+u.dy) != mon) return((boolean)(nsum != 0));
+			if (m_at(u.ux+u.dx, u.uy+u.dy) != mon) return nsum != 0;
 			/* Do not print "You hit" message, since known_hitum
 			 * already did it.
 			 */
@@ -2973,7 +2973,7 @@ use_weapon:
 		rehumanize();
 	    }
 	    if (sum[i] & HIT_FATAL)
-		return((boolean)passive(mon, sum[i], 0, mattk->aatyp));
+		return passive(mon, sum[i], 0, mattk->aatyp);
 							/* defender dead */
 	    else {
 		passive(mon, sum[i], 1, mattk->aatyp);
@@ -2984,7 +2984,7 @@ use_weapon:
 	    if (multi < 0)
 		break; /* If paralyzed while attacking, i.e. floating eye */
 	}
-	return((boolean)(nsum != 0));
+	return nsum != 0;
 }
 
 /*	Special (passive) attacks on you by monsters done here.		*/
@@ -3008,7 +3008,7 @@ uchar aatyp;
 		return 2;			/* lifesaved */
 	}
 	for(i = 0; ; i++) {
-	    if(i >= NATTK) return(malive | mhit);	/* no passive attacks */
+	    if(i >= NATTK) return malive | mhit;	/* no passive attacks */
 	    if(ptr->mattk[i].aatyp == AT_NONE /*||
 	       ptr->mattk[i].aatyp == AT_BOOM*/) break; /* try this one */
 	}
@@ -3211,7 +3211,7 @@ uchar aatyp;
 		break;
 	    }
 	}
-	return(malive | mhit);
+	return malive | mhit;
 }
 
 /*

@@ -157,7 +157,7 @@ int jumble_pack(void) {
 
 	/* Clean up */
 	reorder_invent();
-	return (dmg);
+	return dmg;
 }
 
 
@@ -385,7 +385,7 @@ added:
 	addinv_core2(obj);
 	carry_obj_effects(&youmonst, obj); /* carrying affects the obj */
 	update_inventory();
-	return(obj);
+	return obj;
 }
 /*
  * Some objects are affected by being carried.
@@ -654,7 +654,7 @@ struct obj *o_on(unsigned int id, struct obj *objchn) {
 	struct obj *temp;
 
 	while(objchn) {
-		if(objchn->o_id == id) return(objchn);
+		if(objchn->o_id == id) return objchn;
 		if (Has_contents(objchn) && (temp = o_on(id,objchn->cobj)))
 			return temp;
 		objchn = objchn->nobj;
@@ -696,7 +696,7 @@ struct obj *mkgoldobj(long q) {
 	otmp->quan = q;
 	otmp->owt = weight(otmp);
 	flags.botl = 1;
-	return(otmp);
+	return otmp;
 }
 #endif
 
@@ -1003,7 +1003,7 @@ struct obj *getobj(const char *let, const char *word) {
 	   !allowfloor && !allowthisplace) {
 		You("don't have anything %sto %s.",
 			foox ? "else " : "", word);
-		return(NULL);
+		return NULL;
 	}
 
 	for(;;) {
@@ -1053,7 +1053,7 @@ struct obj *getobj(const char *let, const char *word) {
 		    return NULL;
 		}
 		if(ilet == '-') {
-			return(allownone ? &zeroobj : NULL);
+			return allownone ? &zeroobj : NULL;
 		}
 		if(ilet == def_oc_syms[COIN_CLASS]) {
 			if (!usegold) {
@@ -1070,7 +1070,7 @@ struct obj *getobj(const char *let, const char *word) {
 				return NULL;
 #endif
 			}
-			if(cnt == 0 && prezero) return(NULL);
+			if(cnt == 0 && prezero) return NULL;
 			/* Historic note: early Nethack had a bug which was
 			 * first reported for Larn, where trying to drop 2^32-n
 			 * gold pieces was allowed, and did interesting things
@@ -1085,7 +1085,7 @@ struct obj *getobj(const char *let, const char *word) {
 #ifndef GOLDOBJ
 			if(!(allowcnt == 2 && cnt < u.ugold))
 				cnt = u.ugold;
-			return(mkgoldobj(cnt));
+			return mkgoldobj(cnt);
 #endif
 		}
 		if(ilet == '.') {
@@ -1147,7 +1147,7 @@ struct obj *getobj(const char *let, const char *word) {
 		    if(ilet == '\033') {
 			if(flags.verbose)
 			    pline("%s", Never_mind);
-			return(NULL);
+			return NULL;
 		    }
 		    /* they typed a letter (not a space) at the prompt */
 		}
@@ -1160,7 +1160,7 @@ struct obj *getobj(const char *let, const char *word) {
 		    if (ilet != def_oc_syms[COIN_CLASS])
 #endif
 			allowcnt = 1;
-		    if(cnt == 0 && prezero) return(NULL);
+		    if(cnt == 0 && prezero) return NULL;
 		    if (cnt == 1) {
 			save_cm = (char *) 1; /* Non zero */
 			multi = 0;
@@ -1183,14 +1183,14 @@ struct obj *getobj(const char *let, const char *word) {
 		if(!otmp) {
 			You("don't have that object.");
 #ifdef REDO
-			if (in_doagain) return(NULL);
+			if (in_doagain) return NULL;
 #endif
 			continue;
 		} else if (cnt < 0 || otmp->quan < cnt) {
 			You("don't have that many!  You have only %ld.",
 			    otmp->quan);
 #ifdef REDO
-			if (in_doagain) return(NULL);
+			if (in_doagain) return NULL;
 #endif
 			continue;
 		}
@@ -1203,7 +1203,7 @@ struct obj *getobj(const char *let, const char *word) {
 #endif
 	   ) {
 		silly_thing(word, otmp);
-		return(NULL);
+		return NULL;
 	}
 	if(allowcnt == 2) {	/* cnt given */
 	    if(cnt == 0) return NULL;
@@ -1216,7 +1216,7 @@ struct obj *getobj(const char *let, const char *word) {
 		    otmp = splitobj(otmp, cnt);
 	    }
 	}
-	return(otmp);
+	return otmp;
 }
 
 void silly_thing(const char *word, struct obj *otmp) {
@@ -1304,7 +1304,7 @@ int ggetobj(const char *word, int (*fn)(struct obj*), int mx, boolean combo /* c
 	if(!invent){
 #endif
 		You("have nothing to %s.", word);
-		return(0);
+		return 0;
 	}
 	add_valid_menu_class(0);	/* reset */
 	if (taking_off(word)) {
@@ -1345,7 +1345,7 @@ int ggetobj(const char *word, int (*fn)(struct obj*), int mx, boolean combo /* c
 	    sprintf(qbuf,"What kinds of thing do you want to %s? [%s]",
 		    word, ilets);
 	    getlin(qbuf, buf);
-	    if (buf[0] == '\033') return(0);
+	    if (buf[0] == '\033') return 0;
 	    if (index(buf, 'i')) {
 		if (display_inventory(NULL, true) == '\033') return 0;
 	    } else
@@ -1554,7 +1554,7 @@ nextclass:
 	if(!takeoff && (dud || cnt)) pline("That was all.");
 	else if(!dud && !cnt) pline("No applicable objects.");
 ret:
-	return(cnt);
+	return cnt;
 }
 
 
@@ -1736,7 +1736,7 @@ static struct obj *find_unpaid(struct obj *list, struct obj **last_found) {
 		if (list == *last_found)
 		    *last_found = NULL;
 	    } else
-		return (*last_found = list);
+		return *last_found = list;
 	}
 	if (Has_contents(list)) {
 	    if ((obj = find_unpaid(list->cobj, last_found)) != 0)
@@ -2280,7 +2280,7 @@ int look_here(int obj_cnt /* obj_cnt > 0 implies that autopickup is in progess *
 	    } else {
 		You("%s no objects here.", verb);
 	    }
-	    return(!!Blind);
+	    return !!Blind;
 	}
 	if (!skip_objects && (trap = t_at(u.ux,u.uy)) && trap->tseen)
 		There("is %s here.",
@@ -2305,7 +2305,7 @@ int look_here(int obj_cnt /* obj_cnt > 0 implies that autopickup is in progess *
 			dfeature = 0;		/* ice already identifed */
 		if (!can_reach_floor()) {
 			pline("But you can't reach it!");
-			return(0);
+			return 0;
 		}
 	}
 
@@ -2324,7 +2324,7 @@ int look_here(int obj_cnt /* obj_cnt > 0 implies that autopickup is in progess *
 		sense_engr_at(u.ux, u.uy, false); /* Eric Backus */
 		if (!skip_objects && (Blind || !dfeature))
 		    You("%s no objects here.", verb);
-		return(!!Blind);
+		return !!Blind;
 	}
 	/* we know there is something here */
 
@@ -2368,7 +2368,7 @@ int look_here(int obj_cnt /* obj_cnt > 0 implies that autopickup is in progess *
 	    if (felt_cockatrice) feel_cockatrice(otmp, false);
 	    sense_engr_at(u.ux, u.uy, false); /* Eric Backus */
 	}
-	return(!!Blind);
+	return !!Blind;
 }
 
 /* explicilty look at what is here, including all objects */
@@ -2436,7 +2436,7 @@ static boolean mergable(struct obj *otmp, struct obj *obj) {
 	    obj->oeroded != otmp->oeroded ||
 	    obj->oeroded2 != otmp->oeroded2 ||
 	    obj->bypass != otmp->bypass)
-	    return(false);
+	    return false;
 
 	if ((obj->oclass==WEAPON_CLASS || obj->oclass==ARMOR_CLASS) &&
 	    (obj->oerodeproof!=otmp->oerodeproof || obj->rknown!=otmp->rknown))
@@ -2444,7 +2444,7 @@ static boolean mergable(struct obj *otmp, struct obj *obj) {
 
 	if (obj->oclass == FOOD_CLASS && (obj->oeaten != otmp->oeaten ||
 	  obj->odrained != otmp->odrained || obj->orotten != otmp->orotten))
-	    return(false);
+	    return false;
 
 	if (obj->otyp == CORPSE || obj->otyp == EGG || obj->otyp == TIN) {
 		if (obj->corpsenm != otmp->corpsenm)
@@ -2470,7 +2470,7 @@ static boolean mergable(struct obj *otmp, struct obj *obj) {
 	 * initial candle age is always a multiple of 20.
 	 */
 	if ((obj->otyp == TORCH || Is_candle(obj)) && obj->age/20 != otmp->age/20)
-	    return(false);
+	    return false;
 
 	/* burning potions of oil never merge */
 	/* MRKR: nor do burning torches */
@@ -2496,8 +2496,8 @@ static boolean mergable(struct obj *otmp, struct obj *obj) {
 
 	if(obj->known == otmp->known ||
 		!objects[otmp->otyp].oc_uses_known) {
-		return((boolean)(objects[obj->otyp].oc_merge));
-	} else return(false);
+		return objects[obj->otyp].oc_merge;
+	} else return false;
 }
 
 int doprgold(void) {
@@ -2608,8 +2608,7 @@ static boolean tool_in_use(struct obj *obj) {
 #endif
 			)) != 0L) return true;
 	if (obj->oclass != TOOL_CLASS) return false;
-	return (boolean)(obj == uwep || obj->lamplit ||
-				(obj->otyp == LEASH && obj->leashmon));
+	return obj == uwep || obj->lamplit || (obj->otyp == LEASH && obj->leashmon);
 }
 
 int doprtool(void) {
@@ -2751,7 +2750,7 @@ int doorganize(void) {
 	if (!flags.invlet_constant) reassign();
 	/* get a pointer to the object the user wants to organize */
 	allowall[0] = ALL_CLASSES; allowall[1] = '\0';
-	if (!(obj = getobj(allowall,"adjust"))) return(0);
+	if (!(obj = getobj(allowall,"adjust"))) return 0;
 
 	/* initialize the list with all upper and lower case letters */
 	for (let = 'a', ix = 0;  let <= 'z';) alphabet[ix++] = let++;
@@ -2780,7 +2779,7 @@ int doorganize(void) {
 		let = yn_function(qbuf, NULL, '\0');
 		if(index(quitchars,let)) {
 			pline("%s", Never_mind);
-			return(0);
+			return 0;
 		}
 		if (let == '@' || !letter(let))
 			pline("Select an inventory slot letter.");
@@ -2820,7 +2819,7 @@ int doorganize(void) {
 
 	prinv(adj_type, obj, 0L);
 	update_inventory();
-	return(0);
+	return 0;
 }
 
 // common to display_minventory and display_cinventory
@@ -2844,11 +2843,11 @@ static void invdisp_nothing(const char *hdr, const char *txt) {
 
 // query_objlist callback: return things that could possibly be worn/wielded
 static boolean worn_wield_only(struct obj *obj) {
-    return (obj->oclass == WEAPON_CLASS
+	return obj->oclass == WEAPON_CLASS
 		|| obj->oclass == ARMOR_CLASS
 		|| obj->oclass == AMULET_CLASS
 		|| obj->oclass == RING_CLASS
-		|| obj->oclass == TOOL_CLASS);
+		|| obj->oclass == TOOL_CLASS;
 }
 
 /*
@@ -2971,7 +2970,7 @@ struct obj *display_cinventory(struct obj *obj) {
 static coord only;
 
 static boolean only_here(struct obj *obj) {
-    return (obj->ox == only.x && obj->oy == only.y);
+    return obj->ox == only.x && obj->oy == only.y;
 }
 
 /*

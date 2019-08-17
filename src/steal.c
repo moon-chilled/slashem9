@@ -221,7 +221,7 @@ steal (struct monst *mtmp, char *objnambuf)
 
 	if (objnambuf) *objnambuf = '\0';
 	/* the following is true if successful on first of two attacks. */
-	if(!monnear(mtmp, u.ux, u.uy)) return(0);
+	if(!monnear(mtmp, u.ux, u.uy)) return 0;
 
 	/* food being eaten might already be used up but will not have
 	   been removed from inventory yet; we don't want to steal that,
@@ -236,7 +236,7 @@ nothing_to_steal:
 	    else
 	      pline("%s tries to rob you, but there is nothing to steal!",
 		Monnam(mtmp));
-	    return(1);  /* let thief flee */
+	    return 1;  /* let thief flee */
 	}
 
 	monkey_business = is_animal(mtmp->data);
@@ -272,7 +272,7 @@ nothing_to_steal:
 			break;
 	if(!otmp) {
 		impossible("Steal fails!");
-		return(0);
+		return 0;
 	}
 	/* can't steal gloves while wielding - so steal the wielded item. */
 	if (otmp == uarmg && uwep)
@@ -283,7 +283,7 @@ nothing_to_steal:
 	else if (otmp == uarmu && uarm) otmp = uarm;
 
 gotobj:
-	if (otmp->o_id == stealoid) return(0);
+	if (otmp->o_id == stealoid) return 0;
 
 #ifdef STEED
 	if (otmp == usaddle) dismount_steed(DISMOUNT_FELL);
@@ -391,7 +391,7 @@ gotobj:
 				stealoid = otmp->o_id;
 				stealmid = mtmp->m_id;
 				afternmv = stealarm;
-				return(0);
+				return 0;
 			}
 		    }
 		    break;
@@ -419,7 +419,7 @@ gotobj:
 	    minstapetrify(mtmp, true);
 	    return -1;
 	}
-	return((multi < 0) ? 0 : 1);
+	return (multi < 0) ? 0 : 1;
 }
 
 

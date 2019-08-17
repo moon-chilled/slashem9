@@ -142,7 +142,7 @@ fclose_ppm_file()
 	if (!write_header())	/* update size */
 		return -1;
 
-	return(fclose(ppm_file));
+	return fclose(ppm_file);
 }
 
 

@@ -2694,7 +2694,7 @@ to state %d\n", YYPREFIX, *yyssp, yystate);
 yyoverflow:
     yyerror("yacc stack overflow");
 yyabort:
-    return (1);
+    return 1;
 yyaccept:
-    return (0);
+    return 0;
 }

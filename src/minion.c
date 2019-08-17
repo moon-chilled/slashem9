@@ -153,7 +153,7 @@ bool demon_talk(struct monst *mtmp) {
 	    pline("%s says, \"Good hunting, %s.\"",
 		  Amonnam(mtmp), flags.female ? "Sister" : "Brother");
 	    if (!tele_restrict(mtmp)) (void) rloc(mtmp, false);
-	    return(1);
+	    return 1;
 	}
 #ifndef GOLDOBJ
 	cash = u.ugold;
@@ -227,8 +227,8 @@ int neutral_minion(int difficulty) {
    if (difficulty < 0) difficulty = 0;
    if (difficulty > 30) difficulty = 30;
    if (difficulty < 6) return PM_GRAY_UNICORN;
-   if (difficulty < 15) return (PM_AIR_ELEMENTAL+rn2(4));
-   return (PM_DJINNI /* +rn2(4) */);
+   if (difficulty < 15) return PM_AIR_ELEMENTAL+rn2(4);
+   return PM_DJINNI /* +rn2(4) */;
 }
 
 
@@ -244,7 +244,7 @@ int chaotic_minion(int difficulty) {
    switch (difficulty) {
       case 0: return PM_GREMLIN;
       case 1:
-      case 2: return (PM_DRETCH+rn2(5));
+      case 2: return PM_DRETCH+rn2(5);
       case 3: return PM_BLACK_UNICORN;
       case 4: return PM_BLOOD_IMP;
       case 5: return PM_SPINED_DEVIL;
@@ -305,7 +305,7 @@ long bribe(struct monst *mtmp) {
 	money2mon(mtmp, offer);
 #endif
 	flags.botl = 1;
-	return(offer);
+	return offer;
 }
 
 int dprince(aligntyp atyp) {
@@ -315,7 +315,7 @@ int dprince(aligntyp atyp) {
 	    pm = rn1(PM_DEMOGORGON + 1 - PM_ORCUS, PM_ORCUS);
 	    if (!(mvitals[pm].mvflags & G_GONE) &&
 		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
-		return(pm);
+		return pm;
 	}
 	return dlord(atyp);	/* approximate */
 }
@@ -327,7 +327,7 @@ int dlord(aligntyp atyp) {
 	    pm = rn1(PM_YEENOGHU + 1 - PM_JUIBLEX, PM_JUIBLEX);
 	    if (!(mvitals[pm].mvflags & G_GONE) &&
 		    (atyp == A_NONE || sgn(mons[pm].maligntyp) == sgn(atyp)))
-		return(pm);
+		return pm;
 	}
 	return ndemon(atyp);	/* approximate */
 }
@@ -335,7 +335,7 @@ int dlord(aligntyp atyp) {
 // create lawful (good) lord
 int llord(void) {
 	if (!(mvitals[PM_ARCHON].mvflags & G_GONE))
-		return(PM_ARCHON);
+		return PM_ARCHON;
 
 	return lminion();	/* approximate */
 }
@@ -347,7 +347,7 @@ int lminion(void) {
 	for (tryct = 0; tryct < 20; tryct++) {
 	    ptr = mkclass(S_ANGEL,0);
 	    if (ptr && !is_lord(ptr))
-		return(monsndx(ptr));
+		return monsndx(ptr);
 	}
 
 	return NON_PM;
@@ -361,7 +361,7 @@ int ndemon(aligntyp atyp) {
 	    ptr = mkclass(S_DEMON, 0);
 	    if (ptr && is_ndemon(ptr) &&
 		    (atyp == A_NONE || sgn(ptr->maligntyp) == sgn(atyp)))
-		return(monsndx(ptr));
+		return monsndx(ptr);
 	}
 
 	return NON_PM;

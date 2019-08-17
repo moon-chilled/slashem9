@@ -129,12 +129,12 @@ int fightm(struct monst *mtmp) {
 	int result, has_u_swallowed;
 	/* perhaps the monster will resist Conflict */
 	if(resist(mtmp, RING_CLASS, 0, 0))
-	    return(0);
+	    return 0;
 
 	if(u.ustuck == mtmp) {
 	    /* perhaps we're holding it... */
 	    if(itsstuck(mtmp))
-		return(0);
+		return 0;
 	}
 	has_u_swallowed = (u.uswallow && (mtmp == u.ustuck));
 
@@ -179,7 +179,7 @@ int fightm(struct monst *mtmp) {
 			mattackm(mon, mtmp);	/* return attack */
 		    }
 
-		    return ((result & MM_HIT) ? 1 : 0);
+		    return (result & MM_HIT) ? 1 : 0;
 		}
 	    }
 	}
@@ -221,14 +221,14 @@ int mattackm(struct monst *magr, struct monst *mdef) {
      */
     boolean range;
 
-    if (!magr || !mdef) return(MM_MISS);		/* mike@genat */
-    if (!magr->mcanmove || magr->msleeping) return(MM_MISS);
+    if (!magr || !mdef) return MM_MISS;		/* mike@genat */
+    if (!magr->mcanmove || magr->msleeping) return MM_MISS;
     pa = magr->data;  pd = mdef->data;
 
     /* Grid bugs cannot attack at an angle. */
     if (pa == &mons[PM_GRID_BUG] && magr->mx != mdef->mx
 						&& magr->my != mdef->my)
-	return(MM_MISS);
+	return MM_MISS;
 
     range = !magr->mtame && !monnear(magr, mdef->mx, mdef->my);
 
@@ -744,7 +744,7 @@ static int hitmm(struct monst *magr, struct monst *mdef, struct	attack *mattk) {
 		    pline("%s %s.", buf, mon_nam_too(mdef_name, mdef, magr));
 		}
 	} else  noises(magr, mattk);
-	return(mdamagem(magr, mdef, mattk));
+	return mdamagem(magr, mdef, mattk);
 }
 
 // Returns the same values as mdamagem().
@@ -760,7 +760,7 @@ static int gazemm(struct monst *magr, struct monst *mdef, struct attack *mattk) 
 	    (magr->minvis && !perceives(mdef->data)) ||
 	    !mdef->mcansee || mdef->msleeping) {
 	    if(vis) pline("but nothing happens.");
-	    return(MM_MISS);
+	    return MM_MISS;
 	}
 	/* call mon_reflects 2x, first test, then, if visible, print message */
 	if (magr->data == &mons[PM_MEDUSA] && mon_reflects(mdef, NULL)) {
@@ -772,24 +772,24 @@ static int gazemm(struct monst *magr, struct monst *mdef, struct attack *mattk) 
 		    if (canseemon(magr))
 			mon_reflects(magr,
 					"The gaze is reflected away by %s %s.");
-		    return (MM_MISS);
+		    return MM_MISS;
 		}
 		if (mdef->minvis && !perceives(magr->data)) {
 		    if (canseemon(magr)) {
 			pline("%s doesn't seem to notice that %s gaze was reflected.",
 			      Monnam(magr), mhis(magr));
 		    }
-		    return (MM_MISS);
+		    return MM_MISS;
 		}
 		if (canseemon(magr))
 		    pline("%s is turned to stone!", Monnam(magr));
 		monstone(magr);
-		if (magr->mhp > 0) return (MM_MISS);
-		return (MM_AGR_DIED);
+		if (magr->mhp > 0) return MM_MISS;
+		return MM_AGR_DIED;
 	    }
 	}
 
-	return(mdamagem(magr, mdef, mattk));
+	return mdamagem(magr, mdef, mattk);
 }
 
 // Returns the same values as mattackm().
@@ -1720,14 +1720,14 @@ physical:
 	    default:	tmp = 0;
 			break;
 	}
-	if(!tmp) return(MM_MISS);
+	if(!tmp) return MM_MISS;
 
 	/* STEPHEN WHITE'S NEW CODE */
 	if (objenchant < canhitmon && vis) {
 			strcpy(buf, Monnam(magr));
 			pline("%s doesn't seem to harm %s.", buf,
 								mon_nam(mdef));
-		return(MM_HIT);
+		return MM_HIT;
 	}
 	/* WAC -- Caveman Primal Roar ability */
 	if (magr->mtame != 0 && tech_inuse(T_PRIMAL_ROAR)) {
@@ -1756,7 +1756,7 @@ physical:
 		} else if (mdef->data == &mons[PM_WRAITH]) {
 		    grow_up(magr, NULL);
 		    /* don't grow up twice */
-		    return (MM_DEF_DIED | (magr->mhp > 0 ? 0 : MM_AGR_DIED));
+		    return MM_DEF_DIED | (magr->mhp > 0 ? 0 : MM_AGR_DIED);
 		} else if (mdef->data == &mons[PM_NURSE]) {
 		    magr->mhp = magr->mhpmax;
 		}
@@ -1765,7 +1765,7 @@ physical:
 	    return (MM_DEF_DIED |
 		    ((magr->mhp > 0 && grow_up(magr,mdef)) ? 0 : MM_AGR_DIED));
 	}
-	return(MM_HIT);
+	return MM_HIT;
 }
 
 
@@ -1859,7 +1859,7 @@ static int passivemm(struct monst *magr, struct monst *mdef, boolean mhit, int m
 	int i, tmp;
 
 	for(i = 0; ; i++) {
-	    if(i >= NATTK) return (mdead | mhit); /* no passive attacks */
+	    if(i >= NATTK) return mdead | mhit; /* no passive attacks */
 	    if(mddat->mattk[i].aatyp == AT_NONE /*||
 	       mddat->mattk[i].aatyp == AT_BOOM*/) break;
 	}
@@ -1909,7 +1909,7 @@ static int passivemm(struct monst *magr, struct monst *mdef, boolean mhit, int m
 	    default:
 		break;
 	}
-	if (mdead || mdef->mcan) return (mdead|mhit);
+	if (mdead || mdef->mcan) return mdead|mhit;
 
 	/* These affect the enemy only if defender is still alive */
 	if (rn2(3)) switch(mddat->mattk[i].adtyp) {
@@ -1923,14 +1923,14 @@ static int passivemm(struct monst *magr, struct monst *mdef, boolean mhit, int m
 				s_suffix(mon_nam(mdef)));
 			if (mon_reflects(magr,
 					 canseemon(magr) ? buf : NULL))
-				return(mdead|mhit);
+				return mdead|mhit;
 			strcpy(buf, Monnam(magr));
 			if(canseemon(magr))
 			    pline("%s is frozen by %s gaze!",
 				  buf, s_suffix(mon_nam(mdef)));
 			magr->mcanmove = 0;
 			magr->mfrozen = tmp;
-			return (mdead|mhit);
+			return mdead|mhit;
 		    }
 		} else { /* gelatinous cube */
 		    strcpy(buf, Monnam(magr));
@@ -1938,7 +1938,7 @@ static int passivemm(struct monst *magr, struct monst *mdef, boolean mhit, int m
 			pline("%s is frozen by %s.", buf, mon_nam(mdef));
 		    magr->mcanmove = 0;
 		    magr->mfrozen = tmp;
-		    return (mdead|mhit);
+		    return mdead|mhit;
 		}
 		return 1;
 	    case AD_COLD:
@@ -2001,9 +2001,9 @@ static int passivemm(struct monst *magr, struct monst *mdef, boolean mhit, int m
 		if (mdef->uexp) mon_xkilled(magr, "", (int)mddat->mattk[i].adtyp);
 		else monkilled(magr, "", (int)mddat->mattk[i].adtyp);
 
-		return (mdead | mhit | MM_AGR_DIED);
+		return mdead | mhit | MM_AGR_DIED;
 	}
-	return (mdead | mhit);
+	return mdead | mhit;
 }
 
 /* "aggressive defense"; what type of armor prevents specified attack

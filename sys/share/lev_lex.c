@@ -864,15 +864,15 @@ static int map_cnt = 0;
 char
 input()		/* Under MPW \n is chr(13)! Compensate for this. */
 {
-	if (yysptr > yysbuf) return(*--yysptr);
+	if (yysptr > yysbuf) return *--yysptr;
 	else {
 		yytchar = getc(yyin);
 		if (yytchar == '\n') {
 		    yylineno++;
-		    return(YYNEWLINE);
+		    return YYNEWLINE;
 		}
-		if (yytchar == EOF) return(0);
-		else		    return(yytchar);
+		if (yytchar == EOF) return 0;
+		else		    return yytchar;
 	}
 }
 #endif	/* MAC_MPW && !FLEX_SCANNER && !FLEXHACK_SCANNER */
@@ -2478,7 +2478,7 @@ yy_size_t size;
 	 * any pointer type to void*, and deal with argument conversions
 	 * as though doing an assignment.
 	 */
-	return (void *) realloc( (char *) ptr, size );
+	return void *) realloc( (char *) ptr, size ;
 	}
 
 #ifdef YY_USE_PROTOS

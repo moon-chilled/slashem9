@@ -348,7 +348,7 @@ learn()
 			book->ox == u.ux && book->oy == u.uy))) {
 	    /* maybe it was stolen or polymorphed? */
 	    do_reset_learn();
-	    return(0);
+	    return 0;
 	}
 	/* JDS: lenses give 50% faster reading; 33% smaller read time */
 	if (delay < end_delay && ublindf && ublindf->otyp == LENSES && rn2(2))
@@ -358,17 +358,17 @@ learn()
 	    book = 0;			/* no longer studying */
 	    nomul(delay - end_delay);	/* remaining delay is uninterrupted */
 	    delay = end_delay;
-	    return(0);
+	    return 0;
 	}
 	if (delay < end_delay) {    /* not if (delay++), so at end delay == 0 */
 	    delay++;
-	    return(1); /* still busy */
+	    return 1; /* still busy */
 	}
 	exercise(A_WIS, true);		/* you're studying. */
 	booktype = book->otyp;
 	if(booktype == SPE_BOOK_OF_THE_DEAD) {
 	    deadbook(book);
-	    return(0);
+	    return 0;
 	}
 
 	sprintf(splname, objects[booktype].oc_name_known ?
@@ -422,7 +422,7 @@ learn()
 	}
 	if (costly) check_unpaid(book);
 	book = 0;
-	return(0);
+	return 0;
 }
 
 int
@@ -442,7 +442,7 @@ study_book (struct obj *spellbook)
 		if (booktype == SPE_BLANK_PAPER) {
 			pline("This spellbook is all blank.");
 			makeknown(booktype);
-			return(1);
+			return 1;
 		}
 		if (spellbook->spe && confused) {
 		    check_unpaid_usage(spellbook, true);
@@ -496,7 +496,7 @@ study_book (struct obj *spellbook)
 				    (read_ability < 12 ? "very " : ""));
 			    if (yn(qbuf) != 'y') {
 				spellbook->in_use = false;
-				return(1);
+				return 1;
 			    }
 			}
 			/* its up to random luck now */
@@ -520,14 +520,14 @@ study_book (struct obj *spellbook)
 				else useupf(spellbook, 1L);
 		    } else
 			spellbook->in_use = false;
-		    return(1);
+		    return 1;
 		} else if (confused) {
 		    if (!confused_book(spellbook)) {
 			spellbook->in_use = false;
 		    }
 		    nomul(delay);
 		    delay = 0;
-		    return(1);
+		    return 1;
 		}
 		spellbook->in_use = false;
 
@@ -555,7 +555,7 @@ study_book (struct obj *spellbook)
 	        	sprintf(qbuf, "Study for at least %i turns?", (multi+1));
 			if (ynq(qbuf) != 'y') {
 				multi = 0;
-				return(1);
+				return 1;
 			}
 			if ((--multi) > (-delay)) end_delay = multi + delay;
 			multi = 0;
@@ -571,7 +571,7 @@ study_book (struct obj *spellbook)
 
 	book = spellbook;
 	set_occupation(learn, "studying", 0);
-	return(1);
+	return 1;
 }
 
 /* a spellbook has been destroyed or the character has changed levels;
@@ -703,7 +703,7 @@ spelltypemnemonic(int skill)
 int
 spell_skilltype (int booktype)
 {
-	return (objects[booktype].oc_skill);
+	return objects[booktype].oc_skill;
 }
 
 static void
@@ -822,7 +822,7 @@ boolean atme;
 	    Your("knowledge of this spell is twisted.");
 	    pline("It invokes nightmarish images in your mind...");
 	    spell_backfire(spell);
-	    return(0);
+	    return 0;
 	} else if (spellknow(spell) <= 100) {
 	    You("strain to recall the spell.");
 	} else if (spellknow(spell) <= 1000) {
@@ -832,16 +832,16 @@ boolean atme;
 
 	if (u.uhunger <= 10 && spellid(spell) != SPE_DETECT_FOOD) {
 		You("are too hungry to cast that spell.");
-		return(0);
+		return 0;
 	} else if (ACURR(A_STR) < 4)  {
 		You("lack the strength to cast spells.");
-		return(0);
+		return 0;
 	} else if(check_capacity(
 		"Your concentration falters while carrying so much stuff.")) {
-	    return (1);
+	    return 1;
 	} else if (!freehand()) {
 		Your("arms are not free to cast!");
-		return (0);
+		return 0;
 	}
 
 	if (u.uhave.amulet) {
@@ -910,7 +910,7 @@ boolean atme;
 
 		u.uen -= (energy / 2);
 		flags.botl = 1;
-		return(1);
+		return 1;
 	}
 
 	u.uen -= energy;
@@ -1138,7 +1138,7 @@ boolean atme;
 	default:
 		impossible("Unknown spell %d attempted.", spell);
 		obfree(pseudo, NULL);
-		return(0);
+		return 0;
 	}
 
 	/* gain skill for successful cast */
@@ -1148,7 +1148,7 @@ boolean atme;
 	boostknow(spell,CAST_BOOST);
 
 	obfree(pseudo, NULL);	/* now, get rid of it */
-	return(1);
+	return 1;
 }
 
 
@@ -1455,16 +1455,16 @@ studyspell()
 	if (getspell(&spell_no)) {
 		if (spellknow(spell_no) <= 0) {
 			You("are unable to focus your memory of the spell.");
-			return (false);
+			return false;
 		} else if (spellknow(spell_no) <= 1000) {
 			Your("focus and reinforce your memory of the spell.");
 			incrnknow(spell_no);
 			exercise(A_WIS, true);      /* extra study */
-			return (true);
+			return true;
 		} else /* 1000 < spellknow(spell_no) <= 5000 */
 			You("know that spell quite well already.");
 	}
-	return (false);
+	return false;
 }
 
 /*spell.c*/

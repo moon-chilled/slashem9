@@ -56,7 +56,7 @@ static boolean
 is_solid(x,y)
     int x, y;
 {
-    return (!isok(x,y) || IS_STWALL(levl[x][y].typ));
+    return !isok(x,y) || IS_STWALL(levl[x][y].typ);
 }
 
 
@@ -276,8 +276,8 @@ int dir;
 	move(&x,&y,dir);
 	move(&x,&y,dir);
 	if(x<3 || y<3 || x>x_maze_max || y>y_maze_max || levl[x][y].typ != 0)
-		return(false);
-	return(true);
+		return false;
+	return true;
 }
 
 static void
@@ -383,7 +383,7 @@ d_level *lev;
 	if(MON_AT(x, y)) {
 	    /* move the monster if no choice, or just try again */
 	    if(oneshot) (void) rloc(m_at(x,y), false);
-	    else return(false);
+	    else return false;
 	}
 	u_on_newpos(x, y);
 	break;
@@ -398,7 +398,7 @@ d_level *lev;
 	place_branch(Is_branchlev(&u.uz), x, y);
 	break;
     }
-    return(true);
+    return true;
 }
 
 static boolean was_waterlevel; /* ugh... this shouldn't be needed */

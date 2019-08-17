@@ -9,50 +9,50 @@ static int enermod(int);
 
 /*static*/ long newuexp(int lev) {
 	/* KMH, balance patch -- changed again! */
-	if (lev < 9) return (20L * (1L << lev));
-	if (lev < 13) return (10000L * (1L << (lev - 9)));
-	if (lev == 13) return (150000L);
-	return (50000L * ((long)(lev - 9)));
+	if (lev < 9) return 20L * (1L << lev);
+	if (lev < 13) return 10000L * (1L << (lev - 9));
+	if (lev == 13) return 150000L;
+	return 50000L * ((long)(lev - 9));
 	/*              Old XP routine */
-	/* if (lev < 10) return (10L * (1L << lev));            */
-	/* if (lev < 20) return (10000L * (1L << (lev - 10)));  */
-	/* return (10000000L * ((long)(lev - 19)));             */
-/*      if (lev == 1)  return (75L);
-	if (lev == 2)  return (150L);
-	if (lev == 3)  return (300L);
-	if (lev == 4)  return (600L);
-	if (lev == 5)  return (1200L); */
+	/* if (lev < 10) return 10L * (1L << lev);            */
+	/* if (lev < 20) return 10000L * (1L << (lev - 10));  */
+	/* return 10000000L * ((long)(lev - 19));             */
+/*      if (lev == 1)  return 75L;
+	if (lev == 2)  return 150L;
+	if (lev == 3)  return 300L;
+	if (lev == 4)  return 600L;
+	if (lev == 5)  return 1200L; */
 #if 0
-	if (lev == 1)  return (50L);     /* need 50           */
-	if (lev == 2)  return (100L);    /* need 50           */
-	if (lev == 3)  return (200L);    /* need 100          */
-	if (lev == 4)  return (500L);    /* need 300          */
-	if (lev == 5)  return (1000L);   /* need 500          */
-	if (lev == 6)  return (1750L);   /* need 750          */
-	if (lev == 7)  return (2750L);   /* need 1000         */
-	if (lev == 8)  return (4250L);   /* need 1500         */
-	if (lev == 9)  return (6250L);   /* need 2000         */
-	if (lev == 10) return (8750L);   /* need 2500         */
-	if (lev == 11) return (11750L);  /* need 3000         */
-	if (lev == 12) return (15500L);  /* need 3750         */
-	if (lev == 13) return (20000L);  /* need 4500         */
-	if (lev == 14) return (25000L);  /* need 5000         */
-	if (lev == 15) return (31000L);  /* need 6000         */
-	if (lev == 16) return (38500L);  /* need 7500         */
-	if (lev == 17) return (48000L);  /* need 9500         */
-	if (lev == 18) return (60000L);  /* need 12000        */
-	if (lev == 19) return (76000L);  /* need 16000        */
-	if (lev == 20) return (97000L);  /* need 21000        */
-	if (lev == 21) return (125000L); /* need 28000   +7   */
-	if (lev == 22) return (163000L); /* need 38000   +10  */
-	if (lev == 23) return (213000L); /* need 50000   +12  */
-	if (lev == 24) return (279000L); /* need 66000  +16   */
-	if (lev == 25) return (365000L); /* need 86000 + 20   */
-	if (lev == 26) return (476000L); /* need 111000 + 25  */
-	if (lev == 27) return (617000L); /* need 141000+ 30   */
-	if (lev == 28) return (798000L); /* need 181000 + 40  */
-	if (lev == 29) return (1034000L); /* need 236000 + 55 */
-	return (1750000L);
+	if (lev == 1)  return 50L;     /* need 50           */
+	if (lev == 2)  return 100L;    /* need 50           */
+	if (lev == 3)  return 200L;    /* need 100          */
+	if (lev == 4)  return 500L;    /* need 300          */
+	if (lev == 5)  return 1000L;   /* need 500          */
+	if (lev == 6)  return 1750L;   /* need 750          */
+	if (lev == 7)  return 2750L;   /* need 1000         */
+	if (lev == 8)  return 4250L;   /* need 1500         */
+	if (lev == 9)  return 6250L;   /* need 2000         */
+	if (lev == 10) return 8750L;   /* need 2500         */
+	if (lev == 11) return 11750L;  /* need 3000         */
+	if (lev == 12) return 15500L;  /* need 3750         */
+	if (lev == 13) return 20000L;  /* need 4500         */
+	if (lev == 14) return 25000L;  /* need 5000         */
+	if (lev == 15) return 31000L;  /* need 6000         */
+	if (lev == 16) return 38500L;  /* need 7500         */
+	if (lev == 17) return 48000L;  /* need 9500         */
+	if (lev == 18) return 60000L;  /* need 12000        */
+	if (lev == 19) return 76000L;  /* need 16000        */
+	if (lev == 20) return 97000L;  /* need 21000        */
+	if (lev == 21) return 125000L; /* need 28000   +7   */
+	if (lev == 22) return 163000L; /* need 38000   +10  */
+	if (lev == 23) return 213000L; /* need 50000   +12  */
+	if (lev == 24) return 279000L; /* need 66000  +16   */
+	if (lev == 25) return 365000L; /* need 86000 + 20   */
+	if (lev == 26) return 476000L; /* need 111000 + 25  */
+	if (lev == 27) return 617000L; /* need 141000+ 30   */
+	if (lev == 28) return 798000L; /* need 181000 + 40  */
+	if (lev == 29) return 1034000L; /* need 236000 + 55 */
+	return 1750000L;
 #endif
 }
 
@@ -63,15 +63,15 @@ static int enermod(int en) {
 		case PM_ICE_MAGE:
 	case PM_PRIEST:
 	case PM_WIZARD:
-	    return(2 * en);
+	    return 2 * en;
 	case PM_HEALER:
 	case PM_KNIGHT:
-	    return((3 * en) / 2);
+	    return (3 * en) / 2;
 	case PM_BARBARIAN:
 	case PM_VALKYRIE:
-	    return((3 * en) / 4);
+	    return (3 * en) / 4;
 	default:
-	    return (en);
+	    return en;
 	}
 }
 
@@ -128,7 +128,7 @@ int experience (struct monst *mtmp, int nk) {
 	if(mtmp->data == &mons[PM_MAIL_DAEMON]) tmp = 1;
 #endif
 
-	return(tmp);
+	return tmp;
 }
 
 void more_experienced(int exp, int rexp) {

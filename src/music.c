@@ -508,7 +508,7 @@ do_play_instrument (struct obj *instr)
 
     if (Underwater) {
 	You_cant("play music underwater!");
-	return(0);
+	return 0;
     }
     if (instr->otyp != LEATHER_DRUM && instr->otyp != DRUM_OF_EARTHQUAKE) {
 	c = yn("Improvise?");
@@ -636,7 +636,7 @@ atconsole()
      */
     char	*termtype = nh_getenv("TERM");
 
-     return(!strcmp(termtype, "AT386") || !strcmp(termtype, "xterm"));
+     return !strcmp(termtype, "AT386") || !strcmp(termtype, "xterm");
 }
 
 static void

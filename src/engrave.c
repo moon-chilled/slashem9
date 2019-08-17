@@ -374,9 +374,9 @@ boolean freehand(void) {
 	   (!bimanual(uwep) && (!uarms || !uarms->cursed)));
 /*	if ((uwep && bimanual(uwep)) ||
 	    (uwep && uarms))
-		return(0);
+		return 0;
 	else
-		return(1);*/
+		return 1;*/
 }
 
 static const char styluses[] =

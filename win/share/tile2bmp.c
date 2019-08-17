@@ -49,7 +49,7 @@ extern char *tilename(int, int);
 static short leshort(short x)
 {
 #ifdef __BIG_ENDIAN__
-    return ((x&0xff)<<8)|((x>>8)&0xff);
+    return (x&0xff)<<8)|((x>>8)&0xff;
 #else
     return x;
 #endif
@@ -59,7 +59,7 @@ static short leshort(short x)
 static long lelong(long x)
 {
 #ifdef __BIG_ENDIAN__
-    return ((x&0xff)<<24)|((x&0xff00)<<8)|((x>>8)&0xff00)|((x>>24)&0xff);
+    return (x&0xff)<<24)|((x&0xff00)<<8)|((x>>8)&0xff00)|((x>>24)&0xff;
 #else
     return x;
 #endif

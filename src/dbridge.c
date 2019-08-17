@@ -75,20 +75,20 @@ int is_drawbridge_wall (int x, int y) {
 
 	lev = &levl[x][y];
 	if (lev->typ != DOOR && lev->typ != DBWALL)
-		return (-1);
+		return -1;
 
 	if (IS_DRAWBRIDGE(levl[x+1][y].typ) &&
 	    (levl[x+1][y].drawbridgemask & DB_DIR) == DB_WEST)
-		return (DB_WEST);
+		return DB_WEST;
 	if (IS_DRAWBRIDGE(levl[x-1][y].typ) &&
 	    (levl[x-1][y].drawbridgemask & DB_DIR) == DB_EAST)
-		return (DB_EAST);
+		return DB_EAST;
 	if (IS_DRAWBRIDGE(levl[x][y-1].typ) &&
 	    (levl[x][y-1].drawbridgemask & DB_DIR) == DB_SOUTH)
-		return (DB_SOUTH);
+		return DB_SOUTH;
 	if (IS_DRAWBRIDGE(levl[x][y+1].typ) &&
 	    (levl[x][y+1].drawbridgemask & DB_DIR) == DB_NORTH)
-		return (DB_NORTH);
+		return DB_NORTH;
 
 	return -1;
 }
@@ -172,7 +172,7 @@ boolean create_drawbridge(int x, int y, int dir, boolean flag) {
 			break;
 	}
 	if (!IS_WALL(levl[x2][y2].typ))
-		return(false);
+		return false;
 	if (flag) {             /* We want the bridge open */
 		levl[x][y].typ = DRAWBRIDGE_DOWN;
 		levl[x2][y2].typ = DOOR;
@@ -187,7 +187,7 @@ boolean create_drawbridge(int x, int y, int dir, boolean flag) {
 	levl[x2][y2].horizontal = horiz;
 	levl[x][y].drawbridgemask = dir;
 	if(lava) levl[x][y].drawbridgemask |= DB_LAVA;
-	return(true);
+	return true;
 }
 
 struct entity {
@@ -212,8 +212,7 @@ static struct entity *e_at(int x, int y) {
 	pline("entitycnt = %d", entitycnt);
 	wait_synch();
 #endif
-	return((entitycnt == ENTITIES)?
-	       NULL : &(occupants[entitycnt]));
+	return (entitycnt == ENTITIES) ? NULL : &(occupants[entitycnt]);
 }
 
 static void m_to_e(struct monst *mtmp, int x, int y, struct entity *etmp) {
@@ -256,7 +255,7 @@ static void set_entity(int x, int y, struct entity *etmp) {
 /* #define e_strg(etmp, func) (is_u(etmp)? NULL : func(etmp->emon)) */
 
 static const char *e_nam(struct entity *etmp) {
-	return(is_u(etmp)? "you" : mon_nam(etmp->emon));
+	return is_u(etmp)? "you" : mon_nam(etmp->emon);
 }
 
 #ifdef D_DEBUG
@@ -265,7 +264,7 @@ static const char *e_nam(struct entity *etmp) {
  */
 
 static const char *Enam(struct entity *etmp) {
-	return(is_u(etmp)? "You" : Monnam(etmp->emon));
+	return is_u(etmp)? "You" : Monnam(etmp->emon);
 }
 #endif /* D_DEBUG */
 
@@ -278,13 +277,13 @@ static const char *E_phrase(struct entity *etmp, const char *verb) {
 	static char wholebuf[80];
 
 	strcpy(wholebuf, is_u(etmp) ? "You" : Monnam(etmp->emon));
-	if (!*verb) return(wholebuf);
+	if (!*verb) return wholebuf;
 	strcat(wholebuf, " ");
 	if (is_u(etmp))
 	    strcat(wholebuf, verb);
 	else
 	    strcat(wholebuf, vtense(NULL, verb));
-	return(wholebuf);
+	return wholebuf;
 }
 
 /*
@@ -293,21 +292,21 @@ static const char *E_phrase(struct entity *etmp, const char *verb) {
 
 static boolean e_survives_at(struct entity *etmp, int x, int y) {
 	if (noncorporeal(etmp->edata))
-		return(true);
+		return true;
 	if (is_pool(x, y))
-                return((boolean)((is_u(etmp) &&
+                return (is_u(etmp) &&
 				(Wwalking || Amphibious || Swimming ||
 				Flying || Levitation)) ||
 			is_swimmer(etmp->edata) || is_flyer(etmp->edata) ||
-			is_floater(etmp->edata)));
+			is_floater(etmp->edata);
 	/* must force call to lava_effects in e_died if is_u */
 	if (is_lava(x, y))
-		return (boolean)((is_u(etmp) && (Levitation || Flying)) ||
-			    likes_lava(etmp->edata) || is_flyer(etmp->edata));
+		return (is_u(etmp) && (Levitation || Flying)) ||
+			likes_lava(etmp->edata) || is_flyer(etmp->edata);
 	if (is_db_wall(x, y))
-		return((boolean)(is_u(etmp) ? Passes_walls :
-			passes_walls(etmp->edata)));
-	return(true);
+		return is_u(etmp) ? Passes_walls :
+			passes_walls(etmp->edata);
+	return true;
 }
 
 static void e_died(struct entity *etmp, int dest, int how) {
@@ -387,7 +386,7 @@ static boolean e_missed(struct entity *etmp, boolean chunks) {
 		pline("Do chunks miss?");
 #endif
 	if (automiss(etmp))
-		return(true);
+		return true;
 
 	if (is_flyer(etmp->edata) &&
 	    (is_u(etmp)? !Sleeping :
@@ -409,7 +408,7 @@ static boolean e_missed(struct entity *etmp, boolean chunks) {
 	pline("Miss chance = %d (out of 8)", misses);
 #endif
 
-	return((boolean)((misses >= rnd(8))? true : false));
+	return misses >= rnd(8);
 }
 
 /*
@@ -422,7 +421,7 @@ static boolean e_jumps(struct entity *etmp) {
 	if (is_u(etmp)? (Sleeping || Fumbling) :
 		        (!etmp->emon->mcanmove || etmp->emon->msleeping ||
 			 !etmp->edata->mmove   || etmp->emon->wormno))
-		return(false);
+		return false;
 
 	if (is_u(etmp)? Confusion : etmp->emon->mconf)
 		tmp -= 2;

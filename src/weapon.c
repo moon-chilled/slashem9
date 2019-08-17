@@ -369,11 +369,11 @@ dmgval (struct obj *otmp, struct monst *mon)
 		if (tmp < 1) tmp = 1;
 	}
 
-	return(tmp);
+	return tmp;
 }
 
 static struct obj *oselect(struct monst *,int);
-#define Oselect(x)	if ((otmp = oselect(mtmp, x)) != 0) return(otmp);
+#define Oselect(x)	if ((otmp = oselect(mtmp, x)) != 0) return otmp;
 
 static struct obj *oselect(struct monst *mtmp, int x) {
 	struct obj *otmp;
@@ -542,7 +542,7 @@ select_rwep (	/* select a ranged weapon for the monster */
 			/* Don't throw a cursed weapon-in-hand or an artifact */
 			if ((otmp = oselect(mtmp, rwep[i])) && !otmp->oartifact
 			    && (!otmp->cursed || otmp != MON_WEP(mtmp)))
-				return(otmp);
+				return otmp;
 		/* STEPHEN WHITE'S NEW CODE */
 		/* KMH, balance patch -- removed stone of rotting */
 		} else for(otmp=mtmp->minvent; otmp; otmp=otmp->nobj) {
@@ -836,7 +836,7 @@ abon (void)		/* attack bonus for strength & dexterity */
 	int sbon;
 	int str = ACURR(A_STR), dex = ACURR(A_DEX);
 
-	if (Upolyd) return(adj_lev(&mons[u.umonnum]) - 3);
+	if (Upolyd) return adj_lev(&mons[u.umonnum]) - 3;
 	/* [Tom] lowered these a little */
 	if (str < 6) sbon = -2;
 	else if (str < 8) sbon = -1;
@@ -869,7 +869,7 @@ abon (void)		/* attack bonus for strength & dexterity */
 
 /* Game tuning kludge: make it a bit easier for a low level character to hit */
 	sbon += (u.ulevel < 3) ? 1 : 0;
-	return(sbon);
+	return sbon;
 }
 
 /* STEPHEN WHITE'S NEW CODE */
@@ -878,21 +878,21 @@ dbon (void)		/* damage bonus for strength */
 {
 	int str = ACURR(A_STR);
 
-	if (Upolyd) return(0);
+	if (Upolyd) return 0;
 	/* [Tom] I lowered this a little */
-	if (str < 6) return(-1);
-	else if (str < 16) return(0);
-	else if (str < 18) return(1);
-	else if (str == 18) return(2);		/* up to 18 */
-	else if (str < STR18(100)) return(3);          /* up to 18/99 */
-	else if (str == STR18(100)) return(4);         /* 18/00 */
-	else if (str == STR19(19)) return(5);         /* 19 */
-	else if (str == STR19(20)) return(6);         /* 20 */
-	else if (str == STR19(21)) return(7);         /* 21 */
-	else if (str == STR19(22)) return(8);         /* 22 */
-	else if (str == STR19(23)) return(9);         /* 23 */
-	else if (str == STR19(24)) return(10);        /* 24 */
-	else return(11);
+	if (str < 6) return -1;
+	else if (str < 16) return 0;
+	else if (str < 18) return 1;
+	else if (str == 18) return 2;		/* up to 18 */
+	else if (str < STR18(100)) return 3;          /* up to 18/99 */
+	else if (str == STR18(100)) return 4;         /* 18/00 */
+	else if (str == STR19(19)) return 5;         /* 19 */
+	else if (str == STR19(20)) return 6;         /* 20 */
+	else if (str == STR19(21)) return 7;         /* 21 */
+	else if (str == STR19(22)) return 8;         /* 22 */
+	else if (str == STR19(23)) return 9;         /* 23 */
+	else if (str == STR19(24)) return 10;        /* 24 */
+	else return 11;
 }
 
 /* copy the skill level name into the given buffer */
@@ -1362,9 +1362,9 @@ weapon_type (struct obj *obj)
 	if (obj->oclass != WEAPON_CLASS && obj->oclass != TOOL_CLASS &&
 	    obj->oclass != GEM_CLASS)
 		/* Not a weapon, weapon-tool, or ammo */
-		return (P_NONE);
+		return P_NONE;
 	type = objects[obj->otyp].oc_skill;
-	return ((type < 0) ? -type : type);
+	return (type < 0) ? -type : type;
 }
 
 int
@@ -1599,7 +1599,7 @@ get_obj_skill (struct obj *obj)
     	/* Negative skills == not a skill */
 	if (skill < P_NONE) skill = P_NONE;
 
-	return (skill);
+	return skill;
 }
 
 /*
@@ -1701,12 +1701,12 @@ practice()
 		use_skill(weapon_type(uwep), 1);
 		/*WAC a bit of practice so even if you're interrupted
 		  you won't be wasting your time ;B*/
-		return(1); /* still busy */
+		return 1; /* still busy */
     }
 	You("finish your practice session.");
 	use_skill(weapon_type(uwep),
 	    practice_needed_to_advance(P_SKILL(weapon_type(uwep)),weapon_type(uwep))/3);
-	return(0);
+	return 0;
 }
 
 void
