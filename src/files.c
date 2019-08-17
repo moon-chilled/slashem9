@@ -815,7 +815,7 @@ int restore_saved_game(void) {
 void free_saved_games(char** saved) {
     if (saved) {
 	int i = 0;
-	while (saved[i]) free((void *)saved[i++]);
+	while (saved[i]) free(saved[i++]);
 	free(saved);
     }
 }

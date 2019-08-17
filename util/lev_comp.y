@@ -37,7 +37,6 @@
 #define New(type)		\
 	memset(alloc(sizeof(type)), 0, sizeof(type))
 #define NewTab(type, size)	alloc(sizeof(type *) * size)
-#define Free(ptr)		free((void *)ptr)
 
 extern void yyerror(const char *);
 extern void yywarning(const char *);
@@ -204,7 +203,7 @@ maze_level	: maze_def flags lev_init messages regions
 				}
 				npart = 0;
 			}
-			Free($1);
+			free($1);
 		  }
 		;
 
@@ -235,7 +234,7 @@ room_level	: level_def flags lev_init messages rreg_init rooms corridors_def
 				nrooms = 0;
 				ncorridor = 0;
 			}
-			Free($1);
+			free($1);
 		  }
 		;
 
@@ -321,7 +320,7 @@ message		: MESSAGE_ID ':' STRING
 			    strncpy(tmpmessage+j, $3, i - 1);
 			    tmpmessage[j + i - 1] = 0;
 			}
-			Free($3);
+			free($3);
 		  }
 		;
 
@@ -696,7 +695,7 @@ map_definition	: NOMAP_ID
 			tmppart[npart]->nloc = 0;
 			tmppart[npart]->nrmonst = 0;
 			scan_map($2);
-			Free($2);
+			free($2);
 		  }
 		;
 
@@ -860,7 +859,7 @@ monster_detail	: MONSTER_ID chance ':' monster_c ',' m_name ',' coordinate
 			      "Invalid monster name!  Making random monster.");
 			    else
 				tmpmonst[nmons]->id = token;
-			    Free($6);
+			    free($6);
 			}
 		  }
 		 monster_infos
@@ -928,7 +927,7 @@ object_desc	: chance ':' object_c ',' o_name
 				"Illegal object name!  Making random object.");
 			     else
 				tmpobj[nobj]->id = token;
-			    Free($5);
+			    free($5);
 			}
 		  }
 		 ',' object_where object_infos
@@ -1014,7 +1013,7 @@ monster_id	: STRING
 			    tmpobj[nobj]->corpsenm = NON_PM - 1;
 			else
 			    tmpobj[nobj]->corpsenm = token;
-			Free($1);
+			free($1);
 		  }
 		;
 
@@ -1592,7 +1591,7 @@ trap_name	: string
 			if (token == ERR)
 				yyerror("Unknown trap type!");
 			$<i>$ = token;
-			Free($1);
+			free($1);
 		  }
 		| RANDOM_TYPE
 		;
@@ -1605,7 +1604,7 @@ room_type	: string
 				$<i>$ = OROOM;
 			} else
 				$<i>$ = token;
-			Free($1);
+			free($1);
 		  }
 		| RANDOM_TYPE
 		;

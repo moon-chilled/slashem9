@@ -2098,7 +2098,7 @@ static int menu_remarm(int retry) {
 	    else
 		add_valid_menu_class(pick_list[i].item.a_int);
 	}
-	free((void *) pick_list);
+	free(pick_list);
     } else if (flags.menu_style == MENU_COMBINATION) {
 	all_worn_categories = false;
 	if (ggetobj("take off", select_off, 0, true, NULL) == -2)
@@ -2112,7 +2112,7 @@ static int menu_remarm(int retry) {
     if (n > 0) {
 	for (i = 0; i < n; i++)
 	    select_off(pick_list[i].item.a_obj);
-	free((void *) pick_list);
+	free(pick_list);
     } else if (n < 0 && flags.menu_style != MENU_COMBINATION) {
 	There("is nothing else you can remove or unwield.");
     }

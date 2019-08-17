@@ -55,7 +55,7 @@
 #define ERR		(-1)
 
 #define NewTab(type, size)	(type **) alloc(sizeof(type *) * size)
-#define Free(ptr)		if(ptr) free((void *) (ptr))
+#define Free(ptr)		if(ptr) free((ptr))
 #define Write(fd, item, size)	if (write(fd, (void *)(item), size) != size) return false;
 
 #define MAX_ERRORS	25

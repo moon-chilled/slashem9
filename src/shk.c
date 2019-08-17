@@ -1045,8 +1045,8 @@ void
 shk_free (struct monst *shkp)
 {
 	if (ESHK(shkp)->bill_p && ESHK(shkp)->bill_p != (struct bill_x *) -1000)
-	    free((void *)ESHK(shkp)->bill_p);
-	free((void *)shkp);
+	    free(ESHK(shkp)->bill_p);
+	free(shkp);
 }
 
 static long
@@ -3438,10 +3438,10 @@ boolean croaked;
 
 	    tmp_dam = tmp_dam->next;
 	    if (!tmp2_dam) {
-		free((void *)level.damagelist);
+		free(level.damagelist);
 		level.damagelist = tmp_dam;
 	    } else {
-		free((void *)tmp2_dam->next);
+		free(tmp2_dam->next);
 		tmp2_dam->next = tmp_dam;
 	    }
 	}
@@ -3879,7 +3879,7 @@ coord *mm;
 		makemon(&mons[kop_pm[ik]], mc[cnt].x, mc[cnt].y, NO_MM_FLAGS);
 	}
 	}
-	free((void *)mc);
+	free(mc);
 }
 
 void

@@ -1123,7 +1123,7 @@ struct obj *getobj(const char *let, const char *word) {
 		    otmp = pick_list->item.a_obj;
 		    if (allowcnt && pick_list->count < otmp->quan)
 			otmp = splitobj(otmp, pick_list->count);
-		    free((void *)pick_list);
+		    free(pick_list);
 		    return otmp;
 		}
 		if(ilet == '?' || ilet == '*') {
@@ -1595,7 +1595,7 @@ static void menu_identify(int id_limit) {
 	    if (n > id_limit) n = id_limit;
 	    for (i = 0; i < n; i++, id_limit--)
 		identify(pick_list[i].item.a_obj);
-	    free((void *) pick_list);
+	    free(pick_list);
 	    mark_synch(); /* Before we loop to pop open another menu */
 	} else {
 	    if (n < 0) pline("That was all.");
@@ -1897,7 +1897,7 @@ nextclass:
 	if (n > 0) {
 	    ret = selected[0].item.a_char;
 	    if (out_cnt) *out_cnt = selected[0].count;
-	    free((void *)selected);
+	    free(selected);
 	} else
 	    ret = !n ? '\0' : '\033';	/* cancelled */
 #ifdef DUMP_LOG
@@ -2106,7 +2106,7 @@ int dotypeinv(void) {
 		n = query_category(prompt, invent, i, &pick_list, PICK_ONE);
 		if (!n) return 0;
 		this_type = c = pick_list[0].item.a_int;
-		free((void *) pick_list);
+		free(pick_list);
 	    }
 	}
 	if (traditional) {
@@ -2184,7 +2184,7 @@ int dotypeinv(void) {
 	if (query_objlist(NULL, invent,
 		    (flags.invlet_constant ? USE_INVLET : 0)|INVORDER_SORT,
 		    &pick_list, PICK_NONE, this_type_only) > 0)
-	    free((void *)pick_list);
+	    free(pick_list);
 	return 0;
 }
 
@@ -2706,7 +2706,7 @@ char *let_to_name(char let, boolean unpaid) {
 
 	len = strlen(class_name) + (unpaid ? sizeof "unpaid_" : sizeof "");
 	if (len > invbufsiz) {
-	    if (invbuf) free((void *)invbuf);
+	    if (invbuf) free(invbuf);
 	    invbufsiz = len + 10; /* add slop to reduce incremental realloc */
 	    invbuf = alloc(invbufsiz);
 	}
@@ -2925,7 +2925,7 @@ struct obj *display_minventory(struct monst *mon, int dflags, char *title) {
 
 	if (n > 0) {
 	    ret = selected[0].item.a_obj;
-	    free((void *)selected);
+	    free(selected);
 #ifndef GOLDOBJ
 	    /*
 	     * Unfortunately, we can't return a pointer to our temporary

@@ -141,9 +141,9 @@ unload_qtlist (void)
 	if (msg_file)
 	    dlb_fclose(msg_file),  msg_file = 0;
 	if (qt_list.common)
-	    free((void *) qt_list.common),  qt_list.common = 0;
+	    free(qt_list.common),  qt_list.common = 0;
 	if (qt_list.chrole)
-	    free((void *) qt_list.chrole),  qt_list.chrole = 0;
+	    free(qt_list.chrole),  qt_list.chrole = 0;
 	return;
 }
 

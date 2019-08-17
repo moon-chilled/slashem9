@@ -493,7 +493,7 @@ menu_pickup:
 		if (res < 0) break;	/* can't continue */
 		n_picked += res;
 	    }
-	    if (pick_list) free((void *)pick_list);
+	    if (pick_list) free(pick_list);
 
 	} else {
 	    /* old style interface */
@@ -2470,7 +2470,7 @@ boolean put_in;
 	    else
 		add_valid_menu_class(pick_list[i].item.a_int);
 	}
-	free((void *) pick_list);
+	free(pick_list);
     }
 
     if (loot_everything) {
@@ -2508,7 +2508,7 @@ boolean put_in;
 			break;
 		    }
 		}
-		free((void *)pick_list);
+		free(pick_list);
 	}
     }
     return n_looted;
@@ -2553,7 +2553,7 @@ boolean outokay, inokay;
     destroy_nhwindow(win);
     if (n > 0) {
 	n = pick_list[0].item.a_int;
-	free((void *) pick_list);
+	free(pick_list);
     }
     return n;
 }

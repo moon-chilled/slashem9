@@ -185,7 +185,7 @@ static int eatmdone(void) {
 	/* release `eatmbuf' */
 	if (eatmbuf) {
 	    if (nomovemsg == eatmbuf) nomovemsg = 0;
-	    free((void *)eatmbuf),  eatmbuf = 0;
+	    free(eatmbuf),  eatmbuf = 0;
 	}
 	/* update display */
 	if (youmonst.m_ap_type) {

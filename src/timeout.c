@@ -1901,7 +1901,7 @@ run_timers (void)
 
 	if (curr->kind == TIMER_OBJECT) curr->arg.a_obj->timed--;
 	(*timeout_funcs[curr->func_index].f)(curr->arg.a_void, curr->timeout);
-	free((void *) curr);
+	free(curr);
     }
 }
 
@@ -1949,7 +1949,7 @@ long stop_timer(short func_index, anything arg) {
 	    arg.a_obj->timed--;
 	if (timeout_funcs[doomed->func_index].cleanup)
 	    (*timeout_funcs[doomed->func_index].cleanup)(arg.a_void, timeout);
-	free((void *) doomed);
+	free(doomed);
 	return timeout;
     }
     return 0;
@@ -2011,7 +2011,7 @@ obj_stop_timers (struct obj *obj)
 	    if (timeout_funcs[curr->func_index].cleanup)
 		(*timeout_funcs[curr->func_index].cleanup)(curr->arg.a_void,
 			curr->timeout);
-	    free((void *) curr);
+	    free(curr);
 	} else {
 	    prev = curr;
 	}
@@ -2148,7 +2148,7 @@ static void accelerate_timer(short func_index, anything arg, long adj) {
       if (timer->timeout <= monstermoves) {
 	if (timer->kind == TIMER_OBJECT) (arg.a_obj)->timed--;
 	(*timeout_funcs[func_index].f)(arg.a_void, timer->timeout);
-	free((void *) timer);
+	free(timer);
 	break;
       }
     }
@@ -2289,7 +2289,7 @@ save_timers (int fd, int mode, int range)
 		    prev->next = curr->next;
 		else
 		    timer_base = curr->next;
-		free((void *) curr);
+		free(curr);
 		/* prev stays the same */
 	    } else {
 		prev = curr;

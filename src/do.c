@@ -646,7 +646,7 @@ static int menu_drop(int retry) {
 	    else
 		add_valid_menu_class(pick_list[i].item.a_int);
 	}
-	free((void *) pick_list);
+	free(pick_list);
     } else if (flags.menu_style == MENU_COMBINATION) {
 	unsigned ggoresults = 0;
 	all_categories = false;
@@ -690,7 +690,7 @@ static int menu_drop(int retry) {
 		}
 		n_dropped += drop(otmp);
 	    }
-	    free((void *) pick_list);
+	    free(pick_list);
 	}
     }
 
@@ -1425,9 +1425,9 @@ void deferred_goto(void) {
 	}
 	u.utotype = 0;		/* our caller keys off of this */
 	if (dfr_pre_msg)
-	    free((void *)dfr_pre_msg),  dfr_pre_msg = 0;
+	    free(dfr_pre_msg),  dfr_pre_msg = 0;
 	if (dfr_post_msg)
-	    free((void *)dfr_post_msg),  dfr_post_msg = 0;
+	    free(dfr_post_msg),  dfr_post_msg = 0;
 }
 
 /*

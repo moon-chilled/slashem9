@@ -151,7 +151,7 @@ NhRect *rect;
     if (reg->nrects > 0) {
 	memcpy((void *) tmp_rect, (void *) reg->rects,
 		      (sizeof (NhRect) * reg->nrects));
-	free((void *) reg->rects);
+	free(reg->rects);
     }
     tmp_rect[reg->nrects] = *rect;
     reg->nrects++;
@@ -184,7 +184,7 @@ struct monst *mon;
 	if (reg->max_monst > 0) {
 	    for (i = 0; i < reg->max_monst; i++)
 		tmp_m[i] = reg->monsters[i];
-	    free((void *) reg->monsters);
+	    free(reg->monsters);
 	}
 	reg->monsters = tmp_m;
 	reg->max_monst += MONST_INC;
@@ -273,10 +273,10 @@ NhRegion *reg;
 {
     if (reg) {
 	if (reg->rects)
-	    free((void *) reg->rects);
+	    free(reg->rects);
 	if (reg->monsters)
-	    free((void *) reg->monsters);
-	free((void *) reg);
+	    free(reg->monsters);
+	free(reg);
     }
 }
 
@@ -297,7 +297,7 @@ NhRegion *reg;
 	if (max_regions > 0) {
 	    memcpy((void *) regions, (void *) tmp_reg,
 			  max_regions * sizeof (NhRegion *));
-	    free((void *) tmp_reg);
+	    free(tmp_reg);
 	}
 	max_regions += 10;
     }
@@ -362,7 +362,7 @@ clear_regions (void)
 	free_region(regions[i]);
     n_regions = 0;
     if (max_regions > 0)
-	free((void *) regions);
+	free(regions);
     max_regions = 0;
     regions = NULL;
 }

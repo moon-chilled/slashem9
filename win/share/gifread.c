@@ -649,14 +649,14 @@ fclose_gif_file()
 
 	if (GifScreen.Interlace) {
 		for (i = 0; i < GifScreen.Height; i++) {
-			free((void *)image[i]);
+			free(image[i]);
 		}
-		free((void *)image);
+		free(image);
 	} else {
 		for (i = 0; i < tile_y; i++) {
-			free((void *)image[i]);
+			free(image[i]);
 		}
-		free((void *)image);
+		free(image);
 	}
 	return(fclose(gif_file));
 }

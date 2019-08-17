@@ -63,7 +63,7 @@ static boolean create_subroom(struct mkroom *, xchar, xchar,
 #define Fgetc	(schar)dlb_fgetc
 #define New(type)		alloc(sizeof(type))
 #define NewTab(type, size)	(type **) alloc(sizeof(type *) * (unsigned)size)
-#define Free(ptr)		if(ptr) free((void *) (ptr))
+#define Free(ptr)		if(ptr) free((ptr))
 
 static walk walklist[50];
 extern int min_rx, max_rx, min_ry, max_ry; /* from mkmap.c */
@@ -1174,7 +1174,7 @@ struct mkroom *croom;
 
 	if (found)
 	make_engr_at(x, y, e->engr.str, 0L, e->etype);
-	free((void *) e->engr.str);
+	free(e->engr.str);
 }
 
 /*

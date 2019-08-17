@@ -2175,9 +2175,9 @@ YY_BUFFER_STATE b;
 		yy_current_buffer = (YY_BUFFER_STATE) 0;
 
 	if ( b->yy_is_our_buffer )
-		yy_flex_free( (void *) b->yy_ch_buf );
+		yy_flex_free(b->yy_ch_buf);
 
-	yy_flex_free( (void *) b );
+	yy_flex_free(b);
 	}
 
 

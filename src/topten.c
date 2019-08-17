@@ -9,7 +9,7 @@
 #define done_stopprint program_state.stopprint
 
 #define newttentry() alloc(sizeof(struct toptenentry))
-#define dealloc_ttentry(ttent) free((void *) (ttent))
+#define dealloc_ttentry(ttent) free((ttent))
 #define NAMSZ	10
 #define DTHSZ	100
 #define ROLESZ   3

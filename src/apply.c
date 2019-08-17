@@ -2969,7 +2969,7 @@ static int use_grapple(struct obj *obj) {
 	    if (select_menu(tmpwin, PICK_ONE, &selected) > 0 &&
 			rn2(P_SKILL(typ) > P_SKILLED ? 20 : 2))
 		tohit = selected[0].item.a_int - 1;
-	    free((void *)selected);
+	    free(selected);
 	    destroy_nhwindow(tmpwin);
 	}
 

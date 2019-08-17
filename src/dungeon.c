@@ -1513,7 +1513,7 @@ schar print_dungeon(boolean bymenu, schar *rlev, xchar *rdgn) {
 	destroy_nhwindow(win);
 	if (n > 0) {
 		idx = selected[0].item.a_int - 1;
-		free((void *)selected);
+		free(selected);
 		if (rlev && rdgn) {
 			*rlev = lchoices.lev[idx];
 			*rdgn = lchoices.dgn[idx];

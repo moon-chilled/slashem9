@@ -212,7 +212,7 @@ save_oracles (int fd, int mode)
 	}
 	if (release_data(mode)) {
 	    if (oracle_cnt) {
-		free((void *)oracle_loc);
+		free(oracle_loc);
 		oracle_loc = 0,  oracle_cnt = 0,  oracle_flg = 0;
 	    }
 	}

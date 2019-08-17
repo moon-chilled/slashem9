@@ -495,7 +495,7 @@ dotechmenu(how, tech_no)
 	destroy_nhwindow(tmpwin);
 	if (n > 0) {
 	    *tech_no = selected[0].item.a_int - 1;
-	    free((void *)selected);
+	    free(selected);
 	    return true;
 	}
 	return false;

@@ -326,7 +326,7 @@ struct permonst *mdat;
     }
 #endif
 
-    free((void *)map);
+    free(map);
     return nd;
 }
 
@@ -398,7 +398,7 @@ int max_pathlen;
 			    }
 			    if (ok)
 				ok = step_proc(arg, xx, yy);
-			    free((void *)map);
+			    free(map);
 			    return ok;
 			} else if (map[xy] == EPATHTO_UNSEEN) {
 			    x = EPATHTO_X(xy);
@@ -410,7 +410,7 @@ int max_pathlen;
 		    }
 		}
     }
-    free((void *)map);
+    free(map);
     return false;
 }
 
@@ -470,7 +470,7 @@ void * data;
 	else
 	    nd = n;
     }
-    free((void *)map);
+    free(map);
 }
 
 #ifdef DEBUG

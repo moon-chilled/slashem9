@@ -6,7 +6,7 @@
 #include "lev.h"
 
 #define newseg()		alloc(sizeof(struct wseg))
-#define dealloc_seg(wseg)	free((void *) (wseg))
+#define dealloc_seg(wseg)	free((wseg))
 
 /* worm segment structure */
 struct wseg {

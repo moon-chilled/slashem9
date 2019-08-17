@@ -40,7 +40,7 @@ static void add_location_to_explode_region(ExplodeRegion *reg, xchar x, xchar y)
 		alloc(reg->alocations * sizeof(ExplodeLocation));
 	memcpy((void *)new, (void *)reg->locations,
 		reg->nlocations * sizeof(ExplodeLocation));
-	free((void *)reg->locations);
+	free(reg->locations);
 	reg->locations = new;
     }
     reg->locations[reg->nlocations].x = x;
@@ -776,7 +776,7 @@ long scatter(
 			place_object(stmp->obj, x, y);
 			stackobj(stmp->obj);
 		}
-		free((void *)stmp);
+		free(stmp);
 		newsym(x,y);
 	}
 

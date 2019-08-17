@@ -762,7 +762,7 @@ int fd, mode;
 	    if (perform_bwrite(mode))
 		bwrite(fd, (void *) tmplev, sizeof(s_level));
 	    if (release_data(mode))
-		free((void *) tmplev);
+		free(tmplev);
 	}
 	if (release_data(mode))
 	    sp_levchn = 0;
@@ -787,7 +787,7 @@ int fd, mode;
 	    tmp_dam = damageptr;
 	    damageptr = damageptr->next;
 	    if (release_data(mode))
-		free((void *)tmp_dam);
+		free(tmp_dam);
 	}
 	if (release_data(mode))
 	    level.damagelist = 0;

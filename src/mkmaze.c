@@ -471,7 +471,7 @@ fixup_special()
 	    break;
 	}
 
-	if (r->rname.str) free((void *) r->rname.str),  r->rname.str = 0;
+	if (r->rname.str) free(r->rname.str),  r->rname.str = 0;
     }
 
     /* place dungeon branch if not placed above */
@@ -564,12 +564,12 @@ fixup_special()
 	}
 	if(*str)
 	    pline("%s", str);
-	free((void *)lev_message);
+	free(lev_message);
 	lev_message = 0;
     }
 
     if (lregions)
-	free((void *) lregions),  lregions = 0;
+	free(lregions),  lregions = 0;
     num_lregions = 0;
 }
 
@@ -1255,7 +1255,7 @@ unsetup_waterlevel()
 
 	for (b = bbubbles; b; b = bb) {
 		bb = b->next;
-		free((void *)b);
+		free(b);
 	}
 	bbubbles = ebubbles = NULL;
 }
@@ -1434,7 +1434,7 @@ boolean ini;
 		    impossible("mv_bubble: unknown bubble contents");
 		    break;
 	    }
-	    free((void *)cons);
+	    free(cons);
 	}
 	b->cons = 0;
 

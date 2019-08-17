@@ -893,7 +893,7 @@ clear_id_mapping()
 
     while ((curr = id_map) != 0) {
 	id_map = curr->next;
-	free((void *) curr);
+	free(curr);
     }
     n_ids_mapped = 0;
 }

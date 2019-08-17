@@ -474,7 +474,7 @@ void docall(struct obj *obj) {
 
 	/* clear old name */
 	str1 = &(objects[obj->otyp].oc_uname);
-	if(*str1) free((void *)*str1);
+	if(*str1) free(*str1);
 
 	/* strip leading and trailing spaces; uncalls item if all spaces */
 	mungspaces(buf);

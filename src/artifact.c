@@ -1593,7 +1593,7 @@ static int arti_invoke(struct obj *obj) {
 								    goto nothing_special;
 							    }
 							    i = selected[0].item.a_int - 1;
-							    free((void *)selected);
+							    free(selected);
 						    } else
 							    i = last_ok_dungeon;	/* also first & only OK dungeon */
 						    destroy_nhwindow(tmpwin);

@@ -402,7 +402,7 @@ int extcmd_via_menu (void) {
 	    destroy_nhwindow(win);
 	    if (n==1) {
 		if (matchlevel > (QBUFSZ - 2)) {
-			free((void *)pick_list);
+			free(pick_list);
 #ifdef DEBUG
 			impossible("Too many characters (%d) entered in extcmd_via_menu()",
 				matchlevel);
@@ -411,7 +411,7 @@ int extcmd_via_menu (void) {
 		} else {
 			cbuf[matchlevel++] = pick_list[0].item.a_char;
 			cbuf[matchlevel] = '\0';
-			free((void *)pick_list);
+			free(pick_list);
 		}
 	    } else {
 		if (matchlevel) {
@@ -4215,7 +4215,7 @@ int wiz_port_debug(void) {
 		destroy_nhwindow(win);
 		if (n > 0) {
 			n = pick_list[0].item.a_int - 1;
-			free((void *) pick_list);
+			free(pick_list);
 			/* execute the function */
 			(*menu_selections[n].fn)();
 		}

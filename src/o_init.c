@@ -295,7 +295,7 @@ savenames (int fd, int mode)
 		    bwrite(fd, (void *)objects[i].oc_uname, len);
 		}
 		if (release_data(mode)) {
-		    free((void *)objects[i].oc_uname);
+		    free(objects[i].oc_uname);
 		    objects[i].oc_uname = 0;
 		}
 	    }

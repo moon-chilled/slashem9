@@ -946,11 +946,11 @@ void tmp_at(int x, int y) {
 		cont = tglyph->cont;
 		while (cont) {
 		    tmp = cont->cont;
-		    if (cont != &tgfirst) free((void *)cont);
+		    if (cont != &tgfirst) free(cont);
 		    cont = tmp;
 		}
 		tmp = tglyph->prev;
-		if (tglyph != &tgfirst) free((void *)tglyph);
+		if (tglyph != &tgfirst) free(tglyph);
 		tglyph = tmp;
 	    }
 	    return;
@@ -978,7 +978,7 @@ void tmp_at(int x, int y) {
 		    for (i = 0; i < cont->sidx; i++)
 			newsym(cont->saved[i].x, cont->saved[i].y);
 		    tmp = cont->cont;
-		    if (cont != &tgfirst) free((void *)cont);
+		    if (cont != &tgfirst) free(cont);
 		    cont = tmp;
 		}
 	     /* tglyph->cont = NULL; */
@@ -988,7 +988,7 @@ void tmp_at(int x, int y) {
 	    }
 	 /* tglyph->sidx = 0; -- about to be freed, so not necessary */
 	    tmp = tglyph->prev;
-	    if (tglyph != &tgfirst) free((void *)tglyph);
+	    if (tglyph != &tgfirst) free(tglyph);
 	    tglyph = tmp;
 	    break;
 
