@@ -30,20 +30,11 @@ extern char erase_char, kill_char;	/* from appropriate tty.c file */
  * Reading can be interrupted by an escape ('\033') - now the
  * resulting string is "\033".
  */
-void
-tty_getlin(query, bufp)
-const char *query;
-char *bufp;
-{
-    hooked_tty_getlin(query, bufp, (getlin_hook_proc) 0);
+void tty_getlin(const char *query, char *bufp) {
+	hooked_tty_getlin(query, bufp, NULL);
 }
 
-static void
-hooked_tty_getlin(query, bufp, hook)
-const char *query;
-char *bufp;
-getlin_hook_proc hook;
-{
+static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc hook) {
 	char *obufp = bufp;
 	int c;
 	struct WinDesc *cw = wins[WIN_MESSAGE];
@@ -71,11 +62,11 @@ getlin_hook_proc hook;
 			break;
 		}
 		if (ttyDisplay->intr) {
-		    ttyDisplay->intr--;
-		    *bufp = 0;
+			ttyDisplay->intr--;
+			*bufp = 0;
 		}
 		if(c == '\020') { /* ctrl-P */
-		    if (iflags.prevmsg_window != 's') {
+			if (iflags.prevmsg_window != 's') {
 				int sav = ttyDisplay->inread;
 				ttyDisplay->inread = 0;
 				tty_doprev_message();
@@ -88,19 +79,19 @@ getlin_hook_proc hook;
 				addtopl(obufp);
 			} else {
 				if (!doprev)
-				    tty_doprev_message();/* need two initially */
+					tty_doprev_message();/* need two initially */
 				tty_doprev_message();
 				doprev = 1;
 				continue;
-		    }
+			}
 		} else if (doprev && iflags.prevmsg_window == 's') {
-		    tty_clear_nhwindow(WIN_MESSAGE);
-		    cw->maxcol = cw->maxrow;
-		    doprev = 0;
-		    addtopl(query);
-		    addtopl(" ");
-		    *bufp = 0;
-		    addtopl(obufp);
+			tty_clear_nhwindow(WIN_MESSAGE);
+			cw->maxcol = cw->maxrow;
+			doprev = 0;
+			addtopl(query);
+			addtopl(" ");
+			*bufp = 0;
+			addtopl(obufp);
 		}
 		if(c == erase_char || c == '\b') {
 			if(bufp != obufp) {
@@ -124,9 +115,9 @@ getlin_hook_proc hook;
 #endif /* not NEWAUTOCOMP */
 			break;
 		} else if(' ' <= (unsigned char) c && c != '\177' &&
-			    (bufp-obufp < BUFSZ-1 && bufp-obufp < COLNO)) {
-				/* avoid isprint() - some people don't have it
-				   ' ' is not always a printing char */
+				(bufp-obufp < BUFSZ-1 && bufp-obufp < COLNO)) {
+			/* avoid isprint() - some people don't have it
+			   ' ' is not always a printing char */
 #ifdef NEWAUTOCOMP
 			char *i = eos(bufp);
 
@@ -136,22 +127,22 @@ getlin_hook_proc hook;
 			putsyms(bufp);
 			bufp++;
 			if (hook && (*hook)(obufp)) {
-			    putsyms(bufp);
+				putsyms(bufp);
 #ifndef NEWAUTOCOMP
-			    bufp = eos(bufp);
+				bufp = eos(bufp);
 #else /* NEWAUTOCOMP */
-			    /* pointer and cursor left where they were */
-			    for (i = bufp; *i; ++i) putsyms("\b");
+				/* pointer and cursor left where they were */
+				for (i = bufp; *i; ++i) putsyms("\b");
 			} else if (i > bufp) {
-			    char *s = i;
+				char *s = i;
 
-			    /* erase rest of prior guess */
-			    for (; i > bufp; --i) putsyms(" ");
-			    for (; s > bufp; --s) putsyms("\b");
+				/* erase rest of prior guess */
+				for (; i > bufp; --i) putsyms(" ");
+				for (; s > bufp; --s) putsyms("\b");
 #endif /* NEWAUTOCOMP */
 			}
 		} else if(c == kill_char || c == '\177') { /* Robert Viduya */
-				/* this test last - @ might be the kill_char */
+			/* this test last - @ might be the kill_char */
 #ifndef NEWAUTOCOMP
 			while(bufp != obufp) {
 				bufp--;
@@ -170,23 +161,21 @@ getlin_hook_proc hook;
 	clear_nhwindow(WIN_MESSAGE);	/* clean up after ourselves */
 }
 
-void
-xwaitforspace(s)
-const char *s;	/* chars allowed besides return */
-{
-    int c, x = ttyDisplay ? (int) ttyDisplay->dismiss_more : '\n';
+// paramater: chars allowed besides return
+void xwaitforspace(const char *s) {
+	int c, x = ttyDisplay ? ttyDisplay->dismiss_more : '\n';
 
-    morc = 0;
+	morc = 0;
 
-    while((c = nhgetch()) != '\n') {
-	if(iflags.cbreak) {
-	    if ((s && index(s,c)) || c == x) {
-		morc = (char) c;
-		break;
-	    }
-	    tty_nhbell();
+	while((c = nhgetch()) != '\n') {
+		if(iflags.cbreak) {
+			if ((s && index(s,c)) || c == x) {
+				morc = (char) c;
+				break;
+			}
+			tty_nhbell();
+		}
 	}
-    }
 
 }
 
@@ -231,9 +220,7 @@ ext_cmd_getlin_hook(base)
  * Read in an extended command, doing command line completion.  We
  * stop when we have found enough characters to make a unique command.
  */
-int
-tty_get_ext_cmd()
-{
+int tty_get_ext_cmd(void) {
 	int i;
 	char buf[BUFSZ];
 
@@ -241,8 +228,7 @@ tty_get_ext_cmd()
 	/* maybe a runtime option? */
 	/* hooked_tty_getlin("#", buf, flags.cmd_comp ? ext_cmd_getlin_hook : (getlin_hook_proc) 0); */
 #ifdef REDO
-	hooked_tty_getlin("#", buf, in_doagain ? (getlin_hook_proc)0
-		: ext_cmd_getlin_hook);
+	hooked_tty_getlin("#", buf, in_doagain ? NULL : ext_cmd_getlin_hook);
 #else
 	hooked_tty_getlin("#", buf, ext_cmd_getlin_hook);
 #endif
@@ -254,10 +240,10 @@ tty_get_ext_cmd()
 
 #ifdef REDO
 	if (!in_doagain) {
-	    int j;
-	    for (j = 0; buf[j]; j++)
-		savech(buf[j]);
-	    savech('\n');
+		int j;
+		for (j = 0; buf[j]; j++)
+			savech(buf[j]);
+		savech('\n');
 	}
 #endif
 

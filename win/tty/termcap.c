@@ -17,8 +17,8 @@
 #define Tgetstr(key) (tgetstr(key,&tbufptr))
 #endif /* MICROPORT_286_BUG **/
 
-static char * s_atr2str(int);
-static char * e_atr2str(int);
+static char *s_atr2str(int);
+static char *e_atr2str(int);
 
 void cmov(int, int);
 void nocmov(int, int);
@@ -30,9 +30,8 @@ static void init_hilite(void);
 static void kill_hilite(void);
 #endif
 
-	/* (see tcap.h) -- nh_CM, nh_ND, nh_CD, nh_HI,nh_HE, nh_US,nh_UE,
-				ul_hack */
-struct tc_lcl_data tc_lcl_data = { 0, 0, 0, 0,0, 0,0, false };
+// (see tcap.h) -- nh_CM, nh_ND, nh_CD, nh_HI,nh_HE, nh_US,nh_UE, ul_hack
+struct tc_lcl_data tc_lcl_data = {0, 0, 0, 0,0, 0,0, false};
 
 int allow_bgcolor = 0;
 
@@ -72,9 +71,7 @@ boolean colorflag = false;			/* colors are initialized */
 char ttycolors[CLR_MAX];
 #endif
 
-void
-init_ttycolor()
-{
+void init_ttycolor(void) {
 #ifdef VIDEOSHADES
 	if (!colorflag) {
 		ttycolors[CLR_RED]		= CLR_RED;
@@ -106,9 +103,8 @@ static int convert_uchars(char *, uchar *, int);
  *	red	green	 brown	blue	magenta	cyan	gray	black
  *	orange	br.green yellow	br.blue	br.mag	br.cyan	white
  */
-int assign_videocolors(char *colorvals)
-{
-	int i,icolor;
+int assign_videocolors(char *colorvals) {
+	int i, icolor;
 	uchar *tmpcolor;
 
 	init_ttycolor();
@@ -118,64 +114,56 @@ int assign_videocolors(char *colorvals)
 	if (convert_uchars(colorvals,tmpcolor,i) < 0) return false;
 
 	icolor = CLR_RED;
-	for( i = 0; tmpcolor[i] != 0; ++i) {
-	    if (icolor <= CLR_WHITE)
-		ttycolors[icolor++] = tmpcolor[i];
+	for (i = 0; tmpcolor[i] != 0; ++i) {
+		if (icolor <= CLR_WHITE)
+			ttycolors[icolor++] = tmpcolor[i];
 	}
 
 	colorflag = true;
-	free((void *)tmpcolor);
+	free(tmpcolor);
 	return 1;
 }
 
-static int
-convert_uchars(bufp,list,size)
-    char *bufp; 	/* current pointer */
-    uchar *list;	/* return list */
-    int size;
-{
-    unsigned int num = 0;
-    int count = 0;
+static int convert_uchars(char *bufp, uchar *list, int size) {
+	unsigned int num = 0;
+	int count = 0;
 
-    list[count] = 0;
+	list[count] = 0;
 
-    while (1) {
-	switch(*bufp) {
-	    case ' ':  case '\0':
-	    case '\t': case '-':
-	    case '\n':
-		if (num) {
-		    list[count++] = num;
-		    list[count] = 0;
-		    num = 0;
+	while (1) {
+		switch(*bufp) {
+			case ' ':  case '\0':
+			case '\t': case '-':
+			case '\n':
+				if (num) {
+					list[count++] = num;
+					list[count] = 0;
+					num = 0;
+				}
+				if ((count==size) || !*bufp) return count;
+				bufp++;
+				break;
+			case '#':
+				if (num) {
+					list[count++] = num;
+					list[count] = 0;
+				}
+				return count;
+			case '0': case '1': case '2': case '3':
+			case '4': case '5': case '6': case '7':
+			case '8': case '9':
+				num = num*10 + (*bufp-'0');
+				if (num > 15) return -1;
+				bufp++;
+				break;
+			default: return -1;
 		}
-		if ((count==size) || !*bufp) return count;
-		bufp++;
-		break;
-	    case '#':
-		if (num) {
-		    list[count++] = num;
-		    list[count] = 0;
-		}
-		return count;
-	    case '0': case '1': case '2': case '3':
-	    case '4': case '5': case '6': case '7':
-	    case '8': case '9':
-		num = num*10 + (*bufp-'0');
-		if (num > 15) return -1;
-		bufp++;
-		break;
-	    default: return -1;
 	}
-    }
-    /*NOTREACHED*/
+	/*NOTREACHED*/
 }
 # endif /* VIDEOSHADES*/
 
-void
-tty_startup(wid, hgt)
-int *wid, *hgt;
-{
+void tty_startup(int *wid, int *hgt) {
 	int i;
 #ifdef TERMLIB
 	const char *term;
@@ -381,9 +369,7 @@ int *wid, *hgt;
 
 /* note: at present, this routine is not part of the formal window interface */
 /* deallocate resources prior to final termination */
-void
-tty_shutdown()
-{
+void tty_shutdown(void) {
 #ifdef TERMLIB
 	kill_hilite();
 #endif
@@ -391,20 +377,17 @@ tty_shutdown()
 	return;
 }
 
-void
-tty_number_pad(state)
-int state;
-{
+void tty_number_pad(int state) {
 	switch (state) {
-	    case -1:	/* activate keypad mode (escape sequences) */
-		    if (KS && *KS) xputs(KS);
-		    break;
-	    case  1:	/* activate numeric mode for keypad (digits) */
-		    if (KE && *KE) xputs(KE);
-		    break;
-	    case  0:	/* don't need to do anything--leave terminal as-is */
-	    default:
-		    break;
+		case -1:	/* activate keypad mode (escape sequences) */
+			if (KS && *KS) xputs(KS);
+			break;
+		case  1:	/* activate numeric mode for keypad (digits) */
+			if (KE && *KE) xputs(KE);
+			break;
+		case  0:	/* don't need to do anything--leave terminal as-is */
+		default:
+			break;
 	}
 }
 
@@ -419,9 +402,7 @@ static void tty_decgraphics_termcap_fixup(void);
    call xputs() from the option setting or graphics assigning routines,
    so this is a convenient hook.
  */
-static void
-tty_decgraphics_termcap_fixup()
-{
+static void tty_decgraphics_termcap_fixup(void) {
 	static char ctrlN[]   = "\016";
 	static char ctrlO[]   = "\017";
 	static char appMode[] = "\033=";
@@ -467,9 +448,7 @@ tty_decgraphics_termcap_fixup()
 }
 #endif	/* TERMLIB */
 
-void
-tty_start_screen()
-{
+void tty_start_screen(void) {
 	xputs(TI);
 	xputs(VS);
 
@@ -481,19 +460,14 @@ tty_start_screen()
 	if (iflags.num_pad) tty_number_pad(1);	/* make keypad send digits */
 }
 
-void
-tty_end_screen()
-{
+void tty_end_screen(void) {
 	clear_screen();
 	xputs(VE);
 	xputs(TE);
 }
 
 /* Cursor movements */
-void
-nocmov(x, y)
-int x,y;
-{
+void nocmov(int x, int y) {
 	if ((int) ttyDisplay->cury > y) {
 		if(UP) {
 			while ((int) ttyDisplay->cury > y) {	/* Go up. */
@@ -516,7 +490,7 @@ int x,y;
 			cmov(x, y);
 		} else {
 			while((int) ttyDisplay->cury < y) {
-				xputc('\n');
+				putchar('\n');
 				ttyDisplay->curx = 0;
 				ttyDisplay->cury++;
 			}
@@ -537,38 +511,21 @@ int x,y;
 	}
 }
 
-void
-cmov(x, y)
-int x, y;
-{
+void cmov(int x, int y) {
 	xputs(tgoto(nh_CM, x, y));
 	ttyDisplay->cury = y;
 	ttyDisplay->curx = x;
 }
 
-/* See note at OVLx ifdef above.   xputc() is a special function. */
-void xputc(char c) {
-	putchar(c);
-}
-
-void
-xputs(s)
-const char *s;
-{
+void xputs(const char *s) {
 # ifndef TERMLIB
 	fputs(s, stdout);
 # else
-#  if defined(NHSTDC) || defined(ULTRIX_PROTO)
-	tputs(s, 1, (int (*)())xputc);
-#  else
-	tputs(s, 1, xputc);
-#  endif
+	tputs(s, 1, putchar);
 # endif
 }
 
-void
-cl_end()
-{
+void cl_end(void) {
 	if(CE)
 		xputs(CE);
 	else {	/* no-CE fix - free after Harold Rynes */
@@ -577,17 +534,14 @@ cl_end()
 		int cx = ttyDisplay->curx+1;
 
 		while(cx < CO) {
-			xputc(' ');
+			putchar(' ');
 			cx++;
 		}
-		tty_curs(BASE_WINDOW, (int)ttyDisplay->curx+1,
-						(int)ttyDisplay->cury);
+		tty_curs(BASE_WINDOW, (int)ttyDisplay->curx+1, (int)ttyDisplay->cury);
 	}
 }
 
-void
-clear_screen()
-{
+void clear_screen(void) {
 	/* note: if CL is null, then termcap initialization failed,
 		so don't attempt screen-oriented I/O during final cleanup.
 	 */
@@ -597,9 +551,7 @@ clear_screen()
 	}
 }
 
-void
-home()
-{
+void home(void) {
 	if(HO)
 		xputs(HO);
 	else if(nh_CM)
@@ -609,73 +561,53 @@ home()
 	ttyDisplay->curx = ttyDisplay->cury = 0;
 }
 
-void
-standoutbeg()
-{
+void standoutbeg(void) {
 	if(SO) xputs(SO);
 }
 
-void
-standoutend()
-{
+void standoutend(void) {
 	if(SE) xputs(SE);
 }
 
 #if 0	/* if you need one of these, uncomment it (here and in extern.h) */
-void
-revbeg()
-{
+void revbeg(void) {
 	if(MR) xputs(MR);
 }
 
-void
-boldbeg()
-{
+void boldbeg(void) {
 	if(MD) xputs(MD);
 }
 
-void
-blinkbeg()
-{
+void blinkbeg(void) {
 	if(MB) xputs(MB);
 }
 
-void
-dimbeg()
 /* not in most termcap entries */
-{
+void dimbeg(void) {
 	if(MH) xputs(MH);
 }
 
-void
-m_end()
-{
+void m_end(void) {
 	if(ME) xputs(ME);
 }
 #endif
 
-void
-backsp()
-{
+void backsp(void) {
 	xputs(BC);
 }
 
-void
-tty_nhbell()
-{
+void tty_nhbell(void) {
 	if (flags.silent) return;
 	putchar('\007');		/* curx does not change */
 	fflush(stdout);
 }
 
 #ifdef ASCIIGRAPH
-void
-graph_on() {
+void graph_on(void) {
 	if (AS) xputs(AS);
 }
 
-void
-graph_off() {
+void graph_off(void) {
 	if (AE) xputs(AE);
 }
 #endif
@@ -687,9 +619,7 @@ static const short tmspc10[] = {		/* from termcap */
 #endif
 
 /* delay 50 ms */
-void
-tty_delay_output()
-{
+void tty_delay_output(void) {
 #if defined(MICRO)
 	int i;
 #endif
@@ -709,29 +639,20 @@ tty_delay_output()
 #else /* MICRO */
 	/* BUG: if the padding character is visible, as it is on the 5620
 	   then this looks terrible. */
-	if(flags.null)
+	if(flags.null) {
 # ifdef TERMINFO
 		/* cbosgd!cbcephus!pds for SYS V R2 */
-#  ifdef NHSTDC
-		tputs("$<50>", 1, (int (*)())xputc);
-#  else
-		tputs("$<50>", 1, xputc);
-#  endif
+		tputs("$<50>", 1, putchar);
 # else
-#  if defined(NHSTDC) || defined(ULTRIX_PROTO)
-		tputs("50", 1, (int (*)())xputc);
-#  else
-		tputs("50", 1, xputc);
-#  endif
+		tputs("50", 1, putchar);
 # endif
-
-	else if(ospeed > 0 && ospeed < SIZE(tmspc10) && nh_CM) {
+	} else if (ospeed > 0 && ospeed < SIZE(tmspc10) && nh_CM) {
 		/* delay by sending cm(here) an appropriate number of times */
 		int cmlen = strlen(tgoto(nh_CM, ttyDisplay->curx,
 							ttyDisplay->cury));
 		int i = 500 + tmspc10[ospeed]/2;
 
-		while(i > 0) {
+		while (i > 0) {
 			cmov((int)ttyDisplay->curx, (int)ttyDisplay->cury);
 			i -= cmlen*tmspc10[ospeed];
 		}
@@ -739,22 +660,20 @@ tty_delay_output()
 #endif /* MICRO */
 }
 
-void
-cl_eos()			/* free after Robert Viduya */
-{				/* must only be called with curx = 1 */
-
-	if(nh_CD)
+/* free after Robert Viduya */
+/* must only be called with curx = 1 */
+void cl_eos(void) {
+	if (nh_CD) {
 		xputs(nh_CD);
-	else {
+	} else {
 		int cy = ttyDisplay->cury+1;
 		while(cy <= LI-2) {
 			cl_end();
-			xputc('\n');
+			putchar('\n');
 			cy++;
 		}
 		cl_end();
-		tty_curs(BASE_WINDOW, (int)ttyDisplay->curx+1,
-						(int)ttyDisplay->cury);
+		tty_curs(BASE_WINDOW, (int)ttyDisplay->curx+1, (int)ttyDisplay->cury);
 	}
 }
 
@@ -833,9 +752,7 @@ const int ti_map[8] = {
 	COLOR_BLACK, COLOR_RED, COLOR_GREEN, COLOR_YELLOW,
 	COLOR_BLUE, COLOR_MAGENTA, COLOR_CYAN, COLOR_WHITE };
 
-static void
-init_hilite()
-{
+static void init_hilite(void) {
 	int c;
 	char *setf, *scratch;
 
@@ -849,20 +766,20 @@ init_hilite()
 		return;
 
 	for (c = 0; c < CLR_MAX / 2; c++) {
-	    scratch = tparm(setf, ti_map[c]);
+		scratch = tparm(setf, ti_map[c]);
 #ifndef VIDEOSHADES
-	    if (c != CLR_GRAY) {
+		if (c != CLR_GRAY) {
 #endif
-		hilites[c] = alloc(strlen(scratch) + 1);
-		strcpy(hilites[c], scratch);
+			hilites[c] = alloc(strlen(scratch) + 1);
+			strcpy(hilites[c], scratch);
 #ifndef VIDEOSHADES
-	    }
+		}
 #endif
-	    if (c != CLR_BLACK) {
-		hilites[c|BRIGHT] = alloc(strlen(scratch)+strlen(MD)+1);
-		strcpy(hilites[c|BRIGHT], MD);
-		strcat(hilites[c|BRIGHT], scratch);
-	    }
+		if (c != CLR_BLACK) {
+			hilites[c|BRIGHT] = alloc(strlen(scratch)+strlen(MD)+1);
+			strcpy(hilites[c|BRIGHT], MD);
+			strcat(hilites[c|BRIGHT], scratch);
+		}
 
 	}
 }
@@ -870,11 +787,7 @@ init_hilite()
 # else /* UNIX && TERMINFO */
 
 /* find the foreground and background colors set by nh_HI or nh_HE */
-static void
-analyze_seq (str, fg, bg)
-char *str;
-int *fg, *bg;
-{
+static void analyze_seq (char *str, int *fg, int *bg) {
 	int c, code;
 	int len;
 
@@ -928,10 +841,7 @@ int *fg, *bg;
  * found in print.c).  The nh_HI and nh_HE sequences (usually from SO) are
  * scanned to find foreground and background colors.
  */
-
-static void
-init_hilite()
-{
+static void init_hilite(void) {
 	int c;
 
 	int backg, foreg, hi_backg, hi_foreg;
@@ -969,9 +879,7 @@ init_hilite()
 }
 # endif /* UNIX */
 
-static void
-kill_hilite()
-{
+static void kill_hilite(void) {
 	int c;
 
 	for (c = 0; c < CLR_MAX / 2; c++) {
@@ -988,29 +896,23 @@ kill_hilite()
 
 static char nulstr[] = "";
 
-static char *
-s_atr2str(n)
-int n;
-{
-    switch (n) {
-	    case ATR_ULINE:
-		    if(nh_US) return nh_US;
-	    case ATR_BOLD:
-	    case ATR_BLINK:
+static char *s_atr2str(int n) {
+	switch (n) {
+		case ATR_ULINE:
+			if(nh_US) return nh_US;
+		case ATR_BOLD:
+		case ATR_BLINK:
 #if defined(TERMLIB)
-		    if (MD) return MD;
+			if (MD) return MD;
 #endif
-		    return nh_HI;
-	    case ATR_INVERSE:
-		    return MR;
-    }
-    return nulstr;
+			return nh_HI;
+		case ATR_INVERSE:
+			return MR;
+	}
+	return nulstr;
 }
 
-static char *
-e_atr2str(n)
-int n;
-{
+static char *e_atr2str(int n) {
     switch (n) {
 	    case ATR_ULINE:
 		    if(nh_UE) return nh_UE;
@@ -1024,64 +926,46 @@ int n;
 }
 
 
-void
-term_start_attr(attr)
-int attr;
-{
+void term_start_attr(int attr) {
 	if (attr) {
 		xputs(s_atr2str(attr));
 	}
 }
 
 
-void
-term_end_attr(attr)
-int attr;
-{
-	if(attr) {
+void term_end_attr(int attr) {
+	if (attr) {
 		xputs(e_atr2str(attr));
 	}
 }
 
 
-void
-term_start_raw_bold()
-{
+void term_start_raw_bold(void) {
 	xputs(nh_HI);
 }
 
 
-void
-term_end_raw_bold()
-{
+void term_end_raw_bold(void) {
 	xputs(nh_HE);
 }
 
 
-void
-term_start_bgcolor(color)
-int color;
-{
-    if (allow_bgcolor) {
-	char tmp[8];
-	sprintf(tmp, "\033[%dm", ((color % 8) + 40));
-	xputs(tmp);
-    } else {
-	xputs(e_atr2str(ATR_INVERSE));
-    }
+void term_start_bgcolor(int color) {
+	if (allow_bgcolor) {
+		char tmp[8];
+		sprintf(tmp, "\033[%dm", ((color % 8) + 40));
+		xputs(tmp);
+	} else {
+		xputs(e_atr2str(ATR_INVERSE));
+	}
 }
 
-void
-term_end_color()
-{
+void term_end_color(void) {
 	xputs(nh_HE);
 }
 
 
-void
-term_start_color(color)
-int color;
-{
+void term_start_color(int color) {
 #ifdef VIDEOSHADES
 	xputs(hilites[ttycolors[color]]);
 #else
@@ -1090,16 +974,13 @@ int color;
 }
 
 
-int
-has_color(color)
-int color;
-{
+int has_color(int color) {
 #ifdef CURSES_GRAPHICS
-    /* XXX has_color() should be added to windowprocs */
-    /* iflags.wc_color is set to false and the option disabled if the
-     terminal cannot display color */
-    if (windowprocs.name != NULL &&
-     !strcmpi(windowprocs.name, "curses")) return iflags.wc_color;
+	/* XXX has_color() should be added to windowprocs */
+	/* iflags.wc_color is set to false and the option disabled if the
+	   terminal cannot display color */
+	if (windowprocs.name != NULL &&
+			!strcmpi(windowprocs.name, "curses")) return iflags.wc_color;
 #endif
 	return hilites[color] != NULL;
 }
