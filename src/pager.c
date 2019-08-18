@@ -570,7 +570,7 @@ do_look(quick)
 	    } else if (glyph_is_invisible(glyph)) {
 		sym = DEF_INVISIBLE;
 	    } else if (glyph_is_warning(glyph)) {
-	    	sym = showsyms[glyph_to_cmap(sym)];
+		sym = showsyms[S_warn0 + glyph - GLYPH_WARNING_OFF];
 	    } else {
 		impossible("do_look:  bad glyph %d at (%d,%d)",
 						glyph, (int)cc.x, (int)cc.y);
