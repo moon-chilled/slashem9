@@ -497,15 +497,15 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x2572,	// S_sw_bl:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
 	0x2581, // S_sw_bc:     LOWER ONE EIGHTH BLOCK
 	0x2571,	// S_sw_br:	BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT
-	'/',	// S_explode1
+	0x2571,	// S_explode1:	BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT
 	0x2594, // S_explode2:  UPPER ONE EIGHTH BLOCK
-	'\\',	// S_explode3
+	0x2572,	// S_explode3:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
 	0x258f, // S_explode4:  LEFT ONE EIGHTH BLOCK
 	' ',	// S_explode5
 /*90*/	0x2595, // S_explode6:  RIGHT ONE EIGHTH BLOCK
-	'\\',	// S_explode7
+	0x2572,	// S_explode7:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
 	0x2581, // S_explode8:  LOWER ONE EIGHTH BLOCK
-	'/',	// S_explode9
+	0x2571,	// S_explode9:	BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT
 	'0', // white warning
 	'1', // pink warning
 	'2', // red warning

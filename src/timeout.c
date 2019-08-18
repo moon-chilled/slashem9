@@ -632,10 +632,10 @@ void attach_bomb_blow_timeout(struct obj *bomb, int fuse, boolean yours) {
 
 // timer callback routine: detonate the explosives
 void bomb_blow(void * arg, long timeout) {
-	struct obj *bomb;
+	struct obj *bomb = arg;
 	xchar x,y;
 	boolean silent, underwater;
-	struct monst *mtmp = arg;
+	struct monst *mtmp;
 
 	silent = (timeout != monstermoves);     /* exploded while away */
 
