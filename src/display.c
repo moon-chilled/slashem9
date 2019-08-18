@@ -521,10 +521,10 @@ static void display_warning(struct monst *mon) {
     int glyph;
 
     if (mon_warning(mon)) {
-        if (wl > WARNCOUNT - 1) wl = WARNCOUNT - 1;
-	/* 3.4.1: this really ought to be rn2(WARNCOUNT), but value "0"
+        if (wl > MAXWARNINGS - 1) wl = MAXWARNINGS - 1;
+	/* 3.4.1: this really ought to be rn2(MAXWARNINGS), but value "0"
 	   isn't handled correctly by the what_is routine so avoid it */
-	if (Hallucination) wl = rn1(WARNCOUNT-1,1);
+	if (Hallucination) wl = rn1(MAXWARNINGS-1,1);
         glyph = warning_to_glyph(wl);
     } else if (MATCH_WARN_OF_MON(mon)) {
 	glyph = mon_to_glyph(mon);
@@ -1327,12 +1327,13 @@ static char gbuf_stop[ROWNO];
 
 #ifdef DUMP_LOG
 /* D: Added to dump screen to output file */
+//TODO: switch all this over to using mapglyph or utf8_graphics or something
 static uchar get_glyph_char(int glyph) {
     uchar   ch;
     int offset;
 
     if (glyph >= NO_GLYPH)
-        return ;
+        return;
 
     /*
      *  Map the glyph back to a character.
@@ -1341,29 +1342,29 @@ static uchar get_glyph_char(int glyph) {
      *		  offsets.  The order is set in display.h.
      */
     if ((offset = (glyph - GLYPH_WARNING_OFF)) >= 0) {	/* a warning flash */
-	ch = def_warnsyms[offset].sym;
+	    ch = ascii_graphics[S_warn0 + offset];
     } else if ((offset = (glyph - GLYPH_SWALLOW_OFF)) >= 0) {	/* swallow */
 	/* see swallow_to_glyph() in display.c */
-	ch = (uchar) defsyms[S_sw_tl + (offset & 0x7)].sym;
+	ch = ascii_graphics[S_sw_tl + (offset & 0x7)];
     } else if ((offset = (glyph - GLYPH_ZAP_OFF)) >= 0) {	/* zap beam */
 	/* see zapdir_to_glyph() in display.c */
-	ch = defsyms[S_vbeam + (offset & 0x3)].sym;
+	ch = ascii_graphics[S_vbeam + (offset & 0x3)];
     } else if ((offset = (glyph - GLYPH_CMAP_OFF)) >= 0) {	/* cmap */
-	ch = defsyms[offset].sym;
+	ch = ascii_graphics[offset];
     } else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
-	ch = def_oc_syms[(int)objects[offset].oc_class];
+	ch = def_oc_syms[objects[offset].oc_class];
     } else if ((offset = (glyph - GLYPH_RIDDEN_OFF)) >= 0) { /* mon ridden */
-	ch = def_monsyms[(int)mons[offset].mlet];
+	ch = def_monsyms[mons[offset].mlet];
     } else if ((offset = (glyph - GLYPH_BODY_OFF)) >= 0) {	/* a corpse */
-	ch = def_oc_syms[(int)objects[CORPSE].oc_class];
+	ch = def_oc_syms[objects[CORPSE].oc_class];
     } else if ((offset = (glyph - GLYPH_DETECT_OFF)) >= 0) { /* mon detect */
-	ch = def_monsyms[(int)mons[offset].mlet];
+	ch = def_monsyms[mons[offset].mlet];
     } else if ((offset = (glyph - GLYPH_INVIS_OFF)) >= 0) {  /* invisible */
 	ch = DEF_INVISIBLE;
     } else if ((offset = (glyph - GLYPH_PET_OFF)) >= 0) {	/* a pet */
-	ch = def_monsyms[(int)mons[offset].mlet];
+	ch = def_monsyms[mons[offset].mlet];
     } else {						    /* a monster */
-	ch = monsyms[(int)mons[glyph].mlet];
+	ch = monsyms[mons[glyph].mlet];
     }
     return ch;
 }

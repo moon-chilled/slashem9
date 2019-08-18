@@ -141,10 +141,6 @@ char *get_option(const char *option)
 	encode_escapes(buf, monsyms + 1, MAXMCLASSES - 1);
 	return buf;
     }
-    if (!strcmp(option, "warnings")) {
-	encode_escapes(buf, warnsyms, WARNCOUNT);
-	return buf;
-    }
     if (!strcmp(option, "name"))  return plname;
     if (!strcmp(option, "role"))  return pl_character;
     if (!strcmp(option, "race")) {

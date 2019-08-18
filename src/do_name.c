@@ -119,7 +119,7 @@ int getpos(coord *cc, boolean force, const char *goal) {
 		int pass, lo_x, lo_y, hi_x, hi_y, k = 0;
 		memset((void *)matching, 0, sizeof matching);
 		for (sidx = 1; sidx < MAXPCHARS; sidx++)
-		    if (c == defsyms[sidx].sym || c == (int)showsyms[sidx])
+		    if (c == ascii_graphics[sidx] || c == showsyms[sidx])
 			matching[sidx] = (char) ++k;
 		if (k) {
 		    for (pass = 0; pass <= 1; pass++) {

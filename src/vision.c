@@ -566,7 +566,7 @@ vision_recalc (int control)
 	goto skip;
     }
 #ifdef REINCARNATION
-    else if (Is_rogue_level(&u.uz) {
+    else if (Is_rogue_level(&u.uz)) {
 	rogue_vision(next_array,next_rmin,next_rmax);
     }
 #endif

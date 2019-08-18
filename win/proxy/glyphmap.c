@@ -328,8 +328,8 @@ int first, next;
       alloc(submap->n_glyphs * sizeof(*submap->glyphs));
     for(i = first; i < next; i++) {
 	submap->glyphs[i - first].rgbsym =
-	  NHPROXY_RGB_SYM(rgb_colors[C(defsyms[i].color)], showsyms[i]);
-	submap->glyphs[i - first].description = defsyms[i].explanation;
+	  NHPROXY_RGB_SYM(rgb_colors[C(sym_desc[i].color)], showsyms[i]);
+	submap->glyphs[i - first].description = sym_desc[i].explanation;
     }
 }
 
@@ -448,7 +448,7 @@ int base;
 	  NHPROXY_RGB_SYM(rgb_colors[C(explcolors[0])],
 	  showsyms[i + S_explode1]);
 	map->submappings->glyphs[i].description =
-	  defsyms[i + S_explode1].explanation;
+	  sym_desc[i + S_explode1].explanation;
     }
     for(i = 1; i < EXPL_MAX; i++) {
 	map++;
@@ -502,7 +502,7 @@ int base;
 	map->submappings->glyphs[i].rgbsym =
 	  NHPROXY_RGB_SYM(rgb_colors[C(zapcolors[0])], showsyms[i + S_vbeam]);
 	map->submappings->glyphs[i].description =
-	  defsyms[i + S_vbeam].explanation;
+	  sym_desc[i + S_vbeam].explanation;
     }
     for(i = 1; i < NUM_ZAP; i++) {
 	map++;
@@ -574,7 +574,7 @@ set_glyph_mapping_warning(glyph)
 int glyph;
 {
     int i;
-    for(i = 0; i < WARNCOUNT; i++)
+    for(i = 0; i < MAXWARNINGS; i++)
 	glyph2proxy[warning_to_glyph(i)] = glyph++;
     return glyph;
 }
@@ -594,14 +594,14 @@ struct nhproxy_cb_get_glyph_mapping_res_mapping *map;
       alloc(map->n_submappings * sizeof(*map->submappings));
     map->submappings->symdef.rgbsym = NHPROXY_RGB_SYM(RGB_TRANSPARENT, 0);
     map->submappings->symdef.description = "";
-    map->submappings->n_glyphs = WARNCOUNT;
+    map->submappings->n_glyphs = MAXWARNINGS;
     map->submappings->glyphs =
       (struct nhproxy_cb_get_glyph_mapping_res_symdef *)
       alloc(map->submappings->n_glyphs * sizeof(*map->submappings->glyphs));
-    for(i = 0; i < WARNCOUNT; i++) {
+    for(i = 0; i < MAXWARNINGS; i++) {
 	map->submappings->glyphs[i].rgbsym =
-	  NHPROXY_RGB_SYM(rgb_colors[C(def_warnsyms[i].color)], warnsyms[i]);
-	map->submappings->glyphs[i].description = def_warnsyms[i].explanation;
+	  NHPROXY_RGB_SYM(rgb_colors[C(sym_desc[S_warn0 + i].color)], showsyms[S_warn0 + i]);
+	map->submappings->glyphs[i].description = sym_desc[S_warn0 + i].explanation;
     }
 }
 

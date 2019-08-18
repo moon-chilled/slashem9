@@ -287,7 +287,7 @@
 #define GLYPH_ZAP_OFF		((MAXEXPCHARS * EXPL_MAX) + GLYPH_EXPLODE_OFF)
 #define GLYPH_SWALLOW_OFF	((NUM_ZAP << 2) + GLYPH_ZAP_OFF)
 #define GLYPH_WARNING_OFF	((NUMMONS << 3) + GLYPH_SWALLOW_OFF)
-#define MAX_GLYPH		(WARNCOUNT      + GLYPH_WARNING_OFF)
+#define MAX_GLYPH		(MAXWARNINGS    + GLYPH_WARNING_OFF)
 
 #define NO_GLYPH MAX_GLYPH
 
@@ -367,9 +367,6 @@
 #define glyph_to_swallow(glyph)						\
 	(glyph_is_swallow(glyph) ? (((glyph) - GLYPH_SWALLOW_OFF) & 0x7) : \
 	0)
-#define glyph_to_warning(glyph)						\
-	(glyph_is_warning(glyph) ? ((glyph) - GLYPH_WARNING_OFF) :	\
-	NO_GLYPH);
 
 /*
  * Return true if the given glyph is what we want.  Note that bodies are
@@ -409,7 +406,7 @@
 #define glyph_is_swallow(glyph) \
     ((glyph) >= GLYPH_SWALLOW_OFF && (glyph) < (GLYPH_SWALLOW_OFF+(NUMMONS << 3)))
 #define glyph_is_warning(glyph)	\
-    ((glyph) >= GLYPH_WARNING_OFF && (glyph) < (GLYPH_WARNING_OFF + WARNCOUNT))
+    ((glyph) >= GLYPH_WARNING_OFF && (glyph) < (GLYPH_WARNING_OFF + MAXWARNINGS))
 
 #ifdef DISPLAY_LAYERS
 #define memory_is_invisible(x,y) (levl[x][y].mem_invis)

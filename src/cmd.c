@@ -3153,9 +3153,9 @@ static int wiz_show_display(void) {
 		obj_typename(lev->mem_obj - 1) : "none");
     putstr(win, 0, buf);
     sprintf(buf, "Trap: %s", lev->mem_trap ?
-	    defsyms[trap_to_defsym(lev->mem_trap)].explanation : "none");
+	    sym_desc[trap_to_defsym(lev->mem_trap)].explanation : "none");
     putstr(win, 0, buf);
-    sprintf(buf, "Backgroud: %s", defsyms[lev->mem_bg].explanation);
+    sprintf(buf, "Backgroud: %s", sym_desc[lev->mem_bg].explanation);
     putstr(win, 0, buf);
     putstr(win, 0, "");
     glyph = glyph_at(cc.x, cc.y);
@@ -3182,7 +3182,7 @@ static int wiz_show_display(void) {
     } else if (glyph_is_invisible(glyph))
 	strcat(buf, "invisible monster");
     else if (glyph_is_cmap(glyph))
-	strcat(buf, defsyms[glyph_to_cmap(glyph)].explanation);
+	strcat(buf, sym_desc[glyph_to_cmap(glyph)].explanation);
     else
 	sprintf(eos(buf), "[%d]", glyph);
     putstr(win, 0, buf);

@@ -155,12 +155,8 @@ struct instance_flags {
 	boolean  cbreak;	/* in cbreak mode, rogue format */
 #ifdef CURSES_GRAPHICS
 	boolean  classic_status;    /* What kind of horizontal statusbar to use */
-	boolean  cursesgraphics;    /* Use portable curses extended characters */
 #endif
-	boolean  DECgraphics;	/* use DEC VT-xxx extended character set */
 	boolean  echo;		/* 1 to echo characters */
-	boolean  IBMgraphics;	/* use IBM extended character set */
-	boolean  UTF8graphics;  /* use UTF-8 characters */
 	unsigned msg_history;	/* hint: # of top lines to save */
 	boolean  msg_is_alert;  /* need to press an extra key to get rid of a --More-- prompt.  Only in curses */
 	boolean  num_pad;	/* use numbers for movement commands */
@@ -199,11 +195,6 @@ struct instance_flags {
 #if defined(MICRO) || defined(WIN32)
 	boolean  rawio;		/* whether can use rawio (IOCTL call) */
 #endif
-#ifdef MAC_GRAPHICS_ENV
-	boolean  MACgraphics;	/* use Macintosh extended character set, as
-				   as defined in the special font HackFont */
-	unsigned  use_stone;		/* use the stone ppats */
-#endif
 #ifdef WIN32
 	boolean hassound;	/* has a sound card */
 	boolean usesound;	/* use the sound card */
@@ -216,6 +207,7 @@ struct instance_flags {
 	boolean lan_mail;	/* mail is initialized */
 	boolean lan_mail_fetched; /* mail is awaiting display */
 #endif
+	int graphics;
 	boolean use_menu_glyphs; /* item glyphs in inventory */
 /*
  * Window capability support.
@@ -259,16 +251,15 @@ struct instance_flags {
 	boolean	wc_splash_screen;	/* display an opening splash screen or not */
 	boolean	wc_popup_dialog;	/* put queries in pop up dialogs instead of
 				   		in the message window */
-	boolean wc_eight_bit_input;	/* allow eight bit input               */
 	boolean wc_mouse_support;	/* allow mouse support */
 	boolean wc2_fullscreen;		/* run fullscreen */
 	boolean wc2_softkeyboard;	/* use software keyboard */
 	boolean wc2_wraptext;		/* wrap text */
-    int     wc2_term_cols;      /* terminal width, in characters */
-    int     wc2_term_rows;      /* terminal height, in characters */
-    int     wc2_windowborders;  /* display borders on NetHack windows */
-    int     wc2_petattr;        /* points to text attributes for pet */
-    boolean wc2_guicolor;       /* allow colors in GUI (outside map) */
+	int     wc2_term_cols;      /* terminal width, in characters */
+	int     wc2_term_rows;      /* terminal height, in characters */
+	int     wc2_windowborders;  /* display borders on NetHack windows */
+	int     wc2_petattr;        /* points to text attributes for pet */
+	boolean wc2_guicolor;       /* allow colors in GUI (outside map) */
 
 	boolean  cmdassist;	/* provide detailed assistance for some commands */
 	boolean	 obsolete;	/* obsolete options can point at this, it isn't used */
@@ -292,15 +283,9 @@ struct instance_flags {
 /*
  * Old deprecated names
  */
-#ifdef TTY_GRAPHICS
-#define eight_bit_tty wc_eight_bit_input
-#endif
 #define use_color wc_color
 #define hilite_pet wc_hilite_pet
 #define use_inverse wc_inverse
-#ifdef MAC_GRAPHICS_ENV
-#define large_font obsolete
-#endif
 #ifdef MAC
 #define popup_dialog wc_popup_dialog
 #endif

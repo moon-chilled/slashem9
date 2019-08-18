@@ -55,10 +55,6 @@ char *hilites[CLR_MAX]; /* terminal escapes for the various colors */
 static char *KS = NULL, *KE = NULL;	/* keypad sequences */
 static char nullstr[] = "";
 
-#if defined(ASCIIGRAPH) && !defined(NO_TERMS)
-extern boolean HE_resets_AS;
-#endif
-
 #ifndef TERMLIB
 static char tgotobuf[20];
 #define tgoto(fmt, x, y)	(sprintf(tgotobuf, fmt, y+1, x+1), tgotobuf)
@@ -391,72 +387,10 @@ void tty_number_pad(int state) {
 	}
 }
 
-#ifdef TERMLIB
-extern void (*decgraphics_mode_callback)(void);    /* defined in drawing.c */
-static void tty_decgraphics_termcap_fixup(void);
-
-/*
-   We call this routine whenever DECgraphics mode is enabled, even if it
-   has been previously set, in case the user manages to reset the fonts.
-   The actual termcap fixup only needs to be done once, but we can't
-   call xputs() from the option setting or graphics assigning routines,
-   so this is a convenient hook.
- */
-static void tty_decgraphics_termcap_fixup(void) {
-	static char ctrlN[]   = "\016";
-	static char ctrlO[]   = "\017";
-	static char appMode[] = "\033=";
-	static char numMode[] = "\033>";
-
-	/* these values are missing from some termcaps */
-	if (!AS) AS = ctrlN;	/* ^N (shift-out [graphics font]) */
-	if (!AE) AE = ctrlO;	/* ^O (shift-in  [regular font])  */
-	if (!KS) KS = appMode;	/* ESC= (application keypad mode) */
-	if (!KE) KE = numMode;	/* ESC> (numeric keypad mode)	  */
-	/*
-	 * Select the line-drawing character set as the alternate font.
-	 * Do not select NA ASCII as the primary font since people may
-	 * reasonably be using the UK character set.
-	 */
-	if (iflags.DECgraphics)
-		xputs("\033)0");
-
-#if defined(ASCIIGRAPH) && !defined(NO_TERMS)
-	/* some termcaps suffer from the bizarre notion that resetting
-	   video attributes should also reset the chosen character set */
-    {
-	const char *nh_he = nh_HE, *ae = AE;
-	int he_limit, ae_length;
-
-	if (digit(*ae)) {	/* skip over delay prefix, if any */
-	    do ++ae; while (digit(*ae));
-	    if (*ae == '.') { ++ae; if (digit(*ae)) ++ae; }
-	    if (*ae == '*') ++ae;
-	}
-	/* can't use nethack's case-insensitive strstri() here, and some old
-	   systems don't have strstr(), so use brute force substring search */
-	ae_length = strlen(ae), he_limit = strlen(nh_he);
-	while (he_limit >= ae_length) {
-	    if (strncmp(nh_he, ae, ae_length) == 0) {
-		HE_resets_AS = true;
-		break;
-	    }
-	    ++nh_he, --he_limit;
-	}
-    }
-#endif
-}
-#endif	/* TERMLIB */
-
 void tty_start_screen(void) {
 	xputs(TI);
 	xputs(VS);
 
-#ifdef TERMLIB
-	if (iflags.DECgraphics) tty_decgraphics_termcap_fixup();
-	/* set up callback in case option is not set yet but toggled later */
-	decgraphics_mode_callback = tty_decgraphics_termcap_fixup;
-#endif
 	if (iflags.num_pad) tty_number_pad(1);	/* make keypad send digits */
 }
 
@@ -602,7 +536,6 @@ void tty_nhbell(void) {
 	fflush(stdout);
 }
 
-#ifdef ASCIIGRAPH
 void graph_on(void) {
 	if (AS) xputs(AS);
 }
@@ -610,7 +543,6 @@ void graph_on(void) {
 void graph_off(void) {
 	if (AE) xputs(AE);
 }
-#endif
 
 #if !defined(MICRO)
 static const short tmspc10[] = {		/* from termcap */

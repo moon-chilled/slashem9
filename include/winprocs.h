@@ -178,13 +178,12 @@ extern struct window_procs windowprocs;
 #define WC_SPLASH_SCREEN 0x800000L	/* 24 supports display of splash screen      */
 #define WC_POPUP_DIALOG	 0x1000000L	/* 25 supports queries in pop dialogs        */
 #define WC_SCROLL_AMOUNT 0x2000000L	/* 26 scroll this amount at scroll margin    */
-#define WC_EIGHT_BIT_IN	 0x4000000L	/* 27 8-bit character input                  */
-#define WC_PERM_INVENT	 0x8000000L	/* 28 8-bit character input                  */
-#define WC_MAP_MODE	 0x10000000L	/* 29 map_mode option                        */
-#define WC_WINDOWCOLORS  0x20000000L	/* 30 background color for message window    */
-#define WC_PLAYER_SELECTION  0x40000000L /* 31 background color for message window    */
-#define WC_MOUSE_SUPPORT 0x80000000L	/* 32 mouse support                          */
-					/* no free bits */
+#define WC_PERM_INVENT	 0x4000000L	/* 27 permanent inventory sidebar            */
+#define WC_MAP_MODE	 0x8000000L	/* 28 map_mode option                        */
+#define WC_WINDOWCOLORS  0x10000000L	/* 29 background color for message window    */
+#define WC_PLAYER_SELECTION  0x20000000L/* 30 background color for message window    */
+#define WC_MOUSE_SUPPORT 0x40000000L	/* 31 mouse support                          */
+					/* 1 free bit */
 
 #define WC2_FULLSCREEN		0x01L	/* 01 display full screen                    */
 #define WC2_SOFTKEYBOARD	0x02L	/* 02 software keyboard                      */

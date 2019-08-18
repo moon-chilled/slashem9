@@ -174,7 +174,7 @@ lookat(x, y, buf, monbuf)
 		if (tt == BEAR_TRAP || tt == PIT ||
 			tt == SPIKED_PIT || tt == WEB)
 		    sprintf(eos(buf), ", trapped in %s",
-			    an(defsyms[trap_to_defsym(tt)].explanation));
+			    an(sym_desc[trap_to_defsym(tt)].explanation));
 	    }
 
 	    {
@@ -278,7 +278,7 @@ lookat(x, y, buf, monbuf)
 	    strcat(buf, " in molten lava");	/* [can this ever happen?] */
     } else if (glyph_is_trap(glyph)) {
 	int tnum = what_trap(glyph_to_trap(glyph));
-	strcpy(buf, defsyms[trap_to_defsym(tnum)].explanation);
+	strcpy(buf, sym_desc[trap_to_defsym(tnum)].explanation);
     } else if(!glyph_is_cmap(glyph)) {
 	strcpy(buf,"unexplored area");
     } else switch(glyph_to_cmap(glyph)) {
@@ -304,7 +304,7 @@ lookat(x, y, buf, monbuf)
 	strcpy(buf, level.flags.lethe? "sparkling water" : "water");
 	break;
     default:
-	strcpy(buf,defsyms[glyph_to_cmap(glyph)].explanation);
+	strcpy(buf,sym_desc[glyph_to_cmap(glyph)].explanation);
 	break;
     }
 
@@ -490,7 +490,7 @@ do_look(quick)
     coord   cc;			/* screen pos of unknown glyph */
     boolean save_verbose;	/* saved value of flags.verbose */
     boolean from_screen;	/* question from the screen */
-    bool    force_defsyms = false;/* force using glyphs from defsyms[].sym */
+    bool    force_asciigraphics = false;/* force using glyphs from ascii_graphics[] */
     boolean need_to_look;	/* need to get explan. from glyph */
     boolean hit_trap;		/* true if found trap explanation */
     int skipped_venom;		/* non-zero if we ignored "splash of venom" */
@@ -553,14 +553,9 @@ do_look(quick)
 	    /* Convert the glyph at the selected position to a symbol. */
 	    glyph = glyph_at(cc.x,cc.y);
 	    if (glyph_is_cmap(glyph)) {
-		    if (iflags.UTF8graphics) {
-			    // FIXME: display utf-8 on topl
-			    force_defsyms = true;
-			    sym = defsyms[glyph_to_cmap(glyph)].sym;
-		    } else {
-			    sym = showsyms[glyph_to_cmap(glyph)];
-		    }
-
+		    // FIXME: display utf-8 on topl
+		    force_asciigraphics = true;
+		    sym = ascii_graphics[glyph_to_cmap(glyph)];
 	    } else if (glyph_is_trap(glyph)) {
 		sym = showsyms[trap_to_defsym(glyph_to_trap(glyph))];
 	    } else if (glyph_is_object(glyph)) {
@@ -575,8 +570,7 @@ do_look(quick)
 	    } else if (glyph_is_invisible(glyph)) {
 		sym = DEF_INVISIBLE;
 	    } else if (glyph_is_warning(glyph)) {
-		sym = glyph_to_warning(glyph);
-	    	sym = warnsyms[sym];
+	    	sym = showsyms[glyph_to_cmap(sym)];
 	    } else {
 		impossible("do_look:  bad glyph %d at (%d,%d)",
 						glyph, (int)cc.x, (int)cc.y);
@@ -660,8 +654,8 @@ do_look(quick)
 
 	/* Now check for graphics symbols */
 	for (hit_trap = false, i = 0; i < MAXPCHARS; i++) {
-	    x_str = defsyms[i].explanation;
-	    if (sym == (force_defsyms ? defsyms[i].sym : (from_screen ? showsyms[i] : defsyms[i].sym)) && *x_str) {
+	    x_str = sym_desc[i].explanation;
+	    if (sym == (force_asciigraphics ? ascii_graphics[i] : (from_screen ? showsyms[i] : ascii_graphics[i])) && *x_str) {
 		/* avoid "an air", "a water", "a floor of a room", or "a dark part of a room" */
 		int article = ((i == S_room) || (i == S_darkroom)) ? 2 :	// 2=>"the"
 			      !(strcmp(x_str, "air") == 0 ||	/* 1=>"an"  */
@@ -697,16 +691,15 @@ do_look(quick)
 	}
 
 	/* Now check for warning symbols */
-	for (i = 1; i < WARNCOUNT; i++) {
-	    x_str = def_warnsyms[i].explanation;
-	    if (sym == (from_screen ? warnsyms[i] : def_warnsyms[i].sym)) {
+	for (i = 1; i < MAXWARNINGS; i++) {
+	    x_str = sym_desc[S_warn0 + i].explanation;
+	    if (sym == (from_screen ? showsyms : ascii_graphics)[S_warn0 + i]) {
 		if (!found) {
-			sprintf(out_str, "%c       %s",
-				sym, def_warnsyms[i].explanation);
-			firstmatch = def_warnsyms[i].explanation;
+			sprintf(out_str, "%c       %s", sym, sym_desc[S_warn0 + i].explanation);
+			firstmatch = sym_desc[S_warn0 + i].explanation;
 			found++;
 		} else {
-			found += append_str(out_str, def_warnsyms[i].explanation);
+			found += append_str(out_str, sym_desc[S_warn0 + i].explanation);
 		}
 		/* Kludge: warning trumps boulders on the display.
 		   Reveal the boulder too or player can get confused */
@@ -826,7 +819,7 @@ doidtrap (void)
 		}
 		tt = what_trap(tt);
 		pline("That is %s%s%s.",
-		      an(defsyms[trap_to_defsym(tt)].explanation),
+		      an(sym_desc[trap_to_defsym(tt)].explanation),
 		      !trap->madeby_u ? "" : (tt == WEB) ? " woven" :
 			  /* trap doors & spiked pits can't be made by
 			     player, and should be considered at least

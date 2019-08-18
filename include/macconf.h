@@ -114,7 +114,5 @@ extern void error(const char *,...);
  */
 #define PORT_HELP "MacHelp"
 
-#define MAC_GRAPHICS_ENV
-
 # endif /* ! MACCONF_H */
 #endif /* MAC */

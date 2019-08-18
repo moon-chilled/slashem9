@@ -649,7 +649,7 @@ boolean hurtle_step(void *arg, int x, int y) {
 		if (ttmp->tseen)
 		    You("pass right over %s %s.",
 		    	(ttmp->ttyp == ARROW_TRAP) ? "an" : "a",
-		    	defsyms[trap_to_defsym(ttmp->ttyp)].explanation);
+		    	sym_desc[trap_to_defsym(ttmp->ttyp)].explanation);
     	}
     }
     if (--*range < 0)		/* make sure our range never goes negative */

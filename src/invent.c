@@ -2245,7 +2245,7 @@ const char *dfeature_at(int x, int y, char *buf) {
 	else if (ltyp == IRONBARS)
 	    dfeature = "set of iron bars";
 
-	if (cmap >= 0) dfeature = defsyms[cmap].explanation;
+	if (cmap >= 0) dfeature = sym_desc[cmap].explanation;
 	if (dfeature) strcpy(buf, dfeature);
 	return dfeature;
 }
@@ -2284,7 +2284,7 @@ int look_here(int obj_cnt /* obj_cnt > 0 implies that autopickup is in progess *
 	}
 	if (!skip_objects && (trap = t_at(u.ux,u.uy)) && trap->tseen)
 		There("is %s here.",
-			an(defsyms[trap_to_defsym(trap->ttyp)].explanation));
+			an(sym_desc[trap_to_defsym(trap->ttyp)].explanation));
 
 	otmp = level.objects[u.ux][u.uy];
 	dfeature = dfeature_at(u.ux, u.uy, fbuf2);

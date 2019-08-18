@@ -44,7 +44,7 @@ struct window_procs tty_procs = {
 #if defined(WIN32CON)
 	WC_MOUSE_SUPPORT|
 #endif
-	WC_COLOR|WC_HILITE_PET|WC_INVERSE|WC_EIGHT_BIT_IN,
+	WC_COLOR|WC_HILITE_PET|WC_INVERSE,
 	0L,
 	tty_init_nhwindows,
 	tty_player_selection,
@@ -129,9 +129,8 @@ static int clipx = 0, clipxmax = 0;
 static int clipy = 0, clipymax = 0;
 #endif /* CLIPPING */
 
-#if defined(ASCIIGRAPH) && !defined(NO_TERMS)
+#ifndef NO_TERMS
 boolean GFlag = false;
-boolean HE_resets_AS;	/* see termcap.c */
 #endif
 
 #if defined(MICRO) || defined(WIN32CON)
@@ -1788,11 +1787,7 @@ static void tty_putsym(winid window, int x, int y, char ch) {
 		case NHW_MAP:
 		case NHW_BASE:
 			tty_curs(window, x, y);
-			if (iflags.UTF8graphics) {
-				pututf8char(ch);
-			} else {
-				putchar(ch);
-			}
+			pututf8char(ch);
 
 			ttyDisplay->curx++;
 			cw->curx++;
@@ -2404,7 +2399,7 @@ void docorner(int xmin, int ymax) {
 }
 
 void end_glyphout(void) {
-#if defined(ASCIIGRAPH) && !defined(NO_TERMS)
+#ifndef NO_TERMS
 	if (GFlag) {
 		GFlag = false;
 		graph_off();
@@ -2420,12 +2415,9 @@ void end_glyphout(void) {
 void g_putch(int in_ch) {
 	char ch = (char)in_ch;
 
-# if defined(ASCIIGRAPH) && !defined(NO_TERMS)
-	if (iflags.IBMgraphics || iflags.eight_bit_tty) {
-		/* IBM-compatible displays don't need other stuff */
-		putchar(ch);
-	} else if (ch & 0x80) {
-		if (!GFlag || HE_resets_AS) {
+# ifndef NO_TERMS
+	if (ch & 0x80) {
+		if (!GFlag) {
 			graph_on();
 			GFlag = true;
 		}
@@ -2441,7 +2433,7 @@ void g_putch(int in_ch) {
 #else
 	putchar(ch);
 
-#endif	/* ASCIIGRAPH && !NO_TERMS */
+#endif	/* !NO_TERMS */
 
 	return;
 }
@@ -2540,11 +2532,7 @@ void tty_print_glyph(winid window, xchar x, xchar y, int glyph) {
 			term_start_bgcolor(CLR_BLUE);
 	}
 
-	if (iflags.UTF8graphics) {
-		pututf8char(get_unicode_codepoint(ch));
-	} else {
-		g_putch(ch);
-	}
+	pututf8char(ch);
 
 	if (reverse_on) {
 		term_end_attr(ATR_INVERSE);

@@ -212,23 +212,31 @@
 #define S_explode8	92	/* explosion bottom center		*/
 #define S_explode9	93	/* explosion bottom right		*/
 
-/* end effects */
+/* end effects, begin warning characters */
 
-#define MAXPCHARS	94	/* maximum number of mapped characters */
+#define S_warn0		94
+#define S_warn1		95
+#define S_warn2		96
+#define S_warn3		97
+#define S_warn4		98
+#define S_warn5		99
+
+/* end warning characters */
+
+#define MAXPCHARS	100	/* maximum number of mapped characters */
 #define MAXDCHARS	43	/* maximum of mapped dungeon characters */
 #define MAXTCHARS	22	/* maximum of mapped trap characters */
-#define MAXECHARS       29      /* maximum of mapped effects characters */
+#define MAXECHARS	29	/* maximum of mapped effects characters */
 #define MAXEXPCHARS	9	/* number of explosion characters */
+#define MAXWARNINGS	6	/* number of warning characters */
 
 struct symdef {
-    uchar sym;
-    const char	*explanation;
+    const char *explanation;
     uchar color;
 };
 
-extern const struct symdef defsyms[MAXPCHARS];	/* defaults */
+extern const struct symdef sym_desc[MAXPCHARS];
 extern glyph_t showsyms[MAXPCHARS];
-extern const struct symdef def_warnsyms[WARNCOUNT];
 #ifdef USER_DUNGEONCOLOR
 extern uchar showsymcolors[MAXPCHARS];
 #endif
@@ -236,12 +244,9 @@ extern uchar showsymcolors[MAXPCHARS];
 /*
  * Graphics sets for display symbols
  */
-#define ASCII_GRAPHICS	0	/* regular characters: '-', '+', &c */
-#define IBM_GRAPHICS	1	/* PC graphic characters */
-#define DEC_GRAPHICS	2	/* VT100 line drawing characters */
-#define MAC_GRAPHICS	3	/* Macintosh drawing characters */
-#define CURS_GRAPHICS   4       /* Portable curses drawing characters */
-#define UTF8_GRAPHICS   5       /* UTF-8 characters */
+#define ASCII_GRAPHICS	0	// regular characters: '-', '+', &c
+#define UTF8_GRAPHICS	1	// UTF-8 characters
+#define UTF8COMPAT_GRAPHICS 2	// UTF-8 characters compatible with WGL4
 
 /*
  * The 5 possible states of doors

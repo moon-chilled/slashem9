@@ -1103,7 +1103,7 @@ void find_trap(struct trap *trap) {
 	cleared = true;
     }
 
-    You("find %s.", an(defsyms[trap_to_defsym(tt)].explanation));
+    You("find %s.", an(sym_desc[trap_to_defsym(tt)].explanation));
 
     if (cleared) {
 	display_nhwindow(WIN_MAP, true);	/* wait */

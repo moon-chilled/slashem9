@@ -34,9 +34,6 @@ extern int nroom;
 extern int nsubroom;
 extern int occtime;
 
-#define WARNCOUNT 6			/* number of different warning levels */
-extern uchar warnsyms[WARNCOUNT];
-
 extern int x_maze_max, y_maze_max;
 extern int otg_temp;
 
@@ -551,5 +548,8 @@ extern struct _plinemsg *pline_msg;
    but that invalidates saves */
 extern glyph_t objclass_unicode_codepoint[NUM_OBJECTS];
 extern glyph_t permonst_unicode_codepoint[NUMMONS];
+
+// FIXME: also fix this
+extern const glyph_t ascii_graphics[100];
 
 #endif /* DECL_H */

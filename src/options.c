@@ -60,17 +60,9 @@ static struct Bool_Opt
 	{"confirm",&flags.confirm, true, SET_IN_GAME},
 #ifdef CURSES_GRAPHICS
 	{"classic_status", &iflags.classic_status, true, SET_IN_GAME},
-	{"cursesgraphics", &iflags.cursesgraphics, true, SET_IN_GAME},
 #else
 	{"classic_status", NULL, true, SET_IN_FILE},
-	{"cursesgraphics", NULL, false, SET_IN_FILE},
 #endif
-#if defined(TERMLIB) && !defined(MAC_GRAPHICS_ENV)
-	{"DECgraphics", &iflags.DECgraphics, false, SET_IN_GAME},
-#else
-	{"DECgraphics", NULL, false, SET_IN_FILE},
-#endif
-	{"eight_bit_tty", &iflags.wc_eight_bit_input, false, SET_IN_GAME},	/*WC*/
 #if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS)
 	{"extmenu", &iflags.extmenu, false, SET_IN_GAME},
 #else
@@ -90,11 +82,6 @@ static struct Bool_Opt
 	{"hilite_hidden_stairs",    &iflags.hilite_hidden_stairs, false, SET_IN_GAME},  /*WC*/
 	{"hilite_obj_piles",    &iflags.hilite_obj_piles, false, SET_IN_GAME},  /*WC*/
 	{"hitpointbar", &iflags.hitpointbar, true, SET_IN_GAME},
-#ifdef ASCIIGRAPH
-	{"IBMgraphics", &iflags.IBMgraphics, false, SET_IN_GAME},
-#else
-	{"IBMgraphics", NULL, false, SET_IN_FILE},
-#endif
 #ifndef MAC
 	{"ignintr", &flags.ignintr, false, SET_IN_GAME},
 #else
@@ -111,11 +98,6 @@ static struct Bool_Opt
 	{"legacy", &flags.legacy, true, DISP_IN_GAME},
 	{"lit_corridor", &flags.lit_corridor, false, SET_IN_GAME},
 	{"lootabc", &iflags.lootabc, false, SET_IN_GAME},
-#ifdef MAC_GRAPHICS_ENV
-	{"Macgraphics", &iflags.MACgraphics, true, SET_IN_GAME},
-#else
-	{"Macgraphics", NULL, false, SET_IN_FILE},
-#endif
 #ifdef MAIL
 	{"mail", &flags.biff, true, SET_IN_GAME},
 #else
@@ -198,7 +180,6 @@ static struct Bool_Opt
 	{"tombstone",&flags.tombstone, true, SET_IN_GAME},
 	{"toptenwin",&flags.toptenwin, false, SET_IN_GAME},
 	{"travel", &iflags.travelcmd, true, SET_IN_GAME},
-	{"UTF8graphics", &iflags.UTF8graphics, false, SET_IN_GAME},
 	{"use_inverse", &iflags.wc_inverse, true, SET_IN_GAME},		/*WC*/
 	{"verbose", &flags.verbose, true, SET_IN_GAME},
 	{"wraptext", &iflags.wc2_wraptext, false, SET_IN_GAME},
@@ -265,6 +246,7 @@ static struct Comp_Opt
 						8, DISP_IN_GAME },
 	{ "ghoulname",  "the name of your (first) ghoul (e.g., ghoulname:Casper)",
 						PL_PSIZ, DISP_IN_GAME },
+	{ "graphics", "Graphical mode", sizeof("UTF-8 (compatible)"), SET_IN_GAME },
 	{ "horsename", "the name of your (first) horse (e.g., horsename:Silver)",
 						PL_PSIZ, DISP_IN_GAME },
 	{ "map_mode", "map display mode under Windows", 20, DISP_IN_GAME },	/*WC*/
@@ -452,7 +434,6 @@ static void graphics_opts(char *,const char *,int,int);
 static int feature_alert_opts(char *, const char *);
 static const char *get_compopt_value(const char *, char *);
 static boolean special_handling(const char *, boolean, boolean);
-static void warning_opts(char *,const char *);
 static void duplicate_opt_detection(const char *, int);
 
 static void wc_set_font_name(int, char *);
@@ -505,9 +486,7 @@ nh_getenv (const char *ev)
 		return NULL;
 }
 
-void
-initoptions (void)
-{
+void initoptions(void) {
 #ifndef MAC
 	char *opts;
 #endif
@@ -545,8 +524,6 @@ initoptions (void)
 		oc_syms[i] = (uchar) def_oc_syms[i];
 	for (i = 0; i < MAXMCLASSES; i++)
 		monsyms[i] = (uchar) def_monsyms[i];
-	for (i = 0; i < WARNCOUNT; i++)
-		warnsyms[i] = def_warnsyms[i].sym;
 
 	/* FIXME: These should be integrated into objclass and permonst structs,
 	   but that invalidates saves */
@@ -566,35 +543,10 @@ initoptions (void)
 
 	for (i = 0; i < NUM_DISCLOSURE_OPTIONS; i++)
 		flags.end_disclose[i] = DISCLOSE_PROMPT_DEFAULT_NO;
-	switch_graphics(ASCII_GRAPHICS);	/* set default characters */
-#if defined(UNIX) && defined(TTY_GRAPHICS)
-	/*
-	 * Set defaults for some options depending on what we can
-	 * detect about the environment's capabilities.
-	 * This has to be done after the global initialization above
-	 * and before reading user-specific initialization via
-	 * config file/environment variable below.
-	 */
-	/* this detects the IBM-compatible console on most 386 boxes */
-	if ((opts = nh_getenv("TERM")) && !strncmp(opts, "AT", 2)) {
-		switch_graphics(IBM_GRAPHICS);
-		iflags.use_color = true;
-	}
-#endif /* UNIX && TTY_GRAPHICS */
-#ifdef UNIX
-# ifdef TTY_GRAPHICS
-	/* detect whether a "vt" terminal can handle alternate charsets */
-	if ((opts = nh_getenv("TERM")) &&
-	    !strncmpi(opts, "vt", 2) && AS && AE &&
-	    index(AS, '\016') && index(AE, '\017')) {
-		switch_graphics(DEC_GRAPHICS);
-	}
-# endif
-#endif // UNIX
 
-#ifdef MAC_GRAPHICS_ENV
-	switch_graphics(MAC_GRAPHICS);
-#endif /* MAC_GRAPHICS_ENV */
+	switch_graphics(UTF8_GRAPHICS); // set default characters
+	assign_colors(NULL, 0, MAXPCHARS, 0);
+
 	flags.menu_style = MENU_FULL;
 
 	/* since this is done before init_objects(), do partial init here */
@@ -893,36 +845,6 @@ int maxlen, offset;
 	for (i = 0; i < length; i++)
 		translate[i] = opts[i];
 	assign_graphics(translate, length, maxlen, offset);
-}
-
-static void
-warning_opts(opts, optype)
-char *opts;
-const char *optype;
-{
-	uchar translate[MAXPCHARS+1];
-	int length, i;
-
-	if (!(opts = string_for_env_opt(optype, opts, false)))
-		return;
-	escapes(opts, opts);
-
-	length = strlen(opts);
-	if (length > WARNCOUNT) length = WARNCOUNT;
-	/* match the form obtained from PC configuration files */
-	for (i = 0; i < length; i++)
-	     translate[i] = (((i < WARNCOUNT) && opts[i]) ?
-			   (uchar) opts[i] : def_warnsyms[i].sym);
-	assign_warnings(translate);
-}
-
-void
-assign_warnings(graph_chars)
-uchar *graph_chars;
-{
-	int i;
-	for (i = 0; i < WARNCOUNT; i++)
-	    if (graph_chars[i]) warnsyms[i] = graph_chars[i];
 }
 
 static int
@@ -1469,7 +1391,7 @@ bool parse_symbol(const char *str) {
 
        /* find dungeon feature */
        for (i=0; i < MAXPCHARS; i++) {
-               if (!strcmpi(feature, defsyms[i].explanation)) {
+               if (!strcmpi(feature, sym_desc[i].explanation)) {
                        assign_utf8graphics_symbol(i, num);
                        return true;
                }
@@ -1680,6 +1602,35 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 		    else
 			badoption(opts);
 		}
+		return;
+	}
+
+	fullname = "graphics";
+	if (match_optname(opts, fullname, 4, true)) {
+		if (negated) {
+			bad_negation(fullname, false);
+		} else if ((op = string_for_opt(opts, false)) != 0) {
+			if (!strcmpi(op, "ascii")) {
+				iflags.graphics = ASCII_GRAPHICS;
+			} else if (!strcmpi(op, "utf8")) {
+				iflags.graphics = UTF8_GRAPHICS;
+			} else if (!strcmpi(op, "utf8compat")) {
+				iflags.graphics = UTF8COMPAT_GRAPHICS;
+			} else {
+				badoption(opts);
+			}
+
+			switch_graphics(iflags.graphics);
+			doredraw();
+
+#ifdef REINCARNATION
+			if (!initial && u.uz.dlevel &&
+			      Is_rogue_level(&u.uz))
+				assign_rogue_graphics(true);
+#endif
+
+		}
+
 		return;
 	}
 
@@ -1909,12 +1860,6 @@ goodfruit:
 	}
 
 	/* graphics:string */
-	fullname = "graphics";
-	if (match_optname(opts, fullname, 2, true)) {
-		if (negated) bad_negation(fullname, false);
-		else graphics_opts(opts, fullname, MAXPCHARS, 0);
-		return;
-	}
 	fullname = "dungeon";
 	if (match_optname(opts, fullname, 2, true)) {
 		if (negated) bad_negation(fullname, false);
@@ -1988,12 +1933,7 @@ goodfruit:
 		    monsyms[i+1] = (uchar) opts[i];
 		return;
 	}
-	fullname = "warnings";
-	if (match_optname(opts, fullname, 5, true)) {
-		if (negated) bad_negation(fullname, false);
-		else warning_opts(opts, fullname);
-		return;
-	}
+
 	/* boulder:symbol */
 	fullname = "boulder";
 	if (match_optname(opts, fullname, 7, true)) {
@@ -2750,56 +2690,6 @@ goodfruit:
 
 			duplicate_opt_detection(boolopt[i].name, 0);
 
-#if defined(TERMLIB) || defined(ASCIIGRAPH) || defined(MAC_GRAPHICS_ENV) || defined(CURSES_GRAPHICS)
-			if (boolopt[i].addr == &iflags.UTF8graphics
-# ifdef TERMLIB
-				 || (boolopt[i].addr) == &iflags.DECgraphics
-# endif
-# ifdef ASCIIGRAPH
-				 || (boolopt[i].addr) == &iflags.IBMgraphics
-# endif
-# ifdef MAC_GRAPHICS_ENV
-				 || (boolopt[i].addr) == &iflags.MACgraphics
-# endif
-# ifdef CURSES_GRAPHICS
-				 || (boolopt[i].addr) == &iflags.cursesgraphics
-# endif
-				) {
-# ifdef REINCARNATION
-			    /* [ALI] GTK port may call doset() after initial
-			     * but before we start a game. Prevent false match.
-			     */
-			    if (!initial && u.uz.dlevel &&
-			      Is_rogue_level(&u.uz))
-				assign_rogue_graphics(false);
-# endif
-			    need_redraw = true;
-# ifdef TERMLIB
-			    if ((boolopt[i].addr) == &iflags.DECgraphics)
-				switch_graphics(iflags.DECgraphics ?  DEC_GRAPHICS : ASCII_GRAPHICS);
-# endif
-# ifdef ASCIIGRAPH
-			    if ((boolopt[i].addr) == &iflags.IBMgraphics)
-				switch_graphics(iflags.IBMgraphics ?  IBM_GRAPHICS : ASCII_GRAPHICS);
-# endif
-# ifdef MAC_GRAPHICS_ENV
-			    if ((boolopt[i].addr) == &iflags.MACgraphics)
-				switch_graphics(iflags.MACgraphics ?  MAC_GRAPHICS : ASCII_GRAPHICS);
-# endif
-			    if ((boolopt[i].addr) == &iflags.UTF8graphics)
-				    switch_graphics(iflags.UTF8graphics ? UTF8_GRAPHICS : ASCII_GRAPHICS); 
-# ifdef CURSES_GRAPHICS
-			    if ((boolopt[i].addr) == &iflags.cursesgraphics)
-				switch_graphics(iflags.cursesgraphics ?  CURS_GRAPHICS : ASCII_GRAPHICS);
-# endif
-# ifdef REINCARNATION
-			    if (!initial && u.uz.dlevel &&
-			      Is_rogue_level(&u.uz))
-				assign_rogue_graphics(true);
-# endif
-			}
-#endif /* TERMLIB || ASCIIGRAPH || MAC_GRAPHICS_ENV */
-
 			/* only do processing below if setting with doset() */
 			if (initial) return;
 
@@ -2831,22 +2721,14 @@ goodfruit:
 				vision_full_recalc = 1;	/* delayed recalc */
 				if (iflags.use_color) need_redraw = true;	/* darkroom refresh */
 			    }
-			}
-			else if ((boolopt[i].addr) == &iflags.use_inverse ||
+			} else if ((boolopt[i].addr) == &iflags.use_inverse ||
 					(boolopt[i].addr) == &iflags.showrace ||
 					(boolopt[i].addr) == &iflags.hilite_pet ||
 					(boolopt[i].addr) == &iflags.wc2_guicolor) {
 			    need_redraw = true;
-			}
-#ifdef CURSES_GRAPHICS
-			else if ((boolopt[i].addr) == &iflags.cursesgraphics) {
+			} else if ((boolopt[i].addr) == &iflags.use_color) {
 			    need_redraw = true;
-			}
-#endif
-			else if ((boolopt[i].addr) == &iflags.use_color) {
-			    need_redraw = true;
-			}
-                        else if ((boolopt[i].addr) == &flags.perm_invent)
+			} else if ((boolopt[i].addr) == &flags.perm_invent)
                             update_inventory();
 
 			return;
@@ -3028,6 +2910,11 @@ static const char *burdentype[] = {
 static const char *runmodes[] = {
 	"teleport", "run", "walk", "crawl"
 };
+
+static const char *graphicses[] = {
+	"ascii", "UTF-8", "UTF-8 (compatible)"
+};
+
 
 /*
  * Convert the given string of object classes to a string of default object
@@ -3435,6 +3322,26 @@ boolean setinitial,setfromfile;
 	}
 	destroy_nhwindow(tmpwin);
 	retval = true;
+    } else if (!strcmp("graphics", optname)) {
+	const char *mode_name;
+	menu_item *mode_pick = NULL;
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	for (i = 0; i < SIZE(graphicses); i++) {
+		mode_name = graphicses[i];
+		any.a_int = i + 1;
+		add_menu(tmpwin, NO_GLYPH, &any, 'a' + i, 0,
+			 ATR_NONE, mode_name, MENU_UNSELECTED);
+	}
+	end_menu(tmpwin, "Select run/travel display mode:");
+	if (select_menu(tmpwin, PICK_ONE, &mode_pick) > 0) {
+		iflags.graphics = mode_pick->item.a_int - 1;
+		switch_graphics(iflags.graphics);
+		need_redraw = true;
+		free(mode_pick);
+	}
+	destroy_nhwindow(tmpwin);
+	retval = true;
     }
 #ifdef TTY_GRAPHICS
       else if (!strcmp("msg_window", optname)) {
@@ -3736,14 +3643,15 @@ char *buf;
 	else if (!strcmp(optname, "font_size_text")) {
 		if (iflags.wc_fontsiz_text) sprintf(buf, "%d",iflags.wc_fontsiz_text);
 		else strcpy(buf, defopt);
-	}
-	else if (!strcmp(optname, "fruit"))
+	} else if (!strcmp(optname, "fruit")) {
 		sprintf(buf, "%s", pl_fruit);
-	else if (!strcmp(optname, "gender"))
+	} else if (!strcmp(optname, "gender")) {
 		sprintf(buf, "%s", rolestring(flags.initgend, genders, adj));
-	else if (!strcmp(optname, "ghoulname"))
+	} else if (!strcmp(optname, "ghoulname")) {
 		sprintf(buf, "%s", ghoulname[0] ? ghoulname : none);
-	else if (!strcmp(optname, "horsename"))
+	} else if (!strcmp(optname, "graphics")) {
+		sprintf(buf, "%s", graphicses[iflags.graphics]);
+	} else if (!strcmp(optname, "horsename"))
 		sprintf(buf, "%s", horsename[0] ? horsename : none);
 	else if (!strcmp(optname, "map_mode"))
 		sprintf(buf, "%s",
@@ -4331,7 +4239,6 @@ char *class_select;
 struct wc_Opt wc_options[] = {
 	{"ascii_map", WC_ASCII_MAP},
 	{"color", WC_COLOR},
-	{"eight_bit_tty", WC_EIGHT_BIT_IN},
 	{"hilite_pet", WC_HILITE_PET},
 	{"popup_dialog", WC_POPUP_DIALOG},
 	{"player_selection", WC_PLAYER_SELECTION},

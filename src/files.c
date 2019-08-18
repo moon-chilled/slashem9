@@ -1431,10 +1431,6 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 	    /* monsyms[0] is unused */
 	    get_uchars(fp, buf, bufp, &(monsyms[1]), true,
 					MAXMCLASSES-1, "MONSTERS");
-	} else if (match_varname(buf, "WARNINGS", 5)) {
-	    get_uchars(fp, buf, bufp, translate, true,
-					WARNCOUNT, "WARNINGS");
-	    assign_warnings(translate);
 #ifdef WIZARD
 	} else if (match_varname(buf, "WIZKIT", 6)) {
 	    strncpy(wizkit, bufp, WIZKIT_MAX-1);

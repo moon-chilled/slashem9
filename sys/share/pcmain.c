@@ -134,9 +134,6 @@ void pcmain(int argc, char **argv) { {
 #endif
 	if(argc > 1) {
 		if (!strncmp(argv[1], "-d", 2) && argv[1][2] != 'e') {
-			/* avoid matching "-dec" for DECgraphics; since the man page
-			 * says -d directory, hope nobody's using -desomething_else
-			 */
 			argc--;
 			argv++;
 			dir = argv[0]+2;
@@ -381,14 +378,6 @@ static void process_options(int argc, char **argv) {
 					strncpy(plname, argv[0], sizeof(plname)-1);
 				} else
 					raw_print("Player name expected after -u");
-				break;
-			case 'i':
-				if (!strncmpi(argv[0]+1, "IBM", 3))
-					switch_graphics(IBM_GRAPHICS);
-				break;
-			case 'd':
-				if (!strncmpi(argv[0]+1, "DEC", 3))
-					switch_graphics(DEC_GRAPHICS);
 				break;
 			case 'g':
 				if (argv[0][2]) {

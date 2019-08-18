@@ -473,7 +473,7 @@ extern boolean hurtle_step(void *, int, int);
 extern int def_char_to_objclass(char);
 extern int def_char_to_monclass(char);
 #if !defined(MAKEDEFS_C) && !defined(LEV_LEX_C)
-extern void assign_graphics(glyph_t *,int,int,int);
+extern void assign_graphics(const glyph_t *,int,int,int);
 extern void switch_graphics(int);
 #ifdef REINCARNATION
 extern void assign_rogue_graphics(boolean);
@@ -1259,8 +1259,10 @@ extern void create_mplayers(int,boolean);
 extern void mplayer_talk(struct monst *);
 
 /* ### unicode.c ### */
-extern glyph_t get_unicode_codepoint(int);
+void unicode_to_utf8(glyph_t, char[5]);
+char *utf8_str(glyph_t); // WARNING: output is volatile
 extern void pututf8char(glyph_t);
+
 
 #if defined(MICRO) || defined(WIN32)
 

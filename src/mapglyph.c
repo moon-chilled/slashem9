@@ -25,7 +25,7 @@ int explcolors[] = {
 
 #define zap_color(n)  color = iflags.use_color ? zapcolors[n] : NO_COLOR
 #ifndef USER_DUNGEONCOLOR
-#define cmap_color(n) color = iflags.use_color ? defsyms[n].color : NO_COLOR
+#define cmap_color(n) color = iflags.use_color ? sym_desc[n].color : NO_COLOR
 #else
 #define cmap_color(n) color = iflags.use_color ? showsymcolors[n] : NO_COLOR
 #endif
@@ -33,20 +33,13 @@ int explcolors[] = {
 #define mon_color(n)  color = iflags.use_color ? mons[n].mcolor : NO_COLOR
 #define invis_color(n) color = NO_COLOR
 #define pet_color(n)  color = iflags.use_color ? mons[n].mcolor : NO_COLOR
-#define warn_color(n) color = iflags.use_color ? def_warnsyms[n].color : NO_COLOR
+#define warn_color(n) color = iflags.use_color ? sym_desc[S_warn0 + n].color : NO_COLOR
 #define explode_color(n) color = iflags.use_color ? explcolors[n] : NO_COLOR
-# if defined(REINCARNATION) && defined(ASCIIGRAPH)
-#  define ROGUE_COLOR
-# endif
-
-#ifdef ROGUE_COLOR
-#define HAS_ROGUE_IBM_GRAPHICS (iflags.IBMgraphics && Is_rogue_level(&u.uz))
-#endif
 
 /** Returns the correct monster glyph.
  *  Returns a Unicode codepoint in UTF8graphics and an ASCII character otherwise. */
 static glyph_t get_monsym(int glyph) {
-	if (iflags.UTF8graphics && permonst_unicode_codepoint[glyph]) {
+	if (permonst_unicode_codepoint[glyph]) {
 		/* only return a Unicode codepoint when there is one configured */
 		return permonst_unicode_codepoint[glyph];
 	} else {
@@ -57,11 +50,11 @@ static glyph_t get_monsym(int glyph) {
 /** Returns the correct object glyph.
  *  Returns a Unicode codepoint in UTF8graphics and an ASCII character otherwise. */
 static glyph_t get_objsym(int glyph) {
-	if (iflags.UTF8graphics && objclass_unicode_codepoint[glyph]) {
+	if (objclass_unicode_codepoint[glyph]) {
 		/* only return a Unicode codepoint when there is one configured */
 		return objclass_unicode_codepoint[glyph];
 	} else {
-		return oc_syms[(int)objects[glyph].oc_class];
+		return oc_syms[objects[glyph].oc_class];
 	}
 }
 
@@ -79,38 +72,31 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
      *		  offsets.  The order is set in display.h.
      */
     if ((offset = (glyph - GLYPH_WARNING_OFF)) >= 0) {	/* a warning flash */
-    	ch = warnsyms[offset];
-# ifdef ROGUE_COLOR
-	if (HAS_ROGUE_IBM_GRAPHICS)
+    	ch = showsyms[S_warn0 + offset];
+	if (Is_rogue_level(&u.uz))
 	    color = NO_COLOR;
 	else
-# endif
 	    warn_color(offset);
     } else if ((offset = (glyph - GLYPH_SWALLOW_OFF)) >= 0) {	/* swallow */
 	/* see swallow_to_glyph() in display.c */
 	ch = showsyms[S_sw_tl + (offset & 0x7)];
-#ifdef ROGUE_COLOR
-	if (HAS_ROGUE_IBM_GRAPHICS && iflags.use_color)
+	if (Is_rogue_level(&u.uz) && iflags.use_color)
 	    color = NO_COLOR;
 	else
-#endif
 	    mon_color(offset >> 3);
     } else if ((offset = (glyph - GLYPH_ZAP_OFF)) >= 0) {	/* zap beam */
 	/* see zapdir_to_glyph() in display.c */
 	ch = showsyms[S_vbeam + (offset & 0x3)];
-#ifdef ROGUE_COLOR
-	if (HAS_ROGUE_IBM_GRAPHICS && iflags.use_color)
+	if (Is_rogue_level(&u.uz) && iflags.use_color)
 	    color = NO_COLOR;
 	else
-#endif
 	    zap_color((offset >> 2));
     } else if ((offset = (glyph - GLYPH_EXPLODE_OFF)) >= 0) {	/* explosion */
 	ch = showsyms[(offset % MAXEXPCHARS) + S_explode1];
 	explode_color(offset / MAXEXPCHARS);
     } else if ((offset = (glyph - GLYPH_CMAP_OFF)) >= 0) {	/* cmap */
 	ch = showsyms[offset];
-#ifdef ROGUE_COLOR
-	if (HAS_ROGUE_IBM_GRAPHICS && iflags.use_color) {
+	if (Is_rogue_level(&u.uz) && iflags.use_color) {
 	    if (offset >= S_vwall && offset <= S_hcdoor)
 		color = CLR_BROWN;
 	    else if (offset >= S_arrow_trap && offset <= S_polymorph_trap)
@@ -122,7 +108,6 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 	    else
 		color = NO_COLOR;
 	} else
-#endif
 	    /* provide a visible difference if normal and lit corridor
 	     * use the same symbol */
 	    if (iflags.use_color &&
@@ -145,16 +130,17 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 	if (On_stairs(x,y) && levl[x][y].seenv) special |= MG_STAIRS;
 	if (offset == BOULDER && iflags.bouldersym) ch = iflags.bouldersym;
 	else ch = get_objsym(offset);
-#ifdef ROGUE_COLOR
-	if (HAS_ROGUE_IBM_GRAPHICS && iflags.use_color) {
+
+	if (Is_rogue_level(&u.uz) && iflags.use_color) {
 	    switch(objects[offset].oc_class) {
 		case COIN_CLASS: color = CLR_YELLOW; break;
 		case FOOD_CLASS: color = CLR_RED; break;
 		default: color = CLR_BRIGHT_BLUE; break;
 	    }
-	} else
-#endif
+	} else {
 	    obj_color(offset);
+	}
+
 	if (offset != BOULDER &&
 	    level.objects[x][y] &&
 	    level.objects[x][y]->nexthere) {
@@ -162,26 +148,24 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 	}
     } else if ((offset = (glyph - GLYPH_RIDDEN_OFF)) >= 0) {	/* mon ridden */
 	ch = get_monsym(offset);
-#ifdef ROGUE_COLOR
-	if (HAS_ROGUE_IBM_GRAPHICS)
-	    /* This currently implies that the hero is here -- monsters */
-	    /* don't ride (yet...).  Should we set it to yellow like in */
-	    /* the monster case below?  There is no equivalent in rogue. */
-	    color = NO_COLOR;	/* no need to check iflags.use_color */
-	else
-#endif
-	    mon_color(offset);
-	    special |= MG_RIDDEN;
+	if (Is_rogue_level(&u.uz)) {
+		/* This currently implies that the hero is here -- monsters */
+		/* don't ride (yet...).  Should we set it to yellow like in */
+		/* the monster case below?  There is no equivalent in rogue. */
+		color = NO_COLOR;	/* no need to check iflags.use_color */
+	} else {
+		mon_color(offset);
+	}
+	special |= MG_RIDDEN;
     } else if ((offset = (glyph - GLYPH_BODY_OFF)) >= 0) {	/* a corpse */
 	if (On_stairs(x,y) && levl[x][y].seenv) special |= MG_STAIRS;
 	ch = get_objsym(CORPSE);
-#ifdef ROGUE_COLOR
-	if (HAS_ROGUE_IBM_GRAPHICS && iflags.use_color)
+	if (Is_rogue_level(&u.uz) && iflags.use_color)
 	    color = CLR_RED;
 	else
-#endif
 	    mon_color(offset);
-	    special |= MG_CORPSE;
+
+	special |= MG_CORPSE;
 	if (offset != BOULDER &&
 	    level.objects[x][y] &&
 	    level.objects[x][y]->nexthere) {
@@ -189,45 +173,38 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 	}
     } else if ((offset = (glyph - GLYPH_DETECT_OFF)) >= 0) {	/* mon detect */
 	ch = get_monsym(offset);
-#ifdef ROGUE_COLOR
-	if (HAS_ROGUE_IBM_GRAPHICS)
+	if (Is_rogue_level(&u.uz))
 	    color = NO_COLOR;	/* no need to check iflags.use_color */
 	else
-#endif
 	    mon_color(offset);
 	/* Disabled for now; anyone want to get reverse video to work? */
 	/* is_reverse = true; */
-	    special |= MG_DETECT;
+	special |= MG_DETECT;
     } else if ((offset = (glyph - GLYPH_INVIS_OFF)) >= 0) {	/* invisible */
 	ch = DEF_INVISIBLE;
-#ifdef ROGUE_COLOR
-	if (HAS_ROGUE_IBM_GRAPHICS)
+
+	if (Is_rogue_level(&u.uz))
 	    color = NO_COLOR;	/* no need to check iflags.use_color */
 	else
-#endif
 	    invis_color(offset);
-	    special |= MG_INVIS;
+
+	special |= MG_INVIS;
     } else if ((offset = (glyph - GLYPH_PET_OFF)) >= 0) {	/* a pet */
 	ch = get_monsym(offset);
-#ifdef ROGUE_COLOR
-	if (HAS_ROGUE_IBM_GRAPHICS)
+	if (Is_rogue_level(&u.uz))
 	    color = NO_COLOR;	/* no need to check iflags.use_color */
 	else
-#endif
 	    pet_color(offset);
-	    special |= MG_PET;
+	special |= MG_PET;
     } else {							/* a monster */
 	ch = get_monsym(glyph);
-#ifdef ROGUE_COLOR
-	if (HAS_ROGUE_IBM_GRAPHICS && iflags.use_color) {
+	if (Is_rogue_level(&u.uz) && iflags.use_color) {
 	    if (x == u.ux && y == u.uy)
 		/* actually player should be yellow-on-gray if in a corridor */
 		color = CLR_YELLOW;
 	    else
 		color = NO_COLOR;
-	} else
-#endif
-	{
+	} else {
 	    mon_color(glyph);
 	    /* special case the hero for `showrace' option */
 	    if (iflags.use_color && x == u.ux && y == u.uy &&
@@ -236,16 +213,8 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 	}
     }
 
-    /* Turn off color if no color defined, or rogue level w/o PC graphics. */
-# ifdef REINCARNATION
-#  ifdef ASCIIGRAPH
-    if (!has_color(color) || (Is_rogue_level(&u.uz) && !HAS_ROGUE_IBM_GRAPHICS))
-#  else
-    if (!has_color(color) || Is_rogue_level(&u.uz))
-#  endif
-# else
-    if (!has_color(color))
-# endif
+    /* Turn off color if no color defined, or rogue level w/o fancy graphics. */
+    if (!has_color(color) || (Is_rogue_level(&u.uz) && (iflags.graphics == ASCII_GRAPHICS)))
 	color = NO_COLOR;
 
     *ochar = ch;

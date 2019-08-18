@@ -342,7 +342,7 @@ void init_sco_cons(void) {
 	if (!strcmp(windowprocs.name, "tty") && sco_flag_console) {
 		atexit(sco_mapon);
 		sco_mapoff();
-		switch_graphics(IBM_GRAPHICS);
+
 		if (has_colors())
 			iflags.use_color = true;
 	}

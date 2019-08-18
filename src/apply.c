@@ -2367,7 +2367,7 @@ static void use_trap(struct obj *otmp) {
 		u.ux == trapinfo.tx && u.uy == trapinfo.ty) {
 	    You("resume setting %s %s.",
 		shk_your(buf, otmp),
-		defsyms[trap_to_defsym(what_trap(ttyp))].explanation);
+		sym_desc[trap_to_defsym(what_trap(ttyp))].explanation);
 	    set_occupation(set_trap, occutext, 0);
 	    return;
 	}
@@ -2391,7 +2391,7 @@ static void use_trap(struct obj *otmp) {
 	    You("aren't very skilled at reaching from %s.",
 		mon_nam(u.usteed));
 	    sprintf(buf, "Continue your attempt to set %s?",
-		the(defsyms[trap_to_defsym(what_trap(ttyp))].explanation));
+		the(sym_desc[trap_to_defsym(what_trap(ttyp))].explanation));
 	    if(yn(buf) == 'y') {
 		if (chance) {
 			switch(ttyp) {
@@ -2402,7 +2402,7 @@ static void use_trap(struct obj *otmp) {
 			    case BEAR_TRAP:	/* drop it without arming it */
 				reset_trapset();
 				You("drop %s!",
-			  the(defsyms[trap_to_defsym(what_trap(ttyp))].explanation));
+			  the(sym_desc[trap_to_defsym(what_trap(ttyp))].explanation));
 				dropx(otmp);
 				return;
 			}
@@ -2415,7 +2415,7 @@ static void use_trap(struct obj *otmp) {
 #endif
 	You("begin setting %s %s.",
 	    shk_your(buf, otmp),
-	    defsyms[trap_to_defsym(what_trap(ttyp))].explanation);
+	    sym_desc[trap_to_defsym(what_trap(ttyp))].explanation);
 	set_occupation(set_trap, occutext, 0);
 	return;
 }
@@ -2445,7 +2445,7 @@ static int set_trap(void) {
 	    }
 	    if (!trapinfo.force_bungle)
 		You("finish arming %s.",
-			the(defsyms[trap_to_defsym(what_trap(ttyp))].explanation));
+			the(sym_desc[trap_to_defsym(what_trap(ttyp))].explanation));
 	    if (((otmp->cursed || Fumbling) && (rnl(10) > 5)) || trapinfo.force_bungle)
 		dotrap(ttmp,
 			(unsigned)(trapinfo.force_bungle ? FORCEBUNGLE : 0));

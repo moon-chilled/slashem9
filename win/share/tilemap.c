@@ -226,8 +226,8 @@ int set, entry;
 	oth_origin = tilenum;
 	for (i = 0; i < (MAXPCHARS - MAXEXPCHARS); i++) {
 		if (in_set && tilenum == entry) {
-			if (*defsyms[i].explanation)
-				return defsyms[i].explanation;
+			if (*sym_desc[i].explanation)
+				return sym_desc[i].explanation;
 			else {
 				/* if SINKS are turned off, this
 				 * string won't be there (and can't be there
@@ -291,13 +291,13 @@ int set, entry;
 	tilenum += (NUM_ZAP << 2);
 
 	i = entry - tilenum;
-	if (i < WARNCOUNT) {
+	if (i < MAXWARNINGS) {
 		if (set == OTH_GLYPH) {
 			sprintf(buf, "warning %d", i);
 			return buf;
 	        }
 	}
-	tilenum += WARNCOUNT;
+	tilenum += MAXWARNINGS;
 
 	for (i = 0; i < SIZE(substitutes); i++) {
 	    j = entry - tilenum;
@@ -527,7 +527,7 @@ init_tilemap()
 		}
 	}
 
-	for (i = 0; i < WARNCOUNT; i++) {
+	for (i = 0; i < MAXWARNINGS; i++) {
 		tilemap[GLYPH_WARNING_OFF+i] = tilenum;
 		tilenum++;
 	}

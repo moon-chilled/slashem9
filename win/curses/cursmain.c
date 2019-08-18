@@ -556,9 +556,6 @@ curses_print_glyph(winid wid, xchar x, xchar y, int glyph)
     if ((special & MG_DETECT) && iflags.use_inverse) {
         attr = A_REVERSE;
     }
-    if (iflags.cursesgraphics) {
-        ch = curses_convert_glyph(ch, glyph);
-    }
 
     if (wid == NHW_MAP) {
         if ((special & MG_STAIRS) && iflags.hilite_hidden_stairs) {
@@ -688,7 +685,7 @@ char yn_function(const char *ques, const char *choices, char default)
 char
 curses_yn_function(const char *question, const char *choices, char def)
 {
-    return char) curses_character_input_dialog(question, choices, def;
+    return curses_character_input_dialog(question, choices, def);
 }
 
 /*

@@ -509,7 +509,7 @@ void digactualhole (int x, int y, struct monst *madeby, int ttyp) {
 
 	if (ttyp != PIT && !Can_dig_down(&u.uz)) {
 	    impossible("digactualhole: can't dig %s on this level.",
-		       defsyms[trap_to_defsym(ttyp)].explanation);
+		       sym_desc[trap_to_defsym(ttyp)].explanation);
 	    ttyp = PIT;
 	}
 

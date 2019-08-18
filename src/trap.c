@@ -587,7 +587,7 @@ dotrap (struct trap *trap, unsigned trflags)
 	     */
 	    pline("Air currents pull you down into %s %s!",
 	    	a_your[trap->madeby_u],
-	    	defsyms[trap_to_defsym(ttype)].explanation);
+	    	sym_desc[trap_to_defsym(ttype)].explanation);
 	    /* then proceed to normal trap effect */
 	} else if (already_seen) {
 	    if ((Levitation || Flying) &&
@@ -596,7 +596,7 @@ dotrap (struct trap *trap, unsigned trflags)
 		You("%s over %s %s.",
 		    Levitation ? "float" : "fly",
 		    a_your[trap->madeby_u],
-		    defsyms[trap_to_defsym(ttype)].explanation);
+		    sym_desc[trap_to_defsym(ttype)].explanation);
 		return;
 	    }
 	    if(!Fumbling && ttype != MAGIC_PORTAL &&
@@ -606,7 +606,7 @@ dotrap (struct trap *trap, unsigned trflags)
 		You("escape %s %s.",
 		    (ttype == ARROW_TRAP && !trap->madeby_u) ? "an" :
 			a_your[trap->madeby_u],
-		    defsyms[trap_to_defsym(ttype)].explanation);
+		    sym_desc[trap_to_defsym(ttype)].explanation);
 		return;
 	    }
 	}
@@ -939,7 +939,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, true, &youmonst);
 		if (!Can_fall_thru(&u.uz)) {
 		    seetrap(trap);	/* normally done in fall_through */
 		    impossible("dotrap: %ss cannot exist on this level.",
-			       defsyms[trap_to_defsym(ttype)].explanation);
+			       sym_desc[trap_to_defsym(ttype)].explanation);
 		    break;		/* don't activate it after all */
 		}
 		fall_through(true);
@@ -1979,7 +1979,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 		case TRAPDOOR:
 			if (!Can_fall_thru(&u.uz)) {
 			 impossible("mintrap: %ss cannot exist on this level.",
-				    defsyms[trap_to_defsym(tt)].explanation);
+				    sym_desc[trap_to_defsym(tt)].explanation);
 			    break;	/* don't activate it after all */
 			}
 			if (is_flyer(mptr) || is_floater(mptr) ||
@@ -3296,7 +3296,7 @@ boolean force_failure;
 		bigmonst(youmonst.data)) {
 		/* don't allow untrap if they can't get thru to it */
 		You("are unable to reach the %s!",
-		    defsyms[trap_to_defsym(ttype)].explanation);
+		    sym_desc[trap_to_defsym(ttype)].explanation);
 		return 0;
 	    }
 	}
@@ -3309,7 +3309,7 @@ boolean force_failure;
 		else
 #endif
 		You("are unable to reach the %s!",
-			defsyms[trap_to_defsym(ttype)].explanation);
+			sym_desc[trap_to_defsym(ttype)].explanation);
 		return 0;
 	}
 
@@ -3345,7 +3345,7 @@ boolean force_failure;
 		} else {
 		    pline("%s %s is difficult to %s.",
 			  ttmp->madeby_u ? "Your" : under_u ? "This" : "That",
-			  defsyms[trap_to_defsym(ttype)].explanation,
+			  sym_desc[trap_to_defsym(ttype)].explanation,
 			  (ttype == WEB) ? "remove" : "disarm");
 		}
 		return 1;
@@ -3669,7 +3669,7 @@ boolean force;
 
 	if ((ttmp = t_at(x,y)) && ttmp->tseen) {
 		deal_with_floor_trap = true;
-		strcpy(the_trap, the(defsyms[trap_to_defsym(ttmp->ttyp)].explanation));
+		strcpy(the_trap, the(sym_desc[trap_to_defsym(ttmp->ttyp)].explanation));
 		if (box_here) {
 			if (ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT) {
 			    You_cant("do much about %s%s.",
@@ -3681,7 +3681,7 @@ boolean force;
 			} else {
 			    sprintf(qbuf, "There %s and %s here. %s %s?",
 				(containercnt == 1) ? "is a container" : "are containers",
-				an(defsyms[trap_to_defsym(ttmp->ttyp)].explanation),
+				an(sym_desc[trap_to_defsym(ttmp->ttyp)].explanation),
 				ttmp->ttyp == WEB ? "Remove" : "Disarm", the_trap);
 			    switch (ynq(qbuf)) {
 				case 'q': return 0;

@@ -4,7 +4,7 @@
 
 #include "hack.h"
 #include "lev.h"
-#include "tcap.h" /* for TERMLIB and ASCIIGRAPH */
+#include "tcap.h" /* for TERMLIB */
 
 #if defined(MICRO)
 extern int dotcnt;	/* shared with save */

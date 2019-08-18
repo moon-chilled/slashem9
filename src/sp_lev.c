@@ -924,8 +924,7 @@ struct mkroom	*croom;
 
 		    case M_AP_FURNITURE:
 			for (i = 0; i < MAXPCHARS; i++)
-			    if (!strcmp(defsyms[i].explanation,
-					m->appear_as.str))
+			    if (!strcmp(sym_desc[i].explanation, m->appear_as.str))
 				break;
 			if (i == MAXPCHARS) {
 			    impossible(

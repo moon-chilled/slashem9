@@ -2485,7 +2485,7 @@ srch:
 		for (trap = NO_TRAP+1; trap < TRAPNUM; trap++) {
 			const char *tname;
 
-			tname = defsyms[trap_to_defsym(trap)].explanation;
+			tname = sym_desc[trap_to_defsym(trap)].explanation;
 			if (!strncmpi(tname, bp, strlen(tname))) {
 				/* avoid stupid mistakes */
 				if((trap == TRAPDOOR || trap == HOLE)
