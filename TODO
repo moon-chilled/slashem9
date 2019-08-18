@@ -1,7 +1,6 @@
 * Replace pretty much all uses of void* with anything.
 
 * Completely revamp interface:
- * Make utf-8 work on topl and everywhere else
  * Make windowports support printing coloured text.  (Maybe make them take coloured_character* instead of char* and then have builder functions and wrappers so it's not a total pain)
   * Then add message colours
  * Update proxy graphics.

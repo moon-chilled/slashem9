@@ -490,7 +490,6 @@ do_look(quick)
     coord   cc;			/* screen pos of unknown glyph */
     boolean save_verbose;	/* saved value of flags.verbose */
     boolean from_screen;	/* question from the screen */
-    bool    force_asciigraphics = false;/* force using glyphs from ascii_graphics[] */
     boolean need_to_look;	/* need to get explan. from glyph */
     boolean hit_trap;		/* true if found trap explanation */
     int skipped_venom;		/* non-zero if we ignored "splash of venom" */
@@ -553,9 +552,7 @@ do_look(quick)
 	    /* Convert the glyph at the selected position to a symbol. */
 	    glyph = glyph_at(cc.x,cc.y);
 	    if (glyph_is_cmap(glyph)) {
-		    // FIXME: display utf-8 on topl
-		    force_asciigraphics = true;
-		    sym = ascii_graphics[glyph_to_cmap(glyph)];
+		    sym = showsyms[glyph_to_cmap(glyph)];
 	    } else if (glyph_is_trap(glyph)) {
 		sym = showsyms[trap_to_defsym(glyph_to_trap(glyph))];
 	    } else if (glyph_is_object(glyph)) {
@@ -655,7 +652,7 @@ do_look(quick)
 	/* Now check for graphics symbols */
 	for (hit_trap = false, i = 0; i < MAXPCHARS; i++) {
 	    x_str = sym_desc[i].explanation;
-	    if (sym == (force_asciigraphics ? ascii_graphics[i] : (from_screen ? showsyms[i] : ascii_graphics[i])) && *x_str) {
+	    if (sym == (from_screen ? showsyms[i] : ascii_graphics[i]) && *x_str) {
 		/* avoid "an air", "a water", "a floor of a room", or "a dark part of a room" */
 		int article = ((i == S_room) || (i == S_darkroom)) ? 2 :	// 2=>"the"
 			      !(strcmp(x_str, "air") == 0 ||	/* 1=>"an"  */
@@ -663,12 +660,12 @@ do_look(quick)
 
 		if (!found) {
 		    if (is_cmap_trap(i)) {
-			sprintf(out_str, "%c       a trap", sym);
+			sprintf(out_str, "%s       a trap", utf8_str(sym));
 			hit_trap = true;
 		    } else if (level.flags.lethe && !strcmp(x_str, "water")) {
-			sprintf(out_str, "%c       sparkling water", sym);
+			sprintf(out_str, "%s       sparkling water", utf8_str(sym));
 		    } else {
-			sprintf(out_str, "%c       %s", sym,
+			sprintf(out_str, "%s       %s", utf8_str(sym),
 				article == 2 ? the(x_str) :
 				article == 1 ? an(x_str) : x_str);
 		    }

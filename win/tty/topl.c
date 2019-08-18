@@ -159,12 +159,6 @@ int tty_doprev_message(void) {
 static void redotoplin(const char *str) {
 	int otoplin = ttyDisplay->toplin;
 	home();
-	if(*str & 0x80) {
-		/* kludge for the / command, the only time we ever want a */
-		/* graphics character on the top line */
-		g_putch((int)*str++);
-		ttyDisplay->curx++;
-	}
 	end_glyphout();	/* in case message printed during graphics output */
 	putsyms(str);
 	cl_end();
@@ -314,14 +308,14 @@ static void topl_putsym(glyph_t c) {
 	if(ttyDisplay->curx == CO-1)
 	    topl_putsym('\n'); /* 1 <= curx <= CO; avoid CO */
 #ifdef WIN32CON
-    putchar(c);
+    pututf8char(c);
 #endif
 	ttyDisplay->curx++;
     }
     cw->curx = ttyDisplay->curx;
     if(cw->curx == 0) cl_end();
 #ifndef WIN32CON
-    putchar(c);
+    pututf8char(c);
 #endif
 }
 
