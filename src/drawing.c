@@ -413,47 +413,47 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 
 static glyph_t utf8_graphics[MAXPCHARS] = {
 /* 0*/	' ',	// S_stone
-	0x2502,	/* S_vwall:     BOX DRAWINGS LIGHT VERTICAL */
-	0x2500,	/* S_hwall:     BOX DRAWINGS LIGHT HORIZONTAL */
-	0x250c,	/* S_tlcorn:    BOX DRAWINGS LIGHT DOWN AND RIGHT */
-	0x2510,	/* S_trcorn:    BOX DRAWINGS LIGHT DOWN AND LEFT */
-	0x2514,	/* S_blcorn:    BOX DRAWINGS LIGHT UP AND RIGHT */
-	0x2518,	/* S_brcorn:    BOX DRAWINGS LIGHT UP AND LEFT */
-	0x253c,	/* S_crwall:    BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL */
-	0x2534,	/* S_tuwall:    BOX DRAWINGS LIGHT UP AND HORIZONTAL */
-	0x252c,	/* S_tdwall:    BOX DRAWINGS LIGHT DOWN AND HORIZONTAL */
-/*10*/	0x2524,	/* S_tlwall:    BOX DRAWINGS LIGHT VERTICAL AND LEFT */
-	0x251c,	/* S_trwall:    BOX DRAWINGS LIGHT VERTICAL AND RIGHT */
-	0x00b7,	/* S_ndoor:     MIDDLE DOT */
-	0x2592,	/* S_vodoor:    MEDIUM SHADE */
-	0x2592,	/* S_hodoor:    MEDIUM SHADE */
+	0x2502,	// S_vwall:     BOX DRAWINGS LIGHT VERTICAL
+	0x2500,	// S_hwall:     BOX DRAWINGS LIGHT HORIZONTAL
+	0x250c,	// S_tlcorn:    BOX DRAWINGS LIGHT DOWN AND RIGHT
+	0x2510,	// S_trcorn:    BOX DRAWINGS LIGHT DOWN AND LEFT
+	0x2514,	// S_blcorn:    BOX DRAWINGS LIGHT UP AND RIGHT
+	0x2518,	// S_brcorn:    BOX DRAWINGS LIGHT UP AND LEFT
+	0x253c,	// S_crwall:    BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL
+	0x2534,	// S_tuwall:    BOX DRAWINGS LIGHT UP AND HORIZONTAL
+	0x252c,	// S_tdwall:    BOX DRAWINGS LIGHT DOWN AND HORIZONTAL
+/*10*/	0x2524,	// S_tlwall:    BOX DRAWINGS LIGHT VERTICAL AND LEFT
+	0x251c,	// S_trwall:    BOX DRAWINGS LIGHT VERTICAL AND RIGHT
+	0x00b7,	// S_ndoor:     MIDDLE DOT/
+	0x25a0,	// S_vodoor:    BLACK SQUARE
+	0x25a0,	// S_hodoor:    BLACK SQUARE
 	'+',	// S_vcdoor
 	'+',	// S_hcdoor
-	0x2261,	/* S_bars:      IDENTICAL TO */
-	0x03a8,	/* S_tree:      GREEK CAPITAL LETTER PSI */
-	0x00b7,	/* S_room:      MIDDLE DOT */
+	0x2261,	// S_bars:      IDENTICAL TO
+	0x03a8,	// S_tree:      GREEK CAPITAL LETTER PSI
+	0x00b7,	// S_room:      MIDDLE DOT
 /*20*/	' ',	// S_stone
 	0x2591,	// S_corr:	LIGHT SHADE
 	0x2592,	// S_litcorr	MEDIUM SHADE
 	'<',	// S_upstair
 	'>',	// S_dnstair
-	0x2264,	/* S_upladder:  LESS-THAN OR EQUAL TO */
-	0x2265,	/* S_dnladder:  GREATER-THAN OR EQUAL TO */
-	0x03A9,	/* S_altar:     GREEK CAPITAL LETTER OMEGA */
-	0x2020,	/* S_grave:     DAGGER */
+	0x2264,	// S_upladder:  LESS-THAN OR EQUAL TO
+	0x2265,	// S_dnladder:  GREATER-THAN OR EQUAL TO
+	0x03A9,	// S_altar:     GREEK CAPITAL LETTER OMEGA
+	0x2020,	// S_grave:     DAGGER
 	'\\',	// S_throne
 /*30*/	'#',	// S_sink
 	'#',	// S_toilet
-	0x00b6, /* S_fountain:  PILCROW SIGN */
-	0x224b, /* S_pool:      TRIPLE TILDE */
-	0x00b7, /* S_ice:       MIDDLE DOT */
-	0x224b, /* S_lava:      TRIPLE TILDE */
-	0x00b7, /* S_vodbridge: MIDDLE DOT */
-	0x00b7, /* S_hodbridge: MIDDLE DOT */
+	0x2320, // S_fountain:  TOP HALF INTEGRAL
+	0x224b, // S_pool:      TRIPLE TILDE
+	0x00b7, // S_ice:       MIDDLE DOT
+	0x224b, // S_lava:      TRIPLE TILDE
+	0x00b7, // S_vodbridge: MIDDLE DOT
+	0x00b7, // S_hodbridge: MIDDLE DOT
 	'#',	// S_vcdbridge
 	'#',	// S_hcdbridge
 /*40*/	' ',	// S_air
-	'#',	// S_cloud),
+	'#',	// S_cloud
 	0x2248, // S_water:     ALMOST EQUAL TO
 	'^',	// S_arrow_trap
 	'^',	// S_dart_trap
@@ -479,8 +479,8 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	'^',	// S_polymorph_trap
 	0x2502, // S_vbeam:     BOX DRAWINGS LIGHT VERTICAL
 	0x2500, // S_hbeam:     BOX DRAWINGS LIGHT HORIZONTAL
-	'\\',	// S_lslant
-	'/',	// S_rslant
+	0x2572,	// S_lslant:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
+	0x2571,	// S_rslant:	BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT
 	'*',	// S_digbeam
 /*70*/	'!',	// S_flashbeam
 	')',	// S_boomleft
@@ -489,22 +489,22 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	'#',	// S_ss2
 	'@',	// S_ss3
 	'*',	// S_ss4
-	'/',	// S_sw_tl
+	0x2571,	// S_sw_tl:	BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT
 	0x2594, // S_sw_tc:     UPPER ONE EIGHTH BLOCK
-	'\\',	// S_sw_tr
-/*80*/	0x258f, /* S_sw_ml:     LEFT ONE EIGHTH BLOCK */
-	0x2595, /* S_sw_mr:     RIGHT ONE EIGHTH BLOCK */
-	'\\',	// S_sw_bl
-	0x2581, /* S_sw_bc:     LOWER ONE EIGHTH BLOCK */
-	'/',	// S_sw_br
+	0x2572,	// S_sw_tr:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
+/*80*/	0x258f, // S_sw_ml:     LEFT ONE EIGHTH BLOCK
+	0x2595, // S_sw_mr:     RIGHT ONE EIGHTH BLOCK
+	0x2572,	// S_sw_bl:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
+	0x2581, // S_sw_bc:     LOWER ONE EIGHTH BLOCK
+	0x2571,	// S_sw_br:	BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT
 	'/',	// S_explode1
-	0x2594, /* S_explode2:  UPPER ONE EIGHTH BLOCK */
+	0x2594, // S_explode2:  UPPER ONE EIGHTH BLOCK
 	'\\',	// S_explode3
-	0x258f, /* S_explode4:  LEFT ONE EIGHTH BLOCK */
+	0x258f, // S_explode4:  LEFT ONE EIGHTH BLOCK
 	' ',	// S_explode5
-/*90*/	0x2595, /* S_explode6:  RIGHT ONE EIGHTH BLOCK */
+/*90*/	0x2595, // S_explode6:  RIGHT ONE EIGHTH BLOCK
 	'\\',	// S_explode7
-	0x2581, /* S_explode8:  LOWER ONE EIGHTH BLOCK */
+	0x2581, // S_explode8:  LOWER ONE EIGHTH BLOCK
 	'/',	// S_explode9
 	'0', // white warning
 	'1', // pink warning
@@ -518,43 +518,43 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
  * http://en.wikipedia.org/wiki/WGL4 */
 static glyph_t utf8compat_graphics[MAXPCHARS] = {
 /* 0*/	' ',	// S_stone
-	0x2502,	/* S_vwall:     BOX DRAWINGS LIGHT VERTICAL */
-	0x2500,	/* S_hwall:     BOX DRAWINGS LIGHT HORIZONTAL */
-	0x250c,	/* S_tlcorn:    BOX DRAWINGS LIGHT DOWN AND RIGHT */
-	0x2510,	/* S_trcorn:    BOX DRAWINGS LIGHT DOWN AND LEFT */
-	0x2514,	/* S_blcorn:    BOX DRAWINGS LIGHT UP AND RIGHT */
-	0x2518,	/* S_brcorn:    BOX DRAWINGS LIGHT UP AND LEFT */
-	0x253c,	/* S_crwall:    BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL */
-	0x2534,	/* S_tuwall:    BOX DRAWINGS LIGHT UP AND HORIZONTAL */
-	0x252c,	/* S_tdwall:    BOX DRAWINGS LIGHT DOWN AND HORIZONTAL */
-/*10*/	0x2524,	/* S_tlwall:    BOX DRAWINGS LIGHT VERTICAL AND LEFT */
-	0x251c,	/* S_trwall:    BOX DRAWINGS LIGHT VERTICAL AND RIGHT */
-	0x00b7,	/* S_ndoor:     MIDDLE DOT */
-	0x2592,	/* S_vodoor:    MEDIUM SHADE */
-	0x2592,	/* S_hodoor:    MEDIUM SHADE */
+	0x2502,	// S_vwall:     BOX DRAWINGS LIGHT VERTICAL
+	0x2500,	// S_hwall:     BOX DRAWINGS LIGHT HORIZONTAL
+	0x250c,	// S_tlcorn:    BOX DRAWINGS LIGHT DOWN AND RIGHT
+	0x2510,	// S_trcorn:    BOX DRAWINGS LIGHT DOWN AND LEFT
+	0x2514,	// S_blcorn:    BOX DRAWINGS LIGHT UP AND RIGHT
+	0x2518,	// S_brcorn:    BOX DRAWINGS LIGHT UP AND LEFT
+	0x253c,	// S_crwall:    BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL
+	0x2534,	// S_tuwall:    BOX DRAWINGS LIGHT UP AND HORIZONTAL
+	0x252c,	// S_tdwall:    BOX DRAWINGS LIGHT DOWN AND HORIZONTAL
+/*10*/	0x2524,	// S_tlwall:    BOX DRAWINGS LIGHT VERTICAL AND LEFT
+	0x251c,	// S_trwall:    BOX DRAWINGS LIGHT VERTICAL AND RIGHT
+	0x00b7,	// S_ndoor:     MIDDLE DOT
+	0x25a0,	// S_vodoor:    BLACK SQUARE
+	0x25a0,	// S_hodoor:    BLACK SQUARE
 	'+',	// S_vcdoor
 	'+',	// S_hcdoor
-	0x2261,	/* S_bars:      IDENTICAL TO */
-	0x03a8,	/* S_tree:      GREEK CAPITAL LETTER PSI */
-	0x00b7,	/* S_room:      MIDDLE DOT */
+	0x2261,	// S_bars:      IDENTICAL TO
+	0x03a8,	// S_tree:      GREEK CAPITAL LETTER PSI
+	0x00b7,	// S_room:      MIDDLE DOT
 /*20*/	' ',	// S_stone
 	0x2591,	// S_corr:	LIGHT SHADE
 	0x2592,	// S_litcorr	MEDIUM SHADE
 	'<',	// S_upstair
 	'>',	// S_dnstair
-	0x2264,	/* S_upladder:  LESS-THAN OR EQUAL TO */
-	0x2265,	/* S_dnladder:  GREATER-THAN OR EQUAL TO */
-	0x03A9,	/* S_altar:     GREEK CAPITAL LETTER OMEGA */
-	0x2020,	/* S_grave:     DAGGER */
+	0x2264,	// S_upladder:  LESS-THAN OR EQUAL TO
+	0x2265,	// S_dnladder:  GREATER-THAN OR EQUAL TO
+	0x03A9,	// S_altar:     GREEK CAPITAL LETTER OMEGA
+	0x2020,	// S_grave:     DAGGER
 	'\\',	// S_throne
 /*30*/	'#',	// S_sink
 	'#',	// S_toilet
-	0x00b6, /* S_fountain:  PILCROW SIGN */
-	0x224b, /* S_pool:      TRIPLE TILDE */
-	0x00b7, /* S_ice:       MIDDLE DOT */
-	0x224b, /* S_lava:      TRIPLE TILDE */
-	0x00b7, /* S_vodbridge: MIDDLE DOT */
-	0x00b7, /* S_hodbridge: MIDDLE DOT */
+	0x2320, // S_fountain:  TOP HALF INTEGRAL
+	0x224b, // S_pool:      TRIPLE TILDE
+	0x00b7, // S_ice:       MIDDLE DOT
+	0x224b, // S_lava:      TRIPLE TILDE
+	0x00b7, // S_vodbridge: MIDDLE DOT
+	0x00b7, // S_hodbridge: MIDDLE DOT
 	'#',	// S_vcdbridge
 	'#',	// S_hcdbridge
 /*40*/	' ',	// S_air
@@ -597,19 +597,19 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	'/',	// S_sw_tl
 	0x2594, // S_sw_tc:     UPPER ONE EIGHTH BLOCK
 	'\\',	// S_sw_tr
-/*80*/	0x258f, /* S_sw_ml:     LEFT ONE EIGHTH BLOCK */
-	0x2595, /* S_sw_mr:     RIGHT ONE EIGHTH BLOCK */
+/*80*/	0x258f, // S_sw_ml:     LEFT ONE EIGHTH BLOCK
+	0x2595, // S_sw_mr:     RIGHT ONE EIGHTH BLOCK
 	'\\',	// S_sw_bl
-	0x2581, /* S_sw_bc:     LOWER ONE EIGHTH BLOCK */
+	0x2581, // S_sw_bc:     LOWER ONE EIGHTH BLOCK
 	'/',	// S_sw_br
 	'/',	// S_explode1
-	0x2594, /* S_explode2:  UPPER ONE EIGHTH BLOCK */
+	0x2594, // S_explode2:  UPPER ONE EIGHTH BLOCK
 	'\\',	// S_explode3
-	0x258f, /* S_explode4:  LEFT ONE EIGHTH BLOCK */
+	0x258f, // S_explode4:  LEFT ONE EIGHTH BLOCK
 	' ',	// S_explode5
-/*90*/	0x2595, /* S_explode6:  RIGHT ONE EIGHTH BLOCK */
+/*90*/	0x2595, // S_explode6:  RIGHT ONE EIGHTH BLOCK
 	'\\',	// S_explode7
-	0x2581, /* S_explode8:  LOWER ONE EIGHTH BLOCK */
+	0x2581, // S_explode8:  LOWER ONE EIGHTH BLOCK
 	'/',	// S_explode9
 	'0', // white warning
 	'1', // pink warning
