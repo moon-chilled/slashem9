@@ -10,8 +10,8 @@
 static void reorder_invent(void);
 static boolean mergable(struct obj *,struct obj *);
 static void invdisp_nothing(const char *,const char *);
-static boolean worn_wield_only(struct obj *);
-static boolean only_here(struct obj *);
+static bool worn_wield_only(struct obj *);
+static bool only_here(struct obj *);
 static void compactify(char *);
 static boolean taking_off(const char *);
 static boolean putting_on(const char *);
@@ -22,7 +22,7 @@ static char display_pickinv(const char *,boolean, long *, boolean);
 #else
 static char display_pickinv(const char *,boolean, long *);
 #endif /* DUMP_LOG */
-static boolean this_type_only(struct obj *);
+static bool this_type_only(struct obj *);
 static void dounpaid(void);
 static struct obj *find_unpaid(struct obj *,struct obj **);
 static void menu_identify(int);
@@ -839,7 +839,7 @@ static char valid_ugly_classes[MAXOCLASSES + 1];
 /* Action word for allow_ugly callback */
 static const char *ugly_word;
 
-static boolean allow_ugly(struct obj *obj) {
+static bool allow_ugly(struct obj *obj) {
     return index(valid_ugly_classes, obj->oclass) &&
 	   !ugly_checks(valid_ugly_classes, ugly_word, obj);
 }
@@ -1265,7 +1265,7 @@ boolean wearing_armor(void) {
 	return uarm || uarmc || uarmf || uarmg || uarmh || uarms || uarmu;
 }
 
-boolean is_worn(struct obj *otmp) {
+bool is_worn(struct obj *otmp) {
     return otmp->owornmask & (W_ARMOR | W_RING | W_AMUL | W_TOOL |
 #ifdef STEED
 			W_SADDLE |
@@ -1281,7 +1281,7 @@ static const char removeables[] =
 /* If combo is true, we just use this to get a category list */
 int ggetobj(const char *word, int (*fn)(struct obj*), int mx, boolean combo /* combination menu flag */, unsigned *resultflags) {
 	int (*ckfn)(struct obj*) = NULL;
-	boolean (*filter)(struct obj*) = NULL;
+	bool (*filter)(struct obj*) = NULL;
 	boolean takeoff, ident, allflag, m_seen;
 	int itemcount;
 #ifndef GOLDOBJ
@@ -2073,7 +2073,7 @@ static void dounpaid(void) {
 /* query objlist callback: return true if obj type matches "this_type" */
 static int this_type;
 
-static boolean this_type_only(struct obj *obj) {
+static bool this_type_only(struct obj *obj) {
     return obj->oclass == this_type;
 }
 
@@ -2117,7 +2117,7 @@ int dotypeinv(void) {
 #ifndef GOLDOBJ
 					      (u.ugold != 0),
 #endif
-					      (boolean (*)(struct obj*)) 0, &itemcount);
+					      NULL, &itemcount);
 	    if (unpaid_count) {
 		strcat(types, "u");
 		class_count++;
@@ -2842,7 +2842,7 @@ static void invdisp_nothing(const char *hdr, const char *txt) {
 }
 
 // query_objlist callback: return things that could possibly be worn/wielded
-static boolean worn_wield_only(struct obj *obj) {
+static bool worn_wield_only(struct obj *obj) {
 	return obj->oclass == WEAPON_CLASS
 		|| obj->oclass == ARMOR_CLASS
 		|| obj->oclass == AMULET_CLASS
@@ -2969,7 +2969,7 @@ struct obj *display_cinventory(struct obj *obj) {
 /* query objlist callback: return true if obj is at given location */
 static coord only;
 
-static boolean only_here(struct obj *obj) {
+static bool only_here(struct obj *obj) {
     return obj->ox == only.x && obj->oy == only.y;
 }
 

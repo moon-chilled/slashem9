@@ -17,8 +17,8 @@ static boolean query_classes(char *,boolean *,boolean *,
 		const char *,struct obj *,boolean,int *);
 #endif
 static void check_here(boolean);
-static boolean n_or_more(struct obj *);
-static boolean all_but_uchain(struct obj *);
+static bool n_or_more(struct obj *);
+static bool all_but_uchain(struct obj *);
 #if 0 /* not used */
 static boolean allow_cat_no_uchain(struct obj *);
 #endif
@@ -98,7 +98,7 @@ collect_obj_classes(ilets, otmp, here, incl_gold, filter, itemcount)
 char ilets[];
 struct obj *otmp;
 boolean here, incl_gold;
-boolean (*filter)(struct obj*);
+bool (*filter)(struct obj*);
 int *itemcount;
 #else
 int
@@ -106,7 +106,7 @@ collect_obj_classes(ilets, otmp, here, filter, itemcount)
 char ilets[];
 struct obj *otmp;
 boolean here;
-boolean (*filter)(struct obj*);
+bool (*filter)(struct obj*);
 int *itemcount;
 #endif
 {
@@ -177,7 +177,7 @@ int *menu_on_demand;
 #ifndef GOLDOBJ
 				     incl_gold,
 #endif
-				     (boolean (*)(struct obj*)) 0, &itemcount);
+				     NULL, &itemcount);
 	if (iletct == 0) {
 		return false;
 	} else if (iletct == 1) {
@@ -284,10 +284,7 @@ boolean picked_some;
 static long val_for_n_or_more;
 
 /* query_objlist callback: return true if obj's count is >= reference value */
-static boolean
-n_or_more(obj)
-struct obj *obj;
-{
+static bool n_or_more(struct obj *obj) {
     if (obj == uchain) return false;
     return obj->quan >= val_for_n_or_more;
 }
@@ -308,26 +305,17 @@ add_valid_menu_class (int c)
 }
 
 /* query_objlist callback: return true if not uchain */
-static boolean
-all_but_uchain(obj)
-struct obj *obj;
-{
-    return obj != uchain;
+static bool all_but_uchain(struct obj *obj) {
+	return obj != uchain;
 }
 
 /* query_objlist callback: return true */
 /*ARGSUSED*/
-boolean
-allow_all(obj)
-struct obj *obj;
-{
-    return true;
+bool allow_all(struct obj *obj) {
+	return true;
 }
 
-boolean
-allow_category(obj)
-struct obj *obj;
-{
+bool allow_category(struct obj *obj) {
     if (Role_if(PM_PRIEST)) obj->bknown = true;
     if (((index(valid_menu_classes,'u') != NULL) && obj->unpaid) ||
 	(index(valid_menu_classes, obj->oclass) != NULL))
@@ -686,7 +674,7 @@ struct obj *olist;		/* the list to pick from */
 int qflags;			/* options to control the query */
 menu_item **pick_list;		/* return list of items picked */
 int how;			/* type of query */
-boolean (*allow)(struct obj*);/* allow function */
+bool (*allow)(struct obj*);/* allow function */
 {
 	int n;
 	winid win;

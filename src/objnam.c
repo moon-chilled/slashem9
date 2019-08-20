@@ -868,10 +868,7 @@ ring:
 
 
 /* used from invent.c */
-boolean
-not_fully_identified(otmp)
-struct obj *otmp;
-{
+bool not_fully_identified(struct obj *otmp) {
 #ifdef GOLDOBJ
     /* gold doesn't have any interesting attributes [yet?] */
     if (otmp->oclass == COIN_CLASS) return false;	/* always fully ID'd */
@@ -899,9 +896,9 @@ struct obj *otmp;
 			 otmp->oclass != BALL_CLASS))	    /* (useless) */
 	return false;
     else	/* lack of `rknown' only matters for vulnerable objects */
-	return (boolean)(is_rustprone(otmp) ||
-			 is_corrodeable(otmp) ||
-			 is_flammable(otmp));
+	return is_rustprone(otmp) ||
+		is_corrodeable(otmp) ||
+		is_flammable(otmp);
 }
 
 char *

@@ -813,7 +813,7 @@ extern boolean have_lizard(void);
 extern struct obj *o_on(unsigned int,struct obj *);
 extern boolean obj_here(struct obj *,int,int);
 extern boolean wearing_armor(void);
-extern boolean is_worn(struct obj *);
+extern bool is_worn(struct obj *);
 extern struct obj *g_at(int,int);
 extern struct obj *mkgoldobj(long);
 extern struct obj *getobj(const char *,const char *);
@@ -1386,7 +1386,7 @@ extern char *xname(struct obj *);
 extern char *mshot_xname(struct obj *);
 extern boolean the_unique_obj(struct obj *obj);
 extern char *doname(struct obj *);
-extern boolean not_fully_identified(struct obj *);
+extern bool not_fully_identified(struct obj *);
 extern char *corpse_xname(struct obj *,boolean);
 extern char *cxname(struct obj *);
 extern char *killer_xname(struct obj *);
@@ -1492,13 +1492,13 @@ extern void getlock(void);
 /* ### pickup.c ### */
 
 #ifdef GOLDOBJ
-extern int collect_obj_classes(char *,struct obj *,boolean,boolean (*)(struct obj*), int *);
+extern int collect_obj_classes(char *,struct obj *,boolean,bool (*)(struct obj*), int *);
 #else
-extern int collect_obj_classes(char *,struct obj *,boolean,boolean,boolean (*)(struct obj*), int *);
+extern int collect_obj_classes(char *,struct obj *,boolean,boolean,bool (*)(struct obj*), int *);
 #endif
 extern void add_valid_menu_class(int);
-extern boolean allow_all(struct obj *);
-extern boolean allow_category(struct obj *);
+extern bool allow_all(struct obj *);
+extern bool allow_category(struct obj *);
 extern boolean is_worn_by_type(struct obj *);
 extern boolean mbag_explodes(struct obj *, int);
 extern void destroy_mbag(struct obj *, boolean);
@@ -1506,8 +1506,7 @@ extern int pickup(int);
 extern int pickup_object(struct obj *, long, boolean);
 extern int query_category(const char *, struct obj *, int,
 				menu_item **, int);
-extern int query_objlist(const char *, struct obj *, int,
-				menu_item **, int, boolean (*)(struct obj*));
+extern int query_objlist(const char *, struct obj *, int, menu_item **, int, bool (*)(struct obj*));
 extern struct obj *pick_obj(struct obj *);
 extern int encumber_msg(void);
 extern int doloot(void);
