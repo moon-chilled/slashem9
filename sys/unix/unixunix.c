@@ -285,10 +285,6 @@ unsigned msec;				/* milliseconds */
 int
 dosh()
 {
-	if (iflags.debug_fuzzer) {
-		return 0;
-	}
-
 	char *str;
 	if (child(0)) {
 		if((str = getenv("SHELL")) != NULL)

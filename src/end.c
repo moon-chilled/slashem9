@@ -159,10 +159,6 @@ extern const char * const killed_by_prefix[];	/* from topten.c */
 
 /* "#quit" command or keyboard interrupt */
 int done2(void) {
-	if (iflags.debug_fuzzer) {
-		return 0;
-	}
-
 	if(yn("Really quit?") == 'n') {
 #ifndef NO_SIGNAL
 		signal(SIGINT, (SIG_RET_TYPE) done1);

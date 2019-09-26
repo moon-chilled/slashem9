@@ -148,10 +148,6 @@ void setioctls(void) {
 
 #ifdef SUSPEND		/* No longer implies BSD */
 int dosuspend(void) {
-	if (iflags.debug_fuzzer) {
-		return 0;
-	}
-
 # ifdef SIGTSTP
 	if(signal(SIGTSTP, SIG_IGN) == SIG_DFL) {
 		suspend_nhwindows(NULL);

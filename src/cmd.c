@@ -2702,9 +2702,20 @@ static void bind_key(unsigned char key, char* command) {
 		return;
 	}
 
-	for(extcmd = extcmdlist; extcmd->ef_txt; extcmd++) {
+	for (extcmd = extcmdlist; extcmd->ef_txt; extcmd++) {
 		if (strcmp(command, extcmd->ef_txt)) continue;
 		cmdlist[key].bind_cmd = extcmd;
+
+		// don't want those commands in fuzzer mode
+		if (iflags.debug_fuzzer &&
+			(cmdlist[key].bind_cmd->ef_funct == done2 ||
+			 cmdlist[key].bind_cmd->ef_funct == dosave ||
+			 cmdlist[key].bind_cmd->ef_funct == dosh ||
+			 cmdlist[key].bind_cmd->ef_funct == dosuspend)) {
+
+			cmdlist[key].bind_cmd = NULL;
+		}
+
 		return;
 	}
 
