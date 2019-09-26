@@ -180,11 +180,16 @@ static char popch(void) {
 }
 
 char pgetchar(void) {		/* curtesy of aeb@cwi.nl */
-	int ch;
+	if (iflags.debug_fuzzer) {
+		return randomkey();
+	}
 
-	if(!(ch = popch()))
-		ch = nhgetch();
-	return ch;
+	int ch;
+	if ((ch = popch())) {
+		return ch;
+	} else {
+		return nhgetch();
+	}
 }
 
 /* A ch == 0 resets the pushq */
@@ -960,8 +965,16 @@ static int wiz_level_change(void) {
 
 /* #panic command - test program's panic handling */
 static int wiz_panic(void) {
-	if (yn("Do you want to call panic() and end your game?") == 'y')
+	if (iflags.debug_fuzzer) {
+		u.uhp = u.uhpmax = 1000;
+		u.uen = u.uenmax = 1000;
+		return 0;
+	}
+
+	if (yn("Do you want to call panic() and end your game?") == 'y') {
 		panic("crash test.");
+	}
+
         return 0;
 }
 
@@ -3381,7 +3394,7 @@ parsebindings(bindings)
 	newbinding = alloc(sizeof(*newbinding));
 	newbinding->key = key;
 	newbinding->extcmd = alloc(strlen(bind)+1);
-	strcpy(newbinding->extcmd, bind);;
+	strcpy(newbinding->extcmd, bind);
 	newbinding->next = bindinglist;
 	bindinglist = newbinding;
 }
@@ -3434,12 +3447,36 @@ void parseautocomplete(char* autocomplete, boolean condition) {
 	raw_printf ("Bad autocomplete: invalid extended command '%s'.", autocomplete);
 	wait_synch();
 }
+char randomkey(void) {
+	static uchar k;
 
-void
-parsemappings(mapping)
-     /* closely follows parsebindings and parseoptions */
-     char* mapping;
-{
+	switch (rn2(12)) {
+		default: return '\033';
+		case 0: return '\n';
+		case 1:
+		case 2:
+		case 3:
+		case 4: return ' ' + rn2('~' - ' ');
+		case 5: return '\t';
+		case 6: return 'a' + rn2('z' - 'a');
+		case 7: return 'A' + rn2('Z' - 'A');
+		case 8:
+			// bindinglist is a *temporary* list that's used to
+			// construct cmdlist; if it's still around, then
+			// cmdlist isn't so try again.
+			if (bindinglist) return randomkey();
+
+			// cmdlist has length 256, and uchar (will switch this
+			// to u8 soon) has the same range, so this is safe
+			while (!cmdlist[++k].bind_cmd);
+			return k;
+		case 9: return '#';
+	}
+}
+
+
+// closely follows parsebindings and parseoptions
+void parsemappings(char* mapping) {
 	register char *map;
 	unsigned char key;
 	unsigned char map_to[BUFSZ] = "";
@@ -4107,14 +4144,19 @@ char readchar(void) {
 	int sym;
 	int x = u.ux, y = u.uy, mod = 0;
 
-	if ( *readchar_queue )
+	if (iflags.debug_fuzzer) {
+		return randomkey();
+	}
+
+	if (*readchar_queue) {
 	    sym = *readchar_queue++;
-	else
+	} else {
 #ifdef REDO
 	    sym = in_doagain ? Getchar() : nh_poskey(&x, &y, &mod);
 #else
 	    sym = Getchar();
 #endif
+	}
 
 #ifdef UNIX
 # ifdef NR_OF_EOFS

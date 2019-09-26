@@ -28,9 +28,6 @@ struct flag {
 #define wizard	 flags.debug
 	boolean  end_own;	/* list all own scores */
 	boolean  explore;	/* in exploration mode */
-#ifdef OPT_DISPMAP
-	boolean  fast_map;	/* use optimized, less flexible map display */
-#endif
 #define discover flags.explore
 	boolean  female;
 	boolean  forcefight;
@@ -156,6 +153,7 @@ struct instance_flags {
 #ifdef CURSES_GRAPHICS
 	boolean  classic_status;    /* What kind of horizontal statusbar to use */
 #endif
+	bool     debug_fuzzer;
 	boolean  echo;		/* 1 to echo characters */
 	unsigned msg_history;	/* hint: # of top lines to save */
 	boolean  msg_is_alert;  /* need to press an extra key to get rid of a --More-- prompt.  Only in curses */
@@ -276,7 +274,7 @@ struct instance_flags {
 	char	 altkeyhandler[MAX_ALTKEYHANDLER];
 #endif
 #ifdef REALTIME_ON_BOTL
-  boolean  showrealtime; /* show actual elapsed time */
+	boolean  showrealtime; /* show actual elapsed time */
 #endif
 };
 

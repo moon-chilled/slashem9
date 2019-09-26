@@ -160,6 +160,7 @@ extern const char * shorten_bot2(const char *, unsigned int);
 
 /* ### cmd.c ### */
 
+extern char randomkey(void);
 extern void reset_occupations(void);
 extern void set_occupation(int (*)(void),const char *,int);
 #ifdef REDO

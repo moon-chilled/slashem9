@@ -552,6 +552,10 @@ static const short tmspc10[] = {		/* from termcap */
 
 /* delay 50 ms */
 void tty_delay_output(void) {
+	if (iflags.debug_fuzzer) {
+		return;
+	}
+
 #if defined(MICRO)
 	int i;
 #endif

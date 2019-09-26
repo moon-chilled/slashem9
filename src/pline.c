@@ -213,9 +213,12 @@ void impossible(const char *s, ...) {
 		panic("impossible called impossible");
 	program_state.in_impossible = 1;
 	{
-		char pbuf[BUFSZ];
+		char pbuf[ BUFSZ];
 		vsprintf(pbuf,s,VA_ARGS);
 		paniclog("impossible", pbuf);
+		if (iflags.debug_fuzzer) {
+			panic("%s", pbuf);
+		}
 	}
 	vpline(s,VA_ARGS);
 	pline("Program in disorder!  Saving and reloading may fix the problem.");

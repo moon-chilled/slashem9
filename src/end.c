@@ -159,6 +159,10 @@ extern const char * const killed_by_prefix[];	/* from topten.c */
 
 /* "#quit" command or keyboard interrupt */
 int done2(void) {
+	if (iflags.debug_fuzzer) {
+		return 0;
+	}
+
 	if(yn("Really quit?") == 'n') {
 #ifndef NO_SIGNAL
 		signal(SIGINT, (SIG_RET_TYPE) done1);
@@ -330,7 +334,7 @@ void panic (const char *str, ...) {
 			!program_state.something_worth_saving ? "" :
 			" and it may be possible to rebuild.");
 # endif
-	if (program_state.something_worth_saving) {
+	if (program_state.something_worth_saving && !iflags.debug_fuzzer) {
 	    set_error_savefile();
 	    dosave0();
 	}
@@ -613,7 +617,11 @@ void done(int how) {
 	 *	xname() when listing possessions
 	 * pbuf: holds sprintf'd output for raw_print and putstr
 	 */
-	if (how == ASCENDED || (!killer && how == GENOCIDED))
+	if (iflags.debug_fuzzer && !(program_state.panicking || how == PANICKED)) {
+		savelife(how);
+		killer = 0;
+		return;
+	} else if (how == ASCENDED || (!killer && how == GENOCIDED))
 		killer_format = NO_KILLER_PREFIX;
 	/* Avoid killed by "a" burning or "a" starvation */
 	if (!killer && (how == STARVING || how == BURNING))

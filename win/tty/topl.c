@@ -195,19 +195,28 @@ void more(void) {
 	struct WinDesc *cw = wins[WIN_MESSAGE];
 
 	/* avoid recursion -- only happens from interrupts */
-	if(ttyDisplay->inmore++)
+	if (ttyDisplay->inmore++) {
 		return;
+	}
 
-	if(ttyDisplay->toplin) {
+	if (iflags.debug_fuzzer) {
+		return;
+	}
+
+	if (ttyDisplay->toplin) {
 		tty_curs(BASE_WINDOW, cw->curx+1, cw->cury);
 		if(cw->curx >= CO - 8) topl_putsym('\n');
 	}
 
-	if(flags.standout)
+	if (flags.standout) {
 		standoutbeg();
+	}
+
 	putsyms(defmorestr);
-	if(flags.standout)
+
+	if (flags.standout) {
 		standoutend();
+	}
 
 #ifdef BORG
 	if (borg_on) {

@@ -2596,14 +2596,20 @@ int tty_nhgetch(void) {
 	 */
 	if (WIN_MESSAGE != WIN_ERR && wins[WIN_MESSAGE])
 		wins[WIN_MESSAGE]->flags &= ~WIN_STOP;
+
+	if (iflags.debug_fuzzer) {
+		i = randomkey();
+	} else {
+
 #ifdef UNIX
-	i = ((++nesting == 1) ? tgetch() :
-			(read(fileno(stdin), (void *)&nestbuf,1) == 1 ? (int)nestbuf :
-			 EOF));
-	--nesting;
+		i = ((++nesting == 1) ? tgetch() :
+				(read(fileno(stdin), &nestbuf, 1) == 1 ? (int)nestbuf :
+				 EOF));
+		--nesting;
 #else
-	i = tgetch();
+		i = tgetch();
 #endif
+	}
 	if (!i) i = '\033'; /* map NUL to ESC since nethack doesn't expect NUL */
 	if (ttyDisplay && ttyDisplay->toplin == 1)
 		ttyDisplay->toplin = 2;

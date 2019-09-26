@@ -68,11 +68,6 @@ static struct Bool_Opt
 #else
 	{"extmenu", NULL, false, SET_IN_FILE},
 #endif
-#ifdef OPT_DISPMAP
-	{"fast_map", &flags.fast_map, true, SET_IN_GAME},
-#else
-	{"fast_map", NULL, true, SET_IN_FILE},
-#endif
 	{"female", &flags.female, false, DISP_IN_GAME},
 	{"fixinv", &flags.invlet_constant, true, SET_IN_GAME},
 	{"fullscreen", &iflags.wc2_fullscreen, false, SET_IN_FILE},

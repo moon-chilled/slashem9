@@ -434,6 +434,10 @@ tgetch()
 	return ReadFile(hConIn,&c,1,&count,NULL) && count ? c : EOF;
     } else {
 	really_move_cursor();
+	if (iflags.debug_fuzzer) {
+		return randomkey();
+	}
+
 	return pCheckInput(hConIn, &ir, &count, iflags.num_pad, 0, &mod, &cc);
     }
 }
@@ -647,7 +651,7 @@ cl_eos()
 void
 tty_nhbell()
 {
-	if (flags.silent) return;
+	if (flags.silent || iflags.debug_fuzzer) return;
 	Beep(8000,500);
 }
 
@@ -656,6 +660,10 @@ volatile int junk;	/* prevent optimizer from eliminating loop below */
 void
 tty_delay_output()
 {
+	if (iflags.debug_fuzzer) {
+		return;
+	}
+
 	/* delay 50 ms - uses ANSI C clock() function now */
 	clock_t goal;
 	int k;

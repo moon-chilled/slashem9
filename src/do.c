@@ -805,11 +805,10 @@ int dodown(void) {
 }
 
 int doup(void) {
-	if( (u.ux != xupstair || u.uy != yupstair)
+	if ((u.ux != xupstair || u.uy != yupstair)
 	     && (!xupladder || u.ux != xupladder || u.uy != yupladder)
 	     && (!sstairs.sx || u.ux != sstairs.sx || u.uy != sstairs.sy
-			|| !sstairs.up)
-	  ) {
+			|| !sstairs.up)) {
 		You_cant("go up here.");
 		return 0;
 	}
@@ -822,23 +821,27 @@ int doup(void) {
 		return 0;
 	} else
 #endif
-	if(u.ustuck) {
+	if (u.ustuck) {
 		You("are %s, and cannot go up.",
 			!u.uswallow ? "being held" : is_animal(u.ustuck->data) ?
 			"swallowed" : "engulfed");
 		return 1;
 	}
-	if(near_capacity() > SLT_ENCUMBER) {
+	if (near_capacity() > SLT_ENCUMBER) {
 		/* No levitation check; inv_weight() already allows for it */
 		Your("load is too heavy to climb the %s.",
 			levl[u.ux][u.uy].typ == STAIRS ? "stairs" : "ladder");
 		return 1;
 	}
-	if(ledger_no(&u.uz) == 1) {
-		if (yn("Beware, there will be no return! Still climb?") != 'y')
+	if (ledger_no(&u.uz) == 1) {
+		if (iflags.debug_fuzzer) {
 			return 0;
+		}
+		if (yn("Beware, there will be no return! Still climb?") != 'y') {
+			return 0;
+		}
 	}
-	if(!next_to_u()) {
+	if (!next_to_u()) {
 		You("are held back by your pet!");
 		return 0;
 	}

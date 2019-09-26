@@ -947,6 +947,9 @@ level_tele (void)
 	char buf[BUFSZ];
 	boolean force_dest = false;
 
+	if (iflags.debug_fuzzer) {
+		goto random_levtport;
+	}
 	if ((u.uhave.amulet || In_endgame(&u.uz) || In_sokoban(&u.uz)
 #ifdef STEED
 			|| (u.usteed && mon_has_amulet(u.usteed))
@@ -1102,6 +1105,10 @@ level_tele (void)
 	}
 #endif
 	killer = 0;		/* still alive, so far... */
+
+	if (iflags.debug_fuzzer && newlev < 0) {
+		goto random_levtport;
+	}
 
 	if (newlev < 0 && !force_dest) {
 		if (*u.ushops0) {
