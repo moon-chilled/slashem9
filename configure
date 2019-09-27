@@ -729,7 +729,6 @@ enable_curses_graphics
 enable_data_librarian
 enable_fcntl
 enable_light_src_spell
-enable_reincarnation
 enable_invisible_objects
 enable_unpolypile
 enable_steed
@@ -1394,7 +1393,6 @@ Optional Features:
   --enable-fcntl          FCNTL file locking (default=yes)
   --enable-light-src-spell
                           Spells are light sources (default=yes)
-  --enable-reincarnation  Special Rogue-like levels (default=no)
   --enable-invisible-objects
                           Invisible objects (default=yes)
   --enable-unpolypile     Object unpolymorphing (default=yes)
@@ -5684,25 +5682,6 @@ $as_echo "$enable_light_src_spell" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define LIGHT_SRC_SPELL /**/
-_ACEOF
-
-   fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable reincarnation" >&5
-$as_echo_n "checking whether to enable reincarnation... " >&6; }
-   # Check whether --enable-reincarnation was given.
-if test "${enable_reincarnation+set}" = set; then :
-  enableval=$enable_reincarnation;
-else
-  enable_reincarnation="no"
-fi
-
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_reincarnation" >&5
-$as_echo "$enable_reincarnation" >&6; }
-   if test "$enable_reincarnation" != "no" ; then
-
-cat >>confdefs.h <<_ACEOF
-#define REINCARNATION /**/
 _ACEOF
 
    fi

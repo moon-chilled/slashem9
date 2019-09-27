@@ -309,11 +309,7 @@ int mattackm(struct monst *magr, struct monst *mdef) {
 
 	    case AT_WEAP:
 		/* "ranged" attacks */
-#ifdef REINCARNATION
 		if (!Is_rogue_level(&u.uz) && range) {
-#else
-		if (range) {
-#endif
 		    res[i] = thrwmm(magr, mdef);
 		    attk = 0;
 		    strike = res[i] & MM_HIT;

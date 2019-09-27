@@ -24,16 +24,10 @@ static int pick_animal(void);
 static int select_newcham_form(struct monst *);
 static void kill_eggs(struct obj *);
 
-#ifdef REINCARNATION
 #define LEVEL_SPECIFIC_NOCORPSE(mdat) \
 	 (Is_rogue_level(&u.uz) || \
 	   (level.flags.graveyard && is_undead(mdat) && \
 	    mdat != &mons[PM_VECNA] && rn2(3)))
-#else
-#define LEVEL_SPECIFIC_NOCORPSE(mdat) \
-	   (level.flags.graveyard && is_undead(mdat) && \
-	    mdat != &mons[PM_VECNA] && rn2(3))
-#endif
 
 
 #if 0
@@ -1177,16 +1171,10 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 		(levl[nx][ny].doormask & D_LOCKED && !(flag & UNLOCKDOOR))) &&
 	       !thrudoor) continue;
 	    if(nx != x && ny != y && (nodiag ||
-#ifdef REINCARNATION
 	       ((IS_DOOR(nowtyp) &&
 		 ((levl[x][y].doormask & ~D_BROKEN) || Is_rogue_level(&u.uz))) ||
 		(IS_DOOR(ntyp) &&
-		 ((levl[nx][ny].doormask & ~D_BROKEN) || Is_rogue_level(&u.uz))))
-#else
-	       ((IS_DOOR(nowtyp) && (levl[x][y].doormask & ~D_BROKEN)) ||
-		(IS_DOOR(ntyp) && (levl[nx][ny].doormask & ~D_BROKEN)))
-#endif
-	       ))
+		 ((levl[nx][ny].doormask & ~D_BROKEN) || Is_rogue_level(&u.uz))))))
 		continue;
 	    if((is_pool(nx,ny) == wantpool || poolok) &&
 	       (lavaok || !is_lava(nx,ny))) {

@@ -699,7 +699,6 @@ void assign_utf8graphics_symbol(int position, glyph_t value) {
 
 
 
-#ifdef REINCARNATION
 /*
  * saved display symbols for objects & features.
  */
@@ -860,6 +859,5 @@ void assign_rogue_graphics(boolean is_rlevel) {
 		memcpy(monsyms, save_monsyms, sizeof monsyms);
 	}
 }
-#endif /* REINCARNATION */
 
 /*drawing.c*/

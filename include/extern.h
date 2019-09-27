@@ -363,9 +363,7 @@ extern char *distant_monnam(struct monst *,int,char *);
 extern const char *rndmonnam(void);
 extern const char *hcolor(const char *);
 extern const char *rndcolor(void);
-#ifdef REINCARNATION
 extern const char *roguename(void);
-#endif
 extern struct obj *realloc_obj(struct obj *, int, void *, int, const char *);
 extern char *coyotename(struct monst *,char *);
 
@@ -476,9 +474,7 @@ extern int def_char_to_monclass(char);
 #if !defined(MAKEDEFS_C) && !defined(LEV_LEX_C)
 extern void assign_graphics(const glyph_t *,int,int,int);
 extern void switch_graphics(int);
-#ifdef REINCARNATION
 extern void assign_rogue_graphics(boolean);
-#endif
 extern void assign_utf8graphics_symbol(int, glyph_t);
 #ifdef USER_DUNGEONCOLOR
 extern void assign_colors(uchar *,int,int,int);
@@ -626,11 +622,9 @@ extern void arm_bomb(struct obj *, boolean);
 
 /* ### extralev.c ### */
 
-#ifdef REINCARNATION
 extern void makeroguerooms(void);
 extern void corr(int,int);
 extern void makerogueghost(void);
-#endif
 
 /* ### files.c ### */
 

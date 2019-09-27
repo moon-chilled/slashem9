@@ -230,9 +230,6 @@ typedef long glyph_t;
 /* dungeon features */
 #define LIGHT_SRC_SPELL /* WAC Light sourced spells (wac@intergate.bc.ca)*/
 
-/* dungeon levels */
-/* #define REINCARNATION */     /* Special Rogue-like levels */
-
 /* monsters & objects */
 #define INVISIBLE_OBJECTS /* Not yet fully implemented */
 #define UNPOLYPILE	/* WAC -- Items can unpolymorph */

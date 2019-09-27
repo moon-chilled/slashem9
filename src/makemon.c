@@ -6,9 +6,7 @@
 #include "epri.h"
 #include "emin.h"
 #include "edog.h"
-#ifdef REINCARNATION
 #include <ctype.h>
-#endif
 
 static struct monst zeromonst;
 
@@ -166,9 +164,8 @@ static void m_initweap(struct monst *mtmp) {
 	int mm = monsndx(ptr);
 	struct obj *otmp;
 
-#ifdef REINCARNATION
 	if (Is_rogue_level(&u.uz)) return;
-#endif
+
 /*
  *	first a few special cases:
  *
@@ -871,9 +868,8 @@ static void m_initinv(struct monst *mtmp) {
 /* 	char *opera_cloak = "opera cloak";*/
 	int i;
 
-#ifdef REINCARNATION
 	if (Is_rogue_level(&u.uz)) return;
-#endif
+
 
 /*
  *	Soldiers get armour & rations - armour approximates their ac.
@@ -1700,9 +1696,7 @@ struct permonst *rndmonst(void) {
 	if (rndmonst_state.choice_count < 0) {	/* need to recalculate */
 	    int zlevel, minmlev, maxmlev;
 	    boolean elemlevel;
-#ifdef REINCARNATION
 	    boolean upper;
-#endif
 	    rndmonst_state.choice_count = 0;
 	    /* look for first common monster */
 	    for (mndx = LOW_PM; mndx < SPECIAL_PM; mndx++) {
@@ -1721,9 +1715,7 @@ struct permonst *rndmonst(void) {
 	    minmlev = zlevel / 6;
 	    /* determine the level of the strongest monster to make. */
 	    maxmlev = (zlevel + u.ulevel + 1)>>1;
-#ifdef REINCARNATION
 	    upper = Is_rogue_level(&u.uz);
-#endif
 	    elemlevel = In_endgame(&u.uz) && !Is_astralevel(&u.uz);
 
 /*
@@ -1737,9 +1729,7 @@ loopback:
 		rndmonst_state.mchoices[mndx] = 0;
 		if (tooweak(mndx, minmlev) || toostrong(mndx, maxmlev))
 		    continue;
-#ifdef REINCARNATION
 		if (upper && !isupper((int)def_monsyms[(int)(ptr->mlet)])) continue;
-#endif
 		if (elemlevel && wrong_elem_type(ptr)) continue;
 		if (uncommon(mndx)) continue;
 		if (Inhell && (ptr->geno & G_NOHELL)) continue;

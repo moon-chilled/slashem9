@@ -989,7 +989,6 @@ boolean doorlock(struct obj *otmp, int x, int y) {
 	switch(otmp->otyp) {
 	case WAN_LOCKING:
 	case SPE_WIZARD_LOCK:
-#ifdef REINCARNATION
 	    if (Is_rogue_level(&u.uz)) {
 	    	boolean vis = cansee(x,y);
 		/* Can't have real locking in Rogue, so just hide doorway */
@@ -1007,7 +1006,7 @@ boolean doorlock(struct obj *otmp, int x, int y) {
 		newsym(x,y);
 		return true;
 	    }
-#endif
+
 	    if (obstructed(x,y)) return false;
 	    /* Don't allow doors to close over traps.  This is for pits */
 	    /* & trap doors, but is it ever OK for anything else? */

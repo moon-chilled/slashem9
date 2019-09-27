@@ -429,11 +429,6 @@ make_version()
 	 * groupings are just for convenience.
 	 */
 	version.feature_set = (unsigned long)(0L
-		/* levels and/or topology (0..3) */
-#ifdef REINCARNATION
-			| (1L <<  1)
-#endif
-		/* monsters (4..7) */
 #ifdef MAIL
 			| (1L <<  7)
 #endif
@@ -671,9 +666,6 @@ static const char *build_opts[] = {
 #endif
 #ifdef REDO
 		"redo command",
-#endif
-#ifdef REINCARNATION
-		"rogue level",
 #endif
 #ifdef STEED
 		"saddles and riding",
@@ -1122,17 +1114,11 @@ dead_data:  perror(in_line);	/* report the problem */
 }
 
 
+// this can be used to selectively disable levels in dungeon.def
 static	struct deflist {
-
 	const char	*defname;
 	boolean	true_or_false;
-} deflist[] = {
-#ifdef REINCARNATION
-	      {	"REINCARNATION", true },
-#else
-	      {	"REINCARNATION", false },
-#endif
-	      { 0, 0 } };
+} deflist[] = {{ 0, 0 }};
 
 static int
 check_control(s)

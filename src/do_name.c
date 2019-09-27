@@ -879,7 +879,6 @@ const char *rndmonnam(void) {
 	return mons[name].mname;
 }
 
-#ifdef REINCARNATION
 // Name of a Rogue player
 const char *roguename(void) {
 	char *i, *opts;
@@ -896,7 +895,6 @@ const char *roguename(void) {
 	return rn2(3) ? (rn2(2) ? "Michael Toy" : "Kenneth Arnold")
 		: "Glenn Wichman";
 }
-#endif /* REINCARNATION */
 
 static const char * const hcolors[] = {
 	"ultraviolet", "infrared", "bluish-orange",

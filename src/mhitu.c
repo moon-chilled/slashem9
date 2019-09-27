@@ -719,11 +719,11 @@ int mattacku(struct monst *mtmp) {
 			break;
 		case AT_WEAP:
 			if(range2) {
-#ifdef REINCARNATION
-				if (!Is_rogue_level(&u.uz))
-#endif
-				    if (!blue_on_blue(mtmp))
-					thrwmu(mtmp);
+				if (!Is_rogue_level(&u.uz)) {
+					if (!blue_on_blue(mtmp)) {
+						thrwmu(mtmp);
+					} 
+				}
 			} else {
 			    int hittmp = 0;
 

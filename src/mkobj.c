@@ -55,7 +55,6 @@ const struct icp boxiprobs[] = {
 { 3, AMULET_CLASS}
 };
 
-#ifdef REINCARNATION
 const struct icp rogueprobs[] = {
 {12, WEAPON_CLASS},
 {12, ARMOR_CLASS},
@@ -65,7 +64,6 @@ const struct icp rogueprobs[] = {
 { 5, WAND_CLASS},
 { 5, RING_CLASS}
 };
-#endif
 
 const struct icp hellprobs[] = {
 {15, WEAPON_CLASS},
@@ -114,10 +112,9 @@ boolean artif;
 
 	if(oclass == RANDOM_CLASS) {
 		const struct icp *iprobs =
-#ifdef REINCARNATION
 				    (Is_rogue_level(&u.uz)) ?
 				    (const struct icp *)rogueprobs :
-#endif
+
 				    Inhell ? (const struct icp *)hellprobs :
 				    (const struct icp *)mkobjprobs;
 

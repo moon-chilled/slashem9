@@ -63,6 +63,7 @@ static struct Bool_Opt
 #else
 	{"classic_status", NULL, true, SET_IN_FILE},
 #endif
+	{"debug_fuzzer", &iflags.debug_fuzzer, false, SET_IN_FILE},
 #if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS)
 	{"extmenu", &iflags.extmenu, false, SET_IN_GAME},
 #else
@@ -1618,11 +1619,9 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 			switch_graphics(iflags.graphics);
 			doredraw();
 
-#ifdef REINCARNATION
 			if (!initial && u.uz.dlevel &&
 			      Is_rogue_level(&u.uz))
 				assign_rogue_graphics(true);
-#endif
 
 		}
 
