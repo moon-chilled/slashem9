@@ -252,7 +252,7 @@ dofiles:
 	@HOST_UNIX@-rm -f $(SHELLDIR)/$(SCRIPT)
 	@HOST_UNIX@sed -e 's;@HACKDIR@;$(FILE_AREA_UNSHARE);' \
 	@HOST_UNIX@	-e 's;HACKDIR/@GAME@;HACKDIR/$(GAME);' \
-	@HOST_UNIX@	< $(srcdir)/sys/unix/nethack.sh \
+	@HOST_UNIX@	< $(srcdir)/sys/unix/slashem.sh \
 	@HOST_UNIX@	> $(SHELLDIR)/$(SCRIPT)
 # set up their permissions
 	-( cd $(FILE_AREA_UNSHARE) ; $(CHOWN) $(GAMEUID) $(GAME) recover$(EXEEXT) ; \

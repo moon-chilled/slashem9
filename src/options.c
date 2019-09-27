@@ -2681,6 +2681,12 @@ goodfruit:
 			    return;
 			}
 
+			if (iflags.debug_fuzzer && !initial) {
+				// don't randomly toggle this/these
+				if (boolopt[i].addr == &flags.silent || boolopt[i].addr == &flags.menu_on_esc)
+					return;
+			}
+
 			*(boolopt[i].addr) = !negated;
 
 			duplicate_opt_detection(boolopt[i].name, 0);

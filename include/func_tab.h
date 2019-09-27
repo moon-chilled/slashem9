@@ -14,6 +14,8 @@ struct ext_func_tab {
 	/* for interrupted rpeteats; e.g.,
 	 * "searching" => "You stop searching." */
 	const char *f_text;
+
+	bool disallowed_if_fuzzing;
 };
 
 /* Tells what to do on a command key press: either an extended command or

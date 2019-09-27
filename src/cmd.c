@@ -258,10 +258,13 @@ static int doextcmd(void) {
 
 	/* keep repeating until we don't run help or quit */
 	do {
-	    idx = get_ext_cmd();
-	    if (idx < 0) return 0;	/* quit */
+		idx = get_ext_cmd();
+		if (idx < 0) return 0;	/* quit */
+		if (iflags.debug_fuzzer && extcmdlist[idx].disallowed_if_fuzzing) {
+			continue;
+		}
 
-	    retval = (*extcmdlist[idx].ef_funct)();
+		retval = (*extcmdlist[idx].ef_funct)();
 	} while (extcmdlist[idx].ef_funct == doextlist);
 
 	return retval;
@@ -2556,13 +2559,13 @@ struct ext_func_tab extcmdlist[] = {
 	{"read", "read a scroll or spellbook", doread, !IFBURIED},
 	{"redraw", "redraw screen", doredraw, IFBURIED},
 #ifdef SUSPEND
-	{"suspend", "suspend game (only if defined)", dosuspend, IFBURIED},
+	{"suspend", "suspend game (only if defined)", dosuspend, IFBURIED, .disallowed_if_fuzzing = true},
 #endif /* SUSPEND */
 	{"setoptions", "show option settings, possibly change them", doset, IFBURIED},
 	{"search", "search for traps and secret doors", dosearch, IFBURIED, !AUTOCOMPLETE, "searching"},
-	{"save", "save the game", dosave, IFBURIED},
+	{"save", "save the game", dosave, IFBURIED, .disallowed_if_fuzzing = true},
 	{"swap", "swap wielded and secondary weapons", doswapweapon, !IFBURIED},
-	{"shell", "do a shell escape (only if defined)", dosh, IFBURIED},
+	{"shell", "do a shell escape (only if defined)", dosh, IFBURIED, .disallowed_if_fuzzing = true},
 	{"throw", "throw something", dothrow, !IFBURIED},
 	{"takeoff", "take off one piece of armor", dotakeoff, !IFBURIED},
 	{"teleport", "teleport around level", dotele, IFBURIED},
@@ -2592,7 +2595,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"name", "name an item or type of object", ddocall, IFBURIED, AUTOCOMPLETE},
 	{"offer", "offer a sacrifice to the gods", dosacrifice, !IFBURIED, AUTOCOMPLETE},
 	{"pray", "pray to the gods for help", dopray, IFBURIED, AUTOCOMPLETE},
-	{"quit", "exit without saving current game", done2, IFBURIED, AUTOCOMPLETE},
+	{"quit", "exit without saving current game", done2, IFBURIED, AUTOCOMPLETE, .disallowed_if_fuzzing = true},
 #ifdef STEED
 	{"ride", "ride (or stop riding) a monster", doride, !IFBURIED, AUTOCOMPLETE},
 #endif
@@ -2705,16 +2708,6 @@ static void bind_key(unsigned char key, char* command) {
 	for (extcmd = extcmdlist; extcmd->ef_txt; extcmd++) {
 		if (strcmp(command, extcmd->ef_txt)) continue;
 		cmdlist[key].bind_cmd = extcmd;
-
-		// don't want those commands in fuzzer mode
-		if (iflags.debug_fuzzer &&
-			(cmdlist[key].bind_cmd->ef_funct == done2 ||
-			 cmdlist[key].bind_cmd->ef_funct == dosave ||
-			 cmdlist[key].bind_cmd->ef_funct == dosh ||
-			 cmdlist[key].bind_cmd->ef_funct == dosuspend)) {
-
-			cmdlist[key].bind_cmd = NULL;
-		}
 
 		return;
 	}
@@ -3549,8 +3542,8 @@ void rhack(char *cmd) {
 	if (*cmd == DOESCAPE) { /* <esc> key - user might be panicking */
 		/* Bring up the menu */
 		if (multi || !flags.menu_on_esc || !(domenusystem())) {
-		flags.move = false;
-		    multi = 0;
+			flags.move = false;
+			multi = 0;
 		}
 		return;
 #if 0
@@ -3689,6 +3682,9 @@ void rhack(char *cmd) {
 			int res;
 			int (*func)(void);
 
+			if (iflags.debug_fuzzer && extcmd->disallowed_if_fuzzing) {
+				return;
+			}
 
 			if (u.uburied && !extcmd->can_if_buried) {
 				You_cant("do that while you are buried!");

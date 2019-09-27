@@ -1,5 +1,4 @@
 #!/bin/sh
-#	SCCS Id: @(#)nethack.sh	3.4	1990/02/26
 
 HACKDIR=@HACKDIR@
 export HACKDIR
@@ -59,13 +58,9 @@ fi
 if [ x$NH_USE_GDB != x ]; then
 	HACK="gdb $HACK"
 fi
+if [ x$NH_USE_LLDB != x ]; then
+	HACK="lldb $HACK"
+fi
 
 cd $HACKDIR
-case $1 in
-	-s*)
-		exec $HACK "$@"
-		;;
-	*)
-		exec $HACK "$@" $MAXNROFPLAYERS
-		;;
-esac
+exec $HACK "$@"
