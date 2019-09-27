@@ -3452,8 +3452,6 @@ void parseautocomplete(char* autocomplete, boolean condition) {
 	wait_synch();
 }
 char randomkey(void) {
-	static uchar k;
-
 	switch (rn2(12)) {
 		default: return '\033';
 		case 0: return '\n';
@@ -3464,16 +3462,27 @@ char randomkey(void) {
 		case 5: return '\t';
 		case 6: return 'a' + rn2('z' - 'a');
 		case 7: return 'A' + rn2('Z' - 'A');
-		case 8:
+		case 8: {
 			// bindinglist is a *temporary* list that's used to
 			// construct cmdlist; if it's still around, then
 			// cmdlist isn't so try again.
 			if (bindinglist) return randomkey();
 
-			// cmdlist has length 256, and uchar (will switch this
-			// to u8 soon) has the same range, so this is safe
-			while (!cmdlist[++k].bind_cmd);
-			return k;
+			while (true) {
+				// randomly select a cmd; if it's prayer, accept it only with 1% probability
+				uchar k;
+				if (cmdlist[k = rn2(255)].bind_cmd) {
+					if (cmdlist[k].bind_cmd->ef_funct == dopray) {
+						if (!rn2(100)) {
+							continue;
+						}
+					}
+
+					return k;
+				}
+			}
+
+		}
 		case 9: return '#';
 	}
 }
