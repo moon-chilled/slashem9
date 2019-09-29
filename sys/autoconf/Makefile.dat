@@ -1,15 +1,10 @@
 #	NetHack Makefile.
 #       @configure_input@
-#	SCCS Id: @(#)Makefile.dat	3.4	1992/09/18
 
 VPATH=@srcdir@
 srcdir=@srcdir@
 
 EXEEXT = @EXEEXT@
-
-# for Atari
-# SHELL=E:/GEMINI2/MUPFEL.TTP
-# UUDECODE=uudecode
 
 VARDAT = data rumors quest.dat oracles options
 

@@ -1494,7 +1494,7 @@ extern int collect_obj_classes(char *,struct obj *,boolean,boolean,bool (*)(stru
 extern void add_valid_menu_class(int);
 extern bool allow_all(struct obj *);
 extern bool allow_category(struct obj *);
-extern boolean is_worn_by_type(struct obj *);
+extern bool is_worn_by_type(struct obj *);
 extern boolean mbag_explodes(struct obj *, int);
 extern void destroy_mbag(struct obj *, boolean);
 extern int pickup(int);

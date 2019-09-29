@@ -1,58 +1,13 @@
 #	Makefile for NetHack's utility programs.
 #       @configure_input@
-#	SCCS Id: @(#)Makefile.utl	3.4	1997/04/19
 
 VPATH=@srcdir@
 srcdir=@srcdir@
 
-# newer makes predefine $(MAKE) to 'make' and do smarter processing of
-# recursive make calls if $(MAKE) is used
-# these makes allow $(MAKE) to be overridden by the environment if someone
-# wants to (or has to) use something other than the standard make, so we do
-# not want to unconditionally set $(MAKE) here
-#
-# unfortunately, some older makes do not predefine $(MAKE); if you have one of
-# these, uncomment the following line
-# (you will know that you have one if you get complaints about unable to
-# execute things like 'foo.o')
-# MAKE = make
-
 EXEEXT = @EXEEXT@
 CC = @CC@
 
-# if you are using gcc as your compiler,
-#	uncomment the CC definition below if it's not in your environment
-# CC = gcc
-#
-#	For Bull DPX/2 systems at B.O.S. 2.0 or higher use the following:
-#
-# CC = gcc -ansi -D_BULL_SOURCE -D_XOPEN_SOURCE -D_POSIX_SOURCE
-#
-#	If you are using GCC 2.2.2 or higher on a DPX/2, just use:
-#
-# CC = gcc -ansi
-#
-#	For HP/UX 10.20 with GCC:
-# CC = gcc -D_POSIX_SOURCE
-#
-# if your make doesn't define a default SHELL properly, you may need
-#    the line below (Atari users will need a bourne work-alike)
-# SHELL = /bin/sh
-# for Atari
-# SHELL=E:/GEMINI2/MUPFEL.TTP
-
-# flags for Linux
-#   compile normally
-# CFLAGS = -O2 -fomit-frame-pointer -I../include -I$(srcdir)/../include
-# LFLAGS = -L/usr/X11R6/lib
-#   OR compile backwards compatible a.out format
-# CFLAGS = -O2 -b i486-linuxaout -fomit-frame-pointer -I../include -I$(srcdir)/../include
-# LFLAGS = -b i486-linuxaout -L/usr/X11R6/lib
-
-# flags for debugging:
-# CFLAGS = -g -I../include -I$(srcdir)/../include
-
-CFLAGS = -DAUTOCONF -I../include -I$(srcdir)/../include -std=c99 @CFLAGS@
+CFLAGS = -DAUTOCONF -I../include -I$(srcdir)/../include -std=c99 -Werror @CFLAGS@
 LFLAGS =
 
 LIBS =
@@ -63,12 +18,6 @@ LIBS =
 OBJDIR = ../src
 
 # yacc/lex programs to use to generate *_comp.h, *_lex.c, and *_yacc.c.
-# if, instead of yacc/lex you have bison/flex, comment/uncomment the following.
-# YACC     = yacc
-# LEX      = lex
-# YACC     = bison -y
-# YACC     = byacc
-# LEX      = flex
 LEX      = @LEX@
 YACC     = @YACC@
 
@@ -77,10 +26,6 @@ YACC     = @YACC@
 YTABC = y.tab.c
 YTABH = y.tab.h
 LEXYYC = lex.yy.c
-# YTABC = y_tab.c
-# YTABH = y_tab.h
-# LEXYYC = lexyy.c
-
 
 
 # ----------------------------------------

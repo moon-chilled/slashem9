@@ -48,19 +48,16 @@ static struct Jitem Japanese_items[] = {
 
 static const char *Japanese_item_name(int i);
 
-static char *
-strprepend(s,pref)
-char *s;
-const char *pref;
-{
+static char *strprepend(char *s, const char *pref) {
 	int i = (int)strlen(pref);
 
-	if(i > PREFIX) {
+	if (strlen(pref) > PREFIX) {
 		impossible("PREFIX too short (for %d).", i);
 		return s;
 	}
+
 	s -= i;
-	strncpy(s, pref, i);	/* do not copy trailing 0 */
+	memcpy(s, pref, i);	/* do not copy trailing 0 */
 	return s;
 }
 

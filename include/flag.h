@@ -153,7 +153,7 @@ struct instance_flags {
 #ifdef CURSES_GRAPHICS
 	boolean  classic_status;    /* What kind of horizontal statusbar to use */
 #endif
-	bool     debug_fuzzer;
+	boolean  debug_fuzzer;
 	boolean  echo;		/* 1 to echo characters */
 	unsigned msg_history;	/* hint: # of top lines to save */
 	boolean  msg_is_alert;  /* need to press an extra key to get rid of a --More-- prompt.  Only in curses */

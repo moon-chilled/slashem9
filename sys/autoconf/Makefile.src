@@ -1,6 +1,5 @@
 #	NetHack Makefile.
 #       @configure_input@
-#	SCCS Id: @(#)Makefile.src	3.4	2002/03/02
 
 VPATH = @srcdir@
 srcdir = @srcdir@
@@ -24,7 +23,7 @@ SYSOBJ=@SYSOBJ@
 CC = @CC@
 WINDRES = @WINDRES@
 
-CFLAGS = -DAUTOCONF -I../include -I$(srcdir)/../include -std=c99 @CFLAGS@
+CFLAGS = -DAUTOCONF -I../include -I$(srcdir)/../include -std=c99 -Werror @CFLAGS@
 LFLAGS = @LFLAGS@
 
 # Proxy windowing system
@@ -185,21 +184,6 @@ Syswinnt:	$(HOBJ) @EXTRA_UNSHARE@ Makefile
 	@echo "Loading ..."
 	@$(LINK) $(LFLAGS) -o $(GAME) $(HOBJ) $(WINLIB) $(LIBS)
 	@touch Syswinnt
-
-Sys3B2:	$(HOBJ) Makefile
-	@echo "Loading ..."
-	@$(LINK) $(LFLAGS) -o $(GAME) $(HOBJ) $(WINLIB) -lmalloc
-	@touch Sys3B2
-
-Sysatt:	$(HOBJ) Makefile
-	@echo "Loading ..."
-	@$(LD) $(LFLAGS) /lib/crt0s.o /lib/shlib.ifile -o $(GAME) $(HOBJ)
-	@touch Sysatt
-
-SysV-AT:	DUMB.Setup $(HOBJ) Makefile
-	@echo "Loading ..."
-	@$(LINK) $(LFLAGS) -o $(GAME) $(HOBJ) $(WINLIB)
-	@touch SysV-AT
 
 DUMB.Setup:	../include/extern.h
 	cp ../include/extern.h ../include/extern.h.BAK
