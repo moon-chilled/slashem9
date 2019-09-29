@@ -100,7 +100,7 @@ char *argv[];
 	int tile_no;
 	char buf[BUFSZ], ttype[BUFSZ];
 	pixel pixels[MAX_TILE_Y][MAX_TILE_X];
-	boolean x;
+	bool x;
 	char *filename[600];
 
 	if (argc > 1)

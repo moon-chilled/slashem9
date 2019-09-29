@@ -26,9 +26,7 @@
 #include <unistd.h>			/* for getcwd() prototype */
 #endif
 
-#define SHARED_DCL
-
-SHARED_DCL char orgdir[PATHLEN];	/* also used in pcsys.c, amidos.c */
+char orgdir[PATHLEN];	/* also used in pcsys.c, amidos.c */
 
 static void process_options(int argc,char **argv);
 static void nhusage(void);
@@ -40,7 +38,7 @@ extern void nethack_exit(int);
 #endif
 
 #ifdef WIN32
-extern boolean getreturn_enabled;	/* from sys/share/pcsys.c */
+extern bool getreturn_enabled;	/* from sys/share/pcsys.c */
 #endif
 
 #ifdef EXEPATH

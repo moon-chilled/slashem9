@@ -124,13 +124,13 @@ char defmorestr[] = "--More--";
 extern struct menucoloring *menu_colorings;
 
 #ifdef CLIPPING
-static boolean clipping = false;	/* clipping on? */
+static bool clipping = false;	/* clipping on? */
 static int clipx = 0, clipxmax = 0;
 static int clipy = 0, clipymax = 0;
 #endif /* CLIPPING */
 
 #ifndef NO_TERMS
-boolean GFlag = false;
+bool GFlag = false;
 #endif
 
 #if defined(MICRO) || defined(WIN32CON)
@@ -139,8 +139,8 @@ static const char to_continue[] = "to continue";
 #else
 static void getret(void);
 #endif
-static void erase_menu_or_text(winid, struct WinDesc *, boolean);
-static void free_window_info(struct WinDesc *, boolean);
+static void erase_menu_or_text(winid, struct WinDesc *, bool);
+static void free_window_info(struct WinDesc *, bool);
 static void dmore(struct WinDesc *, const char *);
 static void set_item_state(winid, int, tty_menu_item *);
 static void set_all_on_page(winid,tty_menu_item *,tty_menu_item *);
@@ -985,7 +985,7 @@ winid tty_create_nhwindow(int type) {
     return newid;
 }
 
-static void erase_menu_or_text(winid window, struct WinDesc *cw, boolean clear) {
+static void erase_menu_or_text(winid window, struct WinDesc *cw, bool clear) {
 	if(cw->offx == 0)
 		if(cw->offy) {
 			tty_curs(window, 1, 0);
@@ -998,7 +998,7 @@ static void erase_menu_or_text(winid window, struct WinDesc *cw, boolean clear) 
 		docorner((int)cw->offx, cw->maxrow+1);
 }
 
-static void free_window_info(struct WinDesc *cw, boolean free_data) {
+static void free_window_info(struct WinDesc *cw, bool free_data) {
 	int i;
 
 	if (cw->data) {
@@ -1146,7 +1146,7 @@ static void invert_all_on_page(winid window, tty_menu_item *page_start, tty_menu
  */
 static void invert_all(winid window, tty_menu_item *page_start, tty_menu_item *page_end, char acc) {
 	tty_menu_item *curr;
-	boolean on_curr_page;
+	bool on_curr_page;
 	struct WinDesc *cw =  wins[window];
 
 	invert_all_on_page(window, page_start, page_end, acc);
@@ -1169,21 +1169,22 @@ static void invert_all(winid window, tty_menu_item *page_start, tty_menu_item *p
 	}
 }
 
-static boolean get_menu_coloring(char *str, int *color, int *attr) {
+static bool get_menu_coloring(char *str, int *color, int *attr) {
 	struct menucoloring *tmpmc;
 	if (iflags.use_menu_color) {
 		for (tmpmc = menu_colorings; tmpmc; tmpmc = tmpmc->next) {
 #ifdef USE_REGEX_MATCH
 # ifdef GNU_REGEX
-			if (re_search(&tmpmc->match, str, strlen(str), 0, 9999, 0) >= 0) {
+			if (re_search(&tmpmc->match, str, strlen(str), 0, 9999, 0) >= 0)
 # else
 #  ifdef POSIX_REGEX
-			if (regexec(&tmpmc->match, str, 0, NULL, 0) == 0) {
+			if (regexec(&tmpmc->match, str, 0, NULL, 0) == 0)
 #  endif
 # endif
 #else
-			if (pmatch(tmpmc->match, str)) {
+			if (pmatch(tmpmc->match, str))
 #endif
+			{
 				*color = tmpmc->color;
 				*attr = tmpmc->attr;
 				return true;
@@ -1198,7 +1199,7 @@ static void process_menu_window(winid window, struct WinDesc *cw) {
     tty_menu_item *page_start, *page_end, *curr;
     long count;
     int n, curr_page, page_lines;
-    boolean finished, counting, reset_count;
+    bool finished, counting, reset_count;
     char *cp, *rp, resp[QBUFSZ], gacc[QBUFSZ],
 	 *msave, *morestr;
 
@@ -1268,7 +1269,7 @@ static void process_menu_window(winid window, struct WinDesc *cw) {
 			page_lines++, curr = curr->next) {
 
 		   int color = NO_COLOR, attr = ATR_NONE;
-		   boolean menucolr = false;
+		   bool menucolr = false;
 
 		    if (curr->selector)
 			*rp++ = curr->selector;
@@ -1586,7 +1587,7 @@ static void process_text_window(winid window, struct WinDesc *cw) {
 
 /*ARGSUSED*/
 /* with ttys, all windows are blocking, so 'blocking' is ignored */
-void tty_display_nhwindow(winid window, boolean blocking) {
+void tty_display_nhwindow(winid window, bool blocking) {
 	struct WinDesc *cw = 0;
 
 	if(window == WIN_ERR || (cw = wins[window]) == NULL)
@@ -2017,9 +2018,9 @@ void tty_putstr(winid window, int attr, const char *str) {
 
 void
 #ifdef FILE_AREAS
-tty_display_file(const char *farea, const char *fname, boolean complain)
+tty_display_file(const char *farea, const char *fname, bool complain)
 #else
-tty_display_file(const char *fname, boolean complain)
+tty_display_file(const char *fname, bool complain)
 #endif
 {
 #ifdef DEF_PAGER			/* this implies that UNIX is defined */
@@ -2072,7 +2073,7 @@ tty_display_file(const char *fname, boolean complain)
 	    } else if(u.ux) docrt();
 	} else {
 	    winid datawin = tty_create_nhwindow(NHW_TEXT);
-	    boolean empty = true;
+	    bool empty = true;
 
 	    if(complain
 #ifndef NO_TERMS
@@ -2118,7 +2119,7 @@ void tty_add_menu(
     char gch,		/* group accelerator (0 = no group) */
     int attr,		/* attribute for string (like tty_putstr()) */
     const char *str,	/* menu string */
-    boolean preselected /* item is marked as selected */
+    bool preselected /* item is marked as selected */
     ) {
 #if defined(MAC_MPW)
 # pragma unused(glyph)
@@ -2448,7 +2449,6 @@ void setclipped(void) {
 }
 
 void tty_cliparound(int x, int y) {
-	extern boolean restoring;
 	int oldx = clipx, oldy = clipy;
 
 	if (!clipping) return;
@@ -2487,7 +2487,7 @@ void tty_cliparound(int x, int y) {
 
 void tty_print_glyph(winid window, xchar x, xchar y, int glyph) {
 	glyph_t ch;
-	boolean reverse_on = false;
+	bool reverse_on = false;
 	int	    color;
 	unsigned special;
 

@@ -63,7 +63,7 @@ static char tgotobuf[20];
 static void init_ttycolor(void);
 
 #ifdef VIDEOSHADES
-boolean colorflag = false;			/* colors are initialized */
+bool colorflag = false;			/* colors are initialized */
 char ttycolors[CLR_MAX];
 #endif
 

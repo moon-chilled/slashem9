@@ -223,7 +223,6 @@ void more(void) {
 		//       delay_output();
 		//       delay_output(); /* 100ms wait */
 	} else {
-
 		xwaitforspace("\033 ");
 	}
 #else
@@ -355,9 +354,9 @@ extern char erase_char;		/* from xxxtty.c; don't need kill_char */
 char tty_yn_function(const char *query, const char *resp, char def) {
 	char q;
 	char rtmp[40];
-	boolean digit_ok, allow_num;
+	bool digit_ok, allow_num;
 	struct WinDesc *cw = wins[WIN_MESSAGE];
-	boolean doprev = 0;
+	bool doprev = false;
 	char prompt[QBUFSZ];
 
 	if(ttyDisplay->toplin == 1 && !(cw->flags & WIN_STOP)) more();
@@ -367,7 +366,7 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 	if (resp) {
 		char *rb, respbuf[QBUFSZ];
 
-		allow_num = (index(resp, '#') != 0);
+		allow_num = index(resp, '#') != 0;
 		strcpy(respbuf, resp);
 		/* any acceptable responses that follow <esc> aren't displayed */
 		if ((rb = index(respbuf, '\033')) != 0) *rb = '\0';
@@ -395,7 +394,7 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 				if(!doprev)
 					tty_doprev_message(); /* need two initially */
 				tty_doprev_message();
-				doprev = 1;
+				doprev = true;
 			}
 			q = '\0';       /* force another loop iteration */
 			continue;
@@ -405,7 +404,7 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 			   response; if so, skip the reprompt and use it. */
 			tty_clear_nhwindow(WIN_MESSAGE);
 			cw->maxcol = cw->maxrow;
-			doprev = 0;
+			doprev = false;
 			addtopl(prompt);
 			q = '\0';       /* force another loop iteration */
 			continue;

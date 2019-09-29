@@ -13,15 +13,11 @@ static XpmImage image;
 static XpmInfo info;
 
 /* Maybe these should be in xpm.h, but there isn't one. */
-boolean fopen_xpm_file(char *, char *);
-boolean read_xpm_tile(pixel(*)[]);
+bool fopen_xpm_file(char *, char *);
+bool read_xpm_tile(pixel(*)[]);
 int fclose_xpm_file(void);
 
-boolean
-fopen_xpm_file(filename, type)
-char *filename;
-char *type;
-{
+bool fopen_xpm_file(char *filename, char *type) {
     int i,n;
     int errorcode;
     char fmt[20];
@@ -104,10 +100,7 @@ char *type;
 }
 
 /* Read a tile.  Returns false when there are no more tiles */
-boolean
-read_xpm_tile(pixels)
-pixel (*pixels)[MAX_TILE_X];
-{
+bool read_xpm_tile(pixel (*pixels)[MAX_TILE_X]) {
     int i, j;
     unsigned int *src;
 
@@ -165,7 +158,7 @@ int argc;
 char *argv[];
 {
     int i, argn = 1;
-    boolean split_mode = false;
+    bool split_mode = false;
     int tile_set = 0;
     const char *name;
     pixel pixels[MAX_TILE_Y][MAX_TILE_X];

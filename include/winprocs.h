@@ -18,18 +18,18 @@ struct window_procs {
     void (*win_resume_nhwindows)(void);
     winid (*win_create_nhwindow)(int);
     void (*win_clear_nhwindow)(winid);
-    void (*win_display_nhwindow)(winid, boolean);
+    void (*win_display_nhwindow)(winid, bool);
     void (*win_destroy_nhwindow)(winid);
     void (*win_curs)(winid,int,int);
     void (*win_putstr)(winid, int, const char *);
 #ifdef FILE_AREAS
-    void (*win_display_file)(const char *, const char *, boolean);
+    void (*win_display_file)(const char *, const char *, bool);
 #else
-    void (*win_display_file)(const char *, boolean);
+    void (*win_display_file)(const char *, bool);
 #endif
     void (*win_start_menu)(winid);
     void (*win_add_menu)(winid,int,const anything *,
-		char,char,int,const char *, boolean);
+		char,char,int,const char *, bool);
     void (*win_end_menu)(winid, const char *);
     int (*win_select_menu)(winid, int, menu_item **);
     char (*win_message_menu)(char,int,const char *);

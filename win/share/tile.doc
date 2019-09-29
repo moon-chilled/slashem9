@@ -100,27 +100,27 @@ would necessarily use the LZW compression algorithm they claim.)
 
 The text I/O routines are:
 
-boolean fopen_text_file(const char *filename, const char *type);
+bool fopen_text_file(const char *filename, const char *type);
 	select file for subsequent tile I/O
 	"type" a la fopen
 	returns FALSE if file not opened, otherwise reads/writes header
 	(including colormap) and sets up to decode/encode tiles
 int fclose_text_file();
 	close file
-boolean peek_text_tile_info(ttype, number, name);
+bool peek_text_tile_info(ttype, number, name);
 	returns FALSE if no next tile in current file
 	otherwise fills in the type, number and name of the next tile
-boolean read_text_tile_info(pixel[TILE_Y][TILE_X], ttype, number, name);
+bool read_text_tile_info(pixel[TILE_Y][TILE_X], ttype, number, name);
 	returns FALSE if no next tile in current file
 	otherwise true and insert the tile in the provided array.
 	The tile type, number and name are also filled in.
 	The application program is responsible for checking these
-boolean read_text_tile(pixel[TILE_Y][TILE_X]);
+bool read_text_tile(pixel[TILE_Y][TILE_X]);
 	returns FALSE if no next tile in current file
 	otherwise true and insert the tile in the provided array.
-boolean write_text_tile_info(pixel[TILE_Y][TILE_X], ttype, number, name);
+bool write_text_tile_info(pixel[TILE_Y][TILE_X], ttype, number, name);
 	writes tile with supplied type, number and name
-boolean write_text_tile(pixel[TILE_Y][TILE_X]);
+bool write_text_tile(pixel[TILE_Y][TILE_X]);
 	writes tile
 
 There are two additional shared routines provided for writers:
@@ -168,7 +168,7 @@ n*TILE_X pixels across.
 
 The gif I/O routines are:
 
-boolean fopen_gif_file(const char *filename, const char *type);
+bool fopen_gif_file(const char *filename, const char *type);
 	select file for subsequent tile I/O
 	"type" a la fopen
 	returns FALSE if file not opened, otherwise reads gif header
@@ -176,14 +176,14 @@ boolean fopen_gif_file(const char *filename, const char *type);
 int fclose_gif_file();
 	tear down decode mechanism
 	close file
-boolean read_gif_tile(pixel[TILE_Y][TILE_X]);
+bool read_gif_tile(pixel[TILE_Y][TILE_X]);
 	returns FALSE if no next tile in current file (including when any
 	remaining tiles are "blank"),
 	otherwise true and insert the tile in the provided array
 
 The xpm I/O routines are:
 
-boolean fopen_xpm_file(const char *filename, const char *type);
+bool fopen_xpm_file(const char *filename, const char *type);
 	select file for subsequent tile I/O
 	"type" a la fopen
 	returns FALSE if file not opened, otherwise reads xpm file
@@ -191,7 +191,7 @@ boolean fopen_xpm_file(const char *filename, const char *type);
 int fclose_xpm_file();
 	tear down decode mechanism
 	release resources
-boolean read_xpm_tile(pixel[TILE_Y][TILE_X]);
+bool read_xpm_tile(pixel[TILE_Y][TILE_X]);
 	returns FALSE if no next tile in current file (including when any
 	remaining tiles are "blank"),
 	otherwise true and insert the tile in the provided array

@@ -172,7 +172,7 @@ extern struct sinfo {
 #endif
 } program_state;
 
-extern boolean restoring;
+extern bool restoring;
 
 extern const char quitchars[];
 extern const char vowels[];

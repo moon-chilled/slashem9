@@ -51,11 +51,11 @@ static const char *std_text_sets[] = {
 
 extern const char *tilename(int, int);
 static void read_text_colormap(FILE *);
-static boolean write_text_colormap(FILE *);
-static boolean peek_txttile_info(FILE *, char *, int *, char *);
-static boolean read_txttile_info(FILE *, pixel(*)[MAX_TILE_X],
+static bool write_text_colormap(FILE *);
+static bool peek_txttile_info(FILE *, char *, int *, char *);
+static bool read_txttile_info(FILE *, pixel(*)[MAX_TILE_X],
 	char *, int *, char *);
-static boolean read_txttile(FILE *, pixel(*)[MAX_TILE_X]);
+static bool read_txttile(FILE *, pixel(*)[MAX_TILE_X]);
 static void write_txttile_info(FILE *, pixel(*)[MAX_TILE_X],
 	const char *, int, const char *);
 static void write_txttile(FILE *, pixel(*)[MAX_TILE_X]);
@@ -154,10 +154,7 @@ FILE *txtfile;
 
 #undef FORMAT_STRING
 
-static boolean
-write_text_colormap(txtfile)
-FILE *txtfile;
-{
+static bool write_text_colormap(FILE *txtfile) {
 	int i;
 	char c[3]="?";
 
@@ -184,29 +181,15 @@ FILE *txtfile;
 	return true;
 }
 
-static boolean
-peek_txttile_info(txtfile, ttype, number, name)
-FILE *txtfile;
-char ttype[BUFSZ];
-int *number;
-char name[BUFSZ];
-{
-	long offset;
-	int retval;
-	offset = ftell(txtfile);
-	retval = fscanf(txtfile, "# %s %d (%[^)])", ttype, number, name) == 3;
+static bool peek_txttile_info(FILE *txtfile, char ttype[BUFSZ], int *number, char name[BUFSZ]) {
+	long offset = ftell(txtfile);
+
+	bool retval = fscanf(txtfile, "# %s %d (%[^)])", ttype, number, name) == 3;
 	fseek(txtfile, offset, SEEK_SET);
 	return retval;
 }
 
-static boolean
-read_txttile_info(txtfile, pixels, ttype, number, name)
-FILE *txtfile;
-pixel (*pixels)[MAX_TILE_X];
-char ttype[BUFSZ];
-int *number;
-char name[BUFSZ];
-{
+static bool read_txttile_info(FILE *txtfile, pixel (*pixels)[MAX_TILE_X], char ttype[BUFSZ], int *number, char name[BUFSZ]) {
 	int i, j, k, n;
 	const char *fmt_string;
 	char c[3];
@@ -261,11 +244,7 @@ char name[BUFSZ];
 	return true;
 }
 
-static boolean
-read_txttile(txtfile, pixels)
-FILE *txtfile;
-pixel (*pixels)[MAX_TILE_X];
-{
+static bool read_txttile(FILE *txtfile, pixel (*pixels)[MAX_TILE_X]) {
 	int ph, i;
 	int tile_no;
 	const char *p;
@@ -465,10 +444,7 @@ merge_colormap()
  * just to detect it.
  */
 
-static boolean
-set_tile_size(txtfile)
-FILE *txtfile;
-{
+static bool set_tile_size(FILE *txtfile) {
 	int i, j, ch;
 	long pos;
 	char c[2];
@@ -537,10 +513,7 @@ FILE *txtfile;
 	return true;
 }
 
-boolean
-read_text_file_colormap(filename)
-const char *filename;
-{
+bool read_text_file_colormap(const char *filename) {
 	FILE *fp;
 
 	fp = fopen(filename, RDTMODE);
@@ -553,11 +526,7 @@ const char *filename;
 	return true;
 }
 
-boolean
-fopen_text_file(filename, type)
-const char *filename;
-const char *type;
-{
+bool fopen_text_file(const char *filename, const char *type) {
 	const char *p;
 	int i;
 	int write_mode;
@@ -633,63 +602,34 @@ const char *type;
 	return true;
 }
 
-boolean
-peek_text_tile_info(ttype, number, name)
-char ttype[BUFSZ];
-int *number;
-char name[BUFSZ];
-{
+bool peek_text_tile_info(char ttype[BUFSZ], int *number, char name[BUFSZ]) {
 	return peek_txttile_info(in_file, ttype, number, name);
 }
 
-boolean
-read_text_tile_info(pixels, ttype, number, name)
-pixel (*pixels)[MAX_TILE_X];
-char *ttype;
-int *number;
-char *name;
-{
+bool read_text_tile_info(pixel (*pixels)[MAX_TILE_X], char *ttype, int *number, char *name) {
 	return read_txttile_info(in_file, pixels, ttype, number, name);
 }
 
-boolean
-read_text_tile(pixels)
-pixel (*pixels)[MAX_TILE_X];
-{
+bool read_text_tile(pixel (*pixels)[MAX_TILE_X]) {
 	return read_txttile(in_file, pixels);
 }
 
-boolean
-write_text_tile_info(pixels, ttype, number, name)
-pixel (*pixels)[MAX_TILE_X];
-const char *ttype;
-int number;
-const char *name;
-{
+void write_text_tile_info(pixel (*pixels)[MAX_TILE_X], const char *ttype, int number, const char *name) {
 	write_txttile_info(out_file, pixels, ttype, number, name);
-	return true;
 }
 
-boolean
-write_text_tile(pixels)
-pixel (*pixels)[MAX_TILE_X];
-{
+void write_text_tile(pixel (*pixels)[MAX_TILE_X]) {
 	write_txttile(out_file, pixels);
-	return true;
 }
 
-boolean
-fclose_text_file()
-{
-	boolean ret = false;
-	if (in_file)
-	{
-		ret |= !!fclose(in_file);
+bool fclose_text_file(void) {
+	bool ret = false;
+	if (in_file) {
+		ret += fclose(in_file);
 		in_file = NULL;
 	}
-	if (out_file)
-	{
-		ret |= !!fclose(out_file);
+	if (out_file) {
+		ret += fclose(out_file);
 		out_file = NULL;
 	}
 	return ret;

@@ -52,7 +52,7 @@ static struct bucket *id_map = 0;
 
 #include "quest.h"
 
-boolean restoring = false;
+bool restoring = false;
 static struct fruit *oldfruit;
 static long omoves;
 

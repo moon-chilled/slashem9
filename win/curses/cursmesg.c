@@ -22,7 +22,7 @@ static void scroll_window(winid wid);
 static void unscroll_window(winid wid);
 static void directional_scroll(winid wid, int nlines);
 static void mesg_add_line(char *mline);
-static nhprev_mesg *get_msg_line(boolean reverse, int mindex);
+static nhprev_mesg *get_msg_line(bool reverse, int mindex);
 
 static int turn_lines = 1;
 static int mx = 0;
@@ -37,12 +37,12 @@ static int num_messages = 0;
 /* Write a string to the message window.  Attributes set by calling function. */
 
 void
-curses_message_win_puts(const char *message, boolean recursed)
+curses_message_win_puts(const char *message, bool recursed)
 {
     int height, width, linespace;
     char *tmpstr;
     WINDOW *win = curses_get_nhwin(MESSAGE_WIN);
-    boolean border = curses_window_has_border(MESSAGE_WIN);
+    bool border = curses_window_has_border(MESSAGE_WIN);
     int message_length = strlen(message);
     int border_space = 0;
     static long suppress_turn = -1;
@@ -134,7 +134,7 @@ curses_message_win_puts(const char *message, boolean recursed)
 
 
 int
-curses_block(boolean noscroll)
+curses_block(bool noscroll)
 /* noscroll - blocking because of msgtype = stop/alert */
 /* else blocking because window is full, so need to scroll after */
 {
@@ -189,7 +189,7 @@ void
 curses_clear_unhighlight_message_window()
 {
     int mh, mw, count;
-    boolean border = curses_window_has_border(MESSAGE_WIN);
+    bool border = curses_window_has_border(MESSAGE_WIN);
     WINDOW *win = curses_get_nhwin(MESSAGE_WIN);
 
     turn_lines = 1;
@@ -229,7 +229,7 @@ recent messages. */
 void
 curses_last_messages()
 {
-    boolean border = curses_window_has_border(MESSAGE_WIN);
+    bool border = curses_window_has_border(MESSAGE_WIN);
 
     if (border) {
         mx = 1;
@@ -377,7 +377,7 @@ curses_message_win_getline(const char *prompt, char *answer, int buffer)
     WINDOW *win = curses_get_nhwin(MESSAGE_WIN);
     int border_space = 0;
     int len = 0; /* of answer string */
-    boolean border = curses_window_has_border(MESSAGE_WIN);
+    bool border = curses_window_has_border(MESSAGE_WIN);
     int orig_cursor = curs_set(0);
 
     curses_get_window_size(MESSAGE_WIN, &height, &width);
@@ -535,7 +535,7 @@ static void
 directional_scroll(winid wid, int nlines)
 {
     int wh, ww, s_top, s_bottom;
-    boolean border = curses_window_has_border(wid);
+    bool border = curses_window_has_border(wid);
     WINDOW *win = curses_get_nhwin(wid);
 
     curses_get_window_size(wid, &wh, &ww);
@@ -603,7 +603,7 @@ mesg_add_line(char *mline)
 /* Returns specified line from message history, or NULL if out of bounds */
 
 static nhprev_mesg *
-get_msg_line(boolean reverse, int mindex)
+get_msg_line(bool reverse, int mindex)
 {
     int count;
     nhprev_mesg *current_mesg;

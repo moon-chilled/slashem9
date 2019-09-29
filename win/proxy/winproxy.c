@@ -178,15 +178,11 @@ const char *str;
 	nhproxy_proc_raw_print_bold(str);
 }
 
-void
 #ifdef FILE_AREAS
-proxy_display_file(farea, fname, complain)
-const char *farea;
+void proxy_display_file(const char *farea, const char *fname, bool complain)
 #else
-proxy_display_file(fname, complain)
+void proxy_display_file(const char *fname, bool complain)
 #endif
-const char *fname;
-boolean complain;
 {
     int fh;
 #ifdef FILE_AREAS
@@ -218,15 +214,14 @@ const anything *identifier;
 char ch, gch;
 int attr;
 const char *str;
-boolean preselected;
+bool preselected;
 {
     int mapping = mapid_map_identifier(window, identifier);
     if (glyph == NO_GLYPH)
 	glyph = -1;
     else
 	glyph = glyph2proxy[glyph];
-    nhproxy_proc_add_menu(window, glyph, mapping, ch, gch, attr, str,
-      preselected);
+    nhproxy_proc_add_menu(window, glyph, mapping, ch, gch, attr, str, preselected);
 }
 
 int

@@ -37,18 +37,13 @@ extern int tile_x, tile_y;
 
 #define pixel_equal(x,y) ((x.r == y.r) && (x.g == y.g) && (x.b == y.b))
 
-extern boolean fopen_text_file(const char *, const char *);
-extern boolean fopen_virtual_text_file(const char *base_name,
-		const char *overlay_name, const char *type);
-extern boolean peek_text_tile_info(char ttype[BUFSZ], int *number,
-			char name[BUFSZ]);
-extern boolean read_text_tile_info(pixel (*)[MAX_TILE_X],
-		char *ttype, int *number, char *name);
-extern boolean read_text_tile(pixel (*)[MAX_TILE_X]);
-extern boolean write_text_tile_info(pixel (*)[MAX_TILE_X],
-		const char *ttype, int number, const char *name);
-extern boolean write_text_tile(pixel (*)[MAX_TILE_X]);
-extern boolean fclose_text_file(void);
+extern bool fopen_text_file(const char *, const char *);
+extern bool peek_text_tile_info(char ttype[BUFSZ], int *number, char name[BUFSZ]);
+extern bool read_text_tile_info(pixel (*)[MAX_TILE_X], char *ttype, int *number, char *name);
+extern bool read_text_tile(pixel (*)[MAX_TILE_X]);
+extern void write_text_tile_info(pixel (*)[MAX_TILE_X], const char *ttype, int number, const char *name);
+extern void write_text_tile(pixel (*)[MAX_TILE_X]);
+extern bool fclose_text_file(void);
 
 extern void init_colormap(void);
 extern void merge_colormap(void);

@@ -34,7 +34,7 @@ extern int curses_read_attrs(char *attrs);
 static struct Bool_Opt
 {
 	const char *name;
-	boolean	*addr, initvalue;
+	bool	*addr, initvalue;
 	int optflags;
 } boolopt[] = {
 	{"ascii_map",     &iflags.wc_ascii_map, !PREFER_TILED, SET_IN_GAME},	/*WC*/
@@ -3017,12 +3017,10 @@ doset_add_menu(win, option, indexoffset)
 }
 
 /* Changing options via menu by Per Liboriussen */
-int
-doset (void)
-{
+int doset(void) {
 	char buf[BUFSZ], buf2[BUFSZ];
 	int i, pass, boolcount, pick_cnt, pick_idx, opt_indx;
-	boolean *bool_p;
+	bool *bool_p;
 	winid tmpwin;
 	anything any;
 	menu_item *pick_list;

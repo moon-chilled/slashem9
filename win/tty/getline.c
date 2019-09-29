@@ -14,9 +14,9 @@
 #include "func_tab.h"
 
 char morc = 0;	/* tell the outside world what char you chose */
-static boolean ext_cmd_getlin_hook(char *);
+static bool ext_cmd_getlin_hook(char *);
 
-typedef boolean (*getlin_hook_proc)(char *);
+typedef bool (*getlin_hook_proc)(char *);
 
 static void hooked_tty_getlin(const char*,char*,getlin_hook_proc);
 extern int extcmd_via_menu(void);	/* cmd.c */
@@ -38,7 +38,7 @@ static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc ho
 	char *obufp = bufp;
 	int c;
 	struct WinDesc *cw = wins[WIN_MESSAGE];
-	boolean doprev = 0;
+	bool doprev = false;
 
 	if(ttyDisplay->toplin == 1 && !(cw->flags & WIN_STOP)) more();
 	cw->flags &= ~WIN_STOP;
@@ -81,13 +81,13 @@ static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc ho
 				if (!doprev)
 					tty_doprev_message();/* need two initially */
 				tty_doprev_message();
-				doprev = 1;
+				doprev = true;
 				continue;
 			}
 		} else if (doprev && iflags.prevmsg_window == 's') {
 			tty_clear_nhwindow(WIN_MESSAGE);
 			cw->maxcol = cw->maxrow;
-			doprev = 0;
+			doprev = false;
 			addtopl(query);
 			addtopl(" ");
 			*bufp = 0;
@@ -192,10 +192,7 @@ void xwaitforspace(const char *s) {
  *	+ we don't change the characters that are already in base
  *	+ base has enough room to hold our string
  */
-static boolean
-ext_cmd_getlin_hook(base)
-	char *base;
-{
+static bool ext_cmd_getlin_hook(char *base) {
 	int oindex, com_index;
 
 	com_index = -1;

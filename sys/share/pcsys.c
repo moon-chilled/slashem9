@@ -88,7 +88,7 @@ void append_slash(char *name) {
 }
 
 #ifdef WIN32
-boolean getreturn_enabled;
+bool getreturn_enabled;
 #endif
 
 void getreturn(const char *str) {

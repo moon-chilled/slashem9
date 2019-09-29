@@ -133,7 +133,7 @@ char *argv[];
 	int i, tile_no;
 	char buf[BUFSZ], ttype[BUFSZ];
 	pixel pixels[MAX_TILE_Y][MAX_TILE_X];
-	boolean x;
+	bool x;
 
 	while (filenum < 3) {
 		tilecount_per_file = 0;

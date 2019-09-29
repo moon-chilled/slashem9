@@ -14,13 +14,13 @@
 					 	  && (pixa.b == pixb.b))
 
 /* [WAC] do this without memcmp() */
-static boolean
+static bool
 low_res_tile(bitmap)
 pixel (*bitmap)[MAX_TILE_X];
 {
     int x, y;
     pixel def_background = DEFAULT_BACKGROUND;
-    boolean retval = true;
+    bool retval = true;
     int blanks;
     int topblanks, bottomblanks;
 
@@ -104,7 +104,7 @@ pixel (*bitmap)[MAX_TILE_X];
 }
 
 #if 0
-static boolean
+static bool
 low_res_tile(bitmap)
 pixel (*bitmap)[MAX_TILE_X];
 {
@@ -175,7 +175,7 @@ int match_load(char *file)
     return 0;
 }
 
-boolean
+bool
 match_found(char *name)
 {
     int i;
@@ -193,7 +193,7 @@ int argc;
 char **argv;
 {
     int argn = 1;
-    boolean match_mode = false;
+    bool match_mode = false;
     FILE *match_fp;
     char ttype[BUFSZ];
     int number;

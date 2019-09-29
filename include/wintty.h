@@ -134,7 +134,7 @@ extern void term_start_color(int color);
 extern void term_start_bgcolor(int color);
 extern int has_color(int color);
 
-extern boolean parse_status_color_options(char *);
+extern bool parse_status_color_options(char *);
 
 /* ### topl.c ### */
 
@@ -162,19 +162,18 @@ extern void tty_suspend_nhwindows(const char *);
 extern void tty_resume_nhwindows(void);
 extern winid tty_create_nhwindow(int);
 extern void tty_clear_nhwindow(winid);
-extern void tty_display_nhwindow(winid, boolean);
+extern void tty_display_nhwindow(winid, bool);
 extern void tty_dismiss_nhwindow(winid);
 extern void tty_destroy_nhwindow(winid);
 extern void tty_curs(winid,int,int);
 extern void tty_putstr(winid, int, const char *);
 #ifdef FILE_AREAS
-extern void tty_display_file(const char *, const char *, boolean);
+extern void tty_display_file(const char *, const char *, bool);
 #else
-extern void tty_display_file(const char *, boolean);
+extern void tty_display_file(const char *, bool);
 #endif
 extern void tty_start_menu(winid);
-extern void tty_add_menu(winid,int,const anything *,
-			char,char,int,const char *, boolean);
+extern void tty_add_menu(winid,int,const anything *, char,char,int,const char *, bool);
 extern void tty_end_menu(winid, const char *);
 extern int tty_select_menu(winid, int, menu_item **);
 extern char tty_message_menu(char,int,const char *);

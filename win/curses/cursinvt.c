@@ -25,7 +25,7 @@ curses_update_inv(void)
         return;
     }
 
-    boolean border = curses_window_has_border(INV_WIN);
+    bool border = curses_window_has_border(INV_WIN);
 
     /* Figure out drawing area */
     int x = 0;
@@ -94,7 +94,7 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
     if (accelerator && /* Don't colorize categories */
         iflags.use_menu_color) {
         int color = NO_COLOR;
-        boolean menu_color = false;
+        bool menu_color = false;
         char str_mutable[BUFSZ];
         strcpy(str_mutable, str);
         attr = 0;

@@ -19,7 +19,7 @@
 static struct Bool_Opt
 {
     const char *name;
-    boolean *addr, initvalue;
+    bool *addr, initvalue;
     int optflags;
 } *boolopt = NULL;
 

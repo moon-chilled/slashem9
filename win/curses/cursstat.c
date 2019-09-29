@@ -20,17 +20,17 @@ static attr_t get_trouble_color(const char *);
 static void draw_trouble_str(const char *);
 static void print_statdiff(const char *append, nhstat *, int, int);
 static void get_playerrank(char *);
-static int hpen_color(boolean, int, int);
-static void draw_bar(boolean, int, int, const char *);
+static int hpen_color(bool, int, int);
+static void draw_bar(bool, int, int, const char *);
 static void draw_horizontal(int, int, int, int);
 static void draw_horizontal_new(int, int, int, int);
 static void draw_vertical(int, int, int, int);
-static void curses_add_statuses(WINDOW *, boolean, boolean, int *, int *);
-static void curses_add_status(WINDOW *, boolean, boolean, int *, int *,
+static void curses_add_statuses(WINDOW *, bool, bool, int *, int *);
+static void curses_add_status(WINDOW *, bool, bool, int *, int *,
                               const char *, int);
-static int decrement_highlight(nhstat *, boolean);
+static int decrement_highlight(nhstat *, bool);
 
-static attr_t hpen_color_attr(boolean, int, int);
+static attr_t hpen_color_attr(bool, int, int);
 extern struct color_option text_color_of(const char *text,
                                          const struct text_color_option *color_options);
 struct color_option percentage_color_of(int value, int max,
@@ -42,7 +42,7 @@ extern const struct percent_color_option *pw_colors;
 
 /* Whether or not we have printed status window content at least once.
    Used to ensure that prev* doesn't end up highlighted on game start. */
-static boolean first = true;
+static bool first = true;
 static nhstat prevdepth;
 static nhstat prevstr;
 static nhstat prevint;
@@ -267,7 +267,7 @@ curses_color_attr(int nh_color, int bg_color)
             if (bg_color == CLR_RED)
                 color--;
         } else {
-            boolean hicolor = false;
+            bool hicolor = false;
             if (COLORS >= 16)
                 hicolor = true;
 
@@ -299,7 +299,7 @@ curses_color_attr(int nh_color, int bg_color)
 
 /* Returns a complete curses attribute. Used to possibly bold/underline/etc HP/Pw. */
 static attr_t
-hpen_color_attr(boolean is_hp, int cur, int max)
+hpen_color_attr(bool is_hp, int cur, int max)
 {
     struct color_option stat_color;
     int count;
@@ -326,7 +326,7 @@ hpen_color_attr(boolean is_hp, int cur, int max)
    With status colors OFF, this returns reasonable defaults which are also used
    for the HP/Pw text itself. */
 static int
-hpen_color(boolean is_hp, int cur, int max)
+hpen_color(bool is_hp, int cur, int max)
 {
     if (iflags.use_status_colors) {
         struct color_option stat_color;
@@ -360,7 +360,7 @@ hpen_color(boolean is_hp, int cur, int max)
    title: Not NULL if we are drawing as part of an existing title.
    Otherwise, the format is as follows: [   11 / 11   ] */
 static void
-draw_bar(boolean is_hp, int cur, int max, const char *title)
+draw_bar(bool is_hp, int cur, int max, const char *title)
 {
     WINDOW *win = curses_get_nhwin(STATUS_WIN);
 
@@ -416,11 +416,11 @@ curses_update_stats(void)
 
     int orient = curses_get_window_orientation(STATUS_WIN);
 
-    boolean horiz = false;
+    bool horiz = false;
     if ((orient != ALIGN_RIGHT) && (orient != ALIGN_LEFT))
         horiz = true;
 
-    boolean border = curses_window_has_border(STATUS_WIN);
+    bool border = curses_window_has_border(STATUS_WIN);
 
     /* Figure out if we have proper window dimensions for horizontal statusbar. */
     if (horiz) {
@@ -820,8 +820,8 @@ draw_vertical(int x, int y, int hp, int hpmax)
 }
 
 static void
-curses_add_statuses(WINDOW *win, boolean align_right,
-                    boolean vertical, int *x, int *y)
+curses_add_statuses(WINDOW *win, bool align_right,
+                    bool vertical, int *x, int *y)
 {
     if (align_right) {
         /* Right-aligned statuses. Since add_status decrease one x more
@@ -858,7 +858,7 @@ curses_add_statuses(WINDOW *win, boolean align_right,
 }
 
 static void
-curses_add_status(WINDOW *win, boolean align_right, boolean vertical,
+curses_add_status(WINDOW *win, bool align_right, bool vertical,
                   int *x, int *y, const char *str, int trouble)
 {
     /* If vertical is true here with no x/y, that's an error. But handle
@@ -895,7 +895,7 @@ curses_add_status(WINDOW *win, boolean align_right, boolean vertical,
 /* Decrement a single highlight, return 1 if decremented to zero. zero is true if we're
    zeroing the highlight. */
 static int
-decrement_highlight(nhstat *stat, boolean zero)
+decrement_highlight(nhstat *stat, bool zero)
 {
     if (stat->highlight_turns > 0) {
         if (zero) {
@@ -913,7 +913,7 @@ decrement_highlight(nhstat *stat, boolean zero)
 /* Decrement the highlight_turns for all stats.  Call curses_update_stats
    if needed to unhighlight a stat */
 void
-curses_decrement_highlights(boolean zero)
+curses_decrement_highlights(bool zero)
 {
     int unhighlight = 0;
 

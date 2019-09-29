@@ -15,7 +15,7 @@
 /* Global declarations */
 
 void curses_update_stats();
-void curses_decrement_highlights(boolean);
+void curses_decrement_highlights(bool);
 attr_t curses_color_attr(int nh_color, int bg_color);
 
 #endif /* CURSSTAT_H */

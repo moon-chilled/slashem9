@@ -378,11 +378,7 @@ const char *filearea, *filename;
 	return buf;
 }
 
-FILE *
-fopen_datafile_area(filearea, filename, mode, use_scoreprefix)
-const char *filearea, *filename, *mode;
-boolean use_scoreprefix;
-{
+FILE *fopen_datafile_area(const char *filearea, const char *filename, const char *mode, bool use_scoreprefix) {
 	FILE *fp;
 	char *buf;
 	buf = make_file_name(filearea, filename);
@@ -508,10 +504,7 @@ char *lockname;
 	return lockname;
 }
 
-static boolean
-assert_lock(filename, lockname)
-const char *filename, *lockname;
-{
+static bool assert_lock(const char *filename, const char *lockname) {
 # ifdef NO_FILE_LINKS
     return (lockfd = open(lockname, O_RDWR|O_CREAT|O_EXCL, 0666)) != -1;
 # else
@@ -534,12 +527,8 @@ const char *filename, *lockname;
  * Note: The area says where the file is, not where the lock is.
  */
 
-boolean
-lock_file_area(filearea, filename, retryct)
-const char *filearea, *filename;
-int retryct;
-{
-	int retval=true;
+bool lock_file_area(const char *filearea, const char *filename, int retryct) {
+	bool retval=true;
 	char *lockname, locknambuf[BUFSZ];
 	char *buf;
 

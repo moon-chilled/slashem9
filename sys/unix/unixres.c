@@ -131,10 +131,7 @@ static unsigned int hiding_privileges = 0;
  * Note: returns the value _after_ action.
  */
 
-int
-hide_privileges(flag)
-boolean flag;
-{
+int hide_privileges(bool flag) {
     if (flag)
 	hiding_privileges++;
     else if (hiding_privileges)

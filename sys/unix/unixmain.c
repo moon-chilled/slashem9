@@ -25,9 +25,9 @@ extern struct passwd *getpwuid(int);
 #endif
 extern struct passwd *getpwnam(const char *);
 #ifdef CHDIR
-static void chdirx(const char *,boolean);
+static void chdirx(const char *, bool);
 #endif /* CHDIR */
-static boolean whoami(void);
+static bool whoami(void);
 static void process_options(int, char **);
 
 #ifdef _M_UNIX
@@ -46,19 +46,15 @@ extern void init_linux_cons(void);
 
 static void wd_message(void);
 #ifdef WIZARD
-static boolean wiz_error_flag = false;
+static bool wiz_error_flag = false;
 #endif
 
-int
-main(argc,argv)
-int argc;
-char *argv[];
-{
+int main(int argc, char **argv) {
 	int fd;
 #ifdef CHDIR
 	char *dir;
 #endif
-	boolean exact_username;
+	bool exact_username;
 
 	hname = argv[0];
 	hackpid = getpid();
@@ -226,7 +222,7 @@ char *argv[];
 		/* Since wizard is actually flags.debug, restoring might
 		 * overwrite it.
 		 */
-		boolean remember_wiz_mode = wizard;
+		bool remember_wiz_mode = wizard;
 #endif
 #ifndef FILE_AREAS
 		const char *fq_save = fqname(SAVEF, SAVEPREFIX, 1);
@@ -411,11 +407,7 @@ char *argv[];
 }
 
 #ifdef CHDIR
-static void
-chdirx(dir, wr)
-const char *dir;
-boolean wr;
-{
+static void chdirx(const char *dir, bool wr) {
 	if (dir					/* User specified directory? */
 # ifdef HACKDIR
 	       && strcmp(dir, HACKDIR)		/* and not the default? */
@@ -468,8 +460,7 @@ boolean wr;
 }
 #endif /* CHDIR */
 
-static boolean
-whoami() {
+static bool whoami(void) {
 	/*
 	 * Who am i? Algorithm: 1. Use name as specified in NETHACKOPTIONS
 	 *			2. Use $USER or $LOGNAME	(if 1. fails)

@@ -107,7 +107,7 @@ curses_create_main_windows()
     int status_orientation = 0;
     int border_space = 0;
     int hspace = term_cols - 80;
-    boolean borders = false;
+    bool borders = false;
 
     switch (iflags.wc2_windowborders) {
     case 1:                     /* On */
@@ -191,8 +191,8 @@ curses_create_main_windows()
     int map_height = (term_rows - border_space);
     int map_width = (term_cols - border_space);
 
-    boolean status_vertical = false;
-    boolean msg_vertical = false;
+    bool status_vertical = false;
+    bool msg_vertical = false;
     if (status_orientation == ALIGN_LEFT ||
         status_orientation == ALIGN_RIGHT)
         status_vertical = true;
@@ -312,7 +312,7 @@ curses_init_nhcolors()
                 init_pair(17 + (i * 2) + 1, clr_remap[i], COLOR_BLUE);
             }
 
-            boolean hicolor = false;
+            bool hicolor = false;
             if (COLORS >= 16)
                 hicolor = true;
 

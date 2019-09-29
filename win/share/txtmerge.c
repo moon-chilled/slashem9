@@ -97,10 +97,7 @@ read_tiles()
     }
 }
 
-static boolean
-match(name1, name2)
-const char *name1, *name2;
-{
+static bool match(const char *name1, const char *name2) {
     int n;
     char *s1, *s2;
     if (!strcmp(name1, "unknown") || !strcmp(name2, "unknown"))

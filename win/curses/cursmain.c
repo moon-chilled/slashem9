@@ -271,7 +271,7 @@ curses_clear_nhwindow(winid wid)
                    --more--, if necessary, in the tty window-port.
 */
 void
-curses_display_nhwindow(winid wid, boolean block)
+curses_display_nhwindow(winid wid, bool block)
 {
     menu_item *selected = NULL;
     if (curses_is_menu(wid) || curses_is_text(wid)) {
@@ -354,7 +354,7 @@ curses_putstr(winid wid, int attr, const char *text)
                    iff complain is true.
 */
 void
-curses_display_file(const char *filename, boolean must_exist)
+curses_display_file(const char *filename, bool must_exist)
 {
     curses_view_file(filename, must_exist);
 }
@@ -376,7 +376,7 @@ curses_start_menu(winid wid)
 /*
 add_menu(winid wid, int glyph, const anything identifier,
                                 char accelerator, char groupacc,
-                                int attr, char *str, boolean preselected)
+                                int attr, char *str, bool preselected)
                 -- Add a text line str to the given menu window.  If identifier
                    is 0, then the line cannot be selected (e.g. a title).
                    Otherwise, identifier is the value returned if the line is
@@ -407,7 +407,7 @@ add_menu(winid wid, int glyph, const anything identifier,
 void
 curses_add_menu(winid wid, int glyph, const anything * identifier,
                 char accelerator, char group_accel, int attr,
-                const char *str, boolean presel)
+                const char *str, bool presel)
 {
     int curses_attr = curses_convert_attr(attr);
 
@@ -526,7 +526,7 @@ void
 curses_cliparound(int x, int y)
 {
     int sx, sy, ex, ey;
-    boolean redraw = curses_map_borders(&sx, &sy, &ex, &ey, x, y);
+    bool redraw = curses_map_borders(&sx, &sy, &ex, &ey, x, y);
 
     if (redraw) {
         curses_draw_map(sx, sy, ex, ey);
