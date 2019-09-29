@@ -6,4 +6,4 @@ make install
 
 This will install Slash'EM Variant into ~/slashem-install.  Change this if you know what you are doing and want to do something different.
 
-Other build systems are maintained, and will probably be fixed if they are broken and someone points it out, but are not guaranteed to continue to work.
+Other build systems are unmaintained; they will probably be fixed if they are broken and someone points it out, but they are not guaranteed to to work.
