@@ -1333,7 +1333,7 @@ struct monst *makemon(struct permonst *ptr, int x, int y, int mmflags) {
 	else if (mmflags & MM_EMIN) xlth += sizeof(struct emin);
 	mtmp = newmonst(xlth);
 	*mtmp = zeromonst;		/* clear all entries in structure */
-	memset((void *)mtmp->mextra, 0, xlth);
+	memset(mtmp->mextra, 0, xlth);
 	mtmp->nmon = fmon;
 	fmon = mtmp;
 	mtmp->m_id = flags.ident++;

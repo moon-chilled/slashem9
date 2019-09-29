@@ -24,7 +24,7 @@ struct egyp {
 	int top;					/* Index of top of the deck */
 	xchar cards[CARD_TOTAL];	/* Shuffled cards */
 };
-#define EGYP(mon)	((struct egyp *)&(mon)->mextra[0])
+#define EGYP(mon)	((struct egyp *)mon->mextra)
 
 
 #endif /* EGYP__H */

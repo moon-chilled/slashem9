@@ -28,6 +28,6 @@ struct edog {
 	int mhpmax_penalty;		/* while starving, points reduced */
 	Bitfield(killed_by_u, 1);	/* you attempted to kill him */
 };
-#define EDOG(mon)	((struct edog *)&(mon)->mextra[0])
+#define EDOG(mon)	((struct edog *)mon->mextra)
 
 #endif /* EDOG_H */

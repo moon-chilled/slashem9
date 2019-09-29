@@ -22,6 +22,6 @@ struct egd {
 	struct fakecorridor fakecorr[FCSIZ];
 };
 
-#define EGD(mon)	((struct egd *)&(mon)->mextra[0])
+#define EGD(mon)	((struct egd*)mon->mextra)
 
 #endif /* VAULT_H */

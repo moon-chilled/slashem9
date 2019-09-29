@@ -155,7 +155,7 @@ struct monst {
 	/* in order to prevent alignment problems mextra should
 	   be (or follow) a long int */
 	int meating;		/* monster is eating timeout */
-	long mextra[1]; /* monster dependent info */
+	char mextra[]; /* monster dependent info */
 };
 
 /*

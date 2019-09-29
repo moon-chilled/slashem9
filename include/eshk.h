@@ -45,7 +45,7 @@ struct eshk {
 #endif
 };
 
-#define ESHK(mon)	((struct eshk *)&(mon)->mextra[0])
+#define ESHK(mon)	((struct eshk *)mon->mextra)
 
 #define NOTANGRY(mon)	((mon)->mpeaceful)
 #define ANGRY(mon)	(!NOTANGRY(mon))

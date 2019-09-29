@@ -13,7 +13,7 @@ struct epri {
 	d_level shrlevel;	/* level (& dungeon) of shrine */
 };
 
-#define EPRI(mon)	((struct epri *)&(mon)->mextra[0])
+#define EPRI(mon)	((struct epri*)&mon->mextra)
 
 /* A priest without ispriest is a roaming priest without a shrine, so
  * the fields (except shralign, which becomes only the priest alignment)
