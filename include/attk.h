@@ -24,22 +24,22 @@ typedef struct Attk {
 	xchar	tohit;			/* Calculated to-hit value */
 	xchar	dieroll;		/* The die roll used for the attack */
 	xchar	damage;			/* Calculated amount of damage */
-	Bitfield(ayou,1);		/* You are the attacker */
-	Bitfield(avis,1);		/* Player can see amon */
-	Bitfield(dyou,1);		/* You are the defender */
-	Bitfield(dvis,1);		/* Player can see dmon */
-	Bitfield(defensive,1);	/* This is the defensive response of another */
+	bool ayou;		/* You are the attacker */
+	bool avis;		/* Player can see amon */
+	bool dyou;		/* You are the defender */
+	bool dvis;		/* Player can see dmon */
+	bool defensive;	/* This is the defensive response of another */
 							/* attack by dmon against amon */
-	Bitfield(poison,1);		/* Poison was used */
-	Bitfield(poiskilled,1);
-	Bitfield(poismgs,1);
-	Bitfield(vampmsg,1);
-	Bitfield(resists,1);	/* Defender resists */
-	Bitfield(passes,1);		/* Attack passes harmlessly through dmon */
-	Bitfield(dkilled,1);	/* Defender is killed */
-	Bitfield(wlearn,1);		/* Character learns identity of wobj */
-	Bitfield(hitmsg,1);
-	Bitfield(skbonus,1);
+	bool poison;		/* Poison was used */
+	bool poiskilled;
+	bool poismgs;
+	bool vampmsg;
+	bool resists;	/* Defender resists */
+	bool passes;		/* Attack passes harmlessly through dmon */
+	bool dkilled;	/* Defender is killed */
+	bool wlearn;		/* Character learns identity of wobj */
+	bool hitmsg;
+	bool skbonus;
 } *Attk;
 
 extern void attk_by_you(Attk);

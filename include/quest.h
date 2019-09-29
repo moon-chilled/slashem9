@@ -6,29 +6,29 @@
 #define QUEST_H
 
 struct q_score {			/* Quest "scorecard" */
-	Bitfield(first_start,1);	/* only set the first time */
-	Bitfield(met_leader,1);		/* has met the leader */
+	bool first_start;	/* only set the first time */
+	bool met_leader;		/* has met the leader */
 	Bitfield(not_ready,3);		/* rejected due to alignment, etc. */
-	Bitfield(pissed_off,1);		/* got the leader angry */
-	Bitfield(got_quest,1);		/* got the quest assignment */
+	bool pissed_off;		/* got the leader angry */
+	bool got_quest;		/* got the quest assignment */
 
-	Bitfield(first_locate,1);	/* only set the first time */
-	Bitfield(met_intermed,1);	/* used if the locate is a person. */
-	Bitfield(got_final,1);		/* got the final quest assignment */
+	bool first_locate;	/* only set the first time */
+	bool met_intermed;	/* used if the locate is a person. */
+	bool got_final;		/* got the final quest assignment */
 
 	Bitfield(made_goal,3);		/* # of times on goal level */
-	Bitfield(met_nemesis,1);	/* has met the nemesis before */
-	Bitfield(killed_nemesis,1);	/* set when the nemesis is killed */
-	Bitfield(in_battle,1);		/* set when nemesis fighting you */
+	bool met_nemesis;	/* has met the nemesis before */
+	bool killed_nemesis;	/* set when the nemesis is killed */
+	bool in_battle;		/* set when nemesis fighting you */
 
-	Bitfield(cheater,1);		/* set if cheating detected */
-	Bitfield(touched_artifact,1);	/* for a special message */
-	Bitfield(offered_artifact,1);	/* offered to leader */
-	Bitfield(got_thanks,1);		/* final message from leader */
+	bool cheater;		/* set if cheating detected */
+	bool touched_artifact;	/* for a special message */
+	bool offered_artifact;	/* offered to leader */
+	bool got_thanks;		/* final message from leader */
 
 	/* keep track of leader presence/absence even if leader is
 	   polymorphed, raised from dead, etc */
-	Bitfield(leader_is_dead,1);
+	bool leader_is_dead;
 	unsigned leader_m_id;
 };
 

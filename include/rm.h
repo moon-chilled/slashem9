@@ -348,8 +348,8 @@ struct rm {
 	Bitfield(mem_bg,6);	/* Remembered background */
 	Bitfield(mem_trap,5);	/* Remembered trap */
 	Bitfield(mem_obj,10);	/* Remembered object/corpse */
-	Bitfield(mem_corpse,1);	/* Set if mem_obj refers to a corpse */
-	Bitfield(mem_invis,1);	/* Set if invisible monster remembered */
+	bool mem_corpse;	/* Set if mem_obj refers to a corpse */
+	bool mem_invis;	/* Set if invisible monster remembered */
 	Bitfield(mem_spare,9);
 #else
 	int glyph;		/* what the hero thinks is there */
@@ -357,11 +357,11 @@ struct rm {
 	schar typ;		/* what is really there */
 	uchar seenv;		/* seen vector */
 	Bitfield(flags,5);	/* extra information for typ */
-	Bitfield(horizontal,1); /* wall/door/etc is horiz. (more typ info) */
-	Bitfield(lit,1);	/* speed hack for lit rooms */
-	Bitfield(waslit,1);	/* remember if a location was lit */
+	bool horizontal; /* wall/door/etc is horiz. (more typ info) */
+	bool lit;	/* speed hack for lit rooms */
+	bool waslit;	/* remember if a location was lit */
 	Bitfield(roomno,6);	/* room # for special rooms */
-	Bitfield(edge,1);	/* marks boundaries for special rooms*/
+	bool edge;	/* marks boundaries for special rooms*/
 };
 
 /*
@@ -466,31 +466,31 @@ struct levelflags {
 	uchar	nfountains;		/* number of fountains on level */
 	uchar	nsinks;		/* number of sinks + toilets on the level */
 	/* Several flags that give hints about what's on the level */
-	Bitfield(has_shop, 1);
-	Bitfield(has_vault, 1);
-	Bitfield(has_zoo, 1);
-	Bitfield(has_court, 1);
-	Bitfield(has_morgue, 1);
-	Bitfield(has_beehive, 1);
-	Bitfield(has_barracks, 1);
-	Bitfield(has_temple, 1);
-	Bitfield(has_lemurepit, 1);
-	Bitfield(has_migohive, 1);
-	Bitfield(has_fungusfarm, 1);
+	bool has_shop;
+	bool has_vault;
+	bool has_zoo;
+	bool has_court;
+	bool has_morgue;
+	bool has_beehive;
+	bool has_barracks;
+	bool has_temple;
+	bool has_lemurepit;
+	bool has_migohive;
+	bool has_fungusfarm;
 
-	Bitfield(has_swamp, 1);
-	Bitfield(noteleport,1);
-	Bitfield(hardfloor,1);
-	Bitfield(nommap,1);
-	Bitfield(hero_memory,1);	/* hero has memory */
-	Bitfield(shortsighted,1);	/* monsters are shortsighted */
-	Bitfield(graveyard,1);		/* has_morgue, but remains set */
-	Bitfield(is_maze_lev,1);
+	bool has_swamp;
+	bool noteleport;
+	bool hardfloor;
+	bool nommap;
+	bool hero_memory;	/* hero has memory */
+	bool shortsighted;	/* monsters are shortsighted */
+	bool graveyard;		/* has_morgue, but remains set */
+	bool is_maze_lev;
 
-	Bitfield(is_cavernous_lev,1);
-	Bitfield(arboreal, 1);		/* Trees replace rock */
-	Bitfield(spooky,1);		/* Spooky sounds (Tina Hall) */
-	Bitfield(lethe, 1);			/* All water on level causes amnesia */
+	bool is_cavernous_lev;
+	bool arboreal;		/* Trees replace rock */
+	bool spooky;		/* Spooky sounds (Tina Hall) */
+	bool lethe;			/* All water on level causes amnesia */
 };
 
 typedef struct

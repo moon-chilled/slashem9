@@ -11,23 +11,23 @@ struct objclass {
 	short	oc_name_idx;		/* index of actual name */
 	short	oc_descr_idx;		/* description when name unknown */
 	char *	oc_uname;		/* called by user */
-	Bitfield(oc_name_known,1);
-	Bitfield(oc_merge,1);	/* merge otherwise equal objects */
-	Bitfield(oc_uses_known,1); /* obj->known affects full decription */
+	bool oc_name_known;
+	bool oc_merge;	/* merge otherwise equal objects */
+	bool oc_uses_known; /* obj->known affects full decription */
 				/* otherwise, obj->dknown and obj->bknown */
 				/* tell all, and obj->known should always */
 				/* be set for proper merging behavior */
-	Bitfield(oc_pre_discovered,1);	/* Already known at start of game; */
+	bool oc_pre_discovered;	/* Already known at start of game; */
 					/* won't be listed as a discovery. */
-	Bitfield(oc_magic,1);	/* inherently magical object */
-	Bitfield(oc_charged,1); /* may have +n or (n) charges */
-	Bitfield(oc_unique,1);	/* special one-of-a-kind object */
-	Bitfield(oc_nowish,1);	/* cannot wish for this object */
+	bool oc_magic;	/* inherently magical object */
+	bool oc_charged; /* may have +n or (n) charges */
+	bool oc_unique;	/* special one-of-a-kind object */
+	bool oc_nowish;	/* cannot wish for this object */
 
-	Bitfield(oc_big,1);
+	bool oc_big;
 #define oc_bimanual	oc_big	/* for weapons & tools used as weapons */
 #define oc_bulky	oc_big	/* for armor */
-	Bitfield(oc_tough,1);	/* hard gems/rings */
+	bool oc_tough;	/* hard gems/rings */
 
 	Bitfield(oc_dir,3);
 #define NODIR		1	/* for wands/spells: non-directional */

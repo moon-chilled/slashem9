@@ -30,29 +30,29 @@ struct RoleAdvance {
 
 
 struct u_have {
-	Bitfield(amulet,1);	/* carrying Amulet	*/
-	Bitfield(bell,1);	/* carrying Bell	*/
-	Bitfield(book,1);	/* carrying Book	*/
-	Bitfield(menorah,1);	/* carrying Candelabrum */
-	Bitfield(questart,1);	/* carrying the Quest Artifact */
+	bool amulet;	/* carrying Amulet	*/
+	bool bell;	/* carrying Bell	*/
+	bool book;	/* carrying Book	*/
+	bool menorah;	/* carrying Candelabrum */
+	bool questart;	/* carrying the Quest Artifact */
 	Bitfield(unused,3);
 };
 
 
 struct u_event {
-	Bitfield(minor_oracle,1);	/* received at least 1 cheap oracle */
-	Bitfield(major_oracle,1);	/*  "  expensive oracle */
-	Bitfield(qcalled,1);		/* called by Quest leader to do task */
-	Bitfield(qexpelled,1);		/* expelled from the Quest dungeon */
-	Bitfield(qcompleted,1);		/* successfully completed Quest task */
+	bool minor_oracle;	/* received at least 1 cheap oracle */
+	bool major_oracle;	/*  "  expensive oracle */
+	bool qcalled;		/* called by Quest leader to do task */
+	bool qexpelled;		/* expelled from the Quest dungeon */
+	bool qcompleted;		/* successfully completed Quest task */
 	Bitfield(uheard_tune,2);	/* 1=know about, 2=heard passtune */
-	Bitfield(uopened_dbridge,1);	/* opened the drawbridge */
+	bool uopened_dbridge;	/* opened the drawbridge */
 
-	Bitfield(invoked,1);		/* invoked Gate to the Sanctum level */
-	Bitfield(gehennom_entered,1);	/* entered Gehennom via Valley */
+	bool invoked;		/* invoked Gate to the Sanctum level */
+	bool gehennom_entered;	/* entered Gehennom via Valley */
 	Bitfield(uhand_of_elbereth,2);	/* became Hand of Elbereth */
-	Bitfield(udemigod,1);		/* killed the wiz */
-	Bitfield(ascended,1);		/* has offered the Amulet */
+	bool udemigod;		/* killed the wiz */
+	bool ascended;		/* has offered the Amulet */
 };
 
 /* KMH, conduct --
@@ -302,14 +302,14 @@ struct you {
 	unsigned ucreamed;
 	unsigned uswldtim;		/* time you have been swallowed */
 
-	Bitfield(uswallow,1);		/* true if swallowed */
-	Bitfield(uinwater,1);		/* if you're currently in water (only
+	bool uswallow;		/* true if swallowed */
+	bool uinwater;		/* if you're currently in water (only
 					   underwater possible currently) */
-	Bitfield(uundetected,1);	/* if you're a hiding monster/piercer */
-	Bitfield(mfemale,1);		/* saved human value of flags.female */
-	Bitfield(uinvulnerable,1);	/* you're invulnerable (praying) */
-	Bitfield(uburied,1);		/* you're buried */
-	Bitfield(uedibility,1);		/* blessed food detection; sense unsafe food */
+	bool uundetected;	/* if you're a hiding monster/piercer */
+	bool mfemale;		/* saved human value of flags.female */
+	bool uinvulnerable;	/* you're invulnerable (praying) */
+	bool uburied;		/* you're buried */
+	bool uedibility;		/* blessed food detection; sense unsafe food */
 	/* 1 free bit! */
 
 	struct u_conduct uconduct;	/* KMH, conduct */

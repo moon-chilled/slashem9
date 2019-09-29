@@ -62,14 +62,14 @@ struct obj {
 #define NOBJ_STATES	8
 	xchar timed;		/* # of fuses (timers) attached to this obj */
 
-	Bitfield(cursed,1);
-	Bitfield(blessed,1);
-	Bitfield(unpaid,1);	/* on some bill */
-	Bitfield(no_charge,1);	/* if shk shouldn't charge for this */
-	Bitfield(known,1);	/* exact nature known */
-	Bitfield(dknown,1);	/* color or text known */
-	Bitfield(bknown,1);	/* blessing or curse known */
-	Bitfield(rknown,1);	/* rustproof or not known */
+	bool cursed;
+	bool blessed;
+	bool unpaid;	/* on some bill */
+	bool no_charge;	/* if shk shouldn't charge for this */
+	bool known;	/* exact nature known */
+	bool dknown;	/* color or text known */
+	bool bknown;	/* blessing or curse known */
+	bool rknown;	/* rustproof or not known */
 
 	Bitfield(oeroded,2);	/* rusted/burnt weapon/armor */
 	Bitfield(oeroded2,2);	/* corroded/rotted weapon/armor */
@@ -78,31 +78,31 @@ struct obj {
 #define orotten oeroded		/* rotten food */
 #define odiluted oeroded	/* diluted potions */
 #define norevive oeroded2
-	Bitfield(oerodeproof,1); /* erodeproof weapon/armor */
-	Bitfield(olocked,1);	/* object is locked */
+	bool oerodeproof; /* erodeproof weapon/armor */
+	bool olocked;	/* object is locked */
 #define oarmed olocked
 #define odrained olocked	/* drained corpse */
-	Bitfield(obroken,1);	/* lock has been broken */
-	Bitfield(otrapped,1);	/* container is trapped */
+	bool obroken;	/* lock has been broken */
+	bool otrapped;	/* container is trapped */
 				/* or accidental tripped rolling boulder trap */
 #define opoisoned otrapped	/* object (weapon) is coated with poison */
 
 	Bitfield(recharged,3);	/* number of times it's been recharged */
-	Bitfield(lamplit,1);	/* a light-source -- can be lit */
+	bool lamplit;	/* a light-source -- can be lit */
 #ifdef INVISIBLE_OBJECTS
-	Bitfield(oinvis,1);	/* invisible */
+	bool oinvis;	/* invisible */
 #endif
-	Bitfield(greased,1);	/* covered with grease */
+	bool greased;	/* covered with grease */
 	Bitfield(oattached,2);	/* obj struct has special attachment */
 #define OATTACHED_NOTHING 0
 #define OATTACHED_MONST   1	/* monst struct in oextra */
 #define OATTACHED_M_ID    2	/* monst id in oextra */
 #define OATTACHED_UNUSED3 3
-	Bitfield(in_use,1);	/* for magic items before useup items */
-	Bitfield(bypass,1);	/* mark this as an object to be skipped by bhito() */
+	bool in_use;	/* for magic items before useup items */
+	bool bypass;	/* mark this as an object to be skipped by bhito() */
 
-	Bitfield(yours,1);	/* obj is yours (eg. thrown by you) */
-	Bitfield(was_thrown,1); /* thrown by the hero since last picked up */
+	bool yours;	/* obj is yours (eg. thrown by you) */
+	bool was_thrown; /* thrown by the hero since last picked up */
 	/* ? free bits */
 
 	int	corpsenm;	/* type of corpse is mons[corpsenm] */

@@ -498,24 +498,24 @@ struct autopickup_exception {
 };
 
 struct u_achieve {
-        Bitfield(get_bell,1);        /* You have obtained the bell of
+        bool get_bell;        /* You have obtained the bell of
                                       * opening */
-        Bitfield(get_candelabrum,1); /* You have obtained the candelabrum */
-        Bitfield(get_book,1);        /* You have obtained the book of
+        bool get_candelabrum; /* You have obtained the candelabrum */
+        bool get_book;        /* You have obtained the book of
                                       * the dead */
-        Bitfield(enter_gehennom,1);  /* Entered Gehennom (including the
+        bool enter_gehennom;  /* Entered Gehennom (including the
                                       * Valley) by any means */
-        Bitfield(perform_invocation,1); /* You have performed the invocation
+        bool perform_invocation; /* You have performed the invocation
                                          * ritual */
-        Bitfield(get_amulet,1);      /* You have obtained the amulet
+        bool get_amulet;      /* You have obtained the amulet
                                       * of Yendor */
-        Bitfield(ascended,1);        /* You ascended to demigod[dess]hood.
+        bool ascended;        /* You ascended to demigod[dess]hood.
                                       * Not quite the same as
                                       * u.uevent.ascended. */
-        Bitfield(get_luckstone,1);   /* You obtained the luckstone at the
+        bool get_luckstone;   /* You obtained the luckstone at the
                                       * end of the mines. */
-        Bitfield(finish_sokoban,1);  /* You obtained the sokoban prize. */
-        Bitfield(killed_medusa,1);   /* You defeated Medusa. */
+        bool finish_sokoban;  /* You obtained the sokoban prize. */
+        bool killed_medusa;   /* You defeated Medusa. */
 };
 
 extern struct u_achieve achieve;

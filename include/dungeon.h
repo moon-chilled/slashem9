@@ -6,12 +6,12 @@
 #define DUNGEON_H
 
 typedef struct d_flags {	/* dungeon/level type flags */
-	Bitfield(town, 1);	/* is this a town? (levels only) */
-	Bitfield(hellish, 1);	/* is this part of hell? */
-	Bitfield(maze_like, 1);	/* is this a maze? */
-	Bitfield(rogue_like, 1); /* is this an old-fashioned presentation? */
+	bool town;	/* is this a town? (levels only) */
+	bool hellish;	/* is this part of hell? */
+	bool maze_like;	/* is this a maze? */
+	bool rogue_like; /* is this an old-fashioned presentation? */
 	Bitfield(align, 3);	/* dungeon alignment. */
-	Bitfield(unused, 1);	/* etc... */
+	bool unused;	/* etc... */
 } d_flags;
 
 typedef struct d_level {	/* basic dungeon level element */

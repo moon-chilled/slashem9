@@ -18,9 +18,9 @@ struct trap {
 	d_level dst;	/* destination for portals */
 	coord launch;
 	Bitfield(ttyp,5);
-	Bitfield(tseen,1);
-	Bitfield(once,1);
-	Bitfield(madeby_u,1); /* So monsters may take offence when you trap
+	bool tseen;
+	bool once;
+	bool madeby_u; /* So monsters may take offence when you trap
 				 them.	Recognizing who made the trap isn't
 				 completely unreasonable, everybody has
 				 their own style.  This flag is also needed
