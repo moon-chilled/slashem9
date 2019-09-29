@@ -238,7 +238,7 @@ boolean drop_ripe_treefruit(xchar x, xchar y, boolean showmsg, boolean update) {
 	       if (showmsg) {
 		  if ((cansee(pos.x,pos.y) || cansee(x,y))) {
 		     Norep("%s falls from %s%s.",
-			   cansee(pos.x,pos.y) ? An(xname(otmp)) : Something,
+			   cansee(pos.x,pos.y) ? An(xname(otmp)) : "Something",
 			   cansee(x,y) ? "the tree" : "somewhere",
 			   (cansee(x,y) && IS_POOL(lev->typ)) ?
 			   " into the water" : "");
@@ -1907,7 +1907,7 @@ stillinwater:;
 			else if(mtmp->mpeaceful) {
 				You("surprise %s!",
 				    Blind && !sensemon(mtmp) ?
-				    something : a_monnam(mtmp));
+				    "something" : a_monnam(mtmp));
 				mtmp->mpeaceful = 0;
 			} else
 			    pline("%s attacks you by surprise!",
@@ -2226,8 +2226,7 @@ int dopickup(void) {
 		You("cannot dive into the water to pick things up.");
 		return 0;
 	    } else if (!Underwater) {
-		You_cant("even see the bottom, let alone pick up %s.",
-				something);
+		You_cant("even see the bottom, let alone pick something up.");
 		return 0;
 	    }
 	}
@@ -2464,7 +2463,7 @@ void nomul(int nval) {
 void unmul(const char *msg_override) {
 	multi = 0;	/* caller will usually have done this already */
 	if (msg_override) nomovemsg = msg_override;
-	else if (!nomovemsg) nomovemsg = You_can_move_again;
+	else if (!nomovemsg) nomovemsg = "You can move again.";
 	if (*nomovemsg) pline("%s", nomovemsg);
 	nomovemsg = 0;
 	u.usleep = 0;

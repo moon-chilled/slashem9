@@ -4924,7 +4924,7 @@ struct monst *shkp;
     if (service > 0)
 	verbalize(we_offer);
     else
-	pline(Never_mind);
+	pline("Never mind.");
 
     switch(service) {
 	case 0:

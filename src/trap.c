@@ -487,7 +487,7 @@ int *fail_reason;
 		canspotmon(mon) ? "comes to life" : "disappears");
 	else { /* cause == ANIMATE_NORMAL */
 	    You("find %s posing as a statue.",
-		canspotmon(mon) ? a_monnam(mon) : something);
+		canspotmon(mon) ? a_monnam(mon) : "something");
 	    stop_occupation();
 	}
 	/* avoid hiding under nothing */
@@ -2185,7 +2185,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			    pline("Click! %s triggers %s.", Monnam(mtmp),
 				  trap->tseen ?
 				  "a rolling boulder trap" :
-				  something);
+				  "something");
 			if (launch_obj(BOULDER, trap->launch.x, trap->launch.y,
 				trap->launch2.x, trap->launch2.y, style)) {
 			    if (in_sight) trap->tseen = true;
@@ -2567,7 +2567,7 @@ domagictrap()
 	  if (!resists_blnd(&youmonst)) {
 		You("are momentarily blinded by a flash of light!");
 		make_blinded((long)rn1(5,10),false);
-		if (!Blind) Your(vision_clears);
+		if (!Blind) Your("vision quickly clears.");
 	  } else if (!Blind) {
 		You("see a flash of light!");
 	  }  else
@@ -3391,16 +3391,16 @@ struct trap *ttmp;
 	   There's no need for a cockatrice test, only the trap is touched */
 	if ((mtmp = m_at(ttmp->tx,ttmp->ty)) != 0) {
 		mtmp->mtrapped = 0;
-		You("remove %s %s from %s.", the_your[ttmp->madeby_u],
+		You("remove %s %s from %s.", ttmp->madeby_u ? "your" : "the",
 			(ttmp->ttyp == BEAR_TRAP) ? "bear trap" : "webbing",
 			mon_nam(mtmp));
 		reward_untrap(ttmp, mtmp);
 	} else {
 		if (ttmp->ttyp == BEAR_TRAP) {
-			You("disarm %s bear trap.", the_your[ttmp->madeby_u]);
+			You("disarm %s bear trap.", ttmp->madeby_u ? "your" : "the");
 			cnv_trap_obj(BEARTRAP, 1, ttmp);
 		} else /* if (ttmp->ttyp == WEB) */ {
-			You("succeed in removing %s web.", the_your[ttmp->madeby_u]);
+			You("succeed in removing %s web.", ttmp->madeby_u ? "your" : "the");
 			deltrap(ttmp);
 		}
 	}
@@ -3415,7 +3415,7 @@ struct trap *ttmp;
 	int fails = try_disarm(ttmp, false);
 
 	if (fails < 2) return fails;
-	You("disarm %s land mine.", the_your[ttmp->madeby_u]);
+	You("disarm %s land mine.", ttmp->madeby_u ? "your" : "the");
 	cnv_trap_obj(LAND_MINE, 1, ttmp);
 	return 1;
 }
@@ -3517,7 +3517,7 @@ int otyp;
 	int fails = try_disarm(ttmp, false);
 
 	if (fails < 2) return fails;
-	You("disarm %s trap.", the_your[ttmp->madeby_u]);
+	You("disarm %s trap.", ttmp->madeby_u ? "your" : "the");
 	cnv_trap_obj(otyp, 50-rnl(50), ttmp);
 	return 1;
 }
@@ -3993,7 +3993,7 @@ boolean disarm;
 			pline("Suddenly you are frozen in place!");
 			nomul(-d(5, 6));
 			exercise(A_DEX, false);
-			nomovemsg = You_can_move_again;
+			nomovemsg = "You can move again.";
 			} else You("momentarily stiffen.");
 			} else You("momentarily stiffen.");
 			break;

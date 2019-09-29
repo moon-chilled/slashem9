@@ -1616,7 +1616,7 @@ int doputon(void) {
 				else
 					already_wearing("some lenses");
 			} else
-				already_wearing(something); /* ??? */
+				already_wearing("something"); /* ??? */
 			return 0;
 		}
 		if (otmp->otyp != BLINDFOLD && otmp->otyp != TOWEL && otmp->otyp != LENSES) {

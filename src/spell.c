@@ -278,7 +278,7 @@ struct obj *book2;
 	    u.uevent.udemigod = 1;	/* wizdead() */
 	    if (!u.udg_cnt || u.udg_cnt > soon) u.udg_cnt = soon;
 	} else {	/* at least one artifact not prepared properly */
-	    You("have a feeling that %s is amiss...", something);
+	    You("have a feeling that something is amiss...");
 	    goto raise_dead;
 	}
 	return;
@@ -1055,14 +1055,14 @@ boolean atme;
 		break;
 	case SPE_JUMPING:
 		if (!jump(max(role_skill,1)))
-			pline(nothing_happens);
+			pline("Nothing happens.");
 		break;
 	case SPE_RESIST_POISON:
 		if(!(HPoison_resistance & INTRINSIC)) {
 			You("feel healthy ..... for the moment at least.");
 			incr_itimeout(&HPoison_resistance, rn1(1000, 500) +
 				spell_damage_bonus(spellid(spell))*100);
-		} else pline(nothing_happens);	/* Already have as intrinsic */
+		} else pline("Nothing happens.");	/* Already have as intrinsic */
 		break;
 	case SPE_RESIST_SLEEP:
 		if(!(HSleep_resistance & INTRINSIC)) {
@@ -1072,14 +1072,14 @@ boolean atme;
 				You("no longer feel tired.");
 			incr_itimeout(&HSleep_resistance, rn1(1000, 500) +
 				spell_damage_bonus(spellid(spell))*100);
-		} else pline(nothing_happens);	/* Already have as intrinsic */
+		} else pline("Nothing happens.");	/* Already have as intrinsic */
 		break;
 	case SPE_ENDURE_COLD:
 		if(!(HCold_resistance & INTRINSIC)) {
 			You("feel warmer.");
 			incr_itimeout(&HCold_resistance, rn1(1000, 500) +
 				spell_damage_bonus(spellid(spell))*100);
-		} else pline(nothing_happens);	/* Already have as intrinsic */
+		} else pline("Nothing happens.");	/* Already have as intrinsic */
 		break;
 	case SPE_ENDURE_HEAT:
 		if(!(HFire_resistance & INTRINSIC)) {
@@ -1089,7 +1089,7 @@ boolean atme;
 				You("feel colder.");
 			incr_itimeout(&HFire_resistance, rn1(1000, 500) +
 				spell_damage_bonus(spellid(spell))*100);
-		} else pline(nothing_happens);	/* Already have as intrinsic */
+		} else pline("Nothing happens.");	/* Already have as intrinsic */
 		break;
 	case SPE_INSULATE:
 		if(!(HShock_resistance & INTRINSIC)) {
@@ -1099,7 +1099,7 @@ boolean atme;
 				You("are not at all shocked by this feeling.");
 			incr_itimeout(&HShock_resistance, rn1(1000, 500) +
 				spell_damage_bonus(spellid(spell))*100);
-		} else pline(nothing_happens);	/* Already have as intrinsic */
+		} else pline("Nothing happens.");	/* Already have as intrinsic */
 		break;
 	case SPE_ENLIGHTEN:
 		You("feel self-knowledgeable...");

@@ -848,7 +848,7 @@ static boolean toss_up(struct obj *obj, boolean hitsroof) {
 			pline("It blinds you!");
 		    u.ucreamed += blindinc;
 		    make_blinded(Blinded + blindinc, false);
-		    if (!Blind) Your("%s", vision_clears);
+		    if (!Blind) Your("%s", "vision quickly clears.");
 		}
 		break;
 	default:
@@ -1176,7 +1176,7 @@ int thrown) {
 			if (!dmg) {
 			    pline(Blind ? "%s lands %s your %s." :
 					"%s back to you, landing %s your %s.",
-				  Blind ? Something : Tobjnam(obj, "return"),
+				  Blind ? "Something" : Tobjnam(obj, "return"),
 				  Levitation ? "beneath" : "at",
 				  makeplural(body_part(FOOT)));
 			} else {
@@ -1849,7 +1849,7 @@ static void breakmsg(struct obj *obj, boolean in_view) {
 			/*FALLTHRU*/
 		case POT_WATER:		/* really, all potions */
 			if (!in_view)
-			    You_hear("%s shatter!", something);
+			    You_hear("something shatter!");
 			else
 			    pline("%s shatter%s%s!", Doname2(obj),
 				(obj->quan==1) ? "s" : "", to_pieces);

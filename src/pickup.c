@@ -1857,8 +1857,8 @@ struct obj *obj;
 		pline("That would be an interesting topological exercise.");
 		return 0;
 	} else if (obj->owornmask & (W_ARMOR | W_RING | W_AMUL | W_TOOL)) {
-		Norep("You cannot %s %s you are wearing.",
-			Icebox ? "refrigerate" : "stash", something);
+		Norep("You cannot %s something you are wearing.",
+			Icebox ? "refrigerate" : "stash");
 		return 0;
 	} else if ((obj->otyp == LOADSTONE) && obj->cursed) {
 		obj->bknown = 1;
@@ -2139,7 +2139,7 @@ struct obj *box;
 	livecat->mpeaceful = 1;
 	set_malign(livecat);
 	if (!canspotmon(livecat))
-	    You("think %s brushed your %s.", something, body_part(FOOT));
+	    You("think something brushed your %s.", body_part(FOOT));
 	else
 	    pline("%s inside the box is still alive!", Monnam(livecat));
 	christen_monst(livecat, sc);
@@ -2342,7 +2342,7 @@ ask_again2:
 	    goto containerdone;
 	}
 	if (flags.menu_style != MENU_FULL) {
-	    sprintf(qbuf, "Do you wish to put %s in?", something);
+	    sprintf(qbuf, "Do you wish to put something in?");
 	    strcpy(pbuf, ynqchars);
 	    if (flags.menu_style == MENU_TRADITIONAL && invent && inv_cnt() > 0)
 		strcat(pbuf, "m");
@@ -2516,14 +2516,14 @@ boolean outokay, inokay;
     start_menu(win);
     if (outokay) {
 	any.a_int = 1;
-	sprintf(buf,"Take %s out of %s", something, the(xname(obj)));
+	sprintf(buf,"Take something out of %s", the(xname(obj)));
 	add_menu(win, NO_GLYPH, &any, *menuselector, 0, ATR_NONE,
 			buf, MENU_UNSELECTED);
     }
     menuselector++;
     if (inokay) {
 	any.a_int = 2;
-	sprintf(buf,"Put %s into %s", something, the(xname(obj)));
+	sprintf(buf,"Put something into %s", the(xname(obj)));
 	add_menu(win, NO_GLYPH, &any, *menuselector, 0, ATR_NONE, buf, MENU_UNSELECTED);
     }
     menuselector++;

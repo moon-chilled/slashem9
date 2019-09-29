@@ -268,7 +268,7 @@ boolean sense_engr_at(int x, int y, boolean read_it /* Read any sensed engraving
 	    case DUST:
 		if(!Blind) {
 			sensed = 1;
-			pline("%s is written here in the %s.", Something,
+			pline("Something is written here in the %s.",
 				is_ice(x,y) ? "frost" : "dust");
 		}
 		break;
@@ -276,9 +276,7 @@ boolean sense_engr_at(int x, int y, boolean read_it /* Read any sensed engraving
 	    case HEADSTONE:
 		if (!Blind || can_reach_floor()) {
 			sensed = 1;
-			pline("%s is engraved here on the %s.",
-				Something,
-				surface(x,y));
+			pline("Something is engraved here on the %s.", surface(x,y));
 		}
 		break;
 	    case BURN:
@@ -307,8 +305,7 @@ boolean sense_engr_at(int x, int y, boolean read_it /* Read any sensed engraving
 		}
 		break;
 	    default:
-		impossible("%s is written in a very strange way.",
-				Something);
+		impossible("Something is written in a very strange way.");
 		sensed = 1;
 	    }
 	    if (sensed && !read_it &&
@@ -923,7 +920,7 @@ int doengrave(void) {
 		c = yn_function("Do you want to add to the current engraving?",
 				ynqchars, 'y');
 		if (c == 'q') {
-		    pline("%s", Never_mind);
+		    pline("%s", "Never mind.");
 		    return false;
 		}
 	    }
@@ -1016,7 +1013,7 @@ int doengrave(void) {
 			  Tobjnam(otmp, "glow"), otense(otmp, "fade"));
 		return true;
 	    } else {
-		pline("%s", Never_mind);
+		pline("%s", "Never mind.");
 		return false;
 	    }
 	}
@@ -1139,7 +1136,7 @@ int doengrave(void) {
 	if (doblind && !resists_blnd(&youmonst)) {
 		You("are blinded by the flash!");
 		make_blinded((long)rnd(50),false);
-		if (!Blind) Your("%s", vision_clears);
+		if (!Blind) Your("%s", "vision quickly clears.");
 	}
 
 	return true;

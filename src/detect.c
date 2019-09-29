@@ -282,7 +282,7 @@ int food_detect(struct obj *sobj) {
     int ct = 0, ctu = 0;
     boolean confused = (Confusion || (sobj && sobj->cursed)), stale;
     char oclass = confused ? POTION_CLASS : FOOD_CLASS;
-    const char *what = confused ? something : "food";
+    const char *what = confused ? "something" : "food";
     int uw = u.uinwater;
 
     stale = clear_stale_map(oclass, 0);
@@ -410,7 +410,7 @@ int		class		/* an object class, 0 for all */ ) {
     	boulder = ROCK_CLASS;
 
     if (Hallucination || (Confusion && class == SCROLL_CLASS))
-	strcpy(stuff, something);
+	strcpy(stuff, "something");
     else
     	strcpy(stuff, class ? oclass_names[class] : "objects");
     if (boulder && class != ROCK_CLASS) strcat(stuff, " and/or large stones");
@@ -779,7 +779,7 @@ void use_crystal_ball(struct obj *obj) {
 	case 3 : if (!resists_blnd(&youmonst)) {
 		pline("%s your vision!", Tobjnam(obj, "damage"));
 		make_blinded(Blinded + rnd(100),false);
-		if (!Blind) Your("%s", vision_clears);
+		if (!Blind) Your("%s", "vision quickly clears.");
 	    } else {
 		pline("%s your vision.", Tobjnam(obj, "assault"));
 		You("are unaffected!");
@@ -828,7 +828,7 @@ void use_crystal_ball(struct obj *obj) {
     ch = yn_function("What do you look for?", NULL, '\0');
     /* Don't filter out ' ' here; it has a use */
     if ((ch != def_monsyms[S_GHOST]) && index(quitchars,ch)) {
-	if (flags.verbose) pline("%s", Never_mind);
+	if (flags.verbose) pline("%s", "Never mind.");
 	return;
     }
     You("peer into %s...", the(xname(obj)));

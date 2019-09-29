@@ -795,7 +795,7 @@ static int specialpower(void) {
 			else     u.uhp += (u.ulevel * 4);
 			if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 			u.unextuse = 3000;
-		} else pline(nothing_happens);
+		} else pline("Nothing happens.");
 		break;
 	    case 'S':
 		You("scream \"KIIILLL!\"");
@@ -940,7 +940,7 @@ static int wiz_level_change(void) {
     else ret = sscanf(buf, "%d", &newlevel);
 
     if (ret != 1) {
-	pline("%s", Never_mind);
+	pline("%s", "Never mind.");
 	return 0;
     }
     if (newlevel == u.ulevel) {
@@ -1113,7 +1113,7 @@ static const char
 #define you_can(attr)	enl_msg(You_,can,could,attr)
 #define you_have_been(goodthing) enl_msg(You_,have_been,were,goodthing)
 #define you_have_never(badthing) enl_msg(You_,have_never,never,badthing)
-#define you_have_X(something)	enl_msg(You_,have,(const char *)"",something)
+#define you_have_X(something)	enl_msg(You_,have,(const char *)"","something")
 
 static void enlght_line(const char *start, const char *middle, const char *end) {
 	char buf[BUFSZ];
@@ -1252,7 +1252,7 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	    {
 		if (nth)
 		    strcat(buf, " and ");
-		strcat(buf, something);
+		strcat(buf, "something");
 	    }
 		you_are(buf);
 	}
@@ -1602,7 +1602,7 @@ void dump_enlightenment(int final) {
 		sprintf(buf, "aware of the presence of %s",
 			(flags.warntype & M2_ORC) ? "orcs" :
 			(flags.warntype & M2_DEMON) ? "demons" :
-			something);
+			"something");
 		dump(youwere, buf);
 	}
 	if (Undead_warning) dump(youwere, "warned of undead");
@@ -3794,7 +3794,7 @@ int movecmd(char sym) {
  * produces coordinates using the direction from getdir()
  * and verifies that those coordinates are ok.
  *
- * If the call to getdir() returns 0, Never_mind is displayed.
+ * If the call to getdir() returns 0, "Never mind." is displayed.
  * If the resulting coordinates are not okay, emsg is displayed.
  *
  * Returns non-zero if coordinates in cc are valid.
@@ -3802,7 +3802,7 @@ int movecmd(char sym) {
 int get_adjacent_loc(const char *prompt, const char *emsg, xchar x, xchar y, coord *cc) {
 	xchar new_x, new_y;
 	if (!getdir(prompt)) {
-		pline("%s", Never_mind);
+		pline("%s", "Never mind.");
 		return 0;
 	}
 	new_x = x + u.dx;

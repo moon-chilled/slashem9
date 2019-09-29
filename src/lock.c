@@ -814,7 +814,7 @@ static boolean obstructed(int x, int y) {
 		return true;
 	}
 	if (OBJ_AT(x, y)) {
-objhere:	pline("%s's in the way.", Something);
+objhere:	pline("Something's in the way.");
 		return true;
 	}
 	return false;

@@ -424,7 +424,7 @@ boolean wakeup_msg;
 	}
 	/* early wakeup from combat won't be possible until next monster turn */
 	u.usleep = monstermoves;
-	nomovemsg = wakeup_msg ? "You wake up." : You_can_move_again;
+	nomovemsg = wakeup_msg ? "You wake up." : "You can move again.";
 }
 
 
@@ -847,7 +847,7 @@ void hatch_egg(void *arg, long timeout) {
 		case OBJ_INVENT:
 		    knows_egg = true; /* true even if you are blind */
 		    if (!cansee_hatchspot)
-			You_feel("%s %s from your pack!", something,
+			You_feel("something %s from your pack!",
 			    locomotion(mon->data, "drop"));
 		    else
 			You("see %s %s out of your pack!",
@@ -970,7 +970,7 @@ slip_or_trip()
 	    pronoun = otmp->quan == 1L ? "it" : Hallucination ? "they" : "them";
 	    what = !otmp->nexthere ? pronoun :
 		  (otmp->dknown || !Blind) ? doname(otmp) :
-		  ((otmp = sobj_at(ROCK, u.ux, u.uy)) == 0 ? something :
+		  ((otmp = sobj_at(ROCK, u.ux, u.uy)) == 0 ? "something" :
 		  (otmp->quan == 1L ? "a rock" : "some rocks"));
 	    if (Hallucination) {
 		what = strcpy(buf, what);

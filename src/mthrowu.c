@@ -468,8 +468,7 @@ m_throw (
 			blindinc = rnd(25);
 			if(singleobj->otyp == CREAM_PIE) {
 			    if(!Blind) pline("Yecch!  You've been creamed.");
-			    else pline("There's %s sticky all over your %s.",
-				       something,
+			    else pline("There's something sticky all over your %s.",
 				       body_part(FACE));
 			} else if(singleobj->otyp == BLINDING_VENOM) {
 			    int num_eyes = eyecount(youmonst.data);
@@ -522,7 +521,7 @@ m_throw (
 	if (blindinc) {
 		u.ucreamed += blindinc;
 		make_blinded(Blinded + (long)blindinc, false);
-		if (!Blind) Your(vision_clears);
+		if (!Blind) Your("vision quickly clears.");
 	}
 }
 

@@ -260,13 +260,6 @@ const char *c_obj_colors[] = {
 
 struct menucoloring *menu_colorings = 0;
 
-struct c_common_strings c_common_strings = {
-	"Nothing happens.",		"That's enough tries!",
-	"That is a silly thing to %s.",	"shudder for a moment.",
-	"something", "Something", "You can move again.", "Never mind.",
-	"vision quickly clears.", {"the", "your"}
-};
-
 /* NOTE: the order of these words exactly corresponds to the
    order of oc_material values #define'd in objclass.h. */
 const char *materialnm[] = {

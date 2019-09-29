@@ -928,7 +928,7 @@ bool inside_gas_cloud(void *p1, void * p2) {
 	if (!Blind)
 	    make_blinded(1L, false);
 	if (!Poison_resistance) {
-	    pline("%s is burning your %s!", Something, makeplural(body_part(LUNG)));
+	    pline("Something is burning your %s!", makeplural(body_part(LUNG)));
 	    You("cough and spit blood!");
 	    losehp(rnd(dam) + 5, "gas cloud", KILLED_BY_AN);
 	    return false;

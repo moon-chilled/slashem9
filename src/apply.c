@@ -41,8 +41,6 @@ static boolean figurine_location_checks(struct obj *, coord *, boolean);
 static boolean uhave_graystone(void);
 static void add_class(char *, char);
 
-const char no_elbow_room[] = "don't have enough elbow-room to maneuver.";
-
 static int use_camera(struct obj *obj) {
 	struct monst *mtmp;
 
@@ -53,7 +51,7 @@ static int use_camera(struct obj *obj) {
 	if(!getdir(NULL)) return 0;
 
 	if (obj->spe <= 0) {
-		pline("%s", nothing_happens);
+		pline("%s", "Nothing happens.");
 		return 1;
 	}
 	consume_obj_charge(obj, true);
@@ -822,7 +820,7 @@ static int use_mirror(struct obj *obj) {
 		if (!rn2(4)) tmp = 120;
 		if (vis)
 			pline("%s is frozen by its reflection.", Monnam(mtmp));
-		else You_hear("%s stop moving.",something);
+		else You_hear("something stop moving.");
 		mtmp->mcanmove = 0;
 		if ( (int) mtmp->mfrozen + tmp > 127)
 			mtmp->mfrozen = 127;
@@ -914,7 +912,7 @@ static void use_bell(struct obj **optr) {
 		if (!obj->cursed)
 		    openit();
 		else
-		    pline("%s", nothing_happens);
+		    pline("%s", "Nothing happens.");
 
 	    } else if (obj->cursed) {
 		coord mm;
@@ -940,8 +938,8 @@ static void use_bell(struct obj **optr) {
 		}
 		res += openit();
 		switch (res) {
-		  case 0:  pline("%s", nothing_happens); break;
-		  case 1:  pline("%s opens...", Something);
+		  case 0:  pline("%s", "Nothing happens."); break;
+		  case 1:  pline("Something opens...");
 			   learno = true; break;
 		  default: pline("Things open around you...");
 			   learno = true; break;
@@ -949,7 +947,7 @@ static void use_bell(struct obj **optr) {
 
 	    } else {  /* uncursed */
 		if (findit() != 0) learno = true;
-		else pline("%s", nothing_happens);
+		else pline("%s", "Nothing happens.");
 	    }
 
 	}	/* charged BofO */
@@ -1016,7 +1014,7 @@ static void use_candle(struct obj **optr) {
 	char qbuf[QBUFSZ];
 
 	if(u.uswallow) {
-		You(no_elbow_room);
+		pline("You don't have enough elbow-room to maneuver.");
 		return;
 	}
 	if(Underwater) {
@@ -1260,7 +1258,7 @@ static void use_lamp(struct obj *obj) {
 static int use_torch(struct obj *obj) {
     struct obj *otmp = NULL;
     if (u.uswallow) {
-	You(no_elbow_room);
+	    pline("You don't have enough elbow-room to maneuver.");
 	return 0;
     }
     if (Underwater) {
@@ -1288,7 +1286,7 @@ static void light_cocktail(struct obj *obj /* obj is a potion of oil or a stick 
 	const char *objnam = obj->otyp == POT_OIL ? "potion" : "stick";
 
 	if (u.uswallow) {
-	    You(no_elbow_room);
+		pline("You don't have enough elbow-room to maneuver.");
 	    return;
 	}
 
@@ -1376,12 +1374,12 @@ int dorub(void) {
 		update_inventory();
 	    } else if (rn2(2) && !Blind)
 		You("see a puff of smoke.");
-	    else pline("%s", nothing_happens);
+	    else pline("%s", "Nothing happens.");
 	} else if (obj->otyp == BRASS_LANTERN) {
 	    /* message from Adventure */
 	    pline("Rubbing the electric lamp is not particularly rewarding.");
 	    pline("Anyway, nothing exciting happens.");
-	} else pline("%s", nothing_happens);
+	} else pline("%s", "Nothing happens.");
 	return 1;
 }
 
@@ -1577,7 +1575,7 @@ static void use_tinning_kit(struct obj *obj) {
 	}
 	if (!(corpse = getobj((const char *)tinnables, "tin"))) return;
 	if (corpse->otyp == CORPSE && (corpse->oeaten || corpse->odrained)) {
-		You("cannot tin %s which is partly eaten.",something);
+		You("cannot tin something which is partly eaten.");
 		return;
 	}
 	if (!tinnable(corpse)) {
@@ -1708,7 +1706,7 @@ void use_unicorn_horn (struct obj *obj) {
 	}
 
 	if (trouble_count == 0) {
-	    pline("%s", nothing_happens);
+	    pline("%s", "Nothing happens.");
 	    return;
 	} else if (trouble_count > 1) {		/* shuffle */
 	    int i, j, k;
@@ -1837,8 +1835,7 @@ void fig_transform(void * arg, long timeout) {
 	    switch (figurine->where) {
 		case OBJ_INVENT:
 		    if (Blind)
-			You_feel("%s %s from your pack!", something,
-			    locomotion(mtmp->data,"drop"));
+			You_feel("something %s from your pack!", locomotion(mtmp->data,"drop"));
 		    else
 			You("see %s %s out of your pack!",
 			    monnambuf,
@@ -2567,7 +2564,7 @@ static int use_whip(struct obj *obj) {
 	}
 	if (!wrapped_what) {
 	    if (IS_FURNITURE(levl[rx][ry].typ))
-		wrapped_what = something;
+		wrapped_what = "something";
 	    else if (sobj_at(BOULDER, rx, ry))
 		wrapped_what = "a boulder";
 	}
@@ -2865,7 +2862,7 @@ static int use_pole(struct obj *obj) {
 		u.uconduct.weaphit++;
 	} else
 	    /* Now you know that nothing is there... */
-	    pline("%s", nothing_happens);
+	    pline("%s", "Nothing happens.");
 	return 1;
 }
 
@@ -3018,7 +3015,7 @@ static int use_grapple(struct obj *obj) {
 	    }
 	    break;
 	}
-	pline("%s", nothing_happens);
+	pline("%s", "Nothing happens.");
 	return 1;
 }
 
@@ -3563,7 +3560,7 @@ int doapply(void) {
 				if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 				You_feel("better.");
 				flags.botl = true;
-			    } else pline("%s", nothing_happens);
+			    } else pline("%s", "Nothing happens.");
 			} else if (!rn2(3))
 			    pline("Nothing seems to happen.");
 			else if (!Sick)
@@ -3611,7 +3608,7 @@ int doapply(void) {
 					       NULL);
 		    makeknown(HORN_OF_PLENTY);
 		} else
-		    pline("%s", nothing_happens);
+		    pline("%s", "Nothing happens.");
 		break;
 	case LAND_MINE:
 	case BEARTRAP:

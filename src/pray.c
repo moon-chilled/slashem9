@@ -638,7 +638,7 @@ aligntyp resp_god;
 static void
 at_your_feet (const char *str)
 {
-	if (Blind) str = Something;
+	if (Blind) str = "Something";
 	if (u.uswallow) {
 	    /* barrier between you and the floor */
 	    pline("%s %s into %s %s.", str, vtense(str, "drop"),
@@ -1218,7 +1218,7 @@ offer_oracle (struct monst *mtmp, struct obj *otmp)
 
 	/* Make sure it's a corpse */
     if (otmp->otyp != CORPSE) {
-		pline(nothing_happens);
+		pline("Nothing happens.");
 		return 1;
 	}
 
@@ -1502,7 +1502,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
     } /* fake Amulet */
 
     if (value == 0) {
-	pline(nothing_happens);
+	pline("Nothing happens.");
 	return 1;
     }
 
@@ -1708,7 +1708,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 	    if ((int)u.uluck < 0) u.uluck = 0;
 	    if (u.uluck != saved_luck) {
 		if (Blind)
-		    You("think %s brushed your %s.",something, body_part(FOOT));
+		    You("think something brushed your %s.", body_part(FOOT));
 		else You(Hallucination ?
 		    "see crabgrass at your %s.  A funny thing in a dungeon." :
 		    "glimpse a four-leaf clover at your %s.",

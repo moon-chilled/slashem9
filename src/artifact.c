@@ -1351,7 +1351,7 @@ static int arti_invoke(struct obj *obj) {
 		if(obj->otyp == CRYSTAL_BALL)
 			use_crystal_ball(obj);
 		else
-			pline("%s", nothing_happens);
+			pline("%s", "Nothing happens.");
 		return 1;
 	}
 

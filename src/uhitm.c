@@ -160,8 +160,7 @@ boolean barehanded;
 		    !glyph_is_warning(glyph_at(u.ux+u.dx,u.uy+u.dy)) &&
 		    !memory_is_invisible(u.ux+u.dx, u.uy+u.dy) &&
 		    !(!Blind && mtmp->mundetected && hides_under(mtmp->data))) {
-		pline("Wait!  There's %s there you can't see!",
-			something);
+		pline("Wait!  There's something there you can't see!");
 		map_invisible(u.ux+u.dx, u.uy+u.dy);
 		/* if it was an invisible mimic, treat it as if we stumbled
 		 * onto a visible mimic

@@ -2946,8 +2946,7 @@ typfnd:
 		delete_contents(otmp);
 	    obfree(otmp, NULL);
 	    otmp = &zeroobj;
-	    pline("For a moment, you feel %s in your %s, but it disappears!",
-		  something,
+	    pline("For a moment, you feel something in your %s, but it disappears!",
 		  makeplural(body_part(HAND)));
 	}
 

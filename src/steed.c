@@ -57,7 +57,7 @@ use_saddle (struct obj *otmp)
 
 	/* Select an animal */
 	if (u.uswallow || Underwater || !getdir(NULL)) {
-	    pline(Never_mind);
+	    pline("Never mind.");
 	    return 0;
 	}
 	if (!u.dx && !u.dy) {

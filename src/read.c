@@ -173,7 +173,7 @@ doread (void)
 	    return 1;
 	} else if (scroll->oclass != SCROLL_CLASS
 		&& scroll->oclass != SPBOOK_CLASS) {
-	    pline(silly_thing_to, "read");
+	    pline("That is a silly thing to read.");
 	    return 0;
 	} else if (Blind) {
 	    const char *what = 0;
@@ -266,14 +266,14 @@ doread (void)
 static void
 stripspe (struct obj *obj)
 {
-	if (obj->blessed) pline(nothing_happens);
+	if (obj->blessed) pline("Nothing happens.");
 	else {
 		if (obj->spe > 0) {
 		    obj->spe = 0;
 		    if (obj->otyp == OIL_LAMP || obj->otyp == BRASS_LANTERN)
 			obj->age = 0;
 		    Your("%s %s briefly.",xname(obj), otense(obj, "vibrate"));
-		} else pline(nothing_happens);
+		} else pline("Nothing happens.");
 	}
 }
 
@@ -379,7 +379,7 @@ recharge (struct obj *obj, int curse_bless)
 	} else if (obj->oclass == SPBOOK_CLASS) {
 
 	    if (obj->otyp == SPE_BOOK_OF_THE_DEAD) {
-	    	pline(nothing_happens);
+	    	pline("Nothing happens.");
 		return;
 	    }
 
@@ -479,7 +479,7 @@ recharge (struct obj *obj, int curse_bless)
 		    if (obj->spe < 3)
 			Your("marker seems permanently dried out.");
 		    else
-			pline(nothing_happens);
+			pline("Nothing happens.");
 		} else if (is_blessed) {
 		    n = rn1(16,15);		/* 15..30 */
 		    if (obj->spe + n <= 50)
@@ -558,7 +558,7 @@ recharge (struct obj *obj, int curse_bless)
 		    if (obj->spe < 5) {
 			obj->spe++;
 			p_glow1(obj);
-		    } else pline(nothing_happens);
+		    } else pline("Nothing happens.");
 		}
 		break;
 	    case HORN_OF_PLENTY:
@@ -1368,7 +1368,7 @@ seffects (struct obj *sobj)
 		known = true;
 	case SPE_MAGIC_MAPPING:
 		if (level.flags.nommap) {
-		    Your("%s spins as %s blocks the spell!", body_part(HEAD), something);
+		    Your("%s spins as something blocks the spell!", body_part(HEAD));
 		    make_confused(HConfusion + rnd(30), false);
 		    break;
 		}
@@ -1561,7 +1561,7 @@ seffects (struct obj *sobj)
 		cc.x = u.ux;
 		cc.y = u.uy;
 		if (getpos(&cc, true, "the desired position") < 0) {
-		    pline(Never_mind);
+		    pline("Never mind.");
 		    return 0;
 		}
 		if (!cansee(cc.x, cc.y) || distu(cc.x, cc.y) >= 32) {
@@ -1717,7 +1717,7 @@ do_class_genocide (void)
 
 	for(j=0; ; j++) {
 		if (j >= 5) {
-			pline(thats_enough_tries);
+			pline("That's enough tries!");
 			return;
 		}
 		do {
@@ -1906,7 +1906,7 @@ do_genocide (int how)
 	} else {
 	    for(i = 0; ; i++) {
 		if(i >= 5) {
-		    pline(thats_enough_tries);
+		    pline("That's enough tries!");
 		    return;
 		}
 		getlin("What monster do you want to genocide? [type the name]",
@@ -2029,7 +2029,7 @@ do_genocide (int how)
 	    if (cnt)
 		pline("Sent in some %s.", makeplural(buf));
 	    else
-		pline(nothing_happens);
+		pline("Nothing happens.");
 	}
 }
 
@@ -2148,7 +2148,7 @@ create_particular (void)
 	} while (++tries < 5);
 
 	if (tries == 5) {
-	    pline(thats_enough_tries);
+	    pline("That's enough tries!");
 	} else {
 	    cant_create(&which, false);
 	    whichpm = &mons[which];

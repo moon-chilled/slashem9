@@ -201,7 +201,7 @@ boolean flooreffects(struct obj *obj, int x, int y, const char *verb) {
 		else
 			pline("%s %s into %s pit.",
 				The(xname(obj)), otense(obj, "tumble"),
-				the_your[t->madeby_u]);
+				t->madeby_u ? "your" : "the");
 	}
 	if (is_lightsaber(obj) && obj->lamplit) {
 		if (cansee(x, y)) You("see %s deactivate.", an(xname(obj)));
@@ -401,8 +401,7 @@ giveback:
 boolean canletgo(struct obj *obj, const char *word) {
 	if(obj->owornmask & (W_ARMOR | W_RING | W_AMUL | W_TOOL)){
 		if (*word)
-			Norep("You cannot %s %s you are wearing.",word,
-				something);
+			Norep("You cannot %s something you are wearing.", word);
 		return false;
 	}
 	/* KMH, balance patch -- removed stone of rotting */
@@ -431,8 +430,7 @@ boolean canletgo(struct obj *obj, const char *word) {
 #ifdef STEED
 	if (obj->owornmask & W_SADDLE) {
 		if (*word)
-			You("cannot %s %s you are sitting on.", word,
-				something);
+			You("cannot %s something you are sitting on.", word);
 		return false;
 	}
 #endif
@@ -1514,7 +1512,7 @@ boolean revive_corpse(struct obj *corpse, boolean moldy) {
 		        char sackname[BUFSZ];
 		        strcpy(sackname, an(xname(container)));
 	   		pline("%s %ss out of %s in your pack!",
-	   			Blind ? Something : Amonnam(mtmp),
+	   			Blind ? "Something" : Amonnam(mtmp),
 				locomotion(mtmp->data,"writhes"),
 	   			sackname);
 	   	} else if (container_where == OBJ_FLOOR && container &&

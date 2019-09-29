@@ -317,11 +317,11 @@ ghost_from_bottle()
 		return;
 	}
 	if (Blind) {
-		pline("As you open the bottle, %s emerges.", something);
+		pline("As you open the bottle, something emerges.");
 		return;
 	}
 	pline("As you open the bottle, an enormous %s emerges!",
-		Hallucination ? rndmonnam() : (const char *)"ghost");
+		Hallucination ? rndmonnam() : "ghost");
 	if(flags.verbose)
 	    You("are frightened to death, and unable to move.");
 	nomul(-3);
@@ -660,7 +660,7 @@ peffects (struct obj *otmp)
 			Your("%s are frozen to the %s!",
 			     makeplural(body_part(FOOT)), surface(u.ux, u.uy));
 		    nomul(-(rn1(10, 25 - 12*bcsign(otmp))));
-		    nomovemsg = You_can_move_again;
+		    nomovemsg = "You can move again.";
 		    exercise(A_DEX, false);
 		}
 		break;
@@ -1570,9 +1570,9 @@ potionbreathe (struct obj *obj)
 	case POT_PARALYSIS:
 		kn++;
 		if (!Free_action) {
-		    pline("%s seems to be holding you.", Something);
+		    pline("Something seems to be holding you.");
 		    nomul(-rnd(5));
-		    nomovemsg = You_can_move_again;
+		    nomovemsg = "You can move again.";
 		    exercise(A_DEX, false);
 		} else You("stiffen momentarily.");
 		break;
@@ -1581,7 +1581,7 @@ potionbreathe (struct obj *obj)
 		if (!Free_action && !Sleep_resistance) {
 		    You_feel("rather tired.");
 		    nomul(-rnd(5));
-		    nomovemsg = You_can_move_again;
+		    nomovemsg = "You can move again.";
 		    exercise(A_DEX, false);
 		} else You("yawn.");
 		break;
@@ -1596,7 +1596,7 @@ potionbreathe (struct obj *obj)
 		    pline("It suddenly gets dark.");
 		}
 		make_blinded(itimeout_incr(Blinded, rnd(5)), false);
-		if (!Blind && !u.usleep) Your(vision_clears);
+		if (!Blind && !u.usleep) Your("vision quickly clears.");
 		break;
 	case POT_WATER:
 		if(u.umonnum == PM_GREMLIN) {
@@ -2757,7 +2757,7 @@ dodip (void)
 		    obj == uball || obj == uskin ||
 		    obj_resists(obj->otyp == POT_POLYMORPH ?
 				potion : obj, 5, 95)) {
-		pline(nothing_happens);
+		pline("Nothing happens.");
 	    } else {
 	    	boolean was_wep = false, was_swapwep = false, was_quiver = false;
 		short save_otyp = obj->otyp;
@@ -3165,7 +3165,7 @@ djinni_from_bottle (struct obj *obj)
 		pline("%s speaks.", Monnam(mtmp));
 	} else {
 		You("smell acrid fumes.");
-		pline("%s speaks.", Something);
+		pline("Something speaks.");
 	}
 
 	chance = rn2(5);

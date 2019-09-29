@@ -728,7 +728,7 @@ techeffects (int tech_no)
 		    healup(techlev(tech_no) * 4, 0, false, false);
 		    t_timeout = 3000;
 		} else
-		    pline(nothing_happens);
+		    pline("Nothing happens.");
 		break;
             case T_KIII:
 		You("scream \"KIIILLL!\"");
@@ -1091,7 +1091,7 @@ techeffects (int tech_no)
 		break;
             case T_REVIVE:
 		if (u.uswallow) {
-		    You(no_elbow_room);
+		    pline("You don't have enough elbow-room to maneuver.");
 		    return 0;
 		}
             	num = 100 - techlev(tech_no); /* WAC make this depend on mon? */

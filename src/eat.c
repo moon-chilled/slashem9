@@ -1349,7 +1349,7 @@ static int rottenfood(struct obj *obj) {
 	} else if(!rn2(4) && !Blind) {
 		pline("Everything suddenly goes dark.");
 		make_blinded((long)d(2,10),false);
-		if (!Blind) Your("%s", vision_clears);
+		if (!Blind) Your("%s", "vision quickly clears.");
 	} else if(!rn2(3)) {
 		const char *what, *where;
 		if (!Blind)
@@ -2243,7 +2243,7 @@ int doeat(void)	{
 #endif
 			)) != 0) {
 	    /* let them eat rings */
-	    You_cant("eat %s you're wearing.", something);
+	    You_cant("eat something you're wearing.");
 	    return 0;
 	}
 	if (is_metallic(otmp) &&

@@ -430,7 +430,7 @@ static int kick_object(xchar x, xchar y) {
 			   trap->ttyp == SPIKED_PIT) && !Passes_walls) ||
 			 trap->ttyp == WEB)) {
 		if (!trap->tseen) find_trap(trap);
-		You_cant("kick %s that's in a %s!", something,
+		You_cant("kick something that's in a %s!",
 			 Hallucination ? "tizzy" :
 			 (trap->ttyp == WEB) ? "web" : "pit");
 		return 1;
@@ -859,7 +859,7 @@ int dokick(void) {
 			    mksobj_at(rnd_class(DILITHIUM_CRYSTAL,
 					LUCKSTONE-1), x, y, false, true);
 			if (Blind)
-			    You("kick %s loose!", something);
+			    You("kick something loose!");
 			else {
 			    You("kick loose some ornamental coins and gems!");
 			    newsym(x, y);
@@ -877,7 +877,7 @@ int dokick(void) {
 		}
 		if(IS_ALTAR(maploc->typ)) {
 		    if(Levitation) goto dumb;
-		    You("kick %s.",(Blind ? something : "the altar"));
+		    You("kick %s.", (Blind ? "something" : "the altar"));
 		    if(!rn2(3)) goto ouch;
 		    altar_wrath(x, y);
 		    exercise(A_DEX, true);
@@ -885,7 +885,7 @@ int dokick(void) {
 		}
 		if(IS_FOUNTAIN(maploc->typ)) {
 		    if(Levitation) goto dumb;
-		    You("kick %s.",(Blind ? something : "the fountain"));
+		    You("kick %s.", (Blind ? "something" : "the fountain"));
 		    if(!rn2(3)) goto ouch;
 		    /* make metal boots rust */
 		    if(uarmf && rn2(3))
@@ -987,7 +987,7 @@ int dokick(void) {
 		    } else if(!(maploc->looted & S_LDWASHER) && !rn2(3) &&
 			      !(mvitals[washerndx].mvflags & G_GONE)) {
 			/* can't resist... */
-			pline("%s returns!", (Blind ? Something :
+			pline("%s returns!", (Blind ? "Something" :
 							"The dish washer"));
 			if (makemon(&mons[washerndx], x, y, NO_MM_FLAGS))
 			    newsym(x,y);
