@@ -1,6 +1,7 @@
-CFLAGS="-I../include -Iinclude "
+CFLAGS="-I../include -Iinclude -DDLB"
 mkdir -p dat include src
-cc ../util/makedefs.c ../util/panic.c ../src/alloc.c ../src/objects.c ../src/monst.c  $CFLAGS -o makedefs
+cc -o makedefs ../util/makedefs.c ../util/panic.c ../src/alloc.c ../src/objects.c ../src/monst.c $CFLAGS
+cc -o dlb ../util/dlb_main.c ../src/alloc.c ../util/panic.c ../src/dlb.c $CFLAGS
 ./makedefs
 
 TTY_SRC="../win/tty/getline.c ../win/tty/termcap.c ../win/tty/topl.c ../win/tty/wintty.c"
