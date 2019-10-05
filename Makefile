@@ -15,6 +15,7 @@ install: builder
 	touch $(HACKDIR)/perm $(HACKDIR)/logfile $(HACKDIR)/xlogfile
 
 	cp build/slashem build/nhdat $(HACKDIR)
+
 	sed -e 's;@HACKDIR@;$(HACKDIR);' < sys/unix/slashem.sh > $(BINDIR)/slashem
 	chmod 755 $(BINDIR)/slashem
-
+	cp build/slashem-recover $(BINDIR)/

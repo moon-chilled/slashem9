@@ -16,7 +16,9 @@ CURSES_SRC := win/curses/*.c
 PROXY_SRC := win/proxy/*.c
 SLASHEMSRC := $(SRC) $(SYSSRC) $(GENSRC) $(TTY_SRC) $(CURSES_SRC)
 
-: foreach src/lev_yacc.c src/lev_lex.c src/dgn_yacc.c src/dgn_lex.c util/dgn_main.c util/dlb_main.c util/lev_main.c util/panic.c | include/*.h |> cc $(CFLAGS) -c %f -o %o |> %B.o
+: foreach src/lev_yacc.c src/lev_lex.c src/dgn_yacc.c src/dgn_lex.c util/dgn_main.c util/dlb_main.c util/lev_main.c util/panic.c util/recover.c | include/*.h |> cc $(CFLAGS) -c %f -o %o |> %B.o
+
+: recover.o |> cc -o %o %f |> slashem-recover
 
 : foreach $(SLASHEMSRC) | include/*.h |> cc $(CFLAGS) -c %f -o %o |> %B.o {slashemsrc}
 : {slashemsrc} |> cc -lncursesw -o %o %f |> slashem
