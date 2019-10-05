@@ -37,10 +37,8 @@ typedef struct dlb_library {
 
 /* library definitions */
 # ifndef DLBFILE
-#  define DLBFILE	"nhshare"		/* shareable library */
+#  define DLBFILE	"nhdat"
 #  define DLBAREA	FILE_AREA_SHARE
-#  define DLBFILE2	"nhushare"		/* unshareable library */
-#  define DLBAREA2	FILE_AREA_UNSHARE
 # endif
 # ifndef FILENAME_CMP
 #  define FILENAME_CMP	strcmp			/* case sensitive */

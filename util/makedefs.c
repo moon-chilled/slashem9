@@ -50,10 +50,11 @@
 /*output*/
 #define FILENAME_H      "filename.h"
 
-# define INCLUDE_TEMPLATE	"../include/%s"
-# define SOURCE_TEMPLATE	"../src/%s"
-# define DGN_TEMPLATE		"../dat/%s"  /* where dungeon.pdf file goes */
-# define DATA_TEMPLATE		"../dat/%s"
+# define INCLUDE_TEMPLATE	"include/%s"
+# define INCLUDE_IN_TEMPLATE    "../include/%s"
+# define SOURCE_TEMPLATE	"src/%s"
+# define DGN_TEMPLATE		"dat/%s"  /* where dungeon.pdf file goes */
+# define DATA_TEMPLATE		"dat/%s"
 # define DATA_IN_TEMPLATE	"../dat/%s"
 
 static const char
@@ -1837,7 +1838,7 @@ void do_filenames(void) {
 	char lname[20] = DEF_GAME_NAME;
 	char uname[20] = DEF_GAME_NAME;
 
-	infile = alloc(strlen(INCLUDE_TEMPLATE) - 2 + strlen(FILE_H) + 1);
+	infile = alloc(strlen(INCLUDE_IN_TEMPLATE) - 2 + strlen(FILE_H) + 1);
 	lcase(lname);
 	ucase(uname);
 
@@ -1858,7 +1859,7 @@ void do_filenames(void) {
     fprintf(ofp, "%s", Dont_Edit_Code);
 
 /*OPEN file*/
-    sprintf(infile, INCLUDE_TEMPLATE, FILE_H);
+    sprintf(infile, INCLUDE_IN_TEMPLATE, FILE_H);
     if (!(ifp = fopen(infile, RDTMODE))) {
         perror(infile);
         fclose(ofp);
