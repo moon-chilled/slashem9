@@ -42,11 +42,7 @@
 #ifdef NH_OPTIONS_USED
 #undef NH_OPTIONS_USED
 #endif
-#if defined(AUTOCONF)
-#define NH_OPTIONS_USED	"options"
-#else
 #define NH_OPTIONS_USED	"ttyoptions"
-#endif
 
 #define NH_OPTIONS_FILE NH_OPTIONS_USED
 
@@ -67,14 +63,12 @@ extern void interject(int);
 #include <process.h>	/* Provides prototypes of exit(), spawn()      */
 #endif
 
-#ifndef AUTOCONF
 #include <string.h>	/* Provides prototypes of strncmpi(), etc.     */
 #ifdef STRNCMPI
 #ifndef __CYGWIN__
 #define strncmpi(a,b,c) strnicmp(a,b,c)
 #endif
 #endif
-#endif /* AUTOCONF */
 
 #include <sys/types.h>
 #include <stdlib.h>
