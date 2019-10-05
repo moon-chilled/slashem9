@@ -216,7 +216,7 @@ void close_library(library *lp) {
     free(lp->dir);
     free(lp->sspace);
 
-    memset((char *)lp, 0, sizeof(library));
+    memset(lp, 0, sizeof(library));
 }
 
 /*
@@ -224,17 +224,14 @@ void close_library(library *lp) {
  * keep track of the file position.
  */
 static boolean lib_dlb_init(void) {
-    /* zero out array */
-    memset((char *)&dlb_libs[0], 0, sizeof(dlb_libs));
+    // zero out array
+    memset(&dlb_libs[0], 0, sizeof(dlb_libs));
 
-    /* To open more than one library, add open library calls here. */
-    if (!open_library(DLBAREA, DLBFILE, &dlb_libs[0])) return false;
-#ifdef DLBFILE2
-    if (!open_library(DLBAREA2, DLBFILE2, &dlb_libs[1]))  {
-	close_library(&dlb_libs[0]);
-	return false;
+    // To open more than one library, add open library calls here
+    if (!open_library(DLBAREA, DLBFILE, &dlb_libs[0])) {
+	    return false;
     }
-#endif
+
     return true;
 }
 

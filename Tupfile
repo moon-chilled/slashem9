@@ -1,4 +1,4 @@
-CFLAGS += -Iinclude -Ibuild/include -DDLB -g -Werror -O0
+CFLAGS += -Iinclude -Ibuild/include -DDLB -g -Werror -O0 -DWIZARD=\"`whoami`\"
 
 : util/makedefs.c util/panic.c src/alloc.c src/objects.c src/monst.c |> cc -Iinclude -DDLB %f -o %o |> makedefs
 : makedefs |> ./makedefs |> src/monstr.c src/vis_tab.c include/onames.h include/filename.h include/date.h include/pm.h include/vis_tab.h dat/data dat/dungeon.pdf dat/options dat/quest.dat dat/rumors dat/oracles
@@ -69,5 +69,4 @@ QUEST_DES := dat/Ice.des
 : dat/Yeoman.des | lev_comp |> ./lev_comp %f |> Yeo-fila.lev Yeo-filb.lev Yeo-loca.lev Yeo-goal.lev Yeo-strt.lev
 
 
-: dlb dat/help dat/hh dat/cmdhelp dat/history dat/opthelp dat/wizhelp dat/gypsy.txt dat/data dat/options dat/oracles dat/quest.dat dat/rumors |> cd dat; ../dlb cf nhshare help hh cmdhelp history opthelp wizhelp gypsy.txt data options oracles quest.dat rumors; mv nhshare .. |> nhshare
-: dlb dungeon *.lev |> ./dlb cf nhushare dungeon *.lev |> nhushare
+: dlb dungeon *.lev dat/help dat/hh dat/cmdhelp dat/history dat/opthelp dat/wizhelp dat/gypsy.txt dat/data dat/options dat/oracles dat/quest.dat dat/rumors |> cd dat; cp ../dungeon .; cp ../*.lev .; ../dlb cf nhdat dungeon *.lev help hh cmdhelp history opthelp wizhelp gypsy.txt data options oracles quest.dat rumors; rm -f dungeon *.lev; mv nhdat .. |> nhdat
