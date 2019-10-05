@@ -1,21 +1,27 @@
 language: c
 
-sudo: false
-
-script:
- - ./configure
- - make all
-
 notifications:
   irc:
     channels:
       - "irc.freenode.net#em.slashem.me"
     skip_join: true
-  email: false
+  email: true
 
 matrix:
   include:
     - os: linux
+      dist: bionic
       compiler: gcc
-    - os: linux
-      compiler: clang
+      before_install:
+        - wget http://ppa.launchpad.net/jonathonf/tup/ubuntu/pool/main/t/tup/tup_0.7.8-3~16.04.york0_amd64.deb
+        - sudo dpkg -i tup_0.7.8-3~16.04.york0_amd64.deb
+        - sudo apt install libncursesw5-dev
+      script:
+        - echo CFLAGS += $(ncursesw5-config --cflags) >> Tuprules.tup
+        - make
+    - os: osx
+      osx_image: xcode10.2
+      before_install:
+        - brew cask install osxfuse
+        - brew install tup
+      script: make

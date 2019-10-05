@@ -4,7 +4,9 @@ BINDIR ?= $(PREFIX)/bin
 
 default: builder
 builder:
+	touch Tupfile.ini
 	tup
+	rm -f Tupfile.ini
 
 clean:
 	rm -rf build/*

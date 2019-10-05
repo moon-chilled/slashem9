@@ -1,4 +1,4 @@
-CFLAGS += -Iinclude -Ibuild/include -DDLB -g -Werror -O0 -DWIZARD=\"`whoami`\"
+include_rules
 
 : util/makedefs.c util/panic.c src/alloc.c src/objects.c src/monst.c |> cc -Iinclude -DDLB %f -o %o |> makedefs
 : makedefs |> ./makedefs |> src/monstr.c src/vis_tab.c include/onames.h include/filename.h include/date.h include/pm.h include/vis_tab.h dat/data dat/dungeon.pdf dat/options dat/quest.dat dat/rumors dat/oracles
