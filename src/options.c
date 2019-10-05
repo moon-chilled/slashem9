@@ -946,15 +946,11 @@ parse_color_option(start)
     return result;
 }
 
-const struct percent_color_option *hp_colors = NULL;
-const struct percent_color_option *pw_colors = NULL;
+struct percent_color_option *hp_colors = NULL;
+struct percent_color_option *pw_colors = NULL;
 const struct text_color_option *text_colors = NULL;
 
-struct percent_color_option *
-add_percent_option(new_option, list_head)
-     struct percent_color_option *new_option;
-     struct percent_color_option *list_head;
-{
+struct percent_color_option *add_percent_option(struct percent_color_option *new_option, struct percent_color_option *list_head) {
     if (list_head == NULL)
 	return new_option;
     if (new_option->percentage <= list_head->percentage) {

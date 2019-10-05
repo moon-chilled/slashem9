@@ -1413,7 +1413,7 @@ replmon (struct monst *mtmp, struct monst *mtmp2)
 	del_light_source(LS_MONSTER, monst_to_any(mtmp));
     }
     /* If poly'ed,  move polytimer along */
-    if (unpolytime = stop_timer(UNPOLY_MON, monst_to_any(mtmp))) {
+    if ((unpolytime = stop_timer(UNPOLY_MON, monst_to_any(mtmp)))) {
 	    start_timer(unpolytime, TIMER_MONSTER, UNPOLY_MON, monst_to_any(mtmp2));
     }
     mtmp2->nmon = fmon;

@@ -174,7 +174,7 @@ struct toptenentry *tt;
 			for(dp = tt->death; *dp; dp++) {
 				if(!strncmp(dp, " Conduct=", 9)) {
 					dp2 = dp + 9;
-					sscanf(dp2, "%d", &tt->conduct);
+					sscanf(dp2, "%ld", &tt->conduct);
 					/* Find trailing null or space */
 					while(*dp2 && *dp2 != ' ')
 						dp2++;
@@ -211,7 +211,7 @@ struct toptenentry *tt;
 	char *cp = eos(tt->death);
 
 	/* Add a trailing " Conduct=%d" to tt->death */
-	sprintf(cp, " Conduct=%d", tt->conduct);
+	sprintf(cp, " Conduct=%ld", tt->conduct);
 
 #ifdef NO_SCAN_BRACK
 	nsb_mung_line(tt->name);
@@ -294,8 +294,8 @@ struct toptenentry *tt;
                 SEP "hp=%d"
                 SEP "maxhp=%d"
                 SEP "deaths=%d"
-                SEP "deathdate=%d"
-                SEP "birthdate=%d"
+                SEP "deathdate=%ld"
+                SEP "birthdate=%ld"
                 SEP "uid=%d",
                 tt->ver_major, tt->ver_minor, tt->patchlevel,
                 tt->points, tt->deathdnum, tt->deathlev,

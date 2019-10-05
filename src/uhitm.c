@@ -927,7 +927,7 @@ int thrown;
 		    else
 			tmp = rnd(2);
 		    if (!thrown && (obj == uwep || obj == uswapwep) &&
-				obj->otyp == BOOMERANG && !rnl(4) == 4-1) {
+				obj->otyp == BOOMERANG && rnl(4) == 4-1) {
 			boolean more_than_1 = (obj->quan > 1L);
 
 			pline("As you hit %s, %s%s %s breaks into splinters.",
@@ -2790,7 +2790,7 @@ use_weapon:
 			if (!cantwield(youmonst.data) &&
 				u.umonnum != PM_MARILITH)
 			    goto use_weapon;
-#if 0	/* Shouldn't matter where the first AT_CLAW is anymore
+#if 0	// Shouldn't matter where the first AT_CLAW is anymore
 			/* succubi/incubi are humanoid, but their _second_
 			 * attack is AT_CLAW, not their first...
 			 */

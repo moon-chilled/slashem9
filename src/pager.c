@@ -586,7 +586,7 @@ do_look(quick)
 		monexplain[i]) {
 		need_to_look = true;
 		if (!found) {
-		    sprintf(out_str, "%c       %s", sym, an(monexplain[i]));
+		    sprintf(out_str, "%s       %s", utf8_tmpstr(sym), an(monexplain[i]));
 		    firstmatch = monexplain[i];
 		    found++;
 		} else {
@@ -610,7 +610,7 @@ do_look(quick)
 	 */
 	if (u.uswallow && from_screen && is_swallow_sym(sym)) {
 	    if (!found) {
-		sprintf(out_str, "%c       %s", sym, mon_interior);
+		sprintf(out_str, "%s       %s", utf8_tmpstr(sym), mon_interior);
 		firstmatch = mon_interior;
 	    } else {
 		found += append_str(out_str, mon_interior);
@@ -627,7 +627,7 @@ do_look(quick)
 		    continue;
 		}
 		if (!found) {
-		    sprintf(out_str, "%c       %s", sym, an(objexplain[i]));
+		    sprintf(out_str, "%s       %s", utf8_tmpstr(sym), an(objexplain[i]));
 		    firstmatch = objexplain[i];
 		    found++;
 		} else {
@@ -638,7 +638,7 @@ do_look(quick)
 
 	if (sym == DEF_INVISIBLE) {
 	    if (!found) {
-		sprintf(out_str, "%c       %s", sym, an(invisexplain));
+		sprintf(out_str, "%s       %s", utf8_tmpstr(sym), an(invisexplain));
 		firstmatch = invisexplain;
 		found++;
 	    } else {
@@ -692,7 +692,7 @@ do_look(quick)
 	    x_str = sym_desc[S_warn0 + i].explanation;
 	    if (sym == (from_screen ? showsyms : ascii_graphics)[S_warn0 + i]) {
 		if (!found) {
-			sprintf(out_str, "%c       %s", sym, sym_desc[S_warn0 + i].explanation);
+			sprintf(out_str, "%s       %s", utf8_tmpstr(sym), sym_desc[S_warn0 + i].explanation);
 			firstmatch = sym_desc[S_warn0 + i].explanation;
 			found++;
 		} else {
@@ -710,7 +710,7 @@ do_look(quick)
 	if (skipped_venom && found < 2) {
 	    x_str = objexplain[VENOM_CLASS];
 	    if (!found) {
-		sprintf(out_str, "%c       %s", sym, an(x_str));
+		sprintf(out_str, "%s       %s", utf8_tmpstr(sym), an(x_str));
 		firstmatch = x_str;
 		found++;
 	    } else {
@@ -722,7 +722,7 @@ do_look(quick)
 	if (iflags.bouldersym && sym == iflags.bouldersym) {
 	    if (!found) {
 		firstmatch = "boulder";
-		sprintf(out_str, "%c       %s", sym, an(firstmatch));
+		sprintf(out_str, "%s       %s", utf8_tmpstr(sym), an(firstmatch));
 		found++;
 	    } else {
 		found += append_str(out_str, "boulder");

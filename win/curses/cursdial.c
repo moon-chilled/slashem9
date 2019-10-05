@@ -919,7 +919,7 @@ menu_display_page(nhmenu *menu, WINDOW * win, int page_num)
     bool first_accel = true;
 
     int color = NO_COLOR;
-    int attr = A_NORMAL;
+    attr_t attr = A_NORMAL;
     bool menu_color = false;
 
     /* Cycle through entries until we are on the correct page */

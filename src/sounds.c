@@ -875,8 +875,8 @@ static int domonnoise (struct monst *mtmp) {
 		    "The food's not fit for Orcs!",
 		    "My feet hurt, I've been on them all day!",
 		};
-		verbl_msg = mtmp->mpeaceful ? soldier_pax_msg[SIZE(soldier_pax_msg)]
-					    : soldier_foe_msg[SIZE(soldier_foe_msg)];
+		verbl_msg = mtmp->mpeaceful ? soldier_pax_msg[rn2(SIZE(soldier_pax_msg))]
+					    : soldier_foe_msg[rn2(SIZE(soldier_foe_msg))];
 	    }
 	    break;
 	case MS_RIDER:

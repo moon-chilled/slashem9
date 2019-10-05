@@ -1,1 +1,3 @@
 CFLAGS += -Iinclude -Ibuild/include -DDLB -g -Werror -O0 -DWIZARD=\"`whoami`\"
+CC = cc
+#CC = clang -Wno-knr-promoted-parameter -Wno-format-security -Wno-logical-op-parentheses -Wno-dangling-else
