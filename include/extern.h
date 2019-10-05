@@ -1248,14 +1248,13 @@ extern void monstr_init(void);
 
 /* ### mplayer.c ### */
 
-extern struct monst *mk_mplayer(struct permonst *,xchar,
-				   xchar,boolean);
+extern struct monst *mk_mplayer(struct permonst *,xchar, xchar,boolean);
 extern void create_mplayers(int,boolean);
 extern void mplayer_talk(struct monst *);
 
 /* ### unicode.c ### */
-void unicode_to_utf8(glyph_t, char[5]);
-char *utf8_str(glyph_t); // WARNING: output is volatile
+extern void unicode_to_utf8(glyph_t, char[5]);
+extern char *utf8_tmpstr(glyph_t);
 extern void pututf8char(glyph_t);
 
 

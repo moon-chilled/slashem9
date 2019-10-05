@@ -24,7 +24,7 @@ void unicode_to_utf8(glyph_t c, char buf[5]) {
 	}
 }
 
-char *utf8_str(glyph_t c) {
+char *utf8_tmpstr(glyph_t c) {
 	static char buf[5];
 	unicode_to_utf8(c, buf);
 	return buf;

@@ -660,12 +660,12 @@ do_look(quick)
 
 		if (!found) {
 		    if (is_cmap_trap(i)) {
-			sprintf(out_str, "%s       a trap", utf8_str(sym));
+			sprintf(out_str, "%s       a trap", utf8_tmpstr(sym));
 			hit_trap = true;
 		    } else if (level.flags.lethe && !strcmp(x_str, "water")) {
-			sprintf(out_str, "%s       sparkling water", utf8_str(sym));
+			sprintf(out_str, "%s       sparkling water", utf8_tmpstr(sym));
 		    } else {
-			sprintf(out_str, "%s       %s", utf8_str(sym),
+			sprintf(out_str, "%s       %s", utf8_tmpstr(sym),
 				article == 2 ? the(x_str) :
 				article == 1 ? an(x_str) : x_str);
 		    }
