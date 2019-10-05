@@ -4,4 +4,6 @@
 .*.swm
 .*.swl
 
-build/
+.tup
+build/*
+!build/tup.config
