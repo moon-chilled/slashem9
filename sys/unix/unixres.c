@@ -13,9 +13,6 @@
  * so temporarily dropping privileges on these systems is sufficient to
  * hide them.
  */
-#ifdef __GNUC__
-#define _GNU_SOURCE
-#endif
 
 #include "config.h"
 
