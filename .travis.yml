@@ -19,9 +19,9 @@ matrix:
       script:
         - echo CFLAGS += $(ncursesw5-config --cflags) >> Tuprules.tup
         - make
-    - os: osx
-      osx_image: xcode10.2
-      before_install:
-        - brew cask install osxfuse
-        - brew install tup
-      script: make
+#    - os: osx
+#      osx_image: xcode10.2
+#      before_install:
+#        - brew cask install osxfuse
+#        - brew install tup
+#      script: make
