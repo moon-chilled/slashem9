@@ -1,10 +1,10 @@
-History file by Elijah Stone (Elronnd)
+History file by Elronnd
 
 
                +------------------------------------------+
                |                                          |
-               |  A history of NetHack, and of Slash'EM   |
-               | and of what came before, and what after. |
+               |    A history of NetHack and Slash'EM.    |
+               |   Of what came before, and what after.   |
                |                                          |
                +------------------------------------------+
 
@@ -15,46 +15,95 @@ History file by Elijah Stone (Elronnd)
   | Rogue |
   +-------+
 
-	In the beginning, there was Rogue.  Some people made a game called Rogue that was quite revolutionary at the time.  It ushered in a new era of games knows as roguelikes, or games like Rogue.  It ran on a BSD system, at one time in the 80s and 90s before Linux took over the unix stage and BSD split into three.  It worked, in opposition to other games of the time, by showing you the map on the screen, with ASCII characters, as opposed to telling you what was happening, as with a text-adventure game.  However, it was closed source.  It spawned numerous clones such as Moria, Larn, and Hack.
+	In the beginning, there was Rogue.  Made by Michael Toy, Glenn Wichman,
+and Ken Arnold, it was revolutionary at the time it came out for no other reason
+than that it had graphics.  It ushered in a new era of games called
+roguelikes--games like Rogue.  It ran on a BSD system, in a time before Linux
+took over the unix stage and BSD split into three.  Sadly, it was closed source.
+Never to be the open source community released numerous clones of rogue like
+Moria and Larn.
 
 
   +------+
   | Hack |
   +------+
 
-	One of these clones, one of them that -- at first -- stayed closer to its roots in Rogue than some others, was knows as Hack.  The first several versions of this Hack were made by Jay Fenlason, but alas, only a DOS binary survives of this version.  Andries Brouwer took this code and revised it heavily; the source code for this survives.  As a matter of fact, only in April of 2015 was the final portion of Andries Brouwer's hack v1.0 recovered.  But Andries Brouwer could only hack for so long.  After Hack version 1.03, Hack development stalled.  Mike Stephenson took Andries Brouwer's hack and relicensed it, repackaged it, and renamed it NetHack, because it was Hack, developed over the Net.
+	One of these clones, the one of that stayed closest to its roots in
+Rogue, was called Hack.  The first version was made by Jay Fenlason, but alas:
+only a DOS binary survives of his version.  Andries Brouwer took Jay's code,
+revised it heavily, and made it public.  It wasn't until April 2015 that the
+final portions of Andries Brouwer's Hack v1.0 was recovered.  But Andries could
+only hack for so long.  After version 1.03, Hack development stalled.  Mike
+Stephenson took this Hack, relicensed it, repackaged it, and founded a DevTeam
+to work on it.  This iteration was called NetHack because it was Hack, but
+developed over the 'Net.
 
 
   +---------+
   | NetHack |
   +---------+
 
-	Mike Stephenson took this Hack and developed it together with a bunch of people over the web.  This group consisted of -- and to this day consists of -- a mythical group of people knows as the NetHack DevTeam, or just the DevTeam.  Secretive, releasing late and infrequently, they were nonetheless revered.  But eventually this came to a head.  People had been for some time releasing patches and making variants of NetHack, but none of them ever became popular.  Until one did.  Two variants of NetHack, NetHack-- (previously named NetHack++, but later renamed to avoid confusion that it was written in C++) and NetHack Plus came together to form the a variant called SLASH, short for Super Lotsa Added Stuff Hack.  This SLASH, combined with a patch called the Wizard patch which enhanced spell-casting, came together to form Slash'EM: Super Lotsa Added Stuff Hack -- Extended Magic, a variant maintained by Warren Cheung and Tom Proudfoot.
+	Ahhh, NetHack developers.  This mysterious group consisted of--and to
+this day (purportedly) consists of--a mythical group of people called the
+NetHack DevTeam, or just the DevTeam.  Secretive, releasing late and
+infrequently, they are nevertheless revered.  But eventually this came to an
+end.  For a long time, there had been a traditions of patches and modifications
+to NetHack, but none caught on.  Two variants of NetHack, NetHack-- (previously
+named NetHack++, but later renamed to avoid confusion that it was written in
+C++) and NetHack Plus came together to form the a variant called SLASH, short
+for Super Lotsa Added Stuff Hack.  This SLASH combined with a patch called the
+Wizard patch which enhanced spell-casting, and formed Slash'EM: Super Lotsa
+Added Stuff Hack -- Extended Magic; this was a variant maintained by Warren
+Cheung and Tom Proudfoot; at last, the DevTeam's hegemony was over.
 
 
   +----------+
   | Slash'EM |
   +----------+
 
-	Slash'EM was one of the most successful variants of all time.  Even later, when other variants, notably UnNetHack and NetHack4 arose, Slash'EM retained its popularity.  It didn't last long.  Although it claimed to be everything that everybody had ever wanted in NetHack: releasing early, releasing often, not going out of development, it ceased development only three years after NetHack's apparent stymie in 2003.  The saga of NetHack was far from over, however.  Patric Mueller's UnNetHack, purporting to add randomness, challenges, and fun started development in 2009.  Daniel Thaler's NitroHack combined with said UnNetHack to create DynaHack, and with Alex Smith's AceHack to create NetHack4 which also fed into DynaHack and spawned Nathan Eady's NetHack Fourk and Fredrik Ljungdahl's FIQHack.  dNetHack arrived in 2012.  But list the history of every variant of NetHack would be beyond the scope of such a document as this.  We will continue to talk about Slash'EM and its immortal descendant, Slash'EM Extended.
+	Slash'EM was one of the most successful variants of all time.  Even
+years after its release, when other variants--notably UnNetHack and NetHack4--
+took center stage, Slash'EM remained popular.  It didn't last long, though.  It
+claimed to be everything that anybody could have wanted in NetHack: releasing
+early, releasing often, not stopping development for years at a time with no
+explanation.  Yet it ceased development only three years after NetHack's
+apparent stymie in 2003.  The saga of NetHack was far from over, however.
+Patric Mueller's UnNetHack, purporting to add randomness, challenges, and fun,
+started development in 2009.  Daniel Thaler's NitroHack was the base for quite
+a few variants; tungtn combined it with UnNetHack to make DynaHack, and Alex
+Smith combined it with his own AceHack to create NetHack4.  NetHack4 also fed
+into DynaHack and spawned Nathan Eady's NetHack Fourk and Fredrik Ljungdahl's
+FIQHack.  dNetHack appeared in 2012.  And, of course, there was Slash'EM extended.
 
 
   +-------------------+
   | Slash'EM Extended |
   +-------------------+
 
-	Slash'EM Extended is possibly the most outrageous and bloated descendant of NetHack.  It has 650k lines of code, more than any other NetHack variant.  At 49 Megabytes, it is over 10 times as large as NetHack's codebase.  It's monst.c, the file containing monsters and their info is 5 Megabytes, 30 times larger NetHack's pitiful 168 Kilobytes.  Despite these clear superiorities, some believe it to be too bloated or to be unbalanced.  While we can assure you that they are entirely wrong, we would still like to share with you the story of a variant gone wrong, SlashTHEM.
+	Slash'EM Extended is possibly the most outrageous and bloated descendant
+of NetHack.  Its codebase weighs in at 68 megabytes, over 10 times as large as
+NetHack's codebase.  It has nearly 50,000 different kinds of monsters!  Despite
+these clear superiorities, however, some believe it to be bloated or unbalanced.
+We can assure you that they are sadly misinformed; however, it is still
+illustrative to learn the tale of a variant gone wrong: SlashTHEM.
 
 
   +-----------+
   | SlashTHEM |
   +-----------+
 
-	SlashTHEM, short for Super Lotsa Added Stuff -- The Heavily Extended Mod, developed by an unnamed entity known in IRC as "Soviet5lo," was created to "fix" Slash'EM Extended.  It provides "bug fixes" ("Remember, it's not a bug, it's a feature"), balance "improvements" (which simply made gameplay much easier for the player), and a much milder codebase, with a monst.c less than 10% the size of Slash'EM Extended's.
+	SlashTHEM, short for Super Lotsa Added Stuff -- The Heavily Extended
+Mod, was developed by an unnamed entity known only as 'Soviet5lo'.  It was
+created to 'fix' Slash'EM Extended.  It provides 'bug fixes' (remember, it's not
+a bug, it's a feature!), balance 'improvements' (do you call an easier game more
+balanced?) and a much milder codebase, with only 2,630 monsters.
 
 
-  +------------------+
-  | Slash'EM Variant |
-  +------------------+
+  +---------------+
+  | Slash'EM-Next |
+  +---------------+
 
-	Then, in June of 2017, Elronnd, in a fit of madness, created a Slash'EM variant for no particular reason.
+	Finally, in June 2017, Elronnd got annoyed at the general lack of
+Slash'EM (the original Slash'EM DevTeam are long dead; I killed them), so he
+decided to do something about it.
+The end~
