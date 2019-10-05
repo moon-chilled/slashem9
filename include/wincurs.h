@@ -226,7 +226,7 @@ extern void curses_rtrim(char *str);
 
 extern int curses_get_count(int first_digit);
 
-extern int curses_convert_attr(int attr);
+extern attr_t curses_convert_attr(int attr);
 
 extern int curses_read_attrs(char *attrs);
 
@@ -243,7 +243,7 @@ extern int curses_character_input_dialog(const char *prompt, const char *choices
 extern int curses_ext_cmd(void);
 
 extern void curses_create_nhmenu(winid wid);
-extern bool get_menu_coloring(char *, int *, int *);
+extern bool get_menu_coloring(char *, int *, attr_t *);
 extern void curses_add_nhmenu_item(winid wid, int glyph, const anything *identifier,
  char accelerator, char group_accel, int attr, const char *str,
  bool presel);

@@ -1370,9 +1370,7 @@ menu_clear_selections(nhmenu *menu)
 /* This is to get the color of a menu item if the menucolor patch is
  applied */
 
-bool
-get_menu_coloring(char *str, int *color, int *attr)
-{
+bool get_menu_coloring(char *str, int *color, attr_t *attr) {
     struct menucoloring *tmpmc;
 
     if (iflags.use_menu_color)

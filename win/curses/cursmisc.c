@@ -551,32 +551,23 @@ curses_get_count(int first_digit)
 /* Convert the given NetHack text attributes into the format curses
 understands, and return that format mask. */
 
-int
-curses_convert_attr(int attr)
-{
-    int curses_attr;
+attr_t curses_convert_attr(int attr) {
+    attr_t curses_attr;
 
     switch (attr) {
     case ATR_NONE:
-        curses_attr = A_NORMAL;
-        break;
+        return A_NORMAL;
     case ATR_ULINE:
-        curses_attr = A_UNDERLINE;
-        break;
+        return A_UNDERLINE;
     case ATR_BOLD:
-        curses_attr = A_BOLD;
-        break;
+        return A_BOLD;
     case ATR_BLINK:
-        curses_attr = A_BLINK;
-        break;
+        return A_BLINK;
     case ATR_INVERSE:
-        curses_attr = A_REVERSE;
-        break;
+        return A_REVERSE;
     default:
-        curses_attr = A_NORMAL;
+        return A_NORMAL;
     }
-
-    return curses_attr;
 }
 
 
