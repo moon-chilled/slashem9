@@ -27,8 +27,47 @@ SLASHEMSRC := $(SRC) $(SYSSRC) $(GENSRC) $(TTY_SRC) $(CURSES_SRC)
 : lev_yacc.o lev_lex.o lev_main.o alloc.o panic.o drawing.o decl.o objects.o monst.o |> cc %f -o %o |> lev_comp
 : dgn_yacc.o dgn_lex.o dgn_main.o alloc.o panic.o |> cc %f -o %o |> dgn_comp
 
-: dgn_comp dat/dungeon.pdf |> ./dgn_comp dat/dungeon.pdf |> dat/dungeon
-#: foreach dat/*.des | lev_comp |> ./lev_comp %f |> %B.lev
+: dgn_comp dat/dungeon.pdf |> ./dgn_comp dat/dungeon.pdf; mv dat/dungeon . |> dungeon
+
+
+SIMPLE_DES := dat/beholder.des dat/blkmar.des dat/castle.des dat/dragons.des dat/frnknstn.des dat/guild.des dat/knox.des dat/kobold-1.des dat/kobold-2.des dat/lich.des dat/mall-1.des dat/mall-2.des dat/mtemple.des dat/nightmar.des dat/nymph.des dat/oracle.des dat/rats.des dat/sea.des dat/spiders.des dat/stor-1.des dat/stor-2.des dat/stor-3.des dat/tomb.des
+CMPLX_DES := dat/bigroom.des dat/endgame.des dat/gehennom.des dat/giants.des dat/grund.des dat/mines.des dat/newmall.des dat/medusa.des dat/sokoban.des dat/tower.des dat/yendor.des
+QUEST_DES := dat/Ice.des
+
+: foreach $(SIMPLE_DES) | lev_comp |> ./lev_comp %f |> %B.lev
+
+: dat/bigroom.des | lev_comp |> ./lev_comp %f |> bigrm-1.lev bigrm-2.lev bigrm-3.lev bigrm-4.lev bigrm-5.lev
+: dat/endgame.des | lev_comp |> ./lev_comp %f |> earth.lev air.lev fire.lev water.lev astral.lev
+: dat/gehennom.des | lev_comp |> ./lev_comp %f |> valley.lev orcus.lev asmodeus.lev baalz.lev yeenoghu.lev geryon.lev demogorg.lev dispater.lev sanctum.lev juiblex.lev
+: dat/giants.des | lev_comp |> ./lev_comp %f |> cav2fill.lev
+: dat/grund.des | lev_comp |> ./lev_comp %f |> grund-1.lev grund-2.lev grund-3.lev
+: dat/mines.des | lev_comp |> ./lev_comp %f |> minefill.lev minetn-1.lev minetn-2.lev minetn-3.lev minetn-4.lev minetn-5.lev minetn-6.lev minetn-7.lev minend-1.lev minend-2.lev minend-3.lev mineking.lev
+: dat/newmall.des | lev_comp |> ./lev_comp %f |> mall.lev
+: dat/medusa.des | lev_comp |> ./lev_comp %f |> medusa-1.lev medusa-2.lev medusa-3.lev medusa-4.lev
+: dat/sokoban.des | lev_comp |> ./lev_comp %f |> soko4-1.lev soko4-2.lev soko4-3.lev soko4-4.lev soko4-5.lev soko3-1.lev soko3-2.lev soko3-3.lev soko3-4.lev soko3-5.lev soko3-6.lev soko3-7.lev soko2-1.lev soko2-2.lev soko2-3.lev soko2-4.lev soko2-5.lev soko2-6.lev soko2-7.lev soko1-1.lev soko1-2.lev soko1-3.lev soko1-4.lev
+: dat/tower.des | lev_comp |> ./lev_comp %f |> tower1.lev tower2.lev tower3.lev
+: dat/yendor.des | lev_comp |> ./lev_comp %f |> wizard1.lev wizard2.lev wizard3.lev fakewiz1.lev fakewiz2.lev
+
+#: foreach $(QUEST_DES) | lev_comp |> ./lev_comp %f |> %B-fila.lev %B-filb.lev %B-loca.lev %B-goal.lev %B-strt.lev
+: dat/Arch.des | lev_comp |> ./lev_comp %f |> Arc-fila.lev Arc-filb.lev Arc-loca.lev Arc-goal.lev Arc-strt.lev
+: dat/Barb.des | lev_comp |> ./lev_comp %f |> Bar-fila.lev Bar-filb.lev Bar-loca.lev Bar-goal.lev Bar-strt.lev
+: dat/Caveman.des | lev_comp |> ./lev_comp %f |> Cav-fila.lev Cav-filb.lev Cav-loca.lev Cav-goal.lev Cav-strt.lev
+: dat/Flame.des | lev_comp |> ./lev_comp %f |> Fla-fila.lev Fla-filb.lev Fla-loca.lev Fla-goal.lev Fla-strt.lev
+: dat/Healer.des | lev_comp |> ./lev_comp %f |> Hea-fila.lev Hea-filb.lev Hea-loca.lev Hea-goal.lev Hea-strt.lev
+: dat/Ice.des | lev_comp |> ./lev_comp %f |> Ice-fila.lev Ice-filb.lev Ice-loca.lev Ice-goal.lev Ice-strt.lev
+: dat/Knight.des | lev_comp |> ./lev_comp %f |> Kni-fila.lev Kni-filb.lev Kni-loca.lev Kni-goal.lev Kni-strt.lev
+: dat/Monk.des | lev_comp |> ./lev_comp %f |> Mon-fila.lev Mon-filb.lev Mon-loca.lev Mon-goal.lev Mon-strt.lev
+: dat/Necro.des | lev_comp |> ./lev_comp %f |> Nec-fila.lev Nec-filb.lev Nec-loca.lev Nec-goal.lev Nec-strt.lev
+: dat/Priest.des | lev_comp |> ./lev_comp %f |> Pri-fila.lev Pri-filb.lev Pri-loca.lev Pri-goal.lev Pri-strt.lev
+: dat/Ranger.des | lev_comp |> ./lev_comp %f |> Ran-fila.lev Ran-filb.lev Ran-loca.lev Ran-goal.lev Ran-strt.lev
+: dat/Rogue.des | lev_comp |> ./lev_comp %f |> Rog-fila.lev Rog-filb.lev Rog-loca.lev Rog-goal.lev Rog-strt.lev
+: dat/Samurai.des | lev_comp |> ./lev_comp %f |> Sam-fila.lev Sam-filb.lev Sam-loca.lev Sam-goal.lev Sam-strt.lev
+: dat/Tourist.des | lev_comp |> ./lev_comp %f |> Tou-fila.lev Tou-filb.lev Tou-loca.lev Tou-goal.lev Tou-strt.lev
+: dat/Slayer.des | lev_comp |> ./lev_comp %f |> Und-fila.lev Und-filb.lev Und-loca.lev Und-goal.lev Und-strt.lev
+: dat/Valkyrie.des | lev_comp |> ./lev_comp %f |> Val-fila.lev Val-filb.lev Val-loca.lev Val-goal.lev Val-strt.lev
+: dat/Wizard.des | lev_comp |> ./lev_comp %f |> Wiz-fila.lev Wiz-filb.lev Wiz-loca.lev Wiz-goal.lev Wiz-strt.lev
+: dat/Yeoman.des | lev_comp |> ./lev_comp %f |> Yeo-fila.lev Yeo-filb.lev Yeo-loca.lev Yeo-goal.lev Yeo-strt.lev
 
 
 : dlb dat/help dat/hh dat/cmdhelp dat/history dat/opthelp dat/wizhelp dat/gypsy.txt dat/data dat/options dat/oracles dat/quest.dat dat/rumors |> cd dat; ../dlb cf nhshare help hh cmdhelp history opthelp wizhelp gypsy.txt data options oracles quest.dat rumors; mv nhshare .. |> nhshare
+: dlb dungeon *.lev |> ./dlb cf nhushare dungeon *.lev |> nhushare
