@@ -13,8 +13,7 @@
 #endif
 #ifdef WIN32
 # include <errno.h>
-# include "w32api.h"
-# include "libloaderapi.h"
+# include "win32api.h"
 #endif
 
 int restore_savefile(char *);

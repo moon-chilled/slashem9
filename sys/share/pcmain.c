@@ -19,8 +19,7 @@
 #include <sys/stat.h>
 
 #ifdef WIN32
-#include "w32api.h"			/* for GetModuleFileName */
-#include "libloaderapi.h"
+#include "win32api.h"			/* for GetModuleFileName */
 #endif
 
 #ifdef __DJGPP__

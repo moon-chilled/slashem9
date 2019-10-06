@@ -4,7 +4,7 @@ SYSSRC = sys/winnt/nttty.c sys/winnt/winnt.c sys/winnt/nh340key.c sys/share/pcsy
 BUILDDIR = build-win32
 EXEEXT = .exe
 HOST_EXEEXT = .exe
-CFLAGS += -DWIN32CON
+CFLAGS += -DWIN32CON -Isys/winnt
 LFLAGS += -lkernel32 -lpdcurses
 
 include sys/tup/Tupsrc.tup

@@ -2160,12 +2160,6 @@ extern int assign_videoshades(char *);
 extern int assign_videocolors(char *);
 #endif
 
-/* ### vis_tab.c ### */
-
-#ifdef VISION_TABLES
-extern void vis_tab_init(void);
-#endif
-
 /* ### vision.c ### */
 
 extern void vision_init(void);
@@ -2174,7 +2168,7 @@ extern void vision_reset(void);
 extern void vision_recalc(int);
 extern void block_point(int,int);
 extern void unblock_point(int,int);
-extern boolean clear_path(int,int,int,int);
+extern bool clear_path(int,int,int,int);
 extern void do_clear_area(int,int,int,
 			     void (*)(int,int,void *),void *);
 

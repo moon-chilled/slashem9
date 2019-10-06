@@ -35,7 +35,7 @@ win32:
 clean:
 	rm -rf build-*
 
-install: build-unix
+install: unix
 	mkdir -p $(HACKDIR)/save $(BINDIR)
 	touch $(HACKDIR)/perm $(HACKDIR)/logfile $(HACKDIR)/xlogfile
 
