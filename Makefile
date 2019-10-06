@@ -1,4 +1,4 @@
-PREFIX ?= ~/slashem-nextinstall
+PREFIX ?= $(HOME)/slashem-nextinstall
 HACKDIR ?= $(PREFIX)/slashemdir
 BINDIR ?= $(PREFIX)/bin
 

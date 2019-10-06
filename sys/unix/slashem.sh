@@ -44,6 +44,9 @@ then
 	fi
 fi
 
+if [ x$NH_USE_VALGRIND != x ]; then
+	HACK="valgrind $HACK"
+fi
 if [ x$NH_USE_GDB != x ]; then
 	HACK="gdb $HACK"
 fi
