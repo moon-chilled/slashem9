@@ -18,10 +18,10 @@ SLASHEMSRC := $(SRC) $(SYSSRC) $(GENSRC) $(TTY_SRC) $(CURSES_SRC)
 
 : foreach src/lev_yacc.c src/lev_lex.c src/dgn_yacc.c src/dgn_lex.c util/dgn_main.c util/dlb_main.c util/lev_main.c util/panic.c util/recover.c | include/*.h |> $(CC) $(CFLAGS) -c %f -o %o |> %B.o
 
-: recover.o |> $(CC) -o %o %f |> slashem-recover
+: recover.o |> $(CC) $(CFLAGS) -o %o %f |> slashem-recover
 
 : foreach $(SLASHEMSRC) | include/*.h |> $(CC) $(CFLAGS) -c %f -o %o |> %B.o {slashemsrc}
-: {slashemsrc} |> $(CC) -lncursesw -o %o %f |> slashem
+: {slashemsrc} |> $(CC) -o %o %f $(LFLAGS) |> slashem
 
 
 : dlb_main.o alloc.o panic.o dlb.o |> $(CC) %f -o %o |> dlb

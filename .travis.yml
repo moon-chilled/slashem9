@@ -18,6 +18,7 @@ matrix:
         - sudo apt install libncursesw5-dev
       script:
         - echo CFLAGS += $(ncursesw5-config --cflags) >> Tuprules.tup
+        - echo LFLAGS += $(ncursesw5-config --libs) >> Tuprules.tup
         - make
 #    - os: osx
 #      osx_image: xcode10.2
