@@ -9,18 +9,20 @@ default: build-unix
 all: build-unix build-mingw
 
 build-unix:
+	touch Tupfile.ini
 	cp sys/tup/Tupunix.tup Tupfile
 	mkdir -p build-unix
 	touch build-unix/tup.config
 	tup build-unix
-	rm -f Tupfile
+	rm -f Tupfile Tupfile.ini
 
 build-mingw:
+	touch Tupfile.ini
 	cp sys/tup/Tupmingw.tup Tupfile
 	mkdir -p build-mingw
 	touch build-mingw/tup.config
 	tup build-mingw
-	rm -f Tupfile
+	rm -f Tupfile Tupfile.ini
 
 clean:
 	rm -rf build-*
