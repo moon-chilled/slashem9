@@ -2531,11 +2531,19 @@ goodfruit:
 	fullname = "petattr";
 	if (match_optname(opts, fullname, sizeof("petattr")-1, true)) {
 		op = string_for_opt(opts, negated);
-		if (op && !negated) {
-		    iflags.wc2_petattr = curses_read_attrs(op);
-		    if (!curses_read_attrs(op))
-		    	badoption(opts);
-		} else if (negated) bad_negation(fullname, true);
+		if (op && negated) {
+			bad_negation(fullname, true);
+		} else if (op) {
+#ifdef CURSES_GRAPHICS
+			iflags.wc2_petattr = curses_read_attrs(op);
+#else
+			iflags.wc2_petattr = ATR_INVERSE
+#endif
+		} else {
+			iflags.wc2_petattr = ATR_NONE;
+		}
+
+		need_redraw = true;
 		return;
 	}
 
