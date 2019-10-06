@@ -5,5 +5,4 @@
 .*.swl
 
 .tup
-build/*
-!build/tup.config
+build-*

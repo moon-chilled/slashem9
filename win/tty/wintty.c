@@ -26,13 +26,15 @@
 
 #include "wintty.h"
 
+#ifndef WIN32CON
+# include <sys/ioctl.h>
+#endif
+
 #ifdef CLIPPING		/* might want SIGWINCH */
 # if defined(BSD) || defined(ULTRIX) || defined(AIX_31) || defined(_BULL_SOURCE)
 #include <signal.h>
 # endif
 #endif
-
-#include <sys/ioctl.h>
 
 extern char mapped_menu_cmds[]; /* from options.c */
 
@@ -2649,11 +2651,17 @@ int tty_nh_poskey(int *x, int *y, int *mod) {
 
 
 // Thanks to https://stackoverflow.com/questions/29335758/using-kbhit-and-getch-on-linux and https://web.archive.org/web/20170713065718/www.flipcode.com/archives/_kbhit_for_Linux.shtml
+#ifdef WIN32CON
+int tty_kbhit(void) {
+	return nttty_kbhit();
+}
+#else
 int tty_kbhit(void) {
 	int byteswaiting;
 	ioctl(0, FIONREAD, &byteswaiting);
 	return byteswaiting;
 }
+#endif
 
 
 void win_tty_init(void) {

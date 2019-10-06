@@ -135,32 +135,6 @@ extern void load_keyboard_handler(void);
 
 #include <fcntl.h>
 
-#ifndef CURSES_GRAPHICS
-# ifndef __CYGWIN__
-#  include <io.h>
-#  include <direct.h>
-#  include <conio.h>
-# else
-#  include <io.h>
-# else
-int  _RTLENTRY _EXPFUNC access  (const char _FAR *__path, int __amode);
-int  _RTLENTRY _EXPFUNC _chdrive(int __drive);
-int  _RTLENTRYF _EXPFUNC32   chdir( const char _FAR *__path );
-char _FAR * _RTLENTRY  _EXPFUNC     getcwd( char _FAR *__buf, int __buflen );
-int  _RTLENTRY _EXPFUNC write (int __handle, const void _FAR *__buf, unsigned __len);
-int  _RTLENTRY _EXPFUNC creat   (const char _FAR *__path, int __amode);
-int  _RTLENTRY _EXPFUNC close   (int __handle);
-int  _RTLENTRY _EXPFUNC _close  (int __handle);
-int  _RTLENTRY _EXPFUNC open  (const char _FAR *__path, int __access,... /*unsigned mode*/);
-long _RTLENTRY _EXPFUNC lseek  (int __handle, long __offset, int __fromwhere);
-int  _RTLENTRY _EXPFUNC read  (int __handle, void _FAR *__buf, unsigned __len);
-#  include <conio.h>
-# endif
-#endif /* CURSES_GRAPIHCS */
-
-#undef kbhit		/* Use our special NT kbhit */
-#define kbhit (*nt_kbhit)
-
 #ifdef LAN_FEATURES
 #define MAX_LAN_USERNAME 20
 #define LAN_RO_PLAYGROUND	/* not implemented in 3.3.0 */

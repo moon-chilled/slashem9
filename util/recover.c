@@ -9,11 +9,12 @@
  */
 #include "config.h"
 #if !defined(O_WRONLY) && !defined(LSC)
-#include <fcntl.h>
+# include <fcntl.h>
 #endif
 #ifdef WIN32
-#include <errno.h>
-#include "win32api.h"
+# include <errno.h>
+# include "w32api.h"
+# include "libloaderapi.h"
 #endif
 
 int restore_savefile(char *);
@@ -295,19 +296,17 @@ char *basename;
 #define EXEPATHBUFSZ 256
 char exepathbuf[EXEPATHBUFSZ];
 
-char *exepath(str)
-char *str;
-{
+char *exepath(char *str) {
 	char *tmp, *tmp2;
 	int bsize;
 
 	if (!str) return NULL;
 	bsize = EXEPATHBUFSZ;
 	tmp = exepathbuf;
-#if !defined(WIN32)
-	strcpy (tmp, str);
+#ifndef WIN32
+	strcpy(tmp, str);
 #else
-	*(tmp + GetModuleFileName((HANDLE)0, tmp, bsize)) = '\0';
+	*(tmp + GetModuleFileName(NULL, tmp, bsize)) = '\0';
 #endif
 	tmp2 = strrchr(tmp, PATH_SEPARATOR);
 	if (tmp2) *tmp2 = '\0';

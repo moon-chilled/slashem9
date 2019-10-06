@@ -10,7 +10,7 @@
 
 #if defined(BSD_JOB_CONTROL) || defined(_BULL_SOURCE)
 # ifdef HPUX
-#include <bsdtty.h>
+#  include <bsdtty.h>
 # else
 #  if defined(AIX_31) && !defined(_ALL_SOURCE)
 #   define _ALL_SOURCE	/* causes struct winsize to be present */
@@ -26,11 +26,7 @@ struct termios termio;
 #   include <sys/ttold.h>	/* define struct ltchars */
 #   include <sys/bsdioctl.h>	/* define TIOGWINSZ */
 #  else
-#   ifdef LINUX
-#    include <bsd/sgtty.h>
-#   else
-#    include <bsd/sgtty.h>
-#   endif
+#   include <bsd/sgtty.h>
 #  endif
 # endif
 struct ltchars ltchars;
@@ -38,16 +34,16 @@ struct ltchars ltchars0 = { -1, -1, -1, -1, -1, -1 }; /* turn all off */
 #else
 
 # ifdef POSIX_TYPES
-#include <termios.h>
+#  include <termios.h>
 struct termios termio;
 #  if defined(BSD) || defined(_AIX32)
 #   if defined(_AIX32) && !defined(_ALL_SOURCE)
 #    define _ALL_SOURCE
 #   endif
-#include <sys/ioctl.h>
+#   include <sys/ioctl.h>
 #  endif
 # else
-#include <termio.h>	/* also includes part of <sgtty.h> */
+#  include <sgtty.h>	/* also includes part of <sgtty.h> */
 #  if defined(TCSETS) && !defined(AIX_31)
 struct termios termio;
 #  else

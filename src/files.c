@@ -50,7 +50,7 @@ extern int errno;
 */
 
 #ifdef WIN32
-#include <sys\stat.h>
+#include <sys/stat.h>
 #endif
 #ifndef O_BINARY	/* used for micros, no-op for others */
 # define O_BINARY 0
@@ -1904,7 +1904,7 @@ boolean recover_savefile(void) {
 	return true;
 }
 
-boolean copy_bytes(int ifd, ofd) {
+boolean copy_bytes(int ifd, int ofd) {
 	char buf[BUFSIZ];
 	int nfrom, nto;
 

@@ -1459,7 +1459,7 @@ extern int dosh(void);
 extern void append_slash(char *);
 extern void getreturn(const char *);
 extern void msmsg(const char *,...);
-extern FILextern *fopenp(const char *,const char *);
+extern FILE *fopenp(const char *,const char *);
 #endif /* MICRO || WIN32 */
 
 /* ### pctty.c ### */

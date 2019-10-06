@@ -14,8 +14,8 @@
 #ifdef WIN32CON
 #include "hack.h"
 #include "wintty.h"
-#include <sys\types.h>
-#include <sys\stat.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include "win32api.h"
 
 /* Some defines missing from early mingw32/cygwin wincon.h */
@@ -368,10 +368,6 @@ nttty_open()
 		cmode = 0;
 	if (cmode) {
 		load_keyboard_handler();
-		/* Initialize the function pointer that points to
-		 * the kbhit() equivalent, in this TTY case nttty_kbhit()
-		 */
-		nt_kbhit = nttty_kbhit;
 	}
 	get_scr_size();
 	cursor.X = cursor.Y = 0;
