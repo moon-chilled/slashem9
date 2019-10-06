@@ -537,7 +537,11 @@ static void write_char(WINDOW * win, int x, int y, nethack_char nch) {
     curses_toggle_color_attr(win, nch.color, nch.attr, ON);
 
     cchar_t ch = {0};
+#ifdef PDCURSES
+    ch = nch.ch;
+#else
     ch.chars[0] = nch.ch;
+#endif
     mvwadd_wch(win, y, x, &ch);
 
     curses_toggle_color_attr(win, nch.color, nch.attr, OFF);

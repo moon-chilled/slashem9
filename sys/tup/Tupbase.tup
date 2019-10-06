@@ -13,7 +13,7 @@ include Tupprefs.tup
 : util/recover.c |> $(CC) $(CFLAGS) -o %o %f |> slashem-recover$(EXEEXT)
 
 : foreach $(SLASHEMSRC) | include/*.h |> $(CC) $(CFLAGS) -c %f -o %o |> %B.o {slashemsrc}
-: {slashemsrc} |> $(CC) -o %o %f $(LFLAGS) |> slashem
+: {slashemsrc} |> $(CC) -o %o %f $(LFLAGS) |> slashem$(EXEEXT)
 
 
 : util/dlb_main.c src/alloc.c util/panic.c src/dlb.c |> $(HOST_CC) $(CFLAGS) %f -o %o |> dlb$(HOST_EXEEXT)

@@ -5,7 +5,7 @@
 #ifndef NTCONF_H
 #define NTCONF_H
 
-/* #define SHELL */	/* nt use of pcsys routines caused a hang */
+#define SHELL 		/* nt use of pcsys routines caused a hang */
 
 #define RANDOM		/* have Berkeley random(3) */
 
@@ -22,7 +22,7 @@
 
 #define SELF_RECOVER		/* Allow the game itself to recover from an aborted game */
 
-#define USER_SOUNDS
+//#define USER_SOUNDS
 /*
  * -----------------------------------------------------------------
  *  The remaining code shouldn't need modification.

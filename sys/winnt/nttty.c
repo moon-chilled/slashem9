@@ -653,9 +653,7 @@ tty_nhbell()
 
 volatile int junk;	/* prevent optimizer from eliminating loop below */
 
-void
-tty_delay_output()
-{
+void tty_delay_output(void) {
 	if (iflags.debug_fuzzer) {
 		return;
 	}
@@ -691,9 +689,7 @@ tty_delay_output()
  * BRIGHT		8
  */
 
-static void
-init_ttycolor()
-{
+static void init_ttycolor(void) {
 	ttycolors[CLR_BLACK] = FOREGROUND_INTENSITY;  /* fix by Quietust */
 	ttycolors[CLR_RED] = FOREGROUND_RED;
 	ttycolors[CLR_GREEN] = FOREGROUND_GREEN;
@@ -717,15 +713,11 @@ init_ttycolor()
 						FOREGROUND_INTENSITY;
 }
 
-int
-has_color(int color)
-{
+int has_color(int color) {
     return 1;
 }
 
-void
-term_start_attr(int attrib)
-{
+void term_start_attr(int attrib) {
     switch(attrib){
         case ATR_INVERSE:
 		if (iflags.wc_inverse) {
@@ -749,9 +741,7 @@ term_start_attr(int attrib)
     attr = (foreground | background);
 }
 
-void
-term_end_attr(int attrib)
-{
+void term_end_attr(int attrib) {
     switch(attrib){
 
         case ATR_INVERSE:
@@ -768,21 +758,15 @@ term_end_attr(int attrib)
     attr = (foreground | background);
 }
 
-void
-term_end_raw_bold(void)
-{
+void term_end_raw_bold(void) {
     term_end_attr(ATR_BOLD);
 }
 
-void
-term_start_raw_bold(void)
-{
+void term_start_raw_bold(void) {
     term_start_attr(ATR_BOLD);
 }
 
-void
-term_start_color(int color)
-{
+void term_start_color(int color) {
         if (color >= 0 && color < CLR_MAX) {
 	    foreground = (background != 0 && (color == CLR_GRAY || color == CLR_WHITE)) ?
 			ttycolors[0] : ttycolors[color];
@@ -790,31 +774,35 @@ term_start_color(int color)
 	attr = (foreground | background);
 }
 
-void
-term_end_color(void)
-{
+void term_end_color(void) {
 	foreground = DEFTEXTCOLOR;
 	attr = (foreground | background);
 }
 
+void term_start_bgcolor(int color) {
+        if (color >= 0 && color < CLR_MAX) {
+	    background = (foreground != 0 && (color == CLR_GRAY || color == CLR_WHITE)) ?
+			ttycolors[0] : ttycolors[color];
+	}
+	attr = (foreground | background);
+}
+void term_end_bgcolor(void) {
+	background = DEFTEXTCOLOR;
+	attr = (foreground | background);
+}
 
-void
-standoutbeg()
-{
+
+void standoutbeg(void) {
     term_start_attr(ATR_BOLD);
 }
 
 
-void
-standoutend()
-{
+void standoutend(void) {
     term_end_attr(ATR_BOLD);
 }
 
 #ifndef NO_MOUSE_ALLOWED
-void
-toggle_mouse_support()
-{
+void toggle_mouse_support(void) {
         DWORD cmode;
 	GetConsoleMode(hConIn,&cmode);
 	if (iflags.wc_mouse_support)
@@ -826,10 +814,8 @@ toggle_mouse_support()
 #endif
 
 /* handle tty options updates here */
-void nttty_preference_update(pref)
-const char *pref;
-{
-	if( stricmp( pref, "mouse_support")==0) {
+void nttty_preference_update(const char *pref) {
+	if (stricmp(pref, "mouse_support") == 0) {
 #ifndef NO_MOUSE_ALLOWED
 		toggle_mouse_support();
 #endif

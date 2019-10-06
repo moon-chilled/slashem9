@@ -16,10 +16,11 @@
 
 #include <ctype.h>
 
-#include <sys\stat.h>
+#include <sys/stat.h>
 
 #ifdef WIN32
-#include "win32api.h"			/* for GetModuleFileName */
+#include "w32api.h"			/* for GetModuleFileName */
+#include "libloaderapi.h"
 #endif
 
 #ifdef __DJGPP__
@@ -64,7 +65,7 @@ int main(int argc, char **argv) {
 	return 0;
 }
 
-void pcmain(int argc, char **argv) { {
+void pcmain(int argc, char **argv) {
 	int fd;
 	char *dir;
 
@@ -506,8 +507,7 @@ char *exepath(char *str) {
 		WideCharToMultiByte(CP_ACP, 0, wbuf, -1, tmp, bsize, NULL, NULL);
 	}
 #else
-	*(tmp + GetModuleFileName((HANDLE)0, tmp, bsize)) = '\0';
-#endif
+	*(tmp + GetModuleFileName(NULL, tmp, bsize)) = '\0';
 #endif
 	tmp2 = strrchr(tmp, PATH_SEPARATOR);
 	if (tmp2) *tmp2 = '\0';

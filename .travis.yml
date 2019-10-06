@@ -16,8 +16,9 @@ matrix:
         - sudo dpkg -i tup_0.7.8-3~16.04.york0_amd64.deb
         - sudo apt install libncursesw5-dev
       script:
-        - echo CFLAGS += $(ncursesw5-config --cflags) >> Tuprules.tup
-        - echo LFLAGS += $(ncursesw5-config --libs) >> Tuprules.tup
+        - echo CFLAGS += $(ncursesw5-config --cflags) >> sys/tup/Tupprefs.tup
+        - echo LFLAGS += $(ncursesw5-config --libs) >> sys/tup/Tupprefs.tup
+        - echo CC = gcc >> sys/tup/Tupprefs.tup
         - make install
     - os: linux
       dist: bionic
@@ -27,9 +28,9 @@ matrix:
         - sudo dpkg -i tup_0.7.8-3~16.04.york0_amd64.deb
         - sudo apt install libncursesw5-dev
       script:
-        - echo CFLAGS += $(ncursesw5-config --cflags) >> Tuprules.tup
-        - echo LFLAGS += $(ncursesw5-config --libs) >> Tuprules.tup
-        - echo CC = clang -Wno-knr-promoted-parameter >> Tuprules.tup
+        - echo CFLAGS += $(ncursesw5-config --cflags) >> sys/tup/Tupprefs.tup
+        - echo LFLAGS += $(ncursesw5-config --libs) >> sys/tup/Tupprefs.tup
+        - echo CC = clang -Wno-knr-promoted-parameter >> sys/tup/Tupprefs.tup
         - make install
 
 #    - os: osx
