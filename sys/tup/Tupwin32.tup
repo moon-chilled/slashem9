@@ -1,0 +1,14 @@
+CC = x86_64-w64-mingw32-gcc
+HOST_CC = x86_64-w64-mingw32-gcc
+SYSSRC = sys/winnt/nttty.c sys/winnt/winnt.c sys/winnt/nh340key.c sys/share/pcsys.c sys/share/random.c sys/share/pcmain.c sys/share/nhlan.c sys/share/pcunix.c
+BUILDDIR = build-win32
+EXEEXT = .exe
+HOST_EXEEXT = .exe
+CFLAGS += -DWIN32CON
+LFLAGS += -lkernel32 -lpdcurses
+
+include sys/tup/Tupsrc.tup
+
+SLASHEMSRC := $(SRC) $(SYSSRC) $(GENSRC) $(TTY_SRC) $(CURSES_SRC)
+
+include sys/tup/Tupbase.tup

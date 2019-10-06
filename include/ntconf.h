@@ -42,7 +42,7 @@
 #ifdef NH_OPTIONS_USED
 #undef NH_OPTIONS_USED
 #endif
-#define NH_OPTIONS_USED	"ttyoptions"
+#define NH_OPTIONS_USED	"options"
 
 #define NH_OPTIONS_FILE NH_OPTIONS_USED
 
@@ -112,7 +112,7 @@ extern void interject(int);
 #endif
 
 #if defined(DLB)
-#define FILENAME_CMP  stricmp		      /* case insensitive */
+#define FILENAME_CMP  _stricmp		      /* case insensitive */
 #endif
 
 #if 0

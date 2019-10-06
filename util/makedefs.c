@@ -7,6 +7,8 @@
 #define MAKEDEFS_C	/* use to conditionally include file sections */
 /* #define DEBUG */	/* uncomment for debugging info */
 
+#include <stdio.h>
+
 #include "config.h"
 #include "permonst.h"
 #include "objclass.h"

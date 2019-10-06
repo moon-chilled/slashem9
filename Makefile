@@ -2,13 +2,13 @@ PREFIX ?= ~/slashem-nextinstall
 HACKDIR ?= $(PREFIX)/slashemdir
 BINDIR ?= $(PREFIX)/bin
 
-.PHONY: build-mingw build-unix
+.PHONY: unix mingw win32
 
-default: build-unix
+default: unix
 
-all: build-unix build-mingw
+all: unix mingw win32
 
-build-unix:
+unix:
 	touch Tupfile.ini
 	cp sys/tup/Tupunix.tup Tupfile
 	mkdir -p build-unix
@@ -16,12 +16,20 @@ build-unix:
 	tup build-unix
 	rm -f Tupfile Tupfile.ini
 
-build-mingw:
+mingw:
 	touch Tupfile.ini
 	cp sys/tup/Tupmingw.tup Tupfile
 	mkdir -p build-mingw
 	touch build-mingw/tup.config
 	tup build-mingw
+	rm -f Tupfile Tupfile.ini
+
+win32:
+	touch Tupfile.ini
+	cp sys/tup/Tupwin32.tup Tupfile
+	mkdir -p build-win32
+	touch build-win32/tup.config
+	tup build-win32
 	rm -f Tupfile Tupfile.ini
 
 clean:

@@ -18,10 +18,7 @@
  * Windows NT Autodetection
  *
  */
-#if defined(__CYGWIN__) && !defined(UNIX)
-# define WIN32
-#endif
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(WIN32)
 # define WIN32
 #endif
 
