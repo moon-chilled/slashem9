@@ -32,12 +32,12 @@ matrix:
         - echo CC = clang -Wno-knr-promoted-parameter >> Tuprules.tup
         - make install
 
-    - os: osx
-      osx_image: xcode10.2
-      before_install:
-        - brew cask install osxfuse
-        - brew install tup
-      script:
-        - touch Tupfile.ini
-        - tup generate build.sh
-        - sh build.sh
+#    - os: osx
+#      osx_image: xcode10.2
+#      before_install:
+#        - brew cask install osxfuse
+#        - brew install tup
+#      script:
+#        - touch Tupfile.ini
+#        - tup generate build.sh
+#        - sh build.sh
