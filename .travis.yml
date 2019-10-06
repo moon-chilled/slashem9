@@ -5,7 +5,6 @@ notifications:
     channels:
       - "irc.freenode.net#em.slashem.me"
     skip_join: true
-  email: true
 
 matrix:
   include:
@@ -19,10 +18,26 @@ matrix:
       script:
         - echo CFLAGS += $(ncursesw5-config --cflags) >> Tuprules.tup
         - echo LFLAGS += $(ncursesw5-config --libs) >> Tuprules.tup
-        - make
-#    - os: osx
-#      osx_image: xcode10.2
-#      before_install:
-#        - brew cask install osxfuse
-#        - brew install tup
-#      script: make
+        - make install
+    - os: linux
+      dist: bionic
+      compiler: clang
+      before_install:
+        - wget http://ppa.launchpad.net/jonathonf/tup/ubuntu/pool/main/t/tup/tup_0.7.8-3~16.04.york0_amd64.deb
+        - sudo dpkg -i tup_0.7.8-3~16.04.york0_amd64.deb
+        - sudo apt install libncursesw5-dev
+      script:
+        - echo CFLAGS += $(ncursesw5-config --cflags) >> Tuprules.tup
+        - echo LFLAGS += $(ncursesw5-config --libs) >> Tuprules.tup
+        - echo CC = clang -Wno-knr-promoted-parameter >> Tuprules.tup
+        - make install
+
+    - os: osx
+      osx_image: xcode10.2
+      before_install:
+        - brew cask install osxfuse
+        - brew install tup
+      script:
+        - touch Tupfile.ini
+        - tup generate build.sh
+        - sh build.sh
