@@ -214,7 +214,7 @@ int do_mname(void) {
 	char qbuf[QBUFSZ];
 
 	if (Hallucination) {
-		You("would never recognize it anyway.");
+		pline("You would never recognize it anyway.");
 		return 0;
 	}
 	cc.x = u.ux;
@@ -287,7 +287,7 @@ static void do_oname(struct obj *obj) {
 		strcpy(buf, aname);
 
 	if (obj->oartifact) {
-		pline_The("artifact seems to resist the attempt.");
+		pline("The artifact seems to resist the attempt.");
 		return;
 	} else if (restrict_name(obj, buf) || exist_artifact(obj->otyp, buf)) {
 		int n = rn2((int)strlen(buf));
@@ -298,7 +298,7 @@ static void do_oname(struct obj *obj) {
 		buf[n] = (buf[n] == c1) ? c2 : highc(c2);  /* keep same case */
 		pline("While engraving your %s slips.", body_part(HAND));
 		display_nhwindow(WIN_MESSAGE, false);
-		You("engrave: \"%s\".",buf);
+		pline("You engrave: \"%s\".",buf);
 	}
 	obj = oname(obj, buf);
 }
@@ -442,7 +442,7 @@ int ddocall(void) {
 			xname(obj);
 
 			if (!obj->dknown) {
-				You("would never recognize another one.");
+				pline("You would never recognize another one.");
 				return 0;
 			}
 			docall(obj);

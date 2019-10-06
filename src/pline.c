@@ -120,49 +120,6 @@ void free_youbuf(void) {
 #define YouMessage(pointer,prefix,text) \
  strcat((YouPrefix(pointer, prefix, text), pointer), text)
 
-void You(const char *line, ...) {
-	char *tmp;
-	VA_START(line);
-	vpline(YouMessage(tmp, "You ", line), VA_ARGS);
-	VA_END();
-}
-
-void Your(const char *line, ...) {
-	char *tmp;
-	VA_START(line);
-	vpline(YouMessage(tmp, "Your ", line), VA_ARGS);
-	VA_END();
-}
-
-void You_feel(const char *line, ...) {
-	char *tmp;
-	VA_START(line);
-	vpline(YouMessage(tmp, "You feel ", line), VA_ARGS);
-	VA_END();
-}
-
-
-void You_cant(const char *line, ...) {
-	char *tmp;
-	VA_START(line);
-	vpline(YouMessage(tmp, "You can't ", line), VA_ARGS);
-	VA_END();
-}
-
-void pline_The(const char *line, ...) {
-	char *tmp;
-	VA_START(line);
-	vpline(YouMessage(tmp, "The ", line), VA_ARGS);
-	VA_END();
-}
-
-void There(const char *line, ...) {
-	char *tmp;
-	VA_START(line);
-	vpline(YouMessage(tmp, "There ", line), VA_ARGS);
-	VA_END();
-}
-
 void You_hearf(const char *line, ...) {
 	char *tmp;
 	VA_START(line);

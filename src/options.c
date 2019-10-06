@@ -770,7 +770,7 @@ bad_negation(optname, with_parameter)
 const char *optname;
 boolean with_parameter;
 {
-	pline_The("%s option may not %sbe negated.",
+	pline("The %s option may not %sbe negated.",
 		optname,
 		with_parameter ? "both have a value and " : "");
 }
@@ -858,7 +858,7 @@ const char *optn;
 		flags.suppress_alert = fnv;
 	if (rejectver) {
 		if (!initial)
-			You_cant("disable new feature alerts for future versions.");
+			pline("You can't disable new feature alerts for future versions.");
 		else {
 			sprintf(buf,
 				"\n%s=%s Invalid reference to a future version ignored",
@@ -2666,7 +2666,7 @@ goodfruit:
 			/* options that don't exist */
 			if (!boolopt[i].addr) {
 			    if (!initial && !negated)
-				pline_The("\"%s\" option is not available.",
+				pline("The \"%s\" option is not available.",
 					boolopt[i].name);
 			    return;
 			}

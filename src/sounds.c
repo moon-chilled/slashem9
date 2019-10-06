@@ -189,14 +189,14 @@ dosounds (void)
 		mon_in_room(mtmp, MORGUE)) {
 		switch (rn2(2)+hallu) {
 		    case 0:
-			You("suddenly realize it is unnaturally quiet.");
+			pline("You suddenly realize it is unnaturally quiet.");
 			break;
 		    case 1:
-			pline_The("%s on the back of your %s stands up.",
+			pline("The %s on the back of your %s stands up.",
 				body_part(HAIR), body_part(NECK));
 			break;
 		    case 2:
-			pline_The("%s on your %s seems to stand up.",
+			pline("The %s on your %s seems to stand up.",
 				body_part(HAIR), body_part(HEAD));
 			break;
 		}
@@ -693,7 +693,7 @@ static int domonnoise (struct monst *mtmp) {
 	    break;
 	case MS_BONES:
 	    pline("%s rattles noisily.", Monnam(mtmp));
-	    You("freeze for a moment.");
+	    pline("You freeze for a moment.");
 	    nomul(-2);
 	    nomovemsg = 0;
 	    break;
@@ -915,7 +915,7 @@ dochat (void)
 	return 0;
     }
     if (Strangled) {
-	You_cant("speak.  You're choking!");
+	pline("You can't speak.  You're choking!");
 	return 0;
     }
     if (u.uswallow) {
@@ -923,7 +923,7 @@ dochat (void)
 	return 0;
     }
     if (Underwater) {
-	Your("speech is unintelligible underwater.");
+	pline("Your speech is unintelligible underwater.");
 	return 0;
     }
 
@@ -959,7 +959,7 @@ dochat (void)
  * 2 helmets, 2 amulets, 3 pairs of gloves or 6 rings as a marilith,
  * etc...  --KAA
 	if (u.umonnum == PM_ETTIN) {
-	    You("discover that your other head makes boring conversation.");
+	    pline("You discover that your other head makes boring conversation.");
 	    return 1;
 	}
 */

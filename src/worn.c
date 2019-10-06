@@ -741,12 +741,12 @@ boolean polyspot;
 		goto noride;
 	} else if (mon == u.usteed && !can_ride(mon)) {
 	noride:
-	    You("can no longer ride %s.", mon_nam(mon));
+	    pline("You can no longer ride %s.", mon_nam(mon));
 	    if (touch_petrifies(u.usteed->data) &&
 			!Stone_resistance && rnl(3)) {
 		char buf[BUFSZ];
 
-		You("touch %s.", mon_nam(u.usteed));
+		pline("You touch %s.", mon_nam(u.usteed));
 		sprintf(buf, "falling off %s",
 				an(u.usteed->data->mname));
 		instapetrify(buf);

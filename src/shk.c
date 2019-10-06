@@ -150,7 +150,7 @@ money2u (struct monst *mon, long amount)
     obj_extract_self(mongold);
 
     if (!merge_choice(invent, mongold) && inv_cnt() >= 52) {
-	You("have no room for the money!");
+	pline("You have no room for the money!");
 	dropy(mongold);
     } else {
 	addinv(mongold);
@@ -394,14 +394,14 @@ boolean nearshop;
 	    if (nearshop && (!Is_blackmarket(&u.uz))) {
 		/* Create swarm around you, if you merely "stepped out" */
 		if (flags.verbose)
-		    pline_The("%s appear!", kopname);
+		    pline("The %s appear!", kopname);
 		mm.x = u.ux;
 		mm.y = u.uy;
 		makekops(&mm);
 		return;
 	    }
 	    if (flags.verbose)
-		 pline_The("%s are after you!", kopname);
+		 pline("The %s are after you!", kopname);
 	    /* Create swarm near down staircase (hinders return to level) */
 	    if (Is_blackmarket(&u.uz)) {
 	      struct trap *trap = ftrap;
@@ -556,11 +556,11 @@ struct monst *shkp;
 	rouse_shk(shkp, true);
 	total = (addupbill(shkp) + eshkp->debit);
 	if (eshkp->credit >= total) {
-	    Your("credit of %ld %s is used to cover your shopping bill.",
+	    pline("Your credit of %ld %s is used to cover your shopping bill.",
 		 eshkp->credit, currency(eshkp->credit));
 	    total = 0L;		/* credit gets cleared by setpaid() */
 	} else {
-	    You("escaped the shop without paying!");
+	    pline("You escaped the shop without paying!");
 	    total -= eshkp->credit;
 	}
 	setpaid(shkp);
@@ -568,11 +568,11 @@ struct monst *shkp;
 
 	/* by this point, we know an actual robbery has taken place */
 	eshkp->robbed += total;
-	You("stole %ld %s worth of merchandise.",
+	pline("You stole %ld %s worth of merchandise.",
 	    total, currency(total));
 	if (!Role_if(PM_ROGUE)) {     /* stealing is unlawful */
 	    adjalign(-sgn(u.ualign.type));
-	    You("feel like an evil rogue.");
+	    pline("You feel like an evil rogue.");
 	}
 
 	hot_pursuit(shkp);
@@ -766,7 +766,7 @@ shopper_financial_report (void)
 
 	if (this_shkp &&
 	    !(ESHK(this_shkp)->credit || shop_debt(ESHK(this_shkp)))) {
-	    You("have no credit or debt in here.");
+	    pline("You have no credit or debt in here.");
 	    this_shkp = 0;	/* skip first pass */
 	}
 
@@ -778,16 +778,16 @@ shopper_financial_report (void)
 		if ((shkp != this_shkp) ^ pass) continue;
 		eshkp = ESHK(shkp);
 		if ((amt = eshkp->credit) != 0)
-		    You("have %ld %s credit at %s %s.",
+		    pline("You have %ld %s credit at %s %s.",
 			amt, currency(amt), s_suffix(shkname(shkp)),
 			shtypes[eshkp->shoptype - SHOPBASE].name);
 		else if (shkp == this_shkp)
-		    You("have no credit in here.");
+		    pline("You have no credit in here.");
 		if ((amt = shop_debt(eshkp)) != 0)
-		    You("owe %s %ld %s.",
+		    pline("You owe %s %ld %s.",
 			shkname(shkp), amt, currency(amt));
 		else if (shkp == this_shkp)
-		    You("don't owe any money here.");
+		    pline("You don't owe any money here.");
 	    }
 }
 
@@ -1058,11 +1058,11 @@ struct monst *shkp;
 
 	if(credit == 0L) return tmp;
 	if(credit >= tmp) {
-		pline_The("price is deducted from your credit.");
+		pline("The price is deducted from your credit.");
 		ESHK(shkp)->credit -=tmp;
 		tmp = 0L;
 	} else {
-		pline_The("price is partially covered by your credit.");
+		pline("The price is partially covered by your credit.");
 		ESHK(shkp)->credit = 0L;
 		tmp -= credit;
 	}
@@ -1191,7 +1191,7 @@ boolean silentkops;
 	eshkp->robbed = 0L;
 	if (guilty && !Role_if(PM_ROGUE)) {
 		adjalign(sgn(u.ualign.type));
-		You("feel your guilt vanish.");
+		pline("You feel your guilt vanish.");
 	}
 	if(!inhishop(shkp)) {
 		char shk_nam[BUFSZ];
@@ -1331,12 +1331,12 @@ dopay (void)
 	}
 
 	if ((!sk && (!Blind || Blind_telepat)) || (!Blind && !seensk)) {
-      There("appears to be no shopkeeper here to receive your payment.");
+      pline("There appears to be no shopkeeper here to receive your payment.");
 		return 0;
 	}
 
 	if(!seensk) {
-		You_cant("see...");
+		pline("You can't see...");
 		return 0;
 	}
 
@@ -1379,12 +1379,12 @@ dopay (void)
 		     return 0;
 		}
 		if(u.ux == cx && u.uy == cy) {
-		     You("are generous to yourself.");
+		     pline("You are generous to yourself.");
 		     return 0;
 		}
 		mtmp = m_at(cx, cy);
 		if(!mtmp) {
-		     There("is no one there to receive your payment.");
+		     pline("There is no one there to receive your payment.");
 		     return 0;
 		}
 		/* KMH -- Permit paying gypsies */
@@ -1432,13 +1432,13 @@ proceed:
                 umoney = money_cnt(invent);
 #endif
 		if(!ltmp)
-		    You("do not owe %s anything.", mon_nam(shkp));
+		    pline("You do not owe %s anything.", mon_nam(shkp));
 #ifndef GOLDOBJ
 		else if(!u.ugold) {
 #else
 		else if(!umoney) {
 #endif
-		    You("%shave no money.", stashed_gold ? "seem to " : "");
+		    pline("You %shave no money.", stashed_gold ? "seem to " : "");
 		    if(stashed_gold)
 
 #ifndef GOLDOBJ
@@ -1453,14 +1453,14 @@ proceed:
 #else
 		    if(umoney > ltmp) {
 #endif
-			You("give %s the %ld gold piece%s %s asked for.",
+			pline("You give %s the %ld gold piece%s %s asked for.",
 			    mon_nam(shkp), ltmp, plur(ltmp), mhe(shkp));
 			pay(ltmp, shkp);
 		    } else {
 #ifndef GOLDOBJ
-			You("give %s all your%s gold.", mon_nam(shkp),
+			pline("You give %s all your%s gold.", mon_nam(shkp),
 #else
-			You("give %s all your%s money.", mon_nam(shkp),
+			pline("You give %s all your%s money.", mon_nam(shkp),
 #endif
 					stashed_gold ? " openly kept" : "");
 #ifndef GOLDOBJ
@@ -1490,7 +1490,7 @@ proceed:
                 umoney = money_cnt(invent);
 #endif
 		if(!ltmp && NOTANGRY(shkp)) {
-		    You("do not owe %s anything.", mon_nam(shkp));
+		    pline("You do not owe %s anything.", mon_nam(shkp));
 #ifndef GOLDOBJ
 		    if (!u.ugold)
 #else
@@ -1550,7 +1550,7 @@ proceed:
 			else pline(not_enough_money, mhim(shkp));
 			return 1;
 		    }
-		    You("try to appease %s by giving %s 1000 gold pieces.",
+		    pline("You try to appease %s by giving %s 1000 gold pieces.",
 			x_monnam(shkp, ARTICLE_THE, "angry", 0, false),
 			mhim(shkp));
 		    pay(1000L,shkp);
@@ -1599,7 +1599,7 @@ proceed:
 			eshkp->credit -= dtmp;
 			eshkp->debit = 0L;
 			eshkp->loan = 0L;
-			Your("debt is covered by your credit.");
+			pline("Your debt is covered by your credit.");
 		    } else if (!eshkp->credit) {
 #ifndef GOLDOBJ
 			u.ugold -= dtmp;
@@ -1609,7 +1609,7 @@ proceed:
 #endif
 			eshkp->debit = 0L;
 			eshkp->loan = 0L;
-			You("pay that debt.");
+			pline("You pay that debt.");
 			flags.botl = 1;
 		    } else {
 			dtmp -= eshkp->credit;
@@ -1623,7 +1623,7 @@ proceed:
 			eshkp->debit = 0L;
 			eshkp->loan = 0L;
 			pline("That debt is partially offset by your credit.");
-			You("pay the remainder.");
+			pline("You pay the remainder.");
 			flags.botl = 1;
 		    }
 		    paid = true;
@@ -1638,7 +1638,7 @@ proceed:
             umoney = money_cnt(invent);
 	    if (!umoney && !eshkp->credit) {
 #endif
-		You("%shave no money or credit%s.",
+		pline("You %shave no money or credit%s.",
 				    stashed_gold ? "seem to " : "",
 				    paid ? " left" : "");
 		return 0;
@@ -1648,7 +1648,7 @@ proceed:
 #else
 	    if ((umoney + eshkp->credit) < cheapest_item(shkp)) {
 #endif
-		You("don't have enough money to buy%s the item%s you picked.",
+		pline("You don't have enough money to buy%s the item%s you picked.",
 		    eshkp->billct > 1 ? " any of" : "", plur(eshkp->billct));
 		if(stashed_gold)
 #ifndef GOLDOBJ
@@ -1886,7 +1886,7 @@ boolean itemize;
 #else
 	if(itemize && umoney + ESHK(shkp)->credit == 0L){
 #endif
-		You("%shave no money or credit left.",
+		pline("You %shave no money or credit left.",
 			     stashed_gold ? "seem to " : "");
 		return PAY_BROKE;
 	}
@@ -1923,10 +1923,10 @@ boolean itemize;
 	}
 #ifndef GOLDOBJ
 	if (buy == PAY_BUY && u.ugold + ESHK(shkp)->credit < ltmp) {
-	    You("don't%s have gold%s enough to pay for %s.",
+	    pline("You don't%s have gold%s enough to pay for %s.",
 #else
 	if (buy == PAY_BUY && umoney + ESHK(shkp)->credit < ltmp) {
-	    You("don't%s have money%s enough to pay for %s.",
+	    pline("You don't%s have money%s enough to pay for %s.",
 #endif
 		stashed_gold ? " seem to" : "",
 		(ESHK(shkp)->credit > 0L) ? " or credit" : "",
@@ -2499,7 +2499,7 @@ boolean dummy;
 		return;
 
 	if (!extend_bill(ESHK(shkp), 1)) {
-		You("got that for free!");
+		pline("You got that for free!");
 		return;
 	}
 
@@ -2590,7 +2590,8 @@ const char *arg;
 	    pline(fmtbuf, obj_name, (obj->quan > 1) ? "them" : "it",
 		  amt, plur(amt), arg);
 	} else {
-	    You(fmt, obj_name, amt, plur(amt), arg);
+	    sprintf(fmtbuf, "You %s", fmt);
+	    pline(fmtbuf, obj_name, amt, plur(amt), arg);
 	}
 }
 
@@ -2616,7 +2617,7 @@ boolean ininv, dummy, silent;
 	      ) return;
 
 	if (!extend_bill(ESHK(shkp), 1)) {
-		You("got that for free!");
+		pline("You got that for free!");
 		return;
 	}
 
@@ -2698,7 +2699,7 @@ speak:
 			The(xname(obj)), ltmp, currency(ltmp),
 			(obj->quan > 1L) ? " each" : "");
 	} else if(!silent) {
-	    if(ltmp) pline_The("list price of %s is %ld %s%s.",
+	    if(ltmp) pline("The list price of %s is %ld %s%s.",
 				   the(xname(obj)), ltmp, currency(ltmp),
 				   (obj->quan > 1L) ? " each" : "");
 	    else pline("%s does not notice.", Monnam(shkp));
@@ -2888,20 +2889,20 @@ boolean peaceful, silent, destruction;
 
 		if (credit_use) {
 		    if (ESHK(shkp)->credit) {
-			You("have %ld %s credit remaining.",
+			pline("You have %ld %s credit remaining.",
 				 ESHK(shkp)->credit, currency(ESHK(shkp)->credit));
 			return value;
 		    } else if (!value) {
-			You("have no credit remaining.");
+			pline("You have no credit remaining.");
 			return 0;
 		    }
 		    still = "still ";
 		}
 		if(obj->oclass == COIN_CLASS)
-		    You("%sowe %s %ld %s!", still,
+		    pline("You %sowe %s %ld %s!", still,
 			mon_nam(shkp), value, currency(value));
 		else
-		    You("%sowe %s %ld %s for %s!", still,
+		    pline("You %sowe %s %ld %s for %s!", still,
 			mon_nam(shkp), value, currency(value),
 			obj->quan > 1L ? "them" : "it");
 	    }
@@ -3027,7 +3028,7 @@ xchar x, y;
 			 else eshkp->loan = 0L;
 		    }
 		    eshkp->debit -= gltmp;
-		    Your("debt is %spaid off.",
+		    pline("Your debt is %spaid off.",
 				eshkp->debit ? "partially " : "");
 		} else {
 		    long delta = gltmp - eshkp->debit;
@@ -3036,7 +3037,7 @@ xchar x, y;
 		    if(eshkp->debit) {
 			eshkp->debit = 0L;
 			eshkp->loan = 0L;
-			Your("debt is paid off.");
+			pline("Your debt is paid off.");
 		    }
 		    pline("%ld %s %s added to your credit.",
 				delta, currency(delta), delta > 1L ? "are" : "is");
@@ -3453,9 +3454,9 @@ boolean croaked;
 						  "some" : "several",
 		  (saw_walls == 1) ? "" : "s", (saw_walls == 1) ? "s" : "");
 	    if (saw_door)
-		pline_The("shop door reappears!");
+		pline("The shop door reappears!");
 	    if (saw_floor)
-		pline_The("floor is repaired!");
+		pline("The floor is repaired!");
 	} else {
 	    if (saw_door)
 		pline("Suddenly, the shop door reappears!");
@@ -3464,7 +3465,7 @@ boolean croaked;
 	    else if (saw_untrap)
 	        pline("Suddenly, the trap is removed from the floor!");
 	    else if (inside_shop(u.ux, u.uy) == ESHK(shkp)->shoproom)
-		You_feel("more claustrophobic than before.");
+		pline("You feel more claustrophobic than before.");
 	    else if (flags.soundok && !rn2(10))
 		Norep("The dungeon acoustics noticeably change.");
 	}
@@ -3628,7 +3629,7 @@ struct monst *shkp;
 		if(ANGRY(shkp) ||
 		   (Conflict && !resist(shkp, RING_CLASS, 0, 0))) {
 			if(Displaced)
-			  Your("displaced image doesn't fool %s!",
+			  pline("Your displaced image doesn't fool %s!",
 				mon_nam(shkp));
 			mattacku(shkp);
 			return 0;
@@ -3766,7 +3767,7 @@ int fall;
 
     if(!inhishop(shkp)) {
 	if (Role_if(PM_KNIGHT)) {
-	    You_feel("like a common thief.");
+	    pline("You feel like a common thief.");
 	    adjalign(-sgn(u.ualign.type));
 	}
         /* WAC He may not be here now,  but... */
@@ -3785,7 +3786,7 @@ int fall;
 			flags.female ? "Madam" : "Sir");
 	}
 	if (Role_if(PM_KNIGHT)) {
-	    You_feel("like a common thief.");
+	    pline("You feel like a common thief.");
 	    adjalign(-sgn(u.ualign.type));
 	}
     } else if(!um_dist(shkp->mx, shkp->my, 5) &&
@@ -4015,7 +4016,7 @@ getcad:
 		return;
 	}
 
-	if (Invis) Your("invisibility does not fool %s!", shkname(shkp));
+	if (Invis) pline("Your invisibility does not fool %s!", shkname(shkp));
 	sprintf(qbuf,"\"Cad!  You did %ld %s worth of damage!\"  Pay? ",
 		 cost_of_damage, currency(cost_of_damage));
 	if(yn(qbuf) != 'n') {
@@ -4247,7 +4248,7 @@ boolean silent;
 	    }
 	}
 	if (cnt && !silent)
-	    pline_The("Kop%s (disappointed) vanish%s into thin air.",
+	    pline("The Kop%s (disappointed) vanish%s into thin air.",
 		      plur(cnt), cnt == 1 ? "es" : "");
 }
 
@@ -4384,18 +4385,18 @@ long amount;
 	eshkp = ESHK(shkp);
 	if(eshkp->credit >= amount) {
 	    if(eshkp->credit > amount)
-		Your("credit is reduced by %ld %s.",
+		pline("Your credit is reduced by %ld %s.",
 					amount, currency(amount));
-	    else Your("credit is erased.");
+	    else pline("Your credit is erased.");
 	    eshkp->credit -= amount;
 	} else {
 	    delta = amount - eshkp->credit;
 	    if(eshkp->credit)
-		Your("credit is erased.");
+		pline("Your credit is erased.");
 	    if(eshkp->debit)
-		Your("debt increases by %ld %s.",
+		pline("Your debt increases by %ld %s.",
 					delta, currency(delta));
-	    else You("owe %s %ld %s.",
+	    else pline("You owe %s %ld %s.",
 				shkname(shkp), delta, currency(delta));
 	    eshkp->debit += delta;
 	    eshkp->loan += delta;
@@ -4728,7 +4729,7 @@ shk_uncurse(slang, shkp)
 	else if (Confusion)
 	{
 		/* Curse the item! */
-		You("accidentally ask for the item to be cursed");
+		pline("You accidentally ask for the item to be cursed");
 		curse(obj);
 	}
 	else if (Hallucination)
@@ -4746,7 +4747,7 @@ shk_uncurse(slang, shkp)
 		}
 		else
 		{
-			You("can't see straight and point to the wrong item");
+			pline("You can't see straight and point to the wrong item");
 		}
 	}
 	else
@@ -4814,7 +4815,7 @@ shk_appraisal(slang, shkp)
 	}
 	else if (Hallucination)
 	{
-		You("hear %s say it'll \"knock 'em dead\"",
+		pline("You hear %s say it'll \"knock 'em dead\"",
 			mon_nam(shkp));
 		return;
 	}
@@ -4952,9 +4953,9 @@ struct monst *shkp;
 
 	    /* Have some fun, but for this $$$ it better work. */
 	    if (Confusion)
-		You("fall over in appreciation");
+		pline("You fall over in appreciation");
 	    else if (Hallucination)
-		Your(" - tin roof, un-rusted!");
+		pline("Your  - tin roof, un-rusted!");
 
 	    obj->oeroded = obj->oeroded2 = 0;
 	    obj->rknown = true;
@@ -4986,14 +4987,14 @@ struct monst *shkp;
 	    }
 	    /* Have some fun! */
 	    if (Confusion)
-		Your("%s unexpectedly!", aobjnam(obj, "vibrate"));
+		pline("Your %s unexpectedly!", aobjnam(obj, "vibrate"));
 	    else if (Hallucination)
-		Your("%s to evaporate into thin air!", aobjnam(obj, "seem"));
+		pline("Your %s to evaporate into thin air!", aobjnam(obj, "seem"));
 	    /* ...No actual vibrating and no evaporating */
 
 	    if (obj->otyp == WORM_TOOTH) {
 		obj->otyp = CRYSKNIFE;
-		Your("weapon seems sharper now.");
+		pline("Your weapon seems sharper now.");
 		obj->cursed = 0;
 		break;
 	    }
@@ -5077,9 +5078,9 @@ shk_armor_works(slang, shkp)
 
 		/* Have some fun, but for this $$$ it better work. */
 		if (Confusion)
-			You("forget how to put your %s back on!", xname(obj));
+			pline("You forget how to put your %s back on!", xname(obj));
 		else if (Hallucination)
-			You("mistake your %s for a pot and...", xname(obj));
+			pline("You mistake your %s for a pot and...", xname(obj));
 
 		obj->oeroded = 0;
 		obj->rknown = true;
@@ -5107,12 +5108,12 @@ shk_armor_works(slang, shkp)
 			break;
 			}
 		 /* Have some fun! */
-		if (Hallucination) Your("%s looks dented.", xname(obj));
+		if (Hallucination) pline("Your %s looks dented.", xname(obj));
 
 		if (obj->otyp >= GRAY_DRAGON_SCALES &&
 					obj->otyp <= YELLOW_DRAGON_SCALES) {
 			/* dragon scales get turned into dragon scale mail */
-			Your("%s merges and hardens!", xname(obj));
+			pline("Your %s merges and hardens!", xname(obj));
 			setworn(NULL, W_ARM);
 			/* assumes same order */
 			obj->otyp = GRAY_DRAGON_SCALE_MAIL +

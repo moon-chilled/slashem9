@@ -15,8 +15,6 @@ static boolean vis, far_noise;
 static long noisetime;
 static struct obj *otmp;
 
-static const char brief_feeling[] = "have a %s feeling for a moment, then it passes.";
-
 static char *mon_nam_too(char *,struct monst *,struct monst *);
 static void mrustm(struct monst *, struct monst *, struct obj *);
 static int breamm(struct monst *, struct monst *, struct attack *);
@@ -244,7 +242,7 @@ int mattackm(struct monst *magr, struct monst *mdef) {
 	mdef->mundetected = 0;
 	newsym(mdef->mx, mdef->my);
 	if(canseemon(mdef) && !sensemon(mdef)) {
-	    if (u.usleep) You("dream of %s.",
+	    if (u.usleep) pline("You dream of %s.",
 				(mdef->data->geno & G_UNIQ) ?
 				a_monnam(mdef) : makeplural(m_monnam(mdef)));
 	    else pline("Suddenly, you notice %s.", a_monnam(mdef));
@@ -569,7 +567,7 @@ static int thrwmm(struct monst *magr, struct monst *mdef) {
 	    if (objects[obj->otyp].oc_material == SILVER &&
 		    hates_silver(mdef->data) && canseemon(mdef)) {
 		if (vis)
-		    pline_The("silver sears %s flesh!",
+		    pline("The silver sears %s flesh!",
 			    s_suffix(mon_nam(mdef)));
 		else
 		    pline("%s flesh is seared!", s_suffix(Monnam(mdef)));
@@ -878,7 +876,7 @@ static int explmm(struct monst *magr, struct monst *mdef, struct attack *mattk) 
 		setmangry(mdef);
 	/* give this one even if it was visible, except for spell creatures */
 	if (magr->mtame && !magr->isspell)
-	    You(brief_feeling, "melancholy");
+	    pline("You have a melancholy feeling for a moment, then it passes.");
 
 	return result;
 }
@@ -910,7 +908,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 		monstone(magr);
 		if (magr->mhp > 0) return 0;
 		else if (magr->mtame && !vis)
-		    You(brief_feeling, "peculiarly sad");
+		    pline("You have a peculiarly sad feeling for a moment, then it passes.");
 		return MM_AGR_DIED;
 	    }
 	}
@@ -969,7 +967,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 		    mondied(magr);
 		    if (magr->mhp > 0) return 0;	/* lifesaved */
 		    else if (magr->mtame && !vis)
-			You(brief_feeling, "queasy");
+			pline("You have a queasy feeling for a moment, then it passes.");
 		    return MM_AGR_DIED;
 		}
 		if(flags.verbose && flags.soundok) verbalize("Burrrrp!");
@@ -1176,7 +1174,7 @@ physical:
 		tmp += destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
 		if (resists_fire(mdef)) {
 		    if (vis)
-			pline_The("fire doesn't seem to burn %s!",
+			pline("The fire doesn't seem to burn %s!",
 								mon_nam(mdef));
 		    shieldeff(mdef->mx, mdef->my);
 		    golemeffects(mdef, AD_FIRE, tmp);
@@ -1195,7 +1193,7 @@ physical:
 		if (vis) pline("%s is covered in frost!", Monnam(mdef));
 		if (resists_cold(mdef)) {
 		    if (vis)
-			pline_The("frost doesn't seem to chill %s!",
+			pline("The frost doesn't seem to chill %s!",
 								mon_nam(mdef));
 		    shieldeff(mdef->mx, mdef->my);
 		    golemeffects(mdef, AD_COLD, tmp);
@@ -1213,7 +1211,7 @@ physical:
 		if (vis) pline("%s gets zapped!", Monnam(mdef));
 		tmp += destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
 		if (resists_elec(mdef)) {
-		    if (vis) pline_The("zap doesn't shock %s!", mon_nam(mdef));
+		    if (vis) pline("The zap doesn't shock %s!", mon_nam(mdef));
 		    shieldeff(mdef->mx, mdef->my);
 		    golemeffects(mdef, AD_ELEC, tmp);
 		    tmp = 0;
@@ -1290,7 +1288,7 @@ physical:
 			monstone(magr);
 			if (magr->mhp > 0) return 0;
 			else if (magr->mtame && !vis)
-			    You(brief_feeling, "peculiarly sad");
+			    pline("You have a peculiarly sad feeling for a moment, then it passes.");
 			return MM_AGR_DIED;
 		    }
 		}
@@ -1307,7 +1305,7 @@ physical:
 			monstone(mdef);
  post_stone:		if (mdef->mhp > 0) return 0;
 			else if (mdef->mtame && !vis)
-			    You(brief_feeling, "peculiarly sad");
+			    pline("You have a peculiarly sad feeling for a moment, then it passes.");
 			return (MM_DEF_DIED | (grow_up(magr,mdef) ?
 							0 : MM_AGR_DIED));
 		}
@@ -1376,7 +1374,7 @@ physical:
 		    mondied(magr);
 		    if (magr->mhp > 0) return 0;  /* lifesaved */
 		    else if (magr->mtame && !vis)
-			You(brief_feeling, "peculiarly sad");
+			pline("You have a peculiarly sad feeling for a moment, then it passes.");
 		    return MM_AGR_DIED;
 		} else if (is_undead(mdef->data)) {
 		    /* Still does normal damage */
@@ -1488,7 +1486,7 @@ physical:
 			    mondied(mdef);
 			    if (mdef->mhp > 0) return 0;
 			    else if (mdef->mtame && !vis)
-				You(brief_feeling, "strangely sad");
+				pline("You have a strangely sad feeling for a moment, then it passes.");
 			    return (MM_DEF_DIED | (grow_up(magr,mdef) ?
 							0 : MM_AGR_DIED));
 		    }
@@ -1615,12 +1613,12 @@ physical:
 			      mpoisons_subj(magr, mattk));
 		    if (resists_poison(mdef)) {
 			if (vis)
-			    pline_The("poison doesn't seem to affect %s.",
+			    pline("The poison doesn't seem to affect %s.",
 				mon_nam(mdef));
 		    } else {
 			if (rn2(10)) tmp += rn1(10,6);
 			else {
-			    if (vis) pline_The("poison was deadly...");
+			    if (vis) pline("The poison was deadly...");
 			    tmp = mdef->mhp;
 			}
 		    }

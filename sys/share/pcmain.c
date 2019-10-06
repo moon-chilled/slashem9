@@ -290,7 +290,7 @@ void pcmain(int argc, char **argv) { {
 #endif
 		check_special_room(false);
 		if (discover)
-			You("are in non-scoring discovery mode.");
+			pline("You are in non-scoring discovery mode.");
 
 		if (discover || wizard) {
 			if(yn("Do you want to keep the save file?") == 'n'){
@@ -304,7 +304,7 @@ not_recovered:
 		player_selection();
 		newgame();
 		if (discover)
-			You("are in non-scoring discovery mode.");
+			pline("You are in non-scoring discovery mode.");
 
 		flags.move = 0;
 		set_wear();

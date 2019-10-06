@@ -186,10 +186,10 @@ boolean purify;
 		if (in_wereform && Unchanging) {
 		    killer_format = NO_KILLER_PREFIX;
 		    killer = "purified while stuck in creature form";
-		    pline_The("purification was deadly...");
+		    pline("The purification was deadly...");
 		    done(DIED);
 		} else {
-		    You_feel("very bad!");
+		    pline("You feel very bad!");
 		    if (in_wereform)
 			rehumanize();
 		    adjattrib(A_STR, -rn1(3,3), 2);
@@ -199,7 +199,7 @@ boolean purify;
 		}
 		return;
 	    }
-	    You_feel("purified.");
+	    pline("You feel purified.");
 	    u.ulycn = NON_PM;	/* cure lycanthropy */
 	    upermonst.mflags2 &= ~M2_WERE;
 	}

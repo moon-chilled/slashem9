@@ -220,10 +220,10 @@ void done_in_by(struct monst *mtmp) {
 	char buf[BUFSZ];
 	boolean distorted = Hallucination && canspotmon(mtmp);
 
-	You("die...");
+	pline("You die...");
 	/* for those wand o'death, touch o'death, poisoned spike times... */
 	if (Instant_Death)
-	    You("were hosed!");
+	    pline("You were hosed!");
 	mark_synch();	/* flush buffered screen output */
 	buf[0] = '\0';
 	killer_format = KILLED_BY_AN;
@@ -602,7 +602,7 @@ void done(int how) {
 	    }
 #ifdef WIZARD
 	    if (wizard) {
-		You("are a very tricky wizard, it seems.");
+		pline("You are a very tricky wizard, it seems.");
 		return;
 	    }
 #endif
@@ -629,7 +629,7 @@ void done(int how) {
 	if (how == STONING && uamul && uamul->otyp == AMULET_VERSUS_STONE) {
 		pline("But wait...");
 		makeknown(AMULET_VERSUS_STONE);
-		Your("medallion %s%s!",
+		pline("Your medallion %s%s!",
 		      !Blind ? "begins to glow" : "feels warm",
 		      uamul->cursed ? " and disintegrates" : "");
 		/* blessed -> uncursed -> cursed -> gone */
@@ -651,11 +651,11 @@ void done(int how) {
 	if (Lifesaved && (how <= GENOCIDED)) {
 		pline("But wait...");
 		makeknown(AMULET_OF_LIFE_SAVING);
-		Your("medallion %s!",
+		pline("Your medallion %s!",
 		      !Blind ? "begins to glow" : "feels warm");
-		if (how == CHOKING) You("vomit ...");
-		You_feel("much better!");
-		pline_The("medallion crumbles to dust!");
+		if (how == CHOKING) pline("You vomit ...");
+		pline("You feel much better!");
+		pline("The medallion crumbles to dust!");
 		/* KMH -- Bullet-proofing */
 		if (uamul)
 			useup(uamul);

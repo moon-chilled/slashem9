@@ -247,7 +247,7 @@ boolean fleemsg;
 		expels(mtmp, mtmp->data, true);
 	    else if (!sticks(youmonst.data)) {
 		unstuck(mtmp);	/* monster lets go when fleeing */
-		You("get released!");
+		pline("You get released!");
 	    }
 	}
 
@@ -439,7 +439,7 @@ dochug (struct monst *mtmp)
 		if (canseemon(mtmp))
 			pline("%s concentrates.", Monnam(mtmp));
 		if (distu(mtmp->mx, mtmp->my) > BOLT_LIM * BOLT_LIM) {
-			You("sense a faint wave of psychic energy.");
+			pline("You sense a faint wave of psychic energy.");
 			goto toofar;
 		}
 		pline("A wave of psychic energy pours over you!");
@@ -1114,7 +1114,7 @@ postmov:
 			} else {
 			    if (flags.verbose) {
 				if (canseeit)
-				   You("see a door unlock and open.");
+				   pline("You see a door unlock and open.");
 				else if (flags.soundok)
 				   You_hear("a door unlock and open.");
 			    }
@@ -1131,7 +1131,7 @@ postmov:
 			} else {
 			    if (flags.verbose) {
 				if (canseeit)
-				     You("see a door open.");
+				     pline("You see a door open.");
 				else if (flags.soundok)
 				     You_hear("a door open.");
 			    }
@@ -1155,7 +1155,7 @@ postmov:
 			} else {
 			    if (flags.verbose) {
 				if (canseeit)
-				    You("see a door crash open.");
+				    pline("You see a door crash open.");
 				else if (flags.soundok)
 				    You_hear("a door crash open.");
 			    }

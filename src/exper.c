@@ -252,7 +252,7 @@ void pluslvl(boolean incr /* true iff via incremental experience growth
 				(false for potion of gain level */) {
 	int num;
 
-	if (!incr) You_feel("more experienced.");
+	if (!incr) pline("You feel more experienced.");
 	num = newhp();
 	u.uhpmax += num;
 	u.uhp += num;

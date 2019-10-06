@@ -96,7 +96,7 @@ static void
 give_may_advance_msg(skill)
 int skill;
 {
-	You_feel("more %s in your %sskills.",
+	pline("You feel more %s in your %sskills.",
 	    !P_RESTRICTED(skill) ? "confident" : "comfortable",
 		skill == P_NONE ?
 			"" :
@@ -1022,13 +1022,13 @@ int skill;
     P_SKILL(skill)++;
     u.skill_record[u.skills_advanced++] = skill;
     /* subtly change the advance message to indicate no more advancement */
-    You("are now %s skilled in %s.",
+    pline("You are now %s skilled in %s.",
 	P_SKILL(skill) >= P_MAX_SKILL(skill) ? "most" : "more",
 	P_NAME(skill));
     if (!tech_known(T_DISARM) && (P_SKILL(skill) == P_SKILLED) &&
     		skill <= P_LAST_WEAPON && skill != P_WHIP) {
     	learntech(T_DISARM, FROMOUTSIDE, 1);
-    	You("learn how to perform disarm!");
+    	pline("You learn how to perform disarm!");
     }
 }
 
@@ -1247,7 +1247,7 @@ int enhance_skill(boolean want_dump)
 		/* check for more skills able to advance, if so then .. */
 		for (n = i = 0; i < P_NUM_SKILLS; i++) {
 		    if (can_advance(i, speedy)) {
-			if (!speedy) You_feel("you could be more dangerous!");
+			if (!speedy) pline("You feel you could be more dangerous!");
 			n++;
 			break;
 		    }
@@ -1703,7 +1703,7 @@ practice()
 		  you won't be wasting your time ;B*/
 		return 1; /* still busy */
     }
-	You("finish your practice session.");
+	pline("You finish your practice session.");
 	use_skill(weapon_type(uwep),
 	    practice_needed_to_advance(P_SKILL(weapon_type(uwep)),weapon_type(uwep))/3);
 	return 0;
@@ -1718,17 +1718,17 @@ practice_weapon (void)
 #endif
 	    ) {
 		if (uwep)
-		    You("start practicing intensely with %s",doname(uwep));
+		    pline("You start practicing intensely with %s",doname(uwep));
 		else
-		    You("start practicing intensely with your %s %s.",
+		    pline("You start practicing intensely with your %s %s.",
 		            uarmg ? "gloved" : "bare",      /* Del Lamb */
 		makeplural(body_part(HAND)));
 
 		delay=-10;
 		set_occupation(practice, "practicing", 0);
 	} else if (P_SKILL(weapon_type(uwep)) >= P_MAX_SKILL(weapon_type(uwep)))
-		You("cannot increase your skill in %s.", P_NAME(weapon_type(uwep)));
-	else You("cannot learn much about %s right now.",
+		pline("You cannot increase your skill in %s.", P_NAME(weapon_type(uwep)));
+	else pline("You cannot learn much about %s right now.",
                 P_NAME(weapon_type(uwep)));
 
 }

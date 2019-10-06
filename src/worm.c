@@ -367,7 +367,7 @@ cutworm(worm, x, y, weap)
 	if (flags.mon_moving)
 	    pline("Part of the tail of %s is cut off.", mon_nam(worm));
 	else
-	    You("cut part of the tail off of %s.", mon_nam(worm));
+	    pline("You cut part of the tail off of %s.", mon_nam(worm));
 	toss_wsegs(new_tail, true);
 	if (worm->mhp > 1) worm->mhp /= 2;
 	return 1;
@@ -401,7 +401,7 @@ cutworm(worm, x, y, weap)
     if (flags.mon_moving)
 	pline("%s is cut in half.", Monnam(worm));
     else
-	You("cut %s in half.", mon_nam(worm));
+	pline("You cut %s in half.", mon_nam(worm));
 
     return 1;
 }

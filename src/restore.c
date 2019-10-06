@@ -384,7 +384,7 @@ unsigned int *stuckid, *steedid;	/* STEED */
 #endif
 	if(u.uhp <= 0 && (!Upolyd || u.mh <= 0)) {
 	    u.ux = u.uy = 0;	/* affects pline() [hence You()] */
-	    You("were not healthy enough to survive restoration.");
+	    pline("You were not healthy enough to survive restoration.");
 	    /* wiz1_level.dlevel is used by mklev.c to see if lots of stuff is
 	     * uninitialized, so we only have to set it and not the other stuff.
 	     */
@@ -621,7 +621,7 @@ int dorecover (int fd) {
 	 * Side effect of this is that you don't see this message until after the
 	 * all the levels are loaded
 	 */
-	You("return to level %d in %s%s.",
+	pline("You return to level %d in %s%s.",
 		depth(&u.uz), dungeons[u.uz.dnum].dname,
 		flags.debug ? " while in debug mode" :
 		flags.explore ? " while in explore mode" : "");

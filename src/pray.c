@@ -276,28 +276,28 @@ int trouble;
 
 	switch (trouble) {
 	    case TROUBLE_STONED:
-		    You_feel("more limber.");
+		    pline("You feel more limber.");
 		    Stoned = 0;
 		    flags.botl = 1;
 		    delayed_killer = 0;
 		    break;
 	    case TROUBLE_SLIMED:
-		    pline_The("slime disappears.");
+		    pline("The slime disappears.");
 		    Slimed = 0;
 		    flags.botl = 1;
 		    delayed_killer = 0;
 		    break;
 	    case TROUBLE_STRANGLED:
 		    if (uamul && uamul->otyp == AMULET_OF_STRANGULATION) {
-			Your("amulet vanishes!");
+			pline("Your amulet vanishes!");
 			useup(uamul);
 		    }
-		    You("can breathe again.");
+		    pline("You can breathe again.");
 		    Strangled = 0;
 		    flags.botl = 1;
 		    break;
 	    case TROUBLE_LAVA:
-		    You("are back on solid ground.");
+		    pline("You are back on solid ground.");
 		    /* teleport should always succeed, but if not,
 		     * just untrap them.
 		     */
@@ -308,19 +308,19 @@ int trouble;
 		    losestr(-1);
 		    /* fall into... */
 	    case TROUBLE_HUNGRY:
-		    Your("%s feels content.", body_part(STOMACH));
+		    pline("Your %s feels content.", body_part(STOMACH));
 		    init_uhunger ();
 		    flags.botl = 1;
 		    break;
 	    case TROUBLE_SICK:
-		    You_feel("better.");
+		    pline("You feel better.");
 		    make_sick(0L, NULL, false, SICK_ALL);
 		    break;
 	    case TROUBLE_HIT:
 		    /* "fix all troubles" will keep trying if hero has
 		       5 or less hit points, so make sure they're always
 		       boosted to be more than that */
-		    You_feel("much better.");
+		    pline("You feel much better.");
 		    if (Upolyd) {
 			u.mhmax += rnd(5);
 			if (u.mhmax <= 5) u.mhmax = 5+1;
@@ -336,7 +336,7 @@ int trouble;
 		    flags.botl = 1;
 		    break;
 	    case TROUBLE_STUCK_IN_WALL:
-		    Your("surroundings change.");
+		    pline("Your surroundings change.");
 		    /* no control, but works on no-teleport levels */
 		    safe_teleds(false);
 		    break;
@@ -356,7 +356,7 @@ int trouble;
 		    }
 		    if (Upolyd && nohands(youmonst.data)) {
 			if (!Unchanging) {
-			    Your("shape becomes uncertain.");
+			    pline("Your shape becomes uncertain.");
 			    rehumanize();  /* "You return to {normal} form." */
 			} else if ((otmp = unchanger()) != 0 && otmp->cursed) {
 			    /* otmp is an amulet of unchanging */
@@ -375,7 +375,7 @@ int trouble;
 	/*
 	 */
 	    case TROUBLE_PUNISHED:
-		    Your("chain disappears.");
+		    pline("Your chain disappears.");
 		    unpunish();
 		    break;
 	    case TROUBLE_FUMBLING:
@@ -397,7 +397,7 @@ decurse:
 		    }
 		    uncurse(otmp);
 		    if (!Blind) {
-			Your("%s %s.", what ? what :
+			pline("Your %s %s.", what ? what :
 				(const char *)aobjnam(otmp, "softly glow"),
 			     hcolor(NH_AMBER));
 			otmp->bknown = true;
@@ -408,7 +408,7 @@ decurse:
 		    if (Hallucination)
 			pline("There's a tiger in your tank.");
 		    else
-			You_feel("in good health again.");
+			pline("You feel in good health again.");
 		    for(i=0; i<A_MAX; i++) {
 			if(ABASE(i) < AMAX(i)) {
 				ABASE(i) = AMAX(i);
@@ -422,7 +422,7 @@ decurse:
 	    	    	int num_eyes = eyecount(youmonst.data);
 		    const char *eye = body_part(EYE);
 
-			Your("%s feel%s better.",
+			pline("Your %s feel%s better.",
 			 (num_eyes == 1) ? eye : makeplural(eye),
 			     (num_eyes == 1) ? "s" : "");
 		    u.ucreamed = 0;
@@ -443,7 +443,7 @@ decurse:
 		    make_hallucinated(0L,false,0L);
 		    break;
 	    case TROUBLE_LOW_ENERGY:
-		    You_feel("revitalised.");
+		    pline("You feel revitalised.");
 		    u.uen = u.uenmax;
 		    flags.botl = 1;
 		    break;
@@ -525,7 +525,7 @@ aligntyp resp_god;
 	    if (!Disint_resistance)
 		fry_by_god(resp_god);
 	    else {
-		You("bask in its %s glow for a minute...", NH_BLACK);
+		pline("You bask in its %s glow for a minute...", NH_BLACK);
 		godvoice(resp_god, "You have further angered me!");
 	    }
 	    if (Is_astralevel(&u.uz) || Is_sanctum(&u.uz)) {
@@ -557,7 +557,7 @@ aligntyp resp_god;
 {
 	char killerbuf[64];
 
-	You("fry to a crisp.");
+	pline("You fry to a crisp.");
 	killer_format = KILLED_BY;
 	sprintf(killerbuf, "the wrath of %s", align_gname(resp_god));
 	killer = killerbuf;
@@ -585,7 +585,7 @@ aligntyp resp_god;
 
 	switch (rn2(maxanger)) {
 	    case 0:
-	    case 1:	You_feel("that %s is %s.", align_gname(resp_god),
+	    case 1:	pline("You feel that %s is %s.", align_gname(resp_god),
 			    Hallucination ? "bummed" : "displeased");
 			break;
 	    case 2:
@@ -725,7 +725,7 @@ gcrownu()
 	if (class_gift != STRANGE_OBJECT) {
 	    ;		/* already got bonus above */
 	} else if (obj && obj->otyp == LONG_SWORD && !obj->oartifact) {
-	    if (!Blind) Your("sword shines brightly for a moment.");
+	    if (!Blind) pline("Your sword shines brightly for a moment.");
 	    obj = oname(obj, artiname(ART_EXCALIBUR));
 	    if (obj && obj->oartifact == ART_EXCALIBUR) u.ugifts++;
 	}
@@ -738,7 +738,7 @@ gcrownu()
 	if (class_gift != STRANGE_OBJECT) {
 	    ;		/* already got bonus above */
 	} else if (in_hand) {
-	    Your("%s goes snicker-snack!", xname(obj));
+	    pline("Your %s goes snicker-snack!", xname(obj));
 	    obj->dknown = true;
 	} else if (!already_exists) {
 	    obj = mksobj(LONG_SWORD, false, false);
@@ -761,7 +761,7 @@ gcrownu()
 	if (class_gift != STRANGE_OBJECT) {
 	    ;		/* already got bonus above */
 	} else if (in_hand) {
-	    Your("%s hums ominously!", swordbuf);
+	    pline("Your %s hums ominously!", swordbuf);
 	    obj->dknown = true;
 	} else if (!already_exists) {
 	    obj = mksobj(RUNESWORD, false, false);
@@ -797,7 +797,7 @@ gcrownu()
 	unrestrict_weapon_skill(weapon_type(obj));
     } else if (class_gift == STRANGE_OBJECT) {
 	/* opportunity knocked, but there was nobody home... */
-	You_feel("unworthy.");
+	pline("You feel unworthy.");
     }
     update_inventory();
     return;
@@ -811,7 +811,7 @@ pleased(g_align)
 	int trouble = in_trouble();	/* what's your worst difficulty? */
 	int pat_on_head = 0, kick_on_butt;
 
-	You_feel("that %s is %s.", align_gname(g_align),
+	pline("You feel that %s is %s.", align_gname(g_align),
 	    u.ualign.record >= DEVOUT ?
 	    Hallucination ? "pleased as punch" : "well-pleased" :
 	    u.ualign.record >= STRIDENT ?
@@ -887,19 +887,19 @@ pleased(g_align)
 		    uncurse(uwep);
 		    uwep->bknown = true;
 		    if (!Blind)
-			Your("%s %s%s.", aobjnam(uwep, "softly glow"),
+			pline("Your %s %s%s.", aobjnam(uwep, "softly glow"),
 			     hcolor(NH_AMBER), repair_buf);
-		    else You_feel("the power of %s over your %s.",
+		    else pline("You feel the power of %s over your %s.",
 			u_gname(), xname(uwep));
 		    *repair_buf = '\0';
 		} else if (!uwep->blessed) {
 		    bless(uwep);
 		    uwep->bknown = true;
 		    if (!Blind)
-			Your("%s with %s aura%s.",
+			pline("Your %s with %s aura%s.",
 			     aobjnam(uwep, "softly glow"),
 			     an(hcolor(NH_LIGHT_BLUE)), repair_buf);
-		    else You_feel("the blessing of %s over your %s.",
+		    else pline("You feel the blessing of %s over your %s.",
 			u_gname(), xname(uwep));
 		    *repair_buf = '\0';
 		}
@@ -911,7 +911,7 @@ pleased(g_align)
 		    /* only give this message if we didn't just bless
 		       or uncurse (which has already given a message) */
 		    if (*repair_buf)
-			Your("%s as good as new!",
+			pline("Your %s as good as new!",
 			     aobjnam(uwep, Blind ? "feel" : "look"));
 		}
 		update_inventory();
@@ -938,7 +938,7 @@ pleased(g_align)
 	    /* Otherwise, falls into next case */
 	case 2:
 	    if (!Blind)
-		You("are surrounded by %s glow.", an(hcolor(NH_GOLDEN)));
+		pline("You are surrounded by %s glow.", an(hcolor(NH_GOLDEN)));
 	    /* if any levels have been lost (and not yet regained),
 	       treat this effect like blessed full healing */
 	    if (u.ulevel < u.ulevelmax) {
@@ -961,14 +961,14 @@ pleased(g_align)
 	    int any = 0;
 
 	    if (Blind)
-		You_feel("the power of %s.", u_gname());
-	    else You("are surrounded by %s aura.",
+		pline("You feel the power of %s.", u_gname());
+	    else pline("You are surrounded by %s aura.",
 		     an(hcolor(NH_LIGHT_BLUE)));
 	    for(otmp=invent; otmp; otmp=otmp->nobj) {
 		if (otmp->cursed) {
 		    uncurse(otmp);
 		    if (!Blind) {
-			Your("%s %s.", aobjnam(otmp, "softly glow"),
+			pline("Your %s %s.", aobjnam(otmp, "softly glow"),
 			     hcolor(NH_AMBER));
 			otmp->bknown = true;
 			++any;
@@ -1088,7 +1088,7 @@ godvoice(g_align, words)
     else
 	words = "";
 
-    pline_The("voice of %s %s: %s%s%s", align_gname(g_align),
+    pline("The voice of %s %s: %s%s%s", align_gname(g_align),
 	  godvoices[rn2(SIZE(godvoices))], quot, words, quot);
 }
 
@@ -1120,18 +1120,18 @@ struct obj *otmp;
     if (Hallucination)
 	switch (rn2(3)) {
 	    case 0:
-		Your("sacrifice sprouts wings and a propeller and roars away!");
+		pline("Your sacrifice sprouts wings and a propeller and roars away!");
 		break;
 	    case 1:
-		Your("sacrifice puffs up, swelling bigger and bigger, and pops!");
+		pline("Your sacrifice puffs up, swelling bigger and bigger, and pops!");
 		break;
 	    case 2:
-		Your("sacrifice collapses into a cloud of dancing particles and fades away!");
+		pline("Your sacrifice collapses into a cloud of dancing particles and fades away!");
 		break;
 	}
     else if (Blind && u.ualign.type == A_LAWFUL)
-	Your("sacrifice disappears!");
-    else Your("sacrifice is consumed in a %s!",
+	pline("Your sacrifice disappears!");
+    else pline("Your sacrifice is consumed in a %s!",
 	      u.ualign.type == A_LAWFUL ? "flash of light" : "burst of flame");
     if (carried(otmp)) useup(otmp);
     else useupf(otmp, 1L);
@@ -1259,7 +1259,7 @@ dosacrifice (void)
 	}
     }
     if (!orac && (!on_altar() || u.uswallow)) {
-	You("are not standing on an altar.");
+	pline("You are not standing on an altar.");
 	return 0;
     }
 
@@ -1287,7 +1287,7 @@ dosacrifice (void)
     /* sacrificing the eye and/or hand of Vecna is a special case */
     if (otmp->oartifact == ART_EYE_OF_THE_BEHOLDER ||
 	    otmp->oartifact == ART_HAND_OF_VECNA) {
-	You("offer this evil thing to %s...", a_gname());
+	pline("You offer this evil thing to %s...", a_gname());
 	value = MAXVALUE; /* holy crap! */
 	u.uconduct.gnostic++;	/* KMH, ethics */
     }
@@ -1312,7 +1312,7 @@ dosacrifice (void)
 
 	if (your_race(ptr)) {
 	    if (is_demon(youmonst.data) || Race_if(PM_HUMAN_WEREWOLF)) {
-		You("find the idea very satisfying.");
+		pline("You find the idea very satisfying.");
 		exercise(A_WIS, true);
 	    } else if (u.ualign.type != A_CHAOTIC) {
 		    pline("You'll regret this infamous offense!");
@@ -1323,7 +1323,7 @@ dosacrifice (void)
 		/* curse the lawful/neutral altar */
 		int race = mrace2race(ptr->mflags2);
 		if (race != ROLE_NONE)
-		    pline_The("altar is stained with %s blood.",
+		    pline("The altar is stained with %s blood.",
 			    races[race].adj);
 		else
 		    impossible("Bad monster race?");
@@ -1348,7 +1348,7 @@ dosacrifice (void)
 		    demonless_msg = "cloud dissipates";
 		} else {
 		    /* either you're chaotic or altar is Moloch's or both */
-		    pline_The("blood covers the altar, and a dark cloud forms!");
+		    pline("The blood covers the altar, and a dark cloud forms!");
 		    change_luck(altaralign == A_NONE ? -2 : 2);
 		    demonless_msg = "blood coagulates";
 		}
@@ -1356,7 +1356,7 @@ dosacrifice (void)
 		    (dmon = makemon(&mons[pm], u.ux, u.uy, NO_MM_FLAGS))) {
 		    /* here to be seen */
 		    dmon->minvis = false;
-		    You("have summoned %s!", a_monnam(dmon));
+		    pline("You have summoned %s!", a_monnam(dmon));
 		    if (sgn(u.ualign.type) == sgn(dmon->data->maligntyp)) {
 			dmon->mpeaceful = true;
 			} else if (is_dprince(dmon->data)) {
@@ -1373,7 +1373,7 @@ dosacrifice (void)
 			       break;
 			  case 2:
 			  case 3:
-			       You("are terrified, and unable to move.");
+			       pline("You are terrified, and unable to move.");
 			       nomul(-3);
 			       nomovemsg = 0;
 			       break;
@@ -1383,7 +1383,7 @@ dosacrifice (void)
 			  break;
 		       }
 		    }
-		} else pline_The("%s.", demonless_msg);
+		} else pline("The %s.", demonless_msg);
 	    }
 
 	    if (u.ualign.type != A_CHAOTIC) {
@@ -1422,8 +1422,8 @@ dosacrifice (void)
 		/* If different from altar, and altar is same as yours, */
 		/* it's a very good action */
 		if (u.ualign.record < ALIGNLIM)
-		    You_feel("appropriately %s.", align_str(u.ualign.type));
-		else You_feel("you are thoroughly on the right path.");
+		    pline("You feel appropriately %s.", align_str(u.ualign.type));
+		else pline("You feel you are thoroughly on the right path.");
 		adjalign(5);
 #ifdef NOARTIFACTWISH
 		u.usacrifice += 5;
@@ -1442,9 +1442,9 @@ dosacrifice (void)
     if (otmp->otyp == AMULET_OF_YENDOR) {
 	if (!Is_astralevel(&u.uz)) {
 	    if (Hallucination)
-		    You_feel("homesick.");
+		    pline("You feel homesick.");
 	    else
-		    You_feel("an urge to return to the surface.");
+		    pline("You feel an urge to return to the surface.");
 	    return 1;
 	} else {
 	    /* The final Test.	Did you win? */
@@ -1452,7 +1452,7 @@ dosacrifice (void)
 	    u.uevent.ascended = 1;
 	    if(carried(otmp)) useup(otmp); /* well, it's gone now */
 	    else useupf(otmp, 1L);
-	    You("offer the Amulet of Yendor to %s...", a_gname());
+	    pline("You offer the Amulet of Yendor to %s...", a_gname());
 	    if (u.ualign.type != altaralign) {
 		/* And the opposing team picks you up and
 		   carries you off on their shoulders */
@@ -1473,7 +1473,7 @@ pline("An invisible choir sings, and you are bathed in radiance...");
 		godvoice(altaralign, "Congratulations, mortal!");
 		display_nhwindow(WIN_MESSAGE, false);
 verbalize("In return for thy service, I grant thee the gift of Immortality!");
-		You("ascend to the status of Demigod%s...",
+		pline("You ascend to the status of Demigod%s...",
 		    flags.female ? "dess" : "");
 		done(ASCENDED);
 	    }
@@ -1484,7 +1484,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 	    if (flags.soundok)
 		You_hear("a nearby thunderclap.");
 	    if (!otmp->known) {
-		You("realize you have made a %s.",
+		pline("You realize you have made a %s.",
 		    Hallucination ? "boo-boo" : "mistake");
 		otmp->known = true;
 		change_luck(-1);
@@ -1512,7 +1512,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 	 * REAL BAD NEWS!!! High altars cannot be converted.  Even an attempt
 	 * gets the god who owns it truely pissed off.
 	 */
-	You_feel("the air around you grow charged...");
+	pline("You feel the air around you grow charged...");
 	pline("Suddenly, you realize that %s has noticed you...", a_gname());
 	godvoice(altaralign, "So, mortal!  You dare desecrate my High Temple!");
 	/* Throw everything we have at the player */
@@ -1531,7 +1531,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 	    if (ugod_is_angry() || (altaralign == A_NONE && Inhell)) {
 		if(u.ualignbase[A_CURRENT] == u.ualignbase[A_ORIGINAL] &&
 		   altaralign != A_NONE) {
-		    You("have a strong feeling that %s is angry...", u_gname());
+		    pline("You have a strong feeling that %s is angry...", u_gname());
 		    consume_offering(otmp);
 		    pline("%s accepts your allegiance.", a_gname());
 
@@ -1543,7 +1543,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		    u.ublessed = 0;
 		    flags.botl = 1;
 
-		    You("have a sudden sense of a new direction.");
+		    pline("You have a sudden sense of a new direction.");
 		    /* Beware, Conversion is costly */
 		    change_luck(-3);
 		    u.ublesscnt += 300;
@@ -1563,14 +1563,14 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		return 1;
 	    } else {
 		consume_offering(otmp);
-		You("sense a conflict between %s and %s.",
+		pline("You sense a conflict between %s and %s.",
 		    u_gname(), a_gname());
 		if (rn2(8 + u.ulevel) > 5) {
 		    struct monst *pri;
-		    You_feel("the power of %s increase.", u_gname());
+		    pline("You feel the power of %s increase.", u_gname());
 		    if (rnl(u.ulevel) > 3) {
 		    	/* KMH -- Only a chance of this happening */
-				You("feel %s is very angry at you!", a_gname());
+				pline("You feel %s is very angry at you!", a_gname());
 				summon_minion(altaralign, false);
 				summon_minion(altaralign, false);
 		    }
@@ -1586,7 +1586,7 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		    levl[u.ux][u.uy].altarmask =
 			levl[u.ux][u.uy].altarmask | (Align2amask(u.ualign.type));
 		    if (!Blind)
-			pline_The("altar glows %s.",
+			pline("The altar glows %s.",
 			      hcolor(
 			      u.ualign.type == A_LAWFUL ? NH_WHITE :
 			      u.ualign.type ? NH_BLACK : (const char *)"gray"));
@@ -1634,14 +1634,14 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		}
 	    } else { /* not satisfied yet */
 		if (Hallucination)
-		    pline_The("gods seem tall.");
-		else You("have a feeling of inadequacy.");
+		    pline("The gods seem tall.");
+		else pline("You have a feeling of inadequacy.");
 	    }
 	} else if(ugod_is_angry()) {
 	    if(value > MAXVALUE) value = MAXVALUE;
 	    if(value > -u.ualign.record) value = -u.ualign.record;
 	    adjalign(value);
-	    You_feel("partially absolved.");
+	    pline("You feel partially absolved.");
 	} else if (u.ublesscnt > 0) {
 	    u.ublesscnt -=
 		((value * (u.ualign.type == A_CHAOTIC ? 500 : 300)) / MAXVALUE);
@@ -1649,15 +1649,15 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 	    if(u.ublesscnt != saved_cnt) {
 		if (u.ublesscnt) {
 		    if (Hallucination)
-			You("realize that the gods are not like you and I.");
+			pline("You realize that the gods are not like you and I.");
 		    else
-			You("have a hopeful feeling.");
+			pline("You have a hopeful feeling.");
 		    if ((int)u.uluck < 0) change_luck(1);
 		} else {
 		    if (Hallucination)
 			pline("Overall, there is a smell of fried onions.");
 		    else
-			You("have a feeling of reconciliation.");
+			pline("You have a feeling of reconciliation.");
 		    if ((int)u.uluck < 0) u.uluck = 0;
 		}
 	    }
@@ -1708,10 +1708,10 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 	    if ((int)u.uluck < 0) u.uluck = 0;
 	    if (u.uluck != saved_luck) {
 		if (Blind)
-		    You("think something brushed your %s.", body_part(FOOT));
-		else You(Hallucination ?
-		    "see crabgrass at your %s.  A funny thing in a dungeon." :
-		    "glimpse a four-leaf clover at your %s.",
+		    pline("You think something brushed your %s.", body_part(FOOT));
+		else pline(Hallucination ?
+		    "You see crabgrass at your %s.  A funny thing in a dungeon." :
+		    "You glimpse a four-leaf clover at your %s.",
 		    makeplural(body_part(FOOT)));
 	    }
 	}
@@ -1733,13 +1733,13 @@ boolean praying;	/* false means no messages should be given */
 
     if (is_demon(youmonst.data) && (p_aligntyp != A_CHAOTIC)) {
 	if (praying)
-	    pline_The("very idea of praying to a %s god is repugnant to you.",
+	    pline("The very idea of praying to a %s god is repugnant to you.",
 		  p_aligntyp ? "lawful" : "neutral");
 	return false;
     }
 
     if (praying)
-	You("begin praying to %s.", align_gname(p_aligntyp));
+	pline("You begin praying to %s.", align_gname(p_aligntyp));
 
     if (u.ualign.type && u.ualign.type == -p_aligntyp)
 	alignment = -u.ualign.record;		/* Opposite alignment altar */
@@ -1818,7 +1818,7 @@ dopray (void)
 
 	/* if you've been true to your god you can't die while you pray */
     if(p_type == 3 && !Inhell) {
-	if (!Blind) You("are surrounded by a shimmering light.");
+	if (!Blind) pline("You are surrounded by a shimmering light.");
 	u.uinvulnerable = true;
     }
     return 1;
@@ -1835,7 +1835,7 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
 		 alignment == A_LAWFUL ?
 		 "Vile creature, thou durst call upon me?" :
 		 "Walk no more, perversion of nature!");
-	You_feel("like you are falling apart.");
+	pline("You feel like you are falling apart.");
 	if (Upolyd) {
 	    /* KMH, balance patch -- Gods have mastery over unchanging */
 	rehumanize();
@@ -1900,7 +1900,7 @@ doturn (void)
 			    return spelleffects(sp_no, true);
 		}
 
-		You("don't know how to turn undead!");
+		pline("You don't know how to turn undead!");
 		return 0;
 	}
 	return turn_undead();
@@ -2170,7 +2170,7 @@ aligntyp alignment;
 		    bless(otmp);
 		    otmp->bknown = true;
 		    if (!Blind)
-			    Your("%s %s.",
+			    pline("Your %s %s.",
 				 what ? what :
 				 (const char *)aobjnam (otmp, "softly glow"),
 				 hcolor(NH_AMBER));

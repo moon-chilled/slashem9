@@ -28,7 +28,7 @@ void moveloop(void) {
 
 	flags.moonphase = phase_of_the_moon();
 	if (flags.moonphase == FULL_MOON) {
-		You("are lucky!  Full moon tonight.");
+		pline("You are lucky!  Full moon tonight.");
 		change_luck(1);
 	} else if(flags.moonphase == NEW_MOON) {
 		pline("Be careful!  New moon tonight.");
@@ -240,7 +240,7 @@ void moveloop(void) {
 							} else if (!Upolyd && u.uhp > 1) {
 								u.uhp--;
 							} else {
-								You("pass out from exertion!");
+								pline("You pass out from exertion!");
 								exercise(A_CON, false);
 								fall_asleep(-10, false);
 							}
@@ -420,7 +420,7 @@ void moveloop(void) {
 				if(u.utrap < 1<<8) {
 					killer_format = KILLED_BY;
 					killer = "molten lava";
-					You("sink below the surface and die.");
+					pline("You sink below the surface and die.");
 					done(DISSOLVED);
 				} else if(didmove && !u.umoved) {
 					Norep("You sink deeper into the lava.");
@@ -482,7 +482,7 @@ void moveloop(void) {
 void stop_occupation(void) {
 	if(occupation) {
 		if (!maybe_finished_meal(true))
-		    You("stop %s.", occtxt);
+		    pline("You stop %s.", occtxt);
 		occupation = 0;
 		flags.botl = 1; /* in case u.uhs changed */
 /* fainting stops your occupation, there's no reason to sync.

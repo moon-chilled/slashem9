@@ -533,12 +533,12 @@ do_explode(
 		if ((type >= 0 || adtyp == AD_PHYS || olet == WEAPON_CLASS) &&
 		    /* gas spores */
 				flags.verbose && olet != SCROLL_CLASS)
-			You("are caught in the %s!", str);
+			pline("You are caught in the %s!", str);
 		/* do property damage first, in case we end up leaving bones */
 		if (adtyp == AD_FIRE) burn_away_slime();
 		if (Invulnerable) {
 		    damu = 0;
-		    You("are unharmed!");
+		    pline("You are unharmed!");
 		} else if (Half_physical_damage && adtyp == AD_PHYS)
 		    damu = (damu+1) / 2;
 		if (adtyp == AD_FIRE) (void) burnarmor(&youmonst);

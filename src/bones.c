@@ -301,7 +301,7 @@ void savebones(struct obj *corpse) {
 		}
 		mtmp = christen_monst(mtmp, plname);
 		newsym(u.ux, u.uy);
-		Your("body rises from the dead as %s...",
+		pline("Your body rises from the dead as %s...",
 			an(mons[u.ugrave_arise].mname));
 		display_nhwindow(WIN_MESSAGE, false);
 		drop_upon_death(mtmp, NULL);

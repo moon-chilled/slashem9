@@ -235,9 +235,9 @@ ask_again:
 					!strcmp(action,"take out") ?
 							    "inside" : "";
 			    if (*where)
-				There("are no %c's %s.", sym, where);
+				pline("There are no %c's %s.", sym, where);
 			    else
-				You("have no %c's.", sym);
+				pline("You have no %c's.", sym);
 			    not_everything = true;
 			}
 		    }
@@ -422,7 +422,7 @@ pickup (
 		}
 		if (notake(youmonst.data)) {
 		    if (!autopickup)
-			You("are physically incapable of picking anything up.");
+			pline("You are physically incapable of picking anything up.");
 		    else
 			check_here(false);
 		    return 0;
@@ -508,7 +508,7 @@ menu_pickup:
 	    } else if (ct >= 2) {
 		int via_menu = 0;
 
-		There("are %s objects here.",
+		pline("There are %s objects here.",
 		      (ct <= 10) ? "several" : "many");
 		if (!query_classes(oclasses, &selective, &all_of_a_type,
 				   "pick up", objchain,
@@ -1091,7 +1091,7 @@ int *wt_before, *wt_after;
     /* we can carry qq of them */
     if (qq > 0) {
 	if (qq < count)
-	    You("can only %s %s of the %s %s.",
+	    pline("You can only %s %s of the %s %s.",
 		verb, (qq == 1L) ? "one" : "some", obj_nambuf, where);
 	*wt_after = wt;
 	return qq;
@@ -1111,7 +1111,7 @@ int *wt_before, *wt_after;
 	prefx2 = "is too heavy for you to ";
 	suffx  = "";
     }
-    There("%s %s %s, but %s%s%s%s.",
+    pline("There %s %s %s, but %s%s%s%s.",
 	  otense(obj, "are"), obj_nambuf, where,
 	  prefx1, prefx2, verb, suffx);
 
@@ -1130,7 +1130,7 @@ boolean telekinesis;
     int result, old_wt, new_wt, prev_encumbr, next_encumbr;
 
     if (obj->otyp == BOULDER && In_sokoban(&u.uz)) {
-	You("cannot get your %s around this %s.",
+	pline("You cannot get your %s around this %s.",
 			body_part(HAND), xname(obj));
 	return -1;
     }
@@ -1147,7 +1147,7 @@ boolean telekinesis;
 #else
     } else if (inv_cnt() >= 52 && !merge_choice(invent, obj)) {
 #endif
-	Your("knapsack cannot accommodate any more items.");
+	pline("Your knapsack cannot accommodate any more items.");
 	result = -1;	/* nothing lifted */
     } else {
 	result = 1;
@@ -1260,7 +1260,7 @@ boolean telekinesis;	/* not picking it up directly by hand */
 		      obj->quan, plur(obj->quan), where);
 		return 0;
 	    } else if (gold_capacity < count) {
-		You("can only %s %s of the %ld gold pieces lying %s.",
+		pline("You can only %s %s of the %ld gold pieces lying %s.",
 		    telekinesis ? "acquire" : "carry",
 		    gold_capacity == 1L ? "one" : "some", obj->quan, where);
 		pline("%s %ld gold piece%s.",
@@ -1312,7 +1312,7 @@ boolean telekinesis;	/* not picking it up directly by hand */
 	    if (obj->blessed) obj->blessed = 0;
 	    else if (!obj->spe && !obj->cursed) obj->spe = 1;
 	    else {
-		pline_The("scroll%s %s to dust as you %s %s up.",
+		pline("The scroll%s %s to dust as you %s %s up.",
 			plur(obj->quan), otense(obj, "turn"),
 			telekinesis ? "raise" : "pick",
 			(obj->quan == 1L) ? "it" : "them");
@@ -1395,27 +1395,27 @@ encumber_msg()
 
     if(oldcap < newcap) {
 	switch(newcap) {
-	case 1: Your("movements are slowed slightly because of your load.");
+	case 1: pline("Your movements are slowed slightly because of your load.");
 		break;
-	case 2: You("rebalance your load.  Movement is difficult.");
+	case 2: pline("You rebalance your load.  Movement is difficult.");
 		break;
-	case 3: You("%s under your heavy load.  Movement is very hard.",
+	case 3: pline("You %s under your heavy load.  Movement is very hard.",
 		    stagger(youmonst.data, "stagger"));
 		break;
-	default: You("%s move a handspan with this load!",
+	default: pline("You %s move a handspan with this load!",
 		     newcap == 4 ? "can barely" : "can't even");
 		break;
 	}
 	flags.botl = 1;
     } else if(oldcap > newcap) {
 	switch(newcap) {
-	case 0: Your("movements are now unencumbered.");
+	case 0: pline("Your movements are now unencumbered.");
 		break;
-	case 1: Your("movements are only slowed slightly by your load.");
+	case 1: pline("Your movements are only slowed slightly by your load.");
 		break;
-	case 2: You("rebalance your load.  Movement is still difficult.");
+	case 2: pline("You rebalance your load.  Movement is still difficult.");
 		break;
-	case 3: You("%s under your load.  Movement is still very hard.",
+	case 3: pline("You %s under your load.  Movement is still very hard.",
 		    stagger(youmonst.data, "stagger"));
 		break;
 	}
@@ -1455,11 +1455,11 @@ int x, y;
 			rider_cant_reach(); /* not skilled enough to reach */
 		else
 #endif
-			You("cannot reach the %s.", surface(x, y));
+			pline("You cannot reach the %s.", surface(x, y));
 		return false;
 	} else if (is_pool(x, y) || is_lava(x, y)) {
 		/* at present, can't loot in water even when Underwater */
-		You("cannot loot things that are deep in the %s.",
+		pline("You cannot loot things that are deep in the %s.",
 		    is_lava(x, y) ? "lava" : "water");
 		return false;
 	} else if (nolimbs(youmonst.data)) {
@@ -1507,7 +1507,7 @@ doloot()	/* loot a container on the floor or loot saddle from mon. */
 	return 0;
     }
     if (nohands(youmonst.data)) {
-	You("have no hands!");	/* not `body_part(HAND)' */
+	pline("You have no hands!");	/* not `body_part(HAND)' */
 	return 0;
     }
     cc.x = u.ux; cc.y = u.uy;
@@ -1537,7 +1537,7 @@ lootcont:
 		}
 		if (cobj->otyp == BAG_OF_TRICKS) {
 		    int tmp;
-		    You("carefully open the bag...");
+		    pline("You carefully open the bag...");
 		    pline("It develops a huge set of teeth and bites you!");
 		    tmp = rnd(10);
 		    if (Half_physical_damage) tmp = (tmp+1) / 2;
@@ -1547,7 +1547,7 @@ lootcont:
 		    continue;
 		}
 
-		You("carefully open %s...", the(xname(cobj)));
+		pline("You carefully open %s...", the(xname(cobj)));
 		timepassed |= use_container(&cobj, 0);
 		/* might have triggered chest trap or magic bag explosion */
 		if (multi < 0 || !cobj) return 1;
@@ -1612,7 +1612,7 @@ gotit:
 	    }
 	}
     } else if (IS_GRAVE(levl[cc.x][cc.y].typ)) {
-	You("need to dig up the grave to effectively loot it...");
+	pline("You need to dig up the grave to effectively loot it...");
     }
     /*
      * 3.3.1 introduced directional looting for some things.
@@ -1627,7 +1627,7 @@ gotit:
 	} else
 	    underfoot = false;
 	if (u.dz < 0) {
-	    You("%s to loot on the %s.", dont_find_anything,
+	    pline("You %s to loot on the %s.", dont_find_anything,
 		ceiling(cc.x, cc.y));
 	    timepassed = 1;
 	    return timepassed;
@@ -1642,20 +1642,20 @@ gotit:
 	if (!underfoot) {
 	    if (container_at(cc.x, cc.y, false)) {
 		if (mtmp) {
-		    You_cant("loot anything %sthere with %s in the way.",
+		    pline("You can't loot anything %sthere with %s in the way.",
 			    prev_inquiry ? "else " : "", mon_nam(mtmp));
 		    return timepassed;
 		} else {
-		    You("have to be at a container to loot it.");
+		    pline("You have to be at a container to loot it.");
 		}
 	    } else {
-		You("%s %sthere to loot.", dont_find_anything,
+		pline("You %s %sthere to loot.", dont_find_anything,
 			(prev_inquiry || prev_loot) ? "else " : "");
 		return timepassed;
 	    }
 	}
     } else if (c != 'y' && c != 'n') {
-	You("%s %s to loot.", dont_find_anything,
+	pline("You %s %s to loot.", dont_find_anything,
 		    underfoot ? "here" : "there");
     }
     return timepassed;
@@ -1685,11 +1685,11 @@ boolean *prev_loot;
 		x_monnam(mtmp, ARTICLE_THE, NULL, SUPPRESS_SADDLE, false));
 	if ((c = yn_function(qbuf, ynqchars, 'n')) == 'y') {
 		if (nolimbs(youmonst.data)) {
-		    You_cant("do that without limbs."); /* not body_part(HAND) */
+		    pline("You can't do that without limbs."); /* not body_part(HAND) */
 		    return 0;
 		}
 		if (otmp->cursed) {
-		    You("can't. The saddle seems to be stuck to %s.",
+		    pline("You can't. The saddle seems to be stuck to %s.",
 			x_monnam(mtmp, ARTICLE_THE, NULL,
 				SUPPRESS_SADDLE, false));
 
@@ -1764,7 +1764,7 @@ boolean silent;
 		    MON_NOWEP(mtmp);
 		}
 		if (!silent && canseemon(mtmp))
-		    You("see %s engulfed in an explosion!", mon_nam(mtmp));
+		    pline("You see %s engulfed in an explosion!", mon_nam(mtmp));
 		mtmp->mhp -= d(6,6);
 		if (mtmp->mhp < 1) {
 		    if (!bomb->yours)
@@ -1792,15 +1792,15 @@ boolean silent;
 		if (!silent) {
 		    if (x == u.ux && y == u.uy) {
 			if (underwater && (Flying || Levitation))
-			    pline_The("water boils beneath you.");
+			    pline("The water boils beneath you.");
 			else if (underwater && Wwalking)
-			    pline_The("water erupts around you.");
+			    pline("The water erupts around you.");
 			else pline("A bag explodes under your %s!",
 			  makeplural(body_part(FOOT)));
 		    } else if (cansee(x, y))
-			You(underwater ?
-			    "see a plume of water shoot up." :
-			    "see a bag explode.");
+			pline(underwater ?
+			    "You see a plume of water shoot up." :
+			    "You see a bag explode.");
 		}
 		if (underwater && (Flying || Levitation || Wwalking)) {
 		    if (Wwalking && x == u.ux && y == u.uy) {
@@ -1851,7 +1851,7 @@ struct obj *obj;
 		impossible("<in> no current_container?");
 		return 0;
 	} else if (obj == uball || obj == uchain) {
-		You("must be kidding.");
+		pline("You must be kidding.");
 		return 0;
 	} else if (obj == current_container) {
 		pline("That would be an interesting topological exercise.");
@@ -1862,7 +1862,7 @@ struct obj *obj;
 		return 0;
 	} else if ((obj->otyp == LOADSTONE) && obj->cursed) {
 		obj->bknown = 1;
-	      pline_The("stone%s won't leave your person.", plur(obj->quan));
+	      pline("The stone%s won't leave your person.", plur(obj->quan));
 		return 0;
 	} else if (obj->otyp == AMULET_OF_YENDOR ||
 		   obj->otyp == CANDELABRUM_OF_INVOCATION ||
@@ -1915,11 +1915,11 @@ struct obj *obj;
 		/*
 		 *  xname() uses a static result array.  Save obj's name
 		 *  before current_container's name is computed.  Don't
-		 *  use the result of strcpy() within You() --- the order
+		 *  use the result of strcpy() --- the order
 		 *  of evaluation of the parameters is undefined.
 		 */
 		strcpy(buf, the(xname(obj)));
-		You("cannot fit %s into %s.", buf,
+		pline("You cannot fit %s into %s.", buf,
 		    the(xname(current_container)));
 		return 0;
 	}
@@ -1982,7 +1982,7 @@ struct obj *obj;
 
 	if (current_container) {
 	    strcpy(buf, the(xname(current_container)));
-	    You("put %s into %s.", doname(obj), buf);
+	    pline("You put %s into %s.", doname(obj), buf);
 
 	    /* gold in container always needs to be added to credit */
 	    if (floor_container && obj->oclass == COIN_CLASS)
@@ -2098,7 +2098,7 @@ struct obj *item;
     if (item->dknown)
 	pline("%s %s vanished!", Doname2(item), otense(item, "have"));
     else
-	You("%s %s disappear!", Blind ? "notice" : "see", doname(item));
+	pline("You %s %s disappear!", Blind ? "notice" : "see", doname(item));
 
     if (*u.ushops && (shkp = shop_keeper(*u.ushops)) != 0) {
 	if (held ? (boolean) item->unpaid : costly_spot(u.ux, u.uy))
@@ -2139,7 +2139,7 @@ struct obj *box;
 	livecat->mpeaceful = 1;
 	set_malign(livecat);
 	if (!canspotmon(livecat))
-	    You("think something brushed your %s.", body_part(FOOT));
+	    pline("You think something brushed your %s.", body_part(FOOT));
 	else
 	    pline("%s inside the box is still alive!", Monnam(livecat));
 	christen_monst(livecat, sc);
@@ -2150,7 +2150,7 @@ struct obj *box;
 	    obj_extract_self(deadcat);
 	    add_to_container(box, deadcat);
 	}
-	pline_The("%s inside the box is dead!",
+	pline("The %s inside the box is dead!",
 	    Hallucination ? rndmonnam() : "housecat");
     }
     box->owt = weight(box);
@@ -2188,18 +2188,18 @@ int held;
 
 	emptymsg[0] = '\0';
 	if (nohands(youmonst.data)) {
-		You("have no hands!");	/* not `body_part(HAND)' */
+		pline("You have no hands!");	/* not `body_part(HAND)' */
 		return 0;
 	} else if (!freehand()) {
-		You("have no free %s.", body_part(HAND));
+		pline("You have no free %s.", body_part(HAND));
 		return 0;
 	}
 	if (obj->olocked) {
 	    pline("%s to be locked.", Tobjnam(obj, "seem"));
-	    if (held) You("must put it down to unlock.");
+	    if (held) pline("You must put it down to unlock.");
 	    return 0;
 	} else if (obj->otrapped) {
-	    if (held) You("open %s...", the(xname(obj)));
+	    if (held) pline("You open %s...", the(xname(obj)));
 	    chest_trap(obj, HAND, false);
 	    /* even if the trap fails, you've used up this turn */
 	    if (multi >= 0) {	/* in case we didn't become paralyzed */
@@ -2237,7 +2237,7 @@ int held;
 	    cnt++;
 
 	if (loss)	/* magic bag lost some shop goods */
-	    You("owe %ld %s for lost merchandise.", loss, currency(loss));
+	    pline("You owe %ld %s for lost merchandise.", loss, currency(loss));
 	obj->owt = weight(obj);	/* in case any items were lost */
 
 	if (!cnt)
@@ -2266,7 +2266,7 @@ int held;
 #endif
 		    if (!outokay && !inokay) {
 			pline("%s", emptymsg);
-			You("don't have anything to put in.");
+			pline("You don't have anything to put in.");
 			goto containerdone;
 		    }
 		    menuprompt[0] = '\0';
@@ -2338,7 +2338,7 @@ ask_again2:
 	if (!invent) {
 #endif
 	    /* nothing to put in, but some feedback is necessary */
-	    You("don't have anything to put in.");
+	    pline("You don't have anything to put in.");
 	    goto containerdone;
 	}
 	if (flags.menu_style != MENU_FULL) {

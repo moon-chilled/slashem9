@@ -1275,7 +1275,7 @@ peek_at_iced_corpse_age (struct obj *otmp)
 	age = monstermoves - otmp->age;
 	retval = otmp->age + (age / ROT_ICE_ADJUSTMENT);
 #ifdef DEBUG_EFFECTS
-	pline_The("%s age has ice modifications:otmp->age = %ld, returning %ld.",
+	pline("The %s age has ice modifications:otmp->age = %ld, returning %ld.",
 		s_suffix(doname(otmp)),otmp->age, retval);
 	pline("Effective age of corpse: %ld.",
 		monstermoves - retval);

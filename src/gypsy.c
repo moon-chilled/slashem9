@@ -80,7 +80,7 @@ static long gypsy_bet(struct monst *mtmp, long minimum) {
 #else
  													umoney) {
 #endif
-		You("don't have enough money for the minimum bet.");
+		pline("You don't have enough money for the minimum bet.");
 		return 0L;
 	}
 
@@ -101,7 +101,7 @@ static long gypsy_bet(struct monst *mtmp, long minimum) {
 		return 0L;
 	}
 	if (bet < minimum) {
-		You("must bet at least %ld.", minimum);
+		pline("You must bet at least %ld.", minimum);
 		return 0L;
 	}
 	if (bet > EGYP(mtmp)->credit +
@@ -110,7 +110,7 @@ static long gypsy_bet(struct monst *mtmp, long minimum) {
 #else
 								umoney) {
 #endif
-		You("don't have that much money to bet!");
+		pline("You don't have that much money to bet!");
 		return 0L;
 	}
 	return bet;
@@ -317,7 +317,7 @@ static void fortune(struct monst *mtmp) {
 			incr_itimeout(&HHalf_physical_damage, rn1(500, 500));
 			break;
 		case 7: /* the Hermit */
-			You_feel("like hiding!");
+			pline("You feel like hiding!");
 			incr_itimeout(&HTeleportation, rn1(300, 300));
 			incr_itimeout(&HInvis, rn1(500, 500));
 			newsym(u.ux, u.uy);
@@ -326,7 +326,7 @@ static void fortune(struct monst *mtmp) {
 			if (Hallucination)
 				pline("Where is Vanna?");
 			else
-				You_feel("lucky!");
+				pline("You feel lucky!");
 			if (u.uluck < 0)
 				u.uluck = 0;
 			else
@@ -353,7 +353,7 @@ static void fortune(struct monst *mtmp) {
 					|| Antimagic)
 				shieldeff(u.ux, u.uy);
 			else if(Hallucination)
-				You("have an out of body experience.");
+				pline("You have an out of body experience.");
 			else  {
 				killer_format = KILLED_BY;
 				killer = "the card of Death";
@@ -389,14 +389,14 @@ static void fortune(struct monst *mtmp) {
 					pline("Be careful!  New moon tonight.");
 					break;
 				case 1:	case 2:	case 3:
-					pline_The("moon is waxing tonight.");
+					pline("The moon is waxing tonight.");
 					break;
 				case FULL_MOON:
-					You("are lucky!  Full moon tonight.");
+					pline("You are lucky!  Full moon tonight.");
 					change_luck(1);
 					break;
 				case 5:	case 6:	case 7:
-					pline_The("moon is waning tonight.");
+					pline("The moon is waning tonight.");
 					break;
 				default:
 					impossible("wierd moonphase %d", flags.moonphase);
@@ -616,15 +616,15 @@ static void ninetynine(struct monst *mtmp) {
 		/* Play the card */
 		which = selected[0].item.a_int-1;
 		if (which >= NINETYNINE_HAND) {
-			You("forfeit.");
+			pline("You forfeit.");
 			gypsy_charge(mtmp, bet);
 			return;
 		}
 		card_name(uhand[which], buf);
 		total = nn_play(uhand[which], total);
-		You("play %s for a total of %d.", buf, total);
+		pline("You play %s for a total of %d.", buf, total);
 		if (total < 0 || total > NINETYNINE_GOAL) {
-			You("lose!");
+			pline("You lose!");
 			gypsy_charge(mtmp, bet);
 			return;
 		}
@@ -632,7 +632,7 @@ static void ninetynine(struct monst *mtmp) {
 		/* Draw a new card */
 		uhand[which] = card_draw(mtmp);
 		if (uhand[which] < 0) {
-			pline_The("deck is empty.  You win!");
+			pline("The deck is empty.  You win!");
 			EGYP(mtmp)->credit += bet;
 			return;
 		}
@@ -660,7 +660,7 @@ static void ninetynine(struct monst *mtmp) {
 		/* Draw a new card */
 		ghand[which] = card_draw(mtmp);
 		if (ghand[which] < 0) {
-			pline_The("deck is empty.  You win!");
+			pline("The deck is empty.  You win!");
 			EGYP(mtmp)->credit += bet;
 			return;
 		}
@@ -762,7 +762,7 @@ void gypsy_chat(struct monst *mtmp) {
 		return;
 
 	/* Add up your available money */
-	You("have %ld zorkmid%s credit and are carrying %ld zorkmid%s.",
+	pline("You have %ld zorkmid%s credit and are carrying %ld zorkmid%s.",
 			EGYP(mtmp)->credit, plur(EGYP(mtmp)->credit),
 #ifndef GOLDOBJ
 			u.ugold, plur(u.ugold));

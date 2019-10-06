@@ -447,18 +447,18 @@ static int domonability(void) {
 	    if(IS_FOUNTAIN(levl[u.ux][u.uy].typ)) {
 		if (split_mon(&youmonst, NULL))
 		    dryup(u.ux, u.uy, true);
-	    } else There("is no fountain here.");
+	    } else pline("There is no fountain here.");
 	} else if (is_unicorn(youmonst.data)) {
 	    use_unicorn_horn(NULL);
 	    return 1;
 	} else if (youmonst.data->msound == MS_SHRIEK) {
-	    You("shriek.");
+	    pline("You shriek.");
 	    if(u.uburied)
 		pline("Unfortunately sound does not carry well through rock.");
 	    else aggravate();
 	} else if (Upolyd)
 		pline("Any special ability you may have is purely reflexive.");
-	else You("don't have a special ability in your normal form!");
+	else pline("You don't have a special ability in your normal form!");
 	return 0;
 }
 
@@ -467,7 +467,7 @@ static int enter_explore_mode(void) {
 		pline("Beware!  From explore mode there will be no return to normal game.");
 		if (yn("Do you want to enter explore mode?") == 'y') {
 			clear_nhwindow(WIN_MESSAGE);
-			You("are now in non-scoring explore mode.");
+			pline("You are now in non-scoring explore mode.");
 			discover = true;
 		}
 		else {
@@ -489,7 +489,7 @@ static int playersteal(void) {
 		no_steal = true;
 	} else
 	if (near_capacity() > SLT_ENCUMBER) {
-		Your("load is too heavy to attempt to steal.");
+		pline("Your load is too heavy to attempt to steal.");
 		no_steal = true;
 	}
 	if (no_steal) {
@@ -565,9 +565,9 @@ static int playersteal(void) {
 					obj_extract_self(gold);
 		      if (merge_choice(invent, gold) || inv_cnt() < 52) {
 				    addinv(gold);
-						You("steal %s.", doname(gold));
+						pline("You steal %s.", doname(gold));
 					} else {
-            You("grab %s, but find no room in your knapsack.", doname(gold));
+            pline("You grab %s, but find no room in your knapsack.", doname(gold));
 			    	dropy(gold);
 					}
 				}
@@ -579,15 +579,15 @@ static int playersteal(void) {
 				if (temp > mdat->mgold) temp = mdat->mgold;
 				u.ugold += temp;
 				mdat->mgold -= temp;
-				You("steal %d gold.",temp);
+				pline("You steal %d gold.",temp);
 #endif
 			} else
-				You("don't find anything to steal.");
+				pline("You don't find anything to steal.");
 
 			if (!mdat->mtame) exercise(A_DEX, true);
 			return 1;
 		} else {
-			You("failed to steal anything.");
+			pline("You failed to steal anything.");
 			setmangry(mdat);
 			return 1;
 	       }
@@ -630,7 +630,7 @@ static int specialpower(void) {
 
         /*Added wizard mode can choose to use ability - wAC*/
 	if (u.unextuse) {
-	    You("have to wait %s before using your ability again.",
+	    pline("You have to wait %s before using your ability again.",
 		(u.unextuse > 500) ? "for a while" : "a little longer");
 #ifdef WIZARD
             if (!wizard || (yn("Use ability anyways?") == 'n'))
@@ -643,7 +643,7 @@ static int specialpower(void) {
 /*WAC stolen from the spellcasters...'A' can identify from
         historical research*/
 		if(Hallucination || Stunned || Confusion) {
-		    You("can't concentrate right now!");
+		    pline("You can't concentrate right now!");
 		    break;
 		} else if((ACURR(A_INT) + ACURR(A_WIS)) < rnd(60)) {
 			pline("Nothing in your pack looks familiar.");
@@ -651,7 +651,7 @@ static int specialpower(void) {
 		    break;
 		} else if(invent) {
 		    int ret;
-			You("examine your possessions.");
+			pline("You examine your possessions.");
 			identify_pack(1);
 /*WAC this should be better - made like scroll of identify*/
 /* KMH -- also commented out use of 'ret' without initialization */
@@ -660,53 +660,53 @@ static int specialpower(void) {
 /*                  ret = ggetobj("identify", identify, 1, false);*/
 		} else {
 			/* KMH -- fixed non-compliant string */
-			You("are already quite familiar with the contents of your pack.");
+			pline("You are already quite familiar with the contents of your pack.");
 		    break;
 		}
 		u.unextuse = rn1(500,1500);
 		break;
 	    case 'G':
-			Your("ability, gem identification, is automatic.");
+			pline("Your ability, gem identification, is automatic.");
 			return 0;
 		case 'P':
-			Your("ability, bless and curse detection, is automatic.");
+			pline("Your ability, bless and curse detection, is automatic.");
 			return 0;
 	    case 'D':
 			/* KMH -- Just do it!  (Besides, Alt isn't portable...) */
 			return polyatwill();
-			/*Your("ability, polymorphing, uses the alt-y key.");*/
+			/*pline("Your ability, polymorphing, uses the alt-y key.");*/
 			/*return 0;*/
 	    case 'L':
 		/*only when empty handed, in human form!*/
 		if (Upolyd) {
-			You("can't do this while polymorphed!");
+			pline("You can't do this while polymorphed!");
 			break;
 		}
 		if (uwep == 0) {
-			Your("fingernails extend into claws!");
+			pline("Your fingernails extend into claws!");
 			aggravate();
 			u.ulastuse = d(2,4) + (u.ulevel/5) + 1; /* [max] was d(2,8) */
 			u.unextuse = rn1(1000,1000); /* [max] increased delay */
 		}
-		else You("can't do this while holding a weapon!");
+		else pline("You can't do this while holding a weapon!");
 		break;
 	    case 'R':
 	    /* KMH -- Just do it!  (Besides, Alt isn't portable...) */
 	    return playersteal();
-		/*Your("ability, stealing, uses the alt-b key.");*/
+		/*pline("Your ability, stealing, uses the alt-b key.");*/
         /*return 0;*/
 		break;
 	    case 'M':
-		Your("special ability is unarmed combat, and it is automatic.");
+		pline("Your special ability is unarmed combat, and it is automatic.");
                 return 0;
 		break;
 	    case 'C':
 	    case 'T':
-		You("don't have a special ability!");
+		pline("You don't have a special ability!");
                 return 0;
 		break;
 	    case 'B':
-		You("fly into a berserk rage!");
+		pline("You fly into a berserk rage!");
 		u.ulastuse = d(2,8) + (u.ulevel/5) + 1;
 		incr_itimeout(&HFast, u.ulastuse);
 		u.unextuse = rn1(1000,500);
@@ -718,15 +718,15 @@ static int specialpower(void) {
 	    case 'W':
             /* WAC spell-users can study their known spells*/
 		if(Hallucination || Stunned || Confusion) {
-		    You("can't concentrate right now!");
+		    pline("You can't concentrate right now!");
 		    break;
 		} else {
-			You("concentrate...");
+			pline("You concentrate...");
 			studyspell(); /*in spell.c*/
 		}
 		break;
 	    case 'E':
-                Your("%s %s become blurs as they reach for your quiver!",
+                pline("Your %s %s become blurs as they reach for your quiver!",
 			uarmg ? "gloved" : "bare",      /* Del Lamb */
 			makeplural(body_part(HAND)));
                 u.ulastuse = rnd((int) (u.ulevel/6 + 1)) + 1;
@@ -735,20 +735,20 @@ static int specialpower(void) {
 	    case 'U':
 	    case 'V':
 		if(!uwep || (weapon_type(uwep) == P_NONE)) {
-		    You("are not wielding a weapon!");
+		    pline("You are not wielding a weapon!");
 		    break;
 		} else if(uwep->known == true) {
-                    You("study and practice with your %s %s.",
+                    pline("You study and practice with your %s %s.",
                         uarmg ? "gloved" : "bare",      /* Del Lamb */
 			makeplural(body_part(HAND)));
                     practice_weapon();
 		} else {
                     if (not_fully_identified(uwep)) {
-                        You("examine %s.", doname(uwep));
+                        pline("You examine %s.", doname(uwep));
                             if (rnd(15) <= ACURR(A_INT)) {
                                 makeknown(uwep->otyp);
                                 uwep->known = true;
-                                You("discover it is %s",doname(uwep));
+                                pline("You discover it is %s",doname(uwep));
                                 } else
                      pline("Unfortunately, you didn't learn anything new.");
                     }
@@ -759,7 +759,7 @@ static int specialpower(void) {
 		break;
 	    case 'H':
 		if (Hallucination || Stunned || Confusion) {
-		    You("are in no condition to perform surgery!");
+		    pline("You are in no condition to perform surgery!");
 		    break;
 		}
 		if ((Sick) || (Slimed)) {       /* WAC cure sliming too */
@@ -787,9 +787,9 @@ static int specialpower(void) {
 		break;
 	    case 'K':
 		if (u.uhp < u.uhpmax || Sick || Slimed) { /*WAC heal sliming */
-			if (Sick) You("lay your hands on the foul sickness...");
+			if (Sick) pline("You lay your hands on the foul sickness...");
 			pline("A warm glow spreads through your body!");
-			if (Slimed) pline_The("slime is removed.");
+			if (Slimed) pline("The slime is removed.");
 			Slimed = 0;
 			if(Sick) make_sick(0L,NULL, true, SICK_ALL);
 			else     u.uhp += (u.ulevel * 4);
@@ -798,7 +798,7 @@ static int specialpower(void) {
 		} else pline("Nothing happens.");
 		break;
 	    case 'S':
-		You("scream \"KIIILLL!\"");
+		pline("You scream \"KIIILLL!\"");
 		aggravate();
 		u.ulastuse = rnd((int) (u.ulevel/6 + 1)) + 1;
 		u.unextuse = rn1(1000,500);
@@ -811,10 +811,10 @@ static int specialpower(void) {
 				tamedog(u.usteed, NULL);
 				u.unextuse = rn1(1000,500);
 			} else
-				Your("special ability is only effective when riding a monster.");
+				pline("Your special ability is only effective when riding a monster.");
 			break;
 #else
-			You("don't have a special ability!");
+			pline("You don't have a special ability!");
 			return 0;
 #endif
 	    default:
@@ -879,11 +879,11 @@ static int wiz_gain_ac(void) {
 static int wiz_toggle_invulnerability(void) {
 	if (wizard) {
 	    if ((Invulnerable == 0) && (u.uinvulnerable == false)) {
-	            You("will be invulnerable for 32000 turns.");
+	            pline("You will be invulnerable for 32000 turns.");
 	            Invulnerable = 32000;
 	            u.uinvulnerable = true;
 	    } else {
-	            You("are no longer invulnerable.");
+	            pline("You are no longer invulnerable.");
 	            Invulnerable = 0;
 	            u.uinvulnerable = false;
 	    }
@@ -944,10 +944,10 @@ static int wiz_level_change(void) {
 	return 0;
     }
     if (newlevel == u.ulevel) {
-	You("are already that experienced.");
+	pline("You are already that experienced.");
     } else if (newlevel < u.ulevel) {
 	if (u.ulevel == 1) {
-	    You("are already as inexperienced as you can get.");
+	    pline("You are already as inexperienced as you can get.");
 	    return 0;
 	}
 	if (newlevel < 1) newlevel = 1;
@@ -955,7 +955,7 @@ static int wiz_level_change(void) {
 	    losexp("#levelchange", true);
     } else {
 	if (u.ulevel >= MAXULEV) {
-	    You("are already as experienced as you can get.");
+	    pline("You are already as experienced as you can get.");
 	    return 0;
 	}
 	if (newlevel > MAXULEV) newlevel = MAXULEV;
@@ -3696,7 +3696,7 @@ void rhack(char *cmd) {
 			}
 
 			if (u.uburied && !extcmd->can_if_buried) {
-				You_cant("do that while you are buried!");
+				pline("You can't do that while you are buried!");
 				res = 0;
 			} else {
 				func = extcmd->ef_funct;

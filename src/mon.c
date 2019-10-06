@@ -247,7 +247,7 @@ struct monst *mtmp;
 			/* Only when Medusa leaves a corpse */
 			mtmp2 = makemon(&mons[PM_PEGASUS], x, y, 0);
 			if (mtmp2) {
-				You("%s something spring forth from the corpse of %s.",
+				pline("You %s something spring forth from the corpse of %s.",
 						Blind ? "sense" : "see", mon_nam(mtmp));
 				mtmp2->mpeaceful = 1;
 				mtmp2->mtame = 0;
@@ -834,7 +834,7 @@ meatcorpse (struct monst *mtmp)
 			pline("%s eats %s!", Monnam(mtmp),
 				distant_name(otmp,doname));
 		    else if (flags.soundok && flags.verbose)
-			You("hear an awful gobbling noise!");
+			pline("You hear an awful gobbling noise!");
 		    mtmp->meating = 2;
 		    delobj(otmp);
 		    break; /* only eat one at a time... */
@@ -1509,7 +1509,7 @@ struct monst *mtmp;
 				pline("%s reconstitutes!", Monnam(mtmp));
 			else
 				pline("%s looks much better!", Monnam(mtmp));
-			pline_The("medallion crumbles to dust!");
+			pline("The medallion crumbles to dust!");
 		}
 		m_useup(mtmp, lifesave);
 		mtmp->mcanmove = 1;
@@ -1685,7 +1685,7 @@ boolean was_swallowed;			/* digestion */
 	    	else tmp = 0;
 		if (was_swallowed && magr) {
 		    if (magr == &youmonst) {
-			There("is an explosion in your %s!",
+			pline("There is an explosion in your %s!",
 			      body_part(STOMACH));
 			sprintf(killer_buf, "%s explosion",
 				s_suffix(mdat->mname));
@@ -1855,7 +1855,7 @@ monstone (struct monst *mdef)
 	mondead(mdef);
 	if (wasinside) {
 		if (is_animal(mdef->data))
-			You("%s through an opening in the new %s.",
+			pline("You %s through an opening in the new %s.",
 				locomotion(youmonst.data, "jump"),
 				xname(otmp));
 	}
@@ -1884,7 +1884,7 @@ monkilled (struct monst *mdef, const char *fltxt, int how)
 	    mondied(mdef);
 
 	if (be_sad && mdef->mhp <= 0)
-	    You("have a sad feeling for a moment, then it passes.");
+	    pline("You have a sad feeling for a moment, then it passes.");
 }
 
 
@@ -1910,7 +1910,7 @@ mon_xkilled (struct monst *mdef, const char *fltxt, int how)
 		xkilled(mdef,0);
 
 	if (be_sad && mdef->mhp <= 0)
-		You("have a sad feeling for a moment, then it passes.");
+		pline("You have a sad feeling for a moment, then it passes.");
 }
 
 
@@ -1957,9 +1957,9 @@ xkilled (struct monst *mtmp, int dest)
 	    const char *verb = nonliving(mtmp->data) ? "destroy" : "kill";
 
 	    if (!wasinside && !canspotmon(mtmp))
-		You("%s it!", verb);
+		pline("You %s it!", verb);
 	    else {
-		You("%s %s!", verb,
+		pline("You %s %s!", verb,
 		    !mtmp->mtame ? mon_nam(mtmp) :
 			x_monnam(mtmp,
 				 mtmp->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
@@ -2054,7 +2054,7 @@ cleanup:
 	   u.ualign.type != A_CHAOTIC) {
 		HTelepat &= ~INTRINSIC;
 		change_luck(-2);
-		You("murderer!");
+		pline("You murderer!");
 		if (Blind && !Blind_telepat)
 		    see_monsters(); /* Can't sense monsters any more. */
 	}
@@ -2062,7 +2062,7 @@ cleanup:
 	if (is_unicorn(mdat) &&
 				sgn(u.ualign.type) == sgn(mdat->maligntyp)) {
 		change_luck(-5);
-		You_feel("guilty...");
+		pline("You feel guilty...");
 	}
 	/* give experience points */
 	tmp = experience(mtmp, (int)mvitals[mndx].died + 1);
@@ -2227,7 +2227,7 @@ poisoned (const char *string, int typ, const char *pname, int fatal)
 
 	if(Poison_resistance) {
 		if(!strcmp(string, "blast")) shieldeff(u.ux, u.uy);
-		pline_The("poison doesn't seem to affect you.");
+		pline("The poison doesn't seem to affect you.");
 		return;
 	}
 	/* suppress killer prefix if it already has one */
@@ -2246,7 +2246,7 @@ poisoned (const char *string, int typ, const char *pname, int fatal)
 		   pline("You are unharmed!");
 		else {
 		u.uhp = -1;
-		pline_The("poison was deadly...");
+		pline("The poison was deadly...");
 		}
 	} else if(i <= 5) {
 		/* Check that a stat change was made */
@@ -2349,7 +2349,7 @@ setmangry (struct monst *mtmp)
 		    if (canseemon(mon)) ++got_mad;
 		}
 	    if (got_mad && !Hallucination)
-		pline_The("%s appear%s to be angry too...",
+		pline("The %s appear%s to be angry too...",
 		      got_mad == 1 ? q_guardian->mname :
 				    makeplural(q_guardian->mname),
 		      got_mad == 1 ? "s" : "");
@@ -2582,7 +2582,7 @@ struct monst *mon;
 			getlin(pprompt,buf);
 			mndx = name_to_mon(buf);
 			if (mndx < LOW_PM)
-				You("cannot polymorph %s into that.", mon_nam(mon));
+				pline("You cannot polymorph %s into that.", mon_nam(mon));
 			else break;
 		} while(++tries < 5);
 		if (tries==5) pline("That's enough tries!");
@@ -2789,7 +2789,7 @@ boolean msg;
 				if (!noncorporeal(mdat) && !amorphous(mdat) &&
 				    !is_whirly(mdat) &&
 				    (mdat != &mons[PM_YELLOW_LIGHT])) {
-					You("break out of %s%s!", mon_nam(mtmp),
+					pline("You break out of %s%s!", mon_nam(mtmp),
 					    (is_animal(mdat)?
 					    "'s stomach" : ""));
 					mtmp->mhp = 1;  /* almost dead */
@@ -3030,13 +3030,13 @@ boolean silent;
 	}
 	if(ct) {
 	    if(!silent) { /* do we want pline msgs? */
-		if(slct) pline_The("guard%s wake%s up!",
+		if(slct) pline("The guard%s wake%s up!",
 				 slct > 1 ? "s" : "", slct == 1 ? "s" : "");
 		if(nct || sct) {
-			if(nct) pline_The("guard%s get%s angry!",
+			if(nct) pline("The guard%s get%s angry!",
 				nct == 1 ? "" : "s", nct == 1 ? "s" : "");
 			else if(!Blind)
-				You("see %sangry guard%s approaching!",
+				pline("You see %sangry guard%s approaching!",
 				  sct == 1 ? "an " : "", sct > 1 ? "s" : "");
 		} else if(flags.soundok)
 			You_hear("the shrill sound of a guard's whistle.");

@@ -155,7 +155,7 @@ pri_move (struct monst *priest)
 	   (Conflict && !resist(priest, RING_CLASS, 0, 0))) {
 		if(monnear(priest, u.ux, u.uy)) {
 			if(Displaced)
-				Your("displaced image doesn't fool %s!",
+				pline("Your displaced image doesn't fool %s!",
 					mon_nam(priest));
 			mattacku(priest);
 			return 0;
@@ -371,14 +371,14 @@ intemple (int roomno)
 		    /* !tended -> !shrined */
 		    if (!shrined || !p_coaligned(priest) ||
 			    u.ualign.record <= ALGN_SINNED)
-			You("have a%s forbidding feeling...",
+			pline("You have a%s forbidding feeling...",
 				(!shrined) ? "" : " strange");
-		    else You("experience a strange sense of peace.");
+		    else pline("You experience a strange sense of peace.");
 		}
 	    } else {
 		switch(rn2(3)) {
-		  case 0: You("have an eerie feeling..."); break;
-		  case 1: You_feel("like you are being watched."); break;
+		  case 0: pline("You have an eerie feeling..."); break;
+		  case 1: pline("You feel like you are being watched."); break;
 		  default: pline("A shiver runs down your %s.",
 			body_part(SPINE)); break;
 		}
@@ -389,11 +389,11 @@ intemple (int roomno)
 			return;
 		    if (!Blind || sensemon(mtmp))
 			pline("An enormous ghost appears next to you!");
-		    else You("sense a presence close by!");
+		    else pline("You sense a presence close by!");
 		    mtmp->mpeaceful = 0;
 		    set_malign(mtmp);
 		    if(flags.verbose)
-			You("are frightened to death, and unable to move.");
+			pline("You are frightened to death, and unable to move.");
 		    nomul(-3);
 		    nomovemsg = "You regain your composure.";
 	       }

@@ -140,7 +140,7 @@ void lan_mail_read(struct obj *otmp) {
 			}
 		}
 	}
-	pline_The("text has faded and is no longer readable.");
+	pline("The text has faded and is no longer readable.");
 }
 
 void lan_mail_init(void) {

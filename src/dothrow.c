@@ -131,13 +131,13 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 		return 1;
 	}
 	if(!u.dx && !u.dy && !u.dz) {
-		You("cannot throw an object at yourself.");
+		pline("You cannot throw an object at yourself.");
 		return 0;
 	}
 	u_wipe_engr(2);
 	if (!uarmg && !Stone_resistance && (obj->otyp == CORPSE &&
 		    touch_petrifies(&mons[obj->corpsenm]))) {
-		You("throw the %s corpse with your bare %s.",
+		pline("You throw the %s corpse with your bare %s.",
 		    mons[obj->corpsenm].mname, body_part(HAND));
 		sprintf(killer_buf, "%s corpse", an(mons[obj->corpsenm].mname));
 		instapetrify(killer_buf);
@@ -212,7 +212,7 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 		/* more than usual == volley */
 		if (((shotlimit <= 0) || (shotlimit >= multishot)) &&
 			(obj->quan >= multishot))
-		    You("let fly a volley of %s!", xname(obj));
+		    pline("You let fly a volley of %s!", xname(obj));
 	    }
 
 	    /* Shotlimit controls your rate of fire */
@@ -244,7 +244,7 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 	   attempted to specify a count */
 	if (multishot > 1 || shotlimit > 0) {
 	    /* "You shoot N arrows." or "You throw N daggers." */
-	    You("%s %d %s.",
+	    pline("You %s %d %s.",
 		m_shot.s ? "shoot" : "throw",
 		multishot,	/* (might be 1 if player gave shotlimit) */
 		(multishot == 1) ? singular(obj, xname) :  xname(obj));
@@ -294,7 +294,7 @@ int dothrow(void) {
 	 */
 
 	if (notake(youmonst.data)) {
-	    You("are physically incapable of throwing anything.");
+	    pline("You are physically incapable of throwing anything.");
 	    return 0;
 	}
 
@@ -388,7 +388,7 @@ int dofire(void) {
 	int result, shotlimit;
 
 	if (notake(youmonst.data)) {
-	    You("are physically incapable of doing that.");
+	    pline("You are physically incapable of doing that.");
 	    return 0;
 	}
 
@@ -396,15 +396,15 @@ int dofire(void) {
 	if (!uquiver) {
 		if (!flags.autoquiver) {
 			/* Don't automatically fill the quiver */
-			You("have no ammunition readied!");
+			pline("You have no ammunition readied!");
 			return dothrow();
 		}
 		autoquiver();
 		if (!uquiver) {
-			You("have nothing appropriate for your quiver!");
+			pline("You have nothing appropriate for your quiver!");
 			return dothrow();
 		} else {
-			You("fill your quiver:");
+			pline("You fill your quiver:");
 			prinv(NULL, uquiver, 0L);
 		}
 	}
@@ -552,7 +552,7 @@ boolean hurtle_step(void *arg, int x, int y) {
     struct trap *ttmp;
 
     if (!isok(x,y)) {
-	You_feel("the spirits holding you back.");
+	pline("You feel the spirits holding you back.");
 	return false;
     } else if (!in_out_region(x, y)) {
 	return false;
@@ -575,18 +575,18 @@ boolean hurtle_step(void *arg, int x, int y) {
 	    return false;
 	}
 	if (levl[x][y].typ == IRONBARS) {
-	    You("crash into some iron bars.  Ouch!");
+	    pline("You crash into some iron bars.  Ouch!");
 	    losehp(rnd(2+*range), "crashing into iron bars", KILLED_BY);
 	    return false;
 	}
 	if ((obj = sobj_at(BOULDER,x,y)) != 0) {
-	    You("bump into a %s.  Ouch!", xname(obj));
+	    pline("You bump into a %s.  Ouch!", xname(obj));
 	    losehp(rnd(2+*range), "bumping into a boulder", KILLED_BY);
 	    return false;
 	}
 	if (!may_pass) {
 	    /* did we hit a no-dig non-wall position? */
-	    You("smack into something!");
+	    pline("You smack into something!");
 	    losehp(rnd(2+*range), "touching the edge of the universe", KILLED_BY);
 	    return false;
 	}
@@ -595,7 +595,7 @@ boolean hurtle_step(void *arg, int x, int y) {
 	    boolean too_much = (invent && (inv_weight() + weight_cap() > 600));
 	    /* Move at a diagonal. */
 	    if (bigmonst(youmonst.data) || too_much) {
-		You("%sget forcefully wedged into a crevice.",
+		pline("You %sget forcefully wedged into a crevice.",
 			too_much ? "and all your belongings " : "");
 		losehp(rnd(2+*range), "wedging into a narrow crevice", KILLED_BY);
 		return false;
@@ -604,7 +604,7 @@ boolean hurtle_step(void *arg, int x, int y) {
     }
 
     if ((mon = m_at(x, y)) != 0) {
-	You("bump into %s.", a_monnam(mon));
+	pline("You bump into %s.", a_monnam(mon));
 	wakeup(mon);
 	return false;
     }
@@ -612,7 +612,7 @@ boolean hurtle_step(void *arg, int x, int y) {
 	bad_rock(&youmonst, u.ux, y) && bad_rock(&youmonst, x, u.uy)) {
 	/* Move at a diagonal. */
 	if (In_sokoban(&u.uz)) {
-	    You("come to an abrupt halt!");
+	    pline("You come to an abrupt halt!");
 	    return false;
 	}
     }
@@ -647,7 +647,7 @@ boolean hurtle_step(void *arg, int x, int y) {
 		return true;
     	} else {
 		if (ttmp->tseen)
-		    You("pass right over %s %s.",
+		    pline("You pass right over %s %s.",
 		    	(ttmp->ttyp == ARROW_TRAP) ? "an" : "a",
 		    	sym_desc[trap_to_defsym(ttmp->ttyp)].explanation);
     	}
@@ -696,11 +696,11 @@ void hurtle(int dx, int dy, int range, boolean verbose) {
      * for diagonal movement, give the player a message and return.
      */
     if(Punished && !carried(uball)) {
-	You_feel("a tug from the iron ball.");
+	pline("You feel a tug from the iron ball.");
 	nomul(0);
 	return;
     } else if (u.utrap) {
-	You("are anchored by the %s.",
+	pline("You are anchored by the %s.",
 	    u.utraptype == TT_WEB ? "web" : u.utraptype == TT_LAVA ? "lava" :
 		u.utraptype == TT_INFLOOR ? surface(u.ux,u.uy) : "trap");
 	nomul(0);
@@ -716,11 +716,11 @@ void hurtle(int dx, int dy, int range, boolean verbose) {
     nomul(-range);
     nomovemsg = 0;
     if (verbose)
-	You("%s in the opposite direction.", range > 1 ? "hurtle" : "float");
+	pline("You %s in the opposite direction.", range > 1 ? "hurtle" : "float");
     /* if we're in the midst of shooting multiple projectiles, stop */
     if (m_shot.i < m_shot.n) {
 	/* last message before hurtling was "you shoot N arrows" */
-	You("stop %sing after the first %s.",
+	pline("You stop %sing after the first %s.",
 	    m_shot.s ? "shoot" : "throw", m_shot.s ? "shot" : "toss");
 	m_shot.n = m_shot.i;	/* make current shot be the last */
     }
@@ -848,7 +848,7 @@ static boolean toss_up(struct obj *obj, boolean hitsroof) {
 			pline("It blinds you!");
 		    u.ucreamed += blindinc;
 		    make_blinded(Blinded + blindinc, false);
-		    if (!Blind) Your("%s", "vision quickly clears.");
+		    if (!Blind) pline("Your %s", "vision quickly clears.");
 		}
 		break;
 	default:
@@ -883,14 +883,14 @@ static boolean toss_up(struct obj *obj, boolean hitsroof) {
 		    pline("Fortunately, you are wearing a hard helmet.");
 	    } else if (flags.verbose &&
 		    !(obj->otyp == CORPSE && touch_petrifies(&mons[obj->corpsenm])))
-		Your("%s does not protect you.", xname(uarmh));
+		pline("Your %s does not protect you.", xname(uarmh));
 	} else if (obj->otyp == CORPSE && touch_petrifies(&mons[obj->corpsenm])) {
 	    if (!Stone_resistance &&
 		    !(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
  petrify:
 		killer_format = KILLED_BY;
 		killer = "elementary physics";	/* "what goes up..." */
-		You("turn to stone.");
+		pline("You turn to stone.");
 		if (obj) dropy(obj);	/* bypass most of hitfloor() */
 		done(STONING);
 		return obj ? true : false;
@@ -974,7 +974,7 @@ int thrown) {
 	     : (u.uhp < 10 && u.uhp != u.uhpmax)) &&
 	    obj->owt > (unsigned)((Upolyd ? u.mh : u.uhp) * 2) &&
 	    !Is_airlevel(&u.uz)) {
-	    You("have so little stamina, %s drops from your grasp.",
+	    pline("You have so little stamina, %s drops from your grasp.",
 		the(xname(obj)));
 	    exercise(A_CON, false);
 	    u.dx = u.dy = 0;
@@ -1752,7 +1752,7 @@ static void breakobj(struct obj *obj, xchar x, xchar y, boolean hero_caused, boo
 				exercise(A_WIS, false);
 			    }
 			    /* curse the lawful/neutral altar */
-			    pline_The("altar is stained with blood.");
+			    pline("The altar is stained with blood.");
 			    if (!Is_astralevel(&u.uz))
 				levl[x][y].altarmask = AM_CHAOTIC;
 			    angry_priest();
@@ -1761,10 +1761,10 @@ static void breakobj(struct obj *obj, xchar x, xchar y, boolean hero_caused, boo
 				if (obj->otyp != POT_WATER) {
 					if (!breathless(youmonst.data))
 			    		     /* [what about "familiar odor" when known?] */
-					    You("smell a peculiar odor...");
+					    pline("You smell a peculiar odor...");
 					else {
 					    int numeyes = eyecount(youmonst.data);
-					    Your("%s water%s.",
+					    pline("Your %s water%s.",
 						 (numeyes == 1) ? body_part(EYE) :
 							makeplural(body_part(EYE)),
 						 (numeyes == 1) ? "s" : "");
@@ -1881,7 +1881,7 @@ static int throw_gold(struct obj *obj) {
 		flags.botl = 1;
 		dealloc_obj(obj);
 #endif
-		You("cannot throw gold at yourself.");
+		pline("You cannot throw gold at yourself.");
 		return 0;
 	}
 #ifdef GOLDOBJ
@@ -1904,7 +1904,7 @@ static int throw_gold(struct obj *obj) {
 	if(u.dz) {
 		if (u.dz < 0 && !Is_airlevel(&u.uz) &&
 					!Underwater && !Is_waterlevel(&u.uz)) {
-	pline_The("gold hits the %s, then falls back on top of your %s.",
+	pline("The gold hits the %s, then falls back on top of your %s.",
 		    ceiling(u.ux,u.uy), body_part(HEAD));
 		    /* some self damage? */
 		    if(uarmh) pline("Fortunately, you are wearing a helmet!");
@@ -1940,7 +1940,7 @@ static int throw_gold(struct obj *obj) {
 
 	if(flooreffects(obj,bhitpos.x,bhitpos.y,"fall")) return 1;
 	if(u.dz > 0)
-		pline_The("gold hits the %s.", surface(bhitpos.x,bhitpos.y));
+		pline("The gold hits the %s.", surface(bhitpos.x,bhitpos.y));
 	place_object(obj,bhitpos.x,bhitpos.y);
 	if(*u.ushops) sellobj(obj, bhitpos.x, bhitpos.y);
 	stackobj(obj);

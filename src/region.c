@@ -813,7 +813,7 @@ void * p2;
 
     if (p2 == NULL) {		/* That means the player */
 	if (!Blind)
-		You("bump into %s. Ouch!",
+		pline("You bump into %s. Ouch!",
 		    Hallucination ? "an invisible tree" :
 			"some kind of invisible wall");
 	else
@@ -929,11 +929,11 @@ bool inside_gas_cloud(void *p1, void * p2) {
 	    make_blinded(1L, false);
 	if (!Poison_resistance) {
 	    pline("Something is burning your %s!", makeplural(body_part(LUNG)));
-	    You("cough and spit blood!");
+	    pline("You cough and spit blood!");
 	    losehp(rnd(dam) + 5, "gas cloud", KILLED_BY_AN);
 	    return false;
 	} else {
-	    You("cough!");
+	    pline("You cough!");
 	    return false;
 	}
     } else {			/* A monster is inside the cloud */

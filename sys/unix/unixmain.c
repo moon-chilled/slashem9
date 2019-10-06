@@ -506,7 +506,7 @@ wd_message()
 	} else
 #endif
 	if (discover)
-		You("are in non-scoring discovery mode.");
+		pline("You are in non-scoring discovery mode.");
 }
 
 /*

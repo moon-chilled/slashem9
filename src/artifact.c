@@ -586,7 +586,7 @@ int touch_artifact (struct obj *obj, struct monst *mon) {
 	char buf[BUFSZ];
 
 	if (!yours) return 0;
-	You("are blasted by %s power!", s_suffix(the(xname(obj))));
+	pline("You are blasted by %s power!", s_suffix(the(xname(obj))));
 	dmg = d((Antimagic ? 6 : 8), (self_willed ? 10 : 6));
 	sprintf(buf, "touching %s", oart->name);
 	losehp(dmg, buf, KILLED_BY);
@@ -854,7 +854,7 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
     verb = mb_verb[!!Hallucination][attack_indx];
     if (youattack || youdefend || vis) {
 	result = true;
-	pline_The("magic-absorbing blade %s %s!",
+	pline("The magic-absorbing blade %s %s!",
 		  vtense(NULL, verb), hittee);
 	/* assume probing has some sort of noticeable feedback
 	   even if it is being done by one monster to another */
@@ -878,7 +878,7 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
 		if (youmonst.data != old_uasmon)
 		    *dmgptr = 0;    /* rehumanized, so no more damage */
 		if (u.uenmax > 0) {
-		    You("lose magical energy!");
+		    pline("You lose magical energy!");
 		    u.uenmax--;
 		    if (u.uen > 0) u.uen--;
 		    flags.botl = 1;
@@ -887,7 +887,7 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
 		if (mdef->data == &mons[PM_CLAY_GOLEM])
 		    mdef->mhp = 1;	/* cancelled clay golems will die */
 		if (youattack && attacktype(mdef->data, AT_MAGC)) {
-		    You("absorb magical energy!");
+		    pline("You absorb magical energy!");
 		    u.uenmax++;
 		    u.uen++;
 		    flags.botl = 1;
@@ -905,7 +905,7 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
 		nomovemsg = "";
 		if (magr && magr == u.ustuck && sticks(youmonst.data)) {
 		    setustuck(NULL);
-		    You("release %s!", mon_nam(magr));
+		    pline("You release %s!", mon_nam(magr));
 		}
 	    }
 	} else {
@@ -923,7 +923,7 @@ char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
 
     case MB_INDEX_PROBE:
 	if (youattack && (mb->spe == 0 || !rn2(3 * abs(mb->spe)))) {
-	    pline_The("%s is insightful.", verb);
+	    pline("The %s is insightful.", verb);
 	    /* pre-damage status */
 	    probe_monster(mdef);
 	}
@@ -1016,7 +1016,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 	/* the four basic attacks: fire, cold, shock and missiles */
 	if (attacks(AD_FIRE, otmp)) {
 	    if (realizes_damage)
-		pline_The("fiery blade %s %s%c",
+		pline("The fiery blade %s %s%c",
 			!spec_dbon_applies ? "hits" :
 			(mdef->data == &mons[PM_WATER_ELEMENTAL]) ?
 			"vaporizes part of" : "burns",
@@ -1029,7 +1029,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 	}
 	if (attacks(AD_COLD, otmp)) {
 	    if (realizes_damage)
-		pline_The("ice-cold blade %s %s%c",
+		pline("The ice-cold blade %s %s%c",
 			!spec_dbon_applies ? "hits" : "freezes",
 			hittee, !spec_dbon_applies ? '.' : '!');
 	    if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
@@ -1037,7 +1037,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 	}
 	if (attacks(AD_ELEC, otmp)) {
 	    if (realizes_damage)
-		pline_The("massive hammer hits%s %s%c",
+		pline("The massive hammer hits%s %s%c",
 			  !spec_dbon_applies ? "" : "!  Lightning strikes",
 			  hittee, !spec_dbon_applies ? '.' : '!');
 	    if (!rn2(5)) (void) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
@@ -1046,7 +1046,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 	}
 	if (attacks(AD_MAGM, otmp)) {
 	    if (realizes_damage)
-		pline_The("imaginary widget hits%s %s%c",
+		pline("The imaginary widget hits%s %s%c",
 			  !spec_dbon_applies ? "" :
 				"!  A hail of magic missiles strikes",
 			  hittee, !spec_dbon_applies ? '.' : '!');
@@ -1071,11 +1071,11 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 	/* STEPHEN WHITE'S NEW CODE */
 	if (otmp->oartifact == ART_SERPENT_S_TONGUE) {
 	    otmp->dknown = true;
-	    pline_The("twisted blade poisons %s!",
+	    pline("The twisted blade poisons %s!",
 		    youdefend ? "you" : mon_nam(mdef));
 	    if (youdefend ? Poison_resistance : resists_poison(mdef)) {
 		if (youdefend)
-		    You("are not affected by the poison.");
+		    pline("You are not affected by the poison.");
 		else
 		    pline("%s seems unaffected by the poison.", Monnam(mdef));
 		return true;
@@ -1097,7 +1097,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 		    *dmgptr += d(3,6) + 6;
 		    break;
 		case 10:
-		    pline_The("poison was deadly...");
+		    pline("The poison was deadly...");
 		    *dmgptr = 2 *
 			    (youdefend ? Upolyd ? u.mh : u.uhp : mdef->mhp) +
 			    FATAL_DAMAGE_MODIFIER;
@@ -1108,7 +1108,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 
        if (otmp->oartifact == ART_DOOMBLADE && dieroll < 6) {
 	    if (youattack)
-		You("plunge the Doomblade deeply into %s!",
+		pline("You plunge the Doomblade deeply into %s!",
 			mon_nam(mdef));
 	    else
 		pline("%s plunges the Doomblade deeply into %s!",
@@ -1131,7 +1131,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 	   if (otmp->oartifact == ART_HEARTSEEKER && dieroll < 3) {
 		/* this weapon just sounds nasty... yuck... */
 		if (!youdefend) {
-		   You("plunge Heartseeker into %s!",mon_nam(mdef));
+		   pline("You plunge Heartseeker into %s!",mon_nam(mdef));
 		} else {
 		   pline("%s plunges Heartseeker into you!",mon_nam(mdef));
 		}
@@ -1147,7 +1147,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 		wepdesc = "The razor-sharp blade";
 		/* not really beheading, but so close, why add another SPFX */
 		if (youattack && u.uswallow && mdef == u.ustuck) {
-		    You("slice %s wide open!", mon_nam(mdef));
+		    pline("You slice %s wide open!", mon_nam(mdef));
 		    *dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 		    return true;
 		}
@@ -1158,7 +1158,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 
 			if (bigmonst(mdef->data)) {
 				if (youattack)
-					You("slice deeply into %s!",
+					pline("You slice deeply into %s!",
 						mon_nam(mdef));
 				else if (vis)
 					pline("%s cuts deeply into %s!",
@@ -1253,7 +1253,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 		    if (!resists_drli(mdef)) {
 			if (vis) {
 			    if(otmp->oartifact == ART_STORMBRINGER)
-				pline_The("%s blade draws the life from %s!",
+				pline("The %s blade draws the life from %s!",
 				      hcolor(NH_BLACK),
 				      mon_nam(mdef));
 #if 0	/* OBSOLETE */
@@ -1282,11 +1282,11 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 			int oldhpmax = u.uhpmax;
 
 			if (Blind)
-				You_feel("an %s drain your life!",
+				pline("You feel an %s drain your life!",
 				    otmp->oartifact == ART_STORMBRINGER ?
 				    "unholy blade" : "object");
 			else if (otmp->oartifact == ART_STORMBRINGER)
-				pline_The("%s blade drains your life!",
+				pline("The %s blade drains your life!",
 				      hcolor(NH_BLACK));
 			else
 				pline("%s drains your life!",
@@ -1359,7 +1359,7 @@ static int arti_invoke(struct obj *obj) {
 		/* It's a special power, not "just" a property */
 		if(obj->age > monstermoves) {
 			/* the artifact is tired :-) */
-			You_feel("that %s %s ignoring you.",
+			pline("You feel that %s %s ignoring you.",
 					the(xname(obj)), otense(obj, "are"));
 			/* and just got more so; patience is essential... */
 			obj->age += (long) d(3,10);
@@ -1382,7 +1382,7 @@ static int arti_invoke(struct obj *obj) {
 
 					      if (Upolyd) healamt = (u.mhmax + 1 - u.mh) / 2;
 					      if (healamt || Sick || Slimed || Blinded > creamed)
-						      You_feel("better.");
+						      pline("You feel better.");
 					      else
 						      goto nothing_special;
 					      if (healamt > 0) {
@@ -1400,7 +1400,7 @@ static int arti_invoke(struct obj *obj) {
 						   if (epboost > 120) epboost = 120;		/* arbitrary */
 						   else if (epboost < 12) epboost = u.uenmax - u.uen;
 						   if(epboost) {
-							   You_feel("re-energized.");
+							   pline("You feel re-energized.");
 							   u.uen += epboost;
 							   flags.botl = 1;
 						   } else
@@ -1439,7 +1439,7 @@ static int arti_invoke(struct obj *obj) {
 					 litroom(true, obj);
 					 vision_recalc(0);
 					 if (is_undead(youmonst.data)) {
-						 You("burn in the radiance!");
+						 pline("You burn in the radiance!");
 						 /* This is ground zero.  Not good news ... */
 						 u.uhp /= 100;
 						 if (u.uhp < 1) {
@@ -1471,13 +1471,13 @@ static int arti_invoke(struct obj *obj) {
 					 break;
 			case DEATH_GAZE:
 					 if (u.uluck < -9) {
-						 pline_The("Eye turns on you!");
+						 pline("The Eye turns on you!");
 						 u.uhp = 0;
 						 killer_format = KILLED_BY;
 						 killer = "the Eye of the Beholder";
 						 done(DIED);
 					 }
-					 pline_The("Eye looks around with its icy gaze!");
+					 pline("The Eye looks around with its icy gaze!");
 					 for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 						 if (DEADMONSTER(mtmp)) continue;
 						 /* The eye is never blind ... */
@@ -1494,7 +1494,7 @@ static int arti_invoke(struct obj *obj) {
 			case SUMMON_UNDEAD:
 					 if (u.uluck < -9) {
 						 u.uhp -= rn2(20) + 5;
-						 pline_The("Hand claws you with its icy nails!");
+						 pline("The Hand claws you with its icy nails!");
 						 if (u.uhp <= 0) {
 							 killer_format = KILLED_BY;
 							 killer="the Hand of Vecna";
@@ -1533,7 +1533,7 @@ static int arti_invoke(struct obj *obj) {
 					 u.uluck -= 3;
 					 break;
 			case PROT_POLY:
-					 You("feel more observant.");
+					 pline("You feel more observant.");
 					 rescham();
 					 break;
 			case SUMMON_FIRE_ELEMENTAL:
@@ -1568,7 +1568,7 @@ static int arti_invoke(struct obj *obj) {
 
 						    any.a_void = 0;	/* set all bits to zero */
 						    if (Is_blackmarket(&u.uz) && *u.ushops) {
-							    You("feel very disoriented for a moment.");
+							    pline("You feel very disoriented for a moment.");
 							    break;
 						    }
 						    start_menu(tmpwin);
@@ -1611,10 +1611,10 @@ static int arti_invoke(struct obj *obj) {
 							    newlev.dlevel = dungeons[i].dunlev_ureached;
 						    if(u.uhave.amulet || In_endgame(&u.uz) || In_endgame(&newlev) ||
 								    newlev.dnum == u.uz.dnum) {
-							    You_feel("very disoriented for a moment.");
+							    pline("You feel very disoriented for a moment.");
 						    } else {
-							    if(!Blind) You("are surrounded by a shimmering sphere!");
-							    else You_feel("weightless for a moment.");
+							    if(!Blind) pline("You are surrounded by a shimmering sphere!");
+							    else pline("You feel weightless for a moment.");
 							    goto_level(&newlev, false, false, false);
 						    }
 						    break;
@@ -1650,7 +1650,7 @@ static int arti_invoke(struct obj *obj) {
 		if(on && obj->age > monstermoves) {
 			/* the artifact is tired :-) */
 			u.uprops[oart->inv_prop].extrinsic ^= W_ARTI;
-			You_feel("that %s %s ignoring you.",
+			pline("You feel that %s %s ignoring you.",
 					the(xname(obj)), otense(obj, "are"));
 			/* can't just keep repeatedly trying */
 			obj->age += (long) d(3,10);
@@ -1665,13 +1665,13 @@ static int arti_invoke(struct obj *obj) {
 nothing_special:
 			/* you had the property from some other source too */
 			if (carried(obj))
-				You_feel("a surge of power, but nothing seems to happen.");
+				pline("You feel a surge of power, but nothing seems to happen.");
 			return 1;
 		}
 		switch(oart->inv_prop) {
 			case CONFLICT:
-				if(on) You_feel("like a rabble-rouser.");
-				else You_feel("the tension decrease around you.");
+				if(on) pline("You feel like a rabble-rouser.");
+				else pline("You feel the tension decrease around you.");
 				break;
 			case LEVITATION:
 				if(on) {
@@ -1683,10 +1683,10 @@ nothing_special:
 				if (BInvis || Blind) goto nothing_special;
 				newsym(u.ux, u.uy);
 				if (on)
-					Your("body takes on a %s transparency...",
+					pline("Your body takes on a %s transparency...",
 							Hallucination ? "normal" : "strange");
 				else
-					Your("body seems to unfade...");
+					pline("Your body seems to unfade...");
 				break;
 		}
 	}
@@ -1721,7 +1721,7 @@ int artifact_wet(struct obj *obj, boolean silent) {
 			 return AD_COLD;
 		 case AD_ELEC:
 			 if (!silent) {
-				pline_The("humid air crackles with electricity from %s.",
+				pline("The humid air crackles with electricity from %s.",
 						the(xname(obj)));
 			 }
 			 return AD_ELEC;

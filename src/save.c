@@ -166,7 +166,7 @@ dosave0()
 	    if (fd > 0) {
 		close(fd);
 		clear_nhwindow(WIN_MESSAGE);
-		There("seems to be an old save file.");
+		pline("There seems to be an old save file.");
 		if (yn("Overwrite the old file?") == 'n') {
 #ifdef KEEP_SAVE
 /*WAC don't restore if you didn't save*/

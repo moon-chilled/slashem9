@@ -51,8 +51,8 @@ boolean forceshow;
 		EGD(grd)->fcbeg++;
 	}
 	if(grd->mhp <= 0) {
-	    pline_The("corridor disappears.");
-	    if(IS_ROCK(levl[u.ux][u.uy].typ)) You("are encased in rock.");
+	    pline("The corridor disappears.");
+	    if(IS_ROCK(levl[u.ux][u.uy].typ)) pline("You are encased in rock.");
 	}
 	return true;
 }
@@ -408,12 +408,12 @@ struct monst *grd;
 
 	if(movedgold || fixed) {
 	    if(in_fcorridor(grd, grd->mx, grd->my) || cansee(grd->mx, grd->my))
-		pline_The("%s whispers an incantation.", g_monnam(grd));
+		pline("The %s whispers an incantation.", g_monnam(grd));
 	    else You_hear("a distant chant.");
 	    if(movedgold)
 		pline("A mysterious force moves the gold into the vault.");
 	    if(fixed)
-		pline_The("damaged vault's walls are magically restored!");
+		pline("The damaged vault's walls are magically restored!");
 	}
 }
 
@@ -509,9 +509,9 @@ letknow:
 		    if (!cansee(grd->mx, grd->my) || !mon_visible(grd))
 			You_hear("the shrill sound of a guard's whistle.");
 		    else
-			You(um_dist(grd->mx, grd->my, 2) ?
-			    "see an angry %s approaching." :
-			    "are confronted by an angry %s.",
+			pline(um_dist(grd->mx, grd->my, 2) ?
+			    "You see an angry %s approaching." :
+			    "You are confronted by an angry %s.",
 			    g_monnam(grd));
 		    return -1;
 		} else {
@@ -528,7 +528,7 @@ letknow:
 		  !egrd->gddone && !in_fcorridor(grd, u.ux, u.uy) &&
 		  levl[egrd->fakecorr[0].fx][egrd->fakecorr[0].fy].typ
 				 == egrd->fakecorr[0].ftyp) {
-		pline_The("%s, confused, disappears.", g_monnam(grd));
+		pline("The %s, confused, disappears.", g_monnam(grd));
 		disappear_msg_seen = true;
 		goto cleanup;
 	    }
@@ -737,7 +737,7 @@ paygd (void)
 #endif
 
 	if (u.uinvault) {
-	    Your("%ld %s goes into the Magic Memory Vault.",
+	    pline("Your %ld %s goes into the Magic Memory Vault.",
 #ifndef GOLDOBJ
 		u.ugold,
 		currency(u.ugold));
