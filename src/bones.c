@@ -178,10 +178,7 @@ boolean can_make_bones(void) {
 	/* to both low-level and high-level characters */
 	if(depth(&u.uz) <= 0 ||		/* bulletproofing for endgame */
 	   (!rn2(1 + (depth(&u.uz)>>2))	/* fewer ghosts on low levels */
-#ifdef WIZARD
-		&& !wizard
-#endif
-		)) return false;
+		&& !wizard)) return false;
 
 	/* don't let multiple restarts generate multiple copies of objects
 	 * in bones files */
@@ -205,20 +202,16 @@ void savebones(struct obj *corpse) {
 	fd = open_bonesfile(&u.uz, &bonesid);
 	if (fd >= 0) {
 		close(fd);
-#ifdef WIZARD
 		if (wizard) {
 		    if (yn("Bones file already exists.  Replace it?") == 'y') {
 			if (delete_bonesfile(&u.uz)) goto make_bones;
 			else pline("Cannot unlink old bones.");
 		    }
 		}
-#endif
 		return;
 	}
 
-#ifdef WIZARD
- make_bones:
-#endif
+make_bones:
 	unleash_all();
 	/* in case these characters are not in their home bases */
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
@@ -338,10 +331,8 @@ void savebones(struct obj *corpse) {
 
 	fd = create_bonesfile(&u.uz, &bonesid, whynot);
 	if(fd < 0) {
-#ifdef WIZARD
 		if(wizard)
 			pline("%s", whynot);
-#endif
 		/* bones file creation problems are silent to the player.
 		 * Keep it that way, but place a clue into the paniclog.
 		 */
@@ -373,43 +364,33 @@ int getbones(void) {
 		return 0;
 
 	/* wizard check added by GAN 02/05/87 */
-	if(rn2(3)	/* only once in three times do we find bones */
-
-#ifdef WIZARD
-		&& !wizard
-#endif
-		) return 0;
+	/* only once in three times do we find bones */
+	if(rn2(3) && !wizard) return 0;
 	if(no_bones_level(&u.uz)) return 0;
 	fd = open_bonesfile(&u.uz, &bonesid);
 	if (fd < 0) return 0;
 
 	if ((ok = uptodate(fd, bones)) == 0) {
-#ifdef WIZARD
 	    if (!wizard)
-#endif
 		pline("Discarding unuseable bones; no need to panic...");
 	} else {
-#ifdef WIZARD
 		if(wizard)  {
 			if(yn("Get bones?") == 'n') {
 				close(fd);
 				return 0;
 			}
 		}
-#endif
-		mread(fd, (void *) &c, sizeof c);	/* length incl. '\0' */
-		mread(fd, (void *) oldbonesid, (unsigned) c); /* DD.nnn */
+		mread(fd, &c, sizeof c);	/* length incl. '\0' */
+		mread(fd, oldbonesid, (unsigned) c); /* DD.nnn */
 		if (strcmp(bonesid, oldbonesid) != 0) {
 			char errbuf[BUFSZ];
 
 			sprintf(errbuf, "This is bones level '%s', not '%s'!",
 				oldbonesid, bonesid);
-#ifdef WIZARD
 			if (wizard) {
 				pline("%s", errbuf);
 				ok = false;	/* won't die of trickery */
 			}
-#endif
 			trickery(errbuf);
 		} else {
 			struct monst *mtmp;
@@ -425,7 +406,7 @@ int getbones(void) {
 			 */
 			for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 			    if (mtmp->mhpmax == DEFUNCT_MONSTER) {
-#if defined(DEBUG) && defined(WIZARD)
+#ifdef DEBUG
 				if (wizard)
 				    pline("Removing defunct monster %s from bones.",
 					mtmp->data->mname);
@@ -441,13 +422,11 @@ int getbones(void) {
 	}
 	close(fd);
 
-#ifdef WIZARD
 	if(wizard) {
 		if(yn("Unlink bones?") == 'n') {
 			return ok;
 		}
 	}
-#endif
 	if (!delete_bonesfile(&u.uz)) {
 		/* When N games try to simultaneously restore the same
 		 * bones file, N-1 of them will fail to delete it

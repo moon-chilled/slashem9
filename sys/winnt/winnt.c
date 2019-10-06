@@ -277,9 +277,7 @@ void Delay(int ms)
 extern void backsp(void);
 #endif
 
-void win32_abort()
-{
-#ifdef WIZARD
+void win32_abort(void) {
    	if (wizard) {
 # ifdef WIN32CON
 	    int c, ci, ct;
@@ -306,7 +304,6 @@ void win32_abort()
 			DebugBreak();
 # endif
 	}
-#endif
 	abort();
 }
 

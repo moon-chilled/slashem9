@@ -961,10 +961,8 @@ int skill;
 boolean speedy;
 {
     return !P_RESTRICTED(skill)
-	    && P_SKILL(skill) < P_MAX_SKILL(skill) && (
-#ifdef WIZARD
-	    (wizard && speedy) ||
-#endif
+	    && P_SKILL(skill) < P_MAX_SKILL(skill) &&
+	    ((wizard && speedy) ||
 	    (P_ADVANCE(skill) >=
 		(unsigned) practice_needed_to_advance(P_SKILL(skill), skill)
 	    && u.skills_advanced < P_SKILL_LIMIT
@@ -1007,16 +1005,11 @@ int skill;
 		(unsigned) practice_needed_to_advance(P_SKILL(skill), skill)));
 }
 
-static void
-skill_advance(skill)
-int skill;
-{
-#ifdef WIZARD
+static void skill_advance(int skill) {
     if (wizard && speed_advance && P_RESTRICTED(skill)) {
     	unrestrict_weapon_skill(skill);
 	return;
     }
-#endif
 
     u.weapon_slots -= slots_required(skill);
     P_SKILL(skill)++;
@@ -1083,13 +1076,11 @@ int enhance_skill(boolean want_dump)
     boolean logged;
 #endif
 
-#ifdef WIZARD
 #ifdef DUMP_LOG
 	if (!want_dump)
 #endif
 	if (wizard && yn("Advance skills without practice?") == 'y')
 	    speedy = true;
-#endif
 
 	do {
 	    /* find longest available skill name, count those that can advance */
@@ -1194,7 +1185,6 @@ int enhance_skill(boolean want_dump)
 		    prefix = (to_advance + eventually_advance +
 				maxxed_cnt > 0) ? "    " : "";
 		skill_level_name(i, sklnambuf);
-#ifdef WIZARD
 		if (wizard) {
 		    if (!iflags.menu_tab_sep)
 			sprintf(buf, " %s%-*s %-12s %4d(%4d)",
@@ -1206,9 +1196,7 @@ int enhance_skill(boolean want_dump)
 			    prefix, P_NAME(i), sklnambuf,
 			    P_ADVANCE(i),
 			    practice_needed_to_advance(P_SKILL(i), i));
-		 } else
-#endif
-		{
+		 } else {
 		    if (!iflags.menu_tab_sep)
 			sprintf(buf, " %s %-*s [%s]",
 			    prefix, longest, P_NAME(i), sklnambuf);
@@ -1226,11 +1214,11 @@ int enhance_skill(boolean want_dump)
 
 	    strcpy(buf, (to_advance > 0) ? "Pick a skill to advance:" :
 					   "Current skills:");
-#ifdef WIZARD
+
 	    if (wizard && !speedy)
 		sprintf(eos(buf), "  (%d slot%s available)",
 			u.weapon_slots, plur(u.weapon_slots));
-#endif
+
 #ifdef DUMP_LOG
 	    if (want_dump) {
 		dump("","");
@@ -1713,10 +1701,7 @@ void
 practice_weapon (void)
 {
 	if (can_practice(weapon_type(uwep))
-#ifdef WIZARD
-	    || (wizard && (yn("Skill at normal max. Practice?") == 'y'))
-#endif
-	    ) {
+	    || (wizard && (yn("Skill at normal max. Practice?") == 'y'))) {
 		if (uwep)
 		    pline("You start practicing intensely with %s",doname(uwep));
 		else

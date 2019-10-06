@@ -10,10 +10,8 @@ static void mkbox_cnts(struct obj *);
 static void obj_timer_checks(struct obj *, xchar, xchar, int);
 static void container_weight(struct obj *);
 static struct obj *save_mtraits(struct obj *, struct monst *);
-#ifdef WIZARD
 static const char *where_name(int);
 static void check_contained(struct obj *,const char *);
-#endif
 
 extern struct obj *thrownobj;		/* defined in dothrow.c */
 
@@ -1629,7 +1627,6 @@ void dealloc_obj(struct obj *obj) {
 	free(obj);
 }
 
-#ifdef WIZARD
 /* Check all object lists for consistency. */
 void obj_sanity_check(void) {
 	int x, y;
@@ -1735,10 +1732,7 @@ static const char *where_name(int where) {
 }
 
 /* obj sanity check: check objs contained by container */
-static void check_contained(container, mesg)
-    struct obj *container;
-    const char *mesg;
-{
+static void check_contained(struct obj *container, const char *mesg) {
     struct obj *obj;
     char obj1_address[20], obj2_address[20];
 
@@ -1753,6 +1747,5 @@ static void check_contained(container, mesg)
 		fmt_ptr((void *)container, obj2_address));
     }
 }
-#endif /* WIZARD */
 
 /*mkobj.c*/

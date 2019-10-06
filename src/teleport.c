@@ -545,37 +545,29 @@ int x1, y1, x2, y2;
 						dndest.nhx, dndest.nhy) &&
 		!within_bounded_area(x2, y2, dndest.nlx, dndest.nly,
 						dndest.nhx, dndest.nhy))
-# ifdef WIZARD
                 if (!wizard)
-# endif /* WIZARD */
-		return false;
+			return false;
 	    /* and if outside, can't teleport inside */
 	    if (!within_bounded_area(x1, y1, dndest.nlx, dndest.nly,
 						dndest.nhx, dndest.nhy) &&
 		within_bounded_area(x2, y2, dndest.nlx, dndest.nly,
 						dndest.nhx, dndest.nhy))
-# ifdef WIZARD
                 if (!wizard)
-# endif /* WIZARD */
-		return false;
+			return false;
 	}
 	if (updest.nlx > 0) {		/* ditto */
 	    if (within_bounded_area(x1, y1, updest.nlx, updest.nly,
 						updest.nhx, updest.nhy) &&
 		!within_bounded_area(x2, y2, updest.nlx, updest.nly,
 						updest.nhx, updest.nhy))
-# ifdef WIZARD
                 if (!wizard)
-# endif /* WIZARD */
-		return false;
+			return false;
 	    if (!within_bounded_area(x1, y1, updest.nlx, updest.nly,
 						updest.nhx, updest.nhy) &&
 		within_bounded_area(x2, y2, updest.nlx, updest.nly,
 						updest.nhx, updest.nhy))
-# ifdef WIZARD
                 if (!wizard)
-# endif /* WIZARD */
-		return false;
+			return false;
 	}
 	return true;
 }
@@ -761,47 +753,29 @@ boolean force_it;
 	return true;
 }
 
-void
-tele (void)
-{
+void tele(void) {
 	coord cc;
 
 	/* Disable teleportation in stronghold && Vlad's Tower */
 	if (level.flags.noteleport) {
-#ifdef WIZARD
 		if (!wizard) {
-#endif
-		    pline("A mysterious force prevents you from teleporting!");
-		    return;
-#ifdef WIZARD
+			pline("A mysterious force prevents you from teleporting!");
+			return;
 		}
-#endif
 	}
 
 	/* don't show trap if "Sorry..." */
 	if (!Blinded) make_blinded(0L,false);
 
-	if
-#ifdef WIZARD
-        (
-#endif
-        (u.uhave.amulet || On_W_tower_level(&u.uz)
+	if ((u.uhave.amulet || On_W_tower_level(&u.uz)
 #ifdef STEED
 	|| (u.usteed && mon_has_amulet(u.usteed))
 #endif
-	)
-#ifdef WIZARD
-        && (!wizard) )
-#endif
-	{
+	) && (!wizard)) {
 	    pline("You feel disoriented for a moment.");
 	    return;
 	}
-	if ((Teleport_control && !Stunned)
-#ifdef WIZARD
-			    || wizard
-#endif
-					) {
+	if ((Teleport_control && !Stunned) || wizard) {
 	    if (unconscious()) {
 		pline("Being unconscious, you cannot control your teleport.");
 	    } else {
@@ -867,40 +841,29 @@ dotele (void)
 				castit = true;
 				break;
 			}
-#ifdef WIZARD
 		if (!wizard) {
-#endif
 		    if (!castit) {
 			if (!Teleportation)
 			    pline("You don't know that spell.");
 			else pline("You are not able to teleport at will.");
 			return 0;
 		    }
-#ifdef WIZARD
 		}
-#endif
 	    }
 
 	    if (u.uhunger <= 10 || ACURR(A_STR) < 6) {
-#ifdef WIZARD
 		if (!wizard) {
-#endif
 			pline("You lack the strength %s.",
 			    castit ? "for a teleport spell" : "to teleport");
 			return 1;
-#ifdef WIZARD
 		}
-#endif
 	    }
 
 	    energy = objects[SPE_TELEPORT_AWAY].oc_level * 5;
 	    if (u.uen <= energy) {
-#ifdef WIZARD
-		if (wizard)
+		if (wizard) {
 			energy = u.uen;
-		else
-#endif
-		{
+		} else {
 			pline("You lack the energy %s.",
 			    castit ? "for a teleport spell" : "to teleport");
 			return 1;
@@ -913,13 +876,11 @@ dotele (void)
 
 	    if (castit) {
 		exercise(A_WIS, true);
-		if (spelleffects(sp_no, true))
+		if (spelleffects(sp_no, true)) {
 			return 1;
-		else
-#ifdef WIZARD
-		    if (!wizard)
-#endif
+		} else if (!wizard) {
 			return 0;
+		}
 	    } else {
 		u.uen -= energy;
 		flags.botl = 1;
@@ -954,30 +915,19 @@ level_tele (void)
 #ifdef STEED
 			|| (u.usteed && mon_has_amulet(u.usteed))
 #endif
-	   )
-#ifdef WIZARD
-						&& !wizard
-#endif
-							) {
+	   ) && !wizard) {
 	    pline("You feel very disoriented for a moment.");
 	    return;
 	}
-	if ((Teleport_control && !Stunned)
-#ifdef WIZARD
-	   || wizard
-#endif
-		) {
+	if ((Teleport_control && !Stunned) || wizard) {
 	    char qbuf[BUFSZ];
 	    int trycnt = 0;
 
 	    strcpy(qbuf, "To what level do you want to teleport?");
 	    do {
 		if (++trycnt == 2) {
-#ifdef WIZARD
 			if (wizard) strcat(qbuf, " [type a number or ? for a menu]");
-			else
-#endif
-			strcat(qbuf, " [type a number]");
+			else strcat(qbuf, " [type a number]");
 		}
 		getlin(qbuf, buf);
 		if (!strcmp(buf,"\033")) {	/* cancelled */
@@ -992,7 +942,6 @@ level_tele (void)
 		    pline("Oops...");
 		    goto random_levtport;
 		}
-#ifdef WIZARD
 		if (wizard && !strcmp(buf,"?")) {
 		    schar destlev = 0;
 		    xchar destdnum = 0;
@@ -1017,10 +966,7 @@ level_tele (void)
 			}
 			force_dest = true;
 		    } else return;
-		} else
-#endif
-		if ((newlev = lev_by_name(buf)) == 0) {
-#ifdef WIZARD
+		} else if ((newlev = lev_by_name(buf)) == 0) {
 		    s_level *slev;
 
 		    /* if you're using wizard mode, you shouldn't really need
@@ -1030,7 +976,6 @@ level_tele (void)
 				      NULL, NULL);
 			return;
 		    }
-#endif
 		    newlev = atoi(buf);
                 }
 	    } while (!newlev && !digit(buf[0]) &&
@@ -1090,7 +1035,6 @@ level_tele (void)
 		pline("You shudder for a moment.");
 		return;
 	}
-#ifdef WIZARD
 	if (In_endgame(&u.uz)) {	/* must already be wizard */
 	    int llimit = dunlevs_in_dungeon(&u.uz);
 
@@ -1103,7 +1047,6 @@ level_tele (void)
 	    schedule_goto(&newlevel, false, false, 0, NULL, NULL);
 	    return;
 	}
-#endif
 	killer = 0;		/* still alive, so far... */
 
 	if (iflags.debug_fuzzer && newlev < 0) {
@@ -1173,50 +1116,33 @@ level_tele (void)
 	} else if (u.uz.dnum == medusa_level.dnum &&
 	    newlev >= dungeons[u.uz.dnum].depth_start +
 						dunlevs_in_dungeon(&u.uz)) {
-#ifdef WIZARD
 	    if (!(wizard && force_dest))
-#endif
-	    find_hell(&newlevel);
+		    find_hell(&newlevel);
 	} else {
-	    /* if invocation did not yet occur, teleporting into
-	     * the last level of Gehennom is forbidden.
-	     */
-#ifdef WIZARD
+		/* if invocation did not yet occur, teleporting into
+		 * the last level of Gehennom is forbidden.
+		 */
 		if (!wizard)
-#endif
-	    if (Inhell && !u.uevent.invoked &&
-			newlev >= (dungeons[u.uz.dnum].depth_start +
-					dunlevs_in_dungeon(&u.uz) - 1)) {
-# ifdef WIZARD
-                if (!wizard)
-                {
-# endif /* WIZARD */
-		newlev = dungeons[u.uz.dnum].depth_start +
-					dunlevs_in_dungeon(&u.uz) - 2;
-		pline("Sorry...");
-# ifdef WIZARD
-                }
-# endif /* WIZARD */
+			if (Inhell && !u.uevent.invoked &&
+					newlev >= (dungeons[u.uz.dnum].depth_start +
+						dunlevs_in_dungeon(&u.uz) - 1)) {
+				if (!wizard)
+				{
+					newlev = dungeons[u.uz.dnum].depth_start +
+						dunlevs_in_dungeon(&u.uz) - 2;
+					pline("Sorry...");
+				}
 
-	    }
-	    /* no teleporting out of quest dungeon */
-            if
-# ifdef WIZARD
-                ((!wizard) &&
-# endif /* WIZARD */
-                (In_quest(&u.uz) && newlev < depth(&qstart_level))
-# ifdef WIZARD
-                )
-# endif /* WIZARD */
-		newlev = depth(&qstart_level);
-	    /* the player thinks of levels purely in logical terms, so
-	     * we must translate newlev to a number relative to the
-	     * current dungeon.
-	     */
-#ifdef WIZARD
-	    if (!(wizard && force_dest))
-#endif
-	    get_level(&newlevel, newlev);
+			}
+		/* no teleporting out of quest dungeon */
+		if ((!wizard) && (In_quest(&u.uz) && newlev < depth(&qstart_level)))
+			newlev = depth(&qstart_level);
+		/* the player thinks of levels purely in logical terms, so
+		 * we must translate newlev to a number relative to the
+		 * current dungeon.
+		 */
+		if (!(wizard && force_dest))
+			get_level(&newlevel, newlev);
 	}
 	schedule_goto(&newlevel, false, false, 0, NULL, NULL);
 	/* in case player just read a scroll and is about to be asked to
@@ -1704,12 +1630,10 @@ boolean give_feedback;
 	    unstuck(mtmp);
 	    rloc(mtmp, false);
 	} else if (is_rider(mtmp->data) && rn2(13) &&
-		   enexto(&cc, u.ux, u.uy, mtmp->data))
+		   enexto(&cc, u.ux, u.uy, mtmp->data)) {
 	    rloc_to(mtmp, cc.x, cc.y);
-	else {
-#ifdef WIZARD
-	    if (wizard && Teleport_control)
-	    {
+	} else {
+	    if (wizard && Teleport_control) {
 		/*
 		 * [ALI] This code will only allow monsters to be
 		 * teleported to positions acceptable to rloc_pos_ok().
@@ -1732,9 +1656,9 @@ boolean give_feedback;
 		    pline("Sorry...");
 		    rloc(mtmp, false);
 		}
-	    } else
-#endif /* WIZARD */
-	    rloc(mtmp, false);
+	    } else {
+		    rloc(mtmp, false);
+	    }
 	}
 	return true;
 }

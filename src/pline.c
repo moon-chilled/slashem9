@@ -4,9 +4,7 @@
 
 #include "hack.h"
 #include "epri.h"
-#ifdef WIZARD
 #include "edog.h"
-#endif
 
 static boolean no_repeat = false;
 
@@ -208,7 +206,6 @@ void mstatusline(struct monst *mtmp) {
 
 	info[0] = 0;
 	if (mtmp->mtame) {	  strcat(info, ", tame");
-#ifdef WIZARD
 	    if (wizard) {
 		sprintf(eos(info), " (%d", mtmp->mtame);
 		if (!mtmp->isminion)
@@ -216,7 +213,6 @@ void mstatusline(struct monst *mtmp) {
 			EDOG(mtmp)->hungrytime, EDOG(mtmp)->apport);
 		strcat(info, ")");
 	    }
-#endif
 	}
 	else if (mtmp->mpeaceful) strcat(info, ", peaceful");
 	else if (mtmp->mtraitor)  strcat(info, ", traitor");
@@ -238,9 +234,7 @@ void mstatusline(struct monst *mtmp) {
 	else if (mtmp->mstrategy & STRAT_WAITMASK)
 				  strcat(info, ", meditating");
 	else if (mtmp->mflee) {	  strcat(info, ", scared");
-#ifdef WIZARD
 	    if (wizard)		  sprintf(eos(info), " (%d)", mtmp->mfleetim);
-#endif
 	}
 	if (mtmp->mtrapped)	  strcat(info, ", trapped");
 	if (mtmp->mspeed)	  strcat(info,

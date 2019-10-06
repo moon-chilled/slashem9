@@ -45,9 +45,7 @@ extern void init_linux_cons(void);
 #endif
 
 static void wd_message(void);
-#ifdef WIZARD
 static bool wiz_error_flag = false;
-#endif
 
 int main(int argc, char **argv) {
 	int fd;
@@ -158,12 +156,9 @@ int main(int argc, char **argv) {
 #ifdef MAIL
 	getmailstatus();
 #endif
-#ifdef WIZARD
 	if (wizard)
 		strcpy(plname, "wizard");
-	else
-#endif
-	if(!*plname || !strncmp(plname, "player", 4)
+	else if(!*plname || !strncmp(plname, "player", 4)
 		    || !strncmp(plname, "games", 4)) {
 		askname();
 	} else if (exact_username) {
@@ -177,9 +172,7 @@ int main(int argc, char **argv) {
 	plnamesuffix();		/* strip suffix from name; calls askname() */
 				/* again if suffix was whole name */
 				/* accepts any suffix */
-#ifdef WIZARD
 	if(!wizard) {
-#endif
 		/*
 		 * check for multiple games under the same name
 		 * (if !locknum) or check max nr of players (otherwise)
@@ -187,14 +180,12 @@ int main(int argc, char **argv) {
 		signal(SIGQUIT,SIG_IGN);
 		signal(SIGINT,SIG_IGN);
 		if(!locknum)
-			sprintf(lock, "%d%s", (int)getuid(), plname);
+			sprintf(lock, "%d%s", getuid(), plname);
 		getlock();
-#ifdef WIZARD
 	} else {
-		sprintf(lock, "%d%s", (int)getuid(), plname);
+		sprintf(lock, "%d%s", getuid(), plname);
 		getlock();
 	}
-#endif /* WIZARD */
 
 	dlb_init();	/* must be before newgame() */
 
@@ -218,12 +209,10 @@ int main(int argc, char **argv) {
 	display_gamewindows();
 
 	if ((fd = restore_saved_game()) >= 0) {
-#ifdef WIZARD
 		/* Since wizard is actually flags.debug, restoring might
 		 * overwrite it.
 		 */
 		bool remember_wiz_mode = wizard;
-#endif
 #ifndef FILE_AREAS
 		const char *fq_save = fqname(SAVEF, SAVEPREFIX, 1);
 
@@ -242,9 +231,7 @@ int main(int argc, char **argv) {
 		mark_synch();	/* flush output */
 		if(!dorecover(fd))
 			goto not_recovered;
-#ifdef WIZARD
 		if(!wizard && remember_wiz_mode) wizard = true;
-#endif
 		check_special_room(false);
 		wd_message();
 
@@ -294,7 +281,6 @@ char *argv[];
 		switch(argv[0][1]){
 		case 'D':
 		case 'Z':
-#ifdef WIZARD
 			{
 			  char *user;
 			  int uid;
@@ -323,7 +309,6 @@ char *argv[];
 			}
 			/* otherwise fall thru to discover */
 			wiz_error_flag = true;
-#endif
 		case 'X':
 			discover = true;
 			break;
@@ -496,16 +481,11 @@ port_help()
 }
 #endif
 
-static void
-wd_message()
-{
-#ifdef WIZARD
+static void wd_message(void) {
 	if (wiz_error_flag) {
 		pline("Only user \"%s\" may access debug (wizard) mode.", WIZARD);
 		pline("Entering discovery mode instead.");
-	} else
-#endif
-	if (discover)
+	} else if (discover)
 		pline("You are in non-scoring discovery mode.");
 }
 
@@ -513,10 +493,7 @@ wd_message()
  * Add a slash to any name not ending in /. There must
  * be room for the /
  */
-void
-append_slash(name)
-char *name;
-{
+void append_slash(char *name) {
 	char *ptr;
 
 	if (!*name)

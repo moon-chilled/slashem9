@@ -188,9 +188,7 @@ extern int isok(int,int);
 extern int get_adjacent_loc(const char *, const char *, xchar, xchar, coord *);
 extern const char *click_to_cmd(int,int,int);
 extern char readchar(void);
-#ifdef WIZARD
 extern void sanity_check(void);
-#endif
 extern void commands_init(void);
 extern char *stripspace(char*);
 extern void parsebindings(char*);
@@ -528,9 +526,7 @@ extern int induced_align(int);
 extern boolean Invocation_lev(d_level *);
 extern xchar level_difficulty(void);
 extern schar lev_by_name(const char *);
-#ifdef WIZARD
 extern schar print_dungeon(boolean,schar *,xchar *);
-#endif
 
 /* ### eat.c ### */
 
@@ -649,7 +645,7 @@ extern void set_savefile_name(void);
 #ifdef INSURANCE
 extern void save_savefile_name(int);
 #endif
-#if defined(WIZARD) && !defined(MICRO)
+#ifndef MICRO
 extern void set_error_savefile(void);
 #endif
 extern int create_savefile(void);
@@ -666,9 +662,7 @@ extern boolean can_read_file(const char *);
 extern void read_config_file(const char *);
 extern void check_recordfile(const char *);
 extern int get_uchar_list(char*, uchar*, int);
-#if defined(WIZARD)
 extern void read_wizkit(void);
-#endif
 extern void paniclog(const char *, const char *);
 extern int validate_prefix_locations(char *);
 extern void free_saved_games(char**);
@@ -885,9 +879,7 @@ extern boolean obj_permanent_light(struct obj *);
 extern void obj_split_light_source(struct obj *, struct obj *);
 extern void obj_merge_light_sources(struct obj *,struct obj *);
 extern int candle_light_range(struct obj *);
-#ifdef WIZARD
 extern int wiz_light_sources(void);
-#endif
 
 /* ### lock.c ### */
 
@@ -1110,9 +1102,7 @@ extern void add_to_buried(struct obj *);
 extern void dealloc_obj(struct obj *);
 extern void obj_ice_effects(int, int, boolean);
 extern long peek_at_iced_corpse_age(struct obj *);
-#ifdef WIZARD
 extern void obj_sanity_check(void);
-#endif
 
 /* ### mkroom.c ### */
 
@@ -1667,9 +1657,7 @@ extern void do_genocide(int);
 extern void punish(struct obj *);
 extern void unpunish(void);
 extern boolean cant_create(int *, boolean);
-#ifdef WIZARD
 extern struct monst *create_particular(void);
-#endif
 
 /* ### rect.c ### */
 
@@ -2014,10 +2002,8 @@ extern boolean obj_is_local(struct obj *);
 extern void save_timers(int,int,int);
 extern void restore_timers(int,int,boolean,long);
 extern void relink_timers(boolean);
-#ifdef WIZARD
 extern int wiz_timeout_queue(void);
 extern void timer_sanity_check(void);
-#endif
 
 /* ### topten.c ### */
 

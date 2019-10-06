@@ -464,9 +464,6 @@ static const char *build_opts[] = {
 #ifdef DLB
 	"data librarian",
 #endif
-#ifdef WIZARD
-	"debug mode",
-#endif
 #ifdef REALTIME_ON_BOTL
 	"elapsed time on status line",
 #endif

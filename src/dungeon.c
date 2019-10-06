@@ -49,10 +49,8 @@ static void init_level(int,int,struct proto_dungeon *);
 static int possible_places(int, boolean *, struct proto_dungeon *);
 static xchar pick_level(boolean *, int);
 static boolean place_level(int, struct proto_dungeon *);
-#ifdef WIZARD
 static const char *br_string(int);
 static void print_branch(winid, int, int, int, boolean, struct lchoice *);
-#endif
 
 #ifdef DEBUG
 #define DD	dungeons[i]
@@ -409,9 +407,7 @@ static void init_level(int dgn, int proto_index, struct proto_dungeon *pd) {
 	struct tmplevel *tlevel = &pd->tmplevel[proto_index];
 
 	pd->final_lev[proto_index] = NULL; /* no "real" level */
-#ifdef WIZARD
 /*      if (!wizard)   */
-#endif
 	    if (tlevel->chance <= rn2(100)) return;
 
 	pd->final_lev[proto_index] = new_level =
@@ -628,10 +624,8 @@ void init_dungeons(void) {
 	for (i = 0; i < n_dgns; i++) {
 	    Fread((void *)&pd.tmpdungeon[i],
 				    sizeof(struct tmpdungeon), 1, dgn_file);
-#ifdef WIZARD
-	    if(!wizard)
-#endif
-	      if(pd.tmpdungeon[i].chance && (pd.tmpdungeon[i].chance <= rn2(100))) {
+
+	    if (!wizard && pd.tmpdungeon[i].chance && (pd.tmpdungeon[i].chance <= rn2(100))) {
 		int j;
 
 		/* skip over any levels or branches */
@@ -1328,11 +1322,8 @@ schar lev_by_name(const char *nam) {
 			dlev.dnum == medusa_level.dnum) ||
 		(u.uz.dnum == medusa_level.dnum &&
 			dlev.dnum == valley_level.dnum)) &&
-	    (	/* either wizard mode or else seen and not forgotten */
-#ifdef WIZARD
-	     wizard ||
-#endif
-		(level_info[idx].flags & (FORGOTTEN|VISITED)) == VISITED)) {
+	     	/* either wizard mode or else seen and not forgotten */
+	    (wizard || (level_info[idx].flags & (FORGOTTEN|VISITED)) == VISITED)) {
 	    lev = depth(&slev->dlevel);
 	}
     } else {	/* not a specific level; try branch names */
@@ -1344,10 +1335,8 @@ schar lev_by_name(const char *nam) {
 	if (idx >= 0) {
 	    idxtoo = (idx >> 8) & 0x00FF;
 	    idx &= 0x00FF;
-	    if (  /* either wizard mode, or else _both_ sides of branch seen */
-#ifdef WIZARD
-		wizard ||
-#endif
+	    // either wizard mode, or else _both_ sides of branch seen
+	    if (wizard ||
 		((level_info[idx].flags & (FORGOTTEN|VISITED)) == VISITED &&
 		 (level_info[idxtoo].flags & (FORGOTTEN|VISITED)) == VISITED)) {
 		if (ledger_to_dnum(idxtoo) == u.uz.dnum) idx = idxtoo;
@@ -1360,7 +1349,6 @@ schar lev_by_name(const char *nam) {
     return lev;
 }
 
-#ifdef WIZARD
 
 /* Convert a branch type to a string usable by print_dungeon(). */
 static const char *br_string(int type) {
@@ -1550,6 +1538,5 @@ schar print_dungeon(boolean bymenu, schar *rlev, xchar *rdgn) {
     destroy_nhwindow(win);
     return 0;
 }
-#endif /* WIZARD */
 
 /*dungeon.c*/

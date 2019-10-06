@@ -150,9 +150,6 @@
 /* An MS-Windows system */
 #undef WIN32
 
-/* The person allowed to use the -D option */
-#undef WIZARD
-
 /* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
    `char[]'. */
 #undef YYTEXT_POINTER

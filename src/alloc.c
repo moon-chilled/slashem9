@@ -7,9 +7,7 @@
 #include "tradstdc.h"
 #include "config.h"
 
-#ifdef WIZARD
 char *fmt_ptr(const void*,char *);
-#endif
 
 extern void panic(const char *,...);
 
@@ -25,8 +23,6 @@ void nhfree(const void *ptr) {
 	free((void*)ptr);
 }
 
-
-#ifdef WIZARD
 
 # if defined(MICRO) || defined(WIN32)
 /* we actually want to know which systems have an ANSI run-time library
@@ -53,6 +49,5 @@ char *fmt_ptr(const void *ptr, char *buf) {
 	return buf;
 }
 
-#endif	/* WIZARD */
 
 /*alloc.c*/

@@ -435,9 +435,8 @@ dotechmenu(how, tech_no)
 		prefix = "    ";
 		any.a_int = 0;
 	    }
-#ifdef WIZARD
-	    if (wizard)
-		if (!iflags.menu_tab_sep)
+	    if (wizard) {
+		if (!iflags.menu_tab_sep) {
 		    sprintf(buf, "%s%-*s %2d%c%c%c   %s(%i)",
 			    prefix, longest, techname(i), tlevel,
 			    tech_list[i].t_intrinsic & FROMEXPER ? 'X' : ' ',
@@ -449,7 +448,7 @@ dotechmenu(how, tech_no)
 			    !techtout(i) ? "Prepared" :
 			    techtout(i) > 100 ? "Not Ready" : "Soon",
 			    techtout(i));
-		else
+		} else {
 		    sprintf(buf, "%s%s\t%2d%c%c%c\t%s(%i)",
 			    prefix, techname(i), tlevel,
 			    tech_list[i].t_intrinsic & FROMEXPER ? 'X' : ' ',
@@ -461,24 +460,26 @@ dotechmenu(how, tech_no)
 			    !techtout(i) ? "Prepared" :
 			    techtout(i) > 100 ? "Not Ready" : "Soon",
 			    techtout(i));
-	    else
-#endif
-	    if (!iflags.menu_tab_sep)
-		sprintf(buf, "%s%-*s %5d   %s",
-			prefix, longest, techname(i), tlevel,
-			tech_inuse(techid(i)) ? "Active" :
-			tlevel <= 0 ? "Beyond recall" :
-			can_limitbreak() ? "LIMIT" :
-			!techtout(i) ? "Prepared" :
-			techtout(i) > 100 ? "Not Ready" : "Soon");
-	    else
-		sprintf(buf, "%s%s\t%5d\t%s",
-			prefix, techname(i), tlevel,
-			tech_inuse(techid(i)) ? "Active" :
-			tlevel <= 0 ? "Beyond recall" :
-			can_limitbreak() ? "LIMIT" :
-			!techtout(i) ? "Prepared" :
-			techtout(i) > 100 ? "Not Ready" : "Soon");
+		}
+	    } else {
+		    if (!iflags.menu_tab_sep) {
+			    sprintf(buf, "%s%-*s %5d   %s",
+					    prefix, longest, techname(i), tlevel,
+					    tech_inuse(techid(i)) ? "Active" :
+					    tlevel <= 0 ? "Beyond recall" :
+					    can_limitbreak() ? "LIMIT" :
+					    !techtout(i) ? "Prepared" :
+					    techtout(i) > 100 ? "Not Ready" : "Soon");
+		    } else {
+			    sprintf(buf, "%s%s\t%5d\t%s",
+					    prefix, techname(i), tlevel,
+					    tech_inuse(techid(i)) ? "Active" :
+					    tlevel <= 0 ? "Beyond recall" :
+					    can_limitbreak() ? "LIMIT" :
+					    !techtout(i) ? "Prepared" :
+					    techtout(i) > 100 ? "Not Ready" : "Soon");
+		    }
+	    }
 
 	    add_menu(tmpwin, NO_GLYPH, &any,
 		    techtout(i) ? 0 : let, 0, ATR_NONE, buf, MENU_UNSELECTED);
@@ -583,9 +584,7 @@ techeffects (int tech_no)
 	    pline("You have to wait %s before using your technique again.",
                 (techtout(tech_no) > 100) ?
                         "for a while" : "a little longer");
-#ifdef WIZARD
             if (!wizard || (yn("Use technique anyways?") == 'n'))
-#endif
                 return 0;
         }
 

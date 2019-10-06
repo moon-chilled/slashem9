@@ -262,7 +262,6 @@ static void fortune(struct monst *mtmp) {
 	if (EGYP(mtmp)->top <= 0)
 		card_shuffle(mtmp);
 	card = card_draw(mtmp);
-#ifdef WIZARD
 	if (wizard) {
 		long t = -1;
 
@@ -270,7 +269,6 @@ static void fortune(struct monst *mtmp) {
 		sscanf(buf, "%ld", &t);
 		if (t >= 0) card = t + CARD_SUITED;
 	}
-#endif
 	card_name(card, buf);
 	verbalize("You have drawn %s.", buf);
 

@@ -406,7 +406,6 @@ struct mkroom	*sroom;
 	else if(sy == sroom->hy+1) sy--; else {
 	shk_failed:
 #ifdef DEBUG
-# ifdef WIZARD
 	    /* Said to happen sometimes, but I have never seen it. */
 	    /* Supposedly fixed by fdoor change in mklev.c */
 	    if(wizard) {
@@ -423,7 +422,6 @@ struct mkroom	*sroom;
 		}
 		display_nhwindow(WIN_MESSAGE, false);
 	    }
-# endif
 #endif
 	    return -1;
 	}

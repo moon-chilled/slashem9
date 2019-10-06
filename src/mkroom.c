@@ -70,16 +70,13 @@ mkroom (
     }
 }
 
-static void
-mkshop()
-{
+static void mkshop(void) {
 	struct mkroom *sroom;
 	int i = -1, j;
-#ifdef WIZARD
 	char *ep = NULL;	/* (init == lint suppression) */
 
 	/* first determine shoptype */
-	if(wizard){
+	if(wizard) {
 #ifndef MAC
 		ep = nh_getenv("SHOPTYPE");
 		if(ep){
@@ -149,7 +146,6 @@ mkshop()
 		}
 #endif
 	}
-#endif
 	for(sroom = &rooms[0]; ; sroom++){
 		if(sroom->hx < 0) return;
 		if(sroom - rooms >= nroom) {
@@ -159,11 +155,8 @@ mkshop()
 		if(sroom->rtype != OROOM) continue;
 		if(has_dnstairs(sroom) || has_upstairs(sroom))
 			continue;
-		if(
-#ifdef WIZARD
-		   (wizard && ep && sroom->doorct != 0) ||
-#endif
-			sroom->doorct == 1) break;
+		if ((wizard && ep && sroom->doorct != 0) || sroom->doorct == 1)
+			break;
 	}
 	if (!sroom->rlit) {
 		int x, y;
@@ -217,11 +210,7 @@ boolean strict;
 			continue;
 		} else if(has_upstairs(sroom) || has_dnstairs(sroom))
 			continue;
-		if(sroom->doorct == 1 || (!rn2(5) && !strict)
-#ifdef WIZARD
-						|| (wizard && !strict)
-#endif
-							)
+		if (sroom->doorct == 1 || (!rn2(5) && !strict) || (wizard && !strict))
 			return sroom;
 	}
 	return NULL;

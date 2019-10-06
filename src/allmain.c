@@ -429,10 +429,8 @@ void moveloop(void) {
 			}
 		}
 
-#ifdef WIZARD
 		if (iflags.sanity_check || iflags.debug_fuzzer)
 			sanity_check();
-#endif
 
 #ifdef CLIPPING
 		/* just before rhack */

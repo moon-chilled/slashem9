@@ -749,7 +749,6 @@ do_look(quick)
 		    sprintf(temp_buf, " [seen: %s]", monbuf);
 		    strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
 		}
-#ifdef WIZARD
 		if (wizard && pm) {
 		    struct monst *mtmp = m_at(cc.x, cc.y);
 		    if (mtmp && mtmp->oldmonnm != monsndx(pm)) {
@@ -758,7 +757,6 @@ do_look(quick)
 			strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
 		    }
 		}
-#endif
 	    }
 	}
 
@@ -912,9 +910,7 @@ static const char *help_menu_items[] = {
 #ifdef PORT_HELP
 	"%s-specific help and commands.",
 #endif
-#ifdef WIZARD
 	"List of wizard-mode commands.",
-#endif
 	"",
 	NULL
 };
@@ -927,9 +923,7 @@ enum {
 #ifdef PORT_HELP
   PORT_HELP_ID,
 #endif
-#ifdef WIZARD
   WIZHLP_SLOT,
-#endif
   NULL_SLOT
 };
 
@@ -947,10 +941,8 @@ help_menu(sel)
 
 	any.a_void = 0;		/* zero all bits */
 	start_menu(tmpwin);
-#ifdef WIZARD
 	if (!wizard) help_menu_items[WIZHLP_SLOT] = "",
 		     help_menu_items[WIZHLP_SLOT+1] = NULL;
-#endif
 	for (i = 0; help_menu_items[i]; i++)
 #ifdef PORT_HELP
 	    /* port-specific line has a %s in it for the PORT_ID */
@@ -1008,11 +1000,9 @@ dohelp (void)
 #ifdef PORT_HELP
 			case PORT_HELP_ID:  port_help();  break;
 #endif
-#ifdef WIZARD
                         case  WIZHLP_SLOT:  display_file_area(NH_DEBUGHELP_AREA,
 				    NH_DEBUGHELP, true);
 				  break;
-#endif
 		}
 	}
 	return 0;

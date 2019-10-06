@@ -601,7 +601,7 @@ doname (struct obj *obj)
 #ifdef INVISIBLE_OBJECTS
 	if (obj->oinvis) strcat(prefix,"invisible ");
 #endif
-#if defined(WIZARD) && defined(UNPOLYPILE)
+#ifdef UNPOLYPILE
 	if (wizard && is_hazy(obj)) strcat(prefix,"hazy ");
 #endif
 
@@ -716,7 +716,6 @@ plus:
 		    goto charges;
 		break;
 	case SPBOOK_CLASS: /* WAC spellbooks have charges now */
-#ifdef WIZARD
 		if (wizard) {
 		    if (Hallucination)
 			break;
@@ -724,9 +723,9 @@ plus:
 			sprintf(eos(bp), " (%d:%d,%d)",
 			  (int)obj->recharged, obj->spe, obj->spestudied);
 		    break;
-		} else
-#endif
-		goto charges;
+		} else {
+			goto charges;
+		}
 	case WAND_CLASS:
 		add_erosion_words(obj, prefix);
 charges:
@@ -759,18 +758,16 @@ ring:
 		break;
 	case FOOD_CLASS:
 		if (obj->otyp == CORPSE && obj->odrained) {
-#ifdef WIZARD
-		    if (wizard && obj->oeaten < drainlevel(obj))
-			strcpy(tmpbuf, "over-drained ");
-		    else
-#endif
-		    sprintf(tmpbuf, "%sdrained ",
-		      (obj->oeaten > drainlevel(obj)) ? "partly " : "");
-		}
-		else if (obj->oeaten)
+			if (wizard && obj->oeaten < drainlevel(obj))
+				strcpy(tmpbuf, "over-drained ");
+			else
+				sprintf(tmpbuf, "%sdrained ",
+						(obj->oeaten > drainlevel(obj)) ? "partly " : "");
+		} else if (obj->oeaten) {
 		    strcpy(tmpbuf, "partly eaten ");
-		else
+		} else {
 		    tmpbuf[0] = '\0';
+		}
 		strcat(prefix, tmpbuf);
 		if (obj->otyp == CORPSE && !Hallucination) {
 		    if (mons[obj->corpsenm].geno & G_UNIQ) {
@@ -839,10 +836,8 @@ ring:
 		sprintf(eos(bp), " (unpaid, %ld %s)",
 			quotedprice, currency(quotedprice));
 	}
-#ifdef WIZARD
 	if (wizard && obj->in_use)	/* Can't use "(in use)", see leashes */
 		strcat(bp, " (finishing)");	/* always a bug */
-#endif
 	if (!strncmp(prefix, "a ", 2) &&
 			index(vowels, *(prefix+2) ? *(prefix+2) : *bp)
 			&& (*(prefix+2) || (strncmp(bp, "uranium", 7)
@@ -1586,9 +1581,7 @@ static const struct o_range o_ranges[] = {
 	{ "firearm", 	WEAPON_CLASS, PISTOL, AUTO_SHOTGUN },
 	{ "gun", 	WEAPON_CLASS, PISTOL, AUTO_SHOTGUN },
 	{ "grenade", 	WEAPON_CLASS, FRAG_GRENADE, GAS_GRENADE },
-#ifdef WIZARD
 	{ "venom",	VENOM_CLASS,  BLINDING_VENOM, ACID_VENOM },
-#endif
 	{ "gray stone",	GEM_CLASS,    LUCKSTONE,      FLINT },
 	{ "grey stone",	GEM_CLASS,    LUCKSTONE,      FLINT },
 };
@@ -1687,9 +1680,7 @@ makesingular (const char *oldstr)
                            !BSTRCMPI(bp, p-7, "Perseus") || /* WAC added */
 			   !BSTRCMPI(bp, p-11, "Aesculapius") || /* staff */
 			   !BSTRCMP(bp, p-10, "eucalyptus") ||
-#ifdef WIZARD
 			   !BSTRCMP(bp, p-9, "iron bars") ||
-#endif
 			   !BSTRCMP(bp, p-5, "aklys") ||
 			   !BSTRCMP(bp, p-6, "fungus"))
 				return bp;
@@ -1724,10 +1715,8 @@ boolean retry_inverted;	/* optional extra "of" handling */
 	 * and the trap is "bear trap", so to let wizards wish for both we
 	 * must not fuzzymatch.
 	 */
-#ifdef WIZARD
 	if (wizard && !strcmp(o_str, "beartrap"))
 	    return !strncmpi(o_str, u_str, 8);
-#endif
 
 	/* ignore spaces & hyphens and upper/lower case when comparing */
 	if (fuzzymatch(u_str, o_str, " -", true)) return true;
@@ -1822,7 +1811,6 @@ struct alt_spellings {
 	{ "kiwi fruit", APPLE },
 	{ "kiwi", APPLE }, /* Actually refers to the bird */
 #endif
-#ifdef WIZARD
 /* KMH, balance patch -- How lazy are we going to let the players get? */
 /* WAC Added Abbreviations */
 /* Tools */
@@ -1870,7 +1858,6 @@ struct alt_spellings {
 	{ "HoOA",  HELM_OF_OPPOSITE_ALIGNMENT},
 	{ "HoT",  HELM_OF_TELEPATHY},
 	{ "SoR",  SHIELD_OF_REFLECTION},
-#endif
 	{ "camera", EXPENSIVE_CAMERA },
 	{ "T shirt", T_SHIRT },
 	{ "tee shirt", T_SHIRT },
@@ -2006,10 +1993,7 @@ boolean from_user;
 			   !strncmpi(bp,"blank ", l=6)) {
 			unlabeled = 1;
 		} else if(!strncmpi(bp, "poisoned ",l=9)
-#ifdef WIZARD
-			  || (wizard && !strncmpi(bp, "trapped ",l=8))
-#endif
-			  ) {
+			  || (wizard && !strncmpi(bp, "trapped ",l=8))) {
 			ispoisoned=1;
 		} else if(!strncmpi(bp, "greased ",l=8)) {
 			isgreased=1;
@@ -2253,11 +2237,7 @@ boolean from_user;
 	if(!BSTRCMPI(bp, p-10, "gold piece") || !BSTRCMPI(bp, p-7, "zorkmid") ||
 	   !strcmpi(bp, "gold") || !strcmpi(bp, "money") ||
 	   !strcmpi(bp, "coin") || *bp == GOLD_SYM) {
-			if (cnt > 5000
-#ifdef WIZARD
-					&& !wizard
-#endif
-						) cnt=5000;
+			if (cnt > 5000 && !wizard) cnt=5000;
 		if (cnt < 1) cnt=1;
 #ifndef GOLDOBJ
 		if (from_user)
@@ -2275,12 +2255,7 @@ boolean from_user;
 	}
 	if (strlen(bp) == 1 &&
 	   (i = def_char_to_objclass(*bp)) < MAXOCLASSES && i > ILLOBJ_CLASS
-#ifdef WIZARD
-	    && (wizard || i != VENOM_CLASS)
-#else
-	    && i != VENOM_CLASS
-#endif
-	    ) {
+	    && (wizard || i != VENOM_CLASS)) {
 		oclass = i;
 		goto any;
 	}
@@ -2468,7 +2443,6 @@ srch:
 		goto typfnd;
 	    }
 	}
-#ifdef WIZARD
 	/* Let wizards wish for traps --KAA */
 	/* must come after objects check so wizards can still wish for
 	 * trap objects like beartraps
@@ -2594,51 +2568,39 @@ srch:
 		    return &zeroobj;
 		}
 	}
-#endif
 	if(!oclass) return NULL;
 any:
 	if(!oclass) oclass = wrpsym[rn2((int)sizeof(wrpsym))];
 typfnd:
 	if (typ) oclass = objects[typ].oc_class;
 
-	/* check for some objects that are not allowed */
+	// check for some objects that are not allowed
 	if (typ && objects[typ].oc_unique) {
-#ifdef WIZARD
-	    if (wizard)
-		;	/* allow unique objects */
-	    else
-#endif
-	    switch (typ) {
-		case AMULET_OF_YENDOR:
-		    typ = FAKE_AMULET_OF_YENDOR;
-		    break;
-		case CANDELABRUM_OF_INVOCATION:
-		    typ = rnd_class(TALLOW_CANDLE, WAX_CANDLE);
-		    break;
-		case BELL_OF_OPENING:
-		    typ = BELL;
-		    break;
-		case SPE_BOOK_OF_THE_DEAD:
-		    typ = SPE_BLANK_PAPER;
-		    break;
-	    }
+		// allow unique objects for wizard
+		if (!wizard)
+			switch (typ) {
+				case AMULET_OF_YENDOR:
+					typ = FAKE_AMULET_OF_YENDOR;
+					break;
+				case CANDELABRUM_OF_INVOCATION:
+					typ = rnd_class(TALLOW_CANDLE, WAX_CANDLE);
+					break;
+				case BELL_OF_OPENING:
+					typ = BELL;
+					break;
+				case SPE_BOOK_OF_THE_DEAD:
+					typ = SPE_BLANK_PAPER;
+					break;
+			}
 	}
 
 	/* catch any other non-wishable objects */
-	if (objects[typ].oc_nowish
-#ifdef WIZARD
-	    && !wizard
-#endif
-	    )
+	if (objects[typ].oc_nowish && !wizard)
 	    return NULL;
 
 	/* convert magic lamps to regular lamps before lighting them or setting
 	   the charges */
-	if (typ == MAGIC_LAMP
-#ifdef WIZARD
-				&& !wizard
-#endif
-						)
+	if (typ == MAGIC_LAMP && !wizard)
 	    typ = OIL_LAMP;
 
 	if(typ) {
@@ -2660,23 +2622,17 @@ typfnd:
 	if(cnt > 0 && objects[typ].oc_merge && oclass != SPBOOK_CLASS &&
 		(typ != CORPSE || !is_reviver(&mons[mntmp])) &&
 		(cnt < rnd(6) ||
-#ifdef WIZARD
 		wizard ||
-#endif
 		 (cnt <= 7 && Is_candle(otmp)) ||
 		 (cnt <= 20 &&
 		  ((oclass == WEAPON_CLASS && is_ammo(otmp))
 				|| typ == ROCK || is_missile(otmp)))))
 			otmp->quan = (long) cnt;
 
-#ifdef WIZARD
 	if (oclass == VENOM_CLASS) otmp->spe = 1;
-#endif
 
 	if (spesgn == 0) spe = otmp->spe;
-#ifdef WIZARD
 	else if (wizard) /* no alteration to spe */ ;
-#endif
 	else if (oclass == ARMOR_CLASS || oclass == WEAPON_CLASS ||
 		 is_weptool(otmp) ||
 			(oclass==RING_CLASS && objects[typ].oc_charged)) {
@@ -2713,15 +2669,11 @@ typfnd:
 		case SCR_MAIL: otmp->spe = 1; break;
 #endif
 		case WAN_WISHING:
-#ifdef WIZARD
 			if (!wizard) {
-#endif
 				otmp->spe = (rn2(10) ? -1 : 0);
 				break;
-#ifdef WIZARD
 			}
 			/* fall through, if wizard */
-#endif
 		default: otmp->spe = spe;
 	}
 
@@ -2741,16 +2693,9 @@ typfnd:
 			}
 			break;
 		case CORPSE:
-                        if
-# ifdef WIZARD
-                                ((wizard) ||
-# endif /* WIZARD */
+                        if ((wizard) ||
                                 (!(mons[mntmp].geno & G_UNIQ) &&
-                                !(mvitals[mntmp].mvflags & G_NOCORPSE))
-# ifdef WIZARD
-                                )
-# endif /* WIZARD */
-                                {
+                                !(mvitals[mntmp].mvflags & G_NOCORPSE))) {
 			    /* beware of random troll or lizard corpse,
 			       or of ordinary one being forced to such */
 			    if (otmp->timed) obj_stop_timers(otmp);
@@ -2762,19 +2707,13 @@ typfnd:
 			}
 			break;
 		case FIGURINE:
-                        if
-# ifdef WIZARD
-                                ((wizard) ||
-# endif /* WIZARD */
-                                ((!(mons[mntmp].geno & G_UNIQ)
-			    && !is_human(&mons[mntmp])
-# ifdef WIZARD
-                                )
-# endif /* WIZARD */
+			if (wizard ||
+					((!(mons[mntmp].geno & G_UNIQ)
+					  && !is_human(&mons[mntmp]))
 #ifdef MAIL
-			    && mntmp != PM_MAIL_DAEMON
+					 && mntmp != PM_MAIL_DAEMON
 #endif
-							))
+					))
 				otmp->corpsenm = mntmp;
 			break;
 		case EGG:
@@ -2810,22 +2749,10 @@ typfnd:
 		curse(otmp);
 	} else if (uncursed) {
 		otmp->blessed = 0;
-		otmp->cursed = (Luck < 0
-#ifdef WIZARD
-					 && !wizard
-#endif
-							);
+		otmp->cursed = Luck < 0 && !wizard;
 	} else if (blessed) {
-		otmp->blessed = (Luck >= 0
-#ifdef WIZARD
-					 || wizard
-#endif
-							);
-		otmp->cursed = (Luck < 0
-#ifdef WIZARD
-					 && !wizard
-#endif
-							);
+		otmp->blessed = Luck >= 0 || wizard;
+		otmp->cursed = Luck < 0 && !wizard;
 	} else if (spesgn < 0) {
 		curse(otmp);
 	}
@@ -2844,21 +2771,13 @@ typfnd:
 
 	    /* set erodeproof */
 	    if (erodeproof && !eroded && !eroded2)
-		    otmp->oerodeproof = (Luck >= 0
-#ifdef WIZARD
-					     || wizard
-#endif
-					);
+		    otmp->oerodeproof = Luck >= 0 || wizard;
 	}
 
 	/* set otmp->recharged */
 	if (oclass == WAND_CLASS) {
 	    /* prevent wishing abuse */
-	    if (otmp->otyp == WAN_WISHING
-#ifdef WIZARD
-		    && !wizard
-#endif
-		) rechrg = 1;
+	    if (otmp->otyp == WAN_WISHING && !wizard) rechrg = 1;
 	    otmp->recharged = (unsigned)rechrg;
 	}
 
@@ -2937,10 +2856,7 @@ typfnd:
 		otmp->oartifact != ART_SWORD_OF_BALANCE)) ||
 # endif
 	     (otmp->oartifact && rn2(nartifact_exist()) > 1))
-#ifdef WIZARD
-	    && !wizard
-#endif
-	    ) {
+	    && !wizard) {
 	    artifact_exists(otmp, ONAME(otmp), false);
 	    if (Has_contents(otmp))
 		delete_contents(otmp);

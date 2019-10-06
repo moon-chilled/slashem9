@@ -600,7 +600,6 @@ makemaz (const char *s)
 
 	} else strcpy(protofile, "");
 
-#ifdef WIZARD
 	/* SPLEVTYPE format is "level-choice,level-choice"... */
 	if (wizard && *protofile && sp && sp->rndlevs) {
 	    char *ep = getenv("SPLEVTYPE");	/* not nh_getenv */
@@ -622,7 +621,6 @@ makemaz (const char *s)
 		}
 	    }
 	}
-#endif
 
 	if(*protofile) {
 	    strcat(protofile, LEV_EXT);

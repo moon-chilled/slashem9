@@ -41,7 +41,6 @@ static int playersteal(void);
 #if 0
 static int specialpower(void); /* WAC -- use techniques */
 #endif
-#ifdef WIZARD
 static int wiz_wish(void);
 static int wiz_identify(void);
 static int wiz_map(void);
@@ -76,7 +75,6 @@ static int wiz_show_display(void);
 # ifdef PORT_DEBUG
 static int wiz_port_debug(void);
 # endif
-#endif
 static int enter_explore_mode(void);
 static int doattributes(void);
 static int doconduct(void); /**/
@@ -87,9 +85,7 @@ static void bind_key(unsigned char, char*);
 static void init_bind_list(void);
 static void change_bind_list(void);
 static void verify_key_list(void);
-#ifdef WIZARD
 static void add_debug_extended_commands(void);
-#endif /* WIZARD */
 static void addchar(char);
 
 static struct rm *maploc;
@@ -599,8 +595,6 @@ static int playersteal(void) {
 	return 0;
 }
 
-#ifdef WIZARD
-
 // ^W command - wish for something
 // Unlimited wishes for debug mode by Paul Polderman
 static int wiz_wish(void) {
@@ -632,9 +626,7 @@ static int specialpower(void) {
 	if (u.unextuse) {
 	    pline("You have to wait %s before using your ability again.",
 		(u.unextuse > 500) ? "for a while" : "a little longer");
-#ifdef WIZARD
             if (!wizard || (yn("Use ability anyways?") == 'n'))
-#endif
                 return 0;
 	}
 
@@ -1092,7 +1084,6 @@ static int wiz_show_wmodes(void) {
 	return 0;
 }
 
-#endif /* WIZARD */
 
 
 /* -enlightenment and conduct- */
@@ -1153,12 +1144,10 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	else if (u.ualign.record >= -3)	you_have("strayed");
 	else if (u.ualign.record >= -8)	you_have("sinned");
 	else you_have("transgressed");
-#ifdef WIZARD
 	if (wizard) {
 		sprintf(buf, " %d", u.ualign.record);
 		enl_msg("Your alignment ", "is", "was", buf);
 	}
-#endif
 
 	/*** Resistances to troubles ***/
 	if (Fire_resistance) you_are("fire resistant");
@@ -1207,7 +1196,7 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 		sprintf(buf, "wounded %s", makeplural(body_part(LEG)));
 		you_have(buf);
 	}
-#if defined(WIZARD) && defined(STEED)
+#if defined(STEED)
 	if (Wounded_legs && u.usteed && wizard) {
 	    strcpy(buf, x_monnam(u.usteed, ARTICLE_YOUR, NULL,
 		    SUPPRESS_SADDLE | SUPPRESS_HALLUCINATION, false));
@@ -1310,9 +1299,7 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 #endif
 	if (u.uswallow) {
 	    sprintf(buf, "swallowed by %s", a_monnam(u.ustuck));
-#ifdef WIZARD
 	    if (wizard) sprintf(eos(buf), " (%u)", u.uswldtim);
-#endif
 	    you_are(buf);
 	} else if (u.ustuck) {
 	    sprintf(buf, "%s %s",
@@ -1352,9 +1339,7 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	if (Upolyd) {
 	    if (u.umonnum == u.ulycn) strcpy(buf, "in beast form");
 	    else sprintf(buf, "polymorphed into %s", an(youmonst.data->mname));
-#ifdef WIZARD
 	    if (wizard) sprintf(eos(buf), " (%d)", u.mtimedone);
-#endif
 	    you_are(buf);
 	}
 	if (Unchanging) you_can("not change from your current form");
@@ -1384,14 +1369,10 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	    sprintf(buf, "%s%slucky",
 		    ltmp >= 10 ? "extremely " : ltmp >= 5 ? "very " : "",
 		    Luck < 0 ? "un" : "");
-#ifdef WIZARD
 	    if (wizard) sprintf(eos(buf), " (%d)", Luck);
-#endif
 	    you_are(buf);
 	}
-#ifdef WIZARD
 	 else if (wizard) enl_msg("Your luck ", "is", "was", " zero");
-#endif
 	if (u.moreluck > 0) you_have("extra luck");
 	else if (u.moreluck < 0) you_have("reduced luck");
 	if (carrying(LUCKSTONE) || stone_luck(true)) {
@@ -1407,21 +1388,15 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	{
 		sprintf(buf, "%s health", u.uhealbonus > 0 ? "extra" :
 			"reduced");
-#ifdef WIZARD
 	    if (wizard) sprintf(eos(buf), " (%ld)", u.uhealbonus);
-#endif
 		you_have(buf);
 	}
-#ifdef WIZARD
 	 else if (wizard) enl_msg("Your health bonus ", "is", "was", " zero");
-#endif
 
 	if (u.ugangr) {
 	    sprintf(buf, " %sangry with you",
 		    u.ugangr > 6 ? "extremely " : u.ugangr > 3 ? "very " : "");
-#ifdef WIZARD
 	    if (wizard) sprintf(eos(buf), " (%d)", u.ugangr);
-#endif
 	    enl_msg(u_gname(), " is", " was", buf);
 	} else
 	    /*
@@ -1437,17 +1412,13 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 #else
 	    sprintf(buf, "%ssafely pray", can_pray(false) ? "" : "not ");
 #endif
-#ifdef WIZARD
 	    if (wizard) sprintf(eos(buf), " (%d)", u.ublesscnt);
-#endif
 	    you_can(buf);
 #if 0	/* WAC -- replaced by techniques */
 /*	    sprintf(buf, "%s%suse%s your special", !u.unextuse ? "" : "not ",
 		    final ? "have " : "", final ? "d" : "");*/
 	    sprintf(buf, "%suse your special", !u.unextuse ? "" : "not ");
-#ifdef WIZARD
 	    if (wizard) sprintf(eos(buf), " (%d)", u.unextuse);
-#endif
 	    you_can(buf);
 #endif
 	}
@@ -1531,12 +1502,10 @@ void dump_enlightenment(int final) {
 	else if (u.ualign.record >= -3)	dump(youhave, "strayed");
 	else if (u.ualign.record >= -8)	dump(youhave, "sinned");
 	else dump("  You have ", "transgressed");
-#ifdef WIZARD
 	if (wizard) {
 		sprintf(buf, " %d", u.ualign.record);
 		dump("  Your alignment was ", buf);
 	}
-#endif
 
 	/*** Resistances to troubles ***/
 	if (Fire_resistance) dump(youwere, "fire resistant");
@@ -1655,9 +1624,7 @@ void dump_enlightenment(int final) {
 #endif
 	if (u.uswallow) {
 	    sprintf(buf, "swallowed by %s", a_monnam(u.ustuck));
-#ifdef WIZARD
 	    if (wizard) sprintf(eos(buf), " (%u)", u.uswldtim);
-#endif
 	    dump(youwere, buf);
 	} else if (u.ustuck) {
 	    sprintf(buf, "%s %s",
@@ -1700,9 +1667,7 @@ void dump_enlightenment(int final) {
 	    if (u.umonnum == u.ulycn) strcpy(buf, "in beast form");
 	    else sprintf(buf, "polymorphed into %s",
 			 an(youmonst.data->mname));
-#ifdef WIZARD
 	    if (wizard) sprintf(eos(buf), " (%d)", u.mtimedone);
-#endif
 	    dump(youwere, buf);
 	}
 	if (Unchanging)
@@ -1723,9 +1688,7 @@ void dump_enlightenment(int final) {
 		    Luck < 0 ? "un" : "", Luck);
 	    dump(youwere, buf);
 	}
-#ifdef WIZARD
 	 else if (wizard) dump("  ", "Your luck was zero");
-#endif
 	if (u.moreluck > 0) dump(youhad, "extra luck");
 	else if (u.moreluck < 0) dump(youhad, "reduced luck");
 	if (carrying(LUCKSTONE) || stone_luck(true)) {
@@ -1739,9 +1702,7 @@ void dump_enlightenment(int final) {
 	if (u.ugangr) {
 	    sprintf(buf, " %sangry with you",
 		u.ugangr > 6 ? "extremely " : u.ugangr > 3 ? "very " : "");
-#ifdef WIZARD
 	    if (wizard) sprintf(eos(buf), " (%d)", u.ugangr);
-#endif
 	    sprintf(buf2, "%s was %s", u_gname(), buf);
 	    dump("  ", buf2);
 	}
@@ -1958,7 +1919,6 @@ static const struct menu_tab player_menu[] = {
 	{0,0,0,0}
 };
 
-#ifdef WIZARD
 static const struct menu_tab wizard_menu[] = {
 	{'c', true, wiz_gain_ac, "Increase AC"},
 #ifdef DISPLAY_LAYERS
@@ -1984,7 +1944,6 @@ static const struct menu_tab wizard_menu[] = {
 #endif
 	{0,0,0,0,0},
 };
-#endif
 
 static const struct menu_tab help_menu[] = {
 	{'?', true, dohelp, "Help Contents"},
@@ -2000,9 +1959,7 @@ static const struct menu_tab main_menu[] = {
 	{'a', true, NULL, "Action"},
 	{'p', true, NULL, "Player"},
 	{'d', true, NULL, "Discoveries"},
-#ifdef WIZARD
 	{'w', true, NULL, "Wizard"},
-#endif
 	{'?', true, NULL, "Help"},
 	{0,0,0,0},
 };
@@ -2020,9 +1977,7 @@ static struct menu_list main_menustruct[] = {
 	{"Action", "Main Menu", action_menu},
 	{"Player", "Main Menu", player_menu},
 	{"Discoveries", "Main Menu", discover_menu},
-#ifdef WIZARD
 	{"Wizard", "Main Menu", wizard_menu},
-#endif
 	{"Help", "Main Menu", help_menu},
 	{"Main Menu",NULL, main_menu},
 	{0,0,0},
@@ -2044,9 +1999,7 @@ static int makemenu(const char *menuname, struct menu_list menu_struct[]) {
                 current_menu = menu_struct[i].m_menu;
                 for (n = 0; current_menu[n].m_item; n++) {
                         if (u.uburied && !current_menu[n].can_if_buried) continue;
-#ifdef WIZARD
 			if (!wizard && !current_menu[n].m_funct && !strcmp(current_menu[n].m_item,"Wizard")) continue;
-#endif
                         if (current_menu[n].m_char == (char)0) {
                                 any.a_int = 0;
                                 add_menu(win, NO_GLYPH, &any, 0, 0, ATR_BOLD,
@@ -2102,11 +2055,7 @@ static char *enlght_combatinc(const char *inctyp, int incamt, int final, char *o
 	char numbuf[24];
 	const char *modif, *bonus;
 
-	if (final
-#ifdef WIZARD
-		|| wizard
-#endif
-	  ) {
+	if (final || wizard) {
 	    sprintf(numbuf, "%s%d",
 		    (incamt > 0) ? "+" : "", incamt);
 	    modif = (const char *) numbuf;
@@ -2152,27 +2101,23 @@ void show_conduct(int final) {
 	if (!u.uconduct.gnostic)
 	    you_have_been("an atheist");
 
-	if (!u.uconduct.weaphit)
+	if (!u.uconduct.weaphit) {
 	    you_have_never("hit with a wielded weapon");
-#ifdef WIZARD
-	else if (wizard) {
+	} else if (wizard) {
 	    sprintf(buf, "used a wielded weapon %ld time%s",
 		    u.uconduct.weaphit, plur(u.uconduct.weaphit));
 	    you_have_X(buf);
 	}
-#endif
 	if (!u.uconduct.killer)
 	    you_have_been("a pacifist");
 
-	if (!u.uconduct.literate)
+	if (!u.uconduct.literate) {
 	    you_have_been("illiterate");
-#ifdef WIZARD
-	else if (wizard) {
+	} else if (wizard) {
 	    sprintf(buf, "read items or engraved %ld time%s",
 		    u.uconduct.literate, plur(u.uconduct.literate));
 	    you_have_X(buf);
 	}
-#endif
 
 	ngenocided = num_genocides();
 	if (ngenocided == 0) {
@@ -2183,25 +2128,21 @@ void show_conduct(int final) {
 	    you_have_X(buf);
 	}
 
-	if (!u.uconduct.polypiles)
+	if (!u.uconduct.polypiles) {
 	    you_have_never("polymorphed an object");
-#ifdef WIZARD
-	else if (wizard) {
+	} else if (wizard) {
 	    sprintf(buf, "polymorphed %ld item%s",
 		    u.uconduct.polypiles, plur(u.uconduct.polypiles));
 	    you_have_X(buf);
 	}
-#endif
 
-	if (!u.uconduct.polyselfs)
+	if (!u.uconduct.polyselfs) {
 	    you_have_never("changed form");
-#ifdef WIZARD
-	else if (wizard) {
+	} else if (wizard) {
 	    sprintf(buf, "changed form %ld time%s",
 		    u.uconduct.polyselfs, plur(u.uconduct.polyselfs));
 	    you_have_X(buf);
 	}
-#endif
 
 	if (!u.uconduct.wishes)
 	    you_have_X("used no wishes");
@@ -2216,15 +2157,13 @@ void show_conduct(int final) {
 	}
 
 
-	if (!u.uconduct.celibacy)
+	if (!u.uconduct.celibacy) {
 	    you_have_X("remained celibate");
-#ifdef WIZARD
-	else if (wizard) {
+	} else if (wizard) {
 	    sprintf(buf, "your vow of celibacy %ld time%s",
 		    u.uconduct.celibacy, plur(u.uconduct.celibacy));
 	    enl_msg(You_, "have broken ", "broke ", buf);
 	}
-#endif
 
 	/* Pop up the window and wait for a key */
 	display_nhwindow(en_win, true);
@@ -2260,26 +2199,21 @@ void dump_conduct(int final) {
 	    sprintf(buf, "  You hit with a wielded weapon %ld time%s",
 		    u.uconduct.weaphit, plur(u.uconduct.weaphit));
 	    dump("", buf);
-	}
-#ifdef WIZARD
-	else if (wizard) {
+	} else if (wizard) {
 	    sprintf(buf, "hit with a wielded weapon %ld time%s",
 		    u.uconduct.weaphit, plur(u.uconduct.weaphit));
 	    dump("  You ", buf);
 	}
-#endif
 	if (!u.uconduct.killer)
 	    dump("", "  You were a pacifist");
 
-	if (!u.uconduct.literate)
+	if (!u.uconduct.literate) {
 	    dump("", "  You were illiterate");
-#ifdef WIZARD
-	else if (wizard) {
+	} else if (wizard) {
 	    sprintf(buf, "read items or engraved %ld time%s",
 		    u.uconduct.literate, plur(u.uconduct.literate));
 	    dump("  You ", buf);
 	}
-#endif
 
 	ngenocided = num_genocides();
 	if (ngenocided == 0) {
@@ -2352,7 +2286,6 @@ void dump_conduct(int final) {
 #if 0
 static const struct func_tab cmdlist[] = {
 	{C('d'), false, dokick}, /* "D" is for door!...?  Msg is in dokick.c */
-#ifdef WIZARD
 	{C('b'), false, playersteal},
 /* BEGIN TSANTH'S CODE */
 	{C('c'), true, wiz_gain_ac},
@@ -2362,24 +2295,19 @@ static const struct func_tab cmdlist[] = {
 	{C('g'), true, wiz_genesis},
 	{C('i'), true, wiz_identify},
 	{C('j'), true, wiz_gain_level},
-#endif
 	{C('l'), true, doredraw}, /* if number_pad is set */
-#ifdef WIZARD
 /* BEGIN TSANTH'S CODE */
 	{C('n'), true, wiz_toggle_invulnerability},
 /* END TSANTH'S CODE */
 	{C('o'), true, wiz_where},
-#endif
 	{C('p'), true, doprev_message},
 	{C('q'), true, done2},
 	{C('r'), true, doredraw},
 /*	{C('s'), false, specialpower},*/
 	{C('s'), true, dosave},
 	{C('t'), true, dotele},
-#ifdef WIZARD
 	{C('v'), true, wiz_level_tele},
 	{C('w'), true, wiz_wish},
-#endif
 	{C('x'), true, doattributes},
 	{C('y'), true, polyatwill},
 #ifdef SUSPEND
@@ -2623,7 +2551,6 @@ struct ext_func_tab extcmdlist[] = {
 	{"shout", "say something loud", doyell, IFBURIED}, /* jrn */
 #endif
 
-#if defined(WIZARD)
 	/*
 	 * There must be a blank entry here for every entry in the table
 	 * below.
@@ -2658,10 +2585,8 @@ struct ext_func_tab extcmdlist[] = {
 	{NULL, NULL, donull, true}, // #levelport
 	{NULL, NULL, donull, true}, // #wish
 	{NULL, NULL, donull, true}, // #where
-#endif
 };
 
-#if defined(WIZARD)
 static struct ext_func_tab debug_extcmdlist[] = {
 #ifdef DISPLAY_LAYERS
 	{"display", "detail display layers", wiz_show_display, IFBURIED, !AUTOCOMPLETE},
@@ -2718,7 +2643,6 @@ static void bind_key(unsigned char key, char* command) {
 
 static void init_bind_list(void) {
 	bind_key(C('d'), "kick" ); /* "D" is for door!...?  Msg is in dokick.c */
-#ifdef WIZARD
 	if (wizard) {
 		bind_key(C('e'), "detect" );
 		bind_key(C('f'), "map" );
@@ -2728,7 +2652,6 @@ static void init_bind_list(void) {
 		bind_key(C('v'), "levelport" );
 		bind_key(C('w'), "wish" );
 	}
-#endif
 	bind_key(C('l'), "redraw" ); /* if number_pad is set */
 	bind_key(C('p'), "previous" );
 	bind_key(C('r'), "redraw" );
@@ -3236,8 +3159,6 @@ static int wiz_migrate_mons(void) {
 }
 #endif
 
-#endif /* WIZARD */
-
 static int
 compare_commands(_cmd1, _cmd2)
      /* a wrapper function for strcmp.  Can this be done more simply? */
@@ -3258,9 +3179,7 @@ commands_init(void)
 	qsort(extcmdlist, count, sizeof(struct ext_func_tab),
 	      &compare_commands);
 
-#ifdef WIZARD
 	if (wizard) add_debug_extended_commands();
-#endif
 	init_bind_list();	/* initialize all keyboard commands */
 	change_bind_list();	/* change keyboard commands based on options */
 	verify_key_list();
@@ -3436,7 +3355,6 @@ void parseautocomplete(char* autocomplete, boolean condition) {
 		return;
 	}
 
-#ifdef WIZARD
 	/* do the exact same thing with the wizmode list */
 	/* this is a hack because wizard-mode commands haven't been loaded yet when
 	 * this code is run.  See "crappy hack" elsewhere. */
@@ -3445,7 +3363,6 @@ void parseautocomplete(char* autocomplete, boolean condition) {
 		debug_extcmdlist[i].autocomplete = condition;
 		return;
 	}
-#endif
 
 	/* not a real extended command */
 	raw_printf ("Bad autocomplete: invalid extended command '%s'.", autocomplete);
@@ -3873,11 +3790,7 @@ static boolean help_dir(char sym, const char *msg) {
 	    sym = highc(sym);
 	    ctrl = (sym - 'A') + 1;
 	    if ((expln = dowhatdoes_core(ctrl, buf2))
-		&& (!index(wiz_only_list, sym)
-#ifdef WIZARD
-		    || wizard
-#endif
-	                     )) {
+		&& (!index(wiz_only_list, sym) || wizard)) {
 		sprintf(buf, "Are you trying to use ^%c%s?", sym,
 			index(wiz_only_list, sym) ? "" :
 			" as specified in the Guidebook");

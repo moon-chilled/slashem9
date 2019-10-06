@@ -174,10 +174,8 @@ struct instance_flags {
 	coord	travelcc;	/* coordinates for travel_cache */
 	bool  hilite_hidden_stairs;
 	bool  hilite_obj_piles;
-#ifdef WIZARD
 	bool  sanity_check;	/* run sanity checks */
 	bool  mon_polycontrol;	/* debug: control monster polymorphs */
-#endif
 #ifdef TTY_GRAPHICS
 	char prevmsg_window;	/* type of old message window to use */
 #endif

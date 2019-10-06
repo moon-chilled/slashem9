@@ -507,10 +507,8 @@ cleanup_unpoly(arg, timeout)
 #endif
     struct obj *obj = (struct obj *)arg;
     obj->oldtyp = STRANGE_OBJECT;
-#ifdef WIZARD
     if (wizard && obj->where == OBJ_INVENT)
 	update_inventory();
-#endif
 }
 #endif /* UNPOLYPILE */
 
@@ -1748,10 +1746,8 @@ do_storms (void)
  *		Stop all timers attached to mon.
  */
 
-#ifdef WIZARD
 static const char *kind_name(short);
 static void print_queue(winid, timer_element *);
-#endif
 static void insert_timer(timer_element *);
 static timer_element *remove_timer(timer_element **, short, anything);
 static void write_timer(int, timer_element *);
@@ -1795,12 +1791,7 @@ static const ttable timeout_funcs[NUM_TIME_FUNCS] = {
 #undef TTAB
 
 
-#if defined(WIZARD)
-
-static const char *
-kind_name(kind)
-    short kind;
-{
+static const char *kind_name(short kind) {
     switch (kind) {
 	case TIMER_LEVEL: return "level";
 	case TIMER_GLOBAL: return "global";
@@ -1810,11 +1801,7 @@ kind_name(kind)
     return "unknown";
 }
 
-static void
-print_queue(win, base)
-    winid win;
-    timer_element *base;
-{
+static void print_queue(winid win, timer_element *base) {
     timer_element *curr;
     char buf[BUFSZ], arg_address[20];
 
@@ -1839,9 +1826,7 @@ print_queue(win, base)
     }
 }
 
-int
-wiz_timeout_queue (void)
-{
+int wiz_timeout_queue(void) {
     winid win;
     char buf[BUFSZ];
 
@@ -1861,9 +1846,7 @@ wiz_timeout_queue (void)
     return 0;
 }
 
-void
-timer_sanity_check (void)
-{
+void timer_sanity_check(void) {
     timer_element *curr;
     char obj_address[20];
 
@@ -1877,8 +1860,6 @@ timer_sanity_check (void)
 	    }
 	}
 }
-
-#endif /* WIZARD */
 
 
 /*

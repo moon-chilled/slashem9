@@ -101,18 +101,10 @@ static struct Bool_Opt
 #endif
 	{"menucolors", &iflags.use_menu_color, true,  SET_IN_GAME},
 	{"menu_on_esc", &flags.menu_on_esc, true, SET_IN_GAME},
-#ifdef WIZARD
 	/* for menu debugging only*/
 	{"menu_tab_sep", &iflags.menu_tab_sep, false, SET_IN_GAME},
-#else
-	{"menu_tab_sep", NULL, false, SET_IN_FILE},
-#endif
 	{"menu_glyphs", &iflags.use_menu_glyphs, false, SET_IN_GAME},
-#ifdef WIZARD
 	{"mon_polycontrol", &iflags.mon_polycontrol, false, SET_IN_GAME},
-#else
-	{"mon_polycontrol", NULL, false, SET_IN_FILE},
-#endif
 #ifdef CURSES_GRAPHICS
 	{"mouse_support", &iflags.wc_mouse_support, false, DISP_IN_GAME},	/*WC*/
 #else
@@ -144,11 +136,7 @@ static struct Bool_Opt
 #endif
 	{"rest_on_space", &flags.rest_on_space, false, SET_IN_GAME},
 	{"safe_pet", &flags.safe_dog, true, SET_IN_GAME},
-#ifdef WIZARD
 	{"sanity_check", &iflags.sanity_check, false, SET_IN_GAME},
-#else
-	{"sanity_check", NULL, false, SET_IN_FILE},
-#endif
 	{"showexp", &flags.showexp, false, SET_IN_GAME},
 	{"showrace", &iflags.showrace, false, SET_IN_GAME},
 #ifdef REALTIME_ON_BOTL
@@ -3038,10 +3026,8 @@ int doset(void) {
 			((boolopt[i].optflags == DISP_IN_GAME && pass == 0) ||
 			 (boolopt[i].optflags == SET_IN_GAME && pass == 1))) {
 		    if (bool_p == &flags.female) continue;  /* obsolete */
-#ifdef WIZARD
 		    if (bool_p == &iflags.sanity_check && !wizard) continue;
 		    if (bool_p == &iflags.menu_tab_sep && !wizard) continue;
-#endif
 		    if (is_wc_option(boolopt[i].name) &&
 			!wc_supported(boolopt[i].name)) continue;
 		    if (is_wc2_option(boolopt[i].name) &&
@@ -3985,10 +3971,8 @@ option_help (void)
     /* Boolean options */
     for (i = 0; boolopt[i].name; i++) {
 	if (boolopt[i].addr) {
-#ifdef WIZARD
 	    if (boolopt[i].addr == &iflags.sanity_check && !wizard) continue;
 	    if (boolopt[i].addr == &iflags.menu_tab_sep && !wizard) continue;
-#endif
 	    next_opt(datawin, boolopt[i].name);
 	}
     }

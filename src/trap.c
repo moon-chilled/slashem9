@@ -4188,9 +4188,7 @@ lava_effects()
 	    pline("You fall into the lava!");
 
 	usurvive = Lifesaved || discover;
-#ifdef WIZARD
 	if (wizard) usurvive = true;
-#endif
 	for(obj = invent; obj; obj = obj2) {
 	    obj2 = obj->nobj;
 	    if(is_organic(obj) && !obj->oerodeproof) {

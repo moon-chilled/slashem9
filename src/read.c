@@ -1150,9 +1150,7 @@ seffects (struct obj *sobj)
 		if(!rn2(73) && !sobj->blessed) cnt += rnd(4);
 		if(confused || sobj->cursed) cnt += 12;
 		while(cnt--) {
-#ifdef WIZARD
 		    if(!wizard || !(mtmp = create_particular()))
-#endif
 		    switch (rn2(10)+1) {
 		    case 1:
 			mtmp = makemon(mkclass(S_VAMPIRE,0), u.ux, u.uy, NO_MM_FLAGS);
@@ -1787,7 +1785,6 @@ do_class_genocide (void)
 				(buf[0] == DEF_INVISIBLE && buf[1] == '\0'))
 	pline("You aren't permitted to genocide such monsters.");
 			else
-#ifdef WIZARD	/* to aid in topology testing; remove pesky monsters */
 			  if (wizard && buf[0] == '*') {
 			    struct monst *mtmp, *mtmp2;
 
@@ -1801,7 +1798,6 @@ do_class_genocide (void)
 	pline("Eliminated %d monster%s.", gonecnt, plur(gonecnt));
 			    return;
 			} else
-#endif
 	pline("That symbol does not represent any monster.");
 			continue;
 		}
@@ -2102,7 +2098,6 @@ boolean revival;
 	return false;
 }
 
-#ifdef WIZARD
 /*
  * Make a new monster with the type controlled by the user.
  *
@@ -2110,9 +2105,7 @@ boolean revival;
  * "strange object" (']') symbol produces a random monster rather
  * than a mimic; this behavior quirk is useful so don't "fix" it...
  */
-struct monst *
-create_particular (void)
-{
+struct monst *create_particular(void) {
 	char buf[BUFSZ], *bufp, monclass = MAXMCLASSES;
 	int which, tries, i;
 	struct permonst *whichpm;
@@ -2176,6 +2169,5 @@ create_particular (void)
 	}
 	return mtmp;
 }
-#endif /* WIZARD */
 
 /*read.c*/

@@ -173,7 +173,7 @@ int done2(void) {
 		}
 		return 0;
 	}
-#if defined(WIZARD) && (defined(UNIX) || defined(LATTICE))
+#if (defined(UNIX) || defined(LATTICE))
 	if(wizard) {
 	    int c;
 #  ifdef LATTICE
@@ -317,7 +317,7 @@ void panic (const char *str, ...) {
 		  !program_state.something_worth_saving ?
 		  "Program initialization has failed." :
 		  "Suddenly, the dungeon collapses.");
-#if defined(WIZARD) && !defined(MICRO)
+#ifndef MICRO
 # if defined(NOTIFY_NETHACK_BUGS)
 	if (!wizard)
 	    raw_printf("Report the following error to \"%s\".",
@@ -344,7 +344,7 @@ void panic (const char *str, ...) {
 #ifdef WIN32
 	interject(INTERJECT_PANIC);
 #endif
-#if defined(WIZARD) && (defined(UNIX) || defined(LATTICE) || defined(WIN32))
+#if defined(UNIX) || defined(LATTICE) || defined(WIN32)
 	if (wizard)
 	    NH_abort();	/* generate core dump */
 #endif
@@ -600,12 +600,10 @@ void done(int how) {
 		paniclog("trickery", killer);
 		killer = 0;
 	    }
-#ifdef WIZARD
 	    if (wizard) {
 		pline("You are a very tricky wizard, it seems.");
 		return;
 	    }
-#endif
 	}
 
 	/* kilbuf: used to copy killer in case it comes from something like
@@ -671,11 +669,7 @@ void done(int how) {
 			return;
 		}
 	}
-	if ((
-#ifdef WIZARD
-			wizard ||
-#endif
-			discover) && (how <= GENOCIDED || how == TURNED_SLIME)) {
+	if ((wizard || discover) && (how <= GENOCIDED || how == TURNED_SLIME)) {
 		if(yn("Die?") == 'y') goto die;
 		pline("OK, so you don't %s.",
 			(how == CHOKING) ? "choke" : "die");
@@ -830,10 +824,8 @@ die:
 	}
 
 	if (bones_ok) {
-#ifdef WIZARD
 		/* KMH -- We need the "Save bones?" prompt for testing! */
 	    if (!wizard || yn("Save bones?") == 'y')
-#endif
 		savebones(corpse);
 	    /* corpse may be invalid pointer now so
 		ensure that it isn't used again */

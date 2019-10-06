@@ -144,11 +144,9 @@ void more_experienced(int exp, int rexp) {
 void losexp(const char *drainer /* cause of death, if drain should be fatal */, boolean force /* Force the loss of an experience level */) {
 	int num;
 
-#ifdef WIZARD
 	/* explicit wizard mode requests to reduce level are never fatal. */
 	if (drainer && !strcmp(drainer, "#levelchange"))
 		drainer = 0;
-#endif
 
 	if (!force && Drain_resistance) return;
 
