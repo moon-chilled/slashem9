@@ -409,10 +409,8 @@ boolean artif;
 		otmp->dknown = 0;
 	if (!objects[otmp->otyp].oc_uses_known)
 		otmp->known = 1;
-#ifdef INVISIBLE_OBJECTS
 	obj_set_oinvis(otmp, !rn2(1250) &&
 	  (otmp->otyp != BOULDER || !In_sokoban(&u.uz)), false);
-#endif
 	if (init) switch (let) {
 /* -----------============STEPHEN WHITE'S NEW CODE============----------- */
 	case WEAPON_CLASS:
@@ -655,9 +653,7 @@ boolean artif;
 	case WAND_CLASS:
 		if(otmp->otyp == WAN_WISHING) {
 		    otmp->spe = rnd(3);
-#ifdef INVISIBLE_OBJECTS
 		    if (Is_stronghold(&u.uz)) obj_set_oinvis(otmp, true, false);
-#endif
 		    if(!rn2(2)) otmp->recharged = 1;
 		} else otmp->spe = rn1(5,
 			(objects[otmp->otyp].oc_dir == NODIR) ? 15 : 8);

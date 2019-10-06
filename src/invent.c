@@ -424,11 +424,8 @@ void carry_obj_effects(struct monst *mon, struct obj *obj) {
 struct obj *hold_another_object(struct obj *obj, const char *drop_fmt, const char *drop_arg, const char *hold_msg) {
 	char buf[BUFSZ];
 
-#ifndef INVISIBLE_OBJECTS
-	if (!Blind) obj->dknown = 1;	/* maximize mergibility */
-#else
 	if (!Blind && (!obj->oinvis || See_invisible)) obj->dknown = 1;
-#endif
+
 	if (obj->oartifact) {
 	    /* place_object may change these */
 	    boolean crysknife = (obj->otyp == CRYSKNIFE);
@@ -2334,9 +2331,7 @@ int look_here(int obj_cnt /* obj_cnt > 0 implies that autopickup is in progess *
 	    /* only one object */
 	    if (dfeature) pline("%s", fbuf);
 	    sense_engr_at(u.ux, u.uy, false); /* Eric Backus */
-#ifdef INVISIBLE_OBJECTS
 	    if (otmp->oinvis && !See_invisible) verb = "feel";
-#endif
 	    pline("You %s here %s.", verb, doname(otmp));
 	    if (otmp->otyp == CORPSE) feel_cockatrice(otmp, false);
 	} else {
@@ -2422,12 +2417,8 @@ static boolean mergable(struct obj *otmp, struct obj *obj) {
 	    obj->otrapped != otmp->otrapped ||
 	    obj->lamplit != otmp->lamplit ||
 	    (flags.pickup_thrown && obj->was_thrown != otmp->was_thrown) ||
-#ifdef INVISIBLE_OBJECTS
 	    obj->oinvis != otmp->oinvis ||
-#endif
-#ifdef UNPOLYPILE
 	    obj->oldtyp != otmp->oldtyp ||
-#endif
 	    obj->greased != otmp->greased ||
 	    obj->oeroded != otmp->oeroded ||
 	    obj->oeroded2 != otmp->oeroded2 ||

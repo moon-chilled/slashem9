@@ -562,9 +562,8 @@ coord *cc;
 		mtmp2->mfleetim = mtmp->mfleetim;
 		mtmp2->mlstmv = mtmp->mlstmv;
 		mtmp2->m_ap_type = mtmp->m_ap_type;
-#ifdef INVISIBLE_OBJECTS
 		mtmp2->minvis = obj->oinvis;
-#endif
+
 		/* set these ones explicitly */
 		mtmp2->mavenge = 0;
 		mtmp2->meating = 0;
@@ -874,10 +873,7 @@ struct obj *obj;
 
 
 /* cancel obj, possibly carried by you or a monster */
-void
-cancel_item(obj)
-struct obj *obj;
-{
+void cancel_item(struct obj *obj) {
 	boolean	u_ring = (obj == uleft) || (obj == uright);
 	boolean holy = (obj->otyp == POT_WATER && obj->blessed);
 
@@ -989,10 +985,8 @@ struct obj *obj;
 	if (holy) costly_cancel(obj);
 	unbless(obj);
 	uncurse(obj);
-#ifdef INVISIBLE_OBJECTS
+
 	obj_set_oinvis(obj, false, false);
-#endif
-	return;
 }
 
 /* Remove a positive enchantment or charge from obj,
@@ -1318,12 +1312,7 @@ struct obj *obj;
     }
 }
 
-#ifdef INVISIBLE_OBJECTS
-void
-obj_set_oinvis(obj, oinvis, talk)
-struct obj *obj;
-boolean oinvis, talk;
-{
+void obj_set_oinvis(struct obj *obj, boolean oinvis, boolean talk) {
     boolean was_blind = Blind, sight_changed = false;
     xchar ox, oy;
 
@@ -1363,7 +1352,6 @@ boolean oinvis, talk;
 	}
     }
 }
-#endif
 
 /*
  * Polymorph the object to the given object ID.  If the ID is STRANGE_OBJECT
@@ -1387,9 +1375,7 @@ poly_obj(obj, id)
 	int obj_location = obj->where;
 	int old_nutrit, new_nutrit;
 
-#ifdef UNPOLYPILE
 	boolean unpoly = (id == STRANGE_OBJECT);
-#endif
 
 	/* WAC Amulets of Unchanging shouldn't change */
 	if (obj->otyp == AMULET_OF_UNCHANGING)
@@ -1450,9 +1436,7 @@ poly_obj(obj, id)
 	if (obj->otyp == SCR_MAIL) {
 		otmp->otyp = SCR_MAIL;
 		otmp->spe = 1;
-#ifdef UNPOLYPILE
 		unpoly = false;	/* WAC -- no change! */
-#endif
 	}
 #endif
 
@@ -1461,9 +1445,7 @@ poly_obj(obj, id)
 		int mnum, tryct = 100;
 
 
-#ifdef UNPOLYPILE
 		unpoly = false;	/* WAC no unpolying eggs */
-#endif
 		/* first, turn into a generic egg */
 		if (otmp->otyp == EGG)
 		    kill_egg(otmp);
@@ -1507,9 +1489,7 @@ poly_obj(obj, id)
 		otmp->opoisoned = true;
 
 	if (id == STRANGE_OBJECT && obj->otyp == CORPSE) {
-#ifdef UNPOLYPILE
 		unpoly = false;	/* WAC - don't bother */
-#endif
 	/* turn crocodile corpses into shoes */
 	    if (obj->corpsenm == PM_CROCODILE) {
 		otmp->otyp = LOW_BOOTS;
@@ -1536,18 +1516,14 @@ poly_obj(obj, id)
 	    if(otmp->otyp == MAGIC_LAMP) {
 		otmp->otyp = OIL_LAMP;
 		otmp->age = 1500L;	/* "best" oil lamp possible */
-#ifdef UNPOLYPILE
 		unpoly = false;
-#endif
 	    } else if (otmp->otyp == MAGIC_MARKER) {
 		otmp->recharged = 1;	/* degraded quality */
 	    }
-#ifdef UNPOLYPILE
 	    else if (otmp->otyp == LAND_MINE || otmp->otyp == BEARTRAP) {
 		/* Avoid awkward questions about traps set using hazy objs */
 		unpoly = false;
 	    }
-#endif
 	    /* don't care about the recharge count of other tools */
 	    break;
 
@@ -1677,14 +1653,12 @@ poly_obj(obj, id)
 		otmp->otyp != BOULDER)
 	    unblock_point(obj->ox, obj->oy);
 
-#ifdef UNPOLYPILE
 	/* WAC -- Attach unpoly timer if this is a standard poly */
 	if (unpoly /* && !rn2(20) */) {
 		set_obj_poly(otmp, obj);
 		if (is_hazy(otmp) && !Blind && carried(obj))
 			pline("%s seems hazy.", Yname2(otmp));
 	}
-#endif
 
 	/* ** we are now done adjusting the object ** */
 
@@ -1708,10 +1682,7 @@ poly_obj(obj, id)
 		update_mon_intrinsics(otmp->ocarry, otmp, true, false);
 	}
 
-	if ((!carried(otmp) || obj->unpaid) &&
-#if defined(UNPOLYPILE)
-		!is_hazy(obj) &&
-#endif
+	if ((!carried(otmp) || obj->unpaid) && !is_hazy(obj) &&
 		get_obj_location(otmp, &ox, &oy, BURIED_TOO|CONTAINED_TOO) &&
 		costly_spot(ox, oy)) {
 	    char objroom = *in_rooms(ox, oy, SHOPBASE);
@@ -1876,9 +1847,7 @@ struct obj *obj, *otmp;
 		rloco(obj);
 		break;
 	case WAN_MAKE_INVISIBLE:
-#ifdef INVISIBLE_OBJECTS
 		obj_set_oinvis(obj, true, false);
-#endif
 		break;
 	case WAN_UNDEAD_TURNING:
 	case SPE_TURN_UNDEAD:

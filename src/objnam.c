@@ -237,11 +237,7 @@ xname2 (struct obj *obj)
 	 * and printing the wrong article gives away information.
 	 */
 	if (!nn && ocl->oc_uses_known && ocl->oc_unique) obj->known = 0;
-#ifndef INVISIBLE_OBJECTS
-	if (!Blind) obj->dknown = true;
-#else
 	if (!Blind && (!obj->oinvis || See_invisible)) obj->dknown = true;
-#endif
 	if (Role_if(PM_PRIEST) || Role_if(PM_NECROMANCER)) obj->bknown = true;
 
 	/* We could put a switch(obj->oclass) here but currently only this one case exists */
@@ -598,12 +594,9 @@ doname (struct obj *obj)
 		strcpy(prefix, "the ");
 	} else strcpy(prefix, "a ");
 
-#ifdef INVISIBLE_OBJECTS
-	if (obj->oinvis) strcat(prefix,"invisible ");
-#endif
-#ifdef UNPOLYPILE
-	if (wizard && is_hazy(obj)) strcat(prefix,"hazy ");
-#endif
+	if (obj->oinvis) strcat(prefix, "invisible ");
+
+	if (wizard && is_hazy(obj)) strcat(prefix, "hazy ");
 
 	if ((!Hallucination || Role_if(PM_PRIEST) || Role_if(PM_NECROMANCER)) &&
 	    obj->bknown &&
@@ -1884,9 +1877,7 @@ boolean from_user;
 	int cnt, spe, spesgn, typ, very, rechrg;
 	int blessed, uncursed, iscursed, ispoisoned, isgreased, isdrained;
 	int eroded, eroded2, erodeproof;
-#ifdef INVISIBLE_OBJECTS
 	int isinvisible;
-#endif
 	int halfeaten, halfdrained, mntmp, contents;
 	int islit, unlabeled, ishistoric, isdiluted;
 	struct fruit *f;
@@ -1914,11 +1905,9 @@ boolean from_user;
 
 	cnt = spe = spesgn = typ = very = rechrg =
 		blessed = uncursed = iscursed = isdrained = halfdrained =
-#ifdef INVISIBLE_OBJECTS
-		isinvisible =
-#endif
-		ispoisoned = isgreased = eroded = eroded2 = erodeproof =
-		halfeaten = islit = unlabeled = ishistoric = isdiluted = 0;
+
+		isinvisible = ispoisoned = isgreased = eroded = eroded2 =
+		erodeproof = halfeaten = islit = unlabeled = ishistoric = isdiluted = 0;
 	mntmp = NON_PM;
 #define UNDEFINED 0
 #define EMPTY 1
@@ -1968,12 +1957,10 @@ boolean from_user;
 			iscursed = 1;
 		} else if (!strncmpi(bp, "uncursed ", l=9)) {
 			uncursed = 1;
-#ifdef INVISIBLE_OBJECTS
 		} else if (!strncmpi(bp, "visible ", l=8)) {
 			isinvisible = -1;
 		} else if (!strncmpi(bp, "invisible ", l=10)) {
 			isinvisible = 1;
-#endif
 		} else if (!strncmpi(bp, "rustproof ", l=10) ||
 			   !strncmpi(bp, "erodeproof ", l=11) ||
 			   !strncmpi(bp, "corrodeproof ", l=13) ||
@@ -2757,10 +2744,8 @@ typfnd:
 		curse(otmp);
 	}
 
-#ifdef INVISIBLE_OBJECTS
 	if (isinvisible)
 	    obj_set_oinvis(otmp, isinvisible > 0, false);
-#endif
 
 	/* set eroded */
 	if (is_damageable(otmp) || otmp->otyp == CRYSKNIFE) {

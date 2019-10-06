@@ -776,9 +776,7 @@ void Ring_on(struct obj *obj) {
 		/* can now see invisible monsters */
 		set_mimic_blocking(); /* do special mimic handling */
 		see_monsters();
-#ifdef INVISIBLE_OBJECTS
 		see_objects();
-#endif
 
 		if (Invis && !oldprop && !HSee_invisible &&
 				!perceives(youmonst.data) && !Blind) {
@@ -918,9 +916,7 @@ static void Ring_off_or_gone(struct obj *obj, boolean gone) {
 		if (!See_invisible) {
 		    set_mimic_blocking(); /* do special mimic handling */
 		    see_monsters();
-#ifdef INVISIBLE_OBJECTS
 		    see_objects();
-#endif
 		}
 
 		if (Invisible && !Blind) {

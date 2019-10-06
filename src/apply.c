@@ -711,11 +711,7 @@ void check_leash(struct monst *mon, xchar x, xchar y, boolean reset) {
 static int use_mirror(struct obj *obj) {
 	struct monst *mtmp;
 	char mlet;
-#ifdef INVISIBLE_OBJECTS
 	boolean vis = !Blind && (!obj->oinvis || See_invisible);
-#else
-	boolean vis = !Blind;
-#endif
 
 	if(!getdir(NULL)) return 0;
 	if(obj->cursed && !rn2(2)) {
@@ -763,12 +759,10 @@ static int use_mirror(struct obj *obj) {
 		return 1;
 	}
 	if(Underwater) {
-#ifdef INVISIBLE_OBJECTS
 		if (!obj->oinvis)
-#endif
-		pline(Hallucination ?
-		    "You give the fish a chance to fix their makeup." :
-		    "You reflect the murky water.");
+			pline(Hallucination ?
+					"You give the fish a chance to fix their makeup." :
+					"You reflect the murky water.");
 		return 1;
 	}
 	if(u.dz) {
@@ -793,11 +787,9 @@ static int use_mirror(struct obj *obj) {
 	} else if (!mtmp->mcansee) {
 	    if (vis)
 		pline("%s can't see anything right now.", Monnam(mtmp));
-#ifdef INVISIBLE_OBJECTS
 	} else if (obj->oinvis && !perceives(mtmp->data)) {
 	    if (vis)
 		pline("%s can't see your mirror.", Monnam(mtmp));
-#endif
 	/* some monsters do special things */
 	} else if (is_vampire(mtmp->data) || mlet == S_GHOST) {
 	    if (vis)

@@ -173,10 +173,8 @@ hitval (struct obj *otmp, struct monst *mon)
            (made_of_rock(ptr))) tmp += 2;
 
 
-#ifdef INVISIBLE_OBJECTS
 	/* invisible weapons against monsters who can't see invisible */
 	if (otmp->oinvis && !perceives(ptr)) tmp += 3;
-#endif
 
 	/* Check specially named weapon "to hit" bonuses */
 	if (otmp->oartifact) tmp += spec_abon(otmp, mon);

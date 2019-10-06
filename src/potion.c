@@ -2507,10 +2507,7 @@ upgrade_obj (struct obj *obj)
 		panic("upgrade_obj: unhandled realloc");
 	}
 
-	if ((!carried(obj) || obj->unpaid) &&
-#ifdef UNPOLYPILE
-		!is_hazy(obj) &&
-#endif
+	if ((!carried(obj) || obj->unpaid) && !is_hazy(obj) &&
 		get_obj_location(obj, &ox, &oy, BURIED_TOO|CONTAINED_TOO) &&
 		costly_spot(ox, oy)) {
 	    char objroom = *in_rooms(ox, oy, SHOPBASE);
@@ -2781,7 +2778,6 @@ dodip (void)
 	    }
 	    potion->in_use = false;	/* didn't go poof */
 	    return 1;
-#ifdef UNPOLYPILE
 	} else if (potion->otyp == POT_RESTORE_ABILITY && is_hazy(obj)) {
 		/* KMH -- Restore ability will stop unpolymorphing */
 		stop_timer(UNPOLY_OBJ, obj_to_any(obj));
@@ -2790,7 +2786,6 @@ dodip (void)
 			pline("%s seems less hazy.", Yname2(obj));
 		useup(potion);
 		return 1;
-#endif
 	} else if(obj->oclass == POTION_CLASS && obj->otyp != potion->otyp) {
 		/* Mixing potions is dangerous... */
 		pline("The potions mix...");
@@ -2854,7 +2849,7 @@ dodip (void)
 		useup(potion);
 		return 1;
 	}
-#ifdef INVISIBLE_OBJECTS
+
 	if (!always_visible(obj)) {
 	    if (potion->otyp == POT_INVISIBILITY && !obj->oinvis) {
 		obj_set_oinvis(obj, true, true);
@@ -2864,7 +2859,6 @@ dodip (void)
 		goto poof;
 	    }
 	}
-#endif
 
 	if(is_poisonable(obj)) {
 	    if(potion->otyp == POT_SICKNESS && !obj->opoisoned) {

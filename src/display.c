@@ -137,7 +137,6 @@ static int back_to_cmap(xchar, xchar);
 
 static boolean transp;    /* cached transparency flag for current tileset */
 
-#ifdef INVISIBLE_OBJECTS
 /*
  * vobj_at()
  *
@@ -156,7 +155,6 @@ struct obj *vobj_at(xchar x, xchar y) {
     }
     return NULL;
 }
-#endif	/* else vobj_at() is defined in display.h */
 
 /*
  * magic_map_background()

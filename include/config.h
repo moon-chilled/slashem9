@@ -231,8 +231,6 @@ typedef long glyph_t;
 #define LIGHT_SRC_SPELL /* WAC Light sourced spells (wac@intergate.bc.ca)*/
 
 /* monsters & objects */
-#define INVISIBLE_OBJECTS /* Not yet fully implemented */
-#define UNPOLYPILE	/* WAC -- Items can unpolymorph */
 #define STEED		/* The ability to ride monsters */
 
 /* Roles */

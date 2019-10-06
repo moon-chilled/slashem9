@@ -25,9 +25,7 @@ struct obj {
 	unsigned o_id;
 	xchar ox,oy;
 	short otyp;		/* object class number */
-#ifdef UNPOLYPILE
 	short oldtyp;	/* WAC for unpolymorph */
-#endif
 	unsigned owt;
 	long quan;		/* number of items */
 
@@ -89,9 +87,7 @@ struct obj {
 
 	Bitfield(recharged,3);	/* number of times it's been recharged */
 	bool lamplit;	/* a light-source -- can be lit */
-#ifdef INVISIBLE_OBJECTS
 	bool oinvis;	/* invisible */
-#endif
 	bool greased;	/* covered with grease */
 	Bitfield(oattached,2);	/* obj struct has special attachment */
 #define OATTACHED_NOTHING 0
@@ -136,9 +132,7 @@ struct obj {
 #define ONAME(otmp)	(((char *)(otmp)->oextra) + (otmp)->oxlth)
 
 /* All objects */
-#ifdef UNPOLYPILE
 #define is_hazy(otmp)	((otmp)->oldtyp != STRANGE_OBJECT)
-#endif
 /* [ALI] None of the objects listed here can be picked up by normal monsters.
  * If any such objects need to be marked as indestructible then consideration
  * will need to be given to what happens when such a monster disappears
@@ -152,11 +146,9 @@ struct obj {
 			(otmp)->oartifact == ART_KEY_OF_LAW || \
 			(otmp)->oartifact == ART_KEY_OF_NEUTRALITY || \
 			(otmp)->oartifact == ART_KEY_OF_CHAOS)
-#ifdef INVISIBLE_OBJECTS
 #define always_visible(otmp) ( \
 			(otmp)->otyp == MUMMY_WRAPPING || \
 			(otmp)->oclass == COIN_CLASS)
-#endif
 
 /* Weapons and weapon-tools */
 /* KMH -- now based on skill categories.  Formerly:

@@ -31,12 +31,8 @@ typedef void (*timeout_proc)(void *, long);
 #define FIG_TRANSFORM	6
 #define UNPOLY_MON      7
 #define BOMB_BLOW	8
-#  ifdef UNPOLYPILE
 #define UNPOLY_OBJ      9
 #define NUM_TIME_FUNCS  10
-#  else
-#define NUM_TIME_FUNCS  9
-#  endif
 
 /* used in timeout.c */
 typedef struct fe {

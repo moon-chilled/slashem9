@@ -293,12 +293,11 @@ void artifact_exists(struct obj *otmp, const char *name, boolean mod) {
 			  otmp->oartifact != ART_SUNSWORD)
 			    begin_burn(otmp, false);
 			otmp->quan = 1; /* guarantee only one of this artifact */
-#ifdef UNPOLYPILE	/* Artifacts are immune to unpolypile --ALI */
+			/* Artifacts are immune to unpolypile --ALI */
 			if (is_hazy(otmp)) {
 			    stop_timer(UNPOLY_OBJ, obj_to_any(otmp));
 			    otmp->oldtyp = STRANGE_OBJECT;
 			}
-#endif
 		    }
 		    otmp->age = 0;
 		    if(otmp->otyp == RIN_INCREASE_DAMAGE)

@@ -267,9 +267,7 @@ extern void bury_obj(struct obj *);
 
 /* ### display.c ### */
 
-#ifdef INVISIBLE_OBJECTS
-extern struct obj * vobj_at(xchar,xchar);
-#endif /* INVISIBLE_OBJECTS */
+extern struct obj *vobj_at(xchar,xchar);
 extern void magic_map_background(xchar,xchar,int);
 extern void map_background(xchar,xchar,int);
 extern void map_trap(struct trap *,int);
@@ -1971,10 +1969,8 @@ extern void substitute_tiles(d_level *);
 extern void burn_away_slime(void);
 extern void nh_timeout(void);
 extern void fall_asleep(int, boolean);
-#ifdef UNPOLYPILE
 extern void set_obj_poly(struct obj *, struct obj *);
 extern void unpoly_obj(void *, long);
-#endif
 extern int mon_poly(struct monst *, boolean, const char *);
 extern int mon_spec_poly(struct monst *, struct permonst *, long,
 			    boolean, boolean, boolean, boolean);
@@ -2315,9 +2311,7 @@ extern boolean obj_resists(struct obj *,int,int);
 extern boolean obj_shudders(struct obj *);
 extern void do_osshock(struct obj *);
 extern void puton_worn_item(struct obj *);
-#ifdef INVISIBLE_OBJECTS
 extern void obj_set_oinvis(struct obj *, boolean, boolean);
-#endif
 extern struct obj *poly_obj(struct obj *, int);
 extern int bhito(struct obj *,struct obj *);
 extern int bhitpile(struct obj *,int (*)(struct obj*,struct obj*),int,int);

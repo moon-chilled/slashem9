@@ -253,20 +253,14 @@ nothing_to_steal:
 	tmp = 0;
 	for(otmp = invent; otmp; otmp = otmp->nobj)
 	    if ((!uarm || otmp != uarmc) && otmp != uskin
-#ifdef INVISIBLE_OBJECTS
-				&& (!otmp->oinvis || perceives(mtmp->data))
-#endif
-				)
+				&& (!otmp->oinvis || perceives(mtmp->data)))
 		tmp += ((otmp->owornmask &
 			(W_ARMOR | W_RING | W_AMUL | W_TOOL)) ? 5 : 1);
 	if (!tmp) goto nothing_to_steal;
 	tmp = rn2(tmp);
 	for(otmp = invent; otmp; otmp = otmp->nobj)
 	    if ((!uarm || otmp != uarmc) && otmp != uskin
-#ifdef INVISIBLE_OBJECTS
-				&& (!otmp->oinvis || perceives(mtmp->data))
-#endif
-			)
+				&& (!otmp->oinvis || perceives(mtmp->data)))
 		if((tmp -= ((otmp->owornmask &
 			(W_ARMOR | W_RING | W_AMUL | W_TOOL)) ? 5 : 1)) < 0)
 			break;

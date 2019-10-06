@@ -428,7 +428,6 @@ boolean wakeup_msg;
 }
 
 
-#ifdef UNPOLYPILE
 /* WAC polymorph an object
  * Unlike monsters,  this function is called after the polymorph
  */
@@ -490,18 +489,12 @@ void unpoly_obj(void * arg, long timeout) {
 	}
 	return;
 }
-#endif /* UNPOLYPILE */
 
-#ifdef UNPOLYPILE
 /*
  * Cleanup a hazy object if timer stopped.
  */
 /*ARGSUSED*/
-static void
-cleanup_unpoly(arg, timeout)
-    void * arg;
-    long timeout;
-{
+static void cleanup_unpoly(void * arg, long timeout) {
 #if defined(MAC_MPW) || defined(__MWERKS__)
 # pragma unused(timeout)
 #endif
@@ -510,7 +503,6 @@ cleanup_unpoly(arg, timeout)
     if (wizard && obj->where == OBJ_INVENT)
 	update_inventory();
 }
-#endif /* UNPOLYPILE */
 
 /* WAC polymorph a monster
  * returns 0 if no change, 1 if polymorphed and -1 if died.
@@ -1775,18 +1767,16 @@ typedef struct {
 
 /* table of timeout functions */
 static const ttable timeout_funcs[NUM_TIME_FUNCS] = {
-    TTAB(rot_organic,	(timeout_proc)0,	"rot_organic"),
-    TTAB(rot_corpse,	(timeout_proc)0,	"rot_corpse"),
-    TTAB(moldy_corpse,  (timeout_proc)0,	"moldy_corpse"),
-    TTAB(revive_mon,	(timeout_proc)0,	"revive_mon"),
+    TTAB(rot_organic,	NULL,	"rot_organic"),
+    TTAB(rot_corpse,	NULL,	"rot_corpse"),
+    TTAB(moldy_corpse,  NULL,	"moldy_corpse"),
+    TTAB(revive_mon,	NULL,	"revive_mon"),
     TTAB(burn_object,	cleanup_burn,		"burn_object"),
-    TTAB(hatch_egg,	(timeout_proc)0,	"hatch_egg"),
-    TTAB(fig_transform, (timeout_proc)0,	"fig_transform"),
-    TTAB(unpoly_mon,    (timeout_proc)0,	"unpoly_mon"),
-    TTAB(bomb_blow,     (timeout_proc)0,	"bomb_blow"),
-#ifdef UNPOLYPILE
+    TTAB(hatch_egg,	NULL,	"hatch_egg"),
+    TTAB(fig_transform, NULL,	"fig_transform"),
+    TTAB(unpoly_mon,    NULL,	"unpoly_mon"),
+    TTAB(bomb_blow,     NULL,	"bomb_blow"),
     TTAB(unpoly_obj,    cleanup_unpoly,		"unpoly_obj"),
-#endif
 };
 #undef TTAB
 
