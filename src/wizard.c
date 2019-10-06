@@ -11,7 +11,7 @@
 #include "qtext.h"
 #include "epri.h"
 
-extern const int monstr[];
+extern int *monstr;
 
 static short which_arti(int);
 static boolean mon_has_arti(struct monst *,short);

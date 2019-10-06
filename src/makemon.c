@@ -26,7 +26,7 @@ static void m_initweap(struct monst *);
 static void m_initweap_normal(struct monst *);
 static void m_initinv(struct monst *);
 
-extern const int monstr[];
+extern int *monstr;
 
 #define m_initsgrp(mtmp, x, y)	m_initgrp(mtmp, x, y, 3)
 #define m_initlgrp(mtmp, x, y)	m_initgrp(mtmp, x, y, 10)

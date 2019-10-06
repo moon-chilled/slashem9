@@ -530,6 +530,7 @@ void newgame(void) {
 		mvitals[i].mvflags = mons[i].geno & G_NOCORPSE;
 
 	init_objects();		/* must be before u_init() */
+	monstr_init();
 
 	flags.pantheon = -1;	/* role_init() will reset this */
 	role_init();		/* must be before init_dungeons(), u_init(),

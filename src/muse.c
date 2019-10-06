@@ -9,7 +9,7 @@
 #include "hack.h"
 #include "edog.h"
 
-extern const int monstr[];
+extern int *monstr;
 
 boolean m_using = false;
 

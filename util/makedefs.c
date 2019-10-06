@@ -41,7 +41,6 @@
 #define RUMOR_FILE	"rumors"
 #define DGN_I_FILE	"dungeon.def"
 #define DGN_O_FILE	"dungeon.pdf"
-#define MON_STR_C	"monstr.c"
 #define QTXT_I_FILE	"quest.txt"
 #define QTXT_O_FILE	"quest.dat"
 /*WAC filename*/
@@ -79,7 +78,6 @@ void do_data(void);
 void do_dungeon(void);
 void do_date(void);
 void do_options(void);
-void do_monstr(void);
 void do_permonst(void);
 void do_questtxt(void);
 void do_rumors(void);
@@ -143,7 +141,6 @@ int main(int argc, char	**argv) {
 	do_data();
 	do_dungeon();
 	do_filenames();
-	do_monstr();
 	do_date();
 	do_options();
 	do_permonst();
@@ -957,114 +954,6 @@ recheck:
 			fputs(in_line,ofp);
 	}
 	fclose(ifp);
-	fclose(ofp);
-}
-
-// returns true if monster can attack at range
-static bool ranged_attk(struct permonst *ptr) {
-	int i, j;
-	int atk_mask = (1<<AT_BREA) | (1<<AT_SPIT) | (1<<AT_GAZE);
-
-	for (i = 0; i < NATTK; i++) {
-		if ((j=ptr->mattk[i].aatyp) >= AT_WEAP || (atk_mask & (1<<j)))
-			return true;
-	}
-
-	return false;
-}
-
-/* This routine is designed to return an integer value which represents
- * an approximation of monster strength.  It uses a similar method of
- * determination as "experience()" to arrive at the strength.
- */
-static int mstrength(struct permonst *ptr) {
-	int i, tmp2, n, tmp = ptr->mlevel;
-
-	if(tmp > 49)		/* special fixed hp monster */
-		tmp = 2*(tmp - 6) / 4;
-
-	// For creation in groups
-	n = (!!(ptr->geno & G_SGROUP));
-	n += (!!(ptr->geno & G_LGROUP)) << 1;
-	n += (!!(ptr->geno & G_VLGROUP)) << 2;
-
-	// For ranged attacks
-	if (ranged_attk(ptr)) n++;
-
-	// For higher ac values
-	n += (ptr->ac < 4);
-	n += (ptr->ac < 0);
-
-	// For very fast monsters
-	n += (ptr->mmove >= 18);
-
-	// For each attack and "special" attack
-	for(i = 0; i < NATTK; i++) {
-
-		tmp2 = ptr->mattk[i].aatyp;
-		n += (tmp2 > 0);
-		n += (tmp2 == AT_MAGC);
-		n += (tmp2 == AT_WEAP && (ptr->mflags2 & M2_STRONG));
-	}
-
-	// For each "special" damage type
-	for(i = 0; i < NATTK; i++) {
-		tmp2 = ptr->mattk[i].adtyp;
-		if ((tmp2 == AD_DRLI) || (tmp2 == AD_STON) || (tmp2 == AD_DRST)
-				|| (tmp2 == AD_DRDX) || (tmp2 == AD_DRCO) || (tmp2 == AD_WERE))
-			n += 2;
-		else if (strcmp(ptr->mname, "grid bug")) n += (tmp2 != AD_PHYS);
-		n += ((int) (ptr->mattk[i].damd * ptr->mattk[i].damn) > 23);
-	}
-	// tom's nasties
-	if (extra_nasty(ptr)) n += 5;
-
-	/* Leprechauns are special cases.  They have many hit dice so they
-	   can hit and are hard to kill, but they don't really do much damage. */
-	if (!strcmp(ptr->mname, "leprechaun")) n -= 2;
-
-	// Finally, adjust the monster level  0 <= n <= 24 (approx.)
-	if(n == 0) tmp--;
-	else if(n >= 6) tmp += ( n / 2 );
-	else tmp += ( n / 3 + 1);
-
-	return (tmp >= 0) ? tmp : 0;
-}
-
-void do_monstr(void) {
-	struct permonst *ptr;
-	int i, j;
-
-	/*
-	 * create the source file, "monstr.c"
-	 */
-	filename[0]='\0';
-#ifdef FILE_PREFIX
-	strcat(filename, file_prefix);
-#endif
-	sprintf(eos(filename), SOURCE_TEMPLATE, MON_STR_C);
-	if (!(ofp = fopen(filename, WRTMODE))) {
-		perror(filename);
-		exit(EXIT_FAILURE);
-	}
-	fprintf(ofp, "%s", Dont_Edit_Code);
-	fprintf(ofp, "#include \"config.h\"\n");
-	fprintf(ofp, "\nconst int monstr[] = {\n");
-	for (ptr = &mons[0], j = 0; ptr->mlet; ptr++) {
-		i = mstrength(ptr);
-		fprintf(ofp,"%2d,%c", i, (++j & 15) ? ' ' : '\n');
-	}
-	/* might want to insert a final 0 entry here instead of just newline */
-	fprintf(ofp,"%s};\n", (j & 15) ? "\n" : "");
-
-	fprintf(ofp,"\nvoid monstr_init(void);\n");
-	fprintf(ofp,"\nvoid\n");
-	fprintf(ofp,"monstr_init()\n");
-	fprintf(ofp,"{\n");
-	fprintf(ofp,"    return;\n");
-	fprintf(ofp,"}\n");
-	fprintf(ofp,"\n/*monstr.c*/\n");
-
 	fclose(ofp);
 }
 

@@ -1295,7 +1295,7 @@ dosacrifice (void)
     if (otmp->otyp == CORPSE) {
 	struct permonst *ptr = &mons[otmp->corpsenm];
 	struct monst *mtmp;
-	extern const int monstr[];
+	extern int *monstr;
 
 	/* KMH, conduct */
 	u.uconduct.gnostic++;
