@@ -31,7 +31,7 @@ stoned_dialogue()
 	long i = (Stoned & TIMEOUT);
 
 	if (i > 0L && i <= SIZE(stoned_texts))
-		pline(stoned_texts[SIZE(stoned_texts) - i]);
+		plines(stoned_texts[SIZE(stoned_texts) - i]);
 	if (i == 5L)
 		HFast = 0L;
 	if (i == 3L) {
@@ -58,7 +58,7 @@ vomiting_dialogue()
 
 	if ((((Vomiting & TIMEOUT) % 3L) == 2) && (i >= 0)
 	    && (i < SIZE(vomiting_texts)))
-		You(vomiting_texts[SIZE(vomiting_texts) - i - 1]);
+		pline("You %s", vomiting_texts[SIZE(vomiting_texts) - i - 1]);
 
 	switch ((int) i) {
 	case 0:
@@ -105,7 +105,7 @@ choke_dialogue()
 		if (index(str, '%'))
 		    pline(str, hcolor(NH_BLUE));
 		else
-		    pline(str);
+		    plines(str);
 	    }
 	}
 	exercise(A_STR, false);
@@ -135,7 +135,7 @@ slime_dialogue()
 		} else
 		    pline(str, an(Hallucination ? rndmonnam() : "green slime"));
 	    } else
-		pline(str);
+		plines(str);
 	}
 	if (i == 3L) {	/* limbs becoming oozy */
 	    HFast = 0L;	/* lose intrinsic speed */
@@ -617,7 +617,7 @@ void attach_bomb_blow_timeout(struct obj *bomb, int fuse, boolean yours) {
 
 	/* Now if you play with other people's property... */
 	if (yours && (!carried(bomb) && costly_spot(bomb->ox, bomb->oy) &&
-		!bomb->no_charge || bomb->unpaid)) {
+		(!bomb->no_charge || bomb->unpaid))) {
 	    verbalize("You play with it, you pay for it!");
 	    bill_dummy_object(bomb);
 	}

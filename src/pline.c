@@ -163,7 +163,7 @@ void There(const char *line, ...) {
 	VA_END();
 }
 
-void You_hear(const char *line, ...) {
+void You_hearf(const char *line, ...) {
 	char *tmp;
 	VA_START(line);
 	if (Underwater)

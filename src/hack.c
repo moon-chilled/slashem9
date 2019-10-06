@@ -245,7 +245,7 @@ boolean drop_ripe_treefruit(xchar x, xchar y, boolean showmsg, boolean update) {
 		  } else if (distu(pos.x,pos.y) < 9 &&
 			     otmp->otyp != EUCALYPTUS_LEAF) {
 		     /* a leaf is too light to cause any sound */
-		     You_hear("a %s!",
+		     You_hearf("a %s!",
 			      (IS_POOL(lev->typ) || IS_FOUNTAIN(lev->typ)) ?
 			      "plop" : "splut"); /* rainforesty sounds */
 		  }
@@ -423,7 +423,7 @@ static int moverock(void) {
 		    else
 			pline("There's %s on the other side.", a_monnam(mtmp));
 		} else {
-		    You_hear("a monster behind %s.", the(xname(otmp)));
+		    You_hearf("a monster behind %s.", the(xname(otmp)));
 		    map_invisible(rx, ry);
 		}
 		if (flags.verbose)

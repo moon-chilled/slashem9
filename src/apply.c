@@ -267,13 +267,13 @@ static int use_stethoscope(struct obj *obj) {
 	lev = &levl[rx][ry];
 	switch(lev->typ) {
 	case SDOOR:
-		You_hear(hollow_str, "door");
+		You_hearf(hollow_str, "door");
 		cvt_sdoor_to_door(lev);		/* ->typ = DOOR */
 		if (Blind) feel_location(rx,ry);
 		else newsym(rx,ry);
 		return res;
 	case SCORR:
-		You_hear(hollow_str, "passage");
+		You_hearf(hollow_str, "passage");
 		lev->typ = CORR;
 		unblock_point(rx,ry);
 		if (Blind) feel_location(rx,ry);

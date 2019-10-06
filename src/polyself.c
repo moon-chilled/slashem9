@@ -1665,8 +1665,8 @@ polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
 		return 0;
 	    } else {
 		/* Check if you can do the adult form */
-		if (u.ulevel > 13 && u.uen > EN_ADULT_DRAGON ||
-			scales && u.uen > EN_BABY_DRAGON || scale_mail) {
+		if ((u.ulevel > 13 && u.uen > EN_ADULT_DRAGON) ||
+			(scales && u.uen > EN_BABY_DRAGON) || scale_mail) {
 		    /* If you have scales, energy cost is less */
 		    /* If you have scale mail,  there is no cost! */
 		    if (!scale_mail) {

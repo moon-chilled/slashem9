@@ -1051,11 +1051,11 @@ seffects (struct obj *sobj)
 		    }
 		}
 		if(!ct)
-		      You_hear("%s in the distance.",
+		      You_hearf("%s in the distance.",
 			       (confused || sobj->cursed) ? "sad wailing" :
 							"maniacal laughter");
 		else if(sobj->otyp == SCR_SCARE_MONSTER)
-			You_hear("%s close by.",
+			You_hearf("%s close by.",
 				  (confused || sobj->cursed) ? "sad wailing" :
 						 "maniacal laughter");
 		break;
@@ -1179,13 +1179,16 @@ seffects (struct obj *sobj)
 		     * (if not cursed <g>).  Check curse status in case
 		     * this ever becomes a scroll
 		     */
-		    if (mtmp)
+		    if (mtmp) {
 			if (!sobj->cursed && Role_if(PM_NECROMANCER)) {
 			    if (!resist(mtmp, sobj->oclass, 0, TELL)) {
 				mtmp = tamedog(mtmp, NULL);
 				if (mtmp) You("dominate %s!", mon_nam(mtmp));
 			    }
-			} else setmangry(mtmp);
+			} else {
+				setmangry(mtmp);
+			}
+		    }
 		}
 		multi = oldmulti;
 		/* WAC Give those who know command undead a shot at control.

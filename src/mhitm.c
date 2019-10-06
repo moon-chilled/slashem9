@@ -57,7 +57,7 @@ static void noises(struct monst *magr, struct attack *mattk) {
 	if(flags.soundok && (farq != far_noise || moves-noisetime > 10)) {
 		far_noise = farq;
 		noisetime = moves;
-		You_hear("%s%s.",
+		You_hearf("%s%s.",
 			(mattk->aatyp == AT_EXPL) ? "an explosion" : "some noises",
 			farq ? " in the distance" : "");
 	}

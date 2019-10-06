@@ -670,7 +670,7 @@ int mattacku(struct monst *mtmp) {
 				    pline("%s lunges forward and recoils!",
 					  Monnam(mtmp));
 				else
-				    You_hear("a %s nearby.",
+				    You_hearf("a %s nearby.",
 					     is_whirly(mtmp->data) ?
 						"rushing noise" : "splat");
 			   }
@@ -1418,10 +1418,10 @@ dopois:
 		if(!rn2(3)) {
 		    if (mtmp->mcan) {
 			if (flags.soundok)
-			    You_hear("a cough from %s!", mon_nam(mtmp));
+			    You_hearf("a cough from %s!", mon_nam(mtmp));
 		    } else {
 			if (flags.soundok)
-			    You_hear("%s hissing!", s_suffix(mon_nam(mtmp)));
+			    You_hearf("%s hissing!", s_suffix(mon_nam(mtmp)));
 			if(!rn2(10) ||
 			    (flags.moonphase == NEW_MOON && !have_lizard())) {
  do_stone:

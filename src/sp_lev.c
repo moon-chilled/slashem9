@@ -883,7 +883,7 @@ struct mkroom	*croom;
 	    get_room_loc(&x, &y, croom);
 	else {
 	    boolean found;
-	    if (!pm || !is_swimmer(pm) && !likes_lava(pm))
+	    if (!pm || (!is_swimmer(pm) && !likes_lava(pm)))
 		found = get_location(&x, &y, DRY);
 	    else if (pm->mlet == S_EEL)
 		found = get_location(&x, &y, WET);

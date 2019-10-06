@@ -1399,7 +1399,7 @@ poly_obj(obj, id)
 
 	if (obj->otyp == BOULDER && In_sokoban(&u.uz))
 	    change_luck(-1);    /* Sokoban guilt */
-#ifdef WIZARD
+
 	otmp = NULL;
 	if (id == STRANGE_OBJECT && wizard && Polymorph_control) {
 	    int typ;
@@ -1416,26 +1416,26 @@ poly_obj(obj, id)
 		otmp = mksobj(typ, true, false);
 	    }
 	}
-	if (!otmp)
-#endif
-	if (id == STRANGE_OBJECT) { /* preserve symbol */
-	    int try_limit = 3;
-	    /* Try up to 3 times to make the magic-or-not status of
-	       the new item be the same as it was for the old one. */
-	    otmp = NULL;
-	    do {
-		if (otmp) delobj(otmp);
-		otmp = mkobj(obj->oclass, false);
-	    } while (--try_limit > 0 &&
-		  objects[obj->otyp].oc_magic != objects[otmp->otyp].oc_magic);
-	} else {
-	    /* literally replace obj with this new thing */
-	    otmp = mksobj(id, false, false);
-	/* Actually more things use corpsenm but they polymorph differently */
+
+	if (!otmp) {
+		if (id == STRANGE_OBJECT) { /* preserve symbol */
+			int try_limit = 3;
+			/* Try up to 3 times to make the magic-or-not status of
+			   the new item be the same as it was for the old one. */
+			otmp = NULL;
+			do {
+				if (otmp) delobj(otmp);
+				otmp = mkobj(obj->oclass, false);
+			} while (--try_limit > 0 && objects[obj->otyp].oc_magic != objects[otmp->otyp].oc_magic);
+		} else {
+			/* literally replace obj with this new thing */
+			otmp = mksobj(id, false, false);
+			/* Actually more things use corpsenm but they polymorph differently */
 #define USES_CORPSENM(typ) ((typ)==CORPSE || (typ)==STATUE || (typ)==FIGURINE)
-	    if (USES_CORPSENM(obj->otyp) && USES_CORPSENM(id))
-		otmp->corpsenm = obj->corpsenm;
+			if (USES_CORPSENM(obj->otyp) && USES_CORPSENM(id))
+				otmp->corpsenm = obj->corpsenm;
 #undef USES_CORPSENM
+		}
 	}
 
 	/* preserve quantity */
@@ -4313,7 +4313,7 @@ boolean *shopdamage;
 		    if (ttmp) ttmp->tseen = 1;
 		    if (cansee(x,y)) msgtxt = "The water evaporates.";
 		}
-		Norep(msgtxt);
+		Noreps(msgtxt);
 		if (lev->typ == ROOM) newsym(x,y);
 	    } else if(IS_FOUNTAIN(lev->typ)) {
 		    if (cansee(x,y))
@@ -4445,12 +4445,12 @@ boolean *shopdamage;
 		    lev->doormask = new_doormask;
 		    unblock_point(x, y);	/* vision */
 		    if (cansee(x, y)) {
-			pline(see_txt);
+			plines(see_txt);
 			newsym(x, y);
 		    } else if (sense_txt) {
-			You(sense_txt);
+			pline("You %s", sense_txt);
 		    } else if (hear_txt) {
-			if (flags.soundok) You_hear(hear_txt);
+			if (flags.soundok) pline("You hear %s", hear_txt);
 		    }
 		    if (picking_at(x, y)) {
 			stop_occupation();

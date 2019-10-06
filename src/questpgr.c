@@ -364,7 +364,7 @@ struct qtmsg *qt_msg;
 	for (size = 0; size < qt_msg->size; size += (long)strlen(in_line)) {
 	    dlb_fgets(in_line, 80, msg_file);
 	    convert_line();
-	    pline(out_line);
+	    plines(out_line);
 	}
 
 }

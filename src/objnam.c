@@ -540,7 +540,7 @@ add_erosion_words (struct obj *obj, char *prefix)
 	boolean iscrys = (obj->otyp == CRYSKNIFE);
 
 
-	if (!is_damageable(obj) && !iscrys || Hallucination) return;
+	if ((!is_damageable(obj) && !iscrys) || Hallucination) return;
 
 	/* The only cases where any of these bits do double duty are for
 	 * rotted food and diluted potions, which are all not is_damageable().

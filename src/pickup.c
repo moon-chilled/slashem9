@@ -626,7 +626,7 @@ menu_item **pick_list;	/* list of objects and counts to pick up */
 
 
 	    if ((!*otypes || index(otypes, curr->oclass) ||
-		flags.pickup_thrown && curr->was_thrown ||
+		(flags.pickup_thrown && curr->was_thrown) ||
 		is_autopickup_exception(curr, true)) &&
 		!is_autopickup_exception(curr, false))
 		n++;
@@ -635,7 +635,7 @@ menu_item **pick_list;	/* list of objects and counts to pick up */
 	    *pick_list = pi = alloc(sizeof(menu_item) * n);
 	    for (n = 0, curr = olist; curr; curr = FOLLOW(curr, follow))
 		if ((!*otypes || index(otypes, curr->oclass) ||
-			flags.pickup_thrown && curr->was_thrown ||
+			(flags.pickup_thrown && curr->was_thrown) ||
 			is_autopickup_exception(curr, true)) &&
 			!is_autopickup_exception(curr, false)) {
 		    pi[n].item.a_obj = curr;

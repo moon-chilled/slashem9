@@ -176,8 +176,11 @@ struct monst {
  */
 
 #define newmonst(xl) alloc((unsigned)(xl) + sizeof(struct monst))
-#define dealloc_monst(mon) if ((mon)->isshk) shk_free(mon); else \
-				free((mon))
+#define dealloc_monst(mon) do { if ((mon)->isshk) \
+	shk_free(mon); \
+else \
+	free(mon); \
+} while (0)
 
 /* these are in mspeed */
 #define MSLOW 1		/* slow monster */

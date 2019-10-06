@@ -80,7 +80,7 @@ boolean boulder_hits_pool(struct obj *otmp, int rx, int ry, boolean pushing) {
 			      the(xname(otmp)), fills_up? "fills":"falls into",
 			      what);
 		    } else if (flags.soundok)
-			You_hear("a%s splash.", lava ? " sizzling" : "");
+			You_hearf("a%s splash.", lava ? " sizzling" : "");
 		    wake_nearto(rx, ry, 40);
 		}
 
@@ -157,7 +157,7 @@ boolean flooreffects(struct obj *obj, int x, int y, const char *verb) {
 				if ((x == u.ux) && (y == u.uy))
 					You_hear("a CRASH! beneath you.");
 				else
-					You_hear("the boulder %s.", verb);
+					You_hearf("the boulder %s.", verb);
 			} else if (cansee(x, y)) {
 				pline_The("boulder %s%s.",
 				    t->tseen ? "" : "triggers and ",
@@ -196,7 +196,7 @@ boolean flooreffects(struct obj *obj, int x, int y, const char *verb) {
 			(t->ttyp==PIT || t->ttyp==SPIKED_PIT)) {
 		/* you escaped a pit and are standing on the precipice */
 		if (Blind && flags.soundok)
-			You_hear("%s %s downwards.",
+			You_hearf("%s %s downwards.",
 				The(xname(obj)), otense(obj, "tumble"));
 		else
 			pline("%s %s into %s pit.",

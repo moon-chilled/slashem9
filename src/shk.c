@@ -1582,7 +1582,7 @@ proceed:
 		    else strcat(sbuf,
 			   "for gold picked up and the use of merchandise.");
 		} else strcat(sbuf, "for the use of merchandise.");
-		pline(sbuf);
+		plines(sbuf);
 #ifndef GOLDOBJ
 		if (u.ugold + eshkp->credit < dtmp) {
 		    pline("But you don't%s have enough gold%s.",

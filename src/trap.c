@@ -344,7 +344,7 @@ boolean td;	/* td == true : trap door or hole */
 	    dont_fall = "are jerked back by your pet!";
 	}
 	if (dont_fall) {
-	    You(dont_fall);
+	    pline("You %s", dont_fall);
 	    /* hero didn't fall through, but any objects here might */
 	    impact_drop(NULL, u.ux, u.uy, 0);
 	    if (!td) {
@@ -1496,7 +1496,7 @@ launch_obj (short otyp, int x1, int y1, int x2, int y2, int style)
 			    IS_ROCK(levl[bhitpos.x + dx][bhitpos.y + dy].typ))
 			    bmsg = " as one boulder hits another";
 
-		    	You_hear("a loud crash%s!",
+		    	You_hearf("a loud crash%s!",
 				cansee(bhitpos.x, bhitpos.y) ? bmsg : "");
 			obj_extract_self(otmp2);
 			/* pass off the otrapped flag to the next boulder */

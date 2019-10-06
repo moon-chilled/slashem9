@@ -66,7 +66,6 @@ struct obj *obj;
 
 	if (obj->oclass == POTION_CLASS) {
 	    coord cc;
-	    static const char *empty = "The potion turns out to be empty.";
 	    const char *potion_descr;
 	    struct monst *mtmp;
 #define POTION_OCCUPANT_CHANCE(n) (13 + 2*(n))	/* also in potion.c */
@@ -80,7 +79,7 @@ struct obj *obj;
 		    m_useup(mon, obj);
 		    mtmp = makemon(&mons[PM_GHOST], cc.x, cc.y, NO_MM_FLAGS);
 		    if (!mtmp) {
-			if (vis) pline(empty);
+			if (vis) pline("The potion turns out to be empty.");
 		    } else {
 			if (vis) {
 			    pline("As %s opens the bottle, an enormous %s emerges!",
@@ -103,7 +102,7 @@ struct obj *obj;
 		m_useup(mon, obj);
 		mtmp = makemon(&mons[PM_DJINNI], cc.x, cc.y, NO_MM_FLAGS);
 		if (!mtmp) {
-		    if (vis) pline(empty);
+		    if (vis) pline("The potion turns out to be empty.");
 		} else {
 		    if (vis)
 			pline("In a cloud of smoke, %s emerges!",
@@ -152,7 +151,7 @@ boolean self;
 {
 	if (!canseemon(mtmp)) {
 		if (flags.soundok)
-			You_hear("a %s zap.",
+			You_hearf("a %s zap.",
 					(distu(mtmp->mx,mtmp->my) <= (BOLT_LIM+1)*(BOLT_LIM+1)) ?
 					"nearby" : "distant");
 	} else if (self)
@@ -193,7 +192,7 @@ struct obj *otmp;
 	if (vismon)
 	    pline("%s reads %s!", Monnam(mtmp), onambuf);
 	else
-	    You_hear("%s reading %s.",
+	    You_hearf("%s reading %s.",
 		x_monnam(mtmp, ARTICLE_A, NULL,
 		    (SUPPRESS_IT|SUPPRESS_INVISIBLE|SUPPRESS_SADDLE), false),
 		onambuf);
@@ -706,7 +705,7 @@ mon_tele:
 		    pline("%s %s through...", Monnam(mtmp),
 			  is_flyer(mtmp->data) ? "dives" : "falls");
 		} else if (flags.soundok)
-			You_hear("something crash through the %s.",
+			You_hearf("something crash through the %s.",
 				surface(mtmp->mx, mtmp->my));
 		/* we made sure that there is a level for mtmp to go to */
 		migrate_to_level(mtmp, ledger_no(&u.uz) + 1,
@@ -2344,7 +2343,7 @@ boolean stoning;
 		    distant_name(obj,doname));
 	obj->quan = save_quan;
     } else if (flags.soundok)
-	You_hear("%s.", (obj->otyp == POT_ACID) ? "drinking" : "chewing");
+	You_hear((obj->otyp == POT_ACID) ? "drinking" : "chewing");
     m_useup(mon, obj);
     if (((obj->otyp == POT_ACID) || acidic(&mons[obj->corpsenm])) &&
 		    !resists_acid(mon)) {

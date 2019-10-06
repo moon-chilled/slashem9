@@ -1513,6 +1513,12 @@ extern boolean is_autopickup_exception(struct obj *, boolean);
 
 /* ### pline.c ### */
 
+// for safety; if you say pline(x), where x is untrusted user data, then the
+// controller of that data has arbitrary code execution.  Maybe.
+#define plines(str) pline("%s", (str))
+#define Noreps(str) Norep("%s", (str))
+#define verbalizes(str) verbalize("%s", (str))
+#define You_hear(str) You_hearf("%s", (str))
 extern void msgpline_add(int, char *);
 extern void msgpline_free(void);
 extern void pline(const char *,...) PRINTF_F(1,2);
@@ -1522,7 +1528,7 @@ extern void You(const char *,...) PRINTF_F(1,2);
 extern void Your(const char *,...) PRINTF_F(1,2);
 extern void You_feel(const char *,...) PRINTF_F(1,2);
 extern void You_cant(const char *,...) PRINTF_F(1,2);
-extern void You_hear(const char *,...) PRINTF_F(1,2);
+extern void You_hearf(const char *,...) PRINTF_F(1,2);
 extern void pline_The(const char *,...) PRINTF_F(1,2);
 extern void There(const char *,...) PRINTF_F(1,2);
 extern void verbalize(const char *,...) PRINTF_F(1,2);

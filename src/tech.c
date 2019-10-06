@@ -1236,11 +1236,7 @@ techeffects (int tech_no)
 	    		return 0;
 	    	}
 		/* Blindness dealt with above */
-		if (!mon_visible(mtmp)
-#ifdef INVISIBLE_OBJECTS
-				|| obj->oinvis && !See_invisible
-#endif
-				) {
+		if ((!mon_visible(mtmp) || obj->oinvis) && !See_invisible) {
 	    		You_cant("see %s weapon!", s_suffix(mon_nam(mtmp)));
 	    		return 0;
 		}

@@ -92,7 +92,7 @@ dosounds (void)
 		"smell marsh gas!",	/* so it's a smell...*/
 		"hear Donald Duck!",
 	};
-	You(swamp_msg[rn2(2)+hallu]);
+	pline("You %s", swamp_msg[rn2(2)+hallu]);
 	return;
     }
     if (level.flags.spooky && !rn2(200)) {
@@ -122,7 +122,7 @@ dosounds (void)
 		"hear someone praising your valor!",
 		"hear someone singing: \"Jingle bells, jingle bells...\"",
 	};
-	You(spooky_msg[rn2(15)+hallu*9]);
+	pline("You %s", spooky_msg[rn2(15)+hallu*9]);
 	return;
     }
     if (level.flags.has_vault && !rn2(200)) {
@@ -174,7 +174,7 @@ dosounds (void)
 			You_hear("an angry drone.");
 			break;
 		    case 2:
-			You_hear("bees in your %sbonnet!",
+			You_hearf("bees in your %sbonnet!",
 			    uarmh ? "" : "(nonexistent) ");
 			break;
 		}
@@ -287,7 +287,7 @@ dosounds (void)
         "Somebody whispers: \"Food rations? Only 900 zorkmids.\"",
         "You feel like searching for more gold.",
       };
-      pline(blkmar_msg[rn2(2)+hallu]);
+      plines(blkmar_msg[rn2(2)+hallu]);
     }
 }
 
@@ -841,7 +841,7 @@ static int domonnoise (struct monst *mtmp) {
 	    pline_msg = "seems to mutter a cantrip.";
 	    break;
 	case MS_NURSE:
-	    if (uwep && (uwep->oclass == WEAPON_CLASS || is_weptool(uwep))
+	    if ((uwep && (uwep->oclass == WEAPON_CLASS || is_weptool(uwep)))
 		|| (u.twoweap && uswapwep && (uswapwep->oclass == WEAPON_CLASS
 		|| is_weptool(uswapwep))))
 		verbl_msg = "Put that weapon away before you hurt someone!";
@@ -887,7 +887,7 @@ static int domonnoise (struct monst *mtmp) {
     }
 
     if (pline_msg) pline("%s %s", Monnam(mtmp), pline_msg);
-    else if (verbl_msg) verbalize(verbl_msg);
+    else if (verbl_msg) verbalizes(verbl_msg);
     return 1;
 }
 

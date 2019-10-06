@@ -493,11 +493,12 @@ struct attack *uattk;
 	if (override_confirmation) {
 	    /* this may need to be generalized if weapons other than
 	       Stormbringer acquire similar anti-social behavior... */
-	    if (flags.verbose)
-		if (override_confirmation == HIT_UWEP)
-		    Your("bloodthirsty blade attacks!");
-		else
-		    pline("The black blade will not be thwarted!");
+		if (flags.verbose) {
+			if (override_confirmation == HIT_UWEP)
+				Your("bloodthirsty blade attacks!");
+			else
+				pline("The black blade will not be thwarted!");
+		}
 	}
 
 	if(!*mhit) {
@@ -733,7 +734,7 @@ int thrown;
 	else if (thrown == 2) launcher = uswapwep;
 	else launcher = 0;
 
-	objenchant = !thrown && no_obj || obj->spe < 0 ? 0 : obj->spe;
+	objenchant = !thrown && obj && obj->spe < 0 ? 0 : obj->spe;
 
 	if (need_one(mon))    canhitmon = 1;
 	if (need_two(mon))    canhitmon = 2;
@@ -2711,9 +2712,9 @@ use_weapon:
 			/* WAC if attacking cockatrice/etc, player is smart
 			   if wielding a weapon.  So don't let him
 			   touch the monster */
-			if ((uwep || u.twoweap && uswapwep) &&
-				(mhit == HIT_UWEP && !uwep ||
-				 mhit == HIT_USWAPWEP && !uswapwep) &&
+			if ((uwep || (u.twoweap && uswapwep)) &&
+				((mhit == HIT_UWEP && !uwep) ||
+				 (mhit == HIT_USWAPWEP && !uswapwep)) &&
 				(touch_petrifies(mon->data) ||
 				 mon->data == &mons[PM_MEDUSA]))
 			    break;
@@ -2756,8 +2757,8 @@ use_weapon:
 			}
 
 			if (dhit && mattk->adtyp == AD_SLEE)
-			    barehanded_hit = (dhit & HIT_UWEP) && !uwep ||
-			      (dhit & HIT_USWAPWEP) && !uswapwep;
+			    barehanded_hit = ((dhit & HIT_UWEP) && !uwep) ||
+			      ((dhit & HIT_USWAPWEP) && !uswapwep);
 
 #if 0 /* Old code */
 			if (uwep) {
@@ -2800,7 +2801,7 @@ use_weapon:
 		case AT_BITE:
 			/* [ALI] Vampires are also smart. They avoid biting
 			   monsters if doing so would be fatal */
-			if ((uwep || u.twoweap && uswapwep) &&
+			if ((uwep || (u.twoweap && uswapwep)) &&
 				is_vampire(youmonst.data) &&
 				(is_rider(mon->data) ||
 				 mon->data == &mons[PM_GREEN_SLIME]))
@@ -2810,7 +2811,7 @@ use_weapon:
 		case AT_BUTT:
 		case AT_TENT:
 			if (i==0 && uwep && (youmonst.data->mlet==S_LICH)) goto use_weapon;
-			if ((uwep || u.twoweap && uswapwep) &&
+			if ((uwep || (u.twoweap && uswapwep)) &&
 				(touch_petrifies(mon->data) ||
 				 mon->data == &mons[PM_MEDUSA]))
 			    break;
@@ -3046,8 +3047,8 @@ uchar aatyp;
 	    if (mhit) {		/* successful attack */
 		long protector = attk_protection((int)aatyp);
 		boolean barehanded = mhit & HIT_BODY ||
-			mhit & HIT_UWEP && !uwep ||
-			mhit & HIT_USWAPWEP && !uswapwep;
+			(mhit & HIT_UWEP && !uwep) ||
+			(mhit & HIT_USWAPWEP && !uswapwep);
 
 		/* hero using monsters' AT_MAGC attack is hitting hand to
 		   hand rather than casting a spell */

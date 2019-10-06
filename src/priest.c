@@ -364,8 +364,8 @@ intemple (int roomno)
 		    msg1 = buf;
 		}
 		if (can_speak) {
-		    verbalize(msg1);
-		    if (msg2) verbalize(msg2);
+		    verbalizes(msg1);
+		    if (msg2) verbalizes(msg2);
 		}
 		if(!sanctum) {
 		    /* !tended -> !shrined */
@@ -420,7 +420,7 @@ priest_talk (struct monst *priest)
 	/* priests don't chat unless peaceful and in their own temple */
 	if(!histemple_at(priest,priest->mx,priest->my) ||
 		 !priest->mpeaceful || !priest->mcanmove || priest->msleeping) {
-	    static const char *cranky_msg[3] = {
+	    static const char * const cranky_msg[] = {
 		"Thou wouldst have words, eh?  I'll give thee a word or two!",
 		"Talk?  Here is what I have to say!",
 		"Pilgrim, I would speak no longer with thee."
@@ -433,7 +433,7 @@ priest_talk (struct monst *priest)
 		priest->mcanmove = 1;
 	    }
 	    priest->mpeaceful = 0;
-	    verbalize(cranky_msg[rn2(3)]);
+	    verbalizes(cranky_msg[rn2(SIZE(cranky_msg))]);
 	    return;
 	}
 
@@ -632,8 +632,8 @@ struct monst *priest;
 	 * a door then (u.ux, u.uy) may be counted as a possible source which
 	 * is later rejected by linedup() letting the hero off the hook.
 	 */
-	if((u.ux == x && u.uy == y) || !linedup(u.ux, u.uy, x, y) ||
-		stpx == sgn(tbx) && stpy == sgn(tby)) {
+	if ((u.ux == x && u.uy == y) || !linedup(u.ux, u.uy, x, y) ||
+		(stpx == sgn(tbx) && stpy == sgn(tby))) {
 	    if(IS_DOOR(levl[u.ux][u.uy].typ)) {
 
 		if(u.ux == troom->lx - 1) {
@@ -648,7 +648,7 @@ struct monst *priest;
 			y2 = troom->hy;
 			if (x1 > troom->hx && x2 > troom->hx)
 			    return;
-			else if (x2 > troom->hx || x1 <= troom->hx && !rn2(2)) {
+			else if ((x2 > troom->hx || x1 <= troom->hx) && !rn2(2)) {
 			    x = x1;
 			    y = y1;
 			} else {
@@ -668,7 +668,7 @@ struct monst *priest;
 			y2 = troom->hy;
 			if (x1 < troom->lx && x2 < troom->lx)
 			    return;
-			else if (x2 < troom->lx || x1 >= troom->lx && !rn2(2)) {
+			else if ((x2 < troom->lx || x1 >= troom->lx) && !rn2(2)) {
 			    x = x1;
 			    y = y1;
 			} else {
@@ -688,7 +688,7 @@ struct monst *priest;
 			y2 = u.uy + troom->hx - u.ux;
 			if (y1 > troom->hy && y2 > troom->hy)
 			    return;
-			else if (y2 > troom->hy || y1 <= troom->hy && !rn2(2)) {
+			else if ((y2 > troom->hy || y1 <= troom->hy) && !rn2(2)) {
 			    x = x1;
 			    y = y1;
 			} else {
@@ -708,7 +708,7 @@ struct monst *priest;
 			y2 = u.uy - (troom->hx - u.ux);
 			if (y1 < troom->ly && y2 < troom->ly)
 			    return;
-			else if (y2 < troom->ly || y1 >= troom->ly && !rn2(2)) {
+			else if ((y2 < troom->ly || y1 >= troom->ly) && !rn2(2)) {
 			    x = x1;
 			    y = y1;
 			} else {

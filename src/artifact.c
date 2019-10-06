@@ -1467,7 +1467,7 @@ static int arti_invoke(struct obj *obj) {
 						 }
 					 }
 					 if (unseen)
-						 You_hear("%s of intense pain!", unseen > 1 ? "cries" : "a cry");
+						 You_hearf("%s of intense pain!", unseen > 1 ? "cries" : "a cry");
 					 break;
 			case DEATH_GAZE:
 					 if (u.uluck < -9) {

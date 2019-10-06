@@ -930,7 +930,7 @@ meatobj (		/* for gelatinous cubes */
 	    if (cansee(mtmp->mx, mtmp->my) && flags.verbose && buf[0])
 		pline("%s", buf);
 	    else if (flags.soundok && flags.verbose)
-	    	You_hear("%s slurping sound%s.",
+	    	You_hearf("%s slurping sound%s.",
 			ecount == 1 ? "a" : "several",
 			ecount == 1 ? "" : "s");
 	}
@@ -1164,7 +1164,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 	    /* ALI -- Artifact doors (no passage unless open/openable) */
 	    if (IS_DOOR(ntyp))
 		if (artifact_door(nx, ny) ?
-		    levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR)
+		    (levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR))
 		      || levl[nx][ny].doormask & D_LOCKED :
 		    !amorphous(mdat) &&
 	       ((levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR)) ||
@@ -1497,7 +1497,7 @@ struct monst *mtmp;
 		/* grating amulets are always visible. */
 		/* [ALI] Always treat swallower as visible for consistency */
 		/* with unpoly_monster(). */
-		visible = u.uswallow && u.ustuck == mtmp ||
+		visible = (u.uswallow && u.ustuck == mtmp) ||
 			cansee(mtmp->mx, mtmp->my);
 		if (visible) {
 			pline("But wait...");
@@ -1536,7 +1536,7 @@ unpoly_monster (struct monst *mtmp)
 	int visible;
 	char buf[BUFSZ];
 
-	sprintf(buf, Monnam(mtmp));
+	strcpy(buf, Monnam(mtmp));
 
 	/* If there is a timer == monster was poly'ed */
 	if (stop_timer(UNPOLY_MON, monst_to_any(mtmp))) {
@@ -1544,7 +1544,7 @@ unpoly_monster (struct monst *mtmp)
 	     * indicating that the monster hasn't died comes _before_ any
 	     * message about breaking out of the "new" monster.
 	     */
-	    visible = u.uswallow && u.ustuck == mtmp || cansee(mtmp->mx,mtmp->my);
+	    visible = (u.uswallow && u.ustuck == mtmp) || cansee(mtmp->mx,mtmp->my);
 	    mtmp->mhp = mtmp->mhpmax;
 	    if (visible)
 		pline("But wait...");
@@ -2760,7 +2760,7 @@ boolean msg;
 
 	newsym(mtmp->mx,mtmp->my);
 
-	if (msg && (u.uswallow && mtmp == u.ustuck || canspotmon(mtmp))) {
+	if (msg && ((u.uswallow && mtmp == u.ustuck) || canspotmon(mtmp))) {
 	    if (alt_mesg && is_mplayer(mdat))
 		pline("%s is suddenly very %s!", oldname,
 			mtmp->female ? "feminine" : "masculine");
