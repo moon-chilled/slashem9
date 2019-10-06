@@ -282,7 +282,6 @@ typedef long glyph_t;
 #define BORG            // Fixed for non-DOS --ELR
 /* #define KEEP_SAVE */       /* Keep savefiles after Restore (wac@intergate.bc.ca)*/
 /* #define CHARON */	/* Charon's boat, enables Cerebus - not implemented */
-#define OTHER_SERVICES  /* shopkeeper services */
 #define DUNGEON_GROWTH
 
 /* #define SHOUT */ /* JRN -- shouting and petcommands - not implemented */

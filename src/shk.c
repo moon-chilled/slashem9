@@ -64,7 +64,6 @@ static void bill_box_content(struct obj *, boolean, boolean,
 				     struct monst *);
 static boolean rob_shop(struct monst *);
 
-#ifdef OTHER_SERVICES
 #define NOBOUND         (-1)    /* No lower/upper limit to charge       */
 static void shk_other_services(void);
 static void shk_identify(char *, struct monst *);
@@ -77,7 +76,6 @@ static boolean shk_obj_match(struct obj *, struct monst *);
 /*static int shk_class_match(long class, struct monst *shkp);*/
 static boolean shk_offer_price(char *, long, struct monst *);
 static void shk_smooth_charge(int *, int, int);
-#endif
 
 /*
 	invariants: obj->unpaid iff onbill(obj) [unless bp->useup]
@@ -1498,10 +1496,8 @@ proceed:
 #endif
 			pline(no_money, stashed_gold ? " seem to" : "");
 
-#ifdef OTHER_SERVICES
 /*		    else */
 			shk_other_services();
-#endif
 
 		} else if(ltmp) {
 		    pline("%s is after blood, not money!", Monnam(shkp));
@@ -1720,16 +1716,13 @@ proceed:
 	return 1;
 }
 
-#ifdef OTHER_SERVICES
 /*
 ** FUNCTION shk_other_services
 **
 ** Called when you don't owe any money.  Called after all checks have been
 ** made (in shop, not angry shopkeeper, etc.)
 */
-static void
-shk_other_services()
-{
+static void shk_other_services(void) {
 	char *slang;		/* What shk calls you		*/
 	struct monst *shkp;		/* The shopkeeper		*/
 	/*WAC - Windowstuff*/
@@ -1852,7 +1845,6 @@ shk_other_services()
 	                break;
 	    }
 }
-#endif /* OTHER_SERVICES */
 
 
 /* return 2 if used-up portion paid */
@@ -4526,7 +4518,6 @@ sasc_bug(struct obj *op, unsigned x){
 }
 #endif
 
-#ifdef OTHER_SERVICES
 static const char identify_types[] = { ALL_CLASSES, 0 };
 static const char weapon_types[] = { WEAPON_CLASS, TOOL_CLASS, 0 };
 static const char armor_types[] = { ARMOR_CLASS, 0 };
@@ -4538,11 +4529,7 @@ static const char armor_types[] = { ARMOR_CLASS, 0 };
 */
 static const char ident_chars[] = "bp";
 
-static void
-shk_identify(slang, shkp)
-	char *slang;
-	struct monst *shkp;
-{
+static void shk_identify(char *slang, struct monst *shkp) {
 	struct obj *obj;       /* The object to identify       */
 	int charge, mult;               /* Cost to identify             */
 /*
@@ -4686,11 +4673,7 @@ shk_identify(slang, shkp)
 **
 ** Uncurse an item for the customer
 */
-static void
-shk_uncurse(slang, shkp)
-	char *slang;
-	struct monst *shkp;
-{
+static void shk_uncurse(char *slang, struct monst *shkp) {
 	struct obj *obj;                /* The object picked            */
 	int charge;                     /* How much to uncurse          */
 
@@ -4760,11 +4743,7 @@ shk_uncurse(slang, shkp)
 static const char basic_damage[] =
 	"Basic damage against small foes %s, against large foes %s.";
 
-static void
-shk_appraisal(slang, shkp)
-	char *slang;
-	struct monst *shkp;
-{
+static void shk_appraisal(char *slang, struct monst *shkp) {
 	struct obj *obj;                /* The object picked            */
 	int charge;                     /* How much for appraisal       */
 	boolean guesswork;              /* Shopkeeper unsure?           */
@@ -4857,11 +4836,7 @@ shk_appraisal(slang, shkp)
 ** Perform ops on weapon for customer
 */
 static const char we_offer[] = "We offer the finest service available!";
-static void
-shk_weapon_works(slang, shkp)
-char *slang;
-struct monst *shkp;
-{
+static void shk_weapon_works(char *slang, struct monst *shkp) {
     struct obj *obj;
     int charge;
     winid tmpwin;
@@ -5018,11 +4993,7 @@ struct monst *shkp;
 **
 ** Perform ops on armor for customer
 */
-static void
-shk_armor_works(slang, shkp)
-	char *slang;
-	struct monst *shkp;
-{
+static void shk_armor_works(char *slang, struct monst *shkp) {
 	struct obj *obj;
 	int charge;
 /*WAC - Windowstuff*/
@@ -5139,11 +5110,7 @@ static const char tool_types[] = { TOOL_CLASS, 0 };
 static const char ring_types[] = { RING_CLASS, 0 };
 static const char spbook_types[] = { SPBOOK_CLASS, 0 };
 
-static void
-shk_charge(slang, shkp)
-	char *slang;
-	struct monst *shkp;
-{
+static void shk_charge(char *slang, struct monst *shkp) {
 	struct obj *obj = NULL; /* The object picked            */
 	struct obj *tobj;       /* Temp obj                     */
 	char type;              /* Basic/premier service        */
@@ -5273,11 +5240,7 @@ shk_charge(slang, shkp)
 **
 ** Does object "obj" match the type of shop?
 */
-static boolean
-shk_obj_match(obj, shkp)
-	struct obj *obj;
-	struct monst *shkp;
-{
+static boolean shk_obj_match(struct obj *obj, struct monst *shkp) {
 	/* object matches type of shop? */
 	return saleable(shkp, obj);
 }
@@ -5289,12 +5252,7 @@ shk_obj_match(obj, shkp)
 ** Tell customer how much it'll cost, ask if he wants to pay,
 ** and deduct from $$ if agreable.
 */
-static boolean
-shk_offer_price(slang, charge, shkp)
-	char *slang;
-	long charge;
-	struct monst *shkp;
-{
+static boolean shk_offer_price(char *slang, long charge, struct monst *shkp) {
 	char sbuf[BUFSZ];
 	long credit = ESHK(shkp)->credit;
 
@@ -5344,12 +5302,7 @@ shk_offer_price(slang, charge, shkp)
 ** done.  Make sure that it (1) varies depending on charisma and
 ** (2) is constant.
 */
-static void
-shk_smooth_charge(pcharge, lower, upper)
-	int *pcharge;
-	int lower;
-	int upper;
-{
+static void shk_smooth_charge(int *pcharge, int lower, int upper) {
 	int charisma;
 	int bonus;
 
@@ -5394,13 +5347,10 @@ check_lower:
 	if (*pcharge < lower) *pcharge=lower;
 }
 
-#endif /* OTHER_SERVICES */
-
 
 #ifdef DEBUG
-int
-wiz_debug_cmd()	/* in this case, display your bill(s) */
-{
+// in this case, display your bill(s)
+int wiz_debug_cmd(void) {
     int win, special = 0;
     struct obj *obj;
     struct monst *shkp, *ushkp;

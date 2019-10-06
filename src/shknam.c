@@ -12,10 +12,8 @@ static void nameshk(struct monst *,const char * const *);
 static int  shkinit(const struct shclass *,struct mkroom *);
 
 static void stock_blkmar(const struct shclass *, struct mkroom *, int);
-#ifdef OTHER_SERVICES
 /* WAC init shk services */
 static void init_shk_services(struct monst *);
-#endif
 
 
 static const char * const shkliquors[] = {
@@ -458,10 +456,8 @@ struct mkroom	*sroom;
 	ESHK(shk)->visitct = 0;
 	ESHK(shk)->following = 0;
 	ESHK(shk)->billct = 0;
-#ifdef OTHER_SERVICES
 	/* WAC init services */
 	init_shk_services(shk);
-#endif
 
   shkmoney = 1000L + 30L*(long)rnd(100);	/* initial capital */
   						/* [CWC] Lets not create the money yet until we see if the
@@ -689,12 +685,7 @@ int sh;
      */
 }
 
-#ifdef OTHER_SERVICES
-
-static void
-init_shk_services(shk)
-struct monst *shk;
-{
+static void init_shk_services(struct monst *shk) {
 	ESHK(shk)->services = 0L;
 
 	/* KMH, balance patch 2 -- Increase probability of shopkeeper services.
@@ -735,7 +726,6 @@ struct monst *shk;
 
 	return;
 }
-#endif
 
 /* does shkp's shop stock this item type? */
 boolean
