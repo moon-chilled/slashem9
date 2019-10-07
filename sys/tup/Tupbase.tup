@@ -1,7 +1,7 @@
 include Tupprefs.tup
 
 : util/makedefs.c util/panic.c src/alloc.c src/objects.c src/monst.c |> $(HOST_CC) $(CFLAGS) -DDLB %f -o %o |> makedefs$(HOST_EXEEXT)
-: makedefs$(HOST_EXEEXT) |> ./makedefs$(HOST_EXEEXT) |> include/onames.h include/date.h include/pm.h dat/data dat/dungeon.pdf dat/options dat/quest.dat dat/rumors dat/oracles
+: makedefs$(HOST_EXEEXT) |> ./makedefs$(HOST_EXEEXT) |> include/onames.h include/date.h include/pm.h dat/data dat/dungeon.pdf dat/options dat/quest.dat dat/oracles
 
 : util/dgn_comp.y |> bison -d %f -o $(BUILDDIR)/dgn_yacc.c; mv $(BUILDDIR)/dgn_yacc.h include/dgn_comp.h; mv $(BUILDDIR)/dgn_yacc.c src/ |> src/dgn_yacc.c include/dgn_comp.h
 : util/dgn_comp.l |> flex -o %o %f |> src/dgn_lex.c
@@ -63,4 +63,4 @@ QUEST_DES := dat/Ice.des
 : dat/Yeoman.des | lev_comp$(HOST_EXEEXT) |> ./lev_comp %f |> Yeo-fila.lev Yeo-filb.lev Yeo-loca.lev Yeo-goal.lev Yeo-strt.lev
 
 
-: dlb$(HOST_EXEEXT) dungeon *.lev dat/help dat/hh dat/cmdhelp dat/history dat/opthelp dat/wizhelp dat/gypsy.txt dat/data dat/options dat/oracles dat/quest.dat dat/rumors |> cd dat; cp ../dungeon .; cp ../*.lev .; ../dlb cf nhdat dungeon *.lev help hh cmdhelp history opthelp wizhelp gypsy.txt data options oracles quest.dat rumors; rm -f dungeon *.lev; mv nhdat .. |> nhdat
+: dlb$(HOST_EXEEXT) dungeon *.lev dat/help dat/hh dat/cmdhelp dat/history dat/opthelp dat/wizhelp dat/gypsy.txt dat/data dat/options dat/oracles dat/quest.dat dat/rumors.fal dat/rumors.tru |> cd dat; cp ../dungeon .; cp ../*.lev .; ../dlb cf nhdat dungeon *.lev help hh cmdhelp history opthelp wizhelp gypsy.txt data options oracles quest.dat rumors.fal rumors.tru; rm -f dungeon *.lev; mv nhdat .. |> nhdat

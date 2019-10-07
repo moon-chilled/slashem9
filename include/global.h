@@ -25,7 +25,8 @@
 #define NH_SHELP_AREA	FILE_AREA_SHARE
 #define NH_DEBUGHELP	"wizhelp"	/* a file containing debug mode cmds */
 #define NH_DEBUGHELP_AREA	FILE_AREA_SHARE
-#define NH_RUMORFILE	"rumors"	/* a file with fortune cookies */
+#define NH_RUMORFILE_TRU	"rumors.tru"	// files with fortune cookies */
+#define NH_RUMORFILE_FAL	"rumors.fal"
 #define NH_RUMORAREA	FILE_AREA_SHARE
 #define NH_ORACLEFILE	"oracles"	/* a file with oracular information */
 #define NH_ORACLEAREA	FILE_AREA_SHARE

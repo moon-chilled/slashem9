@@ -28,109 +28,71 @@
  * and placed there by 'makedefs'.
  */
 
-static void init_rumors(dlb *);
 static void init_oracles(dlb *);
 
-static long true_rumor_start,  true_rumor_size,  true_rumor_end,
-	    false_rumor_start, false_rumor_size, false_rumor_end;
 static int oracle_flg = 0;  /* -1=>don't use, 0=>need init, 1=>init done */
 static unsigned oracle_cnt = 0;
 static long *oracle_loc = 0;
-
-static void
-init_rumors(fp)
-dlb *fp;
-{
-	char line[BUFSZ];
-
-	dlb_fgets(line, sizeof line, fp); /* skip "don't edit" comment */
-	dlb_fgets(line, sizeof line, fp);
-	if (sscanf(line, "%6lx\n", &true_rumor_size) == 1 &&
-	    true_rumor_size > 0L) {
-	    dlb_fseek(fp, 0L, SEEK_CUR);
-	    true_rumor_start  = dlb_ftell(fp);
-	    true_rumor_end    = true_rumor_start + true_rumor_size;
-	    dlb_fseek(fp, 0L, SEEK_END);
-	    false_rumor_end   = dlb_ftell(fp);
-	    false_rumor_start = true_rumor_end;	/* ok, so it's redundant... */
-	    false_rumor_size  = false_rumor_end - false_rumor_start;
-	} else
-	    true_rumor_size = -1L;	/* init failed */
-}
 
 /* exclude_cookie is a hack used because we sometimes want to get rumors in a
  * context where messages such as "You swallowed the fortune!" that refer to
  * cookies should not appear.  This has no effect for true rumors since none
  * of them contain such references anyway.
  */
-char *
-getrumor(truth, rumor_buf, exclude_cookie)
-int truth; /* 1=true, -1=false, 0=either */
-char *rumor_buf;
-boolean exclude_cookie;
-{
-	dlb	*rumors;
+// truth: 1=true, -1=false, 0=either
+char *getrumor(int truth, char *rumor_buf, bool exclude_cookie) {
+	dlb *rumors;
 	long tidbit, beginning;
-	char	*endp, line[BUFSZ], xbuf[BUFSZ];
+	char *endp;
+	char line[BUFSZ];
 
 	rumor_buf[0] = '\0';
-	if (true_rumor_size < 0L)	/* we couldn't open NH_RUMORFILE */
-		return rumor_buf;
 
-	rumors = dlb_fopen_area(NH_RUMORAREA, NH_RUMORFILE, "r");
+	if (truth == 1) {
+		rumors = dlb_fopen_area(NH_RUMORAREA, NH_RUMORFILE_TRU, "r");
+	} else if (truth == 0) {
+		rumors = dlb_fopen_area(NH_RUMORAREA, rn2(2) ? NH_RUMORFILE_TRU : NH_RUMORFILE_FAL, "r");
+	} else if (truth == -1) {
+		rumors = dlb_fopen_area(NH_RUMORAREA, NH_RUMORFILE_FAL, "r");
+	} else {
+		impossible("Bad fortune truth %d", truth);
+		return rumor_buf = "Viva fortuna";
+	}
 
-	if (rumors) {
-	    int count = 0;
-	    int adjtruth;
+	if (!rumors) {
+		impossible("Can't open rumors file!");
+		return rumor_buf = "The Slash'EM rumors file is currently closed for rennovations.";
+	}
 
-	    do {
-		rumor_buf[0] = '\0';
-		if (true_rumor_size == 0L) {	/* if this is 1st outrumor() */
-		    init_rumors(rumors);
-		    if (true_rumor_size < 0L) {	/* init failed */
-			sprintf(rumor_buf, "Error reading \"%.80s\".",
-				NH_RUMORFILE);
-			return rumor_buf;
-		    }
-		}
-		/*
-		 *	input:      1    0   -1
-		 *	 rn2 \ +1  2=T  1=T  0=F
-		 *	 adj./ +0  1=T  0=F -1=F
-		 */
-		switch (adjtruth = truth + rn2(2)) {
-		  case  2:	/*(might let a bogus input arg sneak thru)*/
-		  case  1:  beginning = true_rumor_start;
-			    tidbit = Rand() % true_rumor_size;
-			break;
-		  case  0:	/* once here, 0 => false rather than "either"*/
-		  case -1:  beginning = false_rumor_start;
-			    tidbit = Rand() % false_rumor_size;
-			break;
-		  default:
-			    impossible("strange truth value for rumor");
-			return strcpy(rumor_buf, "Oops...");
-		}
-		dlb_fseek(rumors, beginning + tidbit, SEEK_SET);
+	dlb_fseek(rumors, 0, SEEK_END);
+	size_t len = dlb_ftell(rumors);
+
+	do {
+		// HACK ALERT!
+		// This chooses a random position within the file, and then finds the next fortune after that position
+		// Eventually, the dlb interface should support newline-tabulated files
+		// So this doesn't have to be so complex
+		size_t tidbit = rn2(len);
+		dlb_fseek(rumors, tidbit, SEEK_SET);
+
 		dlb_fgets(line, sizeof line, rumors);
-		if (!dlb_fgets(line, sizeof line, rumors) ||
-		    (adjtruth > 0 && dlb_ftell(rumors) > true_rumor_end)) {
-			/* reached end of rumors -- go back to beginning */
+
+		// reached end of rumors -- go back to beginning
+		if (!dlb_fgets(line, sizeof line, rumors)) {
 			dlb_fseek(rumors, beginning, SEEK_SET);
 			dlb_fgets(line, sizeof line, rumors);
 		}
 		if ((endp = index(line, '\n')) != 0) *endp = 0;
-		strcat(rumor_buf, xcrypt(line, xbuf));
-	    } while(count++ < 50 && exclude_cookie && (strstri(rumor_buf, "fortune") || strstri(rumor_buf, "pity")));
-	    dlb_fclose(rumors);
-	    if (count >= 50)
-		impossible("Can't find non-cookie rumor?");
-	    else
-		exercise(A_WIS, (adjtruth > 0));
-	} else {
-		pline("Can't open rumors file!");
-		true_rumor_size = -1;	/* don't try to open it again */
-	}
+	} while (exclude_cookie && (strstri(line, "fortune") || strstri(line, "pity")));
+	// pity => 'What a pity, you cannot read it!'
+
+	strcpy(rumor_buf, line);
+
+	// XXX this currently exercises wisdom only when you get a guaranteed true fortune
+	// should it also if you get a random fortune that happens to be true?
+	exercise(A_WIS, truth > 0);
+
+	dlb_fclose(rumors);
 	return rumor_buf;
 }
 

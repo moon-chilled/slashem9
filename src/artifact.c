@@ -1743,7 +1743,7 @@ boolean artifact_light(struct obj *obj) {
 }
 
 /* KMH -- Talking artifacts are finally implemented */
-void arti_speak (struct obj *obj) {
+void arti_speak(struct obj *obj) {
 	const struct artifact *oart = get_artifact(obj);
 	const char *line;
 	char buf[BUFSZ];
@@ -1758,7 +1758,6 @@ void arti_speak (struct obj *obj) {
 		line = "Slash'EM rumors file closed for renovation.";
 	pline("%s:", Tobjnam(obj, "whisper"));
 	verbalize("%s", line);
-	return;
 }
 
 boolean artifact_has_invprop(struct obj *otmp, uchar inv_prop) {

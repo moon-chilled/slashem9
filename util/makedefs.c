@@ -38,7 +38,6 @@
 #endif
 #define ORACLE_FILE	"oracles"
 #define DATA_FILE	"data"
-#define RUMOR_FILE	"rumors"
 #define DGN_I_FILE	"dungeon.def"
 #define DGN_O_FILE	"dungeon.pdf"
 #define QTXT_I_FILE	"quest.txt"
@@ -75,7 +74,6 @@ void do_date(void);
 void do_options(void);
 void do_permonst(void);
 void do_questtxt(void);
-void do_rumors(void);
 void do_oracles(void);
 
 extern void monst_init(void);		/* monst.c */
@@ -133,7 +131,6 @@ int main(int argc, char	**argv) {
 	do_options();
 	do_permonst();
 	do_questtxt();
-	do_rumors();
 	do_oracles();
 
 	return 0;
@@ -157,61 +154,6 @@ static char *xcrypt(const char *str) {
 	return buf;
 }
 
-void do_rumors(void) {
-	char    *infile;
-	long	true_rumor_size;
-
-	infile = alloc(strlen(DATA_IN_TEMPLATE) - 2 + strlen(RUMOR_FILE) + 5);
-	filename[0]='\0';
-#ifdef FILE_PREFIX
-	strcat(filename,file_prefix);
-#endif
-	sprintf(eos(filename), DATA_TEMPLATE, RUMOR_FILE);
-	if (!(ofp = fopen(filename, WRTMODE))) {
-		perror(filename);
-		exit(EXIT_FAILURE);
-	}
-	fprintf(ofp, "%s", Dont_Edit_Data);
-
-	sprintf(infile, DATA_IN_TEMPLATE, RUMOR_FILE);
-	strcat(infile, ".tru");
-	if (!(ifp = fopen(infile, RDTMODE))) {
-		perror(infile);
-		fclose(ofp);
-		unlink(filename);	/* kill empty output file */
-		exit(EXIT_FAILURE);
-	}
-
-	/* get size of true rumors file */
-	fseek(ifp, 0L, SEEK_END);
-	true_rumor_size = ftell(ifp);
-
-	fprintf(ofp,"%06lx\n", true_rumor_size);
-	fseek(ifp, 0L, SEEK_SET);
-
-	/* copy true rumors */
-	while (fgets(in_line, sizeof in_line, ifp) != 0)
-		fputs(xcrypt(in_line), ofp);
-
-	fclose(ifp);
-
-	sprintf(infile, DATA_IN_TEMPLATE, RUMOR_FILE);
-	strcat(infile, ".fal");
-	if (!(ifp = fopen(infile, RDTMODE))) {
-		perror(infile);
-		fclose(ofp);
-		unlink(filename);	/* kill incomplete output file */
-		exit(EXIT_FAILURE);
-	}
-
-	/* copy false rumors */
-	while (fgets(in_line, sizeof in_line, ifp) != 0)
-		fputs(xcrypt(in_line), ofp);
-
-	fclose(ifp);
-	fclose(ofp);
-	free(infile);
-}
 
 /*
  * 3.4.1: way back in 3.2.1 `flags.nap' became unconditional but

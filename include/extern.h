@@ -1731,7 +1731,7 @@ extern char *root_plselection_prompt(char *, int, int, int, int, int);
 
 /* ### rumors.c ### */
 
-extern char *getrumor(int,char *, boolean);
+extern char *getrumor(int, char *, bool);
 extern void outrumor(int,int);
 extern void outoracle(boolean, boolean);
 extern void save_oracles(int,int);
