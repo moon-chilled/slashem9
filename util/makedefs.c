@@ -43,11 +43,6 @@
 #define DGN_O_FILE	"dungeon.pdf"
 #define QTXT_I_FILE	"quest.txt"
 #define QTXT_O_FILE	"quest.dat"
-/*WAC filename*/
-/*input*/
-#define FILE_H          "file.h"
-/*output*/
-#define FILENAME_H      "filename.h"
 
 # define INCLUDE_TEMPLATE	"include/%s"
 # define INCLUDE_IN_TEMPLATE    "../include/%s"
@@ -82,8 +77,6 @@ void do_permonst(void);
 void do_questtxt(void);
 void do_rumors(void);
 void do_oracles(void);
-/*WAC filenames*/
-void do_filenames(void);
 
 extern void monst_init(void);		/* monst.c */
 extern void objects_init(void);	/* objects.c */
@@ -115,10 +108,6 @@ static char *tmpdup(const char *);
 static char *limit(char *,int);
 static char *eos(char *);
 
-/*Stolen from hacklib.c*/
-static char *lcase(char *);
-static char *ucase(char *);
-
 /* input, output, tmp */
 static FILE *ifp, *ofp, *tfp;
 
@@ -140,7 +129,6 @@ int main(int argc, char	**argv) {
 	do_objs();
 	do_data();
 	do_dungeon();
-	do_filenames();
 	do_date();
 	do_options();
 	do_permonst();
@@ -1346,91 +1334,6 @@ static char *eos(char *str) {
 	while (*str) str++;
 	return str;
 }
-
-/* KMH -- Now supports upper, lower, and mixed case filenames */
-void do_filenames(void) {
-	char    *infile;
-	int i;
-	char buf[BUFSZ];
-	char lname[20] = DEF_GAME_NAME;
-	char uname[20] = DEF_GAME_NAME;
-
-	infile = alloc(strlen(INCLUDE_IN_TEMPLATE) - 2 + strlen(FILE_H) + 1);
-	lcase(lname);
-	ucase(uname);
-
-    /*
-     * create the source file, "filename.h"
-     */
-    filename[0]='\0';
-#ifdef FILE_PREFIX
-    strcat(filename, file_prefix);
-#endif
-
-    sprintf(eos(filename), INCLUDE_TEMPLATE, FILENAME_H);
-    if (!(ofp = fopen(filename, WRTMODE))) {
-		perror(filename);
-		exit(EXIT_FAILURE);
-    }
-    fprintf(ofp, "/*\tSCCS Id: @(#)filename.h\t3.2\t96/05/17 */\n\n");
-    fprintf(ofp, "%s", Dont_Edit_Code);
-
-/*OPEN file*/
-    sprintf(infile, INCLUDE_IN_TEMPLATE, FILE_H);
-    if (!(ifp = fopen(infile, RDTMODE))) {
-        perror(infile);
-        fclose(ofp);
-        unlink(filename);       /* kill empty output file */
-        exit(EXIT_FAILURE);
-     }
-     free(infile);
-     do {
-        fgets(in_line, sizeof in_line, ifp);
-        if (*in_line != '#') continue;
-                sscanf(in_line, "# %s", buf);
-     } while (strcmp(buf, "START") != 0);
-     while (fgets(in_line, sizeof in_line, ifp)) {
-        for ( i = 0; i < strlen(in_line);  i++ ) {
-           if (in_line[i] == '@') {
-/*differentiate uppercase, lowercase*/
-/*assume DEF_GAME_NAME is uppercase*/
-/* KMH -- Added mixed case */
-                if ((in_line[i+1] == 'l') || (in_line[i+1] == 'L'))
-                        fputs(lname,ofp);
-                else if ((in_line[i+1] == 'u') || (in_line[i+1] == 'U'))
-                        fputs(uname,ofp);
-                else
-                        fputs(DEF_GAME_NAME,ofp);
-                i=i+6;
-                }
-           else fputc(in_line[i], ofp);
-        }
-     }
-     fclose(ifp);
-     fclose(ofp);
-     return;
-}
-
-/* convert a string into all lowercase */
-char * lcase(char *s) {
-	char *p;
-
-	for (p = s; *p; p++)
-		if ('A' <= *p && *p <= 'Z') *p |= 040;
-	return s;
-}
-
-
-/* KMH -- added function */
-/* convert a string into all lowercase */
-char * ucase(char *s) {
-	char *p;
-
-	for (p = s; *p; p++)
-		if ('a' <= *p && *p <= 'z') *p &= ~040;
-	return s;
-}
-
 
 #ifdef STRICT_REF_DEF
 struct flag flags;
