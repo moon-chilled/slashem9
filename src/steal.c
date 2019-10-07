@@ -279,9 +279,7 @@ nothing_to_steal:
 gotobj:
 	if (otmp->o_id == stealoid) return 0;
 
-#ifdef STEED
 	if (otmp == usaddle) dismount_steed(DISMOUNT_FELL);
-#endif
 
 	/* animals can't overcome curse stickiness nor unlock chains */
 	if (monkey_business) {
@@ -516,12 +514,10 @@ boolean verbosely;
 	    update_mon_intrinsics(mon, obj, false, true);
 	 /* obj_no_longer_held(obj); -- done by place_object */
 	    if (obj->owornmask & W_WEP) setmnotwielded(mon, obj);
-#ifdef STEED
 	/* don't charge for an owned saddle on dead steed */
 	} else if (mon->mtame && (obj->owornmask & W_SADDLE) &&
 		!obj->unpaid && costly_spot(omx, omy)) {
 	    obj->no_charge = 1;
-#endif
 	}
 	obj->owornmask = 0L;
     }

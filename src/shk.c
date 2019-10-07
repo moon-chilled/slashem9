@@ -687,13 +687,11 @@ u_entered_shop (char *enterstring)
 			  "Leave the %s%s outside.",
 			  tool, plur(cnt));
 		should_block = true;
-#ifdef STEED
 	    } else if (u.usteed) {
 		verbalize(NOTANGRY(shkp) ?
 			  "Will you please leave %s outside?" :
 			  "Leave %s outside.", y_monnam(u.usteed));
 		should_block = true;
-#endif
 	    } else {
 		should_block = (Fast && (sobj_at(PICK_AXE, u.ux, u.uy) ||
 				      sobj_at(DWARVISH_MATTOCK, u.ux, u.uy)));
@@ -909,10 +907,7 @@ obfree (struct obj *obj, struct obj *merge)
 	struct bill_x *bpm;
 	struct monst *shkp;
 
-#ifdef STEED
 	if (obj == usaddle) dismount_steed(DISMOUNT_GENERIC);
-#endif
-
 	if (obj->otyp == LEASH && obj->leashmon) o_unleash(obj);
 	if (obj->oclass == SPBOOK_CLASS) book_disappears(obj);
 	if (obj->oclass == FOOD_CLASS) food_disappears(obj);
@@ -3670,12 +3665,7 @@ struct monst *shkp;
 	    if ((Is_blackmarket(&u.uz) && u.umonnum>0 &&
 		 mons[u.umonnum].mlet != S_HUMAN) ||
                 /* WAC Let you out if you're stuck inside */
-                (!Is_blackmarket(&u.uz) && (Invis
-#ifdef STEED
-			|| u.usteed
-#endif
-			                          ) && !inside_shop(u.ux, u.uy)))
-		{
+                (!Is_blackmarket(&u.uz) && (Invis || u.usteed) && !inside_shop(u.ux, u.uy))) {
 		    avoid = false;
 		} else {
 		    uondoor = (u.ux == eshkp->shd.x && u.uy == eshkp->shd.y);
@@ -4447,11 +4437,7 @@ xchar x, y;
 	if(shkp->mx == sx && shkp->my == sy
 		&& shkp->mcanmove && !shkp->msleeping
 		&& (x == sx-1 || x == sx+1 || y == sy-1 || y == sy+1)
-		&& (Invis || carrying(PICK_AXE) || carrying(DWARVISH_MATTOCK)
-#ifdef STEED
-			|| u.usteed
-#endif
-	  )) {
+		&& (Invis || carrying(PICK_AXE) || carrying(DWARVISH_MATTOCK) || u.usteed)) {
 		pline("%s%s blocks your way!", shkname(shkp),
 				Invis ? " senses your motion and" : "");
 		return true;

@@ -105,13 +105,9 @@ boolean put_away;
 	 * 3.2.2:  Wielding arbitrary objects will give bashing message too.
 	 */
 	if (obj) {
-		unweapon = (obj->oclass == WEAPON_CLASS) ?
-				is_launcher(obj) || is_ammo(obj) ||
-				is_missile(obj) || (is_pole(obj)
-#ifdef STEED
-				&& !u.usteed
-#endif
-				) : !is_weptool(obj);
+		unweapon = (obj->oclass == WEAPON_CLASS)
+				? is_launcher(obj) || is_ammo(obj) || is_missile(obj) || (is_pole(obj) && !u.usteed)
+				: !is_weptool(obj);
 	} else
 		unweapon = true;	/* for "bare hands" message */
 
@@ -285,11 +281,7 @@ dowield (void)
 		return doswapweapon();
 	else if (wep == uquiver)
 		setuqwep(NULL);
-	else if (wep->owornmask & (W_ARMOR | W_RING | W_AMUL | W_TOOL
-#ifdef STEED
-			| W_SADDLE
-#endif
-			)) {
+	else if (wep->owornmask & (W_ARMOR | W_RING | W_AMUL | W_TOOL | W_SADDLE)) {
 		pline("You cannot wield that!");
 		return 0;
 	}
@@ -392,11 +384,7 @@ dowieldquiver (void)
 		pline("%s already being used as a weapon!",
 		      !is_plural(uwep) ? "That is" : "They are");
 		return 0;
-	} else if (newquiver->owornmask & (W_ARMOR | W_RING | W_AMUL | W_TOOL
-#ifdef STEED
-			| W_SADDLE
-#endif
-			)) {
+	} else if (newquiver->owornmask & (W_ARMOR | W_RING | W_AMUL | W_TOOL | W_SADDLE)) {
 		pline("You cannot ready that!");
 		return 0;
 	} else {

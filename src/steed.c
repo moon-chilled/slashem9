@@ -5,8 +5,6 @@
 #include "hack.h"
 
 
-#ifdef STEED
-
 /* Monsters that might be ridden */
 static const char steeds[] = {
 	S_QUADRUPED, S_UNICORN, S_ANGEL, S_CENTAUR, S_DRAGON, S_JABBERWOCK, '\0'
@@ -628,7 +626,5 @@ place_monster (struct monst *mon, int x, int y)
     mon->mx = x, mon->my = y;
     level.monsters[x][y] = mon;
 }
-
-#endif /* STEED */
 
 /*steed.c*/

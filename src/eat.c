@@ -971,10 +971,10 @@ static void cpostfx(int pm) {
 		    char buf[BUFSZ];
 		    pline("You can't resist the temptation to mimic %s.",
 			Hallucination ? "an orange" : "a pile of gold");
-#ifdef STEED
+
                     /* A pile of gold can't ride. */
 		    if (u.usteed) dismount_steed(DISMOUNT_FELL);
-#endif
+
 		    nomul(-tmp);
 		    sprintf(buf, Hallucination ?
 			"You suddenly dread being peeled and mimic %s again!" :
@@ -1342,17 +1342,16 @@ static int rottenfood(struct obj *obj) {
 		if (!Blind) pline("Your %s", "vision quickly clears.");
 	} else if(!rn2(3)) {
 		const char *what, *where;
-		if (!Blind)
-		    what = "goes",  where = "dark";
-		else if (Levitation || Is_airlevel(&u.uz) ||
-			 Is_waterlevel(&u.uz))
-		    what = "you lose control of",  where = "yourself";
-		else
-		    what = "you slap against the", where =
-#ifdef STEED
-			   (u.usteed) ? "saddle" :
-#endif
-			   surface(u.ux,u.uy);
+		if (!Blind) {
+		    what = "goes";
+		    where = "dark";
+		} else if (Levitation || Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)) {
+		    what = "you lose control of";
+		    where = "yourself";
+		} else {
+		    what = "you slap against the";
+		    where = u.usteed ? "saddle" : surface(u.ux,u.uy);
+		}
 		pline("The world spins and %s %s.", what, where);
 		flags.soundok = 0;
 		nomul(-rnd(10));
@@ -2227,11 +2226,7 @@ int doeat(void)	{
 	if (!is_edible(otmp)) {
 	    pline("You cannot eat that!");
 	    return 0;
-	} else if ((otmp->owornmask & (W_ARMOR|W_TOOL|W_AMUL
-#ifdef STEED
-			|W_SADDLE
-#endif
-			)) != 0) {
+	} else if ((otmp->owornmask & (W_ARMOR|W_TOOL|W_AMUL |W_SADDLE)) != 0) {
 	    /* let them eat rings */
 	    pline("You can't eat something you're wearing.");
 	    return 0;
@@ -2765,12 +2760,9 @@ static struct obj *floorfood(const char *verb) {
 	char qbuf[QBUFSZ];
 	char c;
 
-#ifdef STEED
 	if (u.usteed)	/* can't eat off floor while riding */
 	    edibles++;
-	else
-#endif
-	if (metallivorous(youmonst.data)) {
+	else if (metallivorous(youmonst.data)) {
 	    struct trap *ttmp = t_at(u.ux, u.uy);
 
 	    if (ttmp && ttmp->tseen && ttmp->ttyp == BEAR_TRAP) {

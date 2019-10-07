@@ -198,9 +198,7 @@ dosave0()
 	bwrite(fd, (void *) plname, PL_NSIZ);
 #endif
 	ustuck_id = (u.ustuck ? u.ustuck->m_id : 0);
-#ifdef STEED
 	usteed_id = (u.usteed ? u.usteed->m_id : 0);
-#endif
 
 	savelev(fd, ledger_no(&u.uz), WRITE_SAVE | FREE_SAVE);
 /*Keep things from beeing freed if not restoring*/
@@ -223,11 +221,9 @@ dosave0()
 	 * may mislead place_monster() on other levels
 	 */
 	setustuck(NULL);
-#ifdef STEED
 	u.usteed = NULL;
-#endif
 
-	for(ltmp = (xchar)1; ltmp <= maxledgerno(); ltmp++) {
+	for (ltmp = (xchar)1; ltmp <= maxledgerno(); ltmp++) {
 		if (ltmp == ledger_no(&uz_save)) continue;
 		if (!(level_info[ltmp].flags & LFILE_EXISTS)) continue;
 
@@ -298,10 +294,10 @@ int fd, mode;
 	save_oracles(fd, mode);
 	if(ustuck_id)
 	    bwrite(fd, (void *) &ustuck_id, sizeof ustuck_id);
-#ifdef STEED
+
 	if(usteed_id)
 	    bwrite(fd, (void *) &usteed_id, sizeof usteed_id);
-#endif
+
 	bwrite(fd, (void *) pl_character, sizeof pl_character);
 	bwrite(fd, (void *) pl_fruit, sizeof pl_fruit);
 	bwrite(fd, (void *) &current_fruit, sizeof current_fruit);
@@ -380,9 +376,8 @@ savestateinlock()
 		    bwrite(fd, (void *) plname, PL_NSIZ);
 #endif
 		    ustuck_id = (u.ustuck ? u.ustuck->m_id : 0);
-#ifdef STEED
 		    usteed_id = (u.usteed ? u.usteed->m_id : 0);
-#endif
+
 		    savegamestate(fd, WRITE_SAVE);
 		}
 		bclose(fd);

@@ -214,12 +214,10 @@ nh_timeout (void)
 	    }
 	}
 
-#ifdef STEED
 	if (u.ugallop) {
 	    if (--u.ugallop == 0L && u.usteed)
 	    	pline("%s stops galloping.", Monnam(u.usteed));
 	}
-#endif
 
 	for(upp = u.uprops; upp < u.uprops+SIZE(u.uprops); upp++)
 	    if((upp->intrinsic & TIMEOUT) && !(--upp->intrinsic & TIMEOUT)) {
@@ -940,9 +938,7 @@ slip_or_trip()
 	const char *what, *pronoun;
 	char buf[BUFSZ];
 	boolean on_foot = true;
-#ifdef STEED
 	if (u.usteed) on_foot = false;
-#endif
 
 	if (otmp && on_foot && !u.uinwater && is_pool(u.ux, u.uy)) otmp = 0;
 
@@ -970,11 +966,9 @@ slip_or_trip()
 	    }
 	} else if (rn2(3) && is_ice(u.ux, u.uy)) {
 	    pline("%s %s%s on the ice.",
-#ifdef STEED
 		u.usteed ? upstart(x_monnam(u.usteed,
 				u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
 				NULL, SUPPRESS_SADDLE, false)) :
-#endif
 		"You", rn2(2) ? "slip" : "slide", on_foot ? "" : "s");
 	} else {
 	    if (on_foot) {
@@ -994,9 +988,7 @@ slip_or_trip()
 			pline("You stumble.");
 			break;
 		}
-	    }
-#ifdef STEED
-	    else {
+	    } else {
 		switch (rn2(4)) {
 		  case 1:
 			pline("Your %s slip out of the stirrups.", makeplural(body_part(FOOT)));
@@ -1013,7 +1005,6 @@ slip_or_trip()
 		}
 		dismount_steed(DISMOUNT_FELL);
 	    }
-#endif
 	}
 }
 

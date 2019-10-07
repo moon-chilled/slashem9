@@ -411,9 +411,7 @@ static const struct def_skill Skill_B[] = {
     { P_ATTACK_SPELL, P_SKILLED },	{ P_BODY_SPELL, P_SKILLED },
 /*WAC - 'B' is good at attack spells and body manipulation spells
         -both combat oriented */
-#ifdef STEED
     { P_RIDING, P_BASIC },
-#endif
     { P_TWO_WEAPON_COMBAT, P_BASIC },
     { P_BARE_HANDED_COMBAT, P_MASTER },
     { P_NONE, 0 }
@@ -465,9 +463,7 @@ static const struct def_skill Skill_F[] = {
     { P_MATTER_SPELL, P_EXPERT },
 /*  Added expert matter spell (elements), skilled in attack, basic in rest
         He is a mage,  so knows the types.*/
-#ifdef STEED
     { P_RIDING, P_SKILLED },
-#endif
     { P_TWO_WEAPON_COMBAT, P_SKILLED }, { P_BARE_HANDED_COMBAT, P_SKILLED },
     { P_NONE, 0 }
 };
@@ -487,9 +483,7 @@ static const struct def_skill Skill_H[] = {
     { P_DIVINATION_SPELL, P_BASIC },    { P_ENCHANTMENT_SPELL, P_BASIC },
     { P_PROTECTION_SPELL, P_BASIC },    { P_BODY_SPELL, P_BASIC },
     { P_MATTER_SPELL, P_BASIC },
-#ifdef STEED
     { P_RIDING, P_BASIC },
-#endif
     { P_BARE_HANDED_COMBAT, P_BASIC },
     { P_NONE, 0 }
 };
@@ -516,9 +510,7 @@ static const struct def_skill Skill_I[] = {
     { P_PROTECTION_SPELL, P_SKILLED },  { P_BODY_SPELL, P_BASIC },
     { P_MATTER_SPELL, P_EXPERT },
     /*WAC - same as Flame Mage*/
-#ifdef STEED
     { P_RIDING, P_SKILLED },
-#endif
     { P_TWO_WEAPON_COMBAT, P_SKILLED }, { P_BARE_HANDED_COMBAT, P_SKILLED },
     { P_NONE, 0 }
 };
@@ -541,9 +533,7 @@ static const struct def_skill Skill_K[] = {
 /*WAC - removed the attack spells - no good having knights summoning
         undead!  Replaced with skilled body spells*/
 
-#ifdef STEED
     { P_RIDING, P_EXPERT },
-#endif
     { P_TWO_WEAPON_COMBAT, P_SKILLED }, { P_BARE_HANDED_COMBAT, P_EXPERT },
     { P_NONE, 0 }
 };
@@ -620,9 +610,7 @@ static const struct def_skill Skill_R[] = {
     { P_DIVINATION_SPELL, P_SKILLED },        { P_BODY_SPELL, P_SKILLED },
     { P_MATTER_SPELL, P_SKILLED },
 /*WAC Left as is*/
-#ifdef STEED
     { P_RIDING, P_BASIC },
-#endif
     { P_TWO_WEAPON_COMBAT, P_EXPERT },  { P_BARE_HANDED_COMBAT, P_EXPERT },
     { P_NONE, 0 }
 };
@@ -641,9 +629,7 @@ static const struct def_skill Skill_Ran[] = {
     { P_HEALING_SPELL, P_BASIC },
     { P_DIVINATION_SPELL, P_EXPERT },
     { P_BODY_SPELL, P_BASIC },
-#ifdef STEED
     { P_RIDING, P_BASIC },
-#endif
     { P_BARE_HANDED_COMBAT, P_BASIC },
     { P_NONE, 0 }
 };
@@ -661,9 +647,7 @@ static const struct def_skill Skill_S[] = {
     { P_PROTECTION_SPELL, P_SKILLED },      { P_BODY_SPELL, P_BASIC },
 
 /* WAC - removed the attack spells, replace with body.  clairvoyance, meditate*/
-#ifdef STEED
     { P_RIDING, P_SKILLED },
-#endif
     { P_TWO_WEAPON_COMBAT, P_EXPERT },
     { P_MARTIAL_ARTS, P_MASTER },
     { P_NONE, 0 }
@@ -689,9 +673,7 @@ static const struct def_skill Skill_T[] = {
     { P_DIVINATION_SPELL, P_BASIC },	{ P_ENCHANTMENT_SPELL, P_BASIC },
     { P_BODY_SPELL, P_SKILLED },
 /*WAC left alone*/
-#ifdef STEED
     { P_RIDING, P_BASIC },
-#endif
     { P_TWO_WEAPON_COMBAT, P_SKILLED }, { P_BARE_HANDED_COMBAT, P_SKILLED },
     { P_NONE, 0 }
 };
@@ -742,9 +724,7 @@ static const struct def_skill Skill_V[] = {
 /*  replace attack spell with matter spell - cone of cold, lightning
  *  Boosted to Expert
  */
-#ifdef STEED
     { P_RIDING, P_SKILLED },
-#endif
     { P_TWO_WEAPON_COMBAT, P_SKILLED },
     { P_BARE_HANDED_COMBAT, P_EXPERT },
     { P_NONE, 0 }
@@ -766,9 +746,7 @@ static const struct def_skill Skill_W[] = {
     { P_MATTER_SPELL, P_SKILLED },
 /*      added matter spell skilled,  as fireball and cone of cold are
         matter spells, but now specialty of F/I Mages*/
-#ifdef STEED
     { P_RIDING, P_BASIC },
-#endif
     { P_BARE_HANDED_COMBAT, P_BASIC },
     { P_NONE, 0 }
 };
@@ -789,9 +767,7 @@ static const struct def_skill Skill_Y[] = {
 
     { P_ENCHANTMENT_SPELL, P_SKILLED }, { P_PROTECTION_SPELL, P_SKILLED },
     { P_BODY_SPELL, P_BASIC },
-#ifdef STEED
     { P_RIDING, P_EXPERT },
-#endif
     { P_TWO_WEAPON_COMBAT, P_SKILLED }, { P_BARE_HANDED_COMBAT, P_SKILLED },
     { P_NONE, 0 }
 };

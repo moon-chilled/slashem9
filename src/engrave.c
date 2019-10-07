@@ -145,10 +145,8 @@ void wipeout_text( char *engr, int cnt, unsigned seed /* for semi-controlled ran
 
 boolean can_reach_floor(void) {
 	return !u.uswallow &&
-#ifdef STEED
 			/* Restricted/unskilled riders can't reach the floor */
 			!(u.usteed && P_SKILL(P_RIDING) < P_BASIC) &&
-#endif
 			 (!Levitation ||
 			  Is_airlevel(&u.uz) || Is_waterlevel(&u.uz));
 }

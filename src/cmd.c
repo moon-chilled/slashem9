@@ -793,19 +793,14 @@ static int specialpower(void) {
 		u.unextuse = rn1(1000,500);
 		return 0;
 		break;
-		case 'Y':
-#ifdef STEED
-			if (u.usteed) {
-				pline("%s gets tamer.", Monnam(u.usteed));
-				tamedog(u.usteed, NULL);
-				u.unextuse = rn1(1000,500);
-			} else
-				pline("Your special ability is only effective when riding a monster.");
-			break;
-#else
-			pline("You don't have a special ability!");
-			return 0;
-#endif
+	    case 'Y':
+		if (u.usteed) {
+			pline("%s gets tamer.", Monnam(u.usteed));
+			tamedog(u.usteed, NULL);
+			u.unextuse = rn1(1000,500);
+		} else
+			pline("Your special ability is only effective when riding a monster.");
+		break;
 	    default:
 		break;
 	  }
@@ -1185,22 +1180,16 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 		you_have(buf);
 	}
 	if (Fumbling) enl_msg("You fumble", "", "d", "");
-	if (Wounded_legs
-#ifdef STEED
-	    && !u.usteed
-#endif
-			  ) {
+	if (Wounded_legs && !u.usteed) {
 		sprintf(buf, "wounded %s", makeplural(body_part(LEG)));
 		you_have(buf);
 	}
-#if defined(STEED)
 	if (Wounded_legs && u.usteed && wizard) {
 	    strcpy(buf, x_monnam(u.usteed, ARTICLE_YOUR, NULL,
 		    SUPPRESS_SADDLE | SUPPRESS_HALLUCINATION, false));
 	    *buf = highc(*buf);
 	    enl_msg(buf, " has", " had", " wounded legs");
 	}
-#endif
 	if (Sleeping) enl_msg("You ", "fall", "fell", " asleep");
 	if (Hunger) enl_msg("You hunger", "", "ed", " rapidly");
 
@@ -1285,7 +1274,7 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	if (Breathless) you_can("survive without air");
 	else if (Amphibious) you_can("breathe water");
 	if (Passes_walls) you_can("walk through walls");
-#ifdef STEED
+
 	/* If you die while dismounting, u.usteed is still set.  Since several
 	 * places in the done() sequence depend on u.usteed, just detect this
 	 * special case. */
@@ -1293,7 +1282,7 @@ void enlightenment(int final	/* 0 => still in progress; 1 => over, survived; 2 =
 	    sprintf(buf, "riding %s", y_monnam(u.usteed));
 	    you_are(buf);
 	}
-#endif
+
 	if (u.uswallow) {
 	    sprintf(buf, "swallowed by %s", a_monnam(u.ustuck));
 	    if (wizard) sprintf(eos(buf), " (%u)", u.uswldtim);
@@ -1540,15 +1529,10 @@ void dump_enlightenment(int final) {
 		dump(youhad, buf);
 	}
 	if (Fumbling) dump("  ", "You fumbled");
-	if (Wounded_legs
-#ifdef STEED
-	    && !u.usteed
-#endif
-			  ) {
+	if (Wounded_legs && !u.usteed) {
 		sprintf(buf, "wounded %s", makeplural(body_part(LEG)));
 		dump(youhad, buf);
 	}
-#ifdef STEED
 	if (Wounded_legs && u.usteed) {
 	    strcpy(buf, x_monnam(u.usteed, ARTICLE_YOUR, NULL,
 		    SUPPRESS_SADDLE | SUPPRESS_HALLUCINATION, false));
@@ -1556,7 +1540,6 @@ void dump_enlightenment(int final) {
 	    strcat(buf, " had wounded legs");
 	    dump("  ", buf);
 	}
-#endif
 	if (Sleeping) dump("  ", "You fell asleep");
 	if (Hunger) dump("  ", "You hungered rapidly");
 
@@ -1613,12 +1596,10 @@ void dump_enlightenment(int final) {
 	if (Breathless) dump(youcould, "survive without air");
 	else if (Amphibious) dump(youcould, "breathe water");
 	if (Passes_walls) dump(youcould, "walk through walls");
-#ifdef STEED
 	if (u.usteed && (final < 2 || strcmp(killer, "riding accident"))) {
 	    sprintf(buf, "riding %s", y_monnam(u.usteed));
 	    dump(youwere, buf);
 	}
-#endif
 	if (u.uswallow) {
 	    sprintf(buf, "swallowed by %s", a_monnam(u.ustuck));
 	    if (wizard) sprintf(eos(buf), " (%u)", u.uswldtim);
@@ -2521,11 +2502,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"offer", "offer a sacrifice to the gods", dosacrifice, !IFBURIED, AUTOCOMPLETE},
 	{"pray", "pray to the gods for help", dopray, IFBURIED, AUTOCOMPLETE},
 	{"quit", "exit without saving current game", done2, IFBURIED, AUTOCOMPLETE, .disallowed_if_fuzzing = true},
-#ifdef STEED
 	{"ride", "ride (or stop riding) a monster", doride, !IFBURIED, AUTOCOMPLETE},
-#endif
-
-
 	{"rub", "rub a lamp", dorub, !IFBURIED, AUTOCOMPLETE},
 	{"sit", "sit down", dosit, !IFBURIED, AUTOCOMPLETE},
 #ifdef STICKY_COMMAND

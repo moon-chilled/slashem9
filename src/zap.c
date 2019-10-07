@@ -27,9 +27,7 @@ static int zhitm(struct monst *,int,int, struct obj **);
 static void zhitu(int,int,const char *,xchar,xchar);
 static void revive_egg(struct obj *);
 static void throwstorm(struct obj *, int, int, int);
-#ifdef STEED
 static boolean zap_steed(struct obj *);
-#endif
 
 static int zap_hit(int,int);
 static void backfire(struct obj *);
@@ -273,7 +271,6 @@ bhitm (struct monst *mtmp, struct obj *otmp)
 				else pline("%s opens its mouth!", Monnam(mtmp));
 			}
 			expels(mtmp, mtmp->data, true);
-#ifdef STEED
 		} else if (!!(obj = which_armor(mtmp, W_SADDLE))) {
 			mtmp->misc_worn_check &= ~obj->owornmask;
 			update_mon_intrinsics(mtmp, obj, false, false);
@@ -282,7 +279,6 @@ bhitm (struct monst *mtmp, struct obj *otmp)
 			place_object(obj, mtmp->mx, mtmp->my);
 			/* call stackobj() if we ever drop anything that can merge */
 			newsym(mtmp->mx, mtmp->my);
-#endif
 		}
 		break;
 	case WAN_HEALING:
@@ -1631,7 +1627,6 @@ poly_obj(obj, id)
 	else {
 	/* preserve the mask in case being used by something else */
 	otmp->owornmask = obj->owornmask;
-#ifdef STEED
 	    if (otmp->owornmask & W_SADDLE && otmp->otyp != SADDLE) {
 		struct monst *mtmp = obj->ocarry;
 		dismount_steed(DISMOUNT_THROWN);
@@ -1646,7 +1641,6 @@ poly_obj(obj, id)
 		newsym(mtmp->mx, mtmp->my);
 		obj_location = OBJ_FLOOR;
 	    }
-#endif
 	}
 
 	if (obj_location == OBJ_FLOOR && obj->otyp == BOULDER &&
@@ -2596,15 +2590,12 @@ boolean ordinary;
 	return damage;
 }
 
-#ifdef STEED
 /* you've zapped a wand downwards while riding
  * Return true if the steed was hit by the wand.
  * Return false if the steed was not hit by the wand.
  */
-static boolean
-zap_steed(obj)
-struct obj *obj;	/* wand or spell */
-{
+// wand or spell
+static boolean zap_steed(struct obj *obj) {
 	int steedhit = false;
 
 	switch (obj->otyp) {
@@ -2659,7 +2650,6 @@ struct obj *obj;	/* wand or spell */
 	}
 	return steedhit;
 }
-#endif
 
 
 /*
@@ -2922,13 +2912,10 @@ struct obj *obj;
 
 
 	exercise(A_WIS, true);
-#ifdef STEED
 	if (u.usteed && (objects[otyp].oc_dir != NODIR) &&
 	    !u.dx && !u.dy && (u.dz > 0) && zap_steed(obj)) {
 		disclose = true;
-	} else
-#endif
-	if (objects[otyp].oc_dir == IMMEDIATE) {
+	} else if (objects[otyp].oc_dir == IMMEDIATE) {
 	    obj_zapped = false;
 
 	    if (u.uswallow) {
@@ -2943,7 +2930,6 @@ struct obj *obj;
 	    /* give a clue if obj_zapped */
 	    if (obj_zapped)
 		pline("You feel shuddering vibrations.");
-
 	} else if (objects[otyp].oc_dir == NODIR) {
 	    zapnodir(obj);
 
@@ -3962,9 +3948,8 @@ int dx,dy;
         /* WAC Player/Monster Fireball */
             if (abs(type) == ZT_SPELL(ZT_FIRE)) break;
 	    if (type >= 0) mon->mstrategy &= ~STRAT_WAITMASK;
-#ifdef STEED
-	    buzzmonst:
-#endif
+
+buzzmonst:
 	    if (zap_hit(find_mac(mon), spell_type)) {
 		if (mon_reflects(mon, NULL)) {
 		    if(cansee(mon->mx,mon->my)) {
@@ -4080,13 +4065,10 @@ int dx,dy;
 	    }
 	} else if (sx == u.ux && sy == u.uy && range >= 0) {
 	    nomul(0);
-#ifdef STEED
 	    if (u.usteed && !rn2(3) && !mon_reflects(u.usteed, NULL)) {
 		    mon = u.usteed;
 		    goto buzzmonst;
-	    } else
-#endif
-	    if (zap_hit((int) u.uac, 0)) {
+	    } else if (zap_hit((int) u.uac, 0)) {
 		range -= 2;
 		pline("%s hits you!", The(fltxt));
 		if (Reflecting && abs(type) != ZT_SPELL(ZT_FIRE)) {

@@ -884,19 +884,11 @@ int doclose(void) {
 	}
 
 	if(door->doormask == D_ISOPEN) {
-	    if(verysmall(youmonst.data)
-#ifdef STEED
-		&& !u.usteed
-#endif
-		) {
+	    if(verysmall(youmonst.data) && !u.usteed) {
 		 pline("You're too small to push the door closed.");
 		 return 0;
 	    }
-	    if (
-#ifdef STEED
-		 u.usteed ||
-#endif
-		rn2(25) < (ACURRSTR+ACURR(A_DEX)+ACURR(A_CON))/3) {
+	    if (u.usteed || rn2(25) < (ACURRSTR+ACURR(A_DEX)+ACURR(A_CON))/3) {
 		pline("The door closes.");
 		door->doormask = D_CLOSED;
 		if (Blind)
@@ -904,8 +896,7 @@ int doclose(void) {
 		else
 		    newsym(x,y);
 		block_point(x,y);	/* vision:  no longer see there */
-	    }
-	    else {
+	    } else {
 	        exercise(A_STR, true);
 	        pline("The door resists!");
 	    }

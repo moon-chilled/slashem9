@@ -225,22 +225,19 @@ int do_mname(void) {
 	cy = cc.y;
 
 	if (cx == u.ux && cy == u.uy) {
-#ifdef STEED
-	    if (u.usteed && canspotmon(u.usteed))
+	    if (u.usteed && canspotmon(u.usteed)) {
 		mtmp = u.usteed;
-	    else {
-#endif
+	    } else {
 		pline("This %s creature is called %s and cannot be renamed.",
 		ACURR(A_CHA) > 14 ?
 		(flags.female ? "beautiful" : "handsome") :
 		"ugly",
 		plname);
 		return 0;
-#ifdef STEED
 	    }
-#endif
-	} else
+	} else {
 	    mtmp = m_at(cx, cy);
+	}
 
 	if (!mtmp || (!sensemon(mtmp) &&
 			(!(cansee(cx,cy) || see_with_infrared(mtmp)) || mtmp->mundetected
@@ -545,9 +542,7 @@ char *x_monnam(struct monst *mtmp, int article, const char *adjective, int suppr
 	do_it = !canspotmon(mtmp) &&
 	    article != ARTICLE_YOUR &&
 	    !program_state.gameover &&
-#ifdef STEED
 	    mtmp != u.usteed &&
-#endif
 	    !(u.uswallow && mtmp == u.ustuck) &&
 	    !(suppress & SUPPRESS_IT);
 	do_saddle = !(suppress & SUPPRESS_SADDLE);
@@ -607,11 +602,9 @@ char *x_monnam(struct monst *mtmp, int article, const char *adjective, int suppr
 	    strcat(strcat(buf, adjective), " ");
 	if (do_invis)
 	    strcat(buf, "invisible ");
-#ifdef STEED
 	if (do_saddle && (mtmp->misc_worn_check & W_SADDLE) &&
 	    !Blind && !Hallucination)
 	    strcat(buf, "saddled ");
-#endif
 	if (buf[0] != 0)
 	    has_adjectives = true;
 	else
@@ -737,12 +730,8 @@ char *y_monnam(struct monst *mtmp) {
 	int prefix, suppression_flag;
 
 	prefix = mtmp->mtame ? ARTICLE_YOUR : ARTICLE_THE;
-	suppression_flag = (mtmp->mnamelth
-#ifdef STEED
-			    /* "saddled" is redundant when mounted */
-			    || mtmp == u.usteed
-#endif
-			    ) ? SUPPRESS_SADDLE : 0;
+	// "saddled" is redundant when mounted
+	suppression_flag = (mtmp->mnamelth || mtmp == u.usteed) ? SUPPRESS_SADDLE : 0;
 
 	return x_monnam(mtmp, prefix, NULL, suppression_flag, false);
 }

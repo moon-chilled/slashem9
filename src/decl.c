@@ -147,9 +147,7 @@ struct obj *invent = NULL,
 	*uright = NULL,
 	*uleft = NULL,
 	*ublindf = NULL,
-#ifdef STEED
 	*usaddle = NULL,
-#endif
 	*uchain = NULL,
 	*uball = NULL;
 

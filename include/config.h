@@ -209,9 +209,6 @@ typedef long glyph_t;
 /* dungeon features */
 #define LIGHT_SRC_SPELL /* WAC Light sourced spells (wac@intergate.bc.ca)*/
 
-/* monsters & objects */
-#define STEED		/* The ability to ride monsters */
-
 /* Roles */
 /* #define ZOUTHERN */	/* KMH -- Zoutherner class and its animals */
 

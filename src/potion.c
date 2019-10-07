@@ -92,12 +92,10 @@ boolean talk;
 	}
 	if (xtime && !old) {
 		if (talk) {
-#ifdef STEED
 			if (u.usteed)
 				pline("You wobble in the saddle.");
 			else
-#endif
-			pline("You %s...", stagger(youmonst.data, "stagger"));
+				pline("You %s...", stagger(youmonst.data, "stagger"));
 		}
 	}
 	if ((!xtime && old) || (xtime && !old)) flags.botl = true;
@@ -649,10 +647,8 @@ peffects (struct obj *otmp)
 		else {
 		    if (Levitation || Is_airlevel(&u.uz)||Is_waterlevel(&u.uz))
 			pline("You are motionlessly suspended.");
-#ifdef STEED
 		    else if (u.usteed)
 			pline("You are frozen in place!");
-#endif
 		    else
 			pline("Your %s are frozen to the %s!",
 			     makeplural(body_part(FOOT)), surface(u.ux, u.uy));
@@ -831,11 +827,8 @@ peffects (struct obj *otmp)
 		}
 		break;
 	case POT_SPEED:
-		if(Wounded_legs && !otmp->cursed
-#ifdef STEED
-		   && !u.usteed	/* heal_legs() would heal steeds legs */
-#endif
-						) {
+		// heal_legs() would heal steeds legs */
+		if(Wounded_legs && !otmp->cursed && !u.usteed) {
 			heal_legs();
 			unkn++;
 			break;
@@ -2444,14 +2437,12 @@ upgrade_obj (struct obj *obj)
 		case MAGIC_HARP:
 			obj->otyp = WOODEN_HARP;
 			break;
-#ifdef STEED
 		case LEASH:
 			obj->otyp = SADDLE;
 			break;
 		case SADDLE:
 			obj->otyp = LEASH;
 			break;
-#endif
 		case TIN_OPENER:
 			obj->otyp = TINNING_KIT;
 			obj->spe = rn1(30,70);
@@ -2638,11 +2629,9 @@ dodip (void)
 		if (yn(qbuf) == 'y') {
 		    if (Levitation) {
 			floating_above(tmp);
-#ifdef STEED
 		    } else if (u.usteed && !is_swimmer(u.usteed->data) &&
 			    P_SKILL(P_RIDING) < P_BASIC) {
 			rider_cant_reach(); /* not skilled enough to reach */
-#endif
 		    } else {
 			get_wet(obj, level.flags.lethe);
 			if (obj->otyp == POT_ACID) useup(obj);

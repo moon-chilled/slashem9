@@ -276,9 +276,7 @@ extern const int shield_static[];
 #include "obj.h"
 
 extern struct obj *invent, *uarm, *uarmc, *uarmh, *uarms, *uarmg, *uarmf, *uarmu /* under-wear, so to speak */,
-#ifdef STEED
 	*usaddle,
-#endif
 	*uskin, *uamul, *uleft, *uright, *ublindf,
 	*uwep, *uswapwep, *uquiver;
 

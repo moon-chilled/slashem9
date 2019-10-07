@@ -427,13 +427,11 @@ boolean canletgo(struct obj *obj, const char *word) {
 					body_part(HAND));
 		return false;
 	}
-#ifdef STEED
 	if (obj->owornmask & W_SADDLE) {
 		if (*word)
 			pline("You cannot %s something you are sitting on.", word);
 		return false;
 	}
-#endif
 	return true;
 }
 
@@ -722,16 +720,13 @@ int dodown(void) {
 		return 0;
 	}
 
-#ifdef STEED
 	if (u.usteed && !u.usteed->mcanmove) {
 		pline("%s won't move!", Monnam(u.usteed));
 		return 0;
 	} else if (u.usteed && u.usteed->meating) {
 		pline("%s is still eating.", Monnam(u.usteed));
 		return 0;
-	} else
-#endif
-	if (Levitation) {
+	} else if (Levitation) {
 	    if ((HLevitation & I_SPECIAL) || (ELevitation & W_ARTI)) {
 		/* end controlled levitation */
 		if (ELevitation & W_ARTI) {
@@ -810,16 +805,13 @@ int doup(void) {
 		pline("You can't go up here.");
 		return 0;
 	}
-#ifdef STEED
 	if (u.usteed && !u.usteed->mcanmove) {
 		pline("%s won't move!", Monnam(u.usteed));
 		return 0;
 	} else if (u.usteed && u.usteed->meating) {
 		pline("%s is still eating.", Monnam(u.usteed));
 		return 0;
-	} else
-#endif
-	if (u.ustuck) {
+	} else if (u.ustuck) {
 		pline("You are %s, and cannot go up.",
 			!u.uswallow ? "being held" : is_animal(u.ustuck->data) ?
 			"swallowed" : "engulfed");
@@ -1133,12 +1125,10 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 			    freeinv(uball);
 			}
 		    }
-#ifdef STEED
 		    /* falling off steed has its own losehp() call */
 		    if (u.usteed)
 			dismount_steed(DISMOUNT_FELL);
 		    else
-#endif
 			losehp(rnd(3), "falling downstairs", KILLED_BY);
 		    selftouch("Falling, you");
 		} else if (u.dz && at_ladder)
@@ -1182,11 +1172,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 
 	initrack();
 
-	if ((mtmp = m_at(u.ux, u.uy)) != 0
-#ifdef STEED
-		&& mtmp != u.usteed
-#endif
-		) {
+	if ((mtmp = m_at(u.ux, u.uy)) != 0 && mtmp != u.usteed) {
 	    /* There's a monster at your target destination; it might be one
 	       which accompanied you--see mon_arrive(dogmove.c)--or perhaps
 	       it was already here.  Randomly move you to an adjacent spot
@@ -1681,18 +1667,15 @@ void heal_legs(void) {
 			flags.botl = 1;
 		}
 
-#ifdef STEED
-		if (!u.usteed)
-#endif
-		{
+		if (!u.usteed) {
 			/* KMH, intrinsics patch */
 			if((EWounded_legs & BOTH_SIDES) == BOTH_SIDES) {
-			pline("Your %s feel somewhat better.",
-				makeplural(body_part(LEG)));
-		} else {
-			pline("Your %s feels somewhat better.",
-				body_part(LEG));
-		}
+				pline("Your %s feel somewhat better.",
+						makeplural(body_part(LEG)));
+			} else {
+				pline("Your %s feels somewhat better.",
+						body_part(LEG));
+			}
 		}
 		HWounded_legs = EWounded_legs = 0;
 	}

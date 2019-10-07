@@ -10,9 +10,7 @@ static void steal_it(struct monst *, struct attack *);
 static boolean hitum(struct monst *,int,int,struct attack *);
 #endif
 static boolean hmon_hitmon(struct monst *,struct obj *,int);
-#ifdef STEED
 static int joust(struct monst *,struct obj *);
-#endif
 static void demonpet(void);
 static boolean m_slips_free(struct monst *mtmp,struct attack *mattk);
 static int explum(struct monst *,struct attack *);
@@ -716,9 +714,7 @@ int thrown;
 	boolean silvermsg = false, silverobj = false;
 	boolean valid_weapon_attack = false;
 	boolean unarmed = !uwep && !uarm && !uarms;
-#ifdef STEED
 	int jousting = 0;
-#endif
 	boolean vapekilled = false; /* WAC added boolean for vamps vaporize */
 	boolean burnmsg = false;
 	boolean no_obj = !obj;	/* since !obj can change if weapon breaks, etc. */
@@ -904,11 +900,7 @@ int thrown;
 		    /* or strike with a missile in your hand... */
 		    (!thrown && (is_missile(obj) || is_ammo(obj))) ||
 		    /* or use a pole at short range and not mounted... */
-		    (!thrown &&
-#ifdef STEED
-		     !u.usteed &&
-#endif
-		     is_pole(obj)) ||
+		    (!thrown && !u.usteed && is_pole(obj)) ||
 
 		    /* lightsaber that isn't lit ;) */
 		    (is_lightsaber(obj) && !obj->lamplit) ||
@@ -1004,14 +996,13 @@ int thrown;
 				&& hates_silver(mdat)) {
 			silvermsg = true; silverobj = true;
 		    }
-#ifdef STEED
+
 		    if (u.usteed && !thrown && tmp > 0 &&
 			    weapon_type(obj) == P_LANCE && mon != u.ustuck) {
 			jousting = joust(mon, obj);
 			/* exercise skill even for minimal damage hits */
 			if (jousting) valid_weapon_attack = true;
 		    }
-#endif
 		    if (thrown && (is_ammo(obj) || is_missile(obj))) {
 			if (obj->oartifact == ART_HOUCHOU) {
 			    pline("There is a bright flash as it hits %s.",
@@ -1365,7 +1356,6 @@ int thrown;
 	    }
 	}
 
-#ifdef STEED
 	if (jousting) {
 	    tmp += d(2, (obj == uwep) ? 10 : 2);        /* [was in dmgval()] */
 	    pline("You joust %s%s",
@@ -1386,11 +1376,8 @@ int thrown;
 		if (DEADMONSTER(mon)) already_killed = true;
 	    }
 	    hittxt = true;
-	} else
-#endif
-
 	/* VERY small chance of stunning opponent if unarmed. */
-	if (unarmed && tmp > 1 && !thrown && !obj && !Upolyd) {
+	} else if (unarmed && tmp > 1 && !thrown && !obj && !Upolyd) {
 	    if (rnd(100) < P_SKILL(P_BARE_HANDED_COMBAT) &&
 			!bigmonst(mdat) && !thick_skinned(mdat)) {
 		if (canspotmon(mon))

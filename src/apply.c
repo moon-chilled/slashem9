@@ -205,7 +205,6 @@ static int use_stethoscope(struct obj *obj) {
 	last_used_move = moves;
 	last_used_movement = youmonst.movement;
 
-#ifdef STEED
 	if (u.usteed && u.dz > 0) {
 		if (interference) {
 			pline("%s interferes.", Monnam(u.ustuck));
@@ -213,9 +212,7 @@ static int use_stethoscope(struct obj *obj) {
 		} else
 			mstatusline(u.usteed);
 		return res;
-	} else
-#endif
-	if (u.uswallow && (u.dx || u.dy || u.dz)) {
+	} else if (u.uswallow && (u.dx || u.dy || u.dz)) {
 		mstatusline(u.ustuck);
 		return res;
 	} else if (u.uswallow && interference) {
@@ -382,13 +379,11 @@ static void use_leash(struct obj **optr) {
 	if(!get_adjacent_loc(NULL, NULL, u.ux, u.uy, &cc)) return;
 
 	if((cc.x == u.ux) && (cc.y == u.uy)) {
-#ifdef STEED
 		if (u.usteed && u.dz > 0) {
 		    mtmp = u.usteed;
 		    spotmon = 1;
 		    goto got_target;
 		}
-#endif
 		pline("Leash yourself?  Very funny...");
 		return;
 	}
@@ -399,9 +394,7 @@ static void use_leash(struct obj **optr) {
 	}
 
 	spotmon = canspotmon(mtmp);
-#ifdef STEED
  got_target:
-#endif
 
 	/* KMH, balance patch -- This doesn't work properly.
 	 * Pets need extra memory for their edog structure.
@@ -510,10 +503,10 @@ boolean next_to_u() {
 			}
 		}
 	}
-#ifdef STEED
+
 	/* no pack mules for the Amulet */
 	if (u.usteed && mon_has_amulet(u.usteed)) return false;
-#endif
+
 	return true;
 }
 
@@ -1439,23 +1432,19 @@ int jump( int magic /* 0=Physical, otherwise skill level */) {
 		const char *bp = body_part(LEG);
 
 		if (wl == BOTH_SIDES) bp = makeplural(bp);
-#ifdef STEED
+
 		if (u.usteed)
 		    pline("%s is in no shape for jumping.", Monnam(u.usteed));
 		else
-#endif
-		pline("Your %s%s %s in no shape for jumping.",
-		     (wl == LEFT_SIDE) ? "left " :
-			(wl == RIGHT_SIDE) ? "right " : "",
-		     bp, (wl == BOTH_SIDES) ? "are" : "is");
+			pline("Your %s%s %s in no shape for jumping.",
+					(wl == LEFT_SIDE) ? "left " :
+					(wl == RIGHT_SIDE) ? "right " : "",
+					bp, (wl == BOTH_SIDES) ? "are" : "is");
 		return 0;
-	}
-#ifdef STEED
-	else if (u.usteed && u.utrap) {
+	} else if (u.usteed && u.utrap) {
 		pline("%s is stuck in a trap.", Monnam(u.usteed));
 		return 0;
 	}
-#endif
 
 	pline("Where do you want to jump?");
 	cc.x = u.ux;
@@ -1485,14 +1474,12 @@ int jump( int magic /* 0=Physical, otherwise skill level */) {
 	    if(u.utrap)
 		switch(u.utraptype) {
 		case TT_BEARTRAP: {
-		    long side = rn2(3) ? LEFT_SIDE : RIGHT_SIDE;
-		    pline("You rip yourself free of the bear trap!  Ouch!");
-#ifdef STEED
-			if (!u.usteed)
-#endif
-		    losehp(rnd(10), "jumping out of a bear trap", KILLED_BY);
-		    set_wounded_legs(side, rn1(1000,500));
-		    break;
+			    long side = rn2(3) ? LEFT_SIDE : RIGHT_SIDE;
+			    pline("You rip yourself free of the bear trap!  Ouch!");
+			    if (!u.usteed)
+				    losehp(rnd(10), "jumping out of a bear trap", KILLED_BY);
+			    set_wounded_legs(side, rn1(1000,500));
+			    break;
 		  }
 		case TT_PIT:
 		    pline("You leap from the pit!");
@@ -2364,7 +2351,6 @@ static void use_trap(struct obj *otmp) {
 	    trapinfo.time_needed += (tmp > 12) ? 1 : (tmp > 7) ? 2 : 4;
 	/*[fumbling and/or confusion and/or cursed object check(s)
 	   should be incorporated here instead of in set_trap]*/
-#ifdef STEED
 	if (u.usteed && P_SKILL(P_RIDING) < P_BASIC) {
 	    boolean chance;
 
@@ -2394,7 +2380,6 @@ static void use_trap(struct obj *otmp) {
 		return;
 	    }
 	}
-#endif
 	pline("You begin setting %s %s.",
 	    shk_your(buf, otmp),
 	    sym_desc[trap_to_defsym(what_trap(ttyp))].explanation);
@@ -2480,19 +2465,13 @@ static int use_whip(struct obj *obj) {
     } else if ((!u.dx && !u.dy) || (u.dz > 0)) {
 	int dam;
 
-#ifdef STEED
 	/* Sometimes you hit your steed by mistake */
 	if (u.usteed && !rn2(proficient + 2)) {
 	    pline("You whip %s!", mon_nam(u.usteed));
 	    kick_steed();
 	    return 1;
 	}
-#endif
-	if (Levitation
-#ifdef STEED
-			|| u.usteed
-#endif
-		) {
+	if (Levitation || u.usteed) {
 	    /* Have a shot at snaring something on the floor */
 	    otmp = level.objects[u.ux][u.uy];
 	    if (otmp && otmp->otyp == CORPSE && otmp->corpsenm == PM_HORSE) {
@@ -3319,11 +3298,9 @@ int doapply(void) {
 	case LEASH:
 		use_leash(&obj);
 		break;
-#ifdef STEED
 	case SADDLE:
 		res = use_saddle(obj);
 		break;
-#endif
 	case MAGIC_WHISTLE:
 		use_magic_whistle(obj);
 		break;
@@ -3661,11 +3638,7 @@ int unfixable_trouble_count(boolean is_horn) {
 
 	if (Stoned) unfixable_trbl++;
 	if (Strangled) unfixable_trbl++;
-	if (Wounded_legs
-#ifdef STEED
-		    && !u.usteed
-#endif
-				) unfixable_trbl++;
+	if (Wounded_legs && !u.usteed) unfixable_trbl++;
 	if (Slimed) unfixable_trbl++;
 	/* lycanthropy is not desirable, but it doesn't actually make you feel
 	   bad */

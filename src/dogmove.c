@@ -260,11 +260,7 @@ static boolean dog_hunger(struct monst *mtmp, struct edog *edog) {
 		stop_occupation();
 	    } else if (monstermoves > edog->hungrytime + 750 || mtmp->mhp < 1) {
  dog_died:
-		if (mtmp->mleashed
-#ifdef STEED
-		    && mtmp != u.usteed
-#endif
-		    )
+		if (mtmp->mleashed && mtmp != u.usteed)
 		    pline("Your leash goes slack.");
 		else if (cansee(mtmp->mx, mtmp->my))
 		    pline("%s starves.", Monnam(mtmp));
@@ -405,11 +401,9 @@ static int dog_goal(struct monst *mtmp, struct edog *edog, int after, int udist,
 	xchar otyp;
 	int appr;
 
-#ifdef STEED
 	/* Steeds don't move on their own will */
 	if (mtmp == u.usteed)
 		return -2;
-#endif
 
 	omx = mtmp->mx;
 	omy = mtmp->my;
@@ -648,7 +642,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 	if (has_edog && !is_spell && dog_hunger(mtmp, edog)) return 2;      /* starved */
 
 	udist = distu(omx,omy);
-#ifdef STEED
+
 	/* Let steeds eat and maybe throw rider during Conflict */
 	if (mtmp == u.usteed) {
 	    if (Conflict && !resist(mtmp, RING_CLASS, 0, 0)) {
@@ -656,10 +650,8 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 		return 1;
 	    }
 	    udist = 1;
-	} else
-#endif
 	/* maybe we tamed him while being swallowed --jgm */
-	if (!udist) return 0;
+	} else if (!udist) return 0;
 
 	/* Intelligent pets may rebel (apart from minions, spell beings) */
 	if (!rn2(850) && betrayed(mtmp)) return 1;

@@ -146,9 +146,7 @@ struct monst *make_helper(int mnum, xchar x, xchar y) {
 
 struct monst *makedog(void) {
 	struct monst *mtmp;
-#ifdef STEED
 	struct obj *otmp;
-#endif
 	const char *petname;
 	int   pettype, petsym;
 	static int petname_used = 0;
@@ -195,7 +193,6 @@ struct monst *makedog(void) {
 
 	if(!mtmp) return NULL; /* pets were genocided */
 
-#ifdef STEED
 	/* Horses already wear a saddle */
 	if (pettype == PM_PONY && !!(otmp = mksobj(SADDLE, true, false))) {
 	    if (mpickobj(mtmp, otmp))
@@ -206,7 +203,6 @@ struct monst *makedog(void) {
 	    otmp->leashmon = mtmp->m_id;
 	    update_mon_intrinsics(mtmp, otmp, true, true);
 	}
-#endif
 
 	if (!petname_used++ && *petname)
 		mtmp = christen_monst(mtmp, petname);
@@ -280,10 +276,9 @@ void mon_arrive(struct monst *mtmp, boolean with_you) {
 	mtmp->mtrack[0].x = mtmp->mtrack[0].y = 0;
 	mtmp->mtrack[1].x = mtmp->mtrack[1].y = 0;
 
-#ifdef STEED
 	if (mtmp == u.usteed)
 	    return;	/* don't place steed on the map */
-#endif
+
 	if (with_you) {
 	    /* When a monster accompanies you, sometimes it will arrive
 	       at your intended destination and you'll end up next to
@@ -520,21 +515,15 @@ void keepdogs(boolean pets_only /* true for ascension or final escape */) {
 	    mtmp2 = mtmp->nmon;
 	    if (DEADMONSTER(mtmp)) continue;
 	    if (pets_only && !mtmp->mtame) continue;
-	    if (((monnear(mtmp, u.ux, u.uy) && levl_follower(mtmp)) ||
-#ifdef STEED
-			(mtmp == u.usteed) ||
-#endif
+	    if (((monnear(mtmp, u.ux, u.uy) && levl_follower(mtmp)) || (mtmp == u.usteed) ||
 		/* the wiz will level t-port from anywhere to chase
 		   the amulet; if you don't have it, will chase you
 		   only if in range. -3. */
 			(u.uhave.amulet && mtmp->iswiz))
 		&& ((!mtmp->msleeping && mtmp->mcanmove)
-#ifdef STEED
 		    /* eg if level teleport or new trap, steed has no control
 		       to avoid following */
-		    || (mtmp == u.usteed)
-#endif
-		    )
+		    || (mtmp == u.usteed))
 		/* monster won't follow if it hasn't noticed you yet */
 		&& !(mtmp->mstrategy & STRAT_WAITFORU)) {
 		stay_behind = false;
@@ -558,9 +547,7 @@ void keepdogs(boolean pets_only /* true for ascension or final escape */) {
 			    pline("%s is still trapped.", Monnam(mtmp));
 			stay_behind = true;
 		}
-#ifdef STEED
 		if (mtmp == u.usteed) stay_behind = false;
-#endif
 		if (stay_behind) {
 			if (mtmp->mleashed) {
 				pline("%s leash suddenly comes loose.",

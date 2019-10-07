@@ -63,9 +63,7 @@ static const short skill_names_indices[P_NUM_SKILLS] = {
 	PN_MATTER_SPELL,
 	PN_BARE_HANDED, 		PN_MARTIAL_ARTS,
 	PN_TWO_WEAPONS,
-#ifdef STEED
 	PN_RIDING,
-#endif
 };
 
 
@@ -1428,7 +1426,6 @@ weapon_hit_bonus (struct obj *weapon)
 	bonus = ((bonus + 2) * (martial_bonus() ? 2 : 1)) / 2;
     }
 
-#ifdef STEED
 	/* KMH -- It's harder to hit while you are riding */
 	if (u.usteed) {
 		switch (P_SKILL(P_RIDING)) {
@@ -1442,7 +1439,6 @@ weapon_hit_bonus (struct obj *weapon)
 		}
 		if (type == P_LANCE) bonus++;
 	}
-#endif
 
     return bonus;
 }
@@ -1509,7 +1505,6 @@ weapon_dam_bonus (struct obj *weapon)
 	bonus = ((bonus + 1) * (martial_bonus() ? 3 : 1)) / 2;
     } /* Misc skills aren't usually called by weapons */
 
-#ifdef STEED
 	/* KMH -- Riding gives some thrusting damage */
 	if (u.usteed) {
 		switch (P_SKILL(P_RIDING)) {
@@ -1520,7 +1515,6 @@ weapon_dam_bonus (struct obj *weapon)
 		    case P_EXPERT:      bonus += 2; break;
 		}
 	}
-#endif
 
     return bonus;
 }
@@ -1579,9 +1573,8 @@ get_obj_skill (struct obj *obj)
 	/* Should be integrated into oc_subtyp as soon as more skills are
 	 * invented
 	 */
-#ifdef STEED
 	if (obj->otyp == SADDLE) skill = P_RIDING;
-#endif
+
     	/* Negative skills == not a skill */
 	if (skill < P_NONE) skill = P_NONE;
 
@@ -1658,10 +1651,9 @@ skill_init (const struct def_skill *class_skill)
 #endif
 
 	/* Roles that start with a horse know how to ride it */
-#ifdef STEED
 	if (urole.petnum == PM_PONY)
 	    P_SKILL(P_RIDING) = P_BASIC;
-#endif
+
 
 	/*
 	 * Make sure we haven't missed setting the max on a skill

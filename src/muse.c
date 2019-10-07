@@ -1730,11 +1730,7 @@ struct monst *mtmp;
 	int x = mtmp->mx, y = mtmp->my;
 	struct trap *t;
 	int xx, yy;
-#ifdef STEED
-	boolean immobile = (mdat->mmove == 0 || mtmp == u.usteed);
-#else
-	boolean immobile = (mdat->mmove == 0);
-#endif
+	boolean immobile = (mdat->mmove == 0) || (mtmp == u.usteed);
 	boolean stuck = (mtmp == u.ustuck);
 
 	m.misc = NULL;

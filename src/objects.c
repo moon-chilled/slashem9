@@ -830,12 +830,8 @@ TOOL("orb of destruction", "glass orb",
 TOOL("lenses", NULL,	1, 0, 0, 0,   5,  3,  80, GLASS, HI_GLASS),
 TOOL("blindfold", NULL,    1, 0, 0, 0,  50,  2,  20, CLOTH, CLR_BLACK),
 TOOL("towel", NULL,        1, 0, 0, 0,  50,  2,  50, CLOTH, CLR_MAGENTA),
-#ifdef STEED
 TOOL("saddle", NULL,       1, 0, 0, 0,   5,100, 150, LEATHER, HI_LEATHER),
 TOOL("leash", NULL,        1, 0, 0, 0,  65, 12,  20, LEATHER, HI_LEATHER),
-#else
-TOOL("leash", NULL,        1, 0, 0, 0,  70, 12,  20, LEATHER, HI_LEATHER),
-#endif
 TOOL("stethoscope", NULL,  1, 0, 0, 0,  25,  4,  75, IRON, HI_METAL),
 TOOL("tinning kit", NULL,  1, 0, 0, 1,  15, 75,  30, IRON, HI_METAL),
 CONTAINER("medical kit", "leather bag",

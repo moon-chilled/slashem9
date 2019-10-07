@@ -1251,11 +1251,7 @@ boolean wearing_armor(void) {
 }
 
 bool is_worn(struct obj *otmp) {
-    return otmp->owornmask & (W_ARMOR | W_RING | W_AMUL | W_TOOL |
-#ifdef STEED
-			W_SADDLE |
-#endif
-			W_WEP | W_SWAPWEP | W_QUIVER);
+    return otmp->owornmask & (W_ARMOR | W_RING | W_AMUL | W_TOOL | W_SADDLE | W_WEP | W_SWAPWEP | W_QUIVER);
 }
 
 static const char removeables[] =
@@ -2577,11 +2573,7 @@ int dopramulet(void) {
 }
 
 static boolean tool_in_use(struct obj *obj) {
-	if ((obj->owornmask & (W_TOOL
-#ifdef STEED
-			| W_SADDLE
-#endif
-			)) != 0L) return true;
+	if ((obj->owornmask & (W_TOOL | W_SADDLE)) != 0L) return true;
 	if (obj->oclass != TOOL_CLASS) return false;
 	return obj == uwep || obj->lamplit || (obj->otyp == LEASH && obj->leashmon);
 }

@@ -146,9 +146,7 @@ static const struct innate_tech
 	val_tech[] = { {   1, T_PRACTICE, 1},
 		       {   0, 0, 0} },
 	yeo_tech[] = {
-#ifdef STEED
 		       {   1, T_CALM_STEED, 1},
-#endif
 		       {   0, 0, 0} },
 	wiz_tech[] = { {   1, T_REINFORCE, 1},
 		       {   3, T_DRAW_ENERGY, 1},
@@ -735,7 +733,6 @@ techeffects (int tech_no)
                 techt_inuse(tech_no) = rnd((int) (techlev(tech_no)/6 + 1)) + 2;
                 t_timeout = rn1(1000,500);
 		break;
-#ifdef STEED
 	    case T_CALM_STEED:
                 if (u.usteed) {
                         pline("%s gets tamer.", Monnam(u.usteed));
@@ -744,7 +741,6 @@ techeffects (int tech_no)
                 } else
                         pline("Your technique is only effective when riding a monster.");
                 break;
-#endif
             case T_TURN_UNDEAD:
                 return turn_undead();
 	    case T_VANISH:

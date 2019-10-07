@@ -644,7 +644,6 @@ int dokick(void) {
 	} else if (verysmall(youmonst.data)) {
 		pline("You are too small to do any kicking.");
 		no_kick = true;
-#ifdef STEED
 	} else if (u.usteed) {
 		if (yn_function("Kick your steed?", ynchars, 'y') == 'y') {
 		    pline("You kick %s.", mon_nam(u.usteed));
@@ -653,7 +652,6 @@ int dokick(void) {
 		} else {
 		    return 0;
 		}
-#endif
 	} else if (Wounded_legs) {
 		/* note: jump() has similar code */
 		long wl = (EWounded_legs & BOTH_SIDES);

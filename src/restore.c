@@ -344,12 +344,7 @@ struct obj *otmp;
 	else otmp->spe = fruitadd(oldf->fname);
 }
 
-static
-boolean
-restgamestate(fd, stuckid, steedid)
-int fd;
-unsigned int *stuckid, *steedid;	/* STEED */
-{
+static boolean restgamestate(int fd, unsigned int *stuckid, unsigned int *steedid) {
 	/* discover is actually flags.explore */
 	boolean remember_discover = discover;
 	struct obj *otmp;
@@ -439,10 +434,8 @@ unsigned int *stuckid, *steedid;	/* STEED */
 	restore_oracles(fd);
 	if (u.ustuck)
 		mread(fd, (void *) stuckid, sizeof (*stuckid));
-#ifdef STEED
 	if (u.usteed)
 		mread(fd, (void *) steedid, sizeof (*steedid));
-#endif
 	mread(fd, (void *) pl_character, sizeof (pl_character));
 
 	mread(fd, (void *) pl_fruit, sizeof pl_fruit);
@@ -466,10 +459,7 @@ unsigned int *stuckid, *steedid;	/* STEED */
 /* update game state pointers to those valid for the current level (so we
  * don't dereference a wild u.ustuck when saving the game state, for instance)
  */
-static void
-restlevelstate(stuckid, steedid)
-unsigned int stuckid, steedid;	/* STEED */
-{
+static void restlevelstate(unsigned int stuckid, unsigned int steedid) {
 	struct monst *mtmp;
 
 	if (stuckid) {
@@ -478,7 +468,6 @@ unsigned int stuckid, steedid;	/* STEED */
 		if (!mtmp) panic("Cannot find the monster ustuck.");
 		setustuck(mtmp);
 	}
-#ifdef STEED
 	if (steedid) {
 		for (mtmp = fmon; mtmp; mtmp = mtmp->nmon)
 			if (mtmp->m_id == steedid) break;
@@ -486,7 +475,6 @@ unsigned int stuckid, steedid;	/* STEED */
 		u.usteed = mtmp;
 		remove_monster(mtmp->mx, mtmp->my);
 	}
-#endif
 }
 
 /*ARGSUSED*/	/* fd used in MFLOPPY only */
@@ -546,9 +534,7 @@ int dorecover (int fd) {
 	 * place_monster() on other levels
 	 */
 	setustuck(NULL);
-#ifdef STEED
 	u.usteed = NULL;
-#endif
 
 	while(1) {
 #ifdef ZEROCOMP

@@ -68,12 +68,8 @@
 #define P_BARE_HANDED_COMBAT 	(P_LAST_SPELL + 1)
 #define P_MARTIAL_ARTS		(P_LAST_SPELL + 2) /* WAC used to be role distinguishes */
 #define P_TWO_WEAPON_COMBAT	(P_LAST_SPELL + 3) /* Finally implemented */
-#ifdef STEED
 #define P_RIDING		(P_LAST_SPELL + 4) /* How well you control your steed */
 #define P_LAST_H_TO_H		P_RIDING
-#else
-#define P_LAST_H_TO_H		P_TWO_WEAPON_COMBAT
-#endif
 #define P_FIRST_H_TO_H		P_BARE_HANDED_COMBAT
 
 #define P_NUM_SKILLS		(P_LAST_H_TO_H+1)

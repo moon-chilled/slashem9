@@ -397,11 +397,7 @@ static void exerper(void) {
 
 		if(Sick || Vomiting)     exercise(A_CON, false);
 		if(Confusion || Hallucination)		exercise(A_WIS, false);
-		if((Wounded_legs
-#ifdef STEED
-		    && !u.usteed
-#endif
-			    ) || Fumbling || HStun)	exercise(A_DEX, false);
+		if((Wounded_legs && !u.usteed) || Fumbling || HStun)	exercise(A_DEX, false);
 	}
 }
 

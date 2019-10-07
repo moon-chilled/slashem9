@@ -82,9 +82,7 @@ struct conditionals {
 	/* commented out in monst.c at present */
 	{ MON_GLYPH, PM_YEOMAN_WARDER, "Farmer Maggot" },
 
-#ifndef STEED
 	{ OBJ_GLYPH, TOWEL, "saddle" },
-#endif
 
 
 	/* allow slime mold to look like slice of pizza, since we

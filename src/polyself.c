@@ -570,7 +570,6 @@ polymon (	/* returns 1 if polymorph successful */
 
 	if (!sticky && !u.uswallow && u.ustuck && sticks(youmonst.data)) setustuck(0);
 	else if (sticky && !sticks(youmonst.data)) uunstick();
-#ifdef STEED
 	if (u.usteed) {
 	    if (touch_petrifies(u.usteed->data) &&
 	    		!Stone_resistance && rnl(3)) {
@@ -583,7 +582,6 @@ polymon (	/* returns 1 if polymorph successful */
  	    }
 	    if (!can_ride(u.usteed)) dismount_steed(DISMOUNT_POLY);
 	}
-#endif
 
 	if (flags.verbose) {
 	    static const char use_thec[] = "Use the command #%s to %s.";

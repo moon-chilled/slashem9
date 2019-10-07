@@ -389,10 +389,7 @@ int mattacku(struct monst *mtmp) {
 	    range2 = 0;
 	    foundyou = 1;
 	    if(u.uinvulnerable) return 0; /* stomachs can't hurt you! */
-	}
-
-#ifdef STEED
-	else if (u.usteed) {
+	} else if (u.usteed) {
 		if (mtmp == u.usteed)
 			/* Your steed won't attack you */
 			return 0;
@@ -409,7 +406,6 @@ int mattacku(struct monst *mtmp) {
 			return !!(mattackm(u.usteed, mtmp) & MM_DEF_DIED);
 		}
 	}
-#endif
 
 	if (u.uundetected && !range2 && foundyou && !u.uswallow) {
 		u.uundetected = 0;
@@ -927,12 +923,10 @@ int magic_negation(struct monst *mon) {
 	if (armor && armpro < objects[armor->otyp].a_can)
 	    armpro = objects[armor->otyp].a_can;
 
-#ifdef STEED
 	/* this one is really a stretch... */
 	armor = (mon == &youmonst) ? 0 : which_armor(mon, W_SADDLE);
 	if (armor && armpro < objects[armor->otyp].a_can)
 	    armpro = objects[armor->otyp].a_can;
-#endif
 
 	return armpro;
 }
@@ -1378,11 +1372,7 @@ dopois:
 		 * still _can_ attack you when you're flying or mounted.
 		 * [FIXME: why can't a flying attacker overcome this?]
 		 */
-		  if (
-#ifdef STEED
-			u.usteed ||
-#endif
-				    Levitation || Flying) {
+		  if (u.usteed || Levitation || Flying) {
 		    pline("%s tries to reach your %s %s!", Monnam(mtmp),
 			  sidestr, body_part(LEG));
 		    dmg = 0;
@@ -1907,7 +1897,7 @@ static int gulpmu(struct monst *mtmp, struct attack  *mattk) {
 		mtmp->mtrapped = 0;		/* no longer on old trap */
 		place_monster(mtmp, u.ux, u.uy);
 		newsym(mtmp->mx,mtmp->my);
-#ifdef STEED
+
 		if (is_animal(mtmp->data) && u.usteed) {
 			char buf[BUFSZ];
 			/* Too many quirks presently if hero and steed
@@ -1918,9 +1908,10 @@ static int gulpmu(struct monst *mtmp, struct attack  *mattk) {
 			pline ("%s lunges forward and plucks you off %s!",
 				Monnam(mtmp), buf);
 			dismount_steed(DISMOUNT_ENGULFED);
-		} else
-#endif
-		pline("%s engulfs you!", Monnam(mtmp));
+		} else {
+			pline("%s engulfs you!", Monnam(mtmp));
+		}
+
 		stop_occupation();
 		reset_occupations();	/* behave as if you had moved */
 

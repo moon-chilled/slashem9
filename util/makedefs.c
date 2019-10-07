@@ -188,10 +188,6 @@ static void make_version(void) {
 #ifdef MAIL
 			| (1L <<  7)
 #endif
-		/* objects (8..15) */
-#ifdef STEED
-			| (1L << 11)
-#endif
 #ifdef GOLDOBJ
 			| (1L << 12)
 #endif
@@ -392,9 +388,6 @@ static const char *build_opts[] = {
 	/* WAC added noartifactwish version info*/
 #ifdef NOARTIFACTWISH
 	"no wishing for special artifacts",
-#endif
-#ifdef STEED
-	"saddles and riding",
 #endif
 #ifdef DISPLAY_LAYERS
 	"display layers",
