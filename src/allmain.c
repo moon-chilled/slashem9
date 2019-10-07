@@ -270,11 +270,9 @@ void moveloop(void) {
 								if (!next_to_u()) {
 									check_leash(&youmonst, old_ux, old_uy, true);
 								}
-#ifdef REDO
 								/* clear doagain keystrokes */
 								pushch(0);
 								savech(0);
-#endif
 							}
 						}
 						/* delayed change may not be valid anymore */
@@ -380,12 +378,11 @@ void moveloop(void) {
 #ifdef WIN32
 			abort_lev = 0;
 			if (kbhit()) {
-				if ((ch = Getchar()) == ABORT)
+				if ((ch = Getchar()) == ABORT) {
 					abort_lev++;
-# ifdef REDO
-				else
+				} else {
 					pushch(ch);
-# endif /* REDO */
+				}
 			}
 			if (!abort_lev && (*occupation)() == 0)
 #else
@@ -486,10 +483,8 @@ void stop_occupation(void) {
 /* fainting stops your occupation, there's no reason to sync.
 		sync_hunger();
 */
-#ifdef REDO
 		nomul(0);
 		pushch(0);
-#endif
 	}
 }
 

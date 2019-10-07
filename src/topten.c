@@ -45,10 +45,8 @@ static void outentry(int,struct toptenentry *,boolean);
 static void readentry(FILE *,struct toptenentry *);
 static void writeentry(FILE *,struct toptenentry *);
 
-#ifdef XLOGFILE
 static void munge_xlstring(char *dest, char *src, int n);
 static void write_xlentry(FILE *,struct toptenentry *);
-#endif
 
 static void free_ttlist(struct toptenentry *);
 static int classmon(char *,boolean);
@@ -203,11 +201,7 @@ struct toptenentry *tt;
 	}
 }
 
-static void
-writeentry(rfile,tt)
-FILE *rfile;
-struct toptenentry *tt;
-{
+static void writeentry(FILE *rfile, struct toptenentry *tt) {
 	char *cp = eos(tt->death);
 
 	/* Add a trailing " Conduct=%d" to tt->death */
@@ -251,36 +245,24 @@ struct toptenentry *tt;
 	*cp = '\0';
 }
 
-#ifdef XLOGFILE
 #define SEP "\t"
 
 /* copy a maximum of n-1 characters from src to dest, changing ':' and '\n'
  * to '_'; always null-terminate. */
-static void
-munge_xlstring(dest, src, n)
-char *dest;
-char *src;
-int n;
-{
-  int i;
+static void munge_xlstring(char *dest, char *src, int n) {
+	int i;
 
-  for(i = 0; i < (n - 1) && src[i] != '\0'; i++) {
-    if(src[i] == '\n')
-      dest[i] = '_';
-    else
-      dest[i] = src[i];
-  }
+	for(i = 0; i < (n - 1) && src[i] != '\0'; i++) {
+		if(src[i] == '\n')
+			dest[i] = '_';
+		else
+			dest[i] = src[i];
+	}
 
-  dest[i] = '\0';
-
-  return;
+	dest[i] = '\0';
 }
 
-static void
-write_xlentry(rfile,tt)
-FILE *rfile;
-struct toptenentry *tt;
-{
+static void write_xlentry(FILE *rfile, struct toptenentry *tt) {
 
   char buf[DTHSZ+1];
 
@@ -334,9 +316,7 @@ struct toptenentry *tt;
   fprintf(rfile, "\n");
 
 }
-
 #undef SEP
-#endif /* XLOGFILE */
 
 static void
 free_ttlist(tt)
@@ -363,12 +343,7 @@ topten (int how)
 	FILE *rfile;
 	int flg = 0;
 	boolean t0_used;
-#ifdef LOGFILE
-	FILE *lfile;
-#endif /* LOGFILE */
-#ifdef XLOGFILE
 	FILE *xlfile;
-#endif /* XLOGFILE */
 
 /* If we are in the midst of a panic, cut out topten entirely.
  * topten uses alloc() several times, which will lead to
@@ -448,23 +423,6 @@ topten (int how)
 	t0->conduct = encodeconduct();
 	t0->tt_next = 0;
 
-#ifdef LOGFILE		/* used for debugging (who dies of what, where) */
-#ifdef FILE_AREAS
-	if (lock_file_area(LOGAREA, LOGFILE, 10)) {
-#else
-	if (lock_file(LOGFILE, SCOREPREFIX, 10)) {
-#endif
-	    if(!(lfile = fopen_datafile_area(LOGAREA, LOGFILE, "a", SCOREPREFIX))) {
-		HUP raw_print("Cannot open log file!");
-	    } else {
-		writeentry(lfile, t0);
-		fclose(lfile);
-	    }
-	    unlock_file_area(LOGAREA, LOGFILE);
-	}
-#endif /* LOGFILE */
-
-#ifdef XLOGFILE
          if(lock_file(XLOGFILE, SCOREPREFIX, 10)) {
              if(!(xlfile = fopen_datafile(XLOGFILE, "a", SCOREPREFIX))) {
                   HUP raw_print("Cannot open extended log file!");
@@ -474,7 +432,6 @@ topten (int how)
              }
              unlock_file(XLOGFILE);
          }
-#endif /* XLOGFILE */
 
 	if (wizard || discover) {
 	    if (how != PANICKED) HUP {

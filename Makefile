@@ -37,7 +37,7 @@ clean:
 
 install: unix
 	mkdir -p $(HACKDIR)/save $(BINDIR)
-	touch $(HACKDIR)/perm $(HACKDIR)/logfile $(HACKDIR)/xlogfile
+	touch $(HACKDIR)/perm $(HACKDIR)/xlogfile
 
 	cp build-unix/slashem build-unix/nhdat $(HACKDIR)
 

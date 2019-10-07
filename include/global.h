@@ -98,11 +98,7 @@ typedef unsigned long ulong;
 #define LARGEST_INT	32767
 
 
-#ifdef REDO
 #define Getchar pgetchar
-#else
-#define Getchar nhgetch
-#endif
 
 #include "coord.h"
 /*

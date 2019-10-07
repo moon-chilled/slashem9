@@ -163,11 +163,9 @@ extern const char * shorten_bot2(const char *, unsigned int);
 extern char randomkey(void);
 extern void reset_occupations(void);
 extern void set_occupation(int (*)(void),const char *,int);
-#ifdef REDO
 extern char pgetchar(void);
 extern void pushch(char);
 extern void savech(char);
-#endif
 extern char nhgetch(void);
 extern void rhack(char *);
 extern void dokeylist(void);

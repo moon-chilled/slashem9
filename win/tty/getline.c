@@ -224,25 +224,19 @@ int tty_get_ext_cmd(void) {
 	if (iflags.extmenu) return extcmd_via_menu();
 	/* maybe a runtime option? */
 	/* hooked_tty_getlin("#", buf, flags.cmd_comp ? ext_cmd_getlin_hook : (getlin_hook_proc) 0); */
-#ifdef REDO
 	hooked_tty_getlin("#", buf, in_doagain ? NULL : ext_cmd_getlin_hook);
-#else
-	hooked_tty_getlin("#", buf, ext_cmd_getlin_hook);
-#endif
 	mungspaces(buf);
 	if (buf[0] == 0 || buf[0] == '\033') return -1;
 
 	for (i = 0; extcmdlist[i].ef_txt != NULL; i++)
 		if (!strcmpi(buf, extcmdlist[i].ef_txt)) break;
 
-#ifdef REDO
 	if (!in_doagain) {
 		int j;
 		for (j = 0; buf[j]; j++)
 			savech(buf[j]);
 		savech('\n');
 	}
-#endif
 
 	if (extcmdlist[i].ef_txt == NULL) {
 		pline("%s: unknown extended command.", buf);

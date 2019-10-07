@@ -31,9 +31,7 @@ int occtime = 0;
 int x_maze_max, y_maze_max;	/* initialized in main, used in mkmaze.c */
 int otg_temp;			/* used by object_to_glyph() [otg] */
 
-#ifdef REDO
 int in_doagain = 0;
-#endif
 
 /*
  *	The following structure will be initialized at startup time with
@@ -90,14 +88,10 @@ struct sinfo program_state;
 /* 'rogue'-like direction commands (cmd.c) */
 char sdir[] = "hykulnjb><";
 const char ndir[] = "47896321><";	/* number pad mode */
-const schar xdir[10] = { -1,-1, 0, 1, 1, 1, 0,-1, 0, 0 };
-const schar ydir[10] = {  0,-1,-1,-1, 0, 1, 1, 1, 0, 0 };
-const schar zdir[10] = {  0, 0, 0, 0, 0, 0, 0, 0, 1,-1 };
-char misc_cmds[] = {'g', 'G', 'F', 'm', 'M', '\033'
-#ifdef REDO
-		    , '\001'
-#endif
-};
+const schar xdir[10] = {-1,-1, 0, 1, 1, 1, 0,-1, 0, 0};
+const schar ydir[10] = { 0,-1,-1,-1, 0, 1, 1, 1, 0, 0};
+const schar zdir[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 1,-1};
+char misc_cmds[] = {'g', 'G', 'F', 'm', 'M', '\033', '\001'};
 
 schar tbx = 0, tby = 0;	/* mthrowu: target */
 

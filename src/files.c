@@ -1668,7 +1668,7 @@ void check_recordfile(const char *dir) {
 	if (fd != -1) macclose (fd);
 
 	/* Create the logfile, if necessary */
-	fq_record = fqname(LOGFILE, SCOREPREFIX, 0);
+	fq_record = fqname(XLOGFILE, SCOREPREFIX, 0);
 	fd = macopen (fq_record, O_RDWR | O_CREAT, LOGF_TYPE);
 	if (fd != -1) macclose (fd);
 # endif /* MAC */

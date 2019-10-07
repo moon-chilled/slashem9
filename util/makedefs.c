@@ -383,12 +383,6 @@ static const char *build_opts[] = {
 #ifdef HOLD_LOCKFILE_OPEN
 	"exclusive lock on level 0 file",
 #endif
-#ifdef LOGFILE
-	"log file",
-#endif
-#ifdef XLOGFILE
-	"extended log file",
-#endif
 #ifdef MAIL
 	"mail daemon",
 #endif
@@ -398,9 +392,6 @@ static const char *build_opts[] = {
 	/* WAC added noartifactwish version info*/
 #ifdef NOARTIFACTWISH
 	"no wishing for special artifacts",
-#endif
-#ifdef REDO
-	"redo command",
 #endif
 #ifdef STEED
 	"saddles and riding",

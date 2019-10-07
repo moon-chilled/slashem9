@@ -90,7 +90,6 @@
 #endif
 
 #define XLOGFILE "xlogfile"
-#define LOGFILE "logfile"	/* larger file for debugging purposes */
 #define LOGAREA FILE_AREA_VAR
 #define NEWS "news"		/* the file containing the latest hack news */
 #define NEWS_AREA FILE_AREA_SHARE
@@ -217,10 +216,7 @@ typedef long glyph_t;
 /* #define ZOUTHERN */	/* KMH -- Zoutherner class and its animals */
 
 /* I/O */
-#define REDO		/* support for redoing last command - DGK */
-#if !defined(MAC)
-# define CLIPPING	/* allow smaller screens -- ERS */
-#endif
+#define CLIPPING	/* allow smaller screens -- ERS */
 
 #if defined(UNIX)
 #define USE_REGEX_MATCH
@@ -255,9 +251,7 @@ typedef long glyph_t;
                       /* Only supported on Qt with NAS - Network Audio System */
 
 
-#ifdef REDO
-# define DOAGAIN '\001'	/* ^A, the "redo" key used in cmd.c and getline.c */
-#endif
+#define DOAGAIN '\001'	/* ^A, the "redo" key used in cmd.c and getline.c */
 
 #define BORG            // Fixed for non-DOS --ELR
 /* #define KEEP_SAVE */       /* Keep savefiles after Restore (wac@intergate.bc.ca)*/

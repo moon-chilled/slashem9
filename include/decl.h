@@ -34,9 +34,7 @@ extern int occtime;
 extern int x_maze_max, y_maze_max;
 extern int otg_temp;
 
-#ifdef REDO
 extern int in_doagain;
-#endif
 
 extern struct dgn_topology {		/* special dungeon levels for speed */
     d_level	d_oracle_level;
@@ -237,17 +235,11 @@ extern char misc_cmds[];
 #define DONOPICKUP             misc_cmds[3]
 #define DORUN_NOPICKUP         misc_cmds[4]
 #define DOESCAPE               misc_cmds[5]
-#ifdef REDO                    /* JDS: moved from config.h */
-# undef  DOAGAIN /* remove previous definition from config.h */
-# define DOAGAIN               misc_cmds[6]
-#endif
+#undef  DOAGAIN /* remove previous definition from config.h */
+#define DOAGAIN                misc_cmds[6]
 
 /* the number of miscellaneous commands */
-#ifdef REDO
-# define MISC_CMD_COUNT                7
-#else
-# define MISC_CMD_COUNT                6
-#endif
+#define MISC_CMD_COUNT                7
 
 extern schar tbx, tby;		/* set in mthrowu.c */
 
