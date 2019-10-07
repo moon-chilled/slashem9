@@ -18,9 +18,6 @@ extern char *catmore;
 #endif	/* DEF_PAGER */
 
 extern char SAVEF[];
-#ifdef MICRO
-extern char SAVEP[];
-#endif
 
 extern int bases[MAXOCLASSES];
 

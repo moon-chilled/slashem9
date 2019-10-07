@@ -123,9 +123,6 @@ vault_occupied (char *array)
 void
 invault (void)
 {
-#ifdef BSD_43_BUG
-    int dummy;		/* hack to avoid schain botch */
-#endif
     struct monst *guard;
     int trycount, vaultroom = (int)vault_occupied(u.urooms);
 

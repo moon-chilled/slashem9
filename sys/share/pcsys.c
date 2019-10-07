@@ -17,7 +17,7 @@
 #endif
 
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 void nethack_exit(int);
 #else
 #define nethack_exit exit
@@ -29,8 +29,7 @@ static void msexit(void);
 extern int GUILaunched;    /* from nttty.c */
 #endif
 
-#if defined(MICRO) || defined(WIN32)
-
+#ifdef WIN32
 void flushout(void) {
 	fflush(stdout);
 	return;
@@ -68,7 +67,7 @@ int dosh(void) {
 	return 0;
 }
 # endif /* SHELL */
-#endif /* MICRO */
+#endif //WIN32
 
 /*
  * Add a backslash to any name not ending in /, \ or :	 There must
@@ -144,7 +143,7 @@ FILE *fopenp(const char *name, const char *mode) {
 	return NULL;
 }
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 void nethack_exit(int code) {
 	msexit();
 	exit(code);
@@ -197,4 +196,4 @@ void dircheck(void) {
 			chdir(hackdir);		/* chdir, not chdirx */
 }
 #endif
-#endif /* MICRO || WIN32 */
+#endif // WIN32

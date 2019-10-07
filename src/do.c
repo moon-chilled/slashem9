@@ -1239,10 +1239,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 	    if (Is_valley(&u.uz)) {
 		pline("You arrive at the Valley of the Dead...");
 		pline("The odor of burnt flesh and decay pervades the air.");
-#ifdef MICRO
-		display_nhwindow(WIN_MESSAGE, false);
-#endif
-		You_hear("groans and moans everywhere.");
+		pline("You hear groans and moans everywhere.");
 	    } else pline("It is hot here.  You smell smoke...");
 
             achieve.enter_gehennom = 1;

@@ -31,7 +31,7 @@ char orgdir[PATHLEN];	/* also used in pcsys.c, amidos.c */
 static void process_options(int argc,char **argv);
 static void nhusage(void);
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 extern void nethack_exit(int);
 #else
 #define nethack_exit exit

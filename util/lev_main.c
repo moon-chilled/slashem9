@@ -216,80 +216,11 @@ extern unsigned int max_x_map, max_y_map;
 
 extern int line_number, colon_line_number;
 
-int
-main(argc, argv)
-int argc;
-char **argv;
-{
+int main(int argc, char **argv) {
 	FILE *fin;
 	int i;
 	boolean errors_encountered = false;
-#if defined(MAC) && (defined(__MWERKS__))
-	static char *mac_argv[] = {	"lev_comp",	/* dummy argv[0] */
-	/* KMH -- had to add more from SLASH'EM */
-				":dat:Arch.des",
-				":dat:Barb.des",
-				":dat:Caveman.des",
-				":dat:Flame.des",
-				":dat:Healer.des",
-				":dat:Hobbit.des",
-				":dat:Ice.des",
-				":dat:sokoban.des",
-				":dat:Knight.des",
-				":dat:Lycn.des",
-				":dat:Monk.des",
-				":dat:Necro.des",
-				":dat:Priest.des",
-				":dat:Rogue.des",
-				":dat:Ranger.des",
-				":dat:Samurai.des",
-				":dat:Tourist.des",
-				":dat:Slayer.des",		/* Should be Uslayer */
-				":dat:Valkyrie.des",
-				":dat:Wizard.des",
-				":dat:Yeoman.des",
-#ifdef ZOUTHERN
-				":dat:Zouthern.des"
-#endif
-				":dat:beholder.des",
-				":dat:bigroom.des",
-				":dat:blkmar.des",
-				":dat:castle.des",
-				":dat:caves.des",
-				":dat:dragons.des",
-				":dat:endgame.des",
-				":dat:frnknstn.des",
-				":dat:gehennom.des",
-				":dat:giants.des",
-				":dat:guild.des",
-				":dat:knox.des",
-				":dat:kobold-1.des",
-				":dat:kobold-2.des",
-				":dat:lich.des",
-				":dat:mall-1.des",
-				":dat:mall-2.des",
-				":dat:medusa.des",
-				":dat:mtemple.des",
-				":dat:mines.des",
-				":dat:newmall.des",
-				":dat:nightmar.des",
-				":dat:nymph.des",
-				":dat:oracle.des",
-				":dat:rats.des",
-				":dat:sea.des",
-				":dat:sokoban.des",
-				":dat:spiders.des",
-				":dat:stor-1.des",
-				":dat:stor-2.des",
-				":dat:stor-3.des",
-				":dat:tomb.des",
-				":dat:tower.des",
-				":dat:yendor.des"
-				};
 
-	argc = SIZE(mac_argv);
-	argv = mac_argv;
-#endif
 	/* Note:  these initializers don't do anything except guarantee that
 		we're linked properly.
 	*/

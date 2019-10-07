@@ -848,17 +848,6 @@ void do_oracles(void) {
 			if (!(ok = (fpos = ftell(ofp)) >= 0)) break;
 			if (!(ok = (fseek(ofp, fpos, SEEK_SET) >= 0))) break;
 			if (!(ok = (fscanf(ofp, "%5lx", &offset) == 1))) break;
-#ifdef MAC
-# ifdef __MWERKS__
-			/*
-			   MetroWerks CodeWarrior Pro 1's (AKA CW12) version of MSL
-			   (ANSI C Libraries) needs this rewind or else the fprintf
-			   stops working.  This may also be true for CW11, but has
-			   never been checked.
-			   */
-			rewind(ofp);
-# endif
-#endif
 			if (!(ok = (fseek(ofp, fpos, SEEK_SET) >= 0))) break;
 			if (!(ok = (fprintf(ofp, "%05lx\n", offset + txt_offset) >= 0)))
 				break;

@@ -16,10 +16,6 @@
 /*WAC boolean here to keep track of quit status*/
 boolean saverestore;
 
-#ifdef MICRO
-int dotcnt, dotrow;	/* also used in restore */
-#endif
-
 #ifdef ZEROCOMP
 static void bputc(int);
 #endif
@@ -197,14 +193,6 @@ dosave0()
 	if(iflags.window_inited)
 	    HUP clear_nhwindow(WIN_MESSAGE);
 
-#if defined(MICRO) && defined(TTY_GRAPHICS)
-	if (!strncmpi("tty", windowprocs.name, 3)) {
-	dotcnt = 0;
-	dotrow = 2;
-	curs(WIN_MAP, 1, 1);
-	  putstr(WIN_MAP, 0, "Saving:");
-	}
-#endif
 	store_version(fd);
 #ifdef STORE_PLNAME_IN_FILE
 	bwrite(fd, (void *) plname, PL_NSIZ);
@@ -242,15 +230,7 @@ dosave0()
 	for(ltmp = (xchar)1; ltmp <= maxledgerno(); ltmp++) {
 		if (ltmp == ledger_no(&uz_save)) continue;
 		if (!(level_info[ltmp].flags & LFILE_EXISTS)) continue;
-#if defined(MICRO) && defined(TTY_GRAPHICS)
-		curs(WIN_MAP, 1 + dotcnt++, dotrow);
-		if (dotcnt >= (COLNO - 1)) {
-			dotrow++;
-			dotcnt = 0;
-		}
-		  putstr(WIN_MAP, 0, ".");
-		mark_synch();
-#endif
+
 		ofd = open_levelfile(ltmp, whynot);
 		if (ofd < 0) {
 		    HUP pline("%s", whynot);
@@ -712,11 +692,7 @@ unsigned num;
 #endif /* UNIX */
 	{
 /* lint wants the 3rd arg of write to be an int; lint -p an unsigned */
-#if defined(BSD) || defined(ULTRIX)
-	    failed = (write(fd, loc, (int)num) != (int)num);
-#else /* e.g. SYSV, __TURBOC__ */
 	    failed = (write(fd, loc, num) != num);
-#endif
 	}
 
 	if (failed) {

@@ -78,12 +78,9 @@ long yn_number = 0L;
 
 const char disclosure_options[] = "iavgc";
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 char hackdir[PATHLEN];		/* where rumors, help, record are */
-# ifdef MICRO
-char levels[PATHLEN];		/* where levels are */
-# endif
-#endif /* MICRO || WIN32 */
+#endif
 
 
 struct linfo level_info[MAXLINFO];

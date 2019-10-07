@@ -722,54 +722,7 @@ makemaz (const char *s)
 		mktrap(0,1,NULL, NULL);
 }
 
-#ifdef MICRO
-/* Make the mazewalk iterative by faking a stack.  This is needed to
- * ensure the mazewalk is successful in the limited stack space of
- * the program.  This iterative version uses the minimum amount of stack
- * that is totally safe.
- */
-void
-walkfrom (int x, int y)
-{
-#define CELLS (ROWNO * COLNO) / 4		/* a maze cell is 4 squares */
-	char mazex[CELLS + 1], mazey[CELLS + 1];	/* char's are OK */
-	int q, a, dir, pos;
-	int dirs[4];
-
-	pos = 1;
-	mazex[pos] = (char) x;
-	mazey[pos] = (char) y;
-	while (pos) {
-		x = (int) mazex[pos];
-		y = (int) mazey[pos];
-		if(!IS_DOOR(levl[x][y].typ)) {
-		    /* might still be on edge of MAP, so don't overwrite */
-		    levl[x][y].typ = ROOM;
-		    levl[x][y].flags = 0;
-		}
-		q = 0;
-		for (a = 0; a < 4; a++)
-			if(okay(x, y, a)) dirs[q++]= a;
-		if (!q)
-			pos--;
-		else {
-			dir = dirs[rn2(q)];
-			move(&x, &y, dir);
-			levl[x][y].typ = ROOM;
-			move(&x, &y, dir);
-			pos++;
-			if (pos > CELLS)
-				panic("Overflow in walkfrom");
-			mazex[pos] = (char) x;
-			mazey[pos] = (char) y;
-		}
-	}
-}
-#else
-
-void
-walkfrom (int x, int y)
-{
+void walkfrom(int x, int y) {
 	int q,a,dir;
 	int dirs[4];
 
@@ -791,14 +744,9 @@ walkfrom (int x, int y)
 		walkfrom(x,y);
 	}
 }
-#endif /* MICRO */
 
-static void
-move(x,y,dir)
-int *x, *y;
-int dir;
-{
-	switch(dir){
+static void move(int *x, int *y, int dir) {
+	switch(dir) {
 		case 0: --(*y); break;
 		case 1: (*x)++; break;
 		case 2: (*y)++; break;

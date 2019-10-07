@@ -41,19 +41,14 @@ static struct Bool_Opt
 	{"autodig", &flags.autodig, false, SET_IN_GAME},
 	{"autopickup", &flags.pickup, true, SET_IN_GAME},
 	{"autoquiver", &flags.autoquiver, false, SET_IN_GAME},
-#ifdef MICRO
-	{"BIOS", &iflags.BIOS, false, SET_IN_FILE},
-#else
-	{"BIOS", NULL, false, SET_IN_FILE},
-#endif
 #ifdef INSURANCE
 	{"checkpoint", &flags.ins_chkpt, true, SET_IN_GAME},
 #else
 	{"checkpoint", NULL, false, SET_IN_FILE},
 #endif
 	{"cmdassist", &iflags.cmdassist, true, SET_IN_GAME},
-# if defined(MICRO) || defined(WIN32) || defined(CURSES_GRAPHICS)
-	{"color",         &iflags.wc_color,true, SET_IN_GAME},		/*WC*/
+# if defined(WIN32) || defined(CURSES_GRAPHICS)
+	{"color",         &iflags.wc_color, true, SET_IN_GAME},		/*WC*/
 # else	/* systems that support multiple terminals, many monochrome */
 	{"color",         &iflags.wc_color, false, SET_IN_GAME},	/*WC*/
 # endif
@@ -129,11 +124,6 @@ static struct Bool_Opt
 	{"preload_tiles", &iflags.wc_preload_tiles, true, DISP_IN_GAME},	/*WC*/
 	{"pushweapon", &flags.pushweapon, false, SET_IN_GAME},
 	{"radar", NULL, false, SET_IN_FILE},	/* OBSOLETE */
-#ifdef MICRO
-	{"rawio", &iflags.rawio, false, DISP_IN_GAME},
-#else
-	{"rawio", NULL, false, SET_IN_FILE},
-#endif
 	{"rest_on_space", &flags.rest_on_space, false, SET_IN_GAME},
 	{"safe_pet", &flags.safe_dog, true, SET_IN_GAME},
 	{"sanity_check", &iflags.sanity_check, false, SET_IN_GAME},
@@ -655,12 +645,7 @@ static void
 rejectoption(optname)
 const char *optname;
 {
-#ifdef MICRO
-	pline("\"%s\" settable only from %s.", optname, configfile);
-#else
-	pline("%s can be set only from %s or %s.", optname,
-			NETHACK_ENV_OPTIONS, configfile);
-#endif
+	pline("%s can be set only from %s or %s.", optname, NETHACK_ENV_OPTIONS, configfile);
 }
 
 static void
@@ -1435,16 +1420,7 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 		return;
 	}
 
-#ifdef MICRO
-	/* included for compatibility with old NetHack.cnf files */
-	if (match_optname(opts, "IBM_", 4, false)) {
-		iflags.BIOS = !negated;
-		return;
-	}
-#endif /* MICRO */
-
 	/* compound options */
-
 	fullname = "pettype";
 	if (match_optname(opts, fullname, 3, true)) {
 		if ((op = string_for_env_opt(fullname, opts, negated)) != 0) {
@@ -2961,7 +2937,7 @@ map_menu_cmd (char ch)
 }
 
 
-#if defined(MICRO) || defined(MAC) || defined(WIN32)
+#if defined(MAC) || defined(WIN32)
 # define OPTIONS_HEADING "OPTIONS"
 #else
 # define OPTIONS_HEADING NETHACK_ENV_OPTIONS
@@ -3940,9 +3916,7 @@ static const char *opt_intro[] = {
 #define CONFIG_SLOT 3	/* fill in next value at run-time */
 	NULL,
 #define ENV_SLOT 4	/* substitute variable name in next value at run-time */
-#if !defined(MICRO) && !defined(MAC)
 	"or use `%s=\"<options>\"' in your environment",
-#endif
 	"(<options> is a list of options separated by commas)",
 	"or press \"O\" while playing and use the menu.",
 	"",

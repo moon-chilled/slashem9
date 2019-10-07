@@ -15,11 +15,6 @@
 
 #ifdef TTY_GRAPHICS
 
-#ifdef MAC
-# define MICRO /* The Mac is a MICRO only for this file, not in general! */
-#endif
-
-
 #ifndef NO_TERMS
 #include "tcap.h"
 #endif
@@ -135,7 +130,7 @@ static int clipy = 0, clipymax = 0;
 bool GFlag = false;
 #endif
 
-#if defined(MICRO) || defined(WIN32CON)
+#ifdef WIN32CON
 static const char to_continue[] = "to continue";
 #define getret() getreturn(to_continue)
 #else
@@ -791,14 +786,10 @@ void tty_askname(void) {
 #ifdef WIN32CON
 				ttyDisplay->curx--;
 #endif
-#if defined(MICRO) || defined(WIN32CON)
-# if defined(WIN32CON)
+#ifdef WIN32CON
 				backsp();       /* \b is visible on NT */
 				putchar(' ');
 				backsp();
-# else
-				msmsg("\b \b");
-# endif
 #else
 				putchar('\b');
 				putchar(' ');
@@ -812,14 +803,7 @@ void tty_askname(void) {
 		if(c < 'A' || (c > 'Z' && c < 'a') || c > 'z') c = '_';
 #endif
 		if (ct < (int)(sizeof plname) - 1) {
-#if defined(MICRO)
-			if (iflags.grmode) {
-				putchar(c);
-			} else
-			msmsg("%c", c);
-#else
 			putchar(c);
-#endif
 			plname[ct++] = c;
 #ifdef WIN32CON
 			ttyDisplay->curx++;
@@ -837,7 +821,7 @@ void tty_get_nh_event(void) {
     return;
 }
 
-#if !defined(MICRO) && !defined(WIN32CON)
+#ifndef WIN32CON
 static void getret(void) {
 	xputs("\n");
 	if(flags.standout)
@@ -2553,7 +2537,7 @@ void tty_print_glyph(winid window, xchar x, xchar y, int glyph) {
 
 void tty_raw_print(const char *str) {
 	if(ttyDisplay) ttyDisplay->rawprint++;
-#if defined(MICRO) || defined(WIN32CON)
+#ifdef WIN32CON
 	msmsg("%s\n", str);
 #else
 	puts(str);
@@ -2564,13 +2548,13 @@ void tty_raw_print(const char *str) {
 void tty_raw_print_bold(const char *str) {
 	if(ttyDisplay) ttyDisplay->rawprint++;
 	term_start_raw_bold();
-#if defined(MICRO) || defined(WIN32CON)
+#ifdef WIN32CON
 	msmsg("%s", str);
 #else
 	fputs(str, stdout);
 #endif
 	term_end_raw_bold();
-#if defined(MICRO) || defined(WIN32CON)
+#ifdef WIN32CON
 	msmsg("\n");
 #else
 	puts("");

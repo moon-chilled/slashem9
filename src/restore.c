@@ -6,11 +6,6 @@
 #include "lev.h"
 #include "tcap.h" /* for TERMLIB */
 
-#if defined(MICRO)
-extern int dotcnt;	/* shared with save */
-extern int dotrow;	/* shared with save */
-#endif
-
 #ifdef USE_TILES
 extern void substitute_tiles(d_level *);       /* from tile.c */
 #endif
@@ -555,18 +550,6 @@ int dorecover (int fd) {
 	u.usteed = NULL;
 #endif
 
-#ifdef MICRO
-	clear_nhwindow(WIN_MAP);
-	clear_nhwindow(WIN_MESSAGE);
-	/* moved lower */
-	curs(WIN_MAP, 1, 1);
-	dotcnt = 0;
-	dotrow = 2;
-# ifdef TTY_GRAPHICS
-	if (!strncmpi("tty", windowprocs.name, 3))
-    	  putstr(WIN_MAP, 0, "Restoring:");
-# endif
-#endif
 	while(1) {
 #ifdef ZEROCOMP
 		if(mread(fd, (void *) &ltmp, sizeof ltmp) < 0)
@@ -575,27 +558,11 @@ int dorecover (int fd) {
 #endif
 			break;
 		getlev(fd, 0, ltmp, false);
-#if defined(MICRO) && defined(TTY_GRAPHICS)
-		if (!strncmpi("tty", windowprocs.name, 3)) {
-		curs(WIN_MAP, 1+dotcnt++, dotrow);
-		if (dotcnt >= (COLNO - 1)) {
-			dotrow++;
-			dotcnt = 0;
-		}
-		  putstr(WIN_MAP, 0, ".");
-		mark_synch();
-		}
-#endif
 		rtmp = restlevelfile(fd, ltmp);
 		if (rtmp < 2) return rtmp;  /* dorecover called recursively */
 	}
 
-#ifdef BSD
 	lseek(fd, 0L, 0);
-#else
-	lseek(fd, 0L, 0);
-/*      (void) lseek(fd, (off_t)0, 0); */
-#endif
 	uptodate(fd, NULL);		/* skip version info */
 #ifdef STORE_PLNAME_IN_FILE
 	mread(fd, (void *) plname, PL_NSIZ);
@@ -1047,13 +1014,8 @@ unsigned int len;
 {
 	int rlen;
 
-#if defined(BSD) || defined(ULTRIX)
-	rlen = read(fd, buf, (int) len);
-	if(rlen != len){
-#else /* e.g. SYSV, __TURBOC__ */
 	rlen = read(fd, buf, (unsigned) len);
 	if((unsigned)rlen != len){
-#endif
 		pline("Read %d instead of %u bytes.", rlen, len);
 		if(restoring) {
 			close(fd);

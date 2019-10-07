@@ -44,24 +44,11 @@ int  yywrap(void);
 void init_yyin(FILE *);
 void init_yyout(FILE *);
 
-int
-main(argc, argv)
-int argc;
-char **argv;
-{
+int main(int argc, char **argv) {
 	char	*infile, *outfile, *basename;
 	FILE	*fin, *fout;
 	int	i, len;
 	boolean errors_encountered = false;
-#if defined(MAC) && (defined(__MWERKS__))
-	char	*mark;
-	static char *mac_argv[] = {	"dgn_comp",	/* dummy argv[0] */
-				":dat:dungeon.pdf"
-				};
-
-	argc = SIZE(mac_argv);
-	argv = mac_argv;
-#endif
 
 	infile = "(stdin)";
 	fin = stdin;
@@ -91,22 +78,11 @@ char **argv;
 		    continue;
 		}
 
-		/* build output file name */
-#if defined(MAC) && (defined(__MWERKS__))
-		/* extract basename from path to infile */
-		mark = strrchr(infile, ':');
-		mark = mark ? mark+1 : infile;
-		basename = alloc(strlen(mark) + 1);
-		strcpy(basename, mark);
-		mark = strchr(basename, '.');
-		if (mark) *mark = '\0';
-#else
-		/* Use the whole name - strip off the last 3 or 4 chars. */
-
+		// build output file name
+		// Use the whole name - strip off the last 3 or 4 chars.
 		basename = alloc(len + 1);
 		strncpy(basename, infile, len);
 		basename[len] = '\0';
-#endif
 
 		if (outfile) free(outfile);
 #ifdef PREFIX

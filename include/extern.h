@@ -643,9 +643,7 @@ extern void set_savefile_name(void);
 #ifdef INSURANCE
 extern void save_savefile_name(int);
 #endif
-#ifndef MICRO
 extern void set_error_savefile(void);
-#endif
 extern int create_savefile(void);
 extern int open_savefile(void);
 extern int delete_savefile(void);
@@ -1246,7 +1244,7 @@ extern char *utf8_tmpstr(glyph_t);
 extern void pututf8char(glyph_t);
 
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 
 /* ### winnt.c ### */
 
@@ -1266,10 +1264,6 @@ extern void chdrive(char *);
 # endif
 extern void disable_ctrlP(void);
 extern void enable_ctrlP(void);
-# if defined(MICRO) && !defined(WINNT)
-extern void get_scr_size(void);
-extern void gotoxy(int,int);
-# endif
 # ifdef WIN32
 extern char *get_username(int *);
 extern int set_binary_mode(int, int);
@@ -1277,7 +1271,7 @@ extern void nt_regularize(char *);
 extern int (*t_kbhit(void));
 extern void Delay(int);
 # endif /* WIN32 */
-#endif /* MICRO || WIN32 */
+#endif /* WIN32 */
 
 /* ### mthrowu.c ### */
 
@@ -1433,26 +1427,26 @@ extern int dohistory(void);
 
 /* ### pcmain.c ### */
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 # ifdef CHDIR
 extern void chdirx(char *, bool);
 # endif /* CHDIR */
-#endif /* MICRO || WIN32 */
+#endif /* WIN32 */
 
 /* ### pcsys.c ### */
 
-#if defined(MICRO) || defined(WIN32)
+#if defined(WIN32)
 extern void flushout(void);
 extern int dosh(void);
 extern void append_slash(char *);
 extern void getreturn(const char *);
 extern void msmsg(const char *,...);
 extern FILE *fopenp(const char *,const char *);
-#endif /* MICRO || WIN32 */
+#endif /* WIN32 */
 
 /* ### pctty.c ### */
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 extern void gettty(void);
 extern void settty(const char *);
 extern void setftty(void);
@@ -1460,13 +1454,10 @@ extern void error(const char *,...);
 #if defined(TIMED_DELAY) && defined(_MSC_VER)
 extern void msleep(unsigned);
 #endif
-#endif /* MICRO || WIN32 */
+#endif /* WIN32 */
 
 /* ### pcunix.c ### */
 
-#if defined(MICRO)
-extern void regularize(char *);
-#endif /* MICRO */
 #if defined(PC_LOCKING)
 extern void getlock(void);
 #endif
@@ -2142,9 +2133,6 @@ extern char *version_string(char *);
 extern char *getversionstring(char *);
 extern int doversion(void);
 extern int doextversion(void);
-#ifdef MICRO
-extern boolean comp_times(long);
-#endif
 extern boolean check_version(struct version_info *,
 				const char *,boolean);
 extern unsigned long get_feature_notice_ver(char *);

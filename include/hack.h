@@ -285,11 +285,6 @@ extern coord bhitpos;	/* place where throw or zap hits or stops */
 /* negative armor class is randomly weakened to prevent invulnerability */
 #define AC_VALUE(AC)	((AC) >= 0 ? (AC) : -rnd(-(AC)))
 
-#if defined(MICRO) && !defined(__DJGPP__)
-#define getuid() 1
-#define getlogin() (NULL)
-#endif /* MICRO */
-
 /* For my clever ending messages... */
 extern int Instant_Death;
 extern int Quick_Death;

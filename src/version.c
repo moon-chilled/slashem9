@@ -41,12 +41,6 @@ int doextversion(void) {
 	return 0;
 }
 
-#ifdef MICRO
-boolean comp_times(long filetime) {
-	return filetime < BUILD_TIME;
-}
-#endif
-
 boolean check_version(struct version_info *version_data, const char *filename, boolean complain) {
 	if (
 #ifdef VERSION_COMPATIBILITY

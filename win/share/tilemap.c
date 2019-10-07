@@ -13,11 +13,9 @@ const char * tilename(int, int);
 void init_tilemap(void);
 void process_substitutions(FILE *);
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 #undef exit
-#ifndef WIN32
 extern void exit(int);
-#endif
 #endif
 
 #define MON_GLYPH 1

@@ -75,14 +75,11 @@ char lock[PL_NSIZ+25];		/* long enough for username+-+name+.99 */
 # if defined(WIN32)
 #  define SAVESIZE	(PL_NSIZ + 40)	/* username-player.NetHack-saved-game */
 # else
-#  define SAVESIZE        FILENAMELEN        /* from macconf.h or pcconf.h */
+#  define SAVESIZE        FILENAMELEN
 # endif
 #endif
 
 char SAVEF[SAVESIZE];	/* holds relative path of save file from playground */
-#ifdef MICRO
-char SAVEP[SAVESIZE];	/* holds path of directory for save file */
-#endif
 
 #ifdef HOLD_LOCKFILE_OPEN
 struct level_ftrack {
@@ -342,7 +339,7 @@ int create_levelfile(int lev, char errbuf[]) {
 	fq_lock = fqname(lock, LEVELPREFIX, 0);
 #endif
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 	/* Use O_TRUNC to force the file to be shortened if it already
 	 * exists and is currently longer.
 	 */
@@ -358,7 +355,7 @@ int create_levelfile(int lev, char errbuf[]) {
 #  endif
 	fd = open(fq_lock, O_WRONLY |O_CREAT | O_TRUNC | O_BINARY, FCMASK);
 # endif
-#else	/* MICRO */
+#else	// WIN32
 # ifdef FILE_AREAS
 	fd = creat_area(FILE_AREA_LEVL, lock, FCMASK);
 # else
@@ -368,7 +365,7 @@ int create_levelfile(int lev, char errbuf[]) {
 	fd = creat(fq_lock, FCMASK);
 # endif
 # endif	/* FILE_AREAS */
-#endif /* MICRO || WIN32 */
+#endif /* WIN32 */
 
 	if (fd >= 0)
 	    level_info[lev].flags |= LFILE_EXISTS;
@@ -558,7 +555,7 @@ int create_bonesfile(d_level *lev, char **bonesid, char errbuf[]) {
 	file = fqname(file, BONESPREFIX, 0);
 #endif
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 	/* Use O_TRUNC to force the file to be shortened if it already
 	 * exists and is currently longer.
 	 */
@@ -662,32 +659,23 @@ void set_savefile_name(void) {
 #if defined(WIN32)
 	char fnamebuf[BUFSZ], encodedfnamebuf[BUFSZ];
 #endif
-# if defined(MICRO)
-	strcpy(SAVEF, SAVEP);
-	{
-		int i = strlen(SAVEP);
-		strncat(SAVEF, plname, 8);
-		regularize(SAVEF+i);
-	}
-	strcat(SAVEF, ".sav");
-# else
-#  ifndef FILE_AREAS
-#  if defined(WIN32)
+
+#ifndef FILE_AREAS
+# if defined(WIN32)
 	/* Obtain the name of the logged on user and incorporate
 	 * it into the name. */
 	sprintf(fnamebuf, "%s-%s", get_username(0), plname);
 	fname_encode("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-.",
 				'%', fnamebuf, encodedfnamebuf, BUFSZ);
 	sprintf(SAVEF, "%s.NetHack-saved-game", encodedfnamebuf);
-#  else
+# else
 	sprintf(SAVEF, "save/%d%s", (int)getuid(), plname);
 	regularize(SAVEF+5);	/* avoid . or / in name */
-#  endif /* WIN32 */
-#  else
+# endif /* WIN32 */
+#else
 	sprintf(SAVEF, "%d%s", (int)getuid(), plname);
 	regularize(SAVEF);      /* avoid . or / in name */
-#  endif
-# endif	/* MICRO */
+#endif
 }
 
 #ifdef INSURANCE
@@ -697,13 +685,10 @@ void save_savefile_name(int fd) {
 #endif
 
 
-#ifndef MICRO
 /* change pre-existing savefile name to indicate an error savefile */
 void set_error_savefile(void) {
-      {
 	char *semi_colon = rindex(SAVEF, ';');
 	if (semi_colon) *semi_colon = '\0';
-      }
 	strcat(SAVEF, ".e;1");
 # ifdef MAC
 	strcat(SAVEF, "-e");
@@ -711,7 +696,6 @@ void set_error_savefile(void) {
 	strcat(SAVEF, ".e");
 # endif
 }
-#endif
 
 
 /* create save file, overwriting one if it already exists */
@@ -722,15 +706,10 @@ int create_savefile(void) {
 	int fd;
 
 #ifdef FILE_AREAS
-# ifdef MICRO
-	fd = open_area(FILE_AREA_SAVE, SAVEF,
-	  O_WRONLY | O_BINARY | O_CREAT | O_TRUNC, FCMASK);
-# else
 	fd = creat_area(FILE_AREA_SAVE, SAVEF, FCMASK);
-# endif
 #else	/* FILE_AREAS */
 	fq_save = fqname(SAVEF, SAVEPREFIX, 0);
-# if defined(MICRO) || defined(WIN32)
+# ifdef WIN32
 	fd = open(fq_save, O_WRONLY | O_BINARY | O_CREAT | O_TRUNC, FCMASK);
 # else
 #  ifdef MAC
@@ -738,7 +717,7 @@ int create_savefile(void) {
 #  else
 	fd = creat(fq_save, FCMASK);
 #  endif
-# endif /* MICRO */
+# endif // WIN32
 #endif  /* FILE_AREAS */
 
 	return fd;
@@ -844,10 +823,6 @@ struct flock sflock; // for unlocking, sae as above
 
 #if !defined(FILE_AREAS) && !defined(USE_FCNTL)
 static char *make_lockname(const char *filename, char *lockname) {
-#if defined(MAC_MPW) || defined(__MWERKS__)
-# pragma unused(filename,lockname)
-	return NULL;
-#else
 # if defined(UNIX) || defined(WIN32)
 #  ifdef NO_FILE_LINKS
 	strcpy(lockname, LOCKDIR);
@@ -862,17 +837,12 @@ static char *make_lockname(const char *filename, char *lockname) {
 	lockname[0] = '\0';
 	return NULL;
 # endif  /* UNIX || WIN32 */
-#endif
 }
 #endif // !FILE_AREAS && !USE_FCNTL
 
 
 /* lock a file */
 boolean lock_file(const char *filename, int whichprefix, int retryct) {
-#if defined(MAC_MPW) || defined(__MWERKS__)
-# pragma unused(filename, retryct)
-#endif
-
 #ifndef USE_FCNTL
 	char locknambuf[BUFSZ];
 	const char *lockname;
@@ -1080,7 +1050,7 @@ static FILE *fopen_config_file(const char *filename) {
 		}
 	}
 
-#if defined(MICRO) || defined(MAC) || defined(WIN32)
+#if defined(MAC) || defined(WIN32)
 	if ((fp = fopen(fqname(configfile, CONFIGPREFIX, 0), "r"))
 								!= NULL)
 		return fp;
@@ -1252,9 +1222,6 @@ static void adjust_prefix(char *bufp, int prefixid) {
 
 /*ARGSUSED*/
 int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) {
-#if defined(MAC_MPW) || defined(__MWERKS__)
-# pragma unused(tmp_ramdisk,tmp_levels)
-#endif
 	char		*bufp, *altp;
 	uchar   translate[MAXPCHARS];
 	int   len;
@@ -1320,22 +1287,6 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 		adjust_prefix(bufp, CONFIGPREFIX);
 	} else if (match_varname(buf, "TROUBLEDIR", 4)) {
 		adjust_prefix(bufp, TROUBLEPREFIX);
-#else /*NOCWD_ASSUMPTIONS*/
-# ifdef MICRO
-	} else if (match_varname(buf, "HACKDIR", 4)) {
-		strncpy(hackdir, bufp, PATHLEN-1);
-	} else if (match_varname(buf, "LEVELS", 4)) {
-		strncpy(tmp_levels, bufp, PATHLEN-1);
-
-	} else if (match_varname(buf, "SAVE", 4)) {
-		char *ptr;
-		if ((ptr = index(bufp, ';')) != 0) {
-			*ptr = '\0';
-		}
-
-		strncpy(SAVEP, bufp, SAVESIZE-1);
-		append_slash(SAVEP);
-# endif /* MICRO */
 #endif /*NOCWD_ASSUMPTIONS*/
 
 	} else if (match_varname(buf, "NAME", 4)) {
@@ -1450,7 +1401,7 @@ void read_config_file(const char *filename) {
 #define tmp_levels	NULL
 #define tmp_ramdisk	NULL
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 #undef tmp_levels
 	char	tmp_levels[PATHLEN];
 #endif
@@ -1468,7 +1419,7 @@ void read_config_file(const char *filename) {
 	if (!(fp = fopen_config_file(filename))) goto post_process;
 #endif
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 	tmp_levels[0] = 0;
 #endif
 	/* begin detection of duplicate configfile options */
@@ -1590,7 +1541,7 @@ static FILE *fopen_wizkit_file(void) {
 #endif
 	}
 
-#if defined(MICRO) || defined(MAC) || defined(WIN32)
+#if defined(MAC) || defined(WIN32)
 	if ((fp = fopen(fqname(wizkit, CONFIGPREFIX, 0), "r"))
 								!= NULL)
 		return fp;
@@ -1653,9 +1604,6 @@ void read_wizkit(void) {
 
 /* verify that we can write to the scoreboard file; if not, try to create one */
 void check_recordfile(const char *dir) {
-#if defined(MAC_MPW) || defined(__MWERKS__)
-# pragma unused(dir)
-#endif
 	int fd;
 #ifndef FILE_AREAS
 	const char *fq_record;
@@ -1686,7 +1634,7 @@ void check_recordfile(const char *dir) {
 	    wait_synch();
 	}
 #endif  /* !UNIX && !VMS */
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 	char tmp[PATHLEN];
 	strcpy(tmp, NH_RECORD);
 # ifndef FILE_AREAS
@@ -1711,7 +1659,7 @@ void check_recordfile(const char *dir) {
 		close(fd);
 	} else		/* open succeeded */
 	    close(fd);
-#else /* MICRO || WIN32*/
+#else /* WIN32*/
 
 # ifdef MAC
 	/* Create the record file, if necessary */
@@ -1725,7 +1673,7 @@ void check_recordfile(const char *dir) {
 	if (fd != -1) macclose (fd);
 # endif /* MAC */
 
-#endif /* MICRO || WIN32*/
+#endif /* WIN32*/
 }
 
 /* ----------  END SCOREBOARD CREATION ----------- */

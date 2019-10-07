@@ -374,7 +374,7 @@ void setrandom(void) {
 #ifdef RANDOM	/* srandom() from sys/share/random.c */
 	srandom((unsigned int) time(NULL));
 #else
-# if defined(BSD) || defined(LINUX) || defined(ULTRIX) || defined(CYGWIN32) /* system srandom() */
+# if defined(BSD) || defined(LINUX) || defined(CYGWIN32) /* system srandom() */
 #  if defined(BSD) && !defined(POSIX_TYPES)
 #   if defined(SUNOS4)
 	
@@ -396,16 +396,8 @@ void setrandom(void) {
 static struct tm *getlt(void) {
 	time_t date;
 
-#if defined(BSD) && !defined(POSIX_TYPES)
-	time((long *)(&date));
-#else
 	time(&date);
-#endif
-#if (defined(ULTRIX) && !(defined(ULTRIX_PROTO) || defined(NHSTDC))) || (defined(BSD) && !defined(POSIX_TYPES))
-	return localtime((long *)(&date));
-#else
 	return localtime(&date);
-#endif
 }
 
 int getyear(void) {
@@ -427,11 +419,7 @@ char *yymmdd(time_t date) {
 	if (date == 0)
 		lt = getlt();
 	else
-#if (defined(ULTRIX) && !(defined(ULTRIX_PROTO) || defined(NHSTDC))) || defined(BSD)
-		lt = localtime((long *)(&date));
-#else
 		lt = localtime(&date);
-#endif
 
 	sprintf(datestr, "%02d%02d%02d",
 		lt->tm_year, lt->tm_mon + 1, lt->tm_mday);
@@ -446,11 +434,7 @@ long yyyymmdd(time_t date) {
 	if (date == 0)
 		lt = getlt();
 	else
-#if (defined(ULTRIX) && !(defined(ULTRIX_PROTO) || defined(NHSTDC))) || (defined(BSD) && !defined(POSIX_TYPES))
-		lt = localtime((long *)(&date));
-#else
 		lt = localtime(&date);
-#endif
 
 	/* just in case somebody's localtime supplies (year % 100)
 	   rather than the expected (year - 1900) */

@@ -5,38 +5,15 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#if !defined(__cplusplus) && !defined(__GO32__)
-
 /* some old <sys/types.h> may not define off_t and size_t; if your system is
  * one of these, define them by hand below
  */
 #ifdef MAC
-#include <types.h>
+# include <types.h>
+# include <time.h>	/* time_t is not in <sys/types.h> */
 #else
-#  ifndef       __WATCOMC__
-#include <sys/types.h>
-# endif
+# include <sys/types.h>
 #endif
-
-#if defined(MICRO) || defined(ANCIENT_VAXC)
-# if !defined(_SIZE_T) && !defined(__size_t) /* __size_t for CSet/2 */
-#  define _SIZE_T
-# endif
-#endif	// MICRO || ANCIENT_VAXC
-
-#if defined(MAC)
-#include <time.h>	/* time_t is not in <sys/types.h> */
-#endif
-#if defined(ULTRIX) && !(defined(ULTRIX_PROTO) || defined(NHSTDC))
-/* The Ultrix v3.0 <sys/types.h> seems to be very wrong. */
-# define time_t long
-#endif
-
-#ifdef ULTRIX
-# define off_t long
-#endif
-
-#endif /* !__cplusplus && !__GO32__ */
 
 /* You may want to change this to fit your system, as this is almost
  * impossible to get right automatically.
@@ -46,21 +23,13 @@
 # define SIG_RET_TYPE void (__cdecl *)(int)
 #endif
 #ifndef SIG_RET_TYPE
-# if defined(NHSTDC) || defined(POSIX_TYPES) || defined(__DECC)
+# if defined(NHSTDC) || defined(POSIX_TYPES)
 #  define SIG_RET_TYPE void (*)(int)
 # endif
 #endif
 #ifndef SIG_RET_TYPE
-# if defined(ULTRIX) || defined(SUNOS4) || defined(SVR3) || defined(SVR4)
-	/* SVR3 is defined automatically by some systems */
-#  define SIG_RET_TYPE void (*)()
-# endif
-#endif
-#ifndef SIG_RET_TYPE	/* BSD, SIII, SVR2 and earlier, Sun3.5 and earlier */
 # define SIG_RET_TYPE int (*)()
 #endif
-
-#if !defined(__cplusplus) && !defined(__GO32__)
 
 #if defined(BSD) || defined(ULTRIX) || defined(RANDOM)
 # ifdef random
@@ -81,17 +50,14 @@ extern long lrand48(void);
 extern void srand48(long);
 #endif /* BSD || ULTRIX || RANDOM */
 
-#if !defined(BSD) || defined(ultrix)
-			/* real BSD wants all these to return int */
-# ifndef MICRO
+// real BSD wants all these to return int
+#if !defined(BSD)
 extern void exit(int);
-# endif /* MICRO */
-#if !defined(__SASC_60) && !defined(__SC__)
-#  if !(defined(ULTRIX_PROTO) && defined(__GNUC__))
+# ifdef __GNUC__
 extern void perror(const char *);
 # endif
 #endif
-#endif
+
 #ifndef NeXT
 #ifdef POSIX_TYPES
 extern void qsort(void *,size_t,size_t,
@@ -130,9 +96,7 @@ extern long lseek(int,long,int);
 extern int write(int, const void *,unsigned);
 #   endif
 #  else
-#   ifndef __MWERKS__	/* metrowerks defines write via universal headers */
 extern int write(int,void *,unsigned);
-#   endif
 #  endif
 # endif /* ULTRIX */
 #endif /* __GNUC__ */
@@ -146,29 +110,6 @@ extern char *getcwd(char *,int);	/* unistd.h */
 #endif
 
 extern int open(const char *,int);
-#endif
-
-#if defined(MICRO)
-extern int close(int);
-#ifndef __EMX__
-extern int read(int,void *,unsigned int);
-#endif
-extern int open(const char *,int,...);
-extern int dup2(int, int);
-extern int setmode(int,int);
-extern int kbhit(void);
-# ifndef __MINGW32__
-#  ifdef _MSC_VER
-extern int chdir(const char *);
-#  else
-#   ifndef __EMX__
-extern int chdir(char *);
-#   endif
-#  endif
-#  ifndef __EMX__
-extern char *getcwd(char *,int);
-#  endif
-# endif /* !MINGW32 */
 #endif
 
 #ifdef ULTRIX
@@ -206,11 +147,6 @@ extern int execl(const char *, ...);
 #  endif
 # endif
 #endif
-#ifdef MICRO
-extern void abort(void);
-extern void _exit(int);
-extern int system(const char *);
-#endif
 #if defined(HPUX) && !defined(_POSIX_SOURCE)
 extern long fork(void);
 #endif
@@ -246,18 +182,6 @@ extern void *memset(char*,int,int);
 # endif
 #endif
 #endif /* POSIX_TYPES */
-
-#if defined(MICRO) && !defined(LATTICE)
-#  if defined(NHSTDC) || defined(WIN32)
-extern int  memcmp(const void *, const void *, size_t);
-extern void *memcpy(void *, const void *, size_t);
-extern void *memset(void *, int, size_t);
-#  else
-extern int memcmp(char *,char *,unsigned int);
-extern char *memcpy(char *,char *,unsigned int);
-extern char *memset(char*,int,int);
-#  endif /* NHSTDC */
-#endif /* MICRO */
 
 #if defined(BSD) && defined(ultrix)	/* i.e., old versions of Ultrix */
 extern void sleep();
@@ -311,7 +235,7 @@ extern char	*strcat(char *,const char *);
 extern char	*strncat(char *,const char *,size_t);
 extern char	*strpbrk(const char *,const char *);
 
-# if defined(SYSV) || defined(MICRO) || defined(MAC) || defined(HPUX)
+# if defined(SYSV) || defined(MAC) || defined(HPUX)
 extern char	*strchr(const char *,int);
 extern char	*strrchr(const char *,int);
 # else /* BSD */
@@ -321,7 +245,7 @@ extern char	*rindex(const char *,int);
 
 extern int	strcmp(const char *,const char *);
 extern int	strncmp(const char *,const char *,size_t);
-# if defined(MICRO) || defined(MAC)
+# ifdef MAC
 extern size_t strlen(const char *);
 # else
 # ifdef HPUX
@@ -331,7 +255,7 @@ extern unsigned int	strlen(char *);
 extern int	strlen(const char *);
 #   endif
 #  endif /* HPUX */
-# endif /* MICRO */
+# endif /* MAC */
 #endif /* ULTRIX */
 
 #endif	/* !_XtIntrinsic_h_ && !POSIX_TYPES */
@@ -358,10 +282,6 @@ extern char	*rindex(const char *,int);
 #if defined(__sgi) || defined(__GNUC__)
 	/* problem with prototype mismatches */
 #define SPRINTF_PROTO
-#endif
-#if defined(__MWERKS__) || defined(__SC__)
-	/* Metrowerks already has a prototype for sprintf() */
-# define SPRINTF_PROTO
 #endif
 
 #ifndef SPRINTF_PROTO
@@ -395,15 +315,7 @@ extern int vprintf(const char *, va_list);
 #endif
 
 
-#ifdef MICRO
-extern int tgetent(const char *,const char *);
-extern void tputs(const char *,int,int (*)());
-extern int tgetnum(const char *);
-extern int tgetflag(const char *);
-extern char *tgetstr(const char *,char **);
-extern char *tgoto(const char *,int,int);
-#else
-# if ! (defined(HPUX) && defined(_POSIX_SOURCE))
+# ifdef _POSIX_SOURCE
 extern int tgetent(char *,const char *);
 extern void tputs(const char *,int,int (*)());
 # endif
@@ -411,7 +323,6 @@ extern int tgetnum(const char *);
 extern int tgetflag(const char *);
 extern char *tgetstr(const char *,char **);
 extern char *tgoto(const char *,int,int);
-#endif
 
 #ifdef ALLOC_C
 extern void * malloc(size_t);
@@ -427,25 +338,12 @@ extern struct tm *localtime(const time_t *);
 # endif
 # endif
 
-# if defined(ULTRIX) || (defined(BSD) && defined(POSIX_TYPES)) || defined(SYSV) || defined(MICRO) || defined(MAC) || (defined(HPUX) && defined(_POSIX_SOURCE))
+# if defined(ULTRIX) || (defined(BSD) && defined(POSIX_TYPES)) || defined(SYSV) || defined(MAC) || (defined(HPUX) && defined(_POSIX_SOURCE))
 #  ifndef       __WATCOMC__
 extern time_t time(time_t *);
 #  endif
 # else
 extern long time(time_t *);
 # endif /* ULTRIX */
-
-#ifdef MICRO
-# ifdef abs
-# undef abs
-# endif
-extern int abs(int);
-# ifdef atoi
-# undef atoi
-# endif
-extern int atoi(const char *);
-#endif
-
-#endif /*  !__cplusplus && !__GO32__ */
 
 #endif /* SYSTEM_H */

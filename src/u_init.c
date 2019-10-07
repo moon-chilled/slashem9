@@ -1614,7 +1614,7 @@ struct trobj *trop;
 				obj->otyp != SPE_BLANK_PAPER)
 		    initialspell(obj);
 
-#if !defined(PYRAMID_BUG) && !defined(MAC)
+#ifndef MAC
 		if(--trop->trquan) continue;	/* make a similar object */
 #else
 		if(trop->trquan) {		/* check if zero first */

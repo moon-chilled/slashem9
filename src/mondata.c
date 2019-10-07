@@ -598,35 +598,15 @@ static const short grownups[][2] = {
 	{NON_PM,NON_PM}
 };
 
-int
-little_to_big (int montype)
-{
-#ifndef AIXPS2_BUG
+int little_to_big(int montype) {
 	int i;
 
 	for (i = 0; grownups[i][0] >= LOW_PM; i++)
 		if(montype == grownups[i][0]) return grownups[i][1];
 	return montype;
-#else
-/* AIX PS/2 C-compiler 1.1.1 optimizer does not like the above for loop,
- * and causes segmentation faults at runtime.  (The problem does not
- * occur if -O is not used.)
- * lehtonen@cs.Helsinki.FI (Tapio Lehtonen) 28031990
- */
-	int i;
-	int monvalue;
-
-	monvalue = montype;
-	for (i = 0; grownups[i][0] >= LOW_PM; i++)
-		if(montype == grownups[i][0]) monvalue = grownups[i][1];
-
-	return monvalue;
-#endif
 }
 
-int
-big_to_little (int montype)
-{
+int big_to_little(int montype) {
 	int i;
 
 	for (i = 0; grownups[i][0] >= LOW_PM; i++)

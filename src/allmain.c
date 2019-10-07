@@ -19,7 +19,7 @@ static void do_positionbar(void);
 #define spellknow(spell)	spl_book[spell].sp_know
 
 void moveloop(void) {
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 	char ch;
 	int abort_lev;
 #endif
@@ -377,7 +377,7 @@ void moveloop(void) {
 		flags.move = 1;
 
 		if(multi >= 0 && occupation) {
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 			abort_lev = 0;
 			if (kbhit()) {
 				if ((ch = Getchar()) == ABORT)
@@ -393,14 +393,14 @@ void moveloop(void) {
 #endif
 					occupation = 0;
 			if(
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 					abort_lev ||
 #endif
 					monster_nearby()) {
 				stop_occupation();
 				reset_eat();
 			}
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 			if (!(++occtime % 7))
 				display_nhwindow(WIN_MAP, false);
 #endif

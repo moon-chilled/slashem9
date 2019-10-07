@@ -28,9 +28,6 @@
  *  The remaining code shouldn't need modification.
  * -----------------------------------------------------------------
  */
-#ifdef MICRO
-#undef MICRO			/* never define this! */
-#endif
 
 #define NOCWD_ASSUMPTIONS	/* Always define this. There are assumptions that
                                    it is defined for WIN32.
@@ -119,7 +116,7 @@ extern void interject(int);
 extern char levels[], bones[], permbones[],
 #endif /* 0 */
 
-/* this was part of the MICRO stuff in the past */
+/* this was part of the micro stuff in the past */
 extern const char *alllevels, *allbones;
 extern char hackdir[];
 #define ABORT C('a')

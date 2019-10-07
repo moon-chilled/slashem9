@@ -28,7 +28,7 @@ void copy_bytes(int,int);
 # ifdef WIN32
 #  define SAVESIZE	(PL_NSIZ + 40)  /* username-player.NetHack-saved-game */
 # else /* WIN32 */
-#  define SAVESIZE	FILENAMELEN	/* from macconf.h or pcconf.h */
+#  define SAVESIZE	FILENAMELEN
 # endif /* WIN32 */
 #endif
 

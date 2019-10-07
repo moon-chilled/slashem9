@@ -113,10 +113,6 @@ typedef unsigned long ulong;
 #include "unixconf.h"
 #endif
 
-#ifdef MAC
-#include "macconf.h"
-#endif
-
 #ifdef WIN32
 #include "ntconf.h"
 #endif

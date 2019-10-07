@@ -185,12 +185,6 @@ struct instance_flags {
         bool use_menu_color; /* use color in menus; only if wc_color */
 	bool use_status_colors; /* use color in status line; only if wc_color */
 	bool hitpointbar;
-#ifdef MICRO
-	bool  BIOS;		/* use IBM or ST BIOS calls when appropriate */
-#endif
-#if defined(MICRO) || defined(WIN32)
-	bool  rawio;		/* whether can use rawio (IOCTL call) */
-#endif
 #ifdef WIN32
 	bool hassound;	/* has a sound card */
 	bool usesound;	/* use the sound card */

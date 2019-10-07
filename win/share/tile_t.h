@@ -48,11 +48,9 @@ extern bool fclose_text_file(void);
 extern void init_colormap(void);
 extern void merge_colormap(void);
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 #undef exit
-# ifndef WIN32
 extern void exit(int);
-# endif
 #endif
 
 /*tile_t.h*/

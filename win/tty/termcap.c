@@ -11,11 +11,7 @@
 #include "tcap.h"
 
 
-#ifdef MICROPORT_286_BUG
-#define Tgetstr(key) (tgetstr(key,tbuf))
-#else
 #define Tgetstr(key) (tgetstr(key,&tbufptr))
-#endif /* MICROPORT_286_BUG **/
 
 static char *s_atr2str(int);
 static char *e_atr2str(int);
@@ -179,13 +175,6 @@ void tty_startup(int *wid, int *hgt) {
 		error("Can't get TERM.");
 #else
 	{
-#  ifdef MICRO
-		get_scr_size();
-#   ifdef CLIPPING
-		if(CO < COLNO || LI < ROWNO+3)
-			setclipped();
-#   endif
-#  endif
 		HO = "\033[H";
 /*		nh_CD = "\033[J"; */
 		CE = "\033[K";		/* the ANSI termcap */
@@ -197,11 +186,7 @@ void tty_startup(int *wid, int *hgt) {
 		UP = "\033[A";
 		nh_ND = "\033[C";
 		XD = "\033[B";
-#  ifdef MICRO	/* backspaces are non-destructive */
-		BC = "\b";
-#  else
 		BC = "\033[D";
-#  endif
 		nh_HI = SO = "\033[1m";
 		allow_bgcolor = 1;
 		nh_US = "\033[4m";
@@ -210,10 +195,8 @@ void tty_startup(int *wid, int *hgt) {
 		/* strictly, SE should be 2, and nh_UE should be 24,
 		   but we can't trust all ANSI emulators to be
 		   that complete.  -3. */
-#  ifndef MICRO
 		AS = "\016";
 		AE = "\017";
-#  endif
 		TE = VS = VE = nullstr;
 		for (i = 0; i < CLR_MAX / 2; i++)
 		    if (i != CLR_BLACK) {
@@ -221,10 +204,6 @@ void tty_startup(int *wid, int *hgt) {
 			sprintf(hilites[i|BRIGHT], "\033[1;3%dm", i);
 #   ifndef VIDEOSHADES
 			if (i != CLR_GRAY)
-#    ifdef MICRO
-			    if (i == CLR_BLUE) hilites[CLR_BLUE] = hilites[CLR_BLUE|BRIGHT];
-			    else
-#    endif
 #   endif
 			    {
 				hilites[i] = alloc(sizeof("\033[0;3%dm"));
@@ -279,15 +258,8 @@ void tty_startup(int *wid, int *hgt) {
 	 * the kernel has values for either we should use them rather than
 	 * the values from TERMCAP ...
 	 */
-# ifndef MICRO
 	if (!CO) CO = tgetnum("co");
 	if (!LI) LI = tgetnum("li");
-# else
-		CO = tgetnum("co");
-		LI = tgetnum("li");
-		if (!LI || !CO)			/* if we don't override it */
-			get_scr_size();
-# endif
 # ifdef CLIPPING
 	if(CO < COLNO || LI < ROWNO+3)
 		setclipped();
@@ -544,11 +516,9 @@ void graph_off(void) {
 	if (AE) xputs(AE);
 }
 
-#if !defined(MICRO)
 static const short tmspc10[] = {		/* from termcap */
 	0, 2000, 1333, 909, 743, 666, 500, 333, 166, 83, 55, 41, 20, 10, 5
 };
-#endif
 
 /* delay 50 ms */
 void tty_delay_output(void) {
@@ -556,9 +526,6 @@ void tty_delay_output(void) {
 		return;
 	}
 
-#if defined(MICRO)
-	int i;
-#endif
 #ifdef TIMED_DELAY
 	if (flags.nap) {
 		fflush(stdout);
@@ -566,13 +533,6 @@ void tty_delay_output(void) {
 		return;
 	}
 #endif
-#if defined(MICRO)
-	/* simulate the delay with "cursor here" */
-	for (i = 0; i < 3; i++) {
-		cmov(ttyDisplay->curx, ttyDisplay->cury);
-		fflush(stdout);
-	}
-#else /* MICRO */
 	/* BUG: if the padding character is visible, as it is on the 5620
 	   then this looks terrible. */
 	if(flags.null) {
@@ -593,7 +553,6 @@ void tty_delay_output(void) {
 			i -= cmlen*tmspc10[ospeed];
 		}
 	}
-#endif /* MICRO */
 }
 
 /* free after Robert Viduya */
@@ -727,11 +686,7 @@ static void analyze_seq (char *str, int *fg, int *bg) {
 	int c, code;
 	int len;
 
-#   ifdef MICRO
-	*fg = CLR_GRAY; *bg = CLR_BLACK;
-#   else
 	*fg = *bg = NO_COLOR;
-#   endif
 
 	c = (str[0] == '\233') ? 1 : 2;	 /* index of char beyond esc prefix */
 	len = strlen(str) - 1;		 /* length excluding attrib suffix */
@@ -742,11 +697,7 @@ static void analyze_seq (char *str, int *fg, int *bg) {
 	while (c < len) {
 	    if ((code = atoi(&str[c])) == 0) { /* reset */
 		/* this also catches errors */
-#   ifdef MICRO
-		*fg = CLR_GRAY; *bg = CLR_BLACK;
-#   else
 		*fg = *bg = NO_COLOR;
-#   endif
 	    } else if (code == 1) { /* bold */
 		*fg |= BRIGHT;
 #   if 0
@@ -792,9 +743,6 @@ static void init_hilite(void) {
 	for (c = 0; c < SIZE(hilites); c++)
 	    /* avoid invisibility */
 	    if ((backg & ~BRIGHT) != c) {
-#   if defined(MICRO) && !defined(VIDEOSHADES)
-		if (c == CLR_BLUE) continue;
-#   endif
 		if (c == foreg)
 		    hilites[c] = NULL;
 		else if (c != hi_foreg || backg != hi_backg) {
@@ -807,11 +755,6 @@ static void init_hilite(void) {
 		    strcat(hilites[c], "m");
 		}
 	    }
-
-#   if defined(MICRO) && !defined(VIDEOSHADES)
-	/* brighten low-visibility colors */
-	hilites[CLR_BLUE] = hilites[CLR_BLUE|BRIGHT];
-#   endif
 }
 # endif /* UNIX */
 

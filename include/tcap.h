@@ -7,9 +7,7 @@
 #ifndef TCAP_H
 #define TCAP_H
 
-#ifndef MICRO
-# define TERMLIB	/* include termcap code */
-#endif
+#define TERMLIB	/* include termcap code */
 
 #ifndef DECL_H
 extern struct tc_gbl_data {   /* also declared in decl.h; defined in decl.c */

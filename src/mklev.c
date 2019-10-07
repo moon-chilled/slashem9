@@ -483,16 +483,11 @@ static void clear_level_structures(void) {
 	    lev = &levl[x][0];
 	    for(y=0; y<ROWNO; y++) {
 		*lev++ = zerorm;
-#ifdef MICROPORT_BUG
-		level.objects[x][y] = NULL;
-		level.monsters[x][y] = NULL;
-#endif
 	    }
 	}
-#ifndef MICROPORT_BUG
-	memset((void *)level.objects, 0, sizeof(level.objects));
-	memset((void *)level.monsters, 0, sizeof(level.monsters));
-#endif
+	memset(level.objects, 0, sizeof(level.objects));
+	memset(level.monsters, 0, sizeof(level.monsters));
+
 	level.objlist = NULL;
 	level.buriedobjlist = NULL;
 	level.monlist = NULL;

@@ -495,9 +495,6 @@ void unpoly_obj(void * arg, long timeout) {
  */
 /*ARGSUSED*/
 static void cleanup_unpoly(void * arg, long timeout) {
-#if defined(MAC_MPW) || defined(__MWERKS__)
-# pragma unused(timeout)
-#endif
     struct obj *obj = (struct obj *)arg;
     obj->oldtyp = STRANGE_OBJECT;
     if (wizard && obj->where == OBJ_INVENT)

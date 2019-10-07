@@ -47,7 +47,7 @@ static void list_genocided(char,boolean);
 #endif /* DUMP_LOG */
 static boolean should_query_disclose_option(int,char *);
 
-#if defined(MICRO) || defined(WIN32)
+#ifdef WIN32
 extern void nethack_exit(int);
 #else
 #define nethack_exit exit
@@ -317,24 +317,23 @@ void panic (const char *str, ...) {
 		  !program_state.something_worth_saving ?
 		  "Program initialization has failed." :
 		  "Suddenly, the dungeon collapses.");
-#ifndef MICRO
-# if defined(NOTIFY_NETHACK_BUGS)
+#if defined(NOTIFY_NETHACK_BUGS)
 	if (!wizard)
 	    raw_printf("Report the following error to \"%s\".",
 			"slashem-discuss@lists.sourceforge.net");
 	else if (program_state.something_worth_saving)
 	    raw_print("\nError save file being written.\n");
-# else
+#else
 	if (!wizard)
 	    raw_printf("Report error to \"%s\"%s.", WIZARD,
 			!program_state.something_worth_saving ? "" :
 			" and it may be possible to rebuild.");
-# endif
+#endif
 	if (program_state.something_worth_saving && !iflags.debug_fuzzer) {
 	    set_error_savefile();
 	    dosave0();
 	}
-#endif
+
 	{
 	    char buf[BUFSZ];
 	    vsprintf(buf, str, the_args);
