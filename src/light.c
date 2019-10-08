@@ -72,7 +72,7 @@ void new_light_source(xchar x, xchar y, int range, int type, void *id) {
     ls->y = y;
     ls->range = range;
     ls->type = type;
-    ls->idptr = id;
+    ls->id.a_void = id;
     if (ls->type != LS_TEMP && x == 0)
 	ls->flags = LSF_FLOATING;
     else
@@ -107,7 +107,7 @@ void del_light_source(int type, anything id) {
 
     for (prev = 0, curr = light_base; curr; prev = curr, curr = curr->next) {
 	if (curr->type != type) continue;
-        if (curr->idptr == ((curr->flags & LSF_NEEDS_FIXUP) ? tmp_id.a_obj : id.a_obj))
+        if (curr->id.a_obj == ((curr->flags & LSF_NEEDS_FIXUP) ? tmp_id.a_obj : id.a_obj))
           {
 	    if (prev)
 		prev->next = curr->next;
@@ -119,7 +119,7 @@ void del_light_source(int type, anything id) {
 	    return;
 	}
     }
-    impossible("del_light_source: not found type=%d, id=0x%p", type, id.a_void);
+    impossible("del_light_source: not found type=%d, id=%p", type, id.a_void);
 }
 
 /* Mark locations that are temporarily lit via mobile light sources. */
@@ -139,11 +139,11 @@ void do_light_sources (char **cs_rows) {
 	 */
 	if (ls->flags & LSF_FLOATING) {
 	    if (ls->type == LS_OBJECT) {
-		if (get_obj_location((struct obj*)ls->idptr, &ls->x, &ls->y,
+		if (get_obj_location(ls->id.a_obj, &ls->x, &ls->y,
 		  CONTAINED_TOO | BURIED_TOO))
 		    ls->flags &= ~LSF_FLOATING;
 	    } else if (ls->type == LS_MONSTER) {
-		if (get_mon_location((struct monst *)ls->idptr, &ls->x, &ls->y,
+		if (get_mon_location(ls->id.a_monst, &ls->x, &ls->y,
 		  CONTAINED_TOO | BURIED_TOO))
 		    ls->flags &= ~LSF_FLOATING;
 	    }
@@ -159,10 +159,10 @@ void do_light_sources (char **cs_rows) {
 	 * vision recalc.
 	 */
 	if (ls->type == LS_OBJECT) {
-	    if (get_obj_location((struct obj*)ls->idptr, &ls->x, &ls->y, 0))
+	    if (get_obj_location(ls->id.a_obj, &ls->x, &ls->y, 0))
 		ls->flags |= LSF_SHOW;
 	} else if (ls->type == LS_MONSTER) {
-	    if (get_mon_location((struct monst*)ls->idptr, &ls->x, &ls->y, 0))
+	    if (get_mon_location(ls->id.a_monst, &ls->x, &ls->y, 0))
 		ls->flags |= LSF_SHOW;
         } else if (ls->type == LS_TEMP) {
             ls->flags |= LSF_SHOW;
@@ -256,16 +256,16 @@ void save_light_sources(int fd, int mode, int range) {
 
     if (release_data(mode)) {
 	for (prev = &light_base; (curr = *prev) != 0; ) {
-	    if (!curr->id) {
+	    if (!curr->id.a_void) {
 		impossible("save_light_sources: no id! [range=%d]", range);
 		is_global = 0;
 	    } else
 	    switch (curr->type) {
 	    case LS_OBJECT:
-		is_global = !obj_is_local((struct obj *)curr->idptr);
+		is_global = !obj_is_local(curr->id.a_obj);
 		break;
 	    case LS_MONSTER:
-		is_global = !mon_is_local((struct monst *)curr->idptr);
+		is_global = !mon_is_local(curr->id.a_monst);
 		break;
 	    case LS_TEMP:
 	    	/* Temp light sources should never be saved, but need to
@@ -319,18 +319,18 @@ void relink_light_sources(boolean ghostly) {
 	if (ls->flags & LSF_NEEDS_FIXUP) {
 	    if (ls->type == LS_OBJECT || ls->type == LS_MONSTER) {
 		if (ghostly) {
-		    if (!lookup_id_mapping((unsigned)ls->id, &nid))
+		    if (!lookup_id_mapping(ls->id.a_uint, &nid))
 			impossible("relink_light_sources: no id mapping");
 		} else
-		    nid = ls->id;
+		    nid = ls->id.a_uint;
 		if (ls->type == LS_OBJECT) {
 		    which = 'o';
-		    ls->idptr = find_oid(nid);
+		    ls->id.a_obj = find_oid(nid);
 		} else {
 		    which = 'm';
-		    ls->idptr = find_mid(nid, FM_EVERYWHERE);
+		    ls->id.a_monst = find_mid(nid, FM_EVERYWHERE);
 		}
-		if (!ls->id)
+		if (!ls->id.a_void)
 		    impossible("relink_light_sources: cant find %c_id %d",
 			       which, nid);
 	    } else
@@ -351,16 +351,16 @@ static int maybe_write_ls(int fd, int range, boolean write_it) {
     light_source *ls;
 
     for (ls = light_base; ls; ls = ls->next) {
-	if (!ls->id) {
+	if (!ls->id.a_void) {
 	    impossible("maybe_write_ls: no id! [range=%d]", range);
 	    continue;
 	}
 	switch (ls->type) {
 	case LS_OBJECT:
-	    is_global = !obj_is_local((struct obj *)ls->idptr);
+	    is_global = !obj_is_local(ls->id.a_obj);
 	    break;
 	case LS_MONSTER:
-	    is_global = !mon_is_local((struct monst *)ls->idptr);
+	    is_global = !mon_is_local(ls->id.a_monst);
 	    break;
 		case LS_TEMP:
 		    continue;
@@ -382,7 +382,7 @@ static int maybe_write_ls(int fd, int range, boolean write_it) {
 
 /* Write a light source structure to disk. */
 static void write_ls(int fd, light_source *ls) {
-    void *arg_save;
+    anything arg_save;
     struct obj *otmp;
     struct monst *mtmp;
 
@@ -391,17 +391,17 @@ static void write_ls(int fd, light_source *ls) {
 	    bwrite(fd, ls, sizeof(light_source));
 	else {
 	    /* replace object pointer with id for write, then put back */
-	    arg_save = ls->idptr;
+	    arg_save = ls->id;
 	    if (ls->type == LS_OBJECT) {
-		otmp = (struct obj *)ls->idptr;
-		ls->id = otmp->o_id;
+		otmp = ls->id.a_obj;
+		ls->id.a_int = otmp->o_id;
 #ifdef DEBUG
-		if (find_oid((unsigned)ls->id) != otmp)
-		    panic("write_ls: can't find obj #%u!", (unsigned)ls->id);
+		if (find_oid(ls->id.a_uint) != otmp)
+		    panic("write_ls: can't find obj #%u!", ls->id.a_uint);
 #endif
 	    } else { /* ls->type == LS_MONSTER */
-		mtmp = (struct monst *)ls->idptr;
-		ls->id = mtmp->m_id;
+		mtmp = ls->id.a_monst;
+		ls->id.a_int = mtmp->m_id;
 #ifdef DEBUG
 		if (find_mid(ls->id, FM_EVERYWHERE) != mtmp)
 		    panic("write_ls: can't find mon #%u!", ls->id);
@@ -409,7 +409,7 @@ static void write_ls(int fd, light_source *ls) {
 	    }
 	    ls->flags |= LSF_NEEDS_FIXUP;
 	    bwrite(fd, ls, sizeof(light_source));
-	    ls->idptr = arg_save;
+	    ls->id = arg_save;
 	    ls->flags &= ~LSF_NEEDS_FIXUP;
 	}
     } else {
@@ -422,8 +422,8 @@ void obj_move_light_source(struct obj *src, struct obj *dest) {
     light_source *ls;
 
     for (ls = light_base; ls; ls = ls->next)
-	if (ls->type == LS_OBJECT && ls->idptr == src)
-	    ls->idptr = dest;
+	if (ls->type == LS_OBJECT && ls->id.a_obj == src)
+	    ls->id.a_obj = dest;
     src->lamplit = 0;
     dest->lamplit = 1;
 }
@@ -448,7 +448,7 @@ void snuff_light_source(int x, int y) {
 	updated with the last vision update?  [Is that recent enough???]
 	*/
 	if (ls->type == LS_OBJECT && ls->x == x && ls->y == y) {
-	    obj = (struct obj *) ls->idptr;
+	    obj = ls->id.a_obj;
 	    if (obj_is_burning(obj)) {
 		/* The only way to snuff Sunsword is to unwield it.  Darkness
 		 * scrolls won't affect it.  (If we got here because it was
@@ -488,7 +488,7 @@ void obj_split_light_source(struct obj *src, struct obj *dest) {
     light_source *ls, *new_ls;
 
     for (ls = light_base; ls; ls = ls->next)
-	if (ls->type == LS_OBJECT && ls->idptr == src) {
+	if (ls->type == LS_OBJECT && ls->id.a_obj == src) {
 	    /*
 	     * Insert the new source at beginning of list.  This will
 	     * never interfere us walking down the list - we are already
@@ -502,7 +502,7 @@ void obj_split_light_source(struct obj *src, struct obj *dest) {
 		new_ls->range = candle_light_range(dest);
 		vision_full_recalc = 1;	/* in case range changed */
 	    }
-	    new_ls->idptr = dest;
+	    new_ls->id.a_obj = dest;
 	    new_ls->next = light_base;
 	    light_base = new_ls;
 	    dest->lamplit = 1;		/* now an active light source */
@@ -518,7 +518,7 @@ void obj_merge_light_sources(struct obj *src, struct obj *dest) {
     if (src != dest) end_burn(src, true);		/* extinguish candles */
 
     for (ls = light_base; ls; ls = ls->next)
-	if (ls->type == LS_OBJECT && ls->idptr == dest) {
+	if (ls->type == LS_OBJECT && ls->id.a_obj == dest) {
 	    ls->range = candle_light_range(dest);
 	    vision_full_recalc = 1;	/* in case range changed */
 	    break;
@@ -585,11 +585,11 @@ int wiz_light_sources(void) {
 		ls->x, ls->y, ls->range, ls->flags,
 		(ls->type == LS_OBJECT ? "obj" :
 		 ls->type == LS_MONSTER ?
-		    (mon_is_local((struct monst *)ls->idptr) ? "mon" :
-		     ((struct monst *)ls->idptr == &youmonst) ? "you" :
+		    (mon_is_local(ls->id.a_monst) ? "mon" :
+		     (ls->id.a_monst == &youmonst) ? "you" :
 		     "<m>") :		/* migrating monster */
 		 "???"),
-		fmt_ptr(ls->idptr, arg_address));
+		fmt_ptr(ls->id.a_void, arg_address));
 	    putstr(win, 0, buf);
 	}
     } else
