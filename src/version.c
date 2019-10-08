@@ -3,36 +3,36 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "date.h"
 /*
  * All the references to the contents of patchlevel.h have been moved
  * into makedefs....
  */
 #include "patchlevel.h"
 
-/* #define BETA_INFO "" */	/* "[ beta n]" */
-
-/* fill buffer with short version (so caller can avoid including date.h) */
-char *version_string(char *buf) {
-	return strcpy(buf, VERSION_STRING);
+char *version_string_tmp(void) {
+	static char buf[128];
+	sprintf(buf, "%d.%d.%dE%dF%d", VERSION_MAJOR, VERSION_MINOR, PATCHLEVEL, EDITLEVEL, FIXLEVEL);
+	return buf;
 }
 
-/* fill and return the given buffer with the long nethack version string */
-char *getversionstring(char *buf) {
-	strcpy(buf, VERSION_ID);
-#if defined(BETA) && defined(BETA_INFO)
-	sprintf(eos(buf), " %s", BETA_INFO);
+char *full_version_string_tmp(void) {
+	static char buf[BUFSZ];
+
+	sprintf(buf, "%s %s%s Version %s.", PORT_ID, DEF_GAME_NAME,
+#ifdef ALPHA
+			" Alpha",
+#elif defined(BETA)
+			" Beta",
+#else
+			"",
 #endif
-#if defined(RUNTIME_PORT_ID)
-	append_port_id(buf);
-#endif
+			version_string_tmp());
+
 	return buf;
 }
 
 int doversion(void) {
-	char buf[BUFSZ];
-
-	pline("%s", getversionstring(buf));
+	plines(full_version_string_tmp());
 	return 0;
 }
 
@@ -48,15 +48,7 @@ boolean check_version(struct version_info *version_data, const char *filename, b
 	    if (complain)
 		pline("Version mismatch for file \"%s\".", filename);
 	    return false;
-	} else if (
-#ifndef IGNORED_FEATURES
-		   version_data->feature_set != VERSION_FEATURES ||
-#else
-		   (version_data->feature_set & ~IGNORED_FEATURES) !=
-			  (VERSION_FEATURES & ~IGNORED_FEATURES) ||
-#endif
-		   version_data->entity_count != VERSION_SANITY1 ||
-		   version_data->struct_sizes != VERSION_SANITY2) {
+	} else if (version_data->struct_sizes != VERSION_SANITY) {
 	    if (complain)
 		pline("Configuration incompatibility for file \"%s\".",
 		      filename);
@@ -90,8 +82,7 @@ boolean uptodate(int fd, const char *name) {
 
 void store_version(int fd) {
 	const static struct version_info version_data = {
-			VERSION_NUMBER, VERSION_FEATURES,
-			VERSION_SANITY1, VERSION_SANITY2
+			VERSION_NUMBER, VERSION_SANITY
 	};
 
 	bufoff(fd);

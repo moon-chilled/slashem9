@@ -172,7 +172,7 @@ typedef unsigned long ulong;
 #endif
 
 void *alloc(size_t);		/* alloc.c */
-#define _newtype(typ, amnt) alloc(sizeof(typ) * amnt)
+#define _newtype(T, amnt) ((T*)alloc(sizeof(T) * (amnt)))
 //#define _new_defvar(type, varname, amnt) type *varname = _new(sizeof(type), amnt)
 //#define _new_setvar(varname, amnt) varname = _new(sizeof(*varname), amnt)
 
@@ -202,8 +202,6 @@ void *alloc(size_t);		/* alloc.c */
    that utility programs which include config.h but not hack.h can see it. */
 struct version_info {
 	unsigned long	incarnation;	/* actual version number */
-	unsigned long	feature_set;	/* bitmask of config settings */
-	unsigned long	entity_count;	/* # of monsters and objects */
 	unsigned long	struct_sizes;	/* size of key structs */
 };
 

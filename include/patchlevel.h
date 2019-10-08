@@ -17,17 +17,23 @@
 #define EDITLEVEL	0
 #define FIXLEVEL        0
 
-#define COPYRIGHT_BANNER_A \
-"This is SuperLotsoAddedStuffHack-Extended Magic-Next 2017-2019"
+#define COPYRIGHT_BANNER_A "This is SuperLotsoAddedStuffHack-Extended Magic-Next 2017-2019"
+#define COPYRIGHT_BANNER_B "SuperLotsoAddedStuffHack-Extended Magic 1997-2007"
+#define COPYRIGHT_BANNER_C "NetHack, Copyright 1985-2003 Stichting Mathematisch Centrum, M. Stephenson."
+#define COPYRIGHT_BANNER_D "See license for details.  Bug reports to Moonchild."
 
-#define COPYRIGHT_BANNER_B \
-"SuperLotsoAddedStuffHack-Extended Magic 1997-2007"
 
-#define COPYRIGHT_BANNER_C \
-"NetHack, Copyright 1985-2003 Stichting Mathematisch Centrum, M. Stephenson."
+#define VERSION_NUMBER \
+	 ((VERSION_MAJOR << 24) \
+	| (VERSION_MINOR << 16) \
+	| (PATCHLEVEL    << 8) \
+	| EDITLEVEL)
 
-#define COPYRIGHT_BANNER_D \
-"See license for details. Bug reports to slashem-discuss@lists.sourceforge.net"
+#define VERSION_SANITY \
+	  ((sizeof(struct flag)  << 24) \
+	 | (sizeof(struct obj)   << 17) \
+	 | (sizeof(struct monst) << 10) \
+	 | (sizeof(struct you)))
 
 #if 0
 /*

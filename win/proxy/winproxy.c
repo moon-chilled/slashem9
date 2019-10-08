@@ -11,7 +11,6 @@
 #include <nhproxy/nhproxy.h>
 #include "hack.h"
 #include "patchlevel.h"
-#include "date.h"
 #include "winproxy.h"
 #ifdef WIN32
 #include "win32api.h"
@@ -432,7 +431,7 @@ win_proxy_init()
     set_glyph_mapping();
     nhproxy_serv_set_callbacks(&win_proxy_callbacks);
     nhproxy_serv_set_extensions(win_proxy_extents);
-    if (!nhproxy_serv_accept(DEF_GAME_NAME, VERSION_STRING))
+    if (!nhproxy_serv_accept(DEF_GAME_NAME, version_string_tmp()))
 	panic("Proxy: Failed to initialize window interface");
     windowtype = nhproxy_serv_get_windowtype();
     if (windowtype) {

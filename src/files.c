@@ -1678,14 +1678,13 @@ void paniclog(const char *type,	/* panic, impossible, trickery */
 
 #ifdef PANICLOG
 	FILE *lfile;
-	char buf[BUFSZ];
 
 	if (!program_state.in_paniclog) {
 		program_state.in_paniclog = 1;
 		lfile = fopen_datafile(PANICLOG, "a", TROUBLEPREFIX);
 		if (lfile) {
 		    fprintf(lfile, "%s %08ld: %s %s\n",
-				   version_string(buf), yyyymmdd((time_t)0L),
+				   version_string_tmp(), yyyymmdd((time_t)0L),
 				   type, reason);
 		    fclose(lfile);
 		}

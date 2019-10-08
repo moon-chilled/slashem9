@@ -8,23 +8,10 @@
  * This file contains the Dungeon Compiler code
  */
 
-/* In case we're using bison in AIX.  This definition must be
- * placed before any other C-language construct in the file
- * excluding comments and preprocessor directives (thanks IBM
- * for this wonderful feature...).
- *
- * Note: some cpps barf on this 'undefined control' (#pragma).
- * Addition of the leading space seems to prevent barfage for now,
- * and AIX will still see the directive in its non-standard locale.
- */
-
-#ifdef _AIX
- #pragma alloca		/* keep leading space! */
-#endif
-
 #include "config.h"
-#include "date.h"
 #include "dgn_file.h"
+#include "hack.h"
+#include "patchlevel.h"
 
 void yyerror(const char *);
 void yywarning(const char *);
@@ -653,14 +640,11 @@ check_branch()
  *	  ...
  */
 
-void
-output_dgn()
-{
+void output_dgn(void) {
 	int	nd, cl = 0, nl = 0,
 		    cb = 0, nb = 0;
         static struct version_info version_data = {
-                        VERSION_NUMBER, VERSION_FEATURES,
-                        VERSION_SANITY1, VERSION_SANITY2
+                        VERSION_NUMBER, VERSION_SANITY
         };
 
 	if(++n_dgns <= 0) {

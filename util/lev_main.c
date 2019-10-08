@@ -10,8 +10,8 @@
 #define LEVEL_COMPILER	1	/* Enable definition of internal structures */
 
 #include "hack.h"
-#include "date.h"
 #include "sp_lev.h"
+#include "patchlevel.h"
 #ifdef STRICT_REF_DEF
 #include "tcap.h"
 #endif
@@ -74,28 +74,28 @@ int get_room_type(char *);
 int get_trap_type(char *);
 int get_monster_id(char *,char);
 int get_object_id(char *,char);
-boolean check_monster_char(char);
-boolean check_object_char(char);
+bool check_monster_char(char);
+bool check_object_char(char);
 char what_map_char(char);
 void scan_map(char *);
 void wallify_map(void);
-boolean check_subrooms(void);
+bool check_subrooms(void);
 void check_coord(int,int,const char *);
 void store_part(void);
 void store_room(void);
-boolean write_level_file(char *,splev *,specialmaze *);
+bool write_level_file(char *,splev *,specialmaze *);
 void free_rooms(splev *);
 
 extern void monst_init(void);
 extern void objects_init(void);
 extern void decl_init(void);
 
-static boolean write_common_data(int,int,lev_init *,long);
-static boolean write_monsters(int,char *,monster ***);
-static boolean write_objects(int,char *,object ***);
-static boolean write_engravings(int,char *,engraving ***);
-static boolean write_maze(int,specialmaze *);
-static boolean write_rooms(int,splev *);
+static bool write_common_data(int,int,lev_init *,long);
+static bool write_monsters(int,char *,monster ***);
+static bool write_objects(int,char *,object ***);
+static bool write_engravings(int,char *,engraving ***);
+static bool write_maze(int,specialmaze *);
+static bool write_rooms(int,splev *);
 static void init_obj_classes(void);
 
 static struct {
@@ -274,10 +274,7 @@ int main(int argc, char **argv) {
  * capitalized, to allow printing of the line containing the start of
  * the current declaration, instead of the beginning of the next declaration.
  */
-void
-yyerror(s)
-const char *s;
-{
+void yyerror(const char *s) {
 	fprintf(stderr,
 #ifndef MAC_MPW
 	  "%s: line %d : %s\n",
@@ -294,10 +291,7 @@ const char *s;
 /*
  * Just display a warning (that is : a non fatal error)
  */
-void
-yywarning(s)
-const char *s;
-{
+void yywarning(const char *s) {
 	fprintf(stderr,
 #ifndef MAC_MPW
 	  "%s: line %d : WARNING : %s\n",
@@ -310,35 +304,27 @@ const char *s;
 /*
  * Stub needed for lex interface.
  */
-int
-yywrap()
-{
+int yywrap(void) {
 	return 1;
 }
 
 /*
  * Find the index of an artifact in the table, knowing its name.
  */
-int
-get_artifact_id(s)
-char *s;
-{
+int get_artifact_id(char *s) {
 	int i;
 
 	SpinCursor(3);
 	for(i=0; artifact_names[i]; i++)
 	    if (!strcmp(s, artifact_names[i]))
-		return (int) i;
+		return i;
 	return ERR;
 }
 
 /*
  * Find the type of floor, knowing its char representation.
  */
-int
-get_floor_type(c)
-char c;
-{
+int get_floor_type(char c) {
 	int val;
 
 	SpinCursor(3);
@@ -353,10 +339,7 @@ char c;
 /*
  * Find the type of a room in the table, knowing its name.
  */
-int
-get_room_type(s)
-char *s;
-{
+int get_room_type(char *s) {
 	int i;
 
 	SpinCursor(3);
@@ -369,10 +352,7 @@ char *s;
 /*
  * Find the type of a trap in the table, knowing its name.
  */
-int
-get_trap_type(s)
-char *s;
-{
+int get_trap_type(char *s) {
 	int i;
 
 	SpinCursor(3);
@@ -385,11 +365,7 @@ char *s;
 /*
  * Find the index of a monster in the table, knowing its name.
  */
-int
-get_monster_id(s, c)
-char *s;
-char c;
-{
+int get_monster_id(char *s, char c) {
 	int i, class;
 
 	SpinCursor(3);
@@ -405,11 +381,7 @@ char c;
 /*
  * Find the index of an object in the table, knowing its name.
  */
-int
-get_object_id(s, c)
-char *s;
-char c;		/* class */
-{
+int get_object_id(char *s, char c) {
 	int i, class;
 	const char *objname;
 
@@ -426,9 +398,7 @@ char c;		/* class */
 	return ERR;
 }
 
-static void
-init_obj_classes()
-{
+static void init_obj_classes(void) {
 	int i, class, prev_class;
 
 	prev_class = -1;
@@ -444,30 +414,21 @@ init_obj_classes()
 /*
  * Is the character 'c' a valid monster class ?
  */
-boolean
-check_monster_char(c)
-char c;
-{
+bool check_monster_char(char c) {
 	return def_char_to_monclass(c) != MAXMCLASSES;
 }
 
 /*
  * Is the character 'c' a valid object class ?
  */
-boolean
-check_object_char(c)
-char c;
-{
+bool check_object_char(char c) {
 	return def_char_to_objclass(c) != MAXOCLASSES;
 }
 
 /*
  * Convert .des map letter into floor type.
  */
-char
-what_map_char(c)
-char c;
-{
+char what_map_char(char c) {
 	SpinCursor(3);
 	switch(c) {
 		  case ' '  : return STONE;
@@ -500,10 +461,7 @@ char c;
  * Yep! LEX gives us the map in a raw mode.
  * Just analyze it here.
  */
-void
-scan_map(map)
-char *map;
-{
+void scan_map(char *map) {
 	int i, len;
 	char *s1, *s2;
 	int max_len = 0;
@@ -580,9 +538,7 @@ char *map;
  */
 #define Map_point(x,y) *(tmppart[npart]->map[y] + x)
 
-void
-wallify_map()
-{
+void wallify_map(void) {
 	unsigned int x, y, xx, yy, lo_xx, lo_yy, hi_xx, hi_yy;
 
 	for (y = 0; y <= max_y_map; y++) {
@@ -608,11 +564,9 @@ wallify_map()
 /*
  * We need to check the subrooms apartenance to an existing room.
  */
-boolean
-check_subrooms()
-{
+bool check_subrooms(void) {
 	unsigned i, j, n_subrooms;
-	boolean	found, ok = true;
+	bool found, ok = true;
 	char	*last_parent, msg[256];
 
 	for (i = 0; i < nrooms; i++)
@@ -669,26 +623,20 @@ check_subrooms()
  * Check that coordinates (x,y) are roomlike locations.
  * Print warning "str" if they aren't.
  */
-void
-check_coord(x, y, str)
-int x, y;
-const char *str;
-{
-    char ebuf[60];
+void check_coord(int x, int y, const char *str) {
+	char ebuf[60];
 
-    if (x >= 0 && y >= 0 && x <= (int)max_x_map && y <= (int)max_y_map &&
-	(IS_ROCK(tmpmap[y][x]) || IS_DOOR(tmpmap[y][x]))) {
-	sprintf(ebuf, "%s placed in wall at (%02d,%02d)?!", str, x, y);
-	yywarning(ebuf);
-    }
+	if (x >= 0 && y >= 0 && x <= (int)max_x_map && y <= (int)max_y_map &&
+			(IS_ROCK(tmpmap[y][x]) || IS_DOOR(tmpmap[y][x]))) {
+		sprintf(ebuf, "%s placed in wall at (%02d,%02d)?!", str, x, y);
+		yywarning(ebuf);
+	}
 }
 
 /*
  * Here we want to store the maze part we just got.
  */
-void
-store_part()
-{
+void store_part(void) {
 	unsigned i;
 
 	/* Ok, We got the whole part, now we store it. */
@@ -855,9 +803,7 @@ store_part()
 /*
  * Here we want to store the room part we just got.
  */
-void
-store_room()
-{
+void store_room(void) {
 	unsigned i;
 
 	/* Ok, We got the whole room, now we store it. */
@@ -966,9 +912,7 @@ store_room()
 	nrooms++;
 }
 
-void
-store_place_list(int npart, int nlist, int nloc, const struct coord *plist)
-{
+void store_place_list(int npart, int nlist, int nloc, const struct coord *plist) {
 	int i;
 	char msg[256];
 	if (!tmppart[npart]->nloc) {
@@ -999,17 +943,11 @@ store_place_list(int npart, int nlist, int nloc, const struct coord *plist)
 /*
  * Output some info common to all special levels.
  */
-static boolean
-write_common_data(fd, typ, init, flgs)
-int fd, typ;
-lev_init *init;
-long flgs;
-{
+static bool write_common_data(int fd, int typ, lev_init *init, long flgs) {
 	char c;
 	uchar len;
 	static struct version_info version_data = {
-			VERSION_NUMBER, VERSION_FEATURES,
-			VERSION_SANITY1, VERSION_SANITY2
+			VERSION_NUMBER, VERSION_SANITY
 	};
 
 	Write(fd, &version_data, sizeof version_data);
@@ -1028,12 +966,7 @@ long flgs;
 /*
  * Output monster info, which needs string fixups, then release memory.
  */
-static boolean
-write_monsters(fd, nmonster_p, monsters_p)
-int fd;
-char *nmonster_p;
-monster ***monsters_p;
-{
+static bool write_monsters(int fd, char *nmonster_p, monster ***monsters_p) {
 	monster *m;
 	char *name, *appr;
 	int j, n = (int)*nmonster_p;
@@ -1068,15 +1001,10 @@ monster ***monsters_p;
 /*
  * Output object info, which needs string fixup, then release memory.
  */
-static boolean
-write_objects(fd, nobject_p, objects_p)
-int fd;
-char *nobject_p;
-object ***objects_p;
-{
+static bool write_objects(int fd, char *nobject_p, object ***objects_p) {
 	object *o;
 	char *name;
-	int j, n = (int)*nobject_p;
+	int j, n = *nobject_p;
 
 	Write(fd, nobject_p, sizeof *nobject_p);
 	for (j = 0; j < n; j++) {
@@ -1102,12 +1030,7 @@ object ***objects_p;
 /*
  * Output engraving info, which needs string fixup, then release memory.
  */
-static boolean
-write_engravings(fd, nengraving_p, engravings_p)
-int fd;
-char *nengraving_p;
-engraving ***engravings_p;
-{
+static bool write_engravings(int fd, char *nengraving_p, engraving ***engravings_p) {
 	engraving *e;
 	char *engr;
 	int j, n = (int)*nengraving_p;
@@ -1135,12 +1058,7 @@ engraving ***engravings_p;
  * Open and write maze or rooms file, based on which pointer is non-null.
  * Return true on success, false on failure.
  */
-boolean
-write_level_file(filename, room_level, maze_level)
-char *filename;
-splev *room_level;
-specialmaze *maze_level;
-{
+bool write_level_file(char *filename, splev *room_level, specialmaze *maze_level) {
 	int fout;
 	char lbuf[60];
 
@@ -1171,11 +1089,7 @@ specialmaze *maze_level;
  * Here we write the structure of the maze in the specified file (fd).
  * Also, we have to free the memory allocated via alloc().
  */
-static boolean
-write_maze(fd, maze)
-int fd;
-specialmaze *maze;
-{
+static bool write_maze(int fd, specialmaze *maze) {
 	short i,j;
 	mazepart *pt;
 
@@ -1404,11 +1318,7 @@ specialmaze *maze;
 /*
  * Here we write the structure of the room level in the specified file (fd).
  */
-static boolean
-write_rooms(fd, lev)
-int fd;
-splev *lev;
-{
+static bool write_rooms(int fd, splev *lev) {
 	short i,j, size;
 	room *pt;
 
@@ -1518,10 +1428,7 @@ splev *lev;
  * levels have the fields freed as they're written; monsters, objects, and
  * engravings are freed as written for both styles, so not handled here.
  */
-void
-free_rooms(lev)
-splev *lev;
-{
+void free_rooms(splev *lev) {
 	room *r;
 	int j, n = lev->nroom;
 

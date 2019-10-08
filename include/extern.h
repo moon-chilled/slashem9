@@ -2125,8 +2125,8 @@ extern boolean gd_sound(void);
 
 /* ### version.c ### */
 
-extern char *version_string(char *);
-extern char *getversionstring(char *);
+extern char *version_string_tmp(void);
+extern char *full_version_string_tmp();
 extern int doversion(void);
 extern boolean check_version(struct version_info *, const char *,boolean);
 extern unsigned long get_feature_notice_ver(char *);

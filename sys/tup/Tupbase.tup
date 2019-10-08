@@ -1,7 +1,7 @@
 include Tupprefs.tup
 
 : util/makedefs.c util/panic.c src/alloc.c src/objects.c src/monst.c |> $(HOST_CC) $(CFLAGS) -DDLB %f -o %o |> makedefs$(HOST_EXEEXT)
-: makedefs$(HOST_EXEEXT) |> ./makedefs$(HOST_EXEEXT) |> include/onames.h include/date.h include/pm.h dat/data dat/dungeon.pdf dat/quest.dat dat/oracles
+: makedefs$(HOST_EXEEXT) |> ./makedefs$(HOST_EXEEXT) |> include/onames.h include/pm.h dat/data dat/dungeon.pdf dat/quest.dat dat/oracles
 
 : util/dgn_comp.y |> bison -d %f -o $(BUILDDIR)/dgn_yacc.c; mv $(BUILDDIR)/dgn_yacc.h include/dgn_comp.h; mv $(BUILDDIR)/dgn_yacc.c src/ |> src/dgn_yacc.c include/dgn_comp.h
 : util/dgn_comp.l |> flex -o %o %f |> src/dgn_lex.c

@@ -119,21 +119,7 @@ void curses_init_nhwindows(int *argcp, char **argv) {
 # endif/* __APPLE__ */
 #endif /* NCURSES_VERSION */
 #ifdef PDCURSES
-# ifdef DEF_GAME_NAME
-#  ifdef VERSION_STRING
-    sprintf(window_title, "%s %s", DEF_GAME_NAME, VERSION_STRING);
-#  else
-    sprintf(window_title, "%s", DEF_GAME_NAME);
-#  endif
-       /* VERSION_STRING */
-# else
-#  ifdef VERSION_STRING
-    sprintf(window_title, "%s %s", "NetHack", VERSION_STRING);
-#  else
-    sprintf(window_title, "%s", "NetHack");
-#  endif
-       /* VERSION_STRING */
-# endif/* DEF_GAME_NAME */
+    sprintf(window_title, "%s %s", DEF_GAME_NAME, version_string_tmp());
     PDC_set_title(window_title);
     PDC_set_blink(true);        /* Only if the user asks for it! */
     timeout(1);
