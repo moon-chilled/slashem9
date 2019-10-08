@@ -1,7 +1,7 @@
 include Tupprefs.tup
 
 : util/makedefs.c util/panic.c src/alloc.c src/objects.c src/monst.c |> $(HOST_CC) $(CFLAGS) -DDLB %f -o %o |> makedefs$(HOST_EXEEXT)
-: makedefs$(HOST_EXEEXT) |> ./makedefs$(HOST_EXEEXT) |> include/onames.h include/pm.h dat/data dat/dungeon.pdf dat/quest.dat
+: makedefs$(HOST_EXEEXT) |> ./makedefs$(HOST_EXEEXT) |> include/onames.h include/pm.h dat/data dat/quest.dat
 
 : util/dgn_comp.y |> bison -d %f -o $(BUILDDIR)/dgn_yacc.c; mv $(BUILDDIR)/dgn_yacc.h include/dgn_comp.h; mv $(BUILDDIR)/dgn_yacc.c src/ |> src/dgn_yacc.c include/dgn_comp.h
 : util/dgn_comp.l |> flex -o %o %f |> src/dgn_lex.c
@@ -21,7 +21,7 @@ include Tupprefs.tup
 : src/lev_yacc.c src/lev_lex.c util/lev_main.c src/alloc.c util/panic.c src/drawing.c src/decl.c src/objects.c src/monst.c | include/*.h |> $(HOST_CC) $(CFLAGS) %f -o %o |> lev_comp$(HOST_EXEEXT)
 : src/dgn_yacc.c src/dgn_lex.c util/dgn_main.c src/alloc.c util/panic.c | include/*.h |> $(HOST_CC) $(CFLAGS) %f -o %o |> dgn_comp$(HOST_EXEEXT)
 
-: dgn_comp$(HOST_EXEEXT) dat/dungeon.pdf |> ./dgn_comp dat/dungeon.pdf; mv dat/dungeon . |> dungeon
+: dgn_comp$(HOST_EXEEXT) dat/dungeon.def |> ./dgn_comp dat/dungeon.def; mv dat/dungeon . |> dungeon
 
 
 SIMPLE_DES := dat/beholder.des dat/blkmar.des dat/castle.des dat/dragons.des dat/frnknstn.des dat/guild.des dat/knox.des dat/kobold-1.des dat/kobold-2.des dat/lich.des dat/mall-1.des dat/mall-2.des dat/mtemple.des dat/nightmar.des dat/nymph.des dat/oracle.des dat/rats.des dat/sea.des dat/spiders.des dat/stor-1.des dat/stor-2.des dat/stor-3.des dat/tomb.des

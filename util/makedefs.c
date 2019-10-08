@@ -31,15 +31,12 @@
 #define MONST_FILE	"pm.h"
 #define ONAME_FILE	"onames.h"
 #define DATA_FILE	"data"
-#define DGN_I_FILE	"dungeon.def"
-#define DGN_O_FILE	"dungeon.pdf"
 #define QTXT_I_FILE	"quest.txt"
 #define QTXT_O_FILE	"quest.dat"
 
 # define INCLUDE_TEMPLATE	"include/%s"
 # define INCLUDE_IN_TEMPLATE    "../include/%s"
 # define SOURCE_TEMPLATE	"src/%s"
-# define DGN_TEMPLATE		"dat/%s"  /* where dungeon.pdf file goes */
 # define DATA_TEMPLATE		"dat/%s"
 # define DATA_IN_TEMPLATE	"../dat/%s"
 
@@ -60,7 +57,6 @@ int main(int,char **);
 void do_makedefs(char *);
 void do_objs(void);
 void do_data(void);
-void do_dungeon(void);
 void do_permonst(void);
 void do_questtxt(void);
 
@@ -68,8 +64,6 @@ extern void monst_init(void);		/* monst.c */
 extern void objects_init(void);	/* objects.c */
 
 static char *xcrypt(const char *);
-static int check_control(char *);
-static char *without_control(char *);
 static bool d_filter(char *);
 
 static bool qt_comment(char *);
@@ -106,7 +100,6 @@ int main(int argc, char	**argv) {
 
 	do_objs();
 	do_data();
-	do_dungeon();
 	do_permonst();
 	do_questtxt();
 
@@ -346,71 +339,6 @@ dead_data:  perror(in_line);	/* report the problem */
 	}
 
 	/* all done */
-	fclose(ofp);
-}
-
-// this can be used to selectively disable levels in dungeon.def
-static	struct deflist {
-	const char	*defname;
-	boolean	true_or_false;
-} deflist[] = {{ 0, 0 }};
-
-static int check_control(char *s) {
-	int i;
-
-	if(s[0] != '%') return -1;
-
-	for(i = 0; deflist[i].defname; i++)
-		if(!strncmp(deflist[i].defname, s+1, strlen(deflist[i].defname)))
-			return i;
-
-	return -1;
-}
-
-static char *without_control(char *s) {
-	return s + 1 + strlen(deflist[check_control(in_line)].defname);
-}
-
-void do_dungeon(void) {
-	int rcnt = 0;
-
-	sprintf(filename, DATA_IN_TEMPLATE, DGN_I_FILE);
-	if (!(ifp = fopen(filename, RDTMODE))) {
-		perror(filename);
-		exit(EXIT_FAILURE);
-	}
-	filename[0]='\0';
-#ifdef FILE_PREFIX
-	strcat(filename, file_prefix);
-#endif
-	sprintf(eos(filename), DGN_TEMPLATE, DGN_O_FILE);
-	if (!(ofp = fopen(filename, WRTMODE))) {
-		perror(filename);
-		exit(EXIT_FAILURE);
-	}
-	fprintf(ofp, "%s", Dont_Edit_Data);
-
-	while (fgets(in_line, sizeof in_line, ifp) != 0) {
-		rcnt++;
-		if(in_line[0] == '#') continue;	/* discard comments */
-recheck:
-		if(in_line[0] == '%') {
-			int i = check_control(in_line);
-			if(i >= 0) {
-				if(!deflist[i].true_or_false)  {
-					while (fgets(in_line, sizeof in_line, ifp) != 0)
-						if(check_control(in_line) != i) goto recheck;
-				} else
-					fputs(without_control(in_line),ofp);
-			} else {
-				fprintf(stderr, "Unknown control option '%s' in file %s at line %d.\n",
-						in_line, DGN_I_FILE, rcnt);
-				exit(EXIT_FAILURE);
-			}
-		} else
-			fputs(in_line,ofp);
-	}
-	fclose(ifp);
 	fclose(ofp);
 }
 

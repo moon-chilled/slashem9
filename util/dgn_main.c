@@ -67,9 +67,9 @@ int main(int argc, char **argv) {
 		if (infile) free(infile);
 		infile = alloc(strlen(argv[i]) + 1);
 		fname = strcpy(infile, argv[i]);
-		/* the input file had better be a .pdf file */
+		/* the input file had better be a .def file */
 		len = strlen(fname) - 4;	/* length excluding suffix */
-		if (len < 0 || strncmp(".pdf", fname + len, 4)) {
+		if (len < 0 || strncmp(".def", fname + len, 4)) {
 		    fprintf(stderr,
 			    "Error - file name \"%s\" in wrong format.\n",
 			    fname);
