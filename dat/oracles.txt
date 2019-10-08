@@ -1,3 +1,13 @@
+"...it is rather disconcerting to be confronted with the
+following theorem from [Baker, Gill, and Solovay, 1975]
+
+Theorem 7.18  There exist recursive languages A and B such that
+  (1)  P(A) == NP(A), and
+  (2)  P(B) != NP(B)
+
+This provides impressive evidence that the techniques that are
+currently available will not suffice for proving that P != NP or
+that P == NP."  [Garey and Johnson, p. 185.]
 -----
 If thy wand hath run out of charges, thou mayst zap it again and again; though
 naught will happen at first, verily, thy persistence shall be rewarded, as
@@ -48,7 +58,7 @@ It is well known that wily shopkeepers raise their prices whene'er they
 espy the garish apparel of the approaching tourist or the countenance of a
 disfavored patron.  They favor the gentle of manner and the fair of face.
 The boor may expect unprofitable transactions.
------ SINKS
+-----
 The cliche of the kitchen sink swallowing any unfortunate rings that contact
 its pernicious surface reflecteth greater truth than many homilies, yet
 even so, few have developed the skill to identify enchanted rings by the

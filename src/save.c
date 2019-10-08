@@ -291,7 +291,6 @@ int fd, mode;
 	bwrite(fd, (void *) tech_list,
 			sizeof(struct tech) * (MAXTECH + 1));
 	save_artifacts(fd);
-	save_oracles(fd, mode);
 	if(ustuck_id)
 	    bwrite(fd, (void *) &ustuck_id, sizeof ustuck_id);
 

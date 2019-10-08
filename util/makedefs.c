@@ -30,7 +30,6 @@
 /* names of files to be generated */
 #define MONST_FILE	"pm.h"
 #define ONAME_FILE	"onames.h"
-#define ORACLE_FILE	"oracles"
 #define DATA_FILE	"data"
 #define DGN_I_FILE	"dungeon.def"
 #define DGN_O_FILE	"dungeon.pdf"
@@ -64,7 +63,6 @@ void do_data(void);
 void do_dungeon(void);
 void do_permonst(void);
 void do_questtxt(void);
-void do_oracles(void);
 
 extern void monst_init(void);		/* monst.c */
 extern void objects_init(void);	/* objects.c */
@@ -73,7 +71,6 @@ static char *xcrypt(const char *);
 static int check_control(char *);
 static char *without_control(char *);
 static bool d_filter(char *);
-static bool h_filter(char *);
 
 static bool qt_comment(char *);
 static bool qt_control(char *);
@@ -112,7 +109,6 @@ int main(int argc, char	**argv) {
 	do_dungeon();
 	do_permonst();
 	do_questtxt();
-	do_oracles();
 
 	return 0;
 }
@@ -352,163 +348,6 @@ dead_data:  perror(in_line);	/* report the problem */
 	/* all done */
 	fclose(ofp);
 }
-
-/* routine to decide whether to discard something from oracles.txt */
-static bool h_filter(char *line) {
-	static bool skip = false;
-	char tag[sizeof in_line];
-
-	if (*line == '#') return true;	/* ignore comment lines */
-	if (sscanf(line, "----- %s", tag) == 1) {
-		skip = false;
-	} else if (skip && !strncmp(line, "-----", 5))
-		skip = false;
-	return skip;
-}
-
-static const char *special_oracle[] = {
-	"\"...it is rather disconcerting to be confronted with the",
-	"following theorem from [Baker, Gill, and Solovay, 1975].",
-	"",
-	"Theorem 7.18  There exist recursive languages A and B such that",
-	"  (1)  P(A) == NP(A), and",
-	"  (2)  P(B) != NP(B)",
-	"",
-	"This provides impressive evidence that the techniques that are",
-	"currently available will not suffice for proving that P != NP or          ",
-	"that P == NP.\"  [Garey and Johnson, p. 185.]"
-};
-
-/*
-   The oracle file consists of a "do not edit" comment, a decimal count N
-   and set of N+1 hexadecimal fseek offsets, followed by N multiple-line
-   records, separated by "---" lines.  The first oracle is a special case.
-   The input data contains just those multi-line records, separated by
-   "-----" lines.
- */
-
-void do_oracles(void) {
-	char *infile, *tempfile;
-	boolean in_oracle, ok;
-	long txt_offset, offset, fpos;
-	int oracle_cnt;
-	int i;
-
-	infile = alloc(strlen(DATA_IN_TEMPLATE) - 2 + strlen(ORACLE_FILE) + 5);
-	tempfile = alloc(strlen(DATA_TEMPLATE) - 2 + strlen("oracles.tmp") + 1);
-	sprintf(tempfile, DATA_TEMPLATE, "oracles.tmp");
-	filename[0]='\0';
-#ifdef FILE_PREFIX
-	strcat(filename, file_prefix);
-#endif
-	sprintf(eos(filename), DATA_TEMPLATE, ORACLE_FILE);
-	sprintf(infile, DATA_IN_TEMPLATE, ORACLE_FILE);
-	strcat(infile, ".txt");
-	if (!(ifp = fopen(infile, RDTMODE))) {
-		perror(infile);
-		exit(EXIT_FAILURE);
-	}
-	free(infile);
-	if (!(ofp = fopen(filename, WRTMODE))) {
-		perror(filename);
-		fclose(ifp);
-		exit(EXIT_FAILURE);
-	}
-	if (!(tfp = fopen(tempfile, WRTMODE))) {	/* oracles.tmp */
-		perror(tempfile);
-		fclose(ifp);
-		fclose(ofp);
-		unlink(filename);
-		exit(EXIT_FAILURE);
-	}
-
-	/* output a dummy header record; we'll rewind and overwrite it later */
-	fprintf(ofp, "%s%5d\n", Dont_Edit_Data, 0);
-
-	/* handle special oracle; it must come first */
-	fputs("---\n", tfp);
-	fprintf(ofp, "%05lx\n", ftell(tfp));  /* start pos of special oracle */
-	for (i = 0; i < SIZE(special_oracle); i++) {
-		fputs(xcrypt(special_oracle[i]), tfp);
-		fputc('\n', tfp);
-	}
-
-	oracle_cnt = 1;
-	fputs("---\n", tfp);
-	fprintf(ofp, "%05lx\n", ftell(tfp));	/* start pos of first oracle */
-	in_oracle = false;
-
-	while (fgets(in_line, sizeof in_line, ifp)) {
-		if (h_filter(in_line)) continue;
-		if (!strncmp(in_line, "-----", 5)) {
-			if (!in_oracle) continue;
-			in_oracle = false;
-			oracle_cnt++;
-			fputs("---\n", tfp);
-			fprintf(ofp, "%05lx\n", ftell(tfp));
-			/* start pos of this oracle */
-		} else {
-			in_oracle = true;
-			fputs(xcrypt(in_line), tfp);
-		}
-	}
-
-	if (in_oracle) {	/* need to terminate last oracle */
-		oracle_cnt++;
-		fputs("---\n", tfp);
-		fprintf(ofp, "%05lx\n", ftell(tfp));	/* eof position */
-	}
-
-	/* record the current position */
-	txt_offset = ftell(ofp);
-	fclose(ifp);		/* all done with original input file */
-
-	/* reprocess the scratch file; 1st format an error msg, just in case */
-	sprintf(in_line, "rewind of \"%s\"", tempfile);
-	if (rewind(tfp) != 0)  goto dead_data;
-	/* copy all lines of text from the scratch file into the output file */
-	while (fgets(in_line, sizeof in_line, tfp))
-		fputs(in_line, ofp);
-
-	/* finished with scratch file */
-	fclose(tfp);
-	unlink(tempfile);	/* remove it */
-	free(tempfile);
-
-	/* update the first record of the output file; prepare error msg 1st */
-	sprintf(in_line, "rewind of \"%s\"", filename);
-	ok = (rewind(ofp) == 0);
-	if (ok) {
-		sprintf(in_line, "header rewrite of \"%s\"", filename);
-		ok = (fprintf(ofp, "%s%5d\n", Dont_Edit_Data, oracle_cnt) >=0);
-	}
-	if (ok) {
-		sprintf(in_line, "data rewrite of \"%s\"", filename);
-		for (i = 0; i <= oracle_cnt; i++) {
-			if (!(ok = (fflush(ofp) == 0))) break;
-			if (!(ok = (fpos = ftell(ofp)) >= 0)) break;
-			if (!(ok = (fseek(ofp, fpos, SEEK_SET) >= 0))) break;
-			if (!(ok = (fscanf(ofp, "%5lx", &offset) == 1))) break;
-			if (!(ok = (fseek(ofp, fpos, SEEK_SET) >= 0))) break;
-			if (!(ok = (fprintf(ofp, "%05lx\n", offset + txt_offset) >= 0)))
-				break;
-		}
-	}
-	if (!ok) {
-dead_data:  perror(in_line);	/* report the problem */
-	    /* close and kill the aborted output file, then give up */
-	    /* KMH -- I don't know why it fails */
-#ifndef MAC
-	    fclose(ofp);
-	    unlink(filename);
-	    exit(EXIT_FAILURE);
-#endif
-	}
-
-	/* all done */
-	fclose(ofp);
-}
-
 
 // this can be used to selectively disable levels in dungeon.def
 static	struct deflist {

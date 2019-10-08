@@ -431,7 +431,6 @@ static boolean restgamestate(int fd, unsigned int *stuckid, unsigned int *steedi
 	mread(fd, (void *) tech_list,
 			sizeof(struct tech) * (MAXTECH + 1));
 	restore_artifacts(fd);
-	restore_oracles(fd);
 	if (u.ustuck)
 		mread(fd, (void *) stuckid, sizeof (*stuckid));
 	if (u.usteed)

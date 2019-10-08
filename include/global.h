@@ -28,7 +28,7 @@
 #define NH_RUMORFILE_TRU	"rumors.tru"	// files with fortune cookies */
 #define NH_RUMORFILE_FAL	"rumors.fal"
 #define NH_RUMORAREA	FILE_AREA_SHARE
-#define NH_ORACLEFILE	"oracles"	/* a file with oracular information */
+#define NH_ORACLEFILE	"oracles.txt"	/* a file with oracular information */
 #define NH_ORACLEAREA	FILE_AREA_SHARE
 #define NH_DATAFILE	"data"	/* a file giving the meaning of symbols used */
 #define NH_DATAAREA	FILE_AREA_SHARE

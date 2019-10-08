@@ -1732,8 +1732,6 @@ extern char *root_plselection_prompt(char *, int, int, int, int, int);
 extern char *getrumor(int, char *, bool);
 extern void outrumor(int,int);
 extern void outoracle(boolean, boolean);
-extern void save_oracles(int,int);
-extern void restore_oracles(int);
 extern int doconsult(struct monst *);
 
 /* ### save.c ### */
