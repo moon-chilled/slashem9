@@ -1925,7 +1925,6 @@ static const struct menu_tab wizard_menu[] = {
 
 static const struct menu_tab help_menu[] = {
 	{'?', true, dohelp, "Help Contents"},
-	{'v', true, doextversion, "Version"},
 	{'/', true, dowhatis, "Identify an object on the screen" },
 	{'&', true, dowhatdoes, "Determine what a key does"},
 	{0,0,0,0,0},
@@ -2353,7 +2352,6 @@ static const struct func_tab cmdlist[] = {
 	{M('u'), false, dountrap},
 	{'v', true, doversion},
 	{'V', true, dohistory},
-	{M('v'), true, doextversion},
 /*replaced with dowear*/
 	{'w', false, dowield},
 	{'W', false, dowear},
@@ -2509,8 +2507,6 @@ struct ext_func_tab extcmdlist[] = {
 	{"twoweapon", "toggle two-weapon combat", dotwoweapon, !IFBURIED, AUTOCOMPLETE},
 	{"untrap", "untrap something", dountrap, !IFBURIED, AUTOCOMPLETE},
 	{"vanquished", "list vanquished monsters", dolistvanq, true},
-	{"versionext", "list compile time options for this version of NetHack",
-		doextversion, IFBURIED, AUTOCOMPLETE},
 	{"wipe", "wipe off your face", dowipe, !IFBURIED, AUTOCOMPLETE},
 	{"youpoly", "polymorph at will", polyatwill, !IFBURIED},  /* jla */
 	{"?", "get this list of extended commands", doextlist, IFBURIED, AUTOCOMPLETE},
@@ -2686,7 +2682,6 @@ static void init_bind_list(void) {
 	bind_key(M('u'), "untrap" );
 	bind_key('v',    "version" );
 	bind_key('V',    "history" );
-	bind_key(M('v'), "versionext" );
 	bind_key('w',    "wield" );
 	bind_key('W',    "wear" );
 	bind_key(M('w'), "wipe" );

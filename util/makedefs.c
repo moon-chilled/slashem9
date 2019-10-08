@@ -31,11 +31,6 @@
 #define DATE_FILE	"date.h"
 #define MONST_FILE	"pm.h"
 #define ONAME_FILE	"onames.h"
-#ifndef NH_OPTIONS_FILE
-#define OPTIONS_FILE	"options"
-#else
-#define OPTIONS_FILE    NH_OPTIONS_FILE
-#endif
 #define ORACLE_FILE	"oracles"
 #define DATA_FILE	"data"
 #define DGN_I_FILE	"dungeon.def"
@@ -71,7 +66,6 @@ void do_objs(void);
 void do_data(void);
 void do_dungeon(void);
 void do_date(void);
-void do_options(void);
 void do_permonst(void);
 void do_questtxt(void);
 void do_oracles(void);
@@ -128,7 +122,6 @@ int main(int argc, char	**argv) {
 	do_data();
 	do_dungeon();
 	do_date();
-	do_options();
 	do_permonst();
 	do_questtxt();
 	do_oracles();
@@ -434,67 +427,6 @@ static const char *window_opts[] = {
 #endif
 	0
 };
-
-void do_options(void) {
-	int i, length;
-	const char *str, *indent = "    ";
-
-	filename[0]='\0';
-#ifdef FILE_PREFIX
-	strcat(filename,file_prefix);
-#endif
-	sprintf(eos(filename), DATA_TEMPLATE, OPTIONS_FILE);
-	if (!(ofp = fopen(filename, WRTMODE))) {
-		perror(filename);
-		exit(EXIT_FAILURE);
-	}
-
-	build_savebones_compat_string();
-	fprintf(ofp,"\n    %s version %d.%d.%d", DEF_GAME_NAME, VERSION_MAJOR, VERSION_MINOR, PATCHLEVEL);
-#ifdef EDITLEVEL
-	fprintf(ofp, "E%d", EDITLEVEL);
-#ifdef FIXLEVEL
-	fprintf(ofp, "F%d", FIXLEVEL);
-#endif
-#endif
-#if defined(ALPHA)
-	fprintf(ofp, " [alpha]\n");
-#elif defined(BETA)
-	fprintf(ofp, " [beta]\n");
-#else
-	fprintf(ofp, "\n");
-#endif
-
-	fprintf(ofp,"\nOptions compiled into this edition:\n");
-
-	length = COLNO + 1;	/* force 1st item onto new line */
-	for (i = 0; i < SIZE(build_opts); i++) {
-		str = build_opts[i];
-		if (length + strlen(str) > COLNO - 5)
-			fprintf(ofp,"\n%s", indent),  length = strlen(indent);
-		else
-			fprintf(ofp," "),  length++;
-		fprintf(ofp,"%s", str),  length += strlen(str);
-		fprintf(ofp,(i < SIZE(build_opts) - 1) ? "," : "."),  length++;
-	}
-
-	fprintf(ofp,"\n\nSupported windowing systems:\n");
-
-	length = COLNO + 1;	/* force 1st item onto new line */
-	for (i = 0; i < SIZE(window_opts) - 1; i++) {
-		str = window_opts[i];
-		if (length + strlen(str) > COLNO - 5)
-			fprintf(ofp,"\n%s", indent),  length = strlen(indent);
-		else
-			fprintf(ofp," "),  length++;
-		fprintf(ofp,"%s", str),  length += strlen(str);
-		fprintf(ofp, ","),  length++;
-	}
-	fprintf(ofp, "\n%swith a default of %s.", indent, DEFAULT_WINDOW_SYS);
-	fprintf(ofp,"\n\n");
-
-	fclose(ofp);
-}
 
 /* routine to decide whether to discard something from data.base */
 static bool d_filter(char *line) {

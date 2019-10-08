@@ -109,8 +109,6 @@ const char *path, *mode;
 	    SET_FILE(NH_LICENSE, NH_LICENSE_AREA);
 	else if (!strcmp(name + 2, "OPTIONFILE"))
 	    SET_FILE(NH_OPTIONFILE, NH_OPTIONAREA);
-	else if (!strcmp(name + 2, "OPTIONS_USED"))
-	    SET_FILE(NH_OPTIONS_USED, NH_OPTIONS_USED_AREA);
 	else if (!strcmp(name + 2, "GUIDEBOOK"))
 	    SET_FILE(NH_GUIDEBOOK, NH_GUIDEBOOK_AREA);
 	else

@@ -40,8 +40,6 @@
 #define NH_LICENSE_AREA	FILE_AREA_DOC
 #define NH_OPTIONFILE	"opthelp"	/* a file explaining runtime options */
 #define NH_OPTIONAREA	FILE_AREA_SHARE
-#define NH_OPTIONS_USED	"options"	/* compile-time options, for #version */
-#define NH_OPTIONS_USED_AREA FILE_AREA_SHARE
 #define NH_GUIDEBOOK       "Guidebook.txt"       /* Nethack Guidebook*/
 #define NH_GUIDEBOOK_AREA	FILE_AREA_DOC
 

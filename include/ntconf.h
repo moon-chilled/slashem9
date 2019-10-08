@@ -35,13 +35,6 @@
 				   LEVELDIR, SAVEDIR, BONESDIR, DATADIR,
 				   SCOREDIR, LOCKDIR, CONFIGDIR, and TROUBLEDIR */
 
-#ifdef NH_OPTIONS_USED
-#undef NH_OPTIONS_USED
-#endif
-#define NH_OPTIONS_USED	"options"
-
-#define NH_OPTIONS_FILE NH_OPTIONS_USED
-
 #define PORT_HELP	"porthelp"
 
 #ifdef WIN32CON

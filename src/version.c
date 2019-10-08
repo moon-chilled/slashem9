@@ -36,11 +36,6 @@ int doversion(void) {
 	return 0;
 }
 
-int doextversion(void) {
-	display_file_area(NH_OPTIONS_USED_AREA, NH_OPTIONS_USED, true);
-	return 0;
-}
-
 boolean check_version(struct version_info *version_data, const char *filename, boolean complain) {
 	if (
 #ifdef VERSION_COMPATIBILITY
