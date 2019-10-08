@@ -24,7 +24,6 @@
 
 #ifdef WIN32
 # undef UNIX
-# define NHSTDC
 # define STRNCMPI
 #endif
 

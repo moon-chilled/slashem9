@@ -30,10 +30,6 @@ extern void linux_mapoff(void);
 static int veryold(int);
 static int eraseoldlocks(void);
 
-#ifndef NHSTDC
-extern int errno;
-#endif
-
 static struct stat buf;
 
 /* see whether we should throw away this xlock file */

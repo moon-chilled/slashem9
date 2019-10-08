@@ -255,7 +255,6 @@ static char *version_id_string(char *outbuf, const char *build_date) {
 void do_date(void) {
 	unsigned long long clocktim = 0;
 	char *c,  *cbuf, buf[BUFSZ];
-	const char *ul_sfx;
 
 	cbuf = alloc(600);
 	filename[0]='\0';
@@ -274,26 +273,21 @@ void do_date(void) {
 	strcpy(cbuf, ctime((time_t *)&clocktim));
 	for (c = cbuf; *c; c++) if (*c == '\n') break;
 	*c = '\0';	/* strip off the '\n' */
-#ifdef NHSTDC
-	ul_sfx = "UL";
-#else
-	ul_sfx = "L";
-#endif
 	fprintf(ofp,"#define BUILD_DATE \"%s\"\n", cbuf);
 	fprintf(ofp,"#define BUILD_TIME (%lluL)\n", clocktim);
 	fprintf(ofp,"\n");
-	fprintf(ofp,"#define VERSION_NUMBER 0x%08lx%s\n",
-			version.incarnation, ul_sfx);
-	fprintf(ofp,"#define VERSION_FEATURES 0x%08lx%s\n",
-			version.feature_set, ul_sfx);
+	fprintf(ofp,"#define VERSION_NUMBER 0x%08lxUL\n",
+			version.incarnation);
+	fprintf(ofp,"#define VERSION_FEATURES 0x%08lxUL\n",
+			version.feature_set);
 #ifdef IGNORED_FEATURES
-	fprintf(ofp,"#define IGNORED_FEATURES 0x%08lx%s\n",
-			(unsigned long) IGNORED_FEATURES, ul_sfx);
+	fprintf(ofp,"#define IGNORED_FEATURES 0x%08lxUL\n",
+			(unsigned long) IGNORED_FEATURES);
 #endif
-	fprintf(ofp,"#define VERSION_SANITY1 0x%08lx%s\n",
-			version.entity_count, ul_sfx);
-	fprintf(ofp,"#define VERSION_SANITY2 0x%08lx%s\n",
-			version.struct_sizes, ul_sfx);
+	fprintf(ofp,"#define VERSION_SANITY1 0x%08lxUL\n",
+			version.entity_count);
+	fprintf(ofp,"#define VERSION_SANITY2 0x%08lxUL\n",
+			version.struct_sizes);
 	fprintf(ofp,"\n");
 	fprintf(ofp,"#define VERSION_STRING \"%s\"\n", version_string(buf));
 	fprintf(ofp,"#define VERSION_ID \\\n \"%s\"\n",

@@ -2240,11 +2240,7 @@ void dump_conduct(int final) {
  *   UNMETA and UNCTRL are the opposite of M/C and return the key for a given
  *     meta/ctrl code. */
 #ifndef M
-# ifndef NHSTDC
-#  define M(c)		(0x80 | (c))
-# else
-#  define M(c)		((c) - 128)
-# endif /* NHSTDC */
+# define M(c)		((c) - 128)
 #endif
 
 #define ISMETA(c) (((c) & 0x80) != 0)

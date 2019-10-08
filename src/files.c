@@ -24,15 +24,11 @@
 #endif
 
 #include <errno.h>
-#ifdef _MSC_VER	/* MSC 6.0 defines errno quite differently */
-# if (_MSC_VER >= 600)
-#  define SKIP_ERRNO
-# endif
-#else
-# ifdef NHSTDC
-#  define SKIP_ERRNO
-# endif
+// MSC 6.0 defines errno quite differently
+#if defined(_MSC_VER) && (_MSC_VER >= 600)
+# define SKIP_ERRNO
 #endif
+
 #ifndef SKIP_ERRNO
 extern int errno;
 #endif
@@ -277,10 +273,8 @@ int validate_prefix_locations(char *reasonbuf) {
 			}
 			/* the paniclog entry gets the value of errno as well */
 			sprintf(panicbuf1,"Invalid %s", fqn_prefix_names[prefcnt]);
-#if defined (NHSTDC) && !defined(NOTSTDC)
 			if (!(details = strerror(errno)))
-#endif
-			details = "";
+				details = "";
 			sprintf(panicbuf2,"\"%s\", (%d) %s",
 				fqn_prefix[prefcnt], errno, details);
 			paniclog(panicbuf1, panicbuf2);
@@ -1080,9 +1074,7 @@ static FILE *fopen_config_file(const char *filename) {
 	    /* e.g., problems when setuid NetHack can't search home
 	     * directory restricted to user */
 
-#if defined (NHSTDC) && !defined(NOTSTDC)
 	    if ((details = strerror(errno)) == 0)
-#endif
 		details = "";
 	    raw_printf("Couldn't open default config file %s %s(%d).",
 			tmp_config, details, errno);

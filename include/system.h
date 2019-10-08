@@ -21,14 +21,8 @@
  */
 #if defined(_MSC_VER) || defined(__SC__) || defined(WIN32)
 # define SIG_RET_TYPE void (__cdecl *)(int)
-#endif
-#ifndef SIG_RET_TYPE
-# if defined(NHSTDC) || defined(POSIX_TYPES)
-#  define SIG_RET_TYPE void (*)(int)
-# endif
-#endif
-#ifndef SIG_RET_TYPE
-# define SIG_RET_TYPE int (*)()
+#else
+# define SIG_RET_TYPE void (*)(int)
 #endif
 
 #if defined(BSD) || defined(ULTRIX) || defined(RANDOM)
@@ -58,21 +52,12 @@ extern void perror(const char *);
 # endif
 #endif
 
-#ifndef NeXT
 #ifdef POSIX_TYPES
 extern void qsort(void *,size_t,size_t,
 		     int(*)(const void*,const void*));
 #else
-# if (defined(BSD) || defined(ULTRIX)) && (!defined(LINUX) && !defined(__CYGWIN__))
 extern  int qsort();
-# else
-#  if !defined(LATTICE)
-extern   void qsort(void *,size_t,size_t,
-		       int(*)(const void*,const void*));
-#  endif
-# endif
 #endif
-#endif /* NeXT */
 
 #ifndef __SASC_60
 #if !defined(__GNUC__)
@@ -154,33 +139,6 @@ extern long fork(void);
 #ifdef POSIX_TYPES
 /* The POSIX string.h is required to define all the mem* and str* functions */
 #include <string.h>
-#else
-#if defined(SYSV) || defined(MAC) || defined(SUNOS4)
-# ifdef NHSTDC
-#  if !defined(_AIX32) && !(defined(SUNOS4) && defined(__STDC__)) && !defined(LINUX)
-/* Solaris unbundled cc (acc) */
-extern int memcmp(const void *,const void *,size_t);
-extern void *memcpy(void *, const void *, size_t);
-extern void *memset(void *, int, size_t);
-#  endif
-# else
-#  ifndef memcmp	/* some systems seem to macro these back to b*() */
-extern int memcmp();
-#  endif
-#  ifndef memcpy
-extern char *memcpy();
-#  endif
-#  ifndef memset
-extern char *memset();
-#  endif
-# endif
-#else
-# ifdef HPUX
-extern int memcmp(char *,char *,int);
-extern void *memcpy(char *,char *,int);
-extern void *memset(char*,int,int);
-# endif
-#endif
 #endif /* POSIX_TYPES */
 
 #if defined(BSD) && defined(ultrix)	/* i.e., old versions of Ultrix */
@@ -295,25 +253,6 @@ extern  char *sprintf();
 #ifdef SPRINTF_PROTO
 # undef SPRINTF_PROTO
 #endif
-
-#ifndef __SASC_60
-# if defined(USE_STDARG) || defined(USE_VARARGS)
-#  if !defined(SVR4)
-#   if !(defined(ULTRIX_PROTO) && defined(__GNUC__))
-#    if !(defined(SUNOS4) && defined(__STDC__)) /* Solaris unbundled cc (acc) */
-extern int vsprintf(char *, const char *, va_list);
-extern int vfprintf(FILE *, const char *, va_list);
-extern int vprintf(const char *, va_list);
-#    endif
-#   endif
-#  endif
-# else
-#  define vprintf	printf
-#  define vfprintf	fprintf
-#  define vsprintf	sprintf
-# endif
-#endif
-
 
 # ifdef _POSIX_SOURCE
 extern int tgetent(char *,const char *);
