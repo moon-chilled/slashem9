@@ -903,10 +903,6 @@ boolean atme;
 	if (confused || (rnd(100) > chance)) {
 		pline("You fail to cast the spell correctly.");
 
-#ifdef ALLEG_FX
-                if (iflags.usealleg) alleg_aura(u.ux, u.uy, P_ATTACK_SPELL-1);
-#endif
-
 		u.uen -= (energy / 2);
 		flags.botl = 1;
 		return 1;
@@ -926,9 +922,6 @@ boolean atme;
 	if (role_skill >= P_SKILLED)
 		pseudo->blessed = 1;
 
-#ifdef ALLEG_FX
-        if (iflags.usealleg) alleg_aura(u.ux, u.uy, skill);
-#endif
 	switch(pseudo->otyp)  {
 	/*
 	 * At first spells act as expected.  As the hero increases in skill

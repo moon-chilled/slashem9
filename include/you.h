@@ -347,9 +347,6 @@ struct you {
 	int ugangr;			/* if the gods are angry at you */
 	int ugifts;			/* number of artifacts bestowed */
 	int ublessed, ublesscnt;	/* blessing/duration from #pray */
-#ifdef NOARTIFACTWISH
-	int usacrifice;                 /* number of sacrifices so far */
-#endif
 #if 0
 	/* KMH -- Drow is now its own role... */
 	boolean uelf_drow;		/* are you a drow? */

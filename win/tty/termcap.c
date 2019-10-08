@@ -4,7 +4,7 @@
 
 #include "hack.h"
 
-#if defined (TTY_GRAPHICS) && !defined(NO_TERMS)
+#ifdef TTY_GRAPHICS
 
 #include "wintty.h"
 

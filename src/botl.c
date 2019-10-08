@@ -44,9 +44,6 @@ const char *enc_abbrev_stat[] = {
 
 static void bot1(void);
 static void bot2(void);
-#ifdef ALLEG_FX
-static void set_botl_warn(int);
-#endif
 
 extern const struct percent_color_option *hp_colors;
 extern const struct percent_color_option *pw_colors;
@@ -142,16 +139,6 @@ void add_colored_text(const char *text, char *newbot2) {
 static int mrank_sz = 0; /* loaded by max_rank_sz (from u_init) */
 
 static const char *rank(void);
-
-
-#ifdef ALLEG_FX
-static int botl_warn = 0;
-
-static void set_botl_warn(int level) {
-        botl_warn = level;
-        flags.botl = 1;
-}
-#endif
 
 /* convert experience level (1..30) to rank index (0..8) */
 int xlev_to_rank(int xlev) {
@@ -422,10 +409,6 @@ bot2str(char *newbot2) {
 	int cap = near_capacity();
 	int save_botlx = flags.botlx;
 
-#ifdef ALLEG_FX
-	int w;
-#endif
-
 	hp = Upolyd ? u.mh : u.uhp;
 	hpmax = Upolyd ? u.mhmax : u.uhpmax;
 
@@ -485,15 +468,6 @@ bot2str(char *newbot2) {
 	}
 #endif
 
-
-#ifdef ALLEG_FX
-        if(iflags.usealleg && botl_warn && !Hallucination)
-        {
-            sprintf(nb = eos(nb), " ");
-            for(w = 0; w < botl_warn; w++)
-                sprintf(nb = eos(nb), "!");
-        }
-#endif
 
 	if (hu_stat[u.uhs][0]) {
 		add_colored_text_match((bot2_abbrev >= 2) ? hu_abbrev_stat[u.uhs] : hu_stat[u.uhs], hu_stat[u.uhs], newbot2);

@@ -864,13 +864,6 @@ void shieldeff(xchar x, xchar y) {
 
     if (!flags.sparkle) return;
     if (cansee(x,y)) {	/* Don't see anything if can't see the location */
-#ifdef ALLEG_FX
-    	if (iflags.usealleg) {
-	    newsym(x,y);
-	    if(alleg_shield(x,y))
-                return;
-    	}
-#endif
 	for (i = 0; i < SHIELD_COUNT; i++) {
 	    show_glyph(x, y, cmap_to_glyph(shield_static[i]));
 	    flush_screen(1);	/* make sure the glyph shows up */
@@ -1053,9 +1046,6 @@ void swallowed(int first) {
 		if (isok(x,y)) show_glyph(x,y,cmap_to_glyph(S_stone));
     }
 
-#ifdef ALLEG_FX
-    if(!iflags.usealleg || !alleg_swallowed(u.ux,u.uy)) {
-#endif
     swallower = monsndx(u.ustuck->data);
     /* assume isok(u.ux,u.uy) */
     left_ok = isok(u.ux-1,u.uy);
@@ -1084,9 +1074,6 @@ void swallowed(int first) {
 	if (rght_ok)
 	show_glyph(u.ux+1, u.uy+1, swallow_to_glyph(swallower, S_sw_br));
     }
-#ifdef ALLEG_FX
-    }
-#endif
 
     /* Update the swallowed position. */
     lastx = u.ux;
@@ -1567,9 +1554,6 @@ void flush_screen(int cursor_on_u) {
     if (cursor_on_u) curs(WIN_MAP, u.ux,u.uy); /* move cursor to the hero */
     display_nhwindow(WIN_MAP, false);
     reset_glyph_bbox();
-#ifdef ALLEG_FX
-    if (iflags.usealleg) alleg_vid_refresh();
-#endif
     flushing = 0;
     if(flags.botl || flags.botlx) bot();
 }

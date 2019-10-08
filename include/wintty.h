@@ -93,14 +93,9 @@ extern void xwaitforspace(const char *);
 /* ### termcap.c, video.c ### */
 
 extern void tty_startup(int*, int*);
-#ifndef NO_TERMS
 extern void tty_shutdown(void);
-#endif
 extern void xputc(char);
 extern void xputs(const char *);
-#if defined(SCREEN_VGA) || defined(SCREEN_8514) || defined(ALLEG_FX)
-extern void xputg(int, int, unsigned);
-#endif
 extern void cl_end(void);
 extern void clear_screen(void);
 extern void home(void);
@@ -212,35 +207,5 @@ extern void tty_start_screen(void);
 extern void tty_end_screen(void);
 
 extern void genl_outrip(winid,int);
-
-#ifdef NO_TERMS
-# ifdef MAC
-#  ifdef putchar
-#   undef putchar
-#   undef putc
-#  endif
-#  define putchar term_putc
-#  define fflush term_flush
-#  define puts term_puts
-extern int term_putc(int c);
-extern int term_flush(void *desc);
-extern int term_puts(const char *str);
-# endif /* MAC */
-# ifdef WIN32CON
-#  if defined(SCREEN_BIOS) || defined(SCREEN_DJGPPFAST) || defined(WIN32CON)
-#   undef putchar
-#   undef putc
-#   undef puts
-#   define putchar(x) xputc(x)	/* these are in video.c, nttty.c */
-#   define putc(x) xputc(x)
-#   define puts(x) xputs(x)
-#  endif/*SCREEN_BIOS || SCREEN_DJGPPFAST || WIN32CON */
-#  ifdef POSITIONBAR
-extern void video_update_positionbar(char *);
-#  endif
-# endif/*WIN32CON*/
-#endif/*NO_TERMS*/
-
-#undef E
 
 #endif /* WINTTY_H */

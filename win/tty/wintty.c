@@ -15,9 +15,7 @@
 
 #ifdef TTY_GRAPHICS
 
-#ifndef NO_TERMS
 #include "tcap.h"
-#endif
 
 #include "wintty.h"
 
@@ -126,9 +124,7 @@ static int clipx = 0, clipxmax = 0;
 static int clipy = 0, clipymax = 0;
 #endif /* CLIPPING */
 
-#ifndef NO_TERMS
 bool GFlag = false;
-#endif
 
 #ifdef WIN32CON
 static const char to_continue[] = "to continue";
@@ -861,9 +857,8 @@ void tty_exit_nhwindows(const char *str) {
 #endif
 			wins[i] = 0;
 		}
-#ifndef NO_TERMS		/*(until this gets added to the window interface)*/
 	tty_shutdown();		/* cleanup termcap/terminfo/whatever */
-#endif
+
 	iflags.window_inited = 0;
 }
 
@@ -1737,25 +1732,21 @@ void tty_curs(winid window, int x, int y) {
     if(cw->type == NHW_MAP)
 	end_glyphout();
 
-#ifndef NO_TERMS
     if(!nh_ND && (cx != x || x <= 3)) { /* Extremely primitive */
 	cmov(x, y); /* bunker!wtm */
 	return;
     }
-#endif
 
     if((cy -= y) < 0) cy = -cy;
     if((cx -= x) < 0) cx = -cx;
     if(cy <= 3 && cx <= 3) {
 	nocmov(x, y);
-#ifndef NO_TERMS
     } else if ((x <= 3 && cy <= 3) || (!nh_CM && x < cx)) {
 	putchar('\r');
 	ttyDisplay->curx = 0;
 	nocmov(x, y);
     } else if (!nh_CM) {
 	nocmov(x, y);
-#endif
     } else
 	cmov(x, y);
 
@@ -1843,12 +1834,6 @@ void tty_putstr(winid window, int attr, const char *str) {
 	break;
 
     case NHW_STATUS:
-#ifdef ALLEG_FX
-        if (iflags.usealleg) {
-            alleg_stats(str, cw->cury);
-            break;
-        }
-#endif
 	ob = &cw->data[cw->cury][j = cw->curx];
 	if(flags.botlx) *ob = 0;
 	if(!cw->cury && (int)strlen(str) >= CO) {
@@ -2061,11 +2046,7 @@ tty_display_file(const char *fname, bool complain)
 	    winid datawin = tty_create_nhwindow(NHW_TEXT);
 	    bool empty = true;
 
-	    if(complain
-#ifndef NO_TERMS
-		&& nh_CD
-#endif
-	    ) {
+	    if(complain && nh_CD) {
 		/* attempt to scroll text below map window if there's room */
 		wins[datawin]->offy = wins[WIN_STATUS]->offy+3;
 		if((int) wins[datawin]->offy + 12 > (int) ttyDisplay->rows)
@@ -2386,12 +2367,11 @@ void docorner(int xmin, int ymax) {
 }
 
 void end_glyphout(void) {
-#ifndef NO_TERMS
 	if (GFlag) {
 		GFlag = false;
 		graph_off();
 	}
-#endif
+
 	if(ttyDisplay->color != NO_COLOR) {
 		term_end_color();
 		ttyDisplay->color = NO_COLOR;
@@ -2402,7 +2382,6 @@ void end_glyphout(void) {
 void g_putch(int in_ch) {
 	char ch = (char)in_ch;
 
-# ifndef NO_TERMS
 	if (ch & 0x80) {
 		if (!GFlag) {
 			graph_on();
@@ -2416,13 +2395,6 @@ void g_putch(int in_ch) {
 		}
 		putchar(ch);
 	}
-
-#else
-	putchar(ch);
-
-#endif	/* !NO_TERMS */
-
-	return;
 }
 #endif /* !WIN32 */
 
@@ -2489,12 +2461,10 @@ void tty_print_glyph(winid window, xchar x, xchar y, int glyph) {
 	/* Move the cursor. */
 	tty_curs(window, x,y);
 
-#ifndef NO_TERMS
 	if (ul_hack && ch == '_') {		/* non-destructive underscore */
 		putchar((char) ' ');
 		backsp();
 	}
-#endif
 
 	if (color != ttyDisplay->color) {
 		if(ttyDisplay->color != NO_COLOR)

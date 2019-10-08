@@ -729,11 +729,6 @@ die:
 # endif
 #endif /* NO_SIGNAL */
 
-#ifdef ALLEG_FX
-        if(iflags.usealleg && (how < PANICKED))
-                fade_to_black();
-#endif
-
 	bones_ok = (how < GENOCIDED) && can_make_bones();
 
 	if (how == TURNED_SLIME)

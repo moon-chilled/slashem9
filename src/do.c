@@ -1057,9 +1057,6 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 		close(fd);
 	}
 
-#ifdef ALLEG_FX
-        if (iflags.usealleg) nh_fade_out(portal);
-#endif
 
 	/* do this prior to level-change pline messages */
 	vision_reset();		/* clear old level's line-of-sight */
@@ -1208,10 +1205,6 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 	vision_reset();		/* reset the blockages */
 	docrt();		/* does a full vision recalc */
 	flush_screen(-1);
-
-#ifdef ALLEG_FX
-        if (iflags.usealleg) nh_fade_in(portal);
-#endif
 
 	/*
 	 *  Move all plines beyond the screen reset.

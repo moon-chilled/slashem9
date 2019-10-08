@@ -184,26 +184,24 @@ static void make_version(void) {
 	 * The actual values have no special meaning, and the category
 	 * groupings are just for convenience.
 	 */
-	version.feature_set = (unsigned long)(0L
+	version.feature_set = (0L
 #ifdef MAIL
-			| (1L <<  7)
+			| (1L << 1)
 #endif
 #ifdef GOLDOBJ
-			| (1L << 12)
+			| (1L << 2)
 #endif
-		/* flag bits and/or other global variables (16..26) */
 #ifdef DISPLAY_LAYERS
-			| (1L << 16)
+			| (1L << 3)
 #endif
 #ifdef INSURANCE
-			| (1L << 18)
+			| (1L << 4)
 #endif
-		/* data format (27..31) */
 #ifdef ZEROCOMP
-			| (1L << 27)
+			| (1L << 5)
 #endif
 #ifdef RLECOMP
-			| (1L << 28)
+			| (1L << 6)
 #endif
 			);
 	/*
@@ -386,9 +384,6 @@ static const char *build_opts[] = {
 	"news file",
 #endif
 	/* WAC added noartifactwish version info*/
-#ifdef NOARTIFACTWISH
-	"no wishing for special artifacts",
-#endif
 #ifdef DISPLAY_LAYERS
 	"display layers",
 #endif
@@ -398,18 +393,6 @@ static const char *build_opts[] = {
 #ifdef NO_TERMS
 # ifdef MAC
 	"screen control via mactty",
-# endif
-# ifdef SCREEN_BIOS
-	"screen control via BIOS",
-# endif
-# ifdef SCREEN_DJGPPFAST
-	"screen control via DJGPP fast",
-# endif
-# ifdef SCREEN_VGA
-	"screen control via VGA graphics",
-# endif
-# ifdef ALLEG_FX
-	"screen control via Allegro library",
 # endif
 #endif
 #ifdef SHELL

@@ -2790,16 +2790,6 @@ typfnd:
 		aname = artifact_name(name, &objtyp);
 		if (aname && objtyp == otmp->otyp) name = aname;
 
-# ifdef NOARTIFACTWISH
-		/* Tom -- not always getting what you're wishing for... */
-		if (restrict_name(otmp, nname) && !rn2(3) && !wizard) {
-		    int n = rn2((int)strlen(nname));
-		    char c1, c2;
-		    c1 = lowc(nname[n]);
-		    do c2 = 'a' + rn2('z'-'a'); while (c1 == c2);
-		    nname[n] = (nname[n] == c1) ? c2 : highc(c2);  /* keep same case */
-		}
-# endif
 		place_object(otmp, u.ux, u.uy);/* make it viable light source */
 		otmp = oname(otmp, nname);
 		obj_extract_self(otmp);	 /* now release it for caller's use */
@@ -2821,22 +2811,6 @@ typfnd:
 	        otmp->oartifact == ART_EYE_OF_THE_BEHOLDER ||
 	        otmp->oartifact == ART_NIGHTHORN ||
 	        otmp->oartifact == ART_THIEFBANE)) ||
-# ifdef NOARTIFACTWISH
-/* Wishing for a "weak" artifact is easier than for a stronger one */
-	(otmp->oartifact &&
-	       (otmp->oartifact != ART_STING &&
-		otmp->oartifact != ART_ELFRIST &&
-		otmp->oartifact != ART_ORCRIST &&
-		otmp->oartifact != ART_WEREBANE &&
-		otmp->oartifact != ART_GRIMTOOTH &&
-		otmp->oartifact != ART_DISRUPTER &&
-		otmp->oartifact != ART_DEMONBANE &&
-		otmp->oartifact != ART_DRAGONBANE &&
-		otmp->oartifact != ART_TROLLSBANE &&
-		otmp->oartifact != ART_GIANTKILLER &&
-		otmp->oartifact != ART_OGRESMASHER &&
-		otmp->oartifact != ART_SWORD_OF_BALANCE)) ||
-# endif
 	     (otmp->oartifact && rn2(nartifact_exist()) > 1))
 	    && !wizard) {
 	    artifact_exists(otmp, ONAME(otmp), false);

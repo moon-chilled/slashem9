@@ -34,7 +34,6 @@
 				   Allow paths to be specified for HACKDIR,
 				   LEVELDIR, SAVEDIR, BONESDIR, DATADIR,
 				   SCOREDIR, LOCKDIR, CONFIGDIR, and TROUBLEDIR */
-#define NO_TERMS
 
 #ifdef NH_OPTIONS_USED
 #undef NH_OPTIONS_USED

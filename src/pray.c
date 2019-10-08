@@ -619,9 +619,6 @@ aligntyp resp_god;
 			god_zaps_you(resp_god);
 			break;
 	}
-#ifdef NOARTIFACTWISH
-	u.usacrifice = 0;
-#endif
 	u.ublesscnt = rnz(300);
 	return;
 }
@@ -1417,9 +1414,6 @@ dosacrifice (void)
 		    pline("You feel appropriately %s.", align_str(u.ualign.type));
 		else pline("You feel you are thoroughly on the right path.");
 		adjalign(5);
-#ifdef NOARTIFACTWISH
-		u.usacrifice += 5;
-#endif
 		value += 3;
 	    } else
 		/* If sacrificing unicorn of your alignment to altar not of */
@@ -1486,9 +1480,6 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		change_luck(-3);
 		adjalign(-1);
 		u.ugangr += 3;
-#ifdef NOARTIFACTWISH
-		u.usacrifice = 0;
-#endif
 		value = -3;
 	    }
     } /* fake Amulet */
@@ -1543,9 +1534,6 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		} else {
 		    u.ugangr += 3;
 		    adjalign(-5);
-#ifdef NOARTIFACTWISH
-		    u.usacrifice = 0;
-#endif
 		    pline("%s rejects your sacrifice!", a_gname());
 		    godvoice(altaralign, "Suffer, infidel!");
 		    change_luck(-5);
@@ -1568,9 +1556,6 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		    }
 		    u.ublesscnt = 0;  /* WAC You deserve this ... */
 		    exercise(A_WIS, true);
-#ifdef NOARTIFACTWISH
-		    u.usacrifice += 5;
-#endif
 		    change_luck(1);
 		    /* Yes, this is supposed to be &=, not |= */
 		    levl[u.ux][u.uy].altarmask &= AM_SHRINE;
@@ -1594,9 +1579,6 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 		    pline("Unluckily, you feel the power of %s decrease.",
 			  u_gname());
 		    change_luck(-1);
-#ifdef NOARTIFACTWISH
-		    u.usacrifice = 0;
-#endif
 		    exercise(A_WIS, false);
 		    if (rnl(u.ulevel) > 6 && u.ualign.record > 0 &&
 		       rnd(u.ualign.record) > (7*ALIGNLIM)/8)
@@ -1681,18 +1663,12 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 				    makeplural(body_part(FOOT)));
 		    bless(mkobj_at(SPBOOK_CLASS,
 				    u.ux, u.uy, true));
-#ifdef NOARTIFACTWISH
-				u.usacrifice = 0;
-#endif
 				return 1;
 		}
 	    } else if (!rnl(30 + u.ulevel)) {
 			/* no artifact, but maybe a helpful pet? */
 			/* WAC is now some generic benefit (includes pets) */
 			god_gives_benefit(altaralign);
-#ifdef NOARTIFACTWISH
-		    u.usacrifice = 0;
-#endif
 		    return 1;
 	    }
 

@@ -2331,7 +2331,7 @@ goodfruit:
 		return;
 	}
 
-#if defined(VIDEOSHADES) && !defined(NO_TERMS)
+#ifdef VIDEOSHADES
 	/* videocolors:string */
 	fullname = "videocolors";
 	if (match_optname(opts, fullname, 6, true) ||

@@ -365,17 +365,6 @@ do_explode(
 	if (remote) visible = false;
 
 	if (visible) {
-#ifdef ALLEG_FX
-	    if (iflags.usealleg) {
-		alleg_explode(x, y, adtyp);
-		if (any_shield)		/* simulate a shield effect */
-		    for(i = 0; i < area->nlocations; i++) {
-			if (area->locations[i].shielded)
-			    shieldeff(area->locations[i].x,
-				    area->locations[i].y);
-		    }
-	    } else {
-#endif
 		set_blast_symbols(area);
 		/* Start the explosion */
 		for(i = 0; i < area->nlocations; i++) {
@@ -418,9 +407,6 @@ do_explode(
 		    delay_output();
 		}
 		tmp_at(DISP_END, 0); /* clear the explosion */
-#ifdef ALLEG_FX
-	    }
-#endif
 	} else if (!remote) {
 	    if (olet == MON_EXPLODE) {
 		str = "explosion";
@@ -604,9 +590,6 @@ do_explode(
 	i = dam * dam;
 	if (i < 50) i = 50;	/* in case random damage is very small */
 	wake_nearto(x, y, i);
-#ifdef ALLEG_FX
-        if (iflags.usealleg) cleanup_explosions();
-#endif
 }
 
 struct scatter_chain {

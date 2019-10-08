@@ -422,9 +422,6 @@ polymon (	/* returns 1 if polymorph successful */
 		if (Polymorph_control) {
 			pline("You hear a voice boom out: \"How dare you take such a form!\"");
 			u.ualign.record -= 5;
-#ifdef NOARTIFACTWISH
-			u.usacrifice = 0;
-#endif
 			exercise(A_WIS, false);
 		 } else {
 			pline("You start to change into %s, but a voice booms out:", an(mons[mntmp].mname));
