@@ -15,12 +15,12 @@
 /* #define DEBUG */	/* uncomment for debugging */
 
 static void Fread(void *,int,int,dlb *);
-static struct qtmsg * construct_qtlist(long);
-static const char * intermed(void);
-static const char * neminame(void);
-static const char * guardname(void);
-static const char * homebase(void);
-static struct qtmsg * msg_in(struct qtmsg *,int);
+static struct qtmsg *construct_qtlist(long);
+static const char *intermed(void);
+static const char *neminame(void);
+static const char *guardname(void);
+static const char *homebase(void);
+static struct qtmsg *msg_in(struct qtmsg *,int);
 static void convert_arg(char);
 static void convert_line(void);
 static void deliver_by_pline(struct qtmsg *);
@@ -35,9 +35,8 @@ static char	nambuf[sizeof cvt_buf];
 #ifdef DEBUG
 static void dump_qtlist(void);
 
-static void
-dump_qtlist (void)	/* dump the character msg list to check appearance */
-{
+// dump the character msg list to check appearance
+static void dump_qtlist(void) {
 	struct	qtmsg	*msg;
 	long	size;
 
@@ -51,25 +50,15 @@ dump_qtlist (void)	/* dump the character msg list to check appearance */
 }
 #endif /* DEBUG */
 
-static void
-Fread(ptr, size, nitems, stream)
-void *	ptr;
-int	size, nitems;
-dlb	*stream;
-{
+static void Fread(void *ptr, int size, int nitems, dlb *stream) {
 	int cnt;
 
 	if ((cnt = dlb_fread(ptr, size, nitems, stream)) != nitems) {
-
-	    panic("PREMATURE EOF ON QUEST TEXT FILE! Expected %d bytes, got %d",
-		    (size * nitems), (size * cnt));
+	    panic("PREMATURE EOF ON QUEST TEXT FILE! Expected %d bytes, got %d", (size * nitems), (size * cnt));
 	}
 }
 
-static struct qtmsg *
-construct_qtlist(hdr_offset)
-long	hdr_offset;
-{
+static struct qtmsg *construct_qtlist(long hdr_offset) {
 	struct qtmsg *msg_list;
 	int	n_msgs;
 
@@ -87,9 +76,7 @@ long	hdr_offset;
 	return msg_list;
 }
 
-void
-load_qtlist (void)
-{
+void load_qtlist(void) {
 
 	int	n_classes, i;
 	char	qt_classes[N_HDR][LEN_HDR];
@@ -135,9 +122,7 @@ load_qtlist (void)
 }
 
 /* called at program exit */
-void
-unload_qtlist (void)
-{
+void unload_qtlist(void) {
 	if (msg_file)
 	    dlb_fclose(msg_file),  msg_file = 0;
 	if (qt_list.common)
@@ -147,9 +132,7 @@ unload_qtlist (void)
 	return;
 }
 
-short
-quest_info (int typ)
-{
+short quest_info(int typ) {
 	switch (typ) {
 	    case 0:		return urole.questarti;
 	    case MS_LEADER:	return urole.ldrnum;
@@ -160,9 +143,8 @@ quest_info (int typ)
 	return 0;
 }
 
-const char *
-ldrname (void)	/* return your role leader's name */
-{
+// return your role leader's name
+const char *ldrname(void) {
 	int i = urole.ldrnum;
 
 	sprintf(nambuf, "%s%s",
@@ -171,22 +153,17 @@ ldrname (void)	/* return your role leader's name */
 	return nambuf;
 }
 
-static const char *
-intermed()	/* return your intermediate target string */
-{
+// return your intermediate target string
+static const char *intermed(void) {
 	return urole.intermed;
 }
 
-boolean
-is_quest_artifact(otmp)
-struct obj *otmp;
-{
+bool is_quest_artifact(struct obj *otmp) {
 	return otmp->oartifact == urole.questarti;
 }
 
-static const char *
-neminame()	/* return your role nemesis' name */
-{
+// return your role nemesis' name
+static const char *neminame(void) {
 	int i = urole.neminum;
 
 	sprintf(nambuf, "%s%s",
@@ -195,25 +172,19 @@ neminame()	/* return your role nemesis' name */
 	return nambuf;
 }
 
-static const char *
-guardname()	/* return your role leader's guard monster name */
-{
+// return your role leader's guard monster name
+static const char *guardname(void) {
 	int i = urole.guardnum;
 
 	return mons[i].mname;
 }
 
-static const char *
-homebase()	/* return your role leader's location */
-{
+// return your role leader's location
+static const char *homebase(void) {
 	return urole.homebase;
 }
 
-static struct qtmsg *
-msg_in(qtm_list, msgnum)
-struct qtmsg *qtm_list;
-int	msgnum;
-{
+static struct qtmsg *msg_in(struct qtmsg *qtm_list, int msgnum) {
 	struct qtmsg *qt_msg;
 
 	for (qt_msg = qtm_list; qt_msg->msgnum > 0; qt_msg++)
@@ -222,14 +193,10 @@ int	msgnum;
 	return NULL;
 }
 
-static void
-convert_arg(c)
-char c;
-{
+static void convert_arg(char c) {
 	const char *str;
 
 	switch (c) {
-
 	    case 'p':	str = plname;
 			break;
 	    case 'c':	str = (flags.female && urole.name.f) ?
@@ -278,20 +245,17 @@ char c;
 			break;
 	    case '%':	str = "%";
 			break;
-	     default:	str = "";
+	    default:	str = "";
 			break;
 	}
 	strcpy(cvt_buf, str);
 }
 
-static void
-convert_line()
-{
+static void convert_line(void) {
 	char *c, *cc;
-	char xbuf[BUFSZ];
 
 	cc = out_line;
-	for (c = xcrypt(in_line, xbuf); *c; c++) {
+	for (c = in_line; *c; c++) {
 
 	    *cc = 0;
 	    switch(*c) {
@@ -355,11 +319,8 @@ convert_line()
 	return;
 }
 
-static void
-deliver_by_pline(qt_msg)
-struct qtmsg *qt_msg;
-{
-	long	size;
+static void deliver_by_pline(struct qtmsg *qt_msg) {
+	long size;
 
 	for (size = 0; size < qt_msg->size; size += (long)strlen(in_line)) {
 	    dlb_fgets(in_line, 80, msg_file);
@@ -369,11 +330,7 @@ struct qtmsg *qt_msg;
 
 }
 
-static void
-deliver_by_window(qt_msg, how)
-struct qtmsg *qt_msg;
-int how;
-{
+static void deliver_by_window(struct qtmsg *qt_msg, int how) {
 	long	size;
 	winid datawin = create_nhwindow(how);
 
@@ -386,9 +343,7 @@ int how;
 	destroy_nhwindow(datawin);
 }
 
-void
-com_pager (int msgnum)
-{
+void com_pager(int msgnum) {
 	struct qtmsg *qt_msg;
 
 	if (!(qt_msg = msg_in(qt_list.common, msgnum))) {
@@ -403,9 +358,7 @@ com_pager (int msgnum)
 	return;
 }
 
-void
-qt_pager (int msgnum)
-{
+void qt_pager(int msgnum) {
 	struct qtmsg *qt_msg;
 
 	if (!(qt_msg = msg_in(qt_list.chrole, msgnum))) {
@@ -420,9 +373,7 @@ qt_pager (int msgnum)
 	return;
 }
 
-struct permonst *
-qt_montype (void)
-{
+struct permonst *qt_montype(void) {
 	int qpm;
 
 	if (rn2(5)) {

@@ -63,7 +63,6 @@ void do_questtxt(void);
 extern void monst_init(void);		/* monst.c */
 extern void objects_init(void);	/* objects.c */
 
-static char *xcrypt(const char *);
 static bool d_filter(char *);
 
 static bool qt_comment(char *);
@@ -106,23 +105,6 @@ int main(int argc, char	**argv) {
 	return 0;
 }
 
-
-/* trivial text encryption routine which can't be broken with `tr' */
-static char *xcrypt(const char *str) {
-	/* duplicated in src/hacklib.c */
-	static char buf[BUFSZ];
-	const char *p;
-	char *q;
-	int bitmask;
-
-	for (bitmask = 1, p = str, q = buf; *p; q++) {
-		*q = *p++;
-		if (*q & (32|64)) *q ^= bitmask;
-		if ((bitmask <<= 1) >= 32) bitmask = 1;
-	}
-	*q = '\0';
-	return buf;
-}
 
 static char save_bones_compat_buf[BUFSZ];
 
@@ -591,7 +573,7 @@ void do_questtxt(void) {
 #ifdef DEBUG
 		fprintf(stderr, "%ld: %s", ftell(stdout), in_line);
 #endif
-		fputs(xcrypt(in_line), ofp);
+		fputs(in_line, ofp);
 	}
 	fclose(ifp);
 	fclose(ofp);

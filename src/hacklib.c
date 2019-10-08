@@ -20,7 +20,6 @@ NetHack, except that rounddiv may call panic().
 	char *		eos		(char *)
 	char *		strkitten	(char *,char)
 	char *		s_suffix	(const char *)
-	char *		xcrypt		(const char *, char *)
 	boolean		onlyspace	(const char *)
 	char *		tabexpand	(char *)
 	char *		visctrl		(char)
@@ -124,21 +123,6 @@ char *s_suffix(const char *s) {
 	strcat(buf, "'");
     else
 	strcat(buf, "'s");
-    return buf;
-}
-
-// trivial text encryption routine (see makedefs)
-char *xcrypt(const char *str, char *buf) {
-    const char *p;
-    char *q;
-    int bitmask;
-
-    for (bitmask = 1, p = str, q = buf; *p; q++) {
-	*q = *p++;
-	if (*q & (32|64)) *q ^= bitmask;
-	if ((bitmask <<= 1) >= 32) bitmask = 1;
-    }
-    *q = '\0';
     return buf;
 }
 
