@@ -538,7 +538,7 @@ savedamage(fd, mode)
 int fd, mode;
 {
 	struct damage *damageptr, *tmp_dam;
-	unsigned int xl = 0;
+	uint xl = 0;
 
 	damageptr = level.damagelist;
 	for (tmp_dam = damageptr; tmp_dam; tmp_dam = tmp_dam->next)
@@ -564,7 +564,7 @@ int fd, mode;
 struct obj *otmp;
 {
 	struct obj *otmp2;
-	unsigned int xl;
+	uint xl;
 	int minusone = -1;
 
 	while(otmp) {
@@ -596,7 +596,7 @@ int fd, mode;
 struct monst *mtmp;
 {
 	struct monst *mtmp2;
-	unsigned int xl;
+	uint xl;
 	int minusone = -1;
 	struct permonst *monbegin = &mons[0];
 

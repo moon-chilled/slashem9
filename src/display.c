@@ -2057,7 +2057,7 @@ static void t_warn(struct rm *lev) {
  * seen vector (SV).
  */
 static int wall_angle(struct rm *lev) {
-    unsigned int seenv = lev->seenv & 0xff;
+    uint seenv = lev->seenv & 0xff;
     const int *row;
     int col, idx;
 

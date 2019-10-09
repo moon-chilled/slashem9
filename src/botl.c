@@ -554,7 +554,7 @@ const char *shorten_bot1(const char *str, int len) {
  * -- or just under 80 characters
  */
 #ifdef TTY_GRAPHICS
-const char *shorten_bot2(const char *str, unsigned int len) {
+const char *shorten_bot2(const char *str, uint len) {
     static char cbuf[MAXCO];
     for(bot2_abbrev = 1; bot2_abbrev <= 4; bot2_abbrev++) {
 	bot2str(cbuf);

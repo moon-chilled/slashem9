@@ -123,8 +123,8 @@ stealgold (struct monst *mtmp)
 #endif /* GOLDOBJ */
 
 /* steal armor after you finish taking it off */
-unsigned int stealoid;		/* object to be stolen */
-unsigned int stealmid;		/* monster doing the stealing */
+uint stealoid;		/* object to be stolen */
+uint stealmid;		/* monster doing the stealing */
 
 static int
 stealarm()

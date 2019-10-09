@@ -43,7 +43,7 @@ static void speaker(struct obj *,char *);
 #ifdef VPIX_MUSIC
 extern int sco_flag_console;	/* will need changing if not _M_UNIX */
 static void playinit(void);
-static void playstring(char *,size_t);
+static void playstring(char *,usize);
 static void speaker(struct obj *,char *);
 #endif
 #ifdef PCMUSIC
@@ -695,7 +695,7 @@ char	*buf;
 
 static void tone(hz, ticks)
 /* emit tone of frequency hz for given number of ticks */
-unsigned int hz, ticks;
+uint hz, ticks;
 {
     ioctl(0,KDMKTONE,hz|((ticks*10)<<16));
 # ifdef DEBUG

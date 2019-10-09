@@ -1407,7 +1407,7 @@ physical:
 	    case AD_SLOW:
 		if (nohit) break;
 		if(!cancelled && vis && mdef->mspeed != MSLOW) {
-		    unsigned int oldspeed = mdef->mspeed;
+		    uint oldspeed = mdef->mspeed;
 
 		    mon_adjust_speed(mdef, -1, NULL);
 		    mdef->mstrategy &= ~STRAT_WAITFORU;

@@ -39,14 +39,14 @@ char *getrumor(int truth, char *rumor_buf, bool exclude_cookie) {
 	}
 
 	dlb_fseek(rumors, 0, SEEK_END);
-	size_t len = dlb_ftell(rumors);
+	usize len = dlb_ftell(rumors);
 
 	do {
 		// HACK ALERT!
 		// This chooses a random position within the file, and then finds the next fortune after that position
 		// Eventually, the dlb interface should support newline-tabulated files
 		// So this doesn't have to be so complex
-		size_t tidbit = rn2(len);
+		usize tidbit = rn2(len);
 		dlb_fseek(rumors, tidbit, SEEK_SET);
 
 		dlb_fgets(line, sizeof line, rumors);
@@ -121,9 +121,9 @@ void outoracle(boolean special, boolean delphi) {
 	dlb	*oracles;
 	char buf[BUFSZ];
 
-	static size_t *oracle_offsets;
-	static size_t num_oracles;
-	static size_t current_oracle = 0;
+	static usize *oracle_offsets;
+	static usize num_oracles;
+	static usize current_oracle = 0;
 
 
 	oracles = dlb_fopen_area(NH_ORACLEAREA, NH_ORACLEFILE, "r");
@@ -133,11 +133,11 @@ void outoracle(boolean special, boolean delphi) {
 	}
 	if (!oracle_offsets) {
 		num_oracles = 1;
-		oracle_offsets = new(size_t, 1);
+		oracle_offsets = new(usize, 1);
 		oracle_offsets[0] = 0; // First oracle starts at position 0
 		while (dlb_fgets(buf, BUFSZ, oracles)) {
 			if (!strcmp(buf, "-----\n")) {
-				oracle_offsets = realloc(oracle_offsets, sizeof(size_t) * ++num_oracles);
+				oracle_offsets = realloc(oracle_offsets, sizeof(usize) * ++num_oracles);
 				oracle_offsets[num_oracles-1] = dlb_ftell(oracles);
 			}
 		}
@@ -156,7 +156,7 @@ void outoracle(boolean special, boolean delphi) {
 	// special => print the first (crappy) oracle
 	// Subtract 6 because oracle_offsets records the *start* of an oracle
 	// which, since they are delimited by "-----\n", is 6 characters after the end of the previous one
-	size_t start = oracle_offsets[special ? 0 : rnd(num_oracles - 1)];
+	usize start = oracle_offsets[special ? 0 : rnd(num_oracles - 1)];
 
 	dlb_fseek(oracles, start, SEEK_SET);
 

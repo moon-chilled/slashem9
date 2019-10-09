@@ -1482,7 +1482,7 @@ post_process:
 		no_tilesets = i;
 	}
 	if (tileset[0] != '\0') {
-		unsigned int len = strlen(tileset);
+		uint len = strlen(tileset);
 		for(i = 0; i < no_tilesets; i++)
 			if (len == strlen(tilesets[i].name) &&
 			    !strncmpi(tilesets[i].name, tileset, len))

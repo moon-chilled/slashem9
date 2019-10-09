@@ -158,7 +158,7 @@ mon_adjust_speed (
 {
     struct obj *otmp;
     boolean give_msg = !in_mklev, petrify = false;
-    unsigned int oldspeed = mon->mspeed;
+    uint oldspeed = mon->mspeed;
 
     switch (adjust) {
      case  2:

@@ -741,7 +741,7 @@ const struct Gender genders[] = {
 };
 
 #ifdef MAC_MPW
-const size_t maxGender = sizeof genders/sizeof genders[0];
+const usize maxGender = sizeof genders/sizeof genders[0];
 #endif /* MAC_MPW */
 
 /* Table of all alignments */
@@ -760,7 +760,7 @@ static int race_alignmentcount(int);
 static char randomstr[] = "random";
 
 #ifdef MAC_MPW
-const size_t maxAlign = sizeof aligns/sizeof aligns[0];
+const usize maxAlign = sizeof aligns/sizeof aligns[0];
 #endif /* MAC_MPW */
 
 boolean

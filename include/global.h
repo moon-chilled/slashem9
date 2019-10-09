@@ -165,14 +165,14 @@ typedef ssize_t isize;
 # define EXIT_FAILURE 1
 #endif
 
-void *alloc(size_t);		/* alloc.c */
+void *alloc(usize);		/* alloc.c */
 #define _newtype(T, amnt) ((T*)alloc(sizeof(T) * (amnt)))
 //#define _new_defvar(type, varname, amnt) type *varname = _new(sizeof(type), amnt)
 //#define _new_setvar(varname, amnt) varname = _new(sizeof(*varname), amnt)
 
 
 
-// This is magic.  It means #define new(type typ, size_t amnt = 1)
+// This is magic.  It means #define new(type typ, usize amnt = 1)
 #define _newtype_f1(...) _newtype(__VA_ARGS__, 1)
 #define _newtype_f2(...) _newtype(__VA_ARGS__)
 #define _newtype_fx(_1, _2, n, ...) n

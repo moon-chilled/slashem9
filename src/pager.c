@@ -388,7 +388,7 @@ static void checkfile(char *inp, struct permonst *pm, bool user_typed_name, bool
 	}
 
 	bool in_exclusion = false;
-	size_t entry_location;
+	usize entry_location;
 
 	// look for the appropriate entry
 	while (dlb_fgets(buf, BUFSZ, fp)) {

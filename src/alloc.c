@@ -8,7 +8,7 @@
 
 extern void panic(const char *,...);
 
-void *alloc(size_t lth) {
+void *alloc(usize lth) {
 	void *ptr = calloc(1, lth);
 
 	if (!ptr) panic("Memory allocation failure; cannot get %zu bytes", lth);

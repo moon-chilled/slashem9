@@ -117,7 +117,7 @@ int assign_videocolors(char *colorvals) {
 }
 
 static int convert_uchars(char *bufp, uchar *list, int size) {
-	unsigned int num = 0;
+	uint num = 0;
 	int count = 0;
 
 	list[count] = 0;

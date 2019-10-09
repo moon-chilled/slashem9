@@ -618,7 +618,7 @@ long scatter(
     int sx,
     int sy,				/* location of objects to scatter */
     int blastforce,				/* force behind the scattering	*/
-    unsigned int scflags,
+    uint scflags,
     struct obj *obj			/* only scatter this obj        */) {
 
 	struct obj *otmp;

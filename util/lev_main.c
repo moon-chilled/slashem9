@@ -206,13 +206,13 @@ extern lev_region *tmprndlreg[];
 
 extern int n_olist, n_mlist, n_plist;
 
-extern unsigned int nrndlreg;
-extern unsigned int nlreg, nreg, ndoor, ntrap, nmons, nobj;
-extern unsigned int ndb, nwalk, npart, ndig, npass, nlad, nstair;
-extern unsigned int naltar, ncorridor, nrooms, ngold, nengraving;
-extern unsigned int nfountain, npool, nsink;
+extern uint nrndlreg;
+extern uint nlreg, nreg, ndoor, ntrap, nmons, nobj;
+extern uint ndb, nwalk, npart, ndig, npass, nlad, nstair;
+extern uint naltar, ncorridor, nrooms, ngold, nengraving;
+extern uint nfountain, npool, nsink;
 
-extern unsigned int max_x_map, max_y_map;
+extern uint max_x_map, max_y_map;
 
 extern int line_number, colon_line_number;
 
@@ -539,7 +539,7 @@ void scan_map(char *map) {
 #define Map_point(x,y) *(tmppart[npart]->map[y] + x)
 
 void wallify_map(void) {
-	unsigned int x, y, xx, yy, lo_xx, lo_yy, hi_xx, hi_yy;
+	uint x, y, xx, yy, lo_xx, lo_yy, hi_xx, hi_yy;
 
 	for (y = 0; y <= max_y_map; y++) {
 	    SpinCursor(3);

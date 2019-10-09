@@ -2196,7 +2196,7 @@ struct attack *mattk;
 		break;
 	    case AD_SLOW:
 		if (!negated && mdef->mspeed != MSLOW) {
-		    unsigned int oldspeed = mdef->mspeed;
+		    uint oldspeed = mdef->mspeed;
 
 		    mon_adjust_speed(mdef, -1, NULL);
 		    if (mdef->mspeed != oldspeed && canseemon(mdef))

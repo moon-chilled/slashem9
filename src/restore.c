@@ -18,8 +18,8 @@ static struct monst *restmonchn(int,boolean);
 static struct fruit *loadfruitchn(int);
 static void freefruitchn(struct fruit *);
 static void ghostfruit(struct obj *);
-static boolean restgamestate(int, unsigned int *, unsigned int *);
-static void restlevelstate(unsigned int, unsigned int);
+static boolean restgamestate(int, uint *, uint *);
+static void restlevelstate(uint, uint);
 static int restlevelfile(int,xchar);
 static void reset_oattached_mids(boolean);
 
@@ -254,7 +254,7 @@ boolean ghostly;
 			mtmp->m_id = nid;
 		}
 		if (moved && mtmp->data) {
-			int offset = mtmp->data - monbegin;	/*(ptrdiff_t)*/
+			isize offset = mtmp->data - monbegin;
 			mtmp->data = mons + offset;  /* new permonst location */
 		}
 		if (ghostly) {
@@ -341,7 +341,7 @@ struct obj *otmp;
 	else otmp->spe = fruitadd(oldf->fname);
 }
 
-static boolean restgamestate(int fd, unsigned int *stuckid, unsigned int *steedid) {
+static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 	/* discover is actually flags.explore */
 	boolean remember_discover = discover;
 	struct obj *otmp;
@@ -455,7 +455,7 @@ static boolean restgamestate(int fd, unsigned int *stuckid, unsigned int *steedi
 /* update game state pointers to those valid for the current level (so we
  * don't dereference a wild u.ustuck when saving the game state, for instance)
  */
-static void restlevelstate(unsigned int stuckid, unsigned int steedid) {
+static void restlevelstate(uint stuckid, uint steedid) {
 	struct monst *mtmp;
 
 	if (stuckid) {
@@ -498,7 +498,7 @@ xchar ltmp;
 }
 
 int dorecover (int fd) {
-	unsigned int stuckid = 0, steedid = 0;
+	uint stuckid = 0, steedid = 0;
 	xchar ltmp;
 	int rtmp;
 	struct obj *otmp;
@@ -890,7 +890,7 @@ void minit(void) {
     return;
 }
 
-void mread(int fd, void * buf, unsigned int len) {
+void mread(int fd, void * buf, uint len) {
 	int rlen;
 
 	rlen = read(fd, buf, (unsigned) len);

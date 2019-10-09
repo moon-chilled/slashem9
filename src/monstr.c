@@ -6,7 +6,7 @@ int *monstr;
 int mstrength(struct permonst ptr);
 
 void monstr_init(void) {
-	size_t i = 0;
+	usize i = 0;
 
 	// count monsters
 	while (mons[i++].mlet) {}

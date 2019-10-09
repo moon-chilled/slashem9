@@ -276,7 +276,7 @@ void
 savenames (int fd, int mode)
 {
 	int i;
-	unsigned int len;
+	uint len;
 
 	if (perform_bwrite(mode)) {
 	    bwrite(fd, (void *)bases, sizeof bases);
@@ -305,7 +305,7 @@ void
 restnames (int fd)
 {
 	int i;
-	unsigned int len;
+	uint len;
 
 	mread(fd, (void *) bases, sizeof bases);
 	mread(fd, (void *) disco, sizeof disco);

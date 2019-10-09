@@ -7,7 +7,7 @@
 
 /* ### alloc.c ### */
 
-extern void *alloc(size_t);
+extern void *alloc(usize);
 extern void nhfree(const void*);
 #define free nhfree
 extern char *fmt_ptr(const void*,char *);
@@ -155,7 +155,7 @@ extern void bot2str(char *);
 extern const char * shorten_bot1(const char *, int);
 #endif
 #ifdef TTY_GRAPHICS
-extern const char * shorten_bot2(const char *, unsigned int);
+extern const char * shorten_bot2(const char *, uint);
 #endif
 
 /* ### cmd.c ### */
@@ -607,7 +607,7 @@ extern long rndexp(boolean);
 /* ### explode.c ### */
 
 extern void explode(xchar,xchar,int,int,char,int);
-extern long scatter(int, int, int, unsigned int, struct obj *);
+extern long scatter(int, int, int, uint, struct obj *);
 extern void splatter_burning_oil(int, int);
 extern void grenade_explode(struct obj *, int, int, boolean, int);
 extern void arm_bomb(struct obj *, boolean);
@@ -745,7 +745,7 @@ extern char *s_suffix(const char *);
 extern boolean onlyspace(const char *);
 extern char *tabexpand(char *);
 extern char *visctrl(char);
-extern const char *ordin(unsigned int);
+extern const char *ordin(uint);
 extern char *sitoa(int);
 extern int sgn(int);
 extern int rounddiv(long,int);
@@ -754,7 +754,7 @@ extern int distmin(int,int,int,int);
 extern boolean online2(int,int,int,int);
 extern boolean pmatch(const char *,const char *);
 #ifndef STRNCMPI
-extern int strncmpi(const char *,const char *, size_t);
+extern int strncmpi(const char *,const char *, usize);
 #endif
 #ifndef STRSTRI
 extern char *strstri(const char *,const char *);
@@ -792,7 +792,7 @@ extern void delobj(struct obj *);
 extern struct obj *sobj_at(int,int,int);
 extern struct obj *carrying(int);
 extern boolean have_lizard(void);
-extern struct obj *o_on(unsigned int,struct obj *);
+extern struct obj *o_on(uint,struct obj *);
 extern boolean obj_here(struct obj *,int,int);
 extern boolean wearing_armor(void);
 extern bool is_worn(struct obj *);
@@ -1676,7 +1676,7 @@ extern void trickery(char *);
 extern void getlev(int,int,xchar,boolean);
 extern void minit(void);
 extern boolean lookup_id_mapping(unsigned, unsigned *);
-extern void mread(int,void *,unsigned int);
+extern void mread(int,void *,uint);
 
 /* ### rip.c ### */
 
@@ -1743,7 +1743,7 @@ extern void savelev(int,xchar,int);
 extern void bufon(int);
 extern void bufoff(int);
 extern void bflush(int);
-extern void bwrite(int,void *,unsigned int);
+extern void bwrite(int,void *,uint);
 extern void bclose(int);
 extern void savefruitchn(int,int);
 extern void free_dungeons(void);

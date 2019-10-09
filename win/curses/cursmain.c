@@ -531,7 +531,7 @@ curses_print_glyph(winid wid, xchar x, xchar y, int glyph)
 {
     glyph_t ch;
     int color;
-    unsigned int special;
+    uint special;
     int attr = -1;
 
     /* map glyph to character and color */

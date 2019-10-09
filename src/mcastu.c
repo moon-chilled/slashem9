@@ -37,8 +37,8 @@ static int choose_magic_spell(int);
 static int choose_clerical_spell(int);
 static void cast_wizard_spell(struct monst *, int,int);
 static void cast_cleric_spell(struct monst *, int,int);
-static boolean is_undirected_spell(unsigned int,int);
-static boolean spell_would_be_useless(struct monst *,unsigned int,int);
+static boolean is_undirected_spell(uint,int);
+static boolean spell_would_be_useless(struct monst *,uint,int);
 
 
 extern const char * const flash_types[];	/* from zap.c */
@@ -731,7 +731,7 @@ static void cast_cleric_spell(struct monst *mtmp, int dmg, int spellnum) {
     if (dmg) mdamageu(mtmp, dmg);
 }
 
-static boolean is_undirected_spell(unsigned int adtyp, int spellnum) {
+static boolean is_undirected_spell(uint adtyp, int spellnum) {
     if (adtyp == AD_SPEL) {
 	switch (spellnum) {
 	case MGC_CLONE_WIZ:
@@ -758,7 +758,7 @@ static boolean is_undirected_spell(unsigned int adtyp, int spellnum) {
 }
 
 // Some spells are useless under some circumstances.
-static boolean spell_would_be_useless(struct monst *mtmp, unsigned int adtyp, int spellnum) {
+static boolean spell_would_be_useless(struct monst *mtmp, uint adtyp, int spellnum) {
     /* Some spells don't require the player to really be there and can be cast
      * by the monster when you're invisible, yet still shouldn't be cast when
      * the monster doesn't even think you're there.

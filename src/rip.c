@@ -92,7 +92,7 @@ int how;
 
 	rip = dp = (char **) alloc(sizeof(rip_txt));
 	for (x = 0; rip_txt[x]; x++) {
-		dp[x] = alloc((unsigned int)(strlen(rip_txt[x]) + 1));
+		dp[x] = alloc((uint)(strlen(rip_txt[x]) + 1));
 		strcpy(dp[x], rip_txt[x]);
 	}
 	dp[x] = NULL;

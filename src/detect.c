@@ -46,7 +46,7 @@ struct obj *o_in(struct obj *obj, char oclass) {
 }
 
 /* Recursively search obj for an object made of specified material and return 1st found */
-struct obj *o_material (struct obj *obj, unsigned int material) {
+struct obj *o_material (struct obj *obj, uint material) {
     struct obj* otmp;
     struct obj *temp;
 
@@ -72,7 +72,7 @@ static void do_dknown_of(struct obj *obj) {
 }
 
 /* Check whether the location has an outdated object displayed on it. */
-static boolean check_map_spot(int x, int y, char oclass, unsigned int material) {
+static boolean check_map_spot(int x, int y, char oclass, uint material) {
 	int glyph;
 	struct obj *otmp;
 	struct monst *mtmp;
@@ -133,7 +133,7 @@ static boolean check_map_spot(int x, int y, char oclass, unsigned int material) 
    reappear after the detection has completed.  Return true if noticeable
    change occurs.
  */
-static boolean clear_stale_map(char oclass, unsigned int material) {
+static boolean clear_stale_map(char oclass, uint material) {
 	int zx, zy;
 	boolean change_made = false;
 

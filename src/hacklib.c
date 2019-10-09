@@ -176,7 +176,7 @@ char *visctrl(char c) {
 }
 
 // return the ordinal suffix of a number
-const char *ordin (unsigned int n) {
+const char *ordin (uint n) {
     int dd = n % 10;
 
     return (dd == 0 || dd > 3 || (n % 100) / 10 == 1) ? "th" :
@@ -265,7 +265,7 @@ pmatch_top:
 
 #ifndef STRNCMPI
 // case insensitive counted string comparison
-int strncmpi(const char *s1, const char *s2, size_t n) {
+int strncmpi(const char *s1, const char *s2, usize n) {
     //{ aka strncasecmp }
     char t1, t2;
 
@@ -356,7 +356,7 @@ void setrandom(void) {
 	 * routine names into one via #defines is even more confusing
 	 */
 #ifdef RANDOM	/* srandom() from sys/share/random.c */
-	srandom((unsigned int) time(NULL));
+	srandom((uint) time(NULL));
 #else
 # if defined(BSD) || defined(LINUX) || defined(CYGWIN32) /* system srandom() */
 #  if defined(BSD) && !defined(POSIX_TYPES)

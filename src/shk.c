@@ -2161,7 +2161,7 @@ bp_to_obj(bp)
 struct bill_x *bp;
 {
 	struct obj *obj;
-	unsigned int id = bp->bo_id;
+	uint id = bp->bo_id;
 
 	if(bp->useup)
 		obj = o_on(id, billobjs);
@@ -3874,7 +3874,7 @@ boolean cant_mollify;
 	struct damage *tmp_dam, *appear_here = 0;
 	/* any number >= (80*80)+(24*24) would do, actually */
 	long cost_of_damage = 0L;
-	unsigned int nearest_shk = 7000, nearest_damage = 7000;
+	uint nearest_shk = 7000, nearest_damage = 7000;
 	int picks = 0;
 
 	for (tmp_dam = level.damagelist;
@@ -3889,12 +3889,12 @@ boolean cant_mollify;
 		   in_rooms(tmp_dam->place.x, tmp_dam->place.y, SHOPBASE));
 	    for (shp = shops_affected; *shp; shp++) {
 		struct monst *tmp_shk;
-		unsigned int shk_distance;
+		uint shk_distance;
 
 		if (!(tmp_shk = shop_keeper(*shp)))
 		    continue;
 		if (tmp_shk == shkp) {
-		    unsigned int damage_distance =
+		    uint damage_distance =
 				   distu(tmp_dam->place.x, tmp_dam->place.y);
 
 		    if (damage_distance < nearest_damage) {

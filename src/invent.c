@@ -645,7 +645,7 @@ boolean have_lizard(void) {
 	return false;
 }
 
-struct obj *o_on(unsigned int id, struct obj *objchn) {
+struct obj *o_on(uint id, struct obj *objchn) {
 	struct obj *temp;
 
 	while(objchn) {

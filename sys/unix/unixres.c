@@ -122,7 +122,7 @@ gid_t *rgid, *egid, *sgid;
 #  endif	/* BSD || SVR4 */
 # endif		/* LINUX */
 
-static unsigned int hiding_privileges = 0;
+static uint hiding_privileges = 0;
 
 /*
  * Note: returns the value _after_ action.

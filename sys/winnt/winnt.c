@@ -184,7 +184,7 @@ char *get_username(lan_username_size)
 int *lan_username_size;
 {
 	static TCHAR username_buffer[BUFSZ];
-	unsigned int status;
+	uint status;
 	DWORD i = BUFSZ - 1;
 
 	/* i gets updated with actual size */

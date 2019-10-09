@@ -112,15 +112,15 @@ static struct coord plist[MAX_REGISTERS];
 
 int n_olist = 0, n_mlist = 0, n_plist = 0;
 
-unsigned int nrndlreg = 0;
-unsigned int nlreg = 0, nreg = 0, ndoor = 0, ntrap = 0, nmons = 0, nobj = 0;
-unsigned int ndb = 0, nwalk = 0, npart = 0, ndig = 0, nlad = 0, nstair = 0;
-unsigned int naltar = 0, ncorridor = 0, nrooms = 0, ngold = 0, nengraving = 0;
-unsigned int nfountain = 0, npool = 0, nsink = 0, npass = 0;
+uint nrndlreg = 0;
+uint nlreg = 0, nreg = 0, ndoor = 0, ntrap = 0, nmons = 0, nobj = 0;
+uint ndb = 0, nwalk = 0, npart = 0, ndig = 0, nlad = 0, nstair = 0;
+uint naltar = 0, ncorridor = 0, nrooms = 0, ngold = 0, nengraving = 0;
+uint nfountain = 0, npool = 0, nsink = 0, npass = 0;
 
 static int lev_flags = 0;
 
-unsigned int max_x_map, max_y_map;
+uint max_x_map, max_y_map;
 
 static xchar in_room;
 
