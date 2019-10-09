@@ -152,15 +152,6 @@
  */
 
 /*
- * Uncomment the following line if your compiler falsely claims to be
- * a standard C compiler (i.e., defines __STDC__ without cause).
- * Examples are Apollo's cc (in some versions) and possibly SCO UNIX's rcc.
- */
-/* #define NOTSTDC */			/* define for lying compilers */
-
-#include "tradstdc.h"
-
-/*
  * type schar: small signed integers (8 bits suffice)
  */
 typedef signed char	schar;
@@ -175,10 +166,7 @@ typedef signed char	schar;
  *
  *	typedef unsigned short int uchar;
  */
-#ifndef _AIX32		/* identical typedef in system file causes trouble */
 typedef unsigned char	uchar;
-#endif
-
 typedef long glyph_t;
 
 #define REALTIME_ON_BOTL        /* Show elapsed time on bottom line.  Note:

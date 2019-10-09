@@ -4,10 +4,7 @@
 
 #include <stdlib.h>
 
-#include "tradstdc.h"
 #include "config.h"
-
-char *fmt_ptr(const void*,char *);
 
 extern void panic(const char *,...);
 
