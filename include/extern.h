@@ -856,7 +856,7 @@ extern int dosuspend(void);
 
 /* ### light.c ### */
 
-extern void new_light_source(xchar, xchar, int, int, void *);
+extern void new_light_source(xchar, xchar, int, int, anything);
 extern void del_light_source(int, anything);
 extern void do_light_sources(char **);
 extern struct monst *find_mid(unsigned, unsigned);

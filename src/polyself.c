@@ -389,8 +389,7 @@ boolean forcecontrol;
 		del_light_source(LS_MONSTER, monst_to_any(&youmonst));
 	    if (new_light == 1) ++new_light;  /* otherwise it's undetectable */
 	    if (new_light)
-		new_light_source(u.ux, u.uy, new_light,
-				 LS_MONSTER, (void *)&youmonst);
+		new_light_source(u.ux, u.uy, new_light, LS_MONSTER, monst_to_any(&youmonst));
 	}
 	if (is_pool(u.ux,u.uy) && was_floating && !(Levitation || Flying) &&
 		!breathless(youmonst.data) && !amphibious(youmonst.data) &&
@@ -1824,7 +1823,7 @@ special_poly (void)
 		    if (new_light == 1) ++new_light;  /* otherwise it's undetectable */
 		    if (new_light)
 			new_light_source(u.ux, u.uy, new_light,
-					 LS_MONSTER, (void *)&youmonst);
+					 LS_MONSTER, monst_to_any(&youmonst));
 		}
 	}
 	return;

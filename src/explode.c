@@ -270,7 +270,7 @@ do_explode(
 /*WAC add light source for fire*/
 #ifdef LIGHT_SRC_SPELL
         if ((!remote) && ((adtyp == AD_FIRE) || (adtyp == AD_ELEC))) {
-                new_light_source(x, y, 2, LS_TEMP, (void *) 1);
+                new_light_source(x, y, 2, LS_TEMP, uint_to_any(1));
                 vision_recalc(0);
         }
 #endif

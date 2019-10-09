@@ -57,7 +57,7 @@ extern char circle_start[];
 extern boolean obj_special_light(struct obj *);
 
 /* Create a new light source.  */
-void new_light_source(xchar x, xchar y, int range, int type, void *id) {
+void new_light_source(xchar x, xchar y, int range, int type, anything id) {
     light_source *ls;
 
     if (range > MAX_RADIUS || range < 1) {
@@ -72,7 +72,7 @@ void new_light_source(xchar x, xchar y, int range, int type, void *id) {
     ls->y = y;
     ls->range = range;
     ls->type = type;
-    ls->id.a_void = id;
+    ls->id = id;
     if (ls->type != LS_TEMP && x == 0)
 	ls->flags = LSF_FLOATING;
     else
@@ -101,7 +101,7 @@ void del_light_source(int type, anything id) {
 			break;
     case LS_TEMP:       tmp_id.a_uint = id.a_uint;
     			break;
-    default:		tmp_id.a_uint = 0;
+    default:		tmp_id.a_void = NULL;
 			break;
     }
 
@@ -362,8 +362,8 @@ static int maybe_write_ls(int fd, int range, boolean write_it) {
 	case LS_MONSTER:
 	    is_global = !mon_is_local(ls->id.a_monst);
 	    break;
-		case LS_TEMP:
-		    continue;
+	case LS_TEMP:
+	    continue;
 	default:
 	    is_global = 0;
 	    impossible("maybe_write_ls: bad type (%d) [range=%d]",

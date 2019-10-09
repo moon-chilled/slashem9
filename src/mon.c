@@ -1392,9 +1392,7 @@ replmon (struct monst *mtmp, struct monst *mtmp2)
 	place_wsegs(mtmp2); /* locations to mtmp2 not mtmp. */
     if (emits_light(mtmp2->data)) {
 	/* since this is so rare, we don't have any `mon_move_light_source' */
-	new_light_source(mtmp2->mx, mtmp2->my,
-			 emits_light(mtmp2->data),
-			 LS_MONSTER, (void *)mtmp2);
+	new_light_source(mtmp2->mx, mtmp2->my, emits_light(mtmp2->data), LS_MONSTER, monst_to_any(mtmp2));
 	/* here we rely on the fact that `mtmp' hasn't actually been deleted */
 	del_light_source(LS_MONSTER, monst_to_any(mtmp));
     }
@@ -2705,8 +2703,7 @@ boolean msg;
 	    if (emits_light(olddata))
 		del_light_source(LS_MONSTER, monst_to_any(mtmp));
 	    if (emits_light(mtmp->data))
-		new_light_source(mtmp->mx, mtmp->my, emits_light(mtmp->data),
-				 LS_MONSTER, (void *)mtmp);
+		new_light_source(mtmp->mx, mtmp->my, emits_light(mtmp->data), LS_MONSTER, monst_to_any(mtmp));
 	}
 	if (!mtmp->perminvis || pm_invisible(olddata))
 	    mtmp->perminvis = pm_invisible(mdat);

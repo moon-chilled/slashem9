@@ -3300,7 +3300,7 @@ struct obj **obj_p;			/* object tossed/used */
 #ifdef LIGHT_SRC_SPELL
 		if (use_lights) {
 		    lits++;
-		    new_light_source(bhitpos.x, bhitpos.y, 1, LS_TEMP, (void *)(size_t)lits);
+		    new_light_source(bhitpos.x, bhitpos.y, 1, LS_TEMP, uint_to_any(lits));
 		    vision_full_recalc = 1;
 		    vision_recalc(0);
 		}
@@ -3896,7 +3896,7 @@ int dx,dy;
             if (((abstype == ZT_FIRE) || (abstype == ZT_LIGHTNING))
               && (!(type >= ZT_MEGA(ZT_FIRST) && type <= ZT_MEGA(ZT_LAST)))) {
                 lits++;
-                new_light_source(sx, sy, 1, LS_TEMP, (void *)(size_t)lits);
+                new_light_source(sx, sy, 1, LS_TEMP, uint_to_any(lits));
                 vision_full_recalc = 1;
                 vision_recalc(0);
             }
