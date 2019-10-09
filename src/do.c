@@ -1052,7 +1052,6 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 			/* we'll reach here if running in wizard mode */
 			error("Cannot continue this game.");
 		}
-		minit();	/* ZEROCOMP */
 		getlev(fd, hackpid, new_ledger, false);
 		close(fd);
 	}

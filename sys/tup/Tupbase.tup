@@ -63,4 +63,4 @@ QUEST_DES := dat/Ice.des
 : dat/Yeoman.des | lev_comp$(HOST_EXEEXT) |> ./lev_comp %f |> Yeo-fila.lev Yeo-filb.lev Yeo-loca.lev Yeo-goal.lev Yeo-strt.lev
 
 
-: dlb$(HOST_EXEEXT) dungeon *.lev dat/help dat/hh dat/cmdhelp dat/history dat/opthelp dat/wizhelp dat/gypsy.txt dat/data.base dat/oracles.txt dat/quest.dat dat/rumors.fal dat/rumors.tru |> cd dat; cp ../dungeon .; cp ../*.lev .; ../dlb cf nhdat dungeon *.lev help hh cmdhelp history opthelp wizhelp gypsy.txt data.base oracles.txt quest.dat rumors.fal rumors.tru; rm -f dungeon *.lev; mv nhdat .. |> nhdat
+: dlb$(HOST_EXEEXT) dungeon *.lev dat/help dat/hh dat/cmdhelp dat/history dat/license dat/opthelp dat/wizhelp dat/gypsy.txt dat/data.base dat/oracles.txt dat/quest.dat dat/rumors.fal dat/rumors.tru |> cd dat; cp ../dungeon .; cp ../*.lev .; ../dlb cf nhdat dungeon *.lev help hh cmdhelp history license opthelp wizhelp gypsy.txt data.base oracles.txt quest.dat rumors.fal rumors.tru; rm -f dungeon *.lev; mv nhdat .. |> nhdat

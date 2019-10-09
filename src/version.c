@@ -65,7 +65,6 @@ boolean uptodate(int fd, const char *name) {
     boolean verbose = name ? true : false;
 
     rlen = read(fd, (void *) &vers_info, sizeof vers_info);
-    minit();		/* ZEROCOMP */
     if (rlen == 0) {
 	if (verbose) {
 	    pline("File \"%s\" is empty?", name);

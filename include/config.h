@@ -96,9 +96,6 @@
 #define PANICLOG "paniclog"	/* log of panic and impossible events */
 
 
-#define INTERNAL_COMP	/* control use of NetHack's compression routines */
-
-
 /*
  *	Data librarian.  Defining DLB places most of the support files into
  *	a tar-like file, thus making a neater installation.  See *conf.h

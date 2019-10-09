@@ -16,9 +16,6 @@
 /*WAC boolean here to keep track of quit status*/
 boolean saverestore;
 
-#ifdef ZEROCOMP
-static void bputc(int);
-#endif
 static void savelevchn(int,int);
 static void savedamage(int,int);
 static void saveobjchn(int,struct obj *,int);
@@ -236,7 +233,6 @@ dosave0()
 		    HUP done(TRICKED);
 		    return 0;
 		}
-		minit();	/* ZEROCOMP */
 		getlev(ofd, hackpid, ltmp, false);
 		close(ofd);
 		bwrite(fd, (void *) &ltmp, sizeof ltmp); /* level number*/
@@ -406,75 +402,19 @@ int mode;
 	if(fd < 0) panic("Save on bad file!");	/* impossible */
 	if (lev >= 0 && lev <= maxledgerno())
 	    level_info[lev].flags |= VISITED;
-	bwrite(fd,(void *) &hackpid,sizeof(hackpid));
-	bwrite(fd,(void *) &lev,sizeof(lev));
-#ifdef RLECOMP
-	{
-	    /* perform run-length encoding of rm structs */
-	    struct rm *prm, *rgrm;
-	    int x, y;
-	    uchar match;
-
-	    rgrm = &levl[0][0];		/* start matching at first rm */
-	    match = 0;
-
-	    for (y = 0; y < ROWNO; y++) {
-		for (x = 0; x < COLNO; x++) {
-		    prm = &levl[x][y];
-#ifdef DISPLAY_LAYERS
-		    if (prm->mem_bg == rgrm->mem_bg
-			&& prm->mem_trap == rgrm->mem_trap
-			&& prm->mem_obj == rgrm->mem_obj
-			&& prm->mem_corpse == rgrm->mem_corpse
-			&& prm->mem_invis == rgrm->mem_invis
-#else
-		    if (prm->glyph == rgrm->glyph
-#endif
-			&& prm->typ == rgrm->typ
-			&& prm->seenv == rgrm->seenv
-			&& prm->horizontal == rgrm->horizontal
-			&& prm->flags == rgrm->flags
-			&& prm->lit == rgrm->lit
-			&& prm->waslit == rgrm->waslit
-			&& prm->roomno == rgrm->roomno
-			&& prm->edge == rgrm->edge) {
-			match++;
-			if (match > 254) {
-			    match = 254;	/* undo this match */
-			    goto writeout;
-			}
-		    } else {
-			/* the run has been broken,
-			 * write out run-length encoding */
-		    writeout:
-			bwrite(fd, (void *)&match, sizeof(uchar));
-			bwrite(fd, (void *)rgrm, sizeof(struct rm));
-			/* start encoding again. we have at least 1 rm
-			 * in the next run, viz. this one. */
-			match = 1;
-			rgrm = prm;
-		    }
-		}
-	    }
-	    if (match > 0) {
-		bwrite(fd, (void *)&match, sizeof(uchar));
-		bwrite(fd, (void *)rgrm, sizeof(struct rm));
-	    }
-	}
-#else
-	bwrite(fd,(void *) levl,sizeof(levl));
-#endif /* RLECOMP */
-
-	bwrite(fd,(void *) &monstermoves,sizeof(monstermoves));
-	bwrite(fd,(void *) &upstair,sizeof(stairway));
-	bwrite(fd,(void *) &dnstair,sizeof(stairway));
-	bwrite(fd,(void *) &upladder,sizeof(stairway));
-	bwrite(fd,(void *) &dnladder,sizeof(stairway));
-	bwrite(fd,(void *) &sstairs,sizeof(stairway));
-	bwrite(fd,(void *) &updest,sizeof(dest_area));
-	bwrite(fd,(void *) &dndest,sizeof(dest_area));
-	bwrite(fd,(void *) &level.flags,sizeof(level.flags));
-	bwrite(fd, (void *) doors, sizeof(doors));
+	bwrite(fd, &hackpid,sizeof(hackpid));
+	bwrite(fd, &lev,sizeof(lev));
+	bwrite(fd, levl,sizeof(levl));
+	bwrite(fd, &monstermoves,sizeof(monstermoves));
+	bwrite(fd, &upstair,sizeof(stairway));
+	bwrite(fd, &dnstair,sizeof(stairway));
+	bwrite(fd, &upladder,sizeof(stairway));
+	bwrite(fd, &dnladder,sizeof(stairway));
+	bwrite(fd, &sstairs,sizeof(stairway));
+	bwrite(fd, &updest,sizeof(dest_area));
+	bwrite(fd, &dndest,sizeof(dest_area));
+	bwrite(fd, &level.flags,sizeof(level.flags));
+	bwrite(fd, doors, sizeof(doors));
 	save_rooms(fd);	/* no dynamic memory to reclaim */
 
 	/* from here on out, saving also involves allocated memory cleanup */
@@ -502,141 +442,11 @@ int mode;
 	if (mode != FREE_SAVE) bflush(fd);
 }
 
-#ifdef ZEROCOMP
-/* The runs of zero-run compression are flushed after the game state or a
- * level is written out.  This adds a couple bytes to a save file, where
- * the runs could be mashed together, but it allows gluing together game
- * state and level files to form a save file, and it means the flushing
- * does not need to be specifically called for every other time a level
- * file is written out.
- */
-
-#define RLESC '\0'    /* Leading character for run of LRESC's */
-#define flushoutrun(ln) (bputc(RLESC), bputc(ln), ln = -1)
-
-#ifndef ZEROCOMP_BUFSIZ
-# define ZEROCOMP_BUFSIZ BUFSZ
-#endif
-static unsigned char outbuf[ZEROCOMP_BUFSIZ];
-static unsigned short outbufp = 0;
-static short outrunlength = -1;
-static int bwritefd;
-static boolean compressing = false;
-
-/*dbg()
-{
-    HUP printf("outbufp %d outrunlength %d\n", outbufp,outrunlength);
-}*/
-
-static void
-bputc(c)
-int c;
-{
-    if (outbufp >= sizeof outbuf) {
-	write(bwritefd, outbuf, sizeof outbuf);
-	outbufp = 0;
-    }
-    outbuf[outbufp++] = (unsigned char)c;
-}
-
-/*ARGSUSED*/
-void
-bufon(fd)
-int fd;
-{
-    compressing = true;
-    return;
-}
-
-/*ARGSUSED*/
-void
-bufoff(fd)
-int fd;
-{
-    if (outbufp) {
-	outbufp = 0;
-	panic("closing file with buffered data still unwritten");
-    }
-    outrunlength = -1;
-    compressing = false;
-    return;
-}
-
-void
-bflush(fd)  /* flush run and buffer */
-int fd;
-{
-    bwritefd = fd;
-    if (outrunlength >= 0) {	/* flush run */
-	flushoutrun(outrunlength);
-    }
-
-    if (outbufp) {
-	if (write(fd, outbuf, outbufp) != outbufp) {
-#if defined(UNIX) || defined(__EMX__)
-	    if (program_state.done_hup)
-		terminate(EXIT_FAILURE);
-	    else
-#endif
-		bclose(fd);	/* panic (outbufp != 0) */
-	}
-	outbufp = 0;
-    }
-}
-
-void
-bwrite(fd, loc, num)
-int fd;
-void * loc;
-unsigned num;
-{
-    unsigned char *bp = (unsigned char *)loc;
-
-    if (!compressing) {
-	if ((unsigned) write(fd, loc, num) != num) {
-#if defined(UNIX) || defined(__EMX__)
-	    if (program_state.done_hup)
-		terminate(EXIT_FAILURE);
-	    else
-#endif
-		panic("cannot write %u bytes to file #%d", num, fd);
-	}
-    } else {
-	bwritefd = fd;
-	for (; num; num--, bp++) {
-	    if (*bp == RLESC) {	/* One more char in run */
-		if (++outrunlength == 0xFF) {
-		    flushoutrun(outrunlength);
-		}
-	    } else {		/* end of run */
-		if (outrunlength >= 0) {	/* flush run */
-		    flushoutrun(outrunlength);
-		}
-		bputc(*bp);
-	    }
-	}
-    }
-}
-
-void
-bclose(fd)
-int fd;
-{
-    bufoff(fd);
-    close(fd);
-    return;
-}
-
-#else /* ZEROCOMP */
-
 static int bw_fd = -1;
 static FILE *bw_FILE = 0;
 static boolean buffering = false;
 
-void
-bufon(fd)
-    int fd;
-{
+void bufon(int fd) {
 #ifdef UNIX
     if(bw_fd >= 0)
 	panic("double buffering unexpected");
@@ -647,18 +457,12 @@ bufon(fd)
     buffering = true;
 }
 
-void
-bufoff(fd)
-int fd;
-{
+void bufoff(int fd) {
     bflush(fd);
     buffering = false;
 }
 
-void
-bflush(fd)
-    int fd;
-{
+void bflush(int fd) {
 #ifdef UNIX
     if(fd == bw_fd) {
 	if(fflush(bw_FILE) == EOF)
@@ -668,12 +472,7 @@ bflush(fd)
     return;
 }
 
-void
-bwrite(fd,loc,num)
-int fd;
-void * loc;
-unsigned num;
-{
+void bwrite(int fd, void *loc, unsigned num) {
 	boolean failed;
 
 #ifdef UNIX
@@ -699,10 +498,7 @@ unsigned num;
 	}
 }
 
-void
-bclose(fd)
-    int fd;
-{
+void bclose(int fd) {
     bufoff(fd);
 #ifdef UNIX
     if (fd == bw_fd) {
@@ -714,7 +510,6 @@ bclose(fd)
 	close(fd);
     return;
 }
-#endif /* ZEROCOMP */
 
 static void
 savelevchn(fd, mode)

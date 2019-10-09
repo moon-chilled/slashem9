@@ -1676,11 +1676,7 @@ extern void trickery(char *);
 extern void getlev(int,int,xchar,boolean);
 extern void minit(void);
 extern boolean lookup_id_mapping(unsigned, unsigned *);
-#ifdef ZEROCOMP
-extern int mread(int,void *,unsigned int);
-#else
 extern void mread(int,void *,unsigned int);
-#endif
 
 /* ### rip.c ### */
 

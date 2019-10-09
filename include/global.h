@@ -61,19 +61,13 @@ typedef xchar	boolean;		/* 0 or 1 */
 typedef unsigned short ushort;
 typedef unsigned int uint;
 typedef unsigned long ulong;
+typedef size_t usize;
+typedef ssize_t isize;
 
 #ifndef STRNCMPI
 # if !defined(__SASC_60) && !defined(__MINGW32__) /* SAS/C already shifts to stricmp */
 #  define strcmpi(a,b) strncmpi((a),(b),-1)
 # endif
-#endif
-
-/* comment out to test effects of each #define -- these will probably
- * disappear eventually
- */
-#ifdef INTERNAL_COMP
-# define RLECOMP	/* run-length compression of levl array - JLee */
-# define ZEROCOMP	/* zero-run compression of everything - Olaf Seibert */
 #endif
 
 /* #define SPECIALIZATION */	/* do "specialized" version of new topology */
