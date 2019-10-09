@@ -30,7 +30,7 @@
 #define NH_RUMORAREA	FILE_AREA_SHARE
 #define NH_ORACLEFILE	"oracles.txt"	/* a file with oracular information */
 #define NH_ORACLEAREA	FILE_AREA_SHARE
-#define NH_DATAFILE	"data"	/* a file giving the meaning of symbols used */
+#define NH_DATAFILE	"data.base"	/* a file giving the meaning of symbols used */
 #define NH_DATAAREA	FILE_AREA_SHARE
 #define NH_CMDHELPFILE	"cmdhelp"	/* file telling what commands do */
 #define NH_CMDHELPAREA	FILE_AREA_SHARE

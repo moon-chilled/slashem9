@@ -54,7 +54,6 @@ char *file_prefix="";
 #endif
 
 int main(int,char **);
-void do_makedefs(char *);
 void do_objs(void);
 void do_data(void);
 void do_permonst(void);
@@ -98,112 +97,13 @@ int main(int argc, char	**argv) {
 	objects_init();
 
 	do_objs();
-	do_data();
+	//do_data();
 	do_permonst();
 	do_questtxt();
 
 	return 0;
 }
 
-
-static char save_bones_compat_buf[BUFSZ];
-
-static const char *build_opts[] = {
-#ifdef ANSI_DEFAULT
-	"ANSI default terminal",
-#endif
-	/*WAC added for borg,  invisible objects, keep_save,noartifactwish */
-#ifdef BORG
-	"borg",
-#endif
-#ifdef COM_COMPL
-	"command line completion",
-#endif
-#ifdef DLB
-	"data librarian",
-#endif
-#ifdef REALTIME_ON_BOTL
-	"elapsed time on status line",
-#endif
-#ifdef GOLDOBJ
-	"gold object in inventories",
-#endif
-#ifdef INSURANCE
-	"insurance files for recovering from crashes",
-#endif
-	/*WAC invisible objects, keep_save,  light sourced spells*/
-#ifdef LIGHT_SRC_SPELL
-	"light sourced spell effects",
-#endif
-#ifdef KEEP_SAVE
-	"keep savefiles",
-#endif
-#ifdef HOLD_LOCKFILE_OPEN
-	"exclusive lock on level 0 file",
-#endif
-#ifdef MAIL
-	"mail daemon",
-#endif
-#ifdef NEWS
-	"news file",
-#endif
-	/* WAC added noartifactwish version info*/
-#ifdef DISPLAY_LAYERS
-	"display layers",
-#endif
-#ifdef CLIPPING
-	"screen clipping",
-#endif
-#ifdef NO_TERMS
-# ifdef MAC
-	"screen control via mactty",
-# endif
-#endif
-#ifdef SHELL
-	"shell command",
-#endif
-#ifdef SUSPEND
-	"suspend command",
-#endif
-#ifdef TERMINFO
-	"terminal info library",
-#else
-# if defined(TERMLIB) || ((!defined(MICRO) && !defined(WIN32)) && defined(TTY_GRAPHICS))
-	"terminal capability library",
-# endif
-#endif
-#ifdef TIMED_DELAY
-	"timed wait for display effects",
-#endif
-#ifdef USER_SOUNDS
-# ifdef USER_SOUNDS_REGEX
-	"user sounds via regular expressions",
-# else
-	"user sounds via pmatch",
-# endif
-#endif
-#ifdef PREFIXES_IN_USE
-	"variable playground",
-#endif
-#ifdef ZEROCOMP
-	"zero-compressed save files",
-#endif
-	save_bones_compat_buf,
-	"basic NetHack features"
-};
-
-static const char *window_opts[] = {
-#ifdef TTY_GRAPHICS
-	"traditional tty-based graphics",
-#endif
-#ifdef CURSES_GRAPHICS
-	"curses",
-#endif
-#ifdef PROXY_GRAPHICS
-	"Plug-in modules",
-#endif
-	0
-};
 
 /* routine to decide whether to discard something from data.base */
 static bool d_filter(char *line) {

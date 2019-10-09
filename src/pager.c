@@ -11,7 +11,7 @@
 static boolean is_swallow_sym(int);
 static int append_str(char *, const char *);
 static struct permonst * lookat(int, int, char *, char *);
-static void checkfile(char *,struct permonst *,boolean,boolean);
+static void checkfile(char *, struct permonst*, bool, bool);
 static int do_look(boolean);
 static boolean help_menu(int *);
 #ifdef PORT_HELP
@@ -320,62 +320,57 @@ lookat(x, y, buf, monbuf)
  *	 lcase() for data.base lookup so that we can have a clean key.
  *	 Therefore, we create a copy of inp _just_ for data.base lookup.
  */
-static void
-checkfile(inp, pm, user_typed_name, without_asking)
-    char *inp;
-    struct permonst *pm;
-    boolean user_typed_name, without_asking;
-{
-    dlb *fp;
-    char buf[BUFSZ], newstr[BUFSZ];
-    char *ep, *dbase_str;
-    long txt_offset;
-    int chk_skip;
-    boolean found_in_file = false, skipping_entry = false;
+static void checkfile(char *inp, struct permonst *pm, bool user_typed_name, bool without_asking) {
+	dlb *fp;
+	char buf[BUFSZ], newstr[BUFSZ];
+	char *ep, *dbase_str;
+	bool found_in_file = false, had_error = false;
 
-    fp = dlb_fopen_area(NH_DATAAREA, NH_DATAFILE, "r");
-    if (!fp) {
-	pline("Cannot open data file!");
-	return;
-    }
+	fp = dlb_fopen_area(NH_DATAAREA, NH_DATAFILE, "r");
+	if (!fp) {
+		pline("Cannot open data file!");
+		return;
+	}
 
-    /* To prevent the need for entries in data.base like *ngel to account
-     * for Angel and angel, make the lookup string the same for both
-     * user_typed_name and picked name.
-     */
-    if (pm != NULL && !user_typed_name)
-	dbase_str = strcpy(newstr, pm->mname);
-    else dbase_str = strcpy(newstr, inp);
-    lcase(dbase_str);
+	/* To prevent the need for entries in data.base like *ngel to account
+	 * for Angel and angel, make the lookup string the same for both
+	 * user_typed_name and picked name.
+	 */
+	if (pm != NULL && !user_typed_name) {
+		dbase_str = strcpy(newstr, pm->mname);
+	} else {
+		dbase_str = strcpy(newstr, inp);
+	}
 
-    if (!strncmp(dbase_str, "interior of ", 12))
-	dbase_str += 12;
-    if (!strncmp(dbase_str, "a ", 2))
-	dbase_str += 2;
-    else if (!strncmp(dbase_str, "an ", 3))
-	dbase_str += 3;
-    else if (!strncmp(dbase_str, "the ", 4))
-	dbase_str += 4;
-    if (!strncmp(dbase_str, "tame ", 5))
-	dbase_str += 5;
-    else if (!strncmp(dbase_str, "peaceful ", 9))
-	dbase_str += 9;
-    if (!strncmp(dbase_str, "invisible ", 10))
-	dbase_str += 10;
-    if (!strncmp(dbase_str, "statue of ", 10))
-	dbase_str[6] = '\0';
-    else if (!strncmp(dbase_str, "figurine of ", 12))
-	dbase_str[8] = '\0';
+	lcase(dbase_str);
 
-    /* Make sure the name is non-empty. */
-    if (*dbase_str) {
+	if (!strncmp(dbase_str, "interior of ", 12))
+		dbase_str += 12;
+	if (!strncmp(dbase_str, "a ", 2))
+		dbase_str += 2;
+	else if (!strncmp(dbase_str, "an ", 3))
+		dbase_str += 3;
+	else if (!strncmp(dbase_str, "the ", 4))
+		dbase_str += 4;
+	if (!strncmp(dbase_str, "tame ", 5))
+		dbase_str += 5;
+	else if (!strncmp(dbase_str, "peaceful ", 9))
+		dbase_str += 9;
+	if (!strncmp(dbase_str, "invisible ", 10))
+		dbase_str += 10;
+
+	if (!strncmp(dbase_str, "statue of ", 10))
+		dbase_str[6] = '\0';
+	else if (!strncmp(dbase_str, "figurine of ", 12))
+		dbase_str[8] = '\0';
+
 	/* adjust the input to remove "named " and convert to lower case */
-	char *alt = 0;	/* alternate description */
+	char *alt = NULL;	/* alternate description */
 
 	if ((ep = strstri(dbase_str, " named ")) != 0)
-	    alt = ep + 7;
+		alt = ep + 7;
 	else
-	    ep = strstri(dbase_str, " called ");
+		ep = strstri(dbase_str, " called ");
 	if (!ep) ep = strstri(dbase_str, ", ");
 	if (ep && ep > dbase_str) *ep = '\0';
 
@@ -386,85 +381,93 @@ checkfile(inp, pm, user_typed_name, without_asking)
 	 * will usually be found under their name, rather than under their
 	 * object type, so looking for a singular form is pointless.
 	 */
-
-	if (!alt)
-	    alt = makesingular(dbase_str);
-	else
-	    if (user_typed_name)
+	if (!alt) {
+		alt = makesingular(dbase_str);
+	} else if (user_typed_name) {
 		lcase(alt);
+	}
 
-	/* skip first record; read second */
-	txt_offset = 0L;
-	if (!dlb_fgets(buf, BUFSZ, fp) || !dlb_fgets(buf, BUFSZ, fp)) {
-	    impossible("can't read 'data' file");
-	    dlb_fclose(fp);
-	    return;
-	} else if (sscanf(buf, "%8lx\n", &txt_offset) < 1 || txt_offset <= 0)
-	    goto bad_data_file;
+	bool in_exclusion = false;
+	size_t entry_location;
 
-	/* look for the appropriate entry */
-	while (dlb_fgets(buf,BUFSZ,fp)) {
-	    if (*buf == '.') break;  /* we passed last entry without success */
+	// look for the appropriate entry
+	while (dlb_fgets(buf, BUFSZ, fp)) {
+		// comment line
+		if (buf[0] == '#') continue;
 
-	    if (digit(*buf)) {
-		/* a number indicates the end of current entry */
-		skipping_entry = false;
-	    } else if (!skipping_entry) {
-		if (!(ep = index(buf, '\n'))) goto bad_data_file;
-		*ep = 0;
-		/* if we match a key that begins with "~", skip this entry */
-		chk_skip = (*buf == '~') ? 1 : 0;
-		if (pmatch(&buf[chk_skip], dbase_str) ||
-			(alt && pmatch(&buf[chk_skip], alt))) {
-		    if (chk_skip) {
-			skipping_entry = true;
+		// part of an entry's text
+		if (buf[0] == '\t') {
+			// reached the end of a list of entries, so the
+			// exclusion no longer applies
+			in_exclusion = false;
 			continue;
-		    } else {
+		}
+
+		if (in_exclusion) {
+			continue;
+		}
+
+		if (!index(buf, '\n')) goto bad_data_file;
+		*index(buf, '\n') = 0; // strip newline
+
+		if (*buf == '~') {
+			if (pmatch(buf+1, dbase_str) || (alt && pmatch(buf+1, alt))) {
+				in_exclusion = true;
+				continue;
+			}
+		}
+
+		// matched the entry name
+		if (pmatch(buf, dbase_str) || (alt && pmatch(buf, alt))) {
+			// skip to the part containing the description
+			do {
+				entry_location = dlb_ftell(fp);
+				if (!dlb_fgets(buf, BUFSZ, fp)) {
+					goto bad_data_file;
+				}
+			} while (buf[0] != '\t');
+
 			found_in_file = true;
 			break;
-		    }
 		}
-	    }
-	}
-    }
-
-    if(found_in_file) {
-	long entry_offset;
-	int  entry_count;
-	int  i;
-
-	/* skip over other possible matches for the info */
-	do {
-	    if (!dlb_fgets(buf, BUFSZ, fp)) goto bad_data_file;
-	} while (!digit(*buf));
-	if (sscanf(buf, "%ld,%d\n", &entry_offset, &entry_count) < 2) {
-bad_data_file:	impossible("'data' file in wrong format");
-		dlb_fclose(fp);
-		return;
 	}
 
-	if (user_typed_name || without_asking || yn("More info?") == 'y') {
-	    winid datawin;
+	if (found_in_file) {
+		if (user_typed_name || without_asking || yn("More info?") == 'y') {
+			winid datawin;
 
-	    if (dlb_fseek(fp, txt_offset + entry_offset, SEEK_SET) < 0) {
-		pline("? Seek error on 'data' file!");
-		dlb_fclose(fp);
-		return;
-	    }
-	    datawin = create_nhwindow(NHW_MENU);
-	    for (i = 0; i < entry_count; i++) {
-		if (!dlb_fgets(buf, BUFSZ, fp)) goto bad_data_file;
-		if ((ep = index(buf, '\n')) != 0) *ep = 0;
-		if (index(buf+1, '\t') != 0) (void) tabexpand(buf+1);
-		putstr(datawin, 0, buf+1);
-	    }
-	    display_nhwindow(datawin, false);
-	    destroy_nhwindow(datawin);
+			if (dlb_fseek(fp, entry_location, SEEK_SET) < 0) {
+				goto bad_data_file;
+			}
+
+			datawin = create_nhwindow(NHW_MENU);
+			while (true) {
+				if (!dlb_fgets(buf, BUFSZ, fp)) {
+					// EOF
+					break;
+				}
+
+				if (buf[0] != '\t') {
+					// end of entry--start of the title of a new one
+					break;
+				}
+
+				putstr(datawin, 0, buf+1);
+			}
+			display_nhwindow(datawin, false);
+			destroy_nhwindow(datawin);
+		}
+	} else if (user_typed_name) {
+		pline("I don't have any information on those things.");
 	}
-    } else if (user_typed_name)
-	pline("I don't have any information on those things.");
 
-    dlb_fclose(fp);
+	dlb_fclose(fp);
+	return;
+
+bad_data_file:
+	impossible("Bad data file");
+	dlb_fclose(fp);
+
 }
 
 /* getpos() return values */
@@ -769,7 +772,7 @@ do_look(quick)
 		strcpy(temp_buf, level.flags.lethe
 					&& !strcmp(firstmatch, "water")?
 				"lethe" : firstmatch);
-		checkfile(temp_buf, pm, false, (boolean)(ans == LOOK_VERBOSE));
+		checkfile(temp_buf, pm, false, ans == LOOK_VERBOSE);
 	    }
 	} else {
 	    pline("I've never heard of such things.");
