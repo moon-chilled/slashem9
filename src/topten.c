@@ -73,30 +73,21 @@ static winid toptenwin = WIN_ERR;
 
 static time_t deathtime = 0L;
 
-static void
-topten_print(x)
-const char *x;
-{
+static void topten_print(const char *x) {
 	if (toptenwin == WIN_ERR)
 	    raw_print(x);
 	else
 	    putstr(toptenwin, ATR_NONE, x);
 }
 
-static void
-topten_print_bold(x)
-const char *x;
-{
+static void topten_print_bold(const char *x) {
 	if (toptenwin == WIN_ERR)
 	    raw_print_bold(x);
 	else
 	    putstr(toptenwin, ATR_BOLD, x);
 }
 
-static xchar
-observable_depth(lev)
-d_level *lev;
-{
+static xchar observable_depth(d_level *lev) {
 #if 0	/* if we ever randomize the order of the elemental planes, we
 	   must use a constant external representation in the record file */
 	if (In_endgame(lev)) {
@@ -111,11 +102,7 @@ d_level *lev;
 	    return depth(lev);
 }
 
-static void
-readentry(rfile,tt)
-FILE *rfile;
-struct toptenentry *tt;
-{
+static void readentry(FILE *rfile, struct toptenentry *tt) {
 #ifdef NO_SCAN_BRACK		/* Version_ Pts DgnLevs_ Hp___ Died__Born id */
 	static const char fmt[] = "%d %d %d %ld %d %d %d %d %d %d %ld %ld %d%*c";
 	static const char fmt005[] = "%s %c %s %s%*c";
@@ -318,10 +305,7 @@ static void write_xlentry(FILE *rfile, struct toptenentry *tt) {
 }
 #undef SEP
 
-static void
-free_ttlist(tt)
-struct toptenentry *tt;
-{
+static void free_ttlist(struct toptenentry *tt) {
 	struct toptenentry *ttnext;
 
 	while (tt->points > 0) {
@@ -332,9 +316,7 @@ struct toptenentry *tt;
 	dealloc_ttentry(tt);
 }
 
-void
-topten (int how)
-{
+void topten (int how) {
 	int uid = getuid();
 	int rank, rank0 = -1, rank1 = 0;
 	int occ_cnt = PERSMAX;
@@ -625,12 +607,7 @@ outheader()
 }
 
 /* so>0: standout line; so=0: ordinary line */
-static void
-outentry(rank, t1, so)
-struct toptenentry *t1;
-int rank;
-boolean so;
-{
+static void outentry(int rank, struct toptenentry *t1, boolean so) {
 	boolean second_line = true;
 	char linebuf[BUFSZ];
 	char *bp, hpbuf[24], linebuf3[BUFSZ];
@@ -813,15 +790,7 @@ boolean so;
 #endif
 }
 
-static int
-score_wanted(current_ver, rank, t1, playerct, players, uid)
-boolean current_ver;
-int rank;
-struct toptenentry *t1;
-int playerct;
-const char **players;
-int uid;
-{
+static int score_wanted(boolean current_ver, int rank, struct toptenentry *t1, int playerct, const char **players, int uid) {
 	int i;
 
 	if (current_ver && (t1->ver_major != VERSION_MAJOR ||
@@ -925,11 +894,7 @@ encodeachieve(void)
  * argc >= 2, with argv[0] untrustworthy (directory names, et al.),
  * and argv[1] starting with "-s".
  */
-void
-prscore(argc,argv)
-int argc;
-char **argv;
-{
+void prscore(int argc, char **argv) {
 	const char **players;
 	int playerct, rank;
 	boolean current_ver = true, init_done = false;
@@ -1047,11 +1012,7 @@ char **argv;
 	free_ttlist(tt_head);
 }
 
-static int
-classmon(plch, fem)
-	char *plch;
-	boolean fem;
-{
+static int classmon(char *plch, boolean fem) {
 	int i;
 
 	/* Look for this role in the role table */
@@ -1075,10 +1036,7 @@ classmon(plch, fem)
  * Get a random player name and class from the high score list,
  * and attach them to an object (for statues or morgue corpses).
  */
-struct obj *
-tt_oname(otmp)
-struct obj *otmp;
-{
+struct obj * tt_oname(struct obj *otmp) {
 	int rank;
 	int i;
 	struct toptenentry *tt;
@@ -1125,24 +1083,17 @@ pickentry:
 /* Lattice scanf isn't up to reading the scorefile.  What */
 /* follows deals with that; I admit it's ugly. (KL) */
 /* Now generally available (KL) */
-static void
-nsb_mung_line(p)
-	char *p;
-{
+static void nsb_mung_line(char *p) {
 	while ((p = index(p, ' ')) != 0) *p = '|';
 }
 
-static void
-nsb_unmung_line(p)
-	char *p;
-{
+static void nsb_unmung_line(char *p) {
 	while ((p = index(p, '|')) != 0) *p = ' ';
 }
 #endif /* NO_SCAN_BRACK */
 
 #if defined(PROXY_GRAPHICS)
-winid
-create_toptenwin()
+winid create_toptenwin()
 {
     toptenwin = create_nhwindow(NHW_TEXT);
 

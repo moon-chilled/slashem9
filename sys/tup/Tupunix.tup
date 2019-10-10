@@ -1,4 +1,4 @@
-CC = clang -Wno-knr-promoted-parameter
+CC = clang
 HOST_CC = clang
 SYSSRC = sys/share/ioctl.c sys/share/unixtty.c sys/unix/unixmain.c sys/unix/unixunix.c sys/unix/unixres.c
 BUILDDIR = build-unix

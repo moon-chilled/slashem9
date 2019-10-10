@@ -63,9 +63,7 @@ static char *strprepend(char *s, const char *pref) {
 
 
 /* manage a pool of BUFSZ buffers, so callers don't have to */
-static char *
-nextobuf (void)
-{
+static char * nextobuf (void) {
 	static char bufs[NUMOBUF][BUFSZ];
 	static int bufidx = 0;
 
@@ -73,9 +71,7 @@ nextobuf (void)
 	return bufs[bufidx];
 }
 
-char *
-obj_typename (int otyp)
-{
+char * obj_typename (int otyp) {
 	char *buf = nextobuf();
 	struct objclass *ocl = &objects[otyp];
 	const char *actualn = OBJ_NAME(*ocl);
@@ -152,9 +148,7 @@ obj_typename (int otyp)
 
 /* less verbose result than obj_typename(); either the actual name
    or the description (but not both); user-assigned name is ignored */
-char *
-simple_typename (int otyp)
-{
+char * simple_typename (int otyp) {
     char *bufp, *pp, *save_uname = objects[otyp].oc_uname;
 
     objects[otyp].oc_uname = 0;		/* suppress any name given by user */
@@ -165,10 +159,7 @@ simple_typename (int otyp)
     return bufp;
 }
 
-boolean
-obj_is_pname(obj)
-struct obj *obj;
-{
+boolean obj_is_pname(struct obj *obj) {
     return((boolean)(obj->dknown && obj->known && obj->onamelth &&
 		     /* Since there aren't any objects which are both
 		        artifacts and unique, the last check is redundant. */
@@ -182,9 +173,7 @@ struct obj *obj;
  * frequently used, it'd probably be better to pass a parameter to xname()
  * or doname() instead.
  */
-char *
-distant_name (struct obj *obj, char *(*func)( struct obj*))
-{
+char * distant_name (struct obj *obj, char *(*func)( struct obj*)) {
 	char *str;
 
 	long save_Blinded = Blinded;
@@ -196,10 +185,8 @@ distant_name (struct obj *obj, char *(*func)( struct obj*))
 
 /* convert player specified fruit name into corresponding fruit juice name
    ("slice of pizza" -> "pizza juice" rather than "slice of pizza juice") */
-char *
-fruitname(juice)
-boolean juice;	/* whether or not to append " juice" to the name */
-{
+// juice => whether or not to append " juice" to the name
+char * fruitname(boolean juice) {
     char *buf = nextobuf();
     const char *fruit_nam = strstri(pl_fruit, " of ");
 
@@ -213,9 +200,8 @@ boolean juice;	/* whether or not to append " juice" to the name */
 }
 
 
-char *
-xname2 (struct obj *obj)
-{	/* Hallu */
+char * xname2 (struct obj *obj) {
+	/* Hallu */
 	char *buf;
 	int typ = obj->otyp;
 	struct objclass *ocl = &objects[typ];
@@ -472,9 +458,7 @@ nameit:
 } /* end Hallu */
 
 /* WAC calls the above xname2 */
-char *
-xname (struct obj *obj)
-{
+char * xname (struct obj *obj) {
 /* WAC moved hallucination here */
 	struct obj *hobj;
 	static char bufr[BUFSZ];
@@ -498,9 +482,7 @@ xname (struct obj *obj)
 }
 
 /* xname() output augmented for multishot missile feedback */
-char *
-mshot_xname (struct obj *obj)
-{
+char * mshot_xname (struct obj *obj) {
     char tmpbuf[BUFSZ];
     char *onm = xname(obj);
 
@@ -517,10 +499,7 @@ mshot_xname (struct obj *obj)
 
 
 /* used for naming "the unique_item" instead of "a unique_item" */
-boolean
-the_unique_obj(obj)
-struct obj *obj;
-{
+boolean the_unique_obj(struct obj *obj) {
     if (!obj->dknown)
 	return false;
     else if (obj->otyp == FAKE_AMULET_OF_YENDOR && !obj->known)
@@ -530,9 +509,7 @@ struct obj *obj;
 			 (obj->known || obj->otyp == AMULET_OF_YENDOR));
 }
 
-static void
-add_erosion_words (struct obj *obj, char *prefix)
-{
+static void add_erosion_words (struct obj *obj, char *prefix) {
 	boolean iscrys = (obj->otyp == CRYSKNIFE);
 
 
@@ -564,9 +541,7 @@ add_erosion_words (struct obj *obj, char *prefix)
 		       is_flammable(obj) ? "fireproof " : "");
 }
 
-char *
-doname (struct obj *obj)
-{
+char * doname (struct obj *obj) {
 	boolean ispoisoned = false;
 	char prefix[PREFIX];
 	char tmpbuf[PREFIX+1];
@@ -883,35 +858,27 @@ bool not_fully_identified(struct obj *otmp) {
 		is_flammable(otmp);
 }
 
-char *
-corpse_xname(otmp, ignore_oquan)
-struct obj *otmp;
-boolean ignore_oquan;	/* to force singular */
-{
+char * corpse_xname(struct obj *otmp, boolean force_singular)	{
 	char *nambuf = nextobuf();
 
 	sprintf(nambuf, "%s corpse",
 		mons[Hallucination ? rndmonnum() : otmp->corpsenm].mname);
 
-	if (ignore_oquan || otmp->quan < 2)
+	if (force_singular || otmp->quan < 2)
 	    return nambuf;
 	else
 	    return makeplural(nambuf);
 }
 
 /* xname, unless it's a corpse, then corpse_xname(obj, false) */
-char *
-cxname (struct obj *obj)
-{
+char * cxname (struct obj *obj) {
 	if (obj->otyp == CORPSE)
 	    return corpse_xname(obj, false);
 	return xname(obj);
 }
 
 /* treat an object as fully ID'd when it might be used as reason for death */
-char *
-killer_xname (struct obj *obj)
-{
+char * killer_xname (struct obj *obj) {
     struct obj save_obj;
     unsigned save_ocknown;
     char *buf, *save_ocuname;
@@ -948,11 +915,7 @@ killer_xname (struct obj *obj)
     return buf;
 }
 
-char *
-killer_cxname(obj, ignore_oquan)
-struct obj *obj;
-boolean ignore_oquan;	/* to force singular */
-{
+char * killer_cxname( struct obj *obj, boolean force_singular) {
     char *buf;
     if (obj->otyp == CORPSE) {
 	buf = nextobuf();
@@ -961,7 +924,7 @@ boolean ignore_oquan;	/* to force singular */
 		Hallucination ? "hallucinogen-distorted " : "",
 		mons[obj->corpsenm].mname);
 
-	if (!ignore_oquan && obj->quan >= 2)
+	if (!force_singular && obj->quan >= 2)
 	    buf = makeplural(buf);
     } else
 	buf = killer_xname(obj);
@@ -971,9 +934,7 @@ boolean ignore_oquan;	/* to force singular */
 /*
  * Used if only one of a collection of objects is named (e.g. in eat.c).
  */
-const char *
-singular (struct obj *otmp, char *(*func)( struct obj*))
-{
+const char * singular (struct obj *otmp, char *(*func)( struct obj*)) {
 	long savequan;
 	unsigned saveowt;
 	char *nam;
@@ -996,9 +957,7 @@ singular (struct obj *otmp, char *(*func)( struct obj*))
 	return nam;
 }
 
-char *
-an (const char *str)
-{
+char * an (const char *str) {
 	char *buf = nextobuf();
 
 	buf[0] = '\0';
@@ -1022,9 +981,7 @@ an (const char *str)
 	return buf;
 }
 
-char *
-An (const char *str)
-{
+char * An (const char *str) {
 	char *tmp = an(str);
 	*tmp = highc(*tmp);
 	return tmp;
@@ -1034,9 +991,7 @@ An (const char *str)
  * Prepend "the" if necessary; assumes str is a subject derived from xname.
  * Use type_is_pname() for monster names, not the().  the() is idempotent.
  */
-char *
-the (const char *str)
-{
+char * the (const char *str) {
 	char *buf = nextobuf();
 	boolean insert_the = false;
 
@@ -1080,18 +1035,14 @@ the (const char *str)
 	return buf;
 }
 
-char *
-The (const char *str)
-{
+char * The (const char *str) {
     char *tmp = the(str);
     *tmp = highc(*tmp);
     return tmp;
 }
 
 /* returns "count cxname(otmp)" or just cxname(otmp) if count == 1 */
-char *
-aobjnam (struct obj *otmp, const char *verb)
-{
+char * aobjnam (struct obj *otmp, const char *verb) {
 	char *bp = cxname(otmp);
 	char prefix[PREFIX];
 
@@ -1108,9 +1059,7 @@ aobjnam (struct obj *otmp, const char *verb)
 }
 
 /* like aobjnam, but prepend "The", not count, and use xname */
-char *
-Tobjnam (struct obj *otmp, const char *verb)
-{
+char * Tobjnam (struct obj *otmp, const char *verb) {
 	char *bp = The(xname(otmp));
 
 	if(verb) {
@@ -1121,9 +1070,7 @@ Tobjnam (struct obj *otmp, const char *verb)
 }
 
 /* return form of the verb (input plural) if xname(otmp) were the subject */
-char *
-otense (struct obj *otmp, const char *verb)
-{
+char * otense (struct obj *otmp, const char *verb) {
 	char *buf;
 
 	/*
@@ -1246,9 +1193,7 @@ vtense (const char *subj, const char *verb)
 }
 
 /* capitalized variant of doname() */
-char *
-Doname2 (struct obj *obj)
-{
+char * Doname2 (struct obj *obj) {
 	char *s = doname(obj);
 
 	*s = highc(*s);
@@ -1256,9 +1201,7 @@ Doname2 (struct obj *obj)
 }
 
 /* returns "your xname(obj)" or "Foobar's xname(obj)" or "the xname(obj)" */
-char *
-yname (struct obj *obj)
-{
+char * yname (struct obj *obj) {
 	char *outbuf = nextobuf();
 	char *s = shk_your(outbuf, obj);	/* assert( s == outbuf ); */
 	int space_left = BUFSZ - strlen(s) - sizeof " ";
@@ -1267,9 +1210,7 @@ yname (struct obj *obj)
 }
 
 /* capitalized variant of yname() */
-char *
-Yname2 (struct obj *obj)
-{
+char * Yname2 (struct obj *obj) {
 	char *s = yname(obj);
 
 	*s = highc(*s);
@@ -1280,9 +1221,7 @@ Yname2 (struct obj *obj)
  * or "Foobar's simple_typename(obj->otyp)"
  * or "the simple_typename(obj-otyp)"
  */
-char *
-ysimple_name (struct obj *obj)
-{
+char * ysimple_name (struct obj *obj) {
 	char *outbuf = nextobuf();
 	char *s = shk_your(outbuf, obj);	/* assert( s == outbuf ); */
 	int space_left = BUFSZ - strlen(s) - sizeof " ";
@@ -1291,9 +1230,7 @@ ysimple_name (struct obj *obj)
 }
 
 /* capitalized variant of ysimple_name() */
-char *
-Ysimple_name2 (struct obj *obj)
-{
+char * Ysimple_name2 (struct obj *obj) {
 	char *s = ysimple_name(obj);
 
 	*s = highc(*s);
@@ -1324,9 +1261,7 @@ static const char wrpsym[] = {
  *
  * Also misused by muse.c to convert 1st person present verbs to 2nd person.
  */
-char *
-makeplural (const char *oldstr)
-{
+char * makeplural (const char *oldstr) {
 	/* Note: cannot use strcmpi here -- it'd give MATZot, CAVEMeN,... */
 	char *spot;
 	char *str = nextobuf();
@@ -1694,13 +1629,12 @@ makesingular (const char *oldstr)
 	return bp;
 }
 
-/* compare user string against object name string using fuzzy matching */
-static boolean
-wishymatch(u_str, o_str, retry_inverted)
-const char *u_str;	/* from user, so might be variant spelling */
-const char *o_str;	/* from objects[], so is in canonical form */
-boolean retry_inverted;	/* optional extra "of" handling */
-{
+// compare user string against object name string using fuzzy matching
+/* u_str is from the user, so it might have variant spelling; o_str is from
+ * objects[], so is in canonical form
+ */
+// retry_inverted => optional extra "of" handling
+static boolean wishymatch(const char *u_str, const char *o_str, boolean retry_inverted) {
 	/* special case: wizards can wish for traps.  The object is "beartrap"
 	 * and the trap is "bear trap", so to let wizards wish for both we
 	 * must not fuzzymatch.
@@ -1862,12 +1796,7 @@ struct alt_spellings {
  * return null.
  * If from_user is false, we're reading from the wizkit, nothing was typed in.
  */
-struct obj *
-readobjnam(bp, no_wish, from_user)
-char *bp;
-struct obj *no_wish;
-boolean from_user;
-{
+struct obj * readobjnam(char *bp, struct obj *no_wish, boolean from_user) {
 	char *p;
 	int i;
 	struct obj *otmp;
@@ -2847,9 +2776,7 @@ typfnd:
 	return otmp;
 }
 
-int
-rnd_class (int first, int last)
-{
+int rnd_class (int first, int last) {
 	int i, x, sum=0;
 
 	if (first == last)
@@ -2865,10 +2792,7 @@ rnd_class (int first, int last)
 	return 0;
 }
 
-static const char *
-Japanese_item_name(i)
-int i;
-{
+static const char * Japanese_item_name(int i) {
 	struct Jitem *j = Japanese_items;
 
 	while(j->item) {
@@ -2879,9 +2803,7 @@ int i;
 	return NULL;
 }
 
-const char *
-cloak_simple_name (struct obj *cloak)
-{
+const char * cloak_simple_name (struct obj *cloak) {
     if (cloak) {
 	switch (cloak->otyp) {
 	case ROBE:
@@ -2902,9 +2824,7 @@ cloak_simple_name (struct obj *cloak)
     return "cloak";
 }
 
-const char *
-mimic_obj_name (struct monst *mtmp)
-{
+const char * mimic_obj_name (struct monst *mtmp) {
 	if (mtmp->m_ap_type == M_AP_OBJECT && mtmp->mappearance != STRANGE_OBJECT) {
 		int idx = objects[mtmp->mappearance].oc_descr_idx;
 		if (mtmp->mappearance == GOLD_PIECE) return "gold";

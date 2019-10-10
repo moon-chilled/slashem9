@@ -27,10 +27,7 @@ static void healup_mon(struct monst *, int,int,boolean,boolean);
 
 
 /* force `val' to be within valid range for intrinsic timeout value */
-static long
-itimeout(val)
-long val;
-{
+static long itimeout(long val) {
     if (val >= TIMEOUT) val = TIMEOUT;
     else if (val < 1) val = 0;
 
@@ -38,34 +35,22 @@ long val;
 }
 
 /* increment `old' by `incr' and force result to be valid intrinsic timeout */
-static long
-itimeout_incr(old, incr)
-long old;
-int incr;
-{
+static long itimeout_incr(long old, int incr) {
     return itimeout((old & TIMEOUT) + (long)incr);
 }
 
 /* set the timeout field of intrinsic `which' */
-void
-set_itimeout (long *which, long val)
-{
+void set_itimeout (long *which, long val) {
     *which &= ~TIMEOUT;
     *which |= itimeout(val);
 }
 
 /* increment the timeout field of intrinsic `which' */
-void
-incr_itimeout (long *which, int incr)
-{
+void incr_itimeout (long *which, int incr) {
     set_itimeout(which, itimeout_incr(*which, incr));
 }
 
-void
-make_confused(xtime,talk)
-long xtime;
-boolean talk;
-{
+void make_confused(long xtime, boolean talk) {
 	long old = HConfusion;
 
 	if (!xtime && old) {
@@ -78,11 +63,7 @@ boolean talk;
 	set_itimeout(&HConfusion, xtime);
 }
 
-void
-make_stunned(xtime,talk)
-long xtime;
-boolean talk;
-{
+void make_stunned(long xtime, boolean talk) {
 	long old = HStun;
 
 	if (!xtime && old) {
@@ -103,13 +84,7 @@ boolean talk;
 	set_itimeout(&HStun, xtime);
 }
 
-void
-make_sick(xtime, cause, talk, type)
-long xtime;
-const char *cause;	/* sickness cause */
-boolean talk;
-int type;
-{
+void make_sick(long xtime, const char *cause, boolean talk, int type) {
 	long old = Sick;
 
 	if (xtime > 0L) {
@@ -150,11 +125,7 @@ int type;
 	    u.usick_cause[0] = 0;
 }
 
-void
-make_vomiting(xtime, talk)
-long xtime;
-boolean talk;
-{
+void make_vomiting(long xtime, boolean talk) {
 	long old = Vomiting;
 
 	if(!xtime && old)
@@ -163,11 +134,7 @@ boolean talk;
 	set_itimeout(&Vomiting, xtime);
 }
 
-void
-make_blinded(xtime, talk)
-long xtime;
-boolean talk;
-{
+void make_blinded(long xtime, boolean talk) {
 	long old = Blinded;
 	boolean u_could_see, can_see_now;
 	int eyecnt;
@@ -241,12 +208,9 @@ boolean talk;
 	}
 }
 
-boolean
-make_hallucinated(xtime, talk, mask)
-long xtime;	/* nonzero if this is an attempt to turn on hallucination */
-boolean talk;
-long mask;	/* nonzero if resistance status should change by mask */
-{
+/* xtime is nonzero if this is an attempt to turn on hallucination */
+/* mask is nonzero if resistance status should change by mask */
+boolean make_hallucinated(long xtime, boolean talk, long mask) {
 	long old = HHallucination;
 	boolean changed = 0;
 	const char *message, *verb;
@@ -302,9 +266,7 @@ long mask;	/* nonzero if resistance status should change by mask */
 	return changed;
 }
 
-static void
-ghost_from_bottle()
-{
+static void ghost_from_bottle() {
 	struct monst *mtmp = makemon(&mons[PM_GHOST], u.ux, u.uy, NO_MM_FLAGS);
 
 	if (!mtmp) {
@@ -325,9 +287,7 @@ ghost_from_bottle()
 
 /* "Quaffing is like drinking, except you spill more."  -- Terry Pratchett
  */
-int
-dodrink (void)
-{
+int dodrink (void) {
 	struct obj *otmp;
 	const char *potion_descr;
 	char quaffables[SIZE(beverages) + 2];
@@ -389,9 +349,7 @@ dodrink (void)
 	return dopotion(otmp);
 }
 
-int
-dopotion (struct obj *otmp)
-{
+int dopotion (struct obj *otmp) {
 	int retval;
 
 	otmp->in_use = true;
@@ -420,9 +378,7 @@ dopotion (struct obj *otmp)
 }
 
 /* return -1 if potion is used up,  0 if error,  1 not used */
-int
-peffects (struct obj *otmp)
-{
+int peffects (struct obj *otmp) {
 	int i, ii, lim;
 
 
@@ -1067,11 +1023,7 @@ peffects (struct obj *otmp)
 	return -1;
 }
 
-void
-healup(nhp, nxtra, curesick, cureblind)
-	int nhp, nxtra;
-	boolean curesick, cureblind;
-{
+void healup(int nhp, int nxtra, boolean curesick, boolean cureblind) {
 	if (nhp) {
 		if (Upolyd) {
 			u.mh += nhp;
@@ -1087,12 +1039,7 @@ healup(nhp, nxtra, curesick, cureblind)
 	return;
 }
 
-void
-healup_mon(mtmp, nhp, nxtra, curesick, cureblind)
-	struct monst *mtmp;
-	int nhp, nxtra;
-	boolean curesick, cureblind;
-{
+void healup_mon(struct monst *mtmp, int nhp, int nxtra, boolean curesick, boolean cureblind) {
 	if (nhp) {
 		mtmp->mhp += nhp;
 		if (mtmp->mhp > mtmp->mhpmax) mtmp->mhp = (mtmp->mhpmax += nxtra);
@@ -1104,9 +1051,7 @@ healup_mon(mtmp, nhp, nxtra, curesick, cureblind)
 	return;
 }
 
-void
-strange_feeling (struct obj *obj, const char *txt)
-{
+void strange_feeling (struct obj *obj, const char *txt) {
 	if (flags.beginner || !txt)
 		pline("You have a %s feeling for a moment, then it passes.",
 		Hallucination ? "normal" : "strange");
@@ -1127,19 +1072,12 @@ const char *bottlenames[] = {
 	"bottle", "phial", "flagon", "carafe", "flask", "jar", "vial"
 };
 
-const char *
-bottlename (void)
-{
+const char * bottlename (void) {
 	return bottlenames[rn2(SIZE(bottlenames))];
 }
 
 /* WAC -- monsters can throw potions around too! */
-void
-potionhit(mon, obj, your_fault)
-struct monst *mon; /* Monster that got hit */
-struct obj *obj;
-boolean your_fault;
-{
+void potionhit(struct monst *mon, struct obj *obj, boolean your_fault) {
 	const char *botlnam = bottlename();
 	boolean isyou = (mon == &youmonst);
 	int distance;
@@ -1483,9 +1421,7 @@ boolean your_fault;
 }
 
 /* vapors are inhaled or get in your eyes */
-void
-potionbreathe (struct obj *obj)
-{
+void potionbreathe (struct obj *obj) {
 	int i, ii, isdone, kn = 0;
 
 	switch(obj->otyp) {
@@ -1644,11 +1580,8 @@ potionbreathe (struct obj *obj)
 	}
 }
 
-static short
-mixtype(o1, o2)
-struct obj *o1, *o2;
 /* returns the potion type when o1 is dipped in o2 */
-{
+static short mixtype(struct obj *o1, struct obj *o2) {
 	/* cut down on the number of cases below */
 	if (o1->oclass == POTION_CLASS &&
 	    (o2->otyp == POT_GAIN_LEVEL ||
@@ -1874,12 +1807,7 @@ struct obj *o1, *o2;
 
 /* Bills an object that's about to be downgraded, assuming that's not already
  * been done */
-static
-void
-pre_downgrade_obj(obj, used)
-struct obj *obj;
-boolean *used;
-{
+static void pre_downgrade_obj(struct obj *obj, boolean *used) {
     boolean dummy = false;
 
     if (!used) used = &dummy;
@@ -1892,13 +1820,8 @@ boolean *used;
 }
 
 /* Implements the downgrading effect of potions of amnesia and Lethe water */
-static
-void
-downgrade_obj(obj, nomagic, used)
-struct obj *obj;
-int nomagic;	/* The non-magical object to downgrade to */
-boolean *used;
-{
+/* nomagic = The non-magical object to downgrade to */
+static void downgrade_obj(struct obj *obj, int nomagic, boolean *used) {
     pre_downgrade_obj(obj, used);
     obj->otyp = nomagic;
     obj->spe = 0;
@@ -1906,12 +1829,8 @@ boolean *used;
     flags.botl = true;
 }
 
-boolean
-get_wet(obj, amnesia)
-struct obj *obj;
-boolean amnesia;
 /* returns true if something happened (potion should be used up) */
-{
+boolean get_wet(struct obj *obj, boolean amnesia) {
 	char Your_buf[BUFSZ];
 	boolean used = false;
 
@@ -2144,13 +2063,12 @@ boolean amnesia;
  * potions, rings, and wands) should NOT be supported.
  * Polearms are not currently implemented.
  */
-int
-upgrade_obj (struct obj *obj)
+
 /* returns 1 if something happened (potion should be used up)
  * returns 0 if nothing happened
  * returns -1 if object exploded (potion should be used up)
  */
-{
+int upgrade_obj (struct obj *obj) {
 	int chg, otyp = obj->otyp;
 	short otyp2;
 	xchar ox, oy;
@@ -2597,9 +2515,7 @@ upgrade_obj (struct obj *obj)
 	return 1;
 }
 
-int
-dodip (void)
-{
+int dodip (void) {
 	struct obj *potion, *obj, *singlepotion;
 	const char *tmp;
 	uchar here;
@@ -3114,9 +3030,7 @@ dodip (void)
 }
 
 
-void
-djinni_from_bottle (struct obj *obj)
-{
+void djinni_from_bottle (struct obj *obj) {
 	struct monst *mtmp;
 	int genie_type;
 	int chance;
@@ -3174,12 +3088,7 @@ djinni_from_bottle (struct obj *obj)
 
 /* clone a gremlin or mold (2nd arg non-null implies heat as the trigger);
    hit points are cut in half (odd HP stays with original) */
-struct monst *
-split_mon (
-    struct monst *mon,	/* monster being split */
-    struct monst *mtmp	/* optional attacker whose heat triggered it */
-)
-{
+struct monst * split_mon ( struct monst *mon, struct monst *mtmp	) {
 	struct monst *mtmp2;
 	char reason[BUFSZ];
 

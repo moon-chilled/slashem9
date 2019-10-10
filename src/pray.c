@@ -119,9 +119,7 @@ but that's really hard.
 #define on_shrine()	((levl[u.ux][u.uy].altarmask & AM_SHRINE) != 0)
 #define a_align(x,y)	((aligntyp)Amask2align(levl[x][y].altarmask & AM_MASK))
 
-static int
-in_trouble()
-{
+static int in_trouble() {
 	struct obj *otmp;
 	int i, j, count=0;
 
@@ -201,9 +199,7 @@ in_trouble()
 }
 
 /* select an item for TROUBLE_CURSED_ITEMS */
-static struct obj *
-worst_cursed_item()
-{
+static struct obj * worst_cursed_item() {
     struct obj *otmp;
 
     /* if strained or worse, check for loadstone first */
@@ -258,10 +254,7 @@ worst_cursed_item()
     return otmp;
 }
 
-static void
-fix_worst_trouble(trouble)
-int trouble;
-{
+static void fix_worst_trouble(int trouble) {
 	int i;
 	struct obj *otmp = 0;
 	const char *what = NULL;
@@ -462,10 +455,7 @@ decurse:
  * bathroom walls, but who is foiled by bathrobes." --Bertrand Russell, 1943
  * Divine wrath, dungeon walls, and armor follow the same principle.
  */
-static void
-god_zaps_you(resp_god)
-aligntyp resp_god;
-{
+static void god_zaps_you(aligntyp resp_god) {
 	if (u.uswallow) {
 	    pline("Suddenly a bolt of lightning comes down at you from the heavens!");
 	    pline("It strikes %s!", mon_nam(u.ustuck));
@@ -543,10 +533,7 @@ aligntyp resp_god;
 	}
 }
 
-static void
-fry_by_god(resp_god)
-aligntyp resp_god;
-{
+static void fry_by_god(aligntyp resp_god) {
 	char killerbuf[64];
 
 	pline("You fry to a crisp.");
@@ -556,10 +543,7 @@ aligntyp resp_god;
 	done(DIED);
 }
 
-static void
-angrygods(resp_god)
-aligntyp resp_god;
-{
+static void angrygods(aligntyp resp_god) {
 	int	maxanger;
 
 	if(Inhell) resp_god = A_NONE;
@@ -624,9 +608,7 @@ aligntyp resp_god;
 }
 
 /* helper to print "str appears at your feet", or appropriate */
-static void
-at_your_feet (const char *str)
-{
+static void at_your_feet (const char *str) {
 	if (Blind) str = "Something";
 	if (u.uswallow) {
 	    /* barrier between you and the floor */
@@ -640,9 +622,7 @@ at_your_feet (const char *str)
 	}
 }
 
-static void
-gcrownu()
-{
+static void gcrownu() {
     struct obj *obj;
     boolean already_exists, in_hand;
     short class_gift;
@@ -792,10 +772,7 @@ gcrownu()
     return;
 }
 
-static void
-pleased(g_align)
-	aligntyp g_align;
-{
+static void pleased(aligntyp g_align) {
 	/* don't use p_trouble, worst trouble may get fixed while praying */
 	int trouble = in_trouble();	/* what's your worst difficulty? */
 	int pat_on_head = 0, kick_on_butt;
@@ -1037,10 +1014,7 @@ pleased(g_align)
 /* either blesses or curses water on the altar,
  * returns true if it found any water here.
  */
-static boolean
-water_prayer(bless_water)
-    boolean bless_water;
-{
+static boolean water_prayer(boolean bless_water) {
     struct obj* otmp;
     long changed = 0;
     boolean other = false, bc_known = !(Blind || Hallucination);
@@ -1066,11 +1040,7 @@ water_prayer(bless_water)
     return changed > 0L;
 }
 
-static void
-godvoice(g_align, words)
-    aligntyp g_align;
-    const char *words;
-{
+static void godvoice(aligntyp g_align, const char *words) {
     const char *quot = "";
     if(words)
 	quot = "\"";
@@ -1081,18 +1051,12 @@ godvoice(g_align, words)
 	  godvoices[rn2(SIZE(godvoices))], quot, words, quot);
 }
 
-static void
-gods_angry(g_align)
-    aligntyp g_align;
-{
+static void gods_angry(aligntyp g_align) {
     godvoice(g_align, "Thou hast angered me.");
 }
 
 /* The g_align god is upset with you. */
-static void
-gods_upset(g_align)
-	aligntyp g_align;
-{
+static void gods_upset(aligntyp g_align) {
 	if(g_align == u.ualign.type) u.ugangr++;
 	else if(u.ugangr) u.ugangr--;
 	angrygods(g_align);
@@ -1102,10 +1066,7 @@ static const char sacrifice_types[] = { FOOD_CLASS, AMULET_CLASS, 0 };
 static const char ext_sacrifice_types[] = { ALLOW_FLOOROBJ,
 	FOOD_CLASS, AMULET_CLASS, 0 };
 
-static void
-consume_offering(otmp)
-struct obj *otmp;
-{
+static void consume_offering(struct obj *otmp) {
     if (Hallucination)
 	switch (rn2(3)) {
 	    case 0:
@@ -1127,10 +1088,7 @@ struct obj *otmp;
     exercise(A_WIS, true);
 }
 
-void
-god_gives_pet(alignment)
-aligntyp alignment;
-{
+void god_gives_pet(aligntyp alignment) {
 /*
     struct monst *mtmp2;
     struct permonst *pm;
@@ -1176,9 +1134,7 @@ aligntyp alignment;
     }
 }
 
-static void
-lawful_god_gives_angel (void)
-{
+static void lawful_god_gives_angel (void) {
 /*
     struct monst *mtmp2;
     struct permonst *pm;
@@ -1196,9 +1152,7 @@ lawful_god_gives_angel (void)
 
 
 /* KMH -- offerings to Oracle */
-static int
-offer_oracle (struct monst *mtmp, struct obj *otmp)
-{
+static int offer_oracle (struct monst *mtmp, struct obj *otmp) {
 	/* The Oracle doesn't care about the age or species of the corpse,
 	 * except for the dreaded woodchuck.
 	 */
@@ -1229,9 +1183,7 @@ offer_oracle (struct monst *mtmp, struct obj *otmp)
 }
 
 
-int
-dosacrifice (void)
-{
+int dosacrifice (void) {
     struct obj *otmp;
     int value = 0;
     int pm;
@@ -1690,10 +1642,9 @@ verbalize("In return for thy service, I grant thee the gift of Immortality!");
 
 
 /* determine prayer results in advance; also used for enlightenment */
-boolean
-can_pray(praying)
-boolean praying;	/* false means no messages should be given */
-{
+
+/* praying==false means no messages should be given */
+boolean can_pray(boolean praying) {
     int alignment;
 
     p_aligntyp = on_altar() ? a_align(u.ux,u.uy) : u.ualign.type;
@@ -1790,9 +1741,8 @@ dopray (void)
     return 1;
 }
 
-static int
-prayer_done()		/* M. Stephenson (1.0.3b) */
-{
+/* M. Stephenson (1.0.3b) */
+static int prayer_done()		{
     aligntyp alignment = p_aligntyp;
 
     u.uinvulnerable = false;
@@ -1848,12 +1798,9 @@ prayer_done()		/* M. Stephenson (1.0.3b) */
     return 1;
 }
 
-int
-doturn (void)
-{
+int doturn (void) {
 	/* WAC doturn is now a technique */
 	/* Try to use turn undead spell if you don't know the tech. */
-/*	if (!Role_if(PM_PRIEST) && !Role_if(PM_KNIGHT) && !Role_if(PM_UNDEAD_SLAYER)) {*/
 	if (!tech_known(T_TURN_UNDEAD)) {
 		if (objects[SPE_TURN_UNDEAD].oc_name_known) {
 		    int sp_no;
@@ -1872,9 +1819,7 @@ doturn (void)
 	return turn_undead();
 }
 
-int
-turn_undead (void)
-{
+int turn_undead (void) {
 	struct monst *mtmp, *mtmp2;
 	int once, range, xlev;
 
@@ -1954,31 +1899,23 @@ turn_undead (void)
 	return 1;
 }
 
-const char *
-a_gname (void)
-{
+const char * a_gname (void) {
     return a_gname_at(u.ux, u.uy);
 }
 
-const char *
-a_gname_at(x,y)     /* returns the name of an altar's deity */
-xchar x, y;
-{
+    /* returns the name of an altar's deity */
+const char * a_gname_at(xchar x, xchar y) {
     if(!IS_ALTAR(levl[x][y].typ)) return NULL;
 
     return align_gname(a_align(x,y));
 }
 
-const char *
-u_gname (void)  /* returns the name of the player's deity */
-{
+/* returns the name of the player's deity */
+const char * u_gname (void)  {
     return align_gname(u.ualign.type);
 }
 
-const char *
-align_gname(alignment)
-aligntyp alignment;
-{
+const char * align_gname(aligntyp alignment) {
     const char *gnam;
 
     switch (alignment) {
@@ -1995,10 +1932,7 @@ aligntyp alignment;
 
 /* hallucination handling for priest/minion names: select a random god
    iff character is hallucinating */
-const char *
-halu_gname(alignment)
-aligntyp alignment;
-{
+const char * halu_gname(aligntyp alignment) {
     const char *gnam;
     int which;
 
@@ -2017,10 +1951,7 @@ aligntyp alignment;
 }
 
 /* deity's title */
-const char *
-align_gtitle(alignment)
-aligntyp alignment;
-{
+const char * align_gtitle(aligntyp alignment) {
     const char *gnam, *result = "god";
 
     switch (alignment) {
@@ -2033,9 +1964,7 @@ aligntyp alignment;
     return result;
 }
 
-void
-altar_wrath (int x, int y)
-{
+void altar_wrath (int x, int y) {
     aligntyp altaralign = a_align(x,y);
 
     if(!strcmp(align_gname(altaralign), u_gname())) {
@@ -2050,10 +1979,7 @@ altar_wrath (int x, int y)
 }
 
 /* assumes isok() at one space away, but not necessarily at two */
-static boolean
-blocked_boulder(dx,dy)
-int dx,dy;
-{
+static boolean blocked_boulder(int dx, int dy) {
     struct obj *otmp;
     long count = 0L;
 
@@ -2080,10 +2006,7 @@ int dx,dy;
 }
 
 /* Give away something */
-void
-god_gives_benefit(alignment)
-aligntyp alignment;
-{
+void god_gives_benefit(aligntyp alignment) {
 	struct obj *otmp;
 	const char *what = NULL;
 

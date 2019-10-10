@@ -18,14 +18,7 @@ static boolean has_shrine(struct monst *);
  * Move for priests and shopkeepers.  Called from shk_move() and pri_move().
  * Valid returns are  1: moved  0: didn't  -1: let m_move do it  -2: died.
  */
-int
-move_special(mtmp,in_his_shop,appr,uondoor,avoid,omx,omy,gx,gy)
-struct monst *mtmp;
-boolean in_his_shop;
-schar appr;
-boolean uondoor,avoid;
-xchar omx,omy,gx,gy;
-{
+int move_special(struct monst *mtmp, boolean in_his_shop, schar appr, boolean uondoor,boolean avoid, xchar omx,xchar omy,xchar gx,xchar gy) {
 	xchar nx,ny,nix,niy;
 	schar i;
 	schar chcnt,cnt;
@@ -119,11 +112,7 @@ temple_occupied (char *array)
 }
 
 
-static boolean
-histemple_at(priest, x, y)
-struct monst *priest;
-xchar x, y;
-{
+static boolean histemple_at(struct monst *priest, xchar x, xchar y) {
 	return (EPRI(priest)->shroom == *in_rooms(x, y, TEMPLE)) &&
 	       on_level(&(EPRI(priest)->shrlevel), &u.uz);
 }
@@ -131,9 +120,7 @@ xchar x, y;
 /*
  * pri_move: return 1: moved  0: didn't  -1: let m_move do it  -2: died
  */
-int
-pri_move (struct monst *priest)
-{
+int pri_move (struct monst *priest) {
 	xchar gx,gy,omx,omy;
 	schar temple;
 	boolean avoid = true;
@@ -173,13 +160,7 @@ pri_move (struct monst *priest)
 }
 
 /* exclusively for mktemple() */
-void
-priestini(lvl, sroom, sx, sy, sanctum)
-d_level	*lvl;
-struct mkroom *sroom;
-int sx, sy;
-boolean sanctum;   /* is it the seat of the high priest? */
-{
+void priestini(d_level	*lvl, struct mkroom *sroom, int sx, int sy, boolean sanctum) {
 	struct monst *priest;
 	struct obj *otmp = NULL;
 	int cnt;
@@ -244,12 +225,7 @@ boolean sanctum;   /* is it the seat of the high priest? */
  *	- caller needs to inhibit Hallucination if it wants to force
  *		the true name even when under that influence
  */
-char *
-priestname (
-    struct monst *mon,
-    char *pname		/* caller-supplied output buffer */
-)
-{
+char * priestname ( struct monst *mon, char *pname		) {
 	const char *what = Hallucination ? rndmonnam() : mon->data->mname;
 
 	strcpy(pname, "the ");
@@ -287,17 +263,11 @@ priestname (
 	return pname;
 }
 
-boolean
-p_coaligned(priest)
-struct monst *priest;
-{
+boolean p_coaligned(struct monst *priest) {
 	return u.ualign.type == ((int)EPRI(priest)->shralign);
 }
 
-static boolean
-has_shrine(pri)
-struct monst *pri;
-{
+static boolean has_shrine(struct monst *pri) {
 	struct rm *lev;
 
 	if(!pri)
@@ -531,13 +501,7 @@ priest_talk (struct monst *priest)
 	}
 }
 
-struct monst *
-mk_roamer(ptr, alignment, x, y, peaceful)
-struct permonst *ptr;
-aligntyp alignment;
-xchar x, y;
-boolean peaceful;
-{
+struct monst * mk_roamer(struct permonst *ptr, aligntyp alignment, xchar x, xchar y, boolean peaceful) {
 	struct monst *roamer;
 	boolean coaligned = (u.ualign.type == alignment);
 
@@ -563,10 +527,7 @@ boolean peaceful;
 	return roamer;
 }
 
-void
-reset_hostility(roamer)
-struct monst *roamer;
-{
+void reset_hostility( struct monst *roamer) {
 	if(!(roamer->isminion && (roamer->data == &mons[PM_ALIGNED_PRIEST] ||
 				  roamer->data == &mons[PM_ANGEL])))
 	        return;
@@ -578,11 +539,8 @@ struct monst *roamer;
 	newsym(roamer->mx, roamer->my);
 }
 
-boolean
-in_your_sanctuary(mon, x, y)
-struct monst *mon;	/* if non-null, <mx,my> overrides <x,y> */
-xchar x, y;
-{
+/* if mon is non-null, <mx,my> overrides <x,y> */
+boolean in_your_sanctuary(struct monst *mon, xchar x, xchar y) {
 	char roomno;
 	struct monst *priest;
 
@@ -602,10 +560,8 @@ xchar x, y;
 		priest->mpeaceful;
 }
 
-void
-ghod_hitsu(priest)	/* when attacking "priest" in his temple */
-struct monst *priest;
-{
+/* when attacking "priest" in his temple */
+void ghod_hitsu(struct monst *priest) {
 	int x, y, ax, ay, roomno = (int)temple_occupied(u.urooms);
 	int x1, y1, x2, y2, n;
 	coord poss[4];
@@ -812,11 +768,7 @@ clearpriests()
 }
 
 /* munge priest-specific structure when restoring -dlc */
-void
-restpriest(mtmp, ghostly)
-struct monst *mtmp;
-boolean ghostly;
-{
+void restpriest(struct monst *mtmp, boolean ghostly) {
     if(u.uz.dlevel) {
 	if (ghostly)
 	    assign_level(&(EPRI(mtmp)->shrlevel), &u.uz);

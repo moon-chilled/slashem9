@@ -24,10 +24,7 @@ char *new_locations;
 int min_rx, max_rx, min_ry, max_ry; /* rectangle bounds for regions */
 static int n_loc_filled;
 
-static void
-init_map(bg_typ)
-	schar	bg_typ;
-{
+static void init_map(schar bg_typ) {
 	int i,j;
 
 	for(i=1; i<COLNO; i++)
@@ -35,10 +32,7 @@ init_map(bg_typ)
 		levl[i][j].typ = bg_typ;
 }
 
-static void
-init_fill(bg_typ, fg_typ)
-	schar	bg_typ, fg_typ;
-{
+static void init_fill(schar bg_typ, schar fg_typ) {
 	int i,j;
 	long limit, count;
 
@@ -54,11 +48,7 @@ init_fill(bg_typ, fg_typ)
 	}
 }
 
-static schar
-get_map(col,row, bg_typ)
-	int col,row;
-	schar	bg_typ;
-{
+static schar get_map(int col, int row, schar bg_typ) {
 	if (col <= 0 || row < 0 || col > WIDTH || row >= HEIGHT)
 		return bg_typ;
 	return levl[col][row].typ;
@@ -69,10 +59,7 @@ static int dirs[16] = {
      0, -1 /**/,              0, 1 /**/,
      1, -1 /**/,  1, 0 /**/,  1, 1};
 
-static void
-pass_one(bg_typ, fg_typ)
-	schar	bg_typ, fg_typ;
-{
+static void pass_one(schar bg_typ, schar fg_typ) {
 	int i,j;
 	short count, dr;
 
@@ -103,10 +90,7 @@ pass_one(bg_typ, fg_typ)
 
 #define new_loc(i,j)	*(new_locations+ ((j)*(WIDTH+1)) + (i))
 
-static void
-pass_two(bg_typ, fg_typ)
-	schar	bg_typ, fg_typ;
-{
+static void pass_two(schar bg_typ, schar fg_typ) {
 	int i,j;
 	short count, dr;
 
@@ -127,10 +111,7 @@ pass_two(bg_typ, fg_typ)
 		levl[i][j].typ = new_loc(i,j);
 }
 
-static void
-pass_three(bg_typ, fg_typ)
-	schar	bg_typ, fg_typ;
-{
+static void pass_three(schar bg_typ, schar fg_typ) {
 	int i,j;
 	short count, dr;
 
@@ -157,14 +138,7 @@ pass_three(bg_typ, fg_typ)
  * if anyroom is true, use IS_ROOM to check room membership instead of
  * exactly matching levl[sx][sy].typ and walls are included as well.
  */
-void
-flood_fill_rm(sx, sy, rmno, lit, anyroom)
-    int sx;
-    int sy;
-    int rmno;
-    boolean lit;
-    boolean anyroom;
-{
+void flood_fill_rm(int sx, int sy, int rmno, boolean lit, boolean anyroom) {
     int i;
     int nx;
     schar fg_typ = levl[sx][sy].typ;
@@ -247,10 +221,7 @@ flood_fill_rm(sx, sy, rmno, lit, anyroom)
  *	If we have drawn a map without walls, this allows us to
  *	auto-magically wallify it.  Taken from lev_main.c.
  */
-static void
-wallify_map()
-{
-
+static void wallify_map(void) {
     int x, y, xx, yy;
 
     for(x = 1; x < COLNO; x++)
@@ -265,10 +236,7 @@ wallify_map()
 	    }
 }
 
-static void
-join_map(bg_typ, fg_typ)
-	schar	bg_typ, fg_typ;
-{
+static void join_map(schar bg_typ, schar fg_typ) {
     struct mkroom *croom, *croom2;
 
     int i, j;
@@ -336,11 +304,7 @@ joinm:
     }
 }
 
-static void
-finish_map(fg_typ, bg_typ, lit, walled)
-	schar	fg_typ, bg_typ;
-	boolean	lit, walled;
-{
+static void finish_map(schar	fg_typ, schar bg_typ, boolean	lit, boolean walled) {
 	int	i, j;
 
 	if(walled) wallify_map();
@@ -372,9 +336,7 @@ finish_map(fg_typ, bg_typ, lit, walled)
  * region are already cleared, and roomno and irregular fields outside the
  * region are all set.
  */
-void
-remove_rooms (int lx, int ly, int hx, int hy)
-{
+void remove_rooms(int lx, int ly, int hx, int hy) {
     int i;
     struct mkroom *croom;
 
@@ -401,10 +363,7 @@ remove_rooms (int lx, int ly, int hx, int hy)
  * level structure contents corresponding to roomno have already been reset.
  * Currently handles only the removal of rooms that have no subrooms.
  */
-static void
-remove_room(roomno)
-    unsigned roomno;
-{
+static void remove_room(uint roomno) {
     struct mkroom *croom = &rooms[roomno];
     struct mkroom *maxroom = &rooms[--nroom];
     int i, j;
@@ -433,10 +392,7 @@ remove_room(roomno)
 #define N_P2_ITER	1	/* tune map generation via this value */
 #define N_P3_ITER	2	/* tune map smoothing via this value */
 
-void
-mkmap(init_lev)
-	lev_init	*init_lev;
-{
+void mkmap(lev_init *init_lev) {
 	schar	bg_typ = init_lev->bg,
 		fg_typ = init_lev->fg;
 	boolean smooth = init_lev->smoothed,

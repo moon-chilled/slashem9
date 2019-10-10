@@ -44,9 +44,7 @@ static void maybe_tame(struct monst *,struct obj *);
 
 static void set_lit(int,int,void *);
 
-int
-doread (void)
-{
+int doread (void) {
 	struct obj *scroll;
 	boolean confused;
 	char class_list[SIZE(readable) + 3];
@@ -261,9 +259,7 @@ doread (void)
 	return 1;
 }
 
-static void
-stripspe (struct obj *obj)
-{
+static void stripspe (struct obj *obj) {
 	if (obj->blessed) pline("Nothing happens.");
 	else {
 		if (obj->spe > 0) {
@@ -275,16 +271,12 @@ stripspe (struct obj *obj)
 	}
 }
 
-static void
-p_glow1 (struct obj *otmp)
-{
+static void p_glow1 (struct obj *otmp) {
 	pline("Your %s %s briefly.", xname(otmp),
 	     otense(otmp, Blind ? "vibrate" : "glow"));
 }
 
-static void
-p_glow2 (struct obj *otmp, const char *color)
-{
+static void p_glow2 (struct obj *otmp, const char *color) {
 	pline("Your %s %s%s%s for a moment.",
 		xname(otmp),
 		otense(otmp, Blind ? "vibrate" : "glow"),
@@ -315,9 +307,7 @@ boolean is_chargeable(struct obj *obj) {
  * recharge an object; curse_bless is -1 if the recharging implement
  * was cursed, +1 if blessed, 0 otherwise.
  */
-void
-recharge (struct obj *obj, int curse_bless)
-{
+void recharge (struct obj *obj, int curse_bless) {
 	int n;
 	boolean is_cursed, is_blessed;
 
@@ -636,9 +626,7 @@ forget_objclass (int oclass)
 
 
 /* randomize the given list of numbers  0 <= i < count */
-static void
-randomize (int *indices, int count)
-{
+static void randomize (int *indices, int count) {
 	int i, iswap, temp;
 
 	for (i = count - 1; i > 0; i--) {
@@ -651,9 +639,7 @@ randomize (int *indices, int count)
 
 
 /* Forget % of known objects. */
-void
-forget_objects (int percent)
-{
+void forget_objects (int percent) {
 	int i, count;
 	int indices[NUM_OBJECTS];
 
@@ -678,9 +664,7 @@ forget_objects (int percent)
 
 
 /* Forget some or all of map (depends on parameters). */
-void
-forget_map (int howmuch)
-{
+void forget_map (int howmuch) {
 	int zx, zy;
 
 	if (In_sokoban(&u.uz))
@@ -697,9 +681,7 @@ forget_map (int howmuch)
 }
 
 /* Forget all traps on the level. */
-void
-forget_traps (void)
-{
+void forget_traps (void) {
 	struct trap *trap;
 
 	/* forget all traps (except the one the hero is in :-) */
@@ -712,9 +694,7 @@ forget_traps (void)
  * Forget given % of all levels that the hero has visited and not forgotten,
  * except this one.
  */
-void
-forget_levels (int percent)
-{
+void forget_levels (int percent) {
 	int i, count;
 	xchar  maxl, this_lev;
 	int indices[MAXLINFO];
@@ -768,9 +748,7 @@ forget_levels (int percent)
  *	howmuch & ALL_MAP	= forget whole map
  *	howmuch & ALL_SPELLS	= forget all spells
  */
-void
-forget (int howmuch)
-{
+void forget (int howmuch) {
 
 	if (Punished) u.bc_felt = 0;	/* forget felt ball&chain */
 
@@ -798,9 +776,7 @@ forget (int howmuch)
 }
 
 /* monster is hit by scroll of taming's effect */
-static void
-maybe_tame (struct monst *mtmp, struct obj *sobj)
-{
+static void maybe_tame (struct monst *mtmp, struct obj *sobj) {
 	if (sobj->cursed || Is_blackmarket(&u.uz)) {
 	    setmangry(mtmp);
 	} else {
@@ -811,9 +787,7 @@ maybe_tame (struct monst *mtmp, struct obj *sobj)
 	}
 }
 
-int
-seffects (struct obj *sobj)
-{
+int seffects (struct obj *sobj) {
 	int cval;
 	boolean confused = (Confusion != 0);
 	struct obj *otmp;
@@ -1578,9 +1552,7 @@ seffects (struct obj *sobj)
 }
 
 #if 0
-static void
-wand_explode (struct obj *obj)
-{
+static void wand_explode (struct obj *obj) {
     obj->in_use = true;	/* in case losehp() is fatal */
     pline("Your %s vibrates violently, and explodes!",xname(obj));
     nhbell();
@@ -1593,11 +1565,7 @@ wand_explode (struct obj *obj)
 /*
  * Low-level lit-field update routine.
  */
-static void
-set_lit(x,y,val)
-int x, y;
-void * val;
-{
+static void set_lit(int x, int y, void * val) {
 	if (val)
 	    levl[x][y].lit = 1;
 	else {
@@ -1606,11 +1574,7 @@ void * val;
 	}
 }
 
-void
-litroom(on,obj)
-boolean on;
-struct obj *obj;
-{
+void litroom(boolean on, struct obj *obj) {
 	char is_lit;	/* value is irrelevant; we use its address
 			   as a `not null' flag for set_lit() */
 
@@ -1701,9 +1665,7 @@ do_it:
 	vision_full_recalc = 1;	/* delayed vision recalculation */
 }
 
-static void
-do_class_genocide (void)
-{
+static void do_class_genocide (void) {
 /*WAC adding windowstuff*/
         winid tmpwin;
 	anything any;
@@ -1882,13 +1844,11 @@ do_class_genocide (void)
 #define REALLY 1
 #define PLAYER 2
 #define ONTHRONE 4
-void
-do_genocide (int how)
 /* 0 = no genocide; create monsters (cursed scroll) */
 /* 1 = normal genocide */
 /* 3 = forced genocide of player */
 /* 5 (4 | 1) = normal genocide from throne */
-{
+void do_genocide (int how) {
 	char buf[BUFSZ];
 	int	i, killplayer = 0;
 	int mndx;
@@ -2030,9 +1990,7 @@ do_genocide (int how)
 	}
 }
 
-void
-punish (struct obj *sobj)
-{
+void punish (struct obj *sobj) {
 	/* KMH -- Punishment is still okay when you are riding */
 	/* KMH -- Punishment is still okay when you are riding */
 	pline("You are being punished for your misbehavior!");
@@ -2061,9 +2019,9 @@ punish (struct obj *sobj)
 	}
 }
 
-void
-unpunish (void)
-{	    /* remove the ball and chain */
+
+/* remove the ball and chain */
+void unpunish (void) {
 	struct obj *savechain = uchain;
 
 	obj_extract_self(uchain);
@@ -2078,11 +2036,7 @@ unpunish (void)
  * normal locations -- if the player tries to create one elsewhere, or to revive
  * one, the disoriented creature becomes a zombie
  */
-boolean
-cant_create(mtype, revival)
-int *mtype;
-boolean revival;
-{
+boolean cant_create(int *mtype, boolean revival) {
 
 	/* SHOPKEEPERS can be revived now */
 	if (*mtype==PM_GUARD || (*mtype==PM_SHOPKEEPER && !revival)

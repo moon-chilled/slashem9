@@ -20,7 +20,7 @@ static void freefruitchn(struct fruit *);
 static void ghostfruit(struct obj *);
 static boolean restgamestate(int, uint *, uint *);
 static void restlevelstate(uint, uint);
-static int restlevelfile(int,xchar);
+static int restlevelfile(xchar);
 static void reset_oattached_mids(boolean);
 
 /*
@@ -51,9 +51,7 @@ static long omoves;
 #define Is_IceBox(o) ((o)->otyp == ICE_BOX ? true : false)
 
 /* Recalculate level.objects[x][y], since this info was not saved. */
-static void
-find_lev_obj()
-{
+static void find_lev_obj() {
 	struct obj *fobjtmp = NULL;
 	struct obj *otmp;
 	int x,y;
@@ -84,10 +82,7 @@ find_lev_obj()
 /* Things that were marked "in_use" when the game was saved (ex. via the
  * infamous "HUP" cheat) get used up here.
  */
-void
-inven_inuse(quietly)
-boolean quietly;
-{
+void inven_inuse(boolean quietly) {
 	struct obj *otmp, *otmp2;
 
 	for (otmp = invent; otmp; otmp = otmp2) {
@@ -110,10 +105,7 @@ boolean quietly;
 	}
 }
 
-static void
-restlevchn(fd)
-int fd;
-{
+static void restlevchn(int fd) {
 	int cnt;
 	s_level	*tmplev, *x;
 
@@ -133,11 +125,7 @@ int fd;
 	}
 }
 
-static void
-restdamage(fd, ghostly)
-int fd;
-boolean ghostly;
-{
+static void restdamage(int fd, boolean ghostly) {
 	int counter;
 	struct damage *tmp_dam;
 
@@ -176,11 +164,7 @@ boolean ghostly;
 	free(tmp_dam);
 }
 
-static struct obj *
-restobjchn(fd, ghostly, frozen)
-int fd;
-boolean ghostly, frozen;
-{
+static struct obj * restobjchn(int fd, boolean ghostly, boolean frozen) {
 	struct obj *otmp, *otmp2 = 0;
 	struct obj *first = NULL;
 	int xl;
@@ -226,11 +210,7 @@ boolean ghostly, frozen;
 	return first;
 }
 
-static struct monst *
-restmonchn(fd, ghostly)
-int fd;
-boolean ghostly;
-{
+static struct monst * restmonchn(int fd, boolean ghostly) {
 	struct monst *mtmp, *mtmp2 = 0;
 	struct monst *first = NULL;
 	int xl;
@@ -298,10 +278,7 @@ boolean ghostly;
 	return first;
 }
 
-static struct fruit *
-loadfruitchn(fd)
-int fd;
-{
+static struct fruit * loadfruitchn(int fd) {
 	struct fruit *flist, *fnext;
 
 	flist = 0;
@@ -315,10 +292,7 @@ int fd;
 	return flist;
 }
 
-static void
-freefruitchn(flist)
-struct fruit *flist;
-{
+static void freefruitchn(struct fruit *flist) {
 	struct fruit *fnext;
 
 	while (flist) {
@@ -328,10 +302,7 @@ struct fruit *flist;
 	}
 }
 
-static void
-ghostfruit(otmp)
-struct obj *otmp;
-{
+static void ghostfruit(struct obj *otmp) {
 	struct fruit *oldf;
 
 	for (oldf = oldfruit; oldf; oldf = oldf->nextf)
@@ -473,15 +444,7 @@ static void restlevelstate(uint stuckid, uint steedid) {
 	}
 }
 
-/*ARGSUSED*/	/* fd used in MFLOPPY only */
-static int
-restlevelfile(fd, ltmp)
-int fd;
-xchar ltmp;
-{
-#ifdef MAC_MPW
-# pragma unused(fd)
-#endif
+static int restlevelfile(xchar ltmp) {
 	int nfd;
 	char whynot[BUFSZ];
 
@@ -521,7 +484,7 @@ int dorecover (int fd) {
 #ifdef INSURANCE
 	savestateinlock();
 #endif
-	rtmp = restlevelfile(fd, ledger_no(&u.uz));
+	rtmp = restlevelfile(ledger_no(&u.uz));
 	if (rtmp < 2) return rtmp;  /* dorecover called recursively */
 
 	/* these pointers won't be valid while we're processing the
@@ -536,7 +499,7 @@ int dorecover (int fd) {
 		if(read(fd, (void *) &ltmp, sizeof ltmp) != sizeof ltmp)
 			break;
 		getlev(fd, 0, ltmp, false);
-		rtmp = restlevelfile(fd, ltmp);
+		rtmp = restlevelfile(ltmp);
 		if (rtmp < 2) return rtmp;  /* dorecover called recursively */
 	}
 
@@ -607,9 +570,7 @@ int dorecover (int fd) {
 	return 1;
 }
 
-void
-trickery (char *reason)
-{
+void trickery (char *reason) {
 	pline("Strange, this map is not as I remember it.");
 	pline("Somebody is trying some trickery here...");
 	pline("This game is void.");
@@ -617,12 +578,7 @@ trickery (char *reason)
 	done(TRICKED);
 }
 
-void
-getlev(fd, pid, lev, ghostly)
-int fd, pid;
-xchar lev;
-boolean ghostly;
-{
+void getlev(int fd, int pid, xchar lev, boolean ghostly) {
 	struct trap *trap;
 	struct monst *mtmp;
 	branch *br;
@@ -796,9 +752,7 @@ boolean ghostly;
 
 
 /* Clear all structures for object and monster ID mapping. */
-static void
-clear_id_mapping()
-{
+static void clear_id_mapping() {
     struct bucket *curr;
 
     while ((curr = id_map) != 0) {
@@ -809,10 +763,7 @@ clear_id_mapping()
 }
 
 /* Add a mapping to the ID map. */
-static void
-add_id_mapping(gid, nid)
-    unsigned gid, nid;
-{
+static void add_id_mapping(uint gid, uint nid) {
     int idx;
 
     idx = n_ids_mapped % N_PER_BUCKET;
@@ -834,10 +785,7 @@ add_id_mapping(gid, nid)
  * in the new ID value.  Otherwise, return false and return -1 in the new
  * ID.
  */
-boolean
-lookup_id_mapping(gid, nidp)
-    unsigned gid, *nidp;
-{
+boolean lookup_id_mapping(uint gid, uint *nidp) {
     int i;
     struct bucket *curr;
 
@@ -860,10 +808,7 @@ lookup_id_mapping(gid, nidp)
     return false;
 }
 
-static void
-reset_oattached_mids(ghostly)
-boolean ghostly;
-{
+static void reset_oattached_mids(boolean ghostly) {
     struct obj *otmp;
     unsigned oldid, nid;
     for (otmp = fobj; otmp; otmp = otmp->nobj) {

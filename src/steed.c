@@ -22,10 +22,7 @@ rider_cant_reach (void)
 /*** Putting the saddle on ***/
 
 /* Can this monster wear a saddle? */
-boolean
-can_saddle(mtmp)
-	struct monst *mtmp;
-{
+boolean can_saddle(struct monst *mtmp) {
 	struct permonst *ptr = mtmp->data;
 
 	return (index(steeds, ptr->mlet) && (ptr->msize >= MZ_MEDIUM) &&
@@ -154,19 +151,14 @@ use_saddle (struct obj *otmp)
 /*** Riding the monster ***/
 
 /* Can we ride this monster?  Caller should also check can_saddle() */
-boolean
-can_ride(mtmp)
-	struct monst *mtmp;
-{
+boolean can_ride(struct monst *mtmp) {
 	return (mtmp->mtame && humanoid(youmonst.data) &&
 			!verysmall(youmonst.data) && !bigmonst(youmonst.data) &&
 			(!Underwater || is_swimmer(mtmp->data)));
 }
 
 
-int
-doride (void)
-{
+int doride (void) {
 	boolean forcemount = false;
 
 	if (u.usteed)
@@ -182,11 +174,7 @@ doride (void)
 
 
 /* Start riding, with the given monster */
-boolean
-mount_steed(mtmp, force)
-	struct monst *mtmp;	/* The animal */
-	boolean force;		/* Quietly force this animal */
-{
+boolean mount_steed(struct monst *mtmp,	boolean force)		{
 	struct obj *otmp;
 	char buf[BUFSZ];
 	struct permonst *ptr;
@@ -359,12 +347,7 @@ exercise_steed (void)
  * room's walls, which is not what we want.
  * Adapted from mail daemon code.
  */
-static boolean
-landing_spot(spot, reason, forceit)
-coord *spot;	/* landing position (we fill it in) */
-int reason;
-int forceit;
-{
+static boolean landing_spot(coord *spot, int reason, int forceit) {
     int i = 0, x, y, distance, min_distance = -1;
     boolean found = false;
     struct trap *t;
@@ -450,11 +433,7 @@ kick_steed (void)
 }
 
 /* Stop riding the current steed */
-void
-dismount_steed (
-    int reason		/* Player was thrown off etc. */
-)
-{
+void dismount_steed ( int reason		) {
 	struct monst *mtmp;
 	struct obj *otmp;
 	coord cc;

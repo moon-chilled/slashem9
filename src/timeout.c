@@ -25,9 +25,7 @@ static const char * const stoned_texts[] = {
 	"You are a statue."			/* 1 */
 };
 
-static void
-stoned_dialogue()
-{
+static void stoned_dialogue() {
 	long i = (Stoned & TIMEOUT);
 
 	if (i > 0L && i <= SIZE(stoned_texts))
@@ -51,9 +49,7 @@ static const char * const vomiting_texts[] = {
 	"suddenly vomit!"			/* 2 */
 };
 
-static void
-vomiting_dialogue()
-{
+static void vomiting_dialogue() {
 	long i = (Vomiting & TIMEOUT) / 3L;
 
 	if ((((Vomiting & TIMEOUT) % 3L) == 2) && (i >= 0)
@@ -91,9 +87,7 @@ static const char * const choke_texts2[] = {
 	"You suffocate."
 };
 
-static void
-choke_dialogue()
-{
+static void choke_dialogue() {
 	long i = (Strangled & TIMEOUT);
 
 	if(i > 0 && i <= SIZE(choke_texts)) {
@@ -119,9 +113,7 @@ static const char * const slime_texts[] = {
 	"You have become %s."             /* 1 */
 };
 
-static void
-slime_dialogue()
-{
+static void slime_dialogue() {
 	long i = (Slimed & TIMEOUT) / 2L;
 
 	if (((Slimed & TIMEOUT) % 2L) && i >= 0L
@@ -145,9 +137,7 @@ slime_dialogue()
 	exercise(A_DEX, false);
 }
 
-void
-burn_away_slime (void)
-{
+void burn_away_slime (void) {
 	if (Slimed) {
 	    pline("The slime that covers you is burned away!");
 	    Slimed = 0L;
@@ -157,9 +147,7 @@ burn_away_slime (void)
 }
 
 
-void
-nh_timeout (void)
-{
+void nh_timeout (void) {
 	struct prop *upp;
 /*
 	char c;
@@ -406,11 +394,7 @@ nh_timeout (void)
 	run_timers();
 }
 
-void
-fall_asleep(how_long, wakeup_msg)
-int how_long;
-boolean wakeup_msg;
-{
+void fall_asleep(int how_long, boolean wakeup_msg) {
 	stop_occupation();
 	nomul(how_long);
 	/* generally don't notice sounds while sleeping */
@@ -505,12 +489,7 @@ static void cleanup_unpoly(void * arg, long timeout) {
  * when polymorphing.
  * (except in unpolymorph code,  which is a special case)
  */
-int
-mon_poly(mtmp, your_fault, change_fmt)
-struct monst *mtmp;
-boolean your_fault;
-const char *change_fmt;
-{
+int mon_poly(struct monst *mtmp, boolean your_fault, const char *change_fmt) {
 	if (change_fmt && canseemon(mtmp)) pline(change_fmt, Monnam(mtmp));
 	return mon_spec_poly(mtmp, NULL, 0L,
 		false, canseemon(mtmp), true, your_fault);
@@ -523,17 +502,7 @@ const char *change_fmt;
  * lets receiver handle failures
  */
 
-int
-mon_spec_poly(mtmp, type, when, polyspot, transform_msg, system_shock,
-	your_fault)
-struct monst *mtmp;
-struct permonst *type;
-long when;
-boolean polyspot;
-boolean transform_msg;
-boolean system_shock;
-boolean your_fault;
-{
+int mon_spec_poly(struct monst *mtmp, struct permonst *type, long when, boolean polyspot, boolean transform_msg, boolean system_shock, boolean your_fault) {
 	int i;
 
 	i = newcham(mtmp, type, polyspot, transform_msg);
@@ -903,9 +872,7 @@ void hatch_egg(void *arg, long timeout) {
 }
 
 /* Learn to recognize eggs of the given type. */
-void
-learn_egg_type (int mnum)
-{
+void learn_egg_type (int mnum) {
 	/* baby monsters hatch from grown-up eggs */
 	mnum = little_to_big(mnum);
 	mvitals[mnum].mvflags |= MV_KNOWS_EGG;
@@ -914,9 +881,7 @@ learn_egg_type (int mnum)
 }
 
 /* Attach a fig_transform timeout to the given figurine. */
-void
-attach_fig_transform_timeout (struct obj *figurine)
-{
+void attach_fig_transform_timeout (struct obj *figurine) {
 	int i;
 
 	/* stop previous timer, if any */
@@ -931,9 +896,7 @@ attach_fig_transform_timeout (struct obj *figurine)
 }
 
 /* give a fumble message */
-static void
-slip_or_trip()
-{
+static void slip_or_trip() {
 	struct obj *otmp = vobj_at(u.ux, u.uy);
 	const char *what, *pronoun;
 	char buf[BUFSZ];
@@ -1009,11 +972,7 @@ slip_or_trip()
 }
 
 /* Print a lamp flicker message with tailer. */
-static void
-see_lamp_flicker(obj, tailer)
-struct obj *obj;
-const char *tailer;
-{
+static void see_lamp_flicker(struct obj *obj, const char *tailer) {
 	switch (obj->where) {
 	    case OBJ_INVENT:
 	    case OBJ_MINVENT:
@@ -1026,10 +985,7 @@ const char *tailer;
 }
 
 /* Print a dimming message for brass lanterns. */
-static void
-lantern_message(obj)
-struct obj *obj;
-{
+static void lantern_message(struct obj *obj) {
 	/* from adventure */
 	switch (obj->where) {
 	    case OBJ_INVENT:
@@ -1051,11 +1007,7 @@ struct obj *obj;
  * Timeout callback for for objects that are burning. E.g. lamps, candles.
  * See begin_burn() for meanings of obj->age and obj->spe.
  */
-void
-burn_object(arg, timeout)
-void * arg;
-long timeout;
-{
+void burn_object(void * arg, long timeout) {
 	struct obj *obj = (struct obj *) arg;
 	boolean canseeit, many, menorah, need_newsym;
 	xchar x, y;
@@ -1453,11 +1405,7 @@ void lightsaber_deactivate(struct obj *obj, boolean timer_attached) {
  *
  * This is a "silent" routine - it should not print anything out.
  */
-void
-begin_burn(obj, already_lit)
-	struct obj *obj;
-	boolean already_lit;
-{
+void begin_burn(struct obj *obj, boolean already_lit) {
 	int radius = 3;
 	long turns = 0;
 	boolean do_timer = true;
@@ -1562,11 +1510,7 @@ begin_burn(obj, already_lit)
  * Stop a burn timeout on the given object if timer attached.  Darken
  * light source.
  */
-void
-end_burn(obj, timer_attached)
-	struct obj *obj;
-	boolean timer_attached;
-{
+void end_burn(struct obj *obj, boolean timer_attached) {
 	if (!obj->lamplit) {
 	    impossible("end_burn: obj %s not lit", xname(obj));
 	    return;
@@ -1589,11 +1533,7 @@ end_burn(obj, timer_attached)
 /*
  * Cleanup a burning object if timer stopped.
  */
-static void
-cleanup_burn(arg, expire_time)
-    void * arg;
-    long expire_time;
-{
+static void cleanup_burn(void * arg, long expire_time) {
     struct obj *obj = arg;
     if (!obj->lamplit) {
 	impossible("cleanup_burn: obj %s not lit", xname(obj));
@@ -1616,9 +1556,7 @@ cleanup_burn(arg, expire_time)
  *       a torch.
  */
 
-void
-burn_faster (struct obj *obj, long adj)
-{
+void burn_faster (struct obj *obj, long adj) {
 
   if (!obj->lamplit) {
     impossible("burn_faster: obj %s not lit", xname(obj));
@@ -1628,9 +1566,7 @@ burn_faster (struct obj *obj, long adj)
   accelerate_timer(BURN_OBJECT, obj_to_any(obj), adj);
 }
 
-void
-do_storms (void)
-{
+void do_storms (void) {
     int nstrike;
     int x, y;
     int dirx, diry;
@@ -1844,9 +1780,7 @@ void timer_sanity_check(void) {
  * Pick off timeout elements from the global queue and call their functions.
  * Do this until their time is less than or equal to the move count.
  */
-void
-run_timers (void)
-{
+void run_timers (void) {
     timer_element *curr;
 
     /*
@@ -2007,10 +1941,7 @@ mon_stop_timers (struct monst *mon)
 
 
 /* Insert timer into the global queue */
-static void
-insert_timer(gnu)
-    timer_element *gnu;
-{
+static void insert_timer(timer_element *gnu) {
     timer_element *curr, *prev;
 
     for (prev = 0, curr = timer_base; curr; prev = curr, curr = curr->next)
@@ -2040,11 +1971,7 @@ static timer_element *remove_timer(timer_element **base, short func_index, anyth
     return curr;
 }
 
-static void
-write_timer(fd, timer)
-    int fd;
-    timer_element *timer;
-{
+static void write_timer(int fd, timer_element *timer) {
     anything arg_save;
 
     switch (timer->kind) {
@@ -2120,10 +2047,7 @@ static void accelerate_timer(short func_index, anything arg, long adj) {
  * Return true if the object will stay on the level when the level is
  * saved.
  */
-boolean
-obj_is_local(obj)
-    struct obj *obj;
-{
+boolean obj_is_local(struct obj *obj) {
     switch (obj->where) {
 	case OBJ_INVENT:
 	case OBJ_MIGRATING:	return false;
@@ -2141,10 +2065,7 @@ obj_is_local(obj)
  * Return true if the given monster will stay on the level when the
  * level is saved.
  */
-static boolean
-mon_is_local(mon)
-struct monst *mon;
-{
+static boolean mon_is_local(struct monst *mon) {
     struct monst *curr;
 
     for (curr = migrating_mons; curr; curr = curr->nmon)
@@ -2160,10 +2081,7 @@ struct monst *mon;
  * Return true if the timer is attached to something that will stay on the
  * level when the level is saved.
  */
-static boolean
-timer_is_local(timer)
-    timer_element *timer;
-{
+static boolean timer_is_local(timer_element *timer) {
     switch (timer->kind) {
 	case TIMER_LEVEL:	return true;
 	case TIMER_GLOBAL:	return false;
@@ -2179,11 +2097,7 @@ timer_is_local(timer)
  * Part of the save routine.  Count up the number of timers that would
  * be written.  If write_it is true, actually write the timer.
  */
-static int
-maybe_write_timer(fd, range, write_it)
-    int fd, range;
-    boolean write_it;
-{
+static int maybe_write_timer(int fd, int range, boolean write_it) {
     int count = 0;
     timer_element *curr;
 
@@ -2225,8 +2139,7 @@ maybe_write_timer(fd, range, write_it)
  *		+ timeouts that stay with the level (obj & monst)
  */
 void
-save_timers (int fd, int mode, int range)
-{
+save_timers (int fd, int mode, int range) {
     timer_element *curr, *prev, *next_timer=0;
     int count;
 
@@ -2262,12 +2175,7 @@ save_timers (int fd, int mode, int range)
  * Pull in the structures from disk, but don't recalculate the object and
  * monster pointers.
  */
-void
-restore_timers(fd, range, ghostly, adjust)
-    int fd, range;
-    boolean ghostly;	/* restoring from a ghost level */
-    long adjust;	/* how much to adjust timeout */
-{
+void restore_timers(int fd, int range, boolean from_ghost_level, long timeout_adjustment) {
     int count;
     timer_element *curr;
 
@@ -2279,8 +2187,8 @@ restore_timers(fd, range, ghostly, adjust)
     while (count-- > 0) {
 	curr = alloc(sizeof(timer_element));
 	mread(fd, (void *) curr, sizeof(timer_element));
-	if (ghostly)
-	    curr->timeout += adjust;
+	if (from_ghost_level)
+	    curr->timeout += timeout_adjustment;
 	insert_timer(curr);
     }
 }

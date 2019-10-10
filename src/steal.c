@@ -9,10 +9,7 @@ static int stealarm(void);
 static const char *equipname(struct obj *);
 static void mdrop_obj(struct monst *,struct obj *,boolean);
 
-static const char *
-equipname(otmp)
-struct obj *otmp;
-{
+static const char * equipname(struct obj *otmp) {
 	return ((otmp == uarmu) ? "shirt" :
 		(otmp == uarmf) ? "boots" :
 		(otmp == uarms) ? "shield" :
@@ -160,11 +157,7 @@ botm:   stealoid = 0;
 
 /* An object you're wearing has been taken off by a monster (theft or
    seduction).  Also used if a worn item gets transformed (stone to flesh). */
-void
-remove_worn_item(obj, unchain_ball)
-struct obj *obj;
-boolean unchain_ball;	/* whether to unpunish or just unwield */
-{
+void remove_worn_item(struct obj *obj, boolean unchain_ball) {
 	if (donning(obj))
 	    cancel_don();
 	if (!obj->owornmask)
@@ -499,12 +492,7 @@ stealamulet (struct monst *mtmp)
 
 
 /* drop one object taken from a (possibly dead) monster's inventory */
-static void
-mdrop_obj(mon, obj, verbosely)
-struct monst *mon;
-struct obj *obj;
-boolean verbosely;
-{
+static void mdrop_obj(struct monst *mon, struct obj *obj, boolean verbosely) {
     int omx = mon->mx, omy = mon->my;
 
     if (obj->owornmask) {
@@ -549,12 +537,8 @@ mdrop_special_objs (struct monst *mon)
 }
 
 /* release the objects the creature is carrying */
-void
-relobj(mtmp,show,is_pet)
-struct monst *mtmp;
-int show;
-boolean is_pet;		/* If true, pet should keep wielded/worn items */
-{
+/* if is_pet, pet should keep wielded/worn items */
+void relobj(struct monst *mtmp, int show, boolean is_pet) {
 	struct obj *otmp;
 	int omx = mtmp->mx, omy = mtmp->my;
 	struct obj *keepobj = 0;

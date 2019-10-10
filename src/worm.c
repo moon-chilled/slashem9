@@ -135,12 +135,7 @@ initworm (struct monst *worm, int wseg_count)
  *  Get rid of all worm segments on and following the given pointer curr.
  *  The display may or may not need to be updated as we free the segments.
  */
-static
-void
-toss_wsegs(curr, display_update)
-    struct wseg *curr;
-    boolean display_update;
-{
+static void toss_wsegs(struct wseg *curr, boolean display_update) {
     struct wseg *seg;
 
     while (curr) {
@@ -168,17 +163,13 @@ toss_wsegs(curr, display_update)
  *
  *  Remove the tail segment of the worm (the starting segment of the list).
  */
-static
-void
-shrink_worm(wnum)
-    int wnum;	/* worm number */
-{
+static void shrink_worm(int worm_number) {
     struct wseg *seg;
 
-    if (wtails[wnum] == wheads[wnum]) return;	/* no tail */
+    if (wtails[worm_number] == wheads[worm_number]) return;	/* no tail */
 
-    seg = wtails[wnum];
-    wtails[wnum] = seg->nseg;
+    seg = wtails[worm_number];
+    wtails[worm_number] = seg->nseg;
     seg->nseg = NULL;
     toss_wsegs(seg, true);
 }
@@ -307,12 +298,7 @@ wormhitu (struct monst *worm)
  *
  *  [ALI] Return true if worm is cut.
  */
-int
-cutworm(worm, x, y, weap)
-    struct monst *worm;
-    xchar x,y;
-    struct obj *weap;
-{
+int cutworm(struct monst *worm, xchar x, xchar y, struct obj *weap) {
     struct wseg  *curr, *new_tail;
     struct monst *new_worm;
     int wnum = worm->wormno;
@@ -432,11 +418,7 @@ see_wsegs (struct monst *worm)
  *
  *  Display all of the segments of the given worm for detection.
  */
-void
-detect_wsegs(worm, use_detection_glyph)
-    struct monst *worm;
-    boolean use_detection_glyph;
-{
+void detect_wsegs(struct monst *worm, boolean use_detection_glyph) {
     int num;
     struct wseg *curr = wtails[worm->wormno];
 
@@ -579,11 +561,7 @@ remove_worm (struct monst *worm)
  *  x, and y are most likely the worm->mx, and worm->my, but don't *need* to
  *  be, if somehow the head is disjoint from the tail.
  */
-void
-place_worm_tail_randomly(worm, x, y)
-    struct monst *worm;
-    xchar x, y;
-{
+void place_worm_tail_randomly(struct monst *worm, xchar x, xchar y) {
     int wnum = worm->wormno;
     struct wseg *curr = wtails[wnum];
     struct wseg *new_tail;
@@ -635,12 +613,7 @@ place_worm_tail_randomly(worm, x, y)
  * This function, and the loop it serves, could be eliminated by coding
  * enexto() with a search radius.
  */
-static
-void
-random_dir(x, y, nx, ny)
-    xchar   x,   y;
-    xchar *nx, *ny;
-{
+static void random_dir(xchar   x,   xchar y, xchar *nx, xchar *ny) {
     *nx = x;
     *ny = y;
 
@@ -671,9 +644,7 @@ random_dir(x, y, nx, ny)
  *  the number of visible segments that a worm has.
  */
 
-int
-count_wsegs (struct monst *mtmp)
-{
+int count_wsegs (struct monst *mtmp) {
     int i=0;
     struct wseg *curr = (wtails[mtmp->wormno])->nseg;
 
@@ -691,11 +662,7 @@ count_wsegs (struct monst *mtmp)
  *
  *  will create a worm tail chain of (num_segs + 1) and return a pointer to it.
  */
-static
-struct wseg *
-create_worm_tail(num_segs)
-    int num_segs;
-{
+static struct wseg * create_worm_tail(int num_segs) {
     int i=0;
     struct wseg *new_tail, *curr;
 
@@ -724,10 +691,7 @@ create_worm_tail(num_segs)
  *  invisibility and telepathy (which should only show the head anyway).
  *  Mostly used in the canseemon() macro.
  */
-boolean
-worm_known(worm)
-struct monst *worm;
-{
+boolean worm_known(struct monst *worm) {
     struct wseg *curr = wtails[worm->wormno];
 
     while (curr) {

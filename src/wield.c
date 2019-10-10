@@ -83,11 +83,7 @@ static int ready_weapon(struct obj *, boolean);
  *       unwielded weapon is being put back into the inventory
  *       (rather than dropped, destroyed, etc)
  */
-void
-setuwep(obj, put_away)
-struct obj *obj;
-boolean put_away;
-{
+void setuwep(struct obj *obj, boolean put_away) {
 	struct obj *olduwep = uwep;
 
 	if (obj == uwep) return; /* necessary to not set unweapon */
@@ -119,11 +115,7 @@ boolean put_away;
 	update_inventory();
 }
 
-static int
-ready_weapon(wep, put_away)
-struct obj *wep;
-boolean put_away;
-{
+static int ready_weapon(struct obj *wep, boolean put_away) {
 	/* Separated function so swapping works easily */
 	int res = 0;
 
@@ -216,18 +208,12 @@ boolean put_away;
 	return res;
 }
 
-void
-setuqwep (struct obj *obj)
-{
+void setuqwep (struct obj *obj) {
 	setworn(obj, W_QUIVER);
 	update_inventory();
 }
 
-void
-setuswapwep(obj, put_away)
-struct obj *obj;
-boolean put_away;
-{
+void setuswapwep(struct obj *obj, boolean put_away) {
 	struct obj *oldswapwep = uswapwep;
 	setworn(obj, W_SWAPWEP);
 
@@ -246,9 +232,7 @@ static const char ready_objs[] =
 static const char bullets[] =	/* (note: different from dothrow.c) */
 	{ ALL_CLASSES, ALLOW_NONE, GEM_CLASS, WEAPON_CLASS, 0 };
 
-int
-dowield (void)
-{
+int dowield (void) {
 	struct obj *wep, *oldwep;
 	int result;
 
@@ -296,9 +280,7 @@ dowield (void)
 	return result;
 }
 
-int
-doswapweapon (void)
-{
+int doswapweapon (void) {
 	struct obj *oldwep, *oldswap;
 	int result = 0;
 
@@ -343,9 +325,7 @@ doswapweapon (void)
 	return result;
 }
 
-int
-dowieldquiver (void)
-{
+int dowieldquiver (void) {
 	struct obj *newquiver;
 	const char *quivee_types = (uslinging() ||
 		  (uswapwep && objects[uswapwep->otyp].oc_skill == P_SLING)) ?
@@ -412,11 +392,8 @@ dowieldquiver (void)
 
 /* used for #rub and for applying pick-axe, whip, grappling hook, or polearm */
 /* (moved from apply.c) */
-boolean
-wield_tool(obj, verb)
-struct obj *obj;
-const char *verb;	/* "rub",&c */
-{
+// verb = "rub" &c
+boolean wield_tool(struct obj *obj, const char *verb) {
     const char *what;
     boolean more_than_1;
 
@@ -481,9 +458,7 @@ const char *verb;	/* "rub",&c */
 /* WAC
  * For the purposes of SLASH'EM, artifacts should be wieldable in either hand
  */
-int
-can_twoweapon (void)
-{
+int can_twoweapon (void) {
 	char buf[BUFSZ];
 	const char *what;
 	boolean disallowed_by_race;
@@ -565,9 +540,7 @@ can_twoweapon (void)
 	return false;
 }
 
-void
-drop_uswapwep (void)
-{
+void drop_uswapwep (void) {
 	char str[BUFSZ];
 	struct obj *obj = uswapwep;
 
@@ -578,9 +551,7 @@ drop_uswapwep (void)
 	dropx(obj);
 }
 
-int
-dotwoweapon (void)
-{
+int dotwoweapon (void) {
 	/* You can always toggle it off */
 	if (u.twoweap) {
 		if (uwep)
@@ -624,9 +595,7 @@ dotwoweapon (void)
  * 1.  The item has been eaten, stolen, burned away, or rotted away.
  * 2.  Making an item disappear for a bones pile.
  */
-void
-uwepgone (void)
-{
+void uwepgone (void) {
 	if (uwep) {
 		if (artifact_light(uwep) && uwep->lamplit) {
 		    end_burn(uwep, false);
@@ -639,27 +608,21 @@ uwepgone (void)
 	}
 }
 
-void
-uswapwepgone (void)
-{
+void uswapwepgone (void) {
 	if (uswapwep) {
 		setworn(NULL, W_SWAPWEP);
 		update_inventory();
 	}
 }
 
-void
-uqwepgone (void)
-{
+void uqwepgone (void) {
 	if (uquiver) {
 		setworn(NULL, W_QUIVER);
 		update_inventory();
 	}
 }
 
-void
-untwoweapon (void)
-{
+void untwoweapon (void) {
 	if (u.twoweap) {
 		if (uwep && uswapwep)
 		    pline("You can no longer use two weapons at once.");
@@ -678,12 +641,7 @@ untwoweapon (void)
 }
 
 /* Maybe rust object, or corrode it if acid damage is called for */
-void
-erode_obj(target, acid_dmg, fade_scrolls)
-struct obj *target;		/* object (e.g. weapon or armor) to erode */
-boolean acid_dmg;
-boolean fade_scrolls;
-{
+void erode_obj(struct obj *target	, boolean acid_dmg, boolean fade_scrolls) {
 	int erosion;
 	struct monst *victim;
 	boolean vismon;
@@ -767,9 +725,7 @@ boolean fade_scrolls;
 	}
 }
 
-int
-chwepon (struct obj *otmp, int amount)
-{
+int chwepon (struct obj *otmp, int amount) {
 	const char *color = hcolor((amount < 0) ? NH_BLACK : NH_BLUE);
 	const char *xtime;
 	int otyp = STRANGE_OBJECT;
@@ -854,9 +810,7 @@ chwepon (struct obj *otmp, int amount)
 	return 1;
 }
 
-int
-welded (struct obj *obj)
-{
+int welded (struct obj *obj) {
 	if (obj && obj == uwep && will_weld(obj)) {
 		obj->bknown = true;
 		return 1;
@@ -864,9 +818,7 @@ welded (struct obj *obj)
 	return 0;
 }
 
-void
-weldmsg (struct obj *obj)
-{
+void weldmsg (struct obj *obj) {
 	long savewornmask;
 
 	savewornmask = obj->owornmask;
@@ -877,11 +829,7 @@ weldmsg (struct obj *obj)
 	obj->owornmask = savewornmask;
 }
 
-void
-unwield(obj, put_away)
-struct obj *obj;
-boolean put_away;
-{
+void unwield(struct obj *obj, boolean put_away) {
     /* MRKR: Extinguish torches when they are put away */
     if (put_away && obj->otyp == TORCH && obj->lamplit) {
 	pline("You extinguish %s before putting it away.", yname(obj));

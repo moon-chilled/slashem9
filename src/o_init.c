@@ -91,11 +91,7 @@ d_level *dlev;
 }
 
 /* shuffle descriptions on objects o_low to o_high */
-static void
-shuffle(o_low, o_high, domaterial)
-	int o_low, o_high;
-	boolean domaterial;
-{
+static void shuffle(int o_low, int o_high, boolean domaterial) {
 	int i, j, num_to_shuffle;
 	short sw;
 	int color;
@@ -131,8 +127,8 @@ shuffle(o_low, o_high, domaterial)
 void
 init_objects (void)
 {
-int i, first, last, sum;
-char oclass;
+	int i, first, last, sum;
+	char oclass;
 # define COPY_OBJ_DESCR(o_dst,o_src) \
 			o_dst.oc_descr_idx = o_src.oc_descr_idx,\
 			o_dst.oc_color = o_src.oc_color
@@ -324,12 +320,7 @@ restnames (int fd)
 #endif
 }
 
-void
-discover_object(oindx, mark_as_known, credit_hero)
-int oindx;
-boolean mark_as_known;
-boolean credit_hero;
-{
+void discover_object(int oindx, boolean mark_as_known, boolean credit_hero) {
 	/* KMH -- If we are hallucinating, we aren't sure of the object description */
 	if (Hallucination) return;
 
@@ -376,10 +367,7 @@ undiscover_object (int oindx)
     }
 }
 
-static boolean
-interesting_to_discover(i)
-int i;
-{
+static boolean interesting_to_discover(int i) {
 	/* Pre-discovered objects are now printed with a '*' */
     return((boolean)(objects[i].oc_uname != NULL ||
 	    (objects[i].oc_name_known && OBJ_DESCR(objects[i]) != NULL)));

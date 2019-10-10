@@ -31,21 +31,14 @@ static void rest_room(int,struct mkroom *);
 extern const struct shclass shtypes[];	/* defined in shknam.c */
 
 
-static boolean
-isbig(sroom)
-struct mkroom *sroom;
-{
+static boolean isbig(struct mkroom *sroom) {
 	int area = (sroom->hx - sroom->lx + 1)
 			   * (sroom->hy - sroom->ly + 1);
 	return area > 20;
 }
 
-void
-mkroom (
-/* make and stock a room of a given type */
-    int roomtype
-)
-{
+// make and stock a room of a given type
+void mkroom (int roomtype) {
     if (roomtype >= SHOPBASE)
 	mkshop();	/* someday, we should be able to specify shop type */
     else switch(roomtype) {
@@ -191,11 +184,8 @@ static void mkshop(void) {
 	stock_room(i, sroom);
 }
 
-static struct mkroom *
-pick_room(strict)
-boolean strict;
 /* pick an unused room, preferably with only one door */
-{
+static struct mkroom * pick_room(boolean strict) {
 	struct mkroom *sroom;
 	int i = nroom;
 
@@ -216,10 +206,7 @@ boolean strict;
 	return NULL;
 }
 
-static void
-mkzoo(type)
-int type;
-{
+static void mkzoo(int type) {
 	struct mkroom *sroom;
 
 	if (type == BADFOODSHOP) {
@@ -234,9 +221,7 @@ int type;
 	}
 }
 
-void
-fill_zoo (struct mkroom *sroom)
-{
+void fill_zoo (struct mkroom *sroom) {
 	struct monst *mon;
 	int sx,sy,i;
 	int sh, tx, ty, goldlim, type = sroom->rtype;
@@ -460,11 +445,7 @@ fill_zoo (struct mkroom *sroom)
 
 /* make a swarm of undead around mm */
 void
-mkundead(mm, revive_corpses, mm_flags)
-coord *mm;
-boolean revive_corpses;
-int mm_flags;
-{
+mkundead(coord *mm, boolean revive_corpses, int mm_flags) {
 	int cnt = (level_difficulty() + 1)/10 + rnd(5);
 	struct permonst *mdat;
 	struct obj *otmp;
@@ -481,9 +462,7 @@ int mm_flags;
 	level.flags.graveyard = true;	/* reduced chance for undead corpse */
 }
 
-static struct permonst *
-morguemon()
-{
+static struct permonst * morguemon(void) {
 	int i = rn2(100), hd = rn2(level_difficulty());
 
 	if(hd > 10 && i < 10)
@@ -496,9 +475,7 @@ morguemon()
 			: (i < 40) ? &mons[PM_WRAITH] : mkclass(S_ZOMBIE,0);
 }
 
-struct permonst *
-antholemon (void)
-{
+struct permonst * antholemon (void) {
 	int mtyp;
 
 	/* Same monsters within a level, different ones between levels */
@@ -512,9 +489,7 @@ antholemon (void)
 }
 
 
-static struct permonst *
-fungus()
-{
+static struct permonst * fungus() {
 	int i, hd = level_difficulty(), mtyp = 0;
 
 	i = rn2(hd > 20 ? 17 : hd > 12 ? 14 : 12);
@@ -544,9 +519,8 @@ fungus()
 	return (mvitals[mtyp].mvflags & G_GONE) ?  NULL : &mons[mtyp];
 }
 
-static void
-mkswamp()	/* Michiel Huisjes & Fred de Wilde */
-{
+/* Michiel Huisjes & Fred de Wilde */
+static void mkswamp()	{
 	struct mkroom *sroom;
 	int sx,sy,i,eelct = 0;
 
@@ -581,10 +555,7 @@ mkswamp()	/* Michiel Huisjes & Fred de Wilde */
 	}
 }
 
-static coord *
-shrine_pos(roomno)
-int roomno;
-{
+static coord * shrine_pos(int roomno) {
 	static coord buf;
 	struct mkroom *troom = &rooms[roomno - ROOMOFFSET];
 
@@ -617,10 +588,7 @@ mktemple()
 	level.flags.has_temple = 1;
 }
 
-boolean
-nexttodoor(sx,sy)
-int sx, sy;
-{
+boolean nexttodoor(int sx, int sy) {
 	int dx, dy;
 	struct rm *lev;
 	for(dx = -1; dx <= 1; dx++) for(dy = -1; dy <= 1; dy++) {
@@ -632,10 +600,7 @@ int sx, sy;
 	return false;
 }
 
-boolean
-has_dnstairs(sroom)
-struct mkroom *sroom;
-{
+boolean has_dnstairs(struct mkroom *sroom) {
 	if (sroom == dnstairs_room)
 		return true;
 	if (sstairs.sx && !sstairs.up)
@@ -643,10 +608,7 @@ struct mkroom *sroom;
 	return false;
 }
 
-boolean
-has_upstairs(sroom)
-struct mkroom *sroom;
-{
+boolean has_upstairs(struct mkroom *sroom) {
 	if (sroom == upstairs_room)
 		return true;
 	if (sstairs.sx && sstairs.up)
@@ -655,32 +617,20 @@ struct mkroom *sroom;
 }
 
 
-int
-somex (struct mkroom *croom)
-{
+int somex (struct mkroom *croom) {
 	return rn2(croom->hx-croom->lx+1) + croom->lx;
 }
 
-int
-somey (struct mkroom *croom)
-{
+int somey (struct mkroom *croom) {
 	return rn2(croom->hy-croom->ly+1) + croom->ly;
 }
 
-boolean
-inside_room(croom, x, y)
-struct mkroom *croom;
-xchar x, y;
-{
+boolean inside_room(struct mkroom *croom, xchar x, xchar y) {
 	return x >= croom->lx-1 && x <= croom->hx+1 &&
 		y >= croom->ly-1 && y <= croom->hy+1;
 }
 
-boolean
-somexy(croom, c)
-struct mkroom *croom;
-coord *c;
-{
+boolean somexy(struct mkroom *croom, coord *c) {
 	int try_cnt = 0;
 	int i;
 
@@ -734,10 +684,7 @@ you_lose:	;
  *		- ANY_TYPE
  */
 
-struct mkroom *
-search_special(type)
-schar type;
-{
+struct mkroom * search_special(schar type) {
 	struct mkroom *croom;
 
 	for(croom = &rooms[0]; croom->hx >= 0; croom++)
@@ -754,9 +701,7 @@ schar type;
 }
 
 
-struct permonst *
-courtmon (void)
-{
+struct permonst * courtmon (void) {
 	int     i = rn2(60) + rn2(3*level_difficulty());
 	if (i > 200)            return mkclass(S_DRAGON,0);
 	else if (i > 130)       return mkclass(S_GIANT,0);
@@ -769,9 +714,7 @@ courtmon (void)
 	else			return mkclass(S_KOBOLD,0);
 }
 
-struct permonst *
-realzoomon (void)
-{
+struct permonst * realzoomon (void) {
 	int     i = rn2(60) + rn2(3*level_difficulty());
 	if (i > 175)    return &mons[PM_JUMBO_THE_ELEPHANT];
 	else if (i > 115)       return &mons[PM_MASTODON];
@@ -793,9 +736,8 @@ static struct {
     {PM_SOLDIER, 80}, {PM_SERGEANT, 15}, {PM_LIEUTENANT, 4}, {PM_CAPTAIN, 1}
 };
 
-static struct permonst *
-squadmon()		/* return soldier types. */
-{
+/* return soldier types. */
+static struct permonst * squadmon()		{
 	int sel_prob, i, cpro, mndx;
 
 	sel_prob = rnd(80+level_difficulty());
@@ -819,11 +761,7 @@ gotone:
  * (if any).
  */
 
-static void
-save_room(fd, r)
-int	fd;
-struct mkroom *r;
-{
+static void save_room(int	fd, struct mkroom *r) {
 	short i;
 	/*
 	 * Well, I really should write only useful information instead
@@ -839,9 +777,7 @@ struct mkroom *r;
  * save_rooms : Save all the rooms on disk!
  */
 
-void
-save_rooms (int fd)
-{
+void save_rooms (int fd) {
 	short i;
 
 	/* First, write the number of rooms */
@@ -850,11 +786,7 @@ save_rooms (int fd)
 	    save_room(fd, &rooms[i]);
 }
 
-static void
-rest_room(fd, r)
-int fd;
-struct mkroom *r;
-{
+static void rest_room(int fd, struct mkroom *r) {
 	short i;
 
 	mread(fd, (void *) r, sizeof(struct mkroom));
@@ -870,9 +802,7 @@ struct mkroom *r;
  * the disk.
  */
 
-void
-rest_rooms (int fd)
-{
+void rest_rooms (int fd) {
 	short i;
 
 	mread(fd, (void *) &nroom, sizeof(nroom));

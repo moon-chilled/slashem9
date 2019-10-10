@@ -219,10 +219,7 @@ static const struct innate_tech
         		  % LB_HPMOD))))
 
 /* Whether you know the tech */
-boolean
-tech_known(tech)
-	short tech;
-{
+boolean tech_known(short tech) {
 	int i;
 	for (i = 0; i < MAXTECH; i++) {
 		if (techid(i) == tech)
@@ -232,9 +229,7 @@ tech_known(tech)
 }
 
 /* Called to prematurely stop a technique */
-void
-aborttech (int tech)
-{
+void aborttech (int tech) {
 	int i;
 
 	i = get_tech_no(tech);
@@ -262,9 +257,7 @@ aborttech (int tech)
 }
 
 /* Called to teach a new tech.  Level is starting tech level */
-void
-learntech (short tech, long mask, int tlevel)
-{
+void learntech (short tech, long mask, int tlevel) {
 	int i;
 	const struct innate_tech *tp;
 
@@ -340,10 +333,7 @@ learntech (short tech, long mask, int tlevel)
  * Return true if a tech was picked, with the tech index in the return
  * parameter.  Otherwise return false.
  */
-static boolean
-gettech(tech_no)
-        int *tech_no;
-{
+static boolean gettech(int *tech_no) {
         int i, ntechs, idx;
 	char ilet, lets[BUFSZ], qbuf[QBUFSZ];
 
@@ -389,11 +379,7 @@ gettech(tech_no)
         return dotechmenu(PICK_ONE, tech_no);
 }
 
-static boolean
-dotechmenu(how, tech_no)
-	int how;
-        int *tech_no;
-{
+static boolean dotechmenu(int how, int *tech_no) {
 	winid tmpwin;
 	int i, n, len, longest, techs_useable, tlevel;
 	char buf[BUFSZ], let = 'a';
@@ -500,9 +486,7 @@ dotechmenu(how, tech_no)
 	return false;
 }
 
-static int
-get_tech_no (int tech)
-{
+static int get_tech_no (int tech) {
 	int i;
 
 	for (i = 0; i < MAXTECH; i++) {
@@ -513,9 +497,7 @@ get_tech_no (int tech)
 	return -1;
 }
 
-int
-dotech (void)
-{
+int dotech (void) {
 	int tech_no;
 
 	if (gettech(&tech_no))
@@ -525,12 +507,7 @@ dotech (void)
 
 static const char kits[] = { TOOL_CLASS, 0 };
 
-static struct obj *
-use_medical_kit(type, feedback, verb)
-int type;
-boolean feedback;
-char *verb;
-{
+static struct obj * use_medical_kit(int type, boolean feedback, char *verb) {
     struct obj *obj, *otmp;
     makeknown(MEDICAL_KIT);
     if (!(obj = carrying(MEDICAL_KIT))) {
@@ -560,9 +537,7 @@ char *verb;
 /* gettech is reworked getspell */
 /* reworked class special effects code */
 /* adapted from specialpower in cmd.c */
-static int
-techeffects (int tech_no)
-{
+static int techeffects (int tech_no) {
 	/* These variables are used in various techs */
 	struct obj *obj, *otmp;
 	const char *str;
@@ -1478,9 +1453,7 @@ techeffects (int tech_no)
 /* Whether or not a tech is in use.
  * 0 if not in use, turns left if in use. Tech is done when techinuse == 1
  */
-int
-tech_inuse (int tech_id)
-{
+int tech_inuse (int tech_id) {
         int i;
 
         if (tech_id < 1 || tech_id > MAXTECH) {
@@ -1495,9 +1468,7 @@ tech_inuse (int tech_id)
 	return 0;
 }
 
-void
-tech_timeout (void)
-{
+void tech_timeout (void) {
 	int i;
 
         for (i = 0; i < MAXTECH; i++) {
@@ -1573,9 +1544,7 @@ tech_timeout (void)
         }
 }
 
-void
-docalm (void)
-{
+void docalm (void) {
 	int i, tech, n = 0;
 
 	for (i = 0; i < MAXTECH; i++) {
@@ -1589,9 +1558,7 @@ docalm (void)
 	    pline("You calm down.");
 }
 
-static void
-hurtmon (struct monst *mtmp, int tmp)
-{
+static void hurtmon (struct monst *mtmp, int tmp) {
 	mtmp->mhp -= tmp;
 	if (mtmp->mhp < 1) killed (mtmp);
 	else showdmg(tmp);
@@ -1621,9 +1588,7 @@ static const struct innate_tech *role_tech(void) {
 	}
 }
 
-static const struct innate_tech *
-race_tech (void)
-{
+static const struct innate_tech * race_tech (void) {
 	switch (Race_switch) {
 		case PM_DOPPELGANGER:	return dop_tech;
 		case PM_DWARF:		return dwa_tech;
@@ -1636,9 +1601,7 @@ race_tech (void)
 	}
 }
 
-void
-adjtech (int oldlevel, int newlevel)
-{
+void adjtech (int oldlevel, int newlevel) {
 	const struct   innate_tech
 		*tech = role_tech(), *rtech = race_tech();
 	long mask = FROMEXPER;
@@ -1669,9 +1632,7 @@ adjtech (int oldlevel, int newlevel)
 	}
 }
 
-int
-mon_to_zombie (int monnum)
-{
+int mon_to_zombie (int monnum) {
 	if ((&mons[monnum])->mlet == S_ZOMBIE) return monnum;  /* is already zombie */
 	if ((&mons[monnum])->mlet == S_KOBOLD) return PM_KOBOLD_ZOMBIE;
 	if ((&mons[monnum])->mlet == S_GNOME) return PM_GNOME_ZOMBIE;
@@ -1690,9 +1651,7 @@ mon_to_zombie (int monnum)
 
 
 /*WAC tinker code*/
-static int
-tinker()
-{
+static int tinker(void) {
 	int chance;
 	struct obj *otmp = uwep;
 
@@ -1725,9 +1684,7 @@ tinker()
 }
 
 /*WAC  draw energy from surrounding objects */
-static int
-draw_energy()
-{
+static int draw_energy() {
 	int powbonus = 1;
 	if (delay) {    /* not if (delay++), so at end delay == 0 */
 		delay++;
@@ -1814,9 +1771,7 @@ static const struct blitz_tab blitzes[] = {
 #define MAX_CHAIN 5
 
 /* parse blitz input */
-static int
-doblitz (void)
-{
+static int doblitz (void) {
 	int i, j, dx, dy, bdone = 0, tech_no;
 	char buf[BUFSZ];
 	char *bp;
@@ -1933,9 +1888,7 @@ doblitz (void)
 	return 1;
 }
 
-static void
-doblitzlist (void)
-{
+static void doblitzlist (void) {
 	winid tmpwin;
 	int i, n;
 	char buf[BUFSZ];
@@ -1980,9 +1933,7 @@ doblitzlist (void)
 	return;
 }
 
-static int
-blitz_chi_strike (void)
-{
+static int blitz_chi_strike (void) {
 	int tech_no;
 
 	tech_no = (get_tech_no(T_CHI_STRIKE));
@@ -2000,9 +1951,7 @@ blitz_chi_strike (void)
 	return 1;
 }
 
-static int
-blitz_e_fist (void)
-{
+static int blitz_e_fist (void) {
 	int tech_no;
 	const char *str;
 
@@ -2019,9 +1968,7 @@ blitz_e_fist (void)
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int
-blitz_pummel (void)
-{
+static int blitz_pummel (void) {
 	int i = 0, tech_no;
 	struct monst *mtmp;
 	tech_no = (get_tech_no(T_PUMMEL));
@@ -2140,9 +2087,7 @@ blitz_g_slam (void)
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int
-blitz_dash (void)
-{
+static int blitz_dash (void) {
 	int tech_no;
 	tech_no = (get_tech_no(T_DASH));
 
@@ -2157,9 +2102,7 @@ blitz_dash (void)
 	return 1;
 }
 
-static int
-blitz_power_surge (void)
-{
+static int blitz_power_surge (void) {
 	int tech_no, num;
 
 	tech_no = (get_tech_no(T_POWER_SURGE));
@@ -2181,9 +2124,7 @@ blitz_power_surge (void)
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int
-blitz_spirit_bomb (void)
-{
+static int blitz_spirit_bomb (void) {
 	int tech_no, num;
 	int sx = u.ux, sy = u.uy, i;
 
@@ -2225,9 +2166,8 @@ blitz_spirit_bomb (void)
 }
 
 #ifdef DEBUG
-void
-wiz_debug_cmd (void) /* in this case, allow controlled loss of techniques */
-{
+// in this case, allow controlled loss of techniques
+void wiz_debug_cmd (void) {
 	int tech_no, id, n = 0;
 	long mask;
 	if (gettech(&tech_no)) {

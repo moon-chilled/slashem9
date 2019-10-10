@@ -254,10 +254,7 @@ dead: /* we come directly here if their experience level went to 0 or less */
 	see_monsters();
 }
 
-void
-polyself(forcecontrol)
-boolean forcecontrol;
-{
+void polyself(boolean forcecontrol) {
 	char buf[BUFSZ];
 	int old_light, new_light;
 	int mntmp = NON_PM;
@@ -397,8 +394,8 @@ boolean forcecontrol;
 }
 
 /* (try to) make a mntmp monster out of the player */
-int
-polymon (	/* returns 1 if polymorph successful */
+/* returns 1 if polymorph successful */
+int polymon (	
     int mntmp
 )
 {
@@ -778,10 +775,7 @@ break_armor()
     }
 }
 
-static void
-drop_weapon(alone)
-int alone;
-{
+static void drop_weapon(int alone) {
     struct obj *otmp;
     struct obj *otmp2;
 
@@ -812,9 +806,7 @@ int alone;
 	untwoweapon();
 }
 
-void
-rehumanize (void)
-{
+void rehumanize (void) {
 	boolean forced = (u.mh < 1);
 
 	/* KMH, balance patch -- you can't revert back while unchanging */
@@ -859,9 +851,7 @@ rehumanize (void)
  * Note - you can only gaze at one monster at a time, to keep this
  * from getting out of hand ;B  Also costs 20 energy.
  */
-int
-dogaze (void)
-{
+int dogaze (void) {
 	coord cc;
 	struct monst *mtmp;
 
@@ -930,9 +920,7 @@ dogaze (void)
 	return 1;
 }
 
-int
-dobreathe (void)
-{
+int dobreathe (void) {
 	struct attack *mattk;
 	int energy = 0;
 
@@ -973,9 +961,7 @@ dobreathe (void)
 	return 1;
 }
 
-int
-dospit (void)
-{
+int dospit (void) {
 	struct obj *otmp;
 	struct attack *mattk;
 
@@ -1002,9 +988,7 @@ dospit (void)
 	return 1;
 }
 
-int
-doremove (void)
-{
+int doremove (void) {
 	if (!Punished) {
 		pline("You are not chained to anything!");
 		return 0;
@@ -1013,9 +997,7 @@ doremove (void)
 	return 1;
 }
 
-int
-dospinweb (void)
-{
+int dospinweb (void) {
 	struct trap *ttmp = t_at(u.ux,u.uy);
 
 	if (Levitation || Is_airlevel(&u.uz)
@@ -1342,10 +1324,7 @@ uunstick()
 	setustuck(0);
 }
 
-void
-skinback(silently)
-boolean silently;
-{
+void skinback(boolean silently) {
 	if (uskin) {
 		if (!silently) pline("Your skin returns to its original form.");
 		uarm = uskin;
@@ -1512,10 +1491,7 @@ ugolemeffects (int damtype, int dam)
 	}
 }
 
-static int
-armor_to_dragon(atyp)
-int atyp;
-{
+static int armor_to_dragon(int atyp) {
 	switch(atyp) {
 	    case GRAY_DRAGON_SCALE_MAIL:
 	    case GRAY_DRAGON_SCALES:
@@ -1561,9 +1537,10 @@ static struct {
     boolean merge;
 } draconic;
 
+/* called each move during transformation process */
 static
 int
-mage_transform()	/* called each move during transformation process */
+mage_transform()	
 {
     if (--draconic.reqtime)
 	return 1;
@@ -1573,8 +1550,9 @@ mage_transform()	/* called each move during transformation process */
     return 0;
 }
 
+/* Polymorph under conscious control (#youpoly) */
 int
-polyatwill (void)      /* Polymorph under conscious control (#youpoly) */
+polyatwill (void)      
 {
 #define EN_DOPP 	20 	/* This is the "base cost" for a polymorph
 				 * Actual cost is this base cost + 5 * monster level
@@ -1768,66 +1746,5 @@ merge_with_armor (void)
 	uskin->owornmask |= I_SPECIAL;
 
 }
-
-#if 0	/* What the f*** is this for? -- KMH */
-static void
-special_poly (void)
-{
-	char buf[BUFSZ];
-	int old_light, new_light;
-	int mntmp = NON_PM;
-	int tries=0;
-
-	old_light = (u.umonnum >= LOW_PM) ? emits_light(youmonst.data) : 0;
-	do {
-		getlin("Become what kind of monster? [type the name]", buf);
-		mntmp = name_to_mon(buf);
-		if (mntmp < LOW_PM)
-				pline("I've never heard of such monsters.");
-			/* Note:  humans are illegal as monsters, but an
-			 * illegal monster forces newman(), which is what we
-			 * want if they specified a human.... */
-
-			/* [Tom] gnomes are polyok, so this doesn't apply for
-			   player gnomes */
-	                     /* WAC but we want to catch player gnomes and not
-	                        so add an extra check */
-		else if (!polyok(&mons[mntmp]) &&
-				(Role_elven ? !is_elf(&mons[mntmp]) :
-				Role_if(PM_DWARF) ? !is_gnome(&mons[mntmp]) :
-				/* WAC
-				 * should always fail (for now) gnome check
-				 * unless gnomes become not polyok.  Then, it'll
-				 * still work ;B
-				 */
-				Role_if(PM_GNOME) ? !is_gnome(&mons[mntmp]) :
-				!is_human(&mons[mntmp])))
-			pline("You cannot polymorph into that.");
-		else if (!mvitals[mntmp].eaten && (rn2((u.ulevel + 25)) < 20)) {
-			pline("You don't have the knowledge to polymorph into that.");
-			return;  /* Nice try */
-		} else {
-			pline("You attempt an unfamiliar polymorph.");
-			break;
-		}
-	} while(++tries < 5);
-	if (tries==5) {
-		pline("That's enough tries!");
-		return;
-	} else if (polymon(mntmp)) {
-		/* same as made_change above */
-		new_light = (u.umonnum >= LOW_PM) ? emits_light(youmonst.data) : 0;
-		if (old_light != new_light) {
-		    if (old_light)
-			del_light_source(LS_MONSTER, monst_to_any(&youmonst));
-		    if (new_light == 1) ++new_light;  /* otherwise it's undetectable */
-		    if (new_light)
-			new_light_source(u.ux, u.uy, new_light,
-					 LS_MONSTER, monst_to_any(&youmonst));
-		}
-	}
-	return;
-}
-#endif
 
 /*polyself.c*/

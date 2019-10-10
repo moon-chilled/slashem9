@@ -76,12 +76,7 @@ const struct icp hellprobs[] = {
 { 4, AMULET_CLASS}
 };
 
-struct obj *
-mkobj_at(let, x, y, artif)
-char let;
-int x, y;
-boolean artif;
-{
+struct obj *mkobj_at(char let, int x, int y, boolean artif) {
 	struct obj *otmp;
 
 	otmp = mkobj(let, artif);
@@ -89,11 +84,7 @@ boolean artif;
 	return otmp;
 }
 
-struct obj *
-mksobj_at(otyp, x, y, init, artif)
-int otyp, x, y;
-boolean init, artif;
-{
+struct obj * mksobj_at(int otyp, int x, int y, boolean init, boolean artif) {
 	struct obj *otmp;
 
 	otmp = mksobj(otyp, init, artif);
@@ -101,11 +92,7 @@ boolean init, artif;
 	return otmp;
 }
 
-struct obj *
-mkobj(oclass, artif)
-char oclass;
-boolean artif;
-{
+struct obj *mkobj(char oclass, boolean artif) {
 	int tprob, i, prob = rnd(1000);
 
 	if(oclass == RANDOM_CLASS) {
@@ -131,10 +118,7 @@ boolean artif;
 	return mksobj(i, true, artif);
 }
 
-static void
-mkbox_cnts(box)
-struct obj *box;
-{
+static void mkbox_cnts(struct obj *box) {
 	int n, minn = 0;
 	struct obj *otmp;
 
@@ -207,9 +191,8 @@ struct obj *box;
 	}
 }
 
-int
-rndmonnum (void)	/* select a random, common monster type */
-{
+/* select a random, common monster type */
+int rndmonnum (void) {
 	struct permonst *ptr;
 	int	i;
 
@@ -232,9 +215,7 @@ rndmonnum (void)	/* select a random, common monster type */
  * has its wornmask cleared and is positioned just following the original
  * in the nobj chain (and nexthere chain when on the floor).
  */
-struct obj *
-splitobj (struct obj *obj, long num)
-{
+struct obj * splitobj (struct obj *obj, long num) {
 	struct obj *otmp;
 
 	if (obj->cobj || num <= 0L || obj->quan <= num)
@@ -382,12 +363,7 @@ static const char dknowns[] = {
 		GEM_CLASS, SPBOOK_CLASS, WEAPON_CLASS, TOOL_CLASS, 0
 };
 
-struct obj *
-mksobj(otyp, init, artif)
-int otyp;
-boolean init;
-boolean artif;
-{
+struct obj * mksobj(int otyp, boolean init, boolean artif) {
 	int mndx, tryct;
 	struct obj *otmp;
 	char let = objects[otyp].oc_class;
@@ -793,9 +769,7 @@ void start_corpse_timeout (struct obj *body) {
 	start_timer(when, TIMER_OBJECT, action, obj_to_any(body));
 }
 
-void
-bless (struct obj *otmp)
-{
+void bless (struct obj *otmp) {
 #ifdef GOLDOBJ
 	if (otmp->oclass == COIN_CLASS) return;
 #endif
@@ -1005,14 +979,8 @@ mkgold (long amount, int x, int y)
  * yet still allow restoration of the original monster upon
  * resurrection.
  */
-struct obj *
-mkcorpstat(objtype, mtmp, ptr, x, y, init)
-int objtype;	/* CORPSE or STATUE */
-struct monst *mtmp;
-struct permonst *ptr;
-int x, y;
-boolean init;
-{
+/* objtyp => CORPSE or STATUE */
+struct obj * mkcorpstat(int objtype, struct monst *mtmp, struct permonst *ptr, int x, int y, boolean init) {
 	struct obj *otmp;
 
 	if (objtype != CORPSE && objtype != STATUE)
@@ -1053,9 +1021,7 @@ boolean init;
  * Attach a monster id to an object, to provide
  * a lasting association between the two.
  */
-struct obj *
-obj_attach_mid (struct obj *obj, unsigned mid)
-{
+struct obj * obj_attach_mid (struct obj *obj, unsigned mid) {
     struct obj *otmp;
     int lth, namelth;
 
@@ -1074,9 +1040,7 @@ obj_attach_mid (struct obj *obj, unsigned mid)
     return otmp;
 }
 
-static struct obj *
-save_mtraits (struct obj *obj, struct monst *mtmp)
-{
+static struct obj * save_mtraits (struct obj *obj, struct monst *mtmp) {
 	struct obj *otmp;
 	int lth, namelth;
 
@@ -1100,11 +1064,7 @@ save_mtraits (struct obj *obj, struct monst *mtmp)
 /* returns a pointer to a new monst structure based on
  * the one contained within the obj.
  */
-struct monst *
-get_mtraits(obj, copyof)
-struct obj *obj;
-boolean copyof;
-{
+struct monst * get_mtraits(struct obj *obj, boolean copyof) {
 	struct monst *mtmp = NULL;
 	struct monst *mnew = NULL;
 
@@ -1127,13 +1087,7 @@ boolean copyof;
 
 
 /* make an object named after someone listed in the scoreboard file */
-struct obj *
-mk_tt_object (
-    int objtype, /* CORPSE or STATUE */
-    int x,
-    int y
-)
-{
+struct obj *mk_tt_object ( int objtype, /* CORPSE or STATUE */ int x, int y) {
 	struct obj *otmp, *otmp2;
 	boolean initialize_it;
 
@@ -1147,15 +1101,7 @@ mk_tt_object (
 }
 
 /* make a new corpse or statue, uninitialized if a statue (i.e. no books) */
-struct obj *
-mk_named_object (
-    int objtype,	/* CORPSE or STATUE */
-    struct permonst *ptr,
-    int x,
-    int y,
-    const char *nm
-)
-{
+struct obj * mk_named_object ( int objtype,	/* CORPSE or STATUE */ struct permonst *ptr, int x, int y, const char *nm) {
 	struct obj *otmp;
 
 	otmp = mkcorpstat(objtype, NULL, ptr,
@@ -1165,10 +1111,7 @@ mk_named_object (
 	return otmp;
 }
 
-boolean
-is_flammable(otmp)
-struct obj *otmp;
-{
+boolean is_flammable(struct obj *otmp) {
 	int otyp = otmp->otyp;
 	int omat = objects[otyp].oc_material;
 
@@ -1178,10 +1121,7 @@ struct obj *otmp;
 	return (omat <= WOOD && omat != LIQUID) || omat == PLASTIC;
 }
 
-boolean
-is_rottable(otmp)
-struct obj *otmp;
-{
+boolean is_rottable(struct obj *otmp) {
 	int otyp = otmp->otyp;
 
 	return objects[otyp].oc_material <= WOOD &&
@@ -1195,9 +1135,7 @@ struct obj *otmp;
  */
 
 /* put the object at the given location */
-void
-place_object (struct obj *otmp, int x, int y)
-{
+void place_object (struct obj *otmp, int x, int y) {
     struct obj *otmp2 = level.objects[x][y];
 
     if (otmp->where != OBJ_FREE)
@@ -1234,10 +1172,7 @@ place_object (struct obj *otmp, int x, int y)
  * Also used for starting ice effects too. [zap.c]
  */
 void
-obj_ice_effects(x, y, do_buried)
-int x, y;
-boolean do_buried;
-{
+obj_ice_effects( int x, int y, boolean do_buried) {
 	struct obj *otmp;
 
 	for (otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere) {
@@ -1259,9 +1194,7 @@ boolean do_buried;
  * rot timers pertaining to the object don't have to be stopped and
  * restarted etc.
  */
-long
-peek_at_iced_corpse_age (struct obj *otmp)
-{
+long peek_at_iced_corpse_age (struct obj *otmp) {
     long age, retval = otmp->age;
 
     if (otmp->otyp == CORPSE && ON_ICE(otmp)) {
@@ -1278,12 +1211,7 @@ peek_at_iced_corpse_age (struct obj *otmp)
     return retval;
 }
 
-static void
-obj_timer_checks(otmp, x, y, force)
-struct obj *otmp;
-xchar x, y;
-int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
-{
+static void obj_timer_checks(struct obj *otmp, xchar x, xchar y, int force /* 0 = no force so do checks, <0 = force off, >0 force on */) {
     long tleft = 0L;
     short action = ROT_CORPSE;
     boolean restart_timer = false;
@@ -1355,9 +1283,7 @@ int force;	/* 0 = no force so do checks, <0 = force off, >0 force on */
 #undef ON_ICE
 #undef ROT_ICE_ADJUSTMENT
 
-void
-remove_object (struct obj *otmp)
-{
+void remove_object (struct obj *otmp) {
     xchar x = otmp->ox;
     xchar y = otmp->oy;
 
@@ -1582,10 +1508,7 @@ add_to_buried (struct obj *obj)
 }
 
 /* Recalculate the weight of this container and all of _its_ containers. */
-static void
-container_weight(container)
-    struct obj *container;
-{
+static void container_weight(struct obj *container) {
     container->owt = weight(container);
     if (container->where == OBJ_CONTAINED)
 	container_weight(container->ocontainer);

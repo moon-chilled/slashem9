@@ -149,18 +149,19 @@ mon_set_minvis (struct monst *mon)
 	}
 }
 
+/* obj = item to make known if effect can be seen */
 void
 mon_adjust_speed (
     struct monst *mon,
-    int adjust,	/* positive => increase speed, negative => decrease */
-    struct obj *obj	/* item to make known if effect can be seen */
+    int adjustment,	
+    struct obj *obj	
 )
 {
     struct obj *otmp;
     boolean give_msg = !in_mklev, petrify = false;
     uint oldspeed = mon->mspeed;
 
-    switch (adjust) {
+    switch (adjustment) {
      case  2:
 	mon->permspeed = MFAST;
 	give_msg = false;	/* special case monster creation */
@@ -203,7 +204,7 @@ mon_adjust_speed (
 	    /* mimic the player's petrification countdown; "slowing down"
 	       even if fast movement rate retained via worn speed boots */
 	    if (flags.verbose) pline("%s is slowing down.", Monnam(mon));
-	} else if (adjust > 0 || mon->mspeed == MFAST)
+	} else if (adjustment > 0 || mon->mspeed == MFAST)
 	    pline("%s is suddenly moving %sfaster.", Monnam(mon), howmuch);
 	else
 	    pline("%s seems to be moving %sslower.", Monnam(mon), howmuch);
@@ -217,12 +218,7 @@ mon_adjust_speed (
 }
 
 /* armor put on or taken off; might be magical variety */
-void
-update_mon_intrinsics(mon, obj, on, silently)
-struct monst *mon;
-struct obj *obj;
-boolean on, silently;
-{
+void update_mon_intrinsics(struct monst *mon, struct obj *obj, boolean on, boolean silently) {
     int unseen;
     unsigned long mask;
     struct obj *otmp;
@@ -369,11 +365,7 @@ find_mac (struct monst *mon)
  * players to influence what gets worn.  Putting on a shirt underneath
  * already worn body armor is too obviously buggy...
  */
-void
-m_dowear(mon, creation)
-struct monst *mon;
-boolean creation;
-{
+void m_dowear(struct monst *mon, boolean creation) {
 #define RACE_EXCEPTION true
 	/* Note the restrictions here are the same as in dowear in do_wear.c
 	 * except for the additional restriction on intelligence.  (Players
@@ -409,13 +401,7 @@ boolean creation;
 	    m_dowear_type(mon, W_ARM, creation, RACE_EXCEPTION);
 }
 
-static void
-m_dowear_type(mon, flag, creation, racialexception)
-struct monst *mon;
-long flag;
-boolean creation;
-boolean racialexception;
-{
+static void m_dowear_type(struct monst *mon, long flag, boolean creation, boolean racialexception) {
 	struct obj *old, *best, *obj;
 	int m_delay = 0;
 	int unseen = !canseemon(mon);
@@ -531,11 +517,7 @@ which_armor (struct monst *mon, long flag)
 }
 
 /* remove an item of armor and then drop it */
-static void
-m_lose_armor(mon, obj)
-struct monst *mon;
-struct obj *obj;
-{
+static void m_lose_armor(struct monst *mon, struct obj *obj) {
 	mon->misc_worn_check &= ~obj->owornmask;
 	if (obj->owornmask)
 	    update_mon_intrinsics(mon, obj, false, false);
@@ -595,11 +577,7 @@ bypass_obj (struct obj *obj)
 	flags.bypasses = true;
 }
 
-void
-mon_break_armor(mon, polyspot)
-struct monst *mon;
-boolean polyspot;
-{
+void mon_break_armor(struct monst *mon, boolean polyspot) {
 	struct obj *otmp;
 	struct permonst *mdat = mon->data;
 	boolean vis = cansee(mon->mx, mon->my);

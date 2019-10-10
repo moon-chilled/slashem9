@@ -16,11 +16,7 @@ static boolean in_fcorridor(struct monst *,int,int);
 static void move_gold(struct obj *,int);
 static void wallify_vault(struct monst *);
 
-static boolean
-clear_fcorr(grd, forceshow)
-struct monst *grd;
-boolean forceshow;
-{
+static boolean clear_fcorr(struct monst *grd, boolean forceshow) {
 	int fcx, fcy, fcbeg;
 	struct monst *mtmp;
 
@@ -57,18 +53,12 @@ boolean forceshow;
 	return true;
 }
 
-static void
-restfakecorr(grd)
-struct monst *grd;
-{
+static void restfakecorr(struct monst *grd) {
 	/* it seems you left the corridor - let the guard disappear */
 	if(clear_fcorr(grd, false)) mongone(grd);
 }
 
-boolean
-grddead(grd)				/* called in mon.c */
-struct monst *grd;
-{
+boolean grddead(struct monst *grd) {
 	boolean dispose = clear_fcorr(grd, true);
 
 	if(!dispose) {
@@ -83,11 +73,7 @@ struct monst *grd;
 	return dispose;
 }
 
-static boolean
-in_fcorridor(grd, x, y)
-struct monst *grd;
-int x, y;
-{
+static boolean in_fcorridor(struct monst *grd, int x, int y) {
 	int fci;
 
 	for(fci = EGD(grd)->fcbeg; fci < EGD(grd)->fcend; fci++)
@@ -97,8 +83,7 @@ int x, y;
 	return false;
 }
 
-static
-struct monst *
+static struct monst *
 findgd()
 {
 	struct monst *mtmp;
@@ -333,11 +318,7 @@ fnd:
     }
 }
 
-static void
-move_gold(gold, vroom)
-struct obj *gold;
-int vroom;
-{
+static void move_gold(struct obj *gold, int vroom) {
 	xchar nx, ny;
 
 	remove_object(gold);
@@ -349,10 +330,7 @@ int vroom;
 	newsym(nx,ny);
 }
 
-static void
-wallify_vault(grd)
-struct monst *grd;
-{
+static void wallify_vault(struct monst *grd) {
 	int x, y, typ;
 	int vlt = EGD(grd)->vroom;
 	char tmp_viz;
@@ -788,8 +766,9 @@ hidden_gold (void)
 	return value;
 }
 
+/* prevent "You hear footsteps.." when inappropriate */
 boolean
-gd_sound()  /* prevent "You hear footsteps.." when inappropriate */
+gd_sound()  
 {
 	struct monst *grd = findgd();
 

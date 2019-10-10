@@ -17,11 +17,8 @@ static void watch_on_duty(struct monst *);
 /* WAC for breath door busting */
 static int bust_door_breath(struct monst *);
 
-
-boolean /* true : mtmp died */
-mb_trapped(mtmp)
-struct monst *mtmp;
-{
+/* true : mtmp died */
+boolean mb_trapped(struct monst *mtmp) {
 	if (flags.verbose) {
 	    if (cansee(mtmp->mx, mtmp->my))
 		pline("KABOOM!!  You see a door explode.");
@@ -42,10 +39,7 @@ struct monst *mtmp;
 }
 
 
-static void
-watch_on_duty(mtmp)
-struct monst *mtmp;
-{
+static void watch_on_duty(struct monst *mtmp) {
 	int	x, y;
 
 	if(mtmp->mpeaceful && in_town(u.ux+u.dx, u.uy+u.dy) &&
@@ -86,9 +80,7 @@ struct monst *mtmp;
 }
 
 
-int
-dochugw (struct monst *mtmp)
-{
+int dochugw (struct monst *mtmp) {
 	int x = mtmp->mx, y = mtmp->my;
 	boolean already_saw_mon = !occupation ? 0 : canspotmon(mtmp);
 	int rd = dochug(mtmp);
@@ -153,11 +145,7 @@ dochugw (struct monst *mtmp)
 }
 
 
-boolean
-onscary(x, y, mtmp)
-int x, y;
-struct monst *mtmp;
-{
+boolean onscary(int x, int y, struct monst *mtmp) {
 	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || !mtmp->mcansee ||
 			mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN ||
 	    is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
@@ -173,11 +161,7 @@ struct monst *mtmp;
 
 
 /* regenerate lost hit points */
-void
-mon_regen(mon, digest_meal)
-struct monst *mon;
-boolean digest_meal;
-{
+void mon_regen(struct monst *mon, boolean digest_meal) {
 	if (mon->mhp < mon->mhpmax && !is_golem(mon->data) &&
 	    (moves % 20 == 0 || regenerates(mon->data))) mon->mhp++;
 	if (mon->m_en < mon->m_enmax &&
@@ -195,10 +179,7 @@ boolean digest_meal;
  * Possibly awaken the given monster.  Return a 1 if the monster has been
  * jolted awake.
  */
-static int
-disturb(mtmp)
-	struct monst *mtmp;
-{
+static int disturb(struct monst *mtmp) {
 	/*
 	 * + Ettins are hard to surprise.
 	 * + Nymphs, jabberwocks, and leprechauns do not easily wake up.
@@ -235,13 +216,7 @@ disturb(mtmp)
 /* monster begins fleeing for the specified time, 0 means untimed flee
  * if first, only adds fleetime if monster isn't already fleeing
  * if fleemsg, prints a message about new flight, otherwise, caller should */
-void
-monflee(mtmp, fleetime, first, fleemsg)
-struct monst *mtmp;
-int fleetime;
-boolean first;
-boolean fleemsg;
-{
+void monflee(struct monst *mtmp, int fleetime, boolean first, boolean fleemsg) {
 	if (u.ustuck == mtmp) {
 	    if (u.uswallow)
 		expels(mtmp, mtmp->data, true);
@@ -267,11 +242,7 @@ boolean fleemsg;
 	}
 }
 
-static void
-distfleeck(mtmp,inrange,nearby,scared)
-struct monst *mtmp;
-int *inrange, *nearby, *scared;
-{
+static void distfleeck(struct monst *mtmp, int *inrange, int *nearby, int *scared) {
 	int seescaryx, seescaryy;
 
 	*inrange = (dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <=
@@ -307,10 +278,7 @@ int *inrange, *nearby, *scared;
 
 /* perform a special one-time action for a monster; returns -1 if nothing
    special happened, 0 if monster uses up its turn, 1 if monster is killed */
-static int
-m_arrival(mon)
-struct monst *mon;
-{
+static int m_arrival(struct monst *mon) {
 	mon->mstrategy &= ~STRAT_ARRIVE;	/* always reset */
 
 	return -1;
@@ -320,9 +288,7 @@ struct monst *mon;
 /* The whole dochugw/m_move/distfleeck/mfndpos section is serious spaghetti
  * code. --KAA
  */
-int
-dochug (struct monst *mtmp)
-{
+int dochug (struct monst *mtmp) {
 	struct permonst *mdat;
 	int tmp=0;
 	int inrange, nearby, scared;
@@ -612,10 +578,7 @@ static const char indigestion[] = { BALL_CLASS, ROCK_CLASS, 0 };
 static const char boulder_class[] = { ROCK_CLASS, 0 };
 static const char gem_class[] = { GEM_CLASS, 0 };
 
-boolean
-itsstuck(mtmp)
-struct monst *mtmp;
-{
+boolean itsstuck(struct monst *mtmp) {
 	if (sticks(youmonst.data) && mtmp==u.ustuck && !u.uswallow) {
 		pline("%s cannot escape from you!", Monnam(mtmp));
 		return true;
@@ -629,9 +592,7 @@ struct monst *mtmp;
  * 2: monster died.
  * 3: did not move, and can't do anything else either.
  */
-int
-m_move (struct monst *mtmp, int after)
-{
+int m_move (struct monst *mtmp, int after) {
 	int appr;
 	xchar gx,gy,nix,niy,chcnt;
 	int chi;	/* could be schar except for stupid Sun-2 compiler */
@@ -1263,26 +1224,18 @@ postmov:
 }
 
 
-boolean
-closed_door(x, y)
-int x, y;
-{
+boolean closed_door(int x, int y) {
 	return IS_DOOR(levl[x][y].typ) &&
 		(levl[x][y].doormask & (D_LOCKED | D_CLOSED));
 }
 
-boolean
-accessible(x, y)
-int x, y;
-{
+boolean accessible(int x, int y) {
 	return ACCESSIBLE(levl[x][y].typ) && !closed_door(x, y);
 }
 
 
 /* decide where the monster thinks you are standing */
-void
-set_apparxy (struct monst *mtmp)
-{
+void set_apparxy (struct monst *mtmp) {
 	boolean notseen, gotu;
 	int disp, mx = mtmp->mux, my = mtmp->muy;
 #ifdef GOLDOBJ
@@ -1351,10 +1304,7 @@ found_you:
 	mtmp->muy = my;
 }
 
-boolean
-can_ooze(mtmp)
-struct monst *mtmp;
-{
+boolean can_ooze(struct monst *mtmp) {
 	struct obj *chain, *obj;
 
 	if (!amorphous(mtmp->data)) return false;
@@ -1403,9 +1353,7 @@ struct monst *mtmp;
 	return true;
 }
 
-static int
-bust_door_breath (struct monst *mtmp)
-{
+static int bust_door_breath (struct monst *mtmp) {
 	struct permonst *ptr = mtmp->data;
 	int     i;
 

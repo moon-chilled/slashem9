@@ -122,10 +122,7 @@ mon_has_special (struct monst *mtmp)
 
 #define M_Wants(mask)	(mtmp->data->mflags3 & (mask))
 
-static short
-which_arti(mask)
-	int mask;
-{
+static short which_arti(int mask) {
 	switch(mask) {
 	    case M3_WANTSAMUL:	return AMULET_OF_YENDOR;
 	    case M3_WANTSBELL:	return BELL_OF_OPENING;
@@ -141,11 +138,7 @@ which_arti(mask)
  *	since bell, book, candle, and amulet are all objects, not really
  *	artifacts right now.	[MRS]
  */
-static boolean
-mon_has_arti(mtmp, otyp)
-	struct monst *mtmp;
-	short	otyp;
-{
+static boolean mon_has_arti(struct monst *mtmp, short	otyp) {
 	struct obj *otmp;
 
 	for(otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
@@ -159,11 +152,7 @@ mon_has_arti(mtmp, otyp)
 
 }
 
-static struct monst *
-other_mon_has_arti(mtmp, otyp)
-	struct monst *mtmp;
-	short	otyp;
-{
+static struct monst * other_mon_has_arti(struct monst *mtmp, short	otyp) {
 	struct monst *mtmp2;
 
 	for(mtmp2 = fmon; mtmp2; mtmp2 = mtmp2->nmon)
@@ -174,10 +163,7 @@ other_mon_has_arti(mtmp, otyp)
 	return NULL;
 }
 
-static struct obj *
-on_ground(otyp)
-	short	otyp;
-{
+static struct obj * on_ground(short	otyp) {
 	struct obj *otmp;
 
 	for (otmp = fobj; otmp; otmp = otmp->nobj)
@@ -189,10 +175,7 @@ on_ground(otyp)
 	return NULL;
 }
 
-static boolean
-you_have(mask)
-	int mask;
-{
+static boolean you_have(int mask) {
 	switch(mask) {
 	    case M3_WANTSAMUL:	return u.uhave.amulet;
 	    case M3_WANTSBELL:	return u.uhave.bell;
@@ -204,11 +187,7 @@ you_have(mask)
 	return 0;
 }
 
-static long
-target_on(mask, mtmp)
-	int mask;
-	struct monst *mtmp;
-{
+static long target_on(int mask, struct monst *mtmp) {
 	short	otyp;
 	struct obj *otmp;
 	struct monst *mtmp2;
@@ -227,10 +206,7 @@ target_on(mask, mtmp)
 	return STRAT_NONE;
 }
 
-static long
-strategy(mtmp)
-	struct monst *mtmp;
-{
+static long strategy(struct monst *mtmp) {
 	long strat, dstrat;
 
 	if (!is_covetous(mtmp->data) ||
@@ -286,9 +262,7 @@ strategy(mtmp)
 	return dstrat;
 }
 
-int
-tactics (struct monst *mtmp)
-{
+int tactics (struct monst *mtmp) {
 	long strat = strategy(mtmp);
 
 	mtmp->mstrategy = (mtmp->mstrategy & STRAT_WAITMASK) | strat;

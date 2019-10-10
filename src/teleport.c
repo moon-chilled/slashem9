@@ -90,12 +90,7 @@ badpos (int x, int y, struct monst *mtmp, unsigned gpflags)
  * This function will only look at mtmp->mdat, so makemon, mplayer, etc can
  * call it to generate new monster positions with fake monster structures.
  */
-boolean
-goodpos(x, y, mtmp, gpflags)
-int x,y;
-struct monst *mtmp;
-unsigned gpflags;
-{
+boolean goodpos(int x, int y, struct monst *mtmp, unsigned gpflags) {
     if (!isok(x, y)) return false;
 
     return !badpos(x, y, mtmp, gpflags);
@@ -109,22 +104,11 @@ unsigned gpflags;
  * If there is more than one valid positon in the ring, choose one randomly.
  * Return true and the position chosen when successful, false otherwise.
  */
-boolean
-enexto(cc, xx, yy, mdat)
-coord *cc;
-xchar xx, yy;
-struct permonst *mdat;
-{
+boolean enexto(coord *cc, xchar xx, xchar yy, struct permonst *mdat) {
 	return enexto_core(cc, xx, yy, mdat, 0);
 }
 
-boolean
-enexto_core(cc, xx, yy, mdat, entflags)
-coord *cc;
-xchar xx, yy;
-struct permonst *mdat;
-unsigned entflags;
-{
+boolean enexto_core(coord *cc, xchar xx, xchar yy, struct permonst *mdat, unsigned entflags) {
 #define MAX_GOOD 15
     coord good[MAX_GOOD], *good_ptr;
     int x, y, range, i;
@@ -215,13 +199,7 @@ full:
 coord epathto_debug_cc[100];
 #endif
 
-int
-epathto(cc, nc, xx, yy, mdat)
-coord *cc;
-int nc;
-xchar xx, yy;
-struct permonst *mdat;
-{
+int epathto(coord *cc, int nc, xchar xx, xchar yy, struct permonst *mdat) {
     int i, j, dir, ndirs, xy, x, y, r;
     int path_len, postype;
     int first_col, last_col;
@@ -337,14 +315,7 @@ struct permonst *mdat;
  * are "good" positions, if appropriate.
  */
 
-boolean
-wpathto(src_cc, dest_cc, step_proc, arg, mdat, max_pathlen)
-coord *src_cc, *dest_cc;
-boolean (*step_proc)(void *, int, int);
-void * arg;
-struct permonst *mdat;
-int max_pathlen;
-{
+boolean wpathto(coord *src_cc, coord *dest_cc, boolean (*step_proc)(void *, int, int), void * arg, struct permonst *mdat, int max_pathlen) {
     int i, j, dir, ndirs, xy, x, y, n;
     int path_len, postype;
     int first_col, last_col;
@@ -416,13 +387,7 @@ int max_pathlen;
  * (path won't continue through this point) or 0 if it is accessible.
  */
 
-void
-xpathto(r, xx, yy, func, data)
-int r;
-xchar xx, yy;
-int (*func)(void *, int, int);
-void * data;
-{
+void xpathto(int r, xchar xx, xchar yy, int (*func)(void *, int, int), void * data) {
     int i, j, dir, xy, x, y;
     int path_len, postype;
     int first_col, last_col;
@@ -471,19 +436,16 @@ void * data;
 }
 
 #ifdef DEBUG
-static boolean
-wiz_debug_wpathto(arg, x, y)
-void * arg;
-int x, y;
-{
+static boolean wiz_debug_wpathto(void * arg, int x, int y) {
     int *iptr = (int *)arg;
     *iptr = ((*iptr) + 1) & 3;
     show_glyph(x, y, GLYPH_WARNING_OFF + *iptr);
     return true;
 }
 
+/* in this case, run wpathto on arbitary monster & goal */
 void
-wiz_debug_cmd (void) /* in this case, run wpathto on arbitary monster & goal */
+wiz_debug_cmd (void) 
 {
     struct permonst *ptr;
     int mndx, i;
@@ -532,10 +494,7 @@ wiz_debug_cmd (void) /* in this case, run wpathto on arbitary monster & goal */
  * need to be augmented to allow deliberate passage in wizard mode, but
  * only for explicitly chosen destinations.)
  */
-static boolean
-tele_jump_ok(x1, y1, x2, y2)
-int x1, y1, x2, y2;
-{
+static boolean tele_jump_ok(int x1, int y1, int x2, int y2) {
 	if (dndest.nlx > 0) {
 	    /* if inside a restricted region, can't teleport outside */
 	    if (within_bounded_area(x1, y1, dndest.nlx, dndest.nly,
@@ -569,11 +528,7 @@ int x1, y1, x2, y2;
 	return true;
 }
 
-static boolean
-teleok(x, y, trapok)
-int x, y;
-boolean trapok;
-{
+static boolean teleok(int x, int y, boolean trapok) {
 	if (!trapok && t_at(x, y)) return false;
 	if (!goodpos(x, y, &youmonst, 0)) return false;
 	if (!tele_jump_ok(u.ux, u.uy, x, y)) return false;
@@ -581,11 +536,7 @@ boolean trapok;
 	return true;
 }
 
-void
-teleds(nux, nuy, allow_drag)
-int nux,nuy;
-boolean allow_drag;
-{
+void teleds(int nux, int nuy, boolean allow_drag) {
 	boolean ball_active = (Punished && uball->where != OBJ_FREE),
 		ball_still_in_range = false;
 
@@ -687,10 +638,7 @@ boolean allow_drag;
 	invocation_message();
 }
 
-boolean
-safe_teleds(allow_drag)
-boolean allow_drag;
-{
+boolean safe_teleds(boolean allow_drag) {
 	int nux, nuy, tcnt = 0;
 
 	do {
@@ -718,11 +666,7 @@ vault_tele()
 	tele();
 }
 
-boolean
-teleport_pet(mtmp, force_it)
-struct monst *mtmp;
-boolean force_it;
-{
+boolean teleport_pet(struct monst *mtmp, boolean force_it) {
 	struct obj *otmp;
 
 	if (mtmp == u.usteed)
@@ -1206,11 +1150,7 @@ level_tele_trap (struct trap *trap)
 }
 
 /* check whether monster can arrive at location <x,y> via Tport (or fall) */
-static boolean
-rloc_pos_ok(x, y, mtmp)
-int x, y;		/* coordinates of candidate location */
-struct monst *mtmp;
-{
+static boolean rloc_pos_ok(int x, int 	y, struct monst *mtmp) {
 	int xx, yy;
 
 	if (!goodpos(x, y, mtmp, 0)) return false;
@@ -1258,9 +1198,7 @@ struct monst *mtmp;
  * migrating_mon.  Worm tails are always placed randomly around the head of
  * the worm.
  */
-void
-rloc_to (struct monst *mtmp, int x, int y)
-{
+void rloc_to (struct monst *mtmp, int x, int y) {
 	int oldx = mtmp->mx, oldy = mtmp->my;
 	boolean resident_shk = mtmp->isshk && inhishop(mtmp);
 
@@ -1301,11 +1239,9 @@ rloc_to (struct monst *mtmp, int x, int y)
 
 /* place a monster at a random location, typically due to teleport */
 /* return true if successful, false if not */
-boolean
-rloc(mtmp, suppress_impossible)
-struct monst *mtmp;	/* mx==0 implies migrating monster arrival */
-boolean suppress_impossible;
-{
+
+/* mx==0 implies migrating monster arrival */
+boolean rloc(struct monst *mtmp, boolean suppress_impossible) {
 	int x, y, trycount;
 
 	if (mtmp == u.usteed) {
@@ -1352,10 +1288,7 @@ boolean suppress_impossible;
 	return true;
 }
 
-static void
-mvault_tele(mtmp)
-struct monst *mtmp;
-{
+static void mvault_tele(struct monst *mtmp) {
 	struct mkroom *croom = search_special(VAULT);
 	coord c;
 
@@ -1367,10 +1300,7 @@ struct monst *mtmp;
 	rloc(mtmp, false);
 }
 
-boolean
-tele_restrict(mon)
-struct monst *mon;
-{
+boolean tele_restrict(struct monst *mon) {
 	if (level.flags.noteleport) {
 		if (canseemon(mon))
 		    pline("A mysterious force prevents %s from teleporting!",
@@ -1380,9 +1310,7 @@ struct monst *mon;
 	return false;
 }
 
-void
-mtele_trap (struct monst *mtmp, struct trap *trap, int in_sight)
-{
+void mtele_trap (struct monst *mtmp, struct trap *trap, int in_sight) {
 	char *monname;
 
 	if (tele_restrict(mtmp)) return;
@@ -1408,13 +1336,7 @@ mtele_trap (struct monst *mtmp, struct trap *trap, int in_sight)
 }
 
 /* return 0 if still on level, 3 if not */
-int
-mlevel_tele_trap(mtmp, trap, force_it, in_sight)
-struct monst *mtmp;
-struct trap *trap;
-boolean force_it;
-int in_sight;
-{
+int mlevel_tele_trap(struct monst *mtmp, struct trap *trap, boolean force_it, int in_sight) {
 	int tt = trap->ttyp;
 	struct permonst *mptr = mtmp->data;
 
@@ -1487,9 +1409,7 @@ int in_sight;
 }
 
 
-void
-rloco (struct obj *obj)
-{
+void rloco (struct obj *obj) {
 	xchar tx, ty, otx, oty;
 	boolean restricted_fall;
 	int try_limit = 4000;
@@ -1596,11 +1516,7 @@ random_teleport_level (void)
 
 /* you teleport a monster (via wand, spell, or poly'd q.mechanic attack);
    return false iff the attempt fails */
-boolean
-u_teleport_mon(mtmp, give_feedback)
-struct monst *mtmp;
-boolean give_feedback;
-{
+boolean u_teleport_mon(struct monst *mtmp, boolean give_feedback) {
 	coord cc;
 
 	if (mtmp->ispriest && *in_rooms(mtmp->mx, mtmp->my, TEMPLE)) {

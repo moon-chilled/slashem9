@@ -4,9 +4,7 @@
 
 #include "hack.h"
 
-void
-were_change (struct monst *mon)
-{
+void were_change (struct monst *mon) {
 	if (!is_were(mon->data))
 	    return;
 
@@ -34,9 +32,7 @@ were_change (struct monst *mon)
 	}
 }
 
-int
-counter_were (int pm)
-{
+int counter_were (int pm) {
 	switch(pm) {
 	    case PM_WEREWOLF:	      return PM_HUMAN_WEREWOLF;
 	    case PM_HUMAN_WEREWOLF:   return PM_WEREWOLF;
@@ -56,9 +52,7 @@ counter_were (int pm)
 	}
 }
 
-void
-new_were (struct monst *mon)
-{
+void new_were (struct monst *mon) {
 	int pm;
 
 	pm = counter_were(monsndx(mon->data));
@@ -88,13 +82,9 @@ new_were (struct monst *mon)
 	start_timer(rn1(1000,1000), TIMER_MONSTER, UNPOLY_MON, monst_to_any(mon));
 }
 
-int
-were_summon(ptr,yours,visible,genbuf)	/* were-creature (even you) summons a horde */
-struct permonst *ptr;
-boolean yours;
-int *visible;			/* number of visible helpers created */
-char *genbuf;
-{
+/* were-creature (even you) summons a horde */
+// visible => number of visible helpers created
+int were_summon(struct permonst *ptr, boolean yours, int *visible, char *genbuf) {
 	int i, typ, pm = monsndx(ptr);
 	struct monst *mtmp;
 	int total = 0;
@@ -159,9 +149,7 @@ char *genbuf;
 	return total;
 }
 
-void
-you_were (void)
-{
+void you_were (void) {
 	char qbuf[QBUFSZ];
 
 	if (Unchanging || (u.umonnum == u.ulycn)) return;
@@ -174,10 +162,7 @@ you_were (void)
 	polymon(u.ulycn);
 }
 
-void
-you_unwere(purify)
-boolean purify;
-{
+void you_unwere(boolean purify) {
 	boolean in_wereform = (u.umonnum == u.ulycn);
 
 	if (purify) {

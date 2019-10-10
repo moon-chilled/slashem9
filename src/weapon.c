@@ -90,10 +90,7 @@ static const char * const odd_skill_names[] = {
 };
 
 
-static void
-give_may_advance_msg(skill)
-int skill;
-{
+static void give_may_advance_msg(int skill) {
 	pline("You feel more %s in your %sskills.",
 	    !P_RESTRICTED(skill) ? "confident" : "comfortable",
 		skill == P_NONE ?
@@ -127,9 +124,7 @@ static const char kebabable[] = {
  *	hitval returns an integer representing the "to hit" bonuses
  *	of "otmp" against the monster.
  */
-int
-hitval (struct obj *otmp, struct monst *mon)
-{
+int hitval (struct obj *otmp, struct monst *mon) {
 	int	tmp = 0;
 	struct permonst *ptr = mon->data;
 	boolean Is_weapon = (otmp->oclass == WEAPON_CLASS || is_weptool(otmp));
@@ -206,9 +201,7 @@ hitval (struct obj *otmp, struct monst *mon)
  *	dmgval returns an integer representing the damage bonuses
  *	of "otmp" against the monster.
  */
-int
-dmgval (struct obj *otmp, struct monst *mon)
-{
+int dmgval (struct obj *otmp, struct monst *mon) {
 	int tmp = 0, otyp = otmp->otyp;
 	struct permonst *ptr = mon->data;
 	boolean Is_weapon = (otmp->oclass == WEAPON_CLASS || is_weptool(otmp));
@@ -389,8 +382,7 @@ static struct obj *oselect(struct monst *mtmp, int x) {
 
 /* WAC added the Ya, increased priority of silver dagger, added Spoon */
 /* KMH -- added bullets */
-static const int rwep[] =
-{
+static const int rwep[] = {
 #ifdef SPOON
 	SPOON,
 #endif
@@ -404,19 +396,16 @@ static const int rwep[] =
 	/* note: CREAM_PIE should NOT be #ifdef KOPS */ // there is no #ifdef KOPS! --ELR
 };
 
-static const int pwep[] =
-{	HALBERD, BARDICHE, SPETUM, BILL_GUISARME, VOULGE, RANSEUR, GUISARME,
+static const int pwep[] = {
+	HALBERD, BARDICHE, SPETUM, BILL_GUISARME, VOULGE, RANSEUR, GUISARME,
 	GLAIVE, LUCERN_HAMMER, BEC_DE_CORBIN, FAUCHARD, PARTISAN, LANCE
 };
 
 
 static struct obj *propellor;
 
-struct obj *
-select_rwep (	/* select a ranged weapon for the monster */
-    struct monst *mtmp
-)
-{
+/* select a ranged weapon for the monster */
+struct obj * select_rwep (	struct monst *mtmp) {
 	struct obj *otmp;
 	int i;
 
@@ -578,11 +567,8 @@ static const short hwep[] = {
 	  ATHAME, SCALPEL, KNIFE, TORCH, WORM_TOOTH
 };
 
-struct obj *
-select_hwep (	/* select a hand to hand weapon for the monster */
-    struct monst *mtmp
-)
-{
+/* select a hand to hand weapon for the monster */
+struct obj * select_hwep (	struct monst *mtmp) {
 	struct obj *otmp;
 	int i;
 	boolean strong = strongmonst(mtmp->data);
@@ -620,11 +606,7 @@ select_hwep (	/* select a hand to hand weapon for the monster */
 /* Called after polymorphing a monster, robbing it, etc....  Monsters
  * otherwise never unwield stuff on their own.  Might print message.
  */
-void
-possibly_unwield(mon, polyspot)
-struct monst *mon;
-boolean polyspot;
-{
+void possibly_unwield(struct monst *mon, boolean polyspot) {
 	struct obj *obj, *mw_tmp;
 
 	if (!(mw_tmp = MON_WEP(mon)))
@@ -826,9 +808,9 @@ static void mon_ignite_lightsaber(struct obj *obj, struct monst *mon) {
 }
 
 /* STEPHEN WHITE'S NEW CODE */
-int
-abon (void)		/* attack bonus for strength & dexterity */
-{
+
+// attack bonus for strength & dexterity
+int abon (void)		{
 	int sbon;
 	int str = ACURR(A_STR), dex = ACURR(A_DEX);
 
@@ -869,9 +851,8 @@ abon (void)		/* attack bonus for strength & dexterity */
 }
 
 /* STEPHEN WHITE'S NEW CODE */
-int
-dbon (void)		/* damage bonus for strength */
-{
+/* damage bonus for strength */
+int dbon (void)	{
 	int str = ACURR(A_STR);
 
 	if (Upolyd) return 0;
@@ -892,11 +873,7 @@ dbon (void)		/* damage bonus for strength */
 }
 
 /* copy the skill level name into the given buffer */
-static char *
-skill_level_name(skill, buf)
-int skill;
-char *buf;
-{
+static char * skill_level_name(int skill, char *buf) {
     const char *ptr;
 
     switch (P_SKILL(skill)) {
@@ -921,10 +898,7 @@ char *buf;
 }
 
 /* return the # of slots required to advance the skill */
-static int
-slots_required(skill)
-int skill;
-{
+static int slots_required(int skill) {
     int tmp = P_SKILL(skill);
 
       /* WAC if you're over your class max,  it's twice as costly */
@@ -951,11 +925,7 @@ int skill;
 
 /* return true if this skill can be advanced */
 /*ARGSUSED*/
-static boolean
-can_advance(skill, speedy)
-int skill;
-boolean speedy;
-{
+static boolean can_advance(int skill, boolean speedy) {
     return !P_RESTRICTED(skill)
 	    && P_SKILL(skill) < P_MAX_SKILL(skill) &&
 	    ((wizard && speedy) ||
@@ -966,10 +936,7 @@ boolean speedy;
 }
 
 /* WAC return true if skill can be practiced */
-static boolean
-can_practice(skill)
-int skill;
-{
+static boolean can_practice(int skill) {
     return !P_RESTRICTED(skill)
             && P_SKILL(skill) < P_MAX_SKILL(skill)
             && u.skills_advanced < P_SKILL_LIMIT;
@@ -978,10 +945,7 @@ int skill;
 
 
 /* return true if this skill could be advanced if more slots were available */
-static boolean
-could_advance(skill)
-int skill;
-{
+static boolean could_advance(int skill) {
     return !P_RESTRICTED(skill)
 	    && P_SKILL(skill) < P_MAX_SKILL(skill) && (
 	    (P_ADVANCE(skill) >=
@@ -991,10 +955,7 @@ int skill;
 
 /* return true if this skill has reached its maximum and there's been enough
    practice to become eligible for the next step if that had been possible */
-static boolean
-peaked_skill(skill)
-int skill;
-{
+static boolean peaked_skill(int skill) {
     return !P_RESTRICTED(skill)
 	    && P_SKILL(skill) >= P_MAX_SKILL(skill) && (
 	    (P_ADVANCE(skill) >=
@@ -1038,8 +999,7 @@ const static struct skill_range {
  * to be able to update the menu since selecting one item could make
  * others unselectable.
  */
-int
-enhance_weapon_skill (void)
+int enhance_weapon_skill (void)
 #ifdef DUMP_LOG
 {
 	return enhance_skill(false);
@@ -1248,9 +1208,7 @@ int enhance_skill(boolean want_dump)
  * Change from restricted to unrestricted, allowing P_BASIC as max.  This
  * function may be called with with P_NONE.  Used in pray.c.
  */
-void
-unrestrict_weapon_skill (int skill)
-{
+void unrestrict_weapon_skill (int skill) {
     if (skill < P_NUM_SKILLS && P_RESTRICTED(skill)) {
 	P_SKILL(skill) = P_UNSKILLED;
 	P_MAX_SKILL(skill) = P_BASIC;
@@ -1258,9 +1216,7 @@ unrestrict_weapon_skill (int skill)
     }
 }
 
-void
-use_skill (int skill, int degree)
-{
+void use_skill (int skill, int degree) {
     boolean advance_before;
 
 /*    if (skill != P_NONE && !P_RESTRICTED(skill)) {*/
@@ -1276,11 +1232,8 @@ use_skill (int skill, int degree)
     }
 }
 
-void
-add_weapon_skill (
-    int n	/* number of slots to gain; normally one */
-)
-{
+/* n => number of slots to gain; normally one */
+void add_weapon_skill ( int n	) {
     int i, before, after;
 
     for (i = 0, before = 0; i < P_NUM_SKILLS; i++)
@@ -1292,11 +1245,8 @@ add_weapon_skill (
 	give_may_advance_msg(P_NONE);
 }
 
-void
-lose_weapon_skill (
-    int n	/* number of slots to lose; normally one */
-)
-{
+/* number of slots to lose; normally one */
+void lose_weapon_skill ( int n	) {
     int skill;
     boolean maybe_loose_disarm = false;
 
@@ -1333,9 +1283,7 @@ lose_weapon_skill (
     }
 }
 
-int
-weapon_type (struct obj *obj)
-{
+int weapon_type (struct obj *obj) {
 	/* KMH, balance patch -- now uses the object table */
 	int type;
 
@@ -1351,9 +1299,7 @@ weapon_type (struct obj *obj)
 	return (type < 0) ? -type : type;
 }
 
-int
-uwep_skill_type (void)
-{
+int uwep_skill_type (void) {
 	if (u.twoweap)
 		return P_TWO_WEAPON_COMBAT;
 	return weapon_type(uwep);
@@ -1363,9 +1309,7 @@ uwep_skill_type (void)
  * Return hit bonus/penalty based on skill of weapon.
  * Treat restricted weapons as unskilled.
  */
-int
-weapon_hit_bonus (struct obj *weapon)
-{
+int weapon_hit_bonus (struct obj *weapon) {
     int type, wep_type, bonus = 0;
 #if 0
     int skill;
@@ -1447,9 +1391,7 @@ weapon_hit_bonus (struct obj *weapon)
  * Return damage bonus/penalty based on skill of weapon.
  * Treat restricted weapons as unskilled.
  */
-int
-weapon_dam_bonus (struct obj *weapon)
-{
+int weapon_dam_bonus (struct obj *weapon) {
     int type, wep_type, bonus = 0;
 #if 0
     int skill;
@@ -1519,9 +1461,7 @@ weapon_dam_bonus (struct obj *weapon)
     return bonus;
 }
 
-int
-skill_bonus (int type)
-{
+int skill_bonus (int type) {
     int bonus = 0;
     if (type == P_NONE) {
 		bonus = 0;
@@ -1558,9 +1498,7 @@ skill_bonus (int type)
 }
 
 /* Try to return an associated skill for the specified object */
-static int
-get_obj_skill (struct obj *obj)
-{
+static int get_obj_skill (struct obj *obj) {
 	int skill;
 
 	/* Try for a weapon skill */
@@ -1587,9 +1525,7 @@ get_obj_skill (struct obj *obj)
  * hero is holding, finally reading the given array that sets
  * maximums.
  */
-void
-skill_init (const struct def_skill *class_skill)
-{
+void skill_init (const struct def_skill *class_skill) {
 	struct obj *obj;
 	int skmax, skill;
 
@@ -1687,9 +1623,7 @@ practice()
 	return 0;
 }
 
-void
-practice_weapon (void)
-{
+void practice_weapon (void) {
 	if (can_practice(weapon_type(uwep))
 	    || (wizard && (yn("Skill at normal max. Practice?") == 'y'))) {
 		if (uwep)

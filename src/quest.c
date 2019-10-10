@@ -104,10 +104,7 @@ not_capable()
 	return u.ulevel < MIN_QUEST_LEVEL;
 }
 
-static int
-is_pure(talk)
-boolean talk;
-{
+static int is_pure(boolean talk) {
     int purity;
     aligntyp original_alignment = u.ualignbase[A_ORIGINAL];
 
@@ -138,10 +135,7 @@ boolean talk;
  * This assumes that the hero is currently _in_ the quest dungeon and that
  * there is a single branch to and from it.
  */
-static void
-expulsion(seal)
-boolean seal;
-{
+static void expulsion(boolean seal) {
     branch *br;
     d_level *dest;
     struct trap *t;
@@ -171,11 +165,8 @@ boolean seal;
    completion text hasn't been given yet, give it now.  Otherwise
    give another message about the character keeping the artifact
    and using the magic portal to return to the dungeon. */
-void
-finish_quest (
-    struct obj *obj	/* quest artifact; possibly null if carrying Amulet */
-)
-{
+/* obj is the quest artifact; possibly null if carrying Amulet */
+void finish_quest ( struct obj *obj	) {
 	struct obj *otmp;
 
 	if (u.uhave.amulet) {	/* unlikely but not impossible */
@@ -320,10 +311,7 @@ chat_with_guardian()
 	    qt_pager(rn1(5, QT_GUARDTALK));
 }
 
-static void
-prisoner_speaks (mtmp)
-	struct monst *mtmp;
-{
+static void prisoner_speaks (struct monst *mtmp) {
 	if (mtmp->data == &mons[PM_PRISONER] &&
 			(mtmp->mstrategy & STRAT_WAITMASK)) {
 	    /* Awaken the prisoner */

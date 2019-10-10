@@ -110,11 +110,8 @@ dosave (void)
 
 
 #if defined(UNIX) || defined (__EMX__) || defined(WIN32)
-/*ARGSUSED*/
-void
-hangup(sig_unused)  /* called as signal() handler, so sent at least one arg */
-int sig_unused;
-{
+/* called as signal() handler, so sent at least one arg */
+void hangup(int sig_unused) {
 # ifdef NOSAVEONHANGUP
 	signal(SIGINT, SIG_IGN);
 	clearlocks();
@@ -250,10 +247,7 @@ dosave0()
 	return 1;
 }
 
-static void
-savegamestate(fd, mode)
-int fd, mode;
-{
+static void savegamestate(int fd, int mode) {
 	int uid;
         time_t realtime;
 
@@ -381,12 +375,7 @@ savestateinlock()
 }
 #endif
 
-void
-savelev(fd,lev,mode)
-int fd;
-xchar lev;
-int mode;
-{
+void savelev(int fd, xchar lev, int mode) {
 	/* if we're tearing down the current level without saving anything
 	   (which happens upon entrance to the endgame or after an aborted
 	   restore attempt) then we don't want to do any actual I/O */
@@ -511,10 +500,7 @@ void bclose(int fd) {
     return;
 }
 
-static void
-savelevchn(fd, mode)
-int fd, mode;
-{
+static void savelevchn(int fd, int mode) {
 	s_level	*tmplev, *tmplev2;
 	int cnt = 0;
 
@@ -533,10 +519,7 @@ int fd, mode;
 	    sp_levchn = 0;
 }
 
-static void
-savedamage(fd, mode)
-int fd, mode;
-{
+static void savedamage(int fd, int mode) {
 	struct damage *damageptr, *tmp_dam;
 	uint xl = 0;
 
@@ -558,10 +541,7 @@ int fd, mode;
 	    level.damagelist = 0;
 }
 
-static void
-saveobjchn(fd, otmp, mode)
-int fd, mode;
-struct obj *otmp;
+static void saveobjchn(int fd, struct obj *otmp, int mode)
 {
 	struct obj *otmp2;
 	uint xl;
@@ -590,11 +570,7 @@ struct obj *otmp;
 	    bwrite(fd, (void *) &minusone, sizeof(int));
 }
 
-static void
-savemonchn(fd, mtmp, mode)
-int fd, mode;
-struct monst *mtmp;
-{
+static void savemonchn(int fd, struct monst *mtmp, int mode) {
 	struct monst *mtmp2;
 	uint xl;
 	int minusone = -1;
@@ -622,11 +598,7 @@ struct monst *mtmp;
 	    bwrite(fd, (void *) &minusone, sizeof(int));
 }
 
-static void
-savetrapchn(fd, trap, mode)
-int fd, mode;
-struct trap *trap;
-{
+static void savetrapchn(int fd, struct trap *trap, int mode) {
 	struct trap *trap2;
 
 	while (trap) {
@@ -646,10 +618,7 @@ struct trap *trap;
  * we only want to save the fruits which exist on the bones level; the bones
  * level routine marks nonexistent fruits by making the fid negative.
  */
-void
-savefruitchn(fd, mode)
-int fd, mode;
-{
+void savefruitchn(int fd, int mode) {
 	struct fruit *f2, *f1;
 
 	f1 = ffruit;
@@ -667,19 +636,13 @@ int fd, mode;
 	    ffruit = 0;
 }
 
-void
-free_percent_color_options(list_head)
-     const struct percent_color_option *list_head;
-{
+void free_percent_color_options(const struct percent_color_option *list_head) {
     if (list_head == NULL) return;
     free_percent_color_options(list_head->next);
     free(list_head);
 }
 
-void
-free_text_color_options(list_head)
-     const struct text_color_option *list_head;
-{
+void free_text_color_options(const struct text_color_option *list_head) {
     if (list_head == NULL) return;
     free_text_color_options(list_head->next);
     free(list_head->text);

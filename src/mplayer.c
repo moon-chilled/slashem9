@@ -38,9 +38,7 @@ static const char *developers[] = {
 
 
 /* return a randomly chosen developer name */
-static const char *
-dev_name()
-{
+static const char * dev_name() {
 	int i, m = 0, n = SIZE(developers);
 	struct monst *mtmp;
 	boolean match;
@@ -63,11 +61,7 @@ dev_name()
 	return developers[i];
 }
 
-static void
-get_mplname(mtmp, nam)
-struct monst *mtmp;
-char *nam;
-{
+static void get_mplname(struct monst *mtmp, char *nam) {
 	boolean fmlkind = is_female(mtmp->data);
 	const char *devnam;
 
@@ -88,11 +82,7 @@ char *nam;
 			    (boolean)mtmp->female));
 }
 
-static void
-mk_mplayer_armor(mon, typ)
-struct monst *mon;
-short typ;
-{
+static void mk_mplayer_armor(struct monst *mon, short typ) {
 	struct obj *obj;
 
 	if (typ == STRANGE_OBJECT) return;
@@ -108,12 +98,7 @@ short typ;
 	mpickobj(mon, obj);
 }
 
-struct monst *
-mk_mplayer(ptr, x, y, special)
-struct permonst *ptr;
-xchar x, y;
-boolean special;
-{
+struct monst * mk_mplayer(struct permonst *ptr, xchar x, xchar y, boolean special) {
 	struct monst *mtmp;
 	char nam[PL_NSIZ];
 
@@ -299,11 +284,7 @@ boolean special;
  * developers array, otherwise a bunch of Adams and Eves will
  * fill up the overflow.
  */
-void
-create_mplayers(num, special)
-int num;
-boolean special;
-{
+void create_mplayers(int num, boolean special) {
 	int pm, x, y;
 	struct monst fakemon;
 
