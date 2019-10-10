@@ -90,9 +90,7 @@
 #endif
 
 #define XLOGFILE "xlogfile"
-#define LOGAREA FILE_AREA_VAR
 #define NEWS "news"		/* the file containing the latest hack news */
-#define NEWS_AREA FILE_AREA_SHARE
 #define PANICLOG "paniclog"	/* log of panic and impossible events */
 
 

@@ -23,11 +23,11 @@ char *getrumor(int truth, char *rumor_buf, bool exclude_cookie) {
 	rumor_buf[0] = '\0';
 
 	if (truth == 1) {
-		rumors = dlb_fopen_area(NH_RUMORAREA, NH_RUMORFILE_TRU, "r");
+		rumors = dlb_fopen(NH_RUMORFILE_TRU, "r");
 	} else if (truth == 0) {
-		rumors = dlb_fopen_area(NH_RUMORAREA, rn2(2) ? NH_RUMORFILE_TRU : NH_RUMORFILE_FAL, "r");
+		rumors = dlb_fopen(rn2(2) ? NH_RUMORFILE_TRU : NH_RUMORFILE_FAL, "r");
 	} else if (truth == -1) {
-		rumors = dlb_fopen_area(NH_RUMORAREA, NH_RUMORFILE_FAL, "r");
+		rumors = dlb_fopen(NH_RUMORFILE_FAL, "r");
 	} else {
 		impossible("Bad fortune truth %d", truth);
 		return rumor_buf = "Viva fortuna";
@@ -126,7 +126,7 @@ void outoracle(boolean special, boolean delphi) {
 	static usize current_oracle = 0;
 
 
-	oracles = dlb_fopen_area(NH_ORACLEAREA, NH_ORACLEFILE, "r");
+	oracles = dlb_fopen(NH_ORACLEFILE, "r");
 	if (!oracles) {
 		pline("Can't open oracles file!");
 		return;

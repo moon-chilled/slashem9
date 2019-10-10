@@ -451,18 +451,14 @@ topten (int how)
 	    goto showwin;
 	}
 
-#ifdef FILE_AREAS
-	if (!lock_file_area(NH_RECORD_AREA, NH_RECORD, 60))
-#else
 	if (!lock_file(NH_RECORD, SCOREPREFIX, 60))
-#endif
 		goto destroywin;
 
-	rfile = fopen_datafile_area(NH_RECORD_AREA, NH_RECORD, "r", SCOREPREFIX);
+	rfile = fopen_datafile( NH_RECORD, "r", SCOREPREFIX);
 
 	if (!rfile) {
 		HUP raw_print("Cannot open record file!");
-		unlock_file_area(NH_RECORD_AREA, NH_RECORD);
+		unlock_file(NH_RECORD);
 		goto destroywin;
 	}
 
@@ -534,9 +530,9 @@ topten (int how)
 	}
 	if(flg) {	/* rewrite record file */
 		fclose(rfile);
-		if(!(rfile = fopen_datafile_area(NH_RECORD_AREA, NH_RECORD, "w", SCOREPREFIX))){
+		if(!(rfile = fopen_datafile(NH_RECORD, "w", SCOREPREFIX))){
 			HUP raw_print("Cannot write record file");
-			unlock_file_area(NH_RECORD_AREA, NH_RECORD);
+			unlock_file(NH_RECORD);
 			free_ttlist(tt_head);
 			goto destroywin;
 		}
@@ -599,7 +595,7 @@ topten (int how)
 	if(rank0 >= rank) if(!done_stopprint)
 		outentry(0, t0, true);
 	fclose(rfile);
-	unlock_file_area(NH_RECORD_AREA, NH_RECORD);
+	unlock_file(NH_RECORD);
 	free_ttlist(tt_head);
 
   showwin:
@@ -952,7 +948,7 @@ char **argv;
 		return;
 	}
 
-	rfile = fopen_datafile_area(NH_RECORD_AREA, NH_RECORD, "r", SCOREPREFIX);
+	rfile = fopen_datafile(NH_RECORD, "r", SCOREPREFIX);
 	if (!rfile) {
 		raw_print("Cannot open record file!");
 		return;
@@ -1091,7 +1087,7 @@ struct obj *otmp;
 
 	if (!otmp) return NULL;
 
-	rfile = fopen_datafile_area(NH_RECORD_AREA, NH_RECORD, "r", SCOREPREFIX);
+	rfile = fopen_datafile(NH_RECORD, "r", SCOREPREFIX);
 	if (!rfile) {
 		impossible("Cannot open record file!");
 		return NULL;

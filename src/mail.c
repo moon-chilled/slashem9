@@ -474,7 +474,7 @@ void readmail(struct obj *otmp) {
 	}
 #  else
 #   ifndef AMS				/* AMS mailboxes are directories */
-	display_file_area(NULL, mailbox, true);
+	display_file(mailbox, true);
 #   endif /* AMS */
 #  endif /* DEF_MAILREADER */
 

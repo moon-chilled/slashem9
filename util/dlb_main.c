@@ -26,7 +26,7 @@ extern boolean open_library(const char *,const char *,library *);
 extern void close_library(library *);
 
 char *eos(char *);	/* also used by dlb.c */
-FILE *fopen_datafile(const char *,const char *);
+FILE *fopen_datafile(const char*, const char*);
 
 static void Write(int,char *,long);
 static void usage(void);
@@ -107,12 +107,7 @@ verbose_help()
     usage();
 }
 
-static void
-Write(out,buf,len)
-    int out;
-    char *buf;
-    long len;
-{
+static void Write(int out, char *buf, long len) {
     if (write(out,buf,len) != len) {
 	printf("Write Error in '%s'\n",library_file);
 	xexit(EXIT_FAILURE);
@@ -460,63 +455,23 @@ long slen, dir_size, flen;
 #endif	/* DLBLIB */
 #endif	/* DLB */
 
-static void
-xexit(retcd)
-    int retcd;
-{
-    exit(retcd);
+static void xexit(int retcd) {
+	exit(retcd);
 }
 
 
 #ifdef DLB
 
-char *
-eos(s)
-    char *s;
-{
-    while (*s) s++;
-    return s;
+char *eos(char *s) {
+	while (*s) s++;
+	return s;
 }
 
 
-/*
- * open_library(dlb.c) needs this (which normally comes from src/files.c,
- * or sys/unix/unixunix.c if file areas are enabled). As yet only the UNIX
- * port supports file areas so this works. We might need access to the
- * actual port functions, rather than duplicating them here, if other ports
- * follow suit.
- */
-#ifdef FILE_AREAS
-#ifdef UNIX
-FILE *
-fopen_datafile_area(filearea, filename, mode)
-const char *filearea, *filename, *mode;
-{
-    FILE *fp;
-    char *buf;
-    int lenarea;
-    if (filearea && filename[0]!='/')
-    {
-	lenarea = strlen(filearea);
-	buf = alloc(lenarea+strlen(filename)+1);
-	strcpy(buf, filearea);
-	strcpy(buf+lenarea, filename);
-	fp = fopen(buf, mode);
-	free(buf);
-    }
-    else
-	fp = fopen(filename, mode);
-    return fp;
+// open_library(dlb.c) needs this (which normally comes from src/files.c)
+FILE *fopen_datafile(const char *filename, const char *mode) {
+	return fopen(filename, mode);
 }
-#endif
-#else	/* FILE_AREAS */
-FILE *
-fopen_datafile(filename, mode)
-const char *filename, *mode;
-{
-    return fopen(filename, mode);
-}
-#endif	/* FILE_AREAS */
 
 #endif	/* DLB */
 /*dlb_main.c*/

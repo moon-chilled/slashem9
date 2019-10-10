@@ -834,7 +834,7 @@ void gypsy_chat(struct monst *mtmp) {
 			tarocchi(mtmp);
 			break;
 		case '?':
-			display_file_area(FILE_AREA_SHARE, "gypsy.txt", true);
+			display_file("gypsy.txt", true);
 			break;
 	}
 

@@ -213,17 +213,12 @@ int main(int argc, char **argv) {
 		 * overwrite it.
 		 */
 		bool remember_wiz_mode = wizard;
-#ifndef FILE_AREAS
 		const char *fq_save = fqname(SAVEF, SAVEPREFIX, 1);
-
 		chmod(fq_save,0);	/* disallow parallel restores */
-#else
-		chmod_area(FILE_AREA_SAVE, SAVEF, 0);
-#endif
 		signal(SIGINT, (SIG_RET_TYPE) done1);
 #ifdef NEWS
 		if(iflags.news) {
-		    display_file_area(NEWS_AREA, NEWS, false);
+		    display_file(NEWS, false);
 		    iflags.news = false; /* in case dorecover() fails */
 		}
 #endif
@@ -239,11 +234,7 @@ int main(int argc, char **argv) {
 			if(yn("Do you want to keep the save file?") == 'n')
 			    delete_savefile();
 			else {
-#ifdef FILE_AREAS
-			    chmod_area(FILE_AREA_SAVE, SAVEF, FCMASK);
-#else
 			    chmod(fq_save,FCMASK); /* back to readable */
-#endif
 			}
 		}
 		flags.move = 0;
@@ -470,14 +461,12 @@ static bool whoami(void) {
 }
 
 #ifdef PORT_HELP
-void
-port_help()
-{
+void port_help(void) {
 	/*
 	 * Display unix-specific help.   Just show contents of the helpfile
 	 * named by PORT_HELP.
 	 */
-	display_file_area(FILE_AREA_SHARE, PORT_HELP, true);
+	display_file(PORT_HELP, true);
 }
 #endif
 

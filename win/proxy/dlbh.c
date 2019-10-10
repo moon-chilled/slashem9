@@ -17,15 +17,7 @@ struct dlb_node {
     dlb *handles[HANDLES_PER_NODE];
 } *nodes = NULL;
 
-int
-#ifndef FILE_AREAS
-dlbh_fopen(file, mode)
-const char *file, *mode;
-#else
-dlbh_fopen_area(area, file, mode)
-const char *area, *file, *mode;
-#endif
-{
+int dlbh_fopen(const char *file, const char *mode) {
     int i;
     struct dlb_node *n;
     for(n = nodes; n; n = n->next) {
@@ -44,11 +36,8 @@ const char *area, *file, *mode;
 	nodes = n;
 	i = 0;
     }
-#ifndef FILE_AREAS
+
     n->handles[i] = dlb_fopen(file, mode);
-#else
-    n->handles[i] = dlb_fopen_area(area, file, mode);
-#endif
     return n->handles[i] ? n->offset + i : -1;
 }
 

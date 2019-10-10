@@ -111,7 +111,7 @@ extern int n_dgns;		/* from dungeon.c */
 
 static char *set_bonesfile_name(char *,d_level*);
 static char *set_bonestemp_name(void);
-#if !defined(FILE_AREAS) && !defined(USE_FCNTL)
+#if !defined(USE_FCNTL)
 static char *make_lockname(const char *,char *);
 #endif
 static FILE *fopen_config_file(const char *);
@@ -288,11 +288,6 @@ int validate_prefix_locations(char *reasonbuf) {
 	return 1;
 }
 
-/*
- * When file areas are in use, fopen_datafile_area is used instead.
- */
-
-#ifndef FILE_AREAS
 /* fopen a file, with OS-dependent bells and whistles */
 /* NOTE: a simpler version of this routine also exists in util/dlb_main.c */
 FILE *fopen_datafile(const char *filename, const char *mode, int prefix) {
@@ -302,7 +297,6 @@ FILE *fopen_datafile(const char *filename, const char *mode, int prefix) {
 	fp = fopen(filename, mode);
 	return fp;
 }
-#endif	/* FILE_AREAS */
 
 /* ----------  BEGIN LEVEL FILE HANDLING ----------- */
 
@@ -323,24 +317,16 @@ void set_levelfile_name(char *file, int lev) {
 
 int create_levelfile(int lev, char errbuf[]) {
 	int fd;
-#ifndef FILE_AREAS
 	const char *fq_lock;
-#endif
 
 	if (errbuf) *errbuf = '\0';
 	set_levelfile_name(lock, lev);
-#ifndef FILE_AREAS
 	fq_lock = fqname(lock, LEVELPREFIX, 0);
-#endif
 
 #ifdef WIN32
 	/* Use O_TRUNC to force the file to be shortened if it already
 	 * exists and is currently longer.
 	 */
-# ifdef FILE_AREAS
-	fd = open_area(FILE_AREA_LEVL, lock,
-	  O_WRONLY |O_CREAT | O_TRUNC | O_BINARY, FCMASK);
-# else
 #  ifdef HOLD_LOCKFILE_OPEN
 	if (lev == 0)
 	    fd = open_levelfile_exclusively(fq_lock, lev,
@@ -348,17 +334,8 @@ int create_levelfile(int lev, char errbuf[]) {
 	else
 #  endif
 	fd = open(fq_lock, O_WRONLY |O_CREAT | O_TRUNC | O_BINARY, FCMASK);
-# endif
 #else	// WIN32
-# ifdef FILE_AREAS
-	fd = creat_area(FILE_AREA_LEVL, lock, FCMASK);
-# else
-# ifdef MAC
-	fd = maccreat(fq_lock, LEVL_TYPE);
-# else
 	fd = creat(fq_lock, FCMASK);
-# endif
-# endif	/* FILE_AREAS */
 #endif /* WIN32 */
 
 	if (fd >= 0)
@@ -374,29 +351,17 @@ int create_levelfile(int lev, char errbuf[]) {
 
 int open_levelfile(int lev, char errbuf[]) {
 	int fd;
-#ifndef FILE_AREAS
 	const char *fq_lock;
-#endif
 
 	if (errbuf) *errbuf = '\0';
 	set_levelfile_name(lock, lev);
-#ifndef FILE_AREAS
 	fq_lock = fqname(lock, LEVELPREFIX, 0);
-#endif
-#ifdef FILE_AREAS
-	fd = open_area(FILE_AREA_LEVL, lock, O_RDONLY | O_BINARY, 0);
-#else
-# ifdef MAC
-	fd = macopen(fq_lock, O_RDONLY | O_BINARY, LEVL_TYPE);
-# else
-#  ifdef HOLD_LOCKFILE_OPEN
+# ifdef HOLD_LOCKFILE_OPEN
 	if (lev == 0)
 		fd = open_levelfile_exclusively(fq_lock, lev, O_RDONLY | O_BINARY );
 	else
-#  endif
-	fd = open(fq_lock, O_RDONLY | O_BINARY, 0);
 # endif
-#endif	/* FILE_AREAS */
+	fd = open(fq_lock, O_RDONLY | O_BINARY, 0);
 
 	/* for failure, return an explanation that our caller can use;
 	   settle for `lock' instead of `fq_lock' because the latter
@@ -417,14 +382,10 @@ void delete_levelfile(int lev) {
 	 */
 	if (lev == 0 || (level_info[lev].flags & LFILE_EXISTS)) {
 		set_levelfile_name(lock, lev);
-#ifdef FILE_AREAS
-		remove_area(FILE_AREA_LEVL, lock, 0);
-#else
 # ifdef HOLD_LOCKFILE_OPEN
 		if (lev == 0) really_close();
 # endif
 		unlink(fqname(lock, LEVELPREFIX, 0));
-#endif
 		level_info[lev].flags &= ~LFILE_EXISTS;
 	}
 }
@@ -545,30 +506,15 @@ int create_bonesfile(d_level *lev, char **bonesid, char errbuf[]) {
 	if (errbuf) *errbuf = '\0';
 	*bonesid = set_bonesfile_name(bones, lev);
 	file = set_bonestemp_name();
-#ifndef FILE_AREAS
 	file = fqname(file, BONESPREFIX, 0);
-#endif
 
 #ifdef WIN32
 	/* Use O_TRUNC to force the file to be shortened if it already
 	 * exists and is currently longer.
 	 */
-# ifdef FILE_AREAS
-	fd = open_area(FILE_AREA_BONES, file,
-	  O_WRONLY |O_CREAT | O_TRUNC | O_BINARY, FCMASK);
-# else
 	fd = open(file, O_WRONLY |O_CREAT | O_TRUNC | O_BINARY, FCMASK);
-# endif
 #else
-# ifdef FILE_AREAS
-	fd = creat_area(FILE_AREA_BONES, file, FCMASK);
-# else
-# ifdef MAC
-	fd = maccreat(file, BONE_TYPE);
-# else
 	fd = creat(file, FCMASK);
-# endif
-# endif	/* FILE_AREAS */
 #endif
 	if (fd < 0 && errbuf) /* failure explanation */
 	    sprintf(errbuf,
@@ -584,17 +530,10 @@ void commit_bonesfile(d_level *lev) {
 	int ret;
 
 	set_bonesfile_name(bones, lev);
-#ifndef FILE_AREAS
 	fq_bones = fqname(bones, BONESPREFIX, 0);
-#endif
 	tempname = set_bonestemp_name();
-#ifndef FILE_AREAS
 	tempname = fqname(tempname, BONESPREFIX, 1);
-#endif
 
-#ifdef FILE_AREAS
-	ret = rename_area(FILE_AREA_BONES, tempname, bones);
-#else
 # if (defined(SYSV) && !defined(SVR4)) || defined(GENIX)
 	/* old SYSVs don't have rename.  Some SVR3's may, but since they
 	 * also have link/unlink, it doesn't matter. :-)
@@ -605,13 +544,8 @@ void commit_bonesfile(d_level *lev) {
 # else
 	ret = rename(tempname, fq_bones);
 # endif
-#endif	/* FILE_AREAS */
 	if (wizard && ret != 0)
-#ifdef FILE_AREAS
-		pline("couldn't rename %s to %s.", tempname, bones);
-#else
 		pline("couldn't rename %s to %s.", tempname, fq_bones);
-#endif
 }
 
 
@@ -620,27 +554,15 @@ int open_bonesfile(d_level *lev, char **bonesid) {
 	int fd;
 
 	*bonesid = set_bonesfile_name(bones, lev);
-#ifdef FILE_AREAS
-	fd = open_area(FILE_AREA_BONES, bones, O_RDONLY | O_BINARY, 0);
-#else
 	fq_bones = fqname(bones, BONESPREFIX, 0);
-# ifdef MAC
-	fd = macopen(fq_bones, O_RDONLY | O_BINARY, BONE_TYPE);
-# else
 	fd = open(fq_bones, O_RDONLY | O_BINARY, 0);
-# endif
-#endif	/* FILE_AREAS */
 	return fd;
 }
 
 
 boolean delete_bonesfile(d_level *lev) {
 	set_bonesfile_name(bones, lev);
-#ifdef FILE_AREAS
-	return !(remove_area(FILE_AREA_BONES, bones) < 0);
-#else
 	return !(unlink(fqname(bones, BONESPREFIX, 0)) < 0);
-#endif
 }
 /* ----------  END BONES FILE HANDLING ----------- */
 
@@ -654,22 +576,17 @@ void set_savefile_name(void) {
 	char fnamebuf[BUFSZ], encodedfnamebuf[BUFSZ];
 #endif
 
-#ifndef FILE_AREAS
-# if defined(WIN32)
+#if defined(WIN32)
 	/* Obtain the name of the logged on user and incorporate
 	 * it into the name. */
 	sprintf(fnamebuf, "%s-%s", get_username(0), plname);
 	fname_encode("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-.",
 				'%', fnamebuf, encodedfnamebuf, BUFSZ);
 	sprintf(SAVEF, "%s.NetHack-saved-game", encodedfnamebuf);
-# else
+#else
 	sprintf(SAVEF, "save/%d%s", (int)getuid(), plname);
 	regularize(SAVEF+5);	/* avoid . or / in name */
-# endif /* WIN32 */
-#else
-	sprintf(SAVEF, "%d%s", (int)getuid(), plname);
-	regularize(SAVEF);      /* avoid . or / in name */
-#endif
+#endif /* WIN32 */
 }
 
 #ifdef INSURANCE
@@ -694,25 +611,15 @@ void set_error_savefile(void) {
 
 /* create save file, overwriting one if it already exists */
 int create_savefile(void) {
-#ifndef FILE_AREAS
 	const char *fq_save;
-#endif
 	int fd;
 
-#ifdef FILE_AREAS
-	fd = creat_area(FILE_AREA_SAVE, SAVEF, FCMASK);
-#else	/* FILE_AREAS */
 	fq_save = fqname(SAVEF, SAVEPREFIX, 0);
-# ifdef WIN32
+#ifdef WIN32
 	fd = open(fq_save, O_WRONLY | O_BINARY | O_CREAT | O_TRUNC, FCMASK);
-# else
-#  ifdef MAC
-	fd = maccreat(fq_save, SAVE_TYPE);
-#  else
+#else
 	fd = creat(fq_save, FCMASK);
-#  endif
-# endif // WIN32
-#endif  /* FILE_AREAS */
+#endif // WIN32
 
 	return fd;
 }
@@ -722,17 +629,9 @@ int create_savefile(void) {
 int open_savefile(void) {
 	int fd;
 
-#ifdef FILE_AREAS
-	fd = open_area(FILE_AREA_SAVE, SAVEF, O_RDONLY | O_BINARY, 0);
-#else
 	const char *fq_save;
 	fq_save = fqname(SAVEF, SAVEPREFIX, 0);
-# ifdef MAC
-	fd = macopen(fq_save, O_RDONLY | O_BINARY, SAVE_TYPE);
-# else
 	fd = open(fq_save, O_RDONLY | O_BINARY, 0);
-# endif
-#endif	/* FILE_AREAS */
 	return fd;
 }
 
@@ -747,33 +646,21 @@ int delete_savefile(void) {
 	}
 #endif
 
-#ifdef FILE_AREAS
-	remove_area(FILE_AREA_SAVE, SAVEF);
-#else
 	unlink(fqname(SAVEF, SAVEPREFIX, 0));
-#endif
 	return 0;	/* for restore_saved_game() (ex-xxxmain.c) test */
 }
 
 
 /* try to open up a save file and prepare to restore it */
 int restore_saved_game(void) {
-#ifndef FILE_AREAS
 	const char *fq_save;
-#endif
 	int fd;
 
 	set_savefile_name();
-#ifndef FILE_AREAS
 	fq_save = fqname(SAVEF, SAVEPREFIX, 0);
-#endif
 	if ((fd = open_savefile()) < 0) return fd;
 
-#ifndef FILE_AREAS
 	if (!uptodate(fd, fq_save)) {
-#else
-	if (!uptodate(fd, SAVEF)) {
-#endif
 	    close(fd);
  	    fd = -1;
 	    delete_savefile();
@@ -794,12 +681,6 @@ void free_saved_games(char** saved) {
 
 
 
-/*
- * When file areas are in use, (un)lock_file_area are used instead.
- */
-
-#ifndef FILE_AREAS
-
 /* ----------  BEGIN FILE LOCKING HANDLING ----------- */
 
 static int nesting = 0;
@@ -815,7 +696,7 @@ struct flock sflock; // for unlocking, sae as above
 #define HUP	if (!program_state.done_hup)
 
 
-#if !defined(FILE_AREAS) && !defined(USE_FCNTL)
+#if !defined(USE_FCNTL)
 static char *make_lockname(const char *filename, char *lockname) {
 # if defined(UNIX) || defined(WIN32)
 #  ifdef NO_FILE_LINKS
@@ -832,7 +713,7 @@ static char *make_lockname(const char *filename, char *lockname) {
 	return NULL;
 # endif  /* UNIX || WIN32 */
 }
-#endif // !FILE_AREAS && !USE_FCNTL
+#endif // !USE_FCNTL
 
 
 /* lock a file */
@@ -1000,7 +881,6 @@ void unlock_file(const char *filename) {
 
 /* ----------  END FILE LOCKING HANDLING ----------- */
 
-#endif	/* FILE_AREAS */
 
 /* ----------  BEGIN CONFIG FILE HANDLING ----------- */
 
@@ -1597,58 +1477,33 @@ void read_wizkit(void) {
 /* verify that we can write to the scoreboard file; if not, try to create one */
 void check_recordfile(const char *dir) {
 	int fd;
-#ifndef FILE_AREAS
 	const char *fq_record;
-#endif
 
 #ifdef UNIX
-# ifdef FILE_AREAS
-	fd = open_area(NH_RECORD_AREA, NH_RECORD, O_RDWR, 0);
-# else
 	fq_record = fqname(NH_RECORD, SCOREPREFIX, 0);
 	fd = open(fq_record, O_RDWR, 0);
-# endif
 
 	if (fd >= 0) {
 	    close(fd);   /* NH_RECORD is accessible */
-#  ifdef FILE_AREAS
-	} else if ((fd = open_area(NH_RECORD_AREA, NH_RECORD, O_CREAT|O_RDWR, FCMASK)) >= 0) {
-#  else
 	} else if ((fd = open(fq_record, O_CREAT|O_RDWR, FCMASK)) >= 0) {
-#  endif
 	    close(fd);   /* NH_RECORD newly created */
 	} else {
-# ifdef FILE_AREAS
-	    raw_printf("Warning: cannot write scoreboard file %s", NH_RECORD);
-# else
 	    raw_printf("Warning: cannot write scoreboard file %s", fq_record);
-# endif
 	    wait_synch();
 	}
 #endif  /* !UNIX && !VMS */
 #ifdef WIN32
 	char tmp[PATHLEN];
 	strcpy(tmp, NH_RECORD);
-# ifndef FILE_AREAS
 	fq_record = fqname(NH_RECORD, SCOREPREFIX, 0);
-# endif
 
-# ifdef FILE_AREAS
-	if ((fd = open_area(NH_RECORD_AREA, tmp, O_RDWR)) < 0) {
-# else
 	if ((fd = open(fq_record, O_RDWR)) < 0) {
-# endif
 	    /* try to create empty record */
-# if defined(FILE_AREAS)
-	    if ((fd = open_area(NH_RECORD_AREA, tmp, O_CREAT|O_RDWR,
-	      S_IREAD|S_IWRITE)) < 0) {
-# else
-	    if ((fd = open(fq_record, O_CREAT|O_RDWR, S_IREAD|S_IWRITE)) < 0) {
-# endif
-	raw_printf("Warning: cannot write record %s", tmp);
-		wait_synch();
+		if ((fd = open(fq_record, O_CREAT|O_RDWR, S_IREAD|S_IWRITE)) < 0) {
+			raw_printf("Warning: cannot write record %s", tmp);
+			wait_synch();
 		} else          /* create succeeded */
-		close(fd);
+			close(fd);
 	} else		/* open succeeded */
 	    close(fd);
 #else /* WIN32*/

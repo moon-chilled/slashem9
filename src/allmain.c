@@ -540,7 +540,7 @@ void newgame(void) {
 	signal(SIGINT, (SIG_RET_TYPE) done1);
 #endif
 #ifdef NEWS
-	if(iflags.news) display_file_area(NEWS_AREA, NEWS, false);
+	if(iflags.news) display_file(NEWS, false);
 #endif
 
 	load_qtlist();	/* load up the quest text info */

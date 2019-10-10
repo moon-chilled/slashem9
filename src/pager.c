@@ -326,7 +326,7 @@ static void checkfile(char *inp, struct permonst *pm, bool user_typed_name, bool
 	char *ep, *dbase_str;
 	bool found_in_file = false, had_error = false;
 
-	fp = dlb_fopen_area(NH_DATAAREA, NH_DATAFILE, "r");
+	fp = dlb_fopen(NH_DATAFILE, "r");
 	if (!fp) {
 		pline("Cannot open data file!");
 		return;
@@ -836,7 +836,7 @@ dowhatdoes_core (char q, char *cbuf)
 	char bufr[BUFSZ];
 	char *buf = &bufr[6], *ep, ctrl, meta;
 
-	fp = dlb_fopen_area(NH_CMDHELPAREA, NH_CMDHELPFILE, "r");
+	fp = dlb_fopen(NH_CMDHELPFILE, "r");
 	if (!fp) {
 		pline("Cannot open data file!");
 		return 0;
@@ -978,42 +978,34 @@ dohelp (void)
 
 	if (help_menu(&sel)) {
 		switch (sel) {
-			case  0:  display_file_area(NH_HELP_AREA, NH_HELP, true);
+			case  0:  display_file(NH_HELP, true);
 				  break;
-			case  1:  display_file_area(NH_SHELP_AREA, NH_SHELP, true);
+			case  1:  display_file(NH_SHELP, true);
 				  break;
 			case  2:  dohistory();  break;
 			case  3:  dowhatis();  break;
 			case  4:  dowhatdoes();  break;
 			case  5:  option_help();  break;
-			case  6:  display_file_area(NH_OPTIONAREA,
-				    NH_OPTIONFILE, true);
+			case  6:  display_file(NH_OPTIONFILE, true);
 				  break;
 			case  7:  dokeylist(); break;
 			case  8:  doextlist();  break;
 			case  9:  display_file(NH_LICENSE, true);  break;
 
-#ifndef MAC
-/*WAC add guidebook.*/
-                        case  GUIDEBOOK_SLOT:  display_file_area(NH_GUIDEBOOK_AREA,
-				    NH_GUIDEBOOK, true);
+                        case  GUIDEBOOK_SLOT:  display_file(NH_GUIDEBOOK, true);
 				  break;
-#endif
 #ifdef PORT_HELP
 			case PORT_HELP_ID:  port_help();  break;
 #endif
-                        case  WIZHLP_SLOT:  display_file_area(NH_DEBUGHELP_AREA,
-				    NH_DEBUGHELP, true);
+                        case  WIZHLP_SLOT:  display_file(NH_DEBUGHELP, true);
 				  break;
 		}
 	}
 	return 0;
 }
 
-int
-dohistory (void)
-{
-	display_file_area(NH_HISTORY_AREA, NH_HISTORY, true);
+int dohistory(void) {
+	display_file(NH_HISTORY, true);
 	return 0;
 }
 

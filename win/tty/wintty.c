@@ -1987,21 +1987,10 @@ void tty_putstr(winid window, int attr, const char *str) {
     }
 }
 
-void
-#ifdef FILE_AREAS
-tty_display_file(const char *farea, const char *fname, bool complain)
-#else
-tty_display_file(const char *fname, bool complain)
-#endif
-{
+void tty_display_file(const char *fname, bool complain) {
 #ifdef DEF_PAGER			/* this implies that UNIX is defined */
-    {
 	/* use external pager; this may give security problems */
-#ifdef FILE_AREAS
-    int fd = open_area(farea, fname, 0, 0);
-#else
 	int fd = open(fname, 0);
-#endif
 
 	if(fd < 0) {
 	    if(complain) pline("Cannot open %s.", fname);
@@ -2023,19 +2012,14 @@ tty_display_file(const char *fname, bool complain)
 	    terminate(EXIT_FAILURE);
 	}
 	close(fd);
-    }
 #else	/* DEF_PAGER */
-    {
 	dlb *f;
 	char buf[BUFSZ];
 	char *cr;
 
 	tty_clear_nhwindow(WIN_MESSAGE);
-#ifdef FILE_AREAS
-    f = dlb_fopen_area(farea, fname, "r");
-#else
-    f = dlb_fopen(fname, "r");
-#endif
+	f = dlb_fopen(fname, "r");
+
 	if (!f) {
 	    if(complain) {
 		home();  tty_mark_synch();  tty_raw_print("");
@@ -2064,7 +2048,6 @@ tty_display_file(const char *fname, bool complain)
 	    tty_destroy_nhwindow(datawin);
 	    dlb_fclose(f);
 	}
-    }
 #endif /* DEF_PAGER */
 }
 

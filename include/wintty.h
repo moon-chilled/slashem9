@@ -162,11 +162,7 @@ extern void tty_dismiss_nhwindow(winid);
 extern void tty_destroy_nhwindow(winid);
 extern void tty_curs(winid,int,int);
 extern void tty_putstr(winid, int, const char *);
-#ifdef FILE_AREAS
-extern void tty_display_file(const char *, const char *, bool);
-#else
 extern void tty_display_file(const char *, bool);
-#endif
 extern void tty_start_menu(winid);
 extern void tty_add_menu(winid,int,const anything *, char,char,int,const char *, bool);
 extern void tty_end_menu(winid, const char *);

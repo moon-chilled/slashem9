@@ -6,7 +6,6 @@
 #include "dgn_file.h"
 #include "dlb.h"
 
-#define DUNGEON_AREA    FILE_AREA_UNSHARE
 #define DUNGEON_FILE	"dungeon"
 
 #define X_START		"x-strt"
@@ -575,7 +574,7 @@ void init_dungeons(void) {
 
 	pd.n_levs = pd.n_brs = 0;
 
-	dgn_file = dlb_fopen_area(DUNGEON_AREA, DUNGEON_FILE, RDBMODE);
+	dgn_file = dlb_fopen(DUNGEON_FILE, RDBMODE);
 	if (!dgn_file) {
 	    char tbuf[BUFSZ];
 	    sprintf(tbuf, "Cannot open dungeon description - \"%s",

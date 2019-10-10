@@ -623,9 +623,7 @@ extern void makerogueghost(void);
 extern char *fname_encode(const char *, char, char *, char *, int);
 extern char *fname_decode(char, char *, char *, int);
 extern const char *fqname(const char *, int, int);
-#ifndef FILE_AREAS
 extern FILE *fopen_datafile(const char *,const char *,int);
-#endif
 extern boolean uptodate(int,const char *);
 extern void store_version(int);
 extern void set_levelfile_name(char *,int);
@@ -646,10 +644,8 @@ extern int create_savefile(void);
 extern int open_savefile(void);
 extern int delete_savefile(void);
 extern int restore_saved_game(void);
-#ifndef FILE_AREAS
 extern boolean lock_file(const char *,int,int);
 extern void unlock_file(const char *);
-#endif
 #ifdef USER_SOUNDS
 extern boolean can_read_file(const char *);
 #endif
@@ -2087,17 +2083,6 @@ extern int dosh(void);
 # if defined(SHELL) || defined(DEF_PAGER) || defined(DEF_MAILREADER)
 extern int child(int);
 # endif
-#ifdef FILE_AREAS
-extern char *make_file_name(const char *, const char *);
-extern FILextern *fopen_datafile_area(const char *,const char *,const char *,
-				boolean);
-extern FILextern *freopen_area(const char *,const char *,const char *, FILextern *);
-extern int chmod_area(const char *, const char *, int);
-extern int open_area(const char *, const char *, int, int);
-extern int creat_area(const char *, const char *, int);
-extern boolean lock_file_area(const char *, const char *,int);
-extern void unlock_file_area(const char *, const char *);
-#endif
 #endif /* UNIX */
 
 /* ### unixres.c ### */

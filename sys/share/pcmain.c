@@ -272,7 +272,7 @@ void pcmain(int argc, char **argv) {
 #endif
 #ifdef NEWS
 		if(iflags.news){
-			display_file_area(NEWS_AREA, NEWS, false);
+			display_file(NEWS, false);
 			iflags.news = false;
 		}
 #endif
@@ -467,7 +467,7 @@ void chdirx(char *dir, bool wr) {
 # ifdef WIN32
 void port_help(void) {
 	/* display port specific help file */
-	display_file_area(FILE_AREA_SHARE, PORT_HELP, 1 );
+	display_file(PORT_HELP, 1 );
 }
 # endif /* WIN32 */
 #endif /* PORT_HELP */

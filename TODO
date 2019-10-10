@@ -19,8 +19,6 @@
  * In-game chat system (integrate with #shout)
  * IRC notifications (write IRC plugin to make it log messages to a file and slashem pick them up)
 
-* Delete and then rewrite FILE_AREAS
-
 * The ascension run: make it interesting.  No one likes the mysterious force or the WOY randomly appearing, and that only happens in order to make it simpler than just "go up the stairs, rinse, repeat."  Also, the wizard appearing on the plane of earth cheapens him.  He should disappear after you perform the ritual and not come back until then.  Maybe make a group of high-level monsters appear every time you go up the stairs with the AOY?
 
 * Gehenna: it's obviously terrible.  Rip it out completely and think about: what's a good thing to go in between the castle and the vibrating square?  If ais ever finishes his sokoban generator, maybe use that.  It should be a puzzle of some sort, and just "high-powered enemies" doesn't differentiate it from the first half of the game.  Perhaps there's a series of levels, and on each one you suffer some kind of debuff.  Maybe you're burdened, or hallucinating (which is an actual debuff because slashem), or your maximum hp is halved.  Perhaps the very next level after VotD is the invokation level, and it has 9 (obviously undiggable) concentric circles representing dante's 9 circles of hell.  Each door you go through, you get something like the effects of a fire trap, but much stronger (increasing as you get farther in).  Fire resistance won't help, or if it will, it'll be just a little.  (Maybe put the vibrating square on a gehenna-maze-like level, just to be annoying.

@@ -74,81 +74,6 @@
 				   with built-in VPIX support */
 
 /*
- * ALI
- *
- * File areas can be used to place different Slash'EM files in different
- * directories. This is necessary to comply with Linux's FSSTD 1.2 and its
- * replacement FHS 2.0. Currently, these are only implemented for UNIX, but
- * other ports could follow suit by including similar defines in their port
- * specific config files and implementing the relevent functions.
- *
- * File areas are supposed to be opaque; that is the core system does not
- * interpret them in any way, it simply passes them to the port specific
- * functions to handle. This means that while the obvious mapping is onto
- * directories, there is nothing in the core code that assumes this. Non-UNIX
- * ports in particular may find that a more general mapping is desirable.
- *
- * The following file areas are supported:
- *
- * FILE_AREA_SAVE	For save files (R/W)
- * FILE_AREA_BONES	For bones files (R/W)
- * FILE_AREA_LEVL	For level files (R/W)
- * FILE_AREA_VAR	For other files which may be modified by Slash'EM
- * FILE_AREA_SHARE	For read-only, architechure independent, files
- * FILE_AREA_UNSHARE	For read-only, architechure dependent, files
- * FILE_AREA_DOC	For human-readable documentation
- */
-
-/* #define FILE_AREAS */		/* Use file areas */
-
-#ifdef FILE_AREAS
-
-/*
- * File areas compatible with Linux's FSSTND 1.2.
- * Note: This has been superceeded by FHS 2.0, but is included because
- * many systems still seem to use it.
- */
-
-/* #define FILE_AREA_VAR	"/var/lib/games/slashem/" */
-/* #define FILE_AREA_SAVE	"/var/lib/games/slashem/save/" */
-/* #define FILE_AREA_SHARE	"/usr/lib/games/slashem/" */
-/* #define FILE_AREA_UNSHARE	"/usr/lib/games/slashem/" */
-/* #define FILE_AREA_DOC	"/usr/doc/slashem/" */
-
-/*
- * File areas compatible with FHS 2.0
- */
-
-#define FILE_AREA_VAR		"/var/games/slashem/"
-#define FILE_AREA_SAVE		"/var/games/slashem/save/"
-#define FILE_AREA_SHARE		"/usr/share/games/slashem/"
-#define FILE_AREA_UNSHARE	"/usr/lib/games/slashem/"
-#define FILE_AREA_DOC		"/usr/share/doc/slashem/"
-
-#define FILE_AREA_BONES		FILE_AREA_VAR
-#define FILE_AREA_LEVL		FILE_AREA_VAR
-
-#endif /* FILE_AREAS */
-
-/*
- * The next two defines are intended mainly for the Andrew File System,
- * which does not allow hard links.  If NO_FILE_LINKS is defined, lock files
- * will be created in LOCKDIR using open() instead of in the playground using
- * link().
- *		Ralf Brown, 7/26/89 (from v2.3 hack of 10/10/88)
- */
-
-/* #define NO_FILE_LINKS */	/* if no hard links */
-
-#ifdef NO_FILE_LINKS
-# ifdef FILE_AREAS
-# define LOCKDIR FILE_AREA_VAR			/* where to put locks */
-# else
-# define LOCKDIR "/usr/games/lib/nethackdir"	/* where to put locks */
-# endif
-#endif
-
-/*
  * Define DEF_PAGER as your default pager, e.g. "/bin/cat" or "/usr/ucb/more"
  * If defined, it can be overridden by the environment variable PAGER.
  * Hack will use its internal pager if DEF_PAGER is not defined.
@@ -313,7 +238,6 @@
 #endif
 
 #define HLOCK	"perm"	/* an empty file used for locking purposes */
-#define HLOCK_AREA	FILE_AREA_VAR
 
 #define tgetch getchar
 

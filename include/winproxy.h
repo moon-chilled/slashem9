@@ -28,14 +28,9 @@ extern void proxy_dismiss_nhwindow(winid);
 extern void proxy_destroy_nhwindow(winid);
 extern void proxy_curs(winid, int, int);
 extern void proxy_putstr(winid, int, const char *);
-#ifdef FILE_AREAS
-extern void proxy_display_file(const char *, const char *, boolean);
-#else
 extern void proxy_display_file(const char *, boolean);
-#endif
 extern void proxy_start_menu(winid);
-extern void proxy_add_menu(winid, int, const anything *,
-			char, char, int, const char *, boolean);
+extern void proxy_add_menu(winid, int, const anything *, char, char, int, const char *, boolean);
 extern void proxy_end_menu(winid, const char *);
 extern int proxy_select_menu(winid, int, menu_item **);
 extern char proxy_message_menu(char, int, const char *);
@@ -88,11 +83,7 @@ extern void free_glyph_mapping(struct nhproxy_cb_get_glyph_mapping_res *);
 extern int get_no_glyph(void);
 
 /* dlbh.c */
-#ifndef FILE_AREAS
 extern int dlbh_fopen(const char *, const char *);
-#else
-extern int dlbh_fopen_area(const char *, const char *, const char *);
-#endif
 extern int dlbh_fclose(int);
 extern int dlbh_fread(char *, int, int, int);
 extern int dlbh_fseek(int, long, int);

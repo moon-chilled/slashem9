@@ -11,37 +11,21 @@
 #define ALPHA		/* if an alpha-test copy */
 #define BETA		/* if an alpha- or beta-test copy */
 
-/*
- * Files expected to exist in the playground directory if file areas are not
- * enabled and in the named areas otherwise.
- * [WAC] - put a NH_ prefix on all the names to prevent conflicts
- */
+// Files expected to exist in the playground directory or in nhdat.
 
-#define NH_RECORD		"record"  /* a file containing list of topscorers */
-#define NH_RECORD_AREA	FILE_AREA_VAR
-#define NH_HELP		"help"	  /* a file containing command descriptions */
-#define NH_HELP_AREA	FILE_AREA_SHARE
-#define NH_SHELP		"hh"		/* abbreviated form of the same */
-#define NH_SHELP_AREA	FILE_AREA_SHARE
-#define NH_DEBUGHELP	"wizhelp"	/* a file containing debug mode cmds */
-#define NH_DEBUGHELP_AREA	FILE_AREA_SHARE
-#define NH_RUMORFILE_TRU	"rumors.tru"	// files with fortune cookies */
-#define NH_RUMORFILE_FAL	"rumors.fal"
-#define NH_RUMORAREA	FILE_AREA_SHARE
-#define NH_ORACLEFILE	"oracles.txt"	/* a file with oracular information */
-#define NH_ORACLEAREA	FILE_AREA_SHARE
-#define NH_DATAFILE	"data.base"	/* a file giving the meaning of symbols used */
-#define NH_DATAAREA	FILE_AREA_SHARE
-#define NH_CMDHELPFILE	"cmdhelp"	/* file telling what commands do */
-#define NH_CMDHELPAREA	FILE_AREA_SHARE
-#define NH_HISTORY		"history"	/* a file giving nethack's history */
-#define NH_HISTORY_AREA	FILE_AREA_SHARE
-#define NH_LICENSE		"license"	/* file with license information */
-#define NH_LICENSE_AREA	FILE_AREA_DOC
-#define NH_OPTIONFILE	"opthelp"	/* a file explaining runtime options */
-#define NH_OPTIONAREA	FILE_AREA_SHARE
-#define NH_GUIDEBOOK       "Guidebook.txt"       /* Nethack Guidebook*/
-#define NH_GUIDEBOOK_AREA	FILE_AREA_DOC
+#define NH_RECORD		"record"	// a file containing list of topscorers
+#define NH_HELP			"help"		// a file containing command descriptions
+#define NH_SHELP		"hh"		// abbreviated form of the same
+#define NH_DEBUGHELP		"wizhelp"	// a file containing debug mode cmds
+#define NH_RUMORFILE_TRU	"rumors.tru"	// a file with fortune cookies
+#define NH_RUMORFILE_FAL	"rumors.fal"	// a file with misleading fortune cookies
+#define NH_ORACLEFILE		"oracles.txt"	// a file with oracular information
+#define NH_DATAFILE		"data.base"	// a file giving the meaning of symbols used
+#define NH_CMDHELPFILE		"cmdhelp"	// file telling what commands do
+#define NH_HISTORY		"history"	// a file giving nethack's history
+#define NH_LICENSE		"license"	// file with license information
+#define NH_OPTIONFILE		"opthelp"	// a file explaining runtime options
+#define NH_GUIDEBOOK       	"Guidebook.txt"	// Nethack Guidebook*/
 
 #define LEV_EXT	".lev"		/* extension for special level files */
 
@@ -104,33 +88,6 @@ typedef ssize_t isize;
 
 #ifdef WIN32
 #include "ntconf.h"
-#endif
-
-#ifndef FILE_AREAS
-
-#define fopen_datafile_area(area, filename, mode, use_spfx) \
- 		fopen_datafile(filename, mode, use_spfx)
-#define lock_file_area(area, filename, prefix, retryct) \
- 		lock_file(filename, prefix, retryct)
-#define unlock_file_area(area, filename) unlock_file(filename)
-#define dlb_fopen_area(area, name, mode) dlb_fopen(name, mode)
-
-/*
- * ALI
- *
- * By defining these, functions can pass them around even though they're
- * not actually used. This can make the code easier to read at the cost
- * of some efficiency. Given the high overhead of dealing with files anyway,
- * this is often a good trade-off.
- */
-
-#define FILE_AREA_VAR		NULL
-#define FILE_AREA_SAVE		NULL
-#define FILE_AREA_LEVL		NULL
-#define FILE_AREA_BONES		NULL
-#define FILE_AREA_SHARE		NULL
-#define FILE_AREA_UNSHARE	NULL
-
 #endif
 
 /* Displayable name of this port; don't redefine if defined in *conf.h */

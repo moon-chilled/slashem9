@@ -2809,7 +2809,7 @@ const char *name;
 	char c;
 	struct version_info vers_info;
 
-	fd = dlb_fopen_area(FILE_AREA_UNSHARE, name, RDBMODE);
+	fd = dlb_fopen(name, RDBMODE);
 	if (!fd) return false;
 
 	Fread((void *) &vers_info, sizeof vers_info, 1, fd);

@@ -177,18 +177,10 @@ const char *str;
 	nhproxy_proc_raw_print_bold(str);
 }
 
-#ifdef FILE_AREAS
-void proxy_display_file(const char *farea, const char *fname, bool complain)
-#else
-void proxy_display_file(const char *fname, bool complain)
-#endif
-{
+void proxy_display_file(const char *fname, bool complain) {
     int fh;
-#ifdef FILE_AREAS
-    fh = dlbh_fopen_area(farea, fname, "r");
-#else
     fh = dlbh_fopen(fname, "r");
-#endif
+
     if (fh < 0) {
 	if (complain)  pline("Can't open %s.", fname);
 	return;

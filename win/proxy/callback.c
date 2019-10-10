@@ -15,20 +15,10 @@ cb_display_inventory()
     display_inventory(NULL, false);
 }
 
-#ifndef FILE_AREAS
 #define SET_FILE(f, a) if (1) { file = f; } else
-#else
-#define SET_FILE(f, a) if (1) { file = f; area = a; } else
-#endif
 
-static int
-cb_dlbh_fopen(path, mode)
-const char *path, *mode;
-{
+static int cb_dlbh_fopen(const char *path, const char *mode) {
     const char *file, *subname;
-#ifdef FILE_AREAS
-    const char *area;
-#endif
     char *s;
     char *buf = NULL;
     char *name = NULL;
@@ -116,11 +106,8 @@ const char *path, *mode;
     }
     if (!retval) {
 	dlb_init();
-#ifndef FILE_AREAS
+
 	retval = dlbh_fopen(file, mode);
-#else
-	retval = dlbh_fopen_area(area, file, mode);
-#endif
     }
     if (buf)
 	free(buf);

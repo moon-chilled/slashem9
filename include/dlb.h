@@ -38,7 +38,6 @@ typedef struct dlb_library {
 /* library definitions */
 # ifndef DLBFILE
 #  define DLBFILE	"nhdat"
-#  define DLBAREA	FILE_AREA_SHARE
 # endif
 # ifndef FILENAME_CMP
 #  define FILENAME_CMP	strcmp			/* case sensitive */
@@ -63,11 +62,7 @@ typedef struct {
 boolean dlb_init(void);
 void dlb_cleanup(void);
 
-#ifndef FILE_AREAS
 dlb *dlb_fopen(const char *,const char *);
-#else
-dlb *dlb_fopen_area(const char *,const char *,const char *);
-#endif
 int dlb_fclose(dlb*);
 int dlb_fread(char *,int,int,dlb*);
 int dlb_fseek(dlb*,long,int);
@@ -97,12 +92,7 @@ long dlb_ftell(dlb*);
 # define dlb_init()
 # define dlb_cleanup()
 
-#ifndef FILE_AREAS
 # define dlb_fopen	fopen
-#else
-# define dlb_fopen_area(a,b,c) fopen_datafile_area(a,b,c,false)
-	/* TODO: someone more knowledgable make this better */
-#endif
 # define dlb_fclose	fclose
 # define dlb_fread	fread
 # define dlb_fseek	fseek

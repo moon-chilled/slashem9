@@ -9,7 +9,6 @@
 
 #include "qtext.h"
 
-#define QTEXT_AREA      FILE_AREA_SHARE
 #define QTEXT_FILE	"quest.dat"
 
 /* #define DEBUG */	/* uncomment for debugging */
@@ -77,12 +76,11 @@ static struct qtmsg *construct_qtlist(long hdr_offset) {
 }
 
 void load_qtlist(void) {
-
 	int	n_classes, i;
 	char	qt_classes[N_HDR][LEN_HDR];
 	long	qt_offsets[N_HDR];
 
-	msg_file = dlb_fopen_area(QTEXT_AREA, QTEXT_FILE, RDBMODE);
+	msg_file = dlb_fopen(QTEXT_FILE, RDBMODE);
 	if (!msg_file)
 	    panic("CANNOT OPEN QUEST TEXT FILE %s.", QTEXT_FILE);
 
