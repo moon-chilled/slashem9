@@ -2081,10 +2081,6 @@ static void use_whetstone(struct obj *stone, struct obj *obj) {
 	} else
 	if (verysmall(youmonst.data)) {
 	    pline("You are too small to use %s effectively.", an(xname(stone)));
-	} else
-	if (obj->oclass == COIN_CLASS) {
-	    pline("Shopkeepers would spot the lighter coin%s immediately.",
-		obj->quan > 1 ? "s" : "");
 	} else if (!is_pool(u.ux, u.uy) && !IS_FOUNTAIN(levl[u.ux][u.uy].typ)
 	    && !IS_SINK(levl[u.ux][u.uy].typ) && !IS_TOILET(levl[u.ux][u.uy].typ)
 	    ) {
@@ -2205,6 +2201,10 @@ static void use_stone(struct obj *tstone) {
     streak_color = 0;
 
     switch (obj->oclass) {
+
+    case COIN_CLASS:
+	    pline("Shopkeepers would spot the lighter coin%s immediately.", obj->quan > 1 ? "s" : "");
+	    return;
     case WEAPON_CLASS:
     case TOOL_CLASS:
 	use_whetstone(tstone, obj);
