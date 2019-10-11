@@ -16,7 +16,7 @@
 #endif
 
 #define PC_LOCKING		/* Prevent overwrites of aborted or in-progress games */
-				/* without first receiving confirmation. */
+/* without first receiving confirmation. */
 
 #define HOLD_LOCKFILE_OPEN	/* Keep an exclusive lock on the .0 file */
 
@@ -108,8 +108,8 @@ extern void interject(int);
 extern char levels[], bones[], permbones[],
 #endif /* 0 */
 
-/* this was part of the micro stuff in the past */
-extern const char *alllevels, *allbones;
+       /* this was part of the micro stuff in the past */
+       extern const char *alllevels, *allbones;
 extern char hackdir[];
 #define ABORT C('a')
 #define getuid() 1

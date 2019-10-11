@@ -37,42 +37,42 @@ extern int otg_temp;
 extern int in_doagain;
 
 extern struct dgn_topology {		/* special dungeon levels for speed */
-    d_level	d_oracle_level;
-    d_level	d_bigroom_level;	/* unused */
-    d_level	d_rogue_level;
-    d_level	d_medusa_level;
-    d_level     d_mineend_level;
-    d_level	d_stronghold_level;
-    d_level	d_valley_level;
-    d_level	d_wiz1_level;
-    d_level	d_wiz2_level;
-    d_level	d_wiz3_level;
-    d_level	d_juiblex_level;
-    d_level	d_orcus_level;
-    d_level	d_baalzebub_level;	/* unused */
-    d_level     d_demogorgon_level;      /* unused */
-    d_level     d_dispater_level;      /* unused */
-    d_level     d_geryon_level;      /* unused */
-    d_level     d_yeenoghu_level;      /* unused */
-    d_level	d_asmodeus_level;	/* unused */
-    d_level	d_portal_level;		/* only in goto_level() [do.c] */
-    d_level	d_sanctum_level;
-    d_level	d_earth_level;
-    d_level	d_water_level;
-    d_level	d_fire_level;
-    d_level	d_air_level;
-    d_level	d_astral_level;
-    xchar	d_tower_dnum;
-    xchar	d_sokoban_dnum;
-    xchar	d_mines_dnum, d_quest_dnum;
-    xchar       d_spiders_dnum;
-    d_level	d_lawful_quest_level;
-    d_level	d_neutral_quest_level;
-    d_level	d_chaotic_quest_level;
-    d_level	d_qstart_level, d_qlocate_level, d_nemesis_level;
-    d_level	d_knox_level;
-    d_level	d_sokoend_level;
-    d_level     d_blackmarket_level;
+	d_level	d_oracle_level;
+	d_level	d_bigroom_level;	/* unused */
+	d_level	d_rogue_level;
+	d_level	d_medusa_level;
+	d_level     d_mineend_level;
+	d_level	d_stronghold_level;
+	d_level	d_valley_level;
+	d_level	d_wiz1_level;
+	d_level	d_wiz2_level;
+	d_level	d_wiz3_level;
+	d_level	d_juiblex_level;
+	d_level	d_orcus_level;
+	d_level	d_baalzebub_level;	/* unused */
+	d_level     d_demogorgon_level;      /* unused */
+	d_level     d_dispater_level;      /* unused */
+	d_level     d_geryon_level;      /* unused */
+	d_level     d_yeenoghu_level;      /* unused */
+	d_level	d_asmodeus_level;	/* unused */
+	d_level	d_portal_level;		/* only in goto_level() [do.c] */
+	d_level	d_sanctum_level;
+	d_level	d_earth_level;
+	d_level	d_water_level;
+	d_level	d_fire_level;
+	d_level	d_air_level;
+	d_level	d_astral_level;
+	xchar	d_tower_dnum;
+	xchar	d_sokoban_dnum;
+	xchar	d_mines_dnum, d_quest_dnum;
+	xchar       d_spiders_dnum;
+	d_level	d_lawful_quest_level;
+	d_level	d_neutral_quest_level;
+	d_level	d_chaotic_quest_level;
+	d_level	d_qstart_level, d_qlocate_level, d_nemesis_level;
+	d_level	d_knox_level;
+	d_level	d_sokoend_level;
+	d_level     d_blackmarket_level;
 } dungeon_topology;
 /* macros for accesing the dungeon levels by their old names */
 #define oracle_level		(dungeon_topology.d_oracle_level)
@@ -274,9 +274,9 @@ extern const int shield_static[];
 #include "obj.h"
 
 extern struct obj *invent, *uarm, *uarmc, *uarmh, *uarms, *uarmg, *uarmf, *uarmu /* under-wear, so to speak */,
-	*usaddle,
-	*uskin, *uamul, *uleft, *uright, *ublindf,
-	*uwep, *uswapwep, *uquiver;
+	       *usaddle,
+	       *uskin, *uamul, *uleft, *uright, *ublindf,
+	       *uwep, *uswapwep, *uquiver;
 
 extern struct obj *uchain;		/* defined only when punished */
 extern struct obj *uball;
@@ -313,8 +313,8 @@ extern struct Role urole;
 #endif
 
 extern struct permonst playermon, *uasmon;
-					/* also decl'd extern in permonst.h */
-					/* init'd in monst.c */
+/* also decl'd extern in permonst.h */
+/* init'd in monst.c */
 
 extern struct monst youmonst;	/* init'd and defined in decl.c */
 extern struct monst *mydogs, *migrating_mons;
@@ -366,10 +366,10 @@ extern const char def_monsyms[MAXMCLASSES];	/* default class symbols */
 extern uchar monsyms[MAXMCLASSES];		/* current class symbols */
 
 extern struct c_color_names {
-    const char	*const c_black, *const c_amber, *const c_golden,
-		*const c_light_blue,*const c_red, *const c_green,
-		*const c_silver, *const c_blue, *const c_purple,
-		*const c_white;
+	const char	*const c_black, *const c_amber, *const c_golden,
+	           *const c_light_blue,*const c_red, *const c_green,
+	           *const c_silver, *const c_blue, *const c_purple,
+	           *const c_white;
 } c_color_names;
 #define NH_BLACK		c_color_names.c_black
 #define NH_AMBER		c_color_names.c_amber
@@ -387,8 +387,8 @@ extern winid WIN_MAP, WIN_INVEN;
 extern char toplines[];
 #ifndef TCAP_H
 extern struct tc_gbl_data {	/* also declared in tcap.h */
-    char *tc_AS, *tc_AE;	/* graphics start and end (tty font swapping) */
-    int   tc_LI,  tc_CO;	/* lines and columns */
+	char *tc_AS, *tc_AE;	/* graphics start and end (tty font swapping) */
+	int   tc_LI,  tc_CO;	/* lines and columns */
 } tc_gbl_data;
 #define AS tc_gbl_data.tc_AS
 #define AE tc_gbl_data.tc_AE
@@ -397,8 +397,8 @@ extern struct tc_gbl_data {	/* also declared in tcap.h */
 #endif
 
 extern struct authentication {
-    char prog[BUFSZ];
-    char args[BUFSZ];
+	char prog[BUFSZ];
+	char args[BUFSZ];
 } authentication;
 
 #define MAXNOTILESETS		20
@@ -410,10 +410,10 @@ extern struct authentication {
 #define TILESET_PSEUDO3D	2
 
 extern struct tileset {
-    char name[PL_PSIZ];
-    char file[TILESET_MAX_FILENAME];
-    unsigned long flags;
-    void *data;				/* For windowing port's use */
+	char name[PL_PSIZ];
+	char file[TILESET_MAX_FILENAME];
+	unsigned long flags;
+	void *data;				/* For windowing port's use */
 } tilesets[MAXNOTILESETS];
 extern int no_tilesets;
 extern struct tileset def_tilesets[];
@@ -462,39 +462,39 @@ struct autopickup_exception {
 };
 
 struct u_achieve {
-        bool get_bell;        /* You have obtained the bell of
+	bool get_bell;        /* You have obtained the bell of
                                       * opening */
-        bool get_candelabrum; /* You have obtained the candelabrum */
-        bool get_book;        /* You have obtained the book of
+	bool get_candelabrum; /* You have obtained the candelabrum */
+	bool get_book;        /* You have obtained the book of
                                       * the dead */
-        bool enter_gehennom;  /* Entered Gehennom (including the
+	bool enter_gehennom;  /* Entered Gehennom (including the
                                       * Valley) by any means */
-        bool perform_invocation; /* You have performed the invocation
+	bool perform_invocation; /* You have performed the invocation
                                          * ritual */
-        bool get_amulet;      /* You have obtained the amulet
+	bool get_amulet;      /* You have obtained the amulet
                                       * of Yendor */
-        bool ascended;        /* You ascended to demigod[dess]hood.
+	bool ascended;        /* You ascended to demigod[dess]hood.
                                       * Not quite the same as
                                       * u.uevent.ascended. */
-        bool get_luckstone;   /* You obtained the luckstone at the
+	bool get_luckstone;   /* You obtained the luckstone at the
                                       * end of the mines. */
-        bool finish_sokoban;  /* You obtained the sokoban prize. */
-        bool killed_medusa;   /* You defeated Medusa. */
+	bool finish_sokoban;  /* You obtained the sokoban prize. */
+	bool killed_medusa;   /* You defeated Medusa. */
 };
 
 extern struct u_achieve achieve;
 
 extern struct realtime_data {
-  time_t realtime;    /* Amount of actual playing time up until the last time
+	time_t realtime;    /* Amount of actual playing time up until the last time
                        * the game was restored. */
-  time_t restoretime; /* The time that the game was started or restored. */
-  time_t last_displayed_time; /* Last time displayed on the status line */
+	time_t restoretime; /* The time that the game was started or restored. */
+	time_t last_displayed_time; /* Last time displayed on the status line */
 } realtime_data;
 
 struct _plinemsg {
-    xchar msgtype;
-    char *pattern;
-    struct _plinemsg *next;
+	xchar msgtype;
+	char *pattern;
+	struct _plinemsg *next;
 };
 
 extern struct _plinemsg *pline_msg;

@@ -43,8 +43,7 @@ extern const struct text_color_option *text_colors;
 static unsigned ustuck_id = 0, usteed_id = 0;
 
 int
-dosave (void)
-{
+dosave (void) {
 #ifdef KEEP_SAVE
 	/*WAC for reloading*/
 	int fd;
@@ -61,10 +60,10 @@ dosave (void)
 		program_state.done_hup = 0;
 #endif
 #ifdef KEEP_SAVE
-                saverestore = false;
-                if (flags.keep_savefile)
-                        if(yn("Really quit?") == 'n') saverestore = true;
-                if(dosave0() && !saverestore) {
+		saverestore = false;
+		if (flags.keep_savefile)
+			if(yn("Really quit?") == 'n') saverestore = true;
+		if(dosave0() && !saverestore) {
 #else
 		if(dosave0()) {
 #endif
@@ -74,13 +73,13 @@ dosave (void)
 			display_nhwindow(WIN_MESSAGE, true);
 			exit_nhwindows("Be seeing you...");
 			terminate(EXIT_SUCCESS);
-	}
-/*WAC redraw later
-		else (void)doredraw();*/
+		}
+		/*WAC redraw later
+				else (void)doredraw();*/
 	}
 #ifdef KEEP_SAVE
 	if (saverestore) {
-/*WAC pulled this from pcmain.c - restore game from the file just saved*/
+		/*WAC pulled this from pcmain.c - restore game from the file just saved*/
 		fd = create_levelfile(0);
 		if (fd < 0) {
 			raw_print("Cannot create lock file");
@@ -94,7 +93,7 @@ dosave (void)
 		if (fd >= 0) dorecover(fd);
 		check_special_room(false);
 		flags.move = 0;
-/*WAC correct these after restore*/
+		/*WAC correct these after restore*/
 		if(flags.moonphase == FULL_MOON)
 			change_luck(1);
 		if(flags.friday13)
@@ -118,12 +117,12 @@ void hangup(int sig_unused) {
 	terminate(EXIT_FAILURE);
 # else	/* SAVEONHANGUP */
 	if (!program_state.done_hup++) {
-	    if (program_state.something_worth_saving)
-		dosave0();
-	    {
-		clearlocks();
-		terminate(EXIT_FAILURE);
-	    }
+		if (program_state.something_worth_saving)
+			dosave0();
+		{
+			clearlocks();
+			terminate(EXIT_FAILURE);
+		}
 	}
 # endif
 	return;
@@ -132,8 +131,7 @@ void hangup(int sig_unused) {
 
 /* returns 1 if save successful */
 int
-dosave0()
-{
+dosave0() {
 	const char *fq_save;
 	int fd, ofd;
 	xchar ltmp;
@@ -152,19 +150,19 @@ dosave0()
 #endif
 
 	HUP if (iflags.window_inited) {
-	    fd = open_savefile();
-	    if (fd > 0) {
-		close(fd);
-		clear_nhwindow(WIN_MESSAGE);
-		pline("There seems to be an old save file.");
-		if (yn("Overwrite the old file?") == 'n') {
+		fd = open_savefile();
+		if (fd > 0) {
+			close(fd);
+			clear_nhwindow(WIN_MESSAGE);
+			pline("There seems to be an old save file.");
+			if (yn("Overwrite the old file?") == 'n') {
 #ifdef KEEP_SAVE
-/*WAC don't restore if you didn't save*/
-			saverestore = false;
+				/*WAC don't restore if you didn't save*/
+				saverestore = false;
 #endif
-		    return 0;
+				return 0;
+			}
 		}
-	    }
 	}
 
 	HUP mark_synch();	/* flush any buffered screen output */
@@ -185,7 +183,7 @@ dosave0()
 	if(flags.friday13)
 		change_luck(1);
 	if(iflags.window_inited)
-	    HUP clear_nhwindow(WIN_MESSAGE);
+		HUP clear_nhwindow(WIN_MESSAGE);
 
 	store_version(fd);
 #ifdef STORE_PLNAME_IN_FILE
@@ -195,13 +193,13 @@ dosave0()
 	usteed_id = (u.usteed ? u.usteed->m_id : 0);
 
 	savelev(fd, ledger_no(&u.uz), WRITE_SAVE | FREE_SAVE);
-/*Keep things from beeing freed if not restoring*/
-/*
-#ifdef KEEP_SAVE
-	if (saverestore) savegamestate(fd, WRITE_SAVE);
-	else
-#endif
-*/
+	/*Keep things from beeing freed if not restoring*/
+	/*
+	#ifdef KEEP_SAVE
+		if (saverestore) savegamestate(fd, WRITE_SAVE);
+		else
+	#endif
+	*/
 	savegamestate(fd, WRITE_SAVE | FREE_SAVE);
 
 	/* While copying level files around, zero out u.uz to keep
@@ -223,12 +221,12 @@ dosave0()
 
 		ofd = open_levelfile(ltmp, whynot);
 		if (ofd < 0) {
-		    HUP pline("%s", whynot);
-		    close(fd);
-		    delete_savefile();
-		    HUP killer = whynot;
-		    HUP done(TRICKED);
-		    return 0;
+			HUP pline("%s", whynot);
+			close(fd);
+			delete_savefile();
+			HUP killer = whynot;
+			HUP done(TRICKED);
+			return 0;
 		}
 		getlev(ofd, hackpid, ltmp, false);
 		close(ofd);
@@ -249,7 +247,7 @@ dosave0()
 
 static void savegamestate(int fd, int mode) {
 	int uid;
-        time_t realtime;
+	time_t realtime;
 
 	uid = getuid();
 	bwrite(fd, (void *) &uid, sizeof uid);
@@ -264,28 +262,28 @@ static void savegamestate(int fd, int mode) {
 	saveobjchn(fd, migrating_objs, mode);
 	savemonchn(fd, migrating_mons, mode);
 	if (release_data(mode)) {
-	    invent = 0;
-	    migrating_objs = 0;
-	    migrating_mons = 0;
+		invent = 0;
+		migrating_objs = 0;
+		migrating_mons = 0;
 	}
 	bwrite(fd, (void *) mvitals, sizeof(mvitals));
 
 	save_dungeon(fd, (boolean)!!perform_bwrite(mode),
-			 (boolean)!!release_data(mode));
+	             (boolean)!!release_data(mode));
 	savelevchn(fd, mode);
 	bwrite(fd, (void *) &moves, sizeof moves);
 	bwrite(fd, (void *) &monstermoves, sizeof monstermoves);
 	bwrite(fd, (void *) &quest_status, sizeof(struct q_score));
 	bwrite(fd, (void *) spl_book,
-				sizeof(struct spell) * (MAXSPELL + 1));
+	       sizeof(struct spell) * (MAXSPELL + 1));
 	bwrite(fd, (void *) tech_list,
-			sizeof(struct tech) * (MAXTECH + 1));
+	       sizeof(struct tech) * (MAXTECH + 1));
 	save_artifacts(fd);
 	if(ustuck_id)
-	    bwrite(fd, (void *) &ustuck_id, sizeof ustuck_id);
+		bwrite(fd, (void *) &ustuck_id, sizeof ustuck_id);
 
 	if(usteed_id)
-	    bwrite(fd, (void *) &usteed_id, sizeof usteed_id);
+		bwrite(fd, (void *) &usteed_id, sizeof usteed_id);
 
 	bwrite(fd, (void *) pl_character, sizeof pl_character);
 	bwrite(fd, (void *) pl_fruit, sizeof pl_fruit);
@@ -294,17 +292,16 @@ static void savegamestate(int fd, int mode) {
 	savenames(fd, mode);
 	save_waterlevel(fd, mode);
 
-        bwrite(fd, (void *) &achieve, sizeof achieve);
-        realtime = get_realtime();
-        bwrite(fd, (void *) &realtime, sizeof realtime);
+	bwrite(fd, (void *) &achieve, sizeof achieve);
+	realtime = get_realtime();
+	bwrite(fd, (void *) &realtime, sizeof realtime);
 
 	bflush(fd);
 }
 
 #ifdef INSURANCE
 void
-savestateinlock()
-{
+savestateinlock() {
 	int fd, hpid;
 	static boolean havestate = true;
 	char whynot[BUFSZ];
@@ -329,45 +326,45 @@ savestateinlock()
 		 */
 		fd = open_levelfile(0, whynot);
 		if (fd < 0) {
-		    pline("%s", whynot);
-		    pline("Probably someone removed it.");
-		    killer = whynot;
-		    done(TRICKED);
-		    return;
+			pline("%s", whynot);
+			pline("Probably someone removed it.");
+			killer = whynot;
+			done(TRICKED);
+			return;
 		}
 
 		read(fd, (void *) &hpid, sizeof(hpid));
 		if (hackpid != hpid) {
-		    sprintf(whynot,
-			    "Level #0 pid (%d) doesn't match ours (%d)!",
-			    hpid, hackpid);
-		    pline("%s", whynot);
-		    killer = whynot;
-		    done(TRICKED);
+			sprintf(whynot,
+			        "Level #0 pid (%d) doesn't match ours (%d)!",
+			        hpid, hackpid);
+			pline("%s", whynot);
+			killer = whynot;
+			done(TRICKED);
 		}
 		close(fd);
 
 		fd = create_levelfile(0, whynot);
 		if (fd < 0) {
-		    pline("%s", whynot);
-		    killer = whynot;
-		    done(TRICKED);
-		    return;
+			pline("%s", whynot);
+			killer = whynot;
+			done(TRICKED);
+			return;
 		}
 		write(fd, (void *) &hackpid, sizeof(hackpid));
 		if (flags.ins_chkpt) {
-		    int currlev = ledger_no(&u.uz);
+			int currlev = ledger_no(&u.uz);
 
-		    write(fd, (void *) &currlev, sizeof(currlev));
-		    save_savefile_name(fd);
-		    store_version(fd);
+			write(fd, (void *) &currlev, sizeof(currlev));
+			save_savefile_name(fd);
+			store_version(fd);
 #ifdef STORE_PLNAME_IN_FILE
-		    bwrite(fd, (void *) plname, PL_NSIZ);
+			bwrite(fd, (void *) plname, PL_NSIZ);
 #endif
-		    ustuck_id = (u.ustuck ? u.ustuck->m_id : 0);
-		    usteed_id = (u.usteed ? u.usteed->m_id : 0);
+			ustuck_id = (u.ustuck ? u.ustuck->m_id : 0);
+			usteed_id = (u.usteed ? u.usteed->m_id : 0);
 
-		    savegamestate(fd, WRITE_SAVE);
+			savegamestate(fd, WRITE_SAVE);
 		}
 		bclose(fd);
 	}
@@ -390,7 +387,7 @@ void savelev(int fd, xchar lev, int mode) {
 
 	if(fd < 0) panic("Save on bad file!");	/* impossible */
 	if (lev >= 0 && lev <= maxledgerno())
-	    level_info[lev].flags |= VISITED;
+		level_info[lev].flags |= VISITED;
 	bwrite(fd, &hackpid,sizeof(hackpid));
 	bwrite(fd, &lev,sizeof(lev));
 	bwrite(fd, levl,sizeof(levl));
@@ -407,7 +404,7 @@ void savelev(int fd, xchar lev, int mode) {
 	save_rooms(fd);	/* no dynamic memory to reclaim */
 
 	/* from here on out, saving also involves allocated memory cleanup */
- skip_lots:
+skip_lots:
 	/* must be saved before mons, objs, and buried objs */
 	save_timers(fd, mode, RANGE_LEVEL);
 	save_light_sources(fd, mode, RANGE_LEVEL);
@@ -419,11 +416,11 @@ void savelev(int fd, xchar lev, int mode) {
 	saveobjchn(fd, level.buriedobjlist, mode);
 	saveobjchn(fd, billobjs, mode);
 	if (release_data(mode)) {
-	    fmon = 0;
-	    ftrap = 0;
-	    fobj = 0;
-	    level.buriedobjlist = 0;
-	    billobjs = 0;
+		fmon = 0;
+		ftrap = 0;
+		fobj = 0;
+		level.buriedobjlist = 0;
+		billobjs = 0;
 	}
 	save_engravings(fd, mode);
 	savedamage(fd, mode);
@@ -437,28 +434,28 @@ static boolean buffering = false;
 
 void bufon(int fd) {
 #ifdef UNIX
-    if(bw_fd >= 0)
-	panic("double buffering unexpected");
-    bw_fd = fd;
-    if((bw_FILE = fdopen(fd, "w")) == 0)
-	panic("buffering of file %d failed", fd);
+	if(bw_fd >= 0)
+		panic("double buffering unexpected");
+	bw_fd = fd;
+	if((bw_FILE = fdopen(fd, "w")) == 0)
+		panic("buffering of file %d failed", fd);
 #endif
-    buffering = true;
+	buffering = true;
 }
 
 void bufoff(int fd) {
-    bflush(fd);
-    buffering = false;
+	bflush(fd);
+	buffering = false;
 }
 
 void bflush(int fd) {
 #ifdef UNIX
-    if(fd == bw_fd) {
-	if(fflush(bw_FILE) == EOF)
-	    panic("flush of savefile failed!");
-    }
+	if(fd == bw_fd) {
+		if(fflush(bw_FILE) == EOF)
+			panic("flush of savefile failed!");
+	}
 #endif
-    return;
+	return;
 }
 
 void bwrite(int fd, void *loc, unsigned num) {
@@ -466,38 +463,38 @@ void bwrite(int fd, void *loc, unsigned num) {
 
 #ifdef UNIX
 	if (buffering) {
-	    if(fd != bw_fd)
-		panic("unbuffered write to fd %d (!= %d)", fd, bw_fd);
+		if(fd != bw_fd)
+			panic("unbuffered write to fd %d (!= %d)", fd, bw_fd);
 
-	    failed = (fwrite(loc, (int)num, 1, bw_FILE) != 1);
+		failed = (fwrite(loc, (int)num, 1, bw_FILE) != 1);
 	} else
 #endif /* UNIX */
 	{
-/* lint wants the 3rd arg of write to be an int; lint -p an unsigned */
-	    failed = (write(fd, loc, num) != num);
+		/* lint wants the 3rd arg of write to be an int; lint -p an unsigned */
+		failed = (write(fd, loc, num) != num);
 	}
 
 	if (failed) {
 #if defined(UNIX) || defined(__EMX__)
-	    if (program_state.done_hup)
-		terminate(EXIT_FAILURE);
-	    else
+		if (program_state.done_hup)
+			terminate(EXIT_FAILURE);
+		else
 #endif
-		panic("cannot write %u bytes to file #%d", num, fd);
+			panic("cannot write %u bytes to file #%d", num, fd);
 	}
 }
 
 void bclose(int fd) {
-    bufoff(fd);
+	bufoff(fd);
 #ifdef UNIX
-    if (fd == bw_fd) {
-	fclose(bw_FILE);
-	bw_fd = -1;
-	bw_FILE = 0;
-    } else
+	if (fd == bw_fd) {
+		fclose(bw_FILE);
+		bw_fd = -1;
+		bw_FILE = 0;
+	} else
 #endif
-	close(fd);
-    return;
+		close(fd);
+	return;
 }
 
 static void savelevchn(int fd, int mode) {
@@ -506,17 +503,17 @@ static void savelevchn(int fd, int mode) {
 
 	for (tmplev = sp_levchn; tmplev; tmplev = tmplev->next) cnt++;
 	if (perform_bwrite(mode))
-	    bwrite(fd, (void *) &cnt, sizeof(int));
+		bwrite(fd, (void *) &cnt, sizeof(int));
 
 	for (tmplev = sp_levchn; tmplev; tmplev = tmplev2) {
-	    tmplev2 = tmplev->next;
-	    if (perform_bwrite(mode))
-		bwrite(fd, (void *) tmplev, sizeof(s_level));
-	    if (release_data(mode))
-		free(tmplev);
+		tmplev2 = tmplev->next;
+		if (perform_bwrite(mode))
+			bwrite(fd, (void *) tmplev, sizeof(s_level));
+		if (release_data(mode))
+			free(tmplev);
 	}
 	if (release_data(mode))
-	    sp_levchn = 0;
+		sp_levchn = 0;
 }
 
 static void savedamage(int fd, int mode) {
@@ -525,49 +522,48 @@ static void savedamage(int fd, int mode) {
 
 	damageptr = level.damagelist;
 	for (tmp_dam = damageptr; tmp_dam; tmp_dam = tmp_dam->next)
-	    xl++;
+		xl++;
 	if (perform_bwrite(mode))
-	    bwrite(fd, (void *) &xl, sizeof(xl));
+		bwrite(fd, (void *) &xl, sizeof(xl));
 
 	while (xl--) {
-	    if (perform_bwrite(mode))
-		bwrite(fd, (void *) damageptr, sizeof(*damageptr));
-	    tmp_dam = damageptr;
-	    damageptr = damageptr->next;
-	    if (release_data(mode))
-		free(tmp_dam);
+		if (perform_bwrite(mode))
+			bwrite(fd, (void *) damageptr, sizeof(*damageptr));
+		tmp_dam = damageptr;
+		damageptr = damageptr->next;
+		if (release_data(mode))
+			free(tmp_dam);
 	}
 	if (release_data(mode))
-	    level.damagelist = 0;
+		level.damagelist = 0;
 }
 
-static void saveobjchn(int fd, struct obj *otmp, int mode)
-{
+static void saveobjchn(int fd, struct obj *otmp, int mode) {
 	struct obj *otmp2;
 	uint xl;
 	int minusone = -1;
 
 	while(otmp) {
-	    otmp2 = otmp->nobj;
-	    if (perform_bwrite(mode)) {
-		xl = otmp->oxlth + otmp->onamelth;
-		bwrite(fd, (void *) &xl, sizeof(int));
-		bwrite(fd, (void *) otmp, xl + sizeof(struct obj));
-	    }
-	    if (Has_contents(otmp))
-		saveobjchn(fd,otmp->cobj,mode);
-	    if (release_data(mode)) {
-		if (otmp->oclass == FOOD_CLASS) food_disappears(otmp);
-		if (otmp->oclass == SPBOOK_CLASS) book_disappears(otmp);
-		otmp->where = OBJ_FREE;	/* set to free so dealloc will work */
-		otmp->timed = 0;	/* not timed any more */
-		otmp->lamplit = 0;	/* caller handled lights */
-		dealloc_obj(otmp);
-	    }
-	    otmp = otmp2;
+		otmp2 = otmp->nobj;
+		if (perform_bwrite(mode)) {
+			xl = otmp->oxlth + otmp->onamelth;
+			bwrite(fd, (void *) &xl, sizeof(int));
+			bwrite(fd, (void *) otmp, xl + sizeof(struct obj));
+		}
+		if (Has_contents(otmp))
+			saveobjchn(fd,otmp->cobj,mode);
+		if (release_data(mode)) {
+			if (otmp->oclass == FOOD_CLASS) food_disappears(otmp);
+			if (otmp->oclass == SPBOOK_CLASS) book_disappears(otmp);
+			otmp->where = OBJ_FREE;	/* set to free so dealloc will work */
+			otmp->timed = 0;	/* not timed any more */
+			otmp->lamplit = 0;	/* caller handled lights */
+			dealloc_obj(otmp);
+		}
+		otmp = otmp2;
 	}
 	if (perform_bwrite(mode))
-	    bwrite(fd, (void *) &minusone, sizeof(int));
+		bwrite(fd, (void *) &minusone, sizeof(int));
 }
 
 static void savemonchn(int fd, struct monst *mtmp, int mode) {
@@ -577,40 +573,40 @@ static void savemonchn(int fd, struct monst *mtmp, int mode) {
 	struct permonst *monbegin = &mons[0];
 
 	if (perform_bwrite(mode))
-	    bwrite(fd, (void *) &monbegin, sizeof(monbegin));
+		bwrite(fd, (void *) &monbegin, sizeof(monbegin));
 
 	while (mtmp) {
-	    mtmp2 = mtmp->nmon;
+		mtmp2 = mtmp->nmon;
 
-	    if (perform_bwrite(mode)) {
-		xl = mtmp->mxlth + mtmp->mnamelth;
-		bwrite(fd, (void *) &xl, sizeof(int));
-		bwrite(fd, (void *) mtmp, xl + sizeof(struct monst));
-		if (mtmp->isshk) save_shk_bill(fd, mtmp);
-	    }
-	    if (mtmp->minvent)
-		saveobjchn(fd,mtmp->minvent,mode);
-	    if (release_data(mode))
-		dealloc_monst(mtmp);
-	    mtmp = mtmp2;
+		if (perform_bwrite(mode)) {
+			xl = mtmp->mxlth + mtmp->mnamelth;
+			bwrite(fd, (void *) &xl, sizeof(int));
+			bwrite(fd, (void *) mtmp, xl + sizeof(struct monst));
+			if (mtmp->isshk) save_shk_bill(fd, mtmp);
+		}
+		if (mtmp->minvent)
+			saveobjchn(fd,mtmp->minvent,mode);
+		if (release_data(mode))
+			dealloc_monst(mtmp);
+		mtmp = mtmp2;
 	}
 	if (perform_bwrite(mode))
-	    bwrite(fd, (void *) &minusone, sizeof(int));
+		bwrite(fd, (void *) &minusone, sizeof(int));
 }
 
 static void savetrapchn(int fd, struct trap *trap, int mode) {
 	struct trap *trap2;
 
 	while (trap) {
-	    trap2 = trap->ntrap;
-	    if (perform_bwrite(mode))
-		bwrite(fd, (void *) trap, sizeof(struct trap));
-	    if (release_data(mode))
-		dealloc_trap(trap);
-	    trap = trap2;
+		trap2 = trap->ntrap;
+		if (perform_bwrite(mode))
+			bwrite(fd, (void *) trap, sizeof(struct trap));
+		if (release_data(mode))
+			dealloc_trap(trap);
+		trap = trap2;
 	}
 	if (perform_bwrite(mode))
-	    bwrite(fd, (void *)nulls, sizeof(struct trap));
+		bwrite(fd, (void *)nulls, sizeof(struct trap));
 }
 
 /* save all the fruit names and ID's; this is used only in saving whole games
@@ -623,38 +619,40 @@ void savefruitchn(int fd, int mode) {
 
 	f1 = ffruit;
 	while (f1) {
-	    f2 = f1->nextf;
-	    if (f1->fid >= 0 && perform_bwrite(mode))
-		bwrite(fd, (void *) f1, sizeof(struct fruit));
-	    if (release_data(mode))
-		dealloc_fruit(f1);
-	    f1 = f2;
+		f2 = f1->nextf;
+		if (f1->fid >= 0 && perform_bwrite(mode))
+			bwrite(fd, (void *) f1, sizeof(struct fruit));
+		if (release_data(mode))
+			dealloc_fruit(f1);
+		f1 = f2;
 	}
 	if (perform_bwrite(mode))
-	    bwrite(fd, (void *)nulls, sizeof(struct fruit));
+		bwrite(fd, (void *)nulls, sizeof(struct fruit));
 	if (release_data(mode))
-	    ffruit = 0;
+		ffruit = 0;
 }
 
 void free_percent_color_options(const struct percent_color_option *list_head) {
-    if (list_head == NULL) return;
-    free_percent_color_options(list_head->next);
-    free(list_head);
+	if (list_head == NULL) return;
+	free_percent_color_options(list_head->next);
+	free(list_head);
 }
 
 void free_text_color_options(const struct text_color_option *list_head) {
-    if (list_head == NULL) return;
-    free_text_color_options(list_head->next);
-    free(list_head->text);
-    free(list_head);
+	if (list_head == NULL) return;
+	free_text_color_options(list_head->next);
+	free(list_head->text);
+	free(list_head);
 }
 
 void
-free_status_colors()
-{
-    free_percent_color_options(hp_colors); hp_colors = NULL;
-    free_percent_color_options(pw_colors); pw_colors = NULL;
-    free_text_color_options(text_colors); text_colors = NULL;
+free_status_colors() {
+	free_percent_color_options(hp_colors);
+	hp_colors = NULL;
+	free_percent_color_options(pw_colors);
+	pw_colors = NULL;
+	free_text_color_options(text_colors);
+	text_colors = NULL;
 }
 
 
@@ -665,8 +663,7 @@ free_status_colors()
  * the previous dungeon must be discarded.
  */
 void
-free_dungeons()
-{
+free_dungeons() {
 #if defined(FREE_ALL_MEMORY) || defined(PROXY_GRAPHICS)
 	savelevchn(0, FREE_SAVE);
 	save_dungeon(0, false, true);
@@ -675,32 +672,30 @@ free_dungeons()
 }
 
 void
-free_menu_coloring()
-{
-   struct menucoloring *tmp = menu_colorings;
+free_menu_coloring() {
+	struct menucoloring *tmp = menu_colorings;
 
-   while (tmp) {
-      struct menucoloring *tmp2 = tmp->next;
+	while (tmp) {
+		struct menucoloring *tmp2 = tmp->next;
 #ifdef USE_REGEX_MATCH
-       regfree(&tmp->match);
+		regfree(&tmp->match);
 #else
-      free(tmp->match);
+		free(tmp->match);
 #endif
-      free(tmp);
-      tmp = tmp2;
-   }
-   return;
+		free(tmp);
+		tmp = tmp2;
+	}
+	return;
 }
 
 void
-freedynamicdata()
-{
+freedynamicdata() {
 	free_status_colors();
 	unload_qtlist();
 	free_invbuf();	/* let_to_name (invent.c) */
 	free_youbuf();	/* You_buf,&c (pline.c) */
 	msgpline_free();
-        free_menu_coloring();
+	free_menu_coloring();
 	tmp_at(DISP_FREEMEM, 0);	/* temporary display effects */
 #ifdef FREE_ALL_MEMORY
 # define freeobjchn(X)	(saveobjchn(0, X, FREE_SAVE),  X = 0)
@@ -739,7 +734,7 @@ freedynamicdata()
 	freeobjchn(migrating_objs);
 	freemonchn(migrating_mons);
 	freemonchn(mydogs);		/* ascension or dungeon escape */
-     /* freelevchn();	[folded into free_dungeons()] */
+	/* freelevchn();	[folded into free_dungeons()] */
 	free_animals();
 	free_oracles();
 	freefruitchn();

@@ -41,7 +41,7 @@ struct flag {
 	bool  invlet_constant; /* let objects keep their inventory symbol */
 	bool  invweight;    /* show weight in inventory and when picking up */
 
-/*WAC keep_save option*/
+	/*WAC keep_save option*/
 #ifdef KEEP_SAVE
 	bool  keep_savefile; /* Keep Old Save files*/
 #endif
@@ -90,8 +90,8 @@ struct flag {
 	unsigned no_of_wizards; /* 0, 1 or 2 (wizard and his shadow) */
 	bool  travel;        /* find way automatically to u.tx,u.ty */
 	unsigned run;		/* 0: h (etc), 1: H (etc), 2: fh (etc) */
-				/* 3: FH, 4: ff+, 5: ff-, 6: FF+, 7: FF- */
-				/* 8: travel */
+	/* 3: FH, 4: ff+, 5: ff-, 6: FF+, 7: FF- */
+	/* 8: travel */
 	unsigned long warntype; /* warn_of_mon monster type M2 */
 	int	 warnlevel;
 	int	 djinni_count, ghost_count;	/* potion effect tuning */
@@ -182,7 +182,7 @@ struct instance_flags {
 #if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS)
 	bool  extmenu;	/* extended commands use menu interface */
 #endif
-        bool use_menu_color; /* use color in menus; only if wc_color */
+	bool use_menu_color; /* use color in menus; only if wc_color */
 	bool use_status_colors; /* use color in status line; only if wc_color */
 	bool hitpointbar;
 #ifdef WIN32
@@ -199,9 +199,9 @@ struct instance_flags {
 #endif
 	int graphics;
 	bool use_menu_glyphs; /* item glyphs in inventory */
-/*
- * Window capability support.
- */
+	/*
+	 * Window capability support.
+	 */
 	bool wc_color;		/* use color graphics                  */
 	bool wc_hilite_pet;		/* hilight pets                        */
 	bool wc_ascii_map;		/* show map using traditional ascii    */

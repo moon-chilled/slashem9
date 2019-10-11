@@ -21,7 +21,7 @@ struct obj *otmp;
 # ifdef MAIL
 	case SCR_MAIL:
 		return 2;
-/*		break; */
+		/*		break; */
 # endif
 	case SCR_LIGHT:
 	case SCR_GOLD_DETECTION:
@@ -31,23 +31,23 @@ struct obj *otmp;
 	case SCR_FIRE:
 	case SCR_EARTH:
 		return 8;
-/*		break; */
+	/*		break; */
 	case SCR_DESTROY_ARMOR:
 	case SCR_CREATE_MONSTER:
 	case SCR_PUNISHMENT:
 		return 10;
-/*		break; */
+	/*		break; */
 	case SCR_CONFUSE_MONSTER:
 		return 12;
-/*		break; */
+	/*		break; */
 	case SCR_IDENTIFY:
 	case SCR_SCARE_MONSTER:
 		return 14;
-/*		break; */
+	/*		break; */
 	case SCR_TAMING:
 	case SCR_TELEPORTATION:
 		return 20;
-/*		break; */
+	/*		break; */
 	/* KMH, balance patch -- more useful scrolls cost more */
 	case SCR_STINKING_CLOUD:
 	case SCR_ENCHANT_ARMOR:
@@ -55,10 +55,10 @@ struct obj *otmp;
 	case SCR_ENCHANT_WEAPON:
 	case SCR_CHARGING:
 		return 24;
-/*		break; */
+	/*		break; */
 	case SCR_GENOCIDE:
 		return 30;
-/*		break; */
+	/*		break; */
 	case SCR_BLANK_PAPER:
 	default:
 		impossible("You can't write such a weird scroll!");
@@ -69,8 +69,7 @@ struct obj *otmp;
 static const char write_on[] = { SCROLL_CLASS, SPBOOK_CLASS, 0 };
 
 int
-dowrite (struct obj *pen)
-{
+dowrite (struct obj *pen) {
 	struct obj *paper;
 	char namebuf[BUFSZ], *nm, *bp;
 	struct obj *new_obj;
@@ -82,13 +81,13 @@ dowrite (struct obj *pen)
 	const char *typeword;
 
 	if (nohands(youmonst.data)) {
-	    pline("You need hands to be able to write!");
-	    return 0;
+		pline("You need hands to be able to write!");
+		return 0;
 	} else if (Glib) {
-	    pline("%s from your %s.",
-		  Tobjnam(pen, "slip"), makeplural(body_part(FINGER)));
-	    dropx(pen);
-	    return 1;
+		pline("%s from your %s.",
+		      Tobjnam(pen, "slip"), makeplural(body_part(FINGER)));
+		dropx(pen);
+		return 1;
 	}
 
 	/* get paper to write on */
@@ -149,10 +148,10 @@ found:
 		pline("No mere dungeon adventurer could write that.");
 		return 1;
 	} else if (by_descr && paper->oclass == SPBOOK_CLASS &&
-		    !objects[i].oc_name_known) {
+	                !objects[i].oc_name_known) {
 		/* can't write unknown spellbooks by description */
 		pline(
-		  "Unfortunately you don't have enough information to go on.");
+		        "Unfortunately you don't have enough information to go on.");
 		return 1;
 	}
 
@@ -198,8 +197,8 @@ found:
 
 	/* can't write if we don't know it - unless we're lucky */
 	if(!(objects[new_obj->otyp].oc_name_known) &&
-	   !(objects[new_obj->otyp].oc_uname) &&
-	   (rnl(Role_if(PM_WIZARD) ? 3 : 15))) {
+	                !(objects[new_obj->otyp].oc_uname) &&
+	                (rnl(Role_if(PM_WIZARD) ? 3 : 15))) {
 		pline("You %s to write that!", by_descr ? "fail" : "don't know how");
 		/* scrolls disappear, spellbooks don't */
 		if (paper->oclass == SPBOOK_CLASS) {
@@ -207,10 +206,10 @@ found:
 			update_inventory();	/* pen charges */
 		} else {
 			if (by_descr) {
-			    strcpy(namebuf, OBJ_DESCR(objects[new_obj->otyp]));
-			    wipeout_text(namebuf, (6+MAXULEV - u.ulevel)/6, 0);
+				strcpy(namebuf, OBJ_DESCR(objects[new_obj->otyp]));
+				wipeout_text(namebuf, (6+MAXULEV - u.ulevel)/6, 0);
 			} else
-			    sprintf(namebuf, "%s was here!", plname);
+				sprintf(namebuf, "%s was here!", plname);
 			pline("You write \"%s\" and the scroll disappears.", namebuf);
 			useup(paper);
 		}
@@ -233,8 +232,8 @@ found:
 	if (new_obj->otyp == SCR_MAIL) new_obj->spe = 1;
 #endif
 	new_obj = hold_another_object(new_obj, "Oops!  %s out of your grasp!",
-					       The(aobjnam(new_obj, "slip")),
-					       NULL);
+	                              The(aobjnam(new_obj, "slip")),
+	                              NULL);
 	return 1;
 }
 

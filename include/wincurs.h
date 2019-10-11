@@ -47,14 +47,13 @@ bool counting;   /* Count window is active */
 #endif
 
 
-typedef enum orient_type
-{
-    CENTER,
-    UP,
-    DOWN,
-    RIGHT,
-    LEFT,
-    UNDEFINED
+typedef enum orient_type {
+	CENTER,
+	UP,
+	DOWN,
+	RIGHT,
+	LEFT,
+	UNDEFINED
 } orient;
 
 
@@ -93,8 +92,8 @@ extern void curses_display_file(const char *filename, bool must_exist);
 extern void curses_start_menu(winid wid);
 
 extern void curses_add_menu(winid wid, int glyph, const anything * identifier,
-		char accelerator, char group_accel, int attr,
-		const char *str, bool presel);
+                            char accelerator, char group_accel, int attr,
+                            const char *str, bool presel);
 
 extern void curses_end_menu(winid wid, const char *prompt);
 
@@ -152,7 +151,7 @@ extern void curses_destroy_win(WINDOW *win);
 extern WINDOW *curses_get_nhwin(winid wid);
 
 extern void curses_add_nhwin(winid wid, int height, int width, int y,
- int x, orient orientation, bool border);
+                             int x, orient orientation, bool border);
 
 extern void curses_add_wid(winid wid);
 
@@ -187,7 +186,7 @@ extern void curses_alert_main_borders(bool onoff);
 extern void curses_draw_map(int sx, int sy, int ex, int ey);
 
 extern bool curses_map_borders(int *sx, int *sy, int *ex, int *ey,
- int ux, int uy);
+                               int ux, int uy);
 
 
 /* cursmisc.c */
@@ -245,8 +244,8 @@ extern int curses_ext_cmd(void);
 extern void curses_create_nhmenu(winid wid);
 extern bool get_menu_coloring(char *, int *, attr_t *);
 extern void curses_add_nhmenu_item(winid wid, int glyph, const anything *identifier,
- char accelerator, char group_accel, int attr, const char *str,
- bool presel);
+                                   char accelerator, char group_accel, int attr, const char *str,
+                                   bool presel);
 
 extern void curses_finalize_nhmenu(winid wid, const char *prompt);
 

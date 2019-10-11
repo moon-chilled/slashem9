@@ -9,21 +9,21 @@ typedef int winid;              /* a window identifier */
 
 /* generic parameter - must not be any larger than a pointer */
 typedef union {
-    void *a_void;
-    struct obj *a_obj;
-    struct monst *a_monst;
-    int  a_int;
-    uint a_uint;
-    char a_char;
-    schar a_schar;
-    /* add types as needed */
+	void *a_void;
+	struct obj *a_obj;
+	struct monst *a_monst;
+	int  a_int;
+	uint a_uint;
+	char a_char;
+	schar a_schar;
+	/* add types as needed */
 } anything;
 #define anything_zero ((anything){0})
 
 /* menu return list */
 typedef struct {
-    anything item;		/* identifier */
-    long count;			/* count */
+	anything item;		/* identifier */
+	long count;			/* count */
 } menu_item;
 
 /* select_menu() "how" argument types */

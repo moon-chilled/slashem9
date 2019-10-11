@@ -19,13 +19,13 @@ static boolean no_bones_level(d_level *lev) {
 	if (ledger_no(&save_dlevel)) assign_level(lev, &save_dlevel);
 
 	return ((sptr = Is_special(lev)) != 0 && !sptr->boneid)
-		|| !dungeons[lev->dnum].boneid
-		   /* no bones on the last or multiway branch levels */
-		   /* in any dungeon (level 1 isn't multiway).       */
-		|| Is_botlevel(lev) || (Is_branchlev(lev) && lev->dlevel > 1)
-		|| (lev->dlevel < 2)  /* no bones on 1st level */
-		   /* no bones in the invocation level               */
-		|| (In_hell(lev) && lev->dlevel == dunlevs_in_dungeon(lev) - 1);
+	       || !dungeons[lev->dnum].boneid
+	       /* no bones on the last or multiway branch levels */
+	       /* in any dungeon (level 1 isn't multiway).       */
+	       || Is_botlevel(lev) || (Is_branchlev(lev) && lev->dlevel > 1)
+	       || (lev->dlevel < 2)  /* no bones on 1st level */
+	       /* no bones in the invocation level               */
+	       || (In_hell(lev) && lev->dlevel == dunlevs_in_dungeon(lev) - 1);
 }
 
 /* Call this function for each fruit object saved in the bones level: it marks
@@ -49,13 +49,13 @@ static void resetobjs(struct obj *ochain, boolean restore) {
 
 	for (otmp = ochain; otmp; otmp = otmp->nobj) {
 		if (otmp->cobj)
-		    resetobjs(otmp->cobj,restore);
+			resetobjs(otmp->cobj,restore);
 
 		if (((otmp->otyp != CORPSE || otmp->corpsenm < SPECIAL_PM)
-			&& otmp->otyp != STATUE)
-			&& (!otmp->oartifact ||
-			   (restore && (exist_artifact(otmp->otyp, ONAME(otmp))
-					|| is_quest_artifact(otmp))))) {
+		                && otmp->otyp != STATUE)
+		                && (!otmp->oartifact ||
+		                    (restore && (exist_artifact(otmp->otyp, ONAME(otmp))
+		                                 || is_quest_artifact(otmp))))) {
 			otmp->oartifact = 0;
 			otmp->onamelth = 0;
 			*ONAME(otmp) = '\0';
@@ -77,41 +77,41 @@ static void resetobjs(struct obj *ochain, boolean restore) {
 #endif
 			else if (otmp->otyp == EGG) otmp->spe = 0;
 			else if (otmp->otyp == TIN) {
-			    /* make tins of unique monster's meat be empty */
-			    if (otmp->corpsenm >= LOW_PM &&
-				    (mons[otmp->corpsenm].geno & G_UNIQ))
-				otmp->corpsenm = NON_PM;
+				/* make tins of unique monster's meat be empty */
+				if (otmp->corpsenm >= LOW_PM &&
+				                (mons[otmp->corpsenm].geno & G_UNIQ))
+					otmp->corpsenm = NON_PM;
 			} else if (otmp->otyp == AMULET_OF_YENDOR) {
-			    /* no longer the real Amulet */
-			    otmp->otyp = FAKE_AMULET_OF_YENDOR;
-			    curse(otmp);
+				/* no longer the real Amulet */
+				otmp->otyp = FAKE_AMULET_OF_YENDOR;
+				curse(otmp);
 			} else if (otmp->otyp == CANDELABRUM_OF_INVOCATION) {
-			    if (otmp->lamplit)
-				end_burn(otmp, true);
-			    otmp->otyp = WAX_CANDLE;
-			    otmp->age = 50L;  /* assume used */
-			    if (otmp->spe > 0)
-				otmp->quan = (long)otmp->spe;
-			    otmp->spe = 0;
-			    otmp->owt = weight(otmp);
-			    curse(otmp);
+				if (otmp->lamplit)
+					end_burn(otmp, true);
+				otmp->otyp = WAX_CANDLE;
+				otmp->age = 50L;  /* assume used */
+				if (otmp->spe > 0)
+					otmp->quan = (long)otmp->spe;
+				otmp->spe = 0;
+				otmp->owt = weight(otmp);
+				curse(otmp);
 			} else if (otmp->otyp == BELL_OF_OPENING) {
-			    otmp->otyp = BELL;
-			    curse(otmp);
+				otmp->otyp = BELL;
+				curse(otmp);
 			} else if (otmp->otyp == SPE_BOOK_OF_THE_DEAD) {
-			    otmp->otyp = SPE_BLANK_PAPER;
-			    curse(otmp);
+				otmp->otyp = SPE_BLANK_PAPER;
+				curse(otmp);
 			} else if (otmp->oartifact == ART_KEY_OF_LAW ||
-				   otmp->oartifact == ART_KEY_OF_NEUTRALITY ||
-				   otmp->oartifact == ART_KEY_OF_CHAOS ||
-				   otmp->oartifact == ART_NIGHTHORN ||
-				   otmp->oartifact == ART_EYE_OF_THE_BEHOLDER ||
-				   otmp->oartifact == ART_HAND_OF_VECNA ||
-				   otmp->oartifact == ART_THIEFBANE) {
-			    /* Guaranteed artifacts become ordinary objects */
-			    otmp->oartifact = 0;
-			    otmp->onamelth = 0;
-			    *ONAME(otmp) = '\0';
+			                otmp->oartifact == ART_KEY_OF_NEUTRALITY ||
+			                otmp->oartifact == ART_KEY_OF_CHAOS ||
+			                otmp->oartifact == ART_NIGHTHORN ||
+			                otmp->oartifact == ART_EYE_OF_THE_BEHOLDER ||
+			                otmp->oartifact == ART_HAND_OF_VECNA ||
+			                otmp->oartifact == ART_THIEFBANE) {
+				/* Guaranteed artifacts become ordinary objects */
+				otmp->oartifact = 0;
+				otmp->onamelth = 0;
+				*ONAME(otmp) = '\0';
 			}
 		}
 	}
@@ -128,7 +128,7 @@ static void drop_upon_death(struct monst *mtmp, struct obj *cont) {
 		otmp->owornmask = 0;
 		/* lamps don't go out when dropped */
 		if ((cont || artifact_light(otmp)) && obj_is_burning(otmp))
-		    end_burn(otmp, true);	/* smother in statue */
+			end_burn(otmp, true);	/* smother in statue */
 
 		if(otmp->otyp == SLIME_MOLD) goodfruit(otmp->spe);
 
@@ -152,24 +152,24 @@ boolean can_make_bones(void) {
 #endif
 
 	if (ledger_no(&u.uz) <= 0 || ledger_no(&u.uz) > maxledgerno())
-	    return false;
+		return false;
 	if (no_bones_level(&u.uz))
-	    return false;		/* no bones for specific levels */
+		return false;		/* no bones for specific levels */
 	if (u.uswallow) {
-	    return false;		/* no bones when swallowed */
+		return false;		/* no bones when swallowed */
 	}
 	if (!Is_branchlev(&u.uz)) {
-	    /* no bones on non-branches with portals */
-	    for(ttmp = ftrap; ttmp; ttmp = ttmp->ntrap)
-		if (ttmp->ttyp == MAGIC_PORTAL) return false;
+		/* no bones on non-branches with portals */
+		for(ttmp = ftrap; ttmp; ttmp = ttmp->ntrap)
+			if (ttmp->ttyp == MAGIC_PORTAL) return false;
 	}
 
 	/* Several variant authors have experimented with bones probabilities */
 	/* KMH -- Restored to NetHack's chances, to limit abuse and for fairness */
 	/* to both low-level and high-level characters */
 	if(depth(&u.uz) <= 0 ||		/* bulletproofing for endgame */
-	   (!rn2(1 + (depth(&u.uz)>>2))	/* fewer ghosts on low levels */
-		&& !wizard)) return false;
+	                (!rn2(1 + (depth(&u.uz)>>2))	/* fewer ghosts on low levels */
+	                 && !wizard)) return false;
 
 	/* don't let multiple restarts generate multiple copies of objects
 	 * in bones files */
@@ -194,10 +194,10 @@ void savebones(struct obj *corpse) {
 	if (fd >= 0) {
 		close(fd);
 		if (wizard) {
-		    if (yn("Bones file already exists.  Replace it?") == 'y') {
-			if (delete_bonesfile(&u.uz)) goto make_bones;
-			else pline("Cannot unlink old bones.");
-		    }
+			if (yn("Bones file already exists.  Replace it?") == 'y') {
+				if (delete_bonesfile(&u.uz)) goto make_bones;
+				else pline("Cannot unlink old bones.");
+			}
 		}
 		return;
 	}
@@ -206,36 +206,36 @@ make_bones:
 	unleash_all();
 	/* in case these characters are not in their home bases */
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-	    if (DEADMONSTER(mtmp)) continue;
-	    mptr = mtmp->data;
-	    if (mtmp->iswiz || mptr == &mons[PM_MEDUSA] ||
-		    mptr->msound == MS_NEMESIS || mptr->msound == MS_LEADER ||
-		    mptr == &mons[PM_VLAD_THE_IMPALER] ||
-		    mptr == &mons[PM_NIGHTMARE] ||
-		    mptr == &mons[PM_BEHOLDER] || mptr == &mons[PM_VECNA] ||
-		    mptr == &mons[PM_CTHULHU]) {
-		/* Since these monsters may be carrying indestructible
-		 * artifacts, free inventory specifically here to avoid
-		 * the indestructible sanity check in discard_minvent.
-		 * Similar considerations cause the necessity to avoid
-		 * calling delete_contents on containers which are
-		 * directly in a monster's inventory (indestructable
-		 * objects would be dropped on the floor).
-		 */
-		struct obj *otmp, *curr;
-	    	while ((otmp = mtmp->minvent) != 0) {
-		    while (Has_contents(otmp)) {
-			while (Has_contents(otmp->cobj))
-			    delete_contents(otmp->cobj);
-			curr = otmp->cobj;
-			obj_extract_self(curr);
-			obfree(curr, NULL);
-		    }
-		    obj_extract_self(otmp);
-		    obfree(otmp, NULL);
+		if (DEADMONSTER(mtmp)) continue;
+		mptr = mtmp->data;
+		if (mtmp->iswiz || mptr == &mons[PM_MEDUSA] ||
+		                mptr->msound == MS_NEMESIS || mptr->msound == MS_LEADER ||
+		                mptr == &mons[PM_VLAD_THE_IMPALER] ||
+		                mptr == &mons[PM_NIGHTMARE] ||
+		                mptr == &mons[PM_BEHOLDER] || mptr == &mons[PM_VECNA] ||
+		                mptr == &mons[PM_CTHULHU]) {
+			/* Since these monsters may be carrying indestructible
+			 * artifacts, free inventory specifically here to avoid
+			 * the indestructible sanity check in discard_minvent.
+			 * Similar considerations cause the necessity to avoid
+			 * calling delete_contents on containers which are
+			 * directly in a monster's inventory (indestructable
+			 * objects would be dropped on the floor).
+			 */
+			struct obj *otmp, *curr;
+			while ((otmp = mtmp->minvent) != 0) {
+				while (Has_contents(otmp)) {
+					while (Has_contents(otmp->cobj))
+						delete_contents(otmp->cobj);
+					curr = otmp->cobj;
+					obj_extract_self(curr);
+					obfree(curr, NULL);
+				}
+				obj_extract_self(otmp);
+				obfree(otmp, NULL);
+			}
+			mongone(mtmp);
 		}
-		mongone(mtmp);
-	    }
 	}
 
 	if (u.usteed) dismount_steed(DISMOUNT_BONES);
@@ -256,7 +256,7 @@ make_bones:
 
 		/* embed your possessions in your statue */
 		otmp = mk_named_object(STATUE, &mons[u.umonnum],
-				       u.ux, u.uy, plname);
+		                       u.ux, u.uy, plname);
 
 		drop_upon_death(NULL, otmp);
 		if (!otmp) return;	/* couldn't make statue */
@@ -286,7 +286,7 @@ make_bones:
 		mtmp = christen_monst(mtmp, plname);
 		newsym(u.ux, u.uy);
 		pline("Your body rises from the dead as %s...",
-			an(mons[u.ugrave_arise].mname));
+		      an(mons[u.ugrave_arise].mname));
 		display_nhwindow(WIN_MESSAGE, false);
 		drop_upon_death(mtmp, NULL);
 		m_dowear(mtmp, true);
@@ -315,10 +315,10 @@ make_bones:
 
 	/* Clear all memory from the level. */
 	for(x=0; x<COLNO; x++) for(y=0; y<ROWNO; y++) {
-	    levl[x][y].seenv = 0;
-	    levl[x][y].waslit = 0;
-	    clear_memory_glyph(x, y, S_stone);
-	}
+			levl[x][y].seenv = 0;
+			levl[x][y].waslit = 0;
+			clear_memory_glyph(x, y, S_stone);
+		}
 
 	fd = create_bonesfile(&u.uz, &bonesid, whynot);
 	if(fd < 0) {
@@ -362,8 +362,8 @@ int getbones(void) {
 	if (fd < 0) return 0;
 
 	if ((ok = uptodate(fd, bones)) == 0) {
-	    if (!wizard)
-		pline("Discarding unuseable bones; no need to panic...");
+		if (!wizard)
+			pline("Discarding unuseable bones; no need to panic...");
 	} else {
 		if(wizard)  {
 			if(yn("Get bones?") == 'n') {
@@ -377,7 +377,7 @@ int getbones(void) {
 			char errbuf[BUFSZ];
 
 			sprintf(errbuf, "This is bones level '%s', not '%s'!",
-				oldbonesid, bonesid);
+			        oldbonesid, bonesid);
 			if (wizard) {
 				pline("%s", errbuf);
 				ok = false;	/* won't die of trickery */
@@ -396,16 +396,16 @@ int getbones(void) {
 			 * set to the magic DEFUNCT_MONSTER cookie value.
 			 */
 			for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-			    if (mtmp->mhpmax == DEFUNCT_MONSTER) {
+				if (mtmp->mhpmax == DEFUNCT_MONSTER) {
 #ifdef DEBUG
-				if (wizard)
-				    pline("Removing defunct monster %s from bones.",
-					mtmp->data->mname);
+					if (wizard)
+						pline("Removing defunct monster %s from bones.",
+						      mtmp->data->mname);
 #endif
-				mongone(mtmp);
-			    } else
-				/* to correctly reset named artifacts on the level */
-				resetobjs(mtmp->minvent,true);
+					mongone(mtmp);
+				} else
+					/* to correctly reset named artifacts on the level */
+					resetobjs(mtmp->minvent,true);
 			}
 			resetobjs(fobj,true);
 			resetobjs(level.buriedobjlist,true);

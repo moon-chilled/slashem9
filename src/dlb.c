@@ -19,15 +19,15 @@
  */
 
 typedef struct dlb_procs {
-    boolean (*dlb_init_proc)(void);
-    void (*dlb_cleanup_proc)(void);
-    boolean (*dlb_fopen_proc)(dlb*,const char *,const char *);
-    int (*dlb_fclose_proc)(dlb*);
-    int (*dlb_fread_proc)(char *,int,int,dlb*);
-    int (*dlb_fseek_proc)(dlb*,long,int);
-    char *(*dlb_fgets_proc)(char *,int,dlb*);
-    int (*dlb_fgetc_proc)(dlb*);
-    long (*dlb_ftell_proc)(dlb*);
+	boolean (*dlb_init_proc)(void);
+	void (*dlb_cleanup_proc)(void);
+	boolean (*dlb_fopen_proc)(dlb*,const char *,const char *);
+	int (*dlb_fclose_proc)(dlb*);
+	int (*dlb_fread_proc)(char *,int,int,dlb*);
+	int (*dlb_fseek_proc)(dlb*,long,int);
+	char *(*dlb_fgets_proc)(char *,int,dlb*);
+	int (*dlb_fgetc_proc)(dlb*);
+	long (*dlb_ftell_proc)(dlb*);
 } dlb_procs_t;
 
 /* without extern.h via hack.h, these haven't been declared for us */
@@ -55,7 +55,7 @@ static library dlb_libs[MAX_LIBS];
 
 static boolean readlibdir(library *lp);
 static boolean find_file(const char *name, library **lib, long *startp,
-								long *sizep);
+                         long *sizep);
 static boolean lib_dlb_init(void);
 static void lib_dlb_cleanup(void);
 static boolean lib_dlb_fopen(dlb *, const char *, const char *);
@@ -118,44 +118,44 @@ extern char *eos(char *);
  * Return true on success, false on failure.
  */
 static boolean readlibdir(library *lp) {
-    int i;
-    char *sp;
-    long liboffset, totalsize;
+	int i;
+	char *sp;
+	long liboffset, totalsize;
 
-    if (fscanf(lp->fdata, "%ld %ld %ld %ld %ld\n",
-	    &lp->rev,&lp->nentries,&lp->strsize,&liboffset,&totalsize) != 5)
-	return false;
-    if (lp->rev > DLB_MAX_VERS || lp->rev < DLB_MIN_VERS) return false;
+	if (fscanf(lp->fdata, "%ld %ld %ld %ld %ld\n",
+	                &lp->rev,&lp->nentries,&lp->strsize,&liboffset,&totalsize) != 5)
+		return false;
+	if (lp->rev > DLB_MAX_VERS || lp->rev < DLB_MIN_VERS) return false;
 
-    lp->dir = alloc(lp->nentries * sizeof(libdir));
-    lp->sspace = alloc(lp->strsize);
+	lp->dir = alloc(lp->nentries * sizeof(libdir));
+	lp->sspace = alloc(lp->strsize);
 
-    /* read in each directory entry */
-    for (i = 0, sp = lp->sspace; i < lp->nentries; i++) {
-	lp->dir[i].fname = sp;
-	if (fscanf(lp->fdata, "%c%s %ld\n",
-			&lp->dir[i].handling, sp, &lp->dir[i].foffset) != 3) {
-	    free(lp->dir);
-	    free(lp->sspace);
-	    lp->dir = NULL;
-	    lp->sspace = NULL;
-	    return false;
+	/* read in each directory entry */
+	for (i = 0, sp = lp->sspace; i < lp->nentries; i++) {
+		lp->dir[i].fname = sp;
+		if (fscanf(lp->fdata, "%c%s %ld\n",
+		                &lp->dir[i].handling, sp, &lp->dir[i].foffset) != 3) {
+			free(lp->dir);
+			free(lp->sspace);
+			lp->dir = NULL;
+			lp->sspace = NULL;
+			return false;
+		}
+		sp = eos(sp) + 1;
 	}
-	sp = eos(sp) + 1;
-    }
 
-    /* calculate file sizes using offset information */
-    for (i = 0; i < lp->nentries; i++) {
-	if (i == lp->nentries - 1)
-	    lp->dir[i].fsize = totalsize - lp->dir[i].foffset;
-	else
-	    lp->dir[i].fsize = lp->dir[i+1].foffset - lp->dir[i].foffset;
-    }
+	/* calculate file sizes using offset information */
+	for (i = 0; i < lp->nentries; i++) {
+		if (i == lp->nentries - 1)
+			lp->dir[i].fsize = totalsize - lp->dir[i].foffset;
+		else
+			lp->dir[i].fsize = lp->dir[i+1].foffset - lp->dir[i].foffset;
+	}
 
-    fseek(lp->fdata, 0L, SEEK_SET);	/* reset back to zero */
-    lp->fmark = 0;
+	fseek(lp->fdata, 0L, SEEK_SET);	/* reset back to zero */
+	lp->fmark = 0;
 
-    return true;
+	return true;
 }
 
 /*
@@ -163,23 +163,23 @@ static boolean readlibdir(library *lp) {
  * 0 if not found.  Fill in the size and starting position.
  */
 static boolean find_file(const char *name, library **lib, long *startp, long *sizep) {
-    int i, j;
-    library *lp;
+	int i, j;
+	library *lp;
 
-    for (i = 0; i < MAX_LIBS && dlb_libs[i].fdata; i++) {
-	lp = &dlb_libs[i];
-	for (j = 0; j < lp->nentries; j++) {
-	    if (FILENAME_CMP(name, lp->dir[j].fname) == 0) {
-		*lib = lp;
-		*startp = lp->dir[j].foffset;
-		*sizep = lp->dir[j].fsize;
-		return true;
-	    }
+	for (i = 0; i < MAX_LIBS && dlb_libs[i].fdata; i++) {
+		lp = &dlb_libs[i];
+		for (j = 0; j < lp->nentries; j++) {
+			if (FILENAME_CMP(name, lp->dir[j].fname) == 0) {
+				*lib = lp;
+				*startp = lp->dir[j].foffset;
+				*sizep = lp->dir[j].fsize;
+				return true;
+			}
+		}
 	}
-    }
-    *lib = NULL;
-    *startp = *sizep = 0;
-    return false;
+	*lib = NULL;
+	*startp = *sizep = 0;
+	return false;
 }
 
 /*
@@ -187,26 +187,26 @@ static boolean find_file(const char *name, library **lib, long *startp, long *si
  * structure.  Return true if successful, false otherwise.
  */
 boolean open_library(const char *lib_name, library *lp) {
-    boolean status = false;
+	boolean status = false;
 
-    lp->fdata = fopen_datafile(lib_name, RDBMODE, DATAPREFIX);
-    if (lp->fdata) {
-	if (readlibdir(lp)) {
-	    status = true;
-	} else {
-	    fclose(lp->fdata);
-	    lp->fdata = NULL;
+	lp->fdata = fopen_datafile(lib_name, RDBMODE, DATAPREFIX);
+	if (lp->fdata) {
+		if (readlibdir(lp)) {
+			status = true;
+		} else {
+			fclose(lp->fdata);
+			lp->fdata = NULL;
+		}
 	}
-    }
-    return status;
+	return status;
 }
 
 void close_library(library *lp) {
-    fclose(lp->fdata);
-    free(lp->dir);
-    free(lp->sspace);
+	fclose(lp->fdata);
+	free(lp->dir);
+	free(lp->sspace);
 
-    memset(lp, 0, sizeof(library));
+	memset(lp, 0, sizeof(library));
 }
 
 /*
@@ -214,147 +214,153 @@ void close_library(library *lp) {
  * keep track of the file position.
  */
 static boolean lib_dlb_init(void) {
-    // zero out array
-    memset(&dlb_libs[0], 0, sizeof(dlb_libs));
+	// zero out array
+	memset(&dlb_libs[0], 0, sizeof(dlb_libs));
 
-    // To open more than one library, add open library calls here
-    if (!open_library(DLBFILE, &dlb_libs[0])) {
-	    return false;
-    }
+	// To open more than one library, add open library calls here
+	if (!open_library(DLBFILE, &dlb_libs[0])) {
+		return false;
+	}
 
-    return true;
+	return true;
 }
 
 static void lib_dlb_cleanup(void) {
-    int i;
+	int i;
 
-    /* close the data file(s) */
-    for (i = 0; i < MAX_LIBS && dlb_libs[i].fdata; i++)
-	close_library(&dlb_libs[i]);
+	/* close the data file(s) */
+	for (i = 0; i < MAX_LIBS && dlb_libs[i].fdata; i++)
+		close_library(&dlb_libs[i]);
 }
 
 static boolean lib_dlb_fopen(dlb *dp, const char *name, const char *mode) {
-    long start, size;
-    library *lp;
+	long start, size;
+	library *lp;
 
-    /* look up file in directory */
-    if (find_file(name, &lp, &start, &size)) {
-	dp->lib = lp;
-	dp->start = start;
-	dp->size = size;
-	dp->mark = 0;
-	return true;
+	/* look up file in directory */
+	if (find_file(name, &lp, &start, &size)) {
+		dp->lib = lp;
+		dp->start = start;
+		dp->size = size;
+		dp->mark = 0;
+		return true;
 	}
 
-    return false;	/* failed */
+	return false;	/* failed */
 }
 
 static int lib_dlb_fclose(dlb *dp) {
-    /* nothing needs to be done */
-    return 0;
+	/* nothing needs to be done */
+	return 0;
 }
 
 static int lib_dlb_fread(char *buf, int size, int quan, dlb *dp) {
-    long pos, nread, nbytes;
+	long pos, nread, nbytes;
 
-    /* make sure we don't read into the next file */
-    if ((dp->size - dp->mark) < (size * quan))
-	quan = (dp->size - dp->mark) / size;
-    if (quan == 0) return 0;
+	/* make sure we don't read into the next file */
+	if ((dp->size - dp->mark) < (size * quan))
+		quan = (dp->size - dp->mark) / size;
+	if (quan == 0) return 0;
 
-    pos = dp->start + dp->mark;
-    if (dp->lib->fmark != pos) {
-	fseek(dp->lib->fdata, pos, SEEK_SET);	/* check for error??? */
-	dp->lib->fmark = pos;
-    }
+	pos = dp->start + dp->mark;
+	if (dp->lib->fmark != pos) {
+		fseek(dp->lib->fdata, pos, SEEK_SET);	/* check for error??? */
+		dp->lib->fmark = pos;
+	}
 
-    nread = fread(buf, size, quan, dp->lib->fdata);
-    nbytes = nread * size;
-    dp->mark += nbytes;
-    dp->lib->fmark += nbytes;
+	nread = fread(buf, size, quan, dp->lib->fdata);
+	nbytes = nread * size;
+	dp->mark += nbytes;
+	dp->lib->fmark += nbytes;
 
-    return nread;
+	return nread;
 }
 
 static int lib_dlb_fseek(dlb *dp, long pos, int whence) {
-    long curpos;
+	long curpos;
 
-    switch (whence) {
-	case SEEK_CUR:	   curpos = dp->mark + pos;	break;
-	case SEEK_END:	   curpos = dp->size - pos;	break;
-	default: /* set */ curpos = pos;		break;
-    }
-    if (curpos < 0) curpos = 0;
-    if (curpos > dp->size) curpos = dp->size;
+	switch (whence) {
+	case SEEK_CUR:
+		curpos = dp->mark + pos;
+		break;
+	case SEEK_END:
+		curpos = dp->size - pos;
+		break;
+	default: /* set */
+		curpos = pos;
+		break;
+	}
+	if (curpos < 0) curpos = 0;
+	if (curpos > dp->size) curpos = dp->size;
 
-    dp->mark = curpos;
-    return 0;
+	dp->mark = curpos;
+	return 0;
 }
 
 static char *lib_dlb_fgets(char *buf, int len, dlb *dp) {
-    int i;
-    char *bp, c = 0;
+	int i;
+	char *bp, c = 0;
 
-    if (len <= 0) return buf;	/* sanity check */
+	if (len <= 0) return buf;	/* sanity check */
 
-    /* return NULL on EOF */
-    if (dp->mark >= dp->size) return NULL;
+	/* return NULL on EOF */
+	if (dp->mark >= dp->size) return NULL;
 
-    len--;	/* save room for null */
-    for (i = 0, bp = buf;
-		i < len && dp->mark < dp->size && c != '\n'; i++, bp++) {
-	if (dlb_fread(bp, 1, 1, dp) <= 0) break;	/* EOF or error */
-	c = *bp;
-    }
-    *bp = '\0';
+	len--;	/* save room for null */
+	for (i = 0, bp = buf;
+	                i < len && dp->mark < dp->size && c != '\n'; i++, bp++) {
+		if (dlb_fread(bp, 1, 1, dp) <= 0) break;	/* EOF or error */
+		c = *bp;
+	}
+	*bp = '\0';
 
 #ifdef WIN32
-    if ((bp = index(buf, '\r')) != 0) {
-	*bp++ = '\n';
-	*bp = '\0';
-    }
+	if ((bp = index(buf, '\r')) != 0) {
+		*bp++ = '\n';
+		*bp = '\0';
+	}
 #endif
 
-    return buf;
+	return buf;
 }
 
 static int lib_dlb_fgetc(dlb *dp) {
-    char c;
+	char c;
 
-    if (lib_dlb_fread(&c, 1, 1, dp) != 1) return EOF;
-    return c;
+	if (lib_dlb_fread(&c, 1, 1, dp) != 1) return EOF;
+	return c;
 }
 
 
 static long lib_dlb_ftell(dlb *dp) {
-    return dp->mark;
+	return dp->mark;
 }
 
 const dlb_procs_t lib_dlb_procs = {
-    lib_dlb_init,
-    lib_dlb_cleanup,
-    lib_dlb_fopen,
-    lib_dlb_fclose,
-    lib_dlb_fread,
-    lib_dlb_fseek,
-    lib_dlb_fgets,
-    lib_dlb_fgetc,
-    lib_dlb_ftell
+	lib_dlb_init,
+	lib_dlb_cleanup,
+	lib_dlb_fopen,
+	lib_dlb_fclose,
+	lib_dlb_fread,
+	lib_dlb_fseek,
+	lib_dlb_fgets,
+	lib_dlb_fgetc,
+	lib_dlb_ftell
 };
 
 #endif /* DLBLIB */
 
 #ifdef DLBRSRC
 const dlb_procs_t rsrc_dlb_procs = {
-    rsrc_dlb_init,
-    rsrc_dlb_cleanup,
-    rsrc_dlb_fopen,
-    rsrc_dlb_fclose,
-    rsrc_dlb_fread,
-    rsrc_dlb_fseek,
-    rsrc_dlb_fgets,
-    rsrc_dlb_fgetc,
-    rsrc_dlb_ftell
+	rsrc_dlb_init,
+	rsrc_dlb_cleanup,
+	rsrc_dlb_fopen,
+	rsrc_dlb_fclose,
+	rsrc_dlb_fread,
+	rsrc_dlb_fseek,
+	rsrc_dlb_fgets,
+	rsrc_dlb_fgetc,
+	rsrc_dlb_ftell
 };
 #endif
 
@@ -374,89 +380,89 @@ static const dlb_procs_t *dlb_procs;
 static boolean dlb_initialized = false;
 
 boolean dlb_init(void) {
-    if (!dlb_initialized) {
+	if (!dlb_initialized) {
 #ifdef DLBLIB
-	dlb_procs = &lib_dlb_procs;
+		dlb_procs = &lib_dlb_procs;
 #endif
 #ifdef DLBRSRC
-	dlb_procs = &rsrc_dlb_procs;
+		dlb_procs = &rsrc_dlb_procs;
 #endif
 
-	if (dlb_procs)
-	    dlb_initialized = do_dlb_init();
-    }
+		if (dlb_procs)
+			dlb_initialized = do_dlb_init();
+	}
 
-    return dlb_initialized;
+	return dlb_initialized;
 }
 
 void dlb_cleanup(void) {
-    if (dlb_initialized) {
-	do_dlb_cleanup();
-	dlb_initialized = false;
-    }
+	if (dlb_initialized) {
+		do_dlb_cleanup();
+		dlb_initialized = false;
+	}
 }
 
 
 dlb *dlb_fopen(const char *name, const char *mode) {
-    FILE *fp;
-    dlb *dp;
+	FILE *fp;
+	dlb *dp;
 
-    if (!dlb_initialized) return NULL;
+	if (!dlb_initialized) return NULL;
 
-    dp = alloc(sizeof(dlb));
-    if (do_dlb_fopen(dp, name, mode)) {
-    	dp->fp = NULL;
-    } else if ((fp = fopen_datafile(name, mode, DATAPREFIX)) != 0) {
-	dp->fp = fp;
-    } else {
-	    /* can't find anything */
-	    free(dp);
-	    dp = NULL;
-    }
+	dp = alloc(sizeof(dlb));
+	if (do_dlb_fopen(dp, name, mode)) {
+		dp->fp = NULL;
+	} else if ((fp = fopen_datafile(name, mode, DATAPREFIX)) != 0) {
+		dp->fp = fp;
+	} else {
+		/* can't find anything */
+		free(dp);
+		dp = NULL;
+	}
 
-    return dp;
+	return dp;
 }
 
 int dlb_fclose(dlb *dp) {
 	int ret = 0;
 
-    if (dlb_initialized) {
-	if (dp->fp) ret = fclose(dp->fp);
-	else ret = do_dlb_fclose(dp);
+	if (dlb_initialized) {
+		if (dp->fp) ret = fclose(dp->fp);
+		else ret = do_dlb_fclose(dp);
 
-	free(dp);
-    }
-    return ret;
+		free(dp);
+	}
+	return ret;
 }
 
 int dlb_fread(char *buf, int size, int quan, dlb *dp) {
-    if (!dlb_initialized || size <= 0 || quan <= 0) return 0;
-    if (dp->fp) return fread(buf, size, quan, dp->fp);
-    return do_dlb_fread(buf, size, quan, dp);
+	if (!dlb_initialized || size <= 0 || quan <= 0) return 0;
+	if (dp->fp) return fread(buf, size, quan, dp->fp);
+	return do_dlb_fread(buf, size, quan, dp);
 }
 
 int dlb_fseek(dlb *dp, long pos, int whence) {
-    if (!dlb_initialized) return EOF;
-    if (dp->fp) return fseek(dp->fp, pos, whence);
-    return do_dlb_fseek(dp, pos, whence);
+	if (!dlb_initialized) return EOF;
+	if (dp->fp) return fseek(dp->fp, pos, whence);
+	return do_dlb_fseek(dp, pos, whence);
 }
 
 char *dlb_fgets(char *buf, int len, dlb *dp) {
-    if (!dlb_initialized) return NULL;
-    if (dp->fp) return fgets(buf, len, dp->fp);
-    return do_dlb_fgets(buf, len, dp);
+	if (!dlb_initialized) return NULL;
+	if (dp->fp) return fgets(buf, len, dp->fp);
+	return do_dlb_fgets(buf, len, dp);
 }
 
 int dlb_fgetc(dlb *dp) {
-    if (!dlb_initialized) return EOF;
-    if (dp->fp) return fgetc(dp->fp);
-    return do_dlb_fgetc(dp);
+	if (!dlb_initialized) return EOF;
+	if (dp->fp) return fgetc(dp->fp);
+	return do_dlb_fgetc(dp);
 }
 
 long dlb_ftell(dlb *dp) {
-    if (!dlb_initialized) return 0;
-    if (dp->fp) return ftell(dp->fp);
-    return do_dlb_ftell(dp);
+	if (!dlb_initialized) return 0;
+	if (dp->fp) return ftell(dp->fp);
+	return do_dlb_ftell(dp);
 }
 
 #endif /* DLB */

@@ -9,9 +9,9 @@
 			  * typedef for "obj" in <sys/types.h> */
 
 union vptrs {
-	    struct obj *v_nexthere;	/* floor location lists */
-	    struct obj *v_ocontainer;	/* point back to container */
-	    struct monst *v_ocarry;	/* point back to carrying monst */
+	struct obj *v_nexthere;	/* floor location lists */
+	struct obj *v_ocontainer;	/* point back to container */
+	struct monst *v_ocarry;	/* point back to carrying monst */
 };
 
 struct obj {
@@ -43,7 +43,7 @@ struct obj {
 	char	invlet;		/* designation in inventory */
 	char	oartifact;	/* artifact array index */
 	schar 	altmode; 	/* alternate modes - eg. SMG, double Lightsaber */
-				/* WP_MODEs are in decreasing speed */
+	/* WP_MODEs are in decreasing speed */
 #define WP_MODE_AUTO	0	/* Max firing speed */
 #define WP_MODE_BURST	1	/* 1/3 of max rate */
 #define WP_MODE_SINGLE 	2	/* Single shot */
@@ -82,7 +82,7 @@ struct obj {
 #define odrained olocked	/* drained corpse */
 	bool obroken;	/* lock has been broken */
 	bool otrapped;	/* container is trapped */
-				/* or accidental tripped rolling boulder trap */
+	/* or accidental tripped rolling boulder trap */
 #define opoisoned otrapped	/* object (weapon) is coated with poison */
 
 	Bitfield(recharged,3);	/* number of times it's been recharged */

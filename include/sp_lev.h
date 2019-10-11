@@ -5,18 +5,18 @@
 #ifndef SP_LEV_H
 #define SP_LEV_H
 
-    /* wall directions */
+/* wall directions */
 #define W_NORTH		1
 #define W_SOUTH		2
 #define W_EAST		4
 #define W_WEST		8
 #define W_ANY		(W_NORTH|W_SOUTH|W_EAST|W_WEST)
 
-    /* MAP limits */
+/* MAP limits */
 #define MAP_X_LIM	76
 #define MAP_Y_LIM	21
 
-    /* Per level flags */
+/* Per level flags */
 #define NOTELEPORT	1
 #define HARDFLOOR	2
 #define NOMMAP		4
@@ -25,11 +25,11 @@
 #define SPOOKY		32
 #define LETHE		64		/* All water on level is Lethe-ized */
 
-    /* special level types */
+/* special level types */
 #define SP_LEV_ROOMS	1
 #define SP_LEV_MAZE	2
 
-    /* object flags */
+/* object flags */
 #define OBJF_LIT	1
 #define OBJF_BURIED	2
 
@@ -113,8 +113,12 @@ typedef struct {
 
 /* values for rtype are defined in dungeon.h */
 typedef struct {
-	struct { xchar x1, y1, x2, y2; } inarea;
-	struct { xchar x1, y1, x2, y2; } delarea;
+	struct {
+		xchar x1, y1, x2, y2;
+	} inarea;
+	struct {
+		xchar x1, y1, x2, y2;
+	} delarea;
 	boolean in_islev, del_islev;
 	xchar rtype, padding;
 	Str_or_Len rname;

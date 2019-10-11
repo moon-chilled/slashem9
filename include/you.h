@@ -71,7 +71,7 @@ struct u_conduct {		/* number of times... */
 	long	polyselfs;	/* transformed yourself */
 	long	wishes;		/* used a wish */
 	long	wisharti;	/* wished for an artifact */
-				/* genocides already listed at end of game */
+	/* genocides already listed at end of game */
 	long	celibacy;	/* How many times you've played around with *ubbi */
 };
 
@@ -211,7 +211,7 @@ struct Gender {
 	short allow;		/* equivalent ROLE_ mask */
 };
 #define ROLE_GENDERS	2	/* number of permitted player genders */
-				/* increment to 3 if you allow neuter roles */
+/* increment to 3 if you allow neuter roles */
 
 extern const struct Gender genders[];	/* table of available genders */
 #define uhe()	(genders[flags.female ? 1 : 0].he)
@@ -247,7 +247,7 @@ struct you {
 	uchar utotype;		/* bitmask of goto_level() flags for utolev */
 	boolean umoved;		/* changed map location (post-move) */
 	int last_str_turn;	/* 0: none, 1: half turn, 2: full turn */
-				/* +: turn right, -: turn left */
+	/* +: turn right, -: turn left */
 	int ulevel;		/* 1 to MAXULEV */
 	int ulevelmax;		/* Maximmum level achieved */
 	unsigned utrap;		/* trap timeout */
@@ -296,7 +296,7 @@ struct you {
 
 	int mh, mhmax, mtimedone;	/* for polymorph-self */
 	struct attribs	macurr,		/* for monster attribs */
-			mamax;		/* for monster attribs */
+		        mamax;		/* for monster attribs */
 	int ulycn;			/* lycanthrope type */
 
 	unsigned ucreamed;
@@ -317,11 +317,11 @@ struct you {
 	struct u_event	uevent;		/* certain events have happened */
 	struct u_have	uhave;		/* you're carrying special objects */
 	struct attribs	acurr,		/* your current attributes (eg. str)*/
-			aexe,		/* for gain/loss via "exercise" */
-			abon,		/* your bonus attributes (eg. str) */
-			amax,		/* your max attributes (eg. str) */
-			atemp,		/* used for temporary loss/gain */
-			atime;		/* used for loss/gain countdown */
+		        aexe,		/* for gain/loss via "exercise" */
+		        abon,		/* your bonus attributes (eg. str) */
+		        amax,		/* your max attributes (eg. str) */
+		        atemp,		/* used for temporary loss/gain */
+		        atime;		/* used for loss/gain countdown */
 	align	ualign;			/* character alignment */
 #define CONVERT		2
 #define A_ORIGINAL	1

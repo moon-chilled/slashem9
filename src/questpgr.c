@@ -41,7 +41,7 @@ static void dump_qtlist(void) {
 
 	for (msg = qt_list.chrole; msg->msgnum > 0; msg++) {
 		pline("msgnum %d: delivery %c",
-			msg->msgnum, msg->delivery);
+		      msg->msgnum, msg->delivery);
 		more();
 		dlb_fseek(msg_file, msg->offset, SEEK_SET);
 		deliver_by_window(msg, NHW_TEXT);
@@ -53,7 +53,7 @@ static void Fread(void *ptr, int size, int nitems, dlb *stream) {
 	int cnt;
 
 	if ((cnt = dlb_fread(ptr, size, nitems, stream)) != nitems) {
-	    panic("PREMATURE EOF ON QUEST TEXT FILE! Expected %d bytes, got %d", (size * nitems), (size * cnt));
+		panic("PREMATURE EOF ON QUEST TEXT FILE! Expected %d bytes, got %d", (size * nitems), (size * cnt));
 	}
 }
 
@@ -64,7 +64,7 @@ static struct qtmsg *construct_qtlist(long hdr_offset) {
 	dlb_fseek(msg_file, hdr_offset, SEEK_SET);
 	Fread(&n_msgs, sizeof(int), 1, msg_file);
 	msg_list = (struct qtmsg *)
-		alloc((unsigned)(n_msgs+1)*sizeof(struct qtmsg));
+	           alloc((unsigned)(n_msgs+1)*sizeof(struct qtmsg));
 
 	/*
 	 * Load up the list.
@@ -82,7 +82,7 @@ void load_qtlist(void) {
 
 	msg_file = dlb_fopen(QTEXT_FILE, RDBMODE);
 	if (!msg_file)
-	    panic("CANNOT OPEN QUEST TEXT FILE %s.", QTEXT_FILE);
+		panic("CANNOT OPEN QUEST TEXT FILE %s.", QTEXT_FILE);
 
 	/*
 	 * Read in the number of classes, then the ID's & offsets for
@@ -101,18 +101,18 @@ void load_qtlist(void) {
 	qt_list.common = qt_list.chrole = NULL;
 
 	for (i = 0; i < n_classes; i++) {
-	    if (!strncmp(COMMON_ID, qt_classes[i], LEN_HDR))
-	    	qt_list.common = construct_qtlist(qt_offsets[i]);
-	    else if (!strncmp(urole.filecode, qt_classes[i], LEN_HDR))
-	    	qt_list.chrole = construct_qtlist(qt_offsets[i]);
+		if (!strncmp(COMMON_ID, qt_classes[i], LEN_HDR))
+			qt_list.common = construct_qtlist(qt_offsets[i]);
+		else if (!strncmp(urole.filecode, qt_classes[i], LEN_HDR))
+			qt_list.chrole = construct_qtlist(qt_offsets[i]);
 #if 0	/* UNUSED but available */
-	    else if (!strncmp(urace.filecode, qt_classes[i], LEN_HDR))
-	    	qt_list.chrace = construct_qtlist(qt_offsets[i]);
+		else if (!strncmp(urace.filecode, qt_classes[i], LEN_HDR))
+			qt_list.chrace = construct_qtlist(qt_offsets[i]);
 #endif
 	}
 
 	if (!qt_list.common || !qt_list.chrole)
-	    impossible("load_qtlist: cannot load quest text.");
+		impossible("load_qtlist: cannot load quest text.");
 #ifdef DEBUG
 	dump_qtlist();
 #endif
@@ -122,21 +122,26 @@ void load_qtlist(void) {
 /* called at program exit */
 void unload_qtlist(void) {
 	if (msg_file)
-	    dlb_fclose(msg_file),  msg_file = 0;
+		dlb_fclose(msg_file),  msg_file = 0;
 	if (qt_list.common)
-	    free(qt_list.common),  qt_list.common = 0;
+		free(qt_list.common),  qt_list.common = 0;
 	if (qt_list.chrole)
-	    free(qt_list.chrole),  qt_list.chrole = 0;
+		free(qt_list.chrole),  qt_list.chrole = 0;
 	return;
 }
 
 short quest_info(int typ) {
 	switch (typ) {
-	    case 0:		return urole.questarti;
-	    case MS_LEADER:	return urole.ldrnum;
-	    case MS_NEMESIS:	return urole.neminum;
-	    case MS_GUARDIAN:	return urole.guardnum;
-	    default:		impossible("quest_info(%d)", typ);
+	case 0:
+		return urole.questarti;
+	case MS_LEADER:
+		return urole.ldrnum;
+	case MS_NEMESIS:
+		return urole.neminum;
+	case MS_GUARDIAN:
+		return urole.guardnum;
+	default:
+		impossible("quest_info(%d)", typ);
 	}
 	return 0;
 }
@@ -146,8 +151,8 @@ const char *ldrname(void) {
 	int i = urole.ldrnum;
 
 	sprintf(nambuf, "%s%s",
-		type_is_pname(&mons[i]) ? "" : "the ",
-		mons[i].mname);
+	        type_is_pname(&mons[i]) ? "" : "the ",
+	        mons[i].mname);
 	return nambuf;
 }
 
@@ -165,8 +170,8 @@ static const char *neminame(void) {
 	int i = urole.neminum;
 
 	sprintf(nambuf, "%s%s",
-		type_is_pname(&mons[i]) ? "" : "the ",
-		mons[i].mname);
+	        type_is_pname(&mons[i]) ? "" : "the ",
+	        mons[i].mname);
 	return nambuf;
 }
 
@@ -186,7 +191,7 @@ static struct qtmsg *msg_in(struct qtmsg *qtm_list, int msgnum) {
 	struct qtmsg *qt_msg;
 
 	for (qt_msg = qtm_list; qt_msg->msgnum > 0; qt_msg++)
-	    if (qt_msg->msgnum == msgnum) return qt_msg;
+		if (qt_msg->msgnum == msgnum) return qt_msg;
 
 	return NULL;
 }
@@ -195,56 +200,80 @@ static void convert_arg(char c) {
 	const char *str;
 
 	switch (c) {
-	    case 'p':	str = plname;
-			break;
-	    case 'c':	str = (flags.female && urole.name.f) ?
-	    			urole.name.f : urole.name.m;
-			break;
-	    case 'r':	str = rank_of(u.ulevel, Role_switch, flags.female);
-			break;
-	    case 'R':	str = rank_of(MIN_QUEST_LEVEL, Role_switch,
-	    			flags.female);
-			break;
-	    case 's':	str = (flags.female) ? "sister" : "brother";
-			break;
-	    case 'S':	str = (flags.female) ? "daughter" : "son";
-			break;
-	    case 'l':	str = ldrname();
-			break;
-	    case 'i':	str = intermed();
-			break;
-	    case 'o':	str = the(artiname(urole.questarti));
-			break;
-	    case 'n':	str = neminame();
-			break;
-	    case 'g':	str = guardname();
-			break;
-	    case 'G':	str = align_gtitle(u.ualignbase[A_ORIGINAL]);
-			break;
-	    case 'H':	str = homebase();
-			break;
-	    case 'a':	str = align_str(u.ualignbase[A_ORIGINAL]);
-			break;
-	    case 'A':	str = align_str(u.ualign.type);
-			break;
-	    case 'd':	str = align_gname(u.ualignbase[A_ORIGINAL]);
-			break;
-	    case 'D':	str = align_gname(A_LAWFUL);
-			break;
-	    case 'C':	str = "chaotic";
-			break;
-	    case 'N':	str = "neutral";
-			break;
-	    case 'L':	str = "lawful";
-			break;
-	    case 'x':	str = Blind ? "sense" : "see";
-			break;
-	    case 'Z':	str = dungeons[0].dname;
-			break;
-	    case '%':	str = "%";
-			break;
-	    default:	str = "";
-			break;
+	case 'p':
+		str = plname;
+		break;
+	case 'c':
+		str = (flags.female && urole.name.f) ?
+		      urole.name.f : urole.name.m;
+		break;
+	case 'r':
+		str = rank_of(u.ulevel, Role_switch, flags.female);
+		break;
+	case 'R':
+		str = rank_of(MIN_QUEST_LEVEL, Role_switch,
+		              flags.female);
+		break;
+	case 's':
+		str = (flags.female) ? "sister" : "brother";
+		break;
+	case 'S':
+		str = (flags.female) ? "daughter" : "son";
+		break;
+	case 'l':
+		str = ldrname();
+		break;
+	case 'i':
+		str = intermed();
+		break;
+	case 'o':
+		str = the(artiname(urole.questarti));
+		break;
+	case 'n':
+		str = neminame();
+		break;
+	case 'g':
+		str = guardname();
+		break;
+	case 'G':
+		str = align_gtitle(u.ualignbase[A_ORIGINAL]);
+		break;
+	case 'H':
+		str = homebase();
+		break;
+	case 'a':
+		str = align_str(u.ualignbase[A_ORIGINAL]);
+		break;
+	case 'A':
+		str = align_str(u.ualign.type);
+		break;
+	case 'd':
+		str = align_gname(u.ualignbase[A_ORIGINAL]);
+		break;
+	case 'D':
+		str = align_gname(A_LAWFUL);
+		break;
+	case 'C':
+		str = "chaotic";
+		break;
+	case 'N':
+		str = "neutral";
+		break;
+	case 'L':
+		str = "lawful";
+		break;
+	case 'x':
+		str = Blind ? "sense" : "see";
+		break;
+	case 'Z':
+		str = dungeons[0].dname;
+		break;
+	case '%':
+		str = "%";
+		break;
+	default:
+		str = "";
+		break;
 	}
 	strcpy(cvt_buf, str);
 }
@@ -255,8 +284,8 @@ static void convert_line(void) {
 	cc = out_line;
 	for (c = in_line; *c; c++) {
 
-	    *cc = 0;
-	    switch(*c) {
+		*cc = 0;
+		switch(*c) {
 
 		case '\r':
 		case '\n':
@@ -265,54 +294,63 @@ static void convert_line(void) {
 
 		case '%':
 			if (*(c+1)) {
-			    convert_arg(*(++c));
-			    switch (*(++c)) {
+				convert_arg(*(++c));
+				switch (*(++c)) {
 
-					/* insert "a"/"an" prefix */
-				case 'A': strcat(cc, An(cvt_buf));
-				    cc += strlen(cc);
-				    continue; /* for */
-				case 'a': strcat(cc, an(cvt_buf));
-				    cc += strlen(cc);
-				    continue; /* for */
-
-					/* capitalize */
-				case 'C': cvt_buf[0] = highc(cvt_buf[0]);
-				    break;
-
-					/* pluralize */
-				case 'P': cvt_buf[0] = highc(cvt_buf[0]);
-				case 'p': strcpy(cvt_buf, makeplural(cvt_buf));
-				    break;
-
-					/* append possessive suffix */
-				case 'S': cvt_buf[0] = highc(cvt_buf[0]);
-				case 's': strcpy(cvt_buf, s_suffix(cvt_buf));
-				    break;
-
-					/* strip any "the" prefix */
-				case 't': if (!strncmpi(cvt_buf, "the ", 4)) {
-					strcat(cc, &cvt_buf[4]);
+				/* insert "a"/"an" prefix */
+				case 'A':
+					strcat(cc, An(cvt_buf));
 					cc += strlen(cc);
 					continue; /* for */
-				    }
-				    break;
+				case 'a':
+					strcat(cc, an(cvt_buf));
+					cc += strlen(cc);
+					continue; /* for */
 
-				default: --c;	/* undo switch increment */
-				    break;
-			    }
-			    strcat(cc, cvt_buf);
-			    cc += strlen(cvt_buf);
-			    break;
+				/* capitalize */
+				case 'C':
+					cvt_buf[0] = highc(cvt_buf[0]);
+					break;
+
+				/* pluralize */
+				case 'P':
+					cvt_buf[0] = highc(cvt_buf[0]);
+				case 'p':
+					strcpy(cvt_buf, makeplural(cvt_buf));
+					break;
+
+				/* append possessive suffix */
+				case 'S':
+					cvt_buf[0] = highc(cvt_buf[0]);
+				case 's':
+					strcpy(cvt_buf, s_suffix(cvt_buf));
+					break;
+
+				/* strip any "the" prefix */
+				case 't':
+					if (!strncmpi(cvt_buf, "the ", 4)) {
+						strcat(cc, &cvt_buf[4]);
+						cc += strlen(cc);
+						continue; /* for */
+					}
+					break;
+
+				default:
+					--c;	/* undo switch increment */
+					break;
+				}
+				strcat(cc, cvt_buf);
+				cc += strlen(cvt_buf);
+				break;
 			}	/* else fall through */
 
 		default:
 			*cc++ = *c;
 			break;
-	    }
+		}
 	}
 	if (cc >= out_line + sizeof out_line)
-	    panic("convert_line: overflow");
+		panic("convert_line: overflow");
 	*cc = 0;
 	return;
 }
@@ -321,9 +359,9 @@ static void deliver_by_pline(struct qtmsg *qt_msg) {
 	long size;
 
 	for (size = 0; size < qt_msg->size; size += (long)strlen(in_line)) {
-	    dlb_fgets(in_line, 80, msg_file);
-	    convert_line();
-	    plines(out_line);
+		dlb_fgets(in_line, 80, msg_file);
+		convert_line();
+		plines(out_line);
 	}
 
 }
@@ -333,9 +371,9 @@ static void deliver_by_window(struct qtmsg *qt_msg, int how) {
 	winid datawin = create_nhwindow(how);
 
 	for (size = 0; size < qt_msg->size; size += (long)strlen(in_line)) {
-	    dlb_fgets(in_line, 80, msg_file);
-	    convert_line();
-	    putstr(datawin, 0, out_line);
+		dlb_fgets(in_line, 80, msg_file);
+		convert_line();
+		putstr(datawin, 0, out_line);
 	}
 	display_nhwindow(datawin, true);
 	destroy_nhwindow(datawin);
@@ -375,14 +413,14 @@ struct permonst *qt_montype(void) {
 	int qpm;
 
 	if (rn2(5)) {
-	    qpm = urole.enemy1num;
-	    if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
-	    	return &mons[qpm];
-	    return mkclass(urole.enemy1sym, 0);
+		qpm = urole.enemy1num;
+		if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
+			return &mons[qpm];
+		return mkclass(urole.enemy1sym, 0);
 	}
 	qpm = urole.enemy2num;
 	if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD))
-	    return &mons[qpm];
+		return &mons[qpm];
 	return mkclass(urole.enemy2sym, 0);
 }
 

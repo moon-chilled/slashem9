@@ -17,43 +17,43 @@ extern const char * const killed_by_prefix[];	/* from topten.c */
 #ifndef NH320_DEDICATION
 /* A normal tombstone for end of game display. */
 static const char *rip_txt[] = {
-"                       ----------",
-"                      /          \\",
-"                     /    REST    \\",
-"                    /      IN      \\",
-"                   /     PEACE      \\",
-"                  /                  \\",
-"                  |                  |", /* Name of player */
-"                  |                  |", /* Amount of $ */
-"                  |                  |", /* Type of death */
-"                  |                  |", /* . */
-"                  |                  |", /* . */
-"                  |                  |", /* . */
-"                  |       1001       |", /* Real year of death */
-"                 *|     *  *  *      | *",
-"        _________)/\\\\_//(\\/(/\\)/\\//\\/|_)_______",
-0
+	"                       ----------",
+	"                      /          \\",
+	"                     /    REST    \\",
+	"                    /      IN      \\",
+	"                   /     PEACE      \\",
+	"                  /                  \\",
+	"                  |                  |", /* Name of player */
+	"                  |                  |", /* Amount of $ */
+	"                  |                  |", /* Type of death */
+	"                  |                  |", /* . */
+	"                  |                  |", /* . */
+	"                  |                  |", /* . */
+	"                  |       1001       |", /* Real year of death */
+	"                 *|     *  *  *      | *",
+	"        _________)/\\\\_//(\\/(/\\)/\\//\\/|_)_______",
+	0
 };
 #define STONE_LINE_CENT 28	/* char[] element of center of stone face */
 #else	/* NH320_DEDICATION */
 /* NetHack 3.2.x displayed a dual tombstone as a tribute to Izchak. */
 static const char *rip_txt[] = {
-"              ----------                      ----------",
-"             /          \\                    /          \\",
-"            /    REST    \\                  /    This    \\",
-"           /      IN      \\                /  release of  \\",
-"          /     PEACE      \\              /   NetHack is   \\",
-"         /                  \\            /   dedicated to   \\",
-"         |                  |            |  the memory of   |",
-"         |                  |            |                  |",
-"         |                  |            |  Izchak Miller   |",
-"         |                  |            |   1935 - 1994    |",
-"         |                  |            |                  |",
-"         |                  |            |     Ascended     |",
-"         |       1001       |            |                  |",
-"      *  |     *  *  *      | *        * |      *  *  *     | *",
-" _____)/\\|\\__//(\\/(/\\)/\\//\\/|_)________)/|\\\\_/_/(\\/(/\\)/\\/\\/|_)____",
-0
+	"              ----------                      ----------",
+	"             /          \\                    /          \\",
+	"            /    REST    \\                  /    This    \\",
+	"           /      IN      \\                /  release of  \\",
+	"          /     PEACE      \\              /   NetHack is   \\",
+	"         /                  \\            /   dedicated to   \\",
+	"         |                  |            |  the memory of   |",
+	"         |                  |            |                  |",
+	"         |                  |            |  Izchak Miller   |",
+	"         |                  |            |   1935 - 1994    |",
+	"         |                  |            |                  |",
+	"         |                  |            |     Ascended     |",
+	"         |       1001       |            |                  |",
+	"      *  |     *  *  *      | *        * |      *  *  *     | *",
+	" _____)/\\|\\__//(\\/(/\\)/\\//\\/|_)________)/|\\\\_/_/(\\/(/\\)/\\/\\/|_)____",
+	0
 };
 #define STONE_LINE_CENT 19	/* char[] element of center of stone face */
 #endif	/* NH320_DEDICATION */
@@ -109,32 +109,31 @@ int how;
 
 	/* Put together death description */
 	switch (killer_format) {
-		default: impossible("bad killer format?");
-		case KILLED_BY_AN:
-                      if (Instant_Death) {
-                        strcpy(buf, "instantly ");
-                        strcat(buf, killed_by_prefix[how]);
-                      }
-                      else if (Quick_Death) {
-                        strcpy(buf, "quickly ");
-                        strcat(buf, killed_by_prefix[how]);
-                      } else strcpy(buf, killed_by_prefix[how]);
-			strcat(buf, an(killer));
-			break;
-		case KILLED_BY:
-                      if (Instant_Death) {
-                        strcpy(buf, "instantly ");
-                        strcat(buf, killed_by_prefix[how]);
-                      }
-                      else if (Quick_Death) {
-                        strcpy(buf, "quickly ");
-                        strcat(buf, killed_by_prefix[how]);
-                      } else strcpy(buf, killed_by_prefix[how]);
-			strcat(buf, killer);
-			break;
-		case NO_KILLER_PREFIX:
-			strcpy(buf, killer);
-			break;
+	default:
+		impossible("bad killer format?");
+	case KILLED_BY_AN:
+		if (Instant_Death) {
+			strcpy(buf, "instantly ");
+			strcat(buf, killed_by_prefix[how]);
+		} else if (Quick_Death) {
+			strcpy(buf, "quickly ");
+			strcat(buf, killed_by_prefix[how]);
+		} else strcpy(buf, killed_by_prefix[how]);
+		strcat(buf, an(killer));
+		break;
+	case KILLED_BY:
+		if (Instant_Death) {
+			strcpy(buf, "instantly ");
+			strcat(buf, killed_by_prefix[how]);
+		} else if (Quick_Death) {
+			strcpy(buf, "quickly ");
+			strcat(buf, killed_by_prefix[how]);
+		} else strcpy(buf, killed_by_prefix[how]);
+		strcat(buf, killer);
+		break;
+	case NO_KILLER_PREFIX:
+		strcpy(buf, killer);
+		break;
 	}
 
 	/* Put death type on stone */
@@ -143,10 +142,10 @@ int how;
 		char tmpchar;
 
 		if ( (i0=strlen(dpx)) > STONE_LINE_LEN) {
-				for(i = STONE_LINE_LEN;
-				    ((i0 > STONE_LINE_LEN) && i); i--)
-					if(dpx[i] == ' ') i0 = i;
-				if(!i) i0 = STONE_LINE_LEN;
+			for(i = STONE_LINE_LEN;
+			                ((i0 > STONE_LINE_LEN) && i); i--)
+				if(dpx[i] == ' ') i0 = i;
+			if(!i) i0 = STONE_LINE_LEN;
 		}
 		tmpchar = dpx[i0];
 		dpx[i0] = 0;

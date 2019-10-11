@@ -72,44 +72,43 @@ char *getrumor(int truth, char *rumor_buf, bool exclude_cookie) {
 
 void
 outrumor (
-    int truth, /* 1=true, -1=false, 0=either */
-    int mechanism
-)
-{
+        int truth, /* 1=true, -1=false, 0=either */
+        int mechanism
+) {
 	static const char fortune_msg[] =
-		"This cookie has a scrap of paper inside.";
+	        "This cookie has a scrap of paper inside.";
 	const char *line;
 	char buf[BUFSZ];
 	boolean reading = (mechanism == BY_COOKIE ||
-			   mechanism == BY_PAPER);
+	                   mechanism == BY_PAPER);
 
 	if (reading) {
-	    /* deal with various things that prevent reading */
-	    if (is_fainted() && mechanism == BY_COOKIE)
-	    	return;
-	    else if (Blind) {
-		if (mechanism == BY_COOKIE)
-			pline(fortune_msg);
-		pline("What a pity that you cannot read it!");
-	    	return;
-	    }
+		/* deal with various things that prevent reading */
+		if (is_fainted() && mechanism == BY_COOKIE)
+			return;
+		else if (Blind) {
+			if (mechanism == BY_COOKIE)
+				pline(fortune_msg);
+			pline("What a pity that you cannot read it!");
+			return;
+		}
 	}
 	line = getrumor(truth, buf, reading ? false : true);
 	if (!*line)
 		line = "NetHack rumors file closed for renovation.";
 	switch (mechanism) {
-	    case BY_ORACLE:
-	 	/* Oracle delivers the rumor */
+	case BY_ORACLE:
+		/* Oracle delivers the rumor */
 		pline("True to her word, the Oracle %ssays: ",
-		  (!rn2(4) ? "offhandedly " : (!rn2(3) ? "casually " :
-		  (rn2(2) ? "nonchalantly " : ""))));
+		      (!rn2(4) ? "offhandedly " : (!rn2(3) ? "casually " :
+		                                   (rn2(2) ? "nonchalantly " : ""))));
 		verbalize("%s", line);
 		exercise(A_WIS, true);
 		return;
-	    case BY_COOKIE:
+	case BY_COOKIE:
 		pline(fortune_msg);
-		/* FALLTHRU */
-	    case BY_PAPER:
+	/* FALLTHRU */
+	case BY_PAPER:
 		pline("It reads:");
 		break;
 	}
@@ -146,8 +145,8 @@ void outoracle(boolean special, boolean delphi) {
 	winid tmpwin = create_nhwindow(NHW_TEXT);
 	if (delphi)
 		putstr(tmpwin, 0, special ?
-				"The Oracle scornfully takes all your money and says:" :
-				"The Oracle meditates for a moment and then intones:");
+		       "The Oracle scornfully takes all your money and says:" :
+		       "The Oracle meditates for a moment and then intones:");
 	else
 		putstr(tmpwin, 0, "The message reads:");
 	putstr(tmpwin, 0, "");
@@ -171,7 +170,7 @@ void outoracle(boolean special, boolean delphi) {
 }
 
 int doconsult(struct monst *oracl) {
-        long umoney = money_cnt(invent);
+	long umoney = money_cnt(invent);
 
 	int u_pay, minor_cost = 50, major_cost = 500 + 50 * u.ulevel;
 	int add_xpts;
@@ -191,45 +190,45 @@ int doconsult(struct monst *oracl) {
 	}
 
 	sprintf(qbuf,
-		"\"Wilt thou settle for a minor consultation?\" (%d %s)",
-		minor_cost, currency((long)minor_cost));
+	        "\"Wilt thou settle for a minor consultation?\" (%d %s)",
+	        minor_cost, currency((long)minor_cost));
 	switch (ynq(qbuf)) {
-	    default:
-	    case 'q':
+	default:
+	case 'q':
 		return 0;
-	    case 'y':
+	case 'y':
 		if (umoney < (long)minor_cost) {
-		    pline("You don't even have enough money for that!");
-		    return 0;
+			pline("You don't even have enough money for that!");
+			return 0;
 		}
 		u_pay = minor_cost;
 		break;
-	    case 'n':
+	case 'n':
 		/* don't even ask */
 		if (umoney <= minor_cost) return 0;
 		sprintf(qbuf,
-			"\"Then dost thou desire a major one?\" (%d %s)",
-			major_cost, currency((long)major_cost));
+		        "\"Then dost thou desire a major one?\" (%d %s)",
+		        major_cost, currency((long)major_cost));
 		if (yn(qbuf) != 'y') return 0;
 		u_pay = (umoney < (long)major_cost ? (int)umoney : major_cost);
 		break;
 	}
-        money2mon(oracl, (long)u_pay);
+	money2mon(oracl, (long)u_pay);
 
 	flags.botl = 1;
 	add_xpts = 0;	/* first oracle of each type gives experience points */
 	if (u_pay == minor_cost) {
 		outrumor(1, BY_ORACLE);
 		if (!u.uevent.minor_oracle)
-		    add_xpts = u_pay / (u.uevent.major_oracle ? 25 : 10);
-		    /* 5 pts if very 1st, or 2 pts if major already done */
+			add_xpts = u_pay / (u.uevent.major_oracle ? 25 : 10);
+		/* 5 pts if very 1st, or 2 pts if major already done */
 		u.uevent.minor_oracle = true;
 	} else {
 		boolean cheapskate = u_pay < major_cost;
 		outoracle(cheapskate, true);
 		if (!cheapskate && !u.uevent.major_oracle)
-		    add_xpts = u_pay / (u.uevent.minor_oracle ? 25 : 10);
-		    /* ~100 pts if very 1st, ~40 pts if minor already done */
+			add_xpts = u_pay / (u.uevent.minor_oracle ? 25 : 10);
+		/* ~100 pts if very 1st, ~40 pts if minor already done */
 		u.uevent.major_oracle = true;
 		exercise(A_WIS, !cheapskate);
 	}

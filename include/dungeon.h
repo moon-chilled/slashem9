@@ -59,7 +59,7 @@ typedef struct dungeon {	/* basic dungeon identifier */
 	xchar	num_dunlevs;	/* number of levels in this dungeon */
 	xchar	dunlev_ureached; /* how deep you have been in this dungeon */
 	int	ledger_start,	/* the starting depth in "real" terms */
-		depth_start;	/* the starting depth in "logical" terms */
+	        depth_start;	/* the starting depth in "logical" terms */
 } dungeon;
 
 /*
@@ -69,22 +69,22 @@ typedef struct dungeon {	/* basic dungeon identifier */
  * point.
  */
 typedef struct branch {
-    struct branch *next;	/* next in the branch chain */
-    int		  id;		/* branch identifier */
-    int		  type;		/* type of branch */
-    d_level	  end1;		/* "primary" end point */
-    d_level	  end2;		/* other end point */
-    boolean	  end1_up;	/* does end1 go up? */
+	struct branch *next;	/* next in the branch chain */
+	int		  id;		/* branch identifier */
+	int		  type;		/* type of branch */
+	d_level	  end1;		/* "primary" end point */
+	d_level	  end2;		/* other end point */
+	boolean	  end1_up;	/* does end1 go up? */
 } branch;
 
 /* branch types */
 #define BR_STAIR   0	/* "Regular" connection, 2 staircases. */
 #define BR_NO_END1 1	/* "Regular" connection.  However, no stair from  */
-			/*	end1 to end2.  There is a stair from end2 */
-			/*	to end1.				  */
+/*	end1 to end2.  There is a stair from end2 */
+/*	to end1.				  */
 #define BR_NO_END2 2	/* "Regular" connection.  However, no stair from  */
-			/*	end2 to end1.  There is a stair from end1 */
-			/*	to end2.				  */
+/*	end2 to end1.  There is a stair from end1 */
+/*	to end2.				  */
 #define BR_PORTAL  3	/* Connection by magic portals (traps) */
 
 
@@ -168,10 +168,10 @@ struct linfo {
 #define VISITED		0x01	/* hero has visited this level */
 #define FORGOTTEN	0x02	/* hero will forget this level when reached */
 #define LFILE_EXISTS	0x04	/* a level file exists for this level */
-/*
- * Note:  VISITED and LFILE_EXISTS are currently almost always set at the
- * same time.  However they _mean_ different things.
- */
+	/*
+	 * Note:  VISITED and LFILE_EXISTS are currently almost always set at the
+	 * same time.  However they _mean_ different things.
+	 */
 };
 
 #endif /* DUNGEON_H */

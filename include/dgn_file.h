@@ -19,12 +19,12 @@ struct	couple {
 
 struct tmpdungeon {
 	char	name[24],
-		protoname[24];
+	        protoname[24];
 	struct	couple	lev;
 	int	flags,
-		chance,
-		levels,
-		branches;
+	        chance,
+	        levels,
+	        branches;
 	char	boneschar;
 };
 

@@ -147,13 +147,13 @@ static boolean transp;    /* cached transparency flag for current tileset */
  * say, one can see blessed, etc.
  */
 struct obj *vobj_at(xchar x, xchar y) {
-    struct obj *obj = level.objects[x][y];
+	struct obj *obj = level.objects[x][y];
 
-    while (obj) {
-	if (!obj->oinvis || See_invisible) return obj;
-	obj = obj->nexthere;
-    }
-    return NULL;
+	while (obj) {
+		if (!obj->oinvis || See_invisible) return obj;
+		obj = obj->nexthere;
+	}
+	return NULL;
 }
 
 /*
@@ -163,27 +163,27 @@ struct obj *vobj_at(xchar x, xchar y) {
  * attention to and correct unexplored, lit ROOM and CORR spots.
  */
 void magic_map_background(xchar x, xchar y, int show) {
-    int cmap = back_to_cmap(x,y);	/* assumes hero can see x,y */
-    struct rm *lev = &levl[x][y];
+	int cmap = back_to_cmap(x,y);	/* assumes hero can see x,y */
+	struct rm *lev = &levl[x][y];
 
-    /*
-     * Correct for out of sight lit corridors and rooms that the hero
-     * doesn't remember as lit.
-     */
-    if (!cansee(x,y) && !lev->waslit) {
-	/* Floor spaces are dark if unlit.  Corridors are dark if unlit. */
-	if (lev->typ == ROOM && cmap == S_room)
-	    cmap = S_darkroom;
-	else if (lev->typ == CORR && cmap == S_litcorr)
-	    cmap = S_corr;
-    }
-    if (level.flags.hero_memory)
+	/*
+	 * Correct for out of sight lit corridors and rooms that the hero
+	 * doesn't remember as lit.
+	 */
+	if (!cansee(x,y) && !lev->waslit) {
+		/* Floor spaces are dark if unlit.  Corridors are dark if unlit. */
+		if (lev->typ == ROOM && cmap == S_room)
+			cmap = S_darkroom;
+		else if (lev->typ == CORR && cmap == S_litcorr)
+			cmap = S_corr;
+	}
+	if (level.flags.hero_memory)
 #ifdef DISPLAY_LAYERS
-	lev->mem_bg = cmap;
+		lev->mem_bg = cmap;
 #else
-	lev->glyph = cmap_to_glyph(cmap);
+		lev->glyph = cmap_to_glyph(cmap);
 #endif
-    if (show || transp) show_glyph(x,y, cmap_to_glyph(cmap));
+	if (show || transp) show_glyph(x,y, cmap_to_glyph(cmap));
 }
 
 /*
@@ -208,15 +208,15 @@ void magic_map_background(xchar x, xchar y, int show) {
  * the hero can physically see the location.  Update the screen if directed.
  */
 void map_background(xchar x, xchar y, int show) {
-    int cmap = back_to_cmap(x,y);
+	int cmap = back_to_cmap(x,y);
 
-    if (level.flags.hero_memory)
+	if (level.flags.hero_memory)
 #ifdef DISPLAY_LAYERS
-	levl[x][y].mem_bg = cmap;
+		levl[x][y].mem_bg = cmap;
 #else
-	levl[x][y].glyph = cmap_to_glyph(cmap);
+		levl[x][y].glyph = cmap_to_glyph(cmap);
 #endif
-    if (show || transp) show_glyph(x,y, cmap_to_glyph(cmap));
+	if (show || transp) show_glyph(x,y, cmap_to_glyph(cmap));
 }
 
 /*
@@ -226,16 +226,16 @@ void map_background(xchar x, xchar y, int show) {
  * hero can physically see the location.
  */
 void map_trap (struct trap *trap, int show) {
-    int x = trap->tx, y = trap->ty;
-    int cmap = trap_to_cmap(trap);
+	int x = trap->tx, y = trap->ty;
+	int cmap = trap_to_cmap(trap);
 
-    if (level.flags.hero_memory)
+	if (level.flags.hero_memory)
 #ifdef DISPLAY_LAYERS
-	levl[x][y].mem_trap = 1 + cmap - MAXDCHARS;
+		levl[x][y].mem_trap = 1 + cmap - MAXDCHARS;
 #else
-	levl[x][y].glyph = cmap_to_glyph(cmap);
+		levl[x][y].glyph = cmap_to_glyph(cmap);
 #endif
-    if (show || transp) show_glyph(x, y, cmap_to_glyph(cmap));
+	if (show || transp) show_glyph(x, y, cmap_to_glyph(cmap));
 }
 
 /*
@@ -245,21 +245,21 @@ void map_trap (struct trap *trap, int show) {
  * see the location of the object.  Update the screen if directed.
  */
 void map_object (struct obj *obj, int show) {
-    int x = obj->ox, y = obj->oy;
-    int glyph = obj_to_glyph(obj);
+	int x = obj->ox, y = obj->oy;
+	int glyph = obj_to_glyph(obj);
 
-    if (level.flags.hero_memory) {
+	if (level.flags.hero_memory) {
 #ifdef DISPLAY_LAYERS
-	if ((levl[x][y].mem_corpse = glyph_is_body(glyph))) {
-	    levl[x][y].mem_obj = 1 + glyph_to_body(glyph);
-	} else {
-	    levl[x][y].mem_obj = 1 + glyph_to_obj(glyph);
-	}
+		if ((levl[x][y].mem_corpse = glyph_is_body(glyph))) {
+			levl[x][y].mem_obj = 1 + glyph_to_body(glyph);
+		} else {
+			levl[x][y].mem_obj = 1 + glyph_to_obj(glyph);
+		}
 #else
-	levl[x][y].glyph = glyph;
+		levl[x][y].glyph = glyph;
 #endif
-    }
-    if (show) show_glyph(x, y, glyph);
+	}
+	if (show) show_glyph(x, y, glyph);
 }
 
 /*
@@ -272,15 +272,15 @@ void map_object (struct obj *obj, int show) {
  * by newsym() if necessary.
  */
 void map_invisible(xchar x, xchar y) {
-    if (x != u.ux || y != u.uy) { /* don't display I at hero's location */
-	if (level.flags.hero_memory)
+	if (x != u.ux || y != u.uy) { /* don't display I at hero's location */
+		if (level.flags.hero_memory)
 #ifdef DISPLAY_LAYERS
-	    levl[x][y].mem_invis = 1;
+			levl[x][y].mem_invis = 1;
 #else
-	    levl[x][y].glyph = GLYPH_INVISIBLE;
+			levl[x][y].glyph = GLYPH_INVISIBLE;
 #endif
-	show_glyph(x, y, GLYPH_INVISIBLE);
-    }
+		show_glyph(x, y, GLYPH_INVISIBLE);
+	}
 }
 
 /*
@@ -294,27 +294,27 @@ void map_invisible(xchar x, xchar y) {
  */
 void unmap_object (int x, int y) {
 #ifndef DISPLAY_LAYERS
-    struct trap *trap;
+	struct trap *trap;
 #endif
 
-    if (!level.flags.hero_memory) return;
+	if (!level.flags.hero_memory) return;
 
 #ifdef DISPLAY_LAYERS
-    levl[x][y].mem_invis = levl[x][y].mem_corpse = levl[x][y].mem_obj = 0;
+	levl[x][y].mem_invis = levl[x][y].mem_corpse = levl[x][y].mem_obj = 0;
 #else
-    if ((trap = t_at(x,y)) != 0 && trap->tseen && !covers_traps(x,y))
-	map_trap(trap, 0);
-    else if (levl[x][y].seenv) {
-	struct rm *lev = &levl[x][y];
+	if ((trap = t_at(x,y)) != 0 && trap->tseen && !covers_traps(x,y))
+		map_trap(trap, 0);
+	else if (levl[x][y].seenv) {
+		struct rm *lev = &levl[x][y];
 
-	map_background(x, y, 0);
+		map_background(x, y, 0);
 
-	/* turn remembered dark room squares dark */
-	if (!lev->waslit && lev->glyph == cmap_to_glyph(S_room) &&
-							    lev->typ == ROOM)
-	    lev->glyph = cmap_to_glyph(S_darkroom);
-    } else
-	levl[x][y].glyph = cmap_to_glyph(S_stone);	/* default val */
+		/* turn remembered dark room squares dark */
+		if (!lev->waslit && lev->glyph == cmap_to_glyph(S_room) &&
+		                lev->typ == ROOM)
+			lev->glyph = cmap_to_glyph(S_darkroom);
+	} else
+		levl[x][y].glyph = cmap_to_glyph(S_stone);	/* default val */
 #endif
 }
 
@@ -370,36 +370,36 @@ void unmap_object (int x, int y) {
 #endif	/* DISPLAY_LAYERS */
 
 void map_location (int x, int y, int show) {
-    _map_location(x,y,show);
+	_map_location(x,y,show);
 }
 
 int memory_glyph(int x, int y) {
 #ifdef DISPLAY_LAYERS
-    if (levl[x][y].mem_invis)
-	return GLYPH_INVISIBLE;
-    else if (levl[x][y].mem_obj)
-	if (levl[x][y].mem_corpse)
-	    return body_to_glyph(levl[x][y].mem_obj - 1);
+	if (levl[x][y].mem_invis)
+		return GLYPH_INVISIBLE;
+	else if (levl[x][y].mem_obj)
+		if (levl[x][y].mem_corpse)
+			return body_to_glyph(levl[x][y].mem_obj - 1);
+		else
+			return objnum_to_glyph(levl[x][y].mem_obj - 1);
+	else if (levl[x][y].mem_trap)
+		return cmap_to_glyph(levl[x][y].mem_trap - 1 + MAXDCHARS);
 	else
-	    return objnum_to_glyph(levl[x][y].mem_obj - 1);
-    else if (levl[x][y].mem_trap)
-	return cmap_to_glyph(levl[x][y].mem_trap - 1 + MAXDCHARS);
-    else
-	return cmap_to_glyph(levl[x][y].mem_bg);
+		return cmap_to_glyph(levl[x][y].mem_bg);
 #else
-    return levl[x][y].glyph;
+	return levl[x][y].glyph;
 #endif
 }
 
 void clear_memory_glyph(int x, int y, int to) {
 #ifdef DISPLAY_LAYERS
-    levl[x][y].mem_bg = to;
-    levl[x][y].mem_trap = 0;
-    levl[x][y].mem_obj = 0;
-    levl[x][y].mem_corpse = 0;
-    levl[x][y].mem_invis = 0;
+	levl[x][y].mem_bg = to;
+	levl[x][y].mem_trap = 0;
+	levl[x][y].mem_obj = 0;
+	levl[x][y].mem_corpse = 0;
+	levl[x][y].mem_invis = 0;
 #else
-    levl[x][y].glyph = cmap_to_glyph(to);
+	levl[x][y].glyph = cmap_to_glyph(to);
 #endif
 }
 
@@ -416,93 +416,93 @@ void clear_memory_glyph(int x, int y, int to) {
  */
 static void
 display_monster(
-    xchar x, xchar y,	/* display position */
-    struct monst *mon,	/* monster to display */
-    int sightflags,	/* 1 if the monster is physically seen */
-    			/* 2 if detected using Detect_monsters */
-    xchar worm_tail	/* mon is actually a worm tail */ ) {
-    boolean mon_mimic = (mon->m_ap_type != M_AP_NOTHING);
-    int sensed = mon_mimic &&
-	(Protection_from_shape_changers || sensemon(mon));
-    /*
-     * We must do the mimic check first.  If the mimic is mimicing something,
-     * and the location is in sight, we have to change the hero's memory
-     * so that when the position is out of sight, the hero remembers what
-     * the mimic was mimicing.
-     */
-
-    if (mon_mimic && (sightflags == PHYSICALLY_SEEN)) {
-	switch (mon->m_ap_type) {
-	    default:
-		impossible("display_monster:  bad m_ap_type value [ = %d ]",
-							(int) mon->m_ap_type);
-	    case M_AP_NOTHING:
-		show_glyph(x, y, mon_to_glyph(mon));
-		break;
-
-	    case M_AP_FURNITURE: {
-		/*
-		 * This is a poor man's version of map_background().  I can't
-		 * use map_background() because we are overriding what is in
-		 * the 'typ' field.  Maybe have map_background()'s parameters
-		 * be (x,y,glyph) instead of just (x,y).
-		 *
-		 * mappearance is currently set to an S_ index value in
-		 * makemon.c.
-		 */
-		int glyph = cmap_to_glyph(mon->mappearance);
-#ifdef DISPLAY_LAYERS
-		levl[x][y].mem_bg = mon->mappearance;
-#else
-		levl[x][y].glyph = glyph;
-#endif
-		if (!sensed) show_glyph(x,y, glyph);
-		break;
-	    }
-
-	    case M_AP_OBJECT: {
-		struct obj obj;	/* Make a fake object to send	*/
-				/* to map_object().		*/
-		obj.ox = x;
-		obj.oy = y;
-		obj.otyp = mon->mappearance;
-		obj.corpsenm = PM_TENGU;	/* if mimicing a corpse */
-		map_object(&obj,!sensed);
-		break;
-	    }
-
-	    case M_AP_MONSTER:
-		show_glyph(x,y, monnum_to_glyph(what_mon((int)mon->mappearance)));
-		break;
-	}
-
-    }
-
-    /* If the mimic is unsucessfully mimicing something, display the monster */
-    if (!mon_mimic || sensed) {
-	int num;
-
-	/* [ALI] Only use detected glyphs when monster wouldn't be
-	 * visible by any other means.
+        xchar x, xchar y,	/* display position */
+        struct monst *mon,	/* monster to display */
+        int sightflags,	/* 1 if the monster is physically seen */
+        /* 2 if detected using Detect_monsters */
+        xchar worm_tail	/* mon is actually a worm tail */ ) {
+	boolean mon_mimic = (mon->m_ap_type != M_AP_NOTHING);
+	int sensed = mon_mimic &&
+	             (Protection_from_shape_changers || sensemon(mon));
+	/*
+	 * We must do the mimic check first.  If the mimic is mimicing something,
+	 * and the location is in sight, we have to change the hero's memory
+	 * so that when the position is out of sight, the hero remembers what
+	 * the mimic was mimicing.
 	 */
-	if (sightflags == DETECTED) {
-	    if (worm_tail)
-		num = detected_monnum_to_glyph(what_mon(PM_LONG_WORM_TAIL));
-	    else
-		num = detected_mon_to_glyph(mon);
-	} else if (mon->mtame && !Hallucination) {
-	    if (worm_tail)
-		num = petnum_to_glyph(PM_LONG_WORM_TAIL);
-	    else
-		num = pet_to_glyph(mon);
-	} else {
-	    if (worm_tail)
-		num = monnum_to_glyph(what_mon(PM_LONG_WORM_TAIL));
-	    else
-		num = mon_to_glyph(mon);
+
+	if (mon_mimic && (sightflags == PHYSICALLY_SEEN)) {
+		switch (mon->m_ap_type) {
+		default:
+			impossible("display_monster:  bad m_ap_type value [ = %d ]",
+			           (int) mon->m_ap_type);
+		case M_AP_NOTHING:
+			show_glyph(x, y, mon_to_glyph(mon));
+			break;
+
+		case M_AP_FURNITURE: {
+			/*
+			 * This is a poor man's version of map_background().  I can't
+			 * use map_background() because we are overriding what is in
+			 * the 'typ' field.  Maybe have map_background()'s parameters
+			 * be (x,y,glyph) instead of just (x,y).
+			 *
+			 * mappearance is currently set to an S_ index value in
+			 * makemon.c.
+			 */
+			int glyph = cmap_to_glyph(mon->mappearance);
+#ifdef DISPLAY_LAYERS
+			levl[x][y].mem_bg = mon->mappearance;
+#else
+			levl[x][y].glyph = glyph;
+#endif
+			if (!sensed) show_glyph(x,y, glyph);
+			break;
+		}
+
+		case M_AP_OBJECT: {
+			struct obj obj;	/* Make a fake object to send	*/
+			/* to map_object().		*/
+			obj.ox = x;
+			obj.oy = y;
+			obj.otyp = mon->mappearance;
+			obj.corpsenm = PM_TENGU;	/* if mimicing a corpse */
+			map_object(&obj,!sensed);
+			break;
+		}
+
+		case M_AP_MONSTER:
+			show_glyph(x,y, monnum_to_glyph(what_mon((int)mon->mappearance)));
+			break;
+		}
+
 	}
-	show_glyph(x,y,num);
-    }
+
+	/* If the mimic is unsucessfully mimicing something, display the monster */
+	if (!mon_mimic || sensed) {
+		int num;
+
+		/* [ALI] Only use detected glyphs when monster wouldn't be
+		 * visible by any other means.
+		 */
+		if (sightflags == DETECTED) {
+			if (worm_tail)
+				num = detected_monnum_to_glyph(what_mon(PM_LONG_WORM_TAIL));
+			else
+				num = detected_mon_to_glyph(mon);
+		} else if (mon->mtame && !Hallucination) {
+			if (worm_tail)
+				num = petnum_to_glyph(PM_LONG_WORM_TAIL);
+			else
+				num = pet_to_glyph(mon);
+		} else {
+			if (worm_tail)
+				num = monnum_to_glyph(what_mon(PM_LONG_WORM_TAIL));
+			else
+				num = mon_to_glyph(mon);
+		}
+		show_glyph(x,y,num);
+	}
 }
 /*
  * display_warning()
@@ -514,23 +514,23 @@ display_monster(
  * Do not call for worm tails.
  */
 static void display_warning(struct monst *mon) {
-    int x = mon->mx, y = mon->my;
-    int wl = (int) (mon->m_lev / 4);
-    int glyph;
+	int x = mon->mx, y = mon->my;
+	int wl = (int) (mon->m_lev / 4);
+	int glyph;
 
-    if (mon_warning(mon)) {
-        if (wl > MAXWARNINGS - 1) wl = MAXWARNINGS - 1;
-	/* 3.4.1: this really ought to be rn2(MAXWARNINGS), but value "0"
-	   isn't handled correctly by the what_is routine so avoid it */
-	if (Hallucination) wl = rn1(MAXWARNINGS-1,1);
-        glyph = warning_to_glyph(wl);
-    } else if (MATCH_WARN_OF_MON(mon)) {
-	glyph = mon_to_glyph(mon);
-    } else {
-    	impossible("display_warning did not match warning type?");
-        return;
-    }
-    show_glyph(x, y, glyph);
+	if (mon_warning(mon)) {
+		if (wl > MAXWARNINGS - 1) wl = MAXWARNINGS - 1;
+		/* 3.4.1: this really ought to be rn2(MAXWARNINGS), but value "0"
+		   isn't handled correctly by the what_is routine so avoid it */
+		if (Hallucination) wl = rn1(MAXWARNINGS-1,1);
+		glyph = warning_to_glyph(wl);
+	} else if (MATCH_WARN_OF_MON(mon)) {
+		glyph = mon_to_glyph(mon);
+	} else {
+		impossible("display_warning did not match warning type?");
+		return;
+	}
+	show_glyph(x, y, glyph);
 }
 
 /*
@@ -541,161 +541,161 @@ static void display_warning(struct monst *mon) {
  * adjacent to the hero (except for a boulder push).
  */
 void feel_location(xchar x, xchar y) {
-    struct rm *lev = &(levl[x][y]);
-    struct obj *boulder;
-    struct monst *mon;
+	struct rm *lev = &(levl[x][y]);
+	struct obj *boulder;
+	struct monst *mon;
 
-    /* If the hero's memory of an invisible monster is accurate, we want to keep
-     * him from detecting the same monster over and over again on each turn.
-     * We must return (so we don't erase the monster).  (We must also, in the
-     * search function, be sure to skip over previously detected 'I's.)
-     */
-    if (memory_is_invisible(x,y) && m_at(x,y)) return;
-
-    /* The hero can't feel non pool locations while under water. */
-    if (Underwater && !Is_waterlevel(&u.uz) && ! is_pool(x,y))
-	return;
-
-    /* Set the seen vector as if the hero had seen it.  It doesn't matter */
-    /* if the hero is levitating or not.				  */
-    set_seenv(lev, u.ux, u.uy, x, y);
-
-    if (Levitation && !Is_airlevel(&u.uz) && !Is_waterlevel(&u.uz)) {
-	/*
-	 * Levitation Rules.  It is assumed that the hero can feel the state
-	 * of the walls around herself and can tell if she is in a corridor,
-	 * room, or doorway.  Boulders are felt because they are large enough.
-	 * Anything else is unknown because the hero can't reach the ground.
-	 * This makes things difficult.
-	 *
-	 * Check (and display) in order:
-	 *
-	 *	+ Stone, walls, and closed doors.
-	 *	+ Boulders.  [see a boulder before a doorway]
-	 *	+ Doors.
-	 *	+ Room/water positions
-	 *	+ Everything else (hallways!)
+	/* If the hero's memory of an invisible monster is accurate, we want to keep
+	 * him from detecting the same monster over and over again on each turn.
+	 * We must return (so we don't erase the monster).  (We must also, in the
+	 * search function, be sure to skip over previously detected 'I's.)
 	 */
-	if (IS_ROCK(lev->typ) || (IS_DOOR(lev->typ) &&
-				(lev->doormask & (D_LOCKED | D_CLOSED)))) {
-	    map_background(x, y, 1);
-	} else if ((boulder = sobj_at(BOULDER,x,y)) != 0) {
-	    map_object(boulder, 1);
-	} else if (IS_DOOR(lev->typ)) {
-	    map_background(x, y, 1);
-	} else if (IS_ROOM(lev->typ) || IS_POOL(lev->typ)) {
-	    /*
-	     * An open room or water location.  Normally we wouldn't touch
-	     * this, but we have to get rid of remembered boulder symbols.
-	     * This will only occur in rare occations when the hero goes
-	     * blind and doesn't find a boulder where expected (something
-	     * came along and picked it up).  We know that there is not a
-	     * boulder at this location.  Show fountains, pools, etc.
-	     * underneath if already seen.  Otherwise, show the appropriate
-	     * floor symbol.
-	     *
-	     * Similarly, if the hero digs a hole in a wall or feels a location
-	     * that used to contain an unseen monster.  In these cases,
-	     * there's no reason to assume anything was underneath, so
-	     * just show the appropriate floor symbol.  If something was
-	     * embedded in the wall, the glyph will probably already
-	     * reflect that.  Don't change the symbol in this case.
-	     *
-	     * This isn't quite correct.  If the boulder was on top of some
-	     * other objects they should be seen once the boulder is removed.
-	     * However, we have no way of knowing that what is there now
-	     * was there then.  So we let the hero have a lapse of memory.
-	     * We could also just display what is currently on the top of the
-	     * object stack (if anything).
-	     */
-	    if (remembered_object(x, y) == BOULDER) {
-		if (lev->typ != ROOM && lev->seenv) {
-		    map_background(x, y, 1);
+	if (memory_is_invisible(x,y) && m_at(x,y)) return;
+
+	/* The hero can't feel non pool locations while under water. */
+	if (Underwater && !Is_waterlevel(&u.uz) && ! is_pool(x,y))
+		return;
+
+	/* Set the seen vector as if the hero had seen it.  It doesn't matter */
+	/* if the hero is levitating or not.				  */
+	set_seenv(lev, u.ux, u.uy, x, y);
+
+	if (Levitation && !Is_airlevel(&u.uz) && !Is_waterlevel(&u.uz)) {
+		/*
+		 * Levitation Rules.  It is assumed that the hero can feel the state
+		 * of the walls around herself and can tell if she is in a corridor,
+		 * room, or doorway.  Boulders are felt because they are large enough.
+		 * Anything else is unknown because the hero can't reach the ground.
+		 * This makes things difficult.
+		 *
+		 * Check (and display) in order:
+		 *
+		 *	+ Stone, walls, and closed doors.
+		 *	+ Boulders.  [see a boulder before a doorway]
+		 *	+ Doors.
+		 *	+ Room/water positions
+		 *	+ Everything else (hallways!)
+		 */
+		if (IS_ROCK(lev->typ) || (IS_DOOR(lev->typ) &&
+		                          (lev->doormask & (D_LOCKED | D_CLOSED)))) {
+			map_background(x, y, 1);
+		} else if ((boulder = sobj_at(BOULDER,x,y)) != 0) {
+			map_object(boulder, 1);
+		} else if (IS_DOOR(lev->typ)) {
+			map_background(x, y, 1);
+		} else if (IS_ROOM(lev->typ) || IS_POOL(lev->typ)) {
+			/*
+			 * An open room or water location.  Normally we wouldn't touch
+			 * this, but we have to get rid of remembered boulder symbols.
+			 * This will only occur in rare occations when the hero goes
+			 * blind and doesn't find a boulder where expected (something
+			 * came along and picked it up).  We know that there is not a
+			 * boulder at this location.  Show fountains, pools, etc.
+			 * underneath if already seen.  Otherwise, show the appropriate
+			 * floor symbol.
+			 *
+			 * Similarly, if the hero digs a hole in a wall or feels a location
+			 * that used to contain an unseen monster.  In these cases,
+			 * there's no reason to assume anything was underneath, so
+			 * just show the appropriate floor symbol.  If something was
+			 * embedded in the wall, the glyph will probably already
+			 * reflect that.  Don't change the symbol in this case.
+			 *
+			 * This isn't quite correct.  If the boulder was on top of some
+			 * other objects they should be seen once the boulder is removed.
+			 * However, we have no way of knowing that what is there now
+			 * was there then.  So we let the hero have a lapse of memory.
+			 * We could also just display what is currently on the top of the
+			 * object stack (if anything).
+			 */
+			if (remembered_object(x, y) == BOULDER) {
+				if (lev->typ != ROOM && lev->seenv) {
+					map_background(x, y, 1);
+				} else {
+#ifdef DISPLAY_LAYERS
+					lev->mem_bg = lev->waslit ? S_room : S_darkroom;
+#else
+					lev->glyph = lev->waslit ? cmap_to_glyph(S_room) :
+					             cmap_to_glyph(S_darkroom);
+#endif
+					show_glyph(x, y, memory_glyph(x, y));
+				}
+#ifdef DISPLAY_LAYERS
+			} else if ((lev->mem_bg >= S_stone && lev->mem_bg < S_darkroom) ||
+			                memory_is_invisible(x, y)) {
+				lev->mem_bg = lev->waslit ? S_room : S_darkroom;
+#else
+			} else if ((lev->glyph >= cmap_to_glyph(S_stone) &&
+			                lev->glyph < cmap_to_glyph(S_darkroom)) ||
+			                glyph_is_invisible(levl[x][y].glyph)) {
+				lev->glyph = lev->waslit ? cmap_to_glyph(S_room) :
+				             cmap_to_glyph(S_darkroom);
+#endif
+				show_glyph(x, y, memory_glyph(x, y));
+			}
 		} else {
+			/* We feel it (I think hallways are the only things left). */
+			map_background(x, y, 1);
+			/* Corridors are never felt as lit (unless remembered that way) */
+			/* (lit_corridor only).					    */
 #ifdef DISPLAY_LAYERS
-		    lev->mem_bg = lev->waslit ? S_room : S_darkroom;
+			if (lev->typ == CORR && lev->mem_bg == S_litcorr && !lev->waslit)
+				show_glyph(x, y, cmap_to_glyph(lev->mem_bg = S_corr));
 #else
-		    lev->glyph = lev->waslit ? cmap_to_glyph(S_room) :
-					       cmap_to_glyph(S_darkroom);
+			if (lev->typ == CORR &&
+			                lev->glyph == cmap_to_glyph(S_litcorr) && !lev->waslit)
+				show_glyph(x, y, lev->glyph = cmap_to_glyph(S_corr));
 #endif
-		    show_glyph(x, y, memory_glyph(x, y));
 		}
-#ifdef DISPLAY_LAYERS
-	    } else if ((lev->mem_bg >= S_stone && lev->mem_bg < S_darkroom) ||
-		       memory_is_invisible(x, y)) {
-		lev->mem_bg = lev->waslit ? S_room : S_darkroom;
-#else
-	    } else if ((lev->glyph >= cmap_to_glyph(S_stone) &&
-			lev->glyph < cmap_to_glyph(S_darkroom)) ||
-		       glyph_is_invisible(levl[x][y].glyph)) {
-		lev->glyph = lev->waslit ? cmap_to_glyph(S_room) :
-					   cmap_to_glyph(S_darkroom);
-#endif
-		show_glyph(x, y, memory_glyph(x, y));
-	    }
 	} else {
-	    /* We feel it (I think hallways are the only things left). */
-	    map_background(x, y, 1);
-	    /* Corridors are never felt as lit (unless remembered that way) */
-	    /* (lit_corridor only).					    */
+		_map_location(x, y, 1);
+
+		if (Punished) {
+			/*
+			 * A ball or chain is only felt if it is first on the object
+			 * location list.  Otherwise, we need to clear the felt bit ---
+			 * something has been dropped on the ball/chain.  If the bit is
+			 * not cleared, then when the ball/chain is moved it will drop
+			 * the wrong glyph.
+			 */
+			if (uchain->ox == x && uchain->oy == y) {
+				if (level.objects[x][y] == uchain)
+					u.bc_felt |= BC_CHAIN;
+				else
+					u.bc_felt &= ~BC_CHAIN;	/* do not feel the chain */
+			}
+			if (!carried(uball) && uball->ox == x && uball->oy == y) {
+				if (level.objects[x][y] == uball)
+					u.bc_felt |= BC_BALL;
+				else
+					u.bc_felt &= ~BC_BALL;	/* do not feel the ball */
+			}
+		}
+
+		/* Floor spaces are dark if unlit.  Corridors are dark if unlit. */
 #ifdef DISPLAY_LAYERS
-	    if (lev->typ == CORR && lev->mem_bg == S_litcorr && !lev->waslit)
-		show_glyph(x, y, cmap_to_glyph(lev->mem_bg = S_corr));
+		if (lev->typ == ROOM && lev->mem_bg == S_room && !lev->waslit) {
+			lev->mem_bg = S_darkroom;
+			show_glyph(x,y, memory_glyph(x, y));
+		} else if (lev->typ == CORR &&
+		                lev->mem_bg == S_litcorr && !lev->waslit) {
+			lev->mem_bg = S_corr;
+			show_glyph(x,y, memory_glyph(x, y));
+		}
 #else
-	    if (lev->typ == CORR &&
-		    lev->glyph == cmap_to_glyph(S_litcorr) && !lev->waslit)
-		show_glyph(x, y, lev->glyph = cmap_to_glyph(S_corr));
+		if (lev->typ == ROOM &&
+		                lev->glyph == cmap_to_glyph(S_room) && !lev->waslit)
+			show_glyph(x,y, lev->glyph = cmap_to_glyph(S_darkroom));
+		else if (lev->typ == CORR &&
+		                lev->glyph == cmap_to_glyph(S_litcorr) && !lev->waslit)
+			show_glyph(x,y, lev->glyph = cmap_to_glyph(S_corr));
 #endif
 	}
-    } else {
-	_map_location(x, y, 1);
-
-	if (Punished) {
-	    /*
-	     * A ball or chain is only felt if it is first on the object
-	     * location list.  Otherwise, we need to clear the felt bit ---
-	     * something has been dropped on the ball/chain.  If the bit is
-	     * not cleared, then when the ball/chain is moved it will drop
-	     * the wrong glyph.
-	     */
-	    if (uchain->ox == x && uchain->oy == y) {
-		if (level.objects[x][y] == uchain)
-		    u.bc_felt |= BC_CHAIN;
-		else
-		    u.bc_felt &= ~BC_CHAIN;	/* do not feel the chain */
-	    }
-	    if (!carried(uball) && uball->ox == x && uball->oy == y) {
-		if (level.objects[x][y] == uball)
-		    u.bc_felt |= BC_BALL;
-		else
-		    u.bc_felt &= ~BC_BALL;	/* do not feel the ball */
-	    }
-	}
-
-	/* Floor spaces are dark if unlit.  Corridors are dark if unlit. */
-#ifdef DISPLAY_LAYERS
-	if (lev->typ == ROOM && lev->mem_bg == S_room && !lev->waslit) {
-	    lev->mem_bg = S_darkroom;
-	    show_glyph(x,y, memory_glyph(x, y));
-	} else if (lev->typ == CORR &&
-		    lev->mem_bg == S_litcorr && !lev->waslit) {
-	    lev->mem_bg = S_corr;
-	    show_glyph(x,y, memory_glyph(x, y));
-	}
-#else
-	if (lev->typ == ROOM &&
-		    lev->glyph == cmap_to_glyph(S_room) && !lev->waslit)
-	    show_glyph(x,y, lev->glyph = cmap_to_glyph(S_darkroom));
-	else if (lev->typ == CORR &&
-		    lev->glyph == cmap_to_glyph(S_litcorr) && !lev->waslit)
-	    show_glyph(x,y, lev->glyph = cmap_to_glyph(S_corr));
-#endif
-    }
-    /* draw monster on top if we can sense it */
-    if ((x != u.ux || y != u.uy) && (mon = m_at(x,y)) && sensemon(mon))
-	display_monster(x, y, mon,
-		(tp_sensemon(mon) || MATCH_WARN_OF_MON(mon)) ? PHYSICALLY_SEEN : DETECTED,
-		is_worm_tail(mon));
+	/* draw monster on top if we can sense it */
+	if ((x != u.ux || y != u.uy) && (mon = m_at(x,y)) && sensemon(mon))
+		display_monster(x, y, mon,
+		                (tp_sensemon(mon) || MATCH_WARN_OF_MON(mon)) ? PHYSICALLY_SEEN : DETECTED,
+		                is_worm_tail(mon));
 }
 
 /*
@@ -704,151 +704,149 @@ void feel_location(xchar x, xchar y) {
  * Possibly put a new glyph at the given location.
  */
 void newsym(int x, int y) {
-    struct monst *mon;
-    struct rm *lev = &(levl[x][y]);
-    int see_it;
-    xchar worm_tail;
+	struct monst *mon;
+	struct rm *lev = &(levl[x][y]);
+	int see_it;
+	xchar worm_tail;
 
-    if (in_mklev) return;
+	if (in_mklev) return;
 
-    /* only permit updating the hero when swallowed */
-    if (u.uswallow) {
-	if (x == u.ux && y == u.uy) display_self();
-	return;
-    }
-    if (Underwater && !Is_waterlevel(&u.uz)) {
-	/* don't do anything unless (x,y) is an adjacent underwater position */
-	int dx, dy;
-	if (!is_pool(x,y)) return;
-	dx = x - u.ux;	if (dx < 0) dx = -dx;
-	dy = y - u.uy;	if (dy < 0) dy = -dy;
-	if (dx > 1 || dy > 1) return;
-    }
-
-    /* Can physically see the location. */
-    if (cansee(x,y)) {
-        NhRegion* reg = visible_region_at(x,y);
-	/*
-	 * Don't use templit here:  E.g.
-	 *
-	 *	lev->waslit = !!(lev->lit || templit(x,y));
-	 *
-	 * Otherwise we have the "light pool" problem, where non-permanently
-	 * lit areas just out of sight stay remembered as lit.  They should
-	 * re-darken.
-	 *
-	 * Perhaps ALL areas should revert to their "unlit" look when
-	 * out of sight.
-	 */
-	lev->waslit = (lev->lit!=0);	/* remember lit condition */
-
-	if (reg != NULL && ACCESSIBLE(lev->typ)) {
-	    show_region(reg,x,y);
-	    return;
+	/* only permit updating the hero when swallowed */
+	if (u.uswallow) {
+		if (x == u.ux && y == u.uy) display_self();
+		return;
 	}
-	if (x == u.ux && y == u.uy) {
-	    if (senseself()) {
-		_map_location(x,y,0);	/* map *under* self */
-		display_self();
-	    } else
-		/* we can see what is there */
-		_map_location(x,y,1);
+	if (Underwater && !Is_waterlevel(&u.uz)) {
+		/* don't do anything unless (x,y) is an adjacent underwater position */
+		int dx, dy;
+		if (!is_pool(x,y)) return;
+		dx = x - u.ux;
+		if (dx < 0) dx = -dx;
+		dy = y - u.uy;
+		if (dy < 0) dy = -dy;
+		if (dx > 1 || dy > 1) return;
 	}
-	else {
-	    mon = m_at(x,y);
-	    worm_tail = is_worm_tail(mon);
-	    see_it = mon && (worm_tail
-		? (!mon->minvis || See_invisible)
-		: (mon_visible(mon)) || tp_sensemon(mon) || MATCH_WARN_OF_MON(mon));
-	    if (mon && (see_it || (!worm_tail && Detect_monsters))) {
-		if (mon->mtrapped) {
-		    struct trap *trap = t_at(x, y);
-		    int tt = trap ? trap->ttyp : NO_TRAP;
 
-		    /* if monster is in a physical trap, you see the trap too */
-		    if (tt == BEAR_TRAP || tt == PIT ||
-			tt == SPIKED_PIT ||tt == WEB) {
-			trap->tseen = true;
-		    }
+	/* Can physically see the location. */
+	if (cansee(x,y)) {
+		NhRegion* reg = visible_region_at(x,y);
+		/*
+		 * Don't use templit here:  E.g.
+		 *
+		 *	lev->waslit = !!(lev->lit || templit(x,y));
+		 *
+		 * Otherwise we have the "light pool" problem, where non-permanently
+		 * lit areas just out of sight stay remembered as lit.  They should
+		 * re-darken.
+		 *
+		 * Perhaps ALL areas should revert to their "unlit" look when
+		 * out of sight.
+		 */
+		lev->waslit = (lev->lit!=0);	/* remember lit condition */
+
+		if (reg != NULL && ACCESSIBLE(lev->typ)) {
+			show_region(reg,x,y);
+			return;
 		}
-		_map_location(x,y,0);	/* map under the monster */
-		/* also gets rid of any invisibility glyph */
-		display_monster(x, y, mon, see_it? PHYSICALLY_SEEN : DETECTED, worm_tail);
-	    }
-	    else if (mon && mon_warning(mon) && !is_worm_tail(mon))
-	        display_warning(mon);
-	    else if (memory_is_invisible(x,y))
-		map_invisible(x, y);
-	    else
-		_map_location(x,y,1);	/* map the location */
-	}
-    }
+		if (x == u.ux && y == u.uy) {
+			if (senseself()) {
+				_map_location(x,y,0);	/* map *under* self */
+				display_self();
+			} else
+				/* we can see what is there */
+				_map_location(x,y,1);
+		} else {
+			mon = m_at(x,y);
+			worm_tail = is_worm_tail(mon);
+			see_it = mon && (worm_tail
+			                 ? (!mon->minvis || See_invisible)
+			                 : (mon_visible(mon)) || tp_sensemon(mon) || MATCH_WARN_OF_MON(mon));
+			if (mon && (see_it || (!worm_tail && Detect_monsters))) {
+				if (mon->mtrapped) {
+					struct trap *trap = t_at(x, y);
+					int tt = trap ? trap->ttyp : NO_TRAP;
 
-    /* Can't see the location. */
-    else {
-	if (x == u.ux && y == u.uy) {
-	    feel_location(u.ux, u.uy);		/* forces an update */
-
-	    if (senseself()) display_self();
-	}
-	else if ((mon = m_at(x,y))
-		&& ((see_it = (tp_sensemon(mon) || MATCH_WARN_OF_MON(mon)
-		    		|| (see_with_infrared(mon) && mon_visible(mon))))
-		    || Detect_monsters)
-		&& !is_worm_tail(mon)) {
-	    /* Monsters are printed every time. */
-	    /* This also gets rid of any invisibility glyph */
-	    display_monster(x, y, mon, see_it ? 0 : DETECTED, 0);
-	}
-	else if ((mon = m_at(x,y)) && mon_warning(mon) &&
-		 !is_worm_tail(mon)) {
-	        display_warning(mon);
+					/* if monster is in a physical trap, you see the trap too */
+					if (tt == BEAR_TRAP || tt == PIT ||
+					                tt == SPIKED_PIT ||tt == WEB) {
+						trap->tseen = true;
+					}
+				}
+				_map_location(x,y,0);	/* map under the monster */
+				/* also gets rid of any invisibility glyph */
+				display_monster(x, y, mon, see_it? PHYSICALLY_SEEN : DETECTED, worm_tail);
+			} else if (mon && mon_warning(mon) && !is_worm_tail(mon))
+				display_warning(mon);
+			else if (memory_is_invisible(x,y))
+				map_invisible(x, y);
+			else
+				_map_location(x,y,1);	/* map the location */
+		}
 	}
 
-	/*
-	 * If the location is remembered as being both dark (waslit is false)
-	 * and lit (glyph is a lit room or lit corridor) then it was either:
-	 *
-	 *	(1) A dark location that the hero could see through night
-	 *	    vision.
-	 *
-	 *	(2) Darkened while out of the hero's sight.  This can happen
-	 *	    when cursed scroll of light is read.
-	 *
-	 * In either case, we have to manually correct the hero's memory to
-	 * match waslit.  Deciding when to change waslit is non-trivial.
-	 *
-	 *  Note:  If flags.lit_corridor is set, then corridors act like room
-	 *	   squares.  That is, they light up if in night vision range.
-	 *	   If flags.lit_corridor is not set, then corridors will
-	 *	   remain dark unless lit by a light spell and may darken
-	 *	   again, as discussed above.
-	 *
-	 * These checks and changes must be here and not in back_to_glyph().
-	 * They are dependent on the position being out of sight.
-	 */
-	else if (!lev->waslit) {
+	/* Can't see the location. */
+	else {
+		if (x == u.ux && y == u.uy) {
+			feel_location(u.ux, u.uy);		/* forces an update */
+
+			if (senseself()) display_self();
+		} else if ((mon = m_at(x,y))
+		                && ((see_it = (tp_sensemon(mon) || MATCH_WARN_OF_MON(mon)
+		                               || (see_with_infrared(mon) && mon_visible(mon))))
+		                    || Detect_monsters)
+		                && !is_worm_tail(mon)) {
+			/* Monsters are printed every time. */
+			/* This also gets rid of any invisibility glyph */
+			display_monster(x, y, mon, see_it ? 0 : DETECTED, 0);
+		} else if ((mon = m_at(x,y)) && mon_warning(mon) &&
+		                !is_worm_tail(mon)) {
+			display_warning(mon);
+		}
+
+		/*
+		 * If the location is remembered as being both dark (waslit is false)
+		 * and lit (glyph is a lit room or lit corridor) then it was either:
+		 *
+		 *	(1) A dark location that the hero could see through night
+		 *	    vision.
+		 *
+		 *	(2) Darkened while out of the hero's sight.  This can happen
+		 *	    when cursed scroll of light is read.
+		 *
+		 * In either case, we have to manually correct the hero's memory to
+		 * match waslit.  Deciding when to change waslit is non-trivial.
+		 *
+		 *  Note:  If flags.lit_corridor is set, then corridors act like room
+		 *	   squares.  That is, they light up if in night vision range.
+		 *	   If flags.lit_corridor is not set, then corridors will
+		 *	   remain dark unless lit by a light spell and may darken
+		 *	   again, as discussed above.
+		 *
+		 * These checks and changes must be here and not in back_to_glyph().
+		 * They are dependent on the position being out of sight.
+		 */
+		else if (!lev->waslit) {
 #ifdef DISPLAY_LAYERS
-	    if (lev->mem_bg == S_litcorr && lev->typ == CORR) {
-		lev->mem_bg = S_corr;
-		show_glyph(x, y, memory_glyph(x, y));
-	    } else if (lev->mem_bg == S_room && lev->typ == ROOM) {
-		lev->mem_bg = S_darkroom;
-		show_glyph(x, y, memory_glyph(x, y));
-	    }
+			if (lev->mem_bg == S_litcorr && lev->typ == CORR) {
+				lev->mem_bg = S_corr;
+				show_glyph(x, y, memory_glyph(x, y));
+			} else if (lev->mem_bg == S_room && lev->typ == ROOM) {
+				lev->mem_bg = S_darkroom;
+				show_glyph(x, y, memory_glyph(x, y));
+			}
 #else	/* DISPLAY_LAYERS */
-	    if (lev->glyph == cmap_to_glyph(S_litcorr) && lev->typ == CORR)
-		show_glyph(x, y, lev->glyph = cmap_to_glyph(S_corr));
-	    else if (lev->glyph == cmap_to_glyph(S_room) && lev->typ == ROOM)
-		show_glyph(x, y, lev->glyph = cmap_to_glyph(S_darkroom));
+			if (lev->glyph == cmap_to_glyph(S_litcorr) && lev->typ == CORR)
+				show_glyph(x, y, lev->glyph = cmap_to_glyph(S_corr));
+			else if (lev->glyph == cmap_to_glyph(S_room) && lev->typ == ROOM)
+				show_glyph(x, y, lev->glyph = cmap_to_glyph(S_darkroom));
 #endif	/* DISPLAY_LAYERS */
-	    else
-		goto show_mem;
-	} else {
+			else
+				goto show_mem;
+		} else {
 show_mem:
-	    show_glyph(x, y, memory_glyph(x, y));
+			show_glyph(x, y, memory_glyph(x, y));
+		}
 	}
-    }
 }
 
 #undef is_worm_tail
@@ -860,17 +858,17 @@ show_mem:
  * pulled into a platform dependent routine for fancier graphics if desired.
  */
 void shieldeff(xchar x, xchar y) {
-    int i;
+	int i;
 
-    if (!flags.sparkle) return;
-    if (cansee(x,y)) {	/* Don't see anything if can't see the location */
-	for (i = 0; i < SHIELD_COUNT; i++) {
-	    show_glyph(x, y, cmap_to_glyph(shield_static[i]));
-	    flush_screen(1);	/* make sure the glyph shows up */
-	    delay_output();
+	if (!flags.sparkle) return;
+	if (cansee(x,y)) {	/* Don't see anything if can't see the location */
+		for (i = 0; i < SHIELD_COUNT; i++) {
+			show_glyph(x, y, cmap_to_glyph(shield_static[i]));
+			flush_screen(1);	/* make sure the glyph shows up */
+			delay_output();
+		}
+		newsym(x,y);		/* restore the old information */
 	}
-	newsym(x,y);		/* restore the old information */
-    }
 }
 
 
@@ -903,123 +901,123 @@ void shieldeff(xchar x, xchar y) {
  */
 
 static struct tmp_glyph {
-    coord saved[COLNO];	/* previously updated positions */
-    int sidx;		/* index of next unused slot in saved[] */
-    int style;		/* either DISP_BEAM or DISP_FLASH or DISP_ALWAYS */
-    int glyph;		/* glyph to use when printing */
-    struct tmp_glyph *cont;	/* Used if saved[] is full */
-    struct tmp_glyph *prev;
+	coord saved[COLNO];	/* previously updated positions */
+	int sidx;		/* index of next unused slot in saved[] */
+	int style;		/* either DISP_BEAM or DISP_FLASH or DISP_ALWAYS */
+	int glyph;		/* glyph to use when printing */
+	struct tmp_glyph *cont;	/* Used if saved[] is full */
+	struct tmp_glyph *prev;
 } tgfirst;
 static struct tmp_glyph *tglyph = NULL;
 
 void tmp_at(int x, int y) {
-    struct tmp_glyph *tmp, *cont;
+	struct tmp_glyph *tmp, *cont;
 
-    switch (x) {
+	switch (x) {
 	case DISP_BEAM:
-        case DISP_BEAM_ALWAYS:
+	case DISP_BEAM_ALWAYS:
 	case DISP_FLASH:
 	case DISP_ALWAYS:
-	    if (!tglyph)
-		tmp = &tgfirst;
-	    else	/* nested effect; we need dynamic memory */
-		tmp = alloc(sizeof (struct tmp_glyph));
-	    tmp->prev = tglyph;
-	    tglyph = tmp;
-	    tglyph->sidx = 0;
-	    tglyph->style = x;
-	    tglyph->glyph = y;
-	    tglyph->cont = NULL;
-	    flush_screen(0);	/* flush buffered glyphs */
-	    return;
+		if (!tglyph)
+			tmp = &tgfirst;
+		else	/* nested effect; we need dynamic memory */
+			tmp = alloc(sizeof (struct tmp_glyph));
+		tmp->prev = tglyph;
+		tglyph = tmp;
+		tglyph->sidx = 0;
+		tglyph->style = x;
+		tglyph->glyph = y;
+		tglyph->cont = NULL;
+		flush_screen(0);	/* flush buffered glyphs */
+		return;
 	case DISP_FREEMEM:  /* in case game ends with tmp_at() in progress */
-	    while (tglyph) {
-		cont = tglyph->cont;
-		while (cont) {
-		    tmp = cont->cont;
-		    if (cont != &tgfirst) free(cont);
-		    cont = tmp;
+		while (tglyph) {
+			cont = tglyph->cont;
+			while (cont) {
+				tmp = cont->cont;
+				if (cont != &tgfirst) free(cont);
+				cont = tmp;
+			}
+			tmp = tglyph->prev;
+			if (tglyph != &tgfirst) free(tglyph);
+			tglyph = tmp;
 		}
+		return;
+
+	default:
+		break;
+	}
+
+	if (!tglyph) panic("tmp_at: tglyph not initialized");
+
+	switch (x) {
+	case DISP_CHANGE:
+		tglyph->glyph = y;
+		break;
+
+	case DISP_END:
+		if (tglyph->style == DISP_BEAM || tglyph->style == DISP_BEAM_ALWAYS) {
+			int i;
+
+			/* Erase (reset) from source to end */
+			for (i = 0; i < tglyph->sidx; i++)
+				newsym(tglyph->saved[i].x, tglyph->saved[i].y);
+			cont = tglyph->cont;
+			while (cont) {
+				for (i = 0; i < cont->sidx; i++)
+					newsym(cont->saved[i].x, cont->saved[i].y);
+				tmp = cont->cont;
+				if (cont != &tgfirst) free(cont);
+				cont = tmp;
+			}
+			/* tglyph->cont = NULL; */
+		} else {		/* DISP_FLASH or DISP_ALWAYS */
+			if (tglyph->sidx)	/* been called at least once */
+				newsym(tglyph->saved[0].x, tglyph->saved[0].y);
+		}
+		/* tglyph->sidx = 0; -- about to be freed, so not necessary */
 		tmp = tglyph->prev;
 		if (tglyph != &tgfirst) free(tglyph);
 		tglyph = tmp;
-	    }
-	    return;
-
-	default:
-	    break;
-    }
-
-    if (!tglyph) panic("tmp_at: tglyph not initialized");
-
-    switch (x) {
-	case DISP_CHANGE:
-	    tglyph->glyph = y;
-	    break;
-
-	case DISP_END:
-	    if (tglyph->style == DISP_BEAM || tglyph->style == DISP_BEAM_ALWAYS) {
-		int i;
-
-		/* Erase (reset) from source to end */
-		for (i = 0; i < tglyph->sidx; i++)
-		    newsym(tglyph->saved[i].x, tglyph->saved[i].y);
-		cont = tglyph->cont;
-		while (cont) {
-		    for (i = 0; i < cont->sidx; i++)
-			newsym(cont->saved[i].x, cont->saved[i].y);
-		    tmp = cont->cont;
-		    if (cont != &tgfirst) free(cont);
-		    cont = tmp;
-		}
-	     /* tglyph->cont = NULL; */
-	    } else {		/* DISP_FLASH or DISP_ALWAYS */
-		if (tglyph->sidx)	/* been called at least once */
-		    newsym(tglyph->saved[0].x, tglyph->saved[0].y);
-	    }
-	 /* tglyph->sidx = 0; -- about to be freed, so not necessary */
-	    tmp = tglyph->prev;
-	    if (tglyph != &tgfirst) free(tglyph);
-	    tglyph = tmp;
-	    break;
+		break;
 
 	default:	/* do it */
-	    if (tglyph->style == DISP_BEAM || tglyph->style == DISP_BEAM_ALWAYS) {
-		if (!cansee(x,y) && tglyph->style == DISP_BEAM) break;
-		/* save pos for later erasing */
-		if (tglyph->sidx >= SIZE(tglyph->saved)) {
-		    tmp = alloc(sizeof (struct tmp_glyph));
-		    *tmp = *tglyph;
-		    tglyph->prev = NULL;
-		    tmp->cont = tglyph;
-		    tglyph = tmp;
-		    tglyph->sidx = 0;
+		if (tglyph->style == DISP_BEAM || tglyph->style == DISP_BEAM_ALWAYS) {
+			if (!cansee(x,y) && tglyph->style == DISP_BEAM) break;
+			/* save pos for later erasing */
+			if (tglyph->sidx >= SIZE(tglyph->saved)) {
+				tmp = alloc(sizeof (struct tmp_glyph));
+				*tmp = *tglyph;
+				tglyph->prev = NULL;
+				tmp->cont = tglyph;
+				tglyph = tmp;
+				tglyph->sidx = 0;
+			}
+			tglyph->saved[tglyph->sidx].x = x;
+			tglyph->saved[tglyph->sidx].y = y;
+			tglyph->sidx += 1;
+		} else {	/* DISP_FLASH/ALWAYS */
+			if (tglyph->sidx) { /* not first call, so reset previous pos */
+				newsym(tglyph->saved[0].x, tglyph->saved[0].y);
+				tglyph->sidx = 0;	/* display is presently up to date */
+			}
+			if (!cansee(x,y) && tglyph->style != DISP_ALWAYS) break;
+			tglyph->saved[0].x = x;
+			tglyph->saved[0].y = y;
+			tglyph->sidx = 1;
 		}
-		tglyph->saved[tglyph->sidx].x = x;
-		tglyph->saved[tglyph->sidx].y = y;
-		tglyph->sidx += 1;
-	    } else {	/* DISP_FLASH/ALWAYS */
-		if (tglyph->sidx) { /* not first call, so reset previous pos */
-		    newsym(tglyph->saved[0].x, tglyph->saved[0].y);
-		    tglyph->sidx = 0;	/* display is presently up to date */
-		}
-		if (!cansee(x,y) && tglyph->style != DISP_ALWAYS) break;
-		tglyph->saved[0].x = x;
-		tglyph->saved[0].y = y;
-		tglyph->sidx = 1;
-	    }
 
-	    show_glyph(x, y, tglyph->glyph);	/* show it */
-	    flush_screen(0);			/* make sure it shows up */
-	    break;
-    } /* end case */
+		show_glyph(x, y, tglyph->glyph);	/* show it */
+		flush_screen(0);			/* make sure it shows up */
+		break;
+	} /* end case */
 }
 
 #ifdef DISPLAY_LAYERS
 int glyph_is_floating(int glyph) {
-    return glyph_is_monster(glyph) || glyph_is_explosion(glyph) ||
-	    glyph_is_zap_beam(glyph) || glyph_is_swallow(glyph) ||
-	    glyph_is_warning(glyph) || (tglyph && glyph == tglyph->glyph);
+	return glyph_is_monster(glyph) || glyph_is_explosion(glyph) ||
+	       glyph_is_zap_beam(glyph) || glyph_is_swallow(glyph) ||
+	       glyph_is_warning(glyph) || (tglyph && glyph == tglyph->glyph);
 }
 #endif
 
@@ -1032,52 +1030,52 @@ int glyph_is_floating(int glyph) {
  * being swallowed.
  */
 void swallowed(int first) {
-    static xchar lastx, lasty;	/* last swallowed position */
-    int swallower, left_ok, rght_ok;
+	static xchar lastx, lasty;	/* last swallowed position */
+	int swallower, left_ok, rght_ok;
 
-    if (first)
-	cls();
-    else {
-	int x, y;
+	if (first)
+		cls();
+	else {
+		int x, y;
 
-	/* Clear old location */
-	for (y = lasty-1; y <= lasty+1; y++)
-	    for (x = lastx-1; x <= lastx+1; x++)
-		if (isok(x,y)) show_glyph(x,y,cmap_to_glyph(S_stone));
-    }
+		/* Clear old location */
+		for (y = lasty-1; y <= lasty+1; y++)
+			for (x = lastx-1; x <= lastx+1; x++)
+				if (isok(x,y)) show_glyph(x,y,cmap_to_glyph(S_stone));
+	}
 
-    swallower = monsndx(u.ustuck->data);
-    /* assume isok(u.ux,u.uy) */
-    left_ok = isok(u.ux-1,u.uy);
-    rght_ok = isok(u.ux+1,u.uy);
-    /*
-     *  Display the hero surrounded by the monster's stomach.
-     */
-    if(isok(u.ux, u.uy-1)) {
+	swallower = monsndx(u.ustuck->data);
+	/* assume isok(u.ux,u.uy) */
+	left_ok = isok(u.ux-1,u.uy);
+	rght_ok = isok(u.ux+1,u.uy);
+	/*
+	 *  Display the hero surrounded by the monster's stomach.
+	 */
+	if(isok(u.ux, u.uy-1)) {
+		if (left_ok)
+			show_glyph(u.ux-1, u.uy-1, swallow_to_glyph(swallower, S_sw_tl));
+		show_glyph(u.ux, u.uy-1, swallow_to_glyph(swallower, S_sw_tc));
+		if (rght_ok)
+			show_glyph(u.ux+1, u.uy-1, swallow_to_glyph(swallower, S_sw_tr));
+	}
+
 	if (left_ok)
-	show_glyph(u.ux-1, u.uy-1, swallow_to_glyph(swallower, S_sw_tl));
-	show_glyph(u.ux  , u.uy-1, swallow_to_glyph(swallower, S_sw_tc));
+		show_glyph(u.ux-1, u.uy, swallow_to_glyph(swallower, S_sw_ml));
+	display_self();
 	if (rght_ok)
-	show_glyph(u.ux+1, u.uy-1, swallow_to_glyph(swallower, S_sw_tr));
-    }
+		show_glyph(u.ux+1, u.uy, swallow_to_glyph(swallower, S_sw_mr));
 
-    if (left_ok)
-    show_glyph(u.ux-1, u.uy  , swallow_to_glyph(swallower, S_sw_ml));
-    display_self();
-    if (rght_ok)
-    show_glyph(u.ux+1, u.uy  , swallow_to_glyph(swallower, S_sw_mr));
+	if(isok(u.ux, u.uy+1)) {
+		if (left_ok)
+			show_glyph(u.ux-1, u.uy+1, swallow_to_glyph(swallower, S_sw_bl));
+		show_glyph(u.ux, u.uy+1, swallow_to_glyph(swallower, S_sw_bc));
+		if (rght_ok)
+			show_glyph(u.ux+1, u.uy+1, swallow_to_glyph(swallower, S_sw_br));
+	}
 
-    if(isok(u.ux, u.uy+1)) {
-	if (left_ok)
-	show_glyph(u.ux-1, u.uy+1, swallow_to_glyph(swallower, S_sw_bl));
-	show_glyph(u.ux  , u.uy+1, swallow_to_glyph(swallower, S_sw_bc));
-	if (rght_ok)
-	show_glyph(u.ux+1, u.uy+1, swallow_to_glyph(swallower, S_sw_br));
-    }
-
-    /* Update the swallowed position. */
-    lastx = u.ux;
-    lasty = u.uy;
+	/* Update the swallowed position. */
+	lastx = u.ux;
+	lasty = u.uy;
 }
 
 /*
@@ -1087,40 +1085,40 @@ void swallowed(int first) {
  * except when in water level.  Special routines exist for that.
  */
 void under_water(int mode) {
-    static xchar lastx, lasty;
-    static boolean dela;
-    int x, y;
+	static xchar lastx, lasty;
+	static boolean dela;
+	int x, y;
 
-    /* swallowing has a higher precedence than under water */
-    if (Is_waterlevel(&u.uz) || u.uswallow) return;
+	/* swallowing has a higher precedence than under water */
+	if (Is_waterlevel(&u.uz) || u.uswallow) return;
 
-    /* full update */
-    if (mode == 1 || dela) {
-	cls();
-	dela = false;
-    }
-    /* delayed full update */
-    else if (mode == 2) {
-	dela = true;
-	return;
-    }
-    /* limited update */
-    else {
-	for (y = lasty-1; y <= lasty+1; y++)
-	    for (x = lastx-1; x <= lastx+1; x++)
-		if (isok(x,y))
-		    show_glyph(x,y,cmap_to_glyph(S_stone));
-    }
-    for (x = u.ux-1; x <= u.ux+1; x++)
-	for (y = u.uy-1; y <= u.uy+1; y++)
-	    if (isok(x,y) && is_pool(x,y)) {
-		if (Blind && !(x == u.ux && y == u.uy))
-		    show_glyph(x,y,cmap_to_glyph(S_stone));
-		else
-		    newsym(x,y);
-	    }
-    lastx = u.ux;
-    lasty = u.uy;
+	/* full update */
+	if (mode == 1 || dela) {
+		cls();
+		dela = false;
+	}
+	/* delayed full update */
+	else if (mode == 2) {
+		dela = true;
+		return;
+	}
+	/* limited update */
+	else {
+		for (y = lasty-1; y <= lasty+1; y++)
+			for (x = lastx-1; x <= lastx+1; x++)
+				if (isok(x,y))
+					show_glyph(x,y,cmap_to_glyph(S_stone));
+	}
+	for (x = u.ux-1; x <= u.ux+1; x++)
+		for (y = u.uy-1; y <= u.uy+1; y++)
+			if (isok(x,y) && is_pool(x,y)) {
+				if (Blind && !(x == u.ux && y == u.uy))
+					show_glyph(x,y,cmap_to_glyph(S_stone));
+				else
+					newsym(x,y);
+			}
+	lastx = u.ux;
+	lasty = u.uy;
 }
 
 /*
@@ -1129,24 +1127,24 @@ void under_water(int mode) {
  *	Very restricted display.  You can only see yourself.
  */
 void under_ground(int mode) {
-    static boolean dela;
+	static boolean dela;
 
-    /* swallowing has a higher precedence than under ground */
-    if (u.uswallow) return;
+	/* swallowing has a higher precedence than under ground */
+	if (u.uswallow) return;
 
-    /* full update */
-    if (mode == 1 || dela) {
-	cls();
-	dela = false;
-    }
-    /* delayed full update */
-    else if (mode == 2) {
-	dela = true;
-	return;
-    }
-    /* limited update */
-    else
-	newsym(u.ux,u.uy);
+	/* full update */
+	if (mode == 1 || dela) {
+		cls();
+		dela = false;
+	}
+	/* delayed full update */
+	else if (mode == 2) {
+		dela = true;
+		return;
+	}
+	/* limited update */
+	else
+		newsym(u.ux,u.uy);
 }
 
 
@@ -1167,19 +1165,19 @@ void under_ground(int mode) {
  *	  sit.c]
  */
 void see_monsters(void) {
-    struct monst *mon;
+	struct monst *mon;
 
-    if (defer_see_monsters) return;
+	if (defer_see_monsters) return;
 
-    for (mon = fmon; mon; mon = mon->nmon) {
-	if (DEADMONSTER(mon)) continue;
-	newsym(mon->mx,mon->my);
-	if (mon->wormno) see_wsegs(mon);
-    }
+	for (mon = fmon; mon; mon = mon->nmon) {
+		if (DEADMONSTER(mon)) continue;
+		newsym(mon->mx,mon->my);
+		if (mon->wormno) see_wsegs(mon);
+	}
 
-    /* when mounted, hero's location gets caught by monster loop */
-    if (!u.usteed)
-	    newsym(u.ux, u.uy);
+	/* when mounted, hero's location gets caught by monster loop */
+	if (!u.usteed)
+		newsym(u.ux, u.uy);
 }
 
 /*
@@ -1188,20 +1186,20 @@ void see_monsters(void) {
  * changes.
  */
 void set_mimic_blocking(void) {
-    struct monst *mon;
+	struct monst *mon;
 
-    for (mon = fmon; mon; mon = mon->nmon) {
-	if (DEADMONSTER(mon)) continue;
-	if (mon->minvis &&
-	   ((mon->m_ap_type == M_AP_FURNITURE &&
-	     (mon->mappearance == S_vcdoor || mon->mappearance == S_hcdoor)) ||
-	    (mon->m_ap_type == M_AP_OBJECT && mon->mappearance == BOULDER))) {
-	    if(See_invisible)
-		block_point(mon->mx, mon->my);
-	    else
-		unblock_point(mon->mx, mon->my);
+	for (mon = fmon; mon; mon = mon->nmon) {
+		if (DEADMONSTER(mon)) continue;
+		if (mon->minvis &&
+		                ((mon->m_ap_type == M_AP_FURNITURE &&
+		                  (mon->mappearance == S_vcdoor || mon->mappearance == S_hcdoor)) ||
+		                 (mon->m_ap_type == M_AP_OBJECT && mon->mappearance == BOULDER))) {
+			if(See_invisible)
+				block_point(mon->mx, mon->my);
+			else
+				unblock_point(mon->mx, mon->my);
+		}
 	}
-    }
 }
 
 /*
@@ -1209,90 +1207,90 @@ void set_mimic_blocking(void) {
  *	+ hallucinating.
  */
 void see_objects(void) {
-    struct obj *obj;
-    for(obj = fobj; obj; obj = obj->nobj)
-	if (vobj_at(obj->ox,obj->oy) == obj) newsym(obj->ox, obj->oy);
+	struct obj *obj;
+	for(obj = fobj; obj; obj = obj->nobj)
+		if (vobj_at(obj->ox,obj->oy) == obj) newsym(obj->ox, obj->oy);
 }
 
 /*
  * Update hallucinated traps.
  */
 void see_traps(void) {
-    struct trap *trap;
-    int glyph;
+	struct trap *trap;
+	int glyph;
 
-    for (trap = ftrap; trap; trap = trap->ntrap) {
-	glyph = glyph_at(trap->tx, trap->ty);
-	if (glyph_is_trap(glyph))
-	    newsym(trap->tx, trap->ty);
-    }
+	for (trap = ftrap; trap; trap = trap->ntrap) {
+		glyph = glyph_at(trap->tx, trap->ty);
+		if (glyph_is_trap(glyph))
+			newsym(trap->tx, trap->ty);
+	}
 }
 
 /*
  * Put the cursor on the hero.  Flush all accumulated glyphs before doing it.
  */
 void curs_on_u(void) {
-    flush_screen(1);	/* Flush waiting glyphs & put cursor on hero */
+	flush_screen(1);	/* Flush waiting glyphs & put cursor on hero */
 }
 
 int doredraw(void) {
-    docrt();
-    return 0;
+	docrt();
+	return 0;
 }
 
 void docrt(void) {
-    int x,y;
-    struct rm *lev;
-    int i, glyph;
+	int x,y;
+	struct rm *lev;
+	int i, glyph;
 
-    if (!u.ux) return; /* display isn't ready yet */
+	if (!u.ux) return; /* display isn't ready yet */
 
-    transp = false;
-    if (tileset[0])
-	for(i = 0; i < no_tilesets; ++i)
-	    if (!strcmpi(tileset, tilesets[i].name)) {
-		transp = !!(tilesets[i].flags & TILESET_TRANSPARENT);
-		break;
-	    }
+	transp = false;
+	if (tileset[0])
+		for(i = 0; i < no_tilesets; ++i)
+			if (!strcmpi(tileset, tilesets[i].name)) {
+				transp = !!(tilesets[i].flags & TILESET_TRANSPARENT);
+				break;
+			}
 
-    if (u.uswallow) {
-	swallowed(1);
-	return;
-    }
-    if (Underwater && !Is_waterlevel(&u.uz)) {
-	under_water(1);
-	return;
-    }
-    if (u.uburied) {
-	under_ground(1);
-	return;
-    }
+	if (u.uswallow) {
+		swallowed(1);
+		return;
+	}
+	if (Underwater && !Is_waterlevel(&u.uz)) {
+		under_water(1);
+		return;
+	}
+	if (u.uburied) {
+		under_ground(1);
+		return;
+	}
 
-    /* shut down vision */
-    vision_recalc(2);
+	/* shut down vision */
+	vision_recalc(2);
 
-    /*
-     * This routine assumes that cls() does the following:
-     *      + fills the physical screen with the symbol for rock
-     *      + clears the glyph buffer
-     */
-    cls();
+	/*
+	 * This routine assumes that cls() does the following:
+	 *      + fills the physical screen with the symbol for rock
+	 *      + clears the glyph buffer
+	 */
+	cls();
 
-    /* display memory */
-    for (x = 1; x < COLNO; x++) {
-	lev = &levl[x][0];
-	for (y = 0; y < ROWNO; y++, lev++)
-	    if ((glyph = memory_glyph(x,y)) != cmap_to_glyph(S_stone))
-		show_glyph(x,y,glyph);
-    }
+	/* display memory */
+	for (x = 1; x < COLNO; x++) {
+		lev = &levl[x][0];
+		for (y = 0; y < ROWNO; y++, lev++)
+			if ((glyph = memory_glyph(x,y)) != cmap_to_glyph(S_stone))
+				show_glyph(x,y,glyph);
+	}
 
-    /* see what is to be seen */
-    vision_recalc(0);
+	/* see what is to be seen */
+	vision_recalc(0);
 
-    /* overlay with monsters */
-    see_monsters();
+	/* overlay with monsters */
+	see_monsters();
 
-    flags.botlx = 1;	/* force a redraw of the bottom line */
+	flags.botlx = 1;	/* force a redraw of the bottom line */
 
 }
 
@@ -1301,8 +1299,8 @@ void docrt(void) {
 /* Glyph Buffering (3rd screen) ============================================ */
 
 typedef struct {
-    xchar new;		/* perhaps move this bit into the rm strucure. */
-    int   glyph;
+	xchar new;		/* perhaps move this bit into the rm strucure. */
+	int   glyph;
 } gbuf_entry;
 
 static gbuf_entry gbuf[ROWNO][COLNO];
@@ -1313,44 +1311,44 @@ static char gbuf_stop[ROWNO];
 /* D: Added to dump screen to output file */
 //TODO: switch all this over to using mapglyph or utf8_graphics or something
 static uchar get_glyph_char(int glyph) {
-    uchar   ch;
-    int offset;
+	uchar   ch;
+	int offset;
 
-    if (glyph >= NO_GLYPH)
-        return;
+	if (glyph >= NO_GLYPH)
+		return;
 
-    /*
-     *  Map the glyph back to a character.
-     *
-     *  Warning:  For speed, this makes an assumption on the order of
-     *		  offsets.  The order is set in display.h.
-     */
-    if ((offset = (glyph - GLYPH_WARNING_OFF)) >= 0) {	/* a warning flash */
-	    ch = ascii_graphics[S_warn0 + offset];
-    } else if ((offset = (glyph - GLYPH_SWALLOW_OFF)) >= 0) {	/* swallow */
-	/* see swallow_to_glyph() in display.c */
-	ch = ascii_graphics[S_sw_tl + (offset & 0x7)];
-    } else if ((offset = (glyph - GLYPH_ZAP_OFF)) >= 0) {	/* zap beam */
-	/* see zapdir_to_glyph() in display.c */
-	ch = ascii_graphics[S_vbeam + (offset & 0x3)];
-    } else if ((offset = (glyph - GLYPH_CMAP_OFF)) >= 0) {	/* cmap */
-	ch = ascii_graphics[offset];
-    } else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
-	ch = def_oc_syms[objects[offset].oc_class];
-    } else if ((offset = (glyph - GLYPH_RIDDEN_OFF)) >= 0) { /* mon ridden */
-	ch = def_monsyms[mons[offset].mlet];
-    } else if ((offset = (glyph - GLYPH_BODY_OFF)) >= 0) {	/* a corpse */
-	ch = def_oc_syms[objects[CORPSE].oc_class];
-    } else if ((offset = (glyph - GLYPH_DETECT_OFF)) >= 0) { /* mon detect */
-	ch = def_monsyms[mons[offset].mlet];
-    } else if ((offset = (glyph - GLYPH_INVIS_OFF)) >= 0) {  /* invisible */
-	ch = DEF_INVISIBLE;
-    } else if ((offset = (glyph - GLYPH_PET_OFF)) >= 0) {	/* a pet */
-	ch = def_monsyms[mons[offset].mlet];
-    } else {						    /* a monster */
-	ch = monsyms[mons[glyph].mlet];
-    }
-    return ch;
+	/*
+	 *  Map the glyph back to a character.
+	 *
+	 *  Warning:  For speed, this makes an assumption on the order of
+	 *		  offsets.  The order is set in display.h.
+	 */
+	if ((offset = (glyph - GLYPH_WARNING_OFF)) >= 0) {	/* a warning flash */
+		ch = ascii_graphics[S_warn0 + offset];
+	} else if ((offset = (glyph - GLYPH_SWALLOW_OFF)) >= 0) {	/* swallow */
+		/* see swallow_to_glyph() in display.c */
+		ch = ascii_graphics[S_sw_tl + (offset & 0x7)];
+	} else if ((offset = (glyph - GLYPH_ZAP_OFF)) >= 0) {	/* zap beam */
+		/* see zapdir_to_glyph() in display.c */
+		ch = ascii_graphics[S_vbeam + (offset & 0x3)];
+	} else if ((offset = (glyph - GLYPH_CMAP_OFF)) >= 0) {	/* cmap */
+		ch = ascii_graphics[offset];
+	} else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
+		ch = def_oc_syms[objects[offset].oc_class];
+	} else if ((offset = (glyph - GLYPH_RIDDEN_OFF)) >= 0) { /* mon ridden */
+		ch = def_monsyms[mons[offset].mlet];
+	} else if ((offset = (glyph - GLYPH_BODY_OFF)) >= 0) {	/* a corpse */
+		ch = def_oc_syms[objects[CORPSE].oc_class];
+	} else if ((offset = (glyph - GLYPH_DETECT_OFF)) >= 0) { /* mon detect */
+		ch = def_monsyms[mons[offset].mlet];
+	} else if ((offset = (glyph - GLYPH_INVIS_OFF)) >= 0) {  /* invisible */
+		ch = DEF_INVISIBLE;
+	} else if ((offset = (glyph - GLYPH_PET_OFF)) >= 0) {	/* a pet */
+		ch = def_monsyms[mons[offset].mlet];
+	} else {						    /* a monster */
+		ch = monsyms[mons[glyph].mlet];
+	}
+	return ch;
 }
 
 #ifdef TTY_GRAPHICS
@@ -1369,39 +1367,39 @@ const char *compress_str (const char *str) {
 				*bp1++ = *bp0;
 		} while(*bp0++);
 	} else
-	    return str;
+		return str;
 	return cbuf;
 }
 #endif /* TTY_GRAPHICS */
 
 /* Take a screen dump */
 void dump_screen(void) {
-    int x,y;
-    int lastc;
-    /* D: botl.c has a closer approximation to the size, but we'll go with
-     *    this */
-    char buf[300], *ptr;
+	int x,y;
+	int lastc;
+	/* D: botl.c has a closer approximation to the size, but we'll go with
+	 *    this */
+	char buf[300], *ptr;
 
-    for (y = 0; y < ROWNO; y++) {
-	lastc = 0;
-	ptr = buf;
-	for (x = 1; x < COLNO; x++) {
-	    uchar c = get_glyph_char(gbuf[y][x].glyph);
-	    *ptr++ = c;
-	    if (c != ' ')
-		lastc = x;
+	for (y = 0; y < ROWNO; y++) {
+		lastc = 0;
+		ptr = buf;
+		for (x = 1; x < COLNO; x++) {
+			uchar c = get_glyph_char(gbuf[y][x].glyph);
+			*ptr++ = c;
+			if (c != ' ')
+				lastc = x;
+		}
+		buf[lastc] = '\0';
+		dump("", buf);
 	}
-	buf[lastc] = '\0';
+	dump("", "");
+	bot1str(buf);
+	ptr = (char *) compress_str((const char *) buf);
+	dump("", ptr);
+	bot2str(buf);
 	dump("", buf);
-    }
-    dump("", "");
-    bot1str(buf);
-    ptr = (char *) compress_str((const char *) buf);
-    dump("", ptr);
-    bot2str(buf);
-    dump("", buf);
-    dump("", "");
-    dump("", "");
+	dump("", "");
+	dump("", "");
 }
 #endif /* DUMP_LOG */
 
@@ -1409,70 +1407,82 @@ void dump_screen(void) {
  * Store the glyph in the 3rd screen for later flushing.
  */
 void show_glyph(int x, int y, int glyph) {
-    /*
-     * Check for bad positions and glyphs.
-     */
-    if (!isok(x, y)) {
-	const char *text;
-	int  offset;
-
-	/* column 0 is invalid, but it's often used as a flag, so ignore it */
-	if (x == 0) return;
-
 	/*
-	 *  This assumes an ordering of the offsets.  See display.h for
-	 *  the definition.
+	 * Check for bad positions and glyphs.
 	 */
+	if (!isok(x, y)) {
+		const char *text;
+		int  offset;
 
-	if (glyph >= GLYPH_WARNING_OFF) {	/* a warning */
-	    text = "warning";		offset = glyph - GLYPH_WARNING_OFF;
-	} else if (glyph >= GLYPH_SWALLOW_OFF) {	/* swallow border */
-	    text = "swallow border";	offset = glyph - GLYPH_SWALLOW_OFF;
-	} else if (glyph >= GLYPH_ZAP_OFF) {		/* zap beam */
-	    text = "zap beam";		offset = glyph - GLYPH_ZAP_OFF;
-	} else if (glyph >= GLYPH_EXPLODE_OFF) {	/* explosion */
-	    text = "explosion";		offset = glyph - GLYPH_EXPLODE_OFF;
-	} else if (glyph >= GLYPH_CMAP_OFF) {		/* cmap */
-	    text = "cmap_index";	offset = glyph - GLYPH_CMAP_OFF;
-	} else if (glyph >= GLYPH_OBJ_OFF) {		/* object */
-	    text = "object";		offset = glyph - GLYPH_OBJ_OFF;
-	} else if (glyph >= GLYPH_RIDDEN_OFF) {		/* ridden mon */
-	    text = "ridden mon";	offset = glyph - GLYPH_RIDDEN_OFF;
-	} else if (glyph >= GLYPH_BODY_OFF) {		/* a corpse */
-	    text = "corpse";		offset = glyph - GLYPH_BODY_OFF;
-	} else if (glyph >= GLYPH_DETECT_OFF) {		/* detected mon */
-	    text = "detected mon";	offset = glyph - GLYPH_DETECT_OFF;
-	} else if (glyph >= GLYPH_INVIS_OFF) {		/* invisible mon */
-	    text = "invisible mon";	offset = glyph - GLYPH_INVIS_OFF;
-	} else if (glyph >= GLYPH_PET_OFF) {		/* a pet */
-	    text = "pet";		offset = glyph - GLYPH_PET_OFF;
-	} else {					/* a monster */
-	    text = "monster";		offset = glyph;
+		/* column 0 is invalid, but it's often used as a flag, so ignore it */
+		if (x == 0) return;
+
+		/*
+		 *  This assumes an ordering of the offsets.  See display.h for
+		 *  the definition.
+		 */
+
+		if (glyph >= GLYPH_WARNING_OFF) {	/* a warning */
+			text = "warning";
+			offset = glyph - GLYPH_WARNING_OFF;
+		} else if (glyph >= GLYPH_SWALLOW_OFF) {	/* swallow border */
+			text = "swallow border";
+			offset = glyph - GLYPH_SWALLOW_OFF;
+		} else if (glyph >= GLYPH_ZAP_OFF) {		/* zap beam */
+			text = "zap beam";
+			offset = glyph - GLYPH_ZAP_OFF;
+		} else if (glyph >= GLYPH_EXPLODE_OFF) {	/* explosion */
+			text = "explosion";
+			offset = glyph - GLYPH_EXPLODE_OFF;
+		} else if (glyph >= GLYPH_CMAP_OFF) {		/* cmap */
+			text = "cmap_index";
+			offset = glyph - GLYPH_CMAP_OFF;
+		} else if (glyph >= GLYPH_OBJ_OFF) {		/* object */
+			text = "object";
+			offset = glyph - GLYPH_OBJ_OFF;
+		} else if (glyph >= GLYPH_RIDDEN_OFF) {		/* ridden mon */
+			text = "ridden mon";
+			offset = glyph - GLYPH_RIDDEN_OFF;
+		} else if (glyph >= GLYPH_BODY_OFF) {		/* a corpse */
+			text = "corpse";
+			offset = glyph - GLYPH_BODY_OFF;
+		} else if (glyph >= GLYPH_DETECT_OFF) {		/* detected mon */
+			text = "detected mon";
+			offset = glyph - GLYPH_DETECT_OFF;
+		} else if (glyph >= GLYPH_INVIS_OFF) {		/* invisible mon */
+			text = "invisible mon";
+			offset = glyph - GLYPH_INVIS_OFF;
+		} else if (glyph >= GLYPH_PET_OFF) {		/* a pet */
+			text = "pet";
+			offset = glyph - GLYPH_PET_OFF;
+		} else {					/* a monster */
+			text = "monster";
+			offset = glyph;
+		}
+
+		impossible("show_glyph:  bad pos %d %d with glyph %d [%s %d].",
+		           x, y, glyph, text, offset);
+		return;
 	}
 
-	impossible("show_glyph:  bad pos %d %d with glyph %d [%s %d].",
-						x, y, glyph, text, offset);
-	return;
-    }
+	if (glyph >= MAX_GLYPH) {
+		impossible("show_glyph:  bad glyph %d [max %d] at (%d,%d).",
+		           glyph, MAX_GLYPH, x, y);
+		return;
+	}
 
-    if (glyph >= MAX_GLYPH) {
-	impossible("show_glyph:  bad glyph %d [max %d] at (%d,%d).",
-					glyph, MAX_GLYPH, x, y);
-	return;
-    }
-
-    /* [ALI] In transparent mode it is not sufficient just to consider
-     * the foreground glyph, we also need to consider the background.
-     * Rather than extend the display module to do this, for the time
-     * being we just turn off optimization and rely on the windowing port
-     * to ignore redundant calls to print_glyph().
-     */
-    if (transp || gbuf[y][x].glyph != glyph) {
-	gbuf[y][x].glyph = glyph;
-	gbuf[y][x].new   = 1;
-	if (gbuf_start[y] > x) gbuf_start[y] = x;
-	if (gbuf_stop[y]  < x) gbuf_stop[y]  = x;
-    }
+	/* [ALI] In transparent mode it is not sufficient just to consider
+	 * the foreground glyph, we also need to consider the background.
+	 * Rather than extend the display module to do this, for the time
+	 * being we just turn off optimization and rely on the windowing port
+	 * to ignore redundant calls to print_glyph().
+	 */
+	if (transp || gbuf[y][x].glyph != glyph) {
+		gbuf[y][x].glyph = glyph;
+		gbuf[y][x].new   = 1;
+		if (gbuf_start[y] > x) gbuf_start[y] = x;
+		if (gbuf_stop[y]  < x) gbuf_stop[y]  = x;
+	}
 }
 
 
@@ -1496,66 +1506,66 @@ static gbuf_entry nul_gbuf = { 0, cmap_to_glyph(S_stone) };
  * Turn the 3rd screen into stone.
  */
 void clear_glyph_buffer(void) {
-    int x, y;
-    gbuf_entry *gptr;
+	int x, y;
+	gbuf_entry *gptr;
 
-    for (y = 0; y < ROWNO; y++) {
-	gptr = &gbuf[y][0];
-	for (x = COLNO; x; x--) {
-	    *gptr++ = nul_gbuf;
+	for (y = 0; y < ROWNO; y++) {
+		gptr = &gbuf[y][0];
+		for (x = COLNO; x; x--) {
+			*gptr++ = nul_gbuf;
+		}
 	}
-    }
-    reset_glyph_bbox();
+	reset_glyph_bbox();
 }
 
 /*
  * Assumes that the indicated positions are filled with S_stone glyphs.
  */
 void row_refresh(int start, int stop, int y) {
-    int x;
+	int x;
 
-    for (x = start; x <= stop; x++)
-	if (gbuf[y][x].glyph != cmap_to_glyph(S_stone))
-	    print_glyph(WIN_MAP,x,y,gbuf[y][x].glyph);
+	for (x = start; x <= stop; x++)
+		if (gbuf[y][x].glyph != cmap_to_glyph(S_stone))
+			print_glyph(WIN_MAP,x,y,gbuf[y][x].glyph);
 }
 
 void cls(void) {
-    display_nhwindow(WIN_MESSAGE, false); /* flush messages */
-    flags.botlx = 1;		/* force update of botl window */
-    clear_nhwindow(WIN_MAP);	/* clear physical screen */
-    clear_glyph_buffer();	/* this is sort of an extra effort, but OK */
+	display_nhwindow(WIN_MESSAGE, false); /* flush messages */
+	flags.botlx = 1;		/* force update of botl window */
+	clear_nhwindow(WIN_MAP);	/* clear physical screen */
+	clear_glyph_buffer();	/* this is sort of an extra effort, but OK */
 }
 
 /*
  * Synch the third screen with the display.
  */
 void flush_screen(int cursor_on_u) {
-    /* Prevent infinite loops on errors:
-     *	    flush_screen->print_glyph->impossible->pline->flush_screen
-     */
-    static   boolean flushing = 0;
-    static   boolean delay_flushing = 0;
-    int x,y;
+	/* Prevent infinite loops on errors:
+	 *	    flush_screen->print_glyph->impossible->pline->flush_screen
+	 */
+	static   boolean flushing = 0;
+	static   boolean delay_flushing = 0;
+	int x,y;
 
-    if (cursor_on_u == -1) delay_flushing = !delay_flushing;
-    if (delay_flushing) return;
-    if (flushing) return;	/* if already flushing then return */
-    flushing = 1;
+	if (cursor_on_u == -1) delay_flushing = !delay_flushing;
+	if (delay_flushing) return;
+	if (flushing) return;	/* if already flushing then return */
+	flushing = 1;
 
-    for (y = 0; y < ROWNO; y++) {
-	gbuf_entry *gptr = &gbuf[y][x = gbuf_start[y]];
-	for (; x <= gbuf_stop[y]; gptr++, x++)
-	    if (gptr->new) {
-		print_glyph(WIN_MAP,x,y,gptr->glyph);
-		gptr->new = 0;
-	    }
-    }
+	for (y = 0; y < ROWNO; y++) {
+		gbuf_entry *gptr = &gbuf[y][x = gbuf_start[y]];
+		for (; x <= gbuf_stop[y]; gptr++, x++)
+			if (gptr->new) {
+				print_glyph(WIN_MAP,x,y,gptr->glyph);
+				gptr->new = 0;
+			}
+	}
 
-    if (cursor_on_u) curs(WIN_MAP, u.ux,u.uy); /* move cursor to the hero */
-    display_nhwindow(WIN_MAP, false);
-    reset_glyph_bbox();
-    flushing = 0;
-    if(flags.botl || flags.botlx) bot();
+	if (cursor_on_u) curs(WIN_MAP, u.ux,u.uy); /* move cursor to the hero */
+	display_nhwindow(WIN_MAP, false);
+	reset_glyph_bbox();
+	flushing = 0;
+	if(flags.botl || flags.botlx) bot();
 }
 
 /* ========================================================================= */
@@ -1576,11 +1586,11 @@ void flush_screen(int cursor_on_u) {
  * variables.
  */
 static int back_to_cmap(xchar x, xchar y) {
-    int idx;
-    struct rm *ptr = &(levl[x][y]);
+	int idx;
+	struct rm *ptr = &(levl[x][y]);
 
-    switch (ptr->typ) {
-    /* KMH -- support arboreal levels */
+	switch (ptr->typ) {
+	/* KMH -- support arboreal levels */
 	case SCORR:
 	case STONE:
 		idx = level.flags.arboreal ? S_tree : S_stone;
@@ -1603,69 +1613,105 @@ static int back_to_cmap(xchar x, xchar y) {
 	case TLWALL:
 	case TRWALL:
 	case SDOOR:
-	    idx = ptr->seenv ? wall_angle(ptr) : S_stone;
-	    break;
-	case IRONBARS:		idx = S_bars;     break;
-	case DOOR:
-	    if (ptr->doormask) {
-		if (ptr->doormask & D_BROKEN)
-		    idx = S_ndoor;
-		else if (ptr->doormask & D_ISOPEN)
-		    idx = (ptr->horizontal) ? S_hodoor : S_vodoor;
-		else			/* else is closed */
-		    idx = (ptr->horizontal) ? S_hcdoor : S_vcdoor;
-	    } else
-		idx = S_ndoor;
-	    break;
-	case TREE:		idx = S_tree;     break;
-	case POOL:
-	case MOAT:		idx = S_pool;	  break;
-	case STAIRS:
-	    idx = (ptr->ladder & LA_DOWN) ? S_dnstair : S_upstair;
-	    break;
-	case LADDER:
-	    idx = (ptr->ladder & LA_DOWN) ? S_dnladder : S_upladder;
-	    break;
-	case FOUNTAIN:		idx = S_fountain; break;
-	case SINK:		idx = S_sink;     break;
-	case TOILET:            idx = S_toilet;   break;
-	case GRAVE:		idx = S_grave;    break;
-	case ALTAR:             idx = S_altar;    break;
-	case THRONE:		idx = S_throne;   break;
-	case LAVAPOOL:		idx = S_lava;	  break;
-	case ICE:		idx = S_ice;      break;
-	case AIR:		idx = S_air;	  break;
-	case CLOUD:		idx = S_cloud;	  break;
-	case WATER:		idx = S_water;	  break;
-	case DBWALL:
-	    idx = (ptr->horizontal) ? S_hcdbridge : S_vcdbridge;
-	    break;
-	case DRAWBRIDGE_UP:
-	    switch(ptr->drawbridgemask & DB_UNDER) {
-	    case DB_MOAT:  idx = S_pool; break;
-	    case DB_LAVA:  idx = S_lava; break;
-	    case DB_ICE:   idx = S_ice;  break;
-	    case DB_FLOOR: idx = (!cansee(x,y) && !ptr->waslit) ? S_darkroom : S_room; break;
-	    default:
-		impossible("Strange db-under: %d",
-			   ptr->drawbridgemask & DB_UNDER);
-		idx = (!cansee(x,y) && !ptr->waslit) ? S_darkroom : S_room; /* something is better than nothing */
+		idx = ptr->seenv ? wall_angle(ptr) : S_stone;
 		break;
-	    }
-	    break;
+	case IRONBARS:
+		idx = S_bars;
+		break;
+	case DOOR:
+		if (ptr->doormask) {
+			if (ptr->doormask & D_BROKEN)
+				idx = S_ndoor;
+			else if (ptr->doormask & D_ISOPEN)
+				idx = (ptr->horizontal) ? S_hodoor : S_vodoor;
+			else			/* else is closed */
+				idx = (ptr->horizontal) ? S_hcdoor : S_vcdoor;
+		} else
+			idx = S_ndoor;
+		break;
+	case TREE:
+		idx = S_tree;
+		break;
+	case POOL:
+	case MOAT:
+		idx = S_pool;
+		break;
+	case STAIRS:
+		idx = (ptr->ladder & LA_DOWN) ? S_dnstair : S_upstair;
+		break;
+	case LADDER:
+		idx = (ptr->ladder & LA_DOWN) ? S_dnladder : S_upladder;
+		break;
+	case FOUNTAIN:
+		idx = S_fountain;
+		break;
+	case SINK:
+		idx = S_sink;
+		break;
+	case TOILET:
+		idx = S_toilet;
+		break;
+	case GRAVE:
+		idx = S_grave;
+		break;
+	case ALTAR:
+		idx = S_altar;
+		break;
+	case THRONE:
+		idx = S_throne;
+		break;
+	case LAVAPOOL:
+		idx = S_lava;
+		break;
+	case ICE:
+		idx = S_ice;
+		break;
+	case AIR:
+		idx = S_air;
+		break;
+	case CLOUD:
+		idx = S_cloud;
+		break;
+	case WATER:
+		idx = S_water;
+		break;
+	case DBWALL:
+		idx = (ptr->horizontal) ? S_hcdbridge : S_vcdbridge;
+		break;
+	case DRAWBRIDGE_UP:
+		switch(ptr->drawbridgemask & DB_UNDER) {
+		case DB_MOAT:
+			idx = S_pool;
+			break;
+		case DB_LAVA:
+			idx = S_lava;
+			break;
+		case DB_ICE:
+			idx = S_ice;
+			break;
+		case DB_FLOOR:
+			idx = (!cansee(x,y) && !ptr->waslit) ? S_darkroom : S_room;
+			break;
+		default:
+			impossible("Strange db-under: %d",
+			           ptr->drawbridgemask & DB_UNDER);
+			idx = (!cansee(x,y) && !ptr->waslit) ? S_darkroom : S_room; /* something is better than nothing */
+			break;
+		}
+		break;
 	case DRAWBRIDGE_DOWN:
-	    idx = (ptr->horizontal) ? S_hodbridge : S_vodbridge;
-	    break;
+		idx = (ptr->horizontal) ? S_hodbridge : S_vodbridge;
+		break;
 	default:
-	    impossible("back_to_glyph:  unknown level type [ = %d ]",ptr->typ);
-	    idx = S_room;
-	    break;
-    }
-    return idx;
+		impossible("back_to_glyph:  unknown level type [ = %d ]",ptr->typ);
+		idx = S_room;
+		break;
+	}
+	return idx;
 }
 
 int back_to_glyph(xchar x,xchar y) {
-    return cmap_to_glyph(back_to_cmap(x,y));
+	return cmap_to_glyph(back_to_cmap(x,y));
 }
 
 
@@ -1677,11 +1723,11 @@ int back_to_glyph(xchar x,xchar y) {
  * a random monster in swallowed() and don't use what_mon() here.
  */
 static int swallow_to_glyph(int mnum, int loc) {
-    if (loc < S_sw_tl || S_sw_br < loc) {
-	impossible("swallow_to_glyph: bad swallow location");
-	loc = S_sw_br;
-    }
-    return ((what_mon(mnum)<<3) | (loc - S_sw_tl)) + GLYPH_SWALLOW_OFF;
+	if (loc < S_sw_tl || S_sw_br < loc) {
+		impossible("swallow_to_glyph: bad swallow location");
+		loc = S_sw_br;
+	}
+	return ((what_mon(mnum)<<3) | (loc - S_sw_tl)) + GLYPH_SWALLOW_OFF;
 }
 
 
@@ -1699,13 +1745,13 @@ static int swallow_to_glyph(int mnum, int loc) {
  *	/  S_rslant	(-1, 1) or ( 1,-1)
  */
 int zapdir_to_glyph(int dx, int dy, int beam_type) {
-    if (beam_type >= NUM_ZAP) {
-	impossible("zapdir_to_glyph:  illegal beam type");
-	beam_type = 0;
-    }
-    dx = (dx == dy) ? 2 : (dx && dy) ? 3 : dx ? 1 : 0;
+	if (beam_type >= NUM_ZAP) {
+		impossible("zapdir_to_glyph:  illegal beam type");
+		beam_type = 0;
+	}
+	dx = (dx == dy) ? 2 : (dx && dy) ? 3 : dx ? 1 : 0;
 
-    return ((beam_type << 2) | dx) + GLYPH_ZAP_OFF;
+	return ((beam_type << 2) | dx) + GLYPH_ZAP_OFF;
 }
 
 
@@ -1715,9 +1761,9 @@ int zapdir_to_glyph(int dx, int dy, int beam_type) {
  * structure, so we must check the "third screen".
  */
 int glyph_at(xchar x, xchar y) {
-    if(x < 0 || y < 0 || x >= COLNO || y >= ROWNO)
-	return cmap_to_glyph(S_room);			/* XXX */
-    return gbuf[y][x].glyph;
+	if(x < 0 || y < 0 || x >= COLNO || y >= ROWNO)
+		return cmap_to_glyph(S_room);			/* XXX */
+	return gbuf[y][x].glyph;
 }
 
 
@@ -1746,14 +1792,14 @@ static const char *type_names[MAX_TYPE] = {
 
 
 static const char *type_to_name (int type) {
-    return (type < 0 || type > MAX_TYPE) ? "unknown" : type_names[type];
+	return (type < 0 || type > MAX_TYPE) ? "unknown" : type_names[type];
 }
 
 static void error4(int x, int y, int a, int b, int c, int dd) {
-    pline("set_wall_state: %s @ (%d,%d) %s%s%s%s",
-	type_to_name(levl[x][y].typ), x, y,
-	a ? "1":"", b ? "2":"", c ? "3":"", dd ? "4":"");
-    bad_count[levl[x][y].typ]++;
+	pline("set_wall_state: %s @ (%d,%d) %s%s%s%s",
+	      type_to_name(levl[x][y].typ), x, y,
+	      a ? "1":"", b ? "2":"", c ? "3":"", dd ? "4":"");
+	bad_count[levl[x][y].typ]++;
 }
 #endif /* WA_VERBOSE */
 
@@ -1764,11 +1810,11 @@ static void error4(int x, int y, int a, int b, int c, int dd) {
  * Things that are ambigious: lava
  */
 static int check_pos(int x, int y, int which) {
-    int type;
-    if (!isok(x,y)) return which;
-    type = levl[x][y].typ;
-    if (IS_ROCK(type) || type == CORR || type == SCORR) return which;
-    return 0;
+	int type;
+	if (!isok(x,y)) return which;
+	type = levl[x][y].typ;
+	if (IS_ROCK(type) || type == CORR || type == SCORR) return which;
+	return 0;
 }
 
 /* Return true if more than one is non-zero. */
@@ -1778,11 +1824,11 @@ static boolean more_than_one(int x, int y, int a, int b, int c) {
 #if defined(MAC_MPW)
 # pragma unused ( x,y )
 #endif
-    if ((a && (b|c)) || (b && (a|c)) || (c && (a|b))) {
-	error4(x,y,a,b,c,0);
-	return true;
-    }
-    return false;
+	if ((a && (b|c)) || (b && (a|c)) || (c && (a|b))) {
+		error4(x,y,a,b,c,0);
+		return true;
+	}
+	return false;
 }
 #else
 #define more_than_one(x, y, a, b, c) (((a) && ((b)|(c))) || ((b) && ((a)|(c))) || ((c) && ((a)|(b))))
@@ -1790,36 +1836,36 @@ static boolean more_than_one(int x, int y, int a, int b, int c) {
 
 /* Return the wall mode for a T wall. */
 static int set_twall(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3) {
-    int wmode, is_1, is_2, is_3;
+	int wmode, is_1, is_2, is_3;
 
-    is_1 = check_pos(x1, y1, WM_T_LONG);
-    is_2 = check_pos(x2, y2, WM_T_BL);
-    is_3 = check_pos(x3, y3, WM_T_BR);
-    if (more_than_one(x0, y0, is_1, is_2, is_3)) {
-	wmode = 0;
-    } else {
-	wmode = is_1 + is_2 + is_3;
-    }
-    return wmode;
+	is_1 = check_pos(x1, y1, WM_T_LONG);
+	is_2 = check_pos(x2, y2, WM_T_BL);
+	is_3 = check_pos(x3, y3, WM_T_BR);
+	if (more_than_one(x0, y0, is_1, is_2, is_3)) {
+		wmode = 0;
+	} else {
+		wmode = is_1 + is_2 + is_3;
+	}
+	return wmode;
 }
 
 /* Return wall mode for a horizontal or vertical wall. */
 static int set_wall(int x, int y, int horiz) {
-    int wmode, is_1, is_2;
+	int wmode, is_1, is_2;
 
-    if (horiz) {
-	is_1 = check_pos(x,y-1, WM_W_TOP);
-	is_2 = check_pos(x,y+1, WM_W_BOTTOM);
-    } else {
-	is_1 = check_pos(x-1,y, WM_W_LEFT);
-	is_2 = check_pos(x+1,y, WM_W_RIGHT);
-    }
-    if (more_than_one(x, y, is_1, is_2, 0)) {
-	wmode = 0;
-    } else {
-	wmode = is_1 + is_2;
-    }
-    return wmode;
+	if (horiz) {
+		is_1 = check_pos(x,y-1, WM_W_TOP);
+		is_2 = check_pos(x,y+1, WM_W_BOTTOM);
+	} else {
+		is_1 = check_pos(x-1,y, WM_W_LEFT);
+		is_2 = check_pos(x+1,y, WM_W_RIGHT);
+	}
+	if (more_than_one(x, y, is_1, is_2, 0)) {
+		wmode = 0;
+	} else {
+		wmode = is_1 + is_2;
+	}
+	return wmode;
 }
 
 /*
@@ -1830,147 +1876,148 @@ static int set_wall(int x, int y, int horiz) {
  * Return a wall mode for a corner wall. (x4,y4) is the "inner" position.
  */
 static int set_corn(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
-    int wmode, is_1, is_2, is_3, is_4;
+	int wmode, is_1, is_2, is_3, is_4;
 
-    is_1 = check_pos(x1, y1, 1);
-    is_2 = check_pos(x2, y2, 1);
-    is_3 = check_pos(x3, y3, 1);
-    is_4 = check_pos(x4, y4, 1);	/* inner location */
+	is_1 = check_pos(x1, y1, 1);
+	is_2 = check_pos(x2, y2, 1);
+	is_3 = check_pos(x3, y3, 1);
+	is_4 = check_pos(x4, y4, 1);	/* inner location */
 
-    /*
-     * All 4 should not be true.  So if the inner location is rock,
-     * use it.  If all of the outer 3 are true, use outer.  We currently
-     * can't cover the case where only part of the outer is rock, so
-     * we just say that all the walls are finished (if not overridden
-     * by the inner section).
-     */
-    if (is_4) {
-	wmode = WM_C_INNER;
-    } else if (is_1 && is_2 && is_3)
-	wmode = WM_C_OUTER;
-     else
-	wmode = 0;	/* finished walls on all sides */
+	/*
+	 * All 4 should not be true.  So if the inner location is rock,
+	 * use it.  If all of the outer 3 are true, use outer.  We currently
+	 * can't cover the case where only part of the outer is rock, so
+	 * we just say that all the walls are finished (if not overridden
+	 * by the inner section).
+	 */
+	if (is_4) {
+		wmode = WM_C_INNER;
+	} else if (is_1 && is_2 && is_3)
+		wmode = WM_C_OUTER;
+	else
+		wmode = 0;	/* finished walls on all sides */
 
-    return wmode;
+	return wmode;
 }
 
 /* Return mode for a crosswall. */
 static int set_crosswall(int x, int y) {
-    int wmode, is_1, is_2, is_3, is_4;
+	int wmode, is_1, is_2, is_3, is_4;
 
-    is_1 = check_pos(x-1, y-1, 1);
-    is_2 = check_pos(x+1, y-1, 1);
-    is_3 = check_pos(x+1, y+1, 1);
-    is_4 = check_pos(x-1, y+1, 1);
+	is_1 = check_pos(x-1, y-1, 1);
+	is_2 = check_pos(x+1, y-1, 1);
+	is_3 = check_pos(x+1, y+1, 1);
+	is_4 = check_pos(x-1, y+1, 1);
 
-    wmode = is_1+is_2+is_3+is_4;
-    if (wmode > 1) {
-	if (is_1 && is_3 && (is_2+is_4 == 0)) {
-	    wmode = WM_X_TLBR;
-	} else if (is_2 && is_4 && (is_1+is_3 == 0)) {
-	    wmode = WM_X_BLTR;
-	} else {
+	wmode = is_1+is_2+is_3+is_4;
+	if (wmode > 1) {
+		if (is_1 && is_3 && (is_2+is_4 == 0)) {
+			wmode = WM_X_TLBR;
+		} else if (is_2 && is_4 && (is_1+is_3 == 0)) {
+			wmode = WM_X_BLTR;
+		} else {
 #ifdef WA_VERBOSE
-	    error4(x,y,is_1,is_2,is_3,is_4);
+			error4(x,y,is_1,is_2,is_3,is_4);
 #endif
-	    wmode = 0;
-	}
-    } else if (is_1)
-	wmode = WM_X_TL;
-    else if (is_2)
-	wmode = WM_X_TR;
-    else if (is_3)
-	wmode = WM_X_BR;
-    else if (is_4)
-	wmode = WM_X_BL;
+			wmode = 0;
+		}
+	} else if (is_1)
+		wmode = WM_X_TL;
+	else if (is_2)
+		wmode = WM_X_TR;
+	else if (is_3)
+		wmode = WM_X_BR;
+	else if (is_4)
+		wmode = WM_X_BL;
 
-    return wmode;
+	return wmode;
 }
 
 /* Called from mklev.  Scan the level and set the wall modes. */
 void set_wall_state(void) {
-    int x, y;
-    int wmode;
-    struct rm *lev;
+	int x, y;
+	int wmode;
+	struct rm *lev;
 
 #ifdef WA_VERBOSE
-    for (x = 0; x < MAX_TYPE; x++) bad_count[x] = 0;
+	for (x = 0; x < MAX_TYPE; x++) bad_count[x] = 0;
 #endif
 
-    for (x = 0; x < COLNO; x++)
-	for (lev = &levl[x][0], y = 0; y < ROWNO; y++, lev++) {
-	    switch (lev->typ) {
-		case SDOOR:
-		    wmode = set_wall(x, y, (int) lev->horizontal);
-		    break;
-		case VWALL:
-		    wmode = set_wall(x, y, 0);
-		    break;
-		case HWALL:
-		    wmode = set_wall(x, y, 1);
-		    break;
-		case TDWALL:
-		    wmode = set_twall(x,y, x,y-1, x-1,y+1, x+1,y+1);
-		    break;
-		case TUWALL:
-		    wmode = set_twall(x,y, x,y+1, x+1,y-1, x-1,y-1);
-		    break;
-		case TLWALL:
-		    wmode = set_twall(x,y, x+1,y, x-1,y-1, x-1,y+1);
-		    break;
-		case TRWALL:
-		    wmode = set_twall(x,y, x-1,y, x+1,y+1, x+1,y-1);
-		    break;
-		case TLCORNER:
-		    wmode = set_corn(x-1,y-1, x,y-1, x-1,y, x+1,y+1);
-		    break;
-		case TRCORNER:
-		    wmode = set_corn(x,y-1, x+1,y-1, x+1,y, x-1,y+1);
-		    break;
-		case BLCORNER:
-		    wmode = set_corn(x,y+1, x-1,y+1, x-1,y, x+1,y-1);
-		    break;
-		case BRCORNER:
-		    wmode = set_corn(x+1,y, x+1,y+1, x,y+1, x-1,y-1);
-		    break;
-		case CROSSWALL:
-		    wmode = set_crosswall(x, y);
-		    break;
+	for (x = 0; x < COLNO; x++)
+		for (lev = &levl[x][0], y = 0; y < ROWNO; y++, lev++) {
+			switch (lev->typ) {
+			case SDOOR:
+				wmode = set_wall(x, y, (int) lev->horizontal);
+				break;
+			case VWALL:
+				wmode = set_wall(x, y, 0);
+				break;
+			case HWALL:
+				wmode = set_wall(x, y, 1);
+				break;
+			case TDWALL:
+				wmode = set_twall(x,y, x,y-1, x-1,y+1, x+1,y+1);
+				break;
+			case TUWALL:
+				wmode = set_twall(x,y, x,y+1, x+1,y-1, x-1,y-1);
+				break;
+			case TLWALL:
+				wmode = set_twall(x,y, x+1,y, x-1,y-1, x-1,y+1);
+				break;
+			case TRWALL:
+				wmode = set_twall(x,y, x-1,y, x+1,y+1, x+1,y-1);
+				break;
+			case TLCORNER:
+				wmode = set_corn(x-1,y-1, x,y-1, x-1,y, x+1,y+1);
+				break;
+			case TRCORNER:
+				wmode = set_corn(x,y-1, x+1,y-1, x+1,y, x-1,y+1);
+				break;
+			case BLCORNER:
+				wmode = set_corn(x,y+1, x-1,y+1, x-1,y, x+1,y-1);
+				break;
+			case BRCORNER:
+				wmode = set_corn(x+1,y, x+1,y+1, x,y+1, x-1,y-1);
+				break;
+			case CROSSWALL:
+				wmode = set_crosswall(x, y);
+				break;
 
-		default:
-		    wmode = -1;	/* don't set wall info */
-		    break;
-	    }
+			default:
+				wmode = -1;	/* don't set wall info */
+				break;
+			}
 
-	if (wmode >= 0)
-	    lev->wall_info = (lev->wall_info & ~WM_MASK) | wmode;
-	}
+			if (wmode >= 0)
+				lev->wall_info = (lev->wall_info & ~WM_MASK) | wmode;
+		}
 
 #ifdef WA_VERBOSE
-    /* check if any bad positions found */
-    for (x = y = 0; x < MAX_TYPE; x++)
-	if (bad_count[x]) {
-	    if (y == 0) {
-		y = 1;	/* only print once */
-		pline("set_wall_type: wall mode problems with: ");
-	    }
-	    pline("%s %d;", type_names[x], bad_count[x]);
-	}
+	/* check if any bad positions found */
+	for (x = y = 0; x < MAX_TYPE; x++)
+		if (bad_count[x]) {
+			if (y == 0) {
+				y = 1;	/* only print once */
+				pline("set_wall_type: wall mode problems with: ");
+			}
+			pline("%s %d;", type_names[x], bad_count[x]);
+		}
 #endif /* WA_VERBOSE */
 }
 
 /* ------------------------------------------------------------------------- */
 /* This matrix is used here and in vision.c. */
 unsigned char seenv_matrix[3][3] = { {SV2,   SV1, SV0},
-				     {SV3, SVALL, SV7},
-				     {SV4,   SV5, SV6} };
+	{SV3, SVALL, SV7},
+	{SV4,   SV5, SV6}
+};
 
 #define sign(z) ((z) < 0 ? -1 : ((z) > 0 ? 1 : 0))
 
 /* Set the seen vector of lev as if seen from (x0,y0) to (x,y). */
 static void set_seenv(struct rm *lev, int x0, int y0, int x, int y) {
-    int dx = x-x0, dy = y0-y;
-    lev->seenv |= seenv_matrix[sign(dy)+1][sign(dx)+1];
+	int dx = x-x0, dy = y0-y;
+	lev->seenv |= seenv_matrix[sign(dy)+1][sign(dx)+1];
 }
 
 /* ------------------------------------------------------------------------- */
@@ -1995,10 +2042,10 @@ static void set_seenv(struct rm *lev, int x0, int y0, int x, int y) {
 #define T_tdwall 4
 
 static const int wall_matrix[4][5] = {
-    { S_stone, S_tlcorn, S_trcorn, S_hwall, S_tdwall },	/* tdwall */
-    { S_stone, S_trcorn, S_brcorn, S_vwall, S_tlwall },	/* tlwall */
-    { S_stone, S_brcorn, S_blcorn, S_hwall, S_tuwall },	/* tuwall */
-    { S_stone, S_blcorn, S_tlcorn, S_vwall, S_trwall },	/* trwall */
+	{ S_stone, S_tlcorn, S_trcorn, S_hwall, S_tdwall },	/* tdwall */
+	{ S_stone, S_trcorn, S_brcorn, S_vwall, S_tlwall },	/* tlwall */
+	{ S_stone, S_brcorn, S_blcorn, S_hwall, S_tuwall },	/* tuwall */
+	{ S_stone, S_blcorn, S_tlcorn, S_vwall, S_trwall },	/* trwall */
 };
 
 
@@ -2023,24 +2070,24 @@ static const int wall_matrix[4][5] = {
 #define C_crwall 5
 
 static const int cross_matrix[4][6] = {
-    { S_brcorn, S_blcorn, S_tlcorn, S_tuwall, S_trwall, S_crwall },
-    { S_blcorn, S_tlcorn, S_trcorn, S_trwall, S_tdwall, S_crwall },
-    { S_tlcorn, S_trcorn, S_brcorn, S_tdwall, S_tlwall, S_crwall },
-    { S_trcorn, S_brcorn, S_blcorn, S_tlwall, S_tuwall, S_crwall },
+	{ S_brcorn, S_blcorn, S_tlcorn, S_tuwall, S_trwall, S_crwall },
+	{ S_blcorn, S_tlcorn, S_trcorn, S_trwall, S_tdwall, S_crwall },
+	{ S_tlcorn, S_trcorn, S_brcorn, S_tdwall, S_tlwall, S_crwall },
+	{ S_trcorn, S_brcorn, S_blcorn, S_tlwall, S_tuwall, S_crwall },
 };
 
 
 /* Print out a T wall warning and all interesting info. */
 static void t_warn(struct rm *lev) {
-    static const char warn_str[] = "wall_angle: %s: case %d: seenv = 0x%x";
-    const char *wname;
+	static const char warn_str[] = "wall_angle: %s: case %d: seenv = 0x%x";
+	const char *wname;
 
-    if (lev->typ == TUWALL) wname = "tuwall";
-    else if (lev->typ == TLWALL) wname = "tlwall";
-    else if (lev->typ == TRWALL) wname = "trwall";
-    else if (lev->typ == TDWALL) wname = "tdwall";
-    else wname = "unknown";
-    impossible(warn_str, wname, lev->wall_info & WM_MASK, lev->seenv);
+	if (lev->typ == TUWALL) wname = "tuwall";
+	else if (lev->typ == TLWALL) wname = "tlwall";
+	else if (lev->typ == TRWALL) wname = "trwall";
+	else if (lev->typ == TDWALL) wname = "tdwall";
+	else wname = "unknown";
+	impossible(warn_str, wname, lev->wall_info & WM_MASK, lev->seenv);
 }
 
 
@@ -2057,12 +2104,12 @@ static void t_warn(struct rm *lev) {
  * seen vector (SV).
  */
 static int wall_angle(struct rm *lev) {
-    uint seenv = lev->seenv & 0xff;
-    const int *row;
-    int col, idx;
+	uint seenv = lev->seenv & 0xff;
+	const int *row;
+	int col, idx;
 
 #define only(sv, bits)	(((sv) & (bits)) && ! ((sv) & ~(bits)))
-    switch (lev->typ) {
+	switch (lev->typ) {
 	case TUWALL:
 		row = wall_matrix[T_u];
 		seenv = (seenv >> 4 | seenv << 4) & 0xff;/* rotate to tdwall */
@@ -2079,92 +2126,92 @@ static int wall_angle(struct rm *lev) {
 		row = wall_matrix[T_d];
 do_twall:
 		switch (lev->wall_info & WM_MASK) {
-		    case 0:
+		case 0:
 			if (seenv == SV4) {
-			    col = T_tlcorn;
+				col = T_tlcorn;
 			} else if (seenv == SV6) {
-			    col = T_trcorn;
+				col = T_trcorn;
 			} else if (seenv & (SV3|SV5|SV7) ||
-					    ((seenv & SV4) && (seenv & SV6))) {
-			    col = T_tdwall;
+			                ((seenv & SV4) && (seenv & SV6))) {
+				col = T_tdwall;
 			} else if (seenv & (SV0|SV1|SV2)) {
-			    col = (seenv & (SV4|SV6) ? T_tdwall : T_hwall);
+				col = (seenv & (SV4|SV6) ? T_tdwall : T_hwall);
 			} else {
-			    t_warn(lev);
-			    col = T_stone;
-			}
-			break;
-		    case WM_T_LONG:
-			if (seenv & (SV3|SV4) && !(seenv & (SV5|SV6|SV7))) {
-			    col = T_tlcorn;
-			} else if (seenv&(SV6|SV7) && !(seenv&(SV3|SV4|SV5))) {
-			    col = T_trcorn;
-			} else if ((seenv & SV5) ||
-				((seenv & (SV3|SV4)) && (seenv & (SV6|SV7)))) {
-			    col = T_tdwall;
-			} else {
-			    /* only SV0|SV1|SV2 */
-			    if (! only(seenv, SV0|SV1|SV2) )
 				t_warn(lev);
-			    col = T_stone;
+				col = T_stone;
 			}
 			break;
-		    case WM_T_BL:
+		case WM_T_LONG:
+			if (seenv & (SV3|SV4) && !(seenv & (SV5|SV6|SV7))) {
+				col = T_tlcorn;
+			} else if (seenv&(SV6|SV7) && !(seenv&(SV3|SV4|SV5))) {
+				col = T_trcorn;
+			} else if ((seenv & SV5) ||
+			                ((seenv & (SV3|SV4)) && (seenv & (SV6|SV7)))) {
+				col = T_tdwall;
+			} else {
+				/* only SV0|SV1|SV2 */
+				if (! only(seenv, SV0|SV1|SV2) )
+					t_warn(lev);
+				col = T_stone;
+			}
+			break;
+		case WM_T_BL:
 #if 0	/* older method, fixed */
 			if (only(seenv, SV4|SV5)) {
-			    col = T_tlcorn;
+				col = T_tlcorn;
 			} else if ((seenv & (SV0|SV1|SV2)) &&
-					only(seenv, SV0|SV1|SV2|SV6|SV7)) {
-			    col = T_hwall;
+			                only(seenv, SV0|SV1|SV2|SV6|SV7)) {
+				col = T_hwall;
 			} else if (seenv & SV3 ||
-			    ((seenv & (SV0|SV1|SV2)) && (seenv & (SV4|SV5)))) {
-			    col = T_tdwall;
+			                ((seenv & (SV0|SV1|SV2)) && (seenv & (SV4|SV5)))) {
+				col = T_tdwall;
 			} else {
-			    if (seenv != SV6)
-				t_warn(lev);
-			    col = T_stone;
+				if (seenv != SV6)
+					t_warn(lev);
+				col = T_stone;
 			}
 #endif	/* 0 */
 			if (only(seenv, SV4|SV5))
-			    col = T_tlcorn;
+				col = T_tlcorn;
 			else if ((seenv & (SV0|SV1|SV2|SV7)) &&
-					!(seenv & (SV3|SV4|SV5)))
-			    col = T_hwall;
+			                !(seenv & (SV3|SV4|SV5)))
+				col = T_hwall;
 			else if (only(seenv, SV6))
-			    col = T_stone;
+				col = T_stone;
 			else
-			    col = T_tdwall;
+				col = T_tdwall;
 			break;
-		    case WM_T_BR:
+		case WM_T_BR:
 #if 0	/* older method, fixed */
 			if (only(seenv, SV5|SV6)) {
-			    col = T_trcorn;
+				col = T_trcorn;
 			} else if ((seenv & (SV0|SV1|SV2)) &&
-					    only(seenv, SV0|SV1|SV2|SV3|SV4)) {
-			    col = T_hwall;
+			                only(seenv, SV0|SV1|SV2|SV3|SV4)) {
+				col = T_hwall;
 			} else if (seenv & SV7 ||
-			    ((seenv & (SV0|SV1|SV2)) && (seenv & (SV5|SV6)))) {
-			    col = T_tdwall;
+			                ((seenv & (SV0|SV1|SV2)) && (seenv & (SV5|SV6)))) {
+				col = T_tdwall;
 			} else {
-			    if (seenv != SV4)
-				t_warn(lev);
-			    col = T_stone;
+				if (seenv != SV4)
+					t_warn(lev);
+				col = T_stone;
 			}
 #endif	/* 0 */
 			if (only(seenv, SV5|SV6))
-			    col = T_trcorn;
+				col = T_trcorn;
 			else if ((seenv & (SV0|SV1|SV2|SV3)) &&
-					!(seenv & (SV5|SV6|SV7)))
-			    col = T_hwall;
+			                !(seenv & (SV5|SV6|SV7)))
+				col = T_hwall;
 			else if (only(seenv, SV4))
-			    col = T_stone;
+				col = T_stone;
 			else
-			    col = T_tdwall;
+				col = T_tdwall;
 
 			break;
-		    default:
+		default:
 			impossible("wall_angle: unknown T wall mode %d",
-				lev->wall_info & WM_MASK);
+			           lev->wall_info & WM_MASK);
 			col = T_stone;
 			break;
 		}
@@ -2173,19 +2220,23 @@ do_twall:
 
 	case SDOOR:
 		if (lev->horizontal) goto horiz;
-		/* fall through */
+	/* fall through */
 	case VWALL:
 		switch (lev->wall_info & WM_MASK) {
-		    case 0: idx = seenv ? S_vwall : S_stone; break;
-		    case 1: idx = seenv & (SV1|SV2|SV3|SV4|SV5) ? S_vwall :
-								  S_stone;
-			    break;
-		    case 2: idx = seenv & (SV0|SV1|SV5|SV6|SV7) ? S_vwall :
-								  S_stone;
-			    break;
-		    default:
+		case 0:
+			idx = seenv ? S_vwall : S_stone;
+			break;
+		case 1:
+			idx = seenv & (SV1|SV2|SV3|SV4|SV5) ? S_vwall :
+			      S_stone;
+			break;
+		case 2:
+			idx = seenv & (SV0|SV1|SV5|SV6|SV7) ? S_vwall :
+			      S_stone;
+			break;
+		default:
 			impossible("wall_angle: unknown vwall mode %d",
-				lev->wall_info & WM_MASK);
+			           lev->wall_info & WM_MASK);
 			idx = S_stone;
 			break;
 		}
@@ -2194,16 +2245,20 @@ do_twall:
 	case HWALL:
 horiz:
 		switch (lev->wall_info & WM_MASK) {
-		    case 0: idx = seenv ? S_hwall : S_stone; break;
-		    case 1: idx = seenv & (SV3|SV4|SV5|SV6|SV7) ? S_hwall :
-								  S_stone;
-			    break;
-		    case 2: idx = seenv & (SV0|SV1|SV2|SV3|SV7) ? S_hwall :
-								  S_stone;
-			    break;
-		    default:
+		case 0:
+			idx = seenv ? S_hwall : S_stone;
+			break;
+		case 1:
+			idx = seenv & (SV3|SV4|SV5|SV6|SV7) ? S_hwall :
+			      S_stone;
+			break;
+		case 2:
+			idx = seenv & (SV0|SV1|SV2|SV3|SV7) ? S_hwall :
+			      S_stone;
+			break;
+		default:
 			impossible("wall_angle: unknown hwall mode %d",
-				lev->wall_info & WM_MASK);
+			           lev->wall_info & WM_MASK);
 			idx = S_stone;
 			break;
 		}
@@ -2222,118 +2277,118 @@ horiz:
     }
 
 	case TLCORNER:
-	    set_corner(idx, lev, S_tlcorn, (SV3|SV4|SV5), SV4, "tlcorn");
-	    break;
+		set_corner(idx, lev, S_tlcorn, (SV3|SV4|SV5), SV4, "tlcorn");
+		break;
 	case TRCORNER:
-	    set_corner(idx, lev, S_trcorn, (SV5|SV6|SV7), SV6, "trcorn");
-	    break;
+		set_corner(idx, lev, S_trcorn, (SV5|SV6|SV7), SV6, "trcorn");
+		break;
 	case BLCORNER:
-	    set_corner(idx, lev, S_blcorn, (SV1|SV2|SV3), SV2, "blcorn");
-	    break;
+		set_corner(idx, lev, S_blcorn, (SV1|SV2|SV3), SV2, "blcorn");
+		break;
 	case BRCORNER:
-	    set_corner(idx, lev, S_brcorn, (SV7|SV0|SV1), SV0, "brcorn");
-	    break;
+		set_corner(idx, lev, S_brcorn, (SV7|SV0|SV1), SV0, "brcorn");
+		break;
 
 
 	case CROSSWALL:
 		switch (lev->wall_info & WM_MASK) {
-		    case 0:
+		case 0:
 			if (seenv == SV0)
-			    idx = S_brcorn;
+				idx = S_brcorn;
 			else if (seenv == SV2)
-			    idx = S_blcorn;
+				idx = S_blcorn;
 			else if (seenv == SV4)
-			    idx = S_tlcorn;
+				idx = S_tlcorn;
 			else if (seenv == SV6)
-			    idx = S_trcorn;
+				idx = S_trcorn;
 			else if (!(seenv & ~(SV0|SV1|SV2)) &&
-					(seenv & SV1 || seenv == (SV0|SV2)))
-			    idx = S_tuwall;
+			                (seenv & SV1 || seenv == (SV0|SV2)))
+				idx = S_tuwall;
 			else if (!(seenv & ~(SV2|SV3|SV4)) &&
-					(seenv & SV3 || seenv == (SV2|SV4)))
-			    idx = S_trwall;
+			                (seenv & SV3 || seenv == (SV2|SV4)))
+				idx = S_trwall;
 			else if (!(seenv & ~(SV4|SV5|SV6)) &&
-					(seenv & SV5 || seenv == (SV4|SV6)))
-			    idx = S_tdwall;
+			                (seenv & SV5 || seenv == (SV4|SV6)))
+				idx = S_tdwall;
 			else if (!(seenv & ~(SV0|SV6|SV7)) &&
-					(seenv & SV7 || seenv == (SV0|SV6)))
-			    idx = S_tlwall;
+			                (seenv & SV7 || seenv == (SV0|SV6)))
+				idx = S_tlwall;
 			else
-			    idx = S_crwall;
+				idx = S_crwall;
 			break;
 
-		    case WM_X_TL:
+		case WM_X_TL:
 			row = cross_matrix[C_tl];
 			seenv = (seenv >> 4 | seenv << 4) & 0xff;
 			goto do_crwall;
-		    case WM_X_TR:
+		case WM_X_TR:
 			row = cross_matrix[C_tr];
 			seenv = (seenv >> 6 | seenv << 2) & 0xff;
 			goto do_crwall;
-		    case WM_X_BL:
+		case WM_X_BL:
 			row = cross_matrix[C_bl];
 			seenv = (seenv >> 2 | seenv << 6) & 0xff;
 			goto do_crwall;
-		    case WM_X_BR:
+		case WM_X_BR:
 			row = cross_matrix[C_br];
 do_crwall:
 			if (seenv == SV4)
-			    idx = S_stone;
+				idx = S_stone;
 			else {
-			    seenv = seenv & ~SV4;	/* strip SV4 */
-			    if (seenv == SV0) {
-				col = C_brcorn;
-			    } else if (seenv & (SV2|SV3)) {
-				if (seenv & (SV5|SV6|SV7))
-				    col = C_crwall;
-				else if (seenv & (SV0|SV1))
-				    col = C_tuwall;
-				else
-				    col = C_blcorn;
-			    } else if (seenv & (SV5|SV6)) {
-				if (seenv & (SV1|SV2|SV3))
-				    col = C_crwall;
-				else if (seenv & (SV0|SV7))
-				    col = C_tlwall;
-				else
-				    col = C_trcorn;
-			    } else if (seenv & SV1) {
-				col = seenv & SV7 ? C_crwall : C_tuwall;
-			    } else if (seenv & SV7) {
-				col = seenv & SV1 ? C_crwall : C_tlwall;
-			    } else {
-				impossible(
-				    "wall_angle: bottom of crwall check");
-				col = C_crwall;
-			    }
+				seenv = seenv & ~SV4;	/* strip SV4 */
+				if (seenv == SV0) {
+					col = C_brcorn;
+				} else if (seenv & (SV2|SV3)) {
+					if (seenv & (SV5|SV6|SV7))
+						col = C_crwall;
+					else if (seenv & (SV0|SV1))
+						col = C_tuwall;
+					else
+						col = C_blcorn;
+				} else if (seenv & (SV5|SV6)) {
+					if (seenv & (SV1|SV2|SV3))
+						col = C_crwall;
+					else if (seenv & (SV0|SV7))
+						col = C_tlwall;
+					else
+						col = C_trcorn;
+				} else if (seenv & SV1) {
+					col = seenv & SV7 ? C_crwall : C_tuwall;
+				} else if (seenv & SV7) {
+					col = seenv & SV1 ? C_crwall : C_tlwall;
+				} else {
+					impossible(
+					        "wall_angle: bottom of crwall check");
+					col = C_crwall;
+				}
 
-			    idx = row[col];
+				idx = row[col];
 			}
 			break;
 
-		    case WM_X_TLBR:
+		case WM_X_TLBR:
 			if ( only(seenv, SV1|SV2|SV3) )
-			    idx = S_blcorn;
+				idx = S_blcorn;
 			else if ( only(seenv, SV5|SV6|SV7) )
-			    idx = S_trcorn;
+				idx = S_trcorn;
 			else if ( only(seenv, SV0|SV4) )
-			    idx = S_stone;
+				idx = S_stone;
 			else
-			    idx = S_crwall;
+				idx = S_crwall;
 			break;
 
-		    case WM_X_BLTR:
+		case WM_X_BLTR:
 			if ( only(seenv, SV0|SV1|SV7) )
-			    idx = S_brcorn;
+				idx = S_brcorn;
 			else if ( only(seenv, SV3|SV4|SV5) )
-			    idx = S_tlcorn;
+				idx = S_tlcorn;
 			else if ( only(seenv, SV2|SV6) )
-			    idx = S_stone;
+				idx = S_stone;
 			else
-			    idx = S_crwall;
+				idx = S_crwall;
 			break;
 
-		    default:
+		default:
 			impossible("wall_angle: unknown crosswall mode");
 			idx = S_stone;
 			break;
@@ -2341,10 +2396,10 @@ do_crwall:
 		break;
 
 	default:
-	    impossible("wall_angle: unexpected wall type %d", lev->typ);
-	    idx = S_stone;
-    }
-    return idx;
+		impossible("wall_angle: unexpected wall type %d", lev->typ);
+		idx = S_stone;
+	}
+	return idx;
 }
 
 /*display.c*/

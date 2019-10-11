@@ -8,10 +8,10 @@ int get_rect_ind(NhRect *);
 
 static boolean intersect(NhRect *,NhRect *,NhRect *);
 
-    /*
-     * In this file, we will handle the various rectangle functions we
-     * need for room generation.
-     */
+/*
+ * In this file, we will handle the various rectangle functions we
+ * need for room generation.
+ */
 
 #define MAXRECT	50
 #define XLIM	4
@@ -26,8 +26,7 @@ static int rect_cnt;
  */
 
 void
-init_rect (void)
-{
+init_rect (void) {
 	rect_cnt = 1;
 	rect[0].lx = rect[0].ly = 0;
 	rect[0].hx = COLNO - 1;
@@ -47,12 +46,14 @@ NhRect *r;
 	int lx, ly, hx, hy;
 	int i;
 
-	lx = r->lx; ly = r->ly;
-	hx = r->hx; hy = r->hy;
-	for (i=0,rectp = &rect[0];i<rect_cnt;i++,rectp++)
-	    if ( lx == rectp->lx && ly == rectp->ly &&
-		 hx == rectp->hx && hy == rectp->hy)
-		return i;
+	lx = r->lx;
+	ly = r->ly;
+	hx = r->hx;
+	hy = r->hy;
+	for (i=0,rectp = &rect[0]; i<rect_cnt; i++,rectp++)
+		if ( lx == rectp->lx && ly == rectp->ly &&
+		                hx == rectp->hx && hy == rectp->hy)
+			return i;
 	return -1;
 }
 
@@ -68,12 +69,14 @@ NhRect *r;
 	int lx, ly, hx, hy;
 	int i;
 
-	lx = r->lx; ly = r->ly;
-	hx = r->hx; hy = r->hy;
-	for (i=0,rectp = &rect[0];i<rect_cnt;i++,rectp++)
-	    if ( lx >= rectp->lx && ly >= rectp->ly &&
-		 hx <= rectp->hx && hy <= rectp->hy)
-		return rectp;
+	lx = r->lx;
+	ly = r->ly;
+	hx = r->hx;
+	hy = r->hy;
+	for (i=0,rectp = &rect[0]; i<rect_cnt; i++,rectp++)
+		if ( lx >= rectp->lx && ly >= rectp->ly &&
+		                hx <= rectp->hx && hy <= rectp->hy)
+			return rectp;
 	return 0;
 }
 
@@ -82,9 +85,8 @@ NhRect *r;
  */
 
 NhRect *
-rnd_rect()
-{
-	    return rect_cnt > 0 ? &rect[rn2(rect_cnt)] : 0;
+rnd_rect() {
+	return rect_cnt > 0 ? &rect[rn2(rect_cnt)] : 0;
 }
 
 /*
@@ -98,8 +100,8 @@ intersect(r1, r2, r3)
 NhRect *r1, *r2, *r3;
 {
 	if (r2->lx > r1->hx || r2->ly > r1->hy ||
-	    r2->hx < r1->lx || r2->hy < r1->ly)
-	    return false;
+	                r2->hx < r1->lx || r2->hy < r1->ly)
+		return false;
 
 	r3->lx = (r2->lx > r1->lx ? r2->lx : r1->lx);
 	r3->ly = (r2->ly > r1->ly ? r2->ly : r1->ly);
@@ -107,7 +109,7 @@ NhRect *r1, *r2, *r3;
 	r3->hy = (r2->hy > r1->hy ? r1->hy : r2->hy);
 
 	if (r3->lx > r3->hx || r3->ly > r3->hy)
-	    return false;
+		return false;
 	return true;
 }
 
@@ -123,7 +125,7 @@ NhRect *r;
 
 	ind = get_rect_ind(r);
 	if ( ind >=0 )
-	    rect[ind] = rect[--rect_cnt];
+		rect[ind] = rect[--rect_cnt];
 }
 
 /*
@@ -140,7 +142,7 @@ NhRect *r;
 	}
 	/* Check that this NhRect is not included in another one */
 	if (get_rect(r))
-	    return;
+		return;
 	rect[rect_cnt] = *r;
 	rect_cnt++;
 }
@@ -164,8 +166,8 @@ NhRect *r1, *r2;
 
 	/* Walk down since rect_cnt & rect[] will change... */
 	for (i=rect_cnt-1; i>=0; i--)
-	    if (intersect(&rect[i], r2, &r))
-		split_rects(&rect[i], &r);
+		if (intersect(&rect[i], r2, &r))
+			split_rects(&rect[i], &r);
 
 	if (r2->ly - old_r.ly-1 > (old_r.hy < ROWNO - 1 ? 2*YLIM : YLIM+1)+4) {
 		r = old_r;

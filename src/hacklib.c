@@ -46,237 +46,241 @@ NetHack, except that rounddiv may call panic().
 
 // is 'c' a digit?
 boolean digit(char c) {
-    return '0' <= c && c <= '9';
+	return '0' <= c && c <= '9';
 }
 
 // is 'c' a letter?  note: '@' classed as letter
 boolean letter(char c) {
-    return ('@' <= c && c <= 'Z') || ('a' <= c && c <= 'z');
+	return ('@' <= c && c <= 'Z') || ('a' <= c && c <= 'z');
 }
 
 // force 'c' into uppercase
 char highc(char c) {
-    return ('a' <= c && c <= 'z') ? (c & ~040) : c;
+	return ('a' <= c && c <= 'z') ? (c & ~040) : c;
 }
 
 // force 'c' into lowercase
 char lowc(char c) {
-    return ('A' <= c && c <= 'Z') ? (c | 040) : c;
+	return ('A' <= c && c <= 'Z') ? (c | 040) : c;
 }
 
 // convert a string into all lowercase
 char *lcase(char *s) {
-    char *p;
+	char *p;
 
-    for (p = s; *p; p++)
-	if ('A' <= *p && *p <= 'Z') *p |= 040;
-    return s;
+	for (p = s; *p; p++)
+		if ('A' <= *p && *p <= 'Z') *p |= 040;
+	return s;
 }
 
 // convert first character of a string to uppercase
 char *upstart(char *s) {
-    if (s)
-	s[0] = highc(s[0]);
+	if (s)
+		s[0] = highc(s[0]);
 
-    return s;
+	return s;
 }
 
 /* remove excess whitespace from a string buffer (in place) */
 char *mungspaces(char *bp) {
-    char c, *p, *p2;
-    boolean was_space = true;
+	char c, *p, *p2;
+	boolean was_space = true;
 
-    for (p = p2 = bp; (c = *p) != '\0'; p++) {
-	if (c == '\t') c = ' ';
-	if (c != ' ' || !was_space) *p2++ = c;
-	was_space = (c == ' ');
-    }
-    if (was_space && p2 > bp) p2--;
-    *p2 = '\0';
-    return bp;
+	for (p = p2 = bp; (c = *p) != '\0'; p++) {
+		if (c == '\t') c = ' ';
+		if (c != ' ' || !was_space) *p2++ = c;
+		was_space = (c == ' ');
+	}
+	if (was_space && p2 > bp) p2--;
+	*p2 = '\0';
+	return bp;
 }
 
 // return the end of a string (pointing at '\0')
 char *eos(char *s) {
-    while (*s) s++;	// s += strlen(s);
-    return s;
+	while (*s) s++;	// s += strlen(s);
+	return s;
 }
 
 // strcat(s, {c,'\0'});
 // append a character to a string (in place)
 char *strkitten(char *s, char c) {
-    char *p = eos(s);
+	char *p = eos(s);
 
-    *p++ = c;
-    *p = '\0';
-    return s;
+	*p++ = c;
+	*p = '\0';
+	return s;
 }
 
 // return a name converted to possessive
 char *s_suffix(const char *s) {
-    static char buf[BUFSZ];
+	static char buf[BUFSZ];
 
-    strcpy(buf, s);
-    if(!strcmpi(buf, "it"))
-	strcat(buf, "s");
-    else if(*(eos(buf)-1) == 's')
-	strcat(buf, "'");
-    else
-	strcat(buf, "'s");
-    return buf;
+	strcpy(buf, s);
+	if(!strcmpi(buf, "it"))
+		strcat(buf, "s");
+	else if(*(eos(buf)-1) == 's')
+		strcat(buf, "'");
+	else
+		strcat(buf, "'s");
+	return buf;
 }
 
 // is a string entirely whitespace?
 boolean onlyspace(const char *s) {
-    for (; *s; s++)
-	if (*s != ' ' && *s != '\t')
-		return false;
+	for (; *s; s++)
+		if (*s != ' ' && *s != '\t')
+			return false;
 
-    return true;
+	return true;
 }
 
 // expand tabs into proper number of spaces
 char *tabexpand(char *sbuf) {
-    char buf[BUFSZ];
-    char *bp, *s = sbuf;
-    int idx;
+	char buf[BUFSZ];
+	char *bp, *s = sbuf;
+	int idx;
 
-    if (!*s) return sbuf;
+	if (!*s) return sbuf;
 
-    /* warning: no bounds checking performed */
-    for (bp = buf, idx = 0; *s; s++)
-	if (*s == '\t') {
-	    do *bp++ = ' '; while (++idx % 8);
-	} else {
-	    *bp++ = *s;
-	    idx++;
-	}
-    *bp = 0;
-    return strcpy(sbuf, buf);
+	/* warning: no bounds checking performed */
+	for (bp = buf, idx = 0; *s; s++)
+		if (*s == '\t') {
+			do *bp++ = ' ';
+			while (++idx % 8);
+		} else {
+			*bp++ = *s;
+			idx++;
+		}
+	*bp = 0;
+	return strcpy(sbuf, buf);
 }
 
 // make a displayable string from a character
 char *visctrl(char c) {
-    static char ccc[3];
+	static char ccc[3];
 
-    c &= 0177;
+	c &= 0177;
 
-    ccc[2] = '\0';
-    if (c < 040) {
-	ccc[0] = '^';
-	ccc[1] = c | 0100;	/* letter */
-    } else if (c == 0177) {
-	ccc[0] = '^';
-	ccc[1] = c & ~0100;	/* '?' */
-    } else {
-	ccc[0] = c;		/* printable character */
-	ccc[1] = '\0';
-    }
-    return ccc;
+	ccc[2] = '\0';
+	if (c < 040) {
+		ccc[0] = '^';
+		ccc[1] = c | 0100;	/* letter */
+	} else if (c == 0177) {
+		ccc[0] = '^';
+		ccc[1] = c & ~0100;	/* '?' */
+	} else {
+		ccc[0] = c;		/* printable character */
+		ccc[1] = '\0';
+	}
+	return ccc;
 }
 
 // return the ordinal suffix of a number
 const char *ordin (uint n) {
-    int dd = n % 10;
+	int dd = n % 10;
 
-    return (dd == 0 || dd > 3 || (n % 100) / 10 == 1) ? "th" :
-	    (dd == 1) ? "st" : (dd == 2) ? "nd" : "rd";
+	return (dd == 0 || dd > 3 || (n % 100) / 10 == 1) ? "th" :
+	       (dd == 1) ? "st" : (dd == 2) ? "nd" : "rd";
 }
 
 // make a signed digit string from a number
 char *sitoa(int n) {
-    static char buf[13];
+	static char buf[13];
 
-    sprintf(buf, (n < 0) ? "%d" : "+%d", n);
-    return buf;
+	sprintf(buf, (n < 0) ? "%d" : "+%d", n);
+	return buf;
 }
 
 // return the sign of a number: -1, 0, or 1
 int sgn(int n) {
-    return (n < 0) ? -1 : (n != 0);
+	return (n < 0) ? -1 : (n != 0);
 }
 
 // calculate x/y, rounding as appropriate
 int rounddiv(long x, int y) {
-    int r, m;
-    int divsgn = 1;
+	int r, m;
+	int divsgn = 1;
 
-    if (y == 0)
-	panic("division by zero in rounddiv");
-    else if (y < 0) {
-	divsgn = -divsgn;  y = -y;
-    }
-    if (x < 0) {
-	divsgn = -divsgn;  x = -x;
-    }
-    r = x / y;
-    m = x % y;
-    if (2*m >= y) r++;
+	if (y == 0)
+		panic("division by zero in rounddiv");
+	else if (y < 0) {
+		divsgn = -divsgn;
+		y = -y;
+	}
+	if (x < 0) {
+		divsgn = -divsgn;
+		x = -x;
+	}
+	r = x / y;
+	m = x % y;
+	if (2*m >= y) r++;
 
-    return divsgn * r;
+	return divsgn * r;
 }
 
 // distance between two points, in moves
 int distmin(int x0, int y0, int x1, int y1) {
-    int dx = x0 - x1, dy = y0 - y1;
-    if (dx < 0) dx = -dx;
-    if (dy < 0) dy = -dy;
-  /*  The minimum number of moves to get from (x0,y0) to (x1,y1) is the
-   :  larger of the [absolute value of the] two deltas.
-   */
-    return (dx < dy) ? dy : dx;
+	int dx = x0 - x1, dy = y0 - y1;
+	if (dx < 0) dx = -dx;
+	if (dy < 0) dy = -dy;
+	/*  The minimum number of moves to get from (x0,y0) to (x1,y1) is the
+	 :  larger of the [absolute value of the] two deltas.
+	 */
+	return (dx < dy) ? dy : dx;
 }
 
 // square of euclidean distance between pair of pts
 int dist2(int x0, int y0, int x1, int y1) {
-    int dx = x0 - x1, dy = y0 - y1;
-    return dx * dx + dy * dy;
+	int dx = x0 - x1, dy = y0 - y1;
+	return dx * dx + dy * dy;
 }
 
 // are two points lined up (on a straight line)?
 boolean online2(int x0, int y0, int x1, int y1) {
-    int dx = x0 - x1, dy = y0 - y1;
-    /*  If either delta is zero then they're on an orthogonal line,
-     *  else if the deltas are equal (signs ignored) they're on a diagonal.
-     */
-    return !dy || !dx || (dy == dx) || (dy + dx == 0);	/* (dy == -dx) */
+	int dx = x0 - x1, dy = y0 - y1;
+	/*  If either delta is zero then they're on an orthogonal line,
+	 *  else if the deltas are equal (signs ignored) they're on a diagonal.
+	 */
+	return !dy || !dx || (dy == dx) || (dy + dx == 0);	/* (dy == -dx) */
 }
 
 
 // match a string against a pattern
 boolean pmatch(const char *patrn, const char *strng) {
-    char s, p;
-  /*
-   :  Simple pattern matcher:  '*' matches 0 or more characters, '?' matches
-   :  any single character.  Returns true if 'strng' matches 'patrn'.
-   */
+	char s, p;
+	/*
+	 :  Simple pattern matcher:  '*' matches 0 or more characters, '?' matches
+	 :  any single character.  Returns true if 'strng' matches 'patrn'.
+	 */
 pmatch_top:
-    s = *strng++;  p = *patrn++;	/* get next chars and pre-advance */
-    if (!p)			/* end of pattern */
-	return s == '\0';		/* matches iff end of string too */
-    else if (p == '*')		/* wildcard reached */
-	    return (!*patrn || pmatch(patrn, strng-1)) ? true :
-		    s ? pmatch(patrn-1, strng) : false;
-    else if (p != s && (p != '?' || !s))  /* check single character */
-	return false;		/* doesn't match */
-    else				/* return pmatch(patrn, strng); */
-	goto pmatch_top;	/* optimize tail recursion */
+	s = *strng++;
+	p = *patrn++;	/* get next chars and pre-advance */
+	if (!p)			/* end of pattern */
+		return s == '\0';		/* matches iff end of string too */
+	else if (p == '*')		/* wildcard reached */
+		return (!*patrn || pmatch(patrn, strng-1)) ? true :
+		       s ? pmatch(patrn-1, strng) : false;
+	else if (p != s && (p != '?' || !s))  /* check single character */
+		return false;		/* doesn't match */
+	else				/* return pmatch(patrn, strng); */
+		goto pmatch_top;	/* optimize tail recursion */
 }
 
 #ifndef STRNCMPI
 // case insensitive counted string comparison
 int strncmpi(const char *s1, const char *s2, usize n) {
-    //{ aka strncasecmp }
-    char t1, t2;
+	//{ aka strncasecmp }
+	char t1, t2;
 
-    while (n--) {
-	if (!*s2) return *s1 != 0;	/* s1 >= s2 */
-	else if (!*s1) return -1;	/* s1  < s2 */
-	t1 = lowc(*s1++);
-	t2 = lowc(*s2++);
-	if (t1 != t2) return (t1 > t2) ? 1 : -1;
-    }
-    return 0;				/* s1 == s2 */
+	while (n--) {
+		if (!*s2) return *s1 != 0;	/* s1 >= s2 */
+		else if (!*s1) return -1;	/* s1  < s2 */
+		t1 = lowc(*s1++);
+		t2 = lowc(*s2++);
+		if (t1 != t2) return (t1 > t2) ? 1 : -1;
+	}
+	return 0;				/* s1 == s2 */
 }
 #endif	/* STRNCMPI */
 
@@ -284,57 +288,57 @@ int strncmpi(const char *s1, const char *s2, usize n) {
 
 // case insensitive substring search
 char *strstri(const char *str, const char *sub) {
-    const char *s1, *s2;
-    int i, k;
+	const char *s1, *s2;
+	int i, k;
 # define TABSIZ 0x20	/* 0x40 would be case-sensitive */
-    char tstr[TABSIZ], tsub[TABSIZ];	/* nibble count tables */
+	char tstr[TABSIZ], tsub[TABSIZ];	/* nibble count tables */
 # if 0
-    assert( (TABSIZ & ~(TABSIZ-1)) == TABSIZ ); /* must be exact power of 2 */
-    assert( &lowc != 0 );			/* can't be unsafe macro */
+	assert( (TABSIZ & ~(TABSIZ-1)) == TABSIZ ); /* must be exact power of 2 */
+	assert( &lowc != 0 );			/* can't be unsafe macro */
 # endif
 
-    /* special case: empty substring */
-    if (!*sub)	return (char *) str;
+	/* special case: empty substring */
+	if (!*sub)	return (char *) str;
 
-    /* do some useful work while determining relative lengths */
-    for (i = 0; i < TABSIZ; i++)  tstr[i] = tsub[i] = 0;	/* init */
-    for (k = 0, s1 = str; *s1; k++)  tstr[*s1++ & (TABSIZ-1)]++;
-    for (	s2 = sub; *s2; --k)  tsub[*s2++ & (TABSIZ-1)]++;
+	/* do some useful work while determining relative lengths */
+	for (i = 0; i < TABSIZ; i++)  tstr[i] = tsub[i] = 0;	/* init */
+	for (k = 0, s1 = str; *s1; k++)  tstr[*s1++ & (TABSIZ-1)]++;
+	for (	s2 = sub; *s2; --k)  tsub[*s2++ & (TABSIZ-1)]++;
 
-    /* evaluate the info we've collected */
-    if (k < 0)	return NULL;  /* sub longer than str, so can't match */
-    for (i = 0; i < TABSIZ; i++)	/* does sub have more 'x's than str? */
-	if (tsub[i] > tstr[i])	return NULL;  /* match not possible */
+	/* evaluate the info we've collected */
+	if (k < 0)	return NULL;  /* sub longer than str, so can't match */
+	for (i = 0; i < TABSIZ; i++)	/* does sub have more 'x's than str? */
+		if (tsub[i] > tstr[i])	return NULL;  /* match not possible */
 
-    /* now actually compare the substring repeatedly to parts of the string */
-    for (i = 0; i <= k; i++) {
-	s1 = &str[i];
-	s2 = sub;
-	while (lowc(*s1++) == lowc(*s2++))
-	    if (!*s2)  return (char *) &str[i];		/* full match */
-    }
-    return NULL;	/* not found */
+	/* now actually compare the substring repeatedly to parts of the string */
+	for (i = 0; i <= k; i++) {
+		s1 = &str[i];
+		s2 = sub;
+		while (lowc(*s1++) == lowc(*s2++))
+			if (!*s2)  return (char *) &str[i];		/* full match */
+	}
+	return NULL;	/* not found */
 }
 #endif	/* STRSTRI */
 
 /* compare two strings for equality, ignoring the presence of specified
    characters (typically whitespace) and possibly ignoring case */
 boolean fuzzymatch(const char *s1, const char *s2, const char *ignore_chars, boolean caseblind) {
-    char c1, c2;
+	char c1, c2;
 
-    do {
-	while ((c1 = *s1++) != '\0' && index(ignore_chars, c1) != 0) continue;
-	while ((c2 = *s2++) != '\0' && index(ignore_chars, c2) != 0) continue;
-	if (!c1 || !c2) break;	/* stop when end of either string is reached */
+	do {
+		while ((c1 = *s1++) != '\0' && index(ignore_chars, c1) != 0) continue;
+		while ((c2 = *s2++) != '\0' && index(ignore_chars, c2) != 0) continue;
+		if (!c1 || !c2) break;	/* stop when end of either string is reached */
 
-	if (caseblind) {
-	    c1 = lowc(c1);
-	    c2 = lowc(c2);
-	}
-    } while (c1 == c2);
+		if (caseblind) {
+			c1 = lowc(c1);
+			c2 = lowc(c2);
+		}
+	} while (c1 == c2);
 
-    /* match occurs only when the end of both strings has been reached */
-    return !c1 && !c2;
+	/* match occurs only when the end of both strings has been reached */
+	return !c1 && !c2;
 }
 
 
@@ -361,11 +365,11 @@ void setrandom(void) {
 # if defined(BSD) || defined(LINUX) || defined(CYGWIN32) /* system srandom() */
 #  if defined(BSD) && !defined(POSIX_TYPES)
 #   if defined(SUNOS4)
-	
+
 #   endif
-		srandom(time(NULL));
+	srandom(time(NULL));
 #  else
-		srandom(time(NULL));
+	srandom(time(NULL));
 #  endif
 # else
 #  ifdef UNIX	/* system srand48() */
@@ -406,7 +410,7 @@ char *yymmdd(time_t date) {
 		lt = localtime(&date);
 
 	sprintf(datestr, "%02d%02d%02d",
-		lt->tm_year, lt->tm_mon + 1, lt->tm_mday);
+	        lt->tm_year, lt->tm_mon + 1, lt->tm_mday);
 	return datestr;
 }
 #endif
@@ -423,9 +427,9 @@ long yyyymmdd(time_t date) {
 	/* just in case somebody's localtime supplies (year % 100)
 	   rather than the expected (year - 1900) */
 	if (lt->tm_year < 70)
-	    datenum = (long)lt->tm_year + 2000L;
+		datenum = (long)lt->tm_year + 2000L;
 	else
-	    datenum = (long)lt->tm_year + 1900L;
+		datenum = (long)lt->tm_year + 1900L;
 	/* yyyy --> yyyymm */
 	datenum = datenum * 100L + (long)(lt->tm_mon + 1);
 	/* yyyymm --> yyyymmdd */

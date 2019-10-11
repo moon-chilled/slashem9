@@ -18,21 +18,21 @@
 #ifdef DLBLIB
 /* directory structure in memory */
 typedef struct dlb_directory {
-    char *fname;	/* file name as seen from calling code */
-    long foffset;	/* offset in lib file to start of this file */
-    long fsize;		/* file size */
-    char handling;	/* how to handle the file (compression, etc) */
+	char *fname;	/* file name as seen from calling code */
+	long foffset;	/* offset in lib file to start of this file */
+	long fsize;		/* file size */
+	char handling;	/* how to handle the file (compression, etc) */
 } libdir;
 
 /* information about each open library */
 typedef struct dlb_library {
-    FILE *fdata;	/* opened data file */
-    long fmark;		/* current file mark */
-    libdir *dir;	/* directory of library file */
-    char *sspace;	/* pointer to string space */
-    long nentries;	/* # of files in directory */
-    long rev;		/* dlb file revision */
-    long strsize;	/* dlb file string size */
+	FILE *fdata;	/* opened data file */
+	long fmark;		/* current file mark */
+	libdir *dir;	/* directory of library file */
+	char *sspace;	/* pointer to string space */
+	long nentries;	/* # of files in directory */
+	long rev;		/* dlb file revision */
+	long strsize;	/* dlb file string size */
 } library;
 
 /* library definitions */
@@ -47,15 +47,15 @@ typedef struct dlb_library {
 
 
 typedef struct {
-    FILE *fp;		/* pointer to an external file, use if non-null */
+	FILE *fp;		/* pointer to an external file, use if non-null */
 #ifdef DLBLIB
-    library *lib;	/* pointer to library structure */
-    long start;		/* offset of start of file */
-    long size;		/* size of file */
-    long mark;		/* current file marker */
+	library *lib;	/* pointer to library structure */
+	long start;		/* offset of start of file */
+	long size;		/* size of file */
+	long mark;		/* current file marker */
 #endif
 #ifdef DLBRSRC
-    int fd;		/* HandleFile file descriptor */
+	int fd;		/* HandleFile file descriptor */
 #endif
 } dlb;
 
@@ -73,15 +73,15 @@ long dlb_ftell(dlb*);
 
 /* Resource DLB entry points */
 #ifdef DLBRSRC
-	boolean rsrc_dlb_init(void);
-	void rsrc_dlb_cleanup(void);
-	boolean rsrc_dlb_fopen(dlb *dp, const char *name, const char *mode);
-	int rsrc_dlb_fclose(dlb *dp);
-	int rsrc_dlb_fread(char *buf, int size, int quan, dlb *dp);
-	int rsrc_dlb_fseek(dlb *dp, long pos, int whence);
-	char *rsrc_dlb_fgets(char *buf, int len, dlb *dp);
-	int rsrc_dlb_fgetc(dlb *dp);
-	long rsrc_dlb_ftell(dlb *dp);
+boolean rsrc_dlb_init(void);
+void rsrc_dlb_cleanup(void);
+boolean rsrc_dlb_fopen(dlb *dp, const char *name, const char *mode);
+int rsrc_dlb_fclose(dlb *dp);
+int rsrc_dlb_fread(char *buf, int size, int quan, dlb *dp);
+int rsrc_dlb_fseek(dlb *dp, long pos, int whence);
+char *rsrc_dlb_fgets(char *buf, int len, dlb *dp);
+int rsrc_dlb_fgetc(dlb *dp);
+long rsrc_dlb_ftell(dlb *dp);
 #endif
 
 

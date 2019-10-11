@@ -11,8 +11,8 @@
 
 #ifndef DECL_H
 extern struct tc_gbl_data {   /* also declared in decl.h; defined in decl.c */
-    char *tc_AS, *tc_AE;	/* graphics start and end (tty font swapping) */
-    int   tc_LI,  tc_CO;	/* lines and columns */
+	char *tc_AS, *tc_AE;	/* graphics start and end (tty font swapping) */
+	int   tc_LI,  tc_CO;	/* lines and columns */
 } tc_gbl_data;
 #define AS tc_gbl_data.tc_AS
 #define AE tc_gbl_data.tc_AE
@@ -21,9 +21,9 @@ extern struct tc_gbl_data {   /* also declared in decl.h; defined in decl.c */
 #endif
 
 extern struct tc_lcl_data {   /* defined and set up in termcap.c */
-    char *tc_CM, *tc_ND, *tc_CD;
-    char *tc_HI, *tc_HE, *tc_US, *tc_UE;
-    boolean tc_ul_hack;
+	char *tc_CM, *tc_ND, *tc_CD;
+	char *tc_HI, *tc_HE, *tc_US, *tc_UE;
+	boolean tc_ul_hack;
 } tc_lcl_data;
 /* some curses.h declare CM etc. */
 #define nh_CM tc_lcl_data.tc_CM

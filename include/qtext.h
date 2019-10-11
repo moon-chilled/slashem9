@@ -6,7 +6,7 @@
 #define QTEXT_H
 
 #define N_HDR	32		/* Maximum number of categories */
-				/* (i.e., num roles + 1) */
+/* (i.e., num roles + 1) */
 #define LEN_HDR 3		/* Maximum length of a category name */
 
 struct qtmsg {
@@ -47,9 +47,9 @@ struct	qtlists {
 	struct qtmsg
 		*common,
 #if 0	/* UNUSED but available */
-			*chrace,
+		*chrace,
 #endif
-			*chrole;
+		*chrole;
 };
 
 

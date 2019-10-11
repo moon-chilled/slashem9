@@ -11,172 +11,174 @@ extern const char what_is_an_unknown_object[];		/* from pager.c */
 
 /* the response for '?' help request in getpos() */
 static void getpos_help(boolean force, const char *goal) {
-    char sbuf[BUFSZ];
-    boolean doing_what_is;
-    winid tmpwin = create_nhwindow(NHW_MENU);
+	char sbuf[BUFSZ];
+	boolean doing_what_is;
+	winid tmpwin = create_nhwindow(NHW_MENU);
 
-    sprintf(sbuf, "Use [%s] to move the cursor to %s.",
-	    iflags.num_pad ? "2468" : "hjkl", goal);
-    putstr(tmpwin, 0, sbuf);
-    putstr(tmpwin, 0, "Use [HJKL] to move the cursor 8 units at a time.");
-    putstr(tmpwin, 0, "Or enter a background symbol (ex. <).");
-    /* disgusting hack; the alternate selection characters work for any
-       getpos call, but they only matter for dowhatis (and doquickwhatis) */
-    doing_what_is = (goal == what_is_an_unknown_object);
-    sprintf(sbuf, "Type a .%s when you are at the right place.",
-            doing_what_is ? " or , or ; or :" : "");
-    putstr(tmpwin, 0, sbuf);
-    if (!force)
-	putstr(tmpwin, 0, "Type Space or Escape when you're done.");
-    putstr(tmpwin, 0, "");
-    display_nhwindow(tmpwin, true);
-    destroy_nhwindow(tmpwin);
+	sprintf(sbuf, "Use [%s] to move the cursor to %s.",
+	        iflags.num_pad ? "2468" : "hjkl", goal);
+	putstr(tmpwin, 0, sbuf);
+	putstr(tmpwin, 0, "Use [HJKL] to move the cursor 8 units at a time.");
+	putstr(tmpwin, 0, "Or enter a background symbol (ex. <).");
+	/* disgusting hack; the alternate selection characters work for any
+	   getpos call, but they only matter for dowhatis (and doquickwhatis) */
+	doing_what_is = (goal == what_is_an_unknown_object);
+	sprintf(sbuf, "Type a .%s when you are at the right place.",
+	        doing_what_is ? " or , or ; or :" : "");
+	putstr(tmpwin, 0, sbuf);
+	if (!force)
+		putstr(tmpwin, 0, "Type Space or Escape when you're done.");
+	putstr(tmpwin, 0, "");
+	display_nhwindow(tmpwin, true);
+	destroy_nhwindow(tmpwin);
 }
 
 int getpos(coord *cc, boolean force, const char *goal) {
-    int result = 0;
-    int cx, cy, i, c;
-    int sidx, tx, ty;
-    boolean msg_given = true;	/* clear message window by default */
-    static const char pick_chars[] = ".,;:";
-    const char *cp;
-    const char *sdp;
-    if(iflags.num_pad) sdp = ndir; else sdp = sdir;	/* DICE workaround */
+	int result = 0;
+	int cx, cy, i, c;
+	int sidx, tx, ty;
+	boolean msg_given = true;	/* clear message window by default */
+	static const char pick_chars[] = ".,;:";
+	const char *cp;
+	const char *sdp;
+	if(iflags.num_pad) sdp = ndir;
+	else sdp = sdir;	/* DICE workaround */
 
-    if (flags.verbose) {
-	pline("(For instructions type a ?)");
-	msg_given = true;
-    }
-    cx = cc->x;
-    cy = cc->y;
-#ifdef CLIPPING
-    cliparound(cx, cy);
-#endif
-    curs(WIN_MAP, cx,cy);
-    flush_screen(0);
-#ifdef MAC
-    lock_mouse_cursor(true);
-#endif
-    for (;;) {
-	c = nh_poskey(&tx, &ty, &sidx);
-	if (c == '\033') {
-	    cx = cy = -10;
-	    msg_given = true;	/* force clear */
-	    result = -1;
-	    break;
+	if (flags.verbose) {
+		pline("(For instructions type a ?)");
+		msg_given = true;
 	}
-	if(c == 0) {
-	    if (!isok(tx, ty)) continue;
-	    /* a mouse click event, just assign and return */
-	    cx = tx;
-	    cy = ty;
-	    break;
-	}
-	if ((cp = index(pick_chars, c)) != 0) {
-	    /* '.' => 0, ',' => 1, ';' => 2, ':' => 3 */
-	    result = cp - pick_chars;
-	    break;
-	}
-	for (i = 0; i < 8; i++) {
-	    int dx, dy;
-
-	    if (sdp[i] == c) {
-		/* a normal movement letter or digit */
-		dx = xdir[i];
-		dy = ydir[i];
-	    } else if (sdir[i] == lowc((char)c)) {
-		/* a shifted movement letter */
-		dx = 8 * xdir[i];
-		dy = 8 * ydir[i];
-	    } else
-		continue;
-
-	    /* truncate at map edge; diagonal moves complicate this... */
-	    if (cx + dx < 1) {
-		dy -= sgn(dy) * (1 - (cx + dx));
-		dx = 1 - cx;		/* so that (cx+dx == 1) */
-	    } else if (cx + dx > COLNO-1) {
-		dy += sgn(dy) * ((COLNO-1) - (cx + dx));
-		dx = (COLNO-1) - cx;
-	    }
-	    if (cy + dy < 0) {
-		dx -= sgn(dx) * (0 - (cy + dy));
-		dy = 0 - cy;		/* so that (cy+dy == 0) */
-	    } else if (cy + dy > ROWNO-1) {
-		dx += sgn(dx) * ((ROWNO-1) - (cy + dy));
-		dy = (ROWNO-1) - cy;
-	    }
-	    cx += dx;
-	    cy += dy;
-	    goto nxtc;
-	}
-
-	if(c == '?'){
-	    getpos_help(force, goal);
-	} else {
-	    if (!index(quitchars, c)) {
-		char matching[MAXPCHARS];
-		int pass, lo_x, lo_y, hi_x, hi_y, k = 0;
-		memset((void *)matching, 0, sizeof matching);
-		for (sidx = 1; sidx < MAXPCHARS; sidx++)
-		    if (c == ascii_graphics[sidx] || c == showsyms[sidx])
-			matching[sidx] = (char) ++k;
-		if (k) {
-		    for (pass = 0; pass <= 1; pass++) {
-			/* pass 0: just past current pos to lower right;
-			   pass 1: upper left corner to current pos */
-			lo_y = (pass == 0) ? cy : 0;
-			hi_y = (pass == 0) ? ROWNO - 1 : cy;
-			for (ty = lo_y; ty <= hi_y; ty++) {
-			    lo_x = (pass == 0 && ty == lo_y) ? cx + 1 : 1;
-			    hi_x = (pass == 1 && ty == hi_y) ? cx : COLNO - 1;
-			    for (tx = lo_x; tx <= hi_x; tx++) {
-				k = glyph_at(tx, ty);
-				if (glyph_is_cmap(k) &&
-					matching[glyph_to_cmap(k)]) {
-				    cx = tx,  cy = ty;
-				    if (msg_given) {
-					clear_nhwindow(WIN_MESSAGE);
-					msg_given = false;
-				    }
-				    goto nxtc;
-				}
-			    }	/* column */
-			}	/* row */
-		    }		/* pass */
-		    pline("Can't find dungeon feature '%c'.", c);
-		    msg_given = true;
-		    goto nxtc;
-		} else {
-		    pline("Unknown direction: '%s' (%s).",
-			  visctrl((char)c),
-			  !force ? "aborted" :
-			  iflags.num_pad ? "use 2468 or ." : "use hjkl or .");
-		    msg_given = true;
-		} /* k => matching */
-	    } /* !quitchars */
-	    if (force) goto nxtc;
-	    pline("Done.");
-	    msg_given = false;	/* suppress clear */
-	    cx = -1;
-	    cy = 0;
-	    result = 0;	/* not -1 */
-	    break;
-	}
-    nxtc:	;
+	cx = cc->x;
+	cy = cc->y;
 #ifdef CLIPPING
 	cliparound(cx, cy);
 #endif
-	curs(WIN_MAP,cx,cy);
+	curs(WIN_MAP, cx,cy);
 	flush_screen(0);
-    }
 #ifdef MAC
-    lock_mouse_cursor(false);
+	lock_mouse_cursor(true);
 #endif
-    if (msg_given) clear_nhwindow(WIN_MESSAGE);
-    cc->x = cx;
-    cc->y = cy;
-    return result;
+	for (;;) {
+		c = nh_poskey(&tx, &ty, &sidx);
+		if (c == '\033') {
+			cx = cy = -10;
+			msg_given = true;	/* force clear */
+			result = -1;
+			break;
+		}
+		if(c == 0) {
+			if (!isok(tx, ty)) continue;
+			/* a mouse click event, just assign and return */
+			cx = tx;
+			cy = ty;
+			break;
+		}
+		if ((cp = index(pick_chars, c)) != 0) {
+			/* '.' => 0, ',' => 1, ';' => 2, ':' => 3 */
+			result = cp - pick_chars;
+			break;
+		}
+		for (i = 0; i < 8; i++) {
+			int dx, dy;
+
+			if (sdp[i] == c) {
+				/* a normal movement letter or digit */
+				dx = xdir[i];
+				dy = ydir[i];
+			} else if (sdir[i] == lowc((char)c)) {
+				/* a shifted movement letter */
+				dx = 8 * xdir[i];
+				dy = 8 * ydir[i];
+			} else
+				continue;
+
+			/* truncate at map edge; diagonal moves complicate this... */
+			if (cx + dx < 1) {
+				dy -= sgn(dy) * (1 - (cx + dx));
+				dx = 1 - cx;		/* so that (cx+dx == 1) */
+			} else if (cx + dx > COLNO-1) {
+				dy += sgn(dy) * ((COLNO-1) - (cx + dx));
+				dx = (COLNO-1) - cx;
+			}
+			if (cy + dy < 0) {
+				dx -= sgn(dx) * (0 - (cy + dy));
+				dy = 0 - cy;		/* so that (cy+dy == 0) */
+			} else if (cy + dy > ROWNO-1) {
+				dx += sgn(dx) * ((ROWNO-1) - (cy + dy));
+				dy = (ROWNO-1) - cy;
+			}
+			cx += dx;
+			cy += dy;
+			goto nxtc;
+		}
+
+		if(c == '?') {
+			getpos_help(force, goal);
+		} else {
+			if (!index(quitchars, c)) {
+				char matching[MAXPCHARS];
+				int pass, lo_x, lo_y, hi_x, hi_y, k = 0;
+				memset((void *)matching, 0, sizeof matching);
+				for (sidx = 1; sidx < MAXPCHARS; sidx++)
+					if (c == ascii_graphics[sidx] || c == showsyms[sidx])
+						matching[sidx] = (char) ++k;
+				if (k) {
+					for (pass = 0; pass <= 1; pass++) {
+						/* pass 0: just past current pos to lower right;
+						   pass 1: upper left corner to current pos */
+						lo_y = (pass == 0) ? cy : 0;
+						hi_y = (pass == 0) ? ROWNO - 1 : cy;
+						for (ty = lo_y; ty <= hi_y; ty++) {
+							lo_x = (pass == 0 && ty == lo_y) ? cx + 1 : 1;
+							hi_x = (pass == 1 && ty == hi_y) ? cx : COLNO - 1;
+							for (tx = lo_x; tx <= hi_x; tx++) {
+								k = glyph_at(tx, ty);
+								if (glyph_is_cmap(k) &&
+								                matching[glyph_to_cmap(k)]) {
+									cx = tx,  cy = ty;
+									if (msg_given) {
+										clear_nhwindow(WIN_MESSAGE);
+										msg_given = false;
+									}
+									goto nxtc;
+								}
+							}	/* column */
+						}	/* row */
+					}		/* pass */
+					pline("Can't find dungeon feature '%c'.", c);
+					msg_given = true;
+					goto nxtc;
+				} else {
+					pline("Unknown direction: '%s' (%s).",
+					      visctrl((char)c),
+					      !force ? "aborted" :
+					      iflags.num_pad ? "use 2468 or ." : "use hjkl or .");
+					msg_given = true;
+				} /* k => matching */
+			} /* !quitchars */
+			if (force) goto nxtc;
+			pline("Done.");
+			msg_given = false;	/* suppress clear */
+			cx = -1;
+			cy = 0;
+			result = 0;	/* not -1 */
+			break;
+		}
+nxtc:
+		;
+#ifdef CLIPPING
+		cliparound(cx, cy);
+#endif
+		curs(WIN_MAP,cx,cy);
+		flush_screen(0);
+	}
+#ifdef MAC
+	lock_mouse_cursor(false);
+#endif
+	if (msg_given) clear_nhwindow(WIN_MESSAGE);
+	cc->x = cx;
+	cc->y = cy;
+	return result;
 }
 
 struct monst *christen_monst(struct monst *mtmp, const char *name) {
@@ -186,7 +188,7 @@ struct monst *christen_monst(struct monst *mtmp, const char *name) {
 
 	/* dogname & catname are PL_PSIZ arrays; object names have same limit */
 	lth = *name ? (int)(strlen(name) + 1) : 0;
-	if(lth > PL_PSIZ){
+	if(lth > PL_PSIZ) {
 		lth = PL_PSIZ;
 		name = strncpy(buf, name, PL_PSIZ - 1);
 		buf[PL_PSIZ - 1] = '\0';
@@ -199,7 +201,7 @@ struct monst *christen_monst(struct monst *mtmp, const char *name) {
 	mtmp2 = newmonst(mtmp->mxlth + lth);
 	*mtmp2 = *mtmp;
 	memcpy((void *)mtmp2->mextra,
-		      (void *)mtmp->mextra, mtmp->mxlth);
+	       (void *)mtmp->mextra, mtmp->mxlth);
 	mtmp2->mnamelth = lth;
 	if (lth) strcpy(NAME(mtmp2), name);
 	replmon(mtmp,mtmp2);
@@ -220,30 +222,30 @@ int do_mname(void) {
 	cc.x = u.ux;
 	cc.y = u.uy;
 	if (getpos(&cc, false, "the monster you want to name") < 0 ||
-			(cx = cc.x) < 0)
+	                (cx = cc.x) < 0)
 		return 0;
 	cy = cc.y;
 
 	if (cx == u.ux && cy == u.uy) {
-	    if (u.usteed && canspotmon(u.usteed)) {
-		mtmp = u.usteed;
-	    } else {
-		pline("This %s creature is called %s and cannot be renamed.",
-		ACURR(A_CHA) > 14 ?
-		(flags.female ? "beautiful" : "handsome") :
-		"ugly",
-		plname);
-		return 0;
-	    }
+		if (u.usteed && canspotmon(u.usteed)) {
+			mtmp = u.usteed;
+		} else {
+			pline("This %s creature is called %s and cannot be renamed.",
+			      ACURR(A_CHA) > 14 ?
+			      (flags.female ? "beautiful" : "handsome") :
+			      "ugly",
+			      plname);
+			return 0;
+		}
 	} else {
-	    mtmp = m_at(cx, cy);
+		mtmp = m_at(cx, cy);
 	}
 
 	if (!mtmp || (!sensemon(mtmp) &&
-			(!(cansee(cx,cy) || see_with_infrared(mtmp)) || mtmp->mundetected
-			|| mtmp->m_ap_type == M_AP_FURNITURE
-			|| mtmp->m_ap_type == M_AP_OBJECT
-			|| (mtmp->minvis && !See_invisible)))) {
+	                (!(cansee(cx,cy) || see_with_infrared(mtmp)) || mtmp->mundetected
+	                 || mtmp->m_ap_type == M_AP_FURNITURE
+	                 || mtmp->m_ap_type == M_AP_OBJECT
+	                 || (mtmp->minvis && !See_invisible)))) {
 		pline("I see no monster there.");
 		return 0;
 	}
@@ -256,9 +258,9 @@ int do_mname(void) {
 	mungspaces(buf);
 
 	if (mtmp->data->geno & G_UNIQ)
-	    pline("%s doesn't like being called names!", Monnam(mtmp));
+		pline("%s doesn't like being called names!", Monnam(mtmp));
 	else
-	    christen_monst(mtmp, buf);
+		christen_monst(mtmp, buf);
 	return 0;
 }
 
@@ -273,7 +275,7 @@ static void do_oname(struct obj *obj) {
 	short objtyp;
 
 	sprintf(qbuf, "What do you want to name %s %s?",
-		is_plural(obj) ? "these" : "this", xname(obj));
+	        is_plural(obj) ? "these" : "this", xname(obj));
 	getlin(qbuf, buf);
 	if(!*buf || *buf == '\033')	return;
 	/* strip leading and trailing spaces; unnames item if all spaces */
@@ -291,7 +293,8 @@ static void do_oname(struct obj *obj) {
 		char c1, c2;
 
 		c1 = lowc(buf[n]);
-		do c2 = 'a' + rn2('z'-'a'); while (c1 == c2);
+		do c2 = 'a' + rn2('z'-'a');
+		while (c1 == c2);
 		buf[n] = (buf[n] == c1) ? c2 : highc(c2);  /* keep same case */
 		pline("While engraving your %s slips.", body_part(HAND));
 		display_nhwindow(WIN_MESSAGE, false);
@@ -309,11 +312,11 @@ struct obj *realloc_obj(struct obj *obj, int oextra_size, void *oextra_src, int 
 	otmp = newobj(oextra_size + oname_size);
 	*otmp = *obj;	/* the cobj pointer is copied to otmp */
 	if (oextra_size) {
-	    if (oextra_src)
-		memcpy((void *)otmp->oextra, oextra_src,
-							oextra_size);
+		if (oextra_src)
+			memcpy((void *)otmp->oextra, oextra_src,
+			       oextra_size);
 	} else {
-	    otmp->oattached = OATTACHED_NOTHING;
+		otmp->oattached = OATTACHED_NOTHING;
 	}
 	otmp->oxlth = oextra_size;
 
@@ -326,8 +329,8 @@ struct obj *realloc_obj(struct obj *obj, int oextra_size, void *oextra_src, int 
 	   not set condition codes, but optimizer behaves as if it did).
 	   gcc-2.7.2.1 finally fixed this.... */
 	if (oname_size) {
-	    if (name)
-		strcpy(ONAME(otmp), name);
+		if (name)
+			strcpy(ONAME(otmp), name);
 	}
 
 	if (obj->owornmask) {
@@ -357,9 +360,9 @@ struct obj *realloc_obj(struct obj *obj, int oextra_size, void *oextra_src, int 
 	/* objects possibly being manipulated by multi-turn occupations
 	   which have been interrupted but might be subsequently resumed */
 	if (obj->oclass == FOOD_CLASS)
-	    food_substitution(obj, otmp);	/* eat food or open tin */
+		food_substitution(obj, otmp);	/* eat food or open tin */
 	else if (obj->oclass == SPBOOK_CLASS)
-	    book_substitution(obj, otmp);	/* read spellbook */
+		book_substitution(obj, otmp);	/* read spellbook */
 
 	/* obfree(obj, otmp);	now unnecessary: no pointers on bill */
 	dealloc_obj(obj);	/* let us hope nobody else saved a pointer */
@@ -388,14 +391,14 @@ struct obj *oname(struct obj *obj, const char *name) {
 		if (lth) strcpy(ONAME(obj), name);
 	} else {
 		obj = realloc_obj(obj, obj->oxlth,
-			      (void *)obj->oextra, lth, name);
+		                  (void *)obj->oextra, lth, name);
 	}
 	if (lth) artifact_exists(obj, name, true);
 	if (obj->oartifact) {
-	    /* can't dual-wield with artifact as secondary weapon */
-	    if (obj == uswapwep) untwoweapon();
-	    /* activate warning if you've just named your weapon "Sting" */
-	    if (obj == uwep) set_artifact_intrinsic(obj, true, W_WEP);
+		/* can't dual-wield with artifact as secondary weapon */
+		if (obj == uswapwep) untwoweapon();
+		/* activate warning if you've just named your weapon "Sting" */
+		if (obj == uwep) set_artifact_intrinsic(obj, true, W_WEP);
 	}
 	if (carried(obj)) update_inventory();
 	return obj;
@@ -403,7 +406,8 @@ struct obj *oname(struct obj *obj, const char *name) {
 
 static const char callable[] = {
 	SCROLL_CLASS, POTION_CLASS, WAND_CLASS, RING_CLASS, AMULET_CLASS,
-	GEM_CLASS, SPBOOK_CLASS, ARMOR_CLASS, TOOL_CLASS, 0 };
+	GEM_CLASS, SPBOOK_CLASS, ARMOR_CLASS, TOOL_CLASS, 0
+};
 
 int ddocall(void) {
 	struct obj *obj;
@@ -415,7 +419,8 @@ int ddocall(void) {
 		break;
 	case 'y':
 		savech(ch);
-		allowall[0] = ALL_CLASSES; allowall[1] = '\0';
+		allowall[0] = ALL_CLASSES;
+		allowall[1] = '\0';
 		obj = getobj(allowall, "name");
 		if(obj) do_oname(obj);
 		break;
@@ -450,11 +455,11 @@ void docall(struct obj *obj) {
 	otemp.onamelth = 0;
 	otemp.oxlth = 0;
 	if (objects[otemp.otyp].oc_class == POTION_CLASS && otemp.fromsink)
-	    /* kludge, meaning it's sink water */
-	    sprintf(qbuf,"Call a stream of %s fluid:",
-		    OBJ_DESCR(objects[otemp.otyp]));
+		/* kludge, meaning it's sink water */
+		sprintf(qbuf,"Call a stream of %s fluid:",
+		        OBJ_DESCR(objects[otemp.otyp]));
 	else
-	    sprintf(qbuf, "Call %s:", an(xname(&otemp)));
+		sprintf(qbuf, "Call %s:", an(xname(&otemp)));
 	getlin(qbuf, buf);
 	if(!*buf || *buf == '\033')
 		return;
@@ -466,15 +471,15 @@ void docall(struct obj *obj) {
 	/* strip leading and trailing spaces; uncalls item if all spaces */
 	mungspaces(buf);
 	if (!*buf) {
-	    if (*str1) {	/* had name, so possibly remove from disco[] */
-		/* strip name first, for the update_inventory() call
-		   from undiscover_object() */
-		*str1 = NULL;
-		undiscover_object(obj->otyp);
-	    }
+		if (*str1) {	/* had name, so possibly remove from disco[] */
+			/* strip name first, for the update_inventory() call
+			   from undiscover_object() */
+			*str1 = NULL;
+			undiscover_object(obj->otyp);
+		}
 	} else {
-	    *str1 = strcpy(alloc((unsigned)strlen(buf)+1), buf);
-	    discover_object(obj->otyp, false, true); /* possibly add to disco[] */
+		*str1 = strcpy(alloc((unsigned)strlen(buf)+1), buf);
+		discover_object(obj->otyp, false, true); /* possibly add to disco[] */
 	}
 }
 
@@ -491,7 +496,7 @@ static const char * const ghostnames[] = {
 
 /* ghost names formerly set by x_monnam(), now by makemon() instead */
 const char *rndghostname(void) {
-    return rn2(7) ? ghostnames[rn2(SIZE(ghostnames))] : (const char *)plname;
+	return rn2(7) ? ghostnames[rn2(SIZE(ghostnames))] : (const char *)plname;
 }
 
 /* Monster naming functions:
@@ -513,19 +518,19 @@ const char *rndghostname(void) {
  * options works, since those are special cases.
  */
 char *x_monnam(struct monst *mtmp, int article, const char *adjective, int suppress, boolean called) {
-/* article:
- * ARTICLE_NONE, ARTICLE_THE, ARTICLE_A: obvious
- * ARTICLE_YOUR: "your" on pets, "the" on everything else
- *
- * If the monster would be referred to as "it" or if the monster has a name
- * _and_ there is no adjective, "invisible", "saddled", etc., override this
- * and always use no article.
- */
+	/* article:
+	 * ARTICLE_NONE, ARTICLE_THE, ARTICLE_A: obvious
+	 * ARTICLE_YOUR: "your" on pets, "the" on everything else
+	 *
+	 * If the monster would be referred to as "it" or if the monster has a name
+	 * _and_ there is no adjective, "invisible", "saddled", etc., override this
+	 * and always use no article.
+	 */
 
-/* suppress:
- * SUPPRESS_IT, SUPPRESS_INVISIBLE, SUPPRESS_HALLUCINATION, SUPPRESS_SADDLE.
- * EXACT_NAME: combination of all the above
- */
+	/* suppress:
+	 * SUPPRESS_IT, SUPPRESS_INVISIBLE, SUPPRESS_HALLUCINATION, SUPPRESS_SADDLE.
+	 * EXACT_NAME: combination of all the above
+	 */
 	static char buf[BUFSZ];
 	struct permonst *mdat = mtmp->data;
 	boolean do_hallu, do_invis, do_it, do_saddle;
@@ -533,44 +538,44 @@ char *x_monnam(struct monst *mtmp, int article, const char *adjective, int suppr
 	char *bp;
 
 	if (program_state.gameover)
-	    suppress |= SUPPRESS_HALLUCINATION;
+		suppress |= SUPPRESS_HALLUCINATION;
 	if (article == ARTICLE_YOUR && !mtmp->mtame)
-	    article = ARTICLE_THE;
+		article = ARTICLE_THE;
 
 	do_hallu = Hallucination && !(suppress & SUPPRESS_HALLUCINATION);
 	do_invis = mtmp->minvis && !(suppress & SUPPRESS_INVISIBLE);
 	do_it = !canspotmon(mtmp) &&
-	    article != ARTICLE_YOUR &&
-	    !program_state.gameover &&
-	    mtmp != u.usteed &&
-	    !(u.uswallow && mtmp == u.ustuck) &&
-	    !(suppress & SUPPRESS_IT);
+	        article != ARTICLE_YOUR &&
+	        !program_state.gameover &&
+	        mtmp != u.usteed &&
+	        !(u.uswallow && mtmp == u.ustuck) &&
+	        !(suppress & SUPPRESS_IT);
 	do_saddle = !(suppress & SUPPRESS_SADDLE);
 
 	buf[0] = 0;
 
 	/* unseen monsters, etc.  Use "it" */
 	if (do_it) {
-	    strcpy(buf, "it");
-	    return buf;
+		strcpy(buf, "it");
+		return buf;
 	}
 
 	/* priests and minions: don't even use this function */
 	if (mtmp->ispriest || mtmp->isminion) {
-	    char priestnambuf[BUFSZ];
-	    char *name;
-	    long save_prop = EHalluc_resistance;
-	    unsigned save_invis = mtmp->minvis;
+		char priestnambuf[BUFSZ];
+		char *name;
+		long save_prop = EHalluc_resistance;
+		unsigned save_invis = mtmp->minvis;
 
-	    /* when true name is wanted, explicitly block Hallucination */
-	    if (!do_hallu) EHalluc_resistance = 1L;
-	    if (!do_invis) mtmp->minvis = 0;
-	    name = priestname(mtmp, priestnambuf);
-	    EHalluc_resistance = save_prop;
-	    mtmp->minvis = save_invis;
-	    if (article == ARTICLE_NONE && !strncmp(name, "the ", 4))
-		name += 4;
-	    return strcpy(buf, name);
+		/* when true name is wanted, explicitly block Hallucination */
+		if (!do_hallu) EHalluc_resistance = 1L;
+		if (!do_invis) mtmp->minvis = 0;
+		name = priestname(mtmp, priestnambuf);
+		EHalluc_resistance = save_prop;
+		mtmp->minvis = save_invis;
+		if (article == ARTICLE_NONE && !strncmp(name, "the ", 4))
+			name += 4;
+		return strcpy(buf, name);
 	}
 
 	/* Shopkeepers: use shopkeeper name.  For normal shopkeepers, just
@@ -579,121 +584,121 @@ char *x_monnam(struct monst *mtmp, int article, const char *adjective, int suppr
 	 * none of this applies.
 	 */
 	if (mtmp->isshk && !do_hallu) {
-	    if (adjective && article == ARTICLE_THE) {
-		/* pathological case: "the angry Asidonhopo the blue dragon"
-		   sounds silly */
-		strcpy(buf, "the ");
-		strcat(strcat(buf, adjective), " ");
+		if (adjective && article == ARTICLE_THE) {
+			/* pathological case: "the angry Asidonhopo the blue dragon"
+			   sounds silly */
+			strcpy(buf, "the ");
+			strcat(strcat(buf, adjective), " ");
+			strcat(buf, shkname(mtmp));
+			return buf;
+		}
 		strcat(buf, shkname(mtmp));
+		if (mdat == &mons[PM_SHOPKEEPER] && !do_invis)
+			return buf;
+		strcat(buf, " the ");
+		if (do_invis)
+			strcat(buf, "invisible ");
+		strcat(buf, mdat->mname);
 		return buf;
-	    }
-	    strcat(buf, shkname(mtmp));
-	    if (mdat == &mons[PM_SHOPKEEPER] && !do_invis)
-		return buf;
-	    strcat(buf, " the ");
-	    if (do_invis)
-		strcat(buf, "invisible ");
-	    strcat(buf, mdat->mname);
-	    return buf;
 	}
 
 	/* Put the adjectives in the buffer */
 	if (adjective)
-	    strcat(strcat(buf, adjective), " ");
+		strcat(strcat(buf, adjective), " ");
 	if (do_invis)
-	    strcat(buf, "invisible ");
+		strcat(buf, "invisible ");
 	if (do_saddle && (mtmp->misc_worn_check & W_SADDLE) &&
-	    !Blind && !Hallucination)
-	    strcat(buf, "saddled ");
+	                !Blind && !Hallucination)
+		strcat(buf, "saddled ");
 	if (buf[0] != 0)
-	    has_adjectives = true;
+		has_adjectives = true;
 	else
-	    has_adjectives = false;
+		has_adjectives = false;
 
 	/* Put the actual monster name or type into the buffer now */
 	/* Be sure to remember whether the buffer starts with a name */
 	if (do_hallu) {
-	    strcat(buf, rndmonnam());
-	    name_at_start = false;
+		strcat(buf, rndmonnam());
+		name_at_start = false;
 	} else if (mtmp->mnamelth) {
-	    char *name = NAME(mtmp);
+		char *name = NAME(mtmp);
 
-	    if (mdat == &mons[PM_GHOST]) {
-		sprintf(eos(buf), "%s ghost", s_suffix(name));
-		name_at_start = true;
-	    } else if (called) {
-		sprintf(eos(buf), "%s called %s", mdat->mname, name);
-		name_at_start = (boolean)type_is_pname(mdat);
-	    } else if (is_mplayer(mdat) && (bp = strstri(name, " the ")) != 0) {
-		/* <name> the <adjective> <invisible> <saddled> <rank> */
-		char pbuf[BUFSZ];
+		if (mdat == &mons[PM_GHOST]) {
+			sprintf(eos(buf), "%s ghost", s_suffix(name));
+			name_at_start = true;
+		} else if (called) {
+			sprintf(eos(buf), "%s called %s", mdat->mname, name);
+			name_at_start = (boolean)type_is_pname(mdat);
+		} else if (is_mplayer(mdat) && (bp = strstri(name, " the ")) != 0) {
+			/* <name> the <adjective> <invisible> <saddled> <rank> */
+			char pbuf[BUFSZ];
 
-		strcpy(pbuf, name);
-		pbuf[bp - name + 5] = '\0'; /* adjectives right after " the " */
-		if (has_adjectives)
-		    strcat(pbuf, buf);
-		strcat(pbuf, bp + 5);	/* append the rest of the name */
-		strcpy(buf, pbuf);
-		article = ARTICLE_NONE;
-		name_at_start = true;
-	    } else {
-		strcat(buf, name);
-		name_at_start = true;
-	    }
+			strcpy(pbuf, name);
+			pbuf[bp - name + 5] = '\0'; /* adjectives right after " the " */
+			if (has_adjectives)
+				strcat(pbuf, buf);
+			strcat(pbuf, bp + 5);	/* append the rest of the name */
+			strcpy(buf, pbuf);
+			article = ARTICLE_NONE;
+			name_at_start = true;
+		} else {
+			strcat(buf, name);
+			name_at_start = true;
+		}
 	} else if (is_mplayer(mdat) && !In_endgame(&u.uz)) {
-	    char pbuf[BUFSZ];
-	    strcpy(pbuf, rank_of((int)mtmp->m_lev,
-				 monsndx(mdat),
-				 (boolean)mtmp->female));
-	    strcat(buf, lcase(pbuf));
-	    name_at_start = false;
+		char pbuf[BUFSZ];
+		strcpy(pbuf, rank_of((int)mtmp->m_lev,
+		                     monsndx(mdat),
+		                     (boolean)mtmp->female));
+		strcat(buf, lcase(pbuf));
+		name_at_start = false;
 	} else {
-	    strcat(buf, mdat->mname);
-	    name_at_start = (boolean)type_is_pname(mdat);
+		strcat(buf, mdat->mname);
+		name_at_start = (boolean)type_is_pname(mdat);
 	}
 
 	if (name_at_start && (article == ARTICLE_YOUR || !has_adjectives)) {
-	    if (mdat == &mons[PM_WIZARD_OF_YENDOR])
-		article = ARTICLE_THE;
-	    else
-		article = ARTICLE_NONE;
+		if (mdat == &mons[PM_WIZARD_OF_YENDOR])
+			article = ARTICLE_THE;
+		else
+			article = ARTICLE_NONE;
 	} else if ((mdat->geno & G_UNIQ) && article == ARTICLE_A) {
-	    article = ARTICLE_THE;
+		article = ARTICLE_THE;
 	}
 
 	{
-	    char buf2[BUFSZ];
+		char buf2[BUFSZ];
 
-	    switch(article) {
+		switch(article) {
 		case ARTICLE_YOUR:
-		    strcpy(buf2, "your ");
-		    strcat(buf2, buf);
-		    strcpy(buf, buf2);
-		    return buf;
+			strcpy(buf2, "your ");
+			strcat(buf2, buf);
+			strcpy(buf, buf2);
+			return buf;
 		case ARTICLE_THE:
-		    strcpy(buf2, "the ");
-		    strcat(buf2, buf);
-		    strcpy(buf, buf2);
-		    return buf;
+			strcpy(buf2, "the ");
+			strcat(buf2, buf);
+			strcpy(buf, buf2);
+			return buf;
 		case ARTICLE_A:
-		    return an(buf);
+			return an(buf);
 		case ARTICLE_NONE:
 		default:
-		    return buf;
-	    }
+			return buf;
+		}
 	}
 }
 
 
 char *l_monnam(struct monst *mtmp) {
 	return(x_monnam(mtmp, ARTICLE_NONE, NULL,
-		mtmp->mnamelth ? SUPPRESS_SADDLE : 0, true));
+	                mtmp->mnamelth ? SUPPRESS_SADDLE : 0, true));
 }
 
 
 char *mon_nam(struct monst *mtmp) {
 	return(x_monnam(mtmp, ARTICLE_THE, NULL,
-		mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false));
+	                mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false));
 }
 
 /* print the name as if mon_nam() was called, but assume that the player
@@ -702,8 +707,8 @@ char *mon_nam(struct monst *mtmp) {
  */
 char *noit_mon_nam(struct monst *mtmp) {
 	return(x_monnam(mtmp, ARTICLE_THE, NULL,
-		mtmp->mnamelth ? (SUPPRESS_SADDLE|SUPPRESS_IT) :
-		    SUPPRESS_IT, false));
+	                mtmp->mnamelth ? (SUPPRESS_SADDLE|SUPPRESS_IT) :
+	                SUPPRESS_IT, false));
 }
 
 char *Monnam(struct monst *mtmp) {
@@ -739,7 +744,7 @@ char *y_monnam(struct monst *mtmp) {
 
 char *Adjmonnam(struct monst *mtmp, const char *adj) {
 	char *bp = x_monnam(mtmp, ARTICLE_THE, adj,
-		mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false);
+	                    mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false);
 
 	*bp = highc(*bp);
 	return bp;
@@ -747,7 +752,7 @@ char *Adjmonnam(struct monst *mtmp, const char *adj) {
 
 char *a_monnam(struct monst *mtmp) {
 	return x_monnam(mtmp, ARTICLE_A, NULL,
-		mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false);
+	                mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false);
 }
 
 char *Amonnam(struct monst *mtmp) {
@@ -760,19 +765,19 @@ char *Amonnam(struct monst *mtmp) {
 /* used for monster ID by the '/', ';', and 'C' commands to block remote
    identification of the endgame altars via their attending priests */
 char *distant_monnam(struct monst *mon,
-			int article,	/* only ARTICLE_NONE and ARTICLE_THE are handled here */
-			char *outbuf) {
-    /* high priest(ess)'s identity is concealed on the Astral Plane,
-       unless you're adjacent (overridden for hallucination which does
-       its own obfuscation) */
-    if (mon->data == &mons[PM_HIGH_PRIEST] && !Hallucination &&
-	    Is_astralevel(&u.uz) && distu(mon->mx, mon->my) > 2) {
-	strcpy(outbuf, article == ARTICLE_THE ? "the " : "");
-	strcat(outbuf, mon->female ? "high priestess" : "high priest");
-    } else {
-	strcpy(outbuf, x_monnam(mon, article, NULL, 0, true));
-    }
-    return outbuf;
+                     int article,	/* only ARTICLE_NONE and ARTICLE_THE are handled here */
+                     char *outbuf) {
+	/* high priest(ess)'s identity is concealed on the Astral Plane,
+	   unless you're adjacent (overridden for hallucination which does
+	   its own obfuscation) */
+	if (mon->data == &mons[PM_HIGH_PRIEST] && !Hallucination &&
+	                Is_astralevel(&u.uz) && distu(mon->mx, mon->my) > 2) {
+		strcpy(outbuf, article == ARTICLE_THE ? "the " : "");
+		strcat(outbuf, mon->female ? "high priestess" : "high priest");
+	} else {
+		strcpy(outbuf, x_monnam(mon, article, NULL, 0, true));
+	}
+	return outbuf;
 }
 
 static const char * const bogusmons[] = {
@@ -782,13 +787,13 @@ static const char * const bogusmons[] = {
 	"hologram", "jester", "attorney", "sleazoid",
 	"killer tomato", "amazon", "robot", "battlemech",
 	"rhinovirus", "harpy", "lion-dog", "rat-ant", "Y2K bug",
-						/* misc. */
+	/* misc. */
 	"grue", "Christmas-tree monster", "luck sucker", "paskald",
 	"brogmoid", "dornbeast",		/* Quendor (Zork, &c.) */
 	"Ancient Multi-Hued Dragon", "Evil Iggy",
-						/* Moria */
+	/* Moria */
 	"emu", "kestrel", "xeroc", "venus flytrap",
-						/* Rogue */
+	/* Rogue */
 	"creeping coins",			/* Wizardry */
 	"siren",                                /* Greek legend */
 	"killer bunny",				/* Monty Python */
@@ -813,30 +818,30 @@ static const char * const bogusmons[] = {
 	"boomer",				/* Bubblegum Crisis */
 	"Dalek",				/* Dr. Who ("Exterminate!") */
 	"microscopic space fleet", "Ravenous Bugblatter Beast of Traal",
-						/* HGttG */
+	/* HGttG */
 	"teenage mutant ninja turtle",		/* TMNT */
 	"samurai rabbit",			/* Usagi Yojimbo */
 	"aardvark",				/* Cerebus */
 	"Audrey II",				/* Little Shop of Horrors */
 	"witch doctor", "one-eyed one-horned flying purple people eater",
-						/* 50's rock 'n' roll */
+	/* 50's rock 'n' roll */
 	"Barney the dinosaur",			/* saccharine kiddy TV */
 	"Azog the Orc King", "Morgoth",		/* Angband */
 
 	/*[Tom] new wacky names */
 	"commando", "green beret", "sherman tank",
-						/* Military */
+	/* Military */
 	"Jedi knight", "tie fighter", "protocol droid", "R2 unit", "Emperor",
-						/* Star Wars */
+	/* Star Wars */
 	"Vorlon",				/* Babylon 5 */
 	"keg","Diet Pepsi",
-						/* drinks */
+	/* drinks */
 	"questing beast",		/* King Arthur */
 	"Predator",				/* Movie */
 	"green light", "automobile", "invisible Wizard of Yendor",
 	"piece of yellowish-brown glass", "wand of nothing",
 	"ocean","ballpoint pen","paper cut",
-						/* misc */
+	/* misc */
 	"Rune", "Gurk", "Yuval",		/* people I know */
 	"mother-in-law"				/* common pest */
 };
@@ -850,9 +855,9 @@ const char *rndmonnam(void) {
 	int name;
 
 	do {
-	    name = rn1(SPECIAL_PM + SIZE(bogusmons) - LOW_PM, LOW_PM);
+		name = rn1(SPECIAL_PM + SIZE(bogusmons) - LOW_PM, LOW_PM);
 	} while (name < SPECIAL_PM &&
-	    (type_is_pname(&mons[name]) || (mons[name].geno & G_NOGEN)));
+	                (type_is_pname(&mons[name]) || (mons[name].geno & G_NOGEN)));
 
 	if (name >= SPECIAL_PM) return bogusmons[name - SPECIAL_PM];
 	return mons[name].mname;
@@ -872,7 +877,7 @@ const char *roguename(void) {
 			}
 	}
 	return rn2(3) ? (rn2(2) ? "Michael Toy" : "Kenneth Arnold")
-		: "Glenn Wichman";
+	       : "Glenn Wichman";
 }
 
 static const char * const hcolors[] = {
@@ -889,21 +894,21 @@ static const char * const hcolors[] = {
 
 const char *hcolor(const char *colorpref) {
 	return (Hallucination || !colorpref) ?
-		hcolors[rn2(SIZE(hcolors))] : colorpref;
+	       hcolors[rn2(SIZE(hcolors))] : colorpref;
 }
 
 /* return a random real color unless hallucinating */
 const char *rndcolor(void) {
 	int k = rn2(CLR_MAX);
 	return Hallucination ? hcolor(NULL) : (k == NO_COLOR) ?
-		"colorless" : c_obj_colors[k];
+	       "colorless" : c_obj_colors[k];
 }
 
 /* Aliases for road-runner nemesis
  */
 static const char * const coynames[] = {
 	"Carnivorous Vulgaris","Road-Runnerus Digestus",
-	"Eatibus Anythingus"  ,"Famishus-Famishus",
+	"Eatibus Anythingus","Famishus-Famishus",
 	"Eatibus Almost Anythingus","Eatius Birdius",
 	"Famishius Fantasticus","Eternalii Famishiis",
 	"Famishus Vulgarus","Famishius Vulgaris Ingeniusi",
@@ -916,12 +921,12 @@ static const char * const coynames[] = {
 };
 
 char *coyotename(struct monst *mtmp, char *buf) {
-    if (mtmp && buf) {
-	sprintf(buf, "%s - %s",
-	    x_monnam(mtmp, ARTICLE_NONE, NULL, 0, true),
-	    mtmp->mcan ? coynames[SIZE(coynames)-1] : coynames[rn2(SIZE(coynames)-1)]);
-    }
-    return buf;
+	if (mtmp && buf) {
+		sprintf(buf, "%s - %s",
+		        x_monnam(mtmp, ARTICLE_NONE, NULL, 0, true),
+		        mtmp->mcan ? coynames[SIZE(coynames)-1] : coynames[rn2(SIZE(coynames)-1)]);
+	}
+	return buf;
 }
 
 /*do_name.c*/

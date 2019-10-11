@@ -55,7 +55,7 @@ struct color_option text_color_of(const char *text, const struct text_color_opti
 		return result;
 	}
 	if (strstri(color_options->text, text)
-			|| strstri(text, color_options->text))
+	                || strstri(text, color_options->text))
 		return color_options->color_option;
 	return text_color_of(text, color_options->next);
 }
@@ -159,15 +159,15 @@ const char *rank_of(int lev, short monnum, boolean female) {
 
 	/* Find the role */
 	for (role = (struct Role *) roles; role->name.m; role++)
-	    if (monnum == role->malenum || monnum == role->femalenum)
-	    	break;
+		if (monnum == role->malenum || monnum == role->femalenum)
+			break;
 	if (!role->name.m)
-	    role = &urole;
+		role = &urole;
 
 	/* Find the rank */
 	for (i = xlev_to_rank((int)lev); i >= 0; i--) {
-	    if (female && role->rank[i].f) return role->rank[i].f;
-	    if (role->rank[i].m) return role->rank[i].m;
+		if (female && role->rank[i].f) return role->rank[i].f;
+		if (role->rank[i].m) return role->rank[i].m;
 	}
 
 	/* Try the role name, instead */
@@ -187,21 +187,21 @@ int title_to_mon(const char *str, int *rank_indx, int *title_length) {
 
 	/* Loop through each of the roles */
 	for (i = 0; roles[i].name.m; i++)
-	    for (j = 0; j < 9; j++) {
-	    	if (roles[i].rank[j].m && !strncmpi(str,
-	    			roles[i].rank[j].m, strlen(roles[i].rank[j].m))) {
-	    	    if (rank_indx) *rank_indx = j;
-	    	    if (title_length) *title_length = strlen(roles[i].rank[j].m);
-	    	    return roles[i].malenum;
-	    	}
-	    	if (roles[i].rank[j].f && !strncmpi(str,
-	    			roles[i].rank[j].f, strlen(roles[i].rank[j].f))) {
-	    	    if (rank_indx) *rank_indx = j;
-	    	    if (title_length) *title_length = strlen(roles[i].rank[j].f);
-	    	    return ((roles[i].femalenum != NON_PM) ?
-	    	    		roles[i].femalenum : roles[i].malenum);
-	    	}
-	    }
+		for (j = 0; j < 9; j++) {
+			if (roles[i].rank[j].m && !strncmpi(str,
+			                                    roles[i].rank[j].m, strlen(roles[i].rank[j].m))) {
+				if (rank_indx) *rank_indx = j;
+				if (title_length) *title_length = strlen(roles[i].rank[j].m);
+				return roles[i].malenum;
+			}
+			if (roles[i].rank[j].f && !strncmpi(str,
+			                                    roles[i].rank[j].f, strlen(roles[i].rank[j].f))) {
+				if (rank_indx) *rank_indx = j;
+				if (title_length) *title_length = strlen(roles[i].rank[j].f);
+				return ((roles[i].femalenum != NON_PM) ?
+				        roles[i].femalenum : roles[i].malenum);
+			}
+		}
 	return NON_PM;
 }
 
@@ -211,8 +211,8 @@ void max_rank_sz(void) {
 
 
 	for (i = 0; i < 9; i++) {
-	    if (urole.rank[i].m && (r = strlen(urole.rank[i].m)) > maxr) maxr = r;
-	    if (urole.rank[i].f && (r = strlen(urole.rank[i].f)) > maxr) maxr = r;
+		if (urole.rank[i].m && (r = strlen(urole.rank[i].m)) > maxr) maxr = r;
+		if (urole.rank[i].f && (r = strlen(urole.rank[i].f)) > maxr) maxr = r;
 	}
 	mrank_sz = maxr;
 	return;
@@ -220,53 +220,53 @@ void max_rank_sz(void) {
 
 
 long botl_score(void) {
-    int deepest = deepest_lev_reached(false);
-    long umoney = money_cnt(invent) + hidden_gold();
+	int deepest = deepest_lev_reached(false);
+	long umoney = money_cnt(invent) + hidden_gold();
 
-    if ((umoney -= u.umoney0) < 0L) umoney = 0L;
-    return umoney + u.urexp + (long)(50 * (deepest - 1))
-			  + (long)(deepest > 30 ? 10000 :
-				   deepest > 20 ? 1000*(deepest - 20) : 0);
+	if ((umoney -= u.umoney0) < 0L) umoney = 0L;
+	return umoney + u.urexp + (long)(50 * (deepest - 1))
+	       + (long)(deepest > 30 ? 10000 :
+	                deepest > 20 ? 1000*(deepest - 20) : 0);
 }
 
 static char *botl_player(void) {
-    static char player[MAXCO];
+	static char player[MAXCO];
 	char *nb;
-    char mbot[MAXCO - 15];
-    int k = 0;
+	char mbot[MAXCO - 15];
+	int k = 0;
 
-    strcpy(player, plname);
-    if ('a' <= player[0] && player[0] <= 'z') player[0] += 'A'-'a';
-    player[10] = 0;
-    sprintf(nb = eos(player)," the ");
+	strcpy(player, plname);
+	if ('a' <= player[0] && player[0] <= 'z') player[0] += 'A'-'a';
+	player[10] = 0;
+	sprintf(nb = eos(player)," the ");
 
 	if (Upolyd) {
 		strncpy(mbot, mons[u.umonnum].mname, SIZE(mbot) - 1);
 		mbot[SIZE(mbot) - 1] = 0;
 		while(mbot[k] != 0) {
 			if ((k == 0 || (k > 0 && mbot[k-1] == ' ')) &&
-					'a' <= mbot[k] && mbot[k] <= 'z')
+			                'a' <= mbot[k] && mbot[k] <= 'z')
 				mbot[k] += 'A' - 'a';
 			k++;
 		}
 		sprintf(eos(nb), "%s", mbot);
 	} else
 		sprintf(eos(nb), "%s", rank());
-    return player;
+	return player;
 }
 
 static char *botl_strength(void) {
-    static char strength[6];
+	static char strength[6];
 	if (ACURR(A_STR) > 18) {
 		if (ACURR(A_STR) > STR18(100))
-	    sprintf(strength, "%2d", ACURR(A_STR)-100);
+			sprintf(strength, "%2d", ACURR(A_STR)-100);
 		else if (ACURR(A_STR) < STR18(100))
-	    sprintf(strength, "18/%02d", ACURR(A_STR)-18);
+			sprintf(strength, "18/%02d", ACURR(A_STR)-18);
 		else
-	    sprintf(strength, "18/**");
+			sprintf(strength, "18/**");
 	} else
-	sprintf(strength, "%-1d", ACURR(A_STR));
-    return strength;
+		sprintf(strength, "%-1d", ACURR(A_STR));
+	return strength;
 }
 
 #ifdef DUMP_LOG
@@ -329,13 +329,13 @@ static void bot1(void)
 
 	sprintf(nb = eos(nb), "St:%s ", botl_strength());
 	sprintf(nb = eos(nb),
-		"Dx:%-1d Co:%-1d In:%-1d Wi:%-1d Ch:%-1d",
-		ACURR(A_DEX), ACURR(A_CON), ACURR(A_INT), ACURR(A_WIS), ACURR(A_CHA));
+	        "Dx:%-1d Co:%-1d In:%-1d Wi:%-1d Ch:%-1d",
+	        ACURR(A_DEX), ACURR(A_CON), ACURR(A_INT), ACURR(A_WIS), ACURR(A_CHA));
 	sprintf(nb = eos(nb), (u.ualign.type == A_CHAOTIC) ? "  Chaotic" :
-			(u.ualign.type == A_NEUTRAL) ? "  Neutral" : "  Lawful");
+	        (u.ualign.type == A_NEUTRAL) ? "  Neutral" : "  Lawful");
 
 	if (flags.showscore)
-	    sprintf(nb = eos(nb), " S:%ld", botl_score());
+		sprintf(nb = eos(nb), " S:%ld", botl_score());
 
 #ifdef DUMP_LOG
 }
@@ -361,7 +361,7 @@ int describe_level(char *buf, int verbose) {
 		sprintf(buf, "Home %d ", dunlev(&u.uz));
 	else if (In_endgame(&u.uz))
 		sprintf(buf,
-			Is_astralevel(&u.uz) ? "Astral Plane " : "End Game ");
+		        Is_astralevel(&u.uz) ? "Astral Plane " : "End Game ");
 	else {
 		if (verbose)
 			sprintf(buf, "%s, level %d ", dungeons[u.uz.dnum].dname, depth(&u.uz));
@@ -412,7 +412,7 @@ bot2str(char *newbot2) {
 		newbot2[0] = '\0';
 	if (bot2_abbrev < 1)
 		sprintf(nb = eos(newbot2), "%c:%ld",
-		  oc_syms[COIN_CLASS], money_cnt(invent));
+		        oc_syms[COIN_CLASS], money_cnt(invent));
 	else
 		nb = newbot2;
 
@@ -435,7 +435,7 @@ bot2str(char *newbot2) {
 
 	if (Upolyd)
 		sprintf(nb = eos(nb), " HD:%d", ((u.ulycn == u.umonnum) ?
-						u.ulevel : mons[u.umonnum].mlevel));
+		                                 u.ulevel : mons[u.umonnum].mlevel));
 	else if (flags.showexp && bot2_abbrev < 3)
 		sprintf(nb = eos(nb), " Xp:%u/%-1ld", u.ulevel,u.uexp);
 	else
@@ -443,10 +443,10 @@ bot2str(char *newbot2) {
 
 	if (flags.showweight && bot2_abbrev < 3)
 		sprintf(nb = eos(nb), " Wt:%ld/%ld", (long)(inv_weight()+weight_cap()),
-				(long)weight_cap());
+		        (long)weight_cap());
 
 	if(flags.time && bot2_abbrev < 3)
-	        sprintf(nb = eos(nb), " T:%ld ", moves);
+		sprintf(nb = eos(nb), " T:%ld ", moves);
 
 #ifdef REALTIME_ON_BOTL
 	if(iflags.showrealtime) {
@@ -460,11 +460,11 @@ bot2str(char *newbot2) {
 		add_colored_text_match((bot2_abbrev >= 2) ? hu_abbrev_stat[u.uhs] : hu_stat[u.uhs], hu_stat[u.uhs], newbot2);
 	}
 
-/* WAC further Up
-	if (flags.showscore)
-                sprintf(nb,"%c:%-2ld  Score:%ld", oc_syms[COIN_CLASS],
-                   u.ugold, botl_score());
-*/
+	/* WAC further Up
+		if (flags.showscore)
+	                sprintf(nb,"%c:%-2ld  Score:%ld", oc_syms[COIN_CLASS],
+	                   u.ugold, botl_score());
+	*/
 	/* KMH -- changed to Lev */
 
 	if (Levitation) add_colored_text("Lev", newbot2);
@@ -473,9 +473,9 @@ bot2str(char *newbot2) {
 
 	if(Sick) {
 		if (u.usick_type & SICK_VOMITABLE)
-			   add_colored_text_match(bot2_abbrev >= 2 ? "FPs" : "FoodPois", "FoodPois", newbot2);
+			add_colored_text_match(bot2_abbrev >= 2 ? "FPs" : "FoodPois", "FoodPois", newbot2);
 		if (u.usick_type & SICK_NONVOMITABLE)
-			   add_colored_text("Ill", newbot2);
+			add_colored_text("Ill", newbot2);
 	}
 
 	if(Blind)
@@ -511,25 +511,25 @@ static void bot2(void) {
  */
 #if 0
 const char *shorten_bot1(const char *str, int len) {
-    static char cbuf[BUFSZ];
+	static char cbuf[BUFSZ];
 
-    const char *bp0 = str;
-    char *bp1 = cbuf;
-    int k = 0;
+	const char *bp0 = str;
+	char *bp1 = cbuf;
+	int k = 0;
 
-    do {
-            *bp1++ = *bp0;
-            k++;
-    } while(*bp0++ && k < (len - 49));
+	do {
+		*bp1++ = *bp0;
+		k++;
+	} while(*bp0++ && k < (len - 49));
 
-    cbuf[k] = '.';
-    bp1++;
+	cbuf[k] = '.';
+	bp1++;
 
-    bp0 = index(str, ':') - 3;
-    do {
-            *bp1++ = *bp0;
-    } while(*bp0++);
-    return cbuf;
+	bp0 = index(str, ':') - 3;
+	do {
+		*bp1++ = *bp0;
+	} while(*bp0++);
+	return cbuf;
 }
 #endif /* 0 */
 
@@ -542,92 +542,92 @@ const char *shorten_bot1(const char *str, int len) {
  */
 #ifdef TTY_GRAPHICS
 const char *shorten_bot2(const char *str, uint len) {
-    static char cbuf[MAXCO];
-    for(bot2_abbrev = 1; bot2_abbrev <= 4; bot2_abbrev++) {
-	bot2str(cbuf);
-	if (strlen(cbuf) <= len)
-	    break;
-    }
-    if (bot2_abbrev > 4)
-	cbuf[len] = '\0';	/* If all else fails, truncate the line */
-    bot2_abbrev = 0;
-    return cbuf;
+	static char cbuf[MAXCO];
+	for(bot2_abbrev = 1; bot2_abbrev <= 4; bot2_abbrev++) {
+		bot2str(cbuf);
+		if (strlen(cbuf) <= len)
+			break;
+	}
+	if (bot2_abbrev > 4)
+		cbuf[len] = '\0';	/* If all else fails, truncate the line */
+	bot2_abbrev = 0;
+	return cbuf;
 }
 #endif /* TTY_GRAPHICS */
 
 static void (*raw_handler)();
 
 static void bot_raw(boolean reconfig) {
-    const char *botl_raw_values[24], **rv = botl_raw_values;
-    char dex[3], con[3], itl[3], wis[3], cha[3], score[21];
-    int uhp;
-    char dlevel[BUFSZ];
-    char hp[21], hpmax[21], pw[21], pwmax[21], gold[21], ac[21], elevel[21];
-    char expr[21], iweight[21], capacity[21], flgs[21], tim[21];
-    *rv++ = reconfig ? "player" : botl_player();
-    *rv++ = reconfig ? "strength" : botl_strength();
-    *rv++ = reconfig ? "dexterity" : (sprintf(dex, "%d", ACURR(A_DEX)), dex);
-    *rv++ = reconfig ? "constitution" : (sprintf(con, "%d", ACURR(A_CON)), con);
-    *rv++ = reconfig ? "intelligence" : (sprintf(itl, "%d", ACURR(A_INT)), itl);
-    *rv++ = reconfig ? "wisdom" : (sprintf(wis, "%d", ACURR(A_WIS)), wis);
-    *rv++ = reconfig ? "charisma" : (sprintf(cha, "%d", ACURR(A_CHA)), cha);
-    *rv++ = reconfig ? "alignment" : u.ualign.type == A_CHAOTIC ? "Chaotic" :
-	    u.ualign.type == A_NEUTRAL ? "Neutral" : "Lawful";
-    if (flags.showscore)
-	*rv++ = reconfig ? "score" :
-		(sprintf(score, "%ld", botl_score()), score);
-    uhp = Upolyd ? u.mh : u.uhp;
-    if (uhp < 0) uhp = 0;
-    describe_level(dlevel, true);
-    eos(dlevel)[-1] = 0;
-    *rv++ = reconfig ? "dlevel" : dlevel;
-    *rv++ = reconfig ? "gold" : (sprintf(gold, "%ld", money_cnt(invent)), gold);
-    *rv++ = reconfig ? "hp" : (sprintf(hp, "%d", uhp), hp);
-    *rv++ = reconfig ? "hpmax" :
-	    (sprintf(hpmax, "%d", Upolyd ? u.mhmax : u.uhpmax), hpmax);
-    *rv++ = reconfig ? "pw" : (sprintf(pw, "%d", u.uen), pw);
-    *rv++ = reconfig ? "pwmax" : (sprintf(pwmax, "%d", u.uenmax), pwmax);
-    *rv++ = reconfig ? "ac" : (sprintf(ac, "%d", u.uac), ac);
-    sprintf(elevel, "%u",
-	    Upolyd && u.ulycn != u.umonnum ? mons[u.umonnum].mlevel : u.ulevel);
-    *rv++ = reconfig ? (Upolyd ? "hitdice" : "elevel") : elevel;
+	const char *botl_raw_values[24], **rv = botl_raw_values;
+	char dex[3], con[3], itl[3], wis[3], cha[3], score[21];
+	int uhp;
+	char dlevel[BUFSZ];
+	char hp[21], hpmax[21], pw[21], pwmax[21], gold[21], ac[21], elevel[21];
+	char expr[21], iweight[21], capacity[21], flgs[21], tim[21];
+	*rv++ = reconfig ? "player" : botl_player();
+	*rv++ = reconfig ? "strength" : botl_strength();
+	*rv++ = reconfig ? "dexterity" : (sprintf(dex, "%d", ACURR(A_DEX)), dex);
+	*rv++ = reconfig ? "constitution" : (sprintf(con, "%d", ACURR(A_CON)), con);
+	*rv++ = reconfig ? "intelligence" : (sprintf(itl, "%d", ACURR(A_INT)), itl);
+	*rv++ = reconfig ? "wisdom" : (sprintf(wis, "%d", ACURR(A_WIS)), wis);
+	*rv++ = reconfig ? "charisma" : (sprintf(cha, "%d", ACURR(A_CHA)), cha);
+	*rv++ = reconfig ? "alignment" : u.ualign.type == A_CHAOTIC ? "Chaotic" :
+	        u.ualign.type == A_NEUTRAL ? "Neutral" : "Lawful";
+	if (flags.showscore)
+		*rv++ = reconfig ? "score" :
+		        (sprintf(score, "%ld", botl_score()), score);
+	uhp = Upolyd ? u.mh : u.uhp;
+	if (uhp < 0) uhp = 0;
+	describe_level(dlevel, true);
+	eos(dlevel)[-1] = 0;
+	*rv++ = reconfig ? "dlevel" : dlevel;
+	*rv++ = reconfig ? "gold" : (sprintf(gold, "%ld", money_cnt(invent)), gold);
+	*rv++ = reconfig ? "hp" : (sprintf(hp, "%d", uhp), hp);
+	*rv++ = reconfig ? "hpmax" :
+	        (sprintf(hpmax, "%d", Upolyd ? u.mhmax : u.uhpmax), hpmax);
+	*rv++ = reconfig ? "pw" : (sprintf(pw, "%d", u.uen), pw);
+	*rv++ = reconfig ? "pwmax" : (sprintf(pwmax, "%d", u.uenmax), pwmax);
+	*rv++ = reconfig ? "ac" : (sprintf(ac, "%d", u.uac), ac);
+	sprintf(elevel, "%u",
+	        Upolyd && u.ulycn != u.umonnum ? mons[u.umonnum].mlevel : u.ulevel);
+	*rv++ = reconfig ? (Upolyd ? "hitdice" : "elevel") : elevel;
 
-    if (flags.showexp)
-	*rv++ = reconfig ? "experience" : (sprintf(expr, "%ld", u.uexp), expr);
+	if (flags.showexp)
+		*rv++ = reconfig ? "experience" : (sprintf(expr, "%ld", u.uexp), expr);
 
-    if (flags.showweight) {
-	*rv++ = reconfig ? "weight" : (sprintf(iweight,
-		"%ld", (long)(inv_weight() + weight_cap())), iweight);
-	*rv++ = reconfig ? "capacity" : (sprintf(capacity,
-		"%ld", (long)weight_cap()), capacity);
-    }
+	if (flags.showweight) {
+		*rv++ = reconfig ? "weight" : (sprintf(iweight,
+		                                       "%ld", (long)(inv_weight() + weight_cap())), iweight);
+		*rv++ = reconfig ? "capacity" : (sprintf(capacity,
+		                                 "%ld", (long)weight_cap()), capacity);
+	}
 
-    if (flags.time)
-	*rv++ = reconfig ? "time" : (sprintf(tim, "%ld", moves), tim);
-    *rv++ = reconfig ? "hunger" : strcmp(hu_stat[u.uhs], "        ") ?
-	    hu_stat[u.uhs] : "";
-    *rv++ = reconfig ? "encumberance" : enc_stat[near_capacity()];
-    *rv++ = reconfig ? "flags" : (sprintf(flgs, "%d",
-        (Levitation ? RAW_STAT_LEVITATION : 0) |
-	(Confusion ? RAW_STAT_CONFUSION : 0) |
-	(Sick && (u.usick_type & SICK_VOMITABLE) ? RAW_STAT_FOODPOIS : 0) |
-	(Sick && (u.usick_type & SICK_NONVOMITABLE) ? RAW_STAT_ILL : 0) |
-	(Blind ? RAW_STAT_BLIND : 0) |
-	(Stunned ? RAW_STAT_STUNNED : 0) |
-	(Hallucination ? RAW_STAT_HALLUCINATION : 0) |
-	(Slimed ? RAW_STAT_SLIMED : 0)), flgs);
-    (*raw_handler)(reconfig, rv - botl_raw_values, botl_raw_values);
+	if (flags.time)
+		*rv++ = reconfig ? "time" : (sprintf(tim, "%ld", moves), tim);
+	*rv++ = reconfig ? "hunger" : strcmp(hu_stat[u.uhs], "        ") ?
+	        hu_stat[u.uhs] : "";
+	*rv++ = reconfig ? "encumberance" : enc_stat[near_capacity()];
+	*rv++ = reconfig ? "flags" : (sprintf(flgs, "%d",
+	                                      (Levitation ? RAW_STAT_LEVITATION : 0) |
+	                                      (Confusion ? RAW_STAT_CONFUSION : 0) |
+	                                      (Sick && (u.usick_type & SICK_VOMITABLE) ? RAW_STAT_FOODPOIS : 0) |
+	                                      (Sick && (u.usick_type & SICK_NONVOMITABLE) ? RAW_STAT_ILL : 0) |
+	                                      (Blind ? RAW_STAT_BLIND : 0) |
+	                                      (Stunned ? RAW_STAT_STUNNED : 0) |
+	                                      (Hallucination ? RAW_STAT_HALLUCINATION : 0) |
+	                                      (Slimed ? RAW_STAT_SLIMED : 0)), flgs);
+	(*raw_handler)(reconfig, rv - botl_raw_values, botl_raw_values);
 }
 
 void bot_reconfig(void) {
-    if (raw_handler)
-	bot_raw(true);
-    flags.botl = 1;
+	if (raw_handler)
+		bot_raw(true);
+	flags.botl = 1;
 }
 
 void bot_set_handler(void (*handler)(void)) {
-    raw_handler = handler;
-    bot_reconfig();
+	raw_handler = handler;
+	bot_reconfig();
 }
 
 void bot(void) {
@@ -643,8 +643,8 @@ void bot(void) {
 	if (raw_handler)
 		bot_raw(false);
 	else {
-	bot1();
-	bot2();
+		bot1();
+		bot2();
 	}
 	flags.botl = flags.botlx = 0;
 }

@@ -70,17 +70,17 @@ struct monst {
 	bool invis_blkd; /* invisibility blocked */
 	bool perminvis;	/* intrinsic minvis value */
 	Bitfield(cham,3);	/* shape-changer */
-/* note: lychanthropes are handled elsewhere */
+	/* note: lychanthropes are handled elsewhere */
 #define CHAM_ORDINARY		0	/* not a shapechanger */
 #define CHAM_CHAMELEON		1	/* animal */
 #define CHAM_DOPPELGANGER	2	/* demi-human */
 #define CHAM_SANDESTIN		3	/* demon */
 #define CHAM_MAX_INDX		CHAM_SANDESTIN
 	bool mundetected;	/* not seen in present hiding place */
-				/* implies one of M1_CONCEAL or M1_HIDE,
-				 * but not mimic (that is, snake, spider,
-				 * trapper, piercer, eel)
-				 */
+	/* implies one of M1_CONCEAL or M1_HIDE,
+	 * but not mimic (that is, snake, spider,
+	 * trapper, piercer, eel)
+	 */
 
 	bool mcan;	/* has been cancelled */
 	bool mburied;	/* has been buried */
@@ -142,11 +142,11 @@ struct monst {
 	long misc_worn_check;
 	xchar weapon_check;
 
-        /*
-         * NOTE: DO NOT ADD PARTS TO MONST STRUCT AFTER THIS POINT!
-         * ALL ADDITIONS SHOULD GO BEFORE!!
-         *       --WAC
-         */
+	/*
+	 * NOTE: DO NOT ADD PARTS TO MONST STRUCT AFTER THIS POINT!
+	 * ALL ADDITIONS SHOULD GO BEFORE!!
+	 *       --WAC
+	 */
 	uchar mnamelth;		/* length of name (following mxlth) */
 	short mxlth;		/* length of following data */
 	/* in order to prevent alignment problems mextra should

@@ -12,38 +12,37 @@ static char *You_buf(int);
 
 void
 msgpline_add(typ, pattern)
-     int typ;
-     char *pattern;
+int typ;
+char *pattern;
 {
-    struct _plinemsg *tmp = alloc(sizeof(struct _plinemsg));
-    if (!tmp) return;
-    tmp->msgtype = typ;
-    tmp->pattern = strdup(pattern);
-    tmp->next = pline_msg;
-    pline_msg = tmp;
+	struct _plinemsg *tmp = alloc(sizeof(struct _plinemsg));
+	if (!tmp) return;
+	tmp->msgtype = typ;
+	tmp->pattern = strdup(pattern);
+	tmp->next = pline_msg;
+	pline_msg = tmp;
 }
 
 void
-msgpline_free (void)
-{
-    struct _plinemsg *tmp = pline_msg;
-    struct _plinemsg *tmp2;
-    while (tmp) {
-	free(tmp->pattern);
-	tmp2 = tmp;
-	tmp = tmp->next;
-	free(tmp2);
-    }
-    pline_msg = NULL;
+msgpline_free (void) {
+	struct _plinemsg *tmp = pline_msg;
+	struct _plinemsg *tmp2;
+	while (tmp) {
+		free(tmp->pattern);
+		tmp2 = tmp;
+		tmp = tmp->next;
+		free(tmp2);
+	}
+	pline_msg = NULL;
 }
 
 static int msgpline_type(const char *msg) {
-    struct _plinemsg *tmp = pline_msg;
-    while (tmp) {
-	if (pmatch(tmp->pattern, msg)) return tmp->msgtype;
-	tmp = tmp->next;
-    }
-    return MSGTYP_NORMAL;
+	struct _plinemsg *tmp = pline_msg;
+	while (tmp) {
+		if (pmatch(tmp->pattern, msg)) return tmp->msgtype;
+		tmp = tmp->next;
+	}
+	return MSGTYP_NORMAL;
 }
 
 
@@ -55,17 +54,17 @@ static void vpline(const char *line, va_list the_args) {
 
 	if (!line || !*line) return;
 	if (index(line, '%')) {
-	    vsprintf(pbuf,line,VA_ARGS);
-	    line = pbuf;
+		vsprintf(pbuf,line,VA_ARGS);
+		line = pbuf;
 	}
 	typ = msgpline_type(line);
 	if (!iflags.window_inited) {
-	    raw_print(line);
-	    return;
+		raw_print(line);
+		return;
 	}
 #ifndef MAC
 	if (no_repeat && !strcmp(line, toplines))
-	    return;
+		return;
 #endif /* MAC */
 	if (vision_full_recalc) vision_recalc(0);
 	if (u.ux) flush_screen(1);		/* %% */
@@ -182,13 +181,17 @@ void impossible(const char *s, ...) {
 }
 
 const char *align_str(aligntyp alignment) {
-    switch (alignment) {
-	case A_CHAOTIC: return "chaotic";
-	case A_NEUTRAL: return "neutral";
-	case A_LAWFUL:	return "lawful";
-	case A_NONE:	return "unaligned";
-    }
-    return "unknown";
+	switch (alignment) {
+	case A_CHAOTIC:
+		return "chaotic";
+	case A_NEUTRAL:
+		return "neutral";
+	case A_LAWFUL:
+		return "lawful";
+	case A_NONE:
+		return "unaligned";
+	}
+	return "unknown";
 }
 
 void mstatusline(struct monst *mtmp) {
@@ -196,31 +199,31 @@ void mstatusline(struct monst *mtmp) {
 	char info[BUFSZ], monnambuf[BUFSZ];
 
 	if (mtmp->ispriest || mtmp->data == &mons[PM_ALIGNED_PRIEST]
-				|| mtmp->data == &mons[PM_ANGEL])
+	                || mtmp->data == &mons[PM_ANGEL])
 		alignment = EPRI(mtmp)->shralign;
 	else
 		alignment = mtmp->data->maligntyp;
 	alignment = (alignment > 0) ? A_LAWFUL :
-		(alignment < 0) ? A_CHAOTIC :
-		A_NEUTRAL;
+	            (alignment < 0) ? A_CHAOTIC :
+	            A_NEUTRAL;
 
 	info[0] = 0;
-	if (mtmp->mtame) {	  strcat(info, ", tame");
-	    if (wizard) {
-		sprintf(eos(info), " (%d", mtmp->mtame);
-		if (!mtmp->isminion)
-		    sprintf(eos(info), "; hungry %ld; apport %d",
-			EDOG(mtmp)->hungrytime, EDOG(mtmp)->apport);
-		strcat(info, ")");
-	    }
-	}
-	else if (mtmp->mpeaceful) strcat(info, ", peaceful");
+	if (mtmp->mtame) {
+		strcat(info, ", tame");
+		if (wizard) {
+			sprintf(eos(info), " (%d", mtmp->mtame);
+			if (!mtmp->isminion)
+				sprintf(eos(info), "; hungry %ld; apport %d",
+				        EDOG(mtmp)->hungrytime, EDOG(mtmp)->apport);
+			strcat(info, ")");
+		}
+	} else if (mtmp->mpeaceful) strcat(info, ", peaceful");
 	else if (mtmp->mtraitor)  strcat(info, ", traitor");
 	if (mtmp->meating)	  strcat(info, ", eating");
 	if (mtmp->mcan)		  strcat(info, ", cancelled");
 	if (mtmp->mconf)	  strcat(info, ", confused");
 	if (mtmp->mblinded || !mtmp->mcansee)
-				  strcat(info, ", blind");
+		strcat(info, ", blind");
 	if (mtmp->mstun)	  strcat(info, ", stunned");
 	if (mtmp->msleeping)	  strcat(info, ", asleep");
 #if 0	/* unfortunately mfrozen covers temporary sleep and being busy
@@ -228,44 +231,45 @@ void mstatusline(struct monst *mtmp) {
 	else if (mtmp->mfrozen)	  strcat(info, ", paralyzed");
 #else
 	else if (mtmp->mfrozen || !mtmp->mcanmove)
-				  strcat(info, ", can't move");
+		strcat(info, ", can't move");
 #endif
-				  /* [arbitrary reason why it isn't moving] */
+	/* [arbitrary reason why it isn't moving] */
 	else if (mtmp->mstrategy & STRAT_WAITMASK)
-				  strcat(info, ", meditating");
-	else if (mtmp->mflee) {	  strcat(info, ", scared");
-	    if (wizard)		  sprintf(eos(info), " (%d)", mtmp->mfleetim);
+		strcat(info, ", meditating");
+	else if (mtmp->mflee) {
+		strcat(info, ", scared");
+		if (wizard)		  sprintf(eos(info), " (%d)", mtmp->mfleetim);
 	}
 	if (mtmp->mtrapped)	  strcat(info, ", trapped");
 	if (mtmp->mspeed)	  strcat(info,
-					mtmp->mspeed == MFAST ? ", fast" :
-					mtmp->mspeed == MSLOW ? ", slow" :
-					", ???? speed");
+		                                 mtmp->mspeed == MFAST ? ", fast" :
+		                                 mtmp->mspeed == MSLOW ? ", slow" :
+		                                 ", ???? speed");
 	if (mtmp->mundetected)	  strcat(info, ", concealed");
 	if (mtmp->minvis)	  strcat(info, ", invisible");
 	if (mtmp == u.ustuck)	  strcat(info,
-			(sticks(youmonst.data)) ? ", held by you" :
-				u.uswallow ? (is_animal(u.ustuck->data) ?
-				", swallowed you" :
-				", engulfed you") :
-				", holding you");
+		                                 (sticks(youmonst.data)) ? ", held by you" :
+		                                 u.uswallow ? (is_animal(u.ustuck->data) ?
+		                                                 ", swallowed you" :
+		                                                 ", engulfed you") :
+		                                 ", holding you");
 	if (mtmp == u.usteed)	  strcat(info, ", carrying you");
 
 	/* avoid "Status of the invisible newt ..., invisible" */
 	/* and unlike a normal mon_nam, use "saddled" even if it has a name */
 	strcpy(monnambuf, x_monnam(mtmp, ARTICLE_THE, NULL,
-	    (SUPPRESS_IT|SUPPRESS_INVISIBLE), false));
+	                           (SUPPRESS_IT|SUPPRESS_INVISIBLE), false));
 
 	pline("Status of %s (%s):  Level %d  HP %d(%d)  Pw %d(%d)  AC %d%s.",
-		monnambuf,
-		align_str(alignment),
-		mtmp->m_lev,
-		mtmp->mhp,
-		mtmp->mhpmax,
-		mtmp->m_en,
-		mtmp->m_enmax,
-		find_mac(mtmp),
-		info);
+	      monnambuf,
+	      align_str(alignment),
+	      mtmp->m_lev,
+	      mtmp->mhp,
+	      mtmp->mhpmax,
+	      mtmp->m_en,
+	      mtmp->m_enmax,
+	      find_mac(mtmp),
+	      info);
 }
 
 void ustatusline(void) {
@@ -288,13 +292,13 @@ void ustatusline(void) {
 	if (Vomiting)		strcat(info, ", nauseated"); /* !"nauseous" */
 	if (Confusion)		strcat(info, ", confused");
 	if (Blind) {
-	    strcat(info, ", blind");
-	    if (u.ucreamed) {
-		if ((long)u.ucreamed < Blinded || Blindfolded
-						|| !haseyes(youmonst.data))
-		    strcat(info, ", cover");
-		strcat(info, "ed by sticky goop");
-	    }	/* note: "goop" == "glop"; variation is intentional */
+		strcat(info, ", blind");
+		if (u.ucreamed) {
+			if ((long)u.ucreamed < Blinded || Blindfolded
+			                || !haseyes(youmonst.data))
+				strcat(info, ", cover");
+			strcat(info, "ed by sticky goop");
+		}	/* note: "goop" == "glop"; variation is intentional */
 	}
 	if (Stunned)		strcat(info, ", stunned");
 	if (!u.usteed && Wounded_legs) {
@@ -304,44 +308,44 @@ void ustatusline(void) {
 		sprintf(eos(info), ", injured %s", what);
 	}
 	if (Glib)		sprintf(eos(info), ", slippery %s",
-					makeplural(body_part(HAND)));
+		                                makeplural(body_part(HAND)));
 	if (u.utrap)		strcat(info, ", trapped");
 	if (Fast)		strcat(info, Very_fast ?
-						", very fast" : ", fast");
+		                               ", very fast" : ", fast");
 	if (u.uundetected)	strcat(info, ", concealed");
 	if (Invis)		strcat(info, ", invisible");
 	if (u.ustuck) {
-	    if (sticks(youmonst.data))
-		strcat(info, ", holding ");
-	    else
-		strcat(info, ", held by ");
-	    strcat(info, mon_nam(u.ustuck));
+		if (sticks(youmonst.data))
+			strcat(info, ", holding ");
+		else
+			strcat(info, ", held by ");
+		strcat(info, mon_nam(u.ustuck));
 	}
 
 	pline("Status of %s (%s%s):  Level %d  HP %d(%d)  Pw %d(%d)  AC %d%s.",
-		plname,
-		    (u.ualign.record >= 20) ? "piously " :
-		    (u.ualign.record > 13) ? "devoutly " :
-		    (u.ualign.record > 8) ? "fervently " :
-		    (u.ualign.record > 3) ? "stridently " :
-		    (u.ualign.record == 3) ? "" :
-		    (u.ualign.record >= 1) ? "haltingly " :
-		    (u.ualign.record == 0) ? "nominally " :
-					    "insufficiently ",
-		align_str(u.ualign.type),
-		Upolyd ? mons[u.umonnum].mlevel : u.ulevel,
-		Upolyd ? u.mh : u.uhp,
-		Upolyd ? u.mhmax : u.uhpmax,
-		u.uen,
-		u.uenmax,
-		u.uac,
-		info);
+	      plname,
+	      (u.ualign.record >= 20) ? "piously " :
+	      (u.ualign.record > 13) ? "devoutly " :
+	      (u.ualign.record > 8) ? "fervently " :
+	      (u.ualign.record > 3) ? "stridently " :
+	      (u.ualign.record == 3) ? "" :
+	      (u.ualign.record >= 1) ? "haltingly " :
+	      (u.ualign.record == 0) ? "nominally " :
+	      "insufficiently ",
+	      align_str(u.ualign.type),
+	      Upolyd ? mons[u.umonnum].mlevel : u.ulevel,
+	      Upolyd ? u.mh : u.uhp,
+	      Upolyd ? u.mhmax : u.uhpmax,
+	      u.uen,
+	      u.uenmax,
+	      u.uac,
+	      info);
 }
 
 void self_invis_message(void) {
 	pline("%s %s.",
-			Hallucination ? "Far out, man!  You" : "Gee!  All of a sudden, you",
-			See_invisible ? "can see right through yourself" :
-			"can't see yourself");
+	      Hallucination ? "Far out, man!  You" : "Gee!  All of a sudden, you",
+	      See_invisible ? "can see right through yourself" :
+	      "can't see yourself");
 }
 /*pline.c*/

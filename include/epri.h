@@ -7,7 +7,7 @@
 
 struct epri {
 	aligntyp shralign;	/* alignment of priest's shrine */
-				/* leave as first field to match emin */
+	/* leave as first field to match emin */
 	schar shroom;		/* index in rooms */
 	coord shrpos;		/* position of shrine */
 	d_level shrlevel;	/* level (& dungeon) of shrine */

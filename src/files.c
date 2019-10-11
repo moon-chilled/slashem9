@@ -79,10 +79,10 @@ char SAVEF[SAVESIZE];	/* holds relative path of save file from playground */
 
 #ifdef HOLD_LOCKFILE_OPEN
 struct level_ftrack {
-int init;
-int fd;					/* file descriptor for level file     */
-int oflag;				/* open flags                         */
-boolean nethack_thinks_it_is_open;	/* Does NetHack think it's open?       */
+	int init;
+	int fd;					/* file descriptor for level file     */
+	int oflag;				/* open flags                         */
+	boolean nethack_thinks_it_is_open;	/* Does NetHack think it's open?       */
 } lftrack;
 # if defined(WIN32)
 #include <share.h>
@@ -163,8 +163,8 @@ char *fname_encode(const char *legal, char quotechar, char *s, char *callerbuf, 
 
 		if (*sp == quotechar) {
 			sprintf(op, "%c%02X", quotechar, *sp);
-			 op += 3;
-			 cnt += 3;
+			op += 3;
+			cnt += 3;
 		} else if ((index(legal, *sp) != 0) || (index(hexdigits, *sp) != 0)) {
 			*op++ = *sp;
 			*op = '\0';
@@ -235,13 +235,13 @@ const char *fqname(const char *basename, int whichprefix, int buffnum) {
 		return basename;
 	if (buffnum < 0 || buffnum >= FQN_NUMBUF) {
 		impossible("Invalid fqn_filename_buffer specified: %d",
-								buffnum);
+		           buffnum);
 		buffnum = 0;
 	}
 	if (strlen(fqn_prefix[whichprefix]) + strlen(basename) >=
-						    FQN_MAX_FILENAME) {
+	                FQN_MAX_FILENAME) {
 		impossible("fqname too long: %s + %s", fqn_prefix[whichprefix],
-						basename);
+		           basename);
 		return basename;	/* XXX */
 	}
 	strcpy(fqn_filename_buffer[buffnum], fqn_prefix[whichprefix]);
@@ -276,7 +276,7 @@ int validate_prefix_locations(char *reasonbuf) {
 			if (!(details = strerror(errno)))
 				details = "";
 			sprintf(panicbuf2,"\"%s\", (%d) %s",
-				fqn_prefix[prefcnt], errno, details);
+			        fqn_prefix[prefcnt], errno, details);
 			paniclog(panicbuf1, panicbuf2);
 			failcount++;
 		}
@@ -285,7 +285,7 @@ int validate_prefix_locations(char *reasonbuf) {
 		return 0;
 	else
 #endif
-	return 1;
+		return 1;
 }
 
 /* fopen a file, with OS-dependent bells and whistles */
@@ -329,21 +329,21 @@ int create_levelfile(int lev, char errbuf[]) {
 	 */
 #  ifdef HOLD_LOCKFILE_OPEN
 	if (lev == 0)
-	    fd = open_levelfile_exclusively(fq_lock, lev,
-			    O_WRONLY |O_CREAT | O_TRUNC | O_BINARY);
+		fd = open_levelfile_exclusively(fq_lock, lev,
+		                                O_WRONLY |O_CREAT | O_TRUNC | O_BINARY);
 	else
 #  endif
-	fd = open(fq_lock, O_WRONLY |O_CREAT | O_TRUNC | O_BINARY, FCMASK);
+		fd = open(fq_lock, O_WRONLY |O_CREAT | O_TRUNC | O_BINARY, FCMASK);
 #else	// WIN32
 	fd = creat(fq_lock, FCMASK);
 #endif /* WIN32 */
 
 	if (fd >= 0)
-	    level_info[lev].flags |= LFILE_EXISTS;
+		level_info[lev].flags |= LFILE_EXISTS;
 	else if (errbuf)        /* failure explanation */
-	    sprintf(errbuf,
-		    "Cannot create file \"%s\" for level %d (errno %d).",
-		    lock, lev, errno);
+		sprintf(errbuf,
+		        "Cannot create file \"%s\" for level %d (errno %d).",
+		        lock, lev, errno);
 
 	return fd;
 }
@@ -361,15 +361,15 @@ int open_levelfile(int lev, char errbuf[]) {
 		fd = open_levelfile_exclusively(fq_lock, lev, O_RDONLY | O_BINARY );
 	else
 # endif
-	fd = open(fq_lock, O_RDONLY | O_BINARY, 0);
+		fd = open(fq_lock, O_RDONLY | O_BINARY, 0);
 
 	/* for failure, return an explanation that our caller can use;
 	   settle for `lock' instead of `fq_lock' because the latter
 	   might end up being too big for nethack's BUFSZ */
 	if (fd < 0 && errbuf)
-	    sprintf(errbuf,
-		    "Cannot open file \"%s\" for level %d (errno %d).",
-		    lock, lev, errno);
+		sprintf(errbuf,
+		        "Cannot open file \"%s\" for level %d (errno %d).",
+		        lock, lev, errno);
 
 	return fd;
 }
@@ -392,22 +392,22 @@ void delete_levelfile(int lev) {
 
 
 void clearlocks(void) {
-/* [Tom] Watcom.....
-#if !defined(PC_LOCKING)
-	eraseall(levels, alllevels);
-	if (ramdisk)
-		eraseall(permbones, alllevels);
-#else
-	int x;
+	/* [Tom] Watcom.....
+	#if !defined(PC_LOCKING)
+		eraseall(levels, alllevels);
+		if (ramdisk)
+			eraseall(permbones, alllevels);
+	#else
+		int x;
 
-# ifdef UNIX
-	signal(SIGHUP, SIG_IGN);
-# endif */
+	# ifdef UNIX
+		signal(SIGHUP, SIG_IGN);
+	# endif */
 	/* can't access maxledgerno() before dungeons are created -dlc */
 	int x;
 	for (x = (n_dgns ? maxledgerno() : 0); x >= 0; x--)
 		delete_levelfile(x);	/* not all levels need be present */
-/* #endif*/
+	/* #endif*/
 }
 
 #ifdef HOLD_LOCKFILE_OPEN
@@ -423,7 +423,7 @@ static int open_levelfile_exclusively(const char *name, int lev, int oflag) {
 			fd = lftrack.fd;
 			reslt = lseek(fd, 0L, SEEK_SET);
 			if (reslt == -1L)
-			    panic("open_levelfile_exclusively: lseek failed %d", errno);
+				panic("open_levelfile_exclusively: lseek failed %d", errno);
 			lftrack.nethack_thinks_it_is_open = true;
 		} else {
 			really_close();
@@ -433,11 +433,11 @@ static int open_levelfile_exclusively(const char *name, int lev, int oflag) {
 			lftrack.nethack_thinks_it_is_open = true;
 		}
 	} else {
-			fd = sopen(name, oflag,SH_DENYRW, FCMASK);
-			lftrack.fd = fd;
-			lftrack.oflag = oflag;
-			if (fd >= 0)
-			    lftrack.nethack_thinks_it_is_open = true;
+		fd = sopen(name, oflag,SH_DENYRW, FCMASK);
+		lftrack.fd = fd;
+		lftrack.oflag = oflag;
+		if (fd >= 0)
+			lftrack.nethack_thinks_it_is_open = true;
 	}
 	return fd;
 }
@@ -452,7 +452,7 @@ void really_close(void) {
 }
 
 int close(int fd) {
- 	if (lftrack.fd == fd) {
+	if (lftrack.fd == fd) {
 		really_close();	/* close it, but reopen it to hold it */
 		fd = open_levelfile(0, NULL);
 		lftrack.nethack_thinks_it_is_open = false;
@@ -475,12 +475,12 @@ static char *set_bonesfile_name(char *file, d_level *lev) {
 	char *dptr;
 
 	sprintf(file, "bon%c%s", dungeons[lev->dnum].boneid,
-			In_quest(lev) ? urole.filecode : "0");
+	        In_quest(lev) ? urole.filecode : "0");
 	dptr = eos(file);
 	if ((sptr = Is_special(lev)) != 0)
-	    sprintf(dptr, ".%c", sptr->boneid);
+		sprintf(dptr, ".%c", sptr->boneid);
 	else
-	    sprintf(dptr, ".%d", lev->dlevel);
+		sprintf(dptr, ".%d", lev->dlevel);
 	return dptr-2;
 }
 
@@ -517,9 +517,9 @@ int create_bonesfile(d_level *lev, char **bonesid, char errbuf[]) {
 	fd = creat(file, FCMASK);
 #endif
 	if (fd < 0 && errbuf) /* failure explanation */
-	    sprintf(errbuf,
-		    "Cannot create bones \"%s\", id %s (errno %d).",
-		    lock, *bonesid, errno);
+		sprintf(errbuf,
+		        "Cannot create bones \"%s\", id %s (errno %d).",
+		        lock, *bonesid, errno);
 
 	return fd;
 }
@@ -581,7 +581,7 @@ void set_savefile_name(void) {
 	 * it into the name. */
 	sprintf(fnamebuf, "%s-%s", get_username(0), plname);
 	fname_encode("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-.",
-				'%', fnamebuf, encodedfnamebuf, BUFSZ);
+	             '%', fnamebuf, encodedfnamebuf, BUFSZ);
 	sprintf(SAVEF, "%s.NetHack-saved-game", encodedfnamebuf);
 #else
 	sprintf(SAVEF, "save/%d%s", (int)getuid(), plname);
@@ -638,9 +638,9 @@ int open_savefile(void) {
 
 /* delete savefile */
 int delete_savefile(void) {
-/*WAC OK...this is probably a contreversial addition.  It's an option tho*/
+	/*WAC OK...this is probably a contreversial addition.  It's an option tho*/
 #ifdef KEEP_SAVE
-/* Wizard mode already has prompt*/
+	/* Wizard mode already has prompt*/
 	if (flags.keep_savefile && !wizard) {
 		return 1; /*Should this return 0?*/
 	}
@@ -661,19 +661,19 @@ int restore_saved_game(void) {
 	if ((fd = open_savefile()) < 0) return fd;
 
 	if (!uptodate(fd, fq_save)) {
-	    close(fd);
- 	    fd = -1;
-	    delete_savefile();
+		close(fd);
+		fd = -1;
+		delete_savefile();
 	}
 	return fd;
 }
 
 void free_saved_games(char** saved) {
-    if (saved) {
-	int i = 0;
-	while (saved[i]) free(saved[i++]);
-	free(saved);
-    }
+	if (saved) {
+		int i = 0;
+		while (saved[i]) free(saved[i++]);
+		free(saved);
+	}
 }
 
 
@@ -725,8 +725,8 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
 
 	nesting++;
 	if (nesting > 1) {
-	    impossible("TRIED TO NEST LOCKS");
-	    return true;
+		impossible("TRIED TO NEST LOCKS");
+		return true;
 	}
 
 #ifndef USE_FCNTL
@@ -742,7 +742,7 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
 	lockfd = open(filename,O_RDWR);
 	if (lockfd == -1) {
 		HUP raw_printf("Cannot open file %s. This is a program bug.",
-				filename);
+		               filename);
 	}
 	sflock.l_type = F_WRLCK;
 	sflock.l_whence = SEEK_SET;
@@ -764,52 +764,52 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
 # ifdef USE_FCNTL
 		if (retryct--) {
 			HUP raw_printf(
-					"Waiting for release of fcntl lock on %s. (%d retries left).",
-					filename, retryct);
+			        "Waiting for release of fcntl lock on %s. (%d retries left).",
+			        filename, retryct);
 			sleep(1);
 		} else {
 			HUP (void) raw_print("I give up.  Sorry.");
 			HUP raw_printf("Some other process has an unnatural grip on %s.",
-					filename);
+			               filename);
 			nesting--;
 			return false;
 		}
 # else
 
-	    int errnosv = errno;
+		int errnosv = errno;
 
-	    switch (errnosv) {	/* George Barbanis */
-	    case EEXIST:
-		if (retryct--) {
-		    HUP raw_printf(
-			    "Waiting for access to %s.  (%d retries left).",
-			    filename, retryct);
-			sleep(1);
-		} else {
-		    HUP (void) raw_print("I give up.  Sorry.");
-		    HUP raw_printf("Perhaps there is an old %s around?",
-					lockname);
-		    nesting--;
-		    return false;
+		switch (errnosv) {	/* George Barbanis */
+		case EEXIST:
+			if (retryct--) {
+				HUP raw_printf(
+				        "Waiting for access to %s.  (%d retries left).",
+				        filename, retryct);
+				sleep(1);
+			} else {
+				HUP (void) raw_print("I give up.  Sorry.");
+				HUP raw_printf("Perhaps there is an old %s around?",
+				               lockname);
+				nesting--;
+				return false;
+			}
+
+			break;
+		case ENOENT:
+			HUP raw_printf("Can't find file %s to lock!", filename);
+			nesting--;
+			return false;
+		case EACCES:
+			HUP raw_printf("No write permission to lock %s!", filename);
+			nesting--;
+			return false;
+		default:
+			HUP perror(lockname);
+			HUP raw_printf(
+			        "Cannot lock %s for unknown reason (%d).",
+			        filename, errnosv);
+			nesting--;
+			return false;
 		}
-
-		break;
-	    case ENOENT:
-		HUP raw_printf("Can't find file %s to lock!", filename);
-		nesting--;
-		return false;
-	    case EACCES:
-		HUP raw_printf("No write permission to lock %s!", filename);
-		nesting--;
-		return false;
-	    default:
-		HUP perror(lockname);
-		HUP raw_printf(
-			     "Cannot lock %s for unknown reason (%d).",
-			       filename, errnosv);
-		nesting--;
-		return false;
-	    }
 # endif // USE_FCNTL
 
 	}
@@ -818,21 +818,21 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
 #if defined(WIN32) && !defined(USE_FCNTL)
 # define OPENFAILURE(fd) (fd < 0)
 
-    lockptr = -1;
-    while (--retryct && OPENFAILURE(lockptr)) {
-	lockptr = sopen(lockname, O_RDWR|O_CREAT, SH_DENYRW, S_IWRITE);
+	lockptr = -1;
+	while (--retryct && OPENFAILURE(lockptr)) {
+		lockptr = sopen(lockname, O_RDWR|O_CREAT, SH_DENYRW, S_IWRITE);
 
-	if (OPENFAILURE(lockptr)) {
-	    raw_printf("Waiting for access to %s.  (%d retries left).",
-			filename, retryct);
-	    Delay(50);
+		if (OPENFAILURE(lockptr)) {
+			raw_printf("Waiting for access to %s.  (%d retries left).",
+			           filename, retryct);
+			Delay(50);
+		}
 	}
-    }
-    if (!retryct) {
-	raw_printf("I give up.  Sorry.");
-	nesting--;
-	return false;
-    }
+	if (!retryct) {
+		raw_printf("I give up.  Sorry.");
+		nesting--;
+		return false;
+	}
 #endif // WIN32 && !USE_FCNTL
 	return true;
 }
@@ -905,28 +905,28 @@ static FILE *fopen_config_file(const char *filename) {
 			 * control
 			 */
 			raw_printf("Access to %s denied (%d).",
-					filename, errno);
+			           filename, errno);
 			wait_synch();
 			/* fall through to standard names */
 		} else
 #endif
-		if ((fp = fopen(filename, "r")) != NULL) {
-		    configfile = filename;
-		    return fp;
+			if ((fp = fopen(filename, "r")) != NULL) {
+				configfile = filename;
+				return fp;
 #ifdef UNIX
-		} else {
-		    /* access() above probably caught most problems for UNIX */
-		    raw_printf("Couldn't open requested config file %s (%d).",
-					filename, errno);
-		    wait_synch();
-		    /* fall through to standard names */
+			} else {
+				/* access() above probably caught most problems for UNIX */
+				raw_printf("Couldn't open requested config file %s (%d).",
+				           filename, errno);
+				wait_synch();
+				/* fall through to standard names */
 #endif
-		}
+			}
 	}
 
 #if defined(MAC) || defined(WIN32)
 	if ((fp = fopen(fqname(configfile, CONFIGPREFIX, 0), "r"))
-								!= NULL)
+	                != NULL)
 		return fp;
 #else
 	/* constructed full path names don't need fqname() */
@@ -949,26 +949,25 @@ static FILE *fopen_config_file(const char *filename) {
 	}
 # endif
 	if (errno != ENOENT) {
-	    char *details;
+		char *details;
 
-	    /* e.g., problems when setuid NetHack can't search home
-	     * directory restricted to user */
+		/* e.g., problems when setuid NetHack can't search home
+		 * directory restricted to user */
 
-	    if ((details = strerror(errno)) == 0)
-		details = "";
-	    raw_printf("Couldn't open default config file %s %s(%d).",
-			tmp_config, details, errno);
-	    wait_synch();
-	}
-	else if (!strncmp(windowprocs.name, "proxy/", 6)) {
-	    fp = fopen("/etc/slashem/proxy.slashemrc", "r");
-	    if (fp != NULL)
-		return fp;
-	    else if (errno != ENOENT) {
-		raw_printf("Couldn't open /etc/slashem/proxy.slashemrc (%d).",
-				errno);
+		if ((details = strerror(errno)) == 0)
+			details = "";
+		raw_printf("Couldn't open default config file %s %s(%d).",
+		           tmp_config, details, errno);
 		wait_synch();
-	    }
+	} else if (!strncmp(windowprocs.name, "proxy/", 6)) {
+		fp = fopen("/etc/slashem/proxy.slashemrc", "r");
+		if (fp != NULL)
+			return fp;
+		else if (errno != ENOENT) {
+			raw_printf("Couldn't open /etc/slashem/proxy.slashemrc (%d).",
+			           errno);
+			wait_synch();
+		}
 	}
 #endif
 	return NULL;
@@ -987,42 +986,42 @@ static FILE *fopen_config_file(const char *filename) {
  */
 int
 get_uchar_list(buf, list, size)
-    char *buf;		/* read buffer */
-   uchar *list;	/* return list */
-    int size;		/* return list size */
+char *buf;		/* read buffer */
+uchar *list;	/* return list */
+int size;		/* return list size */
 {
-    int cnt = 0;
-    char* next;
-    uchar orig;
-    uchar mkey;
+	int cnt = 0;
+	char* next;
+	uchar orig;
+	uchar mkey;
 
-    while (1) { /* one loop for each uchar */
-	if (cnt == size) return cnt;
+	while (1) { /* one loop for each uchar */
+		if (cnt == size) return cnt;
 
-	/* take off leading whiltespace */
-	while (isspace(*buf)) buf++;
-	if (!*buf) return cnt;
+		/* take off leading whiltespace */
+		while (isspace(*buf)) buf++;
+		if (!*buf) return cnt;
 
-	/* strip trailing whitespace / other uchars */
-	next = buf;
-	while(*next && !isspace(*next)) next++;
-	orig = *next;
-	*next = 0;
+		/* strip trailing whitespace / other uchars */
+		next = buf;
+		while(*next && !isspace(*next)) next++;
+		orig = *next;
+		*next = 0;
 
-	/* interpret the character */
-	mkey = (uchar)txt2key(buf);
-	if (!mkey) {
-		raw_printf("Invalid uchar %s on %i.", buf, cnt+1);
-		return -(cnt+1);
+		/* interpret the character */
+		mkey = (uchar)txt2key(buf);
+		if (!mkey) {
+			raw_printf("Invalid uchar %s on %i.", buf, cnt+1);
+			return -(cnt+1);
+		}
+		list[cnt] = mkey;
+		cnt++;
+
+		/* prepare for the next uchar */
+		*next = orig;
+		buf = next;
 	}
-	list[cnt] = mkey;
-	cnt++;
-
-	/* prepare for the next uchar */
-	*next = orig;
-	buf = next;
-    }
-    /* NOT REACHED */
+	/* NOT REACHED */
 }
 
 /*
@@ -1032,47 +1031,47 @@ get_uchar_list(buf, list, size)
  *  location is unchanged.  Callers must handle zeros if modlist is false.
  */
 static int get_uchars(
-    FILE *fp,		/* input file pointer */
-    char *buf,		/* read buffer, must be of size BUFSZ */
-    char *bufp,		/* current pointer */
-    uchar *list,	/* return list */
-    boolean modlist,	/* true: list is being modified in place */
-    int  size,		/* return list size */
-    const char *name	/* name of option for error message */) {
+        FILE *fp,		/* input file pointer */
+        char *buf,		/* read buffer, must be of size BUFSZ */
+        char *bufp,		/* current pointer */
+        uchar *list,	/* return list */
+        boolean modlist,	/* true: list is being modified in place */
+        int  size,		/* return list size */
+        const char *name	/* name of option for error message */) {
 
-    int count = 0;
+	int count = 0;
 
-    int num_read;
-    char* buf_end;
-    boolean another;   /* expect another line? */
+	int num_read;
+	char* buf_end;
+	boolean another;   /* expect another line? */
 
-    while (1) { /* JDS: one loop for each line of input */
-	    if ((buf_end = index(bufp, '\\')) != 0) {
-		    *buf_end = 0;
-		    another = true;
-	    } else another = false;
+	while (1) { /* JDS: one loop for each line of input */
+		if ((buf_end = index(bufp, '\\')) != 0) {
+			*buf_end = 0;
+			another = true;
+		} else another = false;
 
-	    num_read = get_uchar_list(bufp, list, size-count);
-	    if (num_read < 0) {
-		    count -= num_read + 1;
+		num_read = get_uchar_list(bufp, list, size-count);
+		if (num_read < 0) {
+			count -= num_read + 1;
 gi_error:
-		raw_printf("Syntax error in %s", name);
-		wait_synch();
-		return count;
+			raw_printf("Syntax error in %s", name);
+			wait_synch();
+			return count;
+		}
+		count += num_read;
+		list += num_read;
+
+		if (count == size || !another) return count;
+
+		if (fp == NULL)
+			goto gi_error;
+		do {
+			if (!fgets(buf, BUFSZ, fp)) goto gi_error;
+		} while (buf[0] == '#');
+		bufp = buf;
 	}
-	    count += num_read;
-	    list += num_read;
-
-	    if (count == size || !another) return count;
-
-	    if (fp == NULL)
-		    goto gi_error;
-	    do {
-		    if (!fgets(buf, BUFSZ, fp)) goto gi_error;
-	    } while (buf[0] == '#');
-	    bufp = buf;
-    }
-    /*NOTREACHED*/
+	/*NOTREACHED*/
 }
 
 #ifdef NOCWD_ASSUMPTIONS
@@ -1118,7 +1117,9 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 	if (!bufp) return 0;
 
 	/* skip  whitespace between '=' and value */
-	do { ++bufp; } while (isspace((int)*bufp));
+	do {
+		++bufp;
+	} while (isspace((int)*bufp));
 
 	/* Go through possible variables */
 	/* some of these (at least LEVELS and SAVE) should now set the
@@ -1143,7 +1144,7 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 	} else if (match_varname(buf, "HACKDIR", 4)) {
 		adjust_prefix(bufp, HACKPREFIX);
 	} else if (match_varname(buf, "LEVELDIR", 4) ||
-		   match_varname(buf, "LEVELS", 4)) {
+	                match_varname(buf, "LEVELS", 4)) {
 		adjust_prefix(bufp, LEVELPREFIX);
 	} else if (match_varname(buf, "SAVEDIR", 4)) {
 		adjust_prefix(bufp, SAVEPREFIX);
@@ -1162,54 +1163,54 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 #endif /*NOCWD_ASSUMPTIONS*/
 
 	} else if (match_varname(buf, "NAME", 4)) {
-	    strncpy(plname, bufp, PL_NSIZ-1);
-	    plnamesuffix();
+		strncpy(plname, bufp, PL_NSIZ-1);
+		plnamesuffix();
 	} else if (match_varname(buf, "MSGTYPE", 7)) {
-	    char pattern[256];
-	    char msgtype[11];
-	    if (sscanf(bufp, "%10s \"%255[^\"]\"", msgtype, pattern) == 2) {
-		int typ = MSGTYP_NORMAL;
-		if (!strcasecmp("norep", msgtype)) typ = MSGTYP_NOREP;
-		else if (!strcasecmp("hide", msgtype)) typ = MSGTYP_NOSHOW;
-		else if (!strcasecmp("noshow", msgtype)) typ = MSGTYP_NOSHOW;
-		else if (!strcasecmp("more", msgtype)) typ = MSGTYP_STOP;
-		else if (!strcasecmp("stop", msgtype)) typ = MSGTYP_STOP;
-		if (typ != MSGTYP_NORMAL) {
-		    msgpline_add(typ, pattern);
+		char pattern[256];
+		char msgtype[11];
+		if (sscanf(bufp, "%10s \"%255[^\"]\"", msgtype, pattern) == 2) {
+			int typ = MSGTYP_NORMAL;
+			if (!strcasecmp("norep", msgtype)) typ = MSGTYP_NOREP;
+			else if (!strcasecmp("hide", msgtype)) typ = MSGTYP_NOSHOW;
+			else if (!strcasecmp("noshow", msgtype)) typ = MSGTYP_NOSHOW;
+			else if (!strcasecmp("more", msgtype)) typ = MSGTYP_STOP;
+			else if (!strcasecmp("stop", msgtype)) typ = MSGTYP_STOP;
+			if (typ != MSGTYP_NORMAL) {
+				msgpline_add(typ, pattern);
+			}
 		}
-	    }
 	} else if (match_varname(buf, "ROLE", 4) ||
-		   match_varname(buf, "CHARACTER", 4)) {
-	    if ((len = str2role(bufp)) >= 0)
-	    	flags.initrole = len;
+	                match_varname(buf, "CHARACTER", 4)) {
+		if ((len = str2role(bufp)) >= 0)
+			flags.initrole = len;
 	} else if (match_varname(buf, "DOGNAME", 3)) {
-	    strncpy(dogname, bufp, PL_PSIZ-1);
+		strncpy(dogname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "CATNAME", 3)) {
-	    strncpy(catname, bufp, PL_PSIZ-1);
+		strncpy(catname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "WOLFNAME", 3)) {
-            strncpy(wolfname, bufp, PL_PSIZ-1);
+		strncpy(wolfname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "GHOULNAME", 3)) {
-            strncpy(ghoulname, bufp, PL_PSIZ-1);
+		strncpy(ghoulname, bufp, PL_PSIZ-1);
 #if 0
 	} else if (match_varname(buf, "BATNAME", 3)) {
-            strncpy(batname, bufp, PL_PSIZ-1);
+		strncpy(batname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "SNAKENAME", 3)) {
-            strncpy(batname, bufp, PL_PSIZ-1);
+		strncpy(batname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "RATNAME", 3)) {
-            strncpy(batname, bufp, PL_PSIZ-1);
+		strncpy(batname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "BADGERNAME", 3)) {
-            strncpy(batname, bufp, PL_PSIZ-1);
+		strncpy(batname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "REDDRAGONNAME", 3)) {
-            strncpy(batname, bufp, PL_PSIZ-1);
+		strncpy(batname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "WHITEDRAGONNAME", 3)) {
-            strncpy(batname, bufp, PL_PSIZ-1);
+		strncpy(batname, bufp, PL_PSIZ-1);
 #endif
 
 	} else if (match_varname(buf, "BOULDER", 3)) {
-	    get_uchars(fp, buf, bufp, &iflags.bouldersym, true,
-			      1, "BOULDER");
+		get_uchars(fp, buf, bufp, &iflags.bouldersym, true,
+		           1, "BOULDER");
 	} else if (match_varname(buf, "MENUCOLOR", 9)) {
-	   add_menu_coloring(bufp);
+		add_menu_coloring(bufp);
 	} else if (match_varname(buf, "MONSTERSYMBOL", 13)) {
 		return parse_monster_symbol(bufp);
 	} else if (match_varname(buf, "OBJECTSYMBOL", 12)) {
@@ -1217,41 +1218,41 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 	} else if (match_varname(buf, "SYMBOL", 6)) {
 		return parse_symbol(bufp);
 	} else if (match_varname(buf, "GRAPHICS", 4)) {
-	    len = get_uchars(fp, buf, bufp, translate, false, MAXPCHARS, "GRAPHICS");
-	    assign_graphics((glyph_t*)translate, len, MAXPCHARS, 0);
-        } else if (match_varname(buf, "STATUSCOLOR", 11)) {
-            /* ignore statuscolor entries if not compiled in */
-            parse_status_color_options(bufp);
+		len = get_uchars(fp, buf, bufp, translate, false, MAXPCHARS, "GRAPHICS");
+		assign_graphics((glyph_t*)translate, len, MAXPCHARS, 0);
+	} else if (match_varname(buf, "STATUSCOLOR", 11)) {
+		/* ignore statuscolor entries if not compiled in */
+		parse_status_color_options(bufp);
 	} else if (match_varname(buf, "DUNGEON", 4)) {
-	    len = get_uchars(fp, buf, bufp, translate, false, MAXDCHARS, "DUNGEON");
-	    assign_graphics((glyph_t*)translate, len, MAXDCHARS, 0);
+		len = get_uchars(fp, buf, bufp, translate, false, MAXDCHARS, "DUNGEON");
+		assign_graphics((glyph_t*)translate, len, MAXDCHARS, 0);
 	} else if (match_varname(buf, "TRAPS", 4)) {
-	    len = get_uchars(fp, buf, bufp, translate, false, MAXTCHARS, "TRAPS");
-	    assign_graphics((glyph_t*)translate, len, MAXTCHARS, MAXDCHARS);
+		len = get_uchars(fp, buf, bufp, translate, false, MAXTCHARS, "TRAPS");
+		assign_graphics((glyph_t*)translate, len, MAXTCHARS, MAXDCHARS);
 	} else if (match_varname(buf, "EFFECTS", 4)) {
-	    len = get_uchars(fp, buf, bufp, translate, false, MAXECHARS, "EFFECTS");
-	    assign_graphics((glyph_t*)translate, len, MAXECHARS, MAXDCHARS+MAXTCHARS);
+		len = get_uchars(fp, buf, bufp, translate, false, MAXECHARS, "EFFECTS");
+		assign_graphics((glyph_t*)translate, len, MAXECHARS, MAXDCHARS+MAXTCHARS);
 #ifdef USER_DUNGEONCOLOR
 	} else if (match_varname(buf, "DUNGEONCOLOR", 10)) {
-	    len = get_uchars(fp, buf, bufp, translate, false,
-			     MAXDCHARS, "DUNGEONCOLOR");
-	    assign_colors(translate, len, MAXDCHARS, 0);
+		len = get_uchars(fp, buf, bufp, translate, false,
+		                 MAXDCHARS, "DUNGEONCOLOR");
+		assign_colors(translate, len, MAXDCHARS, 0);
 	} else if (match_varname(buf, "TRAPCOLORS", 7)) {
-	    len = get_uchars(fp, buf, bufp, translate, false,
-			     MAXTCHARS, "TRAPCOLORS");
-	    assign_colors(translate, len, MAXTCHARS, MAXDCHARS);
+		len = get_uchars(fp, buf, bufp, translate, false,
+		                 MAXTCHARS, "TRAPCOLORS");
+		assign_colors(translate, len, MAXTCHARS, MAXDCHARS);
 #endif
 
 	} else if (match_varname(buf, "OBJECTS", 3)) {
-	    /* oc_syms[0] is the RANDOM object, unused */
-	    get_uchars(fp, buf, bufp, &(oc_syms[1]), true,
-					MAXOCLASSES-1, "OBJECTS");
+		/* oc_syms[0] is the RANDOM object, unused */
+		get_uchars(fp, buf, bufp, &(oc_syms[1]), true,
+		           MAXOCLASSES-1, "OBJECTS");
 	} else if (match_varname(buf, "MONSTERS", 3)) {
-	    /* monsyms[0] is unused */
-	    get_uchars(fp, buf, bufp, &(monsyms[1]), true,
-					MAXMCLASSES-1, "MONSTERS");
+		/* monsyms[0] is unused */
+		get_uchars(fp, buf, bufp, &(monsyms[1]), true,
+		           MAXMCLASSES-1, "MONSTERS");
 	} else if (match_varname(buf, "WIZKIT", 6)) {
-	    strncpy(wizkit, bufp, WIZKIT_MAX-1);
+		strncpy(wizkit, bufp, WIZKIT_MAX-1);
 #ifdef USER_SOUNDS
 	} else if (match_varname(buf, "SOUNDDIR", 8)) {
 		sounddir = (char *)strdup(bufp);
@@ -1284,9 +1285,9 @@ void read_config_file(const char *filename) {
 	int	found = false;
 
 	if (!(fp = fopen_config_file(filename)))
-	    goto clnt_process;
+		goto clnt_process;
 	else
-	    found = true;
+		found = true;
 #else
 	if (!(fp = fopen_config_file(filename))) goto post_process;
 #endif
@@ -1317,36 +1318,36 @@ clnt_process:
 	 * files, but we do want to warn of duplicates within each file.
 	 */
 	if (!strncmp(windowprocs.name, "proxy/", 6) &&
-		(fp = proxy_config_file_open())) {
-	    found = true;
-	    set_duplicate_opt_detection(1);
-	    while (fgets(buf, 4*BUFSZ, fp)) {
-		if (match_varname(buf, "TILESETS", 7) ||
-		   match_varname(buf, "HACKDIR", 4) ||
-		   match_varname(buf, "LEVELDIR", 4) ||
-		   match_varname(buf, "LEVELS", 4) ||
-		   match_varname(buf, "SAVEDIR", 4) ||
-		   match_varname(buf, "BONESDIR", 5) ||
-		   match_varname(buf, "DATADIR", 4) ||
-		   match_varname(buf, "SCOREDIR", 4) ||
-		   match_varname(buf, "LOCKDIR", 4) ||
-		   match_varname(buf, "CONFIGDIR", 4) ||
-		   match_varname(buf, "TROUBLEDIR", 4) ||
-		   match_varname(buf, "SOUNDDIR", 8) ||
-		   match_varname(buf, "SOUND", 5)) {
-		    /* Quietly ignore many commands. There's no sense in
-		     * the client configuring these and some introduce
-		     * potential security breachs.
-		     */
-		    continue;
+	                (fp = proxy_config_file_open())) {
+		found = true;
+		set_duplicate_opt_detection(1);
+		while (fgets(buf, 4*BUFSZ, fp)) {
+			if (match_varname(buf, "TILESETS", 7) ||
+			                match_varname(buf, "HACKDIR", 4) ||
+			                match_varname(buf, "LEVELDIR", 4) ||
+			                match_varname(buf, "LEVELS", 4) ||
+			                match_varname(buf, "SAVEDIR", 4) ||
+			                match_varname(buf, "BONESDIR", 5) ||
+			                match_varname(buf, "DATADIR", 4) ||
+			                match_varname(buf, "SCOREDIR", 4) ||
+			                match_varname(buf, "LOCKDIR", 4) ||
+			                match_varname(buf, "CONFIGDIR", 4) ||
+			                match_varname(buf, "TROUBLEDIR", 4) ||
+			                match_varname(buf, "SOUNDDIR", 8) ||
+			                match_varname(buf, "SOUND", 5)) {
+				/* Quietly ignore many commands. There's no sense in
+				 * the client configuring these and some introduce
+				 * potential security breachs.
+				 */
+				continue;
+			}
+			if (!parse_config_line(fp, buf, tmp_ramdisk, tmp_levels)) {
+				pline("Bad option line:  \"%.50s\"", buf);
+				wait_synch();
+			}
 		}
-		if (!parse_config_line(fp, buf, tmp_ramdisk, tmp_levels)) {
-		    pline("Bad option line:  \"%.50s\"", buf);
-		    wait_synch();
-		}
-	    }
-	    proxy_config_file_close(fp);
-	    set_duplicate_opt_detection(0);
+		proxy_config_file_close(fp);
+		set_duplicate_opt_detection(0);
 	}
 
 	if (!found) goto post_process;
@@ -1365,13 +1366,12 @@ post_process:
 		uint len = strlen(tileset);
 		for(i = 0; i < no_tilesets; i++)
 			if (len == strlen(tilesets[i].name) &&
-			    !strncmpi(tilesets[i].name, tileset, len))
+			                !strncmpi(tilesets[i].name, tileset, len))
 				break;
 		if (i == no_tilesets) {
 			pline("Tileset %s not defined.", tileset);
 			tileset[0] = '\0';
-		}
-		else
+		} else
 			strcpy(tileset, tilesets[i].name);
 	}
 	return;
@@ -1397,25 +1397,25 @@ static FILE *fopen_wizkit_file(void) {
 		 * control
 		 */
 		raw_printf("Access to %s denied (%d).",
-				wizkit, errno);
+		           wizkit, errno);
 		wait_synch();
 		/* fall through to standard names */
 	} else
 #endif
-	if ((fp = fopen(wizkit, "r")) != NULL) {
-	    return fp;
+		if ((fp = fopen(wizkit, "r")) != NULL) {
+			return fp;
 #ifdef UNIX
-	} else {
-	    /* access() above probably caught most problems for UNIX */
-	    raw_printf("Couldn't open requested config file %s (%d).",
-				wizkit, errno);
-	    wait_synch();
+		} else {
+			/* access() above probably caught most problems for UNIX */
+			raw_printf("Couldn't open requested config file %s (%d).",
+			           wizkit, errno);
+			wait_synch();
 #endif
-	}
+		}
 
 #if defined(MAC) || defined(WIN32)
 	if ((fp = fopen(fqname(wizkit, CONFIGPREFIX, 0), "r"))
-								!= NULL)
+	                != NULL)
 		return fp;
 #else
 	envp = nh_getenv("HOME");
@@ -1428,7 +1428,7 @@ static FILE *fopen_wizkit_file(void) {
 		/* e.g., problems when setuid NetHack can't search home
 		 * directory restricted to user */
 		raw_printf("Couldn't open default wizkit file %s (%d).",
-					tmp_wizkit, errno);
+		           tmp_wizkit, errno);
 		wait_synch();
 	}
 #endif
@@ -1444,28 +1444,28 @@ void read_wizkit(void) {
 	if (!wizard || !(fp = fopen_wizkit_file())) return;
 
 	while (fgets(buf, (int)(sizeof buf), fp)) {
-	    ep = index(buf, '\n');
-	    if (skip) {	/* in case previous line was too long */
-		if (ep) skip = false; /* found newline; next line is normal */
-	    } else {
-		if (!ep) skip = true; /* newline missing; discard next fgets */
-		else *ep = '\0';		/* remove newline */
+		ep = index(buf, '\n');
+		if (skip) {	/* in case previous line was too long */
+			if (ep) skip = false; /* found newline; next line is normal */
+		} else {
+			if (!ep) skip = true; /* newline missing; discard next fgets */
+			else *ep = '\0';		/* remove newline */
 
-		if (buf[0]) {
-			otmp = readobjnam(buf, NULL, false);
-			if (otmp) {
-			    if (otmp != &zeroobj)
-				otmp = addinv(otmp);
-			} else {
-			    /* .60 limits output line width to 79 chars */
-			    raw_printf("Bad wizkit item: \"%.60s\"", buf);
-			    bad_items = true;
+			if (buf[0]) {
+				otmp = readobjnam(buf, NULL, false);
+				if (otmp) {
+					if (otmp != &zeroobj)
+						otmp = addinv(otmp);
+				} else {
+					/* .60 limits output line width to 79 chars */
+					raw_printf("Bad wizkit item: \"%.60s\"", buf);
+					bad_items = true;
+				}
 			}
 		}
-	    }
 	}
 	if (bad_items)
-	    wait_synch();
+		wait_synch();
 	fclose(fp);
 	return;
 }
@@ -1484,12 +1484,12 @@ void check_recordfile(const char *dir) {
 	fd = open(fq_record, O_RDWR, 0);
 
 	if (fd >= 0) {
-	    close(fd);   /* NH_RECORD is accessible */
+		close(fd);   /* NH_RECORD is accessible */
 	} else if ((fd = open(fq_record, O_CREAT|O_RDWR, FCMASK)) >= 0) {
-	    close(fd);   /* NH_RECORD newly created */
+		close(fd);   /* NH_RECORD newly created */
 	} else {
-	    raw_printf("Warning: cannot write scoreboard file %s", fq_record);
-	    wait_synch();
+		raw_printf("Warning: cannot write scoreboard file %s", fq_record);
+		wait_synch();
 	}
 #endif  /* !UNIX && !VMS */
 #ifdef WIN32
@@ -1498,14 +1498,14 @@ void check_recordfile(const char *dir) {
 	fq_record = fqname(NH_RECORD, SCOREPREFIX, 0);
 
 	if ((fd = open(fq_record, O_RDWR)) < 0) {
-	    /* try to create empty record */
+		/* try to create empty record */
 		if ((fd = open(fq_record, O_CREAT|O_RDWR, S_IREAD|S_IWRITE)) < 0) {
 			raw_printf("Warning: cannot write record %s", tmp);
 			wait_synch();
 		} else          /* create succeeded */
 			close(fd);
 	} else		/* open succeeded */
-	    close(fd);
+		close(fd);
 #else /* WIN32*/
 
 # ifdef MAC
@@ -1529,7 +1529,7 @@ void check_recordfile(const char *dir) {
 
 /*ARGSUSED*/
 void paniclog(const char *type,	/* panic, impossible, trickery */
-		const char *reason	/* explanation */) {
+              const char *reason	/* explanation */) {
 
 #ifdef PANICLOG
 	FILE *lfile;
@@ -1538,10 +1538,10 @@ void paniclog(const char *type,	/* panic, impossible, trickery */
 		program_state.in_paniclog = 1;
 		lfile = fopen_datafile(PANICLOG, "a", TROUBLEPREFIX);
 		if (lfile) {
-		    fprintf(lfile, "%s %08ld: %s %s\n",
-				   version_string_tmp(), yyyymmdd((time_t)0L),
-				   type, reason);
-		    fclose(lfile);
+			fprintf(lfile, "%s %08ld: %s %s\n",
+			        version_string_tmp(), yyyymmdd((time_t)0L),
+			        type, reason);
+			fclose(lfile);
 		}
 		program_state.in_paniclog = 0;
 	}
@@ -1573,29 +1573,29 @@ boolean recover_savefile(void) {
 	 */
 	gfd = open_levelfile(0, errbuf);
 	if (gfd < 0) {
-	    raw_printf("%s\n", errbuf);
-	    return false;
+		raw_printf("%s\n", errbuf);
+		return false;
 	}
 	if (read(gfd, (void *) &hpid, sizeof hpid) != sizeof hpid) {
-	    raw_printf(
-"\nCheckpoint data incompletely written or subsequently clobbered. Recovery impossible.");
-	    close(gfd);
-	    return false;
+		raw_printf(
+		        "\nCheckpoint data incompletely written or subsequently clobbered. Recovery impossible.");
+		close(gfd);
+		return false;
 	}
 	if (read(gfd, (void *) &savelev, sizeof(savelev))
-							!= sizeof(savelev)) {
-	    raw_printf("\nCheckpointing was not in effect for %s -- recovery impossible.\n",
-			lock);
-	    close(gfd);
-	    return false;
+	                != sizeof(savelev)) {
+		raw_printf("\nCheckpointing was not in effect for %s -- recovery impossible.\n",
+		           lock);
+		close(gfd);
+		return false;
 	}
 	if ((read(gfd, (void *) savename, sizeof savename)
-		!= sizeof savename) ||
-	    (read(gfd, (void *) &version_data, sizeof version_data)
-		!= sizeof version_data)) {
-	    raw_printf("\nError reading %s -- can't recover.\n", lock);
-	    close(gfd);
-	    return false;
+	                != sizeof savename) ||
+	                (read(gfd, (void *) &version_data, sizeof version_data)
+	                 != sizeof version_data)) {
+		raw_printf("\nError reading %s -- can't recover.\n", lock);
+		close(gfd);
+		return false;
 	}
 
 	/* save file should contain:
@@ -1607,27 +1607,27 @@ boolean recover_savefile(void) {
 	set_savefile_name();
 	sfd = create_savefile();
 	if (sfd < 0) {
-	    raw_printf("\nCannot recover savefile %s.\n", SAVEF);
-	    close(gfd);
-	    return false;
+		raw_printf("\nCannot recover savefile %s.\n", SAVEF);
+		close(gfd);
+		return false;
 	}
 
 	lfd = open_levelfile(savelev, errbuf);
 	if (lfd < 0) {
-	    raw_printf("\n%s\n", errbuf);
-	    close(gfd);
-	    close(sfd);
-	    delete_savefile();
-	    return false;
+		raw_printf("\n%s\n", errbuf);
+		close(gfd);
+		close(sfd);
+		delete_savefile();
+		return false;
 	}
 
 	if (write(sfd, (void *) &version_data, sizeof version_data)
-		!= sizeof version_data) {
-	    raw_printf("\nError writing %s; recovery failed.", SAVEF);
-	    close(gfd);
-	    close(sfd);
-	    delete_savefile();
-	    return false;
+	                != sizeof version_data) {
+		raw_printf("\nError writing %s; recovery failed.", SAVEF);
+		close(gfd);
+		close(sfd);
+		delete_savefile();
+		return false;
 	}
 
 	if (!copy_bytes(lfd, sfd)) {

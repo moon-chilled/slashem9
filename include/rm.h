@@ -231,8 +231,8 @@
 #define MAXWARNINGS	6	/* number of warning characters */
 
 struct symdef {
-    const char *explanation;
-    uchar color;
+	const char *explanation;
+	uchar color;
 };
 
 extern const struct symdef sym_desc[MAXPCHARS];
@@ -493,16 +493,15 @@ struct levelflags {
 	bool lethe;			/* All water on level causes amnesia */
 };
 
-typedef struct
-{
-    struct rm		locations[COLNO][ROWNO];
-    struct obj		*objects[COLNO][ROWNO];
-    struct monst	*monsters[COLNO][ROWNO];
-    struct obj		*objlist;
-    struct obj		*buriedobjlist;
-    struct monst	*monlist;
-    struct damage	*damagelist;
-    struct levelflags	flags;
+typedef struct {
+	struct rm		locations[COLNO][ROWNO];
+	struct obj		*objects[COLNO][ROWNO];
+	struct monst	*monsters[COLNO][ROWNO];
+	struct obj		*objlist;
+	struct obj		*buriedobjlist;
+	struct monst	*monlist;
+	struct damage	*damagelist;
+	struct levelflags	flags;
 }
 dlevel_t;
 

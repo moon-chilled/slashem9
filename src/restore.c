@@ -29,11 +29,11 @@ static void reset_oattached_mids(boolean);
  */
 #define N_PER_BUCKET 64
 struct bucket {
-    struct bucket *next;
-    struct {
-	unsigned gid;	/* ghost ID */
-	unsigned nid;	/* new ID */
-    } map[N_PER_BUCKET];
+	struct bucket *next;
+	struct {
+		unsigned gid;	/* ghost ID */
+		unsigned nid;	/* new ID */
+	} map[N_PER_BUCKET];
 };
 
 static void clear_id_mapping(void);
@@ -57,7 +57,7 @@ static void find_lev_obj() {
 	int x,y;
 
 	for(x=0; x<COLNO; x++) for(y=0; y<ROWNO; y++)
-		level.objects[x][y] = NULL;
+			level.objects[x][y] = NULL;
 
 	/*
 	 * Reverse the entire fobj chain, which is necessary so that we can
@@ -86,11 +86,11 @@ void inven_inuse(boolean quietly) {
 	struct obj *otmp, *otmp2;
 
 	for (otmp = invent; otmp; otmp = otmp2) {
-	    otmp2 = otmp->nobj;
-	    if (otmp->in_use) {
-		if (!quietly) pline("Finishing off %s...", xname(otmp));
-		useup(otmp);
-	    }
+		otmp2 = otmp->nobj;
+		if (otmp->in_use) {
+			if (!quietly) pline("Finishing off %s...", xname(otmp));
+			useup(otmp);
+		}
 	}
 }
 
@@ -102,15 +102,15 @@ static void restlevchn(int fd) {
 	mread(fd, (void *) &cnt, sizeof(int));
 	for(; cnt > 0; cnt--) {
 
-	    tmplev = new(s_level);
-	    mread(fd, (void *) tmplev, sizeof(s_level));
-	    if(!sp_levchn) sp_levchn = tmplev;
-	    else {
+		tmplev = new(s_level);
+		mread(fd, (void *) tmplev, sizeof(s_level));
+		if(!sp_levchn) sp_levchn = tmplev;
+		else {
 
-		for(x = sp_levchn; x->next; x = x->next);
-		x->next = tmplev;
-	    }
-	    tmplev->next = NULL;
+			for(x = sp_levchn; x->next; x = x->next);
+			x->next = tmplev;
+		}
+		tmplev->next = NULL;
 	}
 }
 
@@ -120,35 +120,35 @@ static void restdamage(int fd, boolean ghostly) {
 
 	mread(fd, &counter, sizeof(counter));
 	if (!counter)
-	    return;
+		return;
 	tmp_dam = new(struct damage);
 	while (--counter >= 0) {
-	    char damaged_shops[5], *shp = NULL;
+		char damaged_shops[5], *shp = NULL;
 
-	    mread(fd, tmp_dam, sizeof(*tmp_dam));
-	    if (ghostly)
-		tmp_dam->when += (monstermoves - omoves);
-	    strcpy(damaged_shops,
-		   in_rooms(tmp_dam->place.x, tmp_dam->place.y, SHOPBASE));
-	    if (u.uz.dlevel) {
-		/* when restoring, there are two passes over the current
-		 * level.  the first time, u.uz isn't set, so neither is
-		 * shop_keeper().  just wait and process the damage on
-		 * the second pass.
-		 */
-		for (shp = damaged_shops; *shp; shp++) {
-		    struct monst *shkp = shop_keeper(*shp);
+		mread(fd, tmp_dam, sizeof(*tmp_dam));
+		if (ghostly)
+			tmp_dam->when += (monstermoves - omoves);
+		strcpy(damaged_shops,
+		       in_rooms(tmp_dam->place.x, tmp_dam->place.y, SHOPBASE));
+		if (u.uz.dlevel) {
+			/* when restoring, there are two passes over the current
+			 * level.  the first time, u.uz isn't set, so neither is
+			 * shop_keeper().  just wait and process the damage on
+			 * the second pass.
+			 */
+			for (shp = damaged_shops; *shp; shp++) {
+				struct monst *shkp = shop_keeper(*shp);
 
-		    if (shkp && inhishop(shkp) &&
-			    repair_damage(shkp, tmp_dam, true))
-			break;
+				if (shkp && inhishop(shkp) &&
+				                repair_damage(shkp, tmp_dam, true))
+					break;
+			}
 		}
-	    }
-	    if (!shp || !*shp) {
-		tmp_dam->next = level.damagelist;
-		level.damagelist = tmp_dam;
-		tmp_dam = new(struct damage);
-	    }
+		if (!shp || !*shp) {
+			tmp_dam->next = level.damagelist;
+			level.damagelist = tmp_dam;
+			tmp_dam = new(struct damage);
+		}
 	}
 	free(tmp_dam);
 }
@@ -165,11 +165,11 @@ static struct obj * restobjchn(int fd, boolean ghostly, boolean frozen) {
 		if(!first) first = otmp;
 		else otmp2->nobj = otmp;
 		mread(fd, (void *) otmp,
-					(unsigned) xl + sizeof(struct obj));
+		      (unsigned) xl + sizeof(struct obj));
 		if (ghostly) {
-		    unsigned nid = flags.ident++;
-		    add_id_mapping(otmp->o_id, nid);
-		    otmp->o_id = nid;
+			unsigned nid = flags.ident++;
+			add_id_mapping(otmp->o_id, nid);
+			otmp->o_id = nid;
 		}
 		if (ghostly && otmp->otyp == SLIME_MOLD) ghostfruit(otmp);
 		/* Ghost levels get object age shifted from old player's clock
@@ -177,21 +177,21 @@ static struct obj * restobjchn(int fd, boolean ghostly, boolean frozen) {
 		 * immediately after old player died.
 		 */
 		if (ghostly && !frozen && !age_is_relative(otmp))
-		    otmp->age = monstermoves - omoves + otmp->age;
+			otmp->age = monstermoves - omoves + otmp->age;
 
 		/* get contents of a container or statue */
 		if (Has_contents(otmp)) {
-		    struct obj *otmp3;
-		    otmp->cobj = restobjchn(fd, ghostly, Is_IceBox(otmp));
-		    /* restore container back pointers */
-		    for (otmp3 = otmp->cobj; otmp3; otmp3 = otmp3->nobj)
-			otmp3->ocontainer = otmp;
+			struct obj *otmp3;
+			otmp->cobj = restobjchn(fd, ghostly, Is_IceBox(otmp));
+			/* restore container back pointers */
+			for (otmp3 = otmp->cobj; otmp3; otmp3 = otmp3->nobj)
+				otmp3->ocontainer = otmp;
 		}
 		if (otmp->bypass) otmp->bypass = 0;
 
 		otmp2 = otmp;
 	}
-	if(first && otmp2->nobj){
+	if(first && otmp2->nobj) {
 		impossible("Restobjchn: error reading objchn.");
 		otmp2->nobj = 0;
 	}
@@ -250,7 +250,7 @@ static struct monst * restmonchn(int fd, boolean ghostly) {
 			else {
 				MON_NOWEP(mtmp);
 				/* KMH -- this is more an annoyance than a bug */
-/*				impossible("bad monster weapon restore"); */
+				/*				impossible("bad monster weapon restore"); */
 			}
 		}
 
@@ -260,7 +260,7 @@ static struct monst * restmonchn(int fd, boolean ghostly) {
 
 		mtmp2 = mtmp;
 	}
-	if(first && mtmp2->nmon){
+	if(first && mtmp2->nmon) {
 		impossible("Restmonchn: error reading monchn.");
 		mtmp2->nmon = 0;
 	}
@@ -272,8 +272,8 @@ static struct fruit * loadfruitchn(int fd) {
 
 	flist = 0;
 	while (fnext = newfruit(),
-	       mread(fd, (void *)fnext, sizeof *fnext),
-	       fnext->fid != 0) {
+	                mread(fd, (void *)fnext, sizeof *fnext),
+	                fnext->fid != 0) {
 		fnext->nextf = flist;
 		flist = fnext;
 	}
@@ -285,9 +285,9 @@ static void freefruitchn(struct fruit *flist) {
 	struct fruit *fnext;
 
 	while (flist) {
-	    fnext = flist->nextf;
-	    dealloc_fruit(flist);
-	    flist = fnext;
+		fnext = flist->nextf;
+		dealloc_fruit(flist);
+		flist = fnext;
 	}
 }
 
@@ -309,11 +309,11 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 
 	mread(fd, (void *) &uid, sizeof uid);
 	if (uid != getuid()) {		/* strange ... */
-	    /* for wizard mode, issue a reminder; for others, treat it
-	       as an attempt to cheat and refuse to restore this file */
-	    pline("Saved game was not yours.");
-	if(!wizard)
-		return false;
+		/* for wizard mode, issue a reminder; for others, treat it
+		   as an attempt to cheat and refuse to restore this file */
+		pline("Saved game was not yours.");
+		if(!wizard)
+			return false;
 	}
 
 	mread(fd, (void *) &flags, sizeof(struct flag));
@@ -328,15 +328,15 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 	cliparound(u.ux, u.uy);
 #endif
 	if(u.uhp <= 0 && (!Upolyd || u.mh <= 0)) {
-	    u.ux = u.uy = 0;	/* affects pline() [hence You()] */
-	    pline("You were not healthy enough to survive restoration.");
-	    /* wiz1_level.dlevel is used by mklev.c to see if lots of stuff is
-	     * uninitialized, so we only have to set it and not the other stuff.
-	     */
-	    wiz1_level.dlevel = 0;
-	    u.uz.dnum = 0;
-	    u.uz.dlevel = 1;
-	    return false;
+		u.ux = u.uy = 0;	/* affects pline() [hence You()] */
+		pline("You were not healthy enough to survive restoration.");
+		/* wiz1_level.dlevel is used by mklev.c to see if lots of stuff is
+		 * uninitialized, so we only have to set it and not the other stuff.
+		 */
+		wiz1_level.dlevel = 0;
+		u.uz.dnum = 0;
+		u.uz.dlevel = 1;
+		return false;
 	}
 
 	/* this stuff comes after potential aborted restore attempts */
@@ -374,8 +374,8 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 	setuwep(otmp,false);	/* (don't need any null check here) */
 	/* KMH, balance patch -- added fishing pole */
 	if (!uwep || uwep->otyp == PICK_AXE || uwep->otyp == GRAPPLING_HOOK ||
-		     uwep->otyp == FISHING_POLE)
-	    unweapon = true;
+	                uwep->otyp == FISHING_POLE)
+		unweapon = true;
 
 	restore_dungeon(fd);
 
@@ -384,9 +384,9 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 	mread(fd, (void *) &monstermoves, sizeof monstermoves);
 	mread(fd, (void *) &quest_status, sizeof(struct q_score));
 	mread(fd, (void *) spl_book,
-				sizeof(struct spell) * (MAXSPELL + 1));
+	      sizeof(struct spell) * (MAXSPELL + 1));
 	mread(fd, (void *) tech_list,
-			sizeof(struct tech) * (MAXTECH + 1));
+	      sizeof(struct tech) * (MAXTECH + 1));
 	restore_artifacts(fd);
 	if (u.ustuck)
 		mread(fd, (void *) stuckid, sizeof (*stuckid));
@@ -402,9 +402,9 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 	restnames(fd);
 	restore_waterlevel(fd);
 
-        mread(fd, (void *) &achieve, sizeof achieve);
-        mread(fd, (void *) &realtime_data.realtime,
-                  sizeof realtime_data.realtime);
+	mread(fd, (void *) &achieve, sizeof achieve);
+	mread(fd, (void *) &realtime_data.realtime,
+	      sizeof realtime_data.realtime);
 
 	/* must come after all mons & objs are restored */
 	relink_timers(false);
@@ -517,9 +517,9 @@ int dorecover (int fd) {
 	 * all the levels are loaded
 	 */
 	pline("You return to level %d in %s%s.",
-		depth(&u.uz), dungeons[u.uz.dnum].dname,
-		flags.debug ? " while in debug mode" :
-		flags.explore ? " while in explore mode" : "");
+	      depth(&u.uz), dungeons[u.uz.dnum].dname,
+	      flags.debug ? " while in debug mode" :
+	      flags.explore ? " while in explore mode" : "");
 
 	max_rank_sz(); /* to recompute mrank_sz (botl.c) */
 	/* take care of iron ball & chain */
@@ -547,11 +547,11 @@ int dorecover (int fd) {
 	clear_nhwindow(WIN_MESSAGE);
 	program_state.something_worth_saving++;	/* useful data now exists */
 
-/* Start the timer here (realtime has already been set) */
+	/* Start the timer here (realtime has already been set) */
 #if defined(BSD) && !defined(POSIX_TYPES)
-        time((long *)&realtime_data.restoretime);
+	time((long *)&realtime_data.restoretime);
 #else
-        time(&realtime_data.restoretime);
+	time(&realtime_data.restoretime);
 #endif
 
 	/* Success! */
@@ -576,7 +576,7 @@ void getlev(int fd, int pid, xchar lev, boolean ghostly) {
 	int x, y;
 
 	if (ghostly)
-	    clear_id_mapping();
+		clear_id_mapping();
 
 	/* Load the old fruit info.  We have to do it first, so the
 	 * information is available when restoring the objects.
@@ -585,18 +585,18 @@ void getlev(int fd, int pid, xchar lev, boolean ghostly) {
 
 	/* First some sanity checks */
 	mread(fd, (void *) &hpid, sizeof(hpid));
-/* CHECK:  This may prevent restoration */
+	/* CHECK:  This may prevent restoration */
 	mread(fd, (void *) &dlvl, sizeof(dlvl));
 	if ((pid && pid != hpid) || (lev && dlvl != lev)) {
-	    char trickbuf[BUFSZ];
+		char trickbuf[BUFSZ];
 
-			if (pid && pid != hpid)
-		sprintf(trickbuf, "PID (%d) doesn't match saved PID (%d)!",
-			hpid, pid);
-	    else
-		sprintf(trickbuf, "This is level %d, not %d!", dlvl, lev);
-	    if (wizard) plines(trickbuf);
-	    trickery(trickbuf);
+		if (pid && pid != hpid)
+			sprintf(trickbuf, "PID (%d) doesn't match saved PID (%d)!",
+			        hpid, pid);
+		else
+			sprintf(trickbuf, "This is level %d, not %d!", dlvl, lev);
+		if (wizard) plines(trickbuf);
+		trickery(trickbuf);
 	}
 
 	mread(fd, (void *) levl, sizeof(levl));
@@ -613,13 +613,13 @@ void getlev(int fd, int pid, xchar lev, boolean ghostly) {
 	rest_rooms(fd);		/* No joke :-) */
 	/* ALI - regenerate doorindex */
 	if (nroom)
-	    doorindex = rooms[nroom - 1].fdoor + rooms[nroom - 1].doorct;
+		doorindex = rooms[nroom - 1].fdoor + rooms[nroom - 1].doorct;
 	else {
-	    doorindex = 0;
-	    for (y = 0; y < ROWNO; y++)
-		for (x = 0; x < COLNO; x++)
-		    if (IS_DOOR(levl[x][y].typ))
-			doorindex++;
+		doorindex = 0;
+		for (y = 0; y < ROWNO; y++)
+			for (x = 0; x < COLNO; x++)
+				if (IS_DOOR(levl[x][y].typ))
+					doorindex++;
 	}
 
 	restore_timers(fd, RANGE_LEVEL, ghostly, monstermoves - omoves);
@@ -628,30 +628,30 @@ void getlev(int fd, int pid, xchar lev, boolean ghostly) {
 
 	/* regenerate animals while on another level */
 	if (u.uz.dlevel) {
-	    struct monst *mtmp2;
+		struct monst *mtmp2;
 
-	  for(mtmp = fmon; mtmp; mtmp = mtmp2) {
-		mtmp2 = mtmp->nmon;
-		if (ghostly) {
-			/* reset peaceful/malign relative to new character */
-			if(!mtmp->isshk)
-				/* shopkeepers will reset based on name */
-				mtmp->mpeaceful = peace_minded(mtmp->data);
-			set_malign(mtmp);
-		} else if (monstermoves > omoves)
-			mon_catchup_elapsed_time(mtmp, monstermoves - omoves);
+		for(mtmp = fmon; mtmp; mtmp = mtmp2) {
+			mtmp2 = mtmp->nmon;
+			if (ghostly) {
+				/* reset peaceful/malign relative to new character */
+				if(!mtmp->isshk)
+					/* shopkeepers will reset based on name */
+					mtmp->mpeaceful = peace_minded(mtmp->data);
+				set_malign(mtmp);
+			} else if (monstermoves > omoves)
+				mon_catchup_elapsed_time(mtmp, monstermoves - omoves);
 
-		/* update shape-changers in case protection against
-		   them is different now than when the level was saved */
-		restore_cham(mtmp);
-	    }
+			/* update shape-changers in case protection against
+			   them is different now than when the level was saved */
+			restore_cham(mtmp);
+		}
 	}
 
 	rest_worm(fd);	/* restore worm information */
 	ftrap = 0;
 	while (trap = newtrap(),
-	       mread(fd, (void *)trap, sizeof(struct trap)),
-	       trap->tx != 0) {	/* need "!= 0" to work around DICE 3.0 bug */
+	                mread(fd, (void *)trap, sizeof(struct trap)),
+	                trap->tx != 0) {	/* need "!= 0" to work around DICE 3.0 bug */
 		trap->ntrap = ftrap;
 		ftrap = trap;
 	}
@@ -666,66 +666,65 @@ void getlev(int fd, int pid, xchar lev, boolean ghostly) {
 
 	/* reset level.monsters for new level */
 	for (x = 0; x < COLNO; x++)
-	    for (y = 0; y < ROWNO; y++)
-		level.monsters[x][y] = NULL;
+		for (y = 0; y < ROWNO; y++)
+			level.monsters[x][y] = NULL;
 	for (mtmp = level.monlist; mtmp; mtmp = mtmp->nmon) {
-	    if (mtmp->isshk)
-		set_residency(mtmp, false);
-	    place_monster(mtmp, mtmp->mx, mtmp->my);
-	    if (mtmp->wormno) place_wsegs(mtmp);
+		if (mtmp->isshk)
+			set_residency(mtmp, false);
+		place_monster(mtmp, mtmp->mx, mtmp->my);
+		if (mtmp->wormno) place_wsegs(mtmp);
 	}
 	restdamage(fd, ghostly);
 
 	rest_regions(fd, ghostly);
 	if (ghostly) {
-	    /* Now get rid of all the temp fruits... */
-	    freefruitchn(oldfruit),  oldfruit = 0;
+		/* Now get rid of all the temp fruits... */
+		freefruitchn(oldfruit),  oldfruit = 0;
 
-	    if (lev > ledger_no(&medusa_level) &&
-			lev < ledger_no(&stronghold_level) && xdnstair == 0) {
-		coord cc;
+		if (lev > ledger_no(&medusa_level) &&
+		                lev < ledger_no(&stronghold_level) && xdnstair == 0) {
+			coord cc;
 
-		mazexy(&cc);
-		xdnstair = cc.x;
-		ydnstair = cc.y;
-		levl[cc.x][cc.y].typ = STAIRS;
-	    }
-
-	    br = Is_branchlev(&u.uz);
-	    if (br && u.uz.dlevel == 1) {
-		d_level ltmp;
-
-		if (on_level(&u.uz, &br->end1))
-		    assign_level(&ltmp, &br->end2);
-		else
-		    assign_level(&ltmp, &br->end1);
-
-		switch(br->type) {
-		case BR_STAIR:
-		case BR_NO_END1:
-		case BR_NO_END2: /* OK to assign to sstairs if it's not used */
-		    assign_level(&sstairs.tolev, &ltmp);
-		    break;
-		case BR_PORTAL: /* max of 1 portal per level */
-		    {
-			struct trap *ttmp;
-			for(ttmp = ftrap; ttmp; ttmp = ttmp->ntrap)
-			    if (ttmp->ttyp == MAGIC_PORTAL)
-				break;
-			if (!ttmp) panic("getlev: need portal but none found");
-			assign_level(&ttmp->dst, &ltmp);
-		    }
-		    break;
+			mazexy(&cc);
+			xdnstair = cc.x;
+			ydnstair = cc.y;
+			levl[cc.x][cc.y].typ = STAIRS;
 		}
-	    } else if (!br) {
-		/* Remove any dangling portals. */
-		struct trap *ttmp;
-		for (ttmp = ftrap; ttmp; ttmp = ttmp->ntrap)
-		    if (ttmp->ttyp == MAGIC_PORTAL) {
-			deltrap(ttmp);
-			break; /* max of 1 portal/level */
-		    }
-	    }
+
+		br = Is_branchlev(&u.uz);
+		if (br && u.uz.dlevel == 1) {
+			d_level ltmp;
+
+			if (on_level(&u.uz, &br->end1))
+				assign_level(&ltmp, &br->end2);
+			else
+				assign_level(&ltmp, &br->end1);
+
+			switch(br->type) {
+			case BR_STAIR:
+			case BR_NO_END1:
+			case BR_NO_END2: /* OK to assign to sstairs if it's not used */
+				assign_level(&sstairs.tolev, &ltmp);
+				break;
+			case BR_PORTAL: { /* max of 1 portal per level */
+				struct trap *ttmp;
+				for(ttmp = ftrap; ttmp; ttmp = ttmp->ntrap)
+					if (ttmp->ttyp == MAGIC_PORTAL)
+						break;
+				if (!ttmp) panic("getlev: need portal but none found");
+				assign_level(&ttmp->dst, &ltmp);
+			}
+			break;
+			}
+		} else if (!br) {
+			/* Remove any dangling portals. */
+			struct trap *ttmp;
+			for (ttmp = ftrap; ttmp; ttmp = ttmp->ntrap)
+				if (ttmp->ttyp == MAGIC_PORTAL) {
+					deltrap(ttmp);
+					break; /* max of 1 portal/level */
+				}
+		}
 	}
 
 	/* must come after all mons & objs are restored */
@@ -736,37 +735,37 @@ void getlev(int fd, int pid, xchar lev, boolean ghostly) {
 	if (!ghostly) catchup_dgn_growths((monstermoves - omoves) / 5);
 #endif
 	if (ghostly)
-	    clear_id_mapping();
+		clear_id_mapping();
 }
 
 
 /* Clear all structures for object and monster ID mapping. */
 static void clear_id_mapping() {
-    struct bucket *curr;
+	struct bucket *curr;
 
-    while ((curr = id_map) != 0) {
-	id_map = curr->next;
-	free(curr);
-    }
-    n_ids_mapped = 0;
+	while ((curr = id_map) != 0) {
+		id_map = curr->next;
+		free(curr);
+	}
+	n_ids_mapped = 0;
 }
 
 /* Add a mapping to the ID map. */
 static void add_id_mapping(uint gid, uint nid) {
-    int idx;
+	int idx;
 
-    idx = n_ids_mapped % N_PER_BUCKET;
-    /* idx is zero on first time through, as well as when a new bucket is */
-    /* needed */
-    if (idx == 0) {
-	struct bucket *gnu = new(struct bucket);
-	gnu->next = id_map;
-	id_map = gnu;
-    }
+	idx = n_ids_mapped % N_PER_BUCKET;
+	/* idx is zero on first time through, as well as when a new bucket is */
+	/* needed */
+	if (idx == 0) {
+		struct bucket *gnu = new(struct bucket);
+		gnu->next = id_map;
+		id_map = gnu;
+	}
 
-    id_map->map[idx].gid = gid;
-    id_map->map[idx].nid = nid;
-    n_ids_mapped++;
+	id_map->map[idx].gid = gid;
+	id_map->map[idx].nid = nid;
+	n_ids_mapped++;
 }
 
 /*
@@ -775,48 +774,48 @@ static void add_id_mapping(uint gid, uint nid) {
  * ID.
  */
 boolean lookup_id_mapping(uint gid, uint *nidp) {
-    int i;
-    struct bucket *curr;
+	int i;
+	struct bucket *curr;
 
-    if (n_ids_mapped)
-	for (curr = id_map; curr; curr = curr->next) {
-	    /* first bucket might not be totally full */
-	    if (curr == id_map) {
-		i = n_ids_mapped % N_PER_BUCKET;
-		if (i == 0) i = N_PER_BUCKET;
-	    } else
-		i = N_PER_BUCKET;
+	if (n_ids_mapped)
+		for (curr = id_map; curr; curr = curr->next) {
+			/* first bucket might not be totally full */
+			if (curr == id_map) {
+				i = n_ids_mapped % N_PER_BUCKET;
+				if (i == 0) i = N_PER_BUCKET;
+			} else
+				i = N_PER_BUCKET;
 
-	    while (--i >= 0)
-		if (gid == curr->map[i].gid) {
-		    *nidp = curr->map[i].nid;
-		    return true;
+			while (--i >= 0)
+				if (gid == curr->map[i].gid) {
+					*nidp = curr->map[i].nid;
+					return true;
+				}
 		}
-	}
 
-    return false;
+	return false;
 }
 
 static void reset_oattached_mids(boolean ghostly) {
-    struct obj *otmp;
-    unsigned oldid, nid;
-    for (otmp = fobj; otmp; otmp = otmp->nobj) {
-	if (ghostly && otmp->oattached == OATTACHED_MONST && otmp->oxlth) {
-	    struct monst *mtmp = (struct monst *)otmp->oextra;
+	struct obj *otmp;
+	unsigned oldid, nid;
+	for (otmp = fobj; otmp; otmp = otmp->nobj) {
+		if (ghostly && otmp->oattached == OATTACHED_MONST && otmp->oxlth) {
+			struct monst *mtmp = (struct monst *)otmp->oextra;
 
-	    mtmp->m_id = 0;
-	    mtmp->mpeaceful = mtmp->mtame = 0;	/* pet's owner died! */
+			mtmp->m_id = 0;
+			mtmp->mpeaceful = mtmp->mtame = 0;	/* pet's owner died! */
+		}
+		if (ghostly && otmp->oattached == OATTACHED_M_ID) {
+			memcpy((void *)&oldid, (void *)otmp->oextra,
+			       sizeof(oldid));
+			if (lookup_id_mapping(oldid, &nid))
+				memcpy((void *)otmp->oextra, (void *)&nid,
+				       sizeof(nid));
+			else
+				otmp->oattached = OATTACHED_NOTHING;
+		}
 	}
-	if (ghostly && otmp->oattached == OATTACHED_M_ID) {
-	    memcpy((void *)&oldid, (void *)otmp->oextra,
-								sizeof(oldid));
-	    if (lookup_id_mapping(oldid, &nid))
-		memcpy((void *)otmp->oextra, (void *)&nid,
-								sizeof(nid));
-	    else
-		otmp->oattached = OATTACHED_NOTHING;
-	}
-    }
 }
 
 
@@ -824,7 +823,7 @@ void mread(int fd, void * buf, uint len) {
 	int rlen;
 
 	rlen = read(fd, buf, (unsigned) len);
-	if((unsigned)rlen != len){
+	if((unsigned)rlen != len) {
 		pline("Read %d instead of %u bytes.", rlen, len);
 		if(restoring) {
 			close(fd);

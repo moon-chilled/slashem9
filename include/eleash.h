@@ -6,12 +6,12 @@
 #define ELEASH_H
 
 struct eleash {
-    xchar pathlen;		/* Number of squares of extended leash
+	xchar pathlen;		/* Number of squares of extended leash
 				   (2 means hero and pet are adjacent) */
-    xchar pathd2;		/* Length of path from hero to pet along
+	xchar pathd2;		/* Length of path from hero to pet along
 				   leash, squared. */
 #define ELEASH_PSZ	6	/* check_leash_pos() assumes at least 2 */
-    coord path[ELEASH_PSZ+1];	/* Positions containing extended leash,
+	coord path[ELEASH_PSZ+1];	/* Positions containing extended leash,
 				   from hero to pet (inclusive) */
 };
 

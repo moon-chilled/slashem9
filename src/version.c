@@ -20,13 +20,13 @@ char *full_version_string_tmp(void) {
 
 	sprintf(buf, "%s %s%s Version %s.", PORT_ID, DEF_GAME_NAME,
 #ifdef ALPHA
-			" Alpha",
+	        " Alpha",
 #elif defined(BETA)
-			" Beta",
+	        " Beta",
 #else
-			"",
+	        "",
 #endif
-			version_string_tmp());
+	        version_string_tmp());
 
 	return buf;
 }
@@ -39,20 +39,20 @@ int doversion(void) {
 boolean check_version(struct version_info *version_data, const char *filename, boolean complain) {
 	if (
 #ifdef VERSION_COMPATIBILITY
-	    version_data->incarnation < VERSION_COMPATIBILITY ||
-	    version_data->incarnation > VERSION_NUMBER
+	        version_data->incarnation < VERSION_COMPATIBILITY ||
+	        version_data->incarnation > VERSION_NUMBER
 #else
-	    version_data->incarnation != VERSION_NUMBER
+	        version_data->incarnation != VERSION_NUMBER
 #endif
-	  ) {
-	    if (complain)
-		pline("Version mismatch for file \"%s\".", filename);
-	    return false;
+	) {
+		if (complain)
+			pline("Version mismatch for file \"%s\".", filename);
+		return false;
 	} else if (version_data->struct_sizes != VERSION_SANITY) {
-	    if (complain)
-		pline("Configuration incompatibility for file \"%s\".",
-		      filename);
-	    return false;
+		if (complain)
+			pline("Configuration incompatibility for file \"%s\".",
+			      filename);
+		return false;
 	}
 	return true;
 }
@@ -60,28 +60,28 @@ boolean check_version(struct version_info *version_data, const char *filename, b
 /* this used to be based on file date and somewhat OS-dependant,
    but now examines the initial part of the file's contents */
 boolean uptodate(int fd, const char *name) {
-    int rlen;
-    struct version_info vers_info;
-    boolean verbose = name ? true : false;
+	int rlen;
+	struct version_info vers_info;
+	boolean verbose = name ? true : false;
 
-    rlen = read(fd, (void *) &vers_info, sizeof vers_info);
-    if (rlen == 0) {
-	if (verbose) {
-	    pline("File \"%s\" is empty?", name);
-	    wait_synch();
+	rlen = read(fd, (void *) &vers_info, sizeof vers_info);
+	if (rlen == 0) {
+		if (verbose) {
+			pline("File \"%s\" is empty?", name);
+			wait_synch();
+		}
+		return false;
 	}
-	return false;
-    }
-    if (!check_version(&vers_info, name, verbose)) {
-	if (verbose) wait_synch();
-	return false;
-    }
-    return true;
+	if (!check_version(&vers_info, name, verbose)) {
+		if (verbose) wait_synch();
+		return false;
+	}
+	return true;
 }
 
 void store_version(int fd) {
 	const static struct version_info version_data = {
-			VERSION_NUMBER, VERSION_SANITY
+		VERSION_NUMBER, VERSION_SANITY
 	};
 
 	bufoff(fd);

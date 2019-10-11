@@ -42,27 +42,27 @@ struct permonst {
 	const char	*mname;			/* full name */
 	char		mlet;			/* symbol */
 	schar		mlevel,			/* base monster level */
-			mmove,			/* move speed */
-			ac,			/* (base) armor class */
-			mr;			/* (base) magic resistance */
+	                mmove,			/* move speed */
+	                ac,			/* (base) armor class */
+	                mr;			/* (base) magic resistance */
 	aligntyp	maligntyp;		/* basic monster alignment */
 	unsigned short	geno;			/* creation/geno mask value */
 	struct	attack	mattk[NATTK];		/* attacks matrix */
 	unsigned short	cwt,			/* weight of corpse */
-			cnutrit;		/* its nutritional value */
+	          cnutrit;		/* its nutritional value */
 	short		pxlth;			/* length of extension */
 	uchar		msound;			/* noise it makes (6 bits) */
 	uchar		msize;			/* physical size (3 bits) */
-        unsigned long   mresists;               /* resistances */
+	unsigned long   mresists;               /* resistances */
 	uchar		mconveys;		/* conveyed by eating */
 	unsigned long	mflags1,		/* boolean bitflags */
-			mflags2;		/* more boolean bitflags */
+	           mflags2;		/* more boolean bitflags */
 	unsigned short	mflags3;		/* yet more boolean bitflags */
 	uchar		mcolor;			/* color to use */
 };
 
 extern struct permonst
-		mons[];		/* the master list of monster types */
+	mons[];		/* the master list of monster types */
 
 #define VERY_SLOW 3
 #define SLOW_SPEED 9
@@ -73,7 +73,7 @@ extern struct permonst
 #define NON_PM		PM_PLAYERMON		/* "not a monster" */
 #define LOW_PM		(NON_PM+1)		/* first monster in mons[] */
 #define SPECIAL_PM	PM_LONG_WORM_TAIL	/* [normal] < ~ < [special] */
-	/* mons[SPECIAL_PM] through mons[NUMMONS-1], inclusive, are
-	   never generated randomly and cannot be polymorphed into */
+/* mons[SPECIAL_PM] through mons[NUMMONS-1], inclusive, are
+   never generated randomly and cannot be polymorphed into */
 
 #endif /* PERMONST_H */

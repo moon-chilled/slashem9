@@ -22,22 +22,22 @@ uchar showsymcolors[MAXPCHARS] = DUMMY; /* current feature display colors */
 
 /* Default object class symbols.  See objclass.h. */
 const char def_oc_syms[MAXOCLASSES] = {
-/* 0*/	'\0',		/* placeholder for the "random class" */
+	/* 0*/	'\0',		/* placeholder for the "random class" */
 	ILLOBJ_SYM,
 	WEAPON_SYM,
 	ARMOR_SYM,
 	RING_SYM,
-/* 5*/	AMULET_SYM,
+	/* 5*/	AMULET_SYM,
 	TOOL_SYM,
 	FOOD_SYM,
 	POTION_SYM,
 	SCROLL_SYM,
-/*10*/	SPBOOK_SYM,
+	/*10*/	SPBOOK_SYM,
 	WAND_SYM,
 	GOLD_SYM,
 	GEM_SYM,
 	ROCK_SYM,
-/*15*/	BALL_SYM,
+	/*15*/	BALL_SYM,
 	CHAIN_SYM,
 	VENOM_SYM
 };
@@ -46,44 +46,44 @@ const char invisexplain[] = "remembered, unseen, creature";
 
 /* Object descriptions.  Used in do_look(). */
 const char * const objexplain[] = {	/* these match def_oc_syms, above */
-/* 0*/	0,
+	/* 0*/	0,
 	"strange object",
 	"weapon",
 	"suit or piece of armor",
 	"ring",
-/* 5*/	"amulet",
+	/* 5*/	"amulet",
 	"useful item (pick-axe, key, lamp...)",
 	"piece of food",
 	"potion",
 	"scroll",
-/*10*/	"spell book",
+	/*10*/	"spell book",
 	"wand",
 	"pile of coins",
 	"gem or rock",
 	"boulder or statue",
-/*15*/	"iron ball",
+	/*15*/	"iron ball",
 	"iron chain",
 	"splash of venom"
 };
 
 /* Object class names.  Used in object_detect(). */
 const char * const oclass_names[] = {
-/* 0*/	0,
+	/* 0*/	0,
 	"illegal objects",
 	"weapons",
 	"armor",
 	"rings",
-/* 5*/	"amulets",
+	/* 5*/	"amulets",
 	"tools",
 	"food",
 	"potions",
 	"scrolls",
-/*10*/	"spell books",
+	/*10*/	"spell books",
 	"wands",
 	"coins",
 	"rocks",
 	"large stones",
-/*15*/	"iron balls",
+	/*15*/	"iron balls",
 	"chains",
 	"venoms"
 };
@@ -162,34 +162,34 @@ const char def_monsyms[MAXMCLASSES] = {
 /* KMH -- changed u and z */
 /* Robin Johnson -  changed Q */
 const char * const monexplain[MAXMCLASSES] = {
-    0,
-    "ant or other insect",	"blob",			"cockatrice",
-    "dog or other canine",	"eye or sphere",	"cat or other feline",
-    "gremlin",			"humanoid",		"imp or minor demon",
-    "jelly",			"kobold",		"leprechaun",
-    "mimic",			"nymph",		"orc",
-    "piercer",			"quadruped",		"rodent",
-    "arachnid or centipede",	"trapper or lurker above", "unicorn or horse",
-    "vortex",		"worm", "xan or other mythical/fantastic insect",
-    "light",			"Zouthern animal",
+	0,
+	"ant or other insect",	"blob",			"cockatrice",
+	"dog or other canine",	"eye or sphere",	"cat or other feline",
+	"gremlin",			"humanoid",		"imp or minor demon",
+	"jelly",			"kobold",		"leprechaun",
+	"mimic",			"nymph",		"orc",
+	"piercer",			"quadruped",		"rodent",
+	"arachnid or centipede",	"trapper or lurker above", "unicorn or horse",
+	"vortex",		"worm", "xan or other mythical/fantastic insect",
+	"light",			"Zouthern animal",
 #if 0
-    "light",			"zruty",
+	"light",			"zruty",
 #endif
-    "angelic being",		"bat or bird",		"centaur",
-    "dragon",			"elemental",		"fungus or mold",
-    "gnome",			"giant humanoid",	0,
-    "jabberwock",		"Keystone Kop",		"lich",
-    "mummy",			"naga",			"ogre",
-    "pudding or ooze",  "quantum mechanic or other scientist",
-    "rust monster or disenchanter",
-    "snake",			"troll",		"umber hulk",
-    "vampire",			"wraith",		"xorn",
-    "apelike creature",		"zombie",
+	"angelic being",		"bat or bird",		"centaur",
+	"dragon",			"elemental",		"fungus or mold",
+	"gnome",			"giant humanoid",	0,
+	"jabberwock",		"Keystone Kop",		"lich",
+	"mummy",			"naga",			"ogre",
+	"pudding or ooze",  "quantum mechanic or other scientist",
+	"rust monster or disenchanter",
+	"snake",			"troll",		"umber hulk",
+	"vampire",			"wraith",		"xorn",
+	"apelike creature",		"zombie",
 
-    "human or elf",		"ghost",		"golem",
-    "major demon",		"sea monster",		"lizard",
-    "piece of food",	"pile of coins",
-    "long worm tail",		"mimic"
+	"human or elf",		"ghost",		"golem",
+	"major demon",		"sea monster",		"lizard",
+	"piece of food",	"pile of coins",
+	"long worm tail",		"mimic"
 };
 
 
@@ -198,7 +198,7 @@ const char * const monexplain[MAXMCLASSES] = {
  *  Note: {ascii|utf8}_graphics[] arrays also depend on this symbol order.
  */
 const struct symdef sym_desc[MAXPCHARS] = {
-/* 0*/	{"unexplored area",C(NO_COLOR)},	/* stone */
+	/* 0*/	{"unexplored area",C(NO_COLOR)},	/* stone */
 	{"wall",		C(CLR_GRAY)},	/* vwall */
 	{"wall",		C(CLR_GRAY)},	/* hwall */
 	{"wall",		C(CLR_GRAY)},	/* tlcorn */
@@ -208,7 +208,7 @@ const struct symdef sym_desc[MAXPCHARS] = {
 	{"wall",		C(CLR_GRAY)},	/* crwall */
 	{"wall",		C(CLR_GRAY)},	/* tuwall */
 	{"wall",		C(CLR_GRAY)},	/* tdwall */
-/*10*/	{"wall",		C(CLR_GRAY)},	/* tlwall */
+	/*10*/	{"wall",		C(CLR_GRAY)},	/* tlwall */
 	{"wall",		C(CLR_GRAY)},	/* trwall */
 	{"doorway",	C(CLR_GRAY)},	/* ndoor */
 	{"open door",	C(CLR_BROWN)},	/* vodoor */
@@ -218,7 +218,7 @@ const struct symdef sym_desc[MAXPCHARS] = {
 	{"iron bars",	C(HI_METAL)},	/* bars */
 	{"tree",		C(CLR_GREEN)},	/* tree */
 	{"floor of a room",C(CLR_GRAY)},	/* room */
-/*20*/	{"dark part of a room", C(CLR_BLACK)},	/* dark room */
+	/*20*/	{"dark part of a room", C(CLR_BLACK)},	/* dark room */
 	{"corridor",	C(CLR_BLACK)},	/* dark corr */
 	{"lit corridor",	C(CLR_GRAY)},	/* lit corr (see mapglyph.c) */
 	{"staircase up",	C(CLR_WHITE)},	/* upstair */
@@ -228,7 +228,7 @@ const struct symdef sym_desc[MAXPCHARS] = {
 	{"altar",		C(CLR_GRAY)},	/* altar */
 	{"grave",      C(CLR_GRAY)},   /* grave */
 	{"opulent throne",C(HI_GOLD)},	/* throne */
-/*30*/	{"sink",		C(CLR_GRAY)},	/* sink */
+	/*30*/	{"sink",		C(CLR_GRAY)},	/* sink */
 	{"toilet",         C(CLR_WHITE)},  /* toilet */
 	{"fountain",       C(CLR_BLUE)},   /* fountain */
 	{"water",		C(CLR_BLUE)},	/* pool */
@@ -238,7 +238,7 @@ const struct symdef sym_desc[MAXPCHARS] = {
 	{"lowered drawbridge",C(CLR_BROWN)},	/* hodbridge */
 	{"raised drawbridge",C(CLR_BROWN)},/* vcdbridge */
 	{"raised drawbridge",C(CLR_BROWN)},/* hcdbridge */
-/*40*/	{"air",		C(CLR_CYAN)},	/* open air */
+	/*40*/	{"air",		C(CLR_CYAN)},	/* open air */
 	{"cloud",		C(CLR_GRAY)},	/* [part of] a cloud */
 	{"water",		C(CLR_BLUE)},	/* under water */
 	{"arrow trap",	C(HI_METAL)},	/* trap */
@@ -248,7 +248,7 @@ const struct symdef sym_desc[MAXPCHARS] = {
 	{"bear trap",	C(HI_METAL)},	/* trap */
 	{"land mine",	C(CLR_RED)},	/* trap */
 	{"rolling boulder trap",	C(CLR_GRAY)},	/* trap */
-/*50*/	{"sleeping gas trap",C(HI_ZAP)},	/* trap */
+	/*50*/	{"sleeping gas trap",C(HI_ZAP)},	/* trap */
 	{"rust trap",	C(CLR_BLUE)},	/* trap */
 	{"fire trap",	C(CLR_ORANGE)},	/* trap */
 	{"pit",		C(CLR_BLACK)},	/* trap */
@@ -258,7 +258,7 @@ const struct symdef sym_desc[MAXPCHARS] = {
 	{"teleportation trap", C(CLR_MAGENTA)},	/* trap */
 	{"level teleporter", C(CLR_MAGENTA)},	/* trap */
 	{"magic portal",	C(CLR_BRIGHT_MAGENTA)},	/* trap */
-/*60*/	{"web",		C(CLR_GRAY)},	/* web */
+	/*60*/	{"web",		C(CLR_GRAY)},	/* web */
 	{"statue trap",	C(CLR_GRAY)},	/* trap */
 	{"magic trap",	C(HI_ZAP)},	/* trap */
 	{"anti-magic field", C(HI_ZAP)},	/* trap */
@@ -268,7 +268,7 @@ const struct symdef sym_desc[MAXPCHARS] = {
 	{"wall",		C(CLR_GRAY)},	/* lslant */
 	{"wall",		C(CLR_GRAY)},	/* rslant */
 	{"",		C(CLR_WHITE)},	/* dig beam */
-/*70*/	{"",		C(CLR_WHITE)},	/* camera flash beam */
+	/*70*/	{"",		C(CLR_WHITE)},	/* camera flash beam */
 	{"",		C(HI_WOOD)},	/* boomerang open left */
 	{"",		C(HI_WOOD)},	/* boomerang open right */
 	{"",		C(HI_ZAP)},	/* 4 magic shield symbols */
@@ -278,7 +278,7 @@ const struct symdef sym_desc[MAXPCHARS] = {
 	{"",		C(CLR_GREEN)},	/* swallow top left	*/
 	{"",		C(CLR_GREEN)},	/* swallow top center	*/
 	{"",		C(CLR_GREEN)},	/* swallow top right	*/
-/*80*/	{"",		C(CLR_GREEN)},	/* swallow middle left	*/
+	/*80*/	{"",		C(CLR_GREEN)},	/* swallow middle left	*/
 	{"",		C(CLR_GREEN)},	/* swallow middle right	*/
 	{"",		C(CLR_GREEN)},	/* swallow bottom left	*/
 	{"",		C(CLR_GREEN)},	/* swallow bottom center*/
@@ -288,7 +288,7 @@ const struct symdef sym_desc[MAXPCHARS] = {
 	{"",		C(CLR_ORANGE)},	/* explosion top right    */
 	{"",		C(CLR_ORANGE)},	/* explosion middle left  */
 	{"",		C(CLR_ORANGE)},	/* explosion middle center*/
-/*90*/	{"",		C(CLR_ORANGE)},	/* explosion middle right */
+	/*90*/	{"",		C(CLR_ORANGE)},	/* explosion middle right */
 	{"",		C(CLR_ORANGE)},	/* explosion bottom left  */
 	{"",		C(CLR_ORANGE)},	/* explosion bottom center*/
 	{"",		C(CLR_ORANGE)},	/* explosion bottom right */
@@ -299,17 +299,17 @@ const struct symdef sym_desc[MAXPCHARS] = {
 	{"unknown creature causing you alarm", C(CLR_MAGENTA)},        /* purple warning */
 	{"unknown creature causing you dread", C(CLR_BRIGHT_MAGENTA)}	/* black warning  */
 
-/*
- *  Note: Additions to this array should be reflected in the
- *	  {ascii,utf8}_graphics[] arrays below.
- */
+	/*
+	 *  Note: Additions to this array should be reflected in the
+	 *	  {ascii,utf8}_graphics[] arrays below.
+	 */
 };
 
 #undef C
 
 
 const glyph_t ascii_graphics[MAXPCHARS] = {
-/* 0*/	' ', // stone
+	/* 0*/	' ', // stone
 	'|', // vwall
 	'-', // hwall
 	'-', // tlcorn
@@ -319,7 +319,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'-', // crwall
 	'-', // tuwall
 	'-', // tdwall
-/*10*/	'|', // tlwall
+	/*10*/	'|', // tlwall
 	'|', // trwall
 	'.', // ndoor
 	'-', // vodoor
@@ -329,7 +329,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'#', // bars
 	'#', // tree
 	'.', // room
-/*20*/	'.', // dark room
+	/*20*/	'.', // dark room
 	'#', // dark corr
 	'#', // lit corr (see mapglyph.c)
 	'<', // upstair
@@ -339,7 +339,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'_', // altar
 	'|', // grave
 	'\\',// throne
-/*30*/	'#', // sink
+	/*30*/	'#', // sink
 	'#', // toilet
 	'{', // fountain
 	'}', // pool
@@ -349,7 +349,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'.', // hodbridge
 	'#', // vcdbridge
 	'#', // hcdbridge
-/*40*/	' ', // open air
+	/*40*/	' ', // open air
 	'#', // [part of] a cloud
 	'}', // under water
 	'^', // trap
@@ -359,7 +359,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'^', // trap
 	'^', // trap
 	'^', // trap
-/*50*/	'^', // trap
+	/*50*/	'^', // trap
 	'^', // trap
 	'^', // trap
 	'^', // trap
@@ -369,7 +369,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'^', // trap
 	'^', // trap
 	'^', // trap
-/*60*/	'"', // web
+	/*60*/	'"', // web
 	'^', // trap
 	'^', // trap
 	'^', // trap
@@ -379,7 +379,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'\\',// lslant
 	'/', // rslant
 	'*', // dig beam
-/*70*/	'!', // camera flash beam
+	/*70*/	'!', // camera flash beam
 	')', // boomerang open left
 	'(', // boomerang open right
 	'0', // 4 magic shield symbols (S_ss1)
@@ -389,7 +389,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'/', // swallow top left
 	'-', // swallow top center
 	'\\',// swallow top right
-/*80*/	'|', // swallow middle left
+	/*80*/	'|', // swallow middle left
 	'|', // swallow middle right
 	'\\',// swallow bottom left
 	'-', // swallow bottom center
@@ -399,7 +399,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'\\',// explosion top right
 	'|', // explosion middle left
 	' ', // explosion middle center
-/*90*/	'|', // explosion middle right
+	/*90*/	'|', // explosion middle right
 	'\\',// explosion bottom left
 	'-', // explosion bottom center
 	'/', // explosion bottom right
@@ -412,7 +412,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 };
 
 static glyph_t utf8_graphics[MAXPCHARS] = {
-/* 0*/	' ',	// S_stone
+	/* 0*/	' ',	// S_stone
 	0x2502,	// S_vwall:     BOX DRAWINGS LIGHT VERTICAL
 	0x2500,	// S_hwall:     BOX DRAWINGS LIGHT HORIZONTAL
 	0x250c,	// S_tlcorn:    BOX DRAWINGS LIGHT DOWN AND RIGHT
@@ -422,7 +422,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x253c,	// S_crwall:    BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL
 	0x2534,	// S_tuwall:    BOX DRAWINGS LIGHT UP AND HORIZONTAL
 	0x252c,	// S_tdwall:    BOX DRAWINGS LIGHT DOWN AND HORIZONTAL
-/*10*/	0x2524,	// S_tlwall:    BOX DRAWINGS LIGHT VERTICAL AND LEFT
+	/*10*/	0x2524,	// S_tlwall:    BOX DRAWINGS LIGHT VERTICAL AND LEFT
 	0x251c,	// S_trwall:    BOX DRAWINGS LIGHT VERTICAL AND RIGHT
 	0x00b7,	// S_ndoor:     MIDDLE DOT/
 	0x25a0,	// S_vodoor:    BLACK SQUARE
@@ -432,7 +432,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x2261,	// S_bars:      IDENTICAL TO
 	0x03a8,	// S_tree:      GREEK CAPITAL LETTER PSI
 	0x00b7,	// S_room:      MIDDLE DOT
-/*20*/	' ',	// S_stone
+	/*20*/	' ',	// S_stone
 	0x2591,	// S_corr:	LIGHT SHADE
 	0x2592,	// S_litcorr	MEDIUM SHADE
 	'<',	// S_upstair
@@ -442,7 +442,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x03A9,	// S_altar:     GREEK CAPITAL LETTER OMEGA
 	0x2020,	// S_grave:     DAGGER
 	'\\',	// S_throne
-/*30*/	'#',	// S_sink
+	/*30*/	'#',	// S_sink
 	'#',	// S_toilet
 	0x2320, // S_fountain:  TOP HALF INTEGRAL
 	0x224b, // S_pool:      TRIPLE TILDE
@@ -452,7 +452,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x00b7, // S_hodbridge: MIDDLE DOT
 	'#',	// S_vcdbridge
 	'#',	// S_hcdbridge
-/*40*/	' ',	// S_air
+	/*40*/	' ',	// S_air
 	'#',	// S_cloud
 	0x2248, // S_water:     ALMOST EQUAL TO
 	'^',	// S_arrow_trap
@@ -462,7 +462,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	'^',	// S_bear_trap
 	'^',	// S_land_mine
 	'^',	// S_rolling_boulder_trap
-/*50*/	'^',	// S_sleeping_gas_trap
+	/*50*/	'^',	// S_sleeping_gas_trap
 	'^',	// S_rust_trap
 	'^',	// S_fire_trap
 	'^',	// S_pit
@@ -472,7 +472,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	'^',	// S_teleportation_trap
 	'^',	// S_level_teleporter
 	'^',	// S_magic_portal
-/*60*/	0x00A4,	// S_web:       CURRENCY SIGN
+	/*60*/	0x00A4,	// S_web:       CURRENCY SIGN
 	'^',	// S_statue_trap
 	'^',	// S_magic_trap
 	'^',	// S_anti_magic_trap
@@ -482,7 +482,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x2572,	// S_lslant:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
 	0x2571,	// S_rslant:	BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT
 	'*',	// S_digbeam
-/*70*/	'!',	// S_flashbeam
+	/*70*/	'!',	// S_flashbeam
 	')',	// S_boomleft
 	'(',	// S_boomright
 	'0',	// S_ss1
@@ -492,7 +492,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x2571,	// S_sw_tl:	BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT
 	0x2594, // S_sw_tc:     UPPER ONE EIGHTH BLOCK
 	0x2572,	// S_sw_tr:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
-/*80*/	0x258f, // S_sw_ml:     LEFT ONE EIGHTH BLOCK
+	/*80*/	0x258f, // S_sw_ml:     LEFT ONE EIGHTH BLOCK
 	0x2595, // S_sw_mr:     RIGHT ONE EIGHTH BLOCK
 	0x2572,	// S_sw_bl:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
 	0x2581, // S_sw_bc:     LOWER ONE EIGHTH BLOCK
@@ -502,7 +502,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x2572,	// S_explode3:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
 	0x258f, // S_explode4:  LEFT ONE EIGHTH BLOCK
 	' ',	// S_explode5
-/*90*/	0x2595, // S_explode6:  RIGHT ONE EIGHTH BLOCK
+	/*90*/	0x2595, // S_explode6:  RIGHT ONE EIGHTH BLOCK
 	0x2572,	// S_explode7:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
 	0x2581, // S_explode8:  LOWER ONE EIGHTH BLOCK
 	0x2571,	// S_explode9:	BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT
@@ -517,7 +517,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 /* Can only use characters from this list
  * http://en.wikipedia.org/wiki/WGL4 */
 static glyph_t utf8compat_graphics[MAXPCHARS] = {
-/* 0*/	' ',	// S_stone
+	/* 0*/	' ',	// S_stone
 	0x2502,	// S_vwall:     BOX DRAWINGS LIGHT VERTICAL
 	0x2500,	// S_hwall:     BOX DRAWINGS LIGHT HORIZONTAL
 	0x250c,	// S_tlcorn:    BOX DRAWINGS LIGHT DOWN AND RIGHT
@@ -527,7 +527,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	0x253c,	// S_crwall:    BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL
 	0x2534,	// S_tuwall:    BOX DRAWINGS LIGHT UP AND HORIZONTAL
 	0x252c,	// S_tdwall:    BOX DRAWINGS LIGHT DOWN AND HORIZONTAL
-/*10*/	0x2524,	// S_tlwall:    BOX DRAWINGS LIGHT VERTICAL AND LEFT
+	/*10*/	0x2524,	// S_tlwall:    BOX DRAWINGS LIGHT VERTICAL AND LEFT
 	0x251c,	// S_trwall:    BOX DRAWINGS LIGHT VERTICAL AND RIGHT
 	0x00b7,	// S_ndoor:     MIDDLE DOT
 	0x25a0,	// S_vodoor:    BLACK SQUARE
@@ -537,7 +537,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	0x2261,	// S_bars:      IDENTICAL TO
 	0x03a8,	// S_tree:      GREEK CAPITAL LETTER PSI
 	0x00b7,	// S_room:      MIDDLE DOT
-/*20*/	' ',	// S_stone
+	/*20*/	' ',	// S_stone
 	0x2591,	// S_corr:	LIGHT SHADE
 	0x2592,	// S_litcorr	MEDIUM SHADE
 	'<',	// S_upstair
@@ -547,7 +547,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	0x03A9,	// S_altar:     GREEK CAPITAL LETTER OMEGA
 	0x2020,	// S_grave:     DAGGER
 	'\\',	// S_throne
-/*30*/	'#',	// S_sink
+	/*30*/	'#',	// S_sink
 	'#',	// S_toilet
 	0x2320, // S_fountain:  TOP HALF INTEGRAL
 	0x224b, // S_pool:      TRIPLE TILDE
@@ -557,7 +557,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	0x00b7, // S_hodbridge: MIDDLE DOT
 	'#',	// S_vcdbridge
 	'#',	// S_hcdbridge
-/*40*/	' ',	// S_air
+	/*40*/	' ',	// S_air
 	'#',	// S_cloud),
 	0x2248, // S_water:     ALMOST EQUAL TO
 	'^',	// S_arrow_trap
@@ -567,7 +567,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	'^',	// S_bear_trap
 	'^',	// S_land_mine
 	'^',	// S_rolling_boulder_trap
-/*50*/	'^',	// S_sleeping_gas_trap
+	/*50*/	'^',	// S_sleeping_gas_trap
 	'^',	// S_rust_trap
 	'^',	// S_fire_trap
 	'^',	// S_pit
@@ -577,7 +577,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	'^',	// S_teleportation_trap
 	'^',	// S_level_teleporter
 	'^',	// S_magic_portal
-/*60*/	0x00A4,	// S_web:       CURRENCY SIGN
+	/*60*/	0x00A4,	// S_web:       CURRENCY SIGN
 	'^',	// S_statue_trap
 	'^',	// S_magic_trap
 	'^',	// S_anti_magic_trap
@@ -587,7 +587,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	'\\',	// S_lslant
 	'/',	// S_rslant
 	'*',	// S_digbeam
-/*70*/	'!',	// S_flashbeam
+	/*70*/	'!',	// S_flashbeam
 	')',	// S_boomleft
 	'(',	// S_boomright
 	'0',	// S_ss1
@@ -597,7 +597,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	'/',	// S_sw_tl
 	0x2594, // S_sw_tc:     UPPER ONE EIGHTH BLOCK
 	'\\',	// S_sw_tr
-/*80*/	0x258f, // S_sw_ml:     LEFT ONE EIGHTH BLOCK
+	/*80*/	0x258f, // S_sw_ml:     LEFT ONE EIGHTH BLOCK
 	0x2595, // S_sw_mr:     RIGHT ONE EIGHTH BLOCK
 	'\\',	// S_sw_bl
 	0x2581, // S_sw_bc:     LOWER ONE EIGHTH BLOCK
@@ -607,7 +607,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	'\\',	// S_explode3
 	0x258f, // S_explode4:  LEFT ONE EIGHTH BLOCK
 	' ',	// S_explode5
-/*90*/	0x2595, // S_explode6:  RIGHT ONE EIGHTH BLOCK
+	/*90*/	0x2595, // S_explode6:  RIGHT ONE EIGHTH BLOCK
 	'\\',	// S_explode7
 	0x2581, // S_explode8:  LOWER ONE EIGHTH BLOCK
 	'/',	// S_explode9
@@ -662,27 +662,27 @@ void assign_colors(uchar *graph_colors, int glth, int maxlen, int offset) {
 
 	for (i = 0; i < maxlen; i++) {
 		showsymcolors[i+offset] =
-			(((i < glth) && (graph_colors[i] < CLR_MAX)) ?
-			 graph_colors[i] : sym_desc[i+offset].color);
+		        (((i < glth) && (graph_colors[i] < CLR_MAX)) ?
+		         graph_colors[i] : sym_desc[i+offset].color);
 	}
 }
 #endif
 
 void switch_graphics(int graphics) {
 	switch (graphics) {
-		default:
-		case ASCII_GRAPHICS:
-			assign_graphics(ascii_graphics, SIZE(ascii_graphics), MAXPCHARS, 0);
-			iflags.graphics = ASCII_GRAPHICS;
-			break;
-		case UTF8_GRAPHICS:
-			assign_graphics(utf8_graphics, SIZE(utf8_graphics), MAXPCHARS, 0);
-			iflags.graphics = UTF8_GRAPHICS;
-			break;
-		case UTF8COMPAT_GRAPHICS:
-			assign_graphics(utf8compat_graphics, SIZE(utf8compat_graphics), MAXPCHARS, 0);
-			iflags.graphics = UTF8COMPAT_GRAPHICS;
-			break;
+	default:
+	case ASCII_GRAPHICS:
+		assign_graphics(ascii_graphics, SIZE(ascii_graphics), MAXPCHARS, 0);
+		iflags.graphics = ASCII_GRAPHICS;
+		break;
+	case UTF8_GRAPHICS:
+		assign_graphics(utf8_graphics, SIZE(utf8_graphics), MAXPCHARS, 0);
+		iflags.graphics = UTF8_GRAPHICS;
+		break;
+	case UTF8COMPAT_GRAPHICS:
+		assign_graphics(utf8compat_graphics, SIZE(utf8compat_graphics), MAXPCHARS, 0);
+		iflags.graphics = UTF8COMPAT_GRAPHICS;
+		break;
 	}
 }
 
@@ -707,22 +707,22 @@ static glyph_t save_showsyms[MAXPCHARS] = DUMMY;
 static uchar save_monsyms[MAXPCHARS]    = DUMMY;
 
 static const glyph_t r_oc_syms[MAXOCLASSES] = {
-/* 0*/	'\0',
+	/* 0*/	'\0',
 	ILLOBJ_SYM,
 	WEAPON_SYM,
 	']',			/* armor */
 	RING_SYM,
-/* 5*/	',',			/* amulet */
+	/* 5*/	',',			/* amulet */
 	TOOL_SYM,
 	':',			/* food */
 	POTION_SYM,
 	SCROLL_SYM,
-/*10*/	SPBOOK_SYM,
+	/*10*/	SPBOOK_SYM,
 	WAND_SYM,
 	GEM_SYM,		/* gold -- yes it's the same as gems */
 	GEM_SYM,
 	ROCK_SYM,
-/*15*/	BALL_SYM,
+	/*15*/	BALL_SYM,
 	CHAIN_SYM,
 	VENOM_SYM
 };
@@ -735,18 +735,18 @@ static const glyph_t r_oc_syms[MAXOCLASSES] = {
  */
 //FIXME: convert to unicode (and add ascii variants)
 static const uchar IBM_r_oc_syms[MAXOCLASSES] = {	/* a la EPYX Rogue */
-/* 0*/	'\0',
+	/* 0*/	'\0',
 	ILLOBJ_SYM,
 #  ifdef WIN32
 	0x18,			/* weapon: up arrow */
-/*	0x0a, */ ARMOR_SYM,	/* armor:  Vert rect with o */
-/*	0x09, */ RING_SYM,	/* ring:   circle with arrow */
-/* 5*/	0x0c,			/* amulet: "female" symbol */
+	/*	0x0a, */ ARMOR_SYM,	/* armor:  Vert rect with o */
+	/*	0x09, */ RING_SYM,	/* ring:   circle with arrow */
+	/* 5*/	0x0c,			/* amulet: "female" symbol */
 	TOOL_SYM,
 	0x05,			/* food:   club (as in cards) */
 	0xad,			/* potion: upside down '!' */
 	0x0e,			/* scroll: musical note */
-/*10*/	SPBOOK_SYM,
+	/*10*/	SPBOOK_SYM,
 	0xe7,			/* wand:   greek tau */
 	0x0f,			/* gold:   yes it's the same as gems */
 	0x0f,			/* gems:   fancy '*' */
@@ -754,18 +754,18 @@ static const uchar IBM_r_oc_syms[MAXOCLASSES] = {	/* a la EPYX Rogue */
 	')',			/* weapon  */
 	ARMOR_SYM,		/* armor */
 	RING_SYM,		/* ring */
-/* 5*/	',',			/* amulet  */
+	/* 5*/	',',			/* amulet  */
 	TOOL_SYM,
 	':',			/* food    */
 	0xad,			/* potion: upside down '!' */
 	SCROLL_SYM,		/* scroll  */
-/*10*/	SPBOOK_SYM,
+	/*10*/	SPBOOK_SYM,
 	0xe7,			/* wand:   greek tau */
 	GEM_SYM,		/* gold:   yes it's the same as gems */
 	GEM_SYM,		/* gems    */
 #  endif
 	ROCK_SYM,
-/*15*/	BALL_SYM,
+	/*15*/	BALL_SYM,
 	CHAIN_SYM,
 	VENOM_SYM
 };

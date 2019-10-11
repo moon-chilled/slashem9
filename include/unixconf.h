@@ -21,22 +21,22 @@
 
 /* define exactly one of the following four choices */
 /* #define BSD 1 */	/* define for 4.n/Free/Open/Net BSD  */
-			/* also for relatives like SunOS 4.x, DG/UX, and */
-			/* older versions of Linux */
+/* also for relatives like SunOS 4.x, DG/UX, and */
+/* older versions of Linux */
 /* #define ULTRIX */	/* define for Ultrix v3.0 or higher (but not lower) */
-			/* Use BSD for < v3.0 */
-			/* "ULTRIX" not to be confused with "ultrix" */
+/* Use BSD for < v3.0 */
+/* "ULTRIX" not to be confused with "ultrix" */
 #define SYSV		/* define for System V, Solaris 2.x, newer versions */
-			/* of Linux */
+/* of Linux */
 /* #define HPUX */	/* Hewlett-Packard's Unix, version 6.5 or higher */
-			/* use SYSV for < v6.5 */
+/* use SYSV for < v6.5 */
 
 
 /* define any of the following that are appropriate */
 #define SVR4		/* use in addition to SYSV for System V Release 4 */
-			/* including Solaris 2+ */
+/* including Solaris 2+ */
 #define NETWORK		/* if running on a networked system */
-			/* e.g. Suns sharing a playground through NFS */
+/* e.g. Suns sharing a playground through NFS */
 /* #define SUNOS4 */	/* SunOS 4.x */
 #define LINUX	/* Another Unix clone */
 /* #define CYGWIN32 */	/* Unix on Win32 -- use with case sensitive defines */
@@ -49,20 +49,20 @@
 			 * Also define this for AIX 3.2 */
 
 #define TERMINFO	/* uses terminfo rather than termcap */
-			/* Should be defined for most SYSV, SVR4 (including
-			 * Solaris 2+), HPUX, and Linux systems.  In
-			 * particular, it should NOT be defined for the UNIXPC
-			 * unless you remove the use of the shared library in
-			 * the Makefile */
+/* Should be defined for most SYSV, SVR4 (including
+ * Solaris 2+), HPUX, and Linux systems.  In
+ * particular, it should NOT be defined for the UNIXPC
+ * unless you remove the use of the shared library in
+ * the Makefile */
 #define POSIX_JOB_CONTROL /* use System V / Solaris 2.x / POSIX job control */
-			/* (e.g., VSUSP) */
+/* (e.g., VSUSP) */
 #define POSIX_TYPES	/* use POSIX types for system calls and termios */
-			/* Define for many recent OS releases, including
-			 * those with specific defines (since types are
-			 * changing toward the standard from earlier chaos).
-			 * For example, platforms using the GNU libraries,
-			 * Linux, Solaris 2.x
-			 */
+/* Define for many recent OS releases, including
+ * those with specific defines (since types are
+ * changing toward the standard from earlier chaos).
+ * For example, platforms using the GNU libraries,
+ * Linux, Solaris 2.x
+ */
 
 /* #define RANDOM */		/* if neither random/srandom nor lrand48/srand48
 				   is available from your system */

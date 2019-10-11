@@ -29,7 +29,7 @@ typedef struct Attk {
 	bool dyou;		/* You are the defender */
 	bool dvis;		/* Player can see dmon */
 	bool defensive;	/* This is the defensive response of another */
-							/* attack by dmon against amon */
+	/* attack by dmon against amon */
 	bool poison;		/* Poison was used */
 	bool poiskilled;
 	bool poismgs;
@@ -126,7 +126,7 @@ extern char *attk_dname(Attk);
 #define AD_DISE		33		/* confers diseases */
 #define AD_DCAY		34		/* decays organics (Brown pudding) */
 #define AD_SSEX		35		/* Succubus seduction (extended) */
-					/* If no SEDUCE then same as AD_SEDU */
+/* If no SEDUCE then same as AD_SEDU */
 #define AD_HALU		36		/* causes hallucination */
 #define AD_DETH		37		/* for Death only */
 #define AD_PEST		38		/* for Pestilence only */

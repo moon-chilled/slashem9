@@ -17,15 +17,15 @@
 #define UNIX		/* delete if no fork(), exec() available */
 
 /* #define MINIMAL_TERM */
-			/* if a terminal handles highlighting or tabs poorly,
-  			   try this define, used in pager.c and termcap.c */
+/* if a terminal handles highlighting or tabs poorly,
+   try this define, used in pager.c and termcap.c */
 /* #define ULTRIX_CC20 */
-			/* define only if using cc v2.0 on a DECstation */
+/* define only if using cc v2.0 on a DECstation */
 /* #define ULTRIX_PROTO */
-			/* define for Ultrix 4.0 (or higher) on a DECstation;
-  			 * if you get compiler errors, don't define this. */
-  			/* Hint: if you're not developing code, don't define
-  			   ULTRIX_PROTO. */
+/* define for Ultrix 4.0 (or higher) on a DECstation;
+ * if you get compiler errors, don't define this. */
+/* Hint: if you're not developing code, don't define
+   ULTRIX_PROTO. */
 
 #include "config1.h"	/* should auto-detect MAC and WIN32 */
 
@@ -227,7 +227,7 @@ typedef long glyph_t;
  * SOUNDDIR=<directory>
  */
 /* #define USER_SOUNDS */   /* Allow user-defined regex mappings from messages to sounds */
-                      /* Only supported on Qt with NAS - Network Audio System */
+/* Only supported on Qt with NAS - Network Audio System */
 
 
 #define DOAGAIN '\001'	/* ^A, the "redo" key used in cmd.c and getline.c */

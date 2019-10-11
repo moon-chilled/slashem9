@@ -113,7 +113,7 @@ boolean in_mklev = false;
 boolean stoned = false;	/* done to monsters hit by 'c' */
 boolean unweapon = false;
 boolean mrg_to_wielded = false;
-			 /* weapon picked is merged with wielded one */
+/* weapon picked is merged with wielded one */
 struct obj *current_wand = 0;	/* wand currently zapped/applied */
 
 boolean in_steed_dismounting = false;
@@ -134,39 +134,39 @@ struct instance_flags iflags = DUMMY;
 struct you u = DUMMY;
 
 struct obj *invent = NULL,
-	*uwep = NULL, *uarm = NULL,
-	*uswapwep = NULL,
-	*uquiver = NULL, /* quiver */
-	*uarmu = NULL, /* under-wear, so to speak */
-	*uskin = NULL, /* dragon armor, if a dragon */
-	*uarmc = NULL, *uarmh = NULL,
-	*uarms = NULL, *uarmg = NULL,
-	*uarmf = NULL, *uamul = NULL,
-	*uright = NULL,
-	*uleft = NULL,
-	*ublindf = NULL,
-	*usaddle = NULL,
-	*uchain = NULL,
-	*uball = NULL;
+	            *uwep = NULL, *uarm = NULL,
+	             *uswapwep = NULL,
+	              *uquiver = NULL, /* quiver */
+	               *uarmu = NULL, /* under-wear, so to speak */
+	                *uskin = NULL, /* dragon armor, if a dragon */
+	                 *uarmc = NULL, *uarmh = NULL,
+	                  *uarms = NULL, *uarmg = NULL,
+	                   *uarmf = NULL, *uamul = NULL,
+	                    *uright = NULL,
+	                     *uleft = NULL,
+	                      *ublindf = NULL,
+	                       *usaddle = NULL,
+	                        *uchain = NULL,
+	                         *uball = NULL;
 
 /*
  *  This must be the same order as used for buzz() in zap.c.
  */
 const int zapcolors[NUM_ZAP] = {
-    HI_ZAP,		/* 0 - missile */
-    CLR_ORANGE,		/* 1 - fire */
-    CLR_WHITE,		/* 2 - frost */
-    HI_ZAP,		/* 3 - sleep */
-    CLR_BLACK,		/* 4 - death */
-    CLR_WHITE,		/* 5 - lightning */
-    CLR_YELLOW,		/* 6 - poison gas */
-    CLR_GREEN,		/* 7 - acid */
+	HI_ZAP,		/* 0 - missile */
+	CLR_ORANGE,		/* 1 - fire */
+	CLR_WHITE,		/* 2 - frost */
+	HI_ZAP,		/* 3 - sleep */
+	CLR_BLACK,		/* 4 - death */
+	CLR_WHITE,		/* 5 - lightning */
+	CLR_YELLOW,		/* 6 - poison gas */
+	CLR_GREEN,		/* 7 - acid */
 };
 
 const int shield_static[SHIELD_COUNT] = {
-    S_ss1, S_ss2, S_ss3, S_ss2, S_ss1, S_ss2, S_ss4,	/* 7 per row */
-    S_ss1, S_ss2, S_ss3, S_ss2, S_ss1, S_ss2, S_ss4,
-    S_ss1, S_ss2, S_ss3, S_ss2, S_ss1, S_ss2, S_ss4,
+	S_ss1, S_ss2, S_ss3, S_ss2, S_ss1, S_ss2, S_ss4,	/* 7 per row */
+	S_ss1, S_ss2, S_ss3, S_ss2, S_ss1, S_ss2, S_ss4,
+	S_ss1, S_ss2, S_ss3, S_ss2, S_ss1, S_ss2, S_ss4,
 };
 
 struct spell spl_book[MAXSPELL + 1] = {DUMMY};
@@ -174,7 +174,7 @@ struct spell spl_book[MAXSPELL + 1] = {DUMMY};
 struct tech tech_list[MAXTECH + 1] = {DUMMY};
 
 long moves = 1L, monstermoves = 1L;
-	 /* These diverge when player is Fast or Very_fast */
+/* These diverge when player is Fast or Very_fast */
 long wailmsg = 0L;
 
 /* objects that are moving to another dungeon level */
@@ -272,18 +272,20 @@ struct authentication authentication = { "", "" };
 struct tileset tilesets[MAXNOTILESETS];
 int no_tilesets = 0;
 struct tileset def_tilesets[] = {
-    {"", "", 0,}
+	{"", "", 0,}
 };
 
 char tileset[PL_PSIZ] = DUMMY;
 
 char *fqn_prefix[PREFIX_COUNT] = { NULL, NULL, NULL, NULL,
-				NULL, NULL, NULL, NULL, NULL };
+                                   NULL, NULL, NULL, NULL, NULL
+                                 };
 
 #ifdef PREFIXES_IN_USE
 char *fqn_prefix_names[PREFIX_COUNT] = { "hackdir", "leveldir", "savedir",
-					"bonesdir", "datadir", "scoredir",
-					"lockdir", "configdir", "troubledir" };
+                                         "bonesdir", "datadir", "scoredir",
+                                         "lockdir", "configdir", "troubledir"
+                                       };
 #endif
 
 struct u_achieve achieve = DUMMY;
@@ -308,7 +310,7 @@ bool curses_stupid_hack = 1;
 
 /* dummy routine used to force linkage */
 void decl_init(void) {
-    return;
+	return;
 }
 
 /*decl.c*/

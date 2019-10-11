@@ -6,18 +6,20 @@
 
 #include "config.h"
 
-extern void panic(const char *,...);
+extern void panic(const char *, ...);
 
 void *alloc(usize lth) {
 	void *ptr = calloc(1, lth);
 
-	if (!ptr) panic("Memory allocation failure; cannot get %zu bytes", lth);
+	if (!ptr) {
+		panic("Memory allocation failure; cannot get %zu bytes", lth);
+	}
 
 	return ptr;
 }
 
 void nhfree(const void *ptr) {
-	free((void*)ptr);
+	free((void *)ptr);
 }
 
 /* format a pointer for display purposes; caller supplies the result buffer */
@@ -25,6 +27,5 @@ char *fmt_ptr(const void *ptr, char *buf) {
 	sprintf(buf, "%p", ptr);
 	return buf;
 }
-
 
 /*alloc.c*/

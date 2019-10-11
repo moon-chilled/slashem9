@@ -14,11 +14,11 @@ struct objclass {
 	bool oc_name_known;
 	bool oc_merge;	/* merge otherwise equal objects */
 	bool oc_uses_known; /* obj->known affects full decription */
-				/* otherwise, obj->dknown and obj->bknown */
-				/* tell all, and obj->known should always */
-				/* be set for proper merging behavior */
+	/* otherwise, obj->dknown and obj->bknown */
+	/* tell all, and obj->known should always */
+	/* be set for proper merging behavior */
 	bool oc_pre_discovered;	/* Already known at start of game; */
-					/* won't be listed as a discovery. */
+	/* won't be listed as a discovery. */
 	bool oc_magic;	/* inherently magical object */
 	bool oc_charged; /* may have +n or (n) charges */
 	bool oc_unique;	/* special one-of-a-kind object */
@@ -66,18 +66,18 @@ struct objclass {
 #define is_metallic(otmp)	(objects[(otmp)->otyp].oc_material >= IRON && \
 				 objects[(otmp)->otyp].oc_material <= MITHRIL)
 
-/* primary damage: fire/rust/--- */
-/* is_flammable(otmp), is_rottable(otmp) in mkobj.c */
+	/* primary damage: fire/rust/--- */
+	/* is_flammable(otmp), is_rottable(otmp) in mkobj.c */
 #define is_rustprone(otmp)	(objects[otmp->otyp].oc_material == IRON)
 
-/* secondary damage: rot/acid/acid */
+	/* secondary damage: rot/acid/acid */
 #define is_corrodeable(otmp)	(objects[otmp->otyp].oc_material == COPPER || objects[otmp->otyp].oc_material == IRON)
 
 #define is_damageable(otmp) (is_rustprone(otmp) || is_flammable(otmp) || \
 				is_rottable(otmp) || is_corrodeable(otmp))
 
 	schar	oc_subtyp;
-/*	Bitfield(oc_subtyp,3);*/	/* Now too big for a bitfield */
+	/*	Bitfield(oc_subtyp,3);*/	/* Now too big for a bitfield */
 #define oc_skill	oc_subtyp   /* for weapons, spellbooks, tools, gems */
 #define oc_armcat	oc_subtyp   /* for armor */
 #define ARM_SHIELD	1	/* needed for special wear function */
@@ -96,8 +96,8 @@ struct objclass {
 	short	oc_prob;		/* probability, used in mkobj() */
 	unsigned short	oc_weight;	/* encumbrance (1 cn = 0.1 lb.) */
 	short	oc_cost;		/* base cost in shops */
-/* Check the AD&D rules!  The FIRST is small monster damage. */
-/* for weapons, and tools, rocks, and gems useful as weapons */
+	/* Check the AD&D rules!  The FIRST is small monster damage. */
+	/* for weapons, and tools, rocks, and gems useful as weapons */
 	schar	oc_wsdam, oc_wldam;	/* max small/large monster damage */
 #define oc_range	oc_wsdam	/* for strength independant ranged weapons */
 #define oc_rof		oc_wldam	/* rate of fire bonus for ranged weapons */

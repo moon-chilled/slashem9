@@ -33,13 +33,13 @@ struct innate_tech {
 };
 
 struct blitz_tab {
-        const char *blitz_cmd; /* the typed command */
-        const int blitz_len; /* The length of blitz_cmd */
-        int (*blitz_funct)(void); /* function called when the command is executed */
-        const int blitz_tech; /* the tech designation - determines tech needed
+	const char *blitz_cmd; /* the typed command */
+	const int blitz_len; /* The length of blitz_cmd */
+	int (*blitz_funct)(void); /* function called when the command is executed */
+	const int blitz_tech; /* the tech designation - determines tech needed
          		       * to access this blitz and the name of the blitz
           		       */
-        const int blitz_type; /* the type of blitz chain */
+	const int blitz_type; /* the type of blitz chain */
 #define BLITZ_START 	0 /* Starts the chain */
 #define BLITZ_CHAIN 	1 /* Goes anywhere in the chain (usually middle) */
 #define BLITZ_END 	2 /* Finishes the chain */

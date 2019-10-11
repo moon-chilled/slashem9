@@ -10,36 +10,36 @@
 
 
 void set_mon_data(struct monst *mon, struct permonst *ptr, int flag) {
-    mon->data = ptr;
-    if (flag == -1) return;		/* "don't care" */
+	mon->data = ptr;
+	if (flag == -1) return;		/* "don't care" */
 
-    if (flag == 1)
-	mon->mintrinsics |= (ptr->mresists & MR_TYPEMASK);
-    else
-	mon->mintrinsics = (ptr->mresists & MR_TYPEMASK);
-    return;
+	if (flag == 1)
+		mon->mintrinsics |= (ptr->mresists & MR_TYPEMASK);
+	else
+		mon->mintrinsics = (ptr->mresists & MR_TYPEMASK);
+	return;
 }
 
 
 struct attack * attacktype_fordmg (struct permonst *ptr, int atyp, int dtyp) {
-    struct attack *a;
+	struct attack *a;
 
-    for (a = &ptr->mattk[0]; a < &ptr->mattk[NATTK]; a++)
-	if (a->aatyp == atyp && (dtyp == AD_ANY || a->adtyp == dtyp))
-	    return a;
+	for (a = &ptr->mattk[0]; a < &ptr->mattk[NATTK]; a++)
+		if (a->aatyp == atyp && (dtyp == AD_ANY || a->adtyp == dtyp))
+			return a;
 
-    return NULL;
+	return NULL;
 }
 
 boolean attacktype(struct permonst *ptr, int atyp) {
-    return attacktype_fordmg(ptr, atyp, AD_ANY) ? true : false;
+	return attacktype_fordmg(ptr, atyp, AD_ANY) ? true : false;
 }
 
 
 boolean poly_when_stoned(struct permonst *ptr) {
-    return is_golem(ptr) && ptr != &mons[PM_STONE_GOLEM] &&
-	    !(mvitals[PM_STONE_GOLEM].mvflags & G_GENOD);
-	    /* allow G_EXTINCT */
+	return is_golem(ptr) && ptr != &mons[PM_STONE_GOLEM] &&
+	       !(mvitals[PM_STONE_GOLEM].mvflags & G_GENOD);
+	/* allow G_EXTINCT */
 }
 
 /* returns true if monster is drain-life resistant */
@@ -48,9 +48,9 @@ boolean resists_drli(struct monst *mon) {
 	struct obj *wep = ((mon == &youmonst) ? uwep : MON_WEP(mon));
 
 	return is_undead(ptr) || is_demon(ptr) || is_were(ptr) ||
-		ptr == &mons[PM_DEATH] || is_golem(ptr) ||
-		resists_drain(mon) ||
-		(wep && wep->oartifact && defends(AD_DRLI, wep));
+	       ptr == &mons[PM_DEATH] || is_golem(ptr) ||
+	       resists_drain(mon) ||
+	       (wep && wep->oartifact && defends(AD_DRLI, wep));
 }
 
 /* true if monster is magic-missile resistant */
@@ -60,18 +60,18 @@ boolean resists_magm(struct monst *mon) {
 
 	/* as of 3.2.0:  gray dragons, Angels, Oracle, Yeenoghu */
 	if (dmgtype(ptr, AD_MAGM) || ptr == &mons[PM_BABY_GRAY_DRAGON] ||
-		dmgtype(ptr, AD_RBRE))	/* Chromatic Dragon */
-	    return true;
+	                dmgtype(ptr, AD_RBRE))	/* Chromatic Dragon */
+		return true;
 	/* check for magic resistance granted by wielded weapon */
 	o = (mon == &youmonst) ? uwep : MON_WEP(mon);
 	if (o && o->oartifact && defends(AD_MAGM, o))
-	    return true;
+		return true;
 	/* check for magic resistance granted by worn or carried items */
 	o = (mon == &youmonst) ? invent : mon->minvent;
 	for ( ; o; o = o->nobj)
-	    if ((o->owornmask && objects[o->otyp].oc_oprop == ANTIMAGIC) ||
-		    (o->oartifact && protects(AD_MAGM, o)))
-		return true;
+		if ((o->owornmask && objects[o->otyp].oc_oprop == ANTIMAGIC) ||
+		                (o->oartifact && protects(AD_MAGM, o)))
+			return true;
 	return false;
 }
 
@@ -82,23 +82,23 @@ boolean resists_blnd(struct monst *mon) {
 	struct obj *o;
 
 	if (is_you ? (Blind || u.usleep) :
-		(mon->mblinded || !mon->mcansee || !haseyes(ptr) ||
-		    /* BUG: temporary sleep sets mfrozen, but since
-			    paralysis does too, we can't check it */
-		    mon->msleeping))
-	    return true;
+	                (mon->mblinded || !mon->mcansee || !haseyes(ptr) ||
+	                 /* BUG: temporary sleep sets mfrozen, but since
+	                     paralysis does too, we can't check it */
+	                 mon->msleeping))
+		return true;
 	/* yellow light, Archon; !dust vortex, !cobra, !raven */
 	if (dmgtype_fromattack(ptr, AD_BLND, AT_EXPL) ||
-		dmgtype_fromattack(ptr, AD_BLND, AT_GAZE))
-	    return true;
+	                dmgtype_fromattack(ptr, AD_BLND, AT_GAZE))
+		return true;
 	o = is_you ? uwep : MON_WEP(mon);
 	if (o && o->oartifact && defends(AD_BLND, o))
-	    return true;
+		return true;
 	o = is_you ? invent : mon->minvent;
 	for ( ; o; o = o->nobj)
-	    if ((o->owornmask && objects[o->otyp].oc_oprop == BLINDED) ||
-		    (o->oartifact && protects(AD_BLND, o)))
-		return true;
+		if ((o->owornmask && objects[o->otyp].oc_oprop == BLINDED) ||
+		                (o->oartifact && protects(AD_BLND, o)))
+			return true;
 	return false;
 }
 
@@ -114,68 +114,74 @@ boolean can_blnd(struct monst *magr, struct monst *mdef, uchar aatyp, struct obj
 
 	/* no eyes protect against all attacks for now */
 	if (!haseyes(mdef->data))
-	    return false;
+		return false;
 
 	switch(aatyp) {
-	case AT_EXPL: case AT_BOOM: case AT_GAZE: case AT_MAGC:
+	case AT_EXPL:
+	case AT_BOOM:
+	case AT_GAZE:
+	case AT_MAGC:
 	case AT_BREA: /* assumed to be lightning */
-	    /* light-based attacks may be cancelled or resisted */
-	    if (magr && magr->mcan)
-		return false;
-	    return !resists_blnd(mdef);
+		/* light-based attacks may be cancelled or resisted */
+		if (magr && magr->mcan)
+			return false;
+		return !resists_blnd(mdef);
 
-	case AT_WEAP: case AT_SPIT: case AT_NONE:
-	    /* an object is used (thrown/spit/other) */
-	    if (obj && (obj->otyp == CREAM_PIE)) {
-		if (is_you && Blindfolded)
-		    return false;
-	    } else if (obj && (obj->otyp == BLINDING_VENOM)) {
-		/* all ublindf, including LENSES, protect, cream-pies too */
-		if (is_you && (ublindf || u.ucreamed))
-		    return false;
-		check_visor = true;
-	    } else if (obj && (obj->otyp == POT_BLINDNESS)) {
-		return true;	/* no defense */
-	    } else
-		return false;	/* other objects cannot cause blindness yet */
-	    if ((magr == &youmonst) && u.uswallow)
-		return false;	/* can't affect eyes while inside monster */
-	    break;
+	case AT_WEAP:
+	case AT_SPIT:
+	case AT_NONE:
+		/* an object is used (thrown/spit/other) */
+		if (obj && (obj->otyp == CREAM_PIE)) {
+			if (is_you && Blindfolded)
+				return false;
+		} else if (obj && (obj->otyp == BLINDING_VENOM)) {
+			/* all ublindf, including LENSES, protect, cream-pies too */
+			if (is_you && (ublindf || u.ucreamed))
+				return false;
+			check_visor = true;
+		} else if (obj && (obj->otyp == POT_BLINDNESS)) {
+			return true;	/* no defense */
+		} else
+			return false;	/* other objects cannot cause blindness yet */
+		if ((magr == &youmonst) && u.uswallow)
+			return false;	/* can't affect eyes while inside monster */
+		break;
 
 	case AT_ENGL:
-	    if (is_you && (Blindfolded || u.usleep || u.ucreamed))
-		return false;
-	    if (!is_you && mdef->msleeping)
-		return false;
-	    break;
+		if (is_you && (Blindfolded || u.usleep || u.ucreamed))
+			return false;
+		if (!is_you && mdef->msleeping)
+			return false;
+		break;
 
 	case AT_CLAW:
-	    /* e.g. raven: all ublindf, including LENSES, protect */
-	    if (is_you && ublindf)
-		return false;
-	    if ((magr == &youmonst) && u.uswallow)
-		return false;	/* can't affect eyes while inside monster */
-	    check_visor = true;
-	    break;
+		/* e.g. raven: all ublindf, including LENSES, protect */
+		if (is_you && ublindf)
+			return false;
+		if ((magr == &youmonst) && u.uswallow)
+			return false;	/* can't affect eyes while inside monster */
+		check_visor = true;
+		break;
 
-	case AT_TUCH: case AT_STNG:
-	    /* some physical, blind-inducing attacks can be cancelled */
-	    if (magr && magr->mcan)
-		return false;
-	    break;
+	case AT_TUCH:
+	case AT_STNG:
+		/* some physical, blind-inducing attacks can be cancelled */
+		if (magr && magr->mcan)
+			return false;
+		break;
 
 	default:
-	    break;
+		break;
 	}
 
 	/* check if wearing a visor (only checked if visor might help) */
 	if (check_visor) {
-	    o = (mdef == &youmonst) ? invent : mdef->minvent;
-	    for ( ; o; o = o->nobj)
-		if ((o->owornmask & W_ARMH) &&
-		    (s = OBJ_DESCR(objects[o->otyp])) != NULL &&
-		    !strcmp(s, "visored helmet"))
-		    return false;
+		o = (mdef == &youmonst) ? invent : mdef->minvent;
+		for ( ; o; o = o->nobj)
+			if ((o->owornmask & W_ARMH) &&
+			                (s = OBJ_DESCR(objects[o->otyp])) != NULL &&
+			                !strcmp(s, "visored helmet"))
+				return false;
 	}
 
 	return true;
@@ -193,10 +199,10 @@ boolean ranged_attk(struct permonst *ptr) {
 	   but that's too slow -dlc
 	 */
 	for(i = 0; i < NATTK; i++) {
-	    atyp = ptr->mattk[i].aatyp;
-	    if (atyp >= AT_WEAP) return true;
-	 /* assert(atyp < 32); */
-	    if ((atk_mask & (1L << atyp)) != 0L) return true;
+		atyp = ptr->mattk[i].aatyp;
+		if (atyp >= AT_WEAP) return true;
+		/* assert(atyp < 32); */
+		if ((atk_mask & (1L << atyp)) != 0L) return true;
 	}
 
 	return false;
@@ -204,9 +210,9 @@ boolean ranged_attk(struct permonst *ptr) {
 
 /* true iff the type of monster pass through iron bars */
 boolean passes_bars(struct permonst *mptr) {
-    return passes_walls(mptr) || amorphous(mptr) ||
-	    is_whirly(mptr) || verysmall(mptr) ||
-	    (slithy(mptr) && !bigmonst(mptr));
+	return passes_walls(mptr) || amorphous(mptr) ||
+	       is_whirly(mptr) || verysmall(mptr) ||
+	       (slithy(mptr) && !bigmonst(mptr));
 }
 
 
@@ -226,9 +232,9 @@ boolean sliparm(struct permonst *ptr) {
 /* creature will break out of armor */
 boolean breakarm(struct permonst *ptr) {
 	return (bigmonst(ptr) || (ptr->msize > MZ_SMALL && !humanoid(ptr)) ||
-		/* special cases of humanoids that cannot wear body armor */
-		ptr == &mons[PM_MARILITH] || ptr == &mons[PM_WINGED_GARGOYLE])
-	      && !sliparm(ptr);
+	        /* special cases of humanoids that cannot wear body armor */
+	        ptr == &mons[PM_MARILITH] || ptr == &mons[PM_WINGED_GARGOYLE])
+	       && !sliparm(ptr);
 }
 
 /* creature sticks other creatures it hits */
@@ -238,65 +244,65 @@ boolean sticks(struct permonst *ptr) {
 
 /* number of horns this type of monster has on its head */
 int num_horns (struct permonst *ptr) {
-    switch (monsndx(ptr)) {
-    case PM_LAMB:
-    case PM_SHEEP:
-    case PM_GOAT:
-    case PM_COW:
-    case PM_BULL:
-    case PM_HORNED_DEVIL:	/* ? "more than one" */
-    case PM_MINOTAUR:
-    case PM_ASMODEUS:
-    case PM_BALROG:
-	return 2;
-    case PM_WHITE_UNICORN:
-    case PM_GRAY_UNICORN:
-    case PM_BLACK_UNICORN:
-    case PM_KI_RIN:
-	return 1;
-    default:
-	break;
-    }
-    return 0;
+	switch (monsndx(ptr)) {
+	case PM_LAMB:
+	case PM_SHEEP:
+	case PM_GOAT:
+	case PM_COW:
+	case PM_BULL:
+	case PM_HORNED_DEVIL:	/* ? "more than one" */
+	case PM_MINOTAUR:
+	case PM_ASMODEUS:
+	case PM_BALROG:
+		return 2;
+	case PM_WHITE_UNICORN:
+	case PM_GRAY_UNICORN:
+	case PM_BLACK_UNICORN:
+	case PM_KI_RIN:
+		return 1;
+	default:
+		break;
+	}
+	return 0;
 }
 
 struct attack * dmgtype_fromattack (struct permonst *ptr, int dtyp, int atyp) {
-    struct attack *a;
+	struct attack *a;
 
-    for (a = &ptr->mattk[0]; a < &ptr->mattk[NATTK]; a++)
-	if (a->adtyp == dtyp && (atyp == AT_ANY || a->aatyp == atyp))
-	    return a;
+	for (a = &ptr->mattk[0]; a < &ptr->mattk[NATTK]; a++)
+		if (a->adtyp == dtyp && (atyp == AT_ANY || a->aatyp == atyp))
+			return a;
 
-    return NULL;
+	return NULL;
 }
 
 boolean dmgtype(struct permonst *ptr, int dtyp) {
-    return dmgtype_fromattack(ptr, dtyp, AT_ANY) ? true : false;
+	return dmgtype_fromattack(ptr, dtyp, AT_ANY) ? true : false;
 }
 
 /* returns the maximum damage a defender can do to the attacker via
  * a passive defense */
 int max_passive_dmg (struct monst *mdef, struct monst *magr) {
-    int	i, dmg = 0;
-    uchar adtyp;
+	int	i, dmg = 0;
+	uchar adtyp;
 
-    for(i = 0; i < NATTK; i++)
-	if(mdef->data->mattk[i].aatyp == AT_NONE ||
-		mdef->data->mattk[i].aatyp == AT_BOOM) {
-	    adtyp = mdef->data->mattk[i].adtyp;
-	    if ((adtyp == AD_ACID && !resists_acid(magr)) ||
-		    (adtyp == AD_COLD && !resists_cold(magr)) ||
-		    (adtyp == AD_FIRE && !resists_fire(magr)) ||
-		    (adtyp == AD_ELEC && !resists_elec(magr)) ||
-		    adtyp == AD_PHYS) {
-		dmg = mdef->data->mattk[i].damn;
-		if(!dmg) dmg = mdef->data->mlevel+1;
-		dmg *= mdef->data->mattk[i].damd;
-	    } else dmg = 0;
+	for(i = 0; i < NATTK; i++)
+		if(mdef->data->mattk[i].aatyp == AT_NONE ||
+		                mdef->data->mattk[i].aatyp == AT_BOOM) {
+			adtyp = mdef->data->mattk[i].adtyp;
+			if ((adtyp == AD_ACID && !resists_acid(magr)) ||
+			                (adtyp == AD_COLD && !resists_cold(magr)) ||
+			                (adtyp == AD_FIRE && !resists_fire(magr)) ||
+			                (adtyp == AD_ELEC && !resists_elec(magr)) ||
+			                adtyp == AD_PHYS) {
+				dmg = mdef->data->mattk[i].damn;
+				if(!dmg) dmg = mdef->data->mlevel+1;
+				dmg *= mdef->data->mattk[i].damd;
+			} else dmg = 0;
 
-	    return dmg;
-	}
-    return 0;
+			return dmg;
+		}
+	return 0;
 }
 
 
@@ -309,9 +315,9 @@ int monsndx (		struct permonst *ptr) {
 	i = (int)(ptr - &mons[0]);
 	if (i < LOW_PM || i >= NUMMONS) {
 		/* ought to switch this to use `fmt_ptr' */
-	    panic("monsndx - could not index monster (%d)",
-		  i);
-	    return NON_PM;		/* will not get here */
+		panic("monsndx - could not index monster (%d)",
+		      i);
+		return NON_PM;		/* will not get here */
 	}
 
 	return i;
@@ -347,88 +353,91 @@ int name_to_mon (const char *in_str) {
 	term = str + slen;
 
 	if ((s = strstri(str, "vortices")) != 0)
-	    strcpy(s+4, "ex");
+		strcpy(s+4, "ex");
 	/* be careful with "ies"; "priest", "zombies" */
 	else if (slen > 3 && !strcmpi(term-3, "ies") &&
-		    (slen < 7 || strcmpi(term-7, "zombies")))
-	    strcpy(term-3, "y");
+	                (slen < 7 || strcmpi(term-7, "zombies")))
+		strcpy(term-3, "y");
 	/* luckily no monster names end in fe or ve with ves plurals */
 	else if (slen > 3 && !strcmpi(term-3, "ves"))
-	    strcpy(term-3, "f");
+		strcpy(term-3, "f");
 
 	slen = strlen(str); /* length possibly needs recomputing */
 
-    {
-	static const struct alt_spl { const char* name; short pm_val; }
-	    names[] = {
-	    /* Alternate spellings */
-		{ "grey dragon",	PM_GRAY_DRAGON },
-		{ "baby grey dragon",	PM_BABY_GRAY_DRAGON },
-		{ "grey unicorn",	PM_GRAY_UNICORN },
-		{ "grey ooze",		PM_GRAY_OOZE },
-		{ "gray-elf",		PM_GREY_ELF },
-		{ "mindflayer",         PM_MIND_FLAYER },
-		{ "master mindflayer",  PM_MASTER_MIND_FLAYER },
-	    /* Hyphenated names */
-		{ "ki rin",		PM_KI_RIN },
-		{ "uruk hai",		PM_URUK_HAI },
-		{ "orc captain",	PM_ORC_CAPTAIN },
-		{ "woodland elf",	PM_WOODLAND_ELF },
-		{ "green elf",		PM_GREEN_ELF },
-		{ "grey elf",		PM_GREY_ELF },
-		{ "gray elf",		PM_GREY_ELF },
-		{ "elf lord",		PM_ELF_LORD },
+	{
+		static const struct alt_spl {
+			const char* name;
+			short pm_val;
+		}
+		names[] = {
+			/* Alternate spellings */
+			{ "grey dragon",	PM_GRAY_DRAGON },
+			{ "baby grey dragon",	PM_BABY_GRAY_DRAGON },
+			{ "grey unicorn",	PM_GRAY_UNICORN },
+			{ "grey ooze",		PM_GRAY_OOZE },
+			{ "gray-elf",		PM_GREY_ELF },
+			{ "mindflayer",         PM_MIND_FLAYER },
+			{ "master mindflayer",  PM_MASTER_MIND_FLAYER },
+			/* Hyphenated names */
+			{ "ki rin",		PM_KI_RIN },
+			{ "uruk hai",		PM_URUK_HAI },
+			{ "orc captain",	PM_ORC_CAPTAIN },
+			{ "woodland elf",	PM_WOODLAND_ELF },
+			{ "green elf",		PM_GREEN_ELF },
+			{ "grey elf",		PM_GREY_ELF },
+			{ "gray elf",		PM_GREY_ELF },
+			{ "elf lord",		PM_ELF_LORD },
 #if 0	/* OBSOLETE */
-		{ "high elf",		PM_HIGH_ELF },
+			{ "high elf",		PM_HIGH_ELF },
 #endif
-		{ "olog hai",		PM_OLOG_HAI },
-		{ "arch lich",		PM_ARCH_LICH },
-	    /* Some irregular plurals */
-		{ "incubi",		PM_INCUBUS },
-		{ "succubi",		PM_SUCCUBUS },
-		{ "violet fungi",	PM_VIOLET_FUNGUS },
-		{ "homunculi",		PM_HOMUNCULUS },
-		{ "baluchitheria",	PM_BALUCHITHERIUM },
-		{ "lurkers above",	PM_LURKER_ABOVE },
-		{ "cavemen",		PM_CAVEMAN },
-		{ "cavewomen",		PM_CAVEWOMAN },
+			{ "olog hai",		PM_OLOG_HAI },
+			{ "arch lich",		PM_ARCH_LICH },
+			/* Some irregular plurals */
+			{ "incubi",		PM_INCUBUS },
+			{ "succubi",		PM_SUCCUBUS },
+			{ "violet fungi",	PM_VIOLET_FUNGUS },
+			{ "homunculi",		PM_HOMUNCULUS },
+			{ "baluchitheria",	PM_BALUCHITHERIUM },
+			{ "lurkers above",	PM_LURKER_ABOVE },
+			{ "cavemen",		PM_CAVEMAN },
+			{ "cavewomen",		PM_CAVEWOMAN },
 #ifndef ZOUTHERN
-/*		{ "zruties",            PM_ZRUTY },*/
+			/*		{ "zruties",            PM_ZRUTY },*/
 #endif
-		{ "djinn",		PM_DJINNI },
-		{ "mumakil",		PM_MUMAK },
-		{ "erinyes",		PM_ERINYS },
-		{ "giant lice",         PM_GIANT_LOUSE },	/* RJ */
-	    /* falsely caught by -ves check above */
-		{ "master of thief",	PM_MASTER_OF_THIEVES },
-	    /* end of list */
-		{ 0, 0 }
-	};
-	const struct alt_spl *namep;
+			{ "djinn",		PM_DJINNI },
+			{ "mumakil",		PM_MUMAK },
+			{ "erinyes",		PM_ERINYS },
+			{ "giant lice",         PM_GIANT_LOUSE },	/* RJ */
+			/* falsely caught by -ves check above */
+			{ "master of thief",	PM_MASTER_OF_THIEVES },
+			/* end of list */
+			{ 0, 0 }
+		};
+		const struct alt_spl *namep;
 
-	for (namep = names; namep->name; namep++)
-	    if (!strncmpi(str, namep->name, (int)strlen(namep->name)))
-		return namep->pm_val;
-    }
+		for (namep = names; namep->name; namep++)
+			if (!strncmpi(str, namep->name, (int)strlen(namep->name)))
+				return namep->pm_val;
+	}
 
 	for (len = 0, i = LOW_PM; i < NUMMONS; i++) {
-	    int m_i_len = strlen(mons[i].mname);
-	    if (m_i_len > len && !strncmpi(mons[i].mname, str, m_i_len)) {
-		if (m_i_len == slen) return i;	/* exact match */
-		else if (slen > m_i_len &&
-			(str[m_i_len] == ' ' ||
-			 !strcmpi(&str[m_i_len], "s") ||
-			 !strncmpi(&str[m_i_len], "s ", 2) ||
-			 !strcmpi(&str[m_i_len], "'") ||
-			 !strncmpi(&str[m_i_len], "' ", 2) ||
-			 !strcmpi(&str[m_i_len], "'s") ||
-			 !strncmpi(&str[m_i_len], "'s ", 3) ||
-			 !strcmpi(&str[m_i_len], "es") ||
-			 !strncmpi(&str[m_i_len], "es ", 3))) {
-		    mntmp = i;
-		    len = m_i_len;
+		int m_i_len = strlen(mons[i].mname);
+		if (m_i_len > len && !strncmpi(mons[i].mname, str, m_i_len)) {
+			if (m_i_len == slen) return i;	/* exact match */
+			else if (slen > m_i_len &&
+			                (str[m_i_len] == ' ' ||
+			                 !strcmpi(&str[m_i_len], "s") ||
+			                 !strncmpi(&str[m_i_len], "s ", 2) ||
+			                 !strcmpi(&str[m_i_len], "'") ||
+			                 !strncmpi(&str[m_i_len], "' ", 2) ||
+			                 !strcmpi(&str[m_i_len], "'s") ||
+			                 !strncmpi(&str[m_i_len], "'s ", 3) ||
+			                 !strcmpi(&str[m_i_len], "es") ||
+			                 !strncmpi(&str[m_i_len], "es ", 3))) {
+				mntmp = i;
+				len = m_i_len;
+			}
 		}
-	    }
 	}
 	if (mntmp == NON_PM) mntmp = title_to_mon(str, NULL, NULL);
 	return mntmp;
@@ -437,8 +446,7 @@ int name_to_mon (const char *in_str) {
 
 /* returns 3 values (0=male, 1=female, 2=none) */
 int
-gender (struct monst *mtmp)
-{
+gender (struct monst *mtmp) {
 	if (is_neuter(mtmp->data)) return 2;
 	return mtmp->female;
 }
@@ -448,7 +456,7 @@ gender (struct monst *mtmp)
 int pronoun_gender (struct monst *mtmp) {
 	if (!mtmp->isshk && (is_neuter(mtmp->data) || !canspotmon(mtmp))) return 2;
 	return (humanoid(mtmp->data) || (mtmp->data->geno & G_UNIQ) ||
-		type_is_pname(mtmp->data)) ? (int)mtmp->female : 2;
+	        type_is_pname(mtmp->data)) ? (int)mtmp->female : 2;
 }
 
 
@@ -561,8 +569,8 @@ int big_to_little(int montype) {
  * player.  It does not return a pointer to player role character.
  */
 const struct permonst * raceptr (struct monst *mtmp) {
-    if (mtmp == &youmonst && !Upolyd) return &mons[urace.malenum];
-    else return mtmp->data;
+	if (mtmp == &youmonst && !Upolyd) return &mons[urace.malenum];
+	else return mtmp->data;
 }
 
 static const char *levitate[4]	= { "float", "Float", "wobble", "Wobble" };
@@ -574,18 +582,17 @@ static const char *immobile[4]	= { "wiggle", "Wiggle", "pulsate", "Pulsate" };
 static const char *crawl[4]	= { "crawl", "Crawl", "falter", "Falter" };
 
 const char *
-locomotion (const struct permonst *ptr, const char *def)
-{
+locomotion (const struct permonst *ptr, const char *def) {
 	int capitalize = (*def == highc(*def));
 
 	return is_floater(ptr) ? levitate[capitalize] :
-		(is_flyer(ptr) && ptr->msize <= MZ_SMALL) ? flys[capitalize] :
-		(is_flyer(ptr) && ptr->msize > MZ_SMALL)  ? flyl[capitalize] :
-		slithy(ptr)     ? slither[capitalize] :
-		amorphous(ptr)  ? ooze[capitalize] :
-		!ptr->mmove	? immobile[capitalize] :
-		nolimbs(ptr)    ? crawl[capitalize] :
-		def;
+	       (is_flyer(ptr) && ptr->msize <= MZ_SMALL) ? flys[capitalize] :
+	       (is_flyer(ptr) && ptr->msize > MZ_SMALL)  ? flyl[capitalize] :
+	       slithy(ptr)     ? slither[capitalize] :
+	       amorphous(ptr)  ? ooze[capitalize] :
+	       !ptr->mmove	? immobile[capitalize] :
+	       nolimbs(ptr)    ? crawl[capitalize] :
+	       def;
 
 }
 
@@ -593,50 +600,50 @@ const char * stagger (const struct permonst *ptr, const char *def) {
 	int capitalize = 2 + (*def == highc(*def));
 
 	return is_floater(ptr) ? levitate[capitalize] :
-		(is_flyer(ptr) && ptr->msize <= MZ_SMALL) ? flys[capitalize] :
-		(is_flyer(ptr) && ptr->msize > MZ_SMALL)  ? flyl[capitalize] :
-		slithy(ptr)     ? slither[capitalize] :
-		amorphous(ptr)  ? ooze[capitalize] :
-		!ptr->mmove	? immobile[capitalize] :
-		nolimbs(ptr)    ? crawl[capitalize] :
-		def;
+	       (is_flyer(ptr) && ptr->msize <= MZ_SMALL) ? flys[capitalize] :
+	       (is_flyer(ptr) && ptr->msize > MZ_SMALL)  ? flyl[capitalize] :
+	       slithy(ptr)     ? slither[capitalize] :
+	       amorphous(ptr)  ? ooze[capitalize] :
+	       !ptr->mmove	? immobile[capitalize] :
+	       nolimbs(ptr)    ? crawl[capitalize] :
+	       def;
 
 }
 
 /* return a phrase describing the effect of fire attack on a type of monster */
 const char * on_fire (struct permonst *mptr, struct attack *mattk) {
-    const char *what;
+	const char *what;
 
-    switch (monsndx(mptr)) {
-    case PM_FLAMING_SPHERE:
-    case PM_FIRE_VORTEX:
-    case PM_FIRE_ELEMENTAL:
-    case PM_SALAMANDER:
-	what = "already on fire";
-	break;
-    case PM_WATER_ELEMENTAL:
-    case PM_FOG_CLOUD:
-    case PM_STEAM_VORTEX:
-	what = "boiling";
-	break;
-    case PM_ICE_VORTEX:
-    case PM_GLASS_GOLEM:
-	what = "melting";
-	break;
-    case PM_STONE_GOLEM:
-    case PM_CLAY_GOLEM:
-    case PM_GOLD_GOLEM:
-    case PM_AIR_ELEMENTAL:
-    case PM_EARTH_ELEMENTAL:
-    case PM_DUST_VORTEX:
-    case PM_ENERGY_VORTEX:
-	what = "heating up";
-	break;
-    default:
-	what = (mattk->aatyp == AT_HUGS) ? "being roasted" : "on fire";
-	break;
-    }
-    return what;
+	switch (monsndx(mptr)) {
+	case PM_FLAMING_SPHERE:
+	case PM_FIRE_VORTEX:
+	case PM_FIRE_ELEMENTAL:
+	case PM_SALAMANDER:
+		what = "already on fire";
+		break;
+	case PM_WATER_ELEMENTAL:
+	case PM_FOG_CLOUD:
+	case PM_STEAM_VORTEX:
+		what = "boiling";
+		break;
+	case PM_ICE_VORTEX:
+	case PM_GLASS_GOLEM:
+		what = "melting";
+		break;
+	case PM_STONE_GOLEM:
+	case PM_CLAY_GOLEM:
+	case PM_GOLD_GOLEM:
+	case PM_AIR_ELEMENTAL:
+	case PM_EARTH_ELEMENTAL:
+	case PM_DUST_VORTEX:
+	case PM_ENERGY_VORTEX:
+		what = "heating up";
+		break;
+	default:
+		what = (mattk->aatyp == AT_HUGS) ? "being roasted" : "on fire";
+		break;
+	}
+	return what;
 }
 
 /*mondata.c*/

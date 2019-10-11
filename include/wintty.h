@@ -10,38 +10,38 @@
 
 /* menu structure */
 typedef struct tty_mi {
-    struct tty_mi *next;
-    anything identifier;	/* user identifier */
-    long count;			/* user count */
-    char *str;			/* description string (including accelerator) */
-    int attr;			/* string attribute */
-    boolean selected;		/* true if selected by user */
-    char selector;		/* keyboard accelerator */
-    char gselector;		/* group accelerator */
-    int glyph;			/* glyph display in menu */
+	struct tty_mi *next;
+	anything identifier;	/* user identifier */
+	long count;			/* user count */
+	char *str;			/* description string (including accelerator) */
+	int attr;			/* string attribute */
+	boolean selected;		/* true if selected by user */
+	char selector;		/* keyboard accelerator */
+	char gselector;		/* group accelerator */
+	int glyph;			/* glyph display in menu */
 } tty_menu_item;
 
 /* descriptor for tty-based windows */
 struct WinDesc {
-    int flags;			/* window flags */
-    xchar type;			/* type of window */
-    boolean active;		/* true if window is active */
-    uchar offx, offy;		/* offset from topleft of display */
-    short rows, cols;		/* dimensions */
-    short curx, cury;		/* current cursor position */
-    short maxrow, maxcol;	/* the maximum size used -- for MENU wins */
-				/* maxcol is also used by WIN_MESSAGE for */
-				/* tracking the ^P command */
-    short *datlen;		/* allocation size for *data */
-    char **data;		/* window data [row][column] */
-    char *morestr;		/* string to display instead of default */
-    tty_menu_item *mlist;	/* menu information (MENU) */
-    tty_menu_item **plist;	/* menu page pointers (MENU) */
-    short plist_size;		/* size of allocated plist (MENU) */
-    short npages;		/* number of pages in menu (MENU) */
-    short nitems;		/* total number of items (MENU) */
-    short how;			/* menu mode - pick 1 or N (MENU) */
-    char menu_ch;		/* menu char (MENU) */
+	int flags;			/* window flags */
+	xchar type;			/* type of window */
+	boolean active;		/* true if window is active */
+	uchar offx, offy;		/* offset from topleft of display */
+	short rows, cols;		/* dimensions */
+	short curx, cury;		/* current cursor position */
+	short maxrow, maxcol;	/* the maximum size used -- for MENU wins */
+	/* maxcol is also used by WIN_MESSAGE for */
+	/* tracking the ^P command */
+	short *datlen;		/* allocation size for *data */
+	char **data;		/* window data [row][column] */
+	char *morestr;		/* string to display instead of default */
+	tty_menu_item *mlist;	/* menu information (MENU) */
+	tty_menu_item **plist;	/* menu page pointers (MENU) */
+	short plist_size;		/* size of allocated plist (MENU) */
+	short npages;		/* number of pages in menu (MENU) */
+	short nitems;		/* total number of items (MENU) */
+	short how;			/* menu mode - pick 1 or N (MENU) */
+	char menu_ch;		/* menu char (MENU) */
 };
 
 /* window flags */
@@ -50,17 +50,17 @@ struct WinDesc {
 
 /* descriptor for tty-based displays -- all the per-display data */
 struct DisplayDesc {
-    uchar rows, cols;		/* width and height of tty display */
-    uchar curx, cury;		/* current cursor position on the screen */
-    int color;			/* current color */
-    int attrs;			/* attributes in effect */
-    int toplin;			/* flag for topl stuff */
-    int rawprint;		/* number of raw_printed lines since synch */
-    int inmore;			/* non-zero if more() is active */
-    int inread;			/* non-zero if reading a character */
-    int intr;			/* non-zero if inread was interrupted */
-    winid lastwin;		/* last window used for I/O */
-    char dismiss_more;		/* extra character accepted at --More-- */
+	uchar rows, cols;		/* width and height of tty display */
+	uchar curx, cury;		/* current cursor position on the screen */
+	int color;			/* current color */
+	int attrs;			/* attributes in effect */
+	int toplin;			/* flag for topl stuff */
+	int rawprint;		/* number of raw_printed lines since synch */
+	int inmore;			/* non-zero if more() is active */
+	int inread;			/* non-zero if reading a character */
+	int intr;			/* non-zero if inread was interrupted */
+	winid lastwin;		/* last window used for I/O */
+	char dismiss_more;		/* extra character accepted at --More-- */
 };
 
 #endif /* WINDOW_STRUCTS */

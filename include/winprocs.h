@@ -6,67 +6,67 @@
 #define WINPROCS_H
 
 struct window_procs {
-    const char *name;
-    unsigned long wincap;	/* window port capability options supported */
-    unsigned long wincap2;	/* additional window port capability options supported */
-    void (*win_init_nhwindows)(int *, char **);
-    void (*win_player_selection)(void);
-    void (*win_askname)(void);
-    void (*win_get_nh_event)(void);
-    void (*win_exit_nhwindows)(const char *);
-    void (*win_suspend_nhwindows)(const char *);
-    void (*win_resume_nhwindows)(void);
-    winid (*win_create_nhwindow)(int);
-    void (*win_clear_nhwindow)(winid);
-    void (*win_display_nhwindow)(winid, bool);
-    void (*win_destroy_nhwindow)(winid);
-    void (*win_curs)(winid,int,int);
-    void (*win_putstr)(winid, int, const char *);
-    void (*win_display_file)(const char *, bool);
-    void (*win_start_menu)(winid);
-    void (*win_add_menu)(winid,int,const anything *,
-		char,char,int,const char *, bool);
-    void (*win_end_menu)(winid, const char *);
-    int (*win_select_menu)(winid, int, menu_item **);
-    char (*win_message_menu)(char,int,const char *);
-    void (*win_update_inventory)(void);
-    void (*win_mark_synch)(void);
-    void (*win_wait_synch)(void);
+	const char *name;
+	unsigned long wincap;	/* window port capability options supported */
+	unsigned long wincap2;	/* additional window port capability options supported */
+	void (*win_init_nhwindows)(int *, char **);
+	void (*win_player_selection)(void);
+	void (*win_askname)(void);
+	void (*win_get_nh_event)(void);
+	void (*win_exit_nhwindows)(const char *);
+	void (*win_suspend_nhwindows)(const char *);
+	void (*win_resume_nhwindows)(void);
+	winid (*win_create_nhwindow)(int);
+	void (*win_clear_nhwindow)(winid);
+	void (*win_display_nhwindow)(winid, bool);
+	void (*win_destroy_nhwindow)(winid);
+	void (*win_curs)(winid,int,int);
+	void (*win_putstr)(winid, int, const char *);
+	void (*win_display_file)(const char *, bool);
+	void (*win_start_menu)(winid);
+	void (*win_add_menu)(winid,int,const anything *,
+	                     char,char,int,const char *, bool);
+	void (*win_end_menu)(winid, const char *);
+	int (*win_select_menu)(winid, int, menu_item **);
+	char (*win_message_menu)(char,int,const char *);
+	void (*win_update_inventory)(void);
+	void (*win_mark_synch)(void);
+	void (*win_wait_synch)(void);
 #ifdef CLIPPING
-    void (*win_cliparound)(int, int);
+	void (*win_cliparound)(int, int);
 #endif
 #ifdef POSITIONBAR
-    void (*win_update_positionbar)(char *);
+	void (*win_update_positionbar)(char *);
 #endif
-    void (*win_print_glyph)(winid,xchar,xchar,int);
-    void (*win_raw_print)(const char *);
-    void (*win_raw_print_bold)(const char *);
-    int (*win_nhgetch)(void);
-    int (*win_nh_poskey)(int *, int *, int *);
-    void (*win_nhbell)(void);
-    int (*win_doprev_message)(void);
-    char (*win_yn_function)(const char *, const char *, char);
-    void (*win_getlin)(const char *,char *);
-    int (*win_get_ext_cmd)(void);
-    void (*win_number_pad)(int);
-    void (*win_delay_output)(void);
+	void (*win_print_glyph)(winid,xchar,xchar,int);
+	void (*win_raw_print)(const char *);
+	void (*win_raw_print_bold)(const char *);
+	int (*win_nhgetch)(void);
+	int (*win_nh_poskey)(int *, int *, int *);
+	void (*win_nhbell)(void);
+	int (*win_doprev_message)(void);
+	char (*win_yn_function)(const char *, const char *, char);
+	void (*win_getlin)(const char *,char *);
+	int (*win_get_ext_cmd)(void);
+	void (*win_number_pad)(int);
+	void (*win_delay_output)(void);
 #ifdef CHANGE_COLOR
-    void (*win_change_color)(int,long,int);
+	void (*win_change_color)(int,long,int);
 #ifdef MAC
-    void (*win_change_background)(int);
-    short (*win_set_font_name)(winid, char *);
+	void (*win_change_background)(int);
+	short (*win_set_font_name)(winid, char *);
 #endif
-    char * (*win_get_color_string)(void);
+	char * (*win_get_color_string)(void);
 #endif
 
-    /* other defs that really should go away (they're tty specific) */
-    void (*win_start_screen)(void);
-    void (*win_end_screen)(void);
+	/* other defs that really should go away (they're tty specific) */
+	void (*win_start_screen)(void);
+	void (*win_end_screen)(void);
 
-    void (*win_outrip)(winid,int);
-    void (*win_preference_update)(const char *);
+	void (*win_outrip)(winid,int);
+	void (*win_preference_update)(const char *);
 
-    int (*win_kbhit)(void);
+	int (*win_kbhit)(void);
 };
 
 extern struct window_procs windowprocs;
@@ -174,7 +174,7 @@ extern struct window_procs windowprocs;
 #define WC_WINDOWCOLORS  0x10000000L	/* 29 background color for message window    */
 #define WC_PLAYER_SELECTION  0x20000000L/* 30 background color for message window    */
 #define WC_MOUSE_SUPPORT 0x40000000L	/* 31 mouse support                          */
-					/* 1 free bit */
+/* 1 free bit */
 
 #define WC2_FULLSCREEN		0x01L	/* 01 display full screen                    */
 #define WC2_SOFTKEYBOARD	0x02L	/* 02 software keyboard                      */
@@ -184,7 +184,7 @@ extern struct window_procs windowprocs;
 #define WC2_WINDOWBORDERS   0x20L	/* 06 display borders for NetHack windows    */
 #define WC2_PETATTR         0x40L	/* 07 attributes for highlight_pet */
 #define WC2_GUICOLOR        0x80L	/* 08 attributes for highlight_pet */
-					/* 25 free bits */
+/* 25 free bits */
 
 #define ALIGN_LEFT	1
 #define ALIGN_RIGHT	2
@@ -216,7 +216,7 @@ extern struct window_procs windowprocs;
 #define WC_SND_RAW	 0x08L		/* 04 Raw sound supported                    */
 #define WC_SND_WAVE	 0x10L		/* 05 Wave support                           */
 #define WC_SND_MIDI	 0x20L		/* 06 Midi support                           */
-					/* 26 free bits */
+/* 26 free bits */
 #endif
 
 struct wc_Opt {

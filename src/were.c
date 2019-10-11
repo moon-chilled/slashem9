@@ -6,49 +6,74 @@
 
 void were_change (struct monst *mon) {
 	if (!is_were(mon->data))
-	    return;
+		return;
 
 	if (is_human(mon->data)) {
-	    if (!Protection_from_shape_changers &&
-			!rn2(night() ? (flags.moonphase == FULL_MOON ?  3 : 30)
-				     : (flags.moonphase == FULL_MOON ? 10 : 50))) {
-		new_were(mon);		/* change into animal form */
-		if (flags.soundok && !canseemon(mon)) {
-		    const char *howler;
+		if (!Protection_from_shape_changers &&
+		                !rn2(night() ? (flags.moonphase == FULL_MOON ?  3 : 30)
+		                     : (flags.moonphase == FULL_MOON ? 10 : 50))) {
+			new_were(mon);		/* change into animal form */
+			if (flags.soundok && !canseemon(mon)) {
+				const char *howler;
 
-		    switch (monsndx(mon->data)) {
-		    case PM_HUMAN_WEREWOLF:	howler = "wolf";    break;
-		    case PM_HUMAN_WEREJACKAL:	howler = "jackal";  break;
-		    case PM_HUMAN_WEREPANTHER:	howler = "panther"; break;
-		    case PM_HUMAN_WERETIGER:	howler = "tiger";   break;
-		    default:			howler = NULL; break;
-		    }
-		    if (howler)
-			You_hearf("a %s howling at the moon.", howler);
+				switch (monsndx(mon->data)) {
+				case PM_HUMAN_WEREWOLF:
+					howler = "wolf";
+					break;
+				case PM_HUMAN_WEREJACKAL:
+					howler = "jackal";
+					break;
+				case PM_HUMAN_WEREPANTHER:
+					howler = "panther";
+					break;
+				case PM_HUMAN_WERETIGER:
+					howler = "tiger";
+					break;
+				default:
+					howler = NULL;
+					break;
+				}
+				if (howler)
+					You_hearf("a %s howling at the moon.", howler);
+			}
 		}
-	    }
 	} else if (!rn2(30) || Protection_from_shape_changers) {
-	    new_were(mon);		/* change back into human form */
+		new_were(mon);		/* change back into human form */
 	}
 }
 
 int counter_were (int pm) {
 	switch(pm) {
-	    case PM_WEREWOLF:	      return PM_HUMAN_WEREWOLF;
-	    case PM_HUMAN_WEREWOLF:   return PM_WEREWOLF;
-	    case PM_WEREJACKAL:	      return PM_HUMAN_WEREJACKAL;
-	    case PM_HUMAN_WEREJACKAL: return PM_WEREJACKAL;
-	    case PM_WERERAT:	      return PM_HUMAN_WERERAT;
-	    case PM_HUMAN_WERERAT:    return PM_WERERAT;
-	    case PM_WEREPANTHER:      return PM_HUMAN_WEREPANTHER;
-	    case PM_HUMAN_WEREPANTHER:return PM_WEREPANTHER;
-	    case PM_WERETIGER:        return PM_HUMAN_WERETIGER;
-	    case PM_HUMAN_WERETIGER:  return PM_WERETIGER;
-	    case PM_WERESNAKE:        return PM_HUMAN_WERESNAKE;
-	    case PM_HUMAN_WERESNAKE:  return PM_WERESNAKE;
-	    case PM_WERESPIDER:       return PM_HUMAN_WERESPIDER;
-	    case PM_HUMAN_WERESPIDER: return PM_WERESPIDER;
-	    default:		      return 0;
+	case PM_WEREWOLF:
+		return PM_HUMAN_WEREWOLF;
+	case PM_HUMAN_WEREWOLF:
+		return PM_WEREWOLF;
+	case PM_WEREJACKAL:
+		return PM_HUMAN_WEREJACKAL;
+	case PM_HUMAN_WEREJACKAL:
+		return PM_WEREJACKAL;
+	case PM_WERERAT:
+		return PM_HUMAN_WERERAT;
+	case PM_HUMAN_WERERAT:
+		return PM_WERERAT;
+	case PM_WEREPANTHER:
+		return PM_HUMAN_WEREPANTHER;
+	case PM_HUMAN_WEREPANTHER:
+		return PM_WEREPANTHER;
+	case PM_WERETIGER:
+		return PM_HUMAN_WERETIGER;
+	case PM_HUMAN_WERETIGER:
+		return PM_WERETIGER;
+	case PM_WERESNAKE:
+		return PM_HUMAN_WERESNAKE;
+	case PM_HUMAN_WERESNAKE:
+		return PM_WERESNAKE;
+	case PM_WERESPIDER:
+		return PM_HUMAN_WERESPIDER;
+	case PM_HUMAN_WERESPIDER:
+		return PM_WERESPIDER;
+	default:
+		return 0;
 	}
 }
 
@@ -57,21 +82,21 @@ void new_were (struct monst *mon) {
 
 	pm = counter_were(monsndx(mon->data));
 	if(!pm) {
-	    impossible("unknown lycanthrope %s.", mon->data->mname);
-	    return;
+		impossible("unknown lycanthrope %s.", mon->data->mname);
+		return;
 	}
 
 	if(canseemon(mon) && !Hallucination)
-	    pline("%s changes into a %s.", Monnam(mon),
-			is_human(&mons[pm]) ? "human" :
-			mons[pm].mname+4);
+		pline("%s changes into a %s.", Monnam(mon),
+		      is_human(&mons[pm]) ? "human" :
+		      mons[pm].mname+4);
 
 	set_mon_data(mon, &mons[pm], 0);
 	if (mon->msleeping || !mon->mcanmove) {
-	    /* transformation wakens and/or revitalizes */
-	    mon->msleeping = 0;
-	    mon->mfrozen = 0;	/* not asleep or paralyzed */
-	    mon->mcanmove = 1;
+		/* transformation wakens and/or revitalizes */
+		mon->msleeping = 0;
+		mon->mfrozen = 0;	/* not asleep or paralyzed */
+		mon->mcanmove = 1;
 	}
 	/* regenerate by 1/4 of the lost hit points */
 	mon->mhp += (mon->mhpmax - mon->mhp) / 4;
@@ -96,9 +121,9 @@ int were_summon(struct permonst *ptr, boolean yours, int *visible, char *genbuf)
 	 * Allow lycanthropes in normal form to summon hordes as well.  --ALI
 	 */
 	if (pm == PM_PLAYERMON)
-	    pm = urace.malenum;
+		pm = urace.malenum;
 	for(i = rnd(2); i > 0; i--) {
-	   switch(pm) {
+		switch(pm) {
 
 		case PM_WERERAT:
 		case PM_HUMAN_WERERAT:
@@ -137,14 +162,14 @@ int were_summon(struct permonst *ptr, boolean yours, int *visible, char *genbuf)
 			break;
 		default:
 			continue;
-	    }
-	    mtmp = makemon(&mons[typ], u.ux, u.uy, NO_MM_FLAGS);
-	    if (mtmp) {
-		total++;
-		if (canseemon(mtmp)) *visible += 1;
-	    }
-	    if (yours && mtmp)
-		tamedog(mtmp, NULL);
+		}
+		mtmp = makemon(&mons[typ], u.ux, u.uy, NO_MM_FLAGS);
+		if (mtmp) {
+			total++;
+			if (canseemon(mtmp)) *visible += 1;
+		}
+		if (yours && mtmp)
+			tamedog(mtmp, NULL);
 	}
 	return total;
 }
@@ -154,10 +179,10 @@ void you_were (void) {
 
 	if (Unchanging || (u.umonnum == u.ulycn)) return;
 	if (Polymorph_control) {
-	    /* `+4' => skip "were" prefix to get name of beast */
-	    sprintf(qbuf, "Do you want to change into %s? ",
-		    an(mons[u.ulycn].mname+4));
-	    if(yn(qbuf) == 'n') return;
+		/* `+4' => skip "were" prefix to get name of beast */
+		sprintf(qbuf, "Do you want to change into %s? ",
+		        an(mons[u.ulycn].mname+4));
+		if(yn(qbuf) == 'n') return;
 	}
 	polymon(u.ulycn);
 }
@@ -166,30 +191,30 @@ void you_unwere(boolean purify) {
 	boolean in_wereform = (u.umonnum == u.ulycn);
 
 	if (purify) {
-	    if (Race_if(PM_HUMAN_WEREWOLF)) {
-		/* An attempt to purify you has been made! */
-		if (in_wereform && Unchanging) {
-		    killer_format = NO_KILLER_PREFIX;
-		    killer = "purified while stuck in creature form";
-		    pline("The purification was deadly...");
-		    done(DIED);
-		} else {
-		    pline("You feel very bad!");
-		    if (in_wereform)
-			rehumanize();
-		    adjattrib(A_STR, -rn1(3,3), 2);
-		    adjattrib(A_CON, -rn1(3,3), 1);
-		    losehp(u.uhp - (u.uhp > 10 ? rnd(5) : 1), "purification",
-			    KILLED_BY);
+		if (Race_if(PM_HUMAN_WEREWOLF)) {
+			/* An attempt to purify you has been made! */
+			if (in_wereform && Unchanging) {
+				killer_format = NO_KILLER_PREFIX;
+				killer = "purified while stuck in creature form";
+				pline("The purification was deadly...");
+				done(DIED);
+			} else {
+				pline("You feel very bad!");
+				if (in_wereform)
+					rehumanize();
+				adjattrib(A_STR, -rn1(3,3), 2);
+				adjattrib(A_CON, -rn1(3,3), 1);
+				losehp(u.uhp - (u.uhp > 10 ? rnd(5) : 1), "purification",
+				       KILLED_BY);
+			}
+			return;
 		}
-		return;
-	    }
-	    pline("You feel purified.");
-	    u.ulycn = NON_PM;	/* cure lycanthropy */
-	    upermonst.mflags2 &= ~M2_WERE;
+		pline("You feel purified.");
+		u.ulycn = NON_PM;	/* cure lycanthropy */
+		upermonst.mflags2 &= ~M2_WERE;
 	}
 	if (!Unchanging && in_wereform &&
-		(!Polymorph_control || yn("Remain in beast form?") == 'n'))
-	    rehumanize();
+	                (!Polymorph_control || yn("Remain in beast form?") == 'n'))
+		rehumanize();
 }
 /*were.c*/

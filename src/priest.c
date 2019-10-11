@@ -50,7 +50,7 @@ int move_special(struct monst *mtmp, boolean in_his_shop, schar appr, boolean uo
 
 	if(mtmp->isshk && avoid && uondoor) { /* perhaps we cannot avoid him */
 		for(i=0; i<cnt; i++)
-		    if(!(info[i] & NOTONL)) goto pick_move;
+			if(!(info[i] & NOTONL)) goto pick_move;
 		avoid = false;
 	}
 
@@ -61,21 +61,21 @@ pick_move:
 		nx = poss[i].x;
 		ny = poss[i].y;
 		if(levl[nx][ny].typ == ROOM ||
-			(mtmp->ispriest &&
-			    levl[nx][ny].typ == ALTAR) ||
-			(mtmp->isshk &&
-			    (!in_his_shop || ESHK(mtmp)->following))) {
-		    if(avoid && (info[i] & NOTONL))
-			continue;
-		    if((!appr && !rn2(++chcnt)) ||
-			(appr && GDIST(nx,ny) < GDIST(nix,niy))) {
-			    nix = nx;
-			    niy = ny;
-		    }
+		                (mtmp->ispriest &&
+		                 levl[nx][ny].typ == ALTAR) ||
+		                (mtmp->isshk &&
+		                 (!in_his_shop || ESHK(mtmp)->following))) {
+			if(avoid && (info[i] & NOTONL))
+				continue;
+			if((!appr && !rn2(++chcnt)) ||
+			                (appr && GDIST(nx,ny) < GDIST(nix,niy))) {
+				nix = nx;
+				niy = ny;
+			}
 		}
 	}
 	if(mtmp->ispriest && avoid &&
-			nix == omx && niy == omy && onlineu(omx,omy)) {
+	                nix == omx && niy == omy && onlineu(omx,omy)) {
 		/* might as well move closer as long it's going to stay
 		 * lined up */
 		avoid = false;
@@ -87,11 +87,11 @@ pick_move:
 		place_monster(mtmp, nix, niy);
 		newsym(nix,niy);
 		if (mtmp->isshk && !in_his_shop && inhishop(mtmp))
-		    check_special_room(false);
+			check_special_room(false);
 		if(ib) {
 			if (cansee(mtmp->mx,mtmp->my))
-			    pline("%s picks up %s.", Monnam(mtmp),
-				distant_name(ib,doname));
+				pline("%s picks up %s.", Monnam(mtmp),
+				      distant_name(ib,doname));
 			obj_extract_self(ib);
 			mpickobj(mtmp, ib);
 		}
@@ -101,8 +101,7 @@ pick_move:
 }
 
 char
-temple_occupied (char *array)
-{
+temple_occupied (char *array) {
 	char *ptr;
 
 	for (ptr = array; *ptr; ptr++)
@@ -139,11 +138,11 @@ int pri_move (struct monst *priest) {
 	gy += rn1(3,-1);
 
 	if(!priest->mpeaceful ||
-	   (Conflict && !resist(priest, RING_CLASS, 0, 0))) {
+	                (Conflict && !resist(priest, RING_CLASS, 0, 0))) {
 		if(monnear(priest, u.ux, u.uy)) {
 			if(Displaced)
 				pline("Your displaced image doesn't fool %s!",
-					mon_nam(priest));
+				      mon_nam(priest));
 			mattacku(priest);
 			return 0;
 		} else if(index(u.urooms, temple)) {
@@ -169,7 +168,7 @@ void priestini(d_level	*lvl, struct mkroom *sroom, int sx, int sy, boolean sanct
 		rloc(m_at(sx+1, sy), false); /* insurance */
 
 	priest = makemon(&mons[sanctum ? PM_HIGH_PRIEST : PM_ALIGNED_PRIEST],
-			 sx + 1, sy, NO_MM_FLAGS);
+	                 sx + 1, sy, NO_MM_FLAGS);
 	if (priest) {
 		EPRI(priest)->shroom = (sroom - rooms) + ROOMOFFSET;
 		EPRI(priest)->shralign = Amask2align(levl[sx][sy].altarmask);
@@ -184,31 +183,31 @@ void priestini(d_level	*lvl, struct mkroom *sroom, int sx, int sy, boolean sanct
 
 		/* now his/her goodies... */
 		if(sanctum && EPRI(priest)->shralign == A_NONE &&
-		     on_level(&sanctum_level, &u.uz)) {
+		                on_level(&sanctum_level, &u.uz)) {
 			mongets(priest, AMULET_OF_YENDOR);
 		}
 		/* 2 to 4 spellbooks */
 		for (cnt = rn1(3,2); cnt > 0; --cnt) {
-		    mpickobj(priest, mkobj(SPBOOK_CLASS, false));
+			mpickobj(priest, mkobj(SPBOOK_CLASS, false));
 		}
 		/* [ALI] Upgrade existing robe or aquire new */
 		if (rn2(2) || (otmp = which_armor(priest, W_ARM)) == 0) {
-		    struct obj *obj;
-		    obj = mksobj(rn2(p_coaligned(priest) ? 2 : 5) ?
-			    ROBE_OF_PROTECTION : ROBE_OF_POWER, true, false);
-		    if (p_coaligned(priest))
-			uncurse(obj);
-		    else
-			curse(obj);
-		    mpickobj(priest, obj);
-		    m_dowear(priest, true);
-		    if (!(obj->owornmask & W_ARM)) {
-			obj_extract_self(obj);
-			obfree(obj, NULL);
-		    } else if (otmp) {
-			obj_extract_self(otmp);
-			obfree(otmp, NULL);
-		    }
+			struct obj *obj;
+			obj = mksobj(rn2(p_coaligned(priest) ? 2 : 5) ?
+			             ROBE_OF_PROTECTION : ROBE_OF_POWER, true, false);
+			if (p_coaligned(priest))
+				uncurse(obj);
+			else
+				curse(obj);
+			mpickobj(priest, obj);
+			m_dowear(priest, true);
+			if (!(obj->owornmask & W_ARM)) {
+				obj_extract_self(obj);
+				obfree(obj, NULL);
+			} else if (otmp) {
+				obj_extract_self(otmp);
+				obfree(otmp, NULL);
+			}
 		}
 	}
 }
@@ -231,12 +230,12 @@ char * priestname ( struct monst *mon, char *pname		) {
 	strcpy(pname, "the ");
 	if (mon->minvis) strcat(pname, "invisible ");
 	if (mon->ispriest || mon->data == &mons[PM_ALIGNED_PRIEST] ||
-					mon->data == &mons[PM_ANGEL]) {
+	                mon->data == &mons[PM_ANGEL]) {
 		/* use epri */
 		if (mon->mtame && mon->data == &mons[PM_ANGEL])
 			strcat(pname, "guardian ");
 		if (mon->data != &mons[PM_ALIGNED_PRIEST] &&
-				mon->data != &mons[PM_HIGH_PRIEST]) {
+		                mon->data != &mons[PM_HIGH_PRIEST]) {
 			strcat(pname, what);
 			strcat(pname, " ");
 		}
@@ -279,23 +278,21 @@ static boolean has_shrine(struct monst *pri) {
 }
 
 struct monst *
-findpriest (char roomno)
-{
+findpriest (char roomno) {
 	struct monst *mtmp;
 
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-	    if (DEADMONSTER(mtmp)) continue;
-	    if(mtmp->ispriest && (EPRI(mtmp)->shroom == roomno) &&
-	       histemple_at(mtmp,mtmp->mx,mtmp->my))
-		return mtmp;
+		if (DEADMONSTER(mtmp)) continue;
+		if(mtmp->ispriest && (EPRI(mtmp)->shroom == roomno) &&
+		                histemple_at(mtmp,mtmp->mx,mtmp->my))
+			return mtmp;
 	}
 	return NULL;
 }
 
 /* called from check_special_room() when the player enters the temple room */
 void
-intemple (int roomno)
-{
+intemple (int roomno) {
 	struct monst *priest = findpriest((char)roomno);
 	boolean tended = (priest != NULL);
 	boolean shrined, sanctum, can_speak;
@@ -303,77 +300,82 @@ intemple (int roomno)
 	char buf[BUFSZ];
 
 	if(!temple_occupied(u.urooms0)) {
-	    if(tended) {
-		shrined = has_shrine(priest);
-		sanctum = (priest->data == &mons[PM_HIGH_PRIEST] &&
-			   (Is_sanctum(&u.uz) || In_endgame(&u.uz)));
-		can_speak = (priest->mcanmove && !priest->msleeping &&
-			     flags.soundok);
-		if (can_speak) {
-		    unsigned save_priest = priest->ispriest;
-		    /* don't reveal the altar's owner upon temple entry in
-		       the endgame; for the Sanctum, the next message names
-		       Moloch so suppress the "of Moloch" for him here too */
-		    if (sanctum && !Hallucination) priest->ispriest = 0;
-		    pline("%s intones:",
-			canseemon(priest) ? Monnam(priest) : "A nearby voice");
-		    priest->ispriest = save_priest;
-		}
-		msg2 = 0;
-		if(sanctum && Is_sanctum(&u.uz)) {
-		    if(priest->mpeaceful) {
-			msg1 = "Infidel, you have entered Moloch's Sanctum!";
-			msg2 = "Be gone!";
-			priest->mpeaceful = 0;
-			set_malign(priest);
-		    } else
-			msg1 = "You desecrate this place by your presence!";
+		if(tended) {
+			shrined = has_shrine(priest);
+			sanctum = (priest->data == &mons[PM_HIGH_PRIEST] &&
+			           (Is_sanctum(&u.uz) || In_endgame(&u.uz)));
+			can_speak = (priest->mcanmove && !priest->msleeping &&
+			             flags.soundok);
+			if (can_speak) {
+				unsigned save_priest = priest->ispriest;
+				/* don't reveal the altar's owner upon temple entry in
+				   the endgame; for the Sanctum, the next message names
+				   Moloch so suppress the "of Moloch" for him here too */
+				if (sanctum && !Hallucination) priest->ispriest = 0;
+				pline("%s intones:",
+				      canseemon(priest) ? Monnam(priest) : "A nearby voice");
+				priest->ispriest = save_priest;
+			}
+			msg2 = 0;
+			if(sanctum && Is_sanctum(&u.uz)) {
+				if(priest->mpeaceful) {
+					msg1 = "Infidel, you have entered Moloch's Sanctum!";
+					msg2 = "Be gone!";
+					priest->mpeaceful = 0;
+					set_malign(priest);
+				} else
+					msg1 = "You desecrate this place by your presence!";
+			} else {
+				sprintf(buf, "Pilgrim, you enter a %s place!",
+				        !shrined ? "desecrated" : "sacred");
+				msg1 = buf;
+			}
+			if (can_speak) {
+				verbalizes(msg1);
+				if (msg2) verbalizes(msg2);
+			}
+			if(!sanctum) {
+				/* !tended -> !shrined */
+				if (!shrined || !p_coaligned(priest) ||
+				                u.ualign.record <= ALGN_SINNED)
+					pline("You have a%s forbidding feeling...",
+					      (!shrined) ? "" : " strange");
+				else pline("You experience a strange sense of peace.");
+			}
 		} else {
-		    sprintf(buf, "Pilgrim, you enter a %s place!",
-			    !shrined ? "desecrated" : "sacred");
-		    msg1 = buf;
-		}
-		if (can_speak) {
-		    verbalizes(msg1);
-		    if (msg2) verbalizes(msg2);
-		}
-		if(!sanctum) {
-		    /* !tended -> !shrined */
-		    if (!shrined || !p_coaligned(priest) ||
-			    u.ualign.record <= ALGN_SINNED)
-			pline("You have a%s forbidding feeling...",
-				(!shrined) ? "" : " strange");
-		    else pline("You experience a strange sense of peace.");
-		}
-	    } else {
-		switch(rn2(3)) {
-		  case 0: pline("You have an eerie feeling..."); break;
-		  case 1: pline("You feel like you are being watched."); break;
-		  default: pline("A shiver runs down your %s.",
-			body_part(SPINE)); break;
-		}
-		if(!rn2(5)) {
-		    struct monst *mtmp;
+			switch(rn2(3)) {
+			case 0:
+				pline("You have an eerie feeling...");
+				break;
+			case 1:
+				pline("You feel like you are being watched.");
+				break;
+			default:
+				pline("A shiver runs down your %s.",
+				      body_part(SPINE));
+				break;
+			}
+			if(!rn2(5)) {
+				struct monst *mtmp;
 
-		    if(!(mtmp = makemon(&mons[PM_GHOST],u.ux,u.uy,NO_MM_FLAGS)))
-			return;
-		    if (!Blind || sensemon(mtmp))
-			pline("An enormous ghost appears next to you!");
-		    else pline("You sense a presence close by!");
-		    mtmp->mpeaceful = 0;
-		    set_malign(mtmp);
-		    if(flags.verbose)
-			pline("You are frightened to death, and unable to move.");
-		    nomul(-3);
-		    nomovemsg = "You regain your composure.";
-	       }
-	   }
-       }
+				if(!(mtmp = makemon(&mons[PM_GHOST],u.ux,u.uy,NO_MM_FLAGS)))
+					return;
+				if (!Blind || sensemon(mtmp))
+					pline("An enormous ghost appears next to you!");
+				else pline("You sense a presence close by!");
+				mtmp->mpeaceful = 0;
+				set_malign(mtmp);
+				if(flags.verbose)
+					pline("You are frightened to death, and unable to move.");
+				nomul(-3);
+				nomovemsg = "You regain your composure.";
+			}
+		}
+	}
 }
 
 void
-priest_talk (struct monst *priest)
-{
+priest_talk (struct monst *priest) {
 	boolean coaligned = p_coaligned(priest);
 	boolean strayed = (u.ualign.record < 0);
 
@@ -381,98 +383,98 @@ priest_talk (struct monst *priest)
 	u.uconduct.gnostic++;
 
 	if(priest->mflee || (!priest->ispriest && coaligned && strayed)) {
-	    pline("%s doesn't want anything to do with you!",
-				Monnam(priest));
-	    priest->mpeaceful = 0;
-	    return;
+		pline("%s doesn't want anything to do with you!",
+		      Monnam(priest));
+		priest->mpeaceful = 0;
+		return;
 	}
 
 	/* priests don't chat unless peaceful and in their own temple */
 	if(!histemple_at(priest,priest->mx,priest->my) ||
-		 !priest->mpeaceful || !priest->mcanmove || priest->msleeping) {
-	    static const char * const cranky_msg[] = {
-		"Thou wouldst have words, eh?  I'll give thee a word or two!",
-		"Talk?  Here is what I have to say!",
-		"Pilgrim, I would speak no longer with thee."
-	    };
+	                !priest->mpeaceful || !priest->mcanmove || priest->msleeping) {
+		static const char * const cranky_msg[] = {
+			"Thou wouldst have words, eh?  I'll give thee a word or two!",
+			"Talk?  Here is what I have to say!",
+			"Pilgrim, I would speak no longer with thee."
+		};
 
-	    if(!priest->mcanmove || priest->msleeping) {
-		pline("%s breaks out of %s reverie!",
-		      Monnam(priest), mhis(priest));
-		priest->mfrozen = priest->msleeping = 0;
-		priest->mcanmove = 1;
-	    }
-	    priest->mpeaceful = 0;
-	    verbalizes(cranky_msg[rn2(SIZE(cranky_msg))]);
-	    return;
+		if(!priest->mcanmove || priest->msleeping) {
+			pline("%s breaks out of %s reverie!",
+			      Monnam(priest), mhis(priest));
+			priest->mfrozen = priest->msleeping = 0;
+			priest->mcanmove = 1;
+		}
+		priest->mpeaceful = 0;
+		verbalizes(cranky_msg[rn2(SIZE(cranky_msg))]);
+		return;
 	}
 
 	/* you desecrated the temple and now you want to chat? */
 	if(priest->mpeaceful && *in_rooms(priest->mx, priest->my, TEMPLE) &&
-		  !has_shrine(priest)) {
-	    verbalize("Begone!  Thou desecratest this holy place with thy presence.");
-	    priest->mpeaceful = 0;
-	    return;
+	                !has_shrine(priest)) {
+		verbalize("Begone!  Thou desecratest this holy place with thy presence.");
+		priest->mpeaceful = 0;
+		return;
 	}
 	if(!money_cnt(invent)) {
-	    if(coaligned && !strayed) {
-                long pmoney = money_cnt(priest->minvent);
-		if (pmoney > 0L) {
-		    /* Note: two bits is actually 25 cents.  Hmm. */
-		    pline("%s gives you %s for an ale.", Monnam(priest),
-			(pmoney == 1L) ? "one bit" : "two bits");
-		     money2u(priest, pmoney > 1L ? 2 : 1);
+		if(coaligned && !strayed) {
+			long pmoney = money_cnt(priest->minvent);
+			if (pmoney > 0L) {
+				/* Note: two bits is actually 25 cents.  Hmm. */
+				pline("%s gives you %s for an ale.", Monnam(priest),
+				      (pmoney == 1L) ? "one bit" : "two bits");
+				money2u(priest, pmoney > 1L ? 2 : 1);
+			} else {
+				pline("%s preaches the virtues of poverty.", Monnam(priest));
+			}
+			exercise(A_WIS, true);
 		} else {
-		    pline("%s preaches the virtues of poverty.", Monnam(priest));
+			pline("%s is not interested.", Monnam(priest));
 		}
-		exercise(A_WIS, true);
-	    } else {
-		pline("%s is not interested.", Monnam(priest));
-	    }
-	    return;
+		return;
 	} else {
-	    long offer;
+		long offer;
 
-	    pline("%s asks you for a contribution for the temple.",
-			Monnam(priest));
-	    if((offer = bribe(priest)) == 0) {
-		verbalize("Thou shalt regret thine action!");
-		if(coaligned) adjalign(-1);
-	    } else if(offer < (u.ulevel * 200)) {
-		if(money_cnt(invent) > (offer * 2L)) verbalize("Cheapskate.");
-		else {
-		    verbalize("I thank thee for thy contribution.");
-		    /*  give player some token  */
-		    exercise(A_WIS, true);
+		pline("%s asks you for a contribution for the temple.",
+		      Monnam(priest));
+		if((offer = bribe(priest)) == 0) {
+			verbalize("Thou shalt regret thine action!");
+			if(coaligned) adjalign(-1);
+		} else if(offer < (u.ulevel * 200)) {
+			if(money_cnt(invent) > (offer * 2L)) verbalize("Cheapskate.");
+			else {
+				verbalize("I thank thee for thy contribution.");
+				/*  give player some token  */
+				exercise(A_WIS, true);
+			}
+		} else if(offer < (u.ulevel * 400)) {
+			verbalize("Thou art indeed a pious individual.");
+			if(money_cnt(invent) < (offer * 2L)) {
+				if (coaligned && u.ualign.record <= ALGN_SINNED)
+					adjalign(1);
+				verbalize("I bestow upon thee a blessing.");
+				/* KMH, intrinsic patch */
+				incr_itimeout(&HClairvoyant, rn1(500,500));
+			}
+		} else if(offer < (u.ulevel * 600) &&
+		                u.ublessed < 20 &&
+		                (u.ublessed < 9 || !rn2(u.ublessed))) {
+			verbalize("Thy devotion has been rewarded.");
+			if (!(HProtection & INTRINSIC))  {
+				HProtection |= FROMOUTSIDE;
+				if (!u.ublessed)  u.ublessed = rn1(3, 2);
+			} else u.ublessed++;
+		} else {
+			verbalize("Thy selfless generosity is deeply appreciated.");
+			if(money_cnt(invent) < (offer * 2L) && coaligned) {
+				if(strayed && (moves - u.ucleansed) > 5000L) {
+					u.ualign.record = 0; /* cleanse thee */
+					u.ucleansed = moves;
+				} else {
+					adjalign(2);
+				}
+			}
 		}
-	    } else if(offer < (u.ulevel * 400)) {
-		verbalize("Thou art indeed a pious individual.");
-		if(money_cnt(invent) < (offer * 2L)) {
-		    if (coaligned && u.ualign.record <= ALGN_SINNED)
-			adjalign(1);
-		    verbalize("I bestow upon thee a blessing.");
-		    /* KMH, intrinsic patch */
-		    incr_itimeout(&HClairvoyant, rn1(500,500));
-		}
-	    } else if(offer < (u.ulevel * 600) &&
-		      u.ublessed < 20 &&
-		      (u.ublessed < 9 || !rn2(u.ublessed))) {
-		verbalize("Thy devotion has been rewarded.");
-		if (!(HProtection & INTRINSIC))  {
-			HProtection |= FROMOUTSIDE;
-			if (!u.ublessed)  u.ublessed = rn1(3, 2);
-		} else u.ublessed++;
-	    } else {
-		verbalize("Thy selfless generosity is deeply appreciated.");
-		if(money_cnt(invent) < (offer * 2L) && coaligned) {
-		    if(strayed && (moves - u.ucleansed) > 5000L) {
-			u.ualign.record = 0; /* cleanse thee */
-			u.ucleansed = moves;
-		    } else {
-			adjalign(2);
-		    }
-		}
-	    }
 	}
 }
 
@@ -504,12 +506,12 @@ struct monst * mk_roamer(struct permonst *ptr, aligntyp alignment, xchar x, xcha
 
 void reset_hostility( struct monst *roamer) {
 	if(!(roamer->isminion && (roamer->data == &mons[PM_ALIGNED_PRIEST] ||
-				  roamer->data == &mons[PM_ANGEL])))
-	        return;
+	                          roamer->data == &mons[PM_ANGEL])))
+		return;
 
 	if(EPRI(roamer)->shralign != u.ualign.type) {
-	    roamer->mpeaceful = roamer->mtame = 0;
-	    set_malign(roamer);
+		roamer->mpeaceful = roamer->mtame = 0;
+		set_malign(roamer);
 	}
 	newsym(roamer->mx, roamer->my);
 }
@@ -520,19 +522,19 @@ boolean in_your_sanctuary(struct monst *mon, xchar x, xchar y) {
 	struct monst *priest;
 
 	if (mon) {
-	    if (is_minion(mon->data) || is_rider(mon->data)) return false;
-	    x = mon->mx, y = mon->my;
+		if (is_minion(mon->data) || is_rider(mon->data)) return false;
+		x = mon->mx, y = mon->my;
 	}
 	if (u.ualign.record <= ALGN_SINNED)	/* sinned or worse */
-	    return false;
+		return false;
 	if ((roomno = temple_occupied(u.urooms)) == 0 ||
-		roomno != *in_rooms(x, y, TEMPLE))
-	    return false;
+	                roomno != *in_rooms(x, y, TEMPLE))
+		return false;
 	if ((priest = findpriest(roomno)) == 0)
-	    return false;
+		return false;
 	return has_shrine(priest) &&
-		p_coaligned(priest) &&
-		priest->mpeaceful;
+	       p_coaligned(priest) &&
+	       priest->mpeaceful;
 }
 
 /* when attacking "priest" in his temple */
@@ -541,7 +543,7 @@ void ghod_hitsu(struct monst *priest) {
 	int x1, y1, x2, y2, n;
 	coord poss[4];
 	int stpx = sgn(u.ux - priest->mx), stpy = sgn(u.uy - priest->my);
-		/* gods avoid hitting the temple priest */
+	/* gods avoid hitting the temple priest */
 	struct mkroom *troom;
 
 	if (!roomno || !has_shrine(priest))
@@ -564,135 +566,135 @@ void ghod_hitsu(struct monst *priest) {
 	 * is later rejected by linedup() letting the hero off the hook.
 	 */
 	if ((u.ux == x && u.uy == y) || !linedup(u.ux, u.uy, x, y) ||
-		(stpx == sgn(tbx) && stpy == sgn(tby))) {
-	    if(IS_DOOR(levl[u.ux][u.uy].typ)) {
+	                (stpx == sgn(tbx) && stpy == sgn(tby))) {
+		if(IS_DOOR(levl[u.ux][u.uy].typ)) {
 
-		if(u.ux == troom->lx - 1) {
-		    if (stpx != sgn(u.ux - troom->hx) || stpy != 0) {
-			x = troom->hx;
-			y = u.uy;
-		    } else {
-			/* Diagonal required */
-			x1 = u.ux + u.uy - troom->ly;
-			y1 = troom->ly;
-			x2 = u.ux + troom->hy - u.uy;
-			y2 = troom->hy;
-			if (x1 > troom->hx && x2 > troom->hx)
-			    return;
-			else if ((x2 > troom->hx || x1 <= troom->hx) && !rn2(2)) {
-			    x = x1;
-			    y = y1;
-			} else {
-			    x = x2;
-			    y = y2;
+			if(u.ux == troom->lx - 1) {
+				if (stpx != sgn(u.ux - troom->hx) || stpy != 0) {
+					x = troom->hx;
+					y = u.uy;
+				} else {
+					/* Diagonal required */
+					x1 = u.ux + u.uy - troom->ly;
+					y1 = troom->ly;
+					x2 = u.ux + troom->hy - u.uy;
+					y2 = troom->hy;
+					if (x1 > troom->hx && x2 > troom->hx)
+						return;
+					else if ((x2 > troom->hx || x1 <= troom->hx) && !rn2(2)) {
+						x = x1;
+						y = y1;
+					} else {
+						x = x2;
+						y = y2;
+					}
+				}
+			} else if(u.ux == troom->hx + 1) {
+				if (stpx != sgn(u.ux - troom->lx) || stpy != 0) {
+					x = troom->lx;
+					y = u.uy;
+				} else {
+					/* Diagonal required */
+					x1 = u.ux - (u.uy - troom->ly);
+					y1 = troom->ly;
+					x2 = u.ux - (troom->hy - u.uy);
+					y2 = troom->hy;
+					if (x1 < troom->lx && x2 < troom->lx)
+						return;
+					else if ((x2 < troom->lx || x1 >= troom->lx) && !rn2(2)) {
+						x = x1;
+						y = y1;
+					} else {
+						x = x2;
+						y = y2;
+					}
+				}
+			} else if(u.uy == troom->ly - 1) {
+				if (stpx != 0 || stpy != sgn(u.uy - troom->hy)) {
+					x = u.ux;
+					y = troom->hy;
+				} else {
+					/* Diagonal required */
+					x1 = troom->lx;
+					y1 = u.uy + u.ux - troom->lx;
+					x2 = troom->hx;
+					y2 = u.uy + troom->hx - u.ux;
+					if (y1 > troom->hy && y2 > troom->hy)
+						return;
+					else if ((y2 > troom->hy || y1 <= troom->hy) && !rn2(2)) {
+						x = x1;
+						y = y1;
+					} else {
+						x = x2;
+						y = y2;
+					}
+				}
+			} else if(u.uy == troom->hy + 1) {
+				if (stpx != 0 || stpy != sgn(u.uy - troom->ly)) {
+					x = u.ux;
+					y = troom->ly;
+				} else {
+					/* Diagonal required */
+					x1 = troom->lx;
+					y1 = u.uy - (u.ux - troom->lx);
+					x2 = troom->hx;
+					y2 = u.uy - (troom->hx - u.ux);
+					if (y1 < troom->ly && y2 < troom->ly)
+						return;
+					else if ((y2 < troom->ly || y1 >= troom->ly) && !rn2(2)) {
+						x = x1;
+						y = y1;
+					} else {
+						x = x2;
+						y = y2;
+					}
+				}
 			}
-		    }
-		} else if(u.ux == troom->hx + 1) {
-		    if (stpx != sgn(u.ux - troom->lx) || stpy != 0) {
-			x = troom->lx;
-			y = u.uy;
-		    } else {
-			/* Diagonal required */
-			x1 = u.ux - (u.uy - troom->ly);
-			y1 = troom->ly;
-			x2 = u.ux - (troom->hy - u.uy);
-			y2 = troom->hy;
-			if (x1 < troom->lx && x2 < troom->lx)
-			    return;
-			else if ((x2 < troom->lx || x1 >= troom->lx) && !rn2(2)) {
-			    x = x1;
-			    y = y1;
-			} else {
-			    x = x2;
-			    y = y2;
-			}
-		    }
-		} else if(u.uy == troom->ly - 1) {
-		    if (stpx != 0 || stpy != sgn(u.uy - troom->hy)) {
-			x = u.ux;
-			y = troom->hy;
-		    } else {
-			/* Diagonal required */
-			x1 = troom->lx;
-			y1 = u.uy + u.ux - troom->lx;
-			x2 = troom->hx;
-			y2 = u.uy + troom->hx - u.ux;
-			if (y1 > troom->hy && y2 > troom->hy)
-			    return;
-			else if ((y2 > troom->hy || y1 <= troom->hy) && !rn2(2)) {
-			    x = x1;
-			    y = y1;
-			} else {
-			    x = x2;
-			    y = y2;
-			}
-		    }
-		} else if(u.uy == troom->hy + 1) {
-		    if (stpx != 0 || stpy != sgn(u.uy - troom->ly)) {
-			x = u.ux;
-			y = troom->ly;
-		    } else {
-			/* Diagonal required */
-			x1 = troom->lx;
-			y1 = u.uy - (u.ux - troom->lx);
-			x2 = troom->hx;
-			y2 = u.uy - (troom->hx - u.ux);
-			if (y1 < troom->ly && y2 < troom->ly)
-			    return;
-			else if ((y2 < troom->ly || y1 >= troom->ly) && !rn2(2)) {
-			    x = x1;
-			    y = y1;
-			} else {
-			    x = x2;
-			    y = y2;
-			}
-		    }
-		}
-	    } else {
-		/* Calculate the possible orthogonal paths */
-		n = 0;
-		if (stpx != 0 || stpy != sgn(u.uy - troom->ly)) {
-		    poss[n].x = u.ux;
-		    poss[n++].y = troom->ly;
-		}
-		if (stpx != 0 || stpy != sgn(u.uy - troom->hy)) {
-		    poss[n].x = u.ux;
-		    poss[n++].y = troom->hy;
-		}
-		if (stpx != sgn(u.ux - troom->lx) || stpy != 0) {
-		    poss[n].x = troom->lx;
-		    poss[n++].y = u.uy;
-		}
-		if (stpx != sgn(u.ux - troom->hx) || stpy != 0) {
-		    poss[n].x = troom->hx;
-		    poss[n++].y = u.uy;
-		}
-		if (n) {
-		    n = rn2(n);
-		    x = poss[n].x;
-		    y = poss[n].y;
 		} else {
-		    impossible("Omnipresent priest?");
-		    return;
+			/* Calculate the possible orthogonal paths */
+			n = 0;
+			if (stpx != 0 || stpy != sgn(u.uy - troom->ly)) {
+				poss[n].x = u.ux;
+				poss[n++].y = troom->ly;
+			}
+			if (stpx != 0 || stpy != sgn(u.uy - troom->hy)) {
+				poss[n].x = u.ux;
+				poss[n++].y = troom->hy;
+			}
+			if (stpx != sgn(u.ux - troom->lx) || stpy != 0) {
+				poss[n].x = troom->lx;
+				poss[n++].y = u.uy;
+			}
+			if (stpx != sgn(u.ux - troom->hx) || stpy != 0) {
+				poss[n].x = troom->hx;
+				poss[n++].y = u.uy;
+			}
+			if (n) {
+				n = rn2(n);
+				x = poss[n].x;
+				y = poss[n].y;
+			} else {
+				impossible("Omnipresent priest?");
+				return;
+			}
 		}
-	    }
-	    if(!linedup(u.ux, u.uy, x, y))
-		return;
+		if(!linedup(u.ux, u.uy, x, y))
+			return;
 	}
 
 	switch(rn2(3)) {
 	case 0:
-	    pline("%s roars in anger:  \"Thou shalt suffer!\"",
-			a_gname_at(ax, ay));
-	    break;
+		pline("%s roars in anger:  \"Thou shalt suffer!\"",
+		      a_gname_at(ax, ay));
+		break;
 	case 1:
-	    pline("%s voice booms:  \"How darest thou harm my servant!\"",
-			s_suffix(a_gname_at(ax, ay)));
-	    break;
+		pline("%s voice booms:  \"How darest thou harm my servant!\"",
+		      s_suffix(a_gname_at(ax, ay)));
+		break;
 	default:
-	    pline("%s roars:  \"Thou dost profane my shrine!\"",
-			a_gname_at(ax, ay));
-	    break;
+		pline("%s roars:  \"Thou dost profane my shrine!\"",
+		      a_gname_at(ax, ay));
+		break;
 	}
 
 	buzz(-10-(AD_ELEC-1), 6, x, y, sgn(tbx), sgn(tby)); /* bolt of lightning */
@@ -700,29 +702,28 @@ void ghod_hitsu(struct monst *priest) {
 }
 
 void
-angry_priest()
-{
+angry_priest() {
 	struct monst *priest;
 	struct rm *lev;
 
 	if ((priest = findpriest(temple_occupied(u.urooms))) != 0) {
-	    wakeup(priest);
-	    /*
-	     * If the altar has been destroyed or converted, let the
-	     * priest run loose.
-	     * (When it's just a conversion and there happens to be
-	     *	a fresh corpse nearby, the priest ought to have an
-	     *	opportunity to try converting it back; maybe someday...)
-	     */
-	    lev = &levl[EPRI(priest)->shrpos.x][EPRI(priest)->shrpos.y];
-	    if (!IS_ALTAR(lev->typ) ||
-		((aligntyp)Amask2align(lev->altarmask & AM_MASK) !=
-			EPRI(priest)->shralign)) {
-		priest->ispriest = 0;		/* now a roamer */
-		priest->isminion = 1;		/* but still aligned */
-		/* this overloads the `shroom' field, which is now clobbered */
-		EPRI(priest)->renegade = 0;
-	    }
+		wakeup(priest);
+		/*
+		 * If the altar has been destroyed or converted, let the
+		 * priest run loose.
+		 * (When it's just a conversion and there happens to be
+		 *	a fresh corpse nearby, the priest ought to have an
+		 *	opportunity to try converting it back; maybe someday...)
+		 */
+		lev = &levl[EPRI(priest)->shrpos.x][EPRI(priest)->shrpos.y];
+		if (!IS_ALTAR(lev->typ) ||
+		                ((aligntyp)Amask2align(lev->altarmask & AM_MASK) !=
+		                 EPRI(priest)->shralign)) {
+			priest->ispriest = 0;		/* now a roamer */
+			priest->isminion = 1;		/* but still aligned */
+			/* this overloads the `shroom' field, which is now clobbered */
+			EPRI(priest)->renegade = 0;
+		}
 	}
 }
 
@@ -731,23 +732,22 @@ angry_priest()
  * and remove them.   This avoids big problems when restoring bones.
  */
 void
-clearpriests()
-{
-    struct monst *mtmp, *mtmp2;
+clearpriests() {
+	struct monst *mtmp, *mtmp2;
 
-    for(mtmp = fmon; mtmp; mtmp = mtmp2) {
-	mtmp2 = mtmp->nmon;
-	if (!DEADMONSTER(mtmp) && mtmp->ispriest && !on_level(&(EPRI(mtmp)->shrlevel), &u.uz))
-	    mongone(mtmp);
-    }
+	for(mtmp = fmon; mtmp; mtmp = mtmp2) {
+		mtmp2 = mtmp->nmon;
+		if (!DEADMONSTER(mtmp) && mtmp->ispriest && !on_level(&(EPRI(mtmp)->shrlevel), &u.uz))
+			mongone(mtmp);
+	}
 }
 
 /* munge priest-specific structure when restoring -dlc */
 void restpriest(struct monst *mtmp, boolean ghostly) {
-    if(u.uz.dlevel) {
-	if (ghostly)
-	    assign_level(&(EPRI(mtmp)->shrlevel), &u.uz);
-    }
+	if(u.uz.dlevel) {
+		if (ghostly)
+			assign_level(&(EPRI(mtmp)->shrlevel), &u.uz);
+	}
 }
 
 /*priest.c*/

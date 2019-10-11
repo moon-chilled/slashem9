@@ -16,7 +16,7 @@ void adjust_hp_list(void) {
 	static int hp_list[HP_TRACK] = {0};
 	int l;
 	int hp_diff;
-	for (l=0;l<HP_TRACK-1;l++) {
+	for (l=0; l<HP_TRACK-1; l++) {
 		hp_list[l+1] = hp_list[l];
 	}
 	hp_list[0] = u.uhp;

@@ -76,7 +76,7 @@ extern void discover_artifact(xchar);
 extern boolean undiscovered_artifact(xchar);
 extern int disp_artifact_discoveries(winid);
 extern boolean artifact_hit(struct monst *,struct monst *,
-				struct obj *,int *,int);
+                            struct obj *,int *,int);
 extern int doinvoke(void);
 extern void arti_speak(struct obj *);
 extern boolean artifact_light(struct obj *);
@@ -119,7 +119,7 @@ extern void unplacebc(void);
 extern void set_bc(boolean);
 extern void move_bc(int,int,xchar,xchar,xchar,xchar);
 extern boolean drag_ball(xchar,xchar,
-		int *,xchar *,xchar *,xchar *,xchar *, boolean *,boolean);
+                         int *,xchar *,xchar *,xchar *,xchar *, boolean *,boolean);
 extern void drop_ball(xchar,xchar);
 extern void drag_down(void);
 
@@ -323,7 +323,7 @@ extern void save_currentstate(void);
 #endif
 extern void goto_level(d_level *,boolean,boolean,boolean);
 extern void schedule_goto(d_level *,boolean,boolean,int,
-			     const char *,const char *);
+                          const char *,const char *);
 extern void deferred_goto(void);
 extern boolean revive_corpse(struct obj *, boolean);
 extern void revive_mon(void *, long);
@@ -798,7 +798,7 @@ extern void fully_identify_obj(struct obj *);
 extern int identify(struct obj *);
 extern void identify_pack(int);
 extern int askchain(struct obj **,const char *,int,int (*)(struct obj*),
-			int (*)(struct obj*),int,const char *);
+                    int (*)(struct obj*),int,const char *);
 extern void prinv(const char *,struct obj *,long);
 extern char *xprname(struct obj *,const char *,char,boolean,long,long);
 extern int ddoinv(void);
@@ -1006,7 +1006,7 @@ extern int lminion(void);
 extern void sort_rooms(void);
 extern void add_room(int,int,int,int,boolean,schar,boolean);
 extern void add_subroom(struct mkroom *,int,int,int,int,
-			   boolean,schar,boolean);
+                        boolean,schar,boolean);
 extern void makecorridors(void);
 extern int add_door(int,int,struct mkroom *);
 extern void mklev(void);
@@ -1038,8 +1038,8 @@ extern void bound_digging(void);
 extern void mkportal(xchar,xchar,xchar,xchar);
 extern boolean bad_location(xchar,xchar,xchar,xchar,xchar,xchar);
 extern void place_lregion(xchar,xchar,xchar,xchar,
-			     xchar,xchar,xchar,xchar,
-			     xchar,d_level *);
+                          xchar,xchar,xchar,xchar,
+                          xchar,d_level *);
 extern void movebubbles(void);
 extern void water_friction(void);
 extern void save_waterlevel(int,int);
@@ -1463,7 +1463,7 @@ extern void destroy_mbag(struct obj *, boolean);
 extern int pickup(int);
 extern int pickup_object(struct obj *, long, boolean);
 extern int query_category(const char *, struct obj *, int,
-				menu_item **, int);
+                          menu_item **, int);
 extern int query_objlist(const char *, struct obj *, int, menu_item **, int, bool (*)(struct obj*));
 extern struct obj *pick_obj(struct obj *);
 extern int encumber_msg(void);
@@ -1472,7 +1472,7 @@ extern boolean container_gone(int (*)(struct obj*));
 extern int use_container(struct obj **,int);
 extern int loot_mon(struct monst *,int *,boolean *);
 extern const char *safe_qbuf(const char *,unsigned,
-				const char *,const char *,const char *);
+                             const char *,const char *,const char *);
 extern boolean is_autopickup_exception(struct obj *, boolean);
 
 /* ### pline.c ### */
@@ -1564,7 +1564,7 @@ extern void altar_wrath(int,int);
 /* ### priest.c ### */
 
 extern int move_special(struct monst *,boolean,schar,boolean,boolean,
-			   xchar,xchar,xchar,xchar);
+                        xchar,xchar,xchar,xchar);
 extern char temple_occupied(char *);
 extern int pri_move(struct monst *);
 extern void priestini(d_level *,struct mkroom *,int,int,boolean);
@@ -1574,7 +1574,7 @@ extern struct monst *findpriest(char);
 extern void intemple(int);
 extern void priest_talk(struct monst *);
 extern struct monst *mk_roamer(struct permonst *,aligntyp,
-				  xchar,xchar,boolean);
+                               xchar,xchar,boolean);
 extern void reset_hostility(struct monst *);
 extern boolean in_your_sanctuary(struct monst *,xchar,xchar);
 extern void ghod_hitsu(struct monst *);
@@ -1775,7 +1775,7 @@ extern void addtobill(struct obj *,boolean,boolean,boolean);
 extern void splitbill(struct obj *,struct obj *);
 extern void subfrombill(struct obj *,struct monst *);
 extern long stolen_value(struct obj *,xchar,xchar,boolean,boolean,
-			    boolean);
+                         boolean);
 extern void sellobj_state(int);
 extern void sellobj(struct obj *,xchar,xchar);
 extern int doinvbill(int);
@@ -1835,7 +1835,7 @@ extern void play_sound_for_message(const char *);
 
 extern boolean check_room(xchar *,xchar *,xchar *,xchar *,boolean);
 extern boolean create_room(xchar,xchar,xchar,xchar,
-			      xchar,xchar,xchar,xchar);
+                           xchar,xchar,xchar,xchar);
 extern void create_secret_door(struct mkroom *,xchar);
 extern boolean dig_corridor(coord *,coord *,boolean,schar,schar);
 extern void fill_room(struct mkroom *,boolean);
@@ -1898,7 +1898,7 @@ extern boolean enexto(coord *,xchar,xchar,struct permonst *);
 extern boolean enexto_core(coord *,xchar,xchar,struct permonst *,unsigned);
 extern int epathto(coord *,int,xchar,xchar,struct permonst *);
 extern boolean wpathto(coord *, coord *, boolean (*)(void *, int, int),
-			  void *, struct permonst *, int);
+                       void *, struct permonst *, int);
 extern void xpathto(int,xchar,xchar,int (*)(void *,int,int),void *);
 extern void teleds(int,int,boolean);
 extern boolean safe_teleds(boolean);
@@ -1932,7 +1932,7 @@ extern void set_obj_poly(struct obj *, struct obj *);
 extern void unpoly_obj(void *, long);
 extern int mon_poly(struct monst *, boolean, const char *);
 extern int mon_spec_poly(struct monst *, struct permonst *, long,
-			    boolean, boolean, boolean, boolean);
+                         boolean, boolean, boolean, boolean);
 extern void unpoly_mon(void *, long);
 extern void attach_bomb_blow_timeout(struct obj *, int, boolean);
 extern void attach_egg_hatch_timeout(struct obj *);
@@ -2113,7 +2113,7 @@ extern void block_point(int,int);
 extern void unblock_point(int,int);
 extern bool clear_path(int,int,int,int);
 extern void do_clear_area(int,int,int,
-			     void (*)(int,int,void *),void *);
+                          void (*)(int,int,void *),void *);
 
 /* ### weapon.c ### */
 
@@ -2257,14 +2257,14 @@ extern void zapnodir(struct obj *);
 extern int dozap(void);
 extern int zapyourself(struct obj *,boolean);
 extern boolean cancel_monst(struct monst *,struct obj *,
-			       boolean,boolean,boolean);
+                            boolean,boolean,boolean);
 extern void weffects(struct obj *);
 extern int spell_damage_bonus(int);
 extern const char *exclam(int force);
 extern void hit(const char *,struct monst *,const char *);
 extern void miss(const char *,struct monst *);
 extern struct monst *bhit(int,int,int,int,int (*)(struct monst*,struct obj*),
-			     int (*)(struct obj*,struct obj*),struct obj **);
+                          int (*)(struct obj*,struct obj*),struct obj **);
 extern struct monst *boomhit(int,int);
 extern int burn_floor_paper(int,int,boolean,boolean);
 extern void buzz(int,int,xchar,xchar,int,int);

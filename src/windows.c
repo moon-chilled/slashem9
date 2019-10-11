@@ -21,19 +21,19 @@ struct window_procs windowprocs;
 
 static
 struct win_choices {
-    struct window_procs *procs;
-    void (*ini_routine)(void);		/* optional (can be 0) */
+	struct window_procs *procs;
+	void (*ini_routine)(void);		/* optional (can be 0) */
 } winchoices[] = {
 #ifdef TTY_GRAPHICS
-    { &tty_procs, win_tty_init },
+	{ &tty_procs, win_tty_init },
 #endif
 #ifdef CURSES_GRAPHICS
-    { &curses_procs, 0 },
+	{ &curses_procs, 0 },
 #endif
 #ifdef PROXY_GRAPHICS
-    { &proxy_procs, win_proxy_init },
+	{ &proxy_procs, win_proxy_init },
 #endif
-    { 0, 0 }		/* must be last */
+	{ 0, 0 }		/* must be last */
 };
 
 static
@@ -41,44 +41,42 @@ void
 def_raw_print(s)
 const char *s;
 {
-    puts(s);
+	puts(s);
 }
 
 static int windows_lock = false;
 
 int
-lock_windows (int flag)
-{
-    int retval = windows_lock;
-    windows_lock = flag;
-    return retval;
+lock_windows (int flag) {
+	int retval = windows_lock;
+	windows_lock = flag;
+	return retval;
 }
 
 void
-choose_windows (const char *s)
-{
-    int i;
+choose_windows (const char *s) {
+	int i;
 
-    if (windows_lock)
-	return;
+	if (windows_lock)
+		return;
 
-    for(i=0; winchoices[i].procs; i++)
-	if (!strcmpi(s, winchoices[i].procs->name)) {
-	    windowprocs = *winchoices[i].procs;
-	    if (winchoices[i].ini_routine) (*winchoices[i].ini_routine)();
-	    return;
-	}
+	for(i=0; winchoices[i].procs; i++)
+		if (!strcmpi(s, winchoices[i].procs->name)) {
+			windowprocs = *winchoices[i].procs;
+			if (winchoices[i].ini_routine) (*winchoices[i].ini_routine)();
+			return;
+		}
 
-    if (!windowprocs.win_raw_print)
-	windowprocs.win_raw_print = def_raw_print;
+	if (!windowprocs.win_raw_print)
+		windowprocs.win_raw_print = def_raw_print;
 
-    raw_printf("Window type %s not recognized.  Choices are:", s);
-    for(i=0; winchoices[i].procs; i++)
-	raw_printf("        %s", winchoices[i].procs->name);
+	raw_printf("Window type %s not recognized.  Choices are:", s);
+	for(i=0; winchoices[i].procs; i++)
+		raw_printf("        %s", winchoices[i].procs->name);
 
-    if (windowprocs.win_raw_print == def_raw_print)
-	terminate(EXIT_SUCCESS);
-    wait_synch();
+	if (windowprocs.win_raw_print == def_raw_print)
+		terminate(EXIT_SUCCESS);
+	wait_synch();
 }
 
 /*
@@ -87,19 +85,17 @@ choose_windows (const char *s)
  */
 /*ARGSUSED*/
 char
-genl_message_menu (char let, int how, const char *mesg)
-{
+genl_message_menu (char let, int how, const char *mesg) {
 #if defined(MAC_MPW)
 # pragma unused ( how,let )
 #endif
-    pline("%s", mesg);
-    return 0;
+	pline("%s", mesg);
+	return 0;
 }
 
 /*ARGSUSED*/
 void
-genl_preference_update (const char *pref)
-{
+genl_preference_update (const char *pref) {
 	/* window ports are expected to provide
 	   their own preference update routine
 	   for the preference capabilities that

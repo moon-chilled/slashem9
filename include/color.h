@@ -61,17 +61,17 @@
 struct menucoloring {
 #ifdef USE_REGEX_MATCH
 # ifdef GNU_REGEX
-   struct re_pattern_buffer match;
+	struct re_pattern_buffer match;
 # else
 #  ifdef POSIX_REGEX
-   regex_t match;
+	regex_t match;
 #  endif
 # endif
 #else
-   char *match;
+	char *match;
 #endif
-   int color, attr;
-   struct menucoloring *next;
+	int color, attr;
+	struct menucoloring *next;
 };
 
 #ifdef VIDEOSHADES
@@ -79,20 +79,20 @@ extern char ttycolors[CLR_MAX];
 #endif
 
 struct color_option {
-    int color;
-    int attr_bits;
+	int color;
+	int attr_bits;
 };
 
 struct percent_color_option {
-    int percentage;
-    struct color_option color_option;
-    struct percent_color_option *next;
+	int percentage;
+	struct color_option color_option;
+	struct percent_color_option *next;
 };
 
 struct text_color_option {
-    const char *text;
-    struct color_option color_option;
-    const struct text_color_option *next;
+	const char *text;
+	struct color_option color_option;
+	const struct text_color_option *next;
 };
 
 

@@ -37,9 +37,9 @@ uint rnl(uint x) {
 	i = RND(x);
 
 	if (Luck && rn2(50 - Luck)) {
-	    i -= (x <= 15 && Luck >= -5 ? Luck/3 : Luck);
-	    if (i < 0) i = 0;
-	    else if (i >= x) i = x-1;
+		i -= (x <= 15 && Luck >= -5 ? Luck/3 : Luck);
+		if (i < 0) i = 0;
+		else if (i >= x) i = x-1;
 	}
 
 	return i;

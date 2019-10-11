@@ -88,7 +88,7 @@
 #define HStun			u.uprops[STUNNED].intrinsic
 #define Stunned			(HStun || u.umonnum == PM_STALKER || \
 				 youmonst.data->mlet == S_BAT)
-		/* Note: birds will also be stunned */
+/* Note: birds will also be stunned */
 
 #define HConfusion		u.uprops[CONFUSION].intrinsic
 #define Confusion		HConfusion
@@ -96,11 +96,11 @@
 #define Blinded			u.uprops[BLINDED].intrinsic
 #define Blindfolded		(ublindf && ublindf->otyp != LENSES && \
 				 !ublindf->oinvis)
-		/* ...means blind because of a cover */
+/* ...means blind because of a cover */
 #define Blind	((Blinded || Blindfolded || !haseyes(youmonst.data)) && \
 		 !(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD))
-		/* ...the Eyes operate even when you really are blind
-		    or don't have any eyes */
+/* ...the Eyes operate even when you really are blind
+    or don't have any eyes */
 
 #define Sick			u.uprops[SICK].intrinsic
 #define Stoned			u.uprops[STONED].intrinsic
@@ -187,7 +187,7 @@
 #define Invis			((HInvis || EInvis || \
 				 pm_invisible(youmonst.data)) && !BInvis)
 #define Invisible		(Invis && !See_invisible)
-		/* Note: invisibility also hides inventory and steed */
+/* Note: invisibility also hides inventory and steed */
 
 #define EDisplaced		u.uprops[DISPLACED].extrinsic
 #define Displaced		EDisplaced
@@ -225,7 +225,7 @@
 #define ELevitation		u.uprops[LEVITATION].extrinsic
 #define Levitation		(HLevitation || ELevitation || \
 				 is_floater(youmonst.data))
-	/* Can't touch surface, can't go under water; overrides all others */
+/* Can't touch surface, can't go under water; overrides all others */
 #define Lev_at_will		(((HLevitation & I_SPECIAL) != 0L || \
 				 (ELevitation & W_ARTI) != 0L) && \
 				 (HLevitation & ~(I_SPECIAL|TIMEOUT)) == 0L && \
@@ -234,25 +234,25 @@
 
 #define EFlying			u.uprops[FLYING].extrinsic
 #define Flying			(EFlying || is_flyer(youmonst.data) || (u.usteed && is_flyer(u.usteed->data)))
-	/* May touch surface; does not override any others */
+/* May touch surface; does not override any others */
 
 #define Wwalking		(u.uprops[WWALKING].extrinsic && \
 				 !Is_waterlevel(&u.uz))
-	/* Don't get wet, can't go under water; overrides others except levitation */
-	/* Wwalking is meaningless on water level */
+/* Don't get wet, can't go under water; overrides others except levitation */
+/* Wwalking is meaningless on water level */
 
 #define HSwimming		u.uprops[SWIMMING].intrinsic
 #define ESwimming		u.uprops[SWIMMING].extrinsic	/* [Tom] */
 #define Swimming		(HSwimming || ESwimming || \
 				 is_swimmer(youmonst.data) || \
 				 (u.usteed && is_swimmer(u.usteed->data)))
-	/* Get wet, don't go under water unless if amphibious */
+/* Get wet, don't go under water unless if amphibious */
 
 #define HMagical_breathing	u.uprops[MAGICAL_BREATHING].intrinsic
 #define EMagical_breathing	u.uprops[MAGICAL_BREATHING].extrinsic
 #define Amphibious		(HMagical_breathing || EMagical_breathing || \
 				 amphibious(youmonst.data))
-	/* Get wet, may go under surface */
+/* Get wet, may go under surface */
 
 #define Breathless		(HMagical_breathing || EMagical_breathing || \
 				 breathless(youmonst.data))
