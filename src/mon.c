@@ -912,13 +912,8 @@ void mpickgold (struct monst *mtmp) {
 
     if ((gold = g_at(mtmp->mx, mtmp->my)) != 0) {
 	mat_idx = objects[gold->otyp].oc_material;
-#ifndef GOLDOBJ
-	mtmp->mgold += gold->quan;
-	delobj(gold);
-#else
         obj_extract_self(gold);
         add_to_minv(mtmp, gold);
-#endif
 	if (cansee(mtmp->mx, mtmp->my) ) {
 	    if (flags.verbose && !mtmp->isgd)
 		pline("%s picks up some %s.", Monnam(mtmp),
@@ -1679,9 +1674,6 @@ void mongone (struct monst *mdef) {
 	mdrop_special_objs(mdef);
 	/* release rest of monster's inventory--it is removed from game */
 	discard_minvent(mdef);
-#ifndef GOLDOBJ
-	mdef->mgold = 0L;
-#endif
 	m_detach(mdef, mdef->data);
 }
 
@@ -1735,16 +1727,6 @@ void monstone (struct monst *mdef) {
 		    oldminvent = obj->nobj;
 		    add_to_container(otmp, obj);
 		}
-#ifndef GOLDOBJ
-		if (mdef->mgold) {
-			struct obj *au;
-			au = mksobj(GOLD_PIECE, false, false);
-			au->quan = mdef->mgold;
-			au->owt = weight(au);
-			add_to_container(otmp, au);
-			mdef->mgold = 0;
-		}
-#endif
 		/* Archeologists should not break unique statues */
 		if (mdef->data->geno & G_UNIQ)
 			otmp->spe = 1;

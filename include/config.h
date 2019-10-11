@@ -251,8 +251,6 @@ typedef long glyph_t;
 
 #define USER_DUNGEONCOLOR
 
-/*#define GOLDOBJ */	/* Gold is kept on obj chains - Helge Hafting */
-
 /* End of Section 5 */
 
 #include "global.h"	/* Define everything else according to choices above */

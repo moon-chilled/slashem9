@@ -722,9 +722,7 @@ extern int calc_capacity(int);
 extern int max_capacity(void);
 extern boolean check_capacity(const char *);
 extern int inv_cnt(void);
-#ifdef GOLDOBJ
 extern long money_cnt(struct obj *);
-#endif
 
 /* ### hacklib.c ### */
 
@@ -952,9 +950,7 @@ extern void set_malign(struct monst *);
 extern void set_mimic_sym(struct monst *);
 extern int mbirth_limit(int);
 extern void mimic_hit_msg(struct monst *, short);
-#ifdef GOLDOBJ
 extern void mkmonmoney(struct monst *, long);
-#endif
 extern void bagotricks(struct obj *);
 extern boolean propagate(int, boolean,boolean);
 
@@ -1457,11 +1453,7 @@ extern void getlock(void);
 
 /* ### pickup.c ### */
 
-#ifdef GOLDOBJ
 extern int collect_obj_classes(char *,struct obj *,boolean,bool (*)(struct obj*), int *);
-#else
-extern int collect_obj_classes(char *,struct obj *,boolean,boolean,bool (*)(struct obj*), int *);
-#endif
 extern void add_valid_menu_class(int);
 extern bool allow_all(struct obj *);
 extern bool allow_category(struct obj *);
@@ -1747,10 +1739,8 @@ extern void freedynamicdata(void);
 
 /* ### shk.c ### */
 
-#ifdef GOLDOBJ
 extern long money2mon(struct monst *, long);
 extern void money2u(struct monst *, long);
-#endif
 extern char *shkname(struct monst *);
 extern void shkgone(struct monst *);
 extern void set_residency(struct monst *,boolean);
@@ -1869,11 +1859,7 @@ extern void initialspell(struct obj *);
 
 /* ### steal.c ### */
 
-#ifdef GOLDOBJ
 extern long somegold(long);
-#else
-extern long somegold(void);
-#endif
 extern void stealgold(struct monst *);
 extern void remove_worn_item(struct obj *,boolean);
 extern int steal(struct monst *, char *);
@@ -1881,9 +1867,7 @@ extern int mpickobj(struct monst *,struct obj *);
 extern void stealamulet(struct monst *);
 extern void mdrop_special_objs(struct monst *);
 extern void relobj(struct monst *,int,boolean);
-#ifdef GOLDOBJ
 extern struct obj *findgold(struct obj *);
-#endif
 
 /* ### steed.c ### */
 

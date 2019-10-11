@@ -18,44 +18,6 @@ static const char * equipname(struct obj *otmp) {
 		(otmp == uarmh) ? "helmet" : "armor");
 }
 
-#ifndef GOLDOBJ
-long
-somegold (void)
-{
-	return (long)( (u.ugold < 100) ? u.ugold :
-		(u.ugold > 10000) ? rnd(10000) : rnd((int) u.ugold) );
-}
-
-void
-stealgold (struct monst *mtmp)
-{
-	struct obj *gold = g_at(u.ux, u.uy);
-	long tmp;
-
-	if (gold && ( !u.ugold || gold->quan > u.ugold || !rn2(5))) {
-	    mtmp->mgold += gold->quan;
-	    delobj(gold);
-	    newsym(u.ux, u.uy);
-	    pline("%s quickly snatches some gold from between your %s!",
-		    Monnam(mtmp), makeplural(body_part(FOOT)));
-	    if(!u.ugold || !rn2(5)) {
-		if (!tele_restrict(mtmp)) (void) rloc(mtmp, false);
-		/* do not set mtmp->mavenge here; gold on the floor is fair game */
-		monflee(mtmp, 0, false, false);
-	    }
-	} else if(u.ugold) {
-	    u.ugold -= (tmp = somegold());
-	    pline("Your purse feels lighter.");
-	    mtmp->mgold += tmp;
-	if (!tele_restrict(mtmp)) (void) rloc(mtmp, false);
-	    mtmp->mavenge = 1;
-	    monflee(mtmp, 0, false, false);
-	    flags.botl = 1;
-	}
-}
-
-#else /* !GOLDOBJ */
-
 long
 somegold (long umoney)
 {
@@ -117,7 +79,6 @@ stealgold (struct monst *mtmp)
 	    flags.botl = 1;
 	}
 }
-#endif /* GOLDOBJ */
 
 /* steal armor after you finish taking it off */
 uint stealoid;		/* object to be stolen */
@@ -414,13 +375,6 @@ mpickobj (struct monst *mtmp, struct obj *otmp)
 {
     int freed_otmp;
 
-#ifndef GOLDOBJ
-    if (otmp->oclass == COIN_CLASS) {
-	mtmp->mgold += otmp->quan;
-	obfree(otmp, NULL);
-	freed_otmp = 1;
-    } else {
-#endif
     boolean snuff_otmp = false;
     /* don't want hidden light source inside the monster; assumes that
        engulfers won't have external inventories; whirly monsters cause
@@ -440,9 +394,6 @@ mpickobj (struct monst *mtmp, struct obj *otmp)
     freed_otmp = add_to_minv(mtmp, otmp);
     /* and we had to defer this until object is in mtmp's inventory */
     if (snuff_otmp) snuff_light_source(mtmp->mx, mtmp->my);
-#ifndef GOLDOBJ
-    }
-#endif
     return freed_otmp;
 }
 
@@ -576,16 +527,6 @@ void relobj(struct monst *mtmp, int show, boolean is_pet) {
 	    keepobj = otmp->nobj;
 	    add_to_minv(mtmp, otmp);
 	}
-#ifndef GOLDOBJ
-	if (mtmp->mgold) {
-		long g = mtmp->mgold;
-		mkgold(g, omx, omy);
-		if (is_pet && cansee(omx, omy) && flags.verbose)
-			pline("%s drops %ld gold piece%s.", Monnam(mtmp),
-				g, plur(g));
-		mtmp->mgold = 0L;
-	}
-#endif
 
 	if (show & cansee(omx, omy))
 		newsym(omx, omy);

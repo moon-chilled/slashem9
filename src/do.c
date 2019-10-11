@@ -24,11 +24,7 @@ static const char drop_types[] =
 
 /* 'd' command: drop one inventory item */
 int dodrop(void) {
-#ifndef GOLDOBJ
-	int result, i = (invent || u.ugold) ? 0 : (SIZE(drop_types) - 1);
-#else
 	int result, i = (invent) ? 0 : (SIZE(drop_types) - 1);
-#endif
 
 	if (*u.ushops) sellobj_state(SELL_DELIBERATE);
 	result = drop(getobj(&drop_types[i], "drop"));
@@ -472,13 +468,9 @@ static int drop(struct obj *obj) {
 	    }
 	    if (!can_reach_floor()) {
 		if(flags.verbose) pline("You drop %s.", doname(obj));
-#ifndef GOLDOBJ
-		if (obj->oclass != COIN_CLASS || obj == invent) freeinv(obj);
-#else
 		/* Ensure update when we drop gold objects */
 		if (obj->oclass == COIN_CLASS) flags.botl = 1;
 		freeinv(obj);
-#endif
 		hitfloor(obj);
 		return 1;
 	    }
@@ -492,13 +484,9 @@ static int drop(struct obj *obj) {
 /* Called in several places - may produce output */
 /* eg ship_object() and dropy() -> sellobj() both produce output */
 void dropx(struct obj *obj) {
-#ifndef GOLDOBJ
-	if (obj->oclass != COIN_CLASS || obj == invent) freeinv(obj);
-#else
         /* Ensure update when we drop gold objects */
         if (obj->oclass == COIN_CLASS) flags.botl = 1;
         freeinv(obj);
-#endif
 	if (!u.uswallow) {
 	    if (ship_object(obj, u.ux, u.uy, false)) return;
 	    if (IS_ALTAR(levl[u.ux][u.uy].typ))
@@ -605,25 +593,10 @@ static int menu_drop(int retry) {
     int n, i, n_dropped = 0;
     long cnt;
     struct obj *otmp, *otmp2;
-#ifndef GOLDOBJ
-    struct obj *u_gold = 0;
-#endif
     menu_item *pick_list;
     boolean all_categories = true;
     boolean drop_everything = false;
 
-#ifndef GOLDOBJ
-    if (u.ugold) {
-	/* Hack: gold is not in the inventory, so make a gold object
-	   and put it at the head of the inventory list. */
-	u_gold = mkgoldobj(u.ugold);	/* removes from u.ugold */
-	u_gold->in_use = true;
-	u.ugold = u_gold->quan;		/* put the gold back */
-	assigninvlet(u_gold);		/* might end up as NOINVSYM */
-	u_gold->nobj = invent;
-	invent = u_gold;
-    }
-#endif
     if (retry) {
 	all_categories = (retry == -2);
     } else if (flags.menu_style == MENU_FULL) {
@@ -676,11 +649,6 @@ static int menu_drop(int retry) {
 			/* same kludge as getobj(), for canletgo()'s use */
 			otmp->corpsenm = (int) cnt;	/* don't split */
 		    } else {
-#ifndef GOLDOBJ
-			if (otmp->oclass == COIN_CLASS)
-			    splitobj(otmp, otmp->quan - cnt);
-			else
-#endif
 			    otmp = splitobj(otmp, cnt);
 		    }
 		}
@@ -691,16 +659,6 @@ static int menu_drop(int retry) {
     }
 
  drop_done:
-#ifndef GOLDOBJ
-    if (u_gold && invent && invent->oclass == COIN_CLASS) {
-	/* didn't drop [all of] it */
-	u_gold = invent;
-	invent = u_gold->nobj;
-	u_gold->in_use = false;
-	dealloc_obj(u_gold);
-	update_inventory();
-    }
-#endif
     return n_dropped;
 }
 

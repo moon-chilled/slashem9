@@ -123,9 +123,7 @@ invault (void)
 	char buf[BUFSZ];
 	int x, y, dd, gx, gy;
 	int lx = 0, ly = 0;
-#ifdef GOLDOBJ
         long umoney;
-#endif
 	/* first find the goal for the guard */
 	for(dd = 2; (dd < ROWNO || dd < COLNO); dd++) {
 	  for(y = u.uy-dd; y <= u.uy+dd; ly = y, y++) {
@@ -265,26 +263,15 @@ fnd:
 	    return;
 	}
 	verbalize("I don't know you.");
-#ifndef GOLDOBJ
-	if (!u.ugold && !hidden_gold())
-	    verbalize("Please follow me.");
-	else {
-	    if (!u.ugold)
-		verbalize("You have hidden gold.");
-	    verbalize("Most likely all your gold was stolen from this vault.");
-	    verbalize("Please drop that gold and follow me.");
-	}
-#else
         umoney = money_cnt(invent);
 	if (!umoney && !hidden_gold())
 	    verbalize("Please follow me.");
 	else {
 	    if (!umoney)
-		verbalize("You have hidden money.");
-	    verbalize("Most likely all your money was stolen from this vault.");
-	    verbalize("Please drop that money and follow me.");
+		verbalize("You have hidden gold.");
+	    verbalize("Most likely all your gold was stolen from this vault.");
+	    verbalize("Please drop that gold and follow me.");
 	}
-#endif
 	EGD(guard)->gdx = gx;
 	EGD(guard)->gdy = gy;
 	EGD(guard)->fcbeg = 0;
@@ -409,12 +396,8 @@ gd_move (struct monst *grd)
 			 grd_in_vault = *in_rooms(grd->mx, grd->my, VAULT)?
 					true : false;
 	boolean disappear_msg_seen = false, semi_dead = (grd->mhp <= 0);
-#ifndef GOLDOBJ
-	boolean u_carry_gold = ((u.ugold + hidden_gold()) > 0L);
-#else
         long umoney = money_cnt(invent);
 	boolean u_carry_gold = ((umoney + hidden_gold()) > 0L);
-#endif
 	boolean see_guard;
 
 	if(!on_level(&(egrd->gdlevel), &u.uz)) return -1;
@@ -448,15 +431,9 @@ gd_move (struct monst *grd)
 		if(egrd->warncnt == 3)
 			verbalize("I repeat, %sfollow me!",
 				u_carry_gold ? (
-#ifndef GOLDOBJ
-					  !u.ugold ?
+					  !umoney ?
 					  "drop that hidden gold and " :
 					  "drop that gold and ") : "");
-#else
-					  !umoney ?
-					  "drop that hidden money and " :
-					  "drop that money and ") : "");
-#endif
 		if(egrd->warncnt == 7) {
 			m = grd->mx;
 			n = grd->my;
@@ -538,13 +515,8 @@ letknow:
 		if (m == u.ux && n == u.uy) {
 		    struct obj *gold = g_at(m,n);
 		    /* Grab the gold from between the hero's feet.  */
-#ifndef GOLDOBJ
-		    grd->mgold += gold->quan;
-		    delobj(gold);
-#else
 		    obj_extract_self(gold);
 		    add_to_minv(grd, gold);
-#endif
 		    newsym(m,n);
 		} else if (m == x && n == y) {
 		    mpickgold(grd);	/* does a newsym */
@@ -696,30 +668,18 @@ void
 paygd (void)
 {
 	struct monst *grd = findgd();
-#ifndef GOLDOBJ
-	struct obj *gold;
-#else
         long umoney = money_cnt(invent);
 	struct obj *coins, *nextcoins;
-#endif
 	int gx,gy;
 	char buf[BUFSZ];
 
-#ifndef GOLDOBJ
-	if (!u.ugold || !grd) return;
-#else
 	if (!umoney || !grd) return;
-#endif
 
 	if (u.uinvault) {
 	    pline("Your %ld %s goes into the Magic Memory Vault.",
-#ifndef GOLDOBJ
-		u.ugold,
-		currency(u.ugold));
-#else
 		umoney,
 		currency(umoney));
-#endif
+
 	    gx = u.ux;
 	    gy = u.uy;
 	} else {
@@ -736,10 +696,6 @@ paygd (void)
 		plname, mons[u.umonster].mname);
 	    make_grave(gx, gy, buf);
 	}
-#ifndef GOLDOBJ
-	place_object(gold = mkgoldobj(u.ugold), gx, gy);
-	stackobj(gold);
-#else
         for (coins = invent; coins; coins = nextcoins) {
             nextcoins = coins->nobj;
 	    if (objects[coins->otyp].oc_class == COIN_CLASS) {
@@ -748,7 +704,6 @@ paygd (void)
 		stackobj(coins);
 	    }
         }
-#endif
 	mongone(grd);
 }
 

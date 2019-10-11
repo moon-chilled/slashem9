@@ -307,12 +307,10 @@ static struct trobj Wishing[] = {
 	{ WAN_WISHING, 3, WAND_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
-#ifdef GOLDOBJ
 static struct trobj Money[] = {
 	{ GOLD_PIECE, 0 , COIN_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
-#endif
 
 /* race-based substitutions for initial inventory;
    the weaker cloak for elven rangers is intentional--they shoot better */
@@ -1006,11 +1004,7 @@ u_init (void)
 		skill_init(Skill_F);
 		break;
 	case PM_HEALER:
-#ifndef GOLDOBJ
-		u.ugold = u.ugold0 = rn1(1000, 1001);
-#else
 		u.umoney0 = rn1(1000, 1001);
-#endif
 		ini_inv(Healer);
 		knows_class(POTION_CLASS); /* WAC - remove? */
 		knows_object(POT_SICKNESS);
@@ -1114,11 +1108,7 @@ u_init (void)
 			Rogue[R_DAGGERS].trquan = 1;
 			Rogue[R_DARTS].trotyp = BULLET;
 		}
-#ifndef GOLDOBJ
-		u.ugold = u.ugold0 = rn1(500 ,1500);
-#else
 		u.umoney0 = rn1(500 ,1500);
-#endif
 		ini_inv(Rogue);
 		if(!rn2(5)) ini_inv(Blindfold);
 		knows_object(OILSKIN_SACK);
@@ -1134,11 +1124,7 @@ u_init (void)
 		break;
 	case PM_TOURIST:
 		Tourist[T_DARTS].trquan = rn1(20, 21);
-#ifndef GOLDOBJ
-		u.ugold = u.ugold0 = rn1(500,1000);
-#else
 		u.umoney0 = rn1(500,1000);
-#endif
 		ini_inv(Tourist);
 		if(!rn2(25)) ini_inv(Tinopener);
 		else if(!rn2(25)) ini_inv(Leash);
@@ -1335,12 +1321,8 @@ u_init (void)
 	if (wizard)
 		read_wizkit();
 
-#ifndef GOLDOBJ
-	u.ugold0 += hidden_gold();	/* in case sack has gold in it */
-#else
 	if (u.umoney0) ini_inv(Money);
 	u.umoney0 += hidden_gold();	/* in case sack has gold in it */
-#endif
 
 	temp = rn1(10,70);
 	init_attr(temp);		/* init attribute values */
@@ -1511,12 +1493,10 @@ static void ini_inv(struct trobj *trop) {
 				nocreate4 = otyp;
 		}
 
-#ifdef GOLDOBJ
 		if (trop->trclass == COIN_CLASS) {
 			/* no "blessed" or "identified" money */
 			obj->quan = u.umoney0;
 		} else {
-#endif
 			obj->dknown = obj->bknown = obj->rknown = 1;
 			if (objects[otyp].oc_uses_known) obj->known = 1;
 			obj->cursed = 0;
@@ -1534,9 +1514,8 @@ static void ini_inv(struct trobj *trop) {
 			    obj->spe = trop->trspe;
 			if (trop->trbless != UNDEF_BLESS)
 			    obj->blessed = trop->trbless;
-#ifdef GOLDOBJ
 		}
-#endif
+
 		/* defined after setting otyp+quan + blessedness */
 		obj->owt = weight(obj);
 

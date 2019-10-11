@@ -538,7 +538,6 @@ static int playersteal(void) {
 		if (chanch > 95) chanch = 95;
 		if (rnd(100) < chanch || mdat->mtame) {
 
-#ifdef GOLDOBJ
 			/* [CWC] This will steal money from the monster from the
 			 * first found goldobj - we could be really clever here and
 			 * then move onwards to the next goldobj in invent if we
@@ -566,14 +565,6 @@ static int playersteal(void) {
 				}
 				else
 				impossible("cmd.c:playersteal() stealing negative money");
-#else
-			if (mdat->mgold) {
-				temp = (u.ulevel * rn1(25,25));
-				if (temp > mdat->mgold) temp = mdat->mgold;
-				u.ugold += temp;
-				mdat->mgold -= temp;
-				pline("You steal %d gold.",temp);
-#endif
 			} else
 				pline("You don't find anything to steal.");
 

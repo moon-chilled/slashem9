@@ -2826,30 +2826,7 @@ static boolean emergency_disrobe(boolean *lostsome) {
 		    /* else continue */
 		}
 	    }
-#ifndef GOLDOBJ
-	    if (!otmp) {
-		/* Nothing available left to drop; try gold */
-		if (u.ugold) {
-		    pline("In desperation, you drop your purse.");
-		    /* Hack: gold is not in the inventory, so make a gold object
-		     * and put it at the head of the inventory list.
-		     */
-		    obj = mkgoldobj(u.ugold);    /* removes from u.ugold */
-		    obj->in_use = true;
-		    u.ugold = obj->quan;         /* put the gold back */
-		    assigninvlet(obj);           /* might end up as NOINVSYM */
-		    obj->nobj = invent;
-		    invent = obj;
-		    *lostsome = true;
-		    dropx(obj);
-		    continue;                    /* Try again */
-		}
-		/* We can't even drop gold! */
-		return false;
-	    }
-#else
 	    if (!otmp) return false; /* nothing to drop! */
-#endif
 	    if (otmp->owornmask) remove_worn_item(otmp, false);
 	    *lostsome = true;
 	    dropx(otmp);

@@ -294,11 +294,7 @@ static int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 	/* if we are carrying sth then we drop it (perhaps near @) */
 	/* Note: if apport == 1 then our behaviour is independent of udist */
 	/* Use udist+1 so steed won't cause divide by zero */
-#ifndef GOLDOBJ
-	if(DROPPABLES(mtmp) || mtmp->mgold) {
-#else
 	if(DROPPABLES(mtmp)) {
-#endif
 	    if (!rn2(udist+1) || !rn2(edog->apport))
 		if(rn2(10) < edog->apport){
 		    relobj(mtmp, (int)mtmp->minvis, true);
@@ -343,14 +339,6 @@ static int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 			    if (dogquan > 0) {
 				if (obj->oclass == COIN_CLASS) {
 				    /* KMH, balance patch -- 10*level */
-#ifndef GOLDOBJ
-				    obj->quan -= dogquan;
-				    if (cansee(omx, omy) && flags.verbose)
-					pline("%s picks up %d gold pieces.",
-							Monnam(mtmp),
-							dogquan);
-				    mtmp->mgold += dogquan;
-#else
 						if (obj->quan != dogquan)
 							obj = splitobj(obj, dogquan);
 				    if (cansee(omx, omy) && flags.verbose)
@@ -360,7 +348,6 @@ static int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 							obj_extract_self(obj);
 				    	newsym(omx,omy);
 							mpickobj(mtmp,obj);
-#endif
 				} else {
 /*
                                 struct obj *floor_obj;

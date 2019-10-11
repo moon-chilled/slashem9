@@ -83,7 +83,6 @@ static void shk_smooth_charge(int *, int, int);
  */
 
 
-#ifdef GOLDOBJ
 /*
     Transfer money from inventory to monster when paying
     shopkeepers, priests, oracle, succubus, & other demons.
@@ -149,8 +148,6 @@ void money2u (struct monst *mon, long amount) {
 	flags.botl = 1;
     }
 }
-
-#endif /* GOLDOBJ */
 
 static struct monst * next_shkp(struct monst *shkp, boolean withbill) {
 	for (; shkp; shkp = shkp->nmon) {
@@ -974,13 +971,9 @@ static void pay(long tmp, struct monst *shkp) {
 	long robbed = ESHK(shkp)->robbed;
 	long balance = ((tmp <= 0L) ? tmp : check_credit(tmp, shkp));
 
-#ifndef GOLDOBJ
-	u.ugold -= balance;
-	shkp->mgold += balance;
-#else
 	if (balance > 0) money2mon(shkp, balance);
 	else if (balance < 0) money2u(shkp, -balance);
-#endif
+
 	flags.botl = 1;
 	if(robbed) {
 		robbed -= tmp;
@@ -1162,9 +1155,8 @@ int dopay (void) {
 	struct monst *shkp;
 	struct monst *nxtm, *resident;
 	long ltmp;
-#ifdef GOLDOBJ
 	long umoney;
-#endif
+
 	int pass, tmp, sk = 0, seensk = 0;
 	boolean paid = false, stashed_gold = (hidden_gold() > 0L);
 
@@ -1295,56 +1287,27 @@ proceed:
 	}
 
 	if(shkp != resident && NOTANGRY(shkp)) {
-#ifdef GOLDOBJ
                 umoney = money_cnt(invent);
-#endif
 		if(!ltmp)
 		    pline("You do not owe %s anything.", mon_nam(shkp));
-#ifndef GOLDOBJ
-		else if(!u.ugold) {
-#else
 		else if(!umoney) {
-#endif
 		    pline("You %shave no money.", stashed_gold ? "seem to " : "");
 		    if(stashed_gold)
 
-#ifndef GOLDOBJ
-			pline("But you have some gold stashed away.");
-#else
-				pline("But you have some money stashed away.");
-#endif
+				pline("But you have some gold stashed away.");
 		} else {
-#ifndef GOLDOBJ
-		    long ugold = u.ugold;
-		    if(ugold > ltmp) {
-#else
 		    if(umoney > ltmp) {
-#endif
 			pline("You give %s the %ld gold piece%s %s asked for.",
 			    mon_nam(shkp), ltmp, plur(ltmp), mhe(shkp));
 			pay(ltmp, shkp);
 		    } else {
-#ifndef GOLDOBJ
 			pline("You give %s all your%s gold.", mon_nam(shkp),
-#else
-			pline("You give %s all your%s money.", mon_nam(shkp),
-#endif
 					stashed_gold ? " openly kept" : "");
-#ifndef GOLDOBJ
-			pay(u.ugold, shkp);
-			if (stashed_gold) pline("But you have hidden gold!");
-#else
 			pay(umoney, shkp);
-			if (stashed_gold) pline("But you have hidden money!");
-#endif
+			if (stashed_gold) pline("But you have hidden gold!");
 		    }
-#ifndef GOLDOBJ
-		    if((ugold < ltmp/2L) || (ugold < ltmp && stashed_gold))
-#else
 		    if((umoney < ltmp/2L) || (umoney < ltmp && stashed_gold))
-#endif
-			pline("Unfortunately, %s doesn't look satisfied.",
-			      mhe(shkp));
+			pline("Unfortunately, %s doesn't look satisfied.", mhe(shkp));
 		    else
 			make_happy_shk(shkp, false);
 		}
@@ -1353,16 +1316,10 @@ proceed:
 
 	/* ltmp is still eshkp->robbed here */
 	if (!eshkp->billct && !eshkp->debit) {
-#ifdef GOLDOBJ
                 umoney = money_cnt(invent);
-#endif
 		if(!ltmp && NOTANGRY(shkp)) {
 		    pline("You do not owe %s anything.", mon_nam(shkp));
-#ifndef GOLDOBJ
-		    if (!u.ugold)
-#else
 		    if (!umoney)
-#endif
 			pline(no_money, stashed_gold ? " seem to" : "");
 
 /*		    else */
@@ -1370,15 +1327,8 @@ proceed:
 
 		} else if(ltmp) {
 		    pline("%s is after blood, not money!", Monnam(shkp));
-#ifndef GOLDOBJ
-		    if(u.ugold < ltmp/2L ||
-				(u.ugold < ltmp && stashed_gold)) {
-			if (!u.ugold)
-#else
-		    if(umoney < ltmp/2L ||
-				(umoney < ltmp && stashed_gold)) {
+		    if(umoney < ltmp/2L || (umoney < ltmp && stashed_gold)) {
 			if (!umoney)
-#endif
 			    pline(no_money, stashed_gold ? " seem to" : "");
 			else pline(not_enough_money, mhim(shkp));
 			return 1;
@@ -1386,31 +1336,18 @@ proceed:
 		    pline("But since %s shop has been robbed recently,",
 			  mhis(shkp));
 		    pline("you %scompensate %s for %s losses.",
-#ifndef GOLDOBJ
-			  (u.ugold < ltmp) ?
-#else
 			  (umoney < ltmp) ?
-#endif
 			  "partially " : "",
 			  mon_nam(shkp), mhis(shkp));
-#ifndef GOLDOBJ
-		    pay(u.ugold < ltmp ? u.ugold : ltmp, shkp);
-#else
 		    pay(umoney < ltmp ? umoney : ltmp, shkp);
-#endif
 		    make_happy_shk(shkp, false);
 		} else {
 		    /* shopkeeper is angry, but has not been robbed --
 		     * door broken, attacked, etc. */
 		    pline("%s is after your hide, not your money!",
 			  Monnam(shkp));
-#ifndef GOLDOBJ
-		    if(u.ugold < 1000L) {
-			if (!u.ugold)
-#else
 		    if(umoney < 1000L) {
 			if (!umoney)
-#endif
 			    pline(no_money, stashed_gold ? " seem to" : "");
 			else pline(not_enough_money, mhim(shkp));
 			return 1;
@@ -1436,9 +1373,7 @@ proceed:
 		long dtmp = eshkp->debit;
 		long loan = eshkp->loan;
 		char sbuf[BUFSZ];
-#ifdef GOLDOBJ
                 umoney = money_cnt(invent);
-#endif
 		sprintf(sbuf, "You owe %s %ld %s ",
 					   shkname(shkp), dtmp, currency(dtmp));
 		if(loan) {
@@ -1448,13 +1383,8 @@ proceed:
 			   "for gold picked up and the use of merchandise.");
 		} else strcat(sbuf, "for the use of merchandise.");
 		plines(sbuf);
-#ifndef GOLDOBJ
-		if (u.ugold + eshkp->credit < dtmp) {
-		    pline("But you don't%s have enough gold%s.",
-#else
 		if (umoney + eshkp->credit < dtmp) {
-		    pline("But you don't%s have enough money%s.",
-#endif
+		    pline("But you don't%s have enough gold%s.",
 
 			stashed_gold ? " seem to" : "",
 			eshkp->credit ? " or credit" : "");
@@ -1466,12 +1396,7 @@ proceed:
 			eshkp->loan = 0L;
 			pline("Your debt is covered by your credit.");
 		    } else if (!eshkp->credit) {
-#ifndef GOLDOBJ
-			u.ugold -= dtmp;
- 			shkp->mgold += dtmp;
-#else
                         money2mon(shkp, dtmp);
-#endif
 			eshkp->debit = 0L;
 			eshkp->loan = 0L;
 			pline("You pay that debt.");
@@ -1479,12 +1404,7 @@ proceed:
 		    } else {
 			dtmp -= eshkp->credit;
 			eshkp->credit = 0L;
-#ifndef GOLDOBJ
-			u.ugold -= dtmp;
-			shkp->mgold += dtmp;
-#else
                         money2mon(shkp, dtmp);
-#endif
 			eshkp->debit = 0L;
 			eshkp->loan = 0L;
 			pline("That debt is partially offset by your credit.");
@@ -1497,30 +1417,18 @@ proceed:
 	/* now check items on bill */
 	if (eshkp->billct) {
 	    boolean itemize;
-#ifndef GOLDOBJ
-	    if (!u.ugold && !eshkp->credit) {
-#else
             umoney = money_cnt(invent);
 	    if (!umoney && !eshkp->credit) {
-#endif
 		pline("You %shave no money or credit%s.",
 				    stashed_gold ? "seem to " : "",
 				    paid ? " left" : "");
 		return 0;
 	    }
-#ifndef GOLDOBJ
-	    if ((u.ugold + eshkp->credit) < cheapest_item(shkp)) {
-#else
 	    if ((umoney + eshkp->credit) < cheapest_item(shkp)) {
-#endif
 		pline("You don't have enough money to buy%s the item%s you picked.",
 		    eshkp->billct > 1 ? " any of" : "", plur(eshkp->billct));
 		if(stashed_gold)
-#ifndef GOLDOBJ
 		    pline("Maybe you have some gold stashed away?");
-#else
-		    pline("Maybe you have some money stashed away?");
-#endif
 		return 0;
 	    }
 
@@ -1726,9 +1634,7 @@ static void shk_other_services(void) {
 static int dopayobj(struct monst *shkp, struct bill_x *bp, struct obj **obj_p, int	which, boolean itemize) {
 	struct obj *obj = *obj_p;
 	long ltmp, quan, save_quan;
-#ifdef GOLDOBJ
 	long umoney = money_cnt(invent);
-#endif
 	int buy;
 	boolean stashed_gold = (hidden_gold() > 0L),
 		consumed = (which == 0);
@@ -1737,11 +1643,7 @@ static int dopayobj(struct monst *shkp, struct bill_x *bp, struct obj **obj_p, i
 		impossible("Paid object on bill??");
 		return PAY_BUY;
 	}
-#ifndef GOLDOBJ
-	if(itemize && u.ugold + ESHK(shkp)->credit == 0L){
-#else
-	if(itemize && umoney + ESHK(shkp)->credit == 0L){
-#endif
+	if(itemize && umoney + ESHK(shkp)->credit == 0L) {
 		pline("You %shave no money or credit left.",
 			     stashed_gold ? "seem to " : "");
 		return PAY_BROKE;
@@ -1777,13 +1679,8 @@ static int dopayobj(struct monst *shkp, struct bill_x *bp, struct obj **obj_p, i
 		buy = PAY_SKIP;		/* shk won't sell */
 	    }
 	}
-#ifndef GOLDOBJ
-	if (buy == PAY_BUY && u.ugold + ESHK(shkp)->credit < ltmp) {
-	    pline("You don't%s have gold%s enough to pay for %s.",
-#else
 	if (buy == PAY_BUY && umoney + ESHK(shkp)->credit < ltmp) {
 	    pline("You don't%s have money%s enough to pay for %s.",
-#endif
 		stashed_gold ? " seem to" : "",
 		(ESHK(shkp)->credit > 0L) ? " or credit" : "",
 		doname(obj));
@@ -1863,9 +1760,7 @@ boolean paybill(int croaked)	{
 
 static boolean inherits(struct monst *shkp, int numsk, int croaked) {
 	long loss = 0L;
-#ifdef GOLDOBJ
 	long umoney;
-#endif
 	struct eshk *eshkp = ESHK(shkp);
 	boolean take = false, taken = false;
 	int roomno = *u.ushops;
@@ -1906,12 +1801,8 @@ static boolean inherits(struct monst *shkp, int numsk, int croaked) {
 	}
 
 	if (eshkp->following || ANGRY(shkp) || take) {
-#ifndef GOLDOBJ
-		if (!invent && !u.ugold) goto skip;
-#else
 		if (!invent) goto skip;
                 umoney = money_cnt(invent);
-#endif
 		takes[0] = '\0';
 		if (!shkp->mcanmove || shkp->msleeping)
 			strcat(takes, "wakes up and ");
@@ -1919,18 +1810,10 @@ static boolean inherits(struct monst *shkp, int numsk, int croaked) {
 			strcat(takes, "comes and ");
 		strcat(takes, "takes");
 
-#ifndef GOLDOBJ
-		if (loss > u.ugold || !loss || roomno == eshkp->shoproom) {
-			eshkp->robbed -= u.ugold;
-			if (eshkp->robbed < 0L) eshkp->robbed = 0L;
-			shkp->mgold += u.ugold;
-			u.ugold = 0L;
-#else
 		if (loss > umoney || !loss || roomno == eshkp->shoproom) {
 			eshkp->robbed -= umoney;
 			if (eshkp->robbed < 0L) eshkp->robbed = 0L;
 			  if (umoney > 0) money2mon(shkp, umoney);
-#endif
 			flags.botl = 1;
 			pline("%s %s all your possessions.",
 			      shkname(shkp), takes);
@@ -1938,12 +1821,7 @@ static boolean inherits(struct monst *shkp, int numsk, int croaked) {
 			/* where to put player's invent (after disclosure) */
 			set_repo_loc(eshkp);
 		} else {
-#ifndef GOLDOBJ
-			shkp->mgold += loss;
-			u.ugold -= loss;
-#else
                         money2mon(shkp, loss);
-#endif
 			flags.botl = 1;
 			pline("%s %s the %ld %s %sowed %s.",
 			      Monnam(shkp), takes,
@@ -2819,11 +2697,7 @@ move_on:
 		return;
 	}
 
-#ifndef GOLDOBJ
-	if(!shkp->mgold) {
-#else
 	if(!money_cnt(shkp->minvent)) {
-#endif
 		char c, qbuf[BUFSZ];
 		long tmpcr = ((offer * 9L) / 10L) + (offer <= 1L);
 
@@ -2862,14 +2736,9 @@ move_on:
 		}
 	} else {
 		char qbuf[BUFSZ];
-#ifndef GOLDOBJ
-		boolean short_funds = (offer > shkp->mgold);
-		if (short_funds) offer = shkp->mgold;
-#else
                 long shkmoney = money_cnt(shkp->minvent);
 		boolean short_funds = (offer > shkmoney);
 		if (short_funds) offer = shkmoney;
-#endif
 		if (!sell_response) {
 		    only_partially_your_contents =
 			(contained_cost(obj, shkp, 0L, false, false) !=
@@ -3688,11 +3557,7 @@ void pay_for_damage(const char *dmgstr, boolean cant_mollify) {
 	}
 
 	if((um_dist(x, y, 1) && !uinshp) || cant_mollify ||
-#ifndef GOLDOBJ
-	   (u.ugold + ESHK(shkp)->credit) < cost_of_damage
-#else
 	   (money_cnt(invent) + ESHK(shkp)->credit) < cost_of_damage
-#endif
 				|| !rn2(50)) {
 		if(um_dist(x, y, 1) && !uinshp) {
 		    pline("%s shouts:", shkname(shkp));
@@ -3712,12 +3577,7 @@ getcad:
 		 cost_of_damage, currency(cost_of_damage));
 	if(yn(qbuf) != 'n') {
 		cost_of_damage = check_credit(cost_of_damage, shkp);
-#ifndef GOLDOBJ
-		u.ugold -= cost_of_damage;
-		shkp->mgold += cost_of_damage;
-#else
                 money2mon(shkp, cost_of_damage);
-#endif
 		flags.botl = 1;
 		pline("Mollified, %s accepts your restitution.",
 			shkname(shkp));
@@ -3847,9 +3707,7 @@ const char *Izchak_speaks[]={
 
 void shk_chat(struct monst *shkp) {
 	struct eshk *eshk;
-#ifdef GOLDOBJ
 	long shkmoney;
-#endif
 	if (!shkp->isshk) {
 		/* The monster type is shopkeeper, but this monster is
 		   not actually a shk, which could happen if someone
@@ -3890,17 +3748,9 @@ void shk_chat(struct monst *shkp) {
 		      shkname(shkp), eshk->credit, currency(eshk->credit));
 	else if (eshk->robbed)
 		pline("%s complains about a recent robbery.", shkname(shkp));
-#ifndef GOLDOBJ
-	else if (shkp->mgold < 50)
-#else
 	else if ((shkmoney = money_cnt(shkp->minvent)) < 50)
-#endif
 		pline("%s complains that business is bad.", shkname(shkp));
-#ifndef GOLDOBJ
-	else if (shkp->mgold > 4000)
-#else
 	else if (shkmoney > 4000)
-#endif
 		pline("%s says that business is good.", shkname(shkp));
 	else if (strcmp(shkname(shkp), "Izchak") == 0)
 		pline(Izchak_speaks[rn2(SIZE(Izchak_speaks))],shkname(shkp));
@@ -4849,12 +4699,7 @@ static void shk_charge(char *slang, struct monst *shkp) {
 			/* Fun */
 			verbalize("Since you'll have everything you always wanted,");
 			verbalize("...How about loaning me some money?");
-#ifndef GOLDOBJ
-			shkp->mgold += u.ugold;
-			u.ugold = 0;
-#else
 			money2mon(shkp, money_cnt(invent));
-#endif
 			makeknown(obj->otyp);
 			bot();
 		}
@@ -4907,11 +4752,7 @@ static boolean shk_offer_price(char *slang, long charge, struct monst *shkp) {
 	 * since we don't want to charge him for part of it if he can't pay for all
 	 * of it
 	 */
-#ifndef GOLDOBJ
-	if (charge > (u.ugold + credit)) {
-#else
 	if (charge > (money_cnt(invent) + credit)) {
-#endif
 		verbalize("Cash on the spot, %s, and you ain't got the dough!",
 			slang);
 		return false;
@@ -4920,12 +4761,7 @@ static boolean shk_offer_price(char *slang, long charge, struct monst *shkp) {
 	/* Charge the customer */
 	charge = check_credit (charge, shkp); /* Deduct the credit first */
 
-#ifndef GOLDOBJ
-	u.ugold -= charge;
-	shkp->mgold += charge;
-#else
 	money2mon(shkp, charge);
-#endif
 	bot();
 
 	return true;

@@ -155,11 +155,7 @@ bool demon_talk(struct monst *mtmp) {
 	    if (!tele_restrict(mtmp)) (void) rloc(mtmp, false);
 	    return 1;
 	}
-#ifndef GOLDOBJ
-	cash = u.ugold;
-#else
 	cash = money_cnt(invent);
-#endif
 	demand = (cash * (rnd(80) + 20 * Athome)) /
 	    (100 * (1 + (sgn(u.ualign.type) == sgn(mtmp->data->maligntyp))));
 
@@ -270,9 +266,7 @@ int chaotic_minion(int difficulty) {
 long bribe(struct monst *mtmp) {
 	char buf[BUFSZ];
 	long offer;
-#ifdef GOLDOBJ
 	long umoney = money_cnt(invent);
-#endif
 
 	getlin("How much will you offer?", buf);
 	if (sscanf(buf, "%ld", &offer) != 1) offer = 0L;
@@ -286,16 +280,6 @@ long bribe(struct monst *mtmp) {
 	} else if (offer == 0L) {
 		pline("You refuse.");
 		return 0L;
-#ifndef GOLDOBJ
-	} else if (offer >= u.ugold) {
-		pline("You give %s all your gold.", mon_nam(mtmp));
-		offer = u.ugold;
-	} else {
-		pline("You give %s %ld %s.", mon_nam(mtmp), offer, currency(offer));
-	}
-	u.ugold -= offer;
-	mtmp->mgold += offer;
-#else
 	} else if (offer >= umoney) {
 		pline("You give %s all your money.", mon_nam(mtmp));
 		offer = umoney;
@@ -303,7 +287,6 @@ long bribe(struct monst *mtmp) {
 		pline("You give %s %ld %s.", mon_nam(mtmp), offer, currency(offer));
 	}
 	money2mon(mtmp, offer);
-#endif
 	flags.botl = 1;
 	return offer;
 }

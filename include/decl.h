@@ -188,9 +188,7 @@ extern char *save_cm;
 extern int killer_format;
 extern const char *killer;
 extern const char *delayed_killer;
-#ifdef GOLDOBJ
 extern long done_money;
-#endif
 extern char killer_buf[BUFSZ];
 #ifdef DUMP_LOG
 extern char dump_fn[];		/* dumpfile name (dump patch) */

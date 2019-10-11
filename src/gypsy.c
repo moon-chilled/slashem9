@@ -15,51 +15,37 @@
 /*** Money-related functions ***/
 
 static void gypsy_charge(struct monst *mtmp, long amount) {
-#ifdef GOLDOBJ
 	struct obj *gypgold;
-#endif
 
 	/* Take from credit first */
 	if (amount > EGYP(mtmp)->credit) {
 		/* Do in several steps, for broken compilers */
 		amount -= EGYP(mtmp)->credit;
 		EGYP(mtmp)->credit = 0;
-#ifdef GOLDOBJ
 		money2mon(mtmp, amount);
-#else
-		u.ugold -= amount;
-#endif
 		flags.botl = 1;
 	} else
 		EGYP(mtmp)->credit -= amount;
 
 	/* The gypsy never carries cash; it might get stolen! */
-#ifdef GOLDOBJ
 	gypgold = findgold(mtmp->minvent);
 	if (gypgold)
 		m_useup(mtmp, gypgold);
-#endif
+
 	return;
 }
 
 static boolean gypsy_offer(struct monst *mtmp, long cost, char *txt) {
-#ifdef GOLDOBJ
-	long umoney;
-	umoney = money_cnt(invent);
-#endif
+	long umoney = money_cnt(invent);
+
 	verbalize("For %ld credit I will %s!", cost, txt);
 	if (EGYP(mtmp)->credit >= cost) {
 		if (yn("Accept this offer?") == 'y') {
 			EGYP(mtmp)->credit -= cost;
 			return true;
 		}
-#ifndef GOLDOBJ
-	} else if (EGYP(mtmp)->credit + u.ugold >= cost)
-		verbalize("What a pity that I can't accept gold!");
-#else
 	} else if (EGYP(mtmp)->credit + umoney >= cost)
-		verbalize("What a pity that I can't accept money!");
-#endif
+		verbalize("What a pity that I can't accept gold!");
 		/* Maybe you could try gambling some of it for credit... */
 	else
 		verbalize("What a pity that you don't have enough!");
@@ -69,29 +55,15 @@ static boolean gypsy_offer(struct monst *mtmp, long cost, char *txt) {
 static long gypsy_bet(struct monst *mtmp, long minimum) {
 	char prompt[BUFSZ], buf[BUFSZ];
 	long bet = 0L;
-#ifdef GOLDOBJ
-	long umoney;
-	umoney = money_cnt(invent);
-#endif
+	long umoney = money_cnt(invent);
 
-	if (minimum > EGYP(mtmp)->credit +
-#ifndef GOLDOBJ
-													u.ugold) {
-#else
- 													umoney) {
-#endif
+	if (minimum > EGYP(mtmp)->credit + umoney) {
 		pline("You don't have enough money for the minimum bet.");
 		return 0L;
 	}
 
 	/* Prompt for an amount */
-	sprintf(prompt, "Bet how much (%ld to %ld)?", minimum,
-			EGYP(mtmp)->credit +
-#ifndef GOLDOBJ
-													u.ugold);
-#else
-													umoney);
-#endif
+	sprintf(prompt, "Bet how much (%ld to %ld)?", minimum, EGYP(mtmp)->credit + umoney);
 	getlin(prompt, buf);
 	sscanf(buf, "%ld", &bet);
 
@@ -104,12 +76,7 @@ static long gypsy_bet(struct monst *mtmp, long minimum) {
 		pline("You must bet at least %ld.", minimum);
 		return 0L;
 	}
-	if (bet > EGYP(mtmp)->credit +
-#ifndef GOLDOBJ
-								u.ugold) {
-#else
-								umoney) {
-#endif
+	if (bet > EGYP(mtmp)->credit + umoney) {
 		pline("You don't have that much money to bet!");
 		return 0L;
 	}
@@ -745,14 +712,8 @@ void gypsy_chat(struct monst *mtmp) {
 	winid win;
 	anything any;
 	menu_item *selected;
-#ifdef GOLDOBJ
-	long umoney;
-#endif
 	int n;
-
-#ifdef GOLDOBJ
-	umoney = money_cnt(invent);
-#endif
+	long umoney = money_cnt(invent);
 
 	/* Sanity checks */
 	if (!mtmp || !mtmp->mpeaceful || !mtmp->isgyp ||
@@ -760,19 +721,9 @@ void gypsy_chat(struct monst *mtmp) {
 		return;
 
 	/* Add up your available money */
-	pline("You have %ld zorkmid%s credit and are carrying %ld zorkmid%s.",
-			EGYP(mtmp)->credit, plur(EGYP(mtmp)->credit),
-#ifndef GOLDOBJ
-			u.ugold, plur(u.ugold));
-#else
-			umoney, plur(umoney));
-#endif
-	money = EGYP(mtmp)->credit +
-#ifndef GOLDOBJ
-											u.ugold;
-#else
-											umoney;
-#endif
+	pline("You have %ld zorkmid%s credit and are carrying %ld %s.",
+			EGYP(mtmp)->credit, plur(EGYP(mtmp)->credit), umoney, currency(umoney));
+	money = EGYP(mtmp)->credit + umoney;
 
 	/* Create the menu */
 	any.a_void = 0;	/* zero out all bits */

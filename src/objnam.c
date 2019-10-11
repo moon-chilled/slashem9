@@ -826,10 +826,9 @@ ring:
 
 /* used from invent.c */
 bool not_fully_identified(struct obj *otmp) {
-#ifdef GOLDOBJ
     /* gold doesn't have any interesting attributes [yet?] */
     if (otmp->oclass == COIN_CLASS) return false;	/* always fully ID'd */
-#endif
+
     /* check fundamental ID hallmarks first */
     if (!otmp->known || !otmp->dknown ||
 #ifdef MAIL
@@ -2152,19 +2151,11 @@ struct obj * readobjnam(char *bp, struct obj *no_wish, boolean from_user) {
 	   !strcmpi(bp, "coin") || *bp == GOLD_SYM) {
 			if (cnt > 5000 && !wizard) cnt=5000;
 		if (cnt < 1) cnt=1;
-#ifndef GOLDOBJ
-		if (from_user)
-		    pline("%d gold piece%s.", cnt, plur(cnt));
-		u.ugold += cnt;
-		flags.botl=1;
-		return &zeroobj;
-#else
                 otmp = mksobj(GOLD_PIECE, false, false);
 		otmp->quan = cnt;
                 otmp->owt = weight(otmp);
 		flags.botl=1;
 		return otmp;
-#endif
 	}
 	if (strlen(bp) == 1 &&
 	   (i = def_char_to_objclass(*bp)) < MAXOCLASSES && i > ILLOBJ_CLASS

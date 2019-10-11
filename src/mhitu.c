@@ -2730,31 +2730,10 @@ int doseduce (struct monst *mon) {
 		pline("%s demands that you pay %s, but you refuse...",
 			noit_Monnam(mon),
 			Blind ? (fem ? "her" : "him") : mhim(mon));
-	} else if (u.umonnum == PM_LEPRECHAUN)
+	} else if (u.umonnum == PM_LEPRECHAUN) {
 		pline("%s tries to take your money, but fails...",
 				noit_Monnam(mon));
-	else {
-#ifndef GOLDOBJ
-		long cost;
-
-		if (u.ugold > (long)LARGEST_INT - 10L)
-			cost = (long) rnd(LARGEST_INT) + 500L;
-		else
-			cost = (long) rnd((int)u.ugold + 10) + 500L;
-		if (mon->mpeaceful) {
-			cost /= 5L;
-			if (!cost) cost = 1L;
-		}
-		if (cost > u.ugold) cost = u.ugold;
-		if (!cost) verbalize("It's on the house!");
-		else {
-		    pline("%s takes %ld %s for services rendered!",
-			    noit_Monnam(mon), cost, currency(cost));
-		    u.ugold -= cost;
-		    mon->mgold += cost;
-		    flags.botl = 1;
-		}
-#else
+	} else {
 		long cost;
                 long umoney = money_cnt(invent);
 
@@ -2774,7 +2753,6 @@ int doseduce (struct monst *mon) {
                     money2mon(mon, cost);
 		    flags.botl = 1;
 		}
-#endif
 	}
 	if (!rn2(25)) mon->mcan = 1; /* monster is worn out */
 	if (!tele_restrict(mon)) (void) rloc(mon, false);

@@ -292,9 +292,7 @@ int dochug (struct monst *mtmp) {
 	struct permonst *mdat;
 	int tmp=0;
 	int inrange, nearby, scared;
-#ifdef GOLDOBJ
         struct obj *ygold = 0, *lepgold = 0;
-#endif
 
 /*	Pre-movement adjustments	*/
 
@@ -475,13 +473,6 @@ toofar:
 	}
 
 /*	Now the actual movement phase	*/
-
-#ifndef GOLDOBJ
-	if(!nearby || mtmp->mflee || scared ||
-	   mtmp->mconf || mtmp->mstun || (mtmp->minvis && !rn2(3)) ||
-	   (mdat->mlet == S_LEPRECHAUN && !u.ugold && (mtmp->mgold || rn2(2))) ||
-
-#else
         if (mdat->mlet == S_LEPRECHAUN) {
 	    ygold = findgold(invent);
 	    lepgold = findgold(mtmp->minvent);
@@ -490,7 +481,6 @@ toofar:
 	if(!nearby || mtmp->mflee || scared ||
 	   mtmp->mconf || mtmp->mstun || (mtmp->minvis && !rn2(3)) ||
 	   (mdat->mlet == S_LEPRECHAUN && !ygold && (lepgold || rn2(2))) ||
-#endif
 	   (is_wanderer(mdat) && !rn2(4)) || (Conflict && !mtmp->iswiz
 	   && !Is_blackmarket(&u.uz))
 	   || (!mtmp->mcansee && !rn2(4)) || mtmp->mpeaceful) {
@@ -716,12 +706,10 @@ not_special:
 	gx = mtmp->mux;
 	gy = mtmp->muy;
 	appr = mtmp->mflee ? -1 : 1;
-	if (mtmp->mconf || (u.uswallow && mtmp == u.ustuck))
+	if (mtmp->mconf || (u.uswallow && mtmp == u.ustuck)) {
 		appr = 0;
-	else {
-#ifdef GOLDOBJ
+	} else {
 		struct obj *lepgold, *ygold;
-#endif
 		boolean should_see = (couldsee(omx, omy) &&
 				      (levl[gx][gy].lit ||
 				       !levl[omx][omy].lit) &&
@@ -736,13 +724,9 @@ not_special:
 		      ptr->mlet == S_LIGHT) && !rn2(3)))
 			appr = 0;
 
-		if(monsndx(ptr) == PM_LEPRECHAUN && (appr == 1) &&
-#ifndef GOLDOBJ
-		   (mtmp->mgold > u.ugold))
-#else
-		   ( (lepgold = findgold(mtmp->minvent)) &&
-                   (lepgold->quan > ((ygold = findgold(invent)) ? ygold->quan : 0L)) ))
-#endif
+		if (monsndx(ptr) == PM_LEPRECHAUN && (appr == 1) &&
+		   ((lepgold = findgold(mtmp->minvent)) &&
+                   (lepgold->quan > ((ygold = findgold(invent)) ? ygold->quan : 0L))))
 			appr = -1;
 
 		if (!should_see && can_track(ptr)) {
@@ -1238,9 +1222,7 @@ boolean accessible(int x, int y) {
 void set_apparxy (struct monst *mtmp) {
 	boolean notseen, gotu;
 	int disp, mx = mtmp->mux, my = mtmp->muy;
-#ifdef GOLDOBJ
 	long umoney = money_cnt(invent);
-#endif
 
 	/*
 	 * do cheapest and/or most likely tests first
@@ -1257,13 +1239,7 @@ void set_apparxy (struct monst *mtmp) {
 	/* add cases as required.  eg. Displacement ... */
 	if (notseen || Underwater) {
 	    /* Xorns can smell valuable metal like gold, treat as seen */
-	    if ((mtmp->data == &mons[PM_XORN]) &&
-#ifndef GOLDOBJ
-			u.ugold
-#else
-			umoney
-#endif
-			&& !Underwater)
+	    if ((mtmp->data == &mons[PM_XORN]) && umoney && !Underwater)
 		disp = 0;
 	    else
 		disp = 1;
@@ -1309,22 +1285,15 @@ boolean can_ooze(struct monst *mtmp) {
 
 	if (!amorphous(mtmp->data)) return false;
 	if (mtmp == &youmonst) {
-#ifndef GOLDOBJ
-		if (u.ugold > 100L) return false;
-#endif
 		chain = invent;
 	} else {
-#ifndef GOLDOBJ
-		if (mtmp->mgold > 100L) return false;
-#endif
 		chain = mtmp->minvent;
 	}
 	for (obj = chain; obj; obj = obj->nobj) {
 		int typ = obj->otyp;
 
-#ifdef GOLDOBJ
                 if (typ == COIN_CLASS && obj->quan > 100L) return false;
-#endif
+
 		if (obj->oclass != GEM_CLASS &&
 		    !(typ >= ARROW && typ <= BOOMERANG) &&
 		    !(typ >= DAGGER && typ <= CRYSKNIFE) &&

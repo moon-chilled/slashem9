@@ -248,20 +248,12 @@ struct monst * mk_mplayer(struct permonst *ptr, xchar x, xchar y, boolean specia
 		    mongets(mtmp, rnd_class(DILITHIUM_CRYSTAL, JADE));
 		/* To get the gold "right" would mean a player can double his */
 		/* gold supply by killing one mplayer.  Not good. */
-#ifndef GOLDOBJ
-		mtmp->mgold = rn2(1000);
-#else
 		mkmonmoney(mtmp, rn2(1000));
-#endif
 		quan = rn2(10);
 		while(quan--)
 		    mpickobj(mtmp, mkobj(RANDOM_CLASS, false));
 	    } else { /* wandering characters... */
-#ifndef GOLDOBJ
-	       mtmp->mgold = rn2((mtmp->m_lev)*100);
-#else
 	       mkmonmoney(mtmp, rn2((mtmp->m_lev)*100));
-#endif
 	    }
 	    quan = rnd(3);
 	    while(quan--)

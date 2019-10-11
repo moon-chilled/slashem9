@@ -333,21 +333,13 @@ static void m_initweap(struct monst *mtmp) {
 		     mongets(mtmp, LEATHER_JACKET);
 		     mongets(mtmp, FEDORA);
 		     if (rn2(2)) (void)mongets(mtmp, PICK_AXE);
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		   break;
 		   case PM_BARBARIAN:
 		     mongets(mtmp, BATTLE_AXE);
 		     if (!rn2(2)) (void)mongets(mtmp, TWO_HANDED_SWORD);
 		     mongets(mtmp, RING_MAIL);
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		   break;
 		   case PM_CAVEMAN: case PM_CAVEWOMAN:
 		     mongets(mtmp, CLUB);
@@ -356,19 +348,11 @@ static void m_initweap(struct monst *mtmp) {
 			 m_initthrow(mtmp, ARROW, 18);
 		     }
 		     mongets(mtmp, LEATHER_ARMOR);
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		   break;
 		   case PM_DOPPELGANGER:
 		     mongets(mtmp, SILVER_DAGGER);
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		   break;
 		   case PM_ELF:
 		     /* gets taken care of later... */
@@ -379,42 +363,26 @@ static void m_initweap(struct monst *mtmp) {
 		     }
 		     if (rn2(3)) (void)mongets(mtmp, ELVEN_CLOAK);
 		     else (void)mongets(mtmp, ELVEN_MITHRIL_COAT);*/
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		   break;
 		   case PM_FLAME_MAGE:
 		     mongets(mtmp, QUARTERSTAFF);
 		     mongets(mtmp, STUDDED_LEATHER_ARMOR);
 		     mongets(mtmp, WAN_FIRE);
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		   break;
 		   case PM_HEALER:
 		     mongets(mtmp, SCALPEL);
 		     mongets(mtmp, LEATHER_GLOVES);
 		     mongets(mtmp, WAN_HEALING);
 		     mongets(mtmp, WAN_SLEEP);
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 20);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 20));
-#endif
 		   break;
 		   case PM_ICE_MAGE:
 		     mongets(mtmp, QUARTERSTAFF);
 		     mongets(mtmp, STUDDED_LEATHER_ARMOR);
 		     mongets(mtmp, WAN_COLD);
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		   break;
 		   case PM_YEOMAN:
 		   case PM_KNIGHT:
@@ -423,29 +391,17 @@ static void m_initweap(struct monst *mtmp) {
 		     mongets(mtmp, LARGE_SHIELD);
 		     mongets(mtmp, HELMET);
 		     mongets(mtmp, LEATHER_GLOVES);
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		     break;
 		   case PM_MONK:
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 5);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 5));
-#endif
 		   break;
 		   case PM_NECROMANCER:
 		     mongets(mtmp, ATHAME);
 		     if (!rn2(4)) (void)mongets(mtmp, PICK_AXE);
 		     mongets(mtmp, rnd_offensive_item(mtmp));
 		     mongets(mtmp, rnd_defensive_item(mtmp));
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		   break;
 		   case PM_PRIEST:
 		   case PM_PRIESTESS:
@@ -461,20 +417,12 @@ static void m_initweap(struct monst *mtmp) {
 			  mpickobj(mtmp, otmp);
 			}
 		     }
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		   break;
 		   case PM_ROGUE:
 		     mongets(mtmp, SHORT_SWORD);
 		     mongets(mtmp, LEATHER_ARMOR);
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 25);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 25));
-#endif
 		   break;
 		   case PM_SAMURAI:
 		     mongets(mtmp, KATANA);
@@ -484,51 +432,31 @@ static void m_initweap(struct monst *mtmp) {
 			m_initthrow(mtmp, YA, 18);
 		     }
 		     mongets(mtmp, SPLINT_MAIL);
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		   break;
 		   case PM_TOURIST:
 		     m_initthrow(mtmp, DART, 18);
 		     mongets(mtmp, HAWAIIAN_SHIRT);
 		     if (rn2(2)) (void)mongets(mtmp, EXPENSIVE_CAMERA);
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 20);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 20));
-#endif
 		   break;
 		   case PM_UNDEAD_SLAYER:
 		     mongets(mtmp, SILVER_SPEAR);
 		     mongets(mtmp, CHAIN_MAIL);
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		   break;
 		   case PM_VALKYRIE:
 		     mongets(mtmp, LONG_SWORD);
 		     if (!rn2(3)) m_initthrow(mtmp, DAGGER, 4);
 		     mongets(mtmp, SMALL_SHIELD);
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		   break;
 		   case PM_WIZARD:
 		     mongets(mtmp, ATHAME);
 		     mongets(mtmp, rnd_offensive_item(mtmp));
 		     mongets(mtmp, rnd_offensive_item(mtmp));
 		     mongets(mtmp, rnd_defensive_item(mtmp));
-#ifndef GOLDOBJ
-		     mtmp->mgold = (long) d(mtmp->m_lev, 15);
-#else
 		     mkmonmoney(mtmp, (long) d(mtmp->m_lev, 15));
-#endif
 		   break;
 		   default:
 		   break;
@@ -849,7 +777,6 @@ static void m_initweap(struct monst *mtmp) {
 }
 
 
-#ifdef GOLDOBJ
 /*
  *   Makes up money for monster's inventory.
  *   This will change with silver & copper coins
@@ -859,7 +786,6 @@ void mkmonmoney(struct monst *mtmp, long amount) {
     gold->quan = amount;
     add_to_minv(mtmp, gold);
 }
-#endif
 
 static void m_initinv(struct monst *mtmp) {
 	int cnt;
@@ -967,11 +893,7 @@ static void m_initinv(struct monst *mtmp) {
 					     rn2(3) ? CLOAK_OF_PROTECTION :
 						 CLOAK_OF_MAGIC_RESISTANCE);
 		    mongets(mtmp, SMALL_SHIELD);
-#ifndef GOLDOBJ
-		    mtmp->mgold = (long)rn1(10,20);
-#else
 		    mkmonmoney(mtmp,(long)rn1(10,20));
-#endif
 		} else if (quest_mon_represents_role(ptr,PM_MONK)) {
 		    mongets(mtmp, rn2(11) ? ROBE :
 					     CLOAK_OF_MAGIC_RESISTANCE);
@@ -1031,11 +953,7 @@ static void m_initinv(struct monst *mtmp) {
 		}
 		break;
 	    case S_LEPRECHAUN:
-#ifndef GOLDOBJ
-		mtmp->mgold = (long) d(level_difficulty(), 30);
-#else
 		mkmonmoney(mtmp, (long) d(level_difficulty(), 30));
-#endif
 		break;
 	    case S_ELEMENTAL:
   /*            if(ptr == &mons[PM_WATER_WEIRD]){
@@ -1095,14 +1013,8 @@ static void m_initinv(struct monst *mtmp) {
 		mongets(mtmp, rnd_defensive_item(mtmp));
 	if ((int) mtmp->m_lev > rn2(200))
 		mongets(mtmp, rnd_misc_item(mtmp));
-#ifndef GOLDOBJ
-	if (likes_gold(ptr) && !mtmp->mgold && !rn2(5))
-		mtmp->mgold =
-		      (long) d(level_difficulty(), mtmp->minvent ? 5 : 10);
-#else
 	if (likes_gold(ptr) && !findgold(mtmp->minvent) && !rn2(5))
 		mkmonmoney(mtmp, (long) d(level_difficulty(), mtmp->minvent ? 5 : 10));
-#endif
 }
 
 // Note: for long worms, always call cutworm (cutworm calls clone_mon) */
@@ -1140,9 +1052,7 @@ struct monst *clone_mon(struct monst *mon, xchar x, xchar y /* clone's preferred
 
 	m2->minvent = NULL; /* objects don't clone */
 	m2->mleashed = false;
-#ifndef GOLDOBJ
-	m2->mgold = 0L;
-#endif
+
 	/* Max HP the same, but current HP halved for both.  The caller
 	 * might want to override this by halving the max HP also.
 	 * When current HP is odd, the original keeps the extra point.
