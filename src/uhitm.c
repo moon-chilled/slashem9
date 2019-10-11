@@ -652,7 +652,7 @@ static boolean hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 	else if (thrown == 2) launcher = uswapwep;
 	else launcher = 0;
 
-	objenchant = !thrown && obj && obj->spe < 0 ? 0 : obj->spe;
+	objenchant = !thrown && (!obj || obj->spe < 0 ? 0 : obj->spe);
 
 	if (need_one(mon))    canhitmon = 1;
 	if (need_two(mon))    canhitmon = 2;
