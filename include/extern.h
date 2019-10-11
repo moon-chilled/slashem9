@@ -1662,7 +1662,6 @@ extern void inven_inuse(boolean);
 extern int dorecover(int);
 extern void trickery(char *);
 extern void getlev(int,int,xchar,boolean);
-extern void minit(void);
 extern boolean lookup_id_mapping(unsigned, unsigned *);
 extern void mread(int,void *,uint);
 

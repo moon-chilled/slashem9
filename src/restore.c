@@ -820,10 +820,6 @@ static void reset_oattached_mids(boolean ghostly) {
 }
 
 
-void minit(void) {
-    return;
-}
-
 void mread(int fd, void * buf, uint len) {
 	int rlen;
 
