@@ -56,10 +56,6 @@ static long encodeconduct(void);
 static long encodeachieve(void);
 
 static long encodeconduct(void);
-#ifdef NO_SCAN_BRACK
-static void nsb_mung_line(char*);
-static void nsb_unmung_line(char*);
-#endif
 
 /* must fit with end.c; used in rip.c */
 const char * const killed_by_prefix[] = {
@@ -103,15 +99,9 @@ static xchar observable_depth(d_level *lev) {
 }
 
 static void readentry(FILE *rfile, struct toptenentry *tt) {
-#ifdef NO_SCAN_BRACK		/* Version_ Pts DgnLevs_ Hp___ Died__Born id */
-	static const char fmt[] = "%d %d %d %ld %d %d %d %d %d %d %ld %ld %d%*c";
-	static const char fmt005[] = "%s %c %s %s%*c";
-	static const char fmt33[] = "%s %s %s %s %s %s%*c";
-#else
 	static const char fmt[] = "%d.%d.%d %ld %d %d %d %d %d %d %ld %ld %d ";
 	static const char fmt005[] = "%s %c %[^,],%[^\n]%*c";
 	static const char fmt33[] = "%s %s %s %s %[^,],%[^\n]%*c";
-#endif
 
 #define TTFIELDS 13
 
@@ -145,12 +135,6 @@ static void readentry(FILE *rfile, struct toptenentry *tt) {
 				tt->plrole, tt->plrace, tt->plgend,
 				tt->plalign, tt->name, tt->death) != 6)
 			tt->points = 0;
-#ifdef NO_SCAN_BRACK
-		if(tt->points > 0) {
-			nsb_unmung_line(tt->name);
-			nsb_unmung_line(tt->death);
-		}
-#endif
 
 		if(tt->points > 0) {
 			/* If the string "Conduct=%d" appears, set tt->conduct and remove that
@@ -194,39 +178,20 @@ static void writeentry(FILE *rfile, struct toptenentry *tt) {
 	/* Add a trailing " Conduct=%d" to tt->death */
 	sprintf(cp, " Conduct=%ld", tt->conduct);
 
-#ifdef NO_SCAN_BRACK
-	nsb_mung_line(tt->name);
-	nsb_mung_line(tt->death);
-	                   /* Version_ Pts DgnLevs_ Hp___ Died__Born id */
-	fprintf(rfile,"%d %d %d %ld %d %d %d %d %d %d %ld %ld %d ",
-#else
 	fprintf(rfile,"%d.%d.%d %ld %d %d %d %d %d %d %ld %ld %d ",
-#endif
 		tt->ver_major, tt->ver_minor, tt->patchlevel,
 		tt->points, tt->deathdnum, tt->deathlev,
 		tt->maxlvl, tt->hp, tt->maxhp, tt->deaths,
 		tt->deathdate, tt->birthdate, tt->uid);
 	if (!tt->ver_major && !tt->ver_minor && tt->patchlevel < 6)
-#ifdef NO_SCAN_BRACK
-		fprintf(rfile,"%s %c %s %s\n",
-#else
 		fprintf(rfile,"%s %c %s,%s\n",
-#endif
 			tt->plrole, tt->plgend[0],
 			onlyspace(tt->name) ? "_" : tt->name, tt->death);
 	else
-#ifdef NO_SCAN_BRACK
-		fprintf(rfile,"%s %s %s %s %s %s\n",
-#else
 		fprintf(rfile,"%s %s %s %s %s,%s\n",
-#endif
 			tt->plrole, tt->plrace, tt->plgend, tt->plalign,
 			onlyspace(tt->name) ? "_" : tt->name, tt->death);
 
-#ifdef NO_SCAN_BRACK
-	nsb_unmung_line(tt->name);
-	nsb_unmung_line(tt->death);
-#endif
 
 	/* Return the tt->death line to the original form */
 	*cp = '\0';
@@ -1078,19 +1043,6 @@ pickentry:
 	fclose(rfile);
 	return otmp;
 }
-
-#ifdef NO_SCAN_BRACK
-/* Lattice scanf isn't up to reading the scorefile.  What */
-/* follows deals with that; I admit it's ugly. (KL) */
-/* Now generally available (KL) */
-static void nsb_mung_line(char *p) {
-	while ((p = index(p, ' ')) != 0) *p = '|';
-}
-
-static void nsb_unmung_line(char *p) {
-	while ((p = index(p, '|')) != 0) *p = ' ';
-}
-#endif /* NO_SCAN_BRACK */
 
 #if defined(PROXY_GRAPHICS)
 winid create_toptenwin()
