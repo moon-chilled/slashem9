@@ -1,0 +1,14 @@
+CC = clang
+HOST_CC = clang
+SYSSRC = sys/share/ioctl.c sys/share/unixtty.c sys/unix/unixmain.c sys/unix/unixunix.c sys/unix/unixres.c
+BUILDDIR = build-linux
+EXEEXT =
+HOST_EXEEXT =
+CFLAGS += `pkg-config --cflags ncursesw`
+LFLAGS += `pkg-config --libs ncursesw`
+
+include sys/tup/Tupsrc.tup
+
+SLASHEMSRC := $(SRC) $(SYSSRC) $(GENSRC) $(TTY_SRC) $(CURSES_SRC)
+
+include sys/tup/Tupbase.tup

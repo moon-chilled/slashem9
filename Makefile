@@ -2,11 +2,11 @@ PREFIX ?= $(HOME)/slashem-nextinstall
 HACKDIR ?= $(PREFIX)/slashemdir
 BINDIR ?= $(PREFIX)/bin
 
-.PHONY: unix mingw win32
+.PHONY: unix linux mingw win32
 
-default: unix
+default: linux
 
-all: unix mingw win32
+all: unix linux mingw win32
 
 unix:
 	touch Tupfile.ini
@@ -14,6 +14,14 @@ unix:
 	mkdir -p build-unix
 	touch build-unix/tup.config
 	tup build-unix
+	rm -f Tupfile Tupfile.ini
+
+linux:
+	touch Tupfile.ini
+	cp sys/tup/Tuplinux.tup Tupfile
+	mkdir -p build-linux
+	touch build-linux/tup.config
+	tup build-linux
 	rm -f Tupfile Tupfile.ini
 
 mingw:
@@ -35,12 +43,12 @@ win32:
 clean:
 	rm -rf build-*
 
-install: unix
+install: linux
 	mkdir -p $(HACKDIR)/save $(BINDIR)
 	touch $(HACKDIR)/perm $(HACKDIR)/xlogfile
 
-	cp build-unix/slashem build-unix/nhdat $(HACKDIR)
+	cp build-linux/slashem build-linux/nhdat $(HACKDIR)
 
 	sed -e 's;@HACKDIR@;$(HACKDIR);' < sys/unix/slashem.sh > $(BINDIR)/slashem
 	chmod 755 $(BINDIR)/slashem
-	cp build-unix/slashem-recover $(BINDIR)/
+	cp build-linux/slashem-recover $(BINDIR)/
