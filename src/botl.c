@@ -106,11 +106,6 @@ void add_colored_text_match(const char *text, const char *match, char *newbot2) 
 
 	if ((*text == '\0') || (*match == '\0')) return;
 
-	/* don't add anything if it can't be displayed.
-	 * Otherwise the color of invisible text may bleed into
-	 * the statusline. */
-	if (strlen(newbot2) >= min(MAXCO, CO)-1) return;
-
 	if (!iflags.use_status_colors) {
 		sprintf(nb = eos(newbot2), " %s", text);
 		return;
@@ -124,9 +119,6 @@ void add_colored_text_match(const char *text, const char *match, char *newbot2) 
 	curs(WIN_STATUS, 1, 1);
 	color_option = text_color_of(match, text_colors);
 	start_color_option(color_option);
-	/* Trim the statusline to always have the end color
-	 * to have effect. */
-	newbot2[min(MAXCO, CO)-1] = '\0';
 	putstr(WIN_STATUS, 0, newbot2);
 	end_color_option(color_option);
 }
@@ -500,7 +492,6 @@ static void bot2(void) {
 	curs(WIN_STATUS, 1, 1);
 
 	putstr(WIN_STATUS, 0, newbot2);
-	return;
 	flags.botlx = save_botlx;
 }
 
