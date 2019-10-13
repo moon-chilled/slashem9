@@ -1076,28 +1076,17 @@ void find_trap(struct trap *trap) {
 	}
 }
 
-int dosearch0(int aflag) {
-	xchar x, y;
-	struct trap *trap;
-	struct monst *mtmp;
-
+void dosearch0(bool aflag) {
 	if(u.uswallow) {
 		if (!aflag)
 			pline("What are you looking for?  The exit?");
 	} else {
-		int fund = (uwep && uwep->oartifact &&
-		            spec_ability(uwep, SPFX_SEARCH)) ?
-		           uwep->spe : 0;
-		if (ublindf && ublindf->otyp == LENSES && !Blind)
-			fund += 2; /* JDS: lenses help searching */
-		if (fund > 5) fund = 5;
-		for(x = u.ux-1; x < u.ux+2; x++)
-			for(y = u.uy-1; y < u.uy+2; y++) {
+		for(xchar x = u.ux-1; x < u.ux+2; x++)
+			for(xchar y = u.uy-1; y < u.uy+2; y++) {
 				if(!isok(x,y)) continue;
 				if(x != u.ux || y != u.uy) {
 					if (Blind && !aflag) feel_location(x,y);
 					if(levl[x][y].typ == SDOOR) {
-						if(rnl(7-fund)) continue;
 						cvt_sdoor_to_door(&levl[x][y]);	/* .typ = DOOR */
 						exercise(A_WIS, true);
 						nomul(0);
@@ -1106,13 +1095,14 @@ int dosearch0(int aflag) {
 						else
 							newsym(x,y);
 					} else if(levl[x][y].typ == SCORR) {
-						if(rnl(7-fund)) continue;
 						levl[x][y].typ = CORR;
 						unblock_point(x,y);	/* vision */
 						exercise(A_WIS, true);
 						nomul(0);
 						newsym(x,y);
 					} else {
+						struct monst *mtmp;
+
 						/* Be careful not to find anything in an SCORR or SDOOR */
 						if((mtmp = m_at(x, y)) && !aflag) {
 							if(mtmp->m_ap_type) {
@@ -1124,9 +1114,8 @@ find:
 										/* found invisible monster in a square
 										 * which already has an 'I' in it.
 										 * Logically, this should still take
-										 * time and lead to a return(1), but if
-										 * we did that the player would keep
-										 * finding the same monster every turn.
+										 * time, but if we did that the player would
+										 * keep finding the same monster every turn.
 										 */
 										continue;
 									} else {
@@ -1135,7 +1124,7 @@ find:
 									}
 								} else if (!sensemon(mtmp))
 									pline("You find %s.", a_monnam(mtmp));
-								return 1;
+								return;
 							}
 							if(!canspotmon(mtmp)) {
 								if (mtmp->mundetected &&
@@ -1155,14 +1144,15 @@ find:
 							newsym(x,y);
 						}
 
-						if ((trap = t_at(x,y)) && !trap->tseen && !rnl(8)) {
+						struct trap *trap;
+						if ((trap = t_at(x,y)) && !trap->tseen) {
 							nomul(0);
 
 							if (trap->ttyp == STATUE_TRAP) {
 								mtmp = activate_statue_trap(trap, x, y, false);
 								if (mtmp != NULL)
 									exercise(A_WIS, true);
-								return 1;
+								return;
 							} else {
 								find_trap(trap);
 							}
@@ -1171,7 +1161,6 @@ find:
 				}
 			}
 	}
-	return 1;
 }
 
 /* Pre-map the sokoban levels */
@@ -1200,7 +1189,8 @@ void sokoban_detect(void) {
 
 
 int dosearch(void) {
-	return dosearch0(0);
+	dosearch0(false);
+	return 1;
 }
 
 /*detect.c*/

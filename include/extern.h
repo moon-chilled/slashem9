@@ -232,7 +232,7 @@ extern void cvt_sdoor_to_door(struct rm *);
 extern int findit(void);
 extern int openit(void);
 extern void find_trap(struct trap *);
-extern int dosearch0(int);
+extern void dosearch0(bool);
 extern int dosearch(void);
 extern void sokoban_detect(void);
 /* KMH -- Sokoban levels */
