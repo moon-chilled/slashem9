@@ -544,9 +544,9 @@ curses_print_glyph(winid wid, xchar x, xchar y, int glyph)
     }
 
     if (wid == NHW_MAP) {
-        if ((special & MG_STAIRS) && iflags.hilite_hidden_stairs) {
+        if ((special & MG_STAIRS) && iflags.hilite_hidden_stairs && iflags.use_color) {
             color = 16 + (color * 2);
-        } else if ((special & MG_OBJPILE) && iflags.hilite_obj_piles) {
+        } else if ((special & MG_OBJPILE) && iflags.hilite_obj_piles && iflags.use_color) {
             color = 16 + (color * 2) + 1;
         }
     }

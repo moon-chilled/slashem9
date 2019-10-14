@@ -2465,9 +2465,9 @@ void tty_print_glyph(winid window, xchar x, xchar y, int glyph) {
 	}
 
 	if (!reverse_on && (special & (MG_STAIRS|MG_OBJPILE))) {
-		if ((special & MG_STAIRS) && iflags.hilite_hidden_stairs)
+		if ((special & MG_STAIRS) && iflags.hilite_hidden_stairs && iflags.use_color)
 			term_start_bgcolor(CLR_RED);
-		else if ((special & MG_OBJPILE) && iflags.hilite_obj_piles)
+		else if ((special & MG_OBJPILE) && iflags.hilite_obj_piles && iflags.use_color)
 			term_start_bgcolor(CLR_BLUE);
 	}
 
