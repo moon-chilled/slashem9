@@ -2079,19 +2079,6 @@ mfiretrap:
 			if (resists_magm(mtmp)) {
 				shieldeff(mtmp->mx, mtmp->my);
 			} else if (!resist(mtmp, WAND_CLASS, 0, NOTELL)) {
-				/*                        (void) newcham(mtmp, NULL, false);*/
-				/* WAC use polymorph code from zap.c*/
-#if 0
-				if (!rn2(25) || !mon_poly(mtmp)) {
-					if (in_sight) {
-						pline("%s shudders!", Monnam(mtmp));
-						seetrap(trap);
-					}
-					/* no corpse after system shock */
-					mtmp->mhp -= rnd(30);
-					if (mtmp->mhp < 0) mondead(mtmp);
-				} else {
-#endif
 					mon_poly(mtmp, false, "%s changes!");
 					if (in_sight) seetrap(trap);
 				}
@@ -2655,10 +2642,13 @@ mfiretrap:
 		return retval;
 	}
 
-	void water_damage(struct obj *obj, boolean force, boolean here) {
+// returns true if obj is destroyed
+	bool water_damage(struct obj *obj, boolean force, boolean here) {
 		/* Dips in the Lethe are a very poor idea */
 		int luckpenalty = level.flags.lethe? 7 : 0;
 		struct obj *otmp;
+		struct obj *obj_original = obj;
+		bool obj_destroyed = false;
 
 		/* Scrolls, spellbooks, potions, weapons and
 		   pieces of armor may get affected by the water */
@@ -2720,6 +2710,7 @@ mfiretrap:
 						/* damage player/monster? */
 						pline("A potion explodes!");
 						delobj(obj);
+						obj_destroyed = obj == obj_original;
 						continue;
 					} else
 						/* Potions turn to water or amnesia... */
@@ -2814,8 +2805,11 @@ mfiretrap:
 					                && obj->oerodeproof && !rn2(5))
 						obj->oerodeproof = false;
 				}
+				obj_destroyed = false;
 			}
 		}
+
+		return obj_destroyed;
 	}
 
 	/*

@@ -2179,7 +2179,8 @@ void tty_end_menu(winid window, const char *prompt) {
 	}
 
 	if (len > (int)ttyDisplay->cols) {
-	    curr->str[ttyDisplay->cols-2] = 0;
+	    // reduce the string by the amount len exceeds cols
+	    curr->str[strlen(curr->str) - (len - ttyDisplay->cols)] = 0;
 	    len = ttyDisplay->cols;
 	}
 	if (len > cw->cols) cw->cols = len;

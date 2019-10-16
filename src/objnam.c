@@ -469,7 +469,6 @@ char * xname (struct obj *obj) {
 		/* WAC clean up */
 		buf = xname2(hobj);
 
-
 		if (Has_contents(hobj))
 			delete_contents(hobj);
 

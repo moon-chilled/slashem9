@@ -894,6 +894,9 @@ void movebubbles(void) {
 
 	vision_recalc(2);
 
+	/* keep attached ball&chain separate from bubble objects, otherwise panic! */
+	if (Punished) unplacebc();
+
 	/*
 	 * Pick up everything inside of a bubble then fill all bubble
 	 * locations.

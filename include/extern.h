@@ -1996,7 +1996,7 @@ extern void float_up(void);
 extern void fill_pit(int,int);
 extern int float_down(long, long);
 extern int fire_damage(struct obj *,boolean,boolean,xchar,xchar);
-extern void water_damage(struct obj *,boolean,boolean);
+extern bool water_damage(struct obj *,boolean,boolean);
 extern boolean drown(void);
 extern void mon_drain_en(struct monst *, int);
 extern void drain_en(int);

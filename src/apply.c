@@ -1257,6 +1257,10 @@ static int use_torch(struct obj *obj) {
 		return 0;
 	}
 	if (obj->quan > 1L) {
+		if (obj == uwep && welded(obj)) {
+			pline("You can only hold one lit torch, but can't drop any to hold only one.");
+			return 0;
+		}
 		otmp = obj;
 		obj = splitobj(otmp, 1L);
 		obj_extract_self(otmp);	/* free from inv */

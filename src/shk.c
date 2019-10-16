@@ -943,6 +943,10 @@ void obfree (struct obj *obj, struct obj *merge) {
 			*bp = ESHK(shkp)->bill_p[ESHK(shkp)->billct];
 		}
 	}
+
+	if (obj == uwep) uwepgone();
+	else if (obj == uswapwep) uswapwepgone();
+	else if (obj == uquiver) uqwepgone();
 	dealloc_obj(obj);
 }
 

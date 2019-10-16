@@ -734,6 +734,7 @@ static int techeffects (int tech_no) {
 		if (u.usteed) {
 			pline("%s gets tamer.", Monnam(u.usteed));
 			tamedog(u.usteed, NULL);
+			if (u.usteed->mtame < 20) u.usteed->mtame++;
 			t_timeout = rn1(1000,500);
 		} else
 			pline("Your technique is only effective when riding a monster.");
