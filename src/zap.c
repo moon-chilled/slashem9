@@ -3411,9 +3411,11 @@ static int zhitm(struct monst *mon, int type, int nd, struct obj **ootmp) {
 			sho_shieldeff = true;
 			tmp = 0;
 			/* can still blind the monster */
-		} else
+		} else {
 			tmp = d(nd,6);
-		if (spellcaster)
+		}
+
+		if (spellcaster && !resists_elec(mon))
 			skilldmg = spell_damage_bonus(SPE_LIGHTNING);
 		if (!resists_blnd(mon) &&
 		                !(type > 0 && u.uswallow && mon == u.ustuck)) {
@@ -3423,6 +3425,9 @@ static int zhitm(struct monst *mon, int type, int nd, struct obj **ootmp) {
 				mon->mblinded = 127;
 			else mon->mblinded += rnd_tmp;
 		}
+
+		if (resists_elec(mon)) break;
+
 		if (!rn2(3)) (void)destroy_mitem(mon, WAND_CLASS, AD_ELEC);
 		/* not actually possible yet */
 		if (!rn2(3)) (void)destroy_mitem(mon, RING_CLASS, AD_ELEC);
