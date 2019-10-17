@@ -304,4 +304,6 @@ extern int repeat_hit;
 #define RAW_STAT_HALLUCINATION	0x00000040
 #define RAW_STAT_SLIMED		0x00000080
 
+#define NUM_ROLES 18
+
 #endif /* HACK_H */

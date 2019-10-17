@@ -24,7 +24,7 @@
  *
  * God names use a leading underscore to flag goddesses.
  */
-const struct Role roles[] = {
+const struct Role roles[NUM_ROLES+1] = {
 	{	{"Archeologist", 0}, {
 			{"Digger",      0},
 			{"Field Worker",0},

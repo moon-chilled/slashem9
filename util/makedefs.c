@@ -5,7 +5,6 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #define MAKEDEFS_C	/* use to conditionally include file sections */
-/* #define DEBUG */	/* uncomment for debugging info */
 
 #include <stdio.h>
 
@@ -31,8 +30,6 @@
 #define MONST_FILE	"pm.h"
 #define ONAME_FILE	"onames.h"
 #define DATA_FILE	"data"
-#define QTXT_I_FILE	"quest.txt"
-#define QTXT_O_FILE	"quest.dat"
 
 # define INCLUDE_TEMPLATE	"include/%s"
 # define INCLUDE_IN_TEMPLATE    "../include/%s"
@@ -46,34 +43,12 @@ static const char
 
 static char     in_line[256], filename[600];
 
-#ifdef FILE_PREFIX
-		/* if defined, a first argument not starting with - is
-		 * taken as a text string to be prepended to any
-		 * output filename generated */
-char *file_prefix="";
-#endif
-
 int main(int,char **);
 void do_objs(void);
-void do_data(void);
 void do_permonst(void);
-void do_questtxt(void);
 
 extern void monst_init(void);		/* monst.c */
 extern void objects_init(void);	/* objects.c */
-
-static bool d_filter(char *);
-
-static bool qt_comment(char *);
-static bool qt_control(char *);
-static int get_hdr(char *);
-static bool new_id(char *);
-static bool known_msg(int,int);
-static void new_msg(char *,int,int);
-static void do_qt_control(char *);
-static void do_qt_text(char *);
-static void adjust_qt_hdrs(void);
-static void put_qt_hdrs(void);
 
 static char *tmpdup(const char *);
 static char *limit(char *,int);
@@ -84,12 +59,6 @@ static FILE *ifp, *ofp, *tfp;
 
 
 int main(int argc, char	**argv) {
-#ifdef FILE_PREFIX
-	if(argc >= 2) {
-		file_prefix=argv[1];
-	}
-#endif
-
 	/* Note:  these initializers don't do anything except guarantee that
 	   we're linked properly.
 	   */
@@ -97,387 +66,9 @@ int main(int argc, char	**argv) {
 	objects_init();
 
 	do_objs();
-	//do_data();
 	do_permonst();
-	do_questtxt();
 
 	return 0;
-}
-
-
-/* routine to decide whether to discard something from data.base */
-static bool d_filter(char *line) {
-    return line[0] == '#'; // ignore comment lines
-}
-
-   /*
-    *
-	New format (v3.1) of 'data' file which allows much faster lookups [pr]
-"do not edit"		first record is a comment line
-01234567		hexadecimal formatted offset to text area
-name-a			first name of interest
-123,4			offset to name's text, and number of lines for it
-name-b			next name of interest
-name-c			multiple names which share same description also
-456,7			share a single offset,count line
-.			sentinel to mark end of names
-789,0			dummy record containing offset, count of EOF
-text-a			4 lines of descriptive text for name-a
-text-a			at file position 0x01234567L + 123L
-text-a
-text-a
-text-b/text-c		7 lines of text for names-b and -c
-text-b/text-c		at fseek(0x01234567L + 456L)
-...
-    *
-    */
-
-void do_data(void) {
-	char    *infile, *tempfile;
-	bool ok;
-	long	txt_offset;
-	int	entry_cnt, line_cnt;
-
-	infile = alloc(strlen(DATA_IN_TEMPLATE) - 2 + strlen(DATA_FILE) + 6);
-	tempfile = alloc(strlen(DATA_TEMPLATE) - 2 + strlen("database.tmp") + 1);
-	sprintf(tempfile, DATA_TEMPLATE, "database.tmp");
-	filename[0]='\0';
-#ifdef FILE_PREFIX
-	strcat(filename,file_prefix);
-#endif
-	sprintf(eos(filename), DATA_TEMPLATE, DATA_FILE);
-	sprintf(infile, DATA_IN_TEMPLATE, DATA_FILE);
-	strcat(infile, ".base");
-	if (!(ifp = fopen(infile, RDTMODE))) {		/* data.base */
-		perror(infile);
-		exit(EXIT_FAILURE);
-	}
-	if (!(ofp = fopen(filename, WRTMODE))) {	/* data */
-		perror(filename);
-		fclose(ifp);
-		exit(EXIT_FAILURE);
-	}
-	free(infile);
-	if (!(tfp = fopen(tempfile, WRTMODE))) {	/* database.tmp */
-		perror(tempfile);
-		fclose(ifp);
-		fclose(ofp);
-		unlink(filename);
-		exit(EXIT_FAILURE);
-	}
-
-	/* output a dummy header record; we'll rewind and overwrite it later */
-	fprintf(ofp, "%s%08lx\n", Dont_Edit_Data, 0L);
-
-	entry_cnt = line_cnt = 0;
-	/* read through the input file and split it into two sections */
-	while (fgets(in_line, sizeof in_line, ifp)) {
-		if (d_filter(in_line)) continue;
-		if (*in_line > ' ') {	/* got an entry name */
-			/* first finish previous entry */
-			if (line_cnt)  fprintf(ofp, "%d\n", line_cnt),  line_cnt = 0;
-			/* output the entry name */
-			fputs(in_line, ofp);
-			entry_cnt++;		/* update number of entries */
-		} else if (entry_cnt) {	/* got some descriptive text */
-			/* update previous entry with current text offset */
-			if (!line_cnt)  fprintf(ofp, "%ld,", ftell(tfp));
-			/* save the text line in the scratch file */
-			fputs(in_line, tfp);
-			line_cnt++;		/* update line counter */
-		}
-	}
-	/* output an end marker and then record the current position */
-	if (line_cnt)  fprintf(ofp, "%d\n", line_cnt);
-	fprintf(ofp, ".\n%ld,%d\n", ftell(tfp), 0);
-	txt_offset = ftell(ofp);
-	fclose(ifp);		/* all done with original input file */
-
-	/* reprocess the scratch file; 1st format an error msg, just in case */
-	sprintf(in_line, "rewind of \"%s\"", tempfile);
-	if (rewind(tfp) != 0)  goto dead_data;
-	/* copy all lines of text from the scratch file into the output file */
-	while (fgets(in_line, sizeof in_line, tfp))
-		fputs(in_line, ofp);
-
-	/* finished with scratch file */
-	fclose(tfp);
-	unlink(tempfile);	/* remove it */
-	free(tempfile);
-
-	/* update the first record of the output file; prepare error msg 1st */
-	sprintf(in_line, "rewind of \"%s\"", filename);
-	ok = rewind(ofp) == 0;
-	if (ok) {
-		sprintf(in_line, "header rewrite of \"%s\"", filename);
-		ok = fprintf(ofp, "%s%08lx\n", Dont_Edit_Data, txt_offset) >= 0;
-	}
-	if (!ok) {
-dead_data:  perror(in_line);	/* report the problem */
-	    /* close and kill the aborted output file, then give up */
-	    fclose(ofp);
-	    unlink(filename);
-	    exit(EXIT_FAILURE);
-	}
-
-	/* all done */
-	fclose(ofp);
-}
-
-void do_permonst(void) {
-	int i;
-	char *c, *nam;
-
-	filename[0]='\0';
-#ifdef FILE_PREFIX
-	strcat(filename, file_prefix);
-#endif
-	sprintf(eos(filename), INCLUDE_TEMPLATE, MONST_FILE);
-	if (!(ofp = fopen(filename, WRTMODE))) {
-		perror(filename);
-		exit(EXIT_FAILURE);
-	}
-	fprintf(ofp, "/*\tSCCS Id: @(#)pm.h\t3.4\t2002/02/03 */\n\n");
-	fprintf(ofp, "%s", Dont_Edit_Code);
-	fprintf(ofp, "#ifndef PM_H\n#define PM_H\n");
-
-	if (strcmp(mons[0].mname, "playermon") != 0)
-		fprintf(ofp,"\n#define PM_PLAYERMON (-1)");
-
-	for (i = 0; mons[i].mlet; i++) {
-		fprintf(ofp,"\n#define\tPM_");
-		if (mons[i].mlet == S_HUMAN &&
-				!strncmp(mons[i].mname, "were", 4))
-			fprintf(ofp, "HUMAN_");
-		for (nam = c = tmpdup(mons[i].mname); *c; c++)
-			if (*c >= 'a' && *c <= 'z') *c -= ('a' - 'A');
-			else if (*c < 'A' || *c > 'Z') *c = '_';
-		fprintf(ofp,"%s\t%d", nam, i);
-	}
-	fprintf(ofp,"\n\n#define NUMMONS %d\n", i);
-	fprintf(ofp,"\n#endif /* PM_H */\n");
-	fclose(ofp);
-}
-
-
-/*	Start of Quest text file processing. */
-#include "qtext.h"
-
-static struct qthdr qt_hdr;
-static struct msghdr msg_hdr[N_HDR];
-static struct qtmsg *curr_msg;
-
-static int qt_line;
-
-static bool in_msg;
-#define NO_MSG	1	/* strlen of a null line returned by fgets() */
-
-static bool qt_comment(char *s) {
-	if (s[0] == '#') return true;
-	return !in_msg  && strlen(s) == NO_MSG;
-}
-
-static bool qt_control(char *s) {
-	return s[0] == '%' && (s[1] == 'C' || s[1] == 'E');
-}
-
-static int get_hdr(char *code) {
-	int i;
-
-	for(i = 0; i < qt_hdr.n_hdr; i++)
-	    if(!strncmp(code, qt_hdr.id[i], LEN_HDR)) return i+1;
-
-	return 0;
-}
-
-static bool new_id(char *code) {
-	if(qt_hdr.n_hdr >= N_HDR) {
-		fprintf(stderr, OUT_OF_HEADERS, qt_line);
-		return false;
-	}
-
-	strncpy(&qt_hdr.id[qt_hdr.n_hdr][0], code, LEN_HDR);
-	msg_hdr[qt_hdr.n_hdr].n_msg = 0;
-	qt_hdr.offset[qt_hdr.n_hdr++] = 0L;
-	return true;
-}
-
-static bool known_msg(int num, int id) {
-	int i;
-
-	for(i = 0; i < msg_hdr[num].n_msg; i++)
-	    if(msg_hdr[num].qt_msg[i].msgnum == id) return true;
-
-	return false;
-}
-
-
-static void new_msg(char *s, int num, int id) {
-	struct qtmsg *qt_msg;
-
-	if(msg_hdr[num].n_msg >= N_MSG) {
-		fprintf(stderr, OUT_OF_MESSAGES, qt_line);
-	} else {
-		qt_msg = &(msg_hdr[num].qt_msg[msg_hdr[num].n_msg++]);
-		qt_msg->msgnum = id;
-		qt_msg->delivery = s[2];
-		qt_msg->offset = qt_msg->size = 0L;
-
-		curr_msg = qt_msg;
-	}
-}
-
-static void do_qt_control(char *s) {
-	char code[BUFSZ];
-	int num, id = 0;
-
-	switch(s[1]) {
-
-	    case 'C':	if(in_msg) {
-			    fprintf(stderr, CREC_IN_MSG, qt_line);
-			    break;
-			} else {
-			    in_msg = true;
-			    if (sscanf(&s[4], "%s %5d", code, &id) != 2) {
-			    	fprintf(stderr, UNREC_CREC, qt_line);
-			    	break;
-			    }
-			    num = get_hdr(code);
-			    if (!num && !new_id(code))
-			    	break;
-			    num = get_hdr(code)-1;
-			    if(known_msg(num, id))
-			    	fprintf(stderr, DUP_MSG, qt_line);
-			    else new_msg(s, num, id);
-			}
-			break;
-
-	    case 'E':	if(!in_msg) {
-			    fprintf(stderr, END_NOT_IN_MSG, qt_line);
-			    break;
-			} else in_msg = false;
-			break;
-
-	    default:	fprintf(stderr, UNREC_CREC, qt_line);
-			break;
-	}
-}
-
-static void do_qt_text(char *s) {
-	if (!in_msg) {
-	    fprintf(stderr, TEXT_NOT_IN_MSG, qt_line);
-	}
-	curr_msg->size += strlen(s);
-}
-
-static void adjust_qt_hdrs(void) {
-	int i, j;
-	long count = 0L, hdr_offset = sizeof(int) + (LEN_HDR + sizeof(long)) * qt_hdr.n_hdr;
-
-	for(i = 0; i < qt_hdr.n_hdr; i++) {
-		qt_hdr.offset[i] = hdr_offset;
-		hdr_offset += sizeof(int) + sizeof(struct qtmsg) * msg_hdr[i].n_msg;
-	}
-
-	for(i = 0; i < qt_hdr.n_hdr; i++) {
-		for(j = 0; j < msg_hdr[i].n_msg; j++) {
-			msg_hdr[i].qt_msg[j].offset = hdr_offset + count;
-			count += msg_hdr[i].qt_msg[j].size;
-		}
-	}
-}
-
-static void put_qt_hdrs(void) {
-	int i;
-
-	/*
-	 *	The main header record.
-	 */
-#ifdef DEBUG
-	fprintf(stderr, "%ld: header info.\n", ftell(ofp));
-#endif
-	fwrite(&(qt_hdr.n_hdr), sizeof(int), 1, ofp);
-	fwrite(&(qt_hdr.id[0][0]), LEN_HDR, qt_hdr.n_hdr, ofp);
-	fwrite(&(qt_hdr.offset[0]), sizeof(long),
-							qt_hdr.n_hdr, ofp);
-#ifdef DEBUG
-	for(i = 0; i < qt_hdr.n_hdr; i++)
-		fprintf(stderr, "%c @ %ld, ", qt_hdr.id[i], qt_hdr.offset[i]);
-
-	fprintf(stderr, "\n");
-#endif
-
-	/*
-	 *	The individual class headers.
-	 */
-	for(i = 0; i < qt_hdr.n_hdr; i++) {
-
-#ifdef DEBUG
-		fprintf(stderr, "%ld: %c header info.\n", ftell(ofp), qt_hdr.id[i]);
-#endif
-		fwrite(&(msg_hdr[i].n_msg), sizeof(int), 1, ofp);
-		fwrite(&(msg_hdr[i].qt_msg[0]), sizeof(struct qtmsg), msg_hdr[i].n_msg, ofp);
-#ifdef DEBUG
-		{
-			int j;
-			for(j = 0; j < msg_hdr[i].n_msg; j++)
-				fprintf(stderr, "msg %d @ %ld (%ld)\n",
-						msg_hdr[i].qt_msg[j].msgnum,
-						msg_hdr[i].qt_msg[j].offset,
-						msg_hdr[i].qt_msg[j].size);
-		}
-#endif
-	}
-}
-
-void do_questtxt(void) {
-	sprintf(filename, DATA_IN_TEMPLATE, QTXT_I_FILE);
-	ifp = fopen(filename, RDTMODE);
-	if(!ifp) {
-		perror(filename);
-		exit(EXIT_FAILURE);
-	}
-
-	filename[0]='\0';
-#ifdef FILE_PREFIX
-	strcat(filename, file_prefix);
-#endif
-	sprintf(eos(filename), DATA_TEMPLATE, QTXT_O_FILE);
-	if(!(ofp = fopen(filename, WRBMODE))) {
-		perror(filename);
-		fclose(ifp);
-		exit(EXIT_FAILURE);
-	}
-
-	qt_hdr.n_hdr = 0;
-	qt_line = 0;
-	in_msg = false;
-
-	while (fgets(in_line, 80, ifp) != 0) {
-		qt_line++;
-		if(qt_control(in_line)) do_qt_control(in_line);
-		else if(qt_comment(in_line)) continue;
-		else		    do_qt_text(in_line);
-	}
-
-	rewind(ifp);
-	in_msg = false;
-	adjust_qt_hdrs();
-	put_qt_hdrs();
-	while (fgets(in_line, 80, ifp) != 0) {
-
-		if(qt_control(in_line)) {
-			in_msg = (in_line[1] == 'C');
-			continue;
-		} else if(qt_comment(in_line)) continue;
-#ifdef DEBUG
-		fprintf(stderr, "%ld: %s", ftell(stdout), in_line);
-#endif
-		fputs(in_line, ofp);
-	}
-	fclose(ifp);
-	fclose(ofp);
-	return;
 }
 
 
@@ -499,9 +90,6 @@ void do_objs(void) {
 	boolean	sumerr = false;
 
 	filename[0]='\0';
-#ifdef FILE_PREFIX
-	strcat(filename, file_prefix);
-#endif
 	sprintf(eos(filename), INCLUDE_TEMPLATE, ONAME_FILE);
 	if (!(ofp = fopen(filename, WRTMODE))) {
 		perror(filename);
@@ -620,5 +208,37 @@ struct flag flags;
 struct attribs attrmax, attrmin;
 # endif
 #endif /* STRICT_REF_DEF */
+
+void do_permonst(void) {
+	int i;
+	char *c, *nam;
+
+	filename[0]='\0';
+	sprintf(eos(filename), INCLUDE_TEMPLATE, MONST_FILE);
+	if (!(ofp = fopen(filename, WRTMODE))) {
+		perror(filename);
+		exit(EXIT_FAILURE);
+	}
+	fprintf(ofp, "/*\tSCCS Id: @(#)pm.h\t3.4\t2002/02/03 */\n\n");
+	fprintf(ofp, "%s", Dont_Edit_Code);
+	fprintf(ofp, "#ifndef PM_H\n#define PM_H\n");
+
+	if (strcmp(mons[0].mname, "playermon") != 0)
+		fprintf(ofp,"\n#define PM_PLAYERMON (-1)");
+
+	for (i = 0; mons[i].mlet; i++) {
+		fprintf(ofp,"\n#define\tPM_");
+		if (mons[i].mlet == S_HUMAN &&
+				!strncmp(mons[i].mname, "were", 4))
+			fprintf(ofp, "HUMAN_");
+		for (nam = c = tmpdup(mons[i].mname); *c; c++)
+			if (*c >= 'a' && *c <= 'z') *c -= ('a' - 'A');
+			else if (*c < 'A' || *c > 'Z') *c = '_';
+		fprintf(ofp,"%s\t%d", nam, i);
+	}
+	fprintf(ofp,"\n\n#define NUMMONS %d\n", i);
+	fprintf(ofp,"\n#endif /* PM_H */\n");
+	fclose(ofp);
+}
 
 /*makedefs.c*/

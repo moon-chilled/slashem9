@@ -9,9 +9,7 @@
 
 #include "qtext.h"
 
-#define QTEXT_FILE	"quest.dat"
-
-/* #define DEBUG */	/* uncomment for debugging */
+#define QTEXT_FILE	"quest.txt"
 
 static void Fread(void *,int,int,dlb *);
 static struct qtmsg *construct_qtlist(long);
@@ -30,24 +28,6 @@ static struct	qtlists	qt_list;
 static dlb	*msg_file;
 /* used by ldrname() and neminame(), then copied into cvt_buf */
 static char	nambuf[sizeof cvt_buf];
-
-#ifdef DEBUG
-static void dump_qtlist(void);
-
-// dump the character msg list to check appearance
-static void dump_qtlist(void) {
-	struct	qtmsg	*msg;
-	long	size;
-
-	for (msg = qt_list.chrole; msg->msgnum > 0; msg++) {
-		pline("msgnum %d: delivery %c",
-		      msg->msgnum, msg->delivery);
-		more();
-		dlb_fseek(msg_file, msg->offset, SEEK_SET);
-		deliver_by_window(msg, NHW_TEXT);
-	}
-}
-#endif /* DEBUG */
 
 static void Fread(void *ptr, int size, int nitems, dlb *stream) {
 	int cnt;
@@ -75,59 +55,90 @@ static struct qtmsg *construct_qtlist(long hdr_offset) {
 	return msg_list;
 }
 
+bool qt_comment(char *line) {
+	return line[0] == '#'
+		|| strlen(line) == 1;
+}
+
 void load_qtlist(void) {
-	int	n_classes, i;
-	char	qt_classes[N_HDR][LEN_HDR];
-	long	qt_offsets[N_HDR];
-
-	msg_file = dlb_fopen(QTEXT_FILE, RDBMODE);
-	if (!msg_file)
+	if (!(msg_file = dlb_fopen(QTEXT_FILE, "r"))) {
 		panic("CANNOT OPEN QUEST TEXT FILE %s.", QTEXT_FILE);
-
-	/*
-	 * Read in the number of classes, then the ID's & offsets for
-	 * each header.
-	 */
-
-	Fread(&n_classes, sizeof(int), 1, msg_file);
-	Fread(&qt_classes[0][0], sizeof(char)*LEN_HDR, n_classes, msg_file);
-	Fread(qt_offsets, sizeof(long), n_classes, msg_file);
-
-	/*
-	 * Now construct the message lists for quick reference later
-	 * on when we are actually paging the messages out.
-	 */
-
-	qt_list.common = qt_list.chrole = NULL;
-
-	for (i = 0; i < n_classes; i++) {
-		if (!strncmp(COMMON_ID, qt_classes[i], LEN_HDR))
-			qt_list.common = construct_qtlist(qt_offsets[i]);
-		else if (!strncmp(urole.filecode, qt_classes[i], LEN_HDR))
-			qt_list.chrole = construct_qtlist(qt_offsets[i]);
-#if 0	/* UNUSED but available */
-		else if (!strncmp(urace.filecode, qt_classes[i], LEN_HDR))
-			qt_list.chrace = construct_qtlist(qt_offsets[i]);
-#endif
 	}
 
-	if (!qt_list.common || !qt_list.chrole)
-		impossible("load_qtlist: cannot load quest text.");
-#ifdef DEBUG
-	dump_qtlist();
-#endif
-	return;	/* no ***DON'T*** close the msg_file */
+	enum {
+		in_msg,
+		in_body,
+	} state = in_body;
+
+	char line[BUFSZ];
+	char role_name[4];
+	bool are_common = false; // true => this is a message for everyone
+
+	usize num_role_msgs[NUM_ROLES] = {0};
+	usize num_common_msgs = 0;
+	int id;
+	usize role_no;
+
+	usize line_no = 0;
+
+	usize curr_pos, prev_pos;
+#define get_qtlist (are_common ? qt_list.common : qt_list.chrole[role_no])
+#define get_qtlen (are_common ? num_common_msgs : num_role_msgs[role_no])
+#define set_qtlen(val) do { usize _tmp = val; if (are_common) num_common_msgs = _tmp; else num_role_msgs[role_no] = _tmp; } while (0)
+
+	while (dlb_fgets(line, BUFSZ, msg_file)) {
+		//pline("Fgetting (%zu) '%s'", line_no, line);
+		line_no++;
+		prev_pos = curr_pos;
+		curr_pos = dlb_ftell(msg_file);
+		if (qt_comment(line)) {
+			continue;
+
+		} else if (line[0] == '%' && line[1] == 'C') {
+			if (state != in_body) {
+				impossible("Bad quest file: control record encountered during message - line %zu\n", line_no);
+				continue;
+			}
+			state = in_msg;
+			if (sscanf(&line[4], "%3s %5d", role_name, &id) != 2) {
+				impossible("Bad quest file: unrecognized control record - line %zu\n", line_no);
+				continue;
+			}
+			if (!strcmp(role_name, "-")) {
+				are_common = true;
+			} else {
+				role_no = str2role(role_name);
+				if (role_no == ROLE_NONE) {
+					impossible("Bad quest file: nonexistent role '%s' - line %zu", role_name, line_no);
+					continue;
+				}
+			}
+
+			set_qtlen(get_qtlen+1);
+			get_qtlist[get_qtlen-1].msgnum = id;
+			get_qtlist[get_qtlen-1].delivery = line[2];
+			get_qtlist[get_qtlen-1].offset = curr_pos;
+		} else if (line[0] == '%' && line[1] == 'E') {
+			if (state != in_msg) {
+				impossible("Bad quest file: end record encountered before message - line %zu\n", line_no);
+				continue;
+			}
+			get_qtlist[get_qtlen-1].size = prev_pos - get_qtlist[get_qtlen-1].offset;
+			state = in_body;
+		} else {
+			// pass: normal line of text
+		}
+	}
+
+#undef get_qtlist
+#undef get_qtlen
+#undef set_qtlen
 }
 
 /* called at program exit */
 void unload_qtlist(void) {
 	if (msg_file)
-		dlb_fclose(msg_file),  msg_file = 0;
-	if (qt_list.common)
-		free(qt_list.common),  qt_list.common = 0;
-	if (qt_list.chrole)
-		free(qt_list.chrole),  qt_list.chrole = 0;
-	return;
+		dlb_fclose(msg_file),  msg_file = NULL;
 }
 
 short quest_info(int typ) {
@@ -397,7 +408,7 @@ void com_pager(int msgnum) {
 void qt_pager(int msgnum) {
 	struct qtmsg *qt_msg;
 
-	if (!(qt_msg = msg_in(qt_list.chrole, msgnum))) {
+	if (!(qt_msg = msg_in(qt_list.chrole[flags.initrole], msgnum))) {
 		impossible("qt_pager: message %d not found.", msgnum);
 		return;
 	}
