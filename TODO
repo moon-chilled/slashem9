@@ -10,10 +10,6 @@
 
 * Integrate libtre (or maybe gnu regex) and use that instead of relying on regex from the system
 
-* ANSI-ify everything (~half done)
-
-* Remove support for platforms no one uses, and in doing so improve maintainability and support on platforms people actually use
-
 * Rewrite MAIL (actual email checking doesn't make sense, but there are a couple of other things that we might want):
  * Dgl mail
  * In-game chat system (integrate with #shout)
