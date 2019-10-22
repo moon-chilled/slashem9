@@ -9,6 +9,7 @@
 #include "permonst.h"
 #include "mondata.h"
 #include "pm.h"
+#include "artilist.h"
 
 
 /* KMH, intrinsics patch.

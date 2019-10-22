@@ -11,7 +11,6 @@
 #include "config.h"
 #include "objclass.h"
 #include "monsym.h"
-#include "artilist.h"
 #include "mondata.h"
 #include "dungeon.h"
 #include "obj.h"
@@ -153,22 +152,6 @@ void do_objs(void) {
 	fprintf(ofp,"#define\tMAXSPELL\t%d\n", nspell+1);
 	fprintf(ofp,"#define\tNUM_OBJECTS\t%d\n", i);
 
-	fprintf(ofp, "\n/* Artifacts (unique objects) */\n\n");
-
-	for (i = 1; artifact_names[i]; i++) {
-		for (c = objnam = tmpdup(artifact_names[i]); *c; c++)
-		    if (*c >= 'a' && *c <= 'z') *c -= (char)('a' - 'A');
-		    else if (*c < 'A' || *c > 'Z') *c = '_';
-
-		if (!strncmp(objnam, "THE_", 4))
-			objnam += 4;
-		/* fudge _platinum_ YENDORIAN EXPRESS CARD */
-		if (!strncmp(objnam, "PLATINUM_", 9))
-			objnam += 9;
-		fprintf(ofp,"#define\tART_%s\t%d\n", limit(objnam, 1), i);
-	}
-
-	fprintf(ofp, "#define\tNROFARTIFACTS\t%d\n", i-1);
 	fprintf(ofp,"\n#endif /* ONAMES_H */\n");
 	fclose(ofp);
 	if (sumerr) exit(EXIT_FAILURE);

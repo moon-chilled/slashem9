@@ -16,9 +16,8 @@
 #include "tcap.h"
 #endif
 /* ALI - We need the list of artifact names for artifact doors */
-#define MAKEDEFS_C      /* We only want the names, not the complete defn */
+#include "artifact.h"
 #include "artilist.h"
-#undef MAKEDEFS_C
 
 #ifdef MAC
 # ifdef MAC_MPW
@@ -315,8 +314,8 @@ int get_artifact_id(char *s) {
 	int i;
 
 	SpinCursor(3);
-	for(i=0; artifact_names[i]; i++)
-	    if (!strcmp(s, artifact_names[i]))
+	for(i=0; artilist[i].name; i++)
+	    if (!strcmp(s, artilist[i].name))
 		return i;
 	return ERR;
 }
