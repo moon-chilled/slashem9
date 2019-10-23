@@ -1241,13 +1241,11 @@ extern void pututf8char(glyph_t);
 extern int tgetch(void);
 #  endif
 extern char switchar(void);
-# ifndef __GO32__
 extern long freediskspace(char *);
 extern int findfirst(char *);
 extern int findnext(void);
 extern long filesize(char *);
 extern char *foundfile_buffer(void);
-# endif /* __GO32__ */
 # ifndef __CYGWIN__
 extern void chdrive(char *);
 # endif
@@ -1608,7 +1606,7 @@ extern struct permonst *qt_montype(void);
 
 /* ### random.c ### */
 
-#if defined(RANDOM) && !defined(__GO32__) /* djgpp has its own random */
+#ifdef RANDOM
 extern void srandom(unsigned);
 extern char *initstate(unsigned,char *,int);
 extern char *setstate(char *);

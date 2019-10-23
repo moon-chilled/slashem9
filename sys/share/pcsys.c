@@ -11,10 +11,6 @@
 #include <ctype.h>
 #include <fcntl.h>
 #include <process.h>
-#ifdef __GO32__
-#define P_WAIT		0
-#define P_NOWAIT	1
-#endif
 
 
 #ifdef WIN32
@@ -43,19 +39,13 @@ static const char *COMSPEC = "COMSPEC";
 int dosh(void) {
 	extern char orgdir[];
 	char *comspec;
-# ifndef __GO32__
 	int spawnstat;
-# endif
 	if ((comspec = getcomspec())) {
 		suspend_nhwindows("To return to NetHack, enter \"exit\" at the system prompt.\n");
 		chdirx(orgdir, 0);
-#  ifdef __GO32__
-		if (system(comspec) < 0) {  /* wsu@eecs.umich.edu */
-#  else
 		spawnstat = spawnl(P_WAIT, comspec, comspec, NULL);
 
 		if ( spawnstat < 0) {
-#  endif
 			raw_printf("Can't spawn \"%s\"!", comspec);
 			getreturn("to continue");
 		}
