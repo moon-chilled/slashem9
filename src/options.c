@@ -4285,7 +4285,7 @@ static boolean wc2_supported(const char *optnam) {
 
 
 static void wc_set_font_name(int wtype, char *fontname) {
-	char **fn = (char **)0;
+	char **fn = NULL;
 	if (!fontname) return;
 	switch(wtype) {
 	case NHW_MAP:

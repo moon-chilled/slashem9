@@ -1710,10 +1710,9 @@ void (*func)(int,int,void *);
 void * arg;
 {
 	/* If not centered on hero, do the hard work of figuring the area */
-	if (scol != u.ux || srow != u.uy)
-		view_from(srow, scol, (char **)0, NULL, NULL,
-		          range, func, arg);
-	else {
+	if (scol != u.ux || srow != u.uy) {
+		view_from(srow, scol, NULL, NULL, NULL, range, func, arg);
+	} else {
 		int x;
 		int y, min_x, max_x, max_y, offset;
 		char *limits;

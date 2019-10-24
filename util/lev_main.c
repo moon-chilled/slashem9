@@ -1309,7 +1309,7 @@ static bool write_maze(int fd, specialmaze *maze) {
 	}
 
 	Free(maze->parts);
-	maze->parts = (mazepart **)0;
+	maze->parts = NULL;
 	maze->numpart = 0;
 	return true;
 }
@@ -1479,7 +1479,7 @@ void free_rooms(splev *lev) {
 		lev->rooms[n] = NULL;
 	}
 	Free(lev->rooms);
-	lev->rooms = (room **)0;
+	lev->rooms = NULL;
 	lev->nroom = 0;
 
 	for (j = 0; j < lev->ncorr; j++) {
@@ -1487,7 +1487,7 @@ void free_rooms(splev *lev) {
 		lev->corrs[j] = NULL;
 	}
 	Free(lev->corrs);
-	lev->corrs = (corridor **)0;
+	lev->corrs = NULL;
 	lev->ncorr = 0;
 
 	Free(lev->robjects);

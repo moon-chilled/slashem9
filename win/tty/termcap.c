@@ -656,8 +656,8 @@ static void init_hilite(void) {
 	hilites[CLR_GRAY] = hilites[NO_COLOR] = NULL;
 
 	if (tgetnum("Co") < 8
-	    || ((setf = tgetstr("AF", (char **)0)) == NULL
-		 && (setf = tgetstr("Sf", (char **)0)) == NULL))
+	    || ((setf = tgetstr("AF", NULL)) == NULL
+		 && (setf = tgetstr("Sf", NULL)) == NULL))
 		return;
 
 	for (c = 0; c < CLR_MAX / 2; c++) {

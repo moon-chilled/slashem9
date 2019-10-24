@@ -205,7 +205,7 @@ int tgetnum(const char *which) {
 
 /* look up a boolean entry */
 int tgetflag(const char *which) {
-	const char *p = tc_field(which, (const char **)0);
+	const char *p = tc_field(which, NULL);
 
 	return (!p || p[2] != ':') ? 0 : 1;
 }

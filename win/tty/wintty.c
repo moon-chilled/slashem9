@@ -877,7 +877,7 @@ winid tty_create_nhwindow(int type) {
     newwin->curx = newwin->cury = 0;
     newwin->morestr = 0;
     newwin->mlist = NULL;
-    newwin->plist = (tty_menu_item **) 0;
+    newwin->plist = NULL;
     newwin->npages = newwin->plist_size = newwin->nitems = newwin->how = 0;
     switch(type) {
     case NHW_BASE:
@@ -993,7 +993,7 @@ static void free_window_info(struct WinDesc *cw, bool free_data) {
 			}
 		if (free_data) {
 			free(cw->data);
-			cw->data = (char **)0;
+			cw->data = NULL;
 			if (cw->datlen) free(cw->datlen);
 			cw->datlen = NULL;
 			cw->rows = 0;

@@ -912,7 +912,7 @@ void prscore(int argc, char **argv) {
 #ifdef PERS_IS_UID
 		uid = getuid();
 		playerct = 0;
-		players = (const char **)0;
+		players = NULL;
 #else
 		player0 = plname;
 		if (!*player0)
