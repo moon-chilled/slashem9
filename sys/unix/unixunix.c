@@ -173,7 +173,7 @@ void getlock(void) {
 			if (iflags.window_inited) {
 				exit_nhwindows(NULL);
 			}
-			error("");
+			error("%s", "");
 		}
 	}
 
