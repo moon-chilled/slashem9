@@ -1,14 +1,9 @@
 include Tupprefs.tup
 
-: util/makedefs.c util/panic.c src/alloc.c src/objects.c src/monst.c |> $(HOST_CC) $(CFLAGS) -DDLB %f -o %o |> makedefs$(HOST_EXEEXT)
-: makedefs$(HOST_EXEEXT) |> ./makedefs$(HOST_EXEEXT) |> include/onames.h
-
 : util/dgn_comp.y |> bison -d %f -o $(BUILDDIR)/dgn_yacc.c; mv $(BUILDDIR)/dgn_yacc.h include/dgn_comp.h; mv $(BUILDDIR)/dgn_yacc.c src/ |> src/dgn_yacc.c include/dgn_comp.h
 : util/dgn_comp.l |> flex -o %o %f |> src/dgn_lex.c
 : util/lev_comp.y |> bison -d %f -o $(BUILDDIR)/lev_yacc.c; mv $(BUILDDIR)/lev_yacc.h include/lev_comp.h; mv $(BUILDDIR)/lev_yacc.c src/ |> src/lev_yacc.c include/lev_comp.h
 : util/lev_comp.l |> flex -o %o %f |> src/lev_lex.c
-
-#: foreach util/panic.c util/recover.c | include/*.h |> $(CC) $(CFLAGS) -c %f -o %o |> %B.o
 
 : util/recover.c |> $(CC) $(CFLAGS) -o %o %f |> slashem-recover$(EXEEXT)
 

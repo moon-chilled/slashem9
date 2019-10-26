@@ -7,9 +7,6 @@
 
 #include "attrib.h"
 #include "monst.h"
-#ifndef PROP_H
-#include "prop.h"		/* (needed here for util/makedefs.c) */
-#endif
 #include "skills.h"
 
 /* KMH -- struct prop and assignments moved to prop.h */

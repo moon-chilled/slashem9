@@ -14,7 +14,7 @@ extern char *fmt_ptr(const void*,char *);
 
 /* This next pre-processor directive covers almost the entire file,
  * interrupted only occasionally to pick up specific functions as needed. */
-#if !defined(MAKEDEFS_C) && !defined(LEV_LEX_C)
+#ifndef LEV_LEX_C
 
 /* ### allmain.c ### */
 
@@ -463,10 +463,10 @@ extern boolean walk_path(coord *, coord *, boolean (*)(void *,int,int), void *);
 extern boolean hurtle_step(void *, int, int);
 
 /* ### drawing.c ### */
-#endif /* !MAKEDEFS_C && !LEV_LEX_C */
+#endif /* !LEV_LEX_C */
 extern int def_char_to_objclass(char);
 extern int def_char_to_monclass(char);
-#if !defined(MAKEDEFS_C) && !defined(LEV_LEX_C)
+#ifndef LEV_LEX_C
 extern void assign_graphics(const glyph_t *,int,int,int);
 extern void switch_graphics(int);
 extern void assign_rogue_graphics(boolean);
@@ -557,9 +557,9 @@ extern boolean maybe_finished_meal(boolean);
 extern void done1(int);
 extern int done2(void);
 extern void done_in_by(struct monst *);
-#endif /* !MAKEDEFS_C && !LEV_LEX_C */
+#endif /* !LEV_LEX_C */
 extern void panic(const char *,...) PRINTF_F(1,2);
-#if !defined(MAKEDEFS_C) && !defined(LEV_LEX_C)
+#ifndef LEV_LEX_C
 extern void done(int);
 extern void container_contents(struct obj *,boolean,boolean);
 #ifdef DUMP_LOG
@@ -2279,6 +2279,6 @@ extern void makewish(void);
 extern void zap_strike_fx(xchar, xchar, int);
 extern void throwspell(void);
 
-#endif /* !MAKEDEFS_C && !LEV_LEX_C */
+#endif /* !LEV_LEX_C */
 
 #endif /* EXTERN_H */

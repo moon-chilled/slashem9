@@ -858,7 +858,7 @@ adjust_attrib:
 	case RIN_INCREASE_DAMAGE:
 		u.udaminc += obj->spe;
 		break;
-	case RIN_PROTECTION_FROM_SHAPE_CHAN:
+	case RIN_PROTECTION_FROM_SHAPE_CHANGERS:
 		rescham();
 		break;
 	case RIN_PROTECTION:
@@ -987,7 +987,7 @@ adjust_attrib:
 			obj->known = 1;
 			update_inventory();
 		}
-	case RIN_PROTECTION_FROM_SHAPE_CHAN:
+	case RIN_PROTECTION_FROM_SHAPE_CHANGERS:
 		/* If you're no longer protected, let the chameleons
 		 * change shape again -dgk
 		 */
