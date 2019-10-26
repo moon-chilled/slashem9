@@ -31,8 +31,8 @@
 
 #define VERSION_SANITY \
 	  ((sizeof(struct flag)  << 24) \
-	 | (sizeof(struct obj)   << 17) \
-	 | (sizeof(struct monst) << 10) \
+	 | (sizeof(struct obj)   << 16) \
+	 | (sizeof(struct monst) << 8) \
 	 | (sizeof(struct you)))
 
 /*patchlevel.h*/

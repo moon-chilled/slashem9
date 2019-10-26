@@ -1,15 +1,14 @@
-This is a slashem variant.  Take a look.  Or don't.  Whatever suits your fancy.  There's not much to see yet.  Mainly a standard complement of all the bug fixes and ui enhancements that slashem has missed over the last 15 years.  See TODO for a tentative list of ideas for things to maybe do/add at some point.
+This is a slashem variant.  Take a look.  Or don't.  Whatever suits your fancy.  There's not much to see yet.  Mainly a standard complement of all the bug fixes and ui enhancements that slashem has missed over the last 15 years, plus a few of my own.  See TODO for a tentative list of ideas for things to maybe do/add at some point.
 
 
 
 !Warning!
-It is currently VERY volatile.  The version number of 0.0.0E0F0 reflects this.
+Though heading toward a releasable version, it is currently VERY volatile.  The version of 0.0.0E999F0-Alpha reflects this.
 
 Saves may break at any time.
 
 Crashes and other bugs will be frequent.
 
-In the future, techniques will be implemented that (hopefully) reduce the rate
-of save breakage, but that's a LONG way out.
+In the future, techniques will be implemented that (hopefully) reduce the rate of save breakage, but that's a LONG way out.
 
-You should still play it, though!  It's fun, and it's better than vanilla slashem!
+You should still play it, though!  It's fun, and it's way better than vanilla slashem!
