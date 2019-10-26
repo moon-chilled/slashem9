@@ -14,7 +14,7 @@
  * PATCHLEVEL is updated for each release.
  */
 #define PATCHLEVEL      0
-#define EDITLEVEL	0
+#define EDITLEVEL	999
 #define FIXLEVEL        0
 
 #define COPYRIGHT_BANNER_A "This is SuperLotsoAddedStuffHack-Extended Magic-Next 2017-2019"
@@ -34,18 +34,5 @@
 	 | (sizeof(struct obj)   << 17) \
 	 | (sizeof(struct monst) << 10) \
 	 | (sizeof(struct you)))
-
-#if 0
-/*
- * If two or more successive releases have compatible data files, define
- * this with the version number of the oldest such release so that the
- * new release will accept old save and bones files.  The format is
- *	0xMMmmPPeeL
- * 0x = literal prefix "0x", MM = major version, mm = minor version,
- * PP = patch level, ee = edit level, L = literal suffix "L",
- * with all four numbers specified as two hexadecimal digits.
- */
-#define VERSION_COMPATIBILITY 0x00000800L
-#endif
 
 /*patchlevel.h*/

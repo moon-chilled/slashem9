@@ -267,8 +267,8 @@ struct nhproxy_cb_get_glyph_mapping_res_mapping *map;
 		      NHPROXY_RGB_SYM(rgb_colors[C(objects[k].oc_color)],
 		      oc_syms[i]);
 		    map->submappings[j].glyphs[l].description =
-		      obj_descr[k].oc_descr ?
-		      obj_descr[k].oc_descr : obj_descr[k].oc_name;
+		      objects[k].oc_descr ?
+		      objects[k].oc_descr : objects[k].oc_name;
 		    l++;
 		}
 	    j++;

@@ -3,30 +3,23 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-/*
- * All the references to the contents of patchlevel.h have been moved
- * into makedefs....
- */
 #include "patchlevel.h"
 
 char *version_string_tmp(void) {
 	static char buf[128];
 	sprintf(buf, "%d.%d.%dE%dF%d", VERSION_MAJOR, VERSION_MINOR, PATCHLEVEL, EDITLEVEL, FIXLEVEL);
+#ifdef ALPHA
+	strcat(buf, "-Alpha");
+#elif defined(BETA)
+	strcat(buf, "-Beta");
+#endif
 	return buf;
 }
 
 char *full_version_string_tmp(void) {
 	static char buf[BUFSZ];
 
-	sprintf(buf, "%s %s%s Version %s.", PORT_ID, DEF_GAME_NAME,
-#ifdef ALPHA
-	        " Alpha",
-#elif defined(BETA)
-	        " Beta",
-#else
-	        "",
-#endif
-	        version_string_tmp());
+	sprintf(buf, "%s %s Version %s.", PORT_ID, DEF_GAME_NAME, version_string_tmp());
 
 	return buf;
 }
@@ -36,15 +29,8 @@ int doversion(void) {
 	return 0;
 }
 
-boolean check_version(struct version_info *version_data, const char *filename, boolean complain) {
-	if (
-#ifdef VERSION_COMPATIBILITY
-	        version_data->incarnation < VERSION_COMPATIBILITY ||
-	        version_data->incarnation > VERSION_NUMBER
-#else
-	        version_data->incarnation != VERSION_NUMBER
-#endif
-	) {
+bool check_version(struct version_info *version_data, const char *filename, boolean complain) {
+	if (version_data->incarnation != VERSION_NUMBER) {
 		if (complain)
 			pline("Version mismatch for file \"%s\".", filename);
 		return false;

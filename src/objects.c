@@ -2,23 +2,18 @@
 /* Copyright (c) Mike Threepoint, 1989.				  */
 /* NetHack may be freely redistributed.  See license for details. */
 
-#ifndef OBJECTS_PASS_2_
 /* first pass */
 struct monst {
 	struct monst *dummy;
 };	/* lint: struct obj's union */
+
 #include "config.h"
 #include "obj.h"
 #include "objclass.h"
 #include "prop.h"
 #include "skills.h"
 #include "skills.h"
-
-#else	/* !OBJECTS_PASS_2_ */
-/* second pass */
 #include "color.h"
-#  define COLOR_FIELD(X) X,
-#endif	/* !OBJECTS_PASS_2_ */
 
 
 
@@ -32,57 +27,41 @@ struct monst {
  *	set at run-time during role-specific character initialization.
  */
 
-#ifndef OBJECTS_PASS_2_
-/* first pass -- object descriptive text */
-# define OBJ(name,desc) name,desc
-# define OBJECT(obj,bits,prp,sym,prob,dly,wt,cost,sdam,ldam,oc1,oc2,nut,color) \
-	{obj}
-
-struct objdescr obj_descr[] = {
-#else
-/* second pass -- object definitions */
-
-# define BITS(nmkn,mrg,uskn,ctnr,mgc,chrg,uniq,nwsh,big,tuf,dir,sub,mtrl) \
+#define BITS(nmkn,mrg,uskn,ctnr,mgc,chrg,uniq,nwsh,big,tuf,dir,sub,mtrl) \
 	nmkn,mrg,uskn,0,mgc,chrg,uniq,nwsh,big,tuf,dir,mtrl,sub /* SCO ODT 1.1 cpp fodder */
-# define OBJECT(obj,bits,prp,sym,prob,dly,wt,cost,sdam,ldam,oc1,oc2,nut,color) \
-	{0, 0, NULL, bits, prp, sym, dly, COLOR_FIELD(color) \
-	 prob, wt, cost, sdam, ldam, oc1, oc2, nut}
-# ifndef lint
-#  define HARDGEM(n) (n >= 8)
-# else
-#  define HARDGEM(n) (0)
-# endif
+#define OBJECT(name,desc,bits,prp,sym,prob,dly,wt,cost,sdam,ldam,oc1,oc2,nut,color) \
+	{name, desc, 0, 0, NULL, bits, prp, sym, dly, color, prob, wt, cost, sdam, ldam, oc1, oc2, nut}
+#define HARDGEM(n) (n >= 8)
 
 struct objclass objects[] = {
-#endif
 	/* dummy object[0] -- description [2nd arg] *must* be NULL */
-	OBJECT(OBJ("strange object",NULL), BITS(1,0,0,0,0,0,0,0,0,0,0,0,0),
+	OBJECT("strange object",NULL, BITS(1,0,0,0,0,0,0,0,0,0,0,0,0),
 	       0, ILLOBJ_CLASS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 
 	/* weapons ... */
 #define WEAPON(name,app,kn,mg,bi,prob,wt,cost,sdam,ldam,hitbon,typ,sub,metal,color) \
 	OBJECT( \
-		OBJ(name,app), BITS(kn,mg,1,0,0,1,0,0,bi,0,typ,sub,metal), 0, \
+		name,app, BITS(kn,mg,1,0,0,1,0,0,bi,0,typ,sub,metal), 0, \
 		WEAPON_CLASS, prob, 0, \
 		wt, cost, sdam, ldam, hitbon, 0, wt, color )
 #define PROJECTILE(name,app,kn,prob,wt,cost,sdam,ldam,hitbon,metal,sub,color) \
 	OBJECT( \
-		OBJ(name,app), BITS(kn,1,1,0,0,1,0,0,0,0,PIERCE,sub,metal), 0, \
+		name,app, BITS(kn,1,1,0,0,1,0,0,0,0,PIERCE,sub,metal), 0, \
 		WEAPON_CLASS, prob, 0, \
 		wt, cost, sdam, ldam, hitbon, WP_GENERIC, wt, color )
 #define BOW(name,app,kn,bi,prob,wt,cost,hitbon,metal,sub,color) \
 	OBJECT( \
-		OBJ(name,app), BITS(kn,0,1,0,0,1,0,0,bi,0,0,sub,metal), 0, \
+		name,app, BITS(kn,0,1,0,0,1,0,0,bi,0,0,sub,metal), 0, \
 		WEAPON_CLASS, prob, 0, \
 		wt, cost, 0, 0, hitbon, WP_GENERIC, wt, color )
 #define BULLET(name,app,kn,prob,wt,cost,sdam,ldam,hitbon,ammotyp,typ,metal,sub,color) \
 	OBJECT( \
-		OBJ(name,app), BITS(kn,1,1,0,0,1,0,0,0,0,typ,sub,metal), 0, \
+		name,app, BITS(kn,1,1,0,0,1,0,0,0,0,typ,sub,metal), 0, \
 		WEAPON_CLASS, prob, 0, \
 		wt, cost, sdam, ldam, hitbon, ammotyp, wt, color )
 #define GUN(name,app,kn,bi,prob,wt,cost,range,rof,hitbon,ammotyp,metal,sub,color) \
 	OBJECT( \
-		OBJ(name,app), BITS(kn,0,1,0,0,1,0,0,bi,0,0,sub,metal), 0, \
+		name,app, BITS(kn,0,1,0,0,1,0,0,bi,0,0,sub,metal), 0, \
 		WEAPON_CLASS, prob, 0, \
 		wt, cost, range, rof, hitbon, ammotyp, wt, color )
 
@@ -406,7 +385,7 @@ struct objclass objects[] = {
 	 */
 #define ARMOR(name,desc,kn,mgc,blk,power,prob,delay,wt,cost,ac,can,sub,metal,c) \
 	OBJECT( \
-		OBJ(name,desc), BITS(kn,0,1,0,mgc,1,0,0,blk,0,0,sub,metal), power, \
+		name,desc, BITS(kn,0,1,0,mgc,1,0,0,blk,0,0,sub,metal), power, \
 		ARMOR_CLASS, prob, delay, wt, cost, \
 		0, 0, 10 - ac, can, wt, c )
 #define CLOAK(name,desc,kn,mgc,power,prob,delay,wt,cost,ac,can,metal,c) \
@@ -636,7 +615,7 @@ struct objclass objects[] = {
 	/* rings ... */
 	/* [Tom] looks like there are no probs to change... */
 #define RING(name,power,stone,cost,mgc,spec,mohs,metal,color) OBJECT( \
-		OBJ(name,stone), \
+		name,stone, \
 		BITS(0,0,spec,0,mgc,spec,0,0,0,HARDGEM(mohs),0,0,metal), \
 		power, RING_CLASS, 0, 0, 3, cost, 0, 0, 0, 0, 15, color )
 	RING("adornment", ADORNED, "wooden",        100, 1, 1, 2, WOOD, HI_WOOD),
@@ -689,7 +668,7 @@ struct objclass objects[] = {
 
 	/* amulets ... - THE Amulet comes last because it is special */
 #define AMULET(name,desc,power,prob) OBJECT( \
-		OBJ(name,desc), BITS(0,0,0,0,1,0,0,0,0,0,0,0,IRON), power, \
+		name,desc, BITS(0,0,0,0,1,0,0,0,0,0,0,0,IRON), power, \
 		AMULET_CLASS, prob, 0, 20, 150, 0, 0, 0, 0, 20, HI_METAL )
 	AMULET("amulet of change",        "square",     0,          110),
 	AMULET("amulet of drain resistance","warped",   DRAIN_RES,   60),
@@ -703,28 +682,28 @@ struct objclass objects[] = {
 	AMULET("amulet of unchanging",    "concave",    UNCHANGING,	 50),
 	AMULET("amulet versus poison",    "pyramidal",  POISON_RES, 140),
 	AMULET("amulet versus stone",     "lunate",   /*STONE_RES*/0,60),
-	OBJECT(OBJ("cheap plastic imitation of the Amulet of Yendor",
-	           "Amulet of Yendor"), BITS(0,0,1,0,0,0,0,0,0,0,0,0,PLASTIC), 0,
+	OBJECT("cheap plastic imitation of the Amulet of Yendor",
+	           "Amulet of Yendor", BITS(0,0,1,0,0,0,0,0,0,0,0,0,PLASTIC), 0,
 	       AMULET_CLASS, 0, 0, 20,    0, 0, 0, 0, 0,  1, HI_METAL),
-	OBJECT(OBJ("Amulet of Yendor",	/* note: description == name */
-	           "Amulet of Yendor"), BITS(0,0,1,0,1,0,1,1,0,0,0,0,MITHRIL), 0,
+	OBJECT("Amulet of Yendor",	/* note: description == name */
+	           "Amulet of Yendor", BITS(0,0,1,0,1,0,1,1,0,0,0,0,MITHRIL), 0,
 	       AMULET_CLASS, 0, 0, 20, 30000, 0, 0, 0, 0, 20, HI_METAL),
 #undef AMULET
 
 	/* tools ... */
 	/* tools with weapon characteristics come last */
 #define TOOL(name,desc,kn,mrg,mgc,chg,prob,wt,cost,mat,color) \
-	OBJECT( OBJ(name,desc), \
+	OBJECT( name,desc, \
 		BITS(kn,mrg,chg,0,mgc,chg,0,0,0,0,0,P_NONE,mat), \
 		0, TOOL_CLASS, prob, 0, \
 		wt, cost, 0, 0, 0, 0, wt, color )
 #define CONTAINER(name,desc,kn,mgc,chg,bi,prob,wt,cost,mat,color) \
-	OBJECT( OBJ(name,desc), \
+	OBJECT( name,desc, \
 		BITS(kn,0,chg,1,mgc,chg,0,0,bi,0,0,P_NONE,mat), \
 		0, TOOL_CLASS, prob, 0, \
 		wt, cost, 0, 0, 0, 0, wt, color )
 #define WEPTOOL(name,desc,kn,mgc,chg,bi,prob,wt,cost,sdam,ldam,hitbon,typ,sub,mat,clr) \
-	OBJECT( OBJ(name,desc), \
+	OBJECT( name,desc, \
 		BITS(kn,0,1,chg,mgc,1,0,0,bi,0,typ,sub,mat), \
 		0, TOOL_CLASS, prob, 0, \
 		wt, cost, sdam, ldam, hitbon, 0, wt, clr )
@@ -791,7 +770,7 @@ struct objclass objects[] = {
 	/* WEPTOOL("torch", NULL,
 		   1, 0, 0,  0,  25, 8, 5, 2, WHACK, P_CLUB, WOOD, HI_WOOD), */
 
-	OBJECT(OBJ("torch", NULL),
+	OBJECT("torch", NULL,
 	       BITS(1,1,1,0,0,1,0,0,0,0,WHACK,P_CLUB,WOOD),
 	       0, TOOL_CLASS, 25, 0,
 	       20, 8, 2, 5, WHACK, 0, 20, HI_WOOD ),
@@ -844,18 +823,18 @@ struct objclass objects[] = {
 	TOOL("magic marker", NULL, 1, 0, 1, 1,  15,  2,  50, PLASTIC, CLR_RED),
 
 	/* Two pseudo tools. These can never exist outside of medical kits. */
-	OBJECT(OBJ("bandage", NULL),
+	OBJECT("bandage", NULL,
 	       BITS(1,1,0,0,0,0,0,1,0,0,0,P_NONE,CLOTH), 0,
 	       TOOL_CLASS, 0, 0, 1, 1, 0, 0, 0, 0, 0, CLR_WHITE),
-	OBJECT(OBJ("phial", NULL),
+	OBJECT("phial", NULL,
 	       BITS(1,1,0,0,0,0,0,1,0,0,0,P_NONE,GLASS), 0,
 	       TOOL_CLASS, 0, 0, 2, 1, 0, 0, 0, 0, 1, HI_GLASS),
 
 	/* Two special unique artifact "tools" */
-	OBJECT(OBJ("Candelabrum of Invocation", "candelabrum"),
+	OBJECT("Candelabrum of Invocation", "candelabrum",
 	       BITS(0,0,1,0,1,0,1,1,0,0,0,0,GOLD), 0,
 	       TOOL_CLASS, 0, 0,10, 5000, 0, 0, 0, 0, 200, HI_GOLD),
-	OBJECT(OBJ("Bell of Opening", "silver bell"),
+	OBJECT("Bell of Opening", "silver bell",
 	       BITS(0,0,1,0,1,1,1,1,0,0,0,0,SILVER), 0,
 	       TOOL_CLASS, 0, 0,10, 5000, 0, 0, 0, 0, 50, HI_SILVER),
 #undef TOOL
@@ -865,7 +844,7 @@ struct objclass objects[] = {
 
 	/* Comestibles ... */
 #define FOOD(name,prob,delay,wt,unk,tin,nutrition,color) OBJECT( \
-		OBJ(name,NULL), BITS(1,1,unk,0,0,0,0,0,0,0,0,0,tin), 0, \
+		name,NULL, BITS(1,1,unk,0,0,0,0,0,0,0,0,0,tin), 0, \
 		FOOD_CLASS, prob, delay, \
 		wt, nutrition/20 + 5, 0, 0, 0, 0, nutrition, color )
 	/* all types of food (except tins & corpses) must have a delay of at least 1. */
@@ -886,7 +865,7 @@ struct objclass objects[] = {
 	FOOD("meat stick",           0, 1,  1, 0, FLESH,   5, CLR_BROWN),
 	FOOD("huge chunk of meat",   0,20,400, 0, FLESH,2000, CLR_BROWN),
 	/* special case because it's not mergable */
-	OBJECT(OBJ("meat ring", NULL),
+	OBJECT("meat ring", NULL,
 	       BITS(1,0,0,0,0,0,0,0,0,0,0,0,FLESH),
 	       0, FOOD_CLASS, 0, 1, 5, 1, 0, 0, 0, 0, 5, CLR_BROWN),
 
@@ -932,7 +911,7 @@ struct objclass objects[] = {
 
 	/* potions ... */
 #define POTION(name,desc,mgc,power,prob,cost,color) OBJECT( \
-		OBJ(name,desc), BITS(0,1,0,0,mgc,0,0,0,0,0,0,0,GLASS), power, \
+		name,desc, BITS(0,1,0,0,mgc,0,0,0,0,0,0,0,GLASS), power, \
 		POTION_CLASS, prob, 0, 20, cost, 0, 0, 0, 0, 10, color )
 	POTION("booze", "brown",                0, 0,          40,  50, CLR_BROWN),
 	POTION("fruit juice", "dark",           0, 0,          40,  50, CLR_BLACK),
@@ -970,7 +949,7 @@ struct objclass objects[] = {
 
 	/* scrolls ... */
 #define SCROLL(name,text,sub,mgc,prob,cost) OBJECT( \
-		OBJ(name,text), BITS(0,1,0,0,mgc,0,0,0,0,0,0,sub,PAPER), 0, \
+		name,text, BITS(0,1,0,0,mgc,0,0,0,0,0,0,sub,PAPER), 0, \
 		SCROLL_CLASS, prob, 0, 5, cost, 0, 0, 0, 0, 6, HI_PAPER )
 	/* Attack */
 	SCROLL("create monster",        "LEP GEX VEN ZEA",      P_ATTACK_SPELL, 1,  45, 200),
@@ -1014,7 +993,7 @@ struct objclass objects[] = {
 
 	/* spell books ... */
 #define SPELL(name,desc,sub,prob,delay,level,mgc,dir,color) OBJECT( \
-		OBJ(name,desc), BITS(0,0,1,0,mgc,1,0,0,0,0,dir,sub,PAPER), 0, \
+		name,desc, BITS(0,0,1,0,mgc,1,0,0,0,0,dir,sub,PAPER), 0, \
 		SPBOOK_CLASS, prob, delay, \
 		50, level*100, 0, 0, 0, level, 20, color )
 	/* Attack spells */
@@ -1091,7 +1070,7 @@ struct objclass objects[] = {
 	SPELL(NULL,		 "stapled",     P_NONE,  0,  0, 0, 1, 0,         HI_PAPER),
 	SPELL("blank paper",	 "plain",		P_NONE, 20,  0, 0, 0, 0,         HI_PAPER),
 	/* ...Blank spellbook must come last because it retains its description */
-	OBJECT(OBJ("Book of the Dead", "papyrus"),
+	OBJECT("Book of the Dead", "papyrus",
 	       BITS(0,0,1,0,1,0,1,1,0,0,0,0,PAPER), 0,
 	       SPBOOK_CLASS, 0, 0,20, 10000, 0, 0, 0, 7, 20, HI_PAPER),
 	/* ...A special, one of a kind, spellbook */
@@ -1099,7 +1078,7 @@ struct objclass objects[] = {
 
 	/* wands ... */
 #define WAND(name,typ,prob,cost,mgc,dir,metal,color) OBJECT( \
-		OBJ(name,typ), BITS(0,0,1,0,mgc,1,0,0,0,0,dir,0,metal), 0, \
+		name,typ, BITS(0,0,1,0,mgc,1,0,0,0,0,dir,0,metal), 0, \
 		WAND_CLASS, prob, 0, 7, cost, 0, 0, 0, 0, 30, color )
 	WAND("light",          "glass",    50, 100, 1, NODIR,     GLASS,    HI_GLASS),
 	WAND("nothing",        "oak",      20, 100, 0, IMMEDIATE, WOOD,     HI_WOOD),
@@ -1142,18 +1121,18 @@ struct objclass objects[] = {
 
 	/* coins ... - so far, gold is all there is */
 #define COIN(name,prob,metal,worth) OBJECT( \
-		OBJ(name,NULL), BITS(0,1,0,0,0,0,0,0,0,0,0,P_NONE,metal), 0, \
+		name,NULL, BITS(0,1,0,0,0,0,0,0,0,0,0,P_NONE,metal), 0, \
 		COIN_CLASS, prob, 0, 1, worth, 0, 0, 0, 0, 0, HI_GOLD )
 	COIN("gold piece",      1000, GOLD,1),
 #undef COIN
 
 	/* gems ... - includes stones and rocks but not boulders */
 #define GEM(name,desc,prob,wt,gval,nutr,mohs,glass,color) OBJECT( \
-	    OBJ(name,desc), \
+	    name,desc, \
 	    BITS(0,1,0,0,0,0,0,0,0,HARDGEM(mohs),0,-P_SLING,glass), 0, \
 	    GEM_CLASS, prob, 0, 1, gval, 3, 3, 0, 0, nutr, color )
 #define ROCK(name,desc,kn,prob,wt,gval,sdam,ldam,mgc,nutr,mohs,glass,color) OBJECT( \
-	    OBJ(name,desc), \
+	    name,desc, \
 	    BITS(kn,1,0,0,mgc,0,0,0,0,HARDGEM(mohs),0,-P_SLING,glass), 0, \
 	    GEM_CLASS, prob, 0, wt, gval, sdam, ldam, 0, 0, nutr, color )
 	GEM("dilithium crystal", "white",      2,  1, 4500, 15,  5, GEMSTONE, CLR_WHITE),
@@ -1209,47 +1188,35 @@ struct objclass objects[] = {
 	 * Boulders weigh more than MAX_CARR_CAP; statues use corpsenm to take
 	 * on a specific type and may act as containers (both affect weight).
 	 */
-	OBJECT(OBJ("boulder",NULL), BITS(1,0,0,0,0,0,0,0,1,0,0,P_NONE,MINERAL), 0,
+	OBJECT("boulder",NULL, BITS(1,0,0,0,0,0,0,0,1,0,0,P_NONE,MINERAL), 0,
 	       ROCK_CLASS,   100, 0, 6000,  0, 20, 20, 0, 0, 2000, HI_MINERAL),
-	OBJECT(OBJ("statue", NULL), BITS(1,0,0,1,0,0,0,0,0,0,0,P_NONE,MINERAL), 0,
+	OBJECT("statue", NULL, BITS(1,0,0,1,0,0,0,0,0,0,0,P_NONE,MINERAL), 0,
 	       ROCK_CLASS,   900, 0, 2500,  0, 20, 20, 0, 0, 2500, CLR_WHITE),
 
-	OBJECT(OBJ("heavy iron ball", NULL), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0,
+	OBJECT("heavy iron ball", NULL, BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0,
 	       BALL_CLASS,  1000, 0,  480, 10, 25, 25, 0, 0,  200, HI_METAL),
 	/* +d4 when "very heavy" */
-	OBJECT(OBJ("iron chain", NULL), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0,
+	OBJECT("iron chain", NULL, BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0,
 	       CHAIN_CLASS, 1000, 0,  120,  0,  4,  4, 0, 0,  200, HI_METAL),
 	/* +1 both l & s */
 
-	OBJECT(OBJ("blinding venom", "splash of venom"),
+	OBJECT("blinding venom", "splash of venom",
 	       BITS(0,1,0,0,0,0,0,1,0,0,0,P_NONE,LIQUID), 0,
 	       VENOM_CLASS,  500, 0,	 1,  0,  0,  0, 0, 0,	 0, HI_ORGANIC),
-	OBJECT(OBJ("acid venom", "splash of venom"),
+	OBJECT("acid venom", "splash of venom",
 	       BITS(0,1,0,0,0,0,0,1,0,0,0,P_NONE,LIQUID), 0,
 	       VENOM_CLASS,  500, 0,	 1,  0,  6,  6, 0, 0,	 0, HI_ORGANIC),
 	/* +d6 small or large */
 
 	/* fencepost, the deadly Array Terminator -- name [1st arg] *must* be NULL */
-	OBJECT(OBJ(NULL,NULL), BITS(0,0,0,0,0,0,0,0,0,0,0,P_NONE,0), 0,
+	OBJECT(NULL,NULL, BITS(0,0,0,0,0,0,0,0,0,0,0,P_NONE,0), 0,
 	       ILLOBJ_CLASS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }; /* objects[] */
-
-#ifndef OBJECTS_PASS_2_
-
-/* perform recursive compilation for second structure */
-#  undef OBJ
-#  undef OBJECT
-#  define OBJECTS_PASS_2_
-#include "objects.c"
-
-void objects_init(void);
 
 /* dummy routine used to force linkage */
 void
 objects_init() {
 	return;
 }
-
-#endif	/* !OBJECTS_PASS_2_ */
 
 /*objects.c*/

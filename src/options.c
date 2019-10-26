@@ -619,7 +619,7 @@ void initoptions(void) {
 	/* prevent it from being wished unless it's actually present	*/
 	/* as a named (or default) fruit.  Wishing for "fruit" will	*/
 	/* result in the player's preferred fruit [better than "\033"].	*/
-	obj_descr[SLIME_MOLD].oc_name = "fruit";
+	objects[SLIME_MOLD].oc_name = "fruit";
 
 	if (flags.lit_corridor && iflags.use_color) {
 		showsyms[S_darkroom]=showsyms[S_room];
@@ -1305,18 +1305,18 @@ bool parse_object_symbol(const char *str) {
 	}
 
 	/* find object */
-	for (i=0; obj_descr[i].oc_name || obj_descr[i].oc_descr; i++) {
-		if ((obj_descr[i].oc_name && obj_descr[i].oc_descr) ||
-		                (obj_descr[i].oc_descr)) {
+	for (i=0; objects[i].oc_name || objects[i].oc_descr; i++) {
+		if ((objects[i].oc_name && objects[i].oc_descr) ||
+		                (objects[i].oc_descr)) {
 			/* Items with both descriptive and actual name or only
 			 * descriptive name. */
-			if (!strcmpi(object, obj_descr[i].oc_descr)) {
+			if (!strcmpi(object, objects[i].oc_descr)) {
 				objclass_unicode_codepoint[i] = num;
 				return true;
 			}
-		} else if (obj_descr[i].oc_name) {
+		} else if (objects[i].oc_name) {
 			/* items with only actual name like "carrot" */
-			if (!strcmpi(object, obj_descr[i].oc_name)) {
+			if (!strcmpi(object, objects[i].oc_name)) {
 				objclass_unicode_codepoint[i] = num;
 				return true;
 			}
