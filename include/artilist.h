@@ -70,7 +70,7 @@ static struct artifact artilist[] = {
 	  (SPFX_RESTR|SPFX_DFLAG2), 0, M2_GIANT,
 	  PHYS(5,0),	NO_DFNS,	NO_CARY,	0, A_NEUTRAL, NON_PM, NON_PM, 800L ),
 
-	A(ART_Quick_BLADE, "Quick Blade",                ELVEN_SHORT_SWORD,
+	A(ART_QUICK_BLADE, "Quick Blade",                ELVEN_SHORT_SWORD,
 	  SPFX_RESTR, 0, 0,
 	  PHYS(9,2),      NO_DFNS,        NO_CARY,        0, A_LAWFUL, NON_PM, NON_PM, 1000L ),
 
