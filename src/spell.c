@@ -1181,19 +1181,20 @@ static boolean dospellmenu(const char *prompt, int splaction, int *spell_no) {
 	 * in the window-ports (say via a tab character).
 	 */
 	if (!iflags.menu_tab_sep)
-		sprintf(buf, "%-20s     Level  %-12s Fail", "    Name", "Category");
+		sprintf(buf, "%-20s     Level  %-12s Fail  Memory", "    Name", "Category");
 	else
-		sprintf(buf, "Name\tLevel\tCategory\tFail");
+		sprintf(buf, "Name\tLevel\tCategory\tFail\tMemory");
 	if (flags.menu_style == MENU_TRADITIONAL)
 		strcat(buf, iflags.menu_tab_sep ? "\tKey" : "  Key");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	for (i = 0; i < MAXSPELL && spellid(i) != NO_SPELL; i++) {
 		sprintf(buf, iflags.menu_tab_sep ?
-		        "%s\t%-d%s\t%s\t%-d%%" : "%-20s  %2d%s   %-12s %3d%%",
+		        "%s\t%-d%s\t%s\t%-d%%\t %3d%%" : "%-20s  %2d%s   %-12s %3d%%   %3d%%",
 		        spellname(i), spellev(i),
 		        spellknow(i) ? " " : "*",
 		        spelltypemnemonic(spell_skilltype(spellid(i))),
-		        100 - percent_success(i));
+		        100 - percent_success(i),
+			(spellknow(i) * 100 + (KEEN-1)) / KEEN);
 		if (flags.menu_style == MENU_TRADITIONAL)
 			sprintf(eos(buf), iflags.menu_tab_sep ?
 			        "\t%c" : "%4c ", spellet(i) ? spellet(i) : ' ');
