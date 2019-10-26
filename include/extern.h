@@ -20,7 +20,8 @@ extern char *fmt_ptr(const void*,char *);
 
 extern void moveloop(void);
 extern void stop_occupation(void);
-extern void display_gamewindows(void);
+extern void create_gamewindows(void);
+extern void show_gamewindows(void);
 extern void newgame(void);
 extern void welcome(boolean);
 extern time_t get_realtime(void);

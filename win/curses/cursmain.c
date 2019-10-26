@@ -108,6 +108,7 @@ void curses_init_nhwindows(int *argcp, char **argv) {
     }
     noecho();
     raw();
+    nonl(); // don't force ^m into newline (^j); input accepts them both, but as a command, accidental enter won't run south
     meta(stdscr, true);
     orig_cursor = curs_set(0);
     keypad(stdscr, true);

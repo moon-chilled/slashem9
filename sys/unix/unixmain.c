@@ -205,10 +205,11 @@ int main(int argc, char **argv) {
 	 *  new game or before a level restore on a saved game.
 	 */
 	vision_init();
-
-	display_gamewindows();
+	create_gamewindows();
 
 	if ((fd = restore_saved_game()) >= 0) {
+		show_gamewindows();
+
 		/* Since wizard is actually flags.debug, restoring might
 		 * overwrite it.
 		 */
@@ -241,6 +242,8 @@ int main(int argc, char **argv) {
 	} else {
 not_recovered:
 		player_selection();
+		show_gamewindows();
+
 		newgame();
 		wd_message();
 

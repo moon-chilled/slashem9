@@ -161,16 +161,19 @@ void getlock(void) {
 		    fflush(stdout);
 		    while (getchar() != '\n') ; /* eat rest of line and newline */
 		}
-		if(c == 'y' || c == 'Y')
-			if(eraseoldlocks())
+		if(c == 'y' || c == 'Y') {
+			if(eraseoldlocks()) {
 				goto gotlock;
-			else {
+			} else {
 				unlock_file(HLOCK);
 				error("Couldn't destroy old game.");
 			}
-		else {
+		} else {
 			unlock_file(HLOCK);
-			error("%s", "");
+			if (iflags.window_inited) {
+				exit_nhwindows(NULL);
+			}
+			error("");
 		}
 	}
 

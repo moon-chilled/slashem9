@@ -33,22 +33,39 @@ nhrgb orig_himagenta;
 nhrgb orig_hicyan;
 nhrgb orig_hiwhite;
 
-/* Banners used for an optional ASCII splash screen */
+/* Banners used for an ASCII splash screen */
+static const char *fancy_splash_text[] = {
+"   ▄▄▄▄    ▄▄▄▄                          ▄▄           ▄▄     ▄▄▄▄▄▄▄▄  ▄▄▄  ▄▄▄",
+" ▄█▀▀▀▀█   ▀▀██                          ██           ██     ██▀▀▀▀▀▀  ███  ███",
+" ██▄         ██       ▄█████▄  ▄▄█████▄  ██▄████▄     ▀▀     ██        ████████",
+"  ▀████▄     ██       ▀ ▄▄▄██  ██▄▄▄▄ ▀  ██▀   ██            ███████   ██ ██ ██",
+"      ▀██    ██      ▄██▀▀▀██   ▀▀▀▀██▄  ██    ██            ██        ██ ▀▀ ██",
+" █▄▄▄▄▄█▀    ██▄▄▄   ██▄▄▄███  █▄▄▄▄▄██  ██    ██            ██▄▄▄▄▄▄  ██    ██",
+"  ▀▀▀▀▀       ▀▀▀▀    ▀▀▀▀ ▀▀   ▀▀▀▀▀▀   ▀▀    ▀▀            ▀▀▀▀▀▀▀▀  ▀▀    ▀▀",
+" ▄▄▄   ▄▄",
+" ███   ██                        ██",
+" ██▀█  ██   ▄████▄   ▀██  ██▀  ███████",
+" ██ ██ ██  ██▄▄▄▄██    ████      ██",
+" ██  █▄██  ██▀▀▀▀▀▀    ▄██▄      ██",
+" ██   ███  ▀██▄▄▄▄█   ▄█▀▀█▄     ██▄▄▄",
+" ▀▀   ▀▀▀    ▀▀▀▀▀   ▀▀▀  ▀▀▀     ▀▀▀▀"};
 
-#define SPLASH_A "  _____  _              _     _  ______  __  __ "
-#define SPLASH_B " / ____|| |            | |   ( )|  ____||  \\/  |"
-#define SPLASH_C "| (___  | |  __ _  ___ | |__  \\|| |__   | \\  / |"
-#define SPLASH_D " \\___ \\ | | / _` |/ __|| '_ \\   |  __|  | |\\/| |"
-#define SPLASH_E " ____) || || (_| |\\__ \\| | | |  | |____ | |  | |"
-#define SPLASH_F "|_____/ |_| \\__,_||___/|_| |_|  |______||_|  |_|"
 
-
-/*_____  _              _     _  ______  __  __
- / ____|| |            | |   ( )|  ____||  \/  |
-| (___  | |  __ _  ___ | |__  \|| |__   | \  / |
- \___ \ | | / _` |/ __|| '_ \   |  __|  | |\/| |
- ____) || || (_| |\__ \| | | |  | |____ | |  | |
-|_____/ |_| \__,_||___/|_| |_|  |______||_|  |_|
+/*
+   ▄▄▄▄    ▄▄▄▄                          ▄▄           ▄▄     ▄▄▄▄▄▄▄▄  ▄▄▄  ▄▄▄
+ ▄█▀▀▀▀█   ▀▀██                          ██           ██     ██▀▀▀▀▀▀  ███  ███
+ ██▄         ██       ▄█████▄  ▄▄█████▄  ██▄████▄     ▀▀     ██        ████████
+  ▀████▄     ██       ▀ ▄▄▄██  ██▄▄▄▄ ▀  ██▀   ██            ███████   ██ ██ ██
+      ▀██    ██      ▄██▀▀▀██   ▀▀▀▀██▄  ██    ██            ██        ██ ▀▀ ██
+ █▄▄▄▄▄█▀    ██▄▄▄   ██▄▄▄███  █▄▄▄▄▄██  ██    ██            ██▄▄▄▄▄▄  ██    ██
+  ▀▀▀▀▀       ▀▀▀▀    ▀▀▀▀ ▀▀   ▀▀▀▀▀▀   ▀▀    ▀▀            ▀▀▀▀▀▀▀▀  ▀▀    ▀▀
+ ▄▄▄   ▄▄
+ ███   ██                        ██
+ ██▀█  ██   ▄████▄   ▀██  ██▀  ███████
+ ██ ██ ██  ██▄▄▄▄██    ████      ██
+ ██  █▄██  ██▀▀▀▀▀▀    ▄██▄      ██
+ ██   ███  ▀██▄▄▄▄█   ▄█▀▀█▄     ██▄▄▄
+ ▀▀   ▀▀▀    ▀▀▀▀▀   ▀▀▀  ▀▀▀     ▀▀▀▀
 */
 
 /* win* is size and placement of window to change, x/y/w/h is baseline which can
@@ -246,6 +263,10 @@ curses_create_main_windows()
 
     if (curses_get_nhwin(STATUS_WIN)) {
         curses_del_nhwin(STATUS_WIN);
+        /* 'count window' overlays last line of mesg win;
+           asking it to display a Null string removes it */
+        curses_count_window(NULL);
+
         curses_del_nhwin(MESSAGE_WIN);
         curses_del_nhwin(MAP_WIN);
         curses_del_nhwin(INV_WIN);
@@ -877,44 +898,26 @@ curses_display_splash_window()
     int x_start;
     int y_start;
     curses_get_window_xy(MAP_WIN, &x_start, &y_start);
+    y_start++;
 
-    if ((term_cols < 70) || (term_rows < 20)) {
+    if ((term_cols < 79) || (term_rows < 23)) {
         iflags.wc_splash_screen = false;        /* No room for s.s. */
     }
 
-    curses_toggle_color_attr(stdscr, CLR_WHITE, A_NORMAL, ON);
+    curses_toggle_color_attr(stdscr, CLR_MAGENTA, A_NORMAL, ON);
     if (iflags.wc_splash_screen) {
-        mvaddstr(y_start, x_start, SPLASH_A);
-        mvaddstr(y_start + 1, x_start, SPLASH_B);
-        mvaddstr(y_start + 2, x_start, SPLASH_C);
-        mvaddstr(y_start + 3, x_start, SPLASH_D);
-        mvaddstr(y_start + 4, x_start, SPLASH_E);
-        mvaddstr(y_start + 5, x_start, SPLASH_F);
-        y_start += 7;
-
+        for (usize i = 0; i < SIZE(fancy_splash_text); i++) {
+            mvaddstr(y_start++, x_start, fancy_splash_text[i]);
+        }
+        y_start++;
     }
 
-    curses_toggle_color_attr(stdscr, CLR_WHITE, A_NORMAL, OFF);
+    curses_toggle_color_attr(stdscr, CLR_GREEN, A_NORMAL, ON);
 
-#ifdef COPYRIGHT_BANNER_A
-    mvaddstr(y_start, x_start, COPYRIGHT_BANNER_A);
-    y_start++;
-#endif
-
-#ifdef COPYRIGHT_BANNER_B
-    mvaddstr(y_start, x_start, COPYRIGHT_BANNER_B);
-    y_start++;
-#endif
-
-#ifdef COPYRIGHT_BANNER_C
-    mvaddstr(y_start, x_start, COPYRIGHT_BANNER_C);
-    y_start++;
-#endif
-
-#ifdef COPYRIGHT_BANNER_D       /* Just in case */
-    mvaddstr(y_start, x_start, COPYRIGHT_BANNER_D);
-    y_start++;
-#endif
+    mvaddstr(y_start++, x_start, COPYRIGHT_BANNER_A);
+    mvaddstr(y_start++, x_start, COPYRIGHT_BANNER_B);
+    mvaddstr(y_start++, x_start, COPYRIGHT_BANNER_C);
+    mvaddstr(y_start++, x_start, COPYRIGHT_BANNER_D);
     refresh();
 }
 
