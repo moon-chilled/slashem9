@@ -9,10 +9,6 @@
 #include "lev_yacc.h"
 #include "sp_lev.h"
 
-// Flex seems to generate code that references fileno; we don't get fileno for
-// some reason.  Get it.
-int fileno(FILE *stream);
-
 /* Most of these don't exist in flex, yywrap is macro and
  * yyunput is properly declared in flex.skel.
  */

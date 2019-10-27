@@ -9,7 +9,7 @@ CFLAGS += -g -O0
 CFLAGS += -std=c99 -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE -Werror -Wpedantic -pedantic
 
 CFLAGS += $(shell pkg-config --cflags ncursesw)
-LDFLAGS += $(shell pkg-config --libs ncursesw)
+LDFLAGS += $(shell pkg-config --libs ncursesw) -lncursesw
 
 CC ?= cc
 CCLD ?= $(CC)
@@ -22,7 +22,7 @@ OBJ_CURSES := win/curses/cursdial.o win/curses/cursinit.o win/curses/cursinvt.o 
 OBJ_PROXY := win/proxy/callback.o win/proxy/dlbh.o win/proxy/getopt.o win/proxy/glyphmap.o win/proxy/mapid.o win/proxy/riputil.o win/proxy/winproxy.o
 OBJ_DGNCOMP := util/dgn_yacc.o util/dgn_lex.o util/dgn_main.o src/alloc.o util/panic.o
 OBJ_LEVCOMP := util/lev_yacc.o util/lev_lex.o util/lev_main.o src/alloc.o util/panic.o src/drawing.o src/decl.o src/objects.o src/monst.o
-OBJ_DLB := util/dlb_main.o src/alloc.o util/panic.o src/dlb.o 
+OBJ_DLB := util/dlb_main.o src/alloc.o util/panic.o src/dlb.o
 
 SLASHEMOBJ := $(OBJ_BASE) $(OBJ_SYS) $(OBJ_TTY) $(OBJ_CURSES)
 
@@ -47,15 +47,17 @@ src/slashem: $(SLASHEMOBJ)
 all: src/slashem dat/nhdat
 
 util/dgn_yacc.c: util/dgn_yacc.y
-	yacc --defines=util/dgn_yacc.h util/dgn_yacc.y
+	yacc -d util/dgn_yacc.y
 	mv -f y.tab.c util/dgn_yacc.c
+	mv -f y.tab.h util/dgn_yacc.h
 
 util/dgn_comp: $(OBJ_DGNCOMP)
 	$(CCLD) -o util/dgn_comp $(OBJ_DGNCOMP)
 
 util/lev_yacc.c: util/lev_yacc.y
-	yacc --defines=util/lev_yacc.h util/lev_yacc.y
+	yacc -d util/lev_yacc.y
 	mv -f y.tab.c util/lev_yacc.c
+	mv -f y.tab.h util/lev_yacc.h
 
 util/lev_comp: $(OBJ_LEVCOMP)
 	$(CCLD) -o util/lev_comp $(OBJ_LEVCOMP)

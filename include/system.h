@@ -19,7 +19,7 @@
 # define SIG_RET_TYPE void (*)(int)
 #endif
 
-#ifdef _POSIX_SOURCE
+#if defined(_POSIX_SOURCE) || defined(_DEFAULT_SOURCE) || defined(_XOPEN_SOURCE)
 extern int tgetent(char *,const char *);
 extern void tputs(const char *,int,int (*)());
 #endif

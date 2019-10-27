@@ -52,6 +52,8 @@ extern int errno;
 # define O_BINARY 0
 #endif
 
+#include <strings.h>
+
 #ifdef PREFIXES_IN_USE
 #define FQN_NUMBUF 4
 static char fqn_filename_buffer[FQN_NUMBUF][FQN_MAX_FILENAME];

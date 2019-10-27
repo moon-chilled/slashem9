@@ -1,6 +1,7 @@
 /* vim:set cin ft=c sw=4 sts=4 ts=8 et ai cino=Ls\:0t0(0 : -*- mode:c;fill-column:80;tab-width:8;c-basic-offset:4;indent-tabs-mode:nil;c-file-style:"k&r" -*-*/
 
-#define NCURSES_WIDECHAR 1
+#define NCURSES_WIDECHAR 1 // to get widechar support from curses
+#define _XOPEN_SOURCE_EXTENDED // same, but for openbsd's ncurses
 #include "curses.h"
 #include "hack.h"
 #include "wincurs.h"
