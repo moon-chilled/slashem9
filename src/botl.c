@@ -442,7 +442,7 @@ bot2str(char *newbot2) {
 #ifdef REALTIME_ON_BOTL
 	if(iflags.showrealtime) {
 		time_t currenttime = get_realtime();
-		sprintf(nb = eos(nb), " %lld:%2.2lld", currenttime / 3600, (currenttime % 3600) / 60);
+		sprintf(nb = eos(nb), " %lld:%2.2lld", (long long)currenttime / 3600, (long long)(currenttime % 3600) / 60);
 	}
 #endif
 

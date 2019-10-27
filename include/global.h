@@ -6,6 +6,7 @@
 #define GLOBAL_H
 
 #include <stdio.h>
+#include <stddef.h>
 #include <stdbool.h>
 
 #define ALPHA		/* if an alpha-test copy */
@@ -46,7 +47,7 @@ typedef unsigned short ushort;
 typedef unsigned int uint;
 typedef unsigned long ulong;
 typedef size_t usize;
-typedef ssize_t isize;
+typedef ptrdiff_t isize;
 
 #ifndef STRNCMPI
 # if !defined(__SASC_60) && !defined(__MINGW32__) /* SAS/C already shifts to stricmp */
