@@ -3517,7 +3517,7 @@ static const char * get_compopt_value(const char *optname, char *buf) {
 #endif
 	else if (!strcmp(optname, "boulder"))
 		sprintf(buf, "%c", iflags.bouldersym ?
-		        iflags.bouldersym : oc_syms[(int)objects[BOULDER].oc_class]);
+		        iflags.bouldersym : oc_syms[objects[BOULDER].oc_class]);
 	else if (!strcmp(optname, "catname"))
 		sprintf(buf, "%s", catname[0] ? catname : none );
 	else if (!strcmp(optname, "disclose")) {

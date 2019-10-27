@@ -358,7 +358,7 @@ int describe_level(char *buf, int verbose) {
 		if (verbose)
 			sprintf(buf, "%s, level %d ", dungeons[u.uz.dnum].dname, depth(&u.uz));
 		else
-			sprintf(buf, "Dlvl:%-2d", depth(&u.uz));
+			sprintf(buf, "Dlvl:%d", depth(&u.uz));
 		ret = 0;
 	}
 	return ret;
@@ -403,8 +403,7 @@ bot2str(char *newbot2) {
 	else
 		newbot2[0] = '\0';
 	if (bot2_abbrev < 1)
-		sprintf(nb = eos(newbot2), "%c:%ld",
-		        oc_syms[COIN_CLASS], money_cnt(invent));
+		sprintf(nb = eos(newbot2), " %s:%ld", utf8_tmpstr(oc_syms[COIN_CLASS]), money_cnt(invent));
 	else
 		nb = newbot2;
 

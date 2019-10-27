@@ -198,7 +198,7 @@ const char * const monexplain[MAXMCLASSES] = {
  *  Note: {ascii|utf8}_graphics[] arrays also depend on this symbol order.
  */
 const struct symdef sym_desc[MAXPCHARS] = {
-	/* 0*/	{"unexplored area",C(NO_COLOR)},	/* stone */
+/* 0*/	{"unexplored area",C(NO_COLOR)},	/* stone */
 	{"wall",		C(CLR_GRAY)},	/* vwall */
 	{"wall",		C(CLR_GRAY)},	/* hwall */
 	{"wall",		C(CLR_GRAY)},	/* tlcorn */
@@ -309,7 +309,7 @@ const struct symdef sym_desc[MAXPCHARS] = {
 
 
 const glyph_t ascii_graphics[MAXPCHARS] = {
-	/* 0*/	' ', // stone
+/* 0*/	' ', // stone
 	'|', // vwall
 	'-', // hwall
 	'-', // tlcorn
@@ -319,7 +319,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'-', // crwall
 	'-', // tuwall
 	'-', // tdwall
-	/*10*/	'|', // tlwall
+/*10*/	'|', // tlwall
 	'|', // trwall
 	'.', // ndoor
 	'-', // vodoor
@@ -329,7 +329,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'#', // bars
 	'#', // tree
 	'.', // room
-	/*20*/	'.', // dark room
+/*20*/	'.', // dark room
 	'#', // dark corr
 	'#', // lit corr (see mapglyph.c)
 	'<', // upstair
@@ -339,7 +339,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'_', // altar
 	'|', // grave
 	'\\',// throne
-	/*30*/	'#', // sink
+/*30*/	'#', // sink
 	'#', // toilet
 	'{', // fountain
 	'}', // pool
@@ -349,7 +349,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'.', // hodbridge
 	'#', // vcdbridge
 	'#', // hcdbridge
-	/*40*/	' ', // open air
+/*40*/	' ', // open air
 	'#', // [part of] a cloud
 	'}', // under water
 	'^', // trap
@@ -359,7 +359,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'^', // trap
 	'^', // trap
 	'^', // trap
-	/*50*/	'^', // trap
+/*50*/	'^', // trap
 	'^', // trap
 	'^', // trap
 	'^', // trap
@@ -369,7 +369,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'^', // trap
 	'^', // trap
 	'^', // trap
-	/*60*/	'"', // web
+/*60*/	'"', // web
 	'^', // trap
 	'^', // trap
 	'^', // trap
@@ -379,7 +379,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'\\',// lslant
 	'/', // rslant
 	'*', // dig beam
-	/*70*/	'!', // camera flash beam
+/*70*/	'!', // camera flash beam
 	')', // boomerang open left
 	'(', // boomerang open right
 	'0', // 4 magic shield symbols (S_ss1)
@@ -389,7 +389,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'/', // swallow top left
 	'-', // swallow top center
 	'\\',// swallow top right
-	/*80*/	'|', // swallow middle left
+/*80*/	'|', // swallow middle left
 	'|', // swallow middle right
 	'\\',// swallow bottom left
 	'-', // swallow bottom center
@@ -399,7 +399,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 	'\\',// explosion top right
 	'|', // explosion middle left
 	' ', // explosion middle center
-	/*90*/	'|', // explosion middle right
+/*90*/	'|', // explosion middle right
 	'\\',// explosion bottom left
 	'-', // explosion bottom center
 	'/', // explosion bottom right
@@ -412,7 +412,7 @@ const glyph_t ascii_graphics[MAXPCHARS] = {
 };
 
 static glyph_t utf8_graphics[MAXPCHARS] = {
-	/* 0*/	' ',	// S_stone
+/* 0*/	' ',	// S_stone
 	0x2502,	// S_vwall:     BOX DRAWINGS LIGHT VERTICAL
 	0x2500,	// S_hwall:     BOX DRAWINGS LIGHT HORIZONTAL
 	0x250c,	// S_tlcorn:    BOX DRAWINGS LIGHT DOWN AND RIGHT
@@ -422,9 +422,9 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x253c,	// S_crwall:    BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL
 	0x2534,	// S_tuwall:    BOX DRAWINGS LIGHT UP AND HORIZONTAL
 	0x252c,	// S_tdwall:    BOX DRAWINGS LIGHT DOWN AND HORIZONTAL
-	/*10*/	0x2524,	// S_tlwall:    BOX DRAWINGS LIGHT VERTICAL AND LEFT
+/*10*/	0x2524,	// S_tlwall:    BOX DRAWINGS LIGHT VERTICAL AND LEFT
 	0x251c,	// S_trwall:    BOX DRAWINGS LIGHT VERTICAL AND RIGHT
-	0x00b7,	// S_ndoor:     MIDDLE DOT/
+	0x00b7,	// S_ndoor:     MIDDLE DOT
 	0x25a0,	// S_vodoor:    BLACK SQUARE
 	0x25a0,	// S_hodoor:    BLACK SQUARE
 	'+',	// S_vcdoor
@@ -432,7 +432,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x2261,	// S_bars:      IDENTICAL TO
 	0x03a8,	// S_tree:      GREEK CAPITAL LETTER PSI
 	0x00b7,	// S_room:      MIDDLE DOT
-	/*20*/	' ',	// S_stone
+/*20*/	' ',	// S_stone
 	0x2591,	// S_corr:	LIGHT SHADE
 	0x2592,	// S_litcorr	MEDIUM SHADE
 	'<',	// S_upstair
@@ -442,7 +442,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x03A9,	// S_altar:     GREEK CAPITAL LETTER OMEGA
 	0x2020,	// S_grave:     DAGGER
 	'\\',	// S_throne
-	/*30*/	'#',	// S_sink
+/*30*/	'#',	// S_sink
 	'#',	// S_toilet
 	0x2320, // S_fountain:  TOP HALF INTEGRAL
 	0x224b, // S_pool:      TRIPLE TILDE
@@ -452,7 +452,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x00b7, // S_hodbridge: MIDDLE DOT
 	'#',	// S_vcdbridge
 	'#',	// S_hcdbridge
-	/*40*/	' ',	// S_air
+/*40*/	' ',	// S_air
 	'#',	// S_cloud
 	0x2248, // S_water:     ALMOST EQUAL TO
 	'^',	// S_arrow_trap
@@ -462,7 +462,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	'^',	// S_bear_trap
 	'^',	// S_land_mine
 	'^',	// S_rolling_boulder_trap
-	/*50*/	'^',	// S_sleeping_gas_trap
+/*50*/	'^',	// S_sleeping_gas_trap
 	'^',	// S_rust_trap
 	'^',	// S_fire_trap
 	'^',	// S_pit
@@ -472,7 +472,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	'^',	// S_teleportation_trap
 	'^',	// S_level_teleporter
 	'^',	// S_magic_portal
-	/*60*/	0x00A4,	// S_web:       CURRENCY SIGN
+/*60*/	0x00A4,	// S_web:       CURRENCY SIGN
 	'^',	// S_statue_trap
 	'^',	// S_magic_trap
 	'^',	// S_anti_magic_trap
@@ -482,7 +482,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x2572,	// S_lslant:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
 	0x2571,	// S_rslant:	BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT
 	'*',	// S_digbeam
-	/*70*/	'!',	// S_flashbeam
+/*70*/	'!',	// S_flashbeam
 	')',	// S_boomleft
 	'(',	// S_boomright
 	'0',	// S_ss1
@@ -492,7 +492,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x2571,	// S_sw_tl:	BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT
 	0x2594, // S_sw_tc:     UPPER ONE EIGHTH BLOCK
 	0x2572,	// S_sw_tr:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
-	/*80*/	0x258f, // S_sw_ml:     LEFT ONE EIGHTH BLOCK
+/*80*/	0x258f, // S_sw_ml:     LEFT ONE EIGHTH BLOCK
 	0x2595, // S_sw_mr:     RIGHT ONE EIGHTH BLOCK
 	0x2572,	// S_sw_bl:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
 	0x2581, // S_sw_bc:     LOWER ONE EIGHTH BLOCK
@@ -502,7 +502,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x2572,	// S_explode3:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
 	0x258f, // S_explode4:  LEFT ONE EIGHTH BLOCK
 	' ',	// S_explode5
-	/*90*/	0x2595, // S_explode6:  RIGHT ONE EIGHTH BLOCK
+/*90*/	0x2595, // S_explode6:  RIGHT ONE EIGHTH BLOCK
 	0x2572,	// S_explode7:	BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
 	0x2581, // S_explode8:  LOWER ONE EIGHTH BLOCK
 	0x2571,	// S_explode9:	BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT
@@ -517,7 +517,7 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 /* Can only use characters from this list
  * http://en.wikipedia.org/wiki/WGL4 */
 static glyph_t utf8compat_graphics[MAXPCHARS] = {
-	/* 0*/	' ',	// S_stone
+/* 0*/	' ',	// S_stone
 	0x2502,	// S_vwall:     BOX DRAWINGS LIGHT VERTICAL
 	0x2500,	// S_hwall:     BOX DRAWINGS LIGHT HORIZONTAL
 	0x250c,	// S_tlcorn:    BOX DRAWINGS LIGHT DOWN AND RIGHT
@@ -527,7 +527,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	0x253c,	// S_crwall:    BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL
 	0x2534,	// S_tuwall:    BOX DRAWINGS LIGHT UP AND HORIZONTAL
 	0x252c,	// S_tdwall:    BOX DRAWINGS LIGHT DOWN AND HORIZONTAL
-	/*10*/	0x2524,	// S_tlwall:    BOX DRAWINGS LIGHT VERTICAL AND LEFT
+/*10*/	0x2524,	// S_tlwall:    BOX DRAWINGS LIGHT VERTICAL AND LEFT
 	0x251c,	// S_trwall:    BOX DRAWINGS LIGHT VERTICAL AND RIGHT
 	0x00b7,	// S_ndoor:     MIDDLE DOT
 	0x25a0,	// S_vodoor:    BLACK SQUARE
@@ -537,7 +537,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	0x2261,	// S_bars:      IDENTICAL TO
 	0x03a8,	// S_tree:      GREEK CAPITAL LETTER PSI
 	0x00b7,	// S_room:      MIDDLE DOT
-	/*20*/	' ',	// S_stone
+/*20*/	' ',	// S_stone
 	0x2591,	// S_corr:	LIGHT SHADE
 	0x2592,	// S_litcorr	MEDIUM SHADE
 	'<',	// S_upstair
@@ -547,7 +547,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	0x03A9,	// S_altar:     GREEK CAPITAL LETTER OMEGA
 	0x2020,	// S_grave:     DAGGER
 	'\\',	// S_throne
-	/*30*/	'#',	// S_sink
+/*30*/	'#',	// S_sink
 	'#',	// S_toilet
 	0x2320, // S_fountain:  TOP HALF INTEGRAL
 	0x224b, // S_pool:      TRIPLE TILDE
@@ -557,7 +557,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	0x00b7, // S_hodbridge: MIDDLE DOT
 	'#',	// S_vcdbridge
 	'#',	// S_hcdbridge
-	/*40*/	' ',	// S_air
+/*40*/	' ',	// S_air
 	'#',	// S_cloud),
 	0x2248, // S_water:     ALMOST EQUAL TO
 	'^',	// S_arrow_trap
@@ -567,7 +567,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	'^',	// S_bear_trap
 	'^',	// S_land_mine
 	'^',	// S_rolling_boulder_trap
-	/*50*/	'^',	// S_sleeping_gas_trap
+/*50*/	'^',	// S_sleeping_gas_trap
 	'^',	// S_rust_trap
 	'^',	// S_fire_trap
 	'^',	// S_pit
@@ -577,7 +577,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	'^',	// S_teleportation_trap
 	'^',	// S_level_teleporter
 	'^',	// S_magic_portal
-	/*60*/	0x00A4,	// S_web:       CURRENCY SIGN
+/*60*/	0x00A4,	// S_web:       CURRENCY SIGN
 	'^',	// S_statue_trap
 	'^',	// S_magic_trap
 	'^',	// S_anti_magic_trap
@@ -587,7 +587,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	'\\',	// S_lslant
 	'/',	// S_rslant
 	'*',	// S_digbeam
-	/*70*/	'!',	// S_flashbeam
+/*70*/	'!',	// S_flashbeam
 	')',	// S_boomleft
 	'(',	// S_boomright
 	'0',	// S_ss1
@@ -597,7 +597,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	'/',	// S_sw_tl
 	0x2594, // S_sw_tc:     UPPER ONE EIGHTH BLOCK
 	'\\',	// S_sw_tr
-	/*80*/	0x258f, // S_sw_ml:     LEFT ONE EIGHTH BLOCK
+/*80*/	0x258f, // S_sw_ml:     LEFT ONE EIGHTH BLOCK
 	0x2595, // S_sw_mr:     RIGHT ONE EIGHTH BLOCK
 	'\\',	// S_sw_bl
 	0x2581, // S_sw_bc:     LOWER ONE EIGHTH BLOCK
@@ -607,7 +607,7 @@ static glyph_t utf8compat_graphics[MAXPCHARS] = {
 	'\\',	// S_explode3
 	0x258f, // S_explode4:  LEFT ONE EIGHTH BLOCK
 	' ',	// S_explode5
-	/*90*/	0x2595, // S_explode6:  RIGHT ONE EIGHTH BLOCK
+/*90*/	0x2595, // S_explode6:  RIGHT ONE EIGHTH BLOCK
 	'\\',	// S_explode7
 	0x2581, // S_explode8:  LOWER ONE EIGHTH BLOCK
 	'/',	// S_explode9
@@ -702,70 +702,55 @@ void assign_utf8graphics_symbol(int position, glyph_t value) {
 /*
  * saved display symbols for objects & features.
  */
-static uchar save_oc_syms[MAXOCLASSES]  = DUMMY;
+static glyph_t save_oc_syms[MAXOCLASSES]  = DUMMY;
 static glyph_t save_showsyms[MAXPCHARS] = DUMMY;
-static uchar save_monsyms[MAXPCHARS]    = DUMMY;
+static glyph_t save_monsyms[MAXPCHARS]    = DUMMY;
 
 static const glyph_t r_oc_syms[MAXOCLASSES] = {
-	/* 0*/	'\0',
+/* 0*/	'\0',
 	ILLOBJ_SYM,
 	WEAPON_SYM,
 	']',			/* armor */
 	RING_SYM,
-	/* 5*/	',',			/* amulet */
+/* 5*/	',',			/* amulet */
 	TOOL_SYM,
 	':',			/* food */
 	POTION_SYM,
 	SCROLL_SYM,
-	/*10*/	SPBOOK_SYM,
+/*10*/	SPBOOK_SYM,
 	WAND_SYM,
 	GEM_SYM,		/* gold -- yes it's the same as gems */
 	GEM_SYM,
 	ROCK_SYM,
-	/*15*/	BALL_SYM,
+/*15*/	BALL_SYM,
 	CHAIN_SYM,
 	VENOM_SYM
 };
 
 /* Rogue level graphics.  Under IBM graphics mode, use the symbols that were
- * used for Rogue on the IBM PC.  Unfortunately, this can't be completely
- * done because some of these are control characters--armor and rings under
- * DOS, and a whole bunch of them under Linux.  Use the TTY Rogue characters
- * for those cases.
+ * used for EPYX Rogue on the IBM PC.
  */
-//FIXME: convert to unicode (and add ascii variants)
-static const uchar IBM_r_oc_syms[MAXOCLASSES] = {	/* a la EPYX Rogue */
-	/* 0*/	'\0',
+// Translated to unicode from the original CP437 -MC
+
+// note: all of these work with both utf8 and utf8compatgraphics
+// probably, wgl4 was designed to be compatible with cp437
+static const glyph_t IBM_r_oc_syms[MAXOCLASSES] = {
+/* 0*/	'\0',
 	ILLOBJ_SYM,
-#  ifdef WIN32
-	0x18,			/* weapon: up arrow */
-	/*	0x0a, */ ARMOR_SYM,	/* armor:  Vert rect with o */
-	/*	0x09, */ RING_SYM,	/* ring:   circle with arrow */
-	/* 5*/	0x0c,			/* amulet: "female" symbol */
+	0x2191,		// weapon: up arrow
+	0x25d9,		// armor: Vert rect with o
+	0x2642,		// ring: circle with arrow
+/* 5*/	0x2640,		// amulet: "female" symbol
 	TOOL_SYM,
-	0x05,			/* food:   club (as in cards) */
-	0xad,			/* potion: upside down '!' */
-	0x0e,			/* scroll: musical note */
-	/*10*/	SPBOOK_SYM,
-	0xe7,			/* wand:   greek tau */
-	0x0f,			/* gold:   yes it's the same as gems */
-	0x0f,			/* gems:   fancy '*' */
-#  else
-	')',			/* weapon  */
-	ARMOR_SYM,		/* armor */
-	RING_SYM,		/* ring */
-	/* 5*/	',',			/* amulet  */
-	TOOL_SYM,
-	':',			/* food    */
-	0xad,			/* potion: upside down '!' */
-	SCROLL_SYM,		/* scroll  */
-	/*10*/	SPBOOK_SYM,
-	0xe7,			/* wand:   greek tau */
-	GEM_SYM,		/* gold:   yes it's the same as gems */
-	GEM_SYM,		/* gems    */
-#  endif
+	0x2663,		// food: club (cards)
+	0x00a1,		// potion: upside down '!'
+	0x266b,		// scroll: musical note
+/*10*/	SPBOOK_SYM,
+	0x03c4,		// wand: greek tau
+	0x263c,		// gold: yes, it's the same as gems
+	0x263c,		// gems: fancy '*'
 	ROCK_SYM,
-	/*15*/	BALL_SYM,
+/*15*/	BALL_SYM,
 	CHAIN_SYM,
 	VENOM_SYM
 };
@@ -783,9 +768,12 @@ void assign_rogue_graphics(boolean is_rlevel) {
 		for (i = 0; i < MAXMCLASSES; i++)
 			monsyms[i] = def_monsyms[i];
 
-		//FIXME: find a way to assign the smiley face with utf-8
-		if (false)
-			monsyms[S_HUMAN] = 0x01; /* smiley face */
+
+		/*
+		if (iflags.graphics == UTF8_GRAPHICS || iflags.graphics == UTF8COMPAT_GRAPHICS) {
+			monsyms[S_HUMAN] = 0x01; // smiley face
+		}
+		*/
 
 		for (i = 0; i < MAXPCHARS; i++)
 			showsyms[i] = ascii_graphics[i];
@@ -796,63 +784,66 @@ void assign_rogue_graphics(boolean is_rlevel) {
 		 * all of this info and to simply initialize it via a for() loop like r_oc_syms.
 		 */
 
-		// FIXME: utf-8 migration.  Top line should be graphics = ascii
-		// bottom should be graphics = utf8 or utf8-compat
-		if (true) {
+		if (iflags.graphics == ASCII_GRAPHICS) {
 			showsyms[S_vodoor]  = showsyms[S_hodoor]  = showsyms[S_ndoor] = '+';
 			showsyms[S_upstair] = showsyms[S_dnstair] = '%';
-		} else {
+		} else if (iflags.graphics == UTF8_GRAPHICS || iflags.graphics == UTF8COMPAT_GRAPHICS) {
 			/* a la EPYX Rogue */
-			showsyms[S_vwall]   = 0xba; /* all walls now use	*/
-			showsyms[S_hwall]   = 0xcd; /* double line graphics	*/
-			showsyms[S_tlcorn]  = 0xc9;
-			showsyms[S_trcorn]  = 0xbb;
-			showsyms[S_blcorn]  = 0xc8;
-			showsyms[S_brcorn]  = 0xbc;
-			showsyms[S_crwall]  = 0xce;
-			showsyms[S_tuwall]  = 0xca;
-			showsyms[S_tdwall]  = 0xcb;
-			showsyms[S_tlwall]  = 0xb9;
-			showsyms[S_trwall]  = 0xcc;
-			showsyms[S_ndoor]   = 0xce;
-			showsyms[S_vodoor]  = 0xce;
-			showsyms[S_hodoor]  = 0xce;
-			showsyms[S_room]    = 0xfa; /* centered dot */
-			showsyms[S_corr]    = 0xb1;
-			showsyms[S_litcorr] = 0xb2;
-			showsyms[S_upstair] = 0xf0; /* Greek Xi */
-			showsyms[S_dnstair] = 0xf0;
-			showsyms[S_arrow_trap] = 0x04; /* diamond (cards) */
-			showsyms[S_dart_trap] = 0x04;
-			showsyms[S_falling_rock_trap] = 0x04;
-			showsyms[S_squeaky_board] = 0x04;
-			showsyms[S_bear_trap] = 0x04;
-			showsyms[S_land_mine] = 0x04;
-			showsyms[S_rolling_boulder_trap] = 0x04;
-			showsyms[S_sleeping_gas_trap] = 0x04;
-			showsyms[S_rust_trap] = 0x04;
-			showsyms[S_fire_trap] = 0x04;
-			showsyms[S_pit] = 0x04;
-			showsyms[S_spiked_pit] = 0x04;
-			showsyms[S_hole] = 0x04;
-			showsyms[S_trap_door] = 0x04;
-			showsyms[S_teleportation_trap] = 0x04;
-			showsyms[S_level_teleporter] = 0x04;
-			showsyms[S_magic_portal] = 0x04;
-			showsyms[S_web] = 0x04;
-			showsyms[S_statue_trap] = 0x04;
-			showsyms[S_magic_trap] = 0x04;
-			showsyms[S_anti_magic_trap] = 0x04;
-			showsyms[S_polymorph_trap] = 0x04;
+			showsyms[S_vwall]   = 0x2551; /* all walls now use	*/
+			showsyms[S_hwall]   = 0x2550; /* double line graphics	*/
+			showsyms[S_tlcorn]  = 0x2554;
+			showsyms[S_trcorn]  = 0x2557;
+			showsyms[S_blcorn]  = 0x255a;
+			showsyms[S_brcorn]  = 0x255d;
+			showsyms[S_crwall]  = 0x256c;
+			showsyms[S_tuwall]  = 0x2569;
+			showsyms[S_tdwall]  = 0x2566;
+			showsyms[S_tlwall]  = 0x2563;
+			showsyms[S_trwall]  = 0x2560;
+			showsyms[S_ndoor]   = 0x256c;
+			showsyms[S_vodoor]  = 0x256c;
+			showsyms[S_hodoor]  = 0x256c;
+
+			showsyms[S_room]    = 0x00b7; // centered dot
+			showsyms[S_darkroom]= 0x00b7;
+			showsyms[S_corr]    = 0x2592;
+			showsyms[S_litcorr] = 0x2593;
+			showsyms[S_upstair] = 0x039e; // Greek Xi (ibm: was 0x2261, which is just a triple bar)
+			showsyms[S_dnstair] = 0x039e;
+			showsyms[S_arrow_trap] = 0x2666; // diamond (cards)
+			showsyms[S_dart_trap] = 0x2666;
+			showsyms[S_falling_rock_trap] = 0x2666;
+			showsyms[S_squeaky_board] = 0x2666;
+			showsyms[S_bear_trap] = 0x2666;
+			showsyms[S_land_mine] = 0x2666;
+			showsyms[S_rolling_boulder_trap] = 0x2666;
+			showsyms[S_sleeping_gas_trap] = 0x2666;
+			showsyms[S_rust_trap] = 0x2666;
+			showsyms[S_fire_trap] = 0x2666;
+			showsyms[S_pit] = 0x2666;
+			showsyms[S_spiked_pit] = 0x2666;
+			showsyms[S_hole] = 0x2666;
+			showsyms[S_trap_door] = 0x2666;
+			showsyms[S_teleportation_trap] = 0x2666;
+			showsyms[S_level_teleporter] = 0x2666;
+			showsyms[S_magic_portal] = 0x2666;
+			showsyms[S_web] = 0x2666;
+			showsyms[S_statue_trap] = 0x2666;
+			showsyms[S_magic_trap] = 0x2666;
+			showsyms[S_anti_magic_trap] = 0x2666;
+			showsyms[S_polymorph_trap] = 0x2666;
 		}
 
+		/*
 		for (i = 0; i < MAXOCLASSES; i++) {
 			//FIXME: update to utf-8
-			if (false)
+			if (iflags.graphics == UTF8_GRAPHICS || iflags.graphics == UTF8COMPAT_GRAPHICS) {
 				oc_syms[i] = IBM_r_oc_syms[i];
-			else
+			} else if (iflags.graphics == ASCII_GRAPHICS) {
 				oc_syms[i] = r_oc_syms[i];
+			}
 		}
+		*/
 	} else {
 		memcpy(showsyms, save_showsyms, sizeof showsyms);
 		memcpy(oc_syms, save_oc_syms, sizeof oc_syms);
