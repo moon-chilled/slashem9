@@ -545,8 +545,6 @@ static int do_look(boolean quick) {
 				sym = showsyms[trap_to_defsym(glyph_to_trap(glyph))];
 			} else if (glyph_is_object(glyph)) {
 				sym = oc_syms[(int)objects[glyph_to_obj(glyph)].oc_class];
-				if (sym == '`' && iflags.bouldersym && (int)glyph_to_obj(glyph) == BOULDER)
-					sym = iflags.bouldersym;
 			} else if (glyph_is_monster(glyph)) {
 				/* takes care of pets, detected, ridden, and regular mons */
 				sym = monsyms[(int)mons[glyph_to_mon(glyph)].mlet];
@@ -703,17 +701,6 @@ static int do_look(boolean quick) {
 				found++;
 			} else {
 				found += append_str(out_str, an(x_str));
-			}
-		}
-
-		/* handle optional boulder symbol as a special case */
-		if (iflags.bouldersym && sym == iflags.bouldersym) {
-			if (!found) {
-				firstmatch = "boulder";
-				sprintf(out_str, "%s       %s", utf8_tmpstr(sym), an(firstmatch));
-				found++;
-			} else {
-				found += append_str(out_str, "boulder");
 			}
 		}
 

@@ -12,7 +12,7 @@
 
 #define C(n) n
 
-uchar oc_syms[MAXOCLASSES] = DUMMY; /* the current object  display symbols */
+glyph_t oc_syms[MAXOCLASSES] = DUMMY; /* the current object  display symbols */
 glyph_t showsyms[MAXPCHARS]  = DUMMY; /* the current feature display symbols */
 uchar monsyms[MAXMCLASSES] = DUMMY; /* the current monster display symbols */
 
@@ -21,23 +21,23 @@ uchar showsymcolors[MAXPCHARS] = DUMMY; /* current feature display colors */
 #endif
 
 /* Default object class symbols.  See objclass.h. */
-const char def_oc_syms[MAXOCLASSES] = {
-	/* 0*/	'\0',		/* placeholder for the "random class" */
+const glyph_t def_oc_syms[MAXOCLASSES] = {
+/* 0*/	'\0',		/* placeholder for the "random class" */
 	ILLOBJ_SYM,
 	WEAPON_SYM,
 	ARMOR_SYM,
 	RING_SYM,
-	/* 5*/	AMULET_SYM,
+/* 5*/	AMULET_SYM,
 	TOOL_SYM,
 	FOOD_SYM,
 	POTION_SYM,
 	SCROLL_SYM,
-	/*10*/	SPBOOK_SYM,
+/*10*/	SPBOOK_SYM,
 	WAND_SYM,
 	GOLD_SYM,
 	GEM_SYM,
 	ROCK_SYM,
-	/*15*/	BALL_SYM,
+/*15*/	BALL_SYM,
 	CHAIN_SYM,
 	VENOM_SYM
 };
@@ -46,44 +46,44 @@ const char invisexplain[] = "remembered, unseen, creature";
 
 /* Object descriptions.  Used in do_look(). */
 const char * const objexplain[] = {	/* these match def_oc_syms, above */
-	/* 0*/	0,
+/* 0*/	NULL,
 	"strange object",
 	"weapon",
 	"suit or piece of armor",
 	"ring",
-	/* 5*/	"amulet",
+/* 5*/	"amulet",
 	"useful item (pick-axe, key, lamp...)",
 	"piece of food",
 	"potion",
 	"scroll",
-	/*10*/	"spell book",
+/*10*/	"spell book",
 	"wand",
 	"pile of coins",
 	"gem or rock",
 	"boulder or statue",
-	/*15*/	"iron ball",
+/*15*/	"iron ball",
 	"iron chain",
 	"splash of venom"
 };
 
 /* Object class names.  Used in object_detect(). */
 const char * const oclass_names[] = {
-	/* 0*/	0,
+/* 0*/	NULL,
 	"illegal objects",
 	"weapons",
 	"armor",
 	"rings",
-	/* 5*/	"amulets",
+/* 5*/	"amulets",
 	"tools",
 	"food",
 	"potions",
 	"scrolls",
-	/*10*/	"spell books",
+/*10*/	"spell books",
 	"wands",
 	"coins",
 	"rocks",
 	"large stones",
-	/*15*/	"iron balls",
+/*15*/	"iron balls",
 	"chains",
 	"venoms"
 };
@@ -834,16 +834,13 @@ void assign_rogue_graphics(boolean is_rlevel) {
 			showsyms[S_polymorph_trap] = 0x2666;
 		}
 
-		/*
 		for (i = 0; i < MAXOCLASSES; i++) {
-			//FIXME: update to utf-8
 			if (iflags.graphics == UTF8_GRAPHICS || iflags.graphics == UTF8COMPAT_GRAPHICS) {
 				oc_syms[i] = IBM_r_oc_syms[i];
 			} else if (iflags.graphics == ASCII_GRAPHICS) {
 				oc_syms[i] = r_oc_syms[i];
 			}
 		}
-		*/
 	} else {
 		memcpy(showsyms, save_showsyms, sizeof showsyms);
 		memcpy(oc_syms, save_oc_syms, sizeof oc_syms);

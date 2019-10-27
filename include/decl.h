@@ -360,8 +360,8 @@ extern char **viz_array;		/* could see/in sight row pointers */
 #include "color.h"
 extern const int zapcolors[];
 
-extern const char def_oc_syms[MAXOCLASSES];	/* default class symbols */
-extern uchar oc_syms[MAXOCLASSES];		/* current class symbols */
+extern const glyph_t def_oc_syms[MAXOCLASSES];	/* default class symbols */
+extern glyph_t oc_syms[MAXOCLASSES];		/* current class symbols */
 extern const char def_monsyms[MAXMCLASSES];	/* default class symbols */
 extern uchar monsyms[MAXMCLASSES];		/* current class symbols */
 

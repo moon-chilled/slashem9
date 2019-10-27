@@ -371,15 +371,7 @@ int object_detect(
 		class = 0;
 	}
 
-	/* Special boulder symbol check - does the class symbol happen
-	 * to match iflags.bouldersym which is a user-defined?
-	 * If so, that means we aren't sure what they really wanted to
-	 * detect. Rather than trump anything, show both possibilities.
-	 * We can exclude checking the buried obj chain for boulders below.
-	 */
 	sym = class ? def_oc_syms[class] : 0;
-	if (sym && iflags.bouldersym && sym == iflags.bouldersym)
-		boulder = ROCK_CLASS;
 
 	if (Hallucination || (Confusion && class == SCROLL_CLASS))
 		strcpy(stuff, "something");
@@ -820,8 +812,6 @@ void use_crystal_ball(struct obj *obj) {
 			ret = object_detect(NULL, class);
 		else if ((class = def_char_to_monclass(ch)) != MAXMCLASSES)
 			ret = monster_detect(NULL, class);
-		else if (iflags.bouldersym && (ch == iflags.bouldersym))
-			ret = object_detect(NULL, ROCK_CLASS);
 		else switch(ch) {
 			case '^':
 				ret = trap_detect(NULL);

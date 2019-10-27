@@ -128,7 +128,6 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 				cmap_color(offset);
 	} else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
 		if (On_stairs(x,y) && levl[x][y].seenv) special |= MG_STAIRS;
-		if (offset == BOULDER && iflags.bouldersym) ch = iflags.bouldersym;
 		else ch = get_objsym(offset);
 
 		if (Is_rogue_level(&u.uz) && iflags.use_color) {

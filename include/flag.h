@@ -169,7 +169,6 @@ struct instance_flags {
 	int	purge_monsters;	/* # of dead monsters still on fmon list */
 	int	*opt_booldup;	/* for duplication of bool opts in config file */
 	int	*opt_compdup;	/* for duplication of compound opts in config file */
-	uchar	bouldersym;	/* symbol for boulder display */
 	bool	travel1;	/* first travel step */
 	coord	travelcc;	/* coordinates for travel_cache */
 	bool  hilite_hidden_stairs;

@@ -182,10 +182,6 @@ static struct Comp_Opt {
 	{ "align_status", "status window alignment", 20, DISP_IN_GAME }, 	/*WC*/
 	{ "altkeyhandler", "alternate key handler", 20, DISP_IN_GAME },
 	{
-		"boulder",  "the symbol to use for displaying boulders",
-		1, SET_IN_GAME
-	},
-	{
 		"catname",  "the name of your (first) cat (e.g., catname:Tabby)",
 		PL_PSIZ, DISP_IN_GAME
 	},
@@ -571,7 +567,6 @@ void initoptions(void) {
 	memset(objclass_unicode_codepoint, 0, sizeof(objclass_unicode_codepoint));
 	memset(permonst_unicode_codepoint, 0, sizeof(permonst_unicode_codepoint));
 
-	iflags.bouldersym = 0;
 	iflags.travelcc.x = iflags.travelcc.y = -1;
 	flags.warnlevel = 1;
 	flags.warntype = 0L;
@@ -718,16 +713,16 @@ static void badoption(const char *opts) {
 	else return;
 #endif
 
-	if(from_file)
-		raw_printf("Bad syntax in OPTIONS in %s: %s.", configfile, opts);
+	if (from_file)
+		raw_printf("Bad syntax in OPTIONS in %s: %s.  (Press enter to continue.)", configfile, opts);
 	else
-		raw_printf("Bad syntax in %s: %s.", NETHACK_ENV_OPTIONS, opts);
+		raw_printf("Bad syntax in %s: %s.  (Press enter to continue.)", NETHACK_ENV_OPTIONS, opts);
 
 	wait_synch();
 }
 
 static void badauthoption(const char *opts) {
-	raw_printf("Bad syntax in AUTHENTICATION in %s: %s.", configfile, opts);
+	raw_printf("Bad syntax in AUTHENTICATION in %s: %s. (Press enter to continue.)", configfile, opts);
 	wait_synch();
 }
 
@@ -1798,113 +1793,6 @@ goodfruit:
 		 * no fruit option at all.  Also, we don't want people
 		 * setting multiple fruits in their options.)
 		 */
-		return;
-	}
-
-	/* graphics:string */
-	fullname = "dungeon";
-	if (match_optname(opts, fullname, 2, true)) {
-		if (negated) bad_negation(fullname, false);
-		else graphics_opts(opts, fullname, MAXDCHARS, 0);
-		return;
-	}
-	fullname = "traps";
-	if (match_optname(opts, fullname, 2, true)) {
-		if (negated) bad_negation(fullname, false);
-		else graphics_opts(opts, fullname, MAXTCHARS, MAXDCHARS);
-		return;
-	}
-	fullname = "effects";
-	if (match_optname(opts, fullname, 2, true)) {
-		if (negated) bad_negation(fullname, false);
-		else
-			graphics_opts(opts, fullname, MAXECHARS, MAXDCHARS+MAXTCHARS);
-		return;
-	}
-
-	/* objects:string */
-	fullname = "objects";
-	if (match_optname(opts, fullname, 7, true)) {
-		int length;
-
-		if (negated) {
-			bad_negation(fullname, false);
-			return;
-		}
-		if (!(opts = string_for_env_opt(fullname, opts, false)))
-			return;
-		escapes(opts, opts);
-
-		/*
-		 * Override the default object class symbols.  The first
-		 * object in the object class is the "random object".  I
-		 * don't want to use 0 as an object class, so the "random
-		 * object" is basically a place holder.
-		 *
-		 * The object class symbols have already been initialized in
-		 * initoptions().
-		 */
-		length = strlen(opts);
-		if (length >= MAXOCLASSES)
-			length = MAXOCLASSES-1;	/* don't count RANDOM_OBJECT */
-
-		for (i = 0; i < length; i++)
-			oc_syms[i+1] = (uchar) opts[i];
-		return;
-	}
-
-	/* monsters:string */
-	fullname = "monsters";
-	if (match_optname(opts, fullname, 8, true)) {
-		int length;
-
-		if (negated) {
-			bad_negation(fullname, false);
-			return;
-		}
-		if (!(opts = string_for_env_opt(fullname, opts, false)))
-			return;
-		escapes(opts, opts);
-
-		/* Override default mon class symbols set in initoptions(). */
-		length = strlen(opts);
-		if (length >= MAXMCLASSES)
-			length = MAXMCLASSES-1;	/* mon class 0 unused */
-
-		for (i = 0; i < length; i++)
-			monsyms[i+1] = (uchar) opts[i];
-		return;
-	}
-
-	/* boulder:symbol */
-	fullname = "boulder";
-	if (match_optname(opts, fullname, 7, true)) {
-		int clash = 0;
-		if (negated) {
-			bad_negation(fullname, false);
-			return;
-		}
-		/*		if (!(opts = string_for_env_opt(fullname, opts, false))) */
-		if (!(opts = string_for_opt(opts, false)))
-			return;
-		escapes(opts, opts);
-		if (def_char_to_monclass(opts[0]) != MAXMCLASSES)
-			clash = 1;
-		else if (opts[0] >= '1' && opts[0] <= '5')
-			clash = 2;
-		if (clash) {
-			/* symbol chosen matches a used monster or warning
-			   symbol which is not good - reject it*/
-			pline(
-			        "Badoption - boulder symbol '%c' conflicts with a %s symbol.",
-			        opts[0], (clash == 1) ? "monster" : "warning");
-		} else {
-			/*
-			 * Override the default boulder symbol.
-			 */
-			iflags.bouldersym = (uchar) opts[0];
-		}
-		if (!initial) need_redraw = true;
 		return;
 	}
 
@@ -3515,9 +3403,6 @@ static const char * get_compopt_value(const char *optname, char *buf) {
 		sprintf(buf, "%s", iflags.altkeyhandler[0] ?
 		        iflags.altkeyhandler : "default");
 #endif
-	else if (!strcmp(optname, "boulder"))
-		sprintf(buf, "%c", iflags.bouldersym ?
-		        iflags.bouldersym : oc_syms[objects[BOULDER].oc_class]);
 	else if (!strcmp(optname, "catname"))
 		sprintf(buf, "%s", catname[0] ? catname : none );
 	else if (!strcmp(optname, "disclose")) {

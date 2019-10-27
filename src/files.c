@@ -1206,9 +1206,6 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 		strncpy(batname, bufp, PL_PSIZ-1);
 #endif
 
-	} else if (match_varname(buf, "BOULDER", 3)) {
-		get_uchars(fp, buf, bufp, &iflags.bouldersym, true,
-		           1, "BOULDER");
 	} else if (match_varname(buf, "MENUCOLOR", 9)) {
 		add_menu_coloring(bufp);
 	} else if (match_varname(buf, "STATUSCOLOR", 11)) {
