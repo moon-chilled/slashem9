@@ -418,9 +418,7 @@ int peffects (struct obj *otmp) {
 	case POT_HALLUCINATION:
 		if (Hallucination || Halluc_resistance) nothing++;
 		else makeknown(otmp->otyp);
-		make_hallucinated(itimeout_incr(HHallucination,
-		                                rn1(200, 600 - 300 * bcsign(otmp))),
-		                  true, 0L);
+		make_hallucinated(itimeout_incr(HHallucination, rn1(50, otmp->blessed ? 55 : otmp->cursed ? 155 : 105)), true, 0L);
 		break;
 	case POT_AMNESIA:
 		pline(Hallucination? "This tastes like champagne!" :
