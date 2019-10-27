@@ -1080,7 +1080,7 @@ have_been[]  = "have been ",
 #define you_can(attr)	enl_msg(You_,can,could,attr)
 #define you_have_been(goodthing) enl_msg(You_,have_been,were,goodthing)
 #define you_have_never(badthing) enl_msg(You_,have_never,never,badthing)
-#define you_have_X(something)	enl_msg(You_,have,(const char *)"","something")
+#define you_have_X(something)	enl_msg(You_,have,"",something)
 
 static void enlght_line(const char *start, const char *middle, const char *end) {
 	char buf[BUFSZ];
