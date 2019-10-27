@@ -1,4 +1,0 @@
-CFLAGS += -Iinclude -Ibuild/include -DDLB -DWIZARD=\"`whoami`\"
-CFLAGS += -g -O0
-CFLAGS += -std=c99 -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE -Werror -Wpedantic -pedantic
-LFLAGS += -g

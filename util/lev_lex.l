@@ -6,7 +6,7 @@
 #define LEV_LEX_C
 
 #include "hack.h"
-#include "lev_comp.h"
+#include "lev_yacc.h"
 #include "sp_lev.h"
 
 // Flex seems to generate code that references fileno; we don't get fileno for

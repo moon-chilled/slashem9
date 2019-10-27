@@ -4,5 +4,21 @@
 .*.swm
 .*.swl
 
-.tup
-build-*
+*.o
+util/dgn_yacc.c
+util/dgn_yacc.h
+util/dgn_lex.c
+util/lev_yacc.c
+util/lev_yacc.h
+util/lev_lec.c
+
+*.lev
+
+src/slashem
+util/slashem-recover
+util/dgn_comp
+util/lev_comp
+util/dlb
+
+dat/dungeon
+dat/nhdat
