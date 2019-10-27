@@ -670,8 +670,8 @@ void assign_colors(uchar *graph_colors, int glth, int maxlen, int offset) {
 
 void switch_graphics(int graphics) {
 	switch (graphics) {
-	default:
 	case ASCII_GRAPHICS:
+	default:
 		assign_graphics(ascii_graphics, SIZE(ascii_graphics), MAXPCHARS, 0);
 		iflags.graphics = ASCII_GRAPHICS;
 		break;
@@ -685,18 +685,6 @@ void switch_graphics(int graphics) {
 		break;
 	}
 }
-
-
-// Change the UTF8graphics symbol at position with codepoint "value".
-void assign_utf8graphics_symbol(int position, glyph_t value) {
-	if (position < MAXPCHARS) {
-		utf8_graphics[position] = value;
-		/* need to update showsym */
-		switch_graphics(UTF8_GRAPHICS);
-	}
-}
-
-
 
 
 /*

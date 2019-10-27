@@ -1323,31 +1323,6 @@ bool parse_object_symbol(const char *str) {
 
 /** Parse '"dungeon feature":unicode_codepoint' and change symbol in
  * UTF8graphics. */
-bool parse_symbol(const char *str) {
-	char feature[BUFSZ];
-	char codepoint[BUFSZ];
-	int i, num;
-
-	if (!parse_extended_option(str, feature, codepoint)) {
-		return false;
-	}
-
-	num = parse_codepoint(codepoint);
-	if (num < 0) {
-		return false;
-	}
-
-	/* find dungeon feature */
-	for (i=0; i < MAXPCHARS; i++) {
-		if (!strcmpi(feature, sym_desc[i].explanation)) {
-			assign_utf8graphics_symbol(i, num);
-			return true;
-		}
-	}
-
-	return false;
-}
-
 
 void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 	char *op;
