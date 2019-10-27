@@ -6,7 +6,7 @@ BINDIR ?= $(PREFIX)/bin
 
 CFLAGS += -Iinclude -Ibuild/include -DDLB -DWIZARD=\"$(shell whoami)\"
 CFLAGS += -g -O0
-CFLAGS += -std=c99 -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE -Werror -Wpedantic -pedantic
+CFLAGS += -std=c99 -D_XOPEN_SOURCE=500 -D_POSIX_C_SOURCE=200809L -Werror -Wpedantic -pedantic
 
 CFLAGS := $(CFLAGS) $(shell pkg-config --cflags ncursesw)
 LDFLAGS += -lncursesw
