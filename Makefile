@@ -8,8 +8,8 @@ CFLAGS += -Iinclude -Ibuild/include -DDLB -DWIZARD=\"$(shell whoami)\"
 CFLAGS += -g -O0
 CFLAGS += -std=c99 -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE -Werror -Wpedantic -pedantic
 
-CFLAGS += $(shell pkg-config --cflags ncursesw)
-LDFLAGS += $(shell pkg-config --libs ncursesw) -lncursesw
+CFLAGS := $(CFLAGS) $(shell pkg-config --cflags ncursesw)
+LDFLAGS += -lncursesw
 
 CC ?= cc
 CCLD ?= $(CC)
