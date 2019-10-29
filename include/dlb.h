@@ -42,25 +42,25 @@ typedef struct dlb_library {
 typedef struct {
 #ifdef DLBLIB
 	library *lib;		/* pointer to library structure */
-	long start;		/* offset of start of file */
-	long size;		/* size of file */
-	long mark;		/* current file marker */
+	usize start;		/* offset of start of file */
+	usize size;		/* size of file */
+	usize mark;		/* current file marker */
 #elif defined(DLBFILE)
 	FILE *fp;		/* pointer to an external file */
 #endif
 
 } dlb;
 
-boolean dlb_init(void);
+bool dlb_init(void);
 void dlb_cleanup(void);
 
-dlb *dlb_fopen(const char *,const char *);
-int dlb_fclose(dlb*);
-int dlb_fread(char *,int,int,dlb*);
-int dlb_fseek(dlb*,long,int);
-char *dlb_fgets(char *,int,dlb*);
-int dlb_fgetc(dlb*);
-long dlb_ftell(dlb*);
+dlb *dlb_fopen(const char *pathname, const char *mode);
+int dlb_fclose(dlb *dp);
+usize dlb_fread(void *ptr, usize size, usize nmemb, dlb *dp);
+int dlb_fseek(dlb *dp, long offset, int whence);
+char *dlb_fgets(char *s, int size, dlb *dp);
+int dlb_fgetc(dlb *dp);
+long dlb_ftell(dlb *dp);
 
 /* various other I/O stuff we don't want to replicate everywhere */
 
