@@ -29,24 +29,18 @@ typedef struct dlb_procs {
 /*
  * Library Implementation:
  *
- * When initialized, we open all library files and read in their tables
- * of contents.  The library files stay open all the time.  When
- * a open is requested, the libraries' directories are searched.  If
+ * When initialized, we open the library file and read in its table
+ * of contents.  The library file stay open all the time.  When
+ * a open is requested, the library's directories are searched.  If
  * successful, we return a descriptor that contains the library, file
  * size, and current file mark.  This descriptor is used for all
  * successive calls.
- *
- * The ability to open more than one library is supported but used
- * only in the Amiga port (the second library holds the sound files).
- * For Unix, the idea would be to split the NetHack library
- * into text and binary parts, where the text version could be shared.
  */
 
-#define MAX_LIBS 4
-static library dlb_libs[MAX_LIBS];
+static library dlb_lib;
 
 static bool readlibdir(library *lp);
-static bool find_file(const char *name, library **lib, long *startp, long *sizep);
+static bool find_file(const char *name, long *startp, long *sizep);
 
 /* not static because shared with dlb_main.c */
 bool open_library(const char *lib_name, library *lp);
@@ -142,22 +136,16 @@ static bool readlibdir(library *lp) {
  * Look for the file in our directory structure.  Return 1 if successful,
  * 0 if not found.  Fill in the size and starting position.
  */
-static bool find_file(const char *name, library **lib, long *startp, long *sizep) {
+static bool find_file(const char *name, long *startp, long *sizep) {
 	int i, j;
-	library *lp;
 
-	for (i = 0; i < MAX_LIBS && dlb_libs[i].fdata; i++) {
-		lp = &dlb_libs[i];
-		for (j = 0; j < lp->nentries; j++) {
-			if (strcmp(name, lp->dir[j].fname) == 0) {
-				*lib = lp;
-				*startp = lp->dir[j].foffset;
-				*sizep = lp->dir[j].fsize;
-				return true;
-			}
+	for (j = 0; j < dlb_lib.nentries; j++) {
+		if (strcmp(name, dlb_lib.dir[j].fname) == 0) {
+			*startp = dlb_lib.dir[j].foffset;
+			*sizep = dlb_lib.dir[j].fsize;
+			return true;
 		}
 	}
-	*lib = NULL;
 	*startp = *sizep = 0;
 	return false;
 }
@@ -194,11 +182,7 @@ void close_library(library *lp) {
  * keep track of the file position.
  */
 static bool do_dlb_init(void) {
-	// zero out array
-	memset(&dlb_libs[0], 0, sizeof(dlb_libs));
-
-	// To open more than one library, add open library calls here
-	if (!open_library(DLB_LIB_FILE, &dlb_libs[0])) {
+	if (!open_library(DLB_LIB_FILE, &dlb_lib)) {
 		return false;
 	}
 
@@ -209,17 +193,15 @@ static void do_dlb_cleanup(void) {
 	int i;
 
 	/* close the data file(s) */
-	for (i = 0; i < MAX_LIBS && dlb_libs[i].fdata; i++)
-		close_library(&dlb_libs[i]);
+	close_library(&dlb_lib);
 }
 
 static bool do_dlb_fopen(dlb *dp, const char *name, const char *mode) {
 	long start, size;
-	library *lp;
 
 	/* look up file in directory */
-	if (find_file(name, &lp, &start, &size)) {
-		dp->lib = lp;
+	if (find_file(name, &start, &size)) {
+		dp->lib = &dlb_lib;
 		dp->start = start;
 		dp->size = size;
 		dp->mark = 0;
