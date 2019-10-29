@@ -582,9 +582,9 @@ void init_dungeons(void) {
 		char tbuf[BUFSZ];
 		sprintf(tbuf, "Cannot open dungeon description - \"%s",
 		        DUNGEON_FILE);
-#ifdef DLB
+#ifdef DLBLIB
 		strcat(tbuf, "\" from \"");
-		strcat(tbuf, DLBFILE);
+		strcat(tbuf, DLB_LIB_FILE);
 #endif
 		strcat(tbuf, "\" file!");
 #ifdef WIN32

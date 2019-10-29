@@ -6,9 +6,14 @@
 #define DLB_H
 /* definitions for data library */
 
-#ifdef DLB
+// DLBLIB: load everything from a library file
+// DLBFILE: load files from the actual file system
+// TODO: DLBEMBED: load files from an archive within the binary
 
-#define DLBLIB		/* use a set of external files */
+// if none is available, default to DLBFILE
+#if !defined(DLBLIB) && !defined(DLBFILE)
+# define DLBFILE
+#endif
 
 #ifdef DLBLIB
 /* directory structure in memory */
@@ -30,25 +35,20 @@ typedef struct dlb_library {
 	long strsize;	/* dlb file string size */
 } library;
 
-/* library definitions */
-# ifndef DLBFILE
-#  define DLBFILE	"nhdat"
-# endif
-# ifndef FILENAME_CMP
-#  define FILENAME_CMP	strcmp			/* case sensitive */
-# endif
+# define DLB_LIB_FILE "nhdat"
 
-#endif /* DLBLIB */
-
+#endif
 
 typedef struct {
-	FILE *fp;		/* pointer to an external file, use if non-null */
 #ifdef DLBLIB
-	library *lib;	/* pointer to library structure */
+	library *lib;		/* pointer to library structure */
 	long start;		/* offset of start of file */
 	long size;		/* size of file */
 	long mark;		/* current file marker */
+#elif defined(DLBFILE)
+	FILE *fp;		/* pointer to an external file */
 #endif
+
 } dlb;
 
 boolean dlb_init(void);
@@ -61,24 +61,6 @@ int dlb_fseek(dlb*,long,int);
 char *dlb_fgets(char *,int,dlb*);
 int dlb_fgetc(dlb*);
 long dlb_ftell(dlb*);
-
-#else /* DLB */
-
-# define dlb FILE
-
-# define dlb_init()
-# define dlb_cleanup()
-
-# define dlb_fopen	fopen
-# define dlb_fclose	fclose
-# define dlb_fread	fread
-# define dlb_fseek	fseek
-# define dlb_fgets	fgets
-# define dlb_fgetc	fgetc
-# define dlb_ftell	ftell
-
-#endif /* DLB */
-
 
 /* various other I/O stuff we don't want to replicate everywhere */
 

@@ -7,7 +7,6 @@
 
 #define DATAPREFIX 4
 
-#ifdef DLB
 /*
  * Data librarian.  Present a STDIO-like interface to NetHack while
  * multiplexing on one or more "data libraries".  If a file is not found
@@ -162,7 +161,7 @@ static boolean find_file(const char *name, library **lib, long *startp, long *si
 	for (i = 0; i < MAX_LIBS && dlb_libs[i].fdata; i++) {
 		lp = &dlb_libs[i];
 		for (j = 0; j < lp->nentries; j++) {
-			if (FILENAME_CMP(name, lp->dir[j].fname) == 0) {
+			if (strcmp(name, lp->dir[j].fname) == 0) {
 				*lib = lp;
 				*startp = lp->dir[j].foffset;
 				*sizep = lp->dir[j].fsize;
@@ -211,7 +210,7 @@ static boolean lib_dlb_init(void) {
 	memset(&dlb_libs[0], 0, sizeof(dlb_libs));
 
 	// To open more than one library, add open library calls here
-	if (!open_library(DLBFILE, &dlb_libs[0])) {
+	if (!open_library(DLB_LIB_FILE, &dlb_libs[0])) {
 		return false;
 	}
 
@@ -329,7 +328,7 @@ static long lib_dlb_ftell(dlb *dp) {
 	return dp->mark;
 }
 
-const dlb_procs_t lib_dlb_procs = {
+const dlb_procs_t dlb_procs = {
 	lib_dlb_init,
 	lib_dlb_cleanup,
 	lib_dlb_fopen,
@@ -341,32 +340,81 @@ const dlb_procs_t lib_dlb_procs = {
 	lib_dlb_ftell
 };
 
-#endif /* DLBLIB */
+#elif defined(DLBFILE)
+
+static boolean file_dlb_init(void) {
+	return true;
+}
+
+static void file_dlb_cleanup(void) {}
+
+static boolean file_dlb_fopen(dlb *dp, const char *name, const char *mode) {
+	static char newname[256];
+	strcpy(newname, "dat/");
+	strncat(newname, name, 256 - 5);
+	if (!(dp->fp = fopen(newname, mode))) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+static int file_dlb_fclose(dlb *dp) {
+	return fclose(dp->fp);
+}
+
+static int file_dlb_fread(char *ptr, int size, int nmemb, dlb *dp) {
+	return fread(ptr, size, nmemb, dp->fp);
+}
+
+static int file_dlb_fseek(dlb *dp, long offset, int whence) {
+	return fseek(dp->fp, offset, whence);
+}
+
+static char *file_dlb_fgets(char *s, int size, dlb *dp) {
+	return fgets(s, size, dp->fp);
+}
+
+static int file_dlb_fgetc(dlb *dp) {
+	return fgetc(dp->fp);
+}
+
+static long file_dlb_ftell(dlb *dp) {
+	return ftell(dp->fp);
+}
+
+const dlb_procs_t dlb_procs = {
+	file_dlb_init,
+	file_dlb_cleanup,
+	file_dlb_fopen,
+	file_dlb_fclose,
+	file_dlb_fread,
+	file_dlb_fseek,
+	file_dlb_fgets,
+	file_dlb_fgetc,
+	file_dlb_ftell
+};
+
+#endif //DLBFILE
 
 
 /* Global wrapper functions ------------------------------------------------ */
 
-#define do_dlb_init (*dlb_procs->dlb_init_proc)
-#define do_dlb_cleanup (*dlb_procs->dlb_cleanup_proc)
-#define do_dlb_fopen (*dlb_procs->dlb_fopen_proc)
-#define do_dlb_fclose (*dlb_procs->dlb_fclose_proc)
-#define do_dlb_fread (*dlb_procs->dlb_fread_proc)
-#define do_dlb_fseek (*dlb_procs->dlb_fseek_proc)
-#define do_dlb_fgets (*dlb_procs->dlb_fgets_proc)
-#define do_dlb_fgetc (*dlb_procs->dlb_fgetc_proc)
-#define do_dlb_ftell (*dlb_procs->dlb_ftell_proc)
+#define do_dlb_init (dlb_procs.dlb_init_proc)
+#define do_dlb_cleanup (dlb_procs.dlb_cleanup_proc)
+#define do_dlb_fopen (dlb_procs.dlb_fopen_proc)
+#define do_dlb_fclose (dlb_procs.dlb_fclose_proc)
+#define do_dlb_fread (dlb_procs.dlb_fread_proc)
+#define do_dlb_fseek (dlb_procs.dlb_fseek_proc)
+#define do_dlb_fgets (dlb_procs.dlb_fgets_proc)
+#define do_dlb_fgetc (dlb_procs.dlb_fgetc_proc)
+#define do_dlb_ftell (dlb_procs.dlb_ftell_proc)
 
-static const dlb_procs_t *dlb_procs;
 static boolean dlb_initialized = false;
 
 boolean dlb_init(void) {
 	if (!dlb_initialized) {
-#ifdef DLBLIB
-		dlb_procs = &lib_dlb_procs;
-#endif
-
-		if (dlb_procs)
-			dlb_initialized = do_dlb_init();
+		dlb_initialized = do_dlb_init();
 	}
 
 	return dlb_initialized;
@@ -381,20 +429,15 @@ void dlb_cleanup(void) {
 
 
 dlb *dlb_fopen(const char *name, const char *mode) {
-	FILE *fp;
 	dlb *dp;
 
 	if (!dlb_initialized) return NULL;
 
 	dp = alloc(sizeof(dlb));
-	if (do_dlb_fopen(dp, name, mode)) {
-		dp->fp = NULL;
-	} else if ((fp = fopen(name, mode)) != 0) {
-		dp->fp = fp;
-	} else {
-		/* can't find anything */
+	if (!do_dlb_fopen(dp, name, mode)) {
+		// can't find anything
 		free(dp);
-		dp = NULL;
+		return NULL;
 	}
 
 	return dp;
@@ -404,8 +447,7 @@ int dlb_fclose(dlb *dp) {
 	int ret = 0;
 
 	if (dlb_initialized) {
-		if (dp->fp) ret = fclose(dp->fp);
-		else ret = do_dlb_fclose(dp);
+		ret = do_dlb_fclose(dp);
 
 		free(dp);
 	}
@@ -414,34 +456,27 @@ int dlb_fclose(dlb *dp) {
 
 int dlb_fread(char *buf, int size, int quan, dlb *dp) {
 	if (!dlb_initialized || size <= 0 || quan <= 0) return 0;
-	if (dp->fp) return fread(buf, size, quan, dp->fp);
 	return do_dlb_fread(buf, size, quan, dp);
 }
 
 int dlb_fseek(dlb *dp, long pos, int whence) {
 	if (!dlb_initialized) return EOF;
-	if (dp->fp) return fseek(dp->fp, pos, whence);
 	return do_dlb_fseek(dp, pos, whence);
 }
 
 char *dlb_fgets(char *buf, int len, dlb *dp) {
 	if (!dlb_initialized) return NULL;
-	if (dp->fp) return fgets(buf, len, dp->fp);
 	return do_dlb_fgets(buf, len, dp);
 }
 
 int dlb_fgetc(dlb *dp) {
 	if (!dlb_initialized) return EOF;
-	if (dp->fp) return fgetc(dp->fp);
 	return do_dlb_fgetc(dp);
 }
 
 long dlb_ftell(dlb *dp) {
 	if (!dlb_initialized) return 0;
-	if (dp->fp) return ftell(dp->fp);
 	return do_dlb_ftell(dp);
 }
-
-#endif /* DLB */
 
 /*dlb.c*/

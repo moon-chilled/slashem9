@@ -32,11 +32,11 @@ ALLOBJ := $(SLASHEMOBJ) $(OBJ_DGNCOMP) $(OBJ_LEVCOMP)
 default: all
 
 install: all
-	mkdir -p $(HACKDIR)/save $(BINDIR)
+	mkdir -p $(HACKDIR)/save $(DATADIR) $(BINDIR)
 	touch $(HACKDIR)/perm $(HACKDIR)/xlogfile
 
 	cp src/slashem $(HACKDIR)
-	cp dat/* $(HACKDIR)
+	cp dat/* $(DATADIR)
 
 	sed -e 's;@HACKDIR@;$(HACKDIR);' < sys/unix/slashem.sh > $(BINDIR)/slashem
 	chmod 755 $(BINDIR)/slashem

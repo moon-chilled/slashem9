@@ -94,10 +94,6 @@ extern void interject(int);
 #define C(c)		(0x1f & (c))
 #endif
 
-#if defined(DLB)
-#define FILENAME_CMP  _stricmp		      /* case insensitive */
-#endif
-
 #if 0
 extern char levels[], bones[], permbones[],
 #endif /* 0 */

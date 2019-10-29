@@ -11,7 +11,6 @@
 static void xexit(int);
 
 #define DLB_DIRECTORY "Directory"	/* name of lib directory */
-#define LIBLISTFILE "dlb.lst"		/* default list file */
 
 /* library functions (from dlb.c) */
 extern boolean open_library(const char *,const char *,library *);
@@ -27,9 +26,8 @@ static void write_dlb_directory(int,int,libdir *,long,long,long);
 static char default_progname[] = "dlb";
 static char *progname = default_progname;
 
-/* fixed library and list file names - can be overridden if necessary */
-static const char *library_file = DLBFILE;
-static const char *list_file = LIBLISTFILE;
+static const char *library_file;
+static const char *list_file;
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -57,15 +55,13 @@ static const char *list_file = LIBLISTFILE;
  *  dlb t	list the archive
  * options:
  *  v		verbose
- *  f file	specify archive file (default DLBFILE)
- *  I file	specify file for list of files (default LIBLISTFILE)
+ *  f file	specify archive file
+ *  I file	specify file for list of files
  *  C dir	chdir to dir (used ONCE, not like tar's -C)
  */
 
 static void usage(void) {
 	printf("Usage: %s [ctxCIfv] arguments... [files...]\n", progname);
-	printf("  default library is %s\n", library_file);
-	printf("  default list file is %s\n", list_file);
 	xexit(EXIT_FAILURE);
 }
 
@@ -208,9 +204,9 @@ int main(int argc, char **argv) {
 						  /* if files are listed, see if current is wanted */
 						  int c;
 						  for (c = ap; c < argc; c++)
-							  if (!FILENAME_CMP(lib.dir[i].fname, argv[c])) break;
+							  if (!strcmp(lib.dir[i].fname, argv[c])) break;
 						  if (c == argc) continue;	/* skip */
-					  } else if (!FILENAME_CMP(lib.dir[i].fname, DLB_DIRECTORY)) {
+					  } else if (!strcmp(lib.dir[i].fname, DLB_DIRECTORY)) {
 						  /*
 						   * Don't extract the directory unless the user
 						   * specifically asks for it.

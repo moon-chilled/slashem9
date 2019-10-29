@@ -4,7 +4,7 @@ PREFIX ?= $(HOME)/slashem-nextinstall
 HACKDIR ?= $(PREFIX)/slashemdir
 BINDIR ?= $(PREFIX)/bin
 
-CFLAGS += -Iinclude -Ibuild/include -DDLB -DWIZARD=\"$(shell whoami)\"
+CFLAGS += -Iinclude -Ibuild/include -DDLBLIB -DWIZARD=\"$(shell whoami)\"
 CFLAGS += -g -O0
 CFLAGS += -std=c99 -D_XOPEN_SOURCE=500 -D_POSIX_C_SOURCE=200809L -Werror -Wpedantic -pedantic
 
