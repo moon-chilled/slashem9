@@ -22,10 +22,6 @@
 #include "win32api.h"			/* for GetModuleFileName */
 #endif
 
-#ifdef __DJGPP__
-#include <unistd.h>			/* for getcwd() prototype */
-#endif
-
 char orgdir[PATHLEN];	/* also used in pcsys.c, amidos.c */
 
 static void process_options(int argc,char **argv);
@@ -68,11 +64,7 @@ void pcmain(int argc, char **argv) {
 	int fd;
 	char *dir;
 
-#ifdef __DJGPP__
-	if (*argv[0]) hname = argv[0];  /* DJGPP can give us argv[0] */
-	else
-#endif
-		hname = "NetHack";      /* used for syntax messages */
+	hname = "NetHack";      /* used for syntax messages */
 
 	choose_windows(DEFAULT_WINDOW_SYS);
 
@@ -294,14 +286,6 @@ not_recovered:
 		pickup(1);
 		sense_engr_at(u.ux,u.uy,false);
 	}
-#ifdef __DJGPP__
-	/* WAC try to set title bar for Win95 DOS Boxes */
-	/*        {
-		  char titlebuf[BUFSZ];
-		  sprintf(titlebuf,"%s - %s", DEF_GAME_NAME, plname);
-		  w95_setapptitle (titlebuf);
-		  }*/
-#endif
 
 #ifndef NO_SIGNAL
 	signal(SIGINT, SIG_IGN);
@@ -462,11 +446,7 @@ void port_help(void) {
 #endif /* PORT_HELP */
 
 #ifdef EXEPATH
-#ifdef __DJGPP__
-#define PATH_SEPARATOR '/'
-#else
 #define PATH_SEPARATOR '\\'
-#endif
 
 #define EXEPATHBUFSZ 256
 char exepathbuf[EXEPATHBUFSZ];

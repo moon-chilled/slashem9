@@ -286,11 +286,7 @@ char *basename;
 }
 
 #ifdef EXEPATH
-# ifdef __DJGPP__
-#define PATH_SEPARATOR '/'
-# else
-#define PATH_SEPARATOR '\\'
-# endif
+# define PATH_SEPARATOR '\\'
 
 #define EXEPATHBUFSZ 256
 char exepathbuf[EXEPATHBUFSZ];
