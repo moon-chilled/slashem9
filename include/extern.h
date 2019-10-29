@@ -622,8 +622,6 @@ extern void makerogueghost(void);
 
 extern char *fname_encode(const char *, char, char *, char *, int);
 extern char *fname_decode(char, char *, char *, int);
-extern const char *fqname(const char *, int, int);
-extern FILE *fopen_datafile(const char *,const char *,int);
 extern boolean uptodate(int,const char *);
 extern void store_version(int);
 extern void set_levelfile_name(char *,int);
@@ -654,7 +652,6 @@ extern void check_recordfile(const char *);
 extern int get_uchar_list(char*, uchar*, int);
 extern void read_wizkit(void);
 extern void paniclog(const char *, const char *);
-extern int validate_prefix_locations(char *);
 extern void free_saved_games(char**);
 #ifdef SELF_RECOVER
 extern boolean recover_savefile(void);

@@ -95,17 +95,6 @@ void pcmain(int argc, char **argv) {
 	if (dir != NULL) {
 		strncpy(hackdir, dir, PATHLEN - 1);
 		hackdir[PATHLEN-1] = '\0';
-#ifdef NOCWD_ASSUMPTIONS
-		{
-			int prefcnt;
-
-			fqn_prefix[0] = alloc(strlen(hackdir)+2);
-			strcpy(fqn_prefix[0], hackdir);
-			append_slash(fqn_prefix[0]);
-			for (prefcnt = 1; prefcnt < PREFIX_COUNT; prefcnt++)
-				fqn_prefix[prefcnt] = fqn_prefix[0];
-		}
-#endif
 #ifdef CHDIR
 		chdirx (dir, 1);
 #endif

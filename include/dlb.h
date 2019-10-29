@@ -8,12 +8,7 @@
 
 #ifdef DLB
 
-/* implementations */
-#ifdef MAC
-# define DLBRSRC	/* use Mac resources */
-#else
-# define DLBLIB		/* use a set of external files */
-#endif
+#define DLBLIB		/* use a set of external files */
 
 #ifdef DLBLIB
 /* directory structure in memory */
@@ -54,9 +49,6 @@ typedef struct {
 	long size;		/* size of file */
 	long mark;		/* current file marker */
 #endif
-#ifdef DLBRSRC
-	int fd;		/* HandleFile file descriptor */
-#endif
 } dlb;
 
 boolean dlb_init(void);
@@ -69,21 +61,6 @@ int dlb_fseek(dlb*,long,int);
 char *dlb_fgets(char *,int,dlb*);
 int dlb_fgetc(dlb*);
 long dlb_ftell(dlb*);
-
-
-/* Resource DLB entry points */
-#ifdef DLBRSRC
-boolean rsrc_dlb_init(void);
-void rsrc_dlb_cleanup(void);
-boolean rsrc_dlb_fopen(dlb *dp, const char *name, const char *mode);
-int rsrc_dlb_fclose(dlb *dp);
-int rsrc_dlb_fread(char *buf, int size, int quan, dlb *dp);
-int rsrc_dlb_fseek(dlb *dp, long pos, int whence);
-char *rsrc_dlb_fgets(char *buf, int len, dlb *dp);
-int rsrc_dlb_fgetc(dlb *dp);
-long rsrc_dlb_ftell(dlb *dp);
-#endif
-
 
 #else /* DLB */
 

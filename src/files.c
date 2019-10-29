@@ -54,11 +54,6 @@ extern int errno;
 
 #include <strings.h>
 
-#ifdef PREFIXES_IN_USE
-#define FQN_NUMBUF 4
-static char fqn_filename_buffer[FQN_NUMBUF][FQN_MAX_FILENAME];
-#endif
-
 #ifndef WIN32
 char bones[] = "bonesnn.xxx";
 char lock[PL_NSIZ+14] = "1lock"; /* long enough for uid+name+.99 */
@@ -224,82 +219,6 @@ char *fname_decode(char quotechar, char *s, char *callerbuf, int bufsz) {
 	return callerbuf;
 }
 
-#ifndef PREFIXES_IN_USE
-/*ARGSUSED*/
-#endif
-const char *fqname(const char *basename, int whichprefix, int buffnum) {
-#ifndef PREFIXES_IN_USE
-	return basename;
-#else
-	if (!basename || whichprefix < 0 || whichprefix >= PREFIX_COUNT)
-		return basename;
-	if (!fqn_prefix[whichprefix])
-		return basename;
-	if (buffnum < 0 || buffnum >= FQN_NUMBUF) {
-		impossible("Invalid fqn_filename_buffer specified: %d",
-		           buffnum);
-		buffnum = 0;
-	}
-	if (strlen(fqn_prefix[whichprefix]) + strlen(basename) >=
-	                FQN_MAX_FILENAME) {
-		impossible("fqname too long: %s + %s", fqn_prefix[whichprefix],
-		           basename);
-		return basename;	/* XXX */
-	}
-	strcpy(fqn_filename_buffer[buffnum], fqn_prefix[whichprefix]);
-	return strcat(fqn_filename_buffer[buffnum], basename);
-#endif
-}
-
-/* reasonbuf must be at least BUFSZ, supplied by caller */
-/*ARGSUSED*/
-int validate_prefix_locations(char *reasonbuf) {
-#if defined(NOCWD_ASSUMPTIONS)
-	FILE *fp;
-	const char *filename;
-	int prefcnt, failcount = 0;
-	char panicbuf1[BUFSZ], panicbuf2[BUFSZ], *details;
-
-	if (reasonbuf) reasonbuf[0] = '\0';
-	for (prefcnt = 1; prefcnt < PREFIX_COUNT; prefcnt++) {
-		/* don't test writing to configdir or datadir; they're readonly */
-		if (prefcnt == CONFIGPREFIX || prefcnt == DATAPREFIX) continue;
-		filename = fqname("validate", prefcnt, 3);
-		if ((fp = fopen(filename, "w"))) {
-			fclose(fp);
-			unlink(filename);
-		} else {
-			if (reasonbuf) {
-				if (failcount) strcat(reasonbuf,", ");
-				strcat(reasonbuf, fqn_prefix_names[prefcnt]);
-			}
-			/* the paniclog entry gets the value of errno as well */
-			sprintf(panicbuf1,"Invalid %s", fqn_prefix_names[prefcnt]);
-			if (!(details = strerror(errno)))
-				details = "";
-			sprintf(panicbuf2,"\"%s\", (%d) %s",
-			        fqn_prefix[prefcnt], errno, details);
-			paniclog(panicbuf1, panicbuf2);
-			failcount++;
-		}
-	}
-	if (failcount)
-		return 0;
-	else
-#endif
-		return 1;
-}
-
-/* fopen a file, with OS-dependent bells and whistles */
-/* NOTE: a simpler version of this routine also exists in util/dlb_main.c */
-FILE *fopen_datafile(const char *filename, const char *mode, int prefix) {
-	FILE *fp;
-
-	filename = fqname(filename, prefix, prefix == TROUBLEPREFIX ? 3 : 0);
-	fp = fopen(filename, mode);
-	return fp;
-}
-
 /* ----------  BEGIN LEVEL FILE HANDLING ----------- */
 
 /* Construct a file name for a level-type file, which is of the form
@@ -319,11 +238,9 @@ void set_levelfile_name(char *file, int lev) {
 
 int create_levelfile(int lev, char errbuf[]) {
 	int fd;
-	const char *fq_lock;
 
 	if (errbuf) *errbuf = '\0';
 	set_levelfile_name(lock, lev);
-	fq_lock = fqname(lock, LEVELPREFIX, 0);
 
 #ifdef WIN32
 	/* Use O_TRUNC to force the file to be shortened if it already
@@ -331,13 +248,12 @@ int create_levelfile(int lev, char errbuf[]) {
 	 */
 #  ifdef HOLD_LOCKFILE_OPEN
 	if (lev == 0)
-		fd = open_levelfile_exclusively(fq_lock, lev,
-		                                O_WRONLY |O_CREAT | O_TRUNC | O_BINARY);
+		fd = open_levelfile_exclusively(lock, lev, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY);
 	else
 #  endif
-		fd = open(fq_lock, O_WRONLY |O_CREAT | O_TRUNC | O_BINARY, FCMASK);
+		fd = open(lock, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, FCMASK);
 #else	// WIN32
-	fd = creat(fq_lock, FCMASK);
+	fd = creat(lock, FCMASK);
 #endif /* WIN32 */
 
 	if (fd >= 0)
@@ -353,21 +269,17 @@ int create_levelfile(int lev, char errbuf[]) {
 
 int open_levelfile(int lev, char errbuf[]) {
 	int fd;
-	const char *fq_lock;
 
 	if (errbuf) *errbuf = '\0';
 	set_levelfile_name(lock, lev);
-	fq_lock = fqname(lock, LEVELPREFIX, 0);
 # ifdef HOLD_LOCKFILE_OPEN
 	if (lev == 0)
-		fd = open_levelfile_exclusively(fq_lock, lev, O_RDONLY | O_BINARY );
+		fd = open_levelfile_exclusively(lock, lev, O_RDONLY | O_BINARY );
 	else
 # endif
-		fd = open(fq_lock, O_RDONLY | O_BINARY, 0);
+		fd = open(lock, O_RDONLY | O_BINARY, 0);
 
-	/* for failure, return an explanation that our caller can use;
-	   settle for `lock' instead of `fq_lock' because the latter
-	   might end up being too big for nethack's BUFSZ */
+	// for failure, return an explanation that our caller can use
 	if (fd < 0 && errbuf)
 		sprintf(errbuf,
 		        "Cannot open file \"%s\" for level %d (errno %d).",
@@ -387,7 +299,7 @@ void delete_levelfile(int lev) {
 # ifdef HOLD_LOCKFILE_OPEN
 		if (lev == 0) really_close();
 # endif
-		unlink(fqname(lock, LEVELPREFIX, 0));
+		unlink(lock);
 		level_info[lev].flags &= ~LFILE_EXISTS;
 	}
 }
@@ -508,7 +420,6 @@ int create_bonesfile(d_level *lev, char **bonesid, char errbuf[]) {
 	if (errbuf) *errbuf = '\0';
 	*bonesid = set_bonesfile_name(bones, lev);
 	file = set_bonestemp_name();
-	file = fqname(file, BONESPREFIX, 0);
 
 #ifdef WIN32
 	/* Use O_TRUNC to force the file to be shortened if it already
@@ -528,43 +439,39 @@ int create_bonesfile(d_level *lev, char **bonesid, char errbuf[]) {
 
 /* move completed bones file to proper name */
 void commit_bonesfile(d_level *lev) {
-	const char *fq_bones, *tempname;
+	const char *tempname;
 	int ret;
 
 	set_bonesfile_name(bones, lev);
-	fq_bones = fqname(bones, BONESPREFIX, 0);
 	tempname = set_bonestemp_name();
-	tempname = fqname(tempname, BONESPREFIX, 1);
 
 # if (defined(SYSV) && !defined(SVR4)) || defined(GENIX)
 	/* old SYSVs don't have rename.  Some SVR3's may, but since they
 	 * also have link/unlink, it doesn't matter. :-)
 	 */
-	unlink(fq_bones);
-	ret = link(tempname, fq_bones);
+	unlink(bones);
+	ret = link(tempname, bones);
 	ret += unlink(tempname);
 # else
-	ret = rename(tempname, fq_bones);
+	ret = rename(tempname, bones);
 # endif
 	if (wizard && ret != 0)
-		pline("couldn't rename %s to %s.", tempname, fq_bones);
+		pline("couldn't rename %s to %s.", tempname, bones);
 }
 
 
 int open_bonesfile(d_level *lev, char **bonesid) {
-	const char *fq_bones;
 	int fd;
 
 	*bonesid = set_bonesfile_name(bones, lev);
-	fq_bones = fqname(bones, BONESPREFIX, 0);
-	fd = open(fq_bones, O_RDONLY | O_BINARY, 0);
+	fd = open(bones, O_RDONLY | O_BINARY, 0);
 	return fd;
 }
 
 
 boolean delete_bonesfile(d_level *lev) {
 	set_bonesfile_name(bones, lev);
-	return !(unlink(fqname(bones, BONESPREFIX, 0)) < 0);
+	return !(unlink(bones) < 0);
 }
 /* ----------  END BONES FILE HANDLING ----------- */
 
@@ -613,14 +520,12 @@ void set_error_savefile(void) {
 
 /* create save file, overwriting one if it already exists */
 int create_savefile(void) {
-	const char *fq_save;
 	int fd;
 
-	fq_save = fqname(SAVEF, SAVEPREFIX, 0);
 #ifdef WIN32
-	fd = open(fq_save, O_WRONLY | O_BINARY | O_CREAT | O_TRUNC, FCMASK);
+	fd = open(SAVEF, O_WRONLY | O_BINARY | O_CREAT | O_TRUNC, FCMASK);
 #else
-	fd = creat(fq_save, FCMASK);
+	fd = creat(SAVEF, FCMASK);
 #endif // WIN32
 
 	return fd;
@@ -629,12 +534,7 @@ int create_savefile(void) {
 
 /* open savefile for reading */
 int open_savefile(void) {
-	int fd;
-
-	const char *fq_save;
-	fq_save = fqname(SAVEF, SAVEPREFIX, 0);
-	fd = open(fq_save, O_RDONLY | O_BINARY, 0);
-	return fd;
+	return open(SAVEF, O_RDONLY | O_BINARY, 0);
 }
 
 
@@ -648,21 +548,19 @@ int delete_savefile(void) {
 	}
 #endif
 
-	unlink(fqname(SAVEF, SAVEPREFIX, 0));
+	unlink(SAVEF);
 	return 0;	/* for restore_saved_game() (ex-xxxmain.c) test */
 }
 
 
 /* try to open up a save file and prepare to restore it */
 int restore_saved_game(void) {
-	const char *fq_save;
 	int fd;
 
 	set_savefile_name();
-	fq_save = fqname(SAVEF, SAVEPREFIX, 0);
 	if ((fd = open_savefile()) < 0) return fd;
 
-	if (!uptodate(fd, fq_save)) {
+	if (!uptodate(fd, SAVEF)) {
 		close(fd);
 		fd = -1;
 		delete_savefile();
@@ -733,12 +631,7 @@ boolean lock_file(const char *filename, int whichprefix, int retryct) {
 
 #ifndef USE_FCNTL
 	lockname = make_lockname(filename, locknambuf);
-#ifndef NO_FILE_LINKS	/* LOCKDIR should be subsumed by LOCKPREFIX */
-	lockname = fqname(lockname, LOCKPREFIX, 2);
 #endif
-#endif
-	filename = fqname(filename, whichprefix, 0);
-
 
 #ifdef USE_FCNTL
 	lockfd = open(filename,O_RDWR);
@@ -857,9 +750,6 @@ void unlock_file(const char *filename) {
 #else
 
 		lockname = make_lockname(filename, locknambuf);
-# ifndef NO_FILE_LINKS	/* LOCKDIR should be subsumed by LOCKPREFIX */
-		lockname = fqname(lockname, LOCKPREFIX, 2);
-# endif
 
 #ifdef UNIX
 		if (unlink(lockname) < 0)
@@ -927,11 +817,10 @@ static FILE *fopen_config_file(const char *filename) {
 	}
 
 #if defined(MAC) || defined(WIN32)
-	if ((fp = fopen(fqname(configfile, CONFIGPREFIX, 0), "r"))
+	if ((fp = fopen(configfile, "r"))
 	                != NULL)
 		return fp;
 #else
-	/* constructed full path names don't need fqname() */
 	envp = nh_getenv("HOME");
 	if (!envp)
 		strcpy(tmp_config, configfile);
@@ -1386,8 +1275,7 @@ static FILE *fopen_wizkit_file(void) {
 		}
 
 #if defined(MAC) || defined(WIN32)
-	if ((fp = fopen(fqname(wizkit, CONFIGPREFIX, 0), "r"))
-	                != NULL)
+	if ((fp = fopen(wizkit, "r")) != NULL)
 		return fp;
 #else
 	envp = nh_getenv("HOME");
@@ -1449,49 +1337,29 @@ void read_wizkit(void) {
 /* verify that we can write to the scoreboard file; if not, try to create one */
 void check_recordfile(const char *dir) {
 	int fd;
-	const char *fq_record;
 
 #ifdef UNIX
-	fq_record = fqname(NH_RECORD, SCOREPREFIX, 0);
-	fd = open(fq_record, O_RDWR, 0);
+	fd = open(NH_RECORD, O_RDWR, 0);
 
 	if (fd >= 0) {
 		close(fd);   /* NH_RECORD is accessible */
-	} else if ((fd = open(fq_record, O_CREAT|O_RDWR, FCMASK)) >= 0) {
+	} else if ((fd = open(NH_RECORD, O_CREAT|O_RDWR, FCMASK)) >= 0) {
 		close(fd);   /* NH_RECORD newly created */
 	} else {
-		raw_printf("Warning: cannot write scoreboard file %s", fq_record);
+		raw_printf("Warning: cannot write scoreboard file %s", NH_RECORD);
 		wait_synch();
 	}
-#endif  /* !UNIX && !VMS */
+#endif  // !UNIX
 #ifdef WIN32
-	char tmp[PATHLEN];
-	strcpy(tmp, NH_RECORD);
-	fq_record = fqname(NH_RECORD, SCOREPREFIX, 0);
-
-	if ((fd = open(fq_record, O_RDWR)) < 0) {
+	if ((fd = open(NH_RECORD, O_RDWR)) < 0) {
 		/* try to create empty record */
-		if ((fd = open(fq_record, O_CREAT|O_RDWR, S_IREAD|S_IWRITE)) < 0) {
-			raw_printf("Warning: cannot write record %s", tmp);
+		if ((fd = open(NH_RECORD, O_CREAT|O_RDWR, S_IREAD|S_IWRITE)) < 0) {
+			raw_printf("Warning: cannot write record %s", NH_RECORD);
 			wait_synch();
 		} else          /* create succeeded */
 			close(fd);
 	} else		/* open succeeded */
 		close(fd);
-#else /* WIN32*/
-
-# ifdef MAC
-	/* Create the record file, if necessary */
-	fq_record = fqname(NH_RECORD, SCOREPREFIX, 0);
-	fd = macopen (fq_record, O_RDWR | O_CREAT, LOGF_TYPE);
-	if (fd != -1) macclose (fd);
-
-	/* Create the logfile, if necessary */
-	fq_record = fqname(XLOGFILE, SCOREPREFIX, 0);
-	fd = macopen (fq_record, O_RDWR | O_CREAT, LOGF_TYPE);
-	if (fd != -1) macclose (fd);
-# endif /* MAC */
-
 #endif /* WIN32*/
 }
 
@@ -1508,7 +1376,7 @@ void paniclog(const char *type,	/* panic, impossible, trickery */
 
 	if (!program_state.in_paniclog) {
 		program_state.in_paniclog = 1;
-		lfile = fopen_datafile(PANICLOG, "a", TROUBLEPREFIX);
+		lfile = fopen(PANICLOG, "a");
 		if (lfile) {
 			fprintf(lfile, "%s %08ld: %s %s\n",
 			        version_string_tmp(), yyyymmdd((time_t)0L),
@@ -1652,10 +1520,8 @@ boolean recover_savefile(void) {
 	 */
 	for (lev = 0; lev < 256; lev++) {
 		if (processed[lev]) {
-			const char *fq_lock;
 			set_levelfile_name(lock, lev);
-			fq_lock = fqname(lock, LEVELPREFIX, 3);
-			unlink(fq_lock);
+			unlink(lock);
 		}
 	}
 	return true;

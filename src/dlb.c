@@ -30,9 +30,6 @@ typedef struct dlb_procs {
 	long (*dlb_ftell_proc)(dlb*);
 } dlb_procs_t;
 
-/* without extern.h via hack.h, these haven't been declared for us */
-extern FILE *fopen_datafile(const char *,const char *,int);
-
 #ifdef DLBLIB
 /*
  * Library Implementation:
@@ -189,7 +186,7 @@ static boolean find_file(const char *name, library **lib, long *startp, long *si
 boolean open_library(const char *lib_name, library *lp) {
 	boolean status = false;
 
-	lp->fdata = fopen_datafile(lib_name, RDBMODE, DATAPREFIX);
+	lp->fdata = fopen(lib_name, RDBMODE);
 	if (lp->fdata) {
 		if (readlibdir(lp)) {
 			status = true;
@@ -350,19 +347,6 @@ const dlb_procs_t lib_dlb_procs = {
 
 #endif /* DLBLIB */
 
-#ifdef DLBRSRC
-const dlb_procs_t rsrc_dlb_procs = {
-	rsrc_dlb_init,
-	rsrc_dlb_cleanup,
-	rsrc_dlb_fopen,
-	rsrc_dlb_fclose,
-	rsrc_dlb_fread,
-	rsrc_dlb_fseek,
-	rsrc_dlb_fgets,
-	rsrc_dlb_fgetc,
-	rsrc_dlb_ftell
-};
-#endif
 
 /* Global wrapper functions ------------------------------------------------ */
 
@@ -383,9 +367,6 @@ boolean dlb_init(void) {
 	if (!dlb_initialized) {
 #ifdef DLBLIB
 		dlb_procs = &lib_dlb_procs;
-#endif
-#ifdef DLBRSRC
-		dlb_procs = &rsrc_dlb_procs;
 #endif
 
 		if (dlb_procs)
@@ -412,7 +393,7 @@ dlb *dlb_fopen(const char *name, const char *mode) {
 	dp = alloc(sizeof(dlb));
 	if (do_dlb_fopen(dp, name, mode)) {
 		dp->fp = NULL;
-	} else if ((fp = fopen_datafile(name, mode, DATAPREFIX)) != 0) {
+	} else if ((fp = fopen(name, mode)) != 0) {
 		dp->fp = fp;
 	} else {
 		/* can't find anything */

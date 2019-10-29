@@ -582,21 +582,11 @@ void init_dungeons(void) {
 		char tbuf[BUFSZ];
 		sprintf(tbuf, "Cannot open dungeon description - \"%s",
 		        DUNGEON_FILE);
-#ifdef DLBRSRC /* using a resource from the executable */
-		strcat(tbuf, "\" resource!");
-#else /* using a file or DLB file */
-# if defined(DLB)
-		strcat(tbuf, "\" from ");
-#  ifdef PREFIXES_IN_USE
-		strcat(tbuf, "\n\"");
-		if (fqn_prefix[DATAPREFIX]) strcat(tbuf, fqn_prefix[DATAPREFIX]);
-#  else
-		strcat(tbuf, "\"");
-#  endif
+#ifdef DLB
+		strcat(tbuf, "\" from \"");
 		strcat(tbuf, DLBFILE);
-# endif
-		strcat(tbuf, "\" file!");
 #endif
+		strcat(tbuf, "\" file!");
 #ifdef WIN32
 		interject_assistance(1, INTERJECT_PANIC, (void *)tbuf,
 		                     (void *)fqn_prefix[DATAPREFIX]);

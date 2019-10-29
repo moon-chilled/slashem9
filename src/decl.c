@@ -281,13 +281,6 @@ char *fqn_prefix[PREFIX_COUNT] = { NULL, NULL, NULL, NULL,
                                    NULL, NULL, NULL, NULL, NULL
                                  };
 
-#ifdef PREFIXES_IN_USE
-char *fqn_prefix_names[PREFIX_COUNT] = { "hackdir", "leveldir", "savedir",
-                                         "bonesdir", "datadir", "scoredir",
-                                         "lockdir", "configdir", "troubledir"
-                                       };
-#endif
-
 struct u_achieve achieve = DUMMY;
 
 struct realtime_data realtime_data = { 0, 0, 0 };

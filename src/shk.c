@@ -833,7 +833,7 @@ void obfree (struct obj *obj, struct obj *merge) {
 		xchar x, y;
 		struct obj *otmp;
 		pline("BUG: obfree() called on non-empty container.  See buglog for details.");
-		fp = fopen_datafile("buglog", "a", TROUBLEPREFIX);
+		fp = fopen("buglog", "a");
 		if (fp) {
 			fprintf(fp,
 			        "%08ld: BUG: obfree() called on non-empty container.\n",

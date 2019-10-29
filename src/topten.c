@@ -372,7 +372,7 @@ void topten (int how) {
 	t0->tt_next = 0;
 
 	if(lock_file(XLOGFILE, SCOREPREFIX, 10)) {
-		if(!(xlfile = fopen_datafile(XLOGFILE, "a", SCOREPREFIX))) {
+		if(!(xlfile = fopen(XLOGFILE, "a"))) {
 			HUP raw_print("Cannot open extended log file!");
 		} else {
 			write_xlentry(xlfile, t0);
@@ -402,7 +402,7 @@ void topten (int how) {
 	if (!lock_file(NH_RECORD, SCOREPREFIX, 60))
 		goto destroywin;
 
-	rfile = fopen_datafile( NH_RECORD, "r", SCOREPREFIX);
+	rfile = fopen(NH_RECORD, "r");
 
 	if (!rfile) {
 		HUP raw_print("Cannot open record file!");
@@ -478,7 +478,7 @@ void topten (int how) {
 	}
 	if(flg) {	/* rewrite record file */
 		fclose(rfile);
-		if(!(rfile = fopen_datafile(NH_RECORD, "w", SCOREPREFIX))) {
+		if(!(rfile = fopen(NH_RECORD, "w"))) {
 			HUP raw_print("Cannot write record file");
 			unlock_file(NH_RECORD);
 			free_ttlist(tt_head);
@@ -882,7 +882,7 @@ void prscore(int argc, char **argv) {
 		return;
 	}
 
-	rfile = fopen_datafile(NH_RECORD, "r", SCOREPREFIX);
+	rfile = fopen(NH_RECORD, "r");
 	if (!rfile) {
 		raw_print("Cannot open record file!");
 		return;
@@ -1014,7 +1014,7 @@ struct obj * tt_oname(struct obj *otmp) {
 
 	if (!otmp) return NULL;
 
-	rfile = fopen_datafile(NH_RECORD, "r", SCOREPREFIX);
+	rfile = fopen(NH_RECORD, "r");
 	if (!rfile) {
 		impossible("Cannot open record file!");
 		return NULL;

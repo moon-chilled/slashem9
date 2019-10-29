@@ -4,6 +4,8 @@
 .*.swm
 .*.swl
 
+tags
+
 *.o
 util/dgn_yacc.c
 util/dgn_yacc.h

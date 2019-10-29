@@ -58,10 +58,10 @@ static int eraseoldlocks(void) {
 	for(i = 1; i <= MAXDUNGEON*MAXLEVEL + 1; i++) {
 		/* try to remove all */
 		set_levelfile_name(lock, i);
-		unlink(fqname(lock, LEVELPREFIX, 0));
+		unlink(lock);
 	}
 	set_levelfile_name(lock, 0);
-	if(unlink(fqname(lock, LEVELPREFIX, 0)))
+	if (unlink(lock))
 		return 0;				/* cannot remove it */
 	return 1;					/* success! */
 }
@@ -69,7 +69,6 @@ static int eraseoldlocks(void) {
 void getlock(void) {
 	int fd, c, ci, ct;
 	char tbuf[BUFSZ];
-	const char *fq_lock;
 	/* we ignore QUIT and INT at this point */
 	if (!lock_file(HLOCK, LOCKPREFIX, 10)) {
 		wait_synch();
@@ -78,15 +77,14 @@ void getlock(void) {
 	}
 
 	/* regularize(lock); */ /* already done in pcmain */
-	sprintf(tbuf,fqname(lock, LEVELPREFIX, 0));
+	sprintf(tbuf, lockj);
 	set_levelfile_name(lock, 0);
-	fq_lock = fqname(lock, LEVELPREFIX, 1);
-	if((fd = open(fq_lock,0)) == -1) {
+	rf((fd = open(lock,0)) == -1) {
 		if(errno == ENOENT) goto gotlock;    /* no such file */
 		chdirx(orgdir, 0);
-		perror(fq_lock);
+		perror(lock);
 		unlock_file(HLOCK);
-		error("Cannot open %s", fq_lock);
+		error("Cannot open %s", lock);
 	}
 
 	close(fd);
@@ -133,20 +131,20 @@ void getlock(void) {
 		}
 
 gotlock:
-	fd = creat(fq_lock, FCMASK);
+	fd = creat(lock, FCMASK);
 	unlock_file(HLOCK);
 	if(fd == -1) {
 		chdirx(orgdir, 0);
-		error("cannot creat lock file (%s.)", fq_lock);
+		error("cannot creat lock file (%s.)", lock);
 	} else {
 		if(write(fd, (char *) &hackpid, sizeof(hackpid))
 				!= sizeof(hackpid)){
 			chdirx(orgdir, 0);
-			error("cannot write lock (%s)", fq_lock);
+			error("cannot write lock (%s)", lock);
 		}
 		if(close(fd) == -1) {
 			chdirx(orgdir, 0);
-			error("cannot close lock (%s)", fq_lock);
+			error("cannot close lock (%s)", lock);
 		}
 	}
 }

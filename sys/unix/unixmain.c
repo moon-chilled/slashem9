@@ -214,8 +214,7 @@ int main(int argc, char **argv) {
 		 * overwrite it.
 		 */
 		bool remember_wiz_mode = wizard;
-		const char *fq_save = fqname(SAVEF, SAVEPREFIX, 1);
-		chmod(fq_save,0);	/* disallow parallel restores */
+		chmod(SAVEF,0);	/* disallow parallel restores */
 		signal(SIGINT, (SIG_RET_TYPE) done1);
 #ifdef NEWS
 		if(iflags.news) {
@@ -235,7 +234,7 @@ int main(int argc, char **argv) {
 			if(yn("Do you want to keep the save file?") == 'n')
 			    delete_savefile();
 			else {
-			    chmod(fq_save,FCMASK); /* back to readable */
+			    chmod(SAVEF,FCMASK); /* back to readable */
 			}
 		}
 		flags.move = 0;
@@ -396,22 +395,8 @@ static void chdirx(const char *dir, bool wr) {
 	    setgid(getgid());
 	    setuid(getuid());		/* Ron Wessels */
 # endif
-	} else {
-	    /* non-default data files is a sign that scores may not be
-	     * compatible, or perhaps that a binary not fitting this
-	     * system's layout is being used.
-	     */
-# ifdef VAR_PLAYGROUND
-	    int len = strlen(VAR_PLAYGROUND);
-
-	    fqn_prefix[SCOREPREFIX] = alloc(len+2);
-	    strcpy(fqn_prefix[SCOREPREFIX], VAR_PLAYGROUND);
-	    if (fqn_prefix[SCOREPREFIX][len-1] != '/') {
-		fqn_prefix[SCOREPREFIX][len] = '/';
-		fqn_prefix[SCOREPREFIX][len+1] = '\0';
-	    }
-# endif
 	}
+
 
 # ifdef HACKDIR
 	if (dir == NULL)
@@ -427,13 +412,6 @@ static void chdirx(const char *dir, bool wr) {
 	/* perhaps we should also test whether . is writable */
 	/* unfortunately the access system-call is worthless */
 	if (wr) {
-# ifdef VAR_PLAYGROUND
-	    fqn_prefix[LEVELPREFIX] = fqn_prefix[SCOREPREFIX];
-	    fqn_prefix[SAVEPREFIX] = fqn_prefix[SCOREPREFIX];
-	    fqn_prefix[BONESPREFIX] = fqn_prefix[SCOREPREFIX];
-	    fqn_prefix[LOCKPREFIX] = fqn_prefix[SCOREPREFIX];
-	    fqn_prefix[TROUBLEPREFIX] = fqn_prefix[SCOREPREFIX];
-# endif
 	    check_recordfile(dir);
 	}
 }
