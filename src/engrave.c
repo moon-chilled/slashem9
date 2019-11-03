@@ -16,6 +16,7 @@ static const char * const random_mesg[] = {
 	/* take-offs and other famous engravings */
 	"Owlbreath", "Galadriel",
 	"Kilroy was here",
+	"Frodo lives",
 	"A.S. ->", "<- A.S.", /* Journey to the Center of the Earth */
 	"You won't get it up the steps", /* Adventure */
 	"Lasciate ogni speranza o voi ch'entrate.", /* Inferno */
@@ -54,6 +55,7 @@ static const char * const random_mesg[] = {
 	"Silly rabbit, Trix are for kids!", /* Trix */
 	"I'll be back!", /* Terminator */
 	"That is not dead which can eternal lie.", /* HPL */
+	"The cake is a lie", /* Portal */
 };
 
 char *random_engraving(char *outbuf) {
