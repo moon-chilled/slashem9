@@ -48,13 +48,12 @@ this day (purportedly) consists of--a mythical group of people called the
 NetHack DevTeam, or just the DevTeam.  Secretive, releasing late and
 infrequently, they are nevertheless revered.  But eventually this came to an
 end.  For a long time, there had been a traditions of patches and modifications
-to NetHack, but none caught on.  Two variants of NetHack, NetHack-- (previously
-named NetHack++, but later renamed to avoid confusion that it was written in
-C++) and NetHack Plus came together to form the a variant called SLASH, short
-for Super Lotsa Added Stuff Hack.  This SLASH combined with a patch called the
-Wizard patch which enhanced spell-casting, and formed Slash'EM: Super Lotsa
-Added Stuff Hack -- Extended Magic; this was a variant maintained by Warren
-Cheung and Tom Proudfoot; at last, the DevTeam's hegemony was over.
+to NetHack, but none caught on.  Tom Proudfoot combined two variants of NetHack,
+NetHack-- (previously named NetHack++, but later renamed to avoid confusion that
+it was written in C++) and NetHack Plus to form a patch called SLASH, short for
+Super Lotsa Added Stuff Hack.  Then, finally, Warren Cheung freed us all from
+the DevTeam's hegemony, the combination this SLASH patch with another called the
+Wizard Patch made Slash'EM: Super Lotsa Added Stuf Hack -- Extended Magic.
 
 
   +----------+
