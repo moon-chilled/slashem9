@@ -250,7 +250,7 @@ typedef long glyph_t;
  */
 
 #define USER_DUNGEONCOLOR
-#define DUMPLOG_FILE "/tmp/%T.txt"
+#define DUMPLOG_FILE "/tmp/%n-%d.txt"
 #define DUMPLOG_MSG_COUNT 50
 
 /* End of Section 5 */
