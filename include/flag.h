@@ -164,6 +164,8 @@ struct instance_flags {
 	bool  menu_tab_sep;	/* Use tabs to separate option menu fields */
 	bool  menu_requested; /* Flag for overloaded use of 'm' prefix
 				  * on some non-move commands */
+
+	bool  in_dumplog; // doing the dumplog right now?
 	uchar num_pad_mode;
 	int	menu_headings;	/* ATR for menu headings */
 	int	purge_monsters;	/* # of dead monsters still on fmon list */

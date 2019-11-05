@@ -17,11 +17,7 @@ static boolean taking_off(const char *);
 static boolean putting_on(const char *);
 static int ckunpaid(struct obj *);
 static int ckvalidcat(struct obj *);
-#ifdef DUMP_LOG
-static char display_pickinv(const char *,boolean, long *, boolean);
-#else
 static char display_pickinv(const char *,boolean, long *);
-#endif /* DUMP_LOG */
 static bool this_type_only(struct obj *);
 static void dounpaid(void);
 static struct obj *find_unpaid(struct obj *,struct obj **);
@@ -1060,11 +1056,7 @@ struct obj *getobj(const char *let, const char *word) {
 			if (ilet == '?' && !*lets && *altlets)
 				allowed_choices = altlets;
 			ilet = display_pickinv(allowed_choices, true,
-			                       allowcnt ? &ctmp : NULL
-#ifdef DUMP_LOG
-			                       , false
-#endif
-			                      );
+			                       allowcnt ? &ctmp : NULL);
 			if(!ilet) continue;
 			if (allowcnt && ctmp >= 0) {
 				cnt = ctmp;
@@ -1626,12 +1618,7 @@ static struct obj *find_unpaid(struct obj *list, struct obj **last_found) {
  * inventory and return a count as well as a letter. If out_cnt is not null,
  * any count returned from the menu selection is placed here.
  */
-#ifdef DUMP_LOG
-static char display_pickinv(const char *lets, boolean want_reply, long* out_cnt, boolean want_dump)
-#else
-static char display_pickinv(const char *lets, boolean want_reply, long* out_cnt)
-#endif
-{
+static char display_pickinv(const char *lets, boolean want_reply, long* out_cnt) {
 	struct obj *otmp;
 	char ilet, ret;
 	char *invlet = flags.inv_order;
@@ -1656,10 +1643,6 @@ static char display_pickinv(const char *lets, boolean want_reply, long* out_cnt)
 	} else
 		win = WIN_INVEN;
 
-#ifdef DUMP_LOG
-	if (want_dump)   dump("", "Your inventory");
-#endif
-
 	/*
 	Exit early if no inventory -- but keep going if we are doing
 	a permanent inventory update.  We need to keep going so the
@@ -1673,11 +1656,6 @@ static char display_pickinv(const char *lets, boolean want_reply, long* out_cnt)
 	*/
 	if (!invent && !(flags.perm_invent && !lets && !want_reply)) {
 		pline("Not carrying anything.");
-#ifdef DUMP_LOG
-		if (want_dump) {
-			dump("  ", "Not carrying anything");
-		}
-#endif
 #ifdef PROXY_GRAPHICS
 		busy--;
 #endif
@@ -1698,14 +1676,6 @@ static char display_pickinv(const char *lets, boolean want_reply, long* out_cnt)
 				                   want_reply ? PICK_ONE : PICK_NONE,
 				                   xprname(otmp, NULL, lets[0], true, 0L, 0L));
 				if (out_cnt) *out_cnt = -1L;	/* select all */
-#ifdef DUMP_LOG
-				if (want_dump) {
-					char letbuf[7];
-					sprintf(letbuf, "  %c - ", lets[0]);
-					dump(letbuf,
-					     xprname(otmp, NULL, lets[0], true, 0L, 0L));
-				}
-#endif
 				break;
 			}
 		}
@@ -1727,23 +1697,12 @@ nextclass:
 					any.a_void = 0;		/* zero */
 					add_menu(win, NO_GLYPH, &any, 0, 0, iflags.menu_headings,
 					         let_to_name(*invlet, false), MENU_UNSELECTED);
-#ifdef DUMP_LOG
-					if (want_dump)
-						dump("  ", let_to_name(*invlet, false));
-#endif
 					classcount++;
 				}
 				any.a_char = ilet;
 				add_menu(win, obj_to_glyph(otmp),
 				         &any, ilet, 0, ATR_NONE, doname(otmp),
 				         MENU_UNSELECTED);
-#ifdef DUMP_LOG
-				if (want_dump) {
-					char letbuf[7];
-					sprintf(letbuf, "  %c - ", ilet);
-					dump(letbuf, doname(otmp));
-				}
-#endif
 			}
 		}
 	}
@@ -1763,9 +1722,6 @@ nextclass:
 		free(selected);
 	} else
 		ret = !n ? '\0' : '\033';	/* cancelled */
-#ifdef DUMP_LOG
-	if (want_dump)  dump("", "");
-#endif
 
 #ifdef PROXY_GRAPHICS
 	busy--;
@@ -1781,19 +1737,8 @@ nextclass:
  * was selected.
  */
 char display_inventory(const char *lets, boolean want_reply) {
-	return display_pickinv(lets, want_reply, NULL
-#ifdef DUMP_LOG
-	                       , false
-#endif
-	                      );
+	return display_pickinv(lets, want_reply, NULL);
 }
-
-#ifdef DUMP_LOG
-/* See display_inventory. This is the same thing WITH dumpfile creation */
-char dump_inventory(const char *lets, boolean want_reply) {
-	return display_pickinv(lets, want_reply, NULL, true);
-}
-#endif
 
 /*
  * Returns the number of unpaid items within the given list.  This includes

@@ -38,6 +38,7 @@ NetHack, except that rounddiv may call panic().
 	int		getyear		(void)
 	char *		yymmdd		(time_t)
 	long		yyyymmdd	(time_t)
+	long		hhmmss		(time_t)
 	int		phase_of_the_moon	(void)
 	boolean		friday_13th	(void)
 	int		night		(void)
@@ -435,6 +436,19 @@ long yyyymmdd(time_t date) {
 	/* yyyymm --> yyyymmdd */
 	datenum = datenum * 100L + (long)lt->tm_mday;
 	return datenum;
+}
+
+long hhmmss(time_t date) {
+	long timenum;
+	struct tm *lt;
+
+	if (date == 0)
+		lt = getlt();
+	else
+		lt = localtime(&date);
+
+	timenum = lt->tm_hour * 10000L + lt->tm_min * 100L + lt->tm_sec;
+	return timenum;
 }
 
 /*

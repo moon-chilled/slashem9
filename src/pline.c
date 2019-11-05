@@ -6,16 +6,30 @@
 #include "epri.h"
 #include "edog.h"
 
-static boolean no_repeat = false;
 
+usize saved_pline_index = 0;
+char *saved_plines[DUMPLOG_MSG_COUNT] = {0};
+
+// keep the most recent DUMPLOG_MSG_COUNT messages
+void dumplogmsg(const char *line) {
+	// since it's zero-initialized and free(NULL) is valid, this always works
+	free(saved_plines[saved_pline_index]);
+
+	saved_plines[saved_pline_index] = strdup(line);
+
+	saved_pline_index = (saved_pline_index + 1) % DUMPLOG_MSG_COUNT;
+}
+void dumplogfreemsgs(void) {
+	for (usize i = 0; i < DUMPLOG_MSG_COUNT; i++) {
+		free(saved_plines[i]);
+	}
+}
+
+static boolean no_repeat = false;
 static char *You_buf(int);
 
-void
-msgpline_add(typ, pattern)
-int typ;
-char *pattern;
-{
-	struct _plinemsg *tmp = alloc(sizeof(struct _plinemsg));
+void msgpline_add(int typ, char *pattern) {
+	struct _plinemsg *tmp = new(struct _plinemsg);
 	if (!tmp) return;
 	tmp->msgtype = typ;
 	tmp->pattern = strdup(pattern);
@@ -23,8 +37,7 @@ char *pattern;
 	pline_msg = tmp;
 }
 
-void
-msgpline_free (void) {
+void msgpline_free (void) {
 	struct _plinemsg *tmp = pline_msg;
 	struct _plinemsg *tmp2;
 	while (tmp) {
@@ -57,7 +70,12 @@ static void vpline(const char *line, va_list the_args) {
 		vsprintf(pbuf,line,VA_ARGS);
 		line = pbuf;
 	}
+
 	typ = msgpline_type(line);
+	if (typ != MSGTYP_NOSHOW) {
+		dumplogmsg(line);
+	}
+
 	if (!iflags.window_inited) {
 		raw_print(line);
 		return;
@@ -80,8 +98,6 @@ void pline(const char *line, ...) {
 	vpline(line, VA_ARGS);
 	VA_END();
 }
-
-
 
 void Norep(const char *line, ...) {
 	VA_START(line);

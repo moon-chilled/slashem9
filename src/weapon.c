@@ -9,10 +9,6 @@
  */
 #include "hack.h"
 
-#ifdef DUMP_LOG
-static int enhance_skill(boolean);
-#endif
-
 /* categories whose names don't come from OBJ_NAME(objects[type]) */
 #define PN_POLEARMS		(-1)
 #define PN_SABER		(-2)
@@ -1040,43 +1036,17 @@ const static struct skill_range {
  * to be able to update the menu since selecting one item could make
  * others unselectable.
  */
-int enhance_weapon_skill (void)
-#ifdef DUMP_LOG
-{
-	return enhance_skill(false);
-}
-
-void
-dump_weapon_skill (void) {
-	enhance_skill(true);
-}
-
-int enhance_skill(boolean want_dump)
-/* This is the original enhance_weapon_skill() function slightly modified
- * to write the skills to the dump file. I added the wrapper functions just
- * because it looked like the easiest way to add a parameter to the
- * function call. - Jukka Lahtinen, August 2001
- */
-#endif
-{
-	int pass, i, n, len, longest,
-	    to_advance, eventually_advance, maxxed_cnt;
+int enhance_weapon_skill (void) {
+	int pass, i, n, len, longest, to_advance, eventually_advance, maxxed_cnt;
 	char buf[BUFSZ], sklnambuf[BUFSZ];
 	const char *prefix;
 	menu_item *selected;
 	anything any;
 	winid win;
 	boolean speedy = false;
-#ifdef DUMP_LOG
-	char buf2[BUFSZ];
-	boolean logged;
-#endif
 
-#ifdef DUMP_LOG
-	if (!want_dump)
-#endif
-		if (wizard && yn("Advance skills without practice?") == 'y')
-			speedy = true;
+	if (wizard && yn("Advance skills without practice?") == 'y')
+		speedy = true;
 
 	do {
 		/* find longest available skill name, count those that can advance */
@@ -1084,7 +1054,7 @@ int enhance_skill(boolean want_dump)
 		for (longest = 0, i = 0; i < P_NUM_SKILLS; i++) {
 			if (P_RESTRICTED(i)) continue;
 			if (i == P_TWO_WEAPON_COMBAT &&
-			                youmonst.data->mattk[1].aatyp != AT_WEAP)
+					youmonst.data->mattk[1].aatyp != AT_WEAP)
 				continue;
 			if ((len = strlen(P_NAME(i))) > longest)
 				longest = len;
@@ -1093,41 +1063,33 @@ int enhance_skill(boolean want_dump)
 			else if (peaked_skill(i)) maxxed_cnt++;
 		}
 
-#ifdef DUMP_LOG
-		if (want_dump)
-			dump("","Your skills at the end");
-		else {
-#endif
-			win = create_nhwindow(NHW_MENU);
-			start_menu(win);
+		win = create_nhwindow(NHW_MENU);
+		start_menu(win);
 
-			/* start with a legend if any entries will be annotated
-			   with "*" or "#" below */
-			if (eventually_advance > 0 || maxxed_cnt > 0) {
-				any.a_void = 0;
-				if (eventually_advance > 0) {
-					sprintf(buf,
-					        "(Skill%s flagged by \"*\" may be enhanced %s.)",
-					        plur(eventually_advance),
-					        (u.ulevel < MAXULEV) ?
-					        "when you're more experienced" :
-					        "if skill slots become available");
-					add_menu(win, NO_GLYPH, &any, 0, 0, ATR_NONE,
-					         buf, MENU_UNSELECTED);
-				}
-				if (maxxed_cnt > 0) {
-					sprintf(buf,
-					        "(Skill%s flagged by \"#\" cannot be enhanced any further.)",
-					        plur(maxxed_cnt));
-					add_menu(win, NO_GLYPH, &any, 0, 0, ATR_NONE,
-					         buf, MENU_UNSELECTED);
-				}
+		/* start with a legend if any entries will be annotated
+		   with "*" or "#" below */
+		if (eventually_advance > 0 || maxxed_cnt > 0) {
+			any.a_void = 0;
+			if (eventually_advance > 0) {
+				sprintf(buf,
+						"(Skill%s flagged by \"*\" may be enhanced %s.)",
+						plur(eventually_advance),
+						(u.ulevel < MAXULEV) ?
+						"when you're more experienced" :
+						"if skill slots become available");
 				add_menu(win, NO_GLYPH, &any, 0, 0, ATR_NONE,
-				         "", MENU_UNSELECTED);
+						buf, MENU_UNSELECTED);
 			}
-#ifdef DUMP_LOG
-		} /* want_dump or not */
-#endif
+			if (maxxed_cnt > 0) {
+				sprintf(buf,
+						"(Skill%s flagged by \"#\" cannot be enhanced any further.)",
+						plur(maxxed_cnt));
+				add_menu(win, NO_GLYPH, &any, 0, 0, ATR_NONE,
+						buf, MENU_UNSELECTED);
+			}
+			add_menu(win, NO_GLYPH, &any, 0, 0, ATR_NONE,
+					"", MENU_UNSELECTED);
+		}
 
 		/* List the skills, making ones that could be advanced
 		   selectable.  List the miscellaneous skills first.
@@ -1135,111 +1097,80 @@ int enhance_skill(boolean want_dump)
 		   weapon skills for spellcaster roles. */
 		for (pass = 0; pass < SIZE(skill_ranges); pass++)
 			for (i = skill_ranges[pass].first;
-			                i <= skill_ranges[pass].last; i++) {
+					i <= skill_ranges[pass].last; i++) {
 				/* Print headings for skill types */
 				any.a_void = 0;
 				if (i == skill_ranges[pass].first)
-#ifdef DUMP_LOG
-					if (want_dump) {
-						dump("  ",(char *)skill_ranges[pass].name);
-						logged=false;
-					} else
-#endif
-						add_menu(win, NO_GLYPH, &any, 0, 0, iflags.menu_headings,
-						         skill_ranges[pass].name, MENU_UNSELECTED);
-#ifdef DUMP_LOG
-				if (want_dump) {
-					if (P_SKILL(i) > P_UNSKILLED) {
-						sprintf(buf2,"%-*s [%s]",
-						        longest, P_NAME(i),skill_level_name(i, buf));
-						dump("    ",buf2);
-						logged=true;
-					} else if (i == skill_ranges[pass].last && !logged) {
-						dump("    ","(none)");
-					}
-				} else {
-#endif
-
-					if (P_RESTRICTED(i)) continue;
-					if (i == P_TWO_WEAPON_COMBAT &&
-					                youmonst.data->mattk[1].aatyp != AT_WEAP)
-						continue;
-					/*
-					 * Sigh, this assumes a monospaced font unless
-					 * iflags.menu_tab_sep is set in which case it puts
-					 * tabs between columns.
-					 * The 12 is the longest skill level name.
-					 * The "    " is room for a selection letter and dash, "a - ".
-					 */
-					if (can_advance(i, speedy))
-						prefix = "";	/* will be preceded by menu choice */
-					else if (could_advance(i))
-						prefix = "  * ";
-					else if (peaked_skill(i))
-						prefix = "  # ";
+					add_menu(win, NO_GLYPH, &any, 0, 0, iflags.menu_headings,
+							skill_ranges[pass].name, MENU_UNSELECTED);
+				if (P_RESTRICTED(i)) continue;
+				if (i == P_TWO_WEAPON_COMBAT &&
+						youmonst.data->mattk[1].aatyp != AT_WEAP)
+					continue;
+				/*
+				 * Sigh, this assumes a monospaced font unless
+				 * iflags.menu_tab_sep is set in which case it puts
+				 * tabs between columns.
+				 * The 12 is the longest skill level name.
+				 * The "    " is room for a selection letter and dash, "a - ".
+				 */
+				if (can_advance(i, speedy))
+					prefix = "";	/* will be preceded by menu choice */
+				else if (could_advance(i))
+					prefix = "  * ";
+				else if (peaked_skill(i))
+					prefix = "  # ";
+				else
+					prefix = (to_advance + eventually_advance +
+							maxxed_cnt > 0) ? "    " : "";
+				skill_level_name(i, sklnambuf);
+				if (wizard) {
+					if (!iflags.menu_tab_sep)
+						sprintf(buf, " %s%-*s %-12s %4d(%4d)",
+								prefix, longest, P_NAME(i), sklnambuf,
+								P_ADVANCE(i),
+								practice_needed_to_advance(P_SKILL(i), i));
 					else
-						prefix = (to_advance + eventually_advance +
-						          maxxed_cnt > 0) ? "    " : "";
-					skill_level_name(i, sklnambuf);
-					if (wizard) {
-						if (!iflags.menu_tab_sep)
-							sprintf(buf, " %s%-*s %-12s %4d(%4d)",
-							        prefix, longest, P_NAME(i), sklnambuf,
-							        P_ADVANCE(i),
-							        practice_needed_to_advance(P_SKILL(i), i));
-						else
-							sprintf(buf, " %s%s\t%s\t%5d(%4d)",
-							        prefix, P_NAME(i), sklnambuf,
-							        P_ADVANCE(i),
-							        practice_needed_to_advance(P_SKILL(i), i));
-					} else {
-						if (!iflags.menu_tab_sep)
-							sprintf(buf, " %s %-*s [%s]",
-							        prefix, longest, P_NAME(i), sklnambuf);
-						else
-							sprintf(buf, " %s%s\t[%s]",
-							        prefix, P_NAME(i), sklnambuf);
-					}
-					any.a_int = can_advance(i, speedy) ? i+1 : 0;
-					add_menu(win, NO_GLYPH, &any, 0, 0, ATR_NONE,
-					         buf, MENU_UNSELECTED);
-#ifdef DUMP_LOG
-				} /* !want_dump */
-#endif
+						sprintf(buf, " %s%s\t%s\t%5d(%4d)",
+								prefix, P_NAME(i), sklnambuf,
+								P_ADVANCE(i),
+								practice_needed_to_advance(P_SKILL(i), i));
+				} else {
+					if (!iflags.menu_tab_sep)
+						sprintf(buf, " %s %-*s [%s]",
+								prefix, longest, P_NAME(i), sklnambuf);
+					else
+						sprintf(buf, " %s%s\t[%s]",
+								prefix, P_NAME(i), sklnambuf);
+				}
+				any.a_int = can_advance(i, speedy) ? i+1 : 0;
+				add_menu(win, NO_GLYPH, &any, 0, 0, ATR_NONE,
+						buf, MENU_UNSELECTED);
 			}
 
 		strcpy(buf, (to_advance > 0) ? "Pick a skill to advance:" :
-		       "Current skills:");
+				"Current skills:");
 
 		if (wizard && !speedy)
 			sprintf(eos(buf), "  (%d slot%s available)",
-			        u.weapon_slots, plur(u.weapon_slots));
+					u.weapon_slots, plur(u.weapon_slots));
 
-#ifdef DUMP_LOG
-		if (want_dump) {
-			dump("","");
-			n=0;
-		} else {
-#endif
-			end_menu(win, buf);
-			n = select_menu(win, to_advance ? PICK_ONE : PICK_NONE, &selected);
-			destroy_nhwindow(win);
-			if (n > 0) {
-				n = selected[0].item.a_int - 1;	/* get item selected */
-				free(selected);
-				skill_advance(n);
-				/* check for more skills able to advance, if so then .. */
-				for (n = i = 0; i < P_NUM_SKILLS; i++) {
-					if (can_advance(i, speedy)) {
-						if (!speedy) pline("You feel you could be more dangerous!");
-						n++;
-						break;
-					}
+		end_menu(win, buf);
+		n = select_menu(win, to_advance ? PICK_ONE : PICK_NONE, &selected);
+		destroy_nhwindow(win);
+		if (n > 0) {
+			n = selected[0].item.a_int - 1;	/* get item selected */
+			free(selected);
+			skill_advance(n);
+			/* check for more skills able to advance, if so then .. */
+			for (n = i = 0; i < P_NUM_SKILLS; i++) {
+				if (can_advance(i, speedy)) {
+					if (!speedy) pline("You feel you could be more dangerous!");
+					n++;
+					break;
 				}
 			}
-#ifdef DUMP_LOG
 		}
-#endif
 	} while (speedy && n > 0);
 	return 0;
 }

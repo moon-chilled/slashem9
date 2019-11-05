@@ -1231,33 +1231,6 @@ static boolean dospellmenu(const char *prompt, int splaction, int *spell_no) {
 	return false;
 }
 
-#ifdef DUMP_LOG
-void dump_spells (void) {
-	int i, n;
-	char buf[BUFSZ];
-
-	if (spellid(0) == NO_SPELL) {
-		dump("", "You didn't know any spells.");
-		dump("", "");
-		return;
-	}
-	dump("", "Spells known in the end");
-
-	sprintf(buf, "%-20s   Level    %-12s Fail", "    Name", "Category");
-	dump("  ",buf);
-	for (i = 0; i < MAXSPELL && spellid(i) != NO_SPELL; i++) {
-		sprintf(buf, "%c - %-20s  %2d%s   %-12s %3d%%",
-		        spellet(i), spellname(i), spellev(i),
-		        spellknow(i) ? " " : "*",
-		        spelltypemnemonic(spell_skilltype(spellid(i))),
-		        100 - percent_success(i));
-		dump("  ", buf);
-	}
-	dump("","");
-
-} /* dump_spells */
-#endif
-
 /* Integer square root function without using floating point. */
 static int isqrt(int val) {
 	int rt = 0;

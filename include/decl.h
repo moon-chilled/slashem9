@@ -190,9 +190,6 @@ extern const char *killer;
 extern const char *delayed_killer;
 extern long done_money;
 extern char killer_buf[BUFSZ];
-#ifdef DUMP_LOG
-extern char dump_fn[];		/* dumpfile name (dump patch) */
-#endif
 extern const char *configfile;
 extern char plname[PL_NSIZ];
 extern char dogname[];

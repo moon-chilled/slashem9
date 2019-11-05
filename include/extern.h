@@ -147,10 +147,8 @@ extern const char *rank_of(int,short,boolean);
 extern void bot_set_handler(void (*)());
 extern void bot_reconfig(void);
 extern void bot(void);
-#ifdef DUMP_LOG
-extern void bot1str(char *);
-extern void bot2str(char *);
-#endif
+extern void bot1str(char*);
+extern void bot2str(char*);
 
 #if 0
 extern const char * shorten_bot1(const char *, int);
@@ -174,10 +172,6 @@ extern int doextlist(void);
 extern int extcmd_via_menu(void);
 extern void enlightenment(int);
 extern void show_conduct(int);
-#ifdef DUMP_LOG
-extern void dump_enlightenment(int);
-extern void dump_conduct(int);
-#endif
 extern int xytod(schar,schar);
 extern void dtoxy(coord *,int);
 extern int movecmd(char);
@@ -298,13 +292,11 @@ extern void clear_glyph_buffer(void);
 extern void row_refresh(int,int,int);
 extern void cls(void);
 extern void flush_screen(int);
-#ifdef DUMP_LOG
-extern void dump_screen(void);
-#endif
 extern int back_to_glyph(xchar,xchar);
 extern int zapdir_to_glyph(int,int,int);
 extern int glyph_at(xchar,xchar);
 extern void set_wall_state(void);
+extern void dump_map(void);
 
 /* ### do.c ### */
 
@@ -561,10 +553,6 @@ extern void panic(const char *,...) PRINTF_F(1,2);
 #ifndef LEV_LEX_C
 extern void done(int);
 extern void container_contents(struct obj *,boolean,boolean);
-#ifdef DUMP_LOG
-extern void dump(char *, char *);
-extern void do_containerconts(struct obj *,boolean,boolean,boolean);
-#endif
 extern void terminate(int);
 extern int dolistvanq(void);
 extern int num_genocides(void);
@@ -758,6 +746,7 @@ extern int getmonth(void);	/* KMH -- Used by gypsies */
 extern char *yymmdd(time_t);
 #endif
 extern long yyyymmdd(time_t);
+extern long hhmmss(time_t date);
 extern int phase_of_the_moon(void);
 extern boolean friday_13th(void);
 extern boolean groundhog_day(void);	/* KMH -- February 2 */
@@ -800,9 +789,6 @@ extern void prinv(const char *,struct obj *,long);
 extern char *xprname(struct obj *,const char *,char,boolean,long,long);
 extern int ddoinv(void);
 extern char display_inventory(const char *,boolean);
-#ifdef DUMP_LOG
-extern char dump_inventory(const char *,boolean);
-#endif
 extern int display_binventory(int,int,boolean);
 extern struct obj *display_cinventory(struct obj *);
 extern struct obj *display_minventory(struct monst *,int,char *);
@@ -1662,7 +1648,7 @@ extern void mread(int,void *,uint);
 
 /* ### rip.c ### */
 
-extern void genl_outrip(winid,int);
+extern void genl_outrip(winid tmpwin, int how);
 
 /* ### rnd.c ### */
 
@@ -2121,9 +2107,6 @@ extern int mon_wield_item(struct monst *);
 extern int abon(void);
 extern int dbon(void);
 extern int enhance_weapon_skill(void);
-#ifdef DUMP_LOG
-extern void dump_weapon_skill(void);
-#endif
 extern void unrestrict_weapon_skill(int);
 extern void use_skill(int,int);
 extern void add_weapon_skill(int);
@@ -2173,6 +2156,10 @@ extern void unwield(struct obj *,boolean);
 extern void choose_windows(const char *);
 extern char genl_message_menu(char,int,const char *);
 extern void genl_preference_update(const char *);
+extern void dump_redirect(bool onoff_flag);
+extern void dump_open_log(time_t now);
+extern void dump_close_log(void);
+extern void dump_forward_putstr(winid win, int attr, const char *str, int no_forward);
 
 /* ### wizard.c ### */
 

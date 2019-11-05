@@ -1307,102 +1307,6 @@ static gbuf_entry gbuf[ROWNO][COLNO];
 static char gbuf_start[ROWNO];
 static char gbuf_stop[ROWNO];
 
-#ifdef DUMP_LOG
-/* D: Added to dump screen to output file */
-//TODO: switch all this over to using mapglyph or utf8_graphics or something
-static uchar get_glyph_char(int glyph) {
-	uchar   ch;
-	int offset;
-
-	if (glyph >= NO_GLYPH)
-		return;
-
-	/*
-	 *  Map the glyph back to a character.
-	 *
-	 *  Warning:  For speed, this makes an assumption on the order of
-	 *		  offsets.  The order is set in display.h.
-	 */
-	if ((offset = (glyph - GLYPH_WARNING_OFF)) >= 0) {	/* a warning flash */
-		ch = ascii_graphics[S_warn0 + offset];
-	} else if ((offset = (glyph - GLYPH_SWALLOW_OFF)) >= 0) {	/* swallow */
-		/* see swallow_to_glyph() in display.c */
-		ch = ascii_graphics[S_sw_tl + (offset & 0x7)];
-	} else if ((offset = (glyph - GLYPH_ZAP_OFF)) >= 0) {	/* zap beam */
-		/* see zapdir_to_glyph() in display.c */
-		ch = ascii_graphics[S_vbeam + (offset & 0x3)];
-	} else if ((offset = (glyph - GLYPH_CMAP_OFF)) >= 0) {	/* cmap */
-		ch = ascii_graphics[offset];
-	} else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
-		ch = def_oc_syms[objects[offset].oc_class];
-	} else if ((offset = (glyph - GLYPH_RIDDEN_OFF)) >= 0) { /* mon ridden */
-		ch = def_monsyms[mons[offset].mlet];
-	} else if ((offset = (glyph - GLYPH_BODY_OFF)) >= 0) {	/* a corpse */
-		ch = def_oc_syms[objects[CORPSE].oc_class];
-	} else if ((offset = (glyph - GLYPH_DETECT_OFF)) >= 0) { /* mon detect */
-		ch = def_monsyms[mons[offset].mlet];
-	} else if ((offset = (glyph - GLYPH_INVIS_OFF)) >= 0) {  /* invisible */
-		ch = DEF_INVISIBLE;
-	} else if ((offset = (glyph - GLYPH_PET_OFF)) >= 0) {	/* a pet */
-		ch = def_monsyms[mons[offset].mlet];
-	} else {						    /* a monster */
-		ch = monsyms[mons[glyph].mlet];
-	}
-	return ch;
-}
-
-#ifdef TTY_GRAPHICS
-extern const char *compress_str(const char *);
-#else
-// copied from win/tty/wintty.c
-const char *compress_str (const char *str) {
-	static char cbuf[BUFSZ];
-	/* compress in case line too long */
-	if(strlen(str) >= 80) {
-		const char *bp0 = str;
-		char *bp1 = cbuf;
-
-		do {
-			if(*bp0 != ' ' || bp0[1] != ' ')
-				*bp1++ = *bp0;
-		} while(*bp0++);
-	} else
-		return str;
-	return cbuf;
-}
-#endif /* TTY_GRAPHICS */
-
-/* Take a screen dump */
-void dump_screen(void) {
-	int x,y;
-	int lastc;
-	/* D: botl.c has a closer approximation to the size, but we'll go with
-	 *    this */
-	char buf[300], *ptr;
-
-	for (y = 0; y < ROWNO; y++) {
-		lastc = 0;
-		ptr = buf;
-		for (x = 1; x < COLNO; x++) {
-			uchar c = get_glyph_char(gbuf[y][x].glyph);
-			*ptr++ = c;
-			if (c != ' ')
-				lastc = x;
-		}
-		buf[lastc] = '\0';
-		dump("", buf);
-	}
-	dump("", "");
-	bot1str(buf);
-	ptr = (char *) compress_str((const char *) buf);
-	dump("", ptr);
-	bot2str(buf);
-	dump("", buf);
-	dump("", "");
-	dump("", "");
-}
-#endif /* DUMP_LOG */
-
 /*
  * Store the glyph in the 3rd screen for later flushing.
  */
@@ -2400,6 +2304,56 @@ do_crwall:
 		idx = S_stone;
 	}
 	return idx;
+}
+
+
+void dump_map(void) {
+	int x, y, glyph, skippedrows, lastnonblank;
+	int default_glyph = cmap_to_glyph(level.flags.arboreal ? S_tree : S_stone);
+	char buf[BUFSZ];
+	bool blankrow, toprow;
+
+	/*
+	 * Squeeze out excess vertial space when dumping the map.
+	 * If there are any blank map rows at the top, suppress them
+	 * (our caller has already printed a separator).  If there is
+	 * more than one blank map row at the bottom, keep just one.
+	 * Any blank rows within the middle of the map are kept.
+	 * Note: putstr() with winid==0 is for dumplog.
+	 */
+	skippedrows = 0;
+	toprow = true;
+	for (y = 0; y < ROWNO; y++) {
+		blankrow = true; /* assume blank until we discover otherwise */
+		lastnonblank = -1; /* buf[] index rather than map's x */
+		for (x = 1; x < COLNO; x++) {
+			int color;
+			glyph_t ch;
+			unsigned special;
+
+			mapglyph(gbuf[y][x].glyph, &ch, &color, &special, x, y);
+			buf[x - 1] = ch;
+			if (ch != ' ') {
+				blankrow = false;
+				lastnonblank = x - 1;
+			}
+		}
+		if (!blankrow) {
+			buf[lastnonblank + 1] = '\0';
+			if (toprow) {
+				skippedrows = 0;
+				toprow = false;
+			}
+			for (x = 0; x < skippedrows; x++)
+				putstr(0, 0, "");
+			putstr(0, 0, buf); /* map row #y */
+			skippedrows = 0;
+		} else {
+			++skippedrows;
+		}
+	}
+	if (skippedrows)
+		putstr(0, 0, "");
 }
 
 /*display.c*/

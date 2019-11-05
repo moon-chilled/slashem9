@@ -261,19 +261,9 @@ static char *botl_strength(void) {
 	return strength;
 }
 
-#ifdef DUMP_LOG
-void bot1str(char *newbot1)
-#else
-static void bot1(void)
-#endif
-{
-#ifndef DUMP_LOG
-	char newbot1[MAXCO];
-#endif
+void bot1str(char *newbot1) {
 	char *nb;
 	int i=0,j;
-
-	int save_botlx = flags.botlx;
 
 	strcpy(newbot1, "");
 	if (iflags.hitpointbar) {
@@ -328,17 +318,16 @@ static void bot1(void)
 
 	if (flags.showscore)
 		sprintf(nb = eos(nb), " S:%ld", botl_score());
-
-#ifdef DUMP_LOG
 }
-static void bot1(void) {
-	char newbot1[MAXCO];
 
+void bot1() {
 	int save_botlx = flags.botlx;
+
+	static char newbot1[MAXCO];
 	bot1str(newbot1);
-#endif
 	curs(WIN_STATUS, 1, 0);
 	putstr(WIN_STATUS, 0, newbot1);
+
 	flags.botlx = save_botlx;
 }
 
@@ -383,12 +372,7 @@ int describe_level(char *buf, int verbose) {
 
 static int bot2_abbrev = 0;	/* Line 2 abbreviation level (max 4) */
 
-#ifdef DUMP_LOG
-void
-#else
-static void
-#endif
-bot2str(char *newbot2) {
+void bot2str(char *newbot2) {
 	char *nb;
 	int hp, hpmax;
 	int cap = near_capacity();
