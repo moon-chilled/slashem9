@@ -19,7 +19,13 @@ char *version_string_tmp(void) {
 char *full_version_string_tmp(void) {
 	static char buf[BUFSZ];
 
-	sprintf(buf, "%s %s Version %s.", PORT_ID, DEF_GAME_NAME, version_string_tmp());
+	sprintf(buf, "%s %s Version %s", PORT_ID, DEF_GAME_NAME, version_string_tmp());
+#ifdef SLASHEM_GIT_COMMIT_REV
+	strcat(buf, " (");
+	strcat(buf, SLASHEM_GIT_COMMIT_REV);
+	strcat(buf, ")");
+#endif
+	strcat(buf, ".");
 
 	return buf;
 }
