@@ -594,6 +594,7 @@ mesg_add_line(char *mline)
         num_messages++;
     } else {
         tmp_mesg = first_mesg->next_mesg;
+        free(first_mesg->str);
         free(first_mesg);
         first_mesg = tmp_mesg;
     }
