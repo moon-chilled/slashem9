@@ -14,13 +14,15 @@ util/lev_yacc.c
 util/lev_yacc.h
 util/lev_lec.c
 
-*.lev
+dat/*.lev
+dat/dungeon
 
 src/slashem
 util/slashem-recover
 util/dgn_comp
 util/lev_comp
 util/dlb
+util/data2c
 
-dat/dungeon
 dat/nhdat
+include/dlb_archive.h

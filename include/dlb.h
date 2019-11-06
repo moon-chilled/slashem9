@@ -4,35 +4,34 @@
 
 #ifndef DLB_H
 #define DLB_H
-/* definitions for data library */
 
 // DLBLIB: load everything from a library file
 // DLBFILE: load files from the actual file system
-// TODO: DLBEMBED: load files from an archive within the binary
+// DLBEMBED: load files from an archive within the binary
 
 // if none is available, default to DLBFILE
-#if !defined(DLBLIB) && !defined(DLBFILE)
+#if !defined(DLBLIB) && !defined(DLBFILE) && !defined(DLBEMBED)
 # define DLBFILE
 #endif
 
 #ifdef DLBLIB
-/* directory structure in memory */
+// directory structure in memory
 typedef struct dlb_directory {
-	char *fname;	/* file name as seen from calling code */
-	long foffset;	/* offset in lib file to start of this file */
-	long fsize;		/* file size */
-	char handling;	/* how to handle the file (compression, etc) */
+	char *fname;	// file name as seen from calling code
+	long foffset;	// offset in lib file to start of this file
+	long fsize;	// file size
+	char handling;	// how to handle the file (compression, etc)
 } libdir;
 
-/* information about each open library */
+// information about each open library
 typedef struct dlb_library {
-	FILE *fdata;	/* opened data file */
-	long fmark;		/* current file mark */
-	libdir *dir;	/* directory of library file */
-	char *sspace;	/* pointer to string space */
-	long nentries;	/* # of files in directory */
-	long rev;		/* dlb file revision */
-	long strsize;	/* dlb file string size */
+	FILE *fdata;	// opened data file
+	long fmark;	// current file mark
+	libdir *dir;	// directory of library file
+	char *sspace;	// pointer to string space
+	long nentries;	// # of files in directory
+	long rev;	// dlb file revision
+	long strsize;	// dlb file string size
 } library;
 
 # define DLB_LIB_FILE "nhdat"
@@ -41,12 +40,16 @@ typedef struct dlb_library {
 
 typedef struct {
 #ifdef DLBLIB
-	library *lib;		/* pointer to library structure */
-	usize start;		/* offset of start of file */
-	usize size;		/* size of file */
-	usize mark;		/* current file marker */
+	library *lib;		// pointer to library structure
+	usize start;		// offset of start of file
+	usize size;		// size of file
+	usize mark;		// current file marker
 #elif defined(DLBFILE)
-	FILE *fp;		/* pointer to an external file */
+	FILE *fp;		// pointer to an external file
+#elif defined(DLBEMBED)
+	usize pos;
+	usize size;
+	const unsigned char *data;
 #endif
 
 } dlb;
@@ -62,7 +65,7 @@ char *dlb_fgets(char *s, int size, dlb *dp);
 int dlb_fgetc(dlb *dp);
 long dlb_ftell(dlb *dp);
 
-/* various other I/O stuff we don't want to replicate everywhere */
+// various other I/O stuff we don't want to replicate everywhere
 
 #ifndef SEEK_SET
 # define SEEK_SET 0

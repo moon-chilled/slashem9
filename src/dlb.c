@@ -341,7 +341,118 @@ static long do_dlb_ftell(dlb *dp) {
 	return ftell(dp->fp);
 }
 
-#endif //DLBFILE
+#elif defined(DLBEMBED)
+
+#include "dlb_archive.h"
+
+static bool do_dlb_init(void) {
+	return true;
+}
+
+static void do_dlb_cleanup(void) {}
+#include "hack.h"
+#include "extern.h"
+
+static bool do_dlb_fopen(dlb *dp, const char *name, const char *mode) {
+	bool found_file = false;
+	usize i;
+
+	for (i = 0; i < SIZE(dlbembed_data); i++) {
+		if (!strcmp(dlbembed_data[i].name, name)) {
+			found_file = true;
+			break;
+		}
+
+	}
+	if (!found_file) {
+		return false;
+	}
+
+	dp->pos = 0;
+	dp->size = dlbembed_data[i].size;
+	dp->data = dlbembed_data[i].data;
+
+	return true;
+}
+
+static int do_dlb_fclose(dlb *dp) {
+	return 0;
+}
+
+static usize do_dlb_fread(void *ptr, usize size, usize nmemb, dlb *dp) {
+	// make sure we don't read past the end of the file
+	if ((size * nmemb) > dp->size - dp->pos) {
+		nmemb = (dp->size - dp->pos) / size;
+	}
+	if (nmemb == 0) return 0;
+
+	usize nbytes = size * nmemb;
+	memcpy(ptr, dp->data + dp->pos, nbytes);
+	dp->pos += nbytes;
+
+	return nmemb;
+}
+
+static int do_dlb_fseek(dlb *dp, long pos, int whence) {
+	isize curpos;
+
+	switch (whence) {
+	case SEEK_CUR:
+		curpos += pos;
+		break;
+	case SEEK_END:
+		curpos = dp->size - pos;
+		break;
+	default: // set
+		curpos = pos;
+		break;
+	}
+	if (curpos < 0) curpos = 0;
+	if (curpos > dp->size) curpos = dp->size - 1;
+
+	dp->pos = curpos;
+
+	return 0;
+}
+
+static char *do_dlb_fgets(char *s, int size, dlb *dp) {
+	int i;
+	char *bp, c = 0;
+
+	if (size <= 0) return s;	/* sanity check */
+
+	/* return NULL on EOF */
+	if (dp->pos >= dp->size) return NULL;
+
+	size--;	/* save room for null */
+	for (i = 0, bp = s; i < size && c != '\n'; i++, bp++) {
+		if (dlb_fread(bp, 1, 1, dp) <= 0) break;	/* EOF or error */
+		c = *bp;
+	}
+	*bp = '\0';
+
+#ifdef WIN32
+	if ((bp = index(s, '\r')) != 0) {
+		*bp++ = '\n';
+		*bp = '\0';
+	}
+#endif
+
+	return s;
+}
+
+static int do_dlb_fgetc(dlb *dp) {
+	char c;
+
+	if (do_dlb_fread(&c, 1, 1, dp) != 1) return EOF;
+	return c;
+}
+
+
+static long do_dlb_ftell(dlb *dp) {
+	return dp->pos;
+}
+#endif //DLBEMBED
 
 
 static bool dlb_initialized = false;
@@ -363,7 +474,6 @@ void dlb_cleanup(void) {
 
 
 dlb *dlb_fopen(const char *name, const char *mode) {
-
 	if (!dlb_initialized) return NULL;
 
 	dlb *dp = alloc(sizeof(dlb));

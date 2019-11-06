@@ -226,7 +226,7 @@ static void dump_putstr(winid win, int attr, const char *str) {
 		fprintf(dumplog_file, "%s\n", str);
 }
 
-static winid dump_create_nhwindow(int dummy) {}
+static winid dump_create_nhwindow(int dummy) { return dummy; }
 
 static void dump_clear_nhwindow(winid win) {}
 
