@@ -851,10 +851,8 @@ void tty_exit_nhwindows(const char *str) {
 	 */
 	for(i=0; i<MAXWIN; i++)
 		if (wins[i] && (i != BASE_WINDOW)) {
-#ifdef FREE_ALL_MEMORY
 			free_window_info(wins[i], true);
 			free(wins[i]);
-#endif
 			wins[i] = 0;
 		}
 	tty_shutdown();		/* cleanup termcap/terminfo/whatever */

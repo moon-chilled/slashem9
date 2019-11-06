@@ -1153,9 +1153,7 @@ static void dump_plines(void) {
 		if (*strp) {
 			strncpy(&buf[1], *strp, BUFSZ - 1 - 1);
 			putstr(0, 0, buf);
-#ifdef FREE_ALL_MEMORY
 			free(*strp), *strp = 0;
-#endif
 		}
 	}
 }

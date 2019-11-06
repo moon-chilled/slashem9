@@ -33,7 +33,7 @@ char *utf8_tmpstr(glyph_t c) {
 void pututf8char(glyph_t c) {
 	if (c < 0x80) {
 		putchar(c);
-	} else if(c < 0x800) {
+	} else if (c < 0x800) {
 		putchar(0xC0 | (c>>6));
 		putchar(0x80 | (c & 0x3F));
 	} else if (c < 0x10000) {

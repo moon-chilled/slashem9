@@ -659,12 +659,9 @@ free_status_colors() {
  * and the display_score callback of the proxy interface. For this purpose,
  * the previous dungeon must be discarded.
  */
-void
-free_dungeons() {
-#if defined(FREE_ALL_MEMORY) || defined(PROXY_GRAPHICS)
+void free_dungeons() {
 	savelevchn(0, FREE_SAVE);
 	save_dungeon(0, false, true);
-#endif
 	return;
 }
 
@@ -694,20 +691,18 @@ freedynamicdata() {
 	msgpline_free();
 	free_menu_coloring();
 	tmp_at(DISP_FREEMEM, 0);	/* temporary display effects */
-#ifdef FREE_ALL_MEMORY
-# define freeobjchn(X)	(saveobjchn(0, X, FREE_SAVE),  X = 0)
-# define freemonchn(X)	(savemonchn(0, X, FREE_SAVE),  X = 0)
-# define freetrapchn(X)	(savetrapchn(0, X, FREE_SAVE), X = 0)
-# define freefruitchn()	 savefruitchn(0, FREE_SAVE)
-# define freenames()	 savenames(0, FREE_SAVE)
-# define free_oracles()	save_oracles(0, FREE_SAVE)
-# define free_waterlevel() save_waterlevel(0, FREE_SAVE)
-# define free_worm()	 save_worm(0, FREE_SAVE)
-# define free_timers(R)	 save_timers(0, FREE_SAVE, R)
-# define free_light_sources(R) save_light_sources(0, FREE_SAVE, R);
-# define free_engravings() save_engravings(0, FREE_SAVE)
-# define freedamage()	 savedamage(0, FREE_SAVE)
-# define free_animals()	 mon_animal_list(false)
+#define freeobjchn(X)	(saveobjchn(0, X, FREE_SAVE),  X = 0)
+#define freemonchn(X)	(savemonchn(0, X, FREE_SAVE),  X = 0)
+#define freetrapchn(X)	(savetrapchn(0, X, FREE_SAVE), X = 0)
+#define freefruitchn()	 savefruitchn(0, FREE_SAVE)
+#define freenames()	 savenames(0, FREE_SAVE)
+#define free_waterlevel() save_waterlevel(0, FREE_SAVE)
+#define free_worm()	 save_worm(0, FREE_SAVE)
+#define free_timers(R)	 save_timers(0, FREE_SAVE, R)
+#define free_light_sources(R) save_light_sources(0, FREE_SAVE, R);
+#define free_engravings() save_engravings(0, FREE_SAVE)
+#define freedamage()	 savedamage(0, FREE_SAVE)
+#define free_animals()	 mon_animal_list(false)
 
 	/* move-specific data */
 	dmonsfree();		/* release dead monsters */
@@ -731,9 +726,7 @@ freedynamicdata() {
 	freeobjchn(migrating_objs);
 	freemonchn(migrating_mons);
 	freemonchn(mydogs);		/* ascension or dungeon escape */
-	/* freelevchn();	[folded into free_dungeons()] */
 	free_animals();
-	free_oracles();
 	freefruitchn();
 	freenames();
 	free_waterlevel();
@@ -748,7 +741,6 @@ freedynamicdata() {
 	if (iflags.wc_tile_file) free(iflags.wc_tile_file);
 	free_autopickup_exceptions();
 
-#endif	/* FREE_ALL_MEMORY */
 	return;
 }
 /*save.c*/
