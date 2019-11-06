@@ -8,21 +8,74 @@ notifications:
 
 matrix:
   include:
-    - os: linux
-      dist: bionic
-      compiler: gcc
-      before_install:
-        - sudo apt install libncursesw5-dev
-      script:
-        - make install
-    - os: linux
+    # linux/clang
+    - name: linux/clang/dlblib
+      os: linux
       dist: bionic
       compiler: clang
       before_install:
         - sudo apt install libncursesw5-dev
       script:
         - make install
-    - os: osx
-      osx_image: xcode10.2
+    - name: linux/clang/dlbembed
+      os: linux
+      dist: bionic
+      compiler: clang
+      before_install:
+        - sudo apt install libncursesw5-dev
+      script:
+        - make -f Makefile.embeddlb install
+    - name: linux/clang/flat
+      os: linux
+      dist: bionic
+      compiler: clang
+      before_install:
+        - sudo apt install libncursesw5-dev
+      script:
+        - make -f Makefile.nodlb install
+
+    # linux/gcc
+    - name: linux/gcc/dlblib
+      os: linux
+      dist: bionic
+      compiler: gcc
+      before_install:
+        - sudo apt install libncursesw5-dev
       script:
         - make install
+    - name: linux/gcc/dlbembed
+      os: linux
+      dist: bionic
+      compiler: gcc
+      before_install:
+        - sudo apt install libncursesw5-dev
+      script:
+        - make -f Makefile.embeddlb install
+    - name: linux/gcc/flat
+      os: linux
+      dist: bionic
+      compiler: gcc
+      before_install:
+        - sudo apt install libncursesw5-dev
+      script:
+        - make -f Makefile.nodlb install
+
+    # macos/clang
+    - name: macos/dlblib
+      os: osx
+      osx_image: xcode10.2
+      compiler: clang
+      script:
+        - make install
+    - name: macos/dlbembed
+      os: osx
+      osx_image: xcode10.2
+      compiler: clang
+      script:
+        - make -f Makefile.embeddlb install
+    - name: macos/flat
+      os: osx
+      osx_image: xcode10.2
+      compiler: clang
+      script:
+        - make -f Makefile.nodlb install

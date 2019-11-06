@@ -9,7 +9,11 @@ CFLAGS += -g -O0
 CFLAGS += -std=c99 -D_XOPEN_SOURCE=500 -D_POSIX_C_SOURCE=200809L -Werror -Wpedantic -pedantic
 
 CFLAGS := $(CFLAGS) $(shell pkg-config --cflags ncursesw)
-LDFLAGS += -lncursesw
+ifeq ($(shell uname -s),Darwin)
+	LDFLAGS += -lncurses
+else
+	LDFLAGS += -lncursesw
+endif
 
 CC ?= cc
 CCLD ?= $(CC)
@@ -42,7 +46,7 @@ install: all
 	#cp util/slashem-recover $(BINDIR)/
 
 src/slashem: $(SLASHEMOBJ)
-	$(CCLD) $(LDFLAGS) -o src/slashem $(SLASHEMOBJ)
+	$(CCLD) -o src/slashem $(SLASHEMOBJ) $(LDFLAGS)
 
 all: src/slashem dat/nhdat
 
