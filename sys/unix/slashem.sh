@@ -45,13 +45,13 @@ then
 fi
 
 if [ x$NH_USE_VALGRIND != x ]; then
-	HACK="valgrind $HACK"
+	HACK="valgrind $NH_VALGRIND_FLAGS $HACK"
 fi
 if [ x$NH_USE_GDB != x ]; then
-	HACK="gdb $HACK"
+	HACK="gdb $NH_GDB_FLAGS $HACK"
 fi
 if [ x$NH_USE_LLDB != x ]; then
-	HACK="lldb $HACK"
+	HACK="lldb $NH_LLDB_FLAGS $HACK"
 fi
 
 cd $HACKDIR
