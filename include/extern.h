@@ -5,6 +5,8 @@
 #ifndef EXTERN_H
 #define EXTERN_H
 
+#include "nhstr.h"
+
 /* ### alloc.c ### */
 
 extern void *alloc(usize);
@@ -148,7 +150,7 @@ extern void bot_set_handler(void (*)());
 extern void bot_reconfig(void);
 extern void bot(void);
 extern void bot1str(char*);
-extern void bot2str(char*);
+extern nhstr *bot2str(void);
 
 #if 0
 extern const char * shorten_bot1(const char *, int);

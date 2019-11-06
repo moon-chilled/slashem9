@@ -1203,13 +1203,14 @@ static void dump_everything(int how, time_t when) {
 	// So turn off dump redirection while they run
 	// (XXX)
 	dump_redirect(false);
-	static char bot1[MAXCO], bot2[MAXCO];
+	static char bot1[MAXCO];
 	bot1str(bot1);
-	bot2str(bot2);
 	dump_redirect(true);
 
 	putstr(0, 0, bot1);
-	putstr(0, 0, bot2);
+	nhstr *bot2 = bot2str();
+	putstr(0, 0, nhs2cstr_tmp(bot2));
+	del_nhs(bot2);
 	putstr(0, 0, "");
 
 	dump_plines();

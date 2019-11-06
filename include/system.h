@@ -30,7 +30,6 @@ char *tgoto(const char *,int,int);
 char *tparam(const char *,char *,int,int,int,int,int);
 
 
-#define VA_NEXT(var1,typ1)	var1 = va_arg(the_args, typ1)
 #define VA_ARGS			the_args
 #define VA_START(x)		va_list the_args; va_start(the_args, x)
 #define VA_END()		va_end(the_args)

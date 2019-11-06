@@ -5,6 +5,9 @@
 #include "hack.h"
 
 #include "wintty.h"
+//TODO take out ^^
+
+#include "nhstr.h"
 
 const char *hu_stat[] = {
 	"Satiated",
@@ -100,31 +103,18 @@ static void apply_color_option(struct color_option color_option, const char *new
 	end_color_option(color_option);
 }
 
-void add_colored_text_match(const char *text, const char *match, char *newbot2) {
-	char *nb;
-	struct color_option color_option;
-
+void add_colored_text_match(const char *text, const char *match, nhstr *newbot) {
 	if ((*text == '\0') || (*match == '\0')) return;
 
 	if (!iflags.use_status_colors) {
-		sprintf(nb = eos(newbot2), " %s", text);
-		return;
+		nhscatf(newbot, " %S", text);
+	} else {
+		nhscatfc(newbot, text_color_of(match, text_colors).color, " %S", text);
 	}
-
-	strcat(nb = eos(newbot2), " ");
-	curs(WIN_STATUS, 1, 1);
-	putstr(WIN_STATUS, 0, newbot2);
-
-	strcat(nb = eos(nb), text);
-	curs(WIN_STATUS, 1, 1);
-	color_option = text_color_of(match, text_colors);
-	start_color_option(color_option);
-	putstr(WIN_STATUS, 0, newbot2);
-	end_color_option(color_option);
 }
 
-void add_colored_text(const char *text, char *newbot2) {
-	add_colored_text_match(text, text, newbot2);
+void add_colored_text(const char *text, nhstr *newbot) {
+	add_colored_text_match(text, text, newbot);
 }
 
 
@@ -372,8 +362,8 @@ int describe_level(char *buf, int verbose) {
 
 static int bot2_abbrev = 0;	/* Line 2 abbreviation level (max 4) */
 
-void bot2str(char *newbot2) {
-	char *nb;
+nhstr *bot2str(void) {
+	nhstr *ret = new_nhs();
 	int hp, hpmax;
 	int cap = near_capacity();
 	int save_botlx = flags.botlx;
@@ -382,57 +372,45 @@ void bot2str(char *newbot2) {
 	hpmax = Upolyd ? u.mhmax : u.uhpmax;
 
 	if(hp < 0) hp = 0;
-	if (bot2_abbrev < 4)
-		describe_level(newbot2, false);
-	else
-		newbot2[0] = '\0';
+	if (bot2_abbrev < 4) {
+		char buf[BUFSZ];
+		describe_level(buf, false);
+		nhscatz(ret, buf);
+	}
+
 	if (bot2_abbrev < 1)
-		sprintf(nb = eos(newbot2), " %s:%ld", utf8_tmpstr(oc_syms[COIN_CLASS]), money_cnt(invent));
-	else
-		nb = newbot2;
+		nhscatf(ret, " %c:%l", oc_syms[COIN_CLASS], money_cnt(invent));
 
+	int hp_color = percentage_color_of(hp, hpmax, hp_colors).color;
 
-	strcat(nb = eos(newbot2), " HP:");
-	curs(WIN_STATUS, 1, 1);
-	putstr(WIN_STATUS, 0, newbot2);
-	flags.botlx = 0;
+	nhscatfc(ret, percentage_color_of(hp, hpmax, hp_colors).color, " HP:%i(%i)", hp, hpmax);
+	nhscatfc(ret, percentage_color_of(u.uen, u.uenmax, pw_colors).color, " Pw:%i(%i)", u.uen, u.uenmax);
+	nhscatf(ret, " AC:%i", u.uac);
 
-	sprintf(nb = eos(nb), "%d(%d)", hp, hpmax);
-	apply_color_option(percentage_color_of(hp, hpmax, hp_colors), newbot2, 2);
-
-	strcat(nb = eos(nb), " Pw:");
-	curs(WIN_STATUS, 1, 1);
-	putstr(WIN_STATUS, 0, newbot2);
-	sprintf(nb = eos(nb), "%d(%d)", u.uen, u.uenmax);
-	apply_color_option(percentage_color_of(u.uen, u.uenmax, pw_colors), newbot2, 2);
-
-	sprintf(nb = eos(nb), " AC:%d", u.uac);
-
-	if (Upolyd)
-		sprintf(nb = eos(nb), " HD:%d", ((u.ulycn == u.umonnum) ?
-		                                 u.ulevel : mons[u.umonnum].mlevel));
-	else if (flags.showexp && bot2_abbrev < 3)
-		sprintf(nb = eos(nb), " Xp:%u/%-1ld", u.ulevel,u.uexp);
-	else
-		sprintf(nb = eos(nb), " Exp:%u", u.ulevel);
+	if (Upolyd) {
+		nhscatf(ret, " HD:%d", ((u.ulycn == u.umonnum) ?  u.ulevel : mons[u.umonnum].mlevel));
+	} else if (flags.showexp && bot2_abbrev < 3) {
+		nhscatf(ret, " Xp:%u/%l", u.ulevel, u.uexp);
+	} else {
+		nhscatf(ret, " Exp:%u", u.ulevel);
+	}
 
 	if (flags.showweight && bot2_abbrev < 3)
-		sprintf(nb = eos(nb), " Wt:%ld/%ld", (long)(inv_weight()+weight_cap()),
-		        (long)weight_cap());
+		nhscatf(ret, " Wt:%l/%l", (long)(inv_weight()+weight_cap()), (long)weight_cap());
 
-	if(flags.time && bot2_abbrev < 3)
-		sprintf(nb = eos(nb), " T:%ld ", moves);
+	if (flags.time && bot2_abbrev < 3)
+		nhscatf(ret, " T:%l ", moves);
 
 #ifdef REALTIME_ON_BOTL
 	if(iflags.showrealtime) {
 		time_t currenttime = get_realtime();
-		sprintf(nb = eos(nb), " %lld:%2.2lld", (long long)currenttime / 3600, (long long)(currenttime % 3600) / 60);
+		//sprintf(nb = eos(nb), " %lld:%2.2lld", (long long)currenttime / 3600, (long long)(currenttime % 3600) / 60);
 	}
 #endif
 
 
 	if (hu_stat[u.uhs][0]) {
-		add_colored_text_match((bot2_abbrev >= 2) ? hu_abbrev_stat[u.uhs] : hu_stat[u.uhs], hu_stat[u.uhs], newbot2);
+		add_colored_text_match((bot2_abbrev >= 2) ? hu_abbrev_stat[u.uhs] : hu_stat[u.uhs], hu_stat[u.uhs], ret);
 	}
 
 	/* WAC further Up
@@ -442,40 +420,39 @@ void bot2str(char *newbot2) {
 	*/
 	/* KMH -- changed to Lev */
 
-	if (Levitation) add_colored_text("Lev", newbot2);
+	if (Levitation) add_colored_text("Lev", ret);
 
-	if(Confusion) add_colored_text_match(bot2_abbrev >= 2 ? "Cnf" : "Conf", "Conf", newbot2);
+	if (Confusion) add_colored_text_match(bot2_abbrev >= 2 ? "Cnf" : "Conf", "Conf", ret);
 
-	if(Sick) {
+	if (Sick) {
 		if (u.usick_type & SICK_VOMITABLE)
-			add_colored_text_match(bot2_abbrev >= 2 ? "FPs" : "FoodPois", "FoodPois", newbot2);
+			add_colored_text_match(bot2_abbrev >= 2 ? "FPs" : "FoodPois", "FoodPois", ret);
 		if (u.usick_type & SICK_NONVOMITABLE)
-			add_colored_text("Ill", newbot2);
+			add_colored_text("Ill", ret);
 	}
 
-	if(Blind)
-		add_colored_text_match(bot2_abbrev >= 2 ? "Bnd" : "Blind", "Blind", newbot2);
-	if(Stunned)
-		add_colored_text_match(bot2_abbrev >= 2 ? "Stn" : "Stun", "Stun", newbot2);
-	if(Hallucination)
-		add_colored_text_match(bot2_abbrev >= 2 ? "Hal" : "Hallu", "Hallu", newbot2);
-	if(Slimed)
-		add_colored_text_match(bot2_abbrev >= 2 ? "Slm" : "Slime", "Slime", newbot2);
-	if(u.ustuck && !u.uswallow && !sticks(youmonst.data))
-		add_colored_text("Held", newbot2);
-	if(cap > UNENCUMBERED)
-		add_colored_text_match(bot2_abbrev >= 2 ? enc_abbrev_stat[cap] : enc_stat[cap], enc_stat[cap], newbot2);
+	if (Blind)
+		add_colored_text_match(bot2_abbrev >= 2 ? "Bnd" : "Blind", "Blind", ret);
+	if (Stunned)
+		add_colored_text_match(bot2_abbrev >= 2 ? "Stn" : "Stun", "Stun", ret);
+	if (Hallucination)
+		add_colored_text_match(bot2_abbrev >= 2 ? "Hal" : "Hallu", "Hallu", ret);
+	if (Slimed)
+		add_colored_text_match(bot2_abbrev >= 2 ? "Slm" : "Slime", "Slime", ret);
+	if (u.ustuck && !u.uswallow && !sticks(youmonst.data))
+		add_colored_text("Held", ret);
+	if (cap > UNENCUMBERED)
+		add_colored_text_match(bot2_abbrev >= 2 ? enc_abbrev_stat[cap] : enc_stat[cap], enc_stat[cap], ret);
+
+	return ret;
 }
 
 static void bot2(void) {
-	int save_botlx = flags.botlx;
-	char  newbot2[MAXCO];
-
-	bot2str(newbot2);
+	nhstr *newbot2 = bot2str();
 	curs(WIN_STATUS, 1, 1);
 
-	putstr(WIN_STATUS, 0, newbot2);
-	flags.botlx = save_botlx;
+	putstr(WIN_STATUS, 0, nhs2cstr_tmp(newbot2));
+	del_nhs(newbot2);
 }
 
 /* WAC -- Shorten bot1 to fit in len spaces.
@@ -516,16 +493,20 @@ const char *shorten_bot1(const char *str, int len) {
  */
 #ifdef TTY_GRAPHICS
 const char *shorten_bot2(const char *str, uint len) {
-	static char cbuf[MAXCO];
-	for(bot2_abbrev = 1; bot2_abbrev <= 4; bot2_abbrev++) {
-		bot2str(cbuf);
-		if (strlen(cbuf) <= len)
+	nhstr *s;
+	for (bot2_abbrev = 1; bot2_abbrev <= 4; bot2_abbrev++) {
+		s = bot2str();
+		if (s->len <= len) {
 			break;
+		}
+		del_nhs(s);
 	}
-	if (bot2_abbrev > 4)
-		cbuf[len] = '\0';	/* If all else fails, truncate the line */
+
 	bot2_abbrev = 0;
-	return cbuf;
+
+	char *ret = nhs2cstr_tmp(s);
+	del_nhs(s);
+	return ret;
 }
 #endif /* TTY_GRAPHICS */
 
