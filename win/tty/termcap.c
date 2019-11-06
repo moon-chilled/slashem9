@@ -603,15 +603,9 @@ void cl_eos(void) {
 	    not needed beyond this point, so we don't need to worry
 	    about reconstructing them after the header file inclusion. */
 #undef delay_output
-#undef true
-#undef false
 #define m_move curses_m_move	/* Some curses.h decl m_move(), not used here */
 
 #include <curses.h>
-
-#if !defined(LINUX) && !defined(__FreeBSD__) && !defined(__APPLE__)
-extern char *tparm();
-#endif
 
 #  ifdef COLOR_BLACK	/* trust include file */
 #ifndef VIDEOSHADES
