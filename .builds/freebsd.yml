@@ -1,0 +1,11 @@
+image: freebsd/latest
+sources:
+  - https://git.sr.ht/~moonchild/slashem-next
+
+packages:
+  - gmake
+
+tasks:
+  - build: |
+      cd slashem-next
+      gmake install
