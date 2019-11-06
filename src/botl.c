@@ -259,7 +259,12 @@ nhstr *bot1str() {
 	if (iflags.hitpointbar) {
 		char *pltitle = botl_player();
 		usize bar_length = strlen(pltitle) - 1;
-		usize filledbar = uhp() * bar_length / uhpmax();
+		usize filledbar;
+		if (uhp() < 0) {
+			filledbar = bar_length; //highlight the whole thing
+		} else {
+			filledbar = uhp() * bar_length / uhpmax();
+		}
 
 		// TODO: use_inverse (once attrs are a thing)
 		nhscatznc(ret, pltitle, filledbar, percentage_color_of(uhp(), uhpmax(), hp_colors).color);
