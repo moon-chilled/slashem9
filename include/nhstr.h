@@ -11,6 +11,8 @@ typedef struct {
 
 /* everything should be prefixed with 'nhs' (N)et(H)ack (S)tring
  * things that deal with (z)ero-terminated strings should be z-suffixed
+ * 	Of those, the ones that explicitly take a (n)umber of chars to consider
+ * 	should be n-suffixed
  * things that deal with (f)ormatted strings should be f-suffixed
  * things that deal with (c)oloured strings should be c-suffixed
  */
@@ -23,7 +25,9 @@ typedef struct {
 
 extern nhstr *new_nhs(void);
 extern void del_nhs(nhstr *str);
+extern nhstr *nhscatznc(nhstr *str, char *cat, usize catlen, int colour);
 extern nhstr *nhscatzc(nhstr *str, char *cat, int colour);
+extern nhstr *nhscatzn(nhstr *str, char *cat, usize catlen);
 extern nhstr *nhscatz(nhstr *str, char *cat);
 extern nhstr *nhscopy(nhstr *str);
 extern nhstr *nhscat(nhstr *str, nhstr *cat);

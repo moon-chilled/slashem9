@@ -149,7 +149,7 @@ extern const char *rank_of(int,short,boolean);
 extern void bot_set_handler(void (*)());
 extern void bot_reconfig(void);
 extern void bot(void);
-extern void bot1str(char*);
+extern nhstr *bot1str(void);
 extern nhstr *bot2str(void);
 
 #if 0

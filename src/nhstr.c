@@ -14,24 +14,31 @@ void del_nhs(nhstr *str) {
 	free(str);
 }
 
-nhstr *nhscatzc(nhstr *str, char *cat, int colour) {
-	usize newlen = strlen(cat);
-	str->str = realloc(str->str, (str->len + newlen) * sizeof(glyph_t));
-	for (usize i = str->len; i < str->len + newlen; i++) {
+nhstr *nhscatznc(nhstr *str, char *cat, usize catlen, int colour) {
+	str->str = realloc(str->str, (str->len + catlen) * sizeof(glyph_t));
+	for (usize i = str->len; i < str->len + catlen; i++) {
 		str->str[i] = cat[i - str->len];
 	}
 
-	str->colouration = realloc(str->colouration, (str->len + newlen) * sizeof(int));
-	for (usize i = str->len; i < str->len + newlen; i++) {
+	str->colouration = realloc(str->colouration, (str->len + catlen) * sizeof(int));
+	for (usize i = str->len; i < str->len + catlen; i++) {
 		str->colouration[i] = colour;
 	}
 
-	str->len += newlen;
+	str->len += catlen;
 	return str;
 }
 
+nhstr *nhscatzc(nhstr *str, char *cat, int colour) {
+	return nhscatznc(str, cat, strlen(cat), colour);
+}
+
+nhstr *nhscatzn(nhstr *str, char *cat, usize catlen) {
+	return nhscatznc(str, cat, catlen, NO_COLOR);
+}
+
 nhstr *nhscatz(nhstr *str, char *cat) {
-	return nhscatzc(str, cat, NO_COLOR);
+	return nhscatzn(str, cat, strlen(cat));
 }
 
 nhstr *nhscopy(nhstr *str) {
@@ -74,7 +81,6 @@ nhstr *nhscatfc_v(nhstr *str, int colour, char *cat, va_list the_args) {
 					break;
 				case 'S': {
 					char *s = va_arg(the_args, char*);
-					raw_printf("printing '%s'\n", s);
 					nhscatzc(str, s, colour);
 					break;
 				}

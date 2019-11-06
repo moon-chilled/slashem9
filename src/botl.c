@@ -45,9 +45,6 @@ const char *enc_abbrev_stat[] = {
 	"Old"
 };
 
-static void bot1(void);
-static void bot2(void);
-
 extern const struct percent_color_option *hp_colors;
 extern const struct percent_color_option *pw_colors;
 extern const struct text_color_option *text_colors;
@@ -251,74 +248,44 @@ static char *botl_strength(void) {
 	return strength;
 }
 
-void bot1str(char *newbot1) {
-	char *nb;
-	int i=0,j;
+nhstr *bot1str() {
+	nhstr *ret = new_nhs();
 
-	strcpy(newbot1, "");
 	if (iflags.hitpointbar) {
-		flags.botlx = 0;
-		curs(WIN_STATUS, 1, 0);
-		putstr(WIN_STATUS, 0, newbot1);
-		strcat(newbot1, "[");
-		i = 1; /* don't overwrite the string in front */
-		curs(WIN_STATUS, 1, 0);
-		putstr(WIN_STATUS, 0, newbot1);
+		//TODO: inverse
+		nhscatz(ret, "[");
 	}
 
-
-	strcat(newbot1, botl_player());
 	if (iflags.hitpointbar) {
-		int bar_length = strlen(newbot1)-1;
-		char tmp[MAXCO];
-		char *p = tmp;
-		int filledbar = uhp() * bar_length / uhpmax();
-		strcpy(tmp, newbot1);
-		p++;
+		char *pltitle = botl_player();
+		usize bar_length = strlen(pltitle) - 1;
+		usize filledbar = uhp() * bar_length / uhpmax();
 
-		/* draw hp bar */
-		if (iflags.use_inverse) term_start_attr(ATR_INVERSE);
-		p[filledbar] = '\0';
-		if (iflags.use_color) {
-			/* draw in color mode */
-			apply_color_option(percentage_color_of(uhp(), uhpmax(), hp_colors), tmp, 1);
-		} else {
-			/* draw in inverse mode */
-			curs(WIN_STATUS, 1, 0);
-			putstr(WIN_STATUS, 0, tmp);
-		}
-		term_end_color();
-		if (iflags.use_inverse) term_end_attr(ATR_INVERSE);
+		// TODO: use_inverse (once attrs are a thing)
+		nhscatznc(ret, pltitle, filledbar, percentage_color_of(uhp(), uhpmax(), hp_colors).color);
+		nhscatz(ret, pltitle + filledbar);
 
-		strcat(newbot1, "]");
+		nhscatz(ret, "]");
 	}
 
-	sprintf(nb = eos(newbot1),"  ");
-	i = mrank_sz + 15;
-	j = (nb + 2) - newbot1; /* aka strlen(newbot1) but less computation */
-	if((i - j) > 0)
-		sprintf(nb = eos(nb),"%*s", i-j, " ");  /* pad with spaces */
+	nhscatz(ret, "  ");
 
-	sprintf(nb = eos(nb), "St:%s ", botl_strength());
-	sprintf(nb = eos(nb),
-	        "Dx:%-1d Co:%-1d In:%-1d Wi:%-1d Ch:%-1d",
+	nhscatf(ret, "St:%S ", botl_strength());
+	nhscatf(ret, "Dx:%i Co:%i In:%i Wi:%i Ch:%i",
 	        ACURR(A_DEX), ACURR(A_CON), ACURR(A_INT), ACURR(A_WIS), ACURR(A_CHA));
-	sprintf(nb = eos(nb), (u.ualign.type == A_CHAOTIC) ? "  Chaotic" :
-	        (u.ualign.type == A_NEUTRAL) ? "  Neutral" : "  Lawful");
+	nhscatz(ret, (u.ualign.type == A_CHAOTIC) ? "  Chaotic" : (u.ualign.type == A_NEUTRAL) ? "  Neutral" : "  Lawful");
 
 	if (flags.showscore)
-		sprintf(nb = eos(nb), " S:%ld", botl_score());
+		nhscatf(ret, " S:%l", botl_score());
+
+	return ret;
 }
 
 void bot1() {
-	int save_botlx = flags.botlx;
-
-	static char newbot1[MAXCO];
-	bot1str(newbot1);
+	nhstr *newbot1 = bot1str();
 	curs(WIN_STATUS, 1, 0);
-	putstr(WIN_STATUS, 0, newbot1);
-
-	flags.botlx = save_botlx;
+	putstr(WIN_STATUS, 0, nhs2cstr_tmp(newbot1));
+	del_nhs(newbot1);
 }
 
 /* provide the name of the current level for display by various ports */

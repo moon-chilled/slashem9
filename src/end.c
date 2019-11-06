@@ -1199,19 +1199,15 @@ static void dump_everything(int how, time_t when) {
 	dump_map();
 
 
-	// Because statuscolors is so braindead, bot1str and bot2str have side effects.
-	// So turn off dump redirection while they run
-	// (XXX)
-	dump_redirect(false);
-	static char bot1[MAXCO];
-	bot1str(bot1);
-	dump_redirect(true);
-
-	putstr(0, 0, bot1);
+	nhstr *bot1 = bot1str();
 	nhstr *bot2 = bot2str();
+
+	putstr(0, 0, nhs2cstr_tmp(bot1));
 	putstr(0, 0, nhs2cstr_tmp(bot2));
-	del_nhs(bot2);
 	putstr(0, 0, "");
+
+	del_nhs(bot2);
+	del_nhs(bot1);
 
 	dump_plines();
 	putstr(0, 0, "");
