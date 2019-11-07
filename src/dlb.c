@@ -390,7 +390,7 @@ static usize do_dlb_fread(void *ptr, usize size, usize nmemb, dlb *dp) {
 }
 
 static int do_dlb_fseek(dlb *dp, long pos, int whence) {
-	isize curpos;
+	isize curpos = dp->pos;
 
 	switch (whence) {
 	case SEEK_CUR:
