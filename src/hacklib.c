@@ -5,6 +5,11 @@
 
 /* We could include only config.h, except for the overlay definitions... */
 #include "hack.h"
+
+#ifdef _POSIX_C_SOURCE
+# include <sys/time.h>
+#endif
+
 /*=
     Assorted 'small' utility routines.	They're virtually independent of
 NetHack, except that rounddiv may call panic().
@@ -356,29 +361,29 @@ boolean fuzzymatch(const char *s1, const char *s2, const char *ignore_chars, boo
 
 static struct tm *getlt(void);
 
-
-/* High-resolution timer entropy collector */
-/*
-void collect_entropy2(char* data) {
-        struct timeval tv;
-        gettimeofday(&tv, (struct timezone*) 0);
-
-        memcpy(data, &tv.tv_sec, sizeof(int));
-        memcpy(data + sizeof(int), &tv.tv_usec, sizeof(int));
-        memset(data + 2 * sizeof(int), 0, 32 - sizeof(int) * 2);
-}
-*/
-
-
 void setrandom(void) {
 	char rnbuf[64];
+	memset(rnbuf, 0xaa, SIZE(rnbuf)); // 0xaa = alternating 0s and 1s
+
 	FILE *fp = fopen("/dev/urandom", "rb");
-	if (fp) {
-		fread(rnbuf, 64, 1, fp);
-		fclose(fp);
-	} else {
-		memset(rnbuf, 0, 64);
+	if (!fp) {
+		fp = fopen("/dev/random", "rb");
 	}
+
+
+	if (fp) {
+		fread(rnbuf, 32, 1, fp);
+		fclose(fp);
+	}
+
+#ifdef _POSIX_C_SOURCE
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	memcpy(&rnbuf[32], &tv.tv_sec, sizeof(int));
+	memcpy(&rnbuf[32 + sizeof(int)], &tv.tv_usec, sizeof(int));
+#endif
+
+	memcpy(&rnbuf[63 - sizeof(malloc)], &malloc, sizeof(malloc));
 
 	seed_good_random(rnbuf);
 }
