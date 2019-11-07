@@ -356,10 +356,31 @@ boolean fuzzymatch(const char *s1, const char *s2, const char *ignore_chars, boo
 
 static struct tm *getlt(void);
 
+
+/* High-resolution timer entropy collector */
+/*
+void collect_entropy2(char* data) {
+        struct timeval tv;
+        gettimeofday(&tv, (struct timezone*) 0);
+
+        memcpy(data, &tv.tv_sec, sizeof(int));
+        memcpy(data + sizeof(int), &tv.tv_usec, sizeof(int));
+        memset(data + 2 * sizeof(int), 0, 32 - sizeof(int) * 2);
+}
+*/
+
+
 void setrandom(void) {
-	// poor quality system routine
-	// TODO: custom random routine
-	srand(time(NULL));
+	char rnbuf[64];
+	FILE *fp = fopen("/dev/urandom", "rb");
+	if (fp) {
+		fread(rnbuf, 64, 1, fp);
+		fclose(fp);
+	} else {
+		memset(rnbuf, 0, 64);
+	}
+
+	seed_good_random(rnbuf);
 }
 
 static struct tm *getlt(void) {

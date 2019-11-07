@@ -1662,6 +1662,8 @@ extern uint rnd(uint x);
 extern uint d(uint n, uint x);
 extern uint rne(uint x);
 extern uint rnz(uint i);
+extern void seed_good_random(char data[64]);
+extern uint good_random(void);
 
 /* ### role.c ### */
 

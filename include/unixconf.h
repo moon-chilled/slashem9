@@ -267,9 +267,6 @@
 # endif
 #endif
 
-/* Use the low quality random number routines. */
-#define Rand()	rand()
-
 #ifdef TIMED_DELAY
 # if defined(SUNOS4) || defined(LINUX) || defined(SVR4) /* [max] added SVR4 */
 # define msleep(k) usleep((k)*1000)
