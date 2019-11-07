@@ -7,7 +7,7 @@ DATADIR ?= $(HACKDIR)/dat
 
 CFLAGS += -Iinclude -Ibuild/include -DWIZARD=\"$(shell whoami)\"
 CFLAGS += -g -O0
-CFLAGS += -std=c99 -D_XOPEN_SOURCE=500 -D_POSIX_C_SOURCE=200809L -Werror -Wpedantic -pedantic
+CFLAGS += -std=c99 -D_POSIX_C_SOURCE=200809L -Wall -Werror
 
 CFLAGS := $(CFLAGS) $(shell pkg-config --cflags ncursesw)
 ifeq ($(shell uname -s),Darwin)
