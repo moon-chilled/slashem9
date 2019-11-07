@@ -41,7 +41,7 @@ struct obj {
 #define STATUE_FEMALE   0x04
 	char	oclass;		/* object class */
 	char	invlet;		/* designation in inventory */
-	char	oartifact;	/* artifact array index */
+	uchar	oartifact;	/* artifact array index */
 	schar 	altmode; 	/* alternate modes - eg. SMG, double Lightsaber */
 	/* WP_MODEs are in decreasing speed */
 #define WP_MODE_AUTO	0	/* Max firing speed */
@@ -271,7 +271,7 @@ struct obj {
 #define Has_contents(o) (/* (Is_container(o) || (o)->otyp == STATUE) && */ \
 			 (o)->cobj != NULL)
 #define Is_container(o) ((o)->otyp == MEDICAL_KIT || \
-			 (o)->otyp >= LARGE_BOX && (o)->otyp <= BAG_OF_TRICKS)
+			 ((o)->otyp >= LARGE_BOX && (o)->otyp <= BAG_OF_TRICKS))
 #define Is_box(otmp)	((otmp)->otyp == LARGE_BOX || (otmp)->otyp == CHEST)
 #define Is_mbag(otmp)	((otmp)->otyp == BAG_OF_HOLDING || \
                          ((otmp)->oartifact && \

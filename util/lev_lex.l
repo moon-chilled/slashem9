@@ -9,6 +9,9 @@
 #include "lev_yacc.h"
 #include "sp_lev.h"
 
+#define YY_NO_INPUT
+#define YY_NO_UNPUT
+
 /* Most of these don't exist in flex, yywrap is macro and
  * yyunput is properly declared in flex.skel.
  */

@@ -2877,7 +2877,8 @@ boolean angry_guards(boolean silent) {
 			}
 			if (mtmp->msleeping || mtmp->mfrozen) {
 				slct++;
-				mtmp->msleeping = mtmp->mfrozen = 0;
+				mtmp->msleeping = false;
+				mtmp->mfrozen = 0;
 			}
 			mtmp->mpeaceful = 0;
 		}

@@ -92,14 +92,6 @@ void end_color_option(struct color_option color_option) {
 #endif  /* TTY_GRAPHICS */
 }
 
-static void apply_color_option(struct color_option color_option, const char *newbot2, int statusline /* apply color on this statusline: 1 or 2 */) {
-	if (!iflags.use_status_colors || !iflags.use_color) return;
-	curs(WIN_STATUS, 1, statusline-1);
-	start_color_option(color_option);
-	putstr(WIN_STATUS, 0, newbot2);
-	end_color_option(color_option);
-}
-
 void add_colored_text_match(const char *text, const char *match, nhstr *newbot) {
 	if ((*text == '\0') || (*match == '\0')) return;
 
@@ -338,7 +330,6 @@ nhstr *bot2str(void) {
 	nhstr *ret = new_nhs();
 	int hp, hpmax;
 	int cap = near_capacity();
-	int save_botlx = flags.botlx;
 
 	hp = Upolyd ? u.mh : u.uhp;
 	hpmax = Upolyd ? u.mhmax : u.uhpmax;
@@ -352,8 +343,6 @@ nhstr *bot2str(void) {
 
 	if (bot2_abbrev < 1)
 		nhscatf(ret, " %c:%l", oc_syms[COIN_CLASS], money_cnt(invent));
-
-	int hp_color = percentage_color_of(hp, hpmax, hp_colors).color;
 
 	nhscatfc(ret, percentage_color_of(hp, hpmax, hp_colors).color, " HP:%i(%i)", hp, hpmax);
 	nhscatfc(ret, percentage_color_of(u.uen, u.uenmax, pw_colors).color, " Pw:%i(%i)", u.uen, u.uenmax);
@@ -375,7 +364,7 @@ nhstr *bot2str(void) {
 
 #ifdef REALTIME_ON_BOTL
 	if(iflags.showrealtime) {
-		time_t currenttime = get_realtime();
+		//time_t currenttime = get_realtime();
 		//sprintf(nb = eos(nb), " %lld:%2.2lld", (long long)currenttime / 3600, (long long)(currenttime % 3600) / 60);
 	}
 #endif

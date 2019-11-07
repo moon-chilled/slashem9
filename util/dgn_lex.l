@@ -10,6 +10,9 @@
 #include "dgn_yacc.h"
 #include "dgn_file.h"
 
+#define YY_NO_INPUT
+#define YY_NO_UNPUT
+
 /*
  * Most of these don't exist in flex, yywrap is macro and
  * yyunput is properly declared in flex.skel.
@@ -49,10 +52,8 @@ int yylex(void);
 #  undef VOIDYYPUT
 # endif
 # ifdef VOIDYYPUT
-void yyunput(int);
 void yyoutput(int);
 # else
-int yyunput(int);
 int yyoutput(int);
 # endif
 #endif	/* !FLEX_SCANNER && !FLEXHACK_SCANNER */
@@ -74,33 +75,6 @@ void init_yyout(FILE *);
 extern YYSTYPE yylval;
 
 int line_number = 1;
-/*
- *	This is a hack required by Michael Hamel to get things
- *	working on the Mac.
- */
-#if defined(MAC_MPW) && !defined(FLEX_SCANNER) && !defined(FLEXHACK_SCANNER)
-#undef input
-#undef unput
-#define unput(c) { yytchar = (c); if (yytchar == 10) yylineno--; *yysptr++ = yytchar; }
-# ifndef YYNEWLINE
-# define YYNEWLINE 10
-# endif
-
-char
-input()		/* Under MPW \n is chr(13)! Compensate for this. */
-{
-	if (yysptr > yysbuf) return *--yysptr;
-	else {
-		yytchar = getc(yyin);
-		if (yytchar == '\n') {
-		    yylineno++;
-		    return YYNEWLINE;
-		}
-		if (yytchar == EOF) return 0;
-		else		    return yytchar;
-	}
-}
-#endif	/* MAC_MPW && !FLEX_SCANNER && !FLEXHACK_SCANNER */
 
 %}
 %%
@@ -144,20 +118,16 @@ RNDCHLEVEL	return RNDCHLEVEL;
 %%
 
 /* routine to switch to another input file; needed for flex */
-void init_yyin( input_f )
-FILE *input_f;
-{
+void init_yyin(FILE *input_f) {
 #if defined(FLEX_SCANNER) || defined(FLEXHACK_SCANNER)
 	if (yyin)
-	    yyrestart(input_f);
+		yyrestart(input_f);
 	else
 #endif
-	    yyin = input_f;
+		yyin = input_f;
 }
 /* analogous routine (for completeness) */
-void init_yyout( output_f )
-FILE *output_f;
-{
+void init_yyout(FILE *output_f) {
 	yyout = output_f;
 }
 

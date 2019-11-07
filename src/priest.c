@@ -509,8 +509,9 @@ void reset_hostility( struct monst *roamer) {
 	                          roamer->data == &mons[PM_ANGEL])))
 		return;
 
-	if(EPRI(roamer)->shralign != u.ualign.type) {
-		roamer->mpeaceful = roamer->mtame = 0;
+	if (EPRI(roamer)->shralign != u.ualign.type) {
+		roamer->mpeaceful = false;
+		roamer->mtame = 0;
 		set_malign(roamer);
 	}
 	newsym(roamer->mx, roamer->my);

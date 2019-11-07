@@ -365,7 +365,8 @@ clonewiz (void) {
 
 	if ((mtmp2 = makemon(&mons[PM_WIZARD_OF_YENDOR],
 	                     u.ux, u.uy, NO_MM_FLAGS)) != 0) {
-		mtmp2->msleeping = mtmp2->mtame = mtmp2->mpeaceful = 0;
+		mtmp2->msleeping = mtmp2->mpeaceful = false;
+		mtmp2->mtame = 0;
 		if (!u.uhave.amulet && rn2(2)) {  /* give clone a fake */
 			add_to_minv(mtmp2, mksobj(FAKE_AMULET_OF_YENDOR,
 			                          true, false));
@@ -419,7 +420,8 @@ nasty (struct monst *mcast) {
 					continue;
 				if ((mtmp = makemon(&mons[makeindex],
 				                    bypos.x, bypos.y, NO_MM_FLAGS)) != 0) {
-					mtmp->msleeping = mtmp->mpeaceful = mtmp->mtame = 0;
+					mtmp->msleeping = mtmp->mpeaceful = false;
+					mtmp->mtame = 0;
 					set_malign(mtmp);
 				} else /* GENOD? */
 					mtmp = makemon(NULL,
@@ -474,7 +476,8 @@ resurrect (void) {
 	}
 
 	if (mtmp) {
-		mtmp->msleeping = mtmp->mtame = mtmp->mpeaceful = 0;
+		mtmp->msleeping = mtmp->mpeaceful = false;
+		mtmp->mtame = 0;
 		set_malign(mtmp);
 		pline("A voice booms out...");
 		verbalize("So thou thought thou couldst %s me, fool.", verb);

@@ -149,11 +149,7 @@ curses_block(bool noscroll)
     if (iflags.msg_is_alert)
         curses_alert_main_borders(true);
     wrefresh(win);
-    if (iflags.msg_is_alert
-#ifdef BORG
-        && !borg_on
-#endif
-       ) {
+    if (iflags.msg_is_alert) {
         while ((ret = wgetch(win)) == '\t') break;
     }
 

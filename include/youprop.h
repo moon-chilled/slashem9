@@ -9,7 +9,11 @@
 #include "permonst.h"
 #include "mondata.h"
 #include "pm.h"
-#include "artilist.h"
+
+#ifndef ARTILIST_PASS2
+# define ARTILIST_PASS2
+# include "artilist_base.h"
+#endif
 
 
 /* KMH, intrinsics patch.

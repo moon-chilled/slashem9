@@ -327,6 +327,7 @@ curses_ext_cmd()
         /* create window inside window to prevent overwriting of border */
         getbegyx(extwin2,y0,x0);
         getmaxyx(extwin2,h,w);
+        (void)h;
         extwin = newwin(1, w-2, y0+1, x0+1);
         if (w - 4 < maxlen) maxlen = w - 4;
     } else {

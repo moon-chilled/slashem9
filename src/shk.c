@@ -4622,17 +4622,18 @@ static void shk_charge(char *slang, struct monst *shkp) {
 	*/
 	if (obj->oclass == WAND_CLASS) {
 		/* What type of service? */
-		if ((ESHK(shkp)->services & (SHK_SPECIAL_A|SHK_SPECIAL_B)) ==
-		                (SHK_SPECIAL_A|SHK_SPECIAL_B)) {
-			type = yn_function("[B]asic service or [P]remier",
-			                   ident_chars, '\0');
+		if ((ESHK(shkp)->services & (SHK_SPECIAL_A|SHK_SPECIAL_B)) == (SHK_SPECIAL_A|SHK_SPECIAL_B)) {
+			type = yn_function("[B]asic service or [P]remier", ident_chars, '\0');
 			if (type == '\0') return;
 		} else if (ESHK(shkp)->services & SHK_SPECIAL_A) {
-			pline ("I only perform basic charging.");
+			pline("I only perform basic charging.");
 			type = 'b';
 		} else if (ESHK(shkp)->services & SHK_SPECIAL_B) {
-			pline ("I only perform complete charging.");
+			pline("I only perform complete charging.");
 			type = 'p';
+		} else {
+			impossible("Shopkeeper cannot perform any services??");
+			type = 'b';
 		}
 	} else {
 		type = 'b';

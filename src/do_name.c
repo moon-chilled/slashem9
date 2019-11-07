@@ -213,7 +213,7 @@ int do_mname(void) {
 	coord cc;
 	int cx,cy;
 	struct monst *mtmp;
-	char qbuf[QBUFSZ];
+	char qbuf[2*BUFSZ];
 
 	if (Hallucination) {
 		pline("You would never recognize it anyway.");

@@ -312,7 +312,7 @@ static void checkfile(char *inp, struct permonst *pm, bool user_typed_name, bool
 	dlb *fp;
 	char buf[BUFSZ], newstr[BUFSZ];
 	char *ep, *dbase_str;
-	bool found_in_file = false, had_error = false;
+	bool found_in_file = false;
 
 	fp = dlb_fopen(NH_DATAFILE, "r");
 	if (!fp) {
@@ -710,7 +710,7 @@ static int do_look(boolean quick) {
 		 */
 		if (from_screen) {
 			if (found > 1 || need_to_look) {
-				char monbuf[BUFSZ];
+				char monbuf[QBUFSZ];
 				char temp_buf[BUFSZ];
 
 				pm = lookat(cc.x, cc.y, look_buf, monbuf);
@@ -820,16 +820,16 @@ dowhatdoes_core (char q, char *cbuf) {
 			if ((ep = index(buf, '\n')) != 0) *ep = 0;
 			if (ctrl && buf[2] == '\t') {
 				buf = bufr + 1;
-				strncpy(buf, "^?      ", 8);
+				memcpy(buf, "^?      ", 8);
 				buf[1] = ctrl;
 			} else if (meta && buf[3] == '\t') {
 				buf = bufr + 2;
-				strncpy(buf, "M-?     ", 8);
+				memcpy(buf, "M-?     ", 8);
 				buf[2] = meta;
 			} else if(buf[1] == '\t') {
 				buf = bufr;
 				buf[0] = q;
-				strncpy(buf+1, "       ", 7);
+				memcpy(buf+1, "       ", 7);
 			}
 			dlb_fclose(fp);
 			strcpy(cbuf, buf);

@@ -24,7 +24,6 @@ void panic(char *str, ...) {
 #endif
 	VA_END();
 	exit(EXIT_FAILURE);		/* redundant */
-	return;
 }
 
 #ifdef ALLOCA_HACK

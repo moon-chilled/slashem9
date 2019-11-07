@@ -617,7 +617,8 @@ static void cast_cleric_spell(struct monst *mtmp, int dmg, int spellnum) {
 			if ((pm = mkclass(let,0)) != 0 &&
 			                (mtmp2 = makemon(pm, bypos.x, bypos.y, NO_MM_FLAGS)) != 0) {
 				success = true;
-				mtmp2->msleeping = mtmp2->mpeaceful = mtmp2->mtame = 0;
+				mtmp2->msleeping = mtmp2->mpeaceful = false;
+				mtmp2->mtame = 0;
 				set_malign(mtmp2);
 			}
 		}

@@ -357,29 +357,9 @@ boolean fuzzymatch(const char *s1, const char *s2, const char *ignore_chars, boo
 static struct tm *getlt(void);
 
 void setrandom(void) {
-	/* the types are different enough here that sweeping the different
-	 * routine names into one via #defines is even more confusing
-	 */
-#ifdef RANDOM	/* srandom() from sys/share/random.c */
-	srandom((uint) time(NULL));
-#else
-# if defined(BSD) || defined(LINUX) || defined(CYGWIN32) /* system srandom() */
-#  if defined(BSD) && !defined(POSIX_TYPES)
-#   if defined(SUNOS4)
-
-#   endif
-	srandom(time(NULL));
-#  else
-	srandom(time(NULL));
-#  endif
-# else
-#  ifdef UNIX	/* system srand48() */
-	srand48(time(NULL));
-#  else		/* poor quality system routine */
+	// poor quality system routine
+	// TODO: custom random routine
 	srand(time(NULL));
-#  endif
-# endif
-#endif
 }
 
 static struct tm *getlt(void) {

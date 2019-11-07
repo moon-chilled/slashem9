@@ -60,7 +60,7 @@ static void init_ttycolor(void);
 
 #ifdef VIDEOSHADES
 bool colorflag = false;			/* colors are initialized */
-char ttycolors[CLR_MAX];
+uchar ttycolors[CLR_MAX];
 #endif
 
 void init_ttycolor(void) {

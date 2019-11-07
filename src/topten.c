@@ -547,7 +547,7 @@ outheader() {
 static void outentry(int rank, struct toptenentry *t1, boolean so) {
 	boolean second_line = true;
 	char linebuf[BUFSZ];
-	char *bp, hpbuf[24], linebuf3[BUFSZ];
+	char *bp, hpbuf[24], linebuf3[QBUFSZ];
 	int hppos, lngr;
 
 

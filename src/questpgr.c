@@ -11,8 +11,6 @@
 
 #define QTEXT_FILE	"quest.txt"
 
-static void Fread(void *,int,int,dlb *);
-static struct qtmsg *construct_qtlist(long);
 static const char *intermed(void);
 static const char *neminame(void);
 static const char *guardname(void);
@@ -28,32 +26,6 @@ static struct	qtlists	qt_list;
 static dlb	*msg_file;
 /* used by ldrname() and neminame(), then copied into cvt_buf */
 static char	nambuf[sizeof cvt_buf];
-
-static void Fread(void *ptr, int size, int nitems, dlb *stream) {
-	int cnt;
-
-	if ((cnt = dlb_fread(ptr, size, nitems, stream)) != nitems) {
-		panic("PREMATURE EOF ON QUEST TEXT FILE! Expected %d bytes, got %d", (size * nitems), (size * cnt));
-	}
-}
-
-static struct qtmsg *construct_qtlist(long hdr_offset) {
-	struct qtmsg *msg_list;
-	int	n_msgs;
-
-	dlb_fseek(msg_file, hdr_offset, SEEK_SET);
-	Fread(&n_msgs, sizeof(int), 1, msg_file);
-	msg_list = (struct qtmsg *)
-	           alloc((unsigned)(n_msgs+1)*sizeof(struct qtmsg));
-
-	/*
-	 * Load up the list.
-	 */
-	Fread((void *)msg_list, n_msgs*sizeof(struct qtmsg), 1, msg_file);
-
-	msg_list[n_msgs].msgnum = -1;
-	return msg_list;
-}
 
 bool qt_comment(char *line) {
 	return line[0] == '#'

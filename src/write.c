@@ -118,7 +118,7 @@ dowrite (struct obj *pen) {
 	if (!strncmpi(nm, "of ", 3)) nm += 3;
 
 	if ((bp = strstri(nm, " armour")) != 0) {
-		strncpy(bp, " armor ", 7);	/* won't add '\0' */
+		memcpy(bp, " armor ", 7);	/* won't add '\0' */
 		mungspaces(bp + 1);	/* remove the extra space */
 	}
 

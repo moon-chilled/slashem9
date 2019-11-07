@@ -32,9 +32,6 @@ static int (*timed_occ_fn)(void);
 static int doprev_message(void);
 static int timed_occupation(void);
 static int doextcmd(void);
-#ifdef BORG
-static int doborgtoggle(void);
-#endif
 static int domonability(void);
 static int dotravel(void);
 static int playersteal(void);
@@ -293,17 +290,6 @@ int doextlist(void) {
 	return 0;
 }
 
-#ifdef BORG
-static int doborgtoggle(void) {
-	if (yn_function("Really enable cyborg?", ynqchars, 'n') == 'y') {
-		borg_on = true;
-		pline("The cyborg is enabled.... Good luck!");
-	}
-
-	return 0;
-}
-#endif
-
 #if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS)
 #define MAX_EXT_CMD 200		/* Change if we ever have more ext cmds */
 /*
@@ -319,7 +305,7 @@ int extcmd_via_menu (void) {
 	anything any;
 	const struct ext_func_tab *choices[MAX_EXT_CMD];
 	char buf[BUFSZ];
-	char cbuf[QBUFSZ], prompt[QBUFSZ], fmtstr[20];
+	char cbuf[QBUFSZ/2], prompt[QBUFSZ], fmtstr[20];
 	int i, n, nchoices, acount;
 	int ret,  biggest;
 	int accelerator, prevaccelerator;
@@ -473,7 +459,7 @@ static int enter_explore_mode(void) {
 
 static int playersteal(void) {
 	int x, y;
-	int temp, chanch, base, dexadj, statbonus = 0;
+	int chanch, base, dexadj, statbonus = 0;
 	boolean no_steal = false;
 
 	if (nohands(youmonst.data)) {
@@ -1190,9 +1176,9 @@ void enlightenment(int final) {
 			unsigned long mask;
 			const char *str;
 		} warntypes[] = {
-			M2_ORC,		"orcs",
-			M2_DEMON,	"demons",
-			M2_UNDEAD,	"undead",
+			{M2_ORC,	"orcs"},
+			{M2_DEMON,	"demons"},
+			{M2_UNDEAD,	"undead"},
 		};
 
 		sprintf(buf, "aware of the presence of ");
@@ -1920,9 +1906,6 @@ static const struct func_tab cmdlist[] = {
 	{'A', false, doddoremarm},
 	{M('a'), true, doorganize},
 	/*	'b', 'B' : go sw */
-#ifdef BORG
-	{'B', true, doborgtoggle}, /* [Tom] */
-#endif
 	{M('b'), false, playersteal},   /* jla */
 #if 0
 	{M('b'), false, specialpower},   /* jla */
@@ -3568,34 +3551,20 @@ static char *parse(void) {
 	flags.move = 1;
 	flush_screen(1); /* Flush screen buffer. Put the cursor on the hero. */
 
-#ifdef BORG
-	if (borg_on) {
-		// TODO: implement kbhit for other windowports --ELR
-		if (!kbhit()) {
-			borg_input();
-			return borg_line;
-		} else {
-			nhgetch();
-			pline("Cyborg terminated.");
-			borg_on = 0;
-		}
+	/* [Tom] for those who occasionally go insane... */
+	if (repeat_hit) {
+		/* Sanity checks for repeat_hit */
+		if (repeat_hit < 0) repeat_hit = 0;
+		else {
+			/* Don't want things to get too out of hand */
+			if (repeat_hit > 10) repeat_hit = 10;
 
-	} else
-#endif
-		/* [Tom] for those who occasionally go insane... */
-		if (repeat_hit) {
-			/* Sanity checks for repeat_hit */
-			if (repeat_hit < 0) repeat_hit = 0;
-			else {
-				/* Don't want things to get too out of hand */
-				if (repeat_hit > 10) repeat_hit = 10;
-
-				repeat_hit--;
-				in_line[0] = repeat_char;
-				in_line[1] = 0;
-				return in_line;
-			}
+			repeat_hit--;
+			in_line[0] = repeat_char;
+			in_line[1] = 0;
+			return in_line;
 		}
+	}
 
 	if (!iflags.num_pad || (foo = readchar()) == 'n')
 		for (;;) {

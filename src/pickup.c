@@ -1926,14 +1926,12 @@ boolean container_gone(int (*fn)(struct obj*)) {
 
 int use_container(struct obj **objp, int held) {
 	struct obj *curr, *otmp, *obj = *objp;
-	struct monst *shkp;
 	boolean one_by_one, allflag, quantum_cat = false,
 	                             loot_out = false, loot_in = false;
 	char select[MAXOCLASSES+1];
-	char qbuf[BUFSZ], emptymsg[BUFSZ], pbuf[QBUFSZ];
+	char qbuf[BUFSZ], emptymsg[QBUFSZ], pbuf[QBUFSZ];
 	long loss = 0L;
-	int cnt = 0, used = 0, lcnt = 0,
-	    menu_on_request;
+	int cnt = 0, used = 0, menu_on_request;
 
 	emptymsg[0] = '\0';
 	if (nohands(youmonst.data)) {

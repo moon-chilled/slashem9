@@ -2,9 +2,9 @@
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
+#include "artilist.h"
 #include "hack.h"
 #include "artifact.h"
-#include "artilist.h"
 /*
  * Note:  both artilist[] and artiexist[] have a dummy element #0,
  *	  so loops over them should normally start at #1.  The primary

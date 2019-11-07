@@ -664,7 +664,7 @@ static boolean hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 	struct obj *launcher;
 	char yourbuf[BUFSZ];
 	char unconventional[BUFSZ];	/* substituted for word "attack" in msg */
-	char saved_oname[BUFSZ];
+	char saved_oname[QBUFSZ];
 
 	if (thrown == 1) launcher = uwep;
 	else if (thrown == 2) launcher = uswapwep;
@@ -2124,7 +2124,7 @@ physical:
 				if (canseemon(mdef))
 					pline("%s is getting more and more confused.",
 					      Monnam(mdef));
-				mdef->mconf++;
+				mdef->mconf = true;
 			}
 			break;
 		case AD_POLY:

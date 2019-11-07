@@ -1007,7 +1007,8 @@ int seffects (struct obj *sobj) {
 			if (DEADMONSTER(mtmp)) continue;
 			if(cansee(mtmp->mx,mtmp->my)) {
 				if(confused || sobj->cursed) {
-					mtmp->mflee = mtmp->mfrozen = mtmp->msleeping = 0;
+					mtmp->mflee = mtmp->msleeping = false;
+					 mtmp->mfrozen = 0;
 					mtmp->mcanmove = 1;
 				} else if (! resist(mtmp, sobj->oclass, 0, NOTELL))
 					monflee(mtmp, 0, false, false);
@@ -1240,7 +1241,7 @@ int seffects (struct obj *sobj) {
 		pline("You have found a scroll of genocide!");
 		known = true;
 		if (sobj->blessed) do_class_genocide();
-		else do_genocide(!sobj->cursed | (2 * !!Confusion));
+		else do_genocide((!sobj->cursed) | (2 * !!Confusion));
 		break;
 	case SCR_LIGHT:
 		if(!Blind) known = true;

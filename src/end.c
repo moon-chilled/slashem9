@@ -250,7 +250,7 @@ void done_in_by(struct monst *mtmp) {
 #endif
 
 /*VARARGS1*/
-void panic (const char *str, ...) {
+noreturn void panic(const char *str, ...) {
 	va_list the_args;
 	va_start(the_args, str);
 
@@ -295,12 +295,11 @@ void panic (const char *str, ...) {
 #ifdef WIN32
 	interject(INTERJECT_PANIC);
 #endif
-#if defined(UNIX) || defined(LATTICE) || defined(WIN32)
-	if (wizard)
-		NH_abort();	/* generate core dump */
-#endif
 	va_end(the_args);
-	done(PANICKED);
+
+#if defined(UNIX) || defined(LATTICE) || defined(WIN32)
+	NH_abort();	/* generate core dump */
+#endif
 }
 
 static boolean should_query_disclose_option(int category, char *defquery) {
@@ -1160,7 +1159,7 @@ static void dump_plines(void) {
 
 
 static void dump_everything(int how, time_t when) {
-	char pbuf[BUFSZ], datetimebuf[24]; /* [24]: room for 64-bit bogus value */
+	char pbuf[BUFSZ];//, datetimebuf[24]; /* [24]: room for 64-bit bogus value */
 
 	dump_redirect(true);
 	if (!iflags.in_dumplog)

@@ -56,7 +56,7 @@ static int compare_explode_location(const void *loc1, const void *loc2) {
 }
 
 static void set_blast_symbols(ExplodeRegion *reg) {
-	int i, j, bitmask;
+	int i, j;
 	/* The index into the blast symbol array is a bitmask containing 4 bits:
 	 * bit 3: True if the location immediately to the north is present
 	 * bit 2: True if the location immediately to the south is present
@@ -76,7 +76,6 @@ static void set_blast_symbols(ExplodeRegion *reg) {
 	for(i = 0; i < reg->nlocations; i++)
 		reg->locations[i].blast = 0;
 	for(i = 0; i < reg->nlocations; i++) {
-		bitmask = 0;
 		if (i && reg->locations[i-1].y == reg->locations[i].y &&
 		                reg->locations[i-1].x == reg->locations[i].x-1) {
 			reg->locations[i].blast |= 1;	/* Location to the west */

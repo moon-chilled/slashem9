@@ -5,6 +5,8 @@
 #ifndef EXTERN_H
 #define EXTERN_H
 
+#include <stdnoreturn.h>
+
 #include "nhstr.h"
 
 /* ### alloc.c ### */
@@ -551,7 +553,7 @@ extern void done1(int);
 extern int done2(void);
 extern void done_in_by(struct monst *);
 #endif /* !LEV_LEX_C */
-extern void panic(const char *,...) PRINTF_F(1,2);
+extern noreturn void panic(const char *,...) PRINTF_F(1,2);
 #ifndef LEV_LEX_C
 extern void done(int);
 extern void container_contents(struct obj *,boolean,boolean);
@@ -2265,5 +2267,8 @@ extern void zap_strike_fx(xchar, xchar, int);
 extern void throwspell(void);
 
 #endif /* !LEV_LEX_C */
+
+#define MAX(a,b) (((a) > (b)) ? (a) : (b))
+#define MIN(a,b) (((a) < (b)) ? (a) : (b))
 
 #endif /* EXTERN_H */

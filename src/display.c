@@ -300,7 +300,8 @@ void unmap_object (int x, int y) {
 	if (!level.flags.hero_memory) return;
 
 #ifdef DISPLAY_LAYERS
-	levl[x][y].mem_invis = levl[x][y].mem_corpse = levl[x][y].mem_obj = 0;
+	levl[x][y].mem_invis = levl[x][y].mem_corpse = false;
+	levl[x][y].mem_obj = 0;
 #else
 	if ((trap = t_at(x,y)) != 0 && trap->tseen && !covers_traps(x,y))
 		map_trap(trap, 0);
@@ -328,50 +329,47 @@ void unmap_object (int x, int y) {
  * Make whatever at this location show up.  This is only for non-living
  * things.  This will not handle feeling invisible objects correctly.
  *
- * Internal to display.c, this is a #define for speed.
+ * Internal to display.c.
  */
 #ifdef DISPLAY_LAYERS
-#define _map_location(x,y,show)						\
-{									\
-    struct obj   *obj;							\
-    struct trap  *trap;							\
-									\
-    if (level.flags.hero_memory) {					\
-	if ((obj = vobj_at(x, y)) && !covers_objects(x, y))		\
-	    map_object(obj, false);					\
-	else								\
-	    levl[x][y].mem_corpse = levl[x][y].mem_obj = 0;		\
-	if ((trap = t_at(x, y)) && trap->tseen && !covers_traps(x, y))	\
-	    map_trap(trap, false);					\
-	else								\
-	    levl[x][y].mem_trap = 0;					\
-	map_background(x, y, false);					\
-	if (show) show_glyph(x, y, memory_glyph(x, y));			\
-    } else if ((obj = vobj_at(x,y)) && !covers_objects(x,y))		\
-	map_object(obj,show);						\
-    else if ((trap = t_at(x,y)) && trap->tseen && !covers_traps(x,y))	\
-	map_trap(trap,show);						\
-    else								\
-	map_background(x,y,show);					\
+void map_location(int x, int y, int show) {
+	struct obj   *obj;
+	struct trap  *trap;
+
+	if (level.flags.hero_memory) {
+		if ((obj = vobj_at(x, y)) && !covers_objects(x, y)) {
+			map_object(obj, false);
+		} else {
+			levl[x][y].mem_corpse = false;
+			levl[x][y].mem_obj = 0;
+		}
+		if ((trap = t_at(x, y)) && trap->tseen && !covers_traps(x, y))
+			map_trap(trap, false);
+		else
+			levl[x][y].mem_trap = 0;
+		map_background(x, y, false);
+		if (show) show_glyph(x, y, memory_glyph(x, y));
+	} else if ((obj = vobj_at(x,y)) && !covers_objects(x,y)) {
+		map_object(obj,show);
+	} else if ((trap = t_at(x,y)) && trap->tseen && !covers_traps(x,y)) {
+		map_trap(trap,show);
+	} else {
+		map_background(x,y,show);
+	}
 }
 #else	/* DISPLAY_LAYERS */
-#define _map_location(x,y,show)						\
-{									\
-    struct obj   *obj;							\
-    struct trap  *trap;							\
-									\
-    if ((obj = vobj_at(x,y)) && !covers_objects(x,y))			\
-	map_object(obj,show);						\
-    else if ((trap = t_at(x,y)) && trap->tseen && !covers_traps(x,y))	\
-	map_trap(trap,show);						\
-    else								\
-	map_background(x,y,show);					\
+void map_location(int x, int y, int show) {
+	struct obj   *obj;
+	struct trap  *trap;
+
+	if ((obj = vobj_at(x,y)) && !covers_objects(x,y))
+		map_object(obj,show);
+	else if ((trap = t_at(x,y)) && trap->tseen && !covers_traps(x,y))
+		map_trap(trap,show);
+	else
+		map_background(x,y,show);
 }
 #endif	/* DISPLAY_LAYERS */
-
-void map_location (int x, int y, int show) {
-	_map_location(x,y,show);
-}
 
 int memory_glyph(int x, int y) {
 #ifdef DISPLAY_LAYERS
@@ -648,7 +646,7 @@ void feel_location(xchar x, xchar y) {
 #endif
 		}
 	} else {
-		_map_location(x, y, 1);
+		map_location(x, y, 1);
 
 		if (Punished) {
 			/*
@@ -750,11 +748,12 @@ void newsym(int x, int y) {
 		}
 		if (x == u.ux && y == u.uy) {
 			if (senseself()) {
-				_map_location(x,y,0);	/* map *under* self */
+				map_location(x,y,0);	/* map *under* self */
 				display_self();
-			} else
+			} else {
 				/* we can see what is there */
-				_map_location(x,y,1);
+				map_location(x,y,1);
+			}
 		} else {
 			mon = m_at(x,y);
 			worm_tail = is_worm_tail(mon);
@@ -772,15 +771,16 @@ void newsym(int x, int y) {
 						trap->tseen = true;
 					}
 				}
-				_map_location(x,y,0);	/* map under the monster */
+				map_location(x,y,0);	/* map under the monster */
 				/* also gets rid of any invisibility glyph */
 				display_monster(x, y, mon, see_it? PHYSICALLY_SEEN : DETECTED, worm_tail);
-			} else if (mon && mon_warning(mon) && !is_worm_tail(mon))
+			} else if (mon && mon_warning(mon) && !is_worm_tail(mon)) {
 				display_warning(mon);
-			else if (memory_is_invisible(x,y))
+			} else if (memory_is_invisible(x,y)) {
 				map_invisible(x, y);
-			else
-				_map_location(x,y,1);	/* map the location */
+			} else {
+				map_location(x,y,1);	/* map the location */
+			}
 		}
 	}
 
@@ -2308,8 +2308,7 @@ do_crwall:
 
 
 void dump_map(void) {
-	int x, y, glyph, skippedrows, lastnonblank;
-	int default_glyph = cmap_to_glyph(level.flags.arboreal ? S_tree : S_stone);
+	int x, y, skippedrows, lastnonblank;
 	char buf[BUFSZ];
 	bool blankrow, toprow;
 

@@ -128,7 +128,8 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 				cmap_color(offset);
 	} else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
 		if (On_stairs(x,y) && levl[x][y].seenv) special |= MG_STAIRS;
-		else ch = get_objsym(offset);
+
+		ch = get_objsym(offset);
 
 		if (Is_rogue_level(&u.uz) && iflags.use_color) {
 			switch(objects[offset].oc_class) {

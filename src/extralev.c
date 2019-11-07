@@ -27,12 +27,6 @@ static void miniwalk(int,int);
 
 static void roguejoin(int x1, int y1, int x2, int y2, int horiz) {
 	int x,y,middle;
-#ifndef MAX
-#define MAX(a,b) (((a) > (b)) ? (a) : (b))
-#endif
-#ifndef MIN
-#define MIN(a,b) (((a) < (b)) ? (a) : (b))
-#endif
 	if (horiz) {
 		middle = x1 + rn2(x2-x1+1);
 		for(x=MIN(x1,middle); x<=MAX(x1,middle); x++)

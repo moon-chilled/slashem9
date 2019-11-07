@@ -232,7 +232,6 @@ typedef long glyph_t;
 
 #define DOAGAIN '\001'	/* ^A, the "redo" key used in cmd.c and getline.c */
 
-#define BORG            // Fixed for non-DOS --ELR
 /* #define KEEP_SAVE */       /* Keep savefiles after Restore (wac@intergate.bc.ca)*/
 /* #define CHARON */	/* Charon's boat, enables Cerebus - not implemented */
 #define DUNGEON_GROWTH

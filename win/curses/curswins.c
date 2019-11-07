@@ -344,9 +344,7 @@ curses_del_wid(winid wid)
 
 /* Print a single character in the given window at the given coordinates */
 
-void
-curses_putch(winid wid, int x, int y, int ch, int color, int attr)
-{
+void curses_putch(winid wid, int x, int y, int ch, int color, int attr) {
     int sx, sy, ex, ey;
     bool border = curses_window_has_border(wid);
     nethack_char nch;
@@ -552,9 +550,7 @@ static void write_char(WINDOW * win, int x, int y, nethack_char nch) {
 /* Draw the entire visible map onto the screen given the visible map
 boundaries */
 
-void
-curses_draw_map(int sx, int sy, int ex, int ey)
-{
+void curses_draw_map(int sx, int sy, int ex, int ey) {
     int curx, cury;
     int bspace = 0;
 

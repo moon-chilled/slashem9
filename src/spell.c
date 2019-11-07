@@ -595,7 +595,7 @@ void age_spells (void) {
  */
 static boolean getspell(int *spell_no) {
 	int nspells, idx;
-	char ilet, lets[BUFSZ], qbuf[QBUFSZ];
+	char ilet, lets[QBUFSZ], qbuf[BUFSZ];
 
 	if (spellid(0) == NO_SPELL)  {
 		pline("You don't know any spells right now.");

@@ -382,16 +382,16 @@ void mon_arrive(struct monst *mtmp, boolean with_you) {
 
 	mtmp->mx = 0;	/*(already is 0)*/
 	mtmp->my = xyflags;
-	if (xlocale)
+	if (xlocale) {
 		mnearto(mtmp, xlocale, ylocale, false);
-	else {
+	} else {
 		if (!rloc(mtmp,true)) {
 			/*
 			 * Failed to place migrating monster,
 			 * probably because the level is full.
 			 * Dump the monster's cargo and leave the monster dead.
 			 */
-			struct obj *obj, *corpse;
+			struct obj *obj;
 			while ((obj = mtmp->minvent) != 0) {
 				obj_extract_self(obj);
 				obj_no_longer_held(obj);
@@ -405,8 +405,7 @@ void mon_arrive(struct monst *mtmp, boolean with_you) {
 					get_obj_location(obj, &xlocale, &ylocale, 0);
 				}
 			}
-			corpse = mkcorpstat(CORPSE, NULL, mtmp->data,
-			                    xlocale, ylocale, false);
+			mkcorpstat(CORPSE, NULL, mtmp->data, xlocale, ylocale, false);
 			mongone(mtmp);
 		}
 	}
@@ -913,7 +912,8 @@ void wary_dog(struct monst *mtmp, boolean was_dead) {
 	}
 
 	if (edog && (edog->killed_by_u == 1 || edog->abuse > 2)) {
-		mtmp->mpeaceful = mtmp->mtame = 0;
+		mtmp->mpeaceful = false;
+		mtmp->mtame = 0;
 		if (edog->abuse >= 0 && edog->abuse < 10)
 			if (!rn2(edog->abuse + 1)) mtmp->mpeaceful = 1;
 		if(!quietly && cansee(mtmp->mx, mtmp->my)) {
@@ -932,7 +932,8 @@ void wary_dog(struct monst *mtmp, boolean was_dead) {
 	} else {
 		/* chance it goes wild anyway - Pet Semetary */
 		if (!rn2(mtmp->mtame)) {
-			mtmp->mpeaceful = mtmp->mtame = 0;
+			mtmp->mpeaceful = false;
+			mtmp->mtame = 0;
 		}
 	}
 	if (!mtmp->mtame) {

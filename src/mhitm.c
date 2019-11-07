@@ -693,7 +693,7 @@ static int thrwmm(struct monst *magr, struct monst *mdef) {
 static int hitmm(struct monst *magr, struct monst *mdef, struct	attack *mattk) {
 	if(vis) {
 		int compat;
-		char buf[BUFSZ], mdef_name[BUFSZ];
+		char buf[2*BUFSZ], mdef_name[BUFSZ];
 
 		if (!canspotmon(magr))
 			map_invisible(magr->mx, magr->my);

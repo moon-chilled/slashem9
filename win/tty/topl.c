@@ -23,7 +23,6 @@ static void removetopl(int);
 
 int tty_doprev_message(void) {
 	/*WAC merged in NH340 prevwindow - add reverse ordering?*/
-    winid tmpwin;
 
     struct WinDesc *cw = wins[WIN_MESSAGE];
 
@@ -357,7 +356,7 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 	bool digit_ok, allow_num;
 	struct WinDesc *cw = wins[WIN_MESSAGE];
 	bool doprev = false;
-	char prompt[QBUFSZ];
+	char prompt[BUFSZ];
 
 	if(ttyDisplay->toplin == 1 && !(cw->flags & WIN_STOP)) more();
 	cw->flags &= ~WIN_STOP;

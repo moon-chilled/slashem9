@@ -267,12 +267,8 @@
 # endif
 #endif
 
-/* Use the high quality random number routines. */
-#if defined(BSD) || defined(LINUX) || defined(ULTRIX) || defined(CYGWIN32) || defined(RANDOM)
-#define Rand()	random()
-#else
-#define Rand()	lrand48()
-#endif
+/* Use the low quality random number routines. */
+#define Rand()	rand()
 
 #ifdef TIMED_DELAY
 # if defined(SUNOS4) || defined(LINUX) || defined(SVR4) /* [max] added SVR4 */

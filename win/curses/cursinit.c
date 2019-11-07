@@ -424,7 +424,7 @@ curses_choose_character()
     int *pickmap;
     char *prompt;
     char pbuf[QBUFSZ];
-    char choice[QBUFSZ];
+    char choice[BUFSZ];
     char tmpchoice[QBUFSZ];
 
 #ifdef TUTORIAL_MODE
@@ -473,7 +473,7 @@ curses_choose_character()
         tmpchoice[count] = toupper(tmpchoice[count]);
     }
 
-    sprintf(choice, "%s%s", choice, tmpchoice);
+    strcat(choice, tmpchoice);
 
     /* prevent an unnecessary prompt */
     rigid_role_checks();

@@ -123,8 +123,7 @@
 #define could_twoweap(ptr)	((ptr)->mattk[1].aatyp == AT_WEAP && \
 			((ptr) != youmonst.data || \
 			P_MAX_SKILL(P_TWO_WEAPON_COMBAT) >= P_SKILLED || \
-			P_MAX_SKILL(P_TWO_WEAPON_COMBAT) >= P_BASIC && \
-			(Race_if(PM_DWARF) || Race_if(PM_HUMAN))))
+			(P_MAX_SKILL(P_TWO_WEAPON_COMBAT) >= P_BASIC && (Race_if(PM_DWARF) || Race_if(PM_HUMAN)))))
 #define cantweararm(ptr)	(breakarm(ptr) || sliparm(ptr))
 #define throws_rocks(ptr)	(((ptr)->mflags2 & M2_ROCKTHROW) != 0L)
 #define type_is_pname(ptr)	(((ptr)->mflags2 & M2_PNAME) != 0L)
@@ -165,8 +164,8 @@
 				 (ptr) == &mons[PM_ELF] || \
 				 (ptr) == &mons[PM_HUMAN])
 /* return true if the monster tends to revive */
-#define is_reviver(ptr)		(is_rider(ptr) || (ptr)->mlet == S_FUNGUS && \
-				 (ptr) != &mons[PM_LICHEN] || \
+#define is_reviver(ptr)		(is_rider(ptr) || \
+				((ptr)->mlet == S_FUNGUS && (ptr) != &mons[PM_LICHEN]) || \
 				 (ptr)->mlet == S_TROLL)
 
 /* this returns the light's range, or 0 if none; if we add more light emitting
@@ -238,12 +237,8 @@
 #define befriend_with_obj(ptr, obj) ((obj)->oclass == FOOD_CLASS && ( \
 		is_domestic(ptr) || \
 		/* [Tom] Dorothy wants more pets... */ \
-		(obj)->otyp == CHEESE && ((ptr) == &mons[PM_GIANT_RAT] || \
-		    (ptr) == &mons[PM_SEWER_RAT] || \
-		    (ptr) == &mons[PM_BLACK_RAT] || \
-		    (ptr) == &mons[PM_PACK_RAT]) || \
-		(obj)->otyp == CARROT && ((ptr) == &mons[PM_RABBIT] || \
-		    (ptr) == &mons[PM_RABID_RABBIT]) || \
-		(obj)->otyp == BANANA && (ptr)->mlet == S_YETI))
+		((obj)->otyp == CHEESE && ((ptr) == &mons[PM_GIANT_RAT] || (ptr) == &mons[PM_SEWER_RAT] || (ptr) == &mons[PM_BLACK_RAT] || (ptr) == &mons[PM_PACK_RAT])) || \
+		((obj)->otyp == CARROT && ((ptr) == &mons[PM_RABBIT] || (ptr) == &mons[PM_RABID_RABBIT])) || \
+		((obj)->otyp == BANANA && (ptr)->mlet == S_YETI)))
 
 #endif /* MONDATA_H */

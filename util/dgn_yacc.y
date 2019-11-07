@@ -593,17 +593,13 @@ check_level()
  *	  have a 100% chance of existing).
  */
 
-int
-check_branch()
-{
-	int i;
-
+int check_branch() {
 	if(!in_dungeon) {
 		yyerror("Branch defined outside of dungeon.");
 		return 0;
 	}
 #if 0
-	for(i = 0; i < n_dgns; i++)
+	for(int i = 0; i < n_dgns; i++)
 	    if(!strcmp(tmpdungeon[i].name, tmpbranch[n_brs].name)) {
 
 		yyerror("Reverse branching not allowed.");

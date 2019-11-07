@@ -33,10 +33,9 @@ static int parse_escape_sequence(void);
 int
 curses_read_char()
 {
-    int ch, tmpch;
+    int ch;
 
     ch = getch();
-    tmpch = ch;
     ch = curses_convert_keys(ch);
 
     if (ch == 0) {
@@ -44,14 +43,14 @@ curses_read_char()
     }
 #if defined(ALT_0) && defined(ALT_9)    /* PDCurses, maybe others */
     if ((ch >= ALT_0) && (ch <= ALT_9)) {
-        tmpch = (ch - ALT_0) + '0';
+        int tmpch = (ch - ALT_0) + '0';
         ch = M(tmpch);
     }
 #endif
 
 #if defined(ALT_A) && defined(ALT_Z)    /* PDCurses, maybe others */
     if ((ch >= ALT_A) && (ch <= ALT_Z)) {
-        tmpch = (ch - ALT_A) + 'a';
+        int tmpch = (ch - ALT_A) + 'a';
         ch = M(tmpch);
     }
 #endif
@@ -320,7 +319,6 @@ curses_str_remainder(const char *str, int width, int line_num)
     int curline = 0;
     int strsize = strlen(str);
     char substr[strsize];
-    char curstr[strsize];
     char tmpstr[strsize];
 
     strcpy(substr, str);
@@ -342,10 +340,6 @@ curses_str_remainder(const char *str, int width, int line_num)
         if (last_space == 0) {  /* No spaces found */
             last_space = count - 1;
         }
-        for (count = 0; count < last_space; count++) {
-            curstr[count] = substr[count];
-        }
-        curstr[count] = '\0';
         if (substr[count] == '\0') {
             break;
         }
@@ -548,8 +542,6 @@ curses_get_count(int first_digit)
 understands, and return that format mask. */
 
 attr_t curses_convert_attr(int attr) {
-    attr_t curses_attr;
-
     switch (attr) {
     case ATR_NONE:
         return A_NORMAL;

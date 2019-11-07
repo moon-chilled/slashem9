@@ -364,14 +364,12 @@ int object_detect(
 	struct obj *obj, *otmp = NULL;
 	struct monst *mtmp;
 	int uw = u.uinwater;
-	int sym, boulder = 0;
+	int boulder = 0;
 
 	if (class < 0 || class >= MAXOCLASSES) {
 		impossible("object_detect:  illegal class %d", class);
 		class = 0;
 	}
-
-	sym = class ? def_oc_syms[class] : 0;
 
 	if (Hallucination || (Confusion && class == SCROLL_CLASS))
 		strcpy(stuff, "something");
@@ -559,7 +557,8 @@ int monster_detect(
 				}
 			if (otmp && otmp->cursed &&
 			                (mtmp->msleeping || !mtmp->mcanmove)) {
-				mtmp->msleeping = mtmp->mfrozen = 0;
+				mtmp->msleeping = false;
+				mtmp->mfrozen = 0;
 				mtmp->mcanmove = 1;
 				woken = true;
 			}

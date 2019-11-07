@@ -6,8 +6,6 @@
 #include "lev.h"
 #include "dlb.h"
 
-static void init_oracles(dlb *);
-
 /* exclude_cookie is a hack used because we sometimes want to get rumors in a
  * context where messages such as "You swallowed the fortune!" that refer to
  * cookies should not appear.  This has no effect for true rumors since none
@@ -16,7 +14,6 @@ static void init_oracles(dlb *);
 // truth: 1=true, -1=false, 0=either
 char *getrumor(int truth, char *rumor_buf, bool exclude_cookie) {
 	dlb *rumors;
-	long tidbit, beginning;
 	char *endp;
 	char line[BUFSZ];
 
@@ -53,7 +50,7 @@ char *getrumor(int truth, char *rumor_buf, bool exclude_cookie) {
 
 		// reached end of rumors -- go back to beginning
 		if (!dlb_fgets(line, sizeof line, rumors)) {
-			dlb_fseek(rumors, beginning, SEEK_SET);
+			dlb_fseek(rumors, 0, SEEK_SET);
 			dlb_fgets(line, sizeof line, rumors);
 		}
 		if ((endp = index(line, '\n')) != 0) *endp = 0;
@@ -122,8 +119,6 @@ void outoracle(boolean special, boolean delphi) {
 
 	static usize *oracle_offsets;
 	static usize num_oracles;
-	static usize current_oracle = 0;
-
 
 	oracles = dlb_fopen(NH_ORACLEFILE, "r");
 	if (!oracles) {

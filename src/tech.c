@@ -357,7 +357,7 @@ void learntech (short tech, long mask, int tlevel) {
  */
 static boolean gettech(int *tech_no) {
 	int i, ntechs, idx;
-	char ilet, lets[BUFSZ], qbuf[QBUFSZ];
+	char ilet, lets[QBUFSZ], qbuf[BUFSZ];
 
 	for (ntechs = i = 0; i < MAXTECH; i++)
 		if (techid(i) != NO_TECH) ntechs++;
@@ -1943,7 +1943,7 @@ static int doblitz (void) {
 
 static void doblitzlist (void) {
 	winid tmpwin;
-	int i, n;
+	int i;
 	char buf[BUFSZ];
 	menu_item *selected;
 	anything any;
@@ -1981,7 +1981,7 @@ static void doblitzlist (void) {
 	}
 	end_menu(tmpwin, "Currently known blitz manoeuvers");
 
-	n = select_menu(tmpwin, PICK_NONE, &selected);
+	select_menu(tmpwin, PICK_NONE, &selected);
 	destroy_nhwindow(tmpwin);
 	return;
 }

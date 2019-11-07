@@ -804,7 +804,9 @@ static void reset_oattached_mids(boolean ghostly) {
 			struct monst *mtmp = (struct monst *)otmp->oextra;
 
 			mtmp->m_id = 0;
-			mtmp->mpeaceful = mtmp->mtame = 0;	/* pet's owner died! */
+
+			mtmp->mpeaceful = false; // pet's owner died!
+			mtmp->mtame = 0;
 		}
 		if (ghostly && otmp->oattached == OATTACHED_M_ID) {
 			memcpy((void *)&oldid, (void *)otmp->oextra,

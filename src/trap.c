@@ -3456,7 +3456,7 @@ crawl:
 		boolean trap_skipped = false;
 		boolean box_here = false;
 		boolean deal_with_floor_trap = false;
-		char the_trap[BUFSZ], qbuf[QBUFSZ];
+		char the_trap[QBUFSZ], qbuf[BUFSZ];
 		int containercnt = 0;
 
 		if(!getdir(NULL)) return 0;

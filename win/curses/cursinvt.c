@@ -94,7 +94,6 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
     if (accelerator && /* Don't colorize categories */
         iflags.use_menu_color) {
         int color = NO_COLOR;
-        bool menu_color = false;
         char str_mutable[BUFSZ];
         strcpy(str_mutable, str);
         attr = 0;

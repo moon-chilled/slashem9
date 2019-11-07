@@ -662,16 +662,17 @@ void init_dungeons(void) {
 		dungeons[i].entry_lev = 1;	/* defaults to top level */
 
 		if (i) {	/* set depth */
-			branch *br;
+			branch *br = NULL;
 			schar from_depth;
 			boolean from_up;
 			int branch_num;
 
-			for (branch_num = 0; branch_num < pd.n_brs; branch_num++)
+			for (branch_num = 0; branch_num < pd.n_brs; branch_num++) {
 				if (!strcmp(pd.tmpbranch[branch_num].name, dungeons[i].dname)) {
 					br = add_branch(i, branch_num, &pd);
 					break;
 				}
+			}
 
 			/* Set the dungeon entry level from the first branch */
 			dungeons[i].entry_lev = br->end2.dlevel;

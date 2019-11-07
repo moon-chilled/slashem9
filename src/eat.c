@@ -58,8 +58,6 @@ char msgbuf[BUFSZ];
 			    Race_if(PM_HUMAN_WEREWOLF) || Race_if(PM_VAMPIRE))
 
 
-static const char comestibles[] = { FOOD_CLASS, 0 };
-
 /* Gold must come first for getobj(). */
 static const char allobj[] = { COIN_CLASS, ALLOW_FLOOROBJ,
                                WEAPON_CLASS, ARMOR_CLASS, POTION_CLASS, SCROLL_CLASS,
@@ -2066,7 +2064,7 @@ static int edibility_prompts(struct obj *otmp) {
 	   ability to detect food that is unfit for consumption
 	   or dangerous and avoid it. */
 
-	char buf[BUFSZ], foodsmell[BUFSZ],
+	char buf[4*BUFSZ], foodsmell[BUFSZ],
 	     it_or_they[QBUFSZ], eat_it_anyway[QBUFSZ];
 	boolean cadaver = (otmp->otyp == CORPSE),
 	        stoneorslime = false;
@@ -2405,7 +2403,7 @@ int doeat(void)	{
 		victual.reqtime = objects[otmp->otyp].oc_delay;
 		if (otmp->otyp != FORTUNE_COOKIE &&
 		                (otmp->cursed ||
-		                 (((monstermoves - otmp->age) > (int) otmp->blessed ? 50:30) &&
+		                 (((monstermoves - otmp->age) > (int) (otmp->blessed ? 50 : 30)) &&
 		                  (otmp->orotten || !rn2(7))))) {
 
 			if (rottenfood(otmp)) {

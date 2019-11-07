@@ -75,7 +75,7 @@ struct menucoloring {
 };
 
 #ifdef VIDEOSHADES
-extern char ttycolors[CLR_MAX];
+extern uchar ttycolors[CLR_MAX];
 #endif
 
 struct color_option {

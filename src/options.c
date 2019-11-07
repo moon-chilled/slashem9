@@ -386,7 +386,6 @@ static boolean need_redraw; /* for doset() */
 
 #ifdef VIDEOSHADES
 extern char *shade[3];		  /* in sys/msdos/video.c */
-extern char ttycolors[CLR_MAX];	  /* in sys/msdos/video.c, win/tty/termcap.c*/
 #endif
 
 static char def_inv_order[MAXOCLASSES] = {
@@ -464,7 +463,6 @@ static char *string_for_env_opt(const char *, char *,boolean);
 static void bad_negation(const char *,boolean);
 static int change_inv_order(char *);
 static void oc_to_str(char *, char *);
-static void graphics_opts(char *,const char *,int,int);
 static int feature_alert_opts(char *, const char *);
 static const char *get_compopt_value(const char *, char *);
 static boolean special_handling(const char *, boolean, boolean);
@@ -797,22 +795,6 @@ static int change_inv_order(char *op) {
 
 	strcpy(flags.inv_order, buf);
 	return 1;
-}
-
-static void graphics_opts(char *opts, const char *optype, int maxlen, int offset) {
-	glyph_t translate[MAXPCHARS+1];
-	int length, i;
-
-	if (!(opts = string_for_env_opt(optype, opts, false)))
-		return;
-	escapes(opts, opts);
-
-	length = strlen(opts);
-	if (length > maxlen) length = maxlen;
-	/* match the form obtained from PC configuration files */
-	for (i = 0; i < length; i++)
-		translate[i] = opts[i];
-	assign_graphics(translate, length, maxlen, offset);
 }
 
 static int feature_alert_opts(char *op, const char *optn) {
@@ -2799,7 +2781,7 @@ static void doset_add_menu(winid win, const char *option, int indexoffset) {
 
 /* Changing options via menu by Per Liboriussen */
 int doset(void) {
-	char buf[BUFSZ], buf2[BUFSZ];
+	char buf[BUFSZ], buf2[QBUFSZ];
 	int i, pass, boolcount, pick_cnt, pick_idx, opt_indx;
 	bool *bool_p;
 	winid tmpwin;
@@ -3230,7 +3212,6 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 		destroy_nhwindow(tmpwin);
 		retval = true;
 	} else if (!strcmp("autopickup_exception", optname)) {
-		boolean retval;
 		int pick_cnt, pick_idx, opt_idx, pass;
 		int totalapes = 0, numapes[2] = {0,0};
 		menu_item *pick_list = NULL;
@@ -3274,7 +3255,6 @@ ape_again:
 			add_autopickup_exception(apebuf);
 			goto ape_again;
 		} else if (opt_idx == 3) {
-			retval = true;
 		} else {	/* remove */
 			tmpwin = create_nhwindow(NHW_MENU);
 			start_menu(tmpwin);
@@ -3687,7 +3667,7 @@ static const char *opt_epilog[] = {
 };
 
 void option_help (void) {
-	char buf[BUFSZ], buf2[BUFSZ];
+	char buf[BUFSZ], buf2[QBUFSZ];
 	int i;
 	winid datawin;
 

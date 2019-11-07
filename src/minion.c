@@ -137,7 +137,8 @@ bool demon_talk(struct monst *mtmp) {
 
 	if (uwep && uwep->oartifact == ART_EXCALIBUR) {
 		pline("%s looks very angry.", Amonnam(mtmp));
-		mtmp->mpeaceful = mtmp->mtame = 0;
+		mtmp->mpeaceful = false;
+		mtmp->mtame = 0;
 		set_malign(mtmp);
 		newsym(mtmp->mx, mtmp->my);
 		return false;

@@ -1498,8 +1498,10 @@ struct monst *makemon(struct permonst *ptr, int x, int y, int mmflags) {
 	if(is_dprince(ptr) && ptr->msound == MS_BRIBE) {
 		mtmp->mpeaceful = mtmp->minvis = mtmp->perminvis = 1;
 		mtmp->mavenge = 0;
-		if (uwep && uwep->oartifact == ART_EXCALIBUR)
-			mtmp->mpeaceful = mtmp->mtame = false;
+		if (uwep && uwep->oartifact == ART_EXCALIBUR) {
+			mtmp->mpeaceful = false;
+			mtmp->mtame = 0;
+		}
 	}
 	if (mndx == PM_LONG_WORM && (mtmp->wormno = get_wormno()) != 0) {
 		/* we can now create worms with tails - 11/91 */

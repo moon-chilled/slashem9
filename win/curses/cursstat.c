@@ -153,7 +153,6 @@ get_playerrank(char *rank)
 static void
 print_statdiff(const char *append, nhstat *stat, int new, int type)
 {
-    char buf[BUFSZ];
     WINDOW *win = curses_get_nhwin(STATUS_WIN);
 
     int color = CLR_GRAY;
@@ -430,8 +429,9 @@ curses_update_stats(void)
             cy = 2;
 
         /* actual y (and x) */
-        int ax = 0;
-        int ay = 0;
+        int ax;
+        int ay;
+        (void)ax;
         getmaxyx(win, ay, ax);
         if (border)
             ay -= 2;
@@ -494,7 +494,7 @@ draw_horizontal(int x, int y, int hp, int hpmax)
         return;
     }
     char buf[BUFSZ];
-    char rank[BUFSZ];
+    char rank[QBUFSZ];
     WINDOW *win = curses_get_nhwin(STATUS_WIN);
 
     /* Line 1 */
@@ -712,15 +712,12 @@ draw_vertical(int x, int y, int hp, int hpmax)
 
     if ((ranklen + namelen) > maxlen) {
         /* The result doesn't fit. Strip name if >10 characters, then strip title */
-        if (namelen > 10) {
-            while (namelen > 10 && (ranklen + namelen) > maxlen)
-                namelen--;
-        }
+        namelen = MAX(10, maxlen - ranklen);
 
-        while ((ranklen + namelen) > maxlen)
-            ranklen--; /* Still doesn't fit, strip rank */
+        ranklen = MAX(0, maxlen - namelen);
     }
-    sprintf(buf, "%-*s the %-*s", namelen, plname, ranklen, rank);
+
+    snprintf(buf, maxlen, "%-*s the %-*s", namelen, plname, ranklen, rank);
     draw_bar(true, hp, hpmax, buf);
     wmove(win, y++, x);
     wprintw(win, "%s", dungeons[u.uz.dnum].dname);
@@ -816,8 +813,9 @@ curses_add_statuses(WINDOW *win, bool align_right,
            (to separate them with spaces), add 1 to x unless we have borders
            (which would offset what add_status does) */
         int mx = *x;
-        int my = *y;
+        int my;
         getmaxyx(win, my, mx);
+        (void)my;
         if (!curses_window_has_border(STATUS_WIN))
             mx++;
 

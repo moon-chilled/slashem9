@@ -137,9 +137,7 @@ static bool readlibdir(library *lp) {
  * 0 if not found.  Fill in the size and starting position.
  */
 static bool find_file(const char *name, long *startp, long *sizep) {
-	int i, j;
-
-	for (j = 0; j < dlb_lib.nentries; j++) {
+	for (int j = 0; j < dlb_lib.nentries; j++) {
 		if (strcmp(name, dlb_lib.dir[j].fname) == 0) {
 			*startp = dlb_lib.dir[j].foffset;
 			*sizep = dlb_lib.dir[j].fsize;
@@ -190,9 +188,7 @@ static bool do_dlb_init(void) {
 }
 
 static void do_dlb_cleanup(void) {
-	int i;
-
-	/* close the data file(s) */
+	// close the data file
 	close_library(&dlb_lib);
 }
 

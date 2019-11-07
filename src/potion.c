@@ -3005,10 +3005,12 @@ more_dips:
 		} else {
 			singlepotion->otyp = mixture;
 			singlepotion->blessed = 0;
-			if (mixture == POT_WATER)
-				singlepotion->cursed = singlepotion->odiluted = 0;
-			else
+			if (mixture == POT_WATER) {
+				singlepotion->cursed = false;
+				singlepotion->odiluted = 0;
+			} else {
 				singlepotion->cursed = obj->cursed;  /* odiluted left as-is */
+			}
 			singlepotion->bknown = false;
 			if (Blind) {
 				singlepotion->dknown = false;

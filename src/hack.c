@@ -119,10 +119,8 @@ boolean grow_water_herbs(int herb, xchar x, xchar y) {
    return true if did something. */
 boolean grow_herbs(int herb, xchar x, xchar y, boolean showmsg, boolean update) {
 	struct obj *otmp;
-	struct rm *lev;
 
 	rndmappos(&x, &y);
-	lev = &levl[x][y];
 	otmp = sobj_at(herb, x, y);
 	if (otmp && herb_can_grow_at(x,y, false)) {
 		if (otmp->quan <= rn2(HERB_GROWTH_LIMIT)) {
@@ -139,7 +137,6 @@ boolean grow_herbs(int herb, xchar x, xchar y, boolean showmsg, boolean update) 
 				pos.x += x;
 				pos.y += y;
 				if (isok(pos.x,pos.y) && herb_can_grow_at(pos.x,pos.y, false)) {
-					lev = &levl[pos.x][pos.y];
 					otmp = sobj_at(herb, pos.x, pos.y);
 					if (otmp) {
 						if (otmp->quan <= rn2(HERB_GROWTH_LIMIT)) {
@@ -2408,7 +2405,8 @@ void nomul(int nval) {
 	u.uinvulnerable = false;	/* Kludge to avoid ctrl-C bug -dlc */
 	u.usleep = 0;
 	multi = nval;
-	flags.travel = iflags.travel1 = flags.mv = flags.run = 0;
+	flags.travel = iflags.travel1 = flags.mv = false;
+	flags.run = 0;
 }
 
 /* called when a non-movement, multi-turn action has completed */

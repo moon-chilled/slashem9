@@ -1038,7 +1038,7 @@ const static struct skill_range {
  */
 int enhance_weapon_skill (void) {
 	int pass, i, n, len, longest, to_advance, eventually_advance, maxxed_cnt;
-	char buf[BUFSZ], sklnambuf[BUFSZ];
+	char buf[BUFSZ], sklnambuf[QBUFSZ];
 	const char *prefix;
 	menu_item *selected;
 	anything any;

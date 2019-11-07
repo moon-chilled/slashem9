@@ -7,7 +7,6 @@
 #include "eleash.h"
 
 static const char tools[] = { TOOL_CLASS, WEAPON_CLASS, WAND_CLASS, 0 };
-static const char all_count[] = { ALLOW_COUNT, ALL_CLASSES, 0 };
 static const char tools_too[] = { ALL_CLASSES, TOOL_CLASS, POTION_CLASS,
                                   WEAPON_CLASS, WAND_CLASS, GEM_CLASS, 0
                                 };
@@ -1920,7 +1919,8 @@ static void use_figurine(struct obj **optr) {
 			return;
 	}
 	if(!getdir(NULL)) {
-		flags.move = multi = 0;
+		flags.move = false;
+		multi = 0;
 		return;
 	}
 	x = u.ux + u.dx;
@@ -2663,7 +2663,7 @@ static int use_whip(struct obj *obj) {
 
 /* Distance attacks by pole-weapons */
 static int use_pole(struct obj *obj) {
-	int res = 0, typ, max_range;
+	int res = 0, max_range;
 	int min_range = obj->otyp == FISHING_POLE ? 1 : 4;
 	coord cc;
 	struct monst *mtmp;

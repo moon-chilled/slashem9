@@ -1150,11 +1150,8 @@ static void lawful_god_gives_angel (void) {
 	    struct monst *mtmp2;
 	    struct permonst *pm;
 	*/
-	int mnum;
-	int mon;
 
-	mnum = lawful_minion(u.ulevel);
-	mon = make_pet_minion(mnum,A_LAWFUL);
+	make_pet_minion(lawful_minion(u.ulevel), A_LAWFUL);
 	pline("%s", Blind ? "You feel the presence of goodness." :
 	      "There is a puff of white fog!");
 	if (u.uhp > (u.uhpmax / 10)) godvoice(u.ualign.type, "My minion shall serve thee!");
