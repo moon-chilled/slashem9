@@ -943,18 +943,19 @@ winid tty_create_nhwindow(int type) {
 	}
 
 	if(newwin->maxrow) {
-		newwin->data =
-		        (char **) alloc(sizeof(char *) * (unsigned)newwin->maxrow);
-		newwin->datlen =
-		        alloc(sizeof(short) * (unsigned)newwin->maxrow);
+		newwin->data = alloc(sizeof(char *) * (unsigned)newwin->maxrow);
+		newwin->clr_data = alloc(sizeof(int *) * newwin->maxrow);
+		newwin->datlen = alloc(sizeof(short) * (unsigned)newwin->maxrow);
 		if(newwin->maxcol) {
 			for (i = 0; i < newwin->maxrow; i++) {
 				newwin->data[i] = alloc((unsigned)newwin->maxcol);
+				newwin->clr_data[i] = alloc(newwin->maxcol * sizeof(int));
 				newwin->datlen[i] = newwin->maxcol;
 			}
 		} else {
 			for (i = 0; i < newwin->maxrow; i++) {
 				newwin->data[i] = NULL;
+				newwin->clr_data[i] = NULL;
 				newwin->datlen[i] = 0;
 			}
 		}
@@ -1850,6 +1851,7 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 
 	switch(cw->type) {
 	case NHW_STATUS: {
+		int stash_curx = cw->curx;
 		int j = cw->curx;
 
 		int fx = 0;
@@ -1885,7 +1887,7 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 			}
 		}
 
-		strncpy(&cw->data[cw->cury][cw->curx], nhs2cstr_trunc_tmp(nb), cw->cols - cw->curx - 1);
+		strncpy(&cw->data[cw->cury][stash_curx], nhs2cstr_trunc_tmp(nb), cw->cols - stash_curx - 1);
 		cw->data[cw->cury][cw->cols-1] = '\0'; /* null terminate */
 		/* ALI - Clear third line if present and unused */
 		if (cw->cury == 1 && cw->cury < (cw->maxrow - 1)) {
