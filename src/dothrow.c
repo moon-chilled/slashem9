@@ -8,7 +8,6 @@
 #include "edog.h"
 
 static int throw_obj(struct obj *, int, int);
-static void autoquiver(void);
 static int gem_accept(struct monst *, struct obj *);
 static void tmiss(struct obj *, struct monst *);
 static int throw_gold(struct obj *);
@@ -19,7 +18,6 @@ static boolean toss_up(struct obj *, boolean);
 static boolean throwing_weapon(struct obj *);
 static void sho_obj_return_to_u(struct obj *obj);
 static boolean mhurtle_step(void *,int,int);
-static void autoquiver(void);	/* KMH -- automatically fill quiver */
 
 
 static const char toss_objs[] =
@@ -313,69 +311,6 @@ int dothrow(void) {
 }
 
 
-/* KMH -- automatically fill quiver */
-/* Suggested by Jeffrey Bay <jbay@convex.hp.com> */
-static void autoquiver(void) {
-	struct obj *otmp, *oammo = 0, *omissile = 0, *omisc = 0, *altammo = 0;
-
-	if (uquiver)
-		return;
-
-	/* Scan through the inventory */
-	for (otmp = invent; otmp; otmp = otmp->nobj) {
-		if (otmp->owornmask || otmp->oartifact || !otmp->dknown) {
-			;	/* Skip it */
-		} else if (otmp->otyp == ROCK ||
-		                /* seen rocks or known flint or known glass */
-		                (objects[otmp->otyp].oc_name_known &&
-		                 otmp->otyp == FLINT) ||
-		                (objects[otmp->otyp].oc_name_known &&
-		                 otmp->oclass == GEM_CLASS &&
-		                 objects[otmp->otyp].oc_material == GLASS)) {
-			if (uslinging())
-				oammo = otmp;
-			else if (ammo_and_launcher(otmp, uswapwep))
-				altammo = otmp;
-			else if (!omisc)
-				omisc = otmp;
-		} else if (otmp->oclass == GEM_CLASS) {
-			;	/* skip non-rock gems--they're ammo but
-			   player has to select them explicitly */
-		} else if (is_ammo(otmp)) {
-			if (ammo_and_launcher(otmp, uwep))
-				/* Ammo matched with launcher (bow and arrow, crossbow and bolt) */
-				oammo = otmp;
-			else if (ammo_and_launcher(otmp, uswapwep))
-				altammo = otmp;
-			else
-				/* Mismatched ammo (no better than an ordinary weapon) */
-				omisc = otmp;
-		} else if (is_missile(otmp)) {
-			/* Missile (dart, shuriken, etc.) */
-			omissile = otmp;
-		} else if (otmp->oclass == WEAPON_CLASS && throwing_weapon(otmp)) {
-			/* Ordinary weapon */
-			if (objects[otmp->otyp].oc_skill == P_DAGGER
-			                && !omissile)
-				omissile = otmp;
-			else
-				omisc = otmp;
-		}
-	}
-
-	/* Pick the best choice */
-	if (oammo)
-		setuqwep(oammo);
-	else if (omissile)
-		setuqwep(omissile);
-	else if (altammo)
-		setuqwep(altammo);
-	else if (omisc)
-		setuqwep(omisc);
-
-	return;
-}
-
 int dofire(void) {
 	int result, shotlimit;
 
@@ -386,19 +321,9 @@ int dofire(void) {
 
 	if(check_capacity(NULL)) return 0;
 	if (!uquiver) {
-		if (!flags.autoquiver) {
-			/* Don't automatically fill the quiver */
-			pline("You have no ammunition readied!");
-			return dothrow();
-		}
-		autoquiver();
-		if (!uquiver) {
-			pline("You have nothing appropriate for your quiver!");
-			return dothrow();
-		} else {
-			pline("You fill your quiver:");
-			prinv(NULL, uquiver, 0L);
-		}
+		/* Don't automatically fill the quiver */
+		pline("You have no ammunition readied!");
+		return dothrow();
 	}
 
 	/*

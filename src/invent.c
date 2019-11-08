@@ -460,11 +460,6 @@ struct obj *hold_another_object(struct obj *obj, const char *drop_fmt, const cha
 			if (obj->quan > oquan) obj = splitobj(obj, oquan);
 			dropx(obj);
 		} else {
-			if (flags.autoquiver && !uquiver && !obj->owornmask &&
-			                (is_missile(obj) ||
-			                 ammo_and_launcher(obj, uwep) ||
-			                 ammo_and_launcher(obj, uswapwep)))
-				setuqwep(obj);
 			if (hold_msg || drop_fmt) prinv(hold_msg, obj, oquan);
 		}
 	}

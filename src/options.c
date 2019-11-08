@@ -39,7 +39,6 @@ static struct Bool_Opt {
 	{"ascii_map",     &iflags.wc_ascii_map, !PREFER_TILED, SET_IN_GAME},	/*WC*/
 	{"autodig", &flags.autodig, false, SET_IN_GAME},
 	{"autopickup", &flags.pickup, true, SET_IN_GAME},
-	{"autoquiver", &flags.autoquiver, false, SET_IN_GAME},
 #ifdef INSURANCE
 	{"checkpoint", &flags.ins_chkpt, true, SET_IN_GAME},
 #else

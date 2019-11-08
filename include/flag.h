@@ -16,7 +16,6 @@
 
 struct flag {
 	bool  autodig;       /* MRKR: Automatically dig */
-	bool  autoquiver;	/* Automatically fill quiver */
 	bool  beginner;
 #ifdef MAIL
 	bool  biff;		/* enable checking for mail */
