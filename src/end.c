@@ -45,7 +45,7 @@ static void get_valuables(struct obj *);
 static void sort_valuables(struct valuable_data *,int);
 static void artifact_score(struct obj *,boolean,winid);
 static void savelife(int);
-static boolean list_vanquished(char, boolean);
+boolean list_vanquished(char, boolean);
 static void list_genocided(char,boolean);
 static boolean should_query_disclose_option(int,char *);
 
@@ -1010,7 +1010,7 @@ void terminate(int status) {
 	nethack_exit(status);
 }
 
-static boolean list_vanquished(char defquery, boolean ask) {
+boolean list_vanquished(char defquery, boolean ask) {
 	int i, lev;
 	int ntypes = 0, max_lev = 0, nkilled;
 	long total_killed = 0L;
@@ -1062,11 +1062,15 @@ static boolean list_vanquished(char defquery, boolean ask) {
 						} else {
 							/* trolls or undead might have come back,
 							   but we don't keep track of that */
-							if (nkilled == 1)
+							if (nkilled == 1) {
 								strcpy(buf, an(mons[i].mname));
-							else
-								sprintf(buf, "%d %s",
-								        nkilled, makeplural(mons[i].mname));
+							} else {
+								sprintf(buf, "%d %s", nkilled, makeplural(mons[i].mname));
+							}
+
+							if (nkilled != mvitals[i].born) {
+								sprintf(eos(buf), " (%d created)", mvitals[i].born);
+							}
 						}
 						putstr(klwin, 0, buf);
 					}
@@ -1104,38 +1108,55 @@ int num_genocides(void) {
 
 static void list_genocided(char defquery, boolean ask) {
 	int i;
-	int ngenocided;
+	int ngenocided = 0;
+	int nextincted = 0;
 	char c;
 	winid klwin;
 	char buf[BUFSZ];
 
-	ngenocided = num_genocides();
+	for (i = LOW_PM; i < NUMMONS; i++) {
+		if (mvitals[i].mvflags & G_GENOD)
+			ngenocided++;
+		else if ( (mvitals[i].mvflags & G_GONE) && !(mons[i].geno & G_UNIQ) )
+			nextincted++;
+	}
 
 	/* genocided species list */
-	if (ngenocided != 0) {
-		c = ask ? yn_function("Do you want a list of species genocided?",
+	if (ngenocided != 0 || nextincted != 0) {
+		c = ask ? yn_function("Do you want a list of species genocided or extinct?",
 		                      ynqchars, defquery) : defquery;
 		if (c == 'q') done_stopprint++;
 		if (c == 'y') {
 			klwin = create_nhwindow(NHW_MENU);
-			sprintf(buf, "Genocided species:");
+			sprintf(buf, "%s species:", ngenocided && nextincted ? "Genocided and extinct" : ngenocided ? "Genocided" : "Extinct");
 			putstr(klwin, 0, buf);
 			putstr(klwin, 0, "");
 
 			for (i = LOW_PM; i < NUMMONS; i++)
-				if (mvitals[i].mvflags & G_GENOD) {
+				if (mvitals[i].mvflags & G_GONE && !(mons[i].geno & G_UNIQ)) {
 					if ((mons[i].geno & G_UNIQ) && i != PM_HIGH_PRIEST)
 						sprintf(buf, "%s%s",
 						        !type_is_pname(&mons[i]) ? "" : "the ",
 						        mons[i].mname);
 					else
 						strcpy(buf, makeplural(mons[i].mname));
+
+					if (!(mvitals[i].mvflags & G_GENOD))
+						strcat(buf, " (extinct)");
+
 					putstr(klwin, 0, buf);
 				}
 
 			putstr(klwin, 0, "");
-			sprintf(buf, "%d species genocided.", ngenocided);
-			putstr(klwin, 0, buf);
+			if (ngenocided) {
+				sprintf(buf, "%d species genocided.", ngenocided);
+				putstr(klwin, 0, buf);
+			}
+
+			if (nextincted) {
+				sprintf(buf, "%d species extinct.", nextincted);
+				putstr(klwin, 0, buf);
+			}
 
 			display_nhwindow(klwin, true);
 			destroy_nhwindow(klwin);

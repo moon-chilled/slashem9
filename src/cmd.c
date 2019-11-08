@@ -57,6 +57,8 @@ static int wiz_show_seenv(void);
 static int wiz_show_vision(void);
 static int wiz_mon_polycontrol(void);
 static int wiz_show_wmodes(void);
+static int wiz_showkills(void);
+extern void list_vanquished(int, bool);
 # ifdef DEBUG_MIGRATING_MONS
 static int wiz_migrate_mons(void);
 # endif
@@ -1046,6 +1048,10 @@ static int wiz_show_wmodes(void) {
 	return 0;
 }
 
+static int wiz_showkills(void) {
+	list_vanquished('y', false);
+	return 0;
+}
 
 
 /* -enlightenment and conduct- */
@@ -2157,6 +2163,7 @@ struct ext_func_tab extcmdlist[] = {
 	{NULL, NULL, donull, true}, // #wizdebug
 #endif
 	{NULL, NULL, donull, true}, // #wmode
+	{NULL, NULL, donull, true}, // #showkills
 	{NULL, NULL, donull, true}, // #detect
 	{NULL, NULL, donull, true}, // #map
 	{NULL, NULL, donull, true}, // #genesis
@@ -2189,6 +2196,7 @@ static struct ext_func_tab debug_extcmdlist[] = {
 	{"wizdebug", "wizard debug command", wiz_debug_cmd, IFBURIED, AUTOCOMPLETE},
 #endif
 	{"wmode", "show wall modes", wiz_show_wmodes, IFBURIED, AUTOCOMPLETE},
+	{"showkills", "show numbers of monsters killed", wiz_showkills, IFBURIED, AUTOCOMPLETE},
 	{"detect", "detect secret doors and traps", wiz_detect, IFBURIED},
 	{"map", "do magic mapping", wiz_map, IFBURIED},
 	{"genesis", "create monster", wiz_genesis, IFBURIED},
