@@ -6,6 +6,9 @@
 /* We could include only config.h, except for the overlay definitions... */
 #include "hack.h"
 
+#ifdef __FreeBSD__
+# define __XSI_VISIBLE 500 //gettimeofday()
+#endif
 #ifdef _POSIX_C_SOURCE
 # include <sys/time.h>
 #endif
