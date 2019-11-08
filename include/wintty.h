@@ -115,7 +115,7 @@ extern void graph_off(void);
 extern void cl_eos(void);
 
 /*
- * termcap.c (or facsimiles in other ports) is the right place for doing
+ * termcap.c (or fascimiles in other ports) is the right place for doing
  * strange and arcane things such as outputting escape sequences to select
  * a color or whatever.  wintty.c should concern itself with WHERE to put
  * stuff in a window.

@@ -122,7 +122,7 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 					else if (In_mines(&u.uz) && !Is_minetn_level(&u.uz))
 						color = CLR_BROWN;
 					else if (In_hell(&u.uz) && !Is_valley(&u.uz))
-						color =  CLR_RED;
+						color = CLR_RED;
 					else if (Is_astralevel(&u.uz))
 						color = CLR_WHITE;
 				} else if ((offset == S_room) || (offset == S_darkroom)) {
