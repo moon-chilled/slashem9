@@ -117,8 +117,13 @@ void hangup(int sig_unused) {
 	terminate(EXIT_FAILURE);
 # else	/* SAVEONHANGUP */
 	if (!program_state.done_hup++) {
-		if (program_state.something_worth_saving)
+		if (program_state.something_worth_saving) {
+			// AIS: record levels on which there were hangups
+			if (ledger_no(&u.uz) >= 0 && ledger_no(&u.uz) < MAXLINFO) {
+				level_info[ledger_no(&u.uz)].flags |= HANGUP_HERE;
+			}
 			dosave0();
+		}
 		{
 			clearlocks();
 			terminate(EXIT_FAILURE);

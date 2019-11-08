@@ -951,7 +951,7 @@ static boolean Mb_hit(
 	if (youattack || youdefend || vis) {
 		upstart(hittee);	/* capitalize */
 		if (resisted) {
-			pline("%s %s!", hittee, vtense(hittee, "resist"));
+			pline("%s resist%s!", hittee, youdefend ? "" : "s");
 			shieldeff(youdefend ? u.ux : mdef->mx,
 			          youdefend ? u.uy : mdef->my);
 		}
@@ -962,7 +962,7 @@ static boolean Mb_hit(
 			if (do_stun) strcat(buf, "stunned");
 			if (do_stun && do_confuse) strcat(buf, " and ");
 			if (do_confuse) strcat(buf, "confused");
-			pline("%s %s %s%c", hittee, vtense(hittee, "are"),
+			pline("%s %s %s%c", hittee, youdefend ? "are" : "is",
 			      buf, (do_stun && do_confuse) ? '!' : '.');
 		}
 	}

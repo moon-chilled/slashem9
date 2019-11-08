@@ -25,7 +25,9 @@ static boolean no_bones_level(d_level *lev) {
 	       || Is_botlevel(lev) || (Is_branchlev(lev) && lev->dlevel > 1)
 	       || (lev->dlevel < 2)  /* no bones on 1st level */
 	       /* no bones in the invocation level               */
-	       || (In_hell(lev) && lev->dlevel == dunlevs_in_dungeon(lev) - 1);
+	       || (In_hell(lev) && lev->dlevel == dunlevs_in_dungeon(lev) - 1)
+	       // AIS: there was a hangup on this level
+	       || (level_info[ledger_no(lev)].flags & HANGUP_HERE);;
 }
 
 /* Call this function for each fruit object saved in the bones level: it marks
@@ -285,8 +287,7 @@ make_bones:
 		}
 		mtmp = christen_monst(mtmp, plname);
 		newsym(u.ux, u.uy);
-		pline("Your body rises from the dead as %s...",
-		      an(mons[u.ugrave_arise].mname));
+		pline("Your body rises from the dead as %s...", an(mons[u.ugrave_arise].mname));
 		display_nhwindow(WIN_MESSAGE, false);
 		drop_upon_death(mtmp, NULL);
 		m_dowear(mtmp, true);

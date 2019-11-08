@@ -282,6 +282,19 @@ wormhitu (struct monst *worm) {
 			mattacku(worm);
 }
 
+/*  cutoff()
+ *
+ *  Remove the tail of a worm and adjust the hp of the worm.
+ */
+void cutoff(struct monst *worm, struct wseg *tail) {
+	if (flags.mon_moving)
+		pline("Part of the tail of %s is cut off.", mon_nam(worm));
+	else
+		pline("You cut part of the tail off of %s.", mon_nam(worm));
+	toss_wsegs(tail, true);
+	if (worm->mhp > 1) worm->mhp /= 2;
+}
+
 /*  cutworm()
  *
  *  Check for mon->wormno before calling this function!
@@ -314,7 +327,7 @@ int cutworm(struct monst *worm, xchar x, xchar y, struct obj *weap) {
 	/* Find the segment that was attacked. */
 	curr = wtails[wnum];
 
-	while ( (curr->wx != x) || (curr->wy != y) ) {
+	while ((curr->wx != x) || (curr->wy != y) ) {
 		curr = curr->nseg;
 		if (!curr) {
 			impossible("cutworm:  no segment at (%d,%d)", (int) x, (int) y);
@@ -344,17 +357,15 @@ int cutworm(struct monst *worm, xchar x, xchar y, struct obj *weap) {
 
 	/* Sometimes the tail end dies. */
 	if (rn2(3) || !(new_wnum = get_wormno())) {
-		if (flags.mon_moving)
-			pline("Part of the tail of %s is cut off.", mon_nam(worm));
-		else
-			pline("You cut part of the tail off of %s.", mon_nam(worm));
-		toss_wsegs(new_tail, true);
-		if (worm->mhp > 1) worm->mhp /= 2;
+		cutoff(worm, new_tail);
 		return 1;
 	}
 
 	remove_monster(x, y);		/* clone_mon puts new head here */
-	new_worm = clone_mon(worm, x, y);
+	if (!(new_worm = clone_mon(worm, x, y))) {
+		cutoff(worm, new_tail);
+		return 1;
+	}
 	new_worm->wormno = new_wnum;	/* affix new worm number */
 
 	/* Devalue the monster level of both halves of the worm. */
