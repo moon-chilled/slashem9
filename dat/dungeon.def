@@ -29,7 +29,9 @@ ALIGNMENT:      unaligned
 #   short stay in the mines pays off.  Slash moved the entrance
 #   deeper, penalizing many characters.  The balance patch restores
 #   the entrance to levels 2 to 4.
-BRANCH:		"The Gnomish Mines" @ (2, 3)
+
+# Now on level 3-4 -MC
+BRANCH:		"The Gnomish Mines" @ (3, 2)
 
 #
 #   New mall is on levels 5 to 6, 75% chance.
