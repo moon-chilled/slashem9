@@ -1726,9 +1726,7 @@ static int in_container(struct obj *obj) {
 		}
 	} else if (Is_mbag(current_container) && mbag_explodes(obj, 0)) {
 		/* explicitly mention what item is triggering the explosion */
-		pline(
-		        "As you put %s inside, you are blasted by a magical explosion!",
-		        doname(obj));
+		pline("As you put %s inside, you are blasted by a magical explosion!", doname(obj));
 		if (Has_contents(obj)) {
 			struct obj *otmp;
 			while((otmp = container_extract_indestructable(obj)))
@@ -1974,18 +1972,22 @@ int use_container(struct obj **objp, int held) {
 		for (curr = obj->cobj; curr; curr = otmp) {
 			otmp = curr->nobj;
 			if (!rn2(13) && !evades_destruction(curr)) {
+				obj_extract_self(curr);
+				obj->owt = weight(obj);
 				loss += mbag_item_gone(held, curr);
+				bot();
 				used = 1;
 			}
 		}
 	}
+	encumber_msg();
+
 	/* Count the number of contained objects. */
 	for (curr = obj->cobj; curr; curr = curr->nobj)
 		cnt++;
 
 	if (loss)	/* magic bag lost some shop goods */
 		pline("You owe %ld %s for lost merchandise.", loss, currency(loss));
-	obj->owt = weight(obj);	/* in case any items were lost */
 
 	if (!cnt)
 		sprintf(emptymsg, "%s is %sempty.", Yname2(obj),
@@ -2019,7 +2021,7 @@ int use_container(struct obj **objp, int held) {
 				t = in_or_out_menu(menuprompt, current_container,
 				                   outokay, inokay);
 				if (t <= 0) {
-					used = 0;
+					//used = 0;
 					goto containerdone;
 				}
 				loot_out = (t & 0x01) != 0;
@@ -2125,7 +2127,7 @@ ask_again2:
 
 containerdone:
 	*objp = current_container;	/* might have become null */
-	current_container = 0;		/* avoid hanging on to stale pointer */
+	current_container = NULL;	/* avoid hanging on to stale pointer */
 	return used;
 }
 
