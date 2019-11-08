@@ -62,6 +62,11 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
                const char *str)
 {
     WINDOW *win = curses_get_nhwin(INV_WIN);
+    int height, width;
+    (void)height;
+    getmaxyx(win, height, width);
+    width -= 2; // border
+    height -= 2;
 
     /* Figure out where to draw the line */
     int x = 0;
@@ -77,6 +82,7 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
         waddch(win, accelerator);
         wattroff(win, bold);
         wprintw(win, ") ");
+        width -= 3;
     }
 
     if (accelerator && glyph != NO_GLYPH && iflags.use_menu_glyphs) {
@@ -88,6 +94,7 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
         wattron(win, glyphclr);
         wprintw(win, "%c ", symbol);
         wattroff(win, glyphclr);
+        width -= 2;
     }
 
 
@@ -103,7 +110,7 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
     }
 
     wattron(win, attr);
-    wprintw(win, "%s", str);
+    wprintw(win, "%.*s", width, str);
     wattroff(win, attr);
     wclrtoeol(win);
 }
