@@ -197,6 +197,7 @@ struct instance_flags {
 	bool lan_mail;	/* mail is initialized */
 	bool lan_mail_fetched; /* mail is awaiting display */
 #endif
+	bool quiver_fired;
 	int graphics;
 	bool use_menu_glyphs; /* item glyphs in inventory */
 	/*

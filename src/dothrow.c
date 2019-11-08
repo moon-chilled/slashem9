@@ -323,7 +323,12 @@ int dofire(void) {
 	if (!uquiver) {
 		/* Don't automatically fill the quiver */
 		pline("You have no ammunition readied!");
-		return dothrow();
+		if (iflags.quiver_fired) {
+			dowieldquiver();
+		}
+		if (!uquiver) {
+			return dothrow();
+		}
 	}
 
 	/*

@@ -121,6 +121,7 @@ static struct Bool_Opt {
 	{"prayconfirm", &flags.prayconfirm, true, SET_IN_GAME},
 	{"preload_tiles", &iflags.wc_preload_tiles, true, DISP_IN_GAME},	/*WC*/
 	{"pushweapon", &flags.pushweapon, false, SET_IN_GAME},
+	{"quiver_fired", &iflags.quiver_fired, true, SET_IN_GAME},
 	{"radar", NULL, false, SET_IN_FILE},	/* OBSOLETE */
 	{"rest_on_space", &flags.rest_on_space, false, SET_IN_GAME},
 	{"safe_pet", &flags.safe_dog, true, SET_IN_GAME},
