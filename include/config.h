@@ -248,7 +248,6 @@ typedef long glyph_t;
  * bugs left here.
  */
 
-#define USER_DUNGEONCOLOR
 #define DUMPLOG_FILE "/tmp/%n-%d.txt"
 #define DUMPLOG_MSG_COUNT 50
 

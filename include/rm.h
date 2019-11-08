@@ -237,9 +237,7 @@ struct symdef {
 
 extern const struct symdef sym_desc[MAXPCHARS];
 extern glyph_t showsyms[MAXPCHARS];
-#ifdef USER_DUNGEONCOLOR
 extern uchar showsymcolors[MAXPCHARS];
-#endif
 
 /*
  * Graphics sets for display symbols

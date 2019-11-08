@@ -459,9 +459,7 @@ extern int def_char_to_monclass(char);
 extern void assign_graphics(const glyph_t *,int,int,int);
 extern void switch_graphics(int);
 extern void assign_rogue_graphics(boolean);
-#ifdef USER_DUNGEONCOLOR
 extern void assign_colors(uchar *,int,int,int);
-#endif
 
 /* ### dungeon.c ### */
 

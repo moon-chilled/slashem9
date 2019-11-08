@@ -1101,7 +1101,6 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 		add_menu_coloring(bufp);
 	} else if (match_varname(buf, "STATUSCOLOR", 11)) {
 		parse_status_color_options(bufp);
-#ifdef USER_DUNGEONCOLOR
 	} else if (match_varname(buf, "DUNGEONCOLOR", 10)) {
 		len = get_uchars(fp, buf, bufp, translate, false,
 		                 MAXDCHARS, "DUNGEONCOLOR");
@@ -1110,7 +1109,6 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 		len = get_uchars(fp, buf, bufp, translate, false,
 		                 MAXTCHARS, "TRAPCOLORS");
 		assign_colors(translate, len, MAXTCHARS, MAXDCHARS);
-#endif
 
 	} else if (match_varname(buf, "WIZKIT", 6)) {
 		strncpy(wizkit, bufp, WIZKIT_MAX-1);

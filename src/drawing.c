@@ -15,10 +15,7 @@
 glyph_t oc_syms[MAXOCLASSES] = DUMMY; /* the current object  display symbols */
 glyph_t showsyms[MAXPCHARS]  = DUMMY; /* the current feature display symbols */
 uchar monsyms[MAXMCLASSES] = DUMMY; /* the current monster display symbols */
-
-#ifdef USER_DUNGEONCOLOR
 uchar showsymcolors[MAXPCHARS] = DUMMY; /* current feature display colors */
-#endif
 
 /* Default object class symbols.  See objclass.h. */
 const glyph_t def_oc_syms[MAXOCLASSES] = {
@@ -656,7 +653,6 @@ void assign_graphics(const glyph_t *graph_chars, int glth, int maxlen, int offse
 	}
 }
 
-#ifdef USER_DUNGEONCOLOR
 void assign_colors(uchar *graph_colors, int glth, int maxlen, int offset) {
 	int i;
 
@@ -666,7 +662,6 @@ void assign_colors(uchar *graph_colors, int glth, int maxlen, int offset) {
 		         graph_colors[i] : sym_desc[i+offset].color);
 	}
 }
-#endif
 
 void switch_graphics(int graphics) {
 	switch (graphics) {

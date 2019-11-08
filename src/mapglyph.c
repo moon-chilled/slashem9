@@ -24,11 +24,7 @@ int explcolors[] = {
 #endif
 
 #define zap_color(n)  color = iflags.use_color ? zapcolors[n] : NO_COLOR
-#ifndef USER_DUNGEONCOLOR
-#define cmap_color(n) color = iflags.use_color ? sym_desc[n].color : NO_COLOR
-#else
 #define cmap_color(n) color = iflags.use_color ? showsymcolors[n] : NO_COLOR
-#endif
 #define obj_color(n)  color = iflags.use_color ? objects[n].oc_color : NO_COLOR
 #define mon_color(n)  color = iflags.use_color ? mons[n].mcolor : NO_COLOR
 #define invis_color(n) color = NO_COLOR
@@ -110,22 +106,15 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 		} else
 			/* provide a visible difference if normal and lit corridor
 			 * use the same symbol */
-			if (iflags.use_color &&
-#ifndef USER_DUNGEONCOLOR
-			                offset == S_litcorr && ch == showsyms[S_corr])
-				color = CLR_WHITE;
-#else
-			                offset == S_litcorr && ch == showsyms[S_corr] &&
-			                showsymcolors[S_corr] == showsymcolors[S_litcorr]) {
+			if (iflags.use_color && offset == S_litcorr && ch == showsyms[S_corr] && showsymcolors[S_corr] == showsymcolors[S_litcorr]) {
 				if (showsymcolors[S_corr] != CLR_WHITE) {
 					color = showsymcolors[S_litcorr] = CLR_WHITE;
 				} else {
 					color = showsymcolors[S_litcorr] = CLR_GRAY;
 				}
-			}
-#endif /* USER_DUNGEONCOLOR */
-			else
+			} else {
 				cmap_color(offset);
+			}
 	} else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
 		if (On_stairs(x,y) && levl[x][y].seenv) special |= MG_STAIRS;
 
