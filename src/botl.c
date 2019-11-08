@@ -70,28 +70,6 @@ struct color_option percentage_color_of(int value, int max, const struct percent
 	return percentage_color_of(value, max, color_options->next);
 }
 
-void start_color_option(struct color_option color_option) {
-#ifdef TTY_GRAPHICS
-	int i;
-	if (color_option.color != NO_COLOR)
-		term_start_color(color_option.color);
-	for (i = 0; (1 << i) <= color_option.attr_bits; ++i)
-		if (i != ATR_NONE && color_option.attr_bits & (1 << i))
-			term_start_attr(i);
-#endif  /* TTY_GRAPHICS */
-}
-
-void end_color_option(struct color_option color_option) {
-#ifdef TTY_GRAPHICS
-	int i;
-	if (color_option.color != NO_COLOR)
-		term_end_color();
-	for (i = 0; (1 << i) <= color_option.attr_bits; ++i)
-		if (i != ATR_NONE && color_option.attr_bits & (1 << i))
-			term_end_attr(i);
-#endif  /* TTY_GRAPHICS */
-}
-
 void add_colored_text_match(const char *text, const char *match, nhstr *newbot) {
 	if ((*text == '\0') || (*match == '\0')) return;
 
@@ -250,7 +228,7 @@ nhstr *bot1str() {
 
 	if (iflags.hitpointbar) {
 		char *pltitle = botl_player();
-		usize bar_length = strlen(pltitle) - 1;
+		usize bar_length = strlen(pltitle);
 		usize filledbar;
 		if (uhp() < 0) {
 			filledbar = bar_length; //highlight the whole thing
@@ -281,7 +259,7 @@ nhstr *bot1str() {
 void bot1() {
 	nhstr *newbot1 = bot1str();
 	curs(WIN_STATUS, 1, 0);
-	putstr(WIN_STATUS, 0, nhs2cstr_tmp(newbot1));
+	putnstr(WIN_STATUS, 0, newbot1);
 	del_nhs(newbot1);
 }
 
@@ -412,7 +390,7 @@ static void bot2(void) {
 	nhstr *newbot2 = bot2str();
 	curs(WIN_STATUS, 1, 1);
 
-	putstr(WIN_STATUS, 0, nhs2cstr_tmp(newbot2));
+	putnstr(WIN_STATUS, 0, newbot2);
 	del_nhs(newbot2);
 }
 

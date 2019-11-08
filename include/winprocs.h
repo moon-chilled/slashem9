@@ -22,6 +22,7 @@ struct window_procs {
 	void (*win_destroy_nhwindow)(winid);
 	void (*win_curs)(winid,int,int);
 	void (*win_putstr)(winid, int, const char *);
+	void (*win_putnstr)(winid, int, nhstr*);
 	void (*win_display_file)(const char *, bool);
 	void (*win_start_menu)(winid);
 	void (*win_add_menu)(winid,int,const anything *,
@@ -89,6 +90,7 @@ extern struct window_procs windowprocs;
 #define destroy_nhwindow (*windowprocs.win_destroy_nhwindow)
 #define curs (*windowprocs.win_curs)
 #define putstr (*windowprocs.win_putstr)
+#define putnstr (*windowprocs.win_putnstr)
 #define display_file (*windowprocs.win_display_file)
 #define start_menu (*windowprocs.win_start_menu)
 #define add_menu (*windowprocs.win_add_menu)

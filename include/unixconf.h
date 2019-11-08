@@ -6,6 +6,8 @@
 #ifndef UNIXCONF_H
 #define UNIXCONF_H
 
+#include "config.h"
+
 
 /*
  * Some include files are in a different place under SYSV
@@ -104,7 +106,7 @@
  */
 /* #define TIMED_DELAY */	/* usleep() */
 
-#  define VIDEOSHADES
+# define VIDEOSHADES
 #endif
 
 /*

@@ -1,6 +1,7 @@
-#include "color.h"
 #include "hack.h"
 #include "config.h"
+#include "unixconf.h"
+#include "color.h"
 #include "extern.h"
 #include "nhstr.h"
 
@@ -44,10 +45,10 @@ nhstr *nhscatz(nhstr *str, char *cat) {
 nhstr *nhscopy(nhstr *str) {
 	nhstr *ret = new(nhstr);
 	ret->str = new(glyph_t, str->len);
-	memcpy(ret->str, str->str, str->len * sizeof(glyph_t));
+	memmove(ret->str, str->str, str->len * sizeof(glyph_t));
 
 	ret->colouration = new(int, str->len);
-	memcpy(ret->colouration, str->colouration, str->len * sizeof(glyph_t));
+	memmove(ret->colouration, str->colouration, str->len * sizeof(int));
 	ret->len = str->len;
 
 	return ret;
@@ -145,6 +146,19 @@ char *nhs2cstr_tmp(nhstr *str) {
 	for (usize i = 0; i < str->len; i++) {
 		strcat(ret, utf8_tmpstr(str->str[i]));
 	}
+
+	return ret;
+}
+
+// doesn't do unicode conversion
+extern char *nhs2cstr_trunc_tmp(nhstr *str) {
+	static char ret[BUFSZ];
+
+	usize i;
+	for (i = 0; i < str->len; i++) {
+		ret[i] = str->str[i];
+	}
+	ret[i+1] = 0;
 
 	return ret;
 }

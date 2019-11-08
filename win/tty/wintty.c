@@ -54,6 +54,7 @@ struct window_procs tty_procs = {
 	tty_destroy_nhwindow,
 	tty_curs,
 	tty_putstr,
+	tty_putnstr,
 	tty_display_file,
 	tty_start_menu,
 	tty_add_menu,
@@ -144,7 +145,7 @@ static void process_menu_window(winid,struct WinDesc *);
 static void process_text_window(winid,struct WinDesc *);
 static tty_menu_item *reverse(tty_menu_item *);
 const char * compress_str(const char *);
-static void tty_putsym(winid, int, int, char);
+static void tty_putsym(winid, int, int, glyph_t);
 static char *copy_of(const char *);
 static void bail(const char *);	/* __attribute__((noreturn)) */
 static int tty_role_select(char *, char *);
@@ -744,6 +745,7 @@ static int tty_race_select(char * pbuf, char * plbuf) {
 	return k;
 #endif
 }
+
 
 /*
  * plname is filled either by an option (-u Player  or  -uPlayer) or
@@ -1777,7 +1779,7 @@ void tty_curs(winid window, int x, int y) {
 	ttyDisplay->cury = y;
 }
 
-static void tty_putsym(winid window, int x, int y, char ch) {
+static void tty_putsym(winid window, int x, int y, glyph_t ch) {
 	struct WinDesc *cw = 0;
 
 	if (window == WIN_ERR || (cw = wins[window]) == NULL)
@@ -1822,6 +1824,84 @@ const char *compress_str(const char *str) {
 	}
 
 	return cbuf;
+}
+
+void tty_putnstr(winid window, int attr, nhstr *str) {
+	struct WinDesc *cw = 0;
+	nhstr *nb = nhscopy(str);
+
+	/* Assume there's a real problem if the window is missing --
+	 * probably a panic message
+	 */
+	if(window == WIN_ERR || (cw = wins[window]) == NULL) {
+		tty_raw_print(nhs2cstr_tmp(str));
+		return;
+	}
+
+	if(str == NULL || ((cw->flags & WIN_CANCELLED) && (cw->type != NHW_MESSAGE)))
+		return;
+
+	/*
+	if(cw->type != NHW_MESSAGE)
+		nb = compress_str(nb);
+		*/
+
+	ttyDisplay->lastwin = window;
+
+	switch(cw->type) {
+	case NHW_STATUS: {
+		int j;
+		char *ob = &cw->data[cw->cury][j = cw->curx];
+		if (flags.botlx) *ob = 0;
+
+		int fx = 0;
+		(void)fx; // working around a bizarre bug where both clang and gcc warn fx is unused
+		for (int i = cw->curx, fx = i + 1; true; i++, fx++) {
+			if (i >= nb->len) {
+				if(*ob || flags.botlx) {
+					/* last char printed may be in middle of line */
+					tty_curs(WIN_STATUS, fx, cw->cury);
+					cl_end();
+				}
+				break;
+			}
+
+			// temporary hack: always redraw every tile that has colour
+			if (*ob != nb->str[i] || nb->colouration[i] != NO_COLOR) {
+				if (nb->colouration[i] != NO_COLOR) { term_start_color(nb->colouration[i]); }
+				tty_putsym(WIN_STATUS, fx, cw->cury, nb->str[i]);
+				if (nb->colouration[i] != NO_COLOR) term_end_color();
+			}
+			if (*ob) ob++;
+
+			// reached EOL
+			if (fx >= cw->cols) {
+				// out of lines?
+				if (cw->cury >= cw->rows-1) {
+					// truncate
+					break;
+				}
+
+				// otherwise, wrap
+				fx = 0;
+				cw->cury++;
+			}
+		}
+
+		strncpy(&cw->data[cw->cury][j], nhs2cstr_trunc_tmp(nb), cw->cols - j - 1);
+		cw->data[cw->cury][cw->cols-1] = '\0'; /* null terminate */
+		/* ALI - Clear third line if present and unused */
+		if (cw->cury == 1 && cw->cury < (cw->maxrow - 1)) {
+			cw->data[cw->cury + 1][0] = '\0';
+			tty_curs(WIN_STATUS, 1, cw->cury + 1);
+			cl_end();
+		}
+		cw->cury = (cw->cury+1) % 2;
+		cw->curx = 0;
+		break;
+	}
+	default: impossible("Can't tty_putnstr a %d yet", cw->type);
+	}
 }
 
 void tty_putstr(winid window, int attr, const char *str) {

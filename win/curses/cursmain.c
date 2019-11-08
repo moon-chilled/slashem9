@@ -30,6 +30,7 @@ struct window_procs curses_procs = {
     curses_destroy_nhwindow,
     curses_curs,
     curses_putstr,
+    curses_putnstr,
     curses_display_file,
     curses_start_menu,
     curses_add_menu,
@@ -335,6 +336,10 @@ curses_putstr(winid wid, int attr, const char *text)
 
     /* We need to convert NetHack attributes to curses attributes */
     curses_puts(wid, curses_attr, text);
+}
+
+void curses_putnstr(winid wid, int attr, nhstr *text) {
+    curses_putstr(wid, attr, nhs2cstr_tmp(text));
 }
 
 /* Display the file named str.  Complain about missing files

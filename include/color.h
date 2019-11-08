@@ -5,6 +5,8 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+#include "unixconf.h"
+
 /*
  * The color scheme used is tailored for an IBM PC.  It consists of the
  * standard 8 colors, folowed by their bright counterparts.  There are
@@ -12,10 +14,10 @@
  * much, so it is used as the "default" foreground color of the screen.
  */
 
-#ifndef VIDEOSHADES
-# define CLR_BLACK		0
-#else
+#ifdef VIDEOSHADES
 # define CLR_BLACK		8
+#else
+# define CLR_BLACK		0
 #endif
 #define CLR_RED			1
 #define CLR_GREEN		2
@@ -24,10 +26,10 @@
 #define CLR_MAGENTA		5
 #define CLR_CYAN		6
 #define CLR_GRAY		7 /* low-intensity white */
-#ifndef VIDEOSHADES
-# define NO_COLOR		8
-#else
+#ifdef VIDEOSHADES
 # define NO_COLOR		0
+#else
+# define NO_COLOR		8
 #endif
 #define CLR_ORANGE		9
 #define CLR_BRIGHT_GREEN	10

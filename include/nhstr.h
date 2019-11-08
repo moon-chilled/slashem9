@@ -39,7 +39,8 @@ extern nhstr *nhscat(nhstr *str, nhstr *cat);
 extern nhstr *nhscatfc(nhstr *str, int colour, char *cat, ...);
 extern nhstr *nhscatf(nhstr *str, char *cat, ...);
 
-extern char *nhs2cstr_tmp(nhstr *str/*, usize *olen*/);
+extern char *nhs2cstr_tmp(nhstr *str);
+extern char *nhs2cstr_trunc_tmp(nhstr *str); // doesn't do unicode conversion
 extern nhstr *nhstrim(nhstr *str, usize maxlen);
 extern nhstr *nhslice(nhstr *str, usize new_start);
 

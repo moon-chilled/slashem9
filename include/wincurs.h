@@ -86,6 +86,7 @@ extern void curses_destroy_nhwindow(winid wid);
 extern void curses_curs(winid wid, int x, int y);
 
 extern void curses_putstr(winid wid, int attr, const char *text);
+extern void curses_putnstr(winid wid, int attr, nhstr *text);
 
 extern void curses_display_file(const char *filename, bool must_exist);
 
