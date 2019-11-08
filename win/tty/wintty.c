@@ -1871,10 +1871,6 @@ void tty_putstr(winid window, int attr, const char *str) {
 			if(cw->cury < (cw->maxrow - 1))
 				for(k = CO - 1; k && str[k] != ' ';)
 					k--;
-			if(!k || (int)strlen(str + k + 1) >= CO) {
-				str = shorten_bot2(str, CO);
-				k = 0;
-			}
 		}
 
 		nb = str;

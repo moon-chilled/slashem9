@@ -154,13 +154,6 @@ extern void bot(void);
 extern nhstr *bot1str(void);
 extern nhstr *bot2str(void);
 
-#if 0
-extern const char * shorten_bot1(const char *, int);
-#endif
-#ifdef TTY_GRAPHICS
-extern const char * shorten_bot2(const char *, uint);
-#endif
-
 /* ### cmd.c ### */
 
 extern char randomkey(void);

@@ -148,3 +148,37 @@ char *nhs2cstr_tmp(nhstr *str) {
 
 	return ret;
 }
+
+nhstr *nhstrim(nhstr *str, usize maxlen) {
+	if (maxlen < str->len) {
+		str->len = maxlen;
+		str->str = realloc(str->str, str->len * sizeof(glyph_t));
+		str->colouration = realloc(str->str, str->len * sizeof(int));
+	}
+
+	return str;
+}
+
+nhstr *nhslice(nhstr *str, usize new_start) {
+	if (new_start < str->len) {
+		memmove(str->str, (str->str + new_start), (str->len - new_start) * sizeof(glyph_t));
+		str->str = realloc(str->str, (str->len - new_start) * sizeof(glyph_t));
+
+		memmove(str->colouration, (str->colouration + new_start), (str->len - new_start) * sizeof(int));
+		str->colouration = realloc(str->colouration, (str->len - new_start) * sizeof(int));
+
+		str->len -= new_start;
+	}
+
+	return str;
+}
+
+isize nhsindex(nhstr *str, glyph_t ch) {
+	for (usize i = 0; i < str->len; i++) {
+		if (str->str[i] == ch) {
+			return i;
+		}
+	}
+
+	return -1; // no match
+}

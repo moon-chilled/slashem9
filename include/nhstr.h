@@ -23,6 +23,10 @@ typedef struct {
  * nhstr, then it should be suffixed with n instead of z.
  */
 
+
+// All function do in-place modification of the string they're passed; they
+// return the same string for convenience.  Only exception is nhscopy.
+
 extern nhstr *new_nhs(void);
 extern void del_nhs(nhstr *str);
 extern nhstr *nhscatznc(nhstr *str, char *cat, usize catlen, int colour);
@@ -34,7 +38,12 @@ extern nhstr *nhscat(nhstr *str, nhstr *cat);
 //extern nhstr *nhscatfc_v(nhstr *str, int colour, char *cat, va_list the_args);
 extern nhstr *nhscatfc(nhstr *str, int colour, char *cat, ...);
 extern nhstr *nhscatf(nhstr *str, char *cat, ...);
-char *nhs2cstr_tmp(nhstr *str/*, usize *olen*/);
+
+extern char *nhs2cstr_tmp(nhstr *str/*, usize *olen*/);
+extern nhstr *nhstrim(nhstr *str, usize maxlen);
+extern nhstr *nhslice(nhstr *str, usize new_start);
+
+isize nhsindex(nhstr *str, glyph_t ch);
 
 
 #endif

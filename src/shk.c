@@ -3466,9 +3466,9 @@ void pay_for_damage(const char *dmgstr, boolean cant_mollify) {
 	boolean dugwall = !strcmp(dmgstr, "dig into") ||	/* wand */
 	                  !strcmp(dmgstr, "damage");		/* pick-axe */
 	struct damage *tmp_dam, *appear_here = 0;
-	/* any number >= (80*80)+(24*24) would do, actually */
+	/* any number >= (80*80)+(25*25) would do, actually */
 	long cost_of_damage = 0L;
-	uint nearest_shk = 7000, nearest_damage = 7000;
+	uint nearest_shk = 8000, nearest_damage = 8000;
 	int picks = 0;
 
 	for (tmp_dam = level.damagelist;

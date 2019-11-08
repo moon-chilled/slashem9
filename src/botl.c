@@ -447,13 +447,14 @@ const char *shorten_bot1(const char *str, int len) {
 
 /* ALI -- Shorten bot2 to fit in len spaces.
  * Currently only used by tty port
- * After the forth attempt the longest practical bot2 becomes:
+ * After the fourth attempt the longest practical bot2 becomes:
  *      HP:700(700) Pw:111(111) AC:-127 Exp:30
  *      Sat Lev Cnf FPs Ill Bnd Stn Hal Slm Old
  * -- or just under 80 characters
  */
 #ifdef TTY_GRAPHICS
-const char *shorten_bot2(const char *str, uint len) {
+#if 0
+void shorten_bot2(nhstr **str, usize len) {
 	nhstr *s;
 	for (bot2_abbrev = 1; bot2_abbrev <= 4; bot2_abbrev++) {
 		s = bot2str();
@@ -469,6 +470,7 @@ const char *shorten_bot2(const char *str, uint len) {
 	del_nhs(s);
 	return ret;
 }
+#endif
 #endif /* TTY_GRAPHICS */
 
 static void (*raw_handler)();
