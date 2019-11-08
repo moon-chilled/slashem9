@@ -106,21 +106,49 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 		} else
 			/* provide a visible difference if normal and lit corridor
 			 * use the same symbol */
-			if (iflags.use_color && offset == S_litcorr && ch == showsyms[S_corr] && showsymcolors[S_corr] == showsymcolors[S_litcorr]) {
+			if (offset == S_litcorr && ch == showsyms[S_corr] && showsymcolors[S_corr] == showsymcolors[S_litcorr]) {
 				if (showsymcolors[S_corr] != CLR_WHITE) {
 					color = showsymcolors[S_litcorr] = CLR_WHITE;
 				} else {
 					color = showsymcolors[S_litcorr] = CLR_GRAY;
 				}
 			} else {
-				cmap_color(offset);
+				/* Special colours for special dungeon areas */
+				if (offset >= S_vwall && offset <= S_hcdoor) {
+					if (*in_rooms(x,y,BEEHIVE))
+						color = CLR_YELLOW;
+					else if (In_W_tower(x, y, &u.uz))
+						color = CLR_MAGENTA;
+					else if (In_mines(&u.uz) && !Is_minetn_level(&u.uz))
+						color = CLR_BROWN;
+					else if (In_hell(&u.uz) && !Is_valley(&u.uz))
+						color =  CLR_RED;
+					else if (Is_astralevel(&u.uz))
+						color = CLR_WHITE;
+				} else if ((offset == S_room) || (offset == S_darkroom)) {
+					if (*in_rooms(x,y,BEEHIVE)) {
+						color = (offset == S_room) ? CLR_YELLOW : CLR_BROWN;
+					} else if (Is_juiblex_level(&u.uz)) {
+						color = (offset == S_room) ? CLR_BRIGHT_GREEN : CLR_GREEN;
+					} else if (In_hell(&u.uz) && !In_W_tower(x, y, &u.uz) && offset == S_room && cansee(x, y))
+						color = CLR_ORANGE;
+				} else if (offset == S_altar) {
+					if (Is_astralevel(&u.uz)) color = CLR_BRIGHT_MAGENTA;
+					else switch ((aligntyp)Amask2align(levl[x][y].altarmask & AM_MASK)) {
+						case A_LAWFUL: color = CLR_WHITE; break;
+						case A_NEUTRAL: color = CLR_GRAY; break;
+						case A_CHAOTIC: color = CLR_BLACK; break;
+						default: color = CLR_RED; break;
+					}
+				}
+				if (color == NO_COLOR) cmap_color(offset);
 			}
 	} else if ((offset = (glyph - GLYPH_OBJ_OFF)) >= 0) {	/* object */
 		if (On_stairs(x,y) && levl[x][y].seenv) special |= MG_STAIRS;
 
 		ch = get_objsym(offset);
 
-		if (Is_rogue_level(&u.uz) && iflags.use_color) {
+		if (Is_rogue_level(&u.uz)) {
 			switch(objects[offset].oc_class) {
 			case COIN_CLASS:
 				color = CLR_YELLOW;
@@ -147,7 +175,7 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 			/* This currently implies that the hero is here -- monsters */
 			/* don't ride (yet...).  Should we set it to yellow like in */
 			/* the monster case below?  There is no equivalent in rogue. */
-			color = NO_COLOR;	/* no need to check iflags.use_color */
+			color = NO_COLOR;
 		} else {
 			mon_color(offset);
 		}
@@ -155,7 +183,7 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 	} else if ((offset = (glyph - GLYPH_BODY_OFF)) >= 0) {	/* a corpse */
 		if (On_stairs(x,y) && levl[x][y].seenv) special |= MG_STAIRS;
 		ch = get_objsym(CORPSE);
-		if (Is_rogue_level(&u.uz) && iflags.use_color)
+		if (Is_rogue_level(&u.uz))
 			color = CLR_RED;
 		else
 			mon_color(offset);
@@ -169,7 +197,7 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 	} else if ((offset = (glyph - GLYPH_DETECT_OFF)) >= 0) {	/* mon detect */
 		ch = get_monsym(offset);
 		if (Is_rogue_level(&u.uz))
-			color = NO_COLOR;	/* no need to check iflags.use_color */
+			color = NO_COLOR;
 		else
 			mon_color(offset);
 		/* Disabled for now; anyone want to get reverse video to work? */
@@ -179,7 +207,7 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 		ch = DEF_INVISIBLE;
 
 		if (Is_rogue_level(&u.uz))
-			color = NO_COLOR;	/* no need to check iflags.use_color */
+			color = NO_COLOR;
 		else
 			invis_color(offset);
 
@@ -187,13 +215,13 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 	} else if ((offset = (glyph - GLYPH_PET_OFF)) >= 0) {	/* a pet */
 		ch = get_monsym(offset);
 		if (Is_rogue_level(&u.uz))
-			color = NO_COLOR;	/* no need to check iflags.use_color */
+			color = NO_COLOR;
 		else
 			pet_color(offset);
 		special |= MG_PET;
 	} else {							/* a monster */
 		ch = get_monsym(glyph);
-		if (Is_rogue_level(&u.uz) && iflags.use_color) {
+		if (Is_rogue_level(&u.uz)) {
 			if (x == u.ux && y == u.uy)
 				/* actually player should be yellow-on-gray if in a corridor */
 				color = CLR_YELLOW;
@@ -202,14 +230,17 @@ void mapglyph(int glyph, glyph_t *ochar, int *ocolor, unsigned *ospecial, int x,
 		} else {
 			mon_color(glyph);
 			/* special case the hero for `showrace' option */
-			if (iflags.use_color && x == u.ux && y == u.uy &&
-			                iflags.showrace && !Upolyd)
+			if (x == u.ux && y == u.uy && iflags.showrace && !Upolyd)
 				color = HI_DOMESTIC;
 		}
 	}
 
-	/* Turn off color if no color defined, or rogue level w/o fancy graphics. */
-	if (!has_color(color) || (Is_rogue_level(&u.uz) && (iflags.graphics == ASCII_GRAPHICS)))
+	if (iflags.use_color && Is_valley(&u.uz) && color != CLR_BLACK) {
+		color = (color < 8) ? CLR_WHITE : CLR_GRAY;
+	}
+
+	/* Turn off color if no color defined, color is off, or rogue level w/o fancy graphics. */
+	if (!has_color(color) || (Is_rogue_level(&u.uz) && (iflags.graphics == ASCII_GRAPHICS)) || !iflags.use_color)
 		color = NO_COLOR;
 
 	*ochar = ch;

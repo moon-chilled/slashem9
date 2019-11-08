@@ -41,7 +41,8 @@ extern struct dgn_topology {		/* special dungeon levels for speed */
 	d_level	d_bigroom_level;	/* unused */
 	d_level	d_rogue_level;
 	d_level	d_medusa_level;
-	d_level     d_mineend_level;
+	d_level d_minetn_level;
+	d_level d_mineend_level;
 	d_level	d_stronghold_level;
 	d_level	d_valley_level;
 	d_level	d_wiz1_level;
@@ -50,10 +51,10 @@ extern struct dgn_topology {		/* special dungeon levels for speed */
 	d_level	d_juiblex_level;
 	d_level	d_orcus_level;
 	d_level	d_baalzebub_level;	/* unused */
-	d_level     d_demogorgon_level;      /* unused */
-	d_level     d_dispater_level;      /* unused */
-	d_level     d_geryon_level;      /* unused */
-	d_level     d_yeenoghu_level;      /* unused */
+	d_level d_demogorgon_level;      /* unused */
+	d_level d_dispater_level;      /* unused */
+	d_level d_geryon_level;      /* unused */
+	d_level d_yeenoghu_level;      /* unused */
 	d_level	d_asmodeus_level;	/* unused */
 	d_level	d_portal_level;		/* only in goto_level() [do.c] */
 	d_level	d_sanctum_level;
@@ -65,14 +66,14 @@ extern struct dgn_topology {		/* special dungeon levels for speed */
 	xchar	d_tower_dnum;
 	xchar	d_sokoban_dnum;
 	xchar	d_mines_dnum, d_quest_dnum;
-	xchar       d_spiders_dnum;
+	xchar   d_spiders_dnum;
 	d_level	d_lawful_quest_level;
 	d_level	d_neutral_quest_level;
 	d_level	d_chaotic_quest_level;
 	d_level	d_qstart_level, d_qlocate_level, d_nemesis_level;
 	d_level	d_knox_level;
 	d_level	d_sokoend_level;
-	d_level     d_blackmarket_level;
+	d_level d_blackmarket_level;
 } dungeon_topology;
 /* macros for accesing the dungeon levels by their old names */
 #define oracle_level		(dungeon_topology.d_oracle_level)
@@ -81,17 +82,18 @@ extern struct dgn_topology {		/* special dungeon levels for speed */
 #define medusa_level		(dungeon_topology.d_medusa_level)
 #define stronghold_level	(dungeon_topology.d_stronghold_level)
 #define valley_level		(dungeon_topology.d_valley_level)
-#define mineend_level           (dungeon_topology.d_mineend_level)
+#define minetn_level		(dungeon_topology.d_minetn_level)
+#define mineend_level		(dungeon_topology.d_mineend_level)
 #define wiz1_level		(dungeon_topology.d_wiz1_level)
 #define wiz2_level		(dungeon_topology.d_wiz2_level)
 #define wiz3_level		(dungeon_topology.d_wiz3_level)
 #define juiblex_level		(dungeon_topology.d_juiblex_level)
 #define orcus_level		(dungeon_topology.d_orcus_level)
 #define baalzebub_level		(dungeon_topology.d_baalzebub_level)
-#define yeenoghu_level          (dungeon_topology.d_yeenoghu_level)
-#define geryon_level            (dungeon_topology.d_geryon_level)
-#define dispater_level          (dungeon_topology.d_dispater_level)
-#define demogorgon_level        (dungeon_topology.d_demogorgon_level)
+#define yeenoghu_level		(dungeon_topology.d_yeenoghu_level)
+#define geryon_level		(dungeon_topology.d_geryon_level)
+#define dispater_level		(dungeon_topology.d_dispater_level)
+#define demogorgon_level	(dungeon_topology.d_demogorgon_level)
 #define asmodeus_level		(dungeon_topology.d_asmodeus_level)
 #define portal_level		(dungeon_topology.d_portal_level)
 #define sanctum_level		(dungeon_topology.d_sanctum_level)
@@ -108,7 +110,6 @@ extern struct dgn_topology {		/* special dungeon levels for speed */
 #define qlocate_level		(dungeon_topology.d_qlocate_level)
 #define nemesis_level		(dungeon_topology.d_nemesis_level)
 #define knox_level		(dungeon_topology.d_knox_level)
-#define mineend_level		(dungeon_topology.d_mineend_level)
 #define sokoend_level		(dungeon_topology.d_sokoend_level)
 #define spiders_dnum		(dungeon_topology.d_spiders_dnum)
 #define lawful_quest_level	(dungeon_topology.d_lawful_quest_level)

@@ -2024,6 +2024,7 @@ void check_special_room(boolean newlev) {
 
 		/* Did we just enter some other special room? */
 		/* vault.c insists that a vault remain a VAULT,
+		 * BEEHIVEs have special colouration,
 		 * and temples should remain TEMPLEs,
 		 * but everything else gives a message only the first time */
 		switch (rt) {
@@ -2061,7 +2062,10 @@ void check_special_room(boolean newlev) {
 				pline("You have an uncanny feeling...");
 			break;
 		case BEEHIVE:
-			pline("You enter a giant beehive!");
+			if (monstinroom(&mons[PM_QUEEN_BEE], roomno)) {
+				pline("You enter a giant beehive!");
+			}
+			rt = 0;
 			break;
 		case LEMUREPIT:
 			pline("You enter a pit of screaming lemures!");
