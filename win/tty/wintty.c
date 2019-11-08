@@ -988,16 +988,23 @@ static void free_window_info(struct WinDesc *cw, bool free_data) {
 	if (cw->data) {
 		if (cw == wins[WIN_MESSAGE] && cw->rows > cw->maxrow)
 			cw->maxrow = cw->rows;		/* topl data */
-		for(i=0; i<cw->maxrow; i++)
+		for(i=0; i<cw->maxrow; i++) {
 			if(cw->data[i]) {
 				free(cw->data[i]);
 				cw->data[i] = NULL;
-				if (cw->datlen) cw->datlen[i] = 0;
 			}
+			if (cw->clr_data[i]) {
+				free(cw->clr_data[i]);
+				cw->clr_data[i] = NULL;
+			}
+			if (cw->datlen) cw->datlen[i] = 0;
+		}
 		if (free_data) {
 			free(cw->data);
 			cw->data = NULL;
 			if (cw->datlen) free(cw->datlen);
+			free(cw->clr_data);
+			cw->clr_data = NULL;
 			cw->datlen = NULL;
 			cw->rows = 0;
 		}
@@ -1829,13 +1836,12 @@ const char *compress_str(const char *str) {
 
 void tty_putnstr(winid window, int attr, nhstr *str) {
 	struct WinDesc *cw = 0;
-	nhstr *nb = nhscopy(str);
 
 	/* Assume there's a real problem if the window is missing --
 	 * probably a panic message
 	 */
 	if(window == WIN_ERR || (cw = wins[window]) == NULL) {
-		tty_raw_print(nhs2cstr_tmp(str));
+		tty_raw_print(nhs2cstr_trunc_tmp(str));
 		return;
 	}
 
@@ -1846,6 +1852,7 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 	if(cw->type != NHW_MESSAGE)
 		nb = compress_str(nb);
 		*/
+	nhstr *nb = nhscopy(str);
 
 	ttyDisplay->lastwin = window;
 
@@ -1887,7 +1894,8 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 			}
 		}
 
-		strncpy(&cw->data[cw->cury][stash_curx], nhs2cstr_trunc_tmp(nb), cw->cols - stash_curx - 1);
+		strncpy(&cw->data[cw->cury][stash_curx], nhs2cstr_trunc_tmp(nb), min(cw->cols - stash_curx - 1, nb->len));
+		memcpy(&cw->clr_data[cw->cury][stash_curx], nb->colouration, min(cw->cols - stash_curx - 1, nb->len) * sizeof(int));
 		cw->data[cw->cury][cw->cols-1] = '\0'; /* null terminate */
 		/* ALI - Clear third line if present and unused */
 		if (cw->cury == 1 && cw->cury < (cw->maxrow - 1)) {
@@ -1901,6 +1909,8 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 	}
 	default: impossible("Can't tty_putnstr a %d yet", cw->type);
 	}
+
+	del_nhs(nb);
 }
 
 void tty_putstr(winid window, int attr, const char *str) {
@@ -2037,32 +2047,50 @@ void tty_putstr(winid window, int attr, const char *str) {
 			/* not a menu, so save memory and output 1 page at a time */
 			cw->maxcol = ttyDisplay->cols; /* force full-screen mode */
 			tty_display_nhwindow(window, true);
-			for(i=0; i<cw->maxrow; i++)
-				if(cw->data[i]) {
+			for(i=0; i<cw->maxrow; i++) {
+				if (cw->data[i]) {
 					free(cw->data[i]);
-					cw->data[i] = 0;
+					cw->data[i] = NULL;
 				}
+				if (cw->clr_data[i]) {
+					free(cw->clr_data[i]);
+					cw->clr_data[i] = NULL;
+				}
+			}
 			cw->maxrow = cw->cury = 0;
 		}
 		/* always grows one at a time, but alloc 12 at a time */
 		if(cw->cury >= cw->rows) {
 			char **tmp;
+			int **ctmp;
 
 			cw->rows += 12;
-			tmp = (char **) alloc(sizeof(char *) * (unsigned)cw->rows);
-			for(i=0; i<cw->maxrow; i++)
+			tmp = alloc(sizeof(char *) * (unsigned)cw->rows);
+			ctmp = alloc(sizeof(int *) * (unsigned)cw->rows);
+			for(i=0; i<cw->maxrow; i++) {
 				tmp[i] = cw->data[i];
-			if(cw->data)
+				ctmp[i] = cw->clr_data[i];
+			}
+			if (cw->data)
 				free(cw->data);
+			if (cw->clr_data)
+				free(cw->clr_data);
 			cw->data = tmp;
+			cw->clr_data = ctmp;
 
-			for(i=cw->maxrow; i<cw->rows; i++)
-				cw->data[i] = 0;
+			for (i=cw->maxrow; i < cw->rows; i++) {
+				cw->data[i] = NULL;
+				cw->clr_data[i] = NULL;
+			}
 		}
-		if(cw->data[cw->cury])
+		if (cw->data[cw->cury])
 			free(cw->data[cw->cury]);
+		if (cw->clr_data[cw->cury])
+			free(cw->clr_data[cw->cury]);
+
 		n0 = strlen(str) + 1;
 		ob = cw->data[cw->cury] = alloc((unsigned)n0 + 1);
+		cw->clr_data[cw->cury] = new(int, n0 + 1);
 		*ob++ = (char)(attr + 1);	/* avoid nuls, for convenience */
 		strcpy(ob, str);
 
