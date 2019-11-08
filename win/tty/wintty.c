@@ -1850,15 +1850,13 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 
 	switch(cw->type) {
 	case NHW_STATUS: {
-		int j;
-		char *ob = &cw->data[cw->cury][j = cw->curx];
-		if (flags.botlx) *ob = 0;
+		int j = cw->curx;
 
 		int fx = 0;
 		(void)fx; // working around a bizarre bug where both clang and gcc warn fx is unused
 		for (int i = cw->curx, fx = i + 1; true; i++, fx++) {
 			if (i >= nb->len) {
-				if(*ob || flags.botlx) {
+				if (cw->data[cw->cury][j] || flags.botlx) {
 					/* last char printed may be in middle of line */
 					tty_curs(WIN_STATUS, fx, cw->cury);
 					cl_end();
@@ -1866,13 +1864,12 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 				break;
 			}
 
-			// temporary hack: always redraw every tile that has colour
-			if (*ob != nb->str[i] || nb->colouration[i] != NO_COLOR) {
+			if (flags.botlx || (cw->data[cw->cury][j] != nb->str[i]) || (cw->clr_data[cw->cury][j] != nb->colouration[i])) {
 				if (nb->colouration[i] != NO_COLOR) { term_start_color(nb->colouration[i]); }
 				tty_putsym(WIN_STATUS, fx, cw->cury, nb->str[i]);
 				if (nb->colouration[i] != NO_COLOR) term_end_color();
 			}
-			if (*ob) ob++;
+			if (cw->data[cw->cury][j]) j++;
 
 			// reached EOL
 			if (fx >= cw->cols) {
@@ -1888,7 +1885,7 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 			}
 		}
 
-		strncpy(&cw->data[cw->cury][j], nhs2cstr_trunc_tmp(nb), cw->cols - j - 1);
+		strncpy(&cw->data[cw->cury][cw->curx], nhs2cstr_trunc_tmp(nb), cw->cols - cw->curx - 1);
 		cw->data[cw->cury][cw->cols-1] = '\0'; /* null terminate */
 		/* ALI - Clear third line if present and unused */
 		if (cw->cury == 1 && cw->cury < (cw->maxrow - 1)) {

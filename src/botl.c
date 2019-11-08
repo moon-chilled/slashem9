@@ -4,9 +4,6 @@
 
 #include "hack.h"
 
-#include "wintty.h"
-//TODO take out ^^
-
 #include "nhstr.h"
 
 const char *hu_stat[] = {
