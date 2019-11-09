@@ -601,7 +601,7 @@ int doengrave(void) {
 			case WAN_SLOW_MONSTER:
 				if (!Blind) {
 					sprintf(post_engr_text, "The bugs on the %s slow down!", surface(u.ux, u.uy));
-					dowknown = true;
+					doknown = true;
 				}
 				break;
 			case WAN_SPEED_MONSTER:

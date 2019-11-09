@@ -353,6 +353,7 @@ struct rm {
 	int glyph;		/* what the hero thinks is there */
 #endif
 	schar typ;		/* what is really there */
+	Bitfield(styp,6);	// last seen/touched dungeon typ
 	uchar seenv;		/* seen vector */
 	Bitfield(flags,5);	/* extra information for typ */
 	bool horizontal; /* wall/door/etc is horiz. (more typ info) */

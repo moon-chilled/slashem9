@@ -260,6 +260,7 @@ void map_object (struct obj *obj, int show) {
 #endif
 	}
 	if (show) show_glyph(x, y, glyph);
+	levl[x][y].styp = levl[x][y].typ;
 }
 
 /*

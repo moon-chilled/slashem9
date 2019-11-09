@@ -510,6 +510,13 @@ extern boolean Invocation_lev(d_level *);
 extern xchar level_difficulty(void);
 extern schar lev_by_name(const char *);
 extern schar print_dungeon(boolean,schar *,xchar *);
+extern int donamelevel(void);
+extern int dooverview(void);
+extern void forget_mapseen(int);
+extern void init_mapseen(d_level*);
+extern void recalc_mapseen(void);
+extern void recbranch_mapseen(d_level*, d_level*);
+extern void remdun_mapseen(int);
 
 /* ### eat.c ### */
 

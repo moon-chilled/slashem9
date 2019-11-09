@@ -1615,7 +1615,6 @@ static const struct menu_tab wizard_menu[] = {
 	{'i', true, wiz_identify, "Identify items in pack"},
 	{'j', true, wiz_gain_level, "Go up an experience level"},
 	{'n', true, wiz_toggle_invulnerability, "Toggle invulnerability"},
-	{'o', true, wiz_where, "Tell locations of special levels"},
 	{'v', true, wiz_level_tele, "Do trans-level teleport"},
 	{'w', true, wiz_wish,  "Make wish"},
 	{'L', true, wiz_light_sources, "show mobile light sources"},
@@ -1894,7 +1893,6 @@ static const struct func_tab cmdlist[] = {
 	/* BEGIN TSANTH'S CODE */
 	{C('n'), true, wiz_toggle_invulnerability},
 	/* END TSANTH'S CODE */
-	{C('o'), true, wiz_where},
 	{C('p'), true, doprev_message},
 	{C('q'), true, done2},
 	{C('r'), true, doredraw},
@@ -2102,6 +2100,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"explore_mode", "enter explore (discovery) mode (only if defined)", enter_explore_mode, IFBURIED},
 
 	{"adjust", "adjust inventory letters", doorganize, IFBURIED, AUTOCOMPLETE},
+	{"annotate", "name current level", donamelevel, IFBURIED, AUTOCOMPLETE},
 	{"chat", "talk to someone", dotalk, IFBURIED, AUTOCOMPLETE},    /* converse? */
 	{"conduct", "list which challenges you have adhered to", doconduct, IFBURIED, AUTOCOMPLETE},
 	{"dip", "dip an object into something", dodip, !IFBURIED, AUTOCOMPLETE},
@@ -2113,6 +2112,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"monster", "use a monster's special ability", domonability, IFBURIED, AUTOCOMPLETE},
 	{"name", "name an item or type of object", ddocall, IFBURIED, AUTOCOMPLETE},
 	{"offer", "offer a sacrifice to the gods", dosacrifice, !IFBURIED, AUTOCOMPLETE},
+	{"overview", "show an overview of the dungeon", dooverview, IFBURIED, AUTOCOMPLETE},
 	{"pray", "pray to the gods for help", dopray, IFBURIED, AUTOCOMPLETE},
 	{"quit", "exit without saving current game", done2, IFBURIED, AUTOCOMPLETE, .disallowed_if_fuzzing = true},
 	{"ride", "ride (or stop riding) a monster", doride, !IFBURIED, AUTOCOMPLETE},
@@ -2280,7 +2280,9 @@ static void init_bind_list(void) {
 	/*       'n' prefixes a count if number_pad is on */
 	bind_key(M('n'), "name" );
 	bind_key(M('N'), "name" ); /* if number_pad is on */
+	bind_key(C('n'), "annotate");
 	bind_key('o',    "open" );
+	bind_key(C('o'), "overview"); //overwrites #where
 	bind_key('O',    "setoptions" );
 	bind_key(M('o'), "offer" );
 	bind_key('p',    "pay" );

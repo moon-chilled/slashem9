@@ -873,6 +873,7 @@ static void mineralize(void) {
 void mklev(void) {
 	struct mkroom *croom;
 
+	init_mapseen(&u.uz);
 	if (getbones()) {
 		return;
 	}
