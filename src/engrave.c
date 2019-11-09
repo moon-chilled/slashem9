@@ -595,44 +595,39 @@ int doengrave(void) {
 			 * previous engraving even if turning to dust.
 			 */
 			case WAN_STRIKING:
-				strcpy(post_engr_text,
-				       "The wand unsuccessfully fights your attempt to write!"
-				      );
+				strcpy(post_engr_text, "The wand unsuccessfully fights your attempt to write!");
+				doknown = true;
 				break;
 			case WAN_SLOW_MONSTER:
 				if (!Blind) {
-					sprintf(post_engr_text,
-					        "The bugs on the %s slow down!",
-					        surface(u.ux, u.uy));
+					sprintf(post_engr_text, "The bugs on the %s slow down!", surface(u.ux, u.uy));
+					dowknown = true;
 				}
 				break;
 			case WAN_SPEED_MONSTER:
 				if (!Blind) {
-					sprintf(post_engr_text,
-					        "The bugs on the %s speed up!",
-					        surface(u.ux, u.uy));
+					sprintf(post_engr_text, "The bugs on the %s speed up!", surface(u.ux, u.uy));
+					doknown = true;
 				}
 				break;
 			case WAN_HEALING:
 			case WAN_EXTRA_HEALING:
 				if (!Blind) {
-					sprintf(post_engr_text,
-					        "The bugs on the %s look healthier!",
-					        surface(u.ux, u.uy));
+					sprintf(post_engr_text, "The bugs on the %s look healthier!", surface(u.ux, u.uy));
 				}
 				break;
 			case WAN_FEAR:
 				if (!Blind) {
-					sprintf(post_engr_text,
-					        "The bugs on the %s run away!",
-					        surface(u.ux, u.uy));
+					sprintf(post_engr_text, "The bugs on the %s run away!", surface(u.ux, u.uy));
+					doknown = true;
 				}
 				break;
 			case WAN_POLYMORPH:
-				if(oep)  {
+				if (oep) {
 					if (!Blind) {
 						type = 0;	/* random */
 						random_engraving(buf);
+						doknown = true;
 					}
 					dengr = true;
 				}
@@ -650,10 +645,9 @@ int doengrave(void) {
 					u_wipe_engr(5);
 					oep = engr_at(u.ux,u.uy);
 					if (!Blind) {
-						if (!oep)
-							pline("The engraving on the %s vanishes!",
-							      surface(u.ux,u.uy));
-						else {
+						if (!oep) {
+							pline("The engraving on the %s vanishes!", surface(u.ux,u.uy));
+						} else {
 							strcpy(buf, oep->engr_txt);
 							dengr = true;
 						}
@@ -671,9 +665,8 @@ int doengrave(void) {
 			case WAN_MAGIC_MISSILE:
 				ptext = true;
 				if (!Blind) {
-					sprintf(post_engr_text,
-					        "The %s is riddled by bullet holes!",
-					        surface(u.ux, u.uy));
+					sprintf(post_engr_text, "The %s is riddled by bullet holes!", surface(u.ux, u.uy));
+					doknown = true;
 				}
 				break;
 
@@ -688,25 +681,24 @@ int doengrave(void) {
 				break;
 
 			case WAN_COLD:
-				if (!Blind)
-					strcpy(post_engr_text,
-					       "A few ice cubes drop from the wand.");
-				if(!oep || (oep->engr_type != BURN))
+				if (!Blind) {
+					strcpy(post_engr_text, "A few ice cubes drop from the wand.");
+					doknown = true;
+				}
+				if (!oep || (oep->engr_type != BURN))
 					break;
 			case WAN_CANCELLATION:
 			case WAN_MAKE_INVISIBLE:
 				if (oep && oep->engr_type != HEADSTONE) {
 					if (!Blind)
-						pline("The engraving on the %s vanishes!",
-						      surface(u.ux,u.uy));
+						pline("The engraving on the %s vanishes!", surface(u.ux,u.uy));
 					dengr = true;
 				}
 				break;
 			case WAN_TELEPORTATION:
 				if (oep && oep->engr_type != HEADSTONE) {
 					if (!Blind)
-						pline("The engraving on the %s vanishes!",
-						      surface(u.ux,u.uy));
+						pline("The engraving on the %s vanishes!", surface(u.ux,u.uy));
 					teleengr = true;
 				}
 				break;
