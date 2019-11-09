@@ -201,23 +201,23 @@ struct linfo {
 
 typedef struct mapseen_feat {
 	/* feature knowledge that must be calculated from levl array */
-	Bitfield(nfount, 2);
-	Bitfield(nsink, 2);
-	Bitfield(naltar, 2);
-	Bitfield(msalign, 2); /* corresponds to MSA_* above */
-	Bitfield(nthrone, 2);
-	Bitfield(ntree, 2);
+	uint nfount;
+	uint nsink;
+	uint naltar;
+	uint msalign; /* corresponds to MSA_* above */
+	uint nthrone;
+	uint ntree;
 	/* water, lava, ice are too verbose so commented out for now */
 	/*
-	   Bitfield(water, 1);
-	   Bitfield(lava, 1);
-	   Bitfield(ice, 1);
+	   bool water;
+	   bool lava;
+	   bool ice;
 	   */
 
 	/* calculated from rooms array */
-	Bitfield(nshop, 2);
-	Bitfield(ntemple, 2);
-	Bitfield(shoptype, 5);
+	uint nshop;
+	uint ntemple;
+	uint shoptype;
 
 	bool forgot; /* player has forgotten about this level? */
 } mapseen_feat;

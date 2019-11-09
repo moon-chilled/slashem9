@@ -2004,6 +2004,8 @@ static const char *shop_string(int rtype) {
 			return "tin shop";
 		case CANDLESHOP:
 			return "lighting shop";
+		case BLACKSHOP:
+			return "The Black Market";
 		default:
 			/* In case another patch adds a shop type that doesn't exist,
 			 * do something reasonable like "a shop".

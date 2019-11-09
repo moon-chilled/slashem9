@@ -221,12 +221,14 @@ const struct shclass shtypes[] = {
 	},
 
 	// TODO, add back antique weapons outlet, but without firearms/etc. --ELR
+	/*
 	{
 		"antique weapons outlet", WEAPON_CLASS, 20, D_SHOP, {
 			{90, WEAPON_CLASS},
 			{10, ARMOR_CLASS}, {0, 0}
 		}, shkweapons
 	},
+	*/
 
 	{
 		"delicatessen", FOOD_CLASS, 4, D_SHOP,
