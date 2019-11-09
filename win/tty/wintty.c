@@ -1873,7 +1873,8 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 				break;
 			}
 
-			if (flags.botlx || (cw->data[cw->cury][j] != nb->str[i]) || (cw->clr_data[cw->cury][j] != nb->colouration[i])) {
+			// just redraw the whole line every time
+			if (true || flags.botlx || (cw->data[cw->cury][j] != nb->str[i]) || (cw->clr_data[cw->cury][j] != nb->colouration[i])) {
 				if (nb->colouration[i] != NO_COLOR) { term_start_color(nb->colouration[i]); }
 				tty_putsym(WIN_STATUS, fx, cw->cury, nb->str[i]);
 				if (nb->colouration[i] != NO_COLOR) term_end_color();
