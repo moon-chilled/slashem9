@@ -163,18 +163,20 @@ typedef struct branch {
 #define MIGR_NEAR_PLAYER	9	/* mon: followers; obj: trap door */
 
 /* level information (saved via ledger number) */
+enum linfo_flag {
+	VISITED = 0x01,	/* hero has visited this level */
+	FORGOTTEN = 0x02,	/* hero will forget this level when reached */
+	LFILE_EXISTS = 0x04,	/* a level file exists for this level */
+	HANGUP_HERE = 0x08,    /* AIS: there was a hangup on this level */
+};
+/*
+ * Note:  VISITED and LFILE_EXISTS are currently almost always set at the
+ * same time.  However they _mean_ different things.
+ */
 
 struct linfo {
-	unsigned char	flags;
-#define VISITED		0x01	/* hero has visited this level */
-#define FORGOTTEN	0x02	/* hero will forget this level when reached */
-#define LFILE_EXISTS	0x04	/* a level file exists for this level */
-#define HANGUP_HERE     0x40    /* AIS: there was a hangup on this level */
+	enum linfo_flag flags;
 
-	/*
-	 * Note:  VISITED and LFILE_EXISTS are currently almost always set at the
-	 * same time.  However they _mean_ different things.
-	 */
 };
 
 
