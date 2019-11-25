@@ -1,0 +1,58 @@
+Changelist for slashem-next v0.0.1E0F0:
+- Interface: add curses windowport (Karl Garrison).
+- System: extended logfile/xlogfile with more information than standard log file (Aardvark Joe).  Remove logfile.
+- Internals: make many options mandatory that could previously be switched off at compile-time, such as EXP_ON_BOTL or ELBERETH.  Where applicable, these can still be toggled at run time.
+- Interface: show object glyphs in inventory display (Patric Mueller).
+- Interface: highlight object piles and stairs covered by objects (Pasi Kallinen).
+- Interface: add MSGTYPES; that is, user-configurable filtering, emphasis, or norep or messages (Pasi Kallinen).
+- Interface: user-specified colours for dungeon features (Patric Mueller).
+- Internals: lots of miscellaneous code cleanup, simplification, removal of indirection or conditionality, etc.
+- Internals: change K&R-style function definitions to ANSI.  Require c99.
+- Internals: remove support for many obsolete platforms or build configurations.  Basic requirements: aNSI c99 + posix or win32.
+- Interface: show dark--but visited/known--room tiles on the screen (Clive Crous).
+- Interface: remove all windowports except for tty and curses.
+- Interface: allow key rebinding (Jason Dorje Short).
+- Interface: heavily modified version of statuscolors (Shachaf and Oren Ben-Kiki) + hitpointbar (Patric Mueller).
+- Development: slashem.sh will automatically launch debugging tools (gdb, lldb, valgrind), if the environment variable NH_USE_(GDB|LLDB|VALGRIND) is set.  It will pass $NH_(GDB|LLDB|VALGRIND)_FLAGS to the corresponding debugging tool.
+- Interface: add UTF-8 graphics support.  Original code by Patric Mueller; heavy modifications have been applied.
+- Interface: remove DEC and IBM graphics; the only graphics sets available are ascii, utf8, and utf8compat (using only characters that are part of wgl4); and these are now under a compound 'graphics' option.
+- Interface: curses supports unicode graphics display.
+- Interface: properly display unicode glyphs on topl and in inventory.
+- Development: add a fuzzer (Pasi Kallinen).
+- Gameplay: re-enable the rogue level.
+- Development: replace build system.  Currently requires GNU make; working on that.
+- Internals: remove support for save compression, both internal routines and shelling out to an external compressor.
+- System: remove FILE_AREAS.
+- Internals: store gold on object chains.
+- Bugfix: a YAFM was supposed to show up when you rubbed gold on a stone, but it didn't.
+- Gameplay: searching is deterministic; you only have to search once to find what you're looking for.
+- Bugfix: fix calm steed technique (Slash'EM Extended).
+- Bugfix: crash bug in tty when an item's description was just less than the window width, but description + accelerator + glyph + padding was just more than said width (Tangles).
+- Bugfix: acid dropping fix (NetHack).
+- Bugfix: deallocated wielded objects fix (NetHack).
+- Bugfix: torch panic fix (Slash'EM Extended).
+- Bugfix: water punishment crash fix (NetHack/Slash'EM Extended).
+- Bugfix: fix bug where lightning-resistant monsters could be affected by lightning  (Slash'EM Extended).
+- Internals: completely remove makedefs.  The tasks it performed have been accomplished with macro magic, shifted to runtime, or, in some cases, removed entirely.
+- Interface: show spell memory in cast menu (inspired by Slash'EM Extended).
+- Gameplay: potion of hallucination only makes you hallucinate for 50-55, 50-105, or 50-155 turns (depending on BUC).
+- Interface: use symbols from EPYX rogue on rogue level.
+- Internals: change the dumplog implementation to be close to NetHack's.
+- System: DLB can now optionally use a library stored inside the slashem binary, removing the need for external data files.
+- Internals: add a custom dynamic string library with associated colour information.  Use it to implement statuscolors/botl.  It will be used for most of our strings in the future.
+- Internals: high-quality cryptographic random number generator (Mikko Juola and libtomcrypt). This should hopefully thwart stunts like SWAGINZZZ (see https://pellsson.github.io/).
+- Bugfix: with USE_FCNTL enabled, the lock file was opened but never closed.
+- Bugfix: fix memory leak in curses.
+- Bugfix: under curses with perm_invent enabled, if an inventory item was longer than the width of the inventory window, it could continue onto the next line.
+- Bugfix: when items disappear from a cursed bag of holding, it may not take up a turn, and, if it causes the player to become unencumbered, they may not get a message or statusbar change until the following turn (Michael Lehotay).
+- Gameplay: to prevent abuse, bones are not saved on levels which were hung up on (Dr. Alex Smith).
+- Bugfix: when dying to an undead, it is not disclosed whether bones were created (Dr. Alex Smith).
+- Bugfix: C343-162: magicbane hit messages could use the wrong pronouns (Ray Chason).
+- Bugfix: C343-324: long worm crash fix (Patric Mueller).
+- Interface: remove autoquiver.
+- Interface: incorporate quiver_fired (Jukka Lahtinen).
+- Interface: at the end of the game, show counts of extinct monsters next to genocided; birth counts next to kill counts (Jukka Lahtinen).
+- Gameplay: move gnomish mines to dlvl 3-4, from 2-4.
+- Interface: wall colouration for different dungeon branches and special rooms (L).
+- Interface: a common technique for identification of wands is to engrave with them on top of an existing engraving; the message produced will either uniquely identify the wand of confine it to one of a small number.  When doing so would uniquely identify the wand, formally identify it as well.
+- Interface: add the overview patch, which adds two new extended commands: #overview, which shows an overview of the layout of the dungeon levels the player has explored, and #annotate, which allows the player to make a mental note which is associated with the current level (Hojita Discordia).
