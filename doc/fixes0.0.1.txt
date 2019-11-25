@@ -1,4 +1,4 @@
-Changelist for slashem-next v0.0.1E0F0:
+Changelist for slashem-next v0.0.1:
 - Interface: add curses windowport (Karl Garrison).
 - System: extended logfile/xlogfile with more information than standard log file (Aardvark Joe).  Remove logfile.
 - Internals: make many options mandatory that could previously be switched off at compile-time, such as EXP_ON_BOTL or ELBERETH.  Where applicable, these can still be toggled at run time.
