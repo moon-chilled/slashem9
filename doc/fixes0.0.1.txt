@@ -4,27 +4,28 @@ Changelist for slashem-next v0.0.1:
 - Internals: make many options mandatory that could previously be switched off at compile-time, such as EXP_ON_BOTL or ELBERETH.  Where applicable, these can still be toggled at run time.
 - Interface: show object glyphs in inventory display (Patric Mueller).
 - Interface: highlight object piles and stairs covered by objects (Pasi Kallinen).
-- Interface: add MSGTYPES; that is, user-configurable filtering, emphasis, or norep or messages (Pasi Kallinen).
-- Interface: user-specified colours for dungeon features (Patric Mueller).
+- Interface: MSGTYPES: user-configurable filtering, emphasis, or norep of messages (Pasi Kallinen).
+- Interface: DUNGEONCOLORS: user-specified colours for dungeon features (Patric Mueller).
 - Internals: lots of miscellaneous code cleanup, simplification, removal of indirection or conditionality, etc.
 - Internals: change K&R-style function definitions to ANSI.  Require c99.
-- Internals: remove support for many obsolete platforms or build configurations.  Basic requirements: aNSI c99 + posix or win32.
+- Internals: remove support for many obsolete platforms and build configurations.  Basic requirements: ANSI c99 + posix or win32.
 - Interface: show dark--but visited/known--room tiles on the screen (Clive Crous).
 - Interface: remove all windowports except for tty and curses.
 - Interface: allow key rebinding (Jason Dorje Short).
 - Interface: heavily modified version of statuscolors (Shachaf and Oren Ben-Kiki) + hitpointbar (Patric Mueller).
 - Development: slashem.sh will automatically launch debugging tools (gdb, lldb, valgrind), if the environment variable NH_USE_(GDB|LLDB|VALGRIND) is set.  It will pass $NH_(GDB|LLDB|VALGRIND)_FLAGS to the corresponding debugging tool.
-- Interface: add UTF-8 graphics support.  Original code by Patric Mueller; heavy modifications have been applied.
-- Interface: remove DEC and IBM graphics; the only graphics sets available are ascii, utf8, and utf8compat (using only characters that are part of wgl4); and these are now under a compound 'graphics' option.
+- Interface: add UTF-8 graphics support.  Original code by Patric Mueller; heavy modifications have been made.
+- Interface: remove DEC and IBM graphics; the only graphics sets available are ascii, utf8, and utf8compat (using only characters that are part of wgl4), and these are now under a compound 'graphics' option.
 - Interface: curses supports unicode graphics display.
 - Interface: properly display unicode glyphs on topl and in inventory.
+- Interface: recommend saving and reloading, rather than quitting, in impossible().
 - Development: add a fuzzer (Pasi Kallinen).
 - Gameplay: re-enable the rogue level.
 - Development: replace build system.  Currently requires GNU make; working on that.
 - Internals: remove support for save compression, both internal routines and shelling out to an external compressor.
 - System: remove FILE_AREAS.
 - Internals: store gold on object chains.
-- Bugfix: a YAFM was supposed to show up when you rubbed gold on a stone, but it didn't.
+- Bugfix: show YAFM when player rubs gold on a stone.
 - Gameplay: searching is deterministic; you only have to search once to find what you're looking for.
 - Bugfix: fix calm steed technique (Slash'EM Extended).
 - Bugfix: crash bug in tty when an item's description was just less than the window width, but description + accelerator + glyph + padding was just more than said width (Tangles).
@@ -32,12 +33,12 @@ Changelist for slashem-next v0.0.1:
 - Bugfix: deallocated wielded objects fix (NetHack).
 - Bugfix: torch panic fix (Slash'EM Extended).
 - Bugfix: water punishment crash fix (NetHack/Slash'EM Extended).
-- Bugfix: fix bug where lightning-resistant monsters could be affected by lightning  (Slash'EM Extended).
+- Bugfix: fix bug where lightning-resistant monsters could be affected by lightning (Slash'EM Extended).
 - Internals: completely remove makedefs.  The tasks it performed have been accomplished with macro magic, shifted to runtime, or, in some cases, removed entirely.
 - Interface: show spell memory in cast menu (inspired by Slash'EM Extended).
-- Gameplay: potion of hallucination only makes you hallucinate for 50-55, 50-105, or 50-155 turns (depending on BUC).
+- Gameplay: potions of hallucination only make you hallucinate for 50-55, 50-105, or 50-155 turns (depending on BUC).
 - Interface: use symbols from EPYX rogue on rogue level.
-- Internals: change the dumplog implementation to be close to NetHack's.
+- Internals: cleaner dumplog implementation (NetHack).
 - System: DLB can now optionally use a library stored inside the slashem binary, removing the need for external data files.
 - Internals: add a custom dynamic string library with associated colour information.  Use it to implement statuscolors/botl.  It will be used for most of our strings in the future.
 - Internals: high-quality cryptographic random number generator (Mikko Juola and libtomcrypt). This should hopefully thwart stunts like SWAGINZZZ (see https://pellsson.github.io/).
