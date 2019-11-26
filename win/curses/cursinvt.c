@@ -92,7 +92,7 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
         mapglyph(glyph, &symbol, &color, &dummy, u.ux, u.uy);
         attr_t glyphclr = curses_color_attr(color, 0);
         wattron(win, glyphclr);
-        wprintw(win, "%c ", symbol);
+        wprintw(win, "%s ", utf8_tmpstr(symbol));
         wattroff(win, glyphclr);
         width -= 2;
     }
@@ -110,7 +110,12 @@ curses_add_inv(int y, int glyph, char accelerator, attr_t attr,
     }
 
     wattron(win, attr);
-    wprintw(win, "%.*s", width, str);
+
+    if ((strlen(str) > width) && ((iflags.graphics == UTF8_GRAPHICS) || (iflags.graphics == UTF8COMPAT_GRAPHICS)))
+        wprintw(win, "%.*s…", width-1, str);
+    else
+        wprintw(win, "%.*s", width, str);
+
     wattroff(win, attr);
     wclrtoeol(win);
 }

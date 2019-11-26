@@ -1,5 +1,3 @@
-* With perm_invent, show a ... at the end of the line of an inv item has to be cut off.
-
 * Replace pretty much all uses of void* with anything.
 
 * Curses seems to sporadically enter a couple of infinite loops?  I had it happen once after enabling perm_invent where it refreshed forever taking up 100% cpu and then eventually segfaulted; that was probably stack overflow.  Another time it printed out 'Hello elronnd, welcome to SlashEM-Next!  You are a neutral female elven' a stupid number of times (took several seconds to finish).  (Possibly because it kept wanting to print out the second part of the message?)
