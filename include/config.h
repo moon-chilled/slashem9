@@ -198,14 +198,6 @@ typedef long glyph_t;
 /* I/O */
 #define CLIPPING	/* allow smaller screens -- ERS */
 
-#if defined(UNIX)
-#define USE_REGEX_MATCH
-/* if USE_REGEX_MATCH is defined, use regular expressions (GNU regex.h)
- * otherwise use pmatch() to match menu color lines.
- * pmatch() provides basic globbing: '*' and '?' wildcards.
- */
-#endif
-
 /* difficulty */
 /* #define NO_BONES */	/*Disables loading and saving bones levels*/
 

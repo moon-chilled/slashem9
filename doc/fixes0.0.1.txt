@@ -57,3 +57,4 @@ Changelist for slashem-next v0.0.1:
 - Interface: wall colouration for different dungeon branches and special rooms (L).
 - Interface: a common technique for identification of wands is to engrave with them on top of an existing engraving; the message produced will either uniquely identify the wand of confine it to one of a small number.  When doing so would uniquely identify the wand, formally identify it as well.
 - Interface: add the overview patch, which adds two new extended commands: #overview, which shows an overview of the layout of the dungeon levels the player has explored, and #annotate, which allows the player to make a mental note which is associated with the current level (Hojita Discordia).
+- Internals: remove reliance on the system for a regex engine, and instead vendor one ourselves (libtre).

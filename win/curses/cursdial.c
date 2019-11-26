@@ -7,6 +7,7 @@
 #include "func_tab.h"
 #include <ctype.h>
 #include <strings.h>
+#include "tre.h"
 
 /* Dialog windows for curses interface */
 
@@ -1378,16 +1379,7 @@ bool get_menu_coloring(char *str, int *color, attr_t *attr) {
 
     if (iflags.use_menu_color)
         for (tmpmc = menu_colorings; tmpmc; tmpmc = tmpmc->next)
-# ifdef USE_REGEX_MATCH
-#  ifdef POSIX_REGEX
-            if (regexec(&tmpmc->match, str, 0, NULL, 0) == 0) {
-#  else
-
-            if (re_search(&tmpmc->match, str, strlen(str), 0, 9999, 0) >= 0) {
-#  endif
-# else
-            if (pmatch(tmpmc->match, str)) {
-# endif
+            if (tre_regexec(&tmpmc->match, str, 0, NULL, 0) == 0) {
                 *color = tmpmc->color;
                 *attr = curses_convert_attr(tmpmc->attr);
                 return true;

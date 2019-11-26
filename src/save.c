@@ -676,11 +676,7 @@ free_menu_coloring() {
 
 	while (tmp) {
 		struct menucoloring *tmp2 = tmp->next;
-#ifdef USE_REGEX_MATCH
-		regfree(&tmp->match);
-#else
-		free(tmp->match);
-#endif
+		tre_regfree(&tmp->match);
 		free(tmp);
 		tmp = tmp2;
 	}

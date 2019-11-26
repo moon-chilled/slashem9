@@ -286,14 +286,7 @@
 # undef hc
 #endif
 
-#ifdef USE_REGEX_MATCH
-# include <regex.h>
-# ifndef RE_NO_GNU_OPS
-#  define POSIX_REGEX
-# else
-#  define GNU_REGEX
-# endif
-#endif
+#include "tre.h"
 
 #endif /* UNIXCONF_H */
 #endif /* UNIX */

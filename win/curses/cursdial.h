@@ -3,11 +3,6 @@
 #ifndef CURSDIAL_H
 # define CURSDIAL_H
 
-# ifdef USE_REGEX_MATCH
-#  include <regex.h>
-# endif
-
-
 /* Global declarations */
 
 void curses_line_input_dialog(const char *prompt, char *answer, int buffer);
