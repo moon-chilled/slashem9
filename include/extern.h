@@ -271,9 +271,7 @@ extern void feel_location(xchar,xchar);
 extern void newsym(int,int);
 extern void shieldeff(xchar,xchar);
 extern void tmp_at(int,int);
-#ifdef DISPLAY_LAYERS
 extern int glyph_is_floating(int);
-#endif
 extern void swallowed(int);
 extern void under_ground(int);
 extern void under_water(int);

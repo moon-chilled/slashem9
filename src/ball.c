@@ -9,11 +9,7 @@
 static int bc_order(void);
 static void litter(void);
 
-#ifdef DISPLAY_LAYERS
 #define memory_object(x, y)	(levl[x][y].mem_obj)
-#else
-#define memory_object(x, y)	(levl[x][y].glyph)
-#endif
 
 void ballfall(void) {
 	boolean gets_hit;

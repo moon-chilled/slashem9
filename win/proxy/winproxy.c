@@ -236,7 +236,6 @@ menu_item **menu_list;
     return n;
 }
 
-#ifdef DISPLAY_LAYERS
 static void
 proxy_print_layer(w, x, y, z, glyph)
 int w;
@@ -256,7 +255,6 @@ int clearing;
     if (!nhproxy_serv_flush_layers(w, clearing, NO_GLYPH))
 	panic("Not enough memory to resize window");
 }
-#endif
 
 void
 proxy_print_glyph(window, x, y, glyph)
@@ -264,7 +262,6 @@ winid window;
 xchar x, y;
 int glyph;
 {
-#ifdef DISPLAY_LAYERS
     int w = nhproxy_serv_get_mapwin(window);
     if (w >= 0 && proxy_interface_mode & NHPROXY_EXT_IM_DISPLAY_LAYERS) {
 	struct rm *lev = &levl[x][y];
@@ -310,7 +307,6 @@ int glyph;
 	    proxy_print_layer(w, x, y, 1, back_to_glyph(x, y));
     }
     else
-#endif
 	nhproxy_proc_print_glyph(window, x, y, glyph2proxy[glyph]);
 }
 

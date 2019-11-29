@@ -68,9 +68,7 @@ static void mon_invent_chain(winid, const char *, struct monst *, long *, long *
 static void mon_chain(winid, const char *, struct monst *, long *, long *);
 static void contained(winid, const char *, long *, long *);
 static int wiz_show_stats(void);
-# ifdef DISPLAY_LAYERS
 static int wiz_show_display(void);
-# endif
 # ifdef PORT_DEBUG
 static int wiz_port_debug(void);
 # endif
@@ -1606,9 +1604,7 @@ static const struct menu_tab player_menu[] = {
 
 static const struct menu_tab wizard_menu[] = {
 	{'c', true, wiz_gain_ac, "Increase AC"},
-#ifdef DISPLAY_LAYERS
 	{'d', true, wiz_show_display, "Detail display layers"},
-#endif
 	{'e', true, wiz_detect, "Detect secret doors and traps"},
 	{'f', true, wiz_map, "Do magic mapping"},
 	{'g', true, wiz_genesis, "Create monster"},
@@ -2141,9 +2137,7 @@ struct ext_func_tab extcmdlist[] = {
 	 * below.
 	 */
 
-#ifdef DISPLAY_LAYERS
 	{NULL, NULL, donull, true}, // #display
-#endif
 	{NULL, NULL, donull, true}, // #levelchange
 	{NULL, NULL, donull, true}, // #lightsources
 #ifdef DEBUG_MIGRATING_MONS
@@ -2174,9 +2168,7 @@ struct ext_func_tab extcmdlist[] = {
 };
 
 static struct ext_func_tab debug_extcmdlist[] = {
-#ifdef DISPLAY_LAYERS
 	{"display", "detail display layers", wiz_show_display, IFBURIED, !AUTOCOMPLETE},
-#endif
 	{"levelchange", "change experience level", wiz_level_change, IFBURIED, AUTOCOMPLETE},
 	{"lightsources", "show mobile light sources", wiz_light_sources, IFBURIED, AUTOCOMPLETE},
 #ifdef DEBUG_MIGRATING_MONS
@@ -2643,7 +2635,6 @@ void sanity_check(void) {
 	timer_sanity_check();
 }
 
-#ifdef DISPLAY_LAYERS
 /*
  * Detail contents of each display layer at specified location(s).
  */
@@ -2717,7 +2708,6 @@ static int wiz_show_display(void) {
 	destroy_nhwindow(win);
 	return 0;
 }
-#endif
 
 #ifdef DEBUG_MIGRATING_MONS
 static int wiz_migrate_mons(void) {

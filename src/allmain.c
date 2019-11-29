@@ -700,56 +700,28 @@ static void do_positionbar(void) {
 	p = pbar;
 	/* up stairway */
 	if (upstair.sx &&
-#ifdef DISPLAY_LAYERS
 	                (level.locations[upstair.sx][upstair.sy].mem_bg == S_upstair ||
 	                 level.locations[upstair.sx][upstair.sy].mem_bg == S_upladder)) {
-#else
-	                (glyph_to_cmap(level.locations[upstair.sx][upstair.sy].glyph) ==
-	                 S_upstair ||
-	                 glyph_to_cmap(level.locations[upstair.sx][upstair.sy].glyph) ==
-	                 S_upladder)) {
-#endif
 		*p++ = '<';
 		*p++ = upstair.sx;
 	}
 	if (sstairs.sx &&
-#ifdef DISPLAY_LAYERS
 	                (level.locations[sstairs.sx][sstairs.sy].mem_bg == S_upstair ||
 	                 level.locations[sstairs.sx][sstairs.sy].mem_bg == S_upladder)) {
-#else
-	                (glyph_to_cmap(level.locations[sstairs.sx][sstairs.sy].glyph) ==
-	                 S_upstair ||
-	                 glyph_to_cmap(level.locations[sstairs.sx][sstairs.sy].glyph) ==
-	                 S_upladder)) {
-#endif
 		*p++ = '<';
 		*p++ = sstairs.sx;
 	}
 
 	/* down stairway */
 	if (dnstair.sx &&
-#ifdef DISPLAY_LAYERS
 	                (level.locations[dnstair.sx][dnstair.sy].mem_bg == S_dnstair ||
 	                 level.locations[dnstair.sx][dnstair.sy].mem_bg == S_dnladder)) {
-#else
-	                (glyph_to_cmap(level.locations[dnstair.sx][dnstair.sy].glyph) ==
-	                 S_dnstair ||
-	                 glyph_to_cmap(level.locations[dnstair.sx][dnstair.sy].glyph) ==
-	                 S_dnladder)) {
-#endif
 		*p++ = '>';
 		*p++ = dnstair.sx;
 	}
 	if (sstairs.sx &&
-#ifdef DISPLAY_LAYERS
 	                (level.locations[sstairs.sx][sstairs.sy].mem_bg == S_dnstair ||
 	                 level.locations[sstairs.sx][sstairs.sy].mem_bg == S_dnladder)) {
-#else
-	                (glyph_to_cmap(level.locations[sstairs.sx][sstairs.sy].glyph) ==
-	                 S_dnstair ||
-	                 glyph_to_cmap(level.locations[sstairs.sx][sstairs.sy].glyph) ==
-	                 S_dnladder)) {
-#endif
 		*p++ = '>';
 		*p++ = sstairs.sx;
 	}

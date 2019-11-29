@@ -849,14 +849,7 @@ static void show_map_spot(int x, int y) {
 	}
 
 	/* if we don't remember an object or trap there, map it */
-#ifdef DISPLAY_LAYERS
 	if (!lev->mem_obj && !lev->mem_trap) {
-#else
-	if (lev->typ == ROOM ?
-	                (glyph_is_cmap(lev->glyph) && !glyph_is_trap(lev->glyph) &&
-	                 glyph_to_cmap(lev->glyph) != ROOM) :
-	                (!glyph_is_object(lev->glyph) && !glyph_is_trap(lev->glyph))) {
-#endif
 		if (level.flags.hero_memory) {
 			magic_map_background(x,y,0);
 			newsym(x,y);			/* show it, if not blocked */
@@ -1044,12 +1037,7 @@ void find_trap(struct trap *trap) {
 	else
 		newsym(trap->tx, trap->ty);
 
-#ifdef DISPLAY_LAYERS
-	if (levl[trap->tx][trap->ty].mem_obj ||
-	                memory_is_invisible(trap->tx, trap->ty)) {
-#else
-	if (levl[trap->tx][trap->ty].glyph != trap_to_glyph(trap)) {
-#endif
+	if (levl[trap->tx][trap->ty].mem_obj || memory_is_invisible(trap->tx, trap->ty)) {
 		/* There's too much clutter to see your find otherwise */
 		cls();
 		map_trap(trap, 1);

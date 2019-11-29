@@ -470,13 +470,7 @@ static void makevtele(void) {
  * each type initializes what it needs to separately.
  */
 static void clear_level_structures(void) {
-#ifdef DISPLAY_LAYERS
-	static struct rm zerorm = { S_stone, 0, 0, 0, 0, 0,
-#else
-	static struct rm zerorm = { cmap_to_glyph(S_stone),
-#endif
-		       0, 0, 0, 0, 0, 0, 0, 0
-	};
+	static struct rm zerorm = { S_stone, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	int x,y;
 	struct rm *lev;
 
