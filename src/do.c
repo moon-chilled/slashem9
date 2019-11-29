@@ -63,7 +63,11 @@ boolean boulder_hits_pool(struct obj *otmp, int rx, int ry, boolean pushing) {
 
 			newsym(rx,ry);
 			if (pushing) {
-				pline("You push %s into the %s.", the(xname(otmp)), what);
+				char *who;
+				if (u.usteed) who = y_monnam(u.usteed);
+				else who = "you";
+
+				pline("%s %s %s into the %s.", upstart(who), vtense(who, "push"), the(xname(otmp)), what);
 				if (flags.verbose && !Blind)
 					pline("Now you can cross it!");
 				/* no splashing in this case */

@@ -67,3 +67,4 @@ Changelist for slashem-next v0.0.1:
 - Bugfix: 'You hear The <x> tumbles downwards' when dropping an item into a pit while blind and standing on the edge (NetHack).
 - Bugfix: wielded silver arrows weren't always dealing silver damage (NetHack).
 - Bugfix: you can sit down on items contained in a pit while teetering at its edge (NetHack).
+- Bugfix: message when you pushed a boulder into a pool of water while riding said that you filled it, rather than your steed (NetHack).
