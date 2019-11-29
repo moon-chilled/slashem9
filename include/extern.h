@@ -11,10 +11,10 @@
 
 /* ### alloc.c ### */
 
-extern void *alloc(usize);
-extern void nhfree(const void*);
+void *alloc(usize);
+void nhfree(const void*);
 #define free nhfree
-extern char *fmt_ptr(const void*,char *);
+char *fmt_ptr(const void*,char *);
 
 /* This next pre-processor directive covers almost the entire file,
  * interrupted only occasionally to pick up specific functions as needed. */
@@ -22,882 +22,882 @@ extern char *fmt_ptr(const void*,char *);
 
 /* ### allmain.c ### */
 
-extern void moveloop(void);
-extern void stop_occupation(void);
-extern void create_gamewindows(void);
-extern void show_gamewindows(void);
-extern void newgame(void);
-extern void welcome(boolean);
-extern time_t get_realtime(void);
+void moveloop(void);
+void stop_occupation(void);
+void create_gamewindows(void);
+void show_gamewindows(void);
+void newgame(void);
+void welcome(boolean);
+time_t get_realtime(void);
 
 /* ### apply.c ### */
 
-extern int doapply(void);
-extern int dorub(void);
-extern int dojump(void);
-extern int jump(int);
-extern int jump(int);
-extern int number_leashed(void);
-extern void o_unleash(struct obj *);
-extern void m_unleash(struct monst *,boolean);
-extern void unleash_all(void);
-extern boolean next_to_u(void);
-extern struct obj *get_mleash(struct monst *);
-extern void check_leash(struct monst *,xchar,xchar,boolean);
-extern boolean um_dist(xchar,xchar,xchar);
-extern boolean snuff_candle(struct obj *);
-extern boolean snuff_lit(struct obj *);
-extern boolean catch_lit(struct obj *);
-extern void use_unicorn_horn(struct obj *);
-extern boolean tinnable(struct obj *);
-extern void reset_trapset(void);
-extern void fig_transform(void *, long);
-extern int unfixable_trouble_count(boolean);
-extern int wand_explode(struct obj *,boolean);
+int doapply(void);
+int dorub(void);
+int dojump(void);
+int jump(int);
+int jump(int);
+int number_leashed(void);
+void o_unleash(struct obj *);
+void m_unleash(struct monst *,boolean);
+void unleash_all(void);
+boolean next_to_u(void);
+struct obj *get_mleash(struct monst *);
+void check_leash(struct monst *,xchar,xchar,boolean);
+boolean um_dist(xchar,xchar,xchar);
+boolean snuff_candle(struct obj *);
+boolean snuff_lit(struct obj *);
+boolean catch_lit(struct obj *);
+void use_unicorn_horn(struct obj *);
+boolean tinnable(struct obj *);
+void reset_trapset(void);
+void fig_transform(void *, long);
+int unfixable_trouble_count(boolean);
+int wand_explode(struct obj *,boolean);
 
 /* ### artifact.c ### */
 
-extern void init_artifacts(void);
-extern void init_artifacts1(void);
-extern void save_artifacts(int fd);
-extern void restore_artifacts(int fd);
-extern const char *artiname(int artinum);
-extern struct obj *mk_artifact(struct obj *otmp, aligntyp alignment);
-extern const char *artifact_name(const char *name, short *otyp);
-extern bool exist_artifact(int otyp, const char *name);
-extern void artifact_exists(struct obj *otmp, const char *name, bool mod);
-extern int nartifact_exist(void);
-extern bool spec_ability(struct obj *otmp, unsigned long abil);
-extern bool confers_luck(struct obj *obj);
-extern bool arti_reflects(struct obj *obj);
-extern bool restrict_name(struct obj *otmp, const char *name);
-extern bool defends(int adtype, struct obj *otmp);
-extern bool protects(int adtype, struct obj *otmp);
-extern void set_artifact_intrinsic(struct obj *otmp, bool on, long wp_mask);
-extern int touch_artifact(struct obj *obj, struct monst *mon);
-extern long spec_m2(struct obj *otmp);
-extern int spec_abon(struct obj *otmp,struct monst *mon);
-extern int spec_dbon(struct obj *otmp,struct monst *mon, int tmp);
-extern void discover_artifact(xchar m);
-extern bool undiscovered_artifact(xchar m);
-extern int disp_artifact_discoveries(winid tmpwin);
-extern bool artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, int *dmgptr, int dieroll);
-extern int doinvoke(void);
-extern int artifact_wet(struct obj *obj, bool silent);
-extern bool artifact_light(struct obj *obj);
-extern void arti_speak(struct obj *obj);
-extern bool artifact_has_invprop(struct obj *otmp, uchar inv_prop);
-extern long arti_cost(struct obj *otmp);
+void init_artifacts(void);
+void init_artifacts1(void);
+void save_artifacts(int fd);
+void restore_artifacts(int fd);
+const char *artiname(int artinum);
+struct obj *mk_artifact(struct obj *otmp, aligntyp alignment);
+const char *artifact_name(const char *name, short *otyp);
+bool exist_artifact(int otyp, const char *name);
+void artifact_exists(struct obj *otmp, const char *name, bool mod);
+int nartifact_exist(void);
+bool spec_ability(struct obj *otmp, unsigned long abil);
+bool confers_luck(struct obj *obj);
+bool arti_reflects(struct obj *obj);
+bool restrict_name(struct obj *otmp, const char *name);
+bool defends(int adtype, struct obj *otmp);
+bool protects(int adtype, struct obj *otmp);
+void set_artifact_intrinsic(struct obj *otmp, bool on, long wp_mask);
+int touch_artifact(struct obj *obj, struct monst *mon);
+long spec_m2(struct obj *otmp);
+int spec_abon(struct obj *otmp,struct monst *mon);
+int spec_dbon(struct obj *otmp,struct monst *mon, int tmp);
+void discover_artifact(xchar m);
+bool undiscovered_artifact(xchar m);
+int disp_artifact_discoveries(winid tmpwin);
+bool artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, int *dmgptr, int dieroll);
+int doinvoke(void);
+int artifact_wet(struct obj *obj, bool silent);
+bool artifact_light(struct obj *obj);
+void arti_speak(struct obj *obj);
+bool artifact_has_invprop(struct obj *otmp, uchar inv_prop);
+long arti_cost(struct obj *otmp);
 
 /* ### attrib.c ### */
 
-extern boolean adjattrib(int,int,int);
-extern void change_luck(schar);
-extern int stone_luck(boolean);
-extern void set_moreluck(void);
-extern void gainstr(struct obj *,int);
-extern void losestr(int);
-extern void restore_attrib(void);
-extern void exercise(int,boolean);
-extern void exerchk(void);
-extern void reset_attribute_clock(void);
-extern void init_attr(int);
-extern void redist_attr(void);
-extern void adjabil(int,int);
-extern int newhp(void);
-extern schar acurr(int);
-extern schar acurrstr(void);
-extern void adjalign(int);
+boolean adjattrib(int,int,int);
+void change_luck(schar);
+int stone_luck(boolean);
+void set_moreluck(void);
+void gainstr(struct obj *,int);
+void losestr(int);
+void restore_attrib(void);
+void exercise(int,boolean);
+void exerchk(void);
+void reset_attribute_clock(void);
+void init_attr(int);
+void redist_attr(void);
+void adjabil(int,int);
+int newhp(void);
+schar acurr(int);
+schar acurrstr(void);
+void adjalign(int);
 /* KMH, balance patch -- new function */
-extern void recalc_health(void);
-extern int uhp(void);
-extern int uhpmax(void);
+void recalc_health(void);
+int uhp(void);
+int uhpmax(void);
 
 /* ### ball.c ### */
 
-extern void ballfall(void);
-extern void placebc(void);
-extern void unplacebc(void);
-extern void set_bc(boolean);
-extern void move_bc(int,int,xchar,xchar,xchar,xchar);
-extern boolean drag_ball(xchar,xchar,
+void ballfall(void);
+void placebc(void);
+void unplacebc(void);
+void set_bc(boolean);
+void move_bc(int,int,xchar,xchar,xchar,xchar);
+boolean drag_ball(xchar,xchar,
                          int *,xchar *,xchar *,xchar *,xchar *, boolean *,boolean);
-extern void drop_ball(xchar,xchar);
-extern void drag_down(void);
+void drop_ball(xchar,xchar);
+void drag_down(void);
 
 /* ### bones.c ### */
 
-extern boolean can_make_bones(void);
-extern void savebones(struct obj *);
-extern int getbones(void);
+boolean can_make_bones(void);
+void savebones(struct obj *);
+int getbones(void);
 
 /* ### borg.c ### */
 
-extern bool borg_on;
-extern char borg_line[80];
-extern char borg_input(void);
+bool borg_on;
+char borg_line[80];
+char borg_input(void);
 
 /* ### botl.c ### */
 
-extern int xlev_to_rank(int);
-extern int title_to_mon(const char *,int *,int *);
-extern void max_rank_sz(void);
-extern long botl_score(void);
-extern int describe_level(char *, int);
-extern const char *rank_of(int,short,boolean);
-extern void bot_set_handler(void (*)());
-extern void bot_reconfig(void);
-extern void bot(void);
-extern nhstr *bot1str(void);
-extern nhstr *bot2str(void);
+int xlev_to_rank(int);
+int title_to_mon(const char *,int *,int *);
+void max_rank_sz(void);
+long botl_score(void);
+int describe_level(char *, int);
+const char *rank_of(int,short,boolean);
+void bot_set_handler(void (*)());
+void bot_reconfig(void);
+void bot(void);
+nhstr *bot1str(void);
+nhstr *bot2str(void);
 
 /* ### cmd.c ### */
 
-extern char randomkey(void);
-extern void reset_occupations(void);
-extern void set_occupation(int (*)(void),const char *,int);
-extern char pgetchar(void);
-extern void pushch(char);
-extern void savech(char);
-extern char nhgetch(void);
-extern void rhack(char *);
-extern void dokeylist(void);
-extern int doextlist(void);
-extern int extcmd_via_menu(void);
-extern void enlightenment(int);
-extern void show_conduct(int);
-extern int xytod(schar,schar);
-extern void dtoxy(coord *,int);
-extern int movecmd(char);
-extern int getdir(const char *);
-extern void confdir(void);
-extern int isok(int,int);
-extern int get_adjacent_loc(const char *, const char *, xchar, xchar, coord *);
-extern const char *click_to_cmd(int,int,int);
-extern char readchar(void);
-extern void sanity_check(void);
-extern void commands_init(void);
-extern char *stripspace(char*);
-extern void parsebindings(char*);
-extern void parseautocomplete(char*,boolean);
-extern void parsemappings(char*);
-extern char txt2key(char*);
-extern char *key2txt(char, char*);
-extern char *str2txt(char*, char*);
-extern char yn_function(const char *, const char *, char);
+char randomkey(void);
+void reset_occupations(void);
+void set_occupation(int (*)(void),const char *,int);
+char pgetchar(void);
+void pushch(char);
+void savech(char);
+char nhgetch(void);
+void rhack(char *);
+void dokeylist(void);
+int doextlist(void);
+int extcmd_via_menu(void);
+void enlightenment(int);
+void show_conduct(int);
+int xytod(schar,schar);
+void dtoxy(coord *,int);
+int movecmd(char);
+int getdir(const char *);
+void confdir(void);
+int isok(int,int);
+int get_adjacent_loc(const char *, const char *, xchar, xchar, coord *);
+const char *click_to_cmd(int,int,int);
+char readchar(void);
+void sanity_check(void);
+void commands_init(void);
+char *stripspace(char*);
+void parsebindings(char*);
+void parseautocomplete(char*,boolean);
+void parsemappings(char*);
+char txt2key(char*);
+char *key2txt(char, char*);
+char *str2txt(char*, char*);
+char yn_function(const char *, const char *, char);
 
 /* ### dbridge.c ### */
 
-extern boolean is_pool(int,int);
-extern boolean is_lava(int,int);
-extern boolean is_ice(int,int);
-extern int is_drawbridge_wall(int,int);
-extern boolean is_db_wall(int,int);
-extern boolean find_drawbridge(int *,int*);
-extern boolean create_drawbridge(int,int,int,boolean);
-extern void open_drawbridge(int,int);
-extern void close_drawbridge(int,int);
-extern void destroy_drawbridge(int,int);
+boolean is_pool(int,int);
+boolean is_lava(int,int);
+boolean is_ice(int,int);
+int is_drawbridge_wall(int,int);
+boolean is_db_wall(int,int);
+boolean find_drawbridge(int *,int*);
+boolean create_drawbridge(int,int,int,boolean);
+void open_drawbridge(int,int);
+void close_drawbridge(int,int);
+void destroy_drawbridge(int,int);
 
 /* ### decl.c ### */
 
-extern void decl_init(void);
-extern bool curses_stupid_hack;
+void decl_init(void);
+bool curses_stupid_hack;
 
 /* ### detect.c ### */
 
-extern struct obj *o_in(struct obj*,char);
-extern struct obj *o_material(struct obj*,unsigned);
-extern int gold_detect(struct obj *);
-extern int food_detect(struct obj *);
-extern int object_detect(struct obj *,int);
-extern int monster_detect(struct obj *,int);
-extern int trap_detect(struct obj *);
-extern const char *level_distance(d_level *);
-extern void use_crystal_ball(struct obj *);
-extern void do_mapping(void);
-extern void do_vicinity_map(void);
-extern void cvt_sdoor_to_door(struct rm *);
-extern int findit(void);
-extern int openit(void);
-extern void find_trap(struct trap *);
-extern void dosearch0(bool);
-extern int dosearch(void);
-extern void sokoban_detect(void);
+struct obj *o_in(struct obj*,char);
+struct obj *o_material(struct obj*,unsigned);
+int gold_detect(struct obj *);
+int food_detect(struct obj *);
+int object_detect(struct obj *,int);
+int monster_detect(struct obj *,int);
+int trap_detect(struct obj *);
+const char *level_distance(d_level *);
+void use_crystal_ball(struct obj *);
+void do_mapping(void);
+void do_vicinity_map(void);
+void cvt_sdoor_to_door(struct rm *);
+int findit(void);
+int openit(void);
+void find_trap(struct trap *);
+void dosearch0(bool);
+int dosearch(void);
+void sokoban_detect(void);
 /* KMH -- Sokoban levels */
-extern void sokoban_detect(void);
+void sokoban_detect(void);
 
 /* ### dig.c ### */
 
-extern boolean is_digging(void);
-extern int holetime(void);
-extern boolean dig_check(struct monst *, boolean, int, int);
-extern void digactualhole(int,int,struct monst *,int);
-extern boolean dighole(boolean);
-extern int use_pick_axe(struct obj *);
-extern int use_pick_axe2(struct obj *);
-extern boolean mdig_tunnel(struct monst *);
-extern void watch_dig(struct monst *,xchar,xchar,boolean);
-extern void zap_dig(void);
-extern struct obj *bury_an_obj(struct obj *);
-extern void bury_objs(int,int);
-extern void unearth_objs(int,int);
-extern void rot_organic(void *, long);
-extern void rot_corpse(void *, long);
+boolean is_digging(void);
+int holetime(void);
+boolean dig_check(struct monst *, boolean, int, int);
+void digactualhole(int,int,struct monst *,int);
+boolean dighole(boolean);
+int use_pick_axe(struct obj *);
+int use_pick_axe2(struct obj *);
+boolean mdig_tunnel(struct monst *);
+void watch_dig(struct monst *,xchar,xchar,boolean);
+void zap_dig(void);
+struct obj *bury_an_obj(struct obj *);
+void bury_objs(int,int);
+void unearth_objs(int,int);
+void rot_organic(void *, long);
+void rot_corpse(void *, long);
 #if 0
-extern void bury_monst(struct monst *);
-extern void bury_you(void);
-extern void unearth_you(void);
-extern void escape_tomb(void);
-extern void bury_obj(struct obj *);
+void bury_monst(struct monst *);
+void bury_you(void);
+void unearth_you(void);
+void escape_tomb(void);
+void bury_obj(struct obj *);
 #endif
 
 /* ### display.c ### */
 
-extern struct obj *vobj_at(xchar,xchar);
-extern void magic_map_background(xchar,xchar,int);
-extern void map_background(xchar,xchar,int);
-extern void map_trap(struct trap *,int);
-extern void map_object(struct obj *,int);
-extern void map_invisible(xchar,xchar);
-extern void unmap_object(int,int);
-extern void map_location(int,int,int);
-extern int memory_glyph(int, int);
-extern void clear_memory_glyph(int, int, int);
-extern void feel_location(xchar,xchar);
-extern void newsym(int,int);
-extern void shieldeff(xchar,xchar);
-extern void tmp_at(int,int);
-extern int glyph_is_floating(int);
-extern void swallowed(int);
-extern void under_ground(int);
-extern void under_water(int);
-extern void see_monsters(void);
-extern void set_mimic_blocking(void);
-extern void see_objects(void);
-extern void see_traps(void);
-extern void curs_on_u(void);
-extern int doredraw(void);
-extern void docrt(void);
-extern void show_glyph(int,int,int);
-extern void clear_glyph_buffer(void);
-extern void row_refresh(int,int,int);
-extern void cls(void);
-extern void flush_screen(int);
-extern int back_to_glyph(xchar,xchar);
-extern int zapdir_to_glyph(int,int,int);
-extern int glyph_at(xchar,xchar);
-extern void set_wall_state(void);
-extern void dump_map(void);
+struct obj *vobj_at(xchar,xchar);
+void magic_map_background(xchar,xchar,int);
+void map_background(xchar,xchar,int);
+void map_trap(struct trap *,int);
+void map_object(struct obj *,int);
+void map_invisible(xchar,xchar);
+void unmap_object(int,int);
+void map_location(int,int,int);
+int memory_glyph(int, int);
+void clear_memory_glyph(int, int, int);
+void feel_location(xchar,xchar);
+void newsym(int,int);
+void shieldeff(xchar,xchar);
+void tmp_at(int,int);
+int glyph_is_floating(int);
+void swallowed(int);
+void under_ground(int);
+void under_water(int);
+void see_monsters(void);
+void set_mimic_blocking(void);
+void see_objects(void);
+void see_traps(void);
+void curs_on_u(void);
+int doredraw(void);
+void docrt(void);
+void show_glyph(int,int,int);
+void clear_glyph_buffer(void);
+void row_refresh(int,int,int);
+void cls(void);
+void flush_screen(int);
+int back_to_glyph(xchar,xchar);
+int zapdir_to_glyph(int,int,int);
+int glyph_at(xchar,xchar);
+void set_wall_state(void);
+void dump_map(void);
 
 /* ### do.c ### */
 
-extern int dodrop(void);
-extern boolean boulder_hits_pool(struct obj *,int,int,boolean);
-extern boolean flooreffects(struct obj *,int,int,const char *);
-extern void doaltarobj(struct obj *);
-extern boolean canletgo(struct obj *,const char *);
-extern void dropx(struct obj *);
-extern void dropy(struct obj *);
-extern void obj_no_longer_held(struct obj *);
-extern int doddrop(void);
-extern int dodown(void);
-extern int doup(void);
+int dodrop(void);
+boolean boulder_hits_pool(struct obj *,int,int,boolean);
+boolean flooreffects(struct obj *,int,int,const char *);
+void doaltarobj(struct obj *);
+boolean canletgo(struct obj *,const char *);
+void dropx(struct obj *);
+void dropy(struct obj *);
+void obj_no_longer_held(struct obj *);
+int doddrop(void);
+int dodown(void);
+int doup(void);
 #ifdef INSURANCE
-extern void save_currentstate(void);
+void save_currentstate(void);
 #endif
-extern void goto_level(d_level *,boolean,boolean,boolean);
-extern void schedule_goto(d_level *,boolean,boolean,int,
+void goto_level(d_level *,boolean,boolean,boolean);
+void schedule_goto(d_level *,boolean,boolean,int,
                           const char *,const char *);
-extern void deferred_goto(void);
-extern boolean revive_corpse(struct obj *, boolean);
-extern void revive_mon(void *, long);
-extern void moldy_corpse(void *, long);
-extern int donull(void);
-extern int dowipe(void);
-extern void set_wounded_legs(long,int);
-extern void heal_legs(void);
+void deferred_goto(void);
+boolean revive_corpse(struct obj *, boolean);
+void revive_mon(void *, long);
+void moldy_corpse(void *, long);
+int donull(void);
+int dowipe(void);
+void set_wounded_legs(long,int);
+void heal_legs(void);
 
 /* ### do_name.c ### */
 
-extern int getpos(coord *,boolean,const char *);
-extern struct monst *christen_monst(struct monst *,const char *);
-extern int do_mname(void);
-extern struct obj *oname(struct obj *,const char *);
-extern int ddocall(void);
-extern void docall(struct obj *);
-extern const char *rndghostname(void);
-extern char *x_monnam(struct monst *,int,const char *,int,boolean);
-extern char *l_monnam(struct monst *);
-extern char *mon_nam(struct monst *);
-extern char *noit_mon_nam(struct monst *);
-extern char *Monnam(struct monst *);
-extern char *noit_Monnam(struct monst *);
-extern char *m_monnam(struct monst *);
-extern char *y_monnam(struct monst *);
-extern char *Adjmonnam(struct monst *,const char *);
-extern char *Amonnam(struct monst *);
-extern char *a_monnam(struct monst *);
-extern char *distant_monnam(struct monst *,int,char *);
-extern const char *rndmonnam(void);
-extern const char *hcolor(const char *);
-extern const char *rndcolor(void);
-extern const char *roguename(void);
-extern struct obj *realloc_obj(struct obj *, int, void *, int, const char *);
-extern char *coyotename(struct monst *,char *);
+int getpos(coord *,boolean,const char *);
+struct monst *christen_monst(struct monst *,const char *);
+int do_mname(void);
+struct obj *oname(struct obj *,const char *);
+int ddocall(void);
+void docall(struct obj *);
+const char *rndghostname(void);
+char *x_monnam(struct monst *,int,const char *,int,boolean);
+char *l_monnam(struct monst *);
+char *mon_nam(struct monst *);
+char *noit_mon_nam(struct monst *);
+char *Monnam(struct monst *);
+char *noit_Monnam(struct monst *);
+char *m_monnam(struct monst *);
+char *y_monnam(struct monst *);
+char *Adjmonnam(struct monst *,const char *);
+char *Amonnam(struct monst *);
+char *a_monnam(struct monst *);
+char *distant_monnam(struct monst *,int,char *);
+const char *rndmonnam(void);
+const char *hcolor(const char *);
+const char *rndcolor(void);
+const char *roguename(void);
+struct obj *realloc_obj(struct obj *, int, void *, int, const char *);
+char *coyotename(struct monst *,char *);
 
 
 /* ### do_wear.c ### */
 
-extern int Armor_on(void);
-extern int Boots_on(void);
-extern int Cloak_on(void);
-extern int Helmet_on(void);
-extern int Gloves_on(void);
-extern int Shield_on(void);
-extern int Shirt_on(void);
-extern void Amulet_on(void);
-extern void off_msg(struct obj *);
-extern void set_wear(void);
-extern boolean donning(struct obj *);
-extern void cancel_don(void);
-extern int Armor_off(void);
-extern int Armor_gone(void);
-extern int Helmet_off(void);
-extern int Gloves_off(void);
-extern int Boots_off(void);
-extern int Cloak_off(void);
-extern int Shield_off(void);
-extern int Shirt_off(void);
-extern void Amulet_off(void);
-extern void Ring_on(struct obj *);
-extern void Ring_off(struct obj *);
-extern void Ring_gone(struct obj *);
-extern void Blindf_on(struct obj *);
-extern void Blindf_off(struct obj *);
-extern int dotakeoff(void);
-extern int doremring(void);
-extern int cursed(struct obj *);
-extern int armoroff(struct obj *);
-extern int canwearobj(struct obj *, long *, boolean);
-extern int dowear(void);
-extern int doputon(void);
-extern void find_ac(void);
-extern void glibr(void);
-extern struct obj *some_armor(struct monst *);
-extern void erode_armor(struct monst *,boolean);
-extern struct obj *stuck_ring(struct obj *,int);
-extern struct obj *unchanger(void);
-extern void reset_remarm(void);
-extern int doddoremarm(void);
-extern int destroy_arm(struct obj *);
-extern void adj_abon(struct obj *,schar);
-extern int dowear2(const char *, const char *);
+int Armor_on(void);
+int Boots_on(void);
+int Cloak_on(void);
+int Helmet_on(void);
+int Gloves_on(void);
+int Shield_on(void);
+int Shirt_on(void);
+void Amulet_on(void);
+void off_msg(struct obj *);
+void set_wear(void);
+boolean donning(struct obj *);
+void cancel_don(void);
+int Armor_off(void);
+int Armor_gone(void);
+int Helmet_off(void);
+int Gloves_off(void);
+int Boots_off(void);
+int Cloak_off(void);
+int Shield_off(void);
+int Shirt_off(void);
+void Amulet_off(void);
+void Ring_on(struct obj *);
+void Ring_off(struct obj *);
+void Ring_gone(struct obj *);
+void Blindf_on(struct obj *);
+void Blindf_off(struct obj *);
+int dotakeoff(void);
+int doremring(void);
+int cursed(struct obj *);
+int armoroff(struct obj *);
+int canwearobj(struct obj *, long *, boolean);
+int dowear(void);
+int doputon(void);
+void find_ac(void);
+void glibr(void);
+struct obj *some_armor(struct monst *);
+void erode_armor(struct monst *,boolean);
+struct obj *stuck_ring(struct obj *,int);
+struct obj *unchanger(void);
+void reset_remarm(void);
+int doddoremarm(void);
+int destroy_arm(struct obj *);
+void adj_abon(struct obj *,schar);
+int dowear2(const char *, const char *);
 
 /* ### dog.c ### */
 
-extern void initedog(struct monst *);
-extern struct monst *make_familiar(struct obj *,xchar,xchar,boolean);
-extern struct monst *make_helper(int,xchar,xchar);
-extern struct monst *makedog(void);
-extern void update_mlstmv(void);
-extern void losedogs(void);
-extern void mon_arrive(struct monst *,boolean);
-extern void mon_catchup_elapsed_time(struct monst *,long);
-extern void keepdogs(boolean);
-extern void migrate_to_level(struct monst *,xchar,xchar,coord *);
-extern int dogfood(struct monst *,struct obj *);
-extern struct monst *tamedog(struct monst *,struct obj *);
-extern int make_pet_minion(int,aligntyp);
-extern void abuse_dog(struct monst *);
-extern void wary_dog(struct monst *, boolean);
+void initedog(struct monst *);
+struct monst *make_familiar(struct obj *,xchar,xchar,boolean);
+struct monst *make_helper(int,xchar,xchar);
+struct monst *makedog(void);
+void update_mlstmv(void);
+void losedogs(void);
+void mon_arrive(struct monst *,boolean);
+void mon_catchup_elapsed_time(struct monst *,long);
+void keepdogs(boolean);
+void migrate_to_level(struct monst *,xchar,xchar,coord *);
+int dogfood(struct monst *,struct obj *);
+struct monst *tamedog(struct monst *,struct obj *);
+int make_pet_minion(int,aligntyp);
+void abuse_dog(struct monst *);
+void wary_dog(struct monst *, boolean);
 
 /* ### dogmove.c ### */
 
-extern int dog_nutrition(struct monst *,struct obj *);
-extern int dog_eat(struct monst *,struct obj *,int,int,boolean);
-extern int dog_move(struct monst *,int);
-extern boolean betrayed(struct monst *);
+int dog_nutrition(struct monst *,struct obj *);
+int dog_eat(struct monst *,struct obj *,int,int,boolean);
+int dog_move(struct monst *,int);
+boolean betrayed(struct monst *);
 
 /* ### dokick.c ### */
 
-extern boolean ghitm(struct monst *,struct obj *);
-extern void container_impact_dmg(struct obj *);
-extern int dokick(void);
-extern boolean ship_object(struct obj *,xchar,xchar,boolean);
-extern void obj_delivery(void);
-extern schar down_gate(xchar,xchar);
-extern void impact_drop(struct obj *,xchar,xchar,xchar);
+boolean ghitm(struct monst *,struct obj *);
+void container_impact_dmg(struct obj *);
+int dokick(void);
+boolean ship_object(struct obj *,xchar,xchar,boolean);
+void obj_delivery(void);
+schar down_gate(xchar,xchar);
+void impact_drop(struct obj *,xchar,xchar,xchar);
 
 /* ### dothrow.c ### */
 
-extern struct obj *splitoneoff(struct obj **);
-extern int dothrow(void);
-extern int dofire(void);
-extern void hitfloor(struct obj *);
-extern void hurtle(int,int,int,boolean);
-extern void mhurtle(struct monst *,int,int,int);
-extern void throwit(struct obj *,long,boolean,int);
-extern int omon_adj(struct monst *,struct obj *,boolean);
-extern int thitmonst(struct monst *,struct obj *, int);
-extern int hero_breaks(struct obj *,xchar,xchar,boolean);
-extern int breaks(struct obj *,xchar,xchar);
-extern boolean breaktest(struct obj *);
-extern boolean walk_path(coord *, coord *, boolean (*)(void *,int,int), void *);
-extern boolean hurtle_step(void *, int, int);
+struct obj *splitoneoff(struct obj **);
+int dothrow(void);
+int dofire(void);
+void hitfloor(struct obj *);
+void hurtle(int,int,int,boolean);
+void mhurtle(struct monst *,int,int,int);
+void throwit(struct obj *,long,boolean,int);
+int omon_adj(struct monst *,struct obj *,boolean);
+int thitmonst(struct monst *,struct obj *, int);
+int hero_breaks(struct obj *,xchar,xchar,boolean);
+int breaks(struct obj *,xchar,xchar);
+boolean breaktest(struct obj *);
+boolean walk_path(coord *, coord *, boolean (*)(void *,int,int), void *);
+boolean hurtle_step(void *, int, int);
 
 /* ### drawing.c ### */
 #endif /* !LEV_LEX_C */
-extern int def_char_to_objclass(char);
-extern int def_char_to_monclass(char);
+int def_char_to_objclass(char);
+int def_char_to_monclass(char);
 #ifndef LEV_LEX_C
-extern void assign_graphics(const glyph_t *,int,int,int);
-extern void switch_graphics(int);
-extern void assign_rogue_graphics(boolean);
-extern void assign_colors(uchar *,int,int,int);
+void assign_graphics(const glyph_t *,int,int,int);
+void switch_graphics(int);
+void assign_rogue_graphics(boolean);
+void assign_colors(uchar *,int,int,int);
 
 /* ### dungeon.c ### */
 
-extern void save_dungeon(int,boolean,boolean);
-extern void restore_dungeon(int);
-extern void insert_branch(branch *,boolean);
-extern void init_dungeons(void);
-extern s_level *find_level(const char *);
-extern s_level *Is_special(d_level *);
-extern branch *Is_branchlev(d_level *);
-extern xchar ledger_no(d_level *);
-extern xchar maxledgerno(void);
-extern schar depth(d_level *);
-extern xchar dunlev(d_level *);
-extern xchar dunlevs_in_dungeon(d_level *);
-extern xchar real_dunlevs_in_dungeon(d_level *);
-extern xchar ledger_to_dnum(xchar);
-extern xchar ledger_to_dlev(xchar);
-extern xchar deepest_lev_reached(boolean);
-extern boolean on_level(d_level *,d_level *);
-extern void next_level(boolean);
-extern void prev_level(boolean);
-extern void u_on_newpos(int,int);
-extern void u_on_sstairs(void);
-extern void u_on_upstairs(void);
-extern void u_on_dnstairs(void);
-extern boolean On_stairs(xchar,xchar);
-extern void get_level(d_level *,int);
-extern boolean Is_botlevel(d_level *);
-extern boolean Can_fall_thru(d_level *);
-extern boolean Can_dig_down(d_level *);
-extern boolean Can_rise_up(int,int,d_level *);
-extern boolean In_quest(d_level *);
-extern boolean In_mines(d_level *);
-extern boolean In_spiders(d_level *);
-extern branch *dungeon_branch(const char *);
-extern boolean at_dgn_entrance(const char *);
-extern boolean In_hell(d_level *);
-extern boolean In_V_tower(d_level *);
-extern boolean On_W_tower_level(d_level *);
-extern boolean In_W_tower(int,int,d_level *);
-extern void find_hell(d_level *);
-extern void goto_hell(boolean,boolean);
-extern void assign_level(d_level *,d_level *);
-extern void assign_rnd_level(d_level *,d_level *,int);
-extern int induced_align(int);
-extern boolean Invocation_lev(d_level *);
-extern xchar level_difficulty(void);
-extern schar lev_by_name(const char *);
-extern schar print_dungeon(boolean,schar *,xchar *);
-extern int donamelevel(void);
-extern int dooverview(void);
-extern void forget_mapseen(int);
-extern void init_mapseen(d_level*);
-extern void recalc_mapseen(void);
-extern void recbranch_mapseen(d_level*, d_level*);
-extern void remdun_mapseen(int);
+void save_dungeon(int,boolean,boolean);
+void restore_dungeon(int);
+void insert_branch(branch *,boolean);
+void init_dungeons(void);
+s_level *find_level(const char *);
+s_level *Is_special(d_level *);
+branch *Is_branchlev(d_level *);
+xchar ledger_no(d_level *);
+xchar maxledgerno(void);
+schar depth(d_level *);
+xchar dunlev(d_level *);
+xchar dunlevs_in_dungeon(d_level *);
+xchar real_dunlevs_in_dungeon(d_level *);
+xchar ledger_to_dnum(xchar);
+xchar ledger_to_dlev(xchar);
+xchar deepest_lev_reached(boolean);
+boolean on_level(d_level *,d_level *);
+void next_level(boolean);
+void prev_level(boolean);
+void u_on_newpos(int,int);
+void u_on_sstairs(void);
+void u_on_upstairs(void);
+void u_on_dnstairs(void);
+boolean On_stairs(xchar,xchar);
+void get_level(d_level *,int);
+boolean Is_botlevel(d_level *);
+boolean Can_fall_thru(d_level *);
+boolean Can_dig_down(d_level *);
+boolean Can_rise_up(int,int,d_level *);
+boolean In_quest(d_level *);
+boolean In_mines(d_level *);
+boolean In_spiders(d_level *);
+branch *dungeon_branch(const char *);
+boolean at_dgn_entrance(const char *);
+boolean In_hell(d_level *);
+boolean In_V_tower(d_level *);
+boolean On_W_tower_level(d_level *);
+boolean In_W_tower(int,int,d_level *);
+void find_hell(d_level *);
+void goto_hell(boolean,boolean);
+void assign_level(d_level *,d_level *);
+void assign_rnd_level(d_level *,d_level *,int);
+int induced_align(int);
+boolean Invocation_lev(d_level *);
+xchar level_difficulty(void);
+schar lev_by_name(const char *);
+schar print_dungeon(boolean,schar *,xchar *);
+int donamelevel(void);
+int dooverview(void);
+void forget_mapseen(int);
+void init_mapseen(d_level*);
+void recalc_mapseen(void);
+void recbranch_mapseen(d_level*, d_level*);
+void remdun_mapseen(int);
 
 /* ### eat.c ### */
 
-extern boolean is_edible(struct obj *);
-extern void init_uhunger(void);
-extern int Hear_again(void);
-extern void reset_eat(void);
-extern int doeat(void);
-extern void gethungry(void);
-extern void morehungry(int);
-extern void lesshungry(int);
-extern boolean is_fainted(void);
-extern void reset_faint(void);
-extern void violated_vegetarian(void);
+boolean is_edible(struct obj *);
+void init_uhunger(void);
+int Hear_again(void);
+void reset_eat(void);
+int doeat(void);
+void gethungry(void);
+void morehungry(int);
+void lesshungry(int);
+boolean is_fainted(void);
+void reset_faint(void);
+void violated_vegetarian(void);
 #if 0
-extern void sync_hunger(void);
+void sync_hunger(void);
 #endif
-extern void newuhs(boolean);
-extern boolean can_reach_floorobj(void);
-extern void vomit(void);
-extern int eaten_stat(int,struct obj *);
-extern void food_disappears(struct obj *);
-extern void food_substitution(struct obj *,struct obj *);
-extern boolean bite_monster(struct monst *mon);
-extern void fix_petrification(void);
-extern void consume_oeaten(struct obj *,int);
-extern boolean maybe_finished_meal(boolean);
+void newuhs(boolean);
+boolean can_reach_floorobj(void);
+void vomit(void);
+int eaten_stat(int,struct obj *);
+void food_disappears(struct obj *);
+void food_substitution(struct obj *,struct obj *);
+boolean bite_monster(struct monst *mon);
+void fix_petrification(void);
+void consume_oeaten(struct obj *,int);
+boolean maybe_finished_meal(boolean);
 
 /* ### end.c ### */
 
-extern void done1(int);
-extern int done2(void);
-extern void done_in_by(struct monst *);
+void done1(int);
+int done2(void);
+void done_in_by(struct monst *);
 #endif /* !LEV_LEX_C */
-extern noreturn void panic(const char *,...) PRINTF_F(1,2);
+noreturn void panic(const char *,...) PRINTF_F(1,2);
 #ifndef LEV_LEX_C
-extern void done(int);
-extern void container_contents(struct obj *,boolean,boolean);
-extern void terminate(int);
-extern int dolistvanq(void);
-extern int num_genocides(void);
+void done(int);
+void container_contents(struct obj *,boolean,boolean);
+void terminate(int);
+int dolistvanq(void);
+int num_genocides(void);
 /* KMH, ethics */
-extern int doethics(void);
+int doethics(void);
 
 
 /* ### engrave.c ### */
 
-extern char *random_engraving(char *);
-extern void wipeout_text(char *,int,unsigned);
-extern boolean can_reach_floor(void);
-extern const char *surface(int,int);
-extern const char *ceiling(int,int);
-extern struct engr *engr_at(xchar,xchar);
-extern int sengr_at(const char *,xchar,xchar);
-extern void u_wipe_engr(int);
-extern void wipe_engr_at(xchar,xchar,xchar);
-extern boolean sense_engr_at(int,int,boolean);
-extern void make_engr_at(int,int,const char *,long,xchar);
-extern void del_engr_at(int,int);
-extern boolean freehand(void);
-extern int   doengrave(void);
-extern void save_engravings(int,int);
-extern void rest_engravings(int);
-extern void del_engr(struct engr *);
-extern void rloc_engr(struct engr *);
-extern void make_grave(int,int,const char *);
+char *random_engraving(char *);
+void wipeout_text(char *,int,unsigned);
+boolean can_reach_floor(void);
+const char *surface(int,int);
+const char *ceiling(int,int);
+struct engr *engr_at(xchar,xchar);
+int sengr_at(const char *,xchar,xchar);
+void u_wipe_engr(int);
+void wipe_engr_at(xchar,xchar,xchar);
+boolean sense_engr_at(int,int,boolean);
+void make_engr_at(int,int,const char *,long,xchar);
+void del_engr_at(int,int);
+boolean freehand(void);
+int   doengrave(void);
+void save_engravings(int,int);
+void rest_engravings(int);
+void del_engr(struct engr *);
+void rloc_engr(struct engr *);
+void make_grave(int,int,const char *);
 
 /* ### exper.c ### */
 
-extern long newuexp(int);
-extern int experience(struct monst *,int);
-extern void more_experienced(int,int);
-extern void losexp(const char *, boolean);
-extern void newexplevel(void);
-extern void pluslvl(boolean);
-extern long rndexp(boolean);
+long newuexp(int);
+int experience(struct monst *,int);
+void more_experienced(int,int);
+void losexp(const char *, boolean);
+void newexplevel(void);
+void pluslvl(boolean);
+long rndexp(boolean);
 
 /* ### explode.c ### */
 
-extern void explode(xchar,xchar,int,int,char,int);
-extern long scatter(int, int, int, uint, struct obj *);
-extern void splatter_burning_oil(int, int);
-extern void grenade_explode(struct obj *, int, int, boolean, int);
-extern void arm_bomb(struct obj *, boolean);
+void explode(xchar,xchar,int,int,char,int);
+long scatter(int, int, int, uint, struct obj *);
+void splatter_burning_oil(int, int);
+void grenade_explode(struct obj *, int, int, boolean, int);
+void arm_bomb(struct obj *, boolean);
 
 /* ### extralev.c ### */
 
-extern void makeroguerooms(void);
-extern void corr(int,int);
-extern void makerogueghost(void);
+void makeroguerooms(void);
+void corr(int,int);
+void makerogueghost(void);
 
 /* ### files.c ### */
 
-extern char *fname_encode(const char *, char, char *, char *, int);
-extern char *fname_decode(char, char *, char *, int);
-extern boolean uptodate(int,const char *);
-extern void store_version(int);
-extern void set_levelfile_name(char *,int);
-extern int create_levelfile(int,char *);
-extern int open_levelfile(int,char *);
-extern void delete_levelfile(int);
-extern void clearlocks(void);
-extern int create_bonesfile(d_level*,char **, char *);
-extern void commit_bonesfile(d_level *);
-extern int open_bonesfile(d_level*,char **);
-extern boolean delete_bonesfile(d_level*);
-extern void set_savefile_name(void);
+char *fname_encode(const char *, char, char *, char *, int);
+char *fname_decode(char, char *, char *, int);
+boolean uptodate(int,const char *);
+void store_version(int);
+void set_levelfile_name(char *,int);
+int create_levelfile(int,char *);
+int open_levelfile(int,char *);
+void delete_levelfile(int);
+void clearlocks(void);
+int create_bonesfile(d_level*,char **, char *);
+void commit_bonesfile(d_level *);
+int open_bonesfile(d_level*,char **);
+boolean delete_bonesfile(d_level*);
+void set_savefile_name(void);
 #ifdef INSURANCE
-extern void save_savefile_name(int);
+void save_savefile_name(int);
 #endif
-extern void set_error_savefile(void);
-extern int create_savefile(void);
-extern int open_savefile(void);
-extern int delete_savefile(void);
-extern int restore_saved_game(void);
-extern boolean lock_file(const char *,int,int);
-extern void unlock_file(const char *);
+void set_error_savefile(void);
+int create_savefile(void);
+int open_savefile(void);
+int delete_savefile(void);
+int restore_saved_game(void);
+boolean lock_file(const char *,int,int);
+void unlock_file(const char *);
 #ifdef USER_SOUNDS
-extern boolean can_read_file(const char *);
+boolean can_read_file(const char *);
 #endif
-extern void read_config_file(const char *);
-extern void check_recordfile(const char *);
-extern int get_uchar_list(char*, uchar*, int);
-extern void read_wizkit(void);
-extern void paniclog(const char *, const char *);
-extern void free_saved_games(char**);
+void read_config_file(const char *);
+void check_recordfile(const char *);
+int get_uchar_list(char*, uchar*, int);
+void read_wizkit(void);
+void paniclog(const char *, const char *);
+void free_saved_games(char**);
 #ifdef SELF_RECOVER
-extern boolean recover_savefile(void);
+boolean recover_savefile(void);
 #endif
 #ifdef HOLD_LOCKFILE_OPEN
-extern void really_close(void);
+void really_close(void);
 #endif
 
 /* ### fountain.c ### */
 
-extern void floating_above(const char *);
-extern void dogushforth(int);
-extern void dryup(xchar,xchar, boolean);
-extern void drinkfountain(void);
-extern void dipfountain(struct obj *);
-extern void whetstone_fountain_effects(struct obj *);
-extern void diptoilet(struct obj *);
-extern void breaksink(int,int);
-extern void breaktoilet(int,int);
-extern void drinksink(void);
-extern void drinktoilet(void);
-extern void whetstone_sink_effects(struct obj *);
-extern void whetstone_toilet_effects(struct obj *);
+void floating_above(const char *);
+void dogushforth(int);
+void dryup(xchar,xchar, boolean);
+void drinkfountain(void);
+void dipfountain(struct obj *);
+void whetstone_fountain_effects(struct obj *);
+void diptoilet(struct obj *);
+void breaksink(int,int);
+void breaktoilet(int,int);
+void drinksink(void);
+void drinktoilet(void);
+void whetstone_sink_effects(struct obj *);
+void whetstone_toilet_effects(struct obj *);
 
 /* ### gypsy.c ### */
 
-extern void gypsy_init(struct monst *);
-extern void gypsy_chat(struct monst *);
+void gypsy_init(struct monst *);
+void gypsy_chat(struct monst *);
 
 
 /* ### hack.c ### */
 
-extern anything int_to_any(int);
-extern anything uint_to_any(uint);
-extern anything monst_to_any(struct monst*);
-extern anything obj_to_any(struct obj*);
+anything int_to_any(int);
+anything uint_to_any(uint);
+anything monst_to_any(struct monst*);
+anything obj_to_any(struct obj*);
 #ifdef DUNGEON_GROWTH
-extern void catchup_dgn_growths(int);
-extern void dgn_growths(boolean,boolean);
+void catchup_dgn_growths(int);
+void dgn_growths(boolean,boolean);
 #endif
-extern boolean revive_nasty(int,int,const char*);
-extern void movobj(struct obj *,xchar,xchar);
-extern boolean may_dig(xchar,xchar);
-extern boolean may_passwall(xchar,xchar);
-extern boolean bad_rock(struct monst *,xchar,xchar);
-extern boolean invocation_pos(xchar,xchar);
-extern boolean test_move(int, int, int, int, int);
-extern void domove(void);
-extern void invocation_message(void);
-extern void spoteffects(boolean);
-extern char *in_rooms(xchar,xchar,int);
-extern boolean in_town(int,int);
-extern void check_special_room(boolean);
-extern int dopickup(void);
-extern void lookaround(void);
-extern int monster_nearby(void);
-extern void nomul(int);
-extern void unmul(const char *);
-extern void showdmg(int);
-extern void losehp(int,const char *, int);
-extern int weight_cap(void);
-extern int inv_weight(void);
-extern int near_capacity(void);
-extern int calc_capacity(int);
-extern int max_capacity(void);
-extern boolean check_capacity(const char *);
-extern int inv_cnt(void);
-extern long money_cnt(struct obj *);
+boolean revive_nasty(int,int,const char*);
+void movobj(struct obj *,xchar,xchar);
+boolean may_dig(xchar,xchar);
+boolean may_passwall(xchar,xchar);
+boolean bad_rock(struct monst *,xchar,xchar);
+boolean invocation_pos(xchar,xchar);
+boolean test_move(int, int, int, int, int);
+void domove(void);
+void invocation_message(void);
+void spoteffects(boolean);
+char *in_rooms(xchar,xchar,int);
+boolean in_town(int,int);
+void check_special_room(boolean);
+int dopickup(void);
+void lookaround(void);
+int monster_nearby(void);
+void nomul(int);
+void unmul(const char *);
+void showdmg(int);
+void losehp(int,const char *, int);
+int weight_cap(void);
+int inv_weight(void);
+int near_capacity(void);
+int calc_capacity(int);
+int max_capacity(void);
+boolean check_capacity(const char *);
+int inv_cnt(void);
+long money_cnt(struct obj *);
 
 /* ### hacklib.c ### */
 
-extern boolean digit(char);
-extern boolean letter(char);
-extern char highc(char);
-extern char lowc(char);
-extern char *lcase(char *);
-extern char *upstart(char *);
-extern char *mungspaces(char *);
-extern char *eos(char *);
-extern char *strkitten(char *,char);
-extern char *s_suffix(const char *);
-extern boolean onlyspace(const char *);
-extern char *tabexpand(char *);
-extern char *visctrl(char);
-extern const char *ordin(uint);
-extern char *sitoa(int);
-extern int sgn(int);
-extern int rounddiv(long,int);
-extern int dist2(int,int,int,int);
-extern int distmin(int,int,int,int);
-extern boolean online2(int,int,int,int);
-extern boolean pmatch(const char *,const char *);
+boolean digit(char);
+boolean letter(char);
+char highc(char);
+char lowc(char);
+char *lcase(char *);
+char *upstart(char *);
+char *mungspaces(char *);
+char *eos(char *);
+char *strkitten(char *,char);
+char *s_suffix(const char *);
+boolean onlyspace(const char *);
+char *tabexpand(char *);
+char *visctrl(char);
+const char *ordin(uint);
+char *sitoa(int);
+int sgn(int);
+int rounddiv(long,int);
+int dist2(int,int,int,int);
+int distmin(int,int,int,int);
+boolean online2(int,int,int,int);
+boolean pmatch(const char *,const char *);
 #ifndef STRNCMPI
-extern int strncmpi(const char *,const char *, usize);
+int strncmpi(const char *,const char *, usize);
 #endif
 #ifndef STRSTRI
-extern char *strstri(const char *,const char *);
+char *strstri(const char *,const char *);
 #endif
-extern boolean fuzzymatch(const char *,const char *,const char *,boolean);
-extern void setrandom(void);
-extern int getyear(void);
-extern int getmonth(void);	/* KMH -- Used by gypsies */
+boolean fuzzymatch(const char *,const char *,const char *,boolean);
+void setrandom(void);
+int getyear(void);
+int getmonth(void);	/* KMH -- Used by gypsies */
 #if 0
-extern char *yymmdd(time_t);
+char *yymmdd(time_t);
 #endif
-extern long yyyymmdd(time_t);
-extern long hhmmss(time_t date);
-extern int phase_of_the_moon(void);
-extern boolean friday_13th(void);
-extern boolean groundhog_day(void);	/* KMH -- February 2 */
-extern int night(void);
-extern int midnight(void);
+long yyyymmdd(time_t);
+long hhmmss(time_t date);
+int phase_of_the_moon(void);
+boolean friday_13th(void);
+boolean groundhog_day(void);	/* KMH -- February 2 */
+int night(void);
+int midnight(void);
 
 /* ### invent.c ### */
 
-extern void assigninvlet(struct obj *);
-extern struct obj *merge_choice(struct obj *,struct obj *);
-extern boolean merged(struct obj **,struct obj **);
-extern void addinv_core1(struct obj *);
-extern void addinv_core2(struct obj *);
-extern struct obj *addinv(struct obj *);
-extern struct obj *hold_another_object(struct obj *,const char *,const char *,const char *);
-extern void useupall(struct obj *);
-extern void useup(struct obj *);
-extern void consume_obj_charge(struct obj *,boolean);
-extern void freeinv_core(struct obj *);
-extern void freeinv(struct obj *);
-extern void delallobj(int,int);
-extern void delobj(struct obj *);
-extern struct obj *sobj_at(int,int,int);
-extern struct obj *carrying(int);
-extern boolean have_lizard(void);
-extern struct obj *o_on(uint,struct obj *);
-extern boolean obj_here(struct obj *,int,int);
-extern boolean wearing_armor(void);
-extern bool is_worn(struct obj *);
-extern struct obj *g_at(int,int);
-extern struct obj *mkgoldobj(long);
-extern struct obj *getobj(const char *,const char *);
-extern int ggetobj(const char *,int (*)(struct obj*),int,boolean,unsigned *);
-extern void fully_identify_obj(struct obj *);
-extern int identify(struct obj *);
-extern void identify_pack(int);
-extern int askchain(struct obj **,const char *,int,int (*)(struct obj*),
+void assigninvlet(struct obj *);
+struct obj *merge_choice(struct obj *,struct obj *);
+boolean merged(struct obj **,struct obj **);
+void addinv_core1(struct obj *);
+void addinv_core2(struct obj *);
+struct obj *addinv(struct obj *);
+struct obj *hold_another_object(struct obj *,const char *,const char *,const char *);
+void useupall(struct obj *);
+void useup(struct obj *);
+void consume_obj_charge(struct obj *,boolean);
+void freeinv_core(struct obj *);
+void freeinv(struct obj *);
+void delallobj(int,int);
+void delobj(struct obj *);
+struct obj *sobj_at(int,int,int);
+struct obj *carrying(int);
+boolean have_lizard(void);
+struct obj *o_on(uint,struct obj *);
+boolean obj_here(struct obj *,int,int);
+boolean wearing_armor(void);
+bool is_worn(struct obj *);
+struct obj *g_at(int,int);
+struct obj *mkgoldobj(long);
+struct obj *getobj(const char *,const char *);
+int ggetobj(const char *,int (*)(struct obj*),int,boolean,unsigned *);
+void fully_identify_obj(struct obj *);
+int identify(struct obj *);
+void identify_pack(int);
+int askchain(struct obj **,const char *,int,int (*)(struct obj*),
                     int (*)(struct obj*),int,const char *);
-extern void prinv(const char *,struct obj *,long);
-extern char *xprname(struct obj *,const char *,char,boolean,long,long);
-extern int ddoinv(void);
-extern char display_inventory(const char *,boolean);
-extern int display_binventory(int,int,boolean);
-extern struct obj *display_cinventory(struct obj *);
-extern struct obj *display_minventory(struct monst *,int,char *);
-extern int dotypeinv(void);
-extern const char *dfeature_at(int,int,char *);
-extern int look_here(int,boolean);
-extern int dolook(void);
-extern boolean will_feel_cockatrice(struct obj *,boolean);
-extern void feel_cockatrice(struct obj *,boolean);
-extern void stackobj(struct obj *);
-extern int doprgold(void);
-extern int doprwep(void);
-extern int doprarm(void);
-extern int doprring(void);
-extern int dopramulet(void);
-extern int doprtool(void);
-extern int doprinuse(void);
-extern void useupf(struct obj *,long);
-extern char *let_to_name(char,boolean);
-extern void free_invbuf(void);
-extern void reassign(void);
-extern int doorganize(void);
-extern int count_unpaid(struct obj *);
-extern int count_buc(struct obj *,int);
-extern void carry_obj_effects(struct monst *, struct obj *);
-extern const char *currency(long);
-extern void silly_thing(const char *,struct obj *);
-extern int doinvinuse(void);
+void prinv(const char *,struct obj *,long);
+char *xprname(struct obj *,const char *,char,boolean,long,long);
+int ddoinv(void);
+char display_inventory(const char *,boolean);
+int display_binventory(int,int,boolean);
+struct obj *display_cinventory(struct obj *);
+struct obj *display_minventory(struct monst *,int,char *);
+int dotypeinv(void);
+const char *dfeature_at(int,int,char *);
+int look_here(int,boolean);
+int dolook(void);
+boolean will_feel_cockatrice(struct obj *,boolean);
+void feel_cockatrice(struct obj *,boolean);
+void stackobj(struct obj *);
+int doprgold(void);
+int doprwep(void);
+int doprarm(void);
+int doprring(void);
+int dopramulet(void);
+int doprtool(void);
+int doprinuse(void);
+void useupf(struct obj *,long);
+char *let_to_name(char,boolean);
+void free_invbuf(void);
+void reassign(void);
+int doorganize(void);
+int count_unpaid(struct obj *);
+int count_buc(struct obj *,int);
+void carry_obj_effects(struct monst *, struct obj *);
+const char *currency(long);
+void silly_thing(const char *,struct obj *);
+int doinvinuse(void);
 /* KMH, balance patch -- new function */
-extern int jumble_pack(void);
+int jumble_pack(void);
 
 /* ### ioctl.c ### */
 
 #ifdef UNIX
-extern void getwindowsz(void);
-extern void getioctls(void);
-extern void setioctls(void);
+void getwindowsz(void);
+void getioctls(void);
+void setioctls(void);
 # ifdef SUSPEND
-extern int dosuspend(void);
+int dosuspend(void);
 # endif /* SUSPEND */
 #endif /* UNIX */
 
 /* ### light.c ### */
 
-extern void new_light_source(xchar, xchar, int, int, anything);
-extern void del_light_source(int, anything);
-extern void do_light_sources(char **);
-extern struct monst *find_mid(unsigned, unsigned);
-extern void save_light_sources(int, int, int);
-extern void restore_light_sources(int);
-extern void relink_light_sources(boolean);
-extern void obj_move_light_source(struct obj *, struct obj *);
-extern boolean any_light_source(void);
-extern void snuff_light_source(int, int);
-extern boolean obj_sheds_light(struct obj *);
-extern boolean obj_is_burning(struct obj *);
-extern boolean obj_permanent_light(struct obj *);
-extern void obj_split_light_source(struct obj *, struct obj *);
-extern void obj_merge_light_sources(struct obj *,struct obj *);
-extern int candle_light_range(struct obj *);
-extern int wiz_light_sources(void);
+void new_light_source(xchar, xchar, int, int, anything);
+void del_light_source(int, anything);
+void do_light_sources(char **);
+struct monst *find_mid(unsigned, unsigned);
+void save_light_sources(int, int, int);
+void restore_light_sources(int);
+void relink_light_sources(boolean);
+void obj_move_light_source(struct obj *, struct obj *);
+boolean any_light_source(void);
+void snuff_light_source(int, int);
+boolean obj_sheds_light(struct obj *);
+boolean obj_is_burning(struct obj *);
+boolean obj_permanent_light(struct obj *);
+void obj_split_light_source(struct obj *, struct obj *);
+void obj_merge_light_sources(struct obj *,struct obj *);
+int candle_light_range(struct obj *);
+int wiz_light_sources(void);
 
 /* ### lock.c ### */
 
-extern boolean picking_lock(int *,int *);
-extern boolean picking_at(int,int);
-extern void reset_pick(void);
-extern int pick_lock(struct obj **);
-extern int doforce(void);
-extern boolean boxlock(struct obj *,struct obj *);
-extern boolean doorlock(struct obj *,int,int);
-extern int doopen(void);
-extern int doclose(void);
-extern int artifact_door(int,int);
+boolean picking_lock(int *,int *);
+boolean picking_at(int,int);
+void reset_pick(void);
+int pick_lock(struct obj **);
+int doforce(void);
+boolean boxlock(struct obj *,struct obj *);
+boolean doorlock(struct obj *,int,int);
+int doopen(void);
+int doclose(void);
+int artifact_door(int,int);
 
 #ifdef MAC
 /* These declarations are here because the main code calls them. */
 
 /* ### macfile.c ### */
 
-extern int maccreat(const char *,long);
-extern int macopen(const char *,int,long);
-extern int macclose(int);
-extern int macread(int,void *,unsigned);
-extern int macwrite(int,void *,unsigned);
-extern long macseek(int,long,short);
-extern int macunlink(const char *);
+int maccreat(const char *,long);
+int macopen(const char *,int,long);
+int macclose(int);
+int macread(int,void *,unsigned);
+int macwrite(int,void *,unsigned);
+long macseek(int,long,short);
+int macunlink(const char *);
 
 /* ### macsnd.c ### */
 
-extern void mac_speaker(struct obj *,char *);
+void mac_speaker(struct obj *,char *);
 
 /* ### macunix.c ### */
 
-extern void regularize(char *);
-extern void getlock(void);
+void regularize(char *);
+void getlock(void);
 
 /* ### macwin.c ### */
 
-extern void lock_mouse_cursor(Boolean);
-extern int SanePositions(void);
+void lock_mouse_cursor(Boolean);
+int SanePositions(void);
 
 /* ### mttymain.c ### */
 
-extern void getreturn(const char *);
-extern void msmsg(const char *,...);
-extern void gettty(void);
-extern void setftty(void);
-extern void settty(const char *);
-extern int tgetch(void);
-extern void cmov(int x, int y);
-extern void nocmov(int x, int y);
+void getreturn(const char *);
+void msmsg(const char *,...);
+void gettty(void);
+void setftty(void);
+void settty(const char *);
+int tgetch(void);
+void cmov(int x, int y);
+void nocmov(int x, int y);
 
 #endif /* MAC */
 
@@ -905,103 +905,103 @@ extern void nocmov(int x, int y);
 
 #ifdef MAIL
 # ifdef UNIX
-extern void getmailstatus(void);
+void getmailstatus(void);
 # endif
-extern void ckmailstatus(void);
-extern void readmail(struct obj *);
+void ckmailstatus(void);
+void readmail(struct obj *);
 #endif /* MAIL */
 
 /* ### makemon.c ### */
 
-extern boolean is_home_elemental(struct permonst *);
-extern struct monst *clone_mon(struct monst *,xchar,xchar);
-extern struct monst *makemon(struct permonst *,int,int,int);
-extern boolean create_critters(int,struct permonst *);
-extern struct permonst *rndmonst(void);
-extern void reset_rndmonst(int);
-extern struct permonst *mkclass(char,int);
-extern int pm_mkclass(char,int);
-extern int adj_lev(struct permonst *);
-extern struct permonst *grow_up(struct monst *,struct monst *);
-extern int mongets(struct monst *,int);
-extern int golemhp(int);
-extern boolean peace_minded(struct permonst *);
-extern void set_malign(struct monst *);
-extern void set_mimic_sym(struct monst *);
-extern int mbirth_limit(int);
-extern void mimic_hit_msg(struct monst *, short);
-extern void mkmonmoney(struct monst *, long);
-extern void bagotricks(struct obj *);
-extern boolean propagate(int, boolean,boolean);
+boolean is_home_elemental(struct permonst *);
+struct monst *clone_mon(struct monst *,xchar,xchar);
+struct monst *makemon(struct permonst *,int,int,int);
+boolean create_critters(int,struct permonst *);
+struct permonst *rndmonst(void);
+void reset_rndmonst(int);
+struct permonst *mkclass(char,int);
+int pm_mkclass(char,int);
+int adj_lev(struct permonst *);
+struct permonst *grow_up(struct monst *,struct monst *);
+int mongets(struct monst *,int);
+int golemhp(int);
+boolean peace_minded(struct permonst *);
+void set_malign(struct monst *);
+void set_mimic_sym(struct monst *);
+int mbirth_limit(int);
+void mimic_hit_msg(struct monst *, short);
+void mkmonmoney(struct monst *, long);
+void bagotricks(struct obj *);
+boolean propagate(int, boolean,boolean);
 
 /* ### mapglyph.c ### */
 
-extern void mapglyph(int, glyph_t *, int *, unsigned *, int, int);
+void mapglyph(int, glyph_t *, int *, unsigned *, int, int);
 
 /* ### mcastu.c ### */
 
-extern int castmu(struct monst *,struct attack *,boolean,boolean);
-extern bool buzzmu(struct monst *,struct attack *);
+int castmu(struct monst *,struct attack *,boolean,boolean);
+bool buzzmu(struct monst *,struct attack *);
 
 /* ### mhitm.c ### */
 
-extern int  fightm(struct monst *);
-extern int  mattackm(struct monst *,struct monst *);
-extern bool noattacks(struct permonst *);
-extern int  sleep_monst(struct monst *,int,int);
-extern void slept_monst(struct monst *);
-extern long attk_protection(int);
+int  fightm(struct monst *);
+int  mattackm(struct monst *,struct monst *);
+bool noattacks(struct permonst *);
+int  sleep_monst(struct monst *,int,int);
+void slept_monst(struct monst *);
+long attk_protection(int);
 
 /* ### mhitu.c ### */
 
-extern const char *mpoisons_subj(struct monst *,struct attack *);
-extern void u_slow_down(void);
-extern struct monst *cloneu(void);
-extern void expels(struct monst *,struct permonst *,boolean);
-extern struct attack *getmattk(struct permonst *,int,int *,struct attack *);
-extern int mattacku(struct monst *);
-extern int magic_negation(struct monst *);
-extern int gazemu(struct monst *,struct attack *);
-extern void mdamageu(struct monst *,int);
-extern int could_seduce(struct monst *,struct monst *,struct attack *);
-extern int doseduce(struct monst *);
+const char *mpoisons_subj(struct monst *,struct attack *);
+void u_slow_down(void);
+struct monst *cloneu(void);
+void expels(struct monst *,struct permonst *,boolean);
+struct attack *getmattk(struct permonst *,int,int *,struct attack *);
+int mattacku(struct monst *);
+int magic_negation(struct monst *);
+int gazemu(struct monst *,struct attack *);
+void mdamageu(struct monst *,int);
+int could_seduce(struct monst *,struct monst *,struct attack *);
+int doseduce(struct monst *);
 
 /* ### minion.c ### */
 
-extern void msummon(struct monst *);
-extern void summon_minion(aligntyp,boolean);
-extern bool demon_talk(struct monst *);
-extern int lawful_minion(int);
-extern int neutral_minion(int);
-extern int chaotic_minion(int);
-extern long bribe(struct monst *);
-extern int dprince(aligntyp);
-extern int dlord(aligntyp);
-extern int llord(void);
-extern int ndemon(aligntyp);
-extern int lminion(void);
+void msummon(struct monst *);
+void summon_minion(aligntyp,boolean);
+bool demon_talk(struct monst *);
+int lawful_minion(int);
+int neutral_minion(int);
+int chaotic_minion(int);
+long bribe(struct monst *);
+int dprince(aligntyp);
+int dlord(aligntyp);
+int llord(void);
+int ndemon(aligntyp);
+int lminion(void);
 
 /* ### mklev.c ### */
 
-extern void sort_rooms(void);
-extern void add_room(int,int,int,int,boolean,schar,boolean);
-extern void add_subroom(struct mkroom *,int,int,int,int,
+void sort_rooms(void);
+void add_room(int,int,int,int,boolean,schar,boolean);
+void add_subroom(struct mkroom *,int,int,int,int,
                         boolean,schar,boolean);
-extern void makecorridors(void);
-extern int add_door(int,int,struct mkroom *);
-extern void mklev(void);
+void makecorridors(void);
+int add_door(int,int,struct mkroom *);
+void mklev(void);
 #ifdef SPECIALIZATION
-extern void topologize(struct mkroom *,boolean);
+void topologize(struct mkroom *,boolean);
 #else
-extern void topologize(struct mkroom *);
+void topologize(struct mkroom *);
 #endif
-extern void place_branch(branch *,xchar,xchar);
-extern boolean occupied(xchar,xchar);
-extern int okdoor(xchar,xchar);
-extern void dodoor(int,int,struct mkroom *);
-extern void mktrap(int,int,struct mkroom *,coord*);
-extern void mkstairs(xchar,xchar,char,struct mkroom *);
-extern void mkinvokearea(void);
+void place_branch(branch *,xchar,xchar);
+boolean occupied(xchar,xchar);
+int okdoor(xchar,xchar);
+void dodoor(int,int,struct mkroom *);
+void mktrap(int,int,struct mkroom *,coord*);
+void mkstairs(xchar,xchar,char,struct mkroom *);
+void mkinvokearea(void);
 
 /* ### mkmap.c ### */
 
@@ -1010,206 +1010,206 @@ void remove_rooms(int,int,int,int);
 
 /* ### mkmaze.c ### */
 
-extern void wallification(int,int,int,int, boolean);
-extern void walkfrom(int,int);
-extern void makemaz(const char *);
-extern void mazexy(coord *);
-extern void bound_digging(void);
-extern void mkportal(xchar,xchar,xchar,xchar);
-extern boolean bad_location(xchar,xchar,xchar,xchar,xchar,xchar);
-extern void place_lregion(xchar,xchar,xchar,xchar,
+void wallification(int,int,int,int, boolean);
+void walkfrom(int,int);
+void makemaz(const char *);
+void mazexy(coord *);
+void bound_digging(void);
+void mkportal(xchar,xchar,xchar,xchar);
+boolean bad_location(xchar,xchar,xchar,xchar,xchar,xchar);
+void place_lregion(xchar,xchar,xchar,xchar,
                           xchar,xchar,xchar,xchar,
                           xchar,d_level *);
-extern void movebubbles(void);
-extern void water_friction(void);
-extern void save_waterlevel(int,int);
-extern void restore_waterlevel(int);
-extern const char *waterbody_name(xchar,xchar);
+void movebubbles(void);
+void water_friction(void);
+void save_waterlevel(int,int);
+void restore_waterlevel(int);
+const char *waterbody_name(xchar,xchar);
 
 /* ### mkobj.c ### */
 
-extern struct obj *mkobj_at(char,int,int,boolean);
-extern struct obj *mksobj_at(int,int,int,boolean,boolean);
-extern struct obj *mkobj(char,boolean);
-extern int rndmonnum(void);
-extern struct obj *splitobj(struct obj *,long);
-extern void replace_object(struct obj *,struct obj *);
-extern void bill_dummy_object(struct obj *);
-extern struct obj *mksobj(int,boolean,boolean);
-extern int bcsign(struct obj *);
-extern int weight(struct obj *);
-extern struct obj *mkgold(long,int,int);
-extern struct obj *mkcorpstat(int,struct monst *,struct permonst *,int,int,boolean);
-extern struct obj *obj_attach_mid(struct obj *, unsigned);
-extern struct monst *get_mtraits(struct obj *, boolean);
-extern struct obj *mk_tt_object(int,int,int);
-extern struct obj *mk_named_object(int,struct permonst *,int,int,const char *);
-extern struct obj *rnd_treefruit_at(int, int);
-extern void start_corpse_timeout(struct obj *);
-extern void bless(struct obj *);
-extern void unbless(struct obj *);
-extern void curse(struct obj *);
-extern void uncurse(struct obj *);
-extern void blessorcurse(struct obj *,int);
-extern boolean is_flammable(struct obj *);
-extern boolean is_rottable(struct obj *);
-extern void place_object(struct obj *,int,int);
-extern void remove_object(struct obj *);
-extern void discard_minvent(struct monst *);
-extern void obj_extract_self(struct obj *);
-extern struct obj *container_extract_indestructable(struct obj *obj);
-extern void extract_nobj(struct obj *, struct obj **);
-extern void extract_nexthere(struct obj *, struct obj **);
-extern int add_to_minv(struct monst *, struct obj *);
-extern struct obj *add_to_container(struct obj *, struct obj *);
-extern void add_to_migration(struct obj *);
-extern void add_to_buried(struct obj *);
-extern void dealloc_obj(struct obj *);
-extern void obj_ice_effects(int, int, boolean);
-extern long peek_at_iced_corpse_age(struct obj *);
-extern void obj_sanity_check(void);
+struct obj *mkobj_at(char,int,int,boolean);
+struct obj *mksobj_at(int,int,int,boolean,boolean);
+struct obj *mkobj(char,boolean);
+int rndmonnum(void);
+struct obj *splitobj(struct obj *,long);
+void replace_object(struct obj *,struct obj *);
+void bill_dummy_object(struct obj *);
+struct obj *mksobj(int,boolean,boolean);
+int bcsign(struct obj *);
+int weight(struct obj *);
+struct obj *mkgold(long,int,int);
+struct obj *mkcorpstat(int,struct monst *,struct permonst *,int,int,boolean);
+struct obj *obj_attach_mid(struct obj *, unsigned);
+struct monst *get_mtraits(struct obj *, boolean);
+struct obj *mk_tt_object(int,int,int);
+struct obj *mk_named_object(int,struct permonst *,int,int,const char *);
+struct obj *rnd_treefruit_at(int, int);
+void start_corpse_timeout(struct obj *);
+void bless(struct obj *);
+void unbless(struct obj *);
+void curse(struct obj *);
+void uncurse(struct obj *);
+void blessorcurse(struct obj *,int);
+boolean is_flammable(struct obj *);
+boolean is_rottable(struct obj *);
+void place_object(struct obj *,int,int);
+void remove_object(struct obj *);
+void discard_minvent(struct monst *);
+void obj_extract_self(struct obj *);
+struct obj *container_extract_indestructable(struct obj *obj);
+void extract_nobj(struct obj *, struct obj **);
+void extract_nexthere(struct obj *, struct obj **);
+int add_to_minv(struct monst *, struct obj *);
+struct obj *add_to_container(struct obj *, struct obj *);
+void add_to_migration(struct obj *);
+void add_to_buried(struct obj *);
+void dealloc_obj(struct obj *);
+void obj_ice_effects(int, int, boolean);
+long peek_at_iced_corpse_age(struct obj *);
+void obj_sanity_check(void);
 
 /* ### mkroom.c ### */
 
-extern void mkroom(int);
-extern void fill_zoo(struct mkroom *);
-extern boolean nexttodoor(int,int);
-extern boolean has_dnstairs(struct mkroom *);
-extern boolean has_upstairs(struct mkroom *);
-extern int somex(struct mkroom *);
-extern int somey(struct mkroom *);
-extern boolean inside_room(struct mkroom *,xchar,xchar);
-extern boolean somexy(struct mkroom *,coord *);
-extern void mkundead(coord *,boolean,int);
-extern struct permonst *courtmon(void);
-extern struct permonst *antholemon(void);
-extern struct permonst *realzoomon(void);
-extern void save_rooms(int);
-extern void rest_rooms(int);
-extern struct mkroom *search_special(schar);
+void mkroom(int);
+void fill_zoo(struct mkroom *);
+boolean nexttodoor(int,int);
+boolean has_dnstairs(struct mkroom *);
+boolean has_upstairs(struct mkroom *);
+int somex(struct mkroom *);
+int somey(struct mkroom *);
+boolean inside_room(struct mkroom *,xchar,xchar);
+boolean somexy(struct mkroom *,coord *);
+void mkundead(coord *,boolean,int);
+struct permonst *courtmon(void);
+struct permonst *antholemon(void);
+struct permonst *realzoomon(void);
+void save_rooms(int);
+void rest_rooms(int);
+struct mkroom *search_special(schar);
 
 /* ### mon.c ### */
 
-extern int undead_to_corpse(int);
-extern int genus(int,int);
-extern int pm_to_cham(int);
-extern int minliquid(struct monst *);
-extern int movemon(void);
-extern int meatmetal(struct monst *);
-extern void meatcorpse(struct monst *);
-extern int meatobj(struct monst *);
-extern void mpickgold(struct monst *);
-extern boolean mpickstuff(struct monst *,const char *);
-extern int curr_mon_load(struct monst *);
-extern int max_mon_load(struct monst *);
-extern boolean can_carry(struct monst *,struct obj *);
-extern int mfndpos(struct monst *,coord *,long *,long);
-extern boolean monnear(struct monst *,int,int);
-extern void dmonsfree(void);
-extern int mcalcmove(struct monst*);
-extern void mcalcdistress(void);
-extern void replmon(struct monst *,struct monst *);
-extern void relmon(struct monst *);
-extern struct obj *mlifesaver(struct monst *);
-extern boolean corpse_chance(struct monst *,struct monst *,boolean);
-extern void mondead(struct monst *);
-extern void mondied(struct monst *);
-extern void mongone(struct monst *);
-extern void monstone(struct monst *);
-extern void monkilled(struct monst *,const char *,int);
-extern void mon_xkilled(struct monst *,const char *,int);
-extern void unstuck(struct monst *);
-extern void killed(struct monst *);
-extern void xkilled(struct monst *,int);
-extern void mon_to_stone(struct monst*);
-extern void mnexto(struct monst *);
-extern boolean mnearto(struct monst *,xchar,xchar,boolean);
-extern void poisontell(int);
-extern void poisoned(const char *,int,const char *,int);
-extern void m_respond(struct monst *);
-extern void setmangry(struct monst *);
-extern void wakeup(struct monst *);
-extern void wake_nearby(void);
-extern void wake_nearto(int,int,int);
-extern void seemimic(struct monst *);
-extern void rescham(void);
-extern void restartcham(void);
-extern void restore_cham(struct monst *);
-extern void mon_animal_list(boolean);
-extern int newcham(struct monst *,struct permonst *,boolean,boolean);
-extern int can_be_hatched(int);
-extern int egg_type_from_parent(int,boolean);
-extern boolean dead_species(int,boolean);
-extern void kill_genocided_monsters(void);
-extern void golemeffects(struct monst *,int,int);
-extern boolean angry_guards(boolean);
-extern void pacify_guards(void);
+int undead_to_corpse(int);
+int genus(int,int);
+int pm_to_cham(int);
+int minliquid(struct monst *);
+int movemon(void);
+int meatmetal(struct monst *);
+void meatcorpse(struct monst *);
+int meatobj(struct monst *);
+void mpickgold(struct monst *);
+boolean mpickstuff(struct monst *,const char *);
+int curr_mon_load(struct monst *);
+int max_mon_load(struct monst *);
+boolean can_carry(struct monst *,struct obj *);
+int mfndpos(struct monst *,coord *,long *,long);
+boolean monnear(struct monst *,int,int);
+void dmonsfree(void);
+int mcalcmove(struct monst*);
+void mcalcdistress(void);
+void replmon(struct monst *,struct monst *);
+void relmon(struct monst *);
+struct obj *mlifesaver(struct monst *);
+boolean corpse_chance(struct monst *,struct monst *,boolean);
+void mondead(struct monst *);
+void mondied(struct monst *);
+void mongone(struct monst *);
+void monstone(struct monst *);
+void monkilled(struct monst *,const char *,int);
+void mon_xkilled(struct monst *,const char *,int);
+void unstuck(struct monst *);
+void killed(struct monst *);
+void xkilled(struct monst *,int);
+void mon_to_stone(struct monst*);
+void mnexto(struct monst *);
+boolean mnearto(struct monst *,xchar,xchar,boolean);
+void poisontell(int);
+void poisoned(const char *,int,const char *,int);
+void m_respond(struct monst *);
+void setmangry(struct monst *);
+void wakeup(struct monst *);
+void wake_nearby(void);
+void wake_nearto(int,int,int);
+void seemimic(struct monst *);
+void rescham(void);
+void restartcham(void);
+void restore_cham(struct monst *);
+void mon_animal_list(boolean);
+int newcham(struct monst *,struct permonst *,boolean,boolean);
+int can_be_hatched(int);
+int egg_type_from_parent(int,boolean);
+boolean dead_species(int,boolean);
+void kill_genocided_monsters(void);
+void golemeffects(struct monst *,int,int);
+boolean angry_guards(boolean);
+void pacify_guards(void);
 
 /* ### mondata.c ### */
 
-extern void set_mon_data(struct monst *,struct permonst *,int);
-extern struct attack *attacktype_fordmg(struct permonst *,int,int);
-extern boolean attacktype(struct permonst *,int);
-extern boolean poly_when_stoned(struct permonst *);
-extern boolean resists_drli(struct monst *);
-extern boolean resists_magm(struct monst *);
-extern boolean resists_blnd(struct monst *);
-extern boolean can_blnd(struct monst *,struct monst *,uchar,struct obj *);
-extern boolean ranged_attk(struct permonst *);
-extern boolean passes_bars(struct permonst *);
-extern boolean can_track(struct permonst *);
-extern boolean breakarm(struct permonst *);
-extern boolean sliparm(struct permonst *);
-extern boolean sticks(struct permonst *);
-extern int num_horns(struct permonst *);
+void set_mon_data(struct monst *,struct permonst *,int);
+struct attack *attacktype_fordmg(struct permonst *,int,int);
+boolean attacktype(struct permonst *,int);
+boolean poly_when_stoned(struct permonst *);
+boolean resists_drli(struct monst *);
+boolean resists_magm(struct monst *);
+boolean resists_blnd(struct monst *);
+boolean can_blnd(struct monst *,struct monst *,uchar,struct obj *);
+boolean ranged_attk(struct permonst *);
+boolean passes_bars(struct permonst *);
+boolean can_track(struct permonst *);
+boolean breakarm(struct permonst *);
+boolean sliparm(struct permonst *);
+boolean sticks(struct permonst *);
+int num_horns(struct permonst *);
 /* extern boolean canseemon(struct monst *); */
-extern struct attack *dmgtype_fromattack(struct permonst *,int,int);
-extern boolean dmgtype(struct permonst *,int);
-extern int max_passive_dmg(struct monst *,struct monst *);
-extern int monsndx(struct permonst *);
-extern int name_to_mon(const char *);
-extern int gender(struct monst *);
-extern int pronoun_gender(struct monst *);
-extern boolean levl_follower(struct monst *);
-extern int little_to_big(int);
-extern int big_to_little(int);
-extern const char *locomotion(const struct permonst *,const char *);
-extern const char *stagger(const struct permonst *,const char *);
-extern const char *on_fire(struct permonst *,struct attack *);
-extern const struct permonst *raceptr(struct monst *);
+struct attack *dmgtype_fromattack(struct permonst *,int,int);
+boolean dmgtype(struct permonst *,int);
+int max_passive_dmg(struct monst *,struct monst *);
+int monsndx(struct permonst *);
+int name_to_mon(const char *);
+int gender(struct monst *);
+int pronoun_gender(struct monst *);
+boolean levl_follower(struct monst *);
+int little_to_big(int);
+int big_to_little(int);
+const char *locomotion(const struct permonst *,const char *);
+const char *stagger(const struct permonst *,const char *);
+const char *on_fire(struct permonst *,struct attack *);
+const struct permonst *raceptr(struct monst *);
 
 /* ### monmove.c ### */
 
-extern boolean itsstuck(struct monst *);
-extern boolean mb_trapped(struct monst *);
-extern void mon_regen(struct monst *,boolean);
-extern int dochugw(struct monst *);
-extern boolean onscary(int,int,struct monst *);
-extern void monflee(struct monst *, int, boolean, boolean);
-extern int dochug(struct monst *);
-extern int m_move(struct monst *,int);
-extern boolean closed_door(int,int);
-extern boolean accessible(int,int);
-extern void set_apparxy(struct monst *);
-extern boolean can_ooze(struct monst *);
+boolean itsstuck(struct monst *);
+boolean mb_trapped(struct monst *);
+void mon_regen(struct monst *,boolean);
+int dochugw(struct monst *);
+boolean onscary(int,int,struct monst *);
+void monflee(struct monst *, int, boolean, boolean);
+int dochug(struct monst *);
+int m_move(struct monst *,int);
+boolean closed_door(int,int);
+boolean accessible(int,int);
+void set_apparxy(struct monst *);
+boolean can_ooze(struct monst *);
 
 /* ### monst.c ### */
 
-extern void monst_init(void);
+void monst_init(void);
 
 /* ### monstr.c ### */
-extern int mstrength(struct permonst *mon);
+int mstrength(struct permonst *mon);
 
 /* ### mplayer.c ### */
 
-extern struct monst *mk_mplayer(struct permonst *,xchar, xchar,boolean);
-extern void create_mplayers(int,boolean);
-extern void mplayer_talk(struct monst *);
+struct monst *mk_mplayer(struct permonst *,xchar, xchar,boolean);
+void create_mplayers(int,boolean);
+void mplayer_talk(struct monst *);
 
 /* ### unicode.c ### */
-extern void unicode_to_utf8(glyph_t, char[5]);
-extern char *utf8_tmpstr(glyph_t);
-extern void pututf8char(glyph_t);
+void unicode_to_utf8(glyph_t, char[5]);
+char *utf8_tmpstr(glyph_t);
+void pututf8char(glyph_t);
 
 
 #ifdef WIN32
@@ -1217,241 +1217,241 @@ extern void pututf8char(glyph_t);
 /* ### winnt.c ### */
 
 #  ifndef WIN32
-extern int tgetch(void);
+int tgetch(void);
 #  endif
-extern char switchar(void);
-extern long freediskspace(char *);
-extern int findfirst(char *);
-extern int findnext(void);
-extern long filesize(char *);
-extern char *foundfile_buffer(void);
+char switchar(void);
+long freediskspace(char *);
+int findfirst(char *);
+int findnext(void);
+long filesize(char *);
+char *foundfile_buffer(void);
 # ifndef __CYGWIN__
-extern void chdrive(char *);
+void chdrive(char *);
 # endif
-extern void disable_ctrlP(void);
-extern void enable_ctrlP(void);
+void disable_ctrlP(void);
+void enable_ctrlP(void);
 # ifdef WIN32
-extern char *get_username(int *);
-extern int set_binary_mode(int, int);
-extern void nt_regularize(char *);
-extern int (*t_kbhit(void));
-extern void Delay(int);
+char *get_username(int *);
+int set_binary_mode(int, int);
+void nt_regularize(char *);
+int (*t_kbhit(void));
+void Delay(int);
 # endif /* WIN32 */
 #endif /* WIN32 */
 
 /* ### mthrowu.c ### */
 
-extern int thitu(int,int,struct obj *,const char *);
-extern int ohitmon(struct monst *,struct monst *,struct obj *,int,boolean);
-extern void thrwmu(struct monst *);
-extern int spitmu(struct monst *,struct attack *);
-extern int breamu(struct monst *,struct attack *);
-extern boolean breamspot(struct monst *, struct attack *, xchar, xchar);
-extern boolean linedup(xchar,xchar,xchar,xchar);
-extern boolean lined_up(struct monst *);
-extern struct obj *m_carrying(struct monst *,int);
-extern void m_useup(struct monst *,struct obj *);
-extern void m_throw(struct monst *,int,int,int,int,int,struct obj *);
-extern boolean hits_bars(struct obj **,int,int,int,int);
+int thitu(int,int,struct obj *,const char *);
+int ohitmon(struct monst *,struct monst *,struct obj *,int,boolean);
+void thrwmu(struct monst *);
+int spitmu(struct monst *,struct attack *);
+int breamu(struct monst *,struct attack *);
+boolean breamspot(struct monst *, struct attack *, xchar, xchar);
+boolean linedup(xchar,xchar,xchar,xchar);
+boolean lined_up(struct monst *);
+struct obj *m_carrying(struct monst *,int);
+void m_useup(struct monst *,struct obj *);
+void m_throw(struct monst *,int,int,int,int,int,struct obj *);
+boolean hits_bars(struct obj **,int,int,int,int);
 
 /* ### muse.c ### */
 
-extern boolean find_defensive(struct monst *);
-extern int use_defensive(struct monst *);
-extern int rnd_defensive_item(struct monst *);
-extern boolean find_offensive(struct monst *);
-extern int use_offensive(struct monst *);
-extern int rnd_offensive_item(struct monst *);
-extern boolean find_misc(struct monst *);
-extern int use_misc(struct monst *);
-extern int rnd_misc_item(struct monst *);
-extern boolean searches_for_item(struct monst *,struct obj *);
-extern boolean mon_reflects(struct monst *,const char *);
-extern boolean ureflects(const char *,const char *);
-extern boolean munstone(struct monst *,boolean);
+boolean find_defensive(struct monst *);
+int use_defensive(struct monst *);
+int rnd_defensive_item(struct monst *);
+boolean find_offensive(struct monst *);
+int use_offensive(struct monst *);
+int rnd_offensive_item(struct monst *);
+boolean find_misc(struct monst *);
+int use_misc(struct monst *);
+int rnd_misc_item(struct monst *);
+boolean searches_for_item(struct monst *,struct obj *);
+boolean mon_reflects(struct monst *,const char *);
+boolean ureflects(const char *,const char *);
+boolean munstone(struct monst *,boolean);
 
 /* ### music.c ### */
 
-extern void awaken_soldiers(void);
-extern int do_play_instrument(struct obj *);
+void awaken_soldiers(void);
+int do_play_instrument(struct obj *);
 
 /* ### nhlan.c ### */
 #ifdef LAN_FEATURES
-extern void init_lan_features(void);
-extern char *lan_username(void);
+void init_lan_features(void);
+char *lan_username(void);
 # ifdef LAN_MAIL
-extern bool lan_mail_check(void);
-extern void lan_mail_read(struct obj *);
-extern void lan_mail_init(void);
-extern void lan_mail_finish(void);
-extern void lan_mail_terminate(void);
+bool lan_mail_check(void);
+void lan_mail_read(struct obj *);
+void lan_mail_init(void);
+void lan_mail_finish(void);
+void lan_mail_terminate(void);
 # endif
 #endif
 
 /* ### nttty.c ### */
 
 #ifdef WIN32CON
-extern void get_scr_size(void);
-extern int nttty_kbhit(void);
-extern void nttty_check_stdio(void);
-extern void nttty_open(void);
-extern void nttty_rubout(void);
-extern int tgetch(void);
-extern int ntposkey(int *, int *, int *);
-extern void set_output_mode(int);
-extern void synch_cursor(void);
+void get_scr_size(void);
+int nttty_kbhit(void);
+void nttty_check_stdio(void);
+void nttty_open(void);
+void nttty_rubout(void);
+int tgetch(void);
+int ntposkey(int *, int *, int *);
+void set_output_mode(int);
+void synch_cursor(void);
 #endif
 
 /* ### o_init.c ### */
 
-extern void init_objects(void);
-extern void obj_shuffle_range(int otyp, int *lo_p, int *hi_p);
-extern int find_skates(void);
-extern void oinit(void);
-extern void savenames(int,int);
-extern void restnames(int);
-extern void discover_object(int,boolean,boolean);
-extern void undiscover_object(int);
-extern int dodiscovered(void);
+void init_objects(void);
+void obj_shuffle_range(int otyp, int *lo_p, int *hi_p);
+int find_skates(void);
+void oinit(void);
+void savenames(int,int);
+void restnames(int);
+void discover_object(int,boolean,boolean);
+void undiscover_object(int);
+int dodiscovered(void);
 
 /* ### objects.c ### */
 
-extern void objects_init(void);
+void objects_init(void);
 
 /* ### objnam.c ### */
 
-extern char *obj_typename(int);
-extern char *simple_typename(int);
-extern boolean obj_is_pname(struct obj *);
-extern char *distant_name(struct obj *,char *(*)(struct obj*));
-extern char *fruitname(boolean);
-extern char *xname(struct obj *);
-extern char *mshot_xname(struct obj *);
-extern boolean the_unique_obj(struct obj *obj);
-extern char *doname(struct obj *);
-extern bool not_fully_identified(struct obj *);
-extern char *corpse_xname(struct obj *,boolean);
-extern char *cxname(struct obj *);
-extern char *killer_xname(struct obj *);
-extern char *killer_cxname(struct obj *,boolean);
-extern const char *singular(struct obj *,char *(*)(struct obj*));
-extern char *an(const char *);
-extern char *An(const char *);
-extern char *The(const char *);
-extern char *the(const char *);
-extern char *aobjnam(struct obj *,const char *);
-extern char *Tobjnam(struct obj *,const char *);
-extern char *otense(struct obj *,const char *);
-extern char *vtense(const char *,const char *);
-extern char *Doname2(struct obj *);
-extern char *yname(struct obj *);
-extern char *Yname2(struct obj *);
-extern char *ysimple_name(struct obj *);
-extern char *Ysimple_name2(struct obj *);
-extern char *makeplural(const char *);
-extern char *makesingular(const char *);
-extern struct obj *readobjnam(char *,struct obj *,boolean);
-extern int rnd_class(int,int);
-extern const char *cloak_simple_name(struct obj *);
-extern const char *mimic_obj_name(struct monst *);
+char *obj_typename(int);
+char *simple_typename(int);
+boolean obj_is_pname(struct obj *);
+char *distant_name(struct obj *,char *(*)(struct obj*));
+char *fruitname(boolean);
+char *xname(struct obj *);
+char *mshot_xname(struct obj *);
+boolean the_unique_obj(struct obj *obj);
+char *doname(struct obj *);
+bool not_fully_identified(struct obj *);
+char *corpse_xname(struct obj *,boolean);
+char *cxname(struct obj *);
+char *killer_xname(struct obj *);
+char *killer_cxname(struct obj *,boolean);
+const char *singular(struct obj *,char *(*)(struct obj*));
+char *an(const char *);
+char *An(const char *);
+char *The(const char *);
+char *the(const char *);
+char *aobjnam(struct obj *,const char *);
+char *Tobjnam(struct obj *,const char *);
+char *otense(struct obj *,const char *);
+char *vtense(const char *,const char *);
+char *Doname2(struct obj *);
+char *yname(struct obj *);
+char *Yname2(struct obj *);
+char *ysimple_name(struct obj *);
+char *Ysimple_name2(struct obj *);
+char *makeplural(const char *);
+char *makesingular(const char *);
+struct obj *readobjnam(char *,struct obj *,boolean);
+int rnd_class(int,int);
+const char *cloak_simple_name(struct obj *);
+const char *mimic_obj_name(struct monst *);
 
 /* ### options.c ### */
 
-extern boolean match_optname(const char *,const char *,int,boolean);
-extern void initoptions(void);
-extern bool parse_monster_symbol(const char*);
-extern bool parse_object_symbol(const char*);
-extern bool parse_symbol(const char*);
-extern void parseoptions(char *,boolean,boolean);
-extern void parsetileset(char *);
-extern int doset(void);
-extern int dotogglepickup(void);
-extern void option_help(void);
-extern void next_opt(winid,const char *);
-extern int fruitadd(char *);
-extern int choose_classes_menu(const char *,int,boolean,char *,char *);
-extern void add_menu_cmd_alias(char, char);
-extern char map_menu_cmd(char);
-extern void assign_warnings(uchar *);
-extern char *nh_getenv(const char *);
-extern void set_duplicate_opt_detection(int);
-extern void set_wc_option_mod_status(unsigned long, int);
-extern void set_wc2_option_mod_status(unsigned long, int);
-extern void set_option_mod_status(const char *, int);
-extern boolean add_menu_coloring(char *);
-extern int add_autopickup_exception(const char *);
-extern void free_autopickup_exceptions(void);
+boolean match_optname(const char *,const char *,int,boolean);
+void initoptions(void);
+bool parse_monster_symbol(const char*);
+bool parse_object_symbol(const char*);
+bool parse_symbol(const char*);
+void parseoptions(char *,boolean,boolean);
+void parsetileset(char *);
+int doset(void);
+int dotogglepickup(void);
+void option_help(void);
+void next_opt(winid,const char *);
+int fruitadd(char *);
+int choose_classes_menu(const char *,int,boolean,char *,char *);
+void add_menu_cmd_alias(char, char);
+char map_menu_cmd(char);
+void assign_warnings(uchar *);
+char *nh_getenv(const char *);
+void set_duplicate_opt_detection(int);
+void set_wc_option_mod_status(unsigned long, int);
+void set_wc2_option_mod_status(unsigned long, int);
+void set_option_mod_status(const char *, int);
+boolean add_menu_coloring(char *);
+int add_autopickup_exception(const char *);
+void free_autopickup_exceptions(void);
 
 /* ### pager.c ### */
 
-extern int dowhatis(void);
-extern int doquickwhatis(void);
-extern int doidtrap(void);
-extern int dowhatdoes(void);
-extern char *dowhatdoes_core(char, char *);
-extern int dohelp(void);
-extern int dohistory(void);
+int dowhatis(void);
+int doquickwhatis(void);
+int doidtrap(void);
+int dowhatdoes(void);
+char *dowhatdoes_core(char, char *);
+int dohelp(void);
+int dohistory(void);
 
 /* ### pcmain.c ### */
 
 #ifdef WIN32
 # ifdef CHDIR
-extern void chdirx(char *, bool);
+void chdirx(char *, bool);
 # endif /* CHDIR */
 #endif /* WIN32 */
 
 /* ### pcsys.c ### */
 
 #if defined(WIN32)
-extern void flushout(void);
-extern int dosh(void);
-extern void append_slash(char *);
-extern void getreturn(const char *);
-extern void msmsg(const char *,...);
-extern FILE *fopenp(const char *,const char *);
+void flushout(void);
+int dosh(void);
+void append_slash(char *);
+void getreturn(const char *);
+void msmsg(const char *,...);
+FILE *fopenp(const char *,const char *);
 #endif /* WIN32 */
 
 /* ### pctty.c ### */
 
 #ifdef WIN32
-extern void gettty(void);
-extern void settty(const char *);
-extern void setftty(void);
-extern void error(const char *,...);
+void gettty(void);
+void settty(const char *);
+void setftty(void);
+void error(const char *,...);
 #if defined(TIMED_DELAY) && defined(_MSC_VER)
-extern void msleep(unsigned);
+void msleep(unsigned);
 #endif
 #endif /* WIN32 */
 
 /* ### pcunix.c ### */
 
 #if defined(PC_LOCKING)
-extern void getlock(void);
+void getlock(void);
 #endif
 
 /* ### pickup.c ### */
 
-extern int collect_obj_classes(char *,struct obj *,boolean,bool (*)(struct obj*), int *);
-extern void add_valid_menu_class(int);
-extern bool allow_all(struct obj *);
-extern bool allow_category(struct obj *);
-extern bool is_worn_by_type(struct obj *);
-extern boolean mbag_explodes(struct obj *, int);
-extern void destroy_mbag(struct obj *, boolean);
-extern int pickup(int);
-extern int pickup_object(struct obj *, long, boolean);
-extern int query_category(const char *, struct obj *, int,
+int collect_obj_classes(char *,struct obj *,boolean,bool (*)(struct obj*), int *);
+void add_valid_menu_class(int);
+bool allow_all(struct obj *);
+bool allow_category(struct obj *);
+bool is_worn_by_type(struct obj *);
+boolean mbag_explodes(struct obj *, int);
+void destroy_mbag(struct obj *, boolean);
+int pickup(int);
+int pickup_object(struct obj *, long, boolean);
+int query_category(const char *, struct obj *, int,
                           menu_item **, int);
-extern int query_objlist(const char *, struct obj *, int, menu_item **, int, bool (*)(struct obj*));
-extern struct obj *pick_obj(struct obj *);
-extern int encumber_msg(void);
-extern int doloot(void);
-extern boolean container_gone(int (*)(struct obj*));
-extern int use_container(struct obj **,int);
-extern int loot_mon(struct monst *,int *,boolean *);
-extern const char *safe_qbuf(const char *,unsigned,
+int query_objlist(const char *, struct obj *, int, menu_item **, int, bool (*)(struct obj*));
+struct obj *pick_obj(struct obj *);
+int encumber_msg(void);
+int doloot(void);
+boolean container_gone(int (*)(struct obj*));
+int use_container(struct obj **,int);
+int loot_mon(struct monst *,int *,boolean *);
+const char *safe_qbuf(const char *,unsigned,
                              const char *,const char *,const char *);
-extern boolean is_autopickup_exception(struct obj *, boolean);
+boolean is_autopickup_exception(struct obj *, boolean);
 
 /* ### pline.c ### */
 
@@ -1461,805 +1461,805 @@ extern boolean is_autopickup_exception(struct obj *, boolean);
 #define Noreps(str) Norep("%s", (str))
 #define verbalizes(str) verbalize("%s", (str))
 #define You_hear(str) You_hearf("%s", (str))
-extern void msgpline_add(int, char *);
-extern void msgpline_free(void);
-extern void pline(const char *,...) PRINTF_F(1,2);
-extern void Norep(const char *,...) PRINTF_F(1,2);
-extern void free_youbuf(void);
-extern void You_hearf(const char *,...) PRINTF_F(1,2);
-extern void verbalize(const char *,...) PRINTF_F(1,2);
-extern void raw_printf(const char *,...) PRINTF_F(1,2);
-extern void impossible(const char *,...) PRINTF_F(1,2);
-extern const char *align_str(aligntyp);
-extern void mstatusline(struct monst *);
-extern void ustatusline(void);
-extern void self_invis_message(void);
+void msgpline_add(int, char *);
+void msgpline_free(void);
+void pline(const char *,...) PRINTF_F(1,2);
+void Norep(const char *,...) PRINTF_F(1,2);
+void free_youbuf(void);
+void You_hearf(const char *,...) PRINTF_F(1,2);
+void verbalize(const char *,...) PRINTF_F(1,2);
+void raw_printf(const char *,...) PRINTF_F(1,2);
+void impossible(const char *,...) PRINTF_F(1,2);
+const char *align_str(aligntyp);
+void mstatusline(struct monst *);
+void ustatusline(void);
+void self_invis_message(void);
 
 /* ### polyself.c ### */
 
-extern void init_uasmon(void);
-extern void set_uasmon(void);
-extern void change_sex(void);
-extern void polyself(boolean);
-extern int polymon(int);
-extern void rehumanize(void);
-extern int dobreathe(void);
-extern int dospit(void);
-extern int doremove(void);
-extern int dospinweb(void);
-extern int dosummon(void);
-extern int dogaze(void);
-extern int dohide(void);
-extern int domindblast(void);
-extern void skinback(boolean);
-extern const char *mbodypart(struct monst *,int);
-extern const char *body_part(int);
-extern int poly_gender(void);
-extern void ugolemeffects(int,int);
-extern int polyatwill(void);
+void init_uasmon(void);
+void set_uasmon(void);
+void change_sex(void);
+void polyself(boolean);
+int polymon(int);
+void rehumanize(void);
+int dobreathe(void);
+int dospit(void);
+int doremove(void);
+int dospinweb(void);
+int dosummon(void);
+int dogaze(void);
+int dohide(void);
+int domindblast(void);
+void skinback(boolean);
+const char *mbodypart(struct monst *,int);
+const char *body_part(int);
+int poly_gender(void);
+void ugolemeffects(int,int);
+int polyatwill(void);
 
 /* ### potion.c ### */
 
-extern void set_itimeout(long *,long);
-extern void incr_itimeout(long *,int);
-extern void make_confused(long,boolean);
-extern void make_stunned(long,boolean);
-extern void make_blinded(long,boolean);
-extern void make_sick(long, const char *, boolean,int);
-extern void make_vomiting(long,boolean);
-extern boolean make_hallucinated(long,boolean,long);
-extern int dodrink(void);
-extern int dopotion(struct obj *);
-extern int peffects(struct obj *);
-extern void healup(int,int,boolean,boolean);
-extern void strange_feeling(struct obj *,const char *);
-extern void potionhit(struct monst *,struct obj *,boolean);
-extern void potionbreathe(struct obj *);
-extern boolean get_wet(struct obj *, boolean);
-extern int dodip(void);
-extern void djinni_from_bottle(struct obj *);
+void set_itimeout(long *,long);
+void incr_itimeout(long *,int);
+void make_confused(long,boolean);
+void make_stunned(long,boolean);
+void make_blinded(long,boolean);
+void make_sick(long, const char *, boolean,int);
+void make_vomiting(long,boolean);
+boolean make_hallucinated(long,boolean,long);
+int dodrink(void);
+int dopotion(struct obj *);
+int peffects(struct obj *);
+void healup(int,int,boolean,boolean);
+void strange_feeling(struct obj *,const char *);
+void potionhit(struct monst *,struct obj *,boolean);
+void potionbreathe(struct obj *);
+boolean get_wet(struct obj *, boolean);
+int dodip(void);
+void djinni_from_bottle(struct obj *);
 /* KMH, balance patch -- new function */
-extern int upgrade_obj(struct obj *);
-extern struct monst *split_mon(struct monst *,struct monst *);
-extern const char *bottlename(void);
+int upgrade_obj(struct obj *);
+struct monst *split_mon(struct monst *,struct monst *);
+const char *bottlename(void);
 
 /* ### pray.c ### */
 
-extern int dosacrifice(void);
-extern boolean can_pray(boolean);
-extern int dopray(void);
-extern const char *u_gname(void);
-extern int doturn(void);
-extern int turn_undead(void);
-extern const char *a_gname(void);
-extern const char *a_gname_at(xchar x,xchar y);
-extern const char *align_gname(aligntyp);
-extern const char *halu_gname(aligntyp);
-extern const char *align_gtitle(aligntyp);
-extern void altar_wrath(int,int);
+int dosacrifice(void);
+boolean can_pray(boolean);
+int dopray(void);
+const char *u_gname(void);
+int doturn(void);
+int turn_undead(void);
+const char *a_gname(void);
+const char *a_gname_at(xchar x,xchar y);
+const char *align_gname(aligntyp);
+const char *halu_gname(aligntyp);
+const char *align_gtitle(aligntyp);
+void altar_wrath(int,int);
 
 
 /* ### priest.c ### */
 
-extern int move_special(struct monst *,boolean,schar,boolean,boolean,
+int move_special(struct monst *,boolean,schar,boolean,boolean,
                         xchar,xchar,xchar,xchar);
-extern char temple_occupied(char *);
-extern int pri_move(struct monst *);
-extern void priestini(d_level *,struct mkroom *,int,int,boolean);
-extern char *priestname(struct monst *,char *);
-extern boolean p_coaligned(struct monst *);
-extern struct monst *findpriest(char);
-extern void intemple(int);
-extern void priest_talk(struct monst *);
-extern struct monst *mk_roamer(struct permonst *,aligntyp,
+char temple_occupied(char *);
+int pri_move(struct monst *);
+void priestini(d_level *,struct mkroom *,int,int,boolean);
+char *priestname(struct monst *,char *);
+boolean p_coaligned(struct monst *);
+struct monst *findpriest(char);
+void intemple(int);
+void priest_talk(struct monst *);
+struct monst *mk_roamer(struct permonst *,aligntyp,
                                xchar,xchar,boolean);
-extern void reset_hostility(struct monst *);
-extern boolean in_your_sanctuary(struct monst *,xchar,xchar);
-extern void ghod_hitsu(struct monst *);
-extern void angry_priest(void);
-extern void clearpriests(void);
-extern void restpriest(struct monst *,boolean);
+void reset_hostility(struct monst *);
+boolean in_your_sanctuary(struct monst *,xchar,xchar);
+void ghod_hitsu(struct monst *);
+void angry_priest(void);
+void clearpriests(void);
+void restpriest(struct monst *,boolean);
 
 /* ### quest.c ### */
 
-extern void onquest(void);
-extern void nemdead(void);
-extern void artitouch(void);
-extern boolean ok_to_quest(void);
-extern void leader_speaks(struct monst *);
-extern void nemesis_speaks(void);
-extern void quest_chat(struct monst *);
-extern void quest_talk(struct monst *);
-extern void quest_stat_check(struct monst *);
-extern void finish_quest(struct obj *);
+void onquest(void);
+void nemdead(void);
+void artitouch(void);
+boolean ok_to_quest(void);
+void leader_speaks(struct monst *);
+void nemesis_speaks(void);
+void quest_chat(struct monst *);
+void quest_talk(struct monst *);
+void quest_stat_check(struct monst *);
+void finish_quest(struct obj *);
 
 /* ### questpgr.c ### */
 
-extern void load_qtlist(void);
-extern void unload_qtlist(void);
-extern short quest_info(int);
-extern const char *ldrname(void);
-extern bool is_quest_artifact(struct obj*);
-extern void com_pager(int);
-extern void qt_pager(int);
-extern struct permonst *qt_montype(void);
+void load_qtlist(void);
+void unload_qtlist(void);
+short quest_info(int);
+const char *ldrname(void);
+bool is_quest_artifact(struct obj*);
+void com_pager(int);
+void qt_pager(int);
+struct permonst *qt_montype(void);
 
 /* ### random.c ### */
 
 #ifdef RANDOM
-extern void srandom(unsigned);
-extern char *initstate(unsigned,char *,int);
-extern char *setstate(char *);
-extern long random(void);
+void srandom(unsigned);
+char *initstate(unsigned,char *,int);
+char *setstate(char *);
+long random(void);
 #endif /* RANDOM */
 
 /* ### read.c ### */
 
-extern int doread(void);
-extern boolean is_chargeable(struct obj *);
-extern void recharge(struct obj *,int);
-extern void forget(int);
-extern void forget_objects(int);
-extern void forget_levels(int);
-extern void forget_traps(void);
-extern void forget_map(int);
-extern int seffects(struct obj *);
-extern void litroom(boolean,struct obj *);
-extern void do_genocide(int);
-extern void punish(struct obj *);
-extern void unpunish(void);
-extern boolean cant_create(int *, boolean);
-extern struct monst *create_particular(void);
+int doread(void);
+boolean is_chargeable(struct obj *);
+void recharge(struct obj *,int);
+void forget(int);
+void forget_objects(int);
+void forget_levels(int);
+void forget_traps(void);
+void forget_map(int);
+int seffects(struct obj *);
+void litroom(boolean,struct obj *);
+void do_genocide(int);
+void punish(struct obj *);
+void unpunish(void);
+boolean cant_create(int *, boolean);
+struct monst *create_particular(void);
 
 /* ### rect.c ### */
 
-extern void init_rect(void);
-extern NhRect *get_rect(NhRect *);
-extern NhRect *rnd_rect(void);
-extern void remove_rect(NhRect *);
-extern void add_rect(NhRect *);
-extern void split_rects(NhRect *,NhRect *);
+void init_rect(void);
+NhRect *get_rect(NhRect *);
+NhRect *rnd_rect(void);
+void remove_rect(NhRect *);
+void add_rect(NhRect *);
+void split_rects(NhRect *,NhRect *);
 
 /* ## region.c ### */
-extern void clear_regions(void);
-extern void run_regions(void);
-extern boolean in_out_region(xchar,xchar);
-extern boolean m_in_out_region(struct monst *,xchar,xchar);
-extern void update_player_regions(void);
-extern void update_monster_region(struct monst *);
-extern NhRegion *visible_region_at(xchar,xchar);
-extern void show_region(NhRegion*, xchar, xchar);
-extern void save_regions(int,int);
-extern void rest_regions(int,boolean);
-extern NhRegion* create_gas_cloud(xchar, xchar, int, int);
-extern NhRegion* create_cthulhu_death_cloud(xchar, xchar, int, int);
+void clear_regions(void);
+void run_regions(void);
+boolean in_out_region(xchar,xchar);
+boolean m_in_out_region(struct monst *,xchar,xchar);
+void update_player_regions(void);
+void update_monster_region(struct monst *);
+NhRegion *visible_region_at(xchar,xchar);
+void show_region(NhRegion*, xchar, xchar);
+void save_regions(int,int);
+void rest_regions(int,boolean);
+NhRegion* create_gas_cloud(xchar, xchar, int, int);
+NhRegion* create_cthulhu_death_cloud(xchar, xchar, int, int);
 
 /* ### restore.c ### */
 
-extern void inven_inuse(boolean);
-extern int dorecover(int);
-extern void trickery(char *);
-extern void getlev(int,int,xchar,boolean);
-extern boolean lookup_id_mapping(unsigned, unsigned *);
-extern void mread(int,void *,uint);
+void inven_inuse(boolean);
+int dorecover(int);
+void trickery(char *);
+void getlev(int,int,xchar,boolean);
+boolean lookup_id_mapping(unsigned, unsigned *);
+void mread(int,void *,uint);
 
 /* ### rip.c ### */
 
-extern void genl_outrip(winid tmpwin, int how);
+void genl_outrip(winid tmpwin, int how);
 
 /* ### rnd.c ### */
 
-extern uint rn2(uint x);
-extern uint rnl(uint x);
-extern uint rnd(uint x);
-extern uint d(uint n, uint x);
-extern uint rne(uint x);
-extern uint rnz(uint i);
-extern void seed_good_random(char data[64]);
-extern uint good_random(void);
+uint rn2(uint x);
+uint rnl(uint x);
+uint rnd(uint x);
+uint d(uint n, uint x);
+uint rne(uint x);
+uint rnz(uint i);
+void seed_good_random(char data[64]);
+uint good_random(void);
 
 /* ### role.c ### */
 
-extern boolean validrole(int);
-extern boolean validrace(int, int);
-extern boolean validgend(int, int, int);
-extern boolean validalign(int, int, int);
-extern int randrole(void);
-extern int randrace(int);
-extern int randgend(int, int);
-extern int randalign(int, int);
-extern int str2role(char *);
-extern int str2race(char *);
-extern int str2gend(char *);
-extern int str2align(char *);
-extern int mrace2race(int);
-extern boolean ok_role(int, int, int, int);
-extern int pick_role(int, int, int, int);
-extern boolean ok_race(int, int, int, int);
-extern int pick_race(int, int, int, int);
-extern boolean ok_gend(int, int, int, int);
-extern int pick_gend(int, int, int, int);
-extern boolean ok_align(int, int, int, int);
-extern int pick_align(int, int, int, int);
-extern void role_init(void);
-extern void rigid_role_checks(void);
-extern void plnamesuffix(void);
-extern const char *Hello(struct monst *);
-extern const char *Goodbye(void);
-extern char *build_plselection_prompt(char *, int, int, int, int, int);
-extern char *root_plselection_prompt(char *, int, int, int, int, int);
+boolean validrole(int);
+boolean validrace(int, int);
+boolean validgend(int, int, int);
+boolean validalign(int, int, int);
+int randrole(void);
+int randrace(int);
+int randgend(int, int);
+int randalign(int, int);
+int str2role(char *);
+int str2race(char *);
+int str2gend(char *);
+int str2align(char *);
+int mrace2race(int);
+boolean ok_role(int, int, int, int);
+int pick_role(int, int, int, int);
+boolean ok_race(int, int, int, int);
+int pick_race(int, int, int, int);
+boolean ok_gend(int, int, int, int);
+int pick_gend(int, int, int, int);
+boolean ok_align(int, int, int, int);
+int pick_align(int, int, int, int);
+void role_init(void);
+void rigid_role_checks(void);
+void plnamesuffix(void);
+const char *Hello(struct monst *);
+const char *Goodbye(void);
+char *build_plselection_prompt(char *, int, int, int, int, int);
+char *root_plselection_prompt(char *, int, int, int, int, int);
 
 /* ### rumors.c ### */
 
-extern char *getrumor(int, char *, bool);
-extern void outrumor(int,int);
-extern void outoracle(boolean, boolean);
-extern int doconsult(struct monst *);
+char *getrumor(int, char *, bool);
+void outrumor(int,int);
+void outoracle(boolean, boolean);
+int doconsult(struct monst *);
 
 /* ### save.c ### */
 
-extern int dosave(void);
+int dosave(void);
 #if defined(UNIX) || defined(__EMX__) || defined(WIN32)
-extern void hangup(int);
+void hangup(int);
 #endif
-extern int dosave0(void);
+int dosave0(void);
 #ifdef INSURANCE
-extern void savestateinlock(void);
+void savestateinlock(void);
 #endif
-extern void savelev(int,xchar,int);
-extern void bufon(int);
-extern void bufoff(int);
-extern void bflush(int);
-extern void bwrite(int,void *,uint);
-extern void bclose(int);
-extern void savefruitchn(int,int);
-extern void free_dungeons(void);
-extern void freedynamicdata(void);
+void savelev(int,xchar,int);
+void bufon(int);
+void bufoff(int);
+void bflush(int);
+void bwrite(int,void *,uint);
+void bclose(int);
+void savefruitchn(int,int);
+void free_dungeons(void);
+void freedynamicdata(void);
 
 /* ### shk.c ### */
 
-extern long money2mon(struct monst *, long);
-extern void money2u(struct monst *, long);
-extern char *shkname(struct monst *);
-extern void shkgone(struct monst *);
-extern void set_residency(struct monst *,boolean);
-extern void replshk(struct monst *,struct monst *);
-extern void save_shk_bill(int, struct monst *);
-extern void restore_shk_bill(int, struct monst *);
-extern void restshk(struct monst *,boolean);
-extern char inside_shop(xchar,xchar);
-extern void u_left_shop(char *,boolean);
-extern void remote_burglary(xchar,xchar);
-extern void u_entered_shop(char *);
-extern boolean same_price(struct obj *,struct obj *);
-extern void shopper_financial_report(void);
-extern int inhishop(struct monst *);
-extern struct monst *shop_keeper(char);
-extern boolean tended_shop(struct mkroom *);
-extern void delete_contents(struct obj *);
-extern void obfree(struct obj *,struct obj *);
-extern void shk_free(struct monst *);
-extern void home_shk(struct monst *,boolean);
-extern void make_happy_shk(struct monst *,boolean);
-extern void hot_pursuit(struct monst *);
-extern void make_angry_shk(struct monst *,xchar,xchar);
-extern int dopay(void);
-extern boolean paybill(int);
-extern void finish_paybill(void);
-extern struct obj *find_oid(unsigned);
-extern long contained_cost(struct obj *,struct monst *,long,boolean, boolean);
-extern long contained_gold(struct obj *);
-extern void picked_container(struct obj *);
-extern long unpaid_cost(struct obj *);
-extern void addtobill(struct obj *,boolean,boolean,boolean);
-extern void splitbill(struct obj *,struct obj *);
-extern void subfrombill(struct obj *,struct monst *);
-extern long stolen_value(struct obj *,xchar,xchar,boolean,boolean,
+long money2mon(struct monst *, long);
+void money2u(struct monst *, long);
+char *shkname(struct monst *);
+void shkgone(struct monst *);
+void set_residency(struct monst *,boolean);
+void replshk(struct monst *,struct monst *);
+void save_shk_bill(int, struct monst *);
+void restore_shk_bill(int, struct monst *);
+void restshk(struct monst *,boolean);
+char inside_shop(xchar,xchar);
+void u_left_shop(char *,boolean);
+void remote_burglary(xchar,xchar);
+void u_entered_shop(char *);
+boolean same_price(struct obj *,struct obj *);
+void shopper_financial_report(void);
+int inhishop(struct monst *);
+struct monst *shop_keeper(char);
+boolean tended_shop(struct mkroom *);
+void delete_contents(struct obj *);
+void obfree(struct obj *,struct obj *);
+void shk_free(struct monst *);
+void home_shk(struct monst *,boolean);
+void make_happy_shk(struct monst *,boolean);
+void hot_pursuit(struct monst *);
+void make_angry_shk(struct monst *,xchar,xchar);
+int dopay(void);
+boolean paybill(int);
+void finish_paybill(void);
+struct obj *find_oid(unsigned);
+long contained_cost(struct obj *,struct monst *,long,boolean, boolean);
+long contained_gold(struct obj *);
+void picked_container(struct obj *);
+long unpaid_cost(struct obj *);
+void addtobill(struct obj *,boolean,boolean,boolean);
+void splitbill(struct obj *,struct obj *);
+void subfrombill(struct obj *,struct monst *);
+long stolen_value(struct obj *,xchar,xchar,boolean,boolean,
                          boolean);
-extern void sellobj_state(int);
-extern void sellobj(struct obj *,xchar,xchar);
-extern int doinvbill(int);
-extern struct monst *shkcatch(struct obj *,xchar,xchar);
-extern void add_damage(xchar,xchar,long);
-extern int repair_damage(struct monst *,struct damage *,boolean);
-extern int shk_move(struct monst *);
-extern void after_shk_move(struct monst *);
-extern boolean is_fshk(struct monst *);
-extern void shopdig(int);
-extern void pay_for_damage(const char *,boolean);
-extern boolean costly_spot(xchar,xchar);
-extern struct obj *shop_object(xchar,xchar);
-extern void price_quote(struct obj *);
-extern void shk_chat(struct monst *);
-extern void check_unpaid_usage(struct obj *,boolean);
-extern void check_unpaid(struct obj *);
-extern void costly_gold(xchar,xchar,long);
-extern boolean block_door(xchar,xchar);
-extern boolean block_entry(xchar,xchar);
-extern boolean block_entry(xchar,xchar);
-extern void blkmar_guards(struct monst *);
-extern char *shk_your(char *,struct obj *);
-extern char *Shk_Your(char *,struct obj *);
+void sellobj_state(int);
+void sellobj(struct obj *,xchar,xchar);
+int doinvbill(int);
+struct monst *shkcatch(struct obj *,xchar,xchar);
+void add_damage(xchar,xchar,long);
+int repair_damage(struct monst *,struct damage *,boolean);
+int shk_move(struct monst *);
+void after_shk_move(struct monst *);
+boolean is_fshk(struct monst *);
+void shopdig(int);
+void pay_for_damage(const char *,boolean);
+boolean costly_spot(xchar,xchar);
+struct obj *shop_object(xchar,xchar);
+void price_quote(struct obj *);
+void shk_chat(struct monst *);
+void check_unpaid_usage(struct obj *,boolean);
+void check_unpaid(struct obj *);
+void costly_gold(xchar,xchar,long);
+boolean block_door(xchar,xchar);
+boolean block_entry(xchar,xchar);
+boolean block_entry(xchar,xchar);
+void blkmar_guards(struct monst *);
+char *shk_your(char *,struct obj *);
+char *Shk_Your(char *,struct obj *);
 
 /* ### shknam.c ### */
 
-extern void stock_room(int,struct mkroom *);
-extern boolean saleable(struct monst *,struct obj *);
-extern int get_shop_item(int);
+void stock_room(int,struct mkroom *);
+boolean saleable(struct monst *,struct obj *);
+int get_shop_item(int);
 
 /* ### sit.c ### */
 
-extern void take_gold(void);
-extern int dosit(void);
-extern void rndcurse(void);
-extern void attrcurse(void);
+void take_gold(void);
+int dosit(void);
+void rndcurse(void);
+void attrcurse(void);
 
 /* ### sounds.c ### */
 
-extern void dosounds(void);
-extern void pet_distress(struct monst *, int);
-extern const char *growl_sound(struct monst *);
+void dosounds(void);
+void pet_distress(struct monst *, int);
+const char *growl_sound(struct monst *);
 /* JRN: converted growl,yelp,whimper to macros based on pet_distress.
   Putting them here since I don't know where else (TOFIX) */
 #define growl(mon) pet_distress((mon),3)
 #define yelp(mon) pet_distress((mon),2)
 #define whimper(mon) pet_distress((mon),1)
-extern void beg(struct monst *);
-extern int dotalk(void);
+void beg(struct monst *);
+int dotalk(void);
 #ifdef USER_SOUNDS
-extern int add_sound_mapping(const char *);
-extern void play_sound_for_message(const char *);
+int add_sound_mapping(const char *);
+void play_sound_for_message(const char *);
 #endif
 
 /* ### sp_lev.c ### */
 
-extern boolean check_room(xchar *,xchar *,xchar *,xchar *,boolean);
-extern boolean create_room(xchar,xchar,xchar,xchar,
+boolean check_room(xchar *,xchar *,xchar *,xchar *,boolean);
+boolean create_room(xchar,xchar,xchar,xchar,
                            xchar,xchar,xchar,xchar);
-extern void create_secret_door(struct mkroom *,xchar);
-extern boolean dig_corridor(coord *,coord *,boolean,schar,schar);
-extern void fill_room(struct mkroom *,boolean);
-extern boolean load_special(const char *);
+void create_secret_door(struct mkroom *,xchar);
+boolean dig_corridor(coord *,coord *,boolean,schar,schar);
+void fill_room(struct mkroom *,boolean);
+boolean load_special(const char *);
 
 /* ### spell.c ### */
 
-extern int study_book(struct obj *);
-extern void book_disappears(struct obj *);
-extern void book_substitution(struct obj *,struct obj *);
-extern void age_spells(void);
-extern int docast(void);
-extern int spell_skilltype(int);
-extern int spelleffects(int,boolean);
-extern void losespells(void);
-extern int dovspell(void);
-extern void learnspell(struct obj *);
-extern boolean studyspell(void);
-extern void initialspell(struct obj *);
+int study_book(struct obj *);
+void book_disappears(struct obj *);
+void book_substitution(struct obj *,struct obj *);
+void age_spells(void);
+int docast(void);
+int spell_skilltype(int);
+int spelleffects(int,boolean);
+void losespells(void);
+int dovspell(void);
+void learnspell(struct obj *);
+boolean studyspell(void);
+void initialspell(struct obj *);
 
 /* ### steal.c ### */
 
-extern long somegold(long);
-extern void stealgold(struct monst *);
-extern void remove_worn_item(struct obj *,boolean);
-extern int steal(struct monst *, char *);
-extern int mpickobj(struct monst *,struct obj *);
-extern void stealamulet(struct monst *);
-extern void mdrop_special_objs(struct monst *);
-extern void relobj(struct monst *,int,boolean);
-extern struct obj *findgold(struct obj *);
+long somegold(long);
+void stealgold(struct monst *);
+void remove_worn_item(struct obj *,boolean);
+int steal(struct monst *, char *);
+int mpickobj(struct monst *,struct obj *);
+void stealamulet(struct monst *);
+void mdrop_special_objs(struct monst *);
+void relobj(struct monst *,int,boolean);
+struct obj *findgold(struct obj *);
 
 /* ### steed.c ### */
 
-extern void rider_cant_reach(void);
-extern boolean can_saddle(struct monst *);
-extern int use_saddle(struct obj *);
-extern boolean can_ride(struct monst *);
-extern int doride(void);
-extern boolean mount_steed(struct monst *, boolean);
-extern void exercise_steed(void);
-extern void kick_steed(void);
-extern void dismount_steed(int);
-extern void place_monster(struct monst *,int,int);
+void rider_cant_reach(void);
+boolean can_saddle(struct monst *);
+int use_saddle(struct obj *);
+boolean can_ride(struct monst *);
+int doride(void);
+boolean mount_steed(struct monst *, boolean);
+void exercise_steed(void);
+void kick_steed(void);
+void dismount_steed(int);
+void place_monster(struct monst *,int,int);
 
 /* ### tech.c ### */
 
-extern void adjtech(int,int);
-extern int dotech(void);
-extern void docalm(void);
-extern int tech_inuse(int);
-extern void tech_timeout(void);
-extern boolean tech_known(short);
-extern void learntech(short,long,int);
+void adjtech(int,int);
+int dotech(void);
+void docalm(void);
+int tech_inuse(int);
+void tech_timeout(void);
+boolean tech_known(short);
+void learntech(short,long,int);
 
 /* ### teleport.c ### */
 
-extern boolean goodpos(int,int,struct monst *,unsigned);
-extern boolean enexto(coord *,xchar,xchar,struct permonst *);
-extern boolean enexto_core(coord *,xchar,xchar,struct permonst *,unsigned);
-extern int epathto(coord *,int,xchar,xchar,struct permonst *);
-extern boolean wpathto(coord *, coord *, boolean (*)(void *, int, int),
+boolean goodpos(int,int,struct monst *,unsigned);
+boolean enexto(coord *,xchar,xchar,struct permonst *);
+boolean enexto_core(coord *,xchar,xchar,struct permonst *,unsigned);
+int epathto(coord *,int,xchar,xchar,struct permonst *);
+boolean wpathto(coord *, coord *, boolean (*)(void *, int, int),
                        void *, struct permonst *, int);
-extern void xpathto(int,xchar,xchar,int (*)(void *,int,int),void *);
-extern void teleds(int,int,boolean);
-extern boolean safe_teleds(boolean);
-extern boolean teleport_pet(struct monst *,boolean);
-extern void tele(void);
-extern int dotele(void);
-extern void level_tele(void);
-extern void domagicportal(struct trap *);
-extern void tele_trap(struct trap *);
-extern void level_tele_trap(struct trap *);
-extern void rloc_to(struct monst *,int,int);
-extern boolean rloc(struct monst *, boolean);
-extern boolean tele_restrict(struct monst *);
-extern void mtele_trap(struct monst *, struct trap *,int);
-extern int mlevel_tele_trap(struct monst *, struct trap *,boolean,int);
-extern void rloco(struct obj *);
-extern int random_teleport_level(void);
-extern boolean u_teleport_mon(struct monst *,boolean);
+void xpathto(int,xchar,xchar,int (*)(void *,int,int),void *);
+void teleds(int,int,boolean);
+boolean safe_teleds(boolean);
+boolean teleport_pet(struct monst *,boolean);
+void tele(void);
+int dotele(void);
+void level_tele(void);
+void domagicportal(struct trap *);
+void tele_trap(struct trap *);
+void level_tele_trap(struct trap *);
+void rloc_to(struct monst *,int,int);
+boolean rloc(struct monst *, boolean);
+boolean tele_restrict(struct monst *);
+void mtele_trap(struct monst *, struct trap *,int);
+int mlevel_tele_trap(struct monst *, struct trap *,boolean,int);
+void rloco(struct obj *);
+int random_teleport_level(void);
+boolean u_teleport_mon(struct monst *,boolean);
 
 /* ### tile.c ### */
 #ifdef USE_TILES
-extern void substitute_tiles(d_level *);
+void substitute_tiles(d_level *);
 #endif
 
 /* ### timeout.c ### */
 
-extern void burn_away_slime(void);
-extern void nh_timeout(void);
-extern void fall_asleep(int, boolean);
-extern void set_obj_poly(struct obj *, struct obj *);
-extern void unpoly_obj(void *, long);
-extern int mon_poly(struct monst *, boolean, const char *);
-extern int mon_spec_poly(struct monst *, struct permonst *, long,
+void burn_away_slime(void);
+void nh_timeout(void);
+void fall_asleep(int, boolean);
+void set_obj_poly(struct obj *, struct obj *);
+void unpoly_obj(void *, long);
+int mon_poly(struct monst *, boolean, const char *);
+int mon_spec_poly(struct monst *, struct permonst *, long,
                          boolean, boolean, boolean, boolean);
-extern void unpoly_mon(void *, long);
-extern void attach_bomb_blow_timeout(struct obj *, int, boolean);
-extern void attach_egg_hatch_timeout(struct obj *);
-extern void attach_fig_transform_timeout(struct obj *);
-extern void kill_egg(struct obj *);
-extern void hatch_egg(void *, long);
-extern void learn_egg_type(int);
-extern void burn_object(void *, long);
-extern void begin_burn(struct obj *, boolean);
-extern void end_burn(struct obj *, boolean);
-extern void burn_faster(struct obj *, long);
-extern void lightsaber_deactivate(struct obj *, boolean);
-extern void do_storms(void);
-extern boolean start_timer(long, short, short, anything);
-extern long stop_timer(short, anything);
-extern void run_timers(void);
-extern void obj_move_timers(struct obj *, struct obj *);
-extern void obj_split_timers(struct obj *, struct obj *);
-extern void obj_stop_timers(struct obj *);
-extern void mon_stop_timers(struct monst *);
-extern boolean obj_is_local(struct obj *);
-extern void save_timers(int,int,int);
-extern void restore_timers(int,int,boolean,long);
-extern void relink_timers(boolean);
-extern int wiz_timeout_queue(void);
-extern void timer_sanity_check(void);
+void unpoly_mon(void *, long);
+void attach_bomb_blow_timeout(struct obj *, int, boolean);
+void attach_egg_hatch_timeout(struct obj *);
+void attach_fig_transform_timeout(struct obj *);
+void kill_egg(struct obj *);
+void hatch_egg(void *, long);
+void learn_egg_type(int);
+void burn_object(void *, long);
+void begin_burn(struct obj *, boolean);
+void end_burn(struct obj *, boolean);
+void burn_faster(struct obj *, long);
+void lightsaber_deactivate(struct obj *, boolean);
+void do_storms(void);
+boolean start_timer(long, short, short, anything);
+long stop_timer(short, anything);
+void run_timers(void);
+void obj_move_timers(struct obj *, struct obj *);
+void obj_split_timers(struct obj *, struct obj *);
+void obj_stop_timers(struct obj *);
+void mon_stop_timers(struct monst *);
+boolean obj_is_local(struct obj *);
+void save_timers(int,int,int);
+void restore_timers(int,int,boolean,long);
+void relink_timers(boolean);
+int wiz_timeout_queue(void);
+void timer_sanity_check(void);
 
 /* ### topten.c ### */
 
-extern void topten(int);
-extern void prscore(int,char **);
-extern struct obj *tt_oname(struct obj *);
+void topten(int);
+void prscore(int,char **);
+struct obj *tt_oname(struct obj *);
 #ifdef PROXY_GRAPHICS
-extern winid create_toptenwin(void);
-extern void destroy_toptenwin(void);
+winid create_toptenwin(void);
+void destroy_toptenwin(void);
 #endif
 
 /* ### track.c ### */
 
-extern void initrack(void);
-extern void settrack(void);
-extern coord *gettrack(int,int);
+void initrack(void);
+void settrack(void);
+coord *gettrack(int,int);
 
 /* ### trap.c ### */
 
-extern boolean burnarmor(struct monst *);
-extern boolean rust_dmg(struct obj *,const char *,int,boolean,struct monst *);
-extern void grease_protect(struct obj *,const char *,struct monst *);
-extern struct trap *maketrap(int,int,int);
-extern void fall_through(boolean);
-extern struct monst *animate_statue(struct obj *,xchar,xchar,int,int *);
-extern struct monst *activate_statue_trap(struct trap *,xchar,xchar,boolean);
-extern void dotrap(struct trap *, unsigned);
-extern void seetrap(struct trap *);
-extern int mintrap(struct monst *);
-extern void instapetrify(const char *);
-extern void minstapetrify(struct monst *,boolean);
-extern void selftouch(const char *);
-extern void mselftouch(struct monst *,const char *,boolean);
-extern void float_up(void);
-extern void fill_pit(int,int);
-extern int float_down(long, long);
-extern int fire_damage(struct obj *,boolean,boolean,xchar,xchar);
-extern bool water_damage(struct obj *,boolean,boolean);
-extern boolean drown(void);
-extern void mon_drain_en(struct monst *, int);
-extern void drain_en(int);
-extern int dountrap(void);
-extern int untrap(boolean);
-extern boolean chest_trap(struct obj *,int,boolean);
-extern void deltrap(struct trap *);
-extern boolean delfloortrap(struct trap *);
-extern struct trap *t_at(int,int);
-extern void b_trapped(const char *,int);
-extern boolean unconscious(void);
-extern boolean lava_effects(void);
-extern void blow_up_landmine(struct trap *);
-extern int launch_obj(short,int,int,int,int,int);
+boolean burnarmor(struct monst *);
+boolean rust_dmg(struct obj *,const char *,int,boolean,struct monst *);
+void grease_protect(struct obj *,const char *,struct monst *);
+struct trap *maketrap(int,int,int);
+void fall_through(boolean);
+struct monst *animate_statue(struct obj *,xchar,xchar,int,int *);
+struct monst *activate_statue_trap(struct trap *,xchar,xchar,boolean);
+void dotrap(struct trap *, unsigned);
+void seetrap(struct trap *);
+int mintrap(struct monst *);
+void instapetrify(const char *);
+void minstapetrify(struct monst *,boolean);
+void selftouch(const char *);
+void mselftouch(struct monst *,const char *,boolean);
+void float_up(void);
+void fill_pit(int,int);
+int float_down(long, long);
+int fire_damage(struct obj *,boolean,boolean,xchar,xchar);
+bool water_damage(struct obj *,boolean,boolean);
+boolean drown(void);
+void mon_drain_en(struct monst *, int);
+void drain_en(int);
+int dountrap(void);
+int untrap(boolean);
+boolean chest_trap(struct obj *,int,boolean);
+void deltrap(struct trap *);
+boolean delfloortrap(struct trap *);
+struct trap *t_at(int,int);
+void b_trapped(const char *,int);
+boolean unconscious(void);
+boolean lava_effects(void);
+void blow_up_landmine(struct trap *);
+int launch_obj(short,int,int,int,int,int);
 /* KMH, balance patch -- new function */
-extern int uunstone(void);
+int uunstone(void);
 
 /* ### u_init.c ### */
 
-extern void u_init(void);
+void u_init(void);
 
 /* ### uhitm.c ### */
 
-extern void hurtmarmor(struct monst *,int);
-extern int attack_checks(struct monst *,boolean);
-extern void check_caitiff(struct monst *);
-extern schar find_roll_to_hit(struct monst *);
-extern boolean attack(struct monst *);
-extern boolean hmon(struct monst *,struct obj *,int);
-extern int damageum(struct monst *,struct attack *);
-extern void missum(struct monst *,int, int, struct attack *);
-extern int passive(struct monst *,int,int,uchar);
-extern void passive_obj(struct monst *,struct obj *,struct attack *);
-extern void stumble_onto_mimic(struct monst *);
-extern int flash_hits_mon(struct monst *,struct obj *);
+void hurtmarmor(struct monst *,int);
+int attack_checks(struct monst *,boolean);
+void check_caitiff(struct monst *);
+schar find_roll_to_hit(struct monst *);
+boolean attack(struct monst *);
+boolean hmon(struct monst *,struct obj *,int);
+int damageum(struct monst *,struct attack *);
+void missum(struct monst *,int, int, struct attack *);
+int passive(struct monst *,int,int,uchar);
+void passive_obj(struct monst *,struct obj *,struct attack *);
+void stumble_onto_mimic(struct monst *);
+int flash_hits_mon(struct monst *,struct obj *);
 
 /* ### unixmain.c ### */
 
 #ifdef UNIX
 # ifdef PORT_HELP
-extern void port_help(void);
+void port_help(void);
 # endif
 #endif /* UNIX */
 
 /* ### unixtty.c ### */
 
 #ifdef UNIX
-extern void gettty(void);
-extern void settty(const char *);
-extern void setftty(void);
-extern void intron(void);
-extern void introff(void);
-extern void error(const char *,...) PRINTF_F(1,2);
+void gettty(void);
+void settty(const char *);
+void setftty(void);
+void intron(void);
+void introff(void);
+void error(const char *,...) PRINTF_F(1,2);
 #endif /* UNIX */
 
 /* ### unixunix.c ### */
 
 #ifdef UNIX
-extern void getlock(void);
-extern void regularize(char *);
+void getlock(void);
+void regularize(char *);
 # if defined(TIMED_DELAY) && !defined(msleep) && defined(SYSV)
-extern void msleep(unsigned);
+void msleep(unsigned);
 # endif
 # ifdef SHELL
-extern int dosh(void);
+int dosh(void);
 # endif /* SHELL */
 # if defined(SHELL) || defined(DEF_PAGER) || defined(DEF_MAILREADER)
-extern int child(int);
+int child(int);
 # endif
 #endif /* UNIX */
 
 /* ### unixres.c ### */
 
 #ifdef UNIX
-extern int hide_privileges(boolean);
+int hide_privileges(boolean);
 #endif /* UNIX */
 
 /* ### vault.c ### */
 
-extern boolean grddead(struct monst *);
-extern char vault_occupied(char *);
-extern void invault(void);
-extern int gd_move(struct monst *);
-extern void paygd(void);
-extern long hidden_gold(void);
-extern boolean gd_sound(void);
+boolean grddead(struct monst *);
+char vault_occupied(char *);
+void invault(void);
+int gd_move(struct monst *);
+void paygd(void);
+long hidden_gold(void);
+boolean gd_sound(void);
 
 /* ### version.c ### */
 
-extern char *version_string_tmp(void);
-extern char *full_version_string_tmp();
-extern int doversion(void);
-extern bool check_version(struct version_info *, const char *,boolean);
-extern unsigned long get_feature_notice_ver(char *);
-extern unsigned long get_current_feature_ver(void);
+char *version_string_tmp(void);
+char *full_version_string_tmp();
+int doversion(void);
+bool check_version(struct version_info *, const char *,boolean);
+unsigned long get_feature_notice_ver(char *);
+unsigned long get_current_feature_ver(void);
 #ifdef RUNTIME_PORT_ID
-extern void append_port_id(char *);
+void append_port_id(char *);
 #endif
 
 /* ### video.c ### */
 
 #ifdef VIDEOSHADES
-extern int assign_videoshades(char *);
-extern int assign_videocolors(char *);
+int assign_videoshades(char *);
+int assign_videocolors(char *);
 #endif
 
 /* ### vision.c ### */
 
-extern void vision_init(void);
-extern int does_block(int,int,struct rm*);
-extern void vision_reset(void);
-extern void vision_recalc(int);
-extern void block_point(int,int);
-extern void unblock_point(int,int);
-extern bool clear_path(int,int,int,int);
-extern void do_clear_area(int,int,int,
+void vision_init(void);
+int does_block(int,int,struct rm*);
+void vision_reset(void);
+void vision_recalc(int);
+void block_point(int,int);
+void unblock_point(int,int);
+bool clear_path(int,int,int,int);
+void do_clear_area(int,int,int,
                           void (*)(int,int,void *),void *);
 
 /* ### weapon.c ### */
 
-extern int hitval(struct obj *,struct monst *);
-extern int dmgval(struct obj *,struct monst *);
-extern struct obj *select_rwep(struct monst *);
-extern struct obj *select_hwep(struct monst *);
-extern void possibly_unwield(struct monst *,boolean);
-extern int mon_wield_item(struct monst *);
-extern int abon(void);
-extern int dbon(void);
-extern int enhance_weapon_skill(void);
-extern void unrestrict_weapon_skill(int);
-extern void use_skill(int,int);
-extern void add_weapon_skill(int);
-extern void lose_weapon_skill(int);
-extern int weapon_type(struct obj *);
-extern int uwep_skill_type(void);
-extern int weapon_hit_bonus(struct obj *);
-extern int weapon_dam_bonus(struct obj *);
-extern int skill_bonus(int);
-extern void skill_init(const struct def_skill *);
-extern void practice_weapon(void);
+int hitval(struct obj *,struct monst *);
+int dmgval(struct obj *,struct monst *);
+struct obj *select_rwep(struct monst *);
+struct obj *select_hwep(struct monst *);
+void possibly_unwield(struct monst *,boolean);
+int mon_wield_item(struct monst *);
+int abon(void);
+int dbon(void);
+int enhance_weapon_skill(void);
+void unrestrict_weapon_skill(int);
+void use_skill(int,int);
+void add_weapon_skill(int);
+void lose_weapon_skill(int);
+int weapon_type(struct obj *);
+int uwep_skill_type(void);
+int weapon_hit_bonus(struct obj *);
+int weapon_dam_bonus(struct obj *);
+int skill_bonus(int);
+void skill_init(const struct def_skill *);
+void practice_weapon(void);
 
 /* ### were.c ### */
 
-extern int counter_were(int);
-extern void were_change(struct monst *);
-extern void new_were(struct monst *);
-extern int were_summon(struct permonst *,boolean,int *,char *);
-extern void you_were(void);
-extern void you_unwere(boolean);
+int counter_were(int);
+void were_change(struct monst *);
+void new_were(struct monst *);
+int were_summon(struct permonst *,boolean,int *,char *);
+void you_were(void);
+void you_unwere(boolean);
 
 /* ### wield.c ### */
 
-extern void setuwep(struct obj *,boolean);
-extern void setuqwep(struct obj *);
-extern void setuswapwep(struct obj *,boolean);
-extern int dowield(void);
-extern int doswapweapon(void);
-extern int dowieldquiver(void);
-extern boolean wield_tool(struct obj *,const char *);
-extern int can_twoweapon(void);
-extern void drop_uswapwep(void);
-extern int dotwoweapon(void);
-extern void uwepgone(void);
-extern void uswapwepgone(void);
-extern void uqwepgone(void);
-extern void untwoweapon(void);
-extern void erode_obj(struct obj *,boolean,boolean);
-extern int chwepon(struct obj *,int);
-extern int welded(struct obj *);
-extern void weldmsg(struct obj *);
-extern void setmnotwielded(struct monst *,struct obj *);
-extern void unwield(struct obj *,boolean);
+void setuwep(struct obj *,boolean);
+void setuqwep(struct obj *);
+void setuswapwep(struct obj *,boolean);
+int dowield(void);
+int doswapweapon(void);
+int dowieldquiver(void);
+boolean wield_tool(struct obj *,const char *);
+int can_twoweapon(void);
+void drop_uswapwep(void);
+int dotwoweapon(void);
+void uwepgone(void);
+void uswapwepgone(void);
+void uqwepgone(void);
+void untwoweapon(void);
+void erode_obj(struct obj *,boolean,boolean);
+int chwepon(struct obj *,int);
+int welded(struct obj *);
+void weldmsg(struct obj *);
+void setmnotwielded(struct monst *,struct obj *);
+void unwield(struct obj *,boolean);
 
 /* ### windows.c ### */
 
-extern void choose_windows(const char *);
-extern char genl_message_menu(char,int,const char *);
-extern void genl_preference_update(const char *);
-extern void dump_redirect(bool onoff_flag);
-extern void dump_open_log(time_t now);
-extern void dump_close_log(void);
-extern void dump_forward_putstr(winid win, int attr, const char *str, int no_forward);
+void choose_windows(const char *);
+char genl_message_menu(char,int,const char *);
+void genl_preference_update(const char *);
+void dump_redirect(bool onoff_flag);
+void dump_open_log(time_t now);
+void dump_close_log(void);
+void dump_forward_putstr(winid win, int attr, const char *str, int no_forward);
 
 /* ### wizard.c ### */
 
-extern void amulet(void);
-extern int mon_has_amulet(struct monst *);
-extern int mon_has_special(struct monst *);
-extern int tactics(struct monst *);
-extern void aggravate(void);
-extern void clonewiz(void);
-extern int pick_nasty(void);
-extern int nasty(struct monst*);
-extern void resurrect(void);
-extern void intervene(void);
-extern void wizdead(void);
-extern void cuss(struct monst *);
+void amulet(void);
+int mon_has_amulet(struct monst *);
+int mon_has_special(struct monst *);
+int tactics(struct monst *);
+void aggravate(void);
+void clonewiz(void);
+int pick_nasty(void);
+int nasty(struct monst*);
+void resurrect(void);
+void intervene(void);
+void wizdead(void);
+void cuss(struct monst *);
 
 /* ### worm.c ### */
 
-extern int get_wormno(void);
-extern void initworm(struct monst *,int);
-extern void worm_move(struct monst *);
-extern void worm_nomove(struct monst *);
-extern void wormgone(struct monst *);
-extern void wormhitu(struct monst *);
-extern int cutworm(struct monst *,xchar,xchar,struct obj *);
-extern void see_wsegs(struct monst *);
-extern void detect_wsegs(struct monst *,boolean);
-extern void save_worm(int,int);
-extern void rest_worm(int);
-extern void place_wsegs(struct monst *);
-extern void remove_worm(struct monst *);
-extern void place_worm_tail_randomly(struct monst *,xchar,xchar);
-extern int count_wsegs(struct monst *);
-extern boolean worm_known(struct monst *);
+int get_wormno(void);
+void initworm(struct monst *,int);
+void worm_move(struct monst *);
+void worm_nomove(struct monst *);
+void wormgone(struct monst *);
+void wormhitu(struct monst *);
+int cutworm(struct monst *,xchar,xchar,struct obj *);
+void see_wsegs(struct monst *);
+void detect_wsegs(struct monst *,boolean);
+void save_worm(int,int);
+void rest_worm(int);
+void place_wsegs(struct monst *);
+void remove_worm(struct monst *);
+void place_worm_tail_randomly(struct monst *,xchar,xchar);
+int count_wsegs(struct monst *);
+boolean worm_known(struct monst *);
 
 /* ### worn.c ### */
 
-extern void setworn(struct obj *,long);
-extern void setnotworn(struct obj *);
-extern void mon_set_minvis(struct monst *);
-extern void mon_adjust_speed(struct monst *,int,struct obj *);
-extern void update_mon_intrinsics(struct monst *,struct obj *,boolean,boolean);
-extern int find_mac(struct monst *);
-extern void m_dowear(struct monst *,boolean);
-extern struct obj *which_armor(struct monst *,long);
-extern void mon_break_armor(struct monst *,boolean);
-extern void bypass_obj(struct obj *);
-extern void clear_bypasses(void);
-extern int racial_exception(struct monst *, struct obj *);
+void setworn(struct obj *,long);
+void setnotworn(struct obj *);
+void mon_set_minvis(struct monst *);
+void mon_adjust_speed(struct monst *,int,struct obj *);
+void update_mon_intrinsics(struct monst *,struct obj *,boolean,boolean);
+int find_mac(struct monst *);
+void m_dowear(struct monst *,boolean);
+struct obj *which_armor(struct monst *,long);
+void mon_break_armor(struct monst *,boolean);
+void bypass_obj(struct obj *);
+void clear_bypasses(void);
+int racial_exception(struct monst *, struct obj *);
 
 /* ### write.c ### */
 
-extern int dowrite(struct obj *);
+int dowrite(struct obj *);
 
 /* ### zap.c ### */
 
-extern int bhitm(struct monst *,struct obj *);
-extern void probe_monster(struct monst *);
-extern boolean get_obj_location(struct obj *,xchar *,xchar *,int);
-extern boolean get_mon_location(struct monst *,xchar *,xchar *,int);
-extern struct monst *get_container_location(struct obj *obj, int *, int *);
-extern struct monst *montraits(struct obj *,coord *);
-extern struct monst *revive(struct obj *);
-extern int unturn_dead(struct monst *);
-extern void cancel_item(struct obj *);
-extern boolean drain_item(struct obj *);	/* KMH */
-extern boolean obj_resists(struct obj *,int,int);
-extern boolean obj_shudders(struct obj *);
-extern void do_osshock(struct obj *);
-extern void puton_worn_item(struct obj *);
-extern void obj_set_oinvis(struct obj *, boolean, boolean);
-extern struct obj *poly_obj(struct obj *, int);
-extern int bhito(struct obj *,struct obj *);
-extern int bhitpile(struct obj *,int (*)(struct obj*,struct obj*),int,int);
-extern int zappable(struct obj *);
-extern void zapnodir(struct obj *);
-extern int dozap(void);
-extern int zapyourself(struct obj *,boolean);
-extern boolean cancel_monst(struct monst *,struct obj *,
+int bhitm(struct monst *,struct obj *);
+void probe_monster(struct monst *);
+boolean get_obj_location(struct obj *,xchar *,xchar *,int);
+boolean get_mon_location(struct monst *,xchar *,xchar *,int);
+struct monst *get_container_location(struct obj *obj, int *, int *);
+struct monst *montraits(struct obj *,coord *);
+struct monst *revive(struct obj *);
+int unturn_dead(struct monst *);
+void cancel_item(struct obj *);
+boolean drain_item(struct obj *);	/* KMH */
+boolean obj_resists(struct obj *,int,int);
+boolean obj_shudders(struct obj *);
+void do_osshock(struct obj *);
+void puton_worn_item(struct obj *);
+void obj_set_oinvis(struct obj *, boolean, boolean);
+struct obj *poly_obj(struct obj *, int);
+int bhito(struct obj *,struct obj *);
+int bhitpile(struct obj *,int (*)(struct obj*,struct obj*),int,int);
+int zappable(struct obj *);
+void zapnodir(struct obj *);
+int dozap(void);
+int zapyourself(struct obj *,boolean);
+boolean cancel_monst(struct monst *,struct obj *,
                             boolean,boolean,boolean);
-extern void weffects(struct obj *);
-extern int spell_damage_bonus(int);
-extern const char *exclam(int force);
-extern void hit(const char *,struct monst *,const char *);
-extern void miss(const char *,struct monst *);
-extern struct monst *bhit(int,int,int,int,int (*)(struct monst*,struct obj*),
+void weffects(struct obj *);
+int spell_damage_bonus(int);
+const char *exclam(int force);
+void hit(const char *,struct monst *,const char *);
+void miss(const char *,struct monst *);
+struct monst *bhit(int,int,int,int,int (*)(struct monst*,struct obj*),
                           int (*)(struct obj*,struct obj*),struct obj **);
-extern struct monst *boomhit(int,int);
-extern int burn_floor_paper(int,int,boolean,boolean);
-extern void buzz(int,int,xchar,xchar,int,int);
-extern void melt_ice(xchar,xchar);
-extern int zap_over_floor(xchar,xchar,int,boolean *);
-extern void fracture_rock(struct obj *);
-extern boolean break_statue(struct obj *);
-extern void destroy_item(int,int);
-extern int destroy_mitem(struct monst *,int,int);
-extern int resist(struct monst *,char,int,int);
-extern void makewish(void);
+struct monst *boomhit(int,int);
+int burn_floor_paper(int,int,boolean,boolean);
+void buzz(int,int,xchar,xchar,int,int);
+void melt_ice(xchar,xchar);
+int zap_over_floor(xchar,xchar,int,boolean *);
+void fracture_rock(struct obj *);
+boolean break_statue(struct obj *);
+void destroy_item(int,int);
+int destroy_mitem(struct monst *,int,int);
+int resist(struct monst *,char,int,int);
+void makewish(void);
 /* KMH -- xchar to xchar */
-extern void zap_strike_fx(xchar, xchar, int);
-extern void throwspell(void);
+void zap_strike_fx(xchar, xchar, int);
+void throwspell(void);
 
 #endif /* !LEV_LEX_C */
 
