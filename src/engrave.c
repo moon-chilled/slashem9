@@ -715,10 +715,9 @@ int doengrave(void) {
 				}
 				if (!Blind)
 					strcpy(post_engr_text,
-					       IS_GRAVE(levl[u.ux][u.uy].typ) ?
-					       "Chips fly out from the headstone." :
-					       is_ice(u.ux,u.uy) ?
-					       "Ice chips fly up from the ice surface!" :
+					       IS_GRAVE(levl[u.ux][u.uy].typ) ? "Chips fly out from the headstone." :
+					       is_ice(u.ux,u.uy) ? "Ice chips fly up from the ice surface!" :
+					       (level.locations[u.ux][u.uy].typ == DRAWBRIDGE_DOWN) ? "Splinters fly up from the bridge." :
 					       "Gravel flies up from the floor.");
 				else
 					strcpy(post_engr_text, "You hear drilling!");
