@@ -859,6 +859,13 @@ static boolean hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 							 tmp = 0;
 						 else
 							 tmp = rnd(2);
+
+						 if (objects[obj->otyp].oc_material == SILVER && hates_silver(mdat)) {
+							 silvermsg = true; silverobj = true;
+							 /* if it will already inflict dmg, make it worse */
+							 tmp += rnd((tmp) ? 20 : 10);
+						 }
+
 						 if (!thrown && (obj == uwep || obj == uswapwep) &&
 								 obj->otyp == BOOMERANG && rnl(4) == 4-1) {
 							 boolean more_than_1 = (obj->quan > 1L);
