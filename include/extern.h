@@ -1201,8 +1201,7 @@ extern boolean can_ooze(struct monst *);
 extern void monst_init(void);
 
 /* ### monstr.c ### */
-extern void monstr_init(void);
-extern int mstrength(struct permonst mon);
+extern int mstrength(struct permonst *mon);
 
 /* ### mplayer.c ### */
 

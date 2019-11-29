@@ -26,13 +26,11 @@ static void m_initweap(struct monst *);
 static void m_initweap_normal(struct monst *);
 static void m_initinv(struct monst *);
 
-extern int *monstr;
-
 #define m_initsgrp(mtmp, x, y)	m_initgrp(mtmp, x, y, 3)
 #define m_initlgrp(mtmp, x, y)	m_initgrp(mtmp, x, y, 10)
 #define m_initvlgrp(mtmp, x, y)  m_initgrp(mtmp, x, y, 20)
-#define toostrong(monindx, lev) (monstr[monindx] > lev)
-#define tooweak(monindx, lev)	(monstr[monindx] < lev)
+#define toostrong(monindx, lev) (mstrength(&mons[monindx]) > lev)
+#define tooweak(monindx, lev)	(mstrength(&mons[monindx]) < lev)
 
 boolean is_home_elemental(struct permonst *ptr) {
 	if (ptr->mlet == S_ELEMENTAL)
@@ -1793,7 +1791,7 @@ int pm_mkclass(char class, int spc) {
 			/* consider it */
 			if(spc & MKC_ULIMIT && toostrong(last, 4 * maxmlev)) break;
 			if(num && toostrong(last, maxmlev) &&
-			                monstr[last] != monstr[last-1] && rn2(2)) break;
+			                mstrength(&mons[last]) != mstrength(&mons[last-1]) && rn2(2)) break;
 			num += mons[last].geno & G_FREQ;
 		}
 

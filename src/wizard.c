@@ -11,8 +11,6 @@
 #include "qtext.h"
 #include "epri.h"
 
-extern int *monstr;
-
 static short which_arti(int);
 static boolean mon_has_arti(struct monst *,short);
 static struct monst *other_mon_has_arti(struct monst *,short);
@@ -413,7 +411,7 @@ nasty (struct monst *mcast) {
 				do {
 					makeindex = pick_nasty();
 				} while(mcast && attacktype(&mons[makeindex], AT_MAGC) &&
-				                monstr[makeindex] >= monstr[mcast->mnum]);
+				                mstrength(&mons[makeindex]) >= mstrength(&mons[mcast->mnum]));
 				/* do this after picking the monster to place */
 				if (mcast &&
 				                !enexto(&bypos, mcast->mux, mcast->muy, &mons[makeindex]))

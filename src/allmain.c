@@ -52,7 +52,6 @@ void moveloop(void) {
 	 */
 	decl_init();
 	monst_init();
-	monstr_init();	/* monster strengths */
 	objects_init();
 
 	commands_init();
@@ -586,7 +585,6 @@ void newgame(void) {
 	}
 
 	init_objects();		/* must be before u_init() */
-	monstr_init();
 
 	flags.pantheon = -1;	/* role_init() will reset this */
 	role_init();		/* must be before init_dungeons(), u_init(),

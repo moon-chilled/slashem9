@@ -1244,7 +1244,6 @@ int dosacrifice (void) {
 	if (otmp->otyp == CORPSE) {
 		struct permonst *ptr = &mons[otmp->corpsenm];
 		struct monst *mtmp;
-		extern int *monstr;
 
 		/* KMH, conduct */
 		u.uconduct.gnostic++;
@@ -1252,9 +1251,8 @@ int dosacrifice (void) {
 		/* you're handling this corpse, even if it was killed upon the altar */
 		feel_cockatrice(otmp, true);
 
-		if (otmp->corpsenm == PM_ACID_BLOB
-		                || (monstermoves <= peek_at_iced_corpse_age(otmp) + 50)) {
-			value = monstr[otmp->corpsenm] + 1;
+		if (otmp->corpsenm == PM_ACID_BLOB || (monstermoves <= peek_at_iced_corpse_age(otmp) + 50)) {
+			value = mstrength(&mons[otmp->corpsenm]) + 1;
 		}
 		if (otmp->oeaten)
 			value = eaten_stat(value, otmp);
