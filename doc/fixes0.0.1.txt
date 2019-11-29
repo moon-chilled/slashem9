@@ -61,3 +61,5 @@ Changelist for slashem-next v0.0.1:
 - Interface: add the overview patch, which adds two new extended commands: #overview, which shows an overview of the layout of the dungeon levels the player has explored, and #annotate, which allows the player to make a mental note which is associated with the current level (Hojita Discordia).
 - Internals: remove reliance on the system for a regex engine, and instead vendor one ourselves (libtre).
 - Gameplay: gypsies can no longer be farmed for wishes.  Gypsies generated via reverse genocide are 'tainted' and will not grant wishes.
+- Bugfix: artifact naming.  The rules here are a bit different from in other games in the family: a name is only prohibited to be attached to an object where either there exists an artifact whose name is that name and whose base object is that object, or where adherence to the previous rule would leak information.
+- Bugfix: when the player's hand slipped while naming an object with the name of an artifact, the name was changed to the proper name of the artifact (plus a typo), rather than the actual player-inputted name (plus a typo).

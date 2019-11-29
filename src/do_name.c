@@ -271,7 +271,6 @@ int do_mname(void) {
  */
 static void do_oname(struct obj *obj) {
 	char buf[BUFSZ], qbuf[QBUFSZ];
-	const char *aname;
 	short objtyp;
 
 	sprintf(qbuf, "What do you want to name %s %s?",
@@ -280,10 +279,6 @@ static void do_oname(struct obj *obj) {
 	if(!*buf || *buf == '\033')	return;
 	/* strip leading and trailing spaces; unnames item if all spaces */
 	mungspaces(buf);
-
-	/* relax restrictions over proper capitalization for artifacts */
-	if ((aname = artifact_name(buf, &objtyp)) != 0 && objtyp == obj->otyp)
-		strcpy(buf, aname);
 
 	if (obj->oartifact) {
 		pline("The artifact seems to resist the attempt.");
@@ -299,7 +294,14 @@ static void do_oname(struct obj *obj) {
 		pline("While engraving your %s slips.", body_part(HAND));
 		display_nhwindow(WIN_MESSAGE, false);
 		pline("You engrave: \"%s\".",buf);
+	} else {
+		const char *aname;
+		// relax restrictions over proper capitalization for artifacts
+		if ((aname = artifact_name(buf, &objtyp)) != 0 && objtyp == obj->otyp)
+			strcpy(buf, aname);
 	}
+
+
 	obj = oname(obj, buf);
 }
 

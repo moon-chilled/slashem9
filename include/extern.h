@@ -1308,6 +1308,7 @@ extern void synch_cursor(void);
 /* ### o_init.c ### */
 
 extern void init_objects(void);
+extern void obj_shuffle_range(int otyp, int *lo_p, int *hi_p);
 extern int find_skates(void);
 extern void oinit(void);
 extern void savenames(int,int);

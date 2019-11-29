@@ -351,23 +351,45 @@ boolean arti_reflects(struct obj *obj) {
 
 boolean
 restrict_name(struct obj *otmp, const char *name) { /* returns 1 if name is restricted for otmp->otyp */
-	const struct artifact *a;
 	const char *aname;
 
 	if (!*name) return false;
 	if (!strncmpi(name, "the ", 4)) name += 4;
 
+	int lo, hi;
+	obj_shuffle_range(otmp->otyp, &lo, &hi);
+
 	/* Since almost every artifact is SPFX_RESTR, it doesn't cost
 	   us much to do the string comparison before the spfx check.
 	   Bug fix:  don't name multiple elven daggers "Sting".
 	 */
-	for (a = artilist+1; a->otyp; a++) {
-		if (a->otyp != otmp->otyp) continue;
-		aname = a->name;
-		if (!strncmpi(aname, "the ", 4)) aname += 4;
-		if (!strcmp(aname, name))
-			return  (a->spfx & (SPFX_NOGEN|SPFX_RESTR)) != 0 ||
-			        otmp->quan > 1L;
+	for (const struct artifact *a = artilist+1; a->otyp; a++) {
+		// disallowed if:
+		//
+		// either they're the same type of object
+		// or they look similar to you
+		//
+		// when do they look similar?
+		// When the artifact is in the objects shuffle group or the object descriptions are the same,
+		// and you don't know what either of them looks like
+		// (if you know what one looks like but not the other, that's ok; since the other is unidentified, you know it's not the same)
+
+		const char *odescr = OBJ_DESCR(objects[otmp->otyp]);
+		if (!odescr) odescr = "";
+
+		const char *adescr = OBJ_DESCR(objects[a->otyp]);
+		if (!adescr) adescr = "";
+
+		if ((a->otyp == otmp->otyp)
+				|| ((((lo <= a->otyp) && (a->otyp <= hi)) || !strcmp(odescr, adescr))
+					&& !objects[otmp->otyp].oc_name_known && !objects[a->otyp].oc_name_known)) {
+
+			aname = a->name;
+			if (!strncmpi(aname, "the ", 4)) aname += 4;
+			if (!strcmpi(aname, name))
+				return (a->spfx & (SPFX_NOGEN|SPFX_RESTR)) || otmp->quan > 1L;
+
+		}
 	}
 
 	return false;
