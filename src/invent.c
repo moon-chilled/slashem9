@@ -297,7 +297,7 @@ void addinv_core1(struct obj *obj) {
 			u.uhave.questart = 1;
 			artitouch();
 		}
-		set_artifact_intrinsic(obj, 1, W_ART);
+		set_artifact_intrinsic(obj, true, W_ART);
 
 	}
 
@@ -524,7 +524,7 @@ void freeinv_core(struct obj *obj) {
 				impossible("don't have quest artifact?");
 			u.uhave.questart = 0;
 		}
-		set_artifact_intrinsic(obj, 0, W_ART);
+		set_artifact_intrinsic(obj, false, W_ART);
 	}
 
 	if (obj->otyp == LOADSTONE) {

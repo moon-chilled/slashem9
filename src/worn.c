@@ -78,7 +78,7 @@ setworn (struct obj *obj, long mask) {
 						if ((p = w_blocks(oobj,mask)) != 0)
 							u.uprops[p].blocked &= ~wp->w_mask;
 						if (oobj->oartifact)
-							set_artifact_intrinsic(oobj, 0, mask);
+							set_artifact_intrinsic(oobj, false, mask);
 					}
 				}
 				*(wp->w_obj) = obj;
@@ -99,7 +99,7 @@ setworn (struct obj *obj, long mask) {
 								u.uprops[p].blocked |= wp->w_mask;
 						}
 						if (obj->oartifact)
-							set_artifact_intrinsic(obj, 1, mask);
+							set_artifact_intrinsic(obj, true, mask);
 					}
 				}
 			}
@@ -129,7 +129,7 @@ setnotworn (struct obj *obj) {
 			u.uprops[p].extrinsic = u.uprops[p].extrinsic & ~wp->w_mask;
 			obj->owornmask &= ~wp->w_mask;
 			if (obj->oartifact)
-				set_artifact_intrinsic(obj, 0, wp->w_mask);
+				set_artifact_intrinsic(obj, false, wp->w_mask);
 			if ((p = w_blocks(obj,wp->w_mask)) != 0)
 				u.uprops[p].blocked &= ~wp->w_mask;
 		}

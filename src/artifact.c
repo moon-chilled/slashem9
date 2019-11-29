@@ -17,10 +17,9 @@ extern boolean notonhead;	/* for long worms */
 #define get_artifact(o) \
 		(((o)&&(o)->oartifact) ? &artilist[(int) (o)->oartifact] : 0)
 
-static int spec_applies(const struct artifact *,struct monst *);
-static int arti_invoke(struct obj*);
-static boolean Mb_hit(struct monst *magr,struct monst *mdef,
-                      struct obj *,int *,int,boolean,char *);
+static int spec_applies(const struct artifact *weap, struct monst *mtmp);
+static int arti_invoke(struct obj *obj);
+static bool Mb_hit(struct monst *magr, struct monst *mdef, struct obj *mb, int *dmgptr, int dieroll, bool vis, char *hittee);
 
 /* The amount added to the victim's total hit points to insure that the
    victim will be killed even after damage bonus/penalty adjustments.
@@ -36,13 +35,13 @@ static boolean Mb_hit(struct monst *magr,struct monst *mdef,
 static int spec_dbon_applies = 0;
 
 /* flags including which artifacts have already been created */
-static boolean artiexist[1+NROFARTIFACTS+1];
+static bool artiexist[1+NROFARTIFACTS+1];
 /* and a discovery list for them (no dummy first entry here) */
 
 static xchar artidisco[NROFARTIFACTS];
 
 static void hack_artifacts(void);
-static boolean attacks(int,struct obj *);
+static bool attacks(int,struct obj *);
 
 
 /* handle some special cases; must be called after role_init() */
@@ -80,8 +79,8 @@ static void hack_artifacts(void) {
 
 /* zero out the artifact existence list */
 void init_artifacts (void) {
-	memset((void *) artiexist, 0, sizeof artiexist);
-	memset((void *) artidisco, 0, sizeof artidisco);
+	memset(artiexist, 0, sizeof(artiexist));
+	memset(artidisco, 0, sizeof(artidisco));
 	hack_artifacts();
 }
 
@@ -133,13 +132,13 @@ void init_artifacts1(void) {
 }
 
 void save_artifacts(int fd) {
-	bwrite(fd, (void *) artiexist, sizeof artiexist);
-	bwrite(fd, (void *) artidisco, sizeof artidisco);
+	bwrite(fd, artiexist, sizeof(artiexist));
+	bwrite(fd, artidisco, sizeof(artidisco));
 }
 
 void restore_artifacts(int fd) {
-	mread(fd, (void *) artiexist, sizeof artiexist);
-	mread(fd, (void *) artidisco, sizeof artidisco);
+	mread(fd, artiexist, sizeof(artiexist));
+	mread(fd, artidisco, sizeof(artidisco));
 	hack_artifacts();	/* redo non-saved special cases */
 }
 
@@ -163,9 +162,9 @@ struct obj *mk_artifact(
         aligntyp alignment	/* target alignment, or A_NONE */ ) {
 	const struct artifact *a;
 	int n, m;
-	boolean by_align = (alignment != A_NONE);
+	const bool by_align = (alignment != A_NONE);
 	short o_typ = (by_align || !otmp) ? 0 : otmp->otyp;
-	boolean unique = !by_align && otmp && objects[o_typ].oc_unique;
+	const bool unique = !by_align && otmp && objects[o_typ].oc_unique;
 	short eligible[NROFARTIFACTS];
 
 
@@ -199,7 +198,7 @@ struct obj *mk_artifact(
 			 * grant artifacts which would be hostile to the player
 			 * _in their normal form_.
 			 */
-			boolean hostile = false;
+			bool hostile = false;
 			if (by_align) {
 				if (a->race != NON_PM && race_hostile(&mons[a->race]))
 					hostile = true;		/* enemies' equipment */
@@ -267,9 +266,9 @@ const char *artifact_name(const char *name, short *otyp) {
 	return 0;
 }
 
-boolean exist_artifact(int otyp, const char *name) {
+bool exist_artifact(int otyp, const char *name) {
 	const struct artifact *a;
-	boolean *arex;
+	bool *arex;
 
 	if (otyp && *name)
 		for (a = artilist+1,arex = artiexist+1; a->otyp; a++,arex++)
@@ -278,7 +277,7 @@ boolean exist_artifact(int otyp, const char *name) {
 	return false;
 }
 
-void artifact_exists(struct obj *otmp, const char *name, boolean mod) {
+void artifact_exists(struct obj *otmp, const char *name, bool mod) {
 	const struct artifact *a;
 
 	if (otmp && *name)
@@ -319,14 +318,14 @@ int nartifact_exist(void) {
 	return a;
 }
 
-boolean spec_ability(struct obj *otmp, unsigned long abil) {
+bool spec_ability(struct obj *otmp, unsigned long abil) {
 	const struct artifact *arti = get_artifact(otmp);
 
 	return arti && (arti->spfx & abil);
 }
 
 /* used so that callers don't need to known about SPFX_ codes */
-boolean confers_luck(struct obj *obj) {
+bool confers_luck(struct obj *obj) {
 	/* might as well check for this too */
 	if (obj->otyp == LUCKSTONE) return true;
 
@@ -336,7 +335,7 @@ boolean confers_luck(struct obj *obj) {
 }
 
 /* used to check whether a monster is getting reflection from an artifact */
-boolean arti_reflects(struct obj *obj) {
+bool arti_reflects(struct obj *obj) {
 	const struct artifact *arti = get_artifact(obj);
 
 	if (arti) {
@@ -349,8 +348,8 @@ boolean arti_reflects(struct obj *obj) {
 	return false;
 }
 
-boolean
-restrict_name(struct obj *otmp, const char *name) { /* returns 1 if name is restricted for otmp->otyp */
+/* returns true if name is restricted for otmp->otyp */
+bool restrict_name(struct obj *otmp, const char *name) {
 	const char *aname;
 
 	if (!*name) return false;
@@ -395,7 +394,7 @@ restrict_name(struct obj *otmp, const char *name) { /* returns 1 if name is rest
 	return false;
 }
 
-static boolean attacks(int adtyp, struct obj *otmp) {
+static bool attacks(int adtyp, struct obj *otmp) {
 	const struct artifact *weap;
 
 	if ((weap = get_artifact(otmp)) != 0)
@@ -403,7 +402,7 @@ static boolean attacks(int adtyp, struct obj *otmp) {
 	return false;
 }
 
-boolean defends(int adtyp, struct obj *otmp) {
+bool defends(int adtyp, struct obj *otmp) {
 	const struct artifact *weap;
 
 	if ((weap = get_artifact(otmp)) != 0)
@@ -412,7 +411,7 @@ boolean defends(int adtyp, struct obj *otmp) {
 }
 
 /* used for monsters */
-boolean protects(int adtyp, struct obj *otmp) {
+bool protects(int adtyp, struct obj *otmp) {
 	const struct artifact *weap;
 
 	if ((weap = get_artifact(otmp)) != 0)
@@ -424,7 +423,7 @@ boolean protects(int adtyp, struct obj *otmp) {
  * a potential artifact has just been worn/wielded/picked-up or
  * unworn/unwielded/dropped.  Pickup/drop only set/reset the W_ART mask.
  */
-void set_artifact_intrinsic(struct obj *otmp, boolean on, long wp_mask) {
+void set_artifact_intrinsic(struct obj *otmp, bool on, long wp_mask) {
 	long *mask = 0;
 	const struct artifact *oart = get_artifact(otmp);
 	uchar dtyp;
@@ -565,17 +564,17 @@ void set_artifact_intrinsic(struct obj *otmp, boolean on, long wp_mask) {
  */
 int touch_artifact (struct obj *obj, struct monst *mon) {
 	const struct artifact *oart = get_artifact(obj);
-	boolean badclass, badalign, self_willed, yours;
+	bool badclass, badalign;
 
 	if(!oart) return 1;
 
 	/* [ALI] Thiefbane has a special affinity with shopkeepers */
 	if (mon->isshk && obj->oartifact == ART_THIEFBANE) return 1;
 
-	yours = (mon == &youmonst);
+	const bool yours = (mon == &youmonst);
 	/* all quest artifacts are self-willed; it this ever changes, `badclass'
 	   will have to be extended to explicitly include quest artifacts */
-	self_willed = ((oart->spfx & SPFX_INTEL) != 0);
+	const bool self_willed = ((oart->spfx & SPFX_INTEL) != 0);
 	if (yours) {
 		badclass = self_willed &&
 		           ((oart->role != NON_PM && !Role_if(oart->role)) ||
@@ -599,7 +598,7 @@ int touch_artifact (struct obj *obj, struct monst *mon) {
 
 		tmp = *oart;
 		tmp.spfx &= SPFX_DBONUS;
-		badalign = !!spec_applies(&tmp, mon);
+		badalign = spec_applies(&tmp, mon);
 	}
 
 	if (((badclass || badalign) && self_willed) ||
@@ -628,12 +627,11 @@ int touch_artifact (struct obj *obj, struct monst *mon) {
 static int spec_applies(const struct artifact *weap, struct monst *mtmp) {
 	int retval = true;
 	struct permonst *ptr;
-	boolean yours;
 
 	if(!(weap->spfx & (SPFX_DBONUS | SPFX_ATTK)))
 		return weap->attk.adtyp == AD_PHYS;
 
-	yours = (mtmp == &youmonst);
+	const bool yours = (mtmp == &youmonst);
 	ptr = mtmp->data;
 
 	/* [ALI] Modified to support multiple DBONUS and ATTK flags set.
@@ -757,7 +755,7 @@ void discover_artifact(xchar m) {
 }
 
 /* used to decide whether an artifact has been fully identified */
-boolean undiscovered_artifact(xchar m) {
+bool undiscovered_artifact(xchar m) {
 	int i;
 
 	/* look for this artifact in the discoveries list;
@@ -823,21 +821,21 @@ static const char * const mb_verb[2][4] = {
 #define MB_INDEX_CANCEL		3
 
 /* called when someone is being hit by Magicbane */
-static boolean Mb_hit(
+static bool Mb_hit(
         struct monst *magr, struct monst *mdef,/* attacker and defender */
         struct obj *mb,			/* Magicbane */
         int *dmgptr,			/* extra damage target will suffer */
         int dieroll,			/* d20 that has already scored a hit */
-        boolean vis,			/* whether the action can be seen */
+        bool vis,			/* whether the action can be seen */
         char *hittee			/* target's name: "you" or mon_nam(mdef) */) {
 	struct permonst *old_uasmon;
 	const char *verb;
-	boolean youattack = (magr == &youmonst),
-	        youdefend = (mdef == &youmonst),
-	        resisted = false, do_stun, do_confuse, result;
+	const bool youattack = (magr == &youmonst),
+	        youdefend = (mdef == &youmonst);
+	bool do_stun, do_confuse, resisted = false;
 	int attack_indx, scare_dieroll = MB_MAX_DIEROLL / 2;
 
-	result = false;		/* no message given yet */
+	bool result = false;		/* no message given yet */
 	/* the most severe effects are less likely at higher enchantment */
 	if (mb->spe >= 3)
 		scare_dieroll /= (1 << (mb->spe / 3));
@@ -849,7 +847,7 @@ static boolean Mb_hit(
 	   in that case it will only happen if the other effect fails;
 	   extra damage will apply regardless; 3.4.1: sometimes might
 	   just probe even when it hasn't been enchanted */
-	do_stun = (max(mb->spe,0) < rn2(spec_dbon_applies ? 11 : 7));
+	do_stun = max(mb->spe,0) < rn2(spec_dbon_applies ? 11 : 7);
 
 	/* the special effects also boost physical damage; increments are
 	   generally cumulative, but since the stun effect is based on a
@@ -1000,17 +998,16 @@ static boolean Mb_hit(
  * extension: change the killer so that when an orc kills you with
  * Stormbringer it's "killed by Stormbringer" instead of "killed by an orc".
  */
-boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, int *dmgptr, int dieroll /* needed for Magicbane and vorpal blades */ ) {
-	boolean youattack = (magr == &youmonst);
-	boolean youdefend = (mdef == &youmonst);
-	boolean vis = (!youattack && magr && cansee(magr->mx, magr->my))
+bool artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, int *dmgptr, int dieroll /* needed for Magicbane and vorpal blades */ ) {
+	const bool youattack = (magr == &youmonst);
+	const bool youdefend = (mdef == &youmonst);
+	const bool vis = (!youattack && magr && cansee(magr->mx, magr->my))
 	              || (!youdefend && cansee(mdef->mx, mdef->my))
 	              || (youattack && u.uswallow && mdef == u.ustuck && !Blind);
-	boolean realizes_damage;
 	const char *wepdesc;
 	static const char you[] = "you";
 	char hittee[BUFSIZ];
-	boolean special_applies;
+	bool special_applies;
 
 	strcpy(hittee, youdefend ? you : mon_nam(mdef));
 
@@ -1020,9 +1017,9 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 	 */
 	*dmgptr += spec_dbon(otmp, mdef, *dmgptr);
 
-	if (spec_dbon_applies)
+	if (spec_dbon_applies) {
 		special_applies = true;
-	else {
+	} else {
 		const struct artifact *weap = get_artifact(otmp);
 		special_applies = weap && spec_applies(weap, mdef);
 	}
@@ -1032,7 +1029,7 @@ boolean artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, i
 		return false;
 	}
 
-	realizes_damage = (youdefend || vis ||
+	const bool realizes_damage = (youdefend || vis ||
 	                   /* feel the effect even if not seen */
 	                   (youattack && mdef == u.ustuck));
 
@@ -1439,13 +1436,12 @@ static int arti_invoke(struct obj *obj) {
 		}
 		case CHARGE_OBJ: {
 			struct obj *otmp = getobj(recharge_type, "charge");
-			boolean b_effect;
 
 			if (!otmp) {
 				obj->age = 0;
 				return 0;
 			}
-			b_effect = obj->blessed &&
+			bool b_effect = obj->blessed &&
 			           (Role_switch == oart->role || !oart->role);
 			recharge(otmp, b_effect ? 1 : obj->cursed ? -1 : 0);
 			update_inventory();
@@ -1668,7 +1664,7 @@ static int arti_invoke(struct obj *obj) {
 	} else {
 		long eprop = (u.uprops[oart->inv_prop].extrinsic ^= W_ARTI),
 		     iprop = u.uprops[oart->inv_prop].intrinsic;
-		boolean on = (eprop & W_ARTI) != 0; /* true if invoked prop just set */
+		const bool on = eprop & W_ARTI; /* true if invoked prop just set */
 
 		if(on && obj->age > monstermoves) {
 			/* the artifact is tired :-) */
@@ -1727,7 +1723,7 @@ nothing_special:
  *      This only prints messages about the actual artifact.
  */
 
-int artifact_wet(struct obj *obj, boolean silent) {
+int artifact_wet(struct obj *obj, bool silent) {
 	if (!obj->oartifact) return -1;
 	switch (artilist[(int) (obj)->oartifact].attk.adtyp) {
 	case AD_FIRE:
@@ -1760,7 +1756,7 @@ int artifact_wet(struct obj *obj, boolean silent) {
 }
 
 /* WAC return true if artifact is always lit */
-boolean artifact_light(struct obj *obj) {
+bool artifact_light(struct obj *obj) {
 	return get_artifact(obj) && (obj->oartifact == ART_SUNSWORD ||
 	                             obj->oartifact == ART_HOLY_SPEAR_OF_LIGHT ||
 	                             obj->oartifact == ART_CANDLE_OF_ETERNAL_FLAME);
@@ -1784,7 +1780,7 @@ void arti_speak(struct obj *obj) {
 	verbalize("%s", line);
 }
 
-boolean artifact_has_invprop(struct obj *otmp, uchar inv_prop) {
+bool artifact_has_invprop(struct obj *otmp, uchar inv_prop) {
 	const struct artifact *arti = get_artifact(otmp);
 
 	return arti && (arti->inv_prop == inv_prop);
