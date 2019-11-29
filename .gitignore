@@ -9,10 +9,8 @@ tags
 *.o
 util/dgn_yacc.c
 util/dgn_yacc.h
-util/dgn_lex.c
 util/lev_yacc.c
 util/lev_yacc.h
-util/lev_lec.c
 
 dat/*.lev
 dat/dungeon

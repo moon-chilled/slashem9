@@ -58,6 +58,8 @@ util/dgn_yacc.c: util/dgn_yacc.y
 util/dgn_comp: $(OBJ_DGNCOMP)
 	$(CCLD) -o util/dgn_comp $(OBJ_DGNCOMP)
 
+util/lev_lex.o: util/lev_yacc.c
+
 util/lev_yacc.c: util/lev_yacc.y
 	yacc -d util/lev_yacc.y
 	mv -f y.tab.c util/lev_yacc.c
