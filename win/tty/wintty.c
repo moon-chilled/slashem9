@@ -1906,9 +1906,7 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 void tty_putstr(winid window, int attr, const char *str) {
 	struct WinDesc *cw = 0;
 	char *ob;
-	const char *nb;
-	int i, j, n0;
-	int k;
+	int i, n0;
 
 	/* Assume there's a real problem if the window is missing --
 	 * probably a panic message
@@ -1936,71 +1934,7 @@ void tty_putstr(winid window, int attr, const char *str) {
 		break;
 
 	case NHW_STATUS:
-		ob = &cw->data[cw->cury][j = cw->curx];
-		if(flags.botlx) *ob = 0;
-		if(!cw->cury && (int)strlen(str) >= CO) {
-			/* the characters before "St:" are unnecessary */
-			nb = index(str, ':');
-			if(nb && nb > str+2)
-				str = nb - 2;
-		}
-		k = 0;
-		/* WAC - attempt to break or shorten line 2 if it's too long */
-		if(cw->cury && (int)strlen(str) >= CO) {
-			if(cw->cury < (cw->maxrow - 1))
-				for(k = CO - 1; k && str[k] != ' ';)
-					k--;
-		}
-
-		nb = str;
-		for(i = cw->curx+1, n0 = cw->cols; i < n0; i++, nb++) {
-			if(!*nb) {
-				if(*ob || flags.botlx) {
-					/* last char printed may be in middle of line */
-					tty_curs(WIN_STATUS, i, cw->cury);
-					cl_end();
-				}
-				break;
-			}
-			if(*ob != *nb)
-				tty_putsym(WIN_STATUS, i, cw->cury, *nb);
-			if(*ob) ob++;
-
-			/* String break? --WAC */
-			if(i == k) {
-				strncpy(&cw->data[cw->cury][j], str, cw->cols - j - 1);
-				cw->data[cw->cury][min(k+1, cw->cols-1)] = '\0';
-
-				if(*ob || flags.botlx) {
-					/* last char printed may be in middle of line */
-					tty_curs(WIN_STATUS, k+1, cw->cury);
-					cl_end();
-				}
-				nb++;
-
-				str = nb + 1;
-				i = j = 0;
-				cw->curx = 0;
-				cw->cury++;
-
-				ob = &cw->data[cw->cury][cw->curx];
-				if(flags.botlx) *ob = 0;
-
-				tty_curs(WIN_STATUS, 1, cw->cury);
-				k = 0;
-			}
-		}
-
-		strncpy(&cw->data[cw->cury][j], str, cw->cols - j - 1);
-		cw->data[cw->cury][cw->cols-1] = '\0'; /* null terminate */
-		/* ALI - Clear third line if present and unused */
-		if (cw->cury == 1 && cw->cury < (cw->maxrow - 1)) {
-			cw->data[cw->cury + 1][0] = '\0';
-			tty_curs(WIN_STATUS, 1, cw->cury + 1);
-			cl_end();
-		}
-		cw->cury = (cw->cury+1) % 2;
-		cw->curx = 0;
+		impossible("Tried to putstr() on a status window");
 		break;
 	case NHW_MAP:
 		tty_curs(window, cw->curx+1, cw->cury);
