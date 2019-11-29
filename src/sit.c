@@ -26,7 +26,7 @@ take_gold() {
 
 int
 dosit() {
-	struct trap *trap;
+	struct trap *trap = t_at(u.ux, u.uy);
 	int typ = levl[u.ux][u.uy].typ;
 
 
@@ -45,23 +45,20 @@ dosit() {
 		goto in_water;
 	}
 
-	if(OBJ_AT(u.ux, u.uy)) {
+	if(OBJ_AT(u.ux, u.uy) && !((!u.utrap || u.utraptype != TT_PIT) && (trap && trap->tseen && (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT)))) {
 		struct obj *obj;
 
 		obj = level.objects[u.ux][u.uy];
 		pline("You sit on %s.", the(xname(obj)));
 		if (!(Is_box(obj) || objects[obj->otyp].oc_material == CLOTH))
 			pline("It's not very comfortable...");
-
-	} else if ((trap = t_at(u.ux, u.uy)) != 0 ||
-	                (u.utrap && (u.utraptype >= TT_LAVA))) {
-
+	} else if (trap || (u.utrap && (u.utraptype >= TT_LAVA))) {
 		if (u.utrap) {
 			exercise(A_WIS, false);	/* you're getting stuck longer */
 			if(u.utraptype == TT_BEARTRAP) {
 				pline("You can't sit down with your %s in the bear trap.", body_part(FOOT));
 				u.utrap++;
-			} else if(u.utraptype == TT_PIT) {
+			} else if (trap && u.utraptype == TT_PIT) {
 				if(trap->ttyp == SPIKED_PIT) {
 					pline("You sit down on a spike.  Ouch!");
 					losehp(1, "sitting on an iron spike", KILLED_BY);
