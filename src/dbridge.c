@@ -8,6 +8,13 @@
  *
  * Added comprehensive monster-handling, and the "entity" structure to
  * deal with players as well. - 11/89
+ *
+ * Any traps and/or engravings at either the portcullis or span location
+ * are destroyed whenever the bridge is lowered, raised, or destroyed.
+ * (Engraving handling could be extended to flag whether an engraving on
+ * the DB_UNDER surface is hidden by the lowered bridge, or one on the
+ * bridge itself is hidden because the bridge has been raised, but that
+ * seems like an awful lot of effort for very little gain.)
  */
 
 #include "hack.h"
@@ -719,6 +726,8 @@ void close_drawbridge (int x, int y) {
 	delallobj(x2, y2);
 	if ((t = t_at(x, y)) != 0) deltrap(t);
 	if ((t = t_at(x2, y2)) != 0) deltrap(t);
+	del_engr_at(x, y);
+	del_engr_at(x2, y2);
 	newsym(x, y);
 	newsym(x2, y2);
 	block_point(x2,y2);	/* vision */
@@ -754,6 +763,8 @@ void open_drawbridge (int x, int y) {
 	delallobj(x, y);
 	if ((t = t_at(x, y)) != 0) deltrap(t);
 	if ((t = t_at(x2, y2)) != 0) deltrap(t);
+	del_engr_at(x, y);
+	del_engr_at(x2, y2);
 	newsym(x, y);
 	newsym(x2, y2);
 	unblock_point(x2,y2);	/* vision */
@@ -816,6 +827,8 @@ void destroy_drawbridge (int x, int y) {
 	lev2->doormask = D_NODOOR;
 	if ((t = t_at(x, y)) != 0) deltrap(t);
 	if ((t = t_at(x2, y2)) != 0) deltrap(t);
+	del_engr_at(x, y);
+	del_engr_at(x2, y2);
 	newsym(x,y);
 	newsym(x2,y2);
 	if (!does_block(x2,y2,lev2)) unblock_point(x2,y2);	/* vision */

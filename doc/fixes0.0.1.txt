@@ -63,3 +63,4 @@ Changelist for slashem-next v0.0.1:
 - Gameplay: gypsies can no longer be farmed for wishes.  Gypsies generated via reverse genocide are 'tainted' and will not grant wishes.
 - Bugfix: artifact naming.  The rules here are a bit different from in other games in the family: a name is only prohibited to be attached to an object where either there exists an artifact whose name is that name and whose base object is that object, or where adherence to the previous rule would leak information.
 - Bugfix: when the player's hand slipped while naming an object with the name of an artifact, the name was changed to the proper name of the artifact (plus a typo), rather than the actual player-inputted name (plus a typo).
+- Bugfix: engravings made on drawbridge would appear on floor beneath.  Fixed by removing all engravings on drawbridge tile whenever it is opened, closed, or wrecked (NetHack).
