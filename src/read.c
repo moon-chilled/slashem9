@@ -3,6 +3,7 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "egyp.h"
 
 
 /* KMH -- Copied from pray.c; this really belongs in a header file */
@@ -1839,7 +1840,7 @@ static void do_class_genocide (void) {
 /* 1 = normal genocide */
 /* 3 = forced genocide of player */
 /* 5 (4 | 1) = normal genocide from throne */
-void do_genocide (int how) {
+void do_genocide(int how) {
 	char buf[BUFSZ];
 	int	i, killplayer = 0;
 	int mndx;
@@ -1965,15 +1966,24 @@ void do_genocide (int how) {
 	} else {
 		int cnt = 0;
 
-		if (!(mons[mndx].geno & G_UNIQ) &&
-		                !(mvitals[mndx].mvflags & (G_GENOD | G_EXTINCT)))
+		if (!(mons[mndx].geno & G_UNIQ) && !(mvitals[mndx].mvflags & (G_GENOD | G_EXTINCT)))
 			for (i = rn1(3, 4); i > 0; i--) {
-				if (!makemon(ptr, u.ux, u.uy, NO_MINVENT))
-					break;	/* couldn't make one */
+				struct monst *mtmp = makemon(ptr, u.ux, u.uy, NO_MINVENT);
+
+				// couldn't make one
+				if (!mtmp)
+					break;
 				++cnt;
+
+				// just made last one
 				if (mvitals[mndx].mvflags & G_EXTINCT)
-					break;	/* just made last one */
+					break;
+
+				// can't get wishes from reverse genocided gypsies; neuter them
+				if (mndx == PM_GYPSY)
+					EGYP(mtmp)->cant_grant_wish = true;
 			}
+
 		if (cnt)
 			pline("Sent in some %s.", makeplural(buf));
 		else

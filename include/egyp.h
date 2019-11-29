@@ -20,8 +20,9 @@
 
 /*** Monster definitions ***/
 struct egyp {
-	long credit;				/* Amount credited to player */
-	int top;					/* Index of top of the deck */
+	bool cant_grant_wish;
+	long credit;			/* Amount credited to player */
+	int top;			/* Index of top of the deck */
 	xchar cards[CARD_TOTAL];	/* Shuffled cards */
 };
 #define EGYP(mon)	((struct egyp *)mon->mextra)

@@ -1712,7 +1712,7 @@ void mondied (struct monst *mdef) {
 }
 
 /* monster disappears, not dies */
-void mongone (struct monst *mdef) {
+void mongone(struct monst *mdef) {
 	mdef->mhp = 0;	/* can skip some inventory bookkeeping */
 
 	/* Player is thrown from his steed when it disappears */

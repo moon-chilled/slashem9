@@ -391,8 +391,21 @@ static void fortune(struct monst *mtmp) {
 				verbalize("I wish I wasn't here!");
 				mongone(mtmp);
 			} else if (gypsy_offer(mtmp, 10000L, "grant you a wish")) {
-				mtmp->mcan = true;
-				makewish();
+				if (EGYP(mtmp)->cant_grant_wish) {
+					verbalize("So you thought you could be the master of fate, eh?");
+					display_nhwindow(WIN_MESSAGE, true); // --More--
+					verbalize("You fool!");
+					display_nhwindow(WIN_MESSAGE, true);
+
+					adjattrib(A_WIS, -1, 0);
+					change_luck(-3);
+
+					pline("The gypsy disappears in a puff of smoke!");
+					mongone(mtmp);
+				} else {
+					mtmp->mcan = true;
+					makewish();
+				}
 			}
 			break;
 		default:
@@ -706,6 +719,7 @@ void gypsy_init(struct monst *mtmp) {
 	mtmp->mpeaceful = true;
 	mtmp->msleeping = 0;
 	mtmp->mtrapseen = ~0;	/* traps are known */
+	EGYP(mtmp)->cant_grant_wish = false;
 	EGYP(mtmp)->credit = 0L;
 	EGYP(mtmp)->top = 0;
 	return;
