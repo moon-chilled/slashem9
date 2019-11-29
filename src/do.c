@@ -192,8 +192,7 @@ boolean flooreffects(struct obj *obj, int x, int y, const char *verb) {
 	                (t->ttyp==PIT || t->ttyp==SPIKED_PIT)) {
 		/* you escaped a pit and are standing on the precipice */
 		if (Blind && flags.soundok)
-			You_hearf("%s %s downwards.",
-			          The(xname(obj)), otense(obj, "tumble"));
+			You_hearf("%s tumble downwards.", the(xname(obj)));
 		else
 			pline("%s %s into %s pit.",
 			      The(xname(obj)), otense(obj, "tumble"),
