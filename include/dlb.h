@@ -11,7 +11,7 @@
 
 // if none is available, default to DLBFILE
 #if !defined(DLBLIB) && !defined(DLBFILE) && !defined(DLBEMBED)
-# define DLBFILE
+#define DLBFILE
 #endif
 
 #ifdef DLBLIB
@@ -34,18 +34,18 @@ typedef struct dlb_library {
 	long strsize;	// dlb file string size
 } library;
 
-# define DLB_LIB_FILE "nhdat"
+#define DLB_LIB_FILE "nhdat"
 
 #endif
 
 typedef struct {
 #ifdef DLBLIB
-	library *lib;		// pointer to library structure
-	usize start;		// offset of start of file
-	usize size;		// size of file
-	usize mark;		// current file marker
+	library *lib;  // pointer to library structure
+	usize start;   // offset of start of file
+	usize size;    // size of file
+	usize mark;    // current file marker
 #elif defined(DLBFILE)
-	FILE *fp;		// pointer to an external file
+	FILE *fp;  // pointer to an external file
 #elif defined(DLBEMBED)
 	usize pos;
 	usize size;
@@ -68,13 +68,13 @@ long dlb_ftell(dlb *dp);
 // various other I/O stuff we don't want to replicate everywhere
 
 #ifndef SEEK_SET
-# define SEEK_SET 0
+#define SEEK_SET 0
 #endif
 #ifndef SEEK_CUR
-# define SEEK_CUR 1
+#define SEEK_CUR 1
 #endif
 #ifndef SEEK_END
-# define SEEK_END 2
+#define SEEK_END 2
 #endif
 
 #define RDTMODE "r"
@@ -84,11 +84,11 @@ long dlb_ftell(dlb *dp);
 #define WRTMODE "w+"
 #endif
 #ifdef WIN32
-# define RDBMODE "rb"
-# define WRBMODE "w+b"
+#define RDBMODE "rb"
+#define WRBMODE "w+b"
 #else
-# define RDBMODE "r"
-# define WRBMODE "w+"
+#define RDBMODE "r"
+#define WRBMODE "w+"
 #endif
 
-#endif	/* DLB_H */
+#endif /* DLB_H */

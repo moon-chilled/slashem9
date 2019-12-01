@@ -51,7 +51,7 @@ extern int proxy_nh_poskey(int *, int *, int *);
 extern void proxy_nhbell(void);
 extern int proxy_doprev_message(void);
 extern char proxy_yn_function(const char *, const char *, char);
-extern void proxy_getlin(const char *,char *);
+extern void proxy_getlin(const char *, char *);
 extern int proxy_get_ext_cmd(void);
 extern void proxy_number_pad(int);
 extern void proxy_delay_output(void);

@@ -35,7 +35,6 @@ extern void mail_finish(void);
 struct lan_mail_struct mailmessage;
 #endif /* LAN_MAIL */
 
-
 void init_lan_features(void) {
 	lan_username();
 #ifdef LAN_MAIL
@@ -63,7 +62,7 @@ char *lan_username(void) {
 	}
 }
 
-# ifdef LAN_MAIL
+#ifdef LAN_MAIL
 #if 0
 static void mail_by_pline(struct lan_mail_struct *msg) {
 	long size;
@@ -173,7 +172,7 @@ void lan_mail_terminate(void) {
 	   which triggers mail initialization */
 }
 
-# endif /*LAN_MAIL*/
+#endif /*LAN_MAIL*/
 
 #endif /*LAN_FEATURES*/
 /*nhlan.c*/

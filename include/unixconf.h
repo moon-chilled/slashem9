@@ -8,7 +8,6 @@
 
 #include "config.h"
 
-
 /*
  * Some include files are in a different place under SYSV
  *	BSD		   SYSV
@@ -22,37 +21,36 @@
  */
 
 /* define exactly one of the following four choices */
-/* #define BSD 1 */	/* define for 4.n/Free/Open/Net BSD  */
+/* #define BSD 1 */ /* define for 4.n/Free/Open/Net BSD  */
 /* also for relatives like SunOS 4.x, DG/UX, and */
 /* older versions of Linux */
-/* #define ULTRIX */	/* define for Ultrix v3.0 or higher (but not lower) */
+/* #define ULTRIX */ /* define for Ultrix v3.0 or higher (but not lower) */
 /* Use BSD for < v3.0 */
 /* "ULTRIX" not to be confused with "ultrix" */
-#define SYSV		/* define for System V, Solaris 2.x, newer versions */
+#define SYSV /* define for System V, Solaris 2.x, newer versions */
 /* of Linux */
-/* #define HPUX */	/* Hewlett-Packard's Unix, version 6.5 or higher */
+/* #define HPUX */ /* Hewlett-Packard's Unix, version 6.5 or higher */
 /* use SYSV for < v6.5 */
 
-
 /* define any of the following that are appropriate */
-#define SVR4		/* use in addition to SYSV for System V Release 4 */
+#define SVR4 /* use in addition to SYSV for System V Release 4 */
 /* including Solaris 2+ */
-#define NETWORK		/* if running on a networked system */
+#define NETWORK /* if running on a networked system */
 /* e.g. Suns sharing a playground through NFS */
-/* #define SUNOS4 */	/* SunOS 4.x */
+/* #define SUNOS4 */ /* SunOS 4.x */
 #ifdef __linux__
-# define LINUX	/* Another Unix clone */
+#define LINUX /* Another Unix clone */
 #endif
-/* #define CYGWIN32 */	/* Unix on Win32 -- use with case sensitive defines */
-/* #define GENIX */	/* Yet Another Unix Clone */
-/* #define HISX */	/* Bull Unix for XPS Machines */
-/* #define BOS */	/* Bull Open Software - Unix for DPX/2 Machines */
-/* #define UNIXPC */	/* use in addition to SYSV for AT&T 7300/3B1 */
-/* #define AIX_31 */	/* In AIX 3.1 (IBM RS/6000) use BSD ioctl's to gain
+/* #define CYGWIN32 */ /* Unix on Win32 -- use with case sensitive defines */
+/* #define GENIX */    /* Yet Another Unix Clone */
+/* #define HISX */     /* Bull Unix for XPS Machines */
+/* #define BOS */      /* Bull Open Software - Unix for DPX/2 Machines */
+/* #define UNIXPC */   /* use in addition to SYSV for AT&T 7300/3B1 */
+/* #define AIX_31 */   /* In AIX 3.1 (IBM RS/6000) use BSD ioctl's to gain
 			 * job control (note that AIX is SYSV otherwise)
 			 * Also define this for AIX 3.2 */
 
-#define TERMINFO	/* uses terminfo rather than termcap */
+#define TERMINFO /* uses terminfo rather than termcap */
 /* Should be defined for most SYSV, SVR4 (including
  * Solaris 2+), HPUX, and Linux systems.  In
  * particular, it should NOT be defined for the UNIXPC
@@ -60,7 +58,7 @@
  * the Makefile */
 #define POSIX_JOB_CONTROL /* use System V / Solaris 2.x / POSIX job control */
 /* (e.g., VSUSP) */
-#define POSIX_TYPES	/* use POSIX types for system calls and termios */
+#define POSIX_TYPES /* use POSIX types for system calls and termios */
 /* Define for many recent OS releases, including
  * those with specific defines (since types are
  * changing toward the standard from earlier chaos).
@@ -68,13 +66,13 @@
  * Linux, Solaris 2.x
  */
 
-/* #define RANDOM */		/* if neither random/srandom nor lrand48/srand48
+/* #define RANDOM */ /* if neither random/srandom nor lrand48/srand48
 				   is available from your system */
 
 /* see sys/unix/snd86unx.shr for more information on these */
-/* #define UNIX386MUSIC */	/* play real music through speaker on systems
+/* #define UNIX386MUSIC */ /* play real music through speaker on systems
 				   with music driver installed */
-/* #define VPIX_MUSIC */	/* play real music through speaker on systems
+/* #define VPIX_MUSIC */   /* play real music through speaker on systems
 				   with built-in VPIX support */
 
 /*
@@ -84,8 +82,6 @@
  * (This might be preferable for security reasons.)
  * #define DEF_PAGER	".../mydir/mypager"
  */
-
-
 
 /*
  * Define PORT_HELP to be the name of the port-specfic help file.
@@ -104,9 +100,9 @@
  * "extra output" method is used, but not all systems provide access to
  * a fine-grained timer.
  */
-/* #define TIMED_DELAY */	/* usleep() */
+/* #define TIMED_DELAY */ /* usleep() */
 
-# define VIDEOSHADES
+#define VIDEOSHADES
 #endif
 
 /*
@@ -117,7 +113,7 @@
  * A stat system call is done on the mailbox every MAILCKFREQ moves.
  */
 
-/* #define MAIL */			/* Deliver mail during the game */
+/* #define MAIL */ /* Deliver mail during the game */
 
 /* The Andrew Message System does mail a little differently from normal
  * UNIX.  Mail is deposited in the user's own directory in ~/Mailbox
@@ -129,7 +125,7 @@
  *		dl2n+@andrew.cmu.edu (dec 19 1989)
  */
 
-/* #define AMS */		/* use Andrew message system for mail */
+/* #define AMS */ /* use Andrew message system for mail */
 
 /* NO_MAILREADER is for kerberos authenticating filesystems where it is
  * essentially impossible to securely exec child processes, like mail
@@ -138,70 +134,67 @@
  *	       dan
  */
 
-/* #define NO_MAILREADER */	/* have mail daemon just tell player of mail */
+/* #define NO_MAILREADER */ /* have mail daemon just tell player of mail */
 
-#ifdef	MAIL
-# if defined(BSD) || defined(ULTRIX)
-#  ifdef AMS
-#define AMS_MAILBOX	"/Mailbox"
-#  else
-#   if defined(__FreeBSD__) || defined(__OpenBSD__)
-#define DEF_MAILREADER "/usr/bin/mail"
-#   else
-#define DEF_MAILREADER	"/usr/ucb/Mail"
-#   endif
-#  endif
+#ifdef MAIL
+#if defined(BSD) || defined(ULTRIX)
+#ifdef AMS
+#define AMS_MAILBOX "/Mailbox"
 #else
-# if (defined(SYSV) || defined(HPUX)) && !defined(LINUX)
-#  if defined(M_XENIX)
-#define DEF_MAILREADER	"/usr/bin/mail"
-#  else
-#   ifdef __sgi
-#define DEF_MAILREADER	"/usr/sbin/Mail"
-#   else
-#define DEF_MAILREADER	"/usr/bin/mailx"
-#   endif
-#  endif
-# else
-#define DEF_MAILREADER	"/bin/mail"
-# endif
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
+#define DEF_MAILREADER "/usr/bin/mail"
+#else
+#define DEF_MAILREADER "/usr/ucb/Mail"
+#endif
+#endif
+#else
+#if (defined(SYSV) || defined(HPUX)) && !defined(LINUX)
+#if defined(M_XENIX)
+#define DEF_MAILREADER "/usr/bin/mail"
+#else
+#ifdef __sgi
+#define DEF_MAILREADER "/usr/sbin/Mail"
+#else
+#define DEF_MAILREADER "/usr/bin/mailx"
+#endif
+#endif
+#else
+#define DEF_MAILREADER "/bin/mail"
+#endif
 #endif
 
-#define MAILCKFREQ	50
-#endif	/* MAIL */
+#define MAILCKFREQ 50
+#endif /* MAIL */
 
-
-#define FCMASK	0660	/* file creation mask */
+#define FCMASK 0660 /* file creation mask */
 
 /* fcntl(2) is a POSIX-portable call for manipulating file descriptors.
  * Comment out the USE_FCNTL if for some reason you have a strange
  * os/filesystem combination for which fcntl(2) does not work. */
 #ifdef POSIX_TYPES
-# define USE_FCNTL
+#define USE_FCNTL
 #endif
-
-
 
 /*
  * The remainder of the file should not need to be changed.
  */
 
 #ifdef _AUX_SOURCE
-# ifdef AUX /* gcc ? */
-#  define _SYSV_SOURCE
-#  define _BSD_SOURCE
+#ifdef AUX /* gcc ? */
+#define _SYSV_SOURCE
+#define _BSD_SOURCE
 #else
-#  define AUX
-# endif
+#define AUX
+#endif
 #endif /* _AUX_SOURCE */
 
 #if defined(LINUX) || defined(bsdi)
-# ifndef POSIX_TYPES
-#  define POSIX_TYPES
-# endif
-# ifndef POSIX_JOB_CONTROL
-#  define POSIX_JOB_CONTROL
-# endif
+#ifndef POSIX_TYPES
+#define POSIX_TYPES
+#endif
+#ifndef POSIX_JOB_CONTROL
+#define POSIX_JOB_CONTROL
+#endif
 #endif
 
 /*
@@ -216,18 +209,17 @@
  * various recent SYSV versions (with possibly tweaks to unixtty.c again).
  */
 #ifndef POSIX_JOB_CONTROL
-# if defined(BSD) || defined(ULTRIX) || defined(HPUX) || defined(AIX_31)
-#  define BSD_JOB_CONTROL
-# else
-#  if defined(SVR4)
-#   define POSIX_JOB_CONTROL
-#  endif
-# endif
+#if defined(BSD) || defined(ULTRIX) || defined(HPUX) || defined(AIX_31)
+#define BSD_JOB_CONTROL
+#else
+#if defined(SVR4)
+#define POSIX_JOB_CONTROL
+#endif
+#endif
 #endif
 #if defined(BSD_JOB_CONTROL) || defined(POSIX_JOB_CONTROL) || defined(AUX)
-#define SUSPEND		/* let ^Z suspend the game */
+#define SUSPEND /* let ^Z suspend the game */
 #endif
-
 
 #if defined(BSD) || defined(ULTRIX)
 #include <sys/time.h>
@@ -235,11 +227,11 @@
 #include <time.h>
 #endif
 
-#define HLOCK	"perm"	/* an empty file used for locking purposes */
+#define HLOCK "perm" /* an empty file used for locking purposes */
 
 #define tgetch getchar
 
-#define SHELL		/* do not delete the '!' command */
+#define SHELL /* do not delete the '!' command */
 
 #include "system.h"
 
@@ -253,37 +245,37 @@
 #endif
 
 #if defined(BSD) || defined(ULTRIX)
-# if !defined(SUNOS4)
-#define memcpy(d, s, n)		bcopy(s, d, n)
-#define memcmp(s1, s2, n)	bcmp(s2, s1, n)
-# endif
-# ifdef SUNOS4
+#if !defined(SUNOS4)
+#define memcpy(d, s, n)	  bcopy(s, d, n)
+#define memcmp(s1, s2, n) bcmp(s2, s1, n)
+#endif
+#ifdef SUNOS4
 #include <memory.h>
-# endif
-#else	/* therefore SYSV */
-# ifndef index	/* some systems seem to do this for you */
-#define index	strchr
-# endif
-# ifndef rindex
-#define rindex	strrchr
-# endif
+#endif
+#else	      /* therefore SYSV */
+#ifndef index /* some systems seem to do this for you */
+#define index strchr
+#endif
+#ifndef rindex
+#define rindex strrchr
+#endif
 #endif
 
 #ifdef TIMED_DELAY
-# if defined(SUNOS4) || defined(LINUX) || defined(SVR4) /* [max] added SVR4 */
-# define msleep(k) usleep((k)*1000)
-# endif
-# ifdef ULTRIX
-# define msleep(k) napms(k)
-# endif
+#if defined(SUNOS4) || defined(LINUX) || defined(SVR4) /* [max] added SVR4 */
+#define msleep(k) usleep((k)*1000)
+#endif
+#ifdef ULTRIX
+#define msleep(k) napms(k)
+#endif
 #endif
 
-#ifdef hc	/* older versions of the MetaWare High-C compiler define this */
-# ifdef __HC__
-#  undef __HC__
-# endif
-# define __HC__ hc
-# undef hc
+#ifdef hc /* older versions of the MetaWare High-C compiler define this */
+#ifdef __HC__
+#undef __HC__
+#endif
+#define __HC__ hc
+#undef hc
 #endif
 
 #include "tre.h"

@@ -12,7 +12,6 @@
 #include <fcntl.h>
 #include <process.h>
 
-
 #ifdef WIN32
 void nethack_exit(int);
 #else
@@ -20,9 +19,8 @@ void nethack_exit(int);
 #endif
 static void msexit(void);
 
-
 #ifdef WIN32CON
-extern int GUILaunched;    /* from nttty.c */
+extern int GUILaunched; /* from nttty.c */
 #endif
 
 #ifdef WIN32
@@ -35,7 +33,7 @@ static const char *COMSPEC = "COMSPEC";
 
 #define getcomspec() nh_getenv(COMSPEC)
 
-# ifdef SHELL
+#ifdef SHELL
 int dosh(void) {
 	extern char orgdir[];
 	char *comspec;
@@ -45,7 +43,7 @@ int dosh(void) {
 		chdirx(orgdir, 0);
 		spawnstat = spawnl(P_WAIT, comspec, comspec, NULL);
 
-		if ( spawnstat < 0) {
+		if (spawnstat < 0) {
 			raw_printf("Can't spawn \"%s\"!", comspec);
 			getreturn("to continue");
 		}
@@ -53,11 +51,11 @@ int dosh(void) {
 		get_scr_size(); /* maybe the screen mode changed (TH) */
 		resume_nhwindows();
 	} else
-		pline("Can't find %s.",COMSPEC);
+		pline("Can't find %s.", COMSPEC);
 	return 0;
 }
-# endif /* SHELL */
-#endif //WIN32
+#endif	/* SHELL */
+#endif	//WIN32
 
 /*
  * Add a backslash to any name not ending in /, \ or :	 There must
@@ -85,7 +83,8 @@ void getreturn(const char *str) {
 	if (!getreturn_enabled) return;
 #endif
 	msmsg("Hit <Enter> %s.", str);
-	while (Getchar() != '\n') ;
+	while (Getchar() != '\n')
+		;
 	return;
 }
 
@@ -106,7 +105,7 @@ FILE *fopenp(const char *name, const char *mode) {
 	/* Try the default directory first.  Then look along PATH.
 	*/
 	strncpy(buf, name, BUFSIZ - 1);
-	buf[BUFSIZ-1] = '\0';
+	buf[BUFSIZ - 1] = '\0';
 	if ((fp = fopen(buf, mode))) {
 		return fp;
 	} else {
@@ -145,14 +144,14 @@ static void msexit(void) {
 #endif
 
 	flushout();
-# ifndef WIN32
-	enable_ctrlP(); 	/* in case this wasn't done */
-# endif
+#ifndef WIN32
+	enable_ctrlP(); /* in case this wasn't done */
+#endif
 #ifdef CHDIR
-	chdir(orgdir);		/* chdir, not chdirx */
-# ifndef __CYGWIN__
+	chdir(orgdir); /* chdir, not chdirx */
+#ifndef __CYGWIN__
 	chdrive(orgdir);
-# endif
+#endif
 #endif
 #ifdef WIN32CON
 	/* Only if we started from the GUI, not the command prompt,
@@ -182,8 +181,8 @@ void dircheck(void) {
 	dirbuf[0] = '\0';
 	if (getcwd(dirbuf, sizeof dirbuf) != NULL)
 		/* pline("%s,%s",dirbuf,hackdir); */
-		if (strcmp(dirbuf,hackdir) != 0)
-			chdir(hackdir);		/* chdir, not chdirx */
+		if (strcmp(dirbuf, hackdir) != 0)
+			chdir(hackdir); /* chdir, not chdirx */
 }
 #endif
-#endif // WIN32
+#endif	// WIN32

@@ -6,10 +6,10 @@
 // returns true if monster can attack at range
 static bool ranged_attk(struct permonst *mon) {
 	int i, j;
-	int atk_mask = (1<<AT_BREA) | (1<<AT_SPIT) | (1<<AT_GAZE);
+	int atk_mask = (1 << AT_BREA) | (1 << AT_SPIT) | (1 << AT_GAZE);
 
 	for (i = 0; i < NATTK; i++) {
-		if ((j=mon->mattk[i].aatyp) >= AT_WEAP || (atk_mask & (1<<j)))
+		if ((j = mon->mattk[i].aatyp) >= AT_WEAP || (atk_mask & (1 << j)))
 			return true;
 	}
 
@@ -23,8 +23,8 @@ static bool ranged_attk(struct permonst *mon) {
 int mstrength(struct permonst *mon) {
 	int i, tmp2, n, tmp = mon->mlevel;
 
-	if(tmp > 49)            /* special fixed hp monster */
-		tmp = 2*(tmp - 6) / 4;
+	if (tmp > 49) /* special fixed hp monster */
+		tmp = 2 * (tmp - 6) / 4;
 
 	// For creation in groups
 	n = (!!(mon->geno & G_SGROUP));
@@ -42,8 +42,7 @@ int mstrength(struct permonst *mon) {
 	n += (mon->mmove >= 18);
 
 	// For each attack and "special" attack
-	for(i = 0; i < NATTK; i++) {
-
+	for (i = 0; i < NATTK; i++) {
 		tmp2 = mon->mattk[i].aatyp;
 		n += (tmp2 > 0);
 		n += (tmp2 == AT_MAGC);
@@ -51,13 +50,13 @@ int mstrength(struct permonst *mon) {
 	}
 
 	// For each "special" damage type
-	for(i = 0; i < NATTK; i++) {
+	for (i = 0; i < NATTK; i++) {
 		tmp2 = mon->mattk[i].adtyp;
-		if ((tmp2 == AD_DRLI) || (tmp2 == AD_STON) || (tmp2 == AD_DRST)
-		                || (tmp2 == AD_DRDX) || (tmp2 == AD_DRCO) || (tmp2 == AD_WERE))
+		if ((tmp2 == AD_DRLI) || (tmp2 == AD_STON) || (tmp2 == AD_DRST) || (tmp2 == AD_DRDX) || (tmp2 == AD_DRCO) || (tmp2 == AD_WERE))
 			n += 2;
-		else if (mon != &mons[PM_GRID_BUG]) n += (tmp2 != AD_PHYS);
-		n += ((int) (mon->mattk[i].damd * mon->mattk[i].damn) > 23);
+		else if (mon != &mons[PM_GRID_BUG])
+			n += (tmp2 != AD_PHYS);
+		n += ((int)(mon->mattk[i].damd * mon->mattk[i].damn) > 23);
 	}
 	// tom's nasties
 	if (extra_nasty(mon)) n += 5;
@@ -67,9 +66,12 @@ int mstrength(struct permonst *mon) {
 	if (mon == &mons[PM_LEPRECHAUN]) n -= 2;
 
 	// Finally, adjust the monster level  0 <= n <= 24 (approx.)
-	if(n == 0) tmp--;
-	else if(n >= 6) tmp += ( n / 2 );
-	else tmp += ( n / 3 + 1);
+	if (n == 0)
+		tmp--;
+	else if (n >= 6)
+		tmp += (n / 2);
+	else
+		tmp += (n / 3 + 1);
 
 	return (tmp >= 0) ? tmp : 0;
 }

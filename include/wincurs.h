@@ -5,47 +5,46 @@
 
 int term_rows, term_cols; /* size of underlying terminal */
 
-WINDOW *base_term;    /* underlying terminal window */
+WINDOW *base_term; /* underlying terminal window */
 
-WINDOW *mapwin, *statuswin, *messagewin;    /* Main windows */
+WINDOW *mapwin, *statuswin, *messagewin; /* Main windows */
 
-int orig_cursor;	/* Preserve initial cursor state */
+int orig_cursor; /* Preserve initial cursor state */
 
-bool counting;   /* Count window is active */
+bool counting; /* Count window is active */
 
 /* Defined in NAO, assumed to exist in curses implementation changes */
 #ifndef DOESCAPE
-# define DOESCAPE '\033'
+#define DOESCAPE '\033'
 #endif
 
-#define NHW_END 19
-#define OFF 0
-#define ON 1
-#define NONE -1
-#define KEY_ESC 0x1b
-#define DIALOG_BORDER_COLOR CLR_MAGENTA
-#define ALERT_BORDER_COLOR CLR_RED
-#define SCROLLBAR_COLOR CLR_MAGENTA
+#define NHW_END		     19
+#define OFF		     0
+#define ON		     1
+#define NONE		     -1
+#define KEY_ESC		     0x1b
+#define DIALOG_BORDER_COLOR  CLR_MAGENTA
+#define ALERT_BORDER_COLOR   CLR_RED
+#define SCROLLBAR_COLOR	     CLR_MAGENTA
 #define SCROLLBAR_BACK_COLOR CLR_BLACK
-#define HIGHLIGHT_COLOR CLR_WHITE
-#define MORECOLOR CLR_ORANGE
-#define STAT_UP_COLOR CLR_GREEN
-#define STAT_DOWN_COLOR CLR_RED
-#define MESSAGE_WIN 1
-#define STATUS_WIN  2
-#define MAP_WIN     3
-#define INV_WIN     4
-#define NHWIN_MAX   5
-#define MESG_HISTORY_MAX   200
-#define CURSES_DARK_GRAY    17
+#define HIGHLIGHT_COLOR	     CLR_WHITE
+#define MORECOLOR	     CLR_ORANGE
+#define STAT_UP_COLOR	     CLR_GREEN
+#define STAT_DOWN_COLOR	     CLR_RED
+#define MESSAGE_WIN	     1
+#define STATUS_WIN	     2
+#define MAP_WIN		     3
+#define INV_WIN		     4
+#define NHWIN_MAX	     5
+#define MESG_HISTORY_MAX     200
+#define CURSES_DARK_GRAY     17
 #define MAP_SCROLLBARS
 #ifdef PDCURSES
-# define getmouse nc_getmouse
-# ifndef NCURSES_MOUSE_VERSION
-#  define NCURSES_MOUSE_VERSION
-# endif
+#define getmouse nc_getmouse
+#ifndef NCURSES_MOUSE_VERSION
+#define NCURSES_MOUSE_VERSION
 #endif
-
+#endif
 
 typedef enum orient_type {
 	CENTER,
@@ -56,12 +55,11 @@ typedef enum orient_type {
 	UNDEFINED
 } orient;
 
-
 /* cursmain.c */
 
 extern struct window_procs curses_procs;
 
-extern void curses_init_nhwindows(int* argcp, char** argv);
+extern void curses_init_nhwindows(int *argcp, char **argv);
 
 extern void curses_player_selection(void);
 
@@ -92,9 +90,9 @@ extern void curses_display_file(const char *filename, bool must_exist);
 
 extern void curses_start_menu(winid wid);
 
-extern void curses_add_menu(winid wid, int glyph, const anything * identifier,
-                            char accelerator, char group_accel, int attr,
-                            const char *str, bool presel);
+extern void curses_add_menu(winid wid, int glyph, const anything *identifier,
+			    char accelerator, char group_accel, int attr,
+			    const char *str, bool presel);
 
 extern void curses_end_menu(winid wid, const char *prompt);
 
@@ -108,7 +106,7 @@ extern void curses_wait_synch(void);
 
 extern void curses_cliparound(int x, int y);
 
-extern void curses_print_glyph(winid wid,xchar x,xchar y,int glyph);
+extern void curses_print_glyph(winid wid, xchar x, xchar y, int glyph);
 
 extern void curses_raw_print(const char *str);
 
@@ -142,7 +140,6 @@ extern void genl_outrip(winid tmpwin, int how);
 
 extern void curses_preference_update(const char *pref);
 
-
 /* curswins.c */
 
 extern WINDOW *curses_create_window(int width, int height, orient orientation);
@@ -152,7 +149,7 @@ extern void curses_destroy_win(WINDOW *win);
 extern WINDOW *curses_get_nhwin(winid wid);
 
 extern void curses_add_nhwin(winid wid, int height, int width, int y,
-                             int x, orient orientation, bool border);
+			     int x, orient orientation, bool border);
 
 extern void curses_add_wid(winid wid);
 
@@ -187,8 +184,7 @@ extern void curses_alert_main_borders(bool onoff);
 extern void curses_draw_map(int sx, int sy, int ex, int ey);
 
 extern bool curses_map_borders(int *sx, int *sy, int *ex, int *ey,
-                               int ux, int uy);
-
+			       int ux, int uy);
 
 /* cursmisc.c */
 
@@ -245,8 +241,8 @@ extern int curses_ext_cmd(void);
 extern void curses_create_nhmenu(winid wid);
 extern bool get_menu_coloring(char *, int *, attr_t *);
 extern void curses_add_nhmenu_item(winid wid, int glyph, const anything *identifier,
-                                   char accelerator, char group_accel, int attr, const char *str,
-                                   bool presel);
+				   char accelerator, char group_accel, int attr, const char *str,
+				   bool presel);
 
 extern void curses_finalize_nhmenu(winid wid, const char *prompt);
 
@@ -255,7 +251,6 @@ extern int curses_display_nhmenu(winid wid, int how, menu_item **_selected);
 extern bool curses_menu_exists(winid wid);
 
 extern void curses_del_menu(winid wid);
-
 
 /* cursstat.c */
 
@@ -276,14 +271,13 @@ extern void curses_init_nhcolors(void);
 
 extern void curses_choose_character(void);
 
-extern int curses_character_dialog(const char** choices, const char *prompt);
+extern int curses_character_dialog(const char **choices, const char *prompt);
 
 extern void curses_init_options(void);
 
 extern void curses_display_splash_window(void);
 
 extern void curses_cleanup(void);
-
 
 /* cursmesg.c */
 
@@ -305,5 +299,4 @@ extern void curses_prev_mesg(void);
 
 extern void curses_count_window(const char *count_text);
 
-#endif  /* WINCURS_H */
-
+#endif /* WINCURS_H */

@@ -8,7 +8,7 @@
 #define HP_TRACK 25
 #define HP_TREND 3
 
-bool borg_on=false;
+bool borg_on = false;
 char borg_line[80] = {0};
 int predicted_hp;
 
@@ -16,8 +16,8 @@ void adjust_hp_list(void) {
 	static int hp_list[HP_TRACK] = {0};
 	int l;
 	int hp_diff;
-	for (l=0; l<HP_TRACK-1; l++) {
-		hp_list[l+1] = hp_list[l];
+	for (l = 0; l < HP_TRACK - 1; l++) {
+		hp_list[l + 1] = hp_list[l];
 	}
 	hp_list[0] = u.uhp;
 	hp_diff = 0;
@@ -26,22 +26,22 @@ void adjust_hp_list(void) {
 	     }
 	     hp_diff /= HP_TREND;
 	     predicted_hp = u.uhp - hp_diff;*/
-	predicted_hp = u.uhp - ((hp_list[0] - u.uhpmax)*2);
+	predicted_hp = u.uhp - ((hp_list[0] - u.uhpmax) * 2);
 }
 
 char borg_input(void) {
 	delay_output();
 	delay_output();
-	delay_output(); // 150ms delay
+	delay_output();	 // 150ms delay
 
 	char c;
 	adjust_hp_list();
 	if (predicted_hp <= 0 || (u.uhp < u.uhpmax / 8)) pline("Emergency!");
 
 	/* He's quite lame for now... */
-	c = rand()%9 + '1';
+	c = rand() % 9 + '1';
 	if (c == '5') c = '.';
-	sprintf(borg_line,"%c",c);
+	sprintf(borg_line, "%c", c);
 	return '.';
 }
 #endif

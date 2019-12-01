@@ -1,12 +1,12 @@
 /* vim:set cin ft=c sw=4 sts=4 ts=8 et ai cino=Ls\:0t0(0 : -*- mode:c;fill-column:80;tab-width:8;c-basic-offset:4;indent-tabs-mode:nil;c-file-style:"k&r" -*-*/
 
 #ifndef CURSMISC_H
-# define CURSMISC_H
+#define CURSMISC_H
 
 /* Global declarations */
 
 int curses_read_char(void);
-void curses_toggle_color_attr(WINDOW * win, int color, int attr, int onoff);
+void curses_toggle_color_attr(WINDOW *win, int color, int attr, int onoff);
 void curses_bail(const char *mesg);
 winid curses_get_wid(int type);
 char *curses_copy_of(const char *s);

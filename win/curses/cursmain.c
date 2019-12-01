@@ -12,60 +12,60 @@
 
 /* Interface definition, for windows.c */
 struct window_procs curses_procs = {
-    "curses",
-    WC_ALIGN_MESSAGE | WC_ALIGN_STATUS | WC_COLOR | WC_HILITE_PET |
-        WC_POPUP_DIALOG | WC_SPLASH_SCREEN,
-    WC2_TERM_COLS | WC2_TERM_ROWS | WC2_WINDOWBORDERS | WC2_PETATTR |
-        WC2_GUICOLOR,
-    curses_init_nhwindows,
-    curses_player_selection,
-    curses_askname,
-    curses_get_nh_event,
-    curses_exit_nhwindows,
-    curses_suspend_nhwindows,
-    curses_resume_nhwindows,
-    curses_create_nhwindow,
-    curses_clear_nhwindow,
-    curses_display_nhwindow,
-    curses_destroy_nhwindow,
-    curses_curs,
-    curses_putstr,
-    curses_putnstr,
-    curses_display_file,
-    curses_start_menu,
-    curses_add_menu,
-    curses_end_menu,
-    curses_select_menu,
-    genl_message_menu,
-    curses_update_inventory,
-    curses_mark_synch,
-    curses_wait_synch,
+	"curses",
+	WC_ALIGN_MESSAGE | WC_ALIGN_STATUS | WC_COLOR | WC_HILITE_PET |
+		WC_POPUP_DIALOG | WC_SPLASH_SCREEN,
+	WC2_TERM_COLS | WC2_TERM_ROWS | WC2_WINDOWBORDERS | WC2_PETATTR |
+		WC2_GUICOLOR,
+	curses_init_nhwindows,
+	curses_player_selection,
+	curses_askname,
+	curses_get_nh_event,
+	curses_exit_nhwindows,
+	curses_suspend_nhwindows,
+	curses_resume_nhwindows,
+	curses_create_nhwindow,
+	curses_clear_nhwindow,
+	curses_display_nhwindow,
+	curses_destroy_nhwindow,
+	curses_curs,
+	curses_putstr,
+	curses_putnstr,
+	curses_display_file,
+	curses_start_menu,
+	curses_add_menu,
+	curses_end_menu,
+	curses_select_menu,
+	genl_message_menu,
+	curses_update_inventory,
+	curses_mark_synch,
+	curses_wait_synch,
 #ifdef CLIPPING
-    curses_cliparound,
+	curses_cliparound,
 #endif
 #ifdef POSITIONBAR
-    donull,
+	donull,
 #endif
-    curses_print_glyph,
-    curses_raw_print,
-    curses_raw_print_bold,
-    curses_nhgetch,
-    curses_nh_poskey,
-    curses_nhbell,
-    curses_doprev_message,
-    curses_yn_function,
-    curses_getlin,
-    curses_get_ext_cmd,
-    curses_number_pad,
-    curses_delay_output,
-#ifdef CHANGE_COLOR             /* only a Mac option currently */
-    donull,
-    donull,
+	curses_print_glyph,
+	curses_raw_print,
+	curses_raw_print_bold,
+	curses_nhgetch,
+	curses_nh_poskey,
+	curses_nhbell,
+	curses_doprev_message,
+	curses_yn_function,
+	curses_getlin,
+	curses_get_ext_cmd,
+	curses_number_pad,
+	curses_delay_output,
+#ifdef CHANGE_COLOR /* only a Mac option currently */
+	donull,
+	donull,
 #endif
-    curses_start_screen,
-    curses_end_screen,
-    genl_outrip,
-    curses_preference_update,
+	curses_start_screen,
+	curses_end_screen,
+	genl_outrip,
+	curses_preference_update,
 };
 
 /* Track if we're performing an update to the permanent window.
@@ -88,135 +88,120 @@ init_nhwindows(int* argcp, char** argv)
                 ** windows?  Or at least all but WIN_INFO?      -dean
 */
 void curses_init_nhwindows(int *argcp, char **argv) {
-    setlocale(LC_ALL, "");
+	setlocale(LC_ALL, "");
 #ifdef PDCURSES
-    char window_title[BUFSZ];
+	char window_title[BUFSZ];
 #endif
 
 #ifdef XCURSES
-    base_term = Xinitscr(*argcp, argv);
+	base_term = Xinitscr(*argcp, argv);
 #else
-    base_term = initscr();
+	base_term = initscr();
 #endif
-    if (has_colors()) {
-        start_color();
-        curses_init_nhcolors();
-    } else {
-        iflags.use_color = false;
-        set_option_mod_status("color", SET_IN_FILE);
-        iflags.wc2_guicolor = false;
-        set_wc2_option_mod_status(WC2_GUICOLOR, SET_IN_FILE);
-    }
-    noecho();
-    raw();
-    nonl(); // don't force ^m into newline (^j); input accepts them both, but as a command, accidental enter won't run south
-    meta(stdscr, true);
-    orig_cursor = curs_set(0);
-    keypad(stdscr, true);
+	if (has_colors()) {
+		start_color();
+		curses_init_nhcolors();
+	} else {
+		iflags.use_color = false;
+		set_option_mod_status("color", SET_IN_FILE);
+		iflags.wc2_guicolor = false;
+		set_wc2_option_mod_status(WC2_GUICOLOR, SET_IN_FILE);
+	}
+	noecho();
+	raw();
+	nonl();	 // don't force ^m into newline (^j); input accepts them both, but as a command, accidental enter won't run south
+	meta(stdscr, true);
+	orig_cursor = curs_set(0);
+	keypad(stdscr, true);
 #ifdef NCURSES_VERSION
-# ifdef __APPLE__
-    ESCDELAY = 25;
-# else
-    set_escdelay(25);
-# endif/* __APPLE__ */
+#ifdef __APPLE__
+	ESCDELAY = 25;
+#else
+	set_escdelay(25);
+#endif /* __APPLE__ */
 #endif /* NCURSES_VERSION */
 #ifdef PDCURSES
-    sprintf(window_title, "%s %s", DEF_GAME_NAME, version_string_tmp());
-    PDC_set_title(window_title);
-    PDC_set_blink(true);        /* Only if the user asks for it! */
-    timeout(1);
-    getch();
-    timeout(-1);
+	sprintf(window_title, "%s %s", DEF_GAME_NAME, version_string_tmp());
+	PDC_set_title(window_title);
+	PDC_set_blink(true); /* Only if the user asks for it! */
+	timeout(1);
+	getch();
+	timeout(-1);
 #endif /* PDCURSES */
-    getmaxyx(base_term, term_rows, term_cols);
-    counting = false;
-    curses_init_options();
-    if ((term_rows < 15) || (term_cols < 40)) {
-        panic("Terminal too small.  Must be minumum 40 width and 15 height");
-    }
+	getmaxyx(base_term, term_rows, term_cols);
+	counting = false;
+	curses_init_options();
+	if ((term_rows < 15) || (term_cols < 40)) {
+		panic("Terminal too small.  Must be minumum 40 width and 15 height");
+	}
 
-    curses_create_main_windows();
-    curses_init_mesg_history();
-    curses_display_splash_window();
+	curses_create_main_windows();
+	curses_init_mesg_history();
+	curses_display_splash_window();
 }
 
 /* Do a window-port specific player type selection. If player_selection()
    offers a Quit option, it is its responsibility to clean up and terminate
    the process. You need to fill in pl_character[0].
 */
-void
-curses_player_selection()
-{
-    curses_choose_character();
+void curses_player_selection() {
+	curses_choose_character();
 }
-
 
 /* Ask the user for a player name. */
-void
-curses_askname()
-{
-    curses_line_input_dialog("Who are you?", plname, PL_NSIZ);
+void curses_askname() {
+	curses_line_input_dialog("Who are you?", plname, PL_NSIZ);
 }
-
 
 /* Does window event processing (e.g. exposure events).
    A noop for the tty and X window-ports.
 */
-void
-curses_get_nh_event()
-{
+void curses_get_nh_event() {
 #ifdef PDCURSES
-    if (is_termresized()) {
-        resize_term(0, 0);
-        getmaxyx(base_term, term_rows, term_cols);
-        curses_create_main_windows();
-        curses_last_messages();
-        doredraw();
-    }
+	if (is_termresized()) {
+		resize_term(0, 0);
+		getmaxyx(base_term, term_rows, term_cols);
+		curses_create_main_windows();
+		curses_last_messages();
+		doredraw();
+	}
 #endif
-#ifdef NCURSES_VERSION          /* Is there a better way to detect ncurses? */
-    if (is_term_resized(term_rows, term_cols)) {
-        if (!isendwin()) {
-            endwin();
-        }
+#ifdef NCURSES_VERSION /* Is there a better way to detect ncurses? */
+	if (is_term_resized(term_rows, term_cols)) {
+		if (!isendwin()) {
+			endwin();
+		}
 
-        refresh();
-        getmaxyx(base_term, term_rows, term_cols);
-        curses_create_main_windows();
-        curses_last_messages();
-        doredraw();
-    }
+		refresh();
+		getmaxyx(base_term, term_rows, term_cols);
+		curses_create_main_windows();
+		curses_last_messages();
+		doredraw();
+	}
 #endif
 }
 
 /* Exits the window system.  This should dismiss all windows,
    except the "window" used for raw_print().  str is printed if possible.
 */
-void
-curses_exit_nhwindows(const char *str)
-{
-    curses_cleanup();
-    curs_set(orig_cursor);
-    endwin();
-    iflags.window_inited = 0;
-    if (str != NULL) {
-        raw_print(str);
-    }
+void curses_exit_nhwindows(const char *str) {
+	curses_cleanup();
+	curs_set(orig_cursor);
+	endwin();
+	iflags.window_inited = 0;
+	if (str != NULL) {
+		raw_print(str);
+	}
 }
 
 /* Prepare the window to be suspended. */
-void
-curses_suspend_nhwindows(const char *str)
-{
-    endwin();
+void curses_suspend_nhwindows(const char *str) {
+	endwin();
 }
 
-
 /* Restore the windows after being suspended. */
-void
-curses_resume_nhwindows()
-{
-    curses_refresh_nethack_windows();
+void curses_resume_nhwindows() {
+	curses_refresh_nethack_windows();
 }
 
 /*  Create a window of type "type" which can be
@@ -226,27 +211,22 @@ curses_resume_nhwindows()
         NHW_MENU        (inventory or other "corner" windows)
         NHW_TEXT        (help/text, full screen paged window)
 */
-winid
-curses_create_nhwindow(int type)
-{
-    winid wid = curses_get_wid(type);
+winid curses_create_nhwindow(int type) {
+	winid wid = curses_get_wid(type);
 
-    if (curses_is_menu(wid) || curses_is_text(wid)) {
-        curses_start_menu(wid);
-        curses_add_wid(wid);
-    }
+	if (curses_is_menu(wid) || curses_is_text(wid)) {
+		curses_start_menu(wid);
+		curses_add_wid(wid);
+	}
 
-    return wid;
+	return wid;
 }
 
-
 /* Clear the given window, when asked to. */
-void
-curses_clear_nhwindow(winid wid)
-{
-    if (wid != NHW_MESSAGE) {
-        curses_clear_nhwin(wid);
-    }
+void curses_clear_nhwindow(winid wid) {
+	if (wid != NHW_MESSAGE) {
+		curses_clear_nhwin(wid);
+	}
 }
 
 /* -- Display the window on the screen.  If there is data
@@ -258,41 +238,36 @@ curses_clear_nhwindow(winid wid)
                 -- Calling display_nhwindow(WIN_MESSAGE,???) will do a
                    --more--, if necessary, in the tty window-port.
 */
-void
-curses_display_nhwindow(winid wid, bool block)
-{
-    menu_item *selected = NULL;
-    if (curses_is_menu(wid) || curses_is_text(wid)) {
-        curses_end_menu(wid, "");
-        curses_select_menu(wid, PICK_NONE, &selected);
-        return;
-    }
+void curses_display_nhwindow(winid wid, bool block) {
+	menu_item *selected = NULL;
+	if (curses_is_menu(wid) || curses_is_text(wid)) {
+		curses_end_menu(wid, "");
+		curses_select_menu(wid, PICK_NONE, &selected);
+		return;
+	}
 
-    /* actually display the window */
-    wnoutrefresh(curses_get_nhwin(wid));
-    /* flush pending writes from other windows too */
-    doupdate();
-    if ((wid == MAP_WIN) && block) {
-        curses_more();
-    }
+	/* actually display the window */
+	wnoutrefresh(curses_get_nhwin(wid));
+	/* flush pending writes from other windows too */
+	doupdate();
+	if ((wid == MAP_WIN) && block) {
+		curses_more();
+	}
 
-    if ((wid == MESSAGE_WIN) && block) {
-        if (u.uhp != -1 && program_state.gameover != 1)
-            curses_block(true);
-        /* don't bug player with TAB prompt on "Saving..." or endgame */
-        else
-            curses_more();
-    }
+	if ((wid == MESSAGE_WIN) && block) {
+		if (u.uhp != -1 && program_state.gameover != 1)
+			curses_block(true);
+		/* don't bug player with TAB prompt on "Saving..." or endgame */
+		else
+			curses_more();
+	}
 }
-
 
 /* Destroy will dismiss the window if the window has not
  * already been dismissed.
 */
-void
-curses_destroy_nhwindow(winid wid)
-{
-    curses_del_nhwin(wid);
+void curses_destroy_nhwindow(winid wid) {
+	curses_del_nhwin(wid);
 }
 
 /* Next output to window will start at (x,y), also moves
@@ -300,10 +275,8 @@ curses_destroy_nhwindow(winid wid)
  1 <= x < cols, 0 <= y < rows, where cols and rows are
  the size of window.
 */
-void
-curses_curs(winid wid, int x, int y)
-{
-    curses_move_cursor(wid, x, y);
+void curses_curs(winid wid, int x, int y) {
+	curses_move_cursor(wid, x, y);
 }
 
 /*
@@ -329,26 +302,22 @@ Attributes
                    then the second.  In the tty port, pline() achieves this
                    by calling more() or displaying both on the same line.
 */
-void
-curses_putstr(winid wid, int attr, const char *text)
-{
-    int curses_attr = curses_convert_attr(attr);
+void curses_putstr(winid wid, int attr, const char *text) {
+	int curses_attr = curses_convert_attr(attr);
 
-    /* We need to convert NetHack attributes to curses attributes */
-    curses_puts(wid, curses_attr, text);
+	/* We need to convert NetHack attributes to curses attributes */
+	curses_puts(wid, curses_attr, text);
 }
 
 void curses_putnstr(winid wid, int attr, nhstr *text) {
-    curses_putstr(wid, attr, nhs2cstr_tmp(text));
+	curses_putstr(wid, attr, nhs2cstr_tmp(text));
 }
 
 /* Display the file named str.  Complain about missing files
                    iff complain is true.
 */
-void
-curses_display_file(const char *filename, bool must_exist)
-{
-    curses_view_file(filename, must_exist);
+void curses_display_file(const char *filename, bool must_exist) {
+	curses_view_file(filename, must_exist);
 }
 
 /* Start using window as a menu.  You must call start_menu()
@@ -356,13 +325,11 @@ curses_display_file(const char *filename, bool must_exist)
    putstr() to the window.  Only windows of type NHW_MENU may
    be used for menus.
 */
-void
-curses_start_menu(winid wid)
-{
-    if (inv_update)
-        return;
+void curses_start_menu(winid wid) {
+	if (inv_update)
+		return;
 
-    curses_create_nhmenu(wid);
+	curses_create_nhmenu(wid);
 }
 
 /*
@@ -396,21 +363,19 @@ add_menu(winid wid, int glyph, const anything identifier,
                 -- If you want this choice to be preselected when the
                    menu is displayed, set preselected to true.
 */
-void
-curses_add_menu(winid wid, int glyph, const anything * identifier,
-                char accelerator, char group_accel, int attr,
-                const char *str, bool presel)
-{
-    int curses_attr = curses_convert_attr(attr);
+void curses_add_menu(winid wid, int glyph, const anything *identifier,
+		     char accelerator, char group_accel, int attr,
+		     const char *str, bool presel) {
+	int curses_attr = curses_convert_attr(attr);
 
-    if (inv_update) {
-        curses_add_inv(inv_update, glyph, accelerator, curses_attr, str);
-        inv_update++;
-        return;
-    }
+	if (inv_update) {
+		curses_add_inv(inv_update, glyph, accelerator, curses_attr, str);
+		inv_update++;
+		return;
+	}
 
-    curses_add_nhmenu_item(wid, glyph, identifier, accelerator, group_accel,
-                           curses_attr, str, presel);
+	curses_add_nhmenu_item(wid, glyph, identifier, accelerator, group_accel,
+			       curses_attr, str, presel);
 }
 
 /*
@@ -422,13 +387,11 @@ end_menu(window, prompt)
                 ** This probably shouldn't flush the window any more (if
                 ** it ever did).  That should be select_menu's job.  -dean
 */
-void
-curses_end_menu(winid wid, const char *prompt)
-{
-    if (inv_update)
-        return;
+void curses_end_menu(winid wid, const char *prompt) {
+	if (inv_update)
+		return;
 
-    curses_finalize_nhmenu(wid, prompt);
+	curses_finalize_nhmenu(wid, prompt);
 }
 
 /*
@@ -456,36 +419,32 @@ int select_menu(winid window, int how, menu_item **selected)
                    select_menu() will be called for the window at
                    create_nhwindow() time.
 */
-int
-curses_select_menu(winid wid, int how, menu_item ** selected)
-{
-    if (inv_update)
-        return 0;
+int curses_select_menu(winid wid, int how, menu_item **selected) {
+	if (inv_update)
+		return 0;
 
-    return curses_display_nhmenu(wid, how, selected);
+	return curses_display_nhmenu(wid, how, selected);
 }
 
-void
-curses_update_inventory(void)
-{
-    /* Don't do anything if perm_invent is off unless we
+void curses_update_inventory(void) {
+	/* Don't do anything if perm_invent is off unless we
        changed the option. */
-    if (!flags.perm_invent) {
-        if (curses_get_nhwin(INV_WIN)) {
-            curses_create_main_windows();
-            curses_last_messages();
-            doredraw();
-        }
-        return;
-    }
+	if (!flags.perm_invent) {
+		if (curses_get_nhwin(INV_WIN)) {
+			curses_create_main_windows();
+			curses_last_messages();
+			doredraw();
+		}
+		return;
+	}
 
-    /* Update inventory sidebar. NetHack uses normal menu functions
+	/* Update inventory sidebar. NetHack uses normal menu functions
        when drawing the inventory, and we don't want to change the
        underlying code. So instead, track if an inventory update is
        being performed with a static variable. */
-    inv_update = 1;
-    curses_update_inv();
-    inv_update = 0;
+	inv_update = 1;
+	curses_update_inv();
+	inv_update = 0;
 }
 
 /*
@@ -493,9 +452,7 @@ mark_synch()    -- Don't go beyond this point in I/O on any channel until
                    all channels are caught up to here.  Can be an empty call
                    for the moment
 */
-void
-curses_mark_synch()
-{
+void curses_mark_synch() {
 }
 
 /*
@@ -504,9 +461,7 @@ wait_synch()    -- Wait until all pending output is complete (*flush*() for
                 -- May also deal with exposure events etc. so that the
                    display is OK when return from wait_synch().
 */
-void
-curses_wait_synch()
-{
+void curses_wait_synch() {
 }
 
 /*
@@ -514,15 +469,13 @@ cliparound(x, y)-- Make sure that the user is more-or-less centered on the
                    screen if the playing area is larger than the screen.
                 -- This function is only defined if CLIPPING is defined.
 */
-void
-curses_cliparound(int x, int y)
-{
-    int sx, sy, ex, ey;
-    bool redraw = curses_map_borders(&sx, &sy, &ex, &ey, x, y);
+void curses_cliparound(int x, int y) {
+	int sx, sy, ex, ey;
+	bool redraw = curses_map_borders(&sx, &sy, &ex, &ey, x, y);
 
-    if (redraw) {
-        curses_draw_map(sx, sy, ex, ey);
-    }
+	if (redraw) {
+		curses_draw_map(sx, sy, ex, ey);
+	}
 }
 
 /*
@@ -532,32 +485,30 @@ print_glyph(window, x, y, glyph)
                    port wants (symbol, font, color, attributes, ...there's
                    a 1-1 map between glyphs and distinct things on the map).
 */
-void
-curses_print_glyph(winid wid, xchar x, xchar y, int glyph)
-{
-    glyph_t ch;
-    int color;
-    uint special;
-    int attr = -1;
+void curses_print_glyph(winid wid, xchar x, xchar y, int glyph) {
+	glyph_t ch;
+	int color;
+	uint special;
+	int attr = -1;
 
-    /* map glyph to character and color */
-    mapglyph(glyph, &ch, &color, &special, x, y);
-    if ((special & MG_PET) && iflags.hilite_pet) {
-        attr = iflags.wc2_petattr;
-    }
-    if ((special & MG_DETECT) && iflags.use_inverse) {
-        attr = A_REVERSE;
-    }
+	/* map glyph to character and color */
+	mapglyph(glyph, &ch, &color, &special, x, y);
+	if ((special & MG_PET) && iflags.hilite_pet) {
+		attr = iflags.wc2_petattr;
+	}
+	if ((special & MG_DETECT) && iflags.use_inverse) {
+		attr = A_REVERSE;
+	}
 
-    if (wid == NHW_MAP) {
-        if ((special & MG_STAIRS) && iflags.hilite_hidden_stairs && iflags.use_color) {
-            color = 16 + (color * 2);
-        } else if ((special & MG_OBJPILE) && iflags.hilite_obj_piles && iflags.use_color) {
-            color = 16 + (color * 2) + 1;
-        }
-    }
+	if (wid == NHW_MAP) {
+		if ((special & MG_STAIRS) && iflags.hilite_hidden_stairs && iflags.use_color) {
+			color = 16 + (color * 2);
+		} else if ((special & MG_OBJPILE) && iflags.hilite_obj_piles && iflags.use_color) {
+			color = 16 + (color * 2) + 1;
+		}
+	}
 
-    curses_putch(wid, x, y, ch, color, attr);
+	curses_putch(wid, x, y, ch, color, attr);
 }
 
 /*
@@ -569,20 +520,16 @@ raw_print(str)  -- Print directly to a screen, or otherwise guarantee that
                    for error messages, and maybe other "msg" uses.  E.g.
                    updating status for micros (i.e, "saving").
 */
-void
-curses_raw_print(const char *str)
-{
-    puts(str);
+void curses_raw_print(const char *str) {
+	puts(str);
 }
 
 /*
 raw_print_bold(str)
             -- Like raw_print(), but prints in bold/standout (if possible).
 */
-void
-curses_raw_print_bold(const char *str)
-{
-    curses_raw_print(str);
+void curses_raw_print_bold(const char *str) {
+	curses_raw_print(str);
 }
 
 /*
@@ -591,16 +538,14 @@ int nhgetch()   -- Returns a single character input from the user.
                    will be the routine the OS provides to read a character.
                    Returned character _must_ be non-zero.
 */
-int
-curses_nhgetch()
-{
-    int ch;
+int curses_nhgetch() {
+	int ch;
 
-    curses_prehousekeeping();
-    ch = curses_read_char();
-    curses_posthousekeeping();
+	curses_prehousekeeping();
+	ch = curses_read_char();
+	curses_posthousekeeping();
 
-    return ch;
+	return ch;
 }
 
 /*
@@ -618,29 +563,25 @@ int nh_poskey(int *x, int *y, int *mod)
                    hardware supports.  If no mouse is supported, this
                    routine always returns a non-zero character.
 */
-int
-curses_nh_poskey(int *x, int *y, int *mod)
-{
-    int key = curses_nhgetch();
+int curses_nh_poskey(int *x, int *y, int *mod) {
+	int key = curses_nhgetch();
 
 #ifdef NCURSES_MOUSE_VERSION
-    /* Mouse event if mouse_support is true */
-    if (key == KEY_MOUSE) {
-        key = curses_get_mouse(x, y, mod);
-    }
+	/* Mouse event if mouse_support is true */
+	if (key == KEY_MOUSE) {
+		key = curses_get_mouse(x, y, mod);
+	}
 #endif
 
-    return key;
+	return key;
 }
 
 /*
 nhbell()        -- Beep at user.  [This will exist at least until sounds are
                    redone, since sounds aren't attributable to windows anyway.]
 */
-void
-curses_nhbell()
-{
-    beep();
+void curses_nhbell() {
+	beep();
 }
 
 /*
@@ -648,11 +589,9 @@ doprev_message()
                 -- Display previous messages.  Used by the ^P command.
                 -- On the tty-port this scrolls WIN_MESSAGE back one line.
 */
-int
-curses_doprev_message()
-{
-    curses_prev_mesg();
-    return 0;
+int curses_doprev_message() {
+	curses_prev_mesg();
+	return 0;
 }
 
 /*
@@ -674,10 +613,8 @@ char yn_function(const char *ques, const char *choices, char default)
                 -- This uses the top line in the tty window-port, other
                    ports might use a popup.
 */
-char
-curses_yn_function(const char *question, const char *choices, char def)
-{
-    return curses_character_input_dialog(question, choices, def);
+char curses_yn_function(const char *question, const char *choices, char def) {
+	return curses_character_input_dialog(question, choices, def);
 }
 
 /*
@@ -690,10 +627,8 @@ getlin(const char *ques, char *input)
             -- This uses the top line in the tty window-port, other
                ports might use a popup.
 */
-void
-curses_getlin(const char *question, char *input)
-{
-    curses_line_input_dialog(question, input, BUFSZ);
+void curses_getlin(const char *question, char *input) {
+	curses_line_input_dialog(question, input, BUFSZ);
 }
 
 /*
@@ -702,20 +637,15 @@ int get_ext_cmd(void)
                An index into extcmdlist[] is returned on a successful
                selection, -1 otherwise.
 */
-int
-curses_get_ext_cmd()
-{
-    return curses_ext_cmd();
+int curses_get_ext_cmd() {
+	return curses_ext_cmd();
 }
-
 
 /*
 number_pad(state)
             -- Initialize the number pad to the given state.
 */
-void
-curses_number_pad(int state)
-{
+void curses_number_pad(int state) {
 }
 
 /*
@@ -723,13 +653,11 @@ delay_output()  -- Causes a visible delay of 50ms in the output.
                Conceptually, this is similar to wait_synch() followed
                by a nap(50ms), but allows asynchronous operation.
 */
-void
-curses_delay_output()
-{
-    /* refreshing the whole display is a waste of time,
+void curses_delay_output() {
+	/* refreshing the whole display is a waste of time,
      * but that's why we're here */
-    refresh();
-    napms(50);
+	refresh();
+	napms(50);
 }
 
 /*
@@ -739,18 +667,14 @@ start_screen()  -- Only used on Unix tty ports, but must be declared for
                example.  If your window-port does not need this function
                just declare an empty function.
 */
-void
-curses_start_screen()
-{
+void curses_start_screen() {
 }
 
 /*
 end_screen()    -- Only used on Unix tty ports, but must be declared for
                completeness.  The complement of start_screen().
 */
-void
-curses_end_screen()
-{
+void curses_end_screen() {
 }
 
 /*
@@ -758,9 +682,7 @@ outrip(winid, int)
             -- The tombstone code.  If you want the traditional code use
                genl_outrip for the value and check the #if in rip.c.
 */
-void
-curses_outrip(winid wid, int how)
-{
+void curses_outrip(winid wid, int how) {
 }
 
 /*
@@ -773,13 +695,11 @@ preference_update(preference)
                    change if it indicated that it wants to be by setting the
                    corresponding bit in the wincap mask.
 */
-void
-curses_preference_update(const char *pref)
-{
-    if ((strcmp(pref, "align_status") == 0) ||
-        (strcmp(pref, "align_message") == 0)) {
-        curses_create_main_windows();
-        curses_last_messages();
-        doredraw();
-    }
+void curses_preference_update(const char *pref) {
+	if ((strcmp(pref, "align_status") == 0) ||
+	    (strcmp(pref, "align_message") == 0)) {
+		curses_create_main_windows();
+		curses_last_messages();
+		doredraw();
+	}
 }

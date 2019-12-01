@@ -4,13 +4,11 @@
 #include "egyp.h"
 #include "qtext.h"
 
-
 /* To do:
  *	fortune_lev()
  *	Fourtunes for suited cards
  *	On-line help
  */
-
 
 /*** Money-related functions ***/
 
@@ -83,56 +81,50 @@ static long gypsy_bet(struct monst *mtmp, long minimum) {
 	return bet;
 }
 
-
 /*** Card-related functions ***/
 
 static const char *suits[CARD_SUITS] =
-{ "swords", "wands",     "shields",  "rings" };          /* Special */
+	{"swords", "wands", "shields", "rings"}; /* Special */
 /* swords    wands/rods  roses/cups  pentacles/disks/coins  Tarot */
 /* spade     bastoni     coppe       denari                 Italian */
 /* swords    batons      cups        coins                  (translated) */
 /* spades    clubs       hearts      diamonds               French */
 
-
 static const char *ranks[CARD_RANKS] = {
 	"ace", "2", "3", "4", "5", "6", "7", "8", "9", "10",
-	/*none*/       "jack",       "queen", "king"
-}; /* French */
+	/*none*/ "jack", "queen", "king"}; /* French */
 /* page/princess  knight/prince  queen    king        Tarot */
 
-
 static const char *trumps[CARD_TRUMPS] = {
-	"the Fool",               /* This is NOT a Joker */
-	"the Magician",           /* same as the Magus */
-	"the High Priestess",     /* sometimes placed after the Emperor */
+	"the Fool",	      /* This is NOT a Joker */
+	"the Magician",	      /* same as the Magus */
+	"the High Priestess", /* sometimes placed after the Emperor */
 #if 0
 	"the Empress",            /* not included here */
 	"the Emperor",            /* not included here */
 #endif
-	"the Oracle",             /* same as the Hierophant */
+	"the Oracle", /* same as the Hierophant */
 	"the Lovers",
 	"the Chariot",
-	"Strength",               /* sometimes Adjustment */
+	"Strength", /* sometimes Adjustment */
 	"the Hermit",
-	"the Wheel of Fortune",   /* sometimes Fortune */
-	"Justice",                /* sometimes Lust */
-	"Punishment",             /* replaces the Hanged Man */
-	"the Devil",              /* normally #15 */
-	"Sorcery",                /* replaces Art or Temperance */
-	"Death",                  /* swapped with the Devil so it remains #13 */
-	"the Tower",              /* really! */
+	"the Wheel of Fortune", /* sometimes Fortune */
+	"Justice",		/* sometimes Lust */
+	"Punishment",		/* replaces the Hanged Man */
+	"the Devil",		/* normally #15 */
+	"Sorcery",		/* replaces Art or Temperance */
+	"Death",		/* swapped with the Devil so it remains #13 */
+	"the Tower",		/* really! */
 	"the Star",
 	"the Moon",
 	"the Sun",
-	"Judgement",              /* sometimes Aeon */
-	"Infinity"                /* replaces the World or the Universe */
+	"Judgement", /* sometimes Aeon */
+	"Infinity"   /* replaces the World or the Universe */
 };
-
 
 static void card_shuffle(struct monst *mtmp) {
 	xchar *cards = &EGYP(mtmp)->cards[0];
 	int i, j, k;
-
 
 	pline("%s shuffles the cards.", Monnam(mtmp));
 	for (i = 0; i < CARD_TOTAL; i++)
@@ -180,26 +172,22 @@ static void card_name(xchar num, char *buf) {
 	return;
 }
 
-
 /*** Fortunes ***/
 
-#define FORTUNE_COST	50			/* Cost to play */
+#define FORTUNE_COST 50 /* Cost to play */
 
 static short birthstones[12] = {
-	/* Jan */  GARNET,      /* Feb */  AMETHYST,
-	/* Mar */  AQUAMARINE,  /* Apr */  DIAMOND,
-	/* May */  EMERALD,     /* Jun */  OPAL,
-	/* Jul */  RUBY,        /* Aug */  CHRYSOBERYL,
-	/* Sep */  SAPPHIRE,    /* Oct */  BLACK_OPAL,
-	/* Nov */  TOPAZ,       /* Dec */  TURQUOISE
-};
-
+	/* Jan */ GARNET, /* Feb */ AMETHYST,
+	/* Mar */ AQUAMARINE, /* Apr */ DIAMOND,
+	/* May */ EMERALD, /* Jun */ OPAL,
+	/* Jul */ RUBY, /* Aug */ CHRYSOBERYL,
+	/* Sep */ SAPPHIRE, /* Oct */ BLACK_OPAL,
+	/* Nov */ TOPAZ, /* Dec */ TURQUOISE};
 
 static void fortune_lev(struct monst *mtmp, char *name, char *txt) {
 	/*** FIXME -- still very buggy ***/
 	/*	d_level *lev;*/
 	schar dep;
-
 
 	dep = lev_by_name(name);
 	if (!dep) {
@@ -224,7 +212,6 @@ static void fortune(struct monst *mtmp) {
 	short otyp;
 	struct obj *otmp;
 
-
 	/* Shuffle the deck, if neccessary, and draw a card */
 	gypsy_charge(mtmp, FORTUNE_COST);
 	if (EGYP(mtmp)->top <= 0)
@@ -242,176 +229,175 @@ static void fortune(struct monst *mtmp) {
 
 	if (card_istrump(card))
 		switch (card_trump(card)) {
-		case 0:	/* the Fool */
-			adjattrib(A_WIS, -1, 0);
-			change_luck(-3);
-			break;
-		case 1:	/* the Magician */
-			if (u.uevent.udemigod)
-				resurrect();
-			else
-				fortune_lev(mtmp, "fakewiz1",
-				            "an entrance to the Wizard's tower");
-			/*fortune_lev(mtmp, &portal_level);*/
-			break;
-		case 2: /* the High Priestess */
-			if (u.uhave.amulet)
-				verbalize("I see a high altar in the heavens.");
-			/* Can only get there by ascending... */
-			else
-				verbalize("I see a high altar on level %d.",
-				          depth(&sanctum_level));
-			/* Can only get there by invocation... */
-			break;
-		case 3: /* the Oracle */
-			fortune_lev(mtmp, "oracle", "the Oracle");
-			/*fortune_lev(mtmp, &oracle_level);*/
-			break;
-		case 4: /* the Lovers */
-			makemon(&mons[flags.female ? PM_INCUBUS : PM_SUCCUBUS],
-			        u.ux, u.uy, 0);
-			break;
-		case 5: /* the Chariot */
-			if (gypsy_offer(mtmp, 5000L,
-			                "teleport you to a level of your choosing")) {
-				incr_itimeout(&HTeleport_control, 1);
-				level_tele();
-			}
-			break;
-		case 6: /* Strength */
-			adjattrib(A_STR, 1, 0);
-			incr_itimeout(&HHalf_physical_damage, rn1(500, 500));
-			break;
-		case 7: /* the Hermit */
-			pline("You feel like hiding!");
-			incr_itimeout(&HTeleportation, rn1(300, 300));
-			incr_itimeout(&HInvis, rn1(500, 500));
-			newsym(u.ux, u.uy);
-			break;
-		case 8: /* the Wheel of Fortune */
-			if (Hallucination)
-				pline("Where is Vanna?");
-			else
-				pline("You feel lucky!");
-			if (u.uluck < 0)
-				u.uluck = 0;
-			else
-				change_luck(3);
-			break;
-		case 9: /* Justice */
-			makemon(&mons[PM_ERINYS], u.ux, u.uy, 0);
-			break;
-		case 10: /* Punishment */
-			if (!Punished)
-				punish(NULL);
-			else
-				rndcurse();
-			break;
-		case 11: /* the Devil */
-			summon_minion(A_NONE, true);
-			break;
-		case 12: /* Sorcery */
-			adjattrib(urole.spelstat, 1, 0);
-			incr_itimeout(&HHalf_spell_damage, rn1(500, 500));
-			break;
-		case 13: /* Death */
-			if (nonliving(youmonst.data) || is_demon(youmonst.data)
-			                || Antimagic)
-				shieldeff(u.ux, u.uy);
-			else if(Hallucination)
-				pline("You have an out of body experience.");
-			else  {
-				killer_format = KILLED_BY;
-				killer = "the card of Death";
-				done(DIED);
-			}
-			break;
-		case 14: /* the Tower */
-			fortune_lev(mtmp, "vlad\'s tower", "Vlad the Impaler");
-			/* fortune_lev(mtmp, &vlad_level); */
-			break;
-		case 15: /* the Star */
-			otyp = birthstones[getmonth()];
-			makeknown(otyp);
-			if ((otmp = mksobj(otyp, true, false)) != NULL) {
-				pline("%s reaches behind your %s and pulls out %s.",
-				      Monnam(mtmp), body_part(HEAD), doname(otmp));
-				if (pickup_object(otmp, otmp->quan, false) <= 0) {
-					obj_extract_self(otmp);
-					place_object(otmp, u.ux, u.uy);
-					newsym(u.ux, u.uy);
+			case 0: /* the Fool */
+				adjattrib(A_WIS, -1, 0);
+				change_luck(-3);
+				break;
+			case 1: /* the Magician */
+				if (u.uevent.udemigod)
+					resurrect();
+				else
+					fortune_lev(mtmp, "fakewiz1",
+						    "an entrance to the Wizard's tower");
+				/*fortune_lev(mtmp, &portal_level);*/
+				break;
+			case 2: /* the High Priestess */
+				if (u.uhave.amulet)
+					verbalize("I see a high altar in the heavens.");
+				/* Can only get there by ascending... */
+				else
+					verbalize("I see a high altar on level %d.",
+						  depth(&sanctum_level));
+				/* Can only get there by invocation... */
+				break;
+			case 3: /* the Oracle */
+				fortune_lev(mtmp, "oracle", "the Oracle");
+				/*fortune_lev(mtmp, &oracle_level);*/
+				break;
+			case 4: /* the Lovers */
+				makemon(&mons[flags.female ? PM_INCUBUS : PM_SUCCUBUS],
+					u.ux, u.uy, 0);
+				break;
+			case 5: /* the Chariot */
+				if (gypsy_offer(mtmp, 5000L,
+						"teleport you to a level of your choosing")) {
+					incr_itimeout(&HTeleport_control, 1);
+					level_tele();
 				}
-			}
-			break;
-		case 16: /* the Moon */
-			/* Reset the old moonphase */
-			if (flags.moonphase == FULL_MOON)
-				change_luck(-1);
+				break;
+			case 6: /* Strength */
+				adjattrib(A_STR, 1, 0);
+				incr_itimeout(&HHalf_physical_damage, rn1(500, 500));
+				break;
+			case 7: /* the Hermit */
+				pline("You feel like hiding!");
+				incr_itimeout(&HTeleportation, rn1(300, 300));
+				incr_itimeout(&HInvis, rn1(500, 500));
+				newsym(u.ux, u.uy);
+				break;
+			case 8: /* the Wheel of Fortune */
+				if (Hallucination)
+					pline("Where is Vanna?");
+				else
+					pline("You feel lucky!");
+				if (u.uluck < 0)
+					u.uluck = 0;
+				else
+					change_luck(3);
+				break;
+			case 9: /* Justice */
+				makemon(&mons[PM_ERINYS], u.ux, u.uy, 0);
+				break;
+			case 10: /* Punishment */
+				if (!Punished)
+					punish(NULL);
+				else
+					rndcurse();
+				break;
+			case 11: /* the Devil */
+				summon_minion(A_NONE, true);
+				break;
+			case 12: /* Sorcery */
+				adjattrib(urole.spelstat, 1, 0);
+				incr_itimeout(&HHalf_spell_damage, rn1(500, 500));
+				break;
+			case 13: /* Death */
+				if (nonliving(youmonst.data) || is_demon(youmonst.data) || Antimagic)
+					shieldeff(u.ux, u.uy);
+				else if (Hallucination)
+					pline("You have an out of body experience.");
+				else {
+					killer_format = KILLED_BY;
+					killer = "the card of Death";
+					done(DIED);
+				}
+				break;
+			case 14: /* the Tower */
+				fortune_lev(mtmp, "vlad\'s tower", "Vlad the Impaler");
+				/* fortune_lev(mtmp, &vlad_level); */
+				break;
+			case 15: /* the Star */
+				otyp = birthstones[getmonth()];
+				makeknown(otyp);
+				if ((otmp = mksobj(otyp, true, false)) != NULL) {
+					pline("%s reaches behind your %s and pulls out %s.",
+					      Monnam(mtmp), body_part(HEAD), doname(otmp));
+					if (pickup_object(otmp, otmp->quan, false) <= 0) {
+						obj_extract_self(otmp);
+						place_object(otmp, u.ux, u.uy);
+						newsym(u.ux, u.uy);
+					}
+				}
+				break;
+			case 16: /* the Moon */
+				/* Reset the old moonphase */
+				if (flags.moonphase == FULL_MOON)
+					change_luck(-1);
 
-			/* Set the new moonphase */
-			flags.moonphase = phase_of_the_moon();
-			switch (flags.moonphase) {
-			case NEW_MOON:
-				pline("Be careful!  New moon tonight.");
+				/* Set the new moonphase */
+				flags.moonphase = phase_of_the_moon();
+				switch (flags.moonphase) {
+					case NEW_MOON:
+						pline("Be careful!  New moon tonight.");
+						break;
+					case 1:
+					case 2:
+					case 3:
+						pline("The moon is waxing tonight.");
+						break;
+					case FULL_MOON:
+						pline("You are lucky!  Full moon tonight.");
+						change_luck(1);
+						break;
+					case 5:
+					case 6:
+					case 7:
+						pline("The moon is waning tonight.");
+						break;
+					default:
+						impossible("wierd moonphase %d", flags.moonphase);
+						break;
+				}
 				break;
-			case 1:
-			case 2:
-			case 3:
-				pline("The moon is waxing tonight.");
+			case 17: /* the Sun */
+				if (midnight())
+					verbalize("It is the witching hour.  Beware of the undead!");
+				else if (night())
+					verbalize("It is nighttime.  Beware of creatures of the night!");
+				else
+					verbalize("It is daytime.  Shouldn't you be working?");
 				break;
-			case FULL_MOON:
-				pline("You are lucky!  Full moon tonight.");
-				change_luck(1);
+			case 18: /* Judgement */
+				fortune_lev(mtmp, "portal to quest",
+					    "a portal to a quest");
+				/* fortune_lev(mtmp, &quest_level); */
 				break;
-			case 5:
-			case 6:
-			case 7:
-				pline("The moon is waning tonight.");
+			case 19: /* Infinity */
+				if (mtmp->mcan) {
+					verbalize("I wish I wasn't here!");
+					mongone(mtmp);
+				} else if (gypsy_offer(mtmp, 10000L, "grant you a wish")) {
+					if (EGYP(mtmp)->cant_grant_wish) {
+						verbalize("So you thought you could be the master of fate, eh?");
+						display_nhwindow(WIN_MESSAGE, true);  // --More--
+						verbalize("You fool!");
+						display_nhwindow(WIN_MESSAGE, true);
+
+						adjattrib(A_WIS, -1, 0);
+						change_luck(-3);
+
+						pline("The gypsy disappears in a puff of smoke!");
+						mongone(mtmp);
+					} else {
+						mtmp->mcan = true;
+						makewish();
+					}
+				}
 				break;
 			default:
-				impossible("wierd moonphase %d", flags.moonphase);
+				impossible("unknown trump %d", card_trump(card));
 				break;
-			}
-			break;
-		case 17: /* the Sun */
-			if (midnight())
-				verbalize("It is the witching hour.  Beware of the undead!");
-			else if (night())
-				verbalize("It is nighttime.  Beware of creatures of the night!");
-			else
-				verbalize("It is daytime.  Shouldn't you be working?");
-			break;
-		case 18: /* Judgement */
-			fortune_lev(mtmp, "portal to quest",
-			            "a portal to a quest");
-			/* fortune_lev(mtmp, &quest_level); */
-			break;
-		case 19: /* Infinity */
-			if (mtmp->mcan) {
-				verbalize("I wish I wasn't here!");
-				mongone(mtmp);
-			} else if (gypsy_offer(mtmp, 10000L, "grant you a wish")) {
-				if (EGYP(mtmp)->cant_grant_wish) {
-					verbalize("So you thought you could be the master of fate, eh?");
-					display_nhwindow(WIN_MESSAGE, true); // --More--
-					verbalize("You fool!");
-					display_nhwindow(WIN_MESSAGE, true);
-
-					adjattrib(A_WIS, -1, 0);
-					change_luck(-3);
-
-					pline("The gypsy disappears in a puff of smoke!");
-					mongone(mtmp);
-				} else {
-					mtmp->mcan = true;
-					makewish();
-				}
-			}
-			break;
-		default:
-			impossible("unknown trump %d", card_trump(card));
-			break;
-		}	/* End trumps */
+		} /* End trumps */
 	else
 		/* Suited card */
 		com_pager(QT_GYPSY + card);
@@ -419,12 +405,10 @@ static void fortune(struct monst *mtmp) {
 	return;
 }
 
-
 /*** Three-card monte ***/
 
-#define MONTE_COST	1			/* Minimum bet */
-#define MONTE_MAX	10			/* Maximum value of monteluck */
-
+#define MONTE_COST 1  /* Minimum bet */
+#define MONTE_MAX  10 /* Maximum value of monteluck */
 
 static void monte(struct monst *mtmp) {
 	long bet, n;
@@ -434,7 +418,6 @@ static void monte(struct monst *mtmp) {
 	menu_item *selected;
 	int delta;
 
-
 	/* Get the bet */
 	bet = gypsy_bet(mtmp, MONTE_COST);
 	if (!bet) return;
@@ -442,25 +425,26 @@ static void monte(struct monst *mtmp) {
 	/* Shuffle and pick */
 	if (flags.verbose)
 		pline("%s places three cards and rearranges them.", Monnam(mtmp));
-	any.a_void = 0;	/* zero out all bits */
+	any.a_void = 0; /* zero out all bits */
 	win = create_nhwindow(NHW_MENU);
 	start_menu(win);
 	any.a_char = 'l';
 	add_menu(win, NO_GLYPH, &any, 'l', 0, ATR_NONE,
-	         "Left card", MENU_UNSELECTED);
+		 "Left card", MENU_UNSELECTED);
 	any.a_char = 'c';
 	add_menu(win, NO_GLYPH, &any, 'c', 0, ATR_NONE,
-	         "Center card", MENU_UNSELECTED);
+		 "Center card", MENU_UNSELECTED);
 	any.a_char = 'r';
 	add_menu(win, NO_GLYPH, &any, 'r', 0, ATR_NONE,
-	         "Right card", MENU_UNSELECTED);
+		 "Right card", MENU_UNSELECTED);
 	end_menu(win, "Pick a card:");
-	while (select_menu(win, PICK_ONE, &selected) != 1) ;
+	while (select_menu(win, PICK_ONE, &selected) != 1)
+		;
 	destroy_nhwindow(win);
 
 	/* Calculate the change in odds for next time */
 	/* Start out easy, but get harder once the player is suckered */
-	delta = rnl(4) - 3;	/* Luck helps */
+	delta = rnl(4) - 3; /* Luck helps */
 	if (u.umontelast == selected[0].item.a_char)
 		/* Only suckers keep picking the same card */
 		delta++;
@@ -493,25 +477,24 @@ static void monte(struct monst *mtmp) {
 	return;
 }
 
-
 /*** Ninety-nine ***/
 
-#define NINETYNINE_COST		1	/* Minimum bet */
-#define NINETYNINE_HAND		3	/* Number of cards in hand */
-#define NINETYNINE_GOAL		99	/* Limit of the total */
+#define NINETYNINE_COST 1  /* Minimum bet */
+#define NINETYNINE_HAND 3  /* Number of cards in hand */
+#define NINETYNINE_GOAL 99 /* Limit of the total */
 
 static boolean nn_playable(xchar card, int total) {
 	if (card_istrump(card))
 		/* The fool always loses; other trumps are always playable */
 		return card != CARD_SUITED;
-	switch (card_rank(card)+1) {
-	case 11:	/* Jack */
-	case 12:	/* Queen */
-		return total >= 10;
-	case 13:	/* King */
-		return true;
-	default:	/* Ace through 10 */
-		return (total + card_rank(card) + 1) <= NINETYNINE_GOAL;
+	switch (card_rank(card) + 1) {
+		case 11: /* Jack */
+		case 12: /* Queen */
+			return total >= 10;
+		case 13: /* King */
+			return true;
+		default: /* Ace through 10 */
+			return (total + card_rank(card) + 1) <= NINETYNINE_GOAL;
 	}
 }
 
@@ -519,19 +502,19 @@ static int nn_play(xchar card, int total) {
 	if (card_istrump(card)) {
 		if (card == CARD_SUITED)
 			/* The Fool always loses */
-			return NINETYNINE_GOAL+1;
+			return NINETYNINE_GOAL + 1;
 		else
 			/* Other trumps leave the total unchanged */
 			return total;
 	}
-	switch (card_rank(card)+1) {
-	case 11:	/* Jack */
-	case 12:	/* Queen */
-		return total - 10;
-	case 13:	/* King */
-		return NINETYNINE_GOAL;
-	default:	/* Ace through 10 */
-		return total + card_rank(card) + 1;
+	switch (card_rank(card) + 1) {
+		case 11: /* Jack */
+		case 12: /* Queen */
+			return total - 10;
+		case 13: /* King */
+			return NINETYNINE_GOAL;
+		default: /* Ace through 10 */
+			return total + card_rank(card) + 1;
 	}
 }
 
@@ -545,17 +528,16 @@ static int nn_pref(xchar card) {
 	if (card_istrump(card))
 		/* The fool always loses; other trumps are always playable */
 		return 0;
-	switch (card_rank(card)+1) {
-	case 11:	/* Jack */
-	case 12:	/* Queen */
-		return 1;
-	case 13:	/* King */
-		return 2;
-	default:	/* Ace through 10 */
-		return 3;
+	switch (card_rank(card) + 1) {
+		case 11: /* Jack */
+		case 12: /* Queen */
+			return 1;
+		case 13: /* King */
+			return 2;
+		default: /* Ace through 10 */
+			return 3;
 	}
 }
-
 
 static void ninetynine(struct monst *mtmp) {
 	long bet;
@@ -565,7 +547,6 @@ static void ninetynine(struct monst *mtmp) {
 	winid win;
 	anything any;
 	menu_item *selected;
-
 
 	/* Get the bet */
 	bet = gypsy_bet(mtmp, NINETYNINE_COST);
@@ -580,24 +561,25 @@ static void ninetynine(struct monst *mtmp) {
 
 	while (1) {
 		/* Let the user pick a card */
-		any.a_void = 0;	/* zero out all bits */
+		any.a_void = 0; /* zero out all bits */
 		win = create_nhwindow(NHW_MENU);
 		start_menu(win);
 		for (i = 0; i < NINETYNINE_HAND; i++) {
-			any.a_int = (nn_playable(uhand[i], total) ? i+1 : 0);
+			any.a_int = (nn_playable(uhand[i], total) ? i + 1 : 0);
 			card_name(uhand[i], buf);
 			add_menu(win, NO_GLYPH, &any, 0, 0, ATR_NONE,
-			         buf, MENU_UNSELECTED);
+				 buf, MENU_UNSELECTED);
 		}
 		any.a_int = NINETYNINE_HAND + 1;
 		add_menu(win, NO_GLYPH, &any, 'q', 0, ATR_NONE,
-		         "Forfeit", MENU_UNSELECTED);
+			 "Forfeit", MENU_UNSELECTED);
 		end_menu(win, "Play a card:");
-		while (select_menu(win, PICK_ONE, &selected) != 1) ;
+		while (select_menu(win, PICK_ONE, &selected) != 1)
+			;
 		destroy_nhwindow(win);
 
 		/* Play the card */
-		which = selected[0].item.a_int-1;
+		which = selected[0].item.a_int - 1;
 		if (which >= NINETYNINE_HAND) {
 			pline("You forfeit.");
 			gypsy_charge(mtmp, bet);
@@ -652,16 +634,13 @@ static void ninetynine(struct monst *mtmp) {
 	return;
 }
 
-
-
 /*** Pawn gems ***/
 
-static const char pawnables[] = { ALLOW_COUNT, GEM_CLASS, 0 };
+static const char pawnables[] = {ALLOW_COUNT, GEM_CLASS, 0};
 
 static void pawn(struct monst *mtmp) {
 	struct obj *otmp;
 	long value;
-
 
 	/* Prompt for an item */
 	otmp = getobj((const char *)pawnables, "pawn");
@@ -691,11 +670,10 @@ static void pawn(struct monst *mtmp) {
 	return;
 }
 
-
 /*** Yendorian Tarocchi ***/
 
-#define TAROCCHI_COST	500		/* Cost to play */
-#define TAROCCHI_HAND	10		/* Number of cards in hand */
+#define TAROCCHI_COST 500 /* Cost to play */
+#define TAROCCHI_HAND 10  /* Number of cards in hand */
 
 static void tarocchi(struct monst *mtmp) {
 	int turn;
@@ -711,20 +689,18 @@ static void tarocchi(struct monst *mtmp) {
 	return;
 }
 
-
 /*** Monster-related functions ***/
 
 void gypsy_init(struct monst *mtmp) {
 	mtmp->isgyp = true;
 	mtmp->mpeaceful = true;
 	mtmp->msleeping = 0;
-	mtmp->mtrapseen = ~0;	/* traps are known */
+	mtmp->mtrapseen = ~0; /* traps are known */
 	EGYP(mtmp)->cant_grant_wish = false;
 	EGYP(mtmp)->credit = 0L;
 	EGYP(mtmp)->top = 0;
 	return;
 }
-
 
 void gypsy_chat(struct monst *mtmp) {
 	long money;
@@ -736,7 +712,7 @@ void gypsy_chat(struct monst *mtmp) {
 
 	/* Sanity checks */
 	if (!mtmp || !mtmp->mpeaceful || !mtmp->isgyp ||
-	                !humanoid(mtmp->data))
+	    !humanoid(mtmp->data))
 		return;
 
 	/* Add up your available money */
@@ -745,7 +721,7 @@ void gypsy_chat(struct monst *mtmp) {
 	money = EGYP(mtmp)->credit + umoney;
 
 	/* Create the menu */
-	any.a_void = 0;	/* zero out all bits */
+	any.a_void = 0; /* zero out all bits */
 	win = create_nhwindow(NHW_MENU);
 	start_menu(win);
 
@@ -753,24 +729,24 @@ void gypsy_chat(struct monst *mtmp) {
 	any.a_char = 'f';
 	if (money >= FORTUNE_COST)
 		add_menu(win, NO_GLYPH, &any, 'f', 0, ATR_NONE,
-		         "Read your fortune", MENU_UNSELECTED);
+			 "Read your fortune", MENU_UNSELECTED);
 
 	/* Three-card monte */
 	any.a_char = 'm';
 	if (money >= MONTE_COST)
 		add_menu(win, NO_GLYPH, &any, 'm', 0, ATR_NONE,
-		         "Three-card monte", MENU_UNSELECTED);
+			 "Three-card monte", MENU_UNSELECTED);
 
 	/* Ninety-nine */
 	any.a_char = 'n';
 	if (money >= NINETYNINE_COST)
 		add_menu(win, NO_GLYPH, &any, 'n', 0, ATR_NONE,
-		         "Ninety-nine", MENU_UNSELECTED);
+			 "Ninety-nine", MENU_UNSELECTED);
 
 	/* Pawn gems (always available) */
 	any.a_char = 'p';
 	add_menu(win, NO_GLYPH, &any, 'p', 0, ATR_NONE,
-	         "Pawn gems", MENU_UNSELECTED);
+		 "Pawn gems", MENU_UNSELECTED);
 
 	/* Yendorian Tarocchi */
 	any.a_char = 't';
@@ -781,34 +757,32 @@ void gypsy_chat(struct monst *mtmp) {
 	/* Help */
 	any.a_char = '?';
 	add_menu(win, NO_GLYPH, &any, '?', 0, ATR_NONE,
-	         "Help", MENU_UNSELECTED);
+		 "Help", MENU_UNSELECTED);
 
 	/* Display the menu */
 	end_menu(win, "Play which game?");
 	n = select_menu(win, PICK_ONE, &selected);
 	destroy_nhwindow(win);
 	if (n > 0) switch (selected[0].item.a_char) {
-		case 'f':
-			fortune(mtmp);
-			break;
-		case 'm':
-			monte(mtmp);
-			break;
-		case 'n':
-			ninetynine(mtmp);
-			break;
-		case 'p':
-			pawn(mtmp);
-			break;
-		case 't':
-			tarocchi(mtmp);
-			break;
-		case '?':
-			display_file("gypsy.txt", true);
-			break;
+			case 'f':
+				fortune(mtmp);
+				break;
+			case 'm':
+				monte(mtmp);
+				break;
+			case 'n':
+				ninetynine(mtmp);
+				break;
+			case 'p':
+				pawn(mtmp);
+				break;
+			case 't':
+				tarocchi(mtmp);
+				break;
+			case '?':
+				display_file("gypsy.txt", true);
+				break;
 		}
 
 	return;
 }
-
-

@@ -13,41 +13,41 @@
 
 /* Macintosh-specific code */
 #if defined(__APPLE__) && defined(__MACH__)
-  /* MacOS X has Unix-style files and processes */
-# undef MAC
+/* MacOS X has Unix-style files and processes */
+#undef MAC
 #endif
 #ifdef MAC
-# ifdef MAC_MPW
-#  define MPWTOOL
+#ifdef MAC_MPW
+#define MPWTOOL
 #include <CursorCtl.h>
-# else
-   /* put dungeon file in library location */
-#  define PREFIX ":lib:"
-# endif
+#else
+/* put dungeon file in library location */
+#define PREFIX ":lib:"
+#endif
 #endif
 
 #ifndef MPWTOOL
-# define SpinCursor(x)
+#define SpinCursor(x)
 #endif
 
-#define MAX_ERRORS	25
+#define MAX_ERRORS 25
 
-extern int  yyparse(void);
+extern int yyparse(void);
 extern int line_number;
 const char *fname = "(stdin)";
 int fatal_error = 0;
 
-int  main(int,char **);
+int main(int, char **);
 void yyerror(const char *);
 void yywarning(const char *);
-int  yywrap(void);
+int yywrap(void);
 void init_yyin(FILE *);
 void init_yyout(FILE *);
 
 int main(int argc, char **argv) {
-	char	*infile, *outfile, *basename;
-	FILE	*fin, *fout;
-	int	i, len;
+	char *infile, *outfile, *basename;
+	FILE *fin, *fout;
+	int i, len;
 	boolean errors_encountered = false;
 
 	infile = "(stdin)";
@@ -55,74 +55,74 @@ int main(int argc, char **argv) {
 	outfile = "(stdout)";
 	fout = stdout;
 
-	if (argc == 1) {	/* Read standard input */
-	    init_yyin(fin);
-	    init_yyout(fout);
-	    yyparse();
-	    if (fatal_error > 0)
-		errors_encountered = true;
-	} else {		/* Otherwise every argument is a filename */
-	    infile = outfile = NULL;
-	    for(i=1; i<argc; i++) {
-		if (infile) free(infile);
-		infile = alloc(strlen(argv[i]) + 1);
-		fname = strcpy(infile, argv[i]);
-		/* the input file had better be a .def file */
-		len = strlen(fname) - 4;	/* length excluding suffix */
-		if (len < 0 || strncmp(".def", fname + len, 4)) {
-		    fprintf(stderr,
-			    "Error - file name \"%s\" in wrong format.\n",
-			    fname);
-		    errors_encountered = true;
-		    free(infile);
-		    continue;
-		}
-
-		// build output file name
-		// Use the whole name - strip off the last 3 or 4 chars.
-		basename = alloc(len + 1);
-		strncpy(basename, infile, len);
-		basename[len] = '\0';
-
-		if (outfile) free(outfile);
-#ifdef PREFIX
-		outfile = alloc(strlen(PREFIX) + strlen(basename) + 1);
-		strcpy(outfile, PREFIX);
-#else
-		outfile = alloc(strlen(basename) + 1);
-		outfile[0] = '\0';
-#endif
-		strcat(outfile, basename);
-		free(basename);
-
-		fin = freopen(infile, "r", stdin);
-		if (!fin) {
-		    fprintf(stderr, "Can't open %s for input.\n", infile);
-		    perror(infile);
-		    errors_encountered = true;
-		    continue;
-		}
-		fout = freopen(outfile, WRBMODE, stdout);
-		if (!fout) {
-		    fprintf(stderr, "Can't open %s for output.\n", outfile);
-		    perror(outfile);
-		    errors_encountered = true;
-		    continue;
-		}
+	if (argc == 1) { /* Read standard input */
 		init_yyin(fin);
 		init_yyout(fout);
 		yyparse();
-		line_number = 1;
-		if (fatal_error > 0) {
+		if (fatal_error > 0)
 			errors_encountered = true;
-			fatal_error = 0;
+	} else { /* Otherwise every argument is a filename */
+		infile = outfile = NULL;
+		for (i = 1; i < argc; i++) {
+			if (infile) free(infile);
+			infile = alloc(strlen(argv[i]) + 1);
+			fname = strcpy(infile, argv[i]);
+			/* the input file had better be a .def file */
+			len = strlen(fname) - 4; /* length excluding suffix */
+			if (len < 0 || strncmp(".def", fname + len, 4)) {
+				fprintf(stderr,
+					"Error - file name \"%s\" in wrong format.\n",
+					fname);
+				errors_encountered = true;
+				free(infile);
+				continue;
+			}
+
+			// build output file name
+			// Use the whole name - strip off the last 3 or 4 chars.
+			basename = alloc(len + 1);
+			strncpy(basename, infile, len);
+			basename[len] = '\0';
+
+			if (outfile) free(outfile);
+#ifdef PREFIX
+			outfile = alloc(strlen(PREFIX) + strlen(basename) + 1);
+			strcpy(outfile, PREFIX);
+#else
+			outfile = alloc(strlen(basename) + 1);
+			outfile[0] = '\0';
+#endif
+			strcat(outfile, basename);
+			free(basename);
+
+			fin = freopen(infile, "r", stdin);
+			if (!fin) {
+				fprintf(stderr, "Can't open %s for input.\n", infile);
+				perror(infile);
+				errors_encountered = true;
+				continue;
+			}
+			fout = freopen(outfile, WRBMODE, stdout);
+			if (!fout) {
+				fprintf(stderr, "Can't open %s for output.\n", outfile);
+				perror(outfile);
+				errors_encountered = true;
+				continue;
+			}
+			init_yyin(fin);
+			init_yyout(fout);
+			yyparse();
+			line_number = 1;
+			if (fatal_error > 0) {
+				errors_encountered = true;
+				fatal_error = 0;
+			}
 		}
-	    }
 	}
 	if (fout && fout != stdout && fclose(fout) < 0) {
-	    fprintf(stderr, "Can't finish output file.");
-	    perror(outfile);
-	    errors_encountered = true;
+		fprintf(stderr, "Can't finish output file.");
+		perror(outfile);
+		errors_encountered = true;
 	}
 	exit(errors_encountered ? EXIT_FAILURE : EXIT_SUCCESS);
 	/*NOTREACHED*/
@@ -136,17 +136,17 @@ int main(int argc, char **argv) {
  */
 
 void yyerror(s)
-const char *s;
+	const char *s;
 {
 	fprintf(stderr,
 #ifndef MAC_MPW
-	  "%s : line %d : %s\n",
+		"%s : line %d : %s\n",
 #else
-	  "File %s ; Line %d # %s\n",
+		"File %s ; Line %d # %s\n",
 #endif
-	  fname, line_number, s);
+		fname, line_number, s);
 	if (++fatal_error > MAX_ERRORS) {
-		fprintf(stderr,"Too many errors, good bye!\n");
+		fprintf(stderr, "Too many errors, good bye!\n");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -156,23 +156,22 @@ const char *s;
  */
 
 void yywarning(s)
-const char *s;
+	const char *s;
 {
 	fprintf(stderr,
 #ifndef MAC_MPW
-	  "%s : line %d : WARNING : %s\n",
+		"%s : line %d : WARNING : %s\n",
 #else
-	  "File %s ; Line %d # WARNING : %s\n",
+		"File %s ; Line %d # WARNING : %s\n",
 #endif
-	  fname, line_number, s);
+		fname, line_number, s);
 }
 
-int yywrap()
-{
+int yywrap() {
 	SpinCursor(3); /*	Don't know if this is a good place to put it ?
 						Is it called for our grammar ? Often enough ?
 						Too often ? -- h+ */
-       return 1;
+	return 1;
 }
 
 /*dgn_main.c*/

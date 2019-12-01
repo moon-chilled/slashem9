@@ -7,19 +7,19 @@
 
 #include "hack.h"
 
-/* #define DEBUG */		/* turn on for diagnostics */
+/* #define DEBUG */ /* turn on for diagnostics */
 
 static boolean gettech(int *);
 static boolean dotechmenu(int, int *);
 static void doblitzlist(void);
 static int get_tech_no(int);
 static int techeffects(int);
-static void hurtmon(struct monst *,int);
+static void hurtmon(struct monst *, int);
 static int mon_to_zombie(int);
 static int tinker(void);
 static int draw_energy(void);
-static const struct innate_tech * role_tech(void);
-static const struct innate_tech * race_tech(void);
+static const struct innate_tech *role_tech(void);
+static const struct innate_tech *race_tech(void);
 static int doblitz(void);
 static int blitz_chi_strike(void);
 static int blitz_e_fist(void);
@@ -29,8 +29,8 @@ static int blitz_dash(void);
 static int blitz_power_surge(void);
 static int blitz_spirit_bomb(void);
 
-static schar delay;            /* moves left for tinker/energy draw */
-static const char revivables[] = { ALLOW_FLOOROBJ, FOOD_CLASS, 0 };
+static schar delay; /* moves left for tinker/energy draw */
+static const char revivables[] = {ALLOW_FLOOROBJ, FOOD_CLASS, 0};
 
 /*
  * Do try to keep the names <= 25 chars long, or else the
@@ -80,124 +80,70 @@ static const char *tech_names[] = {
 	"power surge",
 	"spirit bomb",
 	"draw blood",
-	""
-};
+	""};
 
 static const struct innate_tech
-/* Roles */
-	arc_tech[] = { {   1, T_RESEARCH, 1},
-	{   0, 0, 0}
-},
-bar_tech[] = { {   1, T_BERSERK, 1},
-	{   0, 0, 0}
-},
-cav_tech[] = { {   1, T_PRIMAL_ROAR, 1},
-	{   0, 0, 0}
-},
-fla_tech[] = { {   1, T_REINFORCE, 1},
-	{   3, T_POWER_SURGE, 1},
-	{   5, T_DRAW_ENERGY, 1},
-	{  10, T_SIGIL_TEMPEST, 1},
-	{  20, T_SIGIL_DISCHARGE, 1},
-	{   0, 0, 0}
-},
-hea_tech[] = { {   1, T_SURGERY, 1},
-	{  20, T_REVIVE, 1},
-	{   0, 0, 0}
-},
-ice_tech[] = { {   1, T_REINFORCE, 1},
-	{   5, T_DRAW_ENERGY, 1},
-	{  10, T_SIGIL_TEMPEST, 1},
-	{  12, T_POWER_SURGE, 1},
-	{  20, T_SIGIL_DISCHARGE, 1},
-	{   0, 0, 0}
-},
-kni_tech[] = { {   1, T_TURN_UNDEAD, 1},
-	{   1, T_HEAL_HANDS, 1},
-	{   0, 0, 0}
-},
-mon_tech[] = { {   1, T_PUMMEL, 1},
-	{   1, T_DASH, 1},
-	{   1, T_BLITZ, 1},
-	{   2, T_CHI_STRIKE, 1},
-	{   4, T_CHI_HEALING, 1},
-	{   6, T_E_FIST, 1},
-	{   8, T_DRAW_ENERGY, 1},
-	{  10, T_G_SLAM, 1},
-	{  11, T_WARD_FIRE, 1},
-	{  13, T_WARD_COLD, 1},
-	{  15, T_WARD_ELEC, 1},
-	{  17, T_SPIRIT_BOMB, 1},
-	{  20, T_POWER_SURGE, 1},
-	{   0, 0, 0}
-},
-nec_tech[] = { {   1, T_REINFORCE, 1},
-	{   1, T_RAISE_ZOMBIES, 1},
-	{  10, T_POWER_SURGE, 1},
-	{  15, T_SIGIL_TEMPEST, 1},
-	{   0, 0, 0}
-},
-pri_tech[] = { {   1, T_TURN_UNDEAD, 1},
-	{   1, T_BLESSING, 1},
-	{   0, 0, 0}
-},
-ran_tech[] = { {   1, T_FLURRY, 1},
-	{   0, 0, 0}
-},
-rog_tech[] = { {   1, T_CRIT_STRIKE, 1},
-	{  15, T_CUTTHROAT, 1},
-	{   0, 0, 0}
-},
-sam_tech[] = { {   1, T_KIII, 1},
-	{   0, 0, 0}
-},
-tou_tech[] = { /* Put Tech here */
-	{   0, 0, 0}
-},
-und_tech[] = { {   1, T_TURN_UNDEAD, 1},
-	{   1, T_PRACTICE, 1},
-	{   0, 0, 0}
-},
-val_tech[] = { {   1, T_PRACTICE, 1},
-	{   0, 0, 0}
-},
-yeo_tech[] = {
-	{   1, T_CALM_STEED, 1},
-	{   0, 0, 0}
-},
-wiz_tech[] = { {   1, T_REINFORCE, 1},
-	{   3, T_DRAW_ENERGY, 1},
-	{   5, T_POWER_SURGE, 1},
-	{   7, T_SIGIL_CONTROL, 1},
-	{  14, T_SIGIL_TEMPEST, 1},
-	{  20, T_SIGIL_DISCHARGE, 1},
-	{   0, 0, 0}
-},
-/* Races */
-dop_tech[] = { {   1, T_LIQUID_LEAP, 1},
-	{   0, 0, 0}
-},
-dwa_tech[] = { {   1, T_RAGE, 1},
-	{   0, 0, 0}
-},
-elf_tech[] = { /* Put Tech here */
-	{   0, 0, 0}
-},
-gno_tech[] = { {   1, T_VANISH, 1},
-	{   7, T_TINKER, 1},
-	{   0, 0, 0}
-},
-hob_tech[] = { {   1, T_BLINK, 1},
-	{   0, 0, 0}
-},
-lyc_tech[] = { {   1, T_EVISCERATE, 1},
-	{  10, T_BERSERK, 1},
-	{   0, 0, 0}
-},
-vam_tech[] = { {   1, T_DAZZLE, 1},
-	{   1, T_DRAW_BLOOD, 1},
-	{   0, 0, 0}
-};
+	/* Roles */
+	arc_tech[] = {{1, T_RESEARCH, 1},
+		      {0, 0, 0}},
+	bar_tech[] = {{1, T_BERSERK, 1},
+		      {0, 0, 0}},
+	cav_tech[] = {{1, T_PRIMAL_ROAR, 1},
+		      {0, 0, 0}},
+	fla_tech[] = {{1, T_REINFORCE, 1},
+		      {3, T_POWER_SURGE, 1},
+		      {5, T_DRAW_ENERGY, 1},
+		      {10, T_SIGIL_TEMPEST, 1},
+		      {20, T_SIGIL_DISCHARGE, 1},
+		      {0, 0, 0}},
+	hea_tech[] = {{1, T_SURGERY, 1},
+		      {20, T_REVIVE, 1},
+		      {0, 0, 0}},
+	ice_tech[] = {{1, T_REINFORCE, 1},
+		      {5, T_DRAW_ENERGY, 1},
+		      {10, T_SIGIL_TEMPEST, 1},
+		      {12, T_POWER_SURGE, 1},
+		      {20, T_SIGIL_DISCHARGE, 1},
+		      {0, 0, 0}},
+	kni_tech[] = {{1, T_TURN_UNDEAD, 1},
+		      {1, T_HEAL_HANDS, 1},
+		      {0, 0, 0}},
+	mon_tech[] = {{1, T_PUMMEL, 1},
+		      {1, T_DASH, 1},
+		      {1, T_BLITZ, 1},
+		      {2, T_CHI_STRIKE, 1},
+		      {4, T_CHI_HEALING, 1},
+		      {6, T_E_FIST, 1},
+		      {8, T_DRAW_ENERGY, 1},
+		      {10, T_G_SLAM, 1},
+		      {11, T_WARD_FIRE, 1},
+		      {13, T_WARD_COLD, 1},
+		      {15, T_WARD_ELEC, 1},
+		      {17, T_SPIRIT_BOMB, 1},
+		      {20, T_POWER_SURGE, 1},
+		      {0, 0, 0}},
+	nec_tech[] = {{1, T_REINFORCE, 1},
+		      {1, T_RAISE_ZOMBIES, 1},
+		      {10, T_POWER_SURGE, 1},
+		      {15, T_SIGIL_TEMPEST, 1},
+		      {0, 0, 0}},
+	pri_tech[] = {{1, T_TURN_UNDEAD, 1},
+		      {1, T_BLESSING, 1},
+		      {0, 0, 0}},
+	ran_tech[] = {{1, T_FLURRY, 1},
+		      {0, 0, 0}},
+	rog_tech[] = {{1, T_CRIT_STRIKE, 1},
+		      {15, T_CUTTHROAT, 1},
+		      {0, 0, 0}},
+	sam_tech[] = {{1, T_KIII, 1},
+		      {0, 0, 0}},
+	tou_tech[] = {/* Put Tech here */
+		      {0, 0, 0}},
+	und_tech[] = {{1, T_TURN_UNDEAD, 1}, {1, T_PRACTICE, 1}, {0, 0, 0}}, val_tech[] = {{1, T_PRACTICE, 1}, {0, 0, 0}}, yeo_tech[] = {{1, T_CALM_STEED, 1}, {0, 0, 0}}, wiz_tech[] = {{1, T_REINFORCE, 1}, {3, T_DRAW_ENERGY, 1}, {5, T_POWER_SURGE, 1}, {7, T_SIGIL_CONTROL, 1}, {14, T_SIGIL_TEMPEST, 1}, {20, T_SIGIL_DISCHARGE, 1}, {0, 0, 0}},
+	/* Races */
+	dop_tech[] = {{1, T_LIQUID_LEAP, 1}, {0, 0, 0}}, dwa_tech[] = {{1, T_RAGE, 1}, {0, 0, 0}}, elf_tech[] = {/* Put Tech here */
+														 {0, 0, 0}},
+	gno_tech[] = {{1, T_VANISH, 1}, {7, T_TINKER, 1}, {0, 0, 0}}, hob_tech[] = {{1, T_BLINK, 1}, {0, 0, 0}}, lyc_tech[] = {{1, T_EVISCERATE, 1}, {10, T_BERSERK, 1}, {0, 0, 0}}, vam_tech[] = {{1, T_DAZZLE, 1}, {1, T_DRAW_BLOOD, 1}, {0, 0, 0}};
 /* Orc */
 
 /* Local Macros
@@ -206,13 +152,13 @@ vam_tech[] = { {   1, T_DAZZLE, 1},
  * extern function for checking whether a fcn is inuse
  */
 
-#define techt_inuse(tech)       tech_list[tech].t_inuse
-#define techtout(tech)        tech_list[tech].t_tout
-#define techlev(tech)         (u.ulevel - tech_list[tech].t_lev)
-#define techid(tech)          tech_list[tech].t_id
-#define techname(tech)        (tech_names[techid(tech)])
-#define techlet(tech)  \
-        ((char)((tech < 26) ? ('a' + tech) : ('A' + tech - 26)))
+#define techt_inuse(tech) tech_list[tech].t_inuse
+#define techtout(tech)	  tech_list[tech].t_tout
+#define techlev(tech)	  (u.ulevel - tech_list[tech].t_lev)
+#define techid(tech)	  tech_list[tech].t_id
+#define techname(tech)	  (tech_names[techid(tech)])
+#define techlet(tech) \
+	((char)((tech < 26) ? ('a' + tech) : ('A' + tech - 26)))
 
 /* A simple pseudorandom number generator
  *
@@ -223,25 +169,28 @@ vam_tech[] = { {   1, T_DAZZLE, 1},
  * This also has to depend on things that do NOT change during
  * save and restore,  and also should only change between turns
  */
-#if 0 /* Probably overkill */
-#define LB_CYCLE 259993L	/* number of turns before the pattern repeats */
-#define LB_BASE1 ((long) (monstermoves + u.uhpmax + 300L))
-#define LB_BASE2 ((long) (moves + u.uenmax + u.ulevel + 300L))
-#define LB_STRIP 6	/* Remove the last few bits as they tend to be less random */
+#if 0			 /* Probably overkill */
+#define LB_CYCLE 259993L /* number of turns before the pattern repeats */
+#define LB_BASE1 ((long)(monstermoves + u.uhpmax + 300L))
+#define LB_BASE2 ((long)(moves + u.uenmax + u.ulevel + 300L))
+#define LB_STRIP 6 /* Remove the last few bits as they tend to be less random */
 #endif
 
-#define LB_CYCLE 101L	/* number of turns before the pattern repeats */
-#define LB_BASE1 ((long) (monstermoves + u.uhpmax + 10L))
-#define LB_BASE2 ((long) (moves + u.uenmax + u.ulevel + 10L))
-#define LB_STRIP 3	/* Remove the last few bits as they tend to be less random */
+#define LB_CYCLE 101L /* number of turns before the pattern repeats */
+#define LB_BASE1 ((long)(monstermoves + u.uhpmax + 10L))
+#define LB_BASE2 ((long)(moves + u.uenmax + u.ulevel + 10L))
+#define LB_STRIP 3 /* Remove the last few bits as they tend to be less random */
 
-#define LB_HPMOD ((long) ((u.uhp * 10 / u.uhpmax > 2) ? \
-        			(u.uhp * 10 / u.uhpmax) : 2))
+#define LB_HPMOD ((long)((u.uhp * 10 / u.uhpmax > 2) ?     \
+				 (u.uhp * 10 / u.uhpmax) : \
+				 2))
 
-#define can_limitbreak() (!Upolyd && (u.uhp*10 < u.uhpmax) && \
-        		  (u.uhp == 1 || (!((((LB_BASE1 * \
-        		  LB_BASE2) % LB_CYCLE) >> LB_STRIP) \
-        		  % LB_HPMOD))))
+#define can_limitbreak() (!Upolyd && (u.uhp * 10 < u.uhpmax) && \
+			  (u.uhp == 1 || (!((((LB_BASE1 *       \
+					       LB_BASE2) %      \
+					      LB_CYCLE) >>      \
+					     LB_STRIP) %        \
+					    LB_HPMOD))))
 
 /* Whether you know the tech */
 boolean tech_known(short tech) {
@@ -254,35 +203,35 @@ boolean tech_known(short tech) {
 }
 
 /* Called to prematurely stop a technique */
-void aborttech (int tech) {
+void aborttech(int tech) {
 	int i;
 
 	i = get_tech_no(tech);
 	if (tech_list[i].t_inuse) {
 		switch (tech_list[i].t_id) {
-		case T_RAGE:
-			u.uhpmax -= tech_list[i].t_inuse - 1;
-			if (u.uhpmax < 1)
-				u.uhpmax = 0;
-			u.uhp -= tech_list[i].t_inuse - 1;
-			if (u.uhp < 1)
-				u.uhp = 1;
-			break;
-		case T_POWER_SURGE:
-			u.uenmax -= tech_list[i].t_inuse - 1;
-			if (u.uenmax < 1)
-				u.uenmax = 0;
-			u.uen -= tech_list[i].t_inuse - 1;
-			if (u.uen < 0)
-				u.uen = 0;
-			break;
+			case T_RAGE:
+				u.uhpmax -= tech_list[i].t_inuse - 1;
+				if (u.uhpmax < 1)
+					u.uhpmax = 0;
+				u.uhp -= tech_list[i].t_inuse - 1;
+				if (u.uhp < 1)
+					u.uhp = 1;
+				break;
+			case T_POWER_SURGE:
+				u.uenmax -= tech_list[i].t_inuse - 1;
+				if (u.uenmax < 1)
+					u.uenmax = 0;
+				u.uen -= tech_list[i].t_inuse - 1;
+				if (u.uen < 0)
+					u.uen = 0;
+				break;
 		}
 		tech_list[i].t_inuse = 0;
 	}
 }
 
 /* Called to teach a new tech.  Level is starting tech level */
-void learntech (short tech, long mask, int tlevel) {
+void learntech(short tech, long mask, int tlevel) {
 	int i;
 	const struct innate_tech *tp;
 
@@ -329,7 +278,7 @@ void learntech (short tech, long mask, int tlevel) {
 		if (tech_list[i].t_intrinsic & FROMOUTSIDE)
 			tlevel = tech_list[i].t_intrinsic & OUTSIDE_LEVEL;
 		if (tech_list[i].t_intrinsic & FROMEXPER) {
-			for(tp = role_tech(); tp->tech_id; tp++)
+			for (tp = role_tech(); tp->tech_id; tp++)
 				if (tp->tech_id == tech)
 					break;
 			if (!tp->tech_id)
@@ -338,7 +287,7 @@ void learntech (short tech, long mask, int tlevel) {
 				tlevel = tp->ulevel - tp->tech_lev;
 		}
 		if (tech_list[i].t_intrinsic & FROMRACE) {
-			for(tp = race_tech(); tp->tech_id; tp++)
+			for (tp = race_tech(); tp->tech_id; tp++)
 				if (tp->tech_id == tech)
 					break;
 			if (!tp->tech_id)
@@ -361,17 +310,21 @@ static boolean gettech(int *tech_no) {
 
 	for (ntechs = i = 0; i < MAXTECH; i++)
 		if (techid(i) != NO_TECH) ntechs++;
-	if (ntechs == 0)  {
+	if (ntechs == 0) {
 		pline("You don't know any techniques right now.");
 		return false;
 	}
 	if (flags.menu_style == MENU_TRADITIONAL) {
-		if (ntechs == 1)  strcpy(lets, "a");
-		else if (ntechs < 27)  sprintf(lets, "a-%c", 'a' + ntechs - 1);
-		else if (ntechs == 27)  sprintf(lets, "a-z A");
-		else sprintf(lets, "a-z A-%c", 'A' + ntechs - 27);
+		if (ntechs == 1)
+			strcpy(lets, "a");
+		else if (ntechs < 27)
+			sprintf(lets, "a-%c", 'a' + ntechs - 1);
+		else if (ntechs == 27)
+			sprintf(lets, "a-z A");
+		else
+			sprintf(lets, "a-z A-%c", 'A' + ntechs - 27);
 
-		for(;;)  {
+		for (;;) {
 			sprintf(qbuf, "Perform which technique? [%s ?]", lets);
 			if ((ilet = yn_function(qbuf, NULL, '\0')) == '?')
 				break;
@@ -381,13 +334,13 @@ static boolean gettech(int *tech_no) {
 
 			if (letter(ilet) && ilet != '@') {
 				/* in a-zA-Z, convert back to an index */
-				if (lowc(ilet) == ilet)     /* lower case */
+				if (lowc(ilet) == ilet) /* lower case */
 					idx = ilet - 'a';
 				else
 					idx = ilet - 'A' + 26;
 
 				if (idx < ntechs)
-					for(i = 0; i < MAXTECH; i++)
+					for (i = 0; i < MAXTECH; i++)
 						if (techid(i) != NO_TECH) {
 							if (idx-- == 0) {
 								*tech_no = i;
@@ -411,7 +364,7 @@ static boolean dotechmenu(int how, int *tech_no) {
 
 	tmpwin = create_nhwindow(NHW_MENU);
 	start_menu(tmpwin);
-	any.a_void = 0;         /* zero out all bits */
+	any.a_void = 0; /* zero out all bits */
 
 	techs_useable = 0;
 
@@ -444,51 +397,51 @@ static boolean dotechmenu(int how, int *tech_no) {
 		if (wizard) {
 			if (!iflags.menu_tab_sep) {
 				sprintf(buf, "%s%-*s %2d%c%c%c   %s(%i)",
-				        prefix, longest, techname(i), tlevel,
-				        tech_list[i].t_intrinsic & FROMEXPER ? 'X' : ' ',
-				        tech_list[i].t_intrinsic & FROMRACE ? 'R' : ' ',
-				        tech_list[i].t_intrinsic & FROMOUTSIDE ? 'O' : ' ',
-				        tech_inuse(techid(i)) ? "Active" :
-				        tlevel <= 0 ? "Beyond recall" :
-				        can_limitbreak() ? "LIMIT" :
-				        !techtout(i) ? "Prepared" :
-				        techtout(i) > 100 ? "Not Ready" : "Soon",
-				        techtout(i));
+					prefix, longest, techname(i), tlevel,
+					tech_list[i].t_intrinsic & FROMEXPER ? 'X' : ' ',
+					tech_list[i].t_intrinsic & FROMRACE ? 'R' : ' ',
+					tech_list[i].t_intrinsic & FROMOUTSIDE ? 'O' : ' ',
+					tech_inuse(techid(i)) ? "Active" :
+								tlevel <= 0 ? "Beyond recall" :
+									      can_limitbreak() ? "LIMIT" :
+												 !techtout(i) ? "Prepared" :
+														techtout(i) > 100 ? "Not Ready" : "Soon",
+					techtout(i));
 			} else {
 				sprintf(buf, "%s%s\t%2d%c%c%c\t%s(%i)",
-				        prefix, techname(i), tlevel,
-				        tech_list[i].t_intrinsic & FROMEXPER ? 'X' : ' ',
-				        tech_list[i].t_intrinsic & FROMRACE ? 'R' : ' ',
-				        tech_list[i].t_intrinsic & FROMOUTSIDE ? 'O' : ' ',
-				        tech_inuse(techid(i)) ? "Active" :
-				        tlevel <= 0 ? "Beyond recall" :
-				        can_limitbreak() ? "LIMIT" :
-				        !techtout(i) ? "Prepared" :
-				        techtout(i) > 100 ? "Not Ready" : "Soon",
-				        techtout(i));
+					prefix, techname(i), tlevel,
+					tech_list[i].t_intrinsic & FROMEXPER ? 'X' : ' ',
+					tech_list[i].t_intrinsic & FROMRACE ? 'R' : ' ',
+					tech_list[i].t_intrinsic & FROMOUTSIDE ? 'O' : ' ',
+					tech_inuse(techid(i)) ? "Active" :
+								tlevel <= 0 ? "Beyond recall" :
+									      can_limitbreak() ? "LIMIT" :
+												 !techtout(i) ? "Prepared" :
+														techtout(i) > 100 ? "Not Ready" : "Soon",
+					techtout(i));
 			}
 		} else {
 			if (!iflags.menu_tab_sep) {
 				sprintf(buf, "%s%-*s %5d   %s",
-				        prefix, longest, techname(i), tlevel,
-				        tech_inuse(techid(i)) ? "Active" :
-				        tlevel <= 0 ? "Beyond recall" :
-				        can_limitbreak() ? "LIMIT" :
-				        !techtout(i) ? "Prepared" :
-				        techtout(i) > 100 ? "Not Ready" : "Soon");
+					prefix, longest, techname(i), tlevel,
+					tech_inuse(techid(i)) ? "Active" :
+								tlevel <= 0 ? "Beyond recall" :
+									      can_limitbreak() ? "LIMIT" :
+												 !techtout(i) ? "Prepared" :
+														techtout(i) > 100 ? "Not Ready" : "Soon");
 			} else {
 				sprintf(buf, "%s%s\t%5d\t%s",
-				        prefix, techname(i), tlevel,
-				        tech_inuse(techid(i)) ? "Active" :
-				        tlevel <= 0 ? "Beyond recall" :
-				        can_limitbreak() ? "LIMIT" :
-				        !techtout(i) ? "Prepared" :
-				        techtout(i) > 100 ? "Not Ready" : "Soon");
+					prefix, techname(i), tlevel,
+					tech_inuse(techid(i)) ? "Active" :
+								tlevel <= 0 ? "Beyond recall" :
+									      can_limitbreak() ? "LIMIT" :
+												 !techtout(i) ? "Prepared" :
+														techtout(i) > 100 ? "Not Ready" : "Soon");
 			}
 		}
 
 		add_menu(tmpwin, NO_GLYPH, &any,
-		         techtout(i) ? 0 : let, 0, ATR_NONE, buf, MENU_UNSELECTED);
+			 techtout(i) ? 0 : let, 0, ATR_NONE, buf, MENU_UNSELECTED);
 		if (let++ == 'z') let = 'A';
 	}
 
@@ -496,7 +449,7 @@ static boolean dotechmenu(int how, int *tech_no) {
 		how = PICK_NONE;
 
 	end_menu(tmpwin, how == PICK_ONE ? "Choose a technique" :
-	         "Currently known techniques");
+					   "Currently known techniques");
 
 	n = select_menu(tmpwin, how, &selected);
 	destroy_nhwindow(tmpwin);
@@ -508,7 +461,7 @@ static boolean dotechmenu(int how, int *tech_no) {
 	return false;
 }
 
-static int get_tech_no (int tech) {
+static int get_tech_no(int tech) {
 	int i;
 
 	for (i = 0; i < MAXTECH; i++) {
@@ -519,7 +472,7 @@ static int get_tech_no (int tech) {
 	return -1;
 }
 
-int dotech (void) {
+int dotech(void) {
 	int tech_no;
 
 	if (gettech(&tech_no))
@@ -527,9 +480,9 @@ int dotech (void) {
 	return 0;
 }
 
-static const char kits[] = { TOOL_CLASS, 0 };
+static const char kits[] = {TOOL_CLASS, 0};
 
-static struct obj * use_medical_kit(int type, boolean feedback, char *verb) {
+static struct obj *use_medical_kit(int type, boolean feedback, char *verb) {
 	struct obj *obj, *otmp;
 	makeknown(MEDICAL_KIT);
 	if (!(obj = carrying(MEDICAL_KIT))) {
@@ -539,7 +492,7 @@ static struct obj * use_medical_kit(int type, boolean feedback, char *verb) {
 	for (otmp = invent; otmp; otmp = otmp->nobj)
 		if (otmp->otyp == MEDICAL_KIT && otmp != obj)
 			break;
-	if (otmp) {	/* More than one medical kit */
+	if (otmp) { /* More than one medical kit */
 		obj = getobj(kits, verb);
 		if (!obj)
 			return NULL;
@@ -559,7 +512,7 @@ static struct obj * use_medical_kit(int type, boolean feedback, char *verb) {
 /* gettech is reworked getspell */
 /* reworked class special effects code */
 /* adapted from specialpower in cmd.c */
-static int techeffects (int tech_no) {
+static int techeffects(int tech_no) {
 	/* These variables are used in various techs */
 	struct obj *obj, *otmp;
 	const char *str;
@@ -569,7 +522,6 @@ static int techeffects (int tech_no) {
 	char allowall[2];
 	int i, j, t_timeout = 0;
 
-
 	/* check timeout */
 	if (tech_inuse(techid(tech_no))) {
 		pline("This technique is already active!");
@@ -578,691 +530,703 @@ static int techeffects (int tech_no) {
 	if (techtout(tech_no) && !can_limitbreak()) {
 		pline("You have to wait %s before using your technique again.",
 		      (techtout(tech_no) > 100) ?
-		      "for a while" : "a little longer");
+			      "for a while" :
+			      "a little longer");
 		if (!wizard || (yn("Use technique anyways?") == 'n'))
 			return 0;
 	}
 
 	/* switch to the tech and do stuff */
 	switch (techid(tech_no)) {
-	case T_RESEARCH:
-		/* WAC stolen from the spellcasters...'A' can identify from
+		case T_RESEARCH:
+			/* WAC stolen from the spellcasters...'A' can identify from
 		   historical research*/
-		if(Hallucination || Stunned || Confusion) {
-			pline("You can't concentrate right now!");
-			return 0;
-		} else if((ACURR(A_INT) + ACURR(A_WIS)) < rnd(60)) {
-			pline("Nothing in your pack looks familiar.");
-			t_timeout = rn1(500,500);
-			break;
-		} else if(invent) {
-			pline("You examine your possessions.");
-			identify_pack((int) ((techlev(tech_no) / 10) + 1));
-		} else {
-			/* KMH -- fixed non-compliant string */
-			pline("You are already quite familiar with the contents of your pack.");
-			break;
-		}
-		t_timeout = rn1(500,1500);
-		break;
-	case T_EVISCERATE:
-		/* only when empty handed, in human form */
-		if (Upolyd || uwep || uarmg) {
-			pline("You can't do this while %s!", Upolyd ? "polymorphed" :
-			      uwep ? "holding a weapon" : "wearing gloves");
-			return 0;
-		}
-		pline("Your fingernails extend into claws!");
-		aggravate();
-		techt_inuse(tech_no) = d(2,4) + techlev(tech_no)/5 + 2;
-		t_timeout = rn1(1000,1000);
-		break;
-	case T_BERSERK:
-		pline("You fly into a berserk rage!");
-		techt_inuse(tech_no) = d(2,8) +
-		                       (techlev(tech_no)/5) + 2;
-		incr_itimeout(&HFast, techt_inuse(tech_no));
-		t_timeout = rn1(1000,500);
-		break;
-	case T_REINFORCE:
-		/* WAC spell-users can study their known spells*/
-		if(Hallucination || Stunned || Confusion) {
-			pline("You can't concentrate right now!");
-			break;
-		} else {
-			pline("You concentrate...");
-			if (studyspell()) t_timeout = rn1(1000,500); /*in spell.c*/
-		}
-		break;
-	case T_FLURRY:
-		pline("Your %s %s become blurs as they reach for your quiver!",
-		      uarmg ? "gloved" : "bare",      /* Del Lamb */
-		      makeplural(body_part(HAND)));
-		techt_inuse(tech_no) = rnd((int) (techlev(tech_no)/6 + 1)) + 2;
-		t_timeout = rn1(1000,500);
-		break;
-	case T_PRACTICE:
-		if(!uwep || (weapon_type(uwep) == P_NONE)) {
-			pline("You are not wielding a weapon!");
-			return 0;
-		} else if(uwep->known == true) {
-			practice_weapon();
-		} else {
-			if (not_fully_identified(uwep)) {
-				pline("You examine %s.", doname(uwep));
-				if (rnd(15) <= ACURR(A_INT)) {
-					makeknown(uwep->otyp);
-					uwep->known = true;
-					pline("You discover it is %s",doname(uwep));
-				} else
-					pline("Unfortunately, you didn't learn anything new.");
-			}
-			/*WAC Added practicing code - in weapon.c*/
-			practice_weapon();
-		}
-		t_timeout = rn1(500,500);
-		break;
-	case T_SURGERY:
-		if (Hallucination || Stunned || Confusion) {
-			pline("You are in no condition to perform surgery!");
-			break;
-		}
-		if (Sick || Slimed) {
-			if (carrying(SCALPEL)) {
-				pline("Using your scalpel (ow!), you cure your infection!");
-				make_sick(0L, NULL, true, SICK_ALL);
-				Slimed = 0;
-				if (Upolyd) {
-					u.mh -= 5;
-					if (u.mh < 1)
-						rehumanize();
-				} else if (u.uhp > 6)
-					u.uhp -= 5;
-				else
-					u.uhp = 1;
-				t_timeout = rn1(500,500);
-				flags.botl = true;
+			if (Hallucination || Stunned || Confusion) {
+				pline("You can't concentrate right now!");
+				return 0;
+			} else if ((ACURR(A_INT) + ACURR(A_WIS)) < rnd(60)) {
+				pline("Nothing in your pack looks familiar.");
+				t_timeout = rn1(500, 500);
 				break;
-			} else pline("If only you had a scalpel...");
-		}
-		if (Upolyd ? u.mh < u.mhmax : u.uhp < u.uhpmax) {
-			otmp = use_medical_kit(BANDAGE, false,
-			                       "dress your wounds with");
-			if (otmp) {
-				check_unpaid(otmp);
-				if (otmp->quan > 1L) {
-					otmp->quan--;
-					otmp->ocontainer->owt = weight(otmp->ocontainer);
-				} else {
-					obj_extract_self(otmp);
-					obfree(otmp, NULL);
-				}
-				pline("Using %s, you dress your wounds.", yname(otmp));
-				healup(techlev(tech_no) * (rnd(2)+1) + rn1(5,5),
-				       0, false, false);
+			} else if (invent) {
+				pline("You examine your possessions.");
+				identify_pack((int)((techlev(tech_no) / 10) + 1));
 			} else {
-				pline("You strap your wounds as best you can.");
-				healup(techlev(tech_no) + rn1(5,5), 0, false, false);
+				/* KMH -- fixed non-compliant string */
+				pline("You are already quite familiar with the contents of your pack.");
+				break;
 			}
-			t_timeout = rn1(1000,500);
-			flags.botl = true;
-		} else pline("You don't need your healing powers!");
-		break;
-	case T_HEAL_HANDS:
-		if (Slimed) {
-			pline("Your body is on fire!");
-			burn_away_slime();
-			t_timeout = 3000;
-		} else if (Sick) {
-			pline("You lay your hands on the foul sickness...");
-			make_sick(0L, NULL, true, SICK_ALL);
-			t_timeout = 3000;
-		} else if (Upolyd ? u.mh < u.mhmax : u.uhp < u.uhpmax) {
-			pline("A warm glow spreads through your body!");
-			healup(techlev(tech_no) * 4, 0, false, false);
-			t_timeout = 3000;
-		} else
-			pline("Nothing happens.");
-		break;
-	case T_KIII:
-		pline("You scream \"KIIILLL!\"");
-		aggravate();
-		techt_inuse(tech_no) = rnd((int) (techlev(tech_no)/6 + 1)) + 2;
-		t_timeout = rn1(1000,500);
-		break;
-	case T_CALM_STEED:
-		if (u.usteed) {
-			pline("%s gets tamer.", Monnam(u.usteed));
-			tamedog(u.usteed, NULL);
-			if (u.usteed->mtame < 20) u.usteed->mtame++;
-			t_timeout = rn1(1000,500);
-		} else
-			pline("Your technique is only effective when riding a monster.");
-		break;
-	case T_TURN_UNDEAD:
-		return turn_undead();
-	case T_VANISH:
-		if (Invisible && Fast) {
-			pline("You are already quite nimble and undetectable.");
-		}
-		techt_inuse(tech_no) = rn1(50,50) + techlev(tech_no);
-		if (!Invisible) pline("In a puff of smoke,  you disappear!");
-		if (!Fast) pline("You feel more nimble!");
-		incr_itimeout(&HInvis, techt_inuse(tech_no));
-		incr_itimeout(&HFast, techt_inuse(tech_no));
-		newsym(u.ux,u.uy);      /* update position */
-		t_timeout = rn1(1000,500);
-		break;
-	case T_CRIT_STRIKE:
-		if (!getdir(NULL)) return 0;
-		if (!u.dx && !u.dy) {
-			/* Hopefully a mistake ;B */
-			pline("You decide against that idea.");
-			return 0;
-		}
-		mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
-		if (!mtmp) {
-			pline("You perform a flashy twirl!");
-			return 0;
-		} else {
-			int oldhp = mtmp->mhp;
-			int tmp;
+			t_timeout = rn1(500, 1500);
+			break;
+		case T_EVISCERATE:
+			/* only when empty handed, in human form */
+			if (Upolyd || uwep || uarmg) {
+				pline("You can't do this while %s!", Upolyd ? "polymorphed" :
+									      uwep ? "holding a weapon" : "wearing gloves");
+				return 0;
+			}
+			pline("Your fingernails extend into claws!");
+			aggravate();
+			techt_inuse(tech_no) = d(2, 4) + techlev(tech_no) / 5 + 2;
+			t_timeout = rn1(1000, 1000);
+			break;
+		case T_BERSERK:
+			pline("You fly into a berserk rage!");
+			techt_inuse(tech_no) = d(2, 8) +
+					       (techlev(tech_no) / 5) + 2;
+			incr_itimeout(&HFast, techt_inuse(tech_no));
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_REINFORCE:
+			/* WAC spell-users can study their known spells*/
+			if (Hallucination || Stunned || Confusion) {
+				pline("You can't concentrate right now!");
+				break;
+			} else {
+				pline("You concentrate...");
+				if (studyspell()) t_timeout = rn1(1000, 500); /*in spell.c*/
+			}
+			break;
+		case T_FLURRY:
+			pline("Your %s %s become blurs as they reach for your quiver!",
+			      uarmg ? "gloved" : "bare", /* Del Lamb */
+			      makeplural(body_part(HAND)));
+			techt_inuse(tech_no) = rnd((int)(techlev(tech_no) / 6 + 1)) + 2;
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_PRACTICE:
+			if (!uwep || (weapon_type(uwep) == P_NONE)) {
+				pline("You are not wielding a weapon!");
+				return 0;
+			} else if (uwep->known == true) {
+				practice_weapon();
+			} else {
+				if (not_fully_identified(uwep)) {
+					pline("You examine %s.", doname(uwep));
+					if (rnd(15) <= ACURR(A_INT)) {
+						makeknown(uwep->otyp);
+						uwep->known = true;
+						pline("You discover it is %s", doname(uwep));
+					} else
+						pline("Unfortunately, you didn't learn anything new.");
+				}
+				/*WAC Added practicing code - in weapon.c*/
+				practice_weapon();
+			}
+			t_timeout = rn1(500, 500);
+			break;
+		case T_SURGERY:
+			if (Hallucination || Stunned || Confusion) {
+				pline("You are in no condition to perform surgery!");
+				break;
+			}
+			if (Sick || Slimed) {
+				if (carrying(SCALPEL)) {
+					pline("Using your scalpel (ow!), you cure your infection!");
+					make_sick(0L, NULL, true, SICK_ALL);
+					Slimed = 0;
+					if (Upolyd) {
+						u.mh -= 5;
+						if (u.mh < 1)
+							rehumanize();
+					} else if (u.uhp > 6)
+						u.uhp -= 5;
+					else
+						u.uhp = 1;
+					t_timeout = rn1(500, 500);
+					flags.botl = true;
+					break;
+				} else
+					pline("If only you had a scalpel...");
+			}
+			if (Upolyd ? u.mh < u.mhmax : u.uhp < u.uhpmax) {
+				otmp = use_medical_kit(BANDAGE, false,
+						       "dress your wounds with");
+				if (otmp) {
+					check_unpaid(otmp);
+					if (otmp->quan > 1L) {
+						otmp->quan--;
+						otmp->ocontainer->owt = weight(otmp->ocontainer);
+					} else {
+						obj_extract_self(otmp);
+						obfree(otmp, NULL);
+					}
+					pline("Using %s, you dress your wounds.", yname(otmp));
+					healup(techlev(tech_no) * (rnd(2) + 1) + rn1(5, 5),
+					       0, false, false);
+				} else {
+					pline("You strap your wounds as best you can.");
+					healup(techlev(tech_no) + rn1(5, 5), 0, false, false);
+				}
+				t_timeout = rn1(1000, 500);
+				flags.botl = true;
+			} else
+				pline("You don't need your healing powers!");
+			break;
+		case T_HEAL_HANDS:
+			if (Slimed) {
+				pline("Your body is on fire!");
+				burn_away_slime();
+				t_timeout = 3000;
+			} else if (Sick) {
+				pline("You lay your hands on the foul sickness...");
+				make_sick(0L, NULL, true, SICK_ALL);
+				t_timeout = 3000;
+			} else if (Upolyd ? u.mh < u.mhmax : u.uhp < u.uhpmax) {
+				pline("A warm glow spreads through your body!");
+				healup(techlev(tech_no) * 4, 0, false, false);
+				t_timeout = 3000;
+			} else
+				pline("Nothing happens.");
+			break;
+		case T_KIII:
+			pline("You scream \"KIIILLL!\"");
+			aggravate();
+			techt_inuse(tech_no) = rnd((int)(techlev(tech_no) / 6 + 1)) + 2;
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_CALM_STEED:
+			if (u.usteed) {
+				pline("%s gets tamer.", Monnam(u.usteed));
+				tamedog(u.usteed, NULL);
+				if (u.usteed->mtame < 20) u.usteed->mtame++;
+				t_timeout = rn1(1000, 500);
+			} else
+				pline("Your technique is only effective when riding a monster.");
+			break;
+		case T_TURN_UNDEAD:
+			return turn_undead();
+		case T_VANISH:
+			if (Invisible && Fast) {
+				pline("You are already quite nimble and undetectable.");
+			}
+			techt_inuse(tech_no) = rn1(50, 50) + techlev(tech_no);
+			if (!Invisible) pline("In a puff of smoke,  you disappear!");
+			if (!Fast) pline("You feel more nimble!");
+			incr_itimeout(&HInvis, techt_inuse(tech_no));
+			incr_itimeout(&HFast, techt_inuse(tech_no));
+			newsym(u.ux, u.uy); /* update position */
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_CRIT_STRIKE:
+			if (!getdir(NULL)) return 0;
+			if (!u.dx && !u.dy) {
+				/* Hopefully a mistake ;B */
+				pline("You decide against that idea.");
+				return 0;
+			}
+			mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
+			if (!mtmp) {
+				pline("You perform a flashy twirl!");
+				return 0;
+			} else {
+				int oldhp = mtmp->mhp;
+				int tmp;
 
-			if (!attack(mtmp)) return 0;
-			if (!DEADMONSTER(mtmp) && mtmp->mhp < oldhp &&
-			                !noncorporeal(mtmp->data) && !unsolid(mtmp->data)) {
-				pline("You strike %s vital organs!", s_suffix(mon_nam(mtmp)));
-				/* Base damage is always something, though it may be
+				if (!attack(mtmp)) return 0;
+				if (!DEADMONSTER(mtmp) && mtmp->mhp < oldhp &&
+				    !noncorporeal(mtmp->data) && !unsolid(mtmp->data)) {
+					pline("You strike %s vital organs!", s_suffix(mon_nam(mtmp)));
+					/* Base damage is always something, though it may be
 				 * reduced to zero if the hero is hampered. However,
 				 * since techlev will never be zero, stiking vital
 				 * organs will always do _some_ damage.
 				 */
-				tmp = mtmp->mhp > 1 ? mtmp->mhp / 2 : 1;
-				if (!humanoid(mtmp->data) || is_golem(mtmp->data) ||
-				                mtmp->data->mlet == S_CENTAUR) {
-					pline("You are hampered by the differences in anatomy.");
-					tmp /= 2;
-				}
-				tmp += techlev(tech_no);
-				t_timeout = rn1(1000, 500);
-				hurtmon(mtmp, tmp);
-			}
-		}
-		break;
-	case T_CUTTHROAT:
-		if (!is_blade(uwep)) {
-			pline("You need a blade to perform cutthroat!");
-			return 0;
-		}
-		if (!getdir(NULL)) return 0;
-		if (!u.dx && !u.dy) {
-			/* Hopefully a mistake ;B */
-			pline("Things may be going badly, but that's extreme.");
-			return 0;
-		}
-		mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
-		if (!mtmp) {
-			pline("You attack...nothing!");
-			return 0;
-		} else {
-			int oldhp = mtmp->mhp;
-
-			if (!attack(mtmp)) return 0;
-			if (!DEADMONSTER(mtmp) && mtmp->mhp < oldhp) {
-				if (!has_head(mtmp->data) || u.uswallow)
-					pline("You can't perform cutthroat on %s!", mon_nam(mtmp));
-				else {
-					int tmp = 0;
-
-					if (rn2(5) < (techlev(tech_no)/10 + 1)) {
-						pline("You sever %s head!", s_suffix(mon_nam(mtmp)));
-						tmp = mtmp->mhp;
-					} else {
-						pline("You hurt %s badly!", s_suffix(mon_nam(mtmp)));
-						tmp = mtmp->mhp / 2;
+					tmp = mtmp->mhp > 1 ? mtmp->mhp / 2 : 1;
+					if (!humanoid(mtmp->data) || is_golem(mtmp->data) ||
+					    mtmp->data->mlet == S_CENTAUR) {
+						pline("You are hampered by the differences in anatomy.");
+						tmp /= 2;
 					}
 					tmp += techlev(tech_no);
-					t_timeout = rn1(1000,500);
+					t_timeout = rn1(1000, 500);
 					hurtmon(mtmp, tmp);
 				}
 			}
-		}
-		break;
-	case T_BLESSING:
-		allowall[0] = ALL_CLASSES;
-		allowall[1] = '\0';
-
-		if ( !(obj = getobj(allowall, "bless"))) return 0;
-		pline("An aura of holiness surrounds your hands!");
-		if (!Blind) (void) Shk_Your(Your_buf, obj);
-		if (obj->cursed) {
-			if (!Blind)
-				pline("%s %s %s.",Your_buf,
-				      aobjnam(obj, "softly glow"),
-				      hcolor(NH_AMBER));
-			uncurse(obj);
-			obj->bknown=1;
-		} else if(!obj->blessed) {
-			if (!Blind) {
-				str = hcolor(NH_LIGHT_BLUE);
-				pline("%s %s with a%s %s aura.",
-				      Your_buf,
-				      aobjnam(obj, "softly glow"),
-				      index(vowels, *str) ? "n" : "", str);
-			}
-			bless(obj);
-			obj->bknown=1;
-		} else {
-			if (obj->bknown) {
-				pline ("That object is already blessed!");
+			break;
+		case T_CUTTHROAT:
+			if (!is_blade(uwep)) {
+				pline("You need a blade to perform cutthroat!");
 				return 0;
 			}
-			obj->bknown=1;
-			pline("The aura fades.");
-		}
-		t_timeout = rn1(1000,500);
-		break;
-	case T_E_FIST:
-		blitz_e_fist();
+			if (!getdir(NULL)) return 0;
+			if (!u.dx && !u.dy) {
+				/* Hopefully a mistake ;B */
+				pline("Things may be going badly, but that's extreme.");
+				return 0;
+			}
+			mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
+			if (!mtmp) {
+				pline("You attack...nothing!");
+				return 0;
+			} else {
+				int oldhp = mtmp->mhp;
+
+				if (!attack(mtmp)) return 0;
+				if (!DEADMONSTER(mtmp) && mtmp->mhp < oldhp) {
+					if (!has_head(mtmp->data) || u.uswallow)
+						pline("You can't perform cutthroat on %s!", mon_nam(mtmp));
+					else {
+						int tmp = 0;
+
+						if (rn2(5) < (techlev(tech_no) / 10 + 1)) {
+							pline("You sever %s head!", s_suffix(mon_nam(mtmp)));
+							tmp = mtmp->mhp;
+						} else {
+							pline("You hurt %s badly!", s_suffix(mon_nam(mtmp)));
+							tmp = mtmp->mhp / 2;
+						}
+						tmp += techlev(tech_no);
+						t_timeout = rn1(1000, 500);
+						hurtmon(mtmp, tmp);
+					}
+				}
+			}
+			break;
+		case T_BLESSING:
+			allowall[0] = ALL_CLASSES;
+			allowall[1] = '\0';
+
+			if (!(obj = getobj(allowall, "bless"))) return 0;
+			pline("An aura of holiness surrounds your hands!");
+			if (!Blind) (void)Shk_Your(Your_buf, obj);
+			if (obj->cursed) {
+				if (!Blind)
+					pline("%s %s %s.", Your_buf,
+					      aobjnam(obj, "softly glow"),
+					      hcolor(NH_AMBER));
+				uncurse(obj);
+				obj->bknown = 1;
+			} else if (!obj->blessed) {
+				if (!Blind) {
+					str = hcolor(NH_LIGHT_BLUE);
+					pline("%s %s with a%s %s aura.",
+					      Your_buf,
+					      aobjnam(obj, "softly glow"),
+					      index(vowels, *str) ? "n" : "", str);
+				}
+				bless(obj);
+				obj->bknown = 1;
+			} else {
+				if (obj->bknown) {
+					pline("That object is already blessed!");
+					return 0;
+				}
+				obj->bknown = 1;
+				pline("The aura fades.");
+			}
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_E_FIST:
+			blitz_e_fist();
 #if 0
 		str = makeplural(body_part(HAND));
 		pline("You focus the powers of the elements into your %s", str);
 		techt_inuse(tech_no) = rnd((int) (techlev(tech_no)/3 + 1)) + d(1,4) + 2;
 #endif
-		t_timeout = rn1(1000,500);
-		break;
-	case T_PRIMAL_ROAR:
-		pline("You let out a bloodcurdling roar!");
-		aggravate();
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_PRIMAL_ROAR:
+			pline("You let out a bloodcurdling roar!");
+			aggravate();
 
-		techt_inuse(tech_no) = d(2,6) + (techlev(tech_no)) + 2;
+			techt_inuse(tech_no) = d(2, 6) + (techlev(tech_no)) + 2;
 
-		incr_itimeout(&HFast, techt_inuse(tech_no));
+			incr_itimeout(&HFast, techt_inuse(tech_no));
 
-		for(i = -5; i <= 5; i++) for(j = -5; j <= 5; j++)
-				if(isok(u.ux+i, u.uy+j) && (mtmp = m_at(u.ux+i, u.uy+j))) {
-					if (mtmp->mtame != 0 && !mtmp->isspell) {
-						struct permonst *ptr = mtmp->data;
-						struct monst *mtmp2;
-						int ttime = techt_inuse(tech_no);
-						int type = little_to_big(monsndx(ptr));
+			for (i = -5; i <= 5; i++)
+				for (j = -5; j <= 5; j++)
+					if (isok(u.ux + i, u.uy + j) && (mtmp = m_at(u.ux + i, u.uy + j))) {
+						if (mtmp->mtame != 0 && !mtmp->isspell) {
+							struct permonst *ptr = mtmp->data;
+							struct monst *mtmp2;
+							int ttime = techt_inuse(tech_no);
+							int type = little_to_big(monsndx(ptr));
 
-						mtmp2 = tamedog(mtmp, NULL);
-						if (mtmp2)
-							mtmp = mtmp2;
+							mtmp2 = tamedog(mtmp, NULL);
+							if (mtmp2)
+								mtmp = mtmp2;
 
-						if (type && type != monsndx(ptr)) {
-							ptr = &mons[type];
-							mon_spec_poly(mtmp, ptr, ttime, false,
-							              canseemon(mtmp), false, true);
+							if (type && type != monsndx(ptr)) {
+								ptr = &mons[type];
+								mon_spec_poly(mtmp, ptr, ttime, false,
+									      canseemon(mtmp), false, true);
+							}
 						}
 					}
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_LIQUID_LEAP: {
+			coord cc;
+			int dx, dy, sx, sy, range;
+
+			pline("Where do you want to leap to?");
+			cc.x = sx = u.ux;
+			cc.y = sy = u.uy;
+
+			getpos(&cc, true, "the desired position");
+			if (cc.x == -10) return 0; /* user pressed esc */
+
+			dx = cc.x - u.ux;
+			dy = cc.y - u.uy;
+			/* allow diagonals */
+			if (dx && dy && dx != dy && dx != -dy) {
+				pline("You can only leap in straight lines!");
+				return 0;
+			} else if (distu(cc.x, cc.y) > 19 + techlev(tech_no)) {
+				pline("Too far!");
+				return 0;
+			} else if (m_at(cc.x, cc.y) || !isok(cc.x, cc.y) ||
+				   IS_ROCK(levl[cc.x][cc.y].typ) ||
+				   sobj_at(BOULDER, cc.x, cc.y) ||
+				   closed_door(cc.x, cc.y)) {
+				pline("You can't flow there!"); /* MAR */
+				return 0;
+			} else {
+				pline("You liquify!");
+				if (Punished) {
+					pline("You slip out of the iron chain.");
+					unpunish();
 				}
-		t_timeout = rn1(1000,500);
-		break;
-	case T_LIQUID_LEAP: {
-		coord cc;
-		int dx, dy, sx, sy, range;
-
-		pline("Where do you want to leap to?");
-		cc.x = sx = u.ux;
-		cc.y = sy = u.uy;
-
-		getpos(&cc, true, "the desired position");
-		if (cc.x == -10) return 0; /* user pressed esc */
-
-		dx = cc.x - u.ux;
-		dy = cc.y - u.uy;
-		/* allow diagonals */
-		if (dx && dy && dx != dy && dx != -dy) {
-			pline("You can only leap in straight lines!");
-			return 0;
-		} else if (distu(cc.x, cc.y) > 19 + techlev(tech_no)) {
-			pline("Too far!");
-			return 0;
-		} else if (m_at(cc.x, cc.y) || !isok(cc.x, cc.y) ||
-		                IS_ROCK(levl[cc.x][cc.y].typ) ||
-		                sobj_at(BOULDER, cc.x, cc.y) ||
-		                closed_door(cc.x, cc.y)) {
-			pline("You can't flow there!"); /* MAR */
-			return 0;
-		} else {
-			pline("You liquify!");
-			if (Punished) {
-				pline("You slip out of the iron chain.");
-				unpunish();
-			}
-			if(u.utrap) {
-				switch(u.utraptype) {
-				case TT_BEARTRAP:
-					pline("You slide out of the bear trap.");
-					break;
-				case TT_PIT:
-					pline("You leap from the pit!");
-					break;
-				case TT_WEB:
-					pline("You flow through the web!");
-					break;
-				case TT_LAVA:
-					pline("You separate from the lava!");
+				if (u.utrap) {
+					switch (u.utraptype) {
+						case TT_BEARTRAP:
+							pline("You slide out of the bear trap.");
+							break;
+						case TT_PIT:
+							pline("You leap from the pit!");
+							break;
+						case TT_WEB:
+							pline("You flow through the web!");
+							break;
+						case TT_LAVA:
+							pline("You separate from the lava!");
+							u.utrap = 0;
+							break;
+						case TT_INFLOOR:
+							u.utrap = 0;
+							pline("You ooze out of the floor!");
+					}
 					u.utrap = 0;
-					break;
-				case TT_INFLOOR:
-					u.utrap = 0;
-					pline("You ooze out of the floor!");
 				}
-				u.utrap = 0;
-			}
-			/* Fry the things in the path ;B */
-			if (dx) range = dx;
-			else range = dy;
-			if (range < 0) range = -range;
+				/* Fry the things in the path ;B */
+				if (dx)
+					range = dx;
+				else
+					range = dy;
+				if (range < 0) range = -range;
 
-			dx = sgn(dx);
-			dy = sgn(dy);
+				dx = sgn(dx);
+				dy = sgn(dy);
 
-			while (range-- > 0) {
-				int tmp_invul = 0;
+				while (range-- > 0) {
+					int tmp_invul = 0;
 
-				if (!Invulnerable) Invulnerable = tmp_invul = 1;
-				sx += dx;
-				sy += dy;
-				tmp_at(DISP_BEAM, zapdir_to_glyph(dx, dy, AD_ACID-1));
-				tmp_at(sx,sy);
-				delay_output(); /* wait a little */
-				if ((mtmp = m_at(sx, sy)) != 0) {
-					int chance;
+					if (!Invulnerable) Invulnerable = tmp_invul = 1;
+					sx += dx;
+					sy += dy;
+					tmp_at(DISP_BEAM, zapdir_to_glyph(dx, dy, AD_ACID - 1));
+					tmp_at(sx, sy);
+					delay_output(); /* wait a little */
+					if ((mtmp = m_at(sx, sy)) != 0) {
+						int chance;
 
-					chance = rn2(20);
-					if (!chance || (3 - chance) > AC_VALUE(find_mac(mtmp)))
-						break;
-					setmangry(mtmp);
-					pline("You catch %s in your acid trail!", mon_nam(mtmp));
-					if (!resists_acid(mtmp)) {
-						int tmp = 1;
-						/* Need to add a to-hit */
-						tmp += d(2,4);
-						tmp += rn2((int) (techlev(tech_no)/5 + 1));
-						if (!Blind) pline("The acid burns %s!", mon_nam(mtmp));
-						hurtmon(mtmp, tmp);
-					} else if (!Blind) pline("The acid doesn't affect %s!", mon_nam(mtmp));
+						chance = rn2(20);
+						if (!chance || (3 - chance) > AC_VALUE(find_mac(mtmp)))
+							break;
+						setmangry(mtmp);
+						pline("You catch %s in your acid trail!", mon_nam(mtmp));
+						if (!resists_acid(mtmp)) {
+							int tmp = 1;
+							/* Need to add a to-hit */
+							tmp += d(2, 4);
+							tmp += rn2((int)(techlev(tech_no) / 5 + 1));
+							if (!Blind) pline("The acid burns %s!", mon_nam(mtmp));
+							hurtmon(mtmp, tmp);
+						} else if (!Blind)
+							pline("The acid doesn't affect %s!", mon_nam(mtmp));
+					}
+					/* Clean up */
+					tmp_at(DISP_END, 0);
+					if (tmp_invul) Invulnerable = 0;
 				}
-				/* Clean up */
-				tmp_at(DISP_END,0);
-				if (tmp_invul) Invulnerable = 0;
+
+				/* A little Sokoban guilt... */
+				if (In_sokoban(&u.uz))
+					change_luck(-1);
+				pline("You reform!");
+				teleds(cc.x, cc.y, false);
+				nomul(-1);
+				nomovemsg = "";
 			}
-
-			/* A little Sokoban guilt... */
-			if (In_sokoban(&u.uz))
-				change_luck(-1);
-			pline("You reform!");
-			teleds(cc.x, cc.y, false);
-			nomul(-1);
-			nomovemsg = "";
+			t_timeout = rn1(1000, 500);
+			break;
 		}
-		t_timeout = rn1(1000,500);
-		break;
-	}
-	case T_SIGIL_TEMPEST:
-		/* Have enough power? */
-		num = 50 - techlev(tech_no)/5;
-		if (u.uen < num) {
-			pline("You don't have enough power to invoke the sigil!");
+		case T_SIGIL_TEMPEST:
+			/* Have enough power? */
+			num = 50 - techlev(tech_no) / 5;
+			if (u.uen < num) {
+				pline("You don't have enough power to invoke the sigil!");
+				return 0;
+			}
+			u.uen -= num;
+
+			/* Invoke */
+			pline("You invoke the sigil of tempest!");
+			techt_inuse(tech_no) = d(1, 6) + rnd(techlev(tech_no) / 5 + 1) + 2;
+			u_wipe_engr(2);
 			return 0;
-		}
-		u.uen -= num;
+			break;
+		case T_SIGIL_CONTROL:
+			/* Have enough power? */
+			num = 30 - techlev(tech_no) / 5;
+			if (u.uen < num) {
+				pline("You don't have enough power to invoke the sigil!");
+				return 0;
+			}
+			u.uen -= num;
 
-		/* Invoke */
-		pline("You invoke the sigil of tempest!");
-		techt_inuse(tech_no) = d(1,6) + rnd(techlev(tech_no)/5 + 1) + 2;
-		u_wipe_engr(2);
-		return 0;
-		break;
-	case T_SIGIL_CONTROL:
-		/* Have enough power? */
-		num = 30 - techlev(tech_no)/5;
-		if (u.uen < num) {
-			pline("You don't have enough power to invoke the sigil!");
+			/* Invoke */
+			pline("You invoke the sigil of control!");
+			techt_inuse(tech_no) = d(1, 4) + rnd(techlev(tech_no) / 5 + 1) + 2;
+			u_wipe_engr(2);
 			return 0;
-		}
-		u.uen -= num;
+			break;
+		case T_SIGIL_DISCHARGE:
+			/* Have enough power? */
+			num = 100 - techlev(tech_no) / 5;
+			if (u.uen < num) {
+				pline("You don't have enough power to invoke the sigil!");
+				return 0;
+			}
+			u.uen -= num;
 
-		/* Invoke */
-		pline("You invoke the sigil of control!");
-		techt_inuse(tech_no) = d(1,4) + rnd(techlev(tech_no)/5 + 1) + 2;
-		u_wipe_engr(2);
-		return 0;
-		break;
-	case T_SIGIL_DISCHARGE:
-		/* Have enough power? */
-		num = 100 - techlev(tech_no)/5;
-		if (u.uen < num) {
-			pline("You don't have enough power to invoke the sigil!");
+			/* Invoke */
+			pline("You invoke the sigil of discharge!");
+			techt_inuse(tech_no) = d(1, 4) + rnd(techlev(tech_no) / 5 + 1) + 2;
+			u_wipe_engr(2);
 			return 0;
-		}
-		u.uen -= num;
+			break;
+		case T_RAISE_ZOMBIES:
+			pline("You chant the ancient curse...");
+			for (i = -1; i <= 1; i++)
+				for (j = -1; j <= 1; j++) {
+					int corpsenm;
 
-		/* Invoke */
-		pline("You invoke the sigil of discharge!");
-		techt_inuse(tech_no) = d(1,4) + rnd(techlev(tech_no)/5 + 1) + 2;
-		u_wipe_engr(2);
-		return 0;
-		break;
-	case T_RAISE_ZOMBIES:
-		pline("You chant the ancient curse...");
-		for(i = -1; i <= 1; i++) for(j = -1; j <= 1; j++) {
-				int corpsenm;
+					if (!isok(u.ux + i, u.uy + j)) continue;
+					for (obj = level.objects[u.ux + i][u.uy + j]; obj; obj = otmp) {
+						otmp = obj->nexthere;
 
-				if (!isok(u.ux+i, u.uy+j)) continue;
-				for (obj = level.objects[u.ux+i][u.uy+j]; obj; obj = otmp) {
-					otmp = obj->nexthere;
-
-					if (obj->otyp != CORPSE) continue;
-					/* Only generate undead */
-					corpsenm = mon_to_zombie(obj->corpsenm);
-					if (corpsenm != -1 && !cant_create(&corpsenm, true) &&
-					                (!obj->oxlth || obj->oattached != OATTACHED_MONST)) {
-						/* Maintain approx. proportion of oeaten to cnutrit
+						if (obj->otyp != CORPSE) continue;
+						/* Only generate undead */
+						corpsenm = mon_to_zombie(obj->corpsenm);
+						if (corpsenm != -1 && !cant_create(&corpsenm, true) &&
+						    (!obj->oxlth || obj->oattached != OATTACHED_MONST)) {
+							/* Maintain approx. proportion of oeaten to cnutrit
 						 * so that the zombie's HP relate roughly to how
 						 * much of the original corpse was left.
 						 */
-						if (obj->oeaten)
-							obj->oeaten =
-							        eaten_stat(mons[corpsenm].cnutrit, obj);
-						obj->corpsenm = corpsenm;
-						mtmp = revive(obj);
-						if (mtmp) {
-							if (!resist(mtmp, SPBOOK_CLASS, 0, TELL)) {
-								mtmp = tamedog(mtmp, NULL);
-								pline("You dominate %s!", mon_nam(mtmp));
-							} else setmangry(mtmp);
+							if (obj->oeaten)
+								obj->oeaten =
+									eaten_stat(mons[corpsenm].cnutrit, obj);
+							obj->corpsenm = corpsenm;
+							mtmp = revive(obj);
+							if (mtmp) {
+								if (!resist(mtmp, SPBOOK_CLASS, 0, TELL)) {
+									mtmp = tamedog(mtmp, NULL);
+									pline("You dominate %s!", mon_nam(mtmp));
+								} else
+									setmangry(mtmp);
+							}
 						}
 					}
 				}
+			nomul(-2); /* You need to recover */
+			nomovemsg = 0;
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_REVIVE:
+			if (u.uswallow) {
+				pline("You don't have enough elbow-room to maneuver.");
+				return 0;
 			}
-		nomul(-2); /* You need to recover */
-		nomovemsg = 0;
-		t_timeout = rn1(1000,500);
-		break;
-	case T_REVIVE:
-		if (u.uswallow) {
-			pline("You don't have enough elbow-room to maneuver.");
-			return 0;
-		}
-		num = 100 - techlev(tech_no); /* WAC make this depend on mon? */
-		if ((Upolyd && u.mh <= num) || (!Upolyd && u.uhp <= num)) {
-			pline("You don't have the strength to perform revivification!");
-			return 0;
-		}
+			num = 100 - techlev(tech_no); /* WAC make this depend on mon? */
+			if ((Upolyd && u.mh <= num) || (!Upolyd && u.uhp <= num)) {
+				pline("You don't have the strength to perform revivification!");
+				return 0;
+			}
 
-		obj = getobj((const char *)revivables, "revive");
-		if (!obj) return 0;
-		mtmp = revive(obj);
-		if (mtmp) {
-			if (Is_blackmarket(&u.uz))
-				setmangry(mtmp);
-			else if (mtmp->isshk)
-				make_happy_shk(mtmp, false);
-			else if (!resist(mtmp, SPBOOK_CLASS, 0, NOTELL))
-				tamedog(mtmp, NULL);
-		}
-		if (Upolyd) u.mh -= num;
-		else u.uhp -= num;
-		t_timeout = rn1(1000,500);
-		break;
-	case T_WARD_FIRE:
-		/* Already have it intrinsically? */
-		if (HFire_resistance & FROMOUTSIDE) return 0;
-
-		pline("You invoke the ward against flame!");
-		HFire_resistance += rn1(100,50);
-		HFire_resistance += techlev(tech_no);
-		t_timeout = rn1(1000,500);
-
-		break;
-	case T_WARD_COLD:
-		/* Already have it intrinsically? */
-		if (HCold_resistance & FROMOUTSIDE) return 0;
-
-		pline("You invoke the ward against ice!");
-		HCold_resistance += rn1(100,50);
-		HCold_resistance += techlev(tech_no);
-		t_timeout = rn1(1000,500);
-
-		break;
-	case T_WARD_ELEC:
-		/* Already have it intrinsically? */
-		if (HShock_resistance & FROMOUTSIDE) return 0;
-
-		pline("You invoke the ward against lightning!");
-		HShock_resistance += rn1(100,50);
-		HShock_resistance += techlev(tech_no);
-		t_timeout = rn1(1000,500);
-
-		break;
-	case T_TINKER:
-		if (Blind) {
-			pline("You can't do any tinkering if you can't see!");
-			return 0;
-		}
-		if (!uwep) {
-			pline("You aren't holding an object to work on!");
-			return 0;
-		}
-		pline("You are holding %s.", doname(uwep));
-		if (yn("Start tinkering on this?") != 'y') return 0;
-		pline("You start working on %s",doname(uwep));
-		delay=-150 + techlev(tech_no);
-		set_occupation(tinker, "tinkering", 0);
-		break;
-	case T_RAGE:
-		if (Upolyd) {
-			pline("You cannot focus your anger!");
-			return 0;
-		}
-		pline("You feel the anger inside you erupt!");
-		num = 50 + (4 * techlev(tech_no));
-		techt_inuse(tech_no) = num + 1;
-		u.uhpmax += num;
-		u.uhp += num;
-		t_timeout = rn1(1000,500);
-		break;
-	case T_BLINK:
-		pline("You feel the flow of time slow down.");
-		techt_inuse(tech_no) = rnd(techlev(tech_no) + 1) + 2;
-		t_timeout = rn1(1000,500);
-		break;
-	case T_CHI_STRIKE:
-		if (!blitz_chi_strike()) return 0;
-		t_timeout = rn1(1000,500);
-		break;
-	case T_DRAW_ENERGY:
-		if (u.uen == u.uenmax) {
-			if (Hallucination) pline("You are fully charged!");
-			else pline("You cannot hold any more energy!");
-			return 0;
-		}
-		pline("You begin drawing energy from your surroundings!");
-		delay=-15;
-		set_occupation(draw_energy, "drawing energy", 0);
-		t_timeout = rn1(1000,500);
-		break;
-	case T_CHI_HEALING:
-		if (u.uen < 1) {
-			pline("You are too weak to attempt this!");
-			return 0;
-		}
-		pline("You direct your internal energy to restoring your body!");
-		techt_inuse(tech_no) = techlev(tech_no)*2 + 4;
-		t_timeout = rn1(1000,500);
-		break;
-	case T_DISARM:
-		if (P_SKILL(weapon_type(uwep)) == P_NONE) {
-			pline("You aren't wielding a proper weapon!");
-			return 0;
-		}
-		if ((P_SKILL(weapon_type(uwep)) < P_SKILLED) || (Blind)) {
-			pline("You aren't capable of doing this!");
-			return 0;
-		}
-		if (u.uswallow) {
-			pline("What do you think %s is?  A sword swallower?",
-			      mon_nam(u.ustuck));
-			return 0;
-		}
-
-		if (!getdir(NULL)) return 0;
-		if (!u.dx && !u.dy) {
-			/* Hopefully a mistake ;B */
-			pline("Why don't you try wielding something else instead.");
-			return 0;
-		}
-		mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
-		if (!mtmp || !canspotmon(mtmp)) {
-			if (memory_is_invisible(u.ux + u.dx, u.uy + u.dy))
-				pline("You don't know where to aim for!");
+			obj = getobj((const char *)revivables, "revive");
+			if (!obj) return 0;
+			mtmp = revive(obj);
+			if (mtmp) {
+				if (Is_blackmarket(&u.uz))
+					setmangry(mtmp);
+				else if (mtmp->isshk)
+					make_happy_shk(mtmp, false);
+				else if (!resist(mtmp, SPBOOK_CLASS, 0, NOTELL))
+					tamedog(mtmp, NULL);
+			}
+			if (Upolyd)
+				u.mh -= num;
 			else
-				pline("You don't see anything there!");
-			return 0;
-		}
-		obj = MON_WEP(mtmp);   /* can be null */
-		if (!obj) {
-			pline("You can't disarm an unarmed foe!");
-			return 0;
-		}
-		/* Blindness dealt with above */
-		if ((!mon_visible(mtmp) || obj->oinvis) && !See_invisible) {
-			pline("You can't see %s weapon!", s_suffix(mon_nam(mtmp)));
-			return 0;
-		}
-		num = ((rn2(techlev(tech_no) + 15))
-		       * (P_SKILL(weapon_type(uwep)) - P_SKILLED + 1)) / 10;
+				u.uhp -= num;
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_WARD_FIRE:
+			/* Already have it intrinsically? */
+			if (HFire_resistance & FROMOUTSIDE) return 0;
 
-		pline("You attempt to disarm %s...",mon_nam(mtmp));
-		/* WAC can't yank out cursed items */
-		if (num > 0 && (!Fumbling || !rn2(10)) && !obj->cursed) {
-			int roll;
-			obj_extract_self(obj);
-			possibly_unwield(mtmp, false);
-			setmnotwielded(mtmp, obj);
-			roll = rn2(num + 1);
-			if (roll > 3) roll = 3;
-			switch (roll) {
-			case 2:
-				/* to floor near you */
-				pline("You knock %s %s to the %s!",
-				      s_suffix(mon_nam(mtmp)),
-				      xname(obj),
-				      surface(u.ux, u.uy));
-				if (obj->otyp == CRYSKNIFE &&
-				                (!obj->oerodeproof || !rn2(10))) {
-					obj->otyp = WORM_TOOTH;
-					obj->oerodeproof = 0;
-				}
-				place_object(obj, u.ux, u.uy);
-				stackobj(obj);
-				break;
-			case 3:
+			pline("You invoke the ward against flame!");
+			HFire_resistance += rn1(100, 50);
+			HFire_resistance += techlev(tech_no);
+			t_timeout = rn1(1000, 500);
+
+			break;
+		case T_WARD_COLD:
+			/* Already have it intrinsically? */
+			if (HCold_resistance & FROMOUTSIDE) return 0;
+
+			pline("You invoke the ward against ice!");
+			HCold_resistance += rn1(100, 50);
+			HCold_resistance += techlev(tech_no);
+			t_timeout = rn1(1000, 500);
+
+			break;
+		case T_WARD_ELEC:
+			/* Already have it intrinsically? */
+			if (HShock_resistance & FROMOUTSIDE) return 0;
+
+			pline("You invoke the ward against lightning!");
+			HShock_resistance += rn1(100, 50);
+			HShock_resistance += techlev(tech_no);
+			t_timeout = rn1(1000, 500);
+
+			break;
+		case T_TINKER:
+			if (Blind) {
+				pline("You can't do any tinkering if you can't see!");
+				return 0;
+			}
+			if (!uwep) {
+				pline("You aren't holding an object to work on!");
+				return 0;
+			}
+			pline("You are holding %s.", doname(uwep));
+			if (yn("Start tinkering on this?") != 'y') return 0;
+			pline("You start working on %s", doname(uwep));
+			delay = -150 + techlev(tech_no);
+			set_occupation(tinker, "tinkering", 0);
+			break;
+		case T_RAGE:
+			if (Upolyd) {
+				pline("You cannot focus your anger!");
+				return 0;
+			}
+			pline("You feel the anger inside you erupt!");
+			num = 50 + (4 * techlev(tech_no));
+			techt_inuse(tech_no) = num + 1;
+			u.uhpmax += num;
+			u.uhp += num;
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_BLINK:
+			pline("You feel the flow of time slow down.");
+			techt_inuse(tech_no) = rnd(techlev(tech_no) + 1) + 2;
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_CHI_STRIKE:
+			if (!blitz_chi_strike()) return 0;
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_DRAW_ENERGY:
+			if (u.uen == u.uenmax) {
+				if (Hallucination)
+					pline("You are fully charged!");
+				else
+					pline("You cannot hold any more energy!");
+				return 0;
+			}
+			pline("You begin drawing energy from your surroundings!");
+			delay = -15;
+			set_occupation(draw_energy, "drawing energy", 0);
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_CHI_HEALING:
+			if (u.uen < 1) {
+				pline("You are too weak to attempt this!");
+				return 0;
+			}
+			pline("You direct your internal energy to restoring your body!");
+			techt_inuse(tech_no) = techlev(tech_no) * 2 + 4;
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_DISARM:
+			if (P_SKILL(weapon_type(uwep)) == P_NONE) {
+				pline("You aren't wielding a proper weapon!");
+				return 0;
+			}
+			if ((P_SKILL(weapon_type(uwep)) < P_SKILLED) || (Blind)) {
+				pline("You aren't capable of doing this!");
+				return 0;
+			}
+			if (u.uswallow) {
+				pline("What do you think %s is?  A sword swallower?",
+				      mon_nam(u.ustuck));
+				return 0;
+			}
+
+			if (!getdir(NULL)) return 0;
+			if (!u.dx && !u.dy) {
+				/* Hopefully a mistake ;B */
+				pline("Why don't you try wielding something else instead.");
+				return 0;
+			}
+			mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
+			if (!mtmp || !canspotmon(mtmp)) {
+				if (memory_is_invisible(u.ux + u.dx, u.uy + u.dy))
+					pline("You don't know where to aim for!");
+				else
+					pline("You don't see anything there!");
+				return 0;
+			}
+			obj = MON_WEP(mtmp); /* can be null */
+			if (!obj) {
+				pline("You can't disarm an unarmed foe!");
+				return 0;
+			}
+			/* Blindness dealt with above */
+			if ((!mon_visible(mtmp) || obj->oinvis) && !See_invisible) {
+				pline("You can't see %s weapon!", s_suffix(mon_nam(mtmp)));
+				return 0;
+			}
+			num = ((rn2(techlev(tech_no) + 15)) * (P_SKILL(weapon_type(uwep)) - P_SKILLED + 1)) / 10;
+
+			pline("You attempt to disarm %s...", mon_nam(mtmp));
+			/* WAC can't yank out cursed items */
+			if (num > 0 && (!Fumbling || !rn2(10)) && !obj->cursed) {
+				int roll;
+				obj_extract_self(obj);
+				possibly_unwield(mtmp, false);
+				setmnotwielded(mtmp, obj);
+				roll = rn2(num + 1);
+				if (roll > 3) roll = 3;
+				switch (roll) {
+					case 2:
+						/* to floor near you */
+						pline("You knock %s %s to the %s!",
+						      s_suffix(mon_nam(mtmp)),
+						      xname(obj),
+						      surface(u.ux, u.uy));
+						if (obj->otyp == CRYSKNIFE &&
+						    (!obj->oerodeproof || !rn2(10))) {
+							obj->otyp = WORM_TOOTH;
+							obj->oerodeproof = 0;
+						}
+						place_object(obj, u.ux, u.uy);
+						stackobj(obj);
+						break;
+					case 3:
 #if 0
 				if (!rn2(25)) {
 					/* proficient at disarming, but maybe not
@@ -1281,195 +1245,194 @@ static int techeffects (int tech_no) {
 					break;
 				}
 #endif /* 0 */
-				/* right into your inventory */
-				pline("You snatch %s %s!", s_suffix(mon_nam(mtmp)),
+						/* right into your inventory */
+						pline("You snatch %s %s!", s_suffix(mon_nam(mtmp)),
+						      xname(obj));
+						if (obj->otyp == CORPSE &&
+						    touch_petrifies(&mons[obj->corpsenm]) &&
+						    !uarmg && !Stone_resistance &&
+						    !(poly_when_stoned(youmonst.data) &&
+						      polymon(PM_STONE_GOLEM))) {
+							char kbuf[BUFSZ];
+
+							sprintf(kbuf, "%s corpse",
+								an(mons[obj->corpsenm].mname));
+							pline("Snatching %s is a fatal mistake.", kbuf);
+							instapetrify(kbuf);
+						}
+						obj = hold_another_object(obj, "You drop %s!",
+									  doname(obj), NULL);
+						break;
+					default:
+						/* to floor beneath mon */
+						pline("You knock %s from %s grasp!", the(xname(obj)),
+						      s_suffix(mon_nam(mtmp)));
+						if (obj->otyp == CRYSKNIFE &&
+						    (!obj->oerodeproof || !rn2(10))) {
+							obj->otyp = WORM_TOOTH;
+							obj->oerodeproof = 0;
+						}
+						place_object(obj, mtmp->mx, mtmp->my);
+						stackobj(obj);
+						break;
+				}
+			} else if (mtmp->mcanmove && !mtmp->msleeping)
+				pline("%s evades your attack.", Monnam(mtmp));
+			else
+				pline("You fail to dislodge %s %s.", s_suffix(mon_nam(mtmp)),
 				      xname(obj));
-				if (obj->otyp == CORPSE &&
-				                touch_petrifies(&mons[obj->corpsenm]) &&
-				                !uarmg && !Stone_resistance &&
-				                !(poly_when_stoned(youmonst.data) &&
-				                  polymon(PM_STONE_GOLEM))) {
-					char kbuf[BUFSZ];
-
-					sprintf(kbuf, "%s corpse",
-					        an(mons[obj->corpsenm].mname));
-					pline("Snatching %s is a fatal mistake.", kbuf);
-					instapetrify(kbuf);
-				}
-				obj = hold_another_object(obj, "You drop %s!",
-				                          doname(obj), NULL);
-				break;
-			default:
-				/* to floor beneath mon */
-				pline("You knock %s from %s grasp!", the(xname(obj)),
-				      s_suffix(mon_nam(mtmp)));
-				if (obj->otyp == CRYSKNIFE &&
-				                (!obj->oerodeproof || !rn2(10))) {
-					obj->otyp = WORM_TOOTH;
-					obj->oerodeproof = 0;
-				}
-				place_object(obj, mtmp->mx, mtmp->my);
-				stackobj(obj);
-				break;
+			wakeup(mtmp);
+			if (!mtmp->mcanmove && !rn2(10)) {
+				mtmp->mcanmove = 1;
+				mtmp->mfrozen = 0;
 			}
-		} else if (mtmp->mcanmove && !mtmp->msleeping)
-			pline("%s evades your attack.", Monnam(mtmp));
-		else
-			pline("You fail to dislodge %s %s.", s_suffix(mon_nam(mtmp)),
-			      xname(obj));
-		wakeup(mtmp);
-		if (!mtmp->mcanmove && !rn2(10)) {
-			mtmp->mcanmove = 1;
-			mtmp->mfrozen = 0;
-		}
-		break;
-	case T_DAZZLE:
-		/* Short range stun attack */
-		if (Blind) {
-			pline("You can't see anything!");
-			return 0;
-		}
-		if (!getdir(NULL)) return 0;
-		if (!u.dx && !u.dy) {
-			/* Hopefully a mistake ;B */
-			pline("You can't see yourself!");
-			return 0;
-		}
-		for(i = 0; (i  <= ((techlev(tech_no) / 8) + 1)
-		                && isok(u.ux + (i*u.dx), u.uy + (i*u.dy))); i++) {
-			mtmp = m_at(u.ux + (i*u.dx), u.uy + (i*u.dy));
-			if (mtmp && canseemon(mtmp)) break;
-		}
-		if (!mtmp || !canseemon(mtmp)) {
-			pline("You fail to make eye contact with anything!");
-			return 0;
-		}
-		pline("You stare at %s.", mon_nam(mtmp));
-		if (!haseyes(mtmp->data))
-			pline("..but %s has no eyes!", mon_nam(mtmp));
-		else if (!mtmp->mcansee)
-			pline("..but %s cannot see you!", mon_nam(mtmp));
-		if ((rn2(6) + rn2(6) + (techlev(tech_no) - mtmp->m_lev)) > 10) {
-			pline("You dazzle %s!", mon_nam(mtmp));
-			mtmp->mcanmove = 0;
-			mtmp->mfrozen = rnd(10);
-		} else {
-			pline("%s breaks the stare!", Monnam(mtmp));
-		}
-		t_timeout = rn1(50,25);
-		break;
-	case T_BLITZ:
-		if (uwep || (u.twoweap && uswapwep)) {
-			pline("You can't do this while wielding a weapon!");
-			return 0;
-		} else if (uarms) {
-			pline("You can't do this while holding a shield!");
-			return 0;
-		}
-		if (!doblitz()) return 0;
+			break;
+		case T_DAZZLE:
+			/* Short range stun attack */
+			if (Blind) {
+				pline("You can't see anything!");
+				return 0;
+			}
+			if (!getdir(NULL)) return 0;
+			if (!u.dx && !u.dy) {
+				/* Hopefully a mistake ;B */
+				pline("You can't see yourself!");
+				return 0;
+			}
+			for (i = 0; (i <= ((techlev(tech_no) / 8) + 1) && isok(u.ux + (i * u.dx), u.uy + (i * u.dy))); i++) {
+				mtmp = m_at(u.ux + (i * u.dx), u.uy + (i * u.dy));
+				if (mtmp && canseemon(mtmp)) break;
+			}
+			if (!mtmp || !canseemon(mtmp)) {
+				pline("You fail to make eye contact with anything!");
+				return 0;
+			}
+			pline("You stare at %s.", mon_nam(mtmp));
+			if (!haseyes(mtmp->data))
+				pline("..but %s has no eyes!", mon_nam(mtmp));
+			else if (!mtmp->mcansee)
+				pline("..but %s cannot see you!", mon_nam(mtmp));
+			if ((rn2(6) + rn2(6) + (techlev(tech_no) - mtmp->m_lev)) > 10) {
+				pline("You dazzle %s!", mon_nam(mtmp));
+				mtmp->mcanmove = 0;
+				mtmp->mfrozen = rnd(10);
+			} else {
+				pline("%s breaks the stare!", Monnam(mtmp));
+			}
+			t_timeout = rn1(50, 25);
+			break;
+		case T_BLITZ:
+			if (uwep || (u.twoweap && uswapwep)) {
+				pline("You can't do this while wielding a weapon!");
+				return 0;
+			} else if (uarms) {
+				pline("You can't do this while holding a shield!");
+				return 0;
+			}
+			if (!doblitz()) return 0;
 
-		t_timeout = rn1(1000,500);
-		break;
-	case T_PUMMEL:
-		if (uwep || (u.twoweap && uswapwep)) {
-			pline("You can't do this while wielding a weapon!");
-			return 0;
-		} else if (uarms) {
-			pline("You can't do this while holding a shield!");
-			return 0;
-		}
-		if (!getdir(NULL)) return 0;
-		if (!u.dx && !u.dy) {
-			pline("You flex your muscles.");
-			return 0;
-		}
-		if (!blitz_pummel()) return 0;
-		t_timeout = rn1(1000,500);
-		break;
-	case T_G_SLAM:
-		if (uwep || (u.twoweap && uswapwep)) {
-			pline("You can't do this while wielding a weapon!");
-			return 0;
-		} else if (uarms) {
-			pline("You can't do this while holding a shield!");
-			return 0;
-		}
-		if (!getdir(NULL)) return 0;
-		if (!u.dx && !u.dy) {
-			pline("You flex your muscles.");
-			return 0;
-		}
-		if (!blitz_g_slam()) return 0;
-		t_timeout = rn1(1000,500);
-		break;
-	case T_DASH:
-		if (!getdir(NULL)) return 0;
-		if (!u.dx && !u.dy) {
-			pline("You stretch.");
-			return 0;
-		}
-		if (!blitz_dash()) return 0;
-		t_timeout = rn1(50, 25);
-		break;
-	case T_POWER_SURGE:
-		if (!blitz_power_surge()) return 0;
-		t_timeout = rn1(1000,500);
-		break;
-	case T_SPIRIT_BOMB:
-		if (uwep || (u.twoweap && uswapwep)) {
-			pline("You can't do this while wielding a weapon!");
-			return 0;
-		} else if (uarms) {
-			pline("You can't do this while holding a shield!");
-			return 0;
-		}
-		if (!getdir(NULL)) return 0;
-		if (!blitz_spirit_bomb()) return 0;
-		t_timeout = rn1(1000,500);
-		break;
-	case T_DRAW_BLOOD:
-		if (!maybe_polyd(is_vampire(youmonst.data),
-		                 Race_if(PM_VAMPIRE))) {
-			/* ALI
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_PUMMEL:
+			if (uwep || (u.twoweap && uswapwep)) {
+				pline("You can't do this while wielding a weapon!");
+				return 0;
+			} else if (uarms) {
+				pline("You can't do this while holding a shield!");
+				return 0;
+			}
+			if (!getdir(NULL)) return 0;
+			if (!u.dx && !u.dy) {
+				pline("You flex your muscles.");
+				return 0;
+			}
+			if (!blitz_pummel()) return 0;
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_G_SLAM:
+			if (uwep || (u.twoweap && uswapwep)) {
+				pline("You can't do this while wielding a weapon!");
+				return 0;
+			} else if (uarms) {
+				pline("You can't do this while holding a shield!");
+				return 0;
+			}
+			if (!getdir(NULL)) return 0;
+			if (!u.dx && !u.dy) {
+				pline("You flex your muscles.");
+				return 0;
+			}
+			if (!blitz_g_slam()) return 0;
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_DASH:
+			if (!getdir(NULL)) return 0;
+			if (!u.dx && !u.dy) {
+				pline("You stretch.");
+				return 0;
+			}
+			if (!blitz_dash()) return 0;
+			t_timeout = rn1(50, 25);
+			break;
+		case T_POWER_SURGE:
+			if (!blitz_power_surge()) return 0;
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_SPIRIT_BOMB:
+			if (uwep || (u.twoweap && uswapwep)) {
+				pline("You can't do this while wielding a weapon!");
+				return 0;
+			} else if (uarms) {
+				pline("You can't do this while holding a shield!");
+				return 0;
+			}
+			if (!getdir(NULL)) return 0;
+			if (!blitz_spirit_bomb()) return 0;
+			t_timeout = rn1(1000, 500);
+			break;
+		case T_DRAW_BLOOD:
+			if (!maybe_polyd(is_vampire(youmonst.data),
+					 Race_if(PM_VAMPIRE))) {
+				/* ALI
 			 * Otherwise we get problems with what we create:
 			 * potions of vampire blood would no longer be
 			 * appropriate.
 			 */
-			pline("You must be in your natural form to draw blood.");
-			return 0;
-		}
-		obj = use_medical_kit(PHIAL, true, "draw blood with");
-		if (!obj)
-			return 0;
-		if (u.ulevel <= 1) {
-			pline("You can't seem to find a vein.");
-			return 0;
-		}
-		check_unpaid(obj);
-		if (obj->quan > 1L)
-			obj->quan--;
-		else {
-			obj_extract_self(obj);
-			obfree(obj, NULL);
-		}
-		pline("Using your medical kit, you draw off a phial of your blood.");
-		losexp("drawing blood", true);
-		if (u.uexp > 0)
-			u.uexp = newuexp(u.ulevel - 1);
-		otmp = mksobj(POT_VAMPIRE_BLOOD, false, false);
-		otmp->cursed = obj->cursed;
-		otmp->blessed = obj->blessed;
-		hold_another_object(otmp,
-		                    "You fill, but have to drop, %s!", doname(otmp),
-		                    NULL);
-		t_timeout = rn1(1000, 500);
-		break;
-	default:
-		pline ("Error!  No such effect (%i)", tech_no);
-		break;
+				pline("You must be in your natural form to draw blood.");
+				return 0;
+			}
+			obj = use_medical_kit(PHIAL, true, "draw blood with");
+			if (!obj)
+				return 0;
+			if (u.ulevel <= 1) {
+				pline("You can't seem to find a vein.");
+				return 0;
+			}
+			check_unpaid(obj);
+			if (obj->quan > 1L)
+				obj->quan--;
+			else {
+				obj_extract_self(obj);
+				obfree(obj, NULL);
+			}
+			pline("Using your medical kit, you draw off a phial of your blood.");
+			losexp("drawing blood", true);
+			if (u.uexp > 0)
+				u.uexp = newuexp(u.ulevel - 1);
+			otmp = mksobj(POT_VAMPIRE_BLOOD, false, false);
+			otmp->cursed = obj->cursed;
+			otmp->blessed = obj->blessed;
+			hold_another_object(otmp,
+					    "You fill, but have to drop, %s!", doname(otmp),
+					    NULL);
+			t_timeout = rn1(1000, 500);
+			break;
+		default:
+			pline("Error!  No such effect (%i)", tech_no);
+			break;
 	}
 	if (!can_limitbreak())
-		techtout(tech_no) = (t_timeout * (100 - techlev(tech_no))/100);
+		techtout(tech_no) = (t_timeout * (100 - techlev(tech_no)) / 100);
 
 	/*By default,  action should take a turn*/
 	return 1;
@@ -1478,11 +1441,11 @@ static int techeffects (int tech_no) {
 /* Whether or not a tech is in use.
  * 0 if not in use, turns left if in use. Tech is done when techinuse == 1
  */
-int tech_inuse (int tech_id) {
+int tech_inuse(int tech_id) {
 	int i;
 
 	if (tech_id < 1 || tech_id > MAXTECH) {
-		impossible ("invalid tech: %d", tech_id);
+		impossible("invalid tech: %d", tech_id);
 		return 0;
 	}
 	for (i = 0; i < MAXTECH; i++) {
@@ -1493,7 +1456,7 @@ int tech_inuse (int tech_id) {
 	return 0;
 }
 
-void tech_timeout (void) {
+void tech_timeout(void) {
 	int i;
 
 	for (i = 0; i < MAXTECH; i++) {
@@ -1503,65 +1466,67 @@ void tech_timeout (void) {
 			/* Check if technique is done */
 			if (!(--techt_inuse(i)))
 				switch (techid(i)) {
-				case T_EVISCERATE:
-					pline("You retract your claws.");
-					/* You're using bare hands now,  so new msg for next attack */
-					unweapon=true;
-					/* Lose berserk status */
-					repeat_hit = 0;
-					break;
-				case T_BERSERK:
-					The("red haze in your mind clears.");
-					break;
-				case T_KIII:
-					pline("You calm down.");
-					break;
-				case T_FLURRY:
-					pline("You relax.");
-					break;
-				case T_E_FIST:
-					pline("You feel the power dissipate.");
-					break;
-				case T_SIGIL_TEMPEST:
-					pline("The sigil of tempest fades.");
-					break;
-				case T_SIGIL_CONTROL:
-					pline("The sigil of control fades.");
-					break;
-				case T_SIGIL_DISCHARGE:
-					pline("The sigil of discharge fades.");
-					break;
-				case T_RAGE:
-					pline("Your anger cools.");
-					break;
-				case T_POWER_SURGE:
-					pline("The awesome power within you fades.");
-					break;
-				case T_BLINK:
-					pline("You sense the flow of time returning to normal.");
-					break;
-				case T_CHI_STRIKE:
-					pline("You feel the power in your hands dissipate.");
-					break;
-				case T_CHI_HEALING:
-					pline("You feel the healing power dissipate.");
-					break;
-				default:
-					break;
-				} else switch (techid(i)) {
-				/* During the technique */
-				case T_RAGE:
-					/* Bleed but don't kill */
-					if (u.uhpmax > 1) u.uhpmax--;
-					if (u.uhp > 1) u.uhp--;
-					break;
-				case T_POWER_SURGE:
-					/* Bleed off power.  Can go to zero as 0 power is not fatal */
-					if (u.uenmax > 1) u.uenmax--;
-					if (u.uen > 0) u.uen--;
-					break;
-				default:
-					break;
+					case T_EVISCERATE:
+						pline("You retract your claws.");
+						/* You're using bare hands now,  so new msg for next attack */
+						unweapon = true;
+						/* Lose berserk status */
+						repeat_hit = 0;
+						break;
+					case T_BERSERK:
+						The("red haze in your mind clears.");
+						break;
+					case T_KIII:
+						pline("You calm down.");
+						break;
+					case T_FLURRY:
+						pline("You relax.");
+						break;
+					case T_E_FIST:
+						pline("You feel the power dissipate.");
+						break;
+					case T_SIGIL_TEMPEST:
+						pline("The sigil of tempest fades.");
+						break;
+					case T_SIGIL_CONTROL:
+						pline("The sigil of control fades.");
+						break;
+					case T_SIGIL_DISCHARGE:
+						pline("The sigil of discharge fades.");
+						break;
+					case T_RAGE:
+						pline("Your anger cools.");
+						break;
+					case T_POWER_SURGE:
+						pline("The awesome power within you fades.");
+						break;
+					case T_BLINK:
+						pline("You sense the flow of time returning to normal.");
+						break;
+					case T_CHI_STRIKE:
+						pline("You feel the power in your hands dissipate.");
+						break;
+					case T_CHI_HEALING:
+						pline("You feel the healing power dissipate.");
+						break;
+					default:
+						break;
+				}
+			else
+				switch (techid(i)) {
+					/* During the technique */
+					case T_RAGE:
+						/* Bleed but don't kill */
+						if (u.uhpmax > 1) u.uhpmax--;
+						if (u.uhp > 1) u.uhp--;
+						break;
+					case T_POWER_SURGE:
+						/* Bleed off power.  Can go to zero as 0 power is not fatal */
+						if (u.uenmax > 1) u.uenmax--;
+						if (u.uen > 0) u.uen--;
+						break;
+					default:
+						break;
 				}
 		}
 
@@ -1569,7 +1534,7 @@ void tech_timeout (void) {
 	}
 }
 
-void docalm (void) {
+void docalm(void) {
 	int i, tech, n = 0;
 
 	for (i = 0; i < MAXTECH; i++) {
@@ -1583,80 +1548,83 @@ void docalm (void) {
 		pline("You calm down.");
 }
 
-static void hurtmon (struct monst *mtmp, int tmp) {
+static void hurtmon(struct monst *mtmp, int tmp) {
 	mtmp->mhp -= tmp;
-	if (mtmp->mhp < 1) killed (mtmp);
-	else showdmg(tmp);
+	if (mtmp->mhp < 1)
+		killed(mtmp);
+	else
+		showdmg(tmp);
 }
 
 static const struct innate_tech *role_tech(void) {
 	switch (Role_switch) {
-	case PM_ARCHEOLOGIST:
-		return arc_tech;
-	case PM_BARBARIAN:
-		return bar_tech;
-	case PM_CAVEMAN:
-		return cav_tech;
-	case PM_FLAME_MAGE:
-		return fla_tech;
-	case PM_HEALER:
-		return hea_tech;
-	case PM_ICE_MAGE:
-		return ice_tech;
-	case PM_KNIGHT:
-		return kni_tech;
-	case PM_MONK:
-		return mon_tech;
-	case PM_NECROMANCER:
-		return nec_tech;
-	case PM_PRIEST:
-		return pri_tech;
-	case PM_RANGER:
-		return ran_tech;
-	case PM_ROGUE:
-		return rog_tech;
-	case PM_SAMURAI:
-		return sam_tech;
-	case PM_TOURIST:
-		return tou_tech;
-	case PM_UNDEAD_SLAYER:
-		return und_tech;
-	case PM_VALKYRIE:
-		return val_tech;
-	case PM_WIZARD:
-		return wiz_tech;
-	case PM_YEOMAN:
-		return yeo_tech;
-	default:
-		return NULL;
+		case PM_ARCHEOLOGIST:
+			return arc_tech;
+		case PM_BARBARIAN:
+			return bar_tech;
+		case PM_CAVEMAN:
+			return cav_tech;
+		case PM_FLAME_MAGE:
+			return fla_tech;
+		case PM_HEALER:
+			return hea_tech;
+		case PM_ICE_MAGE:
+			return ice_tech;
+		case PM_KNIGHT:
+			return kni_tech;
+		case PM_MONK:
+			return mon_tech;
+		case PM_NECROMANCER:
+			return nec_tech;
+		case PM_PRIEST:
+			return pri_tech;
+		case PM_RANGER:
+			return ran_tech;
+		case PM_ROGUE:
+			return rog_tech;
+		case PM_SAMURAI:
+			return sam_tech;
+		case PM_TOURIST:
+			return tou_tech;
+		case PM_UNDEAD_SLAYER:
+			return und_tech;
+		case PM_VALKYRIE:
+			return val_tech;
+		case PM_WIZARD:
+			return wiz_tech;
+		case PM_YEOMAN:
+			return yeo_tech;
+		default:
+			return NULL;
 	}
 }
 
-static const struct innate_tech * race_tech (void) {
+static const struct innate_tech *race_tech(void) {
 	switch (Race_switch) {
-	case PM_DOPPELGANGER:
-		return dop_tech;
-	case PM_DWARF:
-		return dwa_tech;
-	case PM_ELF:
-	case PM_DROW:
-		return elf_tech;
-	case PM_GNOME:
-		return gno_tech;
-	case PM_HOBBIT:
-		return hob_tech;
-	case PM_HUMAN_WEREWOLF:
-		return lyc_tech;
-	case PM_VAMPIRE:
-		return vam_tech;
-	default:
-		return NULL;
+		case PM_DOPPELGANGER:
+			return dop_tech;
+		case PM_DWARF:
+			return dwa_tech;
+		case PM_ELF:
+		case PM_DROW:
+			return elf_tech;
+		case PM_GNOME:
+			return gno_tech;
+		case PM_HOBBIT:
+			return hob_tech;
+		case PM_HUMAN_WEREWOLF:
+			return lyc_tech;
+		case PM_VAMPIRE:
+			return vam_tech;
+		default:
+			return NULL;
 	}
 }
 
-void adjtech (int oldlevel, int newlevel) {
-	const struct   innate_tech
-	*tech = role_tech(), *rtech = race_tech();
+void adjtech(int oldlevel, int newlevel) {
+	const struct innate_tech
+		*tech = role_tech(),
+		*rtech = race_tech();
 	long mask = FROMEXPER;
 
 	while (tech || rtech) {
@@ -1669,14 +1637,13 @@ void adjtech (int oldlevel, int newlevel) {
 			mask = FROMRACE;
 		}
 
-		for(; tech->tech_id; tech++)
-			if(oldlevel < tech->ulevel && newlevel >= tech->ulevel) {
+		for (; tech->tech_id; tech++)
+			if (oldlevel < tech->ulevel && newlevel >= tech->ulevel) {
 				if (tech->ulevel != 1 && !tech_known(tech->tech_id))
 					pline("You learn how to perform %s!",
 					      tech_names[tech->tech_id]);
 				learntech(tech->tech_id, mask, tech->tech_lev);
-			} else if (oldlevel >= tech->ulevel && newlevel < tech->ulevel
-			                && tech->ulevel != 1) {
+			} else if (oldlevel >= tech->ulevel && newlevel < tech->ulevel && tech->ulevel != 1) {
 				learntech(tech->tech_id, mask, -1);
 				if (!tech_known(tech->tech_id))
 					pline("You lose the ability to perform %s!",
@@ -1685,8 +1652,8 @@ void adjtech (int oldlevel, int newlevel) {
 	}
 }
 
-int mon_to_zombie (int monnum) {
-	if ((&mons[monnum])->mlet == S_ZOMBIE) return monnum;  /* is already zombie */
+int mon_to_zombie(int monnum) {
+	if ((&mons[monnum])->mlet == S_ZOMBIE) return monnum; /* is already zombie */
 	if ((&mons[monnum])->mlet == S_KOBOLD) return PM_KOBOLD_ZOMBIE;
 	if ((&mons[monnum])->mlet == S_GNOME) return PM_GNOME_ZOMBIE;
 	if (is_orc(&mons[monnum])) return PM_ORC_ZOMBIE;
@@ -1698,18 +1665,18 @@ int mon_to_zombie (int monnum) {
 	/* Is it humanoid? */
 	if (!humanoid(&mons[monnum])) return -1;
 	/* Otherwise,  return a ghoul or ghast */
-	if (!rn2(4)) return PM_GHAST;
-	else return PM_GHOUL;
+	if (!rn2(4))
+		return PM_GHAST;
+	else
+		return PM_GHOUL;
 }
-
 
 /*WAC tinker code*/
 static int tinker(void) {
 	int chance;
 	struct obj *otmp = uwep;
 
-
-	if (delay) {    /* not if (delay++), so at end delay == 0 */
+	if (delay) { /* not if (delay++), so at end delay == 0 */
 		delay++;
 #if 0
 		use_skill(P_TINKER, 1); /* Tinker skill */
@@ -1739,49 +1706,48 @@ static int tinker(void) {
 /*WAC  draw energy from surrounding objects */
 static int draw_energy() {
 	int powbonus = 1;
-	if (delay) {    /* not if (delay++), so at end delay == 0 */
+	if (delay) { /* not if (delay++), so at end delay == 0 */
 		delay++;
 		confdir();
-		if(isok(u.ux + u.dx, u.uy + u.dy)) {
-			switch((&levl[u.ux + u.dx][u.uy + u.dy])->typ) {
-			case ALTAR: /* Divine power */
-				powbonus =  (u.uenmax > 28 ? u.uenmax / 4
-				             : 7);
-				break;
-			case THRONE: /* Regal == pseudo divine */
-				powbonus =  (u.uenmax > 36 ? u.uenmax / 6
-				             : 6);
-				break;
-			case CLOUD: /* Air */
-			case TREE: /* Earth */
-			case LAVAPOOL: /* Fire */
-			case ICE: /* Water - most ordered form */
-				powbonus = 5;
-				break;
-			case AIR:
-			case MOAT: /* Doesn't freeze */
-			case WATER:
-				powbonus = 4;
-				break;
-			case POOL: /* Can dry up */
-				powbonus = 3;
-				break;
-			case FOUNTAIN:
-				powbonus = 2;
-				break;
-			case SINK:  /* Cleansing water */
-				if (!rn2(3)) powbonus = 2;
-				break;
-			case TOILET: /* Water Power...but also waste! */
-				if (rn2(100) < 50)
+		if (isok(u.ux + u.dx, u.uy + u.dy)) {
+			switch ((&levl[u.ux + u.dx][u.uy + u.dy])->typ) {
+				case ALTAR: /* Divine power */
+					powbonus = (u.uenmax > 28 ? u.uenmax / 4 : 7);
+					break;
+				case THRONE: /* Regal == pseudo divine */
+					powbonus = (u.uenmax > 36 ? u.uenmax / 6 : 6);
+					break;
+				case CLOUD:    /* Air */
+				case TREE:     /* Earth */
+				case LAVAPOOL: /* Fire */
+				case ICE:      /* Water - most ordered form */
+					powbonus = 5;
+					break;
+				case AIR:
+				case MOAT: /* Doesn't freeze */
+				case WATER:
+					powbonus = 4;
+					break;
+				case POOL: /* Can dry up */
+					powbonus = 3;
+					break;
+				case FOUNTAIN:
 					powbonus = 2;
-				else powbonus = -2;
-				break;
-			case GRAVE:
-				powbonus = -4;
-				break;
-			default:
-				break;
+					break;
+				case SINK: /* Cleansing water */
+					if (!rn2(3)) powbonus = 2;
+					break;
+				case TOILET: /* Water Power...but also waste! */
+					if (rn2(100) < 50)
+						powbonus = 2;
+					else
+						powbonus = -2;
+					break;
+				case GRAVE:
+					powbonus = -4;
+					break;
+				default:
+					break;
 			}
 		}
 		u.uen += powbonus;
@@ -1798,7 +1764,7 @@ static int draw_energy() {
 }
 
 static const char
-*Enter_Blitz = "Enter Blitz Command[. to end]: ";
+	*Enter_Blitz = "Enter Blitz Command[. to end]: ";
 
 /* Keep commands that reference the same blitz together
  * Keep the BLITZ_START before the BLITZ_CHAIN before the BLITZ_END
@@ -1806,8 +1772,8 @@ static const char
 static const struct blitz_tab blitzes[] = {
 	{"LLDDR", 5, blitz_chi_strike, T_CHI_STRIKE, BLITZ_START},
 	{"LLDDRDR", 7, blitz_chi_strike, T_CHI_STRIKE, BLITZ_START},
-	{"RR",  2, blitz_dash, T_DASH, BLITZ_START},
-	{"LL",  2, blitz_dash, T_DASH, BLITZ_START},
+	{"RR", 2, blitz_dash, T_DASH, BLITZ_START},
+	{"LL", 2, blitz_dash, T_DASH, BLITZ_START},
 	{"UURRDDL", 7, blitz_e_fist, T_E_FIST, BLITZ_START},
 	{"URURRDDLDL", 10, blitz_e_fist, T_E_FIST, BLITZ_START},
 	{"DDRRDDRR", 8, blitz_power_surge, T_POWER_SURGE, BLITZ_START},
@@ -1824,7 +1790,7 @@ static const struct blitz_tab blitzes[] = {
 #define MAX_CHAIN 5
 
 /* parse blitz input */
-static int doblitz (void) {
+static int doblitz(void) {
 	int i, j, dx, dy, bdone = 0, tech_no;
 	char buf[BUFSZ];
 	char *bp;
@@ -1853,7 +1819,7 @@ static int doblitz (void) {
 
 	doblitzlist();
 
-	for (i= 0; i < MAX_BLITZ; i++) {
+	for (i = 0; i < MAX_BLITZ; i++) {
 		if (!getdir(Enter_Blitz)) return 0; /* Get directional input */
 		if (!u.dx && !u.dy && !u.dz) break;
 		if (u.dx == -1) {
@@ -1889,11 +1855,11 @@ static int doblitz (void) {
 	/* parse input */
 	/* You can't put two of the same blitz in a row */
 	blitz_num = 0;
-	while(strncmp(bp, ".", 1)) {
+	while (strncmp(bp, ".", 1)) {
 		bdone = 0;
 		for (j = 0; blitzes[j].blitz_len; j++) {
 			if (blitz_num >= MAX_CHAIN ||
-			                blitz_num >= (MIN_CHAIN + (techlev(tech_no) / 10)))
+			    blitz_num >= (MIN_CHAIN + (techlev(tech_no) / 10)))
 				break; /* Trying to chain too many blitz commands */
 			else if (!strncmp(bp, blitzes[j].blitz_cmd, blitzes[j].blitz_len)) {
 				/* Trying to chain in a command you don't know yet */
@@ -1906,8 +1872,7 @@ static int doblitz (void) {
 					if (j == blitz_chain[(blitz_num - 1)])
 						break;
 					/* Trying to chain after chain finishing command */
-					if (blitzes[blitz_chain[(blitz_num - 1)]].blitz_type
-					                == BLITZ_END)
+					if (blitzes[blitz_chain[(blitz_num - 1)]].blitz_type == BLITZ_END)
 						break;
 					/* Trying to put a chain starter after starting
 					 * a chain
@@ -1915,8 +1880,7 @@ static int doblitz (void) {
 					 * row
 					 */
 					if ((blitzes[j].blitz_type == BLITZ_START) &&
-					                (blitzes[blitz_chain[(blitz_num - 1)]].blitz_type
-					                 != BLITZ_START))
+					    (blitzes[blitz_chain[(blitz_num - 1)]].blitz_type != BLITZ_START))
 						break;
 				}
 				bp += blitzes[j].blitz_len;
@@ -1934,14 +1898,14 @@ static int doblitz (void) {
 	for (i = 0; i < blitz_num; i++) {
 		u.dx = dx;
 		u.dy = dy;
-		if (!( (*blitzes[blitz_chain[i]].blitz_funct)() )) break;
+		if (!((*blitzes[blitz_chain[i]].blitz_funct)())) break;
 	}
 
 	/* done */
 	return 1;
 }
 
-static void doblitzlist (void) {
+static void doblitzlist(void) {
 	winid tmpwin;
 	int i;
 	char buf[BUFSZ];
@@ -1950,7 +1914,7 @@ static void doblitzlist (void) {
 
 	tmpwin = create_nhwindow(NHW_MENU);
 	start_menu(tmpwin);
-	any.a_void = 0;         /* zero out all bits */
+	any.a_void = 0; /* zero out all bits */
 
 	sprintf(buf, "%16s %10s %-17s", "[LU = Left Up]", "[U = Up]", "[RU = Right Up]");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
@@ -1965,18 +1929,20 @@ static void doblitzlist (void) {
 	for (i = 0; blitzes[i].blitz_len; i++) {
 		if (tech_known(blitzes[i].blitz_tech)) {
 			sprintf(buf, "%-30s %10s   %s",
-			        (i && blitzes[i].blitz_tech == blitzes[(i-1)].blitz_tech ?
-			         "" : tech_names[blitzes[i].blitz_tech]),
-			        (blitzes[i].blitz_type == BLITZ_START ?
-			         "starter" :
-			         (blitzes[i].blitz_type == BLITZ_CHAIN ?
-			          "chain" :
-			          (blitzes[i].blitz_type == BLITZ_END ?
-			           "finisher" : "unknown"))),
-			        blitzes[i].blitz_cmd);
+				(i && blitzes[i].blitz_tech == blitzes[(i - 1)].blitz_tech ?
+					 "" :
+					 tech_names[blitzes[i].blitz_tech]),
+				(blitzes[i].blitz_type == BLITZ_START ?
+					 "starter" :
+					 (blitzes[i].blitz_type == BLITZ_CHAIN ?
+						  "chain" :
+						  (blitzes[i].blitz_type == BLITZ_END ?
+							   "finisher" :
+							   "unknown"))),
+				blitzes[i].blitz_cmd);
 
 			add_menu(tmpwin, NO_GLYPH, &any,
-			         0, 0, ATR_NONE, buf, MENU_UNSELECTED);
+				 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
 		}
 	}
 	end_menu(tmpwin, "Currently known blitz manoeuvers");
@@ -1986,7 +1952,7 @@ static void doblitzlist (void) {
 	return;
 }
 
-static int blitz_chi_strike (void) {
+static int blitz_chi_strike(void) {
 	int tech_no;
 
 	tech_no = (get_tech_no(T_CHI_STRIKE));
@@ -2004,7 +1970,7 @@ static int blitz_chi_strike (void) {
 	return 1;
 }
 
-static int blitz_e_fist (void) {
+static int blitz_e_fist(void) {
 	int tech_no;
 	const char *str;
 
@@ -2016,12 +1982,12 @@ static int blitz_e_fist (void) {
 
 	str = makeplural(body_part(HAND));
 	pline("You focus the powers of the elements into your %s.", str);
-	techt_inuse(tech_no) = rnd((int) (techlev(tech_no)/3 + 1)) + d(1,4) + 2;
+	techt_inuse(tech_no) = rnd((int)(techlev(tech_no) / 3 + 1)) + d(1, 4) + 2;
 	return 1;
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int blitz_pummel (void) {
+static int blitz_pummel(void) {
 	int i = 0, tech_no;
 	struct monst *mtmp;
 	tech_no = (get_tech_no(T_PUMMEL));
@@ -2062,7 +2028,7 @@ static int blitz_pummel (void) {
 
 /* Assumes u.dx, u.dy already set up */
 static int
-blitz_g_slam (void) {
+blitz_g_slam(void) {
 	int tech_no, tmp, canhitmon, objenchant;
 	struct monst *mtmp;
 	struct trap *chasm;
@@ -2087,21 +2053,35 @@ blitz_g_slam (void) {
 	pline("You hurl %s downwards...", mon_nam(mtmp));
 	if (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)) return 1;
 
-	if (need_four(mtmp)) canhitmon = 4;
-	else if (need_three(mtmp)) canhitmon = 3;
-	else if (need_two(mtmp)) canhitmon = 2;
-	else if (need_one(mtmp)) canhitmon = 1;
-	else canhitmon = 0;
+	if (need_four(mtmp))
+		canhitmon = 4;
+	else if (need_three(mtmp))
+		canhitmon = 3;
+	else if (need_two(mtmp))
+		canhitmon = 2;
+	else if (need_one(mtmp))
+		canhitmon = 1;
+	else
+		canhitmon = 0;
 	if (Upolyd) {
-		if (hit_as_four(&youmonst))	objenchant = 4;
-		else if (hit_as_three(&youmonst)) objenchant = 3;
-		else if (hit_as_two(&youmonst)) objenchant = 2;
-		else if (hit_as_one(&youmonst)) objenchant = 1;
-		else if (need_four(&youmonst)) objenchant = 4;
-		else if (need_three(&youmonst)) objenchant = 3;
-		else if (need_two(&youmonst)) objenchant = 2;
-		else if (need_one(&youmonst)) objenchant = 1;
-		else objenchant = 0;
+		if (hit_as_four(&youmonst))
+			objenchant = 4;
+		else if (hit_as_three(&youmonst))
+			objenchant = 3;
+		else if (hit_as_two(&youmonst))
+			objenchant = 2;
+		else if (hit_as_one(&youmonst))
+			objenchant = 1;
+		else if (need_four(&youmonst))
+			objenchant = 4;
+		else if (need_three(&youmonst))
+			objenchant = 3;
+		else if (need_two(&youmonst))
+			objenchant = 2;
+		else if (need_one(&youmonst))
+			objenchant = 1;
+		else
+			objenchant = 0;
 	} else
 		objenchant = u.ulevel / 4;
 
@@ -2122,16 +2102,15 @@ blitz_g_slam (void) {
 		if (objenchant < canhitmon)
 			pline("%s doesn't seem to be harmed.", Monnam(mtmp));
 		else if ((mtmp->mhp -= tmp) <= 0) {
-			if(!cansee(u.ux + u.dx, u.uy + u.dy))
+			if (!cansee(u.ux + u.dx, u.uy + u.dy))
 				pline("It is destroyed!");
 			else {
 				pline("You destroy %s!",
-				      mtmp->mtame
-				      ? x_monnam(mtmp, ARTICLE_THE, "poor",
-				                 mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false)
-				      : mon_nam(mtmp));
+				      mtmp->mtame ? x_monnam(mtmp, ARTICLE_THE, "poor",
+							     mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false) :
+						    mon_nam(mtmp));
 			}
-			xkilled(mtmp,0);
+			xkilled(mtmp, 0);
 		}
 	}
 
@@ -2139,7 +2118,7 @@ blitz_g_slam (void) {
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int blitz_dash (void) {
+static int blitz_dash(void) {
 	int tech_no;
 	tech_no = (get_tech_no(T_DASH));
 
@@ -2150,11 +2129,11 @@ static int blitz_dash (void) {
 	if ((!Punished || carried(uball)) && !u.utrap)
 		pline("You dash forwards!");
 	hurtle(u.dx, u.dy, 2, false);
-	multi = 0;		/* No paralysis with dash */
+	multi = 0; /* No paralysis with dash */
 	return 1;
 }
 
-static int blitz_power_surge (void) {
+static int blitz_power_surge(void) {
 	int tech_no, num;
 
 	tech_no = (get_tech_no(T_POWER_SURGE));
@@ -2176,7 +2155,7 @@ static int blitz_power_surge (void) {
 }
 
 /* Assumes u.dx, u.dy already set up */
-static int blitz_spirit_bomb (void) {
+static int blitz_spirit_bomb(void) {
 	int tech_no, num;
 	int sx = u.ux, sy = u.uy, i;
 
@@ -2198,9 +2177,9 @@ static int blitz_spirit_bomb (void) {
 
 	u.uen -= num;
 
-	for( i = 0; i < 2; i++) {
-		if (!isok(sx,sy) || !cansee(sx,sy) ||
-		                IS_STWALL(levl[sx][sy].typ) || u.uswallow)
+	for (i = 0; i < 2; i++) {
+		if (!isok(sx, sy) || !cansee(sx, sy) ||
+		    IS_STWALL(levl[sx][sy].typ) || u.uswallow)
 			break;
 
 		/* Display the center of the explosion */
@@ -2213,13 +2192,13 @@ static int blitz_spirit_bomb (void) {
 		sy += u.dy;
 	}
 	/* Magical Explosion */
-	explode(sx, sy, 10, (d(3,6) + num), WAND_CLASS, EXPL_MAGICAL);
+	explode(sx, sy, 10, (d(3, 6) + num), WAND_CLASS, EXPL_MAGICAL);
 	return 1;
 }
 
 #ifdef DEBUG
 // in this case, allow controlled loss of techniques
-void wiz_debug_cmd (void) {
+void wiz_debug_cmd(void) {
 	int tech_no, id, n = 0;
 	long mask;
 	if (gettech(&tech_no)) {

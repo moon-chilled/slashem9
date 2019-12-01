@@ -58,9 +58,9 @@ static char sccsid[] = "@(#)uudecode.c	5.5 (Berkeley) 7/6/88";
 #include <stdio.h>
 
 #ifndef WIN32
-# include <pwd.h>
+#include <pwd.h>
 #endif
-#include <sys/types.h>   /* MSDOS, WIN32, or UNIX */
+#include <sys/types.h> /* MSDOS, WIN32, or UNIX */
 #include <sys/stat.h>
 #include <string.h>
 #include <stdlib.h>
@@ -69,7 +69,7 @@ static void decode(FILE *, FILE *);
 static void outdec(char *, FILE *, int);
 
 /* single-character decode */
-#define DEC(c)	(((c) - ' ') & 077)
+#define DEC(c) (((c) - ' ') & 077)
 
 int main(int argc, char **argv) {
 	FILE *in, *out;
@@ -83,7 +83,8 @@ int main(int argc, char **argv) {
 			perror(argv[1]);
 			exit(1);
 		}
-		argv++; argc--;
+		argv++;
+		argc--;
 	} else
 		in = stdin;
 
@@ -117,7 +118,7 @@ int main(int argc, char **argv) {
 			exit(3);
 		}
 		*sl++ = 0;
-		user = getpwnam(dest+1);
+		user = getpwnam(dest + 1);
 		if (user == NULL) {
 			fprintf(stderr, "No such user as %s\n", dest);
 			exit(4);
@@ -127,11 +128,11 @@ int main(int argc, char **argv) {
 		strcat(dnbuf, sl);
 		strcpy(dest, dnbuf);
 	}
-#endif	/* !defined(MSDOS) && !defined(VMS) */
+#endif /* !defined(MSDOS) && !defined(VMS) */
 
 	/* create output file */
 #ifdef WIN32
-	out = fopen(dest, "wb");	/* Binary file */
+	out = fopen(dest, "wb"); /* Binary file */
 #else
 	out = fopen(dest, "w");
 #endif
@@ -139,7 +140,7 @@ int main(int argc, char **argv) {
 		perror(dest);
 		exit(4);
 	}
-#ifndef WIN32	/* i.e., UNIX */
+#ifndef WIN32 /* i.e., UNIX */
 	chmod(dest, mode);
 #endif
 
@@ -171,8 +172,9 @@ void decode(FILE *in, FILE *out) {
 			break;
 
 		/* Calculate expected # of chars and pad if necessary */
-		expected = ((n+2)/3)<<2;
-		for (i = strlen(buf)-1; i <= expected; i++) buf[i] = ' ';
+		expected = ((n + 2) / 3) << 2;
+		for (i = strlen(buf) - 1; i <= expected; i++)
+			buf[i] = ' ';
 
 		bp = &buf[1];
 		while (n > 0) {
@@ -210,7 +212,7 @@ void outdec(char *p, FILE *f, int n) {
  */
 
 #ifndef NULL
-#define	NULL	0
+#define NULL 0
 #endif
 
 char *index(char *sp, char c) {

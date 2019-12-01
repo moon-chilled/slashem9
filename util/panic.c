@@ -14,16 +14,16 @@ boolean panicking;
 void panic(char *str, ...) {
 	VA_START(str);
 	if (panicking++)
-		abort();    /* avoid loops - this should never happen*/
+		abort(); /* avoid loops - this should never happen*/
 
 	fputs(" ERROR:  ", stderr);
 	vfprintf(stderr, str, VA_ARGS);
 	fflush(stderr);
 #ifdef UNIX
-	abort();	/* generate core dump */
+	abort(); /* generate core dump */
 #endif
 	VA_END();
-	exit(EXIT_FAILURE);		/* redundant */
+	exit(EXIT_FAILURE); /* redundant */
 }
 
 #ifdef ALLOCA_HACK
@@ -32,8 +32,7 @@ void panic(char *str, ...) {
  * have it then just use malloc() instead.  This may not work on some
  * systems, but they should either use yacc or get a real alloca routine.
  */
-long *alloca(cnt)
-unsigned cnt;
+long *alloca(cnt) unsigned cnt;
 {
 	return cnt ? alloc(cnt) : NULL;
 }

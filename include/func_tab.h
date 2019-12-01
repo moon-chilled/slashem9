@@ -8,7 +8,7 @@
 struct ext_func_tab {
 	const char *ef_txt, *ef_desc;
 	int (*ef_funct)(void);
-	boolean	can_if_buried;
+	boolean can_if_buried;
 	boolean autocomplete;
 
 	/* for interrupted rpeteats; e.g.,
@@ -21,15 +21,15 @@ struct ext_func_tab {
 /* Tells what to do on a command key press: either an extended command or
  * mapped to another set of characters (macro) */
 struct key_tab {
-	struct ext_func_tab * bind_cmd;
-	char * map_list;
+	struct ext_func_tab *bind_cmd;
+	char *map_list;
 };
 
 // Linked list of bindings; see "crappy hack" in cmd.c
 struct binding_list_tab {
-	char key;       // ascii code for key
-	char *extcmd;   // extended command key is going to be rebound to
-	struct binding_list_tab * next;
+	char key;      // ascii code for key
+	char *extcmd;  // extended command key is going to be rebound to
+	struct binding_list_tab *next;
 };
 
 extern struct ext_func_tab extcmdlist[];
@@ -37,7 +37,7 @@ extern struct ext_func_tab extcmdlist[];
 /*WAC for the menus */
 struct menu_tab {
 	char m_char;
-	boolean	can_if_buried;
+	boolean can_if_buried;
 	int (*m_funct)(void);
 	const char *m_item;
 	const char *m_text;

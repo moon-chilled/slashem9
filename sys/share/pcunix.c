@@ -7,9 +7,9 @@
 #include "hack.h"
 #include "wintty.h"
 
-#include	<sys/stat.h>
+#include <sys/stat.h>
 #ifdef WIN32
-#include	<errno.h>
+#include <errno.h>
 #endif
 
 #ifdef WIN32
@@ -22,9 +22,9 @@ extern void clear_screen(void);
 static struct stat buf;
 #endif
 
-# ifdef WANT_GETHDATE
+#ifdef WANT_GETHDATE
 static struct stat hbuf;
-# endif
+#endif
 
 #ifdef PC_LOCKING
 static int eraseoldlocks(void);
@@ -32,7 +32,7 @@ static int eraseoldlocks(void);
 
 #if 0
 int uptodate(int fd) {
-# ifdef WANT_GETHDATE
+#ifdef WANT_GETHDATE
 	if(fstat(fd, &buf)) {
 		pline("Cannot get status of saved level? ");
 		return 0;
@@ -41,8 +41,8 @@ int uptodate(int fd) {
 		pline("Saved level is out of date. ");
 		return 0;
 	}
-# else
-# endif /* WANT_GETHDATE */
+#else
+#endif /* WANT_GETHDATE */
 	return 1;
 }
 #endif
@@ -55,15 +55,15 @@ static int eraseoldlocks(void) {
 	 * before starting everything (including the dungeon initialization
 	 * that sets astral_level, needed for maxledgerno()) up
 	 */
-	for(i = 1; i <= MAXDUNGEON*MAXLEVEL + 1; i++) {
+	for (i = 1; i <= MAXDUNGEON * MAXLEVEL + 1; i++) {
 		/* try to remove all */
 		set_levelfile_name(lock, i);
 		unlink(lock);
 	}
 	set_levelfile_name(lock, 0);
 	if (unlink(lock))
-		return 0;				/* cannot remove it */
-	return 1;					/* success! */
+		return 0; /* cannot remove it */
+	return 1;	  /* success! */
 }
 
 void getlock(void) {
@@ -79,8 +79,8 @@ void getlock(void) {
 	/* regularize(lock); */ /* already done in pcmain */
 	sprintf(tbuf, lockj);
 	set_levelfile_name(lock, 0);
-	rf((fd = open(lock,0)) == -1) {
-		if(errno == ENOENT) goto gotlock;    /* no such file */
+	rf((fd = open(lock, 0)) == -1) {
+		if (errno == ENOENT) goto gotlock; /* no such file */
 		chdirx(orgdir, 0);
 		perror(lock);
 		unlock_file(HLOCK);
@@ -89,18 +89,18 @@ void getlock(void) {
 
 	close(fd);
 
-	if(iflags.window_inited) {
+	if (iflags.window_inited) {
 		pline("There is already a game in progress under your name.");
-		pline("You may be able to use \"recover %s\" to get it back.\n",tbuf);
+		pline("You may be able to use \"recover %s\" to get it back.\n", tbuf);
 		c = yn("Do you want to destroy the old game?");
 	} else {
 		c = 'n';
 		ct = 0;
 		msmsg("\nThere is already a game in progress under your name.\n");
 		msmsg("If this is unexpected, you may be able to use \n");
-		msmsg("\"recover %s\" to get it back.",tbuf);
+		msmsg("\"recover %s\" to get it back.", tbuf);
 		msmsg("\nDo you want to destroy the old game? [yn] ");
-		while ((ci=nhgetch()) != '\n') {
+		while ((ci = nhgetch()) != '\n') {
 			if (ct > 0) {
 				msmsg("\b \b");
 				ct = 0;
@@ -109,48 +109,47 @@ void getlock(void) {
 			if (ci == 'y' || ci == 'n' || ci == 'Y' || ci == 'N') {
 				ct = 1;
 				c = ci;
-				msmsg("%c",c);
+				msmsg("%c", c);
 			}
 		}
 	}
-	if(c == 'y' || c == 'Y')
-		if(eraseoldlocks()) {
-# if defined(WIN32CON)
-			clear_screen();		/* display gets fouled up otherwise */
-# endif
+	if (c == 'y' || c == 'Y')
+		if (eraseoldlocks()) {
+#if defined(WIN32CON)
+			clear_screen(); /* display gets fouled up otherwise */
+#endif
 			goto gotlock;
 		} else {
 			unlock_file(HLOCK);
 			chdirx(orgdir, 0);
 			error("Couldn't destroy old game.");
 		}
-		else {
-			unlock_file(HLOCK);
-			chdirx(orgdir, 0);
-			error("%s", "");
-		}
+	else {
+		unlock_file(HLOCK);
+		chdirx(orgdir, 0);
+		error("%s", "");
+	}
 
 gotlock:
 	fd = creat(lock, FCMASK);
 	unlock_file(HLOCK);
-	if(fd == -1) {
+	if (fd == -1) {
 		chdirx(orgdir, 0);
 		error("cannot creat lock file (%s.)", lock);
 	} else {
-		if(write(fd, (char *) &hackpid, sizeof(hackpid))
-				!= sizeof(hackpid)){
+		if (write(fd, (char *)&hackpid, sizeof(hackpid)) != sizeof(hackpid)) {
 			chdirx(orgdir, 0);
 			error("cannot write lock (%s)", lock);
 		}
-		if(close(fd) == -1) {
+		if (close(fd) == -1) {
 			chdirx(orgdir, 0);
 			error("cannot close lock (%s)", lock);
 		}
 	}
 }
-# endif /* PC_LOCKING */
+#endif /* PC_LOCKING */
 
-# ifndef WIN32
+#ifndef WIN32
 /*
  * normalize file name - we don't like .'s, /'s, spaces, and
  * lots of other things
@@ -162,10 +161,11 @@ void regularize(char *s) {
 		if (*lp <= ' ' || *lp == '"' || (*lp >= '*' && *lp <= ',') ||
 		    *lp == '.' || *lp == '/' || (*lp >= ':' && *lp <= '?') ||
 		    *lp == '|' || *lp >= 127 || (*lp >= '[' && *lp <= ']'))
-                        *lp = '_';
+			*lp = '_';
 }
-# endif /* WIN32 */
+#endif /* WIN32 */
 
 #ifdef __EMX__
-void seteuid(int i) {}
+void seteuid(int i) {
+}
 #endif

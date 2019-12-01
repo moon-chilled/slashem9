@@ -4,97 +4,99 @@
 
 #include "hack.h"
 
-static void m_lose_armor(struct monst *,struct obj *);
-static void m_dowear_type(struct monst *,long, boolean, boolean);
+static void m_lose_armor(struct monst *, struct obj *);
+static void m_dowear_type(struct monst *, long, boolean, boolean);
 static int extra_pref(struct monst *, struct obj *);
 
 const struct worn {
 	long w_mask;
 	struct obj **w_obj;
 } worn[] = {
-	{ W_ARM, &uarm },
-	{ W_ARMC, &uarmc },
-	{ W_ARMH, &uarmh },
-	{ W_ARMS, &uarms },
-	{ W_ARMG, &uarmg },
-	{ W_ARMF, &uarmf },
-	{ W_ARMU, &uarmu },
-	{ W_RINGL, &uleft },
-	{ W_RINGR, &uright },
-	{ W_WEP, &uwep },
-	{ W_SWAPWEP, &uswapwep },
-	{ W_QUIVER, &uquiver },
-	{ W_AMUL, &uamul },
-	{ W_TOOL, &ublindf },
-	{ W_BALL, &uball },
-	{ W_CHAIN, &uchain },
-	{ W_SADDLE, &usaddle },
-	{ 0, 0 }
-};
+	{W_ARM, &uarm},
+	{W_ARMC, &uarmc},
+	{W_ARMH, &uarmh},
+	{W_ARMS, &uarms},
+	{W_ARMG, &uarmg},
+	{W_ARMF, &uarmf},
+	{W_ARMU, &uarmu},
+	{W_RINGL, &uleft},
+	{W_RINGR, &uright},
+	{W_WEP, &uwep},
+	{W_SWAPWEP, &uswapwep},
+	{W_QUIVER, &uquiver},
+	{W_AMUL, &uamul},
+	{W_TOOL, &ublindf},
+	{W_BALL, &uball},
+	{W_CHAIN, &uchain},
+	{W_SADDLE, &usaddle},
+	{0, 0}};
 
 /* this only allows for one blocking property per item */
 /* KMH -- Added Hobbits & stealth */
 /* This only allows for one blocking item per property */
-#define w_blocks(o,m) \
-		((o->otyp == MUMMY_WRAPPING && ((m) & W_ARMC)) ? INVIS : \
-		 (o->otyp == CORNUTHAUM && ((m) & W_ARMH) && \
-			!Role_if(PM_WIZARD)) ? CLAIRVOYANT : \
-		 (is_boots(o) && o->otyp != ELVEN_BOOTS && ((m) & W_ARMF) && \
-		 	Role_if(PM_HOBBIT)) ? STEALTH : 0)
+#define w_blocks(o, m)                                                                                           \
+	((o->otyp == MUMMY_WRAPPING && ((m)&W_ARMC)) ? INVIS :                                                   \
+						       (o->otyp == CORNUTHAUM && ((m)&W_ARMH) &&                 \
+							!Role_if(PM_WIZARD)) ?                                   \
+						       CLAIRVOYANT :                                             \
+						       (is_boots(o) && o->otyp != ELVEN_BOOTS && ((m)&W_ARMF) && \
+							Role_if(PM_HOBBIT)) ?                                    \
+						       STEALTH :                                                 \
+						       0)
 /* note: monsters don't have clairvoyance, so your role
    has no significant effect on their use of w_blocks() */
 
 /* KMH, intrinsic patch.
  * Updated to use the extrinsic and blocked fields.
  */
-void
-setworn (struct obj *obj, long mask) {
+void setworn(struct obj *obj, long mask) {
 	const struct worn *wp;
 	struct obj *oobj;
 	int p;
 
-	if ((mask & (W_ARM|I_SPECIAL)) == (W_ARM|I_SPECIAL)) {
+	if ((mask & (W_ARM | I_SPECIAL)) == (W_ARM | I_SPECIAL)) {
 		/* restoring saved game; no properties are conferred via skin */
 		uskin = obj;
 		/* assert( !uarm ); */
 	} else {
-		for(wp = worn; wp->w_mask; wp++) if(wp->w_mask & mask) {
+		for (wp = worn; wp->w_mask; wp++)
+			if (wp->w_mask & mask) {
 				oobj = *(wp->w_obj);
-				if(oobj && !(oobj->owornmask & wp->w_mask))
+				if (oobj && !(oobj->owornmask & wp->w_mask))
 					impossible("Setworn: mask = %ld.", wp->w_mask);
-				if(oobj) {
-					if (u.twoweap && (oobj->owornmask & (W_WEP|W_SWAPWEP))) {
+				if (oobj) {
+					if (u.twoweap && (oobj->owornmask & (W_WEP | W_SWAPWEP))) {
 						if (uswapwep)
 							unwield(uswapwep, false);
 						u.twoweap = 0;
 					}
 					oobj->owornmask &= ~wp->w_mask;
-					if (wp->w_mask & ~(W_SWAPWEP|W_QUIVER)) {
+					if (wp->w_mask & ~(W_SWAPWEP | W_QUIVER)) {
 						/* leave as "x = x <op> y", here and below, for broken
 						 * compilers */
 						p = objects[oobj->otyp].oc_oprop;
 						u.uprops[p].extrinsic =
-						        u.uprops[p].extrinsic & ~wp->w_mask;
-						if ((p = w_blocks(oobj,mask)) != 0)
+							u.uprops[p].extrinsic & ~wp->w_mask;
+						if ((p = w_blocks(oobj, mask)) != 0)
 							u.uprops[p].blocked &= ~wp->w_mask;
 						if (oobj->oartifact)
 							set_artifact_intrinsic(oobj, false, mask);
 					}
 				}
 				*(wp->w_obj) = obj;
-				if(obj) {
+				if (obj) {
 					obj->owornmask |= wp->w_mask;
 					/* Prevent getting/blocking intrinsics from wielding
 					 * potions, through the quiver, etc.
 					 * Allow weapon-tools, too.
 					 * wp_mask should be same as mask at this point.
 					 */
-					if (wp->w_mask & ~(W_SWAPWEP|W_QUIVER)) {
+					if (wp->w_mask & ~(W_SWAPWEP | W_QUIVER)) {
 						if (obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
-						                mask != W_WEP) {
+						    mask != W_WEP) {
 							p = objects[obj->otyp].oc_oprop;
 							u.uprops[p].extrinsic =
-							        u.uprops[p].extrinsic | wp->w_mask;
+								u.uprops[p].extrinsic | wp->w_mask;
 							if ((p = w_blocks(obj, mask)) != 0)
 								u.uprops[p].blocked |= wp->w_mask;
 						}
@@ -111,8 +113,7 @@ setworn (struct obj *obj, long mask) {
 /* KMH, intrinsic patch.
  * Updated to use the extrinsic and blocked fields.
  */
-void
-setnotworn (struct obj *obj) {
+void setnotworn(struct obj *obj) {
 	const struct worn *wp;
 	int p;
 
@@ -122,71 +123,72 @@ setnotworn (struct obj *obj) {
 			unwield(uswapwep, false);
 		u.twoweap = 0;
 	}
-	for(wp = worn; wp->w_mask; wp++)
-		if(obj == *(wp->w_obj)) {
+	for (wp = worn; wp->w_mask; wp++)
+		if (obj == *(wp->w_obj)) {
 			*(wp->w_obj) = 0;
 			p = objects[obj->otyp].oc_oprop;
 			u.uprops[p].extrinsic = u.uprops[p].extrinsic & ~wp->w_mask;
 			obj->owornmask &= ~wp->w_mask;
 			if (obj->oartifact)
 				set_artifact_intrinsic(obj, false, wp->w_mask);
-			if ((p = w_blocks(obj,wp->w_mask)) != 0)
+			if ((p = w_blocks(obj, wp->w_mask)) != 0)
 				u.uprops[p].blocked &= ~wp->w_mask;
 		}
 	update_inventory();
 }
 
-void
-mon_set_minvis (struct monst *mon) {
+void mon_set_minvis(struct monst *mon) {
 	mon->perminvis = 1;
 	if (!mon->invis_blkd) {
 		mon->minvis = 1;
-		newsym(mon->mx, mon->my);		/* make it disappear */
-		if (mon->wormno) see_wsegs(mon);	/* and any tail too */
+		newsym(mon->mx, mon->my);	 /* make it disappear */
+		if (mon->wormno) see_wsegs(mon); /* and any tail too */
 	}
 }
 
 /* obj = item to make known if effect can be seen */
-void
-mon_adjust_speed (
-        struct monst *mon,
-        int adjustment,
-        struct obj *obj
-) {
+void mon_adjust_speed(
+	struct monst *mon,
+	int adjustment,
+	struct obj *obj) {
 	struct obj *otmp;
 	boolean give_msg = !in_mklev, petrify = false;
 	uint oldspeed = mon->mspeed;
 
 	switch (adjustment) {
-	case  2:
-		mon->permspeed = MFAST;
-		give_msg = false;	/* special case monster creation */
-		break;
-	case  1:
-		if (mon->permspeed == MSLOW) mon->permspeed = 0;
-		else mon->permspeed = MFAST;
-		break;
-	case  0:			/* just check for worn speed boots */
-		break;
-	case -1:
-		if (mon->permspeed == MFAST) mon->permspeed = 0;
-		else mon->permspeed = MSLOW;
-		break;
-	case -2:
-		mon->permspeed = MSLOW;
-		give_msg = false;	/* (not currently used) */
-		break;
-	case -3:			/* petrification */
-		/* take away intrinsic speed but don't reduce normal speed */
-		if (mon->permspeed == MFAST) mon->permspeed = 0;
-		petrify = true;
-		break;
+		case 2:
+			mon->permspeed = MFAST;
+			give_msg = false; /* special case monster creation */
+			break;
+		case 1:
+			if (mon->permspeed == MSLOW)
+				mon->permspeed = 0;
+			else
+				mon->permspeed = MFAST;
+			break;
+		case 0: /* just check for worn speed boots */
+			break;
+		case -1:
+			if (mon->permspeed == MFAST)
+				mon->permspeed = 0;
+			else
+				mon->permspeed = MSLOW;
+			break;
+		case -2:
+			mon->permspeed = MSLOW;
+			give_msg = false; /* (not currently used) */
+			break;
+		case -3: /* petrification */
+			/* take away intrinsic speed but don't reduce normal speed */
+			if (mon->permspeed == MFAST) mon->permspeed = 0;
+			petrify = true;
+			break;
 	}
 
 	for (otmp = mon->minvent; otmp; otmp = otmp->nobj)
 		if (otmp->owornmask && objects[otmp->otyp].oc_oprop == FAST)
 			break;
-	if (otmp)		/* speed boots */
+	if (otmp) /* speed boots */
 		mon->mspeed = MFAST;
 	else
 		mon->mspeed = mon->permspeed;
@@ -194,7 +196,8 @@ mon_adjust_speed (
 	if (give_msg && (mon->mspeed != oldspeed || petrify) && canseemon(mon)) {
 		/* fast to slow (skipping intermediate state) or vice versa */
 		const char *howmuch = (mon->mspeed + oldspeed == MFAST + MSLOW) ?
-		                      "much " : "";
+					      "much " :
+					      "";
 
 		if (petrify) {
 			/* mimic the player's petrification countdown; "slowing down"
@@ -208,7 +211,7 @@ mon_adjust_speed (
 		/* might discover an object if we see the speed change happen, but
 		   avoid making possibly forgotten book known when casting its spell */
 		if (obj != 0 && obj->dknown &&
-		                objects[obj->otyp].oc_class != SPBOOK_CLASS)
+		    objects[obj->otyp].oc_class != SPBOOK_CLASS)
 			makeknown(obj->otyp);
 	}
 }
@@ -218,93 +221,93 @@ void update_mon_intrinsics(struct monst *mon, struct obj *obj, boolean on, boole
 	int unseen;
 	unsigned long mask;
 	struct obj *otmp;
-	int which = (int) objects[obj->otyp].oc_oprop;
+	int which = (int)objects[obj->otyp].oc_oprop;
 
 	unseen = !canseemon(mon);
 	if (!which) goto maybe_blocks;
 
 	if (on) {
 		switch (which) {
-		case INVIS:
-			mon->minvis = !mon->invis_blkd;
-			break;
-		case FAST: {
-			boolean save_in_mklev = in_mklev;
-			if (silently) in_mklev = true;
-			mon_adjust_speed(mon, 0, obj);
-			in_mklev = save_in_mklev;
-			break;
-		}
-		/* properties handled elsewhere */
-		case ANTIMAGIC:
-		case REFLECTING:
-			break;
-		/* properties which have no effect for monsters */
-		case CLAIRVOYANT:
-		case STEALTH:
-		case TELEPAT:
-			break;
-		/* properties which should have an effect but aren't implemented */
-		case LEVITATION:
-		case WWALKING:
-			break;
-		/* properties which maybe should have an effect but don't */
-		case DISPLACED:
-		case FUMBLING:
-		case JUMPING:
-		case PROTECTION:
-			break;
-		case DRAIN_RES:
-			mon->mintrinsics |= MR_DRAIN;
-			break;
-		default:
-			if (which <= 8) {	/* 1 thru 8 correspond to MR_xxx mask values */
-				/* FIRE,COLD,SLEEP,DISINT,SHOCK,POISON,ACID,STONE */
-				mask = (uchar) (1 << (which - 1));
-				mon->mintrinsics |= (unsigned short) mask;
+			case INVIS:
+				mon->minvis = !mon->invis_blkd;
+				break;
+			case FAST: {
+				boolean save_in_mklev = in_mklev;
+				if (silently) in_mklev = true;
+				mon_adjust_speed(mon, 0, obj);
+				in_mklev = save_in_mklev;
+				break;
 			}
-			break;
+			/* properties handled elsewhere */
+			case ANTIMAGIC:
+			case REFLECTING:
+				break;
+			/* properties which have no effect for monsters */
+			case CLAIRVOYANT:
+			case STEALTH:
+			case TELEPAT:
+				break;
+			/* properties which should have an effect but aren't implemented */
+			case LEVITATION:
+			case WWALKING:
+				break;
+			/* properties which maybe should have an effect but don't */
+			case DISPLACED:
+			case FUMBLING:
+			case JUMPING:
+			case PROTECTION:
+				break;
+			case DRAIN_RES:
+				mon->mintrinsics |= MR_DRAIN;
+				break;
+			default:
+				if (which <= 8) { /* 1 thru 8 correspond to MR_xxx mask values */
+					/* FIRE,COLD,SLEEP,DISINT,SHOCK,POISON,ACID,STONE */
+					mask = (uchar)(1 << (which - 1));
+					mon->mintrinsics |= (unsigned short)mask;
+				}
+				break;
 		}
-	} else {	    /* off */
+	} else { /* off */
 		switch (which) {
-		case INVIS:
-			mon->minvis = mon->perminvis;
-			break;
-		case FAST: {
-			boolean save_in_mklev = in_mklev;
-			if (silently) in_mklev = true;
-			mon_adjust_speed(mon, 0, obj);
-			in_mklev = save_in_mklev;
-			break;
-		}
-		case DRAIN_RES:
-			mask = MR_DRAIN;
-			goto maybe_loose;
-		case FIRE_RES:
-		case COLD_RES:
-		case SLEEP_RES:
-		case DISINT_RES:
-		case SHOCK_RES:
-		case POISON_RES:
-		case ACID_RES:
-		case STONE_RES:
-			mask = (uchar) (1 << (which - 1));
-maybe_loose:
-			/* If the monster doesn't have this resistance intrinsically,
+			case INVIS:
+				mon->minvis = mon->perminvis;
+				break;
+			case FAST: {
+				boolean save_in_mklev = in_mklev;
+				if (silently) in_mklev = true;
+				mon_adjust_speed(mon, 0, obj);
+				in_mklev = save_in_mklev;
+				break;
+			}
+			case DRAIN_RES:
+				mask = MR_DRAIN;
+				goto maybe_loose;
+			case FIRE_RES:
+			case COLD_RES:
+			case SLEEP_RES:
+			case DISINT_RES:
+			case SHOCK_RES:
+			case POISON_RES:
+			case ACID_RES:
+			case STONE_RES:
+				mask = (uchar)(1 << (which - 1));
+			maybe_loose:
+				/* If the monster doesn't have this resistance intrinsically,
 			   check whether any other worn item confers it.  Note that
 			   we don't currently check for anything conferred via simply
 			   carrying an object. */
-			if (!(mon->data->mresists & mask)) {
-				for (otmp = mon->minvent; otmp; otmp = otmp->nobj)
-					if (otmp->owornmask &&
-					                (int) objects[otmp->otyp].oc_oprop == which)
-						break;
-				if (!otmp)
-					mon->mintrinsics &= ~mask;
-			}
-			break;
-		default:
-			break;
+				if (!(mon->data->mresists & mask)) {
+					for (otmp = mon->minvent; otmp; otmp = otmp->nobj)
+						if (otmp->owornmask &&
+						    (int)objects[otmp->otyp].oc_oprop == which)
+							break;
+					if (!otmp)
+						mon->mintrinsics &= ~mask;
+				}
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -312,13 +315,13 @@ maybe_blocks:
 	/* obj->owornmask has been cleared by this point, so we can't use it.
 	   However, since monsters don't wield armor, we don't have to guard
 	   against that and can get away with a blanket worn-mask value. */
-	switch (w_blocks(obj,~0L)) {
-	case INVIS:
-		mon->invis_blkd = on ? 1 : 0;
-		mon->minvis = on ? 0 : mon->perminvis;
-		break;
-	default:
-		break;
+	switch (w_blocks(obj, ~0L)) {
+		case INVIS:
+			mon->invis_blkd = on ? 1 : 0;
+			mon->minvis = on ? 0 : mon->perminvis;
+			break;
+		default:
+			break;
 	}
 
 	if (!on && mon == u.usteed && obj->otyp == SADDLE)
@@ -329,8 +332,7 @@ maybe_blocks:
 		newsym(mon->mx, mon->my);
 }
 
-int
-find_mac (struct monst *mon) {
+int find_mac(struct monst *mon) {
 	struct obj *obj;
 	int base = mon->data->ac;
 	long mwflags = mon->misc_worn_check;
@@ -369,7 +371,7 @@ void m_dowear(struct monst *mon, boolean creation) {
 	/* give mummies a chance to wear their wrappings
 	 * and let skeletons wear their initial armor */
 	if (mindless(mon->data) && (!creation ||
-	                            (mon->data->mlet != S_MUMMY && mon->data != &mons[PM_SKELETON])))
+				    (mon->data->mlet != S_MUMMY && mon->data != &mons[PM_SKELETON])))
 		return;
 
 	m_dowear_type(mon, W_AMUL, creation, false);
@@ -410,39 +412,39 @@ static void m_dowear_type(struct monst *mon, long flag, boolean creation, boolea
 	if (old && flag == W_AMUL) return; /* no such thing as better amulets */
 	best = old;
 
-	for(obj = mon->minvent; obj; obj = obj->nobj) {
-		switch(flag) {
-		case W_AMUL:
-			if (obj->oclass != AMULET_CLASS ||
-			                (obj->otyp != AMULET_OF_LIFE_SAVING &&
-			                 obj->otyp != AMULET_OF_REFLECTION))
-				continue;
-			best = obj;
-			goto outer_break; /* no such thing as better amulets */
-		case W_ARMU:
-			if (!is_shirt(obj)) continue;
-			break;
-		case W_ARMC:
-			if (!is_cloak(obj)) continue;
-			break;
-		case W_ARMH:
-			if (!is_helmet(obj)) continue;
-			/* (flimsy exception matches polyself handling) */
-			if (has_horns(mon->data) && !is_flimsy(obj)) continue;
-			break;
-		case W_ARMS:
-			if (!is_shield(obj)) continue;
-			break;
-		case W_ARMG:
-			if (!is_gloves(obj)) continue;
-			break;
-		case W_ARMF:
-			if (!is_boots(obj)) continue;
-			break;
-		case W_ARM:
-			if (!is_suit(obj)) continue;
-			if (racialexception && (racial_exception(mon, obj) < 1)) continue;
-			break;
+	for (obj = mon->minvent; obj; obj = obj->nobj) {
+		switch (flag) {
+			case W_AMUL:
+				if (obj->oclass != AMULET_CLASS ||
+				    (obj->otyp != AMULET_OF_LIFE_SAVING &&
+				     obj->otyp != AMULET_OF_REFLECTION))
+					continue;
+				best = obj;
+				goto outer_break; /* no such thing as better amulets */
+			case W_ARMU:
+				if (!is_shirt(obj)) continue;
+				break;
+			case W_ARMC:
+				if (!is_cloak(obj)) continue;
+				break;
+			case W_ARMH:
+				if (!is_helmet(obj)) continue;
+				/* (flimsy exception matches polyself handling) */
+				if (has_horns(mon->data) && !is_flimsy(obj)) continue;
+				break;
+			case W_ARMS:
+				if (!is_shield(obj)) continue;
+				break;
+			case W_ARMG:
+				if (!is_gloves(obj)) continue;
+				break;
+			case W_ARMF:
+				if (!is_boots(obj)) continue;
+				break;
+			case W_ARM:
+				if (!is_suit(obj)) continue;
+				if (racialexception && (racial_exception(mon, obj) < 1)) continue;
+				break;
 		}
 		if (obj->owornmask) continue;
 		/* I'd like to define a VISIBLE_ARM_BONUS which doesn't assume the
@@ -451,7 +453,7 @@ static void m_dowear_type(struct monst *mon, long flag, boolean creation, boolea
 		 * it would forget spe and once again think the object is better
 		 * than what it already has.
 		 */
-		if (best && (ARM_BONUS(best) + extra_pref(mon,best) >= ARM_BONUS(obj) + extra_pref(mon,obj)))
+		if (best && (ARM_BONUS(best) + extra_pref(mon, best) >= ARM_BONUS(obj) + extra_pref(mon, obj)))
 			continue;
 		best = obj;
 	}
@@ -478,7 +480,7 @@ outer_break:
 			else
 				buf[0] = '\0';
 			pline("%s%s puts on %s.", Monnam(mon),
-			      buf, distant_name(best,doname));
+			      buf, distant_name(best, doname));
 		} /* can see it */
 		m_delay += objects[best->otyp].oc_delay;
 		mon->mfrozen = m_delay;
@@ -500,10 +502,10 @@ outer_break:
 #undef RACE_EXCEPTION
 
 struct obj *
-which_armor (struct monst *mon, long flag) {
+which_armor(struct monst *mon, long flag) {
 	struct obj *obj;
 
-	for(obj = mon->minvent; obj; obj = obj->nobj)
+	for (obj = mon->minvent; obj; obj = obj->nobj)
 		if (obj->owornmask & flag) return obj;
 	return NULL;
 }
@@ -522,8 +524,7 @@ static void m_lose_armor(struct monst *mon, struct obj *obj) {
 }
 
 /* all objects with their bypass bit set should now be reset to normal */
-void
-clear_bypasses (void) {
+void clear_bypasses(void) {
 	struct obj *otmp, *nobj;
 	struct monst *mtmp;
 
@@ -543,7 +544,7 @@ clear_bypasses (void) {
 				stack_object(otmp);
 				newsym(ox, oy);
 			}
-#endif	/*0*/
+#endif /*0*/
 		}
 	}
 	/* invent and mydogs chains shouldn't matter here */
@@ -561,8 +562,7 @@ clear_bypasses (void) {
 	flags.bypasses = false;
 }
 
-void
-bypass_obj (struct obj *obj) {
+void bypass_obj(struct obj *obj) {
 	obj->bypass = 1;
 	flags.bypasses = true;
 }
@@ -573,14 +573,14 @@ void mon_break_armor(struct monst *mon, boolean polyspot) {
 	boolean vis = cansee(mon->mx, mon->my);
 	boolean handless_or_tiny = (nohands(mdat) || verysmall(mdat));
 	const char *pronoun = mhim(mon),
-	            *ppronoun = mhis(mon);
+		   *ppronoun = mhis(mon);
 
 	if (breakarm(mdat)) {
 		if ((otmp = which_armor(mon, W_ARM)) != 0) {
 			if ((Is_dragon_scales(otmp) &&
-			                mdat == Dragon_scales_to_pm(otmp)) ||
-			                (Is_dragon_mail(otmp) && mdat == Dragon_mail_to_pm(otmp)))
-				;	/* no message here;
+			     mdat == Dragon_scales_to_pm(otmp)) ||
+			    (Is_dragon_mail(otmp) && mdat == Dragon_mail_to_pm(otmp)))
+				; /* no message here;
 			   "the dragon merges with his scaly armor" is odd
 			   and the monster's previous form is already gone */
 			else if (vis)
@@ -668,8 +668,8 @@ void mon_break_armor(struct monst *mon, boolean polyspot) {
 	}
 	if (handless_or_tiny || has_horns(mdat)) {
 		if ((otmp = which_armor(mon, W_ARMH)) != 0 &&
-		                /* flimsy test for horns matches polyself handling */
-		                (handless_or_tiny || !is_flimsy(otmp))) {
+		    /* flimsy test for horns matches polyself handling */
+		    (handless_or_tiny || !is_flimsy(otmp))) {
 			if (vis)
 				pline("%s helmet falls to the %s!",
 				      s_suffix(Monnam(mon)), surface(mon->mx, mon->my));
@@ -685,9 +685,10 @@ void mon_break_armor(struct monst *mon, boolean polyspot) {
 				if (is_whirly(mon->data))
 					pline("%s boots fall away!",
 					      s_suffix(Monnam(mon)));
-				else pline("%s boots %s off %s feet!",
-					           s_suffix(Monnam(mon)),
-					           verysmall(mdat) ? "slide" : "are pushed", ppronoun);
+				else
+					pline("%s boots %s off %s feet!",
+					      s_suffix(Monnam(mon)),
+					      verysmall(mdat) ? "slide" : "are pushed", ppronoun);
 			}
 			if (polyspot) bypass_obj(otmp);
 			m_lose_armor(mon, otmp);
@@ -703,15 +704,15 @@ void mon_break_armor(struct monst *mon, boolean polyspot) {
 		if (mon == u.usteed)
 			goto noride;
 	} else if (mon == u.usteed && !can_ride(mon)) {
-noride:
+	noride:
 		pline("You can no longer ride %s.", mon_nam(mon));
 		if (touch_petrifies(u.usteed->data) &&
-		                !Stone_resistance && rnl(3)) {
+		    !Stone_resistance && rnl(3)) {
 			char buf[BUFSZ];
 
 			pline("You touch %s.", mon_nam(u.usteed));
 			sprintf(buf, "falling off %s",
-			        an(u.usteed->data->mname));
+				an(u.usteed->data->mname));
 			instapetrify(buf);
 		}
 		dismount_steed(DISMOUNT_FELL);
@@ -724,7 +725,7 @@ noride:
 /* currently only does speed boots, but might be expanded if monsters get to
    use more armor abilities */
 static int
-extra_pref (struct monst *mon, struct obj *obj) {
+extra_pref(struct monst *mon, struct obj *obj) {
 	if (obj) {
 		if (obj->otyp == SPEED_BOOTS && mon->permspeed != MFAST)
 			return 20;
@@ -739,8 +740,7 @@ extra_pref (struct monst *mon, struct obj *obj) {
  * 	 1 If the race/object combination is acceptable.
  *	-1 If the race/object combination is unacceptable.
  */
-int
-racial_exception (struct monst *mon, struct obj *obj) {
+int racial_exception(struct monst *mon, struct obj *obj) {
 	const struct permonst *ptr = raceptr(mon);
 
 	/* Acceptable Exceptions: */

@@ -14,7 +14,7 @@
  *		For "UNIX" select BSD, ULTRIX, SYSV, or HPUX in unixconf.h.
  */
 
-#define UNIX		/* delete if no fork(), exec() available */
+#define UNIX /* delete if no fork(), exec() available */
 
 /* #define MINIMAL_TERM */
 /* if a terminal handles highlighting or tabs poorly,
@@ -27,15 +27,15 @@
 /* Hint: if you're not developing code, don't define
    ULTRIX_PROTO. */
 
-#include "config1.h"	/* should auto-detect MAC and WIN32 */
+#include "config1.h" /* should auto-detect MAC and WIN32 */
 
 /* Windowing systems...
  * Define all of those you want supported in your binary.
  * Some combinations make no sense.  See the installation document.
  */
-#define TTY_GRAPHICS		/* good old tty based graphics */
-#define CURSES_GRAPHICS		/* awful curses interface */
-/* #define PROXY_GRAPHICS */	/* Plug-in interfaces */
+#define TTY_GRAPHICS	     /* good old tty based graphics */
+#define CURSES_GRAPHICS	     /* awful curses interface */
+/* #define PROXY_GRAPHICS */ /* Plug-in interfaces */
 
 /*
  * Define the default window system.  This should be one that is compiled
@@ -46,20 +46,20 @@
 
 /* MAC also means MAC windows */
 #ifdef MAC
-# ifndef	AUX
-#  define DEFAULT_WINDOW_SYS "Mac"
-# endif
+#ifndef AUX
+#define DEFAULT_WINDOW_SYS "Mac"
+#endif
 #endif
 
 #if 0 /* Removed in 3.3.0 */
 /* Windows NT supports TTY_GRAPHICS */
 #ifdef WIN32
-#  define DEFAULT_WINDOW_SYS "tty"
+#define DEFAULT_WINDOW_SYS "tty"
 #endif
 #endif
 
 #ifdef PROXY_GRAPHICS
-# define USE_XPM		/* Use XPM format for images */
+#define USE_XPM /* Use XPM format for images */
 /*
  * The proxy interface shouldn't be used as the default window system.
  * This will cause it to always be initialized with undesirable side
@@ -68,13 +68,13 @@
 #endif
 
 #ifdef CURSES_GRAPHICS
-# ifndef DEFAULT_WINDOW_SYS
-#  define DEFAULT_WINDOW_SYS "curses"
-# endif
+#ifndef DEFAULT_WINDOW_SYS
+#define DEFAULT_WINDOW_SYS "curses"
+#endif
 #endif
 
 #ifndef DEFAULT_WINDOW_SYS
-# define DEFAULT_WINDOW_SYS "tty"
+#define DEFAULT_WINDOW_SYS "tty"
 #endif
 
 /*
@@ -86,30 +86,29 @@
  */
 
 #ifndef WIZARD		/* allow for compile-time or Makefile changes */
-# define WIZARD  "wizard" /* the person allowed to use the -D option */
+#define WIZARD "wizard" /* the person allowed to use the -D option */
 #endif
 
 #define XLOGFILE "xlogfile"
-#define NEWS "news"		/* the file containing the latest hack news */
-#define PANICLOG "paniclog"	/* log of panic and impossible events */
-
+#define NEWS	 "news"	    /* the file containing the latest hack news */
+#define PANICLOG "paniclog" /* log of panic and impossible events */
 
 /*
  *	Data librarian.  Defining DLB places most of the support files into
  *	a tar-like file, thus making a neater installation.  See *conf.h
  *	for detailed configuration.
  */
-/* #define DLB */             /* not supported on all platforms */
+/* #define DLB */ /* not supported on all platforms */
 
 /*
  *	Defining INSURANCE slows down level changes, but allows games that
  *	died due to program or system crashes to be resumed from the point
  *	of the last level change, after running a utility program.
  */
-#define INSURANCE	/* allow crashed game recovery */
+#define INSURANCE /* allow crashed game recovery */
 
 #ifndef MAC
-# define CHDIR		/* delete if no chdir() available */
+#define CHDIR /* delete if no chdir() available */
 #endif
 
 #ifdef CHDIR
@@ -117,13 +116,13 @@
  * If you define HACKDIR, then this will be the default playground;
  * otherwise it will be the current directory.
  */
-# ifndef HACKDIR
-#  ifdef __APPLE__
-#    define HACKDIR "nethackdir"      /* nethack directory */
-#  else
-#    define HACKDIR "."
-#  endif
-# endif
+#ifndef HACKDIR
+#ifdef __APPLE__
+#define HACKDIR "nethackdir" /* nethack directory */
+#else
+#define HACKDIR "."
+#endif
+#endif
 
 /*
  * Some system administrators are stupid enough to make Hack suid root
@@ -132,7 +131,7 @@
  * since the user might create files in a directory of his choice.
  * Of course SECURE is meaningful only if HACKDIR is defined.
  */
-/* #define SECURE */	/* do setuid(getuid()) after chdir() */
+/* #define SECURE */ /* do setuid(getuid()) after chdir() */
 
 /*
  * If it is desirable to limit the number of people that can play Hack
@@ -140,8 +139,6 @@
  * #define MAX_NR_OF_PLAYERS 6
  */
 #endif /* CHDIR */
-
-
 
 /*
  * Section 3:	Definitions that may vary with system type.
@@ -152,7 +149,7 @@
 /*
  * type schar: small signed integers (8 bits suffice)
  */
-typedef signed char	schar;
+typedef signed char schar;
 
 /*
  * type uchar: small unsigned integers (8 bits suffice - but 7 bits do not)
@@ -164,10 +161,10 @@ typedef signed char	schar;
  *
  *	typedef unsigned short int uchar;
  */
-typedef unsigned char	uchar;
+typedef unsigned char uchar;
 typedef long glyph_t;
 
-#define REALTIME_ON_BOTL        /* Show elapsed time on bottom line.  Note:
+#define REALTIME_ON_BOTL /* Show elapsed time on bottom line.  Note:
                                  * this breaks savefile compatibility. */
 
 /*
@@ -177,7 +174,7 @@ typedef long glyph_t;
  * allocate a separate character for each bitfield.  (The bitfields used never
  * have more than 7 bits, and most are only 1 bit.)
  */
-#define BITFIELDS	/* Good bitfield handling */
+#define BITFIELDS /* Good bitfield handling */
 
 /* #define STRNCMPI */ /* compiler/library has the strncmpi function */
 
@@ -193,16 +190,15 @@ typedef long glyph_t;
 #define LIGHT_SRC_SPELL /* WAC Light sourced spells (wac@intergate.bc.ca)*/
 
 /* Roles */
-/* #define ZOUTHERN */	/* KMH -- Zoutherner class and its animals */
+/* #define ZOUTHERN */ /* KMH -- Zoutherner class and its animals */
 
 /* I/O */
-#define CLIPPING	/* allow smaller screens -- ERS */
+#define CLIPPING /* allow smaller screens -- ERS */
 
 /* difficulty */
-/* #define NO_BONES */	/*Disables loading and saving bones levels*/
+/* #define NO_BONES */ /*Disables loading and saving bones levels*/
 
 /* The following are best left disabled until their bugs are completely fixed */
-
 
 /* User_sounds are sounds matches with messages.  The messages are defined
  * in the player's .nethackrc using lines of the form:
@@ -218,13 +214,12 @@ typedef long glyph_t;
  *
  * SOUNDDIR=<directory>
  */
-/* #define USER_SOUNDS */   /* Allow user-defined regex mappings from messages to sounds */
+/* #define USER_SOUNDS */ /* Allow user-defined regex mappings from messages to sounds */
 /* Only supported on Qt with NAS - Network Audio System */
 
+#define DOAGAIN '\001' /* ^A, the "redo" key used in cmd.c and getline.c */
 
-#define DOAGAIN '\001'	/* ^A, the "redo" key used in cmd.c and getline.c */
-
-/* #define KEEP_SAVE */       /* Keep savefiles after Restore (wac@intergate.bc.ca)*/
+/* #define KEEP_SAVE */ /* Keep savefiles after Restore (wac@intergate.bc.ca)*/
 /* #define CHARON */	/* Charon's boat, enables Cerebus - not implemented */
 #define DUNGEON_GROWTH
 
@@ -238,11 +233,11 @@ typedef long glyph_t;
  * bugs left here.
  */
 
-#define DUMPLOG_FILE "/tmp/%n-%d.txt"
+#define DUMPLOG_FILE	  "/tmp/%n-%d.txt"
 #define DUMPLOG_MSG_COUNT 50
 
 /* End of Section 5 */
 
-#include "global.h"	/* Define everything else according to choices above */
+#include "global.h" /* Define everything else according to choices above */
 
 #endif /* CONFIG_H */

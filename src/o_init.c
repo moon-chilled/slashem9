@@ -3,10 +3,10 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "lev.h"	/* save & restore info */
+#include "lev.h" /* save & restore info */
 
-static void setgemprobs(d_level*);
-static void shuffle(int,int,boolean);
+static void setgemprobs(d_level *);
+static void shuffle(int, int, boolean);
 static void shuffle_all(void);
 static boolean interesting_to_discover(int);
 
@@ -14,7 +14,7 @@ static short disco[NUM_OBJECTS] = DUMMY;
 
 #ifdef USE_TILES
 static void shuffle_tiles(void);
-extern short glyph2tile[];	/* from tile.c */
+extern short glyph2tile[]; /* from tile.c */
 
 /* Shuffle tile assignments to match descriptions, so a red potion isn't
  * displayed with a blue tile and so on.
@@ -32,16 +32,16 @@ shuffle_tiles() {
 
 	for (i = 0; i < NUM_OBJECTS; i++)
 		tmp_tilemap[i] =
-		        glyph2tile[objects[i].oc_descr_idx + GLYPH_OBJ_OFF];
+			glyph2tile[objects[i].oc_descr_idx + GLYPH_OBJ_OFF];
 
 	for (i = 0; i < NUM_OBJECTS; i++)
 		glyph2tile[i + GLYPH_OBJ_OFF] = tmp_tilemap[i];
 }
-#endif	/* USE_TILES */
+#endif /* USE_TILES */
 
 #ifdef PROXY_GRAPHICS
 static void shuffle_proxy_glyphs(void);
-extern short glyph2proxy[];	/* from glyphmap.c */
+extern short glyph2proxy[]; /* from glyphmap.c */
 
 /* Shuffle proxy glyph assignments for the same reason as tiles
  * (internal glyphs are based on object numbers, proxy glyphs
@@ -54,38 +54,37 @@ shuffle_proxy_glyphs() {
 
 	for (i = 0; i < NUM_OBJECTS; i++)
 		tmp_glyphmap[i] =
-		        glyph2proxy[objects[i].oc_descr_idx + GLYPH_OBJ_OFF];
+			glyph2proxy[objects[i].oc_descr_idx + GLYPH_OBJ_OFF];
 
 	for (i = 0; i < NUM_OBJECTS; i++)
 		glyph2proxy[i + GLYPH_OBJ_OFF] = tmp_glyphmap[i];
 }
-#endif	/* USE_TILES */
+#endif /* USE_TILES */
 
 static void
-setgemprobs(dlev)
-d_level *dlev;
+	setgemprobs(dlev)
+		d_level *dlev;
 {
 	int j, first, lev;
 
 	if (dlev)
-		lev = (ledger_no(dlev) > maxledgerno())
-		      ? maxledgerno() : ledger_no(dlev);
+		lev = (ledger_no(dlev) > maxledgerno()) ? maxledgerno() : ledger_no(dlev);
 	else
 		lev = 0;
 	first = bases[GEM_CLASS];
 
-	for(j = 0; j < 9-lev/3; j++)
-		objects[first+j].oc_prob = 0;
+	for (j = 0; j < 9 - lev / 3; j++)
+		objects[first + j].oc_prob = 0;
 	first += j;
 	if (first > LAST_GEM || objects[first].oc_class != GEM_CLASS ||
-	                OBJ_NAME(objects[first]) == NULL) {
+	    OBJ_NAME(objects[first]) == NULL) {
 		raw_printf("Not enough gems? - first=%d j=%d LAST_GEM=%d",
-		           first, j, LAST_GEM);
+			   first, j, LAST_GEM);
 		wait_synch();
 	}
 	for (j = first; j <= LAST_GEM; j++)
 		/* KMH, balance patch -- valuable gems now sum to 171 */
-		objects[j].oc_prob = (171+j-first)/(LAST_GEM+1-first);
+		objects[j].oc_prob = (171 + j - first) / (LAST_GEM + 1 - first);
 }
 
 /* shuffle descriptions on objects o_low to o_high */
@@ -94,14 +93,14 @@ static void shuffle(int o_low, int o_high, boolean domaterial) {
 	short sw;
 	int color;
 
-	for (num_to_shuffle = 0, j=o_low; j <= o_high; j++)
+	for (num_to_shuffle = 0, j = o_low; j <= o_high; j++)
 		if (!objects[j].oc_name_known) num_to_shuffle++;
 	if (num_to_shuffle < 2) return;
 
-	for (j=o_low; j <= o_high; j++) {
+	for (j = o_low; j <= o_high; j++) {
 		if (objects[j].oc_name_known) continue;
 		do
-			i = j + rn2(o_high-j+1);
+			i = j + rn2(o_high - j + 1);
 		while (objects[i].oc_name_known);
 		sw = objects[j].oc_descr_idx;
 		objects[j].oc_descr_idx = objects[i].oc_descr_idx;
@@ -122,13 +121,12 @@ static void shuffle(int o_low, int o_high, boolean domaterial) {
 	}
 }
 
-void
-init_objects (void) {
+void init_objects(void) {
 	int i, first, last, sum;
 	char oclass;
-# define COPY_OBJ_DESCR(o_dst,o_src) \
-			o_dst.oc_descr_idx = o_src.oc_descr_idx,\
-			o_dst.oc_color = o_src.oc_color
+#define COPY_OBJ_DESCR(o_dst, o_src)             \
+	o_dst.oc_descr_idx = o_src.oc_descr_idx, \
+	o_dst.oc_color = o_src.oc_color
 
 	/* bug fix to prevent "initialization error" abort on Intel Xenix.
 	 * reported by mikew@semike
@@ -141,44 +139,46 @@ init_objects (void) {
 	/* init base; if probs given check that they add up to 1000,
 	   otherwise compute probs */
 	first = 0;
-	while( first < NUM_OBJECTS ) {
+	while (first < NUM_OBJECTS) {
 		oclass = objects[first].oc_class;
-		last = first+1;
-		while (last < NUM_OBJECTS && objects[last].oc_class == oclass) last++;
+		last = first + 1;
+		while (last < NUM_OBJECTS && objects[last].oc_class == oclass)
+			last++;
 		bases[(int)oclass] = first;
 
 		if (oclass == GEM_CLASS) {
 			setgemprobs(NULL);
 
 			if (rn2(2)) { /* change turquoise from green to blue? */
-				COPY_OBJ_DESCR(objects[TURQUOISE],objects[SAPPHIRE]);
+				COPY_OBJ_DESCR(objects[TURQUOISE], objects[SAPPHIRE]);
 			}
 			if (rn2(2)) { /* change aquamarine from green to blue? */
-				COPY_OBJ_DESCR(objects[AQUAMARINE],objects[SAPPHIRE]);
+				COPY_OBJ_DESCR(objects[AQUAMARINE], objects[SAPPHIRE]);
 			}
 			switch (rn2(4)) { /* change fluorite from violet? */
-			case 0:
-				break;
-			case 1:	/* blue */
-				COPY_OBJ_DESCR(objects[FLUORITE],objects[SAPPHIRE]);
-				break;
-			case 2:	/* white */
-				COPY_OBJ_DESCR(objects[FLUORITE],objects[DIAMOND]);
-				break;
-			case 3:	/* green */
-				COPY_OBJ_DESCR(objects[FLUORITE],objects[EMERALD]);
-				break;
+				case 0:
+					break;
+				case 1: /* blue */
+					COPY_OBJ_DESCR(objects[FLUORITE], objects[SAPPHIRE]);
+					break;
+				case 2: /* white */
+					COPY_OBJ_DESCR(objects[FLUORITE], objects[DIAMOND]);
+					break;
+				case 3: /* green */
+					COPY_OBJ_DESCR(objects[FLUORITE], objects[EMERALD]);
+					break;
 			}
 		}
-check:
+	check:
 		sum = 0;
-		for(i = first; i < last; i++) sum += objects[i].oc_prob;
-		if(sum == 0) {
-			for(i = first; i < last; i++)
-				objects[i].oc_prob = (1000+i-first)/(last-first);
+		for (i = first; i < last; i++)
+			sum += objects[i].oc_prob;
+		if (sum == 0) {
+			for (i = first; i < last; i++)
+				objects[i].oc_prob = (1000 + i - first) / (last - first);
 			goto check;
 		}
-		if(sum != 1000)
+		if (sum != 1000)
 			error("init-prob error for class %d (%d%%)", oclass, sum);
 		first = last;
 	}
@@ -279,8 +279,7 @@ static void shuffle_all(void) {
 }
 
 /* find the object index for snow boots; used [once] by slippery ice code */
-int
-find_skates (void) {
+int find_skates(void) {
 	int i;
 	const char *s;
 
@@ -289,16 +288,14 @@ find_skates (void) {
 			return i;
 
 	impossible("snow boots not found?");
-	return -1;	/* not 0, or caller would try again each move */
+	return -1; /* not 0, or caller would try again each move */
 }
 
-void
-oinit (void) {		/* level dependent initialization */
+void oinit(void) { /* level dependent initialization */
 	setgemprobs(&u.uz);
 }
 
-void
-savenames (int fd, int mode) {
+void savenames(int fd, int mode) {
 	int i;
 	uint len;
 
@@ -314,7 +311,7 @@ savenames (int fd, int mode) {
 	for (i = 0; i < NUM_OBJECTS; i++)
 		if (objects[i].oc_uname) {
 			if (perform_bwrite(mode)) {
-				len = strlen(objects[i].oc_uname)+1;
+				len = strlen(objects[i].oc_uname) + 1;
 				bwrite(fd, (void *)&len, sizeof len);
 				bwrite(fd, (void *)objects[i].oc_uname, len);
 			}
@@ -325,17 +322,16 @@ savenames (int fd, int mode) {
 		}
 }
 
-void
-restnames (int fd) {
+void restnames(int fd) {
 	int i;
 	uint len;
 
-	mread(fd, (void *) bases, sizeof bases);
-	mread(fd, (void *) disco, sizeof disco);
-	mread(fd, (void *) objects, sizeof(struct objclass) * NUM_OBJECTS);
+	mread(fd, (void *)bases, sizeof bases);
+	mread(fd, (void *)disco, sizeof disco);
+	mread(fd, (void *)objects, sizeof(struct objclass) * NUM_OBJECTS);
 	for (i = 0; i < NUM_OBJECTS; i++)
 		if (objects[i].oc_uname) {
-			mread(fd, (void *) &len, sizeof len);
+			mread(fd, (void *)&len, sizeof len);
 			objects[i].oc_uname = alloc(len);
 			mread(fd, (void *)objects[i].oc_uname, len);
 		}
@@ -371,32 +367,33 @@ void discover_object(int oindx, boolean mark_as_known, boolean credit_hero) {
 }
 
 /* if a class name has been cleared, we may need to purge it from disco[] */
-void
-undiscover_object (int oindx) {
+void undiscover_object(int oindx) {
 	if (!objects[oindx].oc_name_known) {
 		int dindx, acls = objects[oindx].oc_class;
 		boolean found = false;
 
 		/* find the object; shift those behind it forward one slot */
 		for (dindx = bases[acls];
-		                dindx < NUM_OBJECTS && disco[dindx] != 0
-		                && objects[dindx].oc_class == acls; dindx++)
+		     dindx < NUM_OBJECTS && disco[dindx] != 0 && objects[dindx].oc_class == acls;
+		     dindx++)
 			if (found)
-				disco[dindx-1] = disco[dindx];
+				disco[dindx - 1] = disco[dindx];
 			else if (disco[dindx] == oindx)
 				found = true;
 
 		/* clear last slot */
-		if (found) disco[dindx-1] = 0;
-		else impossible("named object not in disco");
+		if (found)
+			disco[dindx - 1] = 0;
+		else
+			impossible("named object not in disco");
 		update_inventory();
 	}
 }
 
 static boolean interesting_to_discover(int i) {
 	/* Pre-discovered objects are now printed with a '*' */
-	return((boolean)(objects[i].oc_uname != NULL ||
-	                 (objects[i].oc_name_known && OBJ_DESCR(objects[i]) != NULL)));
+	return ((boolean)(objects[i].oc_uname != NULL ||
+			  (objects[i].oc_name_known && OBJ_DESCR(objects[i]) != NULL)));
 }
 
 /* items that should stand out once they're known */
@@ -407,12 +404,11 @@ static short uniq_objs[] = {
 	BELL_OF_OPENING,
 };
 
-int
-dodiscovered (void) {			/* free after Robert Viduya */
+int dodiscovered(void) { /* free after Robert Viduya */
 	int i, dis;
-	int	ct = 0;
+	int ct = 0;
 	char *s, oclass, prev_class, classes[MAXOCLASSES];
-	char buf[BUFSZ];    /* WAC */
+	char buf[BUFSZ]; /* WAC */
 	winid tmpwin;
 	anything any;
 	menu_item *selected;
@@ -426,9 +422,9 @@ dodiscovered (void) {			/* free after Robert Viduya */
 
 	any.a_void = 0;
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, "Discoveries",
-	         MENU_UNSELECTED);
+		 MENU_UNSELECTED);
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, "",
-	         MENU_UNSELECTED);
+		 MENU_UNSELECTED);
 
 	/* gather "unique objects" into a pseudo-class; note that they'll
 	   also be displayed individually within their regular class */
@@ -436,10 +432,10 @@ dodiscovered (void) {			/* free after Robert Viduya */
 		if (objects[uniq_objs[i]].oc_name_known) {
 			if (!dis++)
 				add_menu(tmpwin, NO_GLYPH, &any, 0, 0, iflags.menu_headings,
-				         "Unique Items", MENU_UNSELECTED);
+					 "Unique Items", MENU_UNSELECTED);
 			sprintf(buf, "  %s", OBJ_NAME(objects[uniq_objs[i]]));
 			add_menu(tmpwin, objnum_to_glyph(uniq_objs[i]), &any,
-			         0, 0, ATR_NONE, buf, MENU_UNSELECTED);
+				 0, 0, ATR_NONE, buf, MENU_UNSELECTED);
 			++ct;
 		}
 	/* display any known artifacts as another pseudo-class */
@@ -455,20 +451,21 @@ dodiscovered (void) {			/* free after Robert Viduya */
 
 	for (s = classes; *s; s++) {
 		oclass = *s;
-		prev_class = oclass + 1;	/* forced different from oclass */
+		prev_class = oclass + 1; /* forced different from oclass */
 		for (i = bases[(int)oclass];
-		                i < NUM_OBJECTS && objects[i].oc_class == oclass; i++) {
+		     i < NUM_OBJECTS && objects[i].oc_class == oclass;
+		     i++) {
 			if ((dis = disco[i]) && interesting_to_discover(dis)) {
 				ct++;
 				if (oclass != prev_class) {
 					add_menu(tmpwin, NO_GLYPH, &any, 0, 0, iflags.menu_headings,
-					         let_to_name(oclass, false), MENU_UNSELECTED);
+						 let_to_name(oclass, false), MENU_UNSELECTED);
 					prev_class = oclass;
 				}
-				sprintf(buf, "%s %s",(objects[dis].oc_pre_discovered ? "*" : " "),
-				        obj_typename(dis));
+				sprintf(buf, "%s %s", (objects[dis].oc_pre_discovered ? "*" : " "),
+					obj_typename(dis));
 				add_menu(tmpwin, objnum_to_glyph(dis), &any, 0, 0,
-				         ATR_NONE, buf, MENU_UNSELECTED);
+					 ATR_NONE, buf, MENU_UNSELECTED);
 			}
 		}
 	}

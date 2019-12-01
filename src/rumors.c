@@ -67,17 +67,15 @@ char *getrumor(int truth, char *rumor_buf, bool exclude_cookie) {
 	return rumor_buf;
 }
 
-void
-outrumor (
-        int truth, /* 1=true, -1=false, 0=either */
-        int mechanism
-) {
+void outrumor(
+	int truth, /* 1=true, -1=false, 0=either */
+	int mechanism) {
 	static const char fortune_msg[] =
-	        "This cookie has a scrap of paper inside.";
+		"This cookie has a scrap of paper inside.";
 	const char *line;
 	char buf[BUFSZ];
 	boolean reading = (mechanism == BY_COOKIE ||
-	                   mechanism == BY_PAPER);
+			   mechanism == BY_PAPER);
 
 	if (reading) {
 		/* deal with various things that prevent reading */
@@ -94,27 +92,26 @@ outrumor (
 	if (!*line)
 		line = "NetHack rumors file closed for renovation.";
 	switch (mechanism) {
-	case BY_ORACLE:
-		/* Oracle delivers the rumor */
-		pline("True to her word, the Oracle %ssays: ",
-		      (!rn2(4) ? "offhandedly " : (!rn2(3) ? "casually " :
-		                                   (rn2(2) ? "nonchalantly " : ""))));
-		verbalize("%s", line);
-		exercise(A_WIS, true);
-		return;
-	case BY_COOKIE:
-		pline(fortune_msg);
-	/* FALLTHRU */
-	case BY_PAPER:
-		pline("It reads:");
-		break;
+		case BY_ORACLE:
+			/* Oracle delivers the rumor */
+			pline("True to her word, the Oracle %ssays: ",
+			      (!rn2(4) ? "offhandedly " : (!rn2(3) ? "casually " : (rn2(2) ? "nonchalantly " : ""))));
+			verbalize("%s", line);
+			exercise(A_WIS, true);
+			return;
+		case BY_COOKIE:
+			pline(fortune_msg);
+		/* FALLTHRU */
+		case BY_PAPER:
+			pline("It reads:");
+			break;
 	}
 	pline("%s", line);
 }
 
 void outoracle(boolean special, boolean delphi) {
-	char	line[COLNO];
-	dlb	*oracles;
+	char line[COLNO];
+	dlb *oracles;
 	char buf[BUFSZ];
 
 	static usize *oracle_offsets;
@@ -127,25 +124,22 @@ void outoracle(boolean special, boolean delphi) {
 	}
 	if (!oracle_offsets) {
 		num_oracles = 1;
-		oracle_offsets = new(usize, 1);
-		oracle_offsets[0] = 0; // First oracle starts at position 0
+		oracle_offsets = new (usize, 1);
+		oracle_offsets[0] = 0;	// First oracle starts at position 0
 		while (dlb_fgets(buf, BUFSZ, oracles)) {
 			if (!strcmp(buf, "-----\n")) {
 				oracle_offsets = realloc(oracle_offsets, sizeof(usize) * ++num_oracles);
-				oracle_offsets[num_oracles-1] = dlb_ftell(oracles);
+				oracle_offsets[num_oracles - 1] = dlb_ftell(oracles);
 			}
 		}
 	}
 
 	winid tmpwin = create_nhwindow(NHW_TEXT);
 	if (delphi)
-		putstr(tmpwin, 0, special ?
-		       "The Oracle scornfully takes all your money and says:" :
-		       "The Oracle meditates for a moment and then intones:");
+		putstr(tmpwin, 0, special ? "The Oracle scornfully takes all your money and says:" : "The Oracle meditates for a moment and then intones:");
 	else
 		putstr(tmpwin, 0, "The message reads:");
 	putstr(tmpwin, 0, "");
-
 
 	// special => print the first (crappy) oracle
 	// Subtract 6 because oracle_offsets records the *start* of an oracle
@@ -154,7 +148,7 @@ void outoracle(boolean special, boolean delphi) {
 
 	dlb_fseek(oracles, start, SEEK_SET);
 
-	while (dlb_fgets(line, COLNO, oracles) && strcmp(line,"-----\n")) {
+	while (dlb_fgets(line, COLNO, oracles) && strcmp(line, "-----\n")) {
 		putstr(tmpwin, 0, line);
 	}
 
@@ -185,33 +179,33 @@ int doconsult(struct monst *oracl) {
 	}
 
 	sprintf(qbuf,
-	        "\"Wilt thou settle for a minor consultation?\" (%d %s)",
-	        minor_cost, currency((long)minor_cost));
+		"\"Wilt thou settle for a minor consultation?\" (%d %s)",
+		minor_cost, currency((long)minor_cost));
 	switch (ynq(qbuf)) {
-	default:
-	case 'q':
-		return 0;
-	case 'y':
-		if (umoney < (long)minor_cost) {
-			pline("You don't even have enough money for that!");
+		default:
+		case 'q':
 			return 0;
-		}
-		u_pay = minor_cost;
-		break;
-	case 'n':
-		/* don't even ask */
-		if (umoney <= minor_cost) return 0;
-		sprintf(qbuf,
-		        "\"Then dost thou desire a major one?\" (%d %s)",
-		        major_cost, currency((long)major_cost));
-		if (yn(qbuf) != 'y') return 0;
-		u_pay = (umoney < (long)major_cost ? (int)umoney : major_cost);
-		break;
+		case 'y':
+			if (umoney < (long)minor_cost) {
+				pline("You don't even have enough money for that!");
+				return 0;
+			}
+			u_pay = minor_cost;
+			break;
+		case 'n':
+			/* don't even ask */
+			if (umoney <= minor_cost) return 0;
+			sprintf(qbuf,
+				"\"Then dost thou desire a major one?\" (%d %s)",
+				major_cost, currency((long)major_cost));
+			if (yn(qbuf) != 'y') return 0;
+			u_pay = (umoney < (long)major_cost ? (int)umoney : major_cost);
+			break;
 	}
 	money2mon(oracl, (long)u_pay);
 
 	flags.botl = 1;
-	add_xpts = 0;	/* first oracle of each type gives experience points */
+	add_xpts = 0; /* first oracle of each type gives experience points */
 	if (u_pay == minor_cost) {
 		outrumor(1, BY_ORACLE);
 		if (!u.uevent.minor_oracle)
@@ -228,7 +222,7 @@ int doconsult(struct monst *oracl) {
 		exercise(A_WIS, !cheapskate);
 	}
 	if (add_xpts) {
-		more_experienced(add_xpts, u_pay/50);
+		more_experienced(add_xpts, u_pay / 50);
 		newexplevel();
 	}
 	return 1;

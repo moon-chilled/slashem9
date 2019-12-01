@@ -6,32 +6,32 @@
 #define SP_LEV_H
 
 /* wall directions */
-#define W_NORTH		1
-#define W_SOUTH		2
-#define W_EAST		4
-#define W_WEST		8
-#define W_ANY		(W_NORTH|W_SOUTH|W_EAST|W_WEST)
+#define W_NORTH 1
+#define W_SOUTH 2
+#define W_EAST	4
+#define W_WEST	8
+#define W_ANY	(W_NORTH | W_SOUTH | W_EAST | W_WEST)
 
 /* MAP limits */
-#define MAP_X_LIM	76
-#define MAP_Y_LIM	21
+#define MAP_X_LIM 76
+#define MAP_Y_LIM 21
 
 /* Per level flags */
-#define NOTELEPORT	1
-#define HARDFLOOR	2
-#define NOMMAP		4
-#define SHORTSIGHTED	8
-#define ARBOREAL	16
-#define SPOOKY		32
-#define LETHE		64		/* All water on level is Lethe-ized */
+#define NOTELEPORT   1
+#define HARDFLOOR    2
+#define NOMMAP	     4
+#define SHORTSIGHTED 8
+#define ARBOREAL     16
+#define SPOOKY	     32
+#define LETHE	     64 /* All water on level is Lethe-ized */
 
 /* special level types */
-#define SP_LEV_ROOMS	1
-#define SP_LEV_MAZE	2
+#define SP_LEV_ROOMS 1
+#define SP_LEV_MAZE  2
 
 /* object flags */
-#define OBJF_LIT	1
-#define OBJF_BURIED	2
+#define OBJF_LIT    1
+#define OBJF_BURIED 2
 
 /*
  * Structures manipulated by the special levels loader & compiler
@@ -39,24 +39,24 @@
 
 typedef union str_or_len {
 	char *str;
-	int   len;
+	int len;
 } Str_or_Len;
 
 typedef struct {
-	boolean	init_present, padding;
-	char	fg, bg;
-	boolean	smoothed, joined;
-	xchar   lit, walled;
+	boolean init_present, padding;
+	char fg, bg;
+	boolean smoothed, joined;
+	xchar lit, walled;
 } lev_init;
 
 typedef struct {
 	xchar x, y, mask;
-	short arti_key;		/* Index (ART_) of key for this door */
+	short arti_key; /* Index (ART_) of key for this door */
 } door;
 
 typedef struct {
 	xchar wall, pos, secret, mask;
-	short arti_key;		/* Index (ART_) of key for this door */
+	short arti_key; /* Index (ART_) of key for this door */
 } room_door;
 
 typedef struct {
@@ -73,17 +73,17 @@ typedef struct {
 
 typedef struct {
 	Str_or_Len name;
-	int   corpsenm;
+	int corpsenm;
 	short id, spe;
 	xchar x, y, chance, class, containment;
 	schar curse_state;
-	long  oflags;		/* OBJF_foo flags */
+	long oflags; /* OBJF_foo flags */
 } object;
 
 typedef struct {
-	xchar		x, y;
-	aligntyp	align;
-	xchar		shrine;
+	xchar x, y;
+	aligntyp align;
+	xchar shrine;
 } altar;
 
 typedef struct {
@@ -126,7 +126,7 @@ typedef struct {
 
 typedef struct {
 	xchar x, y;
-	int   amount;
+	int amount;
 } gold;
 
 typedef struct {
@@ -204,8 +204,8 @@ typedef struct {
 } specialmaze;
 
 typedef struct _room {
-	char  *name;
-	char  *parent;
+	char *name;
+	char *parent;
 	xchar x, y, w, h;
 	xchar xalign, yalign;
 	xchar rtype, chance, rlit, filled;
@@ -263,6 +263,6 @@ typedef struct {
 struct coord {
 	int x, y;
 };
-#endif	/* LEVEL_COMPILER */
+#endif /* LEVEL_COMPILER */
 
 #endif /* SP_LEV_H */

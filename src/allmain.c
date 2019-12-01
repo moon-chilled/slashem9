@@ -14,9 +14,9 @@
 static void do_positionbar(void);
 #endif
 
-#define decrnknow(spell)	spl_book[spell].sp_know--
-#define spellid(spell)		spl_book[spell].sp_id
-#define spellknow(spell)	spl_book[spell].sp_know
+#define decrnknow(spell) spl_book[spell].sp_know--
+#define spellid(spell)	 spl_book[spell].sp_id
+#define spellknow(spell) spl_book[spell].sp_know
 
 void moveloop(void) {
 #ifdef WIN32
@@ -30,7 +30,7 @@ void moveloop(void) {
 	if (flags.moonphase == FULL_MOON) {
 		pline("You are lucky!  Full moon tonight.");
 		change_luck(1);
-	} else if(flags.moonphase == NEW_MOON) {
+	} else if (flags.moonphase == NEW_MOON) {
 		pline("Be careful!  New moon tonight.");
 	}
 	flags.friday13 = friday_13th();
@@ -45,7 +45,6 @@ void moveloop(void) {
 	}
 
 	initrack();
-
 
 	/* Note:  these initializers don't do anything except guarantee that
 	   we're linked properly.
@@ -63,16 +62,16 @@ void moveloop(void) {
 	}
 
 	u.uz0.dlevel = u.uz.dlevel;
-	youmonst.movement = NORMAL_SPEED;	/* give the hero some movement points */
+	youmonst.movement = NORMAL_SPEED; /* give the hero some movement points */
 
-	for(;;) {
+	for (;;) {
 		get_nh_event();
 #ifdef POSITIONBAR
 		do_positionbar();
 #endif
 
 		didmove = flags.move;
-		if(didmove) {
+		if (didmove) {
 			/* actual time passed */
 			youmonst.movement -= NORMAL_SPEED;
 
@@ -83,7 +82,7 @@ void moveloop(void) {
 				do {
 					monscanmove = movemon();
 					if (youmonst.movement > NORMAL_SPEED) {
-						break;        /* it's now your turn */
+						break; /* it's now your turn */
 					}
 				} while (monscanmove);
 				flags.mon_moving = false;
@@ -92,15 +91,15 @@ void moveloop(void) {
 					/* both you and the monsters are out of steam this round */
 					/* set up for a new turn */
 					struct monst *mtmp;
-					mcalcdistress();	/* adjust monsters' trap, blind, etc */
+					mcalcdistress(); /* adjust monsters' trap, blind, etc */
 
 					/* reallocate movement rations to monsters */
 					for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 						mtmp->movement += mcalcmove(mtmp);
 					}
 
-					if(!rn2(u.uevent.udemigod ? 25 :
-					                (depth(&u.uz) > depth(&stronghold_level)) ? 50 : 70)) {
+					if (!rn2(u.uevent.udemigod ? 25 :
+								     (depth(&u.uz) > depth(&stronghold_level)) ? 50 : 70)) {
 						makemon(NULL, 0, 0, NO_MM_FLAGS);
 					}
 
@@ -111,7 +110,7 @@ void moveloop(void) {
 					} else {
 						moveamt = youmonst.data->mmove;
 
-						if (Very_fast) {	/* speed boots or potion */
+						if (Very_fast) { /* speed boots or potion */
 							/* average movement is 1.67 times normal */
 							moveamt += NORMAL_SPEED / 2;
 							if (rn2(3) == 0) {
@@ -141,22 +140,22 @@ void moveloop(void) {
 					}
 
 					switch (wtcap) {
-					case UNENCUMBERED:
-						break;
-					case SLT_ENCUMBER:
-						moveamt -= (moveamt / 4);
-						break;
-					case MOD_ENCUMBER:
-						moveamt -= (moveamt / 2);
-						break;
-					case HVY_ENCUMBER:
-						moveamt -= ((moveamt * 3) / 4);
-						break;
-					case EXT_ENCUMBER:
-						moveamt -= ((moveamt * 7) / 8);
-						break;
-					default:
-						break;
+						case UNENCUMBERED:
+							break;
+						case SLT_ENCUMBER:
+							moveamt -= (moveamt / 4);
+							break;
+						case MOD_ENCUMBER:
+							moveamt -= (moveamt / 2);
+							break;
+						case HVY_ENCUMBER:
+							moveamt -= ((moveamt * 3) / 4);
+							break;
+						case EXT_ENCUMBER:
+							moveamt -= ((moveamt * 7) / 8);
+							break;
+						default:
+							break;
 					}
 
 					youmonst.movement += moveamt;
@@ -175,7 +174,7 @@ void moveloop(void) {
 					if (flags.bypasses) {
 						clear_bypasses();
 					}
-					if(Glib) {
+					if (Glib) {
 						glibr();
 					}
 					nh_timeout();
@@ -189,7 +188,7 @@ void moveloop(void) {
 						u.ublesscnt--;
 					}
 
-					if(flags.time && !flags.run) {
+					if (flags.time && !flags.run) {
 						flags.botl = 1;
 					}
 
@@ -203,7 +202,7 @@ void moveloop(void) {
 					if (u.uinvulnerable) {
 						/* for the moment at least, you're in tiptop shape */
 						wtcap = UNENCUMBERED;
-					} else if (Upolyd && youmonst.data->mlet == S_EEL && !is_pool(u.ux,u.uy) && !Is_waterlevel(&u.uz)) {
+					} else if (Upolyd && youmonst.data->mlet == S_EEL && !is_pool(u.ux, u.uy) && !Is_waterlevel(&u.uz)) {
 						if (u.mh > 1) {
 							u.mh--;
 							flags.botl = 1;
@@ -214,12 +213,12 @@ void moveloop(void) {
 						if (u.mh < 1) {
 							rehumanize();
 						} else if (Regeneration ||
-						                (wtcap < MOD_ENCUMBER && !(moves%20))) {
+							   (wtcap < MOD_ENCUMBER && !(moves % 20))) {
 							flags.botl = 1;
 							u.mh++;
 						}
 					} else if (u.uhp < u.uhpmax &&
-					                (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)) {
+						   (wtcap < MOD_ENCUMBER || !u.umoved || Regeneration)) {
 						/*
 						 * KMH, balance patch -- New regeneration code
 						 * Healthstones have been added, which alter your effective
@@ -231,31 +230,30 @@ void moveloop(void) {
 						int effcon = ACURR(A_CON) + u.uhealbonus;
 						int heal = 1;
 
-
 						if (efflev > 9 && !(moves % 3)) {
 							if (effcon <= 12) {
 								heal = 1;
 							} else {
 								heal = rnd(effcon);
-								if (heal > efflev-9) {
-									heal = efflev-9;
+								if (heal > efflev - 9) {
+									heal = efflev - 9;
 								}
 							}
 							flags.botl = 1;
 							u.uhp += heal;
-							if(u.uhp > u.uhpmax) {
+							if (u.uhp > u.uhpmax) {
 								u.uhp = u.uhpmax;
 							}
 						} else if (Regeneration ||
-						                (efflev <= 9 &&
-						                 !(moves % ((MAXULEV+12) / (u.ulevel+2) + 1)))) {
+							   (efflev <= 9 &&
+							    !(moves % ((MAXULEV + 12) / (u.ulevel + 2) + 1)))) {
 							flags.botl = 1;
 							u.uhp++;
 						}
 					}
 
 					if (!u.uinvulnerable && u.uen > 0 && u.uhp < u.uhpmax &&
-					                tech_inuse(T_CHI_HEALING)) {
+					    tech_inuse(T_CHI_HEALING)) {
 						u.uen--;
 						u.uhp++;
 						flags.botl = 1;
@@ -263,7 +261,7 @@ void moveloop(void) {
 
 					/* moving around while encumbered is hard work */
 					if (wtcap > MOD_ENCUMBER && u.umoved) {
-						if(!(wtcap < EXT_ENCUMBER ? moves%30 : moves%10)) {
+						if (!(wtcap < EXT_ENCUMBER ? moves % 30 : moves % 10)) {
 							if (Upolyd && u.mh > 1) {
 								u.mh--;
 							} else if (!Upolyd && u.uhp > 1) {
@@ -276,15 +274,14 @@ void moveloop(void) {
 						}
 					}
 
-
 					/* KMH -- OK to regenerate if you don't move */
 					if ((u.uen < u.uenmax) && (Energy_regeneration ||
-					                           ((wtcap < MOD_ENCUMBER || !flags.mv) &&
-					                            (!(moves%((MAXULEV + 15 - u.ulevel) *
-					                                      (Role_if(PM_WIZARD) ? 3 : 4) / 6)))))) {
-						u.uen += rn1((int)(ACURR(A_WIS) + ACURR(A_INT)) / 15 + 1,1);
+								   ((wtcap < MOD_ENCUMBER || !flags.mv) &&
+								    (!(moves % ((MAXULEV + 15 - u.ulevel) *
+										(Role_if(PM_WIZARD) ? 3 : 4) / 6)))))) {
+						u.uen += rn1((int)(ACURR(A_WIS) + ACURR(A_INT)) / 15 + 1, 1);
 #ifdef WIZ_PATCH_DEBUG
-						pline("mana was = %d now = %d",temp,u.uen);
+						pline("mana was = %d now = %d", temp, u.uen);
 #endif
 
 						if (u.uen > u.uenmax) {
@@ -293,8 +290,8 @@ void moveloop(void) {
 						flags.botl = 1;
 					}
 
-					if(!u.uinvulnerable) {
-						if(Teleportation && !rn2(85)) {
+					if (!u.uinvulnerable) {
+						if (Teleportation && !rn2(85)) {
 							xchar old_ux = u.ux, old_uy = u.uy;
 							tele();
 							if (u.ux != old_ux || u.uy != old_uy) {
@@ -308,13 +305,13 @@ void moveloop(void) {
 						}
 						/* delayed change may not be valid anymore */
 						if ((change == 1 && !Polymorph) ||
-						                (change == 2 && u.ulycn == NON_PM)) {
+						    (change == 2 && u.ulycn == NON_PM)) {
 							change = 0;
 						}
-						if(Polymorph && !rn2(100)) {
+						if (Polymorph && !rn2(100)) {
 							change = 1;
 						} else if (u.ulycn >= LOW_PM && !Upolyd &&
-						                !rn2(80 - (20 * night()))) {
+							   !rn2(80 - (20 * night()))) {
 							change = 2;
 						}
 						if (change && !Unchanging) {
@@ -332,10 +329,10 @@ void moveloop(void) {
 								change = 0;
 							}
 						}
-					}	/* !u.uinvulnerable */
+					} /* !u.uinvulnerable */
 
-					if(Searching && multi >= 0) {
-						(void) dosearch0(true);
+					if (Searching && multi >= 0) {
+						(void)dosearch0(true);
 					}
 					dosounds();
 					do_storms();
@@ -346,7 +343,7 @@ void moveloop(void) {
 					if (u.uhave.amulet) {
 						amulet();
 					}
-					if (!rn2(40+(int)(ACURR(A_DEX)*3))) {
+					if (!rn2(40 + (int)(ACURR(A_DEX) * 3))) {
 						u_wipe_engr(rnd(3));
 					}
 					if (u.uevent.udemigod && !u.uinvulnerable) {
@@ -372,8 +369,8 @@ void moveloop(void) {
 					}
 
 					/* when immobile, count is in turns */
-					if(multi < 0) {
-						if (++multi == 0) {	/* finished yet? */
+					if (multi < 0) {
+						if (++multi == 0) { /* finished yet? */
 							unmul(NULL);
 							/* if unmul caused a level change, take it now */
 							if (u.utotype) {
@@ -382,12 +379,11 @@ void moveloop(void) {
 						}
 					}
 				}
-			} while (youmonst.movement<NORMAL_SPEED); /* hero can't move loop */
+			} while (youmonst.movement < NORMAL_SPEED); /* hero can't move loop */
 
 			/******************************************/
 			/* once-per-hero-took-time things go here */
 			/******************************************/
-
 
 		} /* actual time passed */
 
@@ -396,9 +392,9 @@ void moveloop(void) {
 		/****************************************/
 
 		find_ac();
-		if(!flags.mv || Blind) {
+		if (!flags.mv || Blind) {
 			/* redo monsters if hallu or wearing a helm of telepathy */
-			if (Hallucination) {	/* update screen randomly */
+			if (Hallucination) { /* update screen randomly */
 				see_monsters();
 				see_objects();
 				see_traps();
@@ -412,27 +408,27 @@ void moveloop(void) {
 			}
 
 			if (vision_full_recalc) {
-				vision_recalc(0);        /* vision! */
+				vision_recalc(0); /* vision! */
 			}
 		}
 
 #ifdef REALTIME_ON_BOTL
-		if(iflags.showrealtime) {
+		if (iflags.showrealtime) {
 			/* Update the bottom line if the number of minutes has
 			 * changed */
-			if(get_realtime() / 60 != realtime_data.last_displayed_time / 60) {
+			if (get_realtime() / 60 != realtime_data.last_displayed_time / 60) {
 				flags.botl = 1;
 			}
 		}
 #endif
 
-		if(flags.botl || flags.botlx) {
+		if (flags.botl || flags.botlx) {
 			bot();
 		}
 
 		flags.move = 1;
 
-		if(multi >= 0 && occupation) {
+		if (multi >= 0 && occupation) {
 #ifdef WIN32
 			abort_lev = 0;
 			if (kbhit()) {
@@ -447,11 +443,11 @@ void moveloop(void) {
 			if ((*occupation)() == 0)
 #endif
 				occupation = 0;
-			if(
+			if (
 #ifdef WIN32
-			        abort_lev ||
+				abort_lev ||
 #endif
-			        monster_nearby()) {
+				monster_nearby()) {
 				stop_occupation();
 				reset_eat();
 			}
@@ -464,22 +460,22 @@ void moveloop(void) {
 		}
 
 		if ((u.uhave.amulet || Clairvoyant) &&
-		                !In_endgame(&u.uz) && !BClairvoyant &&
-		                !(moves % 15) && !rn2(2)) {
+		    !In_endgame(&u.uz) && !BClairvoyant &&
+		    !(moves % 15) && !rn2(2)) {
 			do_vicinity_map();
 		}
 
-		if(u.utrap && u.utraptype == TT_LAVA) {
-			if(!is_lava(u.ux,u.uy)) {
+		if (u.utrap && u.utraptype == TT_LAVA) {
+			if (!is_lava(u.ux, u.uy)) {
 				u.utrap = 0;
 			} else if (!u.uinvulnerable) {
-				u.utrap -= 1<<8;
-				if(u.utrap < 1<<8) {
+				u.utrap -= 1 << 8;
+				if (u.utrap < 1 << 8) {
 					killer_format = KILLED_BY;
 					killer = "molten lava";
 					pline("You sink below the surface and die.");
 					done(DISSOLVED);
-				} else if(didmove && !u.umoved) {
+				} else if (didmove && !u.umoved) {
 					Norep("You sink deeper into the lava.");
 					u.utrap += rnd(4);
 				}
@@ -508,7 +504,7 @@ void moveloop(void) {
 				continue;
 			}
 			if (flags.mv) {
-				if(multi < COLNO && !--multi) {
+				if (multi < COLNO && !--multi) {
 					flags.travel = iflags.travel1 = flags.mv = false;
 					flags.run = 0;
 				}
@@ -523,8 +519,8 @@ void moveloop(void) {
 #endif
 			rhack(NULL);
 		}
-		if (u.utotype) {	/* change dungeon level */
-			deferred_goto();        /* after rhack() */
+		if (u.utotype) {	 /* change dungeon level */
+			deferred_goto(); /* after rhack() */
 		}
 		/* !flags.move here: multiple movement command stopped */
 		else if (flags.time && (!flags.move || !flags.mv)) {
@@ -532,11 +528,11 @@ void moveloop(void) {
 		}
 
 		if (vision_full_recalc) {
-			vision_recalc(0);        /* vision! */
+			vision_recalc(0); /* vision! */
 		}
 		/* when running in non-tport mode, this gets done through domove() */
 		if ((!flags.run || iflags.runmode == RUN_TPORT) &&
-		                (multi && (!flags.travel ? !(multi % 7) : !(moves % 7L)))) {
+		    (multi && (!flags.travel ? !(multi % 7) : !(moves % 7L)))) {
 			if (flags.time && flags.run) {
 				flags.botl = 1;
 			}
@@ -546,7 +542,7 @@ void moveloop(void) {
 }
 
 void stop_occupation(void) {
-	if(occupation) {
+	if (occupation) {
 		if (!maybe_finished_meal(true)) {
 			pline("You stop %s.", occtxt);
 		}
@@ -584,35 +580,35 @@ void newgame(void) {
 		mvitals[i].mvflags = mons[i].geno & G_NOCORPSE;
 	}
 
-	init_objects();		/* must be before u_init() */
+	init_objects(); /* must be before u_init() */
 
-	flags.pantheon = -1;	/* role_init() will reset this */
-	role_init();		/* must be before init_dungeons(), u_init(),
+	flags.pantheon = -1; /* role_init() will reset this */
+	role_init();	     /* must be before init_dungeons(), u_init(),
 				 * and init_artifacts() */
 
-	init_dungeons();	/* must be before u_init() to avoid rndmonst()
+	init_dungeons();  /* must be before u_init() to avoid rndmonst()
 				 * creating odd monsters for any tins and eggs
 				 * in hero's initial inventory */
-	init_artifacts();	/* before u_init() in case $WIZKIT specifies
+	init_artifacts(); /* before u_init() in case $WIZKIT specifies
 				 * any artifacts */
 	u_init();
-	init_artifacts1();	/* must be after u_init() */
+	init_artifacts1(); /* must be after u_init() */
 
 #ifndef NO_SIGNAL
-	signal(SIGINT, (SIG_RET_TYPE) done1);
+	signal(SIGINT, (SIG_RET_TYPE)done1);
 #endif
 #ifdef NEWS
-	if(iflags.news) {
+	if (iflags.news) {
 		display_file(NEWS, false);
 	}
 #endif
 
-	load_qtlist();	/* load up the quest text info */
-	/*	quest_init();*/	/* Now part of role_init() */
+	load_qtlist();		/* load up the quest text info */
+	/*	quest_init();*/ /* Now part of role_init() */
 
 	mklev();
 	u_on_upstairs();
-	vision_reset();		/* set up internals for level (after mklev) */
+	vision_reset(); /* set up internals for level (after mklev) */
 	check_special_room(false);
 
 	flags.botlx = 1;
@@ -622,7 +618,7 @@ void newgame(void) {
 	 *			- ucsfcgl!kneller
 	 */
 
-	if(MON_AT(u.ux, u.uy)) {
+	if (MON_AT(u.ux, u.uy)) {
 		mnexto(m_at(u.ux, u.uy));
 	}
 	makedog();
@@ -636,7 +632,7 @@ void newgame(void) {
 #ifdef INSURANCE
 	save_currentstate();
 #endif
-	program_state.something_worth_saving++;	/* useful data now exists */
+	program_state.something_worth_saving++; /* useful data now exists */
 
 	/* Start the timer here */
 	realtime_data.realtime = (time_t)0L;
@@ -653,7 +649,7 @@ void newgame(void) {
 }
 
 /* show "welcome [back] to nethack" message at program startup */
-void welcome(boolean new_game /* false => restoring an old game */ ) {
+void welcome(boolean new_game /* false => restoring an old game */) {
 	char buf[BUFSZ];
 	boolean currentgend = Upolyd ? u.mfemale : flags.female;
 
@@ -670,8 +666,8 @@ void welcome(boolean new_game /* false => restoring an old game */ ) {
 		sprintf(eos(buf), " %s", align_str(u.ualignbase[A_ORIGINAL]));
 	}
 	if (!urole.name.f &&
-	                (new_game ? (urole.allow & ROLE_GENDMASK) == (ROLE_MALE|ROLE_FEMALE) :
-	                 currentgend != flags.initgend)) {
+	    (new_game ? (urole.allow & ROLE_GENDMASK) == (ROLE_MALE | ROLE_FEMALE) :
+			currentgend != flags.initgend)) {
 		sprintf(eos(buf), " %s", genders[currentgend].adj);
 	}
 
@@ -681,13 +677,15 @@ void welcome(boolean new_game /* false => restoring an old game */ ) {
 	      Hello(NULL), plname, buf, urace.adj,
 	      (currentgend && urole.name.f) ? urole.name.f : urole.name.m);
 #endif
-	if (new_game) pline("%s %s, welcome to %s!  You are a%s %s %s.",
-		                    Hello(NULL), plname, DEF_GAME_NAME, buf, urace.adj,
-		                    (currentgend && urole.name.f) ? urole.name.f : urole.name.m);
-	else pline("%s %s, the%s %s %s, welcome back to %s!",
-		           Hello(NULL), plname, buf, urace.adj,
-		           (currentgend && urole.name.f) ? urole.name.f : urole.name.m,
-		           DEF_GAME_NAME);
+	if (new_game)
+		pline("%s %s, welcome to %s!  You are a%s %s %s.",
+		      Hello(NULL), plname, DEF_GAME_NAME, buf, urace.adj,
+		      (currentgend && urole.name.f) ? urole.name.f : urole.name.m);
+	else
+		pline("%s %s, the%s %s %s, welcome back to %s!",
+		      Hello(NULL), plname, buf, urace.adj,
+		      (currentgend && urole.name.f) ? urole.name.f : urole.name.m,
+		      DEF_GAME_NAME);
 }
 
 #ifdef POSITIONBAR
@@ -698,28 +696,28 @@ static void do_positionbar(void) {
 	p = pbar;
 	/* up stairway */
 	if (upstair.sx &&
-	                (level.locations[upstair.sx][upstair.sy].mem_bg == S_upstair ||
-	                 level.locations[upstair.sx][upstair.sy].mem_bg == S_upladder)) {
+	    (level.locations[upstair.sx][upstair.sy].mem_bg == S_upstair ||
+	     level.locations[upstair.sx][upstair.sy].mem_bg == S_upladder)) {
 		*p++ = '<';
 		*p++ = upstair.sx;
 	}
 	if (sstairs.sx &&
-	                (level.locations[sstairs.sx][sstairs.sy].mem_bg == S_upstair ||
-	                 level.locations[sstairs.sx][sstairs.sy].mem_bg == S_upladder)) {
+	    (level.locations[sstairs.sx][sstairs.sy].mem_bg == S_upstair ||
+	     level.locations[sstairs.sx][sstairs.sy].mem_bg == S_upladder)) {
 		*p++ = '<';
 		*p++ = sstairs.sx;
 	}
 
 	/* down stairway */
 	if (dnstair.sx &&
-	                (level.locations[dnstair.sx][dnstair.sy].mem_bg == S_dnstair ||
-	                 level.locations[dnstair.sx][dnstair.sy].mem_bg == S_dnladder)) {
+	    (level.locations[dnstair.sx][dnstair.sy].mem_bg == S_dnstair ||
+	     level.locations[dnstair.sx][dnstair.sy].mem_bg == S_dnladder)) {
 		*p++ = '>';
 		*p++ = dnstair.sx;
 	}
 	if (sstairs.sx &&
-	                (level.locations[sstairs.sx][sstairs.sy].mem_bg == S_dnstair ||
-	                 level.locations[sstairs.sx][sstairs.sy].mem_bg == S_dnladder)) {
+	    (level.locations[sstairs.sx][sstairs.sy].mem_bg == S_dnstair ||
+	     level.locations[sstairs.sx][sstairs.sy].mem_bg == S_dnladder)) {
 		*p++ = '>';
 		*p++ = sstairs.sx;
 	}
@@ -748,7 +746,7 @@ time_t get_realtime(void) {
 
 	/* Since the timer isn't set until the game starts, this prevents us
 	 * from displaying nonsense on the bottom line before it does. */
-	if(realtime_data.restoretime == 0) {
+	if (realtime_data.restoretime == 0) {
 		curtime = realtime_data.realtime;
 	} else {
 		curtime -= realtime_data.restoretime;

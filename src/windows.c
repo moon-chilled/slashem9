@@ -22,56 +22,51 @@ static void dump_destroy_nhwindow(winid);
 static void dump_start_menu(winid);
 static void dump_add_menu(winid win, int glyph, const anything *identifier, char ch, char gch, int attr, const char *str, bool preselected);
 static void dump_end_menu(winid, const char *);
-static int dump_select_menu(winid, int, menu_item**);
+static int dump_select_menu(winid, int, menu_item **);
 static void dump_putstr(winid, int, const char *);
-
 
 static void def_raw_print(const char *s);
 
 struct window_procs windowprocs;
 
-static
-struct win_choices {
+static struct win_choices {
 	struct window_procs *procs;
-	void (*ini_routine)(void);		/* optional (can be 0) */
+	void (*ini_routine)(void); /* optional (can be 0) */
 } winchoices[] = {
 #ifdef TTY_GRAPHICS
-	{ &tty_procs, win_tty_init },
+	{&tty_procs, win_tty_init},
 #endif
 #ifdef CURSES_GRAPHICS
-	{ &curses_procs, 0 },
+	{&curses_procs, 0},
 #endif
 #ifdef PROXY_GRAPHICS
-	{ &proxy_procs, win_proxy_init },
+	{&proxy_procs, win_proxy_init},
 #endif
-	{ 0, 0 }		/* must be last */
+	{0, 0} /* must be last */
 };
 
-static
-void
-def_raw_print(s)
-const char *s;
+static void
+	def_raw_print(s)
+		const char *s;
 {
 	puts(s);
 }
 
 static int windows_lock = false;
 
-int
-lock_windows (int flag) {
+int lock_windows(int flag) {
 	int retval = windows_lock;
 	windows_lock = flag;
 	return retval;
 }
 
-void
-choose_windows (const char *s) {
+void choose_windows(const char *s) {
 	int i;
 
 	if (windows_lock)
 		return;
 
-	for(i=0; winchoices[i].procs; i++)
+	for (i = 0; winchoices[i].procs; i++)
 		if (!strcmpi(s, winchoices[i].procs->name)) {
 			windowprocs = *winchoices[i].procs;
 			if (winchoices[i].ini_routine) (*winchoices[i].ini_routine)();
@@ -82,7 +77,7 @@ choose_windows (const char *s) {
 		windowprocs.win_raw_print = def_raw_print;
 
 	raw_printf("Window type %s not recognized.  Choices are:", s);
-	for(i=0; winchoices[i].procs; i++)
+	for (i = 0; winchoices[i].procs; i++)
 		raw_printf("        %s", winchoices[i].procs->name);
 
 	if (windowprocs.win_raw_print == def_raw_print)
@@ -95,18 +90,16 @@ choose_windows (const char *s) {
  * --More-- prompt; other interfaces generally don't need that.
  */
 /*ARGSUSED*/
-char
-genl_message_menu (char let, int how, const char *mesg) {
+char genl_message_menu(char let, int how, const char *mesg) {
 #if defined(MAC_MPW)
-# pragma unused ( how,let )
+#pragma unused(how, let)
 #endif
 	pline("%s", mesg);
 	return 0;
 }
 
 /*ARGSUSED*/
-void
-genl_preference_update (const char *pref) {
+void genl_preference_update(const char *pref) {
 	/* window ports are expected to provide
 	   their own preference update routine
 	   for the preference capabilities that
@@ -137,7 +130,7 @@ static char *dump_fmtstr(const char *fmt, char *buf) {
 	 * may or may not interfere with that usage.]
 	 */
 
-	while (fp && *fp && len < BUFSZ-1) {
+	while (fp && *fp && len < BUFSZ - 1) {
 		if (*fp == '%') {
 			fp++;
 			switch (*fp) {
@@ -148,10 +141,10 @@ static char *dump_fmtstr(const char *fmt, char *buf) {
 					sprintf(tmpbuf, "%%");
 					break;
 				case 't': /* game start, timestamp */
-					sprintf(tmpbuf, "%lu", (unsigned long) u.ubirthday);
+					sprintf(tmpbuf, "%lu", (unsigned long)u.ubirthday);
 					break;
 				case 'T': /* current time, timestamp */
-					sprintf(tmpbuf, "%lu", (unsigned long) now);
+					sprintf(tmpbuf, "%lu", (unsigned long)now);
 					break;
 				case 'd': /* game start, YYYYMMDDhhmmss */
 					sprintf(tmpbuf, "%08ld%06ld", yyyymmdd(u.ubirthday), hhmmss(u.ubirthday));
@@ -171,7 +164,7 @@ static char *dump_fmtstr(const char *fmt, char *buf) {
 			}
 
 			slen = strlen(tmpbuf);
-			if (len + slen < BUFSZ-1) {
+			if (len + slen < BUFSZ - 1) {
 				len += slen;
 				sprintf(bp, "%s", tmpbuf);
 				bp += slen;
@@ -204,7 +197,6 @@ void dump_open_log(time_t now) {
 #endif
 	dumplog_file = fopen(fname, "w");
 	dumplog_windowprocs_backup = windowprocs;
-
 }
 
 void dump_close_log(void) {
@@ -226,15 +218,21 @@ static void dump_putstr(winid win, int attr, const char *str) {
 		fprintf(dumplog_file, "%s\n", str);
 }
 
-static winid dump_create_nhwindow(int dummy) { return dummy; }
+static winid dump_create_nhwindow(int dummy) {
+	return dummy;
+}
 
-static void dump_clear_nhwindow(winid win) {}
+static void dump_clear_nhwindow(winid win) {
+}
 
-static void dump_display_nhwindow(winid win, bool p) {}
+static void dump_display_nhwindow(winid win, bool p) {
+}
 
-static void dump_destroy_nhwindow(winid win) {}
+static void dump_destroy_nhwindow(winid win) {
+}
 
-static void dump_start_menu(winid win) {}
+static void dump_start_menu(winid win) {
+}
 
 static void dump_add_menu(winid win, int glyph, const anything *identifier, char ch, char gch, int attr, const char *str, bool preselected) {
 	if (dumplog_file) {
@@ -256,8 +254,8 @@ static void dump_end_menu(winid win, const char *str) {
 }
 
 static int dump_select_menu(winid win, int how, menu_item **item) {
-    *item = NULL;
-    return 0;
+	*item = NULL;
+	return 0;
 }
 
 void dump_redirect(bool onoff_flag) {
@@ -280,6 +278,5 @@ void dump_redirect(bool onoff_flag) {
 		iflags.in_dumplog = false;
 	}
 }
-
 
 /*windows.c*/

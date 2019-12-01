@@ -7,10 +7,10 @@
 #include "hack.h"
 
 #ifdef __FreeBSD__
-# define __XSI_VISIBLE 500 //gettimeofday()
+#define __XSI_VISIBLE 500  //gettimeofday()
 #endif
 #ifdef _POSIX_C_SOURCE
-# include <sys/time.h>
+#include <sys/time.h>
 #endif
 
 /*=
@@ -107,7 +107,8 @@ char *mungspaces(char *bp) {
 
 // return the end of a string (pointing at '\0')
 char *eos(char *s) {
-	while (*s) s++;	// s += strlen(s);
+	while (*s)
+		s++;  // s += strlen(s);
 	return s;
 }
 
@@ -126,9 +127,9 @@ char *s_suffix(const char *s) {
 	static char buf[BUFSZ];
 
 	strcpy(buf, s);
-	if(!strcmpi(buf, "it"))
+	if (!strcmpi(buf, "it"))
 		strcat(buf, "s");
-	else if(*(eos(buf)-1) == 's')
+	else if (*(eos(buf) - 1) == 's')
 		strcat(buf, "'");
 	else
 		strcat(buf, "'s");
@@ -155,7 +156,8 @@ char *tabexpand(char *sbuf) {
 	/* warning: no bounds checking performed */
 	for (bp = buf, idx = 0; *s; s++)
 		if (*s == '\t') {
-			do *bp++ = ' ';
+			do
+				*bp++ = ' ';
 			while (++idx % 8);
 		} else {
 			*bp++ = *s;
@@ -174,23 +176,23 @@ char *visctrl(char c) {
 	ccc[2] = '\0';
 	if (c < 040) {
 		ccc[0] = '^';
-		ccc[1] = c | 0100;	/* letter */
+		ccc[1] = c | 0100; /* letter */
 	} else if (c == 0177) {
 		ccc[0] = '^';
-		ccc[1] = c & ~0100;	/* '?' */
+		ccc[1] = c & ~0100; /* '?' */
 	} else {
-		ccc[0] = c;		/* printable character */
+		ccc[0] = c; /* printable character */
 		ccc[1] = '\0';
 	}
 	return ccc;
 }
 
 // return the ordinal suffix of a number
-const char *ordin (uint n) {
+const char *ordin(uint n) {
 	int dd = n % 10;
 
 	return (dd == 0 || dd > 3 || (n % 100) / 10 == 1) ? "th" :
-	       (dd == 1) ? "st" : (dd == 2) ? "nd" : "rd";
+							    (dd == 1) ? "st" : (dd == 2) ? "nd" : "rd";
 }
 
 // make a signed digit string from a number
@@ -223,7 +225,7 @@ int rounddiv(long x, int y) {
 	}
 	r = x / y;
 	m = x % y;
-	if (2*m >= y) r++;
+	if (2 * m >= y) r++;
 
 	return divsgn * r;
 }
@@ -251,9 +253,8 @@ boolean online2(int x0, int y0, int x1, int y1) {
 	/*  If either delta is zero then they're on an orthogonal line,
 	 *  else if the deltas are equal (signs ignored) they're on a diagonal.
 	 */
-	return !dy || !dx || (dy == dx) || (dy + dx == 0);	/* (dy == -dx) */
+	return !dy || !dx || (dy == dx) || (dy + dx == 0); /* (dy == -dx) */
 }
-
 
 // match a string against a pattern
 boolean pmatch(const char *patrn, const char *strng) {
@@ -264,16 +265,16 @@ boolean pmatch(const char *patrn, const char *strng) {
 	 */
 pmatch_top:
 	s = *strng++;
-	p = *patrn++;	/* get next chars and pre-advance */
-	if (!p)			/* end of pattern */
-		return s == '\0';		/* matches iff end of string too */
-	else if (p == '*')		/* wildcard reached */
-		return (!*patrn || pmatch(patrn, strng-1)) ? true :
-		       s ? pmatch(patrn-1, strng) : false;
-	else if (p != s && (p != '?' || !s))  /* check single character */
-		return false;		/* doesn't match */
-	else				/* return pmatch(patrn, strng); */
-		goto pmatch_top;	/* optimize tail recursion */
+	p = *patrn++;		  /* get next chars and pre-advance */
+	if (!p)			  /* end of pattern */
+		return s == '\0'; /* matches iff end of string too */
+	else if (p == '*')	  /* wildcard reached */
+		return (!*patrn || pmatch(patrn, strng - 1)) ? true :
+							       s ? pmatch(patrn - 1, strng) : false;
+	else if (p != s && (p != '?' || !s)) /* check single character */
+		return false;		     /* doesn't match */
+	else				     /* return pmatch(patrn, strng); */
+		goto pmatch_top;	     /* optimize tail recursion */
 }
 
 #ifndef STRNCMPI
@@ -283,15 +284,17 @@ int strncmpi(const char *s1, const char *s2, usize n) {
 	char t1, t2;
 
 	while (n--) {
-		if (!*s2) return *s1 != 0;	/* s1 >= s2 */
-		else if (!*s1) return -1;	/* s1  < s2 */
+		if (!*s2)
+			return *s1 != 0; /* s1 >= s2 */
+		else if (!*s1)
+			return -1; /* s1  < s2 */
 		t1 = lowc(*s1++);
 		t2 = lowc(*s2++);
 		if (t1 != t2) return (t1 > t2) ? 1 : -1;
 	}
-	return 0;				/* s1 == s2 */
+	return 0; /* s1 == s2 */
 }
-#endif	/* STRNCMPI */
+#endif /* STRNCMPI */
 
 #ifndef STRSTRI
 
@@ -299,36 +302,39 @@ int strncmpi(const char *s1, const char *s2, usize n) {
 char *strstri(const char *str, const char *sub) {
 	const char *s1, *s2;
 	int i, k;
-# define TABSIZ 0x20	/* 0x40 would be case-sensitive */
-	char tstr[TABSIZ], tsub[TABSIZ];	/* nibble count tables */
-# if 0
+#define TABSIZ 0x20			 /* 0x40 would be case-sensitive */
+	char tstr[TABSIZ], tsub[TABSIZ]; /* nibble count tables */
+#if 0
 	assert( (TABSIZ & ~(TABSIZ-1)) == TABSIZ ); /* must be exact power of 2 */
 	assert( &lowc != 0 );			/* can't be unsafe macro */
-# endif
+#endif
 
 	/* special case: empty substring */
-	if (!*sub)	return (char *) str;
+	if (!*sub) return (char *)str;
 
 	/* do some useful work while determining relative lengths */
-	for (i = 0; i < TABSIZ; i++)  tstr[i] = tsub[i] = 0;	/* init */
-	for (k = 0, s1 = str; *s1; k++)  tstr[*s1++ & (TABSIZ-1)]++;
-	for (	s2 = sub; *s2; --k)  tsub[*s2++ & (TABSIZ-1)]++;
+	for (i = 0; i < TABSIZ; i++)
+		tstr[i] = tsub[i] = 0; /* init */
+	for (k = 0, s1 = str; *s1; k++)
+		tstr[*s1++ & (TABSIZ - 1)]++;
+	for (s2 = sub; *s2; --k)
+		tsub[*s2++ & (TABSIZ - 1)]++;
 
 	/* evaluate the info we've collected */
-	if (k < 0)	return NULL;  /* sub longer than str, so can't match */
-	for (i = 0; i < TABSIZ; i++)	/* does sub have more 'x's than str? */
-		if (tsub[i] > tstr[i])	return NULL;  /* match not possible */
+	if (k < 0) return NULL;			    /* sub longer than str, so can't match */
+	for (i = 0; i < TABSIZ; i++)		    /* does sub have more 'x's than str? */
+		if (tsub[i] > tstr[i]) return NULL; /* match not possible */
 
 	/* now actually compare the substring repeatedly to parts of the string */
 	for (i = 0; i <= k; i++) {
 		s1 = &str[i];
 		s2 = sub;
 		while (lowc(*s1++) == lowc(*s2++))
-			if (!*s2)  return (char *) &str[i];		/* full match */
+			if (!*s2) return (char *)&str[i]; /* full match */
 	}
-	return NULL;	/* not found */
+	return NULL; /* not found */
 }
-#endif	/* STRSTRI */
+#endif /* STRSTRI */
 
 /* compare two strings for equality, ignoring the presence of specified
    characters (typically whitespace) and possibly ignoring case */
@@ -336,9 +342,11 @@ boolean fuzzymatch(const char *s1, const char *s2, const char *ignore_chars, boo
 	char c1, c2;
 
 	do {
-		while ((c1 = *s1++) != '\0' && index(ignore_chars, c1) != 0) continue;
-		while ((c2 = *s2++) != '\0' && index(ignore_chars, c2) != 0) continue;
-		if (!c1 || !c2) break;	/* stop when end of either string is reached */
+		while ((c1 = *s1++) != '\0' && index(ignore_chars, c1) != 0)
+			continue;
+		while ((c2 = *s2++) != '\0' && index(ignore_chars, c2) != 0)
+			continue;
+		if (!c1 || !c2) break; /* stop when end of either string is reached */
 
 		if (caseblind) {
 			c1 = lowc(c1);
@@ -349,7 +357,6 @@ boolean fuzzymatch(const char *s1, const char *s2, const char *ignore_chars, boo
 	/* match occurs only when the end of both strings has been reached */
 	return !c1 && !c2;
 }
-
 
 /*
  * Time routines
@@ -366,13 +373,12 @@ static struct tm *getlt(void);
 
 void setrandom(void) {
 	char rnbuf[64];
-	memset(rnbuf, 0xaa, SIZE(rnbuf)); // 0xaa = alternating 0s and 1s
+	memset(rnbuf, 0xaa, SIZE(rnbuf));  // 0xaa = alternating 0s and 1s
 
 	FILE *fp = fopen("/dev/urandom", "rb");
 	if (!fp) {
 		fp = fopen("/dev/random", "rb");
 	}
-
 
 	if (fp) {
 		fread(rnbuf, 32, 1, fp);

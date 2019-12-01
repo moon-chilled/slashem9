@@ -8,16 +8,16 @@
 #define TRAP_H
 
 union vlaunchinfo {
-	short v_launch_otyp;	/* type of object to be triggered */
-	coord v_launch2;	/* secondary launch point (for boulders) */
+	short v_launch_otyp; /* type of object to be triggered */
+	coord v_launch2;     /* secondary launch point (for boulders) */
 };
 
 struct trap {
 	struct trap *ntrap;
-	xchar tx,ty;
-	d_level dst;	/* destination for portals */
+	xchar tx, ty;
+	d_level dst; /* destination for portals */
 	coord launch;
-	Bitfield(ttyp,5);
+	Bitfield(ttyp, 5);
 	bool tseen;
 	bool once;
 	bool madeby_u; /* So monsters may take offence when you trap
@@ -28,12 +28,12 @@ struct trap {
 				 easy to make a monster peaceful if you could
 				 set a trap for it and then untrap it. */
 	union vlaunchinfo vl;
-#define launch_otyp	vl.v_launch_otyp
-#define launch2		vl.v_launch2
+#define launch_otyp vl.v_launch_otyp
+#define launch2	    vl.v_launch2
 };
 
 extern struct trap *ftrap;
-#define newtrap()	alloc(sizeof(struct trap))
+#define newtrap()	   alloc(sizeof(struct trap))
 #define dealloc_trap(trap) free((trap))
 
 /* reasons for statue animation */
@@ -42,36 +42,36 @@ extern struct trap *ftrap;
 #define ANIMATE_SPELL	2
 
 /* reasons for animate_statue's failure */
-#define AS_OK		 0	/* didn't fail */
-#define AS_NO_MON	 1	/* makemon failed */
-#define AS_MON_IS_UNIQUE 2	/* statue monster is unique */
+#define AS_OK		 0 /* didn't fail */
+#define AS_NO_MON	 1 /* makemon failed */
+#define AS_MON_IS_UNIQUE 2 /* statue monster is unique */
 
 /* Note: if adding/removing a trap, adjust trap_engravings[] in mklev.c */
 
 /* unconditional traps */
-#define NO_TRAP		0
-#define ARROW_TRAP	1
-#define DART_TRAP	2
-#define ROCKTRAP	3
-#define SQKY_BOARD	4
-#define BEAR_TRAP	5
-#define LANDMINE	6
-#define ROLLING_BOULDER_TRAP	7
-#define SLP_GAS_TRAP	8
-#define RUST_TRAP	9
-#define FIRE_TRAP	10
-#define PIT		11
-#define SPIKED_PIT	12
-#define HOLE		13
-#define TRAPDOOR	14
-#define TELEP_TRAP	15
-#define LEVEL_TELEP	16
-#define MAGIC_PORTAL	17
-#define WEB		18
-#define STATUE_TRAP	19
-#define MAGIC_TRAP	20
-#define ANTI_MAGIC	21
-#define POLY_TRAP	22
-#define TRAPNUM 23
+#define NO_TRAP		     0
+#define ARROW_TRAP	     1
+#define DART_TRAP	     2
+#define ROCKTRAP	     3
+#define SQKY_BOARD	     4
+#define BEAR_TRAP	     5
+#define LANDMINE	     6
+#define ROLLING_BOULDER_TRAP 7
+#define SLP_GAS_TRAP	     8
+#define RUST_TRAP	     9
+#define FIRE_TRAP	     10
+#define PIT		     11
+#define SPIKED_PIT	     12
+#define HOLE		     13
+#define TRAPDOOR	     14
+#define TELEP_TRAP	     15
+#define LEVEL_TELEP	     16
+#define MAGIC_PORTAL	     17
+#define WEB		     18
+#define STATUE_TRAP	     19
+#define MAGIC_TRAP	     20
+#define ANTI_MAGIC	     21
+#define POLY_TRAP	     22
+#define TRAPNUM		     23
 
 #endif /* TRAP_H */

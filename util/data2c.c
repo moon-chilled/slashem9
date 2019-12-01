@@ -41,10 +41,11 @@ int main(int argc, char **argv) {
 
 	fputs("// This file has been automatically generated.  Do not edit.\n", ofp);
 	fputs("struct {\n"
-		"const char *name;\n"
-		"const unsigned char *data;\n"
-		"size_t size;\n"
-		"} dlbembed_data[] = {\n", ofp);
+	      "const char *name;\n"
+	      "const unsigned char *data;\n"
+	      "size_t size;\n"
+	      "} dlbembed_data[] = {\n",
+	      ofp);
 
 	for (int i = 2; i < argc; i++) {
 		dump_to_file(ofp, argv[i]);

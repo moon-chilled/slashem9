@@ -6,7 +6,7 @@
 #include "nhstr.h"
 
 nhstr *new_nhs(void) {
-	return new(nhstr);
+	return new (nhstr);
 }
 
 void del_nhs(nhstr *str) {
@@ -43,11 +43,11 @@ nhstr *nhscatz(nhstr *str, char *cat) {
 }
 
 nhstr *nhscopy(nhstr *str) {
-	nhstr *ret = new(nhstr);
-	ret->str = new(glyph_t, str->len);
+	nhstr *ret = new (nhstr);
+	ret->str = new (glyph_t, str->len);
 	memmove(ret->str, str->str, str->len * sizeof(glyph_t));
 
-	ret->colouration = new(int, str->len);
+	ret->colouration = new (int, str->len);
 	memmove(ret->colouration, str->colouration, str->len * sizeof(int));
 	ret->len = str->len;
 
@@ -78,10 +78,10 @@ nhstr *nhscatfc_v(nhstr *str, int colour, char *cat, va_list the_args) {
 			i++;
 			switch (cat[i]) {
 				case 's':
-					nhscat(str, va_arg(the_args, nhstr*));
+					nhscat(str, va_arg(the_args, nhstr *));
 					break;
 				case 'S': {
-					char *s = va_arg(the_args, char*);
+					char *s = va_arg(the_args, char *);
 					nhscatzc(str, s, colour);
 					break;
 				}
@@ -158,7 +158,7 @@ extern char *nhs2cstr_trunc_tmp(nhstr *str) {
 	for (i = 0; i < str->len; i++) {
 		ret[i] = str->str[i];
 	}
-	ret[i+1] = 0;
+	ret[i + 1] = 0;
 
 	return ret;
 }
@@ -194,5 +194,5 @@ isize nhsindex(nhstr *str, glyph_t ch) {
 		}
 	}
 
-	return -1; // no match
+	return -1;  // no match
 }

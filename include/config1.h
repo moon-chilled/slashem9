@@ -6,12 +6,12 @@
 #define CONFIG1_H
 
 #ifdef MAC
-# define DLB
-# undef UNIX
+#define DLB
+#undef UNIX
 #endif
 
-#ifdef __APPLE__        /* defined by GCC on Mac OS X */
-# define OSX
+#ifdef __APPLE__ /* defined by GCC on Mac OS X */
+#define OSX
 #endif
 
 /*
@@ -19,12 +19,12 @@
  *
  */
 #if defined(_WIN32) && !defined(WIN32)
-# define WIN32
+#define WIN32
 #endif
 
 #ifdef WIN32
-# undef UNIX
-# define STRNCMPI
+#undef UNIX
+#define STRNCMPI
 #endif
 
-#endif	/* CONFIG1_H */
+#endif /* CONFIG1_H */

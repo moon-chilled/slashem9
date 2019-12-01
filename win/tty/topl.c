@@ -10,13 +10,11 @@
 #include "wintty.h"
 #include <ctype.h>
 
-#ifndef C	/* this matches src/cmd.c */
-#define C(c)	(0x1f & (c))
+#ifndef C /* this matches src/cmd.c */
+#define C(c) (0x1f & (c))
 #endif
 
-
-
-static void redotoplin(const char*);
+static void redotoplin(const char *);
 static void topl_putsym(glyph_t);
 static void remember_topl(void);
 static void removetopl(int);
@@ -24,96 +22,96 @@ static void removetopl(int);
 int tty_doprev_message(void) {
 	/*WAC merged in NH340 prevwindow - add reverse ordering?*/
 
-    struct WinDesc *cw = wins[WIN_MESSAGE];
+	struct WinDesc *cw = wins[WIN_MESSAGE];
 
-    winid prevmsg_win;
-    int i;
-    if ((iflags.prevmsg_window != 's') && !ttyDisplay->inread) { /* not single */
-        if(iflags.prevmsg_window == 'f') { /* full */
-            prevmsg_win = create_nhwindow(NHW_MENU);
-            putstr(prevmsg_win, 0, "Message History");
-            putstr(prevmsg_win, 0, "");
-            cw->maxcol = cw->maxrow;
-            i = cw->maxcol;
-            do {
-                if(cw->data[i] && strcmp(cw->data[i], "") )
-                    putstr(prevmsg_win, 0, cw->data[i]);
-                i = (i + 1) % cw->rows;
-            } while (i != cw->maxcol);
-            putstr(prevmsg_win, 0, toplines);
-            display_nhwindow(prevmsg_win, true);
-            destroy_nhwindow(prevmsg_win);
-        } else if (iflags.prevmsg_window == 'c') {		/* combination */
-            do {
-                morc = 0;
-                if (cw->maxcol == cw->maxrow) {
-                    ttyDisplay->dismiss_more = C('p');	/* <ctrl/P> allowed at --More-- */
-                    redotoplin(toplines);
-                    cw->maxcol--;
-                    if (cw->maxcol < 0) cw->maxcol = cw->rows-1;
-                    if (!cw->data[cw->maxcol])
-                        cw->maxcol = cw->maxrow;
-                } else if (cw->maxcol == (cw->maxrow - 1)){
-                    ttyDisplay->dismiss_more = C('p');	/* <ctrl/P> allowed at --More-- */
-                    redotoplin(cw->data[cw->maxcol]);
-                    cw->maxcol--;
-                    if (cw->maxcol < 0) cw->maxcol = cw->rows-1;
-                    if (!cw->data[cw->maxcol])
-                        cw->maxcol = cw->maxrow;
-                } else {
-                    prevmsg_win = create_nhwindow(NHW_MENU);
-                    putstr(prevmsg_win, 0, "Message History");
-                    putstr(prevmsg_win, 0, "");
-                    cw->maxcol = cw->maxrow;
-                    i = cw->maxcol;
-                    do {
-                        if(cw->data[i] && strcmp(cw->data[i], "") )
-                            putstr(prevmsg_win, 0, cw->data[i]);
-                        i = (i + 1) % cw->rows;
-                    } while (i != cw->maxcol);
-                    putstr(prevmsg_win, 0, toplines);
-                    display_nhwindow(prevmsg_win, true);
-                    destroy_nhwindow(prevmsg_win);
-                }
+	winid prevmsg_win;
+	int i;
+	if ((iflags.prevmsg_window != 's') && !ttyDisplay->inread) { /* not single */
+		if (iflags.prevmsg_window == 'f') {		     /* full */
+			prevmsg_win = create_nhwindow(NHW_MENU);
+			putstr(prevmsg_win, 0, "Message History");
+			putstr(prevmsg_win, 0, "");
+			cw->maxcol = cw->maxrow;
+			i = cw->maxcol;
+			do {
+				if (cw->data[i] && strcmp(cw->data[i], ""))
+					putstr(prevmsg_win, 0, cw->data[i]);
+				i = (i + 1) % cw->rows;
+			} while (i != cw->maxcol);
+			putstr(prevmsg_win, 0, toplines);
+			display_nhwindow(prevmsg_win, true);
+			destroy_nhwindow(prevmsg_win);
+		} else if (iflags.prevmsg_window == 'c') { /* combination */
+			do {
+				morc = 0;
+				if (cw->maxcol == cw->maxrow) {
+					ttyDisplay->dismiss_more = C('p'); /* <ctrl/P> allowed at --More-- */
+					redotoplin(toplines);
+					cw->maxcol--;
+					if (cw->maxcol < 0) cw->maxcol = cw->rows - 1;
+					if (!cw->data[cw->maxcol])
+						cw->maxcol = cw->maxrow;
+				} else if (cw->maxcol == (cw->maxrow - 1)) {
+					ttyDisplay->dismiss_more = C('p'); /* <ctrl/P> allowed at --More-- */
+					redotoplin(cw->data[cw->maxcol]);
+					cw->maxcol--;
+					if (cw->maxcol < 0) cw->maxcol = cw->rows - 1;
+					if (!cw->data[cw->maxcol])
+						cw->maxcol = cw->maxrow;
+				} else {
+					prevmsg_win = create_nhwindow(NHW_MENU);
+					putstr(prevmsg_win, 0, "Message History");
+					putstr(prevmsg_win, 0, "");
+					cw->maxcol = cw->maxrow;
+					i = cw->maxcol;
+					do {
+						if (cw->data[i] && strcmp(cw->data[i], ""))
+							putstr(prevmsg_win, 0, cw->data[i]);
+						i = (i + 1) % cw->rows;
+					} while (i != cw->maxcol);
+					putstr(prevmsg_win, 0, toplines);
+					display_nhwindow(prevmsg_win, true);
+					destroy_nhwindow(prevmsg_win);
+				}
 
-            } while (morc == C('p'));
-            ttyDisplay->dismiss_more = 0;
-        } else { /* reversed */
-            morc = 0;
-            prevmsg_win = create_nhwindow(NHW_MENU);
-            putstr(prevmsg_win, 0, "Message History");
-            putstr(prevmsg_win, 0, "");
-            putstr(prevmsg_win, 0, toplines);
-            cw->maxcol=cw->maxrow-1;
-            if(cw->maxcol < 0) cw->maxcol = cw->rows-1;
-            do {
-                putstr(prevmsg_win, 0, cw->data[cw->maxcol]);
-                cw->maxcol--;
-                if (cw->maxcol < 0) cw->maxcol = cw->rows-1;
-                if (!cw->data[cw->maxcol])
-                    cw->maxcol = cw->maxrow;
-            } while (cw->maxcol != cw->maxrow);
+			} while (morc == C('p'));
+			ttyDisplay->dismiss_more = 0;
+		} else { /* reversed */
+			morc = 0;
+			prevmsg_win = create_nhwindow(NHW_MENU);
+			putstr(prevmsg_win, 0, "Message History");
+			putstr(prevmsg_win, 0, "");
+			putstr(prevmsg_win, 0, toplines);
+			cw->maxcol = cw->maxrow - 1;
+			if (cw->maxcol < 0) cw->maxcol = cw->rows - 1;
+			do {
+				putstr(prevmsg_win, 0, cw->data[cw->maxcol]);
+				cw->maxcol--;
+				if (cw->maxcol < 0) cw->maxcol = cw->rows - 1;
+				if (!cw->data[cw->maxcol])
+					cw->maxcol = cw->maxrow;
+			} while (cw->maxcol != cw->maxrow);
 
-            display_nhwindow(prevmsg_win, true);
-            destroy_nhwindow(prevmsg_win);
-            cw->maxcol = cw->maxrow;
-            ttyDisplay->dismiss_more = 0;
-        }
-    } else if(iflags.prevmsg_window == 's') { /* single */
-        ttyDisplay->dismiss_more = C('p');  /* <ctrl/P> allowed at --More-- */
-        do {
-            morc = 0;
-            if (cw->maxcol == cw->maxrow)
-                redotoplin(toplines);
-            else if (cw->data[cw->maxcol])
-                redotoplin(cw->data[cw->maxcol]);
-            cw->maxcol--;
-            if (cw->maxcol < 0) cw->maxcol = cw->rows-1;
-            if (!cw->data[cw->maxcol])
-                cw->maxcol = cw->maxrow;
-        } while (morc == C('p'));
-        ttyDisplay->dismiss_more = 0;
-    }
+			display_nhwindow(prevmsg_win, true);
+			destroy_nhwindow(prevmsg_win);
+			cw->maxcol = cw->maxrow;
+			ttyDisplay->dismiss_more = 0;
+		}
+	} else if (iflags.prevmsg_window == 's') { /* single */
+		ttyDisplay->dismiss_more = C('p'); /* <ctrl/P> allowed at --More-- */
+		do {
+			morc = 0;
+			if (cw->maxcol == cw->maxrow)
+				redotoplin(toplines);
+			else if (cw->data[cw->maxcol])
+				redotoplin(cw->data[cw->maxcol]);
+			cw->maxcol--;
+			if (cw->maxcol < 0) cw->maxcol = cw->rows - 1;
+			if (!cw->data[cw->maxcol])
+				cw->maxcol = cw->maxrow;
+		} while (morc == C('p'));
+		ttyDisplay->dismiss_more = 0;
+	}
 
 #if 0
     ttyDisplay->dismiss_more = C('p');	/* <ctrl/P> allowed at --More-- */
@@ -152,17 +150,17 @@ int tty_doprev_message(void) {
     } while (morc == C('p'));
     ttyDisplay->dismiss_more = 0;
 #endif
-    return 0;
+	return 0;
 }
 
 static void redotoplin(const char *str) {
 	int otoplin = ttyDisplay->toplin;
 	home();
-	end_glyphout();	/* in case message printed during graphics output */
+	end_glyphout(); /* in case message printed during graphics output */
 	putsyms(str);
 	cl_end();
 	ttyDisplay->toplin = 1;
-	if(ttyDisplay->cury && otoplin != 3)
+	if (ttyDisplay->cury && otoplin != 3)
 		more();
 }
 
@@ -173,7 +171,7 @@ static void remember_topl(void) {
 
 	if (len > (unsigned)cw->datlen[idx]) {
 		if (cw->data[idx]) free(cw->data[idx]);
-		len += (8 - (len & 7));		/* pad up to next multiple of 8 */
+		len += (8 - (len & 7)); /* pad up to next multiple of 8 */
 		cw->data[idx] = alloc(len);
 		cw->datlen[idx] = (short)len;
 	}
@@ -184,7 +182,7 @@ static void remember_topl(void) {
 void addtopl(const char *s) {
 	struct WinDesc *cw = wins[WIN_MESSAGE];
 
-	tty_curs(BASE_WINDOW,cw->curx+1,cw->cury);
+	tty_curs(BASE_WINDOW, cw->curx + 1, cw->cury);
 	putsyms(s);
 	cl_end();
 	ttyDisplay->toplin = 1;
@@ -203,8 +201,8 @@ void more(void) {
 	}
 
 	if (ttyDisplay->toplin) {
-		tty_curs(BASE_WINDOW, cw->curx+1, cw->cury);
-		if(cw->curx >= CO - 8) topl_putsym('\n');
+		tty_curs(BASE_WINDOW, cw->curx + 1, cw->cury);
+		if (cw->curx >= CO - 8) topl_putsym('\n');
 	}
 
 	if (flags.standout) {
@@ -228,14 +226,14 @@ void more(void) {
 	xwaitforspace("\033 ");
 #endif
 
-	if(morc == '\033')
+	if (morc == '\033')
 		cw->flags |= WIN_STOP;
 
-	if(ttyDisplay->toplin && cw->cury) {
-		docorner(1, cw->cury+1);
+	if (ttyDisplay->toplin && cw->cury) {
+		docorner(1, cw->cury + 1);
 		cw->curx = cw->cury = 0;
 		home();
-	} else if(morc == '\033') {
+	} else if (morc == '\033') {
 		cw->curx = cw->cury = 0;
 		home();
 		cl_end();
@@ -254,90 +252,92 @@ void update_topl(const char *bp) {
 	/* But messages like "You die..." deserve their own line */
 	n0 = strlen(bp);
 	if ((ttyDisplay->toplin == 1 || (cw->flags & WIN_STOP)) &&
-			cw->cury == 0 &&
-			n0 + (int)strlen(toplines) + 3 < CO-8 &&  /* room for --More-- */
-			(notdied = strncmp(bp, "You die", 7))) {
+	    cw->cury == 0 &&
+	    n0 + (int)strlen(toplines) + 3 < CO - 8 && /* room for --More-- */
+	    (notdied = strncmp(bp, "You die", 7))) {
 		strcat(toplines, "  ");
 		strcat(toplines, bp);
 		cw->curx += 2;
-		if(!(cw->flags & WIN_STOP))
+		if (!(cw->flags & WIN_STOP))
 			addtopl(bp);
 		return;
 	} else if (!(cw->flags & WIN_STOP)) {
-		if(ttyDisplay->toplin == 1) more();
-		else if(cw->cury) {	/* for when flags.toplin == 2 && cury > 1 */
-			docorner(1, cw->cury+1); /* reset cury = 0 if redraw screen */
-			cw->curx = cw->cury = 0;/* from home--cls() & docorner(1,n) */
+		if (ttyDisplay->toplin == 1)
+			more();
+		else if (cw->cury) {		   /* for when flags.toplin == 2 && cury > 1 */
+			docorner(1, cw->cury + 1); /* reset cury = 0 if redraw screen */
+			cw->curx = cw->cury = 0;   /* from home--cls() & docorner(1,n) */
 		}
 	}
 	remember_topl();
 	strncpy(toplines, bp, TBUFSZ);
 	toplines[TBUFSZ - 1] = 0;
 
-	for(tl = toplines; n0 >= CO; ){
+	for (tl = toplines; n0 >= CO;) {
 		otl = tl;
-		for(tl+=CO-1; tl != otl && !isspace(*tl); --tl) ;
-		if(tl == otl) {
+		for (tl += CO - 1; tl != otl && !isspace(*tl); --tl)
+			;
+		if (tl == otl) {
 			/* Eek!  A huge token.  Try splitting after it. */
 			tl = index(otl, ' ');
-			if (!tl) break;    /* No choice but to spit it out whole. */
+			if (!tl) break; /* No choice but to spit it out whole. */
 		}
 		*tl++ = '\n';
 		n0 = strlen(tl);
 	}
-	if(!notdied) cw->flags &= ~WIN_STOP;
-	if(!(cw->flags & WIN_STOP)) redotoplin(toplines);
+	if (!notdied) cw->flags &= ~WIN_STOP;
+	if (!(cw->flags & WIN_STOP)) redotoplin(toplines);
 }
 
 static void topl_putsym(glyph_t c) {
-    struct WinDesc *cw = wins[WIN_MESSAGE];
+	struct WinDesc *cw = wins[WIN_MESSAGE];
 
-    if(cw == NULL) panic("Putsym window MESSAGE nonexistant");
+	if (cw == NULL) panic("Putsym window MESSAGE nonexistant");
 
-    switch(c) {
-    case '\b':
-	if(ttyDisplay->curx == 0 && ttyDisplay->cury > 0)
-	    tty_curs(BASE_WINDOW, CO, (int)ttyDisplay->cury-1);
-	backsp();
-	ttyDisplay->curx--;
+	switch (c) {
+		case '\b':
+			if (ttyDisplay->curx == 0 && ttyDisplay->cury > 0)
+				tty_curs(BASE_WINDOW, CO, (int)ttyDisplay->cury - 1);
+			backsp();
+			ttyDisplay->curx--;
+			cw->curx = ttyDisplay->curx;
+			return;
+		case '\n':
+			cl_end();
+			ttyDisplay->curx = 0;
+			ttyDisplay->cury++;
+			cw->cury = ttyDisplay->cury;
+#ifdef WIN32CON
+			pututf8char(c);
+#endif
+			break;
+		default:
+			if (ttyDisplay->curx == CO - 1)
+				topl_putsym('\n'); /* 1 <= curx <= CO; avoid CO */
+#ifdef WIN32CON
+			pututf8char(c);
+#endif
+			ttyDisplay->curx++;
+	}
 	cw->curx = ttyDisplay->curx;
-	return;
-    case '\n':
-	cl_end();
-	ttyDisplay->curx = 0;
-	ttyDisplay->cury++;
-	cw->cury = ttyDisplay->cury;
-#ifdef WIN32CON
-	pututf8char(c);
-#endif
-	break;
-    default:
-	if(ttyDisplay->curx == CO-1)
-	    topl_putsym('\n'); /* 1 <= curx <= CO; avoid CO */
-#ifdef WIN32CON
-    pututf8char(c);
-#endif
-	ttyDisplay->curx++;
-    }
-    cw->curx = ttyDisplay->curx;
-    if(cw->curx == 0) cl_end();
+	if (cw->curx == 0) cl_end();
 #ifndef WIN32CON
-    pututf8char(c);
+	pututf8char(c);
 #endif
 }
 
 void putsyms(const char *str) {
-	while(*str)
+	while (*str)
 		topl_putsym(*str++);
 }
 
 static void removetopl(int n) {
 	/* assume addtopl() has been done, so ttyDisplay->toplin is already set */
-	while (n-- > 0) putsyms("\b \b");
+	while (n-- > 0)
+		putsyms("\b \b");
 }
 
-extern char erase_char;		/* from xxxtty.c; don't need kill_char */
-
+extern char erase_char; /* from xxxtty.c; don't need kill_char */
 
 /*
  *   Generic yes/no function. 'def' is the default (returned by space or
@@ -358,7 +358,7 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 	bool doprev = false;
 	char prompt[BUFSZ];
 
-	if(ttyDisplay->toplin == 1 && !(cw->flags & WIN_STOP)) more();
+	if (ttyDisplay->toplin == 1 && !(cw->flags & WIN_STOP)) more();
 	cw->flags &= ~WIN_STOP;
 	ttyDisplay->toplin = 3; /* special prompt state */
 	ttyDisplay->inread++;
@@ -378,7 +378,7 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 		goto clean_up;
 	}
 
-	do {	/* loop until we get valid input */
+	do { /* loop until we get valid input */
 		q = lowc(readchar());
 		if (q == '\020') { /* ctrl-P */
 			if (iflags.prevmsg_window != 's') {
@@ -390,12 +390,12 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 				cw->maxcol = cw->maxrow;
 				addtopl(prompt);
 			} else {
-				if(!doprev)
+				if (!doprev)
 					tty_doprev_message(); /* need two initially */
 				tty_doprev_message();
 				doprev = true;
 			}
-			q = '\0';       /* force another loop iteration */
+			q = '\0'; /* force another loop iteration */
 			continue;
 		} else if (doprev) {
 			/* BUG[?]: this probably ought to check whether the
@@ -405,7 +405,7 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 			cw->maxcol = cw->maxrow;
 			doprev = false;
 			addtopl(prompt);
-			q = '\0';       /* force another loop iteration */
+			q = '\0'; /* force another loop iteration */
 			continue;
 		}
 		digit_ok = allow_num && digit(q);
@@ -428,41 +428,48 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 			char z, digit_string[2];
 			int n_len = 0;
 			long value = 0;
-			addtopl("#"),  n_len++;
+			addtopl("#"), n_len++;
 			digit_string[1] = '\0';
 			if (q != '#') {
 				digit_string[0] = q;
-				addtopl(digit_string),  n_len++;
+				addtopl(digit_string), n_len++;
 				value = q - '0';
 				q = '#';
 			}
-			do {	/* loop until we get a non-digit */
+			do { /* loop until we get a non-digit */
 				z = lowc(readchar());
 				if (digit(z)) {
 					value = (10 * value) + (z - '0');
-					if (value < 0) break;	/* overflow: try again */
+					if (value < 0) break; /* overflow: try again */
 					digit_string[0] = z;
-					addtopl(digit_string),  n_len++;
+					addtopl(digit_string), n_len++;
 				} else if (z == 'y' || index(quitchars, z)) {
-					if (z == '\033')  value = -1;	/* abort */
-					z = '\n';	/* break */
+					if (z == '\033') value = -1; /* abort */
+					z = '\n';		     /* break */
 				} else if (z == erase_char || z == '\b') {
-					if (n_len <= 1) { value = -1;  break; }
-					else { value /= 10;  removetopl(1),  n_len--; }
+					if (n_len <= 1) {
+						value = -1;
+						break;
+					} else {
+						value /= 10;
+						removetopl(1), n_len--;
+					}
 				} else {
-					value = -1;	/* abort */
+					value = -1; /* abort */
 					tty_nhbell();
 					break;
 				}
 			} while (z != '\n');
-			if (value > 0) yn_number = value;
-			else if (value == 0) q = 'n';		/* 0 => "no" */
-			else {	/* remove number from top line, then try again */
-				removetopl(n_len),  n_len = 0;
+			if (value > 0)
+				yn_number = value;
+			else if (value == 0)
+				q = 'n'; /* 0 => "no" */
+			else {		 /* remove number from top line, then try again */
+				removetopl(n_len), n_len = 0;
 				q = '\0';
 			}
 		}
-	} while(!q);
+	} while (!q);
 
 	if (q != '#') {
 		sprintf(rtmp, "%c", q);
@@ -472,7 +479,7 @@ clean_up:
 	ttyDisplay->inread--;
 	ttyDisplay->toplin = 2;
 	if (ttyDisplay->intr) ttyDisplay->intr--;
-	if(wins[WIN_MESSAGE]->cury)
+	if (wins[WIN_MESSAGE]->cury)
 		tty_clear_nhwindow(WIN_MESSAGE);
 
 	return q;

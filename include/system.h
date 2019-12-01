@@ -14,34 +14,35 @@
  * This is the type of signal handling functions.
  */
 #if defined(_MSC_VER) || defined(__SC__) || defined(WIN32)
-# define SIG_RET_TYPE void (__cdecl *)(int)
+#define SIG_RET_TYPE void(__cdecl *)(int)
 #else
-# define SIG_RET_TYPE void (*)(int)
+#define SIG_RET_TYPE void (*)(int)
 #endif
 
 #if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) || defined(_DEFAULT_SOURCE) || defined(_XOPEN_SOURCE)
-extern int tgetent(char *,const char *);
-extern void tputs(const char *,int,int (*)());
+extern int tgetent(char *, const char *);
+extern void tputs(const char *, int, int (*)());
 #endif
-int   tgetflag(const char *);
-int   tgetnum(const char *);
-char *tgetstr(const char *,char **);
-char *tgoto(const char *,int,int);
-char *tparam(const char *,char *,int,int,int,int,int);
+int tgetflag(const char *);
+int tgetnum(const char *);
+char *tgetstr(const char *, char **);
+char *tgoto(const char *, int, int);
+char *tparam(const char *, char *, int, int, int, int, int);
 
-
-#define VA_ARGS			the_args
-#define VA_START(x)		va_list the_args; va_start(the_args, x)
-#define VA_END()		va_end(the_args)
+#define VA_ARGS the_args
+#define VA_START(x)       \
+	va_list the_args; \
+	va_start(the_args, x)
+#define VA_END() va_end(the_args)
 
 /*
  * Allow gcc to check parameters of printf-like calls with -Wformat;
  * append this to a prototype declaration (see pline() in extern.h).
  */
 #ifdef __GNUC__
-# define PRINTF_F(f,v) __attribute__ ((format (printf, f, v)))
+#define PRINTF_F(f, v) __attribute__((format(printf, f, v)))
 #else
-# define PRINTF_F(f,v)
+#define PRINTF_F(f, v)
 #endif
 
 #endif /* SYSTEM_H */

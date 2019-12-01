@@ -19,12 +19,12 @@
 #include <sys/stat.h>
 
 #ifdef WIN32
-#include "win32api.h"			/* for GetModuleFileName */
+#include "win32api.h" /* for GetModuleFileName */
 #endif
 
-char orgdir[PATHLEN];	/* also used in pcsys.c, amidos.c */
+char orgdir[PATHLEN]; /* also used in pcsys.c, amidos.c */
 
-static void process_options(int argc,char **argv);
+static void process_options(int argc, char **argv);
 static void nhusage(void);
 
 #ifdef WIN32
@@ -34,23 +34,23 @@ extern void nethack_exit(int);
 #endif
 
 #ifdef WIN32
-extern bool getreturn_enabled;	/* from sys/share/pcsys.c */
+extern bool getreturn_enabled; /* from sys/share/pcsys.c */
 #endif
 
 #ifdef EXEPATH
 static char *exepath(char *);
 #endif
 
-int main(int, char**);
+int main(int, char **);
 
-extern void pcmain(int, char**);
+extern void pcmain(int, char **);
 
 /* If the graphics version is built, we don't need a main; it is skipped
  * to help MinGW decide which entry point to choose. If both main and
  * WinMain exist, the resulting executable won't work correctly.
  */
 int main(int argc, char **argv) {
-	pcmain(argc,argv);
+	pcmain(argc, argv);
 #ifdef LAN_FEATURES
 	init_lan_features();
 #endif
@@ -64,7 +64,7 @@ void pcmain(int argc, char **argv) {
 	int fd;
 	char *dir;
 
-	hname = "NetHack";      /* used for syntax messages */
+	hname = "NetHack"; /* used for syntax messages */
 
 	choose_windows(DEFAULT_WINDOW_SYS);
 
@@ -73,9 +73,9 @@ void pcmain(int argc, char **argv) {
 	 */
 	if (getcwd(orgdir, sizeof orgdir) == NULL)
 		error("NetHack: current directory path too long");
-# ifndef NO_SIGNAL
-	signal(SIGINT, (SIG_RET_TYPE) nethack_exit);	/* restore original directory */
-# endif
+#ifndef NO_SIGNAL
+	signal(SIGINT, (SIG_RET_TYPE)nethack_exit); /* restore original directory */
+#endif
 
 	dir = nh_getenv("NETHACKDIR");
 	if (dir == NULL)
@@ -86,9 +86,9 @@ void pcmain(int argc, char **argv) {
 #endif
 	if (dir != NULL) {
 		strncpy(hackdir, dir, PATHLEN - 1);
-		hackdir[PATHLEN-1] = '\0';
+		hackdir[PATHLEN - 1] = '\0';
 #ifdef CHDIR
-		chdirx (dir, 1);
+		chdirx(dir, 1);
 #endif
 	}
 #if defined(WIN32) && defined(PROXY_GRAPHICS)
@@ -100,7 +100,7 @@ void pcmain(int argc, char **argv) {
 		set_binary_mode(0, O_RDONLY | O_BINARY);
 		set_binary_mode(1, O_WRONLY | O_BINARY);
 		choose_windows("proxy");
-		lock_windows(true);		/* Can't be overridden from options */
+		lock_windows(true); /* Can't be overridden from options */
 	}
 #endif
 	initoptions();
@@ -109,32 +109,31 @@ void pcmain(int argc, char **argv) {
 #ifndef LATTICE
 		strcpy(hackdir, orgdir);
 #else
-	strcpy(hackdir, HACKDIR);
+		strcpy(hackdir, HACKDIR);
 #endif
-	if(argc > 1) {
+	if (argc > 1) {
 		if (!strncmp(argv[1], "-d", 2) && argv[1][2] != 'e') {
 			argc--;
 			argv++;
-			dir = argv[0]+2;
-			if(*dir == '=' || *dir == ':') dir++;
-			if(!*dir && argc > 1) {
+			dir = argv[0] + 2;
+			if (*dir == '=' || *dir == ':') dir++;
+			if (!*dir && argc > 1) {
 				argc--;
 				argv++;
 				dir = argv[0];
 			}
-			if(!*dir)
+			if (!*dir)
 				error("Flag -d must be followed by a directory name.");
 			strcpy(hackdir, dir);
 		}
 		if (argc > 1) {
-
 			/*
 			 * Now we know the directory containing 'record' and
 			 * may do a prscore().
 			 */
 			if (!strncmp(argv[1], "-s", 2)) {
 #ifdef CHDIR
-				chdirx(hackdir,0);
+				chdirx(hackdir, 0);
 #endif
 				prscore(argc, argv);
 				nethack_exit(EXIT_SUCCESS);
@@ -142,9 +141,7 @@ void pcmain(int argc, char **argv) {
 
 			/* Don't initialize the window system just to print usage */
 			/* WAC '--help' inits help */
-			if (!strncmp(argv[1], "-?", 2)
-					|| !strncmp(argv[1], "--help", 6)
-					|| !strncmp(argv[1], "/?", 2)) {
+			if (!strncmp(argv[1], "-?", 2) || !strncmp(argv[1], "--help", 6) || !strncmp(argv[1], "/?", 2)) {
 				nhusage();
 				nethack_exit(EXIT_SUCCESS);
 			}
@@ -154,26 +151,26 @@ void pcmain(int argc, char **argv) {
 	/*
 	 * It seems you really want to play.
 	 */
-	u.uhp = 1;	/* prevent RIP on early quits */
-	u.ux = 0;	/* prevent flush_screen() */
+	u.uhp = 1; /* prevent RIP on early quits */
+	u.ux = 0;  /* prevent flush_screen() */
 
 	/* chdir shouldn't be called before this point to keep the
 	 * code parallel to other ports.
 	 */
 #ifdef CHDIR
-	chdirx(hackdir,1);
+	chdirx(hackdir, 1);
 #endif
 
-	init_nhwindows(&argc,argv);
+	init_nhwindows(&argc, argv);
 	process_options(argc, argv);
 
 	if (!*plname)
 		askname();
-	plnamesuffix(); 	/* strip suffix from name; calls askname() */
+	plnamesuffix(); /* strip suffix from name; calls askname() */
 	/* again if suffix was whole name */
 	/* accepts any suffix */
 	if (wizard) {
-		if(!strcmp(plname, WIZARD))
+		if (!strcmp(plname, WIZARD))
 			strcpy(plname, "wizard");
 		else {
 			wizard = false;
@@ -192,19 +189,19 @@ void pcmain(int argc, char **argv) {
 	 * overwritten without confirmation when a user starts up
 	 * another game with the same player name.
 	 */
-# if defined(WIN32)
+#if defined(WIN32)
 	/* Obtain the name of the logged on user and incorporate
 	 * it into the name. */
-	sprintf(lock, "%s-%s",get_username(0),plname);
-# else
-	strcpy(lock,plname);
+	sprintf(lock, "%s-%s", get_username(0), plname);
+#else
+	strcpy(lock, plname);
 	regularize(lock);
-# endif
+#endif
 	getlock();
-#else   /* PC_LOCKING */
-	strcpy(lock,plname);
-	strcat(lock,".99");
-	regularize(lock);	/* is this necessary? */
+#else /* PC_LOCKING */
+	strcpy(lock, plname);
+	strcat(lock, ".99");
+	regularize(lock); /* is this necessary? */
 #endif
 
 	/* Set up level 0 file to keep the game state.
@@ -214,7 +211,7 @@ void pcmain(int argc, char **argv) {
 		raw_print("Cannot create lock file");
 	} else {
 		hackpid = 1;
-		write(fd, (void *) &hackpid, sizeof(hackpid));
+		write(fd, (void *)&hackpid, sizeof(hackpid));
 		close(fd);
 	}
 
@@ -223,10 +220,10 @@ void pcmain(int argc, char **argv) {
 	 * Both boundaries have to be even.
 	 */
 
-	x_maze_max = COLNO-1;
+	x_maze_max = COLNO - 1;
 	if (x_maze_max % 2)
 		x_maze_max--;
-	y_maze_max = ROWNO-1;
+	y_maze_max = ROWNO - 1;
 	if (y_maze_max % 2)
 		y_maze_max--;
 
@@ -249,33 +246,33 @@ void pcmain(int argc, char **argv) {
 		 */
 		boolean remember_wiz_mode = wizard;
 #ifndef NO_SIGNAL
-		signal(SIGINT, (SIG_RET_TYPE) done1);
+		signal(SIGINT, (SIG_RET_TYPE)done1);
 #endif
 #ifdef NEWS
-		if(iflags.news){
+		if (iflags.news) {
 			display_file(NEWS, false);
 			iflags.news = false;
 		}
 #endif
 		pline("Restoring save file...");
-		mark_synch();	/* flush output */
+		mark_synch(); /* flush output */
 
-		if(!dorecover(fd))
+		if (!dorecover(fd))
 			goto not_recovered;
-		if(!wizard && remember_wiz_mode) wizard = true;
+		if (!wizard && remember_wiz_mode) wizard = true;
 		check_special_room(false);
 		if (discover)
 			pline("You are in non-scoring discovery mode.");
 
 		if (discover || wizard) {
-			if(yn("Do you want to keep the save file?") == 'n'){
+			if (yn("Do you want to keep the save file?") == 'n') {
 				delete_savefile();
 			}
 		}
 
 		flags.move = 0;
 	} else {
-not_recovered:
+	not_recovered:
 		player_selection();
 		newgame();
 		if (discover)
@@ -284,7 +281,7 @@ not_recovered:
 		flags.move = 0;
 		set_wear();
 		pickup(1);
-		sense_engr_at(u.ux,u.uy,false);
+		sense_engr_at(u.ux, u.uy, false);
 	}
 
 #ifndef NO_SIGNAL
@@ -296,14 +293,13 @@ not_recovered:
 static void process_options(int argc, char **argv) {
 	int i;
 
-
 	/*
 	 * Process options.
 	 */
-	while(argc > 1 && argv[1][0] == '-'){
+	while (argc > 1 && argv[1][0] == '-') {
 		argv++;
 		argc--;
-		switch(argv[0][1]){
+		switch (argv[0][1]) {
 			case 'a':
 				if (argv[0][2]) {
 					if ((i = str2align(&argv[0][2])) >= 0)
@@ -333,12 +329,12 @@ static void process_options(int argc, char **argv) {
 				break;
 #endif
 			case 'u':
-				if(argv[0][2])
-					strncpy(plname, argv[0]+2, sizeof(plname)-1);
-				else if(argc > 1) {
+				if (argv[0][2])
+					strncpy(plname, argv[0] + 2, sizeof(plname) - 1);
+				else if (argc > 1) {
 					argc--;
 					argv++;
-					strncpy(plname, argv[0], sizeof(plname)-1);
+					strncpy(plname, argv[0], sizeof(plname) - 1);
 				} else
 					raw_print("Player name expected after -u");
 				break;
@@ -382,7 +378,8 @@ static void process_options(int argc, char **argv) {
 				if ((i = str2role(&argv[0][1])) >= 0) {
 					flags.initrole = i;
 					break;
-				} else raw_printf("\nUnknown switch: %s", argv[0]);
+				} else
+					raw_printf("\nUnknown switch: %s", argv[0]);
 				/* FALL THROUGH */
 			case '?':
 				nhusage();
@@ -405,29 +402,29 @@ static void nhusage(void) {
 
 	sprintf(buf1, "\n       %s [-d dir] [-u name] [-r race] [-p profession] [-[DX]]", hname);
 #ifdef NEWS
-	strcat(buf1," [-n]");
+	strcat(buf1, " [-n]");
 #endif
-	strcat(buf1," [-I] [-i] [-d]");
+	strcat(buf1, " [-I] [-i] [-d]");
 
 	if (!iflags.window_inited) {
-		raw_printf("%s\n",buf1);
+		raw_printf("%s\n", buf1);
 	} else {
-		printf("%s\n",buf1);
+		printf("%s\n", buf1);
 	}
 }
 
 #ifdef CHDIR
 void chdirx(char *dir, bool wr) {
 	static char thisdir[] = ".";
-	if(dir && chdir(dir) < 0) {
+	if (dir && chdir(dir) < 0) {
 		error("Cannot chdir to %s.", dir);
 	}
 
-# ifndef __CYGWIN__
+#ifndef __CYGWIN__
 	/* Change the default drive as well.
 	 */
 	chdrive(dir);
-# endif
+#endif
 
 	/* warn the player if we can't write the record file */
 	/* perhaps we should also test whether . is writable */
@@ -437,12 +434,12 @@ void chdirx(char *dir, bool wr) {
 #endif /* CHDIR */
 
 #ifdef PORT_HELP
-# ifdef WIN32
+#ifdef WIN32
 void port_help(void) {
 	/* display port specific help file */
-	display_file(PORT_HELP, 1 );
+	display_file(PORT_HELP, 1);
 }
-# endif /* WIN32 */
+#endif /* WIN32 */
 #endif /* PORT_HELP */
 
 #ifdef EXEPATH

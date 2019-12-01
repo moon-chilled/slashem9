@@ -9,4 +9,4 @@
 #include "artilist_base.h"
 #undef ARTILIST_PASS2
 
-#endif //ARTILIST_H
+#endif	//ARTILIST_H

@@ -56,7 +56,7 @@ boolean uptodate(int fd, const char *name) {
 	struct version_info vers_info;
 	boolean verbose = name ? true : false;
 
-	rlen = read(fd, (void *) &vers_info, sizeof vers_info);
+	rlen = read(fd, (void *)&vers_info, sizeof vers_info);
 	if (rlen == 0) {
 		if (verbose) {
 			pline("File \"%s\" is empty?", name);
@@ -73,17 +73,16 @@ boolean uptodate(int fd, const char *name) {
 
 void store_version(int fd) {
 	const static struct version_info version_data = {
-		VERSION_NUMBER, VERSION_SANITY
-	};
+		VERSION_NUMBER, VERSION_SANITY};
 
 	bufoff(fd);
 	/* bwrite() before bufon() uses plain write() */
-	bwrite(fd,(void *)&version_data,(unsigned)(sizeof version_data));
+	bwrite(fd, (void *)&version_data, (unsigned)(sizeof version_data));
 	bufon(fd);
 	return;
 }
 
-unsigned long get_feature_notice_ver (char *str) {
+unsigned long get_feature_notice_ver(char *str) {
 	char buf[BUFSZ];
 	int ver_maj, ver_min, patch;
 	char *istr[3];
@@ -107,12 +106,12 @@ unsigned long get_feature_notice_ver (char *str) {
 	ver_maj = atoi(istr[0]);
 	ver_min = atoi(istr[1]);
 	patch = atoi(istr[2]);
-	return FEATURE_NOTICE_VER(ver_maj,ver_min,patch);
+	return FEATURE_NOTICE_VER(ver_maj, ver_min, patch);
 	/* macro from hack.h */
 }
 
 unsigned long get_current_feature_ver(void) {
-	return FEATURE_NOTICE_VER(VERSION_MAJOR,VERSION_MINOR,PATCHLEVEL);
+	return FEATURE_NOTICE_VER(VERSION_MAJOR, VERSION_MINOR, PATCHLEVEL);
 }
 
 /*version.c*/

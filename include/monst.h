@@ -15,13 +15,13 @@
  * that there are enough situations which might make a monster change its
  * weapon that this is impractical.  --KAA
  */
-# define NO_WEAPON_WANTED 0
-# define NEED_WEAPON 1
-# define NEED_RANGED_WEAPON 2
-# define NEED_HTH_WEAPON 3
-# define NEED_PICK_AXE 4
-# define NEED_AXE 5
-# define NEED_PICK_OR_AXE 6
+#define NO_WEAPON_WANTED   0
+#define NEED_WEAPON	   1
+#define NEED_RANGED_WEAPON 2
+#define NEED_HTH_WEAPON	   3
+#define NEED_PICK_AXE	   4
+#define NEED_AXE	   5
+#define NEED_PICK_OR_AXE   6
 
 /* The following flags are used for the second argument to display_minventory
  * in invent.c:
@@ -41,84 +41,84 @@ struct monst {
 	struct monst *nmon;
 	struct permonst *data;
 	unsigned m_id;
-	short mnum;		/* permanent monster index number */
-	short movement;		/* movement points (derived from permonst definition and added effects */
-	uchar m_lev;		/* adjusted difficulty level of monster */
-	aligntyp malign;	/* alignment of this monster, relative to the
+	short mnum;	 /* permanent monster index number */
+	short movement;	 /* movement points (derived from permonst definition and added effects */
+	uchar m_lev;	 /* adjusted difficulty level of monster */
+	aligntyp malign; /* alignment of this monster, relative to the
 				   player (positive = good to kill) */
 	xchar mx, my;
-	xchar mux, muy;		/* where the monster thinks you are */
-#define MTSZ	4
-	coord mtrack[MTSZ];	/* monster track */
+	xchar mux, muy; /* where the monster thinks you are */
+#define MTSZ 4
+	coord mtrack[MTSZ]; /* monster track */
 	int mhp, mhpmax;
-	int m_en, m_enmax;	/* Power level (for spells, etc.) */
-	unsigned mappearance;	/* for undetected mimics and the wiz */
-	uchar	 m_ap_type;	/* what mappearance is describing: */
-#define M_AP_NOTHING	0	/* mappearance is unused -- monster appears
+	int m_en, m_enmax;    /* Power level (for spells, etc.) */
+	unsigned mappearance; /* for undetected mimics and the wiz */
+	uchar m_ap_type;      /* what mappearance is describing: */
+#define M_AP_NOTHING   0      /* mappearance is unused -- monster appears
 				   as itself */
-#define M_AP_FURNITURE	1	/* stairs, a door, an altar, etc. */
-#define M_AP_OBJECT	2	/* an object */
-#define M_AP_MONSTER	3	/* a monster */
+#define M_AP_FURNITURE 1      /* stairs, a door, an altar, etc. */
+#define M_AP_OBJECT    2      /* an object */
+#define M_AP_MONSTER   3      /* a monster */
 
-	schar mtame;		/* level of tameness, implies peaceful */
-	unsigned long mintrinsics;	/* initialized from mresists */
-	int mspec_used;		/* monster's special ability attack timeout */
-	int     oldmonnm;       /* Old monster number - for polymorph */
+	schar mtame;		   /* level of tameness, implies peaceful */
+	unsigned long mintrinsics; /* initialized from mresists */
+	int mspec_used;		   /* monster's special ability attack timeout */
+	int oldmonnm;		   /* Old monster number - for polymorph */
 
-	bool female;	/* is female */
-	bool minvis;	/* currently invisible */
-	bool invis_blkd; /* invisibility blocked */
-	bool perminvis;	/* intrinsic minvis value */
-	Bitfield(cham,3);	/* shape-changer */
-	/* note: lychanthropes are handled elsewhere */
-#define CHAM_ORDINARY		0	/* not a shapechanger */
-#define CHAM_CHAMELEON		1	/* animal */
-#define CHAM_DOPPELGANGER	2	/* demi-human */
-#define CHAM_SANDESTIN		3	/* demon */
-#define CHAM_MAX_INDX		CHAM_SANDESTIN
-	bool mundetected;	/* not seen in present hiding place */
+	bool female;	    /* is female */
+	bool minvis;	    /* currently invisible */
+	bool invis_blkd;    /* invisibility blocked */
+	bool perminvis;	    /* intrinsic minvis value */
+	Bitfield(cham, 3);  /* shape-changer */
+			    /* note: lychanthropes are handled elsewhere */
+#define CHAM_ORDINARY	  0 /* not a shapechanger */
+#define CHAM_CHAMELEON	  1 /* animal */
+#define CHAM_DOPPELGANGER 2 /* demi-human */
+#define CHAM_SANDESTIN	  3 /* demon */
+#define CHAM_MAX_INDX	  CHAM_SANDESTIN
+	bool mundetected; /* not seen in present hiding place */
 	/* implies one of M1_CONCEAL or M1_HIDE,
 	 * but not mimic (that is, snake, spider,
 	 * trapper, piercer, eel)
 	 */
 
-	bool mcan;	/* has been cancelled */
-	bool mburied;	/* has been buried */
-	Bitfield(mspeed,2);	/* current speed */
-	Bitfield(permspeed,2);	/* intrinsic mspeed value */
-	bool mrevived;	/* has been revived from the dead */
-	bool mavenge;	/* did something to deserve retaliation */
+	bool mcan;		/* has been cancelled */
+	bool mburied;		/* has been buried */
+	Bitfield(mspeed, 2);	/* current speed */
+	Bitfield(permspeed, 2); /* intrinsic mspeed value */
+	bool mrevived;		/* has been revived from the dead */
+	bool mavenge;		/* did something to deserve retaliation */
 
-	bool mflee;	/* fleeing */
-	Bitfield(mfleetim,7);	/* timeout for mflee */
+	bool mflee;	       /* fleeing */
+	Bitfield(mfleetim, 7); /* timeout for mflee */
 
-	bool mcansee;	/* cansee 1, temp.blinded 0, blind 0 */
-	Bitfield(mblinded,7);	/* cansee 0, temp.blinded n, blind 0 */
+	bool mcansee;	       /* cansee 1, temp.blinded 0, blind 0 */
+	Bitfield(mblinded, 7); /* cansee 0, temp.blinded n, blind 0 */
 
-	bool mcanmove;	/* paralysis, similar to mblinded */
-	Bitfield(mfrozen,7);
+	bool mcanmove; /* paralysis, similar to mblinded */
+	Bitfield(mfrozen, 7);
 
-	bool msleeping;	/* asleep until woken */
+	bool msleeping; /* asleep until woken */
 	bool mstun;	/* stunned (off balance) */
 	bool mconf;	/* confused */
-	bool mpeaceful;	/* does not attack unprovoked */
+	bool mpeaceful; /* does not attack unprovoked */
 	bool mtrapped;	/* trapped in a pit, web or bear trap */
 	bool mleashed;	/* monster is on a leash */
 	bool isspell;	/* is a temporary spell being */
-	bool uexp;		/* you get experience for its kills */
+	bool uexp;	/* you get experience for its kills */
 
-	bool mtraitor;	/* Former pet that turned traitor */
-	bool isshk;	/* is shopkeeper */
-	bool isminion;	/* is a minion */
-	bool isgd;	/* is guard */
-	bool isgyp;	/* is a gypsy */
-	bool ispriest;	/* is a priest */
-	bool iswiz;	/* is the Wizard of Yendor */
-	Bitfield(wormno,5);	/* at most 31 worms on any level */
-#define MAX_NUM_WORMS	32	/* should be 2^(wormno bitfield size) */
+	bool mtraitor;	     /* Former pet that turned traitor */
+	bool isshk;	     /* is shopkeeper */
+	bool isminion;	     /* is a minion */
+	bool isgd;	     /* is guard */
+	bool isgyp;	     /* is a gypsy */
+	bool ispriest;	     /* is a priest */
+	bool iswiz;	     /* is the Wizard of Yendor */
+	Bitfield(wormno, 5); /* at most 31 worms on any level */
+#define MAX_NUM_WORMS 32     /* should be 2^(wormno bitfield size) */
 
-	long mstrategy;		/* for monsters with mflag3: current strategy */
-#define STRAT_ARRIVE	0x40000000L	/* just arrived on current level */
+	long mstrategy;		    /* for monsters with mflag3: current strategy */
+#define STRAT_ARRIVE	0x40000000L /* just arrived on current level */
 #define STRAT_WAITFORU	0x20000000L
 #define STRAT_CLOSE	0x10000000L
 #define STRAT_WAITMASK	0x30000000L
@@ -134,8 +134,8 @@ struct monst {
 #define STRAT_GOALX(s)	((xchar)((s & STRAT_XMASK) >> 16))
 #define STRAT_GOALY(s)	((xchar)((s & STRAT_YMASK) >> 8))
 
-	long mtrapseen;		/* bitmap of traps we've been trapped in */
-	long mlstmv;		/* for catching up with lost time */
+	long mtrapseen; /* bitmap of traps we've been trapped in */
+	long mlstmv;	/* for catching up with lost time */
 	struct obj *minvent;
 
 	struct obj *mw;
@@ -147,11 +147,11 @@ struct monst {
 	 * ALL ADDITIONS SHOULD GO BEFORE!!
 	 *       --WAC
 	 */
-	uchar mnamelth;		/* length of name (following mxlth) */
-	short mxlth;		/* length of following data */
+	uchar mnamelth; /* length of name (following mxlth) */
+	short mxlth;	/* length of following data */
 	/* in order to prevent alignment problems mextra should
 	   be (or follow) a long int */
-	int meating;		/* monster is eating timeout */
+	int meating;   /* monster is eating timeout */
 	char mextra[]; /* monster dependent info */
 };
 
@@ -173,21 +173,23 @@ struct monst {
  */
 
 #define newmonst(xl) alloc((unsigned)(xl) + sizeof(struct monst))
-#define dealloc_monst(mon) do { if ((mon)->isshk) \
-	shk_free(mon); \
-else \
-	free(mon); \
-} while (0)
+#define dealloc_monst(mon)             \
+	do {                           \
+		if ((mon)->isshk)      \
+			shk_free(mon); \
+		else                   \
+			free(mon);     \
+	} while (0)
 
 /* these are in mspeed */
-#define MSLOW 1		/* slow monster */
-#define MFAST 2		/* speeded monster */
+#define MSLOW 1 /* slow monster */
+#define MFAST 2 /* speeded monster */
 
-#define NAME(mtmp)	(((char *)(mtmp)->mextra) + (mtmp)->mxlth)
+#define NAME(mtmp) (((char *)(mtmp)->mextra) + (mtmp)->mxlth)
 
-#define MON_WEP(mon)	((mon)->mw)
-#define MON_NOWEP(mon)	((mon)->mw = NULL)
+#define MON_WEP(mon)   ((mon)->mw)
+#define MON_NOWEP(mon) ((mon)->mw = NULL)
 
-#define DEADMONSTER(mon)	((mon)->mhp < 1)
+#define DEADMONSTER(mon) ((mon)->mhp < 1)
 
 #endif /* MONST_H */

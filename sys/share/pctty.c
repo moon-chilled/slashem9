@@ -16,16 +16,16 @@ char erase_char, kill_char;
  */
 void gettty(void) {
 	erase_char = '\b';
-	kill_char = 21;		/* cntl-U */
+	kill_char = 21; /* cntl-U */
 	iflags.cbreak = true;
-	disable_ctrlP();	/* turn off ^P processing */
+	disable_ctrlP(); /* turn off ^P processing */
 }
 
 /* reset terminal to original state */
 void settty(const char *s) {
 	end_screen();
-	if(s) raw_print(s);
-	enable_ctrlP();		/* turn on ^P processing */
+	if (s) raw_print(s);
+	enable_ctrlP(); /* turn on ^P processing */
 }
 
 /* called by init_nhwindows() and resume_nhwindows() */

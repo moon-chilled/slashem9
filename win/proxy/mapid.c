@@ -16,9 +16,9 @@
  */
 
 struct mapid__window {
-    winid id;
-    int no_identifiers;
-    anything *identifiers;
+	winid id;
+	int no_identifiers;
+	anything *identifiers;
 };
 static int mapid__no_windows;
 static struct mapid__window *mapid__windows;
@@ -29,31 +29,31 @@ static struct mapid__window *mapid__windows;
  */
 
 static int mapid__add_winid(id)
-winid id;
+	winid id;
 {
-    int i;
-    if (id == WIN_ERR)
-	panic("mapid__add_winid: Bad window ID");
-    for(i = 0; i < mapid__no_windows; i++)
-	if (mapid__windows[i].id == id)
-	    return i;
-    for(i = 0; i < mapid__no_windows; i++)
-	if (mapid__windows[i].id == WIN_ERR)
-	    break;
-    if (i == mapid__no_windows) {
-	if (mapid__no_windows++)
-	    mapid__windows = (struct mapid__window *)realloc(mapid__windows,
-	      mapid__no_windows * sizeof(*mapid__windows));
-	else
-	    mapid__windows = alloc(sizeof(*mapid__windows));
-	if (!mapid__windows)
-	    panic("proxy: can't get %d bytes",
-	      mapid__no_windows * sizeof(*mapid__windows));
-    }
-    mapid__windows[i].id = id;
-    mapid__windows[i].no_identifiers = 0;
-    mapid__windows[i].identifiers = NULL;
-    return i;
+	int i;
+	if (id == WIN_ERR)
+		panic("mapid__add_winid: Bad window ID");
+	for (i = 0; i < mapid__no_windows; i++)
+		if (mapid__windows[i].id == id)
+			return i;
+	for (i = 0; i < mapid__no_windows; i++)
+		if (mapid__windows[i].id == WIN_ERR)
+			break;
+	if (i == mapid__no_windows) {
+		if (mapid__no_windows++)
+			mapid__windows = (struct mapid__window *)realloc(mapid__windows,
+									 mapid__no_windows * sizeof(*mapid__windows));
+		else
+			mapid__windows = alloc(sizeof(*mapid__windows));
+		if (!mapid__windows)
+			panic("proxy: can't get %d bytes",
+			      mapid__no_windows * sizeof(*mapid__windows));
+	}
+	mapid__windows[i].id = id;
+	mapid__windows[i].no_identifiers = 0;
+	mapid__windows[i].identifiers = NULL;
+	return i;
 }
 
 /*
@@ -61,18 +61,18 @@ winid id;
  */
 
 void mapid_del_winid(id)
-winid id;
+	winid id;
 {
-    int i;
-    if (id == WIN_ERR)
-	panic("mapid_del_winid: Bad window ID");
-    for(i = 0; i < mapid__no_windows; i++)
-	if (mapid__windows[i].id == id) {
-	    if (mapid__windows[i].no_identifiers)
-		free(mapid__windows[i].identifiers);
-	    mapid__windows[i].id = WIN_ERR;
-	    break;
-	}
+	int i;
+	if (id == WIN_ERR)
+		panic("mapid_del_winid: Bad window ID");
+	for (i = 0; i < mapid__no_windows; i++)
+		if (mapid__windows[i].id == id) {
+			if (mapid__windows[i].no_identifiers)
+				free(mapid__windows[i].identifiers);
+			mapid__windows[i].id = WIN_ERR;
+			break;
+		}
 }
 
 /*
@@ -82,25 +82,25 @@ winid id;
  */
 
 int mapid_map_identifier(id, identifier)
-winid id;
+	winid id;
 const anything *identifier;
 {
-    int i, j;
-    if (identifier->a_void == 0)
-	return 0;
-    i = mapid__add_winid(id);
-    if (j = mapid__windows[i].no_identifiers++)
-	mapid__windows[i].identifiers =
-	  (anything *)realloc(mapid__windows[i].identifiers,
-	  mapid__windows[i].no_identifiers * sizeof(*mapid__windows->identifiers));
-    else
-	mapid__windows[i].identifiers =
-	  alloc(sizeof(*mapid__windows->identifiers));
-    if (!mapid__windows[i].identifiers)
-	panic("proxy: can't get %d bytes",
-	  mapid__windows[i].no_identifiers * sizeof(*mapid__windows->identifiers));
-    mapid__windows[i].identifiers[j] = *identifier;
-    return j + 1;
+	int i, j;
+	if (identifier->a_void == 0)
+		return 0;
+	i = mapid__add_winid(id);
+	if (j = mapid__windows[i].no_identifiers++)
+		mapid__windows[i].identifiers =
+			(anything *)realloc(mapid__windows[i].identifiers,
+					    mapid__windows[i].no_identifiers * sizeof(*mapid__windows->identifiers));
+	else
+		mapid__windows[i].identifiers =
+			alloc(sizeof(*mapid__windows->identifiers));
+	if (!mapid__windows[i].identifiers)
+		panic("proxy: can't get %d bytes",
+		      mapid__windows[i].no_identifiers * sizeof(*mapid__windows->identifiers));
+	mapid__windows[i].identifiers[j] = *identifier;
+	return j + 1;
 }
 
 /*
@@ -108,33 +108,31 @@ const anything *identifier;
  */
 
 void mapid_unmap_identifier(id, mapping, identifier)
-winid id;
+	winid id;
 int mapping;
 anything *identifier;
 {
-    int i;
-    if (mapping == 0) {
-	identifier->a_void = 0;
-	return;
-    }
-    if (id == WIN_ERR)
-	panic("mapid_unmap_identifier: Bad window ID");
-    for(i = 0; i < mapid__no_windows; i++)
-	if (mapid__windows[i].id == id)
-	    break;
-    if (i == mapid__no_windows)
-    {
-	impossible("Ext: Trying to unmap on an unopened window?");
-	identifier->a_void = 0;
-	return;
-    }
-    if (mapping < 1 || mapping > mapid__windows[i].no_identifiers)
-    {
-	impossible("Bad identifier returned from plug-in.");
-	identifier->a_void = 0;
-	return;
-    }
-    *identifier = mapid__windows[i].identifiers[mapping - 1];
+	int i;
+	if (mapping == 0) {
+		identifier->a_void = 0;
+		return;
+	}
+	if (id == WIN_ERR)
+		panic("mapid_unmap_identifier: Bad window ID");
+	for (i = 0; i < mapid__no_windows; i++)
+		if (mapid__windows[i].id == id)
+			break;
+	if (i == mapid__no_windows) {
+		impossible("Ext: Trying to unmap on an unopened window?");
+		identifier->a_void = 0;
+		return;
+	}
+	if (mapping < 1 || mapping > mapid__windows[i].no_identifiers) {
+		impossible("Bad identifier returned from plug-in.");
+		identifier->a_void = 0;
+		return;
+	}
+	*identifier = mapid__windows[i].identifiers[mapping - 1];
 }
 
 /*
@@ -142,17 +140,17 @@ anything *identifier;
  */
 
 void mapid_del_identifiers(id)
-winid id;
+	winid id;
 {
-    int i;
-    if (id == WIN_ERR)
-	panic("mapid_del_indentifiers: Bad window ID");
-    for(i = 0; i < mapid__no_windows; i++)
-	if (mapid__windows[i].id == id) {
-	    if (mapid__windows[i].no_identifiers)
-		free(mapid__windows[i].identifiers);
-	    mapid__windows[i].identifiers = NULL;
-	    mapid__windows[i].no_identifiers = 0;
-	    break;
-	}
+	int i;
+	if (id == WIN_ERR)
+		panic("mapid_del_indentifiers: Bad window ID");
+	for (i = 0; i < mapid__no_windows; i++)
+		if (mapid__windows[i].id == id) {
+			if (mapid__windows[i].no_identifiers)
+				free(mapid__windows[i].identifiers);
+			mapid__windows[i].identifiers = NULL;
+			mapid__windows[i].no_identifiers = 0;
+			break;
+		}
 }

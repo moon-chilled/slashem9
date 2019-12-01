@@ -13,11 +13,11 @@
  *			between unlike platforms)
  */
 
-# ifdef LAN_FEATURES
-#  ifdef LAN_MAIL
+#ifdef LAN_FEATURES
+#ifdef LAN_MAIL
 #define MAIL
 #ifndef WIN32
-#define MAILCKFREQ	  50
+#define MAILCKFREQ 50
 #else
 /*
  * WIN32 port does the real mail lookups in a separate thread
@@ -27,8 +27,8 @@
  * system is controlled by MAILTHREADFREQ and is expressed
  * in milliseconds.
  */
-#define MAILCKFREQ	  5
-#define MAILTHREADFREQ	  50000
+#define MAILCKFREQ     5
+#define MAILTHREADFREQ 50000
 #endif
 
 #ifndef MAX_BODY_SIZE
@@ -38,11 +38,11 @@
 struct lan_mail_struct {
 	char sender[120];
 	char subject[120];
-	boolean body_in_ram;	/* true means body in memory not file */
+	boolean body_in_ram; /* true means body in memory not file */
 	char filename[_MAX_PATH];
 	char body[MAX_BODY_SIZE];
 };
-#  endif
+#endif
 
-# endif /*LAN_FEATURES*/
+#endif /*LAN_FEATURES*/
 #endif /*NHLAN_H*/
