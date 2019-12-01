@@ -412,8 +412,7 @@ static int kick_object(xchar x, xchar y) {
 		return 0;
 
 	if ((trap = t_at(x, y)) != 0 &&
-	    (((trap->ttyp == PIT ||
-	       trap->ttyp == SPIKED_PIT) &&
+	    ((is_pitlike(trap->ttyp) &&
 	      !Passes_walls) ||
 	     trap->ttyp == WEB)) {
 		if (!trap->tseen) find_trap(trap);
@@ -1338,7 +1337,7 @@ boolean ship_object(struct obj *otmp, xchar x, xchar y, boolean shop_floor_obj) 
 	   other things down before plugging the hole */
 	if (otmp->otyp == BOULDER &&
 	    ((t = t_at(x, y)) != 0) &&
-	    (t->ttyp == TRAPDOOR || t->ttyp == HOLE)) {
+	    is_holelike(t->ttyp)) {
 		if (impact) impact_drop(otmp, x, y, 0);
 		return false; /* let caller finish the drop */
 	}

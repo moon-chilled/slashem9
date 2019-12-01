@@ -68,3 +68,6 @@ Changelist for slashem-next v0.0.1:
 - Bugfix: wielded silver arrows weren't always dealing silver damage (NetHack).
 - Bugfix: you can sit down on items contained in a pit while teetering at its edge (NetHack).
 - Bugfix: message when you pushed a boulder into a pool of water while riding said that you filled it, rather than your steed (NetHack).
+- Bugfix: can't eat food from the floor of a pit while teetering at its edge.
+- Gameplay: can use '>' to jump into a pit while teetering at its edge (NetHack).
+- Interface: get a nice death message when you die by jumping into a pit you made.

@@ -549,10 +549,7 @@ drag:
 	      !is_pool(uball->ox, uball->oy) ||
 	      levl[uball->ox][uball->oy].typ == POOL)) ||
 	    ((t = t_at(uchain->ox, uchain->oy)) &&
-	     (t->ttyp == PIT ||
-	      t->ttyp == SPIKED_PIT ||
-	      t->ttyp == HOLE ||
-	      t->ttyp == TRAPDOOR))) {
+	     (is_pitlike(t->ttyp) || is_holelike(t->ttyp)))) {
 		if (Levitation) {
 			pline("You feel a tug from the iron ball.");
 			if (t) t->tseen = 1;
@@ -667,8 +664,7 @@ void drop_ball(xchar x, xchar y) {
 		if (!Levitation && !MON_AT(x, y) && !u.utrap &&
 		    (is_pool(x, y) ||
 		     ((t = t_at(x, y)) &&
-		      (t->ttyp == PIT || t->ttyp == SPIKED_PIT ||
-		       t->ttyp == TRAPDOOR || t->ttyp == HOLE)))) {
+		      (is_pitlike(t->ttyp) || is_holelike(t->ttyp))))) {
 			u.ux = x;
 			u.uy = y;
 		} else {

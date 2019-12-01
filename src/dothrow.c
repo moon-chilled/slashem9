@@ -555,8 +555,7 @@ boolean hurtle_step(void *arg, int x, int y) {
 			return false;
 		} else if (ttmp->ttyp == FIRE_TRAP) {
 			dotrap(ttmp, 0);
-		} else if ((ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT ||
-			    ttmp->ttyp == HOLE || ttmp->ttyp == TRAPDOOR) &&
+		} else if ((is_pitlike(ttmp->ttyp) || is_holelike(ttmp->ttyp)) &&
 			   In_sokoban(&u.uz)) {
 			/* Air currents overcome the recoil */
 			dotrap(ttmp, 0);

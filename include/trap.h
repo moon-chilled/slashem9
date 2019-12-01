@@ -74,4 +74,7 @@ extern struct trap *ftrap;
 #define POLY_TRAP	     22
 #define TRAPNUM		     23
 
+#define is_pitlike(ttyp) ((ttyp) == PIT || (ttyp) == SPIKED_PIT)
+#define is_holelike(ttyp)  ((ttyp) == HOLE || (ttyp) == TRAPDOOR)
+
 #endif /* TRAP_H */

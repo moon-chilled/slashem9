@@ -1004,10 +1004,13 @@ struct obj *getobj(const char *let, const char *word) {
 				pline("That is a silly thing to %s.", word);
 				return NULL;
 			} else if (!allowfloor) {
-				if ((Levitation || Flying))
+				if (Levitation || Flying) {
 					pline("You cannot reach the floor to %s while %sing.", word, Levitation ? "float" : "fly");
-				else
+				} else if (uteetering_at_seen_pit()) {
+					pline("You cannot reach the bottom of the pit.");
+				} else {
 					pline("There's nothing here to %s.", word);
+				}
 				return NULL;
 			}
 			sprintf(qbuf, "%s what?", word);

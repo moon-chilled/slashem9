@@ -2779,10 +2779,10 @@ void newuhs(boolean incr) {
 	}
 }
 
-boolean can_reach_floorobj(void) {
+bool can_reach_floorobj(void) {
 	return can_reach_floor() &&
-	       !((is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) &&
-		 (Wwalking || is_clinger(youmonst.data) || (Flying && !Breathless)));
+	       !((is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) && (Wwalking || is_clinger(youmonst.data) || (Flying && !Breathless))) &&
+	       !uteetering_at_seen_pit();
 }
 
 /* Returns an object representing food.  Object may be either on floor or

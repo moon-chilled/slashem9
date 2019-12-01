@@ -128,7 +128,7 @@ void *alloc(usize); /* alloc.c */
 #define _newtype_f1(...)	    _newtype(__VA_ARGS__, 1)
 #define _newtype_f2(...)	    _newtype(__VA_ARGS__)
 #define _newtype_fx(_1, _2, n, ...) n
-#define new (...) _newtype_fx(__VA_ARGS__, _newtype_f2(__VA_ARGS__), _newtype_f1(__VA_ARGS__), 0)
+#define new(...) _newtype_fx(__VA_ARGS__, _newtype_f2(__VA_ARGS__), _newtype_f1(__VA_ARGS__), 0)
 
 /*
 #define new_setvar_f1(...) _new_setvar(__VA_ARGS__, 1)

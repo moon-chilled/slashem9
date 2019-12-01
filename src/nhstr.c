@@ -151,7 +151,7 @@ char *nhs2cstr_tmp(nhstr *str) {
 }
 
 // doesn't do unicode conversion
-extern char *nhs2cstr_trunc_tmp(nhstr *str) {
+char *nhs2cstr_trunc_tmp(nhstr *str) {
 	static char ret[BUFSZ];
 
 	usize i;
@@ -160,6 +160,12 @@ extern char *nhs2cstr_trunc_tmp(nhstr *str) {
 	}
 	ret[i + 1] = 0;
 
+	return ret;
+}
+
+char *nhs2cstr_tmp_destroy(nhstr *str) {
+	char *ret = nhs2cstr_tmp(str);
+	del_nhs(str);
 	return ret;
 }
 

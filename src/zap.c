@@ -3217,8 +3217,7 @@ struct monst *bhit(int ddx, int ddy, int range, int weapon, int (*fhitm)(struct 
 						      The(distant_name(obj, xname))); /* lame */
 					range = 0;
 				} else if (In_sokoban(&u.uz) && (t = t_at(x, y)) != 0 &&
-					   (t->ttyp == PIT || t->ttyp == SPIKED_PIT ||
-					    t->ttyp == HOLE || t->ttyp == TRAPDOOR)) {
+					   (is_pitlike(t->ttyp) || is_holelike(t->ttyp))) {
 					/* hero falls into the trap, so ball stops */
 					range = 0;
 				}

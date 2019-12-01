@@ -529,7 +529,7 @@ void violated_vegetarian(void);
 void sync_hunger(void);
 #endif
 void newuhs(boolean);
-boolean can_reach_floorobj(void);
+bool can_reach_floorobj(void);
 void vomit(void);
 int eaten_stat(int, struct obj *);
 void food_disappears(struct obj *);
@@ -1988,6 +1988,9 @@ void blow_up_landmine(struct trap *);
 int launch_obj(short, int, int, int, int, int);
 /* KMH, balance patch -- new function */
 int uunstone(void);
+bool uteetering_at_seen_pit(void);
+bool uteetering_at_seen_hole(void);
+bool uteetering_at_seen_trap(void);
 
 /* ### u_init.c ### */
 

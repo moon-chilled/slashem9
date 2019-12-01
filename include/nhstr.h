@@ -26,22 +26,23 @@ typedef struct {
 // All function do in-place modification of the string they're passed; they
 // return the same string for convenience.  Only exception is nhscopy.
 
-extern nhstr *new_nhs(void);
-extern void del_nhs(nhstr *str);
-extern nhstr *nhscatznc(nhstr *str, char *cat, usize catlen, int colour);
-extern nhstr *nhscatzc(nhstr *str, char *cat, int colour);
-extern nhstr *nhscatzn(nhstr *str, char *cat, usize catlen);
-extern nhstr *nhscatz(nhstr *str, char *cat);
-extern nhstr *nhscopy(nhstr *str);
-extern nhstr *nhscat(nhstr *str, nhstr *cat);
-//extern nhstr *nhscatfc_v(nhstr *str, int colour, char *cat, va_list the_args);
-extern nhstr *nhscatfc(nhstr *str, int colour, char *cat, ...);
-extern nhstr *nhscatf(nhstr *str, char *cat, ...);
+nhstr *new_nhs(void);
+void del_nhs(nhstr *str);
+nhstr *nhscatznc(nhstr *str, char *cat, usize catlen, int colour);
+nhstr *nhscatzc(nhstr *str, char *cat, int colour);
+nhstr *nhscatzn(nhstr *str, char *cat, usize catlen);
+nhstr *nhscatz(nhstr *str, char *cat);
+nhstr *nhscopy(nhstr *str);
+nhstr *nhscat(nhstr *str, nhstr *cat);
+//nhstr *nhscatfc_v(nhstr *str, int colour, char *cat, va_list the_args);
+nhstr *nhscatfc(nhstr *str, int colour, char *cat, ...);
+nhstr *nhscatf(nhstr *str, char *cat, ...);
 
-extern char *nhs2cstr_tmp(nhstr *str);
-extern char *nhs2cstr_trunc_tmp(nhstr *str);  // doesn't do unicode conversion
-extern nhstr *nhstrim(nhstr *str, usize maxlen);
-extern nhstr *nhslice(nhstr *str, usize new_start);
+char *nhs2cstr_tmp(nhstr *str);
+char *nhs2cstr_trunc_tmp(nhstr *str);  // doesn't do unicode conversion
+char *nhs2cstr_tmp_destroy(nhstr *str); //
+nhstr *nhstrim(nhstr *str, usize maxlen);
+nhstr *nhslice(nhstr *str, usize new_start);
 
 isize nhsindex(nhstr *str, glyph_t ch);
 

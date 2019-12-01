@@ -373,7 +373,7 @@ boolean find_defensive(struct monst *mtmp) {
 									     passes_walls(mtmp->data)) ||
 									    !sobj_at(BOULDER, xx, yy))
 										if (!onscary(xx, yy, mtmp)) {
-											if ((t->ttyp == TRAPDOOR || t->ttyp == HOLE) && !is_floater(mtmp->data) && !mtmp->isshk && !mtmp->isgd && !mtmp->ispriest && Can_fall_thru(&u.uz)) {
+											if (is_holelike(t->ttyp) && !is_floater(mtmp->data) && !mtmp->isshk && !mtmp->isgd && !mtmp->ispriest && Can_fall_thru(&u.uz)) {
 												trapx = xx;
 												trapy = yy;
 												m.has_defense = MUSE_TRAPDOOR;
@@ -413,8 +413,7 @@ boolean find_defensive(struct monst *mtmp) {
 
 	/* kludge to cut down on trap destruction (particularly portals) */
 	t = t_at(x, y);
-	if (t && (t->ttyp == PIT || t->ttyp == SPIKED_PIT ||
-		  t->ttyp == WEB || t->ttyp == BEAR_TRAP))
+	if (t && (is_pitlike(t->ttyp) || t->ttyp == WEB || t->ttyp == BEAR_TRAP))
 		t = 0; /* ok for monster to dig here */
 
 #define nomore(x) \

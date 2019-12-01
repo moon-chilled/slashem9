@@ -405,8 +405,7 @@ static int moverock(void) {
 
 			if (mtmp && !noncorporeal(mtmp->data) &&
 			    (!mtmp->mtrapped ||
-			     !(ttmp && ((ttmp->ttyp == PIT) ||
-					(ttmp->ttyp == SPIKED_PIT))))) {
+			     !(ttmp && is_pitlike(ttmp->ttyp)))) {
 				if (Blind) feel_location(sx, sy);
 				if (canspotmon(mtmp)) {
 					boolean by_name = (mtmp->data->geno & G_UNIQ ||
@@ -1606,7 +1605,7 @@ void domove(void) {
 
 		if (mtmp->mtrapped &&
 		    (trap = t_at(mtmp->mx, mtmp->my)) != 0 &&
-		    (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT) &&
+		    is_pitlike(trap->ttyp) &&
 		    sobj_at(BOULDER, trap->tx, trap->ty)) {
 			/* can't swap places with pet pinned in a pit by a boulder */
 			u.ux = u.ux0, u.uy = u.uy0; /* didn't move after all */
@@ -1809,10 +1808,10 @@ stillinwater:;
 	if (!in_steed_dismounting) { /* if dismounting, we'll check again later */
 		struct trap *trap = t_at(u.ux, u.uy);
 		boolean pit;
-		pit = (trap && (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT));
+		pit = trap && is_pitlike(trap->ttyp);
 		if (trap && pit)
 			dotrap(trap, 0); /* fall into pit */
-		if (pick) (void)pickup(1);
+		if (pick) pickup(1);
 		if (trap && !pit)
 			dotrap(trap, 0); /* fall into arrow trap, etc. */
 	}
@@ -2193,17 +2192,14 @@ int dopickup(void) {
 		return 0;
 	}
 
-	if (traphere && traphere->tseen) {
+	if (traphere && uteetering_at_seen_pit()) {
 		/* Allow pickup from holes and trap doors that you escaped from
 		 * because that stuff is teetering on the edge just like you, but
 		 * not pits, because there is an elevation discrepancy with stuff
 		 * in pits.
 		 */
-		if ((traphere->ttyp == PIT || traphere->ttyp == SPIKED_PIT) &&
-		    (!u.utrap || (u.utrap && u.utraptype != TT_PIT))) {
-			pline("You cannot reach the bottom of the pit.");
-			return 0;
-		}
+		pline("You cannot reach the bottom of the pit.");
+		return 0;
 	}
 
 	return pickup(-count);

@@ -140,7 +140,7 @@ static int drop_throw(struct monst *mon, struct obj *obj, boolean ohit, int x, i
 	}
 
 	if (create && !((mtmp = m_at(x, y)) && (mtmp->mtrapped) &&
-			(t = t_at(x, y)) && ((t->ttyp == PIT) || (t->ttyp == SPIKED_PIT)))) {
+			(t = t_at(x, y)) && is_pitlike(t->ttyp))) {
 		int objgone = 0;
 
 		if (down_gate(x, y) != -1)

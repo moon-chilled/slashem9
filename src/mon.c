@@ -1861,7 +1861,7 @@ void xkilled(struct monst *mtmp, int dest) {
 	}
 
 	if (mtmp->mtrapped && (t = t_at(x, y)) != 0 &&
-	    (t->ttyp == PIT || t->ttyp == SPIKED_PIT) &&
+	    is_pitlike(t->ttyp) &&
 	    sobj_at(BOULDER, x, y))
 		dest |= 2; /*
 			    * Prevent corpses/treasure being created "on top"

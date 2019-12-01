@@ -1923,7 +1923,7 @@ static int gulpmu(struct monst *mtmp, struct attack *mattk) {
 
 	if (!u.uswallow) { /* swallows you */
 		if (youmonst.data->msize >= MZ_HUGE) return 0;
-		if ((t && ((t->ttyp == PIT) || (t->ttyp == SPIKED_PIT))) &&
+		if ((t && is_pitlike(t->ttyp)) &&
 		    sobj_at(BOULDER, u.ux, u.uy))
 			return 0;
 

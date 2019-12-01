@@ -284,7 +284,7 @@ static int dig(void) {
 			return 0; /* done with digging */
 		}
 
-		if (digging.effort <= 50 || is_lightsaber(uwep) || ((ttmp = t_at(dpx, dpy)) != 0 && (ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT || ttmp->ttyp == TRAPDOOR || ttmp->ttyp == HOLE)))
+		if (digging.effort <= 50 || is_lightsaber(uwep) || ((ttmp = t_at(dpx, dpy)) != 0 && (is_pitlike(ttmp->ttyp) || is_holelike(ttmp->ttyp))))
 
 			return 1;
 
@@ -684,8 +684,7 @@ boolean dighole(boolean pit_only) {
 		}
 
 	} else if ((boulder_here = sobj_at(BOULDER, u.ux, u.uy)) != 0) {
-		if (ttmp && (ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT) &&
-		    rn2(2)) {
+		if (ttmp && is_pitlike(ttmp->ttyp) && rn2(2)) {
 			pline("The boulder settles into the pit.");
 			ttmp->ttyp = PIT; /* crush spikes */
 		} else {

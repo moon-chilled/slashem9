@@ -432,7 +432,7 @@ static void makeniche(int trap_type) {
 			if (trap_type || !rn2(4)) {
 				rm->typ = SCORR;
 				if (trap_type) {
-					if ((trap_type == HOLE || trap_type == TRAPDOOR) && !Can_fall_thru(&u.uz))
+					if (is_holelike(trap_type) && !Can_fall_thru(&u.uz))
 						trap_type = ROCKTRAP;
 					ttmp = maketrap(xx, yy + dy, trap_type);
 					if (ttmp) {
@@ -1211,15 +1211,14 @@ void mktrap(int num, int mazeflag, struct mkroom *croom, coord *tm) {
 		} while (kind == NO_TRAP);
 	}
 
-	if ((kind == TRAPDOOR || kind == HOLE) && !Can_fall_thru(&u.uz))
+	if (is_holelike(kind) && !Can_fall_thru(&u.uz))
 		kind = ROCKTRAP;
 
 	if (tm)
 		m = *tm;
 	else {
 		int tryct = 0;
-		boolean avoid_boulder = (kind == PIT || kind == SPIKED_PIT ||
-					 kind == TRAPDOOR || kind == HOLE);
+		boolean avoid_boulder = is_pitlike(kind) || is_holelike(kind);
 
 		do {
 			if (++tryct > 200)

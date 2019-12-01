@@ -131,7 +131,7 @@ boolean flooreffects(struct obj *obj, int x, int y, const char *verb) {
 	if (obj->otyp == BOULDER && boulder_hits_pool(obj, x, y, false))
 		return true;
 	else if (obj->otyp == BOULDER && (t = t_at(x, y)) != 0 &&
-		 (t->ttyp == PIT || t->ttyp == SPIKED_PIT || t->ttyp == TRAPDOOR || t->ttyp == HOLE)) {
+		 (is_pitlike(t->ttyp) || is_holelike(t->ttyp))) {
 		if (((mtmp = m_at(x, y)) && mtmp->mtrapped) ||
 		    (u.utrap && u.ux == x && u.uy == y)) {
 			if (*verb)
@@ -192,17 +192,14 @@ boolean flooreffects(struct obj *obj, int x, int y, const char *verb) {
 			newsym(x, y);
 		}
 		return water_damage(obj, false, false);
-	} else if (u.ux == x && u.uy == y &&
-		   (!u.utrap || u.utraptype != TT_PIT) &&
-		   (t = t_at(x, y)) != 0 && t->tseen &&
-		   (t->ttyp == PIT || t->ttyp == SPIKED_PIT || t->ttyp == HOLE || t->ttyp == TRAPDOOR)) {
+	} else if ((x == u.ux && y == u.uy) && uteetering_at_seen_trap()) {
 		/* you escaped a pit and are standing on the precipice */
 		if (Blind && flags.soundok)
 			You_hearf("%s tumble downwards.", the(xname(obj)));
 		else
 			pline("%s %s into %s pit.",
 			      The(xname(obj)), otense(obj, "tumble"),
-			      t->madeby_u ? "your" : "the");
+			      t_at(x, y)->madeby_u ? "your" : "the");
 	}
 	if (is_lightsaber(obj) && obj->lamplit) {
 		if (cansee(x, y)) pline("You see %s deactivate.", an(xname(obj)));
@@ -708,8 +705,11 @@ int dodown(void) {
 		return 0; /* didn't move */
 	}
 	if (!stairs_down && !ladder_down) {
-		if (!(trap = t_at(u.ux, u.uy)) ||
-		    (trap->ttyp != TRAPDOOR && trap->ttyp != HOLE) || !Can_fall_thru(&u.uz) || !trap->tseen) {
+		trap = t_at(u.ux, u.uy);
+		if (trap && uteetering_at_seen_pit()) {
+			dotrap(trap, TOOKPLUNGE);
+			return 1;
+		} else if (!trap || !is_holelike(trap->ttyp) || !Can_fall_thru(&u.uz) || !trap->tseen) {
 			if (flags.autodig && !flags.nopick &&
 			    uwep && is_pick(uwep)) {
 				return use_pick_axe2(uwep);

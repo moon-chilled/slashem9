@@ -2367,7 +2367,7 @@ srch:
 			tname = sym_desc[trap_to_defsym(trap)].explanation;
 			if (!strncmpi(tname, bp, strlen(tname))) {
 				/* avoid stupid mistakes */
-				if ((trap == TRAPDOOR || trap == HOLE) && !Can_fall_thru(&u.uz)) trap = ROCKTRAP;
+				if (is_holelike(trap) && !Can_fall_thru(&u.uz)) trap = ROCKTRAP;
 				maketrap(u.ux, u.uy, trap);
 				pline("%s.", An(tname));
 				return &zeroobj;

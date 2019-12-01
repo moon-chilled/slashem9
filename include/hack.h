@@ -172,9 +172,10 @@ extern coord bhitpos; /* place where throw or zap hits or stops */
 #define PICK_RIGID  1
 
 /* Flags to control dotrap() in trap.c */
-#define NOWEBMSG      0x01 /* suppress stumble into web message */
-#define FORCEBUNGLE   0x02 /* adjustments appropriate for bungling */
-#define RECURSIVETRAP 0x04 /* trap changed into another type this same turn */
+#define NOWEBMSG      0x01 // suppress stumble into web message
+#define FORCEBUNGLE   0x02 // adjustments appropriate for bungling
+#define RECURSIVETRAP 0x04 // trap changed into another type this same turn
+#define TOOKPLUNGE    0x08 // used '>' to enter pit/hole below you
 
 /* Flags to control test_move in hack.c */
 #define DO_MOVE	  0 /* really doing the move */

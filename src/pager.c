@@ -778,14 +778,14 @@ int doidtrap(void) {
 			if (!trap->tseen) break;
 			tt = trap->ttyp;
 			if (u.dz) {
-				if (u.dz < 0 ? (tt == TRAPDOOR || tt == HOLE) :
+				if (u.dz < 0 ? is_holelike(tt) :
 					       tt == ROCKTRAP) break;
 			}
 			tt = what_trap(tt);
 			pline("That is %s%s%s.",
 			      an(sym_desc[trap_to_defsym(tt)].explanation),
 			      !trap->madeby_u ? "" : (tt == WEB) ? " woven" :
-								   /* trap doors & spiked pits can't be made by
+			   /* trap doors & spiked pits can't be made by
 			         player, and should be considered at least
 			         as much "set" as "dug" anyway */
 							     (tt == HOLE || tt == PIT) ? " dug" : " set",

@@ -2752,8 +2752,7 @@ static boolean load_maze(dlb *fd) {
 			maze1xy(&mm, DRY);
 			trytrap = rndtrap();
 			if (sobj_at(BOULDER, mm.x, mm.y))
-				while (trytrap == PIT || trytrap == SPIKED_PIT ||
-				       trytrap == TRAPDOOR || trytrap == HOLE)
+				while (is_pitlike(trytrap) || is_holelike(trytrap))
 					trytrap = rndtrap();
 			maketrap(mm.x, mm.y, trytrap);
 		}

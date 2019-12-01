@@ -254,7 +254,7 @@ maketrap(int x, int y, int typ) {
 		case TRAPDOOR:
 			lev = &levl[x][y];
 			if (*in_rooms(x, y, SHOPBASE) &&
-			    ((typ == HOLE || typ == TRAPDOOR) ||
+			    (is_holelike(typ) ||
 			     IS_DOOR(lev->typ) || IS_WALL(lev->typ)))
 				add_damage(x, y, /* schedule repair */
 					   ((IS_DOOR(lev->typ) || IS_WALL(lev->typ)) && !flags.mon_moving) ? 200L : 0L);
@@ -541,14 +541,13 @@ void dotrap(struct trap *trap, unsigned trflags) {
 	struct obj *otmp;
 	boolean already_seen = trap->tseen;
 	boolean webmsgok = (!(trflags & NOWEBMSG));
-	boolean forcebungle = (trflags & FORCEBUNGLE);
+	boolean forcebungle = trflags & FORCEBUNGLE;
+	bool plunged = trflags & TOOKPLUNGE;
 
 	nomul(0);
 
 	/* KMH -- You can't escape the Sokoban level traps */
-	if (In_sokoban(&u.uz) &&
-	    (ttype == PIT || ttype == SPIKED_PIT || ttype == HOLE ||
-	     ttype == TRAPDOOR)) {
+	if (In_sokoban(&u.uz) && (is_pitlike(ttype) || is_holelike(ttype))) {
 		/* The "air currents" message is still appropriate -- even when
 		 * the hero isn't flying or levitating -- because it conveys the
 		 * reason why the player cannot escape the trap with a dexterity
@@ -559,9 +558,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 		      sym_desc[trap_to_defsym(ttype)].explanation);
 		/* then proceed to normal trap effect */
 	} else if (already_seen) {
-		if ((Levitation || Flying) &&
-		    (ttype == PIT || ttype == SPIKED_PIT || ttype == HOLE ||
-		     ttype == BEAR_TRAP)) {
+		if ((Levitation || Flying) && (is_pitlike(ttype) || ttype == HOLE || ttype == BEAR_TRAP)) {
 			pline("You %s over %s %s.",
 			      Levitation ? "float" : "fly",
 			      a_your[trap->madeby_u],
@@ -569,9 +566,9 @@ void dotrap(struct trap *trap, unsigned trflags) {
 			return;
 		}
 		if (!Fumbling && ttype != MAGIC_PORTAL &&
-		    ttype != ANTI_MAGIC && !forcebungle &&
+		    ttype != ANTI_MAGIC && !forcebungle && !plunged &&
 		    (!rn2(5) ||
-		     ((ttype == PIT || ttype == SPIKED_PIT) && is_clinger(youmonst.data)))) {
+		     (is_pitlike(ttype) && is_clinger(youmonst.data)))) {
 			pline("You escape %s %s.",
 			      (ttype == ARROW_TRAP && !trap->madeby_u) ? "an" :
 									 a_your[trap->madeby_u],
@@ -839,7 +836,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 								 u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
 								 "poor", SUPPRESS_SADDLE, false));
 				} else
-					strcpy(verbbuf, "fall");
+					strcpy(verbbuf, plunged ? "plunge" : "fall");
 				pline("You %s into %s pit!", verbbuf, a_your[trap->madeby_u]);
 			}
 			/* wumpus reference */
@@ -851,28 +848,30 @@ void dotrap(struct trap *trap, unsigned trflags) {
 				   u.umonnum == PM_PIT_FIEND)
 				pline("How pitiful.  Isn't that the pits?");
 			if (ttype == SPIKED_PIT) {
-				const char *predicament = "on a set of sharp iron spikes";
-
 				if (u.usteed) {
-					pline("%s lands %s!",
+					pline("%s lands on a set of sharp iron spikes!",
 					      upstart(x_monnam(u.usteed,
 							       u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
-							       "poor", SUPPRESS_SADDLE, false)),
-					      predicament);
-				} else
-					pline("You land %s!", predicament);
+							       "poor", SUPPRESS_SADDLE, false)));
+				} else {
+					pline("You land on a set of sharp iron spikes!");
+				}
 			}
 			if (!Passes_walls)
 				u.utrap = rn1(6, 2);
 			u.utraptype = TT_PIT;
 			if (!steedintrap(trap, NULL)) {
 				if (ttype == SPIKED_PIT) {
-					losehp(rnd(10), "fell into a pit of iron spikes",
-					       NO_KILLER_PREFIX);
+					losehp(rnd(10), plunged ? "deliberately plunged into a pit of iron spikes" : "fell into a pit of iron spikes", NO_KILLER_PREFIX);
 					if (!rn2(6))
 						poisoned("spikes", A_STR, "fall onto poison spikes", 8);
-				} else
-					losehp(rnd(6), "fell into a pit", NO_KILLER_PREFIX);
+				} else {
+					// plunged into her own pit
+					// fell into his own pit
+					// plunged into a pit
+					nhstr *reason = nhscatf(new_nhs(), plunged ? "deliberately plunged into %S%S pit" : "fell into %S%S pit", trap->madeby_u ? uhis() : "a", trap->madeby_u ? " own" : "");
+					losehp(rnd(6), nhs2cstr_tmp_destroy(reason), NO_KILLER_PREFIX);
+				}
 				if (Punished && !carried(uball)) {
 					unplacebc();
 					ballfall();
@@ -1576,9 +1575,8 @@ int mintrap(struct monst *mtmp) {
 	} else if (mtmp->mtrapped) { /* is currently in the trap */
 		if (!trap->tseen &&
 		    cansee(mtmp->mx, mtmp->my) && canseemon(mtmp) &&
-		    (trap->ttyp == SPIKED_PIT || trap->ttyp == BEAR_TRAP ||
-		     trap->ttyp == HOLE || trap->ttyp == PIT ||
-		     trap->ttyp == WEB)) {
+		    (is_pitlike(trap->ttyp) || trap->ttyp == BEAR_TRAP ||
+		     trap->ttyp == HOLE || trap->ttyp == WEB)) {
 			/* If you come upon an obviously trapped monster, then
 			 * you must be able to see the trap it's in too.
 			 */
@@ -1587,7 +1585,7 @@ int mintrap(struct monst *mtmp) {
 
 		if (!rn2(40)) {
 			if (sobj_at(BOULDER, mtmp->mx, mtmp->my) &&
-			    (trap->ttyp == PIT || trap->ttyp == SPIKED_PIT)) {
+			    is_pitlike(trap->ttyp)) {
 				if (!rn2(2)) {
 					mtmp->mtrapped = 0;
 					if (canseemon(mtmp))
@@ -1614,8 +1612,7 @@ int mintrap(struct monst *mtmp) {
 	} else {
 		int tt = trap->ttyp;
 		boolean in_sight, tear_web, see_it,
-			inescapable = ((tt == HOLE || tt == PIT) &&
-				       In_sokoban(&u.uz) && !trap->madeby_u);
+			inescapable = is_pitlike(tt) && In_sokoban(&u.uz) && !trap->madeby_u;
 		const char *fallverb;
 
 		/* true when called from dotrap, inescapable is not an option */
@@ -2245,7 +2242,7 @@ void fill_pit(int x, int y) {
 	struct trap *t;
 
 	if ((t = t_at(x, y)) &&
-	    ((t->ttyp == PIT) || (t->ttyp == SPIKED_PIT)) &&
+	    is_pitlike(t->ttyp) &&
 	    (otmp = sobj_at(BOULDER, x, y))) {
 		obj_extract_self(otmp);
 		flooreffects(otmp, x, y, "settle");
@@ -2270,8 +2267,7 @@ int float_down(long hmask, long emask) {
 	if (Punished && !carried(uball) &&
 	    (is_pool(uball->ox, uball->oy) ||
 	     ((trap = t_at(uball->ox, uball->oy)) &&
-	      ((trap->ttyp == PIT) || (trap->ttyp == SPIKED_PIT) ||
-	       (trap->ttyp == TRAPDOOR) || (trap->ttyp == HOLE))))) {
+	      (is_pitlike(trap->ttyp) || is_holelike(trap->ttyp))))) {
 		u.ux0 = u.ux;
 		u.uy0 = u.uy;
 		u.ux = uball->ox;
@@ -3467,7 +3463,7 @@ int untrap(boolean force) {
 		deal_with_floor_trap = true;
 		strcpy(the_trap, the(sym_desc[trap_to_defsym(ttmp->ttyp)].explanation));
 		if (box_here) {
-			if (ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT) {
+			if (is_pitlike(ttmp->ttyp)) {
 				pline("You can't do much about %s%s.",
 				      the_trap, u.utrap ? " that you're stuck in" : " while standing on the edge of it");
 				trap_skipped = true;
@@ -3863,10 +3859,8 @@ boolean delfloortrap(struct trap *ttmp) {
 		     (ttmp->ttyp == BEAR_TRAP) ||
 		     (ttmp->ttyp == LANDMINE) ||
 		     (ttmp->ttyp == FIRE_TRAP) ||
-		     (ttmp->ttyp == PIT) ||
-		     (ttmp->ttyp == SPIKED_PIT) ||
-		     (ttmp->ttyp == HOLE) ||
-		     (ttmp->ttyp == TRAPDOOR) ||
+		     is_pitlike(ttmp->ttyp) ||
+		     is_holelike(ttmp->ttyp) ||
 		     (ttmp->ttyp == TELEP_TRAP) ||
 		     (ttmp->ttyp == LEVEL_TELEP) ||
 		     (ttmp->ttyp == WEB) ||
@@ -4055,5 +4049,18 @@ burn_stuff:
 	destroy_item(POTION_CLASS, AD_FIRE);
 	return false;
 }
+
+bool uteetering_at_seen_pit(void) {
+	struct trap *t = t_at(u.ux, u.uy);
+	return t && t->tseen && (!u.utrap || u.utraptype != TT_PIT) && is_pitlike(t->ttyp);
+}
+bool uteetering_at_seen_hole(void) {
+	struct trap *t = t_at(u.ux, u.uy);
+	return t && t->tseen && is_holelike(t->ttyp);
+}
+bool uteetering_at_seen_trap(void) {
+	return uteetering_at_seen_pit() || uteetering_at_seen_hole();
+}
+
 
 /*trap.c*/
