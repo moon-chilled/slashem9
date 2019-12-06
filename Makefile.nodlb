@@ -1,5 +1,3 @@
-MAKE ?= make
-
 PREFIX ?= $(HOME)/slashem-nextinstall
 BINDIR ?= $(PREFIX)/bin
 HACKDIR ?= $(PREFIX)/slashemdir
