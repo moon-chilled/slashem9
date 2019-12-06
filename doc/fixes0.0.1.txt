@@ -73,3 +73,4 @@ Changelist for slashem-next v0.0.1:
 - Interface: get a nice death message when you die by jumping into a pit you made.
 - Bugfix: when you lead a named steed into a trap while hallucinating, since the name is elided, elide also the article 'the' (NetHack).
 - Bugfix: when a ridden steed is led onto a polymorph trap and polymorphs into another rideable form, you have to adjust yourself in the saddle on on 'the' (monster-type), not 'a'.
+- Interface: when prompted for a direction, '?' shows help and prompts again (NetHack).

@@ -96,7 +96,7 @@ static void end_of_input(void);
 static const char *readchar_queue = "";
 
 static char *parse(void);
-static boolean help_dir(char, const char *);
+static bool help_dir(char, const char *);
 
 static int domenusystem(void); /* WAC the menus*/
 
@@ -3369,9 +3369,10 @@ int getdir(const char *s) {
 	sprintf(buf, "In what direction? [%s]",
 		(iflags.num_pad ? ndir : sdir));
 
-	if (in_doagain || *readchar_queue)
+retry:
+	if (in_doagain || *readchar_queue) {
 		dirsym = readchar();
-	else {
+	} else {
 		do {
 			dirsym = yn_function((s && *s != '^') ? s : buf, NULL, '\0');
 		} while (!movecmd(dirsym) && !index(quitchars, dirsym) && dirsym == '.' && dirsym == 's' && !u.dz);
@@ -3379,16 +3380,16 @@ int getdir(const char *s) {
 
 	savech(dirsym);
 
-	if (dirsym == '.' || dirsym == 's')
+	if (dirsym == '.' || dirsym == 's') {
 		u.dx = u.dy = u.dz = 0;
-	else if (!movecmd(dirsym) && !u.dz) {
-		boolean did_help = false;
+	} else if (!movecmd(dirsym) && !u.dz) {
 		if (!index(quitchars, dirsym)) {
-			if (iflags.cmdassist) {
-				did_help = help_dir((s && *s == '^') ? dirsym : 0,
-						    "Invalid direction key!");
+			bool did_help = false, help_requested = (dirsym == '?');
+			if (help_requested || iflags.cmdassist) {
+				did_help = help_dir((s && *s == '^') ? dirsym : 0, help_requested ? NULL : "Invalid direction key!");
 			}
 			if (!did_help) pline("What a strange direction!");
+			if (help_requested) goto retry;
 		}
 		return 0;
 	}
@@ -3396,7 +3397,7 @@ int getdir(const char *s) {
 	return 1;
 }
 
-static boolean help_dir(char sym, const char *msg) {
+static bool help_dir(char sym, const char *msg) {
 	char ctrl;
 	winid win;
 	static const char wiz_only_list[] = "EFGIOVW";
@@ -3460,8 +3461,13 @@ static boolean help_dir(char sym, const char *msg) {
 	putstr(win, 0, "          <  up");
 	putstr(win, 0, "          >  down");
 	putstr(win, 0, "          .  direct at yourself");
-	putstr(win, 0, "");
-	putstr(win, 0, "(Suppress this message with !cmdassist in config file.)");
+
+	// null message means this was an explicit user request, so they don't
+	// need to be told how to disable it.
+	if (msg) {
+		putstr(win, 0, "");
+		putstr(win, 0, "(Suppress this message with !cmdassist in config file.)");
+	}
 	display_nhwindow(win, false);
 	destroy_nhwindow(win);
 	return true;
