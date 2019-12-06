@@ -543,6 +543,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 	boolean webmsgok = (!(trflags & NOWEBMSG));
 	boolean forcebungle = trflags & FORCEBUNGLE;
 	bool plunged = trflags & TOOKPLUNGE;
+	int steed_article = ARTICLE_THE;
 
 	nomul(0);
 
@@ -577,7 +578,15 @@ void dotrap(struct trap *trap, unsigned trflags) {
 		}
 	}
 
-	if (u.usteed) u.usteed->mtrapseen |= (1 << (ttype - 1));
+	if (u.usteed) {
+		u.usteed->mtrapseen |= (1 << (ttype - 1));
+
+		// don't show article when referring to steed by name
+		// (don't see steed's name while hallucinating)
+		if (u.usteed->mnamelth && !Hallucination) {
+			steed_article = ARTICLE_NONE;
+		}
+	}
 
 	switch (ttype) {
 		case ARROW_TRAP:
@@ -827,14 +836,10 @@ void dotrap(struct trap *trap, unsigned trflags) {
 				if (u.usteed) {
 					if ((trflags & RECURSIVETRAP) != 0)
 						sprintf(verbbuf, "and %s fall",
-							x_monnam(u.usteed,
-								 u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
-								 NULL, SUPPRESS_SADDLE, false));
+							x_monnam(u.usteed, steed_article, NULL, SUPPRESS_SADDLE, false));
 					else
 						sprintf(verbbuf, "lead %s",
-							x_monnam(u.usteed,
-								 u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
-								 "poor", SUPPRESS_SADDLE, false));
+							x_monnam(u.usteed, steed_article, "poor", SUPPRESS_SADDLE, false));
 				} else
 					strcpy(verbbuf, plunged ? "plunge" : "fall");
 				pline("You %s into %s pit!", verbbuf, a_your[trap->madeby_u]);
@@ -850,9 +855,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 			if (ttype == SPIKED_PIT) {
 				if (u.usteed) {
 					pline("%s lands on a set of sharp iron spikes!",
-					      upstart(x_monnam(u.usteed,
-							       u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
-							       "poor", SUPPRESS_SADDLE, false)));
+					      upstart(x_monnam(u.usteed, steed_article, "poor", SUPPRESS_SADDLE, false)));
 				} else {
 					pline("You land on a set of sharp iron spikes!");
 				}
@@ -928,12 +931,9 @@ void dotrap(struct trap *trap, unsigned trflags) {
 			}
 			if (webmsgok) {
 				char verbbuf[BUFSZ];
-				verbbuf[0] = '\0';
 				if (u.usteed)
 					sprintf(verbbuf, "lead %s",
-						x_monnam(u.usteed,
-							 u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
-							 "poor", SUPPRESS_SADDLE, false));
+						x_monnam(u.usteed, steed_article, "poor", SUPPRESS_SADDLE, false));
 				else
 					sprintf(verbbuf, "%s", Levitation ? "float" : locomotion(youmonst.data, "stumble"));
 
@@ -1029,9 +1029,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 			seetrap(trap);
 			if (u.usteed)
 				sprintf(verbbuf, "lead %s",
-					x_monnam(u.usteed,
-						 u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
-						 NULL, SUPPRESS_SADDLE, false));
+					x_monnam(u.usteed, steed_article, NULL, SUPPRESS_SADDLE, false));
 			else
 				sprintf(verbbuf, "%s",
 					Levitation ? (const char *)"float" :
@@ -1125,18 +1123,15 @@ void dotrap(struct trap *trap, unsigned trflags) {
 }
 
 static int steedintrap(struct trap *trap, struct obj *otmp) {
-	struct monst *mtmp = u.usteed;
-	struct permonst *mptr;
+	struct monst *steed = u.usteed;
 	int tt;
-	boolean in_sight;
-	boolean trapkilled = false;
-	boolean steedhit = false;
+	boolean in_sight, trapkilled = false, steedhit = false;
 
-	if (!u.usteed || !trap) return 0;
-	mptr = mtmp->data;
+	if (!steed || !trap) return 0;
+
 	tt = trap->ttyp;
-	mtmp->mx = u.ux;
-	mtmp->my = u.uy;
+	steed->mx = u.ux;
+	steed->my = u.uy;
 
 	in_sight = !Blind;
 	switch (tt) {
@@ -1145,7 +1140,7 @@ static int steedintrap(struct trap *trap, struct obj *otmp) {
 				impossible("steed hit by non-existant arrow?");
 				return 0;
 			}
-			if (thitm(8, mtmp, otmp, 0, false)) trapkilled = true;
+			trapkilled = thitm(8, steed, otmp, 0, false);
 			steedhit = true;
 			break;
 		case DART_TRAP:
@@ -1153,60 +1148,50 @@ static int steedintrap(struct trap *trap, struct obj *otmp) {
 				impossible("steed hit by non-existant dart?");
 				return 0;
 			}
-			if (thitm(7, mtmp, otmp, 0, false)) trapkilled = true;
+			trapkilled = thitm(7, steed, otmp, 0, false);
 			steedhit = true;
 			break;
 		case SLP_GAS_TRAP:
-			if (!resists_sleep(mtmp) && !breathless(mptr) &&
-			    !mtmp->msleeping && mtmp->mcanmove) {
-				mtmp->mcanmove = 0;
-				mtmp->mfrozen = rnd(25);
+			if (!resists_sleep(steed) && !breathless(steed->data) &&
+			    !steed->msleeping && steed->mcanmove) {
+				steed->mcanmove = 0;
+				steed->mfrozen = rnd(25);
 				if (in_sight) {
-					pline("%s suddenly falls asleep!",
-					      Monnam(mtmp));
+					pline("%s suddenly falls asleep!", Monnam(steed));
 				}
 			}
 			steedhit = true;
 			break;
 		case LANDMINE:
-			if (thitm(0, mtmp, NULL, rnd(16), false))
-				trapkilled = true;
+			trapkilled = thitm(0, steed, NULL, rnd(16), false);
 			steedhit = true;
 			break;
 		case PIT:
 		case SPIKED_PIT:
-			if (mtmp->mhp <= 0 ||
-			    thitm(0, mtmp, NULL,
-				  rnd((tt == PIT) ? 6 : 10), false))
-				trapkilled = true;
-			steedhit = true;
+			trapkilled = (steed->mhp <= 0
+					|| thitm(0, steed, NULL, rnd((tt == PIT) ? 6 : 10), false));
 			break;
 		case POLY_TRAP:
-			if (!resists_magm(mtmp)) {
-				if (!resist(mtmp, WAND_CLASS, 0, NOTELL)) {
-					mon_spec_poly(mtmp, NULL, 0L, false, false, false, true);
-					if (!can_saddle(mtmp) || !can_ride(mtmp)) {
-						dismount_steed(DISMOUNT_POLY);
-					} else {
-						pline("You have to adjust yourself in the saddle on %s.",
-						      x_monnam(mtmp,
-							       mtmp->mnamelth ? ARTICLE_NONE : ARTICLE_A,
-							       NULL, SUPPRESS_SADDLE, false));
-					}
+			if (!resists_magm(steed) && !resist(steed, WAND_CLASS, 0, NOTELL)) {
+				mon_spec_poly(steed, NULL, 0L, false, false, false, true);
+				if (!can_saddle(steed) || !can_ride(steed)) {
+					dismount_steed(DISMOUNT_POLY);
+				} else {
+					pline("You have to adjust yourself in the saddle on %s.",
+					      x_monnam(steed, ARTICLE_THE, NULL, SUPPRESS_SADDLE, false));
 				}
-				steedhit = true;
 			}
+			steedhit = true;
 			break;
 		default:
-			return 0;
+			break;
 	}
 	if (trapkilled) {
 		dismount_steed(DISMOUNT_POLY);
 		return 2;
-	} else if (steedhit)
-		return 1;
-	else
-		return 0;
+	} else {
+		return steedhit;
+	}
 }
 
 /* some actions common to both player and monsters for triggered landmine */
