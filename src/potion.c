@@ -2624,8 +2624,8 @@ int dodip(void) {
 	}
 	potion->in_use = true; /* assume it will be used up */
 	if (potion->otyp == POT_WATER) {
-		boolean useeit = !Blind;
-		if (useeit) (void)Shk_Your(Your_buf, obj);
+		boolean useeit = !Blind || (obj == ublindf && Blindfolded_only);
+		if (useeit) Shk_Your(Your_buf, obj);
 		if (potion->blessed) {
 			if (obj->cursed) {
 				if (useeit)

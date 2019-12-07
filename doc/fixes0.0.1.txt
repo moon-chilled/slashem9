@@ -81,3 +81,4 @@ Changelist for slashem-next v0.0.1:
 - Interface: use proper article in message when eating artifact (NetHack).
 - Bugfix: passwall monsters couldn't pick up objects from pit (fixed by making them always fall in, but suffer no ill effects).
 - Bugfix: potions of acid dipped into fountains were not always used up (NetHack).  Toilets were not affected.
+- Interface: if your blindfold/towel glows while you're wearing it and it's the only thing keeping you from seeing, you see that glow (NetHack).

@@ -384,8 +384,8 @@ static void fix_worst_trouble(int trouble) {
 				return;
 			}
 			uncurse(otmp);
-			if (!Blind) {
-				pline("Your %s %s.", what ? what : (const char *)aobjnam(otmp, "softly glow"),
+			if (!Blind || (otmp == ublindf && Blindfolded_only)) {
+				pline("Your %s %s.", what ? what : aobjnam(otmp, "softly glow"),
 				      hcolor(NH_AMBER));
 				otmp->bknown = true;
 			}
