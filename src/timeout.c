@@ -891,7 +891,7 @@ void attach_fig_transform_timeout(struct obj *figurine) {
 }
 
 /* give a fumble message */
-static void slip_or_trip() {
+static void slip_or_trip(void) {
 	struct obj *otmp = vobj_at(u.ux, u.uy);
 	const char *what, *pronoun;
 	char buf[BUFSZ];
@@ -900,7 +900,8 @@ static void slip_or_trip() {
 
 	if (otmp && on_foot && !u.uinwater && is_pool(u.ux, u.uy)) otmp = 0;
 
-	if (otmp && on_foot) { /* trip over something in particular */
+	// trip over something in particular
+	if (otmp && on_foot) {
 		/*
 		If there is only one item, it will have just been named
 		during the move, so refer to by via pronoun; otherwise,
@@ -921,6 +922,13 @@ static void slip_or_trip() {
 			      body_part(FOOT));
 		} else {
 			pline("You trip over %s.", what);
+		}
+
+		if (!uarmf && otmp->otyp == CORPSE && touch_petrifies(&mons[otmp->corpsenm]) && !Stone_resistance) {
+			static char buf[BUFSZ];
+			sprintf(buf, "tripping over %s corpse", an(mons[otmp->corpsenm].mname));
+			killer = buf;
+			instapetrify(killer);
 		}
 	} else if (rn2(3) && is_ice(u.ux, u.uy)) {
 		pline("%s %s%s on the ice.",
