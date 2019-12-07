@@ -104,8 +104,8 @@ uint rnz(uint i) {
 	return x;
 }
 
-/* Vastly improved RNG functions here, using AES and SHA256 to generate 
-   random numbers. The code is more or less copy+paste from public 
+/* Vastly improved RNG functions here, using AES and SHA256 to generate
+   random numbers. The code is more or less copy+paste from public
    domain LibTomCrypt */
 #include <stdint.h>
 
@@ -3433,7 +3433,7 @@ int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey) {
   Decrypts a block of text with AES
   @param ct The input ciphertext (16 bytes)
   @param pt The output plaintext (16 bytes)
-  @param skey The key as scheduled 
+  @param skey The key as scheduled
   @return CRYPT_OK if successful
 */
 #ifdef LTC_CLEAN_STACK
@@ -3606,7 +3606,7 @@ int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey) {
 }
 #endif
 
-/** Terminate the context 
+/** Terminate the context
    @param skey    The scheduled key
 */
 void ECB_DONE(symmetric_key *skey) {

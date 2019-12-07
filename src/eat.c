@@ -2348,7 +2348,7 @@ int doeat(void) {
 				pline("You seem unaffected by the poison.");
 			}
 		} else if (!otmp->cursed)
-			pline("%s%s is delicious!", (obj_is_pname(otmp) && otmp->oartifact < ART_ORB_OF_DETECTION) ? "" : 
+			pline("%s%s is delicious!", (obj_is_pname(otmp) && otmp->oartifact < ART_ORB_OF_DETECTION) ? "" :
 					obj_is_pname(otmp) ? "The " : "This ",
 			      otmp->oclass == COIN_CLASS ? foodword(otmp) : singular(otmp, xname));
 
