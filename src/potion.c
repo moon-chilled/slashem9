@@ -1906,12 +1906,7 @@ boolean get_wet(struct obj *obj, boolean amnesia) {
 			}
 			if (obj->odiluted || amnesia) {
 				obj->odiluted = 0;
-#ifdef UNIXPC
-				obj->blessed = false;
-				obj->cursed = false;
-#else
 				obj->blessed = obj->cursed = false;
-#endif
 				obj->otyp = POT_WATER;
 			} else
 				obj->odiluted++;

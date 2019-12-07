@@ -364,13 +364,14 @@ void dipfountain(struct obj *obj) {
 		if (in_town(u.ux, u.uy))
 			angry_guards(false);
 		return;
-	} else if (get_wet(obj, false) && !rn2(2))
-		return;
-
-	/* Acid and water don't mix */
-	if (obj->otyp == POT_ACID) {
-		useup(obj);
-		return;
+	} else if (get_wet(obj, false)) {
+		/* Acid and water don't mix */
+		if (obj->otyp == POT_ACID) {
+			useup(obj);
+			return;
+		} else if (!rn2(2)) { // no further effect
+			return;
+		}
 	}
 
 	switch (rnd(30)) {

@@ -45,17 +45,14 @@
 /* #define GENIX */    /* Yet Another Unix Clone */
 /* #define HISX */     /* Bull Unix for XPS Machines */
 /* #define BOS */      /* Bull Open Software - Unix for DPX/2 Machines */
-/* #define UNIXPC */   /* use in addition to SYSV for AT&T 7300/3B1 */
 /* #define AIX_31 */   /* In AIX 3.1 (IBM RS/6000) use BSD ioctl's to gain
 			 * job control (note that AIX is SYSV otherwise)
 			 * Also define this for AIX 3.2 */
 
 #define TERMINFO /* uses terminfo rather than termcap */
 /* Should be defined for most SYSV, SVR4 (including
- * Solaris 2+), HPUX, and Linux systems.  In
- * particular, it should NOT be defined for the UNIXPC
- * unless you remove the use of the shared library in
- * the Makefile */
+ * Solaris 2+), HPUX, and Linux systems.
+ */
 #define POSIX_JOB_CONTROL /* use System V / Solaris 2.x / POSIX job control */
 /* (e.g., VSUSP) */
 #define POSIX_TYPES /* use POSIX types for system calls and termios */
