@@ -16,7 +16,7 @@ static void move_update(boolean);
 #define IS_SHOP(x) (rooms[x].rtype >= SHOPBASE)
 
 //FIXME: this is currently used for destroying LS_TEMPs.  Which take the form of
-//an int.  But del_light_source uses uint.  I doub tthey get big enough that
+//an int.  But del_light_source uses uint.  I doubt they get big enough that
 //actually an issue but...
 anything int_to_any(int i) {
 	anything ret = {0};
@@ -1401,7 +1401,14 @@ void domove(void) {
 		}
 		if (u.utrap) {
 			if (u.utraptype == TT_PIT) {
-				if (!rn2(2) && sobj_at(BOULDER, u.ux, u.uy)) {
+				if (Passes_walls) {
+					// were marked as trapped so they could pick stuff up from pit
+					pline("You ascend from the pit.");
+					u.utrap = 0;
+					fill_pit(u.ux, u.uy);
+					vision_full_recalc = true;
+					goto maybemove;
+				} else if (!rn2(2) && sobj_at(BOULDER, u.ux, u.uy)) {
 					pline("Your %s gets stuck in a crevice.", body_part(LEG));
 					display_nhwindow(WIN_MESSAGE, false);
 					clear_nhwindow(WIN_MESSAGE);
@@ -1503,6 +1510,7 @@ void domove(void) {
 			}
 			return;
 		}
+maybemove:
 
 		if (!test_move(u.ux, u.uy, x - u.ux, y - u.uy, DO_MOVE)) {
 			flags.move = 0;

@@ -567,7 +567,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 			return;
 		}
 		if (!Fumbling && ttype != MAGIC_PORTAL &&
-		    ttype != ANTI_MAGIC && !forcebungle && !plunged &&
+		    ttype != ANTI_MAGIC && !forcebungle && !plunged && !Passes_walls &&
 		    (!rn2(5) ||
 		     (is_pitlike(ttype) && is_clinger(youmonst.data)))) {
 			pline("You escape %s %s.",
@@ -834,15 +834,16 @@ void dotrap(struct trap *trap, unsigned trflags) {
 			if (!In_sokoban(&u.uz)) {
 				char verbbuf[BUFSZ];
 				if (u.usteed) {
-					if ((trflags & RECURSIVETRAP) != 0)
-						sprintf(verbbuf, "and %s fall",
-							x_monnam(u.usteed, steed_article, NULL, SUPPRESS_SADDLE, false));
-					else
-						sprintf(verbbuf, "lead %s",
-							x_monnam(u.usteed, steed_article, "poor", SUPPRESS_SADDLE, false));
-				} else
-					strcpy(verbbuf, plunged ? "plunge" : "fall");
-				pline("You %s into %s pit!", verbbuf, a_your[trap->madeby_u]);
+					if ((trflags & RECURSIVETRAP) != 0) {
+						sprintf(verbbuf, "and %s fall", x_monnam(u.usteed, steed_article, NULL, SUPPRESS_SADDLE, false));
+					} else {
+						sprintf(verbbuf, "lead %s", x_monnam(u.usteed, steed_article, "poor", SUPPRESS_SADDLE, false));
+					}
+				} else {
+					strcpy(verbbuf, Passes_walls ? "descend" :
+							plunged ? "plunge" : "fall");
+				}
+				pline("You %s into %s pit%c", verbbuf, a_your[trap->madeby_u], Passes_walls ? '.' : '!');
 			}
 			/* wumpus reference */
 			if (Role_if(PM_RANGER) && !trap->madeby_u && !trap->once &&
@@ -860,30 +861,32 @@ void dotrap(struct trap *trap, unsigned trflags) {
 					pline("You land on a set of sharp iron spikes!");
 				}
 			}
-			if (!Passes_walls)
-				u.utrap = rn1(6, 2);
+			u.utrap = rn1(6, 2);
 			u.utraptype = TT_PIT;
 			if (!steedintrap(trap, NULL)) {
-				if (ttype == SPIKED_PIT) {
-					losehp(rnd(10), plunged ? "deliberately plunged into a pit of iron spikes" : "fell into a pit of iron spikes", NO_KILLER_PREFIX);
-					if (!rn2(6))
-						poisoned("spikes", A_STR, "fall onto poison spikes", 8);
-				} else {
-					// plunged into her own pit
-					// fell into his own pit
-					// plunged into a pit
-					nhstr *reason = nhscatf(new_nhs(), plunged ? "deliberately plunged into %S%S pit" : "fell into %S%S pit", trap->madeby_u ? uhis() : "a", trap->madeby_u ? " own" : "");
-					losehp(rnd(6), nhs2cstr_tmp_destroy(reason), NO_KILLER_PREFIX);
+				if (!Passes_walls) {
+					if (ttype == SPIKED_PIT) {
+						losehp(rnd(10), plunged ? "deliberately plunged into a pit of iron spikes" : "fell into a pit of iron spikes", NO_KILLER_PREFIX);
+						if (!rn2(6))
+							poisoned("spikes", A_STR, "fall onto poison spikes", 8);
+					} else {
+						// plunged into her own pit
+						// fell into his own pit
+						// plunged into a pit
+						nhstr *reason = nhscatf(new_nhs(), plunged ? "deliberately plunged into %S%S pit" : "fell into %S%S pit", trap->madeby_u ? uhis() : "a", trap->madeby_u ? " own" : "");
+						losehp(rnd(6), nhs2cstr_tmp_destroy(reason), NO_KILLER_PREFIX);
+					}
+					if (Punished && !carried(uball)) {
+						unplacebc();
+						ballfall();
+						placebc();
+					}
+					selftouch("Falling, you");
+					exercise(A_STR, false);
+					exercise(A_DEX, false);
 				}
-				if (Punished && !carried(uball)) {
-					unplacebc();
-					ballfall();
-					placebc();
-				}
-				selftouch("Falling, you");
+
 				vision_full_recalc = 1; /* vision limits change */
-				exercise(A_STR, false);
-				exercise(A_DEX, false);
 			}
 			break;
 		case HOLE:

@@ -79,3 +79,4 @@ Changelist for slashem-next v0.0.1:
 - Gameplay: don't allow using whistles and musical instruments when in a form that blow (NetHack).
 - Gameplay: monster lifesaving messages.  Don't print a message about the monster reviving if the monster is invisible (NetHack).  Don't mention the amulet if it's invisible.  (You do see a visible amulet on an invisible monster because it glows.)
 - Interface: use proper article in message when eating artifact (NetHack).
+- Bugfix: passwall monsters couldn't pick up objects from pit (fixed by making them always falling in, but suffering no ill effects).

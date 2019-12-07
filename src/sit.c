@@ -42,7 +42,7 @@ int dosit() {
 		goto in_water;
 	}
 
-	if (OBJ_AT(u.ux, u.uy) && !((!u.utrap || u.utraptype != TT_PIT) && (trap && trap->tseen && is_pitlike(trap->ttyp)))) {
+	if (OBJ_AT(u.ux, u.uy) && !uteetering_at_seen_pit()) {
 		struct obj *obj;
 
 		obj = level.objects[u.ux][u.uy];
