@@ -74,3 +74,4 @@ Changelist for slashem-next v0.0.1:
 - Bugfix: when you lead a named steed into a trap while hallucinating, since the name is elided, elide also the article 'the' (NetHack).
 - Bugfix: when a ridden steed is led onto a polymorph trap and polymorphs into another rideable form, you have to adjust yourself in the saddle on on 'the' (monster-type), not 'a'.
 - Interface: when prompted for a direction, '?' shows help and prompts again (NetHack).
+- Gameplay: instead of printing 'It turns into it', smell what kind of 'it' it was, assuming you can (NetHack).

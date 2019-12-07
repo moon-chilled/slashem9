@@ -2449,14 +2449,12 @@ int newcham(struct monst *mtmp, struct permonst *mdat, boolean polyspot, boolean
 	int mndx, tryct;
 	int couldsee = canseemon(mtmp);
 	struct permonst *olddata = mtmp->data;
-	char oldname[BUFSZ];
-	boolean alt_mesg = false; /* Avoid "<rank> turns into a <rank>" */
+	char oldname[BUFSZ], newname[BUFSZ];
+	bool alt_mesg = false; /* Avoid "<rank> turns into a <rank>" */
 
 	if (msg) {
 		/* like Monnam() but never mention saddle */
-		strcpy(oldname, x_monnam(mtmp, ARTICLE_THE, NULL,
-					 SUPPRESS_SADDLE, false));
-		oldname[0] = highc(oldname[0]);
+		strcpy(oldname, upstart(x_monnam(mtmp, ARTICLE_THE, NULL, SUPPRESS_SADDLE, false)));
 	}
 
 	/* mdat = 0 -> caller wants a random monster shape */
@@ -2600,18 +2598,19 @@ int newcham(struct monst *mtmp, struct permonst *mdat, boolean polyspot, boolean
 	newsym(mtmp->mx, mtmp->my);
 
 	if (msg && ((u.uswallow && mtmp == u.ustuck) || canspotmon(mtmp))) {
-		if (alt_mesg && is_mplayer(mdat))
-			pline("%s is suddenly very %s!", oldname,
-			      mtmp->female ? "feminine" : "masculine");
-		else if (alt_mesg)
-			pline("%s changes into a %s!", oldname,
-			      is_human(mdat) ? "human" : mdat->mname + 4);
-		else {
+		if (alt_mesg && is_mplayer(mdat)) {
+			pline("%s is suddenly very %s!", oldname, mtmp->female ? "feminine" : "masculine");
+		} else if (alt_mesg) {
+			pline("%s changes into a %s!", oldname, is_human(mdat) ? "human" : mdat->mname + 4);
+		} else {
 			uchar save_mnamelth = mtmp->mnamelth;
 			mtmp->mnamelth = 0;
-			pline("%s turns into %s!", oldname,
-			      mdat == &mons[PM_GREEN_SLIME] ? "slime" :
-							      x_monnam(mtmp, ARTICLE_A, NULL, SUPPRESS_SADDLE, false));
+			strcpy(newname, (mdat == &mons[PM_GREEN_SLIME]) ? "slime" : x_monnam(mtmp, ARTICLE_A, NULL, SUPPRESS_SADDLE, false));
+			if (!strcmpi(oldname, "it") && !strcmpi(newname, "it")) {
+				usmellmon(mdat);
+			} else {
+				pline("%s turns into %s!", oldname, newname);
+			}
 			mtmp->mnamelth = save_mnamelth;
 		}
 	} else if (msg && couldsee)
@@ -2900,6 +2899,118 @@ void mimic_hit_msg(struct monst *mtmp, short otyp) {
 			}
 			break;
 	}
+}
+
+bool usmellmon(struct permonst *mdat) {
+	if (!mdat) return false;
+	if (!olfaction(youmonst.data)) return false;
+
+	bool nonspecific = false;
+	bool msg_given = false;
+
+	int mndx = monsndx(mdat);
+	switch (mndx) {
+		case PM_MINOTAUR:
+			pline("You notice a bovine smell.");
+			msg_given = true;
+			break;
+		case PM_CAVEMAN:
+		case PM_CAVEWOMAN:
+		case PM_BARBARIAN:
+		case PM_NEANDERTHAL:
+			pline("You smell body odor.");
+			msg_given = true;
+			break;
+		/*
+		case PM_PESTILENCE:
+		case PM_FAMINE:
+		case PM_DEATH:
+			break;
+		*/
+		case PM_HORNED_DEVIL:
+		case PM_BALROG:
+		case PM_ASMODEUS:
+		case PM_DISPATER:
+		case PM_YEENOGHU:
+		case PM_ORCUS:
+			break;
+		case PM_HUMAN_WEREJACKAL:
+		case PM_HUMAN_WERERAT:
+		case PM_HUMAN_WEREWOLF:
+		case PM_WEREJACKAL:
+		case PM_WERERAT:
+		case PM_WEREWOLF:
+		case PM_OWLBEAR:
+			pline("You detect an odor reminiscent of an animal's den.");
+			msg_given = true;
+			break;
+		/*
+		case PM_PURPLE_WORM:
+			break;
+		*/
+		case PM_STEAM_VORTEX:
+			pline("You smell steam.");
+			msg_given = true;
+			break;
+		case PM_GREEN_SLIME:
+			pline("Something stinks.");
+			msg_given = true;
+			break;
+		case PM_VIOLET_FUNGUS:
+		case PM_SHRIEKER:
+			pline("You smell mushrooms.");
+			msg_given = true;
+			break;
+		/* These are here to avoid triggering the
+		 * nonspecific treatment through the default case below */
+		case PM_WHITE_UNICORN:
+		case PM_GRAY_UNICORN:
+		case PM_BLACK_UNICORN:
+		case PM_JELLYFISH:
+			break;
+		default:
+			nonspecific = true;
+			break;
+	}
+
+	if (nonspecific) switch (mdat->mlet) {
+		case S_DOG:
+			pline("You notice a dog smell.");
+			msg_given = true;
+			break;
+		case S_DRAGON:
+			pline("You smell a dragon!");
+			msg_given = true;
+			break;
+		case S_FUNGUS:
+			pline("Something smells moldy.");
+			msg_given = true;
+			break;
+		case S_UNICORN:
+			pline("You detect a%s odor reminiscent of a stable.", (mndx == PM_PONY) ? "n" : " strong");
+			msg_given = true;
+			break;
+		case S_ZOMBIE:
+			pline("You smell rotting flesh.");
+			msg_given = true;
+			break;
+		case S_EEL:
+			pline("You smell fish.");
+			msg_given = true;
+			break;
+		case S_ORC:
+			if (maybe_polyd(is_orc(youmonst.data), Race_if(PM_ORC))) {
+				pline("You notice an attractive smell.");
+			} else {
+				pline("A foul stench makes you feel a little nauseated.");
+			}
+			msg_given = true;
+			break;
+		default:
+			break;
+	}
+
+	return msg_given;
 }
 
 /*mon.c*/

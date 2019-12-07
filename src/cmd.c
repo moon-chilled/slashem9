@@ -55,6 +55,7 @@ static int wiz_level_tele(void);
 static int wiz_level_change(void);
 static int wiz_show_seenv(void);
 static int wiz_show_vision(void);
+static int wiz_smell(void);
 static int wiz_mon_polycontrol(void);
 static int wiz_show_wmodes(void);
 static int wiz_showkills(void);
@@ -1044,6 +1045,48 @@ static int wiz_show_vision(void) {
 	}
 	display_nhwindow(win, true);
 	destroy_nhwindow(win);
+	return 0;
+}
+
+// #wizsmell command - test usmellmon()
+static int wiz_smell(void) {
+	coord cc;  /* screen pos of unknown glyph */
+
+	cc.x = u.ux;
+	cc.y = u.uy;
+	if (!olfaction(youmonst.data)) {
+		pline("You are incapable of detecting odors in your present form.");
+		return 0;
+	}
+
+	pline("You can move the cursor to a monster that you want to smell.");
+	do {
+		int mndx;  /* monster index */
+		int glyph; /* glyph at selected position */
+
+		/* Reset some variables. */
+
+		pline("Pick a monster to smell.");
+		int ans = getpos(&cc, true, "a monster");
+		if (ans < 0 || cc.x < 0) {
+			return 0; /* done */
+		}
+		/* Convert the glyph at the selected position to a mndxbol. */
+		glyph = glyph_at(cc.x, cc.y);
+		if (glyph_is_monster(glyph)) {
+			mndx = glyph_to_mon(glyph);
+		} else {
+			mndx = 0;
+		}
+		/* Is it a monster? */
+		if (mndx) {
+			if (!usmellmon(&mons[mndx])) {
+				pline("That monster seems to give off no smell.");
+			}
+		} else {
+			pline("That is not a monster.");
+		}
+	} while (true);
 	return 0;
 }
 
@@ -2074,8 +2117,6 @@ static struct binding_list_tab *bindinglist = NULL;
 #define AUTOCOMPLETE true
 #define IFBURIED     true
 
-#define EXTCMDLIST_SIZE (sizeof(extcmdlist) / sizeof(extcmdlist[0]))
-
 struct ext_func_tab extcmdlist[] = {
 	{"2weapon", "toggle two-weapon combat", dotwoweapon, !IFBURIED, AUTOCOMPLETE},
 	{"apply", "apply (use) a tool (pick-axe, key, lamp...)", doapply, !IFBURIED},
@@ -2200,6 +2241,7 @@ struct ext_func_tab extcmdlist[] = {
 	{NULL, NULL, donull, true},  // #stats
 	{NULL, NULL, donull, true},  // #timeout
 	{NULL, NULL, donull, true},  // #vision
+	{NULL, NULL, donull, true},  // #wizsmell
 #ifdef DEBUG
 	{NULL, NULL, donull, true},  // #wizdebug
 #endif
@@ -2231,6 +2273,7 @@ static struct ext_func_tab debug_extcmdlist[] = {
 	{"stats", "show memory statistics", wiz_show_stats, IFBURIED, AUTOCOMPLETE},
 	{"timeout", "look at timeout queue", wiz_timeout_queue, IFBURIED, AUTOCOMPLETE},
 	{"vision", "show vision array", wiz_show_vision, IFBURIED, AUTOCOMPLETE},
+	{"wizsmell", "smell monster", wiz_smell, IFBURIED, AUTOCOMPLETE},
 #ifdef DEBUG
 	{"wizdebug", "wizard debug command", wiz_debug_cmd, IFBURIED, AUTOCOMPLETE},
 #endif

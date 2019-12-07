@@ -658,4 +658,29 @@ const char *on_fire(struct permonst *mptr, struct attack *mattk) {
 	return what;
 }
 
+/*
+ * Returns:
+ *     True if monster is presumed to have a sense of smell.
+ *     False if monster definitely does not have a sense of smell.
+ *
+ *     Do not base this on presence of a head or nose, since many
+ *     creatures sense smells other ways (feelers, forked-tongues, etc.)
+ *     We're assuming all insects can smell at a distance too.
+ */
+bool olfaction(struct permonst *mdat) {
+	if (mdat && (is_golem(mdat) ||
+		     mdat->mlet == S_EYE || /* spheres  */
+		     mdat->mlet == S_JELLY ||
+		     mdat->mlet == S_PUDDING ||
+		     mdat->mlet == S_BLOB ||
+		     mdat->mlet == S_VORTEX ||
+		     mdat->mlet == S_ELEMENTAL ||
+		     mdat->mlet == S_FUNGUS || /* mushrooms and fungi */
+		     mdat->mlet == S_LIGHT ||
+		     mdat->mlet == S_BAD_FOOD ||
+		     mdat->mlet == S_BAD_COINS))
+		return false;
+	return true;
+}
+
 /*mondata.c*/

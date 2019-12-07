@@ -930,6 +930,7 @@ void mimic_hit_msg(struct monst *, short);
 void mkmonmoney(struct monst *, long);
 void bagotricks(struct obj *);
 boolean propagate(int, boolean, boolean);
+bool usmellmon(struct permonst *mdat);
 
 /* ### mapglyph.c ### */
 
@@ -1174,6 +1175,7 @@ const char *locomotion(const struct permonst *, const char *);
 const char *stagger(const struct permonst *, const char *);
 const char *on_fire(struct permonst *, struct attack *);
 const struct permonst *raceptr(struct monst *);
+bool olfaction(struct permonst *mdat);
 
 /* ### monmove.c ### */
 
