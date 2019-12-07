@@ -2049,9 +2049,10 @@ static int gulpmu(struct monst *mtmp, struct attack *mattk) {
 		case AD_BLND:
 			if (can_blnd(mtmp, &youmonst, mattk->aatyp, NULL)) {
 				if (!Blind) {
-					pline("You can't see in here!");
-					make_blinded((long)tmp, false);
-					if (!Blind) pline("Your vision quickly clears.");
+					bool was_blinded = Blinded;
+					if (!Blinded) pline("You can't see in here!");
+					make_blinded(tmp, false);
+					if (!was_blinded && !Blind) pline("Your vision quickly clears.");
 				} else
 					/* keep him blind until disgorged */
 					make_blinded(Blinded + 1, false);
