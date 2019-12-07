@@ -348,6 +348,7 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 	}
 
 	/* this stuff comes after potential aborted restore attempts */
+	restore_killers(fd);
 	restore_timers(fd, RANGE_GLOBAL, false, 0L);
 	restore_light_sources(fd);
 	invent = restobjchn(fd, false, false);
@@ -571,7 +572,7 @@ void trickery(char *reason) {
 	pline("Strange, this map is not as I remember it.");
 	pline("Somebody is trying some trickery here...");
 	pline("This game is void.");
-	killer = reason;
+	nhscopyz(&killer.name, reason);
 	done(TRICKED);
 }
 

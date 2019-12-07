@@ -265,13 +265,10 @@ static void fix_worst_trouble(int trouble) {
 			pline("You feel more limber.");
 			Stoned = 0;
 			flags.botl = 1;
-			delayed_killer = 0;
+			dealloc_killer(find_delayed_killer(STONED));
 			break;
 		case TROUBLE_SLIMED:
-			pline("The slime disappears.");
-			Slimed = 0;
-			flags.botl = 1;
-			delayed_killer = 0;
+			make_slimed(0, "The slime disappears.");
 			break;
 		case TROUBLE_STRANGLED:
 			if (uamul && uamul->otyp == AMULET_OF_STRANGULATION) {
@@ -536,12 +533,9 @@ static void god_zaps_you(aligntyp resp_god) {
 }
 
 static void fry_by_god(aligntyp resp_god) {
-	char killerbuf[64];
-
 	pline("You fry to a crisp.");
-	killer_format = KILLED_BY;
-	sprintf(killerbuf, "the wrath of %s", align_gname(resp_god));
-	killer = killerbuf;
+	killer.format = KILLED_BY;
+	nhscopyf(&killer.name, "the wrath of %S", align_gname(resp_god));
 	done(DIED);
 }
 

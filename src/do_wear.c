@@ -592,10 +592,7 @@ void Amulet_on(void) {
 		case FAKE_AMULET_OF_YENDOR:
 			break;
 		case AMULET_OF_UNCHANGING:
-			if (Slimed) {
-				Slimed = 0;
-				flags.botl = 1;
-			}
+			if (Slimed) make_slimed(0, NULL);
 			break;
 		case AMULET_OF_CHANGE: {
 			int orig_sex = poly_gender();

@@ -105,7 +105,7 @@ int how;
 	center(GOLD_LINE, buf);
 
 	/* Put together death description */
-	switch (killer_format) {
+	switch (killer.format) {
 		default:
 			impossible("bad killer format?");
 		case KILLED_BY_AN:
@@ -117,7 +117,7 @@ int how;
 				strcat(buf, killed_by_prefix[how]);
 			} else
 				strcpy(buf, killed_by_prefix[how]);
-			strcat(buf, an(killer));
+			strcat(buf, an(nhs2cstr_tmp(killer.name)));
 			break;
 		case KILLED_BY:
 			if (Instant_Death) {
@@ -128,10 +128,10 @@ int how;
 				strcat(buf, killed_by_prefix[how]);
 			} else
 				strcpy(buf, killed_by_prefix[how]);
-			strcat(buf, killer);
+			strcat(buf, nhs2cstr_tmp(killer.name));
 			break;
 		case NO_KILLER_PREFIX:
-			strcpy(buf, killer);
+			strcpy(buf, nhs2cstr_tmp(killer.name));
 			break;
 	}
 

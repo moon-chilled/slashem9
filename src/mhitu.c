@@ -1086,8 +1086,8 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 							if (!rn2(10)) {
 								pline("%s plunges the stake into your heart.",
 								      Monnam(mtmp));
-								killer = "a wooden stake in the heart.";
-								killer_format = KILLED_BY_AN;
+								nhscopyz(&killer.name, "a wooden stake in the heart.");
+								killer.format = KILLED_BY_AN;
 								u.ugrave_arise = NON_PM; /* No corpse */
 								done(DIED);
 							} else {
@@ -1325,8 +1325,8 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 							pline("Unfortunately your brain is still gone.");
 						else
 							pline("Your last thought fades away.");
-						killer = "brainlessness";
-						killer_format = KILLED_BY;
+						killer.format = KILLED_BY;
+						nhscopyz(&killer.name, "brainlessness");
 						done(DIED);
 						lifesaved++;
 					}
@@ -1442,22 +1442,23 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 					    (flags.moonphase == NEW_MOON && !have_lizard())) {
 					do_stone:
 						if (!Stoned && !Stone_resistance && !(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
+							int kformat = KILLED_BY_AN;
+							const char *kname = mtmp->data->mname;
+
 							Stoned = 5;
-							delayed_killer = mtmp->data->mname;
+
 							if (mtmp->data->geno & G_UNIQ) {
 								if (!type_is_pname(mtmp->data)) {
-									static char kbuf[BUFSZ];
-
-									/* "the" buffer may be reallocated */
-									strcpy(kbuf, the(delayed_killer));
-									delayed_killer = kbuf;
+									kname = the(kname);
 								}
-								killer_format = KILLED_BY;
-							} else
-								killer_format = KILLED_BY_AN;
+
+								kformat = KILLED_BY;
+							}
+
+							nhstr tmp = nhsdupz(kname);
+							delayed_killer(stoned, kformat, tmp);
+							del_nhs(&tmp);
 							return 1;
-							/* pline("You turn to stone..."); */
-							/* done_in_by(mtmp); */
 						}
 					}
 				}
@@ -1487,11 +1488,8 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 							!Is_waterlevel(&u.uz);
 
 						pline("%s drowns you...", Monnam(mtmp));
-						killer_format = KILLED_BY_AN;
-						sprintf(buf, "%s by %s",
-							moat ? "moat" : "pool of water",
-							an(mtmp->data->mname));
-						killer = buf;
+						killer.format = KILLED_BY_AN;
+						nhscopyf(&killer.name, "%S by %S", moat ? "moat" : "pool of water", an(mtmp->data->mname));
 						done(DROWNING);
 					} else if (mattk->aatyp == AT_HUGS)
 						pline("You are being crushed.");
@@ -1759,8 +1757,8 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 				case 18:
 				case 17:
 					if (!Antimagic) {
-						killer_format = KILLED_BY_AN;
-						killer = "touch of death";
+						killer.format = KILLED_BY_AN;
+						nhscopyz(&killer.name, "touch of death");
 						done(DIED);
 						dmg = 0;
 						break;
@@ -1820,12 +1818,14 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 				dmg = 0;
 			} else if (!Slimed) {
 				pline("You don't feel very well.");
-				Slimed = 10L;
-				flags.botl = 1;
-				killer_format = KILLED_BY_AN;
-				delayed_killer = mtmp->data->mname;
-			} else
+				make_slimed(10, NULL);
+
+				nhstr tmp = nhsdupz(mtmp->data->mname);
+				delayed_killer(SLIMED, KILLED_BY_AN, tmp);
+				del_nhs(&tmp);
+			} else {
 				pline("Yuck!");
+			}
 			break;
 		case AD_ENCH: /* KMH -- remove enchantment (disenchanter) */
 			hitmsg(mtmp, mattk);
@@ -2246,8 +2246,8 @@ int gazemu(struct monst *mtmp, struct attack *mattk) {
 				if (poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))
 					break;
 				pline("You turn to stone...");
-				killer_format = KILLED_BY;
-				killer = mtmp->data->mname;
+				killer.format = KILLED_BY;
+				nhscopyz(&killer.name, mtmp->data->mname);
 				done(STONING);
 			}
 			break;
@@ -2408,8 +2408,8 @@ int gazemu(struct monst *mtmp, struct attack *mattk) {
 					pline("You shudder momentarily...");
 				} else {
 					pline("You die...");
-					killer_format = KILLED_BY_AN;
-					killer = "gaze of death";
+					killer.format = KILLED_BY_AN;
+					nhscopyz(&killer.name, "gaze of death");
 					done(DIED);
 				}
 			}

@@ -5,6 +5,8 @@
 #ifndef DECL_H
 #define DECL_H
 
+#include "nhstr.h"
+
 extern int (*occupation)(void);
 extern int (*afternmv)(void);
 
@@ -183,14 +185,21 @@ extern const char disclosure_options[];
 extern int smeq[];
 extern int doorindex;
 extern char *save_cm;
-#define KILLED_BY_AN	 0
-#define KILLED_BY	 1
-#define NO_KILLER_PREFIX 2
-extern int killer_format;
-extern const char *killer;
-extern const char *delayed_killer;
+
+enum killer_format {
+	KILLED_BY_AN = 0,
+	KILLED_BY = 1,
+	NO_KILLER_PREFIX = 2,
+};
+
+extern struct kinfo {
+	struct kinfo *next; // chain of delayed killers
+	int id; // uprop keys to ID a delayed killer
+	enum killer_format format;
+	nhstr name; // actual killer name.  This MUST come last.
+} killer;
+
 extern long done_money;
-extern char killer_buf[BUFSZ];
 extern const char *configfile;
 extern char plname[PL_NSIZ];
 extern char dogname[];

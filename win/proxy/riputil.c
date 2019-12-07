@@ -11,7 +11,7 @@ char *
 {
 	static char buf[BUFSZ];
 	/* Put together death description */
-	switch (killer_format) {
+	switch (killer.format) {
 		default: impossible("bad killer format?");
 		case KILLED_BY_AN:
 			if (Instant_Death) {

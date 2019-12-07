@@ -114,13 +114,23 @@ void make_sick(long xtime, const char *cause, boolean talk, int type) {
 
 	if (Sick) {
 		exercise(A_CON, false);
-		if (cause) {
-			strncpy(u.usick_cause, cause, sizeof(u.usick_cause));
-			u.usick_cause[sizeof(u.usick_cause) - 1] = 0;
-		} else
-			u.usick_cause[0] = 0;
-	} else
-		u.usick_cause[0] = 0;
+		nhstr tmp = nhsdupz(cause);
+		delayed_killer(SICK, KILLED_BY_AN, tmp);
+		del_nhs(&tmp);
+	} else {
+		dealloc_killer(find_delayed_killer(SICK));
+	}
+}
+
+void make_slimed(long xtime, const char *msg) {
+	long old = Slimed;
+
+	if ((!xtime && old) || (xtime && !old)) {
+		if (msg) pline("%s", msg);
+		flags.botl = 1;
+	}
+	set_itimeout(&Slimed, xtime);
+	if (!Slimed) dealloc_killer(find_delayed_killer(SLIMED));
 }
 
 void make_vomiting(long xtime, boolean talk) {

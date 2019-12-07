@@ -1860,8 +1860,8 @@ static void do_class_genocide(void) {
 			}
 		}
 		if (gameover || u.uhp == -1) {
-			killer_format = KILLED_BY_AN;
-			killer = "scroll of genocide";
+			killer.format = KILLED_BY_AN;
+			nhscopyz(&killer.name, "scroll of genocide");
 			if (gameover) done(GENOCIDED);
 		}
 		return;
@@ -1975,22 +1975,21 @@ void do_genocide(int how) {
 
 			u.uhp = -1;
 			if (how & PLAYER) {
-				killer_format = KILLED_BY;
-				killer = "genocidal confusion";
+				killer.format = KILLED_BY;
+				nhscopyz(&killer.name, "genocidal confusion");
 			} else if (how & ONTHRONE) {
 				/* player selected while on a throne */
-				killer_format = KILLED_BY_AN;
-				killer = "imperious order";
+				killer.format = KILLED_BY_AN;
+				nhscopyz(&killer.name, "imperious order");
 			} else { /* selected player deliberately, not confused */
-				killer_format = KILLED_BY_AN;
-				killer = "scroll of genocide";
+				killer.format = KILLED_BY_AN;
+				nhscopyz(&killer.name, "scroll of genocide");
 			}
 
 			/* Polymorphed characters will die as soon as they're rehumanized. */
 			/* KMH -- Unchanging prevents rehumanization */
 			if (Upolyd && ptr != youmonst.data) {
-				delayed_killer = killer;
-				killer = 0;
+				delayed_killer(POLYMORPH, killer.format, killer.name);
 				pline("You feel dead inside.");
 			} else
 				done(GENOCIDED);

@@ -2009,8 +2009,7 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 				tmp = 0;
 				if (!Unchanging && mdef->data == &mons[PM_GREEN_SLIME]) {
 					if (!Slimed) {
-						pline("You suck in some slime and don't feel very well.");
-						Slimed = 10L;
+						make_slimed(10, "You suck in some slime and don't feel very well.");
 					}
 				}
 				break;
@@ -2027,8 +2026,9 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 			u.uconduct.food++;
 			if (touch_petrifies(mdef->data) && !Stone_resistance && !Stoned) {
 				Stoned = 5;
-				killer_format = KILLED_BY_AN;
-				delayed_killer = mdef->data->mname;
+				nhstr tmp = nhsdupz(mdef->data->mname);
+				delayed_killer(STONED, KILLED_BY_AN, tmp);
+				del_nhs(&tmp);
 			}
 			if (!vegan(mdef->data))
 				u.uconduct.unvegan++;
@@ -2198,8 +2198,8 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 					break;
 				}
 				pline("You die...");
-				killer_format = KILLED_BY;
-				killer = "a reflected gaze of death";
+				killer.format = KILLED_BY;
+				nhscopyz(&killer.name, "a reflected gaze of death");
 				done(DIED);
 			} else if (is_undead(mdef->data)) {
 				/* Still does normal damage */
@@ -2362,10 +2362,8 @@ static int gulpum(struct monst *mdef, struct attack *mattk) {
 					if (is_rider(mdef->data)) {
 						pline("Unfortunately, digesting any of it is fatal.");
 						end_engulf();
-						sprintf(msgbuf, "unwisely tried to eat %s",
-							mdef->data->mname);
-						killer = msgbuf;
-						killer_format = NO_KILLER_PREFIX;
+						killer.format = NO_KILLER_PREFIX;
+						nhscopyf(&killer.name, "unwisely tried to eat %S", mdef->data->mname);
 						done(DIED);
 						return 0; /* lifesaved */
 					}
@@ -2417,8 +2415,7 @@ static int gulpum(struct monst *mdef, struct attack *mattk) {
 							sprintf(msgbuf, "%s isn't sitting well with you.",
 								The(mdef->data->mname));
 							if (!Unchanging) {
-								Slimed = 5L;
-								flags.botl = 1;
+								make_slimed(5, NULL);
 							}
 						} else
 							exercise(A_CON, true);
@@ -2850,8 +2847,8 @@ static boolean hmonas(struct monst *mon, int tmp) {
 					pline("Gazing at the awake Medusa is not a very good idea.");
 					/* as if gazing at a sleeping anything is fruitful... */
 					pline("You turn to stone...");
-					killer_format = KILLED_BY;
-					killer = "deliberately gazing at Medusa's hideous countenance";
+					killer.format = KILLED_BY;
+					nhscopyz(&killer.name, "deliberately gazing at Medusa's hideous countenance");
 					done(STONING);
 				} else if (!mon->mcansee || mon->msleeping) {
 					pline("But nothing happens.");

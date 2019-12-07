@@ -83,3 +83,4 @@ Changelist for slashem-next v0.0.1:
 - Bugfix: potions of acid dipped into fountains were not always used up (NetHack).  Toilets were not affected.
 - Interface: if your blindfold/towel glows while you're wearing it and it's the only thing keeping you from seeing, you see that glow (NetHack).
 - Bugfix: tripping over a cockatrice corpse while not wearing boots did not petrify the player (NetHack).
+- Bugfix: proper death messages when multiple delayed deaths are in play at once (NetHack).

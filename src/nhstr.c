@@ -5,17 +5,16 @@
 #include "extern.h"
 #include "nhstr.h"
 
-nhstr *new_nhs(void) {
-	return new (nhstr);
-}
-
 void del_nhs(nhstr *str) {
 	free(str->str);
 	free(str->colouration);
-	free(str);
+
+	str->str = NULL;
+	str->colouration = NULL;
+	str->len = 0;
 }
 
-nhstr *nhscatznc(nhstr *str, char *cat, usize catlen, int colour) {
+nhstr *nhscatznc(nhstr *str, const char *cat, usize catlen, int colour) {
 	str->str = realloc(str->str, (str->len + catlen) * sizeof(glyph_t));
 	for (usize i = str->len; i < str->len + catlen; i++) {
 		str->str[i] = cat[i - str->len];
@@ -30,37 +29,42 @@ nhstr *nhscatznc(nhstr *str, char *cat, usize catlen, int colour) {
 	return str;
 }
 
-nhstr *nhscatzc(nhstr *str, char *cat, int colour) {
-	return nhscatznc(str, cat, strlen(cat), colour);
+nhstr *nhscatzc(nhstr *str, const char *cat, int colour) {
+	return nhscatznc(str, cat, cat ? strlen(cat) : 0, colour);
 }
 
-nhstr *nhscatzn(nhstr *str, char *cat, usize catlen) {
+nhstr *nhscatzn(nhstr *str, const char *cat, usize catlen) {
 	return nhscatznc(str, cat, catlen, NO_COLOR);
 }
 
-nhstr *nhscatz(nhstr *str, char *cat) {
-	return nhscatzn(str, cat, strlen(cat));
+nhstr *nhscatz(nhstr *str, const char *cat) {
+	return nhscatzn(str, cat, cat ? strlen(cat) : 0);
 }
 
-nhstr *nhscopy(nhstr *str) {
-	nhstr *ret = new (nhstr);
-	ret->str = new (glyph_t, str->len);
-	memmove(ret->str, str->str, str->len * sizeof(glyph_t));
+nhstr nhsdup(const nhstr str) {
+	nhstr ret;
+	ret.str = new(glyph_t, str.len);
+	memcpy(ret.str, str.str, str.len * sizeof(glyph_t));
 
-	ret->colouration = new (int, str->len);
-	memmove(ret->colouration, str->colouration, str->len * sizeof(int));
-	ret->len = str->len;
+	ret.colouration = new(int, str.len);
+	memcpy(ret.colouration, str.colouration, str.len * sizeof(int));
+	ret.len = str.len;
 
 	return ret;
 }
 
-nhstr *nhscat(nhstr *str, nhstr *cat) {
-	str->str = realloc(str->str, (str->len + cat->len) * sizeof(glyph_t));
-	memcpy(str->str + str->len, cat->str, cat->len * sizeof(glyph_t));
-	str->colouration = realloc(str->colouration, (str->len + cat->len) * sizeof(int));
-	memcpy(str->colouration + str->len, cat->colouration, cat->len * sizeof(int));
+nhstr nhsdupz(const char *str) {
+	nhstr ret = {0};
+	return *nhscatz(&ret, str);
+}
 
-	str->len += cat->len;
+nhstr *nhscat(nhstr *str, const nhstr cat) {
+	str->str = realloc(str->str, (str->len + cat.len) * sizeof(glyph_t));
+	memmove(str->str + str->len, cat.str, cat.len * sizeof(glyph_t));
+	str->colouration = realloc(str->colouration, (str->len + cat.len) * sizeof(int));
+	memmove(str->colouration + str->len, cat.colouration, cat.len * sizeof(int));
+
+	str->len += cat.len;
 	return str;
 }
 
@@ -72,17 +76,16 @@ nhstr *nhscat(nhstr *str, nhstr *cat) {
 // %i: int
 // %u: uint
 // %%: literal %
-nhstr *nhscatfc_v(nhstr *str, int colour, char *cat, va_list the_args) {
+nhstr *nhscatfc_v(nhstr *str, int colour, const char *cat, va_list the_args) {
 	for (usize i = 0; cat[i]; i++) {
 		if (cat[i] == '%') {
 			i++;
 			switch (cat[i]) {
 				case 's':
-					nhscat(str, va_arg(the_args, nhstr *));
+					nhscat(str, va_arg(the_args, nhstr));
 					break;
 				case 'S': {
-					char *s = va_arg(the_args, char *);
-					nhscatzc(str, s, colour);
+					nhscatzc(str, va_arg(the_args, char*), colour);
 					break;
 				}
 				case 'c':
@@ -112,17 +115,17 @@ nhstr *nhscatfc_v(nhstr *str, int colour, char *cat, va_list the_args) {
 				// bad format
 				default:
 					nhscatzc(str, "%", colour);
-					nhscatzc(str, (char[]){cat[i], 0}, colour);
+					nhscatznc(str, cat + i, 1, colour);
 			}
 		} else {
-			nhscatzc(str, (char[]){cat[i], 0}, colour);
+			nhscatznc(str, cat + i, 1, colour);
 		}
 	}
 
 	return str;
 }
 
-nhstr *nhscatfc(nhstr *str, int colour, char *cat, ...) {
+nhstr *nhscatfc(nhstr *str, int colour, const char *cat, ...) {
 	VA_START(cat);
 	nhstr *ret = nhscatfc_v(str, colour, cat, VA_ARGS);
 	VA_END();
@@ -130,7 +133,7 @@ nhstr *nhscatfc(nhstr *str, int colour, char *cat, ...) {
 	return ret;
 }
 
-nhstr *nhscatf(nhstr *str, char *cat, ...) {
+nhstr *nhscatf(nhstr *str, const char *cat, ...) {
 	VA_START(cat);
 	nhstr *ret = nhscatfc_v(str, NO_COLOR, cat, VA_ARGS);
 	VA_END();
@@ -138,25 +141,70 @@ nhstr *nhscatf(nhstr *str, char *cat, ...) {
 	return ret;
 }
 
+nhstr *nhsmove(nhstr *target, nhstr *src) {
+	if (!memcmp(src, target, sizeof(nhstr))) {
+		return target;
+	}
+
+	free(target->str);
+	target->str = src->str;
+	src->str = NULL;
+
+	free(target->colouration);
+	target->colouration = src->colouration;
+	src->colouration = NULL;
+
+	target->len = src->len;
+	src->len = 0;
+
+	return target;
+}
+
+nhstr *nhscopyf(nhstr *target, const char *fmt, ...) {
+	nhstr tmp = {0};
+	VA_START(fmt);
+	nhsmove(target, nhscatfc_v(&tmp, NO_COLOR, fmt, VA_ARGS));
+	VA_END();
+	return target;
+}
+
+nhstr *nhscopyz(nhstr *str, const char *replacement) {
+	nhstr tmp = {0};
+	return nhsmove(str, nhscatz(&tmp, replacement));
+}
+
+nhstr *nhsreplace(nhstr *str, const nhstr replacement) {
+	nhstr tmp = nhsdup(replacement);
+	return nhsmove(str, &tmp);
+}
+
+nhstr nhsfmt(const char *fmt, ...) {
+	nhstr tmp = {0};
+	VA_START(fmt);
+	nhscatfc_v(&tmp, NO_COLOR, fmt, VA_ARGS);
+	VA_END();
+	return tmp;
+}
+
 // does utf-8 conversion
-char *nhs2cstr_tmp(nhstr *str) {
+char *nhs2cstr_tmp(const nhstr str) {
 	static char ret[BUFSZ];
 	ret[0] = 0;
 
-	for (usize i = 0; i < str->len; i++) {
-		strcat(ret, utf8_tmpstr(str->str[i]));
+	for (usize i = 0; i < str.len; i++) {
+		strcat(ret, utf8_tmpstr(str.str[i]));
 	}
 
 	return ret;
 }
 
 // doesn't do unicode conversion
-char *nhs2cstr_trunc_tmp(nhstr *str) {
+char *nhs2cstr_trunc_tmp(const nhstr str) {
 	static char ret[BUFSZ];
 
 	usize i;
-	for (i = 0; i < str->len; i++) {
-		ret[i] = str->str[i];
+	for (i = 0; i < str.len; i++) {
+		ret[i] = str.str[i];
 	}
 	ret[i + 1] = 0;
 
@@ -164,7 +212,7 @@ char *nhs2cstr_trunc_tmp(nhstr *str) {
 }
 
 char *nhs2cstr_tmp_destroy(nhstr *str) {
-	char *ret = nhs2cstr_tmp(str);
+	char *ret = nhs2cstr_tmp(*str);
 	del_nhs(str);
 	return ret;
 }
@@ -193,12 +241,39 @@ nhstr *nhslice(nhstr *str, usize new_start) {
 	return str;
 }
 
-isize nhsindex(nhstr *str, glyph_t ch) {
-	for (usize i = 0; i < str->len; i++) {
-		if (str->str[i] == ch) {
+isize nhsindex(const nhstr str, glyph_t ch) {
+	for (usize i = 0; i < str.len; i++) {
+		if (str.str[i] == ch) {
 			return i;
 		}
 	}
 
 	return -1;  // no match
+}
+
+void save_nhs(int fd, const nhstr str) {
+	usize len = str.len; // silence warning
+	bwrite(fd, &len, sizeof(usize));
+
+	if (len) {
+		bwrite(fd, str.str, str.len * sizeof(glyph_t));
+		bwrite(fd, str.colouration, str.len * sizeof(int));
+	}
+}
+
+nhstr restore_nhs(int fd) {
+	nhstr ret;
+
+	mread(fd, &ret.len, sizeof(usize));
+
+	// note: intentional alloc(0)
+	ret.str = new(glyph_t, ret.len);
+	ret.colouration = new(int, ret.len);
+
+	if (ret.len) {
+		mread(fd, ret.str, ret.len * sizeof(glyph_t));
+		mread(fd, ret.colouration, ret.len * sizeof(int));
+	}
+
+	return ret;
 }

@@ -307,8 +307,8 @@ static void fortune(struct monst *mtmp) {
 				else if (Hallucination)
 					pline("You have an out of body experience.");
 				else {
-					killer_format = KILLED_BY;
-					killer = "the card of Death";
+					killer.format = KILLED_BY;
+					nhscopyz(&killer.name, "the card of Death");
 					done(DIED);
 				}
 				break;

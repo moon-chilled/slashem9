@@ -46,11 +46,9 @@ int smeq[MAXNROFROOMS + 1] = DUMMY;
 int doorindex = 0;
 
 char *save_cm = 0;
-int killer_format = 0;
-const char *killer = 0;
-const char *delayed_killer = 0;
+
+struct kinfo killer = {0};
 long done_money = 0;
-char killer_buf[BUFSZ] = DUMMY;
 const char *nomovemsg = 0;
 const char nul[40] = DUMMY;   /* contains zeros */
 char plname[PL_NSIZ] = DUMMY; /* player name */

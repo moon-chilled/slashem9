@@ -1007,7 +1007,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 		if (fd < 0) {
 			pline("%s", whynot);
 			pline("Probably someone removed it.");
-			killer = whynot;
+			nhscopyz(&killer.name, whynot);
 			done(TRICKED);
 			/* we'll reach here if running in wizard mode */
 			error("Cannot continue this game.");

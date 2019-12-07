@@ -323,21 +323,21 @@ void topten(int how) {
 	strncpy(t0->name, plname, NAMSZ);
 	t0->name[NAMSZ] = '\0';
 	t0->death[0] = '\0';
-	switch (killer_format) {
+	switch (killer.format) {
 		default:
 			impossible("bad killer format?");
 		case KILLED_BY_AN:
 			strcat(t0->death, killed_by_prefix[how]);
-			strncat(t0->death, an(killer),
+			strncat(t0->death, an(nhs2cstr_tmp(killer.name)),
 				DTHSZ - strlen(t0->death));
 			break;
 		case KILLED_BY:
 			strcat(t0->death, killed_by_prefix[how]);
-			strncat(t0->death, killer,
+			strncat(t0->death, nhs2cstr_tmp(killer.name),
 				DTHSZ - strlen(t0->death));
 			break;
 		case NO_KILLER_PREFIX:
-			strncat(t0->death, killer, DTHSZ);
+			strncat(t0->death, nhs2cstr_tmp(killer.name), DTHSZ);
 			break;
 	}
 	t0->birthdate = yyyymmdd(u.ubirthday);

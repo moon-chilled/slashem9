@@ -471,8 +471,8 @@ void moveloop(void) {
 			} else if (!u.uinvulnerable) {
 				u.utrap -= 1 << 8;
 				if (u.utrap < 1 << 8) {
-					killer_format = KILLED_BY;
-					killer = "molten lava";
+					killer.format = KILLED_BY;
+					nhscopyz(&killer.name, "molten lava");
 					pline("You sink below the surface and die.");
 					done(DISSOLVED);
 				} else if (didmove && !u.umoved) {

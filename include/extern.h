@@ -148,8 +148,8 @@ const char *rank_of(int, short, boolean);
 void bot_set_handler(void (*)());
 void bot_reconfig(void);
 void bot(void);
-nhstr *bot1str(void);
-nhstr *bot2str(void);
+nhstr bot1str(void);
+nhstr bot2str(void);
 
 /* ### cmd.c ### */
 
@@ -554,6 +554,11 @@ int dolistvanq(void);
 int num_genocides(void);
 /* KMH, ethics */
 int doethics(void);
+void delayed_killer(int id, int format, nhstr killername);
+struct kinfo *find_delayed_killer(int id);
+void dealloc_killer(struct kinfo *kptr);
+void save_killers(int fd, int mode);
+void restore_killers(int fd);
 
 /* ### engrave.c ### */
 
@@ -1505,6 +1510,7 @@ void make_confused(long, boolean);
 void make_stunned(long, boolean);
 void make_blinded(long, boolean);
 void make_sick(long, const char *, boolean, int);
+void make_slimed(long xtime, const char *msg);
 void make_vomiting(long, boolean);
 boolean make_hallucinated(long, boolean, long);
 int dodrink(void);

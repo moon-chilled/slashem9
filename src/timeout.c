@@ -134,18 +134,13 @@ static void slime_dialogue() {
 
 void burn_away_slime(void) {
 	if (Slimed) {
-		pline("The slime that covers you is burned away!");
-		Slimed = 0L;
-		flags.botl = 1;
+		make_slimed(0, "The slime that covers you is burned away!");
 	}
-	return;
 }
 
 void nh_timeout(void) {
 	struct prop *upp;
-	/*
-		char c;
-	 */
+	struct kinfo *kptr;
 	int sleeptime;
 	int m_idx;
 	int baseluck = (flags.moonphase == FULL_MOON) ? 1 : 0;
@@ -203,29 +198,28 @@ void nh_timeout(void) {
 
 	for (upp = u.uprops; upp < u.uprops + SIZE(u.uprops); upp++)
 		if ((upp->intrinsic & TIMEOUT) && !(--upp->intrinsic & TIMEOUT)) {
+			kptr = find_delayed_killer(upp - u.uprops);
 			switch (upp - u.uprops) {
 				case STONED:
-					if (delayed_killer && !killer) {
-						killer = delayed_killer;
-						delayed_killer = 0;
+					if (kptr && kptr->name.len) {
+						killer.format = kptr->format;
+						nhsmove(&killer.name, &kptr->name);
+					} else {
+						killer.format = NO_KILLER_PREFIX;
+						nhscopyz(&killer.name, "killed by petrification");
 					}
-					if (!killer) {
-						/* leaving killer_format would make it
-					   "petrified by petrification" */
-						killer_format = NO_KILLER_PREFIX;
-						killer = "killed by petrification";
-					}
+					dealloc_killer(kptr);
 					done(STONING);
 					break;
 				case SLIMED:
-					if (delayed_killer && !killer) {
-						killer = delayed_killer;
-						delayed_killer = 0;
+					if (kptr && kptr->name.len) {
+						killer.format = kptr->format;
+						nhsmove(&killer.name, &kptr->name);
+					} else {
+						killer.format = NO_KILLER_PREFIX;
+						nhscopyz(&killer.name, "turned into green slime");
 					}
-					if (!killer) {
-						killer_format = NO_KILLER_PREFIX;
-						killer = "turned into green slime";
-					}
+					dealloc_killer(kptr);
 					done(TURNED_SLIME);
 					break;
 				case VOMITING:
@@ -233,15 +227,21 @@ void nh_timeout(void) {
 					break;
 				case SICK:
 					pline("You die from your illness.");
-					killer_format = KILLED_BY_AN;
-					killer = u.usick_cause;
-					if ((m_idx = name_to_mon(killer)) >= LOW_PM) {
+					if (kptr && kptr->name.len) {
+						killer.format = kptr->format;
+						nhsmove(&killer.name, &kptr->name);
+					} else {
+						killer.format = KILLED_BY_AN;
+						del_nhs(&killer.name);
+					}
+					dealloc_killer(kptr);
+
+					if ((m_idx = name_to_mon(nhs2cstr_tmp(killer.name))) >= LOW_PM) {
 						if (type_is_pname(&mons[m_idx])) {
-							killer_format = KILLED_BY;
+							killer.format = KILLED_BY;
 						} else if (mons[m_idx].geno & G_UNIQ) {
-							killer = the(killer);
-							strcpy(u.usick_cause, killer);
-							killer_format = KILLED_BY;
+							killer.format = KILLED_BY;
+							nhscopyz(&killer.name, the(nhs2cstr_tmp(killer.name)));
 						}
 					}
 					u.usick_type = 0;
@@ -353,8 +353,8 @@ void nh_timeout(void) {
 					float_down(I_SPECIAL | TIMEOUT, 0L);
 					break;
 				case STRANGLED:
-					killer_format = KILLED_BY;
-					killer = (u.uburied) ? "suffocation" : "strangulation";
+					killer.format = KILLED_BY;
+					nhscopyz(&killer.name, (u.uburied) ? "suffocation" : "strangulation");
 					done(DIED);
 					break;
 				case FUMBLING:
@@ -925,10 +925,8 @@ static void slip_or_trip(void) {
 		}
 
 		if (!uarmf && otmp->otyp == CORPSE && touch_petrifies(&mons[otmp->corpsenm]) && !Stone_resistance) {
-			static char buf[BUFSZ];
-			sprintf(buf, "tripping over %s corpse", an(mons[otmp->corpsenm].mname));
-			killer = buf;
-			instapetrify(killer);
+			nhscopyf(&killer.name, "tripping over %S corpse", an(mons[otmp->corpsenm].mname));
+			instapetrify(nhs2cstr_tmp(killer.name));
 		}
 	} else if (rn2(3) && is_ice(u.ux, u.uy)) {
 		pline("%s %s%s on the ice.",

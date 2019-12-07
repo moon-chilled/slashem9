@@ -204,8 +204,9 @@ static char *botl_strength(void) {
 	return strength;
 }
 
-nhstr *bot1str() {
-	nhstr *ret = new_nhs();
+nhstr bot1str() {
+	nhstr dret = {0};
+	nhstr *ret = &dret;
 
 	if (iflags.hitpointbar) {
 		//TODO: inverse
@@ -239,14 +240,15 @@ nhstr *bot1str() {
 	if (flags.showscore)
 		nhscatf(ret, " S:%l", botl_score());
 
-	return ret;
+	return dret;
 }
 
 void bot1() {
-	nhstr *newbot1 = bot1str();
 	curs(WIN_STATUS, 1, 0);
+
+	nhstr newbot1 = bot1str();
 	putnstr(WIN_STATUS, 0, newbot1);
-	del_nhs(newbot1);
+	del_nhs(&newbot1);
 }
 
 /* provide the name of the current level for display by various ports */
@@ -290,8 +292,10 @@ int describe_level(char *buf, int verbose) {
 
 static int bot2_abbrev = 0; /* Line 2 abbreviation level (max 4) */
 
-nhstr *bot2str(void) {
-	nhstr *ret = new_nhs();
+nhstr bot2str(void) {
+	nhstr dret = {0};
+	nhstr *ret = &dret;
+
 	int hp, hpmax;
 	int cap = near_capacity();
 
@@ -368,15 +372,15 @@ nhstr *bot2str(void) {
 	if (cap > UNENCUMBERED)
 		add_colored_text_match(bot2_abbrev >= 2 ? enc_abbrev_stat[cap] : enc_stat[cap], enc_stat[cap], ret);
 
-	return ret;
+	return dret;
 }
 
 static void bot2(void) {
-	nhstr *newbot2 = bot2str();
 	curs(WIN_STATUS, 1, 1);
 
+	nhstr newbot2 = bot2str();
 	putnstr(WIN_STATUS, 0, newbot2);
-	del_nhs(newbot2);
+	del_nhs(&newbot2);
 }
 
 /* WAC -- Shorten bot1 to fit in len spaces.

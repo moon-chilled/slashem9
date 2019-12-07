@@ -2167,7 +2167,6 @@ static void throwstorm(struct obj *obj, int skilldmg, int min, int range) {
 
 int zapyourself(struct obj *obj, boolean ordinary) {
 	int damage = 0;
-	char buf[BUFSZ];
 
 	switch (obj->otyp) {
 		case WAN_STRIKING:
@@ -2396,9 +2395,8 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 				pline("You are unharmed!");
 				break;
 			}
-			killer_format = NO_KILLER_PREFIX;
-			sprintf(buf, "shot %sself with a death ray", uhim());
-			killer = buf;
+			killer.format = NO_KILLER_PREFIX;
+			nhscopyf(&killer.name, "shot %Sself with a death ray", uhim());
 			pline("You irradiate yourself with pure energy!");
 			pline("You die.");
 			makeknown(obj->otyp);
@@ -3558,8 +3556,8 @@ static void zhitu(int type, int nd, const char *fltxt, xchar sx, xchar sy) {
 				pline("You are unharmed!");
 				break;
 			}
-			killer_format = KILLED_BY_AN;
-			killer = fltxt;
+			killer.format = KILLED_BY_AN;
+			nhscopyz(&killer.name, fltxt);
 			/* when killed by disintegration breath, don't leave corpse */
 			u.ugrave_arise = (type == -ZT_BREATH(ZT_DEATH)) ? -3 : NON_PM;
 			done(DIED);

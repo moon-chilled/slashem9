@@ -210,11 +210,12 @@ void do_explode(
 	int expltype,
 	int dest, /* 0 = normal, 1 = silent, 2 = silent/remote */
 	boolean yours /* is it your fault (for killing monsters) */) {
+
 	int i, k, damu = dam;
 	boolean starting = 1;
 	boolean visible, any_shield;
 	int uhurt = 0; /* 0=unhurt, 1=items damaged, 2=you and items damaged */
-	const char *str;
+	nhstr str;
 	int idamres, idamnonres;
 	struct monst *mtmp;
 	uchar adtyp;
@@ -246,47 +247,44 @@ void do_explode(
 		}
 
 	if (olet == MON_EXPLODE) {
-		str = killer;
-		killer = 0; /* set again later as needed */
+		nhsmove(&str, &killer.name);
 		adtyp = AD_PHYS;
-	} else
+	} else {
 		switch (abs(type) % 10) {
 			case 0:
-				str = "magical blast";
+				nhscopyz(&str, "magical blast");
 				adtyp = AD_MAGM;
 				break;
 			case 1:
-				str = olet == BURNING_OIL ? "burning oil" :
-							    olet == SCROLL_CLASS ? "tower of flame" :
-										   "fireball";
+				nhscopyz(&str, olet == BURNING_OIL ? "burning oil" : olet == SCROLL_CLASS ? "tower of flame" : "fireball");
 				adtyp = AD_FIRE;
 				break;
 			case 2:
-				str = "ball of cold";
+				nhscopyz(&str, "ball of cold");
 				adtyp = AD_COLD;
 				break;
 			/* Assume that wands are death, others are disintegration */
 			case 4:
-				str = (olet == WAND_CLASS) ? "death field" :
-							     "disintegration field";
+				nhscopyz(&str, (olet == WAND_CLASS) ? "death field" : "disintegration field");
 				adtyp = AD_DISN;
 				break;
 			case 5:
-				str = "ball of lightning";
+				nhscopyz(&str, "ball of lightning");
 				adtyp = AD_ELEC;
 				break;
 			case 6:
-				str = "poison gas cloud";
+				nhscopyz(&str, "poison gas cloud");
 				adtyp = AD_DRST;
 				break;
 			case 7:
-				str = "splash of acid";
+				nhscopyz(&str, "splash of acid");
 				adtyp = AD_ACID;
 				break;
 			default:
 				impossible("explosion base type %d?", type);
 				return;
 		}
+	}
 
 			/*WAC add light source for fire*/
 #ifdef LIGHT_SRC_SPELL
@@ -430,7 +428,7 @@ void do_explode(
 		tmp_at(DISP_END, 0); /* clear the explosion */
 	} else if (!remote) {
 		if (olet == MON_EXPLODE) {
-			str = "explosion";
+			nhscopyz(&str, "explosion");
 			generic = true;
 		}
 		if (flags.soundok)
@@ -461,30 +459,26 @@ void do_explode(
 					if (!silent) pline("%s gets %s!",
 							   Monnam(u.ustuck),
 							   (adtyp == AD_FIRE) ? "heartburn" :
-										(adtyp == AD_COLD) ? "chilly" :
-												     (adtyp == AD_DISN) ? ((olet == WAND_CLASS) ?
-																   "irradiated by pure energy" :
-																   "perforated") :
-															  (adtyp == AD_ELEC) ? "shocked" :
-																	       (adtyp == AD_DRST) ? "poisoned" :
-																				    (adtyp == AD_ACID) ? "an upset stomach" :
-																							 "fried");
+							   (adtyp == AD_COLD) ? "chilly" :
+							   (adtyp == AD_DISN) ? ((olet == WAND_CLASS) ?  "irradiated by pure energy" : "perforated") :
+							   (adtyp == AD_ELEC) ? "shocked" :
+							   (adtyp == AD_DRST) ? "poisoned" :
+							   (adtyp == AD_ACID) ? "an upset stomach" :
+							   "fried");
 				} else {
 					if (!silent) pline("%s gets slightly %s!",
 							   Monnam(u.ustuck),
 							   (adtyp == AD_FIRE) ? "toasted" :
-										(adtyp == AD_COLD) ? "chilly" :
-												     (adtyp == AD_DISN) ? ((olet == WAND_CLASS) ?
-																   "overwhelmed by pure energy" :
-																   "perforated") :
-															  (adtyp == AD_ELEC) ? "shocked" :
-																	       (adtyp == AD_DRST) ? "intoxicated" :
-																				    (adtyp == AD_ACID) ? "burned" :
-																							 "fried");
+							   (adtyp == AD_COLD) ? "chilly" :
+							   (adtyp == AD_DISN) ? ((olet == WAND_CLASS) ?  "overwhelmed by pure energy" : "perforated") :
+							   (adtyp == AD_ELEC) ? "shocked" :
+							   (adtyp == AD_DRST) ? "intoxicated" :
+							   (adtyp == AD_ACID) ? "burned" :
+							   "fried");
 				}
 			} else if (!silent && cansee(xi, yi)) {
 				if (mtmp->m_ap_type) seemimic(mtmp);
-				pline("%s is caught in the %s!", Monnam(mtmp), str);
+				pline("%s is caught in the %s!", Monnam(mtmp), nhs2cstr_tmp(str));
 			}
 
 			idamres += destroy_mitem(mtmp, SCROLL_CLASS, (int)adtyp);
@@ -505,7 +499,7 @@ void do_explode(
 
 				if (resist(mtmp, olet, 0, false)) {
 					if (!silent && cansee(xi, yi))
-						pline("%s resists the %s!", Monnam(mtmp), str);
+						pline("%s resists the %s!", Monnam(mtmp), nhs2cstr_tmp(str));
 					mdam = dam / 2;
 				}
 				if (mtmp == u.ustuck)
@@ -546,7 +540,7 @@ void do_explode(
 		if ((type >= 0 || adtyp == AD_PHYS || olet == WEAPON_CLASS) &&
 		    /* gas spores */
 		    flags.verbose && olet != SCROLL_CLASS)
-			pline("You are caught in the %s!", str);
+			pline("You are caught in the %s!", nhs2cstr_tmp(str));
 		/* do property damage first, in case we end up leaving bones */
 		if (adtyp == AD_FIRE) burn_away_slime();
 		if (Invulnerable) {
@@ -583,21 +577,21 @@ void do_explode(
 			} else {
 				if (olet == MON_EXPLODE) {
 					/* killer handled by caller */
-					if (str != killer_buf && !generic)
-						strcpy(killer_buf, str);
-					killer_format = KILLED_BY_AN;
+					if (!generic)
+						nhsmove(&killer.name, &str);
+					killer.format = KILLED_BY_AN;
 				} else if (type >= 0 && olet != SCROLL_CLASS && yours) {
-					killer_format = NO_KILLER_PREFIX;
-					sprintf(killer_buf, "caught %sself in %s own %s",
-						uhim(), uhis(), str);
+					killer.format = NO_KILLER_PREFIX;
+					nhscopyf(&killer.name, "caught %Sself in %S own %s", uhim(), uhis(), str);
+					del_nhs(&str);
 				} else if (olet != BURNING_OIL) {
-					killer_format = KILLED_BY_AN;
-					strcpy(killer_buf, str);
+					killer.format = KILLED_BY_AN;
+					nhsmove(&killer.name, &str);
 				} else {
-					killer_format = KILLED_BY;
-					strcpy(killer_buf, str);
+					killer.format = KILLED_BY;
+					nhsmove(&killer.name, &str);
 				}
-				killer = killer_buf;
+
 				/* Known BUG: BURNING suppresses corpse in bones data,
 				   but done does not handle killer reason correctly */
 				done((adtyp == AD_FIRE) ? BURNING : DIED);
@@ -606,11 +600,12 @@ void do_explode(
 		exercise(A_STR, false);
 	}
 
+	del_nhs(&str);
+
 	if (shopdamage) {
-		pay_for_damage(adtyp == AD_FIRE ? "burn away" :
-						  adtyp == AD_COLD ? "shatter" :
-								     adtyp == AD_DISN ? "disintegrate" : "destroy",
-			       false);
+		pay_for_damage( adtyp == AD_FIRE ? "burn away" :
+				adtyp == AD_COLD ? "shatter" :
+				adtyp == AD_DISN ? "disintegrate" : "destroy", false);
 	}
 
 	/* explosions are noisy */

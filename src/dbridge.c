@@ -329,18 +329,18 @@ static boolean e_survives_at(struct entity *etmp, int x, int y) {
 static void e_died(struct entity *etmp, int dest, int how) {
 	if (is_u(etmp)) {
 		if (how == DROWNING) {
-			killer = 0; /* drown() sets its own killer */
+			del_nhs(&killer.name); /* drown() sets its own killer */
 			drown();
 		} else if (how == BURNING) {
-			killer = 0; /* lava_effects() sets its own killer */
+			del_nhs(&killer.name); /* lava_effects() sets its own killer */
 			lava_effects();
 		} else {
 			coord xy;
 
 			/* use more specific killer if specified */
-			if (!killer) {
-				killer_format = KILLED_BY_AN;
-				killer = "falling drawbridge";
+			if (!killer.name.len) {
+				killer.format = KILLED_BY_AN;
+				nhscopyz(&killer.name, "falling drawbridge");
 			}
 			done(how);
 			/* So, you didn't die */
@@ -360,7 +360,7 @@ static void e_died(struct entity *etmp, int dest, int how) {
 	} else {
 		int entitycnt;
 
-		killer = 0;
+		del_nhs(&killer.name);
 		/* fake "digested to death" damage-type suppresses corpse */
 #define mk_message(dest) ((dest & 1) ? "" : NULL)
 #define mk_corpse(dest)	 ((dest & 2) ? AD_DGST : AD_PHYS)
@@ -622,8 +622,8 @@ static void do_entity(struct entity *etmp) {
 				      E_phrase(etmp, "disappear"));
 		}
 		if (!e_survives_at(etmp, etmp->ex, etmp->ey)) {
-			killer_format = KILLED_BY_AN;
-			killer = "closing drawbridge";
+			killer.format = KILLED_BY_AN;
+			nhscopyz(&killer.name, "closing drawbridge");
 			e_died(etmp, 0, CRUSHING); /* no message */
 			return;
 		}
@@ -661,8 +661,8 @@ static void do_entity(struct entity *etmp) {
 					      E_phrase(etmp, "fall"),
 					      lava ? "lava" : "moat");
 			}
-		killer_format = NO_KILLER_PREFIX;
-		killer = "fell from a drawbridge";
+		killer.format = NO_KILLER_PREFIX;
+		nhscopyz(&killer.name, "fell from a drawbridge");
 		e_died(etmp, e_inview ? 3 : 2, /* CRUSHING is arbitrary */
 		       (is_pool(etmp->ex, etmp->ey)) ? DROWNING :
 						       (is_lava(etmp->ex, etmp->ey)) ? BURNING :
@@ -833,8 +833,8 @@ void destroy_drawbridge(int x, int y) {
 			if (e_inview)
 				pline("%s blown apart by flying debris.",
 				      E_phrase(etmp2, "are"));
-			killer_format = KILLED_BY_AN;
-			killer = "exploding drawbridge";
+			killer.format = KILLED_BY_AN;
+			nhscopyz(&killer.name, "exploding drawbridge");
 			e_died(etmp2, e_inview ? 3 : 2, CRUSHING); /*no corpse*/
 		}						   /* nothing which is vulnerable can survive this */
 	}
@@ -862,8 +862,8 @@ void destroy_drawbridge(int x, int y) {
 					      E_phrase(etmp1, "die"));
 #endif
 			}
-			killer_format = KILLED_BY_AN;
-			killer = "collapsing drawbridge";
+			killer.format = KILLED_BY_AN;
+			nhscopyz(&killer.name, "collapsing drawbridge");
 			e_died(etmp1, e_inview ? 3 : 2, CRUSHING); /*no corpse*/
 			if (lev1->typ == MOAT) do_entity(etmp1);
 		}

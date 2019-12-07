@@ -96,11 +96,17 @@ static void polyman(const char *fmt, const char *arg) {
 	    (urace.femalenum != NON_PM &&
 	     (mvitals[urace.femalenum].mvflags & G_GENOD))) {
 		/* intervening activity might have clobbered genocide info */
-		killer = delayed_killer;
-		if (!killer || !strstri(killer, "genocid")) {
-			killer_format = KILLED_BY;
-			killer = "self-genocide";
+		struct kinfo *kptr = find_delayed_killer(POLYMORPH);
+		if (kptr && kptr->name.len) {
+			killer.format = kptr->format;
+			nhsmove(&killer.name, &kptr->name);
+		} else {
+			killer.format = KILLED_BY;
+			nhscopyz(&killer.name, "self-genocide");
 		}
+
+		dealloc_killer(kptr);
+
 		done(GENOCIDED);
 	}
 
@@ -208,7 +214,7 @@ newman() {
 	if (Sick) make_sick(0L, NULL, false, SICK_ALL);
 	Sick = 0;
 	Stoned = 0;
-	delayed_killer = 0;
+	dealloc_killer(find_delayed_killer(STONED));
 	if (Race_if(PM_DOPPELGANGER)) {
 		if (u.uhp <= 10) u.uhp = 10;
 		if (u.uhpmax <= 10) u.uhpmax = 10;
@@ -222,8 +228,8 @@ newman() {
 		} else {
 		dead: /* we come directly here if their experience level went to 0 or less */
 			pline("Your new form doesn't seem healthy enough to survive.");
-			killer_format = KILLED_BY_AN;
-			killer = "unsuccessful polymorph";
+			killer.format = KILLED_BY_AN;
+			nhscopyz(&killer.name, "unsuccessful polymorph");
 			done(DIED);
 			newuhs(false);
 			return; /* lifesaved */
@@ -234,8 +240,7 @@ newman() {
 		(flags.female && urace.individual.f) ? urace.individual.f :
 						       (urace.individual.m) ? urace.individual.m : urace.noun);
 	if (Slimed) {
-		pline("Your body transforms, but there is still slime on you.");
-		Slimed = 10L;
+		make_slimed(10, "Your body transforms, but there is still slime on you.");
 	}
 	flags.botl = 1;
 	vision_full_recalc = 1;
@@ -463,7 +468,7 @@ int polymon(int mntmp) {
 		pline("You turn to stone!");
 		mntmp = PM_STONE_GOLEM;
 		Stoned = 0;
-		delayed_killer = 0;
+		dealloc_killer(find_delayed_killer(STONED));
 	}
 
 	u.mtimedone = rn1(500, 500);
@@ -477,7 +482,7 @@ int polymon(int mntmp) {
 
 	if (Stone_resistance && Stoned) { /* parnes@eniac.seas.upenn.edu */
 		Stoned = 0;
-		delayed_killer = 0;
+		dealloc_killer(find_delayed_killer(STONED));
 		pline("You no longer seem to be petrifying.");
 	}
 	if (Sick_resistance && Sick) {
@@ -486,13 +491,10 @@ int polymon(int mntmp) {
 	}
 	if (Slimed) {
 		if (flaming(youmonst.data)) {
-			pline("The slime burns away!");
-			Slimed = 0L;
-			flags.botl = 1;
+			make_slimed(0, "The slime burns away!");
 		} else if (mntmp == PM_GREEN_SLIME) {
 			/* do it silently */
-			Slimed = 0L;
-			flags.botl = 1;
+			make_slimed(0, NULL);
 		}
 	}
 	if (nohands(youmonst.data)) Glib = 0;
@@ -801,8 +803,8 @@ void rehumanize(void) {
 
 	/* KMH, balance patch -- you can't revert back while unchanging */
 	if (Unchanging && forced) {
-		killer_format = NO_KILLER_PREFIX;
-		killer = "killed while stuck in creature form";
+		killer.format = NO_KILLER_PREFIX;
+		nhscopyz(&killer.name, "killed while stuck in creature form");
 		done(DIED);
 	}
 
@@ -811,11 +813,8 @@ void rehumanize(void) {
 	polyman("You return to %s form!", urace.adj);
 
 	if (u.uhp < 1) {
-		char kbuf[256];
-
-		sprintf(kbuf, "reverting to unhealthy %s form", urace.adj);
-		killer_format = KILLED_BY;
-		killer = kbuf;
+		killer.format = KILLED_BY;
+		nhscopyf(&killer.name, "reverting to unhealthy %S form", urace.adj);
 		done(DIED);
 	}
 
@@ -882,8 +881,8 @@ int dogaze(void) {
 		pline("Gazing at the awake Medusa is not a very good idea.");
 		/* as if gazing at a sleeping anything is fruitful... */
 		pline("You turn to stone...");
-		killer_format = KILLED_BY;
-		killer = "deliberately gazing at Medusa's hideous countenance";
+		killer.format = KILLED_BY;
+		nhscatz(&killer.name, "deliberately gazing at Medusa's hideous countenance");
 		done(STONING);
 	} else if (!mtmp->mcansee || mtmp->msleeping) {
 		pline("But nothing happens.");
@@ -1224,13 +1223,11 @@ dogaze (void) {
 				 */
 				if (!DEADMONSTER(mtmp) &&
 				                (mtmp->data==&mons[PM_MEDUSA]) && !mtmp->mcan) {
-					pline(
-					        "Gazing at the awake %s is not a very good idea.",
-					        l_monnam(mtmp));
+					pline("Gazing at the awake %s is not a very good idea.", l_monnam(mtmp));
 					/* as if gazing at a sleeping anything is fruitful... */
 					pline("You turn to stone...");
-					killer_format = KILLED_BY;
-					killer = "deliberately meeting Medusa's gaze";
+					killer.format = KILLED_BY;
+					nhscopyz(&killer.name, "deliberately meeting Medusa's gaze");
 					done(STONING);
 				}
 			}

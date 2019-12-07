@@ -912,13 +912,11 @@ void level_tele(void) {
 			pline("You cease to exist.");
 			if (invent) pline("Your possessions land on the %s with a thud.",
 					  surface(u.ux, u.uy));
-			killer_format = NO_KILLER_PREFIX;
-			killer = "committed suicide";
+			killer.format = NO_KILLER_PREFIX;
+			nhscopyz(&killer.name, "committed suicide");
 			done(DIED);
 			pline("An energized cloud of dust begins to coalesce.");
-			pline("Your body rematerializes%s.", invent ?
-								     ", and you gather up all your possessions" :
-								     "");
+			pline("Your body rematerializes%s.", invent ? ", and you gather up all your possessions" : "");
 			return;
 		}
 
@@ -968,7 +966,7 @@ void level_tele(void) {
 		schedule_goto(&newlevel, false, false, 0, NULL, NULL);
 		return;
 	}
-	killer = 0; /* still alive, so far... */
+	del_nhs(&killer.name); /* still alive, so far... */
 
 	if (iflags.debug_fuzzer && newlev < 0) {
 		goto random_levtport;
@@ -986,8 +984,8 @@ void level_tele(void) {
 		if (newlev <= -10) {
 			pline("You arrive in heaven.");
 			verbalize("Thou art early, but we'll admit thee.");
-			killer_format = NO_KILLER_PREFIX;
-			killer = "went to heaven prematurely";
+			killer.format = NO_KILLER_PREFIX;
+			nhscopyz(&killer.name, "went to heaven prematurely");
 		} else if (newlev == -9) {
 			pline("You feel deliriously happy. ");
 			pline("(In fact, you're on Cloud 9!) ");
@@ -995,7 +993,7 @@ void level_tele(void) {
 		} else
 			pline("You are now high above the clouds...");
 
-		if (killer) {
+		if (killer.name.len) {
 			; /* arrival in heaven is pending */
 		} else if (Levitation) {
 			escape_by_flying = "float gently down to earth";
@@ -1004,15 +1002,12 @@ void level_tele(void) {
 		} else {
 			pline("Unfortunately, you don't know how to fly.");
 			pline("You plummet a few thousand feet to your death.");
-			sprintf(buf,
-				"teleported out of the dungeon and fell to %s death",
-				uhis());
-			killer = buf;
-			killer_format = NO_KILLER_PREFIX;
+			killer.format = NO_KILLER_PREFIX;
+			nhscopyf(&killer.name, "teleported out of the dungeon and fell to %S death", uhis());
 		}
 	}
 
-	if (killer) { /* the chosen destination was not survivable */
+	if (killer.name.len) { /* the chosen destination was not survivable */
 		d_level lsav;
 
 		/* set specific death location; this also suppresses bones */

@@ -224,7 +224,7 @@ int dosave0() {
 			HUP pline("%s", whynot);
 			close(fd);
 			delete_savefile();
-			HUP killer = whynot;
+			HUP nhscopyz(&killer.name, whynot);
 			HUP done(TRICKED);
 			return 0;
 		}
@@ -250,10 +250,11 @@ static void savegamestate(int fd, int mode) {
 	time_t realtime;
 
 	uid = getuid();
-	bwrite(fd, (void *)&uid, sizeof uid);
-	bwrite(fd, (void *)&flags, sizeof(struct flag));
-	bwrite(fd, (void *)&u, sizeof(struct you));
+	bwrite(fd, &uid, sizeof uid);
+	bwrite(fd, &flags, sizeof(struct flag));
+	bwrite(fd, &u, sizeof(struct you));
 
+	save_killers(fd, mode);
 	/* must come before migrating_objs and migrating_mons are freed */
 	save_timers(fd, mode, RANGE_GLOBAL);
 	save_light_sources(fd, mode, RANGE_GLOBAL);
@@ -327,7 +328,7 @@ void savestateinlock() {
 		if (fd < 0) {
 			pline("%s", whynot);
 			pline("Probably someone removed it.");
-			killer = whynot;
+			nhscopyz(&killer.name, whynot);
 			done(TRICKED);
 			return;
 		}
@@ -338,7 +339,7 @@ void savestateinlock() {
 				"Level #0 pid (%d) doesn't match ours (%d)!",
 				hpid, hackpid);
 			pline("%s", whynot);
-			killer = whynot;
+			nhscopyz(&killer.name, whynot);
 			done(TRICKED);
 		}
 		close(fd);
@@ -346,7 +347,7 @@ void savestateinlock() {
 		fd = create_levelfile(0, whynot);
 		if (fd < 0) {
 			pline("%s", whynot);
-			killer = whynot;
+			nhscopyz(&killer.name, whynot);
 			done(TRICKED);
 			return;
 		}
@@ -693,6 +694,7 @@ void freedynamicdata() {
 #define freenames()	      savenames(0, FREE_SAVE)
 #define free_waterlevel()     save_waterlevel(0, FREE_SAVE)
 #define free_worm()	      save_worm(0, FREE_SAVE)
+#define free_killers()	      save_killers(0, FREE_SAVE)
 #define free_timers(R)	      save_timers(0, FREE_SAVE, R)
 #define free_light_sources(R) save_light_sources(0, FREE_SAVE, R);
 #define free_engravings()     save_engravings(0, FREE_SAVE)
@@ -702,7 +704,8 @@ void freedynamicdata() {
 	/* move-specific data */
 	dmonsfree(); /* release dead monsters */
 
-	/* level-specific data */
+	/* game-state data */
+	free_killers();
 	free_timers(RANGE_LEVEL);
 	free_light_sources(RANGE_LEVEL);
 	freemonchn(fmon);

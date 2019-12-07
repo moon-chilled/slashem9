@@ -1426,7 +1426,7 @@ static int arti_invoke(struct obj *obj) {
 						u.uhp += healamt;
 				}
 				if (Sick) make_sick(0L, NULL, false, SICK_ALL);
-				if (Slimed) Slimed = 0L;
+				if (Slimed) make_slimed(0, NULL);
 				if (Blinded > creamed) make_blinded(creamed, false);
 				flags.botl = 1;
 				break;
@@ -1481,8 +1481,8 @@ static int arti_invoke(struct obj *obj) {
 					u.uhp /= 100;
 					if (u.uhp < 1) {
 						u.uhp = 0;
-						killer_format = KILLED_BY;
-						killer = "the Holy Spear of Light";
+						killer.format = KILLED_BY;
+						nhscopyz(&killer.name, "the Holy Spear of Light");
 						done(DIED);
 					}
 				}
@@ -1510,8 +1510,8 @@ static int arti_invoke(struct obj *obj) {
 				if (u.uluck < -9) {
 					pline("The Eye turns on you!");
 					u.uhp = 0;
-					killer_format = KILLED_BY;
-					killer = "the Eye of the Beholder";
+					killer.format = KILLED_BY;
+					nhscopyz(&killer.name, "the Eye of the Beholder");
 					done(DIED);
 				}
 				pline("The Eye looks around with its icy gaze!");
@@ -1533,8 +1533,8 @@ static int arti_invoke(struct obj *obj) {
 					u.uhp -= rn2(20) + 5;
 					pline("The Hand claws you with its icy nails!");
 					if (u.uhp <= 0) {
-						killer_format = KILLED_BY;
-						killer = "the Hand of Vecna";
+						killer.format = KILLED_BY;
+						nhscopyz(&killer.name, "the Hand of Vecna");
 						done(DIED);
 					}
 				}

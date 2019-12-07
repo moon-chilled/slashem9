@@ -2476,8 +2476,8 @@ void losehp(int n, const char *knam, int k_format /* WAC k_format is an int */) 
 	flags.botl = 1; /* Update status bar */
 
 	if (u.uhp < 1) {
-		killer_format = k_format;
-		killer = knam; /* the thing that killed you */
+		killer.format = k_format;
+		nhscopyz(&killer.name, knam); /* the thing that killed you */
 		pline("You die...");
 		done(DIED);
 	} else if (n > 0 && u.uhp * 10 < u.uhpmax) {

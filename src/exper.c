@@ -162,8 +162,8 @@ void losexp(const char *drainer /* cause of death, if drain should be fatal */, 
 		reset_rndmonst(NON_PM); /* new monster selection */
 	} else {
 		if (drainer) {
-			killer_format = KILLED_BY;
-			killer = drainer;
+			killer.format = KILLED_BY;
+			nhscopyz(&killer.name, drainer);
 			done(DIED);
 		}
 		/* no drainer or lifesaved */

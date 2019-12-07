@@ -192,9 +192,10 @@ void you_unwere(boolean purify) {
 		if (Race_if(PM_HUMAN_WEREWOLF)) {
 			/* An attempt to purify you has been made! */
 			if (in_wereform && Unchanging) {
-				killer_format = NO_KILLER_PREFIX;
-				killer = "purified while stuck in creature form";
 				pline("The purification was deadly...");
+
+				killer.format = NO_KILLER_PREFIX;
+				nhscopyz(&killer.name, "purified while stuck in creature form");
 				done(DIED);
 			} else {
 				pline("You feel very bad!");

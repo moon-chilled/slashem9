@@ -1825,7 +1825,7 @@ const char *compress_str(const char *str) {
 	return cbuf;
 }
 
-void tty_putnstr(winid window, int attr, nhstr *str) {
+void tty_putnstr(winid window, int attr, nhstr str) {
 	struct WinDesc *cw = 0;
 
 	/* Assume there's a real problem if the window is missing --
@@ -1836,14 +1836,14 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 		return;
 	}
 
-	if (str == NULL || ((cw->flags & WIN_CANCELLED) && (cw->type != NHW_MESSAGE)))
+	if (!str.len || ((cw->flags & WIN_CANCELLED) && (cw->type != NHW_MESSAGE)))
 		return;
 
 	/*
 	if(cw->type != NHW_MESSAGE)
 		nb = compress_str(nb);
 		*/
-	nhstr *nb = nhscopy(str);
+	nhstr nb = nhsdup(str);
 
 	ttyDisplay->lastwin = window;
 
@@ -1855,7 +1855,7 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 			int fx = 0;
 			(void)fx;  // working around a bizarre bug where both clang and gcc warn fx is unused
 			for (int i = cw->curx, fx = i + 1; true; i++, fx++) {
-				if (i >= nb->len) {
+				if (i >= nb.len) {
 					if (cw->data[cw->cury][j] || flags.botlx) {
 						/* last char printed may be in middle of line */
 						tty_curs(WIN_STATUS, fx, cw->cury);
@@ -1865,10 +1865,10 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 				}
 
 				// just redraw the whole line every time
-				if (true || flags.botlx || (cw->data[cw->cury][j] != nb->str[i]) || (cw->clr_data[cw->cury][j] != nb->colouration[i])) {
-					if (nb->colouration[i] != NO_COLOR) { term_start_color(nb->colouration[i]); }
-					tty_putsym(WIN_STATUS, fx, cw->cury, nb->str[i]);
-					if (nb->colouration[i] != NO_COLOR) term_end_color();
+				if (true || flags.botlx || (cw->data[cw->cury][j] != nb.str[i]) || (cw->clr_data[cw->cury][j] != nb.colouration[i])) {
+					if (nb.colouration[i] != NO_COLOR) { term_start_color(nb.colouration[i]); }
+					tty_putsym(WIN_STATUS, fx, cw->cury, nb.str[i]);
+					if (nb.colouration[i] != NO_COLOR) term_end_color();
 				}
 				if (cw->data[cw->cury][j]) j++;
 
@@ -1886,8 +1886,8 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 				}
 			}
 
-			strncpy(&cw->data[cw->cury][stash_curx], nhs2cstr_trunc_tmp(nb), min(cw->cols - stash_curx - 1, nb->len));
-			memcpy(&cw->clr_data[cw->cury][stash_curx], nb->colouration, min(cw->cols - stash_curx - 1, nb->len) * sizeof(int));
+			strncpy(&cw->data[cw->cury][stash_curx], nhs2cstr_trunc_tmp(nb), min(cw->cols - stash_curx - 1, nb.len));
+			memcpy(&cw->clr_data[cw->cury][stash_curx], nb.colouration, min(cw->cols - stash_curx - 1, nb.len) * sizeof(int));
 			cw->data[cw->cury][cw->cols - 1] = '\0'; /* null terminate */
 			/* ALI - Clear third line if present and unused */
 			if (cw->cury == 1 && cw->cury < (cw->maxrow - 1)) {
@@ -1902,7 +1902,7 @@ void tty_putnstr(winid window, int attr, nhstr *str) {
 		default: impossible("Can't tty_putnstr a %d yet", cw->type);
 	}
 
-	del_nhs(nb);
+	del_nhs(&nb);
 }
 
 void tty_putstr(winid window, int attr, const char *str) {

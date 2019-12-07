@@ -1014,11 +1014,7 @@ int spelleffects(int spell, boolean atme) {
 			break;
 		case SPE_CURE_SICKNESS:
 			if (Sick) pline("You are no longer ill.");
-			if (Slimed) {
-				pline("The slime disappears!");
-				Slimed = 0;
-				/* flags.botl = 1; -- healup() handles this */
-			}
+			if (Slimed) make_slimed(0, "The slime disappears!");
 			healup(0, 0, true, false);
 			break;
 		case SPE_CREATE_FAMILIAR:

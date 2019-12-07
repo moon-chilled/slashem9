@@ -1340,7 +1340,7 @@ void enlightenment(int final) {
 	/* If you die while dismounting, u.usteed is still set.  Since several
 	 * places in the done() sequence depend on u.usteed, just detect this
 	 * special case. */
-	if (u.usteed && (final < 2 || strcmp(killer, "riding accident"))) {
+	if (u.usteed && (final < 2 || strcmp(nhs2cstr_tmp(killer.name), "riding accident"))) {
 		sprintf(buf, "riding %s", y_monnam(u.usteed));
 		you_are(buf);
 	}
