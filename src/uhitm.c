@@ -2844,7 +2844,7 @@ static boolean hmonas(struct monst *mon, int tmp) {
 				pline("You gaze at %s...", mon_nam(mon));
 
 				if ((mon->data == &mons[PM_MEDUSA]) && !mon->mcan) {
-					pline("Gazing at the awake Medusa is not a very good idea.");
+					pline("Gazing at the wakeful Medusa is not a very good idea.");
 					/* as if gazing at a sleeping anything is fruitful... */
 					pline("You turn to stone...");
 					killer.format = KILLED_BY;
