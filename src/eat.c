@@ -261,11 +261,14 @@ static void choke(struct obj *food) {
 				killer = "a very rich meal";
 			} else {
 				killer = food_xname(food, false);
-				if (food->otyp == CORPSE &&
-				    (mons[food->corpsenm].geno & G_UNIQ)) {
+				if (food->otyp == CORPSE && (mons[food->corpsenm].geno & G_UNIQ)) {
 					if (!type_is_pname(&mons[food->corpsenm]))
 						killer = the(killer);
 					killer_format = KILLED_BY;
+				} else if (obj_is_pname(food)) {
+					killer_format = KILLED_BY;
+					if (food->oartifact >= ART_ORB_OF_DETECTION)
+						killer = the(killer);
 				}
 			}
 		} else {
@@ -2341,12 +2344,13 @@ int doeat(void) {
 			if (!Poison_resistance) {
 				losestr(rnd(4));
 				losehp(rnd(15), xname(otmp), KILLED_BY_AN);
-			} else
+			} else {
 				pline("You seem unaffected by the poison.");
+			}
 		} else if (!otmp->cursed)
-			pline("This %s is delicious!",
-			      otmp->oclass == COIN_CLASS ? foodword(otmp) :
-							   singular(otmp, xname));
+			pline("%s%s is delicious!", (obj_is_pname(otmp) && otmp->oartifact < ART_ORB_OF_DETECTION) ? "" : 
+					obj_is_pname(otmp) ? "The " : "This ",
+			      otmp->oclass == COIN_CLASS ? foodword(otmp) : singular(otmp, xname));
 
 		eatspecial();
 		return 1;
