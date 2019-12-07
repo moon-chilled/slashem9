@@ -499,7 +499,12 @@ int do_play_instrument(struct obj *instr) {
 	int x, y;
 	boolean ok;
 
-	if (Underwater) {
+	if ((instr->otyp == WOODEN_FLUTE || instr->otyp == MAGIC_FLUTE ||
+	     instr->otyp == TOOLED_HORN || instr->otyp == FROST_HORN ||
+	     instr->otyp == FIRE_HORN || instr->otyp == BUGLE) && !can_blow(&youmonst)) {
+		pline("You are incapable of playing %s.", the(distant_name(instr, xname)));
+		return 0;
+	} else if (Underwater) {
 		pline("You can't play music underwater!");
 		return 0;
 	}

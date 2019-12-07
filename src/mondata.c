@@ -211,6 +211,16 @@ boolean passes_bars(struct permonst *mptr) {
 	       (slithy(mptr) && !bigmonst(mptr));
 }
 
+// returns true if the monster is capable of blowing (through e.g. a musical instrument)
+bool can_blow(struct monst *mtmp) {
+	if ((is_silent(mtmp->data) || mtmp->data->msound == MS_BUZZ) &&
+	    (breathless(mtmp->data) || verysmall(mtmp->data) || !has_head(mtmp->data) || mtmp->data->mlet == S_EEL))
+		return false;
+	if ((mtmp == &youmonst) && Strangled) return false;
+
+	return true;
+}
+
 /* returns true if monster can track well */
 boolean can_track(struct permonst *ptr) {
 	if (uwep && uwep->oartifact == ART_EXCALIBUR)

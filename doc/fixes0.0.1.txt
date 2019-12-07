@@ -75,3 +75,5 @@ Changelist for slashem-next v0.0.1:
 - Bugfix: when a ridden steed is led onto a polymorph trap and polymorphs into another rideable form, you have to adjust yourself in the saddle on on 'the' (monster-type), not 'a'.
 - Interface: when prompted for a direction, '?' shows help and prompts again (NetHack).
 - Gameplay: instead of printing 'It turns into it', smell what kind of 'it' it was, assuming you can (NetHack).
+- Gameplay: don't allow using non-magical whistles underwater (NetHack).
+- Gameplay: don't allow using whistles and musical instruments when in a form that blow (NetHack).

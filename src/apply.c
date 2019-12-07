@@ -11,33 +11,33 @@ static const char tools_too[] = {ALL_CLASSES, TOOL_CLASS, POTION_CLASS,
 				 WEAPON_CLASS, WAND_CLASS, GEM_CLASS, 0};
 static const char tinnables[] = {ALLOW_FLOOROBJ, FOOD_CLASS, 0};
 
-static int use_camera(struct obj *);
-static int use_towel(struct obj *);
-static boolean its_dead(int, int, int *);
-static int use_stethoscope(struct obj *);
-static void use_whistle(struct obj *);
-static void use_magic_whistle(struct obj *);
-static void use_leash(struct obj **);
-static int use_mirror(struct obj *);
-static void use_bell(struct obj **);
-static void use_candelabrum(struct obj *);
-static void use_candle(struct obj **);
-static void use_lamp(struct obj *);
-static int use_torch(struct obj *);
-static void light_cocktail(struct obj *);
-static void use_tinning_kit(struct obj *);
-static void use_figurine(struct obj **);
-static void use_grease(struct obj *);
-static void use_trap(struct obj *);
-static void use_stone(struct obj *);
-static int set_trap(void); /* occupation callback */
-static int use_whip(struct obj *);
-static int use_pole(struct obj *);
-static int use_cream_pie(struct obj *);
-static int use_grapple(struct obj *);
-static int do_break_wand(struct obj *);
+static int use_camera(struct obj *obj);
+static int use_towel(struct obj *obj);
+static bool its_dead(int x, int y, int *resp);
+static int use_stethoscope(struct obj *obj);
+static void use_whistle(struct obj *obj);
+static void use_magic_whistle(struct obj *obj);
+static void use_leash(struct obj **optr);
+static int use_mirror(struct obj *obj);
+static void use_bell(struct obj **optr);
+static void use_candelabrum(struct obj *obj);
+static void use_candle(struct obj **optr);
+static void use_lamp(struct obj *obj);
+static int use_torch(struct obj *obj);
+static void light_cocktail(struct obj *obj);
+static void use_tinning_kit(struct obj *obj);
 static boolean figurine_location_checks(struct obj *, coord *, boolean);
-static boolean uhave_graystone(void);
+static void use_figurine(struct obj **optr);
+static void use_grease(struct obj *obj);
+static void use_stone(struct obj *);
+static void use_trap(struct obj *obj);
+static int set_trap(void); /* occupation callback */
+static int use_whip(struct obj *obj);
+static int use_pole(struct obj *obj);
+static int use_cream_pie(struct obj *obj);
+static int use_grapple(struct obj *obj);
+static int do_break_wand(struct obj *obj);
+static bool uhave_graystone(void);
 static void add_class(char *, char);
 
 static int use_camera(struct obj *obj) {
@@ -143,7 +143,7 @@ static int use_towel(struct obj *obj) {
 }
 
 /* maybe give a stethoscope message based on floor objects */
-static boolean its_dead(int rx, int ry, int *resp) {
+static bool its_dead(int rx, int ry, int *resp) {
 	struct obj *otmp;
 	struct trap *ttmp;
 
@@ -290,19 +290,29 @@ static int use_stethoscope(struct obj *obj) {
 }
 
 static void use_whistle(struct obj *obj) {
-	pline("You produce a %s whistling sound.", obj->cursed ? "shrill" : "high");
-	wake_nearby();
+	if (!can_blow(&youmonst)) {
+		pline("You are physically incapable of being a whistleblower.");
+	} else if (Underwater) {
+		pline("You blow bubbles through %s.", yname(obj));
+	} else {
+		pline("You produce a %s whistling sound.", obj->cursed ? "shrill" : "high");
+		wake_nearby();
+	}
 }
 
 static void use_magic_whistle(struct obj *obj) {
 	struct monst *mtmp, *nextmon;
 
-	if (obj->cursed && !rn2(2)) {
-		pline("You produce a high-pitched humming noise.");
+	if (!can_blow(&youmonst)) {
+		pline("You are physically incapable of being a whistleblower.");
+	} else if (obj->cursed && !rn2(2)) {
+		pline("You produce a %shigh-pitched humming noise.", Underwater ? "very " : "");
 		wake_nearby();
 	} else {
 		int pet_cnt = 0;
-		pline("You produce a %s whistling sound.", Hallucination ? "normal" : "strange");
+		pline("You produce a %s whistling sound.", Hallucination ? "normal" :
+									   Underwater ? "strangely high-pitched" :
+											"strange");
 		for (mtmp = fmon; mtmp; mtmp = nextmon) {
 			nextmon = mtmp->nmon; /* trap might kill mon */
 			if (DEADMONSTER(mtmp)) continue;
@@ -3224,7 +3234,7 @@ discard_broken_wand:
 	return 1;
 }
 
-static boolean uhave_graystone(void) {
+static bool uhave_graystone(void) {
 	struct obj *otmp;
 
 	for (otmp = invent; otmp; otmp = otmp->nobj)

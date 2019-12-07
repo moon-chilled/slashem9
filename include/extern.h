@@ -1155,6 +1155,7 @@ boolean resists_blnd(struct monst *);
 boolean can_blnd(struct monst *, struct monst *, uchar, struct obj *);
 boolean ranged_attk(struct permonst *);
 boolean passes_bars(struct permonst *);
+bool can_blow(struct monst *mtmp);
 boolean can_track(struct permonst *);
 boolean breakarm(struct permonst *);
 boolean sliparm(struct permonst *);
