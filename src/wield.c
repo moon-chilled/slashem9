@@ -218,9 +218,9 @@ void setuswapwep(struct obj *obj, boolean put_away) {
 static const char wield_objs[] =
 	{ALL_CLASSES, ALLOW_NONE, WEAPON_CLASS, TOOL_CLASS, 0};
 static const char ready_objs[] =
-	{ALL_CLASSES, ALLOW_NONE, WEAPON_CLASS, 0};
+	{COIN_CLASS, ALL_CLASSES, ALLOW_NONE, WEAPON_CLASS, 0};
 static const char bullets[] = /* (note: different from dothrow.c) */
-	{ALL_CLASSES, ALLOW_NONE, GEM_CLASS, WEAPON_CLASS, 0};
+	{COIN_CLASS, ALL_CLASSES, ALLOW_NONE, GEM_CLASS, WEAPON_CLASS, 0};
 
 int dowield(void) {
 	struct obj *wep, *oldwep;

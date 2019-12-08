@@ -88,3 +88,4 @@ Changelist for slashem-next v0.0.1:
 - Gameplay: lighting shops now stock oil (NetHack).
 - Interface: right-clicking on a tile will show what that tile is (NetHack).
 - Gameplay: add the #tip command (NetHack).
+- Gameplay: you can quiver gold (NetHack).
