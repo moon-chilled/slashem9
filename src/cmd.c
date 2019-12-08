@@ -2258,6 +2258,7 @@ struct ext_func_tab extcmdlist[] = {
 	{NULL, NULL, donull, true},  // #levelport
 	{NULL, NULL, donull, true},  // #wish
 	{NULL, NULL, donull, true},  // #where
+	{NULL, NULL, donull, true},  // terminator
 };
 
 static struct ext_func_tab debug_extcmdlist[] = {
@@ -2290,7 +2291,8 @@ static struct ext_func_tab debug_extcmdlist[] = {
 	{"levelport", "to trans-level teleport", wiz_level_tele, IFBURIED},
 	{"wish", "make wish", wiz_wish, IFBURIED},
 	{"where", "tell locations of special levels", wiz_where, IFBURIED},
-	{NULL, NULL, donull, IFBURIED}};
+	{NULL, NULL, donull, IFBURIED},
+};
 
 static void bind_key(unsigned char key, char *command) {
 	struct ext_func_tab *extcmd;
@@ -2466,7 +2468,7 @@ static void add_debug_extended_commands(void) {
 		;
 	n--;  // n is index of the last entry
 
-	for (i = 0; debug_extcmdlist[i].ef_txt; i++) {
+	for (i = 0; debug_extcmdlist[i].ef_txt && j < SIZE(extcmdlist); i++) {
 		for (j = 0; j < n; j++)
 			if (strcmp(debug_extcmdlist[i].ef_txt, extcmdlist[j].ef_txt) < 0) break;
 
@@ -3007,7 +3009,7 @@ void parseautocomplete(char *autocomplete, boolean condition) {
 
 	/* find and modify the extended command */
 	/* JDS: could be much faster [O(log n) vs O(n)] if done differently */
-	for (i = 0; extcmdlist[i].ef_txt; i++) {
+	for (i = 0; extcmdlist[i].ef_txt && i < SIZE(extcmdlist); i++) {
 		if (strcmp(autocomplete, extcmdlist[i].ef_txt)) continue;
 		extcmdlist[i].autocomplete = condition;
 		return;
@@ -3016,7 +3018,7 @@ void parseautocomplete(char *autocomplete, boolean condition) {
 	/* do the exact same thing with the wizmode list */
 	/* this is a hack because wizard-mode commands haven't been loaded yet when
 	 * this code is run.  See "crappy hack" elsewhere. */
-	for (i = 0; debug_extcmdlist[i].ef_txt; i++) {
+	for (i = 0; debug_extcmdlist[i].ef_txt && i < SIZE(debug_extcmdlist); i++) {
 		if (strcmp(autocomplete, debug_extcmdlist[i].ef_txt)) continue;
 		debug_extcmdlist[i].autocomplete = condition;
 		return;
@@ -3821,7 +3823,7 @@ int wiz_port_debug(void) {
 		{"show keystroke handler information", "tty",
 		 win32con_handler_info},
 #endif
-		{NULL, NULL, (void (*)())0} /* array terminator */
+		{NULL, NULL, NULL} /* array terminator */
 	};
 
 	num_menu_selections = SIZE(menu_selections) - 1;
