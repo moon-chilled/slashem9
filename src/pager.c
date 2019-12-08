@@ -12,7 +12,6 @@ static boolean is_swallow_sym(int);
 static int append_str(char *, const char *);
 static struct permonst *lookat(int, int, char *, char *);
 static void checkfile(char *, struct permonst *, bool, bool);
-static int do_look(boolean);
 static boolean help_menu(int *);
 #ifdef PORT_HELP
 extern void port_help(void);
@@ -468,8 +467,10 @@ bad_data_file:
 /* also used by getpos hack in do_name.c */
 const char what_is_an_unknown_object[] = "an unknown object";
 
-/* quick => use cursor && don't search for "more info" */
-static int do_look(boolean quick) {
+int do_look(int mode, coord *click_cc) {
+	bool quick = mode == 1; // use cursor and don't search for 'more info'
+	bool clicklook = mode == 2; // right mouse-click method
+
 	char out_str[BUFSZ], look_buf[BUFSZ];
 	const char *x_str, *firstmatch = 0;
 	struct permonst *pm = 0;
@@ -484,28 +485,35 @@ static int do_look(boolean quick) {
 	int skipped_venom;    /* non-zero if we ignored "splash of venom" */
 	static const char *mon_interior = "the interior of a monster";
 
-	if (quick) {
-		from_screen = true; /* yes, we want to use the cursor */
-	} else {
-		i = ynq("Specify unknown object by cursor?");
-		if (i == 'q') return 0;
-		from_screen = (i == 'y');
-	}
-
-	if (from_screen) {
-		cc.x = u.ux;
-		cc.y = u.uy;
-		sym = 0; /* gcc -Wall lint */
-	} else {
-		getlin("Specify what? (type the word)", out_str);
-		if (out_str[0] == '\0' || out_str[0] == '\033')
-			return 0;
-
-		if (out_str[1]) { /* user typed in a complete string */
-			checkfile(out_str, pm, true, true);
-			return 0;
+	if (!clicklook) {
+		if (quick) {
+			from_screen = true; /* yes, we want to use the cursor */
+		} else {
+			i = ynq("Specify unknown object by cursor?");
+			if (i == 'q') return 0;
+			from_screen = (i == 'y');
 		}
-		sym = out_str[0];
+
+		if (from_screen) {
+			cc.x = u.ux;
+			cc.y = u.uy;
+			sym = 0; /* gcc -Wall lint */
+		} else {
+			getlin("Specify what? (type the word)", out_str);
+			if (out_str[0] == '\0' || out_str[0] == '\033')
+				return 0;
+
+			if (out_str[1]) { /* user typed in a complete string */
+				checkfile(out_str, pm, true, true);
+				return 0;
+			}
+			sym = out_str[0];
+		}
+	} else { // clicklook
+		cc.x = click_cc->x;
+		cc.y = click_cc->y;
+		sym = 0;
+		from_screen = false;
 	}
 
 	/* Save the verbose flag, we change it later. */
@@ -522,21 +530,23 @@ static int do_look(boolean quick) {
 		found = 0;
 		out_str[0] = '\0';
 
-		if (from_screen) {
+		if (from_screen || clicklook) {
 			int glyph; /* glyph at selected position */
 
-			if (flags.verbose)
-				pline("Please move the cursor to %s.",
-				      what_is_an_unknown_object);
-			else
-				pline("Pick an object.");
+			if (from_screen) {
+				if (flags.verbose)
+					pline("Please move the cursor to %s.",
+							what_is_an_unknown_object);
+				else
+					pline("Pick an object.");
 
-			ans = getpos(&cc, quick, what_is_an_unknown_object);
-			if (ans < 0 || cc.x < 0) {
-				flags.verbose = save_verbose;
-				return 0; /* done */
+				ans = getpos(&cc, quick, what_is_an_unknown_object);
+				if (ans < 0 || cc.x < 0) {
+					flags.verbose = save_verbose;
+					return 0; /* done */
+				}
+				flags.verbose = false; /* only print long question once */
 			}
-			flags.verbose = false; /* only print long question once */
 
 			/* Convert the glyph at the selected position to a symbol. */
 			glyph = glyph_at(cc.x, cc.y);
@@ -569,7 +579,7 @@ static int do_look(boolean quick) {
 
 		/* Check for monsters */
 		for (i = 0; i < MAXMCLASSES; i++) {
-			if (sym == (from_screen ? monsyms[i] : def_monsyms[i]) &&
+			if (sym == ((from_screen || clicklook) ? monsyms[i] : def_monsyms[i]) &&
 			    monexplain[i]) {
 				need_to_look = true;
 				if (!found) {
@@ -584,7 +594,7 @@ static int do_look(boolean quick) {
 		/* handle '@' as a special case if it refers to you and you're
 		   playing a character which isn't normally displayed by that
 		   symbol; firstmatch is assumed to already be set for '@' */
-		if ((from_screen ?
+		if (((from_screen || clicklook) ?
 			     (sym == monsyms[S_HUMAN] && cc.x == u.ux && cc.y == u.uy) :
 			     (sym == def_monsyms[S_HUMAN] && !iflags.showrace)) &&
 		    !(Race_if(PM_HUMAN) || Race_if(PM_ELF)) && !Upolyd)
@@ -595,7 +605,7 @@ static int do_look(boolean quick) {
 		 * and looking at something other than our own symbol, then just say
 		 * "the interior of a monster".
 		 */
-		if (u.uswallow && from_screen && is_swallow_sym(sym)) {
+		if (u.uswallow && (from_screen || clicklook) && is_swallow_sym(sym)) {
 			if (!found) {
 				sprintf(out_str, "%s       %s", utf8_tmpstr(sym), mon_interior);
 				firstmatch = mon_interior;
@@ -607,9 +617,9 @@ static int do_look(boolean quick) {
 
 		/* Now check for objects */
 		for (i = 1; i < MAXOCLASSES; i++) {
-			if (sym == (from_screen ? oc_syms[i] : def_oc_syms[i])) {
+			if (sym == ((from_screen || clicklook) ? oc_syms[i] : def_oc_syms[i])) {
 				need_to_look = true;
-				if (from_screen && i == VENOM_CLASS) {
+				if ((from_screen || clicklook) && i == VENOM_CLASS) {
 					skipped_venom++;
 					continue;
 				}
@@ -639,7 +649,7 @@ static int do_look(boolean quick) {
 		/* Now check for graphics symbols */
 		for (hit_trap = false, i = 0; i < MAXPCHARS; i++) {
 			x_str = sym_desc[i].explanation;
-			if (sym == (from_screen ? showsyms[i] : ascii_graphics[i]) && *x_str) {
+			if (sym == ((from_screen || clicklook) ? showsyms[i] : ascii_graphics[i]) && *x_str) {
 				/* avoid "an air", "a water", "a floor of a room", or "a dark part of a room" */
 				int article = ((i == S_room) || (i == S_darkroom)) ? 2 :  // 2=>"the"
 						      !(strcmp(x_str, "air") == 0 ||	  /* 1=>"an"  */
@@ -677,7 +687,7 @@ static int do_look(boolean quick) {
 		/* Now check for warning symbols */
 		for (i = 1; i < MAXWARNINGS; i++) {
 			x_str = sym_desc[S_warn0 + i].explanation;
-			if (sym == (from_screen ? showsyms : ascii_graphics)[S_warn0 + i]) {
+			if (sym == ((from_screen || clicklook) ? showsyms : ascii_graphics)[S_warn0 + i]) {
 				if (!found) {
 					sprintf(out_str, "%s       %s", utf8_tmpstr(sym), sym_desc[S_warn0 + i].explanation);
 					firstmatch = sym_desc[S_warn0 + i].explanation;
@@ -687,7 +697,7 @@ static int do_look(boolean quick) {
 				}
 				/* Kludge: warning trumps boulders on the display.
 				   Reveal the boulder too or player can get confused */
-				if (from_screen && sobj_at(BOULDER, cc.x, cc.y))
+				if ((from_screen || clicklook) && sobj_at(BOULDER, cc.x, cc.y))
 					strcat(out_str, " co-located with a boulder");
 				break; /* out of for loop*/
 			}
@@ -709,7 +719,7 @@ static int do_look(boolean quick) {
 		 * If we are looking at the screen, follow multiple possibilities or
 		 * an ambiguous explanation by something more detailed.
 		 */
-		if (from_screen) {
+		if (from_screen || clicklook) {
 			if (found > 1 || need_to_look) {
 				char monbuf[QBUFSZ];
 				char temp_buf[BUFSZ];
@@ -741,7 +751,7 @@ static int do_look(boolean quick) {
 			pline("%s", out_str);
 			/* check the data file for information about this thing */
 			if (found == 1 && ans != LOOK_QUICK && ans != LOOK_ONCE &&
-			    (ans == LOOK_VERBOSE || (flags.help && !quick))) {
+			    (ans == LOOK_VERBOSE || (flags.help && !quick)) && !clicklook) {
 				char temp_buf[BUFSZ];
 				strcpy(temp_buf, level.flags.lethe && !strcmp(firstmatch, "water") ?
 							 "lethe" :
@@ -752,18 +762,18 @@ static int do_look(boolean quick) {
 			pline("I've never heard of such things.");
 		}
 
-	} while (from_screen && !quick && ans != LOOK_ONCE);
+	} while (from_screen && !quick && ans != LOOK_ONCE && !clicklook);
 
 	flags.verbose = save_verbose;
 	return 0;
 }
 
 int dowhatis(void) {
-	return do_look(false);
+	return do_look(0, NULL);
 }
 
 int doquickwhatis(void) {
-	return do_look(true);
+	return do_look(1, NULL);
 }
 
 int doidtrap(void) {

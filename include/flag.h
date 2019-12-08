@@ -253,6 +253,7 @@ struct instance_flags {
 	bool wc2_guicolor;	   /* allow colors in GUI (outside map) */
 
 	bool cmdassist; /* provide detailed assistance for some commands */
+	bool clicklook;
 	bool obsolete;	/* obsolete options can point at this, it isn't used */
 	/* Items which belong in flags, but are here to allow save compatibility */
 	bool lootabc;	/* use "a/b/c" rather than "o/i/b" when looting */

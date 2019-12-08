@@ -234,14 +234,14 @@ extern const schar xdir[], ydir[], zdir[];
 
 extern char misc_cmds[];
 
-#define DORUSH	       misc_cmds[0]
-#define DORUN	       misc_cmds[1]
-#define DOFORCEFIGHT   misc_cmds[2]
-#define DONOPICKUP     misc_cmds[3]
-#define DORUN_NOPICKUP misc_cmds[4]
-#define DOESCAPE       misc_cmds[5]
+#define DORUSH	       'g'
+#define DORUN	       'G'
+#define DOFORCEFIGHT   'F'
+#define DONOPICKUP     'm'
+#define DORUN_NOPICKUP 'M'
+#define DOESCAPE       '\033'
 #undef DOAGAIN /* remove previous definition from config.h */
-#define DOAGAIN misc_cmds[6]
+#define DOAGAIN		'\001'
 
 /* the number of miscellaneous commands */
 #define MISC_CMD_COUNT 7

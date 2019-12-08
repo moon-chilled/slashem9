@@ -44,6 +44,7 @@ static struct Bool_Opt {
 #else
 	{"checkpoint", NULL, false, SET_IN_FILE},
 #endif
+	{"clicklook", &iflags.clicklook, true, SET_IN_GAME},
 	{"cmdassist", &iflags.cmdassist, true, SET_IN_GAME},
 #if defined(WIN32) || defined(CURSES_GRAPHICS)
 	{"color", &iflags.wc_color, true, SET_IN_GAME}, /*WC*/

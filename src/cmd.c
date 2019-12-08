@@ -16,7 +16,8 @@
 #define NR_OF_EOFS 20
 #endif
 
-#define CMD_TRAVEL (char)0x90
+#define CMD_TRAVEL	(char)0x90
+#define CMD_CLICKLOOK	(char)0x8F
 
 #ifdef DEBUG
 /*
@@ -95,6 +96,7 @@ static void end_of_input(void);
 #endif
 
 static const char *readchar_queue = "";
+static coord clicklook_cc;
 
 static char *parse(void);
 static bool help_dir(char, const char *);
@@ -3155,85 +3157,93 @@ void rhack(char *cmd) {
 		 * number pad. Now do not map them until here.
 		 */
 		switch (*cmd) {
-			case '5':
-				*cmd = 'g';
-				break;
-			case M('5'):
-				*cmd = 'G';
-				break;
-			case M('0'):
-				*cmd = 'I';
-				break;
+			case '5': *cmd = 'g'; break;
+			case M('5'): *cmd = 'G'; break;
+			case M('0'): *cmd = 'I'; break;
 		}
 	}
 	/* handle most movement commands */
 	do_walk = do_rush = prefix_seen = false;
 	flags.travel = iflags.travel1 = 0;
 
-	if (*cmd == DORUSH) {
-		if (movecmd(cmd[1])) {
-			flags.run = 2;
-			do_rush = true;
-		} else
-			prefix_seen = true;
-	} else if ((*cmd == '5' && iflags.num_pad) || *cmd == DORUN) {
-		if (movecmd(lowc(cmd[1]))) {
-			flags.run = 3;
-			do_rush = true;
-		} else
-			prefix_seen = true;
-	} else if ((*cmd == '-' && iflags.num_pad) || *cmd == DOFORCEFIGHT) {
+	switch (*cmd) {
+		case DORUSH: if (movecmd(cmd[1])) {
+				     flags.run = 2;
+				     do_rush = true;
+			     } else {
+				     prefix_seen = true;
+			     }
+		case '5': if (!iflags.num_pad) break; // else fallthru
+		case DORUN: if (movecmd(lowc(cmd[1]))) {
+				    flags.run = 3;
+				    do_rush = true;
+			    } else {
+				    prefix_seen = true;
+			    }
+		case '-': if (!iflags.num_pad) break; // else fallthru
 		/* Effects of movement commands and invisible monsters:
 		 * m: always move onto space (even if 'I' remembered)
 		 * F: always attack space (even if 'I' not remembered)
 		 * normal movement: attack if 'I', move otherwise
 		 */
-		if (movecmd(cmd[1])) {
-			flags.forcefight = 1;
-			do_walk = true;
-		} else
-			prefix_seen = true;
-	} else if (*cmd == DONOPICKUP) {
-		if (movecmd(cmd[1]) || u.dz) {
-			flags.run = 0;
-			flags.nopick = 1;
-			if (!u.dz)
-				do_walk = true;
-			else
-				cmd[0] = cmd[1]; /* "m<" or "m>" */
-		} else
-			prefix_seen = true;
-	} else if (*cmd == DORUN_NOPICKUP) {
-		if (movecmd(lowc(cmd[1]))) {
-			flags.run = 1;
-			flags.nopick = 1;
-			do_rush = true;
-		} else
-			prefix_seen = true;
-	} else if (*cmd == '0' && iflags.num_pad) {
-		ddoinv(); /* a convenience borrowed from the PC */
-		flags.move = false;
-		multi = 0;
-	} else {
-		if (*cmd == CMD_TRAVEL && iflags.travelcmd) {
-			flags.travel = 1;
-			iflags.travel1 = 1;
-			flags.run = 8;
-			flags.nopick = 1;
-			do_rush = true;
-		}
+		case DOFORCEFIGHT: if (movecmd(cmd[1])) {
+					   flags.forcefight = 1;
+					   do_walk = true;
+				   } else {
+					   prefix_seen = true;
+				   }
+		case DONOPICKUP: if (movecmd(cmd[1]) || u.dz) {
+					 flags.run = 0;
+					 flags.nopick = 1;
+					 if (!u.dz) {
+						 do_walk = true;
+					 } else {
+						 cmd[0] = cmd[1]; /* "m<" or "m>" */
+					 }
+				 } else {
+					 prefix_seen = true;
+				 }
 
-		if (movecmd(*cmd)) { /* ordinary movement */
-			do_walk = true;
-		} else if (movecmd(iflags.num_pad ?
-					   UNMETA(*cmd) :
-					   lowc(*cmd))) {
-			flags.run = 1;
-			do_rush = true;
-		} else if (movecmd(UNCTRL(*cmd))) {
-			flags.run = 3;
-			do_rush = true;
-		}
+		case DORUN_NOPICKUP: if (movecmd(lowc(cmd[1]))) {
+					     flags.run = 1;
+					     flags.nopick = 1;
+					     do_rush = true;
+				     } else {
+					     prefix_seen = true;
+				     }
+		case '0':
+			if (!iflags.num_pad) break;
+			ddoinv(); /* a convenience borrowed from the PC */
+			flags.move = false;
+			multi = 0;
+
+		case CMD_CLICKLOOK:
+			if (iflags.clicklook) {
+				flags.move = false;
+				do_look(2, &clicklook_cc);
+			}
+
+			return;
+		case CMD_TRAVEL:
+			if (iflags.travelcmd) {
+				flags.travel = 1;
+				iflags.travel1 = 1;
+				flags.run = 8;
+				flags.nopick = 1;
+				do_rush = true;
+				break;
+			} // else fallthru
+		default:
+			/* ordinary movement */
+			if (movecmd(*cmd)) {
+				do_walk = true;
+			} else if (movecmd(iflags.num_pad ?  UNMETA(*cmd) : lowc(*cmd))) {
+				flags.run = 1;
+				do_rush = true;
+			} else if (movecmd(UNCTRL(*cmd))) {
+				flags.run = 3;
+				do_rush = true;
+			}
 	}
 
 	/* some special prefix handling */
@@ -3532,6 +3542,13 @@ const char *click_to_cmd(int x, int y, int mod) {
 	int dir;
 	static char cmd[4];
 	cmd[1] = 0;
+
+	if (iflags.clicklook && (mod == CLICK_2)) {
+		clicklook_cc.x = x;
+		clicklook_cc.y = y;
+		cmd[0] = CMD_CLICKLOOK;
+		return cmd;
+	}
 
 	x -= u.ux;
 	y -= u.uy;

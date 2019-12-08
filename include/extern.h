@@ -1399,6 +1399,7 @@ int dowhatdoes(void);
 char *dowhatdoes_core(char, char *);
 int dohelp(void);
 int dohistory(void);
+int do_look(int mode, coord *click_cc);
 
 /* ### pcmain.c ### */
 
