@@ -759,9 +759,9 @@ int dokick(void) {
 		mtmp = m_at(x, y);
 		mdat = mtmp->data;
 		if (!mtmp->mpeaceful || !canspotmon(mtmp))
-			flags.forcefight = true; /* attack even if invisible */
+			context.forcefight = true; /* attack even if invisible */
 		kick_monster(x, y);
-		flags.forcefight = false;
+		context.forcefight = false;
 		/* see comment in attack_checks() */
 		if (!DEADMONSTER(mtmp) &&
 		    !canspotmon(mtmp) &&
@@ -771,7 +771,7 @@ int dokick(void) {
 		    !memory_is_invisible(x, y) &&
 		    !(u.uswallow && mtmp == u.ustuck))
 			map_invisible(x, y);
-		if ((Is_airlevel(&u.uz) || Levitation) && flags.move) {
+		if ((Is_airlevel(&u.uz) || Levitation) && context.move) {
 			int range;
 
 			range = ((int)youmonst.data->cwt + (weight_cap() + inv_weight()));

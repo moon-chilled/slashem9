@@ -184,8 +184,6 @@ static const char hollow_str[] = "a hollow sound.  This must be a secret %s!";
    almost useless.  As a compromise, one use per turn is free, another
    uses up the turn; this makes curse status have a tangible effect. */
 static int use_stethoscope(struct obj *obj) {
-	static long last_used_move = -1;
-	static short last_used_movement = 0;
 	struct monst *mtmp;
 	struct rm *lev;
 	int rx, ry, res;
@@ -201,10 +199,10 @@ static int use_stethoscope(struct obj *obj) {
 	}
 	if (!getdir(NULL)) return 0;
 
-	res = (moves == last_used_move) &&
-	      (youmonst.movement == last_used_movement);
-	last_used_move = moves;
-	last_used_movement = youmonst.movement;
+	res = (moves == context.stethoscope_move) &&
+	      (youmonst.movement == context.stethoscope_movement);
+	context.stethoscope_move = moves;
+	context.stethoscope_movement = youmonst.movement;
 
 	if (u.usteed && u.dz > 0) {
 		if (interference) {
@@ -1802,7 +1800,7 @@ void use_unicorn_horn(struct obj *obj) {
 	else if (!did_prop)
 		pline("Nothing seems to happen.");
 
-	flags.botl = (did_attr || did_prop);
+	context.botl = (did_attr || did_prop);
 #undef PROP_COUNT
 #undef ATTR_COUNT
 #undef prop2trbl
@@ -1937,7 +1935,7 @@ static void use_figurine(struct obj **optr) {
 			return;
 	}
 	if (!getdir(NULL)) {
-		flags.move = false;
+		context.move = false;
 		multi = 0;
 		return;
 	}
@@ -2513,7 +2511,7 @@ static int use_whip(struct obj *obj) {
 		pline("You hit your %s with your bullwhip.", body_part(FOOT));
 		sprintf(buf, "killed %sself with %s bullwhip", uhim(), uhis());
 		losehp(dam, buf, NO_KILLER_PREFIX);
-		flags.botl = 1;
+		context.botl = 1;
 		return 1;
 
 	} else if ((Fumbling || Glib) && !rn2(5)) {
@@ -3193,7 +3191,7 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 				if (obj->otyp == WAN_TELEPORTATION &&
 				    affects_objects && level.objects[x][y]) {
 					bhitpile(obj, bhito, x, y);
-					if (flags.botl) bot(); /* potion effects */
+					if (context.botl) bot(); /* potion effects */
 							       /* makeknown is handled in zapyourself */
 				}
 				damage = zapyourself(obj, false);
@@ -3204,14 +3202,14 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 					} else
 						losehp(damage, "exploding wand", KILLED_BY_AN);
 				}
-				if (flags.botl) bot(); /* blindness */
+				if (context.botl) bot(); /* blindness */
 			} else if ((mon = m_at(x, y)) != 0 && !DEADMONSTER(mon)) {
 				bhitm(mon, obj);
-				/* if (flags.botl) bot(); */
+				/* if (context.botl) bot(); */
 			}
 			if (affects_objects && level.objects[x][y]) {
 				bhitpile(obj, bhito, x, y);
-				if (flags.botl) bot(); /* potion effects */
+				if (context.botl) bot(); /* potion effects */
 			}
 		}
 	}
@@ -3550,7 +3548,7 @@ int doapply(void) {
 							u.uhp += rn1(10, 10);
 							if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 							pline("You feel better.");
-							flags.botl = true;
+							context.botl = true;
 						} else
 							pline("%s", "Nothing happens.");
 					} else if (!rn2(3))

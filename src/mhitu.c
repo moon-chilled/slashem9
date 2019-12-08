@@ -775,7 +775,7 @@ int mattacku(struct monst *mtmp) {
 			default: /* no attack */
 				break;
 		}
-		if (flags.botl) bot();
+		if (context.botl) bot();
 		/* give player a chance of waking up before dying -kaa */
 		if (sum[i] == 1) { /* successful attack */
 			if (u.usleep && u.usleep < monstermoves && !rn2(10)) {
@@ -1157,7 +1157,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 						if (dmg < 1) dmg = 1;
 						if (dmg > 1) exercise(A_STR, false);
 						u.mh -= dmg;
-						flags.botl = 1;
+						context.botl = 1;
 						dmg = 0;
 						if (cloneu())
 							pline("You divide as %s hits you!", mon_nam(mtmp));
@@ -1659,7 +1659,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 				if (!rn2(3)) exercise(A_STR, true);
 				if (!rn2(3)) exercise(A_CON, true);
 				if (Sick) make_sick(0L, NULL, false, SICK_ALL);
-				flags.botl = 1;
+				context.botl = 1;
 				if (goaway) {
 					mongone(mtmp);
 					return 2;
@@ -1897,7 +1897,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 				*hpmax_p = lowerlimit;
 			else	  /* unlikely... */
 				; /* already at or below minimum threshold; do nothing */
-			flags.botl = 1;
+			context.botl = 1;
 		}
 
 		mdamageu(mtmp, dmg);
@@ -2479,7 +2479,7 @@ void mdamageu(struct monst *mtmp, int n) {
 
 	if (flags.showdmg) pline("[%d pts.]", n);
 
-	flags.botl = 1; /* This needs to be AFTER the pline for botl to be
+	context.botl = 1; /* This needs to be AFTER the pline for botl to be
 	 		 * updated correctly -- Kelly Bailey
 	 		 */
 
@@ -2711,13 +2711,13 @@ int doseduce(struct monst *mon) {
 				pline("You are down in the dumps.");
 				adjattrib(A_CON, -1, true);
 				exercise(A_CON, false);
-				flags.botl = 1;
+				context.botl = 1;
 				break;
 			case 2:
 				pline("Your senses are dulled.");
 				adjattrib(A_WIS, -1, true);
 				exercise(A_WIS, false);
-				flags.botl = 1;
+				context.botl = 1;
 				break;
 			case 3:
 				if (!Drain_resistance) {
@@ -2751,13 +2751,13 @@ int doseduce(struct monst *mon) {
 				pline("You feel good enough to do it again.");
 				adjattrib(A_CON, 1, true);
 				exercise(A_CON, true);
-				flags.botl = 1;
+				context.botl = 1;
 				break;
 			case 2:
 				pline("You will always remember %s...", noit_mon_nam(mon));
 				adjattrib(A_WIS, 1, true);
 				exercise(A_WIS, true);
-				flags.botl = 1;
+				context.botl = 1;
 				break;
 			case 3:
 				pline("That was a very educational experience.");
@@ -2769,7 +2769,7 @@ int doseduce(struct monst *mon) {
 				u.uhp = u.uhpmax;
 				if (Upolyd) u.mh = u.mhmax;
 				exercise(A_STR, true);
-				flags.botl = 1;
+				context.botl = 1;
 				break;
 		}
 	}
@@ -2802,7 +2802,7 @@ int doseduce(struct monst *mon) {
 			pline("%s takes %ld %s for services rendered!",
 			      noit_Monnam(mon), cost, currency(cost));
 			money2mon(mon, cost);
-			flags.botl = 1;
+			context.botl = 1;
 		}
 	}
 	if (!rn2(25)) mon->mcan = 1; /* monster is worn out */
@@ -3009,7 +3009,7 @@ struct monst *cloneu(void) {
 	mon->mhpmax = u.mhmax;
 	mon->mhp = u.mh / 2;
 	u.mh -= mon->mhp;
-	flags.botl = 1;
+	context.botl = 1;
 	return mon;
 }
 

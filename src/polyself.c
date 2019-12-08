@@ -242,7 +242,7 @@ newman() {
 	if (Slimed) {
 		make_slimed(10, "Your body transforms, but there is still slime on you.");
 	}
-	flags.botl = 1;
+	context.botl = 1;
 	vision_full_recalc = 1;
 	encumber_msg();
 	see_monsters();
@@ -629,7 +629,7 @@ int polymon(int mntmp) {
 		pline("You orient yourself on the web.");
 		u.utrap = 0;
 	}
-	flags.botl = 1;
+	context.botl = 1;
 	vision_full_recalc = 1;
 	see_monsters();
 	exercise(A_CON, false);
@@ -829,7 +829,7 @@ void rehumanize(void) {
 	if (!uarmg) selftouch("No longer petrify-resistant, you");
 	nomul(0);
 
-	flags.botl = 1;
+	context.botl = 1;
 	vision_full_recalc = 1;
 	encumber_msg();
 }
@@ -927,7 +927,7 @@ int dobreathe(void) {
 	if (!getdir(NULL)) return 0;
 
 	u.uen -= energy;
-	flags.botl = 1;
+	context.botl = 1;
 
 	mattk = attacktype_fordmg(youmonst.data, AT_BREA, AD_ANY);
 	if (!mattk)
@@ -1101,7 +1101,7 @@ int dosummon(void) {
 		return 0;
 	}
 	u.uen -= 10;
-	flags.botl = 1;
+	context.botl = 1;
 
 	pline("You call upon your brethren for help!");
 	exercise(A_WIS, true);
@@ -1141,7 +1141,7 @@ dogaze (void) {
 		return 0;
 	}
 	u.uen -= 15;
-	flags.botl = 1;
+	context.botl = 1;
 
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 		if (DEADMONSTER(mtmp)) continue;
@@ -1262,7 +1262,7 @@ int domindblast(void) {
 		return 0;
 	}
 	u.uen -= 10;
-	flags.botl = 1;
+	context.botl = 1;
 
 	pline("A wave of psychic energy pours out.");
 	for (mtmp = fmon; mtmp; mtmp = nmon) {
@@ -1452,7 +1452,7 @@ void ugolemeffects(int damtype, int dam) {
 	if (heal && (u.mh < u.mhmax)) {
 		u.mh += heal;
 		if (u.mh > u.mhmax) u.mh = u.mhmax;
-		flags.botl = 1;
+		context.botl = 1;
 		pline("Strangely, you feel better than before.");
 		exercise(A_STR, true);
 	}
@@ -1688,7 +1688,7 @@ int polyatwill(void) {
 		return 0;
 	}
 
-	flags.botl = 1;
+	context.botl = 1;
 	return 1;
 }
 

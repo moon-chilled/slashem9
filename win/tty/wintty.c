@@ -1059,7 +1059,7 @@ void tty_clear_nhwindow(winid window) {
 			break;
 		case NHW_MAP:
 			/* cheap -- clear the whole thing and tell nethack to redraw botl */
-			flags.botlx = 1;
+			context.botlx = 1;
 		/* fall into ... */
 		case NHW_BASE:
 			clear_screen();
@@ -1856,7 +1856,7 @@ void tty_putnstr(winid window, int attr, nhstr str) {
 			(void)fx;  // working around a bizarre bug where both clang and gcc warn fx is unused
 			for (int i = cw->curx, fx = i + 1; true; i++, fx++) {
 				if (i >= nb.len) {
-					if (cw->data[cw->cury][j] || flags.botlx) {
+					if (cw->data[cw->cury][j] || context.botlx) {
 						/* last char printed may be in middle of line */
 						tty_curs(WIN_STATUS, fx, cw->cury);
 						cl_end();
@@ -1865,7 +1865,7 @@ void tty_putnstr(winid window, int attr, nhstr str) {
 				}
 
 				// just redraw the whole line every time
-				if (true || flags.botlx || (cw->data[cw->cury][j] != nb.str[i]) || (cw->clr_data[cw->cury][j] != nb.colouration[i])) {
+				if (true || context.botlx || (cw->data[cw->cury][j] != nb.str[i]) || (cw->clr_data[cw->cury][j] != nb.colouration[i])) {
 					if (nb.colouration[i] != NO_COLOR) { term_start_color(nb.colouration[i]); }
 					tty_putsym(WIN_STATUS, fx, cw->cury, nb.str[i]);
 					if (nb.colouration[i] != NO_COLOR) term_end_color();
@@ -2399,7 +2399,7 @@ void docorner(int xmin, int ymax) {
 	end_glyphout();
 	if (ymax >= (int)wins[WIN_STATUS]->offy) {
 		/* we have wrecked the bottom line */
-		flags.botlx = 1;
+		context.botlx = 1;
 		bot();
 	}
 }

@@ -404,7 +404,7 @@ static void cast_wizard_spell(struct monst *mtmp, int dmg, int spellnum) {
 			dmg = 0;
 			break;
 		case MGC_CLONE_WIZ:
-			if (mtmp->iswiz && flags.no_of_wizards == 1) {
+			if (mtmp->iswiz && context.no_of_wizards == 1) {
 				pline("Double Trouble...");
 				clonewiz();
 				dmg = 0;
@@ -795,7 +795,7 @@ static boolean spell_would_be_useless(struct monst *mtmp, uint adtyp, int spelln
 		 */
 		if (((levl[u.ux][u.uy].typ != ROOM && levl[u.ux][u.uy].typ != CORR) || (!u.uhave.amulet && rn2(10))) && spellnum == MGC_CREATE_POOL)
 			return true;
-		if ((!mtmp->iswiz || flags.no_of_wizards > 1) && spellnum == MGC_CLONE_WIZ)
+		if ((!mtmp->iswiz || context.no_of_wizards > 1) && spellnum == MGC_CLONE_WIZ)
 			return true;
 	} else if (adtyp == AD_CLRC) {
 		/* summon insects/sticks to snakes won't be cast by peaceful monsters */

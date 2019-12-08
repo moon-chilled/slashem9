@@ -197,7 +197,7 @@ void explode(xchar x, xchar y, /* WAC was int...i think it's supposed to be xcha
 		for (j = 0; j < 3; j++)
 			if (isok(i + x - 1, j + y - 1) && ZAP_POS((&levl[i + x - 1][j + y - 1])->typ))
 				add_location_to_explode_region(area, i + x - 1, j + y - 1);
-	do_explode(x, y, area, type, dam, olet, expltype, 0, !flags.mon_moving);
+	do_explode(x, y, area, type, dam, olet, expltype, 0, !context.mon_moving);
 	free_explode_region(area);
 }
 
@@ -519,7 +519,7 @@ void do_explode(
 					xkilled(mtmp, (silent ? 0 : 1));
 				else
 					monkilled(mtmp, "", (int)adtyp);
-			} else if (!flags.mon_moving && yours)
+			} else if (!context.mon_moving && yours)
 				setmangry(mtmp);
 		}
 
@@ -562,7 +562,7 @@ void do_explode(
 				u.mh -= damu;
 			else
 				u.uhp -= damu;
-			flags.botl = 1;
+			context.botl = 1;
 			if (flags.showdmg) pline("[%d pts.]", damu);
 		}
 

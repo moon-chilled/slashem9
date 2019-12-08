@@ -634,7 +634,7 @@ static int techeffects(int tech_no) {
 					else
 						u.uhp = 1;
 					t_timeout = rn1(500, 500);
-					flags.botl = true;
+					context.botl = true;
 					break;
 				} else
 					pline("If only you had a scalpel...");
@@ -659,7 +659,7 @@ static int techeffects(int tech_no) {
 					healup(techlev(tech_no) + rn1(5, 5), 0, false, false);
 				}
 				t_timeout = rn1(1000, 500);
-				flags.botl = true;
+				context.botl = true;
 			} else
 				pline("You don't need your healing powers!");
 			break;
@@ -1756,7 +1756,7 @@ static int draw_energy() {
 			u.uen = u.uenmax;
 		}
 		if (u.uen < 1) u.uen = 0;
-		flags.botl = 1;
+		context.botl = 1;
 		return 1; /* still busy */
 	}
 	pline("You finish drawing energy from your surroundings.");

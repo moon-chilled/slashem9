@@ -312,7 +312,7 @@ void pet_distress(struct monst *mtmp, int lev) {
 	if (verb) {
 		pline("%s %s%c", Monnam(mtmp), vtense(NULL, verb),
 		      lev > 1 ? '!' : '.');
-		if (flags.run) nomul(0);
+		if (context.run) nomul(0);
 		wake_nearto(mtmp->mx, mtmp->my, mtmp->data->mlevel * 6 * lev);
 	}
 }

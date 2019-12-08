@@ -212,7 +212,7 @@ int main(int argc, char **argv) {
 			    chmod(SAVEF,FCMASK); /* back to readable */
 			}
 		}
-		flags.move = 0;
+		context.move = 0;
 	} else {
 not_recovered:
 		player_selection();
@@ -221,7 +221,7 @@ not_recovered:
 		newgame();
 		wd_message();
 
-		flags.move = 0;
+		context.move = 0;
 		set_wear();
 		pickup(1);
 	}

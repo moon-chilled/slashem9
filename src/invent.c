@@ -280,7 +280,7 @@ It may be valid to merge this code with with addinv_core2().
 */
 void addinv_core1(struct obj *obj) {
 	if (obj->oclass == COIN_CLASS) {
-		flags.botl = 1;
+		context.botl = 1;
 	} else if (obj->otyp == AMULET_OF_YENDOR) {
 		if (u.uhave.amulet) impossible("already have amulet?");
 		u.uhave.amulet = 1;
@@ -503,7 +503,7 @@ Should think of a better name...
 */
 void freeinv_core(struct obj *obj) {
 	if (obj->oclass == COIN_CLASS) {
-		flags.botl = 1;
+		context.botl = 1;
 		return;
 	} else if (obj->otyp == AMULET_OF_YENDOR) {
 		if (!u.uhave.amulet) impossible("don't have amulet?");
@@ -530,7 +530,7 @@ void freeinv_core(struct obj *obj) {
 		curse(obj);
 	} else if (confers_luck(obj)) {
 		set_moreluck();
-		flags.botl = 1;
+		context.botl = 1;
 	} else if (obj->otyp == HEALTHSTONE) {
 		/* KMH, balance patch -- recalculate health if you've lost healthstones */
 		recalc_health();
@@ -1069,7 +1069,7 @@ struct obj *getobj(const char *let, const char *word) {
 				cnt = 1;
 			}
 		}
-		flags.botl = 1; /* May have changed the amount of money */
+		context.botl = 1; /* May have changed the amount of money */
 		savech(ilet);
 		for (otmp = invent; otmp; otmp = otmp->nobj)
 			if (otmp->invlet == ilet) break;
@@ -1256,7 +1256,7 @@ int ggetobj(const char *word, int (*fn)(struct obj *), int mx, boolean combo /* 
 		}
 
 		if (oc_of_sym == COIN_CLASS && !combo) {
-			flags.botl = 1;
+			context.botl = 1;
 		} else if (sym == 'a') {
 			allflag = true;
 		} else if (sym == 'A') {

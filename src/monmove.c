@@ -69,7 +69,7 @@ static void watch_on_duty(struct monst *mtmp) {
 			}
 		} else if (is_digging()) {
 			/* chewing, wand/spell of digging are checked elsewhere */
-			watch_dig(mtmp, digging.pos.x, digging.pos.y, false);
+			watch_dig(mtmp, context.digging.pos.x, context.digging.pos.y, false);
 		}
 	}
 }

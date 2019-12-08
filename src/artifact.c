@@ -518,10 +518,10 @@ void set_artifact_intrinsic(struct obj *otmp, bool on, long wp_mask) {
 		if (spec_m2(otmp)) {
 			if (on) {
 				EWarn_of_mon |= wp_mask;
-				flags.warntype |= spec_m2(otmp);
+				context.warntype |= spec_m2(otmp);
 			} else {
 				EWarn_of_mon &= ~wp_mask;
-				flags.warntype &= ~spec_m2(otmp);
+				context.warntype &= ~spec_m2(otmp);
 			}
 			see_monsters();
 		} else {
@@ -920,7 +920,7 @@ static bool Mb_hit(
 						pline("You lose magical energy!");
 						u.uenmax--;
 						if (u.uen > 0) u.uen--;
-						flags.botl = 1;
+						context.botl = 1;
 					}
 				} else {
 					if (mdef->data == &mons[PM_CLAY_GOLEM])
@@ -929,7 +929,7 @@ static bool Mb_hit(
 						pline("You absorb magical energy!");
 						u.uenmax++;
 						u.uen++;
-						flags.botl = 1;
+						context.botl = 1;
 					}
 				}
 			}
@@ -1428,7 +1428,7 @@ static int arti_invoke(struct obj *obj) {
 				if (Sick) make_sick(0L, NULL, false, SICK_ALL);
 				if (Slimed) make_slimed(0, NULL);
 				if (Blinded > creamed) make_blinded(creamed, false);
-				flags.botl = 1;
+				context.botl = 1;
 				break;
 			}
 			case ENERGY_BOOST: {
@@ -1440,7 +1440,7 @@ static int arti_invoke(struct obj *obj) {
 				if (epboost) {
 					pline("You feel re-energized.");
 					u.uen += epboost;
-					flags.botl = 1;
+					context.botl = 1;
 				} else
 					goto nothing_special;
 				break;

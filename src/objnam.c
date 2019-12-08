@@ -2187,7 +2187,7 @@ struct obj *readobjnam(char *bp, struct obj *no_wish, boolean from_user) {
 		otmp = mksobj(GOLD_PIECE, false, false);
 		otmp->quan = cnt;
 		otmp->owt = weight(otmp);
-		flags.botl = 1;
+		context.botl = 1;
 		return otmp;
 	}
 	if (strlen(bp) == 1 &&

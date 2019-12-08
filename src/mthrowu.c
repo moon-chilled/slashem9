@@ -260,7 +260,7 @@ int ohitmon(struct monst *mon, struct monst *mtmp, struct obj *otmp, int range, 
 				pline("%s is %s!", Monnam(mtmp),
 				      (nonliving(mtmp->data) || !canspotmon(mtmp)) ? "destroyed" : "killed");
 			/* don't blame hero for unknown rolling boulder trap */
-			if (!flags.mon_moving &&
+			if (!context.mon_moving &&
 			    (otmp->otyp != BOULDER || range >= 0 || !otmp->otrapped))
 				xkilled(mtmp, 0);
 			else

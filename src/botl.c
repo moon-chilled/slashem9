@@ -495,7 +495,7 @@ static void bot_raw(boolean reconfig) {
 void bot_reconfig(void) {
 	if (raw_handler)
 		bot_raw(true);
-	flags.botl = 1;
+	context.botl = 1;
 }
 
 void bot_set_handler(void (*handler)(void)) {
@@ -519,7 +519,7 @@ void bot(void) {
 		bot1();
 		bot2();
 	}
-	flags.botl = flags.botlx = 0;
+	context.botl = context.botlx = 0;
 }
 
 /*botl.c*/

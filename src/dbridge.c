@@ -365,7 +365,7 @@ static void e_died(struct entity *etmp, int dest, int how) {
 #define mk_message(dest) ((dest & 1) ? "" : NULL)
 #define mk_corpse(dest)	 ((dest & 2) ? AD_DGST : AD_PHYS)
 		/* if monsters are moving, one of them caused the destruction */
-		if (flags.mon_moving)
+		if (context.mon_moving)
 			monkilled(etmp->emon, mk_message(dest), mk_corpse(dest));
 		else /* you caused it */
 			xkilled(etmp->emon, dest);

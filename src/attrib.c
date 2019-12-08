@@ -189,7 +189,7 @@ boolean adjattrib(int ndx, int incr, int msgflg /* 2 => no message at all, 1 => 
 		pline("You feel %s%s!",
 		      (incr > 1 || incr < -1) ? "very " : "",
 		      (incr > 0) ? plusattr[ndx] : minusattr[ndx]);
-	flags.botl = 1;
+	context.botl = 1;
 	if (msgflg <= 1 && moves > 1 && (ndx == A_STR || ndx == A_CON))
 		encumber_msg();
 	return true;
@@ -710,9 +710,9 @@ void adjabil(int oldlevel, int newlevel) {
 	/* ALI -- update Warn_of_mon */
 	HWarn_of_mon = HUndead_warning;
 	if (HUndead_warning)
-		flags.warntype |= M2_UNDEAD;
+		context.warntype |= M2_UNDEAD;
 	else
-		flags.warntype &= ~M2_UNDEAD;
+		context.warntype &= ~M2_UNDEAD;
 
 	/* WAC -- adjust techniques */
 	adjtech(oldlevel, newlevel);

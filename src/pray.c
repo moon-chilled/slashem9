@@ -264,7 +264,7 @@ static void fix_worst_trouble(int trouble) {
 		case TROUBLE_STONED:
 			pline("You feel more limber.");
 			Stoned = 0;
-			flags.botl = 1;
+			context.botl = 1;
 			dealloc_killer(find_delayed_killer(STONED));
 			break;
 		case TROUBLE_SLIMED:
@@ -277,7 +277,7 @@ static void fix_worst_trouble(int trouble) {
 			}
 			pline("You can breathe again.");
 			Strangled = 0;
-			flags.botl = 1;
+			context.botl = 1;
 			break;
 		case TROUBLE_LAVA:
 			pline("You are back on solid ground.");
@@ -293,7 +293,7 @@ static void fix_worst_trouble(int trouble) {
 		case TROUBLE_HUNGRY:
 			pline("Your %s feels content.", body_part(STOMACH));
 			init_uhunger();
-			flags.botl = 1;
+			context.botl = 1;
 			break;
 		case TROUBLE_SICK:
 			pline("You feel better.");
@@ -312,11 +312,11 @@ static void fix_worst_trouble(int trouble) {
 			if (u.uhpmax < u.ulevel * 5 + 11) u.uhpmax += rnd(5);
 			if (u.uhpmax <= 5) u.uhpmax = 5 + 1;
 			u.uhp = u.uhpmax;
-			flags.botl = 1;
+			context.botl = 1;
 			break;
 		case TROUBLE_COLLAPSING:
 			ABASE(A_STR) = AMAX(A_STR);
-			flags.botl = 1;
+			context.botl = 1;
 			break;
 		case TROUBLE_STUCK_IN_WALL:
 			pline("Your surroundings change.");
@@ -396,7 +396,7 @@ static void fix_worst_trouble(int trouble) {
 			for (i = 0; i < A_MAX; i++) {
 				if (ABASE(i) < AMAX(i)) {
 					ABASE(i) = AMAX(i);
-					flags.botl = 1;
+					context.botl = 1;
 				}
 			}
 			encumber_msg();
@@ -428,7 +428,7 @@ static void fix_worst_trouble(int trouble) {
 		case TROUBLE_LOW_ENERGY:
 			pline("You feel revitalised.");
 			u.uen = u.uenmax;
-			flags.botl = 1;
+			context.botl = 1;
 			break;
 		case TROUBLE_SADDLE:
 			otmp = which_armor(u.usteed, W_SADDLE);
@@ -932,7 +932,7 @@ static void pleased(aligntyp g_align) {
 				if (u.uhunger < 900) init_uhunger();
 				if (u.uluck < 0) u.uluck = 0;
 				make_blinded(0L, true);
-				flags.botl = 1;
+				context.botl = 1;
 				break;
 			case 4: {
 				struct obj *otmp;
@@ -1495,7 +1495,7 @@ int dosacrifice(void) {
 					else
 						u.ualign.type = u.ualignbase[A_CURRENT] = altaralign;
 					u.ublessed = 0;
-					flags.botl = 1;
+					context.botl = 1;
 
 					pline("You have a sudden sense of a new direction.");
 					/* Beware, Conversion is costly */

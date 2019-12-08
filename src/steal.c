@@ -75,7 +75,7 @@ void stealgold(struct monst *mtmp) {
 		pline("Your purse feels lighter.");
 		if (!tele_restrict(mtmp)) (void)rloc(mtmp, false);
 		monflee(mtmp, 0, false, false);
-		flags.botl = 1;
+		context.botl = 1;
 	}
 }
 

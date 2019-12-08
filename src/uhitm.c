@@ -129,7 +129,7 @@ int attack_checks(struct monst *mtmp, boolean barehanded) {
 
 	if (u.uswallow && mtmp == u.ustuck) return retval;
 
-	if (flags.forcefight) {
+	if (context.forcefight) {
 		/* Do this in the caller, after we checked that the monster
 		 * didn't die from the blow.  Reason: putting the 'I' there
 		 * causes the hero to forget the square's contents since
@@ -231,7 +231,7 @@ int attack_checks(struct monst *mtmp, boolean barehanded) {
 					/* Lose primary attack */
 					return HIT_USWAPWEP;
 				}
-				flags.move = 0;
+				context.move = 0;
 				return 0;
 			}
 		}
@@ -350,7 +350,7 @@ boolean attack(struct monst *mtmp) {
 	 * you'll usually just swap places if this is a movement command
 	 */
 	/* Intelligent chaotic weapons (Stormbringer) want blood */
-	if (is_safepet(mtmp) && !flags.forcefight) {
+	if (is_safepet(mtmp) && !context.forcefight) {
 		if ((!uwep || uwep->oartifact != ART_STORMBRINGER) && (!u.twoweap || !uswapwep || uswapwep->oartifact != ART_STORMBRINGER)) {
 			/* there are some additional considerations: this won't work
 			 * if in a shop or Punished or you miss a random roll or
@@ -458,7 +458,7 @@ atk_done:
 	 * and it returned 0 (it's okay to attack), and the monster didn't
 	 * evade.
 	 */
-	if (flags.forcefight && mtmp->mhp > 0 && !canspotmon(mtmp) &&
+	if (context.forcefight && mtmp->mhp > 0 && !canspotmon(mtmp) &&
 	    !memory_is_invisible(u.ux + u.dx, u.uy + u.dy) &&
 	    !(u.uswallow && mtmp == u.ustuck))
 		map_invisible(u.ux + u.dx, u.uy + u.dy);
@@ -2040,7 +2040,7 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 				ABASE(A_INT) += rnd(4);
 				if (ABASE(A_INT) > AMAX(A_INT))
 					ABASE(A_INT) = AMAX(A_INT);
-				flags.botl = 1;
+				context.botl = 1;
 			}
 			exercise(A_WIS, true);
 			break;
@@ -3243,7 +3243,7 @@ int flash_hits_mon(struct monst *mtmp, struct obj *otmp) {
 								rn2(min(mtmp->mhp, 4));
 				pline("%s %s!", Monnam(mtmp), amt > mtmp->mhp / 2 ? "wails in agony" : "cries out in pain");
 				if ((mtmp->mhp -= amt) <= 0) {
-					if (flags.mon_moving)
+					if (context.mon_moving)
 						monkilled(mtmp, NULL, AD_BLND);
 					else
 						killed(mtmp);
@@ -3252,7 +3252,7 @@ int flash_hits_mon(struct monst *mtmp, struct obj *otmp) {
 				}
 			}
 			if (mtmp->mhp > 0) {
-				if (!flags.mon_moving) setmangry(mtmp);
+				if (!context.mon_moving) setmangry(mtmp);
 				if (tmp < 9 && !mtmp->isshk && rn2(4)) {
 					if (rn2(4))
 						monflee(mtmp, rnd(100), false, true);

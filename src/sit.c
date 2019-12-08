@@ -19,7 +19,7 @@ void take_gold() {
 		pline("You feel a strange sensation.");
 	} else {
 		pline("You notice you have no money!");
-		flags.botl = 1;
+		context.botl = 1;
 	}
 }
 
@@ -171,7 +171,7 @@ int dosit() {
 					make_blinded(0L, true);
 					make_sick(0L, NULL, false, SICK_ALL);
 					heal_legs();
-					flags.botl = 1;
+					context.botl = 1;
 					break;
 				case 5:
 					take_gold();

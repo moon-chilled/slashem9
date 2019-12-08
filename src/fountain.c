@@ -192,7 +192,7 @@ void drinkfountain(void) {
 		for (ii = 0; ii < A_MAX; ii++)
 			if (ABASE(ii) < AMAX(ii)) {
 				ABASE(ii) = AMAX(ii);
-				flags.botl = 1;
+				context.botl = 1;
 			}
 		/* gain ability, blessed if "natural" luck is high */
 		i = rn2(A_MAX); /* start at a random attribute */

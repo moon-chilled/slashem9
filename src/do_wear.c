@@ -98,7 +98,7 @@ int Boots_on(void) {
 			break;
 		case LEVITATION_BOOTS:
 			if (!oldprop && !HLevitation) {
-				flags.botl = 1;
+				context.botl = 1;
 				makeknown(uarmf->otyp);
 				float_up();
 				spoteffects(false);
@@ -147,7 +147,7 @@ int Boots_off(void) {
 			break;
 		case LEVITATION_BOOTS:
 			if (!oldprop && !HLevitation && !cancelled_don) {
-				flags.botl = 1;
+				context.botl = 1;
 				float_down(0L, 0L);
 				makeknown(otyp);
 			}
@@ -284,7 +284,7 @@ int Helmet_on(void) {
 	switch (uarmh->otyp) {
 		case FEDORA:
 			set_moreluck();
-			flags.botl = 1;
+			context.botl = 1;
 			break;
 		case HELMET:
 		case DENTED_POT:
@@ -304,7 +304,7 @@ int Helmet_on(void) {
 		 * and the actual enchantment of the hat is irrelevant.
 		 */
 			ABON(A_CHA) += (Role_if(PM_WIZARD) ? 1 : -1);
-			flags.botl = 1;
+			context.botl = 1;
 			makeknown(uarmh->otyp);
 			break;
 		case HELM_OF_OPPOSITE_ALIGNMENT:
@@ -324,7 +324,7 @@ int Helmet_on(void) {
 					      Tobjnam(uarmh, "glow"), hcolor(NH_BLACK));
 				curse(uarmh);
 			}
-			flags.botl = 1; /* reveal new alignment or INT & WIS */
+			context.botl = 1; /* reveal new alignment or INT & WIS */
 			if (Hallucination) {
 				pline("My brain hurts!"); /* Monty Python's Flying Circus */
 			} else if (uarmh->otyp == DUNCE_CAP) {
@@ -350,7 +350,7 @@ int Helmet_off(void) {
 		case FEDORA:
 			setworn(NULL, W_ARMH);
 			set_moreluck();
-			flags.botl = 1;
+			context.botl = 1;
 			return 0;
 		case HELMET:
 		case DENTED_POT:
@@ -361,12 +361,12 @@ int Helmet_off(void) {
 		case FIRE_HELMET: */
 			break;
 		case DUNCE_CAP:
-			flags.botl = 1;
+			context.botl = 1;
 			break;
 		case CORNUTHAUM:
 			if (!cancelled_don) {
 				ABON(A_CHA) += (Role_if(PM_WIZARD) ? -1 : 1);
-				flags.botl = 1;
+				context.botl = 1;
 			}
 			break;
 		case HELM_OF_TELEPATHY:
@@ -380,7 +380,7 @@ int Helmet_off(void) {
 		case HELM_OF_OPPOSITE_ALIGNMENT:
 			u.ualign.type = u.ualignbase[A_CURRENT];
 			u.ublessed = 0; /* lose the other god's protection */
-			flags.botl = 1;
+			context.botl = 1;
 			break;
 		default:
 			impossible(unknown_type, c_helmet, uarmh->otyp);
@@ -409,7 +409,7 @@ int Gloves_on(void) {
 			break;
 		case GAUNTLETS_OF_POWER:
 			makeknown(uarmg->otyp);
-			flags.botl = 1; /* taken care of in attrib.c */
+			context.botl = 1; /* taken care of in attrib.c */
 			break;
 		case GAUNTLETS_OF_DEXTERITY:
 			adj_abon(uarmg, uarmg->spe);
@@ -441,7 +441,7 @@ int Gloves_off(void) {
 			break;
 		case GAUNTLETS_OF_POWER:
 			makeknown(uarmg->otyp);
-			flags.botl = 1; /* taken care of in attrib.c */
+			context.botl = 1; /* taken care of in attrib.c */
 			break;
 		case GAUNTLETS_OF_DEXTERITY:
 			if (!cancelled_don) adj_abon(uarmg, -uarmg->spe);
@@ -603,7 +603,7 @@ void Amulet_on(void) {
 			if (orig_sex != poly_gender()) {
 				makeknown(AMULET_OF_CHANGE);
 				pline("You are suddenly very %s!", flags.female ? "feminine" : "masculine");
-				flags.botl = 1;
+				context.botl = 1;
 			} else
 				/* already polymorphed into single-gender monster; only
 			   changed the character's base sex */
@@ -621,7 +621,7 @@ void Amulet_on(void) {
 		makeknown(AMULET_OF_POLYMORPH);
 		pline("You feel rather strange.");
 		polyself();
-		flags.botl = 1;
+		context.botl = 1;
 		pline("The amulet disintegrates!");
 		useup(uamul);
 		break;*/
@@ -796,7 +796,7 @@ void Ring_on(struct obj *obj) {
 			break;
 		case RIN_LEVITATION:
 			if (!oldprop && !HLevitation) {
-				flags.botl = 1;
+				context.botl = 1;
 				float_up();
 				makeknown(RIN_LEVITATION);
 				spoteffects(false); /* for sinks */
@@ -816,7 +816,7 @@ void Ring_on(struct obj *obj) {
 			if (ACURR(which) != old_attrib ||
 			    (objects[obj->otyp].oc_name_known &&
 			     old_attrib != 25 && old_attrib != 3)) {
-				flags.botl = 1;
+				context.botl = 1;
 				makeknown(obj->otyp);
 				obj->known = 1;
 				update_inventory();
@@ -824,7 +824,7 @@ void Ring_on(struct obj *obj) {
 			break;
 		case RIN_GAIN_INTELLIGENCE:
 			ABON(A_INT) += obj->spe;
-			flags.botl = 1;
+			context.botl = 1;
 			if (obj->spe || objects[RIN_GAIN_INTELLIGENCE].oc_name_known) {
 				makeknown(RIN_GAIN_INTELLIGENCE);
 				obj->known = true;
@@ -832,7 +832,7 @@ void Ring_on(struct obj *obj) {
 			break;
 		case RIN_GAIN_WISDOM:
 			ABON(A_WIS) += obj->spe;
-			flags.botl = 1;
+			context.botl = 1;
 			if (obj->spe || objects[RIN_GAIN_WISDOM].oc_name_known) {
 				makeknown(RIN_GAIN_WISDOM);
 				obj->known = true;
@@ -840,7 +840,7 @@ void Ring_on(struct obj *obj) {
 			break;
 		case RIN_GAIN_DEXTERITY:
 			ABON(A_DEX) += obj->spe;
-			flags.botl = 1;
+			context.botl = 1;
 			if (obj->spe || objects[RIN_GAIN_DEXTERITY].oc_name_known) {
 				makeknown(RIN_GAIN_DEXTERITY);
 				obj->known = true;
@@ -857,7 +857,7 @@ void Ring_on(struct obj *obj) {
 			break;
 		case RIN_PROTECTION:
 			if (obj->spe || objects[RIN_PROTECTION].oc_name_known) {
-				flags.botl = 1;
+				context.botl = 1;
 				makeknown(RIN_PROTECTION);
 				obj->known = 1;
 				update_inventory();
@@ -938,7 +938,7 @@ static void Ring_off_or_gone(struct obj *obj, boolean gone) {
 			}
 			break;
 		case RIN_LEVITATION:
-			flags.botl = 1;
+			context.botl = 1;
 			float_down(0L, 0L);
 			if (!Levitation) makeknown(RIN_LEVITATION);
 			break;
@@ -963,7 +963,7 @@ static void Ring_off_or_gone(struct obj *obj, boolean gone) {
 			old_attrib = ACURR(which);
 			ABON(which) -= obj->spe;
 			if (ACURR(which) != old_attrib) {
-				flags.botl = 1;
+				context.botl = 1;
 				makeknown(obj->otyp);
 				obj->known = 1;
 				update_inventory();
@@ -978,7 +978,7 @@ static void Ring_off_or_gone(struct obj *obj, boolean gone) {
 		case RIN_PROTECTION:
 			/* might have forgotten it due to amnesia */
 			if (obj->spe) {
-				flags.botl = 1;
+				context.botl = 1;
 				makeknown(RIN_PROTECTION);
 				obj->known = 1;
 				update_inventory();
@@ -1026,7 +1026,7 @@ void Blindf_on(struct obj *otmp) {
 		/* blindness has just been toggled */
 		if (Blind_telepat || Infravision) see_monsters();
 		vision_full_recalc = 1; /* recalc vision limits */
-		flags.botl = 1;
+		context.botl = 1;
 	}
 }
 
@@ -1058,7 +1058,7 @@ void Blindf_off(struct obj *otmp) {
 		/* blindness has just been toggled */
 		if (Blind_telepat || Infravision) see_monsters();
 		vision_full_recalc = 1; /* recalc vision limits */
-		flags.botl = 1;
+		context.botl = 1;
 	}
 }
 
@@ -1482,7 +1482,7 @@ int dowear(void) {
 			pline("You are suddenly overcome with shame and change your mind.");
 		u.ublessed = 0; /* lose your god's protection */
 		makeknown(otmp->otyp);
-		flags.botl = 1;
+		context.botl = 1;
 		return 1;
 	}
 
@@ -1695,7 +1695,7 @@ void find_ac(void) {
 
 	if (uac != u.uac) {
 		u.uac = uac;
-		flags.botl = 1;
+		context.botl = 1;
 	}
 }
 
@@ -2210,7 +2210,7 @@ void adj_abon(struct obj *otmp, schar delta) {
 			makeknown(uarmg->otyp);
 			ABON(A_DEX) += (delta);
 		}
-		flags.botl = 1;
+		context.botl = 1;
 	}
 	if (uarmh && uarmh == otmp && otmp->otyp == HELM_OF_BRILLIANCE) {
 		if (delta) {
@@ -2218,7 +2218,7 @@ void adj_abon(struct obj *otmp, schar delta) {
 			ABON(A_INT) += (delta);
 			ABON(A_WIS) += (delta);
 		}
-		flags.botl = 1;
+		context.botl = 1;
 	}
 }
 /*do_wear.c*/

@@ -355,7 +355,7 @@ boolean sense_engr_at(int x, int y, boolean read_it /* Read any sensed engraving
 
 			pline("You %s: \"%s\".",
 			      (Blind) ? "feel the words" : "read", et);
-			if (flags.run > 1) nomul(0);
+			if (context.run > 1) nomul(0);
 			return true;
 		}
 	}

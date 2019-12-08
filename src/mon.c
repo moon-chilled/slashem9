@@ -426,7 +426,7 @@ static struct obj *make_corpse(struct monst *mtmp) {
 
 	/* if polymorph or undead turning has killed this monster,
 	   prevent the same attack beam from hitting its corpse */
-	if (flags.bypasses) bypass_obj(obj);
+	if (context.bypasses) bypass_obj(obj);
 
 	if (mtmp->mnamelth)
 		obj = oname(obj, NAME(mtmp));
@@ -563,7 +563,7 @@ int mcalcmove(struct monst *mon) {
 		mmove = (4 * mmove + 2) / 3;
 
 	if (mon == u.usteed) {
-		if (u.ugallop && flags.mv) {
+		if (u.ugallop && context.mv) {
 			/* average movement is 1.50 times normal */
 			mmove = ((rn2(2) ? 4 : 5) * mmove) / 3;
 		}
@@ -2178,7 +2178,7 @@ void setmangry(struct monst *mtmp) {
 	}
 
 	/* attacking your own quest leader will anger his or her guardians */
-	if (!flags.mon_moving && /* should always be the case here */
+	if (!context.mon_moving && /* should always be the case here */
 	    mtmp->data == &mons[quest_info(MS_LEADER)]) {
 		struct monst *mon;
 		struct permonst *q_guardian = &mons[quest_info(MS_GUARDIAN)];
@@ -2204,7 +2204,7 @@ void wakeup(struct monst *mtmp) {
 	setmangry(mtmp);
 	if (mtmp->m_ap_type)
 		seemimic(mtmp);
-	else if (flags.forcefight && !flags.mon_moving && mtmp->mundetected) {
+	else if (context.forcefight && !context.mon_moving && mtmp->mundetected) {
 		mtmp->mundetected = 0;
 		newsym(mtmp->mx, mtmp->my);
 	}
@@ -2614,7 +2614,7 @@ int newcham(struct monst *mtmp, struct permonst *mdat, boolean polyspot, boolean
 	mon_break_armor(mtmp, polyspot);
 	if (!(mtmp->misc_worn_check & W_ARMG))
 		mselftouch(mtmp, "No longer petrify-resistant, ",
-			   !flags.mon_moving);
+			   !context.mon_moving);
 	m_dowear(mtmp, false);
 
 	/* This ought to re-test can_carry() on each item in the inventory

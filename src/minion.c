@@ -316,7 +316,7 @@ long bribe(struct monst *mtmp) {
 		pline("You give %s %ld %s.", mon_nam(mtmp), offer, currency(offer));
 	}
 	money2mon(mtmp, offer);
-	flags.botl = 1;
+	context.botl = 1;
 	return offer;
 }
 

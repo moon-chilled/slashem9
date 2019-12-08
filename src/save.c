@@ -91,7 +91,7 @@ int dosave(void) {
 		fd = restore_saved_game();
 		if (fd >= 0) dorecover(fd);
 		check_special_room(false);
-		flags.move = 0;
+		context.move = 0;
 		/*WAC correct these after restore*/
 		if (flags.moonphase == FULL_MOON)
 			change_luck(1);
@@ -250,7 +250,8 @@ static void savegamestate(int fd, int mode) {
 	time_t realtime;
 
 	uid = getuid();
-	bwrite(fd, &uid, sizeof uid);
+	bwrite(fd, &uid, sizeof(uid));
+	bwrite(fd, &context, sizeof(struct context_info));
 	bwrite(fd, &flags, sizeof(struct flag));
 	bwrite(fd, &u, sizeof(struct you));
 
@@ -554,7 +555,18 @@ static void saveobjchn(int fd, struct obj *otmp, int mode) {
 		if (Has_contents(otmp))
 			saveobjchn(fd, otmp->cobj, mode);
 		if (release_data(mode)) {
-			if (otmp->oclass == FOOD_CLASS) food_disappears(otmp);
+			//if (otmp->oclass == FOOD_CLASS) food_disappears(otmp);
+			if (otmp == context.victual.piece) {
+				/* Store the o_id of the victual if mismatched */
+				if (context.victual.o_id != otmp->o_id)
+					context.victual.o_id = otmp->o_id;
+			}
+			if (otmp == context.tin.tin) {
+				/* Store the o_id of your tin */
+				if (context.tin.o_id != otmp->o_id)
+					context.tin.o_id = otmp->o_id;
+			}
+
 			if (otmp->oclass == SPBOOK_CLASS) book_disappears(otmp);
 			otmp->where = OBJ_FREE; /* set to free so dealloc will work */
 			otmp->timed = 0;	/* not timed any more */

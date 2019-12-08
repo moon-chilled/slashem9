@@ -94,8 +94,6 @@ schar tbx = 0, tby = 0; /* mthrowu: target */
    number of shots, index of current one, validity check, shoot vs throw */
 struct multishot m_shot = {0, 0, STRANGE_OBJECT, false};
 
-struct dig_info digging;
-
 dungeon dungeons[MAXDUNGEON]; /* ini'ed by init_dungeon() */
 s_level *sp_levchn;
 stairway upstair = {0, 0}, dnstair = {0, 0};
@@ -126,6 +124,7 @@ dlevel_t level; /* level map */
 struct trap *ftrap = NULL;
 struct monst youmonst = DUMMY;
 struct permonst upermonst = DUMMY;
+struct context_info context = DUMMY;
 struct flag flags = DUMMY;
 struct instance_flags iflags = DUMMY;
 struct you u = DUMMY;

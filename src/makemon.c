@@ -1106,8 +1106,8 @@ struct monst *clone_mon(struct monst *mon, xchar x, xchar y /* clone's preferred
 	*m2 = *mon; /* copy condition of old monster */
 	m2->nmon = fmon;
 	fmon = m2;
-	m2->m_id = flags.ident++;
-	if (!m2->m_id) m2->m_id = flags.ident++; /* ident overflowed */
+	m2->m_id = context.ident++;
+	if (!m2->m_id) m2->m_id = context.ident++; /* ident overflowed */
 	m2->mx = mm.x;
 	m2->my = mm.y;
 
@@ -1148,7 +1148,7 @@ struct monst *clone_mon(struct monst *mon, xchar x, xchar y /* clone's preferred
 	}
 
 	/* not all clones caused by player are tame or peaceful */
-	if (!flags.mon_moving) {
+	if (!context.mon_moving) {
 		if (mon->mtame)
 			m2->mtame = rn2(max(2 + u.uluck, 2)) ? mon->mtame : 0;
 		else if (mon->mpeaceful)
@@ -1309,8 +1309,8 @@ struct monst *makemon(struct permonst *ptr, int x, int y, int mmflags) {
 	memset(mtmp->mextra, 0, xlth);
 	mtmp->nmon = fmon;
 	fmon = mtmp;
-	mtmp->m_id = flags.ident++;
-	if (!mtmp->m_id) mtmp->m_id = flags.ident++; /* ident overflowed */
+	mtmp->m_id = context.ident++;
+	if (!mtmp->m_id) mtmp->m_id = context.ident++; /* ident overflowed */
 	set_mon_data(mtmp, ptr, 0);
 	if (mtmp->data->msound == MS_LEADER)
 		quest_status.leader_m_id = mtmp->m_id;
@@ -1461,13 +1461,13 @@ struct monst *makemon(struct permonst *ptr, int x, int y, int mmflags) {
 		}
 	} else if (mndx == PM_WIZARD_OF_YENDOR) {
 		mtmp->iswiz = true;
-		flags.no_of_wizards++;
-		if (flags.no_of_wizards == 1 && Is_earthlevel(&u.uz))
+		context.no_of_wizards++;
+		if (context.no_of_wizards == 1 && Is_earthlevel(&u.uz))
 			mitem = SPE_DIG;
 	} else if (mndx == PM_DJINNI) {
-		flags.djinni_count++;
+		context.djinni_count++;
 	} else if (mndx == PM_GHOST) {
-		flags.ghost_count++;
+		context.ghost_count++;
 		if (!(mmflags & MM_NONAME))
 			mtmp = christen_monst(mtmp, rndghostname());
 	} else if (mndx == PM_NIGHTMARE) {

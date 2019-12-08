@@ -254,7 +254,7 @@ maketrap(int x, int y, int typ) {
 			    (is_holelike(typ) ||
 			     IS_DOOR(lev->typ) || IS_WALL(lev->typ)))
 				add_damage(x, y, /* schedule repair */
-					   ((IS_DOOR(lev->typ) || IS_WALL(lev->typ)) && !flags.mon_moving) ? 200L : 0L);
+					   ((IS_DOOR(lev->typ) || IS_WALL(lev->typ)) && !context.mon_moving) ? 200L : 0L);
 			lev->doormask = 0;     /* subsumes altarmask, icedpool... */
 			if (IS_ROOM(lev->typ)) /* && !IS_AIR(lev->typ) */
 				lev->typ = ROOM;
@@ -369,7 +369,7 @@ struct monst *animate_statue(struct obj *statue, xchar x, xchar y, int cause, in
 	struct monst *mon = 0;
 	struct obj *item;
 	coord cc;
-	boolean historic = (Role_if(PM_ARCHEOLOGIST) && !flags.mon_moving && (statue->spe & STATUE_HISTORIC));
+	boolean historic = (Role_if(PM_ARCHEOLOGIST) && !context.mon_moving && (statue->spe & STATUE_HISTORIC));
 	char statuename[BUFSZ];
 
 	strcpy(statuename, the(xname(statue)));
@@ -1261,8 +1261,8 @@ int launch_obj(short otyp, int x1, int y1, int x2, int y2, int style) {
 	   launched (perhaps a monster triggered it), destroy context so that
 	   next dig attempt never thinks you're resuming previous effort */
 	if ((otyp == BOULDER || otyp == STATUE) &&
-	    singleobj->ox == digging.pos.x && singleobj->oy == digging.pos.y)
-		memset((void *)&digging, 0, sizeof digging);
+	    singleobj->ox == context.digging.pos.x && singleobj->oy == context.digging.pos.y)
+		memset(&context.digging, 0, sizeof context.digging);
 
 	dist = distmin(x1, y1, x2, y2);
 	bhitpos.x = x1;
@@ -2401,11 +2401,11 @@ static void dofiretrap(struct obj *box) {
 		}
 		if (alt > num) num = alt;
 		if (u.mhmax > mons[u.umonnum].mlevel)
-			u.mhmax -= rn2(min(u.mhmax, num + 1)), flags.botl = 1;
+			u.mhmax -= rn2(min(u.mhmax, num + 1)), context.botl = 1;
 	} else {
 		num = d(2, 4);
 		if (u.uhpmax > u.ulevel)
-			u.uhpmax -= rn2(min(u.uhpmax, num + 1)), flags.botl = 1;
+			u.uhpmax -= rn2(min(u.uhpmax, num + 1)), context.botl = 1;
 	}
 	if (!num)
 		pline("You are uninjured.");
@@ -2999,7 +2999,7 @@ void drain_en(int n) {
 		if (u.uenmax < 0) u.uenmax = 0;
 		u.uen = 0;
 	}
-	flags.botl = 1;
+	context.botl = 1;
 }
 
 // disarm a trap

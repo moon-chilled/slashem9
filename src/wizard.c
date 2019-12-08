@@ -72,7 +72,7 @@ void amulet(void) {
 		}
 	}
 
-	if (!flags.no_of_wizards)
+	if (!context.no_of_wizards)
 		return;
 	/* find Wizard, and wake him if necessary */
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon)
@@ -236,7 +236,7 @@ static long strategy(struct monst *mtmp) {
 			break;
 	}
 
-	if (flags.made_amulet)
+	if (context.made_amulet)
 		if ((strat = target_on(M3_WANTSAMUL, mtmp)) != STRAT_NONE)
 			return strat;
 
@@ -432,7 +432,7 @@ void resurrect(void) {
 	long elapsed;
 	const char *verb;
 
-	if (!flags.no_of_wizards) {
+	if (!context.no_of_wizards) {
 		/* make a new Wizard */
 		verb = "kill";
 		mtmp = makemon(&mons[PM_WIZARD_OF_YENDOR], u.ux, u.uy, MM_NOWAIT);
@@ -502,7 +502,7 @@ void intervene(void) {
 }
 
 void wizdead(void) {
-	flags.no_of_wizards--;
+	context.no_of_wizards--;
 	if (!u.uevent.udemigod) {
 		u.uevent.udemigod = true;
 		u.udg_cnt = rn1(250, 50);

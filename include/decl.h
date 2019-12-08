@@ -254,14 +254,6 @@ extern struct multishot {
 	boolean s;
 } m_shot;
 
-extern struct dig_info { /* apply.c, hack.c */
-	int effort;
-	d_level level;
-	coord pos;
-	long lastdigtime;
-	boolean down, chew, warned, quiet;
-} digging;
-
 extern long moves, monstermoves;
 extern long wailmsg;
 

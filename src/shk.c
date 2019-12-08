@@ -113,7 +113,7 @@ long money2mon(struct monst *mon, long amount) {
 		remove_worn_item(ygold, false); /* quiver */
 	freeinv(ygold);
 	add_to_minv(mon, ygold);
-	flags.botl = 1;
+	context.botl = 1;
 	return amount;
 }
 
@@ -143,7 +143,7 @@ void money2u(struct monst *mon, long amount) {
 		dropy(mongold);
 	} else {
 		addinv(mongold);
-		flags.botl = 1;
+		context.botl = 1;
 	}
 }
 
@@ -980,7 +980,7 @@ static void pay(long tmp, struct monst *shkp) {
 	else if (balance < 0)
 		money2u(shkp, -balance);
 
-	flags.botl = 1;
+	context.botl = 1;
 	if (robbed) {
 		robbed -= tmp;
 		if (robbed < 0) robbed = 0L;
@@ -1413,7 +1413,7 @@ proceed:
 				eshkp->debit = 0L;
 				eshkp->loan = 0L;
 				pline("You pay that debt.");
-				flags.botl = 1;
+				context.botl = 1;
 			} else {
 				dtmp -= eshkp->credit;
 				eshkp->credit = 0L;
@@ -1422,7 +1422,7 @@ proceed:
 				eshkp->loan = 0L;
 				pline("That debt is partially offset by your credit.");
 				pline("You pay the remainder.");
-				flags.botl = 1;
+				context.botl = 1;
 			}
 			paid = true;
 		}
@@ -1823,7 +1823,7 @@ static boolean inherits(struct monst *shkp, int numsk, int croaked) {
 			eshkp->robbed -= umoney;
 			if (eshkp->robbed < 0L) eshkp->robbed = 0L;
 			if (umoney > 0) money2mon(shkp, umoney);
-			flags.botl = 1;
+			context.botl = 1;
 			pline("%s %s all your possessions.",
 			      shkname(shkp), takes);
 			taken = true;
@@ -1831,7 +1831,7 @@ static boolean inherits(struct monst *shkp, int numsk, int croaked) {
 			set_repo_loc(eshkp);
 		} else {
 			money2mon(shkp, loss);
-			flags.botl = 1;
+			context.botl = 1;
 			pline("%s %s the %ld %s %sowed %s.",
 			      Monnam(shkp), takes,
 			      loss, currency(loss),
@@ -2425,7 +2425,7 @@ static void sub_one_frombill(struct obj *obj, struct monst *shkp) {
 		if (bp->bquan > obj->quan) {
 			otmp = newobj(0);
 			*otmp = *obj;
-			bp->bo_id = otmp->o_id = flags.ident++;
+			bp->bo_id = otmp->o_id = context.ident++;
 			otmp->where = OBJ_FREE;
 			otmp->quan = (bp->bquan -= obj->quan);
 			otmp->owt = 0; /* superfluous */
@@ -3590,7 +3590,7 @@ void pay_for_damage(const char *dmgstr, boolean cant_mollify) {
 	if (yn(qbuf) != 'n') {
 		cost_of_damage = check_credit(cost_of_damage, shkp);
 		money2mon(shkp, cost_of_damage);
-		flags.botl = 1;
+		context.botl = 1;
 		pline("Mollified, %s accepts your restitution.",
 		      shkname(shkp));
 		/* move shk back to his home loc */

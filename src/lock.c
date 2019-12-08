@@ -517,7 +517,7 @@ int pick_lock(struct obj **pickp) {
 				}
 		}
 	}
-	flags.move = 0;
+	context.move = 0;
 	xlock.chance = ch;
 	xlock.picktyp = picktyp;
 	xlock.usedtime = 0;

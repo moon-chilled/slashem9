@@ -278,7 +278,7 @@ void wormhitu(struct monst *worm) {
  *  Remove the tail of a worm and adjust the hp of the worm.
  */
 void cutoff(struct monst *worm, struct wseg *tail) {
-	if (flags.mon_moving)
+	if (context.mon_moving)
 		pline("Part of the tail of %s is cut off.", mon_nam(worm));
 	else
 		pline("You cut part of the tail off of %s.", mon_nam(worm));
@@ -381,7 +381,7 @@ int cutworm(struct monst *worm, xchar x, xchar y, struct obj *weap) {
 	/* Place the new monster at all the segment locations. */
 	place_wsegs(new_worm);
 
-	if (flags.mon_moving)
+	if (context.mon_moving)
 		pline("%s is cut in half.", Monnam(worm));
 	else
 		pline("You cut %s in half.", mon_nam(worm));

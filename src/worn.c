@@ -559,12 +559,12 @@ void clear_bypasses(void) {
 		for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
 			otmp->bypass = 0;
 	}
-	flags.bypasses = false;
+	context.bypasses = false;
 }
 
 void bypass_obj(struct obj *obj) {
 	obj->bypass = 1;
-	flags.bypasses = true;
+	context.bypasses = true;
 }
 
 void mon_break_armor(struct monst *mon, boolean polyspot) {

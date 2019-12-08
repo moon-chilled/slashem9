@@ -20,8 +20,6 @@ struct flag {
 #ifdef MAIL
 	bool biff; /* enable checking for mail */
 #endif
-	bool botl;    /* partially redo status line */
-	bool botlx;   /* print an entirely new bottom line */
 	bool confirm; /* confirm before hitting tame monsters */
 	bool debug;   /* in debugging mode */
 #define wizard flags.debug
@@ -29,7 +27,6 @@ struct flag {
 	bool explore; /* in exploration mode */
 #define discover flags.explore
 	bool female;
-	bool forcefight;
 	bool friday13;	   /* it's Friday the 13th */
 	bool groundhogday; /* KMH -- February 2 */
 	bool help;	   /* look in data file for info about stuff */
@@ -46,14 +43,8 @@ struct flag {
 #endif
 	bool legacy;	   /* print game entry "story" */
 	bool lit_corridor; /* show a dark corr as lit if it is in sight */
-	bool made_amulet;
 	bool menu_on_esc; /* show menu when hitting esc */
-	bool mon_moving;  /* monsters' turn to move */
-	bool move;
-	bool mv;
-	bool bypasses; /* bypass flag is set on at least one fobj */
 	bool nap;      /* `timed_delay' option for display effects */
-	bool nopick;   /* do not pickup objects (as when running) */
 	bool null;     /* OK to send nulls to the terminal */
 #ifdef MAC
 	bool page_wait; /* put up a --More-- after a page of messages */
@@ -81,19 +72,10 @@ struct flag {
 	bool verbose;		 /* max battle info */
 	bool prayconfirm;	 /* confirm before praying */
 	int end_top, end_around; /* describe desired score list */
-	unsigned ident;		 /* social security number for each monster */
 	unsigned moonphase;
 	unsigned long suppress_alert;
 #define NEW_MOON  0
 #define FULL_MOON 4
-	unsigned no_of_wizards; /* 0, 1 or 2 (wizard and his shadow) */
-	bool travel;		/* find way automatically to u.tx,u.ty */
-	unsigned run;		/* 0: h (etc), 1: H (etc), 2: fh (etc) */
-	/* 3: FH, 4: ff+, 5: ff-, 6: FF+, 7: FF- */
-	/* 8: travel */
-	unsigned long warntype; /* warn_of_mon monster type M2 */
-	int warnlevel;
-	int djinni_count, ghost_count; /* potion effect tuning */
 	int pickup_burden;	       /* maximum burden before prompt */
 	/* KMH, role patch -- Variables used during startup.
 	 *

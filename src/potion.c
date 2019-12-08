@@ -57,7 +57,7 @@ void make_confused(long xtime, boolean talk) {
 			pline("You feel less %s now.",
 			      Hallucination ? "trippy" : "confused");
 	}
-	if ((xtime && !old) || (!xtime && old)) flags.botl = true;
+	if ((xtime && !old) || (!xtime && old)) context.botl = true;
 
 	set_itimeout(&HConfusion, xtime);
 }
@@ -78,7 +78,7 @@ void make_stunned(long xtime, boolean talk) {
 				pline("You %s...", stagger(youmonst.data, "stagger"));
 		}
 	}
-	if ((!xtime && old) || (xtime && !old)) flags.botl = true;
+	if ((!xtime && old) || (xtime && !old)) context.botl = true;
 
 	set_itimeout(&HStun, xtime);
 }
@@ -98,7 +98,7 @@ void make_sick(long xtime, const char *cause, boolean talk, int type) {
 		}
 		set_itimeout(&Sick, xtime);
 		u.usick_type |= type;
-		flags.botl = true;
+		context.botl = true;
 	} else if (old && (type & u.usick_type)) {
 		/* was sick, now not */
 		u.usick_type &= ~type;
@@ -109,7 +109,7 @@ void make_sick(long xtime, const char *cause, boolean talk, int type) {
 			if (talk) pline("What a relief!");
 			Sick = 0L; /* set_itimeout(&Sick, 0L) */
 		}
-		flags.botl = true;
+		context.botl = true;
 	}
 
 	if (Sick) {
@@ -127,7 +127,7 @@ void make_slimed(long xtime, const char *msg) {
 
 	if ((!xtime && old) || (xtime && !old)) {
 		if (msg) pline("%s", msg);
-		flags.botl = 1;
+		context.botl = 1;
 	}
 	set_itimeout(&Slimed, xtime);
 	if (!Slimed) dealloc_killer(find_delayed_killer(SLIMED));
@@ -210,7 +210,7 @@ void make_blinded(long xtime, boolean talk) {
 	set_itimeout(&Blinded, xtime);
 
 	if (u_could_see ^ can_see_now) { /* one or the other but not both */
-		flags.botl = 1;
+		context.botl = 1;
 		vision_full_recalc = 1; /* blindness just got toggled */
 		if (Blind_telepat || Infravision) see_monsters();
 	}
@@ -270,7 +270,7 @@ boolean make_hallucinated(long xtime, boolean talk, long mask) {
 		(eg. Qt windowport's equipped items display) */
 		update_inventory();
 
-		flags.botl = 1;
+		context.botl = 1;
 		if (talk) pline(message, verb);
 	}
 	return changed;
@@ -339,8 +339,8 @@ int dodrink(void) {
 	potion_descr = OBJ_DESCR(objects[otmp->otyp]);
 	if (potion_descr) {
 		if (!strcmp(potion_descr, "milky") &&
-		    flags.ghost_count < MAXMONNO &&
-		    !rn2(POTION_OCCUPANT_CHANCE(flags.ghost_count))) {
+		    context.ghost_count < MAXMONNO &&
+		    !rn2(POTION_OCCUPANT_CHANCE(context.ghost_count))) {
 			ghost_from_bottle();
 			if (carried(otmp))
 				useup(otmp);
@@ -348,8 +348,8 @@ int dodrink(void) {
 				useupf(otmp, 1L);
 			return 1;
 		} else if (!strcmp(potion_descr, "smoky") &&
-			   (flags.djinni_count < MAXMONNO) &&
-			   !rn2(POTION_OCCUPANT_CHANCE(flags.djinni_count))) {
+			   (context.djinni_count < MAXMONNO) &&
+			   !rn2(POTION_OCCUPANT_CHANCE(context.djinni_count))) {
 			djinni_from_bottle(otmp);
 			if (carried(otmp))
 				useup(otmp);
@@ -424,7 +424,7 @@ int peffects(struct obj *otmp) {
 					if (i == A_STR && u.uhs >= 3) --lim; /* WEAK */
 					if (ABASE(i) < lim) {
 						ABASE(i) = lim;
-						flags.botl = 1;
+						context.botl = 1;
 						/* only first found if not blessed */
 						if (!otmp->blessed) break;
 					}
@@ -943,7 +943,7 @@ int peffects(struct obj *otmp) {
 				u.uenmax += ((u.uen - u.uenmax) / 2);
 				u.uen = u.uenmax;
 			}
-			flags.botl = 1;
+			context.botl = 1;
 			exercise(A_WIS, true);
 		} break;
 		case POT_OIL: { /* P. Winner */
@@ -1051,7 +1051,7 @@ void healup(int nhp, int nxtra, boolean curesick, boolean cureblind) {
 	}
 	if (cureblind) make_blinded(0L, true);
 	if (curesick) make_sick(0L, NULL, true, SICK_ALL);
-	flags.botl = 1;
+	context.botl = 1;
 	return;
 }
 
@@ -1463,23 +1463,23 @@ void potionbreathe(struct obj *obj) {
 						++;
 						/* only first found if not blessed */
 						isdone = !(obj->blessed);
-						flags.botl = 1;
+						context.botl = 1;
 					}
 					if (++i >= A_MAX) i = 0;
 				}
 			}
 			break;
 		case POT_FULL_HEALING:
-			if (Upolyd && u.mh < u.mhmax) u.mh++, flags.botl = 1;
-			if (u.uhp < u.uhpmax) u.uhp++, flags.botl = 1;
+			if (Upolyd && u.mh < u.mhmax) u.mh++, context.botl = 1;
+			if (u.uhp < u.uhpmax) u.uhp++, context.botl = 1;
 		/*FALL THROUGH*/
 		case POT_EXTRA_HEALING:
-			if (Upolyd && u.mh < u.mhmax) u.mh++, flags.botl = 1;
-			if (u.uhp < u.uhpmax) u.uhp++, flags.botl = 1;
+			if (Upolyd && u.mh < u.mhmax) u.mh++, context.botl = 1;
+			if (u.uhp < u.uhpmax) u.uhp++, context.botl = 1;
 		/*FALL THROUGH*/
 		case POT_HEALING:
-			if (Upolyd && u.mh < u.mhmax) u.mh++, flags.botl = 1;
-			if (u.uhp < u.uhpmax) u.uhp++, flags.botl = 1;
+			if (Upolyd && u.mh < u.mhmax) u.mh++, context.botl = 1;
+			if (u.uhp < u.uhpmax) u.uhp++, context.botl = 1;
 			exercise(A_CON, true);
 			break;
 		case POT_SICKNESS:
@@ -1495,7 +1495,7 @@ void potionbreathe(struct obj *obj) {
 					else
 						u.uhp -= 5;
 				}
-				flags.botl = 1;
+				context.botl = 1;
 				exercise(A_CON, false);
 			}
 			break;
@@ -1853,7 +1853,7 @@ static void downgrade_obj(struct obj *obj, int nomagic, boolean *used) {
 	obj->otyp = nomagic;
 	obj->spe = 0;
 	obj->owt = weight(obj);
-	flags.botl = true;
+	context.botl = true;
 }
 
 /* returns true if something happened (potion should be used up) */
@@ -3174,7 +3174,7 @@ struct monst *split_mon(struct monst *mon, struct monst *mtmp) {
 		if (mtmp2) {
 			mtmp2->mhpmax = u.mhmax / 2;
 			u.mhmax -= mtmp2->mhpmax;
-			flags.botl = 1;
+			context.botl = 1;
 			pline("You multiply%s!", reason);
 		}
 	} else {

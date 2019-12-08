@@ -803,7 +803,7 @@ int dotele(void) {
 			}
 		} else {
 			u.uen -= energy;
-			flags.botl = 1;
+			context.botl = 1;
 		}
 	}
 
@@ -1061,7 +1061,7 @@ void level_tele(void) {
 	schedule_goto(&newlevel, false, false, 0, NULL, NULL);
 	/* in case player just read a scroll and is about to be asked to
 	   call it something, we can't defer until the end of the turn */
-	if (u.utotype && !flags.mon_moving) deferred_goto();
+	if (u.utotype && !context.mon_moving) deferred_goto();
 }
 
 void domagicportal(struct trap *ttmp) {

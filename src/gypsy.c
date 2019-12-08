@@ -21,7 +21,7 @@ static void gypsy_charge(struct monst *mtmp, long amount) {
 		amount -= EGYP(mtmp)->credit;
 		EGYP(mtmp)->credit = 0;
 		money2mon(mtmp, amount);
-		flags.botl = 1;
+		context.botl = 1;
 	} else
 		EGYP(mtmp)->credit -= amount;
 

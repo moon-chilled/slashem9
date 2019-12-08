@@ -234,8 +234,8 @@ struct obj *splitobj(struct obj *obj, long num) {
 		panic("splitobj"); /* can't split containers */
 	otmp = newobj(obj->oxlth + obj->onamelth);
 	*otmp = *obj; /* copies whole structure */
-	otmp->o_id = flags.ident++;
-	if (!otmp->o_id) otmp->o_id = flags.ident++; /* ident overflowed */
+	otmp->o_id = context.ident++;
+	if (!otmp->o_id) otmp->o_id = context.ident++; /* ident overflowed */
 	otmp->timed = 0;			     /* not timed, yet */
 	otmp->lamplit = 0;			     /* ditto */
 	otmp->owornmask = 0L;			     /* new object isn't worn */
@@ -349,8 +349,8 @@ void bill_dummy_object(struct obj *otmp) {
 		dummy->cobj = NULL;
 	}
 	dummy->where = OBJ_FREE;
-	dummy->o_id = flags.ident++;
-	if (!dummy->o_id) dummy->o_id = flags.ident++; /* ident overflowed */
+	dummy->o_id = context.ident++;
+	if (!dummy->o_id) dummy->o_id = context.ident++; /* ident overflowed */
 	dummy->timed = 0;
 	if (otmp->oxlth)
 		memcpy((void *)dummy->oextra,
@@ -377,8 +377,8 @@ struct obj *mksobj(int otyp, boolean init, boolean artif) {
 	otmp = newobj(0);
 	*otmp = zeroobj;
 	otmp->age = monstermoves;
-	otmp->o_id = flags.ident++;
-	if (!otmp->o_id) otmp->o_id = flags.ident++; /* ident overflowed */
+	otmp->o_id = context.ident++;
+	if (!otmp->o_id) otmp->o_id = context.ident++; /* ident overflowed */
 	otmp->quan = 1L;
 	otmp->oclass = let;
 	otmp->otyp = otyp;
@@ -586,7 +586,7 @@ struct obj *mksobj(int otyp, boolean init, boolean artif) {
 				}
 				break;
 			case AMULET_CLASS:
-				if (otmp->otyp == AMULET_OF_YENDOR) flags.made_amulet = true;
+				if (otmp->otyp == AMULET_OF_YENDOR) context.made_amulet = true;
 				if (rn2(10) && (otmp->otyp == AMULET_OF_STRANGULATION ||
 						otmp->otyp == AMULET_OF_CHANGE ||
 						otmp->otyp == AMULET_OF_RESTFUL_SLEEP)) {

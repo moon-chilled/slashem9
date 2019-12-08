@@ -846,7 +846,7 @@ static int wiz_gain_ac(void) {
 			pline("Intrinsic AC increased by 1.");
 			HProtection |= FROMOUTSIDE;
 			u.ublessed++;
-			flags.botl = 1;
+			context.botl = 1;
 		} else
 			pline("Intrinsic AC is already maximized.");
 	} else
@@ -1254,10 +1254,10 @@ void enlightenment(int final) {
 	if (See_invisible) enl_msg(You_, "see", "saw", " invisible");
 	if (Blind_telepat) you_are("telepathic");
 	if (Warning) you_are("warned");
-	if (Warn_of_mon && flags.warntype) {
+	if (Warn_of_mon && context.warntype) {
 		/* [ALI] Add support for undead */
 		int i, nth = 0;
-		unsigned long warntype = flags.warntype;
+		unsigned long warntype = context.warntype;
 		struct {
 			unsigned long mask;
 			const char *str;
@@ -3123,18 +3123,18 @@ void rhack(char *cmd) {
 
 	iflags.menu_requested = false;
 	if (firsttime) {
-		flags.nopick = 0;
+		context.nopick = 0;
 		cmd = parse();
 	}
 	if (*cmd == DOESCAPE) { /* <esc> key - user might be panicking */
 		/* Bring up the menu */
 		if (multi || !flags.menu_on_esc || !(domenusystem())) {
-			flags.move = false;
+			context.move = false;
 			multi = 0;
 		}
 		return;
 #if 0
-		flags.move = false;
+		context.move = false;
 		return;
 #endif
 	}
@@ -3148,7 +3148,7 @@ void rhack(char *cmd) {
 	/* Special case of *cmd == ' ' handled better below */
 	if (!*cmd || *cmd == (char)0377) {
 		nhbell();
-		flags.move = false;
+		context.move = false;
 		return; /* probably we just had an interrupt */
 	}
 	if (iflags.num_pad && iflags.num_pad_mode == 1) {
@@ -3165,18 +3165,18 @@ void rhack(char *cmd) {
 	}
 	/* handle most movement commands */
 	do_walk = do_rush = prefix_seen = false;
-	flags.travel = iflags.travel1 = 0;
+	context.travel = iflags.travel1 = 0;
 
 	switch (*cmd) {
 		case DORUSH: if (movecmd(cmd[1])) {
-				     flags.run = 2;
+				     context.run = 2;
 				     do_rush = true;
 			     } else {
 				     prefix_seen = true;
 			     }
 		case '5': if (!iflags.num_pad) break; // else fallthru
 		case DORUN: if (movecmd(lowc(cmd[1]))) {
-				    flags.run = 3;
+				    context.run = 3;
 				    do_rush = true;
 			    } else {
 				    prefix_seen = true;
@@ -3188,14 +3188,14 @@ void rhack(char *cmd) {
 		 * normal movement: attack if 'I', move otherwise
 		 */
 		case DOFORCEFIGHT: if (movecmd(cmd[1])) {
-					   flags.forcefight = 1;
+					   context.forcefight = 1;
 					   do_walk = true;
 				   } else {
 					   prefix_seen = true;
 				   }
 		case DONOPICKUP: if (movecmd(cmd[1]) || u.dz) {
-					 flags.run = 0;
-					 flags.nopick = 1;
+					 context.run = 0;
+					 context.nopick = 1;
 					 if (!u.dz) {
 						 do_walk = true;
 					 } else {
@@ -3206,8 +3206,8 @@ void rhack(char *cmd) {
 				 }
 
 		case DORUN_NOPICKUP: if (movecmd(lowc(cmd[1]))) {
-					     flags.run = 1;
-					     flags.nopick = 1;
+					     context.run = 1;
+					     context.nopick = 1;
 					     do_rush = true;
 				     } else {
 					     prefix_seen = true;
@@ -3215,22 +3215,22 @@ void rhack(char *cmd) {
 		case '0':
 			if (!iflags.num_pad) break;
 			ddoinv(); /* a convenience borrowed from the PC */
-			flags.move = false;
+			context.move = false;
 			multi = 0;
 
 		case CMD_CLICKLOOK:
 			if (iflags.clicklook) {
-				flags.move = false;
+				context.move = false;
 				do_look(2, &clicklook_cc);
 			}
 
 			return;
 		case CMD_TRAVEL:
 			if (iflags.travelcmd) {
-				flags.travel = 1;
+				context.travel = 1;
 				iflags.travel1 = 1;
-				flags.run = 8;
-				flags.nopick = 1;
+				context.run = 8;
+				context.nopick = 1;
 				do_rush = true;
 				break;
 			} // else fallthru
@@ -3239,10 +3239,10 @@ void rhack(char *cmd) {
 			if (movecmd(*cmd)) {
 				do_walk = true;
 			} else if (movecmd(iflags.num_pad ?  UNMETA(*cmd) : lowc(*cmd))) {
-				flags.run = 1;
+				context.run = 1;
 				do_rush = true;
 			} else if (movecmd(UNCTRL(*cmd))) {
-				flags.run = 3;
+				context.run = 3;
 				do_rush = true;
 			}
 	}
@@ -3255,16 +3255,16 @@ void rhack(char *cmd) {
 	}
 
 	if (do_walk) {
-		if (multi) flags.mv = true;
+		if (multi) context.mv = true;
 		domove();
-		flags.forcefight = 0;
+		context.forcefight = 0;
 		return;
 	} else if (do_rush) {
 		if (firsttime) {
 			if (!multi) multi = max(COLNO, ROWNO);
 			u.last_str_turn = 0;
 		}
-		flags.mv = true;
+		context.mv = true;
 		domove();
 		return;
 	} else if (prefix_seen && cmd[1] == DOESCAPE) { /* <prefix><escape> */
@@ -3296,7 +3296,7 @@ void rhack(char *cmd) {
 				res = (*func)(); /* perform the command */
 			}
 			if (!res) {
-				flags.move = false;
+				context.move = false;
 				multi = 0;
 			}
 			return;
@@ -3310,7 +3310,7 @@ void rhack(char *cmd) {
 				addchar(*mapping);
 				mapping++;
 			}
-			flags.move = false;
+			context.move = false;
 			return;
 		}
 
@@ -3339,7 +3339,7 @@ void rhack(char *cmd) {
 			Norep("Unknown command '%s'.", expcmd);
 	}
 	/* didn't move */
-	flags.move = false;
+	context.move = false;
 	multi = 0;
 	return;
 }
@@ -3646,7 +3646,7 @@ static char *parse(void) {
 	boolean prezero = false;
 
 	multi = 0;
-	flags.move = 1;
+	context.move = 1;
 	flush_screen(1); /* Flush screen buffer. Put the cursor on the hero. */
 
 	/* [Tom] for those who occasionally go insane... */

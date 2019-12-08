@@ -270,7 +270,7 @@ void pcmain(int argc, char **argv) {
 			}
 		}
 
-		flags.move = 0;
+		context.move = 0;
 	} else {
 	not_recovered:
 		player_selection();
@@ -278,7 +278,7 @@ void pcmain(int argc, char **argv) {
 		if (discover)
 			pline("You are in non-scoring discovery mode.");
 
-		flags.move = 0;
+		context.move = 0;
 		set_wear();
 		pickup(1);
 		sense_engr_at(u.ux, u.uy, false);

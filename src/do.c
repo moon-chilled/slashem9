@@ -467,7 +467,7 @@ static int drop(struct obj *obj) {
 		if (!can_reach_floor()) {
 			if (flags.verbose) pline("You drop %s.", doname(obj));
 			/* Ensure update when we drop gold objects */
-			if (obj->oclass == COIN_CLASS) flags.botl = 1;
+			if (obj->oclass == COIN_CLASS) context.botl = 1;
 			freeinv(obj);
 			hitfloor(obj);
 			return 1;
@@ -483,7 +483,7 @@ static int drop(struct obj *obj) {
 /* eg ship_object() and dropy() -> sellobj() both produce output */
 void dropx(struct obj *obj) {
 	/* Ensure update when we drop gold objects */
-	if (obj->oclass == COIN_CLASS) flags.botl = 1;
+	if (obj->oclass == COIN_CLASS) context.botl = 1;
 	freeinv(obj);
 	if (!u.uswallow) {
 		if (ship_object(obj, u.ux, u.uy, false)) return;
@@ -709,7 +709,7 @@ int dodown(void) {
 			dotrap(trap, TOOKPLUNGE);
 			return 1;
 		} else if (!trap || !is_holelike(trap->ttyp) || !Can_fall_thru(&u.uz) || !trap->tseen) {
-			if (flags.autodig && !flags.nopick &&
+			if (flags.autodig && !context.nopick &&
 			    uwep && is_pick(uwep)) {
 				return use_pick_axe2(uwep);
 			} else {
@@ -1606,7 +1606,7 @@ void set_wounded_legs(long side, int timex) {
 	if (!Wounded_legs) {
 		ATEMP(A_DEX)
 		--;
-		flags.botl = 1;
+		context.botl = 1;
 	}
 
 	/* KMH, intrinsics patch */
@@ -1621,7 +1621,7 @@ void heal_legs(void) {
 		if (ATEMP(A_DEX) < 0) {
 			ATEMP(A_DEX)
 			++;
-			flags.botl = 1;
+			context.botl = 1;
 		}
 
 		if (!u.usteed) {

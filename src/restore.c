@@ -170,7 +170,7 @@ static struct obj *restobjchn(int fd, boolean ghostly, boolean frozen) {
 		mread(fd, (void *)otmp,
 		      (unsigned)xl + sizeof(struct obj));
 		if (ghostly) {
-			unsigned nid = flags.ident++;
+			unsigned nid = context.ident++;
 			add_id_mapping(otmp->o_id, nid);
 			otmp->o_id = nid;
 		}
@@ -191,6 +191,14 @@ static struct obj *restobjchn(int fd, boolean ghostly, boolean frozen) {
 				otmp3->ocontainer = otmp;
 		}
 		if (otmp->bypass) otmp->bypass = 0;
+
+		if (!ghostly) {
+			/* fix the pointers */
+			if (context.victual.o_id == otmp->o_id)
+				context.victual.piece = otmp;
+			if (context.tin.o_id == otmp->o_id)
+				context.tin.tin = otmp;
+		}
 
 		otmp2 = otmp;
 	}
@@ -223,7 +231,7 @@ static struct monst *restmonchn(int fd, boolean ghostly) {
 			mtmp2->nmon = mtmp;
 		mread(fd, (void *)mtmp, (unsigned)xl + sizeof(struct monst));
 		if (ghostly) {
-			unsigned nid = flags.ident++;
+			unsigned nid = context.ident++;
 			add_id_mapping(mtmp->m_id, nid);
 			mtmp->m_id = nid;
 		}
@@ -324,8 +332,8 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 			return false;
 	}
 
-	mread(fd, (void *)&flags, sizeof(struct flag));
-	flags.bypasses = 0; /* never use the saved value of bypasses */
+	mread(fd, &context, sizeof(struct context_info));
+	mread(fd, &flags, sizeof(struct flag));
 	if (remember_discover) discover = remember_discover;
 
 	role_init(); /* Reset the initial role, gender, and alignment */

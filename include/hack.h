@@ -90,6 +90,7 @@
 #include "objclass.h"
 #include "youprop.h"
 #include "wintype.h"
+#include "context.h"
 #include "decl.h"
 #include "timeout.h"
 
@@ -102,8 +103,8 @@ extern coord bhitpos; /* place where throw or zap hits or stops */
 #define FLASHED_LIGHT 3
 #define INVIS_BEAM    4
 
-#define MATCH_WARN_OF_MON(mon) (Warn_of_mon && flags.warntype && \
-				(flags.warntype & (mon)->data->mflags2))
+#define MATCH_WARN_OF_MON(mon) (Warn_of_mon && context.warntype && \
+				(context.warntype & (mon)->data->mflags2))
 
 #include "trap.h"
 #include "flag.h"
@@ -277,7 +278,7 @@ extern coord bhitpos; /* place where throw or zap hits or stops */
 #define makeknown(x)	discover_object((x), true, true)
 #define distu(xx, yy)	dist2((int)(xx), (int)(yy), (int)u.ux, (int)u.uy)
 #define onlineu(xx, yy) online2((int)(xx), (int)(yy), (int)u.ux, (int)u.uy)
-#define setustuck(v)	(flags.botl = 1, u.ustuck = (v))
+#define setustuck(v)	(context.botl = 1, u.ustuck = (v))
 
 #define rn1(x, y) (rn2(x) + (y))
 

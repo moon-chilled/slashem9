@@ -499,8 +499,6 @@ void initoptions(void) {
 	memset(permonst_unicode_codepoint, 0, sizeof(permonst_unicode_codepoint));
 
 	iflags.travelcc.x = iflags.travelcc.y = -1;
-	flags.warnlevel = 1;
-	flags.warntype = 0L;
 
 	/* assert( sizeof flags.inv_order == sizeof def_inv_order ); */
 	memcpy((void *)flags.inv_order,
