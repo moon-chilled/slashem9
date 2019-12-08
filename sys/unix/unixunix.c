@@ -13,20 +13,6 @@
 #endif
 #include <signal.h>
 
-#ifdef _M_UNIX
-extern void sco_mapon(void);
-extern void sco_mapoff(void);
-#endif
-#ifdef __linux__
-extern void linux_mapon(void);
-extern void linux_mapoff(void);
-#endif
-
-#ifdef LINUX
-extern void linux_mapon(void);
-extern void linux_mapoff(void);
-#endif
-
 static int veryold(int);
 static int eraseoldlocks(void);
 
@@ -239,21 +225,10 @@ dosh()
 #endif /* SHELL */
 
 #if defined(SHELL) || defined(DEF_PAGER) || defined(DEF_MAILREADER)
-int
-child(wt)
-int wt;
-{
+int child(int wt) {
 	int f;
 	suspend_nhwindows(NULL);	/* also calls end_screen() */
-#ifdef _M_UNIX
-	sco_mapon();
-#endif
-#ifdef LINUX
-	linux_mapon();
-#endif
-#ifdef __linux__
-	linux_mapon();
-#endif
+
 	if((f = fork()) == 0){		/* child */
 		setgid(getgid());
 		setuid(getuid());
@@ -269,16 +244,8 @@ int wt;
 	/* fork succeeded; wait for child to exit */
 	signal(SIGINT,SIG_IGN);
 	signal(SIGQUIT,SIG_IGN);
-	wait( NULL);
-#ifdef _M_UNIX
-	sco_mapoff();
-#endif
-#ifdef __linux__
-	linux_mapoff();
-#endif
-#ifdef LINUX
-	linux_mapoff();
-#endif
+	wait(NULL);
+
 	signal(SIGINT, (SIG_RET_TYPE) done1);
 	if(wizard) signal(SIGQUIT,SIG_DFL);
 	if(wt) {
@@ -299,42 +266,28 @@ extern int nh_getresgid(gid_t *, gid_t *, gid_t *);
 extern gid_t nh_getgid(void);
 extern gid_t nh_getegid(void);
 
-int
-(getresuid)(ruid, euid, suid)
-uid_t *ruid, *euid, *suid;
-{
-    return nh_getresuid(ruid, euid, suid);
+int getresuid(uid_t *ruid, uid_t *euid, uid_t *suid) {
+	return nh_getresuid(ruid, euid, suid);
 }
 
-uid_t
-(getuid)()
-{
-    return nh_getuid();
+uid_t getuid(void) {
+	return nh_getuid();
 }
 
-uid_t
-(geteuid)()
-{
-    return nh_geteuid();
+uid_t geteuid(void) {
+	return nh_geteuid();
 }
 
-int
-(getresgid)(rgid, egid, sgid)
-gid_t *rgid, *egid, *sgid;
-{
-    return nh_getresgid(rgid, egid, sgid);
+int getresgid(gid_t *rgid, gid_t *egid, gid_t *sgid) {
+	return nh_getresgid(rgid, egid, sgid);
 }
 
-gid_t
-(getgid)()
-{
-    return nh_getgid();
+gid_t getgid(void) {
+	return nh_getgid();
 }
 
-gid_t
-(getegid)()
-{
-    return nh_getegid();
+gid_t getegid(void) {
+	return nh_getegid();
 }
 
 #endif	/* GETRES_SUPPORT */

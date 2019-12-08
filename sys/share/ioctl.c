@@ -21,20 +21,6 @@ struct termios termio;
 #include "tcap.h" /* for LI and CO */
 #endif
 
-#ifdef _M_UNIX
-extern void sco_mapon(void);
-extern void sco_mapoff(void);
-#endif
-#ifdef __linux__
-extern void linux_mapon(void);
-extern void linux_mapoff(void);
-#endif
-
-#ifdef LINUX
-extern void linux_mapon(void);
-extern void linux_mapoff(void);
-#endif
-
 #ifdef AUX
 void catch_stp(void) {
 	signal(SIGTSTP, SIG_DFL);
@@ -96,29 +82,11 @@ int dosuspend(void) {
 #ifdef SIGTSTP
 	if (signal(SIGTSTP, SIG_IGN) == SIG_DFL) {
 		suspend_nhwindows(NULL);
-#ifdef _M_UNIX
-		sco_mapon();
-#endif
-#ifdef LINUX
-		linux_mapon();
-#endif
-#ifdef __linux__
-		linux_mapon();
-#endif
 		signal(SIGTSTP, SIG_DFL);
 #ifdef AUX
 		kill(0, SIGSTOP);
 #else
 		kill(0, SIGTSTP);
-#endif
-#ifdef LINUX
-		linux_mapoff();
-#endif
-#ifdef _M_UNIX
-		sco_mapoff();
-#endif
-#ifdef __linux__
-		linux_mapoff();
 #endif
 		resume_nhwindows();
 	} else {

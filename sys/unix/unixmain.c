@@ -30,20 +30,6 @@ static void chdirx(const char *, bool);
 static bool whoami(void);
 static void process_options(int, char **);
 
-#ifdef _M_UNIX
-extern void check_sco_console(void);
-extern void init_sco_cons(void);
-#endif
-#ifdef __linux__
-extern void check_linux_console(void);
-extern void init_linux_cons(void);
-#endif
-
-#ifdef LINUX
-extern void check_linux_console(void);
-extern void init_linux_cons(void);
-#endif
-
 static void wd_message(void);
 static bool wiz_error_flag = false;
 
@@ -110,12 +96,6 @@ int main(int argc, char **argv) {
 	chdirx(dir,1);
 #endif
 
-#ifdef _M_UNIX
-	check_sco_console();
-#endif
-#ifdef LINUX
-	check_linux_console();
-#endif
 #ifdef PROXY_GRAPHICS
 	/* Handle --proxy before options, if supported */
 	if (argc > 1 && !strcmp(argv[1], "--proxy")) {
@@ -129,12 +109,7 @@ int main(int argc, char **argv) {
 	initoptions();
 	init_nhwindows(&argc,argv);
 	exact_username = whoami();
-#ifdef _M_UNIX
-	init_sco_cons();
-#endif
-#ifdef LINUX
-	init_linux_cons();
-#endif
+
 	/*
 	 * It seems you really want to play.
 	 */
