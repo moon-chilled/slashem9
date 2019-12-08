@@ -88,7 +88,7 @@ void dosounds(void) {
 			"You smell marsh gas!", /* so it's a smell...*/
 			"You hear Donald Duck!",
 		};
-		pline(swamp_msg[rn2(2) + hallu]);
+		plines(swamp_msg[rn2(2) + hallu]);
 		return;
 	}
 	if (level.flags.spooky && !rn2(200)) {
@@ -118,7 +118,7 @@ void dosounds(void) {
 			"You hear someone praising your valor!",
 			"You hear someone singing: \"Jingle bells, jingle bells...\"",
 		};
-		pline(spooky_msg[rn2(15) + hallu * 9]);
+		plines(spooky_msg[rn2(15) + hallu * 9]);
 		return;
 	}
 	if (level.flags.has_vault && !rn2(200)) {

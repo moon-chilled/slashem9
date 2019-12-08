@@ -568,11 +568,12 @@ int gd_move(struct monst *grd) {
 		}
 	}
 	if (um_dist(grd->mx, grd->my, 1) || egrd->gddone) {
-		if (!egrd->gddone && !rn2(10))
+		if (!egrd->gddone && !rn2(10)) {
 			if (Deaf)
 				pline("%s looks impatient.", Monnam(grd));
 			else
 				verbalize("Move along!");
+		}
 		restfakecorr(grd);
 		return 0; /* didn't move */
 	}
