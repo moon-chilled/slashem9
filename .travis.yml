@@ -60,20 +60,49 @@ matrix:
       script:
         - make -f Makefile.nodlb install
 
+    # linux/tcc
+    - name: linux/tcc/dlblib
+      os: linux
+      dist: bionic
+      compiler: tcc
+      before_install:
+        - sudo apt update
+        - sudo apt install libncursesw5-dev tcc
+      script:
+        - make install CC=tcc
+    - name: linux/tcc/dlbembed
+      os: linux
+      dist: bionic
+      compiler: tcc
+      before_install:
+        - sudo apt update
+        - sudo apt install libncursesw5-dev tcc
+      script:
+        - make -f Makefile.embeddlb install CC=tcc
+    - name: linux/tcc/flat
+      os: linux
+      dist: bionic
+      compiler: tcc
+      before_install:
+        - sudo apt update
+        - sudo apt install libncursesw5-dev tcc
+      script:
+        - make -f Makefile.nodlb install CC=tcc
+
     # macos/clang
-    - name: macos/dlblib
+    - name: macos/clang/dlblib
       os: osx
       osx_image: xcode10.2
       compiler: clang
       script:
         - make install
-    - name: macos/dlbembed
+    - name: macos/clang/dlbembed
       os: osx
       osx_image: xcode10.2
       compiler: clang
       script:
         - make -f Makefile.embeddlb install
-    - name: macos/flat
+    - name: macos/clang/flat
       os: osx
       osx_image: xcode10.2
       compiler: clang
