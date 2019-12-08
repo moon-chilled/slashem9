@@ -27,9 +27,10 @@ static long mbag_item_gone(int, struct obj *);
 static void observe_quantum_cat(struct obj *);
 static int menu_loot(int, struct obj *, boolean);
 static int in_or_out_menu(const char *, struct obj *, boolean, boolean);
-static int container_at(int, int, boolean);
-static boolean able_to_loot(int, int);
+static int container_at(int x, int y, bool countem);
+static bool able_to_loot(int x, int y, bool looting);
 static boolean mon_beside(int, int);
+void tipcontainer(struct obj *box);
 
 /* define for query_objlist() and autopickup() */
 #define FOLLOW(curr, flags) \
@@ -1246,7 +1247,7 @@ int encumber_msg() {
 }
 
 /* Is there a container at x,y. Optional: return count of containers at x,y */
-static int container_at(int x, int y, boolean countem) {
+static int container_at(int x, int y, bool countem) {
 	struct obj *cobj, *nobj;
 	int container_count = 0;
 
@@ -1260,24 +1261,25 @@ static int container_at(int x, int y, boolean countem) {
 	return container_count;
 }
 
-static boolean able_to_loot(int x, int y) {
+static bool able_to_loot(int x, int y, bool looting) {
+	const char *verb = looting ? "loot" : "tip";
+
 	if (!can_reach_floor()) {
 		if (u.usteed && P_SKILL(P_RIDING) < P_BASIC)
 			rider_cant_reach(); /* not skilled enough to reach */
 		else
 			pline("You cannot reach the %s.", surface(x, y));
 		return false;
-	} else if (is_pool(x, y) || is_lava(x, y)) {
-		/* at present, can't loot in water even when Underwater */
-		pline("You cannot loot things that are deep in the %s.",
-		      is_lava(x, y) ? "lava" : "water");
+	} else if ((is_pool(x, y) && (looting || !Underwater)) || is_lava(x, y)) {
+		// at present, can't loot in water even when Underwater.
+		// can tip underwater, but not in lava
+		pline("You cannot %s things that are deep in the %s.", verb, is_lava(x, y) ? "lava" : "water");
 		return false;
 	} else if (nolimbs(youmonst.data)) {
-		pline("Without limbs, you cannot loot anything.");
+		pline("Without limbs, you cannot %s anything.", verb);
 		return false;
-	} else if (!freehand()) {
-		pline("Without a free %s, you cannot loot anything.",
-		      body_part(HAND));
+	} else if (looting && !freehand()) {
+		pline("Without a free %s, you cannot %s anything.", body_part(HAND), verb);
 		return false;
 	}
 	return true;
@@ -1324,7 +1326,7 @@ lootcont:
 	if (container_at(cc.x, cc.y, false)) {
 		boolean any = false;
 
-		if (!able_to_loot(cc.x, cc.y)) return 0;
+		if (!able_to_loot(cc.x, cc.y, true)) return 0;
 		for (cobj = level.objects[cc.x][cc.y]; cobj; cobj = nobj) {
 			nobj = cobj->nexthere;
 
@@ -2240,6 +2242,177 @@ static int in_or_out_menu(const char *prompt, struct obj *obj, boolean outokay, 
 		free(pick_list);
 	}
 	return n;
+}
+
+static const char tippables[] = { ALL_CLASSES, TOOL_CLASS, 0 };
+
+/* #tip command -- empty container contents onto floor */
+int dotip(void) {
+	struct obj *cobj, *nobj;
+	coord cc;
+	int boxes;
+	char c, buf[BUFSZ];
+	const char *spillage = 0;
+
+	/*
+	 * doesn't require free hands;
+	 * limbs are needed to tip floor containers
+	 */
+
+	/* at present, can only tip things at current spot, not adjacent ones */
+	cc.x = u.ux, cc.y = u.uy;
+
+	/* check floor container(s) first; at most one will be accessed */
+	if ((boxes = container_at(cc.x, cc.y, true)) > 0) {
+		if (flags.verbose)
+			pline("There %s here.", (boxes > 1) ? "are containers" : "is a container");
+		sprintf(buf, "You can't tip %s while carrying so much.", !flags.verbose ? "a container" : (boxes > 1) ? "one" : "it");
+		if (!check_capacity(buf) && able_to_loot(cc.x, cc.y, false)) {
+			for (cobj = level.objects[cc.x][cc.y]; cobj; cobj = nobj) {
+				nobj = cobj->nexthere;
+				if (!Is_container(cobj)) continue;
+
+				sprintf(buf, "There is %s here, tip it?", doname(cobj));
+				c = ynq(buf);
+				if (c == 'q') return 0;
+				if (c == 'n') continue;
+
+				tipcontainer(cobj);
+				return 1;
+			}   /* next cobj */
+		}
+	}
+
+	/* either no floor container(s) or couldn't tip one or didn't tip any */
+	cobj = getobj(tippables, "tip");
+	if (!cobj) return 0;
+
+	/* normal case */
+	if (Is_container(cobj)) {
+		tipcontainer(cobj);
+		return 1;
+	}
+	/* assorted other cases */
+	if (Is_candle(cobj) && cobj->lamplit) {
+		/* note "wax" even for tallow candles to avoid giving away info */
+		spillage = "wax";
+	} else if ((cobj->otyp == POT_OIL && cobj->lamplit) ||
+			(cobj->otyp == OIL_LAMP && cobj->age != 0L) ||
+			(cobj->otyp == MAGIC_LAMP && cobj->spe != 0)) {
+		spillage = "oil";
+		/* todo: reduce potion's remaining burn timer or oil lamp's fuel */
+	} else if (cobj->otyp == CAN_OF_GREASE && cobj->spe > 0) {
+		/* charged consumed below */
+		spillage = "grease";
+	} else if (cobj->otyp == FOOD_RATION ||
+			cobj->otyp == CRAM_RATION ||
+			cobj->otyp == LEMBAS_WAFER) {
+		spillage = "crumbs";
+	} else if (cobj->oclass == VENOM_CLASS) {
+		spillage = "venom";
+	}
+	if (spillage) {
+		buf[0] = '\0';
+		if (is_pool(u.ux, u.uy))
+			sprintf(buf, " and gradually %s", vtense(spillage, "dissipate"));
+		else if (is_lava(u.ux, u.uy))
+			sprintf(buf, " and immediately %s away", vtense(spillage, "burn"));
+		pline("Some %s %s onto the %s%s.",
+				spillage, vtense(spillage, "spill"),
+				surface(u.ux, u.uy), buf);
+		/* shop usage message comes after the spill message */
+		if (cobj->otyp == CAN_OF_GREASE && cobj->spe > 0) {
+			check_unpaid(cobj);
+			cobj->spe--;                /* doesn't affect cobj->owt */
+		}
+		/* something [useless] happened */
+		return 1;
+	}
+	/* anything not covered yet */
+	if (cobj->oclass == POTION_CLASS)  /* can't pour potions... */
+		pline("The %s %s securely sealed.", xname(cobj), otense(cobj, "are"));
+	else
+		pline("Nothing happens.");
+	return 0;
+}
+
+void tipcontainer(struct obj *box) {
+	bool empty_it = false;
+
+	if (box->olocked) {
+		pline("It's locked.");
+	} else if (box->otrapped) {
+		// we're not reaching inside but we're still handling it...
+		chest_trap(box, HAND, false);
+		// even if the trap fails, you've used up this turn
+
+		// in case we didn't become paralyzed
+		if (multi >= 0) {
+			nomul(-1);
+			nomovemsg = "";
+		}
+	} else if (box->otyp == BAG_OF_TRICKS && box->spe > 0) {
+		/* apply (not loot) this bag; uses up one charge */
+		bagotricks(box);
+	} else if (box->spe) {
+		char yourbuf[BUFSZ];
+
+		observe_quantum_cat(box);
+
+		// if a live cat came out
+		if (!Has_contents(box)) {
+			// container type of 'large box' is inferred
+			pline("%s box is now empty.", Shk_Your(yourbuf, box));
+		} else {
+			empty_it = true;
+		}
+
+	} else if (!Has_contents(box)) {
+		pline("It's empty.");
+	} else {
+		empty_it = true;
+	}
+
+	if (empty_it) {
+		struct obj *otmp, *nobj;
+		bool verbose = false,
+			highdrop = !can_reach_floor(),
+			altarizing = IS_ALTAR(levl[u.ux][u.uy].typ),
+			cursed_mbag = (Is_mbag(box) && box->cursed);
+		int held = carried(box);
+		long loss = 0L;
+
+		pline("%s out%c",
+				box->cobj->nobj ? "Objects spill" : "An object spills",
+				!(highdrop || altarizing) ? ':' : '.');
+
+		for (otmp = box->cobj; otmp; otmp = nobj) {
+			nobj = otmp->nobj;
+			obj_extract_self(otmp);
+			if (cursed_mbag && !rn2(13)) {
+				loss += mbag_item_gone(held, otmp);
+				/* abbreviated drop format is no longer appropriate */
+				verbose = true;
+			} else if (highdrop) {
+				/* might break or fall down stairs; handles altars itself */
+				hitfloor(otmp);
+			} else {
+				if (altarizing)
+					doaltarobj(otmp);
+				else if (verbose)
+					pline("%s %s to the %s.", Doname2(otmp),
+							otense(otmp, "drop"), surface(u.ux, u.uy));
+				else
+					pline("%s%c", doname(otmp), nobj ? ',' : '.');
+				dropy(otmp);
+			}
+		}
+		if (loss) // magic bag lost some shop goods
+			pline("You owe %ld %s for lost merchandise.", loss, currency(loss));
+
+		// mbag_item_gone() doesn't update this
+		box->owt = weight(box);
+	}
 }
 
 /*pickup.c*/

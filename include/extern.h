@@ -1461,6 +1461,7 @@ int loot_mon(struct monst *, int *, boolean *);
 const char *safe_qbuf(const char *, unsigned,
 		      const char *, const char *, const char *);
 boolean is_autopickup_exception(struct obj *, boolean);
+int dotip(void);
 
 /* ### pline.c ### */
 

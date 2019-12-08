@@ -87,3 +87,4 @@ Changelist for slashem-next v0.0.1:
 - Bugfix: when wearing the eyes of the overworld while trapped in a dust vortex, player got a message every turn about being blinded and then their vision clearing (NetHack).
 - Gameplay: lighting shops now stock oil (NetHack).
 - Interface: right-clicking on a tile will show what that tile is (NetHack).
+- Gameplay: add the #tip command (NetHack).

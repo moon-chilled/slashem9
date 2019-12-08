@@ -2208,6 +2208,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"sticky", "set 'sticky' inventory slots", dosticky, IFBURIED, AUTOCOMPLETE},
 #endif /* STICKY_COMMAND */
 	{"technique", "perform a technique", dotech, IFBURIED, AUTOCOMPLETE},
+	{"tip", "tip objects out of a container", dotip, IFBURIED, AUTOCOMPLETE},
 	{"turn", "turn undead", doturn, IFBURIED, AUTOCOMPLETE},
 	{"twoweapon", "toggle two-weapon combat", dotwoweapon, !IFBURIED, AUTOCOMPLETE},
 	{"untrap", "untrap something", dountrap, !IFBURIED, AUTOCOMPLETE},
