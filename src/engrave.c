@@ -446,6 +446,7 @@ int doengrave(void) {
 	xchar type = DUST;	    /* Type of engraving made */
 	char buf[BUFSZ];	    /* Buffer for final/poly engraving text */
 	char ebuf[BUFSZ];	    /* Buffer for initial engraving text */
+	char fbuf[BUFSZ];	    /* Buffer for 'your fingers' */
 	char qbuf[QBUFSZ];	    /* Buffer for query text */
 	char post_engr_text[BUFSZ]; /* Text displayed after engraving prompt */
 	const char *everb;	    /* Present tense of engraving type */
@@ -503,10 +504,12 @@ int doengrave(void) {
 	otmp = getobj(styluses, "write with");
 	if (!otmp) return false; /* otmp == zeroobj if fingers */
 
-	if (otmp == &zeroobj)
-		writer = makeplural(body_part(FINGER));
-	else
-		writer = xname(otmp);
+	if (otmp == &zeroobj) {
+		strcat(strcpy(fbuf, "your "), makeplural(body_part(FINGER)));
+		writer = fbuf;
+	} else {
+		writer = yname(otmp);
+	}
 
 	/* There's no reason you should be able to write with a wand
 	 * while both your hands are tied up.
@@ -517,7 +520,7 @@ int doengrave(void) {
 	}
 
 	if (jello) {
-		pline("You tickle %s with your %s.", mon_nam(u.ustuck), writer);
+		pline("You tickle %s with %s.", mon_nam(u.ustuck), writer);
 		pline("Your message dissolves...");
 		return false;
 	}
@@ -526,7 +529,7 @@ int doengrave(void) {
 		return false;
 	}
 	if (IS_ALTAR(levl[u.ux][u.uy].typ)) {
-		pline("You make a motion towards the altar with your %s.", writer);
+		pline("You make a motion towards the altar with %s.", writer);
 		altar_wrath(u.ux, u.uy);
 		return false;
 	}
@@ -581,7 +584,7 @@ int doengrave(void) {
 		case FOOD_CLASS:
 		case SCROLL_CLASS:
 		case SPBOOK_CLASS:
-			pline("Your %s would get %s.", xname(otmp),
+			pline("%s would get %s.", Yname2(otmp),
 			      is_ice(u.ux, u.uy) ? "all frosty" : "too dirty");
 			ptext = false;
 			break;
@@ -807,14 +810,13 @@ int doengrave(void) {
 				if ((int)otmp->spe > -3)
 					type = ENGRAVE;
 				else
-					pline("Your %s too dull for engraving.", aobjnam(otmp, "are"));
+					pline("%s too dull for engraving.", Yobjnam2(otmp, "are"));
 			}
 			break;
 
 		case TOOL_CLASS:
 			if (otmp == ublindf) {
-				pline(
-					"That is a bit difficult to engrave with, don't you think?");
+				pline("That is a bit difficult to engrave with, don't you think?");
 				return false;
 			}
 
@@ -841,17 +843,15 @@ int doengrave(void) {
 								if (!Blind)
 									pline("You wipe out the message here.");
 								else
-									pline("Your %s %s %s.", xname(otmp),
-									      otense(otmp, "get"),
-									      is_ice(u.ux, u.uy) ?
-										      "frosty" :
-										      "dusty");
+									pline("%s %s.", Yobjnam2(otmp, "get"),
+									      is_ice(u.ux, u.uy) ?  "frosty" : "dusty");
 								dengr = true;
-							} else
-								pline("Your %s can't wipe out this engraving.",
-								      xname(otmp));
+							} else {
+								pline("%s can't wipe out this engraving.",
+								      Yname2(otmp));
+							}
 						else
-							pline("Your %s %s %s.", xname(otmp), otense(otmp, "get"),
+							pline("%s %s.", Yobjnam2(otmp, "get"),
 							      is_ice(u.ux, u.uy) ? "frosty" : "dusty");
 						break;
 					default:
@@ -1082,7 +1082,7 @@ int doengrave(void) {
 			 *	 However, you could now engrave "Elb", then
 			 *	 "ere", then "th".
 			 */
-				pline("Your %s dull.", aobjnam(otmp, "get"));
+				pline("%s dull.", Yobjnam2(otmp, "get"));
 				if (otmp->unpaid) {
 					struct monst *shkp = shop_keeper(*u.ushops);
 					if (shkp) {

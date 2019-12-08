@@ -11,16 +11,18 @@ static void mdrop_obj(struct monst *, struct obj *, boolean);
 
 static const char *equipname(struct obj *otmp) {
 	return ((otmp == uarmu) ? "shirt" :
-				  (otmp == uarmf) ? "boots" :
-						    (otmp == uarms) ? "shield" :
-								      (otmp == uarmg) ? "gloves" :
-											(otmp == uarmc) ? cloak_simple_name(otmp) :
-													  (otmp == uarmh) ? "helmet" : "armor");
+		(otmp == uarmf) ? "boots" :
+		(otmp == uarms) ? "shield" :
+		(otmp == uarmg) ? "gloves" :
+		(otmp == uarmc) ? cloak_simple_name(otmp) :
+		(otmp == uarmh) ? "helmet" :
+		"armor");
 }
 
 long somegold(long umoney) {
-	return (long)((umoney < 100) ? umoney :
-				       (umoney > 10000) ? rnd(10000) : rnd((int)umoney));
+	return ((umoney < 100) ? umoney :
+	(umoney > 10000) ? rnd(10000) :
+	rnd(umoney));
 }
 
 /*
@@ -257,11 +259,12 @@ gotobj:
 
 		if (ostuck || !can_carry(mtmp, otmp)) {
 			static const char *const how[] = {"steal", "snatch", "grab", "take"};
-		cant_take:
-			pline("%s tries to %s your %s but gives up.",
+cant_take:
+			pline("%s tries to %s %s%s but gives up.",
 			      Monnam(mtmp), how[rn2(SIZE(how))],
+			      (otmp->owornmask & W_ARMOR) ? "your " : "",
 			      (otmp->owornmask & W_ARMOR) ? equipname(otmp) :
-							    cxname(otmp));
+							    yname(otmp));
 			/* the fewer items you have, the less likely the thief
 			   is going to stick around to try again (0) instead of
 			   running away (1) */

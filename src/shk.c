@@ -3983,10 +3983,12 @@ boolean block_entry(xchar x, xchar y) {
 	return false;
 }
 
+// "your " or "Foobar's " (note the trailing space)
 char *shk_your(char *buf, struct obj *obj) {
 	if (!shk_owns(buf, obj) && !mon_owns(buf, obj))
 		strcpy(buf, carried(obj) ? "your" : "the");
-	return buf;
+
+	return strcat(buf, " ");
 }
 
 char *Shk_Your(char *buf, struct obj *obj) {
@@ -4010,7 +4012,7 @@ static char *shk_owns(char *buf, struct obj *obj) {
 
 static char *mon_owns(char *buf, struct obj *obj) {
 	if (obj->where == OBJ_MINVENT)
-		return strcpy(buf, s_suffix(mon_nam(obj->ocarry)));
+		return strcpy(buf, s_suffix(y_monnam(obj->ocarry)));
 	return NULL;
 }
 

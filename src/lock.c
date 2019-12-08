@@ -333,8 +333,7 @@ int pick_lock(struct obj **pickp) {
 			      Levitation ? "here" : "there");
 			return 0;
 		} else if (is_lava(u.ux, u.uy)) {
-			pline("Doing that would probably melt your %s.",
-			      xname(pick));
+			pline("Doing that would probably melt %s.", yname(pick));
 			return 0;
 		} else if (is_pool(u.ux, u.uy) && !Underwater) {
 			pline("The water has no lock.");
@@ -373,7 +372,7 @@ int pick_lock(struct obj **pickp) {
 					return 0;
 				} else if (picktyp == CREDIT_CARD && !otmp->olocked) {
 					/* credit cards are only good for unlocking */
-					pline("You can't do that with %s.", doname(pick));
+					pline("You can't do that with %s.", an(simple_typename(picktyp)));
 					return 0;
 				}
 				switch (picktyp) {
@@ -627,11 +626,11 @@ int doforce(void) {
 				if (c == 'n') continue;
 
 				if (picktyp == 2)
-					pline("You begin melting it with your %s.", xname(uwep));
+					pline("You begin melting it with %s.", yname(uwep));
 				else if (picktyp)
-					pline("You force your %s into a crack and pry.", xname(uwep));
+					pline("You force %s into a crack and pry.", yname(uwep));
 				else
-					pline("You start bashing it with your %s.", xname(uwep));
+					pline("You start bashing it with %s.", yname(uwep));
 
 				xlock.box = otmp;
 

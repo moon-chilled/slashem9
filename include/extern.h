@@ -1348,6 +1348,8 @@ char *An(const char *);
 char *The(const char *);
 char *the(const char *);
 char *aobjnam(struct obj *, const char *);
+char *yobjnam(struct obj *obj, const char *verb);
+char *Yobjnam2(struct obj *obj, const char *verb);
 char *Tobjnam(struct obj *, const char *);
 char *otense(struct obj *, const char *);
 char *vtense(const char *, const char *);

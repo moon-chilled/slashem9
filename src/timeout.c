@@ -1050,7 +1050,7 @@ void burn_object(void *arg, long timeout) {
 	/* only interested in INVENT, FLOOR, and MINVENT */
 	if (get_obj_location(obj, &x, &y, 0)) {
 		canseeit = !Blind && cansee(x, y);
-		/* set up `whose[]' to be "Your" or "Fred's" or "The goblin's" */
+		/* set `whose[]' to be "Your" or "Fred's" or "The goblin's" */
 		Shk_Your(whose, obj);
 	} else {
 		canseeit = false;
@@ -1104,8 +1104,7 @@ void burn_object(void *arg, long timeout) {
 							switch (obj->where) {
 								case OBJ_INVENT:
 								case OBJ_MINVENT:
-									pline("%s %s seems about to go out.",
-									      whose, xname(obj));
+									pline("%s seems about to go out.", Yname2(obj));
 									break;
 								case OBJ_FLOOR:
 									pline("You see %s about to go out.",
@@ -1126,8 +1125,7 @@ void burn_object(void *arg, long timeout) {
 									pline("%s lantern has run out of power.",
 									      whose);
 								else
-									pline("%s %s has gone out.",
-									      whose, xname(obj));
+									pline("%s has gone out.", Yname2(obj));
 								break;
 							case OBJ_FLOOR:
 								if (obj->otyp == BRASS_LANTERN)
@@ -1219,8 +1217,7 @@ void burn_object(void *arg, long timeout) {
 								case OBJ_INVENT:
 								case OBJ_MINVENT:
 									pline("%s candelabrum's flame%s.",
-									      whose,
-									      many ? "s die" : " dies");
+									      whose, many ? "s die" : " dies");
 									break;
 								case OBJ_FLOOR:
 									pline("You see a candelabrum's flame%s die.",
@@ -1231,9 +1228,8 @@ void burn_object(void *arg, long timeout) {
 							switch (obj->where) {
 								case OBJ_INVENT:
 								case OBJ_MINVENT:
-									pline("%s %s %s consumed!",
-									      whose,
-									      xname(obj),
+									pline("%s %s consumed!",
+									      Yname2(obj),
 									      many ? "are" : "is");
 									break;
 								case OBJ_FLOOR:

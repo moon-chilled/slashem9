@@ -553,7 +553,7 @@ int peffects(struct obj *otmp) {
 		case SPE_INVISIBILITY:
 			/* spell cannot penetrate mummy wrapping */
 			if (BInvis && uarmc->otyp == MUMMY_WRAPPING) {
-				pline("You feel rather itchy under your %s.", xname(uarmc));
+				pline("You feel rather itchy under %s.", yname(uarmc));
 				break;
 			}
 		/* FALLTHRU */
@@ -1858,7 +1858,6 @@ static void downgrade_obj(struct obj *obj, int nomagic, boolean *used) {
 
 /* returns true if something happened (potion should be used up) */
 boolean get_wet(struct obj *obj, boolean amnesia) {
-	char Your_buf[BUFSZ];
 	boolean used = false;
 
 	if (snuff_lit(obj)) return true;
@@ -1867,7 +1866,6 @@ boolean get_wet(struct obj *obj, boolean amnesia) {
 		grease_protect(obj, NULL, &youmonst);
 		return false;
 	}
-	Shk_Your(Your_buf, obj);
 	/* (Rusting shop goods ought to be charged for.) */
 	switch (obj->oclass) {
 		case POTION_CLASS:
@@ -1906,9 +1904,9 @@ boolean get_wet(struct obj *obj, boolean amnesia) {
 				break;
 			}
 			if (amnesia)
-				pline("%s %s completely.", Your_buf, aobjnam(obj, "dilute"));
+				pline("%s completely.", Yobjnam2(obj, "dilute"));
 			else
-				pline("%s %s%s.", Your_buf, aobjnam(obj, "dilute"),
+				pline("%s%s.", Yobjnam2(obj, "dilute"),
 				      obj->odiluted ? " further" : "");
 			if (obj->unpaid && costly_spot(u.ux, u.uy)) {
 				pline("You dilute it, you pay for it.");
@@ -2038,9 +2036,7 @@ boolean get_wet(struct obj *obj, boolean amnesia) {
 			}
 			if (!obj->oerodeproof && is_rustprone(obj) &&
 			    (obj->oeroded < MAX_ERODE) && !rn2(2)) {
-				pline("%s %s some%s.",
-				      Your_buf, aobjnam(obj, "rust"),
-				      obj->oeroded ? " more" : "what");
+				pline("%s some%s.", Yobjnam2(obj, "rust"), obj->oeroded ? " more" : "what");
 				obj->oeroded++;
 				if (obj->unpaid && costly_spot(u.ux, u.uy) && !used) {
 					pline("You damage it, you pay for it.");
@@ -2075,7 +2071,7 @@ boolean get_wet(struct obj *obj, boolean amnesia) {
 	if (used)
 		update_inventory();
 	else
-		pline("%s %s wet.", Your_buf, aobjnam(obj, "get"));
+		pline("%s wet.", Yobjnam2(obj, "get"));
 
 	return used;
 }
@@ -2581,7 +2577,7 @@ int dodip(void) {
 	struct obj *potion, *obj, *singlepotion;
 	const char *tmp;
 	uchar here;
-	char allowall[2], qbuf[QBUFSZ], Your_buf[BUFSZ];
+	char allowall[2], qbuf[QBUFSZ];
 	short mixture;
 	int res;
 
@@ -2635,14 +2631,10 @@ int dodip(void) {
 	potion->in_use = true; /* assume it will be used up */
 	if (potion->otyp == POT_WATER) {
 		boolean useeit = !Blind || (obj == ublindf && Blindfolded_only);
-		if (useeit) Shk_Your(Your_buf, obj);
 		if (potion->blessed) {
 			if (obj->cursed) {
 				if (useeit)
-					pline("%s %s %s.",
-					      Your_buf,
-					      aobjnam(obj, "softly glow"),
-					      hcolor(NH_AMBER));
+					pline("%s %s.", Yobjnam2(obj, "softly glow"), hcolor(NH_AMBER));
 				uncurse(obj);
 				obj->bknown = 1;
 			poof:
@@ -2654,9 +2646,8 @@ int dodip(void) {
 			} else if (!obj->blessed) {
 				if (useeit) {
 					tmp = hcolor(NH_LIGHT_BLUE);
-					pline("%s %s with a%s %s aura.",
-					      Your_buf,
-					      aobjnam(obj, "softly glow"),
+					pline("%s with a%s %s aura.",
+					      Yobjnam2(obj, "softly glow"),
 					      index(vowels, *tmp) ? "n" : "", tmp);
 				}
 				bless(obj);
@@ -2666,20 +2657,14 @@ int dodip(void) {
 		} else if (potion->cursed) {
 			if (obj->blessed) {
 				if (useeit)
-					pline("%s %s %s.",
-					      Your_buf,
-					      aobjnam(obj, "glow"),
-					      hcolor((const char *)"brown"));
+					pline("%s %s.", Yobjnam2(obj, "glow"), hcolor("brown"));
 				unbless(obj);
 				obj->bknown = 1;
 				goto poof;
 			} else if (!obj->cursed) {
 				if (useeit) {
 					tmp = hcolor(NH_BLACK);
-					pline("%s %s with a%s %s aura.",
-					      Your_buf,
-					      aobjnam(obj, "glow"),
-					      index(vowels, *tmp) ? "n" : "", tmp);
+					pline("%s with a%s %s aura.", Yobjnam2(obj, "glow"), index(vowels, *tmp) ? "n" : "", tmp);
 				}
 				curse(obj);
 				obj->bknown = 1;
@@ -3181,8 +3166,8 @@ struct monst *split_mon(struct monst *mon, struct monst *mtmp) {
 
 	reason[0] = '\0';
 	if (mtmp) sprintf(reason, " from %s heat",
-			  (mtmp == &youmonst) ? (const char *)"your" :
-						(const char *)s_suffix(mon_nam(mtmp)));
+			  (mtmp == &youmonst) ? "your" :
+						s_suffix(mon_nam(mtmp)));
 
 	if (mon == &youmonst) {
 		mtmp2 = cloneu();

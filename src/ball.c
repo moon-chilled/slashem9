@@ -37,7 +37,7 @@ void ballfall(void) {
 				pline("Fortunately, you are wearing a hard helmet.");
 				dmg = 3;
 			} else if (flags.verbose)
-				pline("Your %s does not protect you.", xname(uarmh));
+				pline("%s does not protect you.", Yname2(uarmh));
 		}
 		losehp(dmg, "crunched in the head by an iron ball",
 		       NO_KILLER_PREFIX);
@@ -702,8 +702,7 @@ static void litter(void) {
 		nextobj = otmp->nobj;
 		if ((otmp != uball) && (rnd(capacity) <= (int)otmp->owt)) {
 			if (canletgo(otmp, "")) {
-				pline("Your %s you down the stairs.",
-				      aobjnam(otmp, "follow"));
+				pline("%s you down the stairs.", Yobjnam2(otmp, "follow"));
 				dropx(otmp);
 			}
 		}

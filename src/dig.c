@@ -240,18 +240,13 @@ static int dig(void) {
 		switch (rn2(3)) {
 			case 0:
 				if (!welded(uwep)) {
-					pline("You fumble and drop your %s.", xname(uwep));
+					pline("You fumble and drop %s.", yname(uwep));
 					dropx(uwep);
 				} else {
 					if (u.usteed)
-						pline("Your %s %s and %s %s!",
-						      xname(uwep),
-						      otense(uwep, "bounce"), otense(uwep, "hit"),
-						      mon_nam(u.usteed));
+						pline("%s and %s %s!", Yobjnam2(uwep, "bounce"), otense(uwep, "hit"), mon_nam(u.usteed));
 					else
-						pline("Ouch!  Your %s %s and %s you!",
-						      xname(uwep),
-						      otense(uwep, "bounce"), otense(uwep, "hit"));
+						pline("Ouch!  %s and %s you!", Yobjnam2(uwep, "bounce"), otense(uwep, "hit"));
 					set_wounded_legs(RIGHT_SIDE, 5 + rnd(5));
 				}
 				break;
@@ -931,8 +926,7 @@ int use_pick_axe2(struct obj *obj) {
 					seetrap(trap);
 					pline("There is a spider web there!");
 				}
-				pline("Your %s entangled in the web.",
-				      aobjnam(obj, "become"));
+				pline("%s entangled in the web.", Yobjnam2(obj, "become"));
 				/* you ought to be able to let go; tough luck */
 				/* (maybe `move_into_trap()' would be better) */
 				nomul(-d(2, 2));
@@ -952,8 +946,7 @@ int use_pick_axe2(struct obj *obj) {
 				      vibrate ? " The axe-handle vibrates violently!" : "");
 				if (vibrate) losehp(2, "axing a hard object", KILLED_BY);
 			} else
-				pline("You swing your %s through thin air.",
-				      aobjnam(obj, NULL));
+				pline("You swing %s through thin air.", yobjnam(obj, NULL));
 		} else {
 			static const char *const d_action[6][2] = {
 				{"swinging", "slicing the air"},
@@ -993,7 +986,7 @@ int use_pick_axe2(struct obj *obj) {
 		}
 	} else if (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)) {
 		/* it must be air -- water checked above */
-		pline("You swing your %s through thin air.", aobjnam(obj, NULL));
+		pline("You swing %s through thin air.", yobjnam(obj, NULL));
 	} else if (!can_reach_floor()) {
 		pline("You can't reach the %s.", surface(u.ux, u.uy));
 	} else if (is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) {
@@ -1001,8 +994,8 @@ int use_pick_axe2(struct obj *obj) {
 		pline("You cannot stay under%s long enough.",
 		      is_pool(u.ux, u.uy) ? "water" : " the lava");
 	} else if (digtyp == 2) {
-		pline("Your %s merely scratches the %s.",
-		      aobjnam(obj, NULL), surface(u.ux, u.uy));
+		pline("%s merely scratches the %s.",
+		      Yobjnam2(obj, NULL), surface(u.ux, u.uy));
 		u_wipe_engr(3);
 	} else {
 		if (digging.pos.x != u.ux || digging.pos.y != u.uy ||

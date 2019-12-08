@@ -351,9 +351,8 @@ void rndcurse(void) { /* curse a few inventory items at random! */
 		else
 			curse(otmp);
 		if (!Blind) {
-			pline("%s %s %s.",
-			      s_suffix(upstart(y_monnam(u.usteed))),
-			      aobjnam(otmp, "glow"),
+			pline("%s %s.",
+			      Yobjnam2(otmp, "glow"),
 			      hcolor(otmp->cursed ? NH_BLACK : (const char *)"brown"));
 			otmp->bknown = true;
 		}

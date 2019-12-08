@@ -1311,8 +1311,7 @@ static void start_tin(struct obj *otmp) {
 			default:
 				goto no_opener;
 		}
-		pline("Using your %s you try to open the tin.",
-		      aobjnam(uwep, NULL));
+		pline("Using %s you try to open the tin.", yobjnam(uwep, NULL));
 	} else {
 	no_opener:
 		pline("It is not so easy to open this tin.");

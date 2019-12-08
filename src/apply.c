@@ -1985,15 +1985,15 @@ static void use_grease(struct obj *obj) {
 		otmp = getobj(lubricables, "grease");
 		if (!otmp) return;
 		if ((otmp->owornmask & WORN_ARMOR) && uarmc) {
-			strcpy(buf, xname(uarmc));
-			pline("You need to remove your %s to grease your %s.", buf, xname(otmp));
+			strcpy(buf, yname(uarmc));
+			pline("You need to remove %s to grease %s.", buf, yname(otmp));
 			return;
 		}
 		if ((otmp->owornmask & WORN_SHIRT) && (uarmc || uarm)) {
-			strcpy(buf, uarmc ? xname(uarmc) : "");
-			if (uarmc && uarm) strcat(buf, " and ");
-			strcat(buf, uarm ? xname(uarm) : "");
-			pline("You need to remove your %s to grease your %s.", buf, xname(otmp));
+			strcpy(buf, uarmc ? yname(uarmc) : "");
+			if (uarmc && uarm) strcat(strcat(buf, " and "), xname(uarm));
+			else strcat(buf, uarm ? yname(uarm) : "");
+			pline("You need to remove %s to grease %s.", buf, yname(otmp));
 			return;
 		}
 		consume_obj_charge(obj, true);
@@ -2595,8 +2595,7 @@ static int use_whip(struct obj *obj) {
 			} else
 				mon_hand = 0; /* lint suppression */
 
-			pline("You wrap your bullwhip around %s %s.",
-			      s_suffix(mon_nam(mtmp)), onambuf);
+			pline("You wrap your bullwhip around %s.", yname(otmp));
 			if (gotit && otmp->cursed) {
 				pline("%s welded to %s %s%c",
 				      (otmp->quan == 1L) ? "It is" : "They are",
@@ -2613,8 +2612,7 @@ static int use_whip(struct obj *obj) {
 				switch (rn2(proficient + 1)) {
 					case 2:
 						/* to floor near you */
-						pline("You yank %s %s to the %s!", s_suffix(mon_nam(mtmp)),
-						      onambuf, surface(u.ux, u.uy));
+						pline("You yank %s to the %s!", yname(otmp), surface(u.ux, u.uy));
 						place_object(otmp, u.ux, u.uy);
 						stackobj(otmp);
 						break;
@@ -2640,7 +2638,7 @@ static int use_whip(struct obj *obj) {
 					}
 #endif /* 0 */
 						/* right into your inventory */
-						pline("You snatch %s %s!", s_suffix(mon_nam(mtmp)), onambuf);
+						pline("You snatch %s!", yname(otmp));
 						if (otmp->otyp == CORPSE &&
 						    touch_petrifies(&mons[otmp->corpsenm]) &&
 						    !uarmg && !Stone_resistance &&
@@ -3347,10 +3345,7 @@ int doapply(void) {
 				/* sometimes the blessing will be worn off */
 				if (!rn2(49)) {
 					if (!Blind) {
-						char buf[BUFSZ];
-
-						pline("%s %s %s.", Shk_Your(buf, obj),
-						      aobjnam(obj, "glow"), hcolor("brown"));
+						pline("%s %s", Yobjnam2(obj, "glow"), hcolor("brown"));
 						obj->bknown = 1;
 					}
 					unbless(obj);

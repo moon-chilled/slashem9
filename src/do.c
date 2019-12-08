@@ -244,8 +244,7 @@ static void dosinkring(struct obj *obj) {
 	obj->in_use = true;  /* block free identification via interrupt */
 	switch (obj->otyp) { /* effects that can be noticed without eyes */
 		case RIN_SEARCHING:
-			pline("You thought your %s got lost in the sink, but there it is!",
-			      xname(obj));
+			pline("You thought %s got lost in the sink, but there it is!", yname(obj));
 			goto giveback;
 		case RIN_SLOW_DIGESTION:
 			pline("The ring is regurgitated!");
@@ -1442,10 +1441,7 @@ boolean revive_corpse(struct obj *corpse, boolean moldy) {
 			case OBJ_CONTAINED:
 				if (container_where == OBJ_MINVENT && cansee(mtmp->mx, mtmp->my) &&
 				    mcarry && canseemon(mcarry) && container) {
-					char sackname[BUFSZ];
-					sprintf(sackname, "%s %s", s_suffix(mon_nam(mcarry)),
-						xname(container));
-					pline("%s writhes out of %s!", Amonnam(mtmp), sackname);
+					pline("%s writhes out of %s!", Amonnam(mtmp), yname(container));
 				} else if (container_where == OBJ_INVENT && container) {
 					char sackname[BUFSZ];
 					strcpy(sackname, an(xname(container)));

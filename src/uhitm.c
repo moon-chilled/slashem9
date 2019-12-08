@@ -412,8 +412,7 @@ boolean attack(struct monst *mtmp) {
 		unweapon = false;
 		if (flags.verbose) {
 			if (uwep)
-				pline("You begin bashing monsters with your %s.",
-				      aobjnam(uwep, NULL));
+				pline("You begin bashing monsters with %s.", yobjnam(uwep, NULL));
 			else if (tech_inuse(T_EVISCERATE))
 				pline("You begin slashing monsters with your claws.");
 			else if (!cantwield(youmonst.data)) {
@@ -876,9 +875,9 @@ static boolean hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 				    obj->otyp == BOOMERANG && rnl(4) == 4 - 1) {
 					boolean more_than_1 = (obj->quan > 1L);
 
-					pline("As you hit %s, %s%s %s breaks into splinters.",
+					pline("As you hit %s, %s%s breaks into splinters.",
 					      mon_nam(mon), more_than_1 ? "one of " : "",
-					      shk_your(yourbuf, obj), xname(obj));
+					      yname(obj));
 					if (!more_than_1) {
 						if (obj == uwep)
 							uwepgone(); /* set unweapon */
@@ -927,9 +926,7 @@ static boolean hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 					setmnotwielded(mon, monwep);
 					MON_NOWEP(mon);
 					mon->weapon_check = NEED_WEAPON;
-					pline("%s %s %s from the force of your blow!",
-					      s_suffix(Monnam(mon)), xname(monwep),
-					      otense(monwep, "shatter"));
+					pline("%s from the force of your blow!", Yobjnam2(monwep, "shatter"));
 					m_useup(mon, monwep);
 					/* If someone just shattered MY weapon, I'd flee! */
 					if (rn2(4)) {
@@ -1293,8 +1290,7 @@ static boolean hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 		}
 		if (obj && !rn2(nopoison)) {
 			obj->opoisoned = false;
-			pline("Your %s %s no longer poisoned.", xname(obj),
-			      otense(obj, "are"));
+			pline("%s no longer poisoned.", Yobjnam2(obj, "are"));
 		}
 		if (resists_poison(mon))
 			needpoismsg = true;
@@ -1326,7 +1322,7 @@ static boolean hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 		pline("You joust %s%s",
 		      mon_nam(mon), canseemon(mon) ? exclam(tmp) : ".");
 		if (jousting < 0) {
-			pline("Your %s shatters on impact!", xname(obj));
+			pline("%s shatters on impact!", Yname2(obj));
 			/* (must be either primary or secondary weapon to get here) */
 			u.twoweap = false;	     /* untwoweapon() is too verbose here */
 			if (obj == uwep) uwepgone(); /* set unweapon */
@@ -3162,7 +3158,7 @@ void passive_obj(struct monst *mon, struct obj *obj, struct attack *mattk) {
 			if (!mon->mcan) {
 				if (drain_item(obj) && carried(obj) &&
 				    (obj->known || obj->oclass == ARMOR_CLASS)) {
-					pline("Your %s less effective.", aobjnam(obj, "seem"));
+					pline("%s less effective.", Yobjnam2(obj, "seem"));
 				}
 				break;
 			}

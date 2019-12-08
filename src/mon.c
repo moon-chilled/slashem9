@@ -449,43 +449,6 @@ static struct obj *make_corpse(struct monst *mtmp) {
 	return obj;
 }
 
-#if 0
-/* part of the original warning code which was replaced in 3.3.1 */
-static void warn_effects() {
-	struct monst *mtmp;
-	int num_mon;
-	int warned_of;
-
-	num_mon = 0;
-	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-		if (!canseemon(mtmp) && !(mtmp->mpeaceful) && !(mtmp->mtame)) {
-			if (Warning && (!spec_ability(uwep,SPFX_WARN) || !spec_dbon(uwep,mtmp,1))) num_mon++;
-			else if (Undead_warning && is_undead(mtmp->data)) num_mon++;
-			else if (spec_ability(uwep,SPFX_WARN) && spec_dbon(uwep,mtmp,1)) num_mon++;
-		}
-	}
-	if (num_mon == 0) return;
-	/* num_mon is the # of monsters which could be warned against...
-	pick one at random... */
-	warned_of = rn2(num_mon)+1;
-	mtmp = fmon;
-	num_mon = warned_of;
-	do {
-		if (!canseemon(mtmp) && !(mtmp->mpeaceful) && !(mtmp->mtame)) {
-			if (Warning && (!spec_ability(uwep,SPFX_WARN) || !spec_dbon(uwep,mtmp,1))) num_mon--;
-			else if (Undead_warning && is_undead(mtmp->data)) num_mon--;
-			else if (spec_ability(uwep,SPFX_WARN) && spec_dbon(uwep,mtmp,1)) num_mon--;
-		}
-		if (num_mon > 0) mtmp = mtmp->nmon;
-	} while (num_mon > 0);
-	display_monster(mtmp->mx,mtmp->my,mtmp,1,0);
-	lastwarnlev = warnlevel;
-	lastwarntime = moves;
-	/*	warnlevel = 0;*/
-	return;
-}
-#endif /* 0 */
-
 /* check mtmp and water/lava for compatibility, 0 (survived), 1 (died) */
 int minliquid(struct monst *mtmp) {
 	boolean inpool, inlava, infountain;
