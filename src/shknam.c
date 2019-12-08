@@ -187,70 +187,59 @@ const struct shclass shtypes[] = {
 	{"second-hand bookstore", SCROLL_CLASS, 4, D_SHOP, {{90, SCROLL_CLASS}, {10, SPBOOK_CLASS}, {0, 0}}, shkbooks},
 	{"liquor emporium", POTION_CLASS, 4, D_SHOP, {{100, POTION_CLASS}, {0, 0}, {0, 0}}, shkliquors},
 	/* KMH -- no longer "antique" */
-	{
-		"weapons outlet",
-		WEAPON_CLASS,
-		20,
-		D_SHOP,
-		{{80, WEAPON_CLASS}, {6, -BULLET}, {3, -BULLET}, {1, -SILVER_BULLET}, {10, ARMOR_CLASS}, {0, 0}},
-		shkweapons},
+	{"weapons outlet", WEAPON_CLASS, 20, D_SHOP,
+	 {{80, WEAPON_CLASS}, {6, -BULLET}, {3, -BULLET}, {1, -SILVER_BULLET}, {10, ARMOR_CLASS}, {0, 0}},
+	 shkweapons},
 
 	// TODO, add back antique weapons outlet, but without firearms/etc. --ELR
 	/*
-	{
-		"antique weapons outlet", WEAPON_CLASS, 20, D_SHOP, {
-			{90, WEAPON_CLASS},
-			{10, ARMOR_CLASS}, {0, 0}
-		}, shkweapons
-	},
+	{"antique weapons outlet", WEAPON_CLASS, 20, D_SHOP,
+	 {{90, WEAPON_CLASS}, {10, ARMOR_CLASS}, {0, 0} },
+	 shkweapons},
 	*/
 
-	{
-		"delicatessen",
-		FOOD_CLASS,
-		4,
-		D_SHOP,
-		{{83, FOOD_CLASS}, {5, -POT_FRUIT_JUICE}, {4, -POT_BOOZE}, {5, -POT_WATER}, {3, -ICE_BOX}},
-		shkfoods},
-	{"jewelers", RING_CLASS, 4, D_SHOP, {{85, RING_CLASS}, {10, GEM_CLASS}, {5, AMULET_CLASS}, {0, 0}}, shkrings},
-	{"quality apparel and accessories", WAND_CLASS, 4, D_SHOP, {{90, WAND_CLASS}, {5, -LEATHER_GLOVES}, {5, -ELVEN_CLOAK}, {0, 0}}, shkwands},
-	{"hardware store", TOOL_CLASS, 4, D_SHOP, {{100, TOOL_CLASS}, {0, 0}}, shktools},
+	{"delicatessen", FOOD_CLASS, 4, D_SHOP,
+	 {{83, FOOD_CLASS}, {5, -POT_FRUIT_JUICE}, {4, -POT_BOOZE}, {5, -POT_WATER}, {3, -ICE_BOX}},
+	 shkfoods},
+
+	{"jewelers", RING_CLASS, 4, D_SHOP,
+	 {{85, RING_CLASS}, {10, GEM_CLASS}, {5, AMULET_CLASS}, {0, 0}},
+	 shkrings},
+
+	{"quality apparel and accessories", WAND_CLASS, 4, D_SHOP,
+	 {{90, WAND_CLASS}, {5, -LEATHER_GLOVES}, {5, -ELVEN_CLOAK}, {0, 0}},
+	 shkwands},
+
+	{"hardware store", TOOL_CLASS, 4, D_SHOP,
+	 {{100, TOOL_CLASS}, {0, 0}},
+	 shktools},
 	/* Actually shktools is ignored; the code specifically chooses a
 	 * random implementor name (along with candle shops having
 	 * random shopkeepers)
 	 */
+
 	/* STEPHEN WHITE'S NEW CODE */
-	{
-		"pet store",
-		FOOD_CLASS,
-		4,
-		D_SHOP,
-		{{67, -FIGURINE}, {5, -LEASH}, {10, -TRIPE_RATION}, {5, -SADDLE}, {10, -TIN_WHISTLE}, {3, -MAGIC_WHISTLE}},
-		shkpet},
+	{"pet store", FOOD_CLASS, 4, D_SHOP,
+	 {{67, -FIGURINE}, {5, -LEASH}, {10, -TRIPE_RATION}, {5, -SADDLE}, {10, -TIN_WHISTLE}, {3, -MAGIC_WHISTLE}},
+	 shkpet},
+
 	/* Robin Johnson -- 4% taken from pet store */
-	{
-		"frozen food store",
-		FOOD_CLASS,
-		4,
-		D_SHOP,
-		{{90, -ICE_BOX}, {10, -TIN},
-		 /* shopkeeper will pay for corpses, but they aren't generated */
-		 /* on the shop floor */
-		 {0, -CORPSE},
-		 {0, 0}},
-		shkfoods},
+	{"frozen food store", FOOD_CLASS, 4, D_SHOP,
+	 /* shopkeeper will pay for corpses, but they aren't generated */
+	 /* on the shop floor */
+	 {{90, -ICE_BOX}, {10, -TIN}, {0, -CORPSE}, {0, 0}},
+	 shkfoods},
+
 	{"rare books", SPBOOK_CLASS, 4, D_SHOP, {{90, SPBOOK_CLASS}, {10, SCROLL_CLASS}, {0, 0}}, shkbooks},
+
 	/* Shops below this point are "unique".  That is they must all have a
 	 * probability of zero.  They are only created via the special level
 	 * loader.
 	 */
-	{
-		"lighting store",
-		TOOL_CLASS,
-		0,
-		D_SHOP,
-		{{25, -WAX_CANDLE}, {35, -TALLOW_CANDLE}, {5, -TORCH}, {11, -BRASS_LANTERN}, {16, -OIL_LAMP}, {3, -MAGIC_LAMP}, {5, -MAGIC_CANDLE}},
-		shklight},
+	{"lighting store", TOOL_CLASS, 0, D_SHOP,
+	 {{23, -WAX_CANDLE}, {33, -TALLOW_CANDLE}, {5, -TORCH}, {10, -BRASS_LANTERN}, {15, -OIL_LAMP}, {3, -MAGIC_LAMP}, {6, -MAGIC_CANDLE}, {5, -POT_OIL}},
+	 shklight},
+
 	{"black market", RANDOM_CLASS, 0, D_SHOP, {{100, RANDOM_CLASS}, {0, 0}, {0, 0}}, shkblack},
 	{NULL, 0, 0, 0, {{0, 0}, {0, 0}, {0, 0}}, 0}};
 

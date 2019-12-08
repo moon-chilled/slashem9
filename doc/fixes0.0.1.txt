@@ -85,3 +85,4 @@ Changelist for slashem-next v0.0.1:
 - Bugfix: tripping over a cockatrice corpse while not wearing boots did not petrify the player (NetHack).
 - Bugfix: proper death messages when multiple delayed deaths are in play at once (NetHack).
 - Bugfix: when wearing the eyes of the overworld while trapped in a dust vortex, player got a message every turn about being blinded and then their vision clearing (NetHack).
+- Gameplay: lighting shops now stock oil (NetHack).
