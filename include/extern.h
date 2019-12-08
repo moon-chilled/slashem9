@@ -5,7 +5,11 @@
 #ifndef EXTERN_H
 #define EXTERN_H
 
+#if __STDC_VERSION__ >= 201112L
 #include <stdnoreturn.h>
+#else
+#define noreturn
+#endif
 
 #include "nhstr.h"
 

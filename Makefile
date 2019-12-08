@@ -4,7 +4,7 @@ BINDIR ?= $(PREFIX)/bin
 
 CFLAGS += -Iinclude -Isys/share/libtre -DDLBLIB -DWIZARD=\"$(shell whoami)\" -DSLASHEM_GIT_COMMIT_REV=\"$(shell git rev-parse --short HEAD)\"
 CFLAGS += -g3 -ggdb -O0
-CFLAGS += -std=c99 -D_POSIX_C_SOURCE=200809L -Wall -Werror
+CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Werror
 
 CFLAGS := $(CFLAGS) $(shell pkg-config --cflags ncursesw)
 ifeq ($(shell uname -s),Darwin)
@@ -47,6 +47,8 @@ src/slashem: $(SLASHEMOBJ)
 	$(CCLD) -o src/slashem $(SLASHEMOBJ) $(LDFLAGS)
 
 all: src/slashem dat/nhdat
+
+util/dgn_lex.o: util/dgn_yacc.o
 
 util/dgn_yacc.c: util/dgn_yacc.y
 	yacc -d util/dgn_yacc.y

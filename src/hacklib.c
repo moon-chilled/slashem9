@@ -392,7 +392,7 @@ void setrandom(void) {
 	memcpy(&rnbuf[32 + sizeof(int)], &tv.tv_usec, sizeof(int));
 #endif
 
-	memcpy(&rnbuf[63 - sizeof(malloc)], &malloc, sizeof(malloc));
+	memcpy(&rnbuf[63 - sizeof(void*)], (void*)malloc, sizeof(void*));
 
 	seed_good_random(rnbuf);
 }

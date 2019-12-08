@@ -2820,13 +2820,9 @@ static int wiz_migrate_mons(void) {
 }
 #endif
 
-static int
-	compare_commands(_cmd1, _cmd2)
-	/* a wrapper function for strcmp.  Can this be done more simply? */
-	void *_cmd1,
-	*_cmd2;
-{
-	struct ext_func_tab *cmd1 = _cmd1, *cmd2 = _cmd2;
+/* a wrapper function for strcmp.  Can this be done more simply? */
+static int compare_commands(const void *_cmd1, const void *_cmd2) {
+	const struct ext_func_tab *cmd1 = _cmd1, *cmd2 = _cmd2;
 
 	return strcmp(cmd1->ef_txt, cmd2->ef_txt);
 }
@@ -2837,8 +2833,7 @@ void commands_init(void) {
 	while (extcmdlist[count].ef_txt)
 		count++;
 
-	qsort(extcmdlist, count, sizeof(struct ext_func_tab),
-	      &compare_commands);
+	qsort(extcmdlist, count, sizeof(struct ext_func_tab), &compare_commands);
 
 	if (wizard) add_debug_extended_commands();
 	init_bind_list();   /* initialize all keyboard commands */
