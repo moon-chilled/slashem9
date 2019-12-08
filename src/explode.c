@@ -431,8 +431,7 @@ void do_explode(
 			nhscopyz(&str, "explosion");
 			generic = true;
 		}
-		if (flags.soundok)
-			You_hear(is_pool(x, y) ? "a muffled explosion." : "a blast.");
+		You_hear(is_pool(x, y) ? "a muffled explosion." : "a blast.");
 	}
 
 	if (dam)

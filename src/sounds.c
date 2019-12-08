@@ -37,7 +37,7 @@ void dosounds(void) {
 	int hallu, vx, vy;
 	struct monst *mtmp;
 
-	if (!flags.soundok || u.uswallow || Underwater) return;
+	if (Deaf || !flags.acoustics || u.uswallow || Underwater) return;
 
 	hallu = Hallucination ? 1 : 0;
 
@@ -84,41 +84,41 @@ void dosounds(void) {
 	}
 	if (level.flags.has_swamp && !rn2(200)) {
 		static const char *const swamp_msg[3] = {
-			"hear mosquitoes!",
-			"smell marsh gas!", /* so it's a smell...*/
-			"hear Donald Duck!",
+			"You hear mosquitoes!",
+			"You smell marsh gas!", /* so it's a smell...*/
+			"You hear Donald Duck!",
 		};
-		pline("You %s", swamp_msg[rn2(2) + hallu]);
+		pline(swamp_msg[rn2(2) + hallu]);
 		return;
 	}
 	if (level.flags.spooky && !rn2(200)) {
-		static const char *spooky_msg[24] = {
-			"hear screaming in the distance!",
-			"hear a faint whisper: \"Please leave your measurements for your custom-made coffin.\"",
-			"hear a door creak ominously.",
-			"hear hard breathing just a few steps behind you!",
-			"hear dragging footsteps coming closer!",
-			"hear anguished moaning and groaning coming out of the walls!",
-			"hear mad giggling directly behind you!",
-			"smell rotting corpses.",
-			"smell chloroform!",
-			"feel ice cold fingers stroking your neck.",
-			"feel a ghostly touch caressing your face.",
-			"feel somebody dancing on your grave.",
-			"feel something breathing down your neck.",
-			"feel as if the walls were closing in on you.",
-			"just stepped on something squishy.",
-			"hear a strong voice pronouncing: \"There can only be one!\"",
-			"hear a voice booming all around you: \"Warning: self-destruction sequence activated!\"",
-			"smell your mother-in-law's cooking!",
-			"smell horse dung.",
-			"hear someone shouting: \"Who ordered the burger?\"",
-			"can faintly hear the Twilight Zone theme.",
-			"hear an outraged customer complaining: \"I'll be back!\"",
-			"hear someone praising your valor!",
-			"hear someone singing: \"Jingle bells, jingle bells...\"",
+		static const char * const spooky_msg[24] = {
+			"You hear screaming in the distance!",
+			"You hear a faint whisper: \"Please leave your measurements for your custom-made coffin.\"",
+			"You hear a door creak ominously.",
+			"You hear hard breathing just a few steps behind you!",
+			"You hear dragging footsteps coming closer!",
+			"You hear anguished moaning and groaning coming out of the walls!",
+			"You hear mad giggling directly behind you!",
+			"You smell rotting corpses.",
+			"You smell chloroform!",
+			"You feel ice cold fingers stroking your neck.",
+			"You feel a ghostly touch caressing your face.",
+			"You feel somebody dancing on your grave.",
+			"You feel something breathing down your neck.",
+			"You feel as if the walls were closing in on you.",
+			"You just stepped on something squishy.",
+			"You hear a strong voice pronouncing: \"There can only be one!\"",
+			"You hear a voice booming all around you: \"Warning: self-destruction sequence activated!\"",
+			"You smell your mother-in-law's cooking!",
+			"You smell horse dung.",
+			"You hear someone shouting: \"Who ordered the burger?\"",
+			"You can faintly hear the Twilight Zone theme.",
+			"You hear an outraged customer complaining: \"I'll be back!\"",
+			"You hear someone praising your valor!",
+			"You hear someone singing: \"Jingle bells, jingle bells...\"",
 		};
-		pline("You %s", spooky_msg[rn2(15) + hallu * 9]);
+		pline(spooky_msg[rn2(15) + hallu * 9]);
 		return;
 	}
 	if (level.flags.has_vault && !rn2(200)) {
@@ -443,7 +443,7 @@ static int domonnoise(struct monst *mtmp) {
 	char verbuf[BUFSZ];
 
 	/* presumably nearness and sleep checks have already been made */
-	if (!flags.soundok) return 0;
+	if (Deaf) return 0;
 	if (is_silent(ptr)) return 0;
 
 	/* Make sure its your role's quest quardian; adjust if not */
@@ -883,15 +883,11 @@ static int domonnoise(struct monst *mtmp) {
 
 int dotalk(void) {
 	int result;
-	boolean save_soundok = flags.soundok;
-	flags.soundok = 1; /* always allow sounds while chatting */
 	result = dochat();
-	flags.soundok = save_soundok;
 	return result;
 }
 
-static int
-dochat(void) {
+static int dochat(void) {
 	struct monst *mtmp;
 	int tx, ty;
 	struct obj *otmp;
@@ -910,6 +906,10 @@ dochat(void) {
 	}
 	if (Underwater) {
 		pline("Your speech is unintelligible underwater.");
+		return 0;
+	}
+	if (Deaf) {
+		pline("How do you expect to hold a conversation when you cannot hear?");
 		return 0;
 	}
 

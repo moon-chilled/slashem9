@@ -272,10 +272,14 @@ void invault(void) {
 			return;
 		}
 		verbalize("I don't know you.");
+
 		umoney = money_cnt(invent);
-		if (!umoney && !hidden_gold())
-			verbalize("Please follow me.");
-		else {
+		if (!umoney && !hidden_gold()) {
+			if (Deaf)
+				pline("%s beckons for you to follow %s.", mhe(guard), mhim(guard));
+			else
+				verbalize("Please follow me.");
+		} else {
 			if (!umoney)
 				verbalize("You have hidden gold.");
 			verbalize("Most likely all your gold was stolen from this vault.");
@@ -437,17 +441,18 @@ int gd_move(struct monst *grd) {
 	if (egrd->fcend == 1) {
 		if (u_in_vault &&
 		    (u_carry_gold || um_dist(grd->mx, grd->my, 1))) {
-			if (egrd->warncnt == 3)
-				verbalize("I repeat, %sfollow me!",
-					  u_carry_gold ? (
-								 !umoney ?
-									 "drop that hidden gold and " :
-									 "drop that gold and ") :
-							 "");
+			if (egrd->warncnt == 3) {
+				if (!Deaf) 
+					verbalize("I repeat, %sfollow me!", u_carry_gold ?
+							(!umoney ? "drop that hidden gold and " : "drop that gold and ") : "");
+				else
+					pline("%s looks impatient.", Monnam(grd));
+			}
 			if (egrd->warncnt == 7) {
 				m = grd->mx;
 				n = grd->my;
-				verbalize("You've been warned, knave!");
+				if (Deaf)
+					verbalize("You've been warned, knave!");
 				mnexto(grd);
 				levl[m][n].typ = egrd->fakecorr[0].ftyp;
 				newsym(m, n);
@@ -477,7 +482,10 @@ int gd_move(struct monst *grd) {
 					      g_monnam(grd));
 				return -1;
 			} else {
-				verbalize("Well, begone.");
+				if (!Deaf)
+					verbalize("Well, begone.");
+				else
+					pline("%s seems glad to be rid of you.", Monnam(grd));
 				wallify_vault(grd);
 				egrd->gddone = 1;
 				goto cleanup;
@@ -503,10 +511,13 @@ int gd_move(struct monst *grd) {
 			}
 			if (egrd->warncnt < 6) {
 				egrd->warncnt = 6;
-				verbalize("Drop all your gold, scoundrel!");
+				if (Deaf)
+					pline("%s looks very impatient.", Monnam(grd));
+				else
+					verbalize("Drop all your gold, scoundrel!");
 				return 0;
 			} else {
-				verbalize("So be it, rogue!");
+				if (!Deaf) verbalize("So be it, rogue!");
 				grd->mpeaceful = 0;
 				return -1;
 			}
@@ -532,7 +543,7 @@ int gd_move(struct monst *grd) {
 		} else {
 			/* just for insurance... */
 			if (MON_AT(m, n) && m != grd->mx && n != grd->my) {
-				verbalize("Out of my way, scum!");
+				if (!Deaf) verbalize("Out of my way, scum!");
 				rloc(m_at(m, n), false);
 			}
 			remove_monster(grd->mx, grd->my);
@@ -557,7 +568,11 @@ int gd_move(struct monst *grd) {
 		}
 	}
 	if (um_dist(grd->mx, grd->my, 1) || egrd->gddone) {
-		if (!egrd->gddone && !rn2(10)) verbalize("Move along!");
+		if (!egrd->gddone && !rn2(10))
+			if (Deaf)
+				pline("%s looks impatient.", Monnam(grd));
+			else
+				verbalize("Move along!");
 		restfakecorr(grd);
 		return 0; /* didn't move */
 	}

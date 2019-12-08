@@ -361,6 +361,8 @@ nhstr bot2str(void) {
 
 	if (Blind)
 		add_colored_text_match(bot2_abbrev >= 2 ? "Bnd" : "Blind", "Blind", ret);
+	if (Deaf)
+		add_colored_text("Deaf", ret);
 	if (Stunned)
 		add_colored_text_match(bot2_abbrev >= 2 ? "Stn" : "Stun", "Stun", ret);
 	if (Hallucination)

@@ -4168,7 +4168,7 @@ int zap_over_floor(xchar x, xchar y, int type, boolean *shopdamage) {
 				else
 					Norep("The water freezes.");
 				newsym(x, y);
-			} else if (flags.soundok && !lava)
+			} else if (!Deaf && !lava)
 				You_hear("a crackling sound.");
 
 			if (x == u.ux && y == u.uy) {
@@ -4263,7 +4263,7 @@ int zap_over_floor(xchar x, xchar y, int type, boolean *shopdamage) {
 			} else if (sense_txt) {
 				pline("You %s", sense_txt);
 			} else if (hear_txt) {
-				if (flags.soundok) pline("You hear %s", hear_txt);
+				if (!Deaf) pline("You hear %s", hear_txt);
 			}
 			if (picking_at(x, y)) {
 				stop_occupation();

@@ -1222,6 +1222,7 @@ void enlightenment(int final) {
 		if (Stunned) you_are("stunned");
 		if (Confusion) you_are("confused");
 		if (Blinded) you_are("blinded");
+		if (Deaf) you_are("deaf");
 		if (Sick) {
 			if (u.usick_type & SICK_VOMITABLE)
 				you_are("sick from food poisoning");

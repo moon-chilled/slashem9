@@ -570,7 +570,7 @@ int mattacku(struct monst *mtmp) {
 			} else {
 				const char *from_nowhere;
 
-				if (flags.soundok) {
+				if (!Deaf) {
 					pline("Something %s!",
 					      makeplural(growl_sound(mtmp)));
 					from_nowhere = "";
@@ -1433,10 +1433,10 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 			hitmsg(mtmp, mattk);
 			if (!rn2(3)) {
 				if (mtmp->mcan) {
-					if (flags.soundok)
+					if (!Deaf)
 						You_hearf("a cough from %s!", mon_nam(mtmp));
 				} else {
-					if (flags.soundok)
+					if (!Deaf)
 						You_hearf("%s hissing!", s_suffix(mon_nam(mtmp)));
 					if (!rn2(10) ||
 					    (flags.moonphase == NEW_MOON && !have_lizard())) {
@@ -1671,7 +1671,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 				dmg = 0;
 			} else {
 				if (Role_if(PM_HEALER)) {
-					if (flags.soundok && !(moves % 5))
+					if (!Deaf && !(moves % 5))
 						verbalize("Doc, I can't help you unless you cooperate.");
 					dmg = 0;
 				} else
@@ -1682,7 +1682,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 			hitmsg(mtmp, mattk);
 			if (!night() && mdat == &mons[PM_GREMLIN]) break;
 			if (!mtmp->mcan && !rn2(10)) {
-				if (flags.soundok) {
+				if (!Deaf) {
 					if (Blind)
 						You_hear("laughter.");
 					else

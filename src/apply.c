@@ -190,8 +190,11 @@ static int use_stethoscope(struct obj *obj) {
 	boolean interference = (u.uswallow && is_whirly(u.ustuck->data) &&
 				!rn2(Role_if(PM_HEALER) ? 10 : 3));
 
-	if (nohands(youmonst.data)) {	     /* should also check for no ears and/or deaf */
+	if (nohands(youmonst.data)) {
 		pline("You have no hands!"); /* not `body_part(HAND)' */
+		return 0;
+	} else if (Deaf) {
+		pline("You can't hear anything!");
 		return 0;
 	} else if (!freehand()) {
 		pline("You have no free %s.", body_part(HAND));

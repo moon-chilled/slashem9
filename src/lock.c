@@ -1061,7 +1061,7 @@ boolean doorlock(struct obj *otmp, int x, int y) {
 					else if (flags.verbose) {
 						if (cansee(x, y))
 							pline("KABOOM!!  You see a door explode.");
-						else if (flags.soundok)
+						else
 							You_hear("a distant explosion.");
 					}
 					door->doormask = D_NODOOR;
@@ -1074,7 +1074,7 @@ boolean doorlock(struct obj *otmp, int x, int y) {
 				if (flags.verbose) {
 					if (cansee(x, y))
 						pline("The door crashes open!");
-					else if (flags.soundok)
+					else
 						You_hear("a crashing sound.");
 				}
 				unblock_point(x, y);

@@ -1043,7 +1043,7 @@ void watch_dig(struct monst *mtmp, xchar x, xchar y, boolean zap) {
 		if (mtmp) {
 			if (zap || context.digging.warned) {
 				verbalize("Halt, vandal!  You're under arrest!");
-				angry_guards(!(flags.soundok));
+				angry_guards(Deaf);
 			} else {
 				const char *str;
 
@@ -1104,7 +1104,7 @@ boolean mdig_tunnel(struct monst *mtmp) {
 
 	if (IS_WALL(here->typ)) {
 		/* KMH -- Okay on arboreal levels (room walls are still stone) */
-		if (flags.soundok && flags.verbose && !rn2(5))
+		if (flags.verbose && !rn2(5))
 			/* KMH -- Okay on arboreal levels (room walls are still stone) */
 			You_hear("crashing rock.");
 		if (*in_rooms(mtmp->mx, mtmp->my, SHOPBASE))

@@ -1006,8 +1006,9 @@ static void openone(int zx, int zy, void *num) {
 			else
 				Norep("You %s an explosion!",
 				      cansee(zx, zy) ? "see" :
-						       (flags.soundok ? "hear" :
-									"feel the shock of"));
+				      Deaf ? "feel the shock of" :
+				      "hear");
+
 			wake_nearto(zx, zy, 11 * 11);
 			levl[zx][zy].doormask = D_NODOOR;
 		} else

@@ -1333,7 +1333,11 @@ no_opener:
 
 // called when waking up after fainting
 int Hear_again(void) {
-	flags.soundok = 1;
+	// Chance of deafness going away while fainted/sleeping/etc.
+	if (!rn2(2)) {
+		set_itimeout(&HDeaf, 0);
+	}
+
 	return 0;
 }
 
@@ -1352,6 +1356,8 @@ static int rottenfood(struct obj *obj) {
 		if (!Blind) pline("Your %s", "vision quickly clears.");
 	} else if (!rn2(3)) {
 		const char *what, *where;
+		int duration = rnd(10);
+
 		if (!Blind) {
 			what = "goes";
 			where = "dark";
@@ -1363,8 +1369,8 @@ static int rottenfood(struct obj *obj) {
 			where = u.usteed ? "saddle" : surface(u.ux, u.uy);
 		}
 		pline("The world spins and %s %s.", what, where);
-		flags.soundok = 0;
-		nomul(-rnd(10));
+		incr_itimeout(&HDeaf, duration);
+		nomul(-duration);
 		nomovemsg = "You are conscious again.";
 		afternmv = Hear_again;
 		return 1;
@@ -2640,17 +2646,6 @@ void reset_faint(void) {
 	if (is_fainted()) nomul(0);
 }
 
-#if 0
-void sync_hunger(void) {
-	if(is_fainted()) {
-		flags.soundok = 0;
-		nomul(-10+(u.uhunger/10));
-		nomovemsg = "You regain consciousness.";
-		afternmv = unfaint;
-	}
-}
-#endif
-
 // compute and comment on your (new?) hunger status
 void newuhs(boolean incr) {
 	unsigned newhs;
@@ -2703,11 +2698,13 @@ void newuhs(boolean incr) {
 		if (is_fainted()) newhs = FAINTED;
 		if (u.uhs <= WEAK || rn2(20 - u.uhunger / 10) >= 19) {
 			if (!is_fainted() && multi >= 0 /* %% */) {
+				int duration = 10 - (u.uhunger / 10);
+
 				/* stop what you're doing, then faint */
 				stop_occupation();
 				pline("You faint from lack of food.");
-				flags.soundok = 0;
-				nomul(-10 + (u.uhunger / 10));
+				incr_itimeout(&HDeaf, duration);
+				nomul(-duration);
 				nomovemsg = "You regain consciousness.";
 				afternmv = unfaint;
 				newhs = FAINTED;

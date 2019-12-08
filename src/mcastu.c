@@ -62,7 +62,7 @@ static void cursetxt(struct monst *mtmp, boolean undirected) {
 
 		pline("%s points %s.", Monnam(mtmp), point_msg);
 	} else if ((!(moves % 4) || !rn2(4))) {
-		if (flags.soundok) Norep("You hear a mumbled curse.");
+		if (!Deaf) Norep("You hear a mumbled curse.");
 	}
 }
 
@@ -273,89 +273,87 @@ int castmu(struct monst *mtmp, struct attack *mattk, boolean thinks_it_foundyou,
 	if (chance > 100) chance = 100;
 	if (chance < 0) chance = 0;
 
-#if 0
-	if(rn2(ml*10) < (mtmp->mconf ? 100 : 20)) {	/* fumbled attack */
-#else
 	if (mtmp->mconf || rnd(100) > chance) { /* fumbled attack */
-#endif
-	if (canseemon(mtmp) && flags.soundok)
-		pline("The air crackles around %s.", mon_nam(mtmp));
-	return 0;
-}
-if (canspotmon(mtmp) || !is_undirected_spell(mattk->adtyp, spellnum)) {
-	pline("%s casts a spell%s!",
-	      canspotmon(mtmp) ? Monnam(mtmp) : "Something",
-	      is_undirected_spell(mattk->adtyp, spellnum) ? "" :
-							    (Invisible && !perceives(mtmp->data) &&
-							     (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
-							    " at a spot near you" :
-							    (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
-							    " at your displaced image" :
-							    " at you");
-}
+		if (canseemon(mtmp) && !Deaf)
+			pline("The air crackles around %s.", mon_nam(mtmp));
+		return 0;
+	}
 
-/*
+	if (canspotmon(mtmp) || !is_undirected_spell(mattk->adtyp, spellnum)) {
+		pline("%s casts a spell%s!",
+				canspotmon(mtmp) ? Monnam(mtmp) : "Something",
+				is_undirected_spell(mattk->adtyp, spellnum) ? "" :
+				(Invisible && !perceives(mtmp->data) &&
+				 (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
+				" at a spot near you" :
+				(Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
+				" at your displaced image" :
+				" at you");
+	}
+
+	/*
 	 *	As these are spells, the damage is related to the level
 	 *	of the monster casting the spell.
 	 */
-if (!foundyou) {
-	dmg = 0;
-	if (mattk->adtyp != AD_SPEL && mattk->adtyp != AD_CLRC) {
-		impossible(
-			"%s casting non-hand-to-hand version of hand-to-hand spell %d?",
-			Monnam(mtmp), mattk->adtyp);
-		return 0;
+	if (!foundyou) {
+		dmg = 0;
+		if (mattk->adtyp != AD_SPEL && mattk->adtyp != AD_CLRC) {
+			impossible(
+					"%s casting non-hand-to-hand version of hand-to-hand spell %d?",
+					Monnam(mtmp), mattk->adtyp);
+			return 0;
+		}
+	} else if (mattk->damd) {
+		dmg = d((int)((ml / 2) + mattk->damn), (int)mattk->damd);
+	} else {
+		dmg = d((int)((ml / 2) + 1), 6);
 	}
-} else if (mattk->damd)
-	dmg = d((int)((ml / 2) + mattk->damn), (int)mattk->damd);
-else
-	dmg = d((int)((ml / 2) + 1), 6);
-if (Half_spell_damage) dmg = (dmg + 1) / 2;
+	if (Half_spell_damage) dmg = (dmg + 1) / 2;
 
-ret = 1;
+	ret = 1;
 
-switch (mattk->adtyp) {
-	case AD_FIRE:
-		pline("You're enveloped in flames.");
-		if (Fire_resistance) {
-			shieldeff(u.ux, u.uy);
-			pline("But you resist the effects.");
-			dmg = 0;
-		}
-		if (Slimed) {
-			pline("The slime is burned away!");
-			Slimed = 0;
-		}
-		burn_away_slime();
-		break;
-	case AD_COLD:
-		pline("You're covered in frost.");
-		if (Cold_resistance) {
-			shieldeff(u.ux, u.uy);
-			pline("But you resist the effects.");
-			dmg = 0;
-		}
-		break;
-	case AD_MAGM:
-		pline("You are hit by a shower of missiles!");
-		if (Antimagic) {
-			shieldeff(u.ux, u.uy);
-			pline("The missiles bounce off!");
-			dmg = 0;
-		}
-		break;
-	case AD_SPEL:	/* wizard spell */
-	case AD_CLRC: { /* clerical spell */
-		if (mattk->adtyp == AD_SPEL)
-			cast_wizard_spell(mtmp, dmg, spellnum);
-		else
-			cast_cleric_spell(mtmp, dmg, spellnum);
-		dmg = 0; /* done by the spell casting functions */
-		break;
+	switch (mattk->adtyp) {
+		case AD_FIRE:
+			pline("You're enveloped in flames.");
+			if (Fire_resistance) {
+				shieldeff(u.ux, u.uy);
+				pline("But you resist the effects.");
+				dmg = 0;
+			}
+			if (Slimed) {
+				pline("The slime is burned away!");
+				Slimed = 0;
+			}
+			burn_away_slime();
+			break;
+		case AD_COLD:
+			pline("You're covered in frost.");
+			if (Cold_resistance) {
+				shieldeff(u.ux, u.uy);
+				pline("But you resist the effects.");
+				dmg = 0;
+			}
+			break;
+		case AD_MAGM:
+			pline("You are hit by a shower of missiles!");
+			if (Antimagic) {
+				shieldeff(u.ux, u.uy);
+				pline("The missiles bounce off!");
+				dmg = 0;
+			}
+			break;
+		case AD_SPEL:	/* wizard spell */
+		case AD_CLRC: { /* clerical spell */
+				      if (mattk->adtyp == AD_SPEL)
+					      cast_wizard_spell(mtmp, dmg, spellnum);
+				      else
+					      cast_cleric_spell(mtmp, dmg, spellnum);
+				      dmg = 0; /* done by the spell casting functions */
+				      break;
+			      }
 	}
-}
-if (dmg) mdamageu(mtmp, dmg);
-return ret;
+	if (dmg) mdamageu(mtmp, dmg);
+	return ret;
 }
 
 /* monster wizard and cleric spellcasting functions

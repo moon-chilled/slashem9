@@ -21,7 +21,7 @@ boolean mb_trapped(struct monst *mtmp) {
 	if (flags.verbose) {
 		if (cansee(mtmp->mx, mtmp->my))
 			pline("KABOOM!!  You see a door explode.");
-		else if (flags.soundok)
+		else if (!Deaf)
 			You_hear("a distant explosion.");
 	}
 	wake_nearto(mtmp->mx, mtmp->my, 7 * 7);
@@ -48,7 +48,7 @@ static void watch_on_duty(struct monst *mtmp) {
 				pline("%s yells:", Amonnam(mtmp));
 				if (levl[x][y].looted & D_WARNED) {
 					verbalize("Halt, thief!  You're under arrest!");
-					angry_guards(!(flags.soundok));
+					angry_guards(!(!Deaf));
 				} else {
 					int i;
 					verbalize("Hey, stop picking that lock!");
@@ -664,7 +664,7 @@ int m_move(struct monst *mtmp, int after) {
 
 #ifdef MAIL
 	if (ptr == &mons[PM_MAIL_DAEMON]) {
-		if (flags.soundok && canseemon(mtmp))
+		if (!Deaf && canseemon(mtmp))
 			verbalize("I'm late!");
 		mongone(mtmp);
 		return 2;
@@ -1040,7 +1040,7 @@ postmov:
 						if (flags.verbose) {
 							if (canseeit)
 								pline("You see a door unlock and open.");
-							else if (flags.soundok)
+							else if (!Deaf)
 								You_hear("a door unlock and open.");
 						}
 						here->doormask = D_ISOPEN;
@@ -1057,7 +1057,7 @@ postmov:
 						if (flags.verbose) {
 							if (canseeit)
 								pline("You see a door open.");
-							else if (flags.soundok)
+							else if (!Deaf)
 								You_hear("a door open.");
 						}
 						here->doormask = D_ISOPEN;
@@ -1080,7 +1080,7 @@ postmov:
 						if (flags.verbose) {
 							if (canseeit)
 								pline("You see a door crash open.");
-							else if (flags.soundok)
+							else if (!Deaf)
 								You_hear("a door crash open.");
 						}
 						if (here->doormask & D_LOCKED && !rn2(2))

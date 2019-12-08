@@ -58,7 +58,7 @@ static char *mon_nam_too(char *outbuf, struct monst *mon, struct monst *other_mo
 static void noises(struct monst *magr, struct attack *mattk) {
 	boolean farq = (distu(magr->mx, magr->my) > 15);
 
-	if (flags.soundok && (farq != far_noise || moves - noisetime > 10)) {
+	if (!Deaf && (farq != far_noise || moves - noisetime > 10)) {
 		far_noise = farq;
 		noisetime = moves;
 		You_hearf("%s%s.",
@@ -310,7 +310,7 @@ int mattackm(struct monst *magr, struct monst *mdef) {
 						      mon_nam(mdef));
 					else
 						pline("%s points and curses at something.", buf);
-				} else if (flags.soundok)
+				} else if (!Deaf)
 					Norep("You hear a mumbled curse.");
 				break;
 
@@ -450,7 +450,7 @@ static int breamm(struct monst *magr, struct monst *mdef, struct attack *mattk) 
 
 	if (linedup(mdef->mx, mdef->my, magr->mx, magr->my)) {
 		if (magr->mcan) {
-			if (flags.soundok) {
+			if (!Deaf) {
 				if (canseemon(magr))
 					pline("%s coughs.", Monnam(magr));
 				else
@@ -483,7 +483,7 @@ static int spitmm(struct monst *magr, struct monst *mdef, struct attack *mattk) 
 	int mhp;
 
 	if (magr->mcan) {
-		if (flags.soundok) {
+		if (!Deaf) {
 			if (canseemon(magr))
 				pline("A dry rattle comes from %s throat.",
 				      s_suffix(mon_nam(magr)));
@@ -979,7 +979,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 					pline("You have a queasy feeling for a moment, then it passes.");
 				return MM_AGR_DIED;
 			}
-			if (flags.verbose && flags.soundok) verbalize("Burrrrp!");
+			if (flags.verbose && !Deaf) verbalize("Burrrrp!");
 			tmp = mdef->mhp;
 			/* Use up amulet of life saving */
 			if (!!(obj = mlifesaver(mdef))) m_useup(mdef, obj);
@@ -1508,7 +1508,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 								       0 :
 								       MM_AGR_DIED));
 				}
-				if (flags.soundok) {
+				if (!Deaf) {
 					if (!vis)
 						You_hear("laughter.");
 					else

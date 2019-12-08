@@ -979,7 +979,7 @@ int dokick(void) {
 
 			if (Levitation) goto dumb;
 			if (rn2(5)) {
-				if (flags.soundok)
+				if (!Deaf)
 					pline("Klunk!  The pipes vibrate noisily.");
 				else
 					pline("Klunk!");

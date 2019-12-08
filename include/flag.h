@@ -15,6 +15,7 @@
  */
 
 struct flag {
+	bool acoustics; // allow dungeon sound messages
 	bool autodig; /* MRKR: Automatically dig */
 	bool beginner;
 #ifdef MAIL
@@ -62,7 +63,6 @@ struct flag {
 	bool showweight;    /* show weight on status line */
 	bool silent;	    /* whether the bell rings or not */
 	bool sortpack;	    /* sorted inventory */
-	bool soundok;	    /* ok to tell about sounds heard */
 	bool sparkle;	    /* show "resisting" special FX (Scott Bigham) */
 	bool standout;	    /* use standout for --More-- */
 	bool time;	    /* display elapsed 'time' */

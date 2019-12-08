@@ -1698,7 +1698,7 @@ int mintrap(struct monst *mtmp) {
 						      Monnam(mtmp), a_your[trap->madeby_u]);
 						seetrap(trap);
 					} else {
-						if ((mptr == &mons[PM_OWLBEAR] || mptr == &mons[PM_BUGBEAR]) && flags.soundok)
+						if ((mptr == &mons[PM_OWLBEAR] || mptr == &mons[PM_BUGBEAR]) && !Deaf)
 							You_hear("the roaring of an angry bear!");
 					}
 				}
@@ -2439,8 +2439,14 @@ static void domagictrap(void) {
 			if (!Blind) pline("Your vision quickly clears.");
 		} else if (!Blind) {
 			pline("You see a flash of light!");
-		} else
+		} else if (!Deaf) {
 			You_hear("a deafening roar!");
+		} else {
+			pline("You feel a jarring vibration!");
+		}
+
+		incr_itimeout(&HDeaf, rn1(20, 30));
+
 		while (cnt--)
 			makemon(NULL, u.ux, u.uy, NO_MM_FLAGS);
 	} else

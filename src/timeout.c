@@ -315,6 +315,11 @@ void nh_timeout(void) {
 					make_blinded(0L, true);
 					stop_occupation();
 					break;
+				case DEAF:
+					if (!Deaf)
+						pline("You can hear again.");
+					stop_occupation();
+					break;
 				case INVIS:
 					newsym(u.ux, u.uy);
 					if (!Invis && !BInvis && !Blind) {
@@ -388,14 +393,14 @@ void nh_timeout(void) {
 	run_timers();
 }
 
-void fall_asleep(int how_long, boolean wakeup_msg) {
+void fall_asleep(int how_long, bool wakeup_msg) {
 	stop_occupation();
 	nomul(how_long);
 	/* generally don't notice sounds while sleeping */
 	if (wakeup_msg && multi == how_long) {
 		/* caller can follow with a direct call to Hear_again() if
 		   there's a need to override this when wakeup_msg is true */
-		flags.soundok = 0;
+		incr_itimeout(&HDeaf, how_long);
 		afternmv = Hear_again; /* this won't give any messages */
 	}
 	/* early wakeup from combat won't be possible until next monster turn */
@@ -807,7 +812,7 @@ void hatch_egg(void *arg, long timeout) {
 					      siblings ? "Their" : "Its",
 					      flags.female ? "mommy" : "daddy",
 					      egg->spe ? "." : "?");
-				} else if (mon->data->mlet == S_DRAGON) {
+				} else if (mon->data->mlet == S_DRAGON && !Deaf) {
 					verbalize("Gleep!"); /* Mything eggs :-) */
 				}
 				break;
@@ -1593,7 +1598,9 @@ void do_storms(void) {
 
 	if (levl[u.ux][u.uy].typ == CLOUD) {
 		/* inside a cloud during a thunder storm is deafening */
+		/* Even if deaf, we sense the thunder's vibrations */
 		pline("Kaboom!!!  Boom!!  Boom!!");
+		incr_itimeout(&HDeaf, rn1(20, 30));
 		if (!u.uinvulnerable) {
 			stop_occupation();
 			nomul(-3);

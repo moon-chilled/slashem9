@@ -468,8 +468,10 @@ void resurrect(void) {
 		mtmp->msleeping = mtmp->mpeaceful = false;
 		mtmp->mtame = 0;
 		set_malign(mtmp);
-		pline("A voice booms out...");
-		verbalize("So thou thought thou couldst %s me, fool.", verb);
+		if (!Deaf) {
+			pline("A voice booms out...");
+			verbalize("So thou thought thou couldst %s me, fool.", verb);
+		}
 	}
 }
 
@@ -555,9 +557,10 @@ const char *const random_malediction[] = {
 
 /* Insult or intimidate the player */
 void cuss(struct monst *mtmp) {
+	if (Deaf) return;
 	if (mtmp->iswiz) {
 		if (!rn2(5)) /* typical bad guy action */
-			pline("%s laughs fiendishly.", Monnam(mtmp));
+			hear("%s laughs fiendishly.", Monnam(mtmp));
 		else if (u.uhave.amulet && !rn2(SIZE(random_insult)))
 			verbalize("Relinquish the amulet, %s!",
 				  random_insult[rn2(SIZE(random_insult))]);
@@ -579,7 +582,7 @@ void cuss(struct monst *mtmp) {
 			  QT_ANGELIC);
 	} else {
 		if (!rn2(5))
-			pline("%s casts aspersions on your ancestry.", Monnam(mtmp));
+			hear("%s casts aspersions on your ancestry.", Monnam(mtmp));
 		else
 			com_pager(rn2(QTN_DEMONIC) + QT_DEMONIC);
 	}

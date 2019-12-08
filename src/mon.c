@@ -746,7 +746,7 @@ int meatmetal(struct monst *mtmp) {
 				if (cansee(mtmp->mx, mtmp->my) && flags.verbose)
 					pline("%s eats %s!", Monnam(mtmp),
 					      distant_name(otmp, doname));
-				else if (flags.soundok && flags.verbose)
+				else if (!Deaf && flags.verbose)
 					You_hear("a crunching sound.");
 				mtmp->meating = otmp->owt / 2 + 1;
 				/* Heal up to the object's weight in hp */
@@ -815,7 +815,7 @@ void meatcorpse(struct monst *mtmp) {
 			if (cansee(mtmp->mx, mtmp->my) && flags.verbose)
 				pline("%s eats %s!", Monnam(mtmp),
 				      distant_name(otmp, doname));
-			else if (flags.soundok && flags.verbose)
+			else if (!Deaf && flags.verbose)
 				pline("You hear an awful gobbling noise!");
 			mtmp->meating = 2;
 			delobj(otmp);
@@ -851,7 +851,7 @@ int meatobj(struct monst *mtmp) {
 			if (cansee(mtmp->mx, mtmp->my) && flags.verbose)
 				pline("%s eats %s!", Monnam(mtmp),
 				      distant_name(otmp, doname));
-			else if (flags.soundok && flags.verbose)
+			else if (!Deaf && flags.verbose)
 				You_hear("a slurping sound.");
 			/* Heal up to the object's weight in hp */
 			if (mtmp->mhp < mtmp->mhpmax) {
@@ -908,7 +908,7 @@ int meatobj(struct monst *mtmp) {
 	if (ecount > 0) {
 		if (cansee(mtmp->mx, mtmp->my) && flags.verbose && buf[0])
 			pline("%s", buf);
-		else if (flags.soundok && flags.verbose)
+		else if (!Deaf && flags.verbose)
 			You_hearf("%s slurping sound%s.",
 				  ecount == 1 ? "a" : "several",
 				  ecount == 1 ? "" : "s");
@@ -1591,7 +1591,7 @@ boolean corpse_chance(struct monst *mon, struct monst *magr, boolean was_swallow
 					if (Half_physical_damage) tmp = (tmp + 1) / 2;
 					losehp(tmp, nhs2cstr_tmp(killer.name), KILLED_BY_AN);
 				} else {
-					if (flags.soundok) You_hear("an explosion.");
+					if (!Deaf) You_hear("an explosion.");
 					magr->mhp -= tmp;
 					if (magr->mhp < 1) mondied(magr);
 					if (magr->mhp < 1) { /* maybe lifesaved */
@@ -2115,7 +2115,7 @@ void poisoned(const char *string, int typ, const char *pname, int fatal) {
 /* assumes reason for response has been tested, and response _must_ be made */
 void m_respond(struct monst *mtmp) {
 	if (mtmp->data->msound == MS_SHRIEK) {
-		if (flags.soundok) {
+		if (!Deaf) {
 			pline("%s shrieks.", Monnam(mtmp));
 			stop_occupation();
 		}
@@ -2160,7 +2160,7 @@ void setmangry(struct monst *mtmp) {
 	if (couldsee(mtmp->mx, mtmp->my)) {
 		if (humanoid(mtmp->data) || mtmp->isshk || mtmp->isgd)
 			pline("%s gets angry!", Monnam(mtmp));
-		else if (flags.verbose && flags.soundok)
+		else if (flags.verbose && !Deaf)
 			growl(mtmp);
 	}
 
@@ -2832,7 +2832,7 @@ boolean angry_guards(boolean silent) {
 				else if (!Blind)
 					pline("You see %sangry guard%s approaching!",
 					      sct == 1 ? "an " : "", sct > 1 ? "s" : "");
-			} else if (flags.soundok)
+			} else if (!Deaf)
 				You_hear("the shrill sound of a guard's whistle.");
 		}
 		return true;

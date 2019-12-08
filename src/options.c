@@ -36,6 +36,7 @@ static struct Bool_Opt {
 	bool *addr, initvalue;
 	int optflags;
 } boolopt[] = {
+	{"acoustics", &flags.acoustics, true, SET_IN_GAME},
 	{"ascii_map", &iflags.wc_ascii_map, !PREFER_TILED, SET_IN_GAME}, /*WC*/
 	{"autodig", &flags.autodig, false, SET_IN_GAME},
 	{"autopickup", &flags.pickup, true, SET_IN_GAME},
@@ -139,7 +140,6 @@ static struct Bool_Opt {
 	{"silent", &flags.silent, true, SET_IN_GAME},
 	{"softkeyboard", &iflags.wc2_softkeyboard, false, SET_IN_FILE},
 	{"sortpack", &flags.sortpack, true, SET_IN_GAME},
-	{"sound", &flags.soundok, true, SET_IN_GAME},
 	{"sparkle", &flags.sparkle, true, SET_IN_GAME},
 	{"standout", &flags.standout, false, SET_IN_GAME},
 	{"statuscolors", &iflags.use_status_colors, true, SET_IN_GAME},
@@ -174,27 +174,18 @@ static struct Comp_Opt {
 			 * a different format */
 	int optflags;
 } compopt[] = {
-	{"align", "your starting alignment (lawful, neutral, or chaotic)",
-	 8, DISP_IN_GAME},
+	{"align", "your starting alignment (lawful, neutral, or chaotic)", 8, DISP_IN_GAME},
 	{"align_message", "message window alignment", 20, DISP_IN_GAME}, /*WC*/
 	{"align_status", "status window alignment", 20, DISP_IN_GAME},	 /*WC*/
 	{"altkeyhandler", "alternate key handler", 20, DISP_IN_GAME},
-	{"catname", "the name of your (first) cat (e.g., catname:Tabby)",
-	 PL_PSIZ, DISP_IN_GAME},
-	{"disclose", "the kinds of information to disclose at end of game",
-	 sizeof(flags.end_disclose) * 2,
-	 SET_IN_GAME},
-	{"dogname", "the name of your (first) dog (e.g., dogname:Fang)",
-	 PL_PSIZ, DISP_IN_GAME},
-	{"dungeon", "the symbols to use in drawing the dungeon map",
-	 MAXDCHARS + 1, SET_IN_FILE},
-	{"effects", "the symbols to use in drawing special effects",
-	 MAXECHARS + 1, SET_IN_FILE},
+	{"catname", "the name of your (first) cat (e.g., catname:Tabby)", PL_PSIZ, DISP_IN_GAME},
+	{"disclose", "the kinds of information to disclose at end of game", sizeof(flags.end_disclose) * 2, SET_IN_GAME},
+	{"dogname", "the name of your (first) dog (e.g., dogname:Fang)", PL_PSIZ, DISP_IN_GAME},
+	{"dungeon", "the symbols to use in drawing the dungeon map", MAXDCHARS + 1, SET_IN_FILE},
+	{"effects", "the symbols to use in drawing special effects", MAXECHARS + 1, SET_IN_FILE},
 	{"font_map", "the font to use in the map window", 40, DISP_IN_GAME}, /*WC*/
 	{"font_menu", "the font to use in menus", 40, DISP_IN_GAME},	     /*WC*/
-	{
-		"font_message", "the font to use in the message window",
-		40, DISP_IN_GAME},						 /*WC*/
+	{"font_message", "the font to use in the message window", 40, DISP_IN_GAME}, /*WC*/
 	{"font_size_map", "the size of the map font", 20, DISP_IN_GAME},	 /*WC*/
 	{"font_size_menu", "the size of the menu font", 20, DISP_IN_GAME},	 /*WC*/
 	{"font_size_message", "the size of the message font", 20, DISP_IN_GAME}, /*WC*/
@@ -202,104 +193,69 @@ static struct Comp_Opt {
 	{"font_size_text", "the size of the text font", 20, DISP_IN_GAME},	 /*WC*/
 	{"font_status", "the font to use in status window", 40, DISP_IN_GAME},	 /*WC*/
 	{"font_text", "the font to use in text windows", 40, DISP_IN_GAME},	 /*WC*/
-	{
-		"fruit", "the name of a fruit you enjoy eating",
-		PL_FSIZ, SET_IN_GAME},
-	{"gender", "your starting gender (male or female)",
-	 8, DISP_IN_GAME},
-	{"ghoulname", "the name of your (first) ghoul (e.g., ghoulname:Casper)",
-	 PL_PSIZ, DISP_IN_GAME},
+	{"fruit", "the name of a fruit you enjoy eating", PL_FSIZ, SET_IN_GAME}, {"gender", "your starting gender (male or female)", 8, DISP_IN_GAME},
+	{"ghoulname", "the name of your (first) ghoul (e.g., ghoulname:Casper)", PL_PSIZ, DISP_IN_GAME},
 	{"graphics", "Graphical mode", sizeof("UTF-8 (compatible)"), SET_IN_GAME},
-	{"horsename", "the name of your (first) horse (e.g., horsename:Silver)",
-	 PL_PSIZ, DISP_IN_GAME},
+	{"horsename", "the name of your (first) horse (e.g., horsename:Silver)", PL_PSIZ, DISP_IN_GAME},
 	{"map_mode", "map display mode under Windows", 20, DISP_IN_GAME}, /*WC*/
 	{"menucolor", "set menu colors", PL_PSIZ, SET_IN_FILE},
-	{"menustyle", "user interface for object selection",
-	 MENUTYPELEN, SET_IN_GAME},
+	{"menustyle", "user interface for object selection", MENUTYPELEN, SET_IN_GAME},
 	{"menu_deselect_all", "deselect all items in a menu", 4, SET_IN_FILE},
-	{"menu_deselect_page", "deselect all items on this page of a menu",
-	 4, SET_IN_FILE},
-	{"menu_first_page", "jump to the first page in a menu",
-	 4, SET_IN_FILE},
+	{"menu_deselect_page", "deselect all items on this page of a menu", 4, SET_IN_FILE},
+	{"menu_first_page", "jump to the first page in a menu", 4, SET_IN_FILE},
 	{"menu_headings", "bold, inverse, or underline headings", 9, SET_IN_GAME},
 	{"menu_invert_all", "invert all items in a menu", 4, SET_IN_FILE},
-	{"menu_invert_page", "invert all items on this page of a menu",
-	 4, SET_IN_FILE},
+	{"menu_invert_page", "invert all items on this page of a menu", 4, SET_IN_FILE},
 	{"menu_last_page", "jump to the last page in a menu", 4, SET_IN_FILE},
 	{"menu_next_page", "goto the next menu page", 4, SET_IN_FILE},
 	{"menu_previous_page", "goto the previous menu page", 4, SET_IN_FILE},
 	{"menu_search", "search for a menu item", 4, SET_IN_FILE},
 	{"menu_select_all", "select all items in a menu", 4, SET_IN_FILE},
-	{"menu_select_page", "select all items on this page of a menu",
-	 4, SET_IN_FILE},
-	{"monsters", "the symbols to use for monsters",
-	 MAXMCLASSES, SET_IN_FILE},
-	{"msghistory", "number of top line messages to save",
-	 5, DISP_IN_GAME},
+	{"menu_select_page", "select all items on this page of a menu", 4, SET_IN_FILE},
+	{"monsters", "the symbols to use for monsters", MAXMCLASSES, SET_IN_FILE},
+	{"msghistory", "number of top line messages to save", 5, DISP_IN_GAME},
 #ifdef TTY_GRAPHICS
 	{"msg_window", "the type of message window required", 1, SET_IN_GAME},
 #else
 	{"msg_window", "the type of message window required", 1, SET_IN_FILE},
 #endif
-	{"name", "your character's name (e.g., name:Merlin-W)",
-	 PL_NSIZ, DISP_IN_GAME},
+	{"name", "your character's name (e.g., name:Merlin-W)", PL_NSIZ, DISP_IN_GAME},
 	{"number_pad", "use the number pad", 1, SET_IN_GAME},
-	{"objects", "the symbols to use for objects",
-	 MAXOCLASSES, SET_IN_FILE},
-	{"packorder", "the inventory order of the items in your pack",
-	 MAXOCLASSES, SET_IN_GAME},
+	{"objects", "the symbols to use for objects", MAXOCLASSES, SET_IN_FILE},
+	{"packorder", "the inventory order of the items in your pack", MAXOCLASSES, SET_IN_GAME},
 #ifdef CHANGE_COLOR
-	{"palette", "palette (00c/880/-fff is blue/yellow/reverse white)",
-	 15, SET_IN_GAME},
+	{"palette", "palette (00c/880/-fff is blue/yellow/reverse white)", 15, SET_IN_GAME},
 #if defined(MAC)
-	{"hicolor", "same as palette, only order is reversed",
-	 15, SET_IN_FILE},
+	{"hicolor", "same as palette, only order is reversed", 15, SET_IN_FILE},
 #endif
 #endif
 	{"petattr", "attributes for highlighting pets", 12, SET_IN_FILE},
 	{"pettype", "your preferred initial pet type", 4, DISP_IN_GAME},
-	{"pickup_burden", "maximum burden picked up before prompt",
-	 20, SET_IN_GAME},
-	{"pickup_types", "types of objects to pick up automatically",
-	 MAXOCLASSES, SET_IN_GAME},
-	{"player_selection", "choose character via dialog or prompts",
-	 12, DISP_IN_GAME},
-	{"race", "your starting race (e.g., Human, Elf)",
-	 PL_CSIZ, DISP_IN_GAME},
-	{"role", "your starting role (e.g., Barbarian, Valkyrie)",
-	 PL_CSIZ, DISP_IN_GAME},
-	{"runmode", "display frequency when `running' or `travelling'",
-	 sizeof "teleport", SET_IN_GAME},
-	{"scores", "the parts of the score list you wish to see",
-	 32, SET_IN_GAME},
-	{"scroll_amount", "amount to scroll map when scroll_margin is reached",
-	 20, DISP_IN_GAME},							       /*WC*/
+	{"pickup_burden", "maximum burden picked up before prompt", 20, SET_IN_GAME},
+	{"pickup_types", "types of objects to pick up automatically", MAXOCLASSES, SET_IN_GAME},
+	{"player_selection", "choose character via dialog or prompts", 12, DISP_IN_GAME},
+	{"race", "your starting race (e.g., Human, Elf)", PL_CSIZ, DISP_IN_GAME},
+	{"role", "your starting role (e.g., Barbarian, Valkyrie)", PL_CSIZ, DISP_IN_GAME},
+	{"runmode", "display frequency when `running' or `travelling'", sizeof "teleport", SET_IN_GAME},
+	{"scores", "the parts of the score list you wish to see", 32, SET_IN_GAME},
+	{"scroll_amount", "amount to scroll map when scroll_margin is reached", 20, DISP_IN_GAME}, /*WC*/
 	{"scroll_margin", "scroll map when this far from the edge", 20, DISP_IN_GAME}, /*WC*/
-	{
-		"suppress_alert", "suppress alerts about version-specific features",
-		8, SET_IN_GAME},
+	{"suppress_alert", "suppress alerts about version-specific features", 8, SET_IN_GAME},
 	{"tile_width", "width of tiles", 20, DISP_IN_GAME},   /*WC*/
 	{"tile_height", "height of tiles", 20, DISP_IN_GAME}, /*WC*/
 	{"tile_file", "name of tile file", 70, DISP_IN_GAME}, /*WC*/
-	{
-		"tileset", "name of predefined tileset to use",
-		PL_PSIZ, SET_IN_GAME},
-	{"traps", "the symbols to use in drawing traps",
-	 MAXTCHARS + 1, SET_IN_FILE},
+	{"tileset", "name of predefined tileset to use", PL_PSIZ, SET_IN_GAME},
+	{"traps", "the symbols to use in drawing traps", MAXTCHARS + 1, SET_IN_FILE},
 	{"vary_msgcount", "show more old messages at a time", 20, DISP_IN_GAME}, /*WC*/
 #ifdef VIDEOSHADES
-	{
-		"videocolors", "color mappings for internal screen routines",
-		40, DISP_IN_GAME},
+	{"videocolors", "color mappings for internal screen routines", 40, DISP_IN_GAME},
 #endif
 #ifdef WIN32CON
 	{"subkeyvalue", "override keystroke value", 7, SET_IN_FILE},
 #endif
-	{"windowcolors", "the foreground/background colors of windows", /*WC*/
-	 80, DISP_IN_GAME},
+	{"windowcolors", "the foreground/background colors of windows", 80, DISP_IN_GAME}, /*WC*/
 	{"windowtype", "windowing system to use", WINTYPELEN, DISP_IN_GAME},
-	{"wolfname", "the name of your (first) wolf (e.g., wolfname:Beast)",
-	 PL_PSIZ, DISP_IN_GAME},
+	{"wolfname", "the name of your (first) wolf (e.g., wolfname:Beast)", PL_PSIZ, DISP_IN_GAME},
 	{NULL, NULL, 0, 0}};
 
 static struct Bool_Tile_Opt {

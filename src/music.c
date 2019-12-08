@@ -293,7 +293,7 @@ static void
 								mtmp->mtrapped = 1;
 								if (cansee(x, y))
 									pline("%s falls into a chasm!", Monnam(mtmp));
-								else if (flags.soundok && humanoid(mtmp->data))
+								else if (!Deaf && humanoid(mtmp->data))
 									You_hear("a scream!");
 								mselftouch(mtmp, "Falling, ", true);
 								if (mtmp->mhp > 0)
@@ -480,6 +480,7 @@ static int
 		case LEATHER_DRUM: /* Awaken monsters */
 			pline("You beat a deafening row!");
 			awaken_monsters(u.ulevel * 40);
+			incr_itimeout(&HDeaf, rn1(20, 30));
 			exercise(A_WIS, false);
 			break;
 		default:
@@ -557,7 +558,7 @@ int do_play_instrument(struct obj *instr) {
 									open_drawbridge(x, y);
 								return 0;
 							}
-			} else if (flags.soundok) {
+			} else if (!Deaf) {
 				if (u.uevent.uheard_tune < 1) u.uevent.uheard_tune = 1;
 				/* Okay, it wasn't the right tune, but perhaps
 				 * we can give the player some hints like in the

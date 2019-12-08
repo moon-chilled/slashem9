@@ -90,3 +90,4 @@ Changelist for slashem-next v0.0.1:
 - Gameplay: add the #tip command (NetHack).
 - Gameplay: you can quiver gold (NetHack).
 - Internals: move various flags, digging status, and currently eaten foods into a context struct (NetHack).
+- Gameplay: hearing is now a full-fledged attribute, like sight (NetHack).

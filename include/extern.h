@@ -1473,17 +1473,17 @@ int dotip(void);
 #define Noreps(str)	Norep("%s", (str))
 #define verbalizes(str) verbalize("%s", (str))
 #define You_hear(str)	You_hearf("%s", (str))
-void msgpline_add(int, char *);
+void msgpline_add(int typ, char *pattern);
 void msgpline_free(void);
-void pline(const char *, ...) PRINTF_F(1, 2);
-void Norep(const char *, ...) PRINTF_F(1, 2);
-void free_youbuf(void);
-void You_hearf(const char *, ...) PRINTF_F(1, 2);
-void verbalize(const char *, ...) PRINTF_F(1, 2);
-void raw_printf(const char *, ...) PRINTF_F(1, 2);
-void impossible(const char *, ...) PRINTF_F(1, 2);
-const char *align_str(aligntyp);
-void mstatusline(struct monst *);
+void pline(const char *line, ...) PRINTF_F(1, 2);
+void Norep(const char *line, ...) PRINTF_F(1, 2);
+void hear(const char *fmt, ...) PRINTF_F(1, 2);
+void You_hearf(const char *line, ...) PRINTF_F(1, 2);
+void verbalize(const char *line, ...) PRINTF_F(1, 2);
+void raw_printf(const char *line, ...) PRINTF_F(1, 2);
+void impossible(const char *s, ...) PRINTF_F(1, 2);
+const char *align_str(aligntyp alignment);
+void mstatusline(struct monst *mtmp);
 void ustatusline(void);
 void self_invis_message(void);
 
@@ -1919,7 +1919,7 @@ void substitute_tiles(d_level *);
 
 void burn_away_slime(void);
 void nh_timeout(void);
-void fall_asleep(int, boolean);
+void fall_asleep(int how_long, bool wakeup_msg);
 void set_obj_poly(struct obj *, struct obj *);
 void unpoly_obj(void *, long);
 int mon_poly(struct monst *, boolean, const char *);

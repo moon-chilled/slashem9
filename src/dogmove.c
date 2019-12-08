@@ -877,7 +877,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 
 			if ((info[i] & ALLOW_TRAPS) && (trap = t_at(nx, ny))) {
 				if (mtmp->mleashed) {
-					if (flags.soundok) whimper(mtmp);
+					if (!Deaf) whimper(mtmp);
 				} else
 					/* 1/40 chance of stepping on it anyway, in case
 					 * it has to pass one to follow the player...

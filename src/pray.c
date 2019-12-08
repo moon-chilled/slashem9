@@ -1438,7 +1438,7 @@ int dosacrifice(void) {
 	} /* real Amulet */
 
 	if (otmp->otyp == FAKE_AMULET_OF_YENDOR) {
-		if (flags.soundok)
+		if (!Deaf)
 			You_hear("a nearby thunderclap.");
 		if (!otmp->known) {
 			pline("You realize you have made a %s.",
@@ -1715,11 +1715,6 @@ int dopray(void) {
 			return 0;
 
 	u.uconduct.gnostic++;
-	/* Praying implies that the hero is conscious and since we have
-	   no deafness attribute this implies that all verbalized messages
-	   can be heard.  So, in case the player has used the 'O' command
-	   to toggle this accessible flag off, force it to be on. */
-	flags.soundok = 1;
 
 	if (IS_TOILET(levl[u.ux][u.uy].typ)) {
 		pline("You pray to the Porcelain God.");

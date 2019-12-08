@@ -25,7 +25,6 @@ void dumplogfreemsgs(void) {
 }
 
 static boolean no_repeat = false;
-static char *You_buf(int);
 
 void msgpline_add(int typ, char *pattern) {
 	struct _plinemsg *tmp = new (struct _plinemsg);
@@ -106,53 +105,45 @@ void Norep(const char *line, ...) {
 	return;
 }
 
-/* work buffer for You(), &c and verbalize() */
-static char *you_buf = 0;
-static int you_buf_siz = 0;
+void vhear(const char *fmt, va_list the_args) {
+	if (Deaf || !flags.acoustics) return;
 
-static char *You_buf(int siz) {
-	if (siz > you_buf_siz) {
-		if (you_buf) free(you_buf);
-		you_buf_siz = siz + 10;
-		you_buf = alloc((unsigned)you_buf_siz);
-	}
-	return you_buf;
+	vpline(fmt, the_args);
 }
 
-void free_youbuf(void) {
-	if (you_buf) free(you_buf), you_buf = NULL;
-	you_buf_siz = 0;
-}
-
-/* `prefix' must be a string literal, not a pointer */
-#define YouPrefix(pointer, prefix, text) \
-	strcpy((pointer = You_buf((int)(strlen(text) + sizeof prefix))), prefix)
-
-#define YouMessage(pointer, prefix, text) \
-	strcat((YouPrefix(pointer, prefix, text), pointer), text)
-
-void You_hearf(const char *line, ...) {
-	char *tmp;
-	VA_START(line);
-	if (Underwater)
-		YouPrefix(tmp, "You barely hear ", line);
-	else if (u.usleep)
-		YouPrefix(tmp, "You dream that you hear ", line);
-	else
-		YouPrefix(tmp, "You hear ", line);
-	vpline(strcat(tmp, line), VA_ARGS);
+void hear(const char *fmt, ...) {
+	VA_START(fmt);
+	vhear(fmt, VA_ARGS);
 	VA_END();
 }
 
-void verbalize(const char *line, ...) {
-	char *tmp;
-	if (!flags.soundok) return;
+void You_hearf(const char *line, ...) {
+	char buf[BUFSZ];
+
 	VA_START(line);
-	tmp = You_buf((int)strlen(line) + sizeof "\"\"");
-	strcpy(tmp, "\"");
-	strcat(tmp, line);
-	strcat(tmp, "\"");
-	vpline(tmp, VA_ARGS);
+	if (Underwater)
+		strcpy(buf, "You barely hear ");
+	else if (u.usleep)
+		strcpy(buf, "You dream that you hear ");
+	else
+		strcpy(buf, "You hear ");
+
+	vhear(strcat(buf, line), VA_ARGS);
+	VA_END();
+}
+
+/* Print a message inside double-quotes.
+ * The caller is responsible for checking deafness.
+ * Gods can speak directly to you in spite of deafness.
+ */
+void verbalize(const char *line, ...) {
+	char buf[BUFSZ];
+
+	VA_START(line);
+
+	sprintf(buf, "\"%s\"", line);
+	vpline(buf, VA_ARGS);
+
 	VA_END();
 }
 

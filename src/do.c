@@ -79,8 +79,9 @@ boolean boulder_hits_pool(struct obj *otmp, int rx, int ry, boolean pushing) {
 					pline("There is a large splash as %s %s the %s.",
 					      the(xname(otmp)), fills_up ? "fills" : "falls into",
 					      what);
-				} else if (flags.soundok)
+				} else {
 					You_hearf("a%s splash.", lava ? " sizzling" : "");
+				}
 				wake_nearto(rx, ry, 40);
 			}
 
@@ -179,7 +180,7 @@ boolean flooreffects(struct obj *obj, int x, int y, const char *verb) {
 		/* Reasonably bulky objects (arbitrary) splash when dropped.
 		 * If you're floating above the water even small things make noise.
 		 * Stuff dropped near fountains always misses */
-		if ((Blind || (Levitation || Flying)) && flags.soundok &&
+		if ((Blind || (Levitation || Flying)) && !Deaf &&
 		    ((x == u.ux) && (y == u.uy))) {
 			if (!Underwater) {
 				if (weight(obj) > 9) {
@@ -194,7 +195,7 @@ boolean flooreffects(struct obj *obj, int x, int y, const char *verb) {
 		return water_damage(obj, false, false);
 	} else if ((x == u.ux && y == u.uy) && uteetering_at_seen_trap()) {
 		/* you escaped a pit and are standing on the precipice */
-		if (Blind && flags.soundok)
+		if (Blind)
 			You_hearf("%s tumble downwards.", the(xname(obj)));
 		else
 			pline("%s %s into %s pit.",
