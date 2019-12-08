@@ -271,7 +271,7 @@ static boolean is_ok_location(schar x, schar y, int humidity) {
 			return true;
 	}
 	if (humidity & WET) {
-		if (is_pool(x, y))
+		if (is_pool(x, y) || ((humidity & DRY) && is_lava(x, y)))
 			return true;
 	}
 	if (humidity & MOLTEN) {
