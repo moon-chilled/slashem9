@@ -1143,7 +1143,7 @@ static int opentin(void) {
 		/* perhaps it was stolen? */
 		return 0; /* %% probably we should use tinoid */
 	if (context.tin.usedtime++ >= 50) {
-		pline("You give up your attempt to open the context.tin.");
+		pline("You give up your attempt to open the tin.");
 		return 0;
 	}
 	if (context.tin.usedtime < context.tin.reqtime)
@@ -1154,7 +1154,7 @@ static int opentin(void) {
 		costly_tin("destroyed");
 		goto use_me;
 	}
-	pline("You succeed in opening the context.tin.");
+	pline("You succeed in opening the tin.");
 	if (context.tin.tin->spe != 1) {
 		if (context.tin.tin->corpsenm == NON_PM) {
 			pline("It turns out to be empty.");
@@ -1196,7 +1196,7 @@ static int opentin(void) {
 			/* ALI - you know the tin iff you recognized the contents */
 			if (mvitals[context.tin.tin->corpsenm].eaten)
 				if (!Hallucination) context.tin.tin->dknown = context.tin.tin->known = true;
-			if (flags.verbose) pline("You discard the open context.tin.");
+			if (flags.verbose) pline("You discard the open tin.");
 			costly_tin(NULL);
 			goto use_me;
 		}
@@ -1249,7 +1249,7 @@ static int opentin(void) {
 			if (!Hallucination && !context.tin.tin->cursed)
 				context.tin.tin->dknown = context.tin.tin->known = true;
 			if (flags.verbose)
-				pline("You discard the open context.tin.");
+				pline("You discard the open tin.");
 			costly_tin(NULL);
 			goto use_me;
 		}
@@ -1277,7 +1277,7 @@ static void start_tin(struct obj *otmp) {
 	int tmp;
 
 	if (metallivorous(youmonst.data)) {
-		pline("You bite right into the metal context.tin...");
+		pline("You bite right into the metal tin...");
 		tmp = 1;
 	} else if (nolimbs(youmonst.data)) {
 		pline("You cannot handle the tin properly to open it.");
@@ -1307,10 +1307,10 @@ static void start_tin(struct obj *otmp) {
 			default:
 				goto no_opener;
 		}
-		pline("Using %s you try to open the context.tin.", yobjnam(uwep, NULL));
+		pline("Using %s you try to open the tin.", yobjnam(uwep, NULL));
 	} else {
 no_opener:
-		pline("It is not so easy to open this context.tin.");
+		pline("It is not so easy to open this tin.");
 		if (Glib) {
 			pline("The tin slips from your %s.",
 			      makeplural(body_part(FINGER)));

@@ -1181,7 +1181,7 @@ static void use_lamp(struct obj *obj) {
 	if (obj->lamplit) {
 		if (obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
 		    obj->otyp == BRASS_LANTERN) {
-			pline("%s lamp is now off.", Shk_Your(buf, obj));
+			pline("%slamp is now off.", Shk_Your(buf, obj));
 		} else if (is_lightsaber(obj)) {
 			if (obj->otyp == RED_DOUBLE_LIGHTSABER) {
 				/* Do we want to activate dual bladed mode? */
