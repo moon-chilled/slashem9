@@ -4429,10 +4429,7 @@ void destroy_item(int osym, int dmgtyp) {
 		if (obj->oartifact) continue;		     /* don't destroy artifacts */
 		if (obj->in_use && obj->quan == 1) continue; /* not available */
 		xresist = skip = 0;
-#ifdef GCC_WARN
-		dmg = dindx = 0;
-		quan = 0L;
-#endif
+
 		switch (dmgtyp) {
 			case AD_COLD:
 				if (osym == POTION_CLASS && obj->otyp != POT_OIL) {

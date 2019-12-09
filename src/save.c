@@ -22,13 +22,9 @@ static void saveobjchn(int, struct obj *, int);
 static void savemonchn(int, struct monst *, int);
 static void savetrapchn(int, struct trap *, int);
 static void savegamestate(int, int);
-#ifdef GCC_WARN
-static long nulls[10];
-#else
 #define nulls nul
-#endif
 
-#if defined(UNIX) || defined(__EMX__) || defined(WIN32)
+#if defined(UNIX) || defined(WIN32)
 #define HUP if (!program_state.done_hup)
 #else
 #define HUP
