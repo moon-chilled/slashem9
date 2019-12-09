@@ -58,7 +58,7 @@ int dosit() {
 			} else if (trap && u.utraptype == TT_PIT) {
 				if (trap->ttyp == SPIKED_PIT) {
 					pline("You sit down on a spike.  Ouch!");
-					losehp(1, "sitting on an iron spike", KILLED_BY);
+					losehp(Maybe_Half_Phys(1), "sitting on an iron spike", KILLED_BY);
 					exercise(A_STR, false);
 				} else
 					pline("You sit down in the pit.");
@@ -132,8 +132,7 @@ int dosit() {
 			pline("The slime is burned away!");
 			Slimed = 0;
 		}
-		losehp(d((Fire_resistance ? 2 : 10), 10),
-		       "sitting on lava", KILLED_BY);
+		losehp(d((Fire_resistance ? 2 : 10), 10), "sitting on lava", KILLED_BY);
 
 	} else if (is_ice(u.ux, u.uy)) {
 		pline("You sit on the %s.", sym_desc[S_ice].explanation);

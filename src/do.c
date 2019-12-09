@@ -98,8 +98,7 @@ boolean boulder_hits_pool(struct obj *otmp, int rx, int ry, boolean pushing) {
 					pline("The slime is burned off!");
 					Slimed = 0;
 				}
-				losehp(d((Fire_resistance ? 1 : 3), 6),
-				       "molten lava", KILLED_BY);
+				losehp(Maybe_Half_Phys(d((Fire_resistance ? 1 : 3), 6)), "molten lava", KILLED_BY);
 			} else if (!fills_up && flags.verbose &&
 				   (pushing ? !Blind : cansee(rx, ry)))
 				pline("It sinks without a trace!");
@@ -148,8 +147,7 @@ boolean flooreffects(struct obj *obj, int x, int y, const char *verb) {
 				mtmp->mtrapped = 0;
 			} else {
 				if (!Passes_walls && !throws_rocks(youmonst.data)) {
-					losehp(rnd(15), "squished under a boulder",
-					       NO_KILLER_PREFIX);
+					losehp(Maybe_Half_Phys(rnd(15)), "squished under a boulder", NO_KILLER_PREFIX);
 					return false; /* player remains trapped */
 				} else
 					u.utrap = 0;
@@ -1088,7 +1086,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 				if (u.usteed)
 					dismount_steed(DISMOUNT_FELL);
 				else
-					losehp(rnd(3), "falling downstairs", KILLED_BY);
+					losehp(Maybe_Half_Phys(rnd(3)), "falling downstairs", KILLED_BY);
 				selftouch("Falling, you");
 			} else if (u.dz && at_ladder)
 				pline("You climb down the ladder.");

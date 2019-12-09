@@ -2127,6 +2127,8 @@ static int gulpmu(struct monst *mtmp, struct attack *mattk) {
 static int explmu(struct monst *mtmp, struct attack *mattk, boolean ufound) {
 	if (mtmp->mcan) return 0;
 
+	bool physical_damage = true;
+
 	if (!ufound) {
 		pline("%s explodes at a spot in %s!",
 		      canseemon(mtmp) ? Monnam(mtmp) : "It",
@@ -2139,14 +2141,17 @@ static int explmu(struct monst *mtmp, struct attack *mattk, boolean ufound) {
 
 		switch (mattk->adtyp) {
 			case AD_COLD:
+				physical_damage = false;
 				not_affected |= Cold_resistance;
 				goto common;
 			case AD_FIRE:
+				physical_damage = false;
 				not_affected |= Fire_resistance;
 				goto common;
 			case AD_ELEC:
+				physical_damage = false;
 				not_affected |= Shock_resistance;
-			common:
+common:
 
 				if (!not_affected) {
 					if (ACURR(A_DEX) > rnd(20)) {
@@ -2156,7 +2161,7 @@ static int explmu(struct monst *mtmp, struct attack *mattk, boolean ufound) {
 						if (flags.verbose) pline("You get blasted!");
 					}
 					if (mattk->adtyp == AD_FIRE) burn_away_slime();
-					if (Half_physical_damage) tmp = (tmp + 1) / 2;
+					if (physical_damage) tmp = Maybe_Half_Phys(tmp);
 					mdamageu(mtmp, tmp);
 				}
 				break;
@@ -2732,8 +2737,7 @@ int doseduce(struct monst *mon) {
 				pline("You feel exhausted.");
 				exercise(A_STR, false);
 				tmp = rn1(10, 6);
-				if (Half_physical_damage) tmp = (tmp + 1) / 2;
-				losehp(tmp, "exhaustion", KILLED_BY);
+				losehp(Maybe_Half_Phys(tmp), "exhaustion", KILLED_BY);
 				break;
 			}
 		}

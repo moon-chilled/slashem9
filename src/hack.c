@@ -712,8 +712,6 @@ void movobj(struct obj *obj, xchar ox, xchar oy) {
 	newsym(ox, oy);
 }
 
-static const char fell_on_sink[] = "fell onto a sink";
-
 static void dosinkfall(void) {
 	struct obj *obj;
 
@@ -728,14 +726,13 @@ static void dosinkfall(void) {
 		   are really still worn has no effect on bones data */
 		ELevitation = HLevitation = 0L;
 		pline("You crash to the floor!");
-		losehp(rn1(8, 25 - (int)ACURR(A_CON)),
-		       fell_on_sink, NO_KILLER_PREFIX);
+		losehp(Maybe_Half_Phys(rn1(8, 25 - ACURR(A_CON))), "fell onto a sink", NO_KILLER_PREFIX);
 		exercise(A_DEX, false);
 		selftouch("Falling, you");
 		for (obj = level.objects[u.ux][u.uy]; obj; obj = obj->nexthere)
 			if (obj->oclass == WEAPON_CLASS || is_weptool(obj)) {
 				pline("You fell on %s.", doname(obj));
-				losehp(rnd(3), fell_on_sink, NO_KILLER_PREFIX);
+				losehp(Maybe_Half_Phys(rnd(3)), "fell onto a sink", NO_KILLER_PREFIX);
 				exercise(A_CON, false);
 			}
 		ELevitation = save_ELev;

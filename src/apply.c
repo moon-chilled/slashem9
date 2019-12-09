@@ -1510,7 +1510,7 @@ int jump(int magic /* 0=Physical, otherwise skill level */) {
 					long side = rn2(3) ? LEFT_SIDE : RIGHT_SIDE;
 					pline("You rip yourself free of the bear trap!  Ouch!");
 					if (!u.usteed)
-						losehp(rnd(10), "jumping out of a bear trap", KILLED_BY);
+						losehp(Maybe_Half_Phys(rnd(10)), "jumping out of a bear trap", KILLED_BY);
 					set_wounded_legs(side, rn1(1000, 500));
 					break;
 				}
@@ -2513,7 +2513,7 @@ static int use_whip(struct obj *obj) {
 		if (dam <= 0) dam = 1;
 		pline("You hit your %s with your bullwhip.", body_part(FOOT));
 		sprintf(buf, "killed %sself with %s bullwhip", uhim(), uhis());
-		losehp(dam, buf, NO_KILLER_PREFIX);
+		losehp(Maybe_Half_Phys(dam), buf, NO_KILLER_PREFIX);
 		context.botl = 1;
 		return 1;
 
@@ -2759,7 +2759,7 @@ static int use_pole(struct obj *obj) {
 			case 1:
 				/* Snag yourself */
 				pline("You hook yourself!");
-				losehp(rn1(10, 10), "a fishing hook", KILLED_BY);
+				losehp(Maybe_Half_Phys(rn1(10, 10)), "a fishing hook", KILLED_BY);
 				return 1;
 			case 2:
 				/* Reel in a fish */
@@ -3201,9 +3201,10 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 				if (damage) {
 					if (hero_broke) {
 						sprintf(buf, "killed %sself by breaking a wand", uhim());
-						losehp(damage, buf, NO_KILLER_PREFIX);
-					} else
-						losehp(damage, "exploding wand", KILLED_BY_AN);
+						losehp(Maybe_Half_Phys(damage), buf, NO_KILLER_PREFIX);
+					} else {
+						losehp(Maybe_Half_Phys(damage), "exploding wand", KILLED_BY_AN);
+					}
 				}
 				if (context.botl) bot(); /* blindness */
 			} else if ((mon = m_at(x, y)) != 0 && !DEADMONSTER(mon)) {

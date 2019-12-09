@@ -319,8 +319,7 @@ static void
 								pline("You fall into a chasm!");
 								u.utrap = rn1(6, 2);
 								u.utraptype = TT_PIT;
-								losehp(rnd(6), "fell into a chasm",
-								       NO_KILLER_PREFIX);
+								losehp(Maybe_Half_Phys(rnd(6)), "fell into a chasm", NO_KILLER_PREFIX);
 								selftouch("Falling, you");
 							}
 						} else
@@ -346,9 +345,7 @@ static void
  * The player is trying to extract something from his/her instrument.
  */
 
-static int
-	do_improvisation(instr) struct obj *instr;
-{
+static int do_improvisation(instr) struct obj *instr; {
 	int damage, do_spec = !Confusion;
 #if defined(MAC) || defined(VPIX_MUSIC) || defined(PCMUSIC)
 	struct obj itmp;

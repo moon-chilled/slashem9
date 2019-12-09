@@ -898,7 +898,7 @@ int use_pick_axe2(struct obj *obj) {
 		pline("You hit yourself with %s.", yname(uwep));
 		sprintf(buf, "%s own %s", uhis(),
 			OBJ_NAME(objects[obj->otyp]));
-		losehp(dam, buf, KILLED_BY);
+		losehp(Maybe_Half_Phys(dam), buf, KILLED_BY);
 		context.botl = 1;
 		return 1;
 	} else if (u.dz == 0) {
@@ -944,7 +944,7 @@ int use_pick_axe2(struct obj *obj) {
 				pline("Sparks fly as you whack the %s.%s",
 				      sobj_at(STATUE, rx, ry) ? "statue" : "boulder",
 				      vibrate ? " The axe-handle vibrates violently!" : "");
-				if (vibrate) losehp(2, "axing a hard object", KILLED_BY);
+				if (vibrate) losehp(Maybe_Half_Phys(2), "axing a hard object", KILLED_BY);
 			} else
 				pline("You swing %s through thin air.", yobjnam(obj, NULL));
 		} else {
@@ -1176,8 +1176,7 @@ void zap_dig(void) {
 					      ceiling(u.ux, u.uy));
 				pline("You loosen a rock from the %s.", ceiling(u.ux, u.uy));
 				pline("It falls on your %s!", body_part(HEAD));
-				losehp(rnd((uarmh && is_metallic(uarmh)) ? 2 : 6),
-				       "falling rock", KILLED_BY_AN);
+				losehp(Maybe_Half_Phys(rnd((uarmh && is_metallic(uarmh)) ? 2 : 6)), "falling rock", KILLED_BY_AN);
 				otmp = mksobj_at(ROCK, u.ux, u.uy, false, false);
 				if (otmp) {
 					xname(otmp); /* set dknown, maybe bknown */

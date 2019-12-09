@@ -1349,8 +1349,7 @@ lootcont:
 					pline("You carefully open the bag...");
 					pline("It develops a huge set of teeth and bites you!");
 					tmp = rnd(10);
-					if (Half_physical_damage) tmp = (tmp + 1) / 2;
-					losehp(tmp, "carnivorous bag", KILLED_BY_AN);
+					losehp(Maybe_Half_Phys(tmp), "carnivorous bag", KILLED_BY_AN);
 					makeknown(BAG_OF_TRICKS);
 					timepassed = 1;
 					continue;

@@ -3,6 +3,7 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "onames.h"
 
 /* "an uncursed greased partly eaten guardian naga hatchling [corpse]" */
 #define PREFIX	  80 /* (56) */
@@ -2851,7 +2852,7 @@ const char *cloak_simple_name(struct obj *cloak) {
 				return "wrapping";
 			case LAB_COAT:
 				return "coat";
-#ifdef ALCHEMY_SMOCK
+#if 0
 			case ALCHEMY_SMOCK:
 				return (objects[cloak->otyp].oc_name_known &&
 					cloak->dknown) ?

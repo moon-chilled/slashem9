@@ -174,7 +174,7 @@ static boolean cursed_book(struct obj *bp) {
 			} else {
 				pline("As you read the book, it %s in your %s!",
 				      explodes, body_part(FACE));
-				losehp(2 * rnd(10) + 5, "exploding rune", KILLED_BY_AN);
+				losehp(Maybe_Half_Phys(2 * rnd(10) + 5), "exploding rune", KILLED_BY_AN);
 			}
 			return true;
 		default:
@@ -783,7 +783,7 @@ int spelleffects(int spell, boolean atme) {
 	int energy, damage, chance, n, intell;
 	int hungr;
 	int skill, role_skill;
-	boolean confused = (Confusion != 0);
+	bool confused = (Confusion != 0);
 	struct obj *pseudo;
 
 	/*
@@ -913,8 +913,10 @@ int spelleffects(int spell, boolean atme) {
 	if (role_skill >= P_SKILLED)
 		pseudo->blessed = 1;
 
+	bool physical_damage = (pseudo->otyp == SPE_FORCE_BOLT);
+
 	switch (pseudo->otyp) {
-		/*
+	/*
 	 * At first spells act as expected.  As the hero increases in skill
 	 * with the appropriate spell type, some spells increase in their
 	 * effects, e.g. more damage, further distance, and so on, without
@@ -959,10 +961,12 @@ int spelleffects(int spell, boolean atme) {
 					if ((damage = zapyourself(pseudo, true)) != 0) {
 						char buf[BUFSZ];
 						sprintf(buf, "zapped %sself with a spell", uhim());
+						if (physical_damage) damage = Maybe_Half_Phys(damage);
 						losehp(damage, buf, NO_KILLER_PREFIX);
 					}
-				} else
+				} else {
 					weffects(pseudo);
+				}
 			} else
 				weffects(pseudo);
 			update_inventory(); /* spell may modify inventory */
@@ -1144,7 +1148,7 @@ int spelleffects(int spell, boolean atme) {
 }
 
 void losespells(void) {
-	boolean confused = (Confusion != 0);
+	bool confused = (Confusion != 0);
 	int n, nzap, i;
 
 	context.spbook.book = NULL;
@@ -1152,7 +1156,7 @@ void losespells(void) {
 	for (n = 0; n < MAXSPELL && spellid(n) != NO_SPELL; n++)
 		continue;
 	if (n) {
-		nzap = rnd(n) + confused ? 1 : 0;
+		nzap = rnd(n) + (confused ? 1 : 0);
 		if (nzap > n) nzap = n;
 		for (i = n - nzap; i < n; i++) {
 			spellid(i) = NO_SPELL;

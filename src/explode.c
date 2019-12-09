@@ -184,7 +184,15 @@ static void do_explode(xchar, xchar, ExplodeRegion *, int, int, char, int, int, 
  *		 30 -  39	Your mega
  *	There is only one special type currently defined:
  *		-1		Exploding gas spore
+ *
+ * Important note about Half_physical_damage:
+ *	Unlike losehp() , explode() makes the Half_physical_damage adjustments
+ *	itself, so the caller should never have done that ahead of time.
+ *	It has to be done this way because the damage value is applied to
+ *	things beside the player. Care is taken within explode() to ensure
+ *	that Half_physical_damage only affects the damage applied to the hero.
  */
+
 void explode(xchar x, xchar y, /* WAC was int...i think it's supposed to be xchar */
 	     int type,	       /* the same as in zap.c */
 	     int dam,
@@ -222,6 +230,7 @@ void do_explode(
 	boolean explmask;
 	boolean shopdamage = false;
 	boolean generic = false;
+	bool physical_dmg = false;
 	boolean silent = false, remote = false;
 	xchar xi, yi;
 
@@ -325,6 +334,7 @@ void do_explode(
 					break;
 				case AD_ACID:
 					explmask = !!Acid_resistance;
+					physical_dmg = true;
 					break;
 				default:
 					impossible("explosion type %d?", adtyp);
@@ -545,14 +555,14 @@ void do_explode(
 		if (Invulnerable) {
 			damu = 0;
 			pline("You are unharmed!");
-		} else if (Half_physical_damage && adtyp == AD_PHYS)
-			damu = (damu + 1) / 2;
-		if (adtyp == AD_FIRE) (void)burnarmor(&youmonst);
-		destroy_item(SCROLL_CLASS, (int)adtyp);
-		destroy_item(SPBOOK_CLASS, (int)adtyp);
-		destroy_item(POTION_CLASS, (int)adtyp);
-		destroy_item(RING_CLASS, (int)adtyp);
-		destroy_item(WAND_CLASS, (int)adtyp);
+		} else if (adtyp == AD_PHYS || physical_dmg)
+			damu = Maybe_Half_Phys(damu);
+		if (adtyp == AD_FIRE) burnarmor(&youmonst);
+		destroy_item(SCROLL_CLASS, adtyp);
+		destroy_item(SPBOOK_CLASS, adtyp);
+		destroy_item(POTION_CLASS, adtyp);
+		destroy_item(RING_CLASS, adtyp);
+		destroy_item(WAND_CLASS, adtyp);
 
 		ugolemeffects((int)adtyp, damu);
 

@@ -2052,7 +2052,7 @@ int dozap(void) {
 		if ((damage = zapyourself(obj, true)) != 0) {
 			char buf[BUFSZ];
 			sprintf(buf, "zapped %sself with a wand", uhim());
-			losehp(damage, buf, NO_KILLER_PREFIX);
+			losehp(Maybe_Half_Phys(damage), buf, NO_KILLER_PREFIX);
 		}
 	} else {
 		/*	Are we having fun yet?
@@ -2695,8 +2695,7 @@ static boolean zap_updown(struct obj *obj) {
 				/* similar to zap_dig() */
 				pline("A rock is dislodged from the %s and falls on your %s.",
 				      ceiling(x, y), body_part(HEAD));
-				losehp(rnd((uarmh && is_metallic(uarmh)) ? 2 : 6),
-				       "falling rock", KILLED_BY_AN);
+				losehp(Maybe_Half_Phys(rnd((uarmh && is_metallic(uarmh)) ? 2 : 6)), "falling rock", KILLED_BY_AN);
 				if ((otmp = mksobj_at(ROCK, x, y, false, false)) != 0) {
 					xname(otmp); /* set dknown, maybe bknown */
 					stackobj(otmp);
@@ -4395,6 +4394,8 @@ void destroy_item(int osym, int dmgtyp) {
 	long i, cnt, quan;
 	int dindx;
 	const char *mult;
+	bool physical_damage;
+
 	/*
 	 * [ALI] Because destroy_item() can call wand_explode() which can
 	 * call explode() which can call destroy_item() again, we need to
@@ -4424,6 +4425,7 @@ void destroy_item(int osym, int dmgtyp) {
 
 	for (obj = invent; obj; obj = frame.next_obj) {
 		frame.next_obj = obj->nobj;
+		physical_damage = false;
 		if (obj->oclass != osym) continue;	     /* test only objs of type osym */
 		if (obj->oartifact) continue;		     /* don't destroy artifacts */
 		if (obj->in_use && obj->quan == 1) continue; /* not available */
@@ -4550,14 +4552,13 @@ void destroy_item(int osym, int dmgtyp) {
 				useup(obj);
 			/* Do the damage if not resisted */
 			if (dmg) {
-				if (xresist)
+				if (xresist) {
 					pline("You aren't hurt!");
-				else {
+				} else {
 					const char *how = destroy_strings[dindx * 3 + 2];
 					boolean one = (cnt == 1L);
 
-					losehp(dmg, one ? how : (const char *)makeplural(how),
-					       one ? KILLED_BY_AN : KILLED_BY);
+					losehp(Maybe_Half_Phys(dmg), one ? how : makeplural(how), one ? KILLED_BY_AN : KILLED_BY);
 					exercise(A_STR, false);
 				}
 			}

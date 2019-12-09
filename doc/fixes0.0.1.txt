@@ -1,27 +1,16 @@
 Changelist for slashem-next v0.0.1:
-- Interface: add curses windowport (Karl Garrison).
-- System: add extended logfile/xlogfile with more information than standard log file (Aardvark Joe).  Remove logfile.
 - Internals: obviate the following compile-time configurable options: SINKS, BLACKMARKET, D_SABER, LIGHTSABERS, P_SPOON, WALLET_O_P, EATEN_MEMORY, WALLIFIED_MAZE, AUTOPICKUP_EXCEPTIONS, YOEMAN, SEDUCE, KOPS, TOURIST, FIREARMS, EXP_ON_BOTL, SCORE_ON_BOTL, DWARF, ELBERETH, TEXTCOLOR, STATUS_COLORS, MENU_COLOR, SHOW_WEIGHT, SHOW_DMG, WIZARD, UNPOLYPILE, INVISIBLE_OBJECTS, OTHER_SERVICES, REDO, XLOGFILE, STEED, FREE_ALL_MEMORY, DISPLAY_LAYERS.  Where applicable, these can still be toggled at run time.
-- Interface: show object glyphs in inventory display (Patric Mueller).
-- Interface: highlight object piles and stairs covered by objects (Pasi Kallinen).
-- Interface: add MSGTYPES, which allow for user-configurable filtering, emphasis, or norep of messages (Pasi Kallinen).
-- Interface: allow users to specify colours for dungeon features (Patric Mueller).
 - Internals: lots of miscellaneous code cleanup, simplification, removal of indirection or conditionality, etc.
 - Internals: change K&R-style function definitions to ANSI.  Require c99.
 - Internals: remove support for many obsolete platforms and build configurations.  Basic requirements: ANSI c99 + posix or win32.
-- Bugfix: '???' could show up in regular gameplay (Fredrik Ljungdahl).
 - Internals: remove the internal malloc implementation and heap monitor.
-- Interface: show dark--but visited/known--room tiles on the screen (Clive Crous).
 - Interface: remove all windowports except for tty and curses.
-- Interface: allow key rebinding (Jason Dorje Short).
-- Interface: add heavily modified version of statuscolors (Shachaf and Oren Ben-Kiki) + hitpointbar (Patric Mueller).
 - Development: allow slashem.sh to automatically launch debugging tools (gdb, lldb, valgrind), if the environment variable NH_USE_(GDB|LLDB|VALGRIND) is set.  It will pass $NH_(GDB|LLDB|VALGRIND)_FLAGS to the corresponding debugging tool.
 - Interface: add UTF-8 graphics support.  Original code by Patric Mueller; heavy modifications have been made.
 - Interface: remove DEC and IBM graphics; the only graphics sets available are ascii, utf8, and utf8compat (using only characters that are part of wgl4), and these are now under a compound 'graphics' option.
 - Interface: make curses support unicode graphics display.
 - Interface: properly display unicode glyphs on topl and in inventory.
 - Interface: recommend saving and reloading, rather than quitting, in impossible().
-- Development: add a fuzzer (Pasi Kallinen).
 - Gameplay: re-enable the rogue level.
 - Development: replace build system.  Currently requires GNU make; working on that.
 - Internals: remove support for save compression, both internal routines and shelling out to an external compressor.
@@ -29,32 +18,17 @@ Changelist for slashem-next v0.0.1:
 - Internals: store gold on object chains.
 - Bugfix: YAFM was supposed to show, but didn't, when player rubs gold on a stone.
 - Gameplay: make searching deterministic; you only have to search once to find what you're looking for.
-- Bugfix: calm steed technique (Slash'EM Extended).
-- Bugfix: crash bug in tty when an item's description was just less than the window width, but description + accelerator + glyph + padding was just more than said width (Tangles).
-- Bugfix: torch panic (Slash'EM Extended).
-- Bugfix: lightning-resistant monsters could be affected by lightning (Slash'EM Extended).
 - Internals: completely remove makedefs.  The tasks it performed have been accomplished with macro magic, shifted to runtime, or, in some cases, removed entirely.
-- Interface: show spell memory in cast menu (inspired by Slash'EM Extended).
 - Gameplay: change duration of hallucination from potions to only 50-55, 50-105, or 50-155 turns (depending on BUC).
 - Interface: use symbols from EPYX rogue on rogue level.
 - System: allow DLB to optionally use a library stored inside the slashem binary, removing the need for external data files.
 - Internals: add a custom dynamic string library with associated colour information.  Use it to implement statuscolors/botl.  It will be used for most of our strings in the future.
-- Internals: use a high-quality cryptographic random number generator (Mikko Juola and libtomcrypt). This should hopefully thwart stunts like SWAGINZZZ (see https://pellsson.github.io/).
 - Bugfix: with USE_FCNTL enabled, the lock file was opened but never closed.
 - Bugfix: memory leak in curses.
 - Bugfix: under curses with perm_invent enabled, if an inventory item was longer than the width of the inventory window, it could continue onto the next line.
-- Bugfix: when items disappear from a cursed bag of holding, it may not take up a turn, and, if it causes the player to become unencumbered, they may not get a message or statusbar change until the following turn (Michael Lehotay).
-- Gameplay: to prevent abuse, bones are not saved on levels which were hung up on (Dr. Alex Smith).
-- Bugfix: when dying to an undead, it is not disclosed whether bones were created (Dr. Alex Smith).
-- Bugfix: C343-162: magicbane hit messages could use the wrong pronouns (Ray Chason).
-- Bugfix: C343-324: long worm crash fix (Patric Mueller).
 - Interface: remove autoquiver.
-- Interface: incorporate quiver_fired (Jukka Lahtinen).
-- Interface: at the end of the game, show counts of extinct monsters next to genocided; birth counts next to kill counts (Jukka Lahtinen).
 - Gameplay: move gnomish mines to dlvl 3-4, from 2-4.
-- Interface: add wall colouration for different dungeon branches and special rooms (L).
 - Interface: a common technique for identification of wands is to engrave with them on top of an existing engraving; the message produced will either uniquely identify the wand of confine it to one of a small number.  When doing so would uniquely identify the wand, formally identify it as well.
-- Interface: add the overview patch, which adds two new extended commands: #overview, which shows an overview of the layout of the dungeon levels the player has explored, and #annotate, which allows the player to make a mental note which is associated with the current level (Hojita Discordia).
 - Internals: remove reliance on the system for a regex engine, and instead vendor one ourselves (libtre).
 - Gameplay: gypsies can no longer be farmed for wishes.  Gypsies generated via reverse genocide are 'tainted' and will not grant wishes.
 - Bugfix: artifact naming.  The rules here are a bit different from in other games in the family: a name is only prohibited to be attached to an object where either there exists an artifact whose name is that name and whose base object is that object, or where adherence to the previous rule would leak information.
@@ -63,35 +37,65 @@ Changelist for slashem-next v0.0.1:
 - Interface: get a nice death message when you die by jumping into a pit you made.
 - Bugfix: when a ridden steed is led onto a polymorph trap and polymorphs into another rideable form, you have to adjust yourself in the saddle on on 'the' (monster-type), not 'a'.
 - Bugfix: passwall monsters couldn't pick up objects from pit (fixed by making them always fall in, but suffer no ill effects).
+- Gameplay: an alchemical smock will protect you from alchemical blasts.
 
 Imports from NetHack versions newer than 3.4.3:
-- Bugfix: acid dropping bug (NetHack).
-- Bugfix: deallocated wielded objects (NetHack).
+- Bugfix: acid dropping bug.
+- Bugfix: deallocated wielded objects.
 - Bugfix: water punishment crash (NetHack/Slash'EM Extended).
-- Internals: change dumplog implementation to be much cleaner (NetHack).
-- Bugfix: engravings made on drawbridge would appear on floor beneath.  Fixed by removing all engravings on drawbridge tile whenever it is opened, closed, or wrecked (NetHack).
-- Bugfix: 'You hear The <x> tumbles downwards' when dropping an item into a pit while blind and standing on the edge (NetHack).
-- Bugfix: wielded silver arrows weren't always dealing silver damage (NetHack).
-- Bugfix: you can sit down on items contained in a pit while teetering at its edge (NetHack).
-- Bugfix: message when you pushed a boulder into a pool of water while riding said that you filled it, rather than your steed (NetHack).
-- Gameplay: can use '>' to jump into a pit while teetering at its edge (NetHack).
-- Bugfix: when you lead a named steed into a trap while hallucinating, since the name is elided, elide also the article 'the' (NetHack).
-- Interface: when prompted for a direction, '?' shows help and prompts again (NetHack).
-- Gameplay: instead of printing 'It turns into it', smell what kind of 'it' it was, assuming you can (NetHack).
-- Gameplay: don't allow using non-magical whistles underwater (NetHack).
-- Gameplay: don't allow using whistles and musical instruments when in a form that blow (NetHack).
-- Gameplay: monster lifesaving messages.  Don't print a message about the monster reviving if the monster is invisible (NetHack).  Don't mention the amulet if it's invisible.  (You do see a visible amulet on an invisible monster because it glows.)
-- Interface: use proper article in message when eating artifact (NetHack).
-- Bugfix: potions of acid dipped into fountains were not always used up (NetHack).  Toilets were not affected.
-- Interface: if your blindfold/towel glows while you're wearing it and it's the only thing keeping you from seeing, you see that glow (NetHack).
-- Bugfix: tripping over a cockatrice corpse while not wearing boots did not petrify the player (NetHack).
-- Bugfix: proper death messages when multiple delayed deaths are in play at once (NetHack).
-- Bugfix: when wearing the eyes of the overworld while trapped in a dust vortex, player got a message every turn about being blinded and then their vision clearing (NetHack).
-- Gameplay: lighting shops now stock oil (NetHack).
-- Interface: right-clicking on a tile will show what that tile is (NetHack).
-- Gameplay: add the #tip command (NetHack).
-- Gameplay: you can quiver gold (NetHack).
-- Internals: move various global flags and state into a context struct (NetHack).
-- Gameplay: hearing is now a full-fledged attribute, like sight (NetHack).
-- Gameplay: artificial ice will eventually melt away.  Warning will notify you if the ice is about to melt (NetHack).
-- Interface: replace the 'stop eating' prompts with 'continue eating', default no (NetHack).
+- Internals: change dumplog implementation to be much cleaner.
+- Bugfix: engravings made on drawbridge would appear on floor beneath.  Fixed by removing all engravings on drawbridge tile whenever it is opened, closed, or wrecked.
+- Bugfix: 'You hear The <x> tumbles downwards' when dropping an item into a pit while blind and standing on the edge.
+- Bugfix: wielded silver arrows weren't always dealing silver damage.
+- Bugfix: you can sit down on items contained in a pit while teetering at its edge.
+- Bugfix: message when you pushed a boulder into a pool of water while riding said that you filled it, rather than your steed.
+- Gameplay: can use '>' to jump into a pit while teetering at its edge.
+- Bugfix: when you lead a named steed into a trap while hallucinating, since the name is elided, elide also the article 'the'.
+- Interface: when prompted for a direction, '?' shows help and prompts again.
+- Gameplay: instead of printing 'It turns into it', smell what kind of 'it' it was, assuming you can.
+- Gameplay: don't allow using non-magical whistles underwater.
+- Gameplay: don't allow using whistles and musical instruments when in a form that blow.
+- Gameplay: monster lifesaving messages.  Don't print a message about the monster reviving if the monster is invisible.  Don't mention the amulet if it's invisible.  (You do see a visible amulet on an invisible monster because it glows.)
+- Interface: use proper article in message when eating artifact.
+- Bugfix: potions of acid dipped into fountains were not always used up.  Toilets were not affected.
+- Interface: if your blindfold/towel glows while you're wearing it and it's the only thing keeping you from seeing, you see that glow.
+- Bugfix: tripping over a cockatrice corpse while not wearing boots did not petrify the player.
+- Bugfix: proper death messages when multiple delayed deaths are in play at once.
+- Bugfix: when wearing the eyes of the overworld while trapped in a dust vortex, player got a message every turn about being blinded and then their vision clearing.
+- Gameplay: lighting shops now stock oil.
+- Interface: right-clicking on a tile will show what that tile is.
+- Gameplay: add the #tip command.
+- Gameplay: you can quiver gold.
+- Internals: move various global flags and state into a context struct.
+- Gameplay: hearing is now a full-fledged attribute, like sight.
+- Gameplay: artificial ice will eventually melt away.  Warning will notify you if the ice is about to melt.
+- Interface: replace the 'stop eating' prompts with 'continue eating', default no.
+- Bugfix: make half physical damage work in many places it didn't.
+
+Imports from other locations:
+- Interface: add curses windowport (Karl Garrison).
+- System: add extended logfile/xlogfile with more information than standard log file (Aardvark Joe).  Remove logfile.
+- Interface: show object glyphs in inventory display (Patric Mueller).
+- Interface: highlight object piles and stairs covered by objects (Pasi Kallinen).
+- Interface: add MSGTYPES, which allow for user-configurable filtering, emphasis, or norep of messages (Pasi Kallinen).
+- Interface: allow users to specify colours for dungeon features (Patric Mueller).
+- Bugfix: '???' could show up in regular gameplay (Fredrik Ljungdahl).
+- Interface: show dark--but visited/known--room tiles on the screen (Clive Crous).
+- Interface: allow key rebinding (Jason Dorje Short).
+- Interface: add heavily modified version of statuscolors (Shachaf and Oren Ben-Kiki) + hitpointbar (Patric Mueller).
+- Development: add a fuzzer (Pasi Kallinen).
+- Bugfix: calm steed technique (Slash'EM Extended).
+- Bugfix: crash bug in tty when an item's description was just less than the window width, but description + accelerator + glyph + padding was just more than said width (Tangles).
+- Bugfix: torch panic (Slash'EM Extended).
+- Bugfix: lightning-resistant monsters could be affected by lightning (Slash'EM Extended).
+- Interface: show spell memory in cast menu (inspired by Slash'EM Extended).
+- Internals: use a high-quality cryptographic random number generator (Mikko Juola and libtomcrypt). This should hopefully thwart stunts like SWAGINZZZ (see https://pellsson.github.io/).
+- Bugfix: when items disappear from a cursed bag of holding, it may not take up a turn, and, if it causes the player to become unencumbered, they may not get a message or statusbar change until the following turn (Michael Lehotay).
+- Gameplay: to prevent abuse, bones are not saved on levels which were hung up on (Dr. Alex Smith).
+- Bugfix: when dying to an undead, it is not disclosed whether bones were created (Dr. Alex Smith).
+- Bugfix: C343-162: magicbane hit messages could use the wrong pronouns (Ray Chason).
+- Bugfix: C343-324: long worm crash fix (Patric Mueller).
+- Interface: incorporate quiver_fired (Jukka Lahtinen).
+- Interface: at the end of the game, show counts of extinct monsters next to genocided; birth counts next to kill counts (Jukka Lahtinen).
+- Interface: add wall colouration for different dungeon branches and special rooms (L).
+- Interface: add the overview patch, which adds two new extended commands: #overview, which shows an overview of the layout of the dungeon levels the player has explored, and #annotate, which allows the player to make a mental note which is associated with the current level (Hojita Discordia).

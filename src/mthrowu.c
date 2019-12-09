@@ -71,7 +71,6 @@ int thitu(int tlev, int dam, struct obj *obj, const char *name) {
 			pline("It doesn't seem to hurt you.");
 		else {
 			if (is_acid) pline("It burns!");
-			if (Half_physical_damage) dam = (dam + 1) / 2;
 			losehp(dam, knm, kprefix);
 			exercise(A_STR, false);
 		}

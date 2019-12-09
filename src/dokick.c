@@ -1041,8 +1041,7 @@ int dokick(void) {
 				maploc = &levl[x][y];
 			}
 			if (!rn2(3)) set_wounded_legs(RIGHT_SIDE, 5 + rnd(5));
-			losehp(rnd(ACURR(A_CON) > 15 ? 3 : 5), kickstr(buf),
-			       KILLED_BY);
+			losehp(Maybe_Half_Phys(rnd(ACURR(A_CON) > 15 ? 3 : 5)), kickstr(buf), KILLED_BY);
 			if (Is_airlevel(&u.uz) || Levitation)
 				hurtle(-u.dx, -u.dy, rn1(2, 4), true); /* assume it's heavy */
 			return 1;

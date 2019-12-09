@@ -1588,8 +1588,7 @@ boolean corpse_chance(struct monst *mon, struct monst *magr, boolean was_swallow
 					pline("There is an explosion in your %s!",
 					      body_part(STOMACH));
 					nhscopyf(&killer.name, "%S explosion", s_suffix(mdat->mname));
-					if (Half_physical_damage) tmp = (tmp + 1) / 2;
-					losehp(tmp, nhs2cstr_tmp(killer.name), KILLED_BY_AN);
+					losehp(Maybe_Half_Phys(tmp), nhs2cstr_tmp(killer.name), KILLED_BY_AN);
 				} else {
 					if (!Deaf) You_hear("an explosion.");
 					magr->mhp -= tmp;
@@ -2099,7 +2098,6 @@ void poisoned(const char *string, int typ, const char *pname, int fatal) {
 			pline("You%s!", poiseff[typ]);
 	} else {
 		i = thrown_weapon ? rnd(6) : rn1(10, 6);
-		if (Half_physical_damage) i = (i + 1) / 2;
 		losehp(i, pname, kprefix);
 	}
 	if (u.uhp < 1) {

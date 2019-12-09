@@ -3,6 +3,7 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "onames.h"
 
 /* KMH, intrinsics patch
  * There are many changes here to support >32-bit properties.
@@ -485,7 +486,7 @@ int peffects(struct obj *otmp) {
 							you_unwere(false);
 						u.ulycn = NON_PM; /* cure lycanthropy */
 					}
-					losehp(d(6, 6), "potion of holy water", KILLED_BY_AN);
+					losehp(Maybe_Half_Phys(d(6, 6)), "potion of holy water", KILLED_BY_AN);
 				} else if (otmp->cursed) {
 					pline("You feel quite proud of yourself.");
 					healup(d(6, 6), 0, 0, 0);
@@ -506,8 +507,7 @@ int peffects(struct obj *otmp) {
 				} else {
 					if (u.ualign.type == A_LAWFUL) {
 						pline("This burns like acid!");
-						losehp(d(6, 6), "potion of unholy water",
-						       KILLED_BY_AN);
+						losehp(Maybe_Half_Phys(d(6, 6)), "potion of unholy water", KILLED_BY_AN);
 					} else
 						pline("You feel full of dread.");
 					if (u.ulycn >= LOW_PM && !Upolyd) you_were();
@@ -912,11 +912,9 @@ int peffects(struct obj *otmp) {
 						pline("You hit your %s on the %s.",
 						      body_part(HEAD),
 						      ceiling(u.ux, u.uy));
-						losehp(uarmh ? 1 : rnd(10),
-						       "colliding with the ceiling",
-						       KILLED_BY);
+						losehp(Maybe_Half_Phys(uarmh ? 1 : rnd(10)), "colliding with the ceiling", KILLED_BY);
 					} else
-						(void)doup();
+						doup();
 				}
 			} else
 				nothing++;
@@ -955,8 +953,7 @@ int peffects(struct obj *otmp) {
 					good_for_you = true;
 				} else {
 					pline("You burn your %s.", body_part(FACE));
-					losehp(d(Fire_resistance ? 1 : 3, 4),
-					       "burning potion of oil", KILLED_BY_AN);
+					losehp(d(Fire_resistance ? 1 : 3, 4), "burning potion of oil", KILLED_BY_AN);
 				}
 			} else if (otmp->cursed)
 				pline("This tastes like castor oil.");
@@ -971,8 +968,7 @@ int peffects(struct obj *otmp) {
 			else {
 				pline("This burns%s!", otmp->blessed ? " a little" :
 								       otmp->cursed ? " a lot" : " like acid");
-				losehp(d(otmp->cursed ? 2 : 1, otmp->blessed ? 4 : 8),
-				       "potion of acid", KILLED_BY_AN);
+				losehp(Maybe_Half_Phys(d(otmp->cursed ? 2 : 1, otmp->blessed ? 4 : 8)), "potion of acid", KILLED_BY_AN);
 				exercise(A_CON, false);
 			}
 			if (Stoned) fix_petrification();
@@ -1103,7 +1099,7 @@ void potionhit(struct monst *mon, struct obj *obj, boolean your_fault) {
 		distance = 0;
 		pline("The %s crashes on your %s and breaks into shards.",
 		      botlnam, body_part(HEAD));
-		losehp(rnd(2), "thrown potion", KILLED_BY_AN);
+		losehp(Maybe_Half_Phys(rnd(2)), "thrown potion", KILLED_BY_AN);
 	} else {
 		distance = distu(mon->mx, mon->my);
 		if (!cansee(mon->mx, mon->my))
@@ -1144,8 +1140,7 @@ void potionhit(struct monst *mon, struct obj *obj, boolean your_fault) {
 				if (!Acid_resistance) {
 					pline("This burns%s!", obj->blessed ? " a little" :
 									      obj->cursed ? " a lot" : "");
-					losehp(d(obj->cursed ? 2 : 1, obj->blessed ? 4 : 8),
-					       "potion of acid", KILLED_BY_AN);
+					losehp(Maybe_Half_Phys(d(obj->cursed ? 2 : 1, obj->blessed ? 4 : 8)), "potion of acid", KILLED_BY_AN);
 				}
 				break;
 			case POT_AMNESIA:
@@ -1893,8 +1888,7 @@ boolean get_wet(struct obj *obj, boolean amnesia) {
 			if (obj->otyp == POT_ACID) {
 				pline("It boils vigorously!");
 				pline("You are caught in the explosion!");
-				losehp(Acid_resistance ? rnd(5) : rnd(10),
-				       "elementary chemistry", KILLED_BY);
+				losehp(Acid_resistance ? rnd(5) : rnd(10), "elementary chemistry", KILLED_BY);
 				if (amnesia) {
 					pline("You feel a momentary lapse of reason!");
 					forget(2 + rn2(3));
@@ -2762,8 +2756,13 @@ int dodip(void) {
 			useup(potion);
 			/* MRKR: an alchemy smock ought to be */
 			/* some protection against this: */
-			losehp(Acid_resistance ? rnd(5) : rnd(10),
-			       "alchemic blast", KILLED_BY_AN);
+			// Done -MC
+			if (uarmc->otyp == LAB_COAT) {
+				pline("Fortunately, %s protects you.", yobjnam(uarmc, NULL));
+				makeknown(LAB_COAT);
+			} else {
+				losehp(Acid_resistance ? rnd(5) : rnd(10), "alchemic blast", KILLED_BY_AN);
+			}
 			return 1;
 		}
 

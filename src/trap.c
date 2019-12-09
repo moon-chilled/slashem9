@@ -670,7 +670,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 				stackobj(otmp);
 				newsym(u.ux, u.uy); /* map the rock */
 
-				losehp(dmg, "falling rock", KILLED_BY_AN);
+				losehp(Maybe_Half_Phys(dmg), "falling rock", KILLED_BY_AN);
 				exercise(A_STR, false);
 			}
 			break;
@@ -741,8 +741,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 
 				pline("%s you!", A_gush_of_water_hits);
 				pline("You are covered with rust!");
-				if (Half_physical_damage) dam = (dam + 1) / 2;
-				losehp(dam, "rusting away", KILLED_BY);
+				losehp(Maybe_Half_Phys(dam), "rusting away", KILLED_BY);
 				break;
 			} else if (u.umonnum == PM_FLAMING_SPHERE) {
 				int dam = u.mhmax;
@@ -863,7 +862,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 			if (!steedintrap(trap, NULL)) {
 				if (!Passes_walls) {
 					if (ttype == SPIKED_PIT) {
-						losehp(rnd(10), plunged ? "deliberately plunged into a pit of iron spikes" : "fell into a pit of iron spikes", NO_KILLER_PREFIX);
+						losehp(Maybe_Half_Phys(rnd(10)), plunged ? "deliberately plunged into a pit of iron spikes" : "fell into a pit of iron spikes", NO_KILLER_PREFIX);
 						if (!rn2(6))
 							poisoned("spikes", A_STR, "fall onto poison spikes", 8);
 					} else {
@@ -871,7 +870,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 						// fell into his own pit
 						// plunged into a pit
 						nhstr reason = nhsfmt(plunged ? "deliberately plunged into %S%S pit" : "fell into %S%S pit", trap->madeby_u ? uhis() : "a", trap->madeby_u ? " own" : "");
-						losehp(rnd(6), nhs2cstr_tmp_destroy(&reason), NO_KILLER_PREFIX);
+						losehp(Maybe_Half_Phys(rnd(6)), nhs2cstr_tmp_destroy(&reason), NO_KILLER_PREFIX);
 					}
 					if (Punished && !carried(uball)) {
 						unplacebc();
@@ -1088,7 +1087,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 			if (steed_mid && saddle && !u.usteed)
 				keep_saddle_with_steedcorpse(steed_mid, fobj, saddle);
 			newsym(u.ux, u.uy); /* update trap symbol */
-			losehp(rnd(16), "land mine", KILLED_BY_AN);
+			losehp(Maybe_Half_Phys(rnd(16)), "land mine", KILLED_BY_AN);
 			/* fall recursively into the pit... */
 			if ((trap = t_at(u.ux, u.uy)) != 0) dotrap(trap, RECURSIVETRAP);
 			fill_pit(u.ux, u.uy);
@@ -1794,8 +1793,7 @@ int mintrap(struct monst *mtmp) {
 			case FIRE_TRAP:
 			mfiretrap:
 				if (in_sight)
-					pline("A %s erupts from the %s under %s!",
-					      tower_of_flame,
+					pline("A %s erupts from the %s under %s!", tower_of_flame,
 					      surface(mtmp->mx, mtmp->my), mon_nam(mtmp));
 				else if (see_it) /* evidently `mtmp' is invisible */
 					pline("You see a %s erupt from the %s!",
@@ -2305,19 +2303,19 @@ int float_down(long hmask, long emask) {
 						      sokoban_trap ? "crashed" :
 								     "hit the ground");
 				else {
-					if (!sokoban_trap)
+					if (!sokoban_trap) {
 						pline("You float gently to the %s.",
 						      surface(u.ux, u.uy));
-					else {
+					} else {
 						/* Justification elsewhere for Sokoban traps
-							 * is based on air currents. This is
-							 * consistent with that.
-							 * The unexpected additional force of the
-							 * air currents once leviation
-							 * ceases knocks you off your feet.
-							 */
+						 * is based on air currents. This is
+						 * consistent with that.
+						 * The unexpected additional force of the
+						 * air currents once leviation
+						 * ceases knocks you off your feet.
+						 */
 						pline("You fall over.");
-						losehp(rnd(2), "dangerous winds", KILLED_BY);
+						losehp(Maybe_Half_Phys(rnd(2)), "dangerous winds", KILLED_BY);
 						if (u.usteed) dismount_steed(DISMOUNT_FELL);
 						selftouch("As you fall, you");
 					}
@@ -2489,7 +2487,7 @@ static void domagictrap(void) {
 				/* KMH, balance patch -- Idea by Wolfgang von Hansen <wvh@geodesy.inka.de> */
 				dmg = jumble_pack();
 				if (dmg)
-					losehp(dmg, "violence", KILLED_BY);
+					losehp(Maybe_Half_Phys(dmg), "violence", KILLED_BY);
 				break;
 			}
 			case 17:
@@ -2876,7 +2874,7 @@ boolean drown(void) {
 		pline("You rust!");
 		i = d(2, 6);
 		if (u.mhmax > i) u.mhmax -= i;
-		losehp(i, "rusting away", KILLED_BY);
+		losehp(Maybe_Half_Phys(i), "rusting away", KILLED_BY);
 	}
 	if (inpool_ok) return false;
 
@@ -3724,7 +3722,7 @@ boolean chest_trap(struct obj *obj, int bodypart, boolean disarm) {
 					delobj(otmp);
 				}
 				wake_nearby();
-				losehp(d(6, 6), buf, KILLED_BY_AN);
+				losehp(Maybe_Half_Phys(d(6, 6)), buf, KILLED_BY_AN);
 				exercise(A_STR, false);
 				if (costly && loss) {
 					if (insider)
@@ -3878,7 +3876,7 @@ void b_trapped(const char *item, int bodypart) {
 
 	pline("KABOOM!!  %s was booby-trapped!", The(item));
 	wake_nearby();
-	losehp(dmg, "explosion", KILLED_BY_AN);
+	losehp(Maybe_Half_Phys(dmg), "explosion", KILLED_BY_AN);
 	exercise(A_STR, false);
 	if (bodypart) exercise(A_CON, false);
 	make_stunned(HStun + dmg, true);
