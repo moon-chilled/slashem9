@@ -92,3 +92,4 @@ Changelist for slashem-next v0.0.1:
 - Internals: move various global flags and state into a context struct (NetHack).
 - Gameplay: hearing is now a full-fledged attribute, like sight (NetHack).
 - Gameplay: artificial ice will eventually melt away (NetHack).
+- Interface: replace the 'stop eating' prompts with 'continue eating', default no (NetHack).
