@@ -4393,7 +4393,6 @@ void destroy_item(int osym, int dmgtyp) {
 	long i, cnt, quan;
 	int dindx;
 	const char *mult;
-	bool physical_damage;
 
 	/*
 	 * [ALI] Because destroy_item() can call wand_explode() which can
@@ -4424,7 +4423,6 @@ void destroy_item(int osym, int dmgtyp) {
 
 	for (obj = invent; obj; obj = frame.next_obj) {
 		frame.next_obj = obj->nobj;
-		physical_damage = false;
 		if (obj->oclass != osym) continue;	     /* test only objs of type osym */
 		if (obj->oartifact) continue;		     /* don't destroy artifacts */
 		if (obj->in_use && obj->quan == 1) continue; /* not available */
@@ -4554,7 +4552,7 @@ void destroy_item(int osym, int dmgtyp) {
 					const char *how = destroy_strings[dindx * 3 + 2];
 					boolean one = (cnt == 1L);
 
-					losehp(Maybe_Half_Phys(dmg), one ? how : makeplural(how), one ? KILLED_BY_AN : KILLED_BY);
+					losehp(dmg, one ? how : makeplural(how), one ? KILLED_BY_AN : KILLED_BY);
 					exercise(A_STR, false);
 				}
 			}
