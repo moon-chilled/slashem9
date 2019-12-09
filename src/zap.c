@@ -2818,7 +2818,6 @@ void weffects(struct obj *obj) {
 			pline("You feel shuddering vibrations.");
 	} else if (objects[otyp].oc_dir == NODIR) {
 		zapnodir(obj);
-
 	} else {
 		/* neither immediate nor directionless */
 		if (otyp == WAN_DIGGING || otyp == SPE_DIG)
@@ -4772,6 +4771,7 @@ retry:
 /* WAC made into a void */
 void throwspell() {
 	coord cc;
+	struct monst *mtmp;
 
 	/*	if (u.uinwater) {
 			pline("You joking! In this weather?"); return 0;
@@ -4796,7 +4796,8 @@ void throwspell() {
 			u.dx = u.ux;
 			u.dy = u.uy;
 			return;
-		} else if (!cansee(cc.x, cc.y) || IS_STWALL(levl[cc.x][cc.y].typ)) {
+		} else if ((!cansee(cc.x, cc.y) && (!(mtmp = m_at(cc.x, cc.y)) || !canspotmon(mtmp))) ||
+				IS_STWALL(levl[cc.x][cc.y].typ)) {
 			pline("Your mind fails to lock onto that location!");
 		} else {
 			/* Bingo! */

@@ -71,6 +71,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: artificial ice will eventually melt away.  Warning will notify you if the ice is about to melt.
 - Interface: replace the 'stop eating' prompts with 'continue eating', default no.
 - Bugfix: make half physical damage work in many places it didn't.
+- Bugfix: allow player to throw a spell (e.g. cone of cold, fireball) at a monster seen only with infravision/telepathy.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
