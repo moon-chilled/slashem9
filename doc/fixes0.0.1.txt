@@ -73,6 +73,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Interface: replace the 'stop eating' prompts with 'continue eating', default no.
 - Bugfix: make half physical damage work in many places it didn't.
 - Bugfix: allow player to throw a spell (e.g. cone of cold, fireball) at a monster seen only with infravision/telepathy.
+- Bugfix: don't say 'it moves only reluctantly' (referring to pet).
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
