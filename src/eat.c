@@ -361,6 +361,8 @@ static void do_reset_eat(void) {
 	if (context.victual.piece) {
 		context.victual.o_id = 0;
 		context.victual.piece = touchfood(context.victual.piece);
+		if (context.victual.piece)
+			context.victual.o_id = context.victual.piece->o_id;
 		recalc_wt();
 	}
 	context.victual.fullwarn = context.victual.eating = context.victual.doreset = false;
@@ -1326,7 +1328,7 @@ no_opener:
 	context.tin.reqtime = tmp;
 	context.tin.usedtime = 0;
 	context.tin.tin = otmp;
-	if (otmp) context.tin.o_id = otmp->o_id;
+	if (context.tin.tin) context.tin.o_id = context.tin.tin->o_id;
 	set_occupation(opentin, "opening the tin", 0);
 	return;
 }
@@ -2375,6 +2377,7 @@ int doeat(void) {
 		 * they shouldn't be able to choke now.
 		 */
 		if (u.uhs != SATIATED) context.victual.canchoke = false;
+		context.victual.o_id = 0;
 		context.victual.piece = touchfood(otmp);
 		if (context.victual.piece) context.victual.o_id = context.victual.piece->o_id;
 		pline("You resume your meal.");
@@ -2393,6 +2396,7 @@ int doeat(void) {
 	/* KMH, conduct */
 	u.uconduct.food++;
 
+	context.victual.o_id = 0;
 	context.victual.piece = otmp = touchfood(otmp);
 	if (context.victual.piece) context.victual.o_id = context.victual.piece->o_id;
 	context.victual.usedtime = 0;

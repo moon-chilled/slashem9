@@ -194,10 +194,12 @@ static struct obj *restobjchn(int fd, boolean ghostly, boolean frozen) {
 
 		if (!ghostly) {
 			/* fix the pointers */
-			if (context.victual.o_id == otmp->o_id)
+			if (otmp->o_id == context.victual.o_id)
 				context.victual.piece = otmp;
-			if (context.tin.o_id == otmp->o_id)
+			if (otmp->o_id == context.tin.o_id)
 				context.tin.tin = otmp;
+			if (otmp->o_id == context.spbook.o_id)
+				context.spbook.book = otmp;
 		}
 
 		otmp2 = otmp;
