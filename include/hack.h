@@ -140,7 +140,7 @@ extern coord bhitpos; /* place where throw or zap hits or stops */
  * need to retain the dmg value beyond that call scope.
  * Take care to ensure it doesn't get used more than once in other instances.
  */
-#define Maybe_Half_Phys(dmg)	(Half_physical_damage ? (((dmg)/2) + rn2(1 + (dmg)&1)) : (dmg))
+#define Maybe_Half_Phys(dmg)	(Half_physical_damage ? (((dmg)/2) + rn2(1 + ((dmg)&1))) : (dmg))
 
 /* flags for special ggetobj status returns */
 #define ALL_FINISHED 0x01 /* called routine already finished the job */
