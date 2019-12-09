@@ -1,3 +1,7 @@
+* Note: features intentionally not present from nethack:
+ - Thrown potions have a chance to hit a steed's saddle.  I think this is a cool idea, but I think it's not worth having unless it can do more.
+ - Elbereth changes.  There will more than likely be elbereth changes, but not those.
+
 * Make rogue level only show up on rogue's birthday per https://github.com/UnNetHack/UnNetHack/commit/7b02e60db76d45c2c91bc7281d288e6b64182005#commitcomment-32053355, once dungeon switches to lua?
 
 * Replace pretty much all uses of void* with anything.

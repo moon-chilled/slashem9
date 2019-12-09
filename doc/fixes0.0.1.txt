@@ -77,6 +77,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: bad capitalization of message when charged by shk for something that catches fire.
 - Bugfix: when fruitname=lotus, don't say fruit juice tastes like lotu juice.
 - Bugfix: don't give non-humanoid angelic minions swords or armour.
+- Gameplay: paper, straw, wood, plastic, and gold golems resist cold.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
