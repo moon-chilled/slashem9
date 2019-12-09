@@ -75,6 +75,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: allow player to throw a spell (e.g. cone of cold, fireball) at a monster seen only with infravision/telepathy.
 - Bugfix: don't say 'it moves only reluctantly' (referring to pet).
 - Bugfix: bad capitalization of message when charged by shk for something that catches fire.
+- Bugfix: when fruitname=lotus, don't say fruit juice tastes like lotu juice.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

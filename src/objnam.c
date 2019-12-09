@@ -1552,8 +1552,7 @@ static const struct o_range o_ranges[] = {
  * WAC made most of the STRCMP ==> STRCMPI so that they are case insensitive
  * catching things like "bag of Tricks"
  */
-char *
-makesingular(const char *oldstr) {
+char *makesingular(const char *oldstr) {
 	char *p, *bp;
 	char *str = nextobuf();
 
@@ -1620,7 +1619,10 @@ makesingular(const char *oldstr) {
 			    !BSTRCMPI(bp, p - 5, "shoes") ||
 			    !BSTRCMPI(bp, p - 6, "scales"))
 				return bp;
-
+		} else if (!BSTRCMP(bp, p-2, "us")) { /* lotus, fungus... */
+			if (BSTRCMP(bp, p-6, "tengus") && /* but not these... */
+			    BSTRCMP(bp, p-7, "hezrous"))
+				return bp;
 		} else if (!BSTRCMPI(bp, p - 5, "boots") ||
 			   !BSTRCMP(bp, p - 9, "gauntlets") ||
 			   !BSTRCMPI(bp, p - 6, "tricks") ||
@@ -1632,12 +1634,8 @@ makesingular(const char *oldstr) {
 			   !BSTRCMPI(bp, p - 21, "Medallion of Shifters") ||
 			   /* WAC added */
 			   !BSTRCMPI(bp, p - 12, "Key of Chaos") ||
-			   !BSTRCMPI(bp, p - 7, "Perseus") ||	   /* WAC added */
-			   !BSTRCMPI(bp, p - 11, "Aesculapius") || /* staff */
-			   !BSTRCMP(bp, p - 10, "eucalyptus") ||
 			   !BSTRCMP(bp, p - 9, "iron bars") ||
-			   !BSTRCMP(bp, p - 5, "aklys") ||
-			   !BSTRCMP(bp, p - 6, "fungus"))
+			   !BSTRCMP(bp, p - 5, "aklys"))
 			return bp;
 	mins:
 		p[-1] = 0;
