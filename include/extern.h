@@ -1946,6 +1946,8 @@ void obj_move_timers(struct obj *, struct obj *);
 void obj_split_timers(struct obj *, struct obj *);
 void obj_stop_timers(struct obj *);
 void spot_stop_timers(xchar x, xchar y, short func_index);
+long spot_time_expires(xchar x, xchar y, short func_index);
+long spot_time_left(xchar x, xchar y, short func_index);
 void mon_stop_timers(struct monst *);
 boolean obj_is_local(struct obj *);
 void save_timers(int, int, int);

@@ -1947,6 +1947,26 @@ void spot_stop_timers(xchar x, xchar y, short func_index) {
 }
 
 
+/*
+ * When is the spot timer of type func_index going to expire?
+ * Returns 0L if no such timer.
+ */
+long spot_time_expires(xchar x, xchar y, short func_index) {
+	timer_element *curr;
+	long where = (((long)x << 16) | ((long)y));
+
+	for (curr = timer_base; curr; curr = curr->next) {
+		if (curr->kind == TIMER_LEVEL &&
+				curr->func_index == func_index && curr->arg.a_long == where)
+			return curr->timeout;
+	}
+	return 0L;
+}
+
+long spot_time_left(xchar x, xchar y, short func_index) {
+    long expires = spot_time_expires(x,y,func_index);
+    return (expires > 0L) ? expires - monstermoves : 0L;
+}
 
 /* Insert timer into the global queue */
 static void insert_timer(timer_element *gnu) {

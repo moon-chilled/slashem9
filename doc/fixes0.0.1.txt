@@ -93,5 +93,5 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: you can quiver gold (NetHack).
 - Internals: move various global flags and state into a context struct (NetHack).
 - Gameplay: hearing is now a full-fledged attribute, like sight (NetHack).
-- Gameplay: artificial ice will eventually melt away (NetHack).
+- Gameplay: artificial ice will eventually melt away.  Warning will notify you if the ice is about to melt (NetHack).
 - Interface: replace the 'stop eating' prompts with 'continue eating', default no (NetHack).
