@@ -972,7 +972,7 @@ boolean test_move(int ux, int uy, int dx, int dy, int mode) {
  */
 static boolean findtravelpath(boolean guess) {
 	/* if travel to adjacent, reachable location, use normal movement rules */
-	if (!guess && iflags.travel1 && distmin(u.ux, u.uy, u.tx, u.ty) == 1) {
+	if (!guess && context.travel1 && distmin(u.ux, u.uy, u.tx, u.ty) == 1) {
 		context.run = 0;
 		if (test_move(u.ux, u.uy, u.tx - u.ux, u.ty - u.uy, TEST_MOVE)) {
 			u.dx = u.tx - u.ux;
@@ -1144,7 +1144,7 @@ void domove(void) {
 	if (context.travel) {
 		if (!findtravelpath(false))
 			findtravelpath(true);
-		iflags.travel1 = 0;
+		context.travel1 = 0;
 	}
 
 	if (((wtcap = near_capacity()) >= OVERLOADED || (wtcap > SLT_ENCUMBER &&
@@ -2415,7 +2415,7 @@ void nomul(int nval) {
 	u.uinvulnerable = false;  /* Kludge to avoid ctrl-C bug -dlc */
 	u.usleep = 0;
 	multi = nval;
-	context.travel = iflags.travel1 = context.mv = false;
+	context.travel = context.travel1 = context.mv = false;
 	context.run = 0;
 }
 

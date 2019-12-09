@@ -3168,7 +3168,7 @@ void rhack(char *cmd) {
 	}
 	/* handle most movement commands */
 	do_walk = do_rush = prefix_seen = false;
-	context.travel = iflags.travel1 = 0;
+	context.travel = context.travel1 = 0;
 
 	switch (*cmd) {
 		case DORUSH: if (movecmd(cmd[1])) {
@@ -3231,7 +3231,7 @@ void rhack(char *cmd) {
 		case CMD_TRAVEL:
 			if (iflags.travelcmd) {
 				context.travel = 1;
-				iflags.travel1 = 1;
+				context.travel1 = 1;
 				context.run = 8;
 				context.nopick = 1;
 				do_rush = true;

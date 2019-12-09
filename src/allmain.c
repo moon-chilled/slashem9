@@ -505,7 +505,7 @@ void moveloop(void) {
 			}
 			if (context.mv) {
 				if (multi < COLNO && !--multi) {
-					context.travel = iflags.travel1 = context.mv = false;
+					context.travel = context.travel1 = context.mv = false;
 					context.run = 0;
 				}
 				domove();
