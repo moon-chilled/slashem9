@@ -2145,8 +2145,12 @@ static void throwstorm(struct obj *obj, int skilldmg, int min, int range) {
 			confdir(); /* Random Dir */
 			u.dx *= (rn2(range) + min);
 			u.dx += sx;
+			u.dx = CLAMP(u.dx, 0, COLNO-1);
+
 			u.dy *= (rn2(range) + min);
 			u.dy += sy;
+			u.dy = CLAMP(u.dy, 0, ROWNO-1);
+
 			failcheck++;
 		} while (failcheck < 3 &&
 			 (!cansee(u.dx, u.dy) || IS_STWALL(levl[u.dx][u.dy].typ)));

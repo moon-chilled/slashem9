@@ -38,6 +38,7 @@ Changelist for slashem-next v0.0.1:
 - Bugfix: when a ridden steed is led onto a polymorph trap and polymorphs into another rideable form, you have to adjust yourself in the saddle on on 'the' (monster-type), not 'a'.
 - Bugfix: passwall monsters couldn't pick up objects from pit (fixed by making them always fall in, but suffer no ill effects).
 - Gameplay: an alchemical smock will protect you from alchemical blasts.
+- Bugfix: segfault could occur when explosion was thrown near the edge of the map screen.
 
 Imports from NetHack versions newer than 3.4.3:
 - Bugfix: acid dropping bug.
