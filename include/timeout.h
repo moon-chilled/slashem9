@@ -22,17 +22,18 @@ typedef void (*timeout_proc)(void *, long);
  * Timeout functions.  Add a define here, then put it in the table
  * in timeout.c.  "One more level of indirection will fix everything."
  */
-#define ROT_ORGANIC    0 /* for buried organics */
-#define ROT_CORPSE     1
-#define MOLDY_CORPSE   2
-#define REVIVE_MON     3
-#define BURN_OBJECT    4
-#define HATCH_EGG      5
-#define FIG_TRANSFORM  6
-#define UNPOLY_MON     7
-#define BOMB_BLOW      8
-#define UNPOLY_OBJ     9
-#define NUM_TIME_FUNCS 10
+#define ROT_ORGANIC	0 /* for buried organics */
+#define ROT_CORPSE	1
+#define MOLDY_CORPSE	2
+#define REVIVE_MON	3
+#define BURN_OBJECT	4
+#define HATCH_EGG	5
+#define FIG_TRANSFORM	6
+#define UNPOLY_MON	7
+#define BOMB_BLOW	8
+#define UNPOLY_OBJ	9
+#define MELT_ICE_AWAY	10
+#define NUM_TIME_FUNCS	11
 
 /* used in timeout.c */
 typedef struct fe {

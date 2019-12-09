@@ -1680,35 +1680,25 @@ static void write_timer(int, timer_element *); /* Damn typedef write_timer is in
 static timer_element *timer_base; /* "active" */
 static unsigned long timer_id = 1;
 
-/* If defined, then include names when printing out the timer queue */
-#define VERBOSE_TIMER
-
 typedef struct {
 	timeout_proc f, cleanup;
-#ifdef VERBOSE_TIMER
 	const char *name;
-#define TTAB(a, b, c) \
-	{ a, b, c }
-#else
-#define TTAB(a, b, c) \
-	{ a, b }
-#endif
 } ttable;
 
 /* table of timeout functions */
 static const ttable timeout_funcs[NUM_TIME_FUNCS] = {
-	TTAB(rot_organic, NULL, "rot_organic"),
-	TTAB(rot_corpse, NULL, "rot_corpse"),
-	TTAB(moldy_corpse, NULL, "moldy_corpse"),
-	TTAB(revive_mon, NULL, "revive_mon"),
-	TTAB(burn_object, cleanup_burn, "burn_object"),
-	TTAB(hatch_egg, NULL, "hatch_egg"),
-	TTAB(fig_transform, NULL, "fig_transform"),
-	TTAB(unpoly_mon, NULL, "unpoly_mon"),
-	TTAB(bomb_blow, NULL, "bomb_blow"),
-	TTAB(unpoly_obj, cleanup_unpoly, "unpoly_obj"),
+	{rot_organic, NULL, "rot_organic"},
+	{rot_corpse, NULL, "rot_corpse"},
+	{moldy_corpse, NULL, "moldy_corpse"},
+	{revive_mon, NULL, "revive_mon"},
+	{burn_object, cleanup_burn, "burn_object"},
+	{hatch_egg, NULL, "hatch_egg"},
+	{fig_transform, NULL, "fig_transform"},
+	{unpoly_mon, NULL, "unpoly_mon"},
+	{bomb_blow, NULL, "bomb_blow"},
+	{unpoly_obj, cleanup_unpoly, "unpoly_obj"},
+	{melt_ice_away, NULL, "melt_ice_away"},
 };
-#undef TTAB
 
 static const char *kind_name(short kind) {
 	switch (kind) {
@@ -1733,17 +1723,10 @@ static void print_queue(winid win, timer_element *base) {
 	} else {
 		putstr(win, 0, "timeout  id   kind   call");
 		for (curr = base; curr; curr = curr->next) {
-#ifdef VERBOSE_TIMER
 			sprintf(buf, " %4ld   %4ld  %-6s %s(%s)",
 				curr->timeout, curr->tid, kind_name(curr->kind),
 				timeout_funcs[curr->func_index].name,
 				fmt_ptr(curr->arg.a_void, arg_address));
-#else
-			sprintf(buf, " %4ld   %4ld  %-6s #%d(%s)",
-				curr->timeout, curr->tid, kind_name(curr->kind),
-				curr->func_index,
-				fmt_ptr(curr->arg.a_void, arg_address));
-#endif
 			putstr(win, 0, buf);
 		}
 	}
@@ -1934,6 +1917,36 @@ void mon_stop_timers(struct monst *mon) {
 		}
 	}
 }
+
+/*
+ * Stop all timers of index func_index at this spot.
+ *
+ */
+void spot_stop_timers(xchar x, xchar y, short func_index) {
+	timer_element *curr, *prev, *next_timer=0;
+	long where = ((long)x << 16) | ((long)y);
+
+	for (prev = 0, curr = timer_base; curr; curr = next_timer) {
+		next_timer = curr->next;
+		if (curr->kind == TIMER_LEVEL && curr->func_index == func_index && curr->arg.a_long == where) {
+			if (prev) {
+				prev->next = curr->next;
+			} else {
+				timer_base = curr->next;
+			}
+
+			if (timeout_funcs[curr->func_index].cleanup) {
+				(*timeout_funcs[curr->func_index].cleanup)(curr->arg.a_void, curr->timeout);
+			}
+
+			free(curr);
+		} else {
+			prev = curr;
+		}
+	}
+}
+
+
 
 /* Insert timer into the global queue */
 static void insert_timer(timer_element *gnu) {

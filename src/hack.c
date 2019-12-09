@@ -41,6 +41,12 @@ anything obj_to_any(struct obj *obj) {
 	return ret;
 }
 
+anything long_to_any(long l) {
+	anything ret = {0};
+	ret.a_long = l;
+	return ret;
+}
+
 #ifdef DUNGEON_GROWTH
 // guaranteed to return a valid coord
 void rndmappos(xchar *x, xchar *y) {

@@ -1852,7 +1852,7 @@ int mintrap(struct monst *mtmp) {
 				    !see_it && distu(mtmp->mx, mtmp->my) <= 3 * 3)
 					pline("You smell smoke.");
 				if (is_ice(mtmp->mx, mtmp->my))
-					melt_ice(mtmp->mx, mtmp->my);
+					melt_ice(mtmp->mx, mtmp->my, NULL);
 				if (see_it) seetrap(trap);
 				break;
 
@@ -2421,7 +2421,7 @@ static void dofiretrap(struct obj *box) {
 	if (!box && burn_floor_paper(u.ux, u.uy, see_it, true) && !see_it)
 		pline("You smell paper burning.");
 	if (is_ice(u.ux, u.uy))
-		melt_ice(u.ux, u.uy);
+		melt_ice(u.ux, u.uy, NULL);
 }
 
 static void domagictrap(void) {

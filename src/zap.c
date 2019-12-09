@@ -4062,21 +4062,24 @@ void buzz(int type, int nd, xchar sx, xchar sy, int dx, int dy) {
 	bhitpos = save_bhitpos;
 }
 
-void melt_ice(xchar x, xchar y) {
+void melt_ice(xchar x, xchar y, const char *msg) {
 	struct rm *lev = &levl[x][y];
 	struct obj *otmp;
 
-	if (lev->typ == DRAWBRIDGE_UP)
-		lev->drawbridgemask &= ~DB_ICE; /* revert to DB_MOAT */
-	else {					/* lev->typ == ICE */
+	if (!msg) msg = "The ice crackles and melts.";
+
+	if (lev->typ == DRAWBRIDGE_UP) {
+		lev->drawbridgemask &= ~DB_ICE;	/* revert to DB_MOAT */
+	} else {				/* lev->typ == ICE */
 		lev->typ = (lev->icedpool == ICED_POOL ? POOL : MOAT);
 		lev->icedpool = 0;
 	}
+	spot_stop_timers(x, y, MELT_ICE_AWAY); // no more ice to melt away
 	obj_ice_effects(x, y, false);
 	unearth_objs(x, y);
 	if (Underwater) vision_recalc(1);
 	newsym(x, y);
-	if (cansee(x, y)) Norep("The ice crackles and melts.");
+	if (cansee(x, y)) Noreps(msg);
 	if ((otmp = sobj_at(BOULDER, x, y)) != 0) {
 		if (cansee(x, y)) pline("%s settles...", An(xname(otmp)));
 		do {
@@ -4089,6 +4092,36 @@ void melt_ice(xchar x, xchar y) {
 	}
 	if (x == u.ux && y == u.uy)
 		spoteffects(true); /* possibly drown, notice objects */
+}
+
+#define MIN_ICE_TIME 50
+#define MAX_ICE_TIME 2000
+/*
+ * Start a melt_ice timer.
+ */
+void start_melt_ice_timeout(xchar x, xchar y) {
+	int when;
+	long where;
+	short action = MELT_ICE_AWAY;
+	for (when = MIN_ICE_TIME; when < (MAX_ICE_TIME + MIN_ICE_TIME); when++)
+		if (!rn2((MAX_ICE_TIME - when) + MIN_ICE_TIME)) break;
+	where = (((long)x << 16) | ((long)y));
+	start_timer(when, TIMER_LEVEL, action, long_to_any(where));
+}
+#undef MIN_ICE_TIME
+#undef MAX_ICE_TIME
+
+/*
+ * Called when ice has melted completely away.
+ */
+void melt_ice_away(void *arg, long timeout) {
+       xchar x,y;
+       long where = (long)arg;
+
+       y = where & 0xFFFF;
+       x = (where >> 16) & 0xFFFF;
+       /* melt_ice does newsym when appropriate */
+       melt_ice(x,y,"Some ice melts away.");
 }
 
 /* Burn floor scrolls, evaporate pools, etc...  in a single square.  Used
@@ -4112,7 +4145,7 @@ int zap_over_floor(xchar x, xchar y, int type, boolean *shopdamage) {
 			if (cansee(x, y)) newsym(x, y);
 		}
 		if (is_ice(x, y)) {
-			melt_ice(x, y);
+			melt_ice(x, y, NULL);
 		} else if (is_pool(x, y)) {
 			const char *msgtxt = "You hear hissing gas.";
 			if (lev->typ != POOL) { /* MOAT or DRAWBRIDGE_UP */
@@ -4196,9 +4229,17 @@ int zap_over_floor(xchar x, xchar y, int type, boolean *shopdamage) {
 					newsym(x, y);
 				}
 			}
+			if (!lava) {
+				start_melt_ice_timeout(x, y);
+				obj_ice_effects(x, y, true);
+			}
 		}
-		obj_ice_effects(x, y, true);
+	} else if (abstype == ZT_COLD && is_ice(x, y)) {
+		/* Already ice here, so just firm it up. */
+		spot_stop_timers(x, y, MELT_ICE_AWAY);	/* stop existing timer */
+		start_melt_ice_timeout(x,y);		/* start new timer */
 	}
+
 	if (closed_door(x, y)) {
 		int new_doormask = -1;
 		const char *see_txt = 0, *sense_txt = 0, *hear_txt = 0;

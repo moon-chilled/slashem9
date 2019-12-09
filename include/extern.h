@@ -679,6 +679,7 @@ anything int_to_any(int);
 anything uint_to_any(uint);
 anything monst_to_any(struct monst *);
 anything obj_to_any(struct obj *);
+anything long_to_any(long l);
 #ifdef DUNGEON_GROWTH
 void catchup_dgn_growths(int);
 void dgn_growths(boolean, boolean);
@@ -1944,6 +1945,7 @@ void run_timers(void);
 void obj_move_timers(struct obj *, struct obj *);
 void obj_split_timers(struct obj *, struct obj *);
 void obj_stop_timers(struct obj *);
+void spot_stop_timers(xchar x, xchar y, short func_index);
 void mon_stop_timers(struct monst *);
 boolean obj_is_local(struct obj *);
 void save_timers(int, int, int);
@@ -2264,7 +2266,9 @@ struct monst *bhit(int, int, int, int, int (*)(struct monst *, struct obj *),
 struct monst *boomhit(int, int);
 int burn_floor_paper(int, int, boolean, boolean);
 void buzz(int, int, xchar, xchar, int, int);
-void melt_ice(xchar, xchar);
+void melt_ice(xchar x, xchar y, const char *msg);
+void start_melt_ice_timeout(xchar x, xchar y);
+void melt_ice_away(void *arg, long timeout);
 int zap_over_floor(xchar, xchar, int, boolean *);
 void fracture_rock(struct obj *);
 boolean break_statue(struct obj *);

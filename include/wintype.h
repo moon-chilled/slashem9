@@ -16,6 +16,7 @@ typedef union {
 	uint a_uint;
 	char a_char;
 	schar a_schar;
+	long a_long;
 	/* add types as needed */
 } anything;
 #define anything_zero ((anything){0})
