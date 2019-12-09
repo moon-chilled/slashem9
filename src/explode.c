@@ -223,7 +223,7 @@ void do_explode(
 	boolean starting = 1;
 	boolean visible, any_shield;
 	int uhurt = 0; /* 0=unhurt, 1=items damaged, 2=you and items damaged */
-	nhstr str;
+	nhstr str = {0};
 	int idamres, idamnonres;
 	struct monst *mtmp;
 	uchar adtyp;
