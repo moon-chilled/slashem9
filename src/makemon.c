@@ -511,7 +511,7 @@ static void m_initweap(struct monst *mtmp) {
 			}
 			break;
 
-		case S_ANGEL: {
+		case S_ANGEL: if (humanoid(ptr)) {
 			int spe2;
 
 			/* create minion stuff; can't use mongets */
