@@ -1,4 +1,4 @@
-* Figure out why binary compiled with tcc segfaults when entering an extended command
+* Make rogue level only show up on rogue's birthday per https://github.com/UnNetHack/UnNetHack/commit/7b02e60db76d45c2c91bc7281d288e6b64182005#commitcomment-32053355, once dungeon switches to lua?
 
 * Replace pretty much all uses of void* with anything.
 
