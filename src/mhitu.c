@@ -1920,6 +1920,7 @@ static int gulpmu(struct monst *mtmp, struct attack *mattk) {
 	int tim_tmp;
 	struct obj *otmp2;
 	int i;
+	bool physical_damage = false;
 
 	if (!u.uswallow) { /* swallows you */
 		if (youmonst.data->msize >= MZ_HUGE) return 0;
@@ -1993,6 +1994,7 @@ static int gulpmu(struct monst *mtmp, struct attack *mattk) {
 
 	switch (mattk->adtyp) {
 		case AD_DGST:
+			physical_damage = true;
 			if (Slow_digestion) {
 				/* Messages are handled below */
 				u.uswldtim = 0;
@@ -2004,11 +2006,12 @@ static int gulpmu(struct monst *mtmp, struct attack *mattk) {
 			} else {
 				pline("%s%s digests you!", Monnam(mtmp),
 				      (u.uswldtim == 2) ? " thoroughly" :
-							  (u.uswldtim == 1) ? " utterly" : "");
+				      (u.uswldtim == 1) ? " utterly" : "");
 				exercise(A_STR, false);
 			}
 			break;
 		case AD_PHYS:
+			physical_damage = true;
 			if (mtmp->data == &mons[PM_FOG_CLOUD]) {
 				pline("You are laden with moisture and %s",
 				      flaming(youmonst.data) ? "are smoldering out!" :
@@ -2104,7 +2107,7 @@ static int gulpmu(struct monst *mtmp, struct attack *mattk) {
 			break;
 	}
 
-	if (Half_physical_damage) tmp = (tmp + 1) / 2;
+	if (physical_damage) tmp = Maybe_Half_Phys(tmp);
 
 	mdamageu(mtmp, tmp);
 	if (tmp) stop_occupation();
