@@ -631,7 +631,7 @@ int trap_detect(struct obj *sobj) {
 			found = true;
 	}
 	for (obj = fobj; obj; obj = obj->nobj) {
-		if ((obj->otyp == LARGE_BOX || obj->otyp == CHEST) && obj->otrapped) {
+		if (Is_box(obj) && obj->otrapped) {
 			if (obj->ox != u.ux || obj->oy != u.uy)
 				goto outtrapmap;
 			else
@@ -665,7 +665,7 @@ outtrapmap:
 		sense_trap(ttmp, 0, 0, sobj && sobj->cursed);
 
 	for (obj = fobj; obj; obj = obj->nobj)
-		if ((obj->otyp == LARGE_BOX || obj->otyp == CHEST) && obj->otrapped)
+		if (Is_Box(obj) && obj->otrapped)
 			sense_trap(NULL, obj->ox, obj->oy, sobj && sobj->cursed);
 
 	for (door = 0; door < doorindex; door++) {
