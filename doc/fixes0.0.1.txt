@@ -84,6 +84,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: if engulfed in vortex and blind only because of a blindfold, taking off the blindfold should cause blindness to take effect immediately.
 - Gameplay: unihorn|prayer won't cure blindness if engulfed in a vortex, because it'll just return immediately.
 - Gameplay: confused reading of cursed charging scroll drains energy.
+- Interface: new rumors, oracles, and random messages.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

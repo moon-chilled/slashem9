@@ -2659,8 +2659,7 @@ void sellobj(struct obj *obj, xchar x, xchar y) {
 			offer += cgold;
 		if ((eshkp->robbed -= offer < 0L))
 			eshkp->robbed = 0L;
-		if (offer) verbalize(
-			"Thank you for your contribution to restock this recently plundered shop.");
+		if (offer) verbalize("Thank you for your contribution to restock this recently plundered shop.");
 		subfrombill(obj, shkp);
 		return;
 	}
