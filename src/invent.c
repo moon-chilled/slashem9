@@ -968,12 +968,7 @@ struct obj *getobj(const char *let, const char *word) {
 		}
 		if (ilet == def_oc_syms[COIN_CLASS]) {
 			if (!usegold) {
-				if (!strncmp(word, "rub on ", 7)) {
-					/* the dangers of building sentences... */
-					pline("You cannot rub gold%s.", word + 3);
-				} else {
-					pline("You cannot %s gold.", word);
-				}
+				pline("You cannot %s gold.", word);
 				return NULL;
 			}
 			if (cnt == 0 && prezero) return NULL;

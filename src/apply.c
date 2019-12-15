@@ -2191,7 +2191,7 @@ static void use_stone(struct obj *tstone) {
 	char stonebuf[QBUFSZ];
 	static const char scritch[] = "\"scritch, scritch\"";
 	static const char allowall[3] = {COIN_CLASS, ALL_CLASSES, 0};
-	static const char justgems[3] = {ALLOW_NONE, GEM_CLASS, 0};
+	static const char coins_gems[3] = {COIN_CLASS, GEM_CLASS, 0};
 
 	/* in case it was acquired while blinded */
 	if (!Blind) tstone->dknown = 1;
@@ -2199,7 +2199,7 @@ static void use_stone(struct obj *tstone) {
 	   junk as likely candidates for rubbing */
 	choices = (tstone->otyp == TOUCHSTONE && tstone->dknown &&
 		   objects[TOUCHSTONE].oc_name_known) ?
-			  justgems :
+			  coins_gems :
 			  allowall;
 	sprintf(stonebuf, "rub on the stone%s", plur(tstone->quan));
 	if ((obj = getobj(choices, stonebuf)) == 0)

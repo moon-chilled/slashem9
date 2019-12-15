@@ -80,6 +80,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: when fruitname=lotus, don't say fruit juice tastes like lotu juice.
 - Bugfix: don't give non-humanoid angelic minions swords or armour.
 - Gameplay: paper, straw, wood, plastic, and gold golems resist cold.
+- Gameplay: player can use a touchstone on gold.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
