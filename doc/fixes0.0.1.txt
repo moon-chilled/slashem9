@@ -81,6 +81,8 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: don't give non-humanoid angelic minions swords or armour.
 - Gameplay: paper, straw, wood, plastic, and gold golems resist cold.
 - Gameplay: player can use a touchstone on gold.
+- Gameplay: if engulfed in vortex and blind only because of a blindfold, taking off the blindfold should cause blindness to take effect immediately.
+- Gameplay: unihorn|prayer won't cure blindness if engulfed in a vortex, because it'll just return immediately.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

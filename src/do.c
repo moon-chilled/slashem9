@@ -1570,8 +1570,10 @@ static int wipeoff(void) {
 	if (!Blinded) {
 		pline("You've got the glop off.");
 		u.ucreamed = 0;
-		Blinded = 1;
-		make_blinded(0L, true);
+		if (!gulp_blnd_check()) {
+			Blinded = 1;
+			make_blinded(0L, true);
+		}
 		return 0;
 	} else if (!u.ucreamed) {
 		pline("Your %s feels clean now.", body_part(FACE));

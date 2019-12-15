@@ -128,8 +128,10 @@ static int use_towel(struct obj *obj) {
 
 		if (!Blinded) {
 			pline("You've got the glop off.");
-			Blinded = 1;
-			make_blinded(0L, true);
+			if (!gulp_blnd_check()) {
+				Blinded = 1;
+				make_blinded(0L, true);
+			}
 		} else {
 			pline("Your %s feels clean now.", body_part(FACE));
 		}
@@ -1696,7 +1698,8 @@ void use_unicorn_horn(struct obj *obj) {
 
 	/* collect property troubles */
 	if (Sick) prop_trouble(SICK);
-	if (Blinded > (long)u.ucreamed) prop_trouble(BLINDED);
+	if (Blinded > u.ucreamed &&
+	    !(u.uswallow && attacktype_fordmg(u.ustuck->data, AT_ENGL, AD_BLND))) prop_trouble(BLINDED);
 	if (HHallucination) prop_trouble(HALLUC);
 	if (Vomiting) prop_trouble(VOMITING);
 	if (HConfusion) prop_trouble(CONFUSION);

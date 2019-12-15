@@ -2004,7 +2004,8 @@ static void fpostfx(struct obj *otmp) {
 			}
 			break;
 		case CARROT:
-			make_blinded((long)u.ucreamed, true);
+			if (!u.uswallow || !attacktype_fordmg(u.ustuck->data, AT_ENGL, AD_BLND))
+				make_blinded(u.ucreamed, true);
 			break;
 		/* body parts -- now checks for artifact and name*/
 		case EYEBALL:

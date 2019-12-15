@@ -184,7 +184,10 @@ static int in_trouble() {
 		if (Cursed_obj(otmp, SADDLE)) return TROUBLE_SADDLE;
 	}
 
-	if (Blinded > 1 && haseyes(youmonst.data)) return TROUBLE_BLIND;
+	if (Blinded > 1 && haseyes(youmonst.data) &&
+			(!u.uswallow || !attacktype_fordmg(u.ustuck->data, AT_ENGL, AD_BLND)))
+		return TROUBLE_BLIND;
+
 	for (i = 0; i < A_MAX; i++)
 		if (ABASE(i) < AMAX(i)) return TROUBLE_POISONED;
 	if (Wounded_legs && !u.usteed) return TROUBLE_WOUNDED_LEGS;

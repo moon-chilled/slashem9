@@ -1913,6 +1913,24 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 	return res;
 }
 
+
+/* An interface for use when taking a blindfold off, for example,
+ * to see if an engulfing attack should immediately take affect, like
+ * a passive attack. TRUE if engulfing blindness occurred */
+bool gulp_blnd_check(void) {
+	struct attack *mattk;
+
+	if (!Blinded && u.uswallow &&
+			(mattk = attacktype_fordmg(u.ustuck->data, AT_ENGL, AD_BLND)) &&
+			can_blnd(u.ustuck, &youmonst, mattk->aatyp, (struct obj*)0)) {
+
+		++u.uswldtim; // compensate for gulpmu change
+		gulpmu(u.ustuck, mattk);
+		return true;
+	}
+	return false;
+}
+
 // monster swallows you, or damage if u.uswallow
 static int gulpmu(struct monst *mtmp, struct attack *mattk) {
 	struct trap *t = t_at(u.ux, u.uy);

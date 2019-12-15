@@ -1045,8 +1045,10 @@ void Blindf_off(struct obj *otmp) {
 			if (Punished) set_bc(0);
 		}
 	} else if (was_blind) {
-		changed = true; /* !Blind */
-		pline("You can see again.");
+		if (!gulp_blnd_check()) {
+			changed = true; /* !Blind */
+			pline("You can see again.");
+		}
 	}
 	if (changed) {
 		/* blindness has just been toggled */

@@ -969,6 +969,7 @@ void expels(struct monst *, struct permonst *, boolean);
 struct attack *getmattk(struct permonst *, int, int *, struct attack *);
 int mattacku(struct monst *);
 int magic_negation(struct monst *);
+bool gulp_blnd_check();
 int gazemu(struct monst *, struct attack *);
 void mdamageu(struct monst *, int);
 int could_seduce(struct monst *, struct monst *, struct attack *);
