@@ -1322,12 +1322,19 @@ int seffects(struct obj *sobj) {
 			return 1;
 		case SCR_CHARGING:
 			if (confused) {
-				pline("You feel charged up!");
-				if (u.uen < u.uenmax)
-					u.uen = u.uenmax;
-				else
-					u.uen = (u.uenmax += d(5, 4));
+				if (sobj->cursed) {
+					pline("You feel discharged.");
+					u.uen = rn2(u.uen/2);
+				} else {
+					pline("You feel charged up!");
+					if (u.uen < u.uenmax) {
+						u.uen = u.uenmax;
+					} else {
+						u.uen = (u.uenmax += d(5, 4));
+					}
+				}
 				context.botl = 1;
+
 				break;
 			}
 			known = true;
