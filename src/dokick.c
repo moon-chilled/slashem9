@@ -132,7 +132,8 @@ static void kick_monster(xchar x, xchar y) {
 	if (Upolyd && attacktype(youmonst.data, AT_KICK)) {
 		struct attack *uattk;
 		int sum;
-		schar tmp = find_roll_to_hit(mon);
+		bool monk_armor_penalty;
+		schar tmp = find_roll_to_hit(mon, &monk_armor_penalty);
 		schar roll = 0;
 
 		for (i = 0; i < NATTK; i++) {
@@ -157,7 +158,7 @@ static void kick_monster(xchar x, xchar y) {
 				if (sum == 2)
 					break; /* Defender died */
 			} else {
-				missum(mon, tmp, roll, uattk);
+				missum(mon, tmp, roll, uattk, monk_armor_penalty);
 				passive(mon, 0, 1, AT_KICK);
 			}
 		}

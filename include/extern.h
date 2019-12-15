@@ -2022,11 +2022,11 @@ void u_init(void);
 void hurtmarmor(struct monst *, int);
 int attack_checks(struct monst *, boolean);
 void check_caitiff(struct monst *);
-schar find_roll_to_hit(struct monst *);
+int find_roll_to_hit(struct monst *mtmp, bool *monk_armor_penalty);
 boolean attack(struct monst *);
 boolean hmon(struct monst *, struct obj *, int);
 int damageum(struct monst *, struct attack *);
-void missum(struct monst *, int, int, struct attack *);
+void missum(struct monst *mdef, int target, int roll, struct attack *mattk, bool encumbered_by_armor);
 int passive(struct monst *, int, int, uchar);
 void passive_obj(struct monst *, struct obj *, struct attack *);
 void stumble_onto_mimic(struct monst *);
@@ -2034,11 +2034,9 @@ int flash_hits_mon(struct monst *, struct obj *);
 
 /* ### unixmain.c ### */
 
-#ifdef UNIX
-#ifdef PORT_HELP
+#if defined(UNIX) && defined(PORT_HELP)
 void port_help(void);
-#endif
-#endif /* UNIX */
+#endif // UNIX && PORT_HELP
 
 /* ### unixtty.c ### */
 

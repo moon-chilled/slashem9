@@ -39,6 +39,8 @@ Changelist for slashem-next v0.0.1:
 - Bugfix: passwall monsters couldn't pick up objects from pit (fixed by making them always fall in, but suffer no ill effects).
 - Gameplay: an alchemical smock will protect you from alchemical blasts.
 - Bugfix: segfault could occur when explosion was thrown near the edge of the map screen.
+- Bugfix: when monks got the message 'Your armor is rather cumbersome...', their attack power would be boosted rather than reduced.
+- Interface: monks only get the 'Your armor is rather cumbersome...' message when when that encumberance actually caused them to miss.
 
 Imports from NetHack versions newer than 3.4.3:
 - Bugfix: acid dropping bug.

@@ -4,7 +4,7 @@
 
 #include "hack.h"
 
-static boolean known_hitum(struct monst *, int, int *, struct attack *);
+static boolean known_hitum(struct monst *, int, int *, struct attack *, bool);
 static void steal_it(struct monst *, struct attack *);
 #if 0
 static boolean hitum(struct monst *,int,int,struct attack *);
@@ -17,7 +17,7 @@ static int explum(struct monst *, struct attack *);
 static void start_engulf(struct monst *);
 static void end_engulf(void);
 static int gulpum(struct monst *, struct attack *);
-static boolean hmonas(struct monst *, int);
+static boolean hmonas(struct monst *);
 static void nohandglow(struct monst *);
 static boolean shade_aware(struct obj *);
 
@@ -253,9 +253,10 @@ void check_caitiff(struct monst *mtmp) {
 	}
 }
 
-schar find_roll_to_hit(struct monst *mtmp) {
-	schar tmp;
-	int tmp2;
+int find_roll_to_hit(struct monst *mtmp, bool *monk_armor_penalty) {
+	int tmp, tmp2;
+
+	*monk_armor_penalty = false;
 
 	tmp = 1 + Luck + abon() + find_mac(mtmp) + u.uhitinc +
 	      maybe_polyd(youmonst.data->mlevel, u.ulevel);
@@ -308,8 +309,8 @@ schar find_roll_to_hit(struct monst *mtmp) {
 
 			tmp += (u.ulevel / 3) + 2;
 		else if (!uwep && (!u.twoweap || !uswapwep)) {
-			pline("Your armor is rather cumbersome...");
-			tmp += (u.ulevel / 9) + 1;
+			tmp -= (u.ulevel / 9) + 1;
+			*monk_armor_penalty = true;
 		}
 	}
 	/* special class effect uses... */
@@ -336,7 +337,6 @@ schar find_roll_to_hit(struct monst *mtmp) {
 /* try to attack; return false if monster evaded */
 /* u.dx and u.dy must be set */
 boolean attack(struct monst *mtmp) {
-	schar tmp;
 	struct permonst *mdat = mtmp->data;
 	int mhit;
 
@@ -438,9 +438,7 @@ boolean attack(struct monst *mtmp) {
 	     mtmp->mx != u.ux + u.dx || mtmp->my != u.uy + u.dy)) /* it moved */
 		return false;
 
-	tmp = find_roll_to_hit(mtmp);
-
-	hmonas(mtmp, tmp); /* hmonas handles all attacks now */
+	hmonas(mtmp); /* hmonas handles all attacks now */
 
 	/* berserk lycanthropes calm down after the enemy is dead */
 	if (mtmp->mhp <= 0) repeat_hit = 0;
@@ -468,7 +466,7 @@ atk_done:
 
 /* returns true if monster still lives */
 /* mattack = Which weapons you attacked with -ALI */
-static boolean known_hitum(struct monst *mon, int mattack, int *mhit, struct attack *uattk) {
+static boolean known_hitum(struct monst *mon, int mattack, int *mhit, struct attack *uattk, bool encumbered_by_armor) {
 	boolean malive = true;
 
 	if (override_confirmation) {
@@ -484,9 +482,9 @@ static boolean known_hitum(struct monst *mon, int mattack, int *mhit, struct att
 
 	if (!*mhit) {
 		if (mattack & HIT_UWEP)
-			missum(mon, tohit(UWEP_ROLL), dice(UWEP_ROLL), uattk);
+			missum(mon, tohit(UWEP_ROLL), dice(UWEP_ROLL), uattk, encumbered_by_armor);
 		if (mattack & HIT_USWAPWEP)
-			missum(mon, tohit(USWAPWEP_ROLL), dice(USWAPWEP_ROLL), uattk);
+			missum(mon, tohit(USWAPWEP_ROLL), dice(USWAPWEP_ROLL), uattk, encumbered_by_armor);
 	} else {
 		int oldhp = mon->mhp,
 		    x = u.ux + u.dx, y = u.uy + u.dy;
@@ -501,7 +499,7 @@ static boolean known_hitum(struct monst *mon, int mattack, int *mhit, struct att
 			dieroll = dice(UWEP_ROLL);
 			malive = hmon(mon, uwep, 0);
 		} else if (mattack & HIT_UWEP)
-			missum(mon, tohit(UWEP_ROLL), dice(UWEP_ROLL), uattk);
+			missum(mon, tohit(UWEP_ROLL), dice(UWEP_ROLL), uattk, encumbered_by_armor);
 		if ((mattack & HIT_USWAPWEP) && malive && m_at(x, y) == mon) {
 			/* KMH, ethics */
 			if (*mhit & HIT_USWAPWEP) {
@@ -509,7 +507,7 @@ static boolean known_hitum(struct monst *mon, int mattack, int *mhit, struct att
 				dieroll = dice(USWAPWEP_ROLL);
 				malive = hmon(mon, uswapwep, 0);
 			} else
-				missum(mon, tohit(USWAPWEP_ROLL), dice(USWAPWEP_ROLL), uattk);
+				missum(mon, tohit(USWAPWEP_ROLL), dice(USWAPWEP_ROLL), uattk, encumbered_by_armor);
 		}
 		if (malive) {
 			/* monster still alive */
@@ -2505,8 +2503,8 @@ static int gulpum(struct monst *mdef, struct attack *mattk) {
 	return 0;
 }
 
-void missum(struct monst *mdef, int target, int roll, struct attack *mattk) {
-	boolean nearmiss = (target == roll);
+void missum(struct monst *mdef, int target, int roll, struct attack *mattk, bool encumbered_by_armor) {
+	bool nearmiss = (target == roll);
 	struct obj *blocker = NULL;
 	long mwflags = mdef->misc_worn_check;
 
@@ -2529,18 +2527,24 @@ void missum(struct monst *mdef, int target, int roll, struct attack *mattk) {
 
 	if (could_seduce(&youmonst, mdef, mattk)) {
 		pline("You pretend to be friendly to %s.", mon_nam(mdef));
-	} else if (canspotmon(mdef) && flags.verbose) {
-		if (nearmiss || !blocker) {
-			pline("You %smiss %s.", (nearmiss ? "just " : ""), mon_nam(mdef));
-		} else {
-			/* Blocker */
-			pline("%s %s %s your attack.",
-			      s_suffix(Monnam(mdef)),
-			      aobjnam(blocker, NULL),
-			      (rn2(2) ? "blocks" : "deflects"));
-		}
 	} else {
-		pline("You %smiss it.", ((flags.verbose && nearmiss) ? "just " : ""));
+		if (encumbered_by_armor && !blocker) {
+			pline("Your armor is rather cumbersome...");
+		}
+
+		if (canspotmon(mdef) && flags.verbose) {
+			if (nearmiss || !blocker) {
+				pline("You %smiss %s.", (nearmiss ? "just " : ""), mon_nam(mdef));
+			} else {
+				/* Blocker */
+				pline("%s %s %s your attack.",
+						s_suffix(Monnam(mdef)),
+						aobjnam(blocker, NULL),
+						(rn2(2) ? "blocks" : "deflects"));
+			}
+		} else {
+			pline("You %smiss it.", ((flags.verbose && nearmiss) ? "just " : ""));
+		}
 	}
 	if (!mdef->msleeping && mdef->mcanmove)
 		wakeup(mdef);
@@ -2564,7 +2568,7 @@ void missum(struct monst *mdef, int target, int roll, struct attack *mattk) {
  *
  * [ALI] Returns true if you hit (and maybe killed) the monster.
  */
-static boolean hmonas(struct monst *mon, int tmp) {
+static boolean hmonas(struct monst *mon) {
 	struct attack *mattk, alt_attk;
 	int i, sum[NATTK];
 #if 0
@@ -2577,6 +2581,10 @@ static boolean hmonas(struct monst *mon, int tmp) {
 	boolean Old_Upolyd = Upolyd;
 	static const int hit_touch[] = {0, HIT_BODY, HIT_BODY | HIT_FATAL};
 	static const int hit_notouch[] = {0, HIT_OTHER, HIT_OTHER | HIT_FATAL};
+
+	bool encumbered_by_armor;
+	int tmp = find_roll_to_hit(mon, &encumbered_by_armor);
+
 
 	/* Keeps track of which weapon hands have been used */
 	boolean used_uwep = false;
@@ -2674,7 +2682,7 @@ static boolean hmonas(struct monst *mon, int tmp) {
 				if (uwep) tmp -= hittmp;
 #endif
 				/* Enemy dead, before any special abilities used */
-				if (!known_hitum(mon, mhit, &dhit, mattk)) {
+				if (!known_hitum(mon, mhit, &dhit, mattk, encumbered_by_armor)) {
 					sum[i] = dhit | HIT_FATAL;
 					break;
 				} else
@@ -2754,8 +2762,9 @@ static boolean hmonas(struct monst *mon, int tmp) {
 					else
 						pline("You hit %s.", mon_nam(mon));
 					sum[i] = hit_touch[damageum(mon, mattk)];
-				} else
-					missum(mon, tmp, dieroll, mattk);
+				} else {
+					missum(mon, tmp, dieroll, mattk, encumbered_by_armor);
+				}
 				break;
 
 			case AT_HUGS:
@@ -2808,7 +2817,7 @@ static boolean hmonas(struct monst *mon, int tmp) {
 						}
 					}
 				} else
-					missum(mon, tmp, dieroll, mattk);
+					missum(mon, tmp, dieroll, mattk, encumbered_by_armor);
 				break;
 
 			case AT_MAGC:

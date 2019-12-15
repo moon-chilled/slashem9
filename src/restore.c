@@ -51,7 +51,7 @@ static long omoves;
 #define Is_IceBox(o) ((o)->otyp == ICE_BOX ? true : false)
 
 /* Recalculate level.objects[x][y], since this info was not saved. */
-static void find_lev_obj() {
+static void find_lev_obj(void) {
 	struct obj *fobjtmp = NULL;
 	struct obj *otmp;
 	int x, y;
@@ -160,15 +160,15 @@ static struct obj *restobjchn(int fd, boolean ghostly, boolean frozen) {
 	int xl;
 
 	while (1) {
-		mread(fd, (void *)&xl, sizeof(xl));
+		mread(fd, &xl, sizeof(xl));
 		if (xl == -1) break;
 		otmp = newobj(xl);
 		if (!first)
 			first = otmp;
 		else
 			otmp2->nobj = otmp;
-		mread(fd, (void *)otmp,
-		      (unsigned)xl + sizeof(struct obj));
+
+		mread(fd, otmp, xl + sizeof(struct obj));
 		if (ghostly) {
 			unsigned nid = context.ident++;
 			add_id_mapping(otmp->o_id, nid);
@@ -220,11 +220,11 @@ static struct monst *restmonchn(int fd, boolean ghostly) {
 	boolean moved;
 
 	/* get the original base address */
-	mread(fd, (void *)&monbegin, sizeof(monbegin));
+	mread(fd, &monbegin, sizeof(monbegin));
 	moved = (monbegin != mons);
 
 	while (1) {
-		mread(fd, (void *)&xl, sizeof(xl));
+		mread(fd, &xl, sizeof(xl));
 		if (xl == -1) break;
 		mtmp = newmonst(xl);
 		if (!first)
@@ -325,7 +325,7 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 	struct obj *otmp;
 	int uid;
 
-	mread(fd, (void *)&uid, sizeof uid);
+	mread(fd, &uid, sizeof uid);
 	if (uid != getuid()) { /* strange ... */
 		/* for wizard mode, issue a reminder; for others, treat it
 		   as an attempt to cheat and refuse to restore this file */
@@ -340,7 +340,7 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 
 	role_init(); /* Reset the initial role, gender, and alignment */
 
-	mread(fd, (void *)&u, sizeof(struct you));
+	mread(fd, &u, sizeof(struct you));
 	init_uasmon();
 #ifdef CLIPPING
 	cliparound(u.ux, u.uy);
@@ -364,7 +364,7 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 	invent = restobjchn(fd, false, false);
 	migrating_objs = restobjchn(fd, false, false);
 	migrating_mons = restmonchn(fd, false);
-	mread(fd, (void *)mvitals, sizeof(mvitals));
+	mread(fd, mvitals, sizeof(mvitals));
 
 	/*
 	 * There are some things after this that can have unintended display
