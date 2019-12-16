@@ -1,14 +1,44 @@
-This is a slashem variant.  Take a look.  Or don't.  Whatever suits your fancy.  There's not much to see yet.  Mainly a standard complement of all the bug fixes and ui enhancements that slashem has missed over the last 15 years, plus a few of my own.  See TODO for a tentative list of ideas for things to maybe do/add at some point.
-
+This is a slashem variant.  Take a look.  Or don't.  Whatever suits your fancy.
+There's not much to see yet.  Mainly a standard complement of all the bug fixes
+and ui enhancements that slashem has missed over the last 15 years, plus a few
+of my own.  It's also in the process of being rebased to NetHack 3.6.  See TODO
+for a tentative list of ideas for things to maybe do/add at some point.
 
 
 !Warning!
-Though heading toward a releasable version, it is currently VERY volatile.  The version of 0.0.0E999F0-Alpha reflects this.
+Though heading toward a releasable version, it is currently VERY volatile.  The
+version of 0.0.0E999F0-Alpha reflects this.
 
 Saves may break at any time.
 
 Crashes and other bugs will be frequent.
 
-In the future, techniques will be implemented that (hopefully) reduce the rate of save breakage, but that's a LONG way out.
+In the future, techniques will be implemented that (hopefully) reduce the rate
+of save breakage, but that's a LONG way out.
 
-You should still play it, though!  It's fun, and it's way better than vanilla slashem!
+You should still play it, though!  It's super fun.
+
+
+!Help wanted!
+Any and all help is /very/ welcome.  This includes development help, but also
+playtesting, writing documentation (I don't write documentation until right
+before release, meaning that unless a new version _just_ came out, there is
+definitely documentation to write), drawing art assets, designing levels, etc.
+I would also specifically like help with the following items:
+
+- Design input from someone who plays NetHack with tiles, to help with
+  designing a new tiled interface for Slash'EM.
+
+- Ensuring that the game runs on Windows, and that it compiles under MSVC.
+
+- Integration and maintenance of an iOS windowport (see:
+  https://github.com/akolade/iNetHack, https://github.com/dirkz/slashem-iphone).
+
+- Integration and maintenance of an Android windowport
+  (https://github.com/gurrhack/SlashEM-Android).
+
+- Integration and maintenance of a win32 windowport.  (One already exists in
+  NetHack, as NetHackW, but I removed it from from Slash'EM as I don't run
+  Windows and so can't commit to to maintaining/testing it.)
+
+- Creation and maintenance of a cocoa windowport.
