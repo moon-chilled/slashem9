@@ -18,6 +18,8 @@
   * Allow to stuff tiles into an nhstr (so the ';' command can work sensibly w/tiles and the gamemap can be implemented in terms of putstr)
   * Message colours
  * Update proxy graphics.
+ * win32, cocoa, gtk, android, ios windowports.  See README
+ * web windowport?  https://github.com/coolwanglu/BrowserHack
 
 * Integrate boehm gc?
  * Probably not
