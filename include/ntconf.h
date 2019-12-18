@@ -11,9 +11,6 @@
 
 #define EXEPATH		     /* Allow .exe location to be used as HACKDIR */
 #define TRADITIONAL_GLYPHMAP /* Store glyph mappings at level change time */
-#if defined(WIN32CON) && !defined(__CYGWIN__)
-#define LAN_FEATURES /* Include code for lan-aware features. */
-#endif
 
 #define PC_LOCKING /* Prevent overwrites of aborted or in-progress games */
 /* without first receiving confirmation. */
@@ -30,10 +27,6 @@
  */
 
 #define PORT_HELP "porthelp"
-
-#ifdef WIN32CON
-#define PORT_DEBUG /* include ability to debug international keyboard issues */
-#endif
 
 /* Stuff to help the user with some common, yet significant errors */
 #define INTERJECT_PANIC	   0
@@ -98,12 +91,6 @@ extern char hackdir[];
 #define getuid()   1
 #define getlogin() (NULL)
 extern void win32_abort(void);
-#ifdef WIN32CON
-extern void nttty_preference_update(const char *);
-extern void toggle_mouse_support(void);
-extern void map_subkeyvalue(char *);
-extern void load_keyboard_handler(void);
-#endif
 
 #include <fcntl.h>
 
@@ -130,11 +117,5 @@ extern void load_keyboard_handler(void);
 #endif
 
 extern int set_win32_option(const char *, const char *);
-#ifdef WIN32CON
-#define LEFTBUTTON  FROM_LEFT_1ST_BUTTON_PRESSED
-#define RIGHTBUTTON RIGHTMOST_BUTTON_PRESSED
-#define MIDBUTTON   FROM_LEFT_2ND_BUTTON_PRESSED
-#define MOUSEMASK   (LEFTBUTTON | RIGHTBUTTON | MIDBUTTON)
-#endif /* WIN32CON */
 
 #endif /* NTCONF_H */

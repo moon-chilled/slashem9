@@ -115,9 +115,6 @@ void getlock(void) {
 	}
 	if (c == 'y' || c == 'Y')
 		if (eraseoldlocks()) {
-#if defined(WIN32CON)
-			clear_screen(); /* display gets fouled up otherwise */
-#endif
 			goto gotlock;
 		} else {
 			unlock_file(HLOCK);

@@ -250,9 +250,6 @@ static struct Comp_Opt {
 #ifdef VIDEOSHADES
 	{"videocolors", "color mappings for internal screen routines", 40, DISP_IN_GAME},
 #endif
-#ifdef WIN32CON
-	{"subkeyvalue", "override keystroke value", 7, SET_IN_FILE},
-#endif
 	{"windowcolors", "the foreground/background colors of windows", 80, DISP_IN_GAME}, /*WC*/
 	{"windowtype", "windowing system to use", WINTYPELEN, DISP_IN_GAME},
 	{"wolfname", "the name of your (first) wolf (e.g., wolfname:Beast)", PL_PSIZ, DISP_IN_GAME},
@@ -1687,20 +1684,6 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 		return;
 	}
 
-	/* altkeyhandler:string */
-	fullname = "altkeyhandler";
-	if (match_optname(opts, fullname, 4, true)) {
-		if (negated)
-			bad_negation(fullname, false);
-		else if ((op = string_for_opt(opts, negated))) {
-#ifdef WIN32CON
-			strncpy(iflags.altkeyhandler, op, MAX_ALTKEYHANDLER - 5);
-			load_keyboard_handler();
-#endif
-		}
-		return;
-	}
-
 	/* WINCAP
 	 * align_status:[left|top|right|bottom] */
 	fullname = "align_status";
@@ -2130,18 +2113,7 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 			bad_negation(fullname, true);
 		return;
 	}
-	fullname = "subkeyvalue";
-	if (match_optname(opts, fullname, 5, true)) {
-		if (negated)
-			bad_negation(fullname, false);
-		else {
-#if defined(WIN32CON)
-			op = string_for_opt(opts, 0);
-			map_subkeyvalue(op);
-#endif
-		}
-		return;
-	}
+
 	/* WINCAP
 	 * tile_width:nn */
 	fullname = "tile_width";
@@ -3242,10 +3214,6 @@ static const char *get_compopt_value(const char *optname, char *buf) {
 		sprintf(buf, "%s", iflags.wc_align_status == ALIGN_TOP ? "top" : iflags.wc_align_status == ALIGN_LEFT ? "left" : iflags.wc_align_status == ALIGN_BOTTOM ? "bottom" : iflags.wc_align_status == ALIGN_RIGHT ? "right" : defopt);
 	else if (!strcmp(optname, "align"))
 		sprintf(buf, "%s", rolestring(flags.initalign, aligns, adj));
-#ifdef WIN32CON
-	else if (!strcmp(optname, "altkeyhandler"))
-		sprintf(buf, "%s", iflags.altkeyhandler[0] ? iflags.altkeyhandler : "default");
-#endif
 	else if (!strcmp(optname, "catname"))
 		sprintf(buf, "%s", catname[0] ? catname : none);
 	else if (!strcmp(optname, "disclose")) {

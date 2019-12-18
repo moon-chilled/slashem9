@@ -20,9 +20,6 @@
 #endif
 #include <ctype.h>
 #include "win32api.h"
-#ifdef WIN32CON
-#include "wintty.h"
-#endif
 #ifdef WIN32
 
 
@@ -246,7 +243,6 @@ return &szFullPath[0];
 }
 # endif
 
-#ifndef WIN32CON
 /* fatal error */
 void error(const char *s, ...) {
 	char buf[BUFSZ];
@@ -266,44 +262,13 @@ void error(const char *s, ...) {
 	VA_END();
 	exit(EXIT_FAILURE);
 }
-#endif
 
 void Delay(int ms)
 {
 	Sleep(ms);
 }
 
-#ifdef WIN32CON
-extern void backsp(void);
-#endif
-
 void win32_abort(void) {
-   	if (wizard) {
-# ifdef WIN32CON
-	    int c, ci, ct;
-
-   	    if (!iflags.window_inited)
-		c = 'n';
-		ct = 0;
-		msmsg("Execute debug breakpoint wizard?");
-		while ((ci=nhgetch()) != '\n') {
-		    if (ct > 0) {
-			backsp();       /* \b is visible on NT */
-			putchar(' ');
-			backsp();
-			ct = 0;
-			c = 'n';
-		    }
-		    if (ci == 'y' || ci == 'n' || ci == 'Y' || ci == 'N') {
-		    	ct = 1;
-		        c = ci;
-		        msmsg("%c",c);
-		    }
-		}
-		if (c == 'y')
-			DebugBreak();
-# endif
-	}
 	abort();
 }
 

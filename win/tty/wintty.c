@@ -19,9 +19,7 @@
 
 #include "wintty.h"
 
-#ifndef WIN32CON
 #include <sys/ioctl.h>
-#endif
 
 #ifdef CLIPPING /* might want SIGWINCH */
 #if defined(BSD) || defined(ULTRIX) || defined(AIX_31) || defined(_BULL_SOURCE)
@@ -36,7 +34,7 @@ int tty_kbhit(void);
 /* Interface definition, for windows.c */
 struct window_procs tty_procs = {
 	"tty",
-#if defined(WIN32CON)
+#if 0 // TODO: mouse support
 	WC_MOUSE_SUPPORT |
 #endif
 		WC_COLOR | WC_HILITE_PET | WC_INVERSE,
@@ -95,11 +93,7 @@ struct window_procs tty_procs = {
 	tty_start_screen,
 	tty_end_screen,
 	genl_outrip,
-#if defined(WIN32CON)
-	nttty_preference_update,
-#else
 	genl_preference_update,
-#endif
 	tty_kbhit,
 };
 
@@ -127,12 +121,7 @@ static int clipy = 0, clipymax = 0;
 
 bool GFlag = false;
 
-#ifdef WIN32CON
-static const char to_continue[] = "to continue";
-#define getret() getreturn(to_continue)
-#else
 static void getret(void);
-#endif
 static void erase_menu_or_text(winid, struct WinDesc *, bool);
 static void free_window_info(struct WinDesc *, bool);
 static void dmore(struct WinDesc *, const char *);
@@ -779,25 +768,14 @@ void tty_askname(void) {
 				ct = 0; /* continue outer loop */
 				break;
 			}
-#if defined(WIN32CON)
-			if (c == '\003') bail("^C abort.\n");
-#endif
+
 			/* some people get confused when their erase char is not ^H */
 			if (c == '\b' || c == '\177') {
 				if (ct) {
 					ct--;
-#ifdef WIN32CON
-					ttyDisplay->curx--;
-#endif
-#ifdef WIN32CON
-					backsp(); /* \b is visible on NT */
-					putchar(' ');
-					backsp();
-#else
 					putchar('\b');
 					putchar(' ');
 					putchar('\b');
-#endif
 				}
 				continue;
 			}
@@ -808,9 +786,6 @@ void tty_askname(void) {
 			if (ct < (int)(sizeof plname) - 1) {
 				putchar(c);
 				plname[ct++] = c;
-#ifdef WIN32CON
-				ttyDisplay->curx++;
-#endif
 			}
 		}
 		plname[ct] = 0;
@@ -824,7 +799,6 @@ void tty_get_nh_event(void) {
 	return;
 }
 
-#ifndef WIN32CON
 static void getret(void) {
 	xputs("\n");
 	if (flags.standout)
@@ -836,7 +810,6 @@ static void getret(void) {
 		standoutend();
 	xwaitforspace(" ");
 }
-#endif
 
 void tty_suspend_nhwindows(const char *str) {
 	settty(str);		     /* calls end_screen, perhaps raw_print */
@@ -1274,6 +1247,7 @@ static void process_menu_window(winid window, struct WinDesc *cw) {
 					if (curr->selector) {
 						/* because WIN32CON this must be done in
 						 * a brain-dead way */
+						// now WIN32CON is dead can we do it in a non-braindead way? -MC
 						putchar(curr->selector);
 						ttyDisplay->curx++;
 						putchar(' ');
@@ -1291,7 +1265,7 @@ static void process_menu_window(winid window, struct WinDesc *cw) {
 						putchar(' ');
 						ttyDisplay->curx++;
 					}
-#ifndef WIN32CON
+
 					if (curr->glyph != NO_GLYPH && iflags.use_menu_glyphs) {
 						int glyph_color = NO_COLOR;
 						glyph_t character;
@@ -1305,7 +1279,6 @@ static void process_menu_window(winid window, struct WinDesc *cw) {
 						putchar(' ');
 						ttyDisplay->curx += 2;
 					}
-#endif
 
 					if (iflags.use_menu_color &&
 					    (menucolr = get_menu_coloring(curr->str, &color, &attr))) {
@@ -1313,14 +1286,7 @@ static void process_menu_window(winid window, struct WinDesc *cw) {
 						if (color != NO_COLOR) term_start_color(color);
 					} else
 						term_start_attr(curr->attr);
-					for (n = 0, cp = curr->str;
-#ifndef WIN32CON
-					     *cp && (int)++ttyDisplay->curx < (int)ttyDisplay->cols;
-					     cp++, n++)
-#else
-					     *cp && (int)ttyDisplay->curx < (int)ttyDisplay->cols;
-					     cp++, n++, ttyDisplay->curx++)
-#endif
+					for (n = 0, cp = curr->str; *cp && (int)++ttyDisplay->curx < (int)ttyDisplay->cols; cp++, n++)
 						pututf8char(*cp);
 
 					if (iflags.use_menu_color && menucolr) {
@@ -1557,14 +1523,7 @@ static void process_text_window(winid window, struct WinDesc *cw) {
 				++ttyDisplay->curx;
 			}
 			term_start_attr(attr);
-			for (cp = &cw->data[i][1];
-#ifndef WIN32CON
-			     *cp && (int)++ttyDisplay->curx < (int)ttyDisplay->cols;
-			     cp++)
-#else
-			     *cp && (int)ttyDisplay->curx < (int)ttyDisplay->cols;
-			     cp++, ttyDisplay->curx++)
-#endif
+			for (cp = &cw->data[i][1]; *cp && (int)++ttyDisplay->curx < (int)ttyDisplay->cols; cp++)
 				pututf8char(*cp);
 			term_end_attr(attr);
 		}
@@ -1929,8 +1888,8 @@ void tty_putstr(winid window, int attr, const char *str) {
 	switch (cw->type) {
 		case NHW_MESSAGE:
 			/* really do this later */
-#if defined(USER_SOUNDS) && defined(WIN32CON)
-			play_sound_for_message(str);
+#if defined(USER_SOUNDS)
+			//play_sound_for_message(str);
 #endif
 			update_topl(str);
 			break;
@@ -2544,29 +2503,17 @@ void tty_print_glyph(winid window, xchar x, xchar y, int glyph) {
 
 void tty_raw_print(const char *str) {
 	if (ttyDisplay) ttyDisplay->rawprint++;
-#ifdef WIN32CON
-	msmsg("%s\n", str);
-#else
 	puts(str);
 	fflush(stdout);
-#endif
 }
 
 void tty_raw_print_bold(const char *str) {
 	if (ttyDisplay) ttyDisplay->rawprint++;
 	term_start_raw_bold();
-#ifdef WIN32CON
-	msmsg("%s", str);
-#else
 	fputs(str, stdout);
-#endif
 	term_end_raw_bold();
-#ifdef WIN32CON
-	msmsg("\n");
-#else
 	puts("");
 	fflush(stdout);
-#endif
 }
 
 int tty_nhgetch(void) {
@@ -2615,47 +2562,17 @@ int tty_nhgetch(void) {
  */
 /*ARGSUSED*/
 int tty_nh_poskey(int *x, int *y, int *mod) {
-#if defined(MAC_MPW)
-#pragma unused(x, y, mod)
-#endif
-#if defined(WIN32CON)
-	int i;
-	fflush(stdout);
-	/* Note: if raw_print() and wait_synch() get called to report terminal
-	 * initialization problems, then wins[] and ttyDisplay might not be
-	 * available yet.  Such problems will probably be fatal before we get
-	 * here, but validate those pointers just in case...
-	 */
-	if (WIN_MESSAGE != WIN_ERR && wins[WIN_MESSAGE])
-		wins[WIN_MESSAGE]->flags &= ~WIN_STOP;
-	i = ntposkey(x, y, mod);
-	if (!i && mod && *mod == 0)
-		i = '\033'; /* map NUL to ESC since nethack doesn't expect NUL */
-	if (ttyDisplay && ttyDisplay->toplin == 1)
-		ttyDisplay->toplin = 2;
-	return i;
-#else
 	return nhgetch();
-#endif
 }
 
 // Thanks to https://stackoverflow.com/questions/29335758/using-kbhit-and-getch-on-linux and https://web.archive.org/web/20170713065718/www.flipcode.com/archives/_kbhit_for_Linux.shtml
-#ifdef WIN32CON
-int tty_kbhit(void) {
-	return nttty_kbhit();
-}
-#else
 int tty_kbhit(void) {
 	int byteswaiting;
 	ioctl(0, FIONREAD, &byteswaiting);
 	return byteswaiting;
 }
-#endif
 
 void win_tty_init(void) {
-#if defined(WIN32CON)
-	nttty_open();
-#endif
 	return;
 }
 

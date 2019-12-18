@@ -19,10 +19,6 @@ void nethack_exit(int);
 #endif
 static void msexit(void);
 
-#ifdef WIN32CON
-extern int GUILaunched; /* from nttty.c */
-#endif
-
 #ifdef WIN32
 void flushout(void) {
 	fflush(stdout);
@@ -88,7 +84,6 @@ void getreturn(const char *str) {
 	return;
 }
 
-#ifndef WIN32CON
 void msmsg(const char *fmt, ...) {
 	VA_START(fmt);
 	vprintf(fmt, VA_ARGS);
@@ -96,7 +91,6 @@ void msmsg(const char *fmt, ...) {
 	VA_END();
 	return;
 }
-#endif
 
 FILE *fopenp(const char *name, const char *mode) {
 	char buf[BUFSIZ], *bp, *pp, lastch = 0;
@@ -152,16 +146,6 @@ static void msexit(void) {
 #ifndef __CYGWIN__
 	chdrive(orgdir);
 #endif
-#endif
-#ifdef WIN32CON
-	/* Only if we started from the GUI, not the command prompt,
-	 * we need to get one last return, so the score board does
-	 * not vanish instantly after being created.
-	 * GUILaunched is defined and set in nttty.c.
-	 */
-	synch_cursor();
-	if (GUILaunched) getreturn("to end");
-	synch_cursor();
 #endif
 	return;
 }

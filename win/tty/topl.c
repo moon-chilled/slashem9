@@ -307,23 +307,15 @@ static void topl_putsym(glyph_t c) {
 			ttyDisplay->curx = 0;
 			ttyDisplay->cury++;
 			cw->cury = ttyDisplay->cury;
-#ifdef WIN32CON
-			pututf8char(c);
-#endif
 			break;
 		default:
 			if (ttyDisplay->curx == CO - 1)
 				topl_putsym('\n'); /* 1 <= curx <= CO; avoid CO */
-#ifdef WIN32CON
-			pututf8char(c);
-#endif
 			ttyDisplay->curx++;
 	}
 	cw->curx = ttyDisplay->curx;
 	if (cw->curx == 0) cl_end();
-#ifndef WIN32CON
 	pututf8char(c);
-#endif
 }
 
 void putsyms(const char *str) {

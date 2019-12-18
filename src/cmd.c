@@ -3802,10 +3802,6 @@ static int dotravel(void) {
 }
 
 #ifdef PORT_DEBUG
-#ifdef WIN32CON
-extern void win32con_debug_keystrokes(void);
-extern void win32con_handler_info(void);
-#endif
 
 int wiz_port_debug(void) {
 	int n, k;
@@ -3818,11 +3814,6 @@ int wiz_port_debug(void) {
 		char *portname;
 		void (*fn)(void);
 	} menu_selections[] = {
-#ifdef WIN32CON
-		{"test win32 keystrokes", "tty", win32con_debug_keystrokes},
-		{"show keystroke handler information", "tty",
-		 win32con_handler_info},
-#endif
 		{NULL, NULL, NULL} /* array terminator */
 	};
 

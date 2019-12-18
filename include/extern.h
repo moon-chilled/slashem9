@@ -1298,20 +1298,6 @@ void lan_mail_terminate(void);
 #endif
 #endif
 
-/* ### nttty.c ### */
-
-#ifdef WIN32CON
-void get_scr_size(void);
-int nttty_kbhit(void);
-void nttty_check_stdio(void);
-void nttty_open(void);
-void nttty_rubout(void);
-int tgetch(void);
-int ntposkey(int *, int *, int *);
-void set_output_mode(int);
-void synch_cursor(void);
-#endif
-
 /* ### o_init.c ### */
 
 void init_objects(void);
