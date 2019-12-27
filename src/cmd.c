@@ -3171,63 +3171,78 @@ void rhack(char *cmd) {
 	context.travel = context.travel1 = 0;
 
 	switch (*cmd) {
-		case DORUSH: if (movecmd(cmd[1])) {
-				     context.run = 2;
-				     do_rush = true;
-			     } else {
-				     prefix_seen = true;
-			     }
+		case DORUSH:
+			if (movecmd(cmd[1])) {
+				context.run = 2;
+				do_rush = true;
+			} else {
+				prefix_seen = true;
+			}
+			break;
+
 		case '5': if (!iflags.num_pad) break; // else fallthru
-		case DORUN: if (movecmd(lowc(cmd[1]))) {
+		case DORUN:
+			if (movecmd(lowc(cmd[1]))) {
 				    context.run = 3;
 				    do_rush = true;
-			    } else {
-				    prefix_seen = true;
-			    }
+			} else {
+				prefix_seen = true;
+			}
+			break;
+
 		case '-': if (!iflags.num_pad) break; // else fallthru
 		/* Effects of movement commands and invisible monsters:
 		 * m: always move onto space (even if 'I' remembered)
 		 * F: always attack space (even if 'I' not remembered)
 		 * normal movement: attack if 'I', move otherwise
 		 */
-		case DOFORCEFIGHT: if (movecmd(cmd[1])) {
-					   context.forcefight = 1;
-					   do_walk = true;
-				   } else {
-					   prefix_seen = true;
-				   }
-		case DONOPICKUP: if (movecmd(cmd[1]) || u.dz) {
-					 context.run = 0;
-					 context.nopick = 1;
-					 if (!u.dz) {
-						 do_walk = true;
-					 } else {
-						 cmd[0] = cmd[1]; /* "m<" or "m>" */
-					 }
-				 } else {
-					 prefix_seen = true;
-				 }
+		case DOFORCEFIGHT:
+			if (movecmd(cmd[1])) {
+				context.forcefight = 1;
+				do_walk = true;
+			} else {
+				prefix_seen = true;
+			}
+			break;
 
-		case DORUN_NOPICKUP: if (movecmd(lowc(cmd[1]))) {
-					     context.run = 1;
-					     context.nopick = 1;
-					     do_rush = true;
-				     } else {
-					     prefix_seen = true;
-				     }
+		case DONOPICKUP:
+			if (movecmd(cmd[1]) || u.dz) {
+				context.run = 0;
+				context.nopick = 1;
+				if (!u.dz) {
+					do_walk = true;
+				} else {
+					cmd[0] = cmd[1]; /* "m<" or "m>" */
+				}
+			} else {
+				prefix_seen = true;
+			}
+			break;
+
+		case DORUN_NOPICKUP:
+			if (movecmd(lowc(cmd[1]))) {
+				context.run = 1;
+				context.nopick = 1;
+				do_rush = true;
+			} else {
+				prefix_seen = true;
+			}
+			break;
+
 		case '0':
 			if (!iflags.num_pad) break;
 			ddoinv(); /* a convenience borrowed from the PC */
 			context.move = false;
 			multi = 0;
+			break;
 
 		case CMD_CLICKLOOK:
 			if (iflags.clicklook) {
 				context.move = false;
 				do_look(2, &clicklook_cc);
 			}
-
 			return;
+
 		case CMD_TRAVEL:
 			if (iflags.travelcmd) {
 				context.travel = 1;
