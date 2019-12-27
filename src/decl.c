@@ -86,7 +86,7 @@ const char ndir[] = "47896321><"; /* number pad mode */
 const schar xdir[10] = {-1, -1, 0, 1, 1, 1, 0, -1, 0, 0};
 const schar ydir[10] = {0, -1, -1, -1, 0, 1, 1, 1, 0, 0};
 const schar zdir[10] = {0, 0, 0, 0, 0, 0, 0, 0, 1, -1};
-char misc_cmds[] = {'g', 'G', 'F', 'm', 'M', '\033', '\001'};
+char misc_cmds[] = {DORUSH, DORUN, DOFORCEFIGHT, DONOPICKUP, DORUN_NOPICKUP, DOESCAPE, DOAGAIN};
 
 schar tbx = 0, tby = 0; /* mthrowu: target */
 

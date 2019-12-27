@@ -217,8 +217,6 @@ typedef long glyph_t;
 /* #define USER_SOUNDS */ /* Allow user-defined regex mappings from messages to sounds */
 /* Only supported on Qt with NAS - Network Audio System */
 
-#define DOAGAIN '\001' /* ^A, the "redo" key used in cmd.c and getline.c */
-
 /* #define KEEP_SAVE */ /* Keep savefiles after Restore (wac@intergate.bc.ca)*/
 /* #define CHARON */	/* Charon's boat, enables Cerebus - not implemented */
 #define DUNGEON_GROWTH
