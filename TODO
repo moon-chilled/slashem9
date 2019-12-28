@@ -1,6 +1,15 @@
 * Note: features intentionally not present from nethack:
  - Thrown potions have a chance to hit a steed's saddle.  I think this is a cool idea, but I think it's not worth having unless it can do more.
  - Elbereth changes.  There will more than likely be elbereth changes, but not those.
+ - SAFERHANGUP
+
+* Make overview/wizardmode levport show nicer names for special levels ('Storage Room' instead of 'stor', 'The Guild of Disgruntled Adventurers' instead of 'guild', etc.)
+
+* Release:
+ - Script?
+ - Cross-compile for all major platforms
+ - Precompile lex/yacc-files (if applicable), remove irrelevant files (DEVEL/?), and tar into source release
+ - Git tag?  Branch?
 
 * Make rogue level only show up on rogue's birthday per https://github.com/UnNetHack/UnNetHack/commit/7b02e60db76d45c2c91bc7281d288e6b64182005#commitcomment-32053355, once dungeon switches to lua?
 
@@ -9,8 +18,9 @@
 * Curses seems to sporadically enter a couple of infinite loops?  I had it happen once after enabling perm_invent where it refreshed forever taking up 100% cpu and then eventually segfaulted; that was probably stack overflow.  Another time it printed out 'Hello elronnd, welcome to SlashEM-Next!  You are a neutral female elven' a stupid number of times (took several seconds to finish).  (Possibly because it kept wanting to print out the second part of the message?)
 * When you reduce the window size, curses wants to display its messages again and makes you <space> again
 * Input lag in curses
-* Investigate: would people be ok with no curses, but a rich sdl|gtk interface?  I kind of hate curses
+* Investigate: would people be ok with no curses, but a rich sdl|gtk interface?  I kind of hate curses.  OTOH, public servers.  libtickit?  Termbox?
 * SDL can't be very rich, gtk is stupid on windows.  Need to re-integrate nethackw?
+* Bearlibterminal?
 
 * Completely revamp interface:
  * More support for nhstr
