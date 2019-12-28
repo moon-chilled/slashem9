@@ -1780,10 +1780,29 @@ int bhito(struct obj *obj, struct obj *otmp) {
 				break;
 			case WAN_UNDEAD_TURNING:
 			case SPE_TURN_UNDEAD:
-				if (obj->otyp == EGG)
+				if (obj->otyp == EGG) {
 					revive_egg(obj);
-				else
+				} else {
+					int corpsenm = (obj->otyp == CORPSE) ? corpse_revive_type(obj) : 0;
 					res = !!revive(obj);
+
+					if (res && corpsenm && (Role_if(PM_HEALER) || Role_if(PM_UNDEAD_SLAYER))) {
+						bool u_noticed = !Blind;
+						if (Hallucination) {
+							You_hear("the sound of a defribillator.");
+							u_noticed = true;
+						} else if (!Blind) {
+							pline("You observe %s %s change dramatically.",
+									s_suffix(an(mons[corpsenm].mname)),
+									nonliving(&mons[corpsenm]) ? "motility" : "health");
+						}
+
+						if (u_noticed) {
+							makeknown(otmp->otyp);
+							exercise(A_WIS, true);
+						}
+					}
+				}
 				break;
 			case WAN_OPENING:
 			case SPE_KNOCK:

@@ -1049,6 +1049,7 @@ int bcsign(struct obj *);
 int weight(struct obj *);
 struct obj *mkgold(long, int, int);
 struct obj *mkcorpstat(int, struct monst *, struct permonst *, int, int, boolean);
+int corpse_revive_type(struct obj *obj);
 struct obj *obj_attach_mid(struct obj *, unsigned);
 struct monst *get_mtraits(struct obj *, boolean);
 struct obj *mk_tt_object(int, int, int);

@@ -19,7 +19,7 @@ Changelist for slashem-next v0.0.1:
 - Bugfix: YAFM was supposed to show, but didn't, when player rubs gold on a stone.
 - Gameplay: make searching deterministic; you only have to search once to find what you're looking for.
 - Internals: completely remove makedefs.  The tasks it performed have been accomplished with macro magic, shifted to runtime, or, in some cases, removed entirely.
-- Gameplay: change duration of hallucination from potions to only 50-55, 50-105, or 50-155 turns (depending on BUC).
+- Gameplay: lower duration of hallucination from potions to only 50-55, 50-105, or 50-155 turns (depending on BUC).
 - Interface: use symbols from EPYX rogue on rogue level.
 - System: allow DLB to optionally use a library stored inside the slashem binary, removing the need for external data files.
 - Internals: add a custom dynamic string library with associated colour information.  Use it to implement statuscolors/botl.  It will be used for most of our strings in the future.
@@ -85,7 +85,8 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: if engulfed in vortex and blind only because of a blindfold, taking off the blindfold should cause blindness to take effect immediately.
 - Gameplay: unihorn|prayer won't cure blindness if engulfed in a vortex, because it'll just return immediately.
 - Gameplay: confused reading of cursed charging scroll drains energy.
-- Interface: new rumors, oracles, and random messages.
+- Interface: new rumors, oracles, and other random messages.
+- Gamplay: healers [and undead slayers] will notice when a wand of undead turning revives a monster.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
