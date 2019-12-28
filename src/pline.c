@@ -225,6 +225,24 @@ void mstatusline(struct monst *mtmp) {
 	else if (mtmp->mtraitor)
 		strcat(info, ", traitor");
 	if (mtmp->meating) strcat(info, ", eating");
+
+	if (mtmp->meating && !mtmp->cham && mtmp->mappearance && mtmp->m_ap_type) {
+		sprintf(eos(info), ", mimicing %s",
+				(mtmp->m_ap_type == M_AP_FURNITURE) ?
+					an(sym_desc[mtmp->mappearance].explanation) :
+
+				(mtmp->m_ap_type == M_AP_OBJECT && OBJ_DESCR(objects[mtmp->mappearance])) ?
+					an(OBJ_DESCR(objects[mtmp->mappearance])) :
+
+				(mtmp->m_ap_type == M_AP_OBJECT && OBJ_NAME(objects[mtmp->mappearance])) ?
+					an(OBJ_NAME(objects[mtmp->mappearance])) :
+
+				(mtmp->m_ap_type == M_AP_MONSTER) ?
+					an(mons[mtmp->mappearance].mname) :
+
+				"something");
+	}
+
 	if (mtmp->mcan) strcat(info, ", cancelled");
 	if (mtmp->mconf) strcat(info, ", confused");
 	if (mtmp->mblinded || !mtmp->mcansee)

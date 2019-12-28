@@ -24,9 +24,9 @@ static int dog_invent(struct monst *, struct edog *, int);
 static int dog_goal(struct monst *, struct edog *, int, int, int);
 
 static struct obj *DROPPABLES(struct monst *);
-static boolean can_reach_location(struct monst *, xchar, xchar,
-				  xchar, xchar);
-static boolean could_reach_item(struct monst *, xchar, xchar);
+static bool can_reach_location(struct monst *, xchar, xchar, xchar, xchar);
+static bool could_reach_item(struct monst *, xchar, xchar);
+static void quickmimic(struct monst *mtmp);
 
 static struct obj *DROPPABLES(struct monst *mon) {
 	struct obj *obj;
@@ -135,16 +135,24 @@ int dog_nutrition(struct monst *mtmp, struct obj *obj) {
 }
 
 /* returns 2 if pet dies, otherwise 1 */
-int dog_eat(struct monst *mtmp, struct obj *obj, int x, int y, boolean devour) {
+int dog_eat(struct monst *mtmp, struct obj *obj, int x, int y, bool devour) {
 	struct edog *edog = EDOG(mtmp);
-	boolean poly = false, grow = false, heal = false;
+	bool poly = false, grow = false, heal = false;
 	int nutrit;
-	boolean vis = (cansee(x, y) || cansee(mtmp->mx, mtmp->my));
-	boolean vampiric = is_vampire(mtmp->data);
+	bool vis = (cansee(x, y) || cansee(mtmp->mx, mtmp->my));
+	bool vampiric = is_vampire(mtmp->data);
+	bool deadmimic = false;
 
 	if (edog->hungrytime < monstermoves)
 		edog->hungrytime = monstermoves;
 	nutrit = dog_nutrition(mtmp, obj);
+
+	deadmimic = (obj->otyp == CORPSE &&
+		    (obj->corpsenm == PM_SMALL_MIMIC ||
+		     obj->corpsenm == PM_LARGE_MIMIC ||
+		     obj->corpsenm == PM_GIANT_MIMIC));
+
+
 	poly = polyfodder(obj);
 	grow = mlevelgain(obj);
 	heal = mhealup(obj);
@@ -233,18 +241,15 @@ int dog_eat(struct monst *mtmp, struct obj *obj, int x, int y, boolean devour) {
 		delobj(obj);
 
 	if (poly) {
-		mon_spec_poly(mtmp, NULL, 0L, false,
-			      cansee(mtmp->mx, mtmp->my), false, false);
-#if 0
-		newcham(mtmp, NULL, false,
-		        cansee(mtmp->mx, mtmp->my));
-#endif
+		mon_spec_poly(mtmp, NULL, 0L, false, cansee(mtmp->mx, mtmp->my), false, false);
 	}
 	/* limit "instant" growth to prevent potential abuse */
 	if (grow && (int)mtmp->m_lev < (int)mtmp->data->mlevel + 15) {
 		if (!grow_up(mtmp, NULL)) return 2;
 	}
 	if (heal) mtmp->mhp = mtmp->mhpmax;
+	if (deadmimic) quickmimic(mtmp);
+
 	return 1;
 }
 
@@ -580,7 +585,7 @@ static char *allow_set(long allowflags) {
 #undef CHECK_ALLOW
 #endif
 
-boolean betrayed(struct monst *mtmp) {
+bool betrayed(struct monst *mtmp) {
 	boolean has_edog = !mtmp->isminion;
 	struct edog *edog = EDOG(mtmp);
 	int udist = distu(mtmp->mx, mtmp->my);
@@ -1020,7 +1025,7 @@ newdogpos:
 }
 
 /* check if a monster could pick up objects from a location */
-static boolean could_reach_item(struct monst *mon, xchar nx, xchar ny) {
+static bool could_reach_item(struct monst *mon, xchar nx, xchar ny) {
 	if ((!is_pool(nx, ny) || is_swimmer(mon->data)) &&
 	    (!is_lava(nx, ny) || likes_lava(mon->data)) &&
 	    (!sobj_at(BOULDER, nx, ny) || throws_rocks(mon->data)))
@@ -1035,7 +1040,7 @@ static boolean could_reach_item(struct monst *mon, xchar nx, xchar ny) {
  * Since the maximum food distance is 5, this should never be more than 5 calls
  * deep.
  */
-static boolean can_reach_location(struct monst *mon, xchar mx, xchar my, xchar fx, xchar fy) {
+static bool can_reach_location(struct monst *mon, xchar mx, xchar my, xchar fx, xchar fy) {
 	int i, j;
 	int dist;
 
@@ -1074,5 +1079,77 @@ static void wantdoor(int x, int y, void *distance) {
 		*(int *)distance = ndist;
 	}
 }
+
+static struct qmchoices {
+	int mndx;                       /* type of pet, 0 means any  */
+	char mlet;                      /* symbol of pet, 0 means any */
+	unsigned mappearance;           /* mimic this */
+	uchar m_ap_type;                /* what is the thing it is mimicing? */
+} qm[] = {
+	/* Things that some pets might be thinking about at the time */
+	{PM_LITTLE_DOG, 0, PM_KITTEN,     M_AP_MONSTER},
+	{PM_LARGE_DOG,  0, PM_LARGE_CAT,  M_AP_MONSTER},
+	{PM_KITTEN,     0, PM_LITTLE_DOG, M_AP_MONSTER},
+	{PM_LARGE_CAT,  0, PM_LARGE_DOG,  M_AP_MONSTER},
+	{PM_HOUSECAT,   0, PM_DOG,        M_AP_MONSTER},
+	{PM_DOG,        0, PM_HOUSECAT,   M_AP_MONSTER},
+	{PM_HOUSECAT,   0, PM_GIANT_RAT,  M_AP_MONSTER},
+	{0, S_DOG, SINK, M_AP_FURNITURE},       /* sorry, no fire hydrants in NetHack */
+	{0, 0, TRIPE_RATION, M_AP_OBJECT},      /* leave this at end */
+};
+
+void finish_meating(struct monst *mtmp) {
+	mtmp->meating = 0;
+	if (mtmp->m_ap_type && mtmp->mappearance && !mtmp->cham) {
+		/* was eating a mimic and now appearance needs resetting */
+		mtmp->m_ap_type = 0;
+		mtmp->mappearance = 0;
+		newsym(mtmp->mx, mtmp->my);
+	}
+}
+
+static void quickmimic(struct monst *mtmp) {
+	int idx = 0, trycnt = 5;
+	char buf[BUFSZ];
+
+	if (Protection_from_shape_changers || Blind || !mtmp->meating) return;
+
+	do {
+		idx = rn2(SIZE(qm));
+		if (qm[idx].mndx != 0 && monsndx(mtmp->data) == qm[idx].mndx)
+			break;
+		if (qm[idx].mlet != 0 && mtmp->data->mlet == qm[idx].mlet)
+			break;
+		if (qm[idx].mndx == 0 && qm[idx].mlet == 0)
+			break;
+	} while (--trycnt > 0);
+	if (trycnt == 0) idx = SIZE(qm)-1;
+	if (!idx) return;       /* impossible */
+
+	strcpy(buf, mon_nam(mtmp));
+
+	mtmp->m_ap_type = qm[idx].m_ap_type;
+	mtmp->mappearance = qm[idx].mappearance;
+
+	newsym(mtmp->mx,mtmp->my);
+	pline("You see %s appear where %s was!",
+			(mtmp->m_ap_type == M_AP_FURNITURE) ?
+			an(sym_desc[mtmp->mappearance].explanation) :
+
+			(mtmp->m_ap_type == M_AP_OBJECT && OBJ_DESCR(objects[mtmp->mappearance])) ?
+			an(OBJ_DESCR(objects[mtmp->mappearance])) :
+
+			(mtmp->m_ap_type == M_AP_OBJECT && OBJ_NAME(objects[mtmp->mappearance])) ?
+			an(OBJ_NAME(objects[mtmp->mappearance])) :
+
+			(mtmp->m_ap_type == M_AP_MONSTER) ?
+			an(mons[mtmp->mappearance].mname) :
+
+			"something",
+
+			buf);
+	display_nhwindow(WIN_MAP, true);
+}
+
 
 /*dogmove.c*/

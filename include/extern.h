@@ -417,10 +417,11 @@ void wary_dog(struct monst *, boolean);
 
 /* ### dogmove.c ### */
 
-int dog_nutrition(struct monst *, struct obj *);
-int dog_eat(struct monst *, struct obj *, int, int, boolean);
-int dog_move(struct monst *, int);
-boolean betrayed(struct monst *);
+int dog_nutrition(struct monst *mtmp, struct obj *obj);
+int dog_eat(struct monst *mtmp, struct obj *obj, int x, int y, bool devour);
+int dog_move(struct monst *mtmp, int after);
+bool betrayed(struct monst *mtmp);
+void finish_meating(struct monst *mtmp);
 
 /* ### dokick.c ### */
 

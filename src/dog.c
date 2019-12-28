@@ -457,7 +457,7 @@ void mon_catchup_elapsed_time(struct monst *mtmp, long nmv /* number of moves */
 
 	/* might finish eating or be able to use special ability again */
 	if (imv > mtmp->meating)
-		mtmp->meating = 0;
+		finish_meating(mtmp);
 	else
 		mtmp->meating -= imv;
 	if (imv > mtmp->mspec_used)
@@ -904,7 +904,8 @@ void wary_dog(struct monst *mtmp, boolean was_dead) {
 	struct edog *edog;
 	boolean quietly = was_dead;
 
-	mtmp->meating = 0;
+	finish_meating(mtmp);
+
 	if (!mtmp->mtame) return;
 	edog = !mtmp->isminion ? EDOG(mtmp) : 0;
 

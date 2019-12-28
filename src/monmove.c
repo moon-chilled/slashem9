@@ -160,7 +160,10 @@ void mon_regen(struct monst *mon, boolean digest_meal) {
 	}
 	if (mon->mspec_used) mon->mspec_used--;
 	if (digest_meal) {
-		if (mon->meating) mon->meating--;
+		if (mon->meating) {
+			mon->meating--;
+			if (mon->meating <= 0) finish_meating(mon);
+		}
 	}
 }
 
@@ -591,6 +594,7 @@ int m_move(struct monst *mtmp, int after) {
 
 	if (mtmp->meating) {
 		mtmp->meating--;
+		if (mtmp->meating <= 0) finish_meating(mtmp);
 		return 3; /* still eating */
 	}
 
