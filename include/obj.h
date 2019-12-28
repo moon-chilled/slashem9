@@ -26,13 +26,13 @@ struct obj {
 	unsigned owt;
 	long quan; /* number of items */
 
-	schar spe; /* quality of weapon, armor or ring (+ or -)
-				   number of charges for wand ( >= -1 )
-				   marks your eggs, spinach tins
-				   royal coffers for a court ( == 2)
-				   tells which fruit a fruit is
-				   special for uball and amulet
-				   historic and gender for statues */
+	schar spe;	/* quality of weapon, armor or ring (+ or -)
+			 * number of charges for wand ( >= -1 )
+			 * marks your eggs, tin varieties and spinach tins
+			 * royal coffers for a court ( == 2)
+			 * tells which fruit a fruit is
+			 * special for uball and amulet
+			 * historic and gender for statues */
 #define STATUE_HISTORIC 0x01
 #define STATUE_MALE	0x02
 #define STATUE_FEMALE	0x04

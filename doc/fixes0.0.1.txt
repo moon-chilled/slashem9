@@ -86,7 +86,8 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: unihorn|prayer won't cure blindness if engulfed in a vortex, because it'll just return immediately.
 - Gameplay: confused reading of cursed charging scroll drains energy.
 - Interface: new rumors, oracles, and other random messages.
-- Gamplay: healers [and undead slayers] will notice when a wand of undead turning revives a monster.
+- Gameplay: healers [and undead slayers] will notice when a wand of undead turning revives a monster.
+- Gameplay: you can wish for tins of specific types (e.g. tin of deep fried orc).
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

@@ -1835,6 +1835,7 @@ struct obj *readobjnam(char *bp, struct obj *no_wish, boolean from_user) {
 	int isinvisible;
 	int halfeaten, halfdrained, mntmp, contents;
 	int islit, unlabeled, ishistoric, isdiluted;
+	int tmp, tinv, tvariety = RANDOM_TIN;
 	struct fruit *f;
 	int ftype = current_fruit;
 	char fruitbuf[BUFSZ];
@@ -1858,10 +1859,10 @@ struct obj *readobjnam(char *bp, struct obj *no_wish, boolean from_user) {
 	const char *name = 0;
 
 	cnt = spe = spesgn = typ = very = rechrg =
-		blessed = uncursed = iscursed = isdrained = halfdrained =
+	blessed = uncursed = iscursed = isdrained = halfdrained =
+	isinvisible = ispoisoned = isgreased = eroded = eroded2 =
+	erodeproof = halfeaten = islit = unlabeled = ishistoric = isdiluted = 0;
 
-			isinvisible = ispoisoned = isgreased = eroded = eroded2 =
-				erodeproof = halfeaten = islit = unlabeled = ishistoric = isdiluted = 0;
 	mntmp = NON_PM;
 #define UNDEFINED 0
 #define EMPTY	  1
@@ -2088,39 +2089,51 @@ struct obj *readobjnam(char *bp, struct obj *no_wish, boolean from_user) {
 	 *  "medallion of shifters", "stake of van helsing" similarly
 	 *  ALI "potion of vampire blood" also).
 	 */
-	if (!strstri(bp, "wand ") && !strstri(bp, "spellbook ") && !strstri(bp, "hand ") && !strstri(bp, "eye ") && !strstri(bp, "medallion ") && !strstri(bp, "stake ") && !strstri(bp, "potion ") && !strstri(bp, "potions ") && !strstri(bp, "finger ")) {
-		if ((p = strstri(bp, " of ")) != 0 && (mntmp = name_to_mon(p + 4)) >= LOW_PM)
+	if (!strstri(bp, "wand ")
+	&& !strstri(bp, "spellbook ")
+	&& !strstri(bp, "hand ")
+	&& !strstri(bp, "eye ")
+	&& !strstri(bp, "medallion ")
+	&& !strstri(bp, "stake ")
+	&& !strstri(bp, "potion ")
+	&& !strstri(bp, "potions ")
+	&& !strstri(bp, "finger ")) {
+		if (((p = strstri(bp, "tin of ")) != 0) &&
+		    (tmp = tin_variety_txt(p+7, &tinv)) && (mntmp = name_to_mon(p+7+tmp)) >= LOW_PM) {
+			*(p+3) = 0;
+			tvariety = tinv;
+		} else if ((p = strstri(bp, " of ")) != 0 && (mntmp = name_to_mon(p + 4)) >= LOW_PM) {
 			*p = 0;
+		}
 	}
 
 	/* Find corpse type w/o "of" (red dragon scale mail, yeti corpse) */
-	if (strncmpi(bp, "samurai sword", 13))								       /* not the "samurai" monster! */
-		if (strncmpi(bp, "wizard lock", 11))							       /* not the "wizard" monster! */
-			if (strncmpi(bp, "ninja-to", 8))						       /* not the "ninja" rank */
-				if (strncmpi(bp, "master key", 10))					       /* not the "master" rank */
-					if (strncmpi(bp, "magenta", 7))					       /* not the "mage" rank */
-						if (strncmpi(bp, "Thiefbane", 9))			       /* not the "thief" rank */
-							if (strncmpi(bp, "Ogresmasher", 11))		       /* not the "ogre" monster */
-								if (strncmpi(bp, "Bat from Hell", 13))	       /* not the "bat" monster */
-									if (strncmpi(bp, "vampire blood", 13)) /* not the "vampire" monster */
-										if (mntmp < LOW_PM && strlen(bp) > 2 &&
-										    (mntmp = name_to_mon(bp)) >= LOW_PM) {
-											int mntmptoo, mntmplen; /* double check for rank title */
-											char *obp = bp;
-											mntmptoo = title_to_mon(bp, NULL, &mntmplen);
-											bp += mntmp != mntmptoo ? (int)strlen(mons[mntmp].mname) : mntmplen;
-											if (*bp == ' ')
-												bp++;
-											else if (!strncmpi(bp, "s ", 2))
-												bp += 2;
-											else if (!strncmpi(bp, "es ", 3))
-												bp += 3;
-											else if (!*bp && !actualn && !dn && !un && !oclass) {
-												/* no referent; they don't really mean a monster type */
-												bp = obp;
-												mntmp = NON_PM;
-											}
-										}
+	if (strncmpi(bp, "samurai sword", 13))	/* not the "samurai" monster! */
+	if (strncmpi(bp, "wizard lock", 11))	/* not the "wizard" monster! */
+	if (strncmpi(bp, "ninja-to", 8))	/* not the "ninja" rank */
+	if (strncmpi(bp, "master key", 10))	/* not the "master" rank */
+	if (strncmpi(bp, "magenta", 7))		/* not the "mage" rank */
+	if (strncmpi(bp, "Thiefbane", 9))	/* not the "thief" rank */
+	if (strncmpi(bp, "Ogresmasher", 11))	/* not the "ogre" monster */
+	if (strncmpi(bp, "Bat from Hell", 13))	/* not the "bat" monster */
+	if (strncmpi(bp, "vampire blood", 13))	/* not the "vampire" monster */
+		if (mntmp < LOW_PM && strlen(bp) > 2 && (mntmp = name_to_mon(bp)) >= LOW_PM) {
+			int mntmptoo, mntmplen; /* double check for rank title */
+			char *obp = bp;
+			mntmptoo = title_to_mon(bp, NULL, &mntmplen);
+			bp += mntmp != mntmptoo ? (int)strlen(mons[mntmp].mname) : mntmplen;
+			if (*bp == ' ')
+				bp++;
+			else if (!strncmpi(bp, "s ", 2))
+				bp += 2;
+			else if (!strncmpi(bp, "es ", 3))
+				bp += 3;
+			else if (!*bp && !actualn && !dn && !un && !oclass) {
+				/* no referent; they don't really mean a monster type */
+				bp = obp;
+				mntmp = NON_PM;
+			}
+		}
 
 	/* first change to singular if necessary */
 	if (*bp) {
@@ -2745,6 +2758,10 @@ typfnd:
 	if (isdiluted && otmp->oclass == POTION_CLASS &&
 	    otmp->otyp != POT_WATER)
 		otmp->odiluted = 1;
+
+	// set tin variety
+	if (otmp->otyp == TIN && tvariety >= 0 && (rn2(20) || wizard))
+		set_tin_variety(otmp, tvariety);
 
 	if (name) {
 		const char *aname;

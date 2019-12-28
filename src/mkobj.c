@@ -421,12 +421,12 @@ struct obj *mksobj(int otyp, boolean init, boolean artif) {
 					case CORPSE:
 						/* possibly overridden by mkcorpstat() */
 						tryct = 50;
-						do
+						do {
 							otmp->corpsenm = undead_to_corpse(rndmonnum());
-						while ((mvitals[otmp->corpsenm].mvflags & G_NOCORPSE) && (--tryct > 0));
+						} while ((mvitals[otmp->corpsenm].mvflags & G_NOCORPSE) && (--tryct > 0));
 						if (tryct == 0) {
-							/* perhaps rndmonnum() only wants to make G_NOCORPSE monsters on
-					   this level; let's create an adventurer's corpse instead, then */
+						/* perhaps rndmonnum() only wants to make G_NOCORPSE monsters on
+						 * this level; let's create an adventurer's corpse instead, then */
 							otmp->corpsenm = PM_HUMAN;
 						}
 						/* timer set below */
@@ -445,24 +445,26 @@ struct obj *mksobj(int otyp, boolean init, boolean artif) {
 						break;
 					case TIN:
 						otmp->corpsenm = NON_PM; /* empty (so far) */
-						if (!rn2(6))
-							otmp->spe = 1; /* spinach */
-						else
+						if (!rn2(6)) {
+							set_tin_variety(otmp, SPINACH_TIN);
+						} else {
 							for (tryct = 200; tryct > 0; --tryct) {
 								mndx = undead_to_corpse(rndmonnum());
 								if (mons[mndx].cnutrit &&
 								    !(mvitals[mndx].mvflags & G_NOCORPSE)) {
 									otmp->corpsenm = mndx;
+									set_tin_variety(otmp, RANDOM_TIN);
 									break;
 								}
 							}
+						}
 						blessorcurse(otmp, 10);
 						break;
 					case SLIME_MOLD:
 						otmp->spe = current_fruit;
 						break;
 					case KELP_FROND:
-						otmp->quan = (long)rnd(2);
+						otmp->quan = rnd(2);
 						break;
 				}
 				if (otmp->otyp == CORPSE || otmp->otyp == MEAT_RING ||

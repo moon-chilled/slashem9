@@ -1630,7 +1630,9 @@ static void use_tinning_kit(struct obj *obj) {
 		if (mvitals[corpse->corpsenm].eaten < 255)
 			mvitals[corpse->corpsenm].eaten++;
 
-		can->spe = -1; /* Mark tinned tins. No spinach allowed... */
+		/* Mark tinned tins. No spinach allowed... */
+		set_tin_variety(can, RANDOM_TIN);
+
 		if (carried(corpse)) {
 			if (corpse->unpaid)
 				verbalize(you_buy_it);

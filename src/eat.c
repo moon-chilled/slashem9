@@ -41,6 +41,7 @@ static void eataccessory(struct obj *);
 static const char *foodword(struct obj *);
 static boolean maybe_cannibal(int, boolean);
 static struct obj *floorfood(const char *);
+static int tin_variety(struct obj *obj);
 
 char msgbuf[BUFSZ];
 
@@ -123,17 +124,14 @@ static const struct {
 	{"pickled", 40},
 	{"soup made from", 20},
 	{"pureed", 500},
-#define ROTTEN_TIN 4
-	{"rotten", -50},
-#define HOMEMADE_TIN 5
-	{"homemade", 50},
+	{"rotten", -50}, // rotten = 4
+	{"homemade", 50}, // homemade = 5
 	{"stir fried", 80},
 	{"candied", 100},
 	{"boiled", 50},
 	{"dried", 55},
 	{"szechuan", 70},
-#define FRENCH_FRIED_TIN 11
-	{"french fried", 40},
+	{"french fried", 40}, // french-fried = 11
 	{"sauteed", 95},
 	{"broiled", 80},
 	{"smoked", 50},
@@ -1133,6 +1131,60 @@ static void costly_tin(const char *verb /* if 0, the verb is "open" */) {
 	}
 }
 
+int tin_variety_txt(char *s, int *tinvariety) {
+	usize k, l;
+	if (s && tinvariety) {
+		*tinvariety = -1;
+		for (k = 0; k < TTSZ-1; ++k) {
+			l = strlen(tintxts[k].txt);
+			if (!strncmpi(s, tintxts[k].txt, l) && (strlen(s) > l) && s[l] == ' ') {
+				*tinvariety = k;
+				return (l + 1);
+			}
+		}
+	}
+	return 0;
+}
+
+void set_tin_variety(struct obj *obj, int forcetype) {
+	int r;
+
+	if (forcetype == SPINACH_TIN) {
+		obj->spe = 1;
+		return;
+	} else if (forcetype >= 0 && forcetype < TTSZ-1) {
+		r = forcetype;
+	} else { // RANDOM_TIN
+		r = rn2(TTSZ-1);		// take your pick
+		if (r == ROTTEN_TIN && (obj->corpsenm == PM_LIZARD || obj->corpsenm == PM_LICHEN))
+			r = HOMEMADE_TIN;	// lizards don't rot
+	}
+	obj->spe = -(r+1); // offset by 1 to allow index 0
+}
+
+static int tin_variety(struct obj *obj) {
+	int r;
+
+	if (obj->spe != 1 && obj->cursed) {
+		r = ROTTEN_TIN;                 // always rotten if cursed
+	} else if (obj->spe < 0) {
+		r = -(obj->spe);
+		--r; // get rid of the offset
+	} else
+		r = rn2(TTSZ-1);
+
+	if (r == HOMEMADE_TIN &&
+			!obj->blessed && !rn2(7))
+		r = ROTTEN_TIN;                 // some homemade tins go bad
+
+	if (r == ROTTEN_TIN && (obj->corpsenm == PM_LIZARD ||
+				obj->corpsenm == PM_LICHEN))
+		r = HOMEMADE_TIN;               // lizards don't rot
+	return r;
+}
+
+
+
 // called during each move whilst opening a tin
 static int opentin(void) {
 	int r;
@@ -1162,14 +1214,7 @@ static int opentin(void) {
 			costly_tin(NULL);
 			goto use_me;
 		}
-		r = context.tin.tin->cursed ? ROTTEN_TIN :		  /* always rotten if cursed */
-			    (context.tin.tin->spe == -1) ? HOMEMADE_TIN : /* player made it */
-				    rn2(TTSZ - 1);		  /* else take your pick */
-		if (r == ROTTEN_TIN && (context.tin.tin->corpsenm == PM_LIZARD ||
-					context.tin.tin->corpsenm == PM_LICHEN))
-			r = HOMEMADE_TIN; /* lizards don't rot */
-		else if (context.tin.tin->spe == -1 && !context.tin.tin->blessed && !rn2(7))
-			r = ROTTEN_TIN; /* some homemade tins go bad */
+		r = tin_variety(context.tin.tin);
 		which = 0;		/* 0=>plural, 1=>as-is, 2=>"the" prefix */
 		if (Hallucination) {
 			what = rndmonnam();

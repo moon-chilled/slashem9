@@ -243,6 +243,15 @@ extern coord bhitpos; /* place where throw or zap hits or stops */
 #define NOSE	     17
 #define STOMACH	     18
 
+// Indeces for some special tin types
+enum tin_type {
+	ROTTEN_TIN = 4,
+	HOMEMADE_TIN = 5,
+	FRENCH_FRIED_TIN = 11,
+	SPINACH_TIN = -1,
+	RANDOM_TIN = -2,
+};
+
 /* Flags to control menus */
 #define MENUTYPELEN	 sizeof("traditional ")
 #define MENU_TRADITIONAL 0

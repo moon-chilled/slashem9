@@ -542,6 +542,8 @@ boolean bite_monster(struct monst *mon);
 void fix_petrification(void);
 void consume_oeaten(struct obj *, int);
 boolean maybe_finished_meal(boolean);
+void set_tin_variety(struct obj *obj, int forcetype);
+int tin_variety_txt(char *x, int *tin_variety);
 
 /* ### end.c ### */
 
