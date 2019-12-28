@@ -92,6 +92,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Interface: can generate random monster in debug mode with '*'.
 - Interface: acknowledge Schroedinger's cat at the end of the game, if you have a box containing it.
 - Gameplay: pets will mimic if they eat a mimic corpse.
+- Gameplay: add a health food store, which contains exclusively vegetables.  It replaces the food store in minetown for monks.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

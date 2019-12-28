@@ -15,6 +15,8 @@ static void stock_blkmar(const struct shclass *, struct mkroom *, int);
 /* WAC init shk services */
 static void init_shk_services(struct monst *);
 
+#define VEGETARIAN_CLASS (MAXOCLASSES+1)
+
 static const char *const shkliquors[] = {
 	/* Ukraine */
 	"Njezjin", "Tsjernigof", "Ossipewsk", "Gorlowka",
@@ -29,7 +31,7 @@ static const char *const shkliquors[] = {
 	/* Schweiz */
 	"Leuk", "Brig", "Brienz", "Thun", "Sarnen", "Burglen", "Elm",
 	"Flims", "Vals", "Schuls", "Zum Loch",
-	0};
+	NULL};
 
 static const char *const shkbooks[] = {
 	/* Eire */
@@ -39,7 +41,7 @@ static const char *const shkbooks[] = {
 	"Cahersiveen", "Glenbeigh", "Kilmihil", "Kiltamagh",
 	"Droichead Atha", "Inniscrone", "Clonegal", "Lisnaskea",
 	"Culdaff", "Dunfanaghy", "Inishbofin", "Kesh",
-	0};
+	NULL};
 
 static const char *const shkarmors[] = {
 	/* Turquie */
@@ -49,7 +51,7 @@ static const char *const shkarmors[] = {
 	"Bayburt", "Ayancik", "Zonguldak", "Balya", "Tefenni",
 	"Artvin", "Kars", "Makharadze", "Malazgirt", "Midyat",
 	"Birecik", "Kirikkale", "Alaca", "Polatli", "Nallihan",
-	0};
+	NULL};
 
 static const char *const shkwands[] = {
 	/* Wales */
@@ -62,7 +64,7 @@ static const char *const shkwands[] = {
 	"Kerloch", "Beinn a Ghlo", "Drumnadrochit", "Morven",
 	"Uist", "Storr", "Sgurr na Ciche", "Cannich", "Gairloch",
 	"Kyleakin", "Dunvegan",
-	0};
+	NULL};
 
 static const char *const shkrings[] = {
 	/* Hollandse familienamen */
@@ -74,7 +76,7 @@ static const char *const shkrings[] = {
 	"Rastegaisa", "Varjag Njarga", "Kautekeino", "Abisko",
 	"Enontekis", "Rovaniemi", "Avasaksa", "Haparanda",
 	"Lulea", "Gellivare", "Oeloe", "Kajaani", "Fauske",
-	0};
+	NULL};
 
 static const char *const shkfoods[] = {
 	/* Indonesia */
@@ -85,7 +87,7 @@ static const char *const shkfoods[] = {
 	"Trenggalek", "Karangkobar", "Njalindoeng", "Pasawahan",
 	"Pameunpeuk", "Patjitan", "Kediri", "Pemboeang", "Tringanoe",
 	"Makin", "Tipor", "Semai", "Berhala", "Tegal", "Samoe",
-	0};
+	NULL};
 
 static const char *const shkweapons[] = {
 	/* Perigord */
@@ -95,7 +97,7 @@ static const char *const shkweapons[] = {
 	"Cazelon", "Eypau", "Carignan", "Monbazillac", "Jonzac",
 	"Pons", "Jumilhac", "Fenouilledes", "Laguiolet", "Saujon",
 	"Eymoutiers", "Eygurande", "Eauze", "Labouheyre",
-	0};
+	NULL};
 
 static const char *const shktools[] = {
 	/* Spmi */
@@ -105,14 +107,13 @@ static const char *const shktools[] = {
 	"Yelpur", "Nosnehpets", "Stewe", "Renrut", "_Zlaw", "Nosalnef",
 	"Rewuorb", "Rellenk", "Yad", "Cire Htims", "Y-crad", "Nenilukah",
 	"Corsh", "Aned",
-#ifdef WIN32
-	"Lechaim", "Lexa", "Niod",
-#endif
-#ifdef MAC
+
+	"Lechaim", "Lexa", "Niod", // originally #ifdef WIN32 -MC
+
 	"Nhoj-lee", "Evad\'kh", "Ettaw-noj", "Tsew-mot", "Ydna-s",
-	"Yao-hang", "Tonbar", "Nivek", "Kivenhoug",
-#endif
-	0};
+	"Yao-hang", "Tonbar", "Nivek", "Kivenhoug", // originally #ifdef MAC -MC
+
+	NULL};
 
 static const char *const shklight[] = {
 	/* Romania */
@@ -123,7 +124,7 @@ static const char *const shklight[] = {
 	"Silistra", "Tulovo", "Panagyuritshte", "Smolyan", "Kirklareli",
 	"Pernik", "Lom", "Haskovo", "Dobrinishte", "Varvara", "Oryahovo",
 	"Troyan", "Lovech", "Sliven",
-	0};
+	NULL};
 
 static const char *const shkgeneral[] = {
 	/* Suriname */
@@ -140,9 +141,25 @@ static const char *const shkgeneral[] = {
 	/* Iceland */
 	"Akureyri", "Kopasker", "Budereyri", "Akranes", "Bordeyri",
 	"Holmavik",
-	0};
+	NULL};
 
-static const char *shkblack[] = {
+
+static const char *const shkhealthfoods[] = {
+	/* Tibet */
+	"Ga'er", "Zhangmu", "Rikaze", "Jiangji",
+	"Changdu", "Linzhi", "Shigatse", "Gyantse",
+	"Ganden", "Tsurphu", "Lhasa", "Tsedong",
+	"Drepung",
+	/* Hippie names */
+	"Azura", "Blaze", "Breanna", "Breezy",
+	"Dharma", "Feather", "Jasmine", "Luna",
+	"Melody", "Moonjava", "Petal", "Rhiannon",
+	"Starla", "Tranquilla", "Windsong", "Zennia",
+	"Zoe", "Zora",
+	NULL
+};
+
+static const char *const shkblack[] = {
 	"One-eyed Sam", "One-eyed Sam", "One-eyed Sam",
 	"One-eyed Sam", "One-eyed Sam", "One-eyed Sam",
 	"One-eyed Sam", "One-eyed Sam", "One-eyed Sam",
@@ -154,14 +171,14 @@ static const char *shkblack[] = {
 	"One-eyed Sam", "One-eyed Sam", "One-eyed Sam",
 	"One-eyed Sam", "One-eyed Sam", "One-eyed Sam",
 	"One-eyed Sam", "One-eyed Sam", "One-eyed Sam",
-	0};
+	NULL};
 
 /* STEPHEN WHITE'S NEW CODE */
 static const char *shkpet[] = {
 	"Silistra", "Tulovo", "Panagyuritshte", "Smolyan", "Kirklareli",
 	"Pernik", "Lom", "Haskovo", "Dobrinishte", "Varvara", "Oryahovo",
 	"Troyan", "Lovech", "Sliven",
-	0};
+	NULL};
 
 /*
  * To add new shop types, all that is necessary is to edit the shtypes[] array.
@@ -182,7 +199,7 @@ static const char *shkpet[] = {
  * a new shop type.
  */
 const struct shclass shtypes[] = {
-	{"general store", RANDOM_CLASS, 24, D_SHOP, {{100, RANDOM_CLASS}, {0, 0}, {0, 0}}, shkgeneral},
+	{"general store", RANDOM_CLASS, 22, D_SHOP, {{100, RANDOM_CLASS}, {0, 0}, {0, 0}}, shkgeneral},
 	{"used armor dealership", ARMOR_CLASS, 20, D_SHOP, {{90, ARMOR_CLASS}, {10, WEAPON_CLASS}, {0, 0}}, shkarmors},
 	{"second-hand bookstore", SCROLL_CLASS, 4, D_SHOP, {{90, SCROLL_CLASS}, {10, SPBOOK_CLASS}, {0, 0}}, shkbooks},
 	{"liquor emporium", POTION_CLASS, 4, D_SHOP, {{100, POTION_CLASS}, {0, 0}, {0, 0}}, shkliquors},
@@ -230,7 +247,15 @@ const struct shclass shtypes[] = {
 	 {{90, -ICE_BOX}, {10, -TIN}, {0, -CORPSE}, {0, 0}},
 	 shkfoods},
 
-	{"rare books", SPBOOK_CLASS, 4, D_SHOP, {{90, SPBOOK_CLASS}, {10, SCROLL_CLASS}, {0, 0}}, shkbooks},
+	{"rare books", SPBOOK_CLASS, 4, D_SHOP,
+		{{90, SPBOOK_CLASS}, {10, SCROLL_CLASS}, {0, 0}},
+		shkbooks},
+
+	{"health food store", FOOD_CLASS, 2, D_SHOP,
+		{{70, VEGETARIAN_CLASS}, {20, -POT_FRUIT_JUICE}, {4, -POT_HEALING},
+		 {3, -POT_FULL_HEALING}, {2, -SCR_FOOD_DETECTION}, {1, -LUMP_OF_ROYAL_JELLY}},
+		shkhealthfoods},
+
 
 	/* Shops below this point are "unique".  That is they must all have a
 	 * probability of zero.  They are only created via the special level
@@ -246,8 +271,7 @@ const struct shclass shtypes[] = {
 #if 0
 /* validate shop probabilities; otherwise incorrect local changes could
    end up provoking infinite loops or wild subscripts fetching garbage */
-void
-init_shop_selection() {
+void init_shop_selection() {
 	int i, j, item_prob, shop_prob;
 
 	for (shop_prob = 0, i = 0; i < SIZE(shtypes); i++) {
@@ -263,12 +287,35 @@ init_shop_selection() {
 }
 #endif /*0*/
 
-static void
-	mkshobj_at(shp, sx, sy)
-	/* make an object of the appropriate type for a shop square */
-	const struct shclass *shp;
-int sx, sy;
-{
+static int shkveg(void) {
+	int i, j, maxprob, prob;
+	uchar oclass = FOOD_CLASS;
+	int ok[NUM_OBJECTS];
+
+	j = maxprob = 0;
+	for (i = bases[oclass]; i < NUM_OBJECTS; ++i) {
+		if (objects[i].oc_material == VEGGY) {
+			ok[j++] = i;
+			maxprob += objects[i].oc_prob;
+		}
+	}
+	prob = rnd(maxprob);
+
+	j = 0;
+	i = ok[0];
+	while ((prob -= objects[i].oc_prob) > 0) {
+		j++;
+		i = ok[j];
+	}
+
+	if (objects[i].oc_class != oclass || !OBJ_NAME(objects[i]))
+		panic("shkveg probtype error, oclass=%d i=%d", oclass, i);
+	return i;
+}
+
+
+/* make an object of the appropriate type for a shop square */
+static void mkshobj_at(const struct shclass *shp, int sx, int sy) {
 	struct monst *mtmp;
 	int atype;
 	struct permonst *ptr;
@@ -283,7 +330,9 @@ int sx, sy;
 		}
 	} else {
 		atype = get_shop_item(shp - shtypes);
-		if (atype < 0)
+		if (atype == VEGETARIAN_CLASS)
+			mksobj_at(shkveg(), sx, sy, true, true);
+		else if (atype < 0)
 			mksobj_at(-atype, sx, sy, true, true);
 		else
 			mkobj_at(atype, sx, sy, true);
@@ -301,7 +350,13 @@ const char *const *nlp;
 	int name_wanted;
 	s_level *sptr;
 
-	if (nlp == shklight && In_mines(&u.uz) && (sptr = Is_special(&u.uz)) != 0 && sptr->flags.town) {
+	if (nlp == shkfoods && Is_minetn_level(&u.uz) && Role_if(PM_MONK)
+	    && (sptr = Is_special(&u.uz)) != 0 && sptr->flags.town) {
+		// special-case override for minetown food store for monks
+		nlp = shkhealthfoods;
+	}
+
+	if (nlp == shklight && Is_minetn_level(&u.uz) && (sptr = Is_special(&u.uz)) != 0 && sptr->flags.town) {
 		/* special-case minetown lighting shk */
 		shname = "Izchak";
 		shk->female = false;
