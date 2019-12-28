@@ -89,6 +89,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: healers [and undead slayers] will notice when a wand of undead turning revives a monster.
 - Gameplay: you can wish for tins of specific types (e.g. tin of deep fried orc).
 - Bugfix: display was not correctly updated if you received a spellbook from your god while unable to see your invisible self.
+- Interface: can generate random monster in debug mode with '*'.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

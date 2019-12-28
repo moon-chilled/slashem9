@@ -2085,14 +2085,19 @@ struct monst *create_particular(void) {
 	int which, tries, i;
 	struct permonst *whichpm;
 	struct monst *mtmp = NULL;
-	boolean maketame, makepeaceful, makehostile;
+	bool maketame, makepeaceful, makehostile;
+	bool randmonst = false;
 
 	tries = 0;
 	do {
 		which = urole.malenum; /* an arbitrary index into mons[] */
 		maketame = makepeaceful = makehostile = false;
-		getlin("Create what kind of monster? [type the name or symbol]",
-		       buf);
+
+		if (wizard)
+			getlin("Create what kind of monster? [type the name or symbol, * for random]", buf);
+		else
+			getlin("Create what kind of monster? [type the name or symbol]", buf);
+
 		bufp = mungspaces(buf);
 		if (*bufp == '\033') return NULL;
 		/* allow the initial disposition to be specified */
@@ -2108,6 +2113,10 @@ struct monst *create_particular(void) {
 		}
 		/* decide whether a valid monster was chosen */
 		if (strlen(bufp) == 1) {
+			if (wizard && *bufp == '*') {
+				randmonst = true;
+				break;
+			}
 			monclass = def_char_to_monclass(*bufp);
 			if (monclass != MAXMCLASSES) break; /* got one */
 		} else {
@@ -2121,9 +2130,14 @@ struct monst *create_particular(void) {
 	if (tries == 5) {
 		pline("That's enough tries!");
 	} else {
-		cant_create(&which, false);
-		whichpm = &mons[which];
+		if (!randmonst) {
+			cant_create(&which, false);
+			whichpm = &mons[which];
+		}
 		for (i = 0; i <= multi; i++) {
+			if (randmonst)
+				whichpm = rndmonst();
+
 			if (monclass != MAXMCLASSES)
 				whichpm = mkclass(monclass, 0);
 			if (maketame) {
