@@ -518,8 +518,7 @@ void dropy(struct obj *obj) {
 			if (is_animal(u.ustuck->data)) {
 				if (could_poly || could_slime) {
 					newcham(u.ustuck,
-						could_poly ? NULL :
-							     &mons[PM_GREEN_SLIME],
+						could_poly ? NULL : &mons[PM_GREEN_SLIME],
 						false, could_slime);
 					delobj(obj); /* corpse is digested */
 				} else if (could_petrify) {

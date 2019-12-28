@@ -737,8 +737,8 @@ static void gcrownu() {
 			} else if (!already_exists) {
 				obj = mksobj(RUNESWORD, false, false);
 				obj = oname(obj, artiname(ART_STORMBRINGER));
-				at_your_feet(An(swordbuf));
 				obj->spe = 1;
+				at_your_feet(An(swordbuf));
 				dropy(obj);
 				u.ugifts++;
 			}
@@ -971,7 +971,6 @@ static void pleased(aligntyp g_align) {
 				struct obj *otmp;
 				int sp_no, trycnt = u.ulevel + 1;
 
-				at_your_feet("An object");
 				/* not yet known spells given preference over already known ones */
 				/* Also, try to grant a spell for which there is a skill slot */
 				otmp = mkobj(SPBOOK_CLASS, true);
@@ -989,7 +988,11 @@ static void pleased(aligntyp g_align) {
 					otmp->otyp = rnd_class(bases[SPBOOK_CLASS], SPE_BLANK_PAPER);
 				}
 				bless(otmp);
+				at_your_feet("An object");
 				place_object(otmp, u.ux, u.uy);
+				/* is this using place_object() because dropy() will give the spellbook
+				 * to a vortex if you're engulfed, where it could be blanked?  -MC */
+				newsym(u.ux, u.uy);
 				break;
 			}
 			case 5: {
@@ -1622,8 +1625,8 @@ int dosacrifice(void) {
 					if (otmp->spe < 0) otmp->spe = 0;
 					if (otmp->cursed) uncurse(otmp);
 					otmp->oerodeproof = true;
-					dropy(otmp);
 					at_your_feet("An object");
+					dropy(otmp);
 					godvoice(u.ualign.type, "Use my gift wisely!");
 					u.ugifts++;
 					u.ublesscnt = rnz(300 + (50 * nartifacts));
