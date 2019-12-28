@@ -44,6 +44,7 @@ static void disclose(int, boolean);
 static void get_valuables(struct obj *);
 static void sort_valuables(struct valuable_data *, int);
 static void artifact_score(struct obj *, boolean, winid);
+static bool odds_and_ends(struct obj *list, int what);
 static void savelife(int);
 boolean list_vanquished(char, boolean);
 static void list_genocided(char, boolean);
@@ -104,6 +105,8 @@ void done1(int sig_unused /* called as signal() handler, so sent at least one ar
 		done2();
 	}
 }
+
+static bool Schroedingers_cat = false;
 
 extern const char *const killed_by_prefix[]; /* from topten.c */
 
@@ -511,6 +514,23 @@ static void artifact_score(struct obj *list, boolean counting /* true => add up 
 	}
 }
 
+#define CAT_CHECK 2
+static bool odds_and_ends(struct obj *list, int what) {
+	for (struct obj *otmp = list; otmp; otmp = otmp->nobj) {
+		switch (what) {
+			case CAT_CHECK:
+				// Ascending is deterministic
+				if (otmp->otyp == LARGE_BOX && otmp->spe == 1) {
+					return rn2(2);
+				}
+				break;
+			default: impossible("Checking odds and ends for unknown %d", what);
+		}
+	}
+
+	return false;
+}
+
 /* Be careful not to call panic from here! */
 void done(int how) {
 	boolean taken;
@@ -843,6 +863,19 @@ die:
 		viz_array[0][0] |= IN_SIGHT; /* need visibility for naming */
 		mtmp = mydogs;
 		strcpy(pbuf, "You");
+
+		// check here in case disclosure was off
+		if (!Schroedingers_cat)
+			Schroedingers_cat = odds_and_ends(invent, CAT_CHECK);
+
+		if (Schroedingers_cat) {
+			int mhp, m_lev = adj_lev(&mons[PM_HOUSECAT]);
+			mhp = d(m_lev, 8);
+			u.urexp += mhp;
+			if (!done_stopprint)
+				strcat(eos(pbuf), " and Schroedinger's cat");
+		}
+
 		if (mtmp) {
 			while (mtmp) {
 				sprintf(eos(pbuf), " and %s", mon_nam(mtmp));
@@ -956,9 +989,21 @@ die:
 void container_contents(struct obj *list, boolean identified, boolean all_containers) {
 	struct obj *box, *obj;
 	char buf[BUFSZ];
+	bool cat, deadcat;
 
 	for (box = list; box; box = box->nobj) {
 		if (Is_container(box) || box->otyp == STATUE) {
+
+			cat = deadcat = false;
+
+			if (box->otyp == LARGE_BOX && box->spe == 1 && !Schroedingers_cat) {
+				// Schroedinger's Cat?
+				cat = odds_and_ends(box, CAT_CHECK);
+				if (cat) Schroedingers_cat = true;
+				else deadcat = true;
+				box->spe = 0;
+			}
+
 			if (box->otyp == BAG_OF_TRICKS) {
 				continue; /* wrong type of container */
 			} else if (box->cobj) {
@@ -974,13 +1019,23 @@ void container_contents(struct obj *list, boolean identified, boolean all_contai
 					}
 					putstr(tmpwin, 0, doname(obj));
 				}
+
+				if (cat) putstr(tmpwin, 0, "Schroedinger's cat");
+				else if (deadcat) putstr(tmpwin, 0, "Schroedinger's dead cat"); // XXX treat this as an artifact?
+
 				display_nhwindow(tmpwin, true);
 				destroy_nhwindow(tmpwin);
 				if (all_containers) {
 					container_contents(box->cobj, identified, true);
 				}
 			} else {
-				pline("%s empty.", Tobjnam(box, "are"));
+				if (cat || deadcat)
+					pline("%s%s contains Schroedinger's %scat!",
+						(box->quan > 1) ? "One of your " : "Your ",
+						xname(box), (deadcat) ? "dead " : "");
+				else
+					pline("%s empty.", Tobjnam(box, "are"));
+
 				display_nhwindow(WIN_MESSAGE, false);
 			}
 		}
