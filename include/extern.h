@@ -104,7 +104,6 @@ void losestr(int);
 void restore_attrib(void);
 void exercise(int, boolean);
 void exerchk(void);
-void reset_attribute_clock(void);
 void init_attr(int);
 void redist_attr(void);
 void adjabil(int, int);

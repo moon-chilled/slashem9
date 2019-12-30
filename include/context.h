@@ -75,6 +75,7 @@ struct context_info {
 				/* 8: travel */
 	int	warnlevel;
 	int	djinni_count, ghost_count;	/* potion effect tuning */
+	long next_attrib_check;
 	long stethoscope_move;
 	short stethoscope_movement;
 	bool travel;	/* find way automatically to u.tx,u.ty */

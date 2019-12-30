@@ -581,6 +581,7 @@ void newgame(void) {
 	context.ident = 1;
 	context.stethoscope_move = 1;
 	context.warnlevel = 1;
+	context.next_attrib_check = 600;
 
 	for (i = 0; i < NUMMONS; i++) {
 		mvitals[i].mvflags = mons[i].geno & G_NOCORPSE;

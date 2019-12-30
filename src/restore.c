@@ -554,7 +554,6 @@ int dorecover(int fd) {
 	inven_inuse(false);
 
 	load_qtlist(); /* re-load the quest text info */
-	reset_attribute_clock();
 	/* Set up the vision internals, after levl[] data is loaded */
 	/* but before docrt().					    */
 	vision_reset();
