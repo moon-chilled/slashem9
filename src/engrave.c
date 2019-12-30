@@ -179,8 +179,8 @@ boolean can_reach_floor(void) {
 	return !u.uswallow &&
 	       /* Restricted/unskilled riders can't reach the floor */
 	       !(u.usteed && P_SKILL(P_RIDING) < P_BASIC) &&
-	       (!Levitation ||
-		Is_airlevel(&u.uz) || Is_waterlevel(&u.uz));
+	       (!Levitation || Is_airlevel(&u.uz) || Is_waterlevel(&u.uz)) &&
+	       (!u.uundetected || !is_hider(youmonst.data) || u.umonnum == PM_TRAPPER);
 }
 
 const char *surface(int x, int y) {

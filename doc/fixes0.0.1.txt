@@ -95,6 +95,8 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: add a health food store, which contains exclusively vegetables.  It replaces the food store in minetown for monks.
 - Gameplay: certain monsters (currently only the three horseman) can move other monsters out of their way.
 - Bugfix: grammar fixes when applying stethoscope to inanimate corpses and statues.
+- Bugfix: trappers hid on the ceiling.
+- Bugfix: player hiding on ceiling did not drop to the floor when #sitting.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
