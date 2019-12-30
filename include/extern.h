@@ -452,13 +452,13 @@ boolean hurtle_step(void *, int, int);
 
 /* ### drawing.c ### */
 #endif /* !LEV_LEX_C */
-int def_char_to_objclass(char);
-int def_char_to_monclass(char);
+int def_char_to_objclass(char ch);
+int def_char_to_monclass(char ch);
 #ifndef LEV_LEX_C
-void assign_graphics(const glyph_t *, int, int, int);
-void switch_graphics(int);
-void assign_rogue_graphics(boolean);
-void assign_colors(uchar *, int, int, int);
+void assign_graphics(const glyph_t *graph_chars, int glth, int maxlen, int offset);
+void assign_colors(uchar *graph_colors, int glth, int maxlen, int offset);
+void switch_graphics(int graphics);
+void assign_rogue_graphics(bool is_rlevel);
 
 /* ### dungeon.c ### */
 
@@ -956,12 +956,12 @@ bool buzzmu(struct monst *, struct attack *);
 
 /* ### mhitm.c ### */
 
-int fightm(struct monst *);
-int mattackm(struct monst *, struct monst *);
-bool noattacks(struct permonst *);
-int sleep_monst(struct monst *, int, int);
-void slept_monst(struct monst *);
-long attk_protection(int);
+int fightm(struct monst *mtmp);
+int mattackm(struct monst *magr, struct monst *mdef);
+bool noattacks(struct permonst *ptr);
+int sleep_monst(struct monst *mon, int amt, int how);
+void slept_monst(struct monst *mon);
+long attk_protection(int aatyp);
 
 /* ### mhitu.c ### */
 

@@ -730,7 +730,7 @@ static const glyph_t IBM_r_oc_syms[MAXOCLASSES] = {
 	CHAIN_SYM,
 	VENOM_SYM};
 
-void assign_rogue_graphics(boolean is_rlevel) {
+void assign_rogue_graphics(bool is_rlevel) {
 	/* Adjust graphics display characters on Rogue levels */
 	if (is_rlevel) {
 		int i;

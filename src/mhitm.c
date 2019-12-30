@@ -15,20 +15,20 @@ static boolean vis, far_noise;
 static long noisetime;
 static struct obj *otmp;
 
-static char *mon_nam_too(char *, struct monst *, struct monst *);
-static void mrustm(struct monst *, struct monst *, struct obj *);
-static int breamm(struct monst *, struct monst *, struct attack *);
-static int spitmm(struct monst *, struct monst *, struct attack *);
-static int thrwmm(struct monst *, struct monst *);
-static int hitmm(struct monst *, struct monst *, struct attack *);
-static int gazemm(struct monst *, struct monst *, struct attack *);
-static int gulpmm(struct monst *, struct monst *, struct attack *);
-static int explmm(struct monst *, struct monst *, struct attack *);
-static int mdamagem(struct monst *, struct monst *, struct attack *);
-static void mswingsm(struct monst *, struct monst *, struct obj *);
-static void noises(struct monst *, struct attack *);
-static void missmm(struct monst *, struct monst *, int, int, struct attack *);
-static int passivemm(struct monst *, struct monst *, boolean, int);
+static char *mon_nam_too(char *outbuf, struct monst *mon, struct monst *other_mon);
+static void mrustm(struct monst *magr, struct monst *mdef, struct obj *obj);
+static int breamm(struct monst *magr, struct monst *mdef, struct attack *mattk);
+static int spitmm(struct monst *magr, struct monst *mdef, struct attack *mattk);
+static int thrwmm(struct monst *magr, struct monst *mdef);
+static int hitmm(struct monst *magr, struct monst *mdef, struct attack *mattk);
+static int gazemm(struct monst *magr, struct monst *mdef, struct attack *mattk);
+static int gulpmm(struct monst *magr, struct monst *mdef, struct attack *mattk);
+static int explmm(struct monst *magr, struct monst *mdef, struct attack *mattk);
+static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk);
+static void mswingsm(struct monst *magr, struct monst *mdef, struct obj *otemp);
+static void noises(struct monst *magr, struct attack *mdef);
+static void missmm(struct monst *magr, struct monst *mdef, int target, int roll, struct attack *mattk);
+static int passivemm(struct monst *magr, struct monst *mdef, boolean mhit, int mdead);
 
 /* Needed for the special case of monsters wielding vorpal blades (rare).
  * If we use this a lot it should probably be a parameter to mdamagem()
