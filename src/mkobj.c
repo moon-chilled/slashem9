@@ -967,8 +967,9 @@ mkgold(long amount, int x, int y) {
  * resurrection.
  */
 /* objtyp => CORPSE or STATUE */
-struct obj *mkcorpstat(int objtype, struct monst *mtmp, struct permonst *ptr, int x, int y, boolean init) {
+struct obj *mkcorpstat(int objtype, struct monst *mtmp, struct permonst *ptr, int x, int y, unsigned flags) {
 	struct obj *otmp;
+	bool init = flags & CORPSTAT_INIT;
 
 	if (objtype != CORPSE && objtype != STATUE)
 		impossible("making corpstat type %d", objtype);
@@ -1113,8 +1114,9 @@ struct obj *mk_tt_object(int objtype, /* CORPSE or STATUE */ int x, int y) {
 struct obj *mk_named_object(int objtype, /* CORPSE or STATUE */ struct permonst *ptr, int x, int y, const char *nm) {
 	struct obj *otmp;
 
-	otmp = mkcorpstat(objtype, NULL, ptr,
-			  x, y, (boolean)(objtype != STATUE));
+	unsigned flags = (objtype != STATUE) ? CORPSTAT_INIT : CORPSTAT_NONE;
+	otmp = mkcorpstat(objtype, NULL, ptr, x, y, flags);
+
 	if (nm)
 		otmp = oname(otmp, nm);
 	return otmp;

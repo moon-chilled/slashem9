@@ -405,7 +405,7 @@ void mon_arrive(struct monst *mtmp, boolean with_you) {
 					get_obj_location(obj, &xlocale, &ylocale, 0);
 				}
 			}
-			mkcorpstat(CORPSE, NULL, mtmp->data, xlocale, ylocale, false);
+			mkcorpstat(CORPSE, NULL, mtmp->data, xlocale, ylocale, CORPSTAT_NONE);
 			mongone(mtmp);
 		}
 	}

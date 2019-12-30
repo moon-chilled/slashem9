@@ -771,9 +771,7 @@ static void makelevel(void) {
 
 			/* put statues inside */
 			if (!rn2(20))
-				mkcorpstat(STATUE, NULL,
-					   NULL,
-					   somex(croom), somey(croom), true);
+				mkcorpstat(STATUE, NULL, NULL, somex(croom), somey(croom), CORPSTAT_INIT);
 			/* put box/chest inside;
 			 *  40% chance for at least 1 box, regardless of number
 			 *  of rooms; about 5 - 7.5% for 2 boxes, least likely

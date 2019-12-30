@@ -97,6 +97,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: grammar fixes when applying stethoscope to inanimate corpses and statues.
 - Bugfix: trappers hid on the ceiling.
 - Bugfix: player hiding on ceiling did not drop to the floor when #sitting.
+- Bugfix: if a monster carrying a boulder was inside of a pit or a hole when killed, the boulder would fill the pit/hole but the monster's corpse would not be buried.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

@@ -228,8 +228,7 @@ maketrap(int x, int y, int typ) {
 			struct monst *mtmp;
 			struct obj *otmp, *statue;
 
-			statue = mkcorpstat(STATUE, NULL,
-					    &mons[rndmonnum()], x, y, false);
+			statue = mkcorpstat(STATUE, NULL, &mons[rndmonnum()], x, y, CORPSTAT_NONE);
 			mtmp = makemon(&mons[statue->corpsenm], 0, 0, NO_MM_FLAGS);
 			if (!mtmp) break; /* should never happen */
 			while (mtmp->minvent) {

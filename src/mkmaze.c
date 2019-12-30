@@ -470,8 +470,7 @@ static void fixup_special(void) {
 		if (rn2(2))
 			otmp = mk_tt_object(STATUE, somex(croom), somey(croom));
 		else /* Medusa statues don't contain books */
-			otmp = mkcorpstat(STATUE, NULL, NULL,
-					  somex(croom), somey(croom), false);
+			otmp = mkcorpstat(STATUE, NULL, NULL, somex(croom), somey(croom), CORPSTAT_NONE);
 		if (otmp) {
 			while (pm_resistance(&mons[otmp->corpsenm], MR_STONE) || poly_when_stoned(&mons[otmp->corpsenm])) {
 				otmp->corpsenm = rndmonnum();
