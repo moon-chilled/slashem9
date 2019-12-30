@@ -580,15 +580,30 @@ void delobj(struct obj *obj) {
 	obfree(obj, NULL);
 }
 
-struct obj *sobj_at(int n, int x, int y) {
+// try to find a particular type of object at designated map location
+struct obj *sobj_at(int otyp, int x, int y) {
 	struct obj *otmp;
 
 	for (otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
-		if (otmp->otyp == n)
+		if (otmp->otyp == otyp)
 			return otmp;
 
 	return NULL;
 }
+
+// sobj_at(&c) traversal -- find next object of specified type
+struct obj *nxtobj(struct obj *obj, int type, bool by_nexthere) {
+	// start with the object after this one
+	struct obj *otmp = obj;
+
+	do {
+		otmp = !by_nexthere ? otmp->nobj : otmp->nexthere;
+		if (!otmp) break;
+	} while (otmp->otyp != type);
+
+	return otmp;
+}
+
 
 struct obj *carrying(int type) {
 	struct obj *otmp;

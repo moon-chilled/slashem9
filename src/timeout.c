@@ -1617,7 +1617,7 @@ void do_storms(void) {
  * Interface:
  *
  * General:
- *	boolean start_timer(long timeout,short kind,short func_index, anything arg)
+ *	boolean start_timer(long timeout, short kind, short func_index, anything arg)
  *		Start a timer of kind 'kind' that will expire at time
  *		monstermoves+'timeout'.  Call the function at 'func_index'
  *		in the timeout table using argument 'arg'.  Return true if
@@ -1630,6 +1630,10 @@ void do_storms(void) {
  *		assumes that such a pair is unique.  Return the time the
  *		timer would have gone off.  If no timer is found, return 0.
  *		If an object, decrement the object's timer count.
+ *
+ *	long peek_timer(short func_index, anything arg)
+ *		Return time specified timer will go off (0 if no such timer).
+ *
  *
  *	void run_timers(void)
  *		Call timers that have timed out.
@@ -1660,6 +1664,9 @@ void do_storms(void) {
  *
  *	void obj_stop_timers(struct obj *obj)
  *		Stop all timers attached to obj.
+ *
+ *	bool obj_has_timer(struct obj *object, short timer_type)
+ *		Check whether object has a timer of type timer_type.
  *
  * Monster Specific:
  *	void mon_stop_timers(struct monst *mon)
@@ -1837,9 +1844,20 @@ long stop_timer(short func_index, anything arg) {
 	return 0;
 }
 
-/*
- * Move all object timers from src to dest, leaving src untimed.
- */
+// Find the timeout of specified timer; return 0 if none.
+long peek_timer(short type, anything arg) {
+	timer_element *curr;
+
+	for (curr = timer_base; curr; curr = curr->next) {
+		if (curr->func_index == type && curr->arg.a_void == arg.a_void)
+			return curr->timeout;
+	}
+
+	return 0;
+}
+
+
+// Move all object timers from src to dest, leaving src untimed.
 void obj_move_timers(struct obj *src, struct obj *dest) {
 	int count;
 	timer_element *curr;
@@ -1917,6 +1935,14 @@ void mon_stop_timers(struct monst *mon) {
 		}
 	}
 }
+
+// Check whether object has a timer of type timer_type.
+bool obj_has_timer(struct obj *object, short timer_type) {
+	long timeout = peek_timer(timer_type, obj_to_any(object));
+
+	return timeout != 0;
+}
+
 
 /*
  * Stop all timers of index func_index at this spot.

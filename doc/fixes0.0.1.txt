@@ -94,6 +94,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: pets will mimic if they eat a mimic corpse.
 - Gameplay: add a health food store, which contains exclusively vegetables.  It replaces the food store in minetown for monks.
 - Gameplay: certain monsters (currently only the three horseman) can move other monsters out of their way.
+- Bugfix: grammar fixes when applying stethoscope to inanimate corpses and statues.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

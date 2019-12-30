@@ -146,37 +146,117 @@ static int use_towel(struct obj *obj) {
 
 /* maybe give a stethoscope message based on floor objects */
 static bool its_dead(int rx, int ry, int *resp) {
-	struct obj *otmp;
-	struct trap *ttmp;
+	char buf[BUFSZ];
+	bool more_corpses;
+	struct permonst *mptr;
+	struct obj *corpse = sobj_at(CORPSE, rx, ry);
+	struct obj *statue = sobj_at(STATUE, rx, ry);
 
-	if (!can_reach_floor()) return false;
+
+	// levitation or unskilled riding
+	if (!can_reach_floor()) {
+		// can't reach corpse on floor
+		corpse = NULL;
+
+		// you can't reach tiny statues (even though you can fight
+		// tiny monsters while levitating--consistency, what's that?)
+		while (statue && mons[statue->corpsenm].msize == MZ_TINY)
+			statue = nxtobj(statue, STATUE, true);
+	}
+
+	// when both corpse and statue are present, pick the uppermost one
+	if (corpse && statue) {
+		if (nxtobj(statue, CORPSE, true) == corpse) {
+			// corpse follows statue; ignore it
+			corpse = NULL;
+		} else {
+			// corpse precedes statue; ignore statue
+			statue = NULL;
+		}
+	}
+	more_corpses = (corpse && nxtobj(corpse, CORPSE, true));
 
 	/* additional stethoscope messages from jyoung@apanix.apana.org.au */
-	if (Hallucination && sobj_at(CORPSE, rx, ry)) {
-		/* (a corpse doesn't retain the monster's sex,
-		   so we're forced to use generic pronoun here) */
-		You_hear("a voice say, \"It's dead, Jim.\"");
+	if (!corpse && !statue) {
+	} else if (Hallucination) {
+		if (!corpse) {
+			// it's a statue
+			strcpy(buf, "You're both stoned");
+		} else if (corpse->quan == 1L && !more_corpses) {
+			int gndr = 2;       /* neuter: "it" */
+			struct monst *mtmp = get_mtraits(corpse, false);
+
+			/* (most corpses don't retain the monster's sex, so
+			 * we're usually forced to use generic pronoun here) */
+			if (mtmp) {
+				mptr = &mons[mtmp->mnum];
+				/* can't use mhe() here; it calls pronoun_gender() which
+				   expects monster to be on the map (visibility check) */
+				if ((humanoid(mptr) || (mptr->geno & G_UNIQ) || type_is_pname(mptr)) && !is_neuter(mptr))
+					gndr = mtmp->female;
+			} else {
+				mptr = &mons[corpse->corpsenm];
+				if (is_female(mptr)) gndr = 1;
+				else if (is_male(mptr)) gndr = 0;
+			}
+			sprintf(buf, "%s's dead", genders[gndr].he);  /* "he"/"she"/"it" */
+			buf[0] = highc(buf[0]);
+		} else {        /* plural */
+			strcpy(buf, "They're dead");
+		}
+		// variations on "He's dead, Jim." (Star Trek's Dr McCoy)
+		You_hearf("a voice say, \"%s, Jim.\"", buf);
+
+
 		*resp = 1;
 		return true;
-	} else if (Role_if(PM_HEALER) && ((otmp = sobj_at(CORPSE, rx, ry)) != 0 ||
-					  (otmp = sobj_at(STATUE, rx, ry)) != 0)) {
-		/* possibly should check uppermost {corpse,statue} in the pile
-		   if both types are present, but it's not worth the effort */
-		if (vobj_at(rx, ry)->otyp == STATUE) otmp = vobj_at(rx, ry);
-		if (otmp->otyp == CORPSE) {
-			pline("You determine that %s unfortunate being is dead.",
-			      (rx == u.ux && ry == u.uy) ? "this" : "that");
-		} else {
-			ttmp = t_at(rx, ry);
-			pline("%s appears to be in %s health for a statue.",
-			      The(mons[otmp->corpsenm].mname),
-			      (ttmp && ttmp->ttyp == STATUE_TRAP) ?
-				      "extraordinary" :
-				      "excellent");
+	} else if (corpse) {
+		bool here = (rx == u.ux && ry == u.uy),
+		     one = (corpse->quan == 1L && !more_corpses),
+		     reviver = false;
+
+		if (Role_if(PM_HEALER)) {
+			/* ok to reset `corpse' here; we're done with it */
+			do {
+				if (obj_has_timer(corpse, REVIVE_MON))
+					reviver = true;
+				else
+					corpse = nxtobj(corpse, CORPSE, true);
+			} while (corpse && !reviver);
 		}
+		pline("You determine that %s unfortunate being%s %s%s dead.",
+				one ? (here ? "this" : "that") : (here ? "these" : "those"),
+				one ? "" : "s", one ? "is" : "are",
+				reviver ? " mostly" : "");
+		return true;
+	} else {
+		/* statue */
+		const char *what, *how;
+
+		mptr = &mons[statue->corpsenm];
+		if (Blind) {    /* ignore statue->dknown; it'll always be set */
+			sprintf(buf, "%s %s",
+				     (rx == u.ux && ry == u.uy) ? "This" : "That",
+				     humanoid(mptr) ? "person" : "creature");
+			what = buf;
+		} else {
+			what = mptr->mname;
+			if (!type_is_pname(mptr)) what = The(what);
+
+		}
+		how = "fine";
+		if (Role_if(PM_HEALER)) {
+			struct trap *ttmp = t_at(rx, ry);
+
+			if (ttmp && ttmp->ttyp == STATUE_TRAP) how = "extraordinary";
+			else if (Has_contents(statue)) how = "remarkable";
+		}
+
+		pline("%s is in %s health for a statue.", what, how);
 		return true;
 	}
-	return false;
+
+	return false; // no corpse or statue
 }
 
 static const char hollow_str[] = "a hollow sound.  This must be a secret %s!";
