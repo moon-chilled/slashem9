@@ -687,13 +687,13 @@ char *x_monnam(struct monst *mtmp, int article, const char *adjective, int suppr
 }
 
 char *l_monnam(struct monst *mtmp) {
-	return (x_monnam(mtmp, ARTICLE_NONE, NULL,
-			 mtmp->mnamelth ? SUPPRESS_SADDLE : 0, true));
+	static char buf[BUFSZ];
+	return strcpy(buf, x_monnam(mtmp, ARTICLE_NONE, NULL, mtmp->mnamelth ? SUPPRESS_SADDLE : 0, true));
 }
 
 char *mon_nam(struct monst *mtmp) {
-	return (x_monnam(mtmp, ARTICLE_THE, NULL,
-			 mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false));
+	static char buf[BUFSZ];
+	return strcpy(buf, x_monnam(mtmp, ARTICLE_THE, NULL, mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false));
 }
 
 /* print the name as if mon_nam() was called, but assume that the player
@@ -701,60 +701,60 @@ char *mon_nam(struct monst *mtmp) {
  * the player with a cursed potion of invisibility
  */
 char *noit_mon_nam(struct monst *mtmp) {
-	return (x_monnam(mtmp, ARTICLE_THE, NULL,
-			 mtmp->mnamelth ? (SUPPRESS_SADDLE | SUPPRESS_IT) :
-					  SUPPRESS_IT,
+	static char buf[BUFSZ];
+	return strcpy(buf, x_monnam(mtmp, ARTICLE_THE, NULL,
+			 mtmp->mnamelth ? (SUPPRESS_SADDLE | SUPPRESS_IT) : SUPPRESS_IT,
 			 false));
 }
 
 char *Monnam(struct monst *mtmp) {
-	char *bp = mon_nam(mtmp);
+	static char buf[BUFSZ];
+	strcpy(buf, mon_nam(mtmp));
 
-	*bp = highc(*bp);
-	return bp;
+	return upstart(buf);
 }
 
 char *noit_Monnam(struct monst *mtmp) {
-	char *bp = noit_mon_nam(mtmp);
+	static char buf[BUFSZ];
+	strcpy(buf, noit_mon_nam(mtmp));
 
-	*bp = highc(*bp);
-	return bp;
+	return upstart(buf);
 }
 
 // monster's own name
 char *m_monnam(struct monst *mtmp) {
-	return x_monnam(mtmp, ARTICLE_NONE, NULL, EXACT_NAME, false);
+	static char buf[BUFSZ];
+	return strcpy(buf, x_monnam(mtmp, ARTICLE_NONE, NULL, EXACT_NAME, false));
 }
 
 // pet name: "your little dog"
 char *y_monnam(struct monst *mtmp) {
+	char buf[BUFSZ];
 	int prefix, suppression_flag;
 
 	prefix = mtmp->mtame ? ARTICLE_YOUR : ARTICLE_THE;
 	// "saddled" is redundant when mounted
 	suppression_flag = (mtmp->mnamelth || mtmp == u.usteed) ? SUPPRESS_SADDLE : 0;
 
-	return x_monnam(mtmp, prefix, NULL, suppression_flag, false);
+	return strcpy(buf, x_monnam(mtmp, prefix, NULL, suppression_flag, false));
 }
 
 char *Adjmonnam(struct monst *mtmp, const char *adj) {
-	char *bp = x_monnam(mtmp, ARTICLE_THE, adj,
-			    mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false);
+	static char buf[BUFSZ];
+	strcpy(buf, x_monnam(mtmp, ARTICLE_THE, adj, mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false));
 
-	*bp = highc(*bp);
-	return bp;
+	return upstart(buf);
 }
 
 char *a_monnam(struct monst *mtmp) {
-	return x_monnam(mtmp, ARTICLE_A, NULL,
-			mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false);
+	static char buf[BUFSZ];
+
+	return strcpy(buf, x_monnam(mtmp, ARTICLE_A, NULL, mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false));
 }
 
 char *Amonnam(struct monst *mtmp) {
-	char *bp = a_monnam(mtmp);
-
-	*bp = highc(*bp);
-	return bp;
+	static char buf[BUFSZ];
+	return upstart(strcpy(buf, a_monnam(mtmp)));
 }
 
 /* used for monster ID by the '/', ';', and 'C' commands to block remote

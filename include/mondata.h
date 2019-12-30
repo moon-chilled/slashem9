@@ -151,11 +151,12 @@
 #define is_longworm(ptr) (((ptr) == &mons[PM_BABY_LONG_WORM]) || \
 			  ((ptr) == &mons[PM_LONG_WORM]) ||      \
 			  ((ptr) == &mons[PM_LONG_WORM_TAIL]))
-#define is_covetous(ptr)     ((ptr)->mflags3 & M3_COVETOUS)
-#define infravision(ptr)     ((ptr->mflags3 & M3_INFRAVISION))
-#define infravisible(ptr)    ((ptr->mflags3 & M3_INFRAVISIBLE))
-#define can_betray(ptr)	     ((ptr->mflags3 & M3_TRAITOR))
-#define cannot_be_tamed(ptr) ((ptr->mflags3 & M3_NOTAME))
+#define is_covetous(ptr)	((ptr)->mflags3 & M3_COVETOUS)
+#define infravision(ptr)	((ptr)->mflags3 & M3_INFRAVISION)
+#define infravisible(ptr)	((ptr)->mflags3 & M3_INFRAVISIBLE)
+#define can_betray(ptr)		((ptr)->mflags3 & M3_TRAITOR)
+#define cannot_be_tamed(ptr)	((ptr)->mflags3 & M3_NOTAME)
+#define is_displacer(ptr)	((ptr)->mflags3 & M3_DISPLACES)
 #define is_mplayer(ptr)	     (((ptr) >= &mons[PM_ARCHEOLOGIST]) && \
 			 ((ptr) <= &mons[PM_WIZARD]))
 #define is_rider(ptr) ((ptr) == &mons[PM_DEATH] ||  \

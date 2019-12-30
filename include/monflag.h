@@ -157,25 +157,25 @@
 #define M2_COLLECT   0x40000000L  /* picks up weapons and food */
 #define M2_MAGIC     0x80000000UL /* picks up magic items */
 
-#define M3_WANTSAMUL 0x0001 /* would like to steal the amulet */
-#define M3_WANTSBELL 0x0002 /* wants the bell */
-#define M3_WANTSBOOK 0x0004 /* wants the book */
-#define M3_WANTSCAND 0x0008 /* wants the candelabrum */
-#define M3_WANTSARTI 0x0010 /* wants the quest artifact */
-#define M3_WANTSALL  0x001f /* wants any major artifact */
-#define M3_WAITFORU  0x0040 /* waits to see you or get attacked */
-#define M3_CLOSE     0x0080 /* lets you close unless attacked */
-
-#define M3_COVETOUS 0x001f /* wants something */
-#define M3_WAITMASK 0x00c0 /* waiting... */
-
+#define M3_WANTSAMUL	0x0001 /* would like to steal the amulet */
+#define M3_WANTSBELL	0x0002 /* wants the bell */
+#define M3_WANTSBOOK	0x0004 /* wants the book */
+#define M3_WANTSCAND	0x0008 /* wants the candelabrum */
+#define M3_WANTSARTI	0x0010 /* wants the quest artifact */
+#define M3_WANTSALL	0x0020 /* wants any major artifact */
+#define M3_WAITFORU	0x0040 /* waits to see you or get attacked */
+#define M3_CLOSE	0x0080 /* lets you close unless attacked */
 /* Infravision is currently implemented for players only */
 #define M3_INFRAVISION	0x0100 /* has infravision */
-#define M3_INFRAVISIBLE 0x0200 /* visible by infravision */
+#define M3_INFRAVISIBLE	0x0200 /* visible by infravision */
+#define M3_TRAITOR	0x0400 /* Capable of treachery */
+#define M3_NOTAME	0x0800 /* Cannot be tamed */
+#define M3_DISPLACES	0x1000 /* moves monsters out of its way */
 
-/* [DS] Lethe */
-#define M3_TRAITOR 0x0400L /* Capable of treachery */
-#define M3_NOTAME  0x0800L /* Cannot be tamed */
+/* wants something */
+#define M3_COVETOUS	(M3_WANTSAMUL|M3_WANTSBELL|M3_WANTSBOOK|M3_WANTSCAND|M3_WANTSARTI)
+/* waiting... */
+#define M3_WAITMASK	(M3_WAITFORU|M3_CLOSE)
 
 #define MZ_TINY	    0	      /* < 2' */
 #define MZ_SMALL    1	      /* 2-4' */

@@ -53,13 +53,11 @@ static struct obj *DROPPABLES(struct monst *mon) {
 
 static const char nofetch[] = {BALL_CLASS, CHAIN_CLASS, ROCK_CLASS, 0};
 
-static boolean cursed_object_at(struct monst *, int, int);
-
 static xchar gtyp, gx, gy; /* type and position of dog's current goal */
 
 static void wantdoor(int, int, void *);
 
-static boolean cursed_object_at(struct monst *mtmp, int x, int y) {
+bool cursed_object_at(struct monst *mtmp, int x, int y) {
 	struct obj *otmp;
 
 	for (otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
@@ -586,7 +584,7 @@ static char *allow_set(long allowflags) {
 #endif
 
 bool betrayed(struct monst *mtmp) {
-	boolean has_edog = !mtmp->isminion;
+	bool has_edog = !mtmp->isminion;
 	struct edog *edog = EDOG(mtmp);
 	int udist = distu(mtmp->mx, mtmp->my);
 
@@ -617,7 +615,8 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 	struct edog *edog = EDOG(mtmp);
 	struct obj *obj = NULL;
 	xchar otyp;
-	boolean has_edog, cursemsg[9], is_spell, do_eat = false;
+	bool has_edog, cursemsg[9], is_spell, do_eat = false;
+	bool better_with_displacing = false;
 	xchar nix, niy; /* position mtmp is (considering) moving to */
 	int nx, ny;	/* temporary coordinates */
 	xchar cnt, uncursedcnt, chcnt;
@@ -721,9 +720,9 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 
 	allowflags = ALLOW_M | ALLOW_TRAPS | ALLOW_SSM | ALLOW_SANCT;
 	if (passes_walls(mtmp->data)) allowflags |= (ALLOW_ROCK | ALLOW_WALL);
-	if (passes_bars(mtmp->data) && !In_sokoban(&u.uz))
-		allowflags |= ALLOW_BARS;
+	if (passes_bars(mtmp->data) && !In_sokoban(&u.uz)) allowflags |= ALLOW_BARS;
 	if (throws_rocks(mtmp->data)) allowflags |= ALLOW_ROCK;
+	if (is_displacer(mtmp->data)) allowflags |= ALLOW_MDISP;
 	if (Conflict && !resist(mtmp, RING_CLASS, 0, 0) && In_endgame(&u.uz)) {
 		allowflags |= ALLOW_U;
 		if (!has_edog && !is_spell) {
@@ -786,10 +785,13 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 	for (i = 0; i < cnt; i++) {
 		nx = poss[i].x;
 		ny = poss[i].y;
-		if (MON_AT(nx, ny) && !(info[i] & ALLOW_M)) continue;
+
+		if (MON_AT(nx, ny) && !(info[i] & (ALLOW_M|ALLOW_MDISP))) continue;
 		if (cursed_object_at(mtmp, nx, ny)) continue;
 		uncursedcnt++;
 	}
+
+	better_with_displacing = should_displace(mtmp, poss, info, cnt, gx, gy);
 
 	chcnt = 0;
 	chi = -1;
@@ -869,6 +871,14 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 
 			return 0;
 		}
+
+		if ((info[i] & ALLOW_MDISP) && MON_AT(nx, ny) && better_with_displacing && !undesirable_disp(mtmp, nx, ny)) {
+			struct monst *mtmp2 = m_at(nx,ny);
+			int mstatus = mdisplacem(mtmp, mtmp2, false);   /* displace monster */
+			if (mstatus & MM_DEF_DIED) return 2;
+			return 0;
+		}
+
 
 		{
 			/* Dog avoids harmful traps, but perhaps it has to pass one

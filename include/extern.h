@@ -417,6 +417,7 @@ void wary_dog(struct monst *, boolean);
 
 /* ### dogmove.c ### */
 
+bool cursed_object_at(struct monst *mtmp, int x, int y);
 int dog_nutrition(struct monst *mtmp, struct obj *obj);
 int dog_eat(struct monst *mtmp, struct obj *obj, int x, int y, bool devour);
 int dog_move(struct monst *mtmp, int after);
@@ -958,6 +959,7 @@ bool buzzmu(struct monst *, struct attack *);
 
 int fightm(struct monst *mtmp);
 int mattackm(struct monst *magr, struct monst *mdef);
+int mdisplacem(struct monst *magr, struct monst *mdef, bool);
 bool noattacks(struct permonst *ptr);
 int sleep_monst(struct monst *mon, int amt, int how);
 void slept_monst(struct monst *mon);
@@ -1207,6 +1209,8 @@ boolean closed_door(int, int);
 boolean accessible(int, int);
 void set_apparxy(struct monst *);
 boolean can_ooze(struct monst *);
+bool should_displace(struct monst *mtmp, coord *poss, long *info, int cnt, xchar gx, xchar gy);
+bool undesirable_disp(struct monst *mtmp, xchar x, xchar y);
 
 /* ### monst.c ### */
 

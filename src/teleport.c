@@ -18,8 +18,7 @@ static void mvault_tele(struct monst *);
  *
  * Returns: -1: Inaccessible, 0: Good pos, 1: Temporally inacessible
  */
-static int
-badpos(int x, int y, struct monst *mtmp, unsigned gpflags) {
+static int badpos(int x, int y, struct monst *mtmp, unsigned gpflags) {
 	int is_badpos = 0, pool;
 	struct permonst *mdat = NULL;
 	boolean ignorewater = ((gpflags & MM_IGNOREWATER) != 0);
@@ -698,9 +697,10 @@ void tele(void) {
 	/* don't show trap if "Sorry..." */
 	if (!Blinded) make_blinded(0L, false);
 
-	if ((u.uhave.amulet || On_W_tower_level(&u.uz) || (u.usteed && mon_has_amulet(u.usteed))) && (!wizard)) {
+	if ((u.uhave.amulet || On_W_tower_level(&u.uz) || (u.usteed && mon_has_amulet(u.usteed)))) {
 		pline("You feel disoriented for a moment.");
-		return;
+		if (wizard && yn("Override?") == 'y') {}
+		else return;
 	}
 	if ((Teleport_control && !Stunned) || wizard) {
 		if (unconscious()) {

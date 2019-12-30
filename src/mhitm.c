@@ -191,11 +191,8 @@ int fightm(struct monst *mtmp) {
 	return 0;
 }
 
-/*
- * mattackm() -- a monster attacks another monster.
- *
- * This function returns a result bitfield:
- *
+/* mattackm() and mdisplacem() both return a result bitfield:
+ 5
  *	    --------- aggressor died
  *	   /  ------- defender died
  *	  /  /  ----- defender was hit
@@ -207,18 +204,25 @@ int fightm(struct monst *mtmp) {
  *	0x1	MM_HIT
  *	0x0	MM_MISS
  *
+ */
+
+/*
+ * mattackm() -- a monster attacks another monster.
+ *
+ *
  * Each successive attack has a lower probability of hitting.  Some rely on the
  * success of previous attacks.  ** this doen't seem to be implemented -dl **
  *
  * In the case of exploding monsters, the monster dies as well.
  */
 int mattackm(struct monst *magr, struct monst *mdef) {
-	int i,		    /* loop counter */
-		tmp,	    /* amour class difference */
-		strike,	    /* hit this attack */
-		attk,	    /* attack attempted this time */
-		struck = 0, /* hit at least once */
-		res[NATTK]; /* results of all attacks */
+	int	i,		/* loop counter */
+		tmp,		/* amour class difference */
+		strike,		/* hit this attack */
+		attk,		/* attack attempted this time */
+		struck = 0,	/* hit at least once */
+		res[NATTK];	/* results of all attacks */
+
 	struct attack *mattk, alt_attk;
 	struct permonst *pa, *pd;
 	/*
@@ -441,6 +445,83 @@ int mattackm(struct monst *magr, struct monst *mdef) {
 
 	return struck ? MM_HIT : MM_MISS;
 }
+
+/*
+ * mdisplacem() -- a monster moves another out of the way
+ */
+int mdisplacem(struct monst *magr, struct monst *mdef, bool quietly) {
+	struct permonst *pa, *pd;
+	int tx, ty, fx, fy;
+
+	// sanity checks, could matter if we accidentally get a long worm
+	if (!magr || !mdef || magr == mdef) return MM_MISS;
+	pa = magr->data, pd =mdef->data;
+	tx = mdef->mx, ty = mdef->my;	// destination
+	fx = magr->mx, fy = magr->my;	// current location
+	if (m_at(fx, fy) != magr || m_at(tx, ty) != mdef) return MM_MISS;
+
+	/* The 1 in 7 failure below matches the chance in attack()
+	 * for pet displacement.
+	 */
+	if (!rn2(7)) return MM_MISS;
+
+	// Grid bugs cannot displace at an angle
+	if (pa == &mons[PM_GRID_BUG] && magr->mx != mdef->mx && magr->my != mdef->my)
+		return MM_MISS;
+
+	// undetected monster becomes un-hidden if it is displaced
+	if (mdef->mundetected) mdef->mundetected = 0;
+	if (mdef->m_ap_type && mdef->m_ap_type != M_AP_MONSTER) seemimic(mdef);
+	// wake up the displaced defender
+	mdef->msleeping = 0;
+	mdef->mstrategy &= ~STRAT_WAITMASK;
+	finish_meating(mdef);
+
+
+	/*
+	 * Set up the visibility of action.
+	 * You can observe monster displacement if you can see both of
+	 * the monsters involved.
+	 */
+	vis = (canspotmon(magr) && canspotmon(mdef));
+
+	if (touch_petrifies(pd) && !resists_ston(magr)) {
+		if (which_armor(magr, W_ARMG) != 0) {
+			if (poly_when_stoned(pa)) {
+				mon_to_stone(magr);
+				return MM_HIT; /* no damage during the polymorph */
+			}
+			if (!quietly && canspotmon(magr))
+				pline("%s turns to stone!", Monnam(magr));
+			monstone(magr);
+			if (magr->mhp > 0) return MM_HIT; // lifesaved
+			else if (magr->mtame && !vis)
+				pline("You have a peculiarly sad feeling for a moment, then it passes.");
+			return MM_AGR_DIED;
+		}
+	}
+
+	// pick up from orig position...
+	remove_monster(fx, fy);
+	remove_monster(tx, ty);
+
+	// ...and place at new position
+	place_monster(magr, tx, ty);
+	place_monster(mdef, fx, fy);
+
+
+	if (vis && !quietly)
+		pline("%s moves %s out of %s way!",
+				Monnam(magr), mon_nam(mdef),
+				is_rider(pa) ? "the" : mhis(magr));
+
+	newsym(fx,fy);	 /* see it */
+	newsym(tx,ty);	 /* all happen */
+	flush_screen(0); /* make sure it shows up */
+
+	return MM_HIT;
+}
+
 
 // monster attempts breath attack against another monster
 static int breamm(struct monst *magr, struct monst *mdef, struct attack *mattk) {
@@ -913,8 +994,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 			}
 			if (vis) pline("%s turns to stone!", Monnam(magr));
 			monstone(magr);
-			if (magr->mhp > 0)
-				return 0;
+			if (magr->mhp > 0) return MM_HIT; // lifesaved0
 			else if (magr->mtame && !vis)
 				pline("You have a peculiarly sad feeling for a moment, then it passes.");
 			return MM_AGR_DIED;

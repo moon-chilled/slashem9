@@ -13,11 +13,12 @@
 
 void display_monster(xchar, xchar, struct monst *, int, xchar);
 
-static boolean restrap(struct monst *);
-static long mm_aggression(struct monst *, struct monst *);
+static bool restrap(struct monst *mtmp);
+static long mm_aggression(struct monst *magr, struct monst *mdef);
+static long mm_displacement(struct monst *magr, struct monst *mdef);
 static int pick_animal(void);
-static int select_newcham_form(struct monst *);
-static void kill_eggs(struct obj *);
+static int select_newcham_form(struct monst *mon);
+static void kill_eggs(struct obj *obj_list);
 
 #define LEVEL_SPECIFIC_NOCORPSE(mdat)                 \
 	(Is_rogue_level(&u.uz) ||                     \
@@ -1126,8 +1127,8 @@ nexttry: /* eels prefer the water, but if there is no water nearby,
 			if ((is_pool(nx, ny) == wantpool || poolok) &&
 			    (lavaok || !is_lava(nx, ny))) {
 				int dispx, dispy;
-				boolean monseeu = (mon->mcansee && (!Invis || perceives(mdat)));
-				boolean checkobj = OBJ_AT(nx, ny);
+				bool monseeu = (mon->mcansee && (!Invis || perceives(mdat)));
+				bool checkobj = OBJ_AT(nx, ny);
 
 				/* Displacement also displaces the Elbereth/scare monster,
 				 * as long as you are visible.
@@ -1164,11 +1165,17 @@ nexttry: /* eels prefer the water, but if there is no water nearby,
 						struct monst *mtmp2 = m_at(nx, ny);
 						long mmflag = flag | mm_aggression(mon, mtmp2);
 
-						if (!(mmflag & ALLOW_M)) continue;
-						info[cnt] |= ALLOW_M;
-						if (mtmp2->mtame) {
-							if (!(mmflag & ALLOW_TM)) continue;
-							info[cnt] |= ALLOW_TM;
+						if (mmflag & ALLOW_M) {
+							info[cnt] |= ALLOW_M;
+							if (mtmp2->mtame) {
+								if (!(mmflag & ALLOW_TM)) continue;
+								info[cnt] |= ALLOW_TM;
+							}
+						} else {
+							mmflag = flag | mm_displacement(mon, mtmp2);
+							if (!(mmflag & ALLOW_MDISP)) continue;
+							info[cnt] |= ALLOW_MDISP;
+
 						}
 					}
 					/* Note: ALLOW_SANCT only prevents movement, not */
@@ -1261,12 +1268,36 @@ static long mm_aggression(struct monst *magr, struct monst *mdef) {
 	if (magr->data == &mons[PM_WOODCHUCK] && mdef->data == &mons[PM_ORACLE])
 		return ALLOW_M | ALLOW_TM;
 
-	return 0L;
+	return 0;
 }
+
+/* Monster displacing another monster out of the way */
+// magr is the moving monster, mdef the displaced one
+static long mm_displacement(struct monst *magr, struct monst *mdef) {
+	struct permonst *pa = magr->data;
+	struct permonst *pd = mdef->data;
+
+	/* if attacker can't barge through, there's nothing to do;
+	 * or if defender can barge through too, don't let attacker
+	 * do so, otherwise they might just end up swapping places
+	 * again when defender gets its chance to move
+	 */
+	if ((pa->mflags3 & M3_DISPLACES) &&
+	    !(pd->mflags3 & M3_DISPLACES) &&
+	    // no displacing trapped monsters or multi-location longworms
+	    !mdef->mtrapped && (!mdef->wormno || !count_wsegs(mdef)) &&
+	    // riders can move anything; others, same size or smaller only
+	    (is_rider(pa) || pa->msize >= pd->msize))
+		return ALLOW_MDISP;
+
+	return 0;
+}
+
 
 /* Is the square close enough for the monster to move or attack into? */
 boolean monnear(struct monst *mon, int x, int y) {
 	int distance = dist2(mon->mx, mon->my, x, y);
+
 	if (distance == 2 && mon->data == &mons[PM_GRID_BUG]) return 0;
 	return distance < 3;
 }
@@ -1665,7 +1696,7 @@ void mongone(struct monst *mdef) {
 void monstone(struct monst *mdef) {
 	struct obj *otmp, *obj, *oldminvent;
 	xchar x = mdef->mx, y = mdef->my;
-	boolean wasinside = false;
+	bool wasinside = false;
 
 	/* we have to make the statue before calling mondead, to be able to
 	 * put inventory in it, and we have to check for lifesaving before
@@ -1737,7 +1768,7 @@ void monstone(struct monst *mdef) {
 
 /* another monster has killed the monster mdef */
 void monkilled(struct monst *mdef, const char *fltxt, int how) {
-	boolean be_sad = false; /* true if unseen pet is killed */
+	bool be_sad = false; /* true if unseen pet is killed */
 
 	if ((mdef->wormno ? worm_known(mdef) : cansee(mdef->mx, mdef->my)) && fltxt)
 		pline("%s is %s%s%s!", Monnam(mdef),
@@ -1759,7 +1790,7 @@ void monkilled(struct monst *mdef, const char *fltxt, int how) {
 
 /* WAC -- another monster has killed the monster mdef and you get exp. */
 void mon_xkilled(struct monst *mdef, const char *fltxt, int how) {
-	boolean be_sad = false; /* true if unseen pet is killed */
+	bool be_sad = false; /* true if unseen pet is killed */
 
 	if ((mdef->wormno ? worm_known(mdef) : cansee(mdef->mx, mdef->my)) && fltxt)
 		pline("%s is %s%s%s!", Monnam(mdef),
@@ -1805,8 +1836,8 @@ void xkilled(struct monst *mtmp, int dest) {
 	int mndx;
 	struct obj *otmp;
 	struct trap *t;
-	boolean redisp = false;
-	boolean wasinside = u.uswallow && (u.ustuck == mtmp);
+	bool redisp = false;
+	const bool wasinside = u.uswallow && (u.ustuck == mtmp);
 
 	/* KMH, conduct */
 	u.uconduct.killer++;
@@ -1964,7 +1995,7 @@ cleanup:
 /* changes the monster into a stone monster of the same type */
 /* this should only be called when poly_when_stoned() is true */
 void mon_to_stone(struct monst *mtmp) {
-	boolean polymorphed = mtmp->oldmonnm != monsndx(mtmp->data);
+	const bool polymorphed = mtmp->oldmonnm != monsndx(mtmp->data);
 
 	if (mtmp->data->mlet == S_GOLEM) {
 		/* it's a golem, and not a stone golem */
@@ -2310,7 +2341,7 @@ void restore_cham(struct monst *mon) {
 }
 
 /* unwatched hiders may hide again; if so, a 1 is returned.  */
-static boolean restrap(struct monst *mtmp) {
+static bool restrap(struct monst *mtmp) {
 	if (mtmp->cham || mtmp->mcan || mtmp->m_ap_type ||
 	    cansee(mtmp->mx, mtmp->my) || rn2(3) || (mtmp == u.ustuck) ||
 	    (sensemon(mtmp) && distu(mtmp->mx, mtmp->my) <= 2))

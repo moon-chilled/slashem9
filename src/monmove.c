@@ -558,6 +558,42 @@ boolean itsstuck(struct monst *mtmp) {
 	return false;
 }
 
+/*
+ * should_displace()
+ *
+ * Displacement of another monster is a last resort and only
+ * used on approach. If there are better ways to get to target,
+ * those should be used instead. This function does that evaluation.
+ */
+bool should_displace(struct monst *mtmp, coord *poss/*coord poss[9]*/, long *info/*long info[9]*/, int cnt, xchar gx, xchar gy) {
+       int shortest_with_displacing = -1;
+       int shortest_without_displacing = -1;
+       int count_without_displacing = 0;
+
+       for (int i = 0; i < cnt; i++) {
+               int nx = poss[i].x;
+	       int ny = poss[i].y;
+               int ndist = dist2(nx,ny,gx,gy);
+               if (MON_AT(nx,ny) &&
+                       (info[i] & ALLOW_MDISP) && !(info[i] & ALLOW_M) &&
+                       !undesirable_disp(mtmp,nx,ny)) {
+                       if (shortest_with_displacing == -1 ||
+                           (ndist < shortest_with_displacing))
+                               shortest_with_displacing = ndist;
+               } else {
+                       if ((shortest_without_displacing == -1) ||
+                           (ndist < shortest_without_displacing))
+                               shortest_without_displacing = ndist;
+                       count_without_displacing++;
+               }
+        }
+       if (shortest_with_displacing > -1 &&
+           (shortest_with_displacing < shortest_without_displacing ||
+           !count_without_displacing))
+               return true;
+       return false;
+}
+
 /* Return values:
  * 0: did not move, but can still attack and do other stuff.
  * 1: moved, possibly can attack.
@@ -568,11 +604,12 @@ int m_move(struct monst *mtmp, int after) {
 	int appr;
 	xchar gx, gy, nix, niy, chcnt;
 	int chi; /* could be schar except for stupid Sun-2 compiler */
-	boolean likegold = 0, likegems = 0, likeobjs = 0, likemagic = 0, conceals = 0;
-	boolean likerock = 0, can_tunnel = 0;
-	boolean can_open = 0, can_unlock = 0, doorbuster = 0;
-	boolean uses_items = 0, setlikes = 0;
-	boolean avoid = false;
+	bool likegold = false, likegems = false, likeobjs = false, likemagic = false, conceals = false;
+	bool likerock = false, can_tunnel = false;
+	bool can_open = false, can_unlock = false, doorbuster = false;
+	bool uses_items = false, setlikes = false;
+	bool avoid = false;
+	bool better_with_displacing = false;
 	struct permonst *ptr;
 	struct monst *mtoo;
 	schar mmoved = 0; /* not strictly nec.: chi >= 0 will do */
@@ -830,8 +867,8 @@ not_special:
 			}
 		} else if (likegold) {
 			/* don't try to pick up anything else, but use the same loop */
-			uses_items = 0;
-			likegems = likeobjs = likemagic = likerock = conceals = 0;
+			uses_items = false;
+			likegems = likeobjs = likemagic = likerock = conceals = false;
 			goto look_for_obj;
 		}
 
@@ -890,10 +927,16 @@ not_special:
 				if (!(info[i] & NOTONL)) avoid = true;
 		}
 
+		better_with_displacing = should_displace(mtmp, poss, info, cnt, gx, gy);
+
 		for (i = 0; i < cnt; i++) {
 			if (avoid && (info[i] & NOTONL)) continue;
 			nx = poss[i].x;
 			ny = poss[i].y;
+
+			if (MON_AT(nx, ny) && (info[i] & ALLOW_MDISP) && !(info[i] & ALLOW_M) &&
+			    !better_with_displacing)
+				continue;
 
 			if (appr != 0) {
 				mtrk = &mtmp->mtrack[0];
@@ -990,6 +1033,17 @@ not_special:
 			return 3;
 		}
 
+		if ((info[chi] & ALLOW_MDISP)) {
+			struct monst *mtmp2;
+			int mstatus;
+			mtmp2 = m_at(nix,niy);
+			mstatus = mdisplacem(mtmp, mtmp2, false);
+			if ((mstatus & MM_AGR_DIED) || (mstatus & MM_DEF_DIED))
+				return 2;
+			if (mstatus & MM_HIT) return 1;
+			return 3;
+		}
+
 		if (!m_in_out_region(mtmp, nix, niy))
 			return 3;
 		remove_monster(omx, omy);
@@ -1022,8 +1076,7 @@ postmov:
 
 			/* open a door, or crash through it, if you can */
 			if (IS_DOOR(levl[mtmp->mx][mtmp->my].typ) && !passes_walls(ptr) /* doesn't need to open doors */
-			    && !can_tunnel						/* taken care of below */
-			) {
+			    && !can_tunnel) {						/* taken care of below */
 				struct rm *here = &levl[mtmp->mx][mtmp->my];
 				boolean btrapped = (here->doormask & D_TRAPPED);
 
@@ -1255,6 +1308,34 @@ void set_apparxy(struct monst *mtmp) {
 	mtmp->mux = mx;
 	mtmp->muy = my;
 }
+
+/*
+ * mon-to-mon displacement is a deliberate "get out of my way" act,
+ * not an accidental bump, so we don't consider mstun or mconf in
+ * undesired_disp().
+ *
+ * We do consider many other things about the target and its
+ * location however.
+ */
+bool undesirable_disp(struct monst *mtmp, xchar x, xchar y) {
+	bool is_pet = (mtmp && mtmp->mtame && !mtmp->isminion);
+	struct trap *trap = t_at(x,y);
+
+	if (is_pet) {
+		// Pets avoid a trap if you've seen it usually
+		if (trap && trap->tseen && rn2(40))
+			return true;
+		// Pets avoid cursed locations 
+		if (cursed_object_at(mtmp, x, y))
+			return true;
+	// Monsters avoid a trap if they've seen that type before
+	} else if (trap && rn2(40) && (mtmp->mtrapseen & (1 << (trap->ttyp -1))) != 0) {
+		return true;
+	}
+
+	return false;
+}
+
 
 boolean can_ooze(struct monst *mtmp) {
 	struct obj *chain, *obj;

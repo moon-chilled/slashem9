@@ -32,11 +32,11 @@ Changelist for slashem-next v0.0.1:
 - Internals: remove reliance on the system for a regex engine, and instead vendor one ourselves (libtre).
 - Gameplay: gypsies can no longer be farmed for wishes.  Gypsies generated via reverse genocide are 'tainted' and will not grant wishes.
 - Bugfix: artifact naming.  The rules here are a bit different from in other games in the family: a name is only prohibited to be attached to an object where either there exists an artifact whose name is that name and whose base object is that object, or where adherence to the previous rule would leak information.
-- Bugfix: when the player's hand slipped while naming an object with the name of an artifact, the name was changed to the proper name of the artifact (plus a typo), rather than the actual player-inputted name (plus a typo).
-- Bugfix: can't eat food from the floor of a pit while teetering at its edge.
+- Bugfix: when the player's hand slipped while naming an object with the name of an artifact, the name was changed to the proper name of the artifact plus a typo, rather than the actual player-inputted name plus a typo.
+- Bugfix: player was able to eat food from the floor of a pit while teetering at its edge.
 - Interface: get a nice death message when you die by jumping into a pit you made.
-- Bugfix: when a ridden steed is led onto a polymorph trap and polymorphs into another rideable form, you have to adjust yourself in the saddle on on 'the' (monster-type), not 'a'.
-- Bugfix: passwall monsters couldn't pick up objects from pit (fixed by making them always fall in, but suffer no ill effects).
+- Bugfix: wording: when a ridden steed is led onto a polymorph trap and polymorphs into another rideable form, you have to adjust yourself in the saddle on on 'the' (monster-type), not 'a'.
+- Bugfix: passwall player couldn't pick up objects from pit (fixed by making them always fall in, but suffer no ill effects).
 - Gameplay: an alchemical smock will protect you from alchemical blasts.
 - Bugfix: segfault could occur when explosion was thrown near the edge of the map screen.
 - Gameplay: when monks got the message 'Your armor is rather cumbersome...', their attack power would be boosted rather than reduced.
@@ -50,8 +50,8 @@ Imports from NetHack versions newer than 3.4.3:
 - Internals: change dumplog implementation to be much cleaner.
 - Bugfix: engravings made on drawbridge would appear on floor beneath.  Fixed by removing all engravings on drawbridge tile whenever it is opened, closed, or wrecked.
 - Bugfix: 'You hear The <x> tumbles downwards' when dropping an item into a pit while blind and standing on the edge.
-- Bugfix: wielded silver arrows weren't always dealing silver damage.
-- Bugfix: you can sit down on items contained in a pit while teetering at its edge.
+- Bugfix: wielded silver arrows didn't always deal silver damage.
+- Bugfix: playercould sit down on items contained in a pit while teetering at its edge.
 - Bugfix: message when you pushed a boulder into a pool of water while riding said that you filled it, rather than your steed.
 - Gameplay: can use '>' to jump into a pit while teetering at its edge.
 - Bugfix: when you lead a named steed into a trap while hallucinating, since the name is elided, elide also the article 'the'.
@@ -79,7 +79,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: don't say 'it moves only reluctantly' (referring to pet).
 - Bugfix: bad capitalization of message when charged by shk for something that catches fire.
 - Bugfix: when fruitname=lotus, don't say fruit juice tastes like lotu juice.
-- Bugfix: don't give non-humanoid angelic minions swords or armour.
+- Bugfix: non-humanoid angelic minions got swords and armour.
 - Gameplay: paper, straw, wood, plastic, and gold golems resist cold.
 - Gameplay: player can use a touchstone on gold.
 - Gameplay: if engulfed in vortex and blind only because of a blindfold, taking off the blindfold should cause blindness to take effect immediately.
@@ -93,6 +93,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Interface: acknowledge Schroedinger's cat at the end of the game, if you have a box containing it.
 - Gameplay: pets will mimic if they eat a mimic corpse.
 - Gameplay: add a health food store, which contains exclusively vegetables.  It replaces the food store in minetown for monks.
+- Gameplay: certain monsters (currently only the three horseman) can move other monsters out of their way.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
