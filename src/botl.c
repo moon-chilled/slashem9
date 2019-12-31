@@ -317,11 +317,11 @@ nhstr bot2str(void) {
 	nhscatf(ret, " AC:%i", u.uac);
 
 	if (Upolyd) {
-		nhscatf(ret, " HD:%d", ((u.ulycn == u.umonnum) ? u.ulevel : mons[u.umonnum].mlevel));
+		nhscatf(ret, " HD:%i", ((u.ulycn == u.umonnum) ? u.ulevel : mons[u.umonnum].mlevel));
 	} else if (flags.showexp && bot2_abbrev < 3) {
-		nhscatf(ret, " Xp:%u/%l", u.ulevel, u.uexp);
+		nhscatf(ret, " Xp:%i/%l", u.ulevel, u.uexp);
 	} else {
-		nhscatf(ret, " Exp:%u", u.ulevel);
+		nhscatf(ret, " Exp:%i", u.ulevel);
 	}
 
 	if (flags.showweight && bot2_abbrev < 3)
