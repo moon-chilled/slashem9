@@ -164,9 +164,6 @@ typedef signed char schar;
 typedef unsigned char uchar;
 typedef long glyph_t;
 
-#define REALTIME_ON_BOTL /* Show elapsed time on bottom line.  Note:
-                                 * this breaks savefile compatibility. */
-
 /*
  * Various structures have the option of using bitfields to save space.
  * If your C compiler handles bitfields well (e.g., it can initialize structs

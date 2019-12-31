@@ -1,5 +1,5 @@
 Changelist for slashem-next v0.0.1:
-- Internals: obviate the following compile-time configurable options: SINKS, BLACKMARKET, D_SABER, LIGHTSABERS, P_SPOON, WALLET_O_P, EATEN_MEMORY, WALLIFIED_MAZE, AUTOPICKUP_EXCEPTIONS, YOEMAN, SEDUCE, KOPS, TOURIST, FIREARMS, EXP_ON_BOTL, SCORE_ON_BOTL, DWARF, ELBERETH, TEXTCOLOR, STATUS_COLORS, MENU_COLOR, SHOW_WEIGHT, SHOW_DMG, WIZARD, UNPOLYPILE, INVISIBLE_OBJECTS, OTHER_SERVICES, REDO, XLOGFILE, STEED, FREE_ALL_MEMORY, DISPLAY_LAYERS.  Where applicable, these can still be toggled at run time.
+- Internals: obviate the following compile-time configurable options: SINKS, BLACKMARKET, D_SABER, LIGHTSABERS, P_SPOON, WALLET_O_P, EATEN_MEMORY, WALLIFIED_MAZE, AUTOPICKUP_EXCEPTIONS, YOEMAN, SEDUCE, KOPS, TOURIST, FIREARMS, EXP_ON_BOTL, SCORE_ON_BOTL, DWARF, ELBERETH, TEXTCOLOR, STATUS_COLORS, MENU_COLOR, SHOW_WEIGHT, SHOW_DMG, WIZARD, UNPOLYPILE, INVISIBLE_OBJECTS, OTHER_SERVICES, REDO, XLOGFILE, STEED, FREE_ALL_MEMORY, DISPLAY_LAYERS, REALTIME_ON_BOTL.  Where applicable, these can still be toggled at run time.
 - Internals: lots of miscellaneous code cleanup, simplification, removal of indirection or conditionality, etc.
 - Internals: change K&R-style function definitions to ANSI.  Require c99.
 - Internals: remove support for many obsolete platforms and build configurations.  Basic requirements: ANSI c99 + posix or win32.

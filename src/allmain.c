@@ -415,7 +415,6 @@ void moveloop(void) {
 			}
 		}
 
-#ifdef REALTIME_ON_BOTL
 		if (iflags.showrealtime) {
 			/* Update the bottom line if the number of minutes has
 			 * changed */
@@ -423,7 +422,6 @@ void moveloop(void) {
 				context.botl = 1;
 			}
 		}
-#endif
 
 		if (context.botl || context.botlx) {
 			bot();

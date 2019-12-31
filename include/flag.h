@@ -244,9 +244,7 @@ struct instance_flags {
 	struct autopickup_exception *autopickup_exceptions[2];
 #define AP_LEAVE 0
 #define AP_GRAB	 1
-#ifdef REALTIME_ON_BOTL
 	bool showrealtime; /* show actual elapsed time */
-#endif
 };
 
 /*

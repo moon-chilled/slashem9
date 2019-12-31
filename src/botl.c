@@ -328,14 +328,15 @@ nhstr bot2str(void) {
 		nhscatf(ret, " Wt:%l/%l", (long)(inv_weight() + weight_cap()), (long)weight_cap());
 
 	if (flags.time && bot2_abbrev < 3)
-		nhscatf(ret, " T:%l ", moves);
+		nhscatf(ret, " T:%l", moves);
 
-#ifdef REALTIME_ON_BOTL
 	if (iflags.showrealtime) {
-		//time_t currenttime = get_realtime();
-		//sprintf(nb = eos(nb), " %lld:%2.2lld", (long long)currenttime / 3600, (long long)(currenttime % 3600) / 60);
+		time_t currenttime = get_realtime();
+		nhscatf(ret, " RT:%l:%22l", (long)(currenttime/3600), (long)((currenttime % 3600) / 60));
 	}
-#endif
+
+	// just give a bit of breathing room
+	nhscatz(ret, " ");
 
 	if (hu_stat[u.uhs][0]) {
 		add_colored_text_match((bot2_abbrev >= 2) ? hu_abbrev_stat[u.uhs] : hu_stat[u.uhs], hu_stat[u.uhs], ret);

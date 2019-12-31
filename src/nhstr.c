@@ -80,6 +80,11 @@ nhstr *nhscatfc_v(nhstr *str, int colour, const char *cat, va_list the_args) {
 	for (usize i = 0; cat[i]; i++) {
 		if (cat[i] == '%') {
 			i++;
+
+			int num1 = -1, num2 = -1; // currently only supported for %l
+			if ('0' <= cat[i] && cat[i] <= '9') { num1 = cat[i] - '0'; i++; }
+			if ('0' <= cat[i] && cat[i] <= '9') { num2 = cat[i] - '0'; i++; }
+
 			switch (cat[i]) {
 				case 's':
 					nhscat(str, va_arg(the_args, nhstr));
@@ -93,7 +98,13 @@ nhstr *nhscatfc_v(nhstr *str, int colour, const char *cat, va_list the_args) {
 					break;
 				case 'l': {
 					static char buf[BUFSZ];
-					sprintf(buf, "%ld", va_arg(the_args, long));
+					if (num1 != -1) {
+						if (num2 != -1) sprintf(buf, "%*.*ld", num1, num2, va_arg(the_args, long));
+						else sprintf(buf, "%*ld", num1, va_arg(the_args, long));
+					} else {
+						sprintf(buf, "%ld", va_arg(the_args, long));
+					}
+
 					nhscatzc(str, buf, colour);
 					break;
 				}

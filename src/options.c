@@ -130,9 +130,7 @@ static struct Bool_Opt {
 	{"sanity_check", &iflags.sanity_check, false, SET_IN_GAME},
 	{"showexp", &flags.showexp, false, SET_IN_GAME},
 	{"showrace", &iflags.showrace, false, SET_IN_GAME},
-#ifdef REALTIME_ON_BOTL
 	{"showrealtime", &iflags.showrealtime, false, SET_IN_GAME},
-#endif
 	{"showscore", &flags.showscore, false, SET_IN_GAME},
 	/* WAC made the [ xx pts]  dmg display optional */
 	{"showdmg", &flags.showdmg, false, SET_IN_GAME},
