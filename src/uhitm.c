@@ -1035,7 +1035,7 @@ static boolean hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 						break;
 					case MIRROR:
 						if (breaktest(obj)) {
-							pline("You break %s mirror.  That's bad luck!",
+							pline("You break %smirror.  That's bad luck!",
 							      shk_your(yourbuf, obj));
 							change_luck(-2);
 							useup(obj);
@@ -1047,7 +1047,7 @@ static boolean hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 						tmp = 1;
 						break;
 					case EXPENSIVE_CAMERA:
-						pline("You succeed in destroying %s camera.  Congratulations!",
+						pline("You succeed in destroying %scamera.  Congratulations!",
 						      shk_your(yourbuf, obj));
 						useup(obj);
 						return true;
