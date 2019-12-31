@@ -894,9 +894,9 @@ int seffects(struct obj *sobj) {
 
 			/* KMH, balance patch -- Restore the NetHack success rate */
 			/* We'll introduce a disenchantment attack later */
-			s = sobj->cursed ? -1 :
-					   otmp->spe >= 9 ? (rn2(otmp->spe) == 0) :
-							    sobj->blessed ? rnd(3 - otmp->spe / 3) : 1;
+			s =	sobj->cursed ? -1 :
+				otmp->spe >= 9 ? (rn2(otmp->spe) == 0) :
+				sobj->blessed ? rnd(3 - otmp->spe / 3) : 1;
 			/*		s = sobj->cursed ? -rnd(2) :
 				    otmp->spe >= 3 ? (rn2(otmp->spe) == 0) :
 				    sobj->blessed ? rnd(2) : 1;*/
@@ -963,7 +963,11 @@ int seffects(struct obj *sobj) {
 					known = true;
 			} else { /* armor and scroll both cursed */
 				pline("%s.", Yobjnam2(otmp, "vibrate"));
-				if (otmp->spe >= -6) otmp->spe--;
+				if (otmp->spe >= -6) {
+					otmp->spe--;
+					adj_abon(otmp, -1);
+				}
+
 				make_stunned(HStun + rn1(10, 10), true);
 			}
 		} break;

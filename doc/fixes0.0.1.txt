@@ -103,6 +103,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: swamps on Juiblex's level were called 'moat' when frozen.
 - Bugfix: greased would slide, if kicked while on the planes of air or water.
 - Bugfix: grammar: use 'removing' rather than 'lifting' when asking player if they really want to remove heavy items from their bag of holding.
+- Bugfix: when a cursed scroll of destroy armor lowered the enchantment of e.g. gauntlets of dexterity or helm of brilliance, the associated attribute didn't also decrease.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
