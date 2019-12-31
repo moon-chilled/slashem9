@@ -100,6 +100,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: player hiding on ceiling did not drop to the floor when #sitting.
 - Bugfix: if a monster carrying a boulder was inside of a pit or a hole when killed, the boulder would fill the pit/hole but the monster's corpse would not be buried.
 - Gamplay: player in certain polyforms will be intrinsically warned of some monsters.
+- Bugfix: swamps on Juiblex's level were called 'moat' when frozen.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
