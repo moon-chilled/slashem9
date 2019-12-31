@@ -105,6 +105,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: grammar: use 'removing' rather than 'lifting' when asking player if they really want to remove heavy items from their bag of holding.
 - Bugfix: when a cursed scroll of destroy armor lowered the enchantment of e.g. gauntlets of dexterity or helm of brilliance, the associated attribute didn't also decrease.
 - Bugfix: if hitting a cockatrice with a mirror or expensive camera resulted in the object shattering, the player would be stoned.
+- Bugfix: if a blind levitating player attempted to go downstairs, they would be told they were floating above the stairs, even if they had never seen the stairs.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
