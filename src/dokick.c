@@ -105,7 +105,7 @@ static void kickdmg(struct monst *mon, boolean clumsy) {
 		}
 	}
 
-	passive(mon, true, mon->mhp > 0, AT_KICK);
+	passive(mon, true, mon->mhp > 0, AT_KICK, false);
 	if (mon->mhp <= 0 && !trapkilled) killed(mon);
 
 	/* may bring up a dialog, so put this after all messages */
@@ -154,12 +154,12 @@ static void kick_monster(xchar x, xchar y) {
 			} else if (tmp > (roll = rnd(20))) {
 				pline("You kick %s.", mon_nam(mon));
 				sum = damageum(mon, uattk);
-				passive(mon, (boolean)(sum > 0), (sum != 2), AT_KICK);
+				passive(mon, (boolean)(sum > 0), (sum != 2), AT_KICK, false);
 				if (sum == 2)
 					break; /* Defender died */
 			} else {
 				missum(mon, tmp, roll, uattk, monk_armor_penalty);
-				passive(mon, 0, 1, AT_KICK);
+				passive(mon, 0, 1, AT_KICK, false);
 			}
 		}
 		return;
@@ -169,7 +169,7 @@ static void kick_monster(xchar x, xchar y) {
 	    !is_flyer(mon->data)) {
 		pline("Floating in the air, you miss wildly!");
 		exercise(A_DEX, false);
-		passive(mon, false, 1, AT_KICK);
+		passive(mon, false, 1, AT_KICK, false);
 		return;
 	}
 
@@ -196,7 +196,7 @@ static void kick_monster(xchar x, xchar y) {
 	if (objenchant < canhitmon && !Upolyd) {
 		pline("Your attack doesn't seem to harm %s.",
 		      mon_nam(mon));
-		passive(mon, false, 1, true);
+		passive(mon, false, 1, true, false); // should this be true?? -MC
 		return;
 	}
 
@@ -207,7 +207,7 @@ static void kick_monster(xchar x, xchar y) {
 		if (!rn2((i < j / 10) ? 2 : (i < j / 5) ? 3 : 4)) {
 			if (martial() && !rn2(2)) goto doit;
 			pline("Your clumsy kick does no damage.");
-			passive(mon, false, 1, AT_KICK);
+			passive(mon, false, 1, AT_KICK, false);
 			return;
 		}
 		if (i < j / 10)
@@ -231,7 +231,7 @@ doit:
 		if (!nohands(mon->data) && !rn2(martial() ? 5 : 3)) {
 			pline("%s blocks your %skick.", Monnam(mon),
 			      clumsy ? "clumsy " : "");
-			passive(mon, false, 1, AT_KICK);
+			passive(mon, false, 1, AT_KICK, false);
 			return;
 		} else {
 			mnexto(mon);
@@ -242,14 +242,13 @@ doit:
 				}
 				pline("%s %s, %s evading your %skick.", Monnam(mon),
 				      (can_teleport(mon->data) ? "teleports" :
-								 is_floater(mon->data) ? "floats" :
-											 is_flyer(mon->data) ? "swoops" :
-													       (nolimbs(mon->data) || slithy(mon->data)) ?
-													       "slides" :
-													       "jumps"),
+				       is_floater(mon->data) ? "floats" :
+				       is_flyer(mon->data) ? "swoops" :
+				       (nolimbs(mon->data) || slithy(mon->data)) ?  "slides" :
+				       "jumps"),
 				      clumsy ? "easily" : "nimbly",
 				      clumsy ? "clumsy " : "");
-				passive(mon, false, 1, AT_KICK);
+				passive(mon, false, 1, AT_KICK, false);
 				return;
 			}
 		}

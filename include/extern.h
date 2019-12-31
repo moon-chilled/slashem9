@@ -2017,18 +2017,18 @@ void u_init(void);
 
 /* ### uhitm.c ### */
 
-void hurtmarmor(struct monst *, int);
-int attack_checks(struct monst *, boolean);
-void check_caitiff(struct monst *);
+void hurtmarmor(struct monst *mdef, int attk);
+int attack_checks(struct monst *mtmp, bool barehanded);
+void check_caitiff(struct monst *mtmp);
 int find_roll_to_hit(struct monst *mtmp, bool *monk_armor_penalty);
-boolean attack(struct monst *);
-boolean hmon(struct monst *, struct obj *, int);
-int damageum(struct monst *, struct attack *);
+bool attack(struct monst *mtmp);
+bool hmon(struct monst *mon, struct obj *obj, int thrown);
+int damageum(struct monst *mdef, struct attack *mattk);
 void missum(struct monst *mdef, int target, int roll, struct attack *mattk, bool encumbered_by_armor);
-int passive(struct monst *, int, int, uchar);
-void passive_obj(struct monst *, struct obj *, struct attack *);
-void stumble_onto_mimic(struct monst *);
-int flash_hits_mon(struct monst *, struct obj *);
+int passive(struct monst *mon, int mhit, int malive, uchar aatyp, bool wep_was_destroyed);
+void passive_obj(struct monst *mon, struct obj *obj, struct attack *mattk);
+void stumble_onto_mimic(struct monst *mtmp);
+int flash_hits_mon(struct monst *mtmp, struct obj *otmp);
 
 /* ### unixmain.c ### */
 

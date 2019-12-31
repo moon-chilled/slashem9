@@ -4,22 +4,19 @@
 
 #include "hack.h"
 
-static boolean known_hitum(struct monst *, int, int *, struct attack *, bool);
-static void steal_it(struct monst *, struct attack *);
-#if 0
-static boolean hitum(struct monst *,int,int,struct attack *);
-#endif
-static boolean hmon_hitmon(struct monst *, struct obj *, int);
-static int joust(struct monst *, struct obj *);
+static bool known_hitum(struct monst *mon, int mattk, int *mhit, struct attack *uattk, bool encumbered_by_armor);
+static void steal_it(struct monst *mdef, struct attack *mattk);
+static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown);
+static int joust(struct monst *target, struct obj *weapon);
 static void demonpet(void);
-static boolean m_slips_free(struct monst *mtmp, struct attack *mattk);
-static int explum(struct monst *, struct attack *);
-static void start_engulf(struct monst *);
+static bool m_slips_free(struct monst *mdef, struct attack *mattk);
+static int explum(struct monst *mdef, struct attack *mattk);
+static void start_engulf(struct monst *mdef);
 static void end_engulf(void);
-static int gulpum(struct monst *, struct attack *);
-static boolean hmonas(struct monst *);
-static void nohandglow(struct monst *);
-static boolean shade_aware(struct obj *);
+static int gulpum(struct monst *mdef, struct attack *mattk);
+static boolean hmonas(struct monst *mon);
+static void nohandglow(struct monst *mon);
+static bool shade_aware(struct obj *obj);
 
 static int martial_dmg(void);
 
@@ -115,7 +112,7 @@ void hurtmarmor(struct monst *mdef, int attk) {
  * returns HIT_UWEP. -ALI
  */
 
-int attack_checks(struct monst *mtmp, boolean barehanded) {
+int attack_checks(struct monst *mtmp, bool barehanded) {
 	int retval;
 	char qbuf[QBUFSZ];
 
@@ -336,7 +333,7 @@ int find_roll_to_hit(struct monst *mtmp, bool *monk_armor_penalty) {
 
 /* try to attack; return false if monster evaded */
 /* u.dx and u.dy must be set */
-boolean attack(struct monst *mtmp) {
+bool attack(struct monst *mtmp) {
 	struct permonst *mdat = mtmp->data;
 	int mhit;
 
@@ -466,8 +463,8 @@ atk_done:
 
 /* returns true if monster still lives */
 /* mattack = Which weapons you attacked with -ALI */
-static boolean known_hitum(struct monst *mon, int mattack, int *mhit, struct attack *uattk, bool encumbered_by_armor) {
-	boolean malive = true;
+static bool known_hitum(struct monst *mon, int mattack, int *mhit, struct attack *uattk, bool encumbered_by_armor) {
+	bool malive = true;
 
 	if (override_confirmation) {
 		/* this may need to be generalized if weapons other than
@@ -622,21 +619,19 @@ int martial_dmg(void) {
 /* return true if mon still alive */
 
 //thrown: 0==not thrown; 1==launched with uwep; 2==launched with uswapwep; 3==thrown by some other means
-boolean hmon(struct monst *mon, struct obj *obj, int thrown) {
-	boolean result, anger_guards;
-
-	anger_guards = (mon->mpeaceful &&
-			(mon->ispriest || mon->isshk ||
-			 mon->data == &mons[PM_WATCHMAN] ||
-			 mon->data == &mons[PM_WATCH_CAPTAIN]));
-	result = hmon_hitmon(mon, obj, thrown);
+bool hmon(struct monst *mon, struct obj *obj, int thrown) {
+	bool anger_guards = (mon->mpeaceful &&
+			     (mon->ispriest || mon->isshk ||
+			      mon->data == &mons[PM_WATCHMAN] ||
+			      mon->data == &mons[PM_WATCH_CAPTAIN]));
+	bool result = hmon_hitmon(mon, obj, thrown);
 	if (mon->ispriest && !rn2(2)) ghod_hitsu(mon);
 	if (anger_guards) angry_guards(Deaf);
 	return result;
 }
 
 /* guts of hmon() */
-static boolean hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
+static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 	int tmp, canhitmon = 0, objenchant;
 	struct permonst *mdat = mon->data;
 	int barehand_silver_rings = 0;
@@ -1540,7 +1535,7 @@ static boolean hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 	return !destroyed;
 }
 
-static boolean shade_aware(struct obj *obj) {
+static bool shade_aware(struct obj *obj) {
 	if (!obj) return false;
 	/*
 	 * The things in this list either
@@ -1559,7 +1554,7 @@ static boolean shade_aware(struct obj *obj) {
 
 /* check whether slippery clothing protects from hug or wrap attack */
 /* [currently assumes that you are the attacker] */
-static boolean m_slips_free(struct monst *mdef, struct attack *mattk) {
+static bool m_slips_free(struct monst *mdef, struct attack *mattk) {
 	struct obj *obj;
 
 	if (mattk->adtyp == AD_DRIN) {
@@ -1629,8 +1624,7 @@ static int joust(struct monst *target, struct obj *weapon) {
  * (DR4 and DR4.5) screws up with an internal error 5 "Expression Too Complex."
  * Pulling it out makes it work.
  */
-static void
-demonpet() {
+static void demonpet(void) {
 	int i;
 	struct permonst *pm;
 	struct monst *dtmp;
@@ -2571,9 +2565,6 @@ void missum(struct monst *mdef, int target, int roll, struct attack *mattk, bool
 static boolean hmonas(struct monst *mon) {
 	struct attack *mattk, alt_attk;
 	int i, sum[NATTK];
-#if 0
-	int	hittmp = 0;
-#endif
 	int nsum = 0;
 	int dhit = 0;
 	int mhit = 0; /* Used to pass the attacks used */
@@ -2581,6 +2572,8 @@ static boolean hmonas(struct monst *mon) {
 	boolean Old_Upolyd = Upolyd;
 	static const int hit_touch[] = {0, HIT_BODY, HIT_BODY | HIT_FATAL};
 	static const int hit_notouch[] = {0, HIT_OTHER, HIT_OTHER | HIT_FATAL};
+	bool wep_was_destroyed;
+	struct obj *wepbefore = uwep;
 
 	bool encumbered_by_armor;
 	int tmp = find_roll_to_hit(mon, &encumbered_by_armor);
@@ -2880,11 +2873,14 @@ static boolean hmonas(struct monst *mon) {
 			u.mh = -1; /* dead in the current form */
 			rehumanize();
 		}
-		if (sum[i] & HIT_FATAL)
-			return passive(mon, sum[i], 0, mattk->aatyp);
+
+		wep_was_destroyed = wepbefore && !uwep;
+
+		if (sum[i] & HIT_FATAL) {
+			return passive(mon, sum[i], 0, mattk->aatyp, wep_was_destroyed);
 		/* defender dead */
-		else {
-			passive(mon, sum[i], 1, mattk->aatyp);
+		} else {
+			passive(mon, sum[i], 1, mattk->aatyp, wep_was_destroyed);
 			nsum |= sum[i];
 		}
 		if (Upolyd != Old_Upolyd)
@@ -2895,9 +2891,8 @@ static boolean hmonas(struct monst *mon) {
 	return nsum != 0;
 }
 
-/*	Special (passive) attacks on you by monsters done here.		*/
-
-int passive(struct monst *mon, int mhit, int malive, uchar aatyp) {
+// Special (passive) attacks on you by monsters done here.
+int passive(struct monst *mon, int mhit, int malive, uchar aatyp, bool wep_was_destroyed) {
 	struct permonst *ptr = mon->data;
 	int i, tmp;
 	struct obj *target = mhit & HIT_UWEP ? uwep :
@@ -2949,9 +2944,9 @@ int passive(struct monst *mon, int mhit, int malive, uchar aatyp) {
 		case AD_STON:
 			if (mhit) { /* successful attack */
 				long protector = attk_protection((int)aatyp);
-				boolean barehanded = mhit & HIT_BODY ||
-						     (mhit & HIT_UWEP && !uwep) ||
-						     (mhit & HIT_USWAPWEP && !uswapwep);
+				const bool barehanded = !wep_was_destroyed &&
+							(mhit & HIT_BODY ||
+							 (mhit & HIT_UWEP && !uwep) || (mhit & HIT_USWAPWEP && !uswapwep));
 
 				/* hero using monsters' AT_MAGC attack is hitting hand to
 				   hand rather than casting a spell */
