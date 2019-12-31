@@ -1817,16 +1817,6 @@ void use_unicorn_horn(struct obj *obj) {
 			}
 	}
 
-#if 0 /* Old NetHack success rate */
-	/*
-	 *		Chances for number of troubles to be fixed
-	 *		 0	1      2      3      4	    5	   6	  7
-	 *   blessed:  22.7%  22.7%  19.5%  15.4%  10.7%   5.7%   2.6%	 0.8%
-	 *  uncursed:  35.4%  35.4%  22.9%   6.3%    0	    0	   0	  0
-	 */
-	val_limit = rn2( d(2, (obj && obj->blessed) ? 4 : 2) );
-	if (val_limit > trouble_count) val_limit = trouble_count;
-#else /* KMH's new success rate */
 	/*
 	 * blessed:  Tries all problems, each with chance given below.
 	 * uncursed: Tries one problem, with chance given below.
@@ -1838,7 +1828,6 @@ void use_unicorn_horn(struct obj *obj) {
 		chance = (obj->spe < 6) ? obj->spe + 3 : 9;
 	else
 		chance = 3;
-#endif
 
 	/* fix [some of] the troubles */
 	for (val = 0; val < val_limit; val++) {
@@ -1965,11 +1954,6 @@ void fig_transform(void *arg, long timeout) {
 					      locomotion(mtmp->data, "drop"), carriedby);
 				}
 				break;
-#if 0
-		case OBJ_MIGRATING:
-			break;
-#endif
-
 			default:
 				impossible("figurine came to life where? (%d)",
 					   (int)figurine->where);

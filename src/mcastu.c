@@ -210,14 +210,6 @@ int castmu(struct monst *mtmp, struct attack *mattk, boolean thinks_it_foundyou,
 	}
 
 	if (mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) {
-		/*
-		 * Spell use (especially MGC) is more common in Slash'EM.
-		 * Still using mspec_used, just so monsters don't go bonkers.
-		 */
-#if 0
-		mtmp->mspec_used = 10 - mtmp->m_lev;
-		if (mtmp->mspec_used < 2) mtmp->mspec_used = 2;
-#endif
 		mtmp->mspec_used = rn2(15) - mtmp->m_lev;
 		if (mattk->adtyp == AD_SPEL)
 			mtmp->mspec_used = mtmp->mspec_used > 0 ? 2 : 0;

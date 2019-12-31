@@ -34,10 +34,7 @@ static char *HO, *CL, *CE, *UP, *XD, *BC, *SO, *SE, *TI, *TE;
 static char *VS, *VE;
 static char *ME;
 static char *MR;
-#if 0
 static char *MB, *MH;
-static char *MD;     /* may already be in use below */
-#endif
 #ifdef TERMLIB
 static char *MD;
 static int SG;
@@ -306,11 +303,9 @@ void tty_startup(int *wid, int *hgt) {
 	KS = Tgetstr("ks"); /* keypad start (special mode) */
 	KE = Tgetstr("ke"); /* keypad end (ordinary mode [ie, digits]) */
 	MR = Tgetstr("mr"); /* reverse */
-#if 0
 	MB = Tgetstr("mb");	/* blink */
 	MD = Tgetstr("md");	/* boldface */
 	MH = Tgetstr("mh");	/* dim */
-#endif
 	ME = Tgetstr("me");		     /* turn off all attributes */
 	if (!ME || (SE == nullstr)) ME = SE; /* default to SE value */
 
@@ -487,7 +482,6 @@ void standoutend(void) {
 	if (SE) xputs(SE);
 }
 
-#if 0 /* if you need one of these, uncomment it (here and in extern.h) */
 void revbeg(void) {
 	if(MR) xputs(MR);
 }
@@ -508,7 +502,6 @@ void dimbeg(void) {
 void m_end(void) {
 	if(ME) xputs(ME);
 }
-#endif
 
 void backsp(void) {
 	xputs(BC);
@@ -702,15 +695,10 @@ static void analyze_seq(char *str, int *fg, int *bg) {
 			*fg = *bg = NO_COLOR;
 		} else if (code == 1) { /* bold */
 			*fg |= BRIGHT;
-#if 0
-	/* I doubt we'll ever resort to using blinking characters,
-	   unless we want a pulsing glow for something.  But, in case
-	   we do... - 3. */
-	    } else if (code == 5) { /* blinking */
-		*fg |= BLINK;
-	    } else if (code == 25) { /* stop blinking */
-		*fg &= ~BLINK;
-#endif
+		} else if (code == 5) { /* blinking */
+			*fg |= BLINK;
+		} else if (code == 25) { /* stop blinking */
+			*fg &= ~BLINK;
 		} else if (code == 7 || code == 27) { /* reverse */
 			code = *fg & ~BRIGHT;
 			*fg = *bg | (*fg & BRIGHT);

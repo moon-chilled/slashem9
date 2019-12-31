@@ -397,16 +397,6 @@ int dopotion(struct obj *otmp) {
 int peffects(struct obj *otmp) {
 	int i, ii, lim;
 
-	/* KMH, balance patch -- this is too cruel for novices */
-#if 0
-	/* sometimes your constitution can be a little _too_ high! */
-	if ((Role_if(PM_BARBARIAN) || ACURR(A_CON) > 15) && !rn2(5)) {
-		pline("Strange ...");
-		nothing++;
-		return -1;
-	}
-#endif
-
 	switch (otmp->otyp) {
 		case POT_RESTORE_ABILITY:
 		case SPE_RESTORE_ABILITY:
@@ -1056,10 +1046,8 @@ void healup_mon(struct monst *mtmp, int nhp, int nxtra, boolean curesick, boolea
 		mtmp->mhp += nhp;
 		if (mtmp->mhp > mtmp->mhpmax) mtmp->mhp = (mtmp->mhpmax += nxtra);
 	}
-#if 0
-	if(cureblind) ; /* NOT DONE YET */
-	if(curesick)  ; /* NOT DONE YET */
-#endif
+	//if (cureblind) ; /* NOT DONE YET */
+	//if (curesick)  ; /* NOT DONE YET */
 	return;
 }
 
@@ -1205,11 +1193,6 @@ void potionhit(struct monst *mon, struct obj *obj, boolean your_fault) {
 			case POT_BOOZE:
 				if (!resist(mon, POTION_CLASS, 0, NOTELL)) mon->mconf = true;
 				break;
-#if 0 /* NH 3.3.0 version */
-		case POT_POLYMORPH:
-			bhitm(mon, obj);
-			break;
-#endif
 			case POT_POLYMORPH:
 				/* [Tom] polymorph potion thrown
 			 * [max] added poor victim a chance to resist
@@ -3088,30 +3071,9 @@ more_dips:
 
 void djinni_from_bottle(struct obj *obj) {
 	struct monst *mtmp;
-	int genie_type;
 	int chance;
 
-#if 0
-	/* KMH -- See comments in monst.c */
-	switch (rn2(4)) {
-	default:
-	case 0:
-		genie_type = PM_DJINNI;
-		break;
-	case 1:
-		genie_type = PM_EFREETI;
-		break;
-	case 2:
-		genie_type = PM_MARID;
-		break;
-	case 3:
-		genie_type = PM_DAO;
-		break;
-	}
-#else
-	genie_type = PM_DJINNI;
-#endif
-	if (!(mtmp = makemon(&mons[genie_type], u.ux, u.uy, NO_MM_FLAGS))) {
+	if (!(mtmp = makemon(&mons[PM_DJINNI], u.ux, u.uy, NO_MM_FLAGS))) {
 		pline("It turns out to be empty.");
 		return;
 	}

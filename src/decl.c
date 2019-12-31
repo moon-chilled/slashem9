@@ -21,9 +21,6 @@ int bases[MAXOCLASSES] = DUMMY;
 
 int multi = 0;
 boolean multi_one = false; /* used by dofire() and throw_the_obj() */
-#if 0
-int warnlevel = 0;		/* used by movemon and dochugw */
-#endif
 int nroom = 0;
 int nsubroom = 0;
 int occtime = 0;
@@ -208,14 +205,14 @@ char catname[PL_PSIZ] = DUMMY;
 char ghoulname[PL_PSIZ] = DUMMY;
 char horsename[PL_PSIZ] = DUMMY;
 char wolfname[PL_PSIZ] = DUMMY;
-#if 0
+/*
 char batname[PL_PSIZ] = DUMMY;
 char snakename[PL_PSIZ] = DUMMY;
 char ratname[PL_PSIZ] = DUMMY;
 char badgername[PL_PSIZ] = DUMMY;
 char reddragonname[PL_PSIZ] = DUMMY;
 char whitedragonname[PL_PSIZ] = DUMMY;
-#endif
+*/
 char preferred_pet; /* '\0', 'c', 'd', 'n' (none) */
 /* monsters that went down/up together with @ */
 struct monst *mydogs = NULL;

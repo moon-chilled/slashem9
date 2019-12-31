@@ -1541,12 +1541,10 @@ maybemove:
 
 	/* Check regions entering/leaving */
 	if (!in_out_region(x, y)) {
-#if 0
 		/* [ALI] This can't happen at present, but if it did we would
 		 * also need to worry about the call to drag_ball above.
 		 */
-		if (displacer) (void)attack(mtmp);
-#endif
+		//if (displacer) attack(mtmp);
 		return;
 	}
 

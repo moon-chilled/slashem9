@@ -211,11 +211,6 @@ int Cloak_on(void) {
 			pline("%s very tightly.", Tobjnam(uarmc, "fit"));
 			break;
 			/* Alchemy smock gives poison _and_ acid resistance */
-#if 0
-	case ALCHEMY_SMOCK:
-		EAcid_resistance |= WORN_CLOAK;
-		break;
-#endif
 		default:
 			impossible(unknown_type, c_cloak, uarmc->otyp);
 	}
@@ -262,12 +257,6 @@ int Cloak_off(void) {
 				      See_invisible ? "no longer see through yourself" : see_yourself);
 			}
 			break;
-#if 0
-	/* Alchemy smock gives poison _and_ acid resistance */
-	case ALCHEMY_SMOCK:
-		EAcid_resistance &= ~WORN_CLOAK;
-		break;
-#endif
 		default:
 			impossible(unknown_type, c_cloak, otyp);
 	}
@@ -572,9 +561,6 @@ int Armor_gone(void) {
 void Amulet_on(void) {
 	switch (uamul->otyp) {
 		case AMULET_OF_ESP:
-#if 0 /* OBSOLETE */
-		if(uamul->oartifact == ART_MEDALLION_OF_SHIFTERS) rescham();
-#endif
 		case AMULET_OF_LIFE_SAVING:
 		case AMULET_VERSUS_POISON:
 		case AMULET_OF_DRAIN_RESISTANCE:
@@ -667,9 +653,6 @@ void Amulet_off(void) {
 	switch (uamul->otyp) {
 		case AMULET_OF_ESP:
 			/* need to update ability before calling see_monsters() */
-#if 0 /* OBSOLETE */
-		if(uamul->oartifact == ART_MEDALLION_OF_SHIFTERS) restartcham();
-#endif
 			setworn(NULL, W_AMUL);
 			see_monsters();
 			return;
@@ -748,8 +731,6 @@ void Ring_on(struct obj *obj) {
 		case RIN_TELEPORT_CONTROL:
 		case RIN_POLYMORPH:
 		case RIN_POLYMORPH_CONTROL:
-		/* KMH, balance patch -- now an amulet
-	case RIN_DRAIN_RESISTANCE: */
 		/* KMH -- added */
 		case RIN_MOOD:
 		case RIN_FREE_ACTION:
@@ -760,11 +741,6 @@ void Ring_on(struct obj *obj) {
 		case RIN_SLEEPING:
 			HSleeping = rnd(100);
 			break;
-#if 0
-	case RIN_INDIGESTION:
-		incr_itimeout(&HIndigestion, rnd(20));
-		break;
-#endif
 		case RIN_WARNING:
 			see_monsters();
 			break;
@@ -900,12 +876,6 @@ static void Ring_off_or_gone(struct obj *obj, boolean gone) {
 			if (!ESleeping)
 				HSleeping = 0;
 			break;
-#if 0
-	case RIN_INDIGESTION:
-		if (!EIndigestion)
-			HIndigestion = 0;
-		break;
-#endif
 		case RIN_WARNING:
 			see_monsters();
 			break;

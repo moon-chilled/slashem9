@@ -712,10 +712,6 @@ static int ugly_checks(const char *let, const char *word, struct obj *otmp) {
 	    (putting_on(word) &&
 	     (otmp->owornmask & (W_ARMOR | W_RING | W_AMUL | W_TOOL)))
 	/* already worn */
-#if 0 /* 3.4.1 -- include currently wielded weapon among the choices */
-	                || (!strcmp(word, "wield") &&
-	                    (otmp->owornmask & W_WEP))
-#endif
 	    || (!strcmp(word, "ready") &&
 		(otmp == uwep || (otmp == uswapwep && u.twoweap)))) {
 		return 1;
@@ -2315,20 +2311,6 @@ int doprwep(void) {
 			pline("Your other %s is empty.", body_part(HAND));
 	}
 	return 0;
-#if 0
-	if(!uwep && !uswapwep && !uquiver) pline("You are empty %s.", body_part(HANDED));
-	else {
-		char lets[3];
-		int ct = 0;
-
-		if(uwep) lets[ct++] = obj_to_let(uwep);
-		if(uswapwep) lets[ct++] = obj_to_let(uswapwep);
-		if(uquiver) lets[ct++] = obj_to_let(uquiver);
-		lets[ct] = 0;
-		display_inventory(lets, false);
-	}
-	return 0;
-#endif
 }
 
 int doprarm(void) {

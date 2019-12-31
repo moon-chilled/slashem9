@@ -36,9 +36,6 @@ static int doextcmd(void);
 static int domonability(void);
 static int dotravel(void);
 static int playersteal(void);
-#if 0
-static int specialpower(void); /* WAC -- use techniques */
-#endif
 static int wiz_wish(void);
 static int wiz_identify(void);
 static int wiz_map(void);
@@ -600,206 +597,6 @@ static int wiz_wish(void) {
 		pline("Unavailable command '^W'.");
 	return 0;
 }
-
-#if 0  // WAC -- Now uses techniques
-// Special class abilites [modified by Tom]
-static int specialpower(void) {
-	/*
-	 * STEPHEN WHITE'S NEW CODE
-	 *
-	 * For clarification, lastuse (as declared in decl.{c|h}) is the
-	 * actual length of time the power is active, nextuse is when you can
-	 * next use the ability.
-	 */
-
-	/*Added wizard mode can choose to use ability - wAC*/
-	if (u.unextuse) {
-		pline("You have to wait %s before using your ability again.",
-		      (u.unextuse > 500) ? "for a while" : "a little longer");
-		if (!wizard || (yn("Use ability anyways?") == 'n'))
-			return 0;
-	}
-
-	switch (u.role) {
-	case 'A':
-		/*WAC stolen from the spellcasters...'A' can identify from
-		        historical research*/
-		if(Hallucination || Stunned || Confusion) {
-			pline("You can't concentrate right now!");
-			break;
-		} else if((ACURR(A_INT) + ACURR(A_WIS)) < rnd(60)) {
-			pline("Nothing in your pack looks familiar.");
-			u.unextuse = rn1(500,500);
-			break;
-		} else if(invent) {
-			int ret;
-			pline("You examine your possessions.");
-			identify_pack(1);
-			/*WAC this should be better - made like scroll of identify*/
-			/* KMH -- also commented out use of 'ret' without initialization */
-			/*                  ret = ggetobj("identify", identify, 1, false);*/
-			/*		    if (ret < 0) break; *//* quit or no eligible items */
-			/*                  ret = ggetobj("identify", identify, 1, false);*/
-		} else {
-			/* KMH -- fixed non-compliant string */
-			pline("You are already quite familiar with the contents of your pack.");
-			break;
-		}
-		u.unextuse = rn1(500,1500);
-		break;
-	case 'G':
-		pline("Your ability, gem identification, is automatic.");
-		return 0;
-	case 'P':
-		pline("Your ability, bless and curse detection, is automatic.");
-		return 0;
-	case 'D':
-		/* KMH -- Just do it!  (Besides, Alt isn't portable...) */
-		return polyatwill();
-	/*pline("Your ability, polymorphing, uses the alt-y key.");*/
-	/*return 0;*/
-	case 'L':
-		/*only when empty handed, in human form!*/
-		if (Upolyd) {
-			pline("You can't do this while polymorphed!");
-			break;
-		}
-		if (uwep == 0) {
-			pline("Your fingernails extend into claws!");
-			aggravate();
-			u.ulastuse = d(2,4) + (u.ulevel/5) + 1; /* [max] was d(2,8) */
-			u.unextuse = rn1(1000,1000); /* [max] increased delay */
-		} else pline("You can't do this while holding a weapon!");
-		break;
-	case 'R':
-		/* KMH -- Just do it!  (Besides, Alt isn't portable...) */
-		return playersteal();
-		/*pline("Your ability, stealing, uses the alt-b key.");*/
-		/*return 0;*/
-		break;
-	case 'M':
-		pline("Your special ability is unarmed combat, and it is automatic.");
-		return 0;
-		break;
-	case 'C':
-	case 'T':
-		pline("You don't have a special ability!");
-		return 0;
-		break;
-	case 'B':
-		pline("You fly into a berserk rage!");
-		u.ulastuse = d(2,8) + (u.ulevel/5) + 1;
-		incr_itimeout(&HFast, u.ulastuse);
-		u.unextuse = rn1(1000,500);
-		return 0;
-		break;
-	case 'F':
-	case 'I':
-	case 'N':
-	case 'W':
-		/* WAC spell-users can study their known spells*/
-		if(Hallucination || Stunned || Confusion) {
-			pline("You can't concentrate right now!");
-			break;
-		} else {
-			pline("You concentrate...");
-			studyspell(); /*in spell.c*/
-		}
-		break;
-	case 'E':
-		pline("Your %s %s become blurs as they reach for your quiver!",
-		      uarmg ? "gloved" : "bare",      /* Del Lamb */
-		      makeplural(body_part(HAND)));
-		u.ulastuse = rnd((int) (u.ulevel/6 + 1)) + 1;
-		u.unextuse = rn1(1000,500);
-		break;
-	case 'U':
-	case 'V':
-		if(!uwep || (weapon_type(uwep) == P_NONE)) {
-			pline("You are not wielding a weapon!");
-			break;
-		} else if(uwep->known == true) {
-			pline("You study and practice with your %s %s.",
-			      uarmg ? "gloved" : "bare",      /* Del Lamb */
-			      makeplural(body_part(HAND)));
-			practice_weapon();
-		} else {
-			if (not_fully_identified(uwep)) {
-				pline("You examine %s.", doname(uwep));
-				if (rnd(15) <= ACURR(A_INT)) {
-					makeknown(uwep->otyp);
-					uwep->known = true;
-					pline("You discover it is %s",doname(uwep));
-				} else
-					pline("Unfortunately, you didn't learn anything new.");
-			}
-			/*WAC Added practicing code - in weapon.c*/
-			practice_weapon();
-		}
-		u.unextuse = rn1(500,500);
-		break;
-	case 'H':
-		if (Hallucination || Stunned || Confusion) {
-			pline("You are in no condition to perform surgery!");
-			break;
-		}
-		if ((Sick) || (Slimed)) {       /* WAC cure sliming too */
-			if(carrying(SCALPEL)) {
-				pline("Using your scalpel (ow!), you cure your infection!");
-				make_sick(0L,NULL, true,SICK_ALL);
-				Slimed = 0;
-				if(u.uhp > 6) u.uhp -= 5;
-				else          u.uhp = 1;
-				u.unextuse = rn1(500,500);
-				break;
-			} else pline("If only you had a scalpel...");
-		}
-		if (u.uhp < u.uhpmax) {
-			if(carrying(MEDICAL_KIT)) {
-				pline("Using your medical kit, you bandage your wounds.");
-				u.uhp += (u.ulevel * (rnd(2)+1)) + rn1(5,5);
-			} else {
-				pline("You bandage your wounds as best you can.");
-				u.uhp += (u.ulevel) + rn1(5,5);
-			}
-			u.unextuse = rn1(1000,500);
-			if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
-		} else pline("You don't need your healing powers!");
-		break;
-	case 'K':
-		if (u.uhp < u.uhpmax || Sick || Slimed) { /*WAC heal sliming */
-			if (Sick) pline("You lay your hands on the foul sickness...");
-			pline("A warm glow spreads through your body!");
-			if (Slimed) pline("The slime is removed.");
-			Slimed = 0;
-			if(Sick) make_sick(0L,NULL, true, SICK_ALL);
-			else     u.uhp += (u.ulevel * 4);
-			if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
-			u.unextuse = 3000;
-		} else pline("Nothing happens.");
-		break;
-	case 'S':
-		pline("You scream \"KIIILLL!\"");
-		aggravate();
-		u.ulastuse = rnd((int) (u.ulevel/6 + 1)) + 1;
-		u.unextuse = rn1(1000,500);
-		return 0;
-		break;
-	case 'Y':
-		if (u.usteed) {
-			pline("%s gets tamer.", Monnam(u.usteed));
-			tamedog(u.usteed, NULL);
-			u.unextuse = rn1(1000,500);
-		} else
-			pline("Your special ability is only effective when riding a monster.");
-		break;
-	default:
-		break;
-	}
-	/*By default,  action should take a turn*/
-	return 1;
-}
-#endif
 
 /* ^I command - identify hero's inventory */
 static int wiz_identify(void) {
@@ -1485,18 +1282,11 @@ void enlightenment(int final) {
 			sprintf(buf, "%s%ssafely pray%s", can_pray(false) ? "" : "not ",
 			        final ? "have " : "", final ? "ed" : "");
 #else
-		sprintf(buf, "%ssafely pray", can_pray(false) ? "" : "not ");
+			sprintf(buf, "%ssafely pray", can_pray(false) ? "" : "not ");
 #endif
-		if (wizard) sprintf(eos(buf), " (%d)", u.ublesscnt);
-		you_can(buf);
-#if 0 /* WAC -- replaced by techniques */
-			/*	    sprintf(buf, "%s%suse%s your special", !u.unextuse ? "" : "not ",
-					    final ? "have " : "", final ? "d" : "");*/
-			sprintf(buf, "%suse your special", !u.unextuse ? "" : "not ");
-			if (wizard) sprintf(eos(buf), " (%d)", u.unextuse);
+			if (wizard) sprintf(eos(buf), " (%d)", u.ublesscnt);
 			you_can(buf);
-#endif
-	}
+		}
 
 	{
 		const char *p;
@@ -2023,9 +1813,6 @@ static const struct func_tab cmdlist[] = {
 	{M('a'), true, doorganize},
 	/*	'b', 'B' : go sw */
 	{M('b'), false, playersteal},   /* jla */
-#if 0
-	{M('b'), false, specialpower},   /* jla */
-#endif
 	{'c', false, doclose},
 	{'C', true, do_mname},
 	{M('c'), true, dotalk},
@@ -3158,10 +2945,6 @@ void rhack(char *cmd) {
 			multi = 0;
 		}
 		return;
-#if 0
-		context.move = false;
-		return;
-#endif
 	}
 	if (*cmd == DOAGAIN && !in_doagain && saveq[0]) {
 		in_doagain = true;

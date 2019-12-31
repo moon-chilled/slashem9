@@ -159,7 +159,7 @@ struct monst *makedog(void) {
 		petname = ghoulname;
 	else if (pettype == PM_PONY)
 		petname = horsename;
-#if 0
+/*
 	else if (petsym == S_BAT)
 		petname = batname;
 	else if (petsym == S_SNAKE)
@@ -172,7 +172,7 @@ struct monst *makedog(void) {
 		petname = reddragonname;
 	else if (pettype == PM_BABY_WHITE_DRAGON)
 		petname = whitedragonname;
-#endif
+*/
 	else if (petsym == S_DOG)
 		petname = dogname;
 	else

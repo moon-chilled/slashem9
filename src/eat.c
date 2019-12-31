@@ -1021,10 +1021,6 @@ static void cpostfx(int pm) {
 		/* WAC all mind flayers as per mondata.h have to be here */
 		case PM_MASTER_MIND_FLAYER:
 		case PM_MIND_FLAYER: {
-#if 0
-		int     temp;
-		temp = urole.attrmax[A_INT];
-#endif
 			if (ABASE(A_INT) < ATTRMAX(A_INT)) {
 				if (!rn2(2)) {
 					pline("Yum! That was real brain food!");

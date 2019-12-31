@@ -18,33 +18,12 @@ extern void backsp(void);
 extern void clear_screen(void);
 #endif
 
-#if 0
-static struct stat buf;
-#endif
-
 #ifdef WANT_GETHDATE
 static struct stat hbuf;
 #endif
 
 #ifdef PC_LOCKING
 static int eraseoldlocks(void);
-#endif
-
-#if 0
-int uptodate(int fd) {
-#ifdef WANT_GETHDATE
-	if(fstat(fd, &buf)) {
-		pline("Cannot get status of saved level? ");
-		return 0;
-	}
-	if(buf.st_mtime < hbuf.st_mtime) {
-		pline("Saved level is out of date. ");
-		return 0;
-	}
-#else
-#endif /* WANT_GETHDATE */
-	return 1;
-}
 #endif
 
 #ifdef PC_LOCKING

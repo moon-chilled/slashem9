@@ -1071,7 +1071,7 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 		strncpy(wolfname, bufp, PL_PSIZ - 1);
 	} else if (match_varname(buf, "GHOULNAME", 3)) {
 		strncpy(ghoulname, bufp, PL_PSIZ - 1);
-#if 0
+/*
 	} else if (match_varname(buf, "BATNAME", 3)) {
 		strncpy(batname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "SNAKENAME", 3)) {
@@ -1084,8 +1084,7 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 		strncpy(batname, bufp, PL_PSIZ-1);
 	} else if (match_varname(buf, "WHITEDRAGONNAME", 3)) {
 		strncpy(batname, bufp, PL_PSIZ-1);
-#endif
-
+*/
 	} else if (match_varname(buf, "MENUCOLOR", 9)) {
 		add_menu_coloring(bufp);
 	} else if (match_varname(buf, "STATUSCOLOR", 11)) {
