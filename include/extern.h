@@ -718,47 +718,48 @@ long money_cnt(struct obj *);
 
 /* ### hacklib.c ### */
 
-boolean digit(char);
-boolean letter(char);
-char highc(char);
-char lowc(char);
-char *lcase(char *);
-char *upstart(char *);
-char *mungspaces(char *);
-char *eos(char *);
-char *strkitten(char *, char);
-char *s_suffix(const char *);
-boolean onlyspace(const char *);
-char *tabexpand(char *);
-char *visctrl(char);
-const char *ordin(uint);
-char *sitoa(int);
-int sgn(int);
-int rounddiv(long, int);
-int dist2(int, int, int, int);
-int distmin(int, int, int, int);
-boolean online2(int, int, int, int);
-boolean pmatch(const char *, const char *);
+bool digit(char c);
+bool letter(char c);
+char highc(char c);
+char lowc(char c);
+char *lcase(char *s);
+char *upstart(char *s);
+char *mungspaces(char *bp);
+char *eos(char *s);
+char *strkitten(char *s, char c);
+char *s_suffix(const char *s);
+bool onlyspace(const char *s);
+char *tabexpand(char *sbuf);
+char *visctrl(char c);
+char *strsubst(char *bp, const char *orig, const char *replacement);
+const char *ordin(uint n);
+char *sitoa(int n);
+int sgn(int n);
+int rounddiv(long x, int y);
+int distmin(int x0, int y0, int x1, int y1);
+int dist2(int x0, int y0, int x1, int y1);
+bool online2(int x0, int y0, int x1, int y1);
+bool pmatch(const char *patrn, const char *strng);
 #ifndef STRNCMPI
-int strncmpi(const char *, const char *, usize);
+int strncmpi(const char *s1, const char *s2, usize n);
 #endif
 #ifndef STRSTRI
-char *strstri(const char *, const char *);
+char *strstri(const char *str, const char *sub);
 #endif
-boolean fuzzymatch(const char *, const char *, const char *, boolean);
+bool fuzzymatch(const char *s1, const char *s2, const char *ignore_chars, bool caseblind);
 void setrandom(void);
 int getyear(void);
 int getmonth(void); /* KMH -- Used by gypsies */
 #if 0
 char *yymmdd(time_t);
 #endif
-long yyyymmdd(time_t);
+long yyyymmdd(time_t date);
 long hhmmss(time_t date);
 int phase_of_the_moon(void);
-boolean friday_13th(void);
-boolean groundhog_day(void); /* KMH -- February 2 */
-int night(void);
-int midnight(void);
+bool friday_13th(void);
+bool groundhog_day(void); /* KMH -- February 2 */
+bool night(void);
+bool midnight(void);
 
 /* ### invent.c ### */
 

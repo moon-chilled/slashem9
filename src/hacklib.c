@@ -18,8 +18,8 @@
 NetHack, except that rounddiv may call panic().
 
       return type     routine name    argument type(s)
-	boolean		digit		(char)
-	boolean		letter		(char)
+	bool		digit		(char)
+	bool		letter		(char)
 	char		highc		(char)
 	char		lowc		(char)
 	char *		lcase		(char *)
@@ -28,38 +28,39 @@ NetHack, except that rounddiv may call panic().
 	char *		eos		(char *)
 	char *		strkitten	(char *,char)
 	char *		s_suffix	(const char *)
-	boolean		onlyspace	(const char *)
+	bool		onlyspace	(const char *)
 	char *		tabexpand	(char *)
 	char *		visctrl		(char)
+	char *		strsubst	(char *, const char *, const char *)
 	const char *	ordin		(int)
 	char *		sitoa		(int)
 	int		sgn		(int)
 	int		rounddiv	(long, int)
 	int		distmin		(int, int, int, int)
 	int		dist2		(int, int, int, int)
-	boolean		online2		(int, int)
-	boolean		pmatch		(const char *, const char *)
+	bool		online2		(int, int)
+	bool		pmatch		(const char *, const char *)
 	int		strncmpi	(const char *, const char *, int)
 	char *		strstri		(const char *, const char *)
-	boolean		fuzzymatch	(const char *,const char *,const char *,boolean)
+	bool		fuzzymatch	(const char *,const char *,const char *,bool)
 	void		setrandom	(void)
 	int		getyear		(void)
-	char *		yymmdd		(time_t)
 	long		yyyymmdd	(time_t)
 	long		hhmmss		(time_t)
-	int		phase_of_the_moon	(void)
-	boolean		friday_13th	(void)
-	int		night		(void)
-	int		midnight	(void)
+	int		phase_of_the_moon(void)
+	bool		friday_13th	(void)
+	bool		groundhog_day	(void)
+	bool		night		(void)
+	bool		midnight	(void)
 =*/
 
 // is 'c' a digit?
-boolean digit(char c) {
+bool digit(char c) {
 	return '0' <= c && c <= '9';
 }
 
 // is 'c' a letter?  note: '@' classed as letter
-boolean letter(char c) {
+bool letter(char c) {
 	return ('@' <= c && c <= 'Z') || ('a' <= c && c <= 'z');
 }
 
@@ -93,7 +94,7 @@ char *upstart(char *s) {
 /* remove excess whitespace from a string buffer (in place) */
 char *mungspaces(char *bp) {
 	char c, *p, *p2;
-	boolean was_space = true;
+	bool was_space = true;
 
 	for (p = p2 = bp; (c = *p) != '\0'; p++) {
 		if (c == '\t') c = ' ';
@@ -137,7 +138,7 @@ char *s_suffix(const char *s) {
 }
 
 // is a string entirely whitespace?
-boolean onlyspace(const char *s) {
+bool onlyspace(const char *s) {
 	for (; *s; s++)
 		if (*s != ' ' && *s != '\t')
 			return false;
@@ -187,12 +188,32 @@ char *visctrl(char c) {
 	return ccc;
 }
 
+/* substitute a word or phrase in a string (in place) */
+/* caller is responsible for ensuring that bp points to big enough buffer */
+char *strsubst(char *bp, const char *orig, const char *replacement) {
+	char *found;
+	char buf[BUFSZ];
+
+	if (bp) {
+		found = strstr(bp, orig);
+		if (found) {
+			strcpy(buf, found + strlen(orig));
+			strcpy(found, replacement);
+			strcat(bp, buf);
+		}
+	}
+
+	return bp;
+}
+
 // return the ordinal suffix of a number
 const char *ordin(uint n) {
 	int dd = n % 10;
 
-	return (dd == 0 || dd > 3 || (n % 100) / 10 == 1) ? "th" :
-							    (dd == 1) ? "st" : (dd == 2) ? "nd" : "rd";
+	return	(dd == 0 || dd > 3 || (n % 100) / 10 == 1) ? "th" :
+	    	(dd == 1) ? "st" :
+		(dd == 2) ? "nd" :
+		"rd";
 }
 
 // make a signed digit string from a number
@@ -248,7 +269,7 @@ int dist2(int x0, int y0, int x1, int y1) {
 }
 
 // are two points lined up (on a straight line)?
-boolean online2(int x0, int y0, int x1, int y1) {
+bool online2(int x0, int y0, int x1, int y1) {
 	int dx = x0 - x1, dy = y0 - y1;
 	/*  If either delta is zero then they're on an orthogonal line,
 	 *  else if the deltas are equal (signs ignored) they're on a diagonal.
@@ -257,7 +278,7 @@ boolean online2(int x0, int y0, int x1, int y1) {
 }
 
 // match a string against a pattern
-boolean pmatch(const char *patrn, const char *strng) {
+bool pmatch(const char *patrn, const char *strng) {
 	char s, p;
 	/*
 	 :  Simple pattern matcher:  '*' matches 0 or more characters, '?' matches
@@ -338,7 +359,7 @@ char *strstri(const char *str, const char *sub) {
 
 /* compare two strings for equality, ignoring the presence of specified
    characters (typically whitespace) and possibly ignoring case */
-boolean fuzzymatch(const char *s1, const char *s2, const char *ignore_chars, boolean caseblind) {
+bool fuzzymatch(const char *s1, const char *s2, const char *ignore_chars, bool caseblind) {
 	char c1, c2;
 
 	do {
@@ -493,26 +514,26 @@ int phase_of_the_moon(void) {
 	return (((((diy + epact) * 6) + 11) % 177) / 22) & 7;
 }
 
-boolean friday_13th(void) {
+bool friday_13th(void) {
 	struct tm *lt = getlt();
 
 	return lt->tm_wday == 5 /* friday */ && lt->tm_mday == 13;
 }
 
-boolean groundhog_day(void) {
+bool groundhog_day(void) {
 	struct tm *lt = getlt();
 
 	/* KMH -- Groundhog Day is February 2 */
 	return lt->tm_mon == 1 && lt->tm_mday == 2;
 }
 
-int night(void) {
+bool night(void) {
 	int hour = getlt()->tm_hour;
 
 	return hour < 6 || hour > 21;
 }
 
-int midnight(void) {
+bool midnight(void) {
 	return getlt()->tm_hour == 0;
 }
 

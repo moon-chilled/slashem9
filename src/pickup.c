@@ -1034,8 +1034,10 @@ static int lift_object(struct obj *obj, struct obj *container, long *cnt_p, bool
 				obj->quan = *cnt_p;
 				strcpy(qbuf,
 				       (next_encumbr > HVY_ENCUMBER) ? overloadmsg :
-								       (next_encumbr > MOD_ENCUMBER) ? nearloadmsg :
-												       moderateloadmsg);
+				       (next_encumbr > MOD_ENCUMBER) ? nearloadmsg :
+				       moderateloadmsg);
+				if (container) strsubst(qbuf, "lifting", "removing");
+
 				sprintf(eos(qbuf), " %s. Continue?",
 					safe_qbuf(qbuf, sizeof(" . Continue?"),
 						  doname(obj), an(simple_typename(obj->otyp)), "something"));

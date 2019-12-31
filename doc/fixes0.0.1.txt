@@ -102,6 +102,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Gamplay: player in certain polyforms will be intrinsically warned of some monsters.
 - Bugfix: swamps on Juiblex's level were called 'moat' when frozen.
 - Bugfix: greased would slide, if kicked while on the planes of air or water.
+- Bugfix: grammar: use 'removing' rather than 'lifting' when asking player if they really want to remove heavy items from their bag of holding.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
