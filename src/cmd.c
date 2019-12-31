@@ -1170,7 +1170,7 @@ char *warned_of(int warntype, const char *aux) {
 		{M2_ELF, "elves"},
 	};
 
-	if (warntypes) {
+	if (warntype) {
 		int n = 0;
 
 		sprintf(buf, "aware of the presence of ");
