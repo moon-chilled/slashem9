@@ -704,9 +704,9 @@ void adjabil(int oldlevel, int newlevel) {
 	/* ALI -- update Warn_of_mon */
 	HWarn_of_mon = HUndead_warning;
 	if (HUndead_warning)
-		context.warntype |= M2_UNDEAD;
+		context.warntype.intrins |= M2_UNDEAD;
 	else
-		context.warntype &= ~M2_UNDEAD;
+		context.warntype.intrins &= ~M2_UNDEAD;
 
 	/* WAC -- adjust techniques */
 	adjtech(oldlevel, newlevel);

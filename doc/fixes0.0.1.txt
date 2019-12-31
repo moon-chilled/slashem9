@@ -42,6 +42,7 @@ Changelist for slashem-next v0.0.1:
 - Gameplay: when monks got the message 'Your armor is rather cumbersome...', their attack power would be boosted rather than reduced.
 - Interface: monks only get the 'Your armor is rather cumbersome...' message when that encumberance actually caused them to miss.
 - Interface: remove support for WIN32CON.
+- Bugfix: grammar in enlightenment messages when intrinsically warned of certain species.
 
 Imports from NetHack versions newer than 3.4.3:
 - Bugfix: acid dropping bug.
@@ -98,6 +99,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: trappers hid on the ceiling.
 - Bugfix: player hiding on ceiling did not drop to the floor when #sitting.
 - Bugfix: if a monster carrying a boulder was inside of a pit or a hole when killed, the boulder would fill the pit/hole but the monster's corpse would not be buried.
+- Gamplay: player in certain polyforms will be intrinsically warned of some monsters.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

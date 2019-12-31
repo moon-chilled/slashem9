@@ -518,10 +518,10 @@ void set_artifact_intrinsic(struct obj *otmp, bool on, long wp_mask) {
 		if (spec_m2(otmp)) {
 			if (on) {
 				EWarn_of_mon |= wp_mask;
-				context.warntype |= spec_m2(otmp);
+				context.warntype.obj |= spec_m2(otmp);
 			} else {
 				EWarn_of_mon &= ~wp_mask;
-				context.warntype &= ~spec_m2(otmp);
+				context.warntype.obj &= ~spec_m2(otmp);
 			}
 			see_monsters();
 		} else {

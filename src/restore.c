@@ -335,6 +335,9 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 	}
 
 	mread(fd, &context, sizeof(struct context_info));
+	if (context.warntype.speciesidx)
+		context.warntype.species = &mons[context.warntype.speciesidx];
+
 	mread(fd, &flags, sizeof(struct flag));
 	if (remember_discover) discover = remember_discover;
 

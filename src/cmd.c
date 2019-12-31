@@ -1154,6 +1154,59 @@ static void enlght_line(const char *start, const char *middle, const char *end) 
 	putstr(en_win, 0, buf);
 }
 
+char *warned_of(int warntype, const char *aux) {
+	static char buf[BUFSZ];
+	buf[0] = '\0';
+
+	/* [ALI] Add support for undead */
+	struct {
+		unsigned long mask;
+		const char *str;
+	} warntypes[] = {
+		{M2_ORC, "orcs"},
+		{M2_DEMON, "demons"},
+		{M2_UNDEAD, "undead"},
+		{M2_HUMAN, "humans"},
+		{M2_ELF, "elves"},
+	};
+
+	if (warntypes) {
+		int n = 0;
+
+		sprintf(buf, "aware of the presence of ");
+		if (aux) {
+			strcat(buf, aux);
+			n++;
+		}
+
+		for (usize i = 0; i < SIZE(warntypes); i++) {
+			if (warntype & warntypes[i].mask) {
+				warntype &= ~warntypes[i].mask;
+				if (n > 0) {
+					if (warntype) {
+						strcat(buf, ", ");
+					} else {
+						if (n == 1) strcat(buf, " and ");
+						else strcat(buf, ", and ");
+					}
+				}
+
+				strcat(buf, warntypes[i].str);
+				n++;
+			}
+		}
+		if (warntype) {
+			impossible("Warned of monsters with flags %x???", warntype);
+			if (n > 0)
+				strcat(buf, " and ");
+			strcat(buf, "certain monsters");
+		}
+	}
+
+	return buf;
+}
+
+
 /* KMH, intrinsic patch -- several of these are updated */
 /* 0 => still in progress; 1 => over, survived; 2 => dead */
 void enlightenment(int final) {
@@ -1255,43 +1308,12 @@ void enlightenment(int final) {
 	if (See_invisible) enl_msg(You_, "see", "saw", " invisible");
 	if (Blind_telepat) you_are("telepathic");
 	if (Warning) you_are("warned");
-	if (Warn_of_mon && context.warntype) {
-		/* [ALI] Add support for undead */
-		int i, nth = 0;
-		unsigned long warntype = context.warntype;
-		struct {
-			unsigned long mask;
-			const char *str;
-		} warntypes[] = {
-			{M2_ORC, "orcs"},
-			{M2_DEMON, "demons"},
-			{M2_UNDEAD, "undead"},
-		};
+	if (Warn_of_mon) {
+		unsigned long warn_flags = context.warntype.obj | context.warntype.polyd | context.warntype.intrins;
 
-		sprintf(buf, "aware of the presence of ");
-		for (i = 0; i < SIZE(warntypes); i++) {
-			if (warntype & warntypes[i].mask) {
-				warntype &= ~warntypes[i].mask;
-				if (nth) {
-					if (warntype)
-						strcat(buf, ", ");
-					else
-						strcat(buf, " and ");
-				} else
-					nth = 1;
-				strcat(buf, warntypes[i].str);
-			}
-		}
-		if (warntype) {
-			if (nth)
-				strcat(buf, " and ");
-			strcat(buf, "something");
-		}
-		you_are(buf);
+		if (warn_flags) you_are(warned_of(warn_flags, context.warntype.speciesidx ?
+					makeplural(mons[context.warntype.speciesidx].mname) : NULL));
 	}
-#if 0 /* ALI - dealt with under Warn_of_mon */
-	if (Undead_warning) you_are("warned of undead");
-#endif
 	if (Searching) you_have("automatic searching");
 	if (Clairvoyant) you_are("clairvoyant");
 	if (Infravision) you_have("infravision");

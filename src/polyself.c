@@ -19,6 +19,7 @@ static void uunstick(void);
 static int armor_to_dragon(int);
 static void newman(void);
 static void merge_with_armor(void);
+static bool polysense(struct permonst *mptr);
 
 /*  Not Used
 static void special_poly(void);
@@ -160,8 +161,7 @@ void change_sex(void) {
 	set_uasmon();
 }
 
-static void
-newman() {
+static void newman() {
 	int tmp, oldlvl;
 
 	if (Race_if(PM_DOPPELGANGER)) {
@@ -232,6 +232,7 @@ newman() {
 			nhscopyz(&killer.name, "unsuccessful polymorph");
 			done(DIED);
 			newuhs(false);
+			polysense(youmonst.data);
 			return; /* lifesaved */
 		}
 	}
@@ -242,6 +243,7 @@ newman() {
 	if (Slimed) {
 		make_slimed(10, "Your body transforms, but there is still slime on you.");
 	}
+	polysense(youmonst.data);
 	context.botl = 1;
 	vision_full_recalc = 1;
 	encumber_msg();
@@ -629,6 +631,7 @@ int polymon(int mntmp) {
 		pline("You orient yourself on the web.");
 		u.utrap = 0;
 	}
+	polysense(youmonst.data);
 	context.botl = 1;
 	vision_full_recalc = 1;
 	see_monsters();
@@ -638,11 +641,9 @@ int polymon(int mntmp) {
 	return 1;
 }
 
-static void
-break_armor() {
+static void break_armor(void) {
 	struct obj *otmp;
-	boolean controlled_change = (Race_if(PM_DOPPELGANGER) ||
-				     (Race_if(PM_HUMAN_WEREWOLF) && u.umonnum == PM_WEREWOLF));
+	const bool controlled_change = (Race_if(PM_DOPPELGANGER) || (Race_if(PM_HUMAN_WEREWOLF) && u.umonnum == PM_WEREWOLF));
 
 	if (breakarm(youmonst.data)) {
 		if ((otmp = uarm) != 0) {
@@ -1692,8 +1693,43 @@ int polyatwill(void) {
 	return 1;
 }
 
-static void
-merge_with_armor(void) {
+/*
+ * Some species have awareness of other species
+ */
+static bool polysense(struct permonst *mptr) {
+	short warnidx = 0;
+
+	context.warntype.speciesidx = 0;
+	context.warntype.species = 0;
+	context.warntype.polyd = 0;
+
+	switch (monsndx(mptr)) {
+		case PM_PURPLE_WORM:
+			warnidx = PM_SHRIEKER; // just for fun :)
+			break;
+		case PM_VAMPIRE:
+		case PM_VAMPIRE_LORD:
+		case PM_VAMPIRE_MAGE:
+			context.warntype.polyd = M2_HUMAN | M2_ELF;
+			HWarn_of_mon |= FROMRACE;
+			return true;
+	}
+
+	if (warnidx) {
+		context.warntype.speciesidx = warnidx;
+		context.warntype.species = &mons[warnidx];
+		HWarn_of_mon |= FROMRACE;
+		return true;
+	}
+
+	context.warntype.speciesidx = 0;
+	context.warntype.species = 0;
+	HWarn_of_mon &= ~FROMRACE;
+
+	return false;
+}
+
+static void merge_with_armor(void) {
 	/* This function does hides the armor being worn
 	 * It currently assumes that you are changing into a dragon
 	 * Should check that monster being morphed into is not genocided
