@@ -24,9 +24,6 @@ extern char SAVEF[];
 extern int bases[MAXOCLASSES];
 
 extern int multi;
-#if 0
-extern int warnlevel;
-#endif
 extern int lastuse;
 extern int nextuse;
 extern int nroom;

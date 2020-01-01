@@ -10,6 +10,7 @@
 * More interesting stuff for health food store.  Also services.  Can they give you the ability to appraise food yourself for a while, cf a blessed ?oFood Detection?
 
 * Encyclopedia: display text offset in _underscores_ as italic on supported terminals
+* Use fuzzy matching for user-inputted encyclopedia entry checking?
 
 * Release:
  - Script?

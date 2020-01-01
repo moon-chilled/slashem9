@@ -25,16 +25,6 @@ static void kill_eggs(struct obj *obj_list);
 	 (level.flags.graveyard && is_undead(mdat) && \
 	  mdat != &mons[PM_VECNA] && rn2(3)))
 
-#if 0
-/* part of the original warning code which was replaced in 3.3.1 */
-#define warnDelay 10
-long lastwarntime;
-int lastwarnlev;
-
-
-static void warn_effects(void);
-#endif /* 0 */
-
 static struct obj *make_corpse(struct monst *mtmp, unsigned corpseflags);
 static void m_detach(struct monst *, struct permonst *);
 static void lifesaved_monster(struct monst *);
@@ -628,11 +618,6 @@ int movemon(void) {
 	struct monst *mtmp, *nmtmp;
 	boolean somebody_can_move = false;
 
-#if 0
-	/* part of the original warning code which was replaced in 3.3.1 */
-	warnlevel = 0;
-#endif
-
 	/*
 	Some of you may remember the former assertion here that
 	because of deaths and other actions, a simple one-pass
@@ -696,11 +681,7 @@ int movemon(void) {
 		if (dochugw(mtmp)) /* otherwise just move the monster */
 			continue;
 	}
-#if 0
-	/* part of the original warning code which was replaced in 3.3.1 */
-	if(warnlevel > 0)
-		warn_effects();
-#endif
+
 	if (any_light_source())
 		vision_full_recalc = 1; /* in case a mon moved with a light source */
 	dmonsfree();			/* remove all dead monsters */

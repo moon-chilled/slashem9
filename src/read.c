@@ -83,16 +83,6 @@ int doread(void) {
 		}
 		if (scroll->dknown && objects[scroll->otyp].oc_name_known)
 			switch (scroll->otyp) {
-#if 0 /* Not yet supported under 3.3.1 style warning system */
-			case RIN_WARNING:
-				if (warnlevel >= 100)
-					clr = "light blue";
-				else if (warnlevel >= SIZE(warnings))
-					clr = warnings[SIZE(warnings)-1];
-				else
-					clr = warnings[warnlevel];
-				break;
-#endif
 				case RIN_MOOD:
 					if (u.ualign.record >= DEVOUT)
 						clr = "green"; /* well-pleased */
