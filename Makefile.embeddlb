@@ -70,7 +70,7 @@ util/lev_comp: $(OBJ_LEVCOMP)
 util/data2c: $(OBJ_DATA2C)
 	$(CCLD) -o util/data2c $(OBJ_DATA2C)
 
-include/dlb_archive.h: util/data2c util/dgn_comp util/lev_comp dat/*.des dat/dungeon dat/help dat/hh dat/cmdhelp dat/history dat/license dat/opthelp dat/wizhelp dat/gypsy.txt dat/data.base dat/oracles.txt dat/quest.txt dat/rumors.fal dat/rumors.tru
+include/dlb_archive.h: util/data2c util/dgn_comp util/lev_comp dat/*.des dat/dungeon.def dat/help dat/hh dat/cmdhelp dat/history dat/license dat/opthelp dat/wizhelp dat/gypsy.txt dat/data.base dat/oracles.txt dat/quest.txt dat/rumors.fal dat/rumors.tru
 	./util/dgn_comp dat/dungeon.def
 	for i in dat/*.des; do ./util/lev_comp $$i; done
 	mv *.lev dat/
