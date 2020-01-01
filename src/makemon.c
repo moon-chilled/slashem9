@@ -2253,6 +2253,8 @@ void set_mimic_sym(struct monst *mtmp) {
 		 *  If there is a wall to the left that connects to this
 		 *  location, then the mimic mimics a horizontal closed door.
 		 *  This does not allow doors to be in corners of rooms.
+		 *  Since rogue has no closed doors, mimics on the rogue level
+		 *  imitate a wall, since that's what locking/wizard lock does.
 		 */
 		if (mx != 0 &&
 		    (levl[mx - 1][my].typ == HWALL ||
@@ -2262,9 +2264,9 @@ void set_mimic_sym(struct monst *mtmp) {
 		     levl[mx - 1][my].typ == TDWALL ||
 		     levl[mx - 1][my].typ == CROSSWALL ||
 		     levl[mx - 1][my].typ == TUWALL))
-			appear = S_hcdoor;
+			appear = Is_rogue_level(&u.uz) ? S_hwall : S_hcdoor;
 		else
-			appear = S_vcdoor;
+			appear = Is_rogue_level(&u.uz) ? S_vwall : S_vcdoor;
 
 		if (!mtmp->minvis || See_invisible)
 			block_point(mx, my); /* vision */
