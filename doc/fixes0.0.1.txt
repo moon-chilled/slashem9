@@ -45,6 +45,7 @@ Changelist for slashem-next v0.0.1:
 - Bugfix: grammar in enlightenment messages when intrinsically warned of certain species.
 - Interface: use regex rather than pattern matching in autopickup exceptions.
 - Internals: use regex rather than pattern matching for database entries.
+- Bugfix: encyclopedia entry for Ruggo the Gnome King.
 
 Imports from NetHack versions newer than 3.4.3:
 - Bugfix: acid dropping bug.

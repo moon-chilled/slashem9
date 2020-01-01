@@ -331,8 +331,6 @@ static void checkfile(char *inp, struct permonst *pm, bool user_typed_name, bool
 		dbase_str = strcpy(newstr, inp);
 	}
 
-	lcase(dbase_str);
-
 	if (!strncmp(dbase_str, "interior of ", 12))
 		dbase_str += 12;
 	if (!strncmp(dbase_str, "a ", 2))
@@ -372,8 +370,6 @@ static void checkfile(char *inp, struct permonst *pm, bool user_typed_name, bool
 	 */
 	if (!alt) {
 		alt = makesingular(dbase_str);
-	} else if (user_typed_name) {
-		lcase(alt);
 	}
 
 	bool in_exclusion = false;
@@ -400,14 +396,14 @@ static void checkfile(char *inp, struct permonst *pm, bool user_typed_name, bool
 		*index(buf, '\n') = 0;	// strip newline
 
 		if (*buf == '~') {
-			if (regmatch(buf + 1, dbase_str) || (alt && regmatch(buf + 1, alt))) {
+			if (regmatch(buf + 1, dbase_str, true) || (alt && regmatch(buf + 1, alt, true))) {
 				in_exclusion = true;
 				continue;
 			}
 		}
 
 		// matched the entry name
-		if (regmatch(buf, dbase_str) || (alt && regmatch(buf, alt))) {
+		if (regmatch(buf, dbase_str, true) || (alt && regmatch(buf, alt, true))) {
 			// skip to the part containing the description
 			do {
 				entry_location = dlb_ftell(fp);

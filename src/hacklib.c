@@ -39,7 +39,7 @@ NetHack, except that rounddiv may call panic().
 	int		distmin		(int, int, int, int)
 	int		dist2		(int, int, int, int)
 	bool		online2		(int, int)
-	bool		regmatch	(const char *, const char *)
+	bool		regmatch	(const char *, const char *, bool)
 	int		strncmpi	(const char *, const char *, int)
 	char *		strstri		(const char *, const char *)
 	bool		fuzzymatch	(const char *,const char *,const char *,bool)
@@ -277,9 +277,9 @@ bool online2(int x0, int y0, int x1, int y1) {
 	return !dy || !dx || (dy == dx) || (dy + dx == 0); /* (dy == -dx) */
 }
 
-bool regmatch(const char *pattern, const char *string) {
+bool regmatch(const char *pattern, const char *string, bool caseblind) {
 	regex_t regex;
-	int errnum = tre_regcomp(&regex, pattern, REG_EXTENDED | REG_NOSUB);
+	int errnum = tre_regcomp(&regex, pattern, REG_EXTENDED | REG_NOSUB | (caseblind ? REG_ICASE : 0));
 	if (errnum != 0) {
 		char errbuf[BUFSZ];
 		tre_regerror(errnum, &regex, errbuf, sizeof(errbuf));

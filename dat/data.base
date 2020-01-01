@@ -1273,18 +1273,18 @@ doppelganger
 	for the taking - if it imitates us!
 		[ Who Goes There?, by John W. Campbell ]
 	
- 	Xander: Let go!  I have to kill the demon bot!
- 	Xander Double (grabbing the gun): Anya, get out of the way.
- 	Buffy: Xander!
- 	Xander Double: That's all right, Buffy.  I have him.
- 	Xander: No, Buffy, I'm me.  Help me!
- 	Anya: My gun, he's got my gun.
- 	Riley: You own a gun?
- 	Buffy: Xander, gun holding Xander, give it to me.
- 	Anya: Buffy, which one's real?
- 	Xander: I am.
- 	Xander Double: No, _I_ am.
- 	    [ Buffy the Vampire Slayer, Episode 5.03, "The Replacement" ]
+	Xander: Let go!  I have to kill the demon bot!
+	Xander Double (grabbing the gun): Anya, get out of the way.
+	Buffy: Xander!
+	Xander Double: That's all right, Buffy.  I have him.
+	Xander: No, Buffy, I'm me.  Help me!
+	Anya: My gun, he's got my gun.
+	Riley: You own a gun?
+	Buffy: Xander, gun holding Xander, give it to me.
+	Anya: Buffy, which one's real?
+	Xander: I am.
+	Xander Double: No, _I_ am.
+	    [ Buffy the Vampire Slayer, Episode 5.03, "The Replacement" ]
 ~komodo.*
 .*dragon
 .*xoth
@@ -1795,6 +1795,8 @@ deep gnome
 		[ The Underdark, by Mike Drees and Albert Foster ]
 # note: "gnomish wizard" is a monster; cave*man entry doesn't fit nonhumans
 ~gnome ..m.*
+~ruggo.*
+~.*nome king
 gnome.*
 gnomish wizard
 gnom.* cave.*man
@@ -1811,21 +1813,21 @@ gnom.* cave.*man
 	'What is the trouble, Alaraba?'  said Ramon Alonzo.
 	'White magic.  Run!'  said the gnome ..
 		 [ The Charwoman's Shadow, by Lord Dunsany ]
- 
- 	"Muggles have garden gnomes, too, you know," Harry told Ron as
- 	they crossed the lawn.
- 	"Yeah, I've seen those things they think are gnomes," said Ron,
- 	bent double with his head in a peony bush, "like fat little
- 	Santa Clauses with fishing rods..."
- 	There was a violent scuffling noise, the peony bush shuddered,
- 	and Ron straightened up.  "This is a gnome," he said grimly.
- 	"Geroff me! Gerroff me!" squealed the gnome.
- 	It was certainly nothing like Santa Claus.  It was small and
- 	leathery looking, with a large, knobby, bald head exactly like
- 	a potato.  Ron held it at arm's length as it kicked out at him
- 	with its horny little feet; he grasped it around the ankles
- 	and turned it upside down.
- 	  [ Harry Potter and the Chamber of Secrets, by J. K. Rowling ]
+	
+	"Muggles have garden gnomes, too, you know," Harry told Ron as
+	they crossed the lawn.
+	"Yeah, I've seen those things they think are gnomes," said Ron,
+	bent double with his head in a peony bush, "like fat little
+	Santa Clauses with fishing rods..."
+	There was a violent scuffling noise, the peony bush shuddered,
+	and Ron straightened up.  "This is a gnome," he said grimly.
+	"Geroff me! Gerroff me!" squealed the gnome.
+	It was certainly nothing like Santa Claus.  It was small and
+	leathery looking, with a large, knobby, bald head exactly like
+	a potato.  Ron held it at arm's length as it kicked out at him
+	with its horny little feet; he grasped it around the ankles
+	and turned it upside down.
+	  [ Harry Potter and the Chamber of Secrets, by J. K. Rowling ]
 goblin
 	Now goblins are cruel, wicked, and bad-hearted.  They make
 	no beautiful things, but they make many clever ones.  They
@@ -3966,8 +3968,8 @@ rothe
 	The rothe (pronounced roth-AY) is a musk ox-like creature with
 	an aversion to light.  It prefers to live underground near
 	lichen and moss.
-Ruggo
-.nome king
+ruggo.*
+.*nome king
 	The Nome King declared, "Cruelty is a thing I can't abide. So, 
 	as slaves must work hard, and the Queen of Ev and her children 
 	were delicate and tender, I transformed them all into articles of 
@@ -4157,21 +4159,21 @@ shan.*lai.*ching
 	seize power from Yao, the fourth emperor.
 		[ Spectrum Atlas van de Mythologie ]
 shark
- 	As the shark moved, its dark top reflected virtually no
- 	light.  The denticles on its skin muted the whoosh of its
- 	movements as the shark rose, driven by the power of the
- 	great tail sweeping from side to side, like a scythe.  
- 	The fish exploded upward.
- 	Charles Bruder felt a slight vacuum tug in the motion of
- 	the sea, noted it as a passing current, the pull of a wave,
- 	the tickle of undertow.  He could not have heard the faint
- 	sucking rush of water not far beneath him.  He couldn't
- 	have seen or heard what was hurtling from the murk at
- 	astonishing speed, jaws unhinging, widening, for the
- 	enormous first bite.  It was the classic attack
- 	that no other creature in nature could make -- a bomb from
- 	the depths.
- 		[ Close to Shore, by Michael Capuzzo ]
+	As the shark moved, its dark top reflected virtually no
+	light.  The denticles on its skin muted the whoosh of its
+	movements as the shark rose, driven by the power of the
+	great tail sweeping from side to side, like a scythe.  
+	The fish exploded upward.
+	Charles Bruder felt a slight vacuum tug in the motion of
+	the sea, noted it as a passing current, the pull of a wave,
+	the tickle of undertow.  He could not have heard the faint
+	sucking rush of water not far beneath him.  He couldn't
+	have seen or heard what was hurtling from the murk at
+	astonishing speed, jaws unhinging, widening, for the
+	enormous first bite.  It was the classic attack
+	that no other creature in nature could make -- a bomb from
+	the depths.
+		[ Close to Shore, by Michael Capuzzo ]
 shito
 	A Japanese stabbing knife.
 .*shoggoth
@@ -4193,13 +4195,13 @@ shito
 	thought, and plastic organ patterns solely by the Old Ones ...
 		[ At the Mountains of Madness, by H.P. Lovecraft ]
 shrieker
- 	With a single, savage thrust of her spear, the warrior-woman 
- 	impaled the fungus, silencing it.  However, it was too late:  
- 	the alarm had been raised[...]
- 	Suddenly, a large, dark shape rose from the abyss before them, 
- 	its fetid bulk looming overhead...The monster was some kind of
- 	great dark worm, but that was about all they were sure of.  
- 		[ The Adventurers, Epic IV, by Thomas A. Miller ]
+	With a single, savage thrust of her spear, the warrior-woman 
+	impaled the fungus, silencing it.  However, it was too late:  
+	the alarm had been raised[...]
+	Suddenly, a large, dark shape rose from the abyss before them, 
+	its fetid bulk looming overhead...The monster was some kind of
+	great dark worm, but that was about all they were sure of.  
+		[ The Adventurers, Epic IV, by Thomas A. Miller ]
 silver
 	A white, precious, metallic chemical element that is extremely 
 	ductile and malleable, capable of high polish, and an excellent
