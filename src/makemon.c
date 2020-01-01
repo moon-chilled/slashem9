@@ -1468,11 +1468,7 @@ struct monst *makemon(struct permonst *ptr, int x, int y, int mmflags) {
 		context.no_of_wizards++;
 		if (context.no_of_wizards == 1 && Is_earthlevel(&u.uz))
 			mitem = SPE_DIG;
-	} else if (mndx == PM_DJINNI) {
-		context.djinni_count++;
-	} else if (mndx == PM_GHOST) {
-		context.ghost_count++;
-		if (!(mmflags & MM_NONAME))
+	} else if (mndx == PM_GHOST && !(mmflags & MM_NONAME)) {
 			mtmp = christen_monst(mtmp, rndghostname());
 	} else if (mndx == PM_NIGHTMARE) {
 		struct obj *otmp;

@@ -340,8 +340,8 @@ int dodrink(void) {
 	potion_descr = OBJ_DESCR(objects[otmp->otyp]);
 	if (potion_descr) {
 		if (!strcmp(potion_descr, "milky") &&
-		    context.ghost_count < MAXMONNO &&
-		    !rn2(POTION_OCCUPANT_CHANCE(context.ghost_count))) {
+		    !(mvitals[PM_GHOST].mvflags & G_GONE) &&
+		    !rn2(POTION_OCCUPANT_CHANCE(mvitals[PM_GHOST].born))) {
 			ghost_from_bottle();
 			if (carried(otmp))
 				useup(otmp);
@@ -349,8 +349,8 @@ int dodrink(void) {
 				useupf(otmp, 1L);
 			return 1;
 		} else if (!strcmp(potion_descr, "smoky") &&
-			   (context.djinni_count < MAXMONNO) &&
-			   !rn2(POTION_OCCUPANT_CHANCE(context.djinni_count))) {
+			   !(mvitals[PM_DJINNI].mvflags & G_GONE) &&
+			   !rn2(POTION_OCCUPANT_CHANCE(mvitals[PM_DJINNI].born))) {
 			djinni_from_bottle(otmp);
 			if (carried(otmp))
 				useup(otmp);

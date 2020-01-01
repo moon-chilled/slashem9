@@ -80,8 +80,7 @@ struct context_info {
 	unsigned run;		/* 0: h (etc), 1: H (etc), 2: fh (etc) */
 				/* 3: FH, 4: ff+, 5: ff-, 6: FF+, 7: FF- */
 				/* 8: travel */
-	int	warnlevel;
-	int	djinni_count, ghost_count;	/* potion effect tuning */
+	int warnlevel;
 	long next_attrib_check;
 	long stethoscope_move;
 	short stethoscope_movement;
