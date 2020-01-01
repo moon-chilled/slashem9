@@ -154,17 +154,16 @@ boolean flooreffects(struct obj *obj, int x, int y, const char *verb) {
 			}
 		}
 		if (*verb) {
-			if (Blind) {
-				if ((x == u.ux) && (y == u.uy))
-					You_hear("a CRASH! beneath you.");
-				else
-					You_hearf("the boulder %s.", verb);
+			if (Blind && (x == u.ux) && (y == u.uy)) {
+				You_hear("a CRASH! beneath you.");
 			} else if (cansee(x, y)) {
 				pline("The boulder %s%s.",
 				      t->tseen ? "" : "triggers and ",
 				      t->ttyp == TRAPDOOR ? "plugs a trap door" :
-							    t->ttyp == HOLE ? "plugs a hole" :
-									      "fills a pit");
+				      t->ttyp == HOLE ? "plugs a hole" :
+				      "fills a pit");
+			} else {
+				You_hearf("a boulder %s.", verb);
 			}
 		}
 		deltrap(t);

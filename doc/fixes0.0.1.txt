@@ -115,6 +115,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: monsters weren't using some teleport traps they should have.
 - Bugfix: cleric casting lighting at player didn't blind player.
 - Interface: when a monster is wielding multiple daggers, say they thrust 'one of' them, not all of them.
+- Interface: if you didn't see a rolling boulder fall into a pit, you would only hear about it if you were blind.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
