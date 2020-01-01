@@ -89,7 +89,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: if engulfed in vortex and blind only because of a blindfold, taking off the blindfold should cause blindness to take effect immediately.
 - Gameplay: unihorn|prayer won't cure blindness if engulfed in a vortex, because it'll just return immediately.
 - Gameplay: confused reading of cursed charging scroll drains energy.
-- Interface: new rumors, oracles, and other random messages.
+- Interface: new rumors, oracles, encyclopedia entries, and other random messages.
 - Gameplay: healers [and undead slayers] will notice when a wand of undead turning revives a monster.
 - Gameplay: you can wish for tins of specific types (e.g. tin of deep fried orc).
 - Bugfix: display was not correctly updated if you received a spellbook from your god while unable to see your invisible self.

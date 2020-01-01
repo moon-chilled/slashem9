@@ -63,6 +63,8 @@ aklys
 	god to  punish alignment violations. Obviously  - and  luckily - in
 	Nethack this is not the case.
 .*altar
+offer.*
+sacrific.*
 	Altars are of three types:
 	1.  In Temples.  These are for Sacrifices [...].  The stone
 	top will have grooves for blood, and the whole will be covered
@@ -148,6 +150,13 @@ angel.*
 	and shall cast them into the furnace of fire; there shall be
 	wailing and gnashing of teeth.
 		[ The Gospel According to Matthew, 13:37-42, 49-50 ]
+angry god.*
+	Cold wind blows.
+	The gods look down in anger on this poor child.
+	
+	Why so unforgiving?
+	And why so cold?
+		[ Robin Trower, "Bridge of Sighs" ]
 anhur
 	An Egyptian god of war and a great hunter, few gods can match
 	his fury.  Unlike many gods of war, he is a force for good.
@@ -3899,7 +3908,7 @@ raven
 	On the morrow _he_ will leave me, as my hopes have flown before.'
 		Then the bird said, 'Nevermore.'
 				[ The Raven - Edgar Allan Poe ]
-.*ring
+(.+ )?ring
 ring of .*
 	Three Rings for the Elven-kings under the sky,
 	Seven for the Dwarf-lords in their halls of stone,
