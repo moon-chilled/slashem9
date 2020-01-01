@@ -927,6 +927,7 @@ void readmail(struct obj *);
 
 boolean is_home_elemental(struct permonst *);
 struct monst *clone_mon(struct monst *, xchar, xchar);
+void newmonhp(struct monst *mon, int mndx);
 struct monst *makemon(struct permonst *, int, int, int);
 boolean create_critters(int, struct permonst *);
 struct permonst *rndmonst(void);

@@ -2470,7 +2470,7 @@ static int select_newcham_form(struct monst *mon) {
  */
 // polyspot => the change is the result of wand or spell of polymorph
 int newcham(struct monst *mtmp, struct permonst *mdat, boolean polyspot, boolean msg) {
-	int mhp, hpn, hpd;
+	int hpn, hpd;
 	int mndx, tryct;
 	int couldsee = canseemon(mtmp);
 	struct permonst *olddata = mtmp->data;
@@ -2561,27 +2561,27 @@ int newcham(struct monst *mtmp, struct permonst *mdat, boolean polyspot, boolean
 		place_monster(mtmp, mtmp->mx, mtmp->my);
 	}
 
+	/* (this code used to try to adjust the monster's health based on
+	   a normal one of its type but there are too many special cases
+	   which need to handled in order to do that correctly, so just
+	   give the new form the same proportion of HP as its old one had) */
+
 	hpn = mtmp->mhp;
-	hpd = (mtmp->m_lev < 50) ? ((int)mtmp->m_lev) * 8 : mdat->mlevel;
-	if (!hpd) hpd = 4;
+	hpd = mtmp->mhpmax;
+	// set level and hit points
+	newmonhp(mtmp, monsndx(mdat));
 
-	mtmp->m_lev = adj_lev(mdat); /* new monster level */
+	// new hp: same fraction of max as before
+	mtmp->mhp = (int)(((long)hpn * (long)mtmp->mhp) / (long)hpd);
+	// sanity check (potential overflow)
+	if ((mtmp->mhp < 0) || (mtmp->mhp > mtmp->mhpmax)) {
+		impossible("mhp is %d, and the maximum is %d?", mtmp->mhp, mtmp->mhpmax);
+		mtmp->mhp = mtmp->mhpmax;
+	}
 
-	mhp = (mtmp->m_lev < 50) ? ((int)mtmp->m_lev) * 8 : mdat->mlevel;
-	if (!mhp) mhp = 4;
-
-	/* new hp: same fraction of max as before */
-	mtmp->mhp = (int)(((long)hpn * (long)mhp) / (long)hpd);
-	if (mtmp->mhp < 0) mtmp->mhp = hpn; /* overflow */
 	/* Unlikely but not impossible; a 1HD creature with 1HP that changes into a
 	   0HD creature will require this statement */
 	if (!mtmp->mhp) mtmp->mhp = 1;
-
-	/* and the same for maximum hit points */
-	hpn = mtmp->mhpmax;
-	mtmp->mhpmax = (int)(((long)hpn * (long)mhp) / (long)hpd);
-	if (mtmp->mhpmax < 0) mtmp->mhpmax = hpn; /* overflow */
-	if (!mtmp->mhpmax) mtmp->mhpmax = 1;
 
 	/* take on the new form... */
 	set_mon_data(mtmp, mdat, 0);

@@ -1219,6 +1219,49 @@ boolean propagate(int mndx, boolean tally, boolean ghostly) {
 	return result;
 }
 
+/* set up a new monster's initial level and hit points;
+   used by newcham() as well as by makemon() */
+void newmonhp(struct monst *mon, int mndx) {
+	struct permonst *ptr = &mons[mndx];
+
+	mon->m_lev = adj_lev(ptr);
+
+	if (ptr >= &mons[PM_ARCHEOLOGIST] && ptr <= &mons[PM_WIZARD]) {
+		/* enemy characters are of varying level */
+		int base_you, base_lev;
+		base_you = (u.ulevel / 2) + 1;
+		base_lev = level_difficulty() + 1;
+		if (base_you < 1) base_you = 1;
+		if (base_lev < 1) base_lev = 1;
+		mon->m_lev = (1 + rn2(base_you) + rn2(base_lev) / 2) + 1;
+	}
+
+	if (is_golem(ptr)) {
+		mon->mhpmax = mon->mhp = golemhp(mndx);
+	} else if (is_rider(ptr)) {
+		// We want low HP, but a high mlevel so they can attack well
+		mon->mhpmax = mon->mhp = d(10, 8) + 20;
+	} else if (ptr->mlevel > 49) {
+		/* "special" fixed hp monster
+		 * the hit points are encoded in the mlevel in a somewhat strange
+		 * way to fit in the 50..127 positive range of a signed character
+		 * above the 1..49 that indicate "normal" monster levels */
+		mon->mhpmax = mon->mhp = 2 * (ptr->mlevel - 6);
+		mon->m_lev = mon->mhp / 4; /* approximation */
+	} else if (ptr->mlet == S_DRAGON && mndx >= PM_GRAY_DRAGON) {
+		// adult dragons
+		mon->mhpmax = mon->mhp = (In_endgame(&u.uz) ?  (8 * mon->m_lev) :
+					  (4 * mon->m_lev + d(mon->m_lev, 4)));
+	} else if (!mon->m_lev) {
+		mon->mhpmax = mon->mhp = rnd(4);
+	} else {
+		mon->mhpmax = mon->mhp = d(mon->m_lev, 8);
+
+		if (is_home_elemental(ptr)) mon->mhpmax = (mon->mhp *= 3);
+		else mon->mhpmax = mon->mhp = d(mon->m_lev, 8) + (mon->m_lev * rnd(2));
+	}
+}
+
 /*
  * called with [x,y] = coordinates;
  *	[0,0] means anyplace
@@ -1317,50 +1360,11 @@ struct monst *makemon(struct permonst *ptr, int x, int y, int mmflags) {
 	mtmp->mxlth = xlth;
 	mtmp->mnum = mndx;
 
-	mtmp->m_lev = adj_lev(ptr);
-
 	/* WAC set oldmonnm */
 	mtmp->oldmonnm = monsndx(ptr);
 
-	if (ptr >= &mons[PM_ARCHEOLOGIST] && ptr <= &mons[PM_WIZARD]) {
-		/* enemy characters are of varying level */
-		int base_you, base_lev;
-		base_you = (u.ulevel / 2) + 1;
-		base_lev = level_difficulty() + 1;
-		if (base_you < 1) base_you = 1;
-		if (base_lev < 1) base_lev = 1;
-		mtmp->m_lev = (1 + rn2(base_you) + rn2(base_lev) / 2) + 1;
-	}
-
-	/* Set HP, HPmax */
-	if (is_golem(ptr)) {
-		mtmp->mhpmax = mtmp->mhp = golemhp(mndx);
-	} else if (is_rider(ptr)) {
-		/* We want low HP, but a high mlevel so they can attack well */
-		mtmp->mhpmax = mtmp->mhp = d(10, 8) + 20;
-	} else if (ptr->mlevel > 49) {
-		/* "special" fixed hp monster
-		 * the hit points are encoded in the mlevel in a somewhat strange
-		 * way to fit in the 50..127 positive range of a signed character
-		 * above the 1..49 that indicate "normal" monster levels */
-		mtmp->mhpmax = mtmp->mhp = 2 * (ptr->mlevel - 6);
-		mtmp->m_lev = mtmp->mhp / 4; /* approximation */
-	} else if (ptr->mlet == S_DRAGON && mndx >= PM_GRAY_DRAGON) {
-		/* adult dragons */
-		mtmp->mhpmax = mtmp->mhp = (int)(In_endgame(&u.uz) ?
-							 (8 * mtmp->m_lev) :
-							 (4 * mtmp->m_lev + d((int)mtmp->m_lev, 4)));
-	} else if (!mtmp->m_lev) {
-		mtmp->mhpmax = mtmp->mhp = rnd(4);
-	} else {
-		mtmp->mhpmax = mtmp->mhp = d((int)mtmp->m_lev, 8);
-
-		if (is_home_elemental(ptr))
-			mtmp->mhpmax = (mtmp->mhp *= 3);
-		else
-			mtmp->mhpmax = mtmp->mhp =
-				d((int)mtmp->m_lev, 8) + (mtmp->m_lev * rnd(2));
-	}
+	// set up level and hit points
+	newmonhp(mtmp, mndx);
 
 	/* Assign power */
 	if (mindless(ptr)) {
