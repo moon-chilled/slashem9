@@ -114,6 +114,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: sometimes, shapeshifted or polymorphed monsters would get the wrong number of hit points.
 - Bugfix: monsters weren't using some teleport traps they should have.
 - Bugfix: cleric casting lighting at player didn't blind player.
+- Interface: when a monster is wielding multiple daggers, say they thrust 'one of' them, not all of them.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
