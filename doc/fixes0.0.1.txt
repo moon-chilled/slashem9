@@ -117,6 +117,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: cleric casting lighting at player didn't blind player.
 - Interface: when a monster is wielding multiple daggers, say they thrust 'one of' them, not all of them.
 - Interface: if you didn't see a rolling boulder fall into a pit, you would only hear about it if you were blind.
+- Gameplay: rocks can skip over water.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

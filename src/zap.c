@@ -28,6 +28,7 @@ static void zhitu(int, int, const char *, xchar, xchar);
 static void revive_egg(struct obj *);
 static void throwstorm(struct obj *, int, int, int);
 static boolean zap_steed(struct obj *);
+static void skiprange(int range, int *skipstart, int *skipend);
 
 static int zap_hit(int, int);
 static void backfire(struct obj *);
@@ -36,53 +37,55 @@ static int spell_hit_bonus(int);
 /* WAC -- ZT_foo #defines moved to spell.h, since explode uses these types */
 
 #define is_hero_spell(type) ((type) >= 10 && (type) < 20)
-#define is_mega_spell(type) (type >= ZT_MEGA(ZT_FIRST) && \
-			     type <= ZT_MEGA(ZT_LAST))
+#define is_mega_spell(type) ((type) >= ZT_MEGA(ZT_FIRST) && ((type) <= ZT_MEGA(ZT_LAST)))
+#define M_IN_WATER(ptr) ((ptr)->mlet == S_EEL || amphibious(ptr) || is_swimmer(ptr))
 
-const char *const flash_types[] = {		    /* also used in buzzmu(mcastu.c) */
-				   "magic missile", /* Wands must be 0-9 */
-				   "bolt of fire",
-				   "bolt of cold",
-				   "sleep ray",
-				   "death ray",
-				   "bolt of lightning",
-				   "",
-				   "",
-				   "",
-				   "",
+const char *const flash_types[] = {
+	/* also used in buzzmu(mcastu.c) */
 
-				   "magic missile", /* Spell equivalents must be 10-19 */
-				   "fireball",
-				   "cone of cold",
-				   "sleep ray",
-				   "finger of death",
-				   "bolt of lightning",	  /* New spell & used for retribution */
-				   "blast of poison gas", /*WAC New spells acid + poison*/
-				   "stream of acid",
-				   "",
-				   "",
+	"magic missile", /* Wands must be 0-9 */
+	"bolt of fire",
+	"bolt of cold",
+	"sleep ray",
+	"death ray",
+	"bolt of lightning",
+	"",
+	"",
+	"",
+	"",
 
-				   "blast of missiles", /* Dragon breath equivalents 20-29*/
-				   "blast of fire",
-				   "blast of frost",
-				   "blast of sleep gas",
-				   "blast of disintegration",
-				   "blast of lightning",
-				   "blast of poison gas",
-				   "blast of acid",
-				   "",
-				   "",
+	"magic missile", /* Spell equivalents must be 10-19 */
+	"fireball",
+	"cone of cold",
+	"sleep ray",
+	"finger of death",
+	"bolt of lightning",	  /* New spell & used for retribution */
+	"blast of poison gas", /*WAC New spells acid + poison*/
+	"stream of acid",
+	"",
+	"",
 
-				   "magical blast", /* Megaspell equivalents must be 30-39 */
-				   "fireball",	    /*Should be same as explosion names*/
-				   "ball of cold",
-				   "",
-				   "",
-				   "ball lightning",
-				   "poison gas cloud",
-				   "splash of acid",
-				   "",
-				   ""};
+	"blast of missiles", /* Dragon breath equivalents 20-29*/
+	"blast of fire",
+	"blast of frost",
+	"blast of sleep gas",
+	"blast of disintegration",
+	"blast of lightning",
+	"blast of poison gas",
+	"blast of acid",
+	"",
+	"",
+
+	"magical blast", /* Megaspell equivalents must be 30-39 */
+	"fireball",	    /*Should be same as explosion names*/
+	"ball of cold",
+	"",
+	"",
+	"ball lightning",
+	"poison gas cloud",
+	"splash of acid",
+	"",
+	""};
 
 /* Yells for Megaspells*/
 const char *yell_types[] = {				  /*10 different beam types*/
@@ -2988,6 +2991,13 @@ void miss(const char *str, struct monst *mtmp) {
 		      "it");
 }
 
+static void skiprange(int range, int *skipstart, int *skipend) {
+	int tmp = range - (rnd(range / 4));
+	*skipstart = tmp;
+	*skipend = tmp - ((tmp / 4) * rnd(3));
+	if (*skipend >= tmp) *skipend = tmp - 1;
+}
+
 /*
  *  Called for the following distance effects:
  *	when a weapon is thrown (weapon == THROWN_WEAPON)
@@ -3020,6 +3030,8 @@ struct monst *bhit(int ddx, int ddy, int range, int weapon, int (*fhitm)(struct 
 	int lits = 0;
 	boolean use_lights = false;
 #endif
+	bool in_skip = false, allow_skip = false;
+	int skiprange_start = 0, skiprange_end = 0, skipcount = 0;
 
 	if (weapon == KICKED_WEAPON) {
 		/* object starts one square in front of player */
@@ -3030,6 +3042,12 @@ struct monst *bhit(int ddx, int ddy, int range, int weapon, int (*fhitm)(struct 
 		bhitpos.x = u.ux;
 		bhitpos.y = u.uy;
 	}
+
+	if (weapon == THROWN_WEAPON && obj && obj->otyp == ROCK) {
+		skiprange(range, &skiprange_start, &skiprange_end);
+		allow_skip = !rn2(3);
+	}
+
 
 	if (weapon == FLASHED_LIGHT) {
 #ifdef LIGHT_SRC_SPELL
@@ -3043,7 +3061,7 @@ struct monst *bhit(int ddx, int ddy, int range, int weapon, int (*fhitm)(struct 
 		tmp_at(DISP_FLASH, obj_to_glyph(obj));
 	}
 
-	while (range-- > 0) {
+	while (range --> 0) {
 		int x, y;
 
 		bhitpos.x += ddx;
@@ -3077,7 +3095,7 @@ struct monst *bhit(int ddx, int ddy, int range, int weapon, int (*fhitm)(struct 
 			break;
 		}
 
-		if (weapon == ZAPPED_WAND && find_drawbridge(&x, &y))
+		if (weapon == ZAPPED_WAND && find_drawbridge(&x, &y)) {
 			switch (obj->otyp) {
 				case WAN_OPENING:
 				case SPE_KNOCK:
@@ -3100,8 +3118,39 @@ struct monst *bhit(int ddx, int ddy, int range, int weapon, int (*fhitm)(struct 
 					makeknown(obj->otyp);
 					break;
 			}
+		}
 
-		if ((mtmp = m_at(bhitpos.x, bhitpos.y)) != 0) {
+		mtmp = m_at(bhitpos.x, bhitpos.y);
+
+		/*
+		 * skipping rocks
+		 *
+		 * skiprange_start is only set if this is a thrown rock
+		 */
+		if (skiprange_start && (range == skiprange_start) && allow_skip) {
+			if (is_pool(bhitpos.x, bhitpos.y) && !mtmp) {
+				in_skip = true;
+				if (!Blind) pline("%s %s%s.", Yname2(obj),
+						otense(obj, "skip"),
+						skipcount ? " again" : "");
+				else You_hearf("%s skip.", yname(obj));
+				skipcount++;
+			} else if (skiprange_start > skiprange_end + 1) {
+				--skiprange_start;
+			}
+		}
+		if (in_skip) {
+			if (range <= skiprange_end) {
+				in_skip = false;
+				if (range > 3)  /* another bounce? */
+					skiprange(range, &skiprange_start, &skiprange_end);
+			} else if (mtmp && M_IN_WATER(mtmp->data)) {
+				if ((!Blind && canseemon(mtmp)) || sensemon(mtmp))
+					pline("%s %s over %s.", Yname2(obj), otense(obj, "pass"), mon_nam(mtmp));
+			}
+		}
+
+		if (mtmp && !(in_skip && M_IN_WATER(mtmp->data))) {
 			notonhead = (bhitpos.x != mtmp->mx ||
 				     bhitpos.y != mtmp->my);
 			if (weapon != FLASHED_LIGHT) {
