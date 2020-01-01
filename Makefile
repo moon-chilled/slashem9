@@ -71,7 +71,7 @@ util/lev_comp: $(OBJ_LEVCOMP)
 util/dlb: $(OBJ_DLB)
 	$(CCLD) -o util/dlb $(OBJ_DLB)
 
-dat/nhdat: util/dlb util/dgn_comp util/lev_comp dat/*.des
+dat/nhdat: util/dlb util/dgn_comp util/lev_comp dat/*.des dat/dungeon dat/help dat/hh dat/cmdhelp dat/history dat/license dat/opthelp dat/wizhelp dat/gypsy.txt dat/data.base dat/oracles.txt dat/quest.txt dat/rumors.fal dat/rumors.tru
 	./util/dgn_comp dat/dungeon.def
 	for i in dat/*.des; do ./util/lev_comp $$i; done
 	mv *.lev dat/
