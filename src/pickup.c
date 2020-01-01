@@ -526,11 +526,10 @@ boolean is_autopickup_exception(struct obj *obj, boolean grab) {
 	 *  Does the text description of this match an exception?
 	 */
 	char *objdesc = makesingular(doname(obj));
-	struct autopickup_exception *ape = (grab) ?
-						   iflags.autopickup_exceptions[AP_GRAB] :
-						   iflags.autopickup_exceptions[AP_LEAVE];
+	struct autopickup_exception *ape = grab ? iflags.autopickup_exceptions[AP_GRAB] :
+						  iflags.autopickup_exceptions[AP_LEAVE];
 	while (ape) {
-		if (pmatch(ape->pattern, objdesc)) return true;
+		if (tre_regexec(&ape->pattern, objdesc, 0, NULL, 0) == 0) return true;
 		ape = ape->next;
 	}
 	return false;

@@ -102,7 +102,7 @@ static void restlevchn(int fd) {
 	sp_levchn = NULL;
 	mread(fd, (void *)&cnt, sizeof(int));
 	for (; cnt > 0; cnt--) {
-		tmplev = new (s_level);
+		tmplev = new(s_level);
 		mread(fd, (void *)tmplev, sizeof(s_level));
 		if (!sp_levchn)
 			sp_levchn = tmplev;
@@ -122,7 +122,7 @@ static void restdamage(int fd, boolean ghostly) {
 	mread(fd, &counter, sizeof(counter));
 	if (!counter)
 		return;
-	tmp_dam = new (struct damage);
+	tmp_dam = new(struct damage);
 	while (--counter >= 0) {
 		char damaged_shops[5], *shp = NULL;
 
@@ -148,7 +148,7 @@ static void restdamage(int fd, boolean ghostly) {
 		if (!shp || !*shp) {
 			tmp_dam->next = level.damagelist;
 			level.damagelist = tmp_dam;
-			tmp_dam = new (struct damage);
+			tmp_dam = new(struct damage);
 		}
 	}
 	free(tmp_dam);
@@ -777,7 +777,7 @@ static void add_id_mapping(uint gid, uint nid) {
 	/* idx is zero on first time through, as well as when a new bucket is */
 	/* needed */
 	if (idx == 0) {
-		struct bucket *gnu = new (struct bucket);
+		struct bucket *gnu = new(struct bucket);
 		gnu->next = id_map;
 		id_map = gnu;
 	}

@@ -24,13 +24,23 @@ void dumplogfreemsgs(void) {
 	}
 }
 
-static boolean no_repeat = false;
+static bool no_repeat = false;
 
 void msgpline_add(int typ, char *pattern) {
-	struct _plinemsg *tmp = new (struct _plinemsg);
+	regex_t regex;
+	int errnum = tre_regcomp(&regex, pattern, REG_EXTENDED | REG_NOSUB);
+	if (errnum != 0) {
+		char errbuf[BUFSZ];
+		tre_regerror(errnum, &regex, errbuf, sizeof(errbuf));
+		raw_printf("Bad regex in MSGTYPE: \"%s\": \"%s\"", pattern, errbuf);
+		return;
+	}
+
+	struct _plinemsg *tmp = new(struct _plinemsg);
 	if (!tmp) return;
+
 	tmp->msgtype = typ;
-	tmp->pattern = strdup(pattern);
+	tmp->pattern = regex;
 	tmp->next = pline_msg;
 	pline_msg = tmp;
 }
@@ -39,7 +49,7 @@ void msgpline_free(void) {
 	struct _plinemsg *tmp = pline_msg;
 	struct _plinemsg *tmp2;
 	while (tmp) {
-		free(tmp->pattern);
+		tre_regfree(&tmp->pattern);
 		tmp2 = tmp;
 		tmp = tmp->next;
 		free(tmp2);
@@ -50,7 +60,7 @@ void msgpline_free(void) {
 static int msgpline_type(const char *msg) {
 	struct _plinemsg *tmp = pline_msg;
 	while (tmp) {
-		if (pmatch(tmp->pattern, msg)) return tmp->msgtype;
+		if (tre_regexec(&tmp->pattern, msg, 0, NULL, 0) == 0) return tmp->msgtype;
 		tmp = tmp->next;
 	}
 	return MSGTYP_NORMAL;

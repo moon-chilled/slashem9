@@ -1626,7 +1626,7 @@ int donamelevel(void) {
 	}
 
 	if (*nbuf) {
-		mptr->custom = new (char, len);
+		mptr->custom = new(char, len);
 		mptr->custom_lth = len;
 		strcpy(mptr->custom, nbuf);
 	}
@@ -1707,7 +1707,7 @@ static mapseen *load_mapseen(int fd) {
 	mread(fd, &load->feat, sizeof(mapseen_feat));
 	mread(fd, &load->custom_lth, sizeof(unsigned));
 	if (load->custom_lth > 0) {
-		load->custom = new (char, load->custom_lth);
+		load->custom = new(char, load->custom_lth);
 		mread(fd, load->custom, load->custom_lth);
 	} else {
 		load->custom = NULL;
@@ -1744,7 +1744,7 @@ void init_mapseen(d_level *lev) {
 	mapseen *init;
 	mapseen *old;
 
-	init = new (mapseen);
+	init = new(mapseen);
 	memset(init, 0, sizeof(mapseen));
 	init->lev.dnum = lev->dnum;
 	init->lev.dlevel = lev->dlevel;

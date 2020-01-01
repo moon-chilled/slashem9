@@ -43,6 +43,8 @@ Changelist for slashem-next v0.0.1:
 - Interface: monks only get the 'Your armor is rather cumbersome...' message when that encumberance actually caused them to miss.
 - Interface: remove support for WIN32CON.
 - Bugfix: grammar in enlightenment messages when intrinsically warned of certain species.
+- Interface: use regex rather than pattern matching in autopickup exceptions.
+- Internals: use regex rather than pattern matching for database entries.
 
 Imports from NetHack versions newer than 3.4.3:
 - Bugfix: acid dropping bug.
@@ -116,7 +118,7 @@ Imports from other locations:
 - System: add extended logfile/xlogfile with more information than standard log file (Aardvark Joe).  Remove logfile.
 - Interface: show object glyphs in inventory display (Patric Mueller).
 - Interface: highlight object piles and stairs covered by objects (Pasi Kallinen).
-- Interface: add MSGTYPES, which allow for user-configurable filtering, emphasis, or norep of messages (Pasi Kallinen).
+- Interface: add MSGTYPES, which allow for user-configurable filtering, emphasis, or norep of messages (Pasi Kallinen).  Use regex instead of pattern matching.
 - Interface: allow users to specify colours for dungeon features (Patric Mueller).
 - Bugfix: '???' could show up in regular gameplay (Fredrik Ljungdahl).
 - Interface: show dark--but visited/known--room tiles on the screen (Clive Crous).
@@ -128,10 +130,10 @@ Imports from other locations:
 - Bugfix: torch panic (Slash'EM Extended).
 - Bugfix: lightning-resistant monsters could be affected by lightning (Slash'EM Extended).
 - Interface: show spell memory in cast menu (inspired by Slash'EM Extended).
-- Internals: use a high-quality cryptographic random number generator (Mikko Juola and libtomcrypt). This should hopefully thwart stunts like SWAGINZZZ (see https://pellsson.github.io/).
-- Bugfix: when items disappear from a cursed bag of holding, it may not take up a turn, and, if it causes the player to become unencumbered, they may not get a message or statusbar change until the following turn (Michael Lehotay).
+- Internals: use a high-quality cryptographic random number generator (Mikko Juola and libtomcrypt).  This should hopefully thwart stunts like SWAGINZZZ (see https://pellsson.github.io/).
+- Bugfix: when items disappear from a cursed bag of holding, it may not take up a turn; and, if it causes the player to become unencumbered, they may not get a message or statusbar change until the following turn (Michael Lehotay).
 - Gameplay: to prevent abuse, bones are not saved on levels which were hung up on (Dr. Alex Smith).
-- Bugfix: when dying to an undead, it is not disclosed whether bones were created (Dr. Alex Smith).
+- Bugfix: when dying to an undead, it was disclosed whether bones were created (Dr. Alex Smith).
 - Bugfix: C343-162: magicbane hit messages could use the wrong pronouns (Ray Chason).
 - Bugfix: C343-324: long worm crash fix (Patric Mueller).
 - Interface: incorporate quiver_fired (Jukka Lahtinen).

@@ -12,6 +12,7 @@ typedef union {
 	void *a_void;
 	struct obj *a_obj;
 	struct monst *a_monst;
+	struct autopickup_exception *a_ape;
 	int a_int;
 	uint a_uint;
 	char a_char;

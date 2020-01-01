@@ -39,7 +39,7 @@ NetHack, except that rounddiv may call panic().
 	int		distmin		(int, int, int, int)
 	int		dist2		(int, int, int, int)
 	bool		online2		(int, int)
-	bool		pmatch		(const char *, const char *)
+	bool		regmatch	(const char *, const char *)
 	int		strncmpi	(const char *, const char *, int)
 	char *		strstri		(const char *, const char *)
 	bool		fuzzymatch	(const char *,const char *,const char *,bool)
@@ -277,25 +277,21 @@ bool online2(int x0, int y0, int x1, int y1) {
 	return !dy || !dx || (dy == dx) || (dy + dx == 0); /* (dy == -dx) */
 }
 
-// match a string against a pattern
-bool pmatch(const char *patrn, const char *strng) {
-	char s, p;
-	/*
-	 :  Simple pattern matcher:  '*' matches 0 or more characters, '?' matches
-	 :  any single character.  Returns true if 'strng' matches 'patrn'.
-	 */
-pmatch_top:
-	s = *strng++;
-	p = *patrn++;		  /* get next chars and pre-advance */
-	if (!p)			  /* end of pattern */
-		return s == '\0'; /* matches iff end of string too */
-	else if (p == '*')	  /* wildcard reached */
-		return (!*patrn || pmatch(patrn, strng - 1)) ? true :
-							       s ? pmatch(patrn - 1, strng) : false;
-	else if (p != s && (p != '?' || !s)) /* check single character */
-		return false;		     /* doesn't match */
-	else				     /* return pmatch(patrn, strng); */
-		goto pmatch_top;	     /* optimize tail recursion */
+bool regmatch(const char *pattern, const char *string) {
+	regex_t regex;
+	int errnum = tre_regcomp(&regex, pattern, REG_EXTENDED | REG_NOSUB);
+	if (errnum != 0) {
+		char errbuf[BUFSZ];
+		tre_regerror(errnum, &regex, errbuf, sizeof(errbuf));
+		impossible("Bad regex syntax in \"%s\": \"%s\" (matching against \"%s\")", pattern, errbuf, string);
+		return false;
+	}
+
+	bool ret = tre_regexec(&regex, string, 0, NULL, 0) == 0;
+
+	tre_regfree(&regex);
+
+	return ret;
 }
 
 #ifndef STRNCMPI

@@ -739,7 +739,7 @@ int rounddiv(long x, int y);
 int distmin(int x0, int y0, int x1, int y1);
 int dist2(int x0, int y0, int x1, int y1);
 bool online2(int x0, int y0, int x1, int y1);
-bool pmatch(const char *patrn, const char *strng);
+bool regmatch(const char *pattern, const char *string);
 #ifndef STRNCMPI
 int strncmpi(const char *s1, const char *s2, usize n);
 #endif

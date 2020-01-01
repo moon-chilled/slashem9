@@ -315,8 +315,8 @@ extern struct monst youmonst; /* init'd and defined in decl.c */
 extern struct monst *mydogs, *migrating_mons;
 
 extern struct permonst upermonst; /* init'd in decl.c,
-					 * defined in polyself.c
-					 */
+				   * defined in polyself.c
+				   */
 
 extern struct mvitals {
 	uchar born;
@@ -359,9 +359,9 @@ extern uchar monsyms[MAXMCLASSES];	       /* current class symbols */
 
 extern struct c_color_names {
 	const char *const c_black, *const c_amber, *const c_golden,
-							   *const c_light_blue, *const c_red, *const c_green,
-												      *const c_silver, *const c_blue, *const c_purple,
-																	      *const c_white;
+		   *const c_light_blue, *const c_red, *const c_green,
+		   *const c_silver, *const c_blue, *const c_purple,
+		   *const c_white;
 } c_color_names;
 #define NH_BLACK      c_color_names.c_black
 #define NH_AMBER      c_color_names.c_amber
@@ -437,28 +437,22 @@ extern const char *const monexplain[], invisexplain[], *const objexplain[], *con
 extern char *fqn_prefix[PREFIX_COUNT];
 
 struct autopickup_exception {
-	char *pattern;
-	boolean grab;
+	regex_t pattern;
+	char *text_pattern;
+	bool grab;
 	struct autopickup_exception *next;
 };
 
 struct u_achieve {
-	bool get_bell;		 /* You have obtained the bell of
-                                      * opening */
+	bool get_bell;		 /* You have obtained the bell of opening */
 	bool get_candelabrum;	 /* You have obtained the candelabrum */
-	bool get_book;		 /* You have obtained the book of
-                                      * the dead */
-	bool enter_gehennom;	 /* Entered Gehennom (including the
-                                      * Valley) by any means */
-	bool perform_invocation; /* You have performed the invocation
-                                         * ritual */
-	bool get_amulet;	 /* You have obtained the amulet
-                                      * of Yendor */
+	bool get_book;		 /* You have obtained the book of the dead */
+	bool enter_gehennom;	 /* Entered Gehennom (including the Valley) by any means */
+	bool perform_invocation; /* You have performed the invocation ritual */
+	bool get_amulet;	 /* You have obtained the amulet of Yendor */
 	bool ascended;		 /* You ascended to demigod[dess]hood.
-                                      * Not quite the same as
-                                      * u.uevent.ascended. */
-	bool get_luckstone;	 /* You obtained the luckstone at the
-                                      * end of the mines. */
+				  * Not quite the same as u.uevent.ascended. */
+	bool get_luckstone;	 /* You obtained the luckstone at the end of the mines. */
 	bool finish_sokoban;	 /* You obtained the sokoban prize. */
 	bool killed_medusa;	 /* You defeated Medusa. */
 };
@@ -467,14 +461,14 @@ extern struct u_achieve achieve;
 
 extern struct realtime_data {
 	time_t realtime;	    /* Amount of actual playing time up until the last time
-                       * the game was restored. */
+				     * the game was restored. */
 	time_t restoretime;	    /* The time that the game was started or restored. */
 	time_t last_displayed_time; /* Last time displayed on the status line */
 } realtime_data;
 
 struct _plinemsg {
 	xchar msgtype;
-	char *pattern;
+	regex_t pattern;
 	struct _plinemsg *next;
 };
 

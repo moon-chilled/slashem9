@@ -400,14 +400,14 @@ static void checkfile(char *inp, struct permonst *pm, bool user_typed_name, bool
 		*index(buf, '\n') = 0;	// strip newline
 
 		if (*buf == '~') {
-			if (pmatch(buf + 1, dbase_str) || (alt && pmatch(buf + 1, alt))) {
+			if (regmatch(buf + 1, dbase_str) || (alt && regmatch(buf + 1, alt))) {
 				in_exclusion = true;
 				continue;
 			}
 		}
 
 		// matched the entry name
-		if (pmatch(buf, dbase_str) || (alt && pmatch(buf, alt))) {
+		if (regmatch(buf, dbase_str) || (alt && regmatch(buf, alt))) {
 			// skip to the part containing the description
 			do {
 				entry_location = dlb_ftell(fp);

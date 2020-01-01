@@ -124,7 +124,7 @@ void outoracle(boolean special, boolean delphi) {
 	}
 	if (!oracle_offsets) {
 		num_oracles = 1;
-		oracle_offsets = new (usize, 1);
+		oracle_offsets = new(usize);
 		oracle_offsets[0] = 0;	// First oracle starts at position 0
 		while (dlb_fgets(buf, BUFSZ, oracles)) {
 			if (!strcmp(buf, "-----\n")) {

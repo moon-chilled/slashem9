@@ -858,11 +858,7 @@ static FILE *fopen_config_file(const char *filename) {
  *
  * Note: there is no way to read value 0
  */
-int
-	get_uchar_list(buf, list, size) char *buf; /* read buffer */
-uchar *list;					   /* return list */
-int size;					   /* return list size */
-{
+int get_uchar_list(char *buf/*read buffer*/, uchar *list/*return list*/, int size/*return list size*/) {
 	int cnt = 0;
 	char *next;
 	uchar orig;
@@ -871,7 +867,7 @@ int size;					   /* return list size */
 	while (1) { /* one loop for each uchar */
 		if (cnt == size) return cnt;
 
-		/* take off leading whiltespace */
+		/* take off leading whitespace */
 		while (isspace(*buf))
 			buf++;
 		if (!*buf) return cnt;

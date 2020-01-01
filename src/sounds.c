@@ -4,11 +4,6 @@
 
 #include "hack.h"
 #include "edog.h"
-#ifdef USER_SOUNDS
-#ifdef USER_SOUNDS_REGEX
-#include <regex.h>
-#endif
-#endif
 
 /* Hmm.... in working on SHOUT I started thinking about things.
  * I think something like this should be set up:
@@ -988,11 +983,7 @@ static int dochat(void) {
 extern void play_usersound(const char *, int);
 
 typedef struct audio_mapping_rec {
-#ifdef USER_SOUNDS_REGEX
-	struct re_pattern_buffer regex;
-#else
-	char *pattern;
-#endif
+	regex_t regex;
 	char *filename;
 	int volume;
 	struct audio_mapping_rec *next;
@@ -1011,7 +1002,6 @@ int add_sound_mapping(const char *mapping) {
 
 	if (sscanf(mapping, "MESG \"%255[^\"]\"%*[\t ]\"%255[^\"]\" %d",
 		   text, filename, &volume) == 3) {
-		const char *err;
 		audio_mapping *new_map;
 
 		if (strlen(sounddir) + strlen(filename) > 254) {
@@ -1021,28 +1011,16 @@ int add_sound_mapping(const char *mapping) {
 		sprintf(filespec, "%s/%s", sounddir, filename);
 
 		if (can_read_file(filespec)) {
-			new_map = alloc(sizeof(audio_mapping));
-#ifdef USER_SOUNDS_REGEX
-			new_map->regex.translate = 0;
-			new_map->regex.fastmap = 0;
-			new_map->regex.buffer = 0;
-			new_map->regex.allocated = 0;
-			new_map->regex.regs_allocated = REGS_FIXED;
-#else
-			new_map->pattern = alloc(strlen(text) + 1);
-			strcpy(new_map->pattern, text);
-#endif
+			new_map = new(audio_mapping);
 			new_map->filename = strdup(filespec);
 			new_map->volume = volume;
 			new_map->next = soundmap;
 
-#ifdef USER_SOUNDS_REGEX
-			err = re_compile_pattern(text, strlen(text), &new_map->regex);
-#else
-			err = 0;
-#endif
-			if (err) {
-				raw_print(err);
+			int errnum = tre_regcomp(&new_map->regex, text, REG_EXTENDED | REG_NOSUB);
+			if (errnum != 0) {
+				char err[BUFSZ];
+				tre_regerror(errnum, &new_map->regex, err, sizeof(err));
+				raw_printf("Sound regex error: '%s'", err);
 				free(new_map->filename);
 				free(new_map);
 				return 0;
@@ -1066,11 +1044,7 @@ void play_sound_for_message(const char *msg) {
 	audio_mapping *cursor = soundmap;
 
 	while (cursor) {
-#ifdef USER_SOUNDS_REGEX
-		if (re_search(&cursor->regex, msg, strlen(msg), 0, 9999, 0) >= 0) {
-#else
-		if (pmatch(cursor->pattern, msg)) {
-#endif
+		if (tre_regexec(&cursor->regex, msg, 0, NULL, 0) == 0) {
 			play_usersound(cursor->filename, cursor->volume);
 		}
 		cursor = cursor->next;

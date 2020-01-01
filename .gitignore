@@ -24,3 +24,5 @@ util/data2c
 
 dat/nhdat
 include/dlb_archive.h
+
+.rgignore

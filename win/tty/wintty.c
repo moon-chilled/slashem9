@@ -1974,9 +1974,9 @@ void tty_putstr(winid window, int attr, const char *str) {
 				free(cw->clr_data[cw->cury]);
 
 			n0 = strlen(str) + 1;
-			ob = cw->data[cw->cury] = alloc((unsigned)n0 + 1);
-			cw->clr_data[cw->cury] = new (int, n0 + 1);
-			*ob++ = (char)(attr + 1); /* avoid nuls, for convenience */
+			ob = cw->data[cw->cury] = new(char, n0 + 1);
+			cw->clr_data[cw->cury] = new(int, n0 + 1);
+			*ob++ = attr + 1; /* avoid nuls, for convenience */
 			strcpy(ob, str);
 
 			if (n0 > cw->maxcol)

@@ -430,6 +430,8 @@ void initoptions(void) {
 	iflags.prevmsg_window = 's';
 #endif
 	iflags.menu_headings = ATR_INVERSE;
+	iflags.autopickup_exceptions[AP_GRAB] = NULL;
+	iflags.autopickup_exceptions[AP_LEAVE] = NULL;
 
 	/* Use negative indices to indicate not yet selected */
 	flags.initrole = -1;
@@ -440,9 +442,9 @@ void initoptions(void) {
 	/* Set the default monster and object class symbols.  Don't use */
 	/* memcpy() --- sizeof char != sizeof uchar on some machines.	*/
 	for (i = 0; i < MAXOCLASSES; i++)
-		oc_syms[i] = (uchar)def_oc_syms[i];
+		oc_syms[i] = def_oc_syms[i];
 	for (i = 0; i < MAXMCLASSES; i++)
-		monsyms[i] = (uchar)def_monsyms[i];
+		monsyms[i] = def_monsyms[i];
 
 	/* FIXME: These should be integrated into objclass and permonst structs,
 	   but that invalidates saves */
@@ -451,9 +453,8 @@ void initoptions(void) {
 
 	iflags.travelcc.x = iflags.travelcc.y = -1;
 
-	/* assert( sizeof flags.inv_order == sizeof def_inv_order ); */
-	memcpy((void *)flags.inv_order,
-	       (void *)def_inv_order, sizeof flags.inv_order);
+	/* assert(sizeof flags.inv_order == sizeof def_inv_order); */
+	memcpy(flags.inv_order, def_inv_order, sizeof flags.inv_order);
 	flags.pickup_types[0] = '\0';
 	flags.pickup_burden = MOD_ENCUMBER;
 
@@ -3159,15 +3160,14 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 			for (pass = AP_LEAVE; pass <= AP_GRAB; ++pass) {
 				if (numapes[pass] == 0) continue;
 				ape = iflags.autopickup_exceptions[pass];
-				any.a_void = 0;
+				any.a_ape = NULL;
 				add_menu(tmpwin, NO_GLYPH, &any, 0, 0, iflags.menu_headings,
 					 (pass == 0) ? "Never pickup" : "Always pickup",
 					 MENU_UNSELECTED);
 				for (i = 0; i < numapes[pass] && ape; i++) {
-					any.a_void = (opt_idx == 1) ? 0 : ape;
-					sprintf(apebuf, "\"%s\"", ape->pattern);
-					add_menu(tmpwin, NO_GLYPH, &any,
-						 0, 0, ATR_NONE, apebuf, MENU_UNSELECTED);
+					any.a_ape = (opt_idx == 1) ? NULL : ape;
+					sprintf(apebuf, "\"%s\"", ape->text_pattern);
+					add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, apebuf, MENU_UNSELECTED);
 					ape = ape->next;
 				}
 			}
@@ -3179,8 +3179,7 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 					       &pick_list);
 			if (pick_cnt > 0) {
 				for (pick_idx = 0; pick_idx < pick_cnt; ++pick_idx)
-					remove_autopickup_exception(
-						(struct autopickup_exception *)pick_list[pick_idx].item.a_void);
+					remove_autopickup_exception(pick_list[pick_idx].item.a_ape);
 			}
 			free(pick_list);
 			pick_list = NULL;
@@ -3467,8 +3466,7 @@ int dotogglepickup(void) {
 int add_autopickup_exception(const char *mapping) {
 	struct autopickup_exception *ape, **apehead;
 	char text[256], *text2;
-	int textsize = 0;
-	boolean grab = false;
+	bool grab = false;
 
 	if (sscanf(mapping, "\"%255[^\"]\"", text) == 1) {
 		text2 = &text[0];
@@ -3479,23 +3477,29 @@ int add_autopickup_exception(const char *mapping) {
 			grab = false;
 			++text2;
 		}
-		textsize = strlen(text2);
-		apehead = (grab) ? &iflags.autopickup_exceptions[AP_GRAB] :
-				   &iflags.autopickup_exceptions[AP_LEAVE];
-		ape = (struct autopickup_exception *)
-			alloc(sizeof(struct autopickup_exception));
-		ape->pattern = alloc(textsize + 1);
-		strcpy(ape->pattern, text2);
+
+		regex_t regex;
+		int errnum = tre_regcomp(&regex, text2, REG_EXTENDED | REG_NOSUB);
+		if (errnum != 0) {
+			char errbuf[BUFSZ];
+			tre_regerror(errnum, &regex, errbuf, sizeof(errbuf));
+			raw_printf("Bad regex in AUTOPICKUP_EXCEPTION: \"%s\": \"%s\"", text2, errbuf);
+			return 0;
+		}
+
+		apehead = grab ? &iflags.autopickup_exceptions[AP_GRAB] :
+				 &iflags.autopickup_exceptions[AP_LEAVE];
+		ape = new(struct autopickup_exception);
+		ape->pattern = regex;
+		ape->text_pattern = strdup(text2);
 		ape->grab = grab;
-		if (!*apehead)
-			ape->next = NULL;
-		else
-			ape->next = *apehead;
+		ape->next = *apehead;
 		*apehead = ape;
 	} else {
 		raw_print("syntax error in AUTOPICKUP_EXCEPTION");
 		return 0;
 	}
+
 	return 1;
 }
 
@@ -3511,7 +3515,8 @@ static void remove_autopickup_exception(struct autopickup_exception *whichape) {
 				prev->next = ape;
 			else
 				iflags.autopickup_exceptions[chain] = ape;
-			free(freeape->pattern);
+			tre_regfree(&freeape->pattern);
+			free(freeape->text_pattern);
 			free(freeape);
 		} else {
 			prev = ape;
@@ -3543,7 +3548,8 @@ void free_autopickup_exceptions(void) {
 
 	for (pass = AP_LEAVE; pass <= AP_GRAB; ++pass) {
 		while ((ape = iflags.autopickup_exceptions[pass]) != 0) {
-			free(ape->pattern);
+			tre_regfree(&ape->pattern);
+			free(ape->text_pattern);
 			iflags.autopickup_exceptions[pass] = ape->next;
 			free(ape);
 		}
@@ -3764,7 +3770,7 @@ int choose_classes_menu(const char *prompt, int category, boolean way, char *cla
 	if (class_list == NULL || class_select == NULL) return 0;
 	accelerator = 0;
 	next_accelerator = 'a';
-	any.a_void = 0;
+	any.a_void = NULL;
 	win = create_nhwindow(NHW_MENU);
 	start_menu(win);
 	while (*class_list) {
