@@ -1477,10 +1477,19 @@ void rot_corpse(void *arg, long timeout) {
 		}
 	}
 	rot_organic(arg, timeout);
-	if (on_floor)
+	if (on_floor) {
+		struct monst *mtmp = m_at(x, y);
+
+		// a hiding monster may be exposed
+		if (mtmp && !OBJ_AT(x, y) &&
+				mtmp->mundetected && hides_under(mtmp->data)) {
+			mtmp->mundetected = 0;
+		}
+
 		newsym(x, y);
-	else if (in_invent)
+	} else if (in_invent) {
 		update_inventory();
+	}
 }
 
 #ifdef DEBUG

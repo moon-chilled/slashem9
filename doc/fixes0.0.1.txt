@@ -106,6 +106,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: when a cursed scroll of destroy armor lowered the enchantment of e.g. gauntlets of dexterity or helm of brilliance, the associated attribute didn't also decrease.
 - Bugfix: if hitting a cockatrice with a mirror or expensive camera resulted in the object shattering, the player would be stoned.
 - Bugfix: if a blind levitating player attempted to go downstairs, they would be told they were floating above the stairs, even if they had never seen the stairs.
+- Bugfix: if a slow-moving monster was hiding under a corpse when it rotted, the monster was not displayed immediately.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
