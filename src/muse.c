@@ -362,27 +362,26 @@ boolean find_defensive(struct monst *mtmp) {
 		/* Note: trap doors take precedence over teleport traps. */
 		int xx, yy;
 
-		for (xx = x - 1; xx <= x + 1; xx++)
-			for (yy = y - 1; yy <= y + 1; yy++)
-				if (isok(xx, yy))
-					if (xx != u.ux && yy != u.uy)
-						if (mtmp->data != &mons[PM_GRID_BUG] || xx == x || yy == y)
-							if ((xx == x && yy == y) || !level.monsters[xx][yy])
-								if ((t = t_at(xx, yy)) != 0)
-									if ((verysmall(mtmp->data) || throws_rocks(mtmp->data) ||
-									     passes_walls(mtmp->data)) ||
-									    !sobj_at(BOULDER, xx, yy))
-										if (!onscary(xx, yy, mtmp)) {
-											if (is_holelike(t->ttyp) && !is_floater(mtmp->data) && !mtmp->isshk && !mtmp->isgd && !mtmp->ispriest && Can_fall_thru(&u.uz)) {
-												trapx = xx;
-												trapy = yy;
-												m.has_defense = MUSE_TRAPDOOR;
-											} else if (t->ttyp == TELEP_TRAP && m.has_defense != MUSE_TRAPDOOR) {
-												trapx = xx;
-												trapy = yy;
-												m.has_defense = MUSE_TELEPORT_TRAP;
-											}
-										}
+		for (xx = x - 1; xx <= x + 1; xx++) for (yy = y - 1; yy <= y + 1; yy++)
+		if (isok(xx, yy))
+		if (xx != u.ux || yy != u.uy)
+		if (mtmp->data != &mons[PM_GRID_BUG] || xx == x || yy == y)
+		if ((xx == x && yy == y) || !level.monsters[xx][yy])
+		if ((t = t_at(xx, yy)) != 0)
+		if ((verysmall(mtmp->data) || throws_rocks(mtmp->data) ||
+		     passes_walls(mtmp->data)) ||
+		    !sobj_at(BOULDER, xx, yy))
+		if (!onscary(xx, yy, mtmp)) {
+			if (is_holelike(t->ttyp) && !is_floater(mtmp->data) && !mtmp->isshk && !mtmp->isgd && !mtmp->ispriest && Can_fall_thru(&u.uz)) {
+				trapx = xx;
+				trapy = yy;
+				m.has_defense = MUSE_TRAPDOOR;
+			} else if (t->ttyp == TELEP_TRAP && m.has_defense != MUSE_TRAPDOOR) {
+				trapx = xx;
+				trapy = yy;
+				m.has_defense = MUSE_TELEPORT_TRAP;
+			}
+		}
 	}
 
 	if (nohands(mtmp->data)) /* can't use objects */
@@ -1698,23 +1697,21 @@ boolean find_misc(struct monst *mtmp) {
 		return false;
 
 	if (!stuck && !immobile && !mtmp->cham && mstrength(mdat) < 6) {
-		boolean ignore_boulders = (verysmall(mdat) ||
-					   throws_rocks(mdat) ||
-					   passes_walls(mdat));
-		for (xx = x - 1; xx <= x + 1; xx++)
-			for (yy = y - 1; yy <= y + 1; yy++)
-				if (isok(xx, yy) && (xx != u.ux || yy != u.uy))
-					if (mdat != &mons[PM_GRID_BUG] || xx == x || yy == y)
-						if (/* (xx==x && yy==y) || */ !level.monsters[xx][yy])
-							if ((t = t_at(xx, yy)) != 0 &&
-							    (ignore_boulders || !sobj_at(BOULDER, xx, yy)) && !onscary(xx, yy, mtmp)) {
-								if (t->ttyp == POLY_TRAP) {
-									trapx = xx;
-									trapy = yy;
-									m.has_misc = MUSE_POLY_TRAP;
-									return true;
-								}
-							}
+		const bool ignore_boulders = (verysmall(mdat) ||
+					     throws_rocks(mdat) ||
+					     passes_walls(mdat));
+		for (xx = x - 1; xx <= x + 1; xx++) for (yy = y - 1; yy <= y + 1; yy++)
+		if (isok(xx, yy) && (xx != u.ux || yy != u.uy))
+		if (mdat != &mons[PM_GRID_BUG] || xx == x || yy == y)
+		if (/* (xx==x && yy==y) || */ !level.monsters[xx][yy])
+		if ((t = t_at(xx, yy)) != 0 && (ignore_boulders || !sobj_at(BOULDER, xx, yy)) && !onscary(xx, yy, mtmp)) {
+			if (t->ttyp == POLY_TRAP) {
+				trapx = xx;
+				trapy = yy;
+				m.has_misc = MUSE_POLY_TRAP;
+				return true;
+			}
+		}
 	}
 	if (nohands(mdat))
 		return 0;
