@@ -1,10 +1,10 @@
 Changelist for slashem-next v0.0.1:
 - Internals: obviate the following compile-time configurable options: SINKS, BLACKMARKET, D_SABER, LIGHTSABERS, P_SPOON, WALLET_O_P, EATEN_MEMORY, WALLIFIED_MAZE, AUTOPICKUP_EXCEPTIONS, YOEMAN, SEDUCE, KOPS, TOURIST, FIREARMS, EXP_ON_BOTL, SCORE_ON_BOTL, DWARF, ELBERETH, TEXTCOLOR, STATUS_COLORS, MENU_COLOR, SHOW_WEIGHT, SHOW_DMG, WIZARD, UNPOLYPILE, INVISIBLE_OBJECTS, OTHER_SERVICES, REDO, XLOGFILE, STEED, FREE_ALL_MEMORY, DISPLAY_LAYERS, REALTIME_ON_BOTL.  Where applicable, these can still be toggled at run time.
 - Internals: lots of miscellaneous code cleanup, simplification, removal of indirection or conditionality, etc.
-- Internals: change K&R-style function definitions to ANSI.  Require c99.
-- Internals: remove support for many obsolete platforms and build configurations.  Basic requirements: ANSI c99 + posix or win32.
-- Internals: remove the internal malloc implementation and heap monitor.
-- Interface: remove all windowports except for tty and curses.
+- Internals: change K&R-style function definitions to ANSI.  Require c99.  Use bool over boolean.
+- Internals: remove support for many obsolete platforms and build configurations.  Basic requirements: ANSI c99 + win32 or posix-ish.
+- Internals: remove the internal malloc implementation and heap monitor in favour of valgrind.
+- Interface: remove all windowports except for tty.
 - Development: allow slashem.sh to automatically launch debugging tools (gdb, lldb, valgrind), if the environment variable NH_USE_(GDB|LLDB|VALGRIND) is set.  It will pass $NH_(GDB|LLDB|VALGRIND)_FLAGS to the corresponding debugging tool.
 - Interface: add UTF-8 graphics support.  Original code by Patric Mueller; heavy modifications have been made.
 - Interface: remove DEC and IBM graphics; the only graphics sets available are ascii, utf8, and utf8compat (using only characters that are part of wgl4), and these are now under a compound 'graphics' option.
