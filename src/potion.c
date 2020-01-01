@@ -665,20 +665,18 @@ int peffects(struct obj *otmp) {
 		case POT_SICKNESS:
 			pline("Yecch!  This stuff tastes like poison.");
 			if (otmp->blessed) {
-				pline("(But in fact it was mildly stale %s.)",
-				      fruitname(true));
-				if (!Role_if(PM_HEALER)) {
+				pline("(But in fact it was mildly stale %s.)", fruitname(true));
+				if (!Role_if(PM_HEALER) && !Poison_resistance) {
 					/* NB: blessed otmp->fromsink is not possible */
 					losehp(1, "mildly contaminated potion", KILLED_BY_AN);
 				}
 			} else {
 				if (Poison_resistance)
-					pline(
-						"(But in fact it was biologically contaminated %s.)",
+					pline("(But in fact it was biologically contaminated %s.)",
 						fruitname(true));
-				if (Role_if(PM_HEALER))
+				if (Role_if(PM_HEALER)) {
 					pline("Fortunately, you have been immunized.");
-				else {
+				} else {
 					int typ = rn2(A_MAX);
 
 					if (!Fixed_abil) {
