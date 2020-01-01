@@ -1152,11 +1152,7 @@ int doengrave(void) {
 	if (post_engr_text[0])
 		pline("%s", post_engr_text);
 
-	if (doblind && !resists_blnd(&youmonst)) {
-		pline("You are blinded by the flash!");
-		make_blinded((long)rnd(50), false);
-		if (!Blind) pline("Your %s", "vision quickly clears.");
-	}
+	if (doblind) flashburn(rnd(50));
 
 	return true;
 }

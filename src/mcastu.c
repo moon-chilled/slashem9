@@ -564,10 +564,6 @@ static void cast_cleric_spell(struct monst *mtmp, int dmg, int spellnum) {
 			zap_strike_fx(u.ux, u.uy, AD_ELEC - 1);
 			pline("A bolt of lightning strikes down at you from above!");
 			reflects = ureflects("It bounces off your %s%s.", "");
-			if (!Blind) {
-				pline("You are blinded by the flash!");
-				make_blinded(Half_spell_damage ? 10L : 20L, false);
-			}
 			if (reflects || Shock_resistance) {
 				shieldeff(u.ux, u.uy);
 				dmg = 0;
@@ -578,6 +574,7 @@ static void cast_cleric_spell(struct monst *mtmp, int dmg, int spellnum) {
 			if (Half_spell_damage) dmg = (dmg + 1) / 2;
 			destroy_item(WAND_CLASS, AD_ELEC);
 			destroy_item(RING_CLASS, AD_ELEC);
+			flashburn(Half_spell_damage ? 10 : 20);
 			break;
 		}
 		case CLC_CURSE_ITEMS:

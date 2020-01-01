@@ -2240,11 +2240,7 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 			}
 			destroy_item(WAND_CLASS, AD_ELEC);
 			destroy_item(RING_CLASS, AD_ELEC);
-			if (!resists_blnd(&youmonst)) {
-				pline("You are blinded by the flash!");
-				make_blinded((long)rnd(100), false);
-				if (!Blind) pline("Your vision quickly clears.");
-			}
+			flashburn(rnd(100));
 			break;
 
 		case WAN_FIREBALL:
@@ -2453,12 +2449,7 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 		/* FALLTHROUGH */
 		case EXPENSIVE_CAMERA:
 			damage += rnd(25);
-			if (!resists_blnd(&youmonst)) {
-				pline("You are blinded by the flash!");
-				make_blinded((long)damage, false);
-				makeknown(obj->otyp);
-				if (!Blind) pline("Your vision quickly clears.");
-			}
+			if (flashburn(damage)) makeknown(obj->otyp);
 			damage = 0; /* reset */
 			break;
 
@@ -2515,11 +2506,21 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 	return damage;
 }
 
+bool flashburn(long duration) {
+       if (!resists_blnd(&youmonst)) {
+	       pline("You are blinded by the flash!");
+               make_blinded(duration, false);
+               if (!Blind) pline("Your vision quickly clears.");
+               return true;
+       }
+
+       return false;
+}
+
 /* you've zapped a wand downwards while riding
  * Return true if the steed was hit by the wand.
  * Return false if the steed was not hit by the wand.
  */
-// wand or spell
 static boolean zap_steed(struct obj *obj) {
 	int steedhit = false;
 
@@ -3982,11 +3983,7 @@ void buzz(int type, int nd, xchar sx, xchar sy, int dx, int dy) {
 			} else {
 				pline("%s whizzes by you!", The(fltxt));
 			}
-			if (abstype == ZT_LIGHTNING && !resists_blnd(&youmonst)) {
-				pline("You are blinded by the flash!");
-				make_blinded((long)d(nd, 50), false);
-				if (!Blind) pline("Your vision quickly clears.");
-			}
+			if (abstype == ZT_LIGHTNING) flashburn(d(nd, 50));
 			stop_occupation();
 			nomul(0);
 		}

@@ -2253,6 +2253,7 @@ int zappable(struct obj *);
 void zapnodir(struct obj *);
 int dozap(void);
 int zapyourself(struct obj *, boolean);
+bool flashburn(long duration);
 boolean cancel_monst(struct monst *, struct obj *,
 		     boolean, boolean, boolean);
 void weffects(struct obj *);
