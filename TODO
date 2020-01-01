@@ -2,6 +2,8 @@
  - Thrown potions have a chance to hit a steed's saddle.  I think this is a cool idea, but I think it's not worth having unless it can do more.
  - Elbereth changes.  There will more than likely be elbereth changes, but not those.
  - SAFERHANGUP
+ - STATUS_VIA_WINDOWPORT
+ - mimics not imitating statues in soko or boulders when over pits|holes
 
 * Make overview/wizardmode levport show nicer names for special levels ('Storage Room' instead of 'stor', 'The Guild of Disgruntled Adventurers' instead of 'guild', etc.)
 
