@@ -479,8 +479,9 @@ char *xname(struct obj *obj) {
 		dealloc_obj(hobj);
 
 		return buf;
-	} else
+	} else {
 		return xname2(obj);
+	}
 }
 
 /* xname() output augmented for multishot missile feedback */
@@ -596,7 +597,7 @@ char *doname(struct obj *obj) {
 		else if ((!obj->known || !objects[obj->otyp].oc_charged ||
 			  (obj->oclass == ARMOR_CLASS ||
 			   obj->oclass == RING_CLASS))
-		/* For most items with charges or +/-, if you know how many
+				/* For most items with charges or +/-, if you know how many
 		                 * charges are left or what the +/- is, then you must have
 		                 * totally identified the item, so "uncursed" is unneccesary,
 		                 * because an identified object not described as "blessed" or

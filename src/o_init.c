@@ -300,10 +300,9 @@ void savenames(int fd, int mode) {
 	uint len;
 
 	if (perform_bwrite(mode)) {
-		bwrite(fd, (void *)bases, sizeof bases);
-		bwrite(fd, (void *)disco, sizeof disco);
-		bwrite(fd, (void *)objects,
-		       sizeof(struct objclass) * NUM_OBJECTS);
+		bwrite(fd, bases, sizeof bases);
+		bwrite(fd, disco, sizeof disco);
+		bwrite(fd, objects, sizeof(struct objclass) * NUM_OBJECTS);
 	}
 	/* as long as we use only one version of Hack we
 	   need not save oc_name and oc_descr, but we must save
@@ -312,8 +311,8 @@ void savenames(int fd, int mode) {
 		if (objects[i].oc_uname) {
 			if (perform_bwrite(mode)) {
 				len = strlen(objects[i].oc_uname) + 1;
-				bwrite(fd, (void *)&len, sizeof len);
-				bwrite(fd, (void *)objects[i].oc_uname, len);
+				bwrite(fd, &len, sizeof len);
+				bwrite(fd, objects[i].oc_uname, len);
 			}
 			if (release_data(mode)) {
 				free(objects[i].oc_uname);
@@ -325,16 +324,22 @@ void savenames(int fd, int mode) {
 void restnames(int fd) {
 	int i;
 	uint len;
+	struct objclass stash_objnames[NUM_OBJECTS];
+	memcpy(stash_objnames, objects, sizeof(struct objclass) * NUM_OBJECTS);
 
-	mread(fd, (void *)bases, sizeof bases);
-	mread(fd, (void *)disco, sizeof disco);
-	mread(fd, (void *)objects, sizeof(struct objclass) * NUM_OBJECTS);
-	for (i = 0; i < NUM_OBJECTS; i++)
+	mread(fd, bases, sizeof bases);
+	mread(fd, disco, sizeof disco);
+	mread(fd, objects, sizeof(struct objclass) * NUM_OBJECTS);
+	for (i = 0; i < NUM_OBJECTS; i++) {
+		objects[i].oc_name = stash_objnames[i].oc_name;
+		objects[i].oc_descr = stash_objnames[i].oc_descr;
+
 		if (objects[i].oc_uname) {
-			mread(fd, (void *)&len, sizeof len);
+			mread(fd, &len, sizeof len);
 			objects[i].oc_uname = alloc(len);
-			mread(fd, (void *)objects[i].oc_uname, len);
+			mread(fd, objects[i].oc_uname, len);
 		}
+	}
 #ifdef USE_TILES
 	shuffle_tiles();
 #endif
