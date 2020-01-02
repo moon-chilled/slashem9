@@ -180,9 +180,7 @@ void moveloop(void) {
 					nh_timeout();
 					run_regions();
 
-#ifdef DUNGEON_GROWTH
 					dgn_growths(true, true);
-#endif
 
 					if (u.ublesscnt) {
 						u.ublesscnt--;
@@ -487,10 +485,8 @@ void moveloop(void) {
 			sanity_check();
 		}
 
-#ifdef CLIPPING
 		/* just before rhack */
 		cliparound(u.ux, u.uy);
-#endif
 
 		u.umoved = false;
 

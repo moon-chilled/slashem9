@@ -1997,9 +1997,9 @@ static void you_aggravate(struct monst *mtmp) {
 	pline("For some reason, %s presence is known to you.",
 	      s_suffix(noit_mon_nam(mtmp)));
 	cls();
-#ifdef CLIPPING
+
 	cliparound(mtmp->mx, mtmp->my);
-#endif
+
 	show_glyph(mtmp->mx, mtmp->my, mon_to_glyph(mtmp));
 	display_self();
 	pline("You feel aggravated at %s.", noit_mon_nam(mtmp));

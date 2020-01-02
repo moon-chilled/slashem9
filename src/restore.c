@@ -345,9 +345,9 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 
 	mread(fd, &u, sizeof(struct you));
 	init_uasmon();
-#ifdef CLIPPING
+
 	cliparound(u.ux, u.uy);
-#endif
+
 	if (u.uhp <= 0 && (!Upolyd || u.mh <= 0)) {
 		u.ux = u.uy = 0; /* affects pline() [hence You()] */
 		pline("You were not healthy enough to survive restoration.");
@@ -751,9 +751,9 @@ void getlev(int fd, int pid, xchar lev, boolean ghostly) {
 	relink_timers(ghostly);
 	relink_light_sources(ghostly);
 	reset_oattached_mids(ghostly);
-#ifdef DUNGEON_GROWTH
+
 	if (!ghostly) catchup_dgn_growths((monstermoves - omoves) / 5);
-#endif
+
 	if (ghostly)
 		clear_id_mapping();
 }

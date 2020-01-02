@@ -53,9 +53,7 @@ struct window_procs proxy_procs = {
 	(nhproxy_proc_update_inventory),
 	(nhproxy_proc_mark_synch),
 	(nhproxy_proc_wait_synch),
-#ifdef CLIPPING
 	(nhproxy_proc_cliparound),
-#endif
 #ifdef POSITIONBAR
 	(nhproxy_proc_update_positionbar),
 #endif

@@ -94,13 +94,6 @@
 #define PANICLOG "paniclog" /* log of panic and impossible events */
 
 /*
- *	Data librarian.  Defining DLB places most of the support files into
- *	a tar-like file, thus making a neater installation.  See *conf.h
- *	for detailed configuration.
- */
-/* #define DLB */ /* not supported on all platforms */
-
-/*
  *	Defining INSURANCE slows down level changes, but allows games that
  *	died due to program or system crashes to be resumed from the point
  *	of the last level change, after running a utility program.
@@ -189,9 +182,6 @@ typedef long glyph_t;
 /* Roles */
 /* #define ZOUTHERN */ /* KMH -- Zoutherner class and its animals */
 
-/* I/O */
-#define CLIPPING /* allow smaller screens -- ERS */
-
 /* difficulty */
 /* #define NO_BONES */ /*Disables loading and saving bones levels*/
 
@@ -216,7 +206,6 @@ typedef long glyph_t;
 
 /* #define KEEP_SAVE */ /* Keep savefiles after Restore (wac@intergate.bc.ca)*/
 /* #define CHARON */	/* Charon's boat, enables Cerebus - not implemented */
-#define DUNGEON_GROWTH
 
 /* #define SHOUT */ /* JRN -- shouting and petcommands - not implemented */
 

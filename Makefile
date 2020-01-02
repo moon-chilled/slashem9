@@ -37,11 +37,10 @@ install: all
 	mkdir -p $(HACKDIR)/save $(BINDIR)
 	touch $(HACKDIR)/perm $(HACKDIR)/xlogfile
 
-	cp src/slashem9 dat/nhdat $(HACKDIR)
+	install src/slashem9 dat/nhdat $(HACKDIR)
 
 	sed -e 's;@HACKDIR@;$(HACKDIR);' < sys/unix/slashem9.sh > $(BINDIR)/slashem9
-	chmod 755 $(BINDIR)/slashem9
-	#cp util/slashem9-recover $(BINDIR)/
+	#install util/slashem9-recover $(BINDIR)/
 
 src/slashem9: $(SLASHEMOBJ)
 	$(CCLD) -o src/slashem9 $(SLASHEMOBJ) $(LDFLAGS)

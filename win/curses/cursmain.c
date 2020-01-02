@@ -40,9 +40,7 @@ struct window_procs curses_procs = {
 	curses_update_inventory,
 	curses_mark_synch,
 	curses_wait_synch,
-#ifdef CLIPPING
 	curses_cliparound,
-#endif
 #ifdef POSITIONBAR
 	donull,
 #endif
@@ -467,7 +465,6 @@ void curses_wait_synch() {
 /*
 cliparound(x, y)-- Make sure that the user is more-or-less centered on the
                    screen if the playing area is larger than the screen.
-                -- This function is only defined if CLIPPING is defined.
 */
 void curses_cliparound(int x, int y) {
 	int sx, sy, ex, ey;

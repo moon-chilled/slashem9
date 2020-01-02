@@ -37,9 +37,7 @@ extern char proxy_message_menu(char, int, const char *);
 extern void proxy_update_inventory(void);
 extern void proxy_mark_synch(void);
 extern void proxy_wait_synch(void);
-#ifdef CLIPPING
 extern void proxy_cliparound(int, int);
-#endif
 #ifdef POSITIONBAR
 extern void proxy_update_positionbar(char *);
 #endif

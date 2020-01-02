@@ -47,7 +47,6 @@ anything long_to_any(long l) {
 	return ret;
 }
 
-#ifdef DUNGEON_GROWTH
 // guaranteed to return a valid coord
 void rndmappos(xchar *x, xchar *y) {
 	if (*x >= COLNO)
@@ -332,7 +331,6 @@ void catchup_dgn_growths(int mvs) {
 	while (mvs-- > 0)
 		dgn_growths(false, false);
 }
-#endif /* DUNGEON_GROWTH */
 
 boolean revive_nasty(int x, int y, const char *msg) {
 	struct obj *otmp, *otmp2;

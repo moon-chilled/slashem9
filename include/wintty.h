@@ -140,9 +140,7 @@ extern void update_topl(const char *);
 extern void putsyms(const char *);
 
 /* ### wintty.c ### */
-#ifdef CLIPPING
 extern void setclipped(void);
-#endif
 extern void docorner(int, int);
 extern void end_glyphout(void);
 extern void g_putch(int);
@@ -173,9 +171,7 @@ extern char tty_message_menu(char, int, const char *);
 extern void tty_update_inventory(void);
 extern void tty_mark_synch(void);
 extern void tty_wait_synch(void);
-#ifdef CLIPPING
 extern void tty_cliparound(int, int);
-#endif
 #ifdef POSITIONBAR
 extern void tty_update_positionbar(char *);
 #endif

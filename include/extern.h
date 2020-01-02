@@ -683,10 +683,8 @@ anything uint_to_any(uint);
 anything monst_to_any(struct monst *);
 anything obj_to_any(struct obj *);
 anything long_to_any(long l);
-#ifdef DUNGEON_GROWTH
 void catchup_dgn_growths(int);
 void dgn_growths(boolean, boolean);
-#endif
 boolean revive_nasty(int, int, const char *);
 void movobj(struct obj *, xchar, xchar);
 boolean may_dig(xchar, xchar);
