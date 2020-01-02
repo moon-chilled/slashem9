@@ -121,7 +121,7 @@ static struct Bool_Opt {
 	{"time", &flags.time, false, SET_IN_GAME},
 	{"timed_delay", &flags.nap, true, SET_IN_GAME},
 	{"tombstone", &flags.tombstone, true, SET_IN_GAME},
-	{"toptenwin", &flags.toptenwin, false, SET_IN_GAME},
+	{"toptenwin", &flags.toptenwin, true, SET_IN_GAME},
 	{"use_inverse", &iflags.wc_inverse, true, SET_IN_GAME}, /*WC*/
 	{"verbose", &flags.verbose, true, SET_IN_GAME},
 	{"wraptext", &iflags.wc2_wraptext, false, SET_IN_GAME},

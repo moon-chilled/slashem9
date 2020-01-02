@@ -113,7 +113,11 @@ static void readentry(FILE *rfile, struct toptenentry *tt) {
 #undef TTFIELDS
 		tt->points = 0;
 	} else {
-		/* Check for backwards compatibility */
+		if (fscanf(rfile, "%s %s %s %s %[^,],%[^\n]%*c",
+				 tt->plrole, tt->plrace, tt->plgend,
+				 tt->plalign, tt->name, tt->death) != 6)
+			tt->points = 0;
+
 		if (tt->points > 0) {
 			/* If the string "Conduct=%d" appears, set tt->conduct and remove that
 			 * portion of the string */
@@ -150,7 +154,7 @@ static void writeentry(FILE *rfile, struct toptenentry *tt) {
 	/* Add a trailing " Conduct=%d" to tt->death */
 	sprintf(cp, " Conduct=%ld", tt->conduct);
 
-	fprintf(rfile, "0%dE%d %ld %d %d %d %d %d %d %ld %ld %d ",
+	fprintf(rfile, "0.%dE%d %ld %d %d %d %d %d %d %ld %ld %d ",
 		tt->ver_number, tt->ver_editlevel,
 		tt->points, tt->deathdnum, tt->deathlev,
 		tt->maxlvl, tt->hp, tt->maxhp, tt->deaths,
