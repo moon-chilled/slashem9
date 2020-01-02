@@ -33,7 +33,7 @@ void setftty(void) {
 	start_screen();
 }
 
-#if defined(TIMED_DELAY) && defined(_MSC_VER)
+#ifdef _MSC_VER
 void msleep(unsigned mseconds) {
 	/* now uses clock() which is ANSI C */
 	clock_t goal;

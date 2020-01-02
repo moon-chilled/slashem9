@@ -88,7 +88,6 @@ static struct Bool_Opt {
 #ifdef NEWS
 	{"news", &iflags.news, true, DISP_IN_GAME},
 #endif
-	{"null", &flags.null, true, SET_IN_GAME},
 #ifdef MAC
 	{"page_wait", &flags.page_wait, true, SET_IN_GAME},
 #else
@@ -120,11 +119,7 @@ static struct Bool_Opt {
 	{"splash_screen", &iflags.wc_splash_screen, true, DISP_IN_GAME}, /*WC*/
 	{"tiled_map", &iflags.wc_tiled_map, PREFER_TILED, DISP_IN_GAME}, /*WC*/
 	{"time", &flags.time, false, SET_IN_GAME},
-#ifdef TIMED_DELAY
 	{"timed_delay", &flags.nap, true, SET_IN_GAME},
-#else
-	{"timed_delay", NULL, false, SET_IN_GAME},
-#endif
 	{"tombstone", &flags.tombstone, true, SET_IN_GAME},
 	{"toptenwin", &flags.toptenwin, false, SET_IN_GAME},
 	{"use_inverse", &iflags.wc_inverse, true, SET_IN_GAME}, /*WC*/

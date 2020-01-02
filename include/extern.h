@@ -1425,7 +1425,7 @@ void gettty(void);
 void settty(const char *);
 void setftty(void);
 void error(const char *, ...);
-#if defined(TIMED_DELAY) && defined(_MSC_VER)
+#ifdef _MSC_VER
 void msleep(unsigned);
 #endif
 #endif /* WIN32 */
@@ -2051,7 +2051,7 @@ void error(const char *, ...) PRINTF_F(1, 2);
 #ifdef UNIX
 void getlock(void);
 void regularize(char *);
-#if defined(TIMED_DELAY) && !defined(msleep) && defined(SYSV)
+#if !defined(msleep) && defined(SYSV)
 void msleep(unsigned);
 #endif
 #ifdef SHELL

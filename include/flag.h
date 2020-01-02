@@ -46,7 +46,6 @@ struct flag {
 	bool lit_corridor; /* show a dark corr as lit if it is in sight */
 	bool menu_on_esc; /* show menu when hitting esc */
 	bool nap;      /* `timed_delay' option for display effects */
-	bool null;     /* OK to send nulls to the terminal */
 #ifdef MAC
 	bool page_wait; /* put up a --More-- after a page of messages */
 #endif

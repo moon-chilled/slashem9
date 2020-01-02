@@ -226,8 +226,6 @@ void tty_startup(int *wid, int *hgt) {
 	tptr = alloc(1024);
 
 	tbufptr = tbuf;
-	if (!strncmp(term, "5620", 4))
-		flags.null = false; /* this should be a termcap flag */
 	if (tgetent(tptr, term) < 1) {
 		char buf[BUFSZ];
 		strncpy(buf, term,
@@ -521,41 +519,15 @@ void graph_off(void) {
 	if (AE) xputs(AE);
 }
 
-static const short tmspc10[] = {/* from termcap */
-				0, 2000, 1333, 909, 743, 666, 500, 333, 166, 83, 55, 41, 20, 10, 5};
-
 /* delay 50 ms */
 void tty_delay_output(void) {
 	if (iflags.debug_fuzzer) {
 		return;
 	}
 
-#ifdef TIMED_DELAY
 	if (flags.nap) {
 		fflush(stdout);
 		msleep(50); /* sleep for 50 milliseconds */
-		return;
-	}
-#endif
-	/* BUG: if the padding character is visible, as it is on the 5620
-	   then this looks terrible. */
-	if (flags.null) {
-#ifdef TERMINFO
-		/* cbosgd!cbcephus!pds for SYS V R2 */
-		tputs("$<50>", 1, putchar);
-#else
-		tputs("50", 1, putchar);
-#endif
-	} else if (ospeed > 0 && ospeed < SIZE(tmspc10) && nh_CM) {
-		/* delay by sending cm(here) an appropriate number of times */
-		int cmlen = strlen(tgoto(nh_CM, ttyDisplay->curx,
-					 ttyDisplay->cury));
-		int i = 500 + tmspc10[ospeed] / 2;
-
-		while (i > 0) {
-			cmov((int)ttyDisplay->curx, (int)ttyDisplay->cury);
-			i -= cmlen * tmspc10[ospeed];
-		}
 	}
 }
 

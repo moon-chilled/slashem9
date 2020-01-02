@@ -89,16 +89,6 @@
 /* #define PORT_HELP "Unixhelp" */
 
 #ifdef TTY_GRAPHICS
-/*
- * To enable the `timed_delay' option for using a timer rather than extra
- * screen output when pausing for display effect.  Requires that `msleep'
- * function be available (with time argument specified in milliseconds).
- * Various output devices can produce wildly varying delays when the
- * "extra output" method is used, but not all systems provide access to
- * a fine-grained timer.
- */
-/* #define TIMED_DELAY */ /* usleep() */
-
 #define VIDEOSHADES
 #endif
 
@@ -258,21 +248,11 @@
 #endif
 #endif
 
-#ifdef TIMED_DELAY
 #if defined(SUNOS4) || defined(LINUX) || defined(SVR4) /* [max] added SVR4 */
 #define msleep(k) usleep((k)*1000)
 #endif
 #ifdef ULTRIX
 #define msleep(k) napms(k)
-#endif
-#endif
-
-#ifdef hc /* older versions of the MetaWare High-C compiler define this */
-#ifdef __HC__
-#undef __HC__
-#endif
-#define __HC__ hc
-#undef hc
 #endif
 
 #include "tre.h"
