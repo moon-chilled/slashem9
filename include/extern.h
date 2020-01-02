@@ -431,7 +431,7 @@ boolean ghitm(struct monst *, struct obj *);
 void container_impact_dmg(struct obj *);
 int dokick(void);
 boolean ship_object(struct obj *, xchar, xchar, boolean);
-void obj_delivery(void);
+void obj_delivery(bool near_hero);
 schar down_gate(xchar, xchar);
 void impact_drop(struct obj *, xchar, xchar, xchar);
 
@@ -1904,7 +1904,7 @@ boolean rloc(struct monst *, boolean);
 boolean tele_restrict(struct monst *);
 void mtele_trap(struct monst *, struct trap *, int);
 int mlevel_tele_trap(struct monst *, struct trap *, boolean, int);
-void rloco(struct obj *);
+bool rloco(struct obj *obj);
 int random_teleport_level(void);
 boolean u_teleport_mon(struct monst *, boolean);
 

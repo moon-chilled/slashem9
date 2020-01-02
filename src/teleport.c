@@ -1388,13 +1388,14 @@ int mlevel_tele_trap(struct monst *mtmp, struct trap *trap, boolean force_it, in
 	return 0;
 }
 
-void rloco(struct obj *obj) {
+/* place object randomly, returns FALSE if it's gone (eg broken) as a result */
+bool rloco(struct obj *obj) {
 	xchar tx, ty, otx, oty;
 	boolean restricted_fall;
 	int try_limit = 4000;
 
 	if (obj->otyp == CORPSE && is_rider(&mons[obj->corpsenm])) {
-		if (revive_corpse(obj, false)) return;
+		if (revive_corpse(obj, false)) return false;
 	}
 
 	obj_extract_self(obj);
@@ -1415,22 +1416,24 @@ void rloco(struct obj *obj) {
 					dndest.nhx, dndest.nhy)))));
 
 	if (flooreffects(obj, tx, ty, "fall")) {
-		return;
+		return false;
 	} else if (otx == 0 && oty == 0) {
 		; /* fell through a trap door; no update of old loc needed */
 	} else {
 		if (costly_spot(otx, oty) && (!costly_spot(tx, ty) ||
 					      !index(in_rooms(tx, ty, 0), *in_rooms(otx, oty, 0)))) {
 			if (costly_spot(u.ux, u.uy) &&
-			    index(u.urooms, *in_rooms(otx, oty, 0)))
+			    index(u.urooms, *in_rooms(otx, oty, 0))) {
 				addtobill(obj, false, false, false);
-			else
-				(void)stolen_value(obj, otx, oty, false, false, false);
+			} else {
+				stolen_value(obj, otx, oty, false, false, false);
+			}
 		}
 		newsym(otx, oty); /* update old location */
 	}
 	place_object(obj, tx, ty);
 	newsym(tx, ty);
+	return true;
 }
 
 /* Returns an absolute depth */

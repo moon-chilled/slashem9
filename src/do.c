@@ -1126,7 +1126,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 	}
 
 	if (Punished) placebc();
-	obj_delivery(); /* before killing geno'd monsters' eggs */
+	obj_delivery(false);
 	losedogs();
 	kill_genocided_monsters(); /* for those wiped out while in limbo */
 	/*
@@ -1181,6 +1181,9 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 
 	/* give room entrance message, if any */
 	check_special_room(false);
+
+	/* deliver objects traveling with player */
+	obj_delivery(true);
 
 	/* Check whether we just entered Gehennom. */
 	if (!In_hell(&u.uz0) && Inhell) {

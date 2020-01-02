@@ -148,24 +148,26 @@ typedef struct branch {
 
 /* monster and object migration codes */
 
-#define MIGR_NOWHERE	 (-1) /* failure flag for down_gate() */
-#define MIGR_RANDOM	 0
-#define MIGR_APPROX_XY	 1 /* approximate coordinates */
-#define MIGR_EXACT_XY	 2 /* specific coordinates */
-#define MIGR_STAIRS_UP	 3
-#define MIGR_STAIRS_DOWN 4
-#define MIGR_LADDER_UP	 5
-#define MIGR_LADDER_DOWN 6
-#define MIGR_SSTAIRS	 7 /* dungeon branch */
-#define MIGR_PORTAL	 8 /* magic portal */
-#define MIGR_NEAR_PLAYER 9 /* mon: followers; obj: trap door */
+#define MIGR_NOWHERE		(-1)	/* failure flag for down_gate() */
+#define MIGR_RANDOM		0
+#define MIGR_APPROX_XY		1	/* approximate coordinates */
+#define MIGR_EXACT_XY		2	/* specific coordinates */
+#define MIGR_STAIRS_UP		3
+#define MIGR_STAIRS_DOWN	4
+#define MIGR_LADDER_UP		5
+#define MIGR_LADDER_DOWN	6
+#define MIGR_SSTAIRS		7	/* dungeon branch */
+#define MIGR_PORTAL		8	/* magic portal */
+#define MIGR_NEAR_PLAYER	9	/* mon: followers; obj: trap door */
+#define MIGR_NOBREAK		1024	/* bitmask: don't break on delivery */
+
 
 /* level information (saved via ledger number) */
 enum linfo_flag {
-	VISITED = 0x01,	     /* hero has visited this level */
-	FORGOTTEN = 0x02,    /* hero will forget this level when reached */
-	LFILE_EXISTS = 0x04, /* a level file exists for this level */
-	HANGUP_HERE = 0x08,  /* AIS: there was a hangup on this level */
+	VISITED = 0x01,		/* hero has visited this level */
+	FORGOTTEN = 0x02,	/* hero will forget this level when reached */
+	LFILE_EXISTS = 0x04,	/* a level file exists for this level */
+	HANGUP_HERE = 0x08,	/* AIS: there was a hangup on this level */
 };
 /*
  * Note:  VISITED and LFILE_EXISTS are currently almost always set at the

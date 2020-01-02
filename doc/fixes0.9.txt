@@ -119,6 +119,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Interface: if you didn't see a rolling boulder fall into a pit, you would only hear about it if you were blind.
 - Gameplay: rocks can skip over water.
 - Gameplay: pits created by wands of digging and drums of earthquake will get filled in by water or lava from the surrounding area, just like player-created pits.
+- Gameplay: breakable objects that fall through trapdoors/holes have a chance to break upon landing on the lower level.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

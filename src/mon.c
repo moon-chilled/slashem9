@@ -2802,6 +2802,7 @@ void kill_genocided_monsters() {
 
 	kill_eggs(invent);
 	kill_eggs(fobj);
+	kill_eggs(migrating_objs);
 	kill_eggs(level.buriedobjlist);
 }
 
