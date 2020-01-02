@@ -944,8 +944,7 @@ void store_place_list(int npart, int nlist, int nloc, const struct coord *plist)
 static bool write_common_data(int fd, int typ, lev_init *init, long flgs) {
 	char c;
 	uchar len;
-	static struct version_info version_data = {
-		VERSION_NUMBER, VERSION_SANITY};
+	static struct version_info version_data = {VERSION_NUM, VERSION_SANITY};
 
 	Write(fd, &version_data, sizeof version_data);
 	c = typ;

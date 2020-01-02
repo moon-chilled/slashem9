@@ -36,7 +36,7 @@ int doversion(void) {
 }
 
 bool check_version(struct version_info *version_data, const char *filename, boolean complain) {
-	if (version_data->incarnation != VERSION_NUMBER) {
+	if (version_data->incarnation != VERSION_NUM) {
 		if (complain)
 			pline("Version mismatch for file \"%s\".", filename);
 		return false;
@@ -56,7 +56,7 @@ boolean uptodate(int fd, const char *name) {
 	struct version_info vers_info;
 	boolean verbose = name ? true : false;
 
-	rlen = read(fd, (void *)&vers_info, sizeof vers_info);
+	rlen = read(fd, &vers_info, sizeof vers_info);
 	if (rlen == 0) {
 		if (verbose) {
 			pline("File \"%s\" is empty?", name);
