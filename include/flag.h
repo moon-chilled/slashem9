@@ -156,9 +156,7 @@ struct instance_flags {
 	bool hilite_obj_piles;
 	bool sanity_check;    /* run sanity checks */
 	bool mon_polycontrol; /* debug: control monster polymorphs */
-#ifdef TTY_GRAPHICS
 	char prevmsg_window; /* type of old message window to use */
-#endif
 #if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS)
 	bool extmenu; /* extended commands use menu interface */
 #endif
@@ -185,7 +183,6 @@ struct instance_flags {
 	 */
 	bool wc_color;		   /* use color graphics                  */
 	bool wc_hilite_pet;	   /* hilight pets                        */
-	bool wc_ascii_map;	   /* show map using traditional ascii    */
 	bool wc_tiled_map;	   /* show map using tiles                */
 	bool wc_preload_tiles;	   /* preload tiles into memory           */
 	int wc_tile_width;	   /* tile width                          */
@@ -238,7 +235,6 @@ struct instance_flags {
 	/* Items which belong in flags, but are here to allow save compatibility */
 	bool lootabc;	/* use "a/b/c" rather than "o/i/b" when looting */
 	bool showrace;	/* show hero glyph by race rather than by role */
-	bool travelcmd; /* allow travel command */
 	int runmode;	/* update screen display during run moves */
 	struct autopickup_exception *autopickup_exceptions[2];
 #define AP_LEAVE 0

@@ -37,79 +37,56 @@ static struct Bool_Opt {
 	int optflags;
 } boolopt[] = {
 	{"acoustics", &flags.acoustics, true, SET_IN_GAME},
-	{"ascii_map", &iflags.wc_ascii_map, !PREFER_TILED, SET_IN_GAME}, /*WC*/
 	{"autodig", &flags.autodig, false, SET_IN_GAME},
 	{"autopickup", &flags.pickup, true, SET_IN_GAME},
 #ifdef INSURANCE
 	{"checkpoint", &flags.ins_chkpt, true, SET_IN_GAME},
-#else
-	{"checkpoint", NULL, false, SET_IN_FILE},
 #endif
 	{"clicklook", &iflags.clicklook, true, SET_IN_GAME},
 	{"cmdassist", &iflags.cmdassist, true, SET_IN_GAME},
-#if defined(WIN32) || defined(CURSES_GRAPHICS)
 	{"color", &iflags.wc_color, true, SET_IN_GAME}, /*WC*/
-#else							/* systems that support multiple terminals, many monochrome */
-	{"color", &iflags.wc_color, false, SET_IN_GAME}, /*WC*/
-#endif
 	{"confirm", &flags.confirm, true, SET_IN_GAME},
 #ifdef CURSES_GRAPHICS
 	{"classic_status", &iflags.classic_status, true, SET_IN_GAME},
-#else
-	{"classic_status", NULL, true, SET_IN_FILE},
 #endif
+#if defined(ALPHA) || defined(BETA)
 	{"debug_fuzzer", &iflags.debug_fuzzer, false, SET_IN_FILE},
-#if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS)
-	{"extmenu", &iflags.extmenu, false, SET_IN_GAME},
-#else
-	{"extmenu", NULL, false, SET_IN_FILE},
 #endif
+	{"extmenu", &iflags.extmenu, false, SET_IN_GAME},
 	{"female", &flags.female, false, DISP_IN_GAME},
 	{"fixinv", &flags.invlet_constant, true, SET_IN_GAME},
 	{"fullscreen", &iflags.wc2_fullscreen, false, SET_IN_FILE},
 	{"guicolor", &iflags.wc2_guicolor, true, SET_IN_GAME},
 	{"help", &flags.help, true, SET_IN_GAME},
-	{"hilite_pet", &iflags.wc_hilite_pet, false, SET_IN_GAME},		    /*WC*/
-	{"hilite_hidden_stairs", &iflags.hilite_hidden_stairs, false, SET_IN_GAME}, /*WC*/
-	{"hilite_obj_piles", &iflags.hilite_obj_piles, false, SET_IN_GAME},	    /*WC*/
+	{"hilite_pet", &iflags.wc_hilite_pet, true, SET_IN_GAME},		    /*WC*/
+	{"hilite_hidden_stairs", &iflags.hilite_hidden_stairs, true, SET_IN_GAME}, /*WC*/
+	{"hilite_obj_piles", &iflags.hilite_obj_piles, true, SET_IN_GAME},	    /*WC*/
 	{"hitpointbar", &iflags.hitpointbar, true, SET_IN_GAME},
 #ifndef MAC
 	{"ignintr", &flags.ignintr, false, SET_IN_GAME},
-#else
-	{"ignintr", NULL, false, SET_IN_FILE},
 #endif
 	{"invweight", &flags.invweight, false, SET_IN_GAME},
 /*WAC the keep savefile option...*/
 #ifdef KEEP_SAVE
 	{"keep_savefile", &flags.keep_savefile, false, SET_IN_FILE},
-#else
-	{"keep_savefile", NULL, false, DISP_IN_GAME},
 #endif
-	{"large_font", &iflags.obsolete, false, SET_IN_FILE}, /* OBSOLETE */
 	{"legacy", &flags.legacy, true, DISP_IN_GAME},
 	{"lit_corridor", &flags.lit_corridor, true, SET_IN_GAME},
 	{"lootabc", &iflags.lootabc, false, SET_IN_GAME},
 #ifdef MAIL
 	{"mail", &flags.biff, true, SET_IN_GAME},
-#else
-	{"mail", NULL, true, SET_IN_FILE},
 #endif
 	{"menucolors", &iflags.use_menu_color, true, SET_IN_GAME},
 	{"menu_on_esc", &flags.menu_on_esc, true, SET_IN_GAME},
 	/* for menu debugging only*/
 	{"menu_tab_sep", &iflags.menu_tab_sep, false, SET_IN_GAME},
-	{"menu_glyphs", &iflags.use_menu_glyphs, false, SET_IN_GAME},
-	{"mon_polycontrol", &iflags.mon_polycontrol, false, SET_IN_GAME},
-#ifdef CURSES_GRAPHICS
-	{"mouse_support", &iflags.wc_mouse_support, false, DISP_IN_GAME}, /*WC*/
-#else
+	{"menu_glyphs", &iflags.use_menu_glyphs, true, SET_IN_GAME},
 	{"mouse_support", &iflags.wc_mouse_support, true, DISP_IN_GAME}, /*WC*/
-#endif
+#ifdef CURSES_GRAPHICS
 	{"msg_is_alert", &iflags.msg_is_alert, false, SET_IN_GAME},
+#endif
 #ifdef NEWS
 	{"news", &iflags.news, true, DISP_IN_GAME},
-#else
-	{"news", NULL, false, SET_IN_FILE},
 #endif
 	{"null", &flags.null, true, SET_IN_GAME},
 #ifdef MAC
@@ -124,7 +101,6 @@ static struct Bool_Opt {
 	{"preload_tiles", &iflags.wc_preload_tiles, true, DISP_IN_GAME}, /*WC*/
 	{"pushweapon", &flags.pushweapon, false, SET_IN_GAME},
 	{"quiver_fired", &iflags.quiver_fired, true, SET_IN_GAME},
-	{"radar", NULL, false, SET_IN_FILE}, /* OBSOLETE */
 	{"rest_on_space", &flags.rest_on_space, false, SET_IN_GAME},
 	{"safe_pet", &flags.safe_dog, true, SET_IN_GAME},
 	{"sanity_check", &iflags.sanity_check, false, SET_IN_GAME},
@@ -134,7 +110,7 @@ static struct Bool_Opt {
 	{"showscore", &flags.showscore, false, SET_IN_GAME},
 	/* WAC made the [ xx pts]  dmg display optional */
 	{"showdmg", &flags.showdmg, false, SET_IN_GAME},
-	{"showweight", &flags.showweight, false, SET_IN_GAME},
+	{"showweight", &flags.showweight, true, SET_IN_GAME},
 	{"silent", &flags.silent, true, SET_IN_GAME},
 	{"softkeyboard", &iflags.wc2_softkeyboard, false, SET_IN_FILE},
 	{"sortpack", &flags.sortpack, true, SET_IN_GAME},
@@ -151,7 +127,6 @@ static struct Bool_Opt {
 #endif
 	{"tombstone", &flags.tombstone, true, SET_IN_GAME},
 	{"toptenwin", &flags.toptenwin, false, SET_IN_GAME},
-	{"travel", &iflags.travelcmd, true, SET_IN_GAME},
 	{"use_inverse", &iflags.wc_inverse, true, SET_IN_GAME}, /*WC*/
 	{"verbose", &flags.verbose, true, SET_IN_GAME},
 	{"wraptext", &iflags.wc2_wraptext, false, SET_IN_GAME},
@@ -212,11 +187,7 @@ static struct Comp_Opt {
 	{"menu_select_page", "select all items on this page of a menu", 4, SET_IN_FILE},
 	{"monsters", "the symbols to use for monsters", MAXMCLASSES, SET_IN_FILE},
 	{"msghistory", "number of top line messages to save", 5, DISP_IN_GAME},
-#ifdef TTY_GRAPHICS
 	{"msg_window", "the type of message window required", 1, SET_IN_GAME},
-#else
-	{"msg_window", "the type of message window required", 1, SET_IN_FILE},
-#endif
 	{"name", "your character's name (e.g., name:Merlin-W)", PL_NSIZ, DISP_IN_GAME},
 	{"number_pad", "use the number pad", 1, SET_IN_GAME},
 	{"objects", "the symbols to use for objects", MAXOCLASSES, SET_IN_FILE},
@@ -424,9 +395,7 @@ void initoptions(void) {
 	flags.end_around = 2;
 	iflags.runmode = RUN_LEAP;
 	iflags.msg_history = 20;
-#ifdef TTY_GRAPHICS
-	iflags.prevmsg_window = 's';
-#endif
+	iflags.prevmsg_window = 'f';
 	iflags.menu_headings = ATR_INVERSE;
 	iflags.autopickup_exceptions[AP_GRAB] = NULL;
 	iflags.autopickup_exceptions[AP_LEAVE] = NULL;
@@ -459,7 +428,7 @@ void initoptions(void) {
 	for (i = 0; i < NUM_DISCLOSURE_OPTIONS; i++)
 		flags.end_disclose[i] = DISCLOSE_PROMPT_DEFAULT_NO;
 
-	switch_graphics(UTF8_GRAPHICS);	 // set default characters
+	switch_graphics(UTF8COMPAT_GRAPHICS);	 // set default characters
 	assign_colors(NULL, 0, MAXPCHARS, 0);
 
 	flags.menu_style = MENU_FULL;
@@ -467,7 +436,6 @@ void initoptions(void) {
 	/* since this is done before init_objects(), do partial init here */
 	objects[SLIME_MOLD].oc_name_idx = SLIME_MOLD;
 	nmcpy(pl_fruit, OBJ_NAME(objects[SLIME_MOLD]), PL_FSIZ);
-#ifndef MAC
 	opts = getenv(NETHACK_ENV_OPTIONS);
 	if (!opts) opts = getenv("NETHACKOPTIONS");
 	if (!opts) opts = getenv("HACKOPTIONS");
@@ -484,9 +452,9 @@ void initoptions(void) {
 			 */
 			parseoptions(opts, true, false);
 		}
-	} else
-#endif
+	} else {
 		read_config_file(NULL);
+	}
 
 	fruitadd(pl_fruit);
 	/* Remove "slime mold" from list of object names; this will	*/
@@ -1381,7 +1349,6 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 	/* msg_window:single, combo, full or reversed */
 	if (match_optname(opts, fullname, 4, true)) {
 		/* allow option to be silently ignored by non-tty ports */
-#ifdef TTY_GRAPHICS
 		int tmp;
 		if (!(op = string_for_opt(opts, true))) {
 			tmp = negated ? 's' : 'f';
@@ -1408,7 +1375,6 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 			default:
 				badoption(opts);
 		}
-#endif
 		return;
 	}
 
@@ -2941,24 +2907,19 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 		destroy_nhwindow(tmpwin);
 		retval = true;
 	}
-#ifdef TTY_GRAPHICS
 	else if (!strcmp("msg_window", optname)) {
 		/* by Christian W. Cooper */
 		menu_item *window_pick = NULL;
 		tmpwin = create_nhwindow(NHW_MENU);
 		start_menu(tmpwin);
 		any.a_char = 's';
-		add_menu(tmpwin, NO_GLYPH, &any, 's', 0,
-			 ATR_NONE, "single", MENU_UNSELECTED);
+		add_menu(tmpwin, NO_GLYPH, &any, 's', 0, ATR_NONE, "single", MENU_UNSELECTED);
 		any.a_char = 'c';
-		add_menu(tmpwin, NO_GLYPH, &any, 'c', 0,
-			 ATR_NONE, "combination", MENU_UNSELECTED);
+		add_menu(tmpwin, NO_GLYPH, &any, 'c', 0, ATR_NONE, "combination", MENU_UNSELECTED);
 		any.a_char = 'f';
-		add_menu(tmpwin, NO_GLYPH, &any, 'f', 0,
-			 ATR_NONE, "full", MENU_UNSELECTED);
+		add_menu(tmpwin, NO_GLYPH, &any, 'f', 0, ATR_NONE, "full", MENU_UNSELECTED);
 		any.a_char = 'r';
-		add_menu(tmpwin, NO_GLYPH, &any, 'r', 0,
-			 ATR_NONE, "reversed", MENU_UNSELECTED);
+		add_menu(tmpwin, NO_GLYPH, &any, 'r', 0, ATR_NONE, "reversed", MENU_UNSELECTED);
 		end_menu(tmpwin, "Select message history display type:");
 		if (select_menu(tmpwin, PICK_ONE, &window_pick) > 0) {
 			iflags.prevmsg_window = window_pick->item.a_char;
@@ -2967,7 +2928,6 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 		destroy_nhwindow(tmpwin);
 		retval = true;
 	}
-#endif
 	else if (!strcmp("align_message", optname) ||
 		 !strcmp("align_status", optname)) {
 		menu_item *window_pick = NULL;
@@ -3279,10 +3239,10 @@ static const char *get_compopt_value(const char *optname, char *buf) {
 		sprintf(buf, "%s", to_be_done);
 	else if (!strcmp(optname, "msghistory"))
 		sprintf(buf, "%u", iflags.msg_history);
-#ifdef TTY_GRAPHICS
 	else if (!strcmp(optname, "msg_window"))
-		sprintf(buf, "%s", (iflags.prevmsg_window == 's') ? "single" : (iflags.prevmsg_window == 'c') ? "combination" : (iflags.prevmsg_window == 'f') ? "full" : "reversed");
-#endif
+		sprintf(buf, "%s", (iflags.prevmsg_window == 's') ? "single" :
+				   (iflags.prevmsg_window == 'c') ? "combination" :
+				   (iflags.prevmsg_window == 'f') ? "full" : "reversed");
 	else if (!strcmp(optname, "name"))
 		sprintf(buf, "%s", plname);
 	else if (!strcmp(optname, "number_pad"))
@@ -3779,7 +3739,6 @@ int choose_classes_menu(const char *prompt, int category, boolean way, char *cla
 }
 
 struct wc_Opt wc_options[] = {
-	{"ascii_map", WC_ASCII_MAP},
 	{"color", WC_COLOR},
 	{"hilite_pet", WC_HILITE_PET},
 	{"popup_dialog", WC_POPUP_DIALOG},
