@@ -3119,12 +3119,12 @@ static int do_break_wand(struct obj *obj) {
  * the wand to explode (zapping or applying).
  */
 int wand_explode(struct obj *obj, boolean hero_broke) {
-	static const char nothing_else_happens[] = "But nothing else happens...";
 	int i, x, y;
 	struct monst *mon;
 	int dmg, damage;
 	boolean affects_objects;
 	boolean shop_damage = false;
+	bool fillmsg = false;
 	int expltype = EXPL_MAGICAL;
 	char buf[BUFSZ];
 
@@ -3143,7 +3143,7 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 	setnotworn(obj);    /* so we need to do this ourselves */
 
 	if (obj->spe <= 0) {
-		pline(nothing_else_happens);
+		pline("But nothing else happens...");
 		goto discard_broken_wand;
 	}
 	obj->ox = u.ux;
@@ -3159,7 +3159,7 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 		case WAN_ENLIGHTENMENT:
 		case WAN_OPENING:
 		case WAN_SECRET_DOOR_DETECTION:
-			pline(nothing_else_happens);
+			pline("But nothing else happens...");
 			goto discard_broken_wand;
 		case WAN_DEATH:
 		case WAN_LIGHTNING:
@@ -3236,6 +3236,7 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 		if (!isok(x, y)) continue;
 
 		if (obj->otyp == WAN_DIGGING) {
+			schar typ;
 			if (dig_check(BY_OBJECT, false, x, y)) {
 				if (IS_WALL(levl[x][y].typ) || IS_DOOR(levl[x][y].typ)) {
 					/* normally, pits and holes don't anger guards, but they
@@ -3243,10 +3244,21 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 					watch_dig(NULL, x, y, true);
 					if (*in_rooms(x, y, SHOPBASE)) shop_damage = true;
 				}
-				digactualhole(x, y, BY_OBJECT,
-					      (rn2(obj->spe) < 3 || !Can_dig_down(&u.uz)) ?
-						      PIT :
-						      HOLE);
+				/*
+				 * Let liquid flow into the newly created pits.
+				 * Adjust corresponding code in music.c for
+				 * drum of earthquake if you alter this sequence.
+				 */
+				typ = fillholetyp(x, y);
+				if (typ != ROOM) {
+					levl[x][y].typ = typ;
+					liquid_flow(x, y, typ, t_at(x,y),
+						    fillmsg ? NULL : "Some holes are quickly filled with %s!");
+					fillmsg = true;
+				} else {
+					digactualhole(x, y, BY_OBJECT,
+						      (rn2(obj->spe) < 3 || !Can_dig_down(&u.uz)) ?  PIT : HOLE);
+				}
 			}
 			continue;
 			/* WAC catch Create Horde wands too */

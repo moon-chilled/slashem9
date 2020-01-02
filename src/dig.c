@@ -13,7 +13,6 @@ static void mkcavepos(xchar, xchar, int, boolean, boolean);
 static void mkcavearea(boolean);
 static int dig_typ(struct obj *, xchar, xchar);
 static int dig(void);
-static schar fillholetyp(int, int);
 static void dig_up_grave(void);
 
 /* Indices returned by dig_typ() */
@@ -436,7 +435,7 @@ int holetime(void) {
 }
 
 /* Return typ of liquid to fill a hole with, or ROOM, if no liquid nearby */
-static schar fillholetyp(int x, int y) {
+schar fillholetyp(int x, int y) {
 	int x1, y1;
 	int lo_x = max(1, x - 1), hi_x = min(x + 1, COLNO - 1),
 	    lo_y = max(0, y - 1), hi_y = min(y + 1, ROWNO - 1);
@@ -637,6 +636,27 @@ void digactualhole(int x, int y, struct monst *madeby, int ttyp) {
 	}
 }
 
+/*
+ * Called from dighole(), but also from do_break_wand()
+ * in apply.c.
+ */
+void liquid_flow(xchar x, xchar y, schar typ, struct trap *ttmp, const char *fillmsg) {
+	bool u_spot = (x == u.ux && y == u.uy);
+
+	if (ttmp) delfloortrap(ttmp);
+	/* if any objects were frozen here, they're released now */
+	unearth_objs(x, y);
+
+	if (fillmsg) pline(fillmsg, typ == LAVAPOOL ? "lava" : "water");
+	if (u_spot && !(Levitation || Flying)) {
+		if (typ == LAVAPOOL)
+			lava_effects();
+		else if (!Wwalking && !Swimming)
+			drown();
+	}
+}
+
+
 /* return true if digging succeeded, false otherwise */
 boolean dighole(boolean pit_only) {
 	struct trap *ttmp = t_at(u.ux, u.uy);
@@ -714,20 +734,7 @@ boolean dighole(boolean pit_only) {
 		lev->drawbridgemask &= ~DB_UNDER;
 		lev->drawbridgemask |= (typ == LAVAPOOL) ? DB_LAVA : DB_MOAT;
 
-	liquid_flow:
-		if (ttmp) (void)delfloortrap(ttmp);
-		/* if any objects were frozen here, they're released now */
-		unearth_objs(u.ux, u.uy);
-
-		pline("As you dig, the hole fills with %s!",
-		      typ == LAVAPOOL ? "lava" : "water");
-		/* KMH, balance patch -- new intrinsic */
-		if (!Levitation && !Flying) {
-			if (typ == LAVAPOOL)
-				lava_effects();
-			else if (!Wwalking && !Swimming)
-				drown();
-		}
+		liquid_flow(u.ux, u.uy, typ, ttmp, "As you dig, the hole fills with %s!");
 		return true;
 
 		/* the following two are here for the wand of digging */
@@ -742,7 +749,8 @@ boolean dighole(boolean pit_only) {
 
 		if (typ != ROOM) {
 			lev->typ = typ;
-			goto liquid_flow;
+			liquid_flow(u.ux, u.uy, typ, ttmp, "As you dig, the hole fills with %s!");
+			return true;
 		}
 
 		/* finally we get to make a hole */

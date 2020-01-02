@@ -272,6 +272,19 @@ static void
 
 						levl[x][y].doormask = 0;
 
+						/*
+						 * Let liquid flow into the newly created chasm.
+						 * Adjust corresponding code in apply.c for
+						 * exploding wand of digging if you alter this sequence.
+						 */
+						schar filltype = fillholetyp(x,y);
+						if (filltype != ROOM) {
+							levl[x][y].typ = filltype;
+							liquid_flow(x, y, filltype, chasm, NULL);
+						}
+
+
+
 						mtmp = m_at(x, y);
 
 						if ((otmp = sobj_at(BOULDER, x, y)) != 0) {

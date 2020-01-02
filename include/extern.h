@@ -247,6 +247,8 @@ void bury_objs(int, int);
 void unearth_objs(int, int);
 void rot_organic(void *, long);
 void rot_corpse(void *, long);
+schar fillholetyp(int x, int y);
+void liquid_flow(xchar x, xchar y, schar typ, struct trap *ttmp, const char *fillmsg);
 #if 0
 void bury_monst(struct monst *);
 void bury_you(void);
