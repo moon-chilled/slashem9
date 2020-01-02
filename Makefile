@@ -1,5 +1,5 @@
-PREFIX ?= $(HOME)/slashem-nextinstall
-HACKDIR ?= $(PREFIX)/slashemdir
+PREFIX ?= $(HOME)/slashem9install
+HACKDIR ?= $(PREFIX)/slashem9dir
 BINDIR ?= $(PREFIX)/bin
 
 CFLAGS += -Iinclude -Isys/share/libtre -DDLBLIB -DWIZARD=\"$(shell whoami)\" -DSLASHEM_GIT_COMMIT_REV=\"$(shell git rev-parse --short HEAD)\"
@@ -37,16 +37,16 @@ install: all
 	mkdir -p $(HACKDIR)/save $(BINDIR)
 	touch $(HACKDIR)/perm $(HACKDIR)/xlogfile
 
-	cp src/slashem dat/nhdat $(HACKDIR)
+	cp src/slashem9 dat/nhdat $(HACKDIR)
 
-	sed -e 's;@HACKDIR@;$(HACKDIR);' < sys/unix/slashem.sh > $(BINDIR)/slashem
-	chmod 755 $(BINDIR)/slashem
-	#cp util/slashem-recover $(BINDIR)/
+	sed -e 's;@HACKDIR@;$(HACKDIR);' < sys/unix/slashem9.sh > $(BINDIR)/slashem9
+	chmod 755 $(BINDIR)/slashem9
+	#cp util/slashem9-recover $(BINDIR)/
 
-src/slashem: $(SLASHEMOBJ)
-	$(CCLD) -o src/slashem $(SLASHEMOBJ) $(LDFLAGS)
+src/slashem9: $(SLASHEMOBJ)
+	$(CCLD) -o src/slashem9 $(SLASHEMOBJ) $(LDFLAGS)
 
-all: src/slashem dat/nhdat
+all: src/slashem9 dat/nhdat
 
 util/dgn_lex.o: util/dgn_yacc.o
 
@@ -78,4 +78,4 @@ dat/nhdat: util/dlb util/dgn_comp util/lev_comp dat/*.des dat/dungeon.def dat/he
 	cd dat; ../util/dlb cf nhdat dungeon *.lev help hh cmdhelp history license opthelp wizhelp gypsy.txt data.base oracles.txt quest.txt rumors.fal rumors.tru
 
 clean:
-	rm -f $(ALLOBJ) src/slashem util/dlb util/lev_comp util/dgn_comp dat/nhdat dat/*.lev util/*_yacc.c util/*_lex.c util/*_yacc.h dat/dungeon
+	rm -f $(ALLOBJ) src/slashem9 util/dlb util/lev_comp util/dgn_comp dat/nhdat dat/*.lev util/*_yacc.c util/*_lex.c util/*_yacc.h dat/dungeon

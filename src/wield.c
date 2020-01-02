@@ -325,11 +325,6 @@ int dowieldquiver(void) {
 	/* will_weld(), touch_petrifies(), etc. */
 	multi = 0;
 
-	/* Slash'EM has used Q for quiver since it started */
-	/* Because 'Q' used to be quit... */
-	if (flags.suppress_alert < FEATURE_NOTICE_VER(0, 0, 0))
-		pline("Note: Please use #quit if you wish to exit the game.");
-
 	/* Prompt for a new quiver */
 	if (!(newquiver = getobj(quivee_types, "ready")))
 		/* Cancelled */

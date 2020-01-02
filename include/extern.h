@@ -2086,8 +2086,6 @@ char *version_string_tmp(void);
 char *full_version_string_tmp();
 int doversion(void);
 bool check_version(struct version_info *, const char *, boolean);
-unsigned long get_feature_notice_ver(char *);
-unsigned long get_current_feature_ver(void);
 #ifdef RUNTIME_PORT_ID
 void append_port_id(char *);
 #endif

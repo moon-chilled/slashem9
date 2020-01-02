@@ -2,7 +2,7 @@
 
 HACKDIR=@HACKDIR@
 export HACKDIR
-HACK=$HACKDIR/slashem
+HACK=$HACKDIR/slashem9
 
 # see if we can find the full path name of PAGER, so help files work properly
 # assume that if someone sets up a special variable (HACKPAGER) for NetHack,

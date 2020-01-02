@@ -171,11 +171,6 @@ char *get_option(const char *option) {
 			flags.end_own ? "/own" : "");
 		return buf;
 	}
-	if (!strcmp(option, "suppress_alert")) {
-		sprintf(buf, "%lu.%lu.%lu", FEATURE_NOTICE_VER_MAJ,
-			FEATURE_NOTICE_VER_MIN, FEATURE_NOTICE_VER_PATCH);
-		return buf;
-	}
 	if (!strcmp(option, "tileset")) return tileset;
 #ifdef VIDEOSHADES
 	if (!strcmp(option, "videocolors")) {

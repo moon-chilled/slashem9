@@ -7,7 +7,7 @@
 
 char *version_string_tmp(void) {
 	static char buf[128];
-	sprintf(buf, "%d.%d.%dE%dF%d", VERSION_MAJOR, VERSION_MINOR, PATCHLEVEL, EDITLEVEL, FIXLEVEL);
+	sprintf(buf, "0.%dE%d", VERSION_NUM, VERSION_EDITLEVEL);
 #ifdef ALPHA
 	strcat(buf, "-Alpha");
 #elif defined(BETA)
@@ -72,46 +72,13 @@ boolean uptodate(int fd, const char *name) {
 }
 
 void store_version(int fd) {
-	const static struct version_info version_data = {
-		VERSION_NUMBER, VERSION_SANITY};
+	static struct version_info version_data = {VERSION_NUM, VERSION_SANITY};
 
 	bufoff(fd);
 	/* bwrite() before bufon() uses plain write() */
-	bwrite(fd, (void *)&version_data, (unsigned)(sizeof version_data));
+	bwrite(fd, &version_data, sizeof(version_data));
 	bufon(fd);
 	return;
-}
-
-unsigned long get_feature_notice_ver(char *str) {
-	char buf[BUFSZ];
-	int ver_maj, ver_min, patch;
-	char *istr[3];
-	int j = 0;
-
-	if (!str) return 0L;
-	str = strcpy(buf, str);
-	istr[j] = str;
-	while (*str) {
-		if (*str == '.') {
-			*str++ = '\0';
-			j++;
-			istr[j] = str;
-			if (j == 2) break;
-		} else if (index("0123456789", *str) != 0) {
-			str++;
-		} else
-			return 0L;
-	}
-	if (j != 2) return 0L;
-	ver_maj = atoi(istr[0]);
-	ver_min = atoi(istr[1]);
-	patch = atoi(istr[2]);
-	return FEATURE_NOTICE_VER(ver_maj, ver_min, patch);
-	/* macro from hack.h */
-}
-
-unsigned long get_current_feature_ver(void) {
-	return FEATURE_NOTICE_VER(VERSION_MAJOR, VERSION_MINOR, PATCHLEVEL);
 }
 
 /*version.c*/

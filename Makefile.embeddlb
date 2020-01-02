@@ -1,5 +1,5 @@
-PREFIX ?= $(HOME)/slashem-nextinstall
-HACKDIR ?= $(PREFIX)/slashemdir
+PREFIX ?= $(HOME)/slashem9install
+HACKDIR ?= $(PREFIX)/slashem9dir
 BINDIR ?= $(PREFIX)/bin
 
 CFLAGS += -Iinclude -Isys/share/libtre -DDLBEMBED -DWIZARD=\"$(shell whoami)\" -DSLASHEM_GIT_COMMIT_REV=\"$(shell git rev-parse --short HEAD)\"
@@ -37,15 +37,15 @@ install: all
 	mkdir -p $(HACKDIR)/save $(BINDIR)
 	touch $(HACKDIR)/perm $(HACKDIR)/xlogfile
 
-	cp src/slashem $(HACKDIR)
-	sed -e 's;@HACKDIR@;$(HACKDIR);' < sys/unix/slashem.sh > $(BINDIR)/slashem
-	chmod 755 $(BINDIR)/slashem
-	#cp util/slashem-recover $(BINDIR)/
+	cp src/slashem9 $(HACKDIR)
+	sed -e 's;@HACKDIR@;$(HACKDIR);' < sys/unix/slashem9.sh > $(BINDIR)/slashem9
+	chmod 755 $(BINDIR)/slashem9
+	#cp util/slashem9-recover $(BINDIR)/
 
-src/slashem: $(SLASHEMOBJ)
-	$(CCLD) -o src/slashem $(SLASHEMOBJ) $(LDFLAGS)
+src/slashem9: $(SLASHEMOBJ)
+	$(CCLD) -o src/slashem9 $(SLASHEMOBJ) $(LDFLAGS)
 
-all: src/slashem
+all: src/slashem9
 
 util/dgn_lex.o: util/dgn_yacc.o
 
@@ -79,4 +79,4 @@ include/dlb_archive.h: util/data2c util/dgn_comp util/lev_comp dat/*.des dat/dun
 src/dlb.o: include/dlb_archive.h
 
 clean:
-	rm -f $(ALLOBJ) src/slashem util/data2c util/lev_comp util/dgn_comp include/dlb_archive.h dat/*.lev util/*_yacc.c util/*_lex.c util/*_yacc.h dat/dungeon
+	rm -f $(ALLOBJ) src/slashem9 util/data2c util/lev_comp util/dgn_comp include/dlb_archive.h dat/*.lev util/*_yacc.c util/*_lex.c util/*_yacc.h dat/dungeon

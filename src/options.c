@@ -238,7 +238,6 @@ static struct Comp_Opt {
 	{"scores", "the parts of the score list you wish to see", 32, SET_IN_GAME},
 	{"scroll_amount", "amount to scroll map when scroll_margin is reached", 20, DISP_IN_GAME}, /*WC*/
 	{"scroll_margin", "scroll map when this far from the edge", 20, DISP_IN_GAME}, /*WC*/
-	{"suppress_alert", "suppress alerts about version-specific features", 8, SET_IN_GAME},
 	{"tile_width", "width of tiles", 20, DISP_IN_GAME},   /*WC*/
 	{"tile_height", "height of tiles", 20, DISP_IN_GAME}, /*WC*/
 	{"tile_file", "name of tile file", 70, DISP_IN_GAME}, /*WC*/
@@ -356,7 +355,6 @@ static char *string_for_env_opt(const char *, char *, boolean);
 static void bad_negation(const char *, boolean);
 static int change_inv_order(char *);
 static void oc_to_str(char *, char *);
-static int feature_alert_opts(char *, const char *);
 static const char *get_compopt_value(const char *, char *);
 static boolean special_handling(const char *, boolean, boolean);
 static void duplicate_opt_detection(const char *, bool);
@@ -688,35 +686,6 @@ static int change_inv_order(char *op) {
 		}
 
 	strcpy(flags.inv_order, buf);
-	return 1;
-}
-
-static int feature_alert_opts(char *op, const char *optn) {
-	char buf[BUFSZ];
-	boolean rejectver = false;
-	unsigned long fnv = get_feature_notice_ver(op); /* version.c */
-	if (fnv == 0L) return 0;
-	if (fnv > get_current_feature_ver())
-		rejectver = true;
-	else
-		flags.suppress_alert = fnv;
-	if (rejectver) {
-		if (!initial)
-			pline("You can't disable new feature alerts for future versions.");
-		else {
-			sprintf(buf,
-				"\n%s=%s Invalid reference to a future version ignored",
-				optn, op);
-			badoption(buf);
-		}
-		return 0;
-	}
-	if (!initial) {
-		sprintf(buf, "%lu.%lu.%lu", FEATURE_NOTICE_VER_MAJ,
-			FEATURE_NOTICE_VER_MIN, FEATURE_NOTICE_VER_PATCH);
-		pline("Feature change alerts disabled for Slash'EM %s features and prior.",
-		      buf);
-	}
 	return 1;
 }
 
@@ -1997,16 +1966,6 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 		else if ((op = string_for_env_opt(fullname, opts, false)) != 0)
 			if (!parse_status_color_options(op))
 				badoption(opts);
-		return;
-	}
-
-	fullname = "suppress_alert";
-	if (match_optname(opts, fullname, 4, true)) {
-		op = string_for_opt(opts, negated);
-		if (negated)
-			bad_negation(fullname, false);
-		else if (op)
-			(void)feature_alert_opts(op, fullname);
 		return;
 	}
 
@@ -3366,16 +3325,8 @@ static const char *get_compopt_value(const char *optname, char *buf) {
 			sprintf(buf, "%d", iflags.wc_scroll_margin);
 		else
 			strcpy(buf, defopt);
-	} else if (!strcmp(optname, "player_selection"))
+	} else if (!strcmp(optname, "player_selection")) {
 		sprintf(buf, "%s", iflags.wc_player_selection ? "prompts" : "dialog");
-	else if (!strcmp(optname, "suppress_alert")) {
-		if (flags.suppress_alert == 0L)
-			strcpy(buf, none);
-		else
-			sprintf(buf, "%lu.%lu.%lu",
-				FEATURE_NOTICE_VER_MAJ,
-				FEATURE_NOTICE_VER_MIN,
-				FEATURE_NOTICE_VER_PATCH);
 	} else if (!strcmp(optname, "term_cols")) {
 		if (iflags.wc2_term_cols)
 			sprintf(buf, "%d", iflags.wc2_term_cols);

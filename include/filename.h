@@ -6,18 +6,18 @@
 
 /* Config Filename */
 #ifdef UNIX
-#define NH_CONFIG_FILE ".slashem-nextrc"
+#define NH_CONFIG_FILE ".slashem9rc"
 #else
 #ifdef MAC
-#define NH_CONFIG_FILE "Slash'EM-Next Defaults"
+#define NH_CONFIG_FILE "Slash'EM9 Defaults"
 #else
 #ifdef WIN32
 #define NH_CONFIG_FILE "defaults.nh";
 #else
-#define NH_CONFIG_FILE "SLASHEM-NEXT.cnf"
+#define NH_CONFIG_FILE "SLASHEM9.cnf"
 #endif
 #endif
 #endif
 
 /* Environment Options Name */
-#define NETHACK_ENV_OPTIONS "SLASHEMOPTIONS"
+#define NETHACK_ENV_OPTIONS "SLASHEM9OPTIONS"

@@ -335,8 +335,7 @@ boolean sense_engr_at(int x, int y, boolean read_it /* Read any sensed engraving
 				impossible("Something is written in a very strange way.");
 				sensed = 1;
 		}
-		if (sensed && !read_it &&
-		    flags.suppress_alert < FEATURE_NOTICE_VER(0, 0, 7)) {
+		if (sensed && !read_it && iflags.cmdassist) {
 			pline("Use \"r.\" to read it.");
 		} else if (sensed && read_it) {
 			char *et;

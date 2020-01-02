@@ -15,8 +15,8 @@ util/lev_yacc.h
 dat/*.lev
 dat/dungeon
 
-src/slashem
-util/slashem-recover
+src/slashem9
+util/slashem9-recover
 util/dgn_comp
 util/lev_comp
 util/dlb

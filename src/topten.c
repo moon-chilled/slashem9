@@ -25,7 +25,7 @@ struct toptenentry {
 	long points;
 	int deathdnum, deathlev;
 	int maxlvl, hp, maxhp, deaths;
-	int ver_major, ver_minor, patchlevel;
+	int ver_number, ver_editlevel;
 	long deathdate, birthdate;
 	long conduct;
 	int uid;
@@ -98,43 +98,22 @@ static xchar observable_depth(d_level *lev) {
 }
 
 static void readentry(FILE *rfile, struct toptenentry *tt) {
-	static const char fmt[] = "%d.%d.%d %ld %d %d %d %d %d %d %ld %ld %d ";
-	static const char fmt005[] = "%s %c %[^,],%[^\n]%*c";
-	static const char fmt33[] = "%s %s %s %s %[^,],%[^\n]%*c";
+	static const char fmt[] = "0.%dE%d %ld %d %d %d %d %d %d %ld %ld %d ";
 
-#define TTFIELDS 13
+#define TTFIELDS 12
 
 	tt->conduct = 4095;
 
 	if (fscanf(rfile, fmt,
-		   &tt->ver_major, &tt->ver_minor, &tt->patchlevel,
+		   &tt->ver_number, &tt->ver_editlevel,
 		   &tt->points, &tt->deathdnum, &tt->deathlev,
 		   &tt->maxlvl, &tt->hp, &tt->maxhp, &tt->deaths,
 		   &tt->deathdate, &tt->birthdate,
-		   &tt->uid) != TTFIELDS)
+		   &tt->uid) != TTFIELDS) {
 #undef TTFIELDS
 		tt->points = 0;
-	else {
+	} else {
 		/* Check for backwards compatibility */
-		if (!tt->ver_major && !tt->ver_minor && tt->patchlevel < 6) {
-			int i;
-
-			if (fscanf(rfile, fmt005,
-				   tt->plrole, tt->plgend,
-				   tt->name, tt->death) != 4)
-				tt->points = 0;
-			tt->plrole[1] = '\0';
-			if ((i = str2role(tt->plrole)) >= 0)
-				strcpy(tt->plrole, roles[i].filecode);
-			tt->plrole[ROLESZ] = 0;
-			strcpy(tt->plrace, "?");
-			strcpy(tt->plgend, (tt->plgend[0] == 'M') ? "Mal" : "Fem");
-			strcpy(tt->plalign, "?");
-		} else if (fscanf(rfile, fmt33,
-				  tt->plrole, tt->plrace, tt->plgend,
-				  tt->plalign, tt->name, tt->death) != 6)
-			tt->points = 0;
-
 		if (tt->points > 0) {
 			/* If the string "Conduct=%d" appears, set tt->conduct and remove that
 			 * portion of the string */
@@ -163,12 +142,6 @@ static void readentry(FILE *rfile, struct toptenentry *tt) {
 				tt->conduct = 4095;
 		}
 	}
-
-	/* check old score entries for Y2K problem and fix whenever found */
-	if (tt->points > 0) {
-		if (tt->birthdate < 19000000L) tt->birthdate += 19000000L;
-		if (tt->deathdate < 19000000L) tt->deathdate += 19000000L;
-	}
 }
 
 static void writeentry(FILE *rfile, struct toptenentry *tt) {
@@ -177,19 +150,14 @@ static void writeentry(FILE *rfile, struct toptenentry *tt) {
 	/* Add a trailing " Conduct=%d" to tt->death */
 	sprintf(cp, " Conduct=%ld", tt->conduct);
 
-	fprintf(rfile, "%d.%d.%d %ld %d %d %d %d %d %d %ld %ld %d ",
-		tt->ver_major, tt->ver_minor, tt->patchlevel,
+	fprintf(rfile, "0%dE%d %ld %d %d %d %d %d %d %ld %ld %d ",
+		tt->ver_number, tt->ver_editlevel,
 		tt->points, tt->deathdnum, tt->deathlev,
 		tt->maxlvl, tt->hp, tt->maxhp, tt->deaths,
 		tt->deathdate, tt->birthdate, tt->uid);
-	if (!tt->ver_major && !tt->ver_minor && tt->patchlevel < 6)
-		fprintf(rfile, "%s %c %s,%s\n",
-			tt->plrole, tt->plgend[0],
-			onlyspace(tt->name) ? "_" : tt->name, tt->death);
-	else
-		fprintf(rfile, "%s %s %s %s %s,%s\n",
-			tt->plrole, tt->plrace, tt->plgend, tt->plalign,
-			onlyspace(tt->name) ? "_" : tt->name, tt->death);
+	fprintf(rfile, "%s %s %s %s %s,%s\n",
+		tt->plrole, tt->plrace, tt->plgend, tt->plalign,
+		onlyspace(tt->name) ? "_" : tt->name, tt->death);
 
 	/* Return the tt->death line to the original form */
 	*cp = '\0';
@@ -217,8 +185,8 @@ static void write_xlentry(FILE *rfile, struct toptenentry *tt) {
 
 	/* Log all of the data found in the regular logfile */
 	fprintf(rfile,
-		"version=%d.%d.%d" SEP "points=%ld" SEP "deathdnum=%d" SEP "deathlev=%d" SEP "maxlvl=%d" SEP "hp=%d" SEP "maxhp=%d" SEP "deaths=%d" SEP "deathdate=%ld" SEP "birthdate=%ld" SEP "uid=%d",
-		tt->ver_major, tt->ver_minor, tt->patchlevel,
+		"version=0.%dE%d" SEP "points=%ld" SEP "deathdnum=%d" SEP "deathlev=%d" SEP "maxlvl=%d" SEP "hp=%d" SEP "maxhp=%d" SEP "deaths=%d" SEP "deathdate=%ld" SEP "birthdate=%ld" SEP "uid=%d",
+		tt->ver_number, tt->ver_editlevel,
 		tt->points, tt->deathdnum, tt->deathlev,
 		tt->maxlvl, tt->hp, tt->maxhp, tt->deaths,
 		tt->deathdate, tt->birthdate, tt->uid);
@@ -301,9 +269,8 @@ void topten(int how) {
 	 * as well (which also seems reasonable since that's all the player
 	 * sees on the screen anyway)
 	 */
-	t0->ver_major = VERSION_MAJOR;
-	t0->ver_minor = VERSION_MINOR;
-	t0->patchlevel = PATCHLEVEL;
+	t0->ver_number = VERSION_NUM;
+	t0->ver_editlevel = VERSION_EDITLEVEL;
 	t0->points = u.urexp;
 	t0->deathdnum = u.uz.dnum;
 	t0->deathlev = observable_depth(&u.uz);
@@ -622,9 +589,6 @@ static void outentry(int rank, struct toptenentry *t1, boolean so) {
 			int deathlev = t1->deathlev;
 			const char *arg, *fmt = " on the Plane of %s";
 
-			if (!t1->ver_major && !t1->ver_minor && t1->patchlevel < 7)
-				deathlev--;
-
 			switch (deathlev) {
 				case -5:
 					fmt = " on the %s Plane";
@@ -721,9 +685,8 @@ static void outentry(int rank, struct toptenentry *t1, boolean so) {
 static int score_wanted(boolean current_ver, int rank, struct toptenentry *t1, int playerct, const char **players, int uid) {
 	int i;
 
-	if (current_ver && (t1->ver_major != VERSION_MAJOR ||
-			    t1->ver_minor != VERSION_MINOR ||
-			    t1->patchlevel != PATCHLEVEL))
+	if (current_ver && (t1->ver_number != VERSION_NUM ||
+			    t1->ver_editlevel != VERSION_EDITLEVEL))
 		return 0;
 
 #ifdef PERS_IS_UID

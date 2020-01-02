@@ -2099,7 +2099,7 @@ int look_here(int obj_cnt /* obj_cnt > 0 implies that autopickup is in progess *
 
 	if (dfeature) {
 		sprintf(fbuf, "There is %s here.", an(dfeature));
-		if (flags.suppress_alert < FEATURE_NOTICE_VER(0, 0, 7) &&
+		if (iflags.cmdassist &&
 		    (IS_FOUNTAIN(levl[u.ux][u.uy].typ) ||
 		     IS_SINK(levl[u.ux][u.uy].typ) ||
 		     IS_TOILET(levl[u.ux][u.uy].typ)))

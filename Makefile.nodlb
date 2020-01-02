@@ -1,6 +1,6 @@
-PREFIX ?= $(HOME)/slashem-nextinstall
+PREFIX ?= $(HOME)/slashem9install
 BINDIR ?= $(PREFIX)/bin
-HACKDIR ?= $(PREFIX)/slashemdir
+HACKDIR ?= $(PREFIX)/slashem9dir
 DATADIR ?= $(HACKDIR)/dat
 
 CFLAGS += -Iinclude -Isys/share/libtre -DWIZARD=\"$(shell whoami)\"
@@ -37,17 +37,17 @@ install: all
 	mkdir -p $(HACKDIR)/save $(DATADIR) $(BINDIR)
 	touch $(HACKDIR)/perm $(HACKDIR)/xlogfile
 
-	cp src/slashem $(HACKDIR)
+	cp src/slashem9 $(HACKDIR)
 	cp dat/* $(DATADIR)
 
-	sed -e 's;@HACKDIR@;$(HACKDIR);' < sys/unix/slashem.sh > $(BINDIR)/slashem
-	chmod 755 $(BINDIR)/slashem
-	#cp util/slashem-recover $(BINDIR)/
+	sed -e 's;@HACKDIR@;$(HACKDIR);' < sys/unix/slashem9.sh > $(BINDIR)/slashem9
+	chmod 755 $(BINDIR)/slashem9
+	#cp util/slashem9-recover $(BINDIR)/
 
-src/slashem: $(SLASHEMOBJ)
-	$(CCLD) -o src/slashem $(SLASHEMOBJ) $(LDFLAGS)
+src/slashem9: $(SLASHEMOBJ)
+	$(CCLD) -o src/slashem9 $(SLASHEMOBJ) $(LDFLAGS)
 
-all: src/slashem data
+all: src/slashem9 data
 
 util/dgn_lex.o: util/dgn_yacc.o
 
@@ -75,4 +75,4 @@ data: util/dgn_comp util/lev_comp dat/*.des
 	mv *.lev dat/
 
 clean:
-	rm -f $(ALLOBJ) src/slashem util/lev_comp util/dgn_comp dat/*.lev util/*_yacc.c util/*_lex.c util/*_yacc.h dat/dungeon
+	rm -f $(ALLOBJ) src/slashem9 util/lev_comp util/dgn_comp dat/*.lev util/*_yacc.c util/*_lex.c util/*_yacc.h dat/dungeon

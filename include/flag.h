@@ -73,7 +73,6 @@ struct flag {
 	bool prayconfirm;	 /* confirm before praying */
 	int end_top, end_around; /* describe desired score list */
 	unsigned moonphase;
-	unsigned long suppress_alert;
 #define NEW_MOON  0
 #define FULL_MOON 4
 	int pickup_burden;	       /* maximum burden before prompt */
