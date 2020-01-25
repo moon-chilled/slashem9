@@ -3963,10 +3963,20 @@ boolean lava_effects(void) {
 		if (wizard) usurvive = true;
 		for (obj = invent; obj; obj = obj2) {
 			obj2 = obj->nobj;
-			if (is_organic(obj) && !obj->oerodeproof) {
+			if ((is_organic(obj) || is_plastic(obj) || (is_metallic(obj) && !rn2(10))) && !obj->oerodeproof) {
 				if (obj->owornmask) {
-					if (usurvive)
-						pline("%s into flame!", Yobjnam2(obj, "burst"));
+					if (usurvive) {
+						if (is_metallic(obj)) {
+							pline("%s!", Yobjnam2(obj, "melt"));
+						} else if (is_organic(obj)) {
+							pline("%s into flame!", Yobjnam2(obj, "burst"));
+						} else if (is_plastic(obj)) {
+							// Yes, plastic will melt rather than burn if you apply moderate heat,
+							// but this is LAVA.
+							pline("%s into flame!", Yobjnam2(obj, "burst"));
+							pline("It emits a horrible stench!");
+						}
+					}
 
 					if (obj == uarm)
 						Armor_gone();

@@ -102,10 +102,9 @@ static void dumpit(void) {
 		fprintf(stderr, "%d: %s, end1 %d %d, end2 %d %d, %s\n",
 			br->id,
 			br->type == BR_STAIR ? "stair" :
-					       br->type == BR_NO_END1 ? "no end1" :
-									br->type == BR_NO_END2 ? "no end2" :
-												 br->type == BR_PORTAL ? "portal" :
-															 "unknown",
+			br->type == BR_NO_END1 ? "no end1" :
+			br->type == BR_NO_END2 ? "no end2" :
+			br->type == BR_PORTAL ? "portal" : "unknown",
 			br->end1.dnum, br->end1.dlevel,
 			br->end2.dnum, br->end2.dlevel,
 			br->end1_up ? "end1 up" : "end1 down");
@@ -215,8 +214,7 @@ static void Fread(void *ptr, int size, int nitems, dlb *stream) {
 	int cnt;
 
 	if ((cnt = dlb_fread(ptr, size, nitems, stream)) != nitems) {
-		panic(
-			"Premature EOF on dungeon description file!\r\nExpected %d bytes - got %d.",
+		panic("Premature EOF on dungeon description file!\r\nExpected %d bytes - got %d.",
 			(size * nitems), (size * cnt));
 		terminate(EXIT_FAILURE);
 	}

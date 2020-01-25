@@ -221,18 +221,16 @@ void flood_fill_rm(int sx, int sy, int rmno, boolean lit, boolean anyroom) {
 static void wallify_map(void) {
 	int x, y, xx, yy;
 
-	for (x = 1; x < COLNO; x++)
-		for (y = 0; y < ROWNO; y++)
-			if (levl[x][y].typ == STONE) {
-				for (yy = y - 1; yy <= y + 1; yy++)
-					for (xx = x - 1; xx <= x + 1; xx++)
-						if (isok(xx, yy) && levl[xx][yy].typ == ROOM) {
-							if (yy != y)
-								levl[x][y].typ = HWALL;
-							else
-								levl[x][y].typ = VWALL;
-						}
-			}
+	for (x = 1; x < COLNO; x++) for (y = 0; y < ROWNO; y++)
+		if (levl[x][y].typ == STONE) {
+			for (yy = y - 1; yy <= y + 1; yy++) for (xx = x - 1; xx <= x + 1; xx++)
+				if (isok(xx, yy) && levl[xx][yy].typ == ROOM) {
+					if (yy != y)
+						levl[x][y].typ = HWALL;
+					else
+						levl[x][y].typ = VWALL;
+				}
+		}
 }
 
 static void join_map(schar bg_typ, schar fg_typ) {

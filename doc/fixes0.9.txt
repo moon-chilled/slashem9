@@ -49,6 +49,8 @@ Changelist for slashem9 v0.9:
 - Bugfix: potion of sickness made you lose HP even if you were poison resistant.
 - Gameplay: #monster while vampshifted will always restore you to your vampiric form.
 - Bugfix: inventory display when inventory is empty and perm_invent is on says 'not carrying anything' rather than just '(end)'.
+- Bugfix: plastic objects will be destroyed by lava.
+- Gameplay: metallic objects have a 10% chance to be destroyed by lava.
 
 Imports from NetHack versions newer than 3.4.3:
 - Bugfix: acid dropping bug.
