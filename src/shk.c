@@ -53,7 +53,7 @@ static void set_repo_loc(struct eshk *);
 static boolean angry_shk_exists(void);
 static void rile_shk(struct monst *);
 static void rouse_shk(struct monst *, boolean);
-static void remove_damage(struct monst *, boolean);
+static void remove_damage(struct monst *shkp, bool croaked);
 static void sub_one_frombill(struct obj *, struct monst *);
 static int extend_bill(struct eshk *, int);
 static void add_one_tobill(struct obj *, boolean);
@@ -2989,12 +2989,13 @@ void add_damage(xchar x, xchar y, long cost) {
  * assumption (they might all be dead too), but we have no reasonable way of
  * telling that.
  */
-static void remove_damage(struct monst *shkp, boolean croaked) {
+static void remove_damage(struct monst *shkp, bool croaked) {
 	struct damage *tmp_dam, *tmp2_dam;
-	boolean did_repair = false, saw_door = false;
-	boolean saw_floor = false, stop_picking = false;
-	boolean saw_untrap = false;
-	uchar saw_walls = 0;
+	bool did_repair = false, saw_door = false;
+	bool saw_floor = false, stop_picking = false;
+	bool doorway_trap = false;
+	int saw_walls = 0, saw_untrap = 0;
+	char trapmsg[BUFSZ];
 
 	tmp_dam = level.damagelist;
 	tmp2_dam = 0;
@@ -3002,10 +3003,14 @@ static void remove_damage(struct monst *shkp, boolean croaked) {
 		xchar x = tmp_dam->place.x, y = tmp_dam->place.y;
 		char shops[5];
 		int disposition;
+		uint old_doormask = 0;
 
 		disposition = 0;
 		strcpy(shops, in_rooms(x, y, SHOPBASE));
 		if (index(shops, ESHK(shkp)->shoproom)) {
+			if (IS_DOOR(levl[x][y].typ))
+				old_doormask = levl[x][y].doormask;
+
 			if (croaked)
 				disposition = (shops[1]) ? 0 : 1;
 			else if (stop_picking)
@@ -3029,14 +3034,16 @@ static void remove_damage(struct monst *shkp, boolean croaked) {
 		if (disposition > 1) {
 			did_repair = true;
 			if (cansee(x, y)) {
-				if (IS_WALL(levl[x][y].typ))
+				if (IS_WALL(levl[x][y].typ)) {
 					saw_walls++;
-				else if (IS_DOOR(levl[x][y].typ))
+				} else if (IS_DOOR(levl[x][y].typ) && !(old_doormask & (D_ISOPEN|D_CLOSED))) { // an existing door here implies trap removal
 					saw_door = true;
-				else if (disposition == 3) /* untrapped */
-					saw_untrap = true;
-				else
+				} else if (disposition == 3) { // untrapped
+					saw_untrap++;
+					if (IS_DOOR(levl[x][y].typ)) doorway_trap = true;
+				} else {
 					saw_floor = true;
+				}
 			}
 		}
 
@@ -3051,21 +3058,40 @@ static void remove_damage(struct monst *shkp, boolean croaked) {
 	}
 	if (!did_repair)
 		return;
+	if (saw_untrap) {
+		sprintf(trapmsg, "%s trap%s",
+				(saw_untrap > 3) ? "several" :
+				(saw_untrap > 1) ? "some" : "a",
+				plur(saw_untrap));
+		sprintf(eos(trapmsg), " %s", vtense(trapmsg, "are"));
+		sprintf(eos(trapmsg), " removed from the %s",
+				(doorway_trap && saw_untrap == 1) ? "doorway" : "floor");
+	} else {
+		trapmsg[0] = '\0';
+	}
+
 	if (saw_walls) {
-		pline("Suddenly, %s section%s of wall close%s up!",
+		char wallbuf[BUFSZ];
+
+		sprintf(wallbuf, "section%s", plur(saw_walls));
+
+		pline("Suddenly, %s %s of wall %s up!",
 		      (saw_walls == 1) ? "a" : (saw_walls <= 3) ? "some" : "several",
-		      (saw_walls == 1) ? "" : "s", (saw_walls == 1) ? "s" : "");
+		      wallbuf, vtense(wallbuf, "close"));
 		if (saw_door)
 			pline("The shop door reappears!");
 		if (saw_floor)
 			pline("The floor is repaired!");
+		if (saw_untrap)
+			pline("%s!", upstart(trapmsg));
 	} else {
-		if (saw_door)
-			pline("Suddenly, the shop door reappears!");
-		else if (saw_floor)
-			pline("Suddenly, the floor damage is gone!");
-		else if (saw_untrap)
-			pline("Suddenly, the trap is removed from the floor!");
+		if (saw_door || saw_floor || saw_untrap)
+			pline("Suddenly, %s%s%s%s%s!",
+				saw_door ? "the shop door reappears" : "",
+				(saw_door && saw_floor) ? " and " : "",
+				saw_floor ? "the floor damage is gone" : "",
+				((saw_door || saw_floor) && *trapmsg) ? " and " : "",
+				trapmsg);
 		else if (inside_shop(u.ux, u.uy) == ESHK(shkp)->shoproom)
 			pline("You feel more claustrophobic than before.");
 		else if (!Deaf && !rn2(10))
@@ -3117,8 +3143,8 @@ int repair_damage(struct monst *shkp, struct damage *tmp_dam, boolean catchup) {
 			mpickobj(shkp, otmp);
 		}
 		deltrap(ttmp);
-		if (IS_DOOR(tmp_dam->typ)) {
-			levl[x][y].doormask = D_CLOSED; /* arbitrary */
+		if (IS_DOOR(tmp_dam->typ) && !(levl[x][y].doormask & D_ISOPEN)) {
+			levl[x][y].doormask = D_CLOSED;
 			block_point(x, y);
 		} else if (IS_WALL(tmp_dam->typ)) {
 			levl[x][y].typ = tmp_dam->typ;

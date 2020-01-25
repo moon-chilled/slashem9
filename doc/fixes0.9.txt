@@ -125,6 +125,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: player in vampiric form can use #monster to transform into a fog cloud, wolf, or vampire bat.
 - Interface: only say '(the djinni) vanishes' if player can see the djinni.
 - Gameplay: ensure a djinni released with the message 'you disturbed me, fool' is always hostile.
+- Interface: fix messages produced when shopkeepers repair their shops.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
