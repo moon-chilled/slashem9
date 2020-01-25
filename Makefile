@@ -3,8 +3,12 @@ HACKDIR ?= $(PREFIX)/slashem9dir
 BINDIR ?= $(PREFIX)/bin
 
 CFLAGS += -Iinclude -Isys/share/libtre -DDLBLIB -DWIZARD=\"$(shell whoami)\" -DSLASHEM_GIT_COMMIT_REV=\"$(shell git rev-parse --short HEAD)\"
-CFLAGS += -g -ggdb -O0
-CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Werror
+CFLAGS += -g -ggdb -O0 -pipe
+CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -Wall
+
+ifneq ($(CC),tcc)
+	CFLAGS += -Werror
+endif
 
 CFLAGS := $(CFLAGS) $(shell pkg-config --cflags ncursesw)
 ifeq ($(shell uname -s),Darwin)

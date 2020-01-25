@@ -4,8 +4,12 @@ HACKDIR ?= $(PREFIX)/slashem9dir
 DATADIR ?= $(HACKDIR)/dat
 
 CFLAGS += -Iinclude -Isys/share/libtre -DWIZARD=\"$(shell whoami)\"
-CFLAGS += -g3 -ggdb -O0
-CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Werror
+CFLAGS += -g3 -ggdb -O0 -pipe
+CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -Wall
+
+ifneq ($(CC),tcc)
+	CFLAGS += -Werror
+endif
 
 CFLAGS := $(CFLAGS) $(shell pkg-config --cflags ncursesw)
 ifeq ($(shell uname -s),Darwin)
