@@ -476,12 +476,9 @@ extern struct _plinemsg *pline_msg;
 #define MSGTYP_NOSHOW 2
 #define MSGTYP_STOP   3
 
-/* FIXME: These should be integrated into objclass and permonst structs,
-   but that invalidates saves */
-extern glyph_t objclass_unicode_codepoint[NUM_OBJECTS];
 extern glyph_t permonst_unicode_codepoint[NUMMONS];
 
-// FIXME: also fix this
+// FIXME: fix this
 extern const glyph_t ascii_graphics[100];
 
 #endif /* DECL_H */

@@ -10,6 +10,7 @@
 struct objclass {
 	const char *oc_name;  /* actual name */
 	const char *oc_descr; /* description when name unknown */
+
 	short oc_name_idx;    /* index of actual name */
 	short oc_descr_idx;   /* description when name unknown */
 	char *oc_uname;	      /* called by user */
@@ -119,6 +120,8 @@ struct objclass {
 #define oc_level oc_oc2 /* books: spell level */
 
 	unsigned short oc_nutrition; /* food value */
+
+	glyph_t glyph;
 };
 
 extern struct objclass objects[];

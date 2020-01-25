@@ -46,9 +46,9 @@ static glyph_t get_monsym(int glyph) {
 /** Returns the correct object glyph.
  *  Returns a Unicode codepoint in UTF8graphics and an ASCII character otherwise. */
 static glyph_t get_objsym(int glyph) {
-	if (objclass_unicode_codepoint[glyph]) {
+	if (objects[glyph].glyph) {
 		/* only return a Unicode codepoint when there is one configured */
-		return objclass_unicode_codepoint[glyph];
+		return objects[glyph].glyph;
 	} else {
 		return oc_syms[objects[glyph].oc_class];
 	}

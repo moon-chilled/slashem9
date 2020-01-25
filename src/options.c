@@ -408,11 +408,6 @@ void initoptions(void) {
 	for (i = 0; i < MAXMCLASSES; i++)
 		monsyms[i] = def_monsyms[i];
 
-	/* FIXME: These should be integrated into objclass and permonst structs,
-	   but that invalidates saves */
-	memset(objclass_unicode_codepoint, 0, sizeof(objclass_unicode_codepoint));
-	memset(permonst_unicode_codepoint, 0, sizeof(permonst_unicode_codepoint));
-
 	iflags.travelcc.x = iflags.travelcc.y = -1;
 
 	/* assert(sizeof flags.inv_order == sizeof def_inv_order); */
@@ -1090,13 +1085,13 @@ bool parse_object_symbol(const char *str) {
 			/* Items with both descriptive and actual name or only
 			 * descriptive name. */
 			if (!strcmpi(object, objects[i].oc_descr)) {
-				objclass_unicode_codepoint[i] = num;
+				objects[i].glyph = num;
 				return true;
 			}
 		} else if (objects[i].oc_name) {
 			/* items with only actual name like "carrot" */
 			if (!strcmpi(object, objects[i].oc_name)) {
-				objclass_unicode_codepoint[i] = num;
+				objects[i].glyph = num;
 				return true;
 			}
 		}
