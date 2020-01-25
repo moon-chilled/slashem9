@@ -52,6 +52,7 @@ NetHack, except that rounddiv may call panic().
 	bool		groundhog_day	(void)
 	bool		night		(void)
 	bool		midnight	(void)
+	void		msleep		(uint)
 =*/
 
 // is 'c' a digit?
@@ -533,6 +534,11 @@ bool night(void) {
 
 bool midnight(void) {
 	return getlt()->tm_hour == 0;
+}
+
+void msleep(uint ms) {
+	const struct timespec ts = { .tv_sec = ms / 1000, .tv_nsec = (ms % 1000) * 1000000};
+	nanosleep(&ts, NULL);
 }
 
 /*hacklib.c*/

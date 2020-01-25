@@ -248,13 +248,6 @@
 #endif
 #endif
 
-#if defined(SUNOS4) || defined(LINUX) || defined(SVR4) /* [max] added SVR4 */
-#define msleep(k) usleep((k)*1000)
-#endif
-#ifdef ULTRIX
-#define msleep(k) napms(k)
-#endif
-
 #include "tre.h"
 
 #endif /* UNIXCONF_H */

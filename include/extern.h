@@ -760,6 +760,7 @@ bool friday_13th(void);
 bool groundhog_day(void); /* KMH -- February 2 */
 bool night(void);
 bool midnight(void);
+void msleep(uint ms);
 
 /* ### invent.c ### */
 
@@ -2057,9 +2058,6 @@ void error(const char *, ...) PRINTF_F(1, 2);
 #ifdef UNIX
 void getlock(void);
 void regularize(char *);
-#if !defined(msleep) && defined(SYSV)
-void msleep(unsigned);
-#endif
 #ifdef SHELL
 int dosh(void);
 #endif /* SHELL */

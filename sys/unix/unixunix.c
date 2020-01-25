@@ -192,18 +192,6 @@ char *s;
 #endif
 }
 
-#if !defined(msleep) && defined(SYSV)
-#include <poll.h>
-
-void msleep(unsigned msec) {
-	struct pollfd unused;
-	int msecs = msec;		/* poll API is signed */
-
-	if (msecs < 0) msecs = 0;	/* avoid infinite sleep */
-	poll(&unused, 0, msecs);
-}
-#endif
-
 #ifdef SHELL
 int
 dosh()
