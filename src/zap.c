@@ -4405,10 +4405,11 @@ void fracture_rock(struct obj *obj) {
 		change_luck(-1);
 
 	obj->otyp = ROCK;
+	obj->oclass = GEM_CLASS;
 	obj->quan = (long)rn1(60, 7);
 	obj->owt = weight(obj);
-	obj->oclass = GEM_CLASS;
-	obj->known = false;
+	obj->dknown = obj->bknown = obj->rknown = false;
+	obj->known = !objects[obj->otyp].oc_uses_known;
 	obj->onamelth = 0; /* no names */
 	obj->oxlth = 0;	   /* no extra data */
 	obj->oattached = OATTACHED_NOTHING;

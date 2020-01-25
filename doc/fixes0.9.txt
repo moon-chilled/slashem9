@@ -129,6 +129,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: ensure a djinni released with the message 'you disturbed me, fool' is always hostile.
 - Interface: fix messages produced when shopkeepers repair their shops.
 - Interface: fix bad message when unique monster's corpse is dropped down stairs.
+- Gameplay: fix inconsistent attributes of rocks made from fractured boulders or statues.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
