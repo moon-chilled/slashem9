@@ -46,7 +46,7 @@ boolean resists_drli(struct monst *mon) {
 
 	return is_undead(ptr) || is_demon(ptr) || is_were(ptr) ||
 	       ptr == &mons[PM_DEATH] || is_golem(ptr) ||
-	       resists_drain(mon) ||
+	       resists_drain(mon) || is_vampshifter(mon) ||
 	       (wep && wep->oartifact && defends(AD_DRLI, wep));
 }
 
@@ -691,6 +691,14 @@ bool olfaction(struct permonst *mdat) {
 		     mdat->mlet == S_BAD_COINS))
 		return false;
 	return true;
+}
+
+bool is_vampshifter(struct monst *mon) {
+	if (mon == &youmonst && mon->cham == u.umonster) {
+		return is_vampire(&upermonst);
+	} else {
+		return is_vampire(&mons[mon->cham]);
+	}
 }
 
 /*mondata.c*/

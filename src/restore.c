@@ -344,7 +344,8 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 	role_init(); /* Reset the initial role, gender, and alignment */
 
 	mread(fd, &u, sizeof(struct you));
-	init_uasmon();
+	mread(fd, &youmonst, sizeof(struct monst));
+	mread(fd, &upermonst, sizeof(struct permonst));
 
 	cliparound(u.ux, u.uy);
 

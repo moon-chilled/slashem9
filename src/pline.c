@@ -236,7 +236,7 @@ void mstatusline(struct monst *mtmp) {
 		strcat(info, ", traitor");
 	if (mtmp->meating) strcat(info, ", eating");
 
-	if (mtmp->meating && !mtmp->cham && mtmp->mappearance && mtmp->m_ap_type) {
+	if (mtmp->meating && mtmp->cham == CHAM_ORDINARY && mtmp->mappearance && mtmp->m_ap_type) {
 		sprintf(eos(info), ", mimicing %s",
 				(mtmp->m_ap_type == M_AP_FURNITURE) ?
 					an(sym_desc[mtmp->mappearance].explanation) :

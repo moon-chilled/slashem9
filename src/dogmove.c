@@ -1110,7 +1110,7 @@ static struct qmchoices {
 
 void finish_meating(struct monst *mtmp) {
 	mtmp->meating = 0;
-	if (mtmp->m_ap_type && mtmp->mappearance && !mtmp->cham) {
+	if (mtmp->m_ap_type && mtmp->mappearance && mtmp->cham == CHAM_ORDINARY) {
 		/* was eating a mimic and now appearance needs resetting */
 		mtmp->m_ap_type = 0;
 		mtmp->mappearance = 0;

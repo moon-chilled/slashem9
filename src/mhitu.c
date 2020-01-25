@@ -542,12 +542,12 @@ int mattacku(struct monst *mtmp) {
 		newsym(mtmp->mx, mtmp->my);
 	}
 
-	/*	Special demon handling code */
-	if (!mtmp->cham && is_demon(mdat) && !range2 && mtmp->data != &mons[PM_BALROG] && mtmp->data != &mons[PM_SUCCUBUS] && mtmp->data != &mons[PM_INCUBUS])
+	/* Special demon handling code */
+	if (mtmp->cham == CHAM_ORDINARY && is_demon(mdat) && !range2 && mtmp->data != &mons[PM_BALROG] && mtmp->data != &mons[PM_SUCCUBUS] && mtmp->data != &mons[PM_INCUBUS])
 		if (!mtmp->mcan && !rn2(13)) msummon(mtmp);
 
-	/*	Special lycanthrope handling code */
-	if (!mtmp->cham && is_were(mdat) && !range2) {
+	/* Special lycanthrope handling code */
+	if (mtmp->cham == CHAM_ORDINARY && is_were(mdat) && !range2) {
 		if (is_human(mdat)) {
 			if (!rn2(5 - (night() * 2)) && !mtmp->mcan) new_were(mtmp);
 		} else if (!rn2(30) && !mtmp->mcan)
@@ -1803,7 +1803,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 			if (uncancelled && !Unchanging && !Antimagic) {
 				if (flags.verbose)
 					pline("You undergo a freakish metamorphosis!");
-				polyself(false);
+				polyself(0);
 			}
 			break;
 		case AD_SLIM:
@@ -1861,7 +1861,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 		if (Half_physical_damage
 		    /* Mitre of Holiness */
 		    || (Role_if(PM_PRIEST) && uarmh && is_quest_artifact(uarmh) &&
-			(is_undead(mtmp->data) || is_demon(mtmp->data))))
+			(is_undead(mtmp->data) || is_demon(mtmp->data) || is_vampshifter(mtmp))))
 			dmg = (dmg + 1) / 2;
 
 		if (permdmg) { /* Death's life force drain */

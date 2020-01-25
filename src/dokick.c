@@ -45,7 +45,7 @@ static void kickdmg(struct monst *mon, boolean clumsy) {
 	if (mon->data == &mons[PM_SHADE])
 		dmg = 0;
 
-	if ((is_undead(mon->data) || is_demon(mon->data)) && uarmf &&
+	if ((is_undead(mon->data) || is_demon(mon->data) || is_vampshifter(mon)) && uarmf &&
 	    uarmf->blessed)
 		blessed_foot_damage = 1;
 

@@ -444,10 +444,14 @@ static int domonability(void) {
 			pline("Unfortunately sound does not carry well through rock.");
 		else
 			aggravate();
-	} else if (Upolyd)
+	} else if (is_vampire(youmonst.data) || is_vampshifter(&youmonst)) {
+		return dopoly();
+	} else if (Upolyd) {
 		pline("Any special ability you may have is purely reflexive.");
-	else
+	} else {
 		pline("You don't have a special ability in your normal form!");
+	}
+
 	return 0;
 }
 
@@ -768,7 +772,7 @@ static int wiz_panic(void) {
 
 /* #polyself command - change hero's form */
 static int wiz_polyself(void) {
-	polyself(true);
+	polyself(1);
 	return 0;
 }
 

@@ -605,10 +605,8 @@ void drinksink(void) {
 			/* KMH, balance patch -- new intrinsic */
 			pline("This water contains toxic wastes!");
 			if (!Unchanging) {
-				if (!Unchanging) {
-					pline("You undergo a freakish metamorphosis!");
-					polyself(false);
-				}
+				pline("You undergo a freakish metamorphosis!");
+				polyself(0);
 			}
 			break;
 		/* more odd messages --JJB */

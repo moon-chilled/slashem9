@@ -727,7 +727,7 @@ int dogfood(struct monst *mon, struct obj *obj) {
 					else
 						return carni ? CADAVER : MANFOOD;
 				case CLOVE_OF_GARLIC:
-					return (is_undead(mon->data) ? TABU :
+					return ((is_undead(mon->data) || is_vampshifter(mon)) ? TABU :
 								       ((herbi || starving) ? ACCFOOD : MANFOOD));
 				case TIN:
 					return metallivorous(mon->data) ? ACCFOOD : MANFOOD;
@@ -747,7 +747,7 @@ int dogfood(struct monst *mon, struct obj *obj) {
 			if (obj->otyp == AMULET_OF_STRANGULATION ||
 			    obj->otyp == RIN_SLOW_DIGESTION)
 				return TABU;
-			if (hates_silver(mon->data) &&
+			if (mon_hates_silver(mon) &&
 			    objects[obj->otyp].oc_material == SILVER)
 				return TABU;
 			/* KMH -- Taz likes organics, too! */

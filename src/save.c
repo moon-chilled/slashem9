@@ -250,6 +250,8 @@ static void savegamestate(int fd, int mode) {
 	bwrite(fd, &context, sizeof(struct context_info));
 	bwrite(fd, &flags, sizeof(struct flag));
 	bwrite(fd, &u, sizeof(struct you));
+	bwrite(fd, &youmonst, sizeof(struct monst));
+	bwrite(fd, &upermonst, sizeof(struct permonst));
 
 	save_killers(fd, mode);
 	/* must come before migrating_objs and migrating_mons are freed */

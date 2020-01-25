@@ -9,12 +9,14 @@
 
 extern boolean notonhead;
 
-static int disturb(struct monst *);
-static void distfleeck(struct monst *, int *, int *, int *);
-static int m_arrival(struct monst *);
-static void watch_on_duty(struct monst *);
+static int disturb(struct monst *mtmp);
+static void distfleeck(struct monst *mtmp, int *inrange, int *nearby, int *scared);
+static int m_arrival(struct monst *mon);
+static void watch_on_duty(struct monst *mtmp);
 /* WAC for breath door busting */
-static int bust_door_breath(struct monst *);
+static int bust_door_breath(struct monst *mtmp);
+static bool stuff_prevents_passage(struct monst *mtmp);
+static int vamp_shift(struct monst *mon, struct permonst *ptr);
 
 /* true : mtmp died */
 boolean mb_trapped(struct monst *mtmp) {
@@ -861,6 +863,7 @@ not_special:
 	if (can_tunnel) flag |= ALLOW_DIG;
 	if (is_human(ptr) || ptr == &mons[PM_MINOTAUR]) flag |= ALLOW_SSM;
 	if (is_undead(ptr) && ptr->mlet != S_GHOST) flag |= NOGARLIC;
+	if (is_vampshifter(mtmp)) flag |= NOGARLIC;
 	if (throws_rocks(ptr)) flag |= ALLOW_ROCK;
 	if (can_open) flag |= OPENDOOR;
 	if (can_unlock) flag |= UNLOCKDOOR;
@@ -1039,7 +1042,7 @@ postmov:
 				struct rm *here = &levl[mtmp->mx][mtmp->my];
 				boolean btrapped = (here->doormask & D_TRAPPED);
 
-				if (here->doormask & (D_LOCKED | D_CLOSED) && amorphous(ptr)) {
+				if (here->doormask & (D_LOCKED | D_CLOSED) && (amorphous(ptr) || (can_fog(mtmp) && vamp_shift(mtmp, &mons[PM_FOG_CLOUD])))) {
 					if (flags.verbose && canseemon(mtmp))
 						pline("%s %s under the door.", Monnam(mtmp),
 						      (ptr == &mons[PM_FOG_CLOUD] ||
@@ -1257,7 +1260,7 @@ void set_apparxy(struct monst *mtmp) {
 			if (++try_cnt > 200) goto found_you; /* punt */
 			mx = u.ux - disp + rn2(2 * disp + 1);
 			my = u.uy - disp + rn2(2 * disp + 1);
-		} while (!isok(mx, my) || (disp != 2 && mx == mtmp->mx && my == mtmp->my) || ((mx != u.ux || my != u.uy) && !passes_walls(mtmp->data) && (!ACCESSIBLE(levl[mx][my].typ) || (closed_door(mx, my) && !can_ooze(mtmp)))) || !couldsee(mx, my));
+		} while (!isok(mx, my) || (disp != 2 && mx == mtmp->mx && my == mtmp->my) || ((mx != u.ux || my != u.uy) && !passes_walls(mtmp->data) && (!ACCESSIBLE(levl[mx][my].typ) || (closed_door(mx, my) && !(can_ooze(mtmp) || can_fog(mtmp))))) || !couldsee(mx, my));
 	} else {
 	found_you:
 		mx = u.ux;
@@ -1296,10 +1299,13 @@ bool undesirable_disp(struct monst *mtmp, xchar x, xchar y) {
 }
 
 
-boolean can_ooze(struct monst *mtmp) {
+/*
+ * Inventory prevents passage under door.
+ * Used by can_ooze() and can_fog().
+ */
+bool stuff_prevents_passage(struct monst *mtmp) {
 	struct obj *chain, *obj;
 
-	if (!amorphous(mtmp->data)) return false;
 	if (mtmp == &youmonst) {
 		chain = invent;
 	} else {
@@ -1308,7 +1314,7 @@ boolean can_ooze(struct monst *mtmp) {
 	for (obj = chain; obj; obj = obj->nobj) {
 		int typ = obj->otyp;
 
-		if (typ == COIN_CLASS && obj->quan > 100L) return false;
+		if (typ == COIN_CLASS && obj->quan > 100L) return true;
 
 		if (obj->oclass != GEM_CLASS &&
 		    !(typ >= ARROW && typ <= BOOMERANG) &&
@@ -1330,10 +1336,20 @@ boolean can_ooze(struct monst *mtmp) {
 		    typ != STETHOSCOPE && typ != BLINDFOLD && typ != TOWEL &&
 		    typ != TIN_WHISTLE && typ != MAGIC_WHISTLE &&
 		    typ != MAGIC_MARKER && typ != TIN_OPENER &&
-		    typ != SKELETON_KEY && typ != LOCK_PICK) return false;
-		if (Is_container(obj) && obj->cobj) return false;
+		    typ != SKELETON_KEY && typ != LOCK_PICK) return true;
+		if (Is_container(obj) && obj->cobj) return true;
 	}
-	return true;
+	return false;
+}
+
+bool can_ooze(struct monst *mtmp) {
+	return amorphous(mtmp->data) && !stuff_prevents_passage(mtmp);
+}
+
+// monster can change form into a fog if necessary
+bool can_fog(struct monst *mtmp) {
+	// TODO: Protection_from_shape_changers shouldn't be preventative if mtmp == &youmonst?
+	return (is_vampshifter(mtmp) || is_vampire(mtmp->data)) && !Protection_from_shape_changers && !stuff_prevents_passage(mtmp);
 }
 
 static int bust_door_breath(struct monst *mtmp) {
@@ -1353,5 +1369,19 @@ static int bust_door_breath(struct monst *mtmp) {
 
 	return -1;
 }
+
+static int vamp_shift(struct monst *mon, struct permonst *ptr) {
+	int reslt = 0;
+	if (mon->cham != CHAM_ORDINARY) {
+		if (ptr == &mons[mon->cham])
+			mon->cham = CHAM_ORDINARY;
+		reslt = newcham(mon, ptr, false, false);
+	} else if (mon->cham == CHAM_ORDINARY && ptr != mon->data) {
+		mon->cham = monsndx(mon->data);
+		reslt = newcham(mon, ptr, false, false);
+	}
+	return reslt;
+}
+
 
 /*monmove.c*/

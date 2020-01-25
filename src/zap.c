@@ -177,7 +177,7 @@ int bhitm(struct monst *mtmp, struct obj *otmp) {
 		case WAN_UNDEAD_TURNING:
 			wake = false;
 			if (unturn_dead(mtmp)) wake = true;
-			if (is_undead(mtmp->data)) {
+			if (is_undead(mtmp->data) || is_vampshifter(mtmp)) {
 				reveal_invis = true;
 				wake = true;
 				dmg = rnd(8);
@@ -194,12 +194,12 @@ int bhitm(struct monst *mtmp, struct obj *otmp) {
 		case POT_POLYMORPH:
 			if (resists_magm(mtmp)) {
 				/* magic resistance protects from polymorph traps, so make
-			   it guard against involuntary polymorph attacks too... */
+				   it guard against involuntary polymorph attacks too... */
 				shieldeff(mtmp->mx, mtmp->my);
 			} else if (!resist(mtmp, otmp->oclass, 0, NOTELL)) {
 				/* natural shapechangers aren't affected by system shock
-			   (unless protection from shapechangers is interfering
-			   with their metabolism...) */
+				   (unless protection from shapechangers is interfering
+				   with their metabolism...) */
 				if (mtmp->cham == CHAM_ORDINARY && !rn2(25)) {
 					if (canseemon(mtmp)) {
 						pline("%s shudders!", Monnam(mtmp));
@@ -247,7 +247,7 @@ int bhitm(struct monst *mtmp, struct obj *otmp) {
 			reveal_invis = true;
 			break;
 		case WAN_FEAR:
-			if (!is_undead(mtmp->data) &&
+			if (!(is_undead(mtmp->data) || is_vampshifter(mtmp)) &&
 			    !resist(mtmp, otmp->oclass, 0, NOTELL) &&
 			    (!mtmp->mflee || mtmp->mfleetim)) {
 				if (canseemon(mtmp))
@@ -2307,7 +2307,7 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 				makeknown(WAN_POLYMORPH);
 		case SPE_POLYMORPH:
 			if (!Unchanging)
-				polyself(false);
+				polyself(0);
 			break;
 		case WAN_CANCELLATION:
 		case SPE_CANCELLATION:
@@ -2430,7 +2430,7 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 			makeknown(WAN_UNDEAD_TURNING);
 		case SPE_TURN_UNDEAD:
 			unturn_dead(&youmonst);
-			if (is_undead(youmonst.data)) {
+			if (is_undead(youmonst.data) || is_vampshifter(&youmonst)) {
 				pline("You feel frightened and %sstunned.",
 				      Stunned ? "even more " : "");
 				make_stunned(HStun + rnd(30), false);
@@ -3431,7 +3431,7 @@ static int zhitm(struct monst *mon, int type, int nd, struct obj **ootmp) {
 					break;
 				}
 				if (nonliving(mon->data) || is_demon(mon->data) ||
-				    resists_death(mon) ||
+				    resists_death(mon) || is_vampshifter(mon) ||
 				    resists_magm(mon)) { /* similar to player */
 					sho_shieldeff = true;
 					break;

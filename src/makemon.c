@@ -1453,15 +1453,36 @@ struct monst *makemon(struct permonst *ptr, int x, int y, int mmflags) {
 
 	mitem = 0; /* extra inventory item for this monster */
 
+	if (mndx == PM_VLAD_THE_IMPALER)
+		mitem = CANDELABRUM_OF_INVOCATION;
+
+	mtmp->cham = CHAM_ORDINARY;
 	if ((mcham = pm_to_cham(mndx)) != CHAM_ORDINARY) {
 		/* If you're protected with a ring, don't create
 		 * any shape-changing chameleons -dgk
 		 */
-		if (Protection_from_shape_changers)
-			mtmp->cham = CHAM_ORDINARY;
-		else {
+		if (Protection_from_shape_changers) {
+			; // stuck in its natural form (CHAM_ORDINARY)
+		} else {
+			/* General shapechangers start out with random form
+			 * (this explicitly picks something from the normal
+			 * selection for current difficulty level rather
+			 * than from among shapechanger's preferred forms).
+			 * Vampires are the exception.
+			 */
+
+			struct permonst *tmpcham = rndmonst();
+
 			mtmp->cham = mcham;
-			mon_spec_poly(mtmp, rndmonst(), 0L, false, false, false, false);
+
+			if (is_vampshifter(mtmp)) {
+				int chamidx = select_newcham_form(mtmp);
+				if (chamidx != NON_PM)
+					tmpcham = &mons[chamidx];
+			}
+
+			if (mtmp->cham != PM_VLAD_THE_IMPALER)
+				mon_spec_poly(mtmp, tmpcham, 0L, false, false, false, false);
 		}
 	} else if (mndx == PM_WIZARD_OF_YENDOR) {
 		mtmp->iswiz = true;
@@ -1500,8 +1521,6 @@ struct monst *makemon(struct permonst *ptr, int x, int y, int mmflags) {
 	} else if (mndx == PM_GYPSY) {
 		/* KMH -- Gypsies are randomly generated; initialize them here */
 		gypsy_init(mtmp);
-	} else if (mndx == PM_VLAD_THE_IMPALER) {
-		mitem = CANDELABRUM_OF_INVOCATION;
 	} else if (mndx == PM_CROESUS) {
 		mitem = TWO_HANDED_SWORD;
 	} else if (ptr->msound == MS_NEMESIS) {

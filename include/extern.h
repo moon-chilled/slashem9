@@ -1153,6 +1153,7 @@ void rescham(void);
 void restartcham(void);
 void restore_cham(struct monst *);
 void mon_animal_list(boolean);
+int select_newcham_form(struct monst *mon);
 int newcham(struct monst *, struct permonst *, boolean, boolean);
 int can_be_hatched(int);
 int egg_type_from_parent(int, boolean);
@@ -1161,6 +1162,7 @@ void kill_genocided_monsters(void);
 void golemeffects(struct monst *, int, int);
 boolean angry_guards(boolean);
 void pacify_guards(void);
+void decide_to_shapeshift(struct monst *mon, int shiftflags);
 
 /* ### mondata.c ### */
 
@@ -1196,6 +1198,7 @@ const char *stagger(const struct permonst *, const char *);
 const char *on_fire(struct permonst *, struct attack *);
 const struct permonst *raceptr(struct monst *);
 bool olfaction(struct permonst *mdat);
+bool is_vampshifter(struct monst *mon);
 
 /* ### monmove.c ### */
 
@@ -1210,7 +1213,8 @@ int m_move(struct monst *, int);
 boolean closed_door(int, int);
 boolean accessible(int, int);
 void set_apparxy(struct monst *);
-boolean can_ooze(struct monst *);
+bool can_ooze(struct monst *mtmp);
+bool can_fog(struct monst *mtmp);
 bool should_displace(struct monst *mtmp, coord *poss, long *info, int cnt, xchar gx, xchar gy);
 bool undesirable_disp(struct monst *mtmp, xchar x, xchar y);
 
@@ -1488,9 +1492,8 @@ void self_invis_message(void);
 /* ### polyself.c ### */
 
 void init_uasmon(void);
-void set_uasmon(void);
 void change_sex(void);
-void polyself(boolean);
+void polyself(int psflags);
 int polymon(int);
 void rehumanize(void);
 int dobreathe(void);
@@ -1500,6 +1503,7 @@ int dospinweb(void);
 int dosummon(void);
 int dogaze(void);
 int dohide(void);
+int dopoly(void);
 int domindblast(void);
 void skinback(boolean);
 const char *mbodypart(struct monst *, int);

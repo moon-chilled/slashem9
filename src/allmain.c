@@ -323,7 +323,7 @@ void moveloop(void) {
 									nomul(0);
 								}
 								if (change == 1) {
-									polyself(false);
+									polyself(0);
 								} else {
 									you_were();
 								}

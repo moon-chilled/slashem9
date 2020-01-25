@@ -162,7 +162,7 @@ int hitval(struct obj *otmp, struct monst *mon) {
 
 	/* Blessed weapons used against undead or demons */
 	if (Is_weapon && otmp->blessed &&
-	    (is_demon(ptr) || is_undead(ptr))) tmp += 2;
+	    (is_demon(ptr) || is_undead(ptr) || is_vampshifter(mon))) tmp += 2;
 
 	/* KMH, balance patch -- new macro */
 	if (is_spear(otmp) && index(kebabable, ptr->mlet)) tmp += 2;
@@ -358,11 +358,11 @@ int dmgval(struct obj *otmp, struct monst *mon) {
 	    otmp->oclass == BALL_CLASS || otmp->oclass == CHAIN_CLASS) {
 		int bonus = 0;
 
-		if (otmp->blessed && (is_undead(ptr) || is_demon(ptr)))
+		if (otmp->blessed && (is_undead(ptr) || is_demon(ptr) || is_vampshifter(mon)))
 			bonus += rnd(4);
 		if (is_axe(otmp) && is_wooden(ptr))
 			bonus += rnd(4);
-		if (objects[otyp].oc_material == SILVER && hates_silver(ptr))
+		if (objects[otyp].oc_material == SILVER && mon_hates_silver(mon))
 			bonus += rnd(20);
 
 		/* Ralf Engels - added more special cases*/
@@ -480,7 +480,7 @@ struct obj *select_rwep(struct monst *mtmp) {
 			 * All monsters can wield the remaining weapons.
 			 */
 			if (((strongmonst(mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0) || !objects[pwep[i]].oc_bimanual) &&
-			    (objects[pwep[i]].oc_material != SILVER || !hates_silver(mtmp->data))) {
+			    (objects[pwep[i]].oc_material != SILVER || !mon_hates_silver(mtmp))) {
 				if ((otmp = oselect(mtmp, pwep[i])) != 0) {
 					propellor = otmp; /* force the monster to wield it */
 					return otmp;
@@ -632,7 +632,7 @@ struct obj *select_hwep(struct monst *mtmp) {
 		if (hwep[i] == CORPSE && !(mtmp->misc_worn_check & W_ARMG))
 			continue;
 		if (((strong && !wearing_shield) || !objects[hwep[i]].oc_bimanual) &&
-		    (objects[hwep[i]].oc_material != SILVER || !hates_silver(mtmp->data)))
+		    (objects[hwep[i]].oc_material != SILVER || !mon_hates_silver(mtmp)))
 			Oselect(hwep[i]);
 	}
 

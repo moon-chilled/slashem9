@@ -1696,7 +1696,7 @@ boolean find_misc(struct monst *mtmp) {
 	if (dist2(x, y, mtmp->mux, mtmp->muy) > 36)
 		return false;
 
-	if (!stuck && !immobile && !mtmp->cham && mstrength(mdat) < 6) {
+	if (!stuck && !immobile && mtmp->cham == CHAM_ORDINARY && mstrength(mdat) < 6) {
 		const bool ignore_boulders = (verysmall(mdat) ||
 					     throws_rocks(mdat) ||
 					     passes_walls(mdat));
@@ -1764,12 +1764,12 @@ boolean find_misc(struct monst *mtmp) {
 			m.has_misc = MUSE_POT_SPEED;
 		}
 		nomore(MUSE_WAN_POLYMORPH);
-		if (obj->otyp == WAN_POLYMORPH && obj->spe > 0 && !mtmp->cham && mstrength(mdat) < 6) {
+		if (obj->otyp == WAN_POLYMORPH && obj->spe > 0 && mtmp->cham == CHAM_ORDINARY && mstrength(mdat) < 6) {
 			m.misc = obj;
 			m.has_misc = MUSE_WAN_POLYMORPH;
 		}
 		nomore(MUSE_POT_POLYMORPH);
-		if (obj->otyp == POT_POLYMORPH && !mtmp->cham && mstrength(mdat) < 6) {
+		if (obj->otyp == POT_POLYMORPH && mtmp->cham == CHAM_ORDINARY && mstrength(mdat) < 6) {
 			m.misc = obj;
 			m.has_misc = MUSE_POT_POLYMORPH;
 		}
@@ -2028,7 +2028,7 @@ int rnd_misc_item(struct monst *mtmp) {
 	if (difficulty < 6 && !rn2(30))
 		return rn2(6) ? POT_POLYMORPH : WAN_POLYMORPH;
 
-	if (!rn2(40) && !nonliving(pm)) return AMULET_OF_LIFE_SAVING;
+	if (!rn2(40) && !nonliving(pm) && !is_vampshifter(mtmp)) return AMULET_OF_LIFE_SAVING;
 
 	switch (rn2(3)) {
 		case 0:
@@ -2099,7 +2099,7 @@ boolean searches_for_item(struct monst *mon, struct obj *obj) {
 			break;
 		case AMULET_CLASS:
 			if (typ == AMULET_OF_LIFE_SAVING)
-				return !nonliving(mon->data);
+				return !(nonliving(mon->data) || is_vampshifter(mon));
 			if (typ == AMULET_OF_REFLECTION)
 				return true;
 			break;

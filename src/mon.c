@@ -17,7 +17,6 @@ static bool restrap(struct monst *mtmp);
 static long mm_aggression(struct monst *magr, struct monst *mdef);
 static long mm_displacement(struct monst *magr, struct monst *mdef);
 static int pick_animal(void);
-static int select_newcham_form(struct monst *mon);
 static void kill_eggs(struct obj *obj_list);
 
 #define LEVEL_SPECIFIC_NOCORPSE(mdat)                 \
@@ -144,34 +143,11 @@ int genus(int mndx, int mode) {
 	return mndx;
 }
 
-/* convert monster index to chameleon index */
+/* return monster index if chameleon, and CHAM_ORDINARY else */
 int pm_to_cham(int mndx) {
-	int mcham;
-
-	switch (mndx) {
-		case PM_CHAMELEON:
-			mcham = CHAM_CHAMELEON;
-			break;
-		case PM_DOPPELGANGER:
-			mcham = CHAM_DOPPELGANGER;
-			break;
-		case PM_SANDESTIN:
-			mcham = CHAM_SANDESTIN;
-			break;
-		default:
-			mcham = CHAM_ORDINARY;
-			break;
-	}
-	return mcham;
+	if (mndx > LOW_PM && is_shapeshifter(&mons[mndx])) return mndx;
+	else return CHAM_ORDINARY;
 }
-
-/* convert chameleon index to monster index */
-static short cham_to_pm[] = {
-	NON_PM, /* placeholder for CHAM_ORDINARY */
-	PM_CHAMELEON,
-	PM_DOPPELGANGER,
-	PM_SANDESTIN,
-};
 
 /* for deciding whether corpse or statue will carry along full monster data */
 #define KEEPTRAITS(mon) ((mon)->isshk || (mon)->isgyp || (mon)->mtame || \
@@ -597,9 +573,14 @@ void mcalcdistress(void) {
 		mon_regen(mtmp, false);
 
 		/* possibly polymorph shapechangers and lycanthropes */
-		if (mtmp->cham && !rn2(6))
-			mon_spec_poly(mtmp, NULL, 0L, false,
-				      cansee(mtmp->mx, mtmp->my) && flags.verbose, false, false);
+		if (mtmp->cham != CHAM_ORDINARY) {
+			if (is_vampshifter(mtmp) || is_vampire(mtmp->data))
+				decide_to_shapeshift(mtmp, 0);
+			else if (!rn2(6))
+				mon_spec_poly(mtmp, NULL, 0L, false,
+					      cansee(mtmp->mx, mtmp->my) && flags.verbose, false, false);
+		}
+
 		were_change(mtmp);
 
 		/* gradually time out temporary problems */
@@ -1016,7 +997,7 @@ boolean can_carry(struct monst *mtmp, struct obj *otmp) {
 		return false;
 	if (otyp == CORPSE && is_rider(&mons[otmp->corpsenm]))
 		return false;
-	if (objects[otyp].oc_material == SILVER && hates_silver(mdat) &&
+	if (objects[otyp].oc_material == SILVER && mon_hates_silver(mtmp) &&
 	    (otyp != BELL_OF_OPENING || !is_covetous(mdat)))
 		return false;
 
@@ -1039,7 +1020,7 @@ boolean can_carry(struct monst *mtmp, struct obj *otmp) {
 	if (curr_mon_load(mtmp) + newload > max_mon_load(mtmp)) return false;
 
 	/* if the monster hates silver,  don't pick it up */
-	if (objects[otmp->otyp].oc_material == SILVER && hates_silver(mtmp->data))
+	if (objects[otmp->otyp].oc_material == SILVER && mon_hates_silver(mtmp))
 		return false;
 
 	if (curr_mon_load(mtmp) + newload > max_mon_load(mtmp)) return false;
@@ -1113,7 +1094,7 @@ nexttry: /* eels prefer the water, but if there is no water nearby,
 			if (IS_DOOR(ntyp))
 				if (artifact_door(nx, ny) ?
 					    (levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR)) || levl[nx][ny].doormask & D_LOCKED :
-					    !amorphous(mdat) &&
+					    !(amorphous(mdat) || (!amorphous(mdat) && can_fog(mon))) &&
 						    ((levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR)) ||
 						     (levl[nx][ny].doormask & D_LOCKED && !(flag & UNLOCKDOOR))) &&
 						    !thrudoor) continue;
@@ -1407,7 +1388,7 @@ static void m_detach(struct monst *mtmp, struct permonst *mptr) {
 
 /* find the worn amulet of life saving which will save a monster */
 struct obj *mlifesaver(struct monst *mon) {
-	if (!nonliving(mon->data)) {
+	if (!nonliving(mon->data) || is_vampshifter(mon)) {
 		struct obj *otmp = which_armor(mon, W_AMUL);
 
 		if (otmp && otmp->otyp == AMULET_OF_LIFE_SAVING)
@@ -1514,28 +1495,78 @@ void mondead(struct monst *mtmp) {
 	lifesaved_monster(mtmp);
 	if (mtmp->mhp > 0) return;
 
+
+	if (is_vampshifter(mtmp)) {
+		int mndx = mtmp->cham;
+		int x = mtmp->mx, y = mtmp->my;
+		// this only happens if shapeshifted
+		if (mndx != CHAM_ORDINARY && mndx != monsndx(mtmp->data)) {
+			char buf[BUFSZ];
+			bool in_door = amorphous(mtmp->data) && closed_door(mtmp->mx,mtmp->my);
+			sprintf(buf,
+					"The %s%s suddenly %s and rises as %%s!",
+					(nonliving(mtmp->data) ||
+					 noncorporeal(mtmp->data) ||
+					 amorphous(mtmp->data)) ? "" : "seemingly dead ",
+					x_monnam(mtmp, ARTICLE_NONE, NULL,
+						SUPPRESS_SADDLE | SUPPRESS_HALLUCINATION |
+						SUPPRESS_INVISIBLE | SUPPRESS_IT, false),
+					(nonliving(mtmp->data) ||
+					 noncorporeal(mtmp->data) ||
+					 amorphous(mtmp->data)) ?
+					"reconstitutes" : "transforms");
+			mtmp->mcanmove = 1;
+			mtmp->mfrozen = 0;
+			if (mtmp->mhpmax <= 0) mtmp->mhpmax = 10;
+			mtmp->mhp = mtmp->mhpmax;
+			// this can happen if previously a fog cloud
+			if (u.uswallow && (mtmp == u.ustuck))
+				expels(mtmp, mtmp->data, false);
+			if (in_door) {
+				coord new_xy;
+				if (enexto(&new_xy, mtmp->mx, mtmp->my, &mons[mndx])) {
+					rloc_to(mtmp, new_xy.x, new_xy.y);
+				}
+			}
+
+			newcham(mtmp, &mons[mndx], false, false);
+
+			if (mtmp->data == &mons[mndx])
+				mtmp->cham = CHAM_ORDINARY;
+			else
+				mtmp->cham = mndx;
+
+			if ((!Blind && canseemon(mtmp)) || sensemon(mtmp))
+				pline(buf, a_monnam(mtmp));
+			newsym(x,y);
+			return;
+		}
+	}
+
 	/* Player is thrown from his steed when it dies */
 	if (mtmp == u.usteed)
 		dismount_steed(DISMOUNT_GENERIC);
 
 	mptr = mtmp->data; /* save this for m_detach() */
 	/* restore chameleon, lycanthropes to true form at death */
-	if (mtmp->cham)
-		set_mon_data(mtmp, &mons[cham_to_pm[mtmp->cham]], -1);
-	else if (mtmp->data == &mons[PM_WEREJACKAL])
+	if (mtmp->cham != CHAM_ORDINARY) {
+		set_mon_data(mtmp, &mons[mtmp->cham], -1);
+		mtmp->cham = CHAM_ORDINARY;
+	} else if (mtmp->data == &mons[PM_WEREJACKAL]) {
 		set_mon_data(mtmp, &mons[PM_HUMAN_WEREJACKAL], -1);
-	else if (mtmp->data == &mons[PM_WEREWOLF])
+	} else if (mtmp->data == &mons[PM_WEREWOLF]) {
 		set_mon_data(mtmp, &mons[PM_HUMAN_WEREWOLF], -1);
-	else if (mtmp->data == &mons[PM_WERERAT])
+	} else if (mtmp->data == &mons[PM_WERERAT]) {
 		set_mon_data(mtmp, &mons[PM_HUMAN_WERERAT], -1);
-	else if (mtmp->data == &mons[PM_WEREPANTHER])
+	} else if (mtmp->data == &mons[PM_WEREPANTHER]) {
 		set_mon_data(mtmp, &mons[PM_HUMAN_WEREPANTHER], -1);
-	else if (mtmp->data == &mons[PM_WERETIGER])
+	} else if (mtmp->data == &mons[PM_WERETIGER]) {
 		set_mon_data(mtmp, &mons[PM_HUMAN_WERETIGER], -1);
-	else if (mtmp->data == &mons[PM_WERESNAKE])
+	} else if (mtmp->data == &mons[PM_WERESNAKE]) {
 		set_mon_data(mtmp, &mons[PM_HUMAN_WERESNAKE], -1);
-	else if (mtmp->data == &mons[PM_WERESPIDER])
+	} else if (mtmp->data == &mons[PM_WERESPIDER]) {
 		set_mon_data(mtmp, &mons[PM_HUMAN_WERESPIDER], -1);
+	}
 
 	/* if MAXMONNO monsters of a given type have died, and it
 	 * can be done, extinguish that monster.
@@ -2298,11 +2329,10 @@ void rescham(void) {
 
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 		if (DEADMONSTER(mtmp)) continue;
-		mcham = (int)mtmp->cham;
-		if (mcham) {
+		mcham = mtmp->cham;
+		if (mcham != CHAM_ORDINARY) {
+			newcham(mtmp, &mons[mcham], false, canseemon(mtmp));
 			mtmp->cham = CHAM_ORDINARY;
-			newcham(mtmp, &mons[cham_to_pm[mcham]], false,
-				canseemon(mtmp));
 		}
 		if (is_were(mtmp->data) && mtmp->data->mlet != S_HUMAN)
 			new_were(mtmp);
@@ -2322,8 +2352,7 @@ void restartcham(void) {
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 		if (DEADMONSTER(mtmp)) continue;
 		mtmp->cham = pm_to_cham(monsndx(mtmp->data));
-		if (mtmp->data->mlet == S_MIMIC && mtmp->msleeping &&
-		    cansee(mtmp->mx, mtmp->my)) {
+		if (mtmp->data->mlet == S_MIMIC && mtmp->msleeping && cansee(mtmp->mx, mtmp->my)) {
 			set_mimic_sym(mtmp);
 			newsym(mtmp->mx, mtmp->my);
 		}
@@ -2337,10 +2366,10 @@ void restore_cham(struct monst *mon) {
 	int mcham;
 
 	if (Protection_from_shape_changers) {
-		mcham = (int)mon->cham;
-		if (mcham) {
+		mcham = mon->cham;
+		if (mcham != CHAM_ORDINARY) {
 			mon->cham = CHAM_ORDINARY;
-			newcham(mon, &mons[cham_to_pm[mcham]], false, false);
+			newcham(mon, &mons[mcham], false, false);
 		} else if (is_were(mon->data) && !is_human(mon->data)) {
 			new_were(mon);
 		}
@@ -2351,7 +2380,7 @@ void restore_cham(struct monst *mon) {
 
 /* unwatched hiders may hide again; if so, a 1 is returned.  */
 static bool restrap(struct monst *mtmp) {
-	if (mtmp->cham || mtmp->mcan || mtmp->m_ap_type ||
+	if (mtmp->cham != CHAM_ORDINARY || mtmp->mcan || mtmp->m_ap_type ||
 	    cansee(mtmp->mx, mtmp->my) || rn2(3) || (mtmp == u.ustuck) ||
 	    (sensemon(mtmp) && distu(mtmp->mx, mtmp->my) <= 2))
 		return false;
@@ -2398,22 +2427,63 @@ static int pick_animal() {
 	return animal_list[rn2(animal_list_count)];
 }
 
-static int select_newcham_form(struct monst *mon) {
+void decide_to_shapeshift(struct monst *mon, int shiftflags) {
+	bool msg = false;
+
+	if ((shiftflags & SHIFT_MSG)
+	    || ((shiftflags & SHIFT_SEENMSG) && sensemon(mon)))
+		msg = true;
+
+	if (is_vampshifter(mon)) {
+		/* The vampire has to be in good health (mhp) to maintain
+		 * its shifted form.
+		 *
+		 * If we're shifted and getting low on hp, maybe shift back.
+		 * If we're not already shifted and in good health, maybe shift.
+		 */
+		if ((mon->mhp <= mon->mhpmax / 6) && rn2(4))
+			newcham(mon, &mons[mon->cham], false, msg);
+	} else if (is_vampire(mon->data) && mon->cham == CHAM_ORDINARY
+		   && !rn2(6) && (mon->mhp > mon->mhpmax - ((mon->mhpmax / 10) + 1))) {
+		newcham(mon, NULL, false, msg);
+	}
+}
+
+
+
+int select_newcham_form(struct monst *mon) {
 	int mndx = NON_PM;
 
 	switch (mon->cham) {
-		case CHAM_SANDESTIN:
+		case PM_SANDESTIN:
 			if (rn2(7)) mndx = pick_nasty();
 			break;
-		case CHAM_DOPPELGANGER:
+		case PM_DOPPELGANGER:
 			if (!rn2(7))
 				mndx = pick_nasty();
 			else if (rn2(3))
 				mndx = rn1(PM_WIZARD - PM_ARCHEOLOGIST + 1,
 					   PM_ARCHEOLOGIST);
 			break;
-		case CHAM_CHAMELEON:
+		case PM_CHAMELEON:
 			if (!rn2(3)) mndx = pick_animal();
+			break;
+		// TODO: add star, fire vampire
+		case PM_VLAD_THE_IMPALER:
+		case PM_VAMPIRE_MAGE:
+		case PM_VAMPIRE_LORD:
+		case PM_VAMPIRE:
+			if (mon_has_special(mon) &&  /* ensure Vlad can carry it still */
+					mon->cham == PM_VLAD_THE_IMPALER) {
+				mndx = PM_VLAD_THE_IMPALER;
+				break;
+			}
+			if (!rn2(10) && mon->cham != PM_VAMPIRE) {
+				/* VAMPIRE_LORD || VLAD */
+				mndx = PM_WOLF;
+				break;
+			}
+			mndx = !rn2(4) ? PM_FOG_CLOUD : PM_VAMPIRE_BAT;
 			break;
 		case CHAM_ORDINARY: {
 			struct obj *m_armr = which_armor(mon, W_ARM);
@@ -2766,12 +2836,12 @@ static void kill_eggs(struct obj *obj_list) {
 /* kill all members of genocided species */
 void kill_genocided_monsters() {
 	struct monst *mtmp, *mtmp2;
-	boolean kill_cham[CHAM_MAX_INDX + 1];
+	bool kill_cham[NUMMONS];
 	int mndx;
 
 	kill_cham[CHAM_ORDINARY] = false; /* (this is mndx==0) */
-	for (mndx = 1; mndx <= CHAM_MAX_INDX; mndx++)
-		kill_cham[mndx] = (mvitals[cham_to_pm[mndx]].mvflags & G_GENOD) != 0;
+	for (mndx = LOW_PM; mndx <= NUMMONS; mndx++)
+		kill_cham[mndx] = (mvitals[mndx].mvflags & G_GENOD) != 0;
 	/*
 	 * Called during genocide, and again upon level change.  The latter
 	 * catches up with any migrating monsters as they finally arrive at
@@ -2788,7 +2858,7 @@ void kill_genocided_monsters() {
 		if (DEADMONSTER(mtmp)) continue;
 		mndx = monsndx(mtmp->data);
 		if ((mvitals[mndx].mvflags & G_GENOD) || kill_cham[mtmp->cham]) {
-			if (mtmp->cham && !kill_cham[mtmp->cham])
+			if (mtmp->cham != CHAM_ORDINARY && !kill_cham[mtmp->cham])
 				/* [ALI] Chameleons are not normally subject to
 				 * system shock, but genocide is a special case.
 				 */

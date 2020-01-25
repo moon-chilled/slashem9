@@ -408,7 +408,7 @@ struct monst *animate_statue(struct obj *statue, xchar x, xchar y, int cause, in
 				 * when makemon() is called, so we have to
 				 * check the field before calling newcham().
 				 */
-				if (mon->cham == CHAM_DOPPELGANGER)
+				if (mon->cham == PM_DOPPELGANGER)
 					newcham(mon, mptr, false, false);
 			}
 		} else
@@ -445,7 +445,7 @@ struct monst *animate_statue(struct obj *statue, xchar x, xchar y, int cause, in
 	else
 		mon->mundetected = false;
 	if ((x == u.ux && y == u.uy) || cause == ANIMATE_SPELL) {
-		const char *comes_to_life = nonliving(mon->data) ?
+		const char *comes_to_life = (nonliving(mon->data) || is_vampshifter(mon)) ?
 						    "moves" :
 						    "comes to life";
 		if (cause == ANIMATE_SPELL)
@@ -1042,7 +1042,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 				deltrap(trap);	    /* delete trap before polymorph */
 				newsym(u.ux, u.uy); /* get rid of trap symbol */
 				pline("You feel a change coming over you.");
-				polyself(false);
+				polyself(0);
 			}
 			break;
 		}

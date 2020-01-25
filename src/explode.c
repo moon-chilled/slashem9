@@ -362,7 +362,9 @@ void do_explode(
 					break;
 				case AD_DISN:
 					explmask |= (olet == WAND_CLASS) ?
-							    (nonliving(mtmp->data) || is_demon(mtmp->data)) :
+							    (nonliving(mtmp->data)
+							     || is_demon(mtmp->data)
+							     || is_vampshifter(mtmp)) :
 							    resists_disint(mtmp);
 					break;
 				case AD_ELEC:

@@ -41,42 +41,37 @@ struct monst {
 	struct monst *nmon;
 	struct permonst *data;
 	unsigned m_id;
-	short mnum;	 /* permanent monster index number */
-	short movement;	 /* movement points (derived from permonst definition and added effects */
-	uchar m_lev;	 /* adjusted difficulty level of monster */
-	aligntyp malign; /* alignment of this monster, relative to the
-				   player (positive = good to kill) */
+	short mnum;	/* permanent monster index number */
+	short cham;	/* if shapeshifter, orig mons[] idx goes here */
+#define CHAM_ORDINARY 0	/* note: lycanthropes are handled elsewhere */
+	short movement;	/* movement points (derived from permonst definition and added effects */
+	uchar m_lev;	/* adjusted difficulty level of monster */
+	aligntyp malign;/* alignment of this monster, relative to the
+			   player (positive = good to kill) */
 	xchar mx, my;
-	xchar mux, muy; /* where the monster thinks you are */
+	xchar mux, muy;	/* where the monster thinks you are */
 #define MTSZ 4
-	coord mtrack[MTSZ]; /* monster track */
+	coord mtrack[MTSZ];/* monster track */
 	int mhp, mhpmax;
-	int m_en, m_enmax;    /* Power level (for spells, etc.) */
-	unsigned mappearance; /* for undetected mimics and the wiz */
-	uchar m_ap_type;      /* what mappearance is describing: */
-#define M_AP_NOTHING   0      /* mappearance is unused -- monster appears
+	int m_en, m_enmax;	/* Power level (for spells, etc.) */
+	unsigned mappearance;	/* for undetected mimics and the wiz */
+	uchar m_ap_type;	/* what mappearance is describing: */
+#define M_AP_NOTHING   0	/* mappearance is unused -- monster appears
 				   as itself */
-#define M_AP_FURNITURE 1      /* stairs, a door, an altar, etc. */
-#define M_AP_OBJECT    2      /* an object */
-#define M_AP_MONSTER   3      /* a monster */
+#define M_AP_FURNITURE 1	/* stairs, a door, an altar, etc. */
+#define M_AP_OBJECT    2	/* an object */
+#define M_AP_MONSTER   3	/* a monster */
 
-	schar mtame;		   /* level of tameness, implies peaceful */
-	unsigned long mintrinsics; /* initialized from mresists */
-	int mspec_used;		   /* monster's special ability attack timeout */
-	int oldmonnm;		   /* Old monster number - for polymorph */
+	schar mtame;			/* level of tameness, implies peaceful */
+	unsigned long mintrinsics;	/* initialized from mresists */
+	int mspec_used;			/* monster's special ability attack timeout */
+	int oldmonnm;			/* Old monster number - for polymorph */
 
-	bool female;	    /* is female */
-	bool minvis;	    /* currently invisible */
-	bool invis_blkd;    /* invisibility blocked */
-	bool perminvis;	    /* intrinsic minvis value */
-	Bitfield(cham, 3);  /* shape-changer */
-			    /* note: lychanthropes are handled elsewhere */
-#define CHAM_ORDINARY	  0 /* not a shapechanger */
-#define CHAM_CHAMELEON	  1 /* animal */
-#define CHAM_DOPPELGANGER 2 /* demi-human */
-#define CHAM_SANDESTIN	  3 /* demon */
-#define CHAM_MAX_INDX	  CHAM_SANDESTIN
-	bool mundetected; /* not seen in present hiding place */
+	bool female;		/* is female */
+	bool minvis;		/* currently invisible */
+	bool invis_blkd;	/* invisibility blocked */
+	bool perminvis;		/* intrinsic minvis value */
+	bool mundetected;	/* not seen in present hiding place */
 	/* implies one of M1_CONCEAL or M1_HIDE,
 	 * but not mimic (that is, snake, spider,
 	 * trapper, piercer, eel)
@@ -190,6 +185,7 @@ struct monst {
 #define MON_WEP(mon)   ((mon)->mw)
 #define MON_NOWEP(mon) ((mon)->mw = NULL)
 
-#define DEADMONSTER(mon) ((mon)->mhp < 1)
+#define DEADMONSTER(mon)	((mon)->mhp < 1)
+
 
 #endif /* MONST_H */

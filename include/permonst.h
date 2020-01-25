@@ -56,8 +56,8 @@ struct permonst {
 	unsigned long mresists;	    /* resistances */
 	uchar mconveys;		    /* conveyed by eating */
 	unsigned long mflags1,	    /* boolean bitflags */
-		mflags2;	    /* more boolean bitflags */
-	unsigned short mflags3;	    /* yet more boolean bitflags */
+		      mflags2,	    /* more boolean bitflags */
+		      mflags3;	    /* and yet more */
 	uchar mcolor;		    /* color to use */
 };
 

@@ -121,8 +121,9 @@
 #define M1_POIS	       0x10000000L  /* poisonous to eat */
 #define M1_CARNIVORE   0x20000000L  /* eats corpses */
 #define M1_HERBIVORE   0x40000000L  /* eats fruits */
-#define M1_OMNIVORE    0x60000000L  /* eats both */
 #define M1_METALLIVORE 0x80000000UL /* eats metal */
+
+#define M1_OMNIVORE    (M1_CARNIVORE | M1_HERBIVORE)  /* eats both */
 
 #define M2_NOPOLY    0x00000001L  /* players mayn't poly into one */
 #define M2_UNDEAD    0x00000002L  /* is walking dead */
@@ -171,6 +172,7 @@
 #define M3_TRAITOR	0x0400 /* Capable of treachery */
 #define M3_NOTAME	0x0800 /* Cannot be tamed */
 #define M3_DISPLACES	0x1000 /* moves monsters out of its way */
+#define M3_SHAPESHIFTER	0x2000 /* is a shapeshifting species */
 
 /* wants something */
 #define M3_COVETOUS	(M3_WANTSAMUL|M3_WANTSBELL|M3_WANTSBOOK|M3_WANTSCAND|M3_WANTSARTI)

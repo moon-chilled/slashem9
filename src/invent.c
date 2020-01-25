@@ -2625,13 +2625,14 @@ struct obj *display_minventory(struct monst *mon, int dflags, char *title) {
 		/* Fool the 'weapon in hand' routine into
 		 * displaying 'weapon in claw', etc. properly.
 		 */
+		struct permonst *stash_udata = youmonst.data;
 		youmonst.data = mon->data;
 
 		n = query_objlist(title ? title : tmp, mon->minvent, INVORDER_SORT, &selected,
 				  (dflags & MINV_NOLET) ? PICK_NONE : PICK_ONE,
 				  do_all ? allow_all : worn_wield_only);
 
-		set_uasmon();
+		youmonst.data = stash_udata;
 	} else {
 		invdisp_nothing(title ? title : tmp, "(none)");
 		n = 0;

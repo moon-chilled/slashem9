@@ -47,6 +47,7 @@ Changelist for slashem9 v0.9:
 - Internals: use regex rather than pattern matching for database entries.
 - Bugfix: encyclopedia entry for Ruggo the Gnome King.
 - Bugfix: potion of sickness made you lose HP even if you were poison resistant.
+- Gameplay: #monster while vampshifted will always restore you to your vampiric form.
 
 Imports from NetHack versions newer than 3.4.3:
 - Bugfix: acid dropping bug.
@@ -120,13 +121,14 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: rocks can skip over water.
 - Gameplay: pits created by wands of digging and drums of earthquake will get filled in by water or lava from the surrounding area, just like player-created pits.
 - Gameplay: breakable objects that fall through trapdoors/holes have a chance to break upon landing on the lower level.
+- Gameplay: player in vampiric form can use #monster to transform into a fog cloud, wolf, or vampire bat.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
-- System: add extended logfile/xlogfile with more information than standard log file (Aardvark Joe).  Remove logfile.
+- System: add extended logfile/xlogfile with more information than standard log file (Aardvark Joe).  Also remove logfile.
 - Interface: show object glyphs in inventory display (Patric Mueller).
 - Interface: highlight object piles and stairs covered by objects (Pasi Kallinen).
-- Interface: add MSGTYPES, which allow for user-configurable filtering, emphasis, or norep of messages (Pasi Kallinen).  Use regex instead of pattern matching.
+- Interface: add MSGTYPES, which allow for user-configurable filtering, emphasis, or norep of messages (Pasi Kallinen).  Also use regex instead of pattern matching.
 - Interface: allow users to specify colours for dungeon features (Patric Mueller).
 - Bugfix: '???' could show up in regular gameplay (Fredrik Ljungdahl).
 - Interface: show dark--but visited/known--room tiles on the screen (Clive Crous).

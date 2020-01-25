@@ -12,6 +12,7 @@
 
 #include "hack.h"
 
+static void set_uasmon(int new_monnum);
 static void polyman(const char *, const char *);
 static void break_armor(void);
 static void drop_weapon(int);
@@ -20,10 +21,6 @@ static int armor_to_dragon(int);
 static void newman(void);
 static void merge_with_armor(void);
 static bool polysense(struct permonst *mptr);
-
-/*  Not Used
-static void special_poly(void);
-*/
 
 /* Assumes u.umonster is set up already */
 /* Use u.umonster since we might be restoring and you may be polymorphed */
@@ -49,12 +46,26 @@ void init_uasmon(void) {
 		upermonst.mattk[i] = mons[urace.malenum].mattk[i];
 	}
 
-	set_uasmon();
+	set_uasmon(u.umonnum);
 }
 
 /* update the youmonst.data structure pointer */
-void set_uasmon(void) {
+void set_uasmon(int new_monnum) {
+	int old_monnum = u.umonnum;
+
+	bool did_vampshift = ((youmonst.data && is_vampire(youmonst.data)) || (!Upolyd && is_vampire(&upermonst)))
+			     && old_monnum != new_monnum;
+			    // && is_valid_vampshift(youmonst.cham, u.umonnum) //TODO
+
+	u.umonnum = new_monnum;
+
 	set_mon_data(&youmonst, ((u.umonnum == u.umonster) ? &upermonst : &mons[u.umonnum]), 0);
+
+	if (youmonst.cham == CHAM_ORDINARY && did_vampshift)
+		youmonst.cham = old_monnum;
+	else
+		youmonst.cham = CHAM_ORDINARY;
+
 	bot_reconfig();
 }
 
@@ -67,11 +78,10 @@ static void polyman(const char *fmt, const char *arg) {
 	if (Upolyd) {
 		u.acurr = u.macurr; /* restore old attribs */
 		u.amax = u.mamax;
-		u.umonnum = u.umonster;
 		flags.female = u.mfemale;
 	}
 
-	set_uasmon();
+	set_uasmon(Upolyd ? u.umonster : u.umonnum);
 
 	u.mh = u.mhmax = 0;
 	u.mtimedone = 0;
@@ -151,17 +161,18 @@ void change_sex(void) {
 			     urole.femalenum :
 			     urole.malenum;
 
+	int new_monnum = u.umonnum;
 	if (!already_polyd) {
-		u.umonnum = u.umonster;
+		new_monnum = u.umonster;
 	} else if (u.umonnum == PM_SUCCUBUS || u.umonnum == PM_INCUBUS) {
 		flags.female = !flags.female;
 		/* change monster type to match new sex */
-		u.umonnum = (u.umonnum == PM_SUCCUBUS) ? PM_INCUBUS : PM_SUCCUBUS;
+		new_monnum = (u.umonnum == PM_SUCCUBUS) ? PM_INCUBUS : PM_SUCCUBUS;
 	}
-	set_uasmon();
+	set_uasmon(new_monnum);
 }
 
-static void newman() {
+static void newman(void) {
 	int tmp, oldlvl;
 
 	if (Race_if(PM_DOPPELGANGER)) {
@@ -250,17 +261,19 @@ static void newman() {
 	see_monsters();
 }
 
-void polyself(boolean forcecontrol) {
+void polyself(int psflags) {
 	char buf[BUFSZ];
 	int old_light, new_light;
 	int mntmp = NON_PM;
 	int tries = 0;
-	boolean draconian = (uarm &&
-			     uarm->otyp >= GRAY_DRAGON_SCALE_MAIL &&
-			     uarm->otyp <= YELLOW_DRAGON_SCALES);
-	boolean iswere = (u.ulycn >= LOW_PM || is_were(youmonst.data));
-	boolean isvamp = (is_vampire(youmonst.data));
-	boolean was_floating = (Levitation || Flying);
+	bool draconian = (uarm &&
+			  uarm->otyp >= GRAY_DRAGON_SCALE_MAIL &&
+			  uarm->otyp <= YELLOW_DRAGON_SCALES);
+	bool iswere = (u.ulycn >= LOW_PM || is_were(youmonst.data));
+	bool isvamp = (is_vampire(youmonst.data) || is_vampshifter(&youmonst));
+	bool was_floating = (Levitation || Flying);
+	bool forcecontrol = (psflags == 1);
+	bool monsterpoly = (psflags == 2);
 
 	/* [Tom] I made the chance of dying from Con check only possible for
 		 really weak people (it was out of 20) */
@@ -276,7 +289,7 @@ void polyself(boolean forcecontrol) {
 	}
 	old_light = Upolyd ? emits_light(youmonst.data) : 0;
 
-	if (Polymorph_control || forcecontrol) {
+	if ((Polymorph_control || forcecontrol) && !monsterpoly) {
 		do {
 			getlin("Become what kind of monster? [type the name]",
 			       buf);
@@ -342,10 +355,24 @@ void polyself(boolean forcecontrol) {
 			else
 				mntmp = u.ulycn;
 		} else if (isvamp) {
-			if (u.umonnum != PM_VAMPIRE_BAT)
-				mntmp = PM_VAMPIRE_BAT;
-			else
-				mntmp = PM_HUMAN; /* newman() */
+			if (is_vampshifter(&youmonst)) {
+				// return to vampiric form
+				mntmp = youmonst.cham;
+			} else {
+				mntmp = (youmonst.data != &mons[PM_VAMPIRE] && !rn2(10)) ? PM_WOLF :
+					!rn2(4) ? PM_FOG_CLOUD :
+					PM_VAMPIRE_BAT;
+			}
+
+			if (Polymorph_control) {
+				char buf[BUFSZ];
+				sprintf(buf, "Become %s?", an(mons[mntmp].mname));
+				if (yn(buf) != 'y') return;
+			}
+			if (Unchanging) {
+				pline("You fail to transform!");
+				return;
+			}
 		}
 		/* if polymon fails, "you feel" message has been given
 		   so don't follow up with another polymon or newman */
@@ -474,8 +501,7 @@ int polymon(int mntmp) {
 	}
 
 	u.mtimedone = rn1(500, 500);
-	u.umonnum = mntmp;
-	set_uasmon();
+	set_uasmon(mntmp);
 
 	/* New stats for monster, to last only as long as polymorphed.
 	 * Currently only strength gets changed.
@@ -1255,6 +1281,21 @@ int dohide(void) {
 	return 1;
 }
 
+int dopoly(void) {
+	struct permonst *savedat = youmonst.data;
+
+	if (is_vampire(youmonst.data) || is_vampshifter(&youmonst)) {
+		polyself(2);
+		if (savedat != youmonst.data) {
+			pline("You transform into %s.", an(youmonst.data->mname));
+			newsym(u.ux,u.uy);
+		}
+	}
+
+	return 1;
+}
+
+
 int domindblast(void) {
 	struct monst *mtmp, *nmon;
 
@@ -1641,7 +1682,7 @@ int polyatwill(void) {
 				else
 					nomul(0);
 			}
-			polyself(false);
+			polyself(0);
 			if (Upolyd) { /* You actually polymorphed */
 				u.uen -= 5 * mons[u.umonnum].mlevel;
 				if (u.uen < 0) {

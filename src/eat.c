@@ -1006,16 +1006,16 @@ static void cpostfx(int pm) {
 			break;
 		case PM_CHAMELEON:
 		case PM_DOPPELGANGER:
-			/* case PM_SANDESTIN: */
+//		case PM_SANDESTIN:
 			if (!Unchanging) {
 				pline("You feel a change coming over you.");
-				polyself(false);
+				polyself(0);
 			}
 			break;
 		case PM_GENETIC_ENGINEER: /* Robin Johnson -- special msg */
 			if (!Unchanging) {
 				pline("You undergo a freakish metamorphosis!");
-				polyself(false);
+				polyself(0);
 			}
 			break;
 		/* WAC all mind flayers as per mondata.h have to be here */

@@ -175,7 +175,7 @@ void dosounds(void) {
 	if (level.flags.has_morgue && !rn2(200)) {
 		for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 			if (DEADMONSTER(mtmp)) continue;
-			if (is_undead(mtmp->data) &&
+			if ((is_undead(mtmp->data) || is_vampshifter(mtmp)) &&
 			    mon_in_room(mtmp, MORGUE)) {
 				switch (rn2(2) + hallu) {
 					case 0:
@@ -471,8 +471,8 @@ static int domonnoise(struct monst *mtmp) {
 			/* vampire messages are varied by tameness, peacefulness, and time of night */
 			boolean isnight = night();
 			boolean kindred = maybe_polyd(u.umonnum == PM_VAMPIRE ||
-							      u.umonnum == PM_VAMPIRE_LORD ||
-							      u.umonnum == PM_VAMPIRE_MAGE,
+						      u.umonnum == PM_VAMPIRE_LORD ||
+						      u.umonnum == PM_VAMPIRE_MAGE,
 						      Race_if(PM_VAMPIRE));
 			boolean nightchild = (Upolyd && (u.umonnum == PM_WOLF ||
 							 u.umonnum == PM_SHADOW_WOLF ||

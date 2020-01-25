@@ -62,7 +62,7 @@ int thitu(int tlev, int dam, struct obj *obj, const char *name) {
 		else
 			pline("You are hit by %s%s", onm, exclam(dam));
 
-		if (obj && objects[obj->otyp].oc_material == SILVER && hates_silver(youmonst.data)) {
+		if (obj && objects[obj->otyp].oc_material == SILVER && mon_hates_silver(&youmonst)) {
 			dam += rnd(20);
 			pline("The silver sears your flesh!");
 			exercise(A_CON, false);
@@ -234,7 +234,7 @@ int ohitmon(struct monst *mon, struct monst *mtmp, struct obj *otmp, int range, 
 			}
 		}
 		if (objects[otmp->otyp].oc_material == SILVER &&
-		    hates_silver(mtmp->data)) {
+		    mon_hates_silver(mtmp)) {
 			if (vis)
 				pline("The silver sears %s flesh!",
 				      s_suffix(mon_nam(mtmp)));
@@ -257,7 +257,7 @@ int ohitmon(struct monst *mon, struct monst *mtmp, struct obj *otmp, int range, 
 		if (mtmp->mhp < 1) {
 			if (vis || verbose)
 				pline("%s is %s!", Monnam(mtmp),
-				      (nonliving(mtmp->data) || !canspotmon(mtmp)) ? "destroyed" : "killed");
+				      (nonliving(mtmp->data) || is_vampshifter(mtmp) || !canspotmon(mtmp)) ? "destroyed" : "killed");
 			/* don't blame hero for unknown rolling boulder trap */
 			if (!context.mon_moving &&
 			    (otmp->otyp != BOULDER || range >= 0 || !otmp->otrapped))

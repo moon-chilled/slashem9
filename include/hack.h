@@ -20,8 +20,7 @@
 #define OFF	     0
 #define BOLT_LIM     6	  /* from this distance ranged attacks will be made */
 #define MAX_CARR_CAP 1000 /* so that boulders can be heavier */
-#define DUMMY \
-	{ 0 }
+#define DUMMY {0}
 
 /* symbolic names for capacity levels */
 #define UNENCUMBERED 0
@@ -141,6 +140,9 @@ extern coord bhitpos; /* place where throw or zap hits or stops */
 #define CORPSTAT_INIT	0x01  /* pass init flag to mkcorpstat */
 #define CORPSTAT_BURIED	0x02  /* bury the corpse or statue */
 
+/* flags for decide_to_shift() */
+#define SHIFT_SEENMSG	0x01  /* put out a message if in sight */
+#define SHIFT_MSG	0x02  /* always put out a message */
 
 /* special mhpmax value when loading bones monster to flag as extinct or genocided */
 #define DEFUNCT_MONSTER (-100)

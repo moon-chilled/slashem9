@@ -822,7 +822,7 @@ static int use_mirror(struct obj *obj) {
 					nomovemsg = 0;
 				} else
 					pline("You stiffen momentarily under your gaze.");
-			} else if (is_vampire(youmonst.data))
+			} else if (is_vampire(youmonst.data) || is_vampshifter(&youmonst))
 				pline("You don't have a reflection.");
 			else if (u.umonnum == PM_UMBER_HULK) {
 				pline("Huh?  That doesn't look like you!");
@@ -885,7 +885,7 @@ static int use_mirror(struct obj *obj) {
 		if (vis)
 			pline("%s can't see your mirror.", Monnam(mtmp));
 		/* some monsters do special things */
-	} else if (is_vampire(mtmp->data) || mlet == S_GHOST) {
+	} else if (is_vampire(mtmp->data) || is_vampshifter(mtmp) || mlet == S_GHOST) {
 		if (vis)
 			pline("%s doesn't have a reflection.", Monnam(mtmp));
 	} else if (!mtmp->mcan && !mtmp->minvis &&

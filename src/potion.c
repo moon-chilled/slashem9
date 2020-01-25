@@ -964,7 +964,7 @@ int peffects(struct obj *otmp) {
 			break;
 		case POT_POLYMORPH:
 			pline("You feel a little %s.", Hallucination ? "normal" : "strange");
-			if (!Unchanging) polyself(false);
+			if (!Unchanging) polyself(0);
 			break;
 		case POT_BLOOD:
 		case POT_VAMPIRE_BLOOD:
@@ -1120,12 +1120,12 @@ void potionhit(struct monst *mon, struct obj *obj, boolean your_fault) {
 				break;
 			case POT_POLYMORPH:
 				pline("You feel a little %s.", Hallucination ? "normal" : "strange");
-				if (!Unchanging && !Antimagic) polyself(false);
+				if (!Unchanging && !Antimagic) polyself(0);
 				break;
 			case POT_ACID:
 				if (!Acid_resistance) {
 					pline("This burns%s!", obj->blessed ? " a little" :
-									      obj->cursed ? " a lot" : "");
+							       obj->cursed ? " a lot" : "");
 					losehp(Maybe_Half_Phys(d(obj->cursed ? 2 : 1, obj->blessed ? 4 : 8)), "potion of acid", KILLED_BY_AN);
 				}
 				break;
@@ -1240,7 +1240,7 @@ void potionhit(struct monst *mon, struct obj *obj, boolean your_fault) {
 				break;
 			case POT_WATER:
 				if (is_undead(mon->data) || is_demon(mon->data) ||
-				    is_were(mon->data)) {
+				    is_were(mon->data) || is_vampshifter(mon)) {
 					if (obj->blessed) {
 						pline("%s %s in pain!", Monnam(mon),
 						      is_silent(mon->data) ? "writhes" : "shrieks");

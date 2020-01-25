@@ -296,7 +296,7 @@ static void deadbook(struct obj *book2) {
 			mtmp2 = mtmp->nmon; /* tamedog() changes chain */
 			if (DEADMONSTER(mtmp)) continue;
 
-			if (is_undead(mtmp->data) && cansee(mtmp->mx, mtmp->my)) {
+			if ((is_undead(mtmp->data) || is_vampshifter(mtmp)) && cansee(mtmp->mx, mtmp->my)) {
 				mtmp->mpeaceful = true;
 				if (sgn(mtmp->data->maligntyp) == sgn(u.ualign.type) && distu(mtmp->mx, mtmp->my) < 4)
 					if (mtmp->mtame) {

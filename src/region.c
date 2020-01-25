@@ -852,7 +852,7 @@ bool inside_gas_cloud(void *p1, void *p2) {
 		mtmp = (struct monst *)p2;
 
 		/* Non living and non breathing monsters are not concerned */
-		if (!nonliving(mtmp->data) && !breathless(mtmp->data)) {
+		if (!(nonliving(mtmp->data) || is_vampshifter(mtmp)) && !breathless(mtmp->data)) {
 			if (cansee(mtmp->mx, mtmp->my))
 				pline("%s coughs!", Monnam(mtmp));
 			if (heros_fault(reg))

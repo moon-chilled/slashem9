@@ -715,7 +715,7 @@ static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 		valid_weapon_attack = (tmp > 1);
 
 		/* blessed gloves give bonuses when fighting 'bare-handed' */
-		if (uarmg && uarmg->blessed && (is_undead(mdat) || is_demon(mdat)))
+		if (uarmg && uarmg->blessed && (is_undead(mdat) || is_demon(mdat) || is_vampshifter(mon)))
 			tmp += rnd(4);
 
 		if (uarmg && uarmg->spe) tmp += uarmg->spe; /* WAC plusses from gloves */
@@ -728,7 +728,7 @@ static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 				barehand_silver_rings++;
 			if (uright && objects[uright->otyp].oc_material == SILVER)
 				barehand_silver_rings++;
-			if (barehand_silver_rings && hates_silver(mdat)) {
+			if (barehand_silver_rings && mon_hates_silver(mon)) {
 				tmp += rnd(20);
 				silvermsg = true;
 			}
@@ -857,7 +857,7 @@ static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 				else
 					tmp = rnd(2);
 
-				if (objects[obj->otyp].oc_material == SILVER && hates_silver(mdat)) {
+				if (objects[obj->otyp].oc_material == SILVER && mon_hates_silver(mon)) {
 					silvermsg = true;
 					silverobj = true;
 					/* if it will already inflict dmg, make it worse */
@@ -935,7 +935,7 @@ static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 					if (tmp == 0) return true;
 					hittxt = true;
 				}
-				if (objects[obj->otyp].oc_material == SILVER && hates_silver(mdat)) {
+				if (objects[obj->otyp].oc_material == SILVER && mon_hates_silver(mon)) {
 					silvermsg = true;
 					silverobj = true;
 				}
@@ -1140,7 +1140,7 @@ static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 #undef useup_eggs
 					}
 					case CLOVE_OF_GARLIC: /* no effect against demons */
-						if (is_undead(mdat)) {
+						if (is_undead(mdat) || is_vampshifter(mon)) {
 							monflee(mon, d(2, 4), false, true);
 						}
 						tmp = 1;
@@ -1148,7 +1148,7 @@ static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 					case CREAM_PIE:
 					case BLINDING_VENOM:
 						mon->msleeping = 0;
-						if (can_blnd(&youmonst, mon, (uchar)(obj->otyp == BLINDING_VENOM ? AT_SPIT : AT_WEAP), obj)) {
+						if (can_blnd(&youmonst, mon, obj->otyp == BLINDING_VENOM ? AT_SPIT : AT_WEAP, obj)) {
 							if (Blind) {
 								pline(obj->otyp == CREAM_PIE ?
 									      "Splat!" :
@@ -1216,7 +1216,7 @@ static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 						   * Things like silver wands can arrive here so
 						   * so we need another silver check.
 						   */
-						if (objects[obj->otyp].oc_material == SILVER && hates_silver(mdat)) {
+						if (objects[obj->otyp].oc_material == SILVER && mon_hates_silver(mon)) {
 							tmp += rnd(20);
 							silvermsg = true;
 							silverobj = true;
@@ -1499,7 +1499,7 @@ static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 			fmt = "%s is seared!";
 		}
 		/* note: s_suffix returns a modifiable buffer */
-		if (!noncorporeal(mdat))
+		if (!noncorporeal(mdat) && !amorphous(mdat))
 			whom = strcat(s_suffix(whom), " flesh");
 		pline(fmt, whom);
 	}

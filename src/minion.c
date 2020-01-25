@@ -128,7 +128,7 @@ void summon_minion(aligntyp alignment, boolean talk) {
 		/* don't call set_malign(); player was naughty */
 	}
 }
-#define Athome (Inhell && !mtmp->cham)
+#define Athome (Inhell && mtmp->cham == CHAM_ORDINARY)
 
 // returns true if it won't attack.
 bool demon_talk(struct monst *mtmp) {
