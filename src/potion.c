@@ -3108,11 +3108,13 @@ void djinni_from_bottle(struct obj *obj) {
 			break;
 		case 3:
 			verbalize("It is about time!");
-			pline("%s vanishes.", Monnam(mtmp));
+			if (canspotmon(mtmp)) pline("%s vanishes.", Monnam(mtmp));
 			mongone(mtmp);
 			break;
 		default:
 			verbalize("You disturbed me, fool!");
+			mtmp->mpeaceful = false;
+			set_malign(mtmp);
 			break;
 	}
 }

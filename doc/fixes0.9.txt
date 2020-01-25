@@ -123,6 +123,8 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: pits created by wands of digging and drums of earthquake will get filled in by water or lava from the surrounding area, just like player-created pits.
 - Gameplay: breakable objects that fall through trapdoors/holes have a chance to break upon landing on the lower level.
 - Gameplay: player in vampiric form can use #monster to transform into a fog cloud, wolf, or vampire bat.
+- Interface: only say '(the djinni) vanishes' if player can see the djinni.
+- Gameplay: ensure a djinni released with the message 'you disturbed me, fool' is always hostile.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
