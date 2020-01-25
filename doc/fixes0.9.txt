@@ -130,6 +130,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Interface: fix messages produced when shopkeepers repair their shops.
 - Interface: fix bad message when unique monster's corpse is dropped down stairs.
 - Gameplay: fix inconsistent attributes of rocks made from fractured boulders or statues.
+- Bugfix: C340-18: setting off an unknown rolling boulder trap that kills a monster counts against pacifism.  Really fixed this time.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
