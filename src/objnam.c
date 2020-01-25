@@ -864,8 +864,12 @@ bool not_fully_identified(struct obj *otmp) {
 char *corpse_xname(struct obj *otmp, boolean force_singular) {
 	char *nambuf = nextobuf();
 
-	sprintf(nambuf, "%s corpse",
-		mons[Hallucination ? rndmonnum() : otmp->corpsenm].mname);
+	int mndx = Hallucination ? rndmonnum() : otmp->corpsenm;
+	const char *mname = (mndx != NON_PM) ? mons[mndx].mname :
+                               "thing";  /* shouldn't happen */
+
+	if (type_is_pname(&mons[mndx]) || mndx == PM_ORACLE) mname = s_suffix(mname);
+	sprintf(nambuf, "%s corpse", mname);
 
 	if (force_singular || otmp->quan < 2)
 		return nambuf;
