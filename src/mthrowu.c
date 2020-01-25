@@ -350,7 +350,7 @@ void m_throw(
 		/* D: Hellfire is handled in drop_throw */
 	}
 
-	if (singleobj->cursed && (dx || dy) && !rn2(7)) {
+	if ((singleobj->cursed || singleobj->greased) && (dx || dy) && !rn2(7)) {
 		if (canseemon(mon) && flags.verbose) {
 			if (is_ammo(singleobj))
 				pline("%s misfires!", Monnam(mon));
