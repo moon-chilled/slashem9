@@ -6,6 +6,9 @@
  - mimics not imitating statues in soko or boulders when over pits|holes
  - iron ball pit punishment changes
 
+* Star and fire vampires should be vampshifters, but need to come up with a good form for them to turn into.  (Maybe give vampire mages another alt form too?)  Star vampires can turn into a 'space kraken' (or a less cheesy name for the same concept)?
+ - (polyself.c:348)
+
 * Make overview/wizardmode levport show nicer names for special levels ('Storage Room' instead of 'stor', 'The Guild of Disgruntled Adventurers' instead of 'guild', etc.)
 
 * More interesting stuff for health food store.  Also services.  Can they give you the ability to appraise food yourself for a while, cf a blessed ?oFood Detection?
@@ -21,6 +24,7 @@
   * opthelp
   * windowport
  - Script?
+ - Remove -Werror (silence all warnings?)
  - Cross-compile for all major platforms
  - Precompile lex/yacc-files (if applicable), remove irrelevant files (DEVEL/?), and tar into source release
  - Git tag?  Branch?
