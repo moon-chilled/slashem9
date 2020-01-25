@@ -1698,6 +1698,9 @@ nextclass:
 			goto nextclass;
 		}
 	}
+
+	if (flags.perm_invent && !lets && !invent)
+		add_menu(win, NO_GLYPH, &any, 0, 0, 0, "Not carrying anything", MENU_UNSELECTED);
 	end_menu(win, NULL);
 
 	n = select_menu(win, want_reply ? PICK_ONE : PICK_NONE, &selected);
