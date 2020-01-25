@@ -379,7 +379,7 @@ void polyself(int psflags) {
 		if (mntmp == PM_HUMAN)
 			newman(); /* werecritter */
 		else
-			(void)polymon(mntmp);
+			polymon(mntmp);
 		goto made_change; /* maybe not, but this is right anyway */
 	}
 	if (mntmp < LOW_PM) {

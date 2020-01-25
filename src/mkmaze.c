@@ -333,7 +333,7 @@ static boolean put_lregion_here(xchar x, xchar y, xchar nlx, xchar nly, xchar nh
 			if (MON_AT(x, y)) {
 				/* move the monster if no choice, or just try again */
 				if (oneshot)
-					(void)rloc(m_at(x, y), false);
+					rloc(m_at(x, y), false);
 				else
 					return false;
 			}

@@ -1058,9 +1058,9 @@ bool artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, int 
 						   "vaporizes part of" :
 						   "burns",
 			      hittee, !spec_dbon_applies ? '.' : '!');
-		if (!rn2(4)) (void)destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
-		if (!rn2(4)) (void)destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
-		if (!rn2(7)) (void)destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+		if (!rn2(4)) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+		if (!rn2(4)) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+		if (!rn2(7)) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
 		if (youdefend && Slimed) burn_away_slime();
 		return realizes_damage;
 	}
@@ -1069,7 +1069,7 @@ bool artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, int 
 			pline("The ice-cold blade %s %s%c",
 			      !spec_dbon_applies ? "hits" : "freezes",
 			      hittee, !spec_dbon_applies ? '.' : '!');
-		if (!rn2(4)) (void)destroy_mitem(mdef, POTION_CLASS, AD_COLD);
+		if (!rn2(4)) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
 		return realizes_damage;
 	}
 	if (attacks(AD_ELEC, otmp)) {
@@ -1077,8 +1077,8 @@ bool artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, int 
 			pline("The massive hammer hits%s %s%c",
 			      !spec_dbon_applies ? "" : "!  Lightning strikes",
 			      hittee, !spec_dbon_applies ? '.' : '!');
-		if (!rn2(5)) (void)destroy_mitem(mdef, RING_CLASS, AD_ELEC);
-		if (!rn2(5)) (void)destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
+		if (!rn2(5)) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
+		if (!rn2(5)) destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
 		return realizes_damage;
 	}
 	if (attacks(AD_MAGM, otmp)) {
@@ -1719,7 +1719,7 @@ static int arti_invoke(struct obj *obj) {
 					float_up();
 					spoteffects(false);
 				} else
-					(void)float_down(I_SPECIAL | TIMEOUT, W_ARTI);
+					float_down(I_SPECIAL | TIMEOUT, W_ARTI);
 				break;
 			case INVIS:
 				if (BInvis || Blind) goto nothing_special;

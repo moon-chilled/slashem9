@@ -923,7 +923,7 @@ static int use_mirror(struct obj *obj) {
 		setnotworn(obj); /* in case mirror was wielded */
 		freeinv(obj);
 		mpickobj(mtmp, obj);
-		if (!tele_restrict(mtmp)) (void)rloc(mtmp, false);
+		if (!tele_restrict(mtmp)) rloc(mtmp, false);
 	} else if (!is_unicorn(mtmp->data) && !humanoid(mtmp->data) &&
 		   (!mtmp->minvis || perceives(mtmp->data)) && rn2(5)) {
 		if (vis)
@@ -1759,10 +1759,10 @@ void use_unicorn_horn(struct obj *obj) {
 				make_stunned(HStun + lcount, true);
 				break;
 			case 4:
-				(void)adjattrib(rn2(A_MAX), -1, false);
+				adjattrib(rn2(A_MAX), -1, false);
 				break;
 			case 5:
-				(void)make_hallucinated(HHallucination + lcount, true, 0L);
+				make_hallucinated(HHallucination + lcount, true, 0L);
 				break;
 		}
 		return;

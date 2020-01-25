@@ -778,7 +778,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 							erode_obj(otmp, false, true);
 					}
 				glovecheck:
-					(void)rust_dmg(uarmg, "gauntlets", 1, true, &youmonst);
+					rust_dmg(uarmg, "gauntlets", 1, true, &youmonst);
 					/* Not "metal gauntlets" since it gets called
 			 * even if it's leather for the message
 			 */

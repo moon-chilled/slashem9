@@ -1304,7 +1304,7 @@ void mtele_trap(struct monst *mtmp, struct trap *trap, int in_sight) {
 		if (trap->once)
 			mvault_tele(mtmp);
 		else
-			(void)rloc(mtmp, false);
+			rloc(mtmp, false);
 
 		if (in_sight) {
 			if (canseemon(mtmp))

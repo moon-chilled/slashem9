@@ -1245,15 +1245,15 @@ void puton_worn_item(struct obj *obj) {
 			break;
 		case ARMOR_CLASS:
 			if (obj == uarm)
-				(void)Armor_on();
+				Armor_on();
 			else if (obj == uarmc)
-				(void)Cloak_on();
+				Cloak_on();
 			else if (obj == uarmf)
-				(void)Boots_on();
+				Boots_on();
 			else if (obj == uarmg)
-				(void)Gloves_on();
+				Gloves_on();
 			else if (obj == uarmh)
-				(void)Helmet_on();
+				Helmet_on();
 			/*	    else if (obj == uarms) (void) Shield_on(); */
 			break;
 	}
@@ -1720,7 +1720,7 @@ int bhito(struct obj *obj, struct obj *otmp) {
 				/* KMH, conduct */
 				u.uconduct.polypiles++;
 				/* any saved lock context will be dangerously obsolete */
-				if (Is_box(obj)) (void)boxlock(obj, otmp);
+				if (Is_box(obj)) boxlock(obj, otmp);
 
 				if (obj_shudders(obj)) {
 					if (cansee(obj->ox, obj->oy))
@@ -3400,9 +3400,9 @@ static int zhitm(struct monst *mon, int type, int nd, struct obj **ootmp) {
 			if (spellcaster)
 				skilldmg = spell_damage_bonus(SPE_FIREBALL);
 			if (burnarmor(mon)) {
-				if (!rn2(3)) (void)destroy_mitem(mon, POTION_CLASS, AD_FIRE);
-				if (!rn2(3)) (void)destroy_mitem(mon, SCROLL_CLASS, AD_FIRE);
-				if (!rn2(5)) (void)destroy_mitem(mon, SPBOOK_CLASS, AD_FIRE);
+				if (!rn2(3)) destroy_mitem(mon, POTION_CLASS, AD_FIRE);
+				if (!rn2(3)) destroy_mitem(mon, SCROLL_CLASS, AD_FIRE);
+				if (!rn2(5)) destroy_mitem(mon, SPBOOK_CLASS, AD_FIRE);
 			}
 			break;
 		case ZT_COLD:
@@ -3414,7 +3414,7 @@ static int zhitm(struct monst *mon, int type, int nd, struct obj **ootmp) {
 			if (resists_fire(mon)) tmp += d(nd, 3);
 			if (spellcaster)
 				skilldmg = spell_damage_bonus(SPE_CONE_OF_COLD);
-			if (!rn2(3)) (void)destroy_mitem(mon, POTION_CLASS, AD_COLD);
+			if (!rn2(3)) destroy_mitem(mon, POTION_CLASS, AD_COLD);
 			break;
 		case ZT_SLEEP:
 			tmp = 0;
@@ -3488,9 +3488,9 @@ static int zhitm(struct monst *mon, int type, int nd, struct obj **ootmp) {
 
 			if (resists_elec(mon)) break;
 
-			if (!rn2(3)) (void)destroy_mitem(mon, WAND_CLASS, AD_ELEC);
+			if (!rn2(3)) destroy_mitem(mon, WAND_CLASS, AD_ELEC);
 			/* not actually possible yet */
-			if (!rn2(3)) (void)destroy_mitem(mon, RING_CLASS, AD_ELEC);
+			if (!rn2(3)) destroy_mitem(mon, RING_CLASS, AD_ELEC);
 			break;
 		case ZT_POISON_GAS:
 			if (resists_poison(mon)) {
@@ -3602,14 +3602,14 @@ static void zhitu(int type, int nd, const char *fltxt, xchar sx, xchar sy) {
 					break;
 				} else if (uarm) {
 					/* destroy suit; if present, cloak goes too */
-					if (uarmc) (void)destroy_arm(uarmc);
+					if (uarmc) destroy_arm(uarmc);
 					destroy_arm(uarm);
 					break;
 				}
 				/* no shield or suit, you're dead; wipe out cloak
 			   and/or shirt in case of life-saving or bones */
-				if (uarmc) (void)destroy_arm(uarmc);
-				if (uarmu) (void)destroy_arm(uarmu);
+				if (uarmc) destroy_arm(uarmc);
+				if (uarmu) destroy_arm(uarmu);
 				if (Invulnerable) {
 					pline("You are unharmed!");
 					break;

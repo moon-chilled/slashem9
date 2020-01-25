@@ -516,13 +516,13 @@ static int kick_object(xchar x, xchar y) {
 				pline("You break open the lock!");
 				kickobj->olocked = 0;
 				kickobj->obroken = 1;
-				if (otrp) (void)chest_trap(kickobj, LEG, false);
+				if (otrp) chest_trap(kickobj, LEG, false);
 				return 1;
 			}
 		} else {
 			if (!rn2(3) || (martial() && !rn2(2))) {
 				pline("The lid slams open, then falls shut.");
-				if (otrp) (void)chest_trap(kickobj, LEG, false);
+				if (otrp) chest_trap(kickobj, LEG, false);
 				return 1;
 			}
 		}
@@ -573,7 +573,7 @@ static int kick_object(xchar x, xchar y) {
 			if (isgold)
 				costly_gold(x, y, kickobj->quan);
 			else
-				(void)stolen_value(kickobj, x, y,
+				stolen_value(kickobj, x, y,
 						   (boolean)shkp->mpeaceful, false, false);
 		}
 		return 1;
@@ -585,7 +585,7 @@ static int kick_object(xchar x, xchar y) {
 		if (isgold)
 			costly_gold(x, y, kickobj->quan);
 		else
-			(void)stolen_value(kickobj, x, y,
+			stolen_value(kickobj, x, y,
 					   (boolean)shkp->mpeaceful, false, false);
 	}
 

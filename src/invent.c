@@ -1489,7 +1489,7 @@ void identify_pack(int id_limit) {
 		} else {
 			/* TODO:  use fully_identify_obj and cornline/menu/whatever here */
 			for (obj = invent; obj; obj = obj->nobj)
-				if (not_fully_identified(obj)) (void)identify(obj);
+				if (not_fully_identified(obj)) identify(obj);
 		}
 	} else {
 		/* identify up to `id_limit' items */
@@ -2378,7 +2378,7 @@ int doprtool(void) {
 	if (!ct)
 		pline("You are not using any tools.");
 	else
-		(void)display_inventory(lets, false);
+		display_inventory(lets, false);
 	return 0;
 }
 

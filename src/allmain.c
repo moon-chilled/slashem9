@@ -333,7 +333,7 @@ void moveloop(void) {
 					} /* !u.uinvulnerable */
 
 					if (Searching && multi >= 0) {
-						(void)dosearch0(true);
+						dosearch0(true);
 					}
 					dosounds();
 					do_storms();
