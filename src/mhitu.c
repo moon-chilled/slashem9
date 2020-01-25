@@ -1528,7 +1528,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 				/* Continue below */
 			} else if (dmgtype(youmonst.data, AD_SEDU) || dmgtype(youmonst.data, AD_SSEX)) {
 				pline("%s %s.", Monnam(mtmp), mtmp->minvent ? "brags about the goods some dungeon explorer provided" : "makes some remarks about how difficult theft is lately");
-				if (!tele_restrict(mtmp)) (void)rloc(mtmp, false);
+				if (!tele_restrict(mtmp)) rloc(mtmp, false);
 				return 3;
 			} else if (mtmp->mcan) {
 				if (!Blind) {
@@ -1545,7 +1545,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 					      do_charm ? "unaffected" : "uninterested");
 				}
 				if (rn2(3)) {
-					if (!tele_restrict(mtmp)) (void)rloc(mtmp, false);
+					if (!tele_restrict(mtmp)) rloc(mtmp, false);
 					return 3;
 				}
 				break;
@@ -1664,7 +1664,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 					mongone(mtmp);
 					return 2;
 				} else if (!rn2(33)) {
-					if (!tele_restrict(mtmp)) (void)rloc(mtmp, false);
+					if (!tele_restrict(mtmp)) rloc(mtmp, false);
 					monflee(mtmp, d(3, 6), true, false);
 					return 3;
 				}
@@ -2709,7 +2709,7 @@ int doseduce(struct monst *mon) {
 	if (uarm || uarmc) {
 		verbalize("You're such a %s; I wish...",
 			  flags.female ? "sweet lady" : "nice guy");
-		if (!tele_restrict(mon)) (void)rloc(mon, false);
+		if (!tele_restrict(mon)) rloc(mon, false);
 		return 1;
 	}
 	if (u.ualign.type == A_CHAOTIC)
@@ -2831,7 +2831,7 @@ int doseduce(struct monst *mon) {
 		}
 	}
 	if (!rn2(25)) mon->mcan = 1; /* monster is worn out */
-	if (!tele_restrict(mon)) (void)rloc(mon, false);
+	if (!tele_restrict(mon)) rloc(mon, false);
 	return 1;
 }
 

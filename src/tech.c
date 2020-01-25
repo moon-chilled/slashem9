@@ -789,7 +789,7 @@ static int techeffects(int tech_no) {
 
 			if (!(obj = getobj(allowall, "bless"))) return 0;
 			pline("An aura of holiness surrounds your hands!");
-			if (!Blind) (void)Shk_Your(Your_buf, obj);
+			if (!Blind) Shk_Your(Your_buf, obj);
 			if (obj->cursed) {
 				if (!Blind)
 					pline("%s %s %s.", Your_buf,

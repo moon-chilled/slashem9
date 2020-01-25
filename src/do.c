@@ -56,7 +56,7 @@ boolean boulder_hits_pool(struct obj *otmp, int rx, int ry, boolean pushing) {
 			} else
 				levl[rx][ry].typ = ROOM;
 
-			if (ttmp) (void)delfloortrap(ttmp);
+			if (ttmp) delfloortrap(ttmp);
 			bury_objs(rx, ry);
 
 			newsym(rx, ry);

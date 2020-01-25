@@ -104,7 +104,7 @@ static int tc_store(const char *trm, const char *ent) {
 	k = tgetnum("pc");
 	PC = (k == -1) ? '\0' : (char)k;
 	BC = s = bc_up_buf;
-	if (!tgetstr("bc", &s)) (void)strcpy(s, "\b"), s += 2;
+	if (!tgetstr("bc", &s)) strcpy(s, "\b"), s += 2;
 	UP = s;
 	tgetstr("up", &s);
 #ifndef NO_DELAY_PADDING

@@ -140,7 +140,7 @@ static int open_levelfile_exclusively(const char *, int, int);
  *
  *   Sample:
  *	The following call:
- *	    (void)fname_encode("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+ *	    fname_encode("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
  *				'%', "This is a % test!", buf, 512);
  *	results in this encoding:
  *	    "This%20is%20a%20%25%20test%21"
@@ -1228,7 +1228,7 @@ static FILE *fopen_wizkit_file(void) {
 	char *envp;
 
 	envp = nh_getenv("WIZKIT");
-	if (envp && *envp) (void)strncpy(wizkit, envp, WIZKIT_MAX - 1);
+	if (envp && *envp) strncpy(wizkit, envp, WIZKIT_MAX - 1);
 	if (!wizkit[0]) return NULL;
 
 #ifdef UNIX

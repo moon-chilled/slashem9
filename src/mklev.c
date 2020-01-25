@@ -453,7 +453,7 @@ static void makeniche(int trap_type) {
 					if (!level.flags.noteleport)
 						mksobj_at(SCR_TELEPORTATION,
 							  xx, yy + dy, true, false);
-					if (!rn2(3)) (void)mkobj_at(0, xx, yy + dy, true);
+					if (!rn2(3)) mkobj_at(0, xx, yy + dy, true);
 				}
 			}
 			return;
@@ -1230,7 +1230,7 @@ void mktrap(int num, int mazeflag, struct mkroom *croom, coord *tm) {
 	}
 
 	maketrap(m.x, m.y, kind);
-	if (kind == WEB) (void)makemon(&mons[PM_GIANT_SPIDER],
+	if (kind == WEB) makemon(&mons[PM_GIANT_SPIDER],
 				       m.x, m.y, NO_MM_FLAGS);
 }
 
@@ -1354,7 +1354,7 @@ static void mkgrave(struct mkroom *croom) {
 	make_grave(m.x, m.y, dobell ? "Saved by the bell!" : NULL);
 
 	/* Possibly fill it with objects */
-	if (!rn2(3)) (void)mkgold(0L, m.x, m.y);
+	if (!rn2(3)) mkgold(0L, m.x, m.y);
 	for (tryct = rn2(5); tryct; tryct--) {
 		otmp = mkobj(RANDOM_CLASS, true);
 		if (!otmp) return;
@@ -1365,7 +1365,7 @@ static void mkgrave(struct mkroom *croom) {
 	}
 
 	/* Leave a bell, in case we accidentally buried someone alive */
-	if (dobell) (void)mksobj_at(BELL, m.x, m.y, true, false);
+	if (dobell) mksobj_at(BELL, m.x, m.y, true, false);
 	return;
 }
 

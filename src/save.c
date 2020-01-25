@@ -70,7 +70,7 @@ int dosave(void) {
 			terminate(EXIT_SUCCESS);
 		}
 		/*WAC redraw later
-				else (void)doredraw();*/
+				else doredraw();*/
 	}
 #ifdef KEEP_SAVE
 	if (saverestore) {

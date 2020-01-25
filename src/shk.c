@@ -625,7 +625,7 @@ void u_entered_shop(char *enterstring) {
 			should_block = (Fast && (sobj_at(PICK_AXE, u.ux, u.uy) ||
 						 sobj_at(DWARVISH_MATTOCK, u.ux, u.uy)));
 		}
-		if (should_block) (void)dochug(shkp); /* shk gets extra move */
+		if (should_block) dochug(shkp); /* shk gets extra move */
 	}
 	return;
 }

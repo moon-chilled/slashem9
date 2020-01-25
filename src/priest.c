@@ -489,7 +489,7 @@ struct monst *mk_roamer(struct permonst *ptr, aligntyp alignment, xchar x, xchar
 	if (ptr != &mons[PM_ALIGNED_PRIEST] && ptr != &mons[PM_ANGEL])
 		return NULL;
 
-	if (MON_AT(x, y)) (void)rloc(m_at(x, y), false); /* insurance */
+	if (MON_AT(x, y)) rloc(m_at(x, y), false); /* insurance */
 
 	if (!(roamer = makemon(ptr, x, y, NO_MM_FLAGS)))
 		return NULL;

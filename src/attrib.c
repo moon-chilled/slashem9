@@ -321,7 +321,7 @@ void exercise(int i, boolean inc_or_dec) {
 		      (inc_or_dec) ? "inc" : "dec", AEXE(i));
 #endif
 	}
-	if (moves > 0 && (i == A_STR || i == A_CON)) (void)encumber_msg();
+	if (moves > 0 && (i == A_STR || i == A_CON)) encumber_msg();
 }
 
 /* hunger values - from eat.c */

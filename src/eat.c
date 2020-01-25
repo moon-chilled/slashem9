@@ -837,7 +837,7 @@ static void cpostfx(int pm) {
 
 	/* in case `afternmv' didn't get called for previously mimicking
 	   gold, clean up now to avoid `eatmbuf' memory leak */
-	if (eatmbuf) (void)eatmdone();
+	if (eatmbuf) eatmdone();
 
 	switch (pm) {
 		case PM_NEWT:

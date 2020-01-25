@@ -872,12 +872,12 @@ int seffects(struct obj *sobj) {
 				      (Blind || same_color) ? nul :
 							      hcolor(sobj->cursed ? NH_BLACK : NH_SILVER),
 				      otense(otmp, "evaporate"));
-				if (is_cloak(otmp)) (void)Cloak_off();
-				if (is_boots(otmp)) (void)Boots_off();
-				if (is_helmet(otmp)) (void)Helmet_off();
-				if (is_gloves(otmp)) (void)Gloves_off();
-				if (is_shield(otmp)) (void)Shield_off();
-				if (otmp == uarm) (void)Armor_gone();
+				if (is_cloak(otmp)) Cloak_off();
+				if (is_boots(otmp)) Boots_off();
+				if (is_helmet(otmp)) Helmet_off();
+				if (is_gloves(otmp)) Gloves_off();
+				if (is_shield(otmp)) Shield_off();
+				if (otmp == uarm) Armor_gone();
 				useup(otmp);
 				break;
 			}

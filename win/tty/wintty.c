@@ -2040,7 +2040,7 @@ void tty_display_file(const char *fname, bool complain) {
 		}
 		while (dlb_fgets(buf, BUFSZ, f)) {
 			if ((cr = index(buf, '\n')) != 0) *cr = 0;
-			if (index(buf, '\t') != 0) (void)tabexpand(buf);
+			if (index(buf, '\t') != 0) tabexpand(buf);
 			empty = false;
 			tty_putstr(datawin, 0, buf);
 			if (wins[datawin]->flags & WIN_CANCELLED)

@@ -304,7 +304,7 @@ int dochug(struct monst *mtmp) {
 
 	/* Monsters that want to acquire things */
 	/* may teleport, so do it before inrange is set */
-	if (is_covetous(mdat)) (void)tactics(mtmp);
+	if (is_covetous(mdat)) tactics(mtmp);
 
 	/* check distance and scariness of attacks */
 	distfleeck(mtmp, &inrange, &nearby, &scared);
@@ -326,7 +326,7 @@ int dochug(struct monst *mtmp) {
 
 			if (is_demon(youmonst.data)) {
 				/* "Good hunting, brother" */
-				if (!tele_restrict(mtmp)) (void)rloc(mtmp, false);
+				if (!tele_restrict(mtmp)) rloc(mtmp, false);
 			} else {
 				mtmp->minvis = mtmp->perminvis = 0;
 				/* Why?  For the same reason in real demon talk */

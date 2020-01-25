@@ -152,7 +152,7 @@ bool demon_talk(struct monst *mtmp) {
 	if (youmonst.data->mlet == S_DEMON) { /* Won't blackmail their own. */
 		pline("%s says, \"Good hunting, %s.\"",
 		      Amonnam(mtmp), flags.female ? "Sister" : "Brother");
-		if (!tele_restrict(mtmp)) (void)rloc(mtmp, false);
+		if (!tele_restrict(mtmp)) rloc(mtmp, false);
 		return 1;
 	}
 	cash = money_cnt(invent);

@@ -62,7 +62,7 @@ void stealgold(struct monst *mtmp) {
 		pline("%s quickly snatches some gold from between your %s!",
 		      Monnam(mtmp), makeplural(body_part(FOOT)));
 		if (!ygold || !rn2(5)) {
-			if (!tele_restrict(mtmp)) (void)rloc(mtmp, false);
+			if (!tele_restrict(mtmp)) rloc(mtmp, false);
 			monflee(mtmp, 0, false, false);
 		}
 	} else if (ygold) {
@@ -73,7 +73,7 @@ void stealgold(struct monst *mtmp) {
 		freeinv(ygold);
 		add_to_minv(mtmp, ygold);
 		pline("Your purse feels lighter.");
-		if (!tele_restrict(mtmp)) (void)rloc(mtmp, false);
+		if (!tele_restrict(mtmp)) rloc(mtmp, false);
 		monflee(mtmp, 0, false, false);
 		context.botl = 1;
 	}
@@ -103,7 +103,7 @@ stealarm() {
 					/* Implies seduction, "you gladly hand over ..."
 					   so we don't set mavenge bit here. */
 					monflee(mtmp, 0, false, false);
-					if (!tele_restrict(mtmp)) (void)rloc(mtmp, false);
+					if (!tele_restrict(mtmp)) rloc(mtmp, false);
 					break;
 				}
 			}
@@ -185,7 +185,7 @@ int steal(struct monst *mtmp, char *objnambuf) {
 	/* food being eaten might already be used up but will not have
 	   been removed from inventory yet; we don't want to steal that,
 	   so this will cause it to be removed now */
-	if (occupation) (void)maybe_finished_meal(false);
+	if (occupation) maybe_finished_meal(false);
 
 	if (!invent || (inv_cnt() == 1 && uskin)) {
 	nothing_to_steal:

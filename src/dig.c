@@ -50,7 +50,7 @@ static void mkcavepos(xchar x, xchar y, int dist, boolean waslit, boolean rockit
 		if (IS_ROCK(lev->typ)) return;
 		if (t_at(x, y)) return;	      /* don't cover the portal */
 		if ((mtmp = m_at(x, y)) != 0) /* make sure crucial monsters survive */
-			if (!passes_walls(mtmp->data)) (void)rloc(mtmp, false);
+			if (!passes_walls(mtmp->data)) rloc(mtmp, false);
 	} else if (lev->typ == ROOM)
 		return;
 
@@ -332,7 +332,7 @@ static int dig(void) {
 			if (IS_TREE(lev->typ)) {
 				digtxt = "You cut down the tree.";
 				lev->typ = ROOM;
-				if (!rn2(5)) (void)rnd_treefruit_at(dpx, dpy);
+				if (!rn2(5)) rnd_treefruit_at(dpx, dpy);
 			} else {
 				digtxt = "You succeed in cutting away some rock.";
 				lev->typ = CORR;

@@ -59,7 +59,7 @@ extern void nethack_exit(int);
 #define done_stopprint program_state.stopprint
 
 #ifdef SYSV
-#define NH_abort() (void)abort()
+#define NH_abort() abort()
 #else
 #ifdef WIN32
 #define NH_abort() win32_abort()

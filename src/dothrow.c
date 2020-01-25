@@ -1078,7 +1078,7 @@ void throwit(
 
 	if (u.uswallow) {
 		/* ball is not picked up by monster */
-		if (obj != uball) (void)mpickobj(u.ustuck, obj);
+		if (obj != uball) mpickobj(u.ustuck, obj);
 	} else {
 		/* the code following might become part of dropy() */
 		if (obj->oartifact == ART_MJOLLNIR &&
@@ -1585,7 +1585,7 @@ static int gem_accept(struct monst *mon, struct obj *obj) {
 
 nopick:
 	if (!Blind) pline("%s", buf);
-	if (!tele_restrict(mon)) (void)rloc(mon, false);
+	if (!tele_restrict(mon)) rloc(mon, false);
 	return ret;
 }
 
