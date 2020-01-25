@@ -2298,7 +2298,7 @@ void dokeylist(void) {
 	char buf[BUFSZ], buf2[BUFSZ];
 	uchar key;
 	boolean keys_used[256] = {0};
-	register const char *dir_keys;
+	const char *dir_keys;
 	winid datawin;
 	int i;
 	char *dir_desc[10] = {"move west",
@@ -2885,7 +2885,7 @@ char randomkey(void) {
 
 // closely follows parsebindings and parseoptions
 void parsemappings(char *mapping) {
-	register char *map;
+	char *map;
 	unsigned char key;
 	unsigned char map_to[BUFSZ] = "";
 	int cnt;
