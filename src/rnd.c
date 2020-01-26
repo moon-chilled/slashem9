@@ -25,7 +25,7 @@ uint rnl(uint x) {
 		return 0;
 	}
 
-	adjustment = luck;
+	adjustment = Luck;
 	if (x <= 15) {
 		/* for small ranges, use Luck/3 (rounded away from 0);
 		 * also guard against architecture-specific differences
@@ -45,7 +45,7 @@ uint rnl(uint x) {
 		 */
 	}
 
-	i = RND(X);
+	i = RND(x);
 	if (adjustment && rn2(37 + abs(adjustment))) {
 		i -= adjustment;
 		if (i < 0) i = 0;
