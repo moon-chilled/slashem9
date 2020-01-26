@@ -1,11 +1,11 @@
 image: openbsd/latest
 sources:
-  - https://git.sr.ht/~moonchild/slashem-next
+  - https://git.sr.ht/~moonchild/slashem9
 
 packages:
   - gmake
 
 tasks:
   - build: |
-      cd slashem-next
+      cd slashem9
       gmake install
