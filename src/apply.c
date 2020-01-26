@@ -1406,7 +1406,7 @@ static void light_cocktail(struct obj *obj /* obj is a potion of oil or a stick 
 		return;
 	}
 
-	pline("You light %s %s.%s", shk_your(buf, obj), objnam,
+	pline("You light %s%s.%s", shk_your(buf, obj), objnam,
 	      Blind ? "" : "  It gives off a dim light.");
 	if (obj->unpaid && costly_spot(u.ux, u.uy)) {
 		/* Normally, we shouldn't both partially and fully charge
