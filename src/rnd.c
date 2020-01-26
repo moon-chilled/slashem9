@@ -18,21 +18,38 @@ uint rn2(uint x) {
 /* 0 <= rnl(x) < x; sometimes subtracting Luck *
  * good luck approaches 0, bad luck approaches (x-1) */
 uint rnl(uint x) {
-	int i;
+	int i, adjustment;
 
 	if (x == 0) {
 		impossible("rnl(0) attempted");
 		return 0;
 	}
 
-	i = RND(x);
+	adjustment = luck;
+	if (x <= 15) {
+		/* for small ranges, use Luck/3 (rounded away from 0);
+		 * also guard against architecture-specific differences
+		 * of integer division involving negative values
+		 */
+		adjustment = (abs(adjustment) + 1) / 3 * sgn(adjustment);
+		/*
+		 *   11..13 ->  4
+		 *    8..10 ->  3
+		 *    5.. 7 ->  2
+		 *    2.. 4 ->  1
+		 *   -1,0,1 ->  0 (no adjustment)
+		 *   -4..-2 -> -1
+		 *   -7..-5 -> -2
+		 *  -10..-8 -> -3
+		 *  -13..-11-> -4
+		 */
+	}
 
-	if (Luck && rn2(50 - Luck)) {
-		i -= (x <= 15 && Luck >= -5 ? Luck / 3 : Luck);
-		if (i < 0)
-			i = 0;
-		else if (i >= x)
-			i = x - 1;
+	i = RND(X);
+	if (adjustment && rn2(37 + abs(adjustment))) {
+		i -= adjustment;
+		if (i < 0) i = 0;
+		else if (i >= x) i = x - 1;
 	}
 
 	return i;

@@ -135,6 +135,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: Killing a pet by displacing it onto water/lava or a trap yields experience.
 - Bugfix: rolling boulder does not show up in bones files.
 - Bugfix: sleeping ridden steed would respond to #chat.
+- Gameplay: eliminate minor anomalies in the generation of luck-adjusted random numbers.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
