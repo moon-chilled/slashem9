@@ -134,6 +134,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: monster throwing a greased object has a chance to slip/misfire, like player.
 - Bugfix: Killing a pet by displacing it onto water/lava or a trap yields experience.
 - Bugfix: rolling boulder does not show up in bones files.
+- Bugfix: sleeping ridden steed would respond to #chat.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
