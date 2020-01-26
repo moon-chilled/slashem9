@@ -1473,7 +1473,7 @@ char *makeplural(const char *oldstr) {
 		strcpy(spot - 1, "ot");
 		goto bottom;
 	}
-	if (len >= 5 && (!strcmp(spot - 4, "matzo") || !strcmp(spot - 5, "matza"))) {
+	if (len >= 5 && (!strcmp(spot - 4, "matzo") || !strcmp(spot - 4, "matza"))) {
 		strcpy(spot, "ot");
 		goto bottom;
 	}
