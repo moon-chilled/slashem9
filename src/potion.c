@@ -2835,10 +2835,12 @@ int dodip(void) {
 			} else {
 				if ((omat == PLASTIC || omat == PAPER) && !obj->oartifact)
 					obj->oeroded = MAX_ERODE;
-				pline("The burning oil %s %s.",
+				pline("The burning oil %s %s%c",
 				      obj->oeroded == MAX_ERODE ? "destroys" : "damages",
-				      yname(obj));
+				      yname(obj),
+				      obj->oeroded == MAX_ERODE ? '!' : '.');
 				if (obj->oeroded == MAX_ERODE) {
+					if (obj->owornmask) remove_worn_item(obj, true);
 					obj_extract_self(obj);
 					obfree(obj, NULL);
 					obj = NULL;
