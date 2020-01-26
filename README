@@ -4,17 +4,19 @@ and ui enhancements that slashem has missed over the last 15 years, plus a few
 of my own.  It's also in the process of being rebased to NetHack 3.6.  See TODO
 for a tentative list of ideas for things to maybe do/add at some point.
 
+We are approaching version 1.0.
+
 
 !Warning!
-Though heading toward a releasable version, it is currently VERY volatile.  The
-version of 0.0.0E999F0-Alpha reflects this.
+Though we are rapidly approaching version 1.0, it is currently VERY volatile.
+The version of 0.8E0-Alpha reflects this.
 
 Saves may break at any time.
 
 Crashes and other bugs will be frequent.
 
 In the future, techniques will be implemented that (hopefully) reduce the rate
-of save breakage, but that's a LONG way out.
+of save breakage, but that will have to wait for a future version.
 
 You should still play it, though!  It's super fun.
 
@@ -23,8 +25,9 @@ You should still play it, though!  It's super fun.
 Any and all help is /very/ welcome.  This includes development help, but also
 playtesting, writing documentation (I don't write documentation until right
 before release, meaning that unless a new version _just_ came out, there is
-definitely documentation to write), drawing art assets, designing levels, etc.
-I would also specifically like help with the following items:
+likely documentation to write), drawing art assets, designing levels, etc.  I
+would would specifically like help with the following items, in approximate
+order of importance:
 
 - Design input from someone who plays NetHack with tiles, to help with
   designing a new tiled interface for Slash'EM.
