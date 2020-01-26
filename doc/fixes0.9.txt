@@ -133,6 +133,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: C340-18: setting off an unknown rolling boulder trap that kills a monster counts against pacifism.  Really fixed this time.
 - Gameplay: monster throwing a greased object has a chance to slip/misfire, like player.
 - Bugfix: Killing a pet by displacing it onto water/lava or a trap yields experience.
+- Bugfix: rolling boulder does not show up in bones files.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

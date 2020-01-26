@@ -1211,6 +1211,39 @@ void blow_up_landmine(struct trap *trap) {
 }
 
 /*
+ * The following are used to track launched objects to
+ * prevent them from vanishing if you are killed.  They
+ * will reappear at the launchplace in bones files.
+ */
+static struct {
+	struct obj *obj;
+	xchar x, y;
+} launchplace;
+
+static void launch_drop_spot(struct obj *obj, xchar x, xchar y) {
+	if (!obj) {
+		launchplace.obj = NULL;
+		launchplace.x = launchplace.y = 0;
+	} else {
+		launchplace.obj = obj;
+		launchplace.x = x;
+		launchplace.y = y;
+	}
+}
+
+bool launch_in_progress(void) {
+	return launchplace.obj != NULL;
+}
+
+void force_launch_placement(void) {
+	if (launchplace.obj) {
+		launchplace.obj->otrapped = 0;
+		place_object(launchplace.obj, launchplace.x, launchplace.y);
+	}
+}
+
+
+/*
  * Move obj from (x1,y1) to (x2,y2)
  *
  * Return 0 if no object was launched.
@@ -1292,6 +1325,16 @@ int launch_obj(short otyp, int x1, int y1, int x2, int y2, int style) {
 			tmp_at(bhitpos.x, bhitpos.y);
 	}
 
+	/* Mark a spot to place object in bones files to prevent
+	 * loss of object.  Use the starting spot to ensure that
+	 * a rolling boulder will still launch, which it wouldn't
+	 * do if left midstream.  Unfortunately we can't use the
+	 * target resting spot, because there are some things/situations
+	 * that would prevent it from ever getting there (bars), and we
+	 * can't tell that yet.
+	 */
+	launch_drop_spot(singleobj, bhitpos.x, bhitpos.y);
+
 	/* Set the object in motion */
 	while (dist-- > 0 && !used_up) {
 		struct trap *t;
@@ -1324,6 +1367,7 @@ int launch_obj(short otyp, int x1, int y1, int x2, int y2, int style) {
 			if (ohitmon(NULL, mtmp, singleobj,
 				    (style == ROLL) ? -1 : dist, false)) {
 				used_up = true;
+				launch_drop_spot(NULL, 0, 0);
 				break;
 			}
 		} else if (bhitpos.x == u.ux && bhitpos.y == u.uy) {
@@ -1360,6 +1404,7 @@ int launch_obj(short otyp, int x1, int y1, int x2, int y2, int style) {
 							if (cansee(bhitpos.x, bhitpos.y))
 								newsym(bhitpos.x, bhitpos.y);
 							used_up = true;
+							launch_drop_spot(NULL, 0, 0);
 						}
 						break;
 					case LEVEL_TELEP:
@@ -1385,6 +1430,7 @@ int launch_obj(short otyp, int x1, int y1, int x2, int y2, int style) {
 						}
 						seetrap(t);
 						used_up = true;
+						launch_drop_spot(NULL, 0, 0);
 						break;
 					case PIT:
 					case SPIKED_PIT:
@@ -1393,8 +1439,10 @@ int launch_obj(short otyp, int x1, int y1, int x2, int y2, int style) {
 						/* the boulder won't be used up if there is a
 					   monster in the trap; stop rolling anyway */
 						x2 = bhitpos.x, y2 = bhitpos.y; /* stops here */
-						if (flooreffects(singleobj, x2, y2, "fall"))
+						if (flooreffects(singleobj, x2, y2, "fall")) {
 							used_up = true;
+							launch_drop_spot(NULL, 0, 0);
+						}
 						dist = -1; /* stop rolling immediately */
 						break;
 				}
@@ -1402,6 +1450,7 @@ int launch_obj(short otyp, int x1, int y1, int x2, int y2, int style) {
 			}
 			if (flooreffects(singleobj, bhitpos.x, bhitpos.y, "fall")) {
 				used_up = true;
+				launch_drop_spot(NULL, 0, 0);
 				break;
 			}
 			if (otyp == BOULDER &&
@@ -1437,19 +1486,24 @@ int launch_obj(short otyp, int x1, int y1, int x2, int y2, int style) {
 		    levl[bhitpos.x + dx][bhitpos.y + dy].typ == IRONBARS) {
 			x2 = bhitpos.x, y2 = bhitpos.y; /* object stops here */
 			if (hits_bars(&singleobj, x2, y2, !rn2(20), 0)) {
-				if (!singleobj) used_up = true;
+				if (!singleobj) {
+					used_up = true;
+					launch_drop_spot(NULL, 0, 0);
+				}
 				break;
 			}
 		}
 	}
 	tmp_at(DISP_END, 0);
+	launch_drop_spot(NULL, 0, 0);
 	if (!used_up) {
 		singleobj->otrapped = 0;
 		place_object(singleobj, x2, y2);
 		newsym(x2, y2);
 		return 1;
-	} else
+	} else {
 		return 2;
+	}
 }
 
 void seetrap(struct trap *trap) {

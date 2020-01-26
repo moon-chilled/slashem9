@@ -2011,6 +2011,8 @@ boolean unconscious(void);
 boolean lava_effects(void);
 void blow_up_landmine(struct trap *);
 int launch_obj(short, int, int, int, int, int);
+bool launch_in_progress(void);
+void force_launch_placement(void);
 /* KMH, balance patch -- new function */
 int uunstone(void);
 bool uteetering_at_seen_pit(void);
