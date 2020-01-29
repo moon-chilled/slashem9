@@ -4,7 +4,11 @@ notifications:
   irc:
     channels:
       - "irc.freenode.net#em.slashem.me"
-    skip_join: true
+    skip_join: false
+    on_success: always
+    on_failure: always
+    template:
+      - "%{commit_subject} (%{result} %{branch} #%{build_number}) %{build_url} Diff: %{compare_url}"
 
 matrix:
   include:
