@@ -352,6 +352,15 @@ struct obj *addinv(struct obj *obj) {
 
 	addinv_core1(obj);
 
+	/* merge with quiver in preference to any other inventory slot
+	 * in case quiver and wielded weapon are both eligible; adding
+	 * extra to quivered stack is more useful than to wielded one
+	 */
+	if (uquiver && merged(&uquiver, &obj)) {
+		obj = uquiver;
+		goto added;
+	}
+
 	/* merge if possible; find end of chain in the process */
 	for (prev = 0, otmp = invent; otmp; prev = otmp, otmp = otmp->nobj)
 		if (merged(&otmp, &obj)) {
