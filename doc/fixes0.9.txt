@@ -139,6 +139,8 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: 'matza' was not pluralised properly.
 - Bugfix: if a worn item was destroyed by dipping into hot oil, its presence would continue to manifest itself problematically.
 - Interface: fix capitalization in 'Ulch - That <object> was rustproofed'.
+- Bugfix: incorrect screen display following engulfer petrified by player monster.
+- Bugfix: panic if hero petrified engulfer while punished.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

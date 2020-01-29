@@ -1941,13 +1941,15 @@ static int gulpmu(struct monst *mtmp, struct attack *mattk) {
 	bool physical_damage = false;
 
 	if (!u.uswallow) { /* swallows you */
+		int omx = mtmp->mx, omy = mtmp->my;
+
 		if (youmonst.data->msize >= MZ_HUGE) return 0;
 		if ((t && is_pitlike(t->ttyp)) &&
 		    sobj_at(BOULDER, u.ux, u.uy))
 			return 0;
 
 		if (Punished) unplacebc(); /* ball&chain go away */
-		remove_monster(mtmp->mx, mtmp->my);
+		remove_monster(omx, omy);
 		mtmp->mtrapped = 0; /* no longer on old trap */
 		place_monster(mtmp, u.ux, u.uy);
 		newsym(mtmp->mx, mtmp->my);
@@ -1983,11 +1985,17 @@ static int gulpmu(struct monst *mtmp, struct attack *mattk) {
 		}
 
 		if (touch_petrifies(youmonst.data) && !resists_ston(mtmp)) {
+			// put the attacker back where it started;
+			// the resulting statue will end up there
+			remove_monster(mtmp->mx, mtmp->my); // u.ux, u.uy
+			place_monster(mtmp, omx, omy);
 			minstapetrify(mtmp, true);
-			if (mtmp->mhp > 0)
-				return 0;
-			else
-				return 2;
+
+			// normally unstuck() would do this, but we're not
+			// fully swallowed yet so that won't work here
+			if (Punished) placebc();
+			u.ustuck = 0;
+			return (mtmp->mhp > 0) ? 0 : 2;
 		}
 
 		display_nhwindow(WIN_MESSAGE, false);
