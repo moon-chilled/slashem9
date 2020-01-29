@@ -1221,7 +1221,9 @@ int armoroff(struct obj *otmp) {
 	if (delay) {
 		nomul(delay);
 		if (is_helmet(otmp)) {
-			nomovemsg = "You finish taking off your helmet.";
+			static char nomovemsg_helm[BUFSZ];
+			sprintf(nomovemsg_helm, "You finish taking off your %s.", helm_simple_name(otmp));
+			nomovemsg = nomovemsg_helm;
 			afternmv = Helmet_off;
 		} else if (is_gloves(otmp)) {
 			nomovemsg = "You finish taking off your gloves.";
@@ -1307,13 +1309,13 @@ int canwearobj(struct obj *otmp, long *mask, boolean noisy) {
 
 	if (is_helmet(otmp)) {
 		if (uarmh) {
-			if (noisy) already_wearing(an(c_helmet));
+			if (noisy) already_wearing(an(helm_simple_name(uarmh)));
 			err++;
 		} else if (Upolyd && has_horns(youmonst.data) && !is_flimsy(otmp)) {
 			/* (flimsy exception matches polyself handling) */
 			if (noisy)
 				pline("The %s won't fit over your horn%s.",
-				      c_helmet, plur(num_horns(youmonst.data)));
+				      helm_simple_name(uarmh), plur(num_horns(youmonst.data)));
 			err++;
 		} else
 			*mask = W_ARMH;
@@ -2163,7 +2165,7 @@ int destroy_arm(struct obj *atmp) {
 		useup(otmp);
 	} else if (DESTROY_ARM(uarmh)) {
 		if (donning(otmp)) cancel_don();
-		pline("Your helmet turns to dust and is blown away!");
+		pline("Your %s turns to dust and is blown away!", helm_simple_name(uarmh));
 		Helmet_off();
 		useup(otmp);
 	} else if (DESTROY_ARM(uarmg)) {

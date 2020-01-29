@@ -1359,8 +1359,9 @@ char *makeplural(const char *);
 char *makesingular(const char *);
 struct obj *readobjnam(char *, struct obj *, boolean);
 int rnd_class(int, int);
-const char *cloak_simple_name(struct obj *);
-const char *mimic_obj_name(struct monst *);
+const char *cloak_simple_name(const struct obj *cloack);
+const char *helm_simple_name(const struct obj *helmet);
+const char *mimic_obj_name(const struct monst *mtmp);
 
 /* ### options.c ### */
 

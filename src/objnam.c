@@ -2865,7 +2865,7 @@ static const char *Japanese_item_name(int i) {
 	return NULL;
 }
 
-const char *cloak_simple_name(struct obj *cloak) {
+const char *cloak_simple_name(const struct obj *cloak) {
 	if (cloak) {
 		switch (cloak->otyp) {
 			case ROBE:
@@ -2888,7 +2888,26 @@ const char *cloak_simple_name(struct obj *cloak) {
 	return "cloak";
 }
 
-const char *mimic_obj_name(struct monst *mtmp) {
+// helm vs hat for messages
+const char *helm_simple_name(const struct obj *helmet) {
+	/*
+	 * There is some wiggle room here; the result has been chosen
+	 * for consistency with the "protected by hard helmet" messages
+	 * given for various bonks on the head:  headgear that provides
+	 * such protection is a "helm", that which doesn't is a "hat".
+	 *
+	 *     elven leather helm / leather hat    -> hat
+	 *     dwarvish iron helm / hard hat       -> helm
+	 * The rest are completely straightforward:
+	 *     fedora, cornuthaum, dunce cap       -> hat
+	 *     all other types of helmets          -> helm
+	 */
+	return (helmet && !is_metallic(helmet)) ? "hat" : "helm";
+}
+
+
+
+const char *mimic_obj_name(const struct monst *mtmp) {
 	if (mtmp->m_ap_type == M_AP_OBJECT && mtmp->mappearance != STRANGE_OBJECT) {
 		int idx = objects[mtmp->mappearance].oc_descr_idx;
 		if (mtmp->mappearance == GOLD_PIECE) return "gold";

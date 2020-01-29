@@ -147,6 +147,8 @@ Imports from NetHack versions newer than 3.4.3:
 - Interface: more specific messages when you drop your weapons due to glibness.
 - Interface: when considering which inventory stack to add a newly picked up item to, try to add it to the quiver first.
 - Interface: #adjust can be used to split stacks.
+- Interface: 'helm' and 'hat' differentiated.
+- Gameplay: helmets don't protect against falling cockatrice eggs because they 'splatter all over your face'.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

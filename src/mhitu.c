@@ -439,8 +439,8 @@ int mattacku(struct monst *mtmp) {
 
 			obj = which_armor(mtmp, WORN_HELMET);
 			if (obj && is_metallic(obj)) {
-				pline("Your blow glances off %s helmet.",
-				      s_suffix(mon_nam(mtmp)));
+				pline("Your blow glances off %s %s.",
+				      s_suffix(mon_nam(mtmp)), helm_simple_name(obj));
 			} else {
 				if (3 + find_mac(mtmp) <= rnd(20)) {
 					pline("%s is hit by a falling piercer (you)!",
@@ -1285,7 +1285,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 
 			if (uarmh && rn2(8)) {
 				/* not body_part(HEAD) */
-				pline("Your helmet blocks the attack to your head.");
+				pline("Your %s blocks the attack to your head.", helm_simple_name(uarmh));
 				break;
 			}
 
@@ -2711,7 +2711,7 @@ int doseduce(struct monst *mon) {
 	 */
 
 	if (uarms) mayberem(uarms, "shield");
-	mayberem(uarmh, "helmet");
+	mayberem(uarmh, helm_simple_name(uarmh));
 	if (!uarmc && !uarm)
 		mayberem(uarmu, "shirt");
 

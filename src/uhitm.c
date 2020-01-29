@@ -2005,8 +2005,8 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 			if (m_slips_free(mdef, mattk)) break;
 
 			if ((mdef->misc_worn_check & W_ARMH) && rn2(8)) {
-				pline("%s helmet blocks your attack to %s head.",
-				      s_suffix(Monnam(mdef)), mhis(mdef));
+				pline("%s %s blocks your attack to %s head.",
+				      s_suffix(Monnam(mdef)), helm_simple_name(which_armor(mdef, W_ARMH)), mhis(mdef));
 				break;
 			}
 

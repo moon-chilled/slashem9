@@ -15,7 +15,7 @@ static const char *equipname(struct obj *otmp) {
 		(otmp == uarms) ? "shield" :
 		(otmp == uarmg) ? "gloves" :
 		(otmp == uarmc) ? cloak_simple_name(otmp) :
-		(otmp == uarmh) ? "helmet" :
+		(otmp == uarmh) ? helm_simple_name(otmp) :
 		"armor");
 }
 

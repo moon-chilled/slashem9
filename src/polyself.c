@@ -751,7 +751,7 @@ static void break_armor(void) {
 				pline("Your %s %s through %s.", hornbuf, vtense(hornbuf, "pierce"), yname(otmp));
 			} else {
 				if (donning(otmp)) cancel_don();
-				pline("Your helmet falls to the %s!", surface(u.ux, u.uy));
+				pline("Your %s falls to the %s!", helm_simple_name(otmp), surface(u.ux, u.uy));
 				Helmet_off();
 				dropx(otmp);
 			}
@@ -773,7 +773,7 @@ static void break_armor(void) {
 		}
 		if ((otmp = uarmh) != 0) {
 			if (donning(otmp)) cancel_don();
-			pline("Your helmet falls to the %s!", surface(u.ux, u.uy));
+			pline("Your %s falls to the %s!", helm_simple_name(uarmh), surface(u.ux, u.uy));
 			Helmet_off();
 			dropx(otmp);
 		}
