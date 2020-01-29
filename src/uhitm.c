@@ -2815,6 +2815,7 @@ static boolean hmonas(struct monst *mon) {
 				 */
 				if (i == 0 && (youmonst.data->mlet == S_KOBOLD || youmonst.data->mlet == S_ORC || youmonst.data->mlet == S_GNOME)) goto use_weapon;
 
+			//else fallthru
 			case AT_NONE:
 			case AT_BOOM:
 				continue;
