@@ -141,6 +141,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Interface: fix capitalization in 'Ulch - That <object> was rustproofed'.
 - Bugfix: incorrect screen display following engulfer petrified by player monster.
 - Bugfix: panic if hero petrified engulfer while punished.
+- Interface: more specific messages when you drop your weapons due to glibness.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

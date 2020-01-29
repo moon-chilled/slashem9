@@ -1667,8 +1667,8 @@ void find_ac(void) {
 void glibr(void) {
 	struct obj *otmp;
 	int xfl = 0;
-	boolean leftfall, rightfall;
-	const char *otherwep = 0;
+	bool leftfall, rightfall, wastwoweap = false;
+	const char *otherwep = NULL, *thiswep, *which, *hand;
 
 	leftfall = (uleft && !uleft->cursed &&
 		    (!uwep || !welded(uwep) || !bimanual(uwep)));
@@ -1694,31 +1694,55 @@ void glibr(void) {
 
 	otmp = uswapwep;
 	if (u.twoweap && otmp) {
-		otherwep = is_sword(otmp) ? c_sword :
-					    makesingular(oclass_names[(int)otmp->oclass]);
-		pline("Your %s %sslips from your %s.",
-		      otherwep,
-		      xfl ? "also " : "",
-		      makeplural(body_part(HAND)));
-		setuswapwep(NULL, false);
+		/* secondary weapon doesn't need nearly as much handling as
+                 * primary; when in two-weapon mode, we know it's one-handed
+                 * with something else in the other hand and also that it's
+                 * a weapon or weptool rather than something unusual, plus
+                 * we don't need to compare its type with the primary */
+		otherwep = is_sword(otmp) ? c_sword : weapon_descr(otmp);
+		if (otmp->quan > 1L) otherwep = makeplural(otherwep);
+		hand = body_part(HAND);
+		which = "left ";
+		pline("Your %s %s%s from your %s%s.",
+				otherwep, xfl ? "also " : "",
+				otense(otmp, "slip"), which, hand);
+
 		xfl++;
+		wastwoweap = true;
+		setuswapwep(NULL, false); // clears u.twoweap
 		if (otmp->otyp != LOADSTONE || !otmp->cursed)
 			dropx(otmp);
 	}
 	otmp = uwep;
 	if (otmp && !welded(otmp)) {
-		const char *thiswep;
+		long savequan = otmp->quan;
 
-		/* nice wording if both weapons are the same type */
-		thiswep = is_sword(otmp) ? c_sword :
-					   makesingular(oclass_names[(int)otmp->oclass]);
-		if (otherwep && strcmp(thiswep, otherwep)) otherwep = 0;
+		// nice wording if both weapons are the same type
+		thiswep = is_sword(otmp) ? c_sword : weapon_descr(otmp);
+		if (otherwep && strcmp(thiswep, makesingular(otherwep)))
+			otherwep = 0;
+		if (otmp->quan > 1L) {
+			/* most class names for unconventional wielded items
+			 * are ok, but if wielding multiple apples or rations
+			 * we don't want "your foods slip", so force non-corpse
+			 * food to be singular; skipping makeplural() isn't
+			 * enough--we need to fool otense() too */
+			if (!strcmp(thiswep, "food")) otmp->quan = 1L;
+			else thiswep = makeplural(thiswep);
+		}
+		hand = body_part(HAND);
+		which = "";
+		if (bimanual(otmp))
+			hand = makeplural(hand);
+		else if (wastwoweap)
+			which = "right ";   /* preceding msg was about left */
+		pline("%s %s%s %s%s from your %s%s.",
+				!strncmp(thiswep, "corpse", 6) ? "The" : "Your",
+				otherwep ? "other " : "", thiswep, xfl ? "also " : "",
+				otense(otmp, "slip"), which, hand);
+		/* xfl++; */
+		otmp->quan = savequan;
 
-		/* changed so cursed weapons don't fall, GAN 10/30/86 */
-		pline("Your %s%s %sslips from your %s.",
-		      otherwep ? "other " : "", thiswep,
-		      xfl ? "also " : "",
-		      makeplural(body_part(HAND)));
 		setuwep(NULL, false);
 		if (otmp->otyp != LOADSTONE || !otmp->cursed)
 			dropx(otmp);

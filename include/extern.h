@@ -2115,6 +2115,7 @@ void do_clear_area(int, int, int,
 
 /* ### weapon.c ### */
 
+const char *weapon_descr(struct obj *obj);
 int hitval(struct obj *, struct monst *);
 int dmgval(struct obj *, struct monst *);
 struct obj *select_rwep(struct monst *);
