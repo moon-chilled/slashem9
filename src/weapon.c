@@ -558,11 +558,11 @@ struct obj *select_rwep(struct monst *mtmp) {
 		if (prop < 0) {
 			switch (-prop) {
 				/* WAC NOTE: remember to always start the 1st item in
-			 *   a list of propellors with a
-			 * 	propellor = ...
-			 *   and follow up with
-			 *   if (!propellor) ...
-			 */
+				 *   a list of propellors with a
+				 * 	propellor = ...
+				 *   and follow up with
+				 *   if (!propellor) ...
+				 */
 				case P_BOW:
 					propellor = (oselect(mtmp, YUMI));
 					if (!propellor) propellor = (oselect(mtmp, ELVEN_BOW));
@@ -576,6 +576,7 @@ struct obj *select_rwep(struct monst *mtmp) {
 					break;
 				case P_CROSSBOW:
 					propellor = (oselect(mtmp, CROSSBOW));
+					break;
 				case P_FIREARM:
 					if ((objects[rwep[i]].w_ammotyp) == WP_BULLET) {
 						propellor = (oselect(mtmp, HEAVY_MACHINE_GUN));
