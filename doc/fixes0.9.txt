@@ -149,6 +149,8 @@ Imports from NetHack versions newer than 3.4.3:
 - Interface: #adjust can be used to split stacks.
 - Interface: 'helm' and 'hat' differentiated.
 - Gameplay: helmets don't protect against falling cockatrice eggs because they 'splatter all over your face'.
+- Bugfix: shopkeepers would not always charge you for destroying their objects.
+- Bugfix: shopkeeper would sometimes charge you for only one broken object, even if you broke multiple.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

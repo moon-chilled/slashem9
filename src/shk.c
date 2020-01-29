@@ -2514,9 +2514,12 @@ long stolen_value(struct obj *obj, xchar x, xchar y, boolean peaceful, boolean s
 
 		value += stolen_container(obj, shkp, value, ininv, destruction);
 		if (!ininv) gvalue += contained_gold(obj);
-	} else if (!obj->no_charge && saleable(shkp, obj) &&
-		   !(destruction && evades_destruction(obj))) {
-		value += get_cost(obj, shkp);
+	} else if (!obj->no_charge && !(destruction && evades_destruction(obj)) &&
+		   // treat items inside containers as 'saleable'
+		   (saleable(shkp, obj) || obj->where == OBJ_CONTAINED) &&
+		   (obj->oclass != FOOD_CLASS || !obj->oeaten))  {
+
+		value += obj->quan * get_cost(obj, shkp);
 	}
 
 	if (gvalue + value == 0L) return 0L;
