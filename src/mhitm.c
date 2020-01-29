@@ -1539,6 +1539,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 				mon_drain_en(mdef,
 					     ((mdef->m_lev > 0) ? (rnd(mdef->m_lev)) : 0) + 1);
 			}
+			break;
 		case AD_BLND:
 			if (nohit) break;
 

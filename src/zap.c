@@ -2195,8 +2195,8 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 	int damage = 0;
 
 	switch (obj->otyp) {
-		case WAN_STRIKING:
-			makeknown(WAN_STRIKING);
+		case WAN_STRIKING: makeknown(WAN_STRIKING);
+		//fallthru
 		case SPE_FORCE_BOLT:
 			if (Antimagic) {
 				shieldeff(u.ux, u.uy);
@@ -2230,6 +2230,7 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 			break;
 		case WAN_LIGHTNING:
 			makeknown(WAN_LIGHTNING);
+		//fallthru
 		/*WAC Added Spell Lightning*/
 		case SPE_LIGHTNING:
 			if (!Shock_resistance) {
@@ -2246,15 +2247,15 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 			flashburn(rnd(100));
 			break;
 
-		case WAN_FIREBALL:
-			makeknown(WAN_FIREBALL);
+		case WAN_FIREBALL: makeknown(WAN_FIREBALL);
+		//fallthru
 		case SPE_FIREBALL:
 			pline("You explode a fireball on top of yourself!");
 			explode(u.ux, u.uy, 11, d(6, 6), WAND_CLASS, EXPL_FIERY);
 			break;
 
-		case WAN_FIRE:
-			makeknown(WAN_FIRE);
+		case WAN_FIRE: makeknown(WAN_FIRE);
+		//fallthru
 		case FIRE_HORN:
 			if (Fire_resistance) {
 				shieldeff(u.ux, u.uy);
@@ -2275,8 +2276,8 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 			destroy_item(SPBOOK_CLASS, AD_FIRE);
 			break;
 
-		case WAN_COLD:
-			makeknown(WAN_COLD);
+		case WAN_COLD: makeknown(WAN_COLD);
+		//fallthru
 		case SPE_CONE_OF_COLD:
 		case FROST_HORN:
 			if (Cold_resistance) {
@@ -2291,8 +2292,8 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 
 			break;
 
-		case WAN_MAGIC_MISSILE:
-			makeknown(WAN_MAGIC_MISSILE);
+		case WAN_MAGIC_MISSILE: makeknown(WAN_MAGIC_MISSILE);
+		//fallthru
 		case SPE_MAGIC_MISSILE:
 			if (Antimagic) {
 				shieldeff(u.ux, u.uy);
@@ -2303,8 +2304,8 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 			}
 			break;
 		case WAN_POLYMORPH:
-			if (!Unchanging)
-				makeknown(WAN_POLYMORPH);
+			if (!Unchanging) makeknown(WAN_POLYMORPH);
+		//fallthru
 		case SPE_POLYMORPH:
 			if (!Unchanging)
 				polyself(0);
@@ -2313,8 +2314,9 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 		case SPE_CANCELLATION:
 			cancel_monst(&youmonst, obj, true, false, true);
 			break;
-		case WAN_DRAINING: /* KMH */
-			makeknown(obj->otyp);
+
+		case WAN_DRAINING: makeknown(obj->otyp);
+		//fallthru
 		case SPE_DRAIN_LIFE:
 			if (!Drain_resistance) {
 				losexp("life drainage", false);
@@ -2326,8 +2328,8 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 			break;
 		case WAN_MAKE_INVISIBLE: {
 			/* have to test before changing HInvis but must change
-		 * HInvis before doing newsym().
-		 */
+			 * HInvis before doing newsym().
+			 */
 			int msg = !Invis && !Blind && !BInvis;
 
 			if (BInvis && uarmc->otyp == MUMMY_WRAPPING) {
@@ -2381,8 +2383,8 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 				make_confused(HConfusion + rnd(10), false);
 			break;
 
-		case WAN_SLEEP:
-			makeknown(WAN_SLEEP);
+		case WAN_SLEEP: makeknown(WAN_SLEEP);
+		//fallthru
 		case SPE_SLEEP:
 			if (Sleep_resistance) {
 				shieldeff(u.ux, u.uy);
@@ -2426,8 +2428,8 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 			done(DIED);
 			break;
 
-		case WAN_UNDEAD_TURNING:
-			makeknown(WAN_UNDEAD_TURNING);
+		case WAN_UNDEAD_TURNING: makeknown(WAN_UNDEAD_TURNING);
+		//fallthru
 		case SPE_TURN_UNDEAD:
 			unturn_dead(&youmonst);
 			if (is_undead(youmonst.data) || is_vampshifter(&youmonst)) {
@@ -2458,6 +2460,7 @@ int zapyourself(struct obj *obj, boolean ordinary) {
 
 		case WAN_OPENING:
 			if (Punished) makeknown(WAN_OPENING);
+		//fallthru
 		case SPE_KNOCK:
 			if (Punished) pline("Your chain quivers for a moment.");
 			break;

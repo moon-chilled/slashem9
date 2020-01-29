@@ -143,7 +143,7 @@ static void mkbox_cnts(struct obj *box) {
 				n = 0;
 				break;
 			}
-		/*else FALLTHRU*/
+		//else fallthru
 		case BAG_OF_HOLDING:
 			n = 1;
 			break;
@@ -469,7 +469,8 @@ struct obj *mksobj(int otyp, boolean init, boolean artif) {
 				}
 				if (otmp->otyp == CORPSE || otmp->otyp == MEAT_RING ||
 				    otmp->otyp == KELP_FROND) break;
-			/* fall into next case */
+
+			//fallthru
 
 			/* -----------============STEPHEN WHITE'S NEW CODE============----------- */
 			case GEM_CLASS:
@@ -504,21 +505,25 @@ struct obj *mksobj(int otyp, boolean init, boolean artif) {
 						otmp->quan = rnd(3);
 						blessorcurse(otmp, 5);
 						break;
+
 					case BRASS_LANTERN:
 					case OIL_LAMP:
 						otmp->spe = 1;
-						otmp->age = (long)rn1(500, 1000);
+						otmp->age = rn1(500, 1000);
 						otmp->lamplit = 0;
 						blessorcurse(otmp, 5);
 						break;
+
 					case MAGIC_CANDLE:
 					case MAGIC_LAMP:
 						otmp->spe = 1;
 						otmp->lamplit = 0;
 						blessorcurse(otmp, 2);
 						break;
+
 					case RED_DOUBLE_LIGHTSABER:
 						otmp->altmode = false;
+					//fallthru
 					case GREEN_LIGHTSABER:
 					case BLUE_LIGHTSABER:
 					case RED_LIGHTSABER:
@@ -531,6 +536,7 @@ struct obj *mksobj(int otyp, boolean init, boolean artif) {
 					case LARGE_BOX:
 						otmp->olocked = !!(rn2(5));
 						otmp->otrapped = !(rn2(10));
+					//fallthru
 					case ICE_BOX:
 					case SACK:
 					case OILSKIN_SACK:

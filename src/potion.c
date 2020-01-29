@@ -793,7 +793,8 @@ int peffects(struct obj *otmp) {
 				heal_legs();
 				unkn++;
 				break;
-			} /* and fall through */
+			}
+		//fallthru
 		case SPE_HASTE_SELF:
 			if (!Very_fast)
 				pline("You are suddenly moving %sfaster.",

@@ -964,14 +964,14 @@ try_again:
 			if (level.flags.noteleport && ++trycnt < 2)
 				goto try_again;
 			if (!rn2(3)) return WAN_TELEPORTATION;
-		/* else FALLTHRU */
+		//else fallthru
 		case 0:
 		case 1:
 			return SCR_TELEPORTATION;
 		case 8:
 		case 10:
 			if (!rn2(3)) return WAN_CREATE_MONSTER;
-		/* else FALLTHRU */
+		//else fallthru
 		case 2:
 			return SCR_CREATE_MONSTER;
 		case 3:

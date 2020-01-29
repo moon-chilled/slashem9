@@ -8,7 +8,7 @@
 #include <fcntl.h>
 #endif
 
-static void xexit(int);
+static noreturn void xexit(int);
 
 #define DLB_DIRECTORY "Directory" /* name of lib directory */
 

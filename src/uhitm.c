@@ -2693,13 +2693,7 @@ static boolean hmonas(struct monst *mon) {
 				if (!cantwield(youmonst.data) &&
 				    u.umonnum != PM_MARILITH)
 					goto use_weapon;
-#if 0  // Shouldn't matter where the first AT_CLAW is anymore
-				/* succubi/incubi are humanoid, but their _second_
-				 * attack is AT_CLAW, not their first...
-				 */
-				if (i==1 && uwep && (u.umonnum == PM_SUCCUBUS ||
-							u.umonnum == PM_INCUBUS)) goto use_weapon;
-#endif
+			//fallthru
 			case AT_BITE:
 				/* [ALI] Vampires are also smart. They avoid biting
 				   monsters if doing so would be fatal */
@@ -2708,6 +2702,7 @@ static boolean hmonas(struct monst *mon) {
 				    (is_rider(mon->data) ||
 				     mon->data == &mons[PM_GREEN_SLIME]))
 					break;
+			// else fallthru
 			case AT_STNG:
 			case AT_TUCH:
 			case AT_BUTT:
@@ -2717,6 +2712,7 @@ static boolean hmonas(struct monst *mon) {
 				    (touch_petrifies(mon->data) ||
 				     mon->data == &mons[PM_MEDUSA]))
 					break;
+			//else fallthru
 			case AT_KICK:
 				if ((dhit = (tmp > (dieroll = rnd(20)) || u.uswallow)) != 0) {
 					int compat;

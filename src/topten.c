@@ -297,6 +297,7 @@ void topten(int how) {
 	switch (killer.format) {
 		default:
 			impossible("bad killer format?");
+		//fallthru
 		case KILLED_BY_AN:
 			strcat(t0->death, killed_by_prefix[how]);
 			strncat(t0->death, an(nhs2cstr_tmp(killer.name)),

@@ -866,6 +866,7 @@ static void m_initinv(struct monst *mtmp) {
 						break;
 					case PM_CHIEF_YEOMAN_WARDER:
 						mongets(mtmp, TALLOW_CANDLE);
+					//fallthru
 					case PM_WATCH_CAPTAIN:
 						mac = -2;
 						break;
@@ -919,33 +920,21 @@ static void m_initinv(struct monst *mtmp) {
 			} else if (ptr == &mons[PM_SHOPKEEPER]) {
 				mongets(mtmp, SKELETON_KEY);
 				/* STEPHEN WHITE'S NEW CODE
-			 *
-			 * "Were here to pump *clap* YOU up!"  -Hans and Frans
-			 *                                      Saterday Night Live
-			 */
+				 *
+				 * "Were here to pump *clap* YOU up!"  -Hans and Frans
+				 *                                      Saterday Night Live
+				 */
 				switch (rn2(4)) {
-					/* MAJOR fall through ... */
-					case 0:
-						mongets(mtmp, WAN_MAGIC_MISSILE);
-					case 1:
-						mongets(mtmp, POT_EXTRA_HEALING);
-					case 2:
-						mongets(mtmp, POT_HEALING);
-					case 3:
-						mongets(mtmp, WAN_STRIKING);
+					case 0: mongets(mtmp, WAN_MAGIC_MISSILE); //fallthru
+					case 1: mongets(mtmp, POT_EXTRA_HEALING); //fallthru
+					case 2: mongets(mtmp, POT_HEALING); //fallthru
+					case 3: mongets(mtmp, WAN_STRIKING);
 				}
 				switch (rnd(4)) {
-					/* MAJOR fall through ... */
-					case 1:
-						mongets(mtmp, POT_HEALING);
-					case 2:
-						mongets(mtmp, POT_EXTRA_HEALING);
-					case 3:
-						mongets(mtmp, SCR_TELEPORTATION);
-					case 4:
-						mongets(mtmp, WAN_TELEPORTATION);
-					default:
-						break;
+					case 1: mongets(mtmp, POT_HEALING); //fallthru
+					case 2: mongets(mtmp, POT_EXTRA_HEALING); //fallthru
+					case 3: mongets(mtmp, SCR_TELEPORTATION); //fallthru
+					case 4: mongets(mtmp, WAN_TELEPORTATION);
 				}
 			} else if (ptr->msound == MS_PRIEST ||
 				   quest_mon_represents_role(ptr, PM_PRIEST)) {

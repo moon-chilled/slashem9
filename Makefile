@@ -4,7 +4,7 @@ BINDIR ?= $(PREFIX)/bin
 
 CFLAGS += -Iinclude -Isys/share/libtre -DDLBLIB -DWIZARD=\"$(shell whoami)\" -DSLASHEM_GIT_COMMIT_REV=\"$(shell git rev-parse --short HEAD)\"
 CFLAGS += -g -ggdb -O0 -pipe
-CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -Wall #-Wimplicit-fallthrough
+CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wimplicit-fallthrough
 
 ifneq ($(CC),tcc)
 	CFLAGS += -Werror

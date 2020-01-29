@@ -716,6 +716,7 @@ int doengrave(void) {
 						}
 						if (!oep || (oep->engr_type != BURN))
 							break;
+					// else fallthru
 					case WAN_CANCELLATION:
 					case WAN_MAKE_INVISIBLE:
 						if (oep && oep->engr_type != HEADSTONE) {
@@ -864,6 +865,7 @@ int doengrave(void) {
 				pline("Writing a poison pen letter??");
 				break;
 			}
+		//fallthru
 		case ILLOBJ_CLASS:
 			impossible("You're engraving with an illegal object!");
 			break;

@@ -2002,7 +2002,7 @@ int mintrap(struct monst *mtmp) {
 							mtmp->mtrapped = 1;
 							break;
 						}
-					/* fall though */
+					//fallthru
 					default:
 						if (mptr->mlet == S_GIANT ||
 						    (mptr->mlet == S_DRAGON &&
@@ -2389,7 +2389,7 @@ int float_down(long hmask, long emask) {
 			case TRAPDOOR:
 				if (!Can_fall_thru(&u.uz) || u.ustuck)
 					break;
-			/* fall into next case */
+			//fallthru
 			default:
 				if (!u.utrap) /* not already in the trap */
 					dotrap(trap, 0);
@@ -2773,37 +2773,21 @@ bool water_damage(struct obj *obj, boolean force, boolean here) {
 				case TOOL_CLASS:
 					if (level.flags.lethe) {
 						switch (obj->otyp) {
-							case MAGIC_LAMP:
-								obj->otyp = OIL_LAMP;
-								break;
-							case MAGIC_CANDLE:
-								obj->otyp = rn2(2) ? WAX_CANDLE : TALLOW_CANDLE;
-								break;
-							case MAGIC_WHISTLE:
-								obj->otyp = TIN_WHISTLE;
-								break;
-							case MAGIC_FLUTE:
-								obj->otyp = WOODEN_FLUTE;
-								obj->spe = 0;
-								break;
-							case MAGIC_HARP:
-								obj->otyp = WOODEN_HARP;
-								obj->spe = 0;
-								break;
+							case MAGIC_LAMP: obj->otyp = OIL_LAMP; break;
+							case MAGIC_CANDLE: obj->otyp = rn2(2) ? WAX_CANDLE : TALLOW_CANDLE; break;
+							case MAGIC_WHISTLE: obj->otyp = TIN_WHISTLE; break;
+							case MAGIC_FLUTE: obj->otyp = WOODEN_FLUTE; obj->spe = 0; break;
+							case MAGIC_HARP: obj->otyp = WOODEN_HARP; obj->spe = 0; break;
+
 							case FIRE_HORN:
 							case FROST_HORN:
-							case HORN_OF_PLENTY:
-								obj->otyp = TOOLED_HORN;
-								obj->spe = 0;
-								break;
-							case DRUM_OF_EARTHQUAKE:
-								obj->otyp = LEATHER_DRUM;
-								obj->spe = 0;
-								break;
+							case HORN_OF_PLENTY: obj->otyp = TOOLED_HORN; obj->spe = 0; break;
+
+							case DRUM_OF_EARTHQUAKE: obj->otyp = LEATHER_DRUM; obj->spe = 0; break;
 						}
 					}
+				//fallthru
 
-				/* Drop through */
 				/* Weapons, armor and tools may be disenchanted... */
 				/* Wands and rings lose a charge... */
 				case WEAPON_CLASS:
@@ -2821,8 +2805,10 @@ bool water_damage(struct obj *obj, boolean force, boolean here) {
 						if (obj->spe < 0) obj->spe = 0;
 					}
 
-				/* Drop through for rusting effects... */
-				/* Weapons, armor, tools and other things may rust... */
+				//fallthru
+				//for rusting effects...
+
+				// Weapons, armor, tools and other things may rust...
 				default:
 					if (is_rustprone(obj) && obj->oeroded < MAX_ERODE &&
 					    !(obj->oerodeproof ||

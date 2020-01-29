@@ -302,6 +302,7 @@ static void convert_line(void) {
 						/* pluralize */
 						case 'P':
 							cvt_buf[0] = highc(cvt_buf[0]);
+						//fallthru
 						case 'p':
 							strcpy(cvt_buf, makeplural(cvt_buf));
 							break;
@@ -309,6 +310,7 @@ static void convert_line(void) {
 						/* append possessive suffix */
 						case 'S':
 							cvt_buf[0] = highc(cvt_buf[0]);
+						//fallthru
 						case 's':
 							strcpy(cvt_buf, s_suffix(cvt_buf));
 							break;

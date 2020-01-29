@@ -250,33 +250,34 @@ char *argv[];
 		case 'D':
 		case 'Z':
 			{
-			  char *user;
-			  int uid;
-			  struct passwd *pw = NULL;
+				char *user;
+				int uid;
+				struct passwd *pw = NULL;
 
-			  uid = getuid();
-			  user = getlogin();
-			  if (user) {
-			      pw = getpwnam(user);
-			      if (pw && (pw->pw_uid != uid)) pw = 0;
-			  }
-			  if (pw == 0) {
-			      user = nh_getenv("USER");
-			      if (user) {
-				  pw = getpwnam(user);
-				  if (pw && (pw->pw_uid != uid)) pw = 0;
-			      }
-			      if (pw == 0) {
-				  pw = getpwuid(uid);
-			      }
-			  }
-			  if (pw && !strcmp(pw->pw_name,WIZARD)) {
-			      wizard = true;
-			      break;
-			  }
+				uid = getuid();
+				user = getlogin();
+				if (user) {
+					pw = getpwnam(user);
+					if (pw && (pw->pw_uid != uid)) pw = 0;
+				}
+				if (pw == 0) {
+					user = nh_getenv("USER");
+					if (user) {
+						pw = getpwnam(user);
+						if (pw && (pw->pw_uid != uid)) pw = 0;
+					}
+					if (pw == 0) {
+						pw = getpwuid(uid);
+					}
+				}
+				if (pw && !strcmp(pw->pw_name,WIZARD)) {
+					wizard = true;
+					break;
+				}
 			}
 			/* otherwise fall thru to discover */
 			wiz_error_flag = true;
+		//fallthru
 		case 'X':
 			discover = true;
 			break;

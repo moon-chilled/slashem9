@@ -286,7 +286,9 @@ int tactics(struct monst *mtmp) {
 					mtmp->mhp += rnd(8);
 					return 1;
 				}
-			/* fall through :-) */
+
+		//fallthru
+		//:)
 
 		case STRAT_NONE: /* harrass */
 			if (!rn2(!mtmp->mflee ? 5 : 33)) mnexto(mtmp);

@@ -1357,6 +1357,7 @@ int seffects(struct obj *sobj) {
 				/* do_mapping() already reveals secret passages */
 			}
 			known = true;
+		//fallthru
 		case SPE_MAGIC_MAPPING:
 			if (level.flags.nommap) {
 				pline("Your %s spins as something blocks the spell!", body_part(HEAD));

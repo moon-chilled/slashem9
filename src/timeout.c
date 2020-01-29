@@ -1289,6 +1289,7 @@ void burn_object(void *arg, long timeout) {
 				pline("%s %s reverts to single blade mode!",
 				      whose, xname(obj));
 			}
+		//fallthru
 		case GREEN_LIGHTSABER:
 		case BLUE_LIGHTSABER:
 		case RED_LIGHTSABER:
@@ -1429,6 +1430,7 @@ void begin_burn(struct obj *obj, boolean already_lit) {
 		case RED_DOUBLE_LIGHTSABER:
 			if (obj->altmode && obj->age > 1)
 				obj->age--; /* Double power usage */
+		//fallthru
 		case RED_LIGHTSABER:
 		case BLUE_LIGHTSABER:
 		case GREEN_LIGHTSABER:

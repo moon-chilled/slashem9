@@ -719,6 +719,7 @@ int dokick(void) {
 					pline("%s burps loudly.", Monnam(u.ustuck));
 					break;
 				}
+			//fallthru
 			default:
 				pline("Your feeble kick has no effect.");
 				break;
@@ -1173,7 +1174,8 @@ static void drop_to(coord *cc, schar loc) {
 			} else if (In_endgame(&u.uz) || Is_botlevel(&u.uz)) {
 				cc->y = cc->x = 0;
 				break;
-			} /* else fall to the next cases */
+			}
+		// else fallthru
 		case MIGR_STAIRS_UP:
 		case MIGR_LADDER_UP:
 			cc->x = u.uz.dnum;

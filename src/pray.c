@@ -292,7 +292,7 @@ static void fix_worst_trouble(int trouble) {
 			break;
 		case TROUBLE_STARVING:
 			losestr(-1);
-		/* fall into... */
+		//fallthru
 		case TROUBLE_HUNGRY:
 			pline("Your %s feels content.", body_part(STOMACH));
 			init_uhunger();
@@ -826,6 +826,7 @@ static void pleased(aligntyp g_align) {
 		switch (min(action, 5)) {
 			case 5:
 				pat_on_head = 1;
+			//fallthru
 			case 4:
 				do
 					fix_worst_trouble(trouble);
@@ -834,6 +835,7 @@ static void pleased(aligntyp g_align) {
 
 			case 3:
 				fix_worst_trouble(trouble);
+			//fallthru
 			case 2:
 				while ((trouble = in_trouble()) > 0)
 					fix_worst_trouble(trouble);
@@ -841,8 +843,9 @@ static void pleased(aligntyp g_align) {
 
 			case 1:
 				if (trouble > 0) fix_worst_trouble(trouble);
+			//fallthru
 			case 0:
-				break; /* your god blows you off, too bad */
+				break; // your god blows you off, too bad
 		}
 	}
 
@@ -916,7 +919,7 @@ static void pleased(aligntyp g_align) {
 						break;
 					}
 				}
-			/* Otherwise, falls into next case */
+			//else fallthru
 			case 2:
 				if (!Blind)
 					pline("You are surrounded by %s glow.", an(hcolor(NH_GOLDEN)));
@@ -966,7 +969,8 @@ static void pleased(aligntyp g_align) {
 				if (u.ualign.record >= PIOUS && !u.uevent.uhand_of_elbereth) {
 					gcrownu();
 					break;
-				} /* else FALLTHRU */
+				}
+			//else fallthru
 			case 6: {
 				struct obj *otmp;
 				int sp_no, trycnt = u.ulevel + 1;

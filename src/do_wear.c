@@ -940,17 +940,17 @@ static void Ring_off_or_gone(struct obj *obj, boolean gone) {
 			u.udaminc -= obj->spe;
 			break;
 		case RIN_PROTECTION:
-			/* might have forgotten it due to amnesia */
+			// might have forgotten it due to amnesia
 			if (obj->spe) {
 				context.botl = 1;
 				makeknown(RIN_PROTECTION);
 				obj->known = 1;
 				update_inventory();
 			}
+			break;
 		case RIN_PROTECTION_FROM_SHAPE_CHANGERS:
-			/* If you're no longer protected, let the chameleons
-		 * change shape again -dgk
-		 */
+			// If you're no longer protected, let the chameleons
+			// change shape again -dgk
 			restartcham();
 			break;
 	}

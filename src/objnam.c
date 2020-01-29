@@ -2640,7 +2640,9 @@ typfnd:
 				otmp->spe = (rn2(10) ? -1 : 0);
 				break;
 			}
-		/* fall through, if wizard */
+		//fallthru
+		//(but only if wizard)
+
 		default:
 			otmp->spe = spe;
 	}

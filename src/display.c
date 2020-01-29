@@ -360,7 +360,7 @@ display_monster(
 	int sightflags,	   /* 1 if the monster is physically seen */
 	/* 2 if detected using Detect_monsters */
 	xchar worm_tail /* mon is actually a worm tail */) {
-	boolean mon_mimic = (mon->m_ap_type != M_AP_NOTHING);
+	bool mon_mimic = (mon->m_ap_type != M_AP_NOTHING);
 	int sensed = mon_mimic &&
 		     (Protection_from_shape_changers || sensemon(mon));
 	/*
@@ -373,22 +373,24 @@ display_monster(
 	if (mon_mimic && (sightflags == PHYSICALLY_SEEN)) {
 		switch (mon->m_ap_type) {
 			default:
-				impossible("display_monster:  bad m_ap_type value [ = %d ]",
-					   (int)mon->m_ap_type);
+				impossible("display_monster:  bad m_ap_type value [ = %d ]", mon->m_ap_type);
+				show_glyph(x, y, mon_to_glyph(mon));
+				break;
+
 			case M_AP_NOTHING:
 				show_glyph(x, y, mon_to_glyph(mon));
 				break;
 
 			case M_AP_FURNITURE: {
 				/*
-			 * This is a poor man's version of map_background().  I can't
-			 * use map_background() because we are overriding what is in
-			 * the 'typ' field.  Maybe have map_background()'s parameters
-			 * be (x,y,glyph) instead of just (x,y).
-			 *
-			 * mappearance is currently set to an S_ index value in
-			 * makemon.c.
-			 */
+				 * This is a poor man's version of map_background().  I can't
+				 * use map_background() because we are overriding what is in
+				 * the 'typ' field.  Maybe have map_background()'s parameters
+				 * be (x,y,glyph) instead of just (x,y).
+				 *
+				 * mappearance is currently set to an S_ index value in
+				 * makemon.c.
+				 */
 				int glyph = cmap_to_glyph(mon->mappearance);
 				levl[x][y].mem_bg = mon->mappearance;
 				if (!sensed) show_glyph(x, y, glyph);

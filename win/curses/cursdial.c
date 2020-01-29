@@ -1073,6 +1073,7 @@ menu_get_selections(WINDOW *win, nhmenu *menu, int how) {
 						curpage = menu_operation(win, menu, INVERT, 0);
 						break;
 				}
+                        //fallthru
 			default:
 				if (isdigit(curletter)) {
 					count = curses_get_count(curletter - '0');

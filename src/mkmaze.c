@@ -389,8 +389,8 @@ static void fixup_special(void) {
 					s_level *sp = find_level(r->rname.str);
 					lev = sp->dlevel;
 				}
-				/* fall into... */
 
+			//fallthru
 			case LR_UPSTAIR:
 			case LR_DOWNSTAIR:
 			place_it:

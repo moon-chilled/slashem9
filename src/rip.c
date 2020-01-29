@@ -108,6 +108,7 @@ int how;
 	switch (killer.format) {
 		default:
 			impossible("bad killer format?");
+		//fallthru
 		case KILLED_BY_AN:
 			if (Instant_Death) {
 				strcpy(buf, "instantly ");

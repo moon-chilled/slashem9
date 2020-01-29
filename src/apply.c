@@ -3168,16 +3168,18 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 		case WAN_COLD:
 			expltype = EXPL_FROSTY;
 			dmg *= 2;
+			goto wanexpl;
 		case WAN_MAGIC_MISSILE:
 		wanexpl:
 			explode(u.ux, u.uy, ZT_MAGIC_MISSILE, dmg, WAND_CLASS, expltype);
 			makeknown(obj->otyp); /* explode described the effect */
 			goto discard_broken_wand;
 		/*WAC for wands of fireball- no double damage
-	 * As well, effect is the same as fire, so no makeknown
-	 */
+		 * As well, effect is the same as fire, so no makeknown
+		 */
 		case WAN_FIRE:
 			dmg *= 2;
+		//fallthru
 		case WAN_FIREBALL:
 			expltype = EXPL_FIERY;
 			explode(u.ux, u.uy, ZT_FIRE, dmg, WAND_CLASS, expltype);
@@ -3189,6 +3191,9 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 			/* we want this before the explosion instead of at the very end */
 			pline("A wall of force smashes down around you!");
 			dmg = d(1 + obj->spe, 6); /* normally 2d12 */
+			affects_objects = true;
+			break;
+
 		case WAN_CANCELLATION:
 		case WAN_POLYMORPH:
 		case WAN_UNDEAD_TURNING:

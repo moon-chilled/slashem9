@@ -765,7 +765,9 @@ int dogfood(struct monst *mon, struct obj *obj) {
 			if (!obj->cursed && obj->oclass != BALL_CLASS &&
 			    obj->oclass != CHAIN_CLASS)
 				return APPORT;
-		/* fall into next case */
+
+			return UNDEF;
+
 		case ROCK_CLASS:
 			return UNDEF;
 	}

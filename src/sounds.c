@@ -142,6 +142,7 @@ void dosounds(void) {
 					}
 					/* fall into... (yes, even for hallucination) */
 				}
+				//fallthru
 				case 0:
 					You_hear("the footsteps of a guard on patrol.");
 					break;
@@ -584,7 +585,8 @@ static int domonnoise(struct monst *mtmp) {
 				else
 					pline_msg = "mews.";
 				break;
-			} /* else FALLTHRU */
+			}
+		//else fallthru
 		case MS_GROWL:
 			pline_msg = mtmp->mpeaceful ? "snarls." : "growls!";
 			break;
@@ -720,7 +722,7 @@ static int domonnoise(struct monst *mtmp) {
 				}
 				break;
 			}
-		/* else FALLTHRU */
+		//else fallthru
 		case MS_HUMANOID:
 			if (!mtmp->mpeaceful) {
 				if (In_endgame(&u.uz) && is_mplayer(ptr)) {

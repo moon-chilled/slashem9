@@ -1024,9 +1024,9 @@ void tty_clear_nhwindow(winid window) {
 			cl_end();
 			break;
 		case NHW_MAP:
-			/* cheap -- clear the whole thing and tell nethack to redraw botl */
+			// cheap -- clear the whole thing and tell nethack to redraw botl
 			context.botlx = 1;
-		/* fall into ... */
+		//fallthru
 		case NHW_BASE:
 			clear_screen();
 			break;
@@ -1331,7 +1331,7 @@ static void process_menu_window(winid window, struct WinDesc *cw) {
 			case '0':
 				/* special case: '0' is also the default ball class */
 				if (!counting && index(gacc, morc)) goto group_accel;
-			/* fall through to count the zero */
+			//fallthru
 			case '1':
 			case '2':
 			case '3':
@@ -1562,6 +1562,8 @@ void tty_display_nhwindow(winid window, bool blocking) {
 				tty_display_nhwindow(WIN_MESSAGE, true);
 				return;
 			}
+			fflush(stdout);
+			break;
 		case NHW_BASE:
 			fflush(stdout);
 			break;

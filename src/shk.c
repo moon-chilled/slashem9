@@ -2773,6 +2773,7 @@ move_on:
 		switch (sell_response ? sell_response : ynaq(qbuf)) {
 			case 'q':
 				sell_response = 'n';
+			//fallthru
 			case 'n':
 				if (container)
 					dropped_container(obj, shkp, false);
@@ -2781,6 +2782,7 @@ move_on:
 				break;
 			case 'a':
 				sell_response = 'y';
+			//fallthru
 			case 'y':
 				if (container)
 					dropped_container(obj, shkp, true);

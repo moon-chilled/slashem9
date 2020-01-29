@@ -940,6 +940,7 @@ static void cpostfx(int pm) {
 				u.uhp = u.uhpmax;
 			context.botl = 1;
 			break;
+
 		case PM_STALKER:
 			if (!Invis) {
 				set_itimeout(&HInvis, (long)rn1(100, 50));
@@ -950,21 +951,21 @@ static void cpostfx(int pm) {
 				HSee_invisible |= FROMOUTSIDE;
 			}
 			newsym(u.ux, u.uy);
-		/* fall into next case */
+		//fallthru
 		case PM_YELLOW_LIGHT:
-		/* fall into next case */
 		case PM_GIANT_BAT:
 			make_stunned(HStun + 30, false);
-		/* fall into next case */
+		//fallthru
 		case PM_BAT:
 			make_stunned(HStun + 30, false);
 			break;
+
 		case PM_GIANT_MIMIC:
 			tmp += 10;
-		/* fall into next case */
+		//fallthru
 		case PM_LARGE_MIMIC:
 			tmp += 20;
-		/* fall into next case */
+		//fallthru
 		case PM_SMALL_MIMIC:
 			tmp += 20;
 			if (youmonst.data->mlet != S_MIMIC && !Unchanging) {
@@ -1018,6 +1019,7 @@ static void cpostfx(int pm) {
 				polyself(0);
 			}
 			break;
+
 		/* WAC all mind flayers as per mondata.h have to be here */
 		case PM_MASTER_MIND_FLAYER:
 		case PM_MIND_FLAYER: {
@@ -1031,7 +1033,7 @@ static void cpostfx(int pm) {
 				pline("For some reason, that tasted bland.");
 			}
 		}
-		/* fall through to default case */
+		//fallthru
 		default: {
 			struct permonst *ptr = &mons[pm];
 			int i, count;
@@ -1747,7 +1749,7 @@ static void fprefx(struct obj *otmp) {
 				make_vomiting((long)rn1(context.victual.reqtime, 5), false);
 				break;
 			}
-		/* Fall through otherwise */
+		//fallthru
 		default:
 			if (otmp->otyp == SLIME_MOLD && !otmp->cursed && otmp->spe == current_fruit)
 				pline("My, that was a %s %s!",
@@ -1756,21 +1758,20 @@ static void fprefx(struct obj *otmp) {
 			else
 #ifdef UNIX
 				if (otmp->otyp == APPLE || otmp->otyp == PEAR) {
-				if (!Hallucination)
+				if (!Hallucination) {
 					pline("Core dumped.");
-				else {
-					/* This is based on an old Usenet joke, a fake a.out manual page */
+				} else {
+					// This is based on an old Usenet joke, a fake a.out manual page
 					int x = rnd(100);
 					if (x <= 75)
 						pline("Segmentation fault -- core dumped.");
-					else if (x <= 99)
+					else if (x <= 98)
 						pline("Bus error -- core dumped.");
 					else
 						pline("Yo' mama -- core dumped.");
 				}
 			} else
-#endif
-#ifdef MAC /* KMH -- Why should Unix have all the fun? */
+#elif defined(MAC)	// KMH -- Why should Unix have all the fun?
 				if (otmp->otyp == APPLE) {
 				pline("This Macintosh is wonderful!");
 			} else

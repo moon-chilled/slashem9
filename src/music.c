@@ -238,31 +238,25 @@ static void
 			}
 			if (!rn2(14 - force)) switch (levl[x][y].typ) {
 					case FOUNTAIN: /* Make the fountain disappear */
-						if (cansee(x, y))
-							pline("The fountain falls into a chasm.");
+						if (cansee(x, y)) pline("The fountain falls into a chasm.");
 						goto do_pit;
 					case SINK:
-						if (cansee(x, y))
-							pline("The kitchen sink falls into a chasm.");
+						if (cansee(x, y)) pline("The kitchen sink falls into a chasm.");
 						goto do_pit;
 					case TOILET:
-						if (cansee(x, y))
-							pline("The toilet falls into a chasm.");
+						if (cansee(x, y)) pline("The toilet falls into a chasm.");
 						goto do_pit;
 					case ALTAR:
 						if (Is_astralevel(&u.uz) || Is_sanctum(&u.uz)) break;
 
-						if (cansee(x, y))
-							pline("The altar falls into a chasm.");
+						if (cansee(x, y)) pline("The altar falls into a chasm.");
 						goto do_pit;
 					case GRAVE:
-						if (cansee(x, y))
-							pline("The headstone topples into a chasm.");
+						if (cansee(x, y)) pline("The headstone topples into a chasm.");
 						goto do_pit;
 					case THRONE:
-						if (cansee(x, y))
-							pline("The throne falls into a chasm.");
-					/* Falls into next case */
+						if (cansee(x, y)) pline("The throne falls into a chasm.");
+					//fallthru
 					case ROOM:
 					case CORR: /* Try to make a pit */
 					do_pit:
@@ -394,9 +388,10 @@ static int do_improvisation(instr) struct obj *instr; {
 				put_monsters_to_sleep(u.ulevel * 5);
 				exercise(A_DEX, true);
 				break;
-			}	   /* else FALLTHRU */
+			}
+		//else fallthru
 		case WOODEN_FLUTE: /* May charm snakes */
-			/* KMH, balance patch -- removed
+		/* KMH, balance patch -- removed
 		case PAN_PIPE: */
 			do_spec &= (rn2(ACURR(A_DEX)) + u.ulevel > 25);
 			pline("%s.", Tobjnam(instr, do_spec ? "trill" : "toot"));
@@ -423,7 +418,8 @@ static int do_improvisation(instr) struct obj *instr; {
 				}
 				makeknown(instr->otyp);
 				break;
-			}	  /* else FALLTHRU */
+			}
+		//else fallthru
 		case TOOLED_HORN: /* Awaken or scare monsters */
 			pline("You produce a frightful, grave sound.");
 			awaken_monsters(u.ulevel * 30);
@@ -434,6 +430,7 @@ static int do_improvisation(instr) struct obj *instr; {
 			awaken_soldiers();
 			exercise(A_WIS, false);
 			break;
+
 		case MAGIC_HARP: /* Charm monsters */
 			if (do_spec && instr->spe > 0) {
 				consume_obj_charge(instr, true);
@@ -442,7 +439,8 @@ static int do_improvisation(instr) struct obj *instr; {
 				charm_monsters((u.ulevel - 1) / 3 + 1);
 				exercise(A_DEX, true);
 				break;
-			}	  /* else FALLTHRU */
+			}
+		//else fallthru
 		case WOODEN_HARP: /* May calm Nymph */
 			do_spec &= (rn2(ACURR(A_DEX)) + u.ulevel > 25);
 			pline("%s %s.", The(xname(instr)),
@@ -461,32 +459,9 @@ static int do_improvisation(instr) struct obj *instr; {
 				awaken_monsters(ROWNO * COLNO);
 				makeknown(DRUM_OF_EARTHQUAKE);
 				break;
-			} /* else FALLTHRU */
-			  /* KMH, balance patch -- removed (in the wrong place anyways) */
-#if 0
-	case PAN_PIPE_OF_SUMMONING: /* yikes! */
-		if (instr->spe > 0) {
-			int cnt = 1;
-			instr->spe--;
-			cnt += rn2(4) + 3;
-			while(cnt--)
-				makemon(NULL, u.ux, u.uy, NO_MM_FLAGS);
-		}
-		break;
-	case PAN_PIPE_OF_THE_SEWERS:
-		pline("You call out the rats!");
-		if (instr->spe > 0) {
-			int cnt = 1;
-			struct monst *mtmp;
-			instr->spe--;
-			cnt += rn2(4) + 3;
-			while(cnt--) {
-				mtmp = makemon(&mons[PM_SEWER_RAT], u.ux, u.uy, NO_MM_FLAGS);
-				tamedog(mtmp, NULL);
 			}
-		}
-		break;
-#endif
+		//else fallthru
+
 		case LEATHER_DRUM: /* Awaken monsters */
 			pline("You beat a deafening row!");
 			awaken_monsters(u.ulevel * 40);

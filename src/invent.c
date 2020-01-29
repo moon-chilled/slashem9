@@ -1388,21 +1388,23 @@ nextclass:
 		switch (sym) {
 			case 'a':
 				allflag = 1;
+			//fallthru
 			case 'y':
 				tmp = (*fn)(otmp);
 				if (tmp < 0) {
 					if (container_gone(fn)) {
 						/* otmp caused magic bag to explode;
-					   both are now gone */
-						otmp = 0; /* and return */
+						   both are now gone */
+						otmp = 0; // and return
 					} else if (otmp && otmp != otmpo) {
-						/* split occurred, merge again */
+						// split occurred, merge again
 						merged(&otmpo, &otmp);
 					}
 					goto ret;
 				}
 				cnt += tmp;
 				if (--mx == 0) goto ret;
+			//fallthru
 			case 'n':
 				if (nodot) dud++;
 			default:

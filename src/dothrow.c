@@ -757,6 +757,7 @@ static boolean toss_up(struct obj *obj, boolean hitsroof) {
 				    !uarmh && !Stone_resistance &&
 				    !(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM)))
 					goto petrify;
+			// else fallthru
 			case CREAM_PIE:
 			case BLINDING_VENOM:
 				pline("You've got it all over your %s!", body_part(FACE));
@@ -1766,16 +1767,17 @@ static void breakmsg(struct obj *obj, boolean in_view) {
 
 	to_pieces = "";
 	switch (obj->oclass == POTION_CLASS ? POT_WATER : obj->otyp) {
-		default: /* glass or crystal wand */
+		default: // glass or crystal wand
 			if (obj->oclass != WAND_CLASS)
 				impossible("breaking odd object?");
+		//fallthru
 		case CRYSTAL_PLATE_MAIL:
 		case LENSES:
 		case MIRROR:
 		case CRYSTAL_BALL:
 		case EXPENSIVE_CAMERA:
 			to_pieces = " into a thousand pieces";
-		/*FALLTHRU*/
+		//fallthru
 		case POT_WATER: /* really, all potions */
 			if (!in_view)
 				You_hear("something shatter!");

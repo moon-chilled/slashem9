@@ -51,6 +51,9 @@ Changelist for slashem9 v0.9:
 - Bugfix: inventory display when inventory is empty and perm_invent is on says 'not carrying anything' rather than just '(end)'.
 - Bugfix: plastic objects will be destroyed by lava.
 - Gameplay: metallic objects have a 10% chance to be destroyed by lava.
+- Bugfix: removing a ring of protection would make a ring of protection from shape changers stop working.
+- Interface: bump chance of getting the message "yo' mama -- core dumped" from 1% to 2%.
+- Bugfix: monster attacking another monster with a draining attack could blind it too.
 
 Imports from NetHack versions newer than 3.4.3:
 - Bugfix: acid dropping bug.
