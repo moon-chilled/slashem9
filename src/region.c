@@ -837,8 +837,10 @@ bool inside_gas_cloud(void *p1, void *p2) {
 	if (p2 == NULL) { /* This means *YOU* Bozo! */
 		if (nonliving(youmonst.data) || Breathless)
 			return false;
-		if (!Blind)
+		if (!Blind) {
+			pline("Your %s sting.", makeplural(body_part(EYE)));
 			make_blinded(1L, false);
+		}
 		if (!Poison_resistance) {
 			pline("Something is burning your %s!", makeplural(body_part(LUNG)));
 			pline("You cough and spit blood!");

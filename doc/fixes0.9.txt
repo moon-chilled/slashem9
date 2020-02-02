@@ -155,6 +155,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Interface: add support for new alternate spellings when wishing for some objects.
 - Bugfix: prevent 'your steed is still eating' message when going through a magic portal.
 - Bugfix: player would see hallucinated form of blacklight when it exploded.
+- Interface: give feedback when blinded by stinking cloud.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
