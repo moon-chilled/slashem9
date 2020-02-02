@@ -534,7 +534,17 @@ void keepdogs(boolean pets_only /* true for ascension or final escape */) {
 		    /* monster won't follow if it hasn't noticed you yet */
 		    && !(mtmp->mstrategy & STRAT_WAITFORU)) {
 			stay_behind = false;
-			if (mtmp->mtame && mtmp->meating) {
+			if (mtmp == u.usteed) {
+				/* make sure steed is eligible to accompany hero;
+				 * start by having mintrap() give a chance to escape
+				 * trap normally but if that fails, force the untrap
+				 * (note: handle traps first because normal escape
+				 * has the potential to set monster->meating) */
+				if (mtmp->mtrapped && mintrap(mtmp))
+					mtmp->mtrapped = 0;	// escape trap
+				mtmp->meating = 0;		// terminate eating
+				mdrop_special_objs(mtmp);	// drop Amulet
+			} else if (mtmp->mtame && mtmp->meating) {
 				if (canseemon(mtmp))
 					pline("%s is still eating.", Monnam(mtmp));
 				stay_behind = true;
@@ -553,13 +563,20 @@ void keepdogs(boolean pets_only /* true for ascension or final escape */) {
 					pline("%s is still trapped.", Monnam(mtmp));
 				stay_behind = true;
 			}
-			if (mtmp == u.usteed) stay_behind = false;
+
 			if (stay_behind) {
 				if (mtmp->mleashed) {
 					pline("%s leash suddenly comes loose.",
 					      humanoid(mtmp->data) ? (mtmp->female ? "Her" : "His") : "Its");
 					m_unleash(mtmp, false);
 				}
+				if (mtmp == u.usteed) {
+					// can't happen unless someone makes a change
+					// which scrambles the stay_behind logic above
+					impossible("steed left behind?");
+					dismount_steed(DISMOUNT_GENERIC);
+				}
+
 				continue;
 			}
 			if (mtmp->isshk)

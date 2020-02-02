@@ -153,6 +153,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: shopkeeper would sometimes charge you for only one broken object, even if you broke multiple.
 - Bugfix: crash when wizkit wishing for quest artifact.
 - Interface: add support for new alternate spellings when wishing for some objects.
+- Bugfix: prevent 'your steed is still eating' message when going through a magic portal.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
