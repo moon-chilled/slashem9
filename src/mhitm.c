@@ -2012,7 +2012,7 @@ static int passivemm(struct monst *magr, struct monst *mdef, boolean mhit, int m
 					if (magr->mcansee && haseyes(madat) && mdef->mcansee &&
 					    (perceives(madat) || !mdef->minvis)) {
 						sprintf(buf, "%s gaze is reflected by %%s %%s.",
-							s_suffix(mon_nam(mdef)));
+							s_suffix(Monnam(mdef)));
 						if (mon_reflects(magr,
 								 canseemon(magr) ? buf : NULL))
 							return mdead | mhit;
