@@ -15,11 +15,13 @@ static const char *intermed(void);
 static const char *neminame(void);
 static const char *guardname(void);
 static const char *homebase(void);
-static struct qtmsg *msg_in(struct qtmsg *, int);
-static void convert_arg(char);
+static struct qtmsg *msg_in(struct qtmsg *qtm_list, int msgnum);
+static void convert_arg(char c);
 static void convert_line(void);
-static void deliver_by_pline(struct qtmsg *);
-static void deliver_by_window(struct qtmsg *, int);
+static void deliver_by_pline(struct qtmsg *qt_msg);
+static void deliver_by_window(struct qtmsg *qt_msg, int how);
+static bool should_skip_pager(bool common);
+
 
 static char in_line[80], cvt_buf[64], out_line[128];
 static struct qtlists qt_list;
@@ -367,7 +369,22 @@ static void deliver_by_window(struct qtmsg *qt_msg, int how) {
 	destroy_nhwindow(datawin);
 }
 
+bool should_skip_pager(bool common) {
+	// WIZKIT: suppress plot feedback if starting with quest artifact
+	if (program_state.wizkit_wishing) return true;
+
+	if (!(common ? qt_list.common : qt_list.chrole[flags.initrole])) {
+		panic("%s: no %s quest text data available",
+		      common ? "com_pager" : "qt_pager",
+		      common ? "common" : "role-specific");
+	}
+
+	return false;
+}
+
 void com_pager(int msgnum) {
+	if (should_skip_pager(true)) return;
+
 	struct qtmsg *qt_msg;
 
 	if (!(qt_msg = msg_in(qt_list.common, msgnum))) {
@@ -386,6 +403,8 @@ void com_pager(int msgnum) {
 }
 
 void qt_pager(int msgnum) {
+	if (should_skip_pager(false)) return;
+
 	struct qtmsg *qt_msg;
 
 	if (!(qt_msg = msg_in(qt_list.chrole[flags.initrole], msgnum))) {

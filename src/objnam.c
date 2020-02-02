@@ -1828,9 +1828,8 @@ struct alt_spellings {
  * if asking explicitly for "nothing" (or "nil") return no_wish;
  * if not an object return &zeroobj; if an error (no matching object),
  * return null.
- * If from_user is false, we're reading from the wizkit, nothing was typed in.
  */
-struct obj *readobjnam(char *bp, struct obj *no_wish, boolean from_user) {
+struct obj *readobjnam(char *bp, struct obj *no_wish) {
 	char *p;
 	int i;
 	struct obj *otmp;
@@ -2402,11 +2401,12 @@ srch:
 			goto typfnd;
 		}
 	}
-	/* Let wizards wish for traps --KAA */
-	/* must come after objects check so wizards can still wish for
-	 * trap objects like beartraps
+	/* Let wizards wish for traps and furniture.
+	 * Must come after objects check so wizards can still wish for
+	 * trap objects like beartraps.
+	 * Disallow such topology tweaks for WIZKIT startup wishes.
 	 */
-	if (wizard && from_user) {
+	if (wizard && !program_state.wizkit_wishing) {
 		int trap;
 
 		for (trap = NO_TRAP + 1; trap < TRAPNUM; trap++) {
@@ -2421,7 +2421,7 @@ srch:
 				return &zeroobj;
 			}
 		}
-		/* or some other dungeon features -dlc */
+		// furniture and terrain
 		p = eos(bp);
 		if (!BSTRCMP(bp, p - 8, "fountain")) {
 			levl[u.ux][u.uy].typ = FOUNTAIN;
@@ -2588,11 +2588,11 @@ typfnd:
 
 	if (oclass == VENOM_CLASS) otmp->spe = 1;
 
-	if (spesgn == 0)
+	if (spesgn == 0) {
 		spe = otmp->spe;
-	else if (wizard) /* no alteration to spe */
+	} else if (wizard) { // no alteration to spe
 		;
-	else if (oclass == ARMOR_CLASS || oclass == WEAPON_CLASS ||
+	} else if (oclass == ARMOR_CLASS || oclass == WEAPON_CLASS ||
 		 is_weptool(otmp) ||
 		 (oclass == RING_CLASS && objects[typ].oc_charged)) {
 		if (spe > rnd(5) && spe > otmp->spe) spe = 0;

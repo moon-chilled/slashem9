@@ -151,6 +151,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: helmets don't protect against falling cockatrice eggs because they 'splatter all over your face'.
 - Bugfix: shopkeepers would not always charge you for destroying their objects.
 - Bugfix: shopkeeper would sometimes charge you for only one broken object, even if you broke multiple.
+- Bugfix: crash when wizkit wishing for quest artifact.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

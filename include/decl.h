@@ -165,6 +165,7 @@ extern struct sinfo {
 #ifdef PANICLOG
 	int in_paniclog;
 #endif
+	int wizkit_wishing;
 } program_state;
 
 extern bool restoring;

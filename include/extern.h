@@ -1357,7 +1357,7 @@ char *ysimple_name(struct obj *);
 char *Ysimple_name2(struct obj *);
 char *makeplural(const char *);
 char *makesingular(const char *);
-struct obj *readobjnam(char *, struct obj *, boolean);
+struct obj *readobjnam(char *bp, struct obj *no_wish);
 int rnd_class(int, int);
 const char *cloak_simple_name(const struct obj *cloack);
 const char *helm_simple_name(const struct obj *helmet);

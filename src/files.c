@@ -1286,6 +1286,7 @@ void read_wizkit(void) {
 
 	if (!wizard || !(fp = fopen_wizkit_file())) return;
 
+	program_state.wizkit_wishing = true;
 	while (fgets(buf, (int)(sizeof buf), fp)) {
 		ep = index(buf, '\n');
 		if (skip) {		      /* in case previous line was too long */
@@ -1297,7 +1298,7 @@ void read_wizkit(void) {
 				*ep = '\0'; /* remove newline */
 
 			if (buf[0]) {
-				otmp = readobjnam(buf, NULL, false);
+				otmp = readobjnam(buf, NULL);
 				if (otmp) {
 					if (otmp != &zeroobj)
 						otmp = addinv(otmp);
@@ -1309,6 +1310,7 @@ void read_wizkit(void) {
 			}
 		}
 	}
+	program_state.wizkit_wishing = false;
 	if (bad_items)
 		wait_synch();
 	fclose(fp);

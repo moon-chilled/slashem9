@@ -73,6 +73,8 @@ static void vpline(const char *line, va_list the_args) {
 	int typ;
 
 	if (!line || !*line) return;
+	if (program_state.wizkit_wishing) return;
+
 	if (index(line, '%')) {
 		vsprintf(pbuf, line, VA_ARGS);
 		line = pbuf;
