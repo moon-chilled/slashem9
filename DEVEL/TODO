@@ -15,8 +15,6 @@
  - (fountains, pools, and watertraps don't just get generated less often, they evaporate as soon as they're generated, so you can 'hear a hissing noise' or w/e upon entering a level.  Same w/ice)
  - (Lava isn't straight-up generated more often; it's generated /slightly/ more often, but also: if lava is generated in a location, there's a good chance more will appear around it, which you can watch ('you hear a crumbling noise' or 'the ground gives way and more lava appears')
 
-* dumplog/wizard-mode: a [cursed] oval amulet [of life saving].  (I think there's a bilious patch to do that for dumplogs)
-
 * Make overview/wizardmode levport show nicer names for special levels ('Storage Room' instead of 'stor', 'The Guild of Disgruntled Adventurers' instead of 'guild', etc.)
 
 * More interesting stuff for health food store.  Also services.  Can they give you the ability to appraise food yourself for a while, cf a blessed ?oFood Detection?
@@ -36,6 +34,7 @@
  - Cross-compile for all major platforms
  - Precompile lex/yacc-files (if applicable), remove irrelevant files (DEVEL/?), and tar into source release
  - Git tag?  Branch?
+ - Save freeze
 
 * Make rogue level only show up on rogue's birthday per https://github.com/UnNetHack/UnNetHack/commit/7b02e60db76d45c2c91bc7281d288e6b64182005#commitcomment-32053355, once dungeon switches to lua?
 
