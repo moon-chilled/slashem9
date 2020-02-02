@@ -2157,7 +2157,7 @@ static int gulpmu(struct monst *mtmp, struct attack *mattk) {
 static int explmu(struct monst *mtmp, struct attack *mattk, boolean ufound) {
 	if (mtmp->mcan) return 0;
 
-	bool physical_damage = true;
+	bool physical_damage = true, kill_agr = true;
 
 	if (!ufound) {
 		pline("%s explodes at a spot in %s!",
@@ -2218,6 +2218,10 @@ common:
 					boolean chg;
 					if (!Hallucination)
 						pline("You are caught in a blast of kaleidoscopic light!");
+					// avoid hallucinating the black light as it dies */
+					mondead(mtmp);		// remove it from map now
+					kill_agr = false;	// already killed (maybe lifesaved)
+
 					chg = make_hallucinated(HHallucination + (long)tmp, false, 0L);
 					pline("You %s.", chg ? "are freaked out" : "seem unaffected");
 				}
@@ -2231,10 +2235,9 @@ common:
 			ugolemeffects((int)mattk->adtyp, tmp);
 		}
 	}
-	mondead(mtmp);
+	if (kill_agr) mondead(mtmp);
 	wake_nearto(mtmp->mx, mtmp->my, 7 * 7);
-	if (mtmp->mhp > 0) return 0;
-	return 2; /* it dies */
+	return (mtmp->mhp > 0) ? 0 : 2;
 }
 
 // monster gazes at you
