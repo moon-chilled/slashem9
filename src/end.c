@@ -1036,8 +1036,6 @@ void container_contents(struct obj *list, boolean identified, boolean all_contai
 					pline("%s%s contains Schroedinger's %scat!",
 						(box->quan > 1) ? "One of your " : "Your ",
 						xname(box), (deadcat) ? "dead " : "");
-				else
-					pline("%s empty.", Tobjnam(box, "are"));
 
 				display_nhwindow(WIN_MESSAGE, false);
 			}
