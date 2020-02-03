@@ -34,6 +34,7 @@ static void stoned_dialogue() {
 		case 5: // slowing down
 			HFast = 0L;
 			if (multi > 0) nomul(0);
+			break;
 		case 4: // limbs stiffening
 			/* just one move left to save oneself so quit fiddling around;
 			   don't stop attempt to eat tin--might be lizard or acidic */
