@@ -1347,8 +1347,7 @@ void skinback(boolean silently) {
 	}
 }
 
-const char *
-mbodypart(struct monst *mon, int part) {
+const char *mbodypart(struct monst *mon, int part) {
 	static const char
 		*humanoid_parts[] = {"arm", "eye", "face", "finger",
 				     "fingertip", "foot", "hand", "handed", "head", "leg",
@@ -1369,7 +1368,7 @@ mbodypart(struct monst *mon, int part) {
 				 "light headed", "neck", "spine", "toe",
 				 "feathers", "blood", "lung", "bill", "stomach"},
 		*horse_parts[] = {"foreleg", "eye", "face", "forehoof", "hoof tip",
-				  "rear hoof", "foreclaw", "hooved", "head", "rear leg",
+				  "rear hoof", "forehoof", "hooved", "head", "rear leg",
 				  "light headed", "neck", "backbone", "rear hoof tip",
 				  "mane", "blood", "lung", "nose", "stomach"},
 		*sphere_parts[] = {"appendage", "optic nerve", "body", "tentacle",
