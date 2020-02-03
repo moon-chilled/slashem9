@@ -76,7 +76,7 @@ int touch_artifact(struct obj *obj, struct monst *mon);
 long spec_m2(struct obj *otmp);
 int spec_abon(struct obj *otmp, struct monst *mon);
 int spec_dbon(struct obj *otmp, struct monst *mon, int tmp);
-void discover_artifact(xchar m);
+void discover_artifact(int m);
 bool undiscovered_artifact(xchar m);
 int disp_artifact_discoveries(winid tmpwin);
 bool artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, int *dmgptr, int dieroll);

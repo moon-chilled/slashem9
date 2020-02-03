@@ -38,7 +38,7 @@ static int spec_dbon_applies = 0;
 static bool artiexist[1 + NROFARTIFACTS + 1];
 /* and a discovery list for them (no dummy first entry here) */
 
-static xchar artidisco[NROFARTIFACTS];
+static int artidisco[NROFARTIFACTS];
 
 static void hack_artifacts(void);
 static bool attacks(int, struct obj *);
@@ -757,7 +757,7 @@ int spec_dbon(struct obj *otmp, struct monst *mon, int tmp) {
 }
 
 /* add identified artifact to discoveries list */
-void discover_artifact(xchar m) {
+void discover_artifact(int m) {
 	int i;
 
 	/* look for this artifact in the discoveries list;
