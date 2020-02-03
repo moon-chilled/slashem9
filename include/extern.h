@@ -1181,6 +1181,7 @@ int num_horns(struct permonst *);
 struct attack *dmgtype_fromattack(struct permonst *, int, int);
 boolean dmgtype(struct permonst *, int);
 int max_passive_dmg(struct monst *, struct monst *);
+bool same_race(struct permonst *pm1, struct permonst *pm2);
 int monsndx(struct permonst *);
 int name_to_mon(const char *);
 int gender(struct monst *);

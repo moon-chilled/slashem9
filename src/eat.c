@@ -39,7 +39,7 @@ static int rottenfood(struct obj *);
 static void eatspecial(void);
 static void eataccessory(struct obj *);
 static const char *foodword(struct obj *);
-static boolean maybe_cannibal(int, boolean);
+static bool maybe_cannibal(int, boolean);
 static struct obj *floorfood(const char *);
 static int tin_variety(struct obj *obj);
 
@@ -431,8 +431,16 @@ static void done_eating(boolean message) {
 	context.victual.fullwarn = context.victual.eating = context.victual.doreset = false;
 }
 
-static boolean maybe_cannibal(int pm, boolean allowmsg) {
-	if (your_race(&mons[pm])) {
+// eating a corpse or egg of one's own species is usually naughty
+static bool maybe_cannibal(int pm, boolean allowmsg) {
+	struct permonst *fptr = &mons[pm];
+	if (your_race(fptr)
+		/* non-cannibalistic heroes shouldn't eat own species ever
+		   and also shouldn't eat current species when polymorphed
+		   (even if having the form of something which doesn't care
+		   about cannibalism--hero's innate traits aren't altered) */
+	    || (Upolyd && same_race(youmonst.data, fptr))) {
+
 		if (!CANNIBAL_ALLOWED()) {
 			if (allowmsg) {
 				if (Upolyd)

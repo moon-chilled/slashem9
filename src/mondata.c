@@ -311,6 +311,82 @@ int max_passive_dmg(struct monst *mdef, struct monst *magr) {
 	return 0;
 }
 
+/* determine whether two monster types are from the same species */
+bool same_race(struct permonst *pm1, struct permonst *pm2) {
+	char let1 = pm1->mlet, let2 = pm2->mlet;
+
+	if (pm1 == pm2)		return true;	/* exact match */
+	/* player races have their own predicates */
+	if (is_human(pm1))	return is_human(pm2);
+	if (is_elf(pm1))	return is_elf(pm2);
+	if (is_dwarf(pm1))	return is_dwarf(pm2);
+	if (is_gnome(pm1))	return is_gnome(pm2);
+	if (is_orc(pm1))	return is_orc(pm2);
+	if (is_vampire(pm1))	return is_vampire(pm2);
+	/* other creatures are less precise */
+	if (is_giant(pm1))	return is_giant(pm2);   /* open to quibbling here */
+	if (is_golem(pm1))	return is_golem(pm2);   /* even moreso... */
+	if (is_mind_flayer(pm1))return is_mind_flayer(pm2);
+	if (let1 == S_KOBOLD ||
+			pm1 == &mons[PM_KOBOLD_ZOMBIE] ||
+			pm1 == &mons[PM_KOBOLD_MUMMY])
+		return (let2 == S_KOBOLD ||
+				pm2 == &mons[PM_KOBOLD_ZOMBIE] ||
+				pm2 == &mons[PM_KOBOLD_MUMMY]);
+	if (let1 == S_OGRE)	return (let2 == S_OGRE);
+	if (let1 == S_NYMPH)	return (let2 == S_NYMPH);
+	if (let1 == S_CENTAUR)	return (let2 == S_CENTAUR);
+	if (is_unicorn(pm1))	return is_unicorn(pm2);
+	if (let1 == S_DRAGON)	return (let2 == S_DRAGON);
+	if (let1 == S_NAGA)	return (let2 == S_NAGA);
+	/* other critters get steadily messier */
+	if (is_rider(pm1))	return is_rider(pm2);   /* debatable */
+	if (is_minion(pm1))	return is_minion(pm2); /* [needs work?] */
+	/* tengu don't match imps (first test handled case of both being tengu) */
+	if (pm1 == &mons[PM_TENGU] || pm2 == &mons[PM_TENGU]) return false;
+
+	if (let1 == S_IMP)	return (let2 == S_IMP);
+	/* and minor demons (imps) don't match major demons */
+	else if (let2 == S_IMP)	return false;
+
+	if (is_demon(pm1))	return is_demon(pm2);
+	if (is_undead(pm1)) {
+		if (let1 == S_ZOMBIE) 	return (let2 == S_ZOMBIE);
+		if (let1 == S_MUMMY) 	return (let2 == S_MUMMY);
+		if (let1 == S_VAMPIRE) 	return (let2 == S_VAMPIRE);
+		if (let1 == S_LICH) 	return (let2 == S_LICH);
+		if (let1 == S_WRAITH) 	return (let2 == S_WRAITH);
+		if (let1 == S_GHOST) 	return (let2 == S_GHOST);
+	} else if (is_undead(pm2)) return false;
+
+	/* check for monsters--mainly animals--which grow into more mature forms */
+	if (let1 == let2) {
+		int m1 = monsndx(pm1), m2 = monsndx(pm2), prv, nxt;
+
+		/* we know m1 != m2 (very first check above); test all smaller
+		   forms of m1 against m2, then all larger ones; don't need to
+		   make the corresponding tests for variants of m2 against m1 */
+		for (prv = m1, nxt = big_to_little(m1); nxt != prv;
+				prv = nxt, nxt = big_to_little(nxt)) if (nxt == m2) return true;
+		for (prv = m1, nxt = little_to_big(m1); nxt != prv;
+				prv = nxt, nxt = little_to_big(nxt)) if (nxt == m2) return true;
+	}
+
+	/* not caught by little/big handling */
+	if (pm1 == &mons[PM_GARGOYLE] || pm1 == &mons[PM_WINGED_GARGOYLE])
+		return (pm2 == &mons[PM_GARGOYLE] || pm2 == &mons[PM_WINGED_GARGOYLE]);
+
+	if (pm1 == &mons[PM_KILLER_BEE] || pm1 == &mons[PM_QUEEN_BEE])
+		return (pm2 == &mons[PM_KILLER_BEE] || pm2 == &mons[PM_QUEEN_BEE]);
+
+	if (is_longworm(pm1)) return is_longworm(pm2);     /* handles tail */
+
+	/* [currently there's no reason to bother matching up
+	   assorted bugs and blobs with their closest variants] */
+	/* didn't match */
+	return false;
+}
+
 // return an index into the mons array
 int monsndx(struct permonst *ptr) {
 	int i;

@@ -677,10 +677,10 @@ void migrate_to_level(
 /* return quality of food; the lower the better */
 /* fungi will eat even tainted food */
 int dogfood(struct monst *mon, struct obj *obj) {
-	boolean carni = carnivorous(mon->data);
-	boolean herbi = herbivorous(mon->data);
-	struct permonst *fptr = &mons[obj->corpsenm];
-	boolean starving;
+	struct permonst *mptr = mon->data, *fptr = &mons[obj->corpsenm];
+	bool carni = carnivorous(mon->data),
+	     herbi = herbivorous(mon->data),
+	     starving;
 
 	if (is_quest_artifact(obj) || obj_resists(obj, 0, 95))
 		return obj->cursed ? TABU : APPORT;
@@ -692,7 +692,7 @@ int dogfood(struct monst *mon, struct obj *obj) {
 	switch (obj->oclass) {
 		case FOOD_CLASS:
 			if (obj->otyp == CORPSE &&
-			    ((touch_petrifies(&mons[obj->corpsenm]) && !resists_ston(mon)) || is_rider(fptr)))
+			    ((touch_petrifies(fptr) && !resists_ston(mon)) || is_rider(fptr)))
 				return TABU;
 			/* Ghouls only eat old corpses... yum! */
 			if (mon->data == &mons[PM_GHOUL] || mon->data == &mons[PM_GHAST]) {
@@ -706,7 +706,7 @@ int dogfood(struct monst *mon, struct obj *obj) {
 		 */
 			if (is_vampire(mon->data)) {
 				return (obj->otyp == CORPSE &&
-					has_blood(&mons[obj->corpsenm]) && !obj->oeaten &&
+					has_blood(fptr) && !obj->oeaten &&
 					peek_at_iced_corpse_age(obj) + 5 >= monstermoves) ?
 					       DOGFOOD :
 					       TABU;
@@ -727,32 +727,38 @@ int dogfood(struct monst *mon, struct obj *obj) {
 				case HUGE_CHUNK_OF_MEAT:
 					return carni ? DOGFOOD : MANFOOD;
 				case EGG:
-					if (touch_petrifies(&mons[obj->corpsenm]) && !resists_ston(mon))
+					if (touch_petrifies(fptr) && !resists_ston(mon))
 						return POISON;
 					return carni ? CADAVER : MANFOOD;
 				case CORPSE:
-					/* WAC add don't eat own class*/
-					if (mons[obj->corpsenm].mlet == mon->data->mlet)
-						return starving && carni ? ACCFOOD : TABU;
-					else if ((peek_at_iced_corpse_age(obj) + 50L <= monstermoves && obj->corpsenm != PM_LIZARD && obj->corpsenm != PM_LICHEN && mon->data->mlet != S_FUNGUS) ||
-						 (acidic(&mons[obj->corpsenm]) && !resists_acid(mon)) ||
-						 (poisonous(&mons[obj->corpsenm]) &&
-						  !resists_poison(mon)))
+					if ((peek_at_iced_corpse_age(obj) + 50L <= monstermoves
+					     && obj->corpsenm != PM_LIZARD
+					     && obj->corpsenm != PM_LICHEN
+					     && mptr->mlet != S_FUNGUS)
+					    || (acidic(fptr) && !resists_acid(mon))
+					    || (poisonous(fptr) && !resists_poison(mon)))
 						return POISON;
 					else if (vegan(fptr))
 						return herbi ? CADAVER : MANFOOD;
+					// most humanoids will avoid cannibalism unless starving;
+					// arbitrary: elves won't eat other elves even then
+					else if (humanoid(mptr) && same_race(mptr, fptr) &&
+						 (!is_undead(mptr) && fptr->mlet != S_KOBOLD &&
+						  fptr->mlet != S_ORC && fptr->mlet != S_OGRE))
+						return (starving && carni && !is_elf(mptr)) ?  ACCFOOD : TABU;
 					else
 						return carni ? CADAVER : MANFOOD;
+
 				case CLOVE_OF_GARLIC:
-					return ((is_undead(mon->data) || is_vampshifter(mon)) ? TABU :
+					return ((is_undead(mptr) || is_vampshifter(mon)) ? TABU :
 								       ((herbi || starving) ? ACCFOOD : MANFOOD));
 				case TIN:
-					return metallivorous(mon->data) ? ACCFOOD : MANFOOD;
+					return metallivorous(mptr) ? ACCFOOD : MANFOOD;
 				case APPLE:
 				case CARROT:
 					return herbi ? DOGFOOD : starving ? ACCFOOD : MANFOOD;
 				case BANANA:
-					return ((mon->data->mlet == S_YETI) ? DOGFOOD :
+					return ((mptr->mlet == S_YETI) ? DOGFOOD :
 									      ((herbi || starving) ? ACCFOOD : MANFOOD));
 				default:
 					if (starving) return ACCFOOD;
@@ -768,13 +774,13 @@ int dogfood(struct monst *mon, struct obj *obj) {
 			    objects[obj->otyp].oc_material == SILVER)
 				return TABU;
 			/* KMH -- Taz likes organics, too! */
-			if ((mon->data == &mons[PM_GELATINOUS_CUBE] ||
-			     mon->data == &mons[PM_SHOGGOTH] ||
-			     mon->data == &mons[PM_GIANT_SHOGGOTH] ||
-			     mon->data == &mons[PM_TASMANIAN_DEVIL]) &&
+			if ((mptr == &mons[PM_GELATINOUS_CUBE] ||
+			     mptr == &mons[PM_SHOGGOTH] ||
+			     mptr == &mons[PM_GIANT_SHOGGOTH] ||
+			     mptr == &mons[PM_TASMANIAN_DEVIL]) &&
 			    is_organic(obj))
 				return ACCFOOD;
-			if (metallivorous(mon->data) && is_metallic(obj) && (is_rustprone(obj) || mon->data != &mons[PM_RUST_MONSTER])) {
+			if (metallivorous(mptr) && is_metallic(obj) && (is_rustprone(obj) || mptr != &mons[PM_RUST_MONSTER])) {
 				/* Non-rustproofed ferrous based metals are preferred. */
 				return ((is_rustprone(obj) && !obj->oerodeproof) ? DOGFOOD :
 										   ACCFOOD);
