@@ -2,17 +2,17 @@ Changelist for slashem9 v0.9:
 - Internals: obviate the following compile-time configurable options: SINKS, BLACKMARKET, D_SABER, LIGHTSABERS, P_SPOON, WALLET_O_P, EATEN_MEMORY, WALLIFIED_MAZE, AUTOPICKUP_EXCEPTIONS, YOEMAN, SEDUCE, KOPS, TOURIST, FIREARMS, EXP_ON_BOTL, SCORE_ON_BOTL, DWARF, ELBERETH, TEXTCOLOR, STATUS_COLORS, MENU_COLOR, SHOW_WEIGHT, SHOW_DMG, WIZARD, UNPOLYPILE, INVISIBLE_OBJECTS, OTHER_SERVICES, REDO, XLOGFILE, STEED, FREE_ALL_MEMORY, DISPLAY_LAYERS, REALTIME_ON_BOTL, CLIPPING, DUNGEON_GROWTH.  Where applicable, these can still be toggled at run time.
 - Internals: lots of miscellaneous code cleanup, simplification, removal of indirection or conditionality, etc.
 - Internals: change K&R-style function definitions to ANSI.  Require c99.  Use bool over boolean.
-- Internals: remove support for many obsolete platforms and build configurations.  Basic requirements: ANSI c99 + win32 or posix-ish.
+- Internals: remove support for many obsolete platforms and build configurations.  Basic requirements: ANSI c99 + win32|posix-ish.
 - Internals: remove the internal malloc implementation and heap monitor in favour of valgrind.
 - Interface: remove all windowports except for tty.
-- Development: allow slashem.sh to automatically launch debugging tools (gdb, lldb, valgrind), if the environment variable NH_USE_(GDB|LLDB|VALGRIND) is set.  It will pass $NH_(GDB|LLDB|VALGRIND)_FLAGS to the corresponding debugging tool.
+- Development: allow slashem.sh to automatically launch debugging tools (gdb, lldb, valgrind), if the environment variable NH_USE_(GDB|LLDB|VALGRIND) is set.  It will also pass $NH_(GDB|LLDB|VALGRIND)_FLAGS to the corresponding debugging tool.
 - Interface: add UTF-8 graphics support.  Original code by Patric Mueller; heavy modifications have been made.
 - Interface: remove DEC and IBM graphics; the only graphics sets available are ascii, utf8, and utf8compat (using only characters that are part of wgl4), and these are now under a compound 'graphics' option.
 - Interface: make curses support unicode graphics display.
 - Interface: properly display unicode glyphs on topl and in inventory.
 - Interface: recommend saving and reloading, rather than quitting, in impossible().
 - Gameplay: re-enable the rogue level.
-- Development: replace build system.  Currently requires GNU make; working on that.
+- Development: replace build system.  Currently requires GNU make.
 - Internals: remove support for save compression, both internal routines and shelling out to an external compressor.
 - System: remove FILE_AREAS.
 - Internals: store gold on object chains.
@@ -23,9 +23,9 @@ Changelist for slashem9 v0.9:
 - Interface: use symbols from EPYX rogue on rogue level.
 - System: allow DLB to optionally use a library stored inside the slashem binary, removing the need for external data files.
 - Internals: add a custom dynamic string library with associated colour information.  Use it to implement statuscolors/botl.  It will be used for most of our strings in the future.
-- Bugfix: with USE_FCNTL enabled, the lock file was opened but never closed.
+- Bugfix: with USE_FCNTL enabled, the lock file was opened but never closed (also present in NetHack and reported to the devteam).
 - Bugfix: memory leak in curses.
-- Bugfix: under curses with perm_invent enabled, if an inventory item was longer than the width of the inventory window, it could continue onto the next line.
+- Bugfix: under curses with perm_invent enabled, if an inventory item was longer than the width of the inventory window, it could continue onto the next line rather than being cut off.
 - Interface: remove autoquiver.
 - Gameplay: move gnomish mines to dlvl 3-4, from 2-4.
 - Interface: a common technique for identification of wands is to engrave with them on top of an existing engraving; the message produced will either uniquely identify the wand of confine it to one of a small number.  When doing so would uniquely identify the wand, formally identify it as well.
@@ -40,7 +40,7 @@ Changelist for slashem9 v0.9:
 - Gameplay: an alchemical smock will protect you from alchemical blasts.
 - Bugfix: segfault could occur when explosion was thrown near the edge of the map screen.
 - Gameplay: when monks got the message 'Your armor is rather cumbersome...', their attack power would be boosted rather than reduced.
-- Interface: monks only get the 'Your armor is rather cumbersome...' message when that encumberance actually caused them to miss.
+- Interface: monks only get the 'Your armor is rather cumbersome...' message when that encumberance actually causes them to miss.
 - Interface: remove support for WIN32CON.
 - Bugfix: grammar in enlightenment messages when intrinsically warned of certain species.
 - Interface: use regex rather than pattern matching in autopickup exceptions.
@@ -178,19 +178,19 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: eating medusa's spoiled corpse would cause food poisoning rather than petrification.
 - Bugfix: blessed food detection doesn't warn you before eating medusa's corpse.
 - Gameplay: it is no longer possible to bypass (most of) the sanctum by repeatedly levporting in and out of it until you land in the temple.
-- Interface: horces have hooves, not claws.
+- Interface: horses have hooves, not claws.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
-- System: add extended logfile/xlogfile with more information than standard log file (Aardvark Joe).  Also remove logfile.
+- System: add extended logfile/xlogfile with more information than standard log file (Aardvark Joe).  Remove logfile.
 - Interface: show object glyphs in inventory display (Patric Mueller).
 - Interface: highlight object piles and stairs covered by objects (Pasi Kallinen).
-- Interface: add MSGTYPES, which allow for user-configurable filtering, emphasis, or norep of messages (Pasi Kallinen).  Also use regex instead of pattern matching.
+- Interface: add MSGTYPES, which allow for user-configurable filtering, emphasis, or norep of messages (Pasi Kallinen).  Use regex instead of globs for matching.
 - Interface: allow users to specify colours for dungeon features (Patric Mueller).
 - Bugfix: '???' could show up in regular gameplay (Fredrik Ljungdahl).
 - Interface: show dark--but visited/known--room tiles on the screen (Clive Crous).
 - Interface: allow key rebinding (Jason Dorje Short).
-- Interface: add heavily modified version of statuscolors (Shachaf and Oren Ben-Kiki) + hitpointbar (Patric Mueller).
+- Interface: add statuscolors (Shachaf and Oren Ben-Kiki), heavily modified; and hitpointbar (Patric Mueller).
 - Development: add a fuzzer (Pasi Kallinen).
 - Bugfix: calm steed technique (Slash'EM Extended).
 - Bugfix: crash bug in tty when an item's description was just less than the window width, but description + accelerator + glyph + padding was just more than said width (Tangles).
