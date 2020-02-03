@@ -2349,7 +2349,7 @@ int float_down(long hmask, long emask) {
 		/* u.uinwater msgs already in spoteffects()/drown() */
 		else if (!u.uinwater && !no_msg) {
 			if (!(emask & W_SADDLE)) {
-				if (In_Sokoban(&u.uz) && trap) {
+				if (In_sokoban(&u.uz) && trap) {
 					/* Justification elsewhere for Sokoban traps
 					 * is based on air currents. This is
 					 * consistent with that.

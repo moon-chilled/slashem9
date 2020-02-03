@@ -171,6 +171,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Interface: swap places with pet, rather than displacing it.
 - Bugfix: hallucinating character wouldn't fall out of their steed's saddle when falling into sokoban hole/pit.
 - Bugfix: fixup levitation/steed messages.
+- Bugfix: if a monster that could teleport evaded your kick on a no-teleport level, a message would be printed saying it teleported.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

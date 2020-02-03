@@ -228,26 +228,28 @@ doit:
 	    mon->data->mlet != S_EEL && haseyes(mon->data) && mon->mcanmove &&
 	    !mon->mstun && !mon->mconf && !mon->msleeping &&
 	    mon->data->mmove >= 12) {
-		if (!nohands(mon->data) && !rn2(martial() ? 5 : 3)) {
+		if(!nohands(mon->data) && !rn2(martial() ? 5 : 3)) {
 			pline("%s blocks your %skick.", Monnam(mon),
-			      clumsy ? "clumsy " : "");
+					clumsy ? "clumsy " : "");
 			passive(mon, false, 1, AT_KICK, false);
 			return;
 		} else {
 			mnexto(mon);
-			if (mon->mx != x || mon->my != y) {
+			if(mon->mx != x || mon->my != y) {
 				if (memory_is_invisible(x, y)) {
 					unmap_object(x, y);
 					newsym(x, y);
 				}
 				pline("%s %s, %s evading your %skick.", Monnam(mon),
-				      (can_teleport(mon->data) ? "teleports" :
-				       is_floater(mon->data) ? "floats" :
-				       is_flyer(mon->data) ? "swoops" :
-				       (nolimbs(mon->data) || slithy(mon->data)) ?  "slides" :
-				       "jumps"),
-				      clumsy ? "easily" : "nimbly",
-				      clumsy ? "clumsy " : "");
+						(!level.flags.noteleport && can_teleport(mon->data)) ?
+						"teleports" :
+						is_floater(mon->data) ? "floats" :
+						is_flyer(mon->data) ? "swoops" :
+						(nolimbs(mon->data) || slithy(mon->data)) ?
+						"slides" : "jumps",
+						clumsy ? "easily" : "nimbly",
+						clumsy ? "clumsy " : "");
+
 				passive(mon, false, 1, AT_KICK, false);
 				return;
 			}
