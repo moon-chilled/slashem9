@@ -164,6 +164,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: unicorn from bones files could be peaceful/hostile even if alignment matched/didn't match.
 - Bugfix: triggering statue trip while blind should have spawned an I marker.
 - Bugfix: fix message when multiple nasties were summoned.
+- Internals: store region player_flags as a uint instead of a boolean.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

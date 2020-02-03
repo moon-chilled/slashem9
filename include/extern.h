@@ -1720,7 +1720,7 @@ void savelev(int, xchar, int);
 void bufon(int);
 void bufoff(int);
 void bflush(int);
-void bwrite(int, void *, uint);
+void bwrite(int, const void *, uint);
 void bclose(int);
 void savefruitchn(int, int);
 void free_dungeons(void);

@@ -549,39 +549,38 @@ void save_regions(int fd, int mode) {
 
 	if (!perform_bwrite(mode)) goto skip_lots;
 
-	bwrite(fd, (void *)&moves, sizeof(moves)); /* timestamp */
-	bwrite(fd, (void *)&n_regions, sizeof(n_regions));
+	bwrite(fd, &moves, sizeof(moves)); /* timestamp */
+	bwrite(fd, &n_regions, sizeof(n_regions));
 	for (i = 0; i < n_regions; i++) {
-		bwrite(fd, (void *)&regions[i]->bounding_box, sizeof(NhRect));
-		bwrite(fd, (void *)&regions[i]->nrects, sizeof(short));
+		bwrite(fd, &regions[i]->bounding_box, sizeof(regions[i]->bounding_box));
+		bwrite(fd, &regions[i]->nrects, sizeof(regions[i]->nrects));
 		for (j = 0; j < regions[i]->nrects; j++)
-			bwrite(fd, (void *)&regions[i]->rects[j], sizeof(NhRect));
-		bwrite(fd, (void *)&regions[i]->attach_2_u, sizeof(boolean));
+			bwrite(fd, &regions[i]->rects[j], sizeof(regions[i]->rects[j]));
+		bwrite(fd, &regions[i]->attach_2_u, sizeof(regions[i]->attach_2_u));
 		n = 0;
-		bwrite(fd, (void *)&regions[i]->attach_2_m, sizeof(unsigned));
+		bwrite(fd, &regions[i]->attach_2_m, sizeof(regions[i]->attach_2_m));
 		n = regions[i]->enter_msg != NULL ? strlen(regions[i]->enter_msg) : 0;
-		bwrite(fd, (void *)&n, sizeof n);
+		bwrite(fd, &n, sizeof(n));
 		if (n > 0)
-			bwrite(fd, (void *)regions[i]->enter_msg, n);
+			bwrite(fd, regions[i]->enter_msg, n);
 		n = regions[i]->leave_msg != NULL ? strlen(regions[i]->leave_msg) : 0;
-		bwrite(fd, (void *)&n, sizeof n);
+		bwrite(fd, &n, sizeof(n));
 		if (n > 0)
-			bwrite(fd, (void *)regions[i]->leave_msg, n);
-		bwrite(fd, (void *)&regions[i]->ttl, sizeof(short));
-		bwrite(fd, (void *)&regions[i]->expire_f, sizeof(short));
-		bwrite(fd, (void *)&regions[i]->can_enter_f, sizeof(short));
-		bwrite(fd, (void *)&regions[i]->enter_f, sizeof(short));
-		bwrite(fd, (void *)&regions[i]->can_leave_f, sizeof(short));
-		bwrite(fd, (void *)&regions[i]->leave_f, sizeof(short));
-		bwrite(fd, (void *)&regions[i]->inside_f, sizeof(short));
-		bwrite(fd, (void *)&regions[i]->player_flags, sizeof(boolean));
-		bwrite(fd, (void *)&regions[i]->n_monst, sizeof(short));
+			bwrite(fd, regions[i]->leave_msg, n);
+		bwrite(fd, &regions[i]->ttl, sizeof(regions[i]->ttl));
+		bwrite(fd, &regions[i]->expire_f, sizeof(regions[i]->expire_f));
+		bwrite(fd, &regions[i]->can_enter_f, sizeof(regions[i]->can_enter_f));
+		bwrite(fd, &regions[i]->enter_f, sizeof(regions[i]->enter_f));
+		bwrite(fd, &regions[i]->can_leave_f, sizeof(regions[i]->can_leave_f));
+		bwrite(fd, &regions[i]->leave_f, sizeof(regions[i]->leave_f));
+		bwrite(fd, &regions[i]->inside_f, sizeof(regions[i]->inside_f));
+		bwrite(fd, &regions[i]->player_flags, sizeof(regions[i]->player_flags));
+		bwrite(fd, &regions[i]->n_monst, sizeof(regions[i]->n_monst));
 		for (j = 0; j < regions[i]->n_monst; j++)
-			bwrite(fd, (void *)&regions[i]->monsters[j],
-			       sizeof(unsigned));
-		bwrite(fd, (void *)&regions[i]->visible, sizeof(boolean));
-		bwrite(fd, (void *)&regions[i]->glyph, sizeof(int));
-		bwrite(fd, (void *)&regions[i]->arg, sizeof(void *));
+			bwrite(fd, &regions[i]->monsters[j], sizeof(regions[i]->monsters[j]));
+		bwrite(fd, &regions[i]->visible, sizeof(regions[i]->visible));
+		bwrite(fd, &regions[i]->glyph, sizeof(regions[i]->glyph));
+		bwrite(fd, &regions[i]->arg, sizeof(regions[i]->arg));
 	}
 
 skip_lots:

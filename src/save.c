@@ -457,7 +457,7 @@ void bflush(int fd) {
 	return;
 }
 
-void bwrite(int fd, void *loc, unsigned num) {
+void bwrite(int fd, const void *loc, unsigned num) {
 	boolean failed;
 
 #ifdef UNIX
