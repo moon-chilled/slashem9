@@ -159,6 +159,24 @@ static const char *const shkhealthfoods[] = {
 	NULL
 };
 
+// based on GTA characters' names
+static const char *const shkguns[] = {
+	// 3
+	"Claude", "_Catalina", "8-Ball", "Salvatore",
+	// Vice City
+	"Tommy", "Ken", "Lance", "Sonny", "Ricardo",
+	// San Andreas
+	"Carl", "Sean", "Melvin",
+	// 4
+	"Niko", "Dimitri", "Mikhail", "Vlad",
+	// Chinatown Wars
+	"Huang", "Wu",
+	// V
+	"Michael", "Franklin", "Trevor", "Steve",
+	"Weston",
+	0
+};
+
 static const char *const shkblack[] = {
 	"One-eyed Sam", "One-eyed Sam", "One-eyed Sam",
 	"One-eyed Sam", "One-eyed Sam", "One-eyed Sam",
@@ -206,7 +224,7 @@ const struct shclass shtypes[] = {
 	/* KMH -- no longer "antique" */
 	{"weapons outlet", WEAPON_CLASS, 20, D_SHOP,
 	 {{80, WEAPON_CLASS}, {6, -BULLET}, {3, -BULLET}, {1, -SILVER_BULLET}, {10, ARMOR_CLASS}, {0, 0}},
-	 shkweapons},
+	 shkguns},
 
 	// TODO, add back antique weapons outlet, but without firearms/etc. --ELR
 	/*
@@ -340,10 +358,7 @@ static void mkshobj_at(const struct shclass *shp, int sx, int sy) {
 }
 
 /* extract a shopkeeper name for the given shop type */
-static void
-	nameshk(shk, nlp) struct monst *shk;
-const char *const *nlp;
-{
+static void nameshk(struct monst *shk, const char *const *nlp) {
 	int i, trycnt, names_avail;
 	const char *shname = 0;
 	struct monst *mtmp;
@@ -409,11 +424,8 @@ const char *const *nlp;
 	ESHK(shk)->shknam[PL_NSIZ - 1] = 0;
 }
 
-static int
-	shkinit(shp, sroom) /* create a new shopkeeper in the given room */
-	const struct shclass *shp;
-struct mkroom *sroom;
-{
+// create a new shopkeeper in the given room
+static int shkinit(const struct shclass *shp, struct mkroom *sroom) {
 	int sh, sx, sy;
 	struct monst *shk;
 	long shkmoney; /* Temporary placeholder for Shopkeeper's initial capital */
@@ -550,10 +562,7 @@ struct mkroom *sroom;
 }
 
 /* stock a newly-created room with objects */
-void
-	stock_room(shp_indx, sroom) int shp_indx;
-struct mkroom *sroom;
-{
+void stock_room(int shp_indx, struct mkroom *sroom) {
 	/*
 	 * Someday soon we'll dispatch on the shdist field of shclass to do
 	 * different placements in this routine. Currently it only supports
@@ -629,12 +638,7 @@ struct mkroom *sroom;
 }
 
 /* stock a newly-created black market with objects */
-static void
-	stock_blkmar(shp, sroom, sh)
-		const struct shclass *shp;
-struct mkroom *sroom;
-int sh;
-{
+static void stock_blkmar(const struct shclass *shp, struct mkroom *sroom, int sh) {
 	/*
 	 * Someday soon we'll dispatch on the shdist field of shclass to do
 	 * different placements in this routine. Currently it only supports
@@ -779,10 +783,7 @@ static void init_shk_services(struct monst *shk) {
 }
 
 /* does shkp's shop stock this item type? */
-boolean
-	saleable(shkp, obj) struct monst *shkp;
-struct obj *obj;
-{
+bool saleable(struct monst *shkp, struct obj *obj) {
 	int i, shp_indx = ESHK(shkp)->shoptype - SHOPBASE;
 	const struct shclass *shp = &shtypes[shp_indx];
 
@@ -798,9 +799,7 @@ struct obj *obj;
 }
 
 /* positive value: class; negative value: specific object type */
-int
-	get_shop_item(type) int type;
-{
+int get_shop_item(int type) {
 	const struct shclass *shp = shtypes + type;
 	int i, j;
 

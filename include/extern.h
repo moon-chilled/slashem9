@@ -1796,9 +1796,9 @@ char *Shk_Your(char *, struct obj *);
 
 /* ### shknam.c ### */
 
-void stock_room(int, struct mkroom *);
-boolean saleable(struct monst *, struct obj *);
-int get_shop_item(int);
+void stock_room(int shp_indx, struct mkroom *sroom);
+bool saleable(struct monst *shkp, struct obj *obj);
+int get_shop_item(int type);
 
 /* ### sit.c ### */
 
