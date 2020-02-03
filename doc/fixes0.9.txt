@@ -159,6 +159,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Interface: fix capitalization when monster's armour reflects floating eye gaze.
 - Interface: looking at container shows its locked/unlocked status and contents count, if known.
 - Bugfix: if a monster 'shrieks in pain' (from a potion of (un)holy water|acid), it didn't wake anything up.
+- Bugfix: master of thieves could meditate even when he shouldn't.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

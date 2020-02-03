@@ -2058,6 +2058,7 @@ void role_init(void) {
 		mons[urole.neminum].msound = MS_NEMESIS;
 		mons[urole.neminum].mflags2 &= ~(M2_PEACEFUL);
 		mons[urole.neminum].mflags2 |= (M2_NASTY | M2_STALK | M2_HOSTILE);
+		mons[urole.neminum].mflags3 &= ~(M3_CLOSE);
 		mons[urole.neminum].mflags3 |= M3_WANTSARTI | M3_WAITFORU;
 	}
 
