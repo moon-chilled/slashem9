@@ -11,6 +11,10 @@
 
 * Polymorph messages for vampshifting
 
+* Wish for (un)lock(ed|able) box.
+
+* Wish for schroedinger's cat?  (It's always dead and 'you feel guilty'?)
+
 * Add global warming.  It increases when you burn plastic.  It weakens and decreases spawn rate of fountain, pool, and watertrap; decreases ice melt timeout; makes spawned ice have a chance to be a fountain/pool instead; strengthens and increases spawn rate of lava and firetrap; decreases timeout for towel drying out
  - (fountains, pools, and watertraps don't just get generated less often, they evaporate as soon as they're generated, so you can 'hear a hissing noise' or w/e upon entering a level.  Same w/ice)
  - (Lava isn't straight-up generated more often; it's generated /slightly/ more often, but also: if lava is generated in a location, there's a good chance more will appear around it, which you can watch ('you hear a crumbling noise' or 'the ground gives way and more lava appears')

@@ -29,7 +29,7 @@ static int menu_loot(int, struct obj *, boolean);
 static int in_or_out_menu(const char *, struct obj *, boolean, boolean);
 static int container_at(int x, int y, bool countem);
 static bool able_to_loot(int x, int y, bool looting);
-static boolean mon_beside(int, int);
+static bool mon_beside(int, int);
 void tipcontainer(struct obj *box);
 
 /* define for query_objlist() and autopickup() */
@@ -1286,7 +1286,7 @@ static bool able_to_loot(int x, int y, bool looting) {
 	return true;
 }
 
-static boolean mon_beside(int x, int y) {
+static bool mon_beside(int x, int y) {
 	int i, j, nx, ny;
 	for (i = -1; i <= 1; i++)
 		for (j = -1; j <= 1; j++) {
@@ -1299,7 +1299,7 @@ static boolean mon_beside(int x, int y) {
 }
 
 /* loot a container on the floor or loot saddle from mon. */
-int doloot() {
+int doloot(void) {
 	struct obj *cobj, *nobj;
 	int c = -1;
 	int timepassed = 0;
@@ -1343,8 +1343,11 @@ lootcont:
 
 				if (cobj->olocked) {
 					pline("Hmmm, it seems to be locked.");
+					cobj->lknown = true;
 					continue;
 				}
+				cobj->lknown = true;
+
 				if (cobj->otyp == BAG_OF_TRICKS) {
 					int tmp;
 					pline("You carefully open the bag...");
@@ -1944,9 +1947,11 @@ int use_container(struct obj **objp, int held) {
 	if (obj->olocked) {
 		pline("%s to be locked.", Tobjnam(obj, "seem"));
 		if (held) pline("You must put it down to unlock.");
+		obj->lknown = true;
 		return 0;
 	} else if (obj->otrapped) {
 		if (held) pline("You open %s...", the(xname(obj)));
+		obj->lknown = true;
 		chest_trap(obj, HAND, false);
 		/* even if the trap fails, you've used up this turn */
 		if (multi >= 0) { /* in case we didn't become paralyzed */
@@ -1956,6 +1961,7 @@ int use_container(struct obj **objp, int held) {
 		return 1;
 	}
 
+	obj->lknown = true;
 	current_container = obj; /* for use by in/out_container */
 	/* from here on out, all early returns go through containerdone */
 
@@ -1991,9 +1997,11 @@ int use_container(struct obj **objp, int held) {
 	if (loss) /* magic bag lost some shop goods */
 		pline("You owe %ld %s for lost merchandise.", loss, currency(loss));
 
-	if (!cnt)
+	if (!cnt) {
 		sprintf(emptymsg, "%s is %sempty.", Yname2(obj),
 			quantum_cat ? "now " : "");
+		obj->cknown = true;
+	}
 	if (current_container->otyp == MEDICAL_KIT) {
 		if (!cnt)
 			pline("%s", emptymsg);
@@ -2037,7 +2045,7 @@ int use_container(struct obj **objp, int held) {
 			}
 		} else {
 			/* traditional code */
-		ask_again2:
+ask_again2:
 			menu_on_request = 0;
 			add_valid_menu_class(0); /* reset */
 			strcpy(pbuf, ":ynq");
@@ -2127,6 +2135,7 @@ int use_container(struct obj **objp, int held) {
 	}
 
 containerdone:
+	if (used) obj->cknown = true;
 	*objp = current_container; /* might have become null */
 	current_container = NULL;  /* avoid hanging on to stale pointer */
 	return used;
@@ -2165,6 +2174,7 @@ static int menu_loot(int retry, struct obj *container, boolean put_in) {
 	}
 
 	if (loot_everything) {
+		container->cknown = true;
 		for (otmp = container->cobj; otmp; otmp = otmp2) {
 			otmp2 = otmp->nobj;
 			res = out_container(otmp);
@@ -2173,6 +2183,7 @@ static int menu_loot(int retry, struct obj *container, boolean put_in) {
 	} else {
 		mflags = INVORDER_SORT;
 		if (put_in && flags.invlet_constant) mflags |= USE_INVLET;
+		if (takeout) container->cknown = true;
 		sprintf(buf, "%s what?", put_in ? putin : takeout);
 		n = query_objlist(buf, put_in ? invent : container->cobj,
 				  mflags, &pick_list, PICK_ANY,
@@ -2337,6 +2348,8 @@ int dotip(void) {
 }
 
 void tipcontainer(struct obj *box) {
+	box->lknown = true;
+
 	bool empty_it = false;
 
 	if (box->olocked) {
@@ -2354,6 +2367,7 @@ void tipcontainer(struct obj *box) {
 	} else if (box->otyp == BAG_OF_TRICKS && box->spe > 0) {
 		/* apply (not loot) this bag; uses up one charge */
 		bagotricks(box);
+		box->cknown = true;
 	} else if (box->spe) {
 		char yourbuf[BUFSZ];
 
@@ -2362,12 +2376,14 @@ void tipcontainer(struct obj *box) {
 		// if a live cat came out
 		if (!Has_contents(box)) {
 			// container type of 'large box' is inferred
-			pline("%s box is now empty.", Shk_Your(yourbuf, box));
+			pline("%sbox is now empty.", Shk_Your(yourbuf, box));
 		} else {
 			empty_it = true;
 		}
 
+		box->cknown = true;
 	} else if (!Has_contents(box)) {
+		box->cknown = true;
 		pline("It's empty.");
 	} else {
 		empty_it = true;
@@ -2382,6 +2398,7 @@ void tipcontainer(struct obj *box) {
 		int held = carried(box);
 		long loss = 0L;
 
+		box->cknown = true;
 		pline("%s out%c",
 				box->cobj->nobj ? "Objects spill" : "An object spills",
 				!(highdrop || altarizing) ? ':' : '.');

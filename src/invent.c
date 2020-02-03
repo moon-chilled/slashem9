@@ -1855,15 +1855,27 @@ static void dounpaid(void) {
 		 */
 		for (otmp = invent; otmp; otmp = otmp->nobj) {
 			if (Has_contents(otmp)) {
+				long contcost = 0;
 				marker = NULL; /* haven't found any */
 				while (find_unpaid(otmp->cobj, &marker)) {
 					totcost += cost = unpaid_cost(marker);
-					save_unpaid = marker->unpaid;
-					marker->unpaid = 0; /* suppress "(unpaid)" suffix */
-					putstr(win, 0,
-					       xprname(marker, distant_name(marker, doname),
-						       CONTAINED_SYM, true, cost, 0L));
-					marker->unpaid = save_unpaid;
+					contcost += cost;
+					if (otmp->cknown) {
+						save_unpaid = marker->unpaid;
+						marker->unpaid = 0; // suppress "(unpaid)" suffix
+						putstr(win, 0,
+							xprname(marker, distant_name(marker, doname),
+								CONTAINED_SYM, true, cost, 0L));
+						marker->unpaid = save_unpaid;
+					}
+				}
+				if (!otmp->cknown) {
+					char contbuf[BUFSZ];
+					// Shopkeeper knows what to charge for contents
+					sprintf(contbuf, "%s contents", s_suffix(xname(otmp)));
+					putstr(win, 0, xprname(NULL, contbuf,
+								CONTAINED_SYM, true, contcost, 0L));
+
 				}
 			}
 		}
@@ -2750,8 +2762,9 @@ struct obj *display_minventory(struct monst *mon, int dflags, char *title) {
 	if (n > 0) {
 		ret = selected[0].item.a_obj;
 		free(selected);
-	} else
+	} else {
 		ret = NULL;
+	}
 	return ret;
 }
 
@@ -2778,8 +2791,10 @@ struct obj *display_cinventory(struct obj *obj) {
 	if (n > 0) {
 		ret = selected[0].item.a_obj;
 		free(selected);
-	} else
+	} else {
 		ret = NULL;
+	}
+	obj->cknown = true;
 	return ret;
 }
 

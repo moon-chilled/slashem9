@@ -391,6 +391,7 @@ struct obj *mksobj(int otyp, boolean init, boolean artif) {
 		otmp->dknown = 0;
 	if (!objects[otmp->otyp].oc_uses_known)
 		otmp->known = 1;
+	otmp->lknown = otmp->cknown = false;
 	obj_set_oinvis(otmp, !rn2(1250) && (otmp->otyp != BOULDER || !In_sokoban(&u.uz)), false);
 	if (init) switch (let) {
 			/* -----------============STEPHEN WHITE'S NEW CODE============----------- */

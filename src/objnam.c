@@ -581,6 +581,11 @@ char *doname(struct obj *obj) {
 
 	if (obj->oinvis) strcat(prefix, "invisible ");
 
+	// "empty" goes at the beginning, but item count goes at the end
+	if (obj->cknown && (Is_container(obj) || obj->otyp == STATUE) && !Has_contents(obj))
+		strcat(prefix, "empty ");
+
+
 	if (wizard && is_hazy(obj)) strcat(prefix, "hazy ");
 
 	if ((!Hallucination || Role_if(PM_PRIEST) || Role_if(PM_NECROMANCER)) &&
@@ -614,7 +619,26 @@ char *doname(struct obj *obj) {
 			strcat(prefix, "uncursed ");
 	}
 
+	if (obj->lknown && Is_box(obj)) {
+		if (obj->obroken) strcat(prefix, "unlockable ");
+		else if (obj->olocked) strcat(prefix, "locked ");
+		else strcat(prefix, "unlocked ");
+	}
+
 	if (Hallucination ? !rn2(100) : obj->greased) strcat(prefix, "greased ");
+
+	if (obj->cknown && Has_contents(obj)) {
+		struct obj *curr;
+		long itemcount = 0L;
+
+		// Count the number of contained objects
+		for (curr = obj->cobj; curr; curr = curr->nobj)
+			itemcount += curr->quan;
+		sprintf(eos(bp), " containing %ld item%s",
+				itemcount, plur(itemcount));
+	}
+
+
 
 	switch (obj->oclass) {
 		case AMULET_CLASS:

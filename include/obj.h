@@ -91,12 +91,12 @@ struct obj {
 #define OATTACHED_MONST	  1 /* monst struct in oextra */
 #define OATTACHED_M_ID	  2 /* monst id in oextra */
 #define OATTACHED_UNUSED3 3
-	bool in_use; /* for magic items before useup items */
-	bool bypass; /* mark this as an object to be skipped by bhito() */
-
-	bool yours;	 /* obj is yours (eg. thrown by you) */
-	bool was_thrown; /* thrown by the hero since last picked up */
-	/* ? free bits */
+	bool in_use;	// for magic items before useup items
+	bool bypass;	// mark this as an object to be skipped by bhito()
+	bool yours;	// obj is yours (eg. thrown by you)
+	bool was_thrown;// thrown by the hero since last picked up
+	bool cknown;	// contents of container assumed to be known
+	bool lknown;	// locked/unlocked status is known
 
 	int corpsenm;			/* type of corpse is mons[corpsenm] */
 #define leashmon	       corpsenm /* gets m_id of attached pet */

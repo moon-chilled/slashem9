@@ -514,14 +514,16 @@ static int kick_object(xchar x, xchar y) {
 		if (kickobj->olocked) {
 			if (!rn2(5) || (martial() && !rn2(2))) {
 				pline("You break open the lock!");
-				kickobj->olocked = 0;
-				kickobj->obroken = 1;
+				kickobj->olocked = false;
+				kickobj->obroken = true;
+				kickobj->lknown = true;
 				if (otrp) chest_trap(kickobj, LEG, false);
 				return 1;
 			}
 		} else {
 			if (!rn2(3) || (martial() && !rn2(2))) {
 				pline("The lid slams open, then falls shut.");
+				kickobj->lknown = true;
 				if (otrp) chest_trap(kickobj, LEG, false);
 				return 1;
 			}

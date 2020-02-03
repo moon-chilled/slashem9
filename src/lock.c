@@ -107,6 +107,7 @@ static int picklock(void) {
 			xlock.door->doormask = D_LOCKED;
 	} else {
 		xlock.box->olocked = !xlock.box->olocked;
+		xlock.box->lknown = true;
 		if (xlock.box->otrapped)
 			chest_trap(xlock.box, FINGER, false);
 	}
@@ -150,6 +151,7 @@ static int forcelock(void) {
 	pline("You succeed in forcing the lock.");
 	xlock.box->olocked = 0;
 	xlock.box->obroken = 1;
+	xlock.box->lknown = true;
 	if ((xlock.picktyp == 0 && !rn2(3)) || (xlock.picktyp == 2 && !rn2(5))) {
 		struct monst *shkp;
 		boolean costly;
@@ -362,6 +364,8 @@ int pick_lock(struct obj **pickp) {
 					safe_qbuf("", sizeof("There is  here, unlock its lock?"),
 						  doname(otmp), an(simple_typename(otmp->otyp)), "a box"),
 					verb, it ? "it" : "its lock");
+
+				otmp->lknown = true;
 
 				c = ynq(qbuf);
 				if (c == 'q') return 0;
@@ -614,12 +618,15 @@ int doforce(void) {
 				if (otmp->obroken || !otmp->olocked) {
 					pline("There is %s here, but its lock is already %s.",
 					      doname(otmp), otmp->obroken ? "broken" : "unlocked");
+
+					otmp->lknown = true;
 					continue;
 				}
 				sprintf(qbuf, "There is %s here, force its lock?",
 					safe_qbuf("", sizeof("There is  here, force its lock?"),
 						  doname(otmp), an(simple_typename(otmp->otyp)),
 						  "a box"));
+				otmp->lknown = true;
 
 				c = ynq(qbuf);
 				if (c == 'q') return 0;
@@ -919,6 +926,8 @@ boolean boxlock(struct obj *obj, struct obj *otmp) {
 				pline("Klunk!");
 				obj->olocked = 1;
 				obj->obroken = 0;
+				if (Role_if(PM_WIZARD)) obj->lknown = true;
+				else obj->lknown = false;
 				res = 1;
 			} /* else already closed and locked */
 			break;
@@ -927,9 +936,13 @@ boolean boxlock(struct obj *obj, struct obj *otmp) {
 			if (obj->olocked) { /* unlock; couldn't be broken */
 				pline("Klick!");
 				obj->olocked = 0;
+				if (Role_if(PM_WIZARD)) obj->lknown = true;
+				else obj->lknown = false;
 				res = 1;
-			} else /* silently fix if broken */
+			} else {
+				/* silently fix if broken */
 				obj->obroken = 0;
+			}
 			break;
 		case WAN_POLYMORPH:
 		case SPE_POLYMORPH:

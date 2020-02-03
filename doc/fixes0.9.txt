@@ -157,6 +157,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: player would see hallucinated form of blacklight when it exploded.
 - Interface: give feedback when blinded by stinking cloud.
 - Interface: fix capitalization when monster's armour reflects floating eye gaze.
+- Interface: looking at container shows its locked/unlocked status and contents count, if known.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
