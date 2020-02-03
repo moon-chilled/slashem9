@@ -58,6 +58,9 @@ char msgbuf[BUFSZ];
 #define CANNIBAL_ALLOWED() (Role_if(PM_CAVEMAN) || Race_if(PM_ORC) || \
 			    Race_if(PM_HUMAN_WEREWOLF) || Race_if(PM_VAMPIRE))
 
+// monster types that cause hero to be turned into stone if eaten
+#define flesh_petrifies(pm) (touch_petrifies(pm) || (pm) == &mons[PM_MEDUSA])
+
 /* Gold must come first for getobj(). */
 static const char allobj[] = {COIN_CLASS, ALLOW_FLOOROBJ,
 			      WEAPON_CLASS, ARMOR_CLASS, POTION_CLASS, SCROLL_CLASS,
@@ -463,7 +466,7 @@ static bool maybe_cannibal(int pm, boolean allowmsg) {
 
 static void cprefx(int pm) {
 	maybe_cannibal(pm, true);
-	if (touch_petrifies(&mons[pm]) || pm == PM_MEDUSA) {
+	if (flesh_petrifies(&mons[pm])) {
 		if (!Stone_resistance &&
 		    !(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
 			killer.format = KILLED_BY;
@@ -1444,7 +1447,7 @@ static int eatcorpse(struct obj *otmp) {
 	long rotted = 0L;
 	boolean uniq = !!(mons[mnum].geno & G_UNIQ);
 	int retcode = 0;
-	boolean stoneable = (touch_petrifies(&mons[mnum]) && !Stone_resistance &&
+	boolean stoneable = (flesh_petrifies(&mons[mnum]) && !Stone_resistance &&
 			     !poly_when_stoned(youmonst.data));
 
 	/* KMH, conduct */
@@ -2110,7 +2113,7 @@ static void fpostfx(struct obj *otmp) {
 			if (!otmp->cursed) heal_legs();
 			break;
 		case EGG:
-			if (touch_petrifies(&mons[otmp->corpsenm])) {
+			if (flesh_petrifies(&mons[otmp->corpsenm])) {
 				if (!Stone_resistance &&
 				    !(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
 					if (!Stoned) {
@@ -2156,7 +2159,7 @@ static int edibility_prompts(struct obj *otmp) {
 
 	if (cadaver || otmp->otyp == EGG || otmp->otyp == TIN) {
 		/* These checks must match those in eatcorpse() */
-		stoneorslime = (touch_petrifies(&mons[mnum]) &&
+		stoneorslime = (flesh_petrifies(&mons[mnum]) &&
 				!Stone_resistance &&
 				!poly_when_stoned(youmonst.data));
 

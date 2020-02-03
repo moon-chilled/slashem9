@@ -175,6 +175,8 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: intelligent pets will refuse to eat corpses of their own kind.
 - Interface: stoning/sliming/vomiting messages interrupt multi-turn actions (except eating food that might cure the ailment).
 - Interface: '<foo> armor' is an acceptable substitute for '<foo> mail' when wishing.
+- Bugfix: eating medusa's spoiled corpse would cause food poisoning rather than petrification.
+- Bugfix: blessed food detection doesn't warn you before eating medusa's corpse.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
