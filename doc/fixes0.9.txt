@@ -177,6 +177,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Interface: '<foo> armor' is an acceptable substitute for '<foo> mail' when wishing.
 - Bugfix: eating medusa's spoiled corpse would cause food poisoning rather than petrification.
 - Bugfix: blessed food detection doesn't warn you before eating medusa's corpse.
+- Gameplay: it is no longer possible to bypass (most of) the sanctum by repeatedly levporting in and out of it until you land in the temple.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
