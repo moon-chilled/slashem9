@@ -54,6 +54,7 @@ Changelist for slashem9 v0.9:
 - Bugfix: removing a ring of protection would make a ring of protection from shape changers stop working.
 - Interface: bump chance of getting the message "yo' mama -- core dumped" from 1% to 2%.
 - Bugfix: monster attacking another monster with a draining attack could blind it too.
+- Interface: nicer messages when attaching candles to the candelabrum of invocation.
 
 Imports from NetHack versions newer than 3.4.3:
 - Bugfix: acid dropping bug.

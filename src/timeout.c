@@ -1196,8 +1196,7 @@ void burn_object(void *arg, long timeout) {
 						switch (obj->where) {
 							case OBJ_INVENT:
 							case OBJ_MINVENT:
-								pline(
-									"%s %scandle%s flame%s flicker%s low!",
+								pline("%s%scandle%s flame%s flicker%s low!",
 									whose,
 									menorah ? "candelabrum's " : "",
 									many ? "s'" : "'s",
@@ -1221,7 +1220,7 @@ void burn_object(void *arg, long timeout) {
 							switch (obj->where) {
 								case OBJ_INVENT:
 								case OBJ_MINVENT:
-									pline("%s candelabrum's flame%s.",
+									pline("%scandelabrum's flame%s.",
 									      whose, many ? "s die" : " dies");
 									break;
 								case OBJ_FLOOR:

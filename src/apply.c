@@ -1123,7 +1123,10 @@ static void use_candle(struct obj **optr) {
 		return;
 	}
 
-	sprintf(qbuf, "Attach %s", the(xname(obj)));
+	sprintf(qbuf, "Attach %s%s", obj->quan > (7-otmp->spe) ?
+					(otmp->spe == 6 ? "one of " : "some of ") :
+				     "", the(xname(obj)));
+
 	sprintf(eos(qbuf), " to %s?",
 		safe_qbuf(qbuf, sizeof(" to ?"), the(xname(otmp)),
 			  the(simple_typename(otmp->otyp)), "it"));
@@ -1133,10 +1136,14 @@ static void use_candle(struct obj **optr) {
 		use_lamp(obj);
 		return;
 	} else {
-		if ((long)otmp->spe + obj->quan > 7L)
+		if ((long)otmp->spe + obj->quan > 7L) {
 			obj = splitobj(obj, 7L - (long)otmp->spe);
-		else
-			*optr = 0;
+			/* avoid a gramatical error if obj->quan gets
+			   reduced to 1 candle from more than one */
+			s = (obj->quan != 1) ? "candles" : "candle";
+		} else {
+			*optr = NULL;
+		}
 		pline("You attach %ld%s %s to %s.",
 		      obj->quan, !otmp->spe ? "" : " more",
 		      s, the(xname(otmp)));
