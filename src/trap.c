@@ -464,6 +464,7 @@ struct monst *animate_statue(struct obj *statue, xchar x, xchar y, int cause, in
 	else { /* cause == ANIMATE_NORMAL */
 		pline("You find %s posing as a statue.",
 		      canspotmon(mon) ? a_monnam(mon) : "something");
+		if (!canspotmon(mon) && Blind) map_invisible(x, y);
 		stop_occupation();
 	}
 	/* avoid hiding under nothing */

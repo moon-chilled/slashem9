@@ -161,6 +161,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: if a monster 'shrieks in pain' (from a potion of (un)holy water|acid), it didn't wake anything up.
 - Bugfix: master of thieves could meditate even when he shouldn't.
 - Bugfix: unicorn from bones files could be peaceful/hostile even if alignment matched/didn't match.
+- Bugfix: triggering statue trip while blind should have spawned an I marker.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
