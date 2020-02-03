@@ -342,21 +342,22 @@ extern uchar showsymcolors[MAXPCHARS];
  * the size of temporary files and save files.
  */
 struct rm {
-	Bitfield(mem_bg, 6);   /* Remembered background */
-	Bitfield(mem_trap, 5); /* Remembered trap */
-	Bitfield(mem_obj, 10); /* Remembered object/corpse */
-	bool mem_corpse;       /* Set if mem_obj refers to a corpse */
-	bool mem_invis;	       /* Set if invisible monster remembered */
+	Bitfield(mem_bg, 6);	// Remembered background
+	Bitfield(mem_trap, 5);	// Remembered trap
+	Bitfield(mem_obj, 10);	// Remembered object/corpse
+	bool mem_corpse;	// Set if mem_obj refers to a corpse
+	bool mem_invis;		// Set if invisible monster remembered
 	Bitfield(mem_spare, 9);
-	schar typ;	     /* what is really there */
-	Bitfield(styp, 6);   // last seen/touched dungeon typ
-	uchar seenv;	     /* seen vector */
-	Bitfield(flags, 5);  /* extra information for typ */
-	bool horizontal;     /* wall/door/etc is horiz. (more typ info) */
-	bool lit;	     /* speed hack for lit rooms */
-	bool waslit;	     /* remember if a location was lit */
-	Bitfield(roomno, 6); /* room # for special rooms */
-	bool edge;	     /* marks boundaries for special rooms*/
+	schar typ;		// what is really there
+	Bitfield(styp, 6);	// last seen/touched dungeon 
+	uchar seenv;		// seen vector
+	Bitfield(flags, 5); 	// extra information for typ
+	bool horizontal;	// wall/door/etc is horiz. (more typ info)
+	bool lit;		// speed hack for lit rooms
+	bool waslit;		// remember if a location was lit
+	Bitfield(roomno, 6);	// room # for special rooms
+	bool edge;		// marks boundaries for special rooms
+	bool candig;		// Exception to Can_dig_down; was a trapdoor
 };
 
 /*

@@ -179,7 +179,7 @@ boolean dig_check(struct monst *madeby, boolean verbose, int x, int y) {
 	} else if ((IS_ROCK(levl[x][y].typ) && levl[x][y].typ != SDOOR &&
 		    (levl[x][y].wall_info & W_NONDIGGABLE) != 0) ||
 		   (ttmp &&
-		    (ttmp->ttyp == MAGIC_PORTAL || !Can_dig_down(&u.uz)))) {
+		    (ttmp->ttyp == MAGIC_PORTAL || (!Can_dig_down(&u.uz) && !levl[x][y].candig)))) {
 		if (verbose) pline("The %s here is too hard to %s.",
 				   surface(x, y), verb);
 		return false;
@@ -500,7 +500,7 @@ void digactualhole(int x, int y, struct monst *madeby, int ttyp) {
 		return;
 	}
 
-	if (ttyp != PIT && !Can_dig_down(&u.uz)) {
+	if (ttyp != PIT && !Can_dig_down(&u.uz) && !lev->candig) {
 		impossible("digactualhole: can't dig %s on this level.",
 			   sym_desc[trap_to_defsym(ttyp)].explanation);
 		ttyp = PIT;
@@ -663,7 +663,7 @@ boolean dighole(boolean pit_only) {
 	struct rm *lev = &levl[u.ux][u.uy];
 	struct obj *boulder_here;
 	schar typ;
-	boolean nohole = !Can_dig_down(&u.uz);
+	bool nohole = !Can_dig_down(&u.uz) && !lev->candig;
 
 	if ((ttmp && (ttmp->ttyp == MAGIC_PORTAL || nohole)) ||
 	    /* ALI - artifact doors */

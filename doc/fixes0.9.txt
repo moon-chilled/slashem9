@@ -165,6 +165,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: triggering statue trip while blind should have spawned an I marker.
 - Bugfix: fix message when multiple nasties were summoned.
 - Internals: store region player_flags as a uint instead of a boolean.
+- Gameplay: can re-dig castle holes if they were filled in.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

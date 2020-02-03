@@ -314,7 +314,7 @@ void fall_through(boolean td) {
 
 	if (In_sokoban(&u.uz) && Can_fall_thru(&u.uz))
 		; /* KMH -- You can't escape the Sokoban level traps */
-	else if (Levitation || u.ustuck || !Can_fall_thru(&u.uz) || Flying || is_clinger(youmonst.data) || (Role_if(PM_ARCHEOLOGIST) && uwep && uwep->otyp == BULLWHIP) || (Inhell && !u.uevent.invoked && newlevel == dunlevs_in_dungeon(&u.uz))) {
+	else if (Levitation || u.ustuck || (!Can_fall_thru(&u.uz) && !levl[u.ux][u.uy].candig) || Flying || is_clinger(youmonst.data) || (Role_if(PM_ARCHEOLOGIST) && uwep && uwep->otyp == BULLWHIP) || (Inhell && !u.uevent.invoked && newlevel == dunlevs_in_dungeon(&u.uz))) {
 		if (Role_if(PM_ARCHEOLOGIST) && uwep && uwep->otyp == BULLWHIP)
 			pline("But thanks to your trusty whip ...");
 		dont_fall = "don't fall in.";

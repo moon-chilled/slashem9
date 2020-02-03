@@ -3269,7 +3269,7 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 					fillmsg = true;
 				} else {
 					digactualhole(x, y, BY_OBJECT,
-						      (rn2(obj->spe) < 3 || !Can_dig_down(&u.uz)) ?  PIT : HOLE);
+						      (rn2(obj->spe) < 3 || (!Can_dig_down(&u.uz) && !levl[x][y].candig)) ?  PIT : HOLE);
 				}
 			}
 			continue;
