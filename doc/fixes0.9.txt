@@ -169,6 +169,8 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: fix experience for monsters with passive attacks.
 - Bugfix: message order when displacing pet.
 - Interface: swap places with pet, rather than displacing it.
+- Bugfix: hallucinating character wouldn't fall out of their steed's saddle when falling into sokoban hole/pit.
+- Bugfix: fixup levitation/steed messages.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

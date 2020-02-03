@@ -2349,31 +2349,33 @@ int float_down(long hmask, long emask) {
 		/* u.uinwater msgs already in spoteffects()/drown() */
 		else if (!u.uinwater && !no_msg) {
 			if (!(emask & W_SADDLE)) {
-				boolean sokoban_trap = (In_sokoban(&u.uz) && trap);
-				if (Hallucination)
-					pline("Bummer!  You've %s.",
-					      is_pool(u.ux, u.uy) ?
-						      "splashed down" :
-						      sokoban_trap ? "crashed" :
-								     "hit the ground");
-				else {
-					if (!sokoban_trap) {
-						pline("You float gently to the %s.",
-						      surface(u.ux, u.uy));
+				if (In_Sokoban(&u.uz) && trap) {
+					/* Justification elsewhere for Sokoban traps
+					 * is based on air currents. This is
+					 * consistent with that.
+					 * The unexpected additional force of the
+					 * air currents once leviation
+					 * ceases knocks you off your feet.
+					 */
+					if (Hallucination) {
+						pline("Bummer!  You've crashed.");
 					} else {
-						/* Justification elsewhere for Sokoban traps
-						 * is based on air currents. This is
-						 * consistent with that.
-						 * The unexpected additional force of the
-						 * air currents once leviation
-						 * ceases knocks you off your feet.
-						 */
 						pline("You fall over.");
-						losehp(Maybe_Half_Phys(rnd(2)), "dangerous winds", KILLED_BY);
-						if (u.usteed) dismount_steed(DISMOUNT_FELL);
-						selftouch("As you fall, you");
 					}
+					losehp(Maybe_Half_Phys(rnd(2)), "dangerous winds", KILLED_BY);
+					if (u.usteed) dismount_steed(DISMOUNT_FELL);
+					selftouch("As you fall, you");
+				} else if (u.usteed && (is_floater(u.usteed->data) ||
+							is_flyer(u.usteed->data))) {
+					pline("You settle more firmly in the saddle.");
+				} else if (Hallucination) {
+					pline("Bummer!  You've %s.",
+							is_pool(u.ux,u.uy) ? "splashed down" :
+							"hit the ground");
+				} else {
+					pline("You float gently to the %s.", surface(u.ux, u.uy));
 				}
+
 			}
 		}
 	}
