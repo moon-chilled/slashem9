@@ -19,8 +19,6 @@
  - (fountains, pools, and watertraps don't just get generated less often, they evaporate as soon as they're generated, so you can 'hear a hissing noise' or w/e upon entering a level.  Same w/ice)
  - (Lava isn't straight-up generated more often; it's generated /slightly/ more often, but also: if lava is generated in a location, there's a good chance more will appear around it, which you can watch ('you hear a crumbling noise' or 'the ground gives way and more lava appears')
 
-* Make overview/wizardmode levport show nicer names for special levels ('Storage Room' instead of 'stor', 'The Guild of Disgruntled Adventurers' instead of 'guild', etc.)
-
 * More interesting stuff for health food store.  Also services.  Can they give you the ability to appraise food yourself for a while, cf a blessed ?oFood Detection?
 
 * Encyclopedia: display text offset in _underscores_ as italic on supported terminals
@@ -44,9 +42,6 @@
 
 * Replace pretty much all uses of void* with anything.
 
-* Curses seems to sporadically enter a couple of infinite loops?  I had it happen once after enabling perm_invent where it refreshed forever taking up 100% cpu and then eventually segfaulted; that was probably stack overflow.  Another time it printed out 'Hello elronnd, welcome to SlashEM-Next!  You are a neutral female elven' a stupid number of times (took several seconds to finish).  (Possibly because it kept wanting to print out the second part of the message?)
-* When you reduce the window size, curses wants to display its messages again and makes you <space> again
-* Input lag in curses
 * Investigate: would people be ok with no curses, but a rich sdl|gtk interface?  I kind of hate curses.  OTOH, public servers.  libtickit?  Termbox?
 * SDL can't be very rich, gtk is stupid on windows.  Need to re-integrate nethackw?
 * Bearlibterminal?
