@@ -30,11 +30,23 @@ static void stoned_dialogue() {
 
 	if (i > 0L && i <= SIZE(stoned_texts))
 		plines(stoned_texts[SIZE(stoned_texts) - i]);
-	if (i == 5L)
-		HFast = 0L;
-	if (i == 3L) {
-		nomul(-3);
-		nomovemsg = 0;
+	switch (i) {
+		case 5: // slowing down
+			HFast = 0L;
+			if (multi > 0) nomul(0);
+		case 4: // limbs stiffening
+			/* just one move left to save oneself so quit fiddling around;
+			   don't stop attempt to eat tin--might be lizard or acidic */
+			if (!Popeye(STONED)) stop_occupation();
+			if (multi > 0) nomul(0);
+			break;
+		case 3: // limbs turned to stone
+			stop_occupation();
+			nomul(-3);	// can't move anymore
+			nomovemsg = 0;
+			break;
+		default:
+			break;
 	}
 	exercise(A_DEX, false);
 }
@@ -58,12 +70,17 @@ static void vomiting_dialogue() {
 		case 0:
 			vomit();
 			morehungry(20);
+			stop_occupation();
+			if (multi > 0) nomul(0);
 			break;
 		case 2:
 			make_stunned(HStun + d(2, 4), false);
-		/* fall through */
+			if (!Popeye(VOMITING)) stop_occupation();
+
+		//fallthru
 		case 3:
 			make_confused(HConfusion + d(2, 4), false);
+			if (multi > 0) nomul(0);
 			break;
 	}
 	exercise(A_CON, false);
@@ -126,7 +143,7 @@ static void slime_dialogue() {
 	}
 	if (i == 3L) {	    /* limbs becoming oozy */
 		HFast = 0L; /* lose intrinsic speed */
-		stop_occupation();
+		if (!Popeye(SLIMED)) stop_occupation();
 		if (multi > 0) nomul(0);
 	}
 	exercise(A_DEX, false);
