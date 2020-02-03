@@ -113,7 +113,7 @@ int experience(struct monst *mtmp, int nk) {
 		else if ((tmp2 == AD_DRLI) || (tmp2 == AD_STON) ||
 			 (tmp2 == AD_SLIM))
 			tmp += 50;
-		else if (tmp != AD_PHYS)
+		else if (tmp2 != AD_PHYS)
 			tmp += mtmp->m_lev;
 		/* extra heavy damage bonus */
 		if ((int)(ptr->mattk[i].damd * ptr->mattk[i].damn) > 23)
