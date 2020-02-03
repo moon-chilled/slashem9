@@ -1243,8 +1243,12 @@ void potionhit(struct monst *mon, struct obj *obj, boolean your_fault) {
 				if (is_undead(mon->data) || is_demon(mon->data) ||
 				    is_were(mon->data) || is_vampshifter(mon)) {
 					if (obj->blessed) {
-						pline("%s %s in pain!", Monnam(mon),
-						      is_silent(mon->data) ? "writhes" : "shrieks");
+						if (is_silent(mon->data)) {
+							pline("%s writhes in pain!", Monnam(mon));
+						} else {
+							pline("%s shrieks in pain!", Monnam(mon));
+							wake_nearto(mon->mx, mon->my, mon->data->mlevel * 10);
+						}
 						mon->mhp -= d(2, 6);
 						if (mon->mhp < 1) {
 							if (your_fault)
@@ -1375,8 +1379,12 @@ void potionhit(struct monst *mon, struct obj *obj, boolean your_fault) {
 			/* KMH, balance patch -- added */
 			case POT_ACID:
 				if (!resists_acid(mon) && !resist(mon, POTION_CLASS, 0, NOTELL)) {
-					pline("%s %s in pain!", Monnam(mon),
-					      is_silent(mon->data) ? "writhes" : "shrieks");
+					if (is_silent(mon->data)) {
+						pline("%s writhes in pain!", Monnam(mon));
+					} else {
+						pline("%s shrieks in pain!", Monnam(mon));
+						wake_nearto(mon->mx, mon->my, mon->data->mlevel * 10);
+					}
 					mon->mhp -= d(obj->cursed ? 2 : 1, obj->blessed ? 4 : 8);
 					if (mon->mhp < 1) {
 						if (your_fault)
