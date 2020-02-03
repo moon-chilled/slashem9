@@ -299,8 +299,6 @@ enum tin_type {
 #define onlineu(xx, yy) online2((int)(xx), (int)(yy), (int)u.ux, (int)u.uy)
 #define setustuck(v)	(context.botl = 1, u.ustuck = (v))
 
-#define rn1(x, y) (rn2(x) + (y))
-
 /* negative armor class is randomly weakened to prevent invulnerability */
 #define AC_VALUE(AC) ((AC) >= 0 ? (AC) : -rnd(-(AC)))
 

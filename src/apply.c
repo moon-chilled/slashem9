@@ -1743,7 +1743,7 @@ void use_unicorn_horn(struct obj *obj) {
 	int idx, val, val_limit,
 		trouble_count, unfixable_trbl, did_prop, did_attr;
 	int trouble_list[PROP_COUNT + ATTR_COUNT];
-	int chance; /* KMH */
+	uint chance; /* KMH */
 
 	if (obj && obj->cursed) {
 		long lcount = (long)rnd(100);
@@ -1832,7 +1832,7 @@ void use_unicorn_horn(struct obj *obj) {
 	 */
 	val_limit = (obj && obj->blessed) ? trouble_count : 1;
 	if (obj && obj->spe > 0)
-		chance = (obj->spe < 6) ? obj->spe + 3 : 9;
+		chance = (obj->spe < 6) ? max(obj->spe + 3, 0) : 9;
 	else
 		chance = 3;
 
@@ -2392,7 +2392,8 @@ static void use_stone(struct obj *tstone) {
 
 /* Place a landmine/bear trap.  Helge Hafting */
 static void use_trap(struct obj *otmp) {
-	int ttyp, tmp;
+	uint ttyp;
+	int tmp;
 	const char *what = NULL;
 	char buf[BUFSZ];
 	const char *occutext = "setting the trap";
@@ -2485,7 +2486,7 @@ static void use_trap(struct obj *otmp) {
 static int set_trap(void) {
 	struct obj *otmp = trapinfo.tobj;
 	struct trap *ttmp;
-	int ttyp;
+	uint ttyp;
 
 	if (!otmp || !carried(otmp) ||
 	    u.ux != trapinfo.tx || u.uy != trapinfo.ty) {
@@ -2562,7 +2563,7 @@ static int use_whip(struct obj *obj) {
 		pline("You flick a bug off of the %s.", ceiling(u.ux, u.uy));
 
 	} else if ((!u.dx && !u.dy) || (u.dz > 0)) {
-		int dam;
+		uint dam;
 
 		/* Sometimes you hit your steed by mistake */
 		if (u.usteed && !rn2(proficient + 2)) {
@@ -2585,8 +2586,7 @@ static int use_whip(struct obj *obj) {
 				return 1;
 			}
 		}
-		dam = rnd(2) + dbon() + obj->spe;
-		if (dam <= 0) dam = 1;
+		dam = max(rnd(2) + dbon() + obj->spe, 1);
 		pline("You hit your %s with your bullwhip.", body_part(FOOT));
 		sprintf(buf, "killed %sself with %s bullwhip", uhim(), uhis());
 		losehp(Maybe_Half_Phys(dam), buf, NO_KILLER_PREFIX);
@@ -3128,7 +3128,8 @@ static int do_break_wand(struct obj *obj) {
 int wand_explode(struct obj *obj, boolean hero_broke) {
 	int i, x, y;
 	struct monst *mon;
-	int dmg, damage;
+	int dmg;
+	uint damage;
 	boolean affects_objects;
 	boolean shop_damage = false;
 	bool fillmsg = false;

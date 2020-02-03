@@ -200,8 +200,7 @@ void grease_protect(struct obj *otmp, const char *ostr, struct monst *victim) {
 	}
 }
 
-struct trap *
-maketrap(int x, int y, int typ) {
+struct trap *maketrap(int x, int y, int typ) {
 	struct trap *ttmp;
 	struct rm *lev;
 	boolean oldplace;

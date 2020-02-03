@@ -1661,6 +1661,7 @@ void genl_outrip(winid tmpwin, int how);
 
 /* ### rnd.c ### */
 
+uint rn1(uint x, uint y);
 uint rn2(uint x);
 uint rnl(uint x);
 uint rnd(uint x);
@@ -2252,7 +2253,7 @@ int bhitpile(struct obj *, int (*)(struct obj *, struct obj *), int, int);
 int zappable(struct obj *);
 void zapnodir(struct obj *);
 int dozap(void);
-int zapyourself(struct obj *, boolean);
+uint zapyourself(struct obj *, boolean);
 bool flashburn(long duration);
 boolean cancel_monst(struct monst *, struct obj *,
 		     boolean, boolean, boolean);

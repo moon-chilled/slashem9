@@ -3,8 +3,11 @@
 
 #include "hack.h"
 
-uint good_random(void);
 #define RND(x) (good_random() % (x))
+
+uint rn1(uint x, uint y) {
+	return rn2(x) + y;
+}
 
 // 0 <= rn2(x) < x
 uint rn2(uint x) {

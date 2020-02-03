@@ -2192,8 +2192,8 @@ static void throwstorm(struct obj *obj, int skilldmg, int min, int range) {
 	return;
 }
 
-int zapyourself(struct obj *obj, boolean ordinary) {
-	int damage = 0;
+uint zapyourself(struct obj *obj, boolean ordinary) {
+	uint damage = 0;
 
 	switch (obj->otyp) {
 		case WAN_STRIKING: makeknown(WAN_STRIKING);
