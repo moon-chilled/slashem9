@@ -383,14 +383,14 @@ int pick_nasty(void) {
 int nasty(struct monst *mcast) {
 	struct monst *mtmp;
 	int i, j, tmp;
-	int castalign = (mcast ? mcast->data->maligntyp : -1);
+	int castalign = (mcast ? sgn(mcast->data->maligntyp) : -1);
 	coord bypos;
-	int count = 0;
+	int count;
 
 	if (!rn2(10) && Inhell) {
-		msummon(NULL); /* summons like WoY */
-		count++;
+		count = msummon(NULL); /* summons like WoY */
 	} else {
+		count = 0;
 		tmp = (u.ulevel > 3) ? u.ulevel / 3 : 1; /* just in case -- rph */
 		/* if we don't have a casting monster, the nasties appear around you */
 		bypos.x = u.ux;
@@ -418,10 +418,11 @@ int nasty(struct monst *mcast) {
 				} else /* GENOD? */
 					mtmp = makemon(NULL,
 						       bypos.x, bypos.y, NO_MM_FLAGS);
-				if (mtmp && (mtmp->data->maligntyp == 0 ||
-					     sgn(mtmp->data->maligntyp) == sgn(castalign))) {
+				if (mtmp) {
 					count++;
-					break;
+					if (mtmp->data->maligntyp == 0 || sgn(mtmp->data->maligntyp) == castalign) {
+						break;
+					}
 				}
 			}
 	}

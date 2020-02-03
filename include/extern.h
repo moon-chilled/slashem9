@@ -979,7 +979,7 @@ int doseduce(struct monst *);
 
 /* ### minion.c ### */
 
-void msummon(struct monst *);
+int msummon(struct monst *);
 void summon_minion(aligntyp, boolean);
 bool demon_talk(struct monst *);
 int lawful_minion(int);

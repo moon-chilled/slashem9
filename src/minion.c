@@ -7,9 +7,9 @@
 #include "epri.h"
 
 // mon summons a monster
-void msummon(struct monst *mon) {
+int msummon(struct monst *mon) {
 	struct permonst *ptr;
-	int dtype = NON_PM, cnt = 0;
+	int dtype = NON_PM, cnt = 0, result = 0;
 	aligntyp atyp;
 	struct monst *mtmp;
 
@@ -57,7 +57,7 @@ void msummon(struct monst *mon) {
 		cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
 	}
 
-	if (dtype == NON_PM) return;
+	if (dtype == NON_PM) return 0;
 
 	/* sanity checks */
 	if (cnt > 1 && (mons[dtype].geno & G_UNIQ)) cnt = 1;
@@ -67,17 +67,20 @@ void msummon(struct monst *mon) {
 	 */
 	if (mvitals[dtype].mvflags & G_GONE) {
 		dtype = ndemon(atyp);
-		if (dtype == NON_PM) return;
+		if (dtype == NON_PM) return 0;
 	}
 
 	while (cnt > 0) {
 		mtmp = makemon(&mons[dtype], u.ux, u.uy, NO_MM_FLAGS);
-		if (mtmp && (dtype == PM_ANGEL)) {
+		if (mtmp) {
+			result++;
 			/* alignment should match the summoner */
-			EPRI(mtmp)->shralign = atyp;
+		       	if (dtype == PM_ANGEL) EPRI(mtmp)->shralign = atyp;
 		}
 		cnt--;
 	}
+
+	return result;
 }
 
 void summon_minion(aligntyp alignment, boolean talk) {
