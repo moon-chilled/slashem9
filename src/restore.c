@@ -656,9 +656,13 @@ void getlev(int fd, int pid, xchar lev, boolean ghostly) {
 			mtmp2 = mtmp->nmon;
 			if (ghostly) {
 				/* reset peaceful/malign relative to new character */
-				if (!mtmp->isshk)
-					/* shopkeepers will reset based on name */
-					mtmp->mpeaceful = peace_minded(mtmp->data);
+				/* shopkeepers will reset based on name */
+				if (!mtmp->isshk) {
+					if (is_unicorn(mtmp->data))
+						mtmp->mpeaceful = sgn(u.ualign.type) == sgn(mtmp->data->maligntyp);
+					else
+						mtmp->mpeaceful = peace_minded(mtmp->data);
+				}
 				set_malign(mtmp);
 			} else if (monstermoves > omoves)
 				mon_catchup_elapsed_time(mtmp, monstermoves - omoves);
