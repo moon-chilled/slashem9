@@ -784,19 +784,32 @@ static void init_shk_services(struct monst *shk) {
 	return;
 }
 
-/* does shkp's shop stock this item type? */
+// does shkp's shop stock this item type?
 bool saleable(struct monst *shkp, struct obj *obj) {
 	int i, shp_indx = ESHK(shkp)->shoptype - SHOPBASE;
 	const struct shclass *shp = &shtypes[shp_indx];
 
 	if (shp->symb == RANDOM_CLASS)
 		return true;
-	else
-		for (i = 0; i < SIZE(shtypes[0].iprobs) && shp->iprobs[i].iprob; i++)
-			if (shp->iprobs[i].itype < 0 ?
-				    shp->iprobs[i].itype == -obj->otyp :
-				    shp->iprobs[i].itype == obj->oclass) return true;
-	/* not found */
+
+	for (i = 0; i < SIZE(shtypes[0].iprobs) && shp->iprobs[i].iprob; i++) {
+		// pseudo-class needs special handling
+		if (shp->iprobs[i].itype == VEGETARIAN_CLASS) {
+			if ((obj->otyp == TIN || obj->otyp == CORPSE)
+			    && ((obj->corpsenm >= LOW_PM && vegetarian(&mons[obj->corpsenm]))
+				|| (obj->otyp == TIN && obj->spe == 1)))	// spinach
+				return true;
+
+			if (obj->oclass == FOOD_CLASS
+			    && (objects[obj->otyp].oc_material == VEGGY || obj->otyp == EGG))
+				return true;
+		} else if ((shp->iprobs[i].itype < 0) ?
+			   shp->iprobs[i].itype == -obj->otyp :
+			   shp->iprobs[i].itype == obj->oclass)
+			return true;
+	}
+
+	// not found
 	return false;
 }
 
