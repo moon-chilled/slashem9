@@ -15,7 +15,7 @@ static boolean wishymatch(const char *, const char *, boolean);
 static char *nextobuf(void);
 static void add_erosion_words(struct obj *, char *);
 
-static char *xname2(struct obj *);
+static char *xname2(struct obj *obj, bool keen);
 
 struct Jitem {
 	int item;
@@ -198,7 +198,7 @@ char *fruitname(boolean juice) {
 	return buf;
 }
 
-char *xname2(struct obj *obj) {
+char *xname2(struct obj *obj, bool keen) {
 	/* Hallu */
 	char *buf;
 	int typ = obj->otyp;
@@ -341,10 +341,9 @@ char *xname2(struct obj *obj) {
 					(Role_if(PM_ARCHEOLOGIST) && (obj->spe & STATUE_HISTORIC)) ? "historic " : "",
 					actualn,
 					type_is_pname(&mons[obj->corpsenm]) ? "" :
-									      (mons[obj->corpsenm].geno & G_UNIQ) ? "the " :
-														    (index(vowels, *(mons[obj->corpsenm].mname)) ?
-															     "an " :
-															     "a "),
+					(mons[obj->corpsenm].geno & G_UNIQ) ? "the " :
+					(index(vowels, *(mons[obj->corpsenm].mname)) ?  "an " :
+					"a "),
 					mons[obj->corpsenm].mname);
 			else
 				strcpy(buf, actualn);
@@ -470,7 +469,7 @@ char *xname(struct obj *obj) {
 		hobj = mkobj(obj->oclass, 0);
 		hobj->quan = obj->quan;
 		/* WAC clean up */
-		buf = xname2(hobj);
+		buf = xname2(hobj, false);
 
 		if (Has_contents(hobj))
 			delete_contents(hobj);
@@ -480,7 +479,7 @@ char *xname(struct obj *obj) {
 
 		return buf;
 	} else {
-		return xname2(obj);
+		return xname2(obj, false);
 	}
 }
 
@@ -545,12 +544,12 @@ static void add_erosion_words(struct obj *obj, char *prefix) {
 	if (obj->rknown && obj->oerodeproof)
 		strcat(prefix,
 		       iscrys ? "fixed " :
-				is_rustprone(obj) ? "rustproof " :
-						    is_corrodeable(obj) ? "corrodeproof " : /* "stainless"? */
-							    is_flammable(obj) ? "fireproof " : "");
+		       is_rustprone(obj) ? "rustproof " :
+		       is_corrodeable(obj) ? "corrodeproof " : /* "stainless"? */
+		       is_flammable(obj) ? "fireproof " : "");
 }
 
-char *doname(struct obj *obj) {
+char *doname_ext(struct obj *obj, bool keen) {
 	boolean ispoisoned = false;
 	char prefix[PREFIX];
 	char tmpbuf[PREFIX + 1];
@@ -582,23 +581,25 @@ char *doname(struct obj *obj) {
 	if (obj->oinvis) strcat(prefix, "invisible ");
 
 	// "empty" goes at the beginning, but item count goes at the end
-	if (obj->cknown && (Is_container(obj) || obj->otyp == STATUE) && !Has_contents(obj))
-		strcat(prefix, "empty ");
+	if ((Is_container(obj) || obj->otyp == STATUE) && !Has_contents(obj)) {
+		if (obj->cknown) strcat(prefix, "empty ");
+		else if (keen) strcat(prefix, "[empty] ");
+	}
 
 
-	if (wizard && is_hazy(obj)) strcat(prefix, "hazy ");
+	if ((wizard || keen) && is_hazy(obj)) strcat(prefix, "[hazy] ");
 
 	if ((!Hallucination || Role_if(PM_PRIEST) || Role_if(PM_NECROMANCER)) &&
-	    obj->bknown &&
+	    (obj->bknown || keen) &&
 	    obj->oclass != COIN_CLASS &&
 	    (obj->otyp != POT_WATER || !objects[POT_WATER].oc_name_known || (!obj->cursed && !obj->blessed) || Hallucination)) {
 		/* allow 'blessed clear potion' if we don't know it's holy water;
 		 * always allow "uncursed potion of water"
 		 */
 		if (Hallucination ? !rn2(10) : obj->cursed)
-			strcat(prefix, "cursed ");
+			strcat(prefix, obj->bknown ? "cursed " : "[cursed] ");
 		else if (Hallucination ? !rn2(10) : obj->blessed)
-			strcat(prefix, "blessed ");
+			strcat(prefix, obj->bknown ? "blessed " : "[blessed] ");
 		else if ((!obj->known || !objects[obj->otyp].oc_charged ||
 			  (obj->oclass == ARMOR_CLASS ||
 			   obj->oclass == RING_CLASS))
@@ -616,26 +617,33 @@ char *doname(struct obj *obj) {
 			 && obj->otyp != SCR_MAIL
 #endif
 			 && obj->otyp != FAKE_AMULET_OF_YENDOR && obj->otyp != AMULET_OF_YENDOR && !Role_if(PM_PRIEST) && !Role_if(PM_NECROMANCER))
-			strcat(prefix, "uncursed ");
+			strcat(prefix, obj->bknown ? "uncursed " : "[uncursed] ");
 	}
 
-	if (obj->lknown && Is_box(obj)) {
-		if (obj->obroken) strcat(prefix, "unlockable ");
-		else if (obj->olocked) strcat(prefix, "locked ");
-		else strcat(prefix, "unlocked ");
+	if ((obj->lknown || keen) && Is_box(obj)) {
+		if (!obj->lknown) strcat(prefix, "[");
+
+		if (obj->obroken) strcat(prefix, "unlockable");
+		else if (obj->olocked) strcat(prefix, "locked");
+		else strcat(prefix, "unlocked");
+
+		if (!obj->lknown) strcat(prefix, "]");
+
+		strcat(prefix, " ");
 	}
 
 	if (Hallucination ? !rn2(100) : obj->greased) strcat(prefix, "greased ");
 
-	if (obj->cknown && Has_contents(obj)) {
+	if ((obj->cknown || keen) && Has_contents(obj)) {
 		struct obj *curr;
 		long itemcount = 0L;
 
 		// Count the number of contained objects
 		for (curr = obj->cobj; curr; curr = curr->nobj)
 			itemcount += curr->quan;
-		sprintf(eos(bp), " containing %ld item%s",
-				itemcount, plur(itemcount));
+
+		sprintf(eos(bp), " %scontaining %ld item%s%s",
+				obj->cknown ? "" : "[", itemcount, plur(itemcount), obj->cknown ? "" : "]");
 	}
 
 
@@ -649,7 +657,9 @@ char *doname(struct obj *obj) {
 		case WEAPON_CLASS:
 			if (ispoisoned)
 				strcat(prefix, "poisoned ");
-		plus:
+			else if (keen && obj->opoisoned)
+				strcat(prefix, "[poisoned] ");
+plus:
 			add_erosion_words(obj, prefix);
 			if (Hallucination)
 				break;
@@ -663,8 +673,9 @@ char *doname(struct obj *obj) {
 #ifdef DEBUG
 				sprintf(eos(bp), " (%d)", obj->age);
 #endif
-			} else if (is_grenade(obj))
+			} else if (is_grenade(obj)) {
 				if (obj->oarmed) strcat(bp, " (armed)");
+			}
 			break;
 		case ARMOR_CLASS:
 			if (obj->owornmask & W_ARMOR)
@@ -852,6 +863,8 @@ char *doname(struct obj *obj) {
 	return bp;
 }
 
+char *doname(struct obj *obj) { return doname_ext(obj, false); }
+
 /* used from invent.c */
 bool not_fully_identified(struct obj *otmp) {
 	/* gold doesn't have any interesting attributes [yet?] */
@@ -936,7 +949,7 @@ char *killer_xname(struct obj *obj) {
 	save_ocuname = objects[obj->otyp].oc_uname;
 	objects[obj->otyp].oc_uname = 0; /* avoid "foo called bar" */
 
-	buf = xname2(obj);
+	buf = xname2(obj, false);
 	if (obj->quan == 1L) buf = obj_is_pname(obj) ? the(buf) : an(buf);
 
 	objects[obj->otyp].oc_name_known = save_ocknown;

@@ -165,6 +165,7 @@ static struct {
 	{"pet shop", PETSHOP}, /* Stephen White */
 	{"tin shop", TINSHOP}, /* Robin Johnson */
 	{"book shop", BOOKSHOP},
+	{"health shop", HEALTHSHOP},
 	{"candle shop", CANDLESHOP},
 	{"black market", BLACKSHOP},
 	{0, 0}};

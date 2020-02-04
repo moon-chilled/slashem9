@@ -75,22 +75,23 @@ extern struct door doors[DOORMAX];
 #define MIGOHIVE    19 /* Mi-Go */
 #define FUNGUSFARM  20 /* molds, puddings, and slime */
 
-#define SHOPBASE   21		  /* everything above this is a shop */
-#define ARMORSHOP  (SHOPBASE + 1) /* specific shop defines for level compiler */
-#define SCROLLSHOP (SHOPBASE + 2)
-#define POTIONSHOP (SHOPBASE + 3)
-#define WEAPONSHOP (SHOPBASE + 4)
-#define FOODSHOP   (SHOPBASE + 5)
-#define RINGSHOP   (SHOPBASE + 6)
-#define WANDSHOP   (SHOPBASE + 7)
-#define TOOLSHOP   (SHOPBASE + 8)
-#define PETSHOP	   (SHOPBASE + 9)  /* Stephen White */
-#define TINSHOP	   (SHOPBASE + 10) /* Robin Johnson */
-#define BOOKSHOP   (SHOPBASE + 11)
-#define UNIQUESHOP (SHOPBASE + 12) /* shops here & above not randomly gen'd. */
-#define CANDLESHOP (UNIQUESHOP)
-#define BLACKSHOP  (UNIQUESHOP + 1)
-#define MAXRTYPE   (UNIQUESHOP + 1) /* maximum valid room type */
+#define SHOPBASE	21		  /* everything above this is a shop */
+#define ARMORSHOP	(SHOPBASE + 1) /* specific shop defines for level compiler */
+#define SCROLLSHOP	(SHOPBASE + 2)
+#define POTIONSHOP	(SHOPBASE + 3)
+#define WEAPONSHOP	(SHOPBASE + 4)
+#define FOODSHOP	(SHOPBASE + 5)
+#define RINGSHOP	(SHOPBASE + 6)
+#define WANDSHOP	(SHOPBASE + 7)
+#define TOOLSHOP	(SHOPBASE + 8)
+#define PETSHOP		(SHOPBASE + 9)  /* Stephen White */
+#define TINSHOP		(SHOPBASE + 10) /* Robin Johnson */
+#define BOOKSHOP	(SHOPBASE + 11)
+#define HEALTHSHOP	(SHOPBASE + 12)
+#define UNIQUESHOP	(SHOPBASE + 13) /* shops here & above not randomly gen'd. */
+#define CANDLESHOP	(UNIQUESHOP)
+#define BLACKSHOP	(UNIQUESHOP + 1)
+#define MAXRTYPE	(UNIQUESHOP + 1) /* maximum valid room type */
 
 /* Special type for search_special() */
 #define ANY_TYPE (-1)

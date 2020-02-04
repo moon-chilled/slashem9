@@ -89,8 +89,9 @@ static const char *const shkfoods[] = {
 	"Makin", "Tipor", "Semai", "Berhala", "Tegal", "Samoe",
 	NULL};
 
+/*
 static const char *const shkweapons[] = {
-	/* Perigord */
+	// Perigord
 	"Voulgezac", "Rouffiac", "Lerignac", "Touverac", "Guizengeard",
 	"Melac", "Neuvicq", "Vanzac", "Picq", "Urignac", "Corignac",
 	"Fleac", "Lonzac", "Vergt", "Queyssac", "Liorac", "Echourgnac",
@@ -98,6 +99,7 @@ static const char *const shkweapons[] = {
 	"Pons", "Jumilhac", "Fenouilledes", "Laguiolet", "Saujon",
 	"Eymoutiers", "Eygurande", "Eauze", "Labouheyre",
 	NULL};
+*/
 
 static const char *const shktools[] = {
 	/* Spmi */
@@ -338,7 +340,9 @@ static void mkshobj_at(const struct shclass *shp, int sx, int sy) {
 	int atype;
 	struct permonst *ptr;
 
-	if (rn2(100) < depth(&u.uz) &&
+	// don't generate mimics in health food stores for monk players;
+	// they're supposed to be a refuse for monks
+	if (rn2(100) < depth(&u.uz) && !(shp->shknms == shkhealthfoods && Role_if(PM_MONK)) &&
 	    !MON_AT(sx, sy) && (ptr = mkclass(S_MIMIC, 0)) &&
 	    (mtmp = makemon(ptr, sx, sy, NO_MM_FLAGS)) != 0) {
 		/* note: makemon will set the mimic symbol to a shop item */
@@ -363,15 +367,8 @@ static void nameshk(struct monst *shk, const char *const *nlp) {
 	const char *shname = 0;
 	struct monst *mtmp;
 	int name_wanted;
-	s_level *sptr;
 
-	if (nlp == shkfoods && Is_minetn_level(&u.uz) && Role_if(PM_MONK)
-	    && (sptr = Is_special(&u.uz)) != 0 && sptr->flags.town) {
-		// special-case override for minetown food store for monks
-		nlp = shkhealthfoods;
-	}
-
-	if (nlp == shklight && Is_minetn_level(&u.uz) && (sptr = Is_special(&u.uz)) != 0 && sptr->flags.town) {
+	if (nlp == shklight && Is_minetn_level(&u.uz)) {
 		/* special-case minetown lighting shk */
 		shname = "Izchak";
 		shk->female = false;
@@ -461,7 +458,7 @@ static int shkinit(const struct shclass *shp, struct mkroom *sroom) {
 	else if (sy == sroom->hy + 1)
 		sy--;
 	else {
-	shk_failed:
+shk_failed:
 #ifdef DEBUG
 		/* Said to happen sometimes, but I have never seen it. */
 		/* Supposedly fixed by fdoor change in mklev.c */
@@ -487,7 +484,7 @@ static int shkinit(const struct shclass *shp, struct mkroom *sroom) {
 
 	/* now initialize the shopkeeper monster structure */
 
-	shk = 0;
+	shk = NULL;
 	if (Is_blackmarket(&u.uz)) {
 		shk = makemon(&mons[PM_BLACK_MARKETEER], sx, sy, NO_MM_FLAGS);
 	}
@@ -572,6 +569,11 @@ void stock_room(int shp_indx, struct mkroom *sroom) {
 	int sx, sy, sh;
 	char buf[BUFSZ];
 	int rmno = (sroom - rooms) + ROOMOFFSET;
+	if (shp_indx+SHOPBASE == FOODSHOP && Is_minetn_level(&u.uz) && Role_if(PM_MONK)) {
+		// special-case override for minetown food store for monks
+		shp_indx = HEALTHSHOP - SHOPBASE;
+	}
+
 	const struct shclass *shp = &shtypes[shp_indx];
 
 	/* first, try to place a shopkeeper in the room */
