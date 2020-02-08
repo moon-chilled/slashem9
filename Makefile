@@ -29,10 +29,11 @@ OBJ_PROXY := win/proxy/callback.o win/proxy/dlbh.o win/proxy/getopt.o win/proxy/
 OBJ_DGNCOMP := util/dgn_yacc.o util/dgn_lex.o util/dgn_main.o src/alloc.o util/panic.o
 OBJ_LEVCOMP := util/lev_yacc.o util/lev_lex.o util/lev_main.o src/alloc.o util/panic.o src/drawing.o src/decl.o src/objects.o src/monst.o
 OBJ_DLB := util/dlb_main.o src/alloc.o util/panic.o src/dlb.o
+OBJ_RECOVER := util/recover.o
 
 SLASHEMOBJ := $(OBJ_BASE) $(OBJ_SYS) $(OBJ_TTY) $(OBJ_CURSES)
 
-ALLOBJ := $(SLASHEMOBJ) $(OBJ_DGNCOMP) $(OBJ_LEVCOMP) $(OBJ_DLB)
+ALLOBJ := $(SLASHEMOBJ) $(OBJ_DGNCOMP) $(OBJ_LEVCOMP) $(OBJ_DLB) $(OBJ_RECOVER)
 
 
 default: all
@@ -42,14 +43,17 @@ install: all
 	touch $(HACKDIR)/perm $(HACKDIR)/xlogfile
 
 	install src/slashem9 dat/nhdat $(HACKDIR)
+	install util/slashem9-recover $(BINDIR)
 
 	sed -e 's;@HACKDIR@;$(HACKDIR);' < sys/unix/slashem9.sh > $(BINDIR)/slashem9
-	#install util/slashem9-recover $(BINDIR)/
 
 src/slashem9: $(SLASHEMOBJ)
 	$(CCLD) -o src/slashem9 $(SLASHEMOBJ) $(LDFLAGS)
 
-all: src/slashem9 dat/nhdat
+util/slashem9-recover: $(OBJ_RECOVER)
+	$(CCLD) -o util/slashem9-recover $(OBJ_RECOVER) $(LDFLAGS)
+
+all: src/slashem9 util/slashem9-recover dat/nhdat
 
 util/dgn_lex.o: util/dgn_yacc.o
 
