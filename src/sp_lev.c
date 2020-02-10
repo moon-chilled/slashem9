@@ -23,24 +23,23 @@
 
 extern void mkmap(lev_init *);
 
-static void get_room_loc(schar *, schar *, struct mkroom *);
-static void get_free_room_loc(schar *, schar *, struct mkroom *);
-static void create_trap(trap *, struct mkroom *);
-static int noncoalignment(aligntyp);
-static void create_monster(monster *, struct mkroom *);
-static void create_object(object *, struct mkroom *);
-static void create_engraving(engraving *, struct mkroom *);
-static void create_stairs(stair *, struct mkroom *);
-static void create_altar(altar *, struct mkroom *);
-static void create_gold(gold *, struct mkroom *);
-static void create_feature(int, int, struct mkroom *, int);
-static boolean search_door(struct mkroom *, xchar *, xchar *,
-			   xchar, int);
+static void get_room_loc(schar *x, schar *y, struct mkroom *croom);
+static void get_free_room_loc(schar *x, schar *y, struct mkroom *croom);
+static void create_trap(trap *t, struct mkroom *croom);
+static int noncoalignment(aligntyp alignment);
+static void create_monster(monster *m, struct mkroom *croom);
+static void create_object(object *o, struct mkroom *croom);
+static void create_engraving(engraving *e, struct mkroom *croom);
+static void create_stairs(stair *s, struct mkroom *croom);
+static void create_altar(altar *a, struct mkroom *croom);
+static void create_gold(gold *g, struct mkroom *croom);
+static void create_feature(int fx, int fy, struct mkroom *croom, int typ);
+static bool search_door(struct mkroom *croom, xchar *x, xchar *y, xchar wall, int cnt);
 static void fix_stair_rooms(void);
-static void create_corridor(corridor *);
+static void create_corridor(corridor *c);
 
-static boolean create_subroom(struct mkroom *, xchar, xchar,
-			      xchar, xchar, xchar, xchar);
+static bool create_subroom(struct mkroom *proom, xchar x, xchar y,
+			   xchar w, xchar h, xchar rtyp, xchar rlit);
 
 #define LEFT	1
 #define H_LEFT	2
@@ -73,22 +72,22 @@ static xchar xstart, ystart;
 static char xsize, ysize;
 static lev_region rarea[10];
 
-static void set_wall_property(xchar, xchar, xchar, xchar, int);
+static void set_wall_property(xchar x1, xchar y1, xchar x2, xchar y2, int prop);
 static int rnddoor(void);
 static int rndtrap(void);
-static boolean get_location(schar *, schar *, int);
-static void sp_lev_shuffle(char *, char *, int);
-static void light_region(region *);
-static void load_common_data(dlb *, int);
-static void load_one_monster(dlb *, monster *);
-static void load_one_object(dlb *, object *);
-static void load_one_engraving(dlb *, engraving *);
-static boolean load_rooms(dlb *);
-static void maze1xy(coord *, int);
-static boolean load_maze(dlb *);
-static void create_door(room_door *, struct mkroom *);
-static void free_rooms(room **, int);
-static void build_room(room *, room *);
+static bool get_location(schar *x, schar *y, int humidity);
+static void sp_lev_shuffle(char *list1, char *list2, int n);
+static void light_region(region *tmpregion);
+static void load_common_data(dlb *fd, int typ);
+static void load_one_monster(dlb *fd, monster *m);
+static void load_one_object(dlb *fd, object *o);
+static void load_one_engraving(dlb *fd, engraving *e);
+static bool load_rooms(dlb *fd);
+static void maze1xy(coord *m, int humidity);
+static bool load_maze(dlb *fd);
+static void create_door(room_door *dd, struct mkroom *broom);
+static void free_rooms(room **ro, int n);
+static void build_room(room *r, room *pr);
 
 char *lev_message = 0;
 lev_region *lregions = 0;
@@ -161,9 +160,9 @@ static int rndtrap() {
 #define WET    0x2
 #define MOLTEN 0x4
 
-static boolean is_ok_location(schar, schar, int);
+static bool is_ok_location(schar x, schar y, int humidity);
 
-static boolean get_location(schar *x, schar *y, int humidity) {
+static bool get_location(schar *x, schar *y, int humidity) {
 	int cpt = 0;
 
 	if (*x >= 0) { /* normal locations */
@@ -259,7 +258,7 @@ found_it:;
 	return true;
 }
 
-static boolean is_ok_location(schar x, schar y, int humidity) {
+static bool is_ok_location(schar x, schar y, int humidity) {
 	int typ;
 
 	if (Is_waterlevel(&u.uz)) return true; /* accept any spot */
@@ -285,7 +284,7 @@ static boolean is_ok_location(schar x, schar y, int humidity) {
  * Shuffle the registers for locations, objects or monsters
  */
 
-static void sp_lev_shuffle(char list1[], char list2[], int n) {
+static void sp_lev_shuffle(char *list1, char *list2, int n) {
 	int i, j;
 	char k;
 
@@ -565,7 +564,7 @@ boolean create_room(xchar x, xchar y, xchar w, xchar h, xchar xal, xchar yal, xc
  * x & y are relative to the parent room.
  */
 
-static boolean create_subroom(struct mkroom *proom, xchar x, xchar y, xchar w, xchar h, xchar rtype, xchar rlit) {
+static bool create_subroom(struct mkroom *proom, xchar x, xchar y, xchar w, xchar h, xchar rtype, xchar rlit) {
 	xchar width, height;
 
 	width = proom->hx - proom->lx + 1;
@@ -1284,7 +1283,7 @@ static void create_feature(int fx, int fy, struct mkroom *croom, int typ) {
  * Search for a door in a room on a specified wall.
  */
 
-static boolean search_door(struct mkroom *croom, xchar *x, xchar *y, xchar wall, int cnt) {
+static bool search_door(struct mkroom *croom, xchar *x, xchar *y, xchar wall, int cnt) {
 	int dx, dy;
 	int xx, yy;
 
@@ -1875,7 +1874,7 @@ static void load_one_engraving(dlb *fd, engraving *e) {
 	e->engr.str[size] = '\0';
 }
 
-static boolean load_rooms(dlb *fd) {
+static bool load_rooms(dlb *fd) {
 	xchar nrooms, ncorr;
 	char n;
 	short size;
@@ -2123,7 +2122,7 @@ static void maze1xy(coord *m, int humidity) {
  * Could be cleaner, but it works.
  */
 
-static boolean load_maze(dlb *fd) {
+static bool load_maze(dlb *fd) {
 	xchar x, y, typ;
 	boolean prefilled, room_not_needed;
 

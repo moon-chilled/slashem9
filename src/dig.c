@@ -6,9 +6,9 @@
 #include "edog.h"
 /* #define DEBUG */ /* turn on for diagnostics */
 
-static boolean did_dig_msg;
+static bool did_dig_msg;
 
-static boolean rm_waslit(void);
+static bool rm_waslit(void);
 static void mkcavepos(xchar, xchar, int, boolean, boolean);
 static void mkcavearea(boolean);
 static int dig_typ(struct obj *, xchar, xchar);
@@ -23,7 +23,7 @@ static void dig_up_grave(void);
 #define DIGTYP_DOOR	  4
 #define DIGTYP_TREE	  5
 
-static boolean rm_waslit(void) {
+static bool rm_waslit(void) {
 	xchar x, y;
 
 	if (levl[u.ux][u.uy].typ == ROOM && levl[u.ux][u.uy].waslit)

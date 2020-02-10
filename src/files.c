@@ -118,7 +118,7 @@ int parse_config_line(FILE *, char *, char *, char *);
 static void adjust_prefix(char *, int);
 #endif
 #ifdef SELF_RECOVER
-static boolean copy_bytes(int, int);
+static bool copy_bytes(int ifd, int ofd);
 #endif
 #ifdef HOLD_LOCKFILE_OPEN
 static int open_levelfile_exclusively(const char *, int, int);
@@ -1509,7 +1509,7 @@ boolean recover_savefile(void) {
 	return true;
 }
 
-boolean copy_bytes(int ifd, int ofd) {
+bool copy_bytes(int ifd, int ofd) {
 	char buf[BUFSIZ];
 	int nfrom, nto;
 

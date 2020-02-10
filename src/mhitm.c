@@ -11,7 +11,7 @@ extern const char *breathwep[]; /* from mthrowu.c */
 
 #define POLE_LIM 5 /* How far monsters can use pole-weapons */
 
-static boolean vis, far_noise;
+static bool vis, far_noise;
 static long noisetime;
 static struct obj *otmp;
 
@@ -56,7 +56,7 @@ static char *mon_nam_too(char *outbuf, struct monst *mon, struct monst *other_mo
 }
 
 static void noises(struct monst *magr, struct attack *mattk) {
-	boolean farq = (distu(magr->mx, magr->my) > 15);
+	bool farq = distu(magr->mx, magr->my) > 15;
 
 	if (!Deaf && (farq != far_noise || moves - noisetime > 10)) {
 		far_noise = farq;

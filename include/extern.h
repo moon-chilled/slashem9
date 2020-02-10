@@ -185,16 +185,16 @@ char yn_function(const char *, const char *, char);
 
 /* ### dbridge.c ### */
 
-boolean is_pool(int, int);
-boolean is_lava(int, int);
-boolean is_ice(int, int);
-int is_drawbridge_wall(int, int);
-boolean is_db_wall(int, int);
-boolean find_drawbridge(int *, int *);
-boolean create_drawbridge(int, int, int, boolean);
-void open_drawbridge(int, int);
-void close_drawbridge(int, int);
-void destroy_drawbridge(int, int);
+bool is_pool(int x, int y);
+bool is_lava(int x, int y);
+bool is_ice(int x, int y);
+int is_drawbridge_wall(int x, int y);
+bool is_db_wall(int x, int y);
+bool find_drawbridge(int *x, int *y);
+bool create_drawbridge(int x, int y, int dir, bool flag);
+void open_drawbridge(int x, int y);
+void close_drawbridge(int x, int y);
+void destroy_drawbridge(int x, int y);
 
 /* ### decl.c ### */
 

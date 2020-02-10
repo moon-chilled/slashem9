@@ -6,12 +6,12 @@
 
 static void maybe_wail(void);
 static int moverock(void);
-static int still_chewing(xchar, xchar);
+static int still_chewing(xchar x, xchar y);
 static void dosinkfall(void);
-static boolean findtravelpath(boolean);
-static boolean monstinroom(struct permonst *, int);
+static bool findtravelpath(bool guess);
+static bool monstinroom(struct permonst *mdat, int roomno);
 
-static void move_update(boolean);
+static void move_update(bool newlev);
 
 #define IS_SHOP(x) (rooms[x].rtype >= SHOPBASE)
 
@@ -967,7 +967,7 @@ boolean test_move(int ux, int uy, int dx, int dy, int mode) {
  * inaccessible locations as valid intermediate path points.
  * Returns true if a path was found.
  */
-static boolean findtravelpath(boolean guess) {
+static bool findtravelpath(bool guess) {
 	/* if travel to adjacent, reachable location, use normal movement rules */
 	if (!guess && context.travel1 && distmin(u.ux, u.uy, u.tx, u.ty) == 1) {
 		context.run = 0;
@@ -1897,7 +1897,7 @@ stillinwater:;
 	}
 }
 
-static boolean monstinroom(struct permonst *mdat, int roomno) {
+static bool monstinroom(struct permonst *mdat, int roomno) {
 	struct monst *mtmp;
 
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon)
@@ -1991,7 +1991,7 @@ boolean in_town(int x, int y) {
 	return !has_subrooms;
 }
 
-static void move_update(boolean newlev) {
+static void move_update(bool newlev) {
 	char *ptr1, *ptr2, *ptr3, *ptr4;
 
 	strcpy(u.urooms0, u.urooms);

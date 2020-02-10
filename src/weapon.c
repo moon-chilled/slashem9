@@ -29,17 +29,15 @@
 #define PN_TWO_WEAPONS	     (-17)
 #define PN_LIGHTSABER	     (-18)
 
-static void give_may_advance_msg(int);
+static void give_may_advance_msg(int skill);
 static int practice(void);
-static int get_obj_skill(struct obj *);
+static int get_obj_skill(struct obj *obj);
 
-static void mon_ignite_lightsaber(struct obj *, struct monst *);
+static void mon_ignite_lightsaber(struct obj *obj, struct monst *mon);
 
 /*WAC practicing needs a delay counter*/
 static schar delay; /* moves left for practice */
-static boolean speed_advance = false;
-
-static void give_may_advance_msg(int);
+static bool speed_advance = false;
 
 /* KMH, balance patch -- updated */
 static const short skill_names_indices[P_NUM_SKILLS] = {
@@ -125,13 +123,13 @@ static void give_may_advance_msg(int skill) {
 		      "");
 }
 
-static boolean can_advance(int, boolean);
-static boolean could_advance(int);
-static boolean peaked_skill(int);
-static int slots_required(int);
-static boolean can_practice(int); /* WAC for Practicing */
-static char *skill_level_name(int, char *);
-static void skill_advance(int);
+static bool can_advance(int skill, bool speedy);
+static bool could_advance(int skill);
+static bool peaked_skill(int skill);
+static int slots_required(int skill);
+static bool can_practice(int skill); /* WAC for Practicing */
+static char *skill_level_name(int skill, char *buf);
+static void skill_advance(int skill);
 
 #define P_NAME(type) (skill_names_indices[type] > 0 ?                        \
 			      OBJ_NAME(objects[skill_names_indices[type]]) : \
@@ -1057,8 +1055,7 @@ static int slots_required(int skill) {
 }
 
 /* return true if this skill can be advanced */
-/*ARGSUSED*/
-static boolean can_advance(int skill, boolean speedy) {
+static bool can_advance(int skill, bool speedy) {
 	return !P_RESTRICTED(skill) && P_SKILL(skill) < P_MAX_SKILL(skill) &&
 	       ((wizard && speedy) ||
 		(P_ADVANCE(skill) >=
@@ -1067,18 +1064,18 @@ static boolean can_advance(int skill, boolean speedy) {
 }
 
 /* WAC return true if skill can be practiced */
-static boolean can_practice(int skill) {
+static bool can_practice(int skill) {
 	return !P_RESTRICTED(skill) && P_SKILL(skill) < P_MAX_SKILL(skill) && u.skills_advanced < P_SKILL_LIMIT;
 }
 
 /* return true if this skill could be advanced if more slots were available */
-static boolean could_advance(int skill) {
+static bool could_advance(int skill) {
 	return !P_RESTRICTED(skill) && P_SKILL(skill) < P_MAX_SKILL(skill) && ((P_ADVANCE(skill) >= (unsigned)practice_needed_to_advance(P_SKILL(skill), skill) && u.skills_advanced < P_SKILL_LIMIT));
 }
 
 /* return true if this skill has reached its maximum and there's been enough
    practice to become eligible for the next step if that had been possible */
-static boolean peaked_skill(int skill) {
+static bool peaked_skill(int skill) {
 	return !P_RESTRICTED(skill) && P_SKILL(skill) >= P_MAX_SKILL(skill) && ((P_ADVANCE(skill) >= (unsigned)practice_needed_to_advance(P_SKILL(skill), skill)));
 }
 

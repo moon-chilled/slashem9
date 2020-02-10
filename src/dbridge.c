@@ -19,24 +19,24 @@
 
 #include "hack.h"
 
-static void get_wall_for_db(int *, int *);
-static struct entity *e_at(int, int);
-static void m_to_e(struct monst *, int, int, struct entity *);
-static void u_to_e(struct entity *);
-static void set_entity(int, int, struct entity *);
-static const char *e_nam(struct entity *);
+static void get_wall_for_db(int *x, int *y);
+static struct entity *e_at(int x, int y);
+static void m_to_e(struct monst *mtmp, int x, int y, struct entity *etmp);
+static void u_to_e(struct entity *etmp);
+static void set_entity(int x, int y, struct entity *etmp);
+static const char *e_nam(struct entity *etmp);
 #ifdef D_DEBUG
-static const char *Enam(struct entity *); /* unused */
+static const char *Enam(struct entity *etmp); // unused
 #endif
-static const char *E_phrase(struct entity *, const char *);
-static boolean e_survives_at(struct entity *, int, int);
-static void e_died(struct entity *, int, int);
-static boolean automiss(struct entity *);
-static boolean e_missed(struct entity *, boolean);
-static boolean e_jumps(struct entity *);
-static void do_entity(struct entity *);
+static const char *E_phrase(struct entity *etmp, const char *verb);
+static bool e_survives_at(struct entity *etmp, int x, int y);
+static void e_died(struct entity *etmp, int dest, int how);
+static bool automiss(struct entity *etmp);
+static bool e_missed(struct entity *etmp, bool chunks);
+static bool e_jumps(struct entity *etmp);
+static void do_entity(struct entity *etmp);
 
-boolean is_pool(int x, int y) {
+bool is_pool(int x, int y) {
 	schar ltyp;
 
 	if (!isok(x, y)) return false;
@@ -47,7 +47,7 @@ boolean is_pool(int x, int y) {
 	return false;
 }
 
-boolean is_lava(int x, int y) {
+bool is_lava(int x, int y) {
 	schar ltyp;
 
 	if (!isok(x, y)) return false;
@@ -56,7 +56,7 @@ boolean is_lava(int x, int y) {
 	return false;
 }
 
-boolean is_ice(int x, int y) {
+bool is_ice(int x, int y) {
 	schar ltyp;
 
 	if (!isok(x, y)) return false;
@@ -100,7 +100,7 @@ int is_drawbridge_wall(int x, int y) {
  * drawbridge "wall" is UP in the location x, y
  * (instead of UP or DOWN, as with is_drawbridge_wall).
  */
-boolean is_db_wall(int x, int y) {
+bool is_db_wall(int x, int y) {
 	return levl[x][y].typ == DBWALL;
 }
 
@@ -108,7 +108,7 @@ boolean is_db_wall(int x, int y) {
  * Return true with x,y pointing to the drawbridge if x,y initially indicate
  * a drawbridge or drawbridge wall.
  */
-boolean find_drawbridge(int *x, int *y) {
+bool find_drawbridge(int *x, int *y) {
 	int dir;
 
 	if (IS_DRAWBRIDGE(levl[*x][*y].typ))
@@ -160,10 +160,10 @@ static void get_wall_for_db(int *x, int *y) {
  *     flag must be put to true if we want the drawbridge to be opened.
  */
 
-boolean create_drawbridge(int x, int y, int dir, boolean flag) {
+bool create_drawbridge(int x, int y, int dir, bool flag) {
 	int x2, y2;
-	boolean horiz;
-	boolean lava = levl[x][y].typ == LAVAPOOL; /* assume initialized map */
+	bool horiz;
+	bool lava = levl[x][y].typ == LAVAPOOL; /* assume initialized map */
 
 	x2 = x;
 	y2 = y;
@@ -307,7 +307,7 @@ static const char *E_phrase(struct entity *etmp, const char *verb) {
  * Simple-minded "can it be here?" routine
  */
 
-static boolean e_survives_at(struct entity *etmp, int x, int y) {
+static bool e_survives_at(struct entity *etmp, int x, int y) {
 	if (noncorporeal(etmp->edata))
 		return true;
 	if (is_pool(x, y))
@@ -386,7 +386,7 @@ static void e_died(struct entity *etmp, int dest, int how) {
  * These are never directly affected by a bridge or portcullis.
  */
 
-static boolean automiss(struct entity *etmp) {
+static bool automiss(struct entity *etmp) {
 	return (is_u(etmp) ? Passes_walls : passes_walls(etmp->edata)) || noncorporeal(etmp->edata);
 }
 
@@ -394,7 +394,7 @@ static boolean automiss(struct entity *etmp) {
  * Does falling drawbridge or portcullis miss etmp?
  */
 
-static boolean e_missed(struct entity *etmp, boolean chunks) {
+static bool e_missed(struct entity *etmp, bool chunks) {
 	int misses;
 
 #ifdef D_DEBUG
@@ -431,7 +431,7 @@ static boolean e_missed(struct entity *etmp, boolean chunks) {
  * Can etmp jump from death?
  */
 
-static boolean e_jumps(struct entity *etmp) {
+static bool e_jumps(struct entity *etmp) {
 	int tmp = 4; /* out of 10 */
 
 	if (is_u(etmp) ? (Sleeping || Fumbling) :
@@ -671,6 +671,44 @@ static void do_entity(struct entity *etmp) {
 }
 
 /*
+ * Open the drawbridge located at x,y
+ */
+
+void open_drawbridge(int x, int y) {
+	struct rm *lev1, *lev2;
+	struct trap *t;
+	int x2, y2;
+
+	lev1 = &levl[x][y];
+	if (lev1->typ != DRAWBRIDGE_UP) return;
+	x2 = x;
+	y2 = y;
+	get_wall_for_db(&x2, &y2);
+	if (cansee(x, y) || cansee(x2, y2))
+		pline("You see a drawbridge %s down!",
+		      (distu(x2, y2) < distu(x, y)) ? "going" : "coming");
+	lev1->typ = DRAWBRIDGE_DOWN;
+	lev2 = &levl[x2][y2];
+	lev2->typ = DOOR;
+	lev2->doormask = D_NODOOR;
+	set_entity(x, y, &(occupants[0]));
+	set_entity(x2, y2, &(occupants[1]));
+	do_entity(&(occupants[0]));	     /* do set_entity after first */
+	set_entity(x2, y2, &(occupants[1])); /* do_entity for worm tails */
+	do_entity(&(occupants[1]));
+	revive_nasty(x, y, NULL);
+	delallobj(x, y);
+	if ((t = t_at(x, y)) != 0) deltrap(t);
+	if ((t = t_at(x2, y2)) != 0) deltrap(t);
+	del_engr_at(x, y);
+	del_engr_at(x2, y2);
+	newsym(x, y);
+	newsym(x2, y2);
+	unblock_point(x2, y2); /* vision */
+	if (Is_stronghold(&u.uz)) u.uevent.uopened_dbridge = true;
+}
+
+/*
  * Close the drawbridge located at x,y
  */
 
@@ -722,44 +760,6 @@ void close_drawbridge(int x, int y) {
 	newsym(x, y);
 	newsym(x2, y2);
 	block_point(x2, y2); /* vision */
-}
-
-/*
- * Open the drawbridge located at x,y
- */
-
-void open_drawbridge(int x, int y) {
-	struct rm *lev1, *lev2;
-	struct trap *t;
-	int x2, y2;
-
-	lev1 = &levl[x][y];
-	if (lev1->typ != DRAWBRIDGE_UP) return;
-	x2 = x;
-	y2 = y;
-	get_wall_for_db(&x2, &y2);
-	if (cansee(x, y) || cansee(x2, y2))
-		pline("You see a drawbridge %s down!",
-		      (distu(x2, y2) < distu(x, y)) ? "going" : "coming");
-	lev1->typ = DRAWBRIDGE_DOWN;
-	lev2 = &levl[x2][y2];
-	lev2->typ = DOOR;
-	lev2->doormask = D_NODOOR;
-	set_entity(x, y, &(occupants[0]));
-	set_entity(x2, y2, &(occupants[1]));
-	do_entity(&(occupants[0]));	     /* do set_entity after first */
-	set_entity(x2, y2, &(occupants[1])); /* do_entity for worm tails */
-	do_entity(&(occupants[1]));
-	revive_nasty(x, y, NULL);
-	delallobj(x, y);
-	if ((t = t_at(x, y)) != 0) deltrap(t);
-	if ((t = t_at(x2, y2)) != 0) deltrap(t);
-	del_engr_at(x, y);
-	del_engr_at(x2, y2);
-	newsym(x, y);
-	newsym(x2, y2);
-	unblock_point(x2, y2); /* vision */
-	if (Is_stronghold(&u.uz)) u.uevent.uopened_dbridge = true;
 }
 
 /*

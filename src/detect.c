@@ -12,13 +12,13 @@
 
 extern boolean known; /* from read.c */
 
-static void do_dknown_of(struct obj *);
-static boolean check_map_spot(int, int, char, unsigned);
-static boolean clear_stale_map(char, unsigned);
-static void sense_trap(struct trap *, xchar, xchar, int);
-static void show_map_spot(int, int);
-static void findone(int, int, void *);
-static void openone(int, int, void *);
+static void do_dknown_of(struct obj *obj);
+static bool check_map_spot(int x, int y, char oclass, uint material);
+static bool clear_stale_map(char oclass, uint material);
+static void sense_trap(struct trap *trap, xchar x, xchar y, int src_cursed);
+static void show_map_spot(int x, int y);
+static void findone(int zx, int zy, void *num);
+static void openone(int zx, int zy, void *num);
 
 /* Recursively search obj for an object in class oclass and return 1st found */
 struct obj *o_in(struct obj *obj, char oclass) {
@@ -74,7 +74,7 @@ static void do_dknown_of(struct obj *obj) {
 }
 
 /* Check whether the location has an outdated object displayed on it. */
-static boolean check_map_spot(int x, int y, char oclass, uint material) {
+static bool check_map_spot(int x, int y, char oclass, uint material) {
 	int glyph;
 	struct obj *otmp;
 	struct monst *mtmp;
@@ -83,8 +83,8 @@ static boolean check_map_spot(int x, int y, char oclass, uint material) {
 	if (glyph_is_object(glyph)) {
 		/* there's some object shown here */
 		if (oclass == ALL_CLASSES) {
-			return ((boolean)(!(level.objects[x][y] || /* stale if nothing here */
-					    ((mtmp = m_at(x, y)) != 0 && (mtmp->minvent)))));
+			return !(level.objects[x][y] || /* stale if nothing here */
+				 ((mtmp = m_at(x, y)) != NULL && (mtmp->minvent)));
 		} else {
 			if (material && objects[glyph_to_obj(glyph)].oc_material == material) {
 				/* the object shown here is of interest because material matches */
@@ -121,9 +121,9 @@ static boolean check_map_spot(int x, int y, char oclass, uint material) {
    reappear after the detection has completed.  Return true if noticeable
    change occurs.
  */
-static boolean clear_stale_map(char oclass, uint material) {
+static bool clear_stale_map(char oclass, uint material) {
 	int zx, zy;
-	boolean change_made = false;
+	bool change_made = false;
 
 	for (zx = 1; zx < COLNO; zx++)
 		for (zy = 0; zy < ROWNO; zy++)

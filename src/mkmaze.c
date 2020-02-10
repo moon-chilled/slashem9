@@ -11,19 +11,19 @@ extern char *lev_message;
 extern lev_region *lregions;
 extern int num_lregions;
 
-static boolean iswall(int, int);
-static boolean iswall_or_stone(int, int);
-static boolean is_solid(int, int);
-static int extend_spine(int[3][3], int, int, int);
-static boolean okay(int, int, int);
-static void maze0xy(coord *);
-static boolean put_lregion_here(xchar, xchar, xchar, xchar, xchar, xchar, xchar, boolean, d_level *);
+static bool iswall(int x, int y);
+static bool iswall_or_stone(int x, int y);
+static bool is_solid(int x, int y);
+static int extend_spine(int locale[3][3], int wall_there, int dx, int dy);
+static bool okay(int x, int y, int dir);
+static void maze0xy(coord *cc);
+static bool put_lregion_here(xchar x, xchar y, xchar nlx, xchar nly, xchar nhx, xchar nhy, xchar rtype, bool oneshot, d_level *lev);
 static void fixup_special(void);
-static void move(int *, int *, int);
+static void move(int *x, int *y, int dir);
 static void setup_waterlevel(void);
 static void unsetup_waterlevel(void);
 
-static boolean iswall(int x, int y) {
+static bool iswall(int x, int y) {
 	int type;
 
 	if (!isok(x, y)) return false;
@@ -32,7 +32,7 @@ static boolean iswall(int x, int y) {
 		type == SDOOR || type == IRONBARS);
 }
 
-static boolean iswall_or_stone(int x, int y) {
+static bool iswall_or_stone(int x, int y) {
 	int type;
 
 	/* out of bounds = stone */
@@ -44,7 +44,7 @@ static boolean iswall_or_stone(int x, int y) {
 }
 
 /* return true if out of bounds, wall or rock */
-static boolean is_solid(int x, int y) {
+static bool is_solid(int x, int y) {
 	return !isok(x, y) || IS_STWALL(levl[x][y].typ);
 }
 
@@ -239,7 +239,7 @@ void wallification(int x1, int y1, int x2, int y2, boolean initial) {
 	return;
 }
 
-static boolean okay(int x, int y, int dir) {
+static bool okay(int x, int y, int dir) {
 	move(&x, &y, dir);
 	move(&x, &y, dir);
 	if (x < 3 || y < 3 || x > x_maze_max || y > y_maze_max || levl[x][y].typ != 0)
@@ -311,7 +311,7 @@ void place_lregion(xchar lx, xchar ly, xchar hx, xchar hy, xchar nlx, xchar nly,
 	impossible("Couldn't place lregion type %d!", rtype);
 }
 
-static boolean put_lregion_here(xchar x, xchar y, xchar nlx, xchar nly, xchar nhx, xchar nhy, xchar rtype, boolean oneshot, d_level *lev) {
+static bool put_lregion_here(xchar x, xchar y, xchar nlx, xchar nly, xchar nhx, xchar nhy, xchar rtype, bool oneshot, d_level *lev) {
 	if (bad_location(x, y, nlx, nly, nhx, nhy)) {
 		if (!oneshot) {
 			return false; /* caller should try again */
