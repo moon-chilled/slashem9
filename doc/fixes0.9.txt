@@ -186,6 +186,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: an exploding landmine will destroy a drawbridge.
 - Bugfix: don't tell player about an object broken but not seen.
 - Gameplay: dipping an object into a potion of acid will erode it.
+- Bugfix: don't get a message like 'the bolt of lightning whizzes by you' when blind.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

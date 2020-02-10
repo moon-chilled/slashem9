@@ -4033,9 +4033,10 @@ void buzz(int type, int nd, xchar sx, xchar sy, int dx, int dy) {
 					else
 						range = 0;
 				}
-			} else {
+			} else if (!Blind) {
 				pline("%s whizzes by you!", The(fltxt));
-			}
+			} else if (abstype == ZT_LIGHTNING) {
+				pline("Your %s tingles.", body_part(ARM));
 			if (abstype == ZT_LIGHTNING) flashburn(d(nd, 50));
 			stop_occupation();
 			nomul(0);
