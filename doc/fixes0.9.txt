@@ -182,6 +182,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: digging down on the site of an existing hole will finish immediately.
 - Bugfix: only prefix shopkeeper names with Mr./Ms. when referred to by last name.
 - Bugfix: properly account for multiple attacks when determining maximum passive damage that can be dealt.
+- Bugfix: ghosts and other noncorporeals could be slimed.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

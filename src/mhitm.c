@@ -1750,6 +1750,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 		case AD_SLIM:
 			if (cancelled) break; /* physical damage only */
 			if (!rn2(4) && !flaming(mdef->data) &&
+			    !noncorporeal(mdef->data) &&
 			    mdef->data != &mons[PM_GREEN_SLIME]) {
 				if (newcham(mdef, &mons[PM_GREEN_SLIME], false, vis)) {
 					mdef->oldmonnm = PM_GREEN_SLIME;

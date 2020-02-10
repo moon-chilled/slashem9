@@ -2113,6 +2113,7 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 		case AD_SLIM:
 			if (negated) break; /* physical damage only */
 			if (!rn2(4) && !flaming(mdef->data) &&
+			    !noncorporeal(mdef->data) &&
 			    mdef->data != &mons[PM_GREEN_SLIME]) {
 				pline("You turn %s into slime.", mon_nam(mdef));
 				newcham(mdef, &mons[PM_GREEN_SLIME], false, !Blind);

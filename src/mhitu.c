@@ -1813,7 +1813,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 			if (flaming(youmonst.data)) {
 				pline("The slime burns away!");
 				dmg = 0;
-			} else if (Unchanging ||
+			} else if (Unchanging || noncorporeal(youmonst.data) ||
 				   youmonst.data == &mons[PM_GREEN_SLIME]) {
 				pline("You are unaffected.");
 				dmg = 0;
