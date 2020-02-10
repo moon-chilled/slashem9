@@ -344,14 +344,18 @@ int tactics(struct monst *mtmp) {
 void aggravate(void) {
 	struct monst *mtmp;
 
-	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon)
-		if (!DEADMONSTER(mtmp)) {
-			mtmp->msleeping = 0;
-			if (!mtmp->mcanmove && !rn2(5)) {
-				mtmp->mfrozen = 0;
-				mtmp->mcanmove = 1;
-			}
+	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+		if (DEADMONSTER(mtmp)) continue;
+
+		mtmp->mstrategy &= ~STRAT_WAITFORU;
+		mtmp->msleeping = 0;
+
+		mtmp->msleeping = 0;
+		if (!mtmp->mcanmove && !rn2(5)) {
+			mtmp->mfrozen = 0;
+			mtmp->mcanmove = 1;
 		}
+	}
 }
 
 void clonewiz(void) {

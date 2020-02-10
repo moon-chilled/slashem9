@@ -187,6 +187,8 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: don't tell player about an object broken but not seen.
 - Gameplay: dipping an object into a potion of acid will erode it.
 - Bugfix: don't get a message like 'the bolt of lightning whizzes by you' when blind.
+- Gameplay: casters won't cast aggravate monster when all the monsters on the level are awake.
+- Gameplay: casters' aggravate monster spell will wake up meditating monsters.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
