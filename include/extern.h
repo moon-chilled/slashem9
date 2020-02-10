@@ -243,13 +243,6 @@ void rot_organic(void *, long);
 void rot_corpse(void *, long);
 schar fillholetyp(int x, int y);
 void liquid_flow(xchar x, xchar y, schar typ, struct trap *ttmp, const char *fillmsg);
-#if 0
-void bury_monst(struct monst *);
-void bury_you(void);
-void unearth_you(void);
-void escape_tomb(void);
-void bury_obj(struct obj *);
-#endif
 
 /* ### display.c ### */
 
@@ -526,9 +519,6 @@ void lesshungry(int);
 boolean is_fainted(void);
 void reset_faint(void);
 void violated_vegetarian(void);
-#if 0
-void sync_hunger(void);
-#endif
 void newuhs(boolean);
 bool can_reach_floorobj(void);
 void vomit(void);
@@ -745,9 +735,6 @@ bool fuzzymatch(const char *s1, const char *s2, const char *ignore_chars, bool c
 void setrandom(void);
 int getyear(void);
 int getmonth(void); /* KMH -- Used by gypsies */
-#if 0
-char *yymmdd(time_t);
-#endif
 long yyyymmdd(time_t date);
 long hhmmss(time_t date);
 int phase_of_the_moon(void);

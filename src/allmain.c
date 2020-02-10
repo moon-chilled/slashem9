@@ -545,9 +545,6 @@ void stop_occupation(void) {
 		}
 		occupation = 0;
 		context.botl = 1; /* in case u.uhs changed */
-		/* fainting stops your occupation, there's no reason to sync.
-				sync_hunger();
-		*/
 		nomul(0);
 		pushch(0);
 	}

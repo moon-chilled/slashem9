@@ -433,24 +433,6 @@ int getmonth(void) {
 	return getlt()->tm_mon;
 }
 
-#if 0
-/* This routine is no longer used since in 2000 it will yield "100mmdd". */
-// Hey, I wrote code after 2000, when it yielded that!! --ELR
-char *yymmdd(time_t date) {
-	static char datestr[10];
-	struct tm *lt;
-
-	if (date == 0)
-		lt = getlt();
-	else
-		lt = localtime(&date);
-
-	sprintf(datestr, "%02d%02d%02d",
-	        lt->tm_year, lt->tm_mon + 1, lt->tm_mday);
-	return datestr;
-}
-#endif
-
 long yyyymmdd(time_t date) {
 	long datenum;
 	struct tm *lt;
