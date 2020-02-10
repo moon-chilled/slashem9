@@ -189,6 +189,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: don't get a message like 'the bolt of lightning whizzes by you' when blind.
 - Gameplay: casters won't cast aggravate monster when all the monsters on the level are awake.
 - Gameplay: casters' aggravate monster spell will wake up meditating monsters.
+- Bugfix: busy pets won't be prevented from accompanying ascending player.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
