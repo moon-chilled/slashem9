@@ -3893,7 +3893,7 @@ void buzz(int type, int nd, xchar sx, xchar sy, int dx, int dy) {
 			if (abs(type) == ZT_SPELL(ZT_FIRE)) break;
 			if (type >= 0) mon->mstrategy &= ~STRAT_WAITMASK;
 
-		buzzmonst:
+buzzmonst:
 			if (zap_hit(find_mac(mon), spell_type)) {
 				if (mon_reflects(mon, NULL)) {
 					if (cansee(mon->mx, mon->my)) {
@@ -4037,6 +4037,7 @@ void buzz(int type, int nd, xchar sx, xchar sy, int dx, int dy) {
 				pline("%s whizzes by you!", The(fltxt));
 			} else if (abstype == ZT_LIGHTNING) {
 				pline("Your %s tingles.", body_part(ARM));
+			}
 			if (abstype == ZT_LIGHTNING) flashburn(d(nd, 50));
 			stop_occupation();
 			nomul(0);
