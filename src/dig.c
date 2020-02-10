@@ -270,15 +270,16 @@ static int dig(void) {
 	context.digging.effort += bonus;
 
 	if (context.digging.down) {
-		struct trap *ttmp;
+		struct trap *ttmp = t_at(dpx, dpy);
 
-		if (context.digging.effort > 250) {
+		if (context.digging.effort > 250 || (ttmp && ttmp->ttyp == HOLE)) {
 			dighole(false);
 			memset((void *)&context.digging, 0, sizeof context.digging);
 			return 0; /* done with digging */
 		}
 
-		if (context.digging.effort <= 50 || is_lightsaber(uwep) || ((ttmp = t_at(dpx, dpy)) != 0 && (is_pitlike(ttmp->ttyp) || is_holelike(ttmp->ttyp))))
+		if (context.digging.effort <= 50 || is_lightsaber(uwep)
+		    || ((ttmp = t_at(dpx, dpy)) != 0 && (is_pitlike(ttmp->ttyp) || ttmp->ttyp == TRAPDOOR)))
 
 			return 1;
 
