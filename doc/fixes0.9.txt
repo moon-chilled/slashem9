@@ -183,6 +183,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: only prefix shopkeeper names with Mr./Ms. when referred to by last name.
 - Bugfix: properly account for multiple attacks when determining maximum passive damage that can be dealt.
 - Bugfix: ghosts and other noncorporeals could be slimed.
+- Gameplay: an exploding landmine will destroy a drawbridge.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

@@ -1194,20 +1194,35 @@ static int steedintrap(struct trap *trap, struct obj *otmp) {
 
 /* some actions common to both player and monsters for triggered landmine */
 void blow_up_landmine(struct trap *trap) {
-	scatter(trap->tx, trap->ty, 4,
+	int x = trap->tx, y = trap->ty, dbx, dby;
+	struct rm *lev = &levl[x][y];
+
+	scatter(x, y, 4,
 		MAY_DESTROY | MAY_HIT | MAY_FRACTURE | VIS_EFFECTS,
 		NULL);
-	del_engr_at(trap->tx, trap->ty);
-	wake_nearto(trap->tx, trap->ty, 400);
+	del_engr_at(x, y);
+	wake_nearto(x, y, 400);
+
 	/* ALI - artifact doors */
-	if (IS_DOOR(levl[trap->tx][trap->ty].typ) &&
-	    !artifact_door(trap->tx, trap->ty))
-		levl[trap->tx][trap->ty].doormask = D_BROKEN;
-	/* TODO: destroy drawbridge if present */
-	/* caller may subsequently fill pit, e.g. with a boulder */
-	trap->ttyp = PIT;	/* explosion creates a pit */
-	trap->madeby_u = false; /* resulting pit isn't yours */
-	seetrap(trap);		/* and it isn't concealed */
+	if (IS_DOOR(lev->typ) &&
+	    !artifact_door(x, y))
+		lev->doormask = D_BROKEN;
+
+	/* destroy drawbridge if present */
+	if (lev->typ == DRAWBRIDGE_DOWN || is_drawbridge_wall(x, y) >= 0) {
+		dbx = x, dby = y;
+		/* if under the portcullis, the bridge is adjacent */
+		if (find_drawbridge(&dbx, &dby))
+			destroy_drawbridge(dbx, dby);
+		trap = t_at(x, y);      /* expected to be null after destruction */
+	}
+
+	/* convert landmine into pit */
+	if (trap) {
+		trap->ttyp = PIT;	/* explosion creates a pit */
+		trap->madeby_u = false; /* resulting pit isn't yours */
+		seetrap(trap);		/* and it isn't concealed */
+	}
 }
 
 /*
@@ -2096,9 +2111,11 @@ int mintrap(struct monst *mtmp) {
 				if (!in_sight)
 					pline("Kaablamm!  You hear an explosion in the distance!");
 				blow_up_landmine(trap);
-				if (thitm(0, mtmp, NULL, rnd(16), false))
+				/* explosion might have destroyed a drawbridge; don't
+				   dish out more damage if monster is already dead */
+				if (mtmp->mhp <= 0 || thitm(0, mtmp, NULL, rnd(16), FALSE)) {
 					trapkilled = true;
-				else {
+				} else {
 					/* monsters recursively fall into new pit */
 					if (mintrap(mtmp) == 2) trapkilled = true;
 				}
