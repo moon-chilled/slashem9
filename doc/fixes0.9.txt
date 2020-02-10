@@ -184,6 +184,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: properly account for multiple attacks when determining maximum passive damage that can be dealt.
 - Bugfix: ghosts and other noncorporeals could be slimed.
 - Gameplay: an exploding landmine will destroy a drawbridge.
+- Bugfix: don't tell player about an object broken but not seen.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

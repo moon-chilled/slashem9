@@ -440,7 +440,7 @@ void mhurtle(struct monst *, int, int, int);
 void throwit(struct obj *, long, boolean, int);
 int omon_adj(struct monst *, struct obj *, boolean);
 int thitmonst(struct monst *, struct obj *, int);
-int hero_breaks(struct obj *, xchar, xchar, boolean);
+int hero_breaks(struct obj *, xchar, xchar, bool);
 int breaks(struct obj *, xchar, xchar);
 boolean breaktest(struct obj *);
 boolean walk_path(coord *, coord *, boolean (*)(void *, int, int), void *);

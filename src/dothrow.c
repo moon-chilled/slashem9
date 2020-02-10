@@ -1632,8 +1632,8 @@ nopick:
  * The hero causes breakage of an object (throwing, dropping it, etc.)
  * Return 0 if the object didn't break, 1 if the object broke.
  */
-int hero_breaks(struct obj *obj, xchar x, xchar y, boolean from_invent) {
-	boolean in_view = !Blind;
+int hero_breaks(struct obj *obj, xchar x, xchar y, bool from_invent) {
+	bool in_view = Blind ? false : (from_invent || cansee(x, y));
 	if (!breaktest(obj)) return 0;
 	breakmsg(obj, in_view);
 	breakobj(obj, x, y, true, from_invent);
