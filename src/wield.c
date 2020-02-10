@@ -622,15 +622,17 @@ void untwoweapon(void) {
 	return;
 }
 
-/* Maybe rust object, or corrode it if acid damage is called for */
-void erode_obj(struct obj *target, boolean acid_dmg, boolean fade_scrolls) {
+// Maybe rust object, or corrode it if acid damage is called for
+// returns true if something happened
+bool erode_obj(struct obj *target, bool acid_dmg, bool fade_scrolls, bool for_dip) {
 	int erosion;
 	struct monst *victim;
-	boolean vismon;
-	boolean visobj;
+	bool vismon;
+	bool visobj;
+	bool ret = false;
 
 	if (!target)
-		return;
+		return false;
 	victim = carried(target) ? &youmonst :
 				   mcarried(target) ? target->ocarry : NULL;
 	vismon = victim && (victim != &youmonst) && canseemon(victim);
@@ -640,6 +642,7 @@ void erode_obj(struct obj *target, boolean acid_dmg, boolean fade_scrolls) {
 
 	if (target->greased) {
 		grease_protect(target, NULL, victim);
+		ret = true;
 	} else if (target->oclass == SCROLL_CLASS) {
 		if (fade_scrolls && target->otyp != SCR_BLANK_PAPER
 #ifdef MAIL
@@ -653,15 +656,16 @@ void erode_obj(struct obj *target, boolean acid_dmg, boolean fade_scrolls) {
 			}
 			target->otyp = SCR_BLANK_PAPER;
 			target->spe = 0;
+			ret = true;
 		}
 	} else if (target->oerodeproof ||
 		   (acid_dmg ? !is_corrodeable(target) : !is_rustprone(target))) {
 		if (flags.verbose || !(target->oerodeproof && target->rknown)) {
-			if ((victim == &youmonst) || vismon)
+			if (((victim == &youmonst) || vismon) && !for_dip)
 				pline("%s not affected.", Yobjnam2(target, "are"));
-			/* no message if not carried */
+			/* no message if not carried or dipping*/
 		}
-		if (target->oerodeproof) target->rknown = true;
+		if (target->oerodeproof) target->rknown = !for_dip;
 	} else if (erosion < MAX_ERODE) {
 		if ((victim == &youmonst) || vismon || visobj)
 			pline("%s%s!", Yobjnam2(target, acid_dmg ? "corrode" : "rust"),
@@ -671,8 +675,9 @@ void erode_obj(struct obj *target, boolean acid_dmg, boolean fade_scrolls) {
 			target->oeroded2++;
 		else
 			target->oeroded++;
+		ret = true;
 	} else {
-		if (flags.verbose) {
+		if (flags.verbose && !for_dip) {
 			if (victim == &youmonst)
 				pline("%s completely %s.",
 				      Yobjnam2(target, Blind ? "feel" : "look"),
@@ -683,6 +688,8 @@ void erode_obj(struct obj *target, boolean acid_dmg, boolean fade_scrolls) {
 				      acid_dmg ? "corroded" : "rusty");
 		}
 	}
+
+	return ret;
 }
 
 int chwepon(struct obj *otmp, int amount) {

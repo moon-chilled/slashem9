@@ -775,7 +775,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 					if (u.twoweap || (uwep && bimanual(uwep))) {
 						otmp = u.twoweap ? uswapwep : uwep;
 						if (otmp && !snuff_lit(otmp))
-							erode_obj(otmp, false, true);
+							erode_obj(otmp, false, true, false);
 					}
 				glovecheck:
 					rust_dmg(uarmg, "gauntlets", 1, true, &youmonst);
@@ -787,7 +787,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 					pline("%s your right %s!", A_gush_of_water_hits,
 					      body_part(ARM));
 					if (uwep && !snuff_lit(uwep))
-						erode_obj(uwep, false, true);
+						erode_obj(uwep, false, true, false);
 					goto glovecheck;
 				default:
 					pline("%s you!", A_gush_of_water_hits);
@@ -1806,7 +1806,7 @@ int mintrap(struct monst *mtmp) {
 							break;
 						target = MON_WEP(mtmp);
 						if (target && bimanual(target))
-							erode_obj(target, false, true);
+							erode_obj(target, false, true, false);
 					glovecheck:
 						target = which_armor(mtmp, W_ARMG);
 						rust_dmg(target, "gauntlets", 1, true, mtmp);
@@ -1816,7 +1816,7 @@ int mintrap(struct monst *mtmp) {
 							pline("%s %s's right %s!", A_gush_of_water_hits,
 							      mon_nam(mtmp), mbodypart(mtmp, ARM));
 						if (MON_WEP(mtmp) && !snuff_lit(MON_WEP(mtmp)))
-							erode_obj(MON_WEP(mtmp), false, true);
+							erode_obj(MON_WEP(mtmp), false, true, false);
 						goto glovecheck;
 					default:
 						if (in_sight)
@@ -2113,7 +2113,7 @@ int mintrap(struct monst *mtmp) {
 				blow_up_landmine(trap);
 				/* explosion might have destroyed a drawbridge; don't
 				   dish out more damage if monster is already dead */
-				if (mtmp->mhp <= 0 || thitm(0, mtmp, NULL, rnd(16), FALSE)) {
+				if (mtmp->mhp <= 0 || thitm(0, mtmp, NULL, rnd(16), false)) {
 					trapkilled = true;
 				} else {
 					/* monsters recursively fall into new pit */

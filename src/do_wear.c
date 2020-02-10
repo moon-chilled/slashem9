@@ -1776,7 +1776,7 @@ void erode_armor(struct monst *victim, boolean acid_dmg) {
 	struct obj *otmph = some_armor(victim);
 
 	if (otmph && (otmph != uarmf)) {
-		erode_obj(otmph, acid_dmg, false);
+		erode_obj(otmph, acid_dmg, false, false);
 		if (carried(otmph)) update_inventory();
 	}
 }

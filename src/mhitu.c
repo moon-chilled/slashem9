@@ -2902,7 +2902,7 @@ static int passiveum(struct permonst *olduasmon, struct monst *mtmp, struct atta
 			} else
 				tmp = 0;
 			if (!rn2(30)) erode_armor(mtmp, true);
-			if (!rn2(6)) erode_obj(MON_WEP(mtmp), true, true);
+			if (!rn2(6)) erode_obj(MON_WEP(mtmp), true, true, false);
 			goto assess_dmg;
 		case AD_STON: { /* cockatrice */
 			long protector = attk_protection((int)mattk->aatyp),

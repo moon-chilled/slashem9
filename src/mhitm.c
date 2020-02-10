@@ -1327,7 +1327,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 				pline("It burns %s!", mon_nam(mdef));
 			}
 			if (!rn2(30)) erode_armor(mdef, true);
-			if (!rn2(6)) erode_obj(MON_WEP(mdef), true, true);
+			if (!rn2(6)) erode_obj(MON_WEP(mdef), true, true, false);
 			break;
 		case AD_RUST:
 			if (magr->mcan) break;

@@ -2161,7 +2161,7 @@ void uwepgone(void);
 void uswapwepgone(void);
 void uqwepgone(void);
 void untwoweapon(void);
-void erode_obj(struct obj *, boolean, boolean);
+bool erode_obj(struct obj *target, bool acid_dmg, bool fade_scrolls, bool for_dip);
 int chwepon(struct obj *, int);
 int welded(struct obj *);
 void weldmsg(struct obj *);

@@ -3143,17 +3143,17 @@ void passive_obj(struct monst *mon, struct obj *obj, struct attack *mattk) {
 	switch (mattk->adtyp) {
 		case AD_ACID:
 			if (!rn2(6)) {
-				erode_obj(obj, true, false);
+				erode_obj(obj, true, false, false);
 			}
 			break;
 		case AD_RUST:
 			if (!mon->mcan) {
-				erode_obj(obj, false, false);
+				erode_obj(obj, false, false, false);
 			}
 			break;
 		case AD_CORR:
 			if (!mon->mcan) {
-				erode_obj(obj, true, false);
+				erode_obj(obj, true, false, false);
 			}
 			break;
 		case AD_ENCH:

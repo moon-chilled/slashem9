@@ -2225,8 +2225,8 @@ uint zapyourself(struct obj *obj, boolean ordinary) {
 				damage = d(12, 6);
 				exercise(A_STR, false);
 			}
-			if (!rn2(u.twoweap ? 3 : 6)) erode_obj(uwep, true, true);
-			if (u.twoweap && !rn2(3)) erode_obj(uswapwep, true, true);
+			if (!rn2(u.twoweap ? 3 : 6)) erode_obj(uwep, true, true, false);
+			if (u.twoweap && !rn2(3)) erode_obj(uswapwep, true, true, false);
 			if (!rn2(6)) erode_armor(&youmonst, true);
 			break;
 		case WAN_LIGHTNING:
@@ -3509,7 +3509,7 @@ static int zhitm(struct monst *mon, int type, int nd, struct obj **ootmp) {
 				break;
 			}
 			tmp = d(nd, 6);
-			if (!rn2(6)) erode_obj(MON_WEP(mon), true, true);
+			if (!rn2(6)) erode_obj(MON_WEP(mon), true, true, false);
 			if (!rn2(6)) erode_armor(mon, true);
 			break;
 	}
@@ -3662,8 +3662,8 @@ static void zhitu(int type, int nd, const char *fltxt, xchar sx, xchar sy) {
 				exercise(A_STR, false);
 			}
 			/* using two weapons at once makes both of them more vulnerable */
-			if (!rn2(u.twoweap ? 3 : 6)) erode_obj(uwep, true, true);
-			if (u.twoweap && !rn2(3)) erode_obj(uswapwep, true, true);
+			if (!rn2(u.twoweap ? 3 : 6)) erode_obj(uwep, true, true, false);
+			if (u.twoweap && !rn2(3)) erode_obj(uswapwep, true, true, false);
 			if (!rn2(6)) erode_armor(&youmonst, true);
 			break;
 	}

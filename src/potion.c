@@ -2830,6 +2830,11 @@ int dodip(void) {
 		}
 	}
 
+	if (potion->otyp == POT_ACID) {
+		if (erode_obj(obj, true, false, true))
+			goto poof;
+	}
+
 	if (potion->otyp == POT_OIL) {
 		boolean wisx = false;
 		if (potion->lamplit) { /* burning */
