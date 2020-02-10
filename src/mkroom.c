@@ -168,6 +168,8 @@ static void mkshop(void) {
 				}
 			if (*ep == 'g' || *ep == 'G')
 				i = 0;
+			else if (*ep == 'v' || *ep == 'V')
+				i = HEALTHSHOP - SHOPBASE;
 			else
 				i = j;
 		}
