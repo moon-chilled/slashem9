@@ -1733,7 +1733,6 @@ void freedynamicdata(void);
 
 long money2mon(struct monst *, long);
 void money2u(struct monst *, long);
-char *shkname(struct monst *);
 void shkgone(struct monst *);
 void set_residency(struct monst *, boolean);
 void replshk(struct monst *, struct monst *);
@@ -1799,6 +1798,8 @@ char *Shk_Your(char *, struct obj *);
 void stock_room(int shp_indx, struct mkroom *sroom);
 bool saleable(struct monst *shkp, struct obj *obj);
 int get_shop_item(int type);
+const char *shkname(struct monst *mtmp);
+bool shkname_is_pname(struct monst *mtmp);
 
 /* ### sit.c ### */
 

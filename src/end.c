@@ -203,8 +203,12 @@ void done_in_by(struct monst *mtmp) {
 			strcat(buf, "ghost");
 			if (mtmp->mnamelth) sprintf(eos(buf), " of %s", NAME(mtmp));
 		} else if (mtmp->isshk) {
-			sprintf(eos(buf), "%s %s, the shopkeeper",
-				(mtmp->female ? "Ms." : "Mr."), shkname(mtmp));
+			const char *shknm = shkname(mtmp),
+				   *honorific = shkname_is_pname(mtmp) ? "" :
+						mtmp->female ? "Ms. " : "Mr. ";
+
+			sprintf(eos(buf), "%s%s, the shopkeeper", honorific, shknm);
+
 			killer.format = KILLED_BY;
 		} else if (mtmp->ispriest || mtmp->isminion) {
 			/* m_monnam() suppresses "the" prefix plus "invisible", and

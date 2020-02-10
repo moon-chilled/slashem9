@@ -163,10 +163,6 @@ static struct monst *next_shkp(struct monst *shkp, boolean withbill) {
 	return shkp;
 }
 
-char *shkname(struct monst *mtmp) {
-	return ESHK(mtmp)->shknam;
-}
-
 void shkgone(struct monst *mtmp) {
 	struct eshk *eshk = ESHK(mtmp);
 	struct mkroom *sroom = &rooms[eshk->shoproom - ROOMOFFSET];
