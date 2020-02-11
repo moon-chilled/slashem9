@@ -219,3 +219,4 @@ Imports from other locations:
 - Interface: add wall colouration for different dungeon branches and special rooms (L).
 - Interface: add the overview patch, which adds two new extended commands: #overview, which shows an overview of the layout of the dungeon levels the player has explored, and #annotate, which allows the player to make a mental note which is associated with the current level (Hojita Discordia).
 - Interface: gun shop owners are named after GTA characters (SlashTHEM).
+- Gameplay: the Staff of Aesculapius protects against drain life again (SlashTHEM).
