@@ -127,10 +127,9 @@ void curses_message_win_puts(const char *message, bool recursed) {
 	wrefresh(win);
 }
 
-int curses_block(bool noscroll)
+int curses_block(bool noscroll) {
 /* noscroll - blocking because of msgtype = stop/alert */
 /* else blocking because window is full, so need to scroll after */
-{
 	int height, width, ret = 0;
 	WINDOW *win = curses_get_nhwin(MESSAGE_WIN);
 	char *resp = " \n\033"; /* space, enter, esc */
@@ -167,12 +166,11 @@ int curses_block(bool noscroll)
 	return ret;
 }
 
-int curses_more() {
+int curses_more(void) {
 	return curses_block(false);
 }
 
 /* Clear the message window if one line; otherwise unhighlight old messages */
-
 void curses_clear_unhighlight_message_window() {
 	int mh, mw, count;
 	bool border = curses_window_has_border(MESSAGE_WIN);
@@ -208,9 +206,8 @@ void curses_clear_unhighlight_message_window() {
 }
 
 /* Reset message window cursor to starting position, and display most
-recent messages. */
-
-void curses_last_messages() {
+   recent messages. */
+void curses_last_messages(void) {
 	bool border = curses_window_has_border(MESSAGE_WIN);
 
 	if (border) {
