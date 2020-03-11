@@ -728,7 +728,7 @@ char *m_monnam(struct monst *mtmp) {
 
 // pet name: "your little dog"
 char *y_monnam(struct monst *mtmp) {
-	char buf[BUFSZ];
+	static char buf[BUFSZ];
 	int prefix, suppression_flag;
 
 	prefix = mtmp->mtame ? ARTICLE_YOUR : ARTICLE_THE;

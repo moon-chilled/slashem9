@@ -248,8 +248,9 @@ void done_in_by(struct monst *mtmp) {
 	return;
 }
 
-#ifdef WIN32
-#define NOTIFY_NETHACK_BUGS
+#if defined(ALPHA) || defined(BETA)
+# define NOTIFY_NETHACK_BUGS
+# define BUG_NOTIFICATION_TARGET "elronnd@slashem.me"
 #endif
 
 /*VARARGS1*/
@@ -275,14 +276,14 @@ noreturn void panic(const char *str, ...) {
 #if defined(NOTIFY_NETHACK_BUGS)
 	if (!wizard)
 		raw_printf("Report the following error to \"%s\".",
-			   "slashem-discuss@lists.sourceforge.net");
+			   BUG_NOTIFICATION_TARGET);
 	else if (program_state.something_worth_saving)
 		raw_print("\nError save file being written.\n");
 #else
 	if (!wizard)
 		raw_printf("Report error to \"%s\"%s.", WIZARD,
 			   !program_state.something_worth_saving ? "" :
-								   " and it may be possible to rebuild.");
+			   " and it may be possible to rebuild.");
 #endif
 	if (program_state.something_worth_saving && !iflags.debug_fuzzer) {
 		set_error_savefile();

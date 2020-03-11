@@ -258,7 +258,7 @@ static void mkzoo(int type) {
 void fill_zoo(struct mkroom *sroom) {
 	struct monst *mon;
 	int sx, sy, i;
-	int sh, tx, ty, goldlim, type = sroom->rtype;
+	int sh, tx = 0, ty = 0, goldlim = 0, type = sroom->rtype;
 	int rmno = (sroom - rooms) + ROOMOFFSET;
 	coord mm;
 
@@ -279,7 +279,7 @@ void fill_zoo(struct mkroom *sroom) {
 				tx = mm.x;
 				ty = mm.y;
 			} while (occupied((xchar)tx, (xchar)ty) && --i > 0);
-		throne_placed:
+throne_placed:
 			/* TODO: try to ensure the enthroned monster is an M2_PRINCE */
 			break;
 		case BEEHIVE:
@@ -324,28 +324,20 @@ void fill_zoo(struct mkroom *sroom) {
 				continue;
 			mon = makemon(
 				(type == COURT) ? courtmon() :
-						  (type == BARRACKS) ? squadmon() :
-								       (type == MORGUE) ? morguemon() :
-											  (type == FUNGUSFARM) ? fungus() :
-														 (type == BEEHIVE) ?
-														 (sx == tx && sy == ty ? &mons[PM_QUEEN_BEE] :
-																	 &mons[PM_KILLER_BEE]) :
-														 (type == LEPREHALL) ? &mons[PM_LEPRECHAUN] :
-																       (type == COCKNEST) ?
-																       (rn2(4) ? &mons[PM_COCKATRICE] :
-																		 &mons[PM_CHICKATRICE]) :
-																       (type == ANTHOLE) ? antholemon() :
-																			   (type == DRAGONLAIR) ? mkclass(S_DRAGON, 0) :
-																						  (type == LEMUREPIT) ?
-																						  (!rn2(10) ? &mons[PM_HORNED_DEVIL] :
-																							      &mons[PM_LEMURE]) :
-																						  (type == MIGOHIVE) ?
-																						  (sx == tx && sy == ty ? &mons[PM_MIGO_QUEEN] :
-																									  (rn2(2) ? &mons[PM_MIGO_DRONE] : &mons[PM_MIGO_WARRIOR])) :
-																						  (type == BADFOODSHOP) ? mkclass(S_BAD_FOOD, 0) :
-																									  (type == REALZOO) ? realzoomon() :
-																											      (type == GIANTCOURT) ? mkclass(S_GIANT, 0) :
-																														     NULL,
+				(type == BARRACKS) ? squadmon() :
+				(type == MORGUE) ? morguemon() :
+				(type == FUNGUSFARM) ? fungus() :
+				(type == BEEHIVE) ? (sx == tx && sy == ty ? &mons[PM_QUEEN_BEE] : &mons[PM_KILLER_BEE]) :
+				(type == LEPREHALL) ? &mons[PM_LEPRECHAUN] :
+				(type == COCKNEST) ? (rn2(4) ? &mons[PM_COCKATRICE] : &mons[PM_CHICKATRICE]) :
+				(type == ANTHOLE) ? antholemon() :
+				(type == DRAGONLAIR) ? mkclass(S_DRAGON, 0) :
+				(type == LEMUREPIT) ? (!rn2(10) ? &mons[PM_HORNED_DEVIL] : &mons[PM_LEMURE]) :
+				(type == MIGOHIVE) ? (sx == tx && sy == ty ? &mons[PM_MIGO_QUEEN] : (rn2(2) ? &mons[PM_MIGO_DRONE] : &mons[PM_MIGO_WARRIOR])) :
+				(type == BADFOODSHOP) ? mkclass(S_BAD_FOOD, 0) :
+				(type == REALZOO) ? realzoomon() :
+				(type == GIANTCOURT) ? mkclass(S_GIANT, 0) :
+				NULL,
 				sx, sy, NO_MM_FLAGS);
 
 			if (mon) {

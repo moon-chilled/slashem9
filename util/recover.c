@@ -260,7 +260,7 @@ int
 			if (lfd >= 0) {
 				/* any or all of these may not exist */
 				levc = (xchar)lev;
-				write(sfd, (void *)&levc, sizeof(levc));
+				write(sfd, &levc, sizeof(levc));
 				copy_bytes(lfd, sfd);
 				close(lfd);
 				unlink(lock);

@@ -2011,7 +2011,7 @@ void zapnodir(struct obj *obj) {
 			break;
 		case WAN_WISHING:
 			known = true;
-			if (Luck + rn2(5) < 0) {
+			if (rn2(5) + Luck < 0) {
 				pline("Unfortunately, nothing happens.");
 				break;
 			}

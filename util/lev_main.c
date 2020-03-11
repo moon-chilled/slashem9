@@ -174,11 +174,6 @@ const char *fname = "(stdin)";
 int fatal_error = 0;
 int want_warnings = 0;
 
-#ifdef FLEX23_BUG
-/* Flex 2.3 bug work around; not needed for 2.3.6 or later */
-int yy_more_len = 0;
-#endif
-
 extern char tmpmessage[];
 extern altar *tmpaltar[];
 extern lad *tmplad[];

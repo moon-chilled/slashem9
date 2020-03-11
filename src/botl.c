@@ -190,18 +190,24 @@ static char *botl_player(void) {
 	return player;
 }
 
-static char *botl_strength(void) {
-	static char strength[6];
+static nhstr botl_strength(void) {
 	if (ACURR(A_STR) > 18) {
-		if (ACURR(A_STR) > STR18(100))
-			sprintf(strength, "%2d", ACURR(A_STR) - 100);
-		else if (ACURR(A_STR) < STR18(100))
-			sprintf(strength, "18/%02d", ACURR(A_STR) - 18);
-		else
-			sprintf(strength, "18/**");
-	} else
-		sprintf(strength, "%-1d", ACURR(A_STR));
-	return strength;
+		if (ACURR(A_STR) > STR18(100)) {
+			return nhsfmt("Straightup %2i", ACURR(A_STR) - 100);
+		} else if (ACURR(A_STR) < STR18(100)) {
+			//TODO: extend nhsfmt
+			static char buf[BUFSZ];
+			sprintf(buf, "18/%02i", ACURR(A_STR) - 18);
+			return nhsdupz(buf);
+		} else {
+			return nhsdupz("18/**");
+		}
+	} else {
+		static char buf[BUFSZ];
+		sprintf(buf, "%i", ACURR(A_STR));
+		//return nhsdupz(buf);
+		return nhsfmt("%i", (int)ACURR(A_STR));
+	}
 }
 
 nhstr bot1str() {
@@ -232,7 +238,7 @@ nhstr bot1str() {
 
 	nhscatz(ret, "  ");
 
-	nhscatf(ret, "St:%S ", botl_strength());
+	nhscatf(ret, "St:%/s ", botl_strength());
 	nhscatf(ret, "Dx:%i Co:%i In:%i Wi:%i Ch:%i",
 		ACURR(A_DEX), ACURR(A_CON), ACURR(A_INT), ACURR(A_WIS), ACURR(A_CHA));
 	nhscatz(ret, (u.ualign.type == A_CHAOTIC) ? "  Chaotic" : (u.ualign.type == A_NEUTRAL) ? "  Neutral" : "  Lawful");
@@ -447,13 +453,14 @@ static void (*raw_handler)();
 
 static void bot_raw(boolean reconfig) {
 	const char *botl_raw_values[24], **rv = botl_raw_values;
-	char dex[3], con[3], itl[3], wis[3], cha[3], score[21];
+	char strength[8], dex[5], con[5], itl[5], wis[5], cha[5], score[21];
 	int uhp;
 	char dlevel[BUFSZ];
 	char hp[21], hpmax[21], pw[21], pwmax[21], gold[21], ac[21], elevel[21];
 	char expr[21], iweight[21], capacity[21], flgs[21], tim[21];
 	*rv++ = reconfig ? "player" : botl_player();
-	*rv++ = reconfig ? "strength" : botl_strength();
+	nhstr nstr = botl_strength();
+	*rv++ = reconfig ? "strength" : (sprintf(strength, "%.7s", nhs2cstr_tmp_destroy(&nstr)), strength);
 	*rv++ = reconfig ? "dexterity" : (sprintf(dex, "%d", ACURR(A_DEX)), dex);
 	*rv++ = reconfig ? "constitution" : (sprintf(con, "%d", ACURR(A_CON)), con);
 	*rv++ = reconfig ? "intelligence" : (sprintf(itl, "%d", ACURR(A_INT)), itl);
@@ -462,7 +469,7 @@ static void bot_raw(boolean reconfig) {
 	*rv++ = reconfig ? "alignment" : u.ualign.type == A_CHAOTIC ? "Chaotic" : u.ualign.type == A_NEUTRAL ? "Neutral" : "Lawful";
 	if (flags.showscore)
 		*rv++ = reconfig ? "score" :
-				   (sprintf(score, "%ld", botl_score()), score);
+			(sprintf(score, "%ld", botl_score()), score);
 	uhp = Upolyd ? u.mh : u.uhp;
 	if (uhp < 0) uhp = 0;
 	describe_level(dlevel, true);

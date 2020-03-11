@@ -837,8 +837,8 @@ struct obj *getobj(const char *let, const char *word) {
 	boolean prezero = false;
 	long dummymask;
 	int ugly;
-	struct obj *floorchain;
-	int floorfollow;
+	struct obj *floorchain = NULL;
+	int floorfollow = 0;
 
 	if (*let == ALLOW_COUNT) let++, allowcnt = 1;
 	if (*let == COIN_CLASS) let++, usegold = true;

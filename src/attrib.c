@@ -792,11 +792,7 @@ schar acurr(int x) {
 		 */
 		if (uarmh && uarmh->otyp == DUNCE_CAP) return 6;
 	}
-#ifdef WIN32_BUG
-	return x = ((tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp);
-#else
 	return (tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp;
-#endif
 }
 
 /* condense clumsy ACURR(A_STR) value into value that fits into game formulas

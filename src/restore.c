@@ -345,6 +345,9 @@ static boolean restgamestate(int fd, uint *stuckid, uint *steedid) {
 
 	mread(fd, &u, sizeof(struct you));
 	mread(fd, &youmonst, sizeof(struct monst));
+	ptrdiff_t d;
+	mread(fd, &d, sizeof(ptrdiff_t));
+	youmonst.data = &mons[0] + d;
 	mread(fd, &upermonst, sizeof(struct permonst));
 
 	cliparound(u.ux, u.uy);

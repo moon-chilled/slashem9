@@ -1648,13 +1648,13 @@ void genl_outrip(winid tmpwin, int how);
 
 /* ### rnd.c ### */
 
-uint rn1(uint x, uint y);
-uint rn2(uint x);
-uint rnl(uint x);
-uint rnd(uint x);
-uint d(uint n, uint x);
-uint rne(uint x);
-uint rnz(uint i);
+int rn1(int x, int y);
+int rn2(int x);
+int rnl(int x);
+int rnd(int x);
+int d(int n, int x);
+int rne(int x);
+int rnz(int i);
 void seed_good_random(char data[64]);
 uint good_random(void);
 

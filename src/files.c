@@ -495,7 +495,7 @@ void set_savefile_name(void) {
 
 #ifdef INSURANCE
 void save_savefile_name(int fd) {
-	write(fd, (void *)SAVEF, sizeof(SAVEF));
+	if (write(fd, SAVEF, sizeof(SAVEF)) == -1) panic("Unable to write savefile name");
 }
 #endif
 

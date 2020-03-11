@@ -2840,7 +2840,7 @@ void kill_genocided_monsters() {
 	int mndx;
 
 	kill_cham[CHAM_ORDINARY] = false; /* (this is mndx==0) */
-	for (mndx = LOW_PM; mndx <= NUMMONS; mndx++)
+	for (mndx = LOW_PM; mndx < NUMMONS; mndx++)
 		kill_cham[mndx] = (mvitals[mndx].mvflags & G_GENOD) != 0;
 	/*
 	 * Called during genocide, and again upon level change.  The latter

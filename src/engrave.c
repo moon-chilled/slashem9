@@ -434,25 +434,27 @@ static const char styluses[] = {
 
 /* return 1 if action took 1 (or more) moves, 0 if error or aborted */
 int doengrave(void) {
-	boolean dengr = false;	    /* true if we wipe out the current engraving */
-	boolean doblind = false;    /* true if engraving blinds the player */
-	boolean doknown = false;    /* true if we identify the stylus */
-	boolean eow = false;	    /* true if we are overwriting oep */
-	boolean jello = false;	    /* true if we are engraving in slime */
-	boolean ptext = true;	    /* true if we must prompt for engrave text */
-	boolean teleengr = false;   /* true if we move the old engraving */
-	boolean zapwand = false;    /* true if we remove a wand charge */
-	xchar type = DUST;	    /* Type of engraving made */
-	char buf[BUFSZ];	    /* Buffer for final/poly engraving text */
-	char ebuf[BUFSZ];	    /* Buffer for initial engraving text */
-	char fbuf[BUFSZ];	    /* Buffer for 'your fingers' */
-	char qbuf[QBUFSZ];	    /* Buffer for query text */
-	char post_engr_text[BUFSZ]; /* Text displayed after engraving prompt */
-	const char *everb;	    /* Present tense of engraving type */
-	const char *eloc;	    /* Where the engraving is (ie dust/floor/...) */
-	char *sp;		    /* Place holder for space count of engr text */
-	int len;		    /* # of nonspace chars of new engraving text */
-	int maxelen;		    /* Max allowable length of engraving text */
+	bool dengr = false;	// true if we wipe out the current engraving
+	bool doblind = false;	// true if engraving blinds the player
+	bool doknown = false;	// true if we identify the stylus
+	bool eow = false;	// true if we are overwriting oep
+	bool jello = false;	// true if we are engraving in slime
+	bool ptext = true;	// true if we must prompt for engrave text
+	bool teleengr = false;	// true if we move the old engraving
+	bool zapwand = false;	// true if we remove a wand charge
+	xchar type = DUST;	// Type of engraving made
+
+	//TODO: dynamic buffers
+	char buf[BUFSZ] = {0};	// Buffer for final/poly engraving text
+	char ebuf[BUFSZ-1];	// Buffer for initial engraving text
+	char fbuf[BUFSZ];	// Buffer for 'your fingers'
+	char qbuf[QBUFSZ];	// Buffer for query text
+	char post_engr_text[BUFSZ];// Text displayed after engraving prompt
+	const char *everb;	// Present tense of engraving type
+	const char *eloc;	// Where the engraving is (ie dust/floor/...)
+	char *sp;		// Place holder for space count of engr text
+	int len;		// # of nonspace chars of new engraving text
+	int maxelen;		// Max allowable length of engraving text
 	struct engr *oep = engr_at(u.ux, u.uy);
 	/* The current engraving */
 	struct obj *otmp; /* Object selected with which to engrave */
@@ -1146,7 +1148,7 @@ int doengrave(void) {
 	/* Add to existing engraving */
 	if (oep) strcpy(buf, oep->engr_txt);
 
-	strncat(buf, ebuf, (BUFSZ - strlen(buf) - 1));
+	strncat(buf, ebuf, (sizeof(buf) - strlen(buf) - 1));
 
 	make_engr_at(u.ux, u.uy, buf, (moves - multi), type);
 

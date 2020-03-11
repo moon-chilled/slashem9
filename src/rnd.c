@@ -5,12 +5,12 @@
 
 #define RND(x) (good_random() % (x))
 
-uint rn1(uint x, uint y) {
+int rn1(int x, int y) {
 	return rn2(x) + y;
 }
 
 // 0 <= rn2(x) < x
-uint rn2(uint x) {
+int rn2(int x) {
 	if (x == 0) {
 		impossible("rn2(0) attempted");
 	}
@@ -20,7 +20,7 @@ uint rn2(uint x) {
 
 /* 0 <= rnl(x) < x; sometimes subtracting Luck *
  * good luck approaches 0, bad luck approaches (x-1) */
-uint rnl(uint x) {
+int rnl(int x) {
 	int i, adjustment;
 
 	if (x == 0) {
@@ -59,7 +59,7 @@ uint rnl(uint x) {
 }
 
 // 1 <= rnd(x) <= x
-uint rnd(uint x) {
+int rnd(int x) {
 	if (x == 0) {
 		impossible("rnd(0) attempted");
 		return 1;
@@ -69,8 +69,8 @@ uint rnd(uint x) {
 }
 
 /* n <= d(n,x) <= (n*x) */
-uint d(uint n, uint x) {
-	uint tmp = n;
+int d(int n, int x) {
+	int tmp = n;
 
 	if (x == 0 && n != 0) {
 		impossible("d(%u,%u) attempted", n, x);
@@ -85,8 +85,8 @@ uint d(uint n, uint x) {
 	return tmp; /* Alea iacta est. -- J.C. */
 }
 
-uint rne(uint x) {
-	uint tmp, utmp;
+int rne(int x) {
+	int tmp, utmp;
 
 	utmp = (u.ulevel < 15) ? 5 : u.ulevel / 3;
 	tmp = 1;
@@ -106,7 +106,7 @@ uint rne(uint x) {
 	 */
 }
 
-uint rnz(uint i) {
+int rnz(int i) {
 	ulong x = i;
 	ulong tmp = 1000;
 

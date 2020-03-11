@@ -1742,7 +1742,7 @@ void use_unicorn_horn(struct obj *obj) {
 #define ATTR_COUNT (A_MAX * 3) /* number of attribute points we might fix */
 	int idx, val, val_limit,
 		trouble_count, unfixable_trbl, did_prop, did_attr;
-	int trouble_list[PROP_COUNT + ATTR_COUNT];
+	int trouble_list[PROP_COUNT + ATTR_COUNT] = {0};
 	uint chance; /* KMH */
 
 	if (obj && obj->cursed) {

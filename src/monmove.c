@@ -868,6 +868,7 @@ not_special:
 	if (can_open) flag |= OPENDOOR;
 	if (can_unlock) flag |= UNLOCKDOOR;
 	if (doorbuster) flag |= BUSTDOOR;
+
 	{
 		int i, j, nx, ny, nearer;
 		int jcnt, cnt;
@@ -918,7 +919,7 @@ not_special:
 				chi = i;
 				mmoved = 1;
 			}
-		nxti:;
+nxti:;
 		}
 	}
 

@@ -128,7 +128,7 @@ static void process_menu_window(winid, struct WinDesc *);
 static void process_text_window(winid, struct WinDesc *);
 static tty_menu_item *reverse(tty_menu_item *);
 const char *compress_str(const char *);
-static void tty_putsym(winid, int, int, glyph_t);
+static void tty_putsym(winid window, int x, int y, glyph_t ch);
 static char *copy_of(const char *);
 static void bail(const char *); /* __attribute__((noreturn)) */
 static int tty_role_select(char *, char *);
@@ -1773,6 +1773,7 @@ const char *compress_str(const char *str) {
 	return cbuf;
 }
 
+// consumes str
 void tty_putnstr(winid window, int attr, nhstr str) {
 	struct WinDesc *cw = 0;
 
@@ -1847,6 +1848,7 @@ void tty_putnstr(winid window, int attr, nhstr str) {
 			cw->curx = 0;
 			break;
 		}
+
 		default: impossible("Can't tty_putnstr a %d yet", cw->type);
 	}
 

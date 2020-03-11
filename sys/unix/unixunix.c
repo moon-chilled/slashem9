@@ -214,7 +214,7 @@ int child(int wt) {
 	int f;
 	suspend_nhwindows(NULL);	/* also calls end_screen() */
 
-	if((f = fork()) == 0){		/* child */
+	if ((f = fork()) == 0) {		/* child */
 		setgid(getgid());
 		setuid(getuid());
 #ifdef CHDIR

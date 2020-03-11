@@ -46,6 +46,7 @@ install: all
 	install util/slashem9-recover $(BINDIR)
 
 	sed -e 's;@HACKDIR@;$(HACKDIR);' < sys/unix/slashem9.sh > $(BINDIR)/slashem9
+	chmod 755 $(BINDIR)/slashem9
 
 src/slashem9: $(SLASHEMOBJ)
 	$(CCLD) -o src/slashem9 $(SLASHEMOBJ) $(LDFLAGS)

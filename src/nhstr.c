@@ -76,21 +76,33 @@ nhstr *nhscat(nhstr *str, const nhstr cat) {
 // %i: int
 // %u: uint
 // %%: literal %
+//
+// Modifiers:
+// %/X: same as %X, but destroy the object once you're done.
+//	Only implemented for nhstr (via del_nhs) and char* (via free)
 nhstr *nhscatfc_v(nhstr *str, int colour, const char *cat, va_list the_args) {
 	for (usize i = 0; cat[i]; i++) {
 		if (cat[i] == '%') {
 			i++;
 
-			int num1 = -1, num2 = -1; // currently only supported for %l
+			bool should_destroy = false;
+			if (cat[i] == '/') { should_destroy = true; i++; }
+
+			int num1 = -1, num2 = -1; // currently only supported for %l,u,i
 			if ('0' <= cat[i] && cat[i] <= '9') { num1 = cat[i] - '0'; i++; }
 			if ('0' <= cat[i] && cat[i] <= '9') { num2 = cat[i] - '0'; i++; }
 
 			switch (cat[i]) {
-				case 's':
-					nhscat(str, va_arg(the_args, nhstr));
+				case 's': {
+					nhstr s = va_arg(the_args, nhstr);
+					nhscat(str, s);
+					if (should_destroy) del_nhs(&s);
 					break;
+				}
 				case 'S': {
-					nhscatzc(str, va_arg(the_args, char*), colour);
+					char *s = va_arg(the_args, char*);
+					nhscatzc(str, s, colour);
+					if (should_destroy) free(s);
 					break;
 				}
 				case 'c':
@@ -110,13 +122,25 @@ nhstr *nhscatfc_v(nhstr *str, int colour, const char *cat, va_list the_args) {
 				}
 				case 'i': {
 					static char buf[BUFSZ];
-					sprintf(buf, "%i", va_arg(the_args, int));
+					if (num1 != -1) {
+						if (num2 != -1) sprintf(buf, "%*.*i", num1, num2, va_arg(the_args, int));
+						else sprintf(buf, "%*i", num1, va_arg(the_args, int));
+					} else {
+						sprintf(buf, "%i", va_arg(the_args, int));
+					}
+
 					nhscatzc(str, buf, colour);
 					break;
 				}
 				case 'u': {
 					static char buf[BUFSZ];
-					sprintf(buf, "%u", va_arg(the_args, uint));
+					if (num1 != -1) {
+						if (num2 != -1) sprintf(buf, "%*.*u", num1, num2, va_arg(the_args, uint));
+						else sprintf(buf, "%*u", num1, va_arg(the_args, uint));
+					} else {
+						sprintf(buf, "%u", va_arg(the_args, uint));
+					}
+
 					nhscatzc(str, buf, colour);
 					break;
 				}

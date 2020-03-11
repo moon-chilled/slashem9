@@ -9,3 +9,5 @@
 * Wizmode-teleported on top of hole in castle, and got a segfault in hack.c:1858 (if ((mtmp = m_at(u.ux, u.uy)) && !u.uswallow)).  Debugger was useless and couldn't repro.
 
 * Crash in dofire() where it apparently gets down to throw_obj() and uquiver is null at that point.
+
+* Bad strength display in tcc.  Bug in its vararg handling?

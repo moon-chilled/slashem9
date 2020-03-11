@@ -6,9 +6,6 @@
 #include "epri.h"
 #include "edog.h"
 
-usize saved_pline_index = 0;
-char *saved_plines[DUMPLOG_MSG_COUNT] = {0};
-
 // keep the most recent DUMPLOG_MSG_COUNT messages
 void dumplogmsg(const char *line) {
 	// since it's zero-initialized and free(NULL) is valid, this always works
@@ -66,11 +63,8 @@ static int msgpline_type(const char *msg) {
 	return MSGTYP_NORMAL;
 }
 
-char prevmsg[BUFSZ];
-
 static void vpline(const char *line, va_list the_args) {
 	char pbuf[BUFSZ];
-	int typ;
 
 	if (!line || !*line) return;
 	if (program_state.wizkit_wishing) return;
@@ -80,26 +74,31 @@ static void vpline(const char *line, va_list the_args) {
 		line = pbuf;
 	}
 
-	typ = msgpline_type(line);
-	if (typ != MSGTYP_NOSHOW) {
-		dumplogmsg(line);
-	}
-
 	if (!iflags.window_inited) {
 		raw_print(line);
 		return;
 	}
+
 #ifndef MAC
 	if (no_repeat && !strcmp(line, toplines))
 		return;
 #endif /* MAC */
+
 	if (vision_full_recalc) vision_recalc(0);
 	if (u.ux) flush_screen(1); /* %% */
+
+	int typ = msgpline_type(line);
+
 	if (typ == MSGTYP_NOSHOW) return;
-	if (typ == MSGTYP_NOREP && !strcmp(line, prevmsg)) return;
+
+	if (typ == MSGTYP_NOREP && !strcmp(line, saved_plines[(saved_pline_index ? saved_pline_index : DUMPLOG_MSG_COUNT) - 1])) return;
 	putstr(WIN_MESSAGE, 0, line);
-	strncpy(prevmsg, line, BUFSZ);
 	if (typ == MSGTYP_STOP) display_nhwindow(WIN_MESSAGE, true); /* --more-- */
+
+	if (typ != MSGTYP_NOSHOW) {
+		dumplogmsg(line);
+	}
+
 }
 
 void pline(const char *line, ...) {

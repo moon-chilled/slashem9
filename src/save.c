@@ -113,7 +113,7 @@ void hangup(int sig_unused) {
 	if (!program_state.done_hup++) {
 		if (program_state.something_worth_saving) {
 			// AIS: record levels on which there were hangups
-			if (ledger_no(&u.uz) >= 0 && (int)ledger_no(&u.uz) < MAXLINFO) {
+			if (ledger_no(&u.uz) >= 0 /*&& (int)ledger_no(&u.uz) < MAXLINFO*/) {
 				level_info[ledger_no(&u.uz)].flags |= HANGUP_HERE;
 			}
 			dosave0();
@@ -251,6 +251,9 @@ static void savegamestate(int fd, int mode) {
 	bwrite(fd, &flags, sizeof(struct flag));
 	bwrite(fd, &u, sizeof(struct you));
 	bwrite(fd, &youmonst, sizeof(struct monst));
+
+	ptrdiff_t umonst_data_offset = youmonst.data - &mons[0];
+	bwrite(fd, &umonst_data_offset, sizeof(ptrdiff_t));
 	bwrite(fd, &upermonst, sizeof(struct permonst));
 
 	save_killers(fd, mode);
@@ -332,7 +335,7 @@ void savestateinlock() {
 			return;
 		}
 
-		read(fd, (void *)&hpid, sizeof(hpid));
+		mread(fd, &hpid, sizeof(hpid));
 		if (hackpid != hpid) {
 			sprintf(whynot,
 				"Level #0 pid (%d) doesn't match ours (%d)!",
@@ -350,11 +353,11 @@ void savestateinlock() {
 			done(TRICKED);
 			return;
 		}
-		write(fd, (void *)&hackpid, sizeof(hackpid));
+		bwrite(fd, (void *)&hackpid, sizeof(hackpid));
 		if (flags.ins_chkpt) {
 			int currlev = ledger_no(&u.uz);
 
-			write(fd, (void *)&currlev, sizeof(currlev));
+			bwrite(fd, (void *)&currlev, sizeof(currlev));
 			save_savefile_name(fd);
 			store_version(fd);
 #ifdef STORE_PLNAME_IN_FILE
@@ -495,7 +498,6 @@ void bclose(int fd) {
 	} else
 #endif
 		close(fd);
-	return;
 }
 
 static void savelevchn(int fd, int mode) {

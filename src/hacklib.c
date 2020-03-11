@@ -395,6 +395,7 @@ void setrandom(void) {
 	char rnbuf[64];
 	memset(rnbuf, 0xaa, SIZE(rnbuf));  // 0xaa = alternating 0s and 1s
 
+	//TODO: something that works on windows
 	FILE *fp = fopen("/dev/urandom", "rb");
 	if (!fp) {
 		fp = fopen("/dev/random", "rb");

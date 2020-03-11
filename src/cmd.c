@@ -243,7 +243,7 @@ static void addchar(char ch) {
 
 // here after # - now read a full-word command
 static int doextcmd(void) {
-	int idx, retval;
+	int idx, retval = 0;
 
 	/* keep repeating until we don't run help or quit */
 	do {
@@ -949,10 +949,9 @@ static const char
 #define you_have_X(something)	 enl_msg(You_, have, "", something)
 
 static void enlght_line(const char *start, const char *middle, const char *end) {
-	char buf[BUFSZ];
+	nhstr buf = nhsfmt("%S%S%S.", start, middle, end);
 
-	sprintf(buf, "%s%s%s.", start, middle, end);
-	putstr(en_win, 0, buf);
+	putstr(en_win, 0, nhs2cstr_tmp_destroy(&buf));
 }
 
 char *warned_of(int warntype, const char *aux) {
@@ -1575,7 +1574,7 @@ static int makemenu(const char *menuname, struct menu_list menu_struct[]) {
 	anything any;
 	menu_item *selected;
 	int n, i, (*func)(void);
-	const struct menu_tab *current_menu;
+	const struct menu_tab *current_menu = NULL;
 
 	any.a_void = 0;
 	win = create_nhwindow(NHW_MENU);
