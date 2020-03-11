@@ -324,11 +324,11 @@ struct you {
 #define LUCKADD 3  /* added value when carrying luck stone */
 #define LUCKMAX 10 /* on moonlit nights 11 */
 #define LUCKMIN (-10)
-	schar uhitinc;	 /* KMH -- additional to-hit bonus */
+	int uhitinc;	 /* KMH -- additional to-hit bonus */
 	long uhealbonus; /* KMH -- Healing bonus from healthstones */
 
-	schar udaminc; /* Additional damage bonus */
-	schar uac;
+	int udaminc; /* Additional damage bonus */
+	int uac;
 
 	uchar uspellprot; /* protection by SPE_PROTECTION */
 	uchar usptime;	  /* #moves until uspellprot-- */

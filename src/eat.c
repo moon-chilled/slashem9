@@ -12,35 +12,36 @@
 
 static int eatmdone(void);
 static int eatfood(void);
-static void costly_tin(const char *);
+static void costly_tin(const char *verb);
 static int opentin(void);
 static int unfaint(void);
 
-static const char *food_xname(struct obj *, boolean);
-static const char *Food_xname(struct obj *, boolean);
-static void choke(struct obj *);
+static const char *food_xname(struct obj *food, bool the_pfx);
+static const char *Food_xname(struct obj *food, bool the_pfx);
+static void choke(struct obj *food);
 static void recalc_wt(void);
-static struct obj *touchfood(struct obj *);
+static struct obj *touchfood(struct obj *otmp);
 static void do_reset_eat(void);
-static void done_eating(boolean);
-static void cprefx(int);
-static int intrinsic_possible(int, struct permonst *);
-static void givit(int, struct permonst *);
-static void cpostfx(int);
-static void start_tin(struct obj *);
-static int eatcorpse(struct obj *);
-static void start_eating(struct obj *);
-static void fprefx(struct obj *);
-static void accessory_has_effect(struct obj *);
-static void fpostfx(struct obj *);
+static void done_eating(bool message);
+static void cprefx(int pm);
+static int intrinsic_possible(int type, struct permonst *ptr);
+static void givit(int type, struct permonst *ptr);
+static void cpostfx(int pm);
+static void start_tin(struct obj *otmp);
+static int eatcorpse(struct obj *otmp);
+static void start_eating(struct obj *otmp);
+static void fprefx(struct obj *otmp);
+static void fpostfx(struct obj *otmp);
 static int bite(void);
-static int edibility_prompts(struct obj *);
-static int rottenfood(struct obj *);
+static int edibility_prompts(struct obj *otmp);
+static int rottenfood(struct obj *obj);
 static void eatspecial(void);
-static void eataccessory(struct obj *);
-static const char *foodword(struct obj *);
-static bool maybe_cannibal(int, boolean);
-static struct obj *floorfood(const char *);
+static int bounded_increase(int old int inc, int typ);
+static void accessory_has_effect(struct obj *otmp);
+static void eataccessory(struct obj *otmp);
+static const char *foodword(struct obj *otmp);
+static bool maybe_cannibal(int pm, bool allowmsg);
+static struct obj *floorfood(const char *verb);
 static int tin_variety(struct obj *obj);
 
 char msgbuf[BUFSZ];
@@ -169,7 +170,7 @@ static int eatmdone(void) {
 }
 
 /* ``[the(] singular(food, xname) [)]'' with awareness of unique monsters */
-static const char *food_xname(struct obj *food, boolean the_pfx) {
+static const char *food_xname(struct obj *food, bool the_pfx) {
 	const char *result;
 	int mnum = food->corpsenm;
 
@@ -189,7 +190,7 @@ static const char *food_xname(struct obj *food, boolean the_pfx) {
 	return result;
 }
 
-static const char *Food_xname(struct obj *food, boolean the_pfx) {
+static const char *Food_xname(struct obj *food, bool the_pfx) {
 	/* food_xname() uses a modifiable buffer, so we can use it too */
 	char *buf = (char *)food_xname(food, the_pfx);
 
@@ -406,7 +407,7 @@ static int eatfood(void) {
 	}
 }
 
-static void done_eating(boolean message) {
+static void done_eating(bool message) {
 	context.victual.piece->in_use = true;
 	occupation = 0; /* do this early, so newuhs() knows we're done */
 	newuhs(false);
@@ -435,7 +436,7 @@ static void done_eating(boolean message) {
 }
 
 // eating a corpse or egg of one's own species is usually naughty
-static bool maybe_cannibal(int pm, boolean allowmsg) {
+static bool maybe_cannibal(int pm, bool allowmsg) {
 	struct permonst *fptr = &mons[pm];
 	if (your_race(fptr)
 		/* non-cannibalistic heroes shouldn't eat own species ever
@@ -1805,6 +1806,33 @@ static void fprefx(struct obj *otmp) {
 	}
 }
 
+/* increment a combat intrinsic with limits on its growth */
+static int bounded_increase(int old, int inc, int typ) {
+	int absold, absinc, sgnold, sgninc;
+
+	/* don't include any amount coming from worn rings */
+	if (uright && uright->otyp == typ) old -= uright->spe;
+	if (uleft && uleft->otyp == typ) old -= uleft->spe;
+	absold = abs(old), absinc = abs(inc);
+	sgnold = sgn(old), sgninc = sgn(inc);
+
+	if (absinc == 0 || sgnold != sgninc || absold + absinc < 10) {
+		;       /* use inc as-is */
+	} else if (absold + absinc < 20) {
+		absinc = rnd(absinc);   /* 1..n */
+		if (absold + absinc < 10) absinc = 10 - absold;
+		inc = sgninc * absinc;
+	} else if (absold + absinc < 40) {
+		absinc = rn2(absinc) ? 1 : 0;
+		if (absold + absinc < 20) absinc = rnd(20 - absold);
+		inc = sgninc * absinc;
+	} else {
+		inc = 0;        /* no further increase allowed via this method */
+	}
+	return old + inc;
+}
+
+
 static void accessory_has_effect(struct obj *otmp) {
 	pline("Magic spreads through your body as you digest the %s.",
 	      otmp->oclass == RING_CLASS ? "ring" : "amulet");
@@ -1899,16 +1927,16 @@ static void eataccessory(struct obj *otmp) {
 				break;
 			case RIN_INCREASE_ACCURACY:
 				accessory_has_effect(otmp);
-				u.uhitinc += otmp->spe;
+				u.uhitinc = bounded_increase(u.uhitinc, otmp->spe, otmp->otyp);
 				break;
 			case RIN_INCREASE_DAMAGE:
 				accessory_has_effect(otmp);
-				u.udaminc += otmp->spe;
+				u.udaminc = bounded_increase(u.udaminc, otmp->spe, otmp->otyp);
 				break;
 			case RIN_PROTECTION:
 				accessory_has_effect(otmp);
 				HProtection |= FROMOUTSIDE;
-				u.ublessed += otmp->spe;
+				u.ublessed = bounded_increase(u.ublessed, otmp->spe, otmp->otyp);
 				context.botl = 1;
 				break;
 			case RIN_FREE_ACTION:

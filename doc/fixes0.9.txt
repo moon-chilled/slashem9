@@ -193,6 +193,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: hero could appear to be inside of all after destroying drawbridge.
 - Bugfix: if an object was polymorphed into a boulder, vision was not obscured properly.
 - Gameplay: armour should autocurse when monster wears it, not just player.
+- Gameplay: limit potential gains from eating rings.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
