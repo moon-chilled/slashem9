@@ -79,9 +79,8 @@
  * routines.  Like mon_visible(), but it checks to see if the hero sees the
  * location instead of assuming it.  (And also considers worms.)
  */
-#define canseemon(mon) (((mon)->wormno ? worm_known(mon) :                                        \
-					 (cansee(mon->mx, mon->my) || see_with_infrared(mon))) && \
-			mon_visible(mon))
+#define canseemon(mon) (((mon)->wormno ? worm_known(mon) : \
+					 (cansee(mon->mx, mon->my) || see_with_infrared(mon))) && mon_visible(mon))
 
 /*
  * canspotmon(mon)

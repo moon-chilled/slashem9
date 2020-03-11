@@ -218,12 +218,11 @@ void mon_adjust_speed(
 
 /* armor put on or taken off; might be magical variety */
 void update_mon_intrinsics(struct monst *mon, struct obj *obj, boolean on, boolean silently) {
-	int unseen;
 	unsigned long mask;
 	struct obj *otmp;
 	int which = (int)objects[obj->otyp].oc_oprop;
+	bool unseen = !canseemon(mon);
 
-	unseen = !canseemon(mon);
 	if (!which) goto maybe_blocks;
 
 	if (on) {
@@ -460,6 +459,8 @@ static void m_dowear_type(struct monst *mon, long flag, boolean creation, boolea
 outer_break:
 	if (!best || best == old) return;
 
+	bool autocurse = ARMOR_SHOULD_AUTOCURSE(best) && !best->cursed;
+
 	/* if wearing a cloak, account for the time spent removing
 	   and re-wearing it when putting on a suit or shirt */
 	if ((flag == W_ARM || flag == W_ARMU) && (mon->misc_worn_check & W_ARMC))
@@ -481,6 +482,10 @@ outer_break:
 				buf[0] = '\0';
 			pline("%s%s puts on %s.", Monnam(mon),
 			      buf, distant_name(best, doname));
+			if (autocurse) 
+				pline("%s %s %s %s for a moment.",
+				      s_suffix(Monnam(mon)), simple_typename(best->otyp),
+				      otense(best, "glow"), hcolor(NH_BLACK));
 		} /* can see it */
 		m_delay += objects[best->otyp].oc_delay;
 		mon->mfrozen = m_delay;
@@ -490,6 +495,7 @@ outer_break:
 		update_mon_intrinsics(mon, old, false, creation);
 	mon->misc_worn_check |= flag;
 	best->owornmask |= flag;
+	if (autocurse) curse(best);
 	update_mon_intrinsics(mon, best, true, creation);
 	/* if couldn't see it but now can, or vice versa, */
 	if (!creation && (unseen ^ !canseemon(mon))) {

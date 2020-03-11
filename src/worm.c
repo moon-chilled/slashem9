@@ -678,7 +678,7 @@ static struct wseg *create_worm_tail(int num_segs) {
  *  invisibility and telepathy (which should only show the head anyway).
  *  Mostly used in the canseemon() macro.
  */
-boolean worm_known(struct monst *worm) {
+bool worm_known(struct monst *worm) {
 	struct wseg *curr = wtails[worm->wormno];
 
 	while (curr) {

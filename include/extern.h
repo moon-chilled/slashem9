@@ -2197,7 +2197,7 @@ void place_wsegs(struct monst *);
 void remove_worm(struct monst *);
 void place_worm_tail_randomly(struct monst *, xchar, xchar);
 int count_wsegs(struct monst *);
-boolean worm_known(struct monst *);
+bool worm_known(struct monst *);
 
 /* ### worn.c ### */
 

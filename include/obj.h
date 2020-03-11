@@ -318,4 +318,6 @@ struct obj {
 #define CONTAINED_TOO 0x1
 #define BURIED_TOO    0x2
 
+#define ARMOR_SHOULD_AUTOCURSE(o) ((o)->otyp == HELM_OF_OPPOSITE_ALIGNMENT || (o)->otyp == DUNCE_CAP)
+
 #endif /* OBJ_H */

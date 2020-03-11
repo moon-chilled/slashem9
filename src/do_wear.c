@@ -264,6 +264,15 @@ int Cloak_off(void) {
 }
 
 int Helmet_on(void) {
+	if (ARMOR_SHOULD_AUTOCURSE(uarmh) && !uarmh->cursed) {
+		if (Blind)
+			pline("%s for a moment.", Tobjnam(uarmh, "vibrate"));
+		else
+			pline("%s %s for a moment.",
+					Tobjnam(uarmh, "glow"), hcolor(NH_BLACK));
+		curse(uarmh);
+	}
+
 	switch (uarmh->otyp) {
 		case FEDORA:
 			set_moreluck();
@@ -274,8 +283,6 @@ int Helmet_on(void) {
 		case ELVEN_LEATHER_HELM:
 		case DWARVISH_IRON_HELM:
 		case ORCISH_HELM:
-		/* KMH, balance patch -- removed
-	case FIRE_HELMET: */
 		case HELM_OF_TELEPATHY:
 			break;
 		case HELM_OF_BRILLIANCE:
@@ -283,9 +290,9 @@ int Helmet_on(void) {
 			break;
 		case CORNUTHAUM:
 			/* people think marked wizards know what they're talking
-		 * about, but it takes trained arrogance to pull it off,
-		 * and the actual enchantment of the hat is irrelevant.
-		 */
+			 * about, but it takes trained arrogance to pull it off,
+			 * and the actual enchantment of the hat is irrelevant.
+			 */
 			ABON(A_CHA) += (Role_if(PM_WIZARD) ? 1 : -1);
 			context.botl = 1;
 			makeknown(uarmh->otyp);
@@ -296,30 +303,30 @@ int Helmet_on(void) {
 			else
 				u.ualign.type = -(u.ualign.type);
 			u.ublessed = 0; /* lose your god's protection */
-		/* makeknown(uarmh->otyp);   -- moved below, after xname() */
-		/*FALLTHRU*/
-		case DUNCE_CAP:
-			if (!uarmh->cursed) {
-				if (Blind)
-					pline("%s for a moment.", Tobjnam(uarmh, "vibrate"));
-				else
-					pline("%s %s for a moment.",
-					      Tobjnam(uarmh, "glow"), hcolor(NH_BLACK));
-				curse(uarmh);
-			}
-			context.botl = 1; /* reveal new alignment or INT & WIS */
+			context.botl = 1; /* reveal new alignment */
+
 			if (Hallucination) {
 				pline("My brain hurts!"); /* Monty Python's Flying Circus */
-			} else if (uarmh->otyp == DUNCE_CAP) {
-				pline("You feel %s.", /* track INT change; ignore WIS */
-				      ACURR(A_INT) <= (ABASE(A_INT) + ABON(A_INT) + ATEMP(A_INT)) ?
-					      "like sitting in a corner" :
-					      "giddy");
 			} else {
 				pline("Your mind oscillates briefly.");
 				makeknown(HELM_OF_OPPOSITE_ALIGNMENT);
 			}
+
 			break;
+
+		case DUNCE_CAP:
+			context.botl = 1; /* reveal new INT/WIS */
+			if (Hallucination) {
+				pline("My brain hurts!"); /* Monty Python's Flying Circus */
+			} else {
+				pline("You feel %s.", /* track INT change; ignore WIS */
+				      ACURR(A_INT) <= (ABASE(A_INT) + ABON(A_INT) + ATEMP(A_INT)) ?
+					      "like sitting in a corner" :
+					      "giddy");
+			}
+
+			break;
+
 		default:
 			impossible(unknown_type, c_helmet, uarmh->otyp);
 	}
