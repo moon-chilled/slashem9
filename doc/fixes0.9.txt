@@ -190,6 +190,7 @@ Imports from NetHack versions newer than 3.4.3:
 - Gameplay: casters won't cast aggravate monster when all the monsters on the level are awake.
 - Gameplay: casters' aggravate monster spell will wake up meditating monsters.
 - Bugfix: busy pets won't be prevented from accompanying ascending player.
+- Bugfix: hero could appear to be inside of all after destroying drawbridge.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
