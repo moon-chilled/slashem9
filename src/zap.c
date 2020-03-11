@@ -1588,6 +1588,9 @@ struct obj *poly_obj(struct obj *obj, int id) {
 	if (obj_location == OBJ_FLOOR && obj->otyp == BOULDER &&
 	    otmp->otyp != BOULDER)
 		unblock_point(obj->ox, obj->oy);
+	else if (obj_location == OBJ_FLOOR && obj->otyp != BOULDER &&
+		 otmp->otyp == BOULDER)
+		block_point(obj->ox, obj->oy);
 
 	/* WAC -- Attach unpoly timer if this is a standard poly */
 	if (unpoly /* && !rn2(20) */) {
