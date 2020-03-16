@@ -934,10 +934,12 @@ int seffects(struct obj *sobj) {
 					    obj->otyp == LOADSTONE ||
 					    obj->otyp == HEALTHSTONE ||
 					    (obj->otyp == LEASH && obj->leashmon)) {
-						if (confused)
+						if (confused) {
 							blessorcurse(obj, 2);
-						else
+							obj->bknown = false;
+						} else {
 							uncurse(obj);
+						}
 					}
 				}
 			}
