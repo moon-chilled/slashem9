@@ -14,31 +14,23 @@
  * much, so it is used as the "default" foreground color of the screen.
  */
 
-#ifdef VIDEOSHADES
-#define CLR_BLACK 8
-#else
-#define CLR_BLACK 0
-#endif
-#define CLR_RED	    1
-#define CLR_GREEN   2
-#define CLR_BROWN   3 /* on IBM, low-intensity yellow is brown */
-#define CLR_BLUE    4
-#define CLR_MAGENTA 5
-#define CLR_CYAN    6
-#define CLR_GRAY    7 /* low-intensity white */
-#ifdef VIDEOSHADES
-#define NO_COLOR 0
-#else
-#define NO_COLOR 8
-#endif
-#define CLR_ORANGE	   9
-#define CLR_BRIGHT_GREEN   10
-#define CLR_YELLOW	   11
-#define CLR_BRIGHT_BLUE	   12
+#define CLR_BLACK	0
+#define CLR_RED		1
+#define CLR_GREEN	2
+#define CLR_BROWN	3 /* on IBM, low-intensity yellow is brown */
+#define CLR_BLUE	4
+#define CLR_MAGENTA	5
+#define CLR_CYAN	6
+#define CLR_GRAY	7 /* low-intensity white */
+#define NO_COLOR	8
+#define CLR_ORANGE	9
+#define CLR_BRIGHT_GREEN 10
+#define CLR_YELLOW	11
+#define CLR_BRIGHT_BLUE	12
 #define CLR_BRIGHT_MAGENTA 13
-#define CLR_BRIGHT_CYAN	   14
-#define CLR_WHITE	   15
-#define CLR_MAX		   16
+#define CLR_BRIGHT_CYAN	14
+#define CLR_WHITE	15
+#define CLR_MAX		16
 
 /* The "half-way" point for tty based color systems.  This is used in */
 /* the tty color setup code.  (IMHO, it should be removed - dean).    */
@@ -65,10 +57,6 @@ struct menucoloring {
 	int color, attr;
 	struct menucoloring *next;
 };
-
-#ifdef VIDEOSHADES
-extern uchar ttycolors[CLR_MAX];
-#endif
 
 struct color_option {
 	int color;

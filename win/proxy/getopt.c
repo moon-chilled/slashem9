@@ -172,24 +172,6 @@ char *get_option(const char *option) {
 		return buf;
 	}
 	if (!strcmp(option, "tileset")) return tileset;
-#ifdef VIDEOSHADES
-	if (!strcmp(option, "videocolors")) {
-		int i, icolor;
-		char *bp = buf;
-		icolor = CLR_RED;
-		for (i = 0; i < 12; i++) {
-			if (icolor < (CLR_WHITE)) {
-				if (bp != buf)
-					*bp++ = '-';
-				sprintf(bp, "%d", ttycolors[icolor++]);
-				bp = eos(bp);
-				if ((icolor > CLR_CYAN) && (icolor < CLR_ORANGE))
-					icolor = CLR_ORANGE;
-			}
-		}
-		return buf;
-	}
-#endif
 	if (!strcmp(option, "menustyle")) {
 		switch (flags.menu_style) {
 			default:

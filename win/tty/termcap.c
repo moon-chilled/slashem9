@@ -52,114 +52,6 @@ static char tgotobuf[20];
 #define tgoto(fmt, x, y) (sprintf(tgotobuf, fmt, y + 1, x + 1), tgotobuf)
 #endif /* TERMLIB */
 
-static void init_ttycolor(void);
-
-#ifdef VIDEOSHADES
-bool colorflag = false; /* colors are initialized */
-uchar ttycolors[CLR_MAX];
-#endif
-
-void init_ttycolor(void) {
-#ifdef VIDEOSHADES
-	if (!colorflag) {
-		ttycolors[CLR_RED] = CLR_RED;
-		ttycolors[CLR_GREEN] = CLR_GREEN;
-		ttycolors[CLR_BROWN] = CLR_BROWN;
-		ttycolors[CLR_BLUE] = CLR_BLUE;
-		ttycolors[CLR_MAGENTA] = CLR_MAGENTA;
-		ttycolors[CLR_CYAN] = CLR_CYAN;
-		ttycolors[CLR_GRAY] = CLR_GRAY;
-		ttycolors[CLR_BLACK] = CLR_BLACK;
-		ttycolors[CLR_ORANGE] = CLR_ORANGE;
-		ttycolors[CLR_BRIGHT_GREEN] = CLR_BRIGHT_GREEN;
-		ttycolors[CLR_YELLOW] = CLR_YELLOW;
-		ttycolors[CLR_BRIGHT_BLUE] = CLR_BRIGHT_BLUE;
-		ttycolors[CLR_BRIGHT_MAGENTA] = CLR_BRIGHT_MAGENTA;
-		ttycolors[CLR_BRIGHT_CYAN] = CLR_BRIGHT_CYAN;
-		ttycolors[CLR_WHITE] = CLR_WHITE;
-	}
-#endif
-}
-
-#ifdef VIDEOSHADES
-
-static int convert_uchars(char *, uchar *, int);
-
-/*
- * OPTIONS=videocolors:1-2-3-4-5-6-7-8-9-10-11-12-13-14-15
- * Left to right assignments for:
- *	red	green	 brown	blue	magenta	cyan	gray	black
- *	orange	br.green yellow	br.blue	br.mag	br.cyan	white
- */
-int assign_videocolors(char *colorvals) {
-	int i, icolor;
-	uchar *tmpcolor;
-
-	init_ttycolor();
-
-	i = strlen(colorvals);
-	tmpcolor = alloc(i);
-	if (convert_uchars(colorvals, tmpcolor, i) < 0) return false;
-
-	icolor = CLR_RED;
-	for (i = 0; tmpcolor[i] != 0; ++i) {
-		if (icolor <= CLR_WHITE)
-			ttycolors[icolor++] = tmpcolor[i];
-	}
-
-	colorflag = true;
-	free(tmpcolor);
-	return 1;
-}
-
-static int convert_uchars(char *bufp, uchar *list, int size) {
-	uint num = 0;
-	int count = 0;
-
-	list[count] = 0;
-
-	while (1) {
-		switch (*bufp) {
-			case ' ':
-			case '\0':
-			case '\t':
-			case '-':
-			case '\n':
-				if (num) {
-					list[count++] = num;
-					list[count] = 0;
-					num = 0;
-				}
-				if ((count == size) || !*bufp) return count;
-				bufp++;
-				break;
-			case '#':
-				if (num) {
-					list[count++] = num;
-					list[count] = 0;
-				}
-				return count;
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				num = num * 10 + (*bufp - '0');
-				if (num > 15) return -1;
-				bufp++;
-				break;
-			default: return -1;
-		}
-	}
-	/*NOTREACHED*/
-}
-#endif /* VIDEOSHADES*/
-
 void tty_startup(int *wid, int *hgt) {
 	int i;
 #ifdef TERMLIB
@@ -167,8 +59,6 @@ void tty_startup(int *wid, int *hgt) {
 	char *tptr;
 	char *tbufptr, *pc;
 #endif
-
-	init_ttycolor();
 
 #ifdef TERMLIB
 
@@ -207,10 +97,8 @@ void tty_startup(int *wid, int *hgt) {
 			if (i != CLR_BLACK) {
 				hilites[i | BRIGHT] = alloc(sizeof("\033[1;3%dm"));
 				sprintf(hilites[i | BRIGHT], "\033[1;3%dm", i);
-#ifndef VIDEOSHADES
-				if (i != CLR_GRAY)
-#endif
-				{
+
+				if (i != CLR_GRAY) {
 					hilites[i] = alloc(sizeof("\033[0;3%dm"));
 					sprintf(hilites[i], "\033[0;3%dm", i);
 				}
@@ -583,35 +471,8 @@ void cl_eos(void) {
 
 #include <curses.h>
 
-#ifdef COLOR_BLACK /* trust include file */
-#ifndef VIDEOSHADES
 #undef COLOR_BLACK
-#endif
-#else
-#ifndef _M_UNIX /* guess BGR */
-#ifdef VIDEOSHADES
-#define COLOR_BLACK 0
-#endif
-#define COLOR_BLUE    1
-#define COLOR_GREEN   2
-#define COLOR_CYAN    3
-#define COLOR_RED     4
-#define COLOR_MAGENTA 5
-#define COLOR_YELLOW  6
-#define COLOR_WHITE   7
-#else /* guess RGB */
-#define COLOR_RED     1
-#define COLOR_GREEN   2
-#define COLOR_YELLOW  3
-#define COLOR_BLUE    4
-#define COLOR_MAGENTA 5
-#define COLOR_CYAN    6
-#define COLOR_WHITE   7
-#endif
-#endif
-#ifndef VIDEOSHADES
-#define COLOR_BLACK COLOR_BLUE
-#endif
+#define COLOR_BLACK 8
 
 const int ti_map[8] = {
 	COLOR_BLACK, COLOR_RED, COLOR_GREEN, COLOR_YELLOW,
@@ -630,14 +491,12 @@ static void init_hilite(void) {
 
 	for (c = 0; c < CLR_MAX / 2; c++) {
 		scratch = tparm(setf, ti_map[c]);
-#ifndef VIDEOSHADES
+
 		if (c != CLR_GRAY) {
-#endif
 			hilites[c] = alloc(strlen(scratch) + 1);
 			strcpy(hilites[c], scratch);
-#ifndef VIDEOSHADES
 		}
-#endif
+
 		if (c != CLR_BLACK) {
 			hilites[c | BRIGHT] = alloc(strlen(scratch) + strlen(MD) + 1);
 			strcpy(hilites[c | BRIGHT], MD);
@@ -803,11 +662,7 @@ void term_end_color(void) {
 }
 
 void term_start_color(int color) {
-#ifdef VIDEOSHADES
-	xputs(hilites[ttycolors[color]]);
-#else
 	xputs(hilites[color]);
-#endif
 }
 
 int has_color(int color) {

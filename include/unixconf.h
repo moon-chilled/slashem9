@@ -88,10 +88,6 @@
  */
 /* #define PORT_HELP "Unixhelp" */
 
-#ifdef TTY_GRAPHICS
-#define VIDEOSHADES
-#endif
-
 /*
  * If you define MAIL, then the player will be notified of new mail
  * when it arrives.  If you also define DEF_MAILREADER then this will

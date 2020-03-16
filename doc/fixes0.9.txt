@@ -55,6 +55,7 @@ Changelist for slashem9 v0.9:
 - Interface: bump chance of getting the message "yo' mama -- core dumped" from 1% to 2%.
 - Bugfix: monster attacking another monster with a draining attack could blind it too.
 - Interface: nicer messages when attaching candles to the candelabrum of invocation.
+- Interface: no more VIDEOSHADES.
 
 Imports from NetHack version 3.6:
 - Bugfix: acid dropping bug.

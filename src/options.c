@@ -210,9 +210,6 @@ static struct Comp_Opt {
 	{"tileset", "name of predefined tileset to use", PL_PSIZ, SET_IN_GAME},
 	{"traps", "the symbols to use in drawing traps", MAXTCHARS + 1, SET_IN_FILE},
 	{"vary_msgcount", "show more old messages at a time", 20, DISP_IN_GAME}, /*WC*/
-#ifdef VIDEOSHADES
-	{"videocolors", "color mappings for internal screen routines", 40, DISP_IN_GAME},
-#endif
 	{"windowcolors", "the foreground/background colors of windows", 80, DISP_IN_GAME}, /*WC*/
 	{"windowtype", "windowing system to use", WINTYPELEN, DISP_IN_GAME},
 	{"wolfname", "the name of your (first) wolf (e.g., wolfname:Beast)", PL_PSIZ, DISP_IN_GAME},
@@ -228,10 +225,6 @@ static struct Bool_Tile_Opt {
 	{NULL, 0, 0}};
 
 static boolean need_redraw; /* for doset() */
-
-#ifdef VIDEOSHADES
-extern char *shade[3]; /* in sys/msdos/video.c */
-#endif
 
 static char def_inv_order[MAXOCLASSES] = {
 	COIN_CLASS,
@@ -1953,23 +1946,6 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 		return;
 	}
 
-#ifdef VIDEOSHADES
-	/* videocolors:string */
-	fullname = "videocolors";
-	if (match_optname(opts, fullname, 6, true) ||
-	    match_optname(opts, "videocolours", 10, true)) {
-		if (negated) {
-			bad_negation(fullname, false);
-			return;
-		} else if (!(opts = string_for_env_opt(fullname, opts, false))) {
-			return;
-		}
-		if (!assign_videocolors(opts))
-			badoption(opts);
-		return;
-	}
-#endif /* VIDEOSHADES */
-
 	/* WINCAP
 	 * map_mode:[tiles|ascii4x6|ascii6x8|ascii8x8|ascii16x8|ascii7x12|ascii8x12|
 			ascii16x12|ascii12x16|ascii10x18|fit_to_screen] */
@@ -3309,18 +3285,6 @@ static const char *get_compopt_value(const char *optname, char *buf) {
 		else
 			strcpy(buf, defopt);
 	}
-#ifdef VIDEOSHADES
-	else if (!strcmp(optname, "videocolors"))
-		sprintf(buf, "%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d",
-			ttycolors[CLR_RED], ttycolors[CLR_GREEN],
-			ttycolors[CLR_BROWN], ttycolors[CLR_BLUE],
-			ttycolors[CLR_MAGENTA], ttycolors[CLR_CYAN],
-			ttycolors[CLR_GRAY], ttycolors[CLR_BLACK],
-			ttycolors[CLR_ORANGE], ttycolors[CLR_BRIGHT_GREEN],
-			ttycolors[CLR_YELLOW], ttycolors[CLR_BRIGHT_BLUE],
-			ttycolors[CLR_BRIGHT_MAGENTA],
-			ttycolors[CLR_BRIGHT_CYAN], ttycolors[CLR_WHITE]);
-#endif /* VIDEOSHADES */
 	else if (!strcmp(optname, "windowborders"))
 		sprintf(buf, "%s", iflags.wc2_windowborders == 1 ? "1=on" : iflags.wc2_windowborders == 2 ? "2=off" : iflags.wc2_windowborders == 3 ? "3=auto" : defopt);
 	else if (!strcmp(optname, "windowtype"))

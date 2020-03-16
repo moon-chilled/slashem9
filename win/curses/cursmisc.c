@@ -68,10 +68,6 @@ int curses_read_char() {
 /* Turn on or off the specified color and / or attribute */
 
 void curses_toggle_color_attr(WINDOW *win, int color, int attr, int onoff) {
-#ifdef VIDEOSHADES
-	if (color == 0) color = 8;
-	else if (color == 8) color = 0;
-#endif
 	int curses_color;
 
 	/* Map color disabled */

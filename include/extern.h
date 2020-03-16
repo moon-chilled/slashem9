@@ -2093,13 +2093,6 @@ bool check_version(struct version_info *, const char *, boolean);
 void append_port_id(char *);
 #endif
 
-/* ### video.c ### */
-
-#ifdef VIDEOSHADES
-int assign_videoshades(char *);
-int assign_videocolors(char *);
-#endif
-
 /* ### vision.c ### */
 
 void vision_init(void);

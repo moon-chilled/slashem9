@@ -252,7 +252,16 @@ static void savegamestate(int fd, int mode) {
 	bwrite(fd, &u, sizeof(struct you));
 	bwrite(fd, &youmonst, sizeof(struct monst));
 
-	ptrdiff_t umonst_data_offset = youmonst.data - &mons[0];
+	ptrdiff_t umonst_data_offset;
+	if ((&mons[0] <= youmonst.data) && (youmonst.data <= &mons[NUMMONS-1])) {
+		umonst_data_offset = youmonst.data - &mons[0];
+	} else if (youmonst.data == &upermonst) {
+		umonst_data_offset = -1; // magic number
+	} else {
+		impossible("Bad youmonst.data (%p)", youmonst.data);
+		umonst_data_offset = -1; // probably reasonable
+	}
+
 	bwrite(fd, &umonst_data_offset, sizeof(ptrdiff_t));
 	bwrite(fd, &upermonst, sizeof(struct permonst));
 
