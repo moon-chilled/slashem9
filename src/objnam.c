@@ -581,7 +581,15 @@ char *doname_ext(struct obj *obj, bool keen) {
 	if (obj->oinvis) strcat(prefix, "invisible ");
 
 	// "empty" goes at the beginning, but item count goes at the end
-	if ((Is_container(obj) || obj->otyp == STATUE) && !Has_contents(obj)) {
+	/* bag of tricks: include "empty" prefix if it's known to
+	 * be empty but its precise number of charges isn't known
+	 * (when that is known, or identification is keen, a suffix of
+	 * "(n:0)" will be appended, making the prefix be redundant; note
+	 * that 'known' flag isn't set when emptiness gets discovered because
+	 * then charging magic would yield known number of new charges)
+	 */
+	if ((obj->otyp == BAG_OF_TRICKS) ? (!keen && obj->spe == 0 && !obj->known) :
+	    (Is_container(obj) || obj->otyp == STATUE) && !Has_contents(obj)) {
 		if (obj->cknown) strcat(prefix, "empty ");
 		else if (keen) strcat(prefix, "[empty] ");
 	}
