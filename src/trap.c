@@ -579,7 +579,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 
 		// don't show article when referring to steed by name
 		// (don't see steed's name while hallucinating)
-		if (u.usteed->mnamelth && !Hallucination) {
+		if (has_name(u.usteed) && !Hallucination) {
 			steed_article = ARTICLE_NONE;
 		}
 	}

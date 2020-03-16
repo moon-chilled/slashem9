@@ -183,7 +183,6 @@ int getpos(coord *cc, boolean force, const char *goal) {
 
 struct monst *christen_monst(struct monst *mtmp, const char *name) {
 	int lth;
-	struct monst *mtmp2;
 	char buf[PL_PSIZ];
 
 	/* dogname & catname are PL_PSIZ arrays; object names have same limit */
@@ -193,19 +192,19 @@ struct monst *christen_monst(struct monst *mtmp, const char *name) {
 		name = strncpy(buf, name, PL_PSIZ - 1);
 		buf[PL_PSIZ - 1] = '\0';
 	}
-	if (lth == mtmp->mnamelth) {
+	if (has_name(mtmp) && lth == (strlen(MNAME(mtmp))+1)) {
 		/* don't need to allocate a new monst struct */
-		if (lth) strcpy(NAME(mtmp), name);
+		if (lth) strcpy(MNAME(mtmp), name);
 		return mtmp;
 	}
-	mtmp2 = newmonst(mtmp->mxlth + lth);
-	*mtmp2 = *mtmp;
-	memcpy((void *)mtmp2->mextra,
-	       (void *)mtmp->mextra, mtmp->mxlth);
-	mtmp2->mnamelth = lth;
-	if (lth) strcpy(NAME(mtmp2), name);
-	replmon(mtmp, mtmp2);
-	return mtmp2;
+
+	if (has_name(mtmp)) free(MNAME(mtmp));
+	if (!mtmp->mextra) mtmp->mextra = newmextra();
+
+	MNAME(mtmp) = new(char, lth);
+	if (lth) strcpy(MNAME(mtmp), name);
+
+	return mtmp;
 }
 
 int do_mname(void) {
@@ -616,8 +615,8 @@ char *x_monnam(struct monst *mtmp, int article, const char *adjective, int suppr
 	if (do_hallu) {
 		strcat(buf, rndmonnam());
 		name_at_start = false;
-	} else if (mtmp->mnamelth) {
-		char *name = NAME(mtmp);
+	} else if (has_name(mtmp)) {
+		char *name = MNAME(mtmp);
 
 		if (mdat == &mons[PM_GHOST]) {
 			sprintf(eos(buf), "%s ghost", s_suffix(name));
@@ -687,12 +686,12 @@ char *x_monnam(struct monst *mtmp, int article, const char *adjective, int suppr
 
 char *l_monnam(struct monst *mtmp) {
 	static char buf[BUFSZ];
-	return strcpy(buf, x_monnam(mtmp, ARTICLE_NONE, NULL, mtmp->mnamelth ? SUPPRESS_SADDLE : 0, true));
+	return strcpy(buf, x_monnam(mtmp, ARTICLE_NONE, NULL, has_name(mtmp) ? SUPPRESS_SADDLE : 0, true));
 }
 
 char *mon_nam(struct monst *mtmp) {
 	static char buf[BUFSZ];
-	return strcpy(buf, x_monnam(mtmp, ARTICLE_THE, NULL, mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false));
+	return strcpy(buf, x_monnam(mtmp, ARTICLE_THE, NULL, has_name(mtmp) ? SUPPRESS_SADDLE : 0, false));
 }
 
 /* print the name as if mon_nam() was called, but assume that the player
@@ -702,7 +701,7 @@ char *mon_nam(struct monst *mtmp) {
 char *noit_mon_nam(struct monst *mtmp) {
 	static char buf[BUFSZ];
 	return strcpy(buf, x_monnam(mtmp, ARTICLE_THE, NULL,
-			 mtmp->mnamelth ? (SUPPRESS_SADDLE | SUPPRESS_IT) : SUPPRESS_IT,
+			 has_name(mtmp) ? (SUPPRESS_SADDLE | SUPPRESS_IT) : SUPPRESS_IT,
 			 false));
 }
 
@@ -733,14 +732,14 @@ char *y_monnam(struct monst *mtmp) {
 
 	prefix = mtmp->mtame ? ARTICLE_YOUR : ARTICLE_THE;
 	// "saddled" is redundant when mounted
-	suppression_flag = (mtmp->mnamelth || mtmp == u.usteed) ? SUPPRESS_SADDLE : 0;
+	suppression_flag = (has_name(mtmp) || mtmp == u.usteed) ? SUPPRESS_SADDLE : 0;
 
 	return strcpy(buf, x_monnam(mtmp, prefix, NULL, suppression_flag, false));
 }
 
 char *Adjmonnam(struct monst *mtmp, const char *adj) {
 	static char buf[BUFSZ];
-	strcpy(buf, x_monnam(mtmp, ARTICLE_THE, adj, mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false));
+	strcpy(buf, x_monnam(mtmp, ARTICLE_THE, adj, has_name(mtmp) ? SUPPRESS_SADDLE : 0, false));
 
 	return upstart(buf);
 }
@@ -748,7 +747,7 @@ char *Adjmonnam(struct monst *mtmp, const char *adj) {
 char *a_monnam(struct monst *mtmp) {
 	static char buf[BUFSZ];
 
-	return strcpy(buf, x_monnam(mtmp, ARTICLE_A, NULL, mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false));
+	return strcpy(buf, x_monnam(mtmp, ARTICLE_A, NULL, has_name(mtmp) ? SUPPRESS_SADDLE : 0, false));
 }
 
 char *Amonnam(struct monst *mtmp) {

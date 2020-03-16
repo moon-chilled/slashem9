@@ -4,7 +4,6 @@
 
 #include "hack.h"
 #include "mfndpos.h"
-#include "edog.h"
 #include "artifact.h"
 #include "display.h"
 #include "global.h"
@@ -18,6 +17,7 @@ static long mm_aggression(struct monst *magr, struct monst *mdef);
 static long mm_displacement(struct monst *magr, struct monst *mdef);
 static int pick_animal(void);
 static void kill_eggs(struct obj *obj_list);
+static void dealloc_mextra(struct monst *m);
 
 #define LEVEL_SPECIFIC_NOCORPSE(mdat)                 \
 	(Is_rogue_level(&u.uz) ||                     \
@@ -294,13 +294,19 @@ static struct obj *make_corpse(struct monst *mtmp, unsigned corpseflags) {
 			num = d(2, 6);
 			while (num--)
 				obj = mksobj_at(IRON_CHAIN, x, y, true, false);
-			mtmp->mnamelth = 0;
+			if (has_name(mtmp)) {
+				free(MNAME(mtmp));
+				MNAME(mtmp) = NULL;
+			}
 			break;
 		case PM_GLASS_GOLEM:
 			num = d(2, 4); /* very low chance of creating all glass gems */
 			while (num--)
 				obj = mksobj_at((LAST_GEM + rnd(9)), x, y, true, false);
-			mtmp->mnamelth = 0;
+			if (has_name(mtmp)) {
+				free(MNAME(mtmp));
+				MNAME(mtmp) = NULL;
+			}
 			break;
 		case PM_RUBY_GOLEM:
 			/* [DS] Mik's original Lethe fobbed off the player with coloured
@@ -309,26 +315,38 @@ static struct obj *make_corpse(struct monst *mtmp, unsigned corpseflags) {
 			num = d(2, 4);
 			while (num--)
 				obj = mksobj_at(RUBY, x, y, true, false);
-			mtmp->mnamelth = 0;
+			if (has_name(mtmp)) {
+				free(MNAME(mtmp));
+				MNAME(mtmp) = NULL;
+			}
 			break;
 		case PM_DIAMOND_GOLEM:
 			num = d(2, 4);
 			while (num--)
 				obj = mksobj_at(DIAMOND, x, y, true, false);
-			mtmp->mnamelth = 0;
+			if (has_name(mtmp)) {
+				free(MNAME(mtmp));
+				MNAME(mtmp) = NULL;
+			}
 			break;
 		case PM_SAPPHIRE_GOLEM:
 			num = d(2, 4);
 			while (num--)
 				obj = mksobj_at(SAPPHIRE, x, y, true, false);
-			mtmp->mnamelth = 0;
+			if (has_name(mtmp)) {
+				free(MNAME(mtmp));
+				MNAME(mtmp) = NULL;
+			}
 			break;
 		case PM_STEEL_GOLEM:
 			num = d(2, 6);
 			/* [DS] Add steel chains (or handcuffs!) for steel golems? */
 			while (num--)
 				obj = mksobj_at(IRON_CHAIN, x, y, true, false);
-			mtmp->mnamelth = 0;
+			if (has_name(mtmp)) {
+				free(MNAME(mtmp));
+				MNAME(mtmp) = NULL;
+			}
 			break;
 		case PM_CRYSTAL_GOLEM:
 			/* [DS] Generate gemstones of various hues */
@@ -338,14 +356,20 @@ static struct obj *make_corpse(struct monst *mtmp, unsigned corpseflags) {
 				while (num--)
 					obj = mksobj_at(bases[GEM_CLASS] + rn2(gemspan), x, y,
 							true, false);
-				mtmp->mnamelth = 0;
+				if (has_name(mtmp)) {
+					free(MNAME(mtmp));
+					MNAME(mtmp) = NULL;
+				}
 			}
 			break;
 		case PM_CLAY_GOLEM:
 			obj = mksobj_at(ROCK, x, y, false, false);
 			obj->quan = (long)(rn2(20) + 50);
 			obj->owt = weight(obj);
-			mtmp->mnamelth = 0;
+			if (has_name(mtmp)) {
+				free(MNAME(mtmp));
+				MNAME(mtmp) = NULL;
+			}
 			break;
 		case PM_STONE_GOLEM:
 			corpstatflags &= ~CORPSTAT_INIT;
@@ -355,36 +379,54 @@ static struct obj *make_corpse(struct monst *mtmp, unsigned corpseflags) {
 			num = d(2, 4);
 			while (num--)
 				obj = mksobj_at(QUARTERSTAFF, x, y, true, false);
-			mtmp->mnamelth = 0;
+			if (has_name(mtmp)) {
+				free(MNAME(mtmp));
+				MNAME(mtmp) = NULL;
+			}
 			break;
 		case PM_LEATHER_GOLEM:
 			num = d(2, 4);
 			while (num--)
 				obj = mksobj_at(LEATHER_ARMOR, x, y, true, false);
-			mtmp->mnamelth = 0;
+			if (has_name(mtmp)) {
+				free(MNAME(mtmp));
+				MNAME(mtmp) = NULL;
+			}
 			break;
 		case PM_WAX_GOLEM:
 			num = d(2, 4);
 			while (num--)
 				obj = mksobj_at(WAX_CANDLE, x, y, true, false);
-			mtmp->mnamelth = 0;
+			if (has_name(mtmp)) {
+				free(MNAME(mtmp));
+				MNAME(mtmp) = NULL;
+			}
 			break;
 		case PM_PLASTIC_GOLEM:
 			num = d(2, 2);
 			while (num--)
 				obj = mksobj_at(CREDIT_CARD, x, y, true, false);
-			mtmp->mnamelth = 0;
+			if (has_name(mtmp)) {
+				free(MNAME(mtmp));
+				MNAME(mtmp) = NULL;
+			}
 			break;
 		case PM_GOLD_GOLEM:
 			/* Good luck gives more coins */
 			obj = mkgold(200 - rnl(101), x, y);
-			mtmp->mnamelth = 0;
+			if (has_name(mtmp)) {
+				free(MNAME(mtmp));
+				MNAME(mtmp) = NULL;
+			}
 			break;
 		case PM_PAPER_GOLEM:
 			num = rnd(4);
 			while (num--)
 				obj = mksobj_at(SCR_BLANK_PAPER, x, y, true, false);
-			mtmp->mnamelth = 0;
+			if (has_name(mtmp)) {
+				free(MNAME(mtmp));
+				MNAME(mtmp) = NULL;
+			}
 			break;
 		default_1:
 		default:
@@ -409,8 +451,8 @@ static struct obj *make_corpse(struct monst *mtmp, unsigned corpseflags) {
 	   prevent the same attack beam from hitting its corpse */
 	if (context.bypasses) bypass_obj(obj);
 
-	if (mtmp->mnamelth)
-		obj = oname(obj, NAME(mtmp));
+	if (has_name(mtmp))
+		obj = oname(obj, MNAME(mtmp));
 
 	/* Avoid "It was hidden under a green mold corpse!"
 	 *  during Blind combat. An unseen monster referred to as "it"
@@ -1365,6 +1407,28 @@ void relmon(struct monst *mon) {
 	}
 }
 
+static void dealloc_mextra(struct monst *m) {
+	struct mextra *x = m->mextra;
+	if (x) {
+		if (x->mname) free(x->mname);
+		if (x->egd)  free(x->egd);
+		if (x->epri) free(x->epri);
+		if (x->eshk) free(x->eshk);
+		if (x->emin) free(x->emin);
+		if (x->edog) free(x->edog);
+		if (x->egyp) free(x->egyp);
+
+		free(x);
+	}
+
+	m->mextra = NULL;
+}
+
+void dealloc_monst(struct monst *mon) {
+	dealloc_mextra(mon);
+	free(mon);
+}
+
 /* remove effects of mtmp from other data structures */
 /* mptr reflects mtmp->data _prior_ to mtmp's death */
 static void m_detach(struct monst *mtmp, struct permonst *mptr) {
@@ -1762,7 +1826,7 @@ void monstone(struct monst *mdef) {
 		   so that saved monster traits won't retain any stale
 		   item-conferred attributes */
 		otmp = mkcorpstat(STATUE, KEEPTRAITS(mdef) ? mdef : 0, mdef->data, x, y, CORPSTAT_NONE);
-		if (mdef->mnamelth) otmp = oname(otmp, NAME(mdef));
+		if (has_name(mdef)) otmp = oname(otmp, MNAME(mdef));
 		while ((obj = oldminvent) != 0) {
 			oldminvent = obj->nobj;
 			add_to_container(otmp, obj);
@@ -1877,9 +1941,9 @@ void xkilled(struct monst *mtmp, int dest) {
 			pline("You %s %s!", verb,
 			      !mtmp->mtame ? mon_nam(mtmp) :
 					     x_monnam(mtmp,
-						      mtmp->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
+						      has_name(mtmp) ? ARTICLE_NONE : ARTICLE_THE,
 						      "poor",
-						      mtmp->mnamelth ? SUPPRESS_SADDLE : 0,
+						      has_name(mtmp) ? SUPPRESS_SADDLE : 0,
 						      false));
 		}
 	}
@@ -2237,7 +2301,7 @@ void setmangry(struct monst *mtmp) {
 	if (Is_blackmarket(&u.uz)) {
 		if (mtmp->isshk)
 			blkmar_guards(mtmp);
-		else if (NAME(mtmp) && *NAME(mtmp)) {
+		else if (MNAME(mtmp) && *MNAME(mtmp)) {
 			/* non-tame named monsters are presumably
 			 * black marketeer's assistants */
 			struct monst *shkp;
@@ -2525,7 +2589,7 @@ int newcham(struct monst *mtmp, struct permonst *mdat, boolean polyspot, boolean
 	int mndx, tryct;
 	int couldsee = canseemon(mtmp);
 	struct permonst *olddata = mtmp->data;
-	char oldname[BUFSZ], newname[BUFSZ];
+	char oldname[BUFSZ];
 	bool alt_mesg = false; /* Avoid "<rank> turns into a <rank>" */
 
 	if (msg) {
@@ -2560,17 +2624,16 @@ int newcham(struct monst *mtmp, struct permonst *mdat, boolean polyspot, boolean
 		if (!rn2(10)) mtmp->female = !mtmp->female;
 	}
 
-	if (In_endgame(&u.uz) && is_mplayer(olddata)) {
+	if (In_endgame(&u.uz) && is_mplayer(olddata) && has_name(mtmp)) {
 		/* mplayers start out as "Foo the Bar", but some of the
 		 * titles are inappropriate when polymorphed, particularly
 		 * into the opposite sex.  players don't use ranks when
 		 * polymorphed, so dropping the rank for mplayers seems
 		 * reasonable.
 		 */
-		char *p = index(NAME(mtmp), ' ');
+		char *p = index(MNAME(mtmp), ' ');
 		if (p) {
 			*p = '\0';
-			mtmp->mnamelth = p - NAME(mtmp) + 1;
 		}
 	}
 
@@ -2679,15 +2742,19 @@ int newcham(struct monst *mtmp, struct permonst *mdat, boolean polyspot, boolean
 		} else if (alt_mesg) {
 			pline("%s changes into a %s!", oldname, is_human(mdat) ? "human" : mdat->mname + 4);
 		} else {
-			uchar save_mnamelth = mtmp->mnamelth;
-			mtmp->mnamelth = 0;
+			char *save_monnam = has_name(mtmp) ? MNAME(mtmp) : NULL;
+
+			char newname[BUFSZ];
+			
+			if (has_name(mtmp)) MNAME(mtmp) = NULL;
 			strcpy(newname, (mdat == &mons[PM_GREEN_SLIME]) ? "slime" : x_monnam(mtmp, ARTICLE_A, NULL, SUPPRESS_SADDLE, false));
 			if (!strcmpi(oldname, "it") && !strcmpi(newname, "it")) {
 				usmellmon(mdat);
 			} else {
 				pline("%s turns into %s!", oldname, newname);
 			}
-			mtmp->mnamelth = save_mnamelth;
+
+			if (has_name(mtmp)) MNAME(mtmp) = save_monnam;
 		}
 	} else if (msg && couldsee)
 		/* No message if we only sensed the monster previously */
@@ -2958,6 +3025,20 @@ void pacify_guards() {
 		    mtmp->data == &mons[PM_WATCH_CAPTAIN])
 			mtmp->mpeaceful = 1;
 	}
+}
+
+struct monst *find_ghost_with_name(const char *str) {
+	struct monst *mtmp;
+
+	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+		if (DEADMONSTER(mtmp)
+		    || mtmp->data != &mons[PM_GHOST] || !has_name(mtmp))
+			continue;
+
+		if (!strcmpi(MNAME(mtmp), str))
+			return mtmp;
+	}
+	return NULL;
 }
 
 void mimic_hit_msg(struct monst *mtmp, short otyp) {

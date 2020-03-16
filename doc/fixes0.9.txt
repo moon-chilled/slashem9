@@ -56,7 +56,7 @@ Changelist for slashem9 v0.9:
 - Bugfix: monster attacking another monster with a draining attack could blind it too.
 - Interface: nicer messages when attaching candles to the candelabrum of invocation.
 
-Imports from NetHack versions newer than 3.4.3:
+Imports from NetHack version 3.6:
 - Bugfix: acid dropping bug.
 - Bugfix: deallocated wielded objects.
 - Bugfix: water punishment crash (NetHack/Slash'EM Extended).
@@ -194,6 +194,9 @@ Imports from NetHack versions newer than 3.4.3:
 - Bugfix: if an object was polymorphed into a boulder, vision was not obscured properly.
 - Gameplay: armour should autocurse when monster wears it, not just player.
 - Gameplay: limit potential gains from eating rings.
+- Bugfix: prevent possible segfault about swallowed hero and magic trap.
+- Internals: rennovate mextra to be a proper structure, which also stores mname.
+- Interface: fix incorrect alignment display of angels in some cases.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
@@ -224,3 +227,4 @@ Imports from other locations:
 - Interface: add the overview patch, which adds two new extended commands: #overview, which shows an overview of the layout of the dungeon levels the player has explored, and #annotate, which allows the player to make a mental note which is associated with the current level (Hojita Discordia).
 - Interface: gun shop owners are named after GTA characters (SlashTHEM).
 - Gameplay: the Staff of Aesculapius protects against drain life again (SlashTHEM).
+- Gameplay: amnesia no longer forgets level maps and item descriptions, instead forgets skills (NetHack 3.7).

@@ -3,7 +3,6 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "egyp.h"
 
 /* KMH -- Copied from pray.c; this really belongs in a header file */
 #define DEVOUT	 14
@@ -35,8 +34,6 @@ static void do_class_genocide(void);
 static void stripspe(struct obj *);
 static void p_glow1(struct obj *);
 static void p_glow2(struct obj *, const char *);
-static void randomize(int *, int);
-static void forget_single_object(int);
 static void maybe_tame(struct monst *, struct obj *);
 
 static void set_lit(int, int, void *);
@@ -601,180 +598,23 @@ void recharge(struct obj *obj, int curse_bless) {
 	}
 }
 
-/* Forget known information about this object class. */
-static void
-forget_single_object(int obj_id) {
-	objects[obj_id].oc_name_known = 0;
-	objects[obj_id].oc_pre_discovered = 0; /* a discovery when relearned */
-	if (objects[obj_id].oc_uname) {
-		free(objects[obj_id].oc_uname);
-		objects[obj_id].oc_uname = 0;
-	}
-	undiscover_object(obj_id); /* after clearing oc_name_known */
-
-	/* clear & free object names from matching inventory items too? */
-}
-
-#if 0 /* here if anyone wants it.... */
-/* Forget everything known about a particular object class. */
-static void
-forget_objclass (int oclass) {
-	int i;
-
-	for (i=bases[oclass];
-	                i < NUM_OBJECTS && objects[i].oc_class==oclass; i++)
-		forget_single_object(i);
-}
-#endif
-
-/* randomize the given list of numbers  0 <= i < count */
-static void randomize(int *indices, int count) {
-	int i, iswap, temp;
-
-	for (i = count - 1; i > 0; i--) {
-		if ((iswap = rn2(i + 1)) == i) continue;
-		temp = indices[i];
-		indices[i] = indices[iswap];
-		indices[iswap] = temp;
-	}
-}
-
-/* Forget % of known objects. */
-void forget_objects(int percent) {
-	int i, count;
-	int indices[NUM_OBJECTS];
-
-	if (percent == 0) return;
-	if (percent <= 0 || percent > 100) {
-		impossible("forget_objects: bad percent %d", percent);
-		return;
-	}
-
-	for (count = 0, i = 1; i < NUM_OBJECTS; i++)
-		if (OBJ_DESCR(objects[i]) &&
-		    (objects[i].oc_name_known || objects[i].oc_uname))
-			indices[count++] = i;
-
-	randomize(indices, count);
-
-	/* forget first % of randomized indices */
-	count = ((count * percent) + 50) / 100;
-	for (i = 0; i < count; i++)
-		forget_single_object(indices[i]);
-}
-
-/* Forget some or all of map (depends on parameters). */
-void forget_map(int howmuch) {
-	int zx, zy;
-
-	if (In_sokoban(&u.uz))
-		return;
-
-	known = true;
-	for (zx = 0; zx < COLNO; zx++)
-		for (zy = 0; zy < ROWNO; zy++)
-			if (howmuch & ALL_MAP || rn2(7)) {
-				/* Zonk all memory of this location. */
-				levl[zx][zy].seenv = 0;
-				levl[zx][zy].waslit = 0;
-				clear_memory_glyph(zx, zy, S_stone);
-				levl[zx][zy].styp = STONE;
-			}
-}
-
-/* Forget all traps on the level. */
-void forget_traps(void) {
-	struct trap *trap;
-
-	/* forget all traps (except the one the hero is in :-) */
-	for (trap = ftrap; trap; trap = trap->ntrap)
-		if ((trap->tx != u.ux || trap->ty != u.uy) && (trap->ttyp != HOLE))
-			trap->tseen = 0;
-}
-
-/*
- * Forget given % of all levels that the hero has visited and not forgotten,
- * except this one.
- */
-void forget_levels(int percent) {
-	int i, count;
-	xchar maxl, this_lev;
-	int indices[MAXLINFO];
-
-	if (percent == 0) return;
-
-	if (percent <= 0 || percent > 100) {
-		impossible("forget_levels: bad percent %d", percent);
-		return;
-	}
-
-	this_lev = ledger_no(&u.uz);
-	maxl = maxledgerno();
-
-	/* count & save indices of non-forgotten visited levels */
-	/* Sokoban levels are pre-mapped for the player, and should stay
-	 * so, or they become nearly impossible to solve.  But try to
-	 * shift the forgetting elsewhere by fiddling with percent
-	 * instead of forgetting fewer levels.
-	 */
-	for (count = 0, i = 0; i <= maxl; i++)
-		if ((level_info[i].flags & VISITED) &&
-		    !(level_info[i].flags & FORGOTTEN) && i != this_lev) {
-			if (ledger_to_dnum(i) == sokoban_dnum)
-				percent += 2;
-			else
-				indices[count++] = i;
-		}
-
-	if (percent > 100) percent = 100;
-
-	randomize(indices, count);
-
-	/* forget first % of randomized indices */
-	count = ((count * percent) + 50) / 100;
-	for (i = 0; i < count; i++) {
-		level_info[indices[i]].flags |= FORGOTTEN;
-		forget_mapseen(indices[i]);
-	}
-}
-
 /*
  * Forget some things (e.g. after reading a scroll of amnesia).  When called,
  * the following are always forgotten:
  *
  *	- felt ball & chain
- *	- traps
- *	- part (6 out of 7) of the map
+ *	- skill training
  *
  * Other things are subject to flags:
  *
- *	howmuch & ALL_MAP	= forget whole map
  *	howmuch & ALL_SPELLS	= forget all spells
  */
 void forget(int howmuch) {
 	if (Punished) u.bc_felt = 0; /* forget felt ball&chain */
 
-	forget_map(howmuch);
-	forget_traps();
-
-	/* 1 in 3 chance of forgetting some levels */
-	if (!rn2(3)) forget_levels(rn2(25));
-
-	/* 1 in 3 chance of forgeting some objects */
-	if (!rn2(3)) forget_objects(rn2(25));
-
 	if (howmuch & ALL_SPELLS) losespells();
-	/*
-	 * Make sure that what was seen is restored correctly.  To do this,
-	 * we need to go blind for an instant --- turn off the display,
-	 * then restart it.  All this work is needed to correctly handle
-	 * walls which are stone on one side and wall on the other.  Turning
-	 * off the seen bits above will make the wall revert to stone,  but
-	 * there are cases where we don't want this to happen.  The easiest
-	 * thing to do is to run it through the vision system again, which
-	 * is always correct.
-	 */
-	docrt(); /* this correctly will reset vision */
+
+	drain_weapon_skill(rnd(howmuch ? 5 : 3));
 }
 
 /* monster is hit by scroll of taming's effect */
@@ -1147,14 +987,14 @@ int seffects(struct obj *sobj) {
 							break;
 					}
 				/* WAC Give N a shot at controlling the beasties
-			 * (if not cursed <g>).  Check curse status in case
-			 * this ever becomes a scroll
-			 */
+				 * (if not cursed <g>).  Check curse status in case
+				 * this ever becomes a scroll
+				 */
 				if (mtmp) {
 					if (!sobj->cursed && Role_if(PM_NECROMANCER)) {
 						if (!resist(mtmp, sobj->oclass, 0, TELL)) {
-							mtmp = tamedog(mtmp, NULL);
-							if (mtmp) pline("You dominate %s!", mon_nam(mtmp));
+							if (tamedog(mtmp, NULL))
+								pline("You dominate %s!", mon_nam(mtmp));
 						}
 					} else {
 						setmangry(mtmp);
@@ -1377,8 +1217,7 @@ int seffects(struct obj *sobj) {
 			break;
 		case SCR_AMNESIA:
 			known = true;
-			forget((!sobj->blessed ? ALL_SPELLS : 0) |
-			       (!confused || sobj->cursed ? ALL_MAP : 0));
+			forget(!sobj->blessed ? ALL_SPELLS : 0);
 			if (Hallucination) /* Ommmmmm! */
 				pline("Your mind releases itself from mundane concerns.");
 			else if (!strncmpi(plname, "Maud", 4))
@@ -1391,9 +1230,9 @@ int seffects(struct obj *sobj) {
 			break;
 		case SCR_FIRE:
 			/*
-		 * Note: Modifications have been made as of 3.0 to allow for
-		 * some damage under all potential cases.
-		 */
+			 * Note: Modifications have been made as of 3.0 to allow for
+			 * some damage under all potential cases.
+			 */
 			cval = bcsign(sobj);
 			if (!objects[sobj->otyp].oc_name_known) more_experienced(0, 10);
 			if (carried(sobj))

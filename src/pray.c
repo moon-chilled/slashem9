@@ -3,7 +3,6 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "epri.h"
 
 static int prayer_done(void);
 static struct obj *worst_cursed_item(void);

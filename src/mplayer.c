@@ -46,8 +46,8 @@ static const char *dev_name() {
 		match = false;
 		i = rn2(n);
 		for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-			if (!is_mplayer(mtmp->data)) continue;
-			if (!strncmp(developers[i], NAME(mtmp),
+			if (!is_mplayer(mtmp->data) || !has_name(mtmp)) continue;
+			if (!strncmp(developers[i], MNAME(mtmp),
 				     strlen(developers[i]))) {
 				match = true;
 				break;

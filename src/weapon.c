@@ -1343,6 +1343,40 @@ void lose_weapon_skill(int n) {
 	}
 }
 
+// n: number of skills to drain
+void drain_weapon_skill(int n) {
+	int tmpskills[P_NUM_SKILLS] = {0};
+
+	while (--n >= 0) {
+		if (u.skills_advanced) {
+			// Pick a random skill, deleting it from the list.
+			int i = rn2(u.skills_advanced);
+			int skill = u.skill_record[i];
+			tmpskills[skill] = 1;
+			for (; i < u.skills_advanced - 1; i++) {
+				u.skill_record[i] = u.skill_record[i + 1];
+			}
+			u.skills_advanced--;
+			if (P_SKILL(skill) <= P_UNSKILLED)
+				panic("drain_weapon_skill (%d)", skill);
+			P_SKILL(skill)--;   // drop skill one level
+			// refund slots used for skill
+			u.weapon_slots += slots_required(skill);
+			// drain a random proportion of skill training
+			if (P_ADVANCE(skill))
+				P_ADVANCE(skill) = rn2(P_ADVANCE(skill));
+		}
+	}
+
+	for (int skill = 0; skill < P_NUM_SKILLS; skill++)
+		if (tmpskills[skill]) {
+			pline("You forget %syour training in %s.",
+					P_SKILL(skill) >= P_BASIC ? "some of " : "", P_NAME(skill));
+		}
+}
+
+
+
 int weapon_type(struct obj *obj) {
 	/* KMH, balance patch -- now uses the object table */
 	int type;
@@ -1755,8 +1789,7 @@ void skill_init(const struct def_skill *class_skill) {
 }
 
 /*WAC  weapon practice code*/
-static int
-practice() {
+static int practice(void) {
 	if (delay) { /* not if (delay++), so at end delay == 0 */
 		delay++;
 		use_skill(weapon_type(uwep), 1);

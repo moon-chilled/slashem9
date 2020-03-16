@@ -387,6 +387,8 @@ int dowear2(const char *, const char *);
 
 /* ### dog.c ### */
 
+void newedog(struct monst *mtmp);
+void free_edog(struct monst *mtmp);
 void initedog(struct monst *);
 struct monst *make_familiar(struct obj *, xchar, xchar, boolean);
 struct monst *make_helper(int, xchar, xchar);
@@ -398,7 +400,7 @@ void mon_catchup_elapsed_time(struct monst *, long);
 void keepdogs(boolean);
 void migrate_to_level(struct monst *, xchar, xchar, coord *);
 int dogfood(struct monst *, struct obj *);
-struct monst *tamedog(struct monst *, struct obj *);
+bool tamedog(struct monst *mtmp, struct obj *obj);
 int make_pet_minion(int, aligntyp);
 void abuse_dog(struct monst *);
 void wary_dog(struct monst *, boolean);
@@ -500,7 +502,6 @@ schar lev_by_name(const char *);
 schar print_dungeon(boolean, schar *, xchar *);
 int donamelevel(void);
 int dooverview(void);
-void forget_mapseen(int);
 void init_mapseen(d_level *);
 void recalc_mapseen(void);
 void recbranch_mapseen(d_level *, d_level *);
@@ -660,8 +661,10 @@ void whetstone_toilet_effects(struct obj *);
 
 /* ### gypsy.c ### */
 
-void gypsy_init(struct monst *);
-void gypsy_chat(struct monst *);
+void newegyp(struct monst *mtmp);
+void free_egyp(struct monst *mtmp);
+void gypsy_init(struct monst *mtmp);
+void gypsy_chat(struct monst *mtmp);
 
 /* ### hack.c ### */
 
@@ -908,9 +911,11 @@ void readmail(struct obj *);
 
 /* ### makemon.c ### */
 
+void dealloc_monst(struct monst *mon);
 boolean is_home_elemental(struct permonst *);
 struct monst *clone_mon(struct monst *, xchar, xchar);
 void newmonhp(struct monst *mon, int mndx);
+struct mextra *newmextra(void);
 struct monst *makemon(struct permonst *, int, int, int);
 boolean create_critters(int, struct permonst *);
 struct permonst *rndmonst(void);
@@ -967,6 +972,8 @@ int doseduce(struct monst *);
 
 /* ### minion.c ### */
 
+void newemin(struct monst *mtmp);
+void free_emin(struct monst *mtmp);
 int msummon(struct monst *);
 void summon_minion(aligntyp, boolean);
 bool demon_talk(struct monst *);
@@ -1145,6 +1152,7 @@ void kill_genocided_monsters(void);
 void golemeffects(struct monst *, int, int);
 boolean angry_guards(boolean);
 void pacify_guards(void);
+struct monst *find_ghost_with_name(const char *str);
 void decide_to_shapeshift(struct monst *mon, int shiftflags);
 
 /* ### mondata.c ### */
@@ -1545,6 +1553,7 @@ int move_special(struct monst *, boolean, schar, boolean, boolean,
 char temple_occupied(char *);
 int pri_move(struct monst *);
 void priestini(d_level *, struct mkroom *, int, int, boolean);
+aligntyp mon_aligntyp(struct monst *mtmp);
 char *priestname(struct monst *, char *);
 boolean p_coaligned(struct monst *);
 struct monst *findpriest(char);
@@ -1558,6 +1567,8 @@ void ghod_hitsu(struct monst *);
 void angry_priest(void);
 void clearpriests(void);
 void restpriest(struct monst *, boolean);
+void newepri(struct monst *mtmp);
+void free_epri(struct monst *mtmp);
 
 /* ### quest.c ### */
 
@@ -1598,10 +1609,6 @@ int doread(void);
 boolean is_chargeable(struct obj *);
 void recharge(struct obj *, int);
 void forget(int);
-void forget_objects(int);
-void forget_levels(int);
-void forget_traps(void);
-void forget_map(int);
 int seffects(struct obj *);
 void litroom(boolean, struct obj *);
 void do_genocide(int);
@@ -1639,7 +1646,8 @@ void inven_inuse(boolean);
 int dorecover(int);
 void trickery(char *);
 void getlev(int, int, xchar, boolean);
-boolean lookup_id_mapping(unsigned, unsigned *);
+bool lookup_id_mapping(uint gid, uint *nidp);
+struct monst *buffer_to_mon(void*);
 void mread(int, void *, uint);
 
 /* ### rip.c ### */
@@ -1707,6 +1715,7 @@ int dosave0(void);
 void savestateinlock(void);
 #endif
 void savelev(int, xchar, int);
+void *mon_to_buffer(struct monst *, int*);
 void bufon(int);
 void bufoff(int);
 void bflush(int);
@@ -1782,6 +1791,8 @@ char *Shk_Your(char *, struct obj *);
 
 /* ### shknam.c ### */
 
+void neweshk(struct monst *mtmp);
+void free_eshk(struct monst *mtmp);
 void stock_room(int shp_indx, struct mkroom *sroom);
 bool saleable(struct monst *shkp, struct obj *obj);
 int get_shop_item(int type);
@@ -2062,7 +2073,9 @@ int hide_privileges(boolean);
 
 /* ### vault.c ### */
 
-boolean grddead(struct monst *);
+void newegd(struct monst *mtmp);
+void free_egd(struct monst *mtmp);
+bool grddead(struct monst *);
 char vault_occupied(char *);
 void invault(void);
 int gd_move(struct monst *);
@@ -2115,6 +2128,7 @@ void unrestrict_weapon_skill(int);
 void use_skill(int, int);
 void add_weapon_skill(int);
 void lose_weapon_skill(int);
+void drain_weapon_skill(int n);
 int weapon_type(struct obj *);
 int uwep_skill_type(void);
 int weapon_hit_bonus(struct obj *);

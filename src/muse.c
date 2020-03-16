@@ -7,7 +7,6 @@
  */
 
 #include "hack.h"
-#include "edog.h"
 
 boolean m_using = false;
 

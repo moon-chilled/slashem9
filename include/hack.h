@@ -124,16 +124,20 @@ extern coord bhitpos; /* place where throw or zap hits or stops */
 #define NO_SPELL 0
 
 /* flags to control makemon() */
-#define NO_MM_FLAGS	0x00  /* use this rather than plain 0 */
-#define NO_MINVENT	0x01  /* suppress minvent when creating mon */
-#define MM_NOWAIT	0x02  /* don't set STRAT_WAITMASK flags */
-#define MM_EDOG		0x04  /* add edog structure */
-#define MM_EMIN		0x08  /* add emin structure */
-#define MM_ANGRY	0x10  /* monster is created angry */
-#define MM_NONAME	0x20  /* monster is not christened */
-#define MM_NOCOUNTBIRTH 0x40  /* don't increment born counter (for revival) */
-#define MM_IGNOREWATER	0x80  /* ignore water when positioning */
-#define MM_ADJACENTOK	0x100 /* it is acceptable to use adjacent coordinates */
+#define NO_MM_FLAGS	0x0000	// use this rather than plain 0
+#define NO_MINVENT	0x0001	// suppress minvent when creating mon
+#define MM_NOWAIT	0x0002	// don't set STRAT_WAITMASK flags
+#define MM_NOCOUNTBIRTH	0x0004	// don't increment born counter (for revival)
+#define MM_IGNOREWATER	0x0008	// ignore water when positioning
+#define MM_ADJACENTOK	0x0010	// it is acceptable to use adjacent coordinates
+#define MM_ANGRY	0x0020	// monster is created angry
+#define MM_NONAME	0x0040	// monster is not christened
+#define MM_EGD		0x0080	// add egd structure
+#define MM_EPRI		0x0100	// add epri structure
+#define MM_ESHK		0x0200	// add eshk structure
+#define MM_EMIN		0x0400	// add emin structure
+#define MM_EDOG		0x0800	// add edog structure
+#define MM_EGYP		0x1000	// add egyp structure
 
 /* flags for make_corpse() and mkcorpstat() */
 #define CORPSTAT_NONE	0x00

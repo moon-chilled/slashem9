@@ -305,13 +305,12 @@ static void
 								mselftouch(mtmp, "Falling, ", true);
 								if (mtmp->mhp > 0)
 									if ((mtmp->mhp -= rnd(6)) <= 0) {
-										if (!cansee(x, y))
+										if (!cansee(x, y)) {
 											pline("It is destroyed!");
-										else {
+										} else {
 											pline("You destroy %s!", mtmp->mtame ?
-															 x_monnam(mtmp, ARTICLE_THE, "poor",
-																  mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false) :
-															 mon_nam(mtmp));
+											      x_monnam(mtmp, ARTICLE_THE, "poor", has_name(mtmp) ? SUPPRESS_SADDLE : 0, false) :
+											      mon_nam(mtmp));
 										}
 										xkilled(mtmp, 0);
 									}

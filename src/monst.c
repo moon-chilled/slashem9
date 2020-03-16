@@ -8,10 +8,6 @@
 #include "permonst.h"
 #include "monsym.h"
 #include "dungeon.h" /* prerequisite for eshk,vault,epri */
-#include "eshk.h"
-#include "vault.h"
-#include "epri.h"
-#include "egyp.h"
 
 /* #ifdef MUSE */
 #define MARM(x, y) x /* x is usually 10 */
@@ -50,7 +46,7 @@
 	{ nam, sym, lvl, gen, atk, siz, mr1, mr2, flg1, flg2, flg3, C(col) }
 /* LVL() and SIZ() collect several fields to cut down on # of args for MON() */
 #define LVL(lvl, mov, ac, mr, aln)  lvl, mov, ac, mr, aln
-#define SIZ(wt, nut, pxl, snd, siz) wt, nut, pxl, snd, siz
+#define SIZ(wt, nut, pxl, snd, siz) wt, nut, snd, siz
 /* ATTK() and A() are to avoid braces and commas within args to MON() */
 #define ATTK(at, ad, n, d) \
 	{ at, ad, n, d }
@@ -1574,7 +1570,7 @@ enum {
 		    M2_HOSTILE | M2_NASTY | M2_NOPOLY,
 	    M3_NOTAME, CLR_RED),
 	MON(PM_SHELOB, "Shelob", S_SPIDER,
-	    SIZ(26, 15, 3, 0, 0), (G_UNIQ | G_NOGEN | 1),
+	    LVL(26, 15, 3, 0, 0), (G_UNIQ | G_NOGEN | 1),
 	    A(ATTK(AT_BITE, AD_PHYS, 8, 4), ATTK(AT_BITE, AD_DRST, 5, 4),
 	      NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	    SIZ(500, 150, 0, MS_SILENT, MZ_LARGE), MR_POISON | MR_STONE, MR_POISON,

@@ -3,7 +3,6 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "eshk.h"
 #ifndef NO_SIGNAL
 #include <signal.h>
 #endif
@@ -190,7 +189,7 @@ void done_in_by(struct monst *mtmp) {
 			killer.format = KILLED_BY;
 		}
 		/* _the_ <invisible> <distorted> ghost of Dudley */
-		if (mtmp->data == &mons[PM_GHOST] && mtmp->mnamelth) {
+		if (mtmp->data == &mons[PM_GHOST] && has_name(mtmp)) {
 			strcat(buf, "the ");
 			killer.format = KILLED_BY;
 		}
@@ -201,7 +200,7 @@ void done_in_by(struct monst *mtmp) {
 
 		if (mtmp->data == &mons[PM_GHOST]) {
 			strcat(buf, "ghost");
-			if (mtmp->mnamelth) sprintf(eos(buf), " of %s", NAME(mtmp));
+			if (has_name(mtmp)) sprintf(eos(buf), " of %s", MNAME(mtmp));
 		} else if (mtmp->isshk) {
 			const char *shknm = shkname(mtmp),
 				   *honorific = shkname_is_pname(mtmp) ? "" :
@@ -216,8 +215,8 @@ void done_in_by(struct monst *mtmp) {
 			strcat(buf, m_monnam(mtmp));
 		} else {
 			strcat(buf, mtmp->data->mname);
-			if (mtmp->mnamelth)
-				sprintf(eos(buf), " called %s", NAME(mtmp));
+			if (has_name(mtmp))
+				sprintf(eos(buf), " called %s", MNAME(mtmp));
 		}
 
 		if (multi) strcat(buf, ", while helpless");

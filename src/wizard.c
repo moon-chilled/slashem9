@@ -9,7 +9,6 @@
 
 #include "hack.h"
 #include "qtext.h"
-#include "epri.h"
 
 static short which_arti(int);
 static boolean mon_has_arti(struct monst *, short);

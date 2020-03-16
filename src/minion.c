@@ -3,8 +3,21 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "emin.h"
-#include "epri.h"
+
+void newemin(struct monst *mtmp) {
+	if (!mtmp->mextra) mtmp->mextra = newmextra();
+	if (!EMIN(mtmp)) {
+		EMIN(mtmp) = new(struct emin);
+	}
+}
+
+void free_emin(struct monst *mtmp) {
+	if (mtmp->mextra && EMIN(mtmp)) {
+		free(EMIN(mtmp));
+		EMIN(mtmp) = NULL;
+	}
+	mtmp->isminion = 0;
+}
 
 // mon summons a monster
 int msummon(struct monst *mon) {
@@ -15,9 +28,10 @@ int msummon(struct monst *mon) {
 
 	if (mon) {
 		ptr = mon->data;
-		atyp = (ptr->maligntyp == A_NONE) ? A_NONE : sgn(ptr->maligntyp);
-		if (mon->ispriest || mon->data == &mons[PM_ALIGNED_PRIEST] || mon->data == &mons[PM_ANGEL])
-			atyp = EPRI(mon)->shralign;
+		atyp = mon->ispriest ? EPRI(mon)->shralign :
+		       mon->isminion ? EMIN(mon)->min_align :
+		       (ptr->maligntyp == A_NONE) ? A_NONE : sgn(ptr->maligntyp);
+
 	} else {
 		ptr = &mons[PM_WIZARD_OF_YENDOR];
 		atyp = (ptr->maligntyp == A_NONE) ? A_NONE : sgn(ptr->maligntyp);
@@ -71,11 +85,18 @@ int msummon(struct monst *mon) {
 	}
 
 	while (cnt > 0) {
-		mtmp = makemon(&mons[dtype], u.ux, u.uy, NO_MM_FLAGS);
+		mtmp = makemon(&mons[dtype], u.ux, u.uy, MM_EMIN);
 		if (mtmp) {
 			result++;
-			/* alignment should match the summoner */
-		       	if (dtype == PM_ANGEL) EPRI(mtmp)->shralign = atyp;
+			/* an angel's alignment should match the summoner */
+			if (dtype == PM_ANGEL) {
+				mtmp->isminion = 1;
+				EMIN(mtmp)->min_align = atyp;
+				/* renegade if same alignment but not peaceful
+				   or peaceful but different alignment */
+				EMIN(mtmp)->renegade = (atyp != u.ualign.type) ^ !mtmp->mpeaceful;
+			}
+
 		}
 		cnt--;
 	}
@@ -105,21 +126,27 @@ void summon_minion(aligntyp alignment, boolean talk) {
 	}
 	if (mnum == NON_PM) {
 		mon = 0;
-	} else if (mons[mnum].pxlth == 0) {
-		struct permonst *pm = &mons[mnum];
-		mon = makemon(pm, u.ux, u.uy, MM_EMIN);
+	} else if (mnum == PM_ANGEL) {
+		mon = makemon(&mons[mnum], u.ux, u.uy, MM_EPRI|MM_EMIN);
 		if (mon) {
 			mon->isminion = true;
 			EMIN(mon)->min_align = alignment;
-		}
-	} else if (mnum == PM_ANGEL) {
-		mon = makemon(&mons[mnum], u.ux, u.uy, NO_MM_FLAGS);
-		if (mon) {
-			mon->isminion = true;
+			EMIN(mon)->renegade = false;
 			EPRI(mon)->shralign = alignment; /* always A_LAWFUL here */
 		}
-	} else
+	} else if (mnum != PM_SHOPKEEPER && mnum != PM_GUARD
+			&& mnum != PM_ALIGNED_PRIEST && mnum != PM_HIGH_PRIEST) {
+		/* This was mons[mnum].pxlth == 0 but is this restriction
+		 * appropriate or necessary now that the structures are separate? */
+		mon = makemon(&mons[mnum], u.ux, u.uy, MM_EMIN);
+		if (mon) {
+			mon->isminion = 1;
+			EMIN(mon)->min_align = alignment;
+			EMIN(mon)->renegade = false;
+		}
+	} else {
 		mon = makemon(&mons[mnum], u.ux, u.uy, NO_MM_FLAGS);
+	}
 	if (mon) {
 		if (talk) {
 			pline("The voice of %s booms:", align_gname(alignment));

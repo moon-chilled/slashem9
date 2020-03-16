@@ -757,8 +757,7 @@ void hatch_egg(void *arg, long timeout) {
 				   while it's in your inventory */
 				if ((yours && !silent) ||
 				    (carried(egg) && mon->data->mlet == S_DRAGON)) {
-					if ((mon2 = tamedog(mon, NULL)) != 0) {
-						mon = mon2;
+					if (tamedog(mon, NULL)) {
 						if (carried(egg) && mon->data->mlet != S_DRAGON)
 							mon->mtame = 20;
 					}
@@ -954,7 +953,7 @@ static void slip_or_trip(void) {
 	} else if (rn2(3) && is_ice(u.ux, u.uy)) {
 		pline("%s %s%s on the ice.",
 		      u.usteed ? upstart(x_monnam(u.usteed,
-						  u.usteed->mnamelth ? ARTICLE_NONE : ARTICLE_THE,
+						  has_name(u.usteed) ? ARTICLE_NONE : ARTICLE_THE,
 						  NULL, SUPPRESS_SADDLE, false)) :
 				 "You",
 		      rn2(2) ? "slip" : "slide", on_foot ? "" : "s");

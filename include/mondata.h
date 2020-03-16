@@ -31,10 +31,7 @@
 #define hit_as_three(mon)	(((mon)->mintrinsics & MR_HITASTHREE) != 0)
 #define hit_as_four(mon)	(((mon)->mintrinsics & MR_HITASFOUR) != 0)
 
-#define is_lminion(mon)		(is_minion((mon)->data) &&                \
-				 (mon)->data->maligntyp >= A_COALIGNED && \
-				 ((mon)->data != &mons[PM_ANGEL] ||       \
-				  EPRI(mon)->shralign > 0))
+#define is_lminion(mon)		(is_minion((mon)->data) && mon_aligntyp(mon) == A_LAWFUL)
 
 #define is_flyer(ptr)		(((ptr)->mflags1 & M1_FLY) != 0L)
 #define is_floater(ptr)		((ptr)->mlet == S_EYE)

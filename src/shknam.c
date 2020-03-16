@@ -5,7 +5,6 @@
 /* shknam.c -- initialize a shop */
 
 #include "hack.h"
-#include "eshk.h"
 
 static void mkshobj_at(const struct shclass *, int, int);
 static void nameshk(struct monst *, const char *const *);
@@ -430,6 +429,22 @@ static void nameshk(struct monst *shk, const char *const *nlp) {
 	ESHK(shk)->shknam[PL_NSIZ - 1] = 0;
 }
 
+void neweshk(struct monst *mtmp) {
+	if (!mtmp->mextra) mtmp->mextra = newmextra();
+	if (!ESHK(mtmp)) {
+		ESHK(mtmp) = new(struct eshk);
+	}
+}
+
+void free_eshk(struct monst *mtmp) {
+	if (mtmp->mextra && ESHK(mtmp)) {
+		free(ESHK(mtmp));
+		ESHK(mtmp) = NULL;
+	}
+
+	mtmp->isshk = 0;
+}
+
 // create a new shopkeeper in the given room
 static int shkinit(const struct shclass *shp, struct mkroom *sroom) {
 	int sh, sx, sy;
@@ -495,10 +510,10 @@ shk_failed:
 
 	shk = NULL;
 	if (Is_blackmarket(&u.uz)) {
-		shk = makemon(&mons[PM_BLACK_MARKETEER], sx, sy, NO_MM_FLAGS);
+		shk = makemon(&mons[PM_BLACK_MARKETEER], sx, sy, MM_ESHK);
 	}
 	if (!shk) {
-		if (!(shk = makemon(&mons[PM_SHOPKEEPER], sx, sy, NO_MM_FLAGS)))
+		if (!(shk = makemon(&mons[PM_SHOPKEEPER], sx, sy, MM_ESHK)))
 			return -1;
 	}
 

@@ -4,7 +4,6 @@
 
 #include "hack.h"
 #include "artifact.h"
-#include "edog.h"
 
 static struct obj *otmp;
 
@@ -1334,8 +1333,6 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 			}
 			/* adjattrib gives dunce cap message when appropriate */
 			adjattrib(A_INT, -rnd(2), false);
-			forget_levels(25);  /* lose memory of 25% of levels */
-			forget_objects(25); /* lose memory of 25% of objects */
 			exercise(A_WIS, false);
 			break;
 		case AD_PLYS:
@@ -3033,7 +3030,6 @@ assess_dmg:
 	return 1;
 }
 
-#include "edog.h"
 struct monst *cloneu(void) {
 	struct monst *mon;
 	int mndx = monsndx(youmonst.data);

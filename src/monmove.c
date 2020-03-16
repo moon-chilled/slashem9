@@ -5,7 +5,6 @@
 #include "hack.h"
 #include "mfndpos.h"
 #include "artifact.h"
-#include "epri.h"
 
 extern boolean notonhead;
 

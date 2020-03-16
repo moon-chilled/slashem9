@@ -413,7 +413,7 @@ static int moverock(void) {
 				if (Blind) feel_location(sx, sy);
 				if (canspotmon(mtmp)) {
 					boolean by_name = (mtmp->data->geno & G_UNIQ ||
-							   mtmp->isshk || mtmp->mnamelth);
+							   mtmp->isshk || has_name(mtmp));
 					if (by_name && !Hallucination)
 						pline("%s is on the other side.", Monnam(mtmp));
 					else

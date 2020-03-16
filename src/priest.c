@@ -4,15 +4,27 @@
 
 #include "hack.h"
 #include "mfndpos.h"
-#include "eshk.h"
-#include "epri.h"
-#include "emin.h"
 
 /* this matches the categorizations shown by enlightenment */
 #define ALGN_SINNED (-4) /* worse than strayed */
 
 static boolean histemple_at(struct monst *, xchar, xchar);
 static boolean has_shrine(struct monst *);
+
+void newepri(struct monst *mtmp) {
+	if (!mtmp->mextra) mtmp->mextra = newmextra();
+	if (!EPRI(mtmp)) {
+		EPRI(mtmp) = new(struct epri);
+	}
+}
+
+void free_epri(struct monst *mtmp) {
+       if (mtmp->mextra && EPRI(mtmp)) {
+               free(EPRI(mtmp));
+               EPRI(mtmp) = NULL;
+       }
+       mtmp->ispriest = false;
+}
 
 /*
  * Move for priests and shopkeepers.  Called from shk_move() and pri_move().
@@ -168,8 +180,7 @@ void priestini(d_level *lvl, struct mkroom *sroom, int sx, int sy, boolean sanct
 	if (MON_AT(sx + 1, sy))
 		rloc(m_at(sx + 1, sy), false); /* insurance */
 
-	priest = makemon(&mons[sanctum ? PM_HIGH_PRIEST : PM_ALIGNED_PRIEST],
-			 sx + 1, sy, NO_MM_FLAGS);
+	priest = makemon(&mons[sanctum ? PM_HIGH_PRIEST : PM_ALIGNED_PRIEST], sx + 1, sy, MM_EPRI);
 	if (priest) {
 		EPRI(priest)->shroom = (sroom - rooms) + ROOMOFFSET;
 		EPRI(priest)->shralign = Amask2align(levl[sx][sy].altarmask);
@@ -179,6 +190,7 @@ void priestini(d_level *lvl, struct mkroom *sroom, int sx, int sy, boolean sanct
 		priest->mtrapseen = ~0; /* traps are known */
 		priest->mpeaceful = 1;
 		priest->ispriest = 1;
+		priest->isminion = 0;
 		priest->msleeping = 0;
 		set_malign(priest); /* mpeaceful may have changed */
 
@@ -215,53 +227,69 @@ void priestini(d_level *lvl, struct mkroom *sroom, int sx, int sy, boolean sanct
 	}
 }
 
+/* get a monster's alignment type without caller needing EPRI & EMIN */
+aligntyp mon_aligntyp(struct monst *mon) {
+	aligntyp algn = mon->ispriest ? EPRI(mon)->shralign :
+			mon->isminion ? EMIN(mon)->min_align :
+			mon->data->maligntyp;
+
+	if (algn == A_NONE)
+		return A_NONE; /* negative but differs from chaotic */
+
+	return (algn > 0) ? A_LAWFUL :
+	       (algn < 0) ? A_CHAOTIC :
+	       A_NEUTRAL;
+}
+
+
 /*
  * Specially aligned monsters are named specially.
  *	- aligned priests with ispriest and high priests have shrines
  *		they retain ispriest and epri when polymorphed
  *	- aligned priests without ispriest and Angels are roamers
- *		they retain isminion and access epri as emin when polymorphed
- *		(coaligned Angels are also created as minions, but they
- *		use the same naming convention)
+ *		they have isminion set and access epri as emin
  *	- minions do not have ispriest but have isminion and emin
  *	- caller needs to inhibit Hallucination if it wants to force
  *		the true name even when under that influence
  */
 char *priestname(struct monst *mon, char *pname) {
+	bool aligned_priest = mon->data == &mons[PM_ALIGNED_PRIEST],
+	     high_priest = mon->data == &mons[PM_HIGH_PRIEST];
+
 	const char *what = Hallucination ? rndmonnam() : mon->data->mname;
+
+	if (!mon->ispriest && !mon->isminion) {
+		impossible("Attempted to priestname() a non-priest");
+		return strcpy(pname, what);
+	}
 
 	strcpy(pname, "the ");
 	if (mon->minvis) strcat(pname, "invisible ");
-	if (mon->ispriest || mon->data == &mons[PM_ALIGNED_PRIEST] ||
-	    mon->data == &mons[PM_ANGEL]) {
-		/* use epri */
-		if (mon->mtame && mon->data == &mons[PM_ANGEL])
-			strcat(pname, "guardian ");
-		if (mon->data != &mons[PM_ALIGNED_PRIEST] &&
-		    mon->data != &mons[PM_HIGH_PRIEST]) {
-			strcat(pname, what);
-			strcat(pname, " ");
-		}
-		if (mon->data != &mons[PM_ANGEL]) {
-			if (!mon->ispriest && EPRI(mon)->renegade)
-				strcat(pname, "renegade ");
-			if (mon->data == &mons[PM_HIGH_PRIEST])
+	if (mon->isminion && EMIN(mon)->renegade)
+		strcat(pname, "renegade ");
+
+	if (mon->ispriest || aligned_priest) {  /* high_priest implies ispriest */
+		if (!aligned_priest && !high_priest) {
+			;   /* polymorphed priest; use ``what'' as is */
+		} else {
+			if (high_priest)
 				strcat(pname, "high ");
 			if (Hallucination)
-				strcat(pname, "poohbah ");
+				what = "poohbah";
 			else if (mon->female)
-				strcat(pname, "priestess ");
+				what = "priestess";
 			else
-				strcat(pname, "priest ");
+				what = "priest";
 		}
-		strcat(pname, "of ");
-		strcat(pname, halu_gname((int)EPRI(mon)->shralign));
-		return pname;
+	} else {
+		if (mon->mtame) {
+			strcat(pname, "guardian ");
+		}
 	}
-	/* use emin instead of epri */
+
 	strcat(pname, what);
 	strcat(pname, " of ");
-	strcat(pname, halu_gname(EMIN(mon)->min_align));
+	strcat(pname, halu_gname(mon_aligntyp(mon)));
 	return pname;
 }
 
@@ -486,19 +514,21 @@ struct monst *mk_roamer(struct permonst *ptr, aligntyp alignment, xchar x, xchar
 	struct monst *roamer;
 	boolean coaligned = (u.ualign.type == alignment);
 
+	/* Angels have the emin extension; aligned priests have the epri
+	   extension, we access it as if it were emin */
 	if (ptr != &mons[PM_ALIGNED_PRIEST] && ptr != &mons[PM_ANGEL])
 		return NULL;
 
 	if (MON_AT(x, y)) rloc(m_at(x, y), false); /* insurance */
 
-	if (!(roamer = makemon(ptr, x, y, NO_MM_FLAGS)))
+	if (!(roamer = makemon(ptr, x, y, MM_ADJACENTOK | MM_EMIN)))
 		return NULL;
 
-	EPRI(roamer)->shralign = alignment;
-	if (coaligned && !peaceful)
-		EPRI(roamer)->renegade = true;
-	/* roamer->ispriest == false naturally */
-	roamer->isminion = true; /* borrowing this bit */
+	EMIN(roamer)->min_align = alignment;
+	EMIN(roamer)->renegade = (coaligned && !peaceful);
+	roamer->ispriest = 0;
+	roamer->isminion = 1;
+
 	roamer->mtrapseen = ~0;	 /* traps are known */
 	roamer->mpeaceful = peaceful;
 	roamer->msleeping = 0;
@@ -509,11 +539,10 @@ struct monst *mk_roamer(struct permonst *ptr, aligntyp alignment, xchar x, xchar
 }
 
 void reset_hostility(struct monst *roamer) {
-	if (!(roamer->isminion && (roamer->data == &mons[PM_ALIGNED_PRIEST] ||
-				   roamer->data == &mons[PM_ANGEL])))
-		return;
+	if (!roamer->isminion) return;
+	if (roamer->data != &mons[PM_ALIGNED_PRIEST] && roamer->data != &mons[PM_ANGEL]) return;
 
-	if (EPRI(roamer)->shralign != u.ualign.type) {
+	if (EMIN(roamer)->min_align != u.ualign.type) {
 		roamer->mpeaceful = false;
 		roamer->mtame = 0;
 		set_malign(roamer);
@@ -722,10 +751,17 @@ void angry_priest() {
 		if (!IS_ALTAR(lev->typ) ||
 		    ((aligntyp)Amask2align(lev->altarmask & AM_MASK) !=
 		     EPRI(priest)->shralign)) {
-			priest->ispriest = 0; /* now a roamer */
-			priest->isminion = 1; /* but still aligned */
-			/* this overloads the `shroom' field, which is now clobbered */
-			EPRI(priest)->renegade = 0;
+			if (EPRI(priest)) {
+				if (!EMIN(priest)) newemin(priest);
+				priest->ispriest = 0;	// roamer
+							// but still aligned
+				priest->isminion = 1; 
+				EMIN(priest)->min_align = EPRI(priest)->shralign;
+			}
+
+			/* this used to overload EPRI's shroom field, which was then clobbered
+			 * but not since adding the separate mextra structure */
+			EMIN(priest)->renegade = 0;
 		}
 	}
 }
@@ -733,13 +769,12 @@ void angry_priest() {
 /*
  * When saving bones, find priests that aren't on their shrine level,
  * and remove them.   This avoids big problems when restoring bones.
+ * [Perhaps we could convert them into roamers instead?]
  */
-void clearpriests() {
-	struct monst *mtmp, *mtmp2;
-
-	for (mtmp = fmon; mtmp; mtmp = mtmp2) {
-		mtmp2 = mtmp->nmon;
-		if (!DEADMONSTER(mtmp) && mtmp->ispriest && !on_level(&(EPRI(mtmp)->shrlevel), &u.uz))
+void clearpriests(void) {
+	for (struct monst *mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+		if (DEADMONSTER(mtmp)) continue;
+		if (mtmp->ispriest && !on_level(&(EPRI(mtmp)->shrlevel), &u.uz))
 			mongone(mtmp);
 	}
 }

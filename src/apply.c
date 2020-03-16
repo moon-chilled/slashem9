@@ -3,7 +3,6 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "edog.h"
 #include "eleash.h"
 
 static const char tools[] = {TOOL_CLASS, WEAPON_CLASS, WAND_CLASS, 0};

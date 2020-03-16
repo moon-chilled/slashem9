@@ -1,7 +1,6 @@
 /*** gypsy.c ***/
 
 #include "hack.h"
-#include "egyp.h"
 #include "qtext.h"
 
 /* To do:
@@ -10,8 +9,24 @@
  *	On-line help
  */
 
-/*** Money-related functions ***/
+void newegyp(struct monst *mtmp) {
+	if (!mtmp->mextra) mtmp->mextra = newmextra();
 
+	if (!EGYP(mtmp)) {
+		EGYP(mtmp) = new(struct egyp);
+	}
+}
+
+void free_egyp(struct monst *mtmp) {
+	if (mtmp->mextra && EGYP(mtmp)) {
+		free(EGYP(mtmp));
+		EGYP(mtmp) = NULL;
+	}
+
+	mtmp->isgyp = false;
+}
+
+/*** Money-related functions ***/
 static void gypsy_charge(struct monst *mtmp, long amount) {
 	struct obj *gypgold;
 

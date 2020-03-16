@@ -604,10 +604,88 @@ static void saveobjchn(int fd, struct obj *otmp, int mode) {
 		bwrite(fd, (void *)&minusone, sizeof(int));
 }
 
+/*
+ * Used by save_mtraits() in mkobj.c to ensure
+ * that all the monst related information is stored in
+ * an OATTACHED_MONST structure.
+ */
+void *mon_to_buffer(struct monst *mtmp, int *osize) {
+       char *spot;
+       int lth, k, xlth[7];
+       void *buffer, *xptr[7];
+       struct monst *mbuf;
+
+       lth = sizeof(struct monst);
+
+       /* there is always one sizeof(int) for the name
+           and one for each of the 5 potential mextra fields */
+       for (k = 0; k < 6; ++k) {
+               xlth[k] = 0;
+               xptr[k] = NULL;
+       }
+
+       if (mtmp->mextra) {
+               if (MNAME(mtmp)) {
+                       xlth[0] = strlen(MNAME(mtmp)) + 1;
+                       xptr[0] = MNAME(mtmp);
+               }
+               if (EGD(mtmp)) {
+                       xlth[1] = sizeof(struct egd);
+                       xptr[1] = EGD(mtmp);
+               }
+               if (EPRI(mtmp)) {
+                       xlth[2] = sizeof(struct epri);
+                       xptr[2] = EPRI(mtmp);
+               }
+               if (ESHK(mtmp)) {
+                       xlth[3] = sizeof(struct eshk);
+                       xptr[3] = ESHK(mtmp);
+               }
+               if (EMIN(mtmp)) {
+                       xlth[4] = sizeof(struct emin);
+                       xptr[4] = EMIN(mtmp);
+               }
+               if (EDOG(mtmp)) {
+                       xlth[5] = sizeof(struct edog);
+                       xptr[5] = EDOG(mtmp);
+               }
+               if (EGYP(mtmp)) {
+                       xlth[6] = sizeof(struct egyp);
+                       xptr[6] = EGYP(mtmp);
+               }
+       }
+       for (k = 0; k < SIZE(xlth); ++k) {
+               lth += sizeof(int);
+               lth += xlth[k];
+       }
+       if (osize) *osize = lth;
+
+       buffer = alloc(lth);
+
+       spot = buffer;
+       memcpy(spot, mtmp, sizeof(struct monst));
+       spot += sizeof(struct monst);
+
+       mbuf = (struct monst *)buffer;
+       mbuf->mextra = NULL;
+
+       for (k = 0; k < SIZE(xlth); ++k) {
+               lth = xlth[k];
+               memcpy(spot, &lth, sizeof(lth));
+               spot += sizeof(lth);
+               if (lth > 0 && xptr[k] != 0) {
+                       memcpy(spot, xptr[k], lth);
+                       spot += lth;
+               }
+       }
+
+       return buffer;
+}
+
 static void savemonchn(int fd, struct monst *mtmp, int mode) {
 	struct monst *mtmp2;
-	uint xl;
-	int minusone = -1;
+	int buflen, minusone = -1;
+
 	struct permonst *monbegin = &mons[0];
 
 	if (perform_bwrite(mode))
@@ -617,9 +695,60 @@ static void savemonchn(int fd, struct monst *mtmp, int mode) {
 		mtmp2 = mtmp->nmon;
 
 		if (perform_bwrite(mode)) {
-			xl = mtmp->mxlth + mtmp->mnamelth;
-			bwrite(fd, (void *)&xl, sizeof(int));
-			bwrite(fd, (void *)mtmp, xl + sizeof(struct monst));
+			buflen = sizeof(struct monst);
+			bwrite(fd, &buflen, sizeof(int));
+#if 0
+			void *buffer = mon_to_buffer(mtmp, &buflen);
+			bwrite(fd, buffer, buflen);
+#else
+			bwrite(fd, mtmp, buflen);
+
+			if (!mtmp->mextra) mtmp->mextra = newmextra();
+
+			if (MNAME(mtmp)) buflen = strlen(MNAME(mtmp)) + 1;
+			else buflen = 0;
+			bwrite(fd, &buflen, sizeof(int));
+			if (buflen > 0)
+				bwrite(fd, MNAME(mtmp), buflen);
+
+			if (EGD(mtmp)) buflen = sizeof(struct egd);
+			else buflen = 0;
+			bwrite(fd, &buflen, sizeof(int));
+			if (buflen > 0)
+				bwrite(fd, EGD(mtmp), buflen);
+
+			if (EPRI(mtmp)) buflen = sizeof(struct epri);
+			else buflen = 0;
+			bwrite(fd, &buflen, sizeof(int));
+			if (buflen > 0)
+				bwrite(fd, EPRI(mtmp), buflen);
+
+
+			if (ESHK(mtmp)) buflen = sizeof(struct eshk);
+			else buflen = 0;
+			bwrite(fd, &buflen, sizeof(int));
+			if (buflen > 0)
+				bwrite(fd, ESHK(mtmp), buflen);
+
+			if (EMIN(mtmp)) buflen = sizeof(struct emin);
+			else buflen = 0;
+			bwrite(fd, &buflen, sizeof(int));
+			if (buflen > 0)
+				bwrite(fd, EMIN(mtmp), buflen);
+
+			if (EDOG(mtmp)) buflen = sizeof(struct edog);
+			else buflen = 0;
+			bwrite(fd, &buflen, sizeof(int));
+			if (buflen > 0)
+				bwrite(fd, EDOG(mtmp), buflen);
+
+			if (EGYP(mtmp)) buflen = sizeof(struct egyp);
+			else buflen = 0;
+			bwrite(fd, &buflen, sizeof(int));
+			if (buflen > 0)
+				bwrite(fd, EGYP(mtmp), buflen);
+#endif
+
 			if (mtmp->isshk) save_shk_bill(fd, mtmp);
 		}
 		if (mtmp->minvent)
@@ -628,6 +757,7 @@ static void savemonchn(int fd, struct monst *mtmp, int mode) {
 			dealloc_monst(mtmp);
 		mtmp = mtmp2;
 	}
+
 	if (perform_bwrite(mode))
 		bwrite(fd, (void *)&minusone, sizeof(int));
 }

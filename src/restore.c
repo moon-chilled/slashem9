@@ -212,26 +212,156 @@ static struct obj *restobjchn(int fd, boolean ghostly, boolean frozen) {
 	return first;
 }
 
+/*
+ * used by get_mtraits() in mkobj.c
+ * to retrieve the bundled up OATTACHED_MONST info.
+ */
+struct monst *buffer_to_mon(void *buffer) {
+	int lth;
+	struct monst *mtmp;
+	char *spot = (char*)buffer;
+
+	mtmp = newmonst();
+	memcpy(mtmp, spot, sizeof(struct monst));
+	spot += sizeof(struct monst);
+
+	/* obtain the stored length of the monster name */
+	memcpy(&lth, spot, sizeof(int));
+	spot += sizeof(int);
+
+	if (lth) {
+		if (!mtmp->mextra) mtmp->mextra = newmextra();
+		MNAME(mtmp) = new(char, lth);
+		memcpy(MNAME(mtmp), spot, lth);
+		spot += lth;
+	}
+
+	/* obtain the length of the egd (guard) structure */
+	memcpy(&lth, spot, sizeof(int));
+	spot += sizeof(int);
+	if (lth) {
+		newegd(mtmp);
+		memcpy(EGD(mtmp), spot, lth);
+		spot += lth;
+	}
+	/* obtain the length of the epri (priest) structure */
+	memcpy(&lth, spot, sizeof(int));
+	spot += sizeof(int);
+	if (lth) {
+		newepri(mtmp);
+		memcpy(EPRI(mtmp), spot, lth);
+		spot += lth;
+	}
+	/* obtain the length of the eshk (shopkeeper) structure */
+	memcpy(&lth, spot, sizeof(int));
+	spot += sizeof(int);
+	if (lth) {
+		neweshk(mtmp);
+		memcpy(ESHK(mtmp), spot, lth);
+		spot += lth;
+	}
+	/* obtain the length of the emin (minion) structure */
+	memcpy(&lth, spot, sizeof(int));
+	spot += sizeof(int);
+	if (lth) {
+		newemin(mtmp);
+		memcpy(EMIN(mtmp), spot, lth);
+		spot += lth;
+	}
+	/* obtain the length of the edog (mtame) structure */
+	memcpy(&lth, spot, sizeof(int));
+	spot += sizeof(int);
+	if (lth) {
+		newedog(mtmp);
+		memcpy(EDOG(mtmp), spot, lth);
+		spot += lth;
+	}
+	/* obtain the length of the egyp (gypsy) structure */
+	memcpy(&lth, spot, sizeof(int));
+	spot += sizeof(int);
+	if (lth) {
+		newegyp(mtmp);
+		memcpy(EGYP(mtmp), spot, lth);
+		spot += lth;    /* actually not necessary */
+	}
+
+	return mtmp;
+}
+
 static struct monst *restmonchn(int fd, boolean ghostly) {
-	struct monst *mtmp, *mtmp2 = 0;
+	struct monst *mtmp = NULL, *mtmp2 = NULL;
 	struct monst *first = NULL;
-	int xl;
+	int buflen;
 	struct permonst *monbegin;
 	boolean moved;
 
 	/* get the original base address */
 	mread(fd, &monbegin, sizeof(monbegin));
-	moved = (monbegin != mons);
+	moved = (monbegin != &mons[0]);
 
 	while (1) {
-		mread(fd, &xl, sizeof(xl));
-		if (xl == -1) break;
-		mtmp = newmonst(xl);
-		if (!first)
-			first = mtmp;
-		else
-			mtmp2->nmon = mtmp;
-		mread(fd, (void *)mtmp, (unsigned)xl + sizeof(struct monst));
+		mread(fd, &buflen, sizeof(buflen));
+		if (buflen == -1) break;
+
+		mtmp = newmonst();
+		mread(fd, mtmp, sizeof(struct monst));
+
+		if (!first) first = mtmp;
+		else mtmp2->nmon = mtmp;
+		/* any saved mextra pointer is invalid */
+		mtmp->mextra = NULL;
+
+		/* read the length of the name and the name */
+		mread(fd, &buflen, sizeof(buflen));
+		if (buflen > 0) {
+			if (!mtmp->mextra) mtmp->mextra = newmextra();
+			MNAME(mtmp) = alloc(buflen);
+			mread(fd, MNAME(mtmp), buflen);
+		}
+
+		/* egd */
+		mread(fd, &buflen, sizeof(buflen));
+		if (buflen > 0) {
+			newegd(mtmp);
+			mread(fd, EGD(mtmp), sizeof(struct egd));
+		}
+
+		/* epri */
+		mread(fd, &buflen, sizeof(buflen));
+		if (buflen > 0) {
+			newepri(mtmp);
+			mread(fd, EPRI(mtmp), sizeof(struct epri));
+		}
+
+		/* eshk */
+		mread(fd, &buflen, sizeof(buflen));
+		if (buflen > 0) {
+			neweshk(mtmp);
+			mread(fd, ESHK(mtmp), sizeof(struct eshk));
+		}
+
+		/* emin */
+		mread(fd, &buflen, sizeof(buflen));
+		if (buflen > 0) {
+			newemin(mtmp);
+			mread(fd, EMIN(mtmp), sizeof(struct emin));
+		}
+
+		/* edog */
+		mread(fd, &buflen, sizeof(buflen));
+		if (buflen > 0) {
+			newedog(mtmp);
+			mread(fd, EDOG(mtmp), sizeof(struct edog));
+		}
+
+		/* egyp */
+		mread(fd, &buflen, sizeof(buflen));
+		if (buflen > 0) {
+			newegyp(mtmp);
+			mread(fd, EGYP(mtmp), sizeof(struct egyp));
+		}
+
+
 		if (ghostly) {
 			unsigned nid = context.ident++;
 			add_id_mapping(mtmp->m_id, nid);
@@ -637,9 +767,9 @@ void getlev(int fd, int pid, xchar lev, boolean ghostly) {
 	mread(fd, (void *)doors, sizeof(doors));
 	rest_rooms(fd); /* No joke :-) */
 	/* ALI - regenerate doorindex */
-	if (nroom)
+	if (nroom) {
 		doorindex = rooms[nroom - 1].fdoor + rooms[nroom - 1].doorct;
-	else {
+	} else {
 		doorindex = 0;
 		for (y = 0; y < ROWNO; y++)
 			for (x = 0; x < COLNO; x++)
@@ -800,7 +930,7 @@ static void add_id_mapping(uint gid, uint nid) {
  * in the new ID value.  Otherwise, return false and return -1 in the new
  * ID.
  */
-boolean lookup_id_mapping(uint gid, uint *nidp) {
+bool lookup_id_mapping(uint gid, uint *nidp) {
 	int i;
 	struct bucket *curr;
 

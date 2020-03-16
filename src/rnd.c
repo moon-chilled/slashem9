@@ -5,6 +5,7 @@
 
 #define RND(x) (good_random() % (x))
 
+// y <= rn1(x, y) < x+y
 int rn1(int x, int y) {
 	return rn2(x) + y;
 }

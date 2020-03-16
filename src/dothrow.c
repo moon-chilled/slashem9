@@ -5,7 +5,6 @@
 /* Contains code for 't' (throw) */
 
 #include "hack.h"
-#include "edog.h"
 
 static int throw_obj(struct obj *, int, int);
 static int gem_accept(struct monst *, struct obj *);

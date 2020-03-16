@@ -724,10 +724,8 @@ struct monst *revive(struct obj *obj) {
 			if (recorporealization) {
 				/* If mtmp is revivification of former tame ghost*/
 				if (savetame) {
-					struct monst *mtmp2 = tamedog(mtmp, NULL);
-					if (mtmp2) {
-						mtmp2->mtame = savetame;
-						mtmp = mtmp2;
+					if (tamedog(mtmp, NULL)) {
+						mtmp->mtame = savetame;
 					}
 				}
 				/* was ghost, now alive, it's all very confusing */

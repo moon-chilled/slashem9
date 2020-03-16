@@ -3,8 +3,6 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "epri.h"
-#include "edog.h"
 
 // keep the most recent DUMPLOG_MSG_COUNT messages
 void dumplogmsg(const char *line) {
@@ -210,16 +208,8 @@ const char *align_str(aligntyp alignment) {
 }
 
 void mstatusline(struct monst *mtmp) {
-	aligntyp alignment;
+	aligntyp alignment = mon_aligntyp(mtmp);
 	char info[BUFSZ], monnambuf[BUFSZ];
-
-	if (mtmp->ispriest || mtmp->data == &mons[PM_ALIGNED_PRIEST] || mtmp->data == &mons[PM_ANGEL])
-		alignment = EPRI(mtmp)->shralign;
-	else
-		alignment = mtmp->data->maligntyp;
-	alignment = (alignment > 0) ? A_LAWFUL :
-				      (alignment < 0) ? A_CHAOTIC :
-							A_NEUTRAL;
 
 	info[0] = 0;
 	if (mtmp->mtame) {

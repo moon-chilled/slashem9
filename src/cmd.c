@@ -61,6 +61,7 @@ extern void list_vanquished(int, bool);
 #ifdef DEBUG_MIGRATING_MONS
 static int wiz_migrate_mons(void);
 #endif
+static usize size_monst(struct monst *mtmp);
 static void count_obj(struct obj *, long *, long *, boolean, boolean);
 static void obj_chain(winid, const char *, struct obj *, long *, long *);
 static void mon_invent_chain(winid, const char *, struct monst *, long *, long *);
@@ -1410,24 +1411,22 @@ static boolean minimal_enlightenment(void) {
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, iflags.menu_headings, "Deities", false);
 	sprintf(buf2, deity_fmtstr, align_gname(A_CHAOTIC),
 		(u.ualignbase[A_ORIGINAL] == u.ualign.type && u.ualign.type == A_CHAOTIC) ? " (s,c)" :
-											    (u.ualignbase[A_ORIGINAL] == A_CHAOTIC) ? " (s)" :
-																      (u.ualign.type == A_CHAOTIC) ? " (c)" : "");
+		(u.ualignbase[A_ORIGINAL] == A_CHAOTIC) ? " (s)" :
+		(u.ualign.type == A_CHAOTIC) ? " (c)" : "");
 	sprintf(buf, fmtstr, "Chaotic", buf2);
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, false);
 
 	sprintf(buf2, deity_fmtstr, align_gname(A_NEUTRAL),
 		(u.ualignbase[A_ORIGINAL] == u.ualign.type && u.ualign.type == A_NEUTRAL) ? " (s,c)" :
-											    (u.ualignbase[A_ORIGINAL] == A_NEUTRAL) ? " (s)" :
-																      (u.ualign.type == A_NEUTRAL) ? " (c)" : "");
+		(u.ualignbase[A_ORIGINAL] == A_NEUTRAL) ? " (s)" :
+		(u.ualign.type == A_NEUTRAL) ? " (c)" : "");
 	sprintf(buf, fmtstr, "Neutral", buf2);
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, false);
 
 	sprintf(buf2, deity_fmtstr, align_gname(A_LAWFUL),
-		(u.ualignbase[A_ORIGINAL] == u.ualign.type &&
-		 u.ualign.type == A_LAWFUL) ?
-			" (s,c)" :
-			(u.ualignbase[A_ORIGINAL] == A_LAWFUL) ? " (s)" :
-								 (u.ualign.type == A_LAWFUL) ? " (c)" : "");
+		(u.ualignbase[A_ORIGINAL] == u.ualign.type && u.ualign.type == A_LAWFUL) ?  " (s,c)" :
+		(u.ualignbase[A_ORIGINAL] == A_LAWFUL) ? " (s)" :
+		(u.ualign.type == A_LAWFUL) ? " (c)" : "");
 	sprintf(buf, fmtstr, "Lawful", buf2);
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE, buf, false);
 
@@ -2402,6 +2401,22 @@ static const char template[] = "%-18s %4ld  %6ld";
 static const char count_str[] = "                   count  bytes";
 static const char separator[] = "------------------ -----  ------";
 
+static usize size_monst(struct monst *mtmp) {
+	usize sz = sizeof(struct monst);
+
+	if (mtmp->mextra) {
+		if (MNAME(mtmp)) sz += strlen(MNAME(mtmp))+1;
+		if (EGD(mtmp)) sz += sizeof(struct egd);
+		if (EPRI(mtmp)) sz += sizeof(struct epri);
+		if (ESHK(mtmp)) sz += sizeof(struct eshk);
+		if (EMIN(mtmp)) sz += sizeof(struct emin);
+		if (EDOG(mtmp)) sz += sizeof(struct edog);
+		if (EGYP(mtmp)) sz += sizeof(struct egyp);
+	}
+	return sz;
+}
+
+
 static void count_obj(struct obj *chain, long *total_count, long *total_size, boolean top, boolean recurse) {
 	long count, size;
 	struct obj *obj;
@@ -2471,7 +2486,7 @@ static void mon_chain(winid win, const char *src, struct monst *chain, long *tot
 
 	for (count = size = 0, mon = chain; mon; mon = mon->nmon) {
 		count++;
-		size += sizeof(struct monst) + mon->mxlth + mon->mnamelth;
+		size += size_monst(mon);
 	}
 	*total_count += count;
 	*total_size += size;

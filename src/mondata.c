@@ -3,8 +3,6 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "eshk.h"
-#include "epri.h"
 
 /*	These routines provide basic data for any type of monster. */
 

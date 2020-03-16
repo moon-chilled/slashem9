@@ -3,20 +3,35 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "vault.h"
 
 static struct monst *findgd(void);
 
 #define g_monnam(mtmp) \
 	x_monnam(mtmp, ARTICLE_NONE, NULL, SUPPRESS_IT, false)
 
-static boolean clear_fcorr(struct monst *, boolean);
+static bool clear_fcorr(struct monst *, boolean);
 static void restfakecorr(struct monst *);
-static boolean in_fcorridor(struct monst *, int, int);
+static bool in_fcorridor(struct monst *, int, int);
 static void move_gold(struct obj *, int);
 static void wallify_vault(struct monst *);
 
-static boolean clear_fcorr(struct monst *grd, boolean forceshow) {
+void newegd(struct monst *mtmp) {
+	if (!mtmp->mextra) mtmp->mextra = newmextra();
+	if (!EGD(mtmp)) {
+		EGD(mtmp) = new(struct egd);
+	}
+}
+
+void free_egd(struct monst *mtmp) {
+       if (mtmp->mextra && EGD(mtmp)) {
+               free(EGD(mtmp));
+               EGD(mtmp) = NULL;
+       }
+       mtmp->isgd = false;
+}
+
+
+static bool clear_fcorr(struct monst *grd, boolean forceshow) {
 	int fcx, fcy, fcbeg;
 	struct monst *mtmp;
 
@@ -56,8 +71,8 @@ static void restfakecorr(struct monst *grd) {
 	if (clear_fcorr(grd, false)) mongone(grd);
 }
 
-boolean grddead(struct monst *grd) {
-	boolean dispose = clear_fcorr(grd, true);
+bool grddead(struct monst *grd) {
+	bool dispose = clear_fcorr(grd, true);
 
 	if (!dispose) {
 		/* see comment by newpos in gd_move() */
@@ -71,7 +86,7 @@ boolean grddead(struct monst *grd) {
 	return dispose;
 }
 
-static boolean in_fcorridor(struct monst *grd, int x, int y) {
+static bool in_fcorridor(struct monst *grd, int x, int y) {
 	int fci;
 
 	for (fci = EGD(grd)->fcbeg; fci < EGD(grd)->fcend; fci++)
@@ -203,7 +218,7 @@ void invault(void) {
 		}
 
 		/* make something interesting happen */
-		if (!(guard = makemon(&mons[PM_GUARD], x, y, NO_MM_FLAGS))) return;
+		if (!(guard = makemon(&mons[PM_GUARD], x, y, MM_EGD))) return;
 		guard->isgd = 1;
 		guard->mpeaceful = 1;
 		set_malign(guard);

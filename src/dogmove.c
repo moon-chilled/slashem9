@@ -5,10 +5,6 @@
 #include "hack.h"
 
 #include "mfndpos.h"
-#include "edog.h"
-#include "emin.h"
-#include "epri.h"
-#include "eleash.h"
 
 /* #define DEBUG */ /* uncomment to enable debugging */
 

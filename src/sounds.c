@@ -3,7 +3,6 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "edog.h"
 
 /* Hmm.... in working on SHOUT I started thinking about things.
  * I think something like this should be set up:

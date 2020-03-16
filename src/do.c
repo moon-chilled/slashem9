@@ -997,17 +997,19 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 
 	/* set default level change destination areas */
 	/* the special level code may override these */
-	memset((void *)&updest, 0, sizeof updest);
-	memset((void *)&dndest, 0, sizeof dndest);
+	memset(&updest, 0, sizeof(updest));
+	memset(&dndest, 0, sizeof(dndest));
 
 	if (!(level_info[new_ledger].flags & LFILE_EXISTS)) {
 		/* entering this level for first time; make it now */
-		if (level_info[new_ledger].flags & (FORGOTTEN | VISITED)) {
+		if (level_info[new_ledger].flags & VISITED) {
 			impossible("goto_level: returning to discarded level?");
-			level_info[new_ledger].flags &= ~(FORGOTTEN | VISITED);
+			level_info[new_ledger].flags &= ~VISITED;
 		}
 		mklev();
 		new = true; /* made the level */
+
+		familiar = find_ghost_with_name(plname) != NULL;
 	} else {
 		/* returning to previously visited level; reload it */
 		fd = open_levelfile(new_ledger, whynot);
@@ -1163,13 +1165,6 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 	if (Is_waterlevel(&u.uz))
 		movebubbles();
 
-	if (level_info[new_ledger].flags & FORGOTTEN) {
-		forget_map(ALL_MAP); /* forget the map */
-		forget_traps();	     /* forget all traps too */
-		familiar = true;
-		level_info[new_ledger].flags &= ~FORGOTTEN;
-	}
-
 	/* Reset the screen. */
 	vision_reset(); /* reset the blockages */
 	docrt();	/* does a full vision recalc */
@@ -1283,9 +1278,9 @@ static void final_level(void) {
 
 	/* create a guardian angel next to player, if worthy */
 	if (Conflict) {
-		pline(
-			"A voice booms: \"Thy desire for conflict shall be fulfilled!\"");
-		for (i = rnd(4); i > 0; --i) {
+		/* create 2 to 4 hostile angels to replace the lost guardian */
+		pline("A voice booms: \"Thy desire for conflict shall be fulfilled!\"");
+		for (i = rn1(3, 2); i > 0; --i) {
 			mm.x = u.ux;
 			mm.y = u.uy;
 			if (enexto(&mm, mm.x, mm.y, &mons[PM_ANGEL]))

@@ -603,7 +603,7 @@ int touch_artifact(struct obj *obj, struct monst *mon) {
 		badclass = self_willed &&
 			   oart->role != NON_PM && oart != &artilist[ART_EXCALIBUR];
 		badalign = (oart->spfx & SPFX_RESTR) && oart->alignment != A_NONE &&
-			   (oart->alignment != sgn(mon->data->maligntyp));
+			   (oart->alignment != sgn(mon_aligntyp(mon)));
 	} else { /* an M3_WANTSxxx monster or a fake player */
 		/* special monsters trying to take the Amulet, invocation tools or
 		   quest item can touch anything except for `spec_applies' artifacts */
@@ -1372,7 +1372,6 @@ int doinvoke(void) {
 static int arti_invoke(struct obj *obj) {
 	const struct artifact *oart = get_artifact(obj);
 	struct monst *mtmp;
-	struct monst *mtmp2;
 	struct permonst *pm;
 
 	int summon_loop;
@@ -1560,9 +1559,8 @@ static int arti_invoke(struct obj *obj) {
 							break;
 					}
 					mtmp = makemon(pm, u.ux, u.uy, NO_MM_FLAGS);
-					if ((mtmp2 = tamedog(mtmp, NULL)) != 0)
-						mtmp = mtmp2;
-					mtmp->mtame = 30;
+					if (tamedog(mtmp, NULL))
+						mtmp->mtame = 30;
 					summon_loop--;
 				} while (summon_loop);
 				/* Tsk,tsk.. */
@@ -1579,9 +1577,8 @@ static int arti_invoke(struct obj *obj) {
 
 				pline("You summon an elemental.");
 
-				if ((mtmp2 = tamedog(mtmp, NULL)) != 0)
-					mtmp = mtmp2;
-				mtmp->mtame = 30;
+				if (tamedog(mtmp, NULL))
+					mtmp->mtame = 30;
 				break;
 			case SUMMON_WATER_ELEMENTAL:
 				pm = &mons[PM_WATER_ELEMENTAL];
@@ -1589,9 +1586,8 @@ static int arti_invoke(struct obj *obj) {
 
 				pline("You summon an elemental.");
 
-				if ((mtmp2 = tamedog(mtmp, NULL)) != 0)
-					mtmp = mtmp2;
-				mtmp->mtame = 30;
+				if (tamedog(mtmp, NULL))
+					mtmp->mtame = 30;
 				break;
 			case OBJ_DETECTION:
 				object_detect(obj, 0);

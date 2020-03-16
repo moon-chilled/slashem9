@@ -165,9 +165,8 @@ typedef struct branch {
 /* level information (saved via ledger number) */
 enum linfo_flag {
 	VISITED = 0x01,		/* hero has visited this level */
-	FORGOTTEN = 0x02,	/* hero will forget this level when reached */
-	LFILE_EXISTS = 0x04,	/* a level file exists for this level */
-	HANGUP_HERE = 0x08,	/* AIS: there was a hangup on this level */
+	LFILE_EXISTS = 0x02,	/* a level file exists for this level */
+	HANGUP_HERE = 0x04,	/* AIS: there was a hangup on this level */
 };
 /*
  * Note:  VISITED and LFILE_EXISTS are currently almost always set at the

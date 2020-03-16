@@ -3,7 +3,6 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "eshk.h"
 
 /*#define DEBUG*/
 
@@ -382,7 +381,7 @@ void blkmar_guards(struct monst *shkp) {
 		if (DEADMONSTER(mt)) continue;
 		/* non-tame named monsters are presumably
 		 * black marketeer's assistants */
-		if (!mt->mtame && NAME(mt) && *NAME(mt) && mt->mpeaceful &&
+		if (!mt->mtame && has_name(mt) && mt->mpeaceful &&
 		    mt != shkp && inside_shop(mt->mx, mt->my) == eshkp->shoproom) {
 			if (!mesg_given) {
 				pline("%s calls for %s assistants!",

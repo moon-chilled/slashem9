@@ -3,7 +3,6 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "edog.h"
 
 /* spellmenu arguments; 0 thru n-1 used as spl_book[] index when swapping */
 #define SPELLMENU_CAST (-2)
@@ -380,8 +379,6 @@ static int learn() {
 				pline("You know %s quite well already.", splname);
 				costly = false;
 			}
-			/* make context.spbook.book become known even when spell is already
-			   known, in case amnesia made you forget the context.spbook.book */
 			makeknown((int)booktype);
 			break;
 		} else if (spellid(i) == NO_SPELL) {

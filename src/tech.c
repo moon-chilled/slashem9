@@ -839,13 +839,10 @@ static int techeffects(int tech_no) {
 					if (isok(u.ux + i, u.uy + j) && (mtmp = m_at(u.ux + i, u.uy + j))) {
 						if (mtmp->mtame != 0 && !mtmp->isspell) {
 							struct permonst *ptr = mtmp->data;
-							struct monst *mtmp2;
 							int ttime = techt_inuse(tech_no);
 							int type = little_to_big(monsndx(ptr));
 
-							mtmp2 = tamedog(mtmp, NULL);
-							if (mtmp2)
-								mtmp = mtmp2;
+							tamedog(mtmp, NULL);
 
 							if (type && type != monsndx(ptr)) {
 								ptr = &mons[type];
@@ -1033,10 +1030,11 @@ static int techeffects(int tech_no) {
 							mtmp = revive(obj);
 							if (mtmp) {
 								if (!resist(mtmp, SPBOOK_CLASS, 0, TELL)) {
-									mtmp = tamedog(mtmp, NULL);
+									tamedog(mtmp, NULL);
 									pline("You dominate %s!", mon_nam(mtmp));
-								} else
+								} else {
 									setmangry(mtmp);
+								}
 							}
 						}
 					}
@@ -2107,7 +2105,7 @@ blitz_g_slam(void) {
 			else {
 				pline("You destroy %s!",
 				      mtmp->mtame ? x_monnam(mtmp, ARTICLE_THE, "poor",
-							     mtmp->mnamelth ? SUPPRESS_SADDLE : 0, false) :
+							     has_name(mtmp) ? SUPPRESS_SADDLE : 0, false) :
 						    mon_nam(mtmp));
 			}
 			xkilled(mtmp, 0);

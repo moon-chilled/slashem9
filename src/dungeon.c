@@ -1348,7 +1348,7 @@ schar lev_by_name(const char *nam) {
 		     (u.uz.dnum == medusa_level.dnum &&
 		      dlev.dnum == valley_level.dnum)) &&
 		    /* either wizard mode or else seen and not forgotten */
-		    (wizard || (level_info[idx].flags & (FORGOTTEN | VISITED)) == VISITED)) {
+		    (wizard || (level_info[idx].flags & VISITED))) {
 			lev = depth(&slev->dlevel);
 		}
 	} else { /* not a specific level; try branch names */
@@ -1362,8 +1362,8 @@ schar lev_by_name(const char *nam) {
 			idx &= 0x00FF;
 			// either wizard mode, or else _both_ sides of branch seen
 			if (wizard ||
-			    ((level_info[idx].flags & (FORGOTTEN | VISITED)) == VISITED &&
-			     (level_info[idxtoo].flags & (FORGOTTEN | VISITED)) == VISITED)) {
+			    ((level_info[idx].flags & VISITED) &&
+			     (level_info[idxtoo].flags & VISITED) == VISITED)) {
 				if (ledger_to_dnum(idxtoo) == u.uz.dnum) idx = idxtoo;
 				dlev.dnum = ledger_to_dnum(idx);
 				dlev.dlevel = ledger_to_dlev(idx);
@@ -1639,30 +1639,6 @@ static mapseen *find_mapseen(d_level *lev) {
 		if (on_level(&(mptr->lev), lev)) break;
 
 	return mptr;
-}
-
-void forget_mapseen(int ledger_no) {
-	mapseen *mptr;
-
-	for (mptr = mapseenchn; mptr; mptr = mptr->next)
-		if (dungeons[mptr->lev.dnum].ledger_start +
-			    mptr->lev.dlevel ==
-		    ledger_no) break;
-
-	/* if not found, then nothing to forget */
-	if (mptr) {
-		mptr->feat.forgot = 1;
-		mptr->br = (branch *)0;
-
-		/* custom names are erased, not forgotten until revisted */
-		if (mptr->custom) {
-			mptr->custom_lth = 0;
-			free(mptr->custom);
-			mptr->custom = NULL;
-		}
-
-		memset(mptr->rooms, 0, sizeof(mptr->rooms));
-	}
 }
 
 static void save_mapseen(int fd, mapseen *mptr) {

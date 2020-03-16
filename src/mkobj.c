@@ -1060,11 +1060,13 @@ struct obj *obj_attach_mid(struct obj *obj, unsigned mid) {
 
 static struct obj *save_mtraits(struct obj *obj, struct monst *mtmp) {
 	struct obj *otmp;
+	void *buffer;
 	int lth, namelth;
 
-	lth = sizeof(struct monst) + mtmp->mxlth + mtmp->mnamelth;
 	namelth = obj->onamelth ? strlen(ONAME(obj)) + 1 : 0;
-	otmp = realloc_obj(obj, lth, (void *)mtmp, namelth, ONAME(obj));
+	buffer = mon_to_buffer(mtmp, &lth);
+	otmp = realloc_obj(obj, lth, buffer, namelth, ONAME(obj));
+	free(buffer);
 	if (otmp && otmp->oxlth) {
 		struct monst *mtmp2 = (struct monst *)otmp->oextra;
 		if (mtmp->data) mtmp2->mnum = monsndx(mtmp->data);
@@ -1074,6 +1076,7 @@ static struct obj *save_mtraits(struct obj *obj, struct monst *mtmp) {
 		mtmp2->nmon = NULL;
 		mtmp2->data = NULL;
 		mtmp2->minvent = NULL;
+		// mon_to_buffer() already took care of mextra
 		otmp->oattached = OATTACHED_MONST; /* mark it */
 	}
 	return otmp;
@@ -1090,13 +1093,9 @@ struct monst *get_mtraits(struct obj *obj, boolean copyof) {
 		mtmp = (struct monst *)obj->oextra;
 	if (mtmp) {
 		if (copyof) {
-			int lth = mtmp->mxlth + mtmp->mnamelth;
-			mnew = newmonst(lth);
-			lth += sizeof(struct monst);
-			memcpy((void *)mnew,
-			       (void *)mtmp, lth);
+			mnew = buffer_to_mon(mtmp);
 		} else {
-			/* Never insert this returned pointer into mon chains! */
+			// Never insert this returned pointer into mon chains!
 			mnew = mtmp;
 		}
 	}

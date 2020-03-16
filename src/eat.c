@@ -36,7 +36,7 @@ static int bite(void);
 static int edibility_prompts(struct obj *otmp);
 static int rottenfood(struct obj *obj);
 static void eatspecial(void);
-static int bounded_increase(int old int inc, int typ);
+static int bounded_increase(int old, int inc, int typ);
 static void accessory_has_effect(struct obj *otmp);
 static void eataccessory(struct obj *otmp);
 static const char *foodword(struct obj *otmp);

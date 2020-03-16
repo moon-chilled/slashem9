@@ -3,11 +3,24 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-#include "edog.h"
-#include "emin.h"
-#include "epri.h"
 
 static int pet_type(void);
+
+void newedog(struct monst *mtmp) {
+	if (!mtmp->mextra) mtmp->mextra = newmextra();
+	if (!EDOG(mtmp)) {
+		EDOG(mtmp) = new(struct edog);
+	}
+}
+
+void free_edog(struct monst *mtmp) {
+	if (mtmp->mextra && EDOG(mtmp)) {
+		free(EDOG(mtmp));
+		EDOG(mtmp) = NULL;
+	}
+
+	mtmp->mtame = 0;
+}
 
 void initedog(struct monst *mtmp) {
 	mtmp->mtame = is_domestic(mtmp->data) ? 10 : 5;
@@ -122,9 +135,7 @@ struct monst *make_helper(int mnum, xchar x, xchar y) {
 	do {
 		pm = &mons[mnum];
 
-		pm->pxlth += sizeof(struct edog);
-		mtmp = makemon(pm, x, y, NO_MM_FLAGS);
-		pm->pxlth -= sizeof(struct edog);
+		mtmp = makemon(pm, x, y, MM_EDOG);
 	} while (!mtmp && --trycnt > 0);
 
 	if (!mtmp) return NULL; /* genocided */
@@ -808,19 +819,18 @@ int dogfood(struct monst *mon, struct obj *obj) {
 	}
 }
 
-struct monst *tamedog(struct monst *mtmp, struct obj *obj) {
-	struct monst *mtmp2;
-
+// returns true if taming succeeded
+bool tamedog(struct monst *mtmp, struct obj *obj) {
 	/* The Wiz, Medusa and the quest nemeses aren't even made peaceful. */
 	if (mtmp->iswiz || mtmp->data == &mons[PM_MEDUSA] || (mtmp->data->mflags3 & M3_WANTSARTI))
-		return NULL;
+		return false;
 
 	/* worst case, at least it'll be peaceful. */
 	mtmp->mpeaceful = 1;
 	mtmp->mtraitor = 0; /* No longer a traitor */
 	set_malign(mtmp);
 	if (flags.moonphase == FULL_MOON && night() && rn2(6) && obj && mtmp->data->mlet == S_DOG)
-		return NULL;
+		return false;
 
 	/* If we cannot tame it, at least it's no longer afraid. */
 	mtmp->mflee = 0;
@@ -857,9 +867,9 @@ struct monst *tamedog(struct monst *mtmp, struct obj *obj) {
 			/* eating might have killed it, but that doesn't matter here;
 			   a non-null result suppresses "miss" message for thrown
 			   food and also implies that the object has been deleted */
-			return mtmp;
+			return true;
 		} else
-			return NULL;
+			return false;
 	}
 
 	if (mtmp->mtame || !mtmp->mcanmove ||
@@ -871,61 +881,53 @@ struct monst *tamedog(struct monst *mtmp, struct obj *obj) {
 	    (is_demon(mtmp->data) && !is_demon(youmonst.data)) ||
 	    /* Mik -- New flag to indicate which things cannot be tamed... */
 	    cannot_be_tamed(mtmp->data) ||
-	    (obj && dogfood(mtmp, obj) >= MANFOOD)) return NULL;
+	    (obj && dogfood(mtmp, obj) >= MANFOOD)) return false;
 
 	if (mtmp->m_id == quest_status.leader_m_id)
-		return NULL;
+		return false;
 
-	/* make a new monster which has the pet extension */
-	mtmp2 = newmonst(sizeof(struct edog) + mtmp->mnamelth);
-	*mtmp2 = *mtmp;
-	mtmp2->mxlth = sizeof(struct edog);
-	if (mtmp->mnamelth) strcpy(NAME(mtmp2), NAME(mtmp));
-	initedog(mtmp2);
-	replmon(mtmp, mtmp2);
-	/* `mtmp' is now obsolete */
+	/* add the pet extension */
+	newedog(mtmp);
+	initedog(mtmp);
 
 	if (obj) { /* thrown food */
 		/* defer eating until the edog extension has been set up */
-		place_object(obj, mtmp2->mx, mtmp2->my); /* put on floor */
+		place_object(obj, mtmp->mx, mtmp->my); /* put on floor */
 		/* devour the food (might grow into larger, genocided monster) */
-		if (dog_eat(mtmp2, obj, mtmp2->mx, mtmp2->my, true) == 2)
-			return mtmp2; /* oops, it died... */
+		if (dog_eat(mtmp, obj, mtmp->mx, mtmp->my, true) == 2)
+			return true; /* oops, it died... */
 				      /* `obj' is now obsolete */
 	}
 
-	newsym(mtmp2->mx, mtmp2->my);
-	if (attacktype(mtmp2->data, AT_WEAP)) {
-		mtmp2->weapon_check = NEED_HTH_WEAPON;
-		mon_wield_item(mtmp2);
+	newsym(mtmp->mx, mtmp->my);
+	if (attacktype(mtmp->data, AT_WEAP)) {
+		mtmp->weapon_check = NEED_HTH_WEAPON;
+		mon_wield_item(mtmp);
 	}
-	return mtmp2;
+
+	return true;
 }
 
 int make_pet_minion(int mnum, aligntyp alignment) {
 	struct monst *mon;
-	struct monst *mtmp2;
-	mon = makemon(&mons[mnum], u.ux, u.uy, NO_MM_FLAGS);
+	mon = makemon(&mons[mnum], u.ux, u.uy, MM_EDOG | (mnum == PM_ANGEL ? MM_EPRI : MM_EMIN));
 	if (!mon) return 0;
-	/* now tame that puppy... */
-	mtmp2 = newmonst(sizeof(struct edog) + mon->mnamelth);
-	*mtmp2 = *mon;
-	mtmp2->mxlth = sizeof(struct edog);
-	if (mon->mnamelth) strcpy(NAME(mtmp2), NAME(mon));
-	initedog(mtmp2);
-	replmon(mon, mtmp2);
-	newsym(mtmp2->mx, mtmp2->my);
-	mtmp2->mpeaceful = 1;
-	set_malign(mtmp2);
-	mtmp2->mtame = 10;
+
+	initedog(mon);
+	newsym(mon->mx, mon->my);
+	mon->mpeaceful = 1;
+	set_malign(mon);
+	mon->mtame = 10;
+
 	/* this section names the creature "of ______" */
-	if (mons[mnum].pxlth == 0) {
-		mtmp2->isminion = true;
-		EMIN(mtmp2)->min_align = alignment;
-	} else if (mnum == PM_ANGEL) {
-		mtmp2->isminion = true;
-		EPRI(mtmp2)->shralign = alignment;
+	if (mnum == PM_ANGEL) {
+		mon->isminion = true;
+		EPRI(mon)->shralign = alignment;
+	} else {
+		mon->isminion = true;
+		EMIN(mon)->min_align = alignment;
 	}
+
 	return 1;
 }
 
