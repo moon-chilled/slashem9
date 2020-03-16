@@ -1941,34 +1941,21 @@ static const char *br_string2(branch *br) {
 static const char *shop_string(int rtype) {
 	/* Yuck, redundancy...but shclass.name doesn't cut it as a noun */
 	switch (rtype) {
-		case SHOPBASE:
-			return "general store";
-		case ARMORSHOP:
-			return "armor shop";
-		case SCROLLSHOP:
-			return "scroll shop";
-		case POTIONSHOP:
-			return "potion shop";
-		case WEAPONSHOP:
-			return "weapon shop";
-		case FOODSHOP:
-			return "delicatessen";
-		case RINGSHOP:
-			return "jewelers";
-		case WANDSHOP:
-			return "wand shop";
-		case BOOKSHOP:
-			return "bookstore";
-		case TOOLSHOP:
-			return "tool shop";
-		case PETSHOP:
-			return "pet store";
-		case TINSHOP:
-			return "tin shop";
-		case CANDLESHOP:
-			return "lighting shop";
-		case BLACKSHOP:
-			return "The Black Market";
+		case SHOPBASE:	return "general store";
+		case ARMORSHOP:	return "armor shop";
+		case SCROLLSHOP:return "scroll shop";
+		case POTIONSHOP:return "potion shop";
+		case WEAPONSHOP:return "weapon shop";
+		case FOODSHOP:	return "delicatessen";
+		case RINGSHOP:	return "jewelers";
+		case WANDSHOP:	return "wand shop";
+		case TOOLSHOP:	return "tool shop";
+		case PETSHOP:	return "pet store";
+		case TINSHOP:	return "tin shop";
+		case BOOKSHOP:	return "bookstore";
+		case HEALTHSHOP:return "health foods mart";
+		case CANDLESHOP:return "lighting shop";
+		case BLACKSHOP:	return "The Black Market";
 		default:
 			/* In case another patch adds a shop type that doesn't exist,
 			 * do something reasonable like "a shop".
