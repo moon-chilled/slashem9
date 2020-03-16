@@ -150,7 +150,7 @@ void summon_minion(aligntyp alignment, boolean talk) {
 	if (mon) {
 		if (talk) {
 			pline("The voice of %s booms:", align_gname(alignment));
-			verbalize("Thou shalt pay for thy indiscretion!");
+			verbalize("Thou shalt pay for thine indiscretion!");
 			if (!Blind)
 				pline("%s appears before you.", Amonnam(mon));
 		}

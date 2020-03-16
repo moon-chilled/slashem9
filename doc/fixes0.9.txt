@@ -197,6 +197,7 @@ Imports from NetHack version 3.6:
 - Bugfix: prevent possible segfault about swallowed hero and magic trap.
 - Internals: rennovate mextra to be a proper structure, which also stores mname.
 - Interface: fix incorrect alignment display of angels in some cases.
+- Bugfix: grammar: use 'thine' rather than 'thy' where appropriate.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

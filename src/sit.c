@@ -190,7 +190,7 @@ int dosit() {
 					int cnt = rnd(10);
 
 					pline("A voice echoes:");
-					verbalize("Thy audience hath been summoned, %s!",
+					verbalize("Thine audience hath been summoned, %s!",
 						  flags.female ? "Dame" : "Sire");
 					while (cnt--)
 						makemon(courtmon(), u.ux, u.uy, NO_MM_FLAGS);
@@ -198,7 +198,7 @@ int dosit() {
 				}
 				case 8:
 					pline("A voice echoes:");
-					verbalize("By thy Imperious order, %s...",
+					verbalize("By thine Imperious order, %s...",
 						  flags.female ? "Dame" : "Sire");
 					do_genocide(5); /* REALLY|ONTHRONE, see do_genocide() */
 					break;
