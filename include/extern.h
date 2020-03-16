@@ -1984,6 +1984,7 @@ struct monst *animate_statue(struct obj *, xchar, xchar, int, int *);
 struct monst *activate_statue_trap(struct trap *, xchar, xchar, boolean);
 void dotrap(struct trap *, unsigned);
 void seetrap(struct trap *);
+void feeltrap(struct trap *);
 int mintrap(struct monst *);
 void instapetrify(const char *);
 void minstapetrify(struct monst *, boolean);

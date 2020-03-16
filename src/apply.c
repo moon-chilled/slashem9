@@ -2499,9 +2499,8 @@ static int set_trap(void) {
 	ttyp = (otmp->otyp == LAND_MINE) ? LANDMINE : BEAR_TRAP;
 	ttmp = maketrap(u.ux, u.uy, ttyp);
 	if (ttmp) {
-		ttmp->tseen = 1;
 		ttmp->madeby_u = 1;
-		newsym(u.ux, u.uy); /* if our hero happens to be invisible */
+		feeltrap(ttmp);
 		if (*in_rooms(u.ux, u.uy, SHOPBASE)) {
 			add_damage(u.ux, u.uy, 0L); /* schedule removal */
 		}

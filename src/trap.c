@@ -301,7 +301,7 @@ void fall_through(boolean td) {
 
 	if (td) {
 		struct trap *t = t_at(u.ux, u.uy);
-		seetrap(t);
+		feeltrap(t);
 		if (!In_sokoban(&u.uz)) {
 			if (t->ttyp == TRAPDOOR)
 				pline("A trap door opens up under you!");
@@ -646,7 +646,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 				int dmg = d(2, 6); /* should be std ROCK dmg? */
 
 				trap->once = 1;
-				seetrap(trap);
+				feeltrap(trap);
 				otmp = mksobj_at(ROCK, u.ux, u.uy, true, false);
 				otmp->quan = 1L;
 				otmp->owt = weight(otmp);
@@ -692,7 +692,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 
 		case BEAR_TRAP:
 			if (Levitation || Flying) break;
-			seetrap(trap);
+			feeltrap(trap);
 			if (amorphous(youmonst.data) || is_whirly(youmonst.data) ||
 			    unsolid(youmonst.data)) {
 				pline("%s bear trap closes harmlessly through you.",
@@ -757,10 +757,10 @@ void dotrap(struct trap *trap, unsigned trflags) {
 			}
 
 			/* Unlike monsters, traps cannot aim their rust attacks at
-		 * you, so instead of looping through and taking either the
-		 * first rustable one or the body, we take whatever we get,
-		 * even if it is not rustable.
-		 */
+			 * you, so instead of looping through and taking either the
+			 * first rustable one or the body, we take whatever we get,
+			 * even if it is not rustable.
+			 */
 			switch (rn2(5)) {
 				case 0:
 					pline("%s you on the %s!", A_gush_of_water_hits,
@@ -813,7 +813,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 		case SPIKED_PIT:
 			/* KMH -- You can't escape the Sokoban level traps */
 			if (!In_sokoban(&u.uz) && (Levitation || Flying)) break;
-			seetrap(trap);
+			feeltrap(trap);
 			if (!In_sokoban(&u.uz) && is_clinger(youmonst.data)) {
 				if (trap->tseen) {
 					pline("You see %s %spit below you.", a_your[trap->madeby_u],
@@ -905,7 +905,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 			break;
 
 		case WEB: /* Our luckless player has stumbled into a web. */
-			seetrap(trap);
+			feeltrap(trap);
 			if (amorphous(youmonst.data) || is_whirly(youmonst.data) ||
 			    unsolid(youmonst.data)) {
 				if (acidic(youmonst.data) || u.umonnum == PM_GELATINOUS_CUBE ||
@@ -1051,7 +1051,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 			struct obj *saddle = 0;
 			if (Levitation || Flying) {
 				if (!already_seen && rn2(3)) break;
-				seetrap(trap);
+				feeltrap(trap);
 				pline("%s %s in a pile of soil below you.",
 				      already_seen ? "There is" : "You discover",
 				      trap->madeby_u ? "the trigger of your mine" :
@@ -1070,7 +1070,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 				static boolean recursive_mine = false;
 
 				if (recursive_mine) break;
-				seetrap(trap);
+				feeltrap(trap);
 				pline("KAABLAMM!!!  You triggered %s land mine!",
 				      a_your[trap->madeby_u]);
 				if (u.usteed) steed_mid = u.usteed->m_id;
@@ -1095,7 +1095,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 		case ROLLING_BOULDER_TRAP: {
 			int style = ROLL | (trap->tseen ? LAUNCH_KNOWN : 0);
 
-			seetrap(trap);
+			feeltrap(trap);
 			pline("Click! You trigger a rolling boulder trap!");
 			if (!launch_obj(BOULDER, trap->launch.x, trap->launch.y,
 					trap->launch2.x, trap->launch2.y, style)) {
@@ -1106,7 +1106,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 			break;
 		}
 		case MAGIC_PORTAL:
-			seetrap(trap);
+			feeltrap(trap);
 			if (u.usteed && (Is_blackmarket(&trap->dst) || Is_blackmarket(&u.uz)))
 				pline("%s seems to shimmer for a moment.",
 				      Monnam(u.usteed));
@@ -1115,7 +1115,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 			break;
 
 		default:
-			seetrap(trap);
+			feeltrap(trap);
 			impossible("You hit a trap of type %u", trap->ttyp);
 	}
 }
@@ -1527,6 +1527,16 @@ void seetrap(struct trap *trap) {
 		newsym(trap->tx, trap->ty);
 	}
 }
+
+// like seetrap() but overrides vision
+void feeltrap(struct trap *trap) {
+	trap->tseen = 1;
+	map_trap(trap, 1);
+	// in case it's beneath something, redisplay the something
+	newsym(trap->tx, trap->ty);
+}
+
+
 
 static int mkroll_launch(struct trap *ttmp, xchar x, xchar y, short otyp, long ocount) {
 	struct obj *otmp;

@@ -199,7 +199,8 @@ Imports from NetHack version 3.6:
 - Internals: rennovate mextra to be a proper structure, which also stores mname.
 - Interface: fix incorrect alignment display of angels in some cases.
 - Bugfix: grammar: use 'thine' rather than 'thy' where appropriate.
-- Interface: Iu shouldn't show price twice when player is only carrying one unpaid object.
+- Interface: Iu doesn't show price twice when player is only carrying one unpaid object.
+- Bugfix: player would feel, but not remember, certain traps.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
