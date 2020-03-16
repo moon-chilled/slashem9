@@ -1,5 +1,3 @@
-/* vim:set cin ft=c sw=4 sts=4 ts=8 et ai cino=Ls\:0t0(0 : -*- mode:c;fill-column:80;tab-width:8;c-basic-offset:4;indent-tabs-mode:nil;c-file-style:"k&r" -*-*/
-
 #include "curses.h"
 #include "hack.h"
 #include "wincurs.h"
@@ -296,6 +294,10 @@ void curses_create_main_windows() {
 
 void curses_init_nhcolors() {
 	if (has_colors()) {
+		COLORS = 8;
+		// force the rest of the library to assume only 8 colours are
+		// available, so it uses bold properly.
+
 		use_default_colors();
 		init_pair(1, COLOR_BLACK, -1);
 		init_pair(2, COLOR_RED, -1);
@@ -382,7 +384,6 @@ void curses_init_nhcolors() {
 				init_color(COLOR_MAGENTA + 8, 1000, 0, 1000);
 				init_color(COLOR_CYAN + 8, 0, 1000, 1000);
 				init_color(COLOR_WHITE + 8, 1000, 1000, 1000);
-#ifdef USE_DARKGRAY
 				if (COLORS > 16) {
 					color_content(CURSES_DARK_GRAY, &orig_darkgray.r,
 						      &orig_darkgray.g, &orig_darkgray.b);
@@ -390,7 +391,6 @@ void curses_init_nhcolors() {
 					/* just override black colorpair entry here */
 					init_pair(1, CURSES_DARK_GRAY, -1);
 				}
-#endif
 			} else {
 				/* Set flag to use bold for bright colors */
 			}
@@ -919,12 +919,10 @@ void curses_cleanup() {
 				   orig_hicyan.b);
 			init_color(COLOR_WHITE + 8, orig_hiwhite.r, orig_hiwhite.g,
 				   orig_hiwhite.b);
-#ifdef USE_DARKGRAY
 			if (COLORS > 16) {
 				init_color(CURSES_DARK_GRAY, orig_darkgray.r,
 					   orig_darkgray.g, orig_darkgray.b);
 			}
-#endif
 		}
 	}
 }

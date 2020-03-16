@@ -1,5 +1,3 @@
-/* vim:set cin ft=c sw=4 sts=4 ts=8 et ai cino=Ls\:0t0(0 : -*- mode:c;fill-column:80;tab-width:8;c-basic-offset:4;indent-tabs-mode:nil;c-file-style:"k&r" -*-*/
-
 #include "curses.h"
 #include "hack.h"
 #include "wincurs.h"
@@ -26,8 +24,7 @@ static void draw_horizontal(int, int, int, int);
 static void draw_horizontal_new(int, int, int, int);
 static void draw_vertical(int, int, int, int);
 static void curses_add_statuses(WINDOW *, bool, bool, int *, int *);
-static void curses_add_status(WINDOW *, bool, bool, int *, int *,
-			      const char *, int);
+static void curses_add_status(WINDOW *, bool, bool, int *, int *, const char *, int);
 static int decrement_highlight(nhstat *, bool);
 
 static attr_t hpen_color_attr(bool, int, int);
@@ -195,19 +192,13 @@ draw_trouble_str(const char *str) {
 
 /* Returns a ncurses attribute for foreground and background.
    This should probably be in cursinit.c or something. */
-attr_t
-curses_color_attr(int nh_color, int bg_color) {
+attr_t curses_color_attr(int nh_color, int bg_color) {
 	int color = nh_color + 1;
 	attr_t cattr = A_NORMAL;
 
 	if (!nh_color) {
-#ifdef USE_DARKGRAY
-		if (iflags.wc2_darkgray) {
-			if (!can_change_color() || COLORS <= 16)
-				cattr |= A_BOLD;
-		} else
-#endif
-			color = COLOR_BLUE;
+		if (!can_change_color() || COLORS <= 16)
+			cattr |= A_BOLD;
 	}
 
 	if (COLORS < 16 && color > 8) {
@@ -216,36 +207,36 @@ curses_color_attr(int nh_color, int bg_color) {
 	}
 
 	/* Can we do background colors? We can if we have more than
-       16*7 colors (more than 8*7 for terminals with bold) */
+	   16*7 colors (more than 8*7 for terminals with bold) */
 	if (COLOR_PAIRS > (COLORS >= 16 ? 16 : 8) * 7) {
 		/* NH3 has a rather overcomplicated way of defining
-           its colors past the first 16:
-           Pair    Foreground  Background
-           17      Black       Red
-           18      Black       Blue
-           19      Red         Red
-           20      Red         Blue
-           21      Green       Red
-           ...
-           (Foreground order: Black, Red, Green, Yellow, Blue,
-           Magenta, Cyan, Gray/White)
+		   its colors past the first 16:
+		   Pair    Foreground  Background
+		   17      Black       Red
+		   18      Black       Blue
+		   19      Red         Red
+		   20      Red         Blue
+		   21      Green       Red
+		   ...
+		   (Foreground order: Black, Red, Green, Yellow, Blue,
+		   Magenta, Cyan, Gray/White)
 
-           To work around these oddities, we define backgrounds
-           by the following pairs:
+		   To work around these oddities, we define backgrounds
+		   by the following pairs:
 
-           16 COLORS
-           49-64: Green
-           65-80: Yellow
-           81-96: Magenta
-           97-112: Cyan
-           113-128: Gray/White
+		   16 COLORS
+		   49-64: Green
+		   65-80: Yellow
+		   81-96: Magenta
+		   97-112: Cyan
+		   113-128: Gray/White
 
-           8 COLORS
-           9-16: Green
-           33-40: Yellow
-           41-48: Magenta
-           49-56: Cyan
-           57-64: Gray/White */
+		   8 COLORS
+		   9-16: Green
+		   33-40: Yellow
+		   41-48: Magenta
+		   49-56: Cyan
+		   57-64: Gray/White */
 
 		if (bg_color == nh_color)
 			color = 1; /* Make foreground black if fg==bg */
@@ -435,7 +426,7 @@ void curses_update_stats(void) {
 	}
 
 	/* Starting x/y. Passed to draw_horizontal/draw_vertical to keep track of
-       window positioning. */
+	   window positioning. */
 	int x = 0;
 	int y = 0;
 
@@ -564,7 +555,7 @@ draw_horizontal_new(int x, int y, int hp, int hpmax) {
 	race[0] = highc(race[0]);
 	wprintw(win, "%s the %s %s%s%s", plname,
 		(u.ualign.type == A_CHAOTIC ? "Chaotic" :
-					      u.ualign.type == A_NEUTRAL ? "Neutral" : "Lawful"),
+		 u.ualign.type == A_NEUTRAL ? "Neutral" : "Lawful"),
 		Upolyd ? "" : race, Upolyd ? "" : " ",
 		rank);
 
@@ -635,7 +626,7 @@ draw_horizontal_new(int x, int y, int hp, int hpmax) {
 	getmaxyx(win, y, x);
 
 	/* We want to deal with top line of y. getmaxx would do what we want, but it only
-       exist for compatibility reasons and might not exist at all in some versions. */
+	   exist for compatibility reasons and might not exist at all in some versions. */
 	y = 0;
 	if (curses_window_has_border(STATUS_WIN)) {
 		x--;
@@ -774,13 +765,11 @@ draw_vertical(int x, int y, int hp, int hpmax) {
 	curses_add_statuses(win, false, true, &x, &y);
 }
 
-static void
-curses_add_statuses(WINDOW *win, bool align_right,
-		    bool vertical, int *x, int *y) {
+static void curses_add_statuses(WINDOW *win, bool align_right, bool vertical, int *x, int *y) {
 	if (align_right) {
 		/* Right-aligned statuses. Since add_status decrease one x more
-           (to separate them with spaces), add 1 to x unless we have borders
-           (which would offset what add_status does) */
+		   (to separate them with spaces), add 1 to x unless we have borders
+		   (which would offset what add_status does) */
 		int mx = *x;
 		int my;
 		getmaxyx(win, my, mx);
@@ -816,7 +805,7 @@ static void
 curses_add_status(WINDOW *win, bool align_right, bool vertical,
 		  int *x, int *y, const char *str, int trouble) {
 	/* If vertical is true here with no x/y, that's an error. But handle
-       it gracefully since NH3 doesn't recover well in crashes. */
+	   it gracefully since NH3 doesn't recover well in crashes. */
 	if (!x || !y)
 		vertical = false;
 

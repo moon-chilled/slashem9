@@ -1,5 +1,3 @@
-/* vim:set cin ft=c sw=4 sts=4 ts=8 et ai cino=Ls\:0t0(0 : -*- mode:c;fill-column:80;tab-width:8;c-basic-offset:4;indent-tabs-mode:nil;c-file-style:"k&r" -*-*/
-
 #define NCURSES_WIDECHAR 1	// to get widechar support from curses
 #define _XOPEN_SOURCE_EXTENDED	// same, but for openbsd's ncurses
 #include "curses.h"
@@ -356,7 +354,7 @@ void curses_putch(winid wid, int x, int y, int ch, int color, int attr) {
 		write_char(mapwin, x - sx, y - sy, nch);
 	}
 	/* refresh after every character?
-     * Fair go, mate! Some of us are playing from Australia! */
+         * Fair go, mate! Some of us are playing from Australia! */
 	/* wrefresh(mapwin); */
 }
 

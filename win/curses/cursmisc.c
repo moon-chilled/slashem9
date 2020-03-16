@@ -1,5 +1,3 @@
-/* vim:set cin ft=c sw=4 sts=4 ts=8 et ai cino=Ls\:0t0(0 : -*- mode:c;fill-column:80;tab-width:8;c-basic-offset:4;indent-tabs-mode:nil;c-file-style:"k&r" -*-*/
-
 #include "curses.h"
 #include "hack.h"
 #include "wincurs.h"
@@ -70,6 +68,10 @@ int curses_read_char() {
 /* Turn on or off the specified color and / or attribute */
 
 void curses_toggle_color_attr(WINDOW *win, int color, int attr, int onoff) {
+#ifdef VIDEOSHADES
+	if (color == 0) color = 8;
+	else if (color == 8) color = 0;
+#endif
 	int curses_color;
 
 	/* Map color disabled */
@@ -83,17 +85,12 @@ void curses_toggle_color_attr(WINDOW *win, int color, int attr, int onoff) {
 	}
 
 	if (color == 0) { /* make black fg visible */
-#ifdef USE_DARKGRAY
-		if (iflags.wc2_darkgray) {
-			if (can_change_color() && (COLORS > 16)) {
-				/* colorpair for black is already darkgray */
-			} else { /* Use bold for a bright black */
+		if (can_change_color() && (COLORS > 16)) {
+			/* colorpair for black is already darkgray */
+		} else { /* Use bold for a bright black */
 
-				wattron(win, A_BOLD);
-			}
-		} else
-#endif /* USE_DARKGRAY */
-			color = CLR_BLUE;
+			wattron(win, A_BOLD);
+		}
 	}
 	curses_color = color + 1;
 	if (COLORS < 16) {
@@ -104,7 +101,7 @@ void curses_toggle_color_attr(WINDOW *win, int color, int attr, int onoff) {
 	}
 	if (onoff == ON) { /* Turn on color/attributes */
 		if (color != NONE) {
-			if ((((color > 7) && (color < 17)) ||
+			if ((((color > BRIGHT) && (color < 17)) ||
 			     (color > 17 + 17)) &&
 			    (COLORS < 16)) {
 				wattron(win, A_BOLD);
@@ -118,18 +115,12 @@ void curses_toggle_color_attr(WINDOW *win, int color, int attr, int onoff) {
 	} else { /* Turn off color/attributes */
 
 		if (color != NONE) {
-			if ((color > 7) && (COLORS < 16)) {
+			if ((color > BRIGHT) && (COLORS < 16)) {
 				wattroff(win, A_BOLD);
 			}
-#ifdef USE_DARKGRAY
-			if ((color == 0) && (!can_change_color() || (COLORS <= 16))) {
+			if ((color == 0) && (!can_change_color() || (COLORS < 16))) {
 				wattroff(win, A_BOLD);
 			}
-#else
-			if (iflags.use_inverse) {
-				wattroff(win, A_REVERSE);
-			}
-#endif /* DARKGRAY */
 			wattroff(win, COLOR_PAIR(curses_color));
 		}
 
@@ -374,7 +365,7 @@ void curses_move_cursor(winid wid, int x, int y) {
 	}
 #ifdef PDCURSES
 	/* PDCurses seems to not handle wmove correctly, so we use move and
-       physical screen coordinates instead */
+	   physical screen coordinates instead */
 	curses_get_window_xy(wid, &xadj, &yadj);
 #endif
 	curs_x = x + xadj;
@@ -408,7 +399,7 @@ void curses_prehousekeeping() {
 		curs_set(1);
 #ifdef PDCURSES
 		/* PDCurses seems to not handle wmove correctly, so we use move
-           and physical screen coordinates instead */
+		   and physical screen coordinates instead */
 		move(curs_y, curs_x);
 #else
 		wmove(win, curs_y, curs_x);
