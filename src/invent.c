@@ -1849,7 +1849,6 @@ static void dounpaid(void) {
 	char ilet;
 	char *invlet = flags.inv_order;
 	int classcount, count, num_so_far;
-	int save_unpaid = 0; /* lint init */
 	long cost, totcost;
 
 	count = count_unpaid(invent);
@@ -1858,13 +1857,13 @@ static void dounpaid(void) {
 		marker = NULL;
 		otmp = find_unpaid(invent, &marker);
 
-		/* see if the unpaid item is in the top level inventory */
-		for (marker = invent; marker; marker = marker->nobj)
-			if (marker == otmp) break;
-
+		cost = unpaid_cost(otmp);
+		otmp->unpaid = false; // suppress '(unpaid)' suffix
 		pline("%s", xprname(otmp, distant_name(otmp, doname),
-				    marker ? otmp->invlet : CONTAINED_SYM,
-				    true, unpaid_cost(otmp), 0L));
+				    carried(otmp) ? otmp->invlet : CONTAINED_SYM,
+				    true, cost, 0L));
+
+		otmp->unpaid = true;
 		return;
 	}
 
@@ -1885,11 +1884,9 @@ static void dounpaid(void) {
 					}
 
 					totcost += cost = unpaid_cost(otmp);
-					/* suppress "(unpaid)" suffix */
-					save_unpaid = otmp->unpaid;
-					otmp->unpaid = 0;
+					otmp->unpaid = false; // suppress "(unpaid)" suffix
 					putstr(win, 0, xprname(otmp, distant_name(otmp, doname), ilet, true, cost, 0L));
-					otmp->unpaid = save_unpaid;
+					otmp->unpaid = true;
 					num_so_far++;
 				}
 			}
@@ -1913,12 +1910,11 @@ static void dounpaid(void) {
 					totcost += cost = unpaid_cost(marker);
 					contcost += cost;
 					if (otmp->cknown) {
-						save_unpaid = marker->unpaid;
-						marker->unpaid = 0; // suppress "(unpaid)" suffix
+						marker->unpaid = false; // suppress "(unpaid)" suffix
 						putstr(win, 0,
 							xprname(marker, distant_name(marker, doname),
 								CONTAINED_SYM, true, cost, 0L));
-						marker->unpaid = save_unpaid;
+						marker->unpaid = true;
 					}
 				}
 				if (!otmp->cknown) {
