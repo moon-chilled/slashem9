@@ -611,18 +611,12 @@ static void saveobjchn(int fd, struct obj *otmp, int mode) {
  */
 void *mon_to_buffer(struct monst *mtmp, int *osize) {
        char *spot;
-       int lth, k, xlth[7];
-       void *buffer, *xptr[7];
+       int lth, k, xlth[7] = {0};
+       void *buffer = NULL, *xptr[7] = {0};
        struct monst *mbuf;
 
        lth = sizeof(struct monst);
 
-       /* there is always one sizeof(int) for the name
-           and one for each of the 5 potential mextra fields */
-       for (k = 0; k < 6; ++k) {
-               xlth[k] = 0;
-               xptr[k] = NULL;
-       }
 
        if (mtmp->mextra) {
                if (MNAME(mtmp)) {
