@@ -1907,25 +1907,8 @@ static void mrustm(struct monst *magr, struct monst *mdef, struct obj *obj) {
 	else
 		return;
 
-	if (!mdef->mcan &&
-	    (is_acid ? is_corrodeable(obj) : is_rustprone(obj)) &&
-	    (is_acid ? obj->oeroded2 : obj->oeroded) < MAX_ERODE) {
-		if (obj->greased || obj->oerodeproof || (obj->blessed && rn2(3))) {
-			if (cansee(mdef->mx, mdef->my) && flags.verbose)
-				pline("%s weapon is not affected.",
-				      s_suffix(Monnam(magr)));
-			if (obj->greased && !rn2(2)) obj->greased = 0;
-		} else {
-			if (cansee(mdef->mx, mdef->my)) {
-				pline("%s%s!", Yobjnam2(obj, (is_acid ? "corrode" : "rust")),
-				      (is_acid ? obj->oeroded2 : obj->oeroded) ? " further" : "");
-			}
-			if (is_acid)
-				obj->oeroded2++;
-			else
-				obj->oeroded++;
-		}
-	}
+	erode_obj(obj, is_acid, false, false);
+
 }
 
 static void mswingsm(struct monst *magr, struct monst *mdef, struct obj *otemp) {

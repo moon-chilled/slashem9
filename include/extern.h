@@ -65,6 +65,7 @@ const char *artifact_name(const char *name, short *otyp);
 bool exist_artifact(int otyp, const char *name);
 void artifact_exists(struct obj *otmp, const char *name, bool mod);
 int nartifact_exist(void);
+bool arti_immune(struct obj *obj, int dtyp);
 bool spec_ability(struct obj *otmp, unsigned long abil);
 bool confers_luck(struct obj *obj);
 bool arti_reflects(struct obj *obj);

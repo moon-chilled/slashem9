@@ -641,6 +641,20 @@ int touch_artifact(struct obj *obj, struct monst *mon) {
 	return 1;
 }
 
+/* decide whether an artifact itself is vulnerable to a particular type
+   of erosion damage, independent of the properties of its bearer */
+bool arti_immune(struct obj *obj, int dtyp) {
+	const struct artifact *weap = get_artifact(obj);
+
+	if (!weap) return false;
+	if (dtyp == AD_PHYS) return false; /* nothing is immune to phys dmg */
+
+	return weap->attk.adtyp == dtyp
+	       || weap->defn.adtyp == dtyp
+	       || weap->cary.adtyp == dtyp;
+}
+
+
 /* decide whether an artifact's special attacks apply against mtmp */
 static int spec_applies(const struct artifact *weap, struct monst *mtmp) {
 	int retval = true;

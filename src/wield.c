@@ -627,8 +627,7 @@ void untwoweapon(void) {
 bool erode_obj(struct obj *target, bool acid_dmg, bool fade_scrolls, bool for_dip) {
 	int erosion;
 	struct monst *victim;
-	bool vismon;
-	bool visobj;
+	bool vismon, visobj, chill;
 	bool ret = false;
 
 	if (!target)
@@ -658,6 +657,25 @@ bool erode_obj(struct obj *target, bool acid_dmg, bool fade_scrolls, bool for_di
 			target->spe = 0;
 			ret = true;
 		}
+	} else if (target->oartifact &&
+               /* (no artifacts currently meet either of these criteria) */
+			arti_immune(target, acid_dmg ? AD_ACID : AD_RUST)) {
+		if (flags.verbose) {
+			if (victim == &youmonst)
+				pline("%s.", Yobjnam2(target, "sizzle"));
+		}
+		/* no damage to object */
+	} else if (target->oartifact && !acid_dmg &&
+               /* cold and fire provide partial protection against rust */
+               ((chill = arti_immune(target, AD_COLD)) != 0 ||
+                arti_immune(target, AD_FIRE)) &&
+               /* once rusted, the chance for further rusting goes up */
+	       rn2(2 * (MAX_ERODE + 1 - erosion))) {
+		if (flags.verbose && target->oclass == WEAPON_CLASS) {
+			if (victim == &youmonst || vismon || visobj)
+				pline("%s some water.", Yobjnam2(target, chill ? "freeze" : "boil"));
+		}
+		/* no damage to object */
 	} else if (target->oerodeproof ||
 		   (acid_dmg ? !is_corrodeable(target) : !is_rustprone(target))) {
 		if (flags.verbose || !(target->oerodeproof && target->rknown)) {

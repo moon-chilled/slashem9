@@ -2536,8 +2536,7 @@ void mdamageu(struct monst *mtmp, int n) {
 }
 
 static void urustm(struct monst *mon, struct obj *obj) {
-	boolean vis;
-	boolean is_acid;
+	bool is_acid;
 
 	if (!mon || !obj) return; /* just in case */
 	if (dmgtype(youmonst.data, AD_CORR))
@@ -2547,23 +2546,7 @@ static void urustm(struct monst *mon, struct obj *obj) {
 	else
 		return;
 
-	vis = cansee(mon->mx, mon->my);
-
-	if ((is_acid ? is_corrodeable(obj) : is_rustprone(obj)) &&
-	    (is_acid ? obj->oeroded2 : obj->oeroded) < MAX_ERODE) {
-		if (obj->greased || obj->oerodeproof || (obj->blessed && rn2(3))) {
-			if (vis) pline("Somehow, %s weapon is not affected.",
-				       s_suffix(mon_nam(mon)));
-			if (obj->greased && !rn2(2)) obj->greased = 0;
-		} else {
-			if (vis) pline("%s%s!", Yobjnam2(obj, (is_acid ? "corrode" : "rust")),
-					(is_acid ? obj->oeroded2 : obj->oeroded) ? " further" : "");
-			if (is_acid)
-				obj->oeroded2++;
-			else
-				obj->oeroded++;
-		}
-	}
+	erode_obj(obj, is_acid, false, false);
 }
 
 /* returns 0 if seduction impossible,
