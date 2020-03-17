@@ -46,6 +46,7 @@ int getpos(coord *cc, boolean force, const char *goal) {
 	else
 		sdp = sdir; /* DICE workaround */
 
+	if (!goal) goal = "desired location";
 	if (flags.verbose) {
 		pline("(For instructions type a ?)");
 		msg_given = true;
@@ -55,8 +56,8 @@ int getpos(coord *cc, boolean force, const char *goal) {
 
 	cliparound(cx, cy);
 
-	curs(WIN_MAP, cx, cy);
 	flush_screen(0);
+	curs(WIN_MAP, cx, cy);
 #ifdef MAC
 	lock_mouse_cursor(true);
 #endif
@@ -114,8 +115,15 @@ int getpos(coord *cc, boolean force, const char *goal) {
 			goto nxtc;
 		}
 
-		if (c == '?') {
-			getpos_help(force, goal);
+		if (c == '?' || is_redraw_cmd(c)) {
+			if (c == '?')
+				getpos_help(force, goal);
+			else // redraw
+				docrt();
+
+			// update message window to reflect that we're still targetting
+			pline("Move cursor to %s:", goal);
+			msg_given = true;
 		} else {
 			if (!index(quitchars, c)) {
 				char matching[MAXPCHARS];
@@ -169,8 +177,8 @@ int getpos(coord *cc, boolean force, const char *goal) {
 	nxtc:;
 		cliparound(cx, cy);
 
-		curs(WIN_MAP, cx, cy);
 		flush_screen(0);
+		curs(WIN_MAP, cx, cy);
 	}
 #ifdef MAC
 	lock_mouse_cursor(false);

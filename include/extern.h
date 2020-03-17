@@ -151,6 +151,7 @@ nhstr bot2str(void);
 
 /* ### cmd.c ### */
 
+bool is_redraw_cmd(char c);
 char randomkey(void);
 void reset_occupations(void);
 void set_occupation(int (*)(void), const char *, int);

@@ -2397,6 +2397,10 @@ void dokeylist(void) {
 	destroy_nhwindow(datawin);
 }
 
+bool is_redraw_cmd(char c) {
+	return c == C('r') || (iflags.num_pad && c == C('l'));
+}
+
 static const char template[] = "%-18s %4ld  %6ld";
 static const char count_str[] = "                   count  bytes";
 static const char separator[] = "------------------ -----  ------";
@@ -3261,9 +3265,15 @@ retry:
 	if (in_doagain || *readchar_queue) {
 		dirsym = readchar();
 	} else {
-		do {
-			dirsym = yn_function((s && *s != '^') ? s : buf, NULL, '\0');
-		} while (!movecmd(dirsym) && !index(quitchars, dirsym) && dirsym == '.' && dirsym == 's' && !u.dz);
+		dirsym = yn_function((s && *s != '^') ? s : buf, NULL, '\0');
+	}
+
+	// remove the prompt string so caller won't have to
+	clear_nhwindow(WIN_MESSAGE);
+
+	if (is_redraw_cmd(dirsym)) {
+		docrt();
+		goto retry;
 	}
 
 	savech(dirsym);

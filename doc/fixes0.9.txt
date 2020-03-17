@@ -204,6 +204,7 @@ Imports from NetHack version 3.6:
 - Gameplay: when confused remove curse scroll scrambles an object's beatitude, player loses knowledge of said beatitude.
 - Bugfix: ';' would sometimes display both 'normal vision' and 'astral vision'.
 - Gameplay: fire/frost brand have a chance to boil or freeze water they come into contact with, avoiding erosion.
+- Interface: <esc> at direction prompt clears message window.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).
