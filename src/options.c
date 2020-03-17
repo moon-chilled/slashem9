@@ -2723,7 +2723,6 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 	anything any;
 	int i;
 	char buf[BUFSZ];
-	boolean retval = false;
 
 	/* Special handling of menustyle, pickup_burden, pickup_types,
 	 * disclose, runmode, msg_window, menu_headings, and number_pad options.
@@ -2748,7 +2747,6 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 			free(style_pick);
 		}
 		destroy_nhwindow(tmpwin);
-		retval = true;
 	} else if (!strcmp("pickup_burden", optname)) {
 		const char *burden_name, *burden_letters = "ubsntl";
 		menu_item *burden_pick = NULL;
@@ -2766,11 +2764,9 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 			free(burden_pick);
 		}
 		destroy_nhwindow(tmpwin);
-		retval = true;
 	} else if (!strcmp("pickup_types", optname)) {
 		/* parseoptions will prompt for the list of types */
 		parseoptions(strcpy(buf, "pickup_types"), setinitial, setfromfile);
-		retval = true;
 	} else if (!strcmp("disclose", optname)) {
 		int pick_cnt, pick_idx, opt_idx;
 		menu_item *disclosure_category_pick = NULL;
@@ -2833,7 +2829,6 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 				destroy_nhwindow(tmpwin);
 			}
 		}
-		retval = true;
 	} else if (!strcmp("runmode", optname)) {
 		const char *mode_name;
 		menu_item *mode_pick = NULL;
@@ -2851,7 +2846,6 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 			free(mode_pick);
 		}
 		destroy_nhwindow(tmpwin);
-		retval = true;
 	} else if (!strcmp("graphics", optname)) {
 		const char *mode_name;
 		menu_item *mode_pick = NULL;
@@ -2871,9 +2865,7 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 			free(mode_pick);
 		}
 		destroy_nhwindow(tmpwin);
-		retval = true;
-	}
-	else if (!strcmp("msg_window", optname)) {
+	} else if (!strcmp("msg_window", optname)) {
 		/* by Christian W. Cooper */
 		menu_item *window_pick = NULL;
 		tmpwin = create_nhwindow(NHW_MENU);
@@ -2892,9 +2884,7 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 			free(window_pick);
 		}
 		destroy_nhwindow(tmpwin);
-		retval = true;
-	}
-	else if (!strcmp("align_message", optname) ||
+	} else if (!strcmp("align_message", optname) ||
 		 !strcmp("align_status", optname)) {
 		menu_item *window_pick = NULL;
 		char abuf[BUFSZ];
@@ -2925,7 +2915,6 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 			free(window_pick);
 		}
 		destroy_nhwindow(tmpwin);
-		retval = true;
 	} else if (!strcmp("number_pad", optname)) {
 		static const char *npchoices[3] =
 			{"0 (off)", "1 (on)", "2 (on, DOS compatible)"};
@@ -2960,7 +2949,6 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 			number_pad(iflags.num_pad);
 		}
 		destroy_nhwindow(tmpwin);
-		retval = true;
 	} else if (!strcmp("menu_headings", optname)) {
 		static const char *mhchoices[3] = {"bold", "inverse", "underline"};
 		const char *npletters = "biu";
@@ -2990,35 +2978,37 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 			free(mode_pick);
 		}
 		destroy_nhwindow(tmpwin);
-		retval = true;
 	} else if (!strcmp("autopickup_exception", optname)) {
 		int pick_cnt, pick_idx, opt_idx, pass;
 		int totalapes = 0, numapes[2] = {0, 0};
 		menu_item *pick_list = NULL;
 		anything any;
-		char apebuf[BUFSZ];
+		char apebuf[BUFSZ+1]; // so &apebuf[1] is BUFSZ long for getlin()
 		struct autopickup_exception *ape;
-		static const char *action_titles[] = {
-			"a",
-			"add new autopickup exception",
-			"l",
-			"list autopickup exceptions",
-			"r",
-			"remove existing autopickup exception",
-			"e",
-			"exit this menu",
+		static struct ape_action {
+			char letr; const char *desc;
+		} action_titles[] = {
+			{ 'a', "add new autopickup exception"},
+			{ 'l', "list autopickup exceptions" },
+			{ 'r', "remove existing autopickup exception" },
+			{ 'x', "exit this menu" },
 		};
-	ape_again:
+ape_again:
 		opt_idx = 0;
 		totalapes = count_ape_maps(&numapes[AP_LEAVE], &numapes[AP_GRAB]);
 		tmpwin = create_nhwindow(NHW_MENU);
 		start_menu(tmpwin);
 		any.a_int = 0;
-		for (i = 0; i < SIZE(action_titles); i += 2) {
+		for (i = 0; i < SIZE(action_titles); i++) {
 			any.a_int++;
-			if (!totalapes && (i >= 2 && i < 6)) continue;
-			add_menu(tmpwin, NO_GLYPH, &any, *action_titles[i],
-				 0, ATR_NONE, action_titles[i + 1], MENU_UNSELECTED);
+			// omit list and remove if there aren't any yet
+			if (!totalapes && (i == 1 || i == 2)) continue;
+			add_menu(tmpwin, NO_GLYPH, &any, action_titles[i].letr,
+					0, ATR_NONE, action_titles[i].desc,
+#if 0					// this ought to work but doesn't...
+					(action_titles[i].letr == 'x') ? MENU_SELECTED :
+#endif
+					MENU_UNSELECTED);
 		}
 		end_menu(tmpwin, "Do what?");
 		if ((pick_cnt = select_menu(tmpwin, PICK_ONE, &pick_list)) > 0) {
@@ -3029,17 +3019,29 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 			pick_list = NULL;
 		}
 		destroy_nhwindow(tmpwin);
-		if (pick_cnt < 1) return false;
 
-		if (opt_idx == 0) { /* add new */
+		if (pick_cnt < 1 || opt_idx == 3) {
+			;       // done--fall through to function exit
+		} else if (opt_idx == 0) {	// add new
 			getlin("What new autopickup exception pattern?", &apebuf[1]);
-			if (apebuf[1] == '\033') return false;
-			apebuf[0] = '"';
-			strcat(apebuf, "\"");
-			add_autopickup_exception(apebuf);
-			goto ape_again;
-		} else if (opt_idx == 3) {
-		} else { /* remove */
+			mungspaces(&apebuf[1]); /* regularize whitespace */
+			if (apebuf[1] == '\033') {
+				;   /* fall through to function exit */
+			} else {
+				if (apebuf[1]) {
+					apebuf[0] = '\"';
+					/* guarantee room for \" prefix and \"\0 suffix;
+					   -2 is good enough for apebuf[] but -3 makes
+					   sure the whole thing fits within normal BUFSZ */
+					apebuf[sizeof apebuf - 3] = '\0';
+					strcat(apebuf, "\"");
+					add_autopickup_exception(apebuf);
+				}
+
+				goto ape_again;
+			}
+		} else {        /* list or remove */
+
 			tmpwin = create_nhwindow(NHW_MENU);
 			start_menu(tmpwin);
 			for (pass = AP_LEAVE; pass <= AP_GRAB; ++pass) {
@@ -3069,11 +3071,13 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 			free(pick_list);
 			pick_list = NULL;
 			destroy_nhwindow(tmpwin);
-			goto ape_again;
+			if (pick_cnt >= 0) goto ape_again;
 		}
-		retval = true;
+	} else {
+		return false;
 	}
-	return retval;
+
+	return true;
 }
 
 #define rolestring(val, array, field) ((val >= 0) ? array[val].field : \
