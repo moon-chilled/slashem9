@@ -433,7 +433,7 @@ struct monst *animate_statue(struct obj *statue, xchar x, xchar y, int cause, in
 	/* transfer any statue contents to monster's inventory */
 	while ((item = statue->cobj) != 0) {
 		obj_extract_self(item);
-		add_to_minv(mon, item);
+		mpickobj(mon, item);
 	}
 	m_dowear(mon, true);
 	delobj(statue);
