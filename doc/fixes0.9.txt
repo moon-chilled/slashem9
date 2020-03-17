@@ -202,6 +202,7 @@ Imports from NetHack version 3.6:
 - Interface: Iu doesn't show price twice when player is only carrying one unpaid object.
 - Bugfix: player would feel, but not remember, certain traps.
 - Gameplay: when confused remove curse scroll scrambles an object's beatitude, player loses knowledge of said beatitude.
+- Bugfix: ';' would sometimes display both 'normal vision' and 'astral vision'.
 
 Imports from other locations:
 - Interface: add curses windowport (Karl Garrison).

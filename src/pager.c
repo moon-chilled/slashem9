@@ -166,12 +166,15 @@ static struct permonst *lookat(int x, int y, char *buf, char *monbuf) {
 
 			{
 				int ways_seen = 0, normal = 0, xraydist;
-				boolean useemon = (boolean)canseemon(mtmp);
+				bool useemon = canseemon(mtmp);
 
 				xraydist = (u.xray_range < 0) ? -1 : u.xray_range * u.xray_range;
-				/* normal vision */
-				if ((mtmp->wormno ? worm_known(mtmp) : cansee(mtmp->mx, mtmp->my)) &&
-				    mon_visible(mtmp) && !mtmp->minvis) {
+				   /* normal vision
+				    * cansee is true for both normal and astral vision,
+				    * but couldsee it not true for astral vision */
+				if ((mtmp->wormno ? worm_known(mtmp) :
+						    (cansee(mtmp->mx, mtmp->my) && couldsee(mtmp->mx, mtmp->my)))
+				    && mon_visible(mtmp) && !mtmp->minvis) {
 					ways_seen++;
 					normal++;
 				}
