@@ -60,7 +60,7 @@ void curses_message_win_puts(const char *message, bool recursed) {
 		}
 	}
 
-	linespace = ((width + border_space) - 3) - mx;
+	linespace = (width - border_space*2) - mx;
 
 	if (strcmp(message, "#") == 0) {								    /* Extended command or Count: */
 		if ((strcmp(toplines, "#") != 0) && (my >= (height - 1 + border_space)) && (height != 1)) { /* Bottom of message window */
@@ -159,6 +159,7 @@ int curses_block(bool noscroll) {
 			scroll_window(MESSAGE_WIN);
 			turn_lines = 1;
 		}
+		wrefresh(win);
 	}
 
 	return ret;
