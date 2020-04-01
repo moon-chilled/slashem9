@@ -2862,10 +2862,19 @@ void newuhs(boolean incr) {
 	}
 }
 
+/* Can you reach an object on the floor (to eat it, etc)? */
 bool can_reach_floorobj(void) {
-	return can_reach_floor() &&
-	       !((is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) && (Wwalking || is_clinger(youmonst.data) || (Flying && !Breathless))) &&
-	       !uteetering_at_seen_pit();
+	// You need to be able to reach the floor in the first place; this covers
+	// things like levitation, unskilled rider, etc.
+	return can_reach_floor()
+	       // If the floor is water or lava, you need to be immersed in it --
+	       // not waterwalking or ceiling-clinging. If flying, you need to be
+	       // unbreathing as well.
+	       && !((is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy))
+	           && (Wwalking || is_clinger(youmonst.data) || (Flying && !Breathless)))
+	       // And you can't be "teetering at the edge" of a pit, since then
+	       // things on the floor are assumed to be at the bottom of the pit.
+	       && !uteetering_at_seen_pit();
 }
 
 /* Returns an object representing food.  Object may be either on floor or
