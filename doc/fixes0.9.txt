@@ -237,3 +237,6 @@ Imports from other locations:
 - Interface: weapon shop owners are named after GTA characters (SlashTHEM).
 - Gameplay: the Staff of Aesculapius protects against drain life again (SlashTHEM).
 - Gameplay: amnesia no longer forgets level maps and item descriptions, instead forgets skills (NetHack 3.7).
+- Bugfix: flying character was marked as teetering on the edge of a pit (ToxicFrog).
+- Bugfix: properly get message box width in curses (ToxicFrog).
+- Bugfix: properly refresh message window after a --More-- (or >>) prompt in curses (ToxicFrog).
