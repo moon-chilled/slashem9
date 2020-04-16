@@ -4120,7 +4120,7 @@ burn_stuff:
 
 bool uteetering_at_seen_pit(void) {
 	struct trap *t = t_at(u.ux, u.uy);
-	return t && t->tseen && (!u.utrap || u.utraptype != TT_PIT) && is_pitlike(t->ttyp);
+	return t && t->tseen && !Flying && (!u.utrap || u.utraptype != TT_PIT) && is_pitlike(t->ttyp);
 }
 bool uteetering_at_seen_hole(void) {
 	struct trap *t = t_at(u.ux, u.uy);
