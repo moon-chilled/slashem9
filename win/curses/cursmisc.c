@@ -230,7 +230,7 @@ curses_break_str(const char *str, int width, int line_num) {
 	int last_space, count;
 	char *retstr;
 	int curline = 0;
-	int strsize = strlen(str);
+	int strsize = strlen(str) + 1;
 	char substr[strsize];
 	char curstr[strsize];
 	char tmpstr[strsize];
@@ -284,7 +284,7 @@ curses_str_remainder(const char *str, int width, int line_num) {
 	int last_space, count;
 	char *retstr;
 	int curline = 0;
-	int strsize = strlen(str);
+	int strsize = strlen(str) + 1;
 	char substr[strsize];
 	char tmpstr[strsize];
 
@@ -444,10 +444,8 @@ void curses_view_file(const char *filename, bool must_exist) {
 void curses_rtrim(char *str) {
 	char *s;
 
-	for (s = str; *s != '\0'; ++s)
-		;
-	for (--s; isspace(*s) && s > str; --s)
-		;
+	s = eos(str);
+	while(s > str && isspace(*--s));
 	if (s == str)
 		*s = '\0';
 	else
