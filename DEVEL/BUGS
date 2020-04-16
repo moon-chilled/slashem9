@@ -11,3 +11,10 @@
 * Crash in dofire() where it apparently gets down to throw_obj() and uquiver is null at that point.
 
 * Bad strength display in tcc.  Bug in its vararg handling?
+
+* Segfault w/tcc.  Can reproduce with bones file.  Stacktrace:
+#0  0x0000000000523c04 in sobj_at ()
+#1  0x000000000050ce67 in grow_herbs ()
+#2  0x000000000050e30f in dgn_growths ()
+#3  0x0000000000427959 in moveloop ()
+#4  0x000000000075d50d in main ()

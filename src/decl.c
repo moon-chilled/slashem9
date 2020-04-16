@@ -17,7 +17,7 @@ int locknum = 0; /* max num of simultaneous users */
 char *catmore = 0; /* default pager */
 #endif
 
-int bases[MAXOCLASSES] = DUMMY;
+int bases[MAXOCLASSES] = {0};
 
 int multi = 0;
 boolean multi_one = false; /* used by dofire() and throw_the_obj() */
@@ -34,12 +34,12 @@ int in_doagain = 0;
  *	The following structure will be initialized at startup time with
  *	the level numbers of some "important" things in the game.
  */
-struct dgn_topology dungeon_topology = {DUMMY};
+struct dgn_topology dungeon_topology = {{0}};
 
 #include "quest.h"
-struct q_score quest_status = DUMMY;
+struct q_score quest_status = {0};
 
-int smeq[MAXNROFROOMS + 1] = DUMMY;
+int smeq[MAXNROFROOMS + 1] = {0};
 int doorindex = 0;
 
 char *save_cm = 0;
@@ -47,21 +47,21 @@ char *save_cm = 0;
 struct kinfo killer = {0};
 long done_money = 0;
 const char *nomovemsg = 0;
-const char nul[40] = DUMMY;   /* contains zeros */
-char plname[PL_NSIZ] = DUMMY; /* player name */
-char pl_character[PL_CSIZ] = DUMMY;
+const char nul[4096] = {0};   /* contains zeros */
+char plname[PL_NSIZ] = {0}; /* player name */
+char pl_character[PL_CSIZ] = {0};
 char pl_race = '\0';
 
-char pl_fruit[PL_FSIZ] = DUMMY;
+char pl_fruit[PL_FSIZ] = {0};
 int current_fruit = 0;
 struct fruit *ffruit = NULL;
 
-char tune[6] = DUMMY;
+char tune[6] = {0};
 
 int poisoned_pit_threshold = 0;
 bool know_poisoned_pit_threshold = false;
 
-const char *occtxt = DUMMY;
+const char *occtxt = {0};
 const char quitchars[] = " \r\n\033";
 const char vowels[] = "aeiouAEIOU";
 const char ynchars[] = "yn";
@@ -113,21 +113,21 @@ struct obj *current_wand = 0; /* wand currently zapped/applied */
 
 boolean in_steed_dismounting = false;
 
-coord bhitpos = DUMMY;
-struct door doors[DOORMAX] = {DUMMY};
+coord bhitpos = {0};
+struct door doors[DOORMAX] = {{0}};
 
-struct mkroom rooms[(MAXNROFROOMS + 1) * 2] = {DUMMY};
+struct mkroom rooms[(MAXNROFROOMS + 1) * 2] = {{0}};
 struct mkroom *subrooms = &rooms[MAXNROFROOMS + 1];
 struct mkroom *upstairs_room, *dnstairs_room, *sstairs_room;
 
 dlevel_t level; /* level map */
 struct trap *ftrap = NULL;
-struct monst youmonst = DUMMY;
-struct permonst upermonst = DUMMY;
-struct context_info context = DUMMY;
-struct flag flags = DUMMY;
-struct instance_flags iflags = DUMMY;
-struct you u = DUMMY;
+struct monst youmonst = {0};
+struct permonst upermonst = {0};
+struct context_info context = {0};
+struct flag flags = {0};
+struct instance_flags iflags = {0};
+struct you u = {0};
 
 struct obj *invent = NULL,
 	   *uwep = NULL, *uarm = NULL,
@@ -183,9 +183,9 @@ const int shield_static[SHIELD_COUNT] = {
 	S_ss4,
 };
 
-struct spell spl_book[MAXSPELL + 1] = {DUMMY};
+struct spell spl_book[MAXSPELL + 1] = {{0}};
 
-struct tech tech_list[MAXTECH + 1] = {DUMMY};
+struct tech tech_list[MAXTECH + 1] = {{0}};
 
 long moves = 1L, monstermoves = 1L;
 /* These diverge when player is Fast or Very_fast */
@@ -197,24 +197,24 @@ struct obj *migrating_objs = NULL;
 struct obj *billobjs = NULL;
 
 /* used to zero all elements of a struct obj */
-struct obj zeroobj = DUMMY;
+struct obj zeroobj = {0};
 
 /* used as an address returned by getobj() */
-struct obj thisplace = DUMMY;
+struct obj thisplace = {0};
 
 /* originally from dog.c */
-char dogname[PL_PSIZ] = DUMMY;
-char catname[PL_PSIZ] = DUMMY;
-char ghoulname[PL_PSIZ] = DUMMY;
-char horsename[PL_PSIZ] = DUMMY;
-char wolfname[PL_PSIZ] = DUMMY;
+char dogname[PL_PSIZ] = {0};
+char catname[PL_PSIZ] = {0};
+char ghoulname[PL_PSIZ] = {0};
+char horsename[PL_PSIZ] = {0};
+char wolfname[PL_PSIZ] = {0};
 /*
-char batname[PL_PSIZ] = DUMMY;
-char snakename[PL_PSIZ] = DUMMY;
-char ratname[PL_PSIZ] = DUMMY;
-char badgername[PL_PSIZ] = DUMMY;
-char reddragonname[PL_PSIZ] = DUMMY;
-char whitedragonname[PL_PSIZ] = DUMMY;
+char batname[PL_PSIZ] = {0};
+char snakename[PL_PSIZ] = {0};
+char ratname[PL_PSIZ] = {0};
+char badgername[PL_PSIZ] = {0};
+char reddragonname[PL_PSIZ] = {0};
+char whitedragonname[PL_PSIZ] = {0};
 */
 char preferred_pet; /* '\0', 'c', 'd', 'n' (none) */
 /* monsters that went down/up together with @ */
@@ -281,20 +281,20 @@ struct tileset def_tilesets[] = {
 		0,
 	}};
 
-char tileset[PL_PSIZ] = DUMMY;
+char tileset[PL_PSIZ] = {0};
 
 char *fqn_prefix[PREFIX_COUNT] = {NULL, NULL, NULL, NULL,
 				  NULL, NULL, NULL, NULL, NULL};
 
-struct u_achieve achieve = DUMMY;
+struct u_achieve achieve = {0};
 
 struct realtime_data realtime_data = {0, 0, 0};
 
 struct _plinemsg *pline_msg = NULL;
 uint saved_pline_index = 0;
-char *saved_plines[DUMPLOG_MSG_COUNT] = DUMMY;
+char *saved_plines[DUMPLOG_MSG_COUNT] = {0};
 
-glyph_t permonst_unicode_codepoint[NUMMONS] = DUMMY;
+glyph_t permonst_unicode_codepoint[NUMMONS] = {0};
 
 /* FIXME: The curses windowport requires this stupid hack, in the
    case where a game is in progress and the user is asked if he

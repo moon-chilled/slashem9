@@ -798,7 +798,7 @@ void savefruitchn(int fd, int mode) {
 		f1 = f2;
 	}
 	if (perform_bwrite(mode))
-		bwrite(fd, (void *)nulls, sizeof(struct fruit));
+		bwrite(fd, nulls, sizeof(struct fruit));
 	if (release_data(mode))
 		ffruit = 0;
 }

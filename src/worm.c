@@ -66,8 +66,8 @@ static struct wseg *create_worm_tail(int);
  *  segment, and remove hit points from the worm.
  */
 
-struct wseg *wheads[MAX_NUM_WORMS] = DUMMY, *wtails[MAX_NUM_WORMS] = DUMMY;
-long wgrowtime[MAX_NUM_WORMS] = DUMMY;
+struct wseg *wheads[MAX_NUM_WORMS] = {0}, *wtails[MAX_NUM_WORMS] = {0};
+long wgrowtime[MAX_NUM_WORMS] = {0};
 
 /*
  *  get_wormno()

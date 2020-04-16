@@ -12,10 +12,10 @@
 
 #define C(n) n
 
-glyph_t oc_syms[MAXOCLASSES] = DUMMY;	/* the current object  display symbols */
-glyph_t showsyms[MAXPCHARS] = DUMMY;	/* the current feature display symbols */
-uchar monsyms[MAXMCLASSES] = DUMMY;	/* the current monster display symbols */
-uchar showsymcolors[MAXPCHARS] = DUMMY; /* current feature display colors */
+glyph_t oc_syms[MAXOCLASSES] = {0};	/* the current object  display symbols */
+glyph_t showsyms[MAXPCHARS] = {0};	/* the current feature display symbols */
+uchar monsyms[MAXMCLASSES] = {0};	/* the current monster display symbols */
+uchar showsymcolors[MAXPCHARS] = {0}; /* current feature display colors */
 
 /* Default object class symbols.  See objclass.h. */
 const glyph_t def_oc_syms[MAXOCLASSES] = {
@@ -679,9 +679,9 @@ void switch_graphics(int graphics) {
 /*
  * saved display symbols for objects & features.
  */
-static glyph_t save_oc_syms[MAXOCLASSES] = DUMMY;
-static glyph_t save_showsyms[MAXPCHARS] = DUMMY;
-static glyph_t save_monsyms[MAXPCHARS] = DUMMY;
+static glyph_t save_oc_syms[MAXOCLASSES] = {0};
+static glyph_t save_showsyms[MAXPCHARS] = {0};
+static glyph_t save_monsyms[MAXPCHARS] = {0};
 
 static const glyph_t r_oc_syms[MAXOCLASSES] = {
 /* 0*/	'\0',

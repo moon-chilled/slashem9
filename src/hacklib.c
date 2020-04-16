@@ -26,6 +26,7 @@ NetHack, except that rounddiv may call panic().
 	char *		upstart		(char *)
 	char *		mungspaces	(char *)
 	char *		eos		(char *)
+	bool		str_end_is	(const char *, const char *)
 	char *		strkitten	(char *,char)
 	char *		s_suffix	(const char *)
 	bool		onlyspace	(const char *)
@@ -112,6 +113,12 @@ char *eos(char *s) {
 	while (*s)
 		s++;  // s += strlen(s);
 	return s;
+}
+
+// returns true if str ends in chkstr
+bool str_end_is(const char *str, const char *chkstr) {
+	size_t slen, clen;
+	return str && chkstr && ((slen=strlen(str)) >= (clen=strlen(chkstr))) && !memcmp(str + slen - clen, chkstr, clen);
 }
 
 // strcat(s, {c,'\0'});

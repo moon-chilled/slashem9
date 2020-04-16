@@ -716,6 +716,7 @@ char *lcase(char *s);
 char *upstart(char *s);
 char *mungspaces(char *bp);
 char *eos(char *s);
+bool str_end_is(const char *str, const char *chkstr);
 char *strkitten(char *s, char c);
 char *s_suffix(const char *s);
 bool onlyspace(const char *s);

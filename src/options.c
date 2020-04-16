@@ -3573,8 +3573,8 @@ int fruitadd(char *str) {
 		     (!strcmp(str + 7, "spinach") ||
 		      name_to_mon(str + 7) >= LOW_PM)) ||
 		    !strcmp(str, "empty tin") ||
-		    ((!strncmp(eos(str) - 7, " corpse", 7) ||
-		      !strncmp(eos(str) - 4, " egg", 4)) &&
+		    ((str_end_is(str, " corpse") ||
+		      str_end_is(str, " egg")) &&
 		     name_to_mon(str) >= LOW_PM)) {
 			strcpy(buf, pl_fruit);
 			strcpy(pl_fruit, "candied ");
