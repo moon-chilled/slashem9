@@ -1,15 +1,13 @@
 Changelist for slashem9 v0.9:
 - Internals: obviate the following compile-time configurable options: SINKS, BLACKMARKET, D_SABER, LIGHTSABERS, P_SPOON, WALLET_O_P, EATEN_MEMORY, WALLIFIED_MAZE, AUTOPICKUP_EXCEPTIONS, YOEMAN, SEDUCE, KOPS, TOURIST, FIREARMS, EXP_ON_BOTL, SCORE_ON_BOTL, DWARF, ELBERETH, TEXTCOLOR, STATUS_COLORS, MENU_COLOR, SHOW_WEIGHT, SHOW_DMG, WIZARD, UNPOLYPILE, INVISIBLE_OBJECTS, OTHER_SERVICES, REDO, XLOGFILE, STEED, FREE_ALL_MEMORY, DISPLAY_LAYERS, REALTIME_ON_BOTL, CLIPPING, DUNGEON_GROWTH.  Where applicable, these can still be toggled at run time.
-- Internals: lots of miscellaneous code cleanup, simplification, removal of indirection or conditionality, etc.
+- Internals: miscellaneous code cleanup and simplification.
 - Internals: change K&R-style function definitions to ANSI.  Require c99.  Use bool over boolean.
 - Internals: remove support for many obsolete platforms and build configurations.  Basic requirements: ANSI c99 + win32|posix-ish.
 - Internals: remove the internal malloc implementation and heap monitor in favour of valgrind.
 - Interface: remove all windowports except for tty.
 - Development: allow slashem.sh to automatically launch debugging tools (gdb, lldb, valgrind), if the environment variable NH_USE_(GDB|LLDB|VALGRIND) is set.  It will also pass $NH_(GDB|LLDB|VALGRIND)_FLAGS to the corresponding debugging tool.
-- Interface: add UTF-8 graphics support.  Original code by Patric Mueller; heavy modifications have been made.
+- Interface: add Unicode graphics support with UTF-8 output.  Original code by Patric Mueller; heavy modifications have been made.  This includes support for Unicode glyphs on topl, botl, and inventory display (with menu_glyphs), as well as Unicode support in curses.
 - Interface: remove DEC and IBM graphics; the only graphics sets available are ascii, utf8, and utf8compat (using only characters that are part of wgl4), and these are now under a compound 'graphics' option.
-- Interface: make curses support unicode graphics display.
-- Interface: properly display unicode glyphs on topl and in inventory.
 - Interface: recommend saving and reloading, rather than quitting, in impossible().
 - Gameplay: re-enable the rogue level.
 - Development: replace build system.  Currently requires GNU make.
@@ -22,8 +20,8 @@ Changelist for slashem9 v0.9:
 - Gameplay: lower duration of hallucination from potions to only 50-55, 50-105, or 50-155 turns (depending on BUC).
 - Interface: use symbols from EPYX rogue on rogue level.
 - System: allow DLB to optionally use a library stored inside the slashem binary, removing the need for external data files.
-- Internals: add a custom dynamic string library with associated colour information.  Use it to implement statuscolors/botl.  It will be used for most of our strings in the future.
-- Bugfix: with USE_FCNTL enabled, the lock file was opened but never closed (also present in NetHack and reported to the devteam).
+- Internals: add a custom dynamic string library with associated colour information.  Use it to implement statuscolors/botl.
+- Bugfix: with USE_FCNTL enabled, the lock file descriptor was leaked (also present in NetHack and reported to the devteam).
 - Bugfix: memory leak in curses.
 - Bugfix: under curses with perm_invent enabled, if an inventory item was longer than the width of the inventory window, it could continue onto the next line rather than being cut off.
 - Interface: remove autoquiver.
@@ -39,7 +37,7 @@ Changelist for slashem9 v0.9:
 - Bugfix: passwall player couldn't pick up objects from pit (fixed by making them always fall in, but suffer no ill effects).
 - Gameplay: an alchemical smock will protect you from alchemical blasts.
 - Bugfix: segfault could occur when explosion was thrown near the edge of the map screen.
-- Gameplay: when monks got the message 'Your armor is rather cumbersome...', their attack power would be boosted rather than reduced.
+- Gameplay: when monks get the message 'Your armor is rather cumbersome...', their attack power is reduced rather than boosted.
 - Interface: monks only get the 'Your armor is rather cumbersome...' message when that encumberance actually causes them to miss.
 - Interface: remove support for WIN32CON.
 - Bugfix: grammar in enlightenment messages when intrinsically warned of certain species.
@@ -52,10 +50,11 @@ Changelist for slashem9 v0.9:
 - Bugfix: plastic objects will be destroyed by lava.
 - Gameplay: metallic objects have a 10% chance to be destroyed by lava.
 - Bugfix: removing a ring of protection would make a ring of protection from shape changers stop working.
-- Interface: bump chance of getting the message "yo' mama -- core dumped" from 1% to 2%.
+- Interface: bump chance of getting the message 'yo' mama -- core dumped' from 1% to 2%.
 - Bugfix: monster attacking another monster with a draining attack could blind it too.
 - Interface: nicer messages when attaching candles to the candelabrum of invocation.
 - Interface: no more VIDEOSHADES.
+- Gameplay: pits cannot be poisoned until dlvl 8-10 (randomly decided for each game).  Player gets a notification when they enter the first level with poisoned pits.
 
 Imports from NetHack version 3.6:
 - Bugfix: acid dropping bug.
@@ -233,6 +232,6 @@ Imports from other locations:
 - Interface: at the end of the game, show counts of extinct monsters next to genocided; birth counts next to kill counts (Jukka Lahtinen).
 - Interface: add wall colouration for different dungeon branches and special rooms (L).
 - Interface: add the overview patch, which adds two new extended commands: #overview, which shows an overview of the layout of the dungeon levels the player has explored, and #annotate, which allows the player to make a mental note which is associated with the current level (Hojita Discordia).
-- Interface: gun shop owners are named after GTA characters (SlashTHEM).
+- Interface: weapon shop owners are named after GTA characters (SlashTHEM).
 - Gameplay: the Staff of Aesculapius protects against drain life again (SlashTHEM).
 - Gameplay: amnesia no longer forgets level maps and item descriptions, instead forgets skills (NetHack 3.7).

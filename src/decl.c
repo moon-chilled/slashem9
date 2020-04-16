@@ -58,6 +58,9 @@ struct fruit *ffruit = NULL;
 
 char tune[6] = DUMMY;
 
+int poisoned_pit_threshold = 0;
+bool know_poisoned_pit_threshold = false;
+
 const char *occtxt = DUMMY;
 const char quitchars[] = " \r\n\033";
 const char vowels[] = "aeiouAEIOU";

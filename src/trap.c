@@ -862,8 +862,9 @@ void dotrap(struct trap *trap, unsigned trflags) {
 				if (!Passes_walls) {
 					if (ttype == SPIKED_PIT) {
 						losehp(Maybe_Half_Phys(rnd(10)), plunged ? "deliberately plunged into a pit of iron spikes" : "fell into a pit of iron spikes", NO_KILLER_PREFIX);
-						if (!rn2(6))
+						if (!rn2(6) && depth(&u.uz) >= poisoned_pit_threshold) {
 							poisoned("spikes", A_STR, "fall onto poison spikes", 8);
+						}
 					} else {
 						// plunged into her own pit
 						// fell into his own pit

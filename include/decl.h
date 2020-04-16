@@ -146,6 +146,9 @@ extern struct fruit *ffruit;
 
 extern char tune[6];
 
+extern int poisoned_pit_threshold;
+extern bool know_poisoned_pit_threshold;
+
 #define MAXLINFO (MAXDUNGEON * MAXLEVEL)
 extern struct linfo level_info[MAXLINFO];
 

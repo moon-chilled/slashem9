@@ -122,10 +122,11 @@ void save_dungeon(int fd, boolean perform_write, boolean free_data) {
 	int count;
 
 	if (perform_write) {
-		bwrite(fd, &n_dgns, sizeof n_dgns);
+		bwrite(fd, &n_dgns, sizeof(n_dgns));
 		bwrite(fd, dungeons, sizeof(dungeon) * n_dgns);
 		bwrite(fd, &dungeon_topology, sizeof dungeon_topology);
-		bwrite(fd, tune, sizeof tune);
+		bwrite(fd, tune, sizeof(tune));
+		bwrite(fd, &poisoned_pit_threshold, sizeof(poisoned_pit_threshold));
 
 		for (count = 0, curr = branches; curr; curr = curr->next)
 			count++;
@@ -173,8 +174,9 @@ void restore_dungeon(int fd) {
 
 	mread(fd, &n_dgns, sizeof(n_dgns));
 	mread(fd, dungeons, sizeof(dungeon) * (unsigned)n_dgns);
-	mread(fd, &dungeon_topology, sizeof dungeon_topology);
-	mread(fd, tune, sizeof tune);
+	mread(fd, &dungeon_topology, sizeof(dungeon_topology));
+	mread(fd, tune, sizeof(tune));
+	mread(fd, &poisoned_pit_threshold, sizeof(poisoned_pit_threshold));
 
 	last = branches = NULL;
 
@@ -800,6 +802,9 @@ void init_dungeons(void) {
 	for (i = 0; i < 5; i++)
 		tune[i] = 'A' + rn2(7);
 	tune[5] = 0;
+
+	// poisoned pits start appearing on levels 8-10
+	poisoned_pit_threshold = rn1(3, 8);
 
 	/*
 	 * Find most of the special levels and dungeons so we can access their
@@ -1744,12 +1749,12 @@ void init_mapseen(d_level *lev) {
 
 #define INTEREST(feat)              \
 	((feat).nfount) ||          \
-		((feat).nsink) ||   \
-		((feat).nthrone) || \
-		((feat).naltar) ||  \
-		((feat).nshop) ||   \
-		((feat).ntemple) || \
-		((feat).ntree)
+	((feat).nsink) ||   \
+	((feat).nthrone) || \
+	((feat).naltar) ||  \
+	((feat).nshop) ||   \
+	((feat).ntemple) || \
+	((feat).ntree)
 /*
    || ((feat).water) || \
    ((feat).ice) || \
@@ -2021,13 +2026,16 @@ static void print_mapseen(winid win, mapseen *mptr, bool printdun) {
 		 * level 1.  There's not much to show, but maybe the player
 		 * wants to #annotate them for some bizarre reason.
 		 */
-		sprintf(buf, TAB "Plane %i:", -i);
+		sprintf(buf, TAB "Plane %d:", -i);
 	} else {
 		sprintf(buf, TAB "Level %d:", i);
 	}
 
 	/* wizmode prints out proto dungeon names for clarity */
 	if (wizard) {
+		if (depth(&mptr->lev) == poisoned_pit_threshold) {
+			strcat(buf, " [poison start]");
+		}
 		s_level *slev;
 		if ((slev = Is_special(&mptr->lev)))
 			sprintf(eos(buf), " [%s]", slev->proto);

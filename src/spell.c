@@ -1048,9 +1048,10 @@ int spelleffects(int spell, boolean atme) {
 			if (!(HPoison_resistance & INTRINSIC)) {
 				pline("You feel healthy ..... for the moment at least.");
 				incr_itimeout(&HPoison_resistance, rn1(1000, 500) +
-									   spell_damage_bonus(spellid(spell)) * 100);
-			} else
+					      spell_damage_bonus(spellid(spell)) * 100);
+			} else {
 				pline("Nothing happens."); /* Already have as intrinsic */
+			}
 			break;
 		case SPE_RESIST_SLEEP:
 			if (!(HSleep_resistance & INTRINSIC)) {
