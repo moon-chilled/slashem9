@@ -18,7 +18,7 @@ static boolean putting_on(const char *);
 static int ckunpaid(struct obj *);
 static int ckvalidcat(struct obj *);
 static char display_pickinv(const char *, boolean, long *);
-static char display_used_invlets(char);
+static char display_used_invlets(char*);
 static bool this_type_only(struct obj *);
 static void dounpaid(void);
 static struct obj *find_unpaid(struct obj *, struct obj **);
@@ -1744,7 +1744,7 @@ char display_inventory(const char *lets, boolean want_reply) {
  * Show what is current using inventory letters.
  *
  */
-static char display_used_invlets(char avoidlet) {
+static char display_used_invlets(char *avoidlet) {
 	struct obj *otmp;
 	char ilet, ret = 0;
 	char *invlet = flags.inv_order;
@@ -1759,9 +1759,9 @@ static char display_used_invlets(char avoidlet) {
 		while (!done) {
 			any.a_void = 0;		// set all bits to zero
 			classcount = 0;
-			for(otmp = invent; otmp; otmp = otmp->nobj) {
+			for (otmp = invent; otmp; otmp = otmp->nobj) {
 				ilet = otmp->invlet;
-				if (ilet == avoidlet) continue;
+				for (int i = 0; avoidlet[i]; i++) if (ilet == avoidlet[i]) goto loop_cont;
 				if (!flags.sortpack || otmp->oclass == *invlet) {
 					if (flags.sortpack && !classcount) {
 						any.a_void = 0;	// zero
@@ -1774,13 +1774,15 @@ static char display_used_invlets(char avoidlet) {
 							&any, ilet, 0, ATR_NONE, doname(otmp),
 							MENU_UNSELECTED);
 				}
+
+loop_cont:;
 			}
 			if (flags.sortpack && *++invlet) continue;
 			done = 1;
 		}
 		end_menu(win, "Inventory letters used:");
 
-		n = select_menu(win, PICK_NONE, &selected);
+		n = select_menu(win, PICK_ONE, &selected);
 		if (n > 0) {
 			ret = selected[0].item.a_char;
 			free(selected);
@@ -2632,6 +2634,7 @@ int doorganize(void) {
 	/* except those that will be merged with the selected object   */
 	for (otmp = invent; otmp; otmp = otmp->nobj)
 		if (otmp != obj && !mergable(otmp, obj)) {
+			if (otmp->invlet == '$') continue;
 			if (otmp->invlet <= 'Z') alphabet[(otmp->invlet) - 'A' + 26] = ' ';
 			else alphabet[(otmp->invlet) - 'a'] = ' ';
 		}
@@ -2649,7 +2652,7 @@ int doorganize(void) {
 	for (;;) {
 		let = yn_function(qbuf, NULL, '\0');
 		if (let == '?' || let == '*') {
-			char ilet = display_used_invlets(splitting ? obj->invlet : '\0');
+			char ilet = display_used_invlets((char[]){'$', splitting ? obj->invlet : '\0', '\0'});
 			if (!ilet) continue;
 			if (ilet == '\033') {
 				pline("Never mind.");

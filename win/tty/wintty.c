@@ -1616,9 +1616,9 @@ void tty_dismiss_nhwindow(winid window) {
 		case NHW_BASE:
 		case NHW_MAP:
 			/*
-		 * these should only get dismissed when the game is going away
-		 * or suspending
-		 */
+			 * these should only get dismissed when the game is going away
+			 * or suspending
+			 */
 			tty_curs(BASE_WINDOW, 1, (int)ttyDisplay->rows - 1);
 			cw->active = 0;
 			break;
