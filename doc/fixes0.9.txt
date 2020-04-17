@@ -207,6 +207,7 @@ Imports from NetHack version 3.6:
 - Interface: <esc> at direction prompt clears message window.
 
 Imports from other locations:
+- Bugfix: hallucination segfault (Slash'EM Extended).
 - Interface: add curses windowport (Karl Garrison).
 - System: add extended logfile/xlogfile with more information than standard log file (Aardvark Joe).  Remove logfile.
 - Interface: show object glyphs in inventory display (Patric Mueller).
