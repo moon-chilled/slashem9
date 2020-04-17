@@ -437,6 +437,7 @@ int doengrave(void) {
 	bool dengr = false;	// true if we wipe out the current engraving
 	bool doblind = false;	// true if engraving blinds the player
 	bool doknown = false;	// true if we identify the stylus
+	bool postknown = false;	// true if we identify the stylus, but not until after getting the engrave message
 	bool eow = false;	// true if we are overwriting oep
 	bool jello = false;	// true if we are engraving in slime
 	bool ptext = true;	// true if we must prompt for engrave text
@@ -623,22 +624,22 @@ int doengrave(void) {
 
 					/* IMMEDIATE wands */
 					/* If wand is "IMMEDIATE", remember to affect the
-			 * previous engraving even if turning to dust.
-			 */
+					 * previous engraving even if turning to dust.
+					 */
 					case WAN_STRIKING:
 						strcpy(post_engr_text, "The wand unsuccessfully fights your attempt to write!");
-						doknown = true;
+						postknown = true;
 						break;
 					case WAN_SLOW_MONSTER:
 						if (!Blind) {
 							sprintf(post_engr_text, "The bugs on the %s slow down!", surface(u.ux, u.uy));
-							doknown = true;
+							postknown = true;
 						}
 						break;
 					case WAN_SPEED_MONSTER:
 						if (!Blind) {
 							sprintf(post_engr_text, "The bugs on the %s speed up!", surface(u.ux, u.uy));
-							doknown = true;
+							postknown = true;
 						}
 						break;
 					case WAN_HEALING:
@@ -650,7 +651,7 @@ int doengrave(void) {
 					case WAN_FEAR:
 						if (!Blind) {
 							sprintf(post_engr_text, "The bugs on the %s run away!", surface(u.ux, u.uy));
-							doknown = true;
+							postknown = true;
 						}
 						break;
 					case WAN_POLYMORPH:
@@ -658,7 +659,7 @@ int doengrave(void) {
 							if (!Blind) {
 								type = 0; /* random */
 								random_engraving(buf);
-								doknown = true;
+								postknown = true;
 							}
 							dengr = true;
 						}
@@ -666,13 +667,13 @@ int doengrave(void) {
 					case WAN_DRAINING: /* KMH */
 						if (oep) {
 							/*
-					 * [ALI] Wand of draining give messages like
-					 * either polymorph or cancellation/make
-					 * invisible depending on whether the
-					 * old engraving is completely wiped or not.
-					 * Note: Blindness has slightly different
-					 * effect than with wand of polymorph.
-					 */
+							 * [ALI] Wand of draining give messages like
+							 * either polymorph or cancellation/make
+							 * invisible depending on whether the
+							 * old engraving is completely wiped or not.
+							 * Note: Blindness has slightly different
+							 * effect than with wand of polymorph.
+							 */
 							u_wipe_engr(5);
 							oep = engr_at(u.ux, u.uy);
 							if (!Blind) {
@@ -697,7 +698,7 @@ int doengrave(void) {
 						ptext = true;
 						if (!Blind) {
 							sprintf(post_engr_text, "The %s is riddled by bullet holes!", surface(u.ux, u.uy));
-							doknown = true;
+							postknown = true;
 						}
 						break;
 
@@ -714,7 +715,7 @@ int doengrave(void) {
 					case WAN_COLD:
 						if (!Blind) {
 							strcpy(post_engr_text, "A few ice cubes drop from the wand.");
-							doknown = true;
+							postknown = true;
 						}
 						if (!oep || (oep->engr_type != BURN))
 							break;
@@ -748,9 +749,9 @@ int doengrave(void) {
 						if (!Blind)
 							strcpy(post_engr_text,
 							       IS_GRAVE(levl[u.ux][u.uy].typ) ? "Chips fly out from the headstone." :
-												is_ice(u.ux, u.uy) ? "Ice chips fly up from the ice surface!" :
-														     (level.locations[u.ux][u.uy].typ == DRAWBRIDGE_DOWN) ? "Splinters fly up from the bridge." :
-																					    "Gravel flies up from the floor.");
+							       is_ice(u.ux, u.uy) ? "Ice chips fly up from the ice surface!" :
+							       (level.locations[u.ux][u.uy].typ == DRAWBRIDGE_DOWN) ? "Splinters fly up from the bridge." :
+							       "Gravel flies up from the floor.");
 						else
 							strcpy(post_engr_text, "You hear drilling!");
 						break;
@@ -1156,6 +1157,10 @@ int doengrave(void) {
 		pline("%s", post_engr_text);
 
 	if (doblind) flashburn(rnd(50));
+
+	if (postknown) {
+		makeknown(otmp->otyp);
+	}
 
 	return true;
 }
