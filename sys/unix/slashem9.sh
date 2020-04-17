@@ -55,4 +55,4 @@ if [ x$NH_USE_LLDB != x ]; then
 fi
 
 cd $HACKDIR
-exec $HACK "$@"
+exec env ASAN_OPTIONS=log_path=asan.log $HACK "$@"
