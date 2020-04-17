@@ -631,11 +631,13 @@ static int tty_race_select(char *pbuf, char *plbuf) {
 		end_menu(win, pbuf);
 		n = select_menu(win, PICK_ONE, &selected);
 		destroy_nhwindow(win);
-		if (n != 1 || selected[0].item.a_int == any.a_int)
+		if (n != 1 || selected[0].item.a_int == any.a_int) {
+			free(selected);
 			return -1; /* Selected quit */
+		}
 
 		k = selected[0].item.a_int - 1;
-		free(selected), selected = 0;
+		free(selected);
 	}
 
 	flags.initrace = k;
