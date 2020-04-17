@@ -18,3 +18,11 @@
 #2  0x000000000050e30f in dgn_growths ()
 #3  0x0000000000427959 in moveloop ()
 #4  0x000000000075d50d in main ()
+
+Engraving with unidentified / speed monster:
+
+What do you want to write with? [- abf or ?*]
+Do you want to add to the current engraving? [ynq] (y)
+You add to the writing in the dust with a wand of speed monster {7}.
+What do you want to add to the writing in the dust here? Elbereth
+The bugs on the floor speed up!
