@@ -1747,13 +1747,14 @@ void init_mapseen(d_level *lev) {
 	init->next = old;
 }
 
-#define INTEREST(feat)              \
-	((feat).nfount) ||          \
-	((feat).nsink) ||   \
-	((feat).nthrone) || \
-	((feat).naltar) ||  \
-	((feat).nshop) ||   \
-	((feat).ntemple) || \
+#define INTEREST(feat)	   \
+	((feat).nfount)	|| \
+	((feat).nsink)	|| \
+	((feat).ntoilet)|| \
+	((feat).nthrone)|| \
+	((feat).naltar) || \
+	((feat).nshop)	|| \
+	((feat).ntemple)|| \
 	((feat).ntree)
 /*
    || ((feat).water) || \
@@ -1868,6 +1869,9 @@ void recalc_mapseen(void) {
 					break;
 				case SINK:
 					mptr->feat.nsink = min(mptr->feat.nsink + 1, 3);
+					break;
+				case TOILET:
+					mptr->feat.ntoilet = min(mptr->feat.ntoilet + 1, 3);
 					break;
 				case ALTAR:
 					if (!mptr->feat.naltar)
@@ -2079,6 +2083,7 @@ static void print_mapseen(winid win, mapseen *mptr, bool printdun) {
 
 		ADDNTOBUF("fountain", mptr->feat.nfount);
 		ADDNTOBUF("sink", mptr->feat.nsink);
+		ADDNTOBUF("toilet", mptr->feat.ntoilet);
 		ADDNTOBUF("throne", mptr->feat.nthrone);
 		ADDNTOBUF("tree", mptr->feat.ntree);
 		/*

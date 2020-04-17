@@ -202,6 +202,7 @@ typedef struct mapseen_feat {
 	/* feature knowledge that must be calculated from levl array */
 	uint nfount;
 	uint nsink;
+	uint ntoilet;
 	uint naltar;
 	uint msalign; /* corresponds to MSA_* above */
 	uint nthrone;

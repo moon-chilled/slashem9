@@ -190,106 +190,106 @@ const char *const monexplain[MAXMCLASSES] = {
  *  Note: {ascii|utf8}_graphics[] arrays also depend on this symbol order.
  */
 const struct symdef sym_desc[MAXPCHARS] = {
-/* 0*/	{"unexplored area", C(NO_COLOR)},      /* stone */
-	{"wall", C(CLR_GRAY)},			      /* vwall */
-	{"wall", C(CLR_GRAY)},			      /* hwall */
-	{"wall", C(CLR_GRAY)},			      /* tlcorn */
-	{"wall", C(CLR_GRAY)},			      /* trcorn */
-	{"wall", C(CLR_GRAY)},			      /* blcorn */
-	{"wall", C(CLR_GRAY)},			      /* brcorn */
-	{"wall", C(CLR_GRAY)},			      /* crwall */
-	{"wall", C(CLR_GRAY)},			      /* tuwall */
-	{"wall", C(CLR_GRAY)},			      /* tdwall */
-/*10*/	{"wall", C(CLR_GRAY)},		      /* tlwall */
-	{"wall", C(CLR_GRAY)},			      /* trwall */
-	{"doorway", C(CLR_GRAY)},		      /* ndoor */
-	{"open door", C(CLR_BROWN)},		      /* vodoor */
-	{"open door", C(CLR_BROWN)},		      /* hodoor */
-	{"closed door", C(CLR_BROWN)},		      /* vcdoor */
-	{"closed door", C(CLR_BROWN)},		      /* hcdoor */
-	{"iron bars", C(HI_METAL)},		      /* bars */
-	{"tree", C(CLR_GREEN)},			      /* tree */
-	{"floor of a room", C(CLR_GRAY)},	      /* room */
-/*20*/	{"dark part of a room", C(CLR_BLACK)}, /* dark room */
-	{"corridor", C(CLR_BLACK)},		      /* dark corr */
-	{"lit corridor", C(CLR_GRAY)},		      /* lit corr (see mapglyph.c) */
-	{"staircase up", C(CLR_WHITE)},		      /* upstair */
-	{"staircase down", C(CLR_WHITE)},	      /* dnstair */
-	{"ladder up", C(CLR_BROWN)},		      /* upladder */
-	{"ladder down", C(CLR_BROWN)},		      /* dnladder */
-	{"altar", C(CLR_GRAY)},			      /* altar */
-	{"grave", C(CLR_GRAY)},			      /* grave */
-	{"opulent throne", C(HI_GOLD)},		      /* throne */
-/*30*/	{"sink", C(CLR_GRAY)},		      /* sink */
-	{"toilet", C(CLR_WHITE)},		      /* toilet */
-	{"fountain", C(CLR_BLUE)},		      /* fountain */
-	{"water", C(CLR_BLUE)},			      /* pool */
-	{"ice", C(CLR_CYAN)},			      /* ice */
-	{"molten lava", C(CLR_RED)},		      /* lava */
-	{"lowered drawbridge", C(CLR_BROWN)},	      /* vodbridge */
-	{"lowered drawbridge", C(CLR_BROWN)},	      /* hodbridge */
-	{"raised drawbridge", C(CLR_BROWN)},	      /* vcdbridge */
-	{"raised drawbridge", C(CLR_BROWN)},	      /* hcdbridge */
-/*40*/	{"air", C(CLR_CYAN)},		      /* open air */
-	{"cloud", C(CLR_GRAY)},			      /* [part of] a cloud */
-	{"water", C(CLR_BLUE)},			      /* under water */
-	{"arrow trap", C(HI_METAL)},		      /* trap */
-	{"dart trap", C(HI_METAL)},		      /* trap */
-	{"falling rock trap", C(CLR_GRAY)},	      /* trap */
-	{"squeaky board", C(CLR_BROWN)},	      /* trap */
-	{"bear trap", C(HI_METAL)},		      /* trap */
-	{"land mine", C(CLR_RED)},		      /* trap */
-	{"rolling boulder trap", C(CLR_GRAY)},	      /* trap */
-/*50*/	{"sleeping gas trap", C(HI_ZAP)},      /* trap */
-	{"rust trap", C(CLR_BLUE)},		      /* trap */
-	{"fire trap", C(CLR_ORANGE)},		      /* trap */
-	{"pit", C(CLR_BLACK)},			      /* trap */
-	{"spiked pit", C(CLR_BLACK)},		      /* trap */
-	{"hole", C(CLR_BROWN)},			      /* trap */
-	{"trap door", C(CLR_BROWN)},		      /* trap */
-	{"teleportation trap", C(CLR_MAGENTA)},	      /* trap */
-	{"level teleporter", C(CLR_MAGENTA)},	      /* trap */
-	{"magic portal", C(CLR_BRIGHT_MAGENTA)},      /* trap */
-/*60*/	{"web", C(CLR_GRAY)},		      /* web */
-	{"statue trap", C(CLR_GRAY)},		      /* trap */
-	{"magic trap", C(HI_ZAP)},		      /* trap */
-	{"anti-magic field", C(HI_ZAP)},	      /* trap */
-	{"polymorph trap", C(CLR_BRIGHT_GREEN)},      /* trap */
-	{"wall", C(CLR_GRAY)},			      /* vbeam */
-	{"wall", C(CLR_GRAY)},			      /* hbeam */
-	{"wall", C(CLR_GRAY)},			      /* lslant */
-	{"wall", C(CLR_GRAY)},			      /* rslant */
-	{"", C(CLR_WHITE)},			      /* dig beam */
-/*70*/	{"", C(CLR_WHITE)},		      /* camera flash beam */
-	{"", C(HI_WOOD)},			      /* boomerang open left */
-	{"", C(HI_WOOD)},			      /* boomerang open right */
-	{"", C(HI_ZAP)},			      /* 4 magic shield symbols */
+/* 0*/	{"unexplored area", C(NO_COLOR)},	/* stone */
+	{"wall", C(CLR_GRAY)},			/* vwall */
+	{"wall", C(CLR_GRAY)},			/* hwall */
+	{"wall", C(CLR_GRAY)},			/* tlcorn */
+	{"wall", C(CLR_GRAY)},			/* trcorn */
+	{"wall", C(CLR_GRAY)},			/* blcorn */
+	{"wall", C(CLR_GRAY)},			/* brcorn */
+	{"wall", C(CLR_GRAY)},			/* crwall */
+	{"wall", C(CLR_GRAY)},			/* tuwall */
+	{"wall", C(CLR_GRAY)},			/* tdwall */
+/*10*/	{"wall", C(CLR_GRAY)},			/* tlwall */
+	{"wall", C(CLR_GRAY)},			/* trwall */
+	{"doorway", C(CLR_GRAY)},		/* ndoor */
+	{"open door", C(CLR_BROWN)},		/* vodoor */
+	{"open door", C(CLR_BROWN)},		/* hodoor */
+	{"closed door", C(CLR_BROWN)},		/* vcdoor */
+	{"closed door", C(CLR_BROWN)},		/* hcdoor */
+	{"iron bars", C(HI_METAL)},		/* bars */
+	{"tree", C(CLR_GREEN)},			/* tree */
+	{"floor of a room", C(CLR_GRAY)},	/* room */
+/*20*/	{"dark part of a room", C(CLR_BLACK)},	/* dark room */
+	{"corridor", C(CLR_BLACK)},		/* dark corr */
+	{"lit corridor", C(CLR_GRAY)},		/* lit corr (see mapglyph.c) */
+	{"staircase up", C(CLR_WHITE)},		/* upstair */
+	{"staircase down", C(CLR_WHITE)},	/* dnstair */
+	{"ladder up", C(CLR_BROWN)},		/* upladder */
+	{"ladder down", C(CLR_BROWN)},		/* dnladder */
+	{"altar", C(CLR_GRAY)},			/* altar */
+	{"grave", C(CLR_GRAY)},			/* grave */
+	{"opulent throne", C(HI_GOLD)},		/* throne */
+/*30*/	{"sink", C(CLR_GRAY)},			/* sink */
+	{"toilet", C(CLR_WHITE)},		/* toilet */
+	{"fountain", C(CLR_BLUE)},		/* fountain */
+	{"water", C(CLR_BLUE)},			/* pool */
+	{"ice", C(CLR_CYAN)},			/* ice */
+	{"molten lava", C(CLR_RED)},		/* lava */
+	{"lowered drawbridge", C(CLR_BROWN)},	/* vodbridge */
+	{"lowered drawbridge", C(CLR_BROWN)},	/* hodbridge */
+	{"raised drawbridge", C(CLR_BROWN)},	/* vcdbridge */
+	{"raised drawbridge", C(CLR_BROWN)},	/* hcdbridge */
+/*40*/	{"air", C(CLR_CYAN)},			/* open air */
+	{"cloud", C(CLR_GRAY)},			/* [part of] a cloud */
+	{"water", C(CLR_BLUE)},			/* under water */
+	{"arrow trap", C(HI_METAL)},		/* trap */
+	{"dart trap", C(HI_METAL)},		/* trap */
+	{"falling rock trap", C(CLR_GRAY)},	/* trap */
+	{"squeaky board", C(CLR_BROWN)},	/* trap */
+	{"bear trap", C(HI_METAL)},		/* trap */
+	{"land mine", C(CLR_RED)},		/* trap */
+	{"rolling boulder trap", C(CLR_GRAY)},	/* trap */
+/*50*/	{"sleeping gas trap", C(HI_ZAP)},	/* trap */
+	{"rust trap", C(CLR_BLUE)},		/* trap */
+	{"fire trap", C(CLR_ORANGE)},		/* trap */
+	{"pit", C(CLR_BLACK)},			/* trap */
+	{"spiked pit", C(CLR_BLACK)},		/* trap */
+	{"hole", C(CLR_BROWN)},			/* trap */
+	{"trap door", C(CLR_BROWN)},		/* trap */
+	{"teleportation trap", C(CLR_MAGENTA)},	/* trap */
+	{"level teleporter", C(CLR_MAGENTA)},	/* trap */
+	{"magic portal", C(CLR_BRIGHT_MAGENTA)},/* trap */
+/*60*/	{"web", C(CLR_GRAY)},			/* web */
+	{"statue trap", C(CLR_GRAY)},		/* trap */
+	{"magic trap", C(HI_ZAP)},		/* trap */
+	{"anti-magic field", C(HI_ZAP)},	/* trap */
+	{"polymorph trap", C(CLR_BRIGHT_GREEN)},/* trap */
+	{"wall", C(CLR_GRAY)},			/* vbeam */
+	{"wall", C(CLR_GRAY)},			/* hbeam */
+	{"wall", C(CLR_GRAY)},			/* lslant */
+	{"wall", C(CLR_GRAY)},			/* rslant */
+	{"", C(CLR_WHITE)},			/* dig beam */
+/*70*/	{"", C(CLR_WHITE)},			/* camera flash beam */
+	{"", C(HI_WOOD)},			/* boomerang open left */
+	{"", C(HI_WOOD)},			/* boomerang open right */
+	{"", C(HI_ZAP)},			/* 4 magic shield symbols */
 	{"", C(HI_ZAP)},
 	{"", C(HI_ZAP)},
 	{"", C(HI_ZAP)},
-	{"", C(CLR_GREEN)},					      /* swallow top left	*/
-	{"", C(CLR_GREEN)},					      /* swallow top center	*/
-	{"", C(CLR_GREEN)},					      /* swallow top right	*/
-/*80*/	{"", C(CLR_GREEN)},				      /* swallow middle left	*/
-	{"", C(CLR_GREEN)},					      /* swallow middle right	*/
-	{"", C(CLR_GREEN)},					      /* swallow bottom left	*/
-	{"", C(CLR_GREEN)},					      /* swallow bottom center*/
-	{"", C(CLR_GREEN)},					      /* swallow bottom right	*/
-	{"", C(CLR_ORANGE)},					      /* explosion top left     */
-	{"", C(CLR_ORANGE)},					      /* explosion top center   */
-	{"", C(CLR_ORANGE)},					      /* explosion top right    */
-	{"", C(CLR_ORANGE)},					      /* explosion middle left  */
-	{"", C(CLR_ORANGE)},					      /* explosion middle center*/
-/*90*/	{"", C(CLR_ORANGE)},				      /* explosion middle right */
-	{"", C(CLR_ORANGE)},					      /* explosion bottom left  */
-	{"", C(CLR_ORANGE)},					      /* explosion bottom center*/
-	{"", C(CLR_ORANGE)},					      /* explosion bottom right */
-	{"unknown creature causing you worry", C(CLR_WHITE)},	      /* white warning  */
-	{"unknown creature causing you concern", C(CLR_RED)},	      /* pink warning   */
-	{"unknown creature causing you anxiety", C(CLR_RED)},	      /* red warning    */
-	{"unknown creature causing you disquiet", C(CLR_RED)},	      /* ruby warning   */
-	{"unknown creature causing you alarm", C(CLR_MAGENTA)},	      /* purple warning */
-	{"unknown creature causing you dread", C(CLR_BRIGHT_MAGENTA)} /* black warning  */
+	{"", C(CLR_GREEN)},			/* swallow top left	*/
+	{"", C(CLR_GREEN)},			/* swallow top center	*/
+	{"", C(CLR_GREEN)},			/* swallow top right	*/
+/*80*/	{"", C(CLR_GREEN)},			/* swallow middle left	*/
+	{"", C(CLR_GREEN)},			/* swallow middle right	*/
+	{"", C(CLR_GREEN)},			/* swallow bottom left	*/
+	{"", C(CLR_GREEN)},			/* swallow bottom center*/
+	{"", C(CLR_GREEN)},			/* swallow bottom right	*/
+	{"", C(CLR_ORANGE)},			/* explosion top left     */
+	{"", C(CLR_ORANGE)},			/* explosion top center   */
+	{"", C(CLR_ORANGE)},			/* explosion top right    */
+	{"", C(CLR_ORANGE)},			/* explosion middle left  */
+	{"", C(CLR_ORANGE)},			/* explosion middle center*/
+/*90*/	{"", C(CLR_ORANGE)},			/* explosion middle right */
+	{"", C(CLR_ORANGE)},			/* explosion bottom left  */
+	{"", C(CLR_ORANGE)},			/* explosion bottom center*/
+	{"", C(CLR_ORANGE)},			/* explosion bottom right */
+	{"unknown creature causing you worry", C(CLR_WHITE)},		/* white warning  */
+	{"unknown creature causing you concern", C(CLR_RED)},		/* pink warning   */
+	{"unknown creature causing you anxiety", C(CLR_RED)},		/* red warning    */
+	{"unknown creature causing you disquiet", C(CLR_RED)},		/* ruby warning   */
+	{"unknown creature causing you alarm", C(CLR_MAGENTA)},		/* purple warning */
+	{"unknown creature causing you dread", C(CLR_BRIGHT_MAGENTA)}	/* black warning  */
 
 	/*
 	 *  Note: Additions to this array should be reflected in the
