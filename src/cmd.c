@@ -408,6 +408,9 @@ int extcmd_via_menu(void) {Deferral
 			} else
 				ret = -1;
 		}
+
+		// in fuzz mode, only allow to try one command
+		if (iflags.debug_fuzzer) break;
 	}
 	Return ret;
 }
@@ -2889,10 +2892,14 @@ char randomkey(void) {
 				if (cmdlist[k = rn2(255)].bind_cmd) {
 					// prayer tends to summon a bunch of couatls which get in the way
 					// bot tends to get stuck in extcmd lists and those don't matter particularly
-					if (cmdlist[k].bind_cmd->ef_funct == dopray || cmdlist[k].bind_cmd->ef_funct == extcmd_via_menu) {
-						if (!rn2(800)) {
-							continue;
-						}
+					// options just don't particularly matter
+					if (cmdlist[k].bind_cmd->ef_funct == dopray || cmdlist[k].bind_cmd->ef_funct == extcmd_via_menu || cmdlist[k].bind_cmd->ef_funct == doset) {
+						if (!rn2(800)) continue;
+					}
+
+					// just not that useful, likely to be cancelled anyway, and bot has a tendency to turn on extcmd
+					if (cmdlist[k].bind_cmd->ef_funct == get_ext_cmd) {
+						if (!rn2(100)) continue;
 					}
 
 					return k;

@@ -2146,6 +2146,9 @@ static void throwstorm(struct obj *obj, int skilldmg, int min, int range) {
 		return;
 	}
 	switch (abs(type) % 10) {
+		default:
+			impossible("unknown explosion type (%d)", type);
+		//fallthru
 		case ZT_MAGIC_MISSILE:
 		case ZT_DEATH:
 			expl_type = EXPL_MAGICAL;

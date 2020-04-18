@@ -1919,7 +1919,7 @@ boolean cant_create(int *mtype, boolean revival) {
 struct monst *create_particular(void) {
 	char buf[BUFSZ], *bufp, monclass = MAXMCLASSES;
 	int which, tries, i;
-	struct permonst *whichpm;
+	struct permonst *whichpm = NULL;
 	struct monst *mtmp = NULL;
 	bool maketame, makepeaceful, makehostile;
 	bool randmonst = false;

@@ -50,7 +50,7 @@ void load_qtlist(void) {
 	usize num_role_msgs[NUM_ROLES] = {0};
 	usize num_common_msgs = 0;
 	int id;
-	usize role_no;
+	usize role_no = 0;
 
 	usize line_no = 0;
 

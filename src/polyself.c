@@ -342,10 +342,10 @@ void polyself(int psflags) {
 	} else if (draconian || iswere || isvamp) {
 		/* special changes that don't require polyok() */
 		if (draconian) {
-		do_merge:
+do_merge:
 			mntmp = armor_to_dragon(uarm->otyp);
 
-			if (!(mvitals[mntmp].mvflags & G_GENOD)) {
+			if (mntmp >= 0 && !(mvitals[mntmp].mvflags & G_GENOD)) {
 				/* Code that was here is now in merge_with_armor */
 				merge_with_armor();
 			}

@@ -764,7 +764,7 @@ not_special:
 		if (!mtmp->mpeaceful && is_mercenary(ptr)) minr = 1;
 
 		if ((likegold || likegems || likeobjs || likemagic || likerock || conceals) && (!*in_rooms(omx, omy, SHOPBASE) || (!rn2(25) && !mtmp->isshk))) {
-		look_for_obj:
+look_for_obj:
 			oomx = min(COLNO - 1, omx + minr);
 			oomy = min(ROWNO - 1, omy + minr);
 			lmx = max(1, omx - minr);

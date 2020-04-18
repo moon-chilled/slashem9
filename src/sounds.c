@@ -528,7 +528,7 @@ static int domonnoise(struct monst *mtmp) {
 					sprintf(verbuf, "%s! Your silver sheen does not frighten me!",
 						youmonst.data == &mons[PM_SILVER_DRAGON] ?
 							"Fool" :
-							"Young Fool");
+							"Young fool");
 					verbl_msg = verbuf;
 				} else {
 					vampindex = rn2(SIZE(vampmsg));
@@ -539,8 +539,9 @@ static int domonnoise(struct monst *mtmp) {
 						sprintf(verbuf, vampmsg[vampindex],
 							Upolyd ? an(mons[u.umonnum].mname) : an(racenoun));
 						verbl_msg = verbuf;
-					} else
+					} else {
 						verbl_msg = vampmsg[vampindex];
+					}
 				}
 			}
 		} break;

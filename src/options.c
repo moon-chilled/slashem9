@@ -959,7 +959,7 @@ static bool parse_extended_option(const char *str, char *option_name, char *opti
 
 	if (!str) return false;
 
-	strncpy(buf, str, BUFSZ);
+	strncpy(buf, str, BUFSZ - 1);
 
 	/* remove comment*/
 	cs = strrchr(buf, '#');

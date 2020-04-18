@@ -8,6 +8,8 @@
 
 * Bad strength display in tcc.  Bug in its vararg handling?
 
+* impossible: dmonsfree: 0 removed doesn't match 1 pending
+
 * Segfault w/tcc.  Can reproduce with bones file.  Stacktrace:
 #0  0x0000000000523c04 in sobj_at ()
 #1  0x000000000050ce67 in grow_herbs ()
