@@ -226,7 +226,6 @@ struct instance_flags {
 	int wc2_term_rows;	   /* terminal height, in characters */
 	int wc2_windowborders;	   /* display borders on NetHack windows */
 	int wc2_petattr;	   /* points to text attributes for pet */
-	bool wc2_guicolor;	   /* allow colors in GUI (outside map) */
 
 	bool cmdassist; /* provide detailed assistance for some commands */
 	bool clicklook;

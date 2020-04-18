@@ -648,6 +648,8 @@ void term_end_raw_bold(void) {
 }
 
 void term_start_bgcolor(int color) {
+	if (!iflags.wc_color) return;
+
 	if (allow_bgcolor) {
 		char tmp[8];
 		sprintf(tmp, "\033[%dm", ((color % 8) + 40));
@@ -658,11 +660,11 @@ void term_start_bgcolor(int color) {
 }
 
 void term_end_color(void) {
-	xputs(nh_HE);
+	if (iflags.wc_color) xputs(nh_HE);
 }
 
 void term_start_color(int color) {
-	xputs(hilites[color]);
+	if (iflags.wc_color) xputs(hilites[color]);
 }
 
 int has_color(int color) {

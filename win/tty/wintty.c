@@ -36,7 +36,7 @@ struct window_procs tty_procs = {
 	WC_MOUSE_SUPPORT |
 #endif
 		WC_COLOR | WC_HILITE_PET | WC_INVERSE,
-	0L,
+	0,
 	tty_init_nhwindows,
 	tty_player_selection,
 	tty_askname,

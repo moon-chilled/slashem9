@@ -56,7 +56,6 @@ static struct Bool_Opt {
 	{"female", &flags.female, false, DISP_IN_GAME},
 	{"fixinv", &flags.invlet_constant, true, SET_IN_GAME},
 	{"fullscreen", &iflags.wc2_fullscreen, false, SET_IN_FILE},
-	{"guicolor", &iflags.wc2_guicolor, true, SET_IN_GAME},
 	{"help", &flags.help, true, SET_IN_GAME},
 	{"hilite_pet", &iflags.wc_hilite_pet, true, SET_IN_GAME},		    /*WC*/
 	{"hilite_hidden_stairs", &iflags.hilite_hidden_stairs, true, SET_IN_GAME}, /*WC*/
@@ -2282,8 +2281,7 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 				}
 			} else if ((boolopt[i].addr) == &iflags.use_inverse ||
 				   (boolopt[i].addr) == &iflags.showrace ||
-				   (boolopt[i].addr) == &iflags.hilite_pet ||
-				   (boolopt[i].addr) == &iflags.wc2_guicolor) {
+				   (boolopt[i].addr) == &iflags.hilite_pet) {
 				need_redraw = true;
 			} else if ((boolopt[i].addr) == &iflags.use_color) {
 				need_redraw = true;
@@ -3739,7 +3737,6 @@ struct wc_Opt wc2_options[] = {
 	{"term_rows", WC2_TERM_ROWS},
 	{"windowborders", WC2_WINDOWBORDERS},
 	{"petattr", WC2_PETATTR},
-	{"guicolor", WC2_GUICOLOR},
 	{NULL, 0L}};
 
 /*

@@ -830,8 +830,6 @@ void curses_init_options() {
 					 WC_HILITE_PET | WC_POPUP_DIALOG,
 				 SET_IN_GAME);
 
-	set_wc2_option_mod_status(WC2_GUICOLOR, SET_IN_GAME);
-
 	/* Add those that are */
 	set_option_mod_status("classic_status", SET_IN_GAME);
 

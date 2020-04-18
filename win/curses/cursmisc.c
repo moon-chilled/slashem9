@@ -70,13 +70,8 @@ int curses_read_char() {
 void curses_toggle_color_attr(WINDOW *win, int color, int attr, int onoff) {
 	int curses_color;
 
-	/* Map color disabled */
-	if ((!iflags.wc_color) && (win == mapwin)) {
-		return;
-	}
-
-	/* GUI color disabled */
-	if ((!iflags.wc2_guicolor) && (win != mapwin)) {
+	/* color disabled */
+	if (!iflags.wc_color) {
 		return;
 	}
 

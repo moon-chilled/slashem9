@@ -80,11 +80,6 @@ OPTIONS=splash_screen
 # Attributes may be one or more of: Bold, Inverse, Underline, blinK,
 # iTalic, Rightline, or Leftline.  The default is underline.
 OPTIONS=petattr:u
-#
-# Controls whether color and attributes are used for menu headers,
-# window borders, message text, etc.  This is separate from the color
-# option, which only controls the color of the map itself.
-OPTIONS=guicolor
 
 # *** Personal Preferences ***
 # Some options to set personal preferences.  Uncomment and change these to
