@@ -2106,7 +2106,7 @@ static struct ext_func_tab debug_extcmdlist[] = {
 	{"levelport", "to trans-level teleport", wiz_level_tele, IFBURIED},
 	{"wish", "make wish", wiz_wish, IFBURIED},
 	{"where", "tell locations of special levels", wiz_where, IFBURIED},
-	{NULL, NULL, donull, IFBURIED},
+	{NULL, NULL, donull, IFBURIED}, // terminator
 };
 
 static void bind_key(unsigned char key, char *command) {
@@ -2276,23 +2276,16 @@ static void verify_key_list(void) {
  * debug_extcmdlist().
  */
 static void add_debug_extended_commands(void) {
-	int i, j, k, n;
+	int n;
 
 	/* count the # of help entries */
-	for (n = 0; extcmdlist[n].ef_txt; n++)
-		;
-	n--;  // n is index of the last entry
+	for (n = 0; extcmdlist[n].ef_txt; n++);
 
-	for (i = 0; debug_extcmdlist[i].ef_txt && j < SIZE(extcmdlist); i++) {
-		for (j = 0; j < n; j++)
-			if (strcmp(debug_extcmdlist[i].ef_txt, extcmdlist[j].ef_txt) < 0) break;
-
-		/* insert i'th debug entry into extcmdlist[j], pushing down  */
-		for (k = n; k >= j; --k)
-			extcmdlist[k + 1] = extcmdlist[k];
-		extcmdlist[j] = debug_extcmdlist[i];
-		n++; /* now an extra entry */
+	if (SIZE(extcmdlist) - n != SIZE(debug_extcmdlist)) {
+		impossible("extcmdlist has %d-%d=%d space left for debug entries, should be %d", SIZE(extcmdlist), n, SIZE(extcmdlist) - n, SIZE(debug_extcmdlist));
 	}
+
+	memcpy(&extcmdlist[n], debug_extcmdlist, sizeof(extcmdlist[0]) * (SIZE(debug_extcmdlist)-1));
 }
 
 /* list all keys and their bindings, like dat/hh but dynamic */
