@@ -338,7 +338,7 @@ nhstr bot2str(void) {
 
 	if (iflags.showrealtime) {
 		time_t currenttime = get_realtime();
-		nhscatf(ret, " RT:%l:%22l", (long)(currenttime/3600), (long)((currenttime % 3600) / 60));
+		nhscatf(ret, " RT:%l:%2.2l", (long)(currenttime/3600), (long)((currenttime % 3600) / 60));
 	}
 
 	// just give a bit of breathing room

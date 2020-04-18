@@ -53,6 +53,9 @@ fi
 if [ x$NH_USE_LLDB != x ]; then
 	HACK="lldb $NH_LLDB_FLAGS $HACK"
 fi
+if [ x$NH_USE_RR != x ]; then
+	HACK="rr record $NH_RR_FLAGS $HACK"
+fi
 
 cd $HACKDIR
 exec env ASAN_OPTIONS=log_path=asan.log $HACK "$@"

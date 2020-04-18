@@ -5,6 +5,7 @@
 #include <ctype.h>
 
 #include "hack.h"
+#include "defer.h"
 #include "func_tab.h"
 /* #define DEBUG */ /* uncomment for debugging */
 
@@ -298,21 +299,21 @@ int doextlist(void) {
  */
 
 // here after # - now show pick-list of possible commands
-int extcmd_via_menu(void) {
+int extcmd_via_menu(void) {Deferral
 	const struct ext_func_tab *efp;
 	menu_item *pick_list = NULL;
 	winid win;
 	anything any;
 	const struct ext_func_tab *choices[MAX_EXT_CMD];
-	char buf[BUFSZ];
-	char cbuf[QBUFSZ / 2], prompt[QBUFSZ], fmtstr[20];
+	nhstr buf = new_nhs();
+	nhstr cbuf = new_nhs(), prompt = new_nhs(), fmtstr = new_nhs();
+	Defer({del_nhs(&buf); del_nhs(&cbuf); del_nhs(&prompt); del_nhs(&fmtstr);});
 	int i, n, nchoices, acount;
 	int ret, biggest;
 	int accelerator, prevaccelerator;
 	int matchlevel = 0;
 
 	ret = 0;
-	cbuf[0] = '\0';
 	biggest = 0;
 	while (!ret) {
 		i = n = 0;
@@ -320,17 +321,17 @@ int extcmd_via_menu(void) {
 		any.a_void = 0;
 		/* populate choices */
 		for (efp = extcmdlist; efp->ef_txt; efp++) {
-			if (!matchlevel || !strncmp(efp->ef_txt, cbuf, matchlevel)) {
+			if (!matchlevel || !strncmp(efp->ef_txt, nhs2cstr_tmp(cbuf), matchlevel)) {
 				choices[i++] = efp;
 				if ((int)strlen(efp->ef_desc) > biggest) {
 					biggest = strlen(efp->ef_desc);
-					sprintf(fmtstr, "%%-%ds", biggest + 15);
+					nhscopyf(&fmtstr, "%%-%is", biggest + 15);
 				}
 #ifdef DEBUG
 				if (i >= MAX_EXT_CMD - 2) {
 					impossible("Exceeded %d extended commands in doextcmd() menu",
 						   MAX_EXT_CMD - 2);
-					return 0;
+					Return 0;
 				}
 #endif
 			}
@@ -340,7 +341,7 @@ int extcmd_via_menu(void) {
 		/* if we're down to one, we have our selection so get out of here */
 		if (nchoices == 1) {
 			for (i = 0; extcmdlist[i].ef_txt != NULL; i++)
-				if (!strncmpi(extcmdlist[i].ef_txt, cbuf, matchlevel)) {
+				if (!strncmpi(extcmdlist[i].ef_txt, nhs2cstr_tmp(cbuf), matchlevel)) {
 					ret = i;
 					break;
 				}
@@ -357,34 +358,34 @@ int extcmd_via_menu(void) {
 			if (accelerator != prevaccelerator || nchoices < (ROWNO - 3)) {
 				if (acount) {
 					/* flush the extended commands for that letter already in buf */
-					sprintf(buf, fmtstr, prompt);
+					nhscopyf(&buf, nhs2cstr_tmp(fmtstr), prompt);
 					any.a_char = prevaccelerator;
 					add_menu(win, NO_GLYPH, &any, any.a_char, 0,
-						 ATR_NONE, buf, false);
+						 ATR_NONE, nhs2cstr_tmp(buf), false);
 					acount = 0;
 				}
 			}
 			prevaccelerator = accelerator;
 			if (!acount || nchoices < (ROWNO - 3)) {
-				sprintf(prompt, "%s [%s]", choices[i]->ef_txt,
+				nhscopyf(&prompt, "%S [%S]", choices[i]->ef_txt,
 					choices[i]->ef_desc);
 			} else if (acount == 1) {
-				sprintf(prompt, "%s or %s", choices[i - 1]->ef_txt,
+				nhscopyf(&prompt, "%S or %S", choices[i - 1]->ef_txt,
 					choices[i]->ef_txt);
 			} else {
-				strcat(prompt, " or ");
-				strcat(prompt, choices[i]->ef_txt);
+				nhscatz(&prompt, " or ");
+				nhscatz(&prompt, choices[i]->ef_txt);
 			}
 			++acount;
 		}
 		if (acount) {
 			/* flush buf */
-			sprintf(buf, fmtstr, prompt);
+			nhscopyf(&buf, nhs2cstr_tmp(fmtstr), prompt);
 			any.a_char = prevaccelerator;
-			add_menu(win, NO_GLYPH, &any, any.a_char, 0, ATR_NONE, buf, false);
+			add_menu(win, NO_GLYPH, &any, any.a_char, 0, ATR_NONE, nhs2cstr_tmp(buf), false);
 		}
-		sprintf(prompt, "Extended Command: %s", cbuf);
-		end_menu(win, prompt);
+		nhscopyf(&prompt, "Extended Command: %s", cbuf);
+		end_menu(win, nhs2cstr_tmp(*nhstrim(&prompt, QBUFSZ-1)));
 		n = select_menu(win, PICK_ONE, &pick_list);
 		destroy_nhwindow(win);
 		if (n == 1) {
@@ -396,8 +397,8 @@ int extcmd_via_menu(void) {
 #endif
 				ret = -1;
 			} else {
-				cbuf[matchlevel++] = pick_list[0].item.a_char;
-				cbuf[matchlevel] = '\0';
+				matchlevel++;
+				nhscatf(&cbuf, "%c", pick_list[0].item.a_char);
 				free(pick_list);
 			}
 		} else {
@@ -408,7 +409,7 @@ int extcmd_via_menu(void) {
 				ret = -1;
 		}
 	}
-	return ret;
+	Return ret;
 }
 #endif
 

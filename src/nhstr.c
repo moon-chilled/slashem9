@@ -88,14 +88,25 @@ nhstr *nhscatfc_v(nhstr *str, int colour, const char *cat, va_list the_args) {
 			bool should_destroy = false;
 			if (cat[i] == '/') { should_destroy = true; i++; }
 
+			bool left_justify = false; // currently only supported for s
+			if (cat[i] == '-') { left_justify = true; i++; }
+
 			int num1 = -1, num2 = -1; // currently only supported for %l,u,i
-			if ('0' <= cat[i] && cat[i] <= '9') { num1 = cat[i] - '0'; i++; }
-			if ('0' <= cat[i] && cat[i] <= '9') { num2 = cat[i] - '0'; i++; }
+			if (digit(cat[i])) { num1 = 0; while (digit(cat[i])) { num1 *= 10; num1 += cat[i] - '0'; i++; } }
+			if (cat[i] == '.' && digit(cat[i+1])) {
+				i++;
+				num2 = 0;
+				while ('0' <= cat[i] && cat[i] <= '9') { num2 *= 10; num2 = cat[i] - '0'; i++; }
+			}
 
 			switch (cat[i]) {
 				case 's': {
 					nhstr s = va_arg(the_args, nhstr);
 					nhscat(str, s);
+					if (left_justify && num1 > (int)s.len) {
+						for (int i = 0; i < ((int)s.len) - num1; i++) nhscatz(str, " ");
+					}
+
 					if (should_destroy) del_nhs(&s);
 					break;
 				}
@@ -149,6 +160,7 @@ nhstr *nhscatfc_v(nhstr *str, int colour, const char *cat, va_list the_args) {
 					break;
 				// bad format
 				default:
+					impossible("bad string format '%c'", cat[i]);
 					nhscatzc(str, "%", colour);
 					nhscatznc(str, cat + i, 1, colour);
 			}
@@ -221,11 +233,25 @@ nhstr nhsfmt(const char *fmt, ...) {
 	return tmp;
 }
 
+usize utf8len(const nhstr str) {
+	usize ret = 0;
+	for (usize i = 0; i < str.len; i++) {
+		ret += strlen(utf8_tmpstr(str.str[i]));
+	}
+
+	return ret;
+}
+
 // does utf-8 conversion
 char *nhs2cstr_tmp(const nhstr str) {
-	static char ret[BUFSZ];
-	ret[0] = 0;
+	static char *ret = NULL;
+	static usize retlen = 0;
 
+	if (retlen <= utf8len(str)) {
+		ret = realloc(ret, retlen = (utf8len(str)+1));
+	}
+
+	ret[0] = 0;
 	for (usize i = 0; i < str.len; i++) {
 		strcat(ret, utf8_tmpstr(str.str[i]));
 	}
@@ -235,13 +261,18 @@ char *nhs2cstr_tmp(const nhstr str) {
 
 // doesn't do unicode conversion
 char *nhs2cstr_trunc_tmp(const nhstr str) {
-	static char ret[BUFSZ];
+	static char *ret = NULL;
+	static usize retlen = 0;
+
+	if (retlen <= str.len) {
+		ret = realloc(ret, retlen = (str.len+1));
+	}
 
 	usize i;
 	for (i = 0; i < str.len; i++) {
 		ret[i] = str.str[i];
 	}
-	ret[i + 1] = 0;
+	ret[str.len] = 0;
 
 	return ret;
 }

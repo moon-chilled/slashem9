@@ -8,8 +8,6 @@
 
 * Wizmode-teleported on top of hole in castle, and got a segfault in hack.c:1858 (if ((mtmp = m_at(u.ux, u.uy)) && !u.uswallow)).  Debugger was useless and couldn't repro.
 
-* Crash in dofire() where it apparently gets down to throw_obj() and uquiver is null at that point.
-
 * Bad strength display in tcc.  Bug in its vararg handling?
 
 * Segfault w/tcc.  Can reproduce with bones file.  Stacktrace:
@@ -18,3 +16,29 @@
 #2  0x000000000050e30f in dgn_growths ()
 #3  0x0000000000427959 in moveloop ()
 #4  0x000000000075d50d in main ()
+
+Memory leaks:
+Direct leak of 24 byte(s) in 1 object(s) allocated from:
+    #0 0x7f73c9247d48 in __interceptor_calloc /build/gcc/src/gcc/libsanitizer/asan/asan_malloc_linux.cc:153
+    #1 0x556e5f47624d in alloc src/alloc.c:12
+    #2 0x556e5f8b6f56 in extend_bill src/shk.c:2163
+    #3 0x556e5f8b8111 in addtobill src/shk.c:2285
+    #4 0x556e5f7e6c0f in pick_obj src/pickup.c:1187
+    #5 0x556e5f7e6719 in pickup_object src/pickup.c:1158
+    #6 0x556e5f7e0169 in pickup src/pickup.c:412
+    #7 0x556e5f633596 in dopickup src/hack.c:2246
+    #8 0x556e5f4e854a in rhack src/cmd.c:3139
+    #9 0x556e5f474835 in moveloop src/allmain.c:517
+    #10 0x556e5fa50d2c in main sys/unix/unixmain.c:229
+    #11 0x7f73c8f27022 in __libc_start_main (/usr/lib/libc.so.6+0x27022)
+
+Direct leak of 16 byte(s) in 1 object(s) allocated from:
+    #0 0x7f73c9247d48 in __interceptor_calloc /build/gcc/src/gcc/libsanitizer/asan/asan_malloc_linux.cc:153
+    #1 0x556e5f47624d in alloc src/alloc.c:12
+    #2 0x556e5fa92283 in tty_select_menu win/tty/wintty.c:2255
+    #3 0x556e5f8b259b in shk_other_services src/shk.c:1598
+    #4 0x556e5f8af83d in dopay src/shk.c:1329
+    #5 0x556e5f4e854a in rhack src/cmd.c:3139
+    #6 0x556e5f474835 in moveloop src/allmain.c:517
+    #7 0x556e5fa50d2c in main sys/unix/unixmain.c:229
+    #8 0x7f73c8f27022 in __libc_start_main (/usr/lib/libc.so.6+0x27022)

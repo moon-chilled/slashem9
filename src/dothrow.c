@@ -350,6 +350,7 @@ int dofire(void) {
 			return result;
 		}
 	}
+
 	result = (throw_obj(uquiver, shotlimit, THROW_UWEP));
 
 	return result;

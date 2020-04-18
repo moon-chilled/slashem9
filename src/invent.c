@@ -8,7 +8,7 @@
 #define CONTAINED_SYM '>' /* designator for inside a container */
 
 static void reorder_invent(void);
-static boolean mergable(struct obj *, struct obj *);
+static bool mergable(struct obj *, struct obj *);
 static void invdisp_nothing(const char *, const char *);
 static bool worn_wield_only(struct obj *);
 static bool only_here(struct obj *);
@@ -2270,8 +2270,10 @@ void stackobj(struct obj *obj) {
 }
 
 // returns true if obj  & otmp can be merged
-static boolean mergable(struct obj *otmp, struct obj *obj) {
-	if (obj->otyp != otmp->otyp) return false;
+static bool mergable(struct obj *otmp, struct obj *obj) {
+	// can't merge an object with itself
+	if (otmp == obj || obj->otyp != otmp->otyp) return false;
+
 	/* coins of the same kind will always merge */
 	if (obj->oclass == COIN_CLASS) return true;
 
@@ -2595,7 +2597,10 @@ int doorganize(void) {
 	char let;
 	char alphabet[52 + 1], buf[52 + 1];
 	char qbuf[QBUFSZ];
-	char allowall[3]; // {ALLOW_COUNT, ALL_CLASSES, 0}
+	// everything except coins
+	char allowall[] = {ALLOW_COUNT, WEAPON_CLASS, ARMOR_CLASS, RING_CLASS, AMULET_CLASS, TOOL_CLASS, FOOD_CLASS, POTION_CLASS, SCROLL_CLASS, SPBOOK_CLASS, WAND_CLASS, GEM_CLASS, ROCK_CLASS, BALL_CLASS, CHAIN_CLASS, VENOM_CLASS, 0};
+
+
 	const char *adj_type;
 
 	if (!invent) {
@@ -2605,9 +2610,6 @@ int doorganize(void) {
 
 	if (!flags.invlet_constant) reassign();
 	// get object the user wants to organize (the 'from' slot)
-	allowall[0] = ALLOW_COUNT;
-	allowall[1] = ALL_CLASSES;
-	allowall[2] = '\0';
 	if (!(obj = getobj(allowall, "adjust"))) return 0;
 
 	// figure out whether user gave a split count to getobj()
