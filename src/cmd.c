@@ -2887,8 +2887,10 @@ char randomkey(void) {
 				// randomly select a cmd; if it's prayer, accept it only with 1% probability
 				uchar k;
 				if (cmdlist[k = rn2(255)].bind_cmd) {
-					if (cmdlist[k].bind_cmd->ef_funct == dopray) {
-						if (!rn2(100)) {
+					// prayer tends to summon a bunch of couatls which get in the way
+					// bot tends to get stuck in extcmd lists and those don't matter particularly
+					if (cmdlist[k].bind_cmd->ef_funct == dopray || cmdlist[k].bind_cmd->ef_funct == extcmd_via_menu) {
+						if (!rn2(800)) {
 							continue;
 						}
 					}

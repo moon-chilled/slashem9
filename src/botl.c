@@ -193,7 +193,7 @@ static char *botl_player(void) {
 static nhstr botl_strength(void) {
 	if (ACURR(A_STR) > 18) {
 		if (ACURR(A_STR) > STR18(100)) {
-			return nhsfmt("Straightup %2i", ACURR(A_STR) - 100);
+			return nhsfmt("%2i", ACURR(A_STR) - 100);
 		} else if (ACURR(A_STR) < STR18(100)) {
 			//TODO: extend nhsfmt
 			static char buf[BUFSZ];
