@@ -4,8 +4,6 @@
 
 * Make overview/wizardmode levport show nicer names for special levels ('Storage Room' instead of 'stor', 'The Guild of Disgruntled Adventurers' instead of 'guild', etc.)
 
-* ? on #adjust doesn't work properly
-
 * Wizmode-teleported on top of hole in castle, and got a segfault in hack.c:1858 (if ((mtmp = m_at(u.ux, u.uy)) && !u.uswallow)).  Debugger was useless and couldn't repro.
 
 * Bad strength display in tcc.  Bug in its vararg handling?
