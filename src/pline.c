@@ -68,7 +68,7 @@ static void vpline(const char *line, va_list the_args) {
 	if (program_state.wizkit_wishing) return;
 
 	if (index(line, '%')) {
-		vsprintf(pbuf, line, VA_ARGS);
+		vsnprintf(pbuf, sizeof(pbuf), line, VA_ARGS);
 		line = pbuf;
 	}
 
@@ -169,7 +169,7 @@ static void vraw_printf(const char *line, va_list the_args) {
 		raw_print(line);
 	} else {
 		char pbuf[BUFSZ];
-		vsprintf(pbuf, line, VA_ARGS);
+		vsnprintf(pbuf, sizeof(pbuf), line, VA_ARGS);
 		raw_print(pbuf);
 	}
 }
@@ -181,7 +181,7 @@ void impossible(const char *s, ...) {
 	program_state.in_impossible = 1;
 	{
 		char pbuf[BUFSZ];
-		vsprintf(pbuf, s, VA_ARGS);
+		vsnprintf(pbuf, sizeof(pbuf), s, VA_ARGS);
 		paniclog("impossible", pbuf);
 		if (iflags.debug_fuzzer) {
 			panic("%s", pbuf);

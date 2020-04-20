@@ -465,35 +465,69 @@ static void nmcpy(char *dest, const char *src, int maxlen) {
 }
 
 /*
- * escapes: escape expansion for showsyms. C-style escapes understood include
- * \n, \b, \t, \r, \xnnn (hex), \onnn (octal), \nnn (decimal). The ^-prefix
- * for control characters is also understood, and \[mM] followed by any of the
- * previous forms or by a character has the effect of 'meta'-ing the value (so
- * that the alternate character set will be enabled).
- */
+ * escapes(): escape expansion for showsyms.  C-style escapes understood
+ * include \n, \b, \t, \r, \xnnn (hex), \onnn (octal), \nnn (decimal).
+ * (Note: unlike in C, leading digit 0 is not used to indicate octal;
+ * the letter o (either upper or lower case) is used for that.
+ * The ^-prefix for control characters is also understood, and \[mM]
+ * has the effect of 'meta'-ing the value which follows (so that the
+ * alternate character set will be enabled).
+ *
+ * X     normal key X
+ * ^X    control-X
+ * \mX   meta-X
+ *
+ * For 3.4.3 and earlier, input ending with "\M", backslash, or caret
+ * prior to terminating '\0' would pull that '\0' into the output and then
+ * keep processing past it, potentially overflowing the output buffer.
+ * Now, trailing \ or ^ will act like \\ or \^ and add '\\' or '^' to the
+ * output and stop there; trailing \M will fall through to \<other> and
+ * yield 'M', then stop.  Any \X or \O followed by something other than
+ * an appropriate digit will also fall through to \<other> and yield 'X'
+ * or 'O', plus stop if the non-digit is end-of-string.
+  */
+
+// cp might be tp; updating in place
+// tp is never longer than cp
 static void escapes(const char *cp, char *tp) {
+	static const char oct[] = "01234567", dec[] = "0123456789",
+			  hex[] = "00112233445566778899aAbBcCdDeEfF";
+	const char *dp;
+	int cval, meta, dcount;
+
 	while (*cp) {
-		int cval = 0, meta = 0;
-
-		if (*cp == '\\' && index("mM", cp[1])) {
-			meta = 1;
+		/* \M has to be followed by something to do meta conversion,
+		   otherwise it will just be \M which ultimately yields 'M' */
+		meta = (*cp == '\\' && (cp[1] == 'm' || cp[1] == 'M') && cp[2]);
+		if (meta)
 			cp += 2;
-		}
-		if (*cp == '\\' && index("0123456789xXoO", cp[1])) {
-			const char *dp, *hex = "00112233445566778899aAbBcCdDeEfF";
-			int dcount = 0;
+		cval = dcount = 0; /* for decimal, octal, hexadecimal cases */
+		if ((*cp != '\\' && *cp != '^') || !cp[1]) {
+			// simple character, or nothing left for \ or ^ to escape
+			cval = *cp++;
+		} else if (*cp == '^') { // expand control-character syntax
+			cval = (*++cp & 0x1f);
+			++cp;
 
-			cp++;
-			if (*cp == 'x' || *cp == 'X')
-				for (++cp; (dp = index(hex, *cp)) && (dcount++ < 2); cp++)
-					cval = (cval * 16) + (dp - hex) / 2;
-			else if (*cp == 'o' || *cp == 'O')
-				for (++cp; (index("01234567", *cp)) && (dcount++ < 3); cp++)
-					cval = (cval * 8) + (*cp - '0');
-			else
-				for (; (index("0123456789", *cp)) && (dcount++ < 3); cp++)
-					cval = (cval * 10) + (*cp - '0');
-		} else if (*cp == '\\') { /* C-style character escapes */
+			// remaining cases are all for backslash; we know cp[1] is not \0
+		} else if (index(dec, cp[1])) {
+			++cp; // move past backslash to first digit
+			do {
+				cval = (cval * 10) + (*cp - '0');
+			} while (*++cp && index(dec, *cp) && ++dcount < 3);
+		} else if ((cp[1] == 'o' || cp[1] == 'O') && cp[2]
+				&& index(oct, cp[2])) {
+			cp += 2; // move past backslash and 'O'
+			do {
+				cval = (cval * 8) + (*cp - '0');
+			} while (*++cp && index(oct, *cp) && ++dcount < 3);
+		} else if ((cp[1] == 'x' || cp[1] == 'X') && cp[2]
+				&& (dp = index(hex, cp[2])) != 0) {
+			cp += 2; // move past backslash and 'X'
+			do {
+				cval = (cval * 16) + ((int) (dp - hex) / 2);
+			} while (*++cp && (dp = index(hex, *cp)) != 0 && ++dcount < 2);
+		} else { // C-style character escapes
 			switch (*++cp) {
 				case '\\':
 					cval = '\\';
@@ -513,16 +547,14 @@ static void escapes(const char *cp, char *tp) {
 				default:
 					cval = *cp;
 			}
-			cp++;
-		} else if (*cp == '^') { /* expand control-character syntax */
-			cval = (*++cp & 0x1f);
-			cp++;
-		} else
-			cval = *cp++;
+			++cp;
+		}
+
 		if (meta)
 			cval |= 0x80;
-		*tp++ = cval;
+		*tp++ = (char)cval;
 	}
+
 	*tp = '\0';
 }
 
@@ -2079,7 +2111,7 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 	fullname = "term_cols";
 	if (match_optname(opts, fullname, sizeof("term_cols") - 1, true)) {
 		op = string_for_opt(opts, negated);
-		iflags.wc2_term_cols = atoi(op);
+		iflags.wc2_term_cols = op ? atoi(op) : 0;
 		if (negated) bad_negation(fullname, false);
 		return;
 	}
@@ -2089,7 +2121,7 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 	fullname = "term_rows";
 	if (match_optname(opts, fullname, sizeof("term_rows") - 1, true)) {
 		op = string_for_opt(opts, negated);
-		iflags.wc2_term_rows = atoi(op);
+		iflags.wc2_term_rows = op ? atoi(op) : 0;
 		if (negated) bad_negation(fullname, false);
 		return;
 	}

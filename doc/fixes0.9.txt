@@ -240,3 +240,4 @@ Imports from other locations:
 - Bugfix: flying character was marked as teetering on the edge of a pit (ToxicFrog).
 - Bugfix: properly get message box width in curses (ToxicFrog).
 - Bugfix: properly refresh message window after a --More-- (or >>) prompt in curses (ToxicFrog).
+- Bugfix: fix several severe vulnerabilities (David Mendenhall).
