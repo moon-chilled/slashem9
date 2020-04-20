@@ -1980,7 +1980,7 @@ struct permonst *grow_up(struct monst *mtmp, struct monst *victim) {
 	if ((int)++mtmp->m_lev >= mons[newtype].mlevel && newtype != oldtype) {
 		ptr = &mons[newtype];
 		if (mvitals[newtype].mvflags & G_GENOD) { /* allow G_EXTINCT */
-			if (sensemon(mtmp))
+			if (canspotmon(mtmp))
 				pline("As %s grows up into %s, %s %s!", mon_nam(mtmp),
 				      an(ptr->mname), mhe(mtmp),
 				      nonliving(ptr) ? "expires" : "dies");
