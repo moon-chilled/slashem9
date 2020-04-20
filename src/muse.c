@@ -1718,10 +1718,10 @@ boolean find_misc(struct monst *mtmp) {
 #define nomore(x) \
 	if (m.has_misc == x) continue;
 	for (obj = mtmp->minvent; obj; obj = obj->nobj) {
-		/* Monsters shouldn't recognize cursed items; this kludge is */
-		/* necessary to prevent serious problems though... */
-		if (obj->otyp == POT_GAIN_LEVEL && (!obj->cursed ||
-						    (!mtmp->isgd && !mtmp->isshk && !mtmp->ispriest))) {
+		/* Non-smart monsters shouldn't recognize cursed items; this */
+		/* kludge is necessary to prevent serious problems though... */
+		if (obj->otyp == POT_GAIN_LEVEL &&
+		    (!obj->cursed || (!mtmp->isgd && !mtmp->isshk && !mtmp->ispriest && (!(mtmp->data->mflags3 & M3_SMART) || mtmp->mflee)))) {
 			m.misc = obj;
 			m.has_misc = MUSE_POT_GAIN_LEVEL;
 		}
@@ -1806,6 +1806,14 @@ int use_misc(struct monst *mtmp) {
 
 	switch (m.has_misc) {
 		case MUSE_POT_GAIN_LEVEL:
+			if (mtmp->data->mflags3 & M3_SMART && mvitals[little_to_big(monsndx(mtmp->data))].mvflags & G_GONE && !otmp->cursed) {
+				pline("%s discards %s useless %s.", Monnam(mtmp), mhis(mtmp), xname(otmp));
+				obj_extract_self(otmp);
+				mdrop_obj(mtmp, otmp, false);
+
+				return 1;
+			}
+
 			mquaffmsg(mtmp, otmp);
 			if (otmp->cursed) {
 				if (Can_rise_up(mtmp->mx, mtmp->my, &u.uz)) {
@@ -1826,7 +1834,7 @@ int use_misc(struct monst *mtmp) {
 							 MIGR_RANDOM, NULL);
 					return 2;
 				} else {
-				skipmsg:
+skipmsg:
 					if (vismon) {
 						pline("%s looks uneasy.", Monnam(mtmp));
 						if (!objects[POT_GAIN_LEVEL].oc_name_known && !objects[POT_GAIN_LEVEL].oc_uname)
@@ -2078,6 +2086,15 @@ boolean searches_for_item(struct monst *mon, struct obj *obj) {
 		case POTION_CLASS:
 			if (typ == POT_VAMPIRE_BLOOD)
 				return is_vampire(mon->data);
+
+			// Smart monster won't pick up pot of gain level if it
+			// would grow up into a geno'd monster, but cursed ones
+			// are fine for escaping.
+			if (typ == POT_GAIN_LEVEL && mon->data->mflags3&M3_SMART
+			    && mvitals[little_to_big(monsndx(mon->data))].mvflags & G_GONE
+			    && !obj->cursed)
+				return false;
+
 			if (typ == POT_HEALING ||
 			    typ == POT_EXTRA_HEALING ||
 			    typ == POT_FULL_HEALING ||
@@ -2089,6 +2106,7 @@ boolean searches_for_item(struct monst *mon, struct obj *obj) {
 			    typ == POT_CONFUSION ||
 			    typ == POT_AMNESIA)
 				return true;
+
 			if (typ == POT_BLINDNESS && !attacktype(mon->data, AT_GAZE))
 				return true;
 			break;

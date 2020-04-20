@@ -1127,7 +1127,7 @@ char *yobjnam(struct obj *obj, const char *verb) {
 }
 
 /* combine Yname2 and aobjnam eg "Your count cxname(otmp)" */
-char * Yobjnam2(struct obj *obj, const char *verb) {
+char *Yobjnam2(struct obj *obj, const char *verb) {
 	char *s = yobjnam(obj,verb);
 
 	*s = highc(*s);

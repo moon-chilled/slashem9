@@ -7,7 +7,6 @@
 static int stealarm(void);
 
 static const char *equipname(struct obj *);
-static void mdrop_obj(struct monst *, struct obj *, boolean);
 
 static const char *equipname(struct obj *otmp) {
 	return ((otmp == uarmu) ? "shirt" :
@@ -446,7 +445,7 @@ void stealamulet(struct monst *mtmp) {
 }
 
 /* drop one object taken from a (possibly dead) monster's inventory */
-static void mdrop_obj(struct monst *mon, struct obj *obj, boolean verbosely) {
+void mdrop_obj(struct monst *mon, struct obj *obj, bool verbosely) {
 	int omx = mon->mx, omy = mon->my;
 
 	if (obj->owornmask) {
