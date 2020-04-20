@@ -981,6 +981,7 @@ static void cpostfx(int pm) {
 		case PM_SMALL_MIMIC:
 			tmp += 20;
 			if (youmonst.data->mlet != S_MIMIC && !Unchanging) {
+				u.uconduct.polyselfs++;	// 'change form'
 				char buf[BUFSZ];
 				pline("You can't resist the temptation to mimic %s.",
 				      Hallucination ? "an orange" : "a pile of gold");

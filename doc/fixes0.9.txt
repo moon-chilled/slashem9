@@ -205,6 +205,7 @@ Imports from NetHack version 3.6:
 - Bugfix: ';' would sometimes display both 'normal vision' and 'astral vision'.
 - Gameplay: fire/frost brand have a chance to boil or freeze water they come into contact with, avoiding erosion.
 - Interface: <esc> at direction prompt clears message window.
+- Interface: break polyselfless conduct when eating a mimc corpse and changing form, or when dying by sliming.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).

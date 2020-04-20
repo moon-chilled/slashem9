@@ -237,6 +237,7 @@ void nh_timeout(void) {
 						killer.format = NO_KILLER_PREFIX;
 						nhscopyz(&killer.name, "turned into green slime");
 					}
+					u.uconduct.polyselfs++; // 'change form'
 					dealloc_killer(kptr);
 					done(TURNED_SLIME);
 					break;
