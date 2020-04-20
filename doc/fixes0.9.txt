@@ -51,7 +51,7 @@ Changelist for slashem9 v0.9:
 - Gameplay: metallic objects have a 10% chance to be destroyed by lava.
 - Bugfix: removing a ring of protection would make a ring of protection from shape changers stop working.
 - Interface: bump chance of getting the message 'yo' mama -- core dumped' from 1% to 2%.
-- Bugfix: monster attacking another monster with a draining attack could blind it too.
+- Bugfix: monster attacking another monster with a draining attack could blind it, too.
 - Interface: nicer messages when attaching candles to the candelabrum of invocation.
 - Interface: no more VIDEOSHADES.
 - Gameplay: pits cannot be poisoned until dlvl 8-10 (randomly decided for each game).  Player gets a notification when they enter the first level with poisoned pits.
