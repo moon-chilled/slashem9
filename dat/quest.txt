@@ -3382,7 +3382,7 @@ Things appear to have become so bad that you fear that soon
 %Cc Tou 00015
 "Is it really you, %p!  I had given up hope for your return.
 As you can %x, we are desperately in need of your talents.  Someone must
-defeat %n if our town is become what it once was.
+defeat %n if our town is to become what it once was.
 
 "Let me see if you are ready to be that someone."
 %E
