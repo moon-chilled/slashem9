@@ -27,29 +27,31 @@ struct attack *attacktype_fordmg(struct permonst *ptr, int atyp, int dtyp) {
 	return NULL;
 }
 
-boolean attacktype(struct permonst *ptr, int atyp) {
-	return attacktype_fordmg(ptr, atyp, AD_ANY) ? true : false;
+bool attacktype(struct permonst *ptr, int atyp) {
+	return attacktype_fordmg(ptr, atyp, AD_ANY);
 }
 
-boolean poly_when_stoned(struct permonst *ptr) {
+bool poly_when_stoned(struct permonst *ptr) {
 	return is_golem(ptr) && ptr != &mons[PM_STONE_GOLEM] &&
 	       !(mvitals[PM_STONE_GOLEM].mvflags & G_GENOD);
 	/* allow G_EXTINCT */
 }
 
 /* returns true if monster is drain-life resistant */
-boolean resists_drli(struct monst *mon) {
+bool resists_drli(struct monst *mon) {
 	struct permonst *ptr = mon->data;
 	struct obj *wep = ((mon == &youmonst) ? uwep : MON_WEP(mon));
 
 	return is_undead(ptr) || is_demon(ptr) || is_were(ptr) ||
+	       // is_were() doesn't handle hero in human form
+	       (mon == &youmonst && u.ulycn >= LOW_PM) ||
 	       ptr == &mons[PM_DEATH] || is_golem(ptr) ||
 	       resists_drain(mon) || is_vampshifter(mon) ||
 	       (wep && wep->oartifact && defends(AD_DRLI, wep));
 }
 
 /* true if monster is magic-missile resistant */
-boolean resists_magm(struct monst *mon) {
+bool resists_magm(struct monst *mon) {
 	struct permonst *ptr = mon->data;
 	struct obj *o;
 
@@ -71,7 +73,7 @@ boolean resists_magm(struct monst *mon) {
 }
 
 /* true if monster is resistant to light-induced blindness */
-boolean resists_blnd(struct monst *mon) {
+bool resists_blnd(struct monst *mon) {
 	struct permonst *ptr = mon->data;
 	boolean is_you = (mon == &youmonst);
 	struct obj *o;
@@ -101,7 +103,7 @@ boolean resists_blnd(struct monst *mon) {
 /* Note: may return true when mdef is blind (e.g. new cream-pie attack) */
 // magr == NULL -> no specific aggressor
 // obj when aatyp == AT_WEAP, AT_SPIT */
-boolean can_blnd(struct monst *magr, struct monst *mdef, uchar aatyp, struct obj *obj) {
+bool can_blnd(struct monst *magr, struct monst *mdef, uchar aatyp, struct obj *obj) {
 	boolean is_you = (mdef == &youmonst);
 	boolean check_visor = false;
 	struct obj *o;
@@ -183,7 +185,7 @@ boolean can_blnd(struct monst *magr, struct monst *mdef, uchar aatyp, struct obj
 }
 
 /* returns true if monster can attack at range */
-boolean ranged_attk(struct permonst *ptr) {
+bool ranged_attk(struct permonst *ptr) {
 	int i, atyp;
 	long atk_mask = (1L << AT_BREA) | (1L << AT_SPIT) | (1L << AT_GAZE);
 
@@ -203,7 +205,7 @@ boolean ranged_attk(struct permonst *ptr) {
 }
 
 /* true iff the type of monster pass through iron bars */
-boolean passes_bars(struct permonst *mptr) {
+bool passes_bars(struct permonst *mptr) {
 	return passes_walls(mptr) || amorphous(mptr) ||
 	       is_whirly(mptr) || verysmall(mptr) ||
 	       (slithy(mptr) && !bigmonst(mptr));
@@ -220,7 +222,7 @@ bool can_blow(struct monst *mtmp) {
 }
 
 /* returns true if monster can track well */
-boolean can_track(struct permonst *ptr) {
+bool can_track(struct permonst *ptr) {
 	if (uwep && uwep->oartifact == ART_EXCALIBUR)
 		return true;
 	else
@@ -228,12 +230,12 @@ boolean can_track(struct permonst *ptr) {
 }
 
 /* creature will slide out of armor */
-boolean sliparm(struct permonst *ptr) {
+bool sliparm(struct permonst *ptr) {
 	return is_whirly(ptr) || ptr->msize <= MZ_SMALL || noncorporeal(ptr);
 }
 
 /* creature will break out of armor */
-boolean breakarm(struct permonst *ptr) {
+bool breakarm(struct permonst *ptr) {
 	return (bigmonst(ptr) || (ptr->msize > MZ_SMALL && !humanoid(ptr)) ||
 		/* special cases of humanoids that cannot wear body armor */
 		ptr == &mons[PM_MARILITH] || ptr == &mons[PM_WINGED_GARGOYLE]) &&
@@ -241,7 +243,7 @@ boolean breakarm(struct permonst *ptr) {
 }
 
 /* creature sticks other creatures it hits */
-boolean sticks(struct permonst *ptr) {
+bool sticks(struct permonst *ptr) {
 	return dmgtype(ptr, AD_STCK) || dmgtype(ptr, AD_WRAP) || attacktype(ptr, AT_HUGS);
 }
 

@@ -214,6 +214,7 @@ Imports from NetHack version 3.6:
 - Gameplay: don't get castle drawbridge code as a prayer reward if you've already entered gehenna.
 - Bugfix: Sunsword would continue to emit light after monster wielding it was killed.
 - Bugfix: game could crash if luck dropped below -1 during prayer.
+- Bugfix: lycanthropic player in human form would not resist drain life, unlike lycanthropic monster.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).
