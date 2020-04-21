@@ -781,8 +781,7 @@ schar acurr(int x) {
 		else
 			return (tmp >= 125) ? 125 : (tmp <= 3) ? 3 : tmp;
 	} else if (x == A_CHA) {
-		if (tmp < 18 && (youmonst.data->mlet == S_NYMPH ||
-				 u.umonnum == PM_SUCCUBUS || u.umonnum == PM_INCUBUS))
+		if (tmp < 18 && (youmonst.data->mlet == S_NYMPH || is_foocubus(&mons[u.umonnum])))
 			tmp = 18;
 		if (uarmh && uarmh->otyp == FEDORA) tmp += 1;
 		return (tmp >= 25) ? 25 : (tmp <= 3) ? 3 : tmp;

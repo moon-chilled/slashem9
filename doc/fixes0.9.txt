@@ -59,6 +59,7 @@ Changelist for slashem9 v0.9:
 - Gameplay: some smart monsters have more advanced AI.
 - Gameplay: weaken pudding farming by keeping cloned monsters from generating corpses or death drops.
 - Bugfix: paralyzed unicorns would catch thrown gems.
+- Bugfix: grammar: use 'thine' rather than 'thy' where appropriate.
 
 Imports from NetHack version 3.6:
 - Bugfix: acid dropping bug.
@@ -111,14 +112,13 @@ Imports from NetHack version 3.6:
 - Gameplay: pets will mimic if they eat a mimic corpse.
 - Gameplay: add a health food store, which contains exclusively vegetables.  It replaces the food store in minetown for monks.
 - Gameplay: certain monsters (currently only the three horseman) can move other monsters out of their way.
-- Bugfix: grammar fixes when applying stethoscope to inanimate corpses and statues.
+- Bugfix: miscellaneous grammar and spelling fixes.
 - Bugfix: trappers hid on the ceiling.
 - Bugfix: player hiding on ceiling did not drop to the floor when #sitting.
 - Bugfix: if a monster carrying a boulder was inside of a pit or a hole when killed, the boulder would fill the pit/hole but the monster's corpse would not be buried.
 - Gamplay: player in certain polyforms will be intrinsically warned of some monsters.
 - Bugfix: swamps on Juiblex's level were called 'moat' when frozen.
 - Bugfix: greased would slide, if kicked while on the planes of air or water.
-- Bugfix: grammar: use 'removing' rather than 'lifting' when asking player if they really want to remove heavy items from their bag of holding.
 - Bugfix: when a cursed scroll of destroy armor lowered the enchantment of e.g. gauntlets of dexterity or helm of brilliance, the associated attribute didn't also decrease.
 - Bugfix: if hitting a cockatrice with a mirror or expensive camera resulted in the object shattering, the player would be stoned.
 - Bugfix: if a blind levitating player attempted to go downstairs, they would be told they were floating above the stairs, even if they had never seen the stairs.
@@ -157,7 +157,6 @@ Imports from NetHack version 3.6:
 - Bugfix: shopkeepers would not always charge you for destroying their objects.
 - Bugfix: shopkeeper would sometimes charge you for only one broken object, even if you broke multiple.
 - Bugfix: crash when wizkit wishing for quest artifact.
-- Interface: add support for new alternate spellings when wishing for some objects.
 - Bugfix: prevent 'your steed is still eating' message when going through a magic portal.
 - Bugfix: player would see hallucinated form of blacklight when it exploded.
 - Interface: give feedback when blinded by stinking cloud.
@@ -201,7 +200,6 @@ Imports from NetHack version 3.6:
 - Bugfix: prevent possible segfault about swallowed hero and magic trap.
 - Internals: rennovate mextra to be a proper structure, which also stores mname.
 - Interface: fix incorrect alignment display of angels in some cases.
-- Bugfix: grammar: use 'thine' rather than 'thy' where appropriate.
 - Interface: Iu doesn't show price twice when player is only carrying one unpaid object.
 - Bugfix: player would feel, but not remember, certain traps.
 - Gameplay: when confused remove curse scroll scrambles an object's beatitude, player loses knowledge of said beatitude.
@@ -217,6 +215,7 @@ Imports from NetHack version 3.6:
 - Bugfix: game could crash if luck dropped below -1 during prayer.
 - Bugfix: lycanthropic player in human form would not resist drain life, unlike lycanthropic monster.
 - Bugfix: if a multiple boulders were at a location and one were removed, player would be able to see items that were previously blocked by the boulder.
+- Bugfix: incubi react to mirrors.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).

@@ -164,7 +164,7 @@ void change_sex(void) {
 	int new_monnum = u.umonnum;
 	if (!already_polyd) {
 		new_monnum = u.umonster;
-	} else if (u.umonnum == PM_SUCCUBUS || u.umonnum == PM_INCUBUS) {
+	} else if (is_foocubus(&mons[u.umonnum])) {
 		flags.female = !flags.female;
 		/* change monster type to match new sex */
 		new_monnum = (u.umonnum == PM_SUCCUBUS) ? PM_INCUBUS : PM_SUCCUBUS;
@@ -1403,7 +1403,7 @@ const char *mbodypart(struct monst *mon, int part) {
 		if (humanoid(mptr) && attacktype(mptr, AT_CLAW) &&
 		    !index(not_claws, mptr->mlet) &&
 		    mptr != &mons[PM_STONE_GOLEM] &&
-		    mptr != &mons[PM_INCUBUS] && mptr != &mons[PM_SUCCUBUS])
+		    !is_foocubus(mptr))
 			return part == HAND ? "claw" : "clawed";
 	}
 	if ((mptr == &mons[PM_MUMAK] || mptr == &mons[PM_MASTODON]) &&

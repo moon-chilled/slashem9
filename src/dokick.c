@@ -980,9 +980,7 @@ int dokick(void) {
 		}
 		if (IS_SINK(maploc->typ)) {
 			int gend = poly_gender();
-			short washerndx = (gend == 1 || (gend == 2 && rn2(2))) ?
-						  PM_INCUBUS :
-						  PM_SUCCUBUS;
+			short washerndx = (gend == 1 || (gend == 2 && rn2(2))) ?  PM_INCUBUS : PM_SUCCUBUS;
 
 			if (Levitation) goto dumb;
 			if (rn2(5)) {

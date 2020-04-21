@@ -1747,7 +1747,7 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 	if (need_three(mdef) && enchantlvl < 3) noeffect = true;
 	if (need_four(mdef) && enchantlvl < 4) noeffect = true;
 
-	if (is_demon(youmonst.data) && !rn2(13) && !uwep && u.umonnum != PM_SUCCUBUS && u.umonnum != PM_INCUBUS && u.umonnum != PM_BALROG) {
+	if (is_demon(youmonst.data) && !rn2(13) && !uwep && !is_foocubus(&mons[u.umonnum]) && u.umonnum != PM_BALROG) {
 		demonpet();
 		return 0;
 	}

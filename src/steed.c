@@ -74,7 +74,7 @@ int use_saddle(struct obj *otmp) {
 			instapetrify(kbuf);
 		}
 	}
-	if (ptr == &mons[PM_INCUBUS] || ptr == &mons[PM_SUCCUBUS]) {
+	if (is_foocubus(ptr)) {
 		pline("Shame on you!");
 		exercise(A_WIS, false);
 		return 1;

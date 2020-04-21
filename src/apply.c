@@ -500,14 +500,13 @@ got_target:
 	 * rejects all demons.  Our other alternative would
 	 * be to duplicate tamedog()'s functionality here.
 	 * Yuck.  So I've merged it into the nymph code below.
-	if (((mtmp->data == &mons[PM_SUCCUBUS]) || (mtmp->data == &mons[PM_INCUBUS]))
-	     && (!mtmp->mtame) && (spotmon) && (!mtmp->mleashed)) {
+	if (is_foocubus(mtmp->data) && (!mtmp->mtame) && (spotmon) && (!mtmp->mleashed)) {
 	       pline("%s smiles seductively at the sight of this prop!", Monnam(mtmp));
 	       mtmp->mtame = 10;
 	       mtmp->mpeaceful = 1;
 	       set_malign(mtmp);
 	}*/
-	if ((mtmp->data->mlet == S_NYMPH || mtmp->data == &mons[PM_SUCCUBUS] || mtmp->data == &mons[PM_INCUBUS]) && (spotmon) && (!mtmp->mleashed)) {
+	if ((mtmp->data->mlet == S_NYMPH || is_foocubus(mtmp->data)) && spotmon && !mtmp->mleashed) {
 		pline("%s looks shocked! \"I'm not that way!\"", Monnam(mtmp));
 		mtmp->mtame = 0;
 		mtmp->mpeaceful = 0;
@@ -554,8 +553,7 @@ got_target:
 		pline("You remove the leash from %s%s.",
 		      spotmon ? "your " : "", l_monnam(mtmp));
 		/* KMH, balance patch -- this is okay */
-		if ((mtmp->data == &mons[PM_SUCCUBUS]) ||
-		    (mtmp->data == &mons[PM_INCUBUS])) {
+		if (is_foocubus(mtmp->data)) {
 			pline("%s is infuriated!", Monnam(mtmp));
 			mtmp->mtame = 0;
 			mtmp->mpeaceful = 0;
@@ -805,38 +803,41 @@ static int use_mirror(struct obj *obj) {
 	boolean vis = !Blind && (!obj->oinvis || See_invisible);
 
 	if (!getdir(NULL)) return 0;
+	const char *mirror = simple_typename(obj->otyp); // 'mirror' or 'looking glass'
 	if (obj->cursed && !rn2(2)) {
 		if (vis)
-			pline("The mirror fogs up and doesn't reflect!");
+			pline("The %s fogs up and doesn't reflect!", mirror);
 		return 1;
 	}
 	if (!u.dx && !u.dy && !u.dz) {
 		if (vis && !Invisible) {
 			if (u.umonnum == PM_FLOATING_EYE) {
-				if (!Free_action) {
-					pline(Hallucination ?
-						      "Yow!  The mirror stares back!" :
-						      "Yikes!  You've frozen yourself!");
+				if (Free_action) {
+					pline("You stiffen momentarily under your gaze.");
+				} else {
+					if (Hallucination) pline("Yow!  The %s stares back!", mirror);
+					else pline("Yikes!  You've frozen yourself!");
+
 					nomul(-rnd((MAXULEV + 6) - u.ulevel));
 					nomovemsg = 0;
-				} else
-					pline("You stiffen momentarily under your gaze.");
-			} else if (is_vampire(youmonst.data) || is_vampshifter(&youmonst))
+				}
+			} else if (is_vampire(youmonst.data) || is_vampshifter(&youmonst)) {
 				pline("You don't have a reflection.");
-			else if (u.umonnum == PM_UMBER_HULK) {
+			} else if (u.umonnum == PM_UMBER_HULK) {
 				pline("Huh?  That doesn't look like you!");
 				make_confused(HConfusion + d(3, 4), false);
-			} else if (Hallucination)
+			} else if (Hallucination) {
 				pline("You look %s.", hcolor(NULL));
-			else if (Sick)
+			} else if (Sick) {
 				pline("You look peaked.");
-			else if (u.uhs >= WEAK)
+			} else if (u.uhs >= WEAK) {
 				pline("You look undernourished.");
-			else
+			} else {
 				pline("You look as %s as ever.",
 				      ACURR(A_CHA) > 14 ?
 					      (poly_gender() == 1 ? "beautiful" : "handsome") :
 					      "ugly");
+			}
 		} else {
 			pline("You can't see your %s %s.",
 			      ACURR(A_CHA) > 14 ?
@@ -875,14 +876,13 @@ static int use_mirror(struct obj *obj) {
 	mlet = mtmp->data->mlet;
 	if (mtmp->msleeping) {
 		if (vis)
-			pline("%s is too tired to look at your mirror.",
-			      Monnam(mtmp));
+			pline("%s is too tired to look at your %s.", Monnam(mtmp), mirror);
 	} else if (!mtmp->mcansee) {
 		if (vis)
 			pline("%s can't see anything right now.", Monnam(mtmp));
 	} else if (obj->oinvis && !perceives(mtmp->data)) {
 		if (vis)
-			pline("%s can't see your mirror.", Monnam(mtmp));
+			pline("%s can't see your %s.", Monnam(mtmp), mirror);
 		/* some monsters do special things */
 	} else if (is_vampire(mtmp->data) || is_vampshifter(mtmp) || mlet == S_GHOST) {
 		if (vis)
@@ -913,12 +913,13 @@ static int use_mirror(struct obj *obj) {
 		if (vis)
 			pline("%s confuses itself!", Monnam(mtmp));
 		mtmp->mconf = 1;
-	} else if (!mtmp->mcan && !mtmp->minvis && (mlet == S_NYMPH || mtmp->data == &mons[PM_SUCCUBUS])) {
+	} else if (!mtmp->mcan && !mtmp->minvis && (mlet == S_NYMPH || is_foocubus(mtmp->data))) {
 		if (vis) {
-			pline("%s admires herself in your mirror.", Monnam(mtmp));
-			pline("She takes it!");
-		} else
-			pline("It steals your mirror!");
+			pline("%s admires %sself in your %s.", Monnam(mtmp), mhis(mtmp), mirror);
+			pline("%s takes it!", upstart(mhe(mtmp)));
+		} else {
+			pline("It steals your %s!", mirror);
+		}
 		setnotworn(obj); /* in case mirror was wielded */
 		freeinv(obj);
 		mpickobj(mtmp, obj);

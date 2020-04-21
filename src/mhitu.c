@@ -542,7 +542,7 @@ int mattacku(struct monst *mtmp) {
 	}
 
 	/* Special demon handling code */
-	if (mtmp->cham == CHAM_ORDINARY && is_demon(mdat) && !range2 && mtmp->data != &mons[PM_BALROG] && mtmp->data != &mons[PM_SUCCUBUS] && mtmp->data != &mons[PM_INCUBUS])
+	if (mtmp->cham == CHAM_ORDINARY && is_demon(mdat) && !range2 && mtmp->data != &mons[PM_BALROG] && !is_foocubus(mtmp->data))
 		if (!mtmp->mcan && !rn2(13)) msummon(mtmp);
 
 	/* Special lycanthrope handling code */
@@ -2575,7 +2575,7 @@ int could_seduce(struct monst *magr, struct monst *mdef, struct attack *mattk) {
 	if (agrinvis && !defperc && mattk && mattk->adtyp != AD_SSEX)
 		return 0;
 
-	if (pagr->mlet != S_NYMPH && ((pagr != &mons[PM_INCUBUS] && pagr != &mons[PM_SUCCUBUS]) || (mattk && mattk->adtyp != AD_SSEX)))
+	if (pagr->mlet != S_NYMPH && ((!is_foocubus(pagr)) || (mattk && mattk->adtyp != AD_SSEX)))
 		return 0;
 
 	if (genagr == 1 - gendef)
