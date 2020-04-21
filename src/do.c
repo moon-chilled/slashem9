@@ -747,7 +747,7 @@ int dodown(void) {
 	}
 
 	if (trap)
-		pline("You %s %s.", locomotion(youmonst.data, "jump"),
+		pline("You %s %s.", Flying ? "fly" : locomotion(youmonst.data, "jump"),
 		      trap->ttyp == HOLE ? "down the hole" : "through the trap door");
 
 	if (trap && Is_stronghold(&u.uz)) {
@@ -865,6 +865,13 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 	boolean new = false; /* made a new level? */
 	struct monst *mtmp;
 	char whynot[BUFSZ];
+
+	// 'You descend/fly up/down the stairs' is common enough that you
+	// don't want to get a --More-- prompt every time it shows up, so
+	// print it after going through the stairs.
+	// (Going through a ladder is a rare enough occurance that taking
+	//  extra time about it is ok.)
+	nhstr deferred_msg = new_nhs();
 
 	if (dunlev(newlevel) > dunlevs_in_dungeon(newlevel))
 		newlevel->dlevel = dunlevs_in_dungeon(newlevel);
@@ -1060,12 +1067,19 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 				} else
 					u_on_dnstairs();
 			}
-			/* Remove bug which crashes with levitation/punishment  KAA */
-			if (Punished && !Levitation) {
-				pline("With great effort you climb the %s.",
-				      at_ladder ? "ladder" : "stairs");
-			} else if (at_ladder)
-				pline("You climb up the ladder.");
+			/* you climb up the {stairs|ladder};
+			   fly up the stairs; fly up along the ladder */
+			if (at_ladder) {
+				pline("%s %s %s the ladder.",
+						(Punished && !Levitation) ? "With great effort you" :
+						"You",
+						Flying ? "fly" : "climb",
+						Flying ? "up along" : "up");
+			} else {
+				nhscopyf(&deferred_msg, "%S %S up the stairs.",
+						(Punished && !Levitation) ? "With great effort you" : "You",
+						Flying ? "fly" : "climb");
+			}
 		} else { /* down */
 			if (at_ladder) {
 				u_on_newpos(xupladder, yupladder);
@@ -1075,11 +1089,14 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 				else
 					u_on_upstairs();
 			}
-			if (u.dz && Flying)
-				pline("You fly down along the %s.",
-				      at_ladder ? "ladder" : "stairs");
-			else if (u.dz &&
-				 (near_capacity() > UNENCUMBERED || Punished || Fumbling)) {
+			if (!u.dz) {
+				;   /* stayed on same level? (no transit effects) */
+			} else if (Flying) {
+				if (flags.verbose) {
+					if (at_ladder) pline("You fly down along the ladder.");
+					else nhscopyz(&deferred_msg, "You fly down the stairs.");
+				}
+			} else if (near_capacity() > UNENCUMBERED || Punished || Fumbling) {
 				pline("You fall down the %s.", at_ladder ? "ladder" : "stairs");
 				if (Punished) {
 					drag_down();
@@ -1097,10 +1114,14 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 				if (u.usteed)
 					dismount_steed(DISMOUNT_FELL);
 				else
-					losehp(Maybe_Half_Phys(rnd(3)), "falling downstairs", KILLED_BY);
+					losehp(Maybe_Half_Phys(rnd(3)), at_ladder ? "falling off a ladder" : "tumbling down a flight of stairs", KILLED_BY);
 				selftouch("Falling, you");
-			} else if (u.dz && at_ladder)
-				pline("You climb down the ladder.");
+			} else {        /* ordinary descent */
+				if (flags.verbose) {
+					if (at_ladder) pline("You climb down the ladder.");
+					else nhscopyz(&deferred_msg, "You descend the stairs.");
+				}
+			}
 		}
 	} else { /* trap door or level_tele or In_endgame */
 		if (was_in_W_tower && On_W_tower_level(&u.uz))
@@ -1169,6 +1190,11 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 	vision_reset(); /* reset the blockages */
 	docrt();	/* does a full vision recalc */
 	flush_screen(-1);
+
+	if (deferred_msg.len) {
+		pline(nhs2cstr_tmp(deferred_msg));
+		del_nhs(&deferred_msg);
+	}
 
 	/*
 	 *  Move all plines beyond the screen reset.
