@@ -1313,7 +1313,7 @@ int thitmonst(struct monst *mon, struct obj *obj, int thrown) {
 	}
 
 	/* sleeping unicorns don't catch gems */
-	if (obj->oclass == GEM_CLASS && is_unicorn(mon->data) && !mon->msleeping) {
+	if (obj->oclass == GEM_CLASS && is_unicorn(mon->data) && !mon->msleeping && mon->mcanmove) {
 		if (mon->mtame) {
 			pline("%s catches and drops %s.", Monnam(mon), the(xname(obj)));
 			return 0;

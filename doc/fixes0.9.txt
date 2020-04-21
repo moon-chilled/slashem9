@@ -58,6 +58,7 @@ Changelist for slashem9 v0.9:
 - Bugfix: various memory safety fixes.
 - Gameplay: some smart monsters have more advanced AI.
 - Gameplay: weaken pudding farming by keeping cloned monsters from generating corpses or death drops.
+- Bugfix: paralyzed unicorns would catch thrown gems.
 
 Imports from NetHack version 3.6:
 - Bugfix: acid dropping bug.
