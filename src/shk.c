@@ -2341,29 +2341,36 @@ speak:
 			      the(xname(obj)));
 			return;
 		}
-		strcpy(buf, "\"For you, ");
-		if (ANGRY(shkp))
-			strcat(buf, "scum ");
-		else {
-			static const char *honored[5] = {
+		if (!ininv) {
+			pline("%s will cost you %ld %s%s.",
+				The(xname(obj)), ltmp, currency(ltmp),
+				(obj->quan > 1L) ? " each" : "");
+		} else {
+			/* (chooses among [0]..[3] normally; [1]..[4] after the
+			   Wizard has been killed or invocation ritual performed) */
+			static const char * const honored[] = {
 				"good", "honored", "most gracious", "esteemed",
 				"most renowned and sacred"};
-			strcat(buf, honored[rn2(4) + u.uevent.udemigod]);
-			if (!is_human(youmonst.data))
-				strcat(buf, " creature");
-			else
-				strcat(buf, (flags.female) ? " lady" : " sir");
+
+			strcpy(buf, "\"For you, ");
+			if (ANGRY(shkp)) {
+				strcat(buf, "scum;");
+			} else {
+				int idx = rn2(SIZE(honored) - 1) + u.uevent.udemigod;
+
+				strcat(buf, honored[idx]);
+				strcat(buf, !is_human(youmonst.data) ? " creature" :
+						(flags.female) ? " lady" : " sir");
+				strcat(buf, "; only");
+			}
+
+			long save_quan = obj->quan;
+			obj->quan = 1; /* fool xname() into giving singular */
+			pline("%s %ld %s %s %s.\"", buf, ltmp, currency(ltmp),
+					(save_quan > 1L) ? "per" : "for this", xname(obj));
+			obj->quan = save_quan;
+
 		}
-		if (ininv) {
-			long quan = obj->quan;
-			obj->quan = 1L; /* fool xname() into giving singular */
-			pline("%s; only %ld %s %s.\"", buf, ltmp,
-			      (quan > 1L) ? "per" : "for this", xname(obj));
-			obj->quan = quan;
-		} else
-			pline("%s will cost you %ld %s%s.",
-			      The(xname(obj)), ltmp, currency(ltmp),
-			      (obj->quan > 1L) ? " each" : "");
 	} else if (!silent) {
 		if (ltmp)
 			pline("The list price of %s is %ld %s%s.",

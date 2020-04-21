@@ -122,7 +122,7 @@ but that's really hard.
 // criticially low hit points if hp <= 5 or hp <= maxhp/N for some N
 
 // only_if_injured: determines whether maxhp <= 5 matters
-bool critically_low_hp(boolean only_if_injured) {
+bool critically_low_hp(bool only_if_injured) {
 	int divisor, hplim,
 	    curhp = Upolyd ? u.mh : u.uhp,
 	    maxhp = Upolyd ? u.mhmax : u.uhpmax;
