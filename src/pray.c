@@ -118,6 +118,39 @@ but that's really hard.
 #define on_shrine()	((levl[u.ux][u.uy].altarmask & AM_SHRINE) != 0)
 #define a_align(x, y)	((aligntyp)Amask2align(levl[x][y].altarmask & AM_MASK))
 
+
+// criticially low hit points if hp <= 5 or hp <= maxhp/N for some N
+
+// only_if_injured: determines whether maxhp <= 5 matters
+bool critically_low_hp(boolean only_if_injured) {
+	int divisor, hplim,
+	    curhp = Upolyd ? u.mh : u.uhp,
+	    maxhp = Upolyd ? u.mhmax : u.uhpmax;
+
+	if (only_if_injured && !(curhp < maxhp)) return false;
+
+	/* if maxhp is extremely high, use lower threshold for the division test
+	 * (golden glow cuts off at 11+5*lvl, nurse interaction at 25*lvl; this
+	 * ought to use monster hit dice--and a smaller multiplier--rather than
+	 * ulevel when polymorphed, but polyself doesn't maintain that) */
+	hplim = 15 * u.ulevel;
+	if (maxhp > hplim) maxhp = hplim;
+
+	// 7 used to be the unconditional divisor
+	switch (xlev_to_rank(u.ulevel)) {	// maps 1..30 into 0..8
+		case 0: case 1:	divisor = 5; break;	/* explvl 1 to 5 */
+		case 2: case 3:	divisor = 6; break;	/* explvl 6 to 13 */
+		case 4: case 5:	divisor = 7; break;	/* explvl 14 to 21 */
+		case 6: case 7:	divisor = 8; break;	/* explvl 22 to 29 */
+		default:	divisor = 9; break;	/* explvl 30+ */
+	}
+
+	// 5 is a magic number in TROUBLE_HIT handling below
+	return (curhp <= 5 || curhp * divisor <= maxhp);
+}
+
+
+
 static int in_trouble() {
 	struct obj *otmp;
 	int i, j, count = 0;
@@ -141,8 +174,7 @@ static int in_trouble() {
 	if (u.utrap && u.utraptype == TT_LAVA) return TROUBLE_LAVA;
 	if (Sick) return TROUBLE_SICK;
 	if (u.uhs >= WEAK) return TROUBLE_STARVING;
-	if (Upolyd ? (u.mh <= 5 || u.mh * 7 <= u.mhmax) :
-		     (u.uhp <= 5 || u.uhp * 7 <= u.uhpmax)) return TROUBLE_HIT;
+	if (critically_low_hp(false)) return TROUBLE_HIT;
 	if (u.ulycn >= LOW_PM && !Race_if(PM_HUMAN_WEREWOLF))
 		return TROUBLE_LYCANTHROPE;
 	if (near_capacity() >= EXT_ENCUMBER && AMAX(A_STR) - ABASE(A_STR) > 3)
@@ -1668,7 +1700,7 @@ int dosacrifice(void) {
 /* determine prayer results in advance; also used for enlightenment */
 
 /* praying==false means no messages should be given */
-boolean can_pray(boolean praying) {
+bool can_pray(bool praying) {
 	int alignment;
 
 	p_aligntyp = on_altar() ? a_align(u.ux, u.uy) : u.ualign.type;
@@ -1711,7 +1743,7 @@ boolean can_pray(boolean praying) {
 	   return value a non-deterministic approximation for enlightenment.
 	   This case should be uncommon enough to live with... */
 
-	return !praying ? (boolean)(p_type == 3 && !Inhell) : true;
+	return !praying ? (p_type == 3 && !Inhell) : true;
 }
 
 int dopray(void) {

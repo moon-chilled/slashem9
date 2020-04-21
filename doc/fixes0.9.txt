@@ -207,6 +207,7 @@ Imports from NetHack version 3.6:
 - Gameplay: fire/frost brand have a chance to boil or freeze water they come into contact with, avoiding erosion.
 - Interface: <esc> at direction prompt clears message window.
 - Interface: break polyselfless conduct when eating a mimc corpse and changing form, or when dying by sliming.
+- Gameplay: low-level characters are likelier to have their health restored as a result of prayer; high-level characters are less likely to.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).

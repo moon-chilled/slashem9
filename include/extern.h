@@ -1537,18 +1537,19 @@ const char *bottlename(void);
 
 /* ### pray.c ### */
 
+bool critically_low_hp(bool only_if_injured);
 int dosacrifice(void);
-boolean can_pray(boolean);
+bool can_pray(bool praying);
 int dopray(void);
 const char *u_gname(void);
 int doturn(void);
 int turn_undead(void);
 const char *a_gname(void);
 const char *a_gname_at(xchar x, xchar y);
-const char *align_gname(aligntyp);
-const char *halu_gname(aligntyp);
-const char *align_gtitle(aligntyp);
-void altar_wrath(int, int);
+const char *align_gname(aligntyp alignment);
+const char *halu_gname(aligntyp alignment);
+const char *align_gtitle(aligntyp alignment);
+void altar_wrath(int x, int y);
 
 /* ### priest.c ### */
 
