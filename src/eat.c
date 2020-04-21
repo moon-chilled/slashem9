@@ -238,7 +238,7 @@ static void choke(struct obj *food) {
 		if (food) {
 			pline("You choke over your %s.", foodword(food));
 			if (food->oclass == COIN_CLASS) {
-				nhscopyz(&killer.name, "a very rich meal");
+				nhscopyz(&killer.name, "very rich meal");
 			} else {
 				nhscopyz(&killer.name, food_xname(food, false));
 				if (food->otyp == CORPSE && (mons[food->corpsenm].geno & G_UNIQ)) {
