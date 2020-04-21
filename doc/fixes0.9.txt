@@ -210,6 +210,7 @@ Imports from NetHack version 3.6:
 - Gameplay: low-level characters are likelier to have their health restored as a result of prayer; high-level characters are less likely to.
 - Bugfix: invulnerability would not protect from mind flayer's psychic blast.
 - Bugfix: player who bypassed the valley of the dead to get to gehenna and then returned to the valley and tried to enter gehenna thence would get a prompt, as if it were their first time entering gehenna.
+- Gameplay: don't get castle drawbridge code as a prayer reward if you've already entered gehenna.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).

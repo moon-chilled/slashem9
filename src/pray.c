@@ -930,8 +930,11 @@ static void pleased(aligntyp g_align) {
 				}
 				break;
 			case 3:
-				/* takes 2 hints to get the music to enter the stronghold */
-				if (!u.uevent.uopened_dbridge) {
+				/* takes 2 hints to get the music to enter the stronghold;
+				 * skip if you've solved it via mastermind or destroyed the
+				 * drawbridge (both set uopened_dbridge) or if you've already
+				 * travelled past the Valley of the Dead (gehennom_entered) */
+				if (!u.uevent.uopened_dbridge && !u.uevent.gehennom_entered) {
 					if (u.uevent.uheard_tune < 1) {
 						godvoice(g_align, NULL);
 						verbalize("Hark, %s!",
