@@ -429,8 +429,10 @@ int row, col;
  *	+ Right before something is printed. [pline()]
  *	+ Right before we do a vision based operation. [do_clear_area()]
  *	+ screen redraw, so we can renew all positions in sight. [docrt()]
- *WAC   + when firing wand of fire [buzz()] #define LIGHT_SRC_SPELL
- *WAC   + fire explosions [explode()] #define LIGHT_SRC_SPELL
+ *	+ When toggling temporary blindness, in case additional events
+ *	  impacted by vision occur during the same move [make_blinded()]
+ *WAC	+ when firing wand of fire [buzz()] #define LIGHT_SRC_SPELL
+ *WAC	+ fire explosions [explode()] #define LIGHT_SRC_SPELL
  *
  * Control flag = 1.  An adjacent vision recalculation.  The hero has moved
  * one square.  Knowing this, it might be possible to optimize the vision

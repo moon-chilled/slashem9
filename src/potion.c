@@ -213,6 +213,7 @@ void make_blinded(long xtime, boolean talk) {
 	if (u_could_see ^ can_see_now) { /* one or the other but not both */
 		context.botl = 1;
 		vision_full_recalc = 1; /* blindness just got toggled */
+		vision_recalc(0);
 		if (Blind_telepat || Infravision) see_monsters();
 	}
 }
