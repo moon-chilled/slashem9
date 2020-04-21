@@ -656,7 +656,7 @@ void newsym(int x, int y) {
 			return;
 		}
 		if (x == u.ux && y == u.uy) {
-			if (senseself()) {
+			if (canspotself()) {
 				map_location(x, y, 0); /* map *under* self */
 				display_self();
 			} else {
@@ -695,7 +695,7 @@ void newsym(int x, int y) {
 		if (x == u.ux && y == u.uy) {
 			feel_location(u.ux, u.uy); /* forces an update */
 
-			if (senseself()) display_self();
+			if (canspotself()) display_self();
 		} else if ((mon = m_at(x, y)) && ((see_it = (tp_sensemon(mon) || MATCH_WARN_OF_MON(mon) || (see_with_infrared(mon) && mon_visible(mon)))) || Detect_monsters) && !is_worm_tail(mon)) {
 			/* Monsters are printed every time. */
 			/* This also gets rid of any invisibility glyph */

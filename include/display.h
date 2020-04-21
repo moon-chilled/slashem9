@@ -22,8 +22,10 @@
  */
 #define tp_sensemon(mon) (															      /* The hero can always sense a monster IF:  */ \
 			  (!mindless((mon)->data)) &&												      /* 1. the monster has a brain to sense AND  */ \
-			  ((Blind && Blind_telepat) || /* 2a. hero is blind and telepathic OR	    */ /* 2b. hero is using a telepathy inducing   */ /*	 object and in range		    */                \
-			   (Unblind_telepat &&                                                                                                                                                       \
+			  ((Blind && Blind_telepat) ||	/* 2a. hero is blind and telepathic OR	    */\
+							/* 2b. hero is using a telepathy inducing   */\
+							/*     object and in range		    */\
+			   (Unblind_telepat && \
 			    (distu((mon)->mx, (mon)->my) <= (BOLT_LIM * BOLT_LIM)))))
 
 #define sensemon(mon) (tp_sensemon(mon) || Detect_monsters || MATCH_WARN_OF_MON(mon))
@@ -121,14 +123,18 @@
 /*
  * canseeself()
  * senseself()
+ * canspotself()
  *
  * This returns true if the hero can see her/himself.
  *
- * The u.uswallow check assumes that you can see yourself even if you are
- * invisible.  If not, then we don't need the check.
+ * Sensing yourself by touch is treated as seeing yourself, even if
+ * unable to see.  So when blind, being invisible won't affect your
+ * self-perception, and when swallowed, the enclosing monster touches.
  */
 #define canseeself() (Blind || u.uswallow || (!Invisible && !u.uundetected))
-#define senseself()  (canseeself() || Unblind_telepat || Detect_monsters)
+#define senseself()    (Unblind_telepat || Detect_monsters)
+#define canspotself()  (canseeself() || senseself())
+
 
 /*
  * random_monster()
