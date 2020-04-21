@@ -36,7 +36,7 @@ struct u_have {
 
 struct u_event {
 	bool minor_oracle;	  /* received at least 1 cheap oracle */
-	bool major_oracle;	  /*  "  expensive oracle */
+	bool major_oracle;	  /*    "     "    "   " expensive oracle */
 	bool qcalled;		  /* called by Quest leader to do task */
 	bool qexpelled;		  /* expelled from the Quest dungeon */
 	bool qcompleted;	  /* successfully completed Quest task */

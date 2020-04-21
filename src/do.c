@@ -1186,11 +1186,17 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 			pline("You arrive at the Valley of the Dead...");
 			pline("The odor of burnt flesh and decay pervades the air.");
 			pline("You hear groans and moans everywhere.");
-		} else
+		} else {
 			pline("It is hot here.  You smell smoke...");
+		}
 
-		achieve.enter_gehennom = 1;
+		achieve.enter_gehennom = true;
 	}
+
+	// in case we've managed to bypass the Valley's stairway down
+	if (Inhell && !Is_valley(&u.uz)) u.uevent.gehennom_entered = true;
+
+
 
 	if (familiar) {
 		static const char *const fam_msgs[4] = {
