@@ -2243,17 +2243,13 @@ void mselftouch(struct monst *mon, const char *arg, boolean byplayer) {
 /* KMH, balance patch -- several ways for the player to fix stoning */
 int uunstone(void) {
 	if (Stoned) {
-		Stoned = 0;
-		if (!Hallucination)
-			pline("You feel limber!");
-		else
-			pline("What a pity - you just ruined a future piece of %sart!",
-			      ACURR(A_CHA) > 15 ? "fine " : "");
-		/* The problem was fixed */
+		fix_petrification();
+		// the problem was fixed
 		return 1;
+	} else {
+		// no problem to fix
+		return 0;
 	}
-	/* No problem to fix */
-	return 0;
 }
 
 void float_up(void) {

@@ -223,9 +223,7 @@ static void newman(void) {
 	redist_attr();
 	u.uhunger = rn1(500, 500);
 	if (Sick) make_sick(0L, NULL, false, SICK_ALL);
-	Sick = 0;
-	Stoned = 0;
-	dealloc_killer(find_delayed_killer(STONED));
+	if (Stoned) make_stoned(0, NULL, 0, new_nhs());
 	if (Race_if(PM_DOPPELGANGER)) {
 		if (u.uhp <= 10) u.uhp = 10;
 		if (u.uhpmax <= 10) u.uhpmax = 10;
@@ -494,10 +492,8 @@ int polymon(int mntmp) {
 	}
 	if (Stoned && poly_when_stoned(&mons[mntmp])) {
 		/* poly_when_stoned already checked stone golem genocide */
-		pline("You turn to stone!");
 		mntmp = PM_STONE_GOLEM;
-		Stoned = 0;
-		dealloc_killer(find_delayed_killer(STONED));
+		make_stoned(0, "You turn to stone!", 0, new_nhs());
 	}
 
 	u.mtimedone = rn1(500, 500);
@@ -509,9 +505,7 @@ int polymon(int mntmp) {
 	if (strongmonst(&mons[mntmp])) ABASE(A_STR) = AMAX(A_STR) = STR18(100);
 
 	if (Stone_resistance && Stoned) { /* parnes@eniac.seas.upenn.edu */
-		Stoned = 0;
-		dealloc_killer(find_delayed_killer(STONED));
-		pline("You no longer seem to be petrifying.");
+		make_stoned(0, "You no longer seem to be petrifying.", 0, new_nhs());
 	}
 	if (Sick_resistance && Sick) {
 		make_sick(0L, NULL, false, SICK_ALL);

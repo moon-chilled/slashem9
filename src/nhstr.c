@@ -242,6 +242,17 @@ usize utf8len(const nhstr str) {
 	return ret;
 }
 
+nhstr *nhstmp(nhstr *str) {
+	static nhstr store[NHSTMP_BACKING_STORE_SIZE];
+	static usize index;
+
+	nhstr *ret = &store[index];
+	index = (index + 1) % NHSTMP_BACKING_STORE_SIZE;
+	return nhsmove(ret, str);
+}
+
+nhstr *nhstmpt(nhstr str) { return nhstmp(&str); }
+
 // does utf-8 conversion
 char *nhs2cstr_tmp(const nhstr str) {
 	static char *ret = NULL;

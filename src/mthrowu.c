@@ -480,8 +480,7 @@ void m_throw(
 			if (hitu && singleobj->otyp == EGG) {
 				if (!Stoned && !Stone_resistance && !(poly_when_stoned(youmonst.data) &&
 							   polymon(PM_STONE_GOLEM))) {
-					Stoned = 5;
-					delayed_killer(STONED, KILLED_BY, new_nhs());
+					make_stoned(5, NULL, KILLED_BY, new_nhs());
 				}
 			}
 			stop_occupation();

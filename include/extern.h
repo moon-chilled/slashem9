@@ -1517,6 +1517,7 @@ void make_stunned(long, boolean);
 void make_blinded(long, boolean);
 void make_sick(long, const char *, boolean, int);
 void make_slimed(long xtime, const char *msg);
+void make_stoned(long xtime, const char *msg, int killedby, const nhstr killername);
 void make_vomiting(long, boolean);
 boolean make_hallucinated(long, boolean, long);
 int dodrink(void);

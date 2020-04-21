@@ -58,10 +58,11 @@ int dosave(void) {
 		saverestore = false;
 		if (flags.keep_savefile)
 			if (yn("Really quit?") == 'n') saverestore = true;
-		if (dosave0() && !saverestore) {
+		if (dosave0() && !saverestore)
 #else
-		if (dosave0()) {
+		if (dosave0())
 #endif
+		{
 			program_state.something_worth_saving = 0;
 			u.uhp = -1; /* universal game's over indicator */
 			/* make sure they see the Saving message */
@@ -850,6 +851,7 @@ void free_menu_coloring() {
 }
 
 void freedynamicdata() {
+	for (int i = 0; i < NHSTMP_BACKING_STORE_SIZE; i++) nhstmp(&new_nhs());
 	free_status_colors();
 	unload_qtlist();
 	free_invbuf(); /* let_to_name (invent.c) */

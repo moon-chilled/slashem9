@@ -1437,12 +1437,10 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 						You_hearf("%s hissing!", s_suffix(mon_nam(mtmp)));
 					if (!rn2(10) ||
 					    (flags.moonphase == NEW_MOON && !have_lizard())) {
-					do_stone:
+do_stone:
 						if (!Stoned && !Stone_resistance && !(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
 							int kformat = KILLED_BY_AN;
 							const char *kname = mtmp->data->mname;
-
-							Stoned = 5;
 
 							if (mtmp->data->geno & G_UNIQ) {
 								if (!type_is_pname(mtmp->data)) {
@@ -1452,9 +1450,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 								kformat = KILLED_BY;
 							}
 
-							nhstr tmp = nhsdupz(kname);
-							delayed_killer(stoned, kformat, tmp);
-							del_nhs(&tmp);
+							make_stoned(5, NULL, kformat, *nhstmpt(nhsdupz(kname)));
 							return 1;
 						}
 					}

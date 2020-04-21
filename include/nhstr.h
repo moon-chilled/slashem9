@@ -46,9 +46,20 @@ nhstr *nhscopyz(nhstr *str, const char *replacement);
 nhstr *nhsreplace(nhstr *str, const nhstr replacement);
 nhstr nhsfmt(const char *fmt, ...);
 
+// when you need a string to have a 'short lifetime', but don't want to leak it
+// to free the backing store size, do something like:
+// for (int i = 0; i < NHSTMP_BACKING_STORE_SIZE; i++) nhstmp(new_nhs());
+#define NHSTMP_BACKING_STORE_SIZE 16
+nhstr *nhstmp(nhstr *str); // !destroys str!
+
+// for library functions that return a direct nhstr (not a pointer)
+// so you don't need an intermediate variable
+nhstr *nhstmpt(nhstr str);
+
+
 char *nhs2cstr_tmp(const nhstr str);
 char *nhs2cstr_trunc_tmp(const nhstr str);  // doesn't do unicode conversion
-char *nhs2cstr_tmp_destroy(nhstr *str); //
+char *nhs2cstr_tmp_destroy(nhstr *str); // !destroys src!
 nhstr *nhstrim(nhstr *str, usize maxlen);
 nhstr *nhslice(nhstr *str, usize new_start);
 

@@ -562,13 +562,14 @@ boolean bite_monster(struct monst *mon) {
 }
 
 void fix_petrification(void) {
-	Stoned = 0;
-	dealloc_killer(find_delayed_killer(STONED));
+	char buf[BUFSZ];
+
 	if (Hallucination)
-		pline("What a pity - you just ruined a future piece of %sart!",
-		      ACURR(A_CHA) > 15 ? "fine " : "");
+		sprintf(buf, "What a pity - you just ruined a future piece of %sart!", ACURR(A_CHA) > 15 ? "fine " : "");
 	else
-		pline("You feel limber!");
+		strcpy(buf, "You feel limber!");
+
+	make_stoned(0, buf, 0, new_nhs());
 }
 
 /*
@@ -2146,9 +2147,8 @@ static void fpostfx(struct obj *otmp) {
 				if (!Stone_resistance &&
 				    !(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
 					if (!Stoned) {
-						Stoned = 5;
 						nhscopyf(&killer.name, "%S egg", mons[otmp->corpsenm].mname);
-						delayed_killer(STONED, KILLED_BY_AN, killer.name);
+						make_stoned(5, NULL, KILLED_BY_AN, killer.name);
 					}
 				}
 			}

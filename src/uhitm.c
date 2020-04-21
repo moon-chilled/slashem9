@@ -2013,10 +2013,7 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 			pline("You eat %s brain!", s_suffix(mon_nam(mdef)));
 			u.uconduct.food++;
 			if (touch_petrifies(mdef->data) && !Stone_resistance && !Stoned) {
-				Stoned = 5;
-				nhstr tmp = nhsdupz(mdef->data->mname);
-				delayed_killer(STONED, KILLED_BY_AN, tmp);
-				del_nhs(&tmp);
+				make_stoned(5, NULL, KILLED_BY_AN, *nhstmpt(nhsdupz(mdef->data->mname)));
 			}
 			if (!vegan(mdef->data))
 				u.uconduct.unvegan++;

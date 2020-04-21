@@ -264,10 +264,7 @@ static void fix_worst_trouble(int trouble) {
 
 	switch (trouble) {
 		case TROUBLE_STONED:
-			pline("You feel more limber.");
-			Stoned = 0;
-			context.botl = 1;
-			dealloc_killer(find_delayed_killer(STONED));
+			make_stoned(0, "You feel more limber.", 0, new_nhs());
 			break;
 		case TROUBLE_SLIMED:
 			make_slimed(0, "The slime disappears.");

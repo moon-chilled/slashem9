@@ -134,6 +134,21 @@ void make_slimed(long xtime, const char *msg) {
 	if (!Slimed) dealloc_killer(find_delayed_killer(SLIMED));
 }
 
+// start or stop petrification
+void make_stoned(long xtime, const char *msg, int killedby, const nhstr killername) {
+	long old = Stoned;
+
+	if ((!xtime && old) || (xtime && !old)) {
+		if (msg) pline("%s", msg);
+		//context.botl = 1;   // Stoned is not a status line item
+	}
+
+	set_itimeout(&Stoned, xtime);
+
+	if (!Stoned) dealloc_killer(find_delayed_killer(STONED));
+	else if (!old) delayed_killer(STONED, killedby, killername);
+}
+
 void make_vomiting(long xtime, boolean talk) {
 	long old = Vomiting;
 
