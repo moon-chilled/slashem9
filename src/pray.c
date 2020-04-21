@@ -841,7 +841,20 @@ static void pleased(aligntyp g_align) {
 		/* if hero was in trouble, but got better, no special favor */
 		if (p_trouble == 0) pat_on_head = 1;
 	} else {
-		int action = rn1(Luck + (on_altar() ? 3 + on_shrine() : 2), 1);
+		/* Negative luck is normally impossible here (can_pray() forces
+		 * prayer failure in that situation), but it's possible for
+		 * Luck to drop during the period of prayer occupation and
+		 * become negative by the time we get here.  [Reported case
+		 * was lawful character whose stinking cloud caused a delayed
+		 * killing of a peaceful human, triggering the "murderer"
+		 * penalty while successful prayer was in progress.  It could
+		 * also happen due to inconvenient timing on Friday 13th, but
+		 * the magnitude there (-1) isn't big enough to cause trouble.]
+		 * We don't bother remembering start-of-prayer luck, just make
+		 * sure it's at least -1 so that Luck+2 is big enough to avoid
+		 * a divide by zero crash when generating a random number.  */
+		int prayer_luck = max(Luck, -1);        /* => (prayer_luck + 2 > 0) */
+		int action = rn1(prayer_luck + (on_altar() ? 3 + on_shrine() : 2), 1);
 
 		if (!on_altar()) action = min(action, 3);
 		if (u.ualign.record < STRIDENT)
