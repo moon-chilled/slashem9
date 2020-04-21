@@ -1299,6 +1299,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 
 			if (!uarmh || uarmh->otyp != DUNCE_CAP) {
 				pline("Your brain is eaten!");
+
 				/* No such thing as mindless players... */
 				if (ABASE(A_INT) <= ATTRMIN(A_INT)) {
 					int lifesaved = 0;
@@ -1309,11 +1310,11 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 						if (lifesaved && (discover || wizard)) {
 							if (wore_amulet && !uamul) {
 								/* used up AMULET_OF_LIFE_SAVING; still
-							   subject to dying from brainlessness */
+								   subject to dying from brainlessness */
 								wore_amulet = 0;
 							} else {
 								/* explicitly chose not to die;
-							   arbitrarily boost intelligence */
+								   arbitrarily boost intelligence */
 								ABASE(A_INT) = ATTRMIN(A_INT) + 2;
 								pline("You feel like a scarecrow.");
 								break;

@@ -1737,6 +1737,13 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 				if (vis) pline("%s doesn't notice.", Monnam(mdef));
 				break;
 			}
+			if (is_rider(pd)) {
+				mondied(magr);
+				if (magr->mhp <= 0) result = MM_AGR_DIED;
+				// Rider takes extra damage regardless of whether attacker dies
+				tmp += rnd(10);
+				break;
+			}
 			tmp += rnd(10); /* fakery, since monsters lack INT scores */
 			if (magr->mtame && !magr->isminion) {
 				EDOG(magr)->hungrytime += rnd(60);

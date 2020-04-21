@@ -2013,8 +2013,18 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 
 			pline("You eat %s brain!", s_suffix(mon_nam(mdef)));
 			u.uconduct.food++;
-			if (touch_petrifies(mdef->data) && !Stone_resistance && !Stoned) {
+			if (flesh_petrifies(mdef->data) && !Stone_resistance && !Stoned) {
 				make_stoned(5, NULL, KILLED_BY_AN, *nhstmpt(nhsdupz(mdef->data->mname)));
+			}
+			if (is_rider(mdef->data)) {
+				pline("Injesting that is fatal.");
+				nhscopyf(killer.name, "unwisely ate the brain of %S", pd->mname);
+				killer.format = NO_KILLER_PREFIX;
+				done(DIED);
+				// life-saving needed to reach here
+				exercise(A_WIS, false);
+				tmp += rnd(10);
+				break;
 			}
 			if (!vegan(mdef->data))
 				u.uconduct.unvegan++;
@@ -2033,6 +2043,11 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 				context.botl = 1;
 			}
 			exercise(A_WIS, true);
+
+			/* targetting another mind flayer or your own underlying species
+			 * is cannibalism */
+			maybe_cannibal(monsndx(mdef->data), true);
+
 			break;
 		case AD_STCK:
 			if (!negated && !sticks(mdef->data))
