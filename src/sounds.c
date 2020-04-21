@@ -177,17 +177,18 @@ void dosounds(void) {
 			if (DEADMONSTER(mtmp)) continue;
 			if ((is_undead(mtmp->data) || is_vampshifter(mtmp)) &&
 			    mon_in_room(mtmp, MORGUE)) {
+
 				switch (rn2(2) + hallu) {
 					case 0:
 						pline("You suddenly realize it is unnaturally quiet.");
 						break;
 					case 1:
-						pline("The %s on the back of your %s stands up.",
-						      body_part(HAIR), body_part(NECK));
+						pline("The %s on the back of your %s %s up.",
+						      body_part(HAIR), body_part(NECK), vtense(body_part(HAIR), "stand"));
 						break;
 					case 2:
-						pline("The %s on your %s seems to stand up.",
-						      body_part(HAIR), body_part(HEAD));
+						pline("The %s on your %s %s to stand up.",
+						      body_part(HAIR), body_part(HEAD), vtense(body_part(HAIR), "seem"));
 						break;
 				}
 				return;
