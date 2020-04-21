@@ -1683,7 +1683,7 @@ void mondead(struct monst *mtmp) {
 
 /* true if corpse might be dropped, magr may die if mon was swallowed */
 /* magr -> killer, if swallowed */
-boolean corpse_chance(struct monst *mon, struct monst *magr, boolean was_swallowed) {
+boolean corpse_chance(struct monst *mon, struct monst *magr, bool was_swallowed) {
 	struct permonst *mdat = mon->data;
 	int i, tmp;
 
@@ -1752,8 +1752,13 @@ boolean corpse_chance(struct monst *mon, struct monst *magr, boolean was_swallow
 
 	if (bigmonst(mdat) || mdat == &mons[PM_LIZARD] || is_golem(mdat) || is_mplayer(mdat) || is_rider(mdat))
 		return true;
-	return !rn2(
-		2 + ((mdat->geno & G_FREQ) < 2) + verysmall(mdat));
+
+
+	// should this check override the bigmonst() and is_golem() checks?
+	// Is there any meaningful overlap?
+	if (mon->mcloned) return false;
+
+	return !rn2(2 + ((mdat->geno & G_FREQ) < 2) + verysmall(mdat));
 }
 
 /* drop (perhaps) a cadaver and remove monster */
@@ -2008,7 +2013,8 @@ void xkilled(struct monst *mtmp, int dest) {
 		if (wasinside) spoteffects(true);
 	} else if (x != u.ux || y != u.uy) {
 		/* might be here after swallowed */
-		if (!rn2(6) && !(mvitals[mndx].mvflags & G_NOCORPSE) && !(nohands(mdat)) && mdat->mlet != S_KOP) {
+		if (!rn2(6) && !(mvitals[mndx].mvflags & G_NOCORPSE) && !(nohands(mdat)) &&
+		    mdat->mlet != S_KOP && !mtmp->mcloned) {
 			int typ;
 
 			otmp = mkobj_at(RANDOM_CLASS, x, y, true);

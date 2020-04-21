@@ -358,6 +358,7 @@ int cutworm(struct monst *worm, xchar x, xchar y, struct obj *weap) {
 		return 1;
 	}
 	new_worm->wormno = new_wnum; /* affix new worm number */
+	new_worm->mcloned = false;
 
 	/* Devalue the monster level of both halves of the worm. */
 	worm->m_lev = ((unsigned)worm->m_lev <= 3) ?

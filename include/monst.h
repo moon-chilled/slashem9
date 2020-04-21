@@ -82,6 +82,7 @@ struct monst {
 	Bitfield(mspeed, 2);	/* current speed */
 	Bitfield(permspeed, 2); /* intrinsic mspeed value */
 	bool mrevived;		/* has been revived from the dead */
+	bool mcloned;		/* has been cloned from another monster */
 	bool mavenge;		/* did something to deserve retaliation */
 
 	bool mflee;	       /* fleeing */

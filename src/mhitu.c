@@ -3016,6 +3016,7 @@ struct monst *cloneu(void) {
 	if (u.mh <= 1) return NULL;
 	if (mvitals[mndx].mvflags & G_EXTINCT) return NULL;
 	mon = makemon(youmonst.data, u.ux, u.uy, NO_MINVENT | MM_EDOG);
+	mon->mcloned = true;
 	mon = christen_monst(mon, plname);
 	initedog(mon);
 	mon->m_lev = youmonst.data->mlevel;

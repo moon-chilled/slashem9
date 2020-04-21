@@ -1121,7 +1121,7 @@ void mcalcdistress(void);
 void replmon(struct monst *, struct monst *);
 void relmon(struct monst *);
 struct obj *mlifesaver(struct monst *);
-boolean corpse_chance(struct monst *, struct monst *, boolean);
+boolean corpse_chance(struct monst *corpse_chance, struct monst *magr, bool was_swallowed);
 void mondead(struct monst *);
 void mondied(struct monst *);
 void mongone(struct monst *);

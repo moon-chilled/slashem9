@@ -1098,6 +1098,7 @@ struct monst *clone_mon(struct monst *mon, xchar x, xchar y /* clone's preferred
 	m2->mx = mm.x;
 	m2->my = mm.y;
 
+	m2->mcloned = true;
 	m2->minvent = NULL; /* objects don't clone */
 	m2->mleashed = false;
 
