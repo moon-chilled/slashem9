@@ -215,6 +215,7 @@ Imports from NetHack version 3.6:
 - Bugfix: Sunsword would continue to emit light after monster wielding it was killed.
 - Bugfix: game could crash if luck dropped below -1 during prayer.
 - Bugfix: lycanthropic player in human form would not resist drain life, unlike lycanthropic monster.
+- Bugfix: if a multiple boulders were at a location and one were removed, player would be able to see items that were previously blocked by the boulder.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).

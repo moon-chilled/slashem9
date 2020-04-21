@@ -1192,7 +1192,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 	flush_screen(-1);
 
 	if (deferred_msg.len) {
-		pline(nhs2cstr_tmp(deferred_msg));
+		plines(nhs2cstr_tmp(deferred_msg));
 		del_nhs(&deferred_msg);
 	}
 
