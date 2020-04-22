@@ -2245,7 +2245,7 @@ boolean get_obj_location(struct obj *, xchar *, xchar *, int);
 boolean get_mon_location(struct monst *, xchar *, xchar *, int);
 struct monst *get_container_location(struct obj *obj, int *, int *);
 struct monst *montraits(struct obj *, coord *);
-struct monst *revive(struct obj *);
+struct monst *revive(struct obj *corpse, bool by_hero);
 int unturn_dead(struct monst *);
 void cancel_item(struct obj *);
 boolean drain_item(struct obj *); /* KMH */

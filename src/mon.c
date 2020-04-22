@@ -436,7 +436,7 @@ static struct obj *make_corpse(struct monst *mtmp, unsigned corpseflags) {
 				corpstatflags |= CORPSTAT_INIT;
 				// preserve the unique traits of some creatures
 				obj = mkcorpstat(CORPSE, KEEPTRAITS(mtmp) ? mtmp : 0, mdat, x, y, corpstatflags);
-				
+
 				if (corpseflags & CORPSTAT_BURIED) {
 					bury_an_obj(obj);
 					newsym(x, y);

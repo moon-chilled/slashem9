@@ -352,7 +352,7 @@ struct rm {
 	bool mem_invis;		// Set if invisible monster remembered
 	Bitfield(mem_spare, 9);
 	schar typ;		// what is really there
-	Bitfield(styp, 6);	// last seen/touched dungeon 
+	Bitfield(styp, 6);	// last seen/touched dungeon
 	uchar seenv;		// seen vector
 	Bitfield(flags, 5); 	// extra information for typ
 	bool horizontal;	// wall/door/etc is horiz. (more typ info)

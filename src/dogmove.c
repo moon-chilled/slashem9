@@ -37,7 +37,7 @@ struct obj *droppables(struct monst *mon) {
 	if (is_animal(mon->data) || mindless(mon->data)) {
 		// won't hang on to any objects of these types
 		// act as if already have them
-		pickaxe = unihorn = key = &dummy;  
+		pickaxe = unihorn = key = &dummy;
 	} else {
 		// don't hang on to pick-axe if can't use one or don't need one
 		if (!tunnels(mon->data) || !needspick(mon->data)) pickaxe = &dummy;

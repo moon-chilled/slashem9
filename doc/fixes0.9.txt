@@ -222,6 +222,7 @@ Imports from NetHack version 3.6:
 - Bugfix: don't show message 'the corridor disappears' when player doesn't actually see it disappear.
 - Bugfix: don't print 'your vision blurs' for a hallucination-resistant player caught by a chest trap.
 - Bugfix: if a guard encounters gold on the ground while leading player away from a vault, don't think it was dropped by the player (unless it was).
+- Bugfix: shopkeeper would not charge for corpse revived by player.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).

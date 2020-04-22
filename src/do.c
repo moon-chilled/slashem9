@@ -1394,7 +1394,7 @@ boolean revive_corpse(struct obj *corpse, boolean moldy) {
 		/* container_where is the outermost container's location even if nested */
 		if (container_where == OBJ_MINVENT && mtmp2) mcarry = mtmp2;
 	}
-	mtmp = revive(corpse); /* corpse is gone if successful && quan == 1 */
+	mtmp = revive(corpse, false); /* corpse is gone if successful && quan == 1 */
 
 	if (mtmp) {
 		/*

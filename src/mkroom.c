@@ -476,7 +476,7 @@ void mkundead(coord *mm, boolean revive_corpses, int mm_flags) {
 		if (enexto(&cc, mm->x, mm->y, mdat) &&
 		    (!revive_corpses ||
 		     !(otmp = sobj_at(CORPSE, cc.x, cc.y)) ||
-		     !revive(otmp)))
+		     !revive(otmp, false)))
 			makemon(mdat, cc.x, cc.y, mm_flags);
 	}
 	level.flags.graveyard = true; /* reduced chance for undead corpse */

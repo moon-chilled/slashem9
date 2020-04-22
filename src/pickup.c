@@ -167,9 +167,9 @@ static boolean query_classes(char oclasses[], boolean *one_at_a_time, boolean *e
 				*everything = true;
 			else if (sym == ':') {
 				simple_look(objs, here); /* dumb if objs==invent */
-				/* if we just scanned the contents of a container                                        
-				 * then mark it as having known contents */                    
-				if (objs->where == OBJ_CONTAINED)                                              
+				/* if we just scanned the contents of a container
+				 * then mark it as having known contents */
+				if (objs->where == OBJ_CONTAINED)
 					objs->ocontainer->cknown = 1;
 
 				goto ask_again;

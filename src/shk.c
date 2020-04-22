@@ -55,7 +55,7 @@ static void rouse_shk(struct monst *, boolean);
 static void remove_damage(struct monst *shkp, bool croaked);
 static void sub_one_frombill(struct obj *, struct monst *);
 static int extend_bill(struct eshk *, int);
-static void add_one_tobill(struct obj *, boolean);
+static void add_one_tobill(struct obj *obj, bool dummy, struct monst *shkp);
 static void dropped_container(struct obj *, struct monst *,
 			      boolean);
 static void add_to_billobjs(struct obj *);
@@ -2169,34 +2169,21 @@ static int extend_bill(struct eshk *eshkp, int to_add) {
 	return 1;
 }
 
-static void add_one_tobill(struct obj *obj, boolean dummy) {
+static void add_one_tobill(struct obj *obj, bool dummy, struct monst *shkp) {
 	struct monst *shkp;
 	struct bill_x *bp;
 	int bct;
-	char roomno = *u.ushops;
 
-	if (!roomno) return;
-	if (!(shkp = shop_keeper(roomno))) return;
-	if (!inhishop(shkp)) return;
+	if (!billable(&shkp, obj, *u.ushops, true)) return;
+	eshkp = ESHKP(shkp);
 
-	if (onbill(obj, shkp, false) || /* perhaps thrown away earlier */
-	    (obj->oclass == FOOD_CLASS && obj->oeaten))
-		return;
-
-	if (!extend_bill(ESHK(shkp), 1)) {
+	if (!extend_bill(eshkp, 1)) {
 		pline("You got that for free!");
 		return;
 	}
 
-	/* To recognize objects the shopkeeper is not interested in. -dgk
-	 */
-	if (obj->no_charge) {
-		obj->no_charge = 0;
-		return;
-	}
-
-	bct = ESHK(shkp)->billct;
-	bp = &(ESHK(shkp)->bill_p[bct]);
+	bct = eshkp->billct;
+	bp = &(eshkp->bill_p[bct]);
 	bp->bo_id = obj->o_id;
 	bp->bquan = obj->quan;
 	if (dummy) {		      /* a dummy object must be inserted into  */
@@ -2205,7 +2192,7 @@ static void add_one_tobill(struct obj *obj, boolean dummy) {
 	} else
 		bp->useup = 0;
 	bp->price = get_cost(obj, shkp);
-	ESHK(shkp)->billct++;
+	eshkp->billct++;
 	obj->unpaid = 1;
 }
 
@@ -2229,7 +2216,7 @@ static void bill_box_content(struct obj *obj, boolean ininv, boolean dummy, stru
 
 		/* the "top" box is added in addtobill() */
 		if (!otmp->no_charge)
-			add_one_tobill(otmp, dummy);
+			add_one_tobill(otmp, dummy, shkp);
 		if (Has_contents(otmp))
 			bill_box_content(otmp, ininv, dummy, shkp);
 	}
@@ -2306,7 +2293,7 @@ void addtobill(struct obj *obj, boolean ininv, boolean dummy, boolean silent) {
 				obj->no_charge = 0;
 				return;
 			} else {
-				add_one_tobill(obj, dummy);
+				add_one_tobill(obj, dummy, shkp);
 				goto speak;
 			}
 		} else {
@@ -2314,7 +2301,7 @@ void addtobill(struct obj *obj, boolean ininv, boolean dummy, boolean silent) {
 			gltmp += contained_gold(obj);
 		}
 
-		if (ltmp) add_one_tobill(obj, dummy);
+		if (ltmp) add_one_tobill(obj, dummy, shkp);
 		if (cltmp) bill_box_content(obj, ininv, dummy, shkp);
 		picked_container(obj); /* reset contained obj->no_charge */
 
@@ -2331,7 +2318,7 @@ void addtobill(struct obj *obj, boolean ininv, boolean dummy, boolean silent) {
 		}
 
 	} else /* i.e., !container */
-		add_one_tobill(obj, dummy);
+		add_one_tobill(obj, dummy, shkp);
 speak:
 	if (shkp->mcanmove && !shkp->msleeping && !silent) {
 		char buf[BUFSZ];

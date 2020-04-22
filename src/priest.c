@@ -755,7 +755,7 @@ void angry_priest() {
 				if (!EMIN(priest)) newemin(priest);
 				priest->ispriest = 0;	// roamer
 							// but still aligned
-				priest->isminion = 1; 
+				priest->isminion = 1;
 				EMIN(priest)->min_align = EPRI(priest)->shralign;
 			}
 

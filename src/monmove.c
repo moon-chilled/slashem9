@@ -1302,7 +1302,7 @@ bool undesirable_disp(struct monst *mtmp, xchar x, xchar y) {
 		// Pets avoid a trap if you've seen it usually
 		if (trap && trap->tseen && rn2(40))
 			return true;
-		// Pets avoid cursed locations 
+		// Pets avoid cursed locations
 		if (cursed_object_at(mtmp, x, y))
 			return true;
 	// Monsters avoid a trap if they've seen that type before

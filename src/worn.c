@@ -482,7 +482,7 @@ outer_break:
 				buf[0] = '\0';
 			pline("%s%s puts on %s.", Monnam(mon),
 			      buf, distant_name(best, doname));
-			if (autocurse) 
+			if (autocurse)
 				pline("%s %s %s %s for a moment.",
 				      s_suffix(Monnam(mon)), simple_typename(best->otyp),
 				      otense(best, "glow"), hcolor(NH_BLACK));

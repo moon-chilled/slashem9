@@ -361,16 +361,27 @@ void fall_through(boolean td) {
  *
  * Perhaps x, y is not needed if we can use get_obj_location() to find
  * the statue's location... ???
+ *
+ * Sequencing matters:
+ *     create monster; if it fails, give up with statue intact;
+ *     give "statue comes to life" message;
+ *     if statue belongs to shop, have shk give "you owe" message;
+ *     transfer statue contents to monster (after stolen_value());
+ *     delete statue.
+ *     [This ordering means that if the statue ends up wearing a cloak of
+ *      invisibility or a mummy wrapping, the visibility checks might be
+ *      wrong, but to avoid that we'd have to clone the statue contents
+ *      first in order to give them to the monster before checking their
+ *      shop status--it's not worth the hassle.]
  */
 struct monst *animate_statue(struct obj *statue, xchar x, xchar y, int cause, int *fail_reason) {
 	struct permonst *mptr;
-	struct monst *mon = 0;
+	struct monst *mon = NULL, *shkp;
 	struct obj *item;
 	coord cc;
-	boolean historic = (Role_if(PM_ARCHEOLOGIST) && !context.mon_moving && (statue->spe & STATUE_HISTORIC));
-	char statuename[BUFSZ];
-
-	strcpy(statuename, the(xname(statue)));
+	bool historic = (Role_if(PM_ARCHEOLOGIST) && (statue->spe & STATUE_HISTORIC));
+	const char *comes_to_life;
+	char statuename[BUFSZ], tmpbuf[BUFSZ];
 
 	if (statue->oxlth && statue->oattached == OATTACHED_MONST) {
 		cc.x = x, cc.y = y;
@@ -419,10 +430,7 @@ struct monst *animate_statue(struct obj *statue, xchar x, xchar y, int cause, in
 		return NULL;
 	}
 
-	/* in case statue is wielded and hero zaps stone-to-flesh at self */
-	if (statue->owornmask) remove_worn_item(statue, true);
-
-	/* allow statues to be of a specific gender */
+	/* a non-montraits() statue might specify gender */
 	if (statue->spe & STATUE_MALE)
 		mon->female = false;
 	else if (statue->spe & STATUE_FEMALE)
@@ -430,42 +438,64 @@ struct monst *animate_statue(struct obj *statue, xchar x, xchar y, int cause, in
 	/* if statue has been named, give same name to the monster */
 	if (statue->onamelth)
 		mon = christen_monst(mon, ONAME(statue));
-	/* transfer any statue contents to monster's inventory */
-	while ((item = statue->cobj) != 0) {
-		obj_extract_self(item);
-		mpickobj(mon, item);
-	}
-	m_dowear(mon, true);
-	delobj(statue);
 
 	/* mimic statue becomes seen mimic; other hiders won't be hidden */
-	if (mon->m_ap_type)
-		seemimic(mon);
-	else
-		mon->mundetected = false;
+	if (mon->m_ap_type) seemimic(mon);
+	else mon->mundetected = false;
+
+	comes_to_life = !canspotmon(mon) ? "disappears" :
+			(nonliving(mon->data) || is_vampshifter(mon)) ? "moves" :
+			"comes to live";
 	if ((x == u.ux && y == u.uy) || cause == ANIMATE_SPELL) {
-		const char *comes_to_life = (nonliving(mon->data) || is_vampshifter(mon)) ?
-						    "moves" :
-						    "comes to life";
-		if (cause == ANIMATE_SPELL)
-			pline("%s %s!", upstart(statuename),
-			      canspotmon(mon) ? comes_to_life : "disappears");
+		/* "the|your|Manlobbi's statue [of a wombat]" */
+		printf(statuename, "%s%s", shk_your(tmpbuf, statue),
+				(cause == ANIMATE_SPELL) ? xname(statue) : "statue");
+		pline("%s %s!", upstart(statuename), comes_to_life);
+	} else if (cause == ANIMATE_SHATTER) {
+		if (cansee(x, y))
+			sprintf(statuename, "%s%s", shk_your(tmpbuf, statue), xname(statue));
 		else
-			pline("The statue %s!",
-			      canspotmon(mon) ? comes_to_life : "disappears");
-		if (historic) {
-			pline("You feel guilty that the historic statue is now gone.");
-			adjalign(-1);
-		}
-	} else if (cause == ANIMATE_SHATTER)
-		pline("Instead of shattering, the statue suddenly %s!",
-		      canspotmon(mon) ? "comes to life" : "disappears");
-	else { /* cause == ANIMATE_NORMAL */
+			strcpy(statuename, "a statue");
+		pline("Instead of shattering, %s suddenly %s!", statuename, comes_to_life);
+	} else { // ANIMATE_NORMAL
 		pline("You find %s posing as a statue.",
 		      canspotmon(mon) ? a_monnam(mon) : "something");
 		if (!canspotmon(mon) && Blind) map_invisible(x, y);
 		stop_occupation();
 	}
+
+	/* if this isn't caused by a monster using a wand of striking,
+	 * there might be consequences for the hero */
+	if (!context.mon_moving) {
+		/* if statue is owned by a shop, hero will have to pay for it;
+		 * stolen_value gives a message (about debt or use of credit)
+		 * which refers to "it" so needs to follow a message describing
+		 * the object ("the statue comes to life" one above) */
+		if (cause != ANIMATE_NORMAL && costly_spot(x, y) &&
+				(shkp = shop_keeper(*in_rooms(x, y, SHOPBASE))) != 0)
+			stolen_value(statue, x, y, shkp->mpeaceful, false, false);
+
+		if (historic) {
+			pline("You feel guilty that the historic statue is now gone.");
+			adjalign(-1);
+		}
+	} else {
+		if (historic && cansee(x, y))
+			pline("You feel regret that the historic statue is now gone.");
+		/* no alignment penalty */
+	}
+
+	/* transfer any statue contents to monster's inventory */
+	while ((item = statue->cobj) != 0) {
+		obj_extract_self(item);
+		add_to_minv(mon, item);
+	}
+	m_dowear(mon, true);
+	/* in case statue is wielded and hero zaps stone-to-flesh at self */
+	if (statue->owornmask) remove_worn_item(statue, true);
+	/* statue no longer exists */
+	delobj(statue);
+
 	/* avoid hiding under nothing */
 	if (x == u.ux && y == u.uy &&
 	    Upolyd && hides_under(youmonst.data) && !OBJ_AT(x, y))

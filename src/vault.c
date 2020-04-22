@@ -461,7 +461,7 @@ int gd_move(struct monst *grd) {
 		if (u_in_vault &&
 		    (u_carry_gold || um_dist(grd->mx, grd->my, 1))) {
 			if (egrd->warncnt == 3) {
-				if (!Deaf) 
+				if (!Deaf)
 					verbalize("I repeat, %sfollow me!", u_carry_gold ?
 							(!umoney ? "drop that hidden gold and " : "drop that gold and ") : "");
 				else
