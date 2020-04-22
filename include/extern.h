@@ -991,6 +991,8 @@ int dlord(aligntyp);
 int llord(void);
 int ndemon(aligntyp);
 int lminion(void);
+void lose_guardian_angel(struct monst *mon);
+void gain_guardian_angel(void);
 
 /* ### mklev.c ### */
 

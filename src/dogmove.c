@@ -788,24 +788,12 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 	if (Conflict && !resist(mtmp, RING_CLASS, 0, 0) && In_endgame(&u.uz)) {
 		allowflags |= ALLOW_U;
 		if (!has_edog && !is_spell) {
-			coord mm;
 			/* Guardian angel refuses to be conflicted; rather,
 			 * it disappears, angrily, and sends in some nasties
 			 */
-			if (canspotmon(mtmp)) {
-				pline("%s rebukes you, saying:", Monnam(mtmp));
-				verbalize("Since you desire conflict, have some more!");
-			}
-			mongone(mtmp);
-			i = rnd(4);
-			while (i--) {
-				mm.x = u.ux;
-				mm.y = u.uy;
-				if (enexto(&mm, mm.x, mm.y, &mons[PM_ANGEL]))
-					mk_roamer(&mons[PM_ANGEL], u.ualign.type,
-						  mm.x, mm.y, false);
-			}
-			return 2;
+
+			lose_guardian_angel(mtmp);
+			return 2; // current monster is gone
 		}
 	}
 

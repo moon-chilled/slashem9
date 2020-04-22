@@ -409,4 +409,84 @@ int ndemon(aligntyp atyp) {
 	return NON_PM;
 }
 
+// guardian angel has been affected by conflict so is abandoning hero
+// if mon is null, angel hasn't been created yet
+void lose_guardian_angel(struct monst *mon) {
+	if (mon) {
+		if (canspotmon(mon)) {
+			if (!Deaf) {
+				pline("%s rebukes you, saying:", Monnam(mon));
+				verbalize("Since you desire conflict, have some more!");
+			} else {
+				pline("%s vanishes!", Monnam(mon));
+			}
+
+		}
+
+		mongone(mon);
+	}
+
+	// create 2 to 4 hostile angels to replace the lost guardian
+	for (int i = rn1(3, 2); i > 0; --i) {
+		coord mm;
+		mm.x = u.ux;
+		mm.y = u.uy;
+		if (enexto(&mm, mm.x, mm.y, &mons[PM_ANGEL]))
+			mk_roamer(&mons[PM_ANGEL], u.ualign.type,
+					mm.x, mm.y, false);
+	}
+}
+
+
+
+// just entered Astral Plane; receive tame guardian angel if worthy
+void gain_guardian_angel(void) {
+	Hear_again();
+
+	if (Conflict) {
+		pline("A voice booms: \"Thy desire for conflict shall be fulfilled!\"");
+		// send in 2-4 hostile angels instead
+		lose_guardian_angel(NULL);
+	} else if (u.ualign.record > 8) { /* fervent */
+		coord mm;
+		mm.x = u.ux;
+		mm.y = u.uy;
+
+		pline("A voice whispers: \"Thou hast been worthy of me!\"");
+		if (enexto(&mm, mm.x, mm.y, &mons[PM_ANGEL])) {
+			struct monst *mtmp;
+			if ((mtmp = mk_roamer(&mons[PM_ANGEL], u.ualign.type,
+					      mm.x, mm.y, true)) != 0) {
+				if (!Blind)
+					pline("An angel appears near you.");
+				else
+					pline("You feel the presence of a friendly angel near you.");
+				/* guardian angel -- the one case mtame doesn't
+				 * imply an edog structure, so we don't want to
+				 * call tamedog().
+				 */
+				mtmp->mtame = 10;
+				/* make him strong enough vs. endgame foes */
+				mtmp->m_lev = rn1(8, 15);
+				mtmp->mhp = mtmp->mhpmax =
+					d((int)mtmp->m_lev, 10) + 30 + rnd(30);
+
+				struct obj *otmp;
+				if ((otmp = select_hwep(mtmp)) == 0) {
+					otmp = mksobj(SILVER_SABER, false, false);
+					if (mpickobj(mtmp, otmp))
+						panic("merged weapon?");
+				}
+				bless(otmp);
+				if (otmp->spe < 4) otmp->spe += rnd(4);
+				if ((otmp = which_armor(mtmp, W_ARMS)) == 0 ||
+				    otmp->otyp != SHIELD_OF_REFLECTION) {
+					mongets(mtmp, AMULET_OF_REFLECTION);
+					m_dowear(mtmp, true);
+				}
+			}
+		}
+	}
+}
+
 /*minion.c*/

@@ -1636,7 +1636,7 @@ char *makesingular(const char *oldstr) {
 	    (p = strstri(bp, "-at-")) != 0) {
 		// [wo]men-at-arms -> [wo]man-at-arms; takes "not end in s" exit
 		if (!BSTRNCMP(bp, p-3, "men", 3)) *(p-2) = 'a';
-		f (BSTRNCMP(bp, p-1, "s", 1)) return bp;   /* wasn't plural */
+		if (BSTRNCMP(bp, p-1, "s", 1)) return bp;   /* wasn't plural */
 		--p;                /* back up to the 's' */
 		/* but don't singularize "gauntlets", "boots", "Eyes of the.." */
 		if (BSTRNCMPI(bp, p - 3, "Eye", 3) &&
