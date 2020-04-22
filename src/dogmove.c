@@ -761,7 +761,7 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 		if (m_carrying(mtmp, SKELETON_KEY)) allowflags |= BUSTDOOR;
 	}
 	if (is_giant(mtmp->data)) allowflags |= BUSTDOOR;
-	if (tunnels(mtmp->data)) allowflags |= ALLOW_DIG;
+	if (tunnels(mtmp->data) && !Is_rogue_level(&u.uz)) allowflags |= ALLOW_DIG;
 	cnt = mfndpos(mtmp, poss, info, allowflags);
 #ifdef DEBUG
 	debugpline("%d positions found with allow: %s", cnt,

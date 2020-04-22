@@ -217,6 +217,7 @@ Imports from NetHack version 3.6:
 - Bugfix: if a multiple boulders were at a location and one were removed, player would be able to see items that were previously blocked by the boulder.
 - Bugfix: incubi react to mirrors.
 - Bugfix: behaviour of brain-eating attack was incorrect in certain cases.
+- Bugfix: pets could dig on the rogue level.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).
