@@ -218,6 +218,7 @@ Imports from NetHack version 3.6:
 - Bugfix: incubi react to mirrors.
 - Bugfix: behaviour of brain-eating attack was incorrect in certain cases.
 - Bugfix: pets could dig on the rogue level.
+- Gameplay: allow pets to unlock and open doors with keys.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).

@@ -19,31 +19,97 @@ static boolean dog_hunger(struct monst *, struct edog *);
 static int dog_invent(struct monst *, struct edog *, int);
 static int dog_goal(struct monst *, struct edog *, int, int, int);
 
-static struct obj *DROPPABLES(struct monst *);
 static bool can_reach_location(struct monst *, xchar, xchar, xchar, xchar);
 static bool could_reach_item(struct monst *, xchar, xchar);
 static void quickmimic(struct monst *mtmp);
 
-static struct obj *DROPPABLES(struct monst *mon) {
-	struct obj *obj;
-	struct obj *wep = MON_WEP(mon);
-	boolean item1 = false, item2 = false;
+// pick a carried item for the pet to drop
+struct obj *droppables(struct monst *mon) {
+	struct obj *obj = NULL, *wep = NULL, dummy = {0},
+		   *pickaxe = NULL, *unihorn = NULL, *key = NULL;
 
-	if (is_animal(mon->data) || mindless(mon->data))
-		item1 = item2 = true;
-	if (!tunnels(mon->data) || !needspick(mon->data))
-		item1 = true;
+	// dummy is a standin for an object that will never get dropped
+	dummy.otyp = GOLD_PIECE; // not STRANGE_OBJECT or tools of interest
+	dummy.oartifact = 1; // so real artifact won't override "don't keep it"
+
+	wep = MON_WEP(mon);
+
+	if (is_animal(mon->data) || mindless(mon->data)) {
+		// won't hang on to any objects of these types
+		// act as if already have them
+		pickaxe = unihorn = key = &dummy;  
+	} else {
+		// don't hang on to pick-axe if can't use one or don't need one
+		if (!tunnels(mon->data) || !needspick(mon->data)) pickaxe = &dummy;
+
+		// don't hang on to key if can't open doors
+		if (nohands(mon->data) || verysmall(mon->data)) key = &dummy;
+	}
+	if (wep) {
+		if (is_pick(wep)) pickaxe = wep;
+		if (wep->otyp == UNICORN_HORN) unihorn = wep;
+		// don't need any wielded check for keys...
+	}
+
 	for (obj = mon->minvent; obj; obj = obj->nobj) {
-		if (!item1 && is_pick(obj) && (obj->otyp != DWARVISH_MATTOCK || !which_armor(mon, W_ARMS))) {
-			item1 = true;
-			continue;
-		}
-		if (!item2 && obj->otyp == UNICORN_HORN && !obj->cursed) {
-			item2 = true;
-			continue;
+		switch (obj->otyp) {
+			case DWARVISH_MATTOCK:
+				// reject mattock if couldn't wield it
+				if (which_armor(mon, W_ARMS)) break;
+				/* keep mattock in preference to pick unless pick is already
+				 * wielded or is an artifact and mattock isn't */
+				if (pickaxe && pickaxe->otyp == PICK_AXE &&
+						pickaxe != wep && (!pickaxe->oartifact || obj->oartifact))
+					// drop the one we earlier decided to keep
+					return pickaxe;
+				//fallthru
+			case PICK_AXE:
+				if (!pickaxe || (obj->oartifact && !pickaxe->oartifact)) {
+					if (pickaxe) return pickaxe;
+					// keep this digging tool
+					pickaxe = obj;
+					continue;
+				}
+				break;
+			case UNICORN_HORN:
+				// reject cursed unicorn horns
+				if (obj->cursed) break;
+				// keep artifact unihorn in preference to ordinary one
+				if (!unihorn || (obj->oartifact && !unihorn->oartifact)) {
+					if (unihorn) return unihorn;
+					// keep this unicorn horn
+					unihorn = obj;
+					continue;
+				}
+				break;
+			case SKELETON_KEY:
+				// keep key in preference to lock-pick
+				if (key && key->otyp == LOCK_PICK &&
+						(!key->oartifact || obj->oartifact))
+					// drop the one we earlier decided to keep
+					return key;
+				//fallthru
+			case LOCK_PICK:
+				// keep lock-pick in preference to credit card
+				if (key && key->otyp == CREDIT_CARD &&
+						(!key->oartifact || obj->oartifact))
+					return key;
+				//fallthru
+			case CREDIT_CARD:
+				if (!key || (obj->oartifact && !key->oartifact)) {
+					if (key) return key;
+					key = obj;              // keep this unlocking tool
+					continue;
+				}
+				break;
+
+			default:
+				break;
 		}
 		if (!obj->owornmask && obj != wep) return obj;
 	}
+
+	// don't drop anything
 	return NULL;
 }
 
@@ -305,7 +371,7 @@ static int dog_invent(struct monst *mtmp, struct edog *edog, int udist) {
 	/* if we are carrying sth then we drop it (perhaps near @) */
 	/* Note: if apport == 1 then our behaviour is independent of udist */
 	/* Use udist+1 so steed won't cause divide by zero */
-	if (DROPPABLES(mtmp)) {
+	if (droppables(mtmp)) {
 		if (!rn2(udist + 1) || !rn2(edog->apport))
 			if (rn2(10) < edog->apport) {
 				relobj(mtmp, (int)mtmp->minvis, true);
@@ -405,7 +471,7 @@ static int dog_goal(struct monst *mtmp, struct edog *edog, int after, int udist,
 	omy = mtmp->my;
 
 	in_masters_sight = couldsee(omx, omy);
-	dog_has_minvent = (DROPPABLES(mtmp) != 0);
+	dog_has_minvent = (droppables(mtmp) != 0);
 
 	if (!edog || mtmp->mleashed) { /* he's not going anywhere... */
 		/* Note: it would be easy enough for pets to follow tight leashes
@@ -758,7 +824,9 @@ int dog_move(struct monst *mtmp, int after /* this is extra fast monster movemen
 	}
 	if (!nohands(mtmp->data) && !verysmall(mtmp->data)) {
 		allowflags |= OPENDOOR;
-		if (m_carrying(mtmp, SKELETON_KEY)) allowflags |= BUSTDOOR;
+		if (monhaskey(mtmp, true)) allowflags |= UNLOCKDOOR;
+		/* note:  the Wizard and Riders can unlock doors without a key;
+		 * they won't use that ability if someone manages to tame them */
 	}
 	if (is_giant(mtmp->data)) allowflags |= BUSTDOOR;
 	if (tunnels(mtmp->data) && !Is_rogue_level(&u.uz)) allowflags |= ALLOW_DIG;

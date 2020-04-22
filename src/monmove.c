@@ -38,6 +38,14 @@ bool mb_trapped(struct monst *mtmp) {
 	return false;
 }
 
+// check whether a monster is carrying a locking/unlocking tool
+bool monhaskey(struct monst *mon, bool for_unlocking) {
+	if (for_unlocking && m_carrying(mon, CREDIT_CARD)) return true;
+
+	return m_carrying(mon, SKELETON_KEY) || m_carrying(mon, LOCK_PICK);
+}
+
+
 static void watch_on_duty(struct monst *mtmp) {
 	int x, y;
 
@@ -608,7 +616,7 @@ int m_move(struct monst *mtmp, int after) {
 	if (!Is_rogue_level(&u.uz))
 		can_tunnel = tunnels(ptr);
 	can_open = !(nohands(ptr) || verysmall(ptr));
-	can_unlock = ((can_open && m_carrying(mtmp, SKELETON_KEY)) ||
+	can_unlock = ((can_open && monhaskey(mtmp, true)) ||
 		      mtmp->iswiz || is_rider(ptr));
 	/*        doorbuster = is_giant(ptr);*/
 
@@ -1042,7 +1050,7 @@ postmov:
 			if (IS_DOOR(levl[mtmp->mx][mtmp->my].typ) && !passes_walls(ptr) /* doesn't need to open doors */
 			    && !can_tunnel) {						/* taken care of below */
 				struct rm *here = &levl[mtmp->mx][mtmp->my];
-				boolean btrapped = (here->doormask & D_TRAPPED);
+				bool btrapped = (here->doormask & D_TRAPPED), observeit = canseeit && canspotmon(mtmp);
 
 				if (here->doormask & (D_LOCKED | D_CLOSED) && (amorphous(ptr) || (can_fog(mtmp) && vamp_shift(mtmp, &mons[PM_FOG_CLOUD])))) {
 					if (flags.verbose && canseemon(mtmp))
@@ -1059,8 +1067,11 @@ postmov:
 						if (mb_trapped(mtmp)) return 2;
 					} else {
 						if (flags.verbose) {
-							if (canseeit)
+							if (observeit)
+								pline("%s unlocks and opens a door.", Monnam(mtmp));
+							else if (canseeit)
 								pline("You see a door unlock and open.");
+
 							else if (!Deaf)
 								You_hear("a door unlock and open.");
 						}
@@ -1076,7 +1087,9 @@ postmov:
 						if (mb_trapped(mtmp)) return 2;
 					} else {
 						if (flags.verbose) {
-							if (canseeit)
+							if (observeit)
+								pline("%s opens a door.", Monnam(mtmp));
+							else if (canseeit)
 								pline("You see a door open.");
 							else if (!Deaf)
 								You_hear("a door open.");

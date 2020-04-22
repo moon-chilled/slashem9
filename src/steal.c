@@ -497,40 +497,10 @@ void mdrop_special_objs(struct monst *mon) {
 void relobj(struct monst *mtmp, int show, boolean is_pet) {
 	struct obj *otmp;
 	int omx = mtmp->mx, omy = mtmp->my;
-	struct obj *keepobj = 0;
-	struct obj *wep = MON_WEP(mtmp);
-	boolean item1 = false, item2 = false;
 
-	if (!is_pet || mindless(mtmp->data) || is_animal(mtmp->data))
-		item1 = item2 = true;
-	if (!tunnels(mtmp->data) || !needspick(mtmp->data))
-		item1 = true;
-
-	while ((otmp = mtmp->minvent) != 0) {
+	while ((otmp = (is_pet ? droppables(mtmp) : mtmp->minvent)) != 0) {
 		obj_extract_self(otmp);
-		/* special case: pick-axe and unicorn horn are non-worn */
-		/* items that we also want pets to keep 1 of */
-		/* (It is a coincidence that these can also be wielded.) */
-		if (otmp->owornmask || otmp == wep ||
-		    ((!item1 && otmp->otyp == PICK_AXE) ||
-		     (!item2 && otmp->otyp == UNICORN_HORN && !otmp->cursed))) {
-			if (is_pet) { /* dont drop worn/wielded item */
-				if (otmp->otyp == PICK_AXE)
-					item1 = true;
-				if (otmp->otyp == UNICORN_HORN && !otmp->cursed)
-					item2 = true;
-				otmp->nobj = keepobj;
-				keepobj = otmp;
-				continue;
-			}
-		}
 		mdrop_obj(mtmp, otmp, is_pet && flags.verbose);
-	}
-
-	/* put kept objects back */
-	while ((otmp = keepobj) != NULL) {
-		keepobj = otmp->nobj;
-		add_to_minv(mtmp, otmp);
 	}
 
 	if (show & cansee(omx, omy))

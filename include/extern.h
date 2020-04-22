@@ -409,6 +409,7 @@ void wary_dog(struct monst *, boolean);
 
 /* ### dogmove.c ### */
 
+struct obj *droppables(struct monst *mon);
 bool cursed_object_at(struct monst *mtmp, int x, int y);
 int dog_nutrition(struct monst *mtmp, struct obj *obj);
 int dog_eat(struct monst *mtmp, struct obj *obj, int x, int y, bool devour);
@@ -1199,6 +1200,7 @@ bool is_vampshifter(struct monst *mon);
 /* ### monmove.c ### */
 
 bool mb_trapped(struct monst *mtmp);
+bool monhaskey(struct monst *mon, bool for_unlocking);
 int dochugw(struct monst *mtmp);
 bool onscary(int x, int y, struct monst *mtmp);
 void mon_regen(struct monst *mon, bool digest_meal);
