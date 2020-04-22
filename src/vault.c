@@ -34,14 +34,16 @@ void free_egd(struct monst *mtmp) {
 static bool clear_fcorr(struct monst *grd, boolean forceshow) {
 	int fcx, fcy, fcbeg;
 	struct monst *mtmp;
+	bool sawcorridor = false;
+	struct egd *egrd = EGD(grd);
 
-	if (!on_level(&(EGD(grd)->gdlevel), &u.uz)) return true;
+	if (!on_level(&egrd->gdlevel, &u.uz)) return true;
 
-	while ((fcbeg = EGD(grd)->fcbeg) < EGD(grd)->fcend) {
-		fcx = EGD(grd)->fakecorr[fcbeg].fx;
-		fcy = EGD(grd)->fakecorr[fcbeg].fy;
+	while ((fcbeg = egrd->fcbeg) < egrd->fcend) {
+		fcx = egrd->fakecorr[fcbeg].fx;
+		fcy = egrd->fakecorr[fcbeg].fy;
 		if ((grd->mhp <= 0 || !in_fcorridor(grd, u.ux, u.uy)) &&
-		    EGD(grd)->gddone)
+		    egrd->gddone)
 			forceshow = true;
 		if ((u.ux == fcx && u.uy == fcy && grd->mhp > 0) || (!forceshow && couldsee(fcx, fcy)) || (Punished && !carried(uball) && uball->ox == fcx && uball->oy == fcy))
 			return false;
@@ -54,12 +56,14 @@ static bool clear_fcorr(struct monst *grd, boolean forceshow) {
 				rloc(mtmp, false);
 			}
 		}
-		levl[fcx][fcy].typ = EGD(grd)->fakecorr[fcbeg].ftyp;
+		if (levl[fcx][fcy].typ == CORR && cansee(fcx, fcy))
+			sawcorridor = true;
+		levl[fcx][fcy].typ = egrd->fakecorr[fcbeg].ftyp;
 		map_location(fcx, fcy, 1); /* bypass vision */
 		if (!ACCESSIBLE(levl[fcx][fcy].typ)) block_point(fcx, fcy);
-		EGD(grd)->fcbeg++;
+		egrd->fcbeg++;
 	}
-	if (grd->mhp <= 0) {
+	if (sawcorridor) {
 		pline("The corridor disappears.");
 		if (IS_ROCK(levl[u.ux][u.uy].typ)) pline("You are encased in rock.");
 	}

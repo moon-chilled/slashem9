@@ -219,6 +219,7 @@ Imports from NetHack version 3.6:
 - Bugfix: behaviour of brain-eating attack was incorrect in certain cases.
 - Bugfix: pets could dig on the rogue level.
 - Gameplay: allow pets to unlock and open doors with keys.
+- Bugfix: don't show message 'the corridor disappears' when player doesn't actually see it disappear.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).
