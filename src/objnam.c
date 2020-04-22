@@ -1391,7 +1391,8 @@ char *makeplural(const char *oldstr) {
 		    !strncmp(spot, " de ", 4) ||
 		    !strncmp(spot, " d'", 3) ||
 		    !strncmp(spot, " du ", 4) ||
-		    !strncmp(spot, " in ", 4)) {
+		    !strncmp(spot, "-in-", 4) ||
+		    !strncmp(spot, "-at-", 4)) {
 			excess = oldstr + (int)(spot - str);
 			*spot = 0;
 			break;
@@ -1631,8 +1632,11 @@ char *makesingular(const char *oldstr) {
 	 * recursively since it can't recognize whether we should be
 	 * removing "es" rather than just "s" */
 	if ((p = strstri(bp, " of ")) != 0 ||
-	    (p = strstri(bp, "-in-")) != 0) {
-		if (BSTRNCMP(bp, p-1, "s", 1)) return bp;   /* wasn't plural */
+	    (p = strstri(bp, "-in-")) != 0 ||
+	    (p = strstri(bp, "-at-")) != 0) {
+		// [wo]men-at-arms -> [wo]man-at-arms; takes "not end in s" exit
+		if (!BSTRNCMP(bp, p-3, "men", 3)) *(p-2) = 'a';
+		f (BSTRNCMP(bp, p-1, "s", 1)) return bp;   /* wasn't plural */
 		--p;                /* back up to the 's' */
 		/* but don't singularize "gauntlets", "boots", "Eyes of the.." */
 		if (BSTRNCMPI(bp, p - 3, "Eye", 3) &&
@@ -1707,13 +1711,18 @@ char *makesingular(const char *oldstr) {
 		p[-1] = 0;
 
 	} else {
-		if (!BSTRCMPI(bp, p - 5, "teeth")) {
-			strcpy(p - 5, "tooth");
+		if (!BSTRCMPI(bp, p-5, "teeth")) {
+			strcpy(p-5, "tooth");
 			return bp;
 		}
 
-		if (!BSTRCMP(bp, p - 5, "fungi")) {
-			strcpy(p - 5, "fungus");
+		if (!BSTRCMP(bp, p-5, "fungi")) {
+			strcpy(p-5, "fungus");
+			return bp;
+		}
+
+		if (!BSTRCMP(bp, p-3, "men")) {
+			strcpy(p-3, "man");
 			return bp;
 		}
 

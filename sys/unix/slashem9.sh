@@ -58,4 +58,4 @@ if [ x$NH_USE_RR != x ]; then
 fi
 
 cd $HACKDIR
-exec env ASAN_OPTIONS=log_path=asan.log $HACK "$@"
+exec env ASAN_OPTIONS=log_path=asan.log $NH_WRAPPER $HACK "$@"

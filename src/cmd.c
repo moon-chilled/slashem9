@@ -1797,89 +1797,13 @@ void show_conduct(int final) {
 // TODO make sure all these commands make it into the ext cmd list
 #if 0
 static const struct func_tab cmdlist[] = {
-	{C('d'), false, dokick}, /* "D" is for door!...?  Msg is in dokick.c */
-	{C('b'), false, playersteal},
-	/* BEGIN TSANTH'S CODE */
-	{C('c'), true, wiz_gain_ac},
-	/* END TSANTH'S CODE */
-	{C('e'), true, wiz_detect},
-	{C('f'), true, wiz_map},
-	{C('g'), true, wiz_genesis},
-	{C('i'), true, wiz_identify},
-	{C('j'), true, wiz_gain_level},
-	{C('l'), true, doredraw}, /* if number_pad is set */
-	/* BEGIN TSANTH'S CODE */
-	{C('n'), true, wiz_toggle_invulnerability},
-	/* END TSANTH'S CODE */
-	{C('p'), true, doprev_message},
-	{C('q'), true, done2},
-	{C('r'), true, doredraw},
 	/*	{C('s'), false, specialpower},*/
-	{C('s'), true, dosave},
-	{C('t'), true, dotele},
-	{C('v'), true, wiz_level_tele},
-	{C('w'), true, wiz_wish},
-	{C('x'), true, doattributes},
-	{C('y'), true, polyatwill},
-#ifdef SUSPEND
-	{C('z'), true, dosuspend},
-#endif
-	{'a', false, doapply},
-	{'A', false, doddoremarm},
-	{M('a'), true, doorganize},
-	/*	'b', 'B' : go sw */
-	{M('b'), false, playersteal},   /* jla */
-	{'c', false, doclose},
-	{'C', true, do_mname},
-	{M('c'), true, dotalk},
-	{'d', false, dodrop},
-	{'D', false, doddrop},
-	{M('d'), false, dodip},
-	{'e', false, doeat},
-	{'E', false, doengrave},
-	{M('e'), true, enhance_weapon_skill},
-	{'f', false, dofire},
-	/*	'F' : fight (one time) */
-	{M('f'), false, doforce},
-	/*	'g', 'G' : multiple go */
-	/*	'h', 'H' : go west */
-	{'h', true, dohelp}, /* if number_pad is set */
-	{'i', true, ddoinv},
-	{'I', true, dotypeinv},		/* Robert Viduya */
-	{M('i'), true, doinvoke},
-	/*	'j', 'J', 'k', 'K', 'l', 'L', 'm', 'M', 'n', 'N' : move commands */
-	{'j', false, dojump}, /* if number_pad is on */
-	{M('j'), false, dojump},
-	{'k', false, dokick}, /* if number_pad is on */
-	{'K', true, dolistvanq}, /* if number_pad is on */
-	{M('k'), true, enhance_weapon_skill},
-	{'l', false, doloot}, /* if number_pad is on */
-	{M('l'), false, doloot},
-	/*	'n' prefixes a count if number_pad is on */
-	{M('m'), true, domonability},
-	{'N', true, ddocall}, /* if number_pad is on */
-	{M('n'), true, ddocall},
-	{'o', false, doopen},
-	{'O', true, doset},
-	{M('o'), false, dosacrifice},
-	{'p', false, dopay},
 	/*WAC replace with dowear*/
 	{'P', false, doputon},
 	{M('p'), true, dopray},
 	{'q', false, dodrink},
 	{'Q', false, dowieldquiver},
 	{M('q'), true, done2},
-	{'r', false, doread},
-	{'R', false, doremring},
-	{M('r'), false, dorub},
-	{'s', true, dosearch, "searching"},
-	{'S', true, dosave},
-	{M('s'), false, dosit},
-	{'t', false, dothrow},
-	{'T', false, dotakeoff},
-	/*	{M('t'), true, doturn},*/
-	{M('t'), true, dotech},
-	/*	'u', 'U' : go ne */
 	{'u', false, dountrap}, /* if number_pad is on */
 	{M('u'), false, dountrap},
 	{'v', true, doversion},
@@ -1894,42 +1818,13 @@ static const struct func_tab cmdlist[] = {
 	{M('x'), true, dovspell},                  /* Mike Stephenson */
 #endif
 	/*	'y', 'Y' : go nw */
-	{M('y'), false, polyatwill},  /* jla */
-	{'z', false, dozap},
-	{'Z', true, docast},
-	{'<', false, doup},
-	{'>', false, dodown},
 	{'/', true, dowhatis},
 	{'&', true, dowhatdoes},
-	{'?', true, dohelp},
 	{M('?'), true, doextlist},
-#ifdef SHELL
-	{'!', true, dosh},
-#endif
-	{'.', true, donull, "waiting"},
-	{' ', true, donull, "waiting"},
-	{',', false, dopickup},
-	{':', true, dolook},
-	{';', true, doquickwhatis},
-	{'^', true, doidtrap},
-	{'\\', true, dodiscovered},		/* Robert Viduya */
-	{'@', true, dotogglepickup},
-	{M('2'), false, dotwoweapon},
 	/* WAC Angband style items in use, menusystem
 		{'*', true, doinvinuse}, */
 	{'`', true, domenusystem},
 	{'~', true, domenusystem},
-	{WEAPON_SYM,  true, doprwep},
-	{ARMOR_SYM,  true, doprarm},
-	{RING_SYM,  true, doprring},
-	{AMULET_SYM, true, dopramulet},
-	{TOOL_SYM, true, doprtool},
-	{'*', true, doprinuse},	/* inventory of all equipment in use */
-	{GOLD_SYM, true, doprgold},
-	{SPBOOK_SYM, true, dovspell},			/* Mike Stephenson */
-	{'#', true, doextcmd},
-	{'_', true, dotravel},
-	{0,0,0,0}
 };
 #endif
 
@@ -2031,9 +1926,6 @@ struct ext_func_tab extcmdlist[] = {
 	{"ride", "ride (or stop riding) a monster", doride, !IFBURIED, AUTOCOMPLETE},
 	{"rub", "rub a lamp", dorub, !IFBURIED, AUTOCOMPLETE},
 	{"sit", "sit down", dosit, !IFBURIED, AUTOCOMPLETE},
-#ifdef STICKY_COMMAND
-	{"sticky", "set 'sticky' inventory slots", dosticky, IFBURIED, AUTOCOMPLETE},
-#endif /* STICKY_COMMAND */
 	{"technique", "perform a technique", dotech, IFBURIED, AUTOCOMPLETE},
 	{"tip", "tip objects out of a container", dotip, IFBURIED, AUTOCOMPLETE},
 	{"turn", "turn undead", doturn, IFBURIED, AUTOCOMPLETE},
@@ -2145,10 +2037,13 @@ static void init_bind_list(void) {
 	bind_key(C('d'), "kick"); /* "D" is for door!...?  Msg is in dokick.c */
 	bind_key(C('i'), "removeimarkers"); // do this first so it can be overridden in wizmode
 	if (wizard) {
+		//bind_key(C('c'), "gainac");
 		bind_key(C('e'), "detect");
 		bind_key(C('f'), "map");
 		bind_key(C('g'), "genesis");
 		bind_key(C('i'), "identify");
+		//bind_key(C('j'), "gainlevel");
+		//bind_key(C('n'), "toggleinvulnerability");
 		bind_key(C('o'), "where");
 		bind_key(C('v'), "levelport");
 		bind_key(C('w'), "wish");
@@ -2158,13 +2053,11 @@ static void init_bind_list(void) {
 	bind_key(C('r'), "redraw");
 	bind_key(C('t'), "teleport");
 	bind_key(C('x'), "attributes");
-#ifdef SUSPEND
-	bind_key(C('z'), "suspend");
-#endif
 	bind_key('a', "apply");
 	bind_key('A', "takeoffall");
 	bind_key(M('a'), "adjust");
 	/*       'b', 'B' : go sw */
+	bind_key(C('b'), "borrow");
 	bind_key('c', "close");
 	bind_key('C', "call");
 	bind_key(M('c'), "chat");
@@ -2187,17 +2080,18 @@ static void init_bind_list(void) {
 	/*       'j', 'J', 'k', 'K', 'l', 'L', 'm', 'M', 'n', 'N' : move commands */
 	bind_key(M('j'), "jump"); /* if number_pad is on */
 	bind_key('k', "kick");	  /* if number_pad is on */
+	bind_key('K', "vanquished");/*if number_pad is on */
+	//bind_key(M('k'), "enhance"); /*is this really necessary?*/
 	bind_key('l', "loot");	  /* if number_pad is on */
 	bind_key(M('l'), "loot");
 	bind_key(M('m'), "monster");
 	bind_key('N', "name");
 	/*       'n' prefixes a count if number_pad is on */
 	bind_key(M('n'), "name");
-	bind_key(M('N'), "name"); /* if number_pad is on */
 	bind_key(C('n'), "annotate");
 	bind_key('o', "open");
-	bind_key(C('o'), "overview");  //overwrites #where
 	bind_key('O', "setoptions");
+	bind_key(C('o'), "overview");  //overwrites #where
 	bind_key(M('o'), "offer");
 	bind_key('p', "pay");
 	bind_key('P', "puton");
@@ -2213,7 +2107,8 @@ static void init_bind_list(void) {
 	bind_key(M('s'), "sit");
 	bind_key('t', "throw");
 	bind_key('T', "takeoff");
-	bind_key(M('t'), "turn");
+	//bind_key(M('t'), "turn");
+	bind_key(M('t'), "technique");
 	/*        'u', 'U' : go ne */
 	bind_key('u', "untrap"); /* if number_pad is on */
 	bind_key(M('u'), "untrap");
@@ -2224,12 +2119,16 @@ static void init_bind_list(void) {
 	bind_key(M('w'), "wipe");
 	bind_key('x', "swap");
 	bind_key('X', "explore_mode");
+#if 0
+	{M('x'), true, dovspell},                  /* Mike Stephenson */
+#endif
 	/*        'y', 'Y' : go nw */
-#ifdef STICKY_COMMAND
-	bind_key(M('y'), "sticky");
-#endif /* STICKY_COMMAND */
+	bind_key(M('y'), "youpoly");
 	bind_key('z', "zap");
 	bind_key('Z', "cast");
+#ifdef SUSPEND
+	bind_key(C('z'), "suspend");
+#endif
 	bind_key('<', "up");
 	bind_key('>', "down");
 	bind_key('/', "whatis");

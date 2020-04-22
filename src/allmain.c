@@ -687,7 +687,7 @@ void welcome(boolean new_game /* false => restoring an old game */) {
 #ifdef POSITIONBAR
 static void do_positionbar(void) {
 	static char pbar[COLNO];
-	char *p;
+	char *p = NULL;
 
 	p = pbar;
 	/* up stairway */
