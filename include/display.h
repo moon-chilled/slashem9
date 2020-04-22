@@ -387,5 +387,5 @@
 #define memory_is_invisible(x, y) (levl[x][y].mem_invis)
 #define remembered_object(x, y)           \
 	(levl[x][y].mem_corpse ? CORPSE : \
-				 levl[x][y].mem_obj ? levl[x][y].mem_obj - 1 : NO_GLYPH)
+	 levl[x][y].mem_obj ? levl[x][y].mem_obj - 1 : NO_GLYPH)
 #endif /* DISPLAY_H */

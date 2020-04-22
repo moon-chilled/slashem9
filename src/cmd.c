@@ -291,6 +291,16 @@ int doextlist(void) {
 	return 0;
 }
 
+int doremoveimarkers(void) {
+	for (usize x = 1; x < COLNO; x++) {
+		for (usize y = 0; y < ROWNO; y++) {
+			levl[x][y].mem_invis = false;
+		}
+	}
+
+	return 0;
+}
+
 #if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS)
 #define MAX_EXT_CMD 200 /* Change if we ever have more ext cmds */
 /*
@@ -2017,6 +2027,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"overview", "show an overview of the dungeon", dooverview, IFBURIED, AUTOCOMPLETE},
 	{"pray", "pray to the gods for help", dopray, IFBURIED, AUTOCOMPLETE},
 	{"quit", "exit without saving current game", done2, IFBURIED, AUTOCOMPLETE, .disallowed_if_fuzzing = true},
+	{"removeimarkers", "remove markers of remembered invisible monsters", doremoveimarkers, IFBURIED, !AUTOCOMPLETE},
 	{"ride", "ride (or stop riding) a monster", doride, !IFBURIED, AUTOCOMPLETE},
 	{"rub", "rub a lamp", dorub, !IFBURIED, AUTOCOMPLETE},
 	{"sit", "sit down", dosit, !IFBURIED, AUTOCOMPLETE},
@@ -2132,6 +2143,7 @@ static void bind_key(unsigned char key, char *command) {
 
 static void init_bind_list(void) {
 	bind_key(C('d'), "kick"); /* "D" is for door!...?  Msg is in dokick.c */
+	bind_key(C('i'), "removeimarkers"); // do this first so it can be overridden in wizmode
 	if (wizard) {
 		bind_key(C('e'), "detect");
 		bind_key(C('f'), "map");
