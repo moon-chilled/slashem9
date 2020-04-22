@@ -528,6 +528,7 @@ void vomit(void);
 int eaten_stat(int, struct obj *);
 void food_disappears(struct obj *);
 void food_substitution(struct obj *, struct obj *);
+bool maybe_cannibal(int pm, bool allowmsg);
 boolean bite_monster(struct monst *mon);
 void fix_petrification(void);
 void consume_oeaten(struct obj *, int);

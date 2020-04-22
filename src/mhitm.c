@@ -973,7 +973,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 	struct obj *obj;
 	char buf[BUFSZ];
 	struct permonst *pa = magr->data, *pd = mdef->data;
-	int armpro, num, tmp = d((int)mattk->damn, (int)mattk->damd);
+	int armpro, num, tmp = d((int)mattk->damn, (int)mattk->damd), res = MM_MISS;
 	boolean cancelled;
 	int canhitmon, objenchant;
 	boolean nohit = false;
@@ -1739,7 +1739,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 			}
 			if (is_rider(pd)) {
 				mondied(magr);
-				if (magr->mhp <= 0) result = MM_AGR_DIED;
+				if (magr->mhp <= 0) res = MM_AGR_DIED;
 				// Rider takes extra damage regardless of whether attacker dies
 				tmp += rnd(10);
 				break;
@@ -1815,7 +1815,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 			tmp = 0;
 			break;
 	}
-	if (!tmp) return MM_MISS;
+	if (!tmp) return res;
 
 	/* STEPHEN WHITE'S NEW CODE */
 	if (objenchant < canhitmon && vis) {

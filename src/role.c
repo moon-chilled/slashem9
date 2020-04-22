@@ -1153,10 +1153,6 @@ const struct Gender genders[] = {
 	{"female", "she", "her", "her", "Fem", ROLE_FEMALE},
 	{"neuter", "it", "it", "its", "Ntr", ROLE_NEUTER}};
 
-#ifdef MAC_MPW
-const usize maxGender = sizeof genders / sizeof genders[0];
-#endif /* MAC_MPW */
-
 /* Table of all alignments */
 const struct Align aligns[] = {
 	{"law", "lawful", "Law", ROLE_LAWFUL, A_LAWFUL},

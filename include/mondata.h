@@ -192,6 +192,9 @@
 				 ptr == &mons[PM_CHICKATRICE] || \
 				 ptr == &mons[PM_ASPHYNX])
 
+// monster types that cause hero to be turned into stone if eaten
+#define flesh_petrifies(pm) (touch_petrifies(pm) || (pm) == &mons[PM_MEDUSA])
+
 #define is_mind_flayer(ptr)	((ptr) == &mons[PM_MIND_FLAYER] || (ptr) == &mons[PM_MASTER_MIND_FLAYER])
 
 #define made_of_rock(ptr)	((passes_walls(ptr) && thick_skinned(ptr)) || \

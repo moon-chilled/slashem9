@@ -2018,7 +2018,7 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 			}
 			if (is_rider(mdef->data)) {
 				pline("Injesting that is fatal.");
-				nhscopyf(killer.name, "unwisely ate the brain of %S", pd->mname);
+				nhscopyf(&killer.name, "unwisely ate the brain of %S", pd->mname);
 				killer.format = NO_KILLER_PREFIX;
 				done(DIED);
 				// life-saving needed to reach here

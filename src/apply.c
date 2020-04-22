@@ -916,7 +916,8 @@ static int use_mirror(struct obj *obj) {
 	} else if (!mtmp->mcan && !mtmp->minvis && (mlet == S_NYMPH || is_foocubus(mtmp->data))) {
 		if (vis) {
 			pline("%s admires %sself in your %s.", Monnam(mtmp), mhis(mtmp), mirror);
-			pline("%s takes it!", upstart(mhe(mtmp)));
+			char buf[5];
+			pline("%s takes it!", upstart(strcpy(buf, mhe(mtmp))));
 		} else {
 			pline("It steals your %s!", mirror);
 		}
@@ -3063,7 +3064,7 @@ static int use_grapple(struct obj *obj) {
 				thitmonst(mtmp, uwep, 1);
 				return 1;
 			}
-		/* FALL THROUGH */
+		//fallthru
 		case 3: /* Surface */
 			if (IS_AIR(levl[cc.x][cc.y].typ) || is_pool(cc.x, cc.y))
 				pline("The hook slices through the %s.", surface(cc.x, cc.y));

@@ -40,7 +40,6 @@ static int bounded_increase(int old, int inc, int typ);
 static void accessory_has_effect(struct obj *otmp);
 static void eataccessory(struct obj *otmp);
 static const char *foodword(struct obj *otmp);
-static bool maybe_cannibal(int pm, bool allowmsg);
 static struct obj *floorfood(const char *verb);
 static int tin_variety(struct obj *obj);
 
@@ -58,9 +57,6 @@ char msgbuf[BUFSZ];
 /* also used to see if you're allowed to eat cats and dogs */
 #define CANNIBAL_ALLOWED() (Role_if(PM_CAVEMAN) || Race_if(PM_ORC) || \
 			    Race_if(PM_HUMAN_WEREWOLF) || Race_if(PM_VAMPIRE))
-
-// monster types that cause hero to be turned into stone if eaten
-#define flesh_petrifies(pm) (touch_petrifies(pm) || (pm) == &mons[PM_MEDUSA])
 
 /* Gold must come first for getobj(). */
 static const char allobj[] = {COIN_CLASS, ALLOW_FLOOROBJ,
@@ -436,7 +432,7 @@ static void done_eating(bool message) {
 }
 
 // eating a corpse or egg of one's own species is usually naughty
-static bool maybe_cannibal(int pm, bool allowmsg) {
+bool maybe_cannibal(int pm, bool allowmsg) {
 	struct permonst *fptr = &mons[pm];
 	if (your_race(fptr)
 		/* non-cannibalistic heroes shouldn't eat own species ever
