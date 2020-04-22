@@ -1753,8 +1753,12 @@ static void ini_inv(struct trobj *trop) {
 			/* no "blessed" or "identified" money */
 			obj->quan = u.umoney0;
 		} else {
-			obj->dknown = obj->bknown = obj->rknown = 1;
 			if (objects[otyp].oc_uses_known) obj->known = 1;
+			obj->dknown = obj->bknown = obj->rknown = 1;
+			if (Is_container(obj) || obj->otyp == Statue) {
+				obj->cknown = obj->lknown = true;
+				obj->otrapped = false;
+			}
 			obj->cursed = 0;
 			if (obj->opoisoned && u.ualign.type != A_CHAOTIC)
 				obj->opoisoned = 0;

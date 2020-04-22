@@ -731,10 +731,11 @@ die:
 		 * Both are optional, so do it once here instead of duplicating
 		 * it in both of those places.
 		 */
+#if 0
 		for (struct obj *obj = invent; obj; obj = obj->nobj) {
 			discover_object(obj->otyp, true, false);
 			obj->known = obj->bknown = obj->dknown = obj->rknown = 1;
-#if 0  //TODO
+
 			if (Is_container(obj) || obj->otyp == STATUE)
 				obj->cknown = obj->lknown = 1;
 			/* we resolve Schroedinger's cat now in case of both
@@ -751,8 +752,8 @@ die:
 				} else
 					obj->spe = 0; /* ordinary box with cat corpse in it */
 			}
-#endif
 		}
+#endif
 
 		if (strcmp(flags.end_disclose, "none"))
 			disclose(how, taken);
@@ -1000,7 +1001,8 @@ void container_contents(struct obj *list, boolean identified, boolean all_contai
 
 	for (box = list; box; box = box->nobj) {
 		if (Is_container(box) || box->otyp == STATUE) {
-
+			box->cknown = true; // we're looking at the contents now
+			if (identified) box->lknown = true;
 			cat = deadcat = false;
 
 			if (box->otyp == LARGE_BOX && box->spe == 1 && !Schroedingers_cat) {

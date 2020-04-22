@@ -1443,7 +1443,10 @@ ret:
 void fully_identify_obj(struct obj *otmp) {
 	makeknown(otmp->otyp);
 	if (otmp->oartifact) discover_artifact(otmp->oartifact);
-	otmp->known = otmp->dknown = otmp->bknown = otmp->rknown = 1;
+	otmp->known = otmp->dknown = otmp->bknown = otmp->rknown = true;
+	if (Is_container(otmp) || otmp->otyp == STATUE)
+		otmp->cknown = otmp->lknown = true;
+
 	if (otmp->otyp == EGG && otmp->corpsenm != NON_PM)
 		learn_egg_type(otmp->corpsenm);
 }

@@ -1735,8 +1735,9 @@ int bhito(struct obj *obj, struct obj *otmp) {
 			case WAN_PROBING:
 				res = !obj->dknown;
 				/* target object has now been "seen (up close)" */
-				obj->dknown = 1;
+				obj->dknown = true;
 				if (Is_container(obj) || obj->otyp == STATUE) {
+					obj->cknown = obj->lknown = true;
 					if (!obj->cobj) {
 						pline("%s empty.", Tobjnam(obj, "are"));
 					} else {
@@ -1746,7 +1747,6 @@ int bhito(struct obj *obj, struct obj *otmp) {
 							o->dknown = 1; /* "seen", even if blind */
 						display_cinventory(obj);
 					}
-					obj->cknown = true;
 					res = 1;
 				}
 				if (res) makeknown(WAN_PROBING);

@@ -897,6 +897,11 @@ bool not_fully_identified(struct obj *otmp) {
 #endif
 	    !objects[otmp->otyp].oc_name_known) /* ?redundant? */
 		return true;
+
+	if ((!otmp->cknown && (Is_container(otmp) || otmp->otyp == STATUE)) ||
+	    (!otmp->lknown && Is_box(otmp)))
+		return true;
+
 	if (otmp->oartifact && undiscovered_artifact(otmp->oartifact))
 		return true;
 	/* otmp->rknown is the only item of interest if we reach here */
