@@ -1910,7 +1910,7 @@ struct obj *readobjnam(char *bp, struct obj *no_wish) {
 	int eroded, eroded2, erodeproof;
 	int isinvisible;
 	int halfeaten, halfdrained, mntmp, contents;
-	int islit, unlabeled, ishistoric, isdiluted;
+	int islit, unlabeled, ishistoric, isdiluted, trapped;
 	int tmp, tinv, tvariety = RANDOM_TIN;
 	struct fruit *f;
 	int ftype = current_fruit;
@@ -1937,7 +1937,7 @@ struct obj *readobjnam(char *bp, struct obj *no_wish) {
 	cnt = spe = spesgn = typ = very = rechrg =
 	blessed = uncursed = iscursed = isdrained = halfdrained =
 	isinvisible = ispoisoned = isgreased = eroded = eroded2 =
-	erodeproof = halfeaten = islit = unlabeled = ishistoric = isdiluted = 0;
+	erodeproof = halfeaten = islit = unlabeled = ishistoric = isdiluted = trapped = 0;
 
 	mntmp = NON_PM;
 #define UNDEFINED 0
@@ -2014,9 +2014,13 @@ struct obj *readobjnam(char *bp, struct obj *no_wish) {
 			   !strncmpi(bp, "unlabelled ", l=11) ||
 			   !strncmpi(bp, "blank ", l=6)) {
 			unlabeled = 1;
-		} else if (!strncmpi(bp, "poisoned ", l=9) ||
-			   (wizard && !strncmpi(bp, "trapped ", l=8))) {
+		} else if (!strncmpi(bp, "poisoned ", l=9)) {
 			ispoisoned = 1;
+		} else if (!strncmpi(bp, "trapped ", l=8)) {
+			trapped = 0;
+			if (wizard) trapped = 1;
+		} else if (!strncmpi(bp, "untrapped ", l=10)) {
+			trapped = 2; // not trapped
 		} else if (!strncmpi(bp, "greased ", l=8)) {
 			isgreased = 1;
 		} else if (!strncmpi(bp, "very ", l=5)) {
@@ -2860,11 +2864,14 @@ typfnd:
 	if (ispoisoned) {
 		if (is_poisonable(otmp))
 			otmp->opoisoned = (Luck >= 0);
-		else if (Is_box(otmp) || typ == TIN)
-			otmp->otrapped = 1;
 		else if (oclass == FOOD_CLASS)
 			/* try to taint by making it as old as possible */
 			otmp->age = 1L;
+	}
+
+	if (trapped) {
+		if (Is_box(otmp) || typ == TIN)
+			otmp->otrapped = (trapped == 1);
 	}
 
 	if (isgreased) otmp->greased = 1;
