@@ -1614,7 +1614,7 @@ int donamelevel(void) {
 
 	if (!(mptr = find_mapseen(&u.uz))) return 0;
 
-	sprintf(qbuf, "What do you want to call this dungeon level? ");
+	sprintf(qbuf, "What do you want to call this dungeon level?");
 	getlin(qbuf, nbuf);
 
 	if (index(nbuf, '\033')) return 0;
