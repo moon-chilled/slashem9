@@ -163,12 +163,12 @@ void invault(void) {
 					}
 				}
 			}
-		incr_radius:;
+incr_radius:;
 		}
 		impossible("Not a single corridor on this level??");
 		tele();
 		return;
-	fnd:
+fnd:
 		gx = x;
 		gy = y;
 
@@ -429,8 +429,8 @@ int gd_move(struct monst *grd) {
 				       false;
 	boolean disappear_msg_seen = false, semi_dead = (grd->mhp <= 0);
 	long umoney = money_cnt(invent);
-	boolean u_carry_gold = ((umoney + hidden_gold()) > 0L);
-	boolean see_guard;
+	bool u_carry_gold = ((umoney + hidden_gold()) > 0L);
+	bool see_guard, newspot = false;;
 
 	if (!on_level(&(egrd->gdlevel), &u.uz)) return -1;
 	nx = ny = m = n = 0;
@@ -491,7 +491,7 @@ int gd_move(struct monst *grd) {
 				levl[m][n].typ = egrd->fakecorr[0].ftyp;
 				newsym(m, n);
 				grd->mpeaceful = 0;
-			letknow:
+letknow:
 				if (!cansee(grd->mx, grd->my) || !mon_visible(grd))
 					You_hear("the shrill sound of a guard's whistle.");
 				else
@@ -621,7 +621,7 @@ int gd_move(struct monst *grd) {
 					goto proceed;
 				}
 			}
-		nextnxy:;
+nextnxy:;
 		}
 nextpos:
 	nx = x;
@@ -665,6 +665,7 @@ nextpos:
 	}
 	crm->typ = CORR;
 proceed:
+	newspot = true;
 	unblock_point(nx, ny); /* doesn't block light */
 	if (cansee(nx, ny))
 		newsym(nx, ny);
@@ -685,7 +686,7 @@ newpos:
 		/* to avoid a check at the top of this function.  */
 		/* At the end of the process, the guard is killed */
 		/* in restfakecorr().				  */
-	cleanup:
+cleanup:
 		x = grd->mx;
 		y = grd->my;
 
@@ -709,7 +710,16 @@ newpos:
 	egrd->ogy = grd->my;
 	remove_monster(grd->mx, grd->my);
 	place_monster(grd, nx, ny);
-	newsym(grd->mx, grd->my);
+	if (newspot && g_at(nx, ny)) {
+		/* if there's already gold here (most likely from mineralize()),
+		 * pick it up now so that the guard doesn't later think the hero
+		 * dropped it and give an inappropriate message
+		 */
+		mpickgold(grd);
+		if (canspotmon(grd)) pline("%s picks up some gold.", Monnam(grd));
+	} else {
+		newsym(grd->mx, grd->my);
+	}
 	restfakecorr(grd);
 	return 1;
 }

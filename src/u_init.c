@@ -1755,7 +1755,7 @@ static void ini_inv(struct trobj *trop) {
 		} else {
 			if (objects[otyp].oc_uses_known) obj->known = 1;
 			obj->dknown = obj->bknown = obj->rknown = 1;
-			if (Is_container(obj) || obj->otyp == Statue) {
+			if (Is_container(obj) || obj->otyp == STATUE) {
 				obj->cknown = obj->lknown = true;
 				obj->otrapped = false;
 			}
