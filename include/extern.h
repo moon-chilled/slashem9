@@ -1197,19 +1197,19 @@ bool is_vampshifter(struct monst *mon);
 
 /* ### monmove.c ### */
 
-boolean itsstuck(struct monst *);
-boolean mb_trapped(struct monst *);
-void mon_regen(struct monst *, boolean);
-int dochugw(struct monst *);
-boolean onscary(int, int, struct monst *);
-void monflee(struct monst *, int, boolean, boolean);
-int dochug(struct monst *);
-int m_move(struct monst *, int);
-boolean closed_door(int, int);
-boolean accessible(int, int);
-void set_apparxy(struct monst *);
+bool mb_trapped(struct monst *mtmp);
+int dochugw(struct monst *mtmp);
+bool onscary(int x, int y, struct monst *mtmp);
+void mon_regen(struct monst *mon, bool digest_meal);
+void monflee(struct monst *mtmp, int fleetime, bool first, bool fleemsg);
+int dochug(struct monst *mtmp);
+int m_move(struct monst *mtmp, int after);
+bool closed_door(int x, int y);
+bool accessible(int x, int y);
+void set_apparxy(struct monst *mtmp);
 bool can_ooze(struct monst *mtmp);
 bool can_fog(struct monst *mtmp);
+bool itsstuck(struct monst *);
 bool should_displace(struct monst *mtmp, coord *poss, long *info, int cnt, xchar gx, xchar gy);
 bool undesirable_disp(struct monst *mtmp, xchar x, xchar y);
 

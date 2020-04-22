@@ -18,7 +18,7 @@ static bool stuff_prevents_passage(struct monst *mtmp);
 static int vamp_shift(struct monst *mon, struct permonst *ptr);
 
 /* true : mtmp died */
-boolean mb_trapped(struct monst *mtmp) {
+bool mb_trapped(struct monst *mtmp) {
 	if (flags.verbose) {
 		if (cansee(mtmp->mx, mtmp->my))
 			pline("KABOOM!!  You see a door explode.");
@@ -98,7 +98,7 @@ int dochugw(struct monst *mtmp) {
 	return rd;
 }
 
-boolean onscary(int x, int y, struct monst *mtmp) {
+bool onscary(int x, int y, struct monst *mtmp) {
 	if (mtmp->isshk || mtmp->isgd || mtmp->iswiz || !mtmp->mcansee ||
 	    mtmp->mpeaceful || mtmp->data->mlet == S_HUMAN ||
 	    is_lminion(mtmp) || mtmp->data == &mons[PM_ANGEL] ||
@@ -106,11 +106,13 @@ boolean onscary(int x, int y, struct monst *mtmp) {
 	    is_rider(mtmp->data) || mtmp->data == &mons[PM_MINOTAUR])
 		return false;
 
-	return sobj_at(SCR_SCARE_MONSTER, x, y) || sengr_at("Elbereth", x, y) || (is_vampire(mtmp->data) && IS_ALTAR(levl[x][y].typ));
+	return sobj_at(SCR_SCARE_MONSTER, x, y) ||
+	       sengr_at("Elbereth", x, y) ||
+	       ((is_vampire(mtmp->data) || is_vampshifter(mtmp)) && IS_ALTAR(levl[x][y].typ));
 }
 
 /* regenerate lost hit points */
-void mon_regen(struct monst *mon, boolean digest_meal) {
+void mon_regen(struct monst *mon, bool digest_meal) {
 	if (mon->mhp < mon->mhpmax && !is_golem(mon->data) &&
 	    (moves % 20 == 0 || regenerates(mon->data))) mon->mhp++;
 	if (mon->m_en < mon->m_enmax &&
@@ -163,7 +165,7 @@ static int disturb(struct monst *mtmp) {
 /* monster begins fleeing for the specified time, 0 means untimed flee
  * if first, only adds fleetime if monster isn't already fleeing
  * if fleemsg, prints a message about new flight, otherwise, caller should */
-void monflee(struct monst *mtmp, int fleetime, boolean first, boolean fleemsg) {
+void monflee(struct monst *mtmp, int fleetime, bool first, bool fleemsg) {
 	if (u.ustuck == mtmp) {
 		if (u.uswallow)
 			expels(mtmp, mtmp->data, true);
@@ -510,7 +512,7 @@ static const char indigestion[] = {BALL_CLASS, ROCK_CLASS, 0};
 static const char boulder_class[] = {ROCK_CLASS, 0};
 static const char gem_class[] = {GEM_CLASS, 0};
 
-boolean itsstuck(struct monst *mtmp) {
+bool itsstuck(struct monst *mtmp) {
 	if (sticks(youmonst.data) && mtmp == u.ustuck && !u.uswallow) {
 		pline("%s cannot escape from you!", Monnam(mtmp));
 		return true;
@@ -1205,12 +1207,12 @@ postmov:
 	return mmoved;
 }
 
-boolean closed_door(int x, int y) {
+bool closed_door(int x, int y) {
 	return IS_DOOR(levl[x][y].typ) &&
 	       (levl[x][y].doormask & (D_LOCKED | D_CLOSED));
 }
 
-boolean accessible(int x, int y) {
+bool accessible(int x, int y) {
 	return ACCESSIBLE(levl[x][y].typ) && !closed_door(x, y);
 }
 
