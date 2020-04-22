@@ -3863,14 +3863,17 @@ boolean chest_trap(struct obj *obj, int bodypart, boolean disarm) {
 					      rndcolor(),
 				      the(xname(obj)));
 				if (!Stunned) {
-					if (Hallucination)
+					if (Hallucination) {
 						pline("What a groovy feeling!");
-					else if (Blind)
+					} else if (Blind) {
 						pline("You %s and get dizzy...",
 						      stagger(youmonst.data, "stagger"));
-					else
+					} else if (Halluc_resistance) {
+						pline("You %s...", stagger(youmonst.data, "stagger"));
+					} else {
 						pline("You %s and your vision blurs...",
 						      stagger(youmonst.data, "stagger"));
+					}
 				}
 				make_stunned(HStun + rn1(7, 16), false);
 				make_hallucinated(HHallucination + rn1(5, 16), false, 0L);

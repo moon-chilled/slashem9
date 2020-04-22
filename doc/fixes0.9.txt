@@ -220,6 +220,7 @@ Imports from NetHack version 3.6:
 - Bugfix: pets could dig on the rogue level.
 - Gameplay: allow pets to unlock and open doors with keys.
 - Bugfix: don't show message 'the corridor disappears' when player doesn't actually see it disappear.
+- Bugfix: don't print 'your vision blurs' for a hallucination-resistant player caught by a chest trap.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).
