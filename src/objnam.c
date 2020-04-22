@@ -207,6 +207,7 @@ char *xname2(struct obj *obj, bool keen) {
 	const char *actualn = OBJ_NAME(*ocl);
 	const char *dn = OBJ_DESCR(*ocl);
 	const char *un = ocl->oc_uname;
+	bool pluralize = obj->quan != 1;
 
 	buf = nextobuf() + PREFIX; /* leave room for "17 -3 " */
 	if (Role_if(PM_SAMURAI) && Japanese_item_name(typ))
@@ -315,7 +316,16 @@ char *xname2(struct obj *obj, bool keen) {
 						break;
 					}
 				}
-				if (!f) impossible("Bad fruit #%d?", obj->spe);
+				if (!f) {
+					impossible("Bad fruit #%d?", obj->spe);
+					strcpy(buf, "slime mold");
+				} else if (pluralize) {
+					/* ick; already pluralized fruit names
+					   are allowed--we want to try to avoid
+					   adding a redundant plural suffix */
+					strcpy(buf, makeplural(makesingular(buf)));
+					pluralize = false;
+				}
 				break;
 			}
 
@@ -446,11 +456,11 @@ char *xname2(struct obj *obj, bool keen) {
 		default:
 			sprintf(buf, "glorkum %d %d %d", obj->oclass, typ, obj->spe);
 	}
-	if (obj->quan != 1L) strcpy(buf, makeplural(buf));
+	if (pluralize) strcpy(buf, makeplural(buf));
 
 	if (obj->onamelth && obj->dknown) {
 		strcat(buf, " named ");
-	nameit:
+nameit:
 		strcat(buf, ONAME(obj));
 	}
 
@@ -1367,9 +1377,21 @@ char *makeplural(const char *oldstr) {
 
 	/* Search for common compounds, ex. lump of royal jelly */
 	for (spot = str; *spot; spot++) {
-		if (!strncmp(spot, " of ", 4) || !strncmp(spot, " labeled ", 9) || !strncmp(spot, " called ", 8) || !strncmp(spot, " named ", 7) || !strcmp(spot, " above")				   /* lurkers above */
-		    || !strncmp(spot, " versus ", 8) || !strncmp(spot, " from ", 6) || !strncmp(spot, " in ", 4) || !strncmp(spot, " on ", 4) || !strncmp(spot, " a la ", 6) || !strncmp(spot, " with", 5) /* " with "? */
-		    || !strncmp(spot, " de ", 4) || !strncmp(spot, " d'", 3) || !strncmp(spot, " du ", 4)) {
+		if (!strncmp(spot, " of ", 4) ||
+		    !strncmp(spot, " labeled ", 9) ||
+		    !strncmp(spot, " called ", 8) ||
+		    !strncmp(spot, " named ", 7) ||
+		    !strcmp(spot, " above") || // lurkers above
+		    !strncmp(spot, " versus ", 8) ||
+		    !strncmp(spot, " from ", 6) ||
+		    !strncmp(spot, " in ", 4) ||
+		    !strncmp(spot, " on ", 4) ||
+		    !strncmp(spot, " a la ", 6) ||
+		    !strncmp(spot, " with", 5) || // " with "?
+		    !strncmp(spot, " de ", 4) ||
+		    !strncmp(spot, " d'", 3) ||
+		    !strncmp(spot, " du ", 4) ||
+		    !strncmp(spot, " in ", 4)) {
 			excess = oldstr + (int)(spot - str);
 			*spot = 0;
 			break;
@@ -1604,8 +1626,14 @@ char *makesingular(const char *oldstr) {
 
 	while (*bp == ' ')
 		bp++;
-	/* find "cloves of garlic", "worthless pieces of blue glass" */
-	if ((p = strstri(bp, "s of ")) != 0) {
+	/* find "cloves of garlic", "worthless pieces of blue glass",
+	 * "mothers-in-law"; note: this should probably be implemented
+	 * recursively since it can't recognize whether we should be
+	 * removing "es" rather than just "s" */
+	if ((p = strstri(bp, " of ")) != 0 ||
+	    (p = strstri(bp, "-in-")) != 0) {
+		if (BSTRNCMP(bp, p-1, "s", 1)) return bp;   /* wasn't plural */
+		--p;                /* back up to the 's' */
 		/* but don't singularize "gauntlets", "boots", "Eyes of the.." */
 		if (BSTRNCMPI(bp, p - 3, "Eye", 3) &&
 		    BSTRNCMP(bp, p - 4, "boot", 4) &&
@@ -1919,10 +1947,10 @@ struct obj *readobjnam(char *bp, struct obj *no_wish) {
 		int l;
 
 		if (!bp || !*bp) goto any;
-		if (!strncmpi(bp, "an ", l = 3) ||
-		    !strncmpi(bp, "a ", l = 2)) {
+		if (!strncmpi(bp, "an ", l=3) ||
+		    !strncmpi(bp, "a ", l=2)) {
 			cnt = 1;
-		} else if (!strncmpi(bp, "the ", l = 4)) {
+		} else if (!strncmpi(bp, "the ", l=4)) {
 			; /* just increment `bp' by `l' below */
 		} else if (!cnt && digit(*bp) && strcmp(bp, "0")) {
 			cnt = atoi(bp);
@@ -1939,71 +1967,73 @@ struct obj *readobjnam(char *bp, struct obj *no_wish) {
 			while (*bp == ' ')
 				bp++;
 			l = 0;
-		} else if (!strncmpi(bp, "blessed ", l = 8)
+		} else if (!strncmpi(bp, "blessed ", l=8)
 			   /*WAC removed this.  Holy is in some artifact weapon names
 		                                || !strncmpi(bp, "holy ", l=5)
 		                */
 		) {
 			blessed = 1;
-		} else if (!strncmpi(bp, "cursed ", l = 7) ||
-			   !strncmpi(bp, "unholy ", l = 7)) {
+		} else if (!strncmpi(bp, "cursed ", l=7) ||
+			   !strncmpi(bp, "unholy ", l=7)) {
 			iscursed = 1;
-		} else if (!strncmpi(bp, "uncursed ", l = 9)) {
+		} else if (!strncmpi(bp, "uncursed ", l=9)) {
 			uncursed = 1;
-		} else if (!strncmpi(bp, "visible ", l = 8)) {
+		} else if (!strncmpi(bp, "visible ", l=8)) {
 			isinvisible = -1;
-		} else if (!strncmpi(bp, "invisible ", l = 10)) {
+		} else if (!strncmpi(bp, "invisible ", l=10)) {
 			isinvisible = 1;
-		} else if (!strncmpi(bp, "rustproof ", l = 10) ||
-			   !strncmpi(bp, "erodeproof ", l = 11) ||
-			   !strncmpi(bp, "corrodeproof ", l = 13) ||
-			   !strncmpi(bp, "fixed ", l = 6) ||
-			   !strncmpi(bp, "fireproof ", l = 10) ||
-			   !strncmpi(bp, "rotproof ", l = 9)) {
+		} else if (!strncmpi(bp, "rustproof ", l=10) ||
+			   !strncmpi(bp, "erodeproof ", l=11) ||
+			   !strncmpi(bp, "corrodeproof ", l=13) ||
+			   !strncmpi(bp, "fixed ", l=6) ||
+			   !strncmpi(bp, "fireproof ", l=10) ||
+			   !strncmpi(bp, "rotproof ", l=9)) {
 			erodeproof = 1;
-		} else if (!strncmpi(bp, "lit ", l = 4) ||
-			   !strncmpi(bp, "burning ", l = 8)) {
+		} else if (!strncmpi(bp, "lit ", l=4) ||
+			   !strncmpi(bp, "burning ", l=8)) {
 			islit = 1;
-		} else if (!strncmpi(bp, "unlit ", l = 6) ||
-			   !strncmpi(bp, "extinguished ", l = 13)) {
+		} else if (!strncmpi(bp, "unlit ", l=6) ||
+			   !strncmpi(bp, "extinguished ", l=13)) {
 			islit = 0;
 			/* "unlabeled" and "blank" are synonymous */
-		} else if (!strncmpi(bp, "unlabeled ", l = 10) ||
-			   !strncmpi(bp, "unlabelled ", l = 11) ||
-			   !strncmpi(bp, "blank ", l = 6)) {
+		} else if (!strncmpi(bp, "unlabeled ", l=10) ||
+			   !strncmpi(bp, "unlabelled ", l=11) ||
+			   !strncmpi(bp, "blank ", l=6)) {
 			unlabeled = 1;
-		} else if (!strncmpi(bp, "poisoned ", l = 9) || (wizard && !strncmpi(bp, "trapped ", l = 8))) {
+		} else if (!strncmpi(bp, "poisoned ", l=9) ||
+			   (wizard && !strncmpi(bp, "trapped ", l=8))) {
 			ispoisoned = 1;
-		} else if (!strncmpi(bp, "greased ", l = 8)) {
+		} else if (!strncmpi(bp, "greased ", l=8)) {
 			isgreased = 1;
-		} else if (!strncmpi(bp, "very ", l = 5)) {
+		} else if (!strncmpi(bp, "very ", l=5)) {
 			/* very rusted very heavy iron ball */
 			very = 1;
-		} else if (!strncmpi(bp, "thoroughly ", l = 11)) {
+		} else if (!strncmpi(bp, "thoroughly ", l=11)) {
 			very = 2;
-		} else if (!strncmpi(bp, "rusty ", l = 6) ||
-			   !strncmpi(bp, "rusted ", l = 7) ||
-			   !strncmpi(bp, "burnt ", l = 6) ||
-			   !strncmpi(bp, "burned ", l = 7)) {
+		} else if (!strncmpi(bp, "rusty ", l=6) ||
+			   !strncmpi(bp, "rusted ", l=7) ||
+			   !strncmpi(bp, "burnt ", l=6) ||
+			   !strncmpi(bp, "burned ", l=7)) {
 			eroded = 1 + very;
 			very = 0;
-		} else if (!strncmpi(bp, "corroded ", l = 9) ||
-			   !strncmpi(bp, "rotted ", l = 7)) {
+		} else if (!strncmpi(bp, "corroded ", l=9) ||
+			   !strncmpi(bp, "rotted ", l=7)) {
 			eroded2 = 1 + very;
 			very = 0;
-		} else if (!strncmpi(bp, "partly drained ", l = 15)) {
+		} else if (!strncmpi(bp, "partly drained ", l=15)) {
 			isdrained = 1;
 			halfdrained = 1;
-		} else if (!strncmpi(bp, "drained ", l = 8)) {
+		} else if (!strncmpi(bp, "drained ", l=8)) {
 			isdrained = 1;
 			halfdrained = 0;
-		} else if (!strncmpi(bp, "partly eaten ", l = 13)) {
+		} else if (!strncmpi(bp, "partly eaten ", l=13) ||
+			   !strncmpi(bp, "partially eaten ", l=16)) {
 			halfeaten = 1;
-		} else if (!strncmpi(bp, "historic ", l = 9)) {
+		} else if (!strncmpi(bp, "historic ", l=9)) {
 			ishistoric = 1;
-		} else if (!strncmpi(bp, "diluted ", l = 8)) {
+		} else if (!strncmpi(bp, "diluted ", l=8)) {
 			isdiluted = 1;
-		} else if (!strncmpi(bp, "empty ", l = 6)) {
+		} else if (!strncmpi(bp, "empty ", l=6)) {
 			contents = EMPTY;
 		} else
 			break;
@@ -2387,7 +2417,11 @@ srch:
 		typ = TIN;
 		goto typfnd;
 	}
-	/* Note: not strncmpi.  2 fruits, one capital, one not, are possible. */
+
+	/* Note: not strcmpi.  2 fruits, one capital, one not, are possible.
+	 * Also not strncmp.  We used to ignore trailing text with it, but
+	 * that resulted in "grapefruit" matching "grape" if the latter came
+	 * earlier than the former in the fruit list. */
 	{
 		char *fp;
 		int l, cntf;
@@ -2399,8 +2433,8 @@ srch:
 		fp = fruitbuf;
 		for (;;) {
 			if (!fp || !*fp) break;
-			if (!strncmpi(fp, "an ", l = 3) ||
-			    !strncmpi(fp, "a ", l = 2)) {
+			if (!strncmpi(fp, "an ", l=3) ||
+			    !strncmpi(fp, "a ", l=2)) {
 				cntf = 1;
 			} else if (!cntf && digit(*fp)) {
 				cntf = atoi(fp);
@@ -2409,13 +2443,14 @@ srch:
 				while (*fp == ' ')
 					fp++;
 				l = 0;
-			} else if (!strncmpi(fp, "blessed ", l = 8)) {
+			} else if (!strncmpi(fp, "blessed ", l=8)) {
 				blessedf = 1;
-			} else if (!strncmpi(fp, "cursed ", l = 7)) {
+			} else if (!strncmpi(fp, "cursed ", l=7)) {
 				iscursedf = 1;
-			} else if (!strncmpi(fp, "uncursed ", l = 9)) {
+			} else if (!strncmpi(fp, "uncursed ", l=9)) {
 				uncursedf = 1;
-			} else if (!strncmpi(fp, "partly eaten ", l = 13)) {
+			} else if (!strncmpi(fp, "partly eaten ", l=13) ||
+				   !strncmpi(fp, "partially eaten ", l=16)) {
 				halfeatenf = 1;
 			} else
 				break;
@@ -2423,15 +2458,25 @@ srch:
 		}
 
 		for (f = ffruit; f; f = f->nextf) {
-			char *f1 = f->fname, *f2 = makeplural(f->fname);
+			enum {none, exact, singular, plural} ftyp = none;
 
-			if (!strncmp(fp, f1, strlen(f1)) ||
-			    !strncmp(fp, f2, strlen(f2))) {
+			if (!strcmp(fp, f->fname)) ftyp = exact;
+			else if (!strcmp(fp, makesingular(f->fname))) ftyp = singular;
+			else if (!strcmp(fp, makeplural(f->fname))) ftyp = plural;
+
+			if (ftyp != none) {
 				typ = SLIME_MOLD;
 				blessed = blessedf;
 				iscursed = iscursedf;
 				uncursed = uncursedf;
 				halfeaten = halfeatenf;
+				/* adjust count if user explicitly asked for
+				 * singular amount (can't happen unless fruit
+				 * has been given an already pluralized name)
+				 * or for plural amount */
+				if (ftyp == singular && !cntf) cntf = 1;
+				else if (ftyp == plural && !cntf) cntf = 2;
+
 				cnt = cntf;
 				ftype = f->fid;
 				goto typfnd;
