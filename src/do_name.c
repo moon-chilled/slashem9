@@ -326,17 +326,11 @@ struct obj *realloc_obj(struct obj *obj, int oextra_size, void *oextra_src, int 
 	}
 	otmp->oxlth = oextra_size;
 
-	otmp->onamelth = oname_size;
 	otmp->timed = 0;   /* not timed, yet */
 	otmp->lamplit = 0; /* ditto */
-	/* __GNUC__ note:  if the assignment of otmp->onamelth immediately
-	   precedes this `if' statement, a gcc bug will miscompile the
-	   test on vax (`insv' instruction used to store bitfield does
-	   not set condition codes, but optimizer behaves as if it did).
-	   gcc-2.7.2.1 finally fixed this.... */
-	if (oname_size) {
-		if (name)
-			strcpy(ONAME(otmp), name);
+	otmp->onamelth = oname_size;
+	if (oname_size && name) {
+		strcpy(ONAME(otmp), name);
 	}
 
 	if (obj->owornmask) {
