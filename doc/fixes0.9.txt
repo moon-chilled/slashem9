@@ -60,6 +60,7 @@ Changelist for slashem9 v0.9:
 - Gameplay: weaken pudding farming by keeping cloned monsters from generating corpses or death drops.
 - Bugfix: paralyzed unicorns would catch thrown gems.
 - Bugfix: grammar: use 'thine' rather than 'thy' where appropriate.
+- Interface: add more thorough prompting for potentially disastrous commands.
 
 Imports from NetHack version 3.6:
 - Bugfix: acid dropping bug.

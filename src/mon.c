@@ -2751,7 +2751,7 @@ int newcham(struct monst *mtmp, struct permonst *mdat, boolean polyspot, boolean
 			char *save_monnam = has_name(mtmp) ? MNAME(mtmp) : NULL;
 
 			char newname[BUFSZ];
-			
+
 			if (has_name(mtmp)) MNAME(mtmp) = NULL;
 			strcpy(newname, (mdat == &mons[PM_GREEN_SLIME]) ? "slime" : x_monnam(mtmp, ARTICLE_A, NULL, SUPPRESS_SADDLE, false));
 			if (!strcmpi(oldname, "it") && !strcmpi(newname, "it")) {

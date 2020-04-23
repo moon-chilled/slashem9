@@ -2588,9 +2588,7 @@ void commands_init(void) {
 
 /* returns a one-byte character from the text (it may massacre the txt
  * buffer) */
-char
-	txt2key(txt) char *txt;
-{
+char txt2key(char *txt) {
 	txt = stripspace(txt);
 	if (!*txt) return 0;
 
@@ -2669,9 +2667,7 @@ char *str2txt(char *s, char *txt) {
 }
 
 /* strips leading and trailing whitespace */
-char *
-	stripspace(txt) char *txt;
-{
+char *stripspace(char *txt) {
 	char *end;
 	while (isspace(*txt))
 		txt++;
@@ -2681,11 +2677,8 @@ char *
 	return txt;
 }
 
-void
-	parsebindings(bindings)
-	/* closely follows parseoptions in options.c */
-	char *bindings;
-{
+/* closely follows parseoptions in options.c */
+void parsebindings(char *bindings) {
 	char *bind;
 	char key;
 	struct binding_list_tab *newbinding = NULL;
@@ -2866,8 +2859,8 @@ void parsemappings(char *mapping) {
 }
 
 void rhack(char *cmd) {
-	boolean do_walk, do_rush, prefix_seen, bad_command,
-		firsttime = (cmd == 0);
+	bool do_walk, do_rush, prefix_seen, bad_command,
+	     firsttime = (cmd == 0);
 
 	iflags.menu_requested = false;
 	if (firsttime) {
@@ -3292,7 +3285,7 @@ void confdir(void) {
 	return;
 }
 
-int isok(int x, int y) {
+bool isok(int x, int y) {
 	/* x corresponds to curx, so x==1 is the first column. Ach. %% */
 	return x >= 1 && x <= COLNO - 1 && y >= 0 && y <= ROWNO - 1;
 }
@@ -3607,6 +3600,23 @@ char yn_function(const char *query, const char *resp, char def) {
 	qbuf[truncspot] = '\0';
 	strcat(qbuf, "...");
 	return windowprocs.win_yn_function(qbuf, resp, def);
+}
+
+// 'paranoid' alternative to yn(), requires user to enter a full response and press enter
+char yesno(const char *query) {
+	const char yesnochars[] = " [yes/no]";
+	char qbuf[QBUFSZ];
+	strncpy(qbuf, query, sizeof(qbuf) - 1 - sizeof(yesnochars));
+	strcpy(&qbuf[strlen(query)], yesnochars);
+
+	while (true) {
+		char buf[BUFSZ];
+		getlin(qbuf, buf);
+		if (!strcmpi(buf, "yes")) return 'y';
+		else if (!strcmpi(buf, "no")) return 'n';
+
+		pline("Please enter 'yes' or 'no' only.", buf);
+	}
 }
 
 /*cmd.c*/

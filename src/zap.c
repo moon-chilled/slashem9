@@ -4850,11 +4850,12 @@ retry:
 
 	if (otmp != &zeroobj) {
 		/* The(aobjnam()) is safe since otmp is unidentified -dlc */
-		hold_another_object(otmp, u.uswallow ? "Oops!  %s out of your reach!" : (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz) || levl[u.ux][u.uy].typ < IRONBARS || levl[u.ux][u.uy].typ >= ICE) ? "Oops!  %s away from you!" : "Oops!  %s to the floor!",
-				    The(aobjnam(otmp,
-						Is_airlevel(&u.uz) || u.uinwater ?
-							"slip" :
-							"drop")),
+		hold_another_object(otmp, u.uswallow ? "Oops!  %s out of your reach!" :
+					  (Is_airlevel(&u.uz) || Is_waterlevel(&u.uz) ||
+					   levl[u.ux][u.uy].typ < IRONBARS ||
+					   levl[u.ux][u.uy].typ >= ICE) ? "Oops!  %s away from you!" :
+					  "Oops!  %s to the floor!",
+				    The(aobjnam(otmp, Is_airlevel(&u.uz) || u.uinwater ?  "slip" : "drop")),
 				    NULL);
 		u.ublesscnt += rn1(100, 50); /* the gods take notice */
 	}

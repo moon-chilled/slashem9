@@ -111,7 +111,7 @@ extern const char *const killed_by_prefix[]; /* from topten.c */
 
 /* "#quit" command or keyboard interrupt */
 int done2(void) {
-	if (yn("Really quit?") == 'n') {
+	if ((iflags.paranoid_quit ? yesno("Really quit?") : yn("Really quit?")) == 'n') {
 #ifndef NO_SIGNAL
 		signal(SIGINT, (SIG_RET_TYPE)done1);
 #endif

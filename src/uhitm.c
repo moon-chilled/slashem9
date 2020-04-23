@@ -220,7 +220,7 @@ int attack_checks(struct monst *mtmp, bool barehanded) {
 		}
 		if (canspotmon(mtmp)) {
 			sprintf(qbuf, "Really attack %s?", mon_nam(mtmp));
-			if (yn(qbuf) != 'y') {
+			if ((iflags.paranoid_hit ? yesno(qbuf) : yn(qbuf)) != 'y') {
 				/* Stormbringer is not tricked so easily */
 				if (!barehanded && u.twoweap && uswapwep &&
 				    uswapwep->oartifact == ART_STORMBRINGER) {
