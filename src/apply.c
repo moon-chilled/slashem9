@@ -1310,7 +1310,7 @@ static void use_lamp(struct obj *obj) {
 		if (obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
 		    obj->otyp == BRASS_LANTERN) {
 			check_unpaid(obj);
-			pline("%s lamp is now on.", Shk_Your(buf, obj));
+			pline("%slamp is now on.", Shk_Your(buf, obj));
 		} else if (obj->otyp == TORCH) {
 			check_unpaid(obj);
 			pline("%s flame%s burn%s%s",
