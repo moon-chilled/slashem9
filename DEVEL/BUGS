@@ -8,6 +8,8 @@
 
 * Bad strength display in tcc.  Bug in its vararg handling?
 
+* If you drink a potion that makes you weaker, such that total inv weight including that potion encumbers you, but weight without it doesn't, you're told 'Your movements are slowed slightly because of your load.  Your movements are now unencumbered.'
+
 * impossible: dmonsfree: 0 removed doesn't match 1 pending
 
 * Segfault w/tcc.  Can reproduce with bones file.  Stacktrace:
