@@ -1020,14 +1020,14 @@ static int techeffects(int tech_no) {
 						if (corpsenm != -1 && !cant_create(&corpsenm, true) &&
 						    (!obj->oxlth || obj->oattached != OATTACHED_MONST)) {
 							/* Maintain approx. proportion of oeaten to cnutrit
-						 * so that the zombie's HP relate roughly to how
-						 * much of the original corpse was left.
-						 */
+							 * so that the zombie's HP relate roughly to how
+							 * much of the original corpse was left.
+							 */
 							if (obj->oeaten)
 								obj->oeaten =
 									eaten_stat(mons[corpsenm].cnutrit, obj);
 							obj->corpsenm = corpsenm;
-							mtmp = revive(obj);
+							mtmp = revive(obj, true);
 							if (mtmp) {
 								if (!resist(mtmp, SPBOOK_CLASS, 0, TELL)) {
 									tamedog(mtmp, NULL);
@@ -1056,7 +1056,7 @@ static int techeffects(int tech_no) {
 
 			obj = getobj((const char *)revivables, "revive");
 			if (!obj) return 0;
-			mtmp = revive(obj);
+			mtmp = revive(obj, true);
 			if (mtmp) {
 				if (Is_blackmarket(&u.uz))
 					setmangry(mtmp);

@@ -90,7 +90,6 @@ struct epri {
    (and emin extension) */
 
 #define REPAIR_DELAY	5	/* minimum delay between shop damage & repair */
-#define BILLSZ	200
 
 struct bill_x {
 	unsigned bo_id;

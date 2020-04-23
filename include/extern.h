@@ -1772,8 +1772,7 @@ long unpaid_cost(struct obj *);
 void addtobill(struct obj *, boolean, boolean, boolean);
 void splitbill(struct obj *, struct obj *);
 void subfrombill(struct obj *, struct monst *);
-long stolen_value(struct obj *, xchar, xchar, boolean, boolean,
-		  boolean);
+long stolen_value(struct obj *obj, xchar x, xchar y, bool peaceful, bool silent, bool destruction);
 void sellobj_state(int);
 void sellobj(struct obj *, xchar, xchar);
 int doinvbill(int);
