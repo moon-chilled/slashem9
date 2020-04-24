@@ -227,6 +227,7 @@ Imports from NetHack version 3.6:
 - Bugfix: non-wizard player could wish for a trapped chest or tin be specifying it as 'poisoned'.
 - Gampeplay: if unable to move, player is woken up by vault guard or demon demanding money.
 - Bugfix: if demon is refused money, becomes hostile, and is subsequently killed, player lost alignment.
+- Bugfix: flaming and shocking spheres could pick up items.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).
