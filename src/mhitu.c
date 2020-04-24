@@ -2939,15 +2939,13 @@ static int passiveum(struct permonst *olduasmon, struct monst *mtmp, struct atta
 									 "Your gaze is reflected by %s %s."))
 								return 1;
 							pline("%s is frozen by your gaze!", Monnam(mtmp));
-							mtmp->mcanmove = 0;
-							mtmp->mfrozen = tmp;
+							paralyze_monst(mtmp, tmp);
 							return 3;
 						}
 					}
 				} else { /* gelatinous cube */
 					pline("%s is frozen by you.", Monnam(mtmp));
-					mtmp->mcanmove = 0;
-					mtmp->mfrozen = tmp;
+					paralyze_monst(mtmp, tmp);
 					return 3;
 				}
 				return 1;

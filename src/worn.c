@@ -488,8 +488,7 @@ outer_break:
 				      otense(best, "glow"), hcolor(NH_BLACK));
 		} /* can see it */
 		m_delay += objects[best->otyp].oc_delay;
-		mon->mfrozen = m_delay;
-		if (mon->mfrozen) mon->mcanmove = 0;
+		if (m_delay) paralyze_monst(mon, m_delay);
 	}
 	if (old)
 		update_mon_intrinsics(mon, old, false, creation);

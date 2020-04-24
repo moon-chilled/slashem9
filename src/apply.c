@@ -897,17 +897,15 @@ static int use_mirror(struct obj *obj) {
 		killed(mtmp);
 	} else if (!mtmp->mcan && !mtmp->minvis &&
 		   mtmp->data == &mons[PM_FLOATING_EYE]) {
-		int tmp = d((int)mtmp->m_lev, (int)mtmp->data->mattk[0].damd);
-		if (!rn2(4)) tmp = 120;
 		if (vis)
 			pline("%s is frozen by its reflection.", Monnam(mtmp));
 		else
 			You_hear("something stop moving.");
-		mtmp->mcanmove = 0;
-		if ((int)mtmp->mfrozen + tmp > 127)
-			mtmp->mfrozen = 127;
-		else
-			mtmp->mfrozen += tmp;
+
+		int tmp = d((int)mtmp->m_lev, (int)mtmp->data->mattk[0].damd);
+		if (!rn2(4)) tmp = 120;
+
+		paralyze_monst(mtmp, mtmp->mfrozen + tmp);
 	} else if (!mtmp->mcan && !mtmp->minvis &&
 		   mtmp->data == &mons[PM_UMBER_HULK]) {
 		if (vis)

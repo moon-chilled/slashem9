@@ -1488,9 +1488,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 					strcpy(buf, Monnam(mdef));
 					pline("%s is frozen by %s.", buf, mon_nam(magr));
 				}
-				mdef->mcanmove = 0;
-				mdef->mfrozen = rnd(10);
-				mdef->mstrategy &= ~STRAT_WAITFORU;
+				paralyze_monst(mdef, rnd(10));
 			}
 			break;
 		case AD_TCKL:
@@ -1499,9 +1497,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 					strcpy(buf, Monnam(magr));
 					pline("%s mercilessly tickles %s.", buf, mon_nam(mdef));
 				}
-				mdef->mcanmove = 0;
-				mdef->mfrozen = rnd(10);
-				mdef->mstrategy &= ~STRAT_WAITFORU;
+				paralyze_monst(mdef, rnd(10));
 			}
 			break;
 		case AD_SLOW:
@@ -1875,16 +1871,25 @@ bool noattacks(struct permonst *ptr) {
 	return true;
 }
 
+void paralyze_monst(struct monst *mon, int amt) {
+	mon->mcanmove = 0;
+	mon->mfrozen = amt;
+	mon->meating = 0;       /* terminate any meal-in-progress */
+	mon->mstrategy &= ~STRAT_WAITFORU;
+}
+
+
 // `mon' is hit by a sleep attack; return 1 if it's affected, 0 otherwise
 int sleep_monst(struct monst *mon, int amt, int how) {
 	if (resists_sleep(mon) ||
 	    (how >= 0 && resist(mon, (char)how, 0, NOTELL))) {
 		shieldeff(mon->mx, mon->my);
 	} else if (mon->mcanmove) {
-		amt += (int)mon->mfrozen;
+		amt += mon->mfrozen;
 		if (amt > 0) { /* sleep for N turns */
+			mon->meating = 0; // terminate any meal in progress
 			mon->mcanmove = 0;
-			mon->mfrozen = min(amt, 127);
+			mon->mfrozen = amt;
 		} else { /* sleep until awakened */
 			mon->msleeping = 1;
 		}
@@ -2010,16 +2015,14 @@ static int passivemm(struct monst *magr, struct monst *mdef, boolean mhit, int m
 						if (canseemon(magr))
 							pline("%s is frozen by %s gaze!",
 							      buf, s_suffix(mon_nam(mdef)));
-						magr->mcanmove = 0;
-						magr->mfrozen = tmp;
+						paralyze_monst(magr, tmp);
 						return mdead | mhit;
 					}
 				} else { /* gelatinous cube */
 					strcpy(buf, Monnam(magr));
 					if (canseemon(magr))
 						pline("%s is frozen by %s.", buf, mon_nam(mdef));
-					magr->mcanmove = 0;
-					magr->mfrozen = tmp;
+					paralyze_monst(magr, tmp);
 					return mdead | mhit;
 				}
 				return 1;

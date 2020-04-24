@@ -1183,9 +1183,8 @@ static int steedintrap(struct trap *trap, struct obj *otmp) {
 		case SLP_GAS_TRAP:
 			if (!resists_sleep(steed) && !breathless(steed->data) &&
 			    !steed->msleeping && steed->mcanmove) {
-				steed->mcanmove = 0;
-				steed->mfrozen = rnd(25);
-				if (in_sight) {
+				if (sleep_monst(steed, rnd(25), -1)) {
+					// no in_sight check here; you can feel it even if blind
 					pline("%s suddenly falls asleep!", Monnam(steed));
 				}
 			}
@@ -1815,11 +1814,8 @@ int mintrap(struct monst *mtmp) {
 			case SLP_GAS_TRAP:
 				if (!resists_sleep(mtmp) && !breathless(mptr) &&
 				    !mtmp->msleeping && mtmp->mcanmove) {
-					mtmp->mcanmove = 0;
-					mtmp->mfrozen = rnd(25);
-					if (in_sight) {
-						pline("%s suddenly falls asleep!",
-						      Monnam(mtmp));
+					if (sleep_monst(mtmp, rnd(25), -1) && in_sight) {
+						pline("%s suddenly falls asleep!", Monnam(mtmp));
 						seetrap(trap);
 					}
 				}

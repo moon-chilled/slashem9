@@ -230,6 +230,7 @@ Imports from NetHack version 3.6:
 - Bugfix: flaming and shocking spheres could pick up items.
 - Interface: opening or closing a drawbridge while blind (but not deaf) will give a message.
 - Gameplay: a destroyed drawbridge will scatter debris.
+- Bugfix: if a pet went to sleep, they could continue eating food.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).

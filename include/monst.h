@@ -92,7 +92,7 @@ struct monst {
 	Bitfield(mblinded, 7); /* cansee 0, temp.blinded n, blind 0 */
 
 	bool mcanmove; /* paralysis, similar to mblinded */
-	Bitfield(mfrozen, 7);
+	int mfrozen;
 
 	bool msleeping; /* asleep until woken */
 	bool mstun;	/* stunned (off balance) */

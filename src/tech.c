@@ -1312,8 +1312,7 @@ static int techeffects(int tech_no) {
 				pline("..but %s cannot see you!", mon_nam(mtmp));
 			if ((rn2(6) + rn2(6) + (techlev(tech_no) - mtmp->m_lev)) > 10) {
 				pline("You dazzle %s!", mon_nam(mtmp));
-				mtmp->mcanmove = 0;
-				mtmp->mfrozen = rnd(10);
+				paralyze_monst(mtmp, rnd(10));
 			} else {
 				pline("%s breaks the stare!", Monnam(mtmp));
 			}

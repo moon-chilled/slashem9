@@ -1235,11 +1235,10 @@ void potionhit(struct monst *mon, struct obj *obj, boolean your_fault) {
 				break;
 			case POT_PARALYSIS:
 				if (mon->mcanmove) {
-					mon->mcanmove = 0;
 					/* really should be rnd(5) for consistency with players
-				 * breathing potions, but...
-				 */
-					mon->mfrozen = rnd(25);
+					 * breathing potions, but...
+					 */
+					paralyze_monst(mon, rnd(25));
 				}
 				break;
 			case POT_SPEED:

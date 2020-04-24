@@ -284,8 +284,7 @@ int find_roll_to_hit(struct monst *mtmp, bool *monk_armor_penalty) {
 		}
 	}
 
-	if (is_orc(mtmp->data) && maybe_polyd(is_elf(youmonst.data),
-					      Race_if(PM_ELF)))
+	if (is_orc(mtmp->data) && maybe_polyd(is_elf(youmonst.data), Race_if(PM_ELF)))
 		tmp++;
 
 #if 0
@@ -547,16 +546,12 @@ static bool known_hitum(struct monst *mon, int mattack, int *mhit, struct attack
 				/*make slashing message elsewhere*/
 				if (repeat_hit == 0) {
 					/* [max] limit to 4 (0-3) */
-					repeat_hit = (tech_inuse(T_EVISCERATE) > 5) ?
-							     4 :
-							     (tech_inuse(T_EVISCERATE) - 2);
+					repeat_hit = (tech_inuse(T_EVISCERATE)>5) ? 4 :
+							     (tech_inuse(T_EVISCERATE)-2);
 					/* [max] limit to 4 */
-					mon->mfrozen = (tech_inuse(T_EVISCERATE) > 5) ?
-							       4 :
-							       (tech_inuse(T_EVISCERATE) - 2);
+					paralyze_monst(mon, (tech_inuse(T_EVISCERATE)>5) ?  4 : (tech_inuse(T_EVISCERATE)-2));
 				}
 				mon->mstun = 1;
-				mon->mcanmove = 0;
 			} else if (!rn2(24)) {
 				repeat_hit += rn2(4) + 1;
 				/* Length of growl depends on how angry you get */
@@ -2084,15 +2079,13 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 		case AD_PLYS:
 			if (!negated && mdef->mcanmove && !rn2(3) && tmp < mdef->mhp) {
 				if (!Blind) pline("%s is frozen by you!", Monnam(mdef));
-				mdef->mcanmove = 0;
-				mdef->mfrozen = rnd(10);
+				paralyze_monst(mdef, rnd(10));
 			}
 			break;
 		case AD_TCKL:
 			if (!negated && mdef->mcanmove && !rn2(3) && tmp < mdef->mhp) {
 				if (!Blind) pline("You mercilessly tickle %s!", mon_nam(mdef));
-				mdef->mcanmove = 0;
-				mdef->mfrozen = rnd(10);
+				paralyze_monst(mdef, rnd(10));
 			}
 			break;
 		case AD_SLEE:

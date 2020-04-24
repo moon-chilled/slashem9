@@ -957,6 +957,7 @@ int fightm(struct monst *mtmp);
 int mattackm(struct monst *magr, struct monst *mdef);
 int mdisplacem(struct monst *magr, struct monst *mdef, bool);
 bool noattacks(struct permonst *ptr);
+void paralyze_monst(struct monst *mon, int amt);
 int sleep_monst(struct monst *mon, int amt, int how);
 void slept_monst(struct monst *mon);
 long attk_protection(int aatyp);

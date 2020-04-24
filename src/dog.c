@@ -448,7 +448,7 @@ void mon_catchup_elapsed_time(struct monst *mtmp, long nmv /* number of moves */
 			mtmp->mblinded -= imv;
 	}
 	if (mtmp->mfrozen) {
-		if (imv >= (int)mtmp->mfrozen)
+		if (imv >= mtmp->mfrozen)
 			mtmp->mfrozen = 1;
 		else
 			mtmp->mfrozen -= imv;

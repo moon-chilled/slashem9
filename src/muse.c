@@ -81,8 +81,7 @@ static int precheck(struct monst *mon, struct obj *obj) {
 						pline("%s is frightened to death, and unable to move.",
 						      Monnam(mon));
 					}
-					mon->mcanmove = 0;
-					mon->mfrozen = 3;
+					paralyze_monst(mon, 3);
 				}
 				return 2;
 			}
