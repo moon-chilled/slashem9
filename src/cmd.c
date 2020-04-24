@@ -3615,7 +3615,7 @@ char yesno(const char *query) {
 		if (!strcmpi(buf, "yes")) return 'y';
 		else if (!strcmpi(buf, "no")) return 'n';
 
-		pline("Please enter 'yes' or 'no' only.", buf);
+		pline("Please enter 'yes' or 'no' only.");
 	}
 }
 
