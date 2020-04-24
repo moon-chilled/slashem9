@@ -1154,7 +1154,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 static int steedintrap(struct trap *trap, struct obj *otmp) {
 	struct monst *steed = u.usteed;
 	int tt;
-	boolean in_sight, trapkilled = false, steedhit = false;
+	boolean trapkilled = false, steedhit = false;
 
 	if (!steed || !trap) return 0;
 
@@ -1162,7 +1162,6 @@ static int steedintrap(struct trap *trap, struct obj *otmp) {
 	steed->mx = u.ux;
 	steed->my = u.uy;
 
-	in_sight = !Blind;
 	switch (tt) {
 		case ARROW_TRAP:
 			if (!otmp) {
@@ -1896,7 +1895,7 @@ int mintrap(struct monst *mtmp) {
 				break;
 			}
 			case FIRE_TRAP:
-			mfiretrap:
+mfiretrap:
 				if (in_sight)
 					pline("A %s erupts from the %s under %s!", tower_of_flame,
 					      surface(mtmp->mx, mtmp->my), mon_nam(mtmp));
