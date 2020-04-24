@@ -685,8 +685,9 @@ void open_drawbridge(int x, int y) {
 	y2 = y;
 	get_wall_for_db(&x2, &y2);
 	if (cansee(x, y) || cansee(x2, y2))
-		pline("You see a drawbridge %s down!",
-		      (distu(x2, y2) < distu(x, y)) ? "going" : "coming");
+		pline("You see a drawbridge %s down!", (distu(x2, y2) < distu(x, y)) ? "going" : "coming");
+	else
+		You_hear("chains rattling and gears turning.");
 	lev1->typ = DRAWBRIDGE_DOWN;
 	lev2 = &levl[x2][y2];
 	lev2->typ = DOOR;
@@ -725,9 +726,9 @@ void close_drawbridge(int x, int y) {
 	if (cansee(x, y) || cansee(x2, y2))
 		pline("You see a drawbridge %s up!",
 		      (((u.ux == x || u.uy == y) && !Underwater) ||
-		       distu(x2, y2) < distu(x, y)) ?
-			      "coming" :
-			      "going");
+		       distu(x2, y2) < distu(x, y)) ?  "coming" : "going");
+	else
+		You_hear("gears turning and chains rattling.");
 	lev1->typ = DRAWBRIDGE_UP;
 	lev2 = &levl[x2][y2];
 	lev2->typ = DBWALL;
@@ -818,6 +819,19 @@ void destroy_drawbridge(int x, int y) {
 	lev2->doormask = D_NODOOR;
 	if ((t = t_at(x, y)) != 0) deltrap(t);
 	if ((t = t_at(x2, y2)) != 0) deltrap(t);
+
+	for (int i = rn2(6); i > 0; --i) {  // scatter some debris
+		/* doesn't matter if we happen to pick <x,y2> or <x2,y>;
+		 * since drawbridges are never placed diagonally, those
+		 * pairings will always match one of <x,y> or <x2,y2> */
+		struct obj *otmp = mksobj_at(IRON_CHAIN,
+				rn2(2) ? x : x2, rn2(2) ? y : y2,
+				true, false);
+		/* a force of 5 here would yield a radius of 2 for
+		 * iron chain; anything less produces a radius of 1 */
+		scatter(otmp->ox, otmp->oy, 1, MAY_HIT, otmp);
+	}
+
 	del_engr_at(x, y);
 	del_engr_at(x2, y2);
 	newsym(x, y);

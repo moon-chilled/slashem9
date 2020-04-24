@@ -228,6 +228,8 @@ Imports from NetHack version 3.6:
 - Gampeplay: if unable to move, player is woken up by vault guard or demon demanding money.
 - Bugfix: if demon is refused money, becomes hostile, and is subsequently killed, player lost alignment.
 - Bugfix: flaming and shocking spheres could pick up items.
+- Interface: opening or closing a drawbridge while blind (but not deaf) will give a message.
+- Gameplay: a destroyed drawbridge will scatter debris.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).
