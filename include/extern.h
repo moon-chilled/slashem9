@@ -513,7 +513,7 @@ void remdun_mapseen(int);
 
 /* ### eat.c ### */
 
-boolean is_edible(struct obj *);
+bool is_edible(struct obj *obj);
 void init_uhunger(void);
 int Hear_again(void);
 void reset_eat(void);
@@ -521,7 +521,7 @@ int doeat(void);
 void gethungry(void);
 void morehungry(int);
 void lesshungry(int);
-boolean is_fainted(void);
+bool is_fainted(void);
 void reset_faint(void);
 void violated_vegetarian(void);
 void newuhs(boolean);

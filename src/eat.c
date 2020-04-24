@@ -70,7 +70,7 @@ static boolean force_save_hs = false;
  * Decide whether a particular object can be eaten by the possibly
  * polymorphed character.  Not used for monster checks.
  */
-boolean is_edible(struct obj *obj) {
+bool is_edible(struct obj *obj) {
 	/* protect invocation tools but not Rider corpses (handled elsewhere)*/
 	/* if (obj->oclass != FOOD_CLASS && obj_resists(obj, 0, 0)) */
 	if (evades_destruction(obj))
@@ -2720,13 +2720,13 @@ static int unfaint(void) {
 	return 0;
 }
 
-boolean is_fainted(void) {
+bool is_fainted(void) {
 	return u.uhs == FAINTED;
 }
 
 // call when a faint must be prematurely terminated
 void reset_faint(void) {
-	if (is_fainted()) nomul(0);
+	if (afternmv == unfaint) unmul("You revive.");
 }
 
 // compute and comment on your (new?) hunger status

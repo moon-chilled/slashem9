@@ -173,6 +173,13 @@ bool demon_talk(struct monst *mtmp) {
 		return false;
 	}
 
+	if (is_fainted()) {
+		reset_faint();              /* if fainted - wake up */
+	} else {
+		stop_occupation();
+		if (multi > 0) { nomul(0); unmul(NULL); }
+	}
+
 	/* Slight advantage given. */
 	if (is_dprince(mtmp->data) && mtmp->minvis) {
 		mtmp->minvis = mtmp->perminvis = 0;
@@ -189,7 +196,7 @@ bool demon_talk(struct monst *mtmp) {
 	demand = (cash * (rnd(80) + 20 * Athome)) /
 		 (100 * (1 + (sgn(u.ualign.type) == sgn(mtmp->data->maligntyp))));
 
-	if (!demand) { /* you have no gold */
+	if (!demand || multi < 0) { // you have no gold or can't move
 		mtmp->mpeaceful = 0;
 		set_malign(mtmp);
 		return false;
