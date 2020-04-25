@@ -2502,15 +2502,6 @@ void tty_raw_print_bold(const char *str) {
 
 int tty_nhgetch(void) {
 	int i;
-#ifdef UNIX
-	/* kludge alert: Some Unix variants return funny values if getc()
-	 * is called, interrupted, and then called again.  There
-	 * is non-reentrant code in the internal _filbuf() routine, called by
-	 * getc().
-	 */
-	static volatile int nesting = 0;
-	char nestbuf;
-#endif
 
 	fflush(stdout);
 	/* Note: if raw_print() and wait_synch() get called to report terminal
@@ -2524,14 +2515,7 @@ int tty_nhgetch(void) {
 	if (iflags.debug_fuzzer) {
 		i = randomkey();
 	} else {
-#ifdef UNIX
-		i = ((++nesting == 1) ? tgetch() :
-					(read(fileno(stdin), &nestbuf, 1) == 1 ? (int)nestbuf :
-										 EOF));
-		--nesting;
-#else
 		i = tgetch();
-#endif
 	}
 	if (!i) i = '\033'; /* map NUL to ESC since nethack doesn't expect NUL */
 	if (ttyDisplay && ttyDisplay->toplin == 1)
@@ -2552,7 +2536,7 @@ int tty_nh_poskey(int *x, int *y, int *mod) {
 // Thanks to https://stackoverflow.com/questions/29335758/using-kbhit-and-getch-on-linux and https://web.archive.org/web/20170713065718/www.flipcode.com/archives/_kbhit_for_Linux.shtml
 int tty_kbhit(void) {
 	int byteswaiting;
-	ioctl(0, FIONREAD, &byteswaiting);
+	ioctl(fileno(stdin), FIONREAD, &byteswaiting);
 	return byteswaiting;
 }
 

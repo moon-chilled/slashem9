@@ -264,7 +264,8 @@ boolean sense_engr_at(int x, int y, boolean read_it /* Read any sensed engraving
 			case DUST:
 				if (!Blind) {
 					sensed = 1;
-					pline("Something is written here in the %s.",
+					pline("Something is written %s in the %s.",
+					      Levitation ? "below you" : "here",
 					      is_ice(x, y) ? "frost" : "dust");
 				}
 				break;
@@ -272,32 +273,34 @@ boolean sense_engr_at(int x, int y, boolean read_it /* Read any sensed engraving
 			case HEADSTONE:
 				if (!Blind || can_reach_floor()) {
 					sensed = 1;
-					pline("Something is engraved here on the %s.", surface(x, y));
+					pline("Something is engraved %s on the %s.",
+					      Levitation ? "below you" : "here", surface(x, y));
 				}
 				break;
 			case BURN:
 				if (!Blind || can_reach_floor()) {
 					sensed = 1;
-					pline("Some text has been %s into the %s here.",
+					pline("Some text has been %s into the %s %s.",
 					      is_ice(x, y) ? "melted" : "burned",
-					      surface(x, y));
+					      surface(x, y), Levitation ? "below you" : "here");
 				}
 				break;
 			case MARK:
 				if (!Blind) {
 					sensed = 1;
-					pline("There's some graffiti on the %s here.",
-					      surface(x, y));
+					pline("There's some graffiti on the %s %s.",
+					      surface(x, y), Levitation ? "below you" : "here");
 				}
 				break;
 			case ENGR_BLOOD:
 				/* "It's a message!  Scrawled in blood!"
-			 * "What's it say?"
-			 * "It says... `See you next Wednesday.'" -- Thriller
-			 */
+				 * "What's it say?"
+				 * "It says... `See you next Wednesday.'" -- Thriller
+				 */
 				if (!Blind) {
 					sensed = 1;
-					pline("You see a message scrawled in blood here.");
+					pline("You see a message scrawled in blood %s.",
+					      Levitation ? "below you" : "here");
 				}
 				break;
 			default:
@@ -322,7 +325,7 @@ boolean sense_engr_at(int x, int y, boolean read_it /* Read any sensed engraving
 				u.uconduct.literate++;
 
 			pline("You %s: \"%s\".",
-			      (Blind) ? "feel the words" : "read", et);
+			      Blind ? "feel the words" : "read", et);
 			if (context.run > 1) nomul(0);
 			return true;
 		}

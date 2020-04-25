@@ -71,15 +71,6 @@ extern void interject(int);
 #define regularize nt_regularize
 #define HLOCK	   "NHPERM"
 
-#ifndef M
-#define M(c) ((char)(0x80 | (c)))
-/* #define M(c)		((c) - 128) */
-#endif
-
-#ifndef C
-#define C(c) (0x1f & (c))
-#endif
-
 #if 0
 extern char levels[], bones[], permbones[],
 #endif /* 0 */

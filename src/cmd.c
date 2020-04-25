@@ -1774,26 +1774,6 @@ void show_conduct(int final) {
 	destroy_nhwindow(en_win);
 }
 
-/* Macros for meta and ctrl modifiers:
- *   M and C return the meta/ctrl code for the given character;
- *     e.g., (C('c') is ctrl-c
- *   ISMETA and ISCTRL return TRUE iff the code is a meta/ctrl code
- *   UNMETA and UNCTRL are the opposite of M/C and return the key for a given
- *     meta/ctrl code. */
-#ifndef M
-#define M(c) ((c)-128)
-#endif
-
-#define ISMETA(c) (((c)&0x80) != 0)
-#define UNMETA(c) ((c)&0x7f)
-
-#ifndef C
-#define C(c) (0x1f & (c))
-#endif
-
-#define ISCTRL(c) ((uchar)(c) < 0x20)
-#define UNCTRL(c) (ISCTRL(c) ? (0x60 | (c)) : (c))
-
 // TODO make sure all these commands make it into the ext cmd list
 #if 0
 static const struct func_tab cmdlist[] = {

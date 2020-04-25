@@ -12,11 +12,6 @@
  * checked by the window port where appropriate.
  */
 
-#ifdef C
-#undef C
-#endif
-#define C(n) n
-
 #define RGB(r, g, b) ((r) << 16 | (g) << 8 | (b))
 
 /* Some arbitary, unused, colour */
@@ -89,7 +84,7 @@ static void
 			for (k = l = 0; k < NUMMONS; k++)
 				if (mons[k].mlet == i) {
 					map->submappings[j].glyphs[l].rgbsym =
-						NHPROXY_RGB_SYM(rgb_colors[C(mons[k].mcolor)],
+						NHPROXY_RGB_SYM(rgb_colors[mons[k].mcolor],
 								monsyms[i]);
 					map->submappings[j].glyphs[l].description = mons[k].mname;
 					l++;
@@ -253,7 +248,7 @@ static void
 			for (k = l = 0; k < NUM_OBJECTS; k++)
 				if (objects[k].oc_class == i) {
 					map->submappings[j].glyphs[l].rgbsym =
-						NHPROXY_RGB_SYM(rgb_colors[C(objects[k].oc_color)],
+						NHPROXY_RGB_SYM(rgb_colors[objects[k].oc_color],
 								oc_syms[i]);
 					map->submappings[j].glyphs[l].description =
 						objects[k].oc_descr ?
@@ -317,7 +312,7 @@ int first, next;
 		alloc(submap->n_glyphs * sizeof(*submap->glyphs));
 	for (i = first; i < next; i++) {
 		submap->glyphs[i - first].rgbsym =
-			NHPROXY_RGB_SYM(rgb_colors[C(sym_desc[i].color)], showsyms[i]);
+			NHPROXY_RGB_SYM(rgb_colors[sym_desc[i].color], showsyms[i]);
 		submap->glyphs[i - first].description = sym_desc[i].explanation;
 	}
 }
@@ -418,20 +413,20 @@ int base;
 	map->flags = explosion_types[0];
 	map->base_mapping = -1;
 	map->alt_glyph = NO_GLYPH;
-	map->symdef.rgbsym = NHPROXY_RGB_SYM(rgb_colors[C(explcolors[0])], 0);
+	map->symdef.rgbsym = NHPROXY_RGB_SYM(rgb_colors[explcolors[0]], 0);
 	map->symdef.description = "explosion";
 	map->n_submappings = 1;
 	map->submappings = (struct nhproxy_cb_get_glyph_mapping_res_submapping *)
 		alloc(map->n_submappings * sizeof(*map->submappings));
 	map->submappings->symdef.rgbsym =
-		NHPROXY_RGB_SYM(rgb_colors[C(explcolors[0])], 0);
+		NHPROXY_RGB_SYM(rgb_colors[explcolors[0]], 0);
 	map->submappings->symdef.description = "";
 	map->submappings->n_glyphs = MAXEXPCHARS;
 	map->submappings->glyphs = (struct nhproxy_cb_get_glyph_mapping_res_symdef *)
 		alloc(map->submappings->n_glyphs * sizeof(*map->submappings->glyphs));
 	for (i = 0; i < MAXEXPCHARS; i++) {
 		map->submappings->glyphs[i].rgbsym =
-			NHPROXY_RGB_SYM(rgb_colors[C(explcolors[0])],
+			NHPROXY_RGB_SYM(rgb_colors[explcolors[0]],
 					showsyms[i + S_explode1]);
 		map->submappings->glyphs[i].description =
 			sym_desc[i + S_explode1].explanation;
@@ -441,7 +436,7 @@ int base;
 		map->flags = explosion_types[i];
 		map->base_mapping = base;
 		map->alt_glyph = NO_GLYPH;
-		map->symdef.rgbsym = NHPROXY_RGB_SYM(rgb_colors[C(explcolors[i])], 0);
+		map->symdef.rgbsym = NHPROXY_RGB_SYM(rgb_colors[explcolors[i]], 0);
 		map->symdef.description = "";
 		map->n_submappings = 0;
 		map->submappings = NULL;
@@ -470,20 +465,20 @@ int base;
 	map->flags = zap_types[0];
 	map->base_mapping = -1;
 	map->alt_glyph = NO_GLYPH;
-	map->symdef.rgbsym = NHPROXY_RGB_SYM(rgb_colors[C(zapcolors[0])], 0);
+	map->symdef.rgbsym = NHPROXY_RGB_SYM(rgb_colors[zapcolors[0]], 0);
 	map->symdef.description = "zap";
 	map->n_submappings = 1;
 	map->submappings = (struct nhproxy_cb_get_glyph_mapping_res_submapping *)
 		alloc(map->n_submappings * sizeof(*map->submappings));
 	map->submappings->symdef.rgbsym =
-		NHPROXY_RGB_SYM(rgb_colors[C(zapcolors[0])], 0);
+		NHPROXY_RGB_SYM(rgb_colors[zapcolors[0]], 0);
 	map->submappings->symdef.description = "";
 	map->submappings->n_glyphs = 4;
 	map->submappings->glyphs = (struct nhproxy_cb_get_glyph_mapping_res_symdef *)
 		alloc(map->submappings->n_glyphs * sizeof(*map->submappings->glyphs));
 	for (i = 0; i < 4; i++) {
 		map->submappings->glyphs[i].rgbsym =
-			NHPROXY_RGB_SYM(rgb_colors[C(zapcolors[0])], showsyms[i + S_vbeam]);
+			NHPROXY_RGB_SYM(rgb_colors[zapcolors[0]], showsyms[i + S_vbeam]);
 		map->submappings->glyphs[i].description =
 			sym_desc[i + S_vbeam].explanation;
 	}
@@ -492,7 +487,7 @@ int base;
 		map->flags = zap_types[i];
 		map->base_mapping = base;
 		map->alt_glyph = NO_GLYPH;
-		map->symdef.rgbsym = NHPROXY_RGB_SYM(rgb_colors[C(zapcolors[i])], 0);
+		map->symdef.rgbsym = NHPROXY_RGB_SYM(rgb_colors[zapcolors[i]], 0);
 		map->symdef.description = "";
 		map->n_submappings = 0;
 		map->submappings = NULL;
@@ -579,7 +574,7 @@ static void
 			alloc(map->submappings->n_glyphs * sizeof(*map->submappings->glyphs));
 	for (i = 0; i < MAXWARNINGS; i++) {
 		map->submappings->glyphs[i].rgbsym =
-			NHPROXY_RGB_SYM(rgb_colors[C(sym_desc[S_warn0 + i].color)], showsyms[S_warn0 + i]);
+			NHPROXY_RGB_SYM(rgb_colors[sym_desc[S_warn0 + i].color], showsyms[S_warn0 + i]);
 		map->submappings->glyphs[i].description = sym_desc[S_warn0 + i].explanation;
 	}
 }

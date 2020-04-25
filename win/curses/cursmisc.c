@@ -18,13 +18,6 @@ static int parse_escape_sequence(void);
 
 /* Macros for Control and Alt keys */
 
-#ifndef M
-#define M(c) ((c)-128)
-#endif
-#ifndef C
-#define C(c) (0x1f & (c))
-#endif
-
 /* Read a character of input from the user */
 
 int curses_read_char() {
