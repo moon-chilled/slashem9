@@ -63,6 +63,13 @@ struct window_procs curses_procs = {
 	curses_preference_update,
 };
 
+// global interface-specific vars
+int term_rows, term_cols;
+WINDOW *base_term;
+WINDOW *mapwin, *statuswin, *messagewin;
+int orig_cursor;
+bool counting;
+
 /* Track if we're performing an update to the permanent window.
    Needed since we aren't using the normal menu functions to handle
    the inventory window. */

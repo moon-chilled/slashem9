@@ -211,16 +211,7 @@ void more(void) {
 		standoutend();
 	}
 
-#ifdef BORG
-	if (borg_on) {
-		//       delay_output();
-		//       delay_output(); /* 100ms wait */
-	} else {
-		xwaitforspace("\033 ");
-	}
-#else
 	xwaitforspace("\033 ");
-#endif
 
 	if (morc == '\033')
 		cw->flags |= WIN_STOP;

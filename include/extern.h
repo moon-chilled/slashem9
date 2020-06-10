@@ -129,12 +129,6 @@ boolean can_make_bones(void);
 void savebones(struct obj *);
 int getbones(void);
 
-/* ### borg.c ### */
-
-bool borg_on;
-char borg_line[80];
-char borg_input(void);
-
 /* ### botl.c ### */
 
 int xlev_to_rank(int);
@@ -202,7 +196,7 @@ void destroy_drawbridge(int x, int y);
 /* ### decl.c ### */
 
 void decl_init(void);
-bool curses_stupid_hack;
+extern bool curses_stupid_hack;
 
 /* ### detect.c ### */
 
