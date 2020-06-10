@@ -182,7 +182,7 @@ player_selection()
 		   player_selection() offers a Quit option, it is its
 		   responsibility to clean up and terminate the process.
 		   You need to fill in pl_character[0].
-display_file(str, boolean complain)
+display_file(str, bool complain)
 		-- Display the file named str.  Complain about missing files
 		   iff complain is true.
 update_inventory()

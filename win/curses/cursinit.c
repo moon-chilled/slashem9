@@ -570,8 +570,7 @@ void curses_choose_character() {
 		choices[n] = NULL;
 		if (n > 1)
 			sel =
-				curses_character_dialog(choices,
-							"Choose one of the following roles:");
+				curses_character_dialog(choices, "Choose one of the following roles:");
 		else
 			sel = 0;
 		if (sel >= 0)
@@ -630,9 +629,7 @@ void curses_choose_character() {
 			choices[n] = NULL;
 			/* Permit the user to pick, if there is more than one */
 			if (n > 1)
-				sel =
-					curses_character_dialog(choices,
-								"Choose one of the following races:");
+				sel = curses_character_dialog(choices, "Choose one of the following races:");
 			else
 				sel = 0;
 			if (sel >= 0)
@@ -689,9 +686,7 @@ void curses_choose_character() {
 			choices[n] = NULL;
 			/* Permit the user to pick, if there is more than one */
 			if (n > 1)
-				sel =
-					curses_character_dialog(choices,
-								"Choose one of the following genders:");
+				sel = curses_character_dialog(choices, "Choose one of the following genders:");
 			else
 				sel = 0;
 			if (sel >= 0)

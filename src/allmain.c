@@ -582,13 +582,13 @@ void newgame(void) {
 
 	flags.pantheon = -1; /* role_init() will reset this */
 	role_init();	     /* must be before init_dungeons(), u_init(),
-				 * and init_artifacts() */
+			      * and init_artifacts() */
 
 	init_dungeons();  /* must be before u_init() to avoid rndmonst()
-				 * creating odd monsters for any tins and eggs
-				 * in hero's initial inventory */
+			   * creating odd monsters for any tins and eggs
+			   * in hero's initial inventory */
 	init_artifacts(); /* before u_init() in case $WIZKIT specifies
-				 * any artifacts */
+			   * any artifacts */
 	u_init();
 	init_artifacts1(); /* must be after u_init() */
 
