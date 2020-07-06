@@ -1,13 +1,13 @@
 This is a slashem variant.  Take a look.  Or don't.  Whatever suits your fancy.
 There's not much to see yet.  Mainly a standard complement of all the bug fixes
 and ui enhancements that slashem has missed over the last 15 years, plus a few
-of my own.  It's also in the process of being rebased to NetHack 3.6.  See TODO
+new ones.  It's also in the process of being rebased to NetHack 3.6.  See TODO
 for a tentative list of ideas for things to maybe do/add at some point.
 
 We are approaching version 1.0.
 
 
-!Warning!
+Warning
 Though we are rapidly approaching version 1.0, it is currently VERY volatile.
 The version of 0.8E0-Alpha reflects this.
 
@@ -21,7 +21,7 @@ of save breakage, but that will have to wait for a future version.
 You should still play it, though!  It's super fun.
 
 
-!Help wanted!
+Help wanted
 Any and all help is /very/ welcome.  This includes development help, but also
 playtesting, writing documentation (I don't write documentation until right
 before release, meaning that unless a new version _just_ came out, there is
