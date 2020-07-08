@@ -39,7 +39,7 @@ struct attack {
 #include "monflag.h"
 
 struct permonst {
-	const char *mname;	    /* full name */
+	const char mname[32];	    /* full name */
 	uchar mlet;		    /* symbol */
 	schar mlevel,		    /* base monster level */
 		mmove,		    /* move speed */
