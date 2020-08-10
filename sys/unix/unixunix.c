@@ -12,6 +12,7 @@
 #include <fcntl.h>
 #endif
 #include <signal.h>
+#include <assert.h>
 
 static int veryold(int);
 static int eraseoldlocks(void);
@@ -215,10 +216,10 @@ int child(int wt) {
 	suspend_nhwindows(NULL);	/* also calls end_screen() */
 
 	if ((f = fork()) == 0) {		/* child */
-		setgid(getgid());
-		setuid(getuid());
+		assert(setgid(getgid()) == 0);
+		assert(setuid(getuid()) == 0);
 #ifdef CHDIR
-		chdir(getenv("HOME"));
+		assert(chdir(getenv("HOME")) == 0);
 #endif
 		return 1;
 	}

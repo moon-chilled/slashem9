@@ -5,6 +5,7 @@
 
 /* We could include only config.h, except for the overlay definitions... */
 #include "hack.h"
+#include <assert.h>
 
 #ifdef __FreeBSD__
 #define __XSI_VISIBLE 500  //gettimeofday()
@@ -409,7 +410,7 @@ void setrandom(void) {
 	}
 
 	if (fp) {
-		fread(rnbuf, 32, 1, fp);
+		assert(fread(rnbuf, 32, 1, fp) > 0);
 		fclose(fp);
 	}
 

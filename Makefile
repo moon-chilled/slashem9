@@ -7,7 +7,7 @@ CFLAGS += -g -ggdb -O0 -pipe
 CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wimplicit-fallthrough -U_FORTIFY_SOURCE
 # If you want to build with _FORTIFY_SOURCE warnings enabled, you will need to turn
 # some of them off (and turn on optimization) below.
-#CFLAGS += -D_FORTIFY_SOURCE -O -Wno-format-overflow -Wno-maybe-uninitialized -Wno-format-truncation -Wno-unused-result
+#CFLAGS += -D_FORTIFY_SOURCE -O -Wno-format-overflow -Wno-maybe-uninitialized -Wno-format-truncation
 
 ifneq ($(CC),tcc)
 	CFLAGS += -Werror

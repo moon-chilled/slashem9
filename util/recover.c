@@ -15,6 +15,7 @@
 #include <errno.h>
 #include "win32api.h"
 #endif
+#include <assert.h>
 
 int restore_savefile(char *);
 void set_levelfile_name(int);
@@ -260,7 +261,7 @@ int
 			if (lfd >= 0) {
 				/* any or all of these may not exist */
 				levc = (xchar)lev;
-				write(sfd, &levc, sizeof(levc));
+				assert(write(sfd, &levc, sizeof(levc)) > 0);
 				copy_bytes(lfd, sfd);
 				close(lfd);
 				unlink(lock);
