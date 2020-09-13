@@ -404,12 +404,10 @@ void setrandom(void) {
 
 	//TODO: something that works on windows
 	FILE *fp = fopen("/dev/urandom", "rb");
-	if (!fp) {
-		fp = fopen("/dev/random", "rb");
-	}
+	if (!fp) fp = fopen("/dev/random", "rb");
 
 	if (fp) {
-		fread(rnbuf, 32, 1, fp);
+		assert(fread(rnbuf, 1, 32, fp) == 32, "fread: failed to read random data from /dev/u?random");
 		fclose(fp);
 	}
 

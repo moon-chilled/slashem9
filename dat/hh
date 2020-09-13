@@ -19,7 +19,6 @@ General commands:
 ?       help    display one of several informative texts
 `       menu    access the menusystem
 S       save    save the game (to be continued later)
-!       sh      escape to some SHELL (if allowed)
 ^Z      suspend suspend the game (independent of your current suspend char)
 O       options set options
 /       whatis  tell what a map symbol represents

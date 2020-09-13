@@ -73,14 +73,6 @@
 				   with built-in VPIX support */
 
 /*
- * Define DEF_PAGER as your default pager, e.g. "/bin/cat" or "/usr/ucb/more"
- * If defined, it can be overridden by the environment variable PAGER.
- * Hack will use its internal pager if DEF_PAGER is not defined.
- * (This might be preferable for security reasons.)
- * #define DEF_PAGER	".../mydir/mypager"
- */
-
-/*
  * Define PORT_HELP to be the name of the port-specfic help file.
  * This file is found in HACKDIR.
  * Normally, you shouldn't need to change this.
@@ -90,9 +82,7 @@
 
 /*
  * If you define MAIL, then the player will be notified of new mail
- * when it arrives.  If you also define DEF_MAILREADER then this will
- * be the default mail reader, and can be overridden by the environment
- * variable MAILREADER; otherwise an internal pager will be used.
+ * when it arrives.
  * A stat system call is done on the mailbox every MAILCKFREQ moves.
  */
 
@@ -108,8 +98,6 @@
  *		dl2n+@andrew.cmu.edu (dec 19 1989)
  */
 
-/* #define AMS */ /* use Andrew message system for mail */
-
 /* NO_MAILREADER is for kerberos authenticating filesystems where it is
  * essentially impossible to securely exec child processes, like mail
  * readers, when the game is running under a special token.
@@ -120,33 +108,7 @@
 /* #define NO_MAILREADER */ /* have mail daemon just tell player of mail */
 
 #ifdef MAIL
-#if defined(BSD) || defined(ULTRIX)
-#ifdef AMS
-#define AMS_MAILBOX "/Mailbox"
-#else
-#if defined(__FreeBSD__) || defined(__OpenBSD__)
-#define DEF_MAILREADER "/usr/bin/mail"
-#else
-#define DEF_MAILREADER "/usr/ucb/Mail"
-#endif
-#endif
-#else
-#if (defined(SYSV) || defined(HPUX)) && !defined(LINUX)
-#if defined(M_XENIX)
-#define DEF_MAILREADER "/usr/bin/mail"
-#else
-#ifdef __sgi
-#define DEF_MAILREADER "/usr/sbin/Mail"
-#else
-#define DEF_MAILREADER "/usr/bin/mailx"
-#endif
-#endif
-#else
-#define DEF_MAILREADER "/bin/mail"
-#endif
-#endif
-
-#define MAILCKFREQ 50
+# define MAILCKFREQ 50
 #endif /* MAIL */
 
 #define FCMASK 0660 /* file creation mask */
@@ -213,8 +175,6 @@
 #define HLOCK "perm" /* an empty file used for locking purposes */
 
 #define tgetch getchar
-
-#define SHELL /* do not delete the '!' command */
 
 #include "system.h"
 

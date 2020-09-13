@@ -1462,9 +1462,6 @@ static const struct menu_tab game_menu[] = {
 	{'O', true, doset, "Options"},
 	{'r', true, doredraw, "Redraw Screen"},
 	{'x', true, enter_explore_mode, "Enter Explore Mode"},
-#ifdef SHELL
-	{'!', true, dosh, "Jump to Shell"},
-#endif
 	{'S', true, dosave, "Save"},
 	{'q', true, done2, "Quit [M-q]"},
 	{0, 0, 0, 0},
@@ -1869,7 +1866,6 @@ struct ext_func_tab extcmdlist[] = {
 	{"search", "search for traps and secret doors", dosearch, IFBURIED, !AUTOCOMPLETE, "searching"},
 	{"save", "save the game", dosave, IFBURIED, .disallowed_if_fuzzing = true},
 	{"swap", "swap wielded and secondary weapons", doswapweapon, !IFBURIED},
-	{"shell", "do a shell escape (only if defined)", dosh, IFBURIED, .disallowed_if_fuzzing = true},
 	{"throw", "throw something", dothrow, !IFBURIED},
 	{"takeoff", "take off one piece of armor", dotakeoff, !IFBURIED},
 	{"teleport", "teleport around level", dotele, IFBURIED},
@@ -2115,9 +2111,6 @@ static void init_bind_list(void) {
 	bind_key('&', "whatdoes");
 	bind_key('?', "help");
 	bind_key(M('?'), "?");
-#ifdef SHELL
-	bind_key('!', "shell");
-#endif
 	bind_key('.', "wait");
 	bind_key(' ', "wait");
 	bind_key(',', "pickup");

@@ -124,10 +124,6 @@ int main(int argc, char **argv) {
 
 	process_options(argc, argv);	/* command line options */
 
-#ifdef DEF_PAGER
-	if(!(catmore = nh_getenv("HACKPAGER")) && !(catmore = nh_getenv("PAGER")))
-		catmore = DEF_PAGER;
-#endif
 #ifdef MAIL
 	getmailstatus();
 #endif

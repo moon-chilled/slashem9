@@ -19,10 +19,7 @@ static int eraseoldlocks(void);
 static struct stat buf;
 
 /* see whether we should throw away this xlock file */
-static int
-veryold(fd)
-int fd;
-{
+static int veryold(int fd) {
 	time_t date;
 
 	if(fstat(fd, &buf)) return 0;			/* cannot get status */
@@ -176,10 +173,8 @@ gotlock:
 	}
 }
 
-void
-regularize(s)	/* normalize file name - we don't like .'s, /'s, spaces */
-char *s;
-{
+/* normalize file name - we don't like .'s, /'s, spaces */
+void regularize(char *s) {
 	char *lp;
 
 	while((lp=index(s, '.')) || (lp=index(s, '/')) || (lp=index(s,' ')))
@@ -191,56 +186,6 @@ char *s;
 		s[11] = '\0';
 #endif
 }
-
-#ifdef SHELL
-int
-dosh()
-{
-	char *str;
-	if (child(0)) {
-		if((str = getenv("SHELL")) != NULL)
-			execl(str, str, NULL);
-		else
-			execl("/bin/sh", "sh", NULL);
-		raw_print("sh: cannot execute.");
-		exit(EXIT_FAILURE);
-	}
-	return 0;
-}
-#endif /* SHELL */
-
-#if defined(SHELL) || defined(DEF_PAGER) || defined(DEF_MAILREADER)
-int child(int wt) {
-	int f;
-	suspend_nhwindows(NULL);	/* also calls end_screen() */
-
-	if ((f = fork()) == 0) {		/* child */
-		setgid(getgid());
-		setuid(getuid());
-#ifdef CHDIR
-		chdir(getenv("HOME"));
-#endif
-		return 1;
-	}
-	if(f == -1) {	/* cannot fork */
-		pline("Fork failed.  Try again.");
-		return 0;
-	}
-	/* fork succeeded; wait for child to exit */
-	signal(SIGINT,SIG_IGN);
-	signal(SIGQUIT,SIG_IGN);
-	wait(NULL);
-
-	signal(SIGINT, (SIG_RET_TYPE) done1);
-	if(wizard) signal(SIGQUIT,SIG_DFL);
-	if(wt) {
-		raw_print("");
-		wait_synch();
-	}
-	resume_nhwindows();
-	return 0;
-}
-#endif
 
 #ifdef GETRES_SUPPORT
 

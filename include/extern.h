@@ -2064,12 +2064,6 @@ void error(const char *, ...) PRINTF_F(1, 2);
 #ifdef UNIX
 void getlock(void);
 void regularize(char *);
-#ifdef SHELL
-int dosh(void);
-#endif /* SHELL */
-#if defined(SHELL) || defined(DEF_PAGER) || defined(DEF_MAILREADER)
-int child(int);
-#endif
 #endif /* UNIX */
 
 /* ### unixres.c ### */

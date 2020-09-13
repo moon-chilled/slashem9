@@ -4,7 +4,12 @@ BINDIR ?= $(PREFIX)/bin
 
 CFLAGS += -Iinclude -Isys/share/libtre -DDLBLIB -DWIZARD=\"$(shell whoami)\" -DSLASHEM_GIT_COMMIT_REV=\"$(shell git rev-parse --short HEAD)\"
 CFLAGS += -g -ggdb -O0 -pipe
-CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wimplicit-fallthrough
+CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wimplicit-fallthrough -U_FORTIFY_SOURCE
+# -U_FORTIFY_SOURCE - some systems enable source fortification by default, but we can't handle that yet
+
+ifneq ($(FORTIFY),)
+	CFLAGS += -D_FORTIFY_SOURCE -O2 -Wno-format-overflow -Wno-maybe-uninitialized -Wno-format-truncation
+endif
 
 ifneq ($(CC),tcc)
 	CFLAGS += -Werror

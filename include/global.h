@@ -121,8 +121,6 @@ typedef ptrdiff_t isize;
 
 void *alloc(usize); /* alloc.c */
 #define _newtype(T, amnt) ((T *)alloc(sizeof(T) * (amnt)))
-//#define _new_defvar(type, varname, amnt) type *varname = _new(sizeof(type), amnt)
-//#define _new_setvar(varname, amnt) varname = _new(sizeof(*varname), amnt)
 
 // This is magic.  It means #define new(type typ, usize amnt = 1)
 #define _newtype_f1(...)	    _newtype(__VA_ARGS__, 1)
@@ -130,18 +128,7 @@ void *alloc(usize); /* alloc.c */
 #define _newtype_fx(_1, _2, n, ...) n
 #define new(...) _newtype_fx(__VA_ARGS__, _newtype_f2(__VA_ARGS__), _newtype_f1(__VA_ARGS__), 0)
 
-/*
-#define new_setvar_f1(...) _new_setvar(__VA_ARGS__, 1)
-#define new_setvar_f2(...) _new_setvar(__VA_ARGS__)
-#define new_setvar_fx(_1, _2, n, ...) n
-#define new_setvar(...) new_setvar_fx(__VA_ARGS__, new_setvar_f2(__VA_ARGS__), new_setvar_f1(__VA_ARGS__), 0)
-
-
-#define new_defvar_f1(...) _new_defvar(__VA_ARGS__, 1)
-#define new_defvar_f2(...) _new_defvar(__VA_ARGS__)
-#define new_defvar_fx(_1, _2, _3, n, ...) n
-#define new_defvar(...) new_defvar_fx(__VA_ARGS__, new_defvar_f2(__VA_ARGS__), new_defvar_f1(__VA_ARGS__), 0)
-*/
+#define assert(cond, ...) do { if (!(cond)) impossible(__VA_ARGS__); } while (0)
 
 /* Used for consistency checks of various data files; declare it here so
    that utility programs which include config.h but not hack.h can see it. */

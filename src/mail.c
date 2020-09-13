@@ -81,22 +81,10 @@ static long laststattime;
 void getmailstatus(void) {
 	if (!mailbox && !(mailbox = nh_getenv("MAIL"))) {
 #ifdef MAILPATH
-#ifdef AMS
-		struct passwd ppasswd;
-
-		memcpy(&ppasswd, getpwuid(getuid()), sizeof(struct passwd));
-		if (ppasswd.pw_dir) {
-			mailbox = alloc((unsigned)strlen(ppasswd.pw_dir) + sizeof(AMS_MAILBOX));
-			strcpy(mailbox, ppasswd.pw_dir);
-			strcat(mailbox, AMS_MAILBOX);
-		} else
-			return;
-#else
 		const char *pw_name = getpwuid(getuid())->pw_name;
 		mailbox = alloc(sizeof(MAILPATH) + strlen(pw_name));
 		strcpy(mailbox, MAILPATH);
 		strcat(mailbox, pw_name);
-#endif /* AMS */
 #else
 		return;
 #endif
@@ -441,12 +429,7 @@ void ckmailstatus(void) {
 	} else if (nmstat.st_mtime > omstat.st_mtime) {
 		if (nmstat.st_size) {
 			static struct mail_info deliver = {
-#ifndef NO_MAILREADER
 				MSG_MAIL, "I have some mail for you",
-#else
-				/* suppress creation and delivery of scroll of mail */
-				MSG_OTHER, "You have some mail in the outside world",
-#endif
 				0, 0};
 			newmail(&deliver);
 		}
@@ -455,22 +438,7 @@ void ckmailstatus(void) {
 }
 
 void readmail(struct obj *otmp) {
-#ifdef DEF_MAILREADER /* This implies that UNIX is defined */
-	const char *mr = 0;
-
-	display_nhwindow(WIN_MESSAGE, false);
-	if (!(mr = nh_getenv("MAILREADER")))
-		mr = DEF_MAILREADER;
-
-	if (child(1)) {
-		execl(mr, mr, NULL);
-		terminate(EXIT_FAILURE);
-	}
-#else
-#ifndef AMS /* AMS mailboxes are directories */
 	display_file(mailbox, true);
-#endif	    /* AMS */
-#endif	    /* DEF_MAILREADER */
 
 	/* get new stat; not entirely correct: there is a small time
 	   window where we do not see new mail */
@@ -494,12 +462,7 @@ void ckmailstatus(void) {
 	laststattime = moves;
 	if (lan_mail_check()) {
 		static struct mail_info deliver = {
-#ifndef NO_MAILREADER
 			MSG_MAIL, "I have some mail for you",
-#else
-			/* suppress creation and delivery of scroll of mail */
-			MSG_OTHER, "You have some mail in the outside world",
-#endif
 			0, 0};
 		newmail(&deliver);
 	}

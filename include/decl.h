@@ -15,9 +15,6 @@ extern int hackpid;
 #ifdef UNIX
 extern int locknum;
 #endif
-#ifdef DEF_PAGER
-extern char *catmore;
-#endif /* DEF_PAGER */
 
 extern char SAVEF[];
 

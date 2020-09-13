@@ -260,7 +260,9 @@ int
 			if (lfd >= 0) {
 				/* any or all of these may not exist */
 				levc = (xchar)lev;
-				write(sfd, &levc, sizeof(levc));
+				if (write(sfd, &levc, sizeof(levc)) != sizeof(levc)) {
+					printf("Warning: writing save file failed.  You may wish to retry this operation.\n");
+				}
 				copy_bytes(lfd, sfd);
 				close(lfd);
 				unlink(lock);
