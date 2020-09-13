@@ -3582,20 +3582,22 @@ char yn_function(const char *query, const char *resp, char def) {
 	return windowprocs.win_yn_function(qbuf, resp, def);
 }
 
-// 'paranoid' alternative to yn(), requires user to enter a full response and press enter
+bool yesno_helper(char *input_so_far) { return !strcmpi(input_so_far, "yes") || !strcmpi(input_so_far, "no"); }
+
+// 'paranoid' alternative to yn(), an answer of 'yes' must be entered completely
 char yesno(const char *query) {
-	const char yesnochars[] = " [yes/no]";
+	const char yesnochars[] = " [yes/no] (n)";
 	char qbuf[QBUFSZ];
 	strncpy(qbuf, query, sizeof(qbuf) - 1 - sizeof(yesnochars));
-	strcpy(&qbuf[strlen(query)], yesnochars);
+	strcat(qbuf, yesnochars);
+
+	char resp[BUFSZ];
 
 	while (true) {
-		char buf[BUFSZ];
-		getlin(qbuf, buf);
-		if (!strcmpi(buf, "yes")) return 'y';
-		else if (!strcmpi(buf, "no")) return 'n';
+		instant_getlin(qbuf, resp, yesno_helper);
 
-		pline("Please enter 'yes' or 'no' only.");
+		if (!strcmpi(resp, "yes")) return 'y';
+		else if (resp[0] == '\033' || !strcmpi(resp, "no") || !strcmpi(resp, "n")) return 'n';
 	}
 }
 

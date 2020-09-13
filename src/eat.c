@@ -2699,7 +2699,7 @@ void lesshungry(int num) {
 					context.victual.fullwarn = true;
 					if (context.victual.canchoke && context.victual.reqtime > 1) {
 						/* a one-gulp food will not survive a stop */
-						if (yn_function("Continue eating?", ynchars, 'n') == 'n') {
+						if (paranoid_yn("Continue eating?") == 'n') {
 							reset_eat();
 							nomovemsg = NULL;
 						}

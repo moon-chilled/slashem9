@@ -330,7 +330,7 @@ void curses_count_window(const char *count_text) {
 }
 
 /* Gets a "line" (buffer) of input. */
-void curses_message_win_getline(const char *prompt, char *answer, int buffer) {
+void curses_message_win_getline(const char *prompt, char *answer, int buffer, bool (*exit_early)(char *answer)) {
 	int height, width;	 /* of window */
 	char *tmpbuf, *p_answer; /* combined prompt + answer */
 	int nlines, maxlines, i; /* prompt + answer */
@@ -448,6 +448,7 @@ void curses_message_win_getline(const char *prompt, char *answer, int buffer) {
 				return;
 			case '\r':
 			case '\n':
+done:
 				free(linestarts);
 				strncpy(answer, p_answer, buffer);
 				strcpy(toplines, tmpbuf);
@@ -455,9 +456,11 @@ void curses_message_win_getline(const char *prompt, char *answer, int buffer) {
 				free(tmpbuf);
 				curs_set(orig_cursor);
 				curses_toggle_color_attr(win, NONE, A_BOLD, OFF);
+				wrefresh(win);
 				return;
 			case '\b':
 			case KEY_BACKSPACE:
+			case 127:
 				if (len < 1) {
 					len = 1;
 					mx = promptx;
@@ -485,23 +488,21 @@ void curses_message_win_getline(const char *prompt, char *answer, int buffer) {
 				else
 					mvwaddch(win, my, mx, ch);
 				p_answer[len] = '\0';
+				if (exit_early && exit_early(p_answer)) goto done;
 		}
 	}
 }
 
 /* Scroll lines upward in given window, or clear window if only one line. */
-static void
-scroll_window(winid wid) {
+static void scroll_window(winid wid) {
 	directional_scroll(wid, 1);
 }
 
-static void
-unscroll_window(winid wid) {
+static void unscroll_window(winid wid) {
 	directional_scroll(wid, -1);
 }
 
-static void
-directional_scroll(winid wid, int nlines) {
+static void directional_scroll(winid wid, int nlines) {
 	int wh, ww, s_top, s_bottom;
 	bool border = curses_window_has_border(wid);
 	WINDOW *win = curses_get_nhwin(wid);
@@ -536,8 +537,7 @@ directional_scroll(winid wid, int nlines) {
 
 /* Add given line to message history */
 
-static void
-mesg_add_line(char *mline) {
+static void mesg_add_line(char *mline) {
 	nhprev_mesg *tmp_mesg = NULL;
 	nhprev_mesg *current_mesg = alloc(sizeof(nhprev_mesg));
 
@@ -567,8 +567,7 @@ mesg_add_line(char *mline) {
 
 /* Returns specified line from message history, or NULL if out of bounds */
 
-static nhprev_mesg *
-get_msg_line(bool reverse, int mindex) {
+static nhprev_mesg *get_msg_line(bool reverse, int mindex) {
 	int count;
 	nhprev_mesg *current_mesg;
 

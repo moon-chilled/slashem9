@@ -3,7 +3,7 @@
 
 /* Global declarations */
 
-void curses_line_input_dialog(const char *prompt, char *answer, int buffer);
+void curses_line_input_dialog(const char *prompt, char *answer, int buffer, bool (*exit_early)(char *answer));
 int curses_character_input_dialog(const char *prompt, const char *choices,
 				  char def);
 int curses_ext_cmd(void);

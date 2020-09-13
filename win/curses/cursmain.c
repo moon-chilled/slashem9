@@ -50,6 +50,7 @@ struct window_procs curses_procs = {
 	curses_doprev_message,
 	curses_yn_function,
 	curses_getlin,
+	curses_instant_getlin,
 	curses_get_ext_cmd,
 	curses_number_pad,
 	curses_delay_output,
@@ -150,7 +151,7 @@ void curses_player_selection() {
 
 /* Ask the user for a player name. */
 void curses_askname() {
-	curses_line_input_dialog("Who are you?", plname, PL_NSIZ);
+	curses_line_input_dialog("Who are you?", plname, PL_NSIZ, NULL);
 }
 
 /* Does window event processing (e.g. exposure events).
@@ -166,7 +167,7 @@ void curses_get_nh_event() {
 		doredraw();
 	}
 #endif
-#ifdef NCURSES_VERSION /* Is there a better way to detect ncurses? */
+#ifdef NCURSES_VERSION
 	if (is_term_resized(term_rows, term_cols)) {
 		if (!isendwin()) {
 			endwin();
@@ -627,7 +628,11 @@ getlin(const char *ques, char *input)
                ports might use a popup.
 */
 void curses_getlin(const char *question, char *input) {
-	curses_line_input_dialog(question, input, BUFSZ);
+	curses_line_input_dialog(question, input, BUFSZ, NULL);
+}
+
+void curses_instant_getlin(const char *question, char *input, bool (*exit_early)(char *input)) {
+	curses_line_input_dialog(question, input, BUFSZ, exit_early);
 }
 
 /*

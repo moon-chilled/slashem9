@@ -124,6 +124,8 @@ extern char curses_yn_function(const char *question, const char *choices, char d
 
 extern void curses_getlin(const char *question, char *input);
 
+extern void curses_instant_getlin(const char *question, char *input, bool (*exit_early)(char *input));
+
 extern int curses_get_ext_cmd(void);
 
 extern void curses_number_pad(int state);
@@ -232,7 +234,7 @@ extern int curses_get_mouse(int *mousex, int *mousey, int *mod);
 
 /* cursdial.c */
 
-extern void curses_line_input_dialog(const char *prompt, char *answer, int buffer);
+extern void curses_line_input_dialog(const char *prompt, char *answer, int buffer, bool (*exit_early)(char *answer));
 
 extern int curses_character_input_dialog(const char *prompt, const char *choices, char def);
 
@@ -289,7 +291,7 @@ extern int curses_more(void);
 
 extern void curses_clear_unhighlight_message_window(void);
 
-extern void curses_message_win_getline(const char *prompt, char *answer, int buffer);
+extern void curses_message_win_getline(const char *prompt, char *answer, int buffer, bool (*exit_early)(char *answer));
 
 extern void curses_last_messages(void);
 

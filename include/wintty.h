@@ -184,6 +184,7 @@ extern void tty_nhbell(void);
 extern int tty_doprev_message(void);
 extern char tty_yn_function(const char *, const char *, char);
 extern void tty_getlin(const char *, char *);
+extern void tty_instant_getlin(const char *, char *, bool (*)(char*));
 extern int tty_get_ext_cmd(void);
 extern void tty_number_pad(int);
 extern void tty_delay_output(void);

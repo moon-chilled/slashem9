@@ -6,10 +6,6 @@
 
 #ifdef TTY_GRAPHICS
 
-#if !defined(MAC)
-#define NEWAUTOCOMP
-#endif
-
 #include "wintty.h"
 #include "func_tab.h"
 
@@ -18,7 +14,7 @@ static bool ext_cmd_getlin_hook(char *);
 
 typedef bool (*getlin_hook_proc)(char *);
 
-static void hooked_tty_getlin(const char *, char *, getlin_hook_proc);
+static void hooked_tty_getlin(const char *, char *, getlin_hook_proc, bool (*)(char*));
 extern int extcmd_via_menu(void); /* cmd.c */
 
 extern char erase_char, kill_char; /* from appropriate tty.c file */
@@ -30,10 +26,14 @@ extern char erase_char, kill_char; /* from appropriate tty.c file */
  * resulting string is "\033".
  */
 void tty_getlin(const char *query, char *bufp) {
-	hooked_tty_getlin(query, bufp, NULL);
+	hooked_tty_getlin(query, bufp, NULL, NULL);
 }
 
-static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc hook) {
+void tty_instant_getlin(const char *query, char *bufp, bool (*exit_early)(char *answer)) {
+	hooked_tty_getlin(query, bufp, NULL, exit_early);
+}
+
+static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc hook, bool (*exit_early)(char *answer)) {
 	char *obufp = bufp;
 	int c;
 	struct WinDesc *cw = wins[WIN_MESSAGE];
@@ -46,13 +46,11 @@ static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc ho
 	pline("%s ", query);
 	*obufp = 0;
 	for (;;) {
+		if (exit_early && exit_early(obufp)) break;
 		fflush(stdout);
 		sprintf(toplines, "%s ", query);
 		strcat(toplines, obufp);
 		if ((c = Getchar()) == EOF) {
-#ifndef NEWAUTOCOMP
-			*bufp = 0;
-#endif /* not NEWAUTOCOMP */
 			break;
 		}
 		if (c == '\033') {
@@ -94,45 +92,30 @@ static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc ho
 		}
 		if (c == erase_char || c == '\b') {
 			if (bufp != obufp) {
-#ifdef NEWAUTOCOMP
 				char *i;
-
-#endif /* NEWAUTOCOMP */
 				bufp--;
-#ifndef NEWAUTOCOMP
-				putsyms("\b \b"); /* putsym converts \b */
-#else						  /* NEWAUTOCOMP */
 				putsyms("\b");
 				for (i = bufp; *i; ++i)
 					putsyms(" ");
 				for (; i > bufp; --i)
 					putsyms("\b");
 				*bufp = 0;
-#endif						  /* NEWAUTOCOMP */
 			} else
 				tty_nhbell();
 		} else if (c == '\n') {
-#ifndef NEWAUTOCOMP
-			*bufp = 0;
-#endif /* not NEWAUTOCOMP */
 			break;
 		} else if (' ' <= (unsigned char)c && c != '\177' &&
 			   (bufp - obufp < BUFSZ - 1 && bufp - obufp < COLNO)) {
 			/* avoid isprint() - some people don't have it
 			   ' ' is not always a printing char */
-#ifdef NEWAUTOCOMP
 			char *i = eos(bufp);
 
-#endif /* NEWAUTOCOMP */
 			*bufp = c;
 			bufp[1] = 0;
 			putsyms(bufp);
 			bufp++;
 			if (hook && (*hook)(obufp)) {
 				putsyms(bufp);
-#ifndef NEWAUTOCOMP
-				bufp = eos(bufp);
-#else  /* NEWAUTOCOMP */
 				/* pointer and cursor left where they were */
 				for (i = bufp; *i; ++i)
 					putsyms("\b");
@@ -144,22 +127,14 @@ static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc ho
 					putsyms(" ");
 				for (; s > bufp; --s)
 					putsyms("\b");
-#endif /* NEWAUTOCOMP */
 			}
 		} else if (c == kill_char || c == '\177') { /* Robert Viduya */
 							    /* this test last - @ might be the kill_char */
-#ifndef NEWAUTOCOMP
-			while (bufp != obufp) {
-				bufp--;
-				putsyms("\b \b");
-			}
-#else  /* NEWAUTOCOMP */
 			for (; *bufp; ++bufp)
 				putsyms(" ");
 			for (; bufp != obufp; --bufp)
 				putsyms("\b \b");
 			*bufp = 0;
-#endif /* NEWAUTOCOMP */
 		} else
 			tty_nhbell();
 	}
@@ -229,7 +204,7 @@ int tty_get_ext_cmd(void) {
 	if (iflags.extmenu) return extcmd_via_menu();
 	/* maybe a runtime option? */
 	/* hooked_tty_getlin("#", buf, flags.cmd_comp ? ext_cmd_getlin_hook : (getlin_hook_proc) 0); */
-	hooked_tty_getlin("#", buf, in_doagain ? NULL : ext_cmd_getlin_hook);
+	hooked_tty_getlin("#", buf, in_doagain ? NULL : ext_cmd_getlin_hook, NULL);
 	mungspaces(buf);
 	if (buf[0] == 0 || buf[0] == '\033') return -1;
 

@@ -152,8 +152,7 @@ struct instance_flags {
 	bool hilite_obj_piles;
 	bool sanity_check;	// run sanity checks
 	bool mon_polycontrol;	// debug: control monster polymorphs
-	bool paranoid_hit;	// [yes/no] prompt to attack peacefuls, rather than [yn]
-	bool paranoid_quit;	// ditto for quitting
+	bool paranoid_prompts;	// [yes/no] prompt (rather than [yn]) when 'yes' could be potentially destructive
 	char prevmsg_window;	// type of old message window to use
 #if defined(TTY_GRAPHICS) || defined(CURSES_GRAPHICS)
 	bool extmenu;		// extended commands use menu interface

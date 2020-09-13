@@ -87,8 +87,7 @@ static struct Bool_Opt {
 #ifdef NEWS
 	{"news", &iflags.news, true, DISP_IN_GAME},
 #endif
-	{"paranoid_hit", &iflags.paranoid_hit, true, SET_IN_GAME},
-	{"paranoid_quit", &iflags.paranoid_quit, true, SET_IN_GAME},
+	{"paranoid_prompts", &iflags.paranoid_prompts, true, SET_IN_GAME},
 	{"perm_invent", &flags.perm_invent, true, SET_IN_GAME},
 	{"pickup_thrown", &flags.pickup_thrown, true, SET_IN_GAME},
 	{"popup_dialog", &iflags.wc_popup_dialog, false, SET_IN_GAME}, /*WC*/

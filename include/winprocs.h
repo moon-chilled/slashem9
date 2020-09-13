@@ -61,6 +61,7 @@ struct window_procs {
 	int (*win_doprev_message)(void);
 	char (*win_yn_function)(const char *, const char *, char);
 	void (*win_getlin)(const char *, char *);
+	void (*win_instant_getlin)(const char *, char *, bool (*)(char*));
 	int (*win_get_ext_cmd)(void);
 	void (*win_number_pad)(int);
 	void (*win_delay_output)(void);
@@ -125,6 +126,7 @@ extern struct window_procs windowprocs;
 #define nhbell		  (*windowprocs.win_nhbell)
 #define nh_doprev_message (*windowprocs.win_doprev_message)
 #define getlin		  (*windowprocs.win_getlin)
+#define instant_getlin	  (*windowprocs.win_instant_getlin)
 #define get_ext_cmd	  (*windowprocs.win_get_ext_cmd)
 #define number_pad	  (*windowprocs.win_number_pad)
 #define delay_output	  (*windowprocs.win_delay_output)

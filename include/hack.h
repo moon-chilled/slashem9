@@ -207,6 +207,7 @@ extern coord bhitpos; /* place where throw or zap hits or stops */
 
 /*** some utility macros ***/
 #define yn(query)    yn_function(query, ynchars, 'n')
+#define paranoid_yn(query) (iflags.paranoid_prompts ? yesno(query) : yn(query))
 #define ynq(query)   yn_function(query, ynqchars, 'q')
 #define ynaq(query)  yn_function(query, ynaqchars, 'y')
 #define nyaq(query)  yn_function(query, ynaqchars, 'n')

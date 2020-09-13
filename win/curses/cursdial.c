@@ -68,7 +68,7 @@ static nhmenu *nhmenus = NULL; /* NetHack menu array */
 
 /* Get a line of text from the player, such as asking for a character name or a wish */
 
-void curses_line_input_dialog(const char *prompt, char *answer, int buffer) {
+void curses_line_input_dialog(const char *prompt, char *answer, int buffer, bool (*exit_early)(char *answer)) {
 	int map_height, map_width, maxwidth, remaining_buf, winx, winy, count;
 	WINDOW *askwin, *bwin;
 	char input[buffer];
@@ -81,7 +81,7 @@ void curses_line_input_dialog(const char *prompt, char *answer, int buffer) {
 
 	if (iflags.window_inited) {
 		if (!iflags.wc_popup_dialog) {
-			curses_message_win_getline(prompt, answer, buffer);
+			curses_message_win_getline(prompt, answer, buffer, exit_early);
 			return;
 		}
 		curses_get_window_size(MAP_WIN, &map_height, &map_width);
@@ -126,7 +126,14 @@ void curses_line_input_dialog(const char *prompt, char *answer, int buffer) {
 
 	echo();
 	curs_set(1);
-	wgetnstr(askwin, input, buffer - 1);
+	*input = 0;
+	//TODO cursor movement here would be cool
+	for (size_t i = 0; (!exit_early || !exit_early(input)) && i < buffer - 1; ) {
+		int c = wgetch(askwin);
+		if (c == '\n' || c == '\r' || c == ERR) break;
+		input[i++] = c;
+		input[i] = 0;
+	}
 	curs_set(0);
 	strcpy(answer, input);
 	werase(bwin);
@@ -376,7 +383,7 @@ int curses_ext_cmd() {
 			break;
 		}
 
-		if ((letter == '\b') || (letter == KEY_BACKSPACE)) {
+		if ((letter == '\b') || (letter == KEY_BACKSPACE) || (letter == 127)) {
 			if (prompt_width == 0) {
 				ret = -1;
 				break;
@@ -1128,7 +1135,7 @@ menu_get_selections(WINDOW *win, nhmenu *menu, int how) {
 				}
 				break;
 			case MENU_SEARCH:
-				curses_line_input_dialog("Search for:", search_key, BUFSZ);
+				curses_line_input_dialog("Search for:", search_key, BUFSZ, NULL);
 
 				refresh();
 				touchwin(win);

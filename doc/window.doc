@@ -173,6 +173,11 @@ getlin(const char *ques, char *input)
 		-- getlin() can assume the input buffer is at least BUFSZ
 		   bytes in size and must truncate inputs to fit, including
 		   the nul character.
+instant_getlin(const char *ques, char *input, bool (*exit_early)(char *input_so_far))
+		-- Identical to getlin() except that it may stop reading input
+		   before a newline exit_early(input_so_far) returns true.
+		-- exit_early may be NULL; if it is, the function behaves
+		   the same as getlin.
 int get_ext_cmd(void)
 		-- Get an extended command in a window-port specific way.
 		   An index into extcmdlist[] is returned on a successful

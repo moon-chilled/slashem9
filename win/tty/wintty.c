@@ -73,6 +73,7 @@ struct window_procs tty_procs = {
 	tty_doprev_message,
 	tty_yn_function,
 	tty_getlin,
+	tty_instant_getlin,
 	tty_get_ext_cmd,
 	tty_number_pad,
 	tty_delay_output,
