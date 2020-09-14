@@ -15,7 +15,7 @@ matrix:
     # linux/clang
     - name: linux/clang/dlblib
       os: linux
-      dist: bionic
+      dist: focal
       compiler: clang
       before_install:
         - sudo apt install libncursesw5-dev
@@ -23,7 +23,7 @@ matrix:
         - make install
     - name: linux/clang/dlbembed
       os: linux
-      dist: bionic
+      dist: focal
       compiler: clang
       before_install:
         - sudo apt install libncursesw5-dev
@@ -31,7 +31,7 @@ matrix:
         - make -f Makefile.embeddlb install
     - name: linux/clang/flat
       os: linux
-      dist: bionic
+      dist: focal
       compiler: clang
       before_install:
         - sudo apt install libncursesw5-dev
@@ -41,7 +41,7 @@ matrix:
     # linux/gcc
     - name: linux/gcc/dlblib
       os: linux
-      dist: bionic
+      dist: focal
       compiler: gcc
       before_install:
         - sudo apt install libncursesw5-dev
@@ -49,7 +49,7 @@ matrix:
         - make install
     - name: linux/gcc/dlbembed
       os: linux
-      dist: bionic
+      dist: focal
       compiler: gcc
       before_install:
         - sudo apt install libncursesw5-dev
@@ -57,7 +57,7 @@ matrix:
         - make -f Makefile.embeddlb install
     - name: linux/gcc/flat
       os: linux
-      dist: bionic
+      dist: focal
       compiler: gcc
       before_install:
         - sudo apt install libncursesw5-dev
@@ -67,7 +67,7 @@ matrix:
     # linux/tcc
     - name: linux/tcc/dlblib
       os: linux
-      dist: bionic
+      dist: focal
       compiler: tcc
       before_install:
         - sudo apt update
@@ -76,7 +76,7 @@ matrix:
         - make install CC=tcc
     - name: linux/tcc/dlbembed
       os: linux
-      dist: bionic
+      dist: focal
       compiler: tcc
       before_install:
         - sudo apt update
@@ -85,7 +85,7 @@ matrix:
         - make -f Makefile.embeddlb install CC=tcc
     - name: linux/tcc/flat
       os: linux
-      dist: bionic
+      dist: focal
       compiler: tcc
       before_install:
         - sudo apt update
