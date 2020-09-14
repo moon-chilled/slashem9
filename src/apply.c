@@ -3062,7 +3062,7 @@ static int use_grapple(struct obj *obj) {
 				thitmonst(mtmp, uwep, 1);
 				return 1;
 			}
-		//fallthru
+		fallthru;
 		case 3: /* Surface */
 			if (IS_AIR(levl[cc.x][cc.y].typ) || is_pool(cc.x, cc.y))
 				pline("The hook slices through the %s.", surface(cc.x, cc.y));
@@ -3185,7 +3185,7 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 		 */
 		case WAN_FIRE:
 			dmg *= 2;
-		//fallthru
+		fallthru;
 		case WAN_FIREBALL:
 			expltype = EXPL_FIERY;
 			explode(u.ux, u.uy, ZT_FIRE, dmg, WAND_CLASS, expltype);
@@ -3475,7 +3475,7 @@ int doapply(void) {
 		case RED_LIGHTSABER:
 		case RED_DOUBLE_LIGHTSABER:
 			if (uwep != obj && !wield_tool(obj, NULL)) break;
-		/* Fall through - activate via use_lamp */
+		fallthru; // activate via use_lamp
 		case OIL_LAMP:
 		case MAGIC_LAMP:
 		case BRASS_LANTERN:

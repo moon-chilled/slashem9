@@ -980,7 +980,7 @@ int dospit(void) {
 				break;
 			default:
 				impossible("bad attack type in do_spit");
-			/* fall through */
+			fallthru;
 			case AD_ACID:
 				otmp = mksobj(ACID_VENOM, true, false);
 				break;

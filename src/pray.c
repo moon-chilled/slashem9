@@ -320,7 +320,7 @@ static void fix_worst_trouble(int trouble) {
 			break;
 		case TROUBLE_STARVING:
 			losestr(-1);
-		//fallthru
+		fallthru;
 		case TROUBLE_HUNGRY:
 			pline("Your %s feels content.", body_part(STOMACH));
 			init_uhunger();
@@ -607,7 +607,7 @@ static void angrygods(aligntyp resp_god) {
 				gods_angry(resp_god);
 				punish(NULL);
 				break;
-			} /* else fall thru */
+			} else fallthru;
 		case 4:
 		case 5:
 			gods_angry(resp_god);
@@ -867,7 +867,7 @@ static void pleased(aligntyp g_align) {
 		switch (min(action, 5)) {
 			case 5:
 				pat_on_head = 1;
-			//fallthru
+			fallthru;
 			case 4:
 				do
 					fix_worst_trouble(trouble);
@@ -876,7 +876,7 @@ static void pleased(aligntyp g_align) {
 
 			case 3:
 				fix_worst_trouble(trouble);
-			//fallthru
+			fallthru;
 			case 2:
 				while ((trouble = in_trouble()) > 0)
 					fix_worst_trouble(trouble);
@@ -884,7 +884,7 @@ static void pleased(aligntyp g_align) {
 
 			case 1:
 				if (trouble > 0) fix_worst_trouble(trouble);
-			//fallthru
+			fallthru;
 			case 0:
 				break; // your god blows you off, too bad
 		}
@@ -931,11 +931,11 @@ static void pleased(aligntyp g_align) {
 					}
 
 					/* fix any rust/burn/rot damage, but don't protect
-				   against future damage */
+					   against future damage */
 					if (uwep->oeroded || uwep->oeroded2) {
 						uwep->oeroded = uwep->oeroded2 = 0;
 						/* only give this message if we didn't just bless
-					   or uncurse (which has already given a message) */
+						   or uncurse (which has already given a message) */
 						if (*repair_buf)
 							pline("%s as good as new!", Yobjnam2(uwep, Blind ? "feel" : "look"));
 					}
@@ -952,8 +952,7 @@ static void pleased(aligntyp g_align) {
 						godvoice(g_align, NULL);
 						verbalize("Hark, %s!",
 							  youmonst.data->mlet == S_HUMAN ? "mortal" : "creature");
-						verbalize(
-							"To enter the castle, thou must play the right tune!");
+						verbalize("To enter the castle, thou must play the right tune!");
 						u.uevent.uheard_tune++;
 						break;
 					} else if (u.uevent.uheard_tune < 2) {
@@ -963,12 +962,12 @@ static void pleased(aligntyp g_align) {
 						break;
 					}
 				}
-			//else fallthru
+			fallthru;
 			case 2:
 				if (!Blind)
 					pline("You are surrounded by %s glow.", an(hcolor(NH_GOLDEN)));
 				/* if any levels have been lost (and not yet regained),
-			   treat this effect like blessed full healing */
+				   treat this effect like blessed full healing */
 				if (u.ulevel < u.ulevelmax) {
 					u.ulevelmax -= 1; /* see potion.c */
 					pluslvl(false);
@@ -1013,8 +1012,7 @@ static void pleased(aligntyp g_align) {
 				if (u.ualign.record >= PIOUS && !u.uevent.uhand_of_elbereth) {
 					gcrownu();
 					break;
-				}
-			//else fallthru
+				} else fallthru;
 			case 6: {
 				struct obj *otmp;
 				int sp_no, trycnt = u.ulevel + 1;
@@ -1935,18 +1933,13 @@ int turn_undead(void) {
 				xlev = 6;
 				switch (mtmp->data->mlet) {
 					/* this is intentional, lichs are tougher
-				   than zombies. */
+					   than zombies. */
 					/* ToDo - catch vampire bats */
-					case S_LICH:
-						xlev += 2; /*FALLTHRU*/
-					case S_GHOST:
-						xlev += 2; /*FALLTHRU*/
-					case S_VAMPIRE:
-						xlev += 2; /*FALLTHRU*/
-					case S_WRAITH:
-						xlev += 2; /*FALLTHRU*/
-					case S_MUMMY:
-						xlev += 2; /*FALLTHRU*/
+					case S_LICH: xlev += 2; fallthru;
+					case S_GHOST: xlev += 2; fallthru;
+					case S_VAMPIRE: xlev += 2; fallthru;
+					case S_WRAITH: xlev += 2; fallthru;
+					case S_MUMMY: xlev += 2; fallthru;
 					case S_ZOMBIE:
 						if (u.ulevel >= xlev &&
 						    !resist(mtmp, '\0', 0, NOTELL)) {
@@ -1958,7 +1951,7 @@ int turn_undead(void) {
 							}
 							break;
 						} /* else flee */
-					/*FALLTHRU*/
+					fallthru;
 					default:
 						monflee(mtmp, 0, false, true);
 						break;

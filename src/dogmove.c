@@ -62,7 +62,7 @@ struct obj *droppables(struct monst *mon) {
 						pickaxe != wep && (!pickaxe->oartifact || obj->oartifact))
 					// drop the one we earlier decided to keep
 					return pickaxe;
-				//fallthru
+			fallthru;
 			case PICK_AXE:
 				if (!pickaxe || (obj->oartifact && !pickaxe->oartifact)) {
 					if (pickaxe) return pickaxe;
@@ -88,13 +88,13 @@ struct obj *droppables(struct monst *mon) {
 						(!key->oartifact || obj->oartifact))
 					// drop the one we earlier decided to keep
 					return key;
-				//fallthru
+			fallthru;
 			case LOCK_PICK:
 				// keep lock-pick in preference to credit card
 				if (key && key->otyp == CREDIT_CARD &&
 						(!key->oartifact || obj->oartifact))
 					return key;
-				//fallthru
+			fallthru;
 			case CREDIT_CARD:
 				if (!key || (obj->oartifact && !key->oartifact)) {
 					if (key) return key;

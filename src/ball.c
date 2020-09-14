@@ -487,13 +487,13 @@ boolean drag_ball(xchar x, xchar y, int *bc_control, xchar *ballx, xchar *bally,
 				break;
 
 			/* ball is one space diagonal from player.  Check for the
-		 * following special case:
-		 *   @
-		 *    _    moving southwest becomes  @_
-		 *   0                                0
-		 * (This will also catch teleporting that happens to resemble
-		 * this case, but oh well.)  Otherwise fall through.
-		 */
+			 * following special case:
+			 *   @
+			 *    _    moving southwest becomes  @_
+			 *   0                                0
+			 * (This will also catch teleporting that happens to resemble
+			 * this case, but oh well.)  Otherwise fall through.
+			 */
 			case 2:
 				if (dist2(x, y, uball->ox, uball->oy) == 2 &&
 				    dist2(x, y, uchain->ox, uchain->oy) == 4) {
@@ -505,7 +505,7 @@ boolean drag_ball(xchar x, xchar y, int *bc_control, xchar *ballx, xchar *bally,
 						SKIP_TO_DRAG;
 					break;
 				}
-			/* fall through */
+			fallthru;
 			case 1:
 			case 0:
 				/* do nothing if possible */
@@ -518,7 +518,7 @@ boolean drag_ball(xchar x, xchar y, int *bc_control, xchar *ballx, xchar *bally,
 					break;
 				}
 				/* otherwise use player's new position (they must have
-			   teleported, for this to happen) */
+				   teleported, for this to happen) */
 				*chainx = x;
 				*chainy = y;
 				break;

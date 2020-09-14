@@ -600,7 +600,7 @@ static char *s_atr2str(int n) {
 	switch (n) {
 		case ATR_ULINE:
 			if (nh_US) return nh_US;
-		//else fallthru
+			else fallthru;
 		case ATR_BOLD:
 		case ATR_BLINK:
 #if defined(TERMLIB)
@@ -617,7 +617,7 @@ static char *e_atr2str(int n) {
 	switch (n) {
 		case ATR_ULINE:
 			if (nh_UE) return nh_UE;
-		//else fallthru
+			else fallthru;
 		case ATR_BOLD:
 		case ATR_BLINK:
 			return nh_HE;

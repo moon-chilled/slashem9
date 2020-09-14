@@ -369,21 +369,21 @@ void attrcurse(void) { /* remove a random INTRINSIC ability */
 				pline("You feel warmer.");
 				break;
 			}
-		//fallthru
+		fallthru;
 		case 2:
 			if (HTeleportation & INTRINSIC) {
 				HTeleportation &= ~INTRINSIC;
 				pline("You feel less jumpy.");
 				break;
 			}
-		//fallthru
+		fallthru;
 		case 3:
 			if (HPoison_resistance & INTRINSIC) {
 				HPoison_resistance &= ~INTRINSIC;
 				pline("You feel a little sick!");
 				break;
 			}
-		//fallthru
+		fallthru;
 		case 4:
 			if (HTelepat & INTRINSIC) {
 				HTelepat &= ~INTRINSIC;
@@ -392,49 +392,49 @@ void attrcurse(void) { /* remove a random INTRINSIC ability */
 				pline("Your senses fail!");
 				break;
 			}
-		//fallthru
+		fallthru;
 		case 5:
 			if (HCold_resistance & INTRINSIC) {
 				HCold_resistance &= ~INTRINSIC;
 				pline("You feel cooler.");
 				break;
 			}
-		//fallthru
+		fallthru;
 		case 6:
 			if (HInvis & INTRINSIC) {
 				HInvis &= ~INTRINSIC;
 				pline("You feel paranoid.");
 				break;
 			}
-		//fallthru
+		fallthru;
 		case 7:
 			if (HSee_invisible & INTRINSIC) {
 				HSee_invisible &= ~INTRINSIC;
 				pline("You %s!", Hallucination ? "tawt you taw a puttie tat" : "thought you saw something");
 				break;
 			}
-		//fallthru
+		fallthru;
 		case 8:
 			if (HFast & INTRINSIC) {
 				HFast &= ~INTRINSIC;
 				pline("You feel slower.");
 				break;
 			}
-		//fallthru
+		fallthru;
 		case 9:
 			if (HStealth & INTRINSIC) {
 				HStealth &= ~INTRINSIC;
 				pline("You feel clumsy.");
 				break;
 			}
-		//fallthru
+		fallthru;
 		case 10:
 			if (HProtection & INTRINSIC) {
 				HProtection &= ~INTRINSIC;
 				pline("You feel vulnerable.");
 				break;
 			}
-		//fallthru
+		fallthru;
 		case 11:
 			if (HAggravate_monster & INTRINSIC) {
 				HAggravate_monster &= ~INTRINSIC;

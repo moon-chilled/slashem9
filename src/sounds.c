@@ -141,7 +141,7 @@ void dosounds(void) {
 					}
 					/* fall into... (yes, even for hallucination) */
 				}
-				//fallthru
+				fallthru;
 				case 0:
 					You_hear("the footsteps of a guard on patrol.");
 					break;
@@ -586,8 +586,7 @@ static int domonnoise(struct monst *mtmp) {
 				else
 					pline_msg = "mews.";
 				break;
-			}
-		//else fallthru
+			} else fallthru;
 		case MS_GROWL:
 			pline_msg = mtmp->mpeaceful ? "snarls." : "growls!";
 			break;
@@ -722,8 +721,7 @@ static int domonnoise(struct monst *mtmp) {
 						break;
 				}
 				break;
-			}
-		//else fallthru
+			} else fallthru;
 		case MS_HUMANOID:
 			if (!mtmp->mpeaceful) {
 				if (In_endgame(&u.uz) && is_mplayer(ptr)) {
@@ -818,7 +816,7 @@ static int domonnoise(struct monst *mtmp) {
 				demon_talk(mtmp);
 				break;
 			}
-		/* fall through */
+		fallthru;
 		case MS_CUSS:
 			if (!mtmp->mpeaceful)
 				cuss(mtmp);
@@ -828,7 +826,7 @@ static int domonnoise(struct monst *mtmp) {
 				gypsy_chat(mtmp);
 				break;
 			}
-		/* fall through */
+		fallthru;
 		case MS_SPELL:
 			/* deliberately vague, since it's not actually casting any spell */
 			pline_msg = "seems to mutter a cantrip.";

@@ -362,7 +362,7 @@ void mon_arrive(struct monst *mtmp, boolean with_you) {
 				break;
 			} else
 				impossible("mon_arrive: no corresponding portal?");
-		/*FALLTHRU*/
+		fallthru;
 		default:
 		case MIGR_RANDOM:
 			xlocale = ylocale = 0;

@@ -928,7 +928,7 @@ int spelleffects(int spell, boolean atme) {
 			if (tech_inuse(T_SIGIL_TEMPEST)) {
 				weffects(pseudo);
 				break;
-			} /* else fall through... */
+			} else fallthru;
 		/* these spells are all duplicates of wand effects */
 		case SPE_FORCE_BOLT:
 		case SPE_SLEEP:

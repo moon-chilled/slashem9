@@ -318,7 +318,7 @@ int dmgval(struct obj *otmp, struct monst *mon) {
 				break;
 			case RED_DOUBLE_LIGHTSABER:
 				if (otmp->altmode) tmp += rnd(11);
-			/* fallthrough */
+			fallthru;
 			case RED_LIGHTSABER:
 				tmp += 10;
 				break;
@@ -360,7 +360,7 @@ int dmgval(struct obj *otmp, struct monst *mon) {
 				break;
 			case RED_DOUBLE_LIGHTSABER:
 				if (otmp->altmode) tmp += rnd(9);
-			/* fallthrough */
+			fallthru;
 			case RED_LIGHTSABER:
 				tmp += 6;
 				break;
@@ -1422,7 +1422,8 @@ int weapon_hit_bonus(struct obj *weapon) {
 	} else if (type <= P_LAST_WEAPON) {
 		switch (P_SKILL(type)) {
 			default:
-				impossible(bad_skill, P_SKILL(type)); /* fall through */
+				impossible(bad_skill, P_SKILL(type));
+			fallthru;
 			case P_ISRESTRICTED:
 			case P_UNSKILLED:
 				bonus = -4;
@@ -1540,7 +1541,7 @@ int weapon_dam_bonus(struct obj *weapon) {
 		switch (P_SKILL(type)) {
 			default:
 				impossible("weapon_dam_bonus: bad skill %d", P_SKILL(type));
-			/* fall through */
+			fallthru;
 			case P_ISRESTRICTED:
 			case P_UNSKILLED:
 				bonus = -2;
@@ -1626,7 +1627,7 @@ int skill_bonus(int type) {
 		switch (P_SKILL(type)) {
 			default:
 				impossible("skill_bonus: bad skill %d", P_SKILL(type));
-			/* fall through */
+			fallthru;
 			case P_ISRESTRICTED:
 			case P_UNSKILLED:
 				bonus = -2;
@@ -1654,7 +1655,7 @@ int skill_bonus(int type) {
 		switch (P_SKILL(type)) {
 			default:
 				impossible("skill_bonus: bad skill %d", P_SKILL(type));
-			/* fall through */
+			fallthru;
 			case P_ISRESTRICTED:
 			case P_UNSKILLED:
 				bonus = -2;

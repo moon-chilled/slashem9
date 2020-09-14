@@ -2700,7 +2700,7 @@ static boolean hmonas(struct monst *mon) {
 				if (!cantwield(youmonst.data) &&
 				    u.umonnum != PM_MARILITH)
 					goto use_weapon;
-			//fallthru
+			fallthru;
 			case AT_BITE:
 				/* [ALI] Vampires are also smart. They avoid biting
 				   monsters if doing so would be fatal */
@@ -2709,7 +2709,7 @@ static boolean hmonas(struct monst *mon) {
 				    (is_rider(mon->data) ||
 				     mon->data == &mons[PM_GREEN_SLIME]))
 					break;
-			// else fallthru
+				else fallthru;
 			case AT_STNG:
 			case AT_TUCH:
 			case AT_BUTT:
@@ -2719,7 +2719,7 @@ static boolean hmonas(struct monst *mon) {
 				    (touch_petrifies(mon->data) ||
 				     mon->data == &mons[PM_MEDUSA]))
 					break;
-			//else fallthru
+				else fallthru;
 			case AT_KICK:
 				if ((dhit = (tmp > (dieroll = rnd(20)) || u.uswallow)) != 0) {
 					int compat;
@@ -2822,7 +2822,7 @@ static boolean hmonas(struct monst *mon) {
 				 */
 				if (i == 0 && (youmonst.data->mlet == S_KOBOLD || youmonst.data->mlet == S_ORC || youmonst.data->mlet == S_GNOME)) goto use_weapon;
 
-			//else fallthru
+				else fallthru;
 			case AT_NONE:
 			case AT_BOOM:
 				continue;
@@ -3168,8 +3168,8 @@ void passive_obj(struct monst *mon, struct obj *obj, struct attack *mattk) {
 				    (obj->known || obj->oclass == ARMOR_CLASS)) {
 					pline("%s less effective.", Yobjnam2(obj, "seem"));
 				}
-				break;
 			}
+			break;
 		default:
 			break;
 	}

@@ -619,8 +619,7 @@ static int tty_race_select(char *pbuf, char *plbuf) {
 				lastch = thisch;
 			}
 		any.a_int = pick_race(flags.initrole, flags.initgend,
-				      flags.initalign, PICK_RANDOM) +
-			    1;
+				      flags.initalign, PICK_RANDOM) + 1;
 		if (any.a_int == 0) /* must be non-zero */
 			any.a_int = randrace(flags.initrole) + 1;
 		add_menu(win, NO_GLYPH, &any, '*', 0, ATR_NONE,
@@ -1029,7 +1028,7 @@ void tty_clear_nhwindow(winid window) {
 		case NHW_MAP:
 			// cheap -- clear the whole thing and tell nethack to redraw botl
 			context.botlx = 1;
-		//fallthru
+		fallthru;
 		case NHW_BASE:
 			clear_screen();
 			break;
@@ -1334,7 +1333,7 @@ static void process_menu_window(winid window, struct WinDesc *cw) {
 			case '0':
 				/* special case: '0' is also the default ball class */
 				if (!counting && index(gacc, morc)) goto group_accel;
-			//fallthru
+			fallthru;
 			case '1':
 			case '2':
 			case '3':
@@ -1380,8 +1379,7 @@ static void process_menu_window(winid window, struct WinDesc *cw) {
 				if (cw->how != PICK_NONE) {
 					finished = true;
 					break;
-				}
-			/* else fall through */
+				} else fallthru;
 			case MENU_NEXT_PAGE:
 				if (cw->npages > 0 && curr_page != cw->npages - 1) {
 					curr_page++;
@@ -1572,7 +1570,7 @@ void tty_display_nhwindow(winid window, bool blocking) {
 			break;
 		case NHW_TEXT:
 			cw->maxcol = ttyDisplay->cols; /* force full-screen mode */
-		/*FALLTHRU*/
+		fallthru;
 		case NHW_MENU:
 			cw->active = 1;
 			/* avoid converting to uchar before calculations are finished */
@@ -1612,7 +1610,7 @@ void tty_dismiss_nhwindow(winid window) {
 		case NHW_MESSAGE:
 			if (ttyDisplay->toplin)
 				tty_display_nhwindow(WIN_MESSAGE, true);
-		/*FALLTHRU*/
+		fallthru;
 		case NHW_STATUS:
 		case NHW_BASE:
 		case NHW_MAP:

@@ -422,7 +422,7 @@ void m_throw(
 						hitu = 0;
 						break;
 					}
-				/* fall through */
+				fallthru;
 				case CREAM_PIE:
 				case BLINDING_VENOM:
 					hitu = thitu(8, 0, singleobj, NULL);
@@ -706,7 +706,7 @@ int spitmu(struct monst *mtmp, struct attack *mattk) {
 				break;
 			default:
 				impossible("bad attack type in spitmu");
-			/* fall through */
+			fallthru;
 			case AD_ACID:
 				otmp = mksobj(ACID_VENOM, true, false);
 				break;

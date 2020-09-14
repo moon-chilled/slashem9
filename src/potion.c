@@ -562,7 +562,7 @@ int peffects(struct obj *otmp) {
 				pline("You feel rather itchy under %s.", yname(uarmc));
 				break;
 			}
-		/* FALLTHRU */
+		fallthru;
 		case POT_INVISIBILITY:
 			if (Invis || Blind || BInvis) {
 				nothing++;
@@ -810,7 +810,7 @@ int peffects(struct obj *otmp) {
 				unkn++;
 				break;
 			}
-		//fallthru
+		fallthru;
 		case SPE_HASTE_SELF:
 			if (!Very_fast)
 				pline("You are suddenly moving %sfaster.",
@@ -1178,7 +1178,7 @@ void potionhit(struct monst *mon, struct obj *obj, boolean your_fault) {
 				break;
 			case POT_FULL_HEALING:
 				if (mon->data == &mons[PM_PESTILENCE]) goto do_illness;
-			/*FALLTHRU*/
+			fallthru;
 			case POT_RESTORE_ABILITY:
 			case POT_GAIN_ABILITY:
 				angermon = false;
@@ -1472,11 +1472,11 @@ void potionbreathe(struct obj *obj) {
 		case POT_FULL_HEALING:
 			if (Upolyd && u.mh < u.mhmax) u.mh++, context.botl = 1;
 			if (u.uhp < u.uhpmax) u.uhp++, context.botl = 1;
-		/*FALL THROUGH*/
+		fallthru;
 		case POT_EXTRA_HEALING:
 			if (Upolyd && u.mh < u.mhmax) u.mh++, context.botl = 1;
 			if (u.uhp < u.uhpmax) u.uhp++, context.botl = 1;
-		/*FALL THROUGH*/
+		fallthru;
 		case POT_HEALING:
 			if (Upolyd && u.mh < u.mhmax) u.mh++, context.botl = 1;
 			if (u.uhp < u.uhpmax) u.uhp++, context.botl = 1;
@@ -1553,7 +1553,7 @@ void potionbreathe(struct obj *obj) {
 				split_mon(&youmonst, NULL);
 			} else if (u.ulycn >= LOW_PM) {
 				/* vapor from [un]holy water will trigger
-			   transformation but won't cure lycanthropy */
+				   transformation but won't cure lycanthropy */
 				if (obj->blessed && youmonst.data == &mons[u.ulycn])
 					you_unwere(false);
 				else if (obj->cursed && !Upolyd)
@@ -2014,13 +2014,13 @@ boolean get_wet(struct obj *obj, boolean amnesia) {
 		 * unicorn horns... */
 			if (!is_weptool(obj)) break;
 		/* Drop through for disenchantment and rusting... */
-		/* fall through */
+		fallthru;
 		case ARMOR_CLASS:
 		case WEAPON_CLASS:
 		case WAND_CLASS:
 		case RING_CLASS:
 		/* Just "fall through" to generic rustprone check for now. */
-		/* fall through */
+		fallthru;
 		default:
 			switch (artifact_wet(obj, false)) {
 				case -1:

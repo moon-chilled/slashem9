@@ -546,7 +546,7 @@ int doengrave(void) {
 				type = DUST;
 				break;
 			}
-		/* fall through */
+		fallthru;
 		/* Objects too large to engrave with */
 		case BALL_CLASS:
 		case ROCK_CLASS:
@@ -689,9 +689,8 @@ int doengrave(void) {
 							strcpy(post_engr_text, "A few ice cubes drop from the wand.");
 							postknown = true;
 						}
-						if (!oep || (oep->engr_type != BURN))
-							break;
-					// else fallthru
+						if (!oep || (oep->engr_type != BURN)) break;
+						else fallthru;
 					case WAN_CANCELLATION:
 					case WAN_MAKE_INVISIBLE:
 						if (oep && oep->engr_type != HEADSTONE) {
@@ -840,7 +839,7 @@ int doengrave(void) {
 				pline("Writing a poison pen letter??");
 				break;
 			}
-		//fallthru
+		fallthru;
 		case ILLOBJ_CLASS:
 			impossible("You're engraving with an illegal object!");
 			break;

@@ -764,9 +764,7 @@ static boolean toss_up(struct obj *obj, boolean hitsroof) {
 					if (uarmh) pline("Your %s fails to protect you.",
 							helm_simple_name(uarmh));
 					goto petrify;
-				}
-
-			// else fallthru
+				} else fallthru;
 			case CREAM_PIE:
 			case BLINDING_VENOM:
 				pline("You've got it all over your %s!", body_part(FACE));
@@ -1780,14 +1778,14 @@ static void breakmsg(struct obj *obj, boolean in_view) {
 		default: // glass or crystal wand
 			if (obj->oclass != WAND_CLASS)
 				impossible("breaking odd object?");
-		//fallthru
+		fallthru;
 		case CRYSTAL_PLATE_MAIL:
 		case LENSES:
 		case MIRROR:
 		case CRYSTAL_BALL:
 		case EXPENSIVE_CAMERA:
 			to_pieces = " into a thousand pieces";
-		//fallthru
+		fallthru;
 		case POT_WATER: /* really, all potions */
 			if (!in_view)
 				You_hear("something shatter!");

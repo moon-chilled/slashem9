@@ -2006,7 +2006,7 @@ static int wall_angle(struct rm *lev) {
 
 		case SDOOR:
 			if (lev->horizontal) goto horiz;
-		/* fall through */
+		fallthru;
 		case VWALL:
 			switch (lev->wall_info & WM_MASK) {
 				case 0:

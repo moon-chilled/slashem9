@@ -499,7 +499,7 @@ int pickup(
 						if (!yn_number) continue; /* 0 count => No */
 						lcount = (long)yn_number;
 						if (lcount > obj->quan) lcount = obj->quan;
-					/* fall thru */
+					fallthru;
 					default: /* 'y' */
 						break;
 				}
@@ -2074,7 +2074,7 @@ ask_again2:
 						used |= menu_loot(menu_on_request,
 								  current_container, false) > 0;
 					}
-				/*FALLTHRU*/
+				fallthru;
 				case 'n':
 					break;
 				case 'm':

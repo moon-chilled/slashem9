@@ -439,7 +439,7 @@ void dismount_steed(int reason) {
 	switch (reason) {
 		case DISMOUNT_THROWN:
 			verb = "are thrown";
-		//fallthru
+		fallthru;
 		case DISMOUNT_FELL:
 			pline("You %s off of %s!", verb, mon_nam(mtmp));
 			if (!have_spot) have_spot = landing_spot(&cc, reason, 1);

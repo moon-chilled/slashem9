@@ -2732,7 +2732,7 @@ typfnd:
 			break;
 		case SLIME_MOLD:
 			otmp->spe = ftype;
-		/* Fall through */
+		fallthru;
 		case SKELETON_KEY:
 		case CHEST:
 		case LARGE_BOX:
@@ -2751,7 +2751,7 @@ typfnd:
 				otmp->spe = (rn2(10) ? -1 : 0);
 				break;
 			}
-		//fallthru
+		fallthru;
 		//(but only if wizard)
 
 		default:

@@ -273,7 +273,7 @@ char *argv[];
 			}
 			/* otherwise fall thru to discover */
 			wiz_error_flag = true;
-		//fallthru
+		fallthru;
 		case 'X':
 			discover = true;
 			break;

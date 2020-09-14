@@ -78,7 +78,7 @@ static void vomiting_dialogue() {
 			make_stunned(HStun + d(2, 4), false);
 			if (!Popeye(VOMITING)) stop_occupation();
 
-		//fallthru
+		fallthru;
 		case 3:
 			make_confused(HConfusion + d(2, 4), false);
 			if (multi > 0) nomul(0);
@@ -1306,7 +1306,7 @@ void burn_object(void *arg, long timeout) {
 				pline("%s %s reverts to single blade mode!",
 				      whose, xname(obj));
 			}
-		//fallthru
+		fallthru;
 		case GREEN_LIGHTSABER:
 		case BLUE_LIGHTSABER:
 		case RED_LIGHTSABER:
@@ -1447,7 +1447,7 @@ void begin_burn(struct obj *obj, boolean already_lit) {
 		case RED_DOUBLE_LIGHTSABER:
 			if (obj->altmode && obj->age > 1)
 				obj->age--; /* Double power usage */
-		//fallthru
+		fallthru;
 		case RED_LIGHTSABER:
 		case BLUE_LIGHTSABER:
 		case GREEN_LIGHTSABER:

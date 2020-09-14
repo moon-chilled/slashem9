@@ -1334,6 +1334,7 @@ void enlightenment(int final) {
 			switch (u.umortality) {
 				case 0:
 					impossible("dead without dying?");
+					break;
 				case 1:
 					break; /* just "are dead" */
 				default:
@@ -2887,7 +2888,7 @@ void rhack(char *cmd) {
 			}
 			break;
 
-		case '5': if (!iflags.num_pad) break; // else fallthru
+		case '5': if (!iflags.num_pad) break; else fallthru;
 		case DORUN:
 			if (movecmd(lowc(cmd[1]))) {
 				    context.run = 3;
@@ -2897,7 +2898,7 @@ void rhack(char *cmd) {
 			}
 			break;
 
-		case '-': if (!iflags.num_pad) break; // else fallthru
+		case '-': if (!iflags.num_pad) break; else fallthru;
 		/* Effects of movement commands and invisible monsters:
 		 * m: always move onto space (even if 'I' remembered)
 		 * F: always attack space (even if 'I' not remembered)

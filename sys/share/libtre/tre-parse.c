@@ -1106,7 +1106,7 @@ tre_parse(tre_parse_ctx_t *ctx)
 	    case CHAR_QUESTIONMARK:
 	      if (!(ctx->cflags & REG_EXTENDED))
 		break;
-		/*FALLTHROUGH*/
+	    __attribute__((fallthrough));
 	    case CHAR_STAR:
 	      {
 		tre_ast_node_t *tmp_node;
@@ -1499,7 +1499,7 @@ tre_parse(tre_parse_ctx_t *ctx)
 		      ctx->position++;
 		      break;
 		    }
-		  /*FALLTHROUGH*/
+		  __attribute__((fallthrough));
 
 		default:
 		  if (tre_isdigit(*ctx->re))

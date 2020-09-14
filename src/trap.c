@@ -1357,11 +1357,11 @@ int launch_obj(short otyp, int x1, int y1, int x2, int y2, int style) {
 			/* use otrapped as a flag to ohitmon */
 			singleobj->otrapped = 1;
 			style &= ~LAUNCH_KNOWN;
-			/* fall through */
-		roll:
+			goto roll;
+roll:
 		case ROLL:
 			delaycnt = 2;
-		/* fall through */
+		fallthru;
 		default:
 			if (!delaycnt) delaycnt = 1;
 			if (!cansee(bhitpos.x, bhitpos.y)) curs_on_u();
@@ -2005,7 +2005,7 @@ mfiretrap:
 					} else
 						break;
 				}
-			/* Fall through */
+			fallthru;
 			case LEVEL_TELEP:
 			case MAGIC_PORTAL: {
 				int mlev_res;
@@ -2053,7 +2053,7 @@ mfiretrap:
 							mtmp->mtrapped = 1;
 							break;
 						}
-					//fallthru
+					fallthru;
 					default:
 						if (mptr->mlet == S_GIANT ||
 						    (mptr->mlet == S_DRAGON &&
@@ -2440,7 +2440,7 @@ int float_down(long hmask, long emask) {
 			case TRAPDOOR:
 				if (!Can_fall_thru(&u.uz) || u.ustuck)
 					break;
-			//fallthru
+			fallthru;
 			default:
 				if (!u.utrap) /* not already in the trap */
 					dotrap(trap, 0);
@@ -2837,7 +2837,7 @@ bool water_damage(struct obj *obj, bool force, bool here) {
 							case DRUM_OF_EARTHQUAKE: obj->otyp = LEATHER_DRUM; obj->spe = 0; break;
 						}
 					}
-				//fallthru
+				fallthru;
 
 				/* Weapons, armor and tools may be disenchanted... */
 				/* Wands and rings lose a charge... */
@@ -2856,7 +2856,7 @@ bool water_damage(struct obj *obj, bool force, bool here) {
 						if (obj->spe < 0) obj->spe = 0;
 					}
 
-				//fallthru
+				fallthru;
 				//for rusting effects...
 
 				// Weapons, armor, tools and other things may rust...

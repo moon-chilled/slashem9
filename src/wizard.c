@@ -224,7 +224,7 @@ static long strategy(struct monst *mtmp) {
 		case 1: /* the wiz is less cautious */
 			if (mtmp->data != &mons[PM_WIZARD_OF_YENDOR])
 				return STRAT_HEAL;
-			/* else fall through */
+			else fallthru;
 
 		case 2:
 			dstrat = STRAT_HEAL;
@@ -286,7 +286,7 @@ int tactics(struct monst *mtmp) {
 					return 1;
 				}
 
-		//fallthru
+		fallthru;
 		//:)
 
 		case STRAT_NONE: /* harrass */

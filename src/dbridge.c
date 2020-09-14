@@ -182,7 +182,7 @@ bool create_drawbridge(int x, int y, int dir, bool flag) {
 			break;
 		default:
 			impossible("bad direction in create_drawbridge");
-		/* fall through */
+		fallthru;
 		case DB_WEST:
 			horiz = false;
 			x2--;

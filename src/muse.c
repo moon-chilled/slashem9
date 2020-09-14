@@ -962,14 +962,14 @@ try_again:
 			if (level.flags.noteleport && ++trycnt < 2)
 				goto try_again;
 			if (!rn2(3)) return WAN_TELEPORTATION;
-		//else fallthru
+			else fallthru;
 		case 0:
 		case 1:
 			return SCR_TELEPORTATION;
 		case 8:
 		case 10:
 			if (!rn2(3)) return WAN_CREATE_MONSTER;
-		//else fallthru
+			else fallthru;
 		case 2:
 			return SCR_CREATE_MONSTER;
 		case 3:
@@ -1632,7 +1632,8 @@ int rnd_offensive_item(struct monst *mtmp) {
 
 			if ((helmet && is_metallic(helmet)) || amorphous(pm) || passes_walls(pm) || noncorporeal(pm) || unsolid(pm))
 				return SCR_EARTH;
-		} /* fall through */
+		}
+		fallthru;
 		case 1:
 			return WAN_STRIKING;
 		case 2:

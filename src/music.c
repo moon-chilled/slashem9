@@ -256,7 +256,7 @@ static void
 						goto do_pit;
 					case THRONE:
 						if (cansee(x, y)) pline("The throne falls into a chasm.");
-					//fallthru
+					fallthru;
 					case ROOM:
 					case CORR: /* Try to make a pit */
 					do_pit:
@@ -387,8 +387,8 @@ static int do_improvisation(instr) struct obj *instr; {
 				put_monsters_to_sleep(u.ulevel * 5);
 				exercise(A_DEX, true);
 				break;
-			}
-		//else fallthru
+			} else fallthru;
+
 		case WOODEN_FLUTE: /* May charm snakes */
 		/* KMH, balance patch -- removed
 		case PAN_PIPE: */
@@ -417,8 +417,7 @@ static int do_improvisation(instr) struct obj *instr; {
 				}
 				makeknown(instr->otyp);
 				break;
-			}
-		//else fallthru
+			} else fallthru;
 		case TOOLED_HORN: /* Awaken or scare monsters */
 			pline("You produce a frightful, grave sound.");
 			awaken_monsters(u.ulevel * 30);
@@ -438,8 +437,7 @@ static int do_improvisation(instr) struct obj *instr; {
 				charm_monsters((u.ulevel - 1) / 3 + 1);
 				exercise(A_DEX, true);
 				break;
-			}
-		//else fallthru
+			} else fallthru;
 		case WOODEN_HARP: /* May calm Nymph */
 			do_spec &= (rn2(ACURR(A_DEX)) + u.ulevel > 25);
 			pline("%s %s.", The(xname(instr)),
@@ -458,8 +456,7 @@ static int do_improvisation(instr) struct obj *instr; {
 				awaken_monsters(ROWNO * COLNO);
 				makeknown(DRUM_OF_EARTHQUAKE);
 				break;
-			}
-		//else fallthru
+			} else fallthru;
 
 		case LEATHER_DRUM: /* Awaken monsters */
 			pline("You beat a deafening row!");

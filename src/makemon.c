@@ -282,7 +282,7 @@ static void m_initweap(struct monst *mtmp) {
 						m_initthrow(mtmp, SHOTGUN_SHELL, 20);
 						m_initthrow(mtmp, SHOTGUN_SHELL, 20);
 						m_initthrow(mtmp, SHOTGUN_SHELL, 20);
-					/* Fallthrough */
+					fallthru;
 					default:
 						if (!rn2(4)) w1 = DAGGER;
 						if (!rn2(7)) w2 = SPEAR;
@@ -795,15 +795,15 @@ static void m_initweap(struct monst *mtmp) {
 					break;
 			}
 			/* prevent djinnis and mail daemons from leaving objects when
-		 * they vanish
-		 */
+			 * they vanish
+			 */
 			if (!is_demon(ptr)) break;
-		/* fall thru */
-		/*
-	 *	Now the general case, Some chance of getting some type
-	 *	of weapon for "normal" monsters.  Certain special types
-	 *	of monsters will get a bonus chance or different selections.
-	 */
+		fallthru;
+			/*
+			 *	Now the general case, Some chance of getting some type
+			 *	of weapon for "normal" monsters.  Certain special types
+			 *	of monsters will get a bonus chance or different selections.
+			 */
 		default:
 			m_initweap_normal(mtmp);
 			break;
@@ -863,7 +863,7 @@ static void m_initinv(struct monst *mtmp) {
 						break;
 					case PM_CHIEF_YEOMAN_WARDER:
 						mongets(mtmp, TALLOW_CANDLE);
-					//fallthru
+					fallthru;
 					case PM_WATCH_CAPTAIN:
 						mac = -2;
 						break;
@@ -922,15 +922,15 @@ static void m_initinv(struct monst *mtmp) {
 				 *                                      Saterday Night Live
 				 */
 				switch (rn2(4)) {
-					case 0: mongets(mtmp, WAN_MAGIC_MISSILE); //fallthru
-					case 1: mongets(mtmp, POT_EXTRA_HEALING); //fallthru
-					case 2: mongets(mtmp, POT_HEALING); //fallthru
+					case 0: mongets(mtmp, WAN_MAGIC_MISSILE); fallthru;
+					case 1: mongets(mtmp, POT_EXTRA_HEALING); fallthru;
+					case 2: mongets(mtmp, POT_HEALING); fallthru;
 					case 3: mongets(mtmp, WAN_STRIKING);
 				}
 				switch (rnd(4)) {
-					case 1: mongets(mtmp, POT_HEALING); //fallthru
-					case 2: mongets(mtmp, POT_EXTRA_HEALING); //fallthru
-					case 3: mongets(mtmp, SCR_TELEPORTATION); //fallthru
+					case 1: mongets(mtmp, POT_HEALING); fallthru;
+					case 2: mongets(mtmp, POT_EXTRA_HEALING); fallthru;
+					case 3: mongets(mtmp, SCR_TELEPORTATION); fallthru;
 					case 4: mongets(mtmp, WAN_TELEPORTATION);
 				}
 			} else if (ptr->msound == MS_PRIEST ||

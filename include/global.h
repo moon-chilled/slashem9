@@ -130,6 +130,12 @@ void *alloc(usize); /* alloc.c */
 
 #define assert(cond, ...) do { if (!(cond)) impossible(__VA_ARGS__); } while (0)
 
+#ifdef __GNUC__
+# define fallthru __attribute__((fallthrough))
+#else
+# define fallthru
+#endif
+
 /* Used for consistency checks of various data files; declare it here so
    that utility programs which include config.h but not hack.h can see it. */
 struct version_info {

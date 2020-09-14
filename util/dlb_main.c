@@ -19,7 +19,7 @@ extern void close_library(library *);
 char *eos(char *); /* also used by dlb.c */
 
 static void Write(int, char *, long);
-static void usage(void);
+static noreturn void usage(void);
 static void verbose_help(void);
 static void write_dlb_directory(int, int, libdir *, long, long, long);
 
@@ -59,7 +59,7 @@ static const char *list_file;
  *  C dir	chdir to dir (used ONCE, not like tar's -C)
  */
 
-static void usage(void) {
+static noreturn void usage(void) {
 	printf("Usage: %s [ctxCIfv] arguments... [files...]\n", progname);
 	xexit(EXIT_FAILURE);
 }

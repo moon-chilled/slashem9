@@ -142,8 +142,7 @@ static void mkbox_cnts(struct obj *box) {
 			if (moves <= 1 && !in_mklev) {
 				n = 0;
 				break;
-			}
-		//else fallthru
+			} else fallthru;
 		case BAG_OF_HOLDING:
 			n = 1;
 			break;
@@ -471,7 +470,7 @@ struct obj *mksobj(int otyp, boolean init, boolean artif) {
 				if (otmp->otyp == CORPSE || otmp->otyp == MEAT_RING ||
 				    otmp->otyp == KELP_FROND) break;
 
-			//fallthru
+			fallthru;
 
 			/* -----------============STEPHEN WHITE'S NEW CODE============----------- */
 			case GEM_CLASS:
@@ -524,7 +523,7 @@ struct obj *mksobj(int otyp, boolean init, boolean artif) {
 
 					case RED_DOUBLE_LIGHTSABER:
 						otmp->altmode = false;
-					//fallthru
+					fallthru;
 					case GREEN_LIGHTSABER:
 					case BLUE_LIGHTSABER:
 					case RED_LIGHTSABER:
@@ -537,7 +536,7 @@ struct obj *mksobj(int otyp, boolean init, boolean artif) {
 					case LARGE_BOX:
 						otmp->olocked = !!(rn2(5));
 						otmp->otrapped = !(rn2(10));
-					//fallthru
+					fallthru;
 					case ICE_BOX:
 					case SACK:
 					case OILSKIN_SACK:
@@ -602,6 +601,7 @@ struct obj *mksobj(int otyp, boolean init, boolean artif) {
 					curse(otmp);
 				} else
 					blessorcurse(otmp, 10);
+				break;
 			case VENOM_CLASS:
 			case CHAIN_CLASS:
 			case BALL_CLASS:
@@ -609,7 +609,7 @@ struct obj *mksobj(int otyp, boolean init, boolean artif) {
 			case POTION_CLASS:
 				if (otmp->otyp == POT_OIL)
 					otmp->age = MAX_OIL_IN_FLASK; /* amount of oil */
-			/* fall through */
+			fallthru;
 			case SCROLL_CLASS:
 #ifdef MAIL
 				if (otmp->otyp != SCR_MAIL)

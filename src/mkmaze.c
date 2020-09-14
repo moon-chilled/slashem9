@@ -390,7 +390,7 @@ static void fixup_special(void) {
 					lev = sp->dlevel;
 				}
 
-			//fallthru
+			fallthru;
 			case LR_UPSTAIR:
 			case LR_DOWNSTAIR:
 			place_it:
@@ -1325,13 +1325,14 @@ static void mv_bubble(struct bubble *b, int dx, int dy, boolean ini) {
 			b->dy = -b->dy;
 			break;
 		case 3:
-			b->dy = -b->dy; /* fall through */
+			b->dy = -b->dy;
+		fallthru;
 		case 2:
 			b->dx = -b->dx;
 			break;
 		default:
 			/* sometimes alter direction for fun anyway
-		   (higher probability for stationary bubbles) */
+			   (higher probability for stationary bubbles) */
 			if (!ini && ((b->dx || b->dy) ? !rn2(20) : !rn2(5))) {
 				b->dx = 1 - rn2(3);
 				b->dy = 1 - rn2(3);

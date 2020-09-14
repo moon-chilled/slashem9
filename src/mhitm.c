@@ -337,7 +337,7 @@ int mattackm(struct monst *magr, struct monst *mdef) {
 					if (vis) mswingsm(magr, mdef, otmp);
 					tmp += hitval(otmp, mdef);
 				}
-			/* fall through */
+			fallthru;
 			case AT_CLAW:
 			case AT_KICK:
 			case AT_BITE:
@@ -349,9 +349,9 @@ int mattackm(struct monst *magr, struct monst *mdef) {
 				if (distmin(magr->mx, magr->my, mdef->mx, mdef->my) > 1)
 					return MM_MISS;
 				/* Monsters won't attack cockatrices physically if they
-			 * have a weapon instead.  This instinct doesn't work for
-			 * players, or under conflict or confusion.
-			 */
+				 * have a weapon instead.  This instinct doesn't work for
+				 * players, or under conflict or confusion.
+				 */
 				if (!magr->mconf && !Conflict && otmp &&
 				    mattk->aatyp != AT_WEAP && touch_petrifies(mdef->data)) {
 					strike = 0;
@@ -581,7 +581,7 @@ static int spitmm(struct monst *magr, struct monst *mdef, struct attack *mattk) 
 				break;
 			default:
 				impossible("bad attack type in spitmm");
-			/* fall through */
+			fallthru;
 			case AD_ACID:
 				obj = mksobj(ACID_VENOM, true, false);
 				break;
@@ -813,10 +813,8 @@ static int hitmm(struct monst *magr, struct monst *mdef, struct attack *mattk) {
 						s_suffix(magr_name));
 					break;
 				case AT_HUGS:
-					if (magr != u.ustuck) {
-						sprintf(buf, "%s squeezes", magr_name);
-						break;
-					}
+					if (magr != u.ustuck) sprintf(buf, "%s squeezes", magr_name);
+					break;
 				case AT_MULTIPLY:
 					/* No message. */
 					break;

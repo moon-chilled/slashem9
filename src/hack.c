@@ -1276,7 +1276,7 @@ void domove(void) {
 							u.ustuck->mfrozen = 1;
 							u.ustuck->msleeping = 0;
 						}
-					/*FALLTHRU*/
+					fallthru;
 					default:
 						if (u.ustuck->mtame &&
 						    !Conflict && !u.ustuck->mconf)
@@ -2126,7 +2126,7 @@ void check_special_room(boolean newlev) {
 				break;
 			case TEMPLE:
 				intemple(roomno + ROOMOFFSET);
-			/* fall through */
+			fallthru;
 			default:
 				rt = 0;
 		}

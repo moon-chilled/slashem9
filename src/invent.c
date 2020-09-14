@@ -1398,7 +1398,7 @@ nextclass:
 		switch (sym) {
 			case 'a':
 				allflag = 1;
-			//fallthru
+			fallthru;
 			case 'y':
 				tmp = (*fn)(otmp);
 				if (tmp < 0) {
@@ -1414,11 +1414,11 @@ nextclass:
 				}
 				cnt += tmp;
 				if (--mx == 0) goto ret;
-			//fallthru
+			fallthru;
 			case 'n':
 				if (nodot) dud++;
-			default:
 				break;
+			default: break;
 			case 'q':
 				/* special case for seffects() */
 				if (ident) cnt = -1;

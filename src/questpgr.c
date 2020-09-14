@@ -304,7 +304,7 @@ static void convert_line(void) {
 						/* pluralize */
 						case 'P':
 							cvt_buf[0] = highc(cvt_buf[0]);
-						//fallthru
+						fallthru;
 						case 'p':
 							strcpy(cvt_buf, makeplural(cvt_buf));
 							break;
@@ -312,7 +312,7 @@ static void convert_line(void) {
 						/* append possessive suffix */
 						case 'S':
 							cvt_buf[0] = highc(cvt_buf[0]);
-						//fallthru
+						fallthru;
 						case 's':
 							strcpy(cvt_buf, s_suffix(cvt_buf));
 							break;
@@ -333,7 +333,7 @@ static void convert_line(void) {
 					strcat(cc, cvt_buf);
 					cc += strlen(cvt_buf);
 					break;
-				} /* else fall through */
+				} else fallthru;
 
 			default:
 				*cc++ = *c;

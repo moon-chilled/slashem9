@@ -295,7 +295,7 @@ void drinkfountain(void) {
 					dofindgem();
 					break;
 				}
-			//fallthru
+			fallthru;
 			case 28: /* Water Nymph */
 				dowaternymph();
 				break;
@@ -406,7 +406,7 @@ void dipfountain(struct obj *obj) {
 				dofindgem();
 				break;
 			}
-		//fallthru
+		fallthru;
 		case 24:
 		case 25: /* Water gushes forth */
 			dogushforth(false);
@@ -618,8 +618,7 @@ void drinksink(void) {
 			if (Hallucination) {
 				pline("From the murky drain, a hand reaches up... --oops--");
 				break;
-			}
-		// else fallthru
+			} else fallthru;
 		default:
 			pline("You take a sip of %s water.",
 			      rn2(3) ? (rn2(2) ? "cold" : "warm") : "hot");
@@ -724,7 +723,7 @@ void whetstone_fountain_effects(struct obj *obj) {
 				dofindgem();
 				break;
 			}
-		//fallthru
+		fallthru;
 		case 24:
 		case 25: /* Water gushes forth */
 			dogushforth(false);
@@ -841,10 +840,8 @@ void whetstone_sink_effects(struct obj *obj) {
 			You_hear("snatches of song from among the sewers...");
 			break;
 		case 19:
-			if (Hallucination) {
-				pline("From the murky drain, a hand reaches up... --oops--");
-				break;
-			}
+			if (Hallucination) pline("From the murky drain, a hand reaches up... --oops--");
+			break;
 		default:
 			break;
 	}

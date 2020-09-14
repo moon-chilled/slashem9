@@ -516,7 +516,7 @@ static void cprefx(int pm) {
 				make_slimed(10, NULL);
 				delayed_killer(SLIMED, KILLED_BY_AN, new_nhs());
 			}
-		/* Fall through */
+		fallthru;
 		default:
 			if (acidic(&mons[pm]) && Stoned)
 				fix_petrification();
@@ -548,7 +548,7 @@ boolean bite_monster(struct monst *mon) {
 				pline("You don't feel very well.");
 				Slimed = 10L;
 			}
-		/* Fall through */
+		fallthru;
 		default:
 			if (acidic(mon->data) && Stoned)
 				fix_petrification();
@@ -960,21 +960,21 @@ static void cpostfx(int pm) {
 				HSee_invisible |= FROMOUTSIDE;
 			}
 			newsym(u.ux, u.uy);
-		//fallthru
+		fallthru;
 		case PM_YELLOW_LIGHT:
 		case PM_GIANT_BAT:
 			make_stunned(HStun + 30, false);
-		//fallthru
+		fallthru;
 		case PM_BAT:
 			make_stunned(HStun + 30, false);
 			break;
 
 		case PM_GIANT_MIMIC:
 			tmp += 10;
-		//fallthru
+		fallthru;
 		case PM_LARGE_MIMIC:
 			tmp += 20;
-		//fallthru
+		fallthru;
 		case PM_SMALL_MIMIC:
 			tmp += 20;
 			if (youmonst.data->mlet != S_MIMIC && !Unchanging) {
@@ -1032,7 +1032,7 @@ static void cpostfx(int pm) {
 
 		/* WAC all mind flayers as per mondata.h have to be here */
 		case PM_MASTER_MIND_FLAYER:
-		case PM_MIND_FLAYER: {
+		case PM_MIND_FLAYER:
 			if (ABASE(A_INT) < ATTRMAX(A_INT)) {
 				if (!rn2(2)) {
 					pline("Yum! That was real brain food!");
@@ -1042,8 +1042,8 @@ static void cpostfx(int pm) {
 			} else {
 				pline("For some reason, that tasted bland.");
 			}
-		}
-		//fallthru
+
+		fallthru;
 		default: {
 			struct permonst *ptr = &mons[pm];
 			int i, count;
@@ -1056,25 +1056,25 @@ static void cpostfx(int pm) {
 			if (is_giant(ptr) && !rn2(4)) gainstr(NULL, 0);
 
 			/* Check the monster for all of the intrinsics.  If this
-		 * monster can give more than one, pick one to try to give
-		 * from among all it can give.
-		 *
-		 * If a monster can give 4 intrinsics then you have
-		 * a 1/1 * 1/2 * 2/3 * 3/4 = 1/4 chance of getting the first,
-		 * a 1/2 * 2/3 * 3/4 = 1/4 chance of getting the second,
-		 * a 1/3 * 3/4 = 1/4 chance of getting the third,
-		 * and a 1/4 chance of getting the fourth.
-		 *
-		 * And now a proof by induction:
-		 * it works for 1 intrinsic (1 in 1 of getting it)
-		 * for 2 you have a 1 in 2 chance of getting the second,
-		 *	otherwise you keep the first
-		 * for 3 you have a 1 in 3 chance of getting the third,
-		 *	otherwise you keep the first or the second
-		 * for n+1 you have a 1 in n+1 chance of getting the (n+1)st,
-		 *	otherwise you keep the previous one.
-		 * Elliott Kleinrock, October 5, 1990
-		 */
+			 * monster can give more than one, pick one to try to give
+			 * from among all it can give.
+			 *
+			 * If a monster can give 4 intrinsics then you have
+			 * a 1/1 * 1/2 * 2/3 * 3/4 = 1/4 chance of getting the first,
+			 * a 1/2 * 2/3 * 3/4 = 1/4 chance of getting the second,
+			 * a 1/3 * 3/4 = 1/4 chance of getting the third,
+			 * and a 1/4 chance of getting the fourth.
+			 *
+			 * And now a proof by induction:
+			 * it works for 1 intrinsic (1 in 1 of getting it)
+			 * for 2 you have a 1 in 2 chance of getting the second,
+			 *	otherwise you keep the first
+			 * for 3 you have a 1 in 3 chance of getting the third,
+			 *	otherwise you keep the first or the second
+			 * for n+1 you have a 1 in n+1 chance of getting the (n+1)st,
+			 *	otherwise you keep the previous one.
+			 * Elliott Kleinrock, October 5, 1990
+			 */
 
 			count = 0; /* number of possible intrinsics */
 			tmp = 0;   /* which one we will try to give */
@@ -1082,11 +1082,11 @@ static void cpostfx(int pm) {
 				if (intrinsic_possible(i, ptr)) {
 					count++;
 					/* a 1 in count chance of replacing the old
-				 * one with this one, and a count-1 in count
-				 * chance of keeping the old one.  (note
-				 * that 1 in 1 and 0 in 1 are what we want
-				 * for the first one
-				 */
+					 * one with this one, and a count-1 in count
+					 * chance of keeping the old one.  (note
+					 * that 1 in 1 and 0 in 1 are what we want
+					 * for the first one
+					 */
 					if (!rn2(count)) {
 #ifdef DEBUG
 						debugpline("Intrinsic %d replacing %d",
@@ -1753,13 +1753,13 @@ static void fprefx(struct obj *otmp) {
 		case HUGE_CHUNK_OF_MEAT:
 		case MEAT_RING:
 			goto give_feedback;
-		/* break; */
+
 		case CLOVE_OF_GARLIC:
 			if (is_undead(youmonst.data)) {
 				make_vomiting((long)rn1(context.victual.reqtime, 5), false);
 				break;
 			}
-		//fallthru
+		fallthru;
 		default:
 			if (otmp->otyp == SLIME_MOLD && !otmp->cursed && otmp->spe == current_fruit)
 				pline("My, that was a %s %s!",

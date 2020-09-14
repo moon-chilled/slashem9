@@ -1756,8 +1756,7 @@ do_stone:
 						done(DIED);
 						dmg = 0;
 						break;
-					}
-				//else fallthru
+					} else fallthru;
 				default:  /* case 16: ... case 5: */
 					pline("You feel your life force draining away...");
 					permdmg = 1; /* actual damage done below */
