@@ -130,7 +130,7 @@ void *alloc(usize); /* alloc.c */
 
 #define assert(cond, ...) do { if (!(cond)) impossible(__VA_ARGS__); } while (0)
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__PCC__) && !defined(__INTEL_COMPILER)
 # define fallthru __attribute__((fallthrough))
 #else
 # define fallthru

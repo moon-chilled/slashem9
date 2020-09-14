@@ -12,6 +12,12 @@
   the "extended" syntax, and some nonstandard extensions.
 */
 
+#if defined(__GNUC__) && !defined(__PCC__) && !defined(__INTEL_COMPILER)
+# define fallthru __attribute__((fallthrough))
+#else
+# define fallthru
+#endif
+
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -1106,7 +1112,7 @@ tre_parse(tre_parse_ctx_t *ctx)
 	    case CHAR_QUESTIONMARK:
 	      if (!(ctx->cflags & REG_EXTENDED))
 		break;
-	    __attribute__((fallthrough));
+	    fallthru;
 	    case CHAR_STAR:
 	      {
 		tre_ast_node_t *tmp_node;
@@ -1499,7 +1505,7 @@ tre_parse(tre_parse_ctx_t *ctx)
 		      ctx->position++;
 		      break;
 		    }
-		  __attribute__((fallthrough));
+		fallthru;
 
 		default:
 		  if (tre_isdigit(*ctx->re))

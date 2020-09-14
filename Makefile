@@ -12,10 +12,15 @@ ifneq ($(FORTIFY),)
 endif
 
 ifneq ($(CC),tcc)
+ifneq ($(CC),pcc)
 	CFLAGS += -Werror
 endif
+endif
+ifeq ($(CC),pcc)
+	CFLAGS += -D__float128="long double"
+endif
 
-CFLAGS := $(CFLAGS) $(shell pkg-config --cflags ncursesw)
+CFLAGS += $(shell pkg-config --cflags ncursesw)
 ifeq ($(shell uname -s),Darwin)
 	LDFLAGS += -lncurses
 else
