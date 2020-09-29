@@ -29,7 +29,7 @@ Changelist for slashem9 v0.9:
 - Interface: a common technique for identification of wands is to engrave with them on top of an existing engraving; the message produced will either uniquely identify the wand of confine it to one of a small number.  When doing so would uniquely identify the wand, formally identify it as well.
 - Internals: remove reliance on the system for a regex engine, and instead vendor one ourselves (libtre).
 - Gameplay: gypsies can no longer be farmed for wishes.  Gypsies generated via reverse genocide are 'tainted' and will not grant wishes.
-- Bugfix: artifact naming.  The rules here are a bit different from in other games in the family: a name is only prohibited to be attached to an object where either there exists an artifact whose name is that name and whose base object is that object, or where adherence to the previous rule would leak information.
+- Bugfix: artifact naming.  The rules here are a bit different from in other games in the family: a name is only prohibited to be attached to an object when either there exists an artifact whose name is that name and whose base object is that object, or where adherence to the previous rule would leak information.
 - Bugfix: when the player's hand slipped while naming an object with the name of an artifact, the name was changed to the proper name of the artifact plus a typo, rather than the actual player-inputted name plus a typo.
 - Bugfix: player was able to eat food from the floor of a pit while teetering at its edge.
 - Interface: get a nice death message when you die by jumping into a pit you made.
@@ -233,6 +233,7 @@ Imports from NetHack version 3.6:
 - Bugfix: if a pet went to sleep, they could continue eating food.
 - Bugfix: if you lose levels while polymorphed, your polyform (not just your true form) loses maxhp.
 - Gameplay: use a more specialized algorithm to calculate maxhp gain/loss for monsters on level change.
+- Bugfix: trap detection routines did not detect traps in carried or buried chests.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).

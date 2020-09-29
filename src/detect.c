@@ -16,6 +16,7 @@ static void do_dknown_of(struct obj *obj);
 static bool check_map_spot(int x, int y, char oclass, uint material);
 static bool clear_stale_map(char oclass, uint material);
 static void sense_trap(struct trap *trap, xchar x, xchar y, int src_cursed);
+static enum OTRAP detect_obj_traps(struct obj *objlist, bool show_them, int how);
 static void show_map_spot(int x, int y);
 static void findone(int zx, int zy, void *num);
 static void openone(int zx, int zy, void *num);
@@ -611,6 +612,34 @@ static void sense_trap(struct trap *trap, xchar x, xchar y, int src_cursed) {
 	}
 }
 
+enum OTRAP {
+	OTRAP_NONE = 0,       /* nothing found */
+	OTRAP_HERE = 1,       /* found at hero's location */
+	OTRAP_THERE = 2,      /* found at any other location */
+};
+
+/* check a list of objects for chest traps; return HERE if found at <ux,uy>,
+   THERE if found at some other spot, HERE|THERE if both, NONE otherwise; optionally
+   update the map to show where such traps were found */
+// how=1 for misleading map feedback
+static enum OTRAP detect_obj_traps(struct obj *objlist, bool show_them, int how) {
+	struct obj *otmp;
+	xchar x, y;
+	enum OTRAP result = OTRAP_NONE;
+
+	for (otmp = objlist; otmp; otmp = otmp->nobj) {
+		if (Is_box(otmp) && otmp->otrapped &&
+				get_obj_location(otmp, &x, &y, BURIED_TOO|CONTAINED_TOO)) {
+			result |= (x == u.ux && y == u.uy) ? OTRAP_HERE : OTRAP_THERE;
+			if (show_them) sense_trap(NULL, x, y, how);
+		}
+		if (Has_contents(otmp))
+			result |= detect_obj_traps(otmp->cobj, show_them, how);
+	}
+	return result;
+}
+
+
 // the detections are pulled out so they can
 // also be used in the crystal ball routine
 // returns 1 if nothing was detected
@@ -619,25 +648,37 @@ static void sense_trap(struct trap *trap, xchar x, xchar y, int src_cursed) {
 int trap_detect(struct obj *sobj) {
 	struct trap *ttmp;
 	struct obj *obj;
-	int door;
-	int uw = u.uinwater;
+	struct monst *mon;
+	int door, glyph, tr;
+	int uw = u.uinwater, cursed_src = sobj && sobj->cursed;
 	boolean found = false;
 	int x, y;
 
+	// floor/ceiling traps
 	for (ttmp = ftrap; ttmp; ttmp = ttmp->ntrap) {
 		if (ttmp->tx != u.ux || ttmp->ty != u.uy)
 			goto outtrapmap;
 		else
 			found = true;
 	}
-	for (obj = fobj; obj; obj = obj->nobj) {
-		if (Is_box(obj) && obj->otrapped) {
-			if (obj->ox != u.ux || obj->oy != u.uy)
-				goto outtrapmap;
-			else
-				found = true;
+	    /* chest traps (might be buried or carried) */
+	if ((tr = detect_obj_traps(fobj, false, 0)) != OTRAP_NONE) {
+		if (tr & OTRAP_THERE) goto outtrapmap;
+		else found = true;
+	}
+	if ((tr = detect_obj_traps(level.buriedobjlist, false, 0)) != OTRAP_NONE) {
+		if (tr & OTRAP_THERE) goto outtrapmap;
+		else found = true;
+	}
+	for (mon = fmon; mon; mon = mon->nmon) {
+		if (DEADMONSTER(mon)) continue;
+		if ((tr = detect_obj_traps(mon->minvent, false, 0)) != OTRAP_NONE) {
+			if (tr & OTRAP_THERE) goto outtrapmap;
+			else found = true;
 		}
 	}
+	if (detect_obj_traps(invent, false, 0) != OTRAP_NONE) found = true;
+	// door traps
 	for (door = 0; door < doorindex; door++) {
 		x = doors[door].x;
 		y = doors[door].y;
@@ -662,21 +703,27 @@ outtrapmap:
 
 	u.uinwater = 0;
 	for (ttmp = ftrap; ttmp; ttmp = ttmp->ntrap)
-		sense_trap(ttmp, 0, 0, sobj && sobj->cursed);
+		sense_trap(ttmp, 0, 0, cursed_src);
 
 	for (obj = fobj; obj; obj = obj->nobj)
 		if (Is_box(obj) && obj->otrapped)
-			sense_trap(NULL, obj->ox, obj->oy, sobj && sobj->cursed);
+			sense_trap(NULL, obj->ox, obj->oy, cursed_src);
 
 	for (door = 0; door < doorindex; door++) {
 		x = doors[door].x;
 		y = doors[door].y;
 		if (levl[x][y].doormask & D_TRAPPED)
-			sense_trap(NULL, x, y, sobj && sobj->cursed);
+			sense_trap(NULL, x, y, cursed_src);
 	}
 
-	newsym(u.ux, u.uy);
-	pline("You feel %s.", sobj && sobj->cursed ? "very greedy" : "entrapped");
+	// redisplay hero unless sense_trap() revealed something at <ux,uy>
+	glyph = glyph_at(u.ux, u.uy);
+	if (!(glyph_is_trap(glyph) || glyph_is_object(glyph)))
+		newsym(u.ux, u.uy);
+
+	pline("You feel %s.", cursed_src ? "very greedy" : "entrapped");
+
+	// wait for user to respond, then reset map display to normal
 	display_nhwindow(WIN_MAP, true);
 	docrt();
 	u.uinwater = uw;
