@@ -602,38 +602,22 @@ static int kick_object(xchar x, xchar y) {
 static char *kickstr(char *buf) {
 	const char *what;
 
-	if (kickobj)
-		what = distant_name(kickobj, doname);
-	else if (IS_DOOR(maploc->typ))
-		what = "a door";
-	else if (IS_TREE(maploc->typ))
-		what = "a tree";
-	else if (IS_STWALL(maploc->typ))
-		what = "a wall";
-	else if (IS_ROCK(maploc->typ))
-		what = "a rock";
-	else if (IS_THRONE(maploc->typ))
-		what = "a throne";
-	else if (IS_FOUNTAIN(maploc->typ))
-		what = "a fountain";
-	else if (IS_GRAVE(maploc->typ))
-		what = "a headstone";
-	else if (IS_SINK(maploc->typ))
-		what = "a sink";
-	else if (IS_TOILET(maploc->typ))
-		what = "a toilet";
-	else if (IS_ALTAR(maploc->typ))
-		what = "an altar";
-	else if (IS_DRAWBRIDGE(maploc->typ))
-		what = "a drawbridge";
-	else if (maploc->typ == STAIRS)
-		what = "the stairs";
-	else if (maploc->typ == LADDER)
-		what = "a ladder";
-	else if (maploc->typ == IRONBARS)
-		what = "an iron bar";
-	else
-		what = "something weird";
+	if (kickobj) what = killer_xname(kickobj);
+	else if (IS_DOOR(maploc->typ)) what = "a door";
+	else if (IS_TREE(maploc->typ)) what = "a tree";
+	else if (IS_STWALL(maploc->typ)) what = "a wall";
+	else if (IS_ROCK(maploc->typ)) what = "a rock";
+	else if (IS_THRONE(maploc->typ)) what = "a throne";
+	else if (IS_FOUNTAIN(maploc->typ)) what = "a fountain";
+	else if (IS_GRAVE(maploc->typ)) what = "a headstone";
+	else if (IS_SINK(maploc->typ)) what = "a sink";
+	else if (IS_TOILET(maploc->typ)) what = "a toilet";
+	else if (IS_ALTAR(maploc->typ)) what = "an altar";
+	else if (IS_DRAWBRIDGE(maploc->typ)) what = "a drawbridge";
+	else if (maploc->typ == STAIRS) what = "the stairs";
+	else if (maploc->typ == LADDER) what = "a ladder";
+	else if (maploc->typ == IRONBARS) what = "an iron bar";
+	else what = "something weird";
 	return strcat(strcpy(buf, "kicking "), what);
 }
 

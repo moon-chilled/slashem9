@@ -786,8 +786,7 @@ static boolean toss_up(struct obj *obj, boolean hitsroof) {
 
 		if (obj->oartifact)
 			/* need a fake die roll here; rn1(18,2) avoids 1 and 20 */
-			artimsg = artifact_hit(NULL, &youmonst,
-					       obj, &dmg, rn1(18, 2));
+			artimsg = artifact_hit(NULL, &youmonst, obj, &dmg, rn1(18, 2));
 
 		if (!dmg) { /* probably wasn't a weapon; base damage on weight */
 			dmg = (int)obj->owt / 100;
@@ -1117,9 +1116,8 @@ void throwit(
 						      "%s back toward you, hitting your %s!",
 					      Tobjnam(obj, Blind ? "hit" : "fly"),
 					      body_part(ARM));
-					artifact_hit(NULL,
-						     &youmonst, obj, &dmg, 0);
-					losehp(Maybe_Half_Phys(dmg), xname(obj), obj_is_pname(obj) ? KILLED_BY : KILLED_BY_AN);
+					artifact_hit(NULL, &youmonst, obj, &dmg, 0);
+					losehp(Maybe_Half_Phys(dmg), killer_xname(obj), KILLED_BY);
 				}
 				if (ship_object(obj, u.ux, u.uy, false)) {
 					thrownobj = NULL;
