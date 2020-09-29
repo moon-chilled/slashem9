@@ -976,7 +976,9 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 	int canhitmon, objenchant;
 	boolean nohit = false;
 
-	if (touch_petrifies(pd) && !resists_ston(magr)) {
+	if ((touch_petrifies(pd) /* or flesh_petrifies */
+	     || (mattk->adtyp == AD_DGST && pd == &mons[PM_MEDUSA]))
+	    && !resists_ston(magr)) {
 		long protector = attk_protection((int)mattk->aatyp),
 		     wornitems = magr->misc_worn_check;
 

@@ -234,6 +234,8 @@ Imports from NetHack version 3.6:
 - Bugfix: if you lose levels while polymorphed, your polyform (not just your true form) loses maxhp.
 - Gameplay: use a more specialized algorithm to calculate maxhp gain/loss for monsters on level change.
 - Bugfix: trap detection routines did not detect traps in carried or buried chests.
+- Bugfix: swallowing medusa (e.g. as a purple worm) should be fatal.
+- Bugfix: swallowing a petrifying monster should violate foodless conduct before killing you.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).

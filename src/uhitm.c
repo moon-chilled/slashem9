@@ -2317,9 +2317,13 @@ static void end_engulf() {
 }
 
 static int gulpum(struct monst *mdef, struct attack *mattk) {
+	static char msgbuf[BUFSZ];
 	int tmp;
-	int dam = d((int)mattk->damn, (int)mattk->damd);
+	int dam = d(mattk->damn, mattk->damd);
+	bool fatal_gulp;
 	struct obj *otmp;
+	struct permonst *pd = mdef->data;
+
 	/* Not totally the same as for real monsters.  Specifically, these
 	 * don't take multiple moves.  (It's just too hard, for too little
 	 * result, to program monsters which attack from inside you, which
@@ -2328,23 +2332,44 @@ static int gulpum(struct monst *mdef, struct attack *mattk) {
 	 * after exactly 1 round of attack otherwise.  -KAA
 	 */
 
-	if (mdef->data->msize >= MZ_HUGE) return 0;
+	if (pd->msize >= MZ_HUGE) return 0;
 
 	if (u.uhunger < 1500 && !u.uswallow) {
 		for (otmp = mdef->minvent; otmp; otmp = otmp->nobj)
 			snuff_lit(otmp);
 
-		if (!touch_petrifies(mdef->data) || Stone_resistance) {
-			static char msgbuf[BUFSZ];
+		/* engulfing a cockatrice or digesting a Rider or Medusa */
+		fatal_gulp = (touch_petrifies(pd) && !Stone_resistance)
+		             || (mattk->adtyp == AD_DGST && (is_rider(pd)
+		                 || (pd == &mons[PM_MEDUSA]) && !Stone_resistance));
+
+		if ((mattk->adtyp == AD_DGST && !Slow_digestion) || fatal_gulp) {
+			/* KMH, conduct */
+			u.uconduct.food++;
+			if (!vegan(pd))
+				u.uconduct.unvegan++;
+			if (!vegetarian(pd))
+				violated_vegetarian();
+		}
+
+		if (fatal_gulp && !is_rider(pd)) {  /* petrification */
+			char kbuf[BUFSZ];
+			const char *mname = pd->mname;
+
+			if (!type_is_pname(pd)) mname = an(mname);
+			pline("You bite into %s.", mon_nam(mdef));
+			sprintf(kbuf, "swallowing %s whole", mname);
+			instapetrify(kbuf);
+		} else {
 			start_engulf(mdef);
 			switch (mattk->adtyp) {
 				case AD_DGST:
 					/* eating a Rider or its corpse is fatal */
-					if (is_rider(mdef->data)) {
+					if (is_rider(pd)) {
 						pline("Unfortunately, digesting any of it is fatal.");
 						end_engulf();
 						killer.format = NO_KILLER_PREFIX;
-						nhscopyf(&killer.name, "unwisely tried to eat %S", mdef->data->mname);
+						nhscopyf(&killer.name, "unwisely tried to eat %S", pd->mname);
 						done(DIED);
 						return 0; /* lifesaved */
 					}
@@ -2354,15 +2379,8 @@ static int gulpum(struct monst *mdef, struct attack *mattk) {
 						break;
 					}
 
-					/* KMH, conduct */
-					u.uconduct.food++;
-					if (!vegan(mdef->data))
-						u.uconduct.unvegan++;
-					if (!vegetarian(mdef->data))
-						violated_vegetarian();
-
 					/* Use up amulet of life saving */
-					if (!!(otmp = mlifesaver(mdef))) m_useup(mdef, otmp);
+					if ((otmp = mlifesaver(mdef))) m_useup(mdef, otmp);
 
 					newuhs(false);
 					xkilled(mdef, 2);
@@ -2370,16 +2388,14 @@ static int gulpum(struct monst *mdef, struct attack *mattk) {
 						pline("You hurriedly regurgitate the sizzling in your %s.",
 						      body_part(STOMACH));
 					} else {
-						tmp = 1 + (mdef->data->cwt >> 8);
+						tmp = 1 + (pd->cwt >> 8);
 						if (corpse_chance(mdef, &youmonst, true) &&
-						    !(mvitals[monsndx(mdef->data)].mvflags &
-						      G_NOCORPSE)) {
+						    !(mvitals[monsndx(pd)].mvflags & G_NOCORPSE)) {
 							/* nutrition only if there can be a corpse */
-							u.uhunger += (mdef->data->cnutrit + 1) / 2;
+							u.uhunger += (pd->cnutrit + 1) / 2;
 						} else
 							tmp = 0;
-						sprintf(msgbuf, "You totally digest %s.",
-							mon_nam(mdef));
+						sprintf(msgbuf, "You totally digest %s.", mon_nam(mdef));
 						if (tmp != 0) {
 							/* setting afternmv = end_engulf is tempting,
 							 * but will cause problems if the player is
@@ -2392,9 +2408,9 @@ static int gulpum(struct monst *mdef, struct attack *mattk) {
 							nomovemsg = msgbuf;
 						} else
 							pline("%s", msgbuf);
-						if (mdef->data == &mons[PM_GREEN_SLIME]) {
+						if (pd == &mons[PM_GREEN_SLIME]) {
 							sprintf(msgbuf, "%s isn't sitting well with you.",
-								The(mdef->data->mname));
+								The(pd->mname));
 							if (!Unchanging) {
 								make_slimed(5, NULL);
 							}
@@ -2407,8 +2423,7 @@ static int gulpum(struct monst *mdef, struct attack *mattk) {
 					if (youmonst.data == &mons[PM_FOG_CLOUD]) {
 						pline("%s is laden with your moisture.",
 						      Monnam(mdef));
-						if (amphibious(mdef->data) &&
-						    !flaming(mdef->data)) {
+						if (amphibious(pd) && !flaming(pd)) {
 							dam = 0;
 							pline("%s seems unharmed.", Monnam(mdef));
 						}
@@ -2479,12 +2494,6 @@ static int gulpum(struct monst *mdef, struct attack *mattk) {
 				pline("Obviously, you didn't like %s taste.",
 				      s_suffix(mon_nam(mdef)));
 			}
-		} else {
-			char kbuf[BUFSZ];
-
-			pline("You bite into %s.", mon_nam(mdef));
-			sprintf(kbuf, "swallowing %s whole", an(mdef->data->mname));
-			instapetrify(kbuf);
 		}
 	}
 	return 0;
