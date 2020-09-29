@@ -1722,11 +1722,10 @@ static void steal_it(struct monst *mdef, struct attack *mattk) {
 
 int damageum(struct monst *mdef, struct attack *mattk) {
 	struct permonst *pd = mdef->data;
-	int tmp = d((int)mattk->damn, (int)mattk->damd);
-	int armpro;
-	boolean negated;
+	int armpro, tmp = d(mattk->damn, mattk->damd);
+	bool negated;
 	int enchantlvl = 0;
-	boolean noeffect = false;
+	bool noeffect = false;
 
 	armpro = magic_negation(mdef);
 	/* since hero can't be cancelled, only defender's armor applies */
@@ -2006,42 +2005,7 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 				break;
 			}
 
-			pline("You eat %s brain!", s_suffix(mon_nam(mdef)));
-			u.uconduct.food++;
-			if (flesh_petrifies(mdef->data) && !Stone_resistance && !Stoned) {
-				make_stoned(5, NULL, KILLED_BY_AN, *nhstmpt(nhsdupz(mdef->data->mname)));
-			}
-			if (is_rider(mdef->data)) {
-				pline("Injesting that is fatal.");
-				nhscopyf(&killer.name, "unwisely ate the brain of %S", pd->mname);
-				killer.format = NO_KILLER_PREFIX;
-				done(DIED);
-				// life-saving needed to reach here
-				exercise(A_WIS, false);
-				tmp += rnd(10);
-				break;
-			}
-			if (!vegan(mdef->data))
-				u.uconduct.unvegan++;
-			if (!vegetarian(mdef->data))
-				violated_vegetarian();
-			if (mindless(mdef->data)) {
-				pline("%s doesn't notice.", Monnam(mdef));
-				break;
-			}
-			tmp += rnd(10);
-			morehungry(-rnd(30)); /* cannot choke */
-			if (ABASE(A_INT) < AMAX(A_INT)) {
-				ABASE(A_INT) += rnd(4);
-				if (ABASE(A_INT) > AMAX(A_INT))
-					ABASE(A_INT) = AMAX(A_INT);
-				context.botl = 1;
-			}
-			exercise(A_WIS, true);
-
-			/* targetting another mind flayer or your own underlying species
-			 * is cannibalism */
-			maybe_cannibal(monsndx(mdef->data), true);
+			eat_brains(&youmonst, mdef, true, &tmp);
 
 			break;
 		case AD_STCK:

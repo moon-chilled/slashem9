@@ -1315,7 +1315,7 @@ bool artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, int 
 				if (mdef->m_lev == 0) {
 					*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 				} else {
-					int drain = monhp_per_level(mdef);
+					int drain = monhp_per_lvl(mdef);
 					*dmgptr += drain;
 					mdef->mhpmax -= drain;
 					mdef->m_lev--;

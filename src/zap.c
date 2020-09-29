@@ -381,7 +381,7 @@ int bhitm(struct monst *mtmp, struct obj *otmp) {
 			break;
 		case SPE_DRAIN_LIFE:
 		case WAN_DRAINING: /* KMH */
-			dmg = monhp_per_level(mtmp);
+			dmg = monhp_per_lvl(mtmp);
 			if (dbldam) dmg *= 2;
 			dmg += skilldmg;
 

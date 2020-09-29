@@ -194,8 +194,8 @@ void losexp(const char *drainer /* cause of death, if drain should be fatal */, 
 		u.uexp = newuexp(u.ulevel) - 1;
 
 	if (Upolyd) {
-		num = monhp_per_level(&youmonst);
-		u.mhpmax -= num;
+		num = monhp_per_lvl(&youmonst);
+		u.mhmax -= num;
 		u.mh -= num;
 		if (u.mh <= 0) rehumanize();
 	}
@@ -312,7 +312,7 @@ void pluslvl(bool incr) {
 	u.uhpmax += num;
 	u.uhp += num;
 	if (Upolyd) {
-		num = monhp_per_level(&youmonst);
+		num = monhp_per_lvl(&youmonst);
 		u.mhmax += num;
 		u.mh += num;
 	}

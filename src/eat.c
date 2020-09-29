@@ -3,6 +3,7 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "mextra.h"
 /* #define DEBUG */ /* uncomment to enable new eat code debugging */
 
 #ifdef DEBUG
@@ -431,9 +432,144 @@ static void done_eating(bool message) {
 	context.victual.fullwarn = context.victual.eating = context.victual.doreset = false;
 }
 
+// handle side-effects of mind flayer's tentacle attack
+// dmg_p: for dishing out extra damage in lieu of Int loss
+int eat_brains(struct monst *magr, struct monst *mdef, bool visflag, int *dmg_p) {
+	struct permonst *pd = mdef->data;
+	bool give_nutrit = false;
+	int result = MM_HIT, xtra_dmg = rnd(10);
+
+	if (magr == &youmonst) {
+		pline("You eat %s brain!", s_suffix(mon_nam(mdef)));
+	} else if (mdef == &youmonst) {
+		pline("Your brain is eaten!");
+	} else {           /* monster against monster */
+		if (visflag) pline("%s brain is eaten!", s_suffix(Monnam(mdef)));
+	}
+
+	if (flesh_petrifies(pd)) {
+		/* mind flayer has attempted to eat the brains of a petrification
+		   inducing critter (most likely Medusa; attacking a cockatrice via
+		   tentacle-touch should have been caught before reaching this far) */
+		if (magr == &youmonst) {
+			if (!Stone_resistance && !Stoned) make_stoned(5, NULL, KILLED_BY_AN, nhsdupz(pd->mname));
+		} else {
+			/* no need to check for poly_when_stoned or Stone_resistance;
+			   mind flayers don't have those capabilities */
+			if (visflag) pline("%s turns to stone!", Monnam(magr));
+			monstone(magr);
+			if (magr->mhp > 0) {
+				/* life-saved; don't continue eating the brains */
+				return MM_MISS;
+			} else {
+				if (magr->mtame && !visflag)
+					/* parallels mhitm.c's brief_feeling */
+					pline("You have a sad thought for a moment, then is passes.");
+				return MM_AGR_DIED;
+			}
+		}
+	}
+
+	if (magr == &youmonst) {
+		 // player mind flayer is eating something's brain
+		u.uconduct.food++;
+		if (!vegan(pd))
+			u.uconduct.unvegan++;
+		if (!vegetarian(pd))
+			violated_vegetarian();
+		if (mindless(pd)) {             /* (cannibalism not possible here) */
+			pline("%s doesn't notice.", Monnam(mdef));
+			/* all done; no extra harm inflicted upon target */
+			return MM_MISS;
+		} else if (is_rider(pd)) {
+			pline("Ingesting that is fatal.");
+			nhscopyf(&killer.name, "unwisely ate the brain of %S", pd->mname);
+			killer.format = NO_KILLER_PREFIX;
+			done(DIED);
+			/* life-saving needed to reach here */
+			exercise(A_WIS, false);
+			*dmg_p += xtra_dmg;         /* Rider takes extra damage */
+		} else {
+			morehungry(-rnd(30));       /* cannot choke */
+			if (ABASE(A_INT) < AMAX(A_INT)) {
+				/* recover lost Int; won't increase current max */
+				ABASE(A_INT) += rnd(4);
+				if (ABASE(A_INT) > AMAX(A_INT)) ABASE(A_INT) = AMAX(A_INT);
+				context.botl = 1;
+			}
+			exercise(A_WIS, true);
+			*dmg_p += xtra_dmg;
+		}
+		/* targetting another mind flayer or your own underlying species
+		   is cannibalism */
+		maybe_cannibal(monsndx(pd), true);
+	} else if (mdef == &youmonst) {
+		/*
+		 * monster mind flayer is eating hero's brain
+		 */
+		/* no such thing as mindless players */
+		if (ABASE(A_INT) <= ATTRMIN(A_INT)) {
+			if (Lifesaved) {
+				nhscopyz(&killer.name, "brainlessness");
+				killer.format = KILLED_BY;
+				done(DIED);
+				/* amulet of life saving has now been used up */
+				pline("Unfortunately your brain is still gone.");
+			} else {
+				pline("Your last thought fades away.");
+			}
+			nhscopyz(&killer.name, "brainlessness");
+			killer.format = KILLED_BY;
+			done(DIED);
+			/* can only get here when in wizard or explore mode and user has
+			   explicitly chosen not to die; arbitrarily boost intelligence */
+			ABASE(A_INT) = ATTRMIN(A_INT) + 2;
+			pline("You feel like a scarecrow.");
+		}
+		give_nutrit = true;     /* in case a conflicted pet is doing this */
+		exercise(A_WIS, false);
+		/* caller handles Int and memory loss */
+
+	} else {           /* mhitm */
+		/*
+		 * monster mind flayer is eating another monster's brain
+		 */
+		if (mindless(pd)) {
+			if (visflag) pline("%s doesn't notice.", Monnam(mdef));
+			return MM_MISS;
+		} else if (is_rider(pd)) {
+			mondied(magr);
+			if (magr->mhp <= 0) result = MM_AGR_DIED;
+			/* Rider takes extra damage regardless of whether attacker dies */
+			*dmg_p += xtra_dmg;
+		} else {
+			*dmg_p += xtra_dmg;
+			give_nutrit = true;
+			if (*dmg_p >= mdef->mhp && visflag)
+				pline("%s last thought fades away...", s_suffix(Monnam(mdef)));
+		}
+	}
+
+	if (give_nutrit && magr->mtame && !magr->isminion) {
+		EDOG(magr)->hungrytime += rnd(60);
+		magr->mconf = 0;
+	}
+
+	return result;
+}
+
+
 // eating a corpse or egg of one's own species is usually naughty
 bool maybe_cannibal(int pm, bool allowmsg) {
+	static long ate_brains = 0;
 	struct permonst *fptr = &mons[pm];
+
+       /* when poly'd into a mind flayer, multiple tentacle hits in one
+          turn cause multiple digestion checks to occur; avoid giving
+          multiple luck penalties for the same attack */
+       if (moves == ate_brains) return false;
+       ate_brains = moves;     // ate_anything, not just brains...
+
 	if (your_race(fptr)
 		/* non-cannibalistic heroes shouldn't eat own species ever
 		   and also shouldn't eat current species when polymorphed

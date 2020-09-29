@@ -20,7 +20,7 @@ ifeq ($(CC),pcc)
 	CFLAGS += -D__float128="long double"
 endif
 
-CFLAGS += $(shell pkg-config --cflags ncursesw)
+CFLAGS := $(CFLAGS) $(shell pkg-config --cflags ncursesw)
 ifeq ($(shell uname -s),Darwin)
 	LDFLAGS += -lncurses
 else

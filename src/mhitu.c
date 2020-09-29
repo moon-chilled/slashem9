@@ -1297,44 +1297,11 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 			if (Half_physical_damage) dmg = (dmg + 1) / 2;
 			mdamageu(mtmp, dmg);
 
-			if (!uarmh || uarmh->otyp != DUNCE_CAP) {
-				pline("Your brain is eaten!");
+			if (!uarmh || uarmh->otyp != DUNCE_CAP)
+				eat_brains(mtmp, &youmonst, true, NULL);
 
-				/* No such thing as mindless players... */
-				if (ABASE(A_INT) <= ATTRMIN(A_INT)) {
-					int lifesaved = 0;
-					struct obj *wore_amulet = uamul;
-
-					while (1) {
-						/* avoid looping on "die(y/n)?" */
-						if (lifesaved && (discover || wizard)) {
-							if (wore_amulet && !uamul) {
-								/* used up AMULET_OF_LIFE_SAVING; still
-								   subject to dying from brainlessness */
-								wore_amulet = 0;
-							} else {
-								/* explicitly chose not to die;
-								   arbitrarily boost intelligence */
-								ABASE(A_INT) = ATTRMIN(A_INT) + 2;
-								pline("You feel like a scarecrow.");
-								break;
-							}
-						}
-
-						if (lifesaved)
-							pline("Unfortunately your brain is still gone.");
-						else
-							pline("Your last thought fades away.");
-						killer.format = KILLED_BY;
-						nhscopyz(&killer.name, "brainlessness");
-						done(DIED);
-						lifesaved++;
-					}
-				}
-			}
 			/* adjattrib gives dunce cap message when appropriate */
 			adjattrib(A_INT, -rnd(2), false);
-			exercise(A_WIS, false);
 			break;
 		case AD_PLYS:
 			hitmsg(mtmp, mattk);

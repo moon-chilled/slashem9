@@ -971,7 +971,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 	struct obj *obj;
 	char buf[BUFSZ];
 	struct permonst *pa = magr->data, *pd = mdef->data;
-	int armpro, num, tmp = d((int)mattk->damn, (int)mattk->damd), res = MM_MISS;
+	int armpro, num, tmp = d(mattk->damn, mattk->damd), res = MM_MISS;
 	boolean cancelled;
 	int canhitmon, objenchant;
 	boolean nohit = false;
@@ -1726,26 +1726,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 				}
 				break;
 			}
-			if (vis) pline("%s brain is eaten!", s_suffix(Monnam(mdef)));
-			if (mindless(pd)) {
-				if (vis) pline("%s doesn't notice.", Monnam(mdef));
-				break;
-			}
-			if (is_rider(pd)) {
-				mondied(magr);
-				if (magr->mhp <= 0) res = MM_AGR_DIED;
-				// Rider takes extra damage regardless of whether attacker dies
-				tmp += rnd(10);
-				break;
-			}
-			tmp += rnd(10); /* fakery, since monsters lack INT scores */
-			if (magr->mtame && !magr->isminion) {
-				EDOG(magr)->hungrytime += rnd(60);
-				magr->mconf = 0;
-			}
-			if (tmp >= mdef->mhp && vis)
-				pline("%s last thought fades away...",
-				      s_suffix(Monnam(mdef)));
+			res = eat_brains(magr, mdef, vis, &tmp);
 			break;
 		case AD_SLIM:
 			if (cancelled) break; /* physical damage only */
@@ -1835,7 +1816,9 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 		else
 			monkilled(mdef, "", (int)mattk->adtyp);
 
-		if (mdef->mhp > 0) return 0; /* mdef lifesaved */
+		if (mdef->mhp > 0) return res; /* mdef lifesaved */
+		else if (res == MM_AGR_DIED) return (MM_DEF_DIED | MM_AGR_DIED);
+
 
 		if (mattk->adtyp == AD_DGST) {
 			/* various checks similar to dog_eat and meatobj.
@@ -1856,7 +1839,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 		return (MM_DEF_DIED |
 			((magr->mhp > 0 && grow_up(magr, mdef)) ? 0 : MM_AGR_DIED));
 	}
-	return MM_HIT;
+	return (res == MM_AGR_DIED) ? MM_AGR_DIED : MM_HIT;
 }
 
 // returns 1 if monster doesn't attack
