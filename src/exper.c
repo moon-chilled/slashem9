@@ -77,9 +77,6 @@ static int enermod(int en) {
 
 // return # of exp points for mtmp after nk killed
 int experience(struct monst *mtmp, int nk) {
-#if defined(MAC_MPW)
-#pragma unused(nk)
-#endif
 	struct permonst *ptr = mtmp->data;
 	int i, tmp, tmp2;
 
@@ -146,7 +143,7 @@ void more_experienced(int exp, int rexp) {
 }
 
 // e.g., hit by drain life attack
-void losexp(const char *drainer /* cause of death, if drain should be fatal */, boolean force /* Force the loss of an experience level */) {
+void losexp(const char *drainer /* cause of death, if drain should be fatal */, bool force /* Force the loss of an experience level */) {
 	int num;
 
 	/* explicit wizard mode requests to reduce level are never fatal. */
@@ -195,6 +192,14 @@ void losexp(const char *drainer /* cause of death, if drain should be fatal */, 
 
 	if (u.uexp > 0)
 		u.uexp = newuexp(u.ulevel) - 1;
+
+	if (Upolyd) {
+		num = monhp_per_level(&youmonst);
+		u.mhpmax -= num;
+		u.mh -= num;
+		if (u.mh <= 0) rehumanize();
+	}
+
 	context.botl = 1;
 }
 
@@ -298,9 +303,8 @@ void newexplevel(void) {
 }
 #endif /* old newexplevel() */
 
-void pluslvl(boolean incr /* true iff via incremental experience growth
-				(false for potion of gain level */
-) {
+/* incr is true iff via incremental experience growth (false for potion of gain level */
+void pluslvl(bool incr) {
 	int num;
 
 	if (!incr) pline("You feel more experienced.");
@@ -308,7 +312,7 @@ void pluslvl(boolean incr /* true iff via incremental experience growth
 	u.uhpmax += num;
 	u.uhp += num;
 	if (Upolyd) {
-		num = rnd(8);
+		num = monhp_per_level(&youmonst);
 		u.mhmax += num;
 		u.mh += num;
 	}

@@ -581,9 +581,9 @@ void make_grave(int, int, const char *);
 long newuexp(int);
 int experience(struct monst *, int);
 void more_experienced(int, int);
-void losexp(const char *, boolean);
+void losexp(const char *drainer, bool force);
 void newexplevel(void);
-void pluslvl(boolean);
+void pluslvl(bool incr);
 long rndexp(boolean);
 
 /* ### explode.c ### */
@@ -914,6 +914,7 @@ void readmail(struct obj *);
 void dealloc_monst(struct monst *mon);
 boolean is_home_elemental(struct permonst *);
 struct monst *clone_mon(struct monst *, xchar, xchar);
+int monhp_per_level(struct monst *mon);
 void newmonhp(struct monst *mon, int mndx);
 struct mextra *newmextra(void);
 struct monst *makemon(struct permonst *, int, int, int);

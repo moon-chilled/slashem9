@@ -40,7 +40,7 @@ Changelist for slashem9 v0.9:
 - Gameplay: when monks get the message 'Your armor is rather cumbersome...', their attack power is reduced rather than boosted.
 - Interface: monks only get the 'Your armor is rather cumbersome...' message when that encumberance actually causes them to miss.
 - Interface: remove support for WIN32CON.
-- Bugfix: grammar in enlightenment messages when intrinsically warned of certain species.
+- Grammar: better enlightenment messages when intrinsically warned of certain species.
 - Interface: use regex rather than pattern matching in autopickup exceptions.
 - Internals: use regex rather than pattern matching for database entries.
 - Bugfix: encyclopedia entry for Ruggo the Gnome King.
@@ -59,7 +59,7 @@ Changelist for slashem9 v0.9:
 - Gameplay: some smart monsters have more advanced AI.
 - Gameplay: weaken pudding farming by keeping cloned monsters from generating corpses or death drops.
 - Bugfix: paralyzed unicorns would catch thrown gems.
-- Bugfix: grammar: use 'thine' rather than 'thy' where appropriate.
+- Grammar: use 'thine' rather than 'thy' where appropriate.
 - Interface: add more thorough prompting for potentially disastrous commands.
 
 Imports from NetHack version 3.6:
@@ -113,7 +113,7 @@ Imports from NetHack version 3.6:
 - Gameplay: pets will mimic if they eat a mimic corpse.
 - Gameplay: add a health food store, which contains exclusively vegetables.  It replaces the food store in minetown for monks.
 - Gameplay: certain monsters (currently only the three horseman) can move other monsters out of their way.
-- Bugfix: miscellaneous grammar and spelling fixes.
+- Grammar: miscellaneous fixes.
 - Bugfix: trappers hid on the ceiling.
 - Bugfix: player hiding on ceiling did not drop to the floor when #sitting.
 - Bugfix: if a monster carrying a boulder was inside of a pit or a hole when killed, the boulder would fill the pit/hole but the monster's corpse would not be buried.
@@ -231,11 +231,13 @@ Imports from NetHack version 3.6:
 - Interface: opening or closing a drawbridge while blind (but not deaf) will give a message.
 - Gameplay: a destroyed drawbridge will scatter debris.
 - Bugfix: if a pet went to sleep, they could continue eating food.
+- Bugfix: if you lose levels while polymorphed, your polyform (not just your true form) loses maxhp.
+- Gameplay: use a more specialized algorithm to calculate maxhp gain/loss for monsters on level change.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).
-- Interface: add curses windowport (Karl Garrison).
-- System: add extended logfile/xlogfile with more information than standard log file (Aardvark Joe).  Remove logfile.
+- Interface: add curses windowport (Karl Garrison).  Many additional improvements from various sources.
+- System: add extended logfile (xlogfile) with more information than standard log file (Aardvark Joe).  Remove logfile.
 - Interface: show object glyphs in inventory display (Patric Mueller).
 - Interface: highlight object piles and stairs covered by objects (Pasi Kallinen).
 - Interface: add MSGTYPES, which allow for user-configurable filtering, emphasis, or norep of messages (Pasi Kallinen).  Use regex instead of globs for matching.
@@ -250,7 +252,7 @@ Imports from other locations:
 - Bugfix: torch panic (Slash'EM Extended).
 - Bugfix: lightning-resistant monsters could be affected by lightning (Slash'EM Extended).
 - Interface: show spell memory in cast menu (inspired by Slash'EM Extended).
-- Internals: use a high-quality cryptographic random number generator (Mikko Juola and libtomcrypt).  This should hopefully thwart stunts like SWAGINZZZ (see https://pellsson.github.io/).
+- Internals: use a high-quality cryptographic random number generator (Mikko Juola and libtomcrypt).  This is intended to thwart stunts like SWAGINZZZ (see https://pellsson.github.io/).
 - Bugfix: when items disappear from a cursed bag of holding, it may not take up a turn; and, if it causes the player to become unencumbered, they may not get a message or statusbar change until the following turn (Michael Lehotay).
 - Gameplay: to prevent abuse, bones are not saved on levels which were hung up on (Dr. Alex Smith).
 - Bugfix: when dying to an undead, it was disclosed whether bones were created (Dr. Alex Smith).
@@ -266,4 +268,4 @@ Imports from other locations:
 - Bugfix: flying character was marked as teetering on the edge of a pit (ToxicFrog).
 - Bugfix: properly get message box width in curses (ToxicFrog).
 - Bugfix: properly refresh message window after a --More-- (or >>) prompt in curses (ToxicFrog).
-- Bugfix: fix several severe vulnerabilities (David Mendenhall).
+- Bugfix: fix several serious vulnerabilities (David Mendenhall).

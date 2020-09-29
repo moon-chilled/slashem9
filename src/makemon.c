@@ -1197,6 +1197,30 @@ boolean propagate(int mndx, boolean tally, boolean ghostly) {
 	return result;
 }
 
+/* amount of HP to lose from level drain (or gain from Stormbringer) */
+int monhp_per_lvl(struct monst *mon) {
+	struct permonst *ptr = mon->data;
+	int hp = rnd(8);   // default is d8
+
+	// like newmonhp, but home elementals are ignored, riders use normal d8
+	if (is_golem(ptr)) {
+		// draining usually won't be applicable for these critters
+		hp = golemhp(monsndx(ptr)) / (int)ptr->mlevel;
+	} else if (ptr->mlevel > 49) {
+		// arbitrary; such monsters won't be involved in draining anyway
+		hp = 4 + rnd(4);        // 5..8
+	} else if (ptr->mlet == S_DRAGON && monsndx(ptr) >= PM_GRAY_DRAGON) {
+		// adult dragons; newmonhp() uses In_endgame(&u.uz) ? 8 : 4 + rnd(4)
+		hp = 4 + rn2(5);        // 4..8
+	} else if (!mon->m_lev) {
+		// level 0 monsters use 1d4 instead of Nd8
+		hp = rnd(4);
+	}
+
+	return hp;
+}
+
+
 /* set up a new monster's initial level and hit points;
    used by newcham() as well as by makemon() */
 void newmonhp(struct monst *mon, int mndx) {

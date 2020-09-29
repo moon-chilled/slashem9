@@ -920,9 +920,9 @@ static bool Mb_hit(
 		case MB_INDEX_CANCEL:
 			old_uasmon = youmonst.data;
 			/* No mdef->mcan check: even a cancelled monster can be polymorphed
-		 * into a golem, and the "cancel" effect acts as if some magical
-		 * energy remains in spellcasting defenders to be absorbed later.
-		 */
+			 * into a golem, and the "cancel" effect acts as if some magical
+			 * energy remains in spellcasting defenders to be absorbed later.
+			 */
 			if (!cancel_monst(mdef, mb, youattack, false, false)) {
 				resisted = true;
 			} else {
@@ -1149,9 +1149,7 @@ bool artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, int 
 				break;
 			case 10:
 				pline("The poison was deadly...");
-				*dmgptr = 2 *
-						  (youdefend ? Upolyd ? u.mh : u.uhp : mdef->mhp) +
-					  FATAL_DAMAGE_MODIFIER;
+				*dmgptr = 2 * (youdefend ? Upolyd ? u.mh : u.uhp : mdef->mhp) + FATAL_DAMAGE_MODIFIER;
 				break;
 		}
 		return true;
@@ -1317,7 +1315,7 @@ bool artifact_hit(struct monst *magr, struct monst *mdef, struct obj *otmp, int 
 				if (mdef->m_lev == 0) {
 					*dmgptr = 2 * mdef->mhp + FATAL_DAMAGE_MODIFIER;
 				} else {
-					int drain = rnd(8);
+					int drain = monhp_per_level(mdef);
 					*dmgptr += drain;
 					mdef->mhpmax -= drain;
 					mdef->m_lev--;
