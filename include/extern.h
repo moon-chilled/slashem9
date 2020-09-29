@@ -2010,7 +2010,7 @@ bool chest_trap(struct obj *obj, int bodypart, bool disarm);
 void deltrap(struct trap *trap);
 bool delfloortrap(struct trap *ttmp);
 struct trap *t_at(int x, int y);
-void b_trapped(const char *, int);
+void b_trapped(const char *item, int bodypart);
 bool unconscious(void);
 bool lava_effects(void);
 void blow_up_landmine(struct trap *trap);

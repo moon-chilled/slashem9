@@ -1,9 +1,6 @@
-Slash'EM Variant uses autotools.  To build, simply type the following:
+To build Slash'EM9 on most unix-like systems, simply run 'make install' or 'gmake install'.
+This will install to ~/slashem9install (where ~ is your home directory).
+To make install somewhere else, add 'PREFIX' to your command line, as in 'make install PREFIX=~/.local'
 
-mkdir build; cd build
-../configure --prefix=$HOME/slashem-install --with-owner=`whoami` --with-group=`whoami`
-make install
-
-This will install Slash'EM Variant into ~/slashem-install.  Change this if you know what you are doing and want to do something different.
-
-Other build systems are unmaintained; they will probably be fixed if they are broken and someone points it out, but they are not guaranteed to to work.
+You can then run ~/slashem9install/bin/slashem9 to play the game.
+That script is relocatable, so feel free to move it somewhere else.

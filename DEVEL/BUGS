@@ -6,7 +6,9 @@
 
 * Wizmode-teleported on top of hole in castle, and got a segfault in hack.c:1858 (if ((mtmp = m_at(u.ux, u.uy)) && !u.uswallow)).  Debugger was useless and couldn't repro.
 
-* Bad strength display in tcc.  Bug in its vararg handling?
+* Bad strength display in tcc.  Bad charisma display in pcc.  Bug in their vararg handling?
+
+* Got accepted to the quest at xlvl10
 
 * If you drink a potion that makes you weaker, such that total inv weight including that potion encumbers you, but weight without it doesn't, you're told 'Your movements are slowed slightly because of your load.  Your movements are now unencumbered.'
 
@@ -21,6 +23,7 @@
 #2  0x000000000050e30f in dgn_growths ()
 #3  0x0000000000427959 in moveloop ()
 #4  0x000000000075d50d in main ()
+* Lost bones file now
 
 Memory leaks:
 Direct leak of 24 byte(s) in 1 object(s) allocated from:

@@ -12,7 +12,7 @@
 /* EDITLEVEL is updated for each release. */
 #define VERSION_EDITLEVEL  0
 
-#define COPYRIGHT_BANNER_A "This is SuperLotsoAddedStuffHack-Extended Magic9 2017-2020"
+#define COPYRIGHT_BANNER_A "This is SuperLotsoAddedStuffHack-Extended Magic Nine 2017-2020"
 #define COPYRIGHT_BANNER_B "SuperLotsoAddedStuffHack-Extended Magic 1997-2007"
 #define COPYRIGHT_BANNER_C "NetHack, Copyright 1985-2003 Stichting Mathematisch Centrum, M. Stephenson."
 #define COPYRIGHT_BANNER_D "See license for details.  Bug reports to Moonchild."

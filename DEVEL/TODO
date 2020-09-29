@@ -9,6 +9,8 @@
  - OPTIONS=role:!knight etc. (b064510a9be2bcb021e17d9ad90a49d9e9d1391e)
  - vampire dancing prevention (25a9c0ca4b74f0b9079caef954e99950286d75cd+5bc6f1444ea32f17d5ef74aff89307b4cc6e2ea9+7828cb368709ce7e49131d561720a805ed9e3999)
 
+* Should deep dragons see through displacement?
+
 * Proper readline-style line editing (arrow-key movement, C-w/C-h (for curses); M-b, M-f, C-b, C-f, etc.)
 
 * Star and fire vampires should be vampshifters, but need to come up with a good form for them to turn into.  (Maybe give vampire mages another alt form too?)  Star vampires can turn into a 'space kraken' (or a less cheesy name for the same concept)?
