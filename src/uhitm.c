@@ -5,6 +5,7 @@
 #include "hack.h"
 
 static bool known_hitum(struct monst *mon, int mattk, int *mhit, struct attack *uattk, bool encumbered_by_armor);
+static bool theft_petrifies(struct obj *otmp);
 static void steal_it(struct monst *mdef, struct attack *mattk);
 static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown);
 static int joust(struct monst *target, struct obj *weapon);
@@ -1633,6 +1634,34 @@ static void demonpet(void) {
 	exercise(A_WIS, true);
 }
 
+static bool theft_petrifies(struct obj *otmp) {
+	const char *fmt;
+	char *p, cbuf[BUFSZ], kbuf[BUFSZ];
+
+	if (uarmg || otmp->otyp != CORPSE || !touch_petrifies(&mons[otmp->corpsenm]))
+		return false;
+
+	/* stealing this corpse is fatal... */
+	strcpy(cbuf, cxname(otmp));                /* "cockatrice corpse" */
+	fmt = "a stolen %s";
+	if (otmp->quan > 1L) {
+		/* stack of multiple cockatrice corpses; no article for plural */
+		fmt += 2;       /* skip "a ", leaving "stolen %s" */
+	} else if ((p = strstri(cbuf, "'s corpse")) != 0 ||
+			(p = strstri(cbuf, "s' corpse")) != 0) {
+		/* in case a unique monster with petrifying touch and
+		   a personal name ever gets introduced:  we want to use
+		   "Foo's stolen corpse" instead of "a stolen Foo's corpse" */
+		*(p + 2) = '\0';        /* chop " corpse" off of cbuf */
+		fmt = "%s stolen corpse";
+	}
+	sprintf(kbuf, fmt, cbuf);
+	instapetrify(kbuf);
+	/* apparently wasn't fatal after all... */
+	return true;
+}
+
+
 /*
  * Player uses theft attack against monster.
  *
@@ -1699,14 +1728,7 @@ static void steal_it(struct monst *mdef, struct attack *mattk) {
 		otmp = hold_another_object(otmp, "You snatched but dropped %s.",
 					   doname(otmp), "You steal: ");
 		if (otmp->where != OBJ_INVENT) continue;
-		if (otmp->otyp == CORPSE &&
-		    touch_petrifies(&mons[otmp->corpsenm]) && !uarmg) {
-			char kbuf[BUFSZ];
-
-			sprintf(kbuf, "stolen %s corpse", mons[otmp->corpsenm].mname);
-			instapetrify(kbuf);
-			break; /* stop the theft even if hero survives */
-		}
+		if (theft_petrifies(otmp)) break;  // stop thieving even though hero survived
 		/* more take-away handling, after theft message */
 		if (unwornmask & W_WEP) { /* stole wielded weapon */
 			possibly_unwield(mdef, false);
