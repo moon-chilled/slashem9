@@ -2373,13 +2373,13 @@ int float_down(long hmask, long emask) {
 			u.ustuck = 0;
 		}
 		/* kludge alert:
-			 * drown() and lava_effects() print various messages almost
-			 * every time they're called which conflict with the "fall
-			 * into" message below.  Thus, we want to avoid printing
-			 * confusing, duplicate or out-of-order messages.
-			 * Use knowledge of the two routines as a hack -- this
-			 * should really be handled differently -dlc
-			 */
+		 * drown() and lava_effects() print various messages almost
+		 * every time they're called which conflict with the "fall
+		 * into" message below.  Thus, we want to avoid printing
+		 * confusing, duplicate or out-of-order messages.
+		 * Use knowledge of the two routines as a hack -- this
+		 * should really be handled differently -dlc
+		 */
 		if (is_pool(u.ux, u.uy) && !Wwalking && !Swimming && !u.uinwater)
 			no_msg = drown();
 
@@ -4034,17 +4034,22 @@ static const char lava_killer[] = "molten lava";
 
 bool lava_effects() {
 	struct obj *obj, *obj2;
-	int dmg;
-	boolean usurvive;
+	int dmg = d(6, 6);
+	bool usurvive = Fire_resistance || (Wwalking && dmg < u.uhp);
+
+	/* a timely interrupt might manage to salvage your life
+	   but not your gear; do this before messages */
+	if (!usurvive)
+		for (obj = invent; obj; obj = obj->nobj)
+			if (is_organic(obj) && !obj->oerodeproof) obj->in_use = true;
 
 	burn_away_slime();
 	if (likes_lava(youmonst.data)) return false;
 
 	if (!Fire_resistance) {
 		if (Wwalking) {
-			dmg = d(6, 6);
 			pline("The lava here burns you!");
-			if (dmg < u.uhp) {
+			if (usurvive) {
 				losehp(dmg, lava_killer, KILLED_BY);
 				goto burn_stuff;
 			}
@@ -4053,6 +4058,12 @@ bool lava_effects() {
 
 		usurvive = Lifesaved || discover;
 		if (wizard) usurvive = true;
+		/* prevent Boots_off() -> spoteffects() -> lava_effects() recursion
+		   which would successfully delete (via useupall) the no-longer-worn
+		   boots; once recursive call returned, we would try to delete them
+		   again here in the outer call (access stale memory, probably panic) */
+		iflags.in_lava_effects++;
+
 		for (obj = invent; obj; obj = obj2) {
 			obj2 = obj->nobj;
 			if ((is_organic(obj) || is_plastic(obj) || (is_metallic(obj) && !rn2(10))) && !obj->oerodeproof) {
@@ -4070,38 +4081,26 @@ bool lava_effects() {
 						}
 					}
 
-					if (obj == uarm)
-						Armor_gone();
-					else if (obj == uarmc)
-						Cloak_off();
-					else if (obj == uarmh)
-						Helmet_off();
-					else if (obj == uarms)
-						Shield_off();
-					else if (obj == uarmg)
-						Gloves_off();
-					else if (obj == uarmf)
-						Boots_off();
-					else if (obj == uarmu)
-						setnotworn(obj);
-					else if (obj == uleft)
-						Ring_gone(obj);
-					else if (obj == uright)
-						Ring_gone(obj);
-					else if (obj == ublindf)
-						Blindf_off(obj);
-					else if (obj == uamul)
-						Amulet_off();
-					else if (obj == uwep)
-						uwepgone();
-					else if (obj == uquiver)
-						uqwepgone();
-					else if (obj == uswapwep)
-						uswapwepgone();
+					if (obj == uarm) Armor_gone();
+					else if (obj == uarmc) Cloak_off();
+					else if (obj == uarmh) Helmet_off();
+					else if (obj == uarms) Shield_off();
+					else if (obj == uarmg) Gloves_off();
+					else if (obj == uarmf) Boots_off();
+					else if (obj == uarmu) Shirt_off();
+					else if (obj == uleft) Ring_gone(obj);
+					else if (obj == uright) Ring_gone(obj);
+					else if (obj == ublindf) Blindf_off(obj);
+					else if (obj == uamul) Amulet_off();
+					else if (obj == uwep) uwepgone();
+					else if (obj == uquiver) uqwepgone();
+					else if (obj == uswapwep) uswapwepgone();
 				}
 				useupall(obj);
 			}
 		}
+
+		iflags.in_lava_effects--;
 
 		/* s/he died... */
 		u.uhp = -1;

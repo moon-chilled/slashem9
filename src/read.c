@@ -705,19 +705,23 @@ int seffects(struct obj *sobj) {
 			s = sobj->cursed ? -otmp->spe : otmp->spe;
 
 			if (s > (special_armor ? 5 : 3) && rn2(s)) {
+				otmp->in_use = true;
 				pline("%s violently %s%s%s for a while, then %s.",
 				      Yname2(otmp),
 				      otense(otmp, Blind ? "vibrate" : "glow"),
 				      (!Blind && !same_color) ? " " : nul,
 				      (Blind || same_color) ? nul :
-							      hcolor(sobj->cursed ? NH_BLACK : NH_SILVER),
+				      hcolor(sobj->cursed ? NH_BLACK : NH_SILVER),
 				      otense(otmp, "evaporate"));
+
 				if (is_cloak(otmp)) Cloak_off();
 				if (is_boots(otmp)) Boots_off();
 				if (is_helmet(otmp)) Helmet_off();
 				if (is_gloves(otmp)) Gloves_off();
 				if (is_shield(otmp)) Shield_off();
 				if (otmp == uarm) Armor_gone();
+				if (is_shirt(otmp)) Shirt_off();
+
 				useup(otmp);
 				break;
 			}

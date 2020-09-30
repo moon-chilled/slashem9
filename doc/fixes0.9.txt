@@ -236,6 +236,7 @@ Imports from NetHack version 3.6:
 - Bugfix: trap detection routines did not detect traps in carried or buried chests.
 - Bugfix: swallowing medusa (e.g. as a purple worm) should be fatal.
 - Bugfix: swallowing a petrifying monster should violate foodless conduct before killing you.
+- Bugfix: crash when lifesaved after walking over lava with unfixed water walking boots.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).

@@ -11,6 +11,8 @@
 
 * Should deep dragons see through displacement?
 
+* Portable build: uses embeddlb and puts save/xlog/perm/dump in dotdir, so single no-dependency binary
+
 * Proper readline-style line editing (arrow-key movement, C-w/C-h (for curses); M-b, M-f, C-b, C-f, etc.)
 
 * Star and fire vampires should be vampshifters, but need to come up with a good form for them to turn into.  (Maybe give vampire mages another alt form too?)  Star vampires can turn into a 'space kraken' (or a less cheesy name for the same concept)?

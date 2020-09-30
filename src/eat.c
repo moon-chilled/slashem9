@@ -2873,9 +2873,9 @@ void newuhs(boolean incr) {
 	int h = u.uhunger;
 
 	newhs = (h > 1000) ? SATIATED :
-			     (h > 150) ? NOT_HUNGRY :
-					 (h > 50) ? HUNGRY :
-						    (h > 0) ? WEAK : FAINTING;
+		(h > 150) ? NOT_HUNGRY :
+		(h > 50) ? HUNGRY :
+		(h > 0) ? WEAK : FAINTING;
 
 	/* While you're eating, you may pass from WEAK to HUNGRY to NOT_HUNGRY.
 	 * This should not produce the message "you only feel hungry now";

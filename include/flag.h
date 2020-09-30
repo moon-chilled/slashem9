@@ -145,6 +145,7 @@ struct instance_flags {
 	uchar num_pad_mode;
 	int menu_headings;	// ATR for menu headings
 	int purge_monsters;	// # of dead monsters still on fmon list
+	int in_lava_effects;	// hack for Boots_off()
 	int *opt_booldup;	// for duplication of bool opts in config file
 	int *opt_compdup;	// for duplication of compound opts in config file
 	coord travelcc;		// coordinates for travel_cache

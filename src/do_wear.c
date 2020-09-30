@@ -24,14 +24,15 @@ static const long takeoff_order[] = {WORN_BLINDF, W_WEP,
 				     WORN_HELMET, WORN_AMUL, WORN_ARMOR, WORN_SHIRT, WORN_BOOTS,
 				     W_SWAPWEP, W_QUIVER, 0L};
 
-static void on_msg(struct obj *);
-static void Ring_off_or_gone(struct obj *, boolean);
-static int select_off(struct obj *);
+static void on_msg(struct obj *otmp);
+static void Ring_off_or_gone(struct obj *obj, bool gone);
+static int select_off(struct obj *otmp);
 static struct obj *do_takeoff(void);
 static int take_off(void);
-static int menu_remarm(int);
-static void already_wearing(const char *);
-static void already_wearing2(const char *, const char *);
+static int menu_remarm(int retry);
+static void already_wearing(const char *cc);
+static void already_wearing2(const char *cc1, const char *cc2);
+static void wielding_corpse(struct obj *obj, bool voluntary);
 
 void off_msg(struct obj *otmp) {
 	if (flags.verbose)
@@ -122,8 +123,10 @@ int Boots_off(void) {
 			}
 			break;
 		case WATER_WALKING_BOOTS:
-			if (is_pool(u.ux, u.uy) && !Levitation && !Flying &&
-			    !is_clinger(youmonst.data) && !context.takeoff.cancelled_don) {
+			if ((is_pool(u.ux, u.uy) || is_lava(u.ux, u.uy)) && !Levitation && !Flying
+			    && !is_clinger(youmonst.data) && !context.takeoff.cancelled_don
+			    // avoid recursive call to lava_effects()
+			    && !iflags.in_lava_effects) {
 				makeknown(otyp);
 				/* make boots known in case you survive the drowning */
 				spoteffects(true);
@@ -410,11 +413,33 @@ int Gloves_on(void) {
 	return 0;
 }
 
+// voluntary => taking gloves off on purpose?
+static void wielding_corpse(struct obj *obj, bool voluntary) {
+	char kbuf[BUFSZ];
+
+	if (!obj || obj->otyp != CORPSE) return;
+	if (obj != uwep && (obj != uswapwep || !u.twoweap)) return;
+
+	if (touch_petrifies(&mons[obj->corpsenm]) && !Stone_resistance) {
+		pline("You now wield %s in your bare %s.",
+		      the(corpse_xname(obj, true)),
+		      makeplural(body_part(HAND)));
+		sprintf(kbuf, "%s gloves while wielding %s",
+		        voluntary ? "removing" : "losing",
+		        killer_cxname(obj, true));
+		instapetrify(kbuf);
+		// life-saved; can't continue wielding cockatrice corpse though
+		remove_worn_item(obj, false);
+	}
+}
+
+
+
 int Gloves_off(void) {
-	long oldprop =
-		u.uprops[objects[uarmg->otyp].oc_oprop].extrinsic & ~WORN_GLOVES;
+	long oldprop = u.uprops[objects[uarmg->otyp].oc_oprop].extrinsic & ~WORN_GLOVES;
 
 	context.takeoff.mask &= ~W_ARMG;
+	bool on_purpose = !context.mon_moving && !uarmg->in_use;
 
 	switch (uarmg->otyp) {
 		case LEATHER_GLOVES:
@@ -443,30 +468,16 @@ int Gloves_off(void) {
 	context.takeoff.cancelled_don = false;
 	encumber_msg(); /* immediate feedback for GoP */
 
-	/* Prevent wielding cockatrice when not wearing gloves */
-	if (uwep && uwep->otyp == CORPSE &&
-	    touch_petrifies(&mons[uwep->corpsenm])) {
-		char kbuf[BUFSZ];
+	/* prevent wielding cockatrice when not wearing gloves */
+	if (uwep && uwep->otyp == CORPSE)
+		wielding_corpse(uwep, on_purpose);
 
-		pline("You wield the %s in your bare %s.",
-		      corpse_xname(uwep, true), makeplural(body_part(HAND)));
-		strcpy(kbuf, an(killer_cxname(uwep, true)));
-		instapetrify(kbuf);
-		uwepgone(); /* life-saved still doesn't allow touching cockatrice */
-	}
+	/* KMH -- ...or your secondary weapon when you're wielding it
+	   [This case can't actually happen; twoweapon mode won't
+	   engage if a corpse has been set up as the alternate weapon.] */
+	if (u.twoweap && uswapwep && uswapwep->otyp == CORPSE)
+		wielding_corpse(uswapwep, on_purpose);
 
-	/* KMH -- ...or your secondary weapon when you're wielding it */
-	if (u.twoweap && uswapwep && uswapwep->otyp == CORPSE &&
-	    touch_petrifies(&mons[uswapwep->corpsenm])) {
-		char kbuf[BUFSZ];
-
-		pline("You wield the %s in your bare %s.",
-		      corpse_xname(uswapwep, true), body_part(HAND));
-
-		strcpy(kbuf, an(killer_cxname(uswapwep, true)));
-		instapetrify(kbuf);
-		uswapwepgone(); /* lifesaved still doesn't allow touching cockatrice */
-	}
 
 	return 0;
 }
@@ -843,7 +854,7 @@ void Ring_on(struct obj *obj) {
 	}
 }
 
-static void Ring_off_or_gone(struct obj *obj, boolean gone) {
+static void Ring_off_or_gone(struct obj *obj, bool gone) {
 	long mask = (obj->owornmask & W_RING);
 	int old_attrib, which;
 
@@ -2149,9 +2160,10 @@ static int menu_remarm(int retry) {
 /* hit by destroy armor scroll/black dragon breath/monster spell */
 int destroy_arm(struct obj *atmp) {
 	struct obj *otmp;
-#define DESTROY_ARM(o) ((otmp = (o)) != 0 &&       \
-			(!atmp || atmp == otmp) && \
-			(!obj_resists(otmp, 0, 90)))
+#define DESTROY_ARM(o) ((otmp = (o)) != 0 && \
+                       (!atmp || atmp == otmp) && \
+                       (!obj_resists(otmp, 0, 90)) ? \
+                       (otmp->in_use = true) : false)
 
 	if (DESTROY_ARM(uarmc)) {
 		if (donning(otmp)) cancel_don();

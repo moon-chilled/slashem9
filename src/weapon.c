@@ -1478,14 +1478,14 @@ int weapon_hit_bonus(struct obj *weapon) {
 		/* WAC  because we split Martial Arts and Bare handed */
 	} else if (type <= P_LAST_H_TO_H) {
 		/*
-	 *	       b.h.  m.a.
-	 *	unskl:	+1   n/a
-	 *	basic:	+1    +3
-	 *	skild:	+2    +4
-	 *	exprt:	+2    +5
-	 *	mastr:	+3    +6
-	 *	grand:	+3    +7
-	 */
+		 *	       b.h.  m.a.
+		 *	unskl:	+1   n/a
+		 *	basic:	+1    +3
+		 *	skild:	+2    +4
+		 *	exprt:	+2    +5
+		 *	mastr:	+3    +6
+		 *	grand:	+3    +7
+		 */
 		bonus = P_SKILL(type);
 		bonus = max(bonus, P_UNSKILLED) - 1; /* unskilled => 0 */
 		bonus = ((bonus + 2) * (martial_bonus() ? 2 : 1)) / 2;
