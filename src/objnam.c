@@ -203,7 +203,7 @@ char *xname2(struct obj *obj, bool keen) {
 	char *buf;
 	int typ = obj->otyp;
 	struct objclass *ocl = &objects[typ];
-	int nn = ocl->oc_name_known;
+	int nn = ocl->oc_name_known, omndx = obj->corpsenm;
 	const char *actualn = OBJ_NAME(*ocl);
 	const char *dn = OBJ_DESCR(*ocl);
 	const char *un = ocl->oc_uname;
@@ -266,8 +266,8 @@ char *xname2(struct obj *obj, bool keen) {
 			/* it whenever calling doname() or xname(). */
 			if (typ == FIGURINE)
 				sprintf(eos(buf), " of a%s %s",
-					index(vowels, *(mons[obj->corpsenm].mname)) ? "n" : "",
-					mons[obj->corpsenm].mname);
+					index(vowels, *mons[omndx].mname) ? "n" : "",
+					mons[omndx].mname);
 			break;
 		case ARMOR_CLASS:
 			/* depends on order of the dragon scales objects */
@@ -333,12 +333,12 @@ char *xname2(struct obj *obj, bool keen) {
 			if (typ == TIN && obj->known) {
 				if (obj->spe > 0)
 					strcat(buf, " of spinach");
-				else if (obj->corpsenm == NON_PM)
+				else if (omndx == NON_PM)
 					strcpy(buf, "empty tin");
-				else if (vegetarian(&mons[obj->corpsenm]))
-					sprintf(eos(buf), " of %s", mons[obj->corpsenm].mname);
+				else if (vegetarian(&mons[omndx]))
+					sprintf(eos(buf), " of %s", mons[omndx].mname);
 				else
-					sprintf(eos(buf), " of %s meat", mons[obj->corpsenm].mname);
+					sprintf(eos(buf), " of %s meat", mons[omndx].mname);
 			}
 			break;
 		case COIN_CLASS:
@@ -350,11 +350,11 @@ char *xname2(struct obj *obj, bool keen) {
 				sprintf(buf, "%s%s of %s%s",
 					(Role_if(PM_ARCHEOLOGIST) && (obj->spe & STATUE_HISTORIC)) ? "historic " : "",
 					actualn,
+
 					type_is_pname(&mons[obj->corpsenm]) ? "" :
-					(mons[obj->corpsenm].geno & G_UNIQ) ? "the " :
-					(index(vowels, *(mons[obj->corpsenm].mname)) ?  "an " :
-					"a "),
-					mons[obj->corpsenm].mname);
+					the_unique_pm(&mons[omndx]) ? "the " :
+					index(vowels, *(mons[obj->corpsenm].mname)) ?  "an " : "a ",
+					mons[omndx].mname);
 			else
 				strcpy(buf, actualn);
 			break;
@@ -510,15 +510,36 @@ char *mshot_xname(struct obj *obj) {
 }
 
 /* used for naming "the unique_item" instead of "a unique_item" */
-boolean the_unique_obj(struct obj *obj) {
+bool the_unique_obj(struct obj *obj) {
 	if (!obj->dknown)
 		return false;
 	else if (obj->otyp == FAKE_AMULET_OF_YENDOR && !obj->known)
 		return true; /* lie */
 	else
-		return (boolean)(objects[obj->otyp].oc_unique &&
-				 (obj->known || obj->otyp == AMULET_OF_YENDOR));
+		return objects[obj->otyp].oc_unique && (obj->known || obj->otyp == AMULET_OF_YENDOR);
 }
+
+
+/* should monster type be prefixed with "the"? (mostly used for corpses) */
+bool the_unique_pm(struct permonst *ptr) {
+	bool uniq;
+
+	/* even though monsters with personal names are unique, we want to
+	   describe them as "Name" rather than "the Name" */
+	if (type_is_pname(ptr)) return false;
+
+	uniq = ptr->geno & G_UNIQ;
+	/* high priest is unique if it includes "of <deity>", otherwise not
+	   (caller needs to handle the 1st possibility; we assume the 2nd);
+	   worm tail should be irrelevant but is included for completeness */
+	if (ptr == &mons[PM_HIGH_PRIEST] || ptr == &mons[PM_LONG_WORM_TAIL])
+		uniq = false;
+	/* Wizard no longer needs this; he's flagged as unique these days */
+	if (ptr == &mons[PM_WIZARD_OF_YENDOR])
+		uniq = true;
+	return uniq;
+}
+
 
 static void add_erosion_words(struct obj *obj, char *prefix) {
 	boolean iscrys = (obj->otyp == CRYSKNIFE);
@@ -560,7 +581,8 @@ static void add_erosion_words(struct obj *obj, char *prefix) {
 }
 
 char *doname_ext(struct obj *obj, bool keen) {
-	boolean ispoisoned = false;
+	bool ispoisoned = false;
+	int omndx = obj->corpsenm;
 	char prefix[PREFIX];
 	char tmpbuf[PREFIX + 1];
 	/* when we have to add something at the start of prefix instead of the
@@ -795,15 +817,14 @@ plus:
 			}
 			strcat(prefix, tmpbuf);
 			if (obj->otyp == CORPSE && !Hallucination) {
-				if (mons[obj->corpsenm].geno & G_UNIQ) {
+				if (the_unique_pm(&mons[omndx])
+				    || type_is_pname(&mons[omndx])) {
 					sprintf(prefix, "%s%s ",
-						(type_is_pname(&mons[obj->corpsenm]) ?
-							 "" :
-							 "the "),
-						s_suffix(mons[obj->corpsenm].mname));
+						(the_unique_pm(&mons[omndx]) ? "the " : ""),
+						s_suffix(mons[omndx].mname));
 					strcat(prefix, tmpbuf);
 				} else {
-					strcat(prefix, mons[obj->corpsenm].mname);
+					strcat(prefix, mons[omndx].mname);
 					strcat(prefix, " ");
 				}
 			} else if (obj->otyp == EGG) {
@@ -811,10 +832,10 @@ plus:
 			if (obj->known && stale_egg(obj))
 				strcat(prefix, "stale ");
 #endif
-				if (obj->corpsenm >= LOW_PM &&
+				if (omndx >= LOW_PM &&
 				    (obj->known ||
-				     mvitals[obj->corpsenm].mvflags & MV_KNOWS_EGG)) {
-					strcat(prefix, mons[obj->corpsenm].mname);
+				     mvitals[omndx].mvflags & MV_KNOWS_EGG)) {
+					strcat(prefix, mons[omndx].mname);
 					strcat(prefix, " ");
 					if (obj->spe == 2)
 						strcat(bp, " (with your markings)");
@@ -923,12 +944,22 @@ bool not_fully_identified(struct obj *otmp) {
 
 char *corpse_xname(struct obj *otmp, boolean force_singular) {
 	char *nambuf = nextobuf();
+	int omndx = Hallucination ? rndmonnum() : otmp->corpsenm;
+	const char *mname;
 
-	int mndx = Hallucination ? rndmonnum() : otmp->corpsenm;
-	const char *mname = (mndx != NON_PM) ? mons[mndx].mname :
-                               "thing";  /* shouldn't happen */
+	if (omndx == NON_PM) return strcpy(nambuf, "thing"); // paranoia
 
-	if (type_is_pname(&mons[mndx]) || mndx == PM_ORACLE) mname = s_suffix(mname);
+	/* [Possible enhancement:  check whether corpse has monster traits
+	   attached in order to use priestname() for priests and minions.] */
+	if (omndx == PM_ALIGNED_PRIEST) {
+		/* avoid "aligned priest"; it just exposes internal details */
+		mname = "priest";
+	} else {
+		mname = mons[omndx].mname;
+		if (the_unique_pm(&mons[omndx]) || type_is_pname(&mons[omndx]))
+			mname = s_suffix(mname);
+	}
+
 	sprintf(nambuf, "%s corpse", mname);
 
 	if (force_singular || otmp->quan < 2)
@@ -959,7 +990,8 @@ char *killer_xname(struct obj *obj) {
 	obj->known = obj->dknown = 1;
 	obj->bknown = obj->rknown = obj->greased = 0;
 	/* if character is a priest[ess], bknown will get toggled back on */
-	obj->blessed = obj->cursed = 0;
+	if (obj->otyp != POT_WATER) obj->blessed = obj->cursed = 0;
+	else obj->bknown = 1;      /* describe holy/unholy water as such */
 	/* "killed by poisoned <obj>" would be misleading when poison is
 	   not the cause of death and "poisoned by poisoned <obj>" would
 	   be redundant when it is, so suppress "poisoned" prefix */
@@ -972,8 +1004,26 @@ char *killer_xname(struct obj *obj) {
 	save_ocuname = objects[obj->otyp].oc_uname;
 	objects[obj->otyp].oc_uname = 0; /* avoid "foo called bar" */
 
-	buf = xname2(obj, false);
-	if (obj->quan == 1L) buf = obj_is_pname(obj) ? the(buf) : an(buf);
+	/* format the object */
+	if (obj->otyp == CORPSE) {
+		buf = nextobuf();
+		sprintf(buf, "%s%s",
+		        // can't use the(); capitalized name blocks its article
+		        the_unique_pm(&mons[obj->corpsenm]) ? "the " : "",
+		        corpse_xname(obj, false));
+	} else if (obj->otyp == SLIME_MOLD) {
+		/* concession to "most unique deaths competition" in the annual
+		   devnull tournament, suppress player supplied fruit names because
+		   those can be used to fake other objects and dungeon features */
+		buf = nextobuf();
+		sprintf(buf, "deadly slime mold%s", plur(obj->quan));
+	} else {
+		buf = xname(obj);
+	}
+	/* apply an article if appropriate; caller should always use KILLED_BY */
+	if (obj->quan == 1L && !strstri(buf, "'s ") && !strstri(buf, "s' "))
+		buf = (obj_is_pname(obj) || the_unique_obj(obj)) ? the(buf) : an(buf);
+
 
 	objects[obj->otyp].oc_name_known = save_ocknown;
 	objects[obj->otyp].oc_uname = save_ocuname;
@@ -1006,9 +1056,8 @@ const char *singular(struct obj *otmp, char *(*func)(struct obj *)) {
 	unsigned saveowt;
 	char *nam;
 
-	/* Note: using xname for corpses will not give the monster type */
-	if (otmp->otyp == CORPSE && func == xname && !Hallucination)
-		return corpse_xname(otmp, true);
+	/* using xname for corpses does not give the monster type */
+	if (otmp->otyp == CORPSE && func == xname) func = cxname;
 
 	savequan = otmp->quan;
 	otmp->quan = 1L;
