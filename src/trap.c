@@ -2343,6 +2343,7 @@ int float_down(long hmask, long emask) {
 	HLevitation &= ~hmask;
 	ELevitation &= ~emask;
 	if (Levitation) return 0; /* maybe another ring/potion/boots */
+	nomul(0); // stop running or resting
 	if (u.uswallow) {
 		pline("You float down, but you are still %s.",
 		      is_animal(u.ustuck->data) ? "swallowed" : "engulfed");
