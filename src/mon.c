@@ -1135,8 +1135,8 @@ nexttry: /* eels prefer the water, but if there is no water nearby,
 			/* ALI -- Artifact doors (no passage unless open/openable) */
 			if (IS_DOOR(ntyp))
 				if (artifact_door(nx, ny) ?
-					    (levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR)) || levl[nx][ny].doormask & D_LOCKED :
-					    !(amorphous(mdat) || (!amorphous(mdat) && can_fog(mon))) &&
+				    (levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR)) || levl[nx][ny].doormask & D_LOCKED :
+				    !(amorphous(mdat) || (!amorphous(mdat) && can_fog(mon))) &&
 						    ((levl[nx][ny].doormask & D_CLOSED && !(flag & OPENDOOR)) ||
 						     (levl[nx][ny].doormask & D_LOCKED && !(flag & UNLOCKDOOR))) &&
 						    !thrudoor) continue;
@@ -1218,8 +1218,12 @@ nexttry: /* eels prefer the water, but if there is no water nearby,
 					if (flag & NOTONL) continue;
 					info[cnt] |= NOTONL;
 				}
-				if (nx != x && ny != y && bad_rock(mon, x, ny) && bad_rock(mon, nx, y) && (bigmonst(mdat) || (curr_mon_load(mon) > 600)))
+				// check for diagonal tight squeeze
+				if (nx != x && ny != y
+				    && bad_rock(mon, x, ny) && bad_rock(mon, nx, y)
+				    && cant_squeeze_through(mon))
 					continue;
+
 				/* The monster avoids a particular type of trap if it's familiar
 				 * with the trap type.  Pets get ALLOW_TRAPS and checking is
 				 * done in dogmove.c.  In either case, "harmless" traps are

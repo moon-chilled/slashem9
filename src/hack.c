@@ -761,25 +761,54 @@ static void dosinkfall(void) {
 }
 
 // intended to be called only on ROCKs
-boolean may_dig(xchar x, xchar y) {
+bool may_dig(xchar x, xchar y) {
 	return !(IS_STWALL(levl[x][y].typ) &&
 		 (levl[x][y].wall_info & W_NONDIGGABLE));
 }
 
-boolean may_passwall(xchar x, xchar y) {
+bool may_passwall(xchar x, xchar y) {
 	return !(IS_STWALL(levl[x][y].typ) &&
 		 (levl[x][y].wall_info & W_NONPASSWALL));
 }
 
 /* [ALI] Changed to take monst * as argument to support passwall property */
-boolean bad_rock(struct monst *mon, xchar x, xchar y) {
+bool bad_rock(struct monst *mon, xchar x, xchar y) {
 	struct permonst *mdat = mon->data;
 	boolean passwall = mon == &youmonst ? Passes_walls : passes_walls(mdat);
-	return ((boolean)((In_sokoban(&u.uz) && sobj_at(BOULDER, x, y)) ||
-			  (IS_ROCK(levl[x][y].typ) && (!tunnels(mdat) || needspick(mdat) || !may_dig(x, y)) && !(passwall && may_passwall(x, y)))));
+	return (In_sokoban(&u.uz) && sobj_at(BOULDER, x, y)) ||
+	       (IS_ROCK(levl[x][y].typ)
+	        && (!tunnels(mdat) || needspick(mdat) || !may_dig(x, y))
+	        && !(passwall && may_passwall(x, y)));
 }
 
-boolean invocation_pos(xchar x, xchar y) {
+/* caller has already decided that it's a tight diagonal; check whether a
+   monster--who might be the hero--can fit through, and if not then return
+   the reason why:  1: can't fit, 2: possessions won't fit, 3: sokoban
+   returns 0 if we can squeeze through */
+int cant_squeeze_thru(struct monst *mon) {
+	int amt;
+	struct permonst *ptr = mon->data;
+
+	/* too big? */
+	if (bigmonst(ptr)
+	    && !(amorphous(ptr) || is_whirly(ptr)
+	         || noncorporeal(ptr) || slithy(ptr) || can_fog(mon)))
+		return 1;
+
+	/* lugging too much junk? */
+	amt = (mon == &youmonst) ? inv_weight() + weight_cap() :
+		curr_mon_load(mon);
+	if (amt > 600) return 2;
+
+	/* Sokoban restriction applies to hero only */
+	if (mon == &youmonst && In_sokoban(&u.uz)) return 3;
+
+	/* can squeeze through */
+	return 0;
+}
+
+
+bool invocation_pos(xchar x, xchar y) {
 	return Invocation_lev(&u.uz) && x == inv_pos.x && y == inv_pos.y;
 }
 
@@ -894,20 +923,22 @@ boolean test_move(int ux, int uy, int dx, int dy, int mode) {
 	}
 	if (dx && dy && bad_rock(&youmonst, ux, y) && bad_rock(&youmonst, x, uy)) {
 		/* Move at a diagonal. */
-		if (In_sokoban(&u.uz)) {
-			if (mode == DO_MOVE)
-				pline("You cannot pass that way.");
-			return false;
-		}
-		if (bigmonst(youmonst.data)) {
-			if (mode == DO_MOVE)
-				pline("Your body is too large to fit through.");
-			return false;
-		}
-		if (invent && (inv_weight() + weight_cap() > 600)) {
-			if (mode == DO_MOVE)
-				pline("You are carrying too much to get through.");
-			return false;
+		switch (cant_squeeze_thru(&youmonst)) {
+			case 3:
+				if (mode == DO_MOVE) pline("You cannot pass that way.");
+
+				return false;
+			case 2:
+				if (mode == DO_MOVE) pline("Your are carrying too much to get through.");
+
+				return false;
+
+			case 1:
+				if (mode == DO_MOVE) pline("Your body is too large to fit through.");
+
+				return false;
+
+			default: break; // can squeeze through
 		}
 	}
 	/* Pick travel path that does not require crossing a trap.

@@ -240,6 +240,7 @@ Imports from NetHack version 3.6:
 - Interface: when levitation ends, multi-turn actions (running, waiting, etc.) are interrupted.
 - Grammar: message when a leprechaun steals gold from under your steed's feet referenced your feet.
 - Bugfix: #call could be used to distinguish high priests on astral plain.
+- Bugfix: amorphous monsters couldn't fit through tight gaps (because they were large).
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).
