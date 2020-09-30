@@ -216,7 +216,7 @@ struct monst *christen_monst(struct monst *mtmp, const char *name) {
 }
 
 int do_mname(void) {
-	char buf[BUFSZ];
+	char buf[BUFSZ], monnambuf[BUFSZ];
 	coord cc;
 	int cx, cy;
 	struct monst *mtmp;
@@ -254,15 +254,15 @@ int do_mname(void) {
 		return 0;
 	}
 	/* special case similar to the one in lookat() */
-	distant_monnam(mtmp, ARTICLE_THE, buf);
-	sprintf(qbuf, "What do you want to call %s?", buf);
+	distant_monnam(mtmp, ARTICLE_THE, monnambuf);
+	sprintf(qbuf, "What do you want to call %s?", monnambuf);
 	getlin(qbuf, buf);
 	if (!*buf || *buf == '\033') return 0;
 	/* strip leading and trailing spaces; unnames monster if all spaces */
 	mungspaces(buf);
 
 	if (mtmp->data->geno & G_UNIQ)
-		pline("%s doesn't like being called names!", Monnam(mtmp));
+		pline("%s doesn't like being called names!", upstart(monnambuf));
 	else
 		christen_monst(mtmp, buf);
 	return 0;
