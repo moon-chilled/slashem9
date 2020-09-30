@@ -2126,7 +2126,7 @@ int look_here(int obj_cnt /* obj_cnt > 0 implies that autopickup is in progess *
 	const char *dfeature = NULL;
 	char fbuf[BUFSZ], fbuf2[BUFSZ];
 	winid tmpwin;
-	boolean skip_objects = (obj_cnt >= 5), felt_cockatrice = false;
+	bool skip_objects = (obj_cnt >= iflags.pilesize), felt_cockatrice = false;
 
 	if (u.uswallow && u.ustuck) {
 		struct monst *mtmp = u.ustuck;

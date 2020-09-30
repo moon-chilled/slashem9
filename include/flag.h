@@ -230,6 +230,7 @@ struct instance_flags {
 	bool lootabc;		// use "a/b/c" rather than "o/i/b" when looting
 	bool showrace;		// show hero glyph by race rather than by role
 	int runmode;		// update screen display during run moves
+	int pilesize;		// how big must a pile of items be before you see 'there are many objects here' instead of 'things that are here'
 	struct autopickup_exception *autopickup_exceptions[2];
 #define AP_LEAVE 0
 #define AP_GRAB	 1

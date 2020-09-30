@@ -131,10 +131,10 @@ void *nh_option_get_boolopt() {
 static struct Comp_Opt {
 	const char *name, *descr;
 	int size; /* for frontends and such allocating space --
-			 * usually allowed size of data in game, but
-			 * occasionally maximum reasonable size for
-			 * typing when game maintains information in
-			 * a different format */
+		   * usually allowed size of data in game, but
+		   * occasionally maximum reasonable size for
+		   * typing when game maintains information in
+		   * a different format */
 	int optflags;
 } compopt[] = {
 	{"align", "your starting alignment (lawful, neutral, or chaotic)", 8, DISP_IN_GAME},
@@ -192,6 +192,7 @@ static struct Comp_Opt {
 	{"pettype", "your preferred initial pet type", 4, DISP_IN_GAME},
 	{"pickup_burden", "maximum burden picked up before prompt", 20, SET_IN_GAME},
 	{"pickup_types", "types of objects to pick up automatically", MAXOCLASSES, SET_IN_GAME},
+	{"pilesize", "maximum number of items on floor to list automatically", 20, SET_IN_GAME},
 	{"player_selection", "choose character via dialog or prompts", 12, DISP_IN_GAME},
 	{"race", "your starting race (e.g., Human, Elf)", PL_CSIZ, DISP_IN_GAME},
 	{"role", "your starting role (e.g., Barbarian, Valkyrie)", PL_CSIZ, DISP_IN_GAME},
@@ -380,6 +381,7 @@ void initoptions(void) {
 	iflags.msg_history = 20;
 	iflags.prevmsg_window = 'f';
 	iflags.menu_headings = ATR_INVERSE;
+	iflags.pilesize = 5;
 	iflags.autopickup_exceptions[AP_GRAB] = NULL;
 	iflags.autopickup_exceptions[AP_LEAVE] = NULL;
 
@@ -1794,6 +1796,18 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 		}
 		return;
 	}
+
+	fullname = "pilesize";
+	if (match_optname(opts, fullname, sizeof("pilesize")-1, true)) {
+		if (negated) {
+			bad_negation(fullname, false);
+			return;
+		} else if (!(op = string_for_opt(opts, false))) return;
+		iflags.pilesize = atoi(op);
+		if (iflags.pilesize < 1) iflags.pilesize = 1;
+		return;
+	}
+
 	/* WINCAP
 	 * player_selection: dialog | prompts */
 	fullname = "player_selection";
@@ -3252,22 +3266,18 @@ static const char *get_compopt_value(const char *optname, char *buf) {
 		sprintf(buf, "%s", ocl);
 	}
 #ifdef CHANGE_COLOR
-	else if (!strcmp(optname, "palette"))
-		sprintf(buf, "%s", get_color_string());
+	else if (!strcmp(optname, "palette")) sprintf(buf, "%s", get_color_string());
 #endif
 	else if (!strcmp(optname, "pettype"))
 		sprintf(buf, "%s", (preferred_pet == 'c') ? "cat" : (preferred_pet == 'd') ? "dog" : (preferred_pet == 'n') ? "none" : "random");
-	else if (!strcmp(optname, "pickup_burden"))
-		sprintf(buf, "%s", burdentype[flags.pickup_burden]);
+	else if (!strcmp(optname, "pickup_burden")) sprintf(buf, "%s", burdentype[flags.pickup_burden]);
 	else if (!strcmp(optname, "pickup_types")) {
 		oc_to_str(flags.pickup_types, ocl);
 		sprintf(buf, "%s", ocl[0] ? ocl : "all");
-	} else if (!strcmp(optname, "race"))
-		sprintf(buf, "%s", rolestring(flags.initrace, races, noun));
-	else if (!strcmp(optname, "role"))
-		sprintf(buf, "%s", rolestring(flags.initrole, roles, name.m));
-	else if (!strcmp(optname, "runmode"))
-		sprintf(buf, "%s", runmodes[iflags.runmode]);
+	} else if (!strcmp(optname, "pilesize")) sprintf(buf, "%d", iflags.pilesize);
+	else if (!strcmp(optname, "race")) sprintf(buf, "%s", rolestring(flags.initrace, races, noun));
+	else if (!strcmp(optname, "role")) sprintf(buf, "%s", rolestring(flags.initrole, roles, name.m));
+	else if (!strcmp(optname, "runmode")) sprintf(buf, "%s", runmodes[iflags.runmode]);
 	else if (!strcmp(optname, "scores")) {
 		sprintf(buf, "%d top/%d around%s", flags.end_top,
 			flags.end_around, flags.end_own ? "/own" : "");
