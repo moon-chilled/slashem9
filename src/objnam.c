@@ -1240,8 +1240,7 @@ static const char *const special_subjs[] = {
 	0};
 
 /* return form of the verb (input plural) for present tense 3rd person subj */
-char *
-vtense(const char *subj, const char *verb) {
+char *vtense(const char *subj, const char *verb) {
 	char *buf = nextobuf();
 	int len, ltmp;
 	const char *sp, *spot;
@@ -1898,6 +1897,7 @@ struct alt_spellings {
 	{"ML", MAGIC_LAMP},
 	{"MM", MAGIC_MARKER},
 	{"UH", UNICORN_HORN},
+	{"unihorn", UNICORN_HORN},
 	/* Rings */
 	{"RoC", RIN_CONFLICT},
 	{"RoPC", RIN_POLYMORPH_CONTROL},
