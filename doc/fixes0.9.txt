@@ -238,6 +238,7 @@ Imports from NetHack version 3.6:
 - Bugfix: swallowing a petrifying monster should violate foodless conduct before killing you.
 - Bugfix: crash when lifesaved after walking over lava with unfixed water walking boots.
 - Interface: when levitation ends, multi-turn actions (running, waiting, etc.) are interrupted.
+- Grammar: message when a leprechaun steals gold from under your steed's feet referenced your feet.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).

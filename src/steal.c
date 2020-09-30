@@ -19,9 +19,9 @@ static const char *equipname(struct obj *otmp) {
 }
 
 long somegold(long umoney) {
-	return ((umoney < 100) ? umoney :
-	(umoney > 10000) ? rnd(10000) :
-	rnd(umoney));
+	return (umoney < 100) ? umoney :
+	       (umoney > 10000) ? rnd(10000) :
+	       rnd(umoney);
 }
 
 /*
@@ -32,20 +32,19 @@ be seized without further searching.
 May search containers too.
 Deals in gold only, as leprechauns don't care for lesser coins.
 */
-struct obj *
-findgold(struct obj *chain) {
+struct obj *findgold(struct obj *chain) {
 	while (chain && chain->otyp != GOLD_PIECE)
 		chain = chain->nobj;
 	return chain;
 }
 
-/*
-Steal gold coins only.  Leprechauns don't care for lesser coins.
-*/
+// Steal gold coins only.  Leprechauns don't care for lesser coins.
 void stealgold(struct monst *mtmp) {
 	struct obj *fgold = g_at(u.ux, u.uy);
 	struct obj *ygold;
 	long tmp;
+	struct monst *who;
+	const char *whose, *what;
 
 	/* skip lesser coins on the floor */
 	while (fgold && fgold->otyp != GOLD_PIECE)
@@ -58,8 +57,24 @@ void stealgold(struct monst *mtmp) {
 		obj_extract_self(fgold);
 		add_to_minv(mtmp, fgold);
 		newsym(u.ux, u.uy);
-		pline("%s quickly snatches some gold from between your %s!",
-		      Monnam(mtmp), makeplural(body_part(FOOT)));
+		if (u.usteed) {
+			who = u.usteed;
+			whose = s_suffix(y_monnam(who));
+			what = makeplural(mbodypart(who, FOOT));
+		} else {
+			who = &youmonst;
+			whose = "your";
+			what = makeplural(body_part(FOOT));
+		}
+		/* [ avoid "between your rear regions" :-] */
+		if (slithy(who->data)) what = "coils";
+		/* reduce "rear hooves/claws" to "hooves/claws" */
+		if (!strncmp(what, "rear ", 5)) what += 5;
+		pline("%s quickly snatches some gold from %s %s %s!",
+		      Monnam(mtmp),
+		      (Levitation || Flying) ? "beneath" : "between",
+		      whose, what);
+
 		if (!ygold || !rn2(5)) {
 			if (!tele_restrict(mtmp)) rloc(mtmp, false);
 			monflee(mtmp, 0, false, false);
