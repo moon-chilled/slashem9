@@ -681,7 +681,7 @@ bool may_dig(xchar x, xchar y);
 bool may_passwall(xchar x, xchar y);
 bool bad_rock(struct monst *mon, xchar x, xchar y);
 int cant_squeeze_thru(struct monst *mon);
-boolean invocation_pos(xchar, xchar);
+bool invocation_pos(xchar x, xchar y);
 boolean test_move(int, int, int, int, int);
 void domove(void);
 void invocation_message(void);

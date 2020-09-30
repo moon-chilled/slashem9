@@ -1221,7 +1221,7 @@ nexttry: /* eels prefer the water, but if there is no water nearby,
 				// check for diagonal tight squeeze
 				if (nx != x && ny != y
 				    && bad_rock(mon, x, ny) && bad_rock(mon, nx, y)
-				    && cant_squeeze_through(mon))
+				    && cant_squeeze_thru(mon))
 					continue;
 
 				/* The monster avoids a particular type of trap if it's familiar

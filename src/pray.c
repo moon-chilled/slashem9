@@ -1361,9 +1361,16 @@ int dosacrifice(void) {
 				}
 				if ((pm = dlord(altaralign)) != NON_PM &&
 				    (dmon = makemon(&mons[pm], u.ux, u.uy, NO_MM_FLAGS))) {
-					/* here to be seen */
+					// here to be seen
+					// note this doesn't invalidate the below 'it' check, as hero could be blindfolded
 					dmon->minvis = false;
-					pline("You have summoned %s!", a_monnam(dmon));
+
+					char dbuf[BUFSZ];
+					strcpy(dbuf, a_monnam(dmon));
+					if (!strcmpi(dbuf, "it"))
+						strcpy(dbuf, "something dreadful");
+					pline("You have summoned %s!", dbuf);
+
 					if (sgn(u.ualign.type) == sgn(dmon->data->maligntyp)) {
 						dmon->mpeaceful = true;
 					} else if (is_dprince(dmon->data)) {

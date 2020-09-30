@@ -241,6 +241,7 @@ Imports from NetHack version 3.6:
 - Grammar: message when a leprechaun steals gold from under your steed's feet referenced your feet.
 - Bugfix: #call could be used to distinguish high priests on astral plain.
 - Bugfix: amorphous monsters couldn't fit through tight gaps (because they were large).
+- Grammar: don't say 'you have summoned it' when sacrificing an own-race corpse while blind.
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).
