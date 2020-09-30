@@ -3213,8 +3213,7 @@ static int try_disarm(struct trap *ttmp, boolean force_failure) {
 	/* untrappable traps are located on the ground. */
 	if (!can_reach_floor()) {
 		if (u.usteed && P_SKILL(P_RIDING) < P_BASIC)
-			pline("You aren't skilled enough to reach from %s.",
-			      mon_nam(u.usteed));
+			rider_cant_reach();
 		else
 			pline("You are unable to reach the %s!", sym_desc[trap_to_defsym(ttype)].explanation);
 		return 0;
@@ -3616,8 +3615,7 @@ int untrap(bool force) {
 				}
 
 				if (u.usteed && P_SKILL(P_RIDING) < P_BASIC) {
-					pline("You aren't skilled enough to reach from %s.",
-					      mon_nam(u.usteed));
+					rider_cant_reach();
 					return 0;
 				}
 

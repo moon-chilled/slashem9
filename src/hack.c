@@ -2225,8 +2225,7 @@ int dopickup(void) {
 	}
 	if (!can_reach_floor()) {
 		if (u.usteed && P_SKILL(P_RIDING) < P_BASIC)
-			pline("You aren't skilled enough to reach from %s.",
-			      y_monnam(u.usteed));
+			rider_cant_reach();
 		else
 			pline("You cannot reach the %s.", surface(u.ux, u.uy));
 
