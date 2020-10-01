@@ -157,6 +157,7 @@ void xwaitforspace(const char *s) {
 			}
 			tty_nhbell();
 		}
+		if (c == -1) break; // lost terminal or other error
 	}
 }
 

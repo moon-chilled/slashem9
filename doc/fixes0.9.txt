@@ -279,3 +279,4 @@ Imports from other locations:
 - Bugfix: properly refresh message window after a --More-- (or >>) prompt in curses (ToxicFrog).
 - Bugfix: fix several serious vulnerabilities (David Mendenhall).
 - Interface: allow player to configure number of items that must be on the floor to trigger the 'things that are here' list (Glyn Kennington).
+- Bugfix: fix hang on terminal loss at prompt (SporkHack).
