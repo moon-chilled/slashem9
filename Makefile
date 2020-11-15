@@ -66,7 +66,7 @@ util/slashem9-recover: $(OBJ_RECOVER)
 
 all: src/slashem9 util/slashem9-recover dat/nhdat
 
-util/dgn_lex.o: util/dgn_yacc.o
+util/dgn_lex.c: util/dgn_yacc.c
 
 util/dgn_yacc.c: util/dgn_yacc.y
 	yacc -d util/dgn_yacc.y
@@ -76,9 +76,12 @@ util/dgn_yacc.c: util/dgn_yacc.y
 util/dgn_comp: $(OBJ_DGNCOMP)
 	$(CCLD) -o util/dgn_comp $(OBJ_DGNCOMP)
 
-util/lev_lex.o: util/lev_yacc.c
+util/lev_lex.c: util/lev_yacc.c
 
-util/lev_yacc.c: util/lev_yacc.y
+# artificial dependency on dgn_yacc.c to force one to be built completely
+# before the other; otherwise, there can be a race and multiple y.tab.[ch]
+# will be created
+util/lev_yacc.c: util/lev_yacc.y util/dgn_yacc.c
 	yacc -d util/lev_yacc.y
 	mv -f y.tab.c util/lev_yacc.c
 	mv -f y.tab.h util/lev_yacc.h
