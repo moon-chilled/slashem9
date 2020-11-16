@@ -20,7 +20,7 @@ matrix:
       before_install:
         - sudo apt install libncursesw5-dev
       script:
-        - make install
+        - make DLBMODE=lib install
     - name: linux/clang/dlbembed
       os: linux
       dist: focal
@@ -28,7 +28,7 @@ matrix:
       before_install:
         - sudo apt install libncursesw5-dev
       script:
-        - make -f Makefile.embeddlb install
+        - make DLBMODE=embed install
     - name: linux/clang/flat
       os: linux
       dist: focal
@@ -36,7 +36,7 @@ matrix:
       before_install:
         - sudo apt install libncursesw5-dev
       script:
-        - make -f Makefile.nodlb install
+        - make DLBMODE=none install
 
     # linux/gcc
     - name: linux/gcc/dlblib
@@ -46,7 +46,7 @@ matrix:
       before_install:
         - sudo apt install libncursesw5-dev
       script:
-        - make install
+        - make DLBMODE=lib install
     - name: linux/gcc/dlbembed
       os: linux
       dist: focal
@@ -54,7 +54,7 @@ matrix:
       before_install:
         - sudo apt install libncursesw5-dev
       script:
-        - make -f Makefile.embeddlb install
+        - make DLBMODE=embed install
     - name: linux/gcc/flat
       os: linux
       dist: focal
@@ -62,7 +62,7 @@ matrix:
       before_install:
         - sudo apt install libncursesw5-dev
       script:
-        - make -f Makefile.nodlb install
+        - make DLBMODE=none install
 
     # linux/tcc
     - name: linux/tcc/dlblib
@@ -73,7 +73,7 @@ matrix:
         - sudo apt update
         - sudo apt install libncursesw5-dev tcc
       script:
-        - make install CC=tcc
+        - make DLBMODE=lib install CC=tcc
     - name: linux/tcc/dlbembed
       os: linux
       dist: focal
@@ -82,7 +82,7 @@ matrix:
         - sudo apt update
         - sudo apt install libncursesw5-dev tcc
       script:
-        - make -f Makefile.embeddlb install CC=tcc
+        - make DLBMODE=embed install CC=tcc
     - name: linux/tcc/flat
       os: linux
       dist: focal
@@ -91,7 +91,7 @@ matrix:
         - sudo apt update
         - sudo apt install libncursesw5-dev tcc
       script:
-        - make -f Makefile.nodlb install CC=tcc
+        - make DLBMODE=none install CC=tcc
 
     # macos/clang
     - name: macos/clang/dlblib
@@ -99,16 +99,16 @@ matrix:
       osx_image: xcode10.2
       compiler: clang
       script:
-        - make install
+        - make DLBMODE=lib install
     - name: macos/clang/dlbembed
       os: osx
       osx_image: xcode10.2
       compiler: clang
       script:
-        - make -f Makefile.embeddlb install
+        - make DLBMODE=embed install
     - name: macos/clang/flat
       os: osx
       osx_image: xcode10.2
       compiler: clang
       script:
-        - make -f Makefile.nodlb install
+        - make DLBMODE=none install
