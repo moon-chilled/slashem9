@@ -1,0 +1,58 @@
+=================================================================
+==506718==ERROR: AddressSanitizer: stack-buffer-overflow on address 0x7fff7c635bfd at pc 0x55910dbce1b8 bp 0x7fff7c635b30 sp 0x7fff7c635b20
+WRITE of size 1 at 0x7fff7c635bfd thread T0
+    #0 0x55910dbce1b7 in doorganize src/invent.c:2635
+    #1 0x55910da4cfa9 in doextcmd src/cmd.c:257
+    #2 0x55910da6454a in rhack src/cmd.c:3139
+    #3 0x55910d9f0835 in moveloop src/allmain.c:517
+    #4 0x55910dfccf89 in main sys/unix/unixmain.c:229
+    #5 0x7f6f2daf7022 in __libc_start_main (/usr/lib/libc.so.6+0x27022)
+    #6 0x55910d9ecc5d in _start (/home/mc/slashem9install/slashem9dir/slashem9+0x140c5d)
+
+Address 0x7fff7c635bfd is located in stack of thread T0 at offset 157 in frame
+    #0 0x55910dbcd8a0 in doorganize src/invent.c:2590
+
+  This frame has 7 object(s):
+    [48, 56) 'obj' (line 2591)
+    [80, 88) 'otmp' (line 2591)
+    [112, 120) 'splitting' (line 2591)
+    [144, 147) 'allowall' (line 2596)
+    [160, 213) 'alphabet' (line 2594) <== Memory access at offset 157 underflows this variable
+    [256, 309) 'buf' (line 2594)
+    [352, 480) 'qbuf' (line 2595)
+HINT: this may be a false positive if your program uses some custom stack unwind mechanism, swapcontext or vfork
+      (longjmp and C++ exceptions *are* supported)
+SUMMARY: AddressSanitizer: stack-buffer-overflow src/invent.c:2635 in doorganize
+Shadow bytes around the buggy address:
+  0x10006f8beb20: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x10006f8beb30: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x10006f8beb40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x10006f8beb50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x10006f8beb60: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1
+=>0x10006f8beb70: 00 00 00 f2 00 00 00 f2 00 00 00 f2 f2 f2 03[f2]
+  0x10006f8beb80: 00 00 00 00 00 00 05 f2 f2 f2 f2 f2 00 00 00 00
+  0x10006f8beb90: 00 00 05 f2 f2 f2 f2 f2 00 00 00 00 00 00 00 00
+  0x10006f8beba0: 00 00 00 00 00 00 00 00 f3 f3 f3 f3 00 00 00 00
+  0x10006f8bebb0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x10006f8bebc0: 00 00 00 00 f1 f1 f1 f1 00 02 f2 f2 00 00 00 00
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==506718==ABORTING

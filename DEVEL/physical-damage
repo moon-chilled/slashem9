@@ -1,0 +1,21 @@
+commit 9b9f13aa131226bf0b42b882774ca55d213d49a1
+Author: nethack.allison <nethack.allison>
+Date:   Wed Oct 22 23:05:24 2003 +0000
+
+    Half_physical_damage 07
+
+    It is not physical damage if:
+    1. it already qualifies for some other special type of damage
+       for which a special resistance already exists in the game
+       including: cold, fire, shock, and acid. Note that fire is
+       extended to include all forms of burning, even boiling water
+       since that is already dealt with by fire resistance, and in
+       most or all cases is caused by fire.
+    2. it doesn't leave a mark. Marks include destruction of, or
+       damage to, an internal organ (including the brain),
+       lacerations, bruises, crushed body parts, bleeding.
+
+    Current exceptions to the rule (already existing):
+    - holy water burning chaotic ("it burns like acid") is physical damage.
+    - unholy water burning lawful is physical damage.
+

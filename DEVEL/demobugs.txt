@@ -1,0 +1,7 @@
+surgery tech read after free bandage
+rogue critical strike beneath map at max x and y (overly high y) crashes
+rogue cutthroat beneath map at max x and y (overly high y) crashes
+disarm technique beneath map at max x and y (overly high y) crashes
+pummel technique beneath map at max x and y (overly high y) crashes
+ground slam technique beneath map at max x and y (overly high y) crashes
+draw blood can read after free if obfree() is called on the vial in the medical kit, its blessed and cursed are read after
