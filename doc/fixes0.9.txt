@@ -61,6 +61,7 @@ Changelist for slashem9 v0.9:
 - Bugfix: paralyzed unicorns would catch thrown gems.
 - Grammar: use 'thine' rather than 'thy' where appropriate.
 - Interface: add more thorough prompting for potentially disastrous commands.
+- Bugfix: crash following repeated portal creation in black market.
 
 Imports from NetHack version 3.6:
 - Bugfix: acid dropping bug.

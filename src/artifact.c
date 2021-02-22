@@ -1605,6 +1605,11 @@ static int arti_invoke(struct obj *obj) {
 				object_detect(obj, 0);
 				break;
 			case CREATE_PORTAL: {
+				if (Is_blackmarket(&u.uz) && *u.ushops) {
+					pline("You feel very disoriented for a moment.");
+					break;
+				}
+
 				int i, num_ok_dungeons, last_ok_dungeon = 0;
 				d_level newlev;
 				extern int n_dgns; /* from dungeon.c */
@@ -1612,10 +1617,6 @@ static int arti_invoke(struct obj *obj) {
 				anything any;
 
 				any.a_void = 0; /* set all bits to zero */
-				if (Is_blackmarket(&u.uz) && *u.ushops) {
-					pline("You feel very disoriented for a moment.");
-					break;
-				}
 				start_menu(tmpwin);
 				/* use index+1 (cant use 0) as identifier */
 				for (i = num_ok_dungeons = 0; i < n_dgns; i++) {
