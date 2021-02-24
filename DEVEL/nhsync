@@ -1,1 +1,13 @@
 bd3a5466dd4fafa050e8a6d109b13491a132ea4a
+
+Features intentionally not synced from nethack:
+- Thrown potions have a chance to hit a steed's saddle (1e8c99bcc0d72e43419a7a5cd0c2daf2a948f461).  I think this is a cool idea, but I think it's not worth having unless it can do more.
+- Elbereth changes.  There will probably be elbereth changes, but not those.
+- SAFERHANGUP (40b5b126739897ee9e0ba152fe08446b9c322589)
+- STATUS_VIA_WINDOWPORT (5ed547995d68bac551e9535e56c72b595167ceaf)
+- mimics not imitating statues in soko or boulders when over pits|holes (1fbd886068b790e73b65ed9f0d6a6558fff73ad1)
+- iron ball pit punishment changes
+- save selection menu
+- OPTIONS=role:!knight etc. (b064510a9be2bcb021e17d9ad90a49d9e9d1391e)
+- vampire dancing prevention (25a9c0ca4b74f0b9079caef954e99950286d75cd+5bc6f1444ea32f17d5ef74aff89307b4cc6e2ea9+7828cb368709ce7e49131d561720a805ed9e3999)
+- randomized shk names when hallu (44b9e2539710ab16aa046e626471d510b7d530b7).  Done because of different hallu semantics, but may revisit this if I decide to revert slashem hallu

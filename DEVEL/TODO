@@ -1,86 +1,77 @@
-* Note: features intentionally not present from nethack:
- - Thrown potions have a chance to hit a steed's saddle.  I think this is a cool idea, but I think it's not worth having unless it can do more.
- - Elbereth changes.  There will more than likely be elbereth changes, but not those.
- - SAFERHANGUP (40b5b126739897ee9e0ba152fe08446b9c322589)
- - STATUS_VIA_WINDOWPORT (5ed547995d68bac551e9535e56c72b595167ceaf)
- - mimics not imitating statues in soko or boulders when over pits|holes (1fbd886068b790e73b65ed9f0d6a6558fff73ad1)
- - iron ball pit punishment changes
- - save selection menu
- - OPTIONS=role:!knight etc. (b064510a9be2bcb021e17d9ad90a49d9e9d1391e)
- - vampire dancing prevention (25a9c0ca4b74f0b9079caef954e99950286d75cd+5bc6f1444ea32f17d5ef74aff89307b4cc6e2ea9+7828cb368709ce7e49131d561720a805ed9e3999)
- - randomized shk names when hallu (44b9e2539710ab16aa046e626471d510b7d530b7).  Done because of different hallu semantics, but may revisit this if I decide to revert slashem hallu
+- json saves
 
-* Should deep dragons see through displacement?
+- des/lev -> s7 scm (or lua, for 3.7 compat?)
 
-* Portable build: uses embeddlb and puts save/xlog/perm/dump in dotdir, so single no-dependency binary
+- grammartree?
 
-* Proper readline-style line editing (arrow-key movement, C-w/C-h (for curses); M-b, M-f, C-b, C-f, etc.)
+- Should deep dragons see through displacement?
 
-* Star and fire vampires should be vampshifters, but need to come up with a good form for them to turn into.  (Maybe give vampire mages another alt form too?)  Star vampires can turn into a 'space kraken' (or a less cheesy name for the same concept)?
- - (polyself.c:348)
+- Portable build: uses embeddlb and puts save/xlog/perm/dump in dotdir, so single no-dependency binary
 
-* Tutorial mode
+- Proper readline-style line editing (arrow-key movement, C-w/C-h (for curses); M-b, M-f, C-b, C-f, etc.)
 
-* 'peaceful Mike's ghost' -> 'Mike's peaceful ghost' ?
+- Star and fire vampires should be vampshifters, but need to come up with a good form for them to turn into.  (Maybe give vampire mages another alt form too?)  Star vampires can turn into a 'space kraken' (or a less cheesy name for something similar)?
+  - (polyself.c:348)
 
-* Health food shops should carry tins of spinach
+- Tutorial mode (a la unnethack)
 
-* Polymorph messages for vampshifting
+- 'peaceful Mike's ghost' -> 'Mike's peaceful ghost' ?
 
-* Wish for (un)lock(ed|able) box.
+- Health food shops should carry tins of spinach
 
-* Wish for schroedinger's cat?  (It's always dead and 'you feel guilty'?)
+- Polymorph messages for vampshifting
 
-* Add global warming.  It increases when you burn plastic.  It weakens and decreases spawn rate of fountain, pool, and watertrap; decreases ice melt timeout; makes spawned ice have a chance to be a fountain/pool instead; strengthens and increases spawn rate of lava and firetrap; decreases timeout for towel drying out
- - (fountains, pools, and watertraps don't just get generated less often, they evaporate as soon as they're generated, so you can 'hear a hissing noise' or w/e upon entering a level.  Same w/ice)
- - (Lava isn't straight-up generated more often; it's generated /slightly/ more often, but also: if lava is generated in a location, there's a good chance more will appear around it, which you can watch ('you hear a crumbling noise' or 'the ground gives way and more lava appears')
+- Wish for (un)lock(ed|able) box.
 
-* More interesting stuff for health food store.  Also services.  Can they give you the ability to appraise food yourself for a while, cf a blessed ?oFood Detection?
+- Wish for schroedinger's cat?  (It's always dead and 'you feel guilty'?)
 
-* Encyclopedia: display text offset in _underscores_ as italic on supported terminals
-* Use fuzzy matching for user-inputted encyclopedia entry checking?
+- Add global warming.  It increases when you burn plastic.  It weakens and decreases spawn rate of fountain, pool, and watertrap; decreases ice melt timeout; makes spawned ice have a chance to be a fountain/pool instead; strengthens and increases spawn rate of lava and firetrap; decreases timeout for towel drying out
+  - (fountains, pools, and watertraps don't just get generated less often, they evaporate as soon as they're generated, so you can 'hear a hissing noise' or w/e upon entering a level.  Same w/ice)
+  - (Lava isn't straight-up generated more often; it's generated /slightly/ more often, but also: if lava is generated in a location, there's a good chance more will appear around it, which you can watch ('you hear a crumbling noise' or 'the ground gives way and more lava appears')
 
-* Release:
- - Update documentation
-  * manpage
-  * guidebook?
-  * wiz command help
-  * opthelp
-  * windowport
- - Script?
- - Remove -Werror (silence all warnings?)
- - Cross-compile for all major platforms
- - Precompile lex/yacc-files (if applicable), remove irrelevant files (DEVEL/?), and tar into source release
- - Git tag?  Branch?
- - Save freeze
+- More interesting stuff for health food store.  Also services.  Can they give you the ability to appraise food yourself for a while, cf a blessed ?oFood Detection?
 
-* Make rogue level only show up on rogue's birthday per https://github.com/UnNetHack/UnNetHack/commit/7b02e60db76d45c2c91bc7281d288e6b64182005#commitcomment-32053355, once dungeon switches to lua?
+- Encyclopedia: display text offset in _underscores_ as italic on supported terminals
+- Use fuzzy matching for user-inputted encyclopedia entry checking?
+  - tre has approximate matching already, just need to hook it up
 
-* Replace pretty much all uses of void* with anything.
+- Release:
+  - Update documentation
+    - manpage
+    - guidebook?
+    - wiz command help
+    - opthelp
+    - windowport
+  - Script?
+  - Remove -Werror (silence all warnings?)
+  - Cross-compile for all major platforms
+  - Precompile lex/yacc-files (if applicable), remove irrelevant files (DEVEL/?), and tar into source release
+  - Git tag?  Branch?
+  - Save freeze
 
-* Investigate: would people be ok with no curses, but a rich sdl|gtk interface?  I kind of hate curses.  OTOH, public servers.  libtickit?  Termbox?
-* SDL can't be very rich, gtk is stupid on windows.  Need to re-integrate nethackw?
-* Bearlibterminal?
+- Make rogue level only show up on rogue's birthday per https://github.com/UnNetHack/UnNetHack/commit/7b02e60db76d45c2c91bc7281d288e6b64182005#commitcomment-32053355, once dungeon switches to lua?
 
-* Completely revamp interface:
- * More support for nhstr
-  * Support attrs (bg, italic, inverse?, bold)
-  * Allow to stuff tiles into an nhstr (so the ';' command can work sensibly w/tiles and the gamemap can be implemented in terms of putstr)
-  * Message colours
- * Update proxy graphics.
- * win32, cocoa, gtk, android, ios windowports.  See README
- * web windowport?  https://github.com/coolwanglu/BrowserHack
+- Replace most uses of void* with anything.
 
-* Integrate boehm gc?
- * Probably not
- * Re-evaluate once nhstr is pervasive
+- Investigate: would people be ok with no curses, but a rich sdl|gtk interface?  I kind of hate curses.  OTOH, public servers.  libtickit?  Termbox?  Notcurses?
+- SDL can't be very rich, gtk is stupid on windows.  Need to re-integrate nethackw?
+- Bearlibterminal?
 
-* Rewrite MAIL (actual email checking doesn't make sense, but there are a couple of other things that we might want):
- * Dgl mail
- * In-game chat system (integrate with #shout)
- * IRC notifications (write IRC plugin to make it log messages to a file and slashem pick them up)
-  * Discord? (ugh)
+- Revamp interface interface:
+  - More support for nhstr
+    - Support attrs (bg, italic, inverse?, bold)
+    - Allow to stuff tiles into an nhstr (so the ';' command can work sensibly w/tiles and the gamemap can be implemented in terms of putstr)
+    - Message colours
+  - Proxy graphics.
+  - win32, cocoa, gtk, android, ios windowports.  See README
+  - web windowport?  https://github.com/coolwanglu/BrowserHack
 
-* The ascension run: make it interesting.  No one likes the the WOY randomly appearing, and that only happens in order to make it more interesting than just "go up the stairs, rinse, repeat."  Also, the wizard appearing on the plane of earth cheapens him.  He should disappear after you perform the ritual and not come back.  Maybe make a group of high-level monsters appear every time you go up the stairs with the AOY?
+- Integrate boehm gc?
+  - Probably not
+  - Re-evaluate once nhstr is pervasive
 
-* The castle: I like it.  Get rid of the wand of wishing and instead add more loot.  Some ideas: Currently, there are two barracks.  Instead of barracks, make each of those rooms contain 2/3 randomly of: barracks, unicorns, dragons.  Right now, there's a room of weapons, armour, food, and gems.  Gems are irrelevant, and food can be gotten elsewhere.  Replace it with 4/5 of: weapons, armour, scrolls, rings, and wands.
+- Rewrite MAIL (actual email checking doesn't make sense, but there are a couple of other things that we might want):
+  - Dgl mail
+  - In-game chat system (integrate with #shout)
+  - IRC notifications (write IRC plugin to make it log messages to a file and slashem pick them up)
+    - Discord? (ugh)
