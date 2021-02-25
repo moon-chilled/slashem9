@@ -43,11 +43,10 @@ typedef struct {
 
 /* attribute types for putstr; the same as the ANSI value, for convenience */
 #define ATR_NONE    0
-#define ATR_BOLD    1
-#define ATR_DIM	    2
-#define ATR_ULINE   4
-#define ATR_BLINK   5
-#define ATR_INVERSE 7
+#define ATR_BOLD    0x1
+#define ATR_ULINE   0x2
+#define ATR_BLINK   0x4
+#define ATR_INVERSE 0x8
 
 /* nh_poskey() modifier types */
 #define CLICK_1 1

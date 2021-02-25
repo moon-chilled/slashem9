@@ -3,7 +3,7 @@
 
 typedef struct {
 	glyph_t *str;
-	int *colouration;
+	nhstyle *style;
 	usize len;
 } nhstr;
 
@@ -27,17 +27,18 @@ typedef struct {
 // return the same string for convenience.  Exceptions are labled with
 // exclamation marks.
 
+#define nhstyle_default() ((nhstyle){.fg=NO_COLOR, .bg=NO_COLOR})
 #define new_nhs() ((nhstr){0})
 void del_nhs(nhstr *str);
-nhstr *nhscatznc(nhstr *str, const char *cat, usize catlen, int colour);
-nhstr *nhscatzc(nhstr *str, const char *cat, int colour);
+nhstr *nhscatznc(nhstr *str, const char *cat, usize catlen, nhstyle style);
+nhstr *nhscatzc(nhstr *str, const char *cat, nhstyle style);
 nhstr *nhscatzn(nhstr *str, const char *cat, usize catlen);
 nhstr *nhscatz(nhstr *str, const char *cat);
 nhstr nhsdup(const nhstr str); // !no in-place modification!
 nhstr nhsdupz(const char *str);
 nhstr *nhscat(nhstr *str, const nhstr cat);
-//nhstr *nhscatfc_v(nhstr *str, int colour, char *cat, va_list the_args);
-nhstr *nhscatfc(nhstr *str, int colour, const char *cat, ...);
+//nhstr *nhscatfc_v(nhstr *str, nhstyle style, char *cat, va_list the_args);
+nhstr *nhscatfc(nhstr *str, nhstyle style, const char *cat, ...);
 nhstr *nhscatf(nhstr *str, const char *cat, ...);
 
 nhstr *nhsmove(nhstr *target, nhstr *src); // !destroys src!

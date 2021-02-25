@@ -917,18 +917,18 @@ winid tty_create_nhwindow(int type) {
 
 	if (newwin->maxrow) {
 		newwin->data = alloc(sizeof(char *) * (unsigned)newwin->maxrow);
-		newwin->clr_data = alloc(sizeof(int *) * newwin->maxrow);
+		newwin->style_data = alloc(sizeof(nhstyle*) * newwin->maxrow);
 		newwin->datlen = alloc(sizeof(short) * (unsigned)newwin->maxrow);
 		if (newwin->maxcol) {
 			for (i = 0; i < newwin->maxrow; i++) {
 				newwin->data[i] = alloc((unsigned)newwin->maxcol);
-				newwin->clr_data[i] = alloc(newwin->maxcol * sizeof(int));
+				newwin->style_data[i] = alloc(newwin->maxcol * sizeof(nhstyle));
 				newwin->datlen[i] = newwin->maxcol;
 			}
 		} else {
 			for (i = 0; i < newwin->maxrow; i++) {
 				newwin->data[i] = NULL;
-				newwin->clr_data[i] = NULL;
+				newwin->style_data[i] = NULL;
 				newwin->datlen[i] = 0;
 			}
 		}
@@ -966,9 +966,9 @@ static void free_window_info(struct WinDesc *cw, bool free_data) {
 				free(cw->data[i]);
 				cw->data[i] = NULL;
 			}
-			if (cw->clr_data[i]) {
-				free(cw->clr_data[i]);
-				cw->clr_data[i] = NULL;
+			if (cw->style_data[i]) {
+				free(cw->style_data[i]);
+				cw->style_data[i] = NULL;
 			}
 			if (cw->datlen) cw->datlen[i] = 0;
 		}
@@ -976,8 +976,8 @@ static void free_window_info(struct WinDesc *cw, bool free_data) {
 			free(cw->data);
 			cw->data = NULL;
 			if (cw->datlen) free(cw->datlen);
-			free(cw->clr_data);
-			cw->clr_data = NULL;
+			free(cw->style_data);
+			cw->style_data = NULL;
 			cw->datlen = NULL;
 			cw->rows = 0;
 		}
@@ -1802,8 +1802,6 @@ void tty_putnstr(winid window, int attr, nhstr str) {
 			int stash_curx = cw->curx;
 			int j = cw->curx;
 
-			int fx = 0;
-			(void)fx;  // working around a bizarre bug where both clang and gcc warn fx is unused
 			for (int i = cw->curx, fx = i + 1; true; i++, fx++) {
 				if (i >= nb.len) {
 					if (cw->data[cw->cury][j] || context.botlx) {
@@ -1815,14 +1813,16 @@ void tty_putnstr(winid window, int attr, nhstr str) {
 				}
 
 				// just redraw the whole line every time
-				if (true || context.botlx || (cw->data[cw->cury][j] != nb.str[i]) || (cw->clr_data[cw->cury][j] != nb.colouration[i])) {
-					if (nb.colouration[i] != NO_COLOR) { term_start_color(nb.colouration[i]); }
+				if (true || context.botlx || (cw->data[cw->cury][j] != nb.str[i]) || !nhstyle_eq(cw->style_data[cw->cury][j], nb.style[i])) {
+					if (nb.style[i].fg != NO_COLOR) term_start_color(nb.style[i].fg);
+					if (nb.style[i].bg != NO_COLOR) term_start_bgcolor(nb.style[i].bg);
+					term_start_attrs(nb.style[i].attr);
 					tty_putsym(WIN_STATUS, fx, cw->cury, nb.str[i]);
-					if (nb.colouration[i] != NO_COLOR) term_end_color();
+					if (!nhstyle_eq(nb.style[i], nhstyle_default())) term_end_color();
 				}
 				if (cw->data[cw->cury][j]) j++;
 
-				// reached EOL
+				// EOL
 				if (fx >= cw->cols) {
 					// out of lines?
 					if (cw->cury >= cw->rows - 1) {
@@ -1837,7 +1837,7 @@ void tty_putnstr(winid window, int attr, nhstr str) {
 			}
 
 			strncpy(&cw->data[cw->cury][stash_curx], nhs2cstr_trunc_tmp(nb), min(cw->cols - stash_curx - 1, nb.len));
-			memcpy(&cw->clr_data[cw->cury][stash_curx], nb.colouration, min(cw->cols - stash_curx - 1, nb.len) * sizeof(int));
+			memcpy(&cw->style_data[cw->cury][stash_curx], nb.style, min(cw->cols - stash_curx - 1, nb.len) * sizeof(nhstyle));
 			cw->data[cw->cury][cw->cols - 1] = '\0'; /* null terminate */
 			/* ALI - Clear third line if present and unused */
 			if (cw->cury == 1 && cw->cury < (cw->maxrow - 1)) {
@@ -1929,9 +1929,9 @@ void tty_putstr(winid window, int attr, const char *str) {
 						free(cw->data[i]);
 						cw->data[i] = NULL;
 					}
-					if (cw->clr_data[i]) {
-						free(cw->clr_data[i]);
-						cw->clr_data[i] = NULL;
+					if (cw->style_data[i]) {
+						free(cw->style_data[i]);
+						cw->style_data[i] = NULL;
 					}
 				}
 				cw->maxrow = cw->cury = 0;
@@ -1939,35 +1939,35 @@ void tty_putstr(winid window, int attr, const char *str) {
 			/* always grows one at a time, but alloc 12 at a time */
 			if (cw->cury >= cw->rows) {
 				char **tmp;
-				int **ctmp;
+				nhstyle **stmp;
 
 				cw->rows += 12;
-				tmp = alloc(sizeof(char *) * (unsigned)cw->rows);
-				ctmp = alloc(sizeof(int *) * (unsigned)cw->rows);
+				tmp = new(char*, (unsigned)cw->rows);
+				stmp = new(nhstyle*, (unsigned)cw->rows);
 				for (i = 0; i < cw->maxrow; i++) {
 					tmp[i] = cw->data[i];
-					ctmp[i] = cw->clr_data[i];
+					stmp[i] = cw->style_data[i];
 				}
 				if (cw->data)
 					free(cw->data);
-				if (cw->clr_data)
-					free(cw->clr_data);
+				if (cw->style_data)
+					free(cw->style_data);
 				cw->data = tmp;
-				cw->clr_data = ctmp;
+				cw->style_data = stmp;
 
 				for (i = cw->maxrow; i < cw->rows; i++) {
 					cw->data[i] = NULL;
-					cw->clr_data[i] = NULL;
+					cw->style_data[i] = NULL;
 				}
 			}
 			if (cw->data[cw->cury])
 				free(cw->data[cw->cury]);
-			if (cw->clr_data[cw->cury])
-				free(cw->clr_data[cw->cury]);
+			if (cw->style_data[cw->cury])
+				free(cw->style_data[cw->cury]);
 
 			n0 = strlen(str) + 1;
 			ob = cw->data[cw->cury] = new(char, n0 + 1);
-			cw->clr_data[cw->cury] = new(int, n0 + 1);
+			cw->style_data[cw->cury] = new(nhstyle, n0 + 1);
 			*ob++ = attr + 1; /* avoid nuls, for convenience */
 			strcpy(ob, str);
 

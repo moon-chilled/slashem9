@@ -225,6 +225,7 @@ extern void curses_rtrim(char *str);
 extern int curses_get_count(int first_digit);
 
 extern attr_t curses_convert_attr(int attr);
+extern attr_t curses_convert_attrs(int attrs);
 
 extern int curses_read_attrs(char *attrs);
 

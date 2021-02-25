@@ -52,26 +52,30 @@
 #define DRAGON_SILVER CLR_BRIGHT_CYAN
 #define HI_ZAP	      CLR_BRIGHT_BLUE
 
+typedef struct {
+	int fg, bg;
+	uint attr;
+} nhstyle;
+
+static inline bool nhstyle_eq(nhstyle x, nhstyle y) {
+	return x.fg == y.fg && x.bg == y.bg && x.attr == y.attr;
+}
+
 struct menucoloring {
 	regex_t match;
 	int color, attr;
 	struct menucoloring *next;
 };
 
-struct color_option {
-	int color;
-	int attr_bits;
-};
-
 struct percent_color_option {
 	int percentage;
-	struct color_option color_option;
+	nhstyle style;
 	struct percent_color_option *next;
 };
 
 struct text_color_option {
 	const char *text;
-	struct color_option color_option;
+	nhstyle style;
 	const struct text_color_option *next;
 };
 

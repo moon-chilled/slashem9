@@ -42,38 +42,37 @@ extern const struct percent_color_option *hp_colors;
 extern const struct percent_color_option *pw_colors;
 extern const struct text_color_option *text_colors;
 
-struct color_option text_color_of(const char *text, const struct text_color_option *color_options) {
+nhstyle text_style_of(const char *text, const struct text_color_option *color_options) {
 	if (color_options == NULL) {
-		struct color_option result = {NO_COLOR, 0};
-		return result;
+		return nhstyle_default();
 	}
 	if (strstri(color_options->text, text) || strstri(text, color_options->text))
-		return color_options->color_option;
-	return text_color_of(text, color_options->next);
+		return color_options->style;
+	return text_style_of(text, color_options->next);
 }
 
-struct color_option percentage_color_of(int value, int max, const struct percent_color_option *color_options) {
+nhstyle percentage_style_of(int value, int max, const struct percent_color_option *color_options) {
 	if (color_options == NULL) {
-		struct color_option result = {NO_COLOR, 0};
-		return result;
+		return nhstyle_default();
 	}
 	if (100 * value <= color_options->percentage * max)
-		return color_options->color_option;
-	return percentage_color_of(value, max, color_options->next);
+		return color_options->style;
+	return percentage_style_of(value, max, color_options->next);
 }
 
-void add_colored_text_match(const char *text, const char *match, nhstr *newbot) {
+void add_styled_text_match(const char *text, const char *match, nhstr *newbot) {
 	if ((*text == '\0') || (*match == '\0')) return;
 
 	if (!iflags.use_status_colors) {
 		nhscatf(newbot, " %S", text);
 	} else {
-		nhscatfc(newbot, text_color_of(match, text_colors).color, " %S", text);
+		nhscatz(newbot, " ");
+		nhscatfc(newbot, text_style_of(match, text_colors), "%S", text);
 	}
 }
 
-void add_colored_text(const char *text, nhstr *newbot) {
-	add_colored_text_match(text, text, newbot);
+void add_styled_text(const char *text, nhstr *newbot) {
+	add_styled_text_match(text, text, newbot);
 }
 
 static int mrank_sz = 0; /* loaded by max_rank_sz (from u_init) */
@@ -229,8 +228,9 @@ nhstr bot1str() {
 			filledbar = uhp() * bar_length / uhpmax();
 		}
 
-		// TODO: use_inverse (once attrs are a thing)
-		nhscatznc(ret, pltitle, filledbar, percentage_color_of(uhp(), uhpmax(), hp_colors).color);
+		nhstyle s = percentage_style_of(uhp(), uhpmax(), hp_colors);
+		if (iflags.use_inverse) s.attr |= ATR_INVERSE;
+		nhscatznc(ret, pltitle, filledbar, s);
 		nhscatz(ret, pltitle + filledbar);
 
 		nhscatz(ret, "]");
@@ -318,8 +318,10 @@ nhstr bot2str(void) {
 	if (bot2_abbrev < 1)
 		nhscatf(ret, " %c:%l", oc_syms[COIN_CLASS], money_cnt(invent));
 
-	nhscatfc(ret, percentage_color_of(hp, hpmax, hp_colors).color, " HP:%i(%i)", hp, hpmax);
-	nhscatfc(ret, percentage_color_of(u.uen, u.uenmax, pw_colors).color, " Pw:%i(%i)", u.uen, u.uenmax);
+	nhscatz(ret, " ");
+	nhscatfc(ret, percentage_style_of(hp, hpmax, hp_colors), "HP:%i(%i)", hp, hpmax);
+	nhscatz(ret, " ");
+	nhscatfc(ret, percentage_style_of(u.uen, u.uenmax, pw_colors), "Pw:%i(%i)", u.uen, u.uenmax);
 	nhscatf(ret, " AC:%i", u.uac);
 
 	if (Upolyd) {
@@ -345,7 +347,7 @@ nhstr bot2str(void) {
 	nhscatz(ret, " ");
 
 	if (hu_stat[u.uhs][0]) {
-		add_colored_text_match((bot2_abbrev >= 2) ? hu_abbrev_stat[u.uhs] : hu_stat[u.uhs], hu_stat[u.uhs], ret);
+		add_styled_text_match((bot2_abbrev >= 2) ? hu_abbrev_stat[u.uhs] : hu_stat[u.uhs], hu_stat[u.uhs], ret);
 	}
 
 	/* WAC further Up
@@ -355,31 +357,31 @@ nhstr bot2str(void) {
 	*/
 	/* KMH -- changed to Lev */
 
-	if (Levitation) add_colored_text("Lev", ret);
+	if (Levitation) add_styled_text("Lev", ret);
 
-	if (Confusion) add_colored_text_match(bot2_abbrev >= 2 ? "Cnf" : "Conf", "Conf", ret);
+	if (Confusion) add_styled_text_match(bot2_abbrev >= 2 ? "Cnf" : "Conf", "Conf", ret);
 
 	if (Sick) {
 		if (u.usick_type & SICK_VOMITABLE)
-			add_colored_text_match(bot2_abbrev >= 2 ? "FPs" : "FoodPois", "FoodPois", ret);
+			add_styled_text_match(bot2_abbrev >= 2 ? "FPs" : "FoodPois", "FoodPois", ret);
 		if (u.usick_type & SICK_NONVOMITABLE)
-			add_colored_text("Ill", ret);
+			add_styled_text("Ill", ret);
 	}
 
 	if (Blind)
-		add_colored_text_match(bot2_abbrev >= 2 ? "Bnd" : "Blind", "Blind", ret);
+		add_styled_text_match(bot2_abbrev >= 2 ? "Bnd" : "Blind", "Blind", ret);
 	if (Deaf)
-		add_colored_text("Deaf", ret);
+		add_styled_text("Deaf", ret);
 	if (Stunned)
-		add_colored_text_match(bot2_abbrev >= 2 ? "Stn" : "Stun", "Stun", ret);
+		add_styled_text_match(bot2_abbrev >= 2 ? "Stn" : "Stun", "Stun", ret);
 	if (Hallucination)
-		add_colored_text_match(bot2_abbrev >= 2 ? "Hal" : "Hallu", "Hallu", ret);
+		add_styled_text_match(bot2_abbrev >= 2 ? "Hal" : "Hallu", "Hallu", ret);
 	if (Slimed)
-		add_colored_text_match(bot2_abbrev >= 2 ? "Slm" : "Slime", "Slime", ret);
+		add_styled_text_match(bot2_abbrev >= 2 ? "Slm" : "Slime", "Slime", ret);
 	if (u.ustuck && !u.uswallow && !sticks(youmonst.data))
-		add_colored_text("Held", ret);
+		add_styled_text("Held", ret);
 	if (cap > UNENCUMBERED)
-		add_colored_text_match(bot2_abbrev >= 2 ? enc_abbrev_stat[cap] : enc_stat[cap], enc_stat[cap], ret);
+		add_styled_text_match(bot2_abbrev >= 2 ? enc_abbrev_stat[cap] : enc_stat[cap], enc_stat[cap], ret);
 
 	return dret;
 }

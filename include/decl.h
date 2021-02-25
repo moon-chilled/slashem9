@@ -5,6 +5,7 @@
 #ifndef DECL_H
 #define DECL_H
 
+#include "color.h"
 #include "nhstr.h"
 
 extern int (*occupation)(void);
@@ -347,7 +348,6 @@ extern boolean vision_full_recalc; /* true if need vision recalc */
 extern char **viz_array;	   /* could see/in sight row pointers */
 
 /*** Window system stuff ***/
-#include "color.h"
 extern const int zapcolors[];
 
 extern const glyph_t def_oc_syms[MAXOCLASSES]; /* default class symbols */

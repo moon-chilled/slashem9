@@ -488,6 +488,15 @@ attr_t curses_convert_attr(int attr) {
 	}
 }
 
+attr_t curses_convert_attrs(int attr) {
+	attr_t ret = A_NORMAL;
+	if (attr & ATR_BOLD) ret |= A_BOLD;
+	if (attr & ATR_ULINE) ret |= A_UNDERLINE;
+	if (attr & ATR_BLINK) ret |= A_BLINK;
+	if (attr & ATR_INVERSE) ret |= A_REVERSE;
+	return ret;
+}
+
 /* Map letter attributes from a string to bitmask.  Return mask on
 success, or 0 if not found */
 

@@ -695,7 +695,6 @@ const struct name_value status_colornames[] = {
 const struct name_value status_attrnames[] = {
 	{"none", ATR_NONE},
 	{"bold", ATR_BOLD},
-	{"dim", ATR_DIM},
 	{"underline", ATR_ULINE},
 	{"blink", ATR_BLINK},
 	{"inverse", ATR_INVERSE},
@@ -707,8 +706,8 @@ int value_of_name(const char *name, const struct name_value *name_values) {
 	return name_values->value;
 }
 
-struct color_option parse_color_option(char *start) {
-	struct color_option result = {NO_COLOR, 0};
+nhstyle parse_style_option(char *start) {
+	nhstyle ret = {NO_COLOR, NO_COLOR};
 	char last;
 	char *end;
 	int attr;
@@ -717,7 +716,7 @@ struct color_option parse_color_option(char *start) {
 		;
 	last = *end;
 	*end = '\0';
-	result.color = value_of_name(start, status_colornames);
+	ret.fg = value_of_name(start, status_colornames);
 
 	while (last == '&') {
 		for (start = ++end; *end != '&' && *end != '\0'; ++end)
@@ -725,11 +724,10 @@ struct color_option parse_color_option(char *start) {
 		last = *end;
 		*end = '\0';
 		attr = value_of_name(start, status_attrnames);
-		if (attr >= 0)
-			result.attr_bits |= 1 << attr;
+		if (attr >= 0) ret.attr |= attr;
 	}
 
-	return result;
+	return ret;
 }
 
 struct percent_color_option *hp_colors = NULL;
@@ -760,9 +758,9 @@ boolean parse_status_color_option(char *start) {
 			alloc(sizeof(*percent_color_option));
 		percent_color_option->next = NULL;
 		percent_color_option->percentage = atoi(start + 3);
-		percent_color_option->color_option = parse_color_option(middle);
+		percent_color_option->style = parse_style_option(middle);
 		start[2] = '\0';
-		if (percent_color_option->color_option.color >= 0 && percent_color_option->color_option.attr_bits >= 0) {
+		if (percent_color_option->style.fg >= 0 && percent_color_option->style.attr >= 0) {
 			if (!strcmpi(start, "hp")) {
 				hp_colors = add_percent_option(percent_color_option, hp_colors);
 				return true;
@@ -781,8 +779,8 @@ boolean parse_status_color_option(char *start) {
 		text_color_option->next = NULL;
 		text_color_option->text = alloc(length);
 		memcpy((char *)text_color_option->text, start, length);
-		text_color_option->color_option = parse_color_option(middle);
-		if (text_color_option->color_option.color >= 0 && text_color_option->color_option.attr_bits >= 0) {
+		text_color_option->style = parse_style_option(middle);
+		if (text_color_option->style.fg >= 0 && text_color_option->style.attr >= 0) {
 			text_color_option->next = text_colors;
 			text_colors = text_color_option;
 			return true;
@@ -901,11 +899,9 @@ static const struct {
 } attrnames[] = {
 	{"none", ATR_NONE},
 	{"bold", ATR_BOLD},
-	{"dim", ATR_DIM},
 	{"underline", ATR_ULINE},
 	{"blink", ATR_BLINK},
 	{"inverse", ATR_INVERSE}
-
 };
 
 /* parse '"regex_string"=color' and add it to menucoloring */

@@ -627,6 +627,13 @@ static char *e_atr2str(int n) {
 	return nulstr;
 }
 
+void term_start_attrs(int attr) {
+	if (attr & ATR_BLINK) term_start_attr(ATR_BLINK);
+	if (attr & ATR_ULINE) term_start_attr(ATR_ULINE);
+	if (attr & ATR_BLINK) term_start_attr(ATR_BLINK);
+	if (attr & ATR_INVERSE) term_start_attr(ATR_INVERSE);
+}
+
 void term_start_attr(int attr) {
 	if (attr) {
 		xputs(s_atr2str(attr));

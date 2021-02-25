@@ -7,34 +7,34 @@
 
 void del_nhs(nhstr *str) {
 	free(str->str);
-	free(str->colouration);
+	free(str->style);
 
 	str->str = NULL;
-	str->colouration = NULL;
+	str->style = NULL;
 	str->len = 0;
 }
 
-nhstr *nhscatznc(nhstr *str, const char *cat, usize catlen, int colour) {
+nhstr *nhscatznc(nhstr *str, const char *cat, usize catlen, nhstyle style) {
 	str->str = realloc(str->str, (str->len + catlen) * sizeof(glyph_t));
 	for (usize i = str->len; i < str->len + catlen; i++) {
 		str->str[i] = cat[i - str->len];
 	}
 
-	str->colouration = realloc(str->colouration, (str->len + catlen) * sizeof(int));
+	str->style = realloc(str->style, (str->len + catlen) * sizeof(nhstyle));
 	for (usize i = str->len; i < str->len + catlen; i++) {
-		str->colouration[i] = colour;
+		str->style[i] = style;
 	}
 
 	str->len += catlen;
 	return str;
 }
 
-nhstr *nhscatzc(nhstr *str, const char *cat, int colour) {
-	return nhscatznc(str, cat, cat ? strlen(cat) : 0, colour);
+nhstr *nhscatzc(nhstr *str, const char *cat, nhstyle style) {
+	return nhscatznc(str, cat, cat ? strlen(cat) : 0, style);
 }
 
 nhstr *nhscatzn(nhstr *str, const char *cat, usize catlen) {
-	return nhscatznc(str, cat, catlen, NO_COLOR);
+	return nhscatznc(str, cat, catlen, nhstyle_default());
 }
 
 nhstr *nhscatz(nhstr *str, const char *cat) {
@@ -46,8 +46,8 @@ nhstr nhsdup(const nhstr str) {
 	ret.str = new(glyph_t, str.len);
 	memcpy(ret.str, str.str, str.len * sizeof(glyph_t));
 
-	ret.colouration = new(int, str.len);
-	memcpy(ret.colouration, str.colouration, str.len * sizeof(int));
+	ret.style = new(nhstyle, str.len);
+	memcpy(ret.style, str.style, str.len * sizeof(nhstyle));
 	ret.len = str.len;
 
 	return ret;
@@ -61,8 +61,8 @@ nhstr nhsdupz(const char *str) {
 nhstr *nhscat(nhstr *str, const nhstr cat) {
 	str->str = realloc(str->str, (str->len + cat.len) * sizeof(glyph_t));
 	memmove(str->str + str->len, cat.str, cat.len * sizeof(glyph_t));
-	str->colouration = realloc(str->colouration, (str->len + cat.len) * sizeof(int));
-	memmove(str->colouration + str->len, cat.colouration, cat.len * sizeof(int));
+	str->style = realloc(str->style, (str->len + cat.len) * sizeof(nhstyle));
+	memmove(str->style + str->len, cat.style, cat.len * sizeof(nhstyle));
 
 	str->len += cat.len;
 	return str;
@@ -80,7 +80,7 @@ nhstr *nhscat(nhstr *str, const nhstr cat) {
 // Modifiers:
 // %/X: same as %X, but destroy the object once you're done.
 //	Only implemented for nhstr (via del_nhs) and char* (via free)
-nhstr *nhscatfc_v(nhstr *str, int colour, const char *cat, va_list the_args) {
+nhstr *nhscatfc_v(nhstr *str, nhstyle style, const char *cat, va_list the_args) {
 	for (usize i = 0; cat[i]; i++) {
 		if (cat[i] == '%') {
 			i++;
@@ -112,12 +112,12 @@ nhstr *nhscatfc_v(nhstr *str, int colour, const char *cat, va_list the_args) {
 				}
 				case 'S': {
 					char *s = va_arg(the_args, char*);
-					nhscatzc(str, s, colour);
+					nhscatzc(str, s, style);
 					if (should_destroy) free(s);
 					break;
 				}
 				case 'c':
-					nhscatzc(str, utf8_tmpstr(va_arg(the_args, glyph_t)), colour);
+					nhscatzc(str, utf8_tmpstr(va_arg(the_args, glyph_t)), style);
 					break;
 				case 'l': {
 					static char buf[BUFSZ];
@@ -128,7 +128,7 @@ nhstr *nhscatfc_v(nhstr *str, int colour, const char *cat, va_list the_args) {
 						sprintf(buf, "%ld", va_arg(the_args, long));
 					}
 
-					nhscatzc(str, buf, colour);
+					nhscatzc(str, buf, style);
 					break;
 				}
 				case 'i': {
@@ -140,7 +140,7 @@ nhstr *nhscatfc_v(nhstr *str, int colour, const char *cat, va_list the_args) {
 						sprintf(buf, "%i", va_arg(the_args, int));
 					}
 
-					nhscatzc(str, buf, colour);
+					nhscatzc(str, buf, style);
 					break;
 				}
 				case 'u': {
@@ -152,29 +152,29 @@ nhstr *nhscatfc_v(nhstr *str, int colour, const char *cat, va_list the_args) {
 						sprintf(buf, "%u", va_arg(the_args, uint));
 					}
 
-					nhscatzc(str, buf, colour);
+					nhscatzc(str, buf, style);
 					break;
 				}
 				case '%':
-					nhscatzc(str, "%", colour);
+					nhscatzc(str, "%", style);
 					break;
 				// bad format
 				default:
 					impossible("bad string format '%c'", cat[i]);
-					nhscatzc(str, "%", colour);
-					nhscatznc(str, cat + i, 1, colour);
+					nhscatzc(str, "%", style);
+					nhscatznc(str, cat + i, 1, style);
 			}
 		} else {
-			nhscatznc(str, cat + i, 1, colour);
+			nhscatznc(str, cat + i, 1, style);
 		}
 	}
 
 	return str;
 }
 
-nhstr *nhscatfc(nhstr *str, int colour, const char *cat, ...) {
+nhstr *nhscatfc(nhstr *str, nhstyle style, const char *cat, ...) {
 	VA_START(cat);
-	nhstr *ret = nhscatfc_v(str, colour, cat, VA_ARGS);
+	nhstr *ret = nhscatfc_v(str, style, cat, VA_ARGS);
 	VA_END();
 
 	return ret;
@@ -182,7 +182,7 @@ nhstr *nhscatfc(nhstr *str, int colour, const char *cat, ...) {
 
 nhstr *nhscatf(nhstr *str, const char *cat, ...) {
 	VA_START(cat);
-	nhstr *ret = nhscatfc_v(str, NO_COLOR, cat, VA_ARGS);
+	nhstr *ret = nhscatfc_v(str, nhstyle_default(), cat, VA_ARGS);
 	VA_END();
 
 	return ret;
@@ -197,9 +197,9 @@ nhstr *nhsmove(nhstr *target, nhstr *src) {
 	target->str = src->str;
 	src->str = NULL;
 
-	free(target->colouration);
-	target->colouration = src->colouration;
-	src->colouration = NULL;
+	free(target->style);
+	target->style = src->style;
+	src->style = NULL;
 
 	target->len = src->len;
 	src->len = 0;
@@ -210,7 +210,7 @@ nhstr *nhsmove(nhstr *target, nhstr *src) {
 nhstr *nhscopyf(nhstr *target, const char *fmt, ...) {
 	nhstr tmp = {0};
 	VA_START(fmt);
-	nhsmove(target, nhscatfc_v(&tmp, NO_COLOR, fmt, VA_ARGS));
+	nhsmove(target, nhscatfc_v(&tmp, nhstyle_default(), fmt, VA_ARGS));
 	VA_END();
 	return target;
 }
@@ -228,7 +228,7 @@ nhstr *nhsreplace(nhstr *str, const nhstr replacement) {
 nhstr nhsfmt(const char *fmt, ...) {
 	nhstr tmp = {0};
 	VA_START(fmt);
-	nhscatfc_v(&tmp, NO_COLOR, fmt, VA_ARGS);
+	nhscatfc_v(&tmp, nhstyle_default(), fmt, VA_ARGS);
 	VA_END();
 	return tmp;
 }
@@ -298,7 +298,7 @@ nhstr *nhstrim(nhstr *str, usize maxlen) {
 	if (maxlen < str->len) {
 		str->len = maxlen;
 		str->str = realloc(str->str, str->len * sizeof(glyph_t));
-		str->colouration = realloc(str->str, str->len * sizeof(int));
+		str->style = realloc(str->str, str->len * sizeof(nhstyle));
 	}
 
 	return str;
@@ -309,8 +309,8 @@ nhstr *nhslice(nhstr *str, usize new_start) {
 		memmove(str->str, (str->str + new_start), (str->len - new_start) * sizeof(glyph_t));
 		str->str = realloc(str->str, (str->len - new_start) * sizeof(glyph_t));
 
-		memmove(str->colouration, (str->colouration + new_start), (str->len - new_start) * sizeof(int));
-		str->colouration = realloc(str->colouration, (str->len - new_start) * sizeof(int));
+		memmove(str->style, str->style + new_start, (str->len - new_start) * sizeof(nhstyle));
+		str->style = realloc(str->style, (str->len - new_start) * sizeof(nhstyle));
 
 		str->len -= new_start;
 	}
@@ -334,7 +334,7 @@ void save_nhs(int fd, const nhstr str) {
 
 	if (len) {
 		bwrite(fd, str.str, str.len * sizeof(glyph_t));
-		bwrite(fd, str.colouration, str.len * sizeof(int));
+		bwrite(fd, str.style, str.len * sizeof(nhstyle));
 	}
 }
 
@@ -345,11 +345,11 @@ nhstr restore_nhs(int fd) {
 
 	// note: intentional alloc(0)
 	ret.str = new(glyph_t, ret.len);
-	ret.colouration = new(int, ret.len);
+	ret.style = new(nhstyle, ret.len);
 
 	if (ret.len) {
 		mread(fd, ret.str, ret.len * sizeof(glyph_t));
-		mread(fd, ret.colouration, ret.len * sizeof(int));
+		mread(fd, ret.style, ret.len * sizeof(nhstyle));
 	}
 
 	return ret;

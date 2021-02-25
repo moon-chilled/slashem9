@@ -21,6 +21,7 @@ void curses_view_file(const char *filename, bool must_exist);
 void curses_rtrim(char *str);
 int curses_get_count(int first_digit);
 attr_t curses_convert_attr(int attr);
+attr_t curses_convert_attrs(int attrs);
 int curses_read_attrs(char *attrs);
 int curses_convert_keys(int key);
 int curses_get_mouse(int *mousex, int *mousey, int *mod);

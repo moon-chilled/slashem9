@@ -28,10 +28,8 @@ static void curses_add_status(WINDOW *, bool, bool, int *, int *, const char *, 
 static int decrement_highlight(nhstat *, bool);
 
 static attr_t hpen_color_attr(bool, int, int);
-extern struct color_option text_color_of(const char *text,
-					 const struct text_color_option *color_options);
-struct color_option percentage_color_of(int value, int max,
-					const struct percent_color_option *color_options);
+nhstyle text_style_of(const char *text, const struct text_color_option *color_options);
+nhstyle percentage_style_of(int value, int max, const struct percent_color_option *color_options);
 
 extern const struct text_color_option *text_colors;
 extern const struct percent_color_option *hp_colors;
@@ -96,22 +94,17 @@ get_trouble_color(const char *stat) {
 			if (!iflags.use_status_colors)
 				return curses_color_attr(CLR_GRAY, 0); /* no color configured */
 
-			struct color_option stat_color;
+			nhstyle stat_style;
 
-			stat_color = text_color_of(clr->txt, text_colors);
-			if (stat_color.color == NO_COLOR && !stat_color.attr_bits)
+			stat_style = text_style_of(clr->txt, text_colors);
+			if (stat_style.fg == NO_COLOR && !stat_style.attr)
 				return curses_color_attr(CLR_GRAY, 0);
 
-			if (stat_color.color != NO_COLOR)
-				res = curses_color_attr(stat_color.color, 0);
+			if (stat_style.fg != NO_COLOR)
+				res = curses_color_attr(stat_style.fg, 0);
 
-			res = curses_color_attr(stat_color.color, 0);
-			int count;
-			for (count = 0; (1 << count) <= stat_color.attr_bits; count++) {
-				if (count != ATR_NONE &&
-				    (stat_color.attr_bits & (1 << count)))
-					res |= curses_convert_attr(count);
-			}
+			res = curses_color_attr(stat_style.fg, 0);
+			res |= curses_convert_attrs(stat_style.attr);
 
 			return res;
 		}
@@ -279,23 +272,18 @@ attr_t curses_color_attr(int nh_color, int bg_color) {
 }
 
 /* Returns a complete curses attribute. Used to possibly bold/underline/etc HP/Pw. */
-static attr_t
-hpen_color_attr(bool is_hp, int cur, int max) {
-	struct color_option stat_color;
-	int count;
+static attr_t hpen_color_attr(bool is_hp, int cur, int max) {
+	nhstyle stat_style;
 	attr_t attr = 0;
 	if (!iflags.use_status_colors)
 		return curses_color_attr(CLR_GRAY, 0);
 
-	stat_color = percentage_color_of(cur, max, is_hp ? hp_colors : pw_colors);
+	stat_style = percentage_style_of(cur, max, is_hp ? hp_colors : pw_colors);
 
-	if (stat_color.color != NO_COLOR)
-		attr |= curses_color_attr(stat_color.color, 0);
+	if (stat_style.fg != NO_COLOR)
+		attr |= curses_color_attr(stat_style.fg, 0);
 
-	for (count = 0; (1 << count) <= stat_color.attr_bits; count++) {
-		if (count != ATR_NONE && (stat_color.attr_bits & (1 << count)))
-			attr |= curses_convert_attr(count);
-	}
+	attr |= curses_convert_attrs(stat_style.attr);
 
 	return attr;
 }
@@ -305,16 +293,14 @@ hpen_color_attr(bool is_hp, int cur, int max) {
    only obeys the color (no weird attributes for the HP bar).
    With status colors OFF, this returns reasonable defaults which are also used
    for the HP/Pw text itself. */
-static int
-hpen_color(bool is_hp, int cur, int max) {
+static int hpen_color(bool is_hp, int cur, int max) {
 	if (iflags.use_status_colors) {
-		struct color_option stat_color;
-		stat_color = percentage_color_of(cur, max, is_hp ? hp_colors : pw_colors);
+		nhstyle stat_style = percentage_style_of(cur, max, is_hp ? hp_colors : pw_colors);
 
-		if (stat_color.color == NO_COLOR)
+		if (stat_style.fg == NO_COLOR)
 			return CLR_GRAY;
 		else
-			return stat_color.color;
+			return stat_style.fg;
 	} else
 		return CLR_GRAY;
 
@@ -338,8 +324,7 @@ hpen_color(bool is_hp, int cur, int max) {
    cur/max: Current/max HP/Pw
    title: Not NULL if we are drawing as part of an existing title.
    Otherwise, the format is as follows: [   11 / 11   ] */
-static void
-draw_bar(bool is_hp, int cur, int max, const char *title) {
+static void draw_bar(bool is_hp, int cur, int max, const char *title) {
 	WINDOW *win = curses_get_nhwin(STATUS_WIN);
 
 	if (!iflags.hitpointbar) {

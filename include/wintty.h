@@ -23,26 +23,26 @@ typedef struct tty_mi {
 
 /* descriptor for tty-based windows */
 struct WinDesc {
-	int flags;	      /* window flags */
-	xchar type;	      /* type of window */
-	boolean active;	      /* true if window is active */
-	uchar offx, offy;     /* offset from topleft of display */
-	short rows, cols;     /* dimensions */
-	short curx, cury;     /* current cursor position */
-	short maxrow, maxcol; /* the maximum size used -- for MENU wins */
+	int flags;		/* window flags */
+	xchar type;		/* type of window */
+	boolean active;		/* true if window is active */
+	uchar offx, offy;	/* offset from topleft of display */
+	short rows, cols;	/* dimensions */
+	short curx, cury;	/* current cursor position */
+	short maxrow, maxcol;	/* the maximum size used -- for MENU wins */
 	/* maxcol is also used by WIN_MESSAGE for */
 	/* tracking the ^P command */
-	short *datlen;	       /* allocation size for *data */
-	char **data;	       /* window data [row][column] */
-	int **clr_data;	       // colour data (same)
-	char *morestr;	       /* string to display instead of default */
-	tty_menu_item *mlist;  /* menu information (MENU) */
-	tty_menu_item **plist; /* menu page pointers (MENU) */
-	short plist_size;      /* size of allocated plist (MENU) */
-	short npages;	       /* number of pages in menu (MENU) */
-	short nitems;	       /* total number of items (MENU) */
-	short how;	       /* menu mode - pick 1 or N (MENU) */
-	char menu_ch;	       /* menu char (MENU) */
+	short *datlen;		/* allocation size for *data */
+	char **data;		/* window data [row][column] */
+	nhstyle **style_data;	/* colour data (same) */
+	char *morestr;		/* string to display instead of default */
+	tty_menu_item *mlist;	/* menu information (MENU) */
+	tty_menu_item **plist;	/* menu page pointers (MENU) */
+	short plist_size;	/* size of allocated plist (MENU) */
+	short npages;		/* number of pages in menu (MENU) */
+	short nitems;		/* total number of items (MENU) */
+	short how;		/* menu mode - pick 1 or N (MENU) */
+	char menu_ch;		/* menu char (MENU) */
 };
 
 /* window flags */
@@ -120,6 +120,7 @@ extern void cl_eos(void);
  * a color or whatever.  wintty.c should concern itself with WHERE to put
  * stuff in a window.
  */
+extern void term_start_attrs(int attr);
 extern void term_start_attr(int attr);
 extern void term_end_attr(int attr);
 extern void term_start_raw_bold(void);
