@@ -1037,11 +1037,18 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 		strncpy(plname, bufp, PL_NSIZ - 1);
 		plnamesuffix();
 	} else if (match_varname(buf, "MSGTYPE", 7)) {
+		char msgtype[256];
 		char pattern[256];
-		char msgtype[11];
-		if (sscanf(bufp, "%10s \"%255[^\"]\"", msgtype, pattern) == 2) {
+		if (sscanf(bufp, "%255s \"%255[^\"]\"", msgtype, pattern) == 2) {
 			int typ = MSGTYP_NORMAL;
-			if (!strcasecmp("norep", msgtype))
+			nhstyle style = nhstyle_default();
+			char *p = index(msgtype, '&');
+			if (p) {
+				*p = 0;
+				read_style(p+1, &style);
+			}
+			if (!strcasecmp("normal", msgtype)) ;
+			else if (!strcasecmp("norep", msgtype))
 				typ = MSGTYP_NOREP;
 			else if (!strcasecmp("hide", msgtype))
 				typ = MSGTYP_NOSHOW;
@@ -1051,8 +1058,8 @@ int parse_config_line(FILE *fp, char *buf, char *tmp_ramdisk, char *tmp_levels) 
 				typ = MSGTYP_STOP;
 			else if (!strcasecmp("stop", msgtype))
 				typ = MSGTYP_STOP;
-			if (typ != MSGTYP_NORMAL) {
-				msgpline_add(typ, pattern);
+			if (typ != MSGTYP_NORMAL || !nhstyle_eq(style, nhstyle_default())) {
+				msgpline_add(pattern, typ, style);
 			}
 		}
 	} else if (match_varname(buf, "ROLE", 4) ||

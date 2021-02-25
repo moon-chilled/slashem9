@@ -18,7 +18,7 @@ void dumplogfreemsgs(void) {
 
 static bool no_repeat = false;
 
-void msgpline_add(int typ, char *pattern) {
+void msgpline_add(const char *pattern, int typ, nhstyle style) {
 	regex_t regex;
 	int errnum = tre_regcomp(&regex, pattern, REG_EXTENDED | REG_NOSUB);
 	if (errnum != 0) {
@@ -32,18 +32,22 @@ void msgpline_add(int typ, char *pattern) {
 	if (!tmp) return;
 
 	tmp->msgtype = typ;
+	tmp->style = style;
 	tmp->pattern = regex;
 	tmp->next = pline_msg;
 	pline_msg = tmp;
 }
 
-static int msgpline_type(const char *msg) {
-	struct _plinemsg *tmp = pline_msg;
-	while (tmp) {
-		if (tre_regexec(&tmp->pattern, msg, 0, NULL, 0) == 0) return tmp->msgtype;
-		tmp = tmp->next;
+// returns true if match
+static bool msgpline_type(const char *msg, int *type, nhstyle *style) {
+	for (struct _plinemsg *tmp = pline_msg; tmp; tmp = tmp->next) {
+		if (tre_regexec(&tmp->pattern, msg, 0, NULL, 0) == 0) {
+			*type = tmp->msgtype;
+			*style = tmp->style;
+			return true;
+		}
 	}
-	return MSGTYP_NORMAL;
+	return false;
 }
 
 static void npline(nhstr line) {
@@ -63,15 +67,27 @@ static void npline(nhstr line) {
 	if (u.ux) flush_screen(1); /* %% */
 
 	//todo make tre work on widechars (not as simple as #define wchar_t glyph_t; it uses wmemcmp and maybe also other annoying things), to avoid this copy
-	int typ = msgpline_type(nhs2cstr(line));
+	int typ;
+	nhstyle style;
+	bool msgtyped = msgpline_type(nhs2cstr(line), &typ, &style);
 
-	if (typ == MSGTYP_NOSHOW) return;
+	if (msgtyped && !nhstyle_eq(style, nhstyle_default())) {
+		nhstyle *n = memcpy(new(nhstyle, line.len), line.style, line.len * sizeof(nhstyle));
+		for (usize i = 0; i < line.len; i++) {
+			if (n[i].fg == NO_COLOR) n[i].fg = style.fg;
+			if (n[i].bg == NO_COLOR) n[i].bg = style.bg;
+			if (!n[i].attr) n[i].attr = style.attr;
+		}
+		line.style = n;
+	}
 
-	if (typ == MSGTYP_NOREP && !nhseq(line, saved_plines[(saved_pline_index ? saved_pline_index : DUMPLOG_MSG_COUNT) - 1])) return;
+	if (msgtyped && typ == MSGTYP_NOSHOW) return;
+
+	if (msgtyped && typ == MSGTYP_NOREP && !nhseq(line, saved_plines[(saved_pline_index ? saved_pline_index : DUMPLOG_MSG_COUNT) - 1])) return;
 	putnstr(WIN_MESSAGE, 0, line);
-	if (typ == MSGTYP_STOP) display_nhwindow(WIN_MESSAGE, true); /* --more-- */
+	if (msgtyped && typ == MSGTYP_STOP) display_nhwindow(WIN_MESSAGE, true); /* --more-- */
 
-	if (typ != MSGTYP_NOSHOW) {
+	if (msgtyped && typ != MSGTYP_NOSHOW) {
 		dumplogmsg(line);
 	}
 

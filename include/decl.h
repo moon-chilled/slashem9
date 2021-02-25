@@ -466,6 +466,7 @@ extern struct realtime_data {
 
 struct _plinemsg {
 	xchar msgtype;
+	nhstyle style;
 	regex_t pattern;
 	struct _plinemsg *next;
 };

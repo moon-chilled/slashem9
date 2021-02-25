@@ -695,9 +695,10 @@ const struct name_value status_colornames[] = {
 const struct name_value status_attrnames[] = {
 	{"none", ATR_NONE},
 	{"bold", ATR_BOLD},
-	{"underline", ATR_UNDERLINE},
 	{"blink", ATR_BLINK},
+	{"italic", ATR_ITALIC},
 	{"inverse", ATR_INVERSE},
+	{"underline", ATR_UNDERLINE},
 	{NULL, -1}};
 
 int value_of_name(const char *name, const struct name_value *name_values) {
@@ -899,65 +900,75 @@ static const struct {
 } attrnames[] = {
 	{"none", ATR_NONE},
 	{"bold", ATR_BOLD},
-	{"underline", ATR_UNDERLINE},
 	{"blink", ATR_BLINK},
-	{"inverse", ATR_INVERSE}
+	{"italic", ATR_ITALIC},
+	{"inverse", ATR_INVERSE},
+	{"underline", ATR_UNDERLINE},
 };
 
-/* parse '"regex_string"=color' and add it to menucoloring */
-boolean add_menu_coloring(char *str) {
-	int i, c = NO_COLOR, a = ATR_NONE;
-	struct menucoloring *tmp;
-	char *tmps, *cs = strchr(str, '=');
-	const char *err = NULL;
-	int errnum;
-	char errbuf[80];
+bool read_style(const char *str, nhstyle *style) {
+	int i;
+	int c = NO_COLOR, a = ATR_NONE;
 
-	if (!cs || !str) return false;
-
-	tmps = cs;
-	tmps++;
-	while (*tmps && isspace(*tmps))
-		tmps++;
+	while (*str && isspace(*str))
+		str++;
 
 	for (i = 0; i < SIZE(colornames); i++)
-		if (strstri(tmps, colornames[i].name) == tmps) {
+		if (strstri(str, colornames[i].name) == str) {
 			c = colornames[i].color;
 			break;
 		}
-	if ((i == SIZE(colornames)) && (*tmps >= '0' && *tmps <= '9'))
-		c = atoi(tmps);
+	if ((i == SIZE(colornames)) && (*str >= '0' && *str <= '9'))
+		c = atoi(str);
 
 	if (c > 15) return false;
 
-	tmps = strchr(str, '&');
-	if (tmps) {
-		tmps++;
-		while (*tmps && isspace(*tmps))
-			tmps++;
+	str = strchr(str, '&');
+	if (str) {
+		str++;
+		while (*str && isspace(*str))
+			str++;
 		for (i = 0; i < SIZE(attrnames); i++)
-			if (strstri(tmps, attrnames[i].name) == tmps) {
+			if (strstri(str, attrnames[i].name) == str) {
 				a = attrnames[i].attr;
 				break;
 			}
-		if ((i == SIZE(attrnames)) && (*tmps >= '0' && *tmps <= '9'))
-			a = atoi(tmps);
+		if ((i == SIZE(attrnames)) && (*str >= '0' && *str <= '9'))
+			a = atoi(str);
 	}
 
+	style->fg = c;
+	style->attr = a;
+	return true;
+}
+
+/* parse '"regex_string"=color' and add it to menucoloring */
+bool add_menu_coloring(char *str) {
+	struct menucoloring *tmp;
+	char *cs = strchr(str, '=');
+	const char *err = NULL;
+	int errnum;
+	char errbuf[80];
+	nhstyle style;
+
+	if (!cs || !str) return false;
+
+	if (!read_style(cs+1, &style)) return false;
 	*cs = '\0';
-	tmps = str;
-	if ((*tmps == '"') || (*tmps == '\'')) {
+
+
+	if ((*str == '"') || (*str == '\'')) {
 		cs--;
 		while (isspace(*cs))
 			cs--;
-		if (*cs == *tmps) {
+		if (*cs == *str) {
 			*cs = '\0';
-			tmps++;
+			str++;
 		}
 	}
 
 	tmp = alloc(sizeof(struct menucoloring));
-	errnum = tre_regcomp(&tmp->match, tmps, REG_EXTENDED | REG_NOSUB);
+	errnum = tre_regcomp(&tmp->match, str, REG_EXTENDED | REG_NOSUB);
 	if (errnum != 0) {
 		tre_regerror(errnum, &tmp->match, errbuf, sizeof(errbuf));
 		err = errbuf;
@@ -969,8 +980,8 @@ boolean add_menu_coloring(char *str) {
 		return false;
 	} else {
 		tmp->next = menu_colorings;
-		tmp->color = c;
-		tmp->attr = a;
+		tmp->color = style.fg;
+		tmp->attr = style.attr;
 		menu_colorings = tmp;
 		return true;
 	}

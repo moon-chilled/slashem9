@@ -1391,7 +1391,8 @@ void set_duplicate_opt_detection(int);
 void set_wc_option_mod_status(unsigned long, int);
 void set_wc2_option_mod_status(unsigned long, int);
 void set_option_mod_status(const char *, int);
-boolean add_menu_coloring(char *);
+bool read_style(const char*, nhstyle*);
+bool add_menu_coloring(char *);
 int add_autopickup_exception(const char *);
 void free_autopickup_exceptions(void);
 
@@ -1476,7 +1477,7 @@ int dotip(void);
 #define Noreps(str)	Norep("%s", (str))
 #define verbalizes(str) verbalize("%s", (str))
 #define You_hear(str)	You_hearf("%s", (str))
-void msgpline_add(int typ, char *pattern);
+void msgpline_add(const char *pattern, int typ, nhstyle style);
 void pline(const char *line, ...) PRINTF_F(1, 2);
 void spline(const char *line, ...); //uses nhsfmt-style formatting
 void Norep(const char *line, ...) PRINTF_F(1, 2);
