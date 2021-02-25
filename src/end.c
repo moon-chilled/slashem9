@@ -3,6 +3,7 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "decl.h"
 #ifndef NO_SIGNAL
 #include <signal.h>
 #endif
@@ -1222,20 +1223,16 @@ static void list_genocided(char defquery, boolean ask) {
 	}
 }
 static void dump_plines(void) {
-	int i, j;
-	char buf[BUFSZ], **strp;
-	extern char *saved_plines[];
-	extern unsigned saved_pline_index;
+	char buf[BUFSZ];
 
 	strcpy(buf, " "); /* one space for indentation */
 	putstr(0, 0, "Latest messages:");
-	for (i = 0, j = (int)saved_pline_index; i < DUMPLOG_MSG_COUNT;
+	for (int i = 0, j = (int)saved_pline_index; i < DUMPLOG_MSG_COUNT;
 	     ++i, j = (j + 1) % DUMPLOG_MSG_COUNT) {
-		strp = &saved_plines[j];
-		if (*strp) {
-			strncpy(&buf[1], *strp, BUFSZ - 1 - 1);
+		nhstr s = saved_plines[j];
+		if (s.len) {
+			strncpy(&buf[1], nhs2cstr(s), BUFSZ - 1 - 1);
 			putstr(0, 0, buf);
-			free(*strp), *strp = 0;
 		}
 	}
 }

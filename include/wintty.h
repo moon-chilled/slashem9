@@ -102,13 +102,6 @@ extern void clear_screen(void);
 extern void home(void);
 extern void standoutbeg(void);
 extern void standoutend(void);
-#if 0
-extern void revbeg(void);
-extern void boldbeg(void);
-extern void blinkbeg(void);
-extern void dimbeg(void);
-extern void m_end(void);
-#endif
 extern void backsp(void);
 extern void graph_on(void);
 extern void graph_off(void);
@@ -203,5 +196,7 @@ extern void tty_start_screen(void);
 extern void tty_end_screen(void);
 
 extern void genl_outrip(winid, int);
+
+extern void tty_style_start(nhstyle);
 
 #endif /* WINTTY_H */

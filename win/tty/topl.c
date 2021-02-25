@@ -311,7 +311,16 @@ void putsyms(const char *str) {
 
 //todo style
 static void putnsyms(const nhstr s) {
-	for (usize i = 0; i < s.len; i++) topl_putsym(s.str[i]);
+	nhstyle old = nhstyle_default();
+	for (usize i = 0; i < s.len; i++) {
+		if (!nhstyle_eq(s.style[i], old)) {
+			term_end_color();
+			tty_style_start(s.style[i]);
+			old = s.style[i];
+		}
+		topl_putsym(s.str[i]);
+	}
+	if (!nhstyle_eq(old, nhstyle_default())) term_end_color();
 }
 
 static void removetopl(int n) {
@@ -353,7 +362,7 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 		if ((rb = index(respbuf, '\033')) != 0) *rb = '\0';
 		prompt = nhsfmt("%S [%S] ", query, respbuf);
 		if (def) prompt = nhscatf(prompt, "(%c) ", def);
-		pline("%s", nhs2cstr(prompt));
+		spline("%s", prompt);
 	} else {
 		pline("%s ", query);
 		q = readchar();

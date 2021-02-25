@@ -50,6 +50,14 @@ nhstr nhsdup(const nhstr str) {
 	return ret;
 }
 
+nhstr nhsdupzn(const char *str, usize len) {
+	return nhscatzn(new_nhs(), str, len);
+}
+
+nhstr nhsdupzc(const char *str, nhstyle style) {
+	return nhscatzc(new_nhs(), str, style);
+}
+
 nhstr nhsdupz(const char *str) {
 	return nhscatz(new_nhs(), str);
 }

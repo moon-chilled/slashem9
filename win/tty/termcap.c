@@ -31,10 +31,11 @@ struct tc_lcl_data tc_lcl_data = {0, 0, 0, 0, 0, 0, 0, false};
 int allow_bgcolor = 0;
 
 static char *HO, *CL, *CE, *UP, *XD, *BC, *SO, *SE, *TI, *TE;
+static char *ZH, *ZR;
 static char *VS, *VE;
 static char *ME;
 static char *MR;
-static char *MB, *MH;
+static char *MB;
 #ifdef TERMLIB
 static char *MD;
 static int SG;
@@ -87,6 +88,8 @@ void tty_startup(int *wid, int *hgt) {
 		nh_US = "\033[4m";
 		MR = "\033[7m";
 		TI = nh_HE = ME = SE = nh_UE = "\033[0m";
+		ZH = "\033[3m";
+		ZR = "\033[23m";
 		/* strictly, SE should be 2, and nh_UE should be 24,
 		   but we can't trust all ANSI emulators to be
 		   that complete.  -3. */
@@ -158,8 +161,6 @@ void tty_startup(int *wid, int *hgt) {
 	nh_ND = Tgetstr("nd");
 	if (tgetflag("os"))
 		error("NetHack can't have OS.");
-	if (tgetflag("ul"))
-		ul_hack = true;
 	CE = Tgetstr("ce");
 	UP = Tgetstr("up");
 	/* It seems that xd is no longer supported, and we should use
@@ -189,10 +190,11 @@ void tty_startup(int *wid, int *hgt) {
 	KS = Tgetstr("ks"); /* keypad start (special mode) */
 	KE = Tgetstr("ke"); /* keypad end (ordinary mode [ie, digits]) */
 	MR = Tgetstr("mr"); /* reverse */
-	MB = Tgetstr("mb");	/* blink */
-	MD = Tgetstr("md");	/* boldface */
-	MH = Tgetstr("mh");	/* dim */
-	ME = Tgetstr("me");		     /* turn off all attributes */
+	MB = Tgetstr("mb"); /* blink */
+	MD = Tgetstr("md"); /* boldface */
+	ZH = Tgetstr("ZH"); /* italic */
+	ZR = Tgetstr("ZR"); /* diable italic */
+	ME = Tgetstr("me"); /* turn off all attributes */
 	if (!ME || (SE == nullstr)) ME = SE; /* default to SE value */
 
 	/* Get rid of padding numbers for nh_HI and nh_HE.  Hope they
@@ -366,27 +368,6 @@ void standoutbeg(void) {
 
 void standoutend(void) {
 	if (SE) xputs(SE);
-}
-
-void revbeg(void) {
-	if(MR) xputs(MR);
-}
-
-void boldbeg(void) {
-	if(MD) xputs(MD);
-}
-
-void blinkbeg(void) {
-	if(MB) xputs(MB);
-}
-
-/* not in most termcap entries */
-void dimbeg(void) {
-	if(MH) xputs(MH);
-}
-
-void m_end(void) {
-	if(ME) xputs(ME);
 }
 
 void backsp(void) {
@@ -594,28 +575,38 @@ static void kill_hilite(void) {
 }
 #endif /* TERMLIB */
 
-static char nulstr[] = "";
-
 static char *s_atr2str(int n) {
 	switch (n) {
-		case ATR_ULINE:
+		case ATR_BLINK:
+			if (MB) return MB;
+			else break;
+
+		case ATR_ITALIC:
+			if (ZH) return ZH;
+			else fallthru;
+
+		case ATR_UNDERLINE:
 			if (nh_US) return nh_US;
 			else fallthru;
+
 		case ATR_BOLD:
-		case ATR_BLINK:
 #if defined(TERMLIB)
 			if (MD) return MD;
 #endif
 			return nh_HI;
+
 		case ATR_INVERSE:
 			return MR;
 	}
-	return nulstr;
+	return "";
 }
 
 static char *e_atr2str(int n) {
 	switch (n) {
-		case ATR_ULINE:
+		case ATR_ITALIC:
+			if (ZR) return ZR;
+			else fallthru;
+		case ATR_UNDERLINE:
 			if (nh_UE) return nh_UE;
 			else fallthru;
 		case ATR_BOLD:
@@ -624,14 +615,15 @@ static char *e_atr2str(int n) {
 		case ATR_INVERSE:
 			return ME;
 	}
-	return nulstr;
+	return "";
 }
 
 void term_start_attrs(int attr) {
+	if (attr & ATR_BOLD) term_start_attr(ATR_BOLD);
 	if (attr & ATR_BLINK) term_start_attr(ATR_BLINK);
-	if (attr & ATR_ULINE) term_start_attr(ATR_ULINE);
-	if (attr & ATR_BLINK) term_start_attr(ATR_BLINK);
+	if (attr & ATR_ITALIC) term_start_attr(ATR_ITALIC);
 	if (attr & ATR_INVERSE) term_start_attr(ATR_INVERSE);
+	if (attr & ATR_UNDERLINE) term_start_attr(ATR_UNDERLINE);
 }
 
 void term_start_attr(int attr) {

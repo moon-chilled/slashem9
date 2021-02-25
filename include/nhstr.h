@@ -30,10 +30,12 @@ nhstr nhscatznc(const nhstr str, const char *cat, usize catlen, nhstyle style);
 nhstr nhscatzc(const nhstr str, const char *cat, nhstyle style);
 nhstr nhscatzn(const nhstr str, const char *cat, usize catlen);
 nhstr nhscatz(const nhstr str, const char *cat);
-nhstr nhsdup(const nhstr str); // !no in-place modification!
+nhstr nhsdup(const nhstr str);
+nhstr nhsdupzc(const char *str, nhstyle style);
 nhstr nhsdupz(const char *str);
+nhstr nhsdupzn(const char *str, usize len);
 nhstr nhscat(const nhstr str, const nhstr cat);
-//nhstr nhsfmtc_v(nhstyle style, char *cat, va_list the_args);
+nhstr nhsfmtc_v(nhstyle style, const char *cat, va_list the_args);
 nhstr nhscatfc(const nhstr str, nhstyle style, const char *cat, ...);
 nhstr nhscatf(const nhstr str, const char *cat, ...);
 nhstr nhsfmt(const char *fmt, ...);

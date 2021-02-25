@@ -5,13 +5,10 @@
 #include "hack.h"
 
 // keep the most recent DUMPLOG_MSG_COUNT messages
-void dumplogmsg(const char *line) {
-	// since it's zero-initialized and free(NULL) is valid, this always works
-	free(saved_plines[saved_pline_index]);
+void dumplogmsg(nhstr s) {
+	saved_plines[saved_pline_index++] = s;
 
-	saved_plines[saved_pline_index] = strdup(line);
-
-	saved_pline_index = (saved_pline_index + 1) % DUMPLOG_MSG_COUNT;
+	if (saved_pline_index >= DUMPLOG_MSG_COUNT) saved_pline_index = 0;
 }
 void dumplogfreemsgs(void) {
 	for (usize i = 0; i < DUMPLOG_MSG_COUNT; i++) {
@@ -49,36 +46,29 @@ static int msgpline_type(const char *msg) {
 	return MSGTYP_NORMAL;
 }
 
-static void vpline(const char *line, va_list the_args) {
-	char pbuf[BUFSZ];
-
-	if (!line || !*line) return;
+static void npline(nhstr line) {
 	if (program_state.wizkit_wishing) return;
 
-	if (index(line, '%')) {
-		vsnprintf(pbuf, sizeof(pbuf), line, VA_ARGS);
-		line = pbuf;
-	}
-
 	if (!iflags.window_inited) {
-		raw_print(line);
+		raw_print(nhs2cstr(line));
 		return;
 	}
 
 #ifndef MAC
-	if (no_repeat && nhseq(nhsdupz(line), toplines))
+	if (no_repeat && nhseq(line, toplines))
 		return;
 #endif /* MAC */
 
 	if (vision_full_recalc) vision_recalc(0);
 	if (u.ux) flush_screen(1); /* %% */
 
-	int typ = msgpline_type(line);
+	//todo make tre work on widechars (not as simple as #define wchar_t glyph_t; it uses wmemcmp and maybe also other annoying things), to avoid this copy
+	int typ = msgpline_type(nhs2cstr(line));
 
 	if (typ == MSGTYP_NOSHOW) return;
 
-	if (typ == MSGTYP_NOREP && !strcmp(line, saved_plines[(saved_pline_index ? saved_pline_index : DUMPLOG_MSG_COUNT) - 1])) return;
-	putstr(WIN_MESSAGE, 0, line);
+	if (typ == MSGTYP_NOREP && !nhseq(line, saved_plines[(saved_pline_index ? saved_pline_index : DUMPLOG_MSG_COUNT) - 1])) return;
+	putnstr(WIN_MESSAGE, 0, line);
 	if (typ == MSGTYP_STOP) display_nhwindow(WIN_MESSAGE, true); /* --more-- */
 
 	if (typ != MSGTYP_NOSHOW) {
@@ -87,9 +77,31 @@ static void vpline(const char *line, va_list the_args) {
 
 }
 
+static void vpline(const char *line, va_list the_args) {
+	char pbuf[BUFSZ];
+	if (!line || !*line) return;
+
+	usize l;
+
+	if (index(line, '%')) {
+		l = vsnprintf(pbuf, sizeof(pbuf), line, the_args);
+		line = pbuf;
+	} else {
+		l = strlen(line);
+	}
+
+	npline(nhsdupzn(line, l));
+}
+
 void pline(const char *line, ...) {
 	VA_START(line);
 	vpline(line, VA_ARGS);
+	VA_END();
+}
+
+void spline(const char *line, ...) {
+	VA_START(line);
+	npline(nhsfmtc_v(nhstyle_default(), line, VA_ARGS));
 	VA_END();
 }
 

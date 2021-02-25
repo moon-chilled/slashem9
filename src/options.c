@@ -695,7 +695,7 @@ const struct name_value status_colornames[] = {
 const struct name_value status_attrnames[] = {
 	{"none", ATR_NONE},
 	{"bold", ATR_BOLD},
-	{"underline", ATR_ULINE},
+	{"underline", ATR_UNDERLINE},
 	{"blink", ATR_BLINK},
 	{"inverse", ATR_INVERSE},
 	{NULL, -1}};
@@ -899,7 +899,7 @@ static const struct {
 } attrnames[] = {
 	{"none", ATR_NONE},
 	{"bold", ATR_BOLD},
-	{"underline", ATR_ULINE},
+	{"underline", ATR_UNDERLINE},
 	{"blink", ATR_BLINK},
 	{"inverse", ATR_INVERSE}
 };
@@ -2220,7 +2220,7 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 		else if (!strcmpi(opts, "inverse"))
 			iflags.menu_headings = ATR_INVERSE;
 		else if (!strcmpi(opts, "underline"))
-			iflags.menu_headings = ATR_ULINE;
+			iflags.menu_headings = ATR_UNDERLINE;
 		else
 			badoption(opts);
 		return;
@@ -3002,7 +3002,7 @@ static boolean special_handling(const char *optname, boolean setinitial, boolean
 			int mode = mode_pick->item.a_int - 1;
 			switch (mode) {
 				case 2:
-					iflags.menu_headings = ATR_ULINE;
+					iflags.menu_headings = ATR_UNDERLINE;
 					break;
 				case 0:
 					iflags.menu_headings = ATR_BOLD;
@@ -3226,7 +3226,9 @@ static const char *get_compopt_value(const char *optname, char *buf) {
 	else if (!strcmp(optname, "menu_invert_all"))
 		sprintf(buf, "%s", to_be_done);
 	else if (!strcmp(optname, "menu_headings")) {
-		sprintf(buf, "%s", (iflags.menu_headings == ATR_BOLD) ? "bold" : (iflags.menu_headings == ATR_INVERSE) ? "inverse" : (iflags.menu_headings == ATR_ULINE) ? "underline" : "unknown");
+		sprintf(buf, "%s", (iflags.menu_headings == ATR_BOLD) ? "bold" :
+		                   (iflags.menu_headings == ATR_INVERSE) ? "inverse" :
+		                   (iflags.menu_headings == ATR_UNDERLINE) ? "underline" : "unknown");
 	} else if (!strcmp(optname, "menu_invert_page"))
 		sprintf(buf, "%s", to_be_done);
 	else if (!strcmp(optname, "menu_last_page"))

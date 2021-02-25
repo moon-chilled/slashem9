@@ -42,11 +42,12 @@ typedef struct {
 #define NHW_TEXT    5
 
 /* attribute types for putstr; the same as the ANSI value, for convenience */
-#define ATR_NONE    0
-#define ATR_BOLD    0x1
-#define ATR_ULINE   0x2
-#define ATR_BLINK   0x4
-#define ATR_INVERSE 0x8
+#define ATR_NONE	0
+#define ATR_BOLD	0x01
+#define ATR_BLINK	0x02
+#define ATR_ITALIC	0x04
+#define ATR_INVERSE	0x08
+#define ATR_UNDERLINE	0x10
 
 /* nh_poskey() modifier types */
 #define CLICK_1 1

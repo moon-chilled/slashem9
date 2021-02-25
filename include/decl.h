@@ -472,7 +472,7 @@ struct _plinemsg {
 
 extern struct _plinemsg *pline_msg;
 extern uint saved_pline_index;
-extern char *saved_plines[DUMPLOG_MSG_COUNT];
+extern nhstr saved_plines[DUMPLOG_MSG_COUNT];
 
 #define MSGTYP_NORMAL 0
 #define MSGTYP_NOREP  1

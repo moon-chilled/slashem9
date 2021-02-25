@@ -288,7 +288,7 @@ putstr(window, attr, str)
 Attributes
                    can be one of
                         ATR_NONE (or 0)
-                        ATR_ULINE
+                        ATR_UNDERLINE
                         ATR_BOLD
                         ATR_BLINK
                         ATR_INVERSE

@@ -473,27 +473,24 @@ understands, and return that format mask. */
 
 attr_t curses_convert_attr(int attr) {
 	switch (attr) {
-		case ATR_NONE:
-			return A_NORMAL;
-		case ATR_ULINE:
-			return A_UNDERLINE;
-		case ATR_BOLD:
-			return A_BOLD;
-		case ATR_BLINK:
-			return A_BLINK;
-		case ATR_INVERSE:
-			return A_REVERSE;
-		default:
-			return A_NORMAL;
+		case ATR_NONE: return A_NORMAL;
+		case ATR_BOLD: return A_BOLD;
+		case ATR_BLINK: return A_BLINK;
+		case ATR_ITALIC: return A_ITALIC;
+		case ATR_INVERSE: return A_REVERSE;
+		case ATR_UNDERLINE: return A_UNDERLINE;
+
+		default: return A_NORMAL;
 	}
 }
 
 attr_t curses_convert_attrs(int attr) {
 	attr_t ret = A_NORMAL;
 	if (attr & ATR_BOLD) ret |= A_BOLD;
-	if (attr & ATR_ULINE) ret |= A_UNDERLINE;
 	if (attr & ATR_BLINK) ret |= A_BLINK;
+	if (attr & ATR_ITALIC) ret |= A_ITALIC;
 	if (attr & ATR_INVERSE) ret |= A_REVERSE;
+	if (attr & ATR_UNDERLINE) ret |= A_UNDERLINE;
 	return ret;
 }
 

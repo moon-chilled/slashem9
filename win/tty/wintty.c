@@ -1804,10 +1804,13 @@ void tty_putnstr(winid window, int attr, nhstr str) {
 		case NHW_STATUS: {
 			int stash_curx = cw->curx;
 			int j = cw->curx;
+			nhstyle old_style = nhstyle_default();
 
 			for (int i = cw->curx, fx = i + 1; true; i++, fx++) {
 				if (i >= nb.len) {
 					if (cw->data[cw->cury][j] || context.botlx) {
+						if (!nhstyle_eq(old_style, nhstyle_default())) term_end_color();
+
 						/* last char printed may be in middle of line */
 						tty_curs(WIN_STATUS, fx, cw->cury);
 						cl_end();
@@ -1817,12 +1820,14 @@ void tty_putnstr(winid window, int attr, nhstr str) {
 
 				// just redraw the whole line every time
 				if (true || context.botlx || (cw->data[cw->cury][j] != nb.str[i]) || !nhstyle_eq(cw->style_data[cw->cury][j], nb.style[i])) {
-					if (nb.style[i].fg != NO_COLOR) term_start_color(nb.style[i].fg);
-					if (nb.style[i].bg != NO_COLOR) term_start_bgcolor(nb.style[i].bg);
-					term_start_attrs(nb.style[i].attr);
+					if (!nhstyle_eq(nb.style[i], old_style)) {
+						term_end_color();
+						tty_style_start(nb.style[i]);
+					}
 					tty_putsym(WIN_STATUS, fx, cw->cury, nb.str[i]);
-					if (!nhstyle_eq(nb.style[i], nhstyle_default())) term_end_color();
 				}
+
+				old_style = nb.style[i];
 				if (cw->data[cw->cury][j]) j++;
 
 				// EOL
@@ -1838,6 +1843,7 @@ void tty_putnstr(winid window, int attr, nhstr str) {
 					cw->cury++;
 				}
 			}
+			if (!nhstyle_eq(old_style, nhstyle_default())) term_end_color();
 
 			strncpy(&cw->data[cw->cury][stash_curx], nhs2cstr_trunc(nb), min(cw->cols - stash_curx - 1, nb.len));
 			memcpy(&cw->style_data[cw->cury][stash_curx], nb.style, min(cw->cols - stash_curx - 1, nb.len) * sizeof(nhstyle));
@@ -2408,11 +2414,6 @@ void tty_print_glyph(winid window, xchar x, xchar y, int glyph) {
 	/* Move the cursor. */
 	tty_curs(window, x, y);
 
-	if (ul_hack && ch == '_') { /* non-destructive underscore */
-		putchar((char)' ');
-		backsp();
-	}
-
 	if (color != ttyDisplay->color) {
 		if (ttyDisplay->color != NO_COLOR)
 			term_end_color();
@@ -2527,6 +2528,12 @@ void tty_update_positionbar(char *posbar) {
 static char *copy_of(const char *s) {
 	if (!s) s = "";
 	return strcpy(alloc(strlen(s) + 1), s);
+}
+
+void tty_style_start(nhstyle s) {
+	if (s.fg != NO_COLOR) term_start_color(s.fg);
+	if (s.bg != NO_COLOR) term_start_bgcolor(s.bg);
+	term_start_attrs(s.attr);
 }
 
 #endif /* TTY_GRAPHICS */

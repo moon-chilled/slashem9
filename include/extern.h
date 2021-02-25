@@ -1478,6 +1478,7 @@ int dotip(void);
 #define You_hear(str)	You_hearf("%s", (str))
 void msgpline_add(int typ, char *pattern);
 void pline(const char *line, ...) PRINTF_F(1, 2);
+void spline(const char *line, ...); //uses nhsfmt-style formatting
 void Norep(const char *line, ...) PRINTF_F(1, 2);
 void hear(const char *fmt, ...) PRINTF_F(1, 2);
 void You_hearf(const char *line, ...) PRINTF_F(1, 2);
