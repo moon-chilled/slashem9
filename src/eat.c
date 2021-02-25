@@ -235,22 +235,22 @@ static void choke(struct obj *food) {
 		if (food) {
 			pline("You choke over your %s.", foodword(food));
 			if (food->oclass == COIN_CLASS) {
-				nhscopyz(&killer.name, "very rich meal");
+				killer.name = nhsdupz("very rich meal");
 			} else {
-				nhscopyz(&killer.name, food_xname(food, false));
+				killer.name = nhsdupz(food_xname(food, false));
 				if (food->otyp == CORPSE && (mons[food->corpsenm].geno & G_UNIQ)) {
 					if (!type_is_pname(&mons[food->corpsenm]))
-						nhscopyz(&killer.name, the(nhs2cstr_tmp(killer.name)));
+						killer.name = nhsdupz(the(nhs2cstr(killer.name)));
 					killer.format = KILLED_BY;
 				} else if (obj_is_pname(food)) {
 					killer.format = KILLED_BY;
 					if (food->oartifact >= ART_ORB_OF_DETECTION)
-						nhscopyz(&killer.name, the(nhs2cstr_tmp(killer.name)));
+						killer.name = nhsdupz(the(nhs2cstr(killer.name)));
 				}
 			}
 		} else {
 			pline("You choke over it.");
-			nhscopyz(&killer.name, "quick snack");
+			killer.name = nhsdupz("quick snack");
 		}
 		pline("You die...");
 		done(CHOKING);
@@ -483,7 +483,7 @@ int eat_brains(struct monst *magr, struct monst *mdef, bool visflag, int *dmg_p)
 			return MM_MISS;
 		} else if (is_rider(pd)) {
 			pline("Ingesting that is fatal.");
-			nhscopyf(&killer.name, "unwisely ate the brain of %S", pd->mname);
+			killer.name = nhsfmt("unwisely ate the brain of %S", pd->mname);
 			killer.format = NO_KILLER_PREFIX;
 			done(DIED);
 			/* life-saving needed to reach here */
@@ -510,7 +510,7 @@ int eat_brains(struct monst *magr, struct monst *mdef, bool visflag, int *dmg_p)
 		/* no such thing as mindless players */
 		if (ABASE(A_INT) <= ATTRMIN(A_INT)) {
 			if (Lifesaved) {
-				nhscopyz(&killer.name, "brainlessness");
+				killer.name = nhsdupz("brainlessness");
 				killer.format = KILLED_BY;
 				done(DIED);
 				/* amulet of life saving has now been used up */
@@ -518,7 +518,7 @@ int eat_brains(struct monst *magr, struct monst *mdef, bool visflag, int *dmg_p)
 			} else {
 				pline("Your last thought fades away.");
 			}
-			nhscopyz(&killer.name, "brainlessness");
+			killer.name = nhsdupz("brainlessness");
 			killer.format = KILLED_BY;
 			done(DIED);
 			/* can only get here when in wizard or explore mode and user has
@@ -603,7 +603,7 @@ static void cprefx(int pm) {
 		if (!Stone_resistance &&
 		    !(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
 			killer.format = KILLED_BY;
-			nhscopyf(&killer.name, "tasting %S meat", mons[pm].mname);
+			killer.name = nhsfmt("tasting %S meat", mons[pm].mname);
 			pline("You turn to stone.");
 			done(STONING);
 			if (context.victual.piece)
@@ -634,7 +634,7 @@ static void cprefx(int pm) {
 		case PM_FAMINE: {
 			pline("Eating that is instantly fatal.");
 			killer.format = NO_KILLER_PREFIX;
-			nhscopyf(&killer.name, "unwisely ate the body of %S", mons[pm].mname);
+			killer.name = nhsfmt("unwisely ate the body of %S", mons[pm].mname);
 			done(DIED);
 			/* It so happens that since we know these monsters */
 			/* cannot appear in tins, context.victual.piece will always */
@@ -2229,7 +2229,7 @@ static void fpostfx(struct obj *otmp) {
 			u.uhp -= rn1(50, 150);
 			if (u.uhp <= 0) {
 				killer.format = KILLED_BY;
-				nhscopyz(&killer.name, food_xname(otmp, true));
+				killer.name = nhsdupz(food_xname(otmp, true));
 				done(CHOKING);
 			}
 			break;
@@ -2239,7 +2239,7 @@ static void fpostfx(struct obj *otmp) {
 			u.uhp -= rn1(50, 150);
 			if (u.uhp <= 0) {
 				killer.format = KILLED_BY;
-				nhscopyz(&killer.name, food_xname(otmp, true));
+				killer.name = nhsdupz(food_xname(otmp, true));
 				done(CHOKING);
 			}
 			break;
@@ -2268,7 +2268,7 @@ static void fpostfx(struct obj *otmp) {
 					u.uhp = u.uhpmax;
 				} else if (u.uhp <= 0) {
 					killer.format = KILLED_BY_AN;
-					nhscopyz(&killer.name, "rotten lump of royal jelly");
+					killer.name = nhsdupz("rotten lump of royal jelly");
 					done(POISONING);
 				}
 			}
@@ -2279,7 +2279,7 @@ static void fpostfx(struct obj *otmp) {
 				if (!Stone_resistance &&
 				    !(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
 					if (!Stoned) {
-						nhscopyf(&killer.name, "%S egg", mons[otmp->corpsenm].mname);
+						killer.name = nhsfmt("%S egg", mons[otmp->corpsenm].mname);
 						make_stoned(5, NULL, KILLED_BY_AN, killer.name);
 					}
 				}
@@ -2934,7 +2934,7 @@ void newuhs(boolean incr) {
 			bot();
 			pline("You die from starvation.");
 			killer.format = KILLED_BY;
-			nhscopyz(&killer.name, "starvation");
+			killer.name = nhsdupz("starvation");
 			done(STARVING);
 			/* if we return, we lifesaved, and that calls newuhs */
 			return;
@@ -2988,7 +2988,7 @@ void newuhs(boolean incr) {
 		if ((Upolyd ? u.mh : u.uhp) < 1) {
 			pline("You die from hunger and exhaustion.");
 			killer.format = KILLED_BY;
-			nhscopyz(&killer.name, "exhaustion");
+			killer.name = nhsdupz("exhaustion");
 			done(STARVING);
 			return;
 		}

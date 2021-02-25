@@ -913,7 +913,7 @@ void level_tele(void) {
 			if (invent) pline("Your possessions land on the %s with a thud.",
 					  surface(u.ux, u.uy));
 			killer.format = NO_KILLER_PREFIX;
-			nhscopyz(&killer.name, "committed suicide");
+			killer.name = nhsdupz("committed suicide");
 			done(DIED);
 			pline("An energized cloud of dust begins to coalesce.");
 			pline("Your body rematerializes%s.", invent ? ", and you gather up all your possessions" : "");
@@ -985,7 +985,7 @@ void level_tele(void) {
 			pline("You arrive in heaven.");
 			verbalize("Thou art early, but we'll admit thee.");
 			killer.format = NO_KILLER_PREFIX;
-			nhscopyz(&killer.name, "went to heaven prematurely");
+			killer.name = nhsdupz("went to heaven prematurely");
 		} else if (newlev == -9) {
 			pline("You feel deliriously happy. ");
 			pline("(In fact, you're on Cloud 9!) ");
@@ -1003,7 +1003,7 @@ void level_tele(void) {
 			pline("Unfortunately, you don't know how to fly.");
 			pline("You plummet a few thousand feet to your death.");
 			killer.format = NO_KILLER_PREFIX;
-			nhscopyf(&killer.name, "teleported out of the dungeon and fell to %S death", uhis());
+			killer.name = nhsfmt("teleported out of the dungeon and fell to %S death", uhis());
 		}
 	}
 

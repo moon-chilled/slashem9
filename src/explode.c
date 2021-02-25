@@ -256,37 +256,37 @@ void do_explode(
 		}
 
 	if (olet == MON_EXPLODE) {
-		nhsmove(&str, &killer.name);
+		str = killer.name;
 		adtyp = AD_PHYS;
 	} else {
 		switch (abs(type) % 10) {
 			case 0:
-				nhscopyz(&str, "magical blast");
+				str = nhsdupz("magical blast");
 				adtyp = AD_MAGM;
 				break;
 			case 1:
-				nhscopyz(&str, olet == BURNING_OIL ? "burning oil" : olet == SCROLL_CLASS ? "tower of flame" : "fireball");
+				str = nhsdupz(olet == BURNING_OIL ? "burning oil" : olet == SCROLL_CLASS ? "tower of flame" : "fireball");
 				adtyp = AD_FIRE;
 				break;
 			case 2:
-				nhscopyz(&str, "ball of cold");
+				str = nhsdupz("ball of cold");
 				adtyp = AD_COLD;
 				break;
 			/* Assume that wands are death, others are disintegration */
 			case 4:
-				nhscopyz(&str, (olet == WAND_CLASS) ? "death field" : "disintegration field");
+				str = nhsdupz((olet == WAND_CLASS) ? "death field" : "disintegration field");
 				adtyp = AD_DISN;
 				break;
 			case 5:
-				nhscopyz(&str, "ball of lightning");
+				str = nhsdupz("ball of lightning");
 				adtyp = AD_ELEC;
 				break;
 			case 6:
-				nhscopyz(&str, "poison gas cloud");
+				str = nhsdupz("poison gas cloud");
 				adtyp = AD_DRST;
 				break;
 			case 7:
-				nhscopyz(&str, "splash of acid");
+				str = nhsdupz("splash of acid");
 				adtyp = AD_ACID;
 				break;
 			default:
@@ -440,7 +440,7 @@ void do_explode(
 		tmp_at(DISP_END, 0); /* clear the explosion */
 	} else if (!remote) {
 		if (olet == MON_EXPLODE) {
-			nhscopyz(&str, "explosion");
+			str = nhsdupz("explosion");
 			generic = true;
 		}
 		You_hear(is_pool(x, y) ? "a muffled explosion." : "a blast.");
@@ -489,7 +489,7 @@ void do_explode(
 				}
 			} else if (!silent && cansee(xi, yi)) {
 				if (mtmp->m_ap_type) seemimic(mtmp);
-				pline("%s is caught in the %s!", Monnam(mtmp), nhs2cstr_tmp(str));
+				pline("%s is caught in the %s!", Monnam(mtmp), nhs2cstr(str));
 			}
 
 			idamres += destroy_mitem(mtmp, SCROLL_CLASS, (int)adtyp);
@@ -510,7 +510,7 @@ void do_explode(
 
 				if (resist(mtmp, olet, 0, false)) {
 					if (!silent && cansee(xi, yi))
-						pline("%s resists the %s!", Monnam(mtmp), nhs2cstr_tmp(str));
+						pline("%s resists the %s!", Monnam(mtmp), nhs2cstr(str));
 					mdam = dam / 2;
 				}
 				if (mtmp == u.ustuck)
@@ -551,7 +551,7 @@ void do_explode(
 		if ((type >= 0 || adtyp == AD_PHYS || olet == WEAPON_CLASS) &&
 		    /* gas spores */
 		    flags.verbose && olet != SCROLL_CLASS)
-			pline("You are caught in the %s!", nhs2cstr_tmp(str));
+			pline("You are caught in the %s!", nhs2cstr(str));
 		/* do property damage first, in case we end up leaving bones */
 		if (adtyp == AD_FIRE) burn_away_slime();
 		if (Invulnerable) {
@@ -589,18 +589,18 @@ void do_explode(
 				if (olet == MON_EXPLODE) {
 					/* killer handled by caller */
 					if (!generic)
-						nhsmove(&killer.name, &str);
+						killer.name = str;
 					killer.format = KILLED_BY_AN;
 				} else if (type >= 0 && olet != SCROLL_CLASS && yours) {
 					killer.format = NO_KILLER_PREFIX;
-					nhscopyf(&killer.name, "caught %Sself in %S own %s", uhim(), uhis(), str);
+					killer.name = nhsfmt("caught %Sself in %S own %s", uhim(), uhis(), str);
 					del_nhs(&str);
 				} else if (olet != BURNING_OIL) {
 					killer.format = KILLED_BY_AN;
-					nhsmove(&killer.name, &str);
+					killer.name = str;
 				} else {
 					killer.format = KILLED_BY;
-					nhsmove(&killer.name, &str);
+					killer.name = str;
 				}
 
 				/* Known BUG: BURNING suppresses corpse in bones data,

@@ -300,16 +300,16 @@ void topten(int how) {
 		fallthru;
 		case KILLED_BY_AN:
 			strcat(t0->death, killed_by_prefix[how]);
-			strncat(t0->death, an(nhs2cstr_tmp(killer.name)),
+			strncat(t0->death, an(nhs2cstr(killer.name)),
 				DTHSZ - strlen(t0->death));
 			break;
 		case KILLED_BY:
 			strcat(t0->death, killed_by_prefix[how]);
-			strncat(t0->death, nhs2cstr_tmp(killer.name),
+			strncat(t0->death, nhs2cstr(killer.name),
 				DTHSZ - strlen(t0->death));
 			break;
 		case NO_KILLER_PREFIX:
-			strncat(t0->death, nhs2cstr_tmp(killer.name), DTHSZ);
+			strncat(t0->death, nhs2cstr(killer.name), DTHSZ);
 			break;
 	}
 	t0->birthdate = yyyymmdd(u.ubirthday);

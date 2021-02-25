@@ -83,7 +83,6 @@ dungeonline	: A_DUNGEON ':' STRING bones_tag rcouple optional_int
 			tmpdungeon[n_dgns].lev.base = couple.base;
 			tmpdungeon[n_dgns].lev.rand = couple.rand;
 			tmpdungeon[n_dgns].chance = $6;
-			free($3);
 		  }
 		;
 
@@ -133,7 +132,6 @@ prototype	: PROTOFILE ':' STRING
 			if (strlen($3)+1 > sizeof(tmpdungeon[n_dgns].protoname))
 			    yyerror("Proto name is too long");
 			strcpy(tmpdungeon[n_dgns].protoname, $3);
-			free($3);
 		  }
 		;
 
@@ -154,7 +152,6 @@ level1		: LEVEL ':' STRING bones_tag '@' acouple
 			tmplevel[n_levs].lev.base = couple.base;
 			tmplevel[n_levs].lev.rand = couple.rand;
 			tmpdungeon[n_dgns].levels++;
-			free($3);
 		  }
 		| RNDLEVEL ':' STRING bones_tag '@' acouple INTEGER
 		  {
@@ -167,7 +164,6 @@ level1		: LEVEL ':' STRING bones_tag '@' acouple
 			tmplevel[n_levs].lev.rand = couple.rand;
 			tmplevel[n_levs].rndlevs = $7;
 			tmpdungeon[n_dgns].levels++;
-			free($3);
 		  }
 		;
 
@@ -182,7 +178,6 @@ level2		: LEVEL ':' STRING bones_tag '@' acouple INTEGER
 			tmplevel[n_levs].lev.rand = couple.rand;
 			tmplevel[n_levs].chance = $7;
 			tmpdungeon[n_dgns].levels++;
-			free($3);
 		  }
 		| RNDLEVEL ':' STRING bones_tag '@' acouple INTEGER INTEGER
 		  {
@@ -196,7 +191,6 @@ level2		: LEVEL ':' STRING bones_tag '@' acouple INTEGER
 			tmplevel[n_levs].chance = $7;
 			tmplevel[n_levs].rndlevs = $8;
 			tmpdungeon[n_dgns].levels++;
-			free($3);
 		  }
 		;
 
@@ -228,8 +222,6 @@ chlevel1	: CHLEVEL ':' STRING bones_tag STRING '+' rcouple
 			tmplevel[n_levs].lev.rand = couple.rand;
 			if(!check_level()) n_levs--;
 			else tmpdungeon[n_dgns].levels++;
-			free($3);
-			free($5);
 		  }
 		| RNDCHLEVEL ':' STRING bones_tag STRING '+' rcouple INTEGER
 		  {
@@ -244,8 +236,6 @@ chlevel1	: CHLEVEL ':' STRING bones_tag STRING '+' rcouple
 			tmplevel[n_levs].rndlevs = $8;
 			if(!check_level()) n_levs--;
 			else tmpdungeon[n_dgns].levels++;
-			free($3);
-			free($5);
 		  }
 		;
 
@@ -262,8 +252,6 @@ chlevel2	: CHLEVEL ':' STRING bones_tag STRING '+' rcouple INTEGER
 			tmplevel[n_levs].chance = $8;
 			if(!check_level()) n_levs--;
 			else tmpdungeon[n_dgns].levels++;
-			free($3);
-			free($5);
 		  }
 		| RNDCHLEVEL ':' STRING bones_tag STRING '+' rcouple INTEGER INTEGER
 		  {
@@ -279,8 +267,6 @@ chlevel2	: CHLEVEL ':' STRING bones_tag STRING '+' rcouple INTEGER
 			tmplevel[n_levs].rndlevs = $9;
 			if(!check_level()) n_levs--;
 			else tmpdungeon[n_dgns].levels++;
-			free($3);
-			free($5);
 		  }
 		;
 
@@ -301,7 +287,6 @@ branch		: BRANCH ':' STRING '@' acouple branch_type direction optional_int
                         tmpbranch[n_brs].entry_lev = $8;
 			if(!check_branch()) n_brs--;
 			else tmpdungeon[n_dgns].branches++;
-			free($3);
 		  }
 		;
 
@@ -319,8 +304,6 @@ chbranch	: CHBRANCH ':' STRING STRING '+' rcouple branch_type direction optional
 			tmpbranch[n_brs].entry_lev = $9;
 			if(!check_branch()) n_brs--;
 			else tmpdungeon[n_dgns].branches++;
-			free($3);
-			free($4);
 		  }
 		;
 
@@ -365,7 +348,6 @@ bones_tag	: STRING
 			    *p = '\0';
 			}
 			$$ = *p;
-			free(p);
 		  }
 		;
 

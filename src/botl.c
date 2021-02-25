@@ -60,19 +60,21 @@ nhstyle percentage_style_of(int value, int max, const struct percent_color_optio
 	return percentage_style_of(value, max, color_options->next);
 }
 
-void add_styled_text_match(const char *text, const char *match, nhstr *newbot) {
-	if ((*text == '\0') || (*match == '\0')) return;
+nhstr add_styled_text_match(const char *text, const char *match, nhstr newbot) {
+	if ((*text == '\0') || (*match == '\0')) return newbot;
 
 	if (!iflags.use_status_colors) {
-		nhscatf(newbot, " %S", text);
+		newbot = nhscatf(newbot, " %S", text);
 	} else {
-		nhscatz(newbot, " ");
-		nhscatfc(newbot, text_style_of(match, text_colors), "%S", text);
+		newbot = nhscatz(newbot, " ");
+		newbot = nhscatfc(newbot, text_style_of(match, text_colors), "%S", text);
 	}
+
+	return newbot;
 }
 
-void add_styled_text(const char *text, nhstr *newbot) {
-	add_styled_text_match(text, text, newbot);
+nhstr add_styled_text(const char *text, nhstr newbot) {
+	return add_styled_text_match(text, text, newbot);
 }
 
 static int mrank_sz = 0; /* loaded by max_rank_sz (from u_init) */
@@ -210,43 +212,41 @@ static nhstr botl_strength(void) {
 }
 
 nhstr bot1str() {
-	nhstr dret = {0};
-	nhstr *ret = &dret;
+	nhstr ret = {0};
+
+	char *pltitle = botl_player();
+	usize plen = strlen(pltitle);
 
 	if (iflags.hitpointbar) {
-		//TODO: inverse
-		nhscatz(ret, "[");
-	}
-
-	if (iflags.hitpointbar) {
-		char *pltitle = botl_player();
-		usize bar_length = strlen(pltitle);
+		ret = nhscatz(ret, "[");
 		usize filledbar;
 		if (uhp() < 0) {
-			filledbar = bar_length;	 //highlight the whole thing
+			filledbar = plen;	 //highlight the whole thing
 		} else {
-			filledbar = uhp() * bar_length / uhpmax();
+			filledbar = uhp() * plen / uhpmax();
 		}
 
 		nhstyle s = percentage_style_of(uhp(), uhpmax(), hp_colors);
 		if (iflags.use_inverse) s.attr |= ATR_INVERSE;
-		nhscatznc(ret, pltitle, filledbar, s);
-		nhscatz(ret, pltitle + filledbar);
+		ret = nhscatznc(ret, pltitle, filledbar, s);
+		ret = nhscatz(ret, pltitle + filledbar);
 
-		nhscatz(ret, "]");
+		ret = nhscatz(ret, "]");
+	} else {
+		ret = nhscatzn(ret, pltitle, plen);
 	}
 
-	nhscatz(ret, "  ");
+	ret = nhscatz(ret, "  ");
 
-	nhscatf(ret, "St:%/s ", botl_strength());
-	nhscatf(ret, "Dx:%i Co:%i In:%i Wi:%i Ch:%i",
+	ret = nhscatf(ret, "St:%s ", botl_strength());
+	ret = nhscatf(ret, "Dx:%i Co:%i In:%i Wi:%i Ch:%i",
 		ACURR(A_DEX), ACURR(A_CON), ACURR(A_INT), ACURR(A_WIS), ACURR(A_CHA));
-	nhscatz(ret, (u.ualign.type == A_CHAOTIC) ? "  Chaotic" : (u.ualign.type == A_NEUTRAL) ? "  Neutral" : "  Lawful");
+	ret = nhscatz(ret, (u.ualign.type == A_CHAOTIC) ? "  Chaotic" : (u.ualign.type == A_NEUTRAL) ? "  Neutral" : "  Lawful");
 
 	if (flags.showscore)
-		nhscatf(ret, " S:%l", botl_score());
+		ret = nhscatf(ret, " S:%l", botl_score());
 
-	return dret;
+	return ret;
 }
 
 void bot1() {
@@ -299,8 +299,7 @@ int describe_level(char *buf, int verbose) {
 static int bot2_abbrev = 0; /* Line 2 abbreviation level (max 4) */
 
 nhstr bot2str(void) {
-	nhstr dret = {0};
-	nhstr *ret = &dret;
+	nhstr ret = {0};
 
 	int hp, hpmax;
 	int cap = near_capacity();
@@ -312,42 +311,42 @@ nhstr bot2str(void) {
 	if (bot2_abbrev < 4) {
 		char buf[BUFSZ];
 		describe_level(buf, false);
-		nhscatz(ret, buf);
+		ret = nhscatz(ret, buf);
 	}
 
 	if (bot2_abbrev < 1)
-		nhscatf(ret, " %c:%l", oc_syms[COIN_CLASS], money_cnt(invent));
+		ret = nhscatf(ret, " %c:%l", oc_syms[COIN_CLASS], money_cnt(invent));
 
-	nhscatz(ret, " ");
-	nhscatfc(ret, percentage_style_of(hp, hpmax, hp_colors), "HP:%i(%i)", hp, hpmax);
-	nhscatz(ret, " ");
-	nhscatfc(ret, percentage_style_of(u.uen, u.uenmax, pw_colors), "Pw:%i(%i)", u.uen, u.uenmax);
-	nhscatf(ret, " AC:%i", u.uac);
+	ret = nhscatz(ret, " ");
+	ret = nhscatfc(ret, percentage_style_of(hp, hpmax, hp_colors), "HP:%i(%i)", hp, hpmax);
+	ret = nhscatz(ret, " ");
+	ret = nhscatfc(ret, percentage_style_of(u.uen, u.uenmax, pw_colors), "Pw:%i(%i)", u.uen, u.uenmax);
+	ret = nhscatf(ret, " AC:%i", u.uac);
 
 	if (Upolyd) {
-		nhscatf(ret, " HD:%i", ((u.ulycn == u.umonnum) ? u.ulevel : mons[u.umonnum].mlevel));
+		ret = nhscatf(ret, " HD:%i", ((u.ulycn == u.umonnum) ? u.ulevel : mons[u.umonnum].mlevel));
 	} else if (flags.showexp && bot2_abbrev < 3) {
-		nhscatf(ret, " Xp:%i/%l", u.ulevel, u.uexp);
+		ret = nhscatf(ret, " Xp:%i/%l", u.ulevel, u.uexp);
 	} else {
-		nhscatf(ret, " Exp:%i", u.ulevel);
+		ret = nhscatf(ret, " Exp:%i", u.ulevel);
 	}
 
 	if (flags.showweight && bot2_abbrev < 3)
-		nhscatf(ret, " Wt:%l/%l", (long)(inv_weight() + weight_cap()), (long)weight_cap());
+		ret = nhscatf(ret, " Wt:%l/%l", (long)(inv_weight() + weight_cap()), (long)weight_cap());
 
 	if (flags.time && bot2_abbrev < 3)
-		nhscatf(ret, " T:%l", moves);
+		ret = nhscatf(ret, " T:%l", moves);
 
 	if (iflags.showrealtime) {
 		time_t currenttime = get_realtime();
-		nhscatf(ret, " RT:%l:%2.2l", (long)(currenttime/3600), (long)((currenttime % 3600) / 60));
+		ret = nhscatf(ret, " RT:%l:%2.2l", (long)(currenttime/3600), (long)((currenttime % 3600) / 60));
 	}
 
 	// just give a bit of breathing room
-	nhscatz(ret, " ");
+	ret = nhscatz(ret, " ");
 
 	if (hu_stat[u.uhs][0]) {
-		add_styled_text_match((bot2_abbrev >= 2) ? hu_abbrev_stat[u.uhs] : hu_stat[u.uhs], hu_stat[u.uhs], ret);
+		ret = add_styled_text_match((bot2_abbrev >= 2) ? hu_abbrev_stat[u.uhs] : hu_stat[u.uhs], hu_stat[u.uhs], ret);
 	}
 
 	/* WAC further Up
@@ -357,33 +356,33 @@ nhstr bot2str(void) {
 	*/
 	/* KMH -- changed to Lev */
 
-	if (Levitation) add_styled_text("Lev", ret);
+	if (Levitation) ret = add_styled_text("Lev", ret);
 
-	if (Confusion) add_styled_text_match(bot2_abbrev >= 2 ? "Cnf" : "Conf", "Conf", ret);
+	if (Confusion) ret = add_styled_text_match(bot2_abbrev >= 2 ? "Cnf" : "Conf", "Conf", ret);
 
 	if (Sick) {
 		if (u.usick_type & SICK_VOMITABLE)
-			add_styled_text_match(bot2_abbrev >= 2 ? "FPs" : "FoodPois", "FoodPois", ret);
+			ret = add_styled_text_match(bot2_abbrev >= 2 ? "FPs" : "FoodPois", "FoodPois", ret);
 		if (u.usick_type & SICK_NONVOMITABLE)
-			add_styled_text("Ill", ret);
+			ret = add_styled_text("Ill", ret);
 	}
 
 	if (Blind)
-		add_styled_text_match(bot2_abbrev >= 2 ? "Bnd" : "Blind", "Blind", ret);
+		ret = add_styled_text_match(bot2_abbrev >= 2 ? "Bnd" : "Blind", "Blind", ret);
 	if (Deaf)
-		add_styled_text("Deaf", ret);
+		ret = add_styled_text("Deaf", ret);
 	if (Stunned)
-		add_styled_text_match(bot2_abbrev >= 2 ? "Stn" : "Stun", "Stun", ret);
+		ret = add_styled_text_match(bot2_abbrev >= 2 ? "Stn" : "Stun", "Stun", ret);
 	if (Hallucination)
-		add_styled_text_match(bot2_abbrev >= 2 ? "Hal" : "Hallu", "Hallu", ret);
+		ret = add_styled_text_match(bot2_abbrev >= 2 ? "Hal" : "Hallu", "Hallu", ret);
 	if (Slimed)
-		add_styled_text_match(bot2_abbrev >= 2 ? "Slm" : "Slime", "Slime", ret);
+		ret = add_styled_text_match(bot2_abbrev >= 2 ? "Slm" : "Slime", "Slime", ret);
 	if (u.ustuck && !u.uswallow && !sticks(youmonst.data))
-		add_styled_text("Held", ret);
+		ret = add_styled_text("Held", ret);
 	if (cap > UNENCUMBERED)
-		add_styled_text_match(bot2_abbrev >= 2 ? enc_abbrev_stat[cap] : enc_stat[cap], enc_stat[cap], ret);
+		ret = add_styled_text_match(bot2_abbrev >= 2 ? enc_abbrev_stat[cap] : enc_stat[cap], enc_stat[cap], ret);
 
-	return dret;
+	return ret;
 }
 
 static void bot2(void) {
@@ -444,7 +443,7 @@ void shorten_bot2(nhstr **str, usize len) {
 
 	bot2_abbrev = 0;
 
-	char *ret = nhs2cstr_tmp(s);
+	char *ret = nhs2cstr(s);
 	del_nhs(s);
 	return ret;
 }
@@ -462,7 +461,7 @@ static void bot_raw(boolean reconfig) {
 	char expr[21], iweight[21], capacity[21], flgs[21], tim[21];
 	*rv++ = reconfig ? "player" : botl_player();
 	nhstr nstr = botl_strength();
-	*rv++ = reconfig ? "strength" : (sprintf(strength, "%.7s", nhs2cstr_tmp_destroy(&nstr)), strength);
+	*rv++ = reconfig ? "strength" : (sprintf(strength, "%.7s", nhs2cstr(nstr)), strength);
 	*rv++ = reconfig ? "dexterity" : (sprintf(dex, "%d", ACURR(A_DEX)), dex);
 	*rv++ = reconfig ? "constitution" : (sprintf(con, "%d", ACURR(A_CON)), con);
 	*rv++ = reconfig ? "intelligence" : (sprintf(itl, "%d", ACURR(A_INT)), itl);

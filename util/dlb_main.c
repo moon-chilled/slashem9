@@ -375,7 +375,7 @@ int main(int argc, char **argv) {
 			}
 
 			for (i = 0; i < nfiles; i++)
-				free(ld[i].fname), ld[i].fname = 0;
+				ld[i].fname = 0;
 
 			close(out);
 			xexit(EXIT_SUCCESS);

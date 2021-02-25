@@ -63,18 +63,18 @@ void curses_message_win_puts(const char *message, bool recursed) {
 	linespace = (width - border_space*2) - mx;
 
 	if (strcmp(message, "#") == 0) {								    /* Extended command or Count: */
-		if ((strcmp(toplines, "#") != 0) && (my >= (height - 1 + border_space)) && (height != 1)) { /* Bottom of message window */
+		if ((strcmp(nhs2cstr(toplines), "#") != 0) && (my >= (height - 1 + border_space)) && (height != 1)) { /* Bottom of message window */
 			scroll_window(MESSAGE_WIN);
 			mx = width;
 			my--;
-			strcpy(toplines, message);
+			toplines = nhsdupz(message);
 		}
 
 		return;
 	}
 
 	if (!recursed) {
-		strcpy(toplines, message);
+		toplines = nhsdupz(message);
 		mesg_add_line((char *)message);
 	}
 
@@ -224,7 +224,7 @@ void curses_last_messages(void) {
 		if (mesg && mesg->str && strcmp(mesg->str, ""))
 			curses_message_win_puts(mesg->str, true);
 	}
-	curses_message_win_puts(toplines, true);
+	curses_message_win_puts(nhs2cstr(toplines), true);
 }
 
 /* Initialize list for message history */
@@ -451,8 +451,8 @@ void curses_message_win_getline(const char *prompt, char *answer, int buffer, bo
 done:
 				free(linestarts);
 				strncpy(answer, p_answer, buffer);
-				strcpy(toplines, tmpbuf);
-				mesg_add_line((char *)tmpbuf);
+				toplines = nhsdupz(tmpbuf);
+				mesg_add_line(tmpbuf);
 				free(tmpbuf);
 				curs_set(orig_cursor);
 				curses_toggle_color_attr(win, NONE, A_BOLD, OFF);

@@ -195,7 +195,7 @@ void you_unwere(boolean purify) {
 				pline("The purification was deadly...");
 
 				killer.format = NO_KILLER_PREFIX;
-				nhscopyz(&killer.name, "purified while stuck in creature form");
+				killer.name = nhsdupz("purified while stuck in creature form");
 				done(DIED);
 			} else {
 				pline("You feel very bad!");

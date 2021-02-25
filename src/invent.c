@@ -358,6 +358,7 @@ struct obj *addinv(struct obj *obj) {
 	 * extra to quivered stack is more useful than to wielded one
 	 */
 	if (uquiver && merged(&uquiver, &obj)) {
+		if (!uquiver) impossible("bad quiver???");
 		obj = uquiver;
 		goto added;
 	}
@@ -365,6 +366,7 @@ struct obj *addinv(struct obj *obj) {
 	/* merge if possible; find end of chain in the process */
 	for (prev = 0, otmp = invent; otmp; prev = otmp, otmp = otmp->nobj)
 		if (merged(&otmp, &obj)) {
+			if (!otmp) impossible("bad otmp???");
 			obj = otmp;
 			goto added;
 		}

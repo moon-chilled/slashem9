@@ -32,9 +32,8 @@ void panic(char *str, ...) {
  * have it then just use malloc() instead.  This may not work on some
  * systems, but they should either use yacc or get a real alloca routine.
  */
-long *alloca(cnt) unsigned cnt;
-{
-	return cnt ? alloc(cnt) : NULL;
+long *alloca(usize l) {
+	return alloc(l);
 }
 #endif
 

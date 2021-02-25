@@ -435,7 +435,7 @@ static int kick_object(xchar x, xchar y) {
 			pline("You turn to stone...");
 			killer.format = KILLED_BY;
 			/* KMH -- otmp should be kickobj */
-			nhscopyf(&killer.name, "kicking %S without boots", an(killer_cxname(kickobj, true)));
+			killer.name = nhsfmt("kicking %S without boots", an(killer_cxname(kickobj, true)));
 			done(STONING);
 		}
 	}

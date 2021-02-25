@@ -160,7 +160,7 @@ void losexp(const char *drainer /* cause of death, if drain should be fatal */, 
 	} else {
 		if (drainer) {
 			killer.format = KILLED_BY;
-			nhscopyz(&killer.name, drainer);
+			killer.name = nhsdupz(drainer);
 			done(DIED);
 		}
 		/* no drainer or lifesaved */

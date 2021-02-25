@@ -325,9 +325,9 @@ void xputs(const char *s) {
 }
 
 void cl_end(void) {
-	if (CE)
+	if (CE) {
 		xputs(CE);
-	else { /* no-CE fix - free after Harold Rynes */
+	} else { /* no-CE fix - free after Harold Rynes */
 		/* this looks terrible, especially on a slow terminal
 		   but is better than nothing */
 		int cx = ttyDisplay->curx + 1;

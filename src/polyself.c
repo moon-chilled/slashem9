@@ -110,10 +110,10 @@ static void polyman(const char *fmt, const char *arg) {
 		struct kinfo *kptr = find_delayed_killer(POLYMORPH);
 		if (kptr && kptr->name.len) {
 			killer.format = kptr->format;
-			nhsmove(&killer.name, &kptr->name);
+			killer.name = kptr->name;
 		} else {
 			killer.format = KILLED_BY;
-			nhscopyz(&killer.name, "self-genocide");
+			killer.name = nhsdupz("self-genocide");
 		}
 
 		dealloc_killer(kptr);
@@ -238,7 +238,7 @@ static void newman(void) {
 		dead: /* we come directly here if their experience level went to 0 or less */
 			pline("Your new form doesn't seem healthy enough to survive.");
 			killer.format = KILLED_BY_AN;
-			nhscopyz(&killer.name, "unsuccessful polymorph");
+			killer.name = nhsdupz("unsuccessful polymorph");
 			done(DIED);
 			newuhs(false);
 			polysense(youmonst.data);
@@ -824,7 +824,7 @@ void rehumanize(void) {
 	/* KMH, balance patch -- you can't revert back while unchanging */
 	if (Unchanging && forced) {
 		killer.format = NO_KILLER_PREFIX;
-		nhscopyz(&killer.name, "killed while stuck in creature form");
+		killer.name = nhsdupz("killed while stuck in creature form");
 		done(DIED);
 	}
 
@@ -834,7 +834,7 @@ void rehumanize(void) {
 
 	if (u.uhp < 1) {
 		killer.format = KILLED_BY;
-		nhscopyf(&killer.name, "reverting to unhealthy %S form", urace.adj);
+		killer.name = nhsfmt("reverting to unhealthy %S form", urace.adj);
 		done(DIED);
 	}
 
@@ -902,7 +902,7 @@ int dogaze(void) {
 		/* as if gazing at a sleeping anything is fruitful... */
 		pline("You turn to stone...");
 		killer.format = KILLED_BY;
-		nhscatz(&killer.name, "deliberately gazing at Medusa's hideous countenance");
+		killer.name = nhscatz(killer.name, "deliberately gazing at Medusa's hideous countenance");
 		done(STONING);
 	} else if (!mtmp->mcansee || mtmp->msleeping) {
 		pline("But nothing happens.");
@@ -1246,7 +1246,7 @@ dogaze (void) {
 					/* as if gazing at a sleeping anything is fruitful... */
 					pline("You turn to stone...");
 					killer.format = KILLED_BY;
-					nhscopyz(&killer.name, "deliberately meeting Medusa's gaze");
+					killer.name = nhsdupz("deliberately meeting Medusa's gaze");
 					done(STONING);
 				}
 			}

@@ -2180,7 +2180,7 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 				}
 				pline("You die...");
 				killer.format = KILLED_BY;
-				nhscopyz(&killer.name, "a reflected gaze of death");
+				killer.name = nhsdupz("a reflected gaze of death");
 				done(DIED);
 			} else if (is_undead(mdef->data)) {
 				/* Still does normal damage */
@@ -2369,7 +2369,7 @@ static int gulpum(struct monst *mdef, struct attack *mattk) {
 						pline("Unfortunately, digesting any of it is fatal.");
 						end_engulf();
 						killer.format = NO_KILLER_PREFIX;
-						nhscopyf(&killer.name, "unwisely tried to eat %S", pd->mname);
+						killer.name = nhsfmt("unwisely tried to eat %S", pd->mname);
 						done(DIED);
 						return 0; /* lifesaved */
 					}
@@ -2845,7 +2845,7 @@ static boolean hmonas(struct monst *mon) {
 					/* as if gazing at a sleeping anything is fruitful... */
 					pline("You turn to stone...");
 					killer.format = KILLED_BY;
-					nhscopyz(&killer.name, "deliberately gazing at Medusa's hideous countenance");
+					killer.name = nhsdupz("deliberately gazing at Medusa's hideous countenance");
 					done(STONING);
 				} else if (!mon->mcansee || mon->msleeping) {
 					pline("But nothing happens.");

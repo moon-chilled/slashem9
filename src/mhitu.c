@@ -1085,7 +1085,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 							if (!rn2(10)) {
 								pline("%s plunges the stake into your heart.",
 								      Monnam(mtmp));
-								nhscopyz(&killer.name, "a wooden stake in the heart.");
+								killer.name = nhsdupz("a wooden stake in the heart.");
 								killer.format = KILLED_BY_AN;
 								u.ugrave_arise = NON_PM; /* No corpse */
 								done(DIED);
@@ -1418,7 +1418,7 @@ do_stone:
 								kformat = KILLED_BY;
 							}
 
-							make_stoned(5, NULL, kformat, *nhstmpt(nhsdupz(kname)));
+							make_stoned(5, NULL, kformat, nhsdupz(kname));
 							return 1;
 						}
 					}
@@ -1450,7 +1450,7 @@ do_stone:
 
 						pline("%s drowns you...", Monnam(mtmp));
 						killer.format = KILLED_BY_AN;
-						nhscopyf(&killer.name, "%S by %S", moat ? "moat" : "pool of water", an(mtmp->data->mname));
+						killer.name = nhsfmt("%S by %S", moat ? "moat" : "pool of water", an(mtmp->data->mname));
 						done(DROWNING);
 					} else if (mattk->aatyp == AT_HUGS)
 						pline("You are being crushed.");
@@ -1719,7 +1719,7 @@ do_stone:
 				case 17:
 					if (!Antimagic) {
 						killer.format = KILLED_BY_AN;
-						nhscopyz(&killer.name, "touch of death");
+						killer.name = nhsdupz("touch of death");
 						done(DIED);
 						dmg = 0;
 						break;
@@ -2247,7 +2247,7 @@ int gazemu(struct monst *mtmp, struct attack *mattk) {
 					break;
 				pline("You turn to stone...");
 				killer.format = KILLED_BY;
-				nhscopyz(&killer.name, mtmp->data->mname);
+				killer.name = nhsdupz(mtmp->data->mname);
 				done(STONING);
 			}
 			break;
@@ -2409,7 +2409,7 @@ int gazemu(struct monst *mtmp, struct attack *mattk) {
 				} else {
 					pline("You die...");
 					killer.format = KILLED_BY_AN;
-					nhscopyz(&killer.name, "gaze of death");
+					killer.name = nhsdupz("gaze of death");
 					done(DIED);
 				}
 			}

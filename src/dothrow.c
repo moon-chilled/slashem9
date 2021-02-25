@@ -120,8 +120,8 @@ static int throw_obj(struct obj *obj, int shotlimit, int thrown) {
 	u_wipe_engr(2);
 	if (!uarmg && !Stone_resistance && (obj->otyp == CORPSE && touch_petrifies(&mons[obj->corpsenm]))) {
 		pline("You throw the %s corpse with your bare %s.", mons[obj->corpsenm].mname, body_part(HAND));
-		nhscopyf(&killer.name, "%S corpse", an(mons[obj->corpsenm].mname));
-		instapetrify(nhs2cstr_tmp(killer.name));
+		killer.name = nhsfmt("%S corpse", an(mons[obj->corpsenm].mname));
+		instapetrify(nhs2cstr(killer.name));
 	}
 	if (welded(obj)) {
 		weldmsg(obj);
@@ -817,7 +817,7 @@ static boolean toss_up(struct obj *obj, boolean hitsroof) {
 			   !(poly_when_stoned(youmonst.data) && polymon(PM_STONE_GOLEM))) {
 petrify:
 			killer.format = KILLED_BY;
-			nhscopyz(&killer.name, "elementary physics"); /* "what goes up..." */
+			killer.name = nhsdupz("elementary physics"); /* "what goes up..." */
 			pline("You turn to stone.");
 			if (obj) dropy(obj);        /* bypass most of hitfloor() */
 			done(STONING);

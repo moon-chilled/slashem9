@@ -311,7 +311,7 @@ void curses_putstr(winid wid, int attr, const char *text) {
 }
 
 void curses_putnstr(winid wid, int attr, nhstr text) {
-	curses_putstr(wid, attr, nhs2cstr_tmp(text));
+	curses_putstr(wid, attr, nhs2cstr(text));
 }
 
 /* Display the file named str.  Complain about missing files

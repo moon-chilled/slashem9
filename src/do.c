@@ -1023,7 +1023,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 		if (fd < 0) {
 			pline("%s", whynot);
 			pline("Probably someone removed it.");
-			nhscopyz(&killer.name, whynot);
+			killer.name = nhsdupz(whynot);
 			done(TRICKED);
 			/* we'll reach here if running in wizard mode */
 			error("Cannot continue this game.");
@@ -1076,7 +1076,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 						Flying ? "fly" : "climb",
 						Flying ? "up along" : "up");
 			} else {
-				nhscopyf(&deferred_msg, "%S %S up the stairs.",
+				deferred_msg = nhsfmt("%S %S up the stairs.",
 						(Punished && !Levitation) ? "With great effort you" : "You",
 						Flying ? "fly" : "climb");
 			}
@@ -1094,7 +1094,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 			} else if (Flying) {
 				if (flags.verbose) {
 					if (at_ladder) pline("You fly down along the ladder.");
-					else nhscopyz(&deferred_msg, "You fly down the stairs.");
+					else deferred_msg = nhsdupz("You fly down the stairs.");
 				}
 			} else if (near_capacity() > UNENCUMBERED || Punished || Fumbling) {
 				pline("You fall down the %s.", at_ladder ? "ladder" : "stairs");
@@ -1119,7 +1119,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 			} else {        /* ordinary descent */
 				if (flags.verbose) {
 					if (at_ladder) pline("You climb down the ladder.");
-					else nhscopyz(&deferred_msg, "You descend the stairs.");
+					else deferred_msg = nhsdupz("You descend the stairs.");
 				}
 			}
 		}
@@ -1192,7 +1192,7 @@ void goto_level(d_level *newlevel, boolean at_stairs, boolean falling, boolean p
 	flush_screen(-1);
 
 	if (deferred_msg.len) {
-		plines(nhs2cstr_tmp(deferred_msg));
+		plines(nhs2cstr(deferred_msg));
 		del_nhs(&deferred_msg);
 	}
 

@@ -48,8 +48,7 @@ static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc ho
 	for (;;) {
 		if (exit_early && exit_early(obufp)) break;
 		fflush(stdout);
-		sprintf(toplines, "%s ", query);
-		strcat(toplines, obufp);
+		toplines = nhsfmt("%S %S", query, obufp);
 		if ((c = Getchar()) == EOF) {
 			break;
 		}
@@ -70,10 +69,8 @@ static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc ho
 				ttyDisplay->inread = sav;
 				tty_clear_nhwindow(WIN_MESSAGE);
 				cw->maxcol = cw->maxrow;
-				addtopl(query);
-				addtopl(" ");
 				*bufp = 0;
-				addtopl(obufp);
+				addtopl(nhsfmt("%S %S", query, obufp));
 			} else {
 				if (!doprev)
 					tty_doprev_message(); /* need two initially */
@@ -85,10 +82,8 @@ static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc ho
 			tty_clear_nhwindow(WIN_MESSAGE);
 			cw->maxcol = cw->maxrow;
 			doprev = false;
-			addtopl(query);
-			addtopl(" ");
 			*bufp = 0;
-			addtopl(obufp);
+			addtopl(nhsfmt("%S %S", query, obufp));
 		}
 		if (c == erase_char || c == '\b') {
 			if (bufp != obufp) {

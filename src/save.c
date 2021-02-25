@@ -221,7 +221,7 @@ int dosave0() {
 			HUP pline("%s", whynot);
 			close(fd);
 			delete_savefile();
-			HUP nhscopyz(&killer.name, whynot);
+			HUP killer.name = nhsdupz(whynot);
 			HUP done(TRICKED);
 			return 0;
 		}
@@ -340,7 +340,7 @@ void savestateinlock() {
 		if (fd < 0) {
 			pline("%s", whynot);
 			pline("Probably someone removed it.");
-			nhscopyz(&killer.name, whynot);
+			killer.name = nhsdupz(whynot);
 			done(TRICKED);
 			return;
 		}
@@ -351,7 +351,7 @@ void savestateinlock() {
 				"Level #0 pid (%d) doesn't match ours (%d)!",
 				hpid, hackpid);
 			pline("%s", whynot);
-			nhscopyz(&killer.name, whynot);
+			killer.name = nhsdupz(whynot);
 			done(TRICKED);
 		}
 		close(fd);
@@ -359,7 +359,7 @@ void savestateinlock() {
 		fd = create_levelfile(0, whynot);
 		if (fd < 0) {
 			pline("%s", whynot);
-			nhscopyz(&killer.name, whynot);
+			killer.name = nhsdupz(whynot);
 			done(TRICKED);
 			return;
 		}
@@ -851,11 +851,9 @@ void free_menu_coloring() {
 }
 
 void freedynamicdata() {
-	for (int i = 0; i < NHSTMP_BACKING_STORE_SIZE; i++) nhstmp(&new_nhs());
 	free_status_colors();
 	unload_qtlist();
 	free_invbuf(); /* let_to_name (invent.c) */
-	msgpline_free();
 	free_menu_coloring();
 	tmp_at(DISP_FREEMEM, 0); /* temporary display effects */
 #define freeobjchn(X)	      (saveobjchn(0, X, FREE_SAVE), X = 0)

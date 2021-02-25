@@ -323,7 +323,7 @@ static void fortune(struct monst *mtmp) {
 					pline("You have an out of body experience.");
 				else {
 					killer.format = KILLED_BY;
-					nhscopyz(&killer.name, "the card of Death");
+					killer.name = nhsdupz("the card of Death");
 					done(DIED);
 				}
 				break;

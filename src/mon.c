@@ -1712,8 +1712,8 @@ boolean corpse_chance(struct monst *mon, struct monst *magr, bool was_swallowed)
 				if (magr == &youmonst) {
 					pline("There is an explosion in your %s!",
 					      body_part(STOMACH));
-					nhscopyf(&killer.name, "%S explosion", s_suffix(mdat->mname));
-					losehp(Maybe_Half_Phys(tmp), nhs2cstr_tmp(killer.name), KILLED_BY_AN);
+					killer.name = nhsfmt("%S explosion", s_suffix(mdat->mname));
+					losehp(Maybe_Half_Phys(tmp), nhs2cstr(killer.name), KILLED_BY_AN);
 				} else {
 					if (!Deaf) You_hear("an explosion.");
 					magr->mhp -= tmp;
@@ -1730,7 +1730,7 @@ boolean corpse_chance(struct monst *mon, struct monst *magr, bool was_swallowed)
 			}
 
 			killer.format = KILLED_BY_AN;
-			nhscopyf(&killer.name, "%S explosion", s_suffix(mdat->mname));
+			killer.name = nhsfmt("%S explosion", s_suffix(mdat->mname));
 			explode(mon->mx, mon->my, -1, tmp, MON_EXPLODE, EXPL_NOXIOUS);
 			return false;
 		}
@@ -2247,7 +2247,7 @@ void poisoned(const char *string, int typ, const char *pname, int fatal) {
 	}
 	if (u.uhp < 1) {
 		killer.format = kprefix;
-		nhscopyz(&killer.name, pname);
+		killer.name = nhsdupz(pname);
 		/* "Poisoned by a poisoned ___" is redundant */
 		done(strstri(pname, "poison") ? DIED : POISONING);
 	}

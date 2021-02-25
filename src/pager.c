@@ -726,20 +726,20 @@ int do_look(int mode, coord *click_cc) {
 				pm = lookat(cc.x, cc.y, look_buf, monbuf);
 				firstmatch = look_buf;
 				if (*firstmatch) {
-					nhscopyf(&temp_buf, " (%S)", firstmatch);
-					strncat(out_str, nhs2cstr_tmp(temp_buf), BUFSZ - strlen(out_str) - 1);
+					temp_buf = nhsfmt(" (%S)", firstmatch);
+					strncat(out_str, nhs2cstr(temp_buf), BUFSZ - strlen(out_str) - 1);
 					found = 1; /* we have something to look up */
 				}
 				if (monbuf[0]) {
-					nhscopyf(&temp_buf, " [seen: %S]", monbuf);
-					strncat(out_str, nhs2cstr_tmp(temp_buf), BUFSZ - strlen(out_str) - 1);
+					temp_buf = nhsfmt(" [seen: %S]", monbuf);
+					strncat(out_str, nhs2cstr(temp_buf), BUFSZ - strlen(out_str) - 1);
 				}
 				if (wizard && pm) {
 					struct monst *mtmp = m_at(cc.x, cc.y);
 					if (mtmp && mtmp->oldmonnm != monsndx(pm)) {
-						nhscopyf(&temp_buf, " [polymorphed from a %S]",
+						temp_buf = nhsfmt(" [polymorphed from a %S]",
 							mons[mtmp->oldmonnm].mname);
-						strncat(out_str, nhs2cstr_tmp(temp_buf), BUFSZ - strlen(out_str) - 1);
+						strncat(out_str, nhs2cstr(temp_buf), BUFSZ - strlen(out_str) - 1);
 					}
 				}
 				del_nhs(&temp_buf);

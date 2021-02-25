@@ -900,7 +900,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 						// fell into his own pit
 						// plunged into a pit
 						nhstr reason = nhsfmt(plunged ? "deliberately plunged into %S%S pit" : "fell into %S%S pit", trap->madeby_u ? uhis() : "a", trap->madeby_u ? " own" : "");
-						losehp(Maybe_Half_Phys(rnd(6)), nhs2cstr_tmp_destroy(&reason), NO_KILLER_PREFIX);
+						losehp(Maybe_Half_Phys(rnd(6)), nhs2cstr(reason), NO_KILLER_PREFIX);
 					}
 					if (Punished && !carried(uball)) {
 						unplacebc();
@@ -2209,7 +2209,7 @@ void instapetrify(const char *str) {
 		return;
 	pline("You turn to stone...");
 	killer.format = KILLED_BY;
-	nhscopyz(&killer.name, str);
+	killer.name = nhsdupz(str);
 	done(STONING);
 }
 
@@ -3067,7 +3067,7 @@ crawl:
 	}
 
 	killer.format = KILLED_BY_AN;
-	nhscopyz(&killer.name, (levl[u.ux][u.uy].typ == POOL || Is_medusa_level(&u.uz)) ?  "pool of water" : "moat");
+	killer.name = nhsdupz((levl[u.ux][u.uy].typ == POOL || Is_medusa_level(&u.uz)) ?  "pool of water" : "moat");
 	done(DROWNING);
 
 	/* oops, we're still alive.  better get out of the water. */
@@ -4104,7 +4104,7 @@ bool lava_effects() {
 		/* s/he died... */
 		u.uhp = -1;
 		killer.format = KILLED_BY;
-		nhscopyz(&killer.name, lava_killer);
+		killer.name = nhsdupz(lava_killer);
 		pline("You burn to a crisp...");
 		done(BURNING);
 		while (!safe_teleds(true)) {

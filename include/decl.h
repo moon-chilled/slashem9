@@ -374,7 +374,7 @@ extern struct c_color_names {
 
 extern winid WIN_MESSAGE, WIN_STATUS;
 extern winid WIN_MAP, WIN_INVEN;
-extern char toplines[];
+extern nhstr toplines;
 #ifndef TCAP_H
 extern struct tc_gbl_data {  /* also declared in tcap.h */
 	char *tc_AS, *tc_AE; /* graphics start and end (tty font swapping) */

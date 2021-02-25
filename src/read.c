@@ -1690,7 +1690,7 @@ static void do_class_genocide(void) {
 		}
 		if (gameover || u.uhp == -1) {
 			killer.format = KILLED_BY_AN;
-			nhscopyz(&killer.name, "scroll of genocide");
+			killer.name = nhsdupz("scroll of genocide");
 			if (gameover) done(GENOCIDED);
 		}
 		return;
@@ -1805,14 +1805,14 @@ void do_genocide(int how) {
 			u.uhp = -1;
 			if (how & PLAYER) {
 				killer.format = KILLED_BY;
-				nhscopyz(&killer.name, "genocidal confusion");
+				killer.name = nhsdupz("genocidal confusion");
 			} else if (how & ONTHRONE) {
 				/* player selected while on a throne */
 				killer.format = KILLED_BY_AN;
-				nhscopyz(&killer.name, "imperious order");
+				killer.name = nhsdupz("imperious order");
 			} else { /* selected player deliberately, not confused */
 				killer.format = KILLED_BY_AN;
-				nhscopyz(&killer.name, "scroll of genocide");
+				killer.name = nhsdupz("scroll of genocide");
 			}
 
 			/* Polymorphed characters will die as soon as they're rehumanized. */

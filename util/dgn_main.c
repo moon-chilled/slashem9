@@ -64,7 +64,6 @@ int main(int argc, char **argv) {
 	} else { /* Otherwise every argument is a filename */
 		infile = outfile = NULL;
 		for (i = 1; i < argc; i++) {
-			if (infile) free(infile);
 			infile = alloc(strlen(argv[i]) + 1);
 			fname = strcpy(infile, argv[i]);
 			/* the input file had better be a .def file */
@@ -74,7 +73,6 @@ int main(int argc, char **argv) {
 					"Error - file name \"%s\" in wrong format.\n",
 					fname);
 				errors_encountered = true;
-				free(infile);
 				continue;
 			}
 
@@ -84,7 +82,6 @@ int main(int argc, char **argv) {
 			strncpy(basename, infile, len);
 			basename[len] = '\0';
 
-			if (outfile) free(outfile);
 #ifdef PREFIX
 			outfile = alloc(strlen(PREFIX) + strlen(basename) + 1);
 			strcpy(outfile, PREFIX);
@@ -93,7 +90,6 @@ int main(int argc, char **argv) {
 			outfile[0] = '\0';
 #endif
 			strcat(outfile, basename);
-			free(basename);
 
 			fin = freopen(infile, "r", stdin);
 			if (!fin) {

@@ -3,23 +3,26 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include <stdlib.h>
+#include <gc/gc.h>
 
 #include "config.h"
 
 extern void panic(const char *, ...);
 
 void *alloc(usize lth) {
-	void *ptr = calloc(1, lth);
+	void *ptr = GC_malloc(lth);
 
 	if (!ptr) {
 		panic("Memory allocation failure; cannot get %zu bytes", lth);
 	}
 
-	return ptr;
+	return memset(ptr, 0, lth);
 }
 
-void nhfree(const void *ptr) {
-	free((void *)ptr);
+void *nhrealloc(void *ptr, usize sz) {
+	void *ret = GC_realloc(ptr, sz);
+	if (!ret) panic("Memory allocation failure; cannot get %zu bytes", sz);
+	return ret;
 }
 
 /* format a pointer for display purposes; caller supplies the result buffer */

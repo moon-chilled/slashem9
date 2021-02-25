@@ -10,7 +10,9 @@
 #include "wintty.h"
 #include <ctype.h>
 
+static void putnsyms(const nhstr str);
 static void redotoplin(const char *);
+static void redotopnlin(const nhstr);
 static void topl_putsym(glyph_t);
 static void remember_topl(void);
 static void removetopl(int);
@@ -34,7 +36,7 @@ int tty_doprev_message(void) {
 					putstr(prevmsg_win, 0, cw->data[i]);
 				i = (i + 1) % cw->rows;
 			} while (i != cw->maxcol);
-			putstr(prevmsg_win, 0, toplines);
+			putnstr(prevmsg_win, 0, toplines);
 			display_nhwindow(prevmsg_win, true);
 			destroy_nhwindow(prevmsg_win);
 		} else if (iflags.prevmsg_window == 'c') { /* combination */
@@ -42,7 +44,7 @@ int tty_doprev_message(void) {
 				morc = 0;
 				if (cw->maxcol == cw->maxrow) {
 					ttyDisplay->dismiss_more = C('p'); /* <ctrl/P> allowed at --More-- */
-					redotoplin(toplines);
+					redotopnlin(toplines);
 					cw->maxcol--;
 					if (cw->maxcol < 0) cw->maxcol = cw->rows - 1;
 					if (!cw->data[cw->maxcol])
@@ -65,7 +67,7 @@ int tty_doprev_message(void) {
 							putstr(prevmsg_win, 0, cw->data[i]);
 						i = (i + 1) % cw->rows;
 					} while (i != cw->maxcol);
-					putstr(prevmsg_win, 0, toplines);
+					putnstr(prevmsg_win, 0, toplines);
 					display_nhwindow(prevmsg_win, true);
 					destroy_nhwindow(prevmsg_win);
 				}
@@ -77,7 +79,7 @@ int tty_doprev_message(void) {
 			prevmsg_win = create_nhwindow(NHW_MENU);
 			putstr(prevmsg_win, 0, "Message History");
 			putstr(prevmsg_win, 0, "");
-			putstr(prevmsg_win, 0, toplines);
+			putnstr(prevmsg_win, 0, toplines);
 			cw->maxcol = cw->maxrow - 1;
 			if (cw->maxcol < 0) cw->maxcol = cw->rows - 1;
 			do {
@@ -98,7 +100,7 @@ int tty_doprev_message(void) {
 		do {
 			morc = 0;
 			if (cw->maxcol == cw->maxrow)
-				redotoplin(toplines);
+				redotopnlin(toplines);
 			else if (cw->data[cw->maxcol])
 				redotoplin(cw->data[cw->maxcol]);
 			cw->maxcol--;
@@ -115,7 +117,7 @@ int tty_doprev_message(void) {
     do {
 	morc = 0;
         if (cw->maxcol == cw->maxrow) {
-            redotoplin(toplines);
+            redotopnlin(toplines);
             cw->maxcol--;
             if (cw->maxcol < 0) cw->maxcol = cw->rows-1;
             if (!cw->data[cw->maxcol])
@@ -126,7 +128,7 @@ int tty_doprev_message(void) {
             tmpwin = create_nhwindow(NHW_MENU);
             putstr(tmpwin, ATR_BOLD, "Message History");
             putstr(tmpwin, 0, "");
-            putstr(tmpwin, 0, toplines);
+            putnstr(tmpwin, 0, toplines);
 
             do {
                 if (!cw->data[cw->maxcol]) break;
@@ -149,37 +151,33 @@ int tty_doprev_message(void) {
 	return 0;
 }
 
-static void redotoplin(const char *str) {
+static void redotopnlin(const nhstr str) {
 	int otoplin = ttyDisplay->toplin;
 	home();
 	end_glyphout(); /* in case message printed during graphics output */
-	putsyms(str);
+	putnsyms(str);
 	cl_end();
 	ttyDisplay->toplin = 1;
 	if (ttyDisplay->cury && otoplin != 3)
 		more();
 }
+static void redotoplin(const char *str) { redotopnlin(nhsdupz(str)); }
 
 static void remember_topl(void) {
 	struct WinDesc *cw = wins[WIN_MESSAGE];
 	int idx = cw->maxrow;
-	unsigned len = strlen(toplines) + 1;
 
-	if (len > (unsigned)cw->datlen[idx]) {
-		if (cw->data[idx]) free(cw->data[idx]);
-		len += (8 - (len & 7)); /* pad up to next multiple of 8 */
-		cw->data[idx] = alloc(len);
-		cw->datlen[idx] = (short)len;
-	}
-	strcpy(cw->data[idx], toplines);
+	cw->data[idx] = nhs2cstr_trunc(toplines);
+	cw->datlen[idx] = toplines.len + 1;
+
 	cw->maxcol = cw->maxrow = (idx + 1) % cw->rows;
 }
 
-void addtopl(const char *s) {
+void addtopl(const nhstr s) {
 	struct WinDesc *cw = wins[WIN_MESSAGE];
 
 	tty_curs(BASE_WINDOW, cw->curx + 1, cw->cury);
-	putsyms(s);
+	putnsyms(s);
 	cl_end();
 	ttyDisplay->toplin = 1;
 }
@@ -229,51 +227,52 @@ void more(void) {
 	ttyDisplay->inmore = 0;
 }
 
-void update_topl(const char *bp) {
-	char *tl, *otl;
-	int n0;
+void update_topl(const nhstr s) {
 	int notdied = 1;
 	struct WinDesc *cw = wins[WIN_MESSAGE];
 
 	/* If there is room on the line, print message on same line */
 	/* But messages like "You die..." deserve their own line */
-	n0 = strlen(bp);
 	if ((ttyDisplay->toplin == 1 || (cw->flags & WIN_STOP)) &&
 	    cw->cury == 0 &&
-	    n0 + (int)strlen(toplines) + 3 < CO - 8 && /* room for --More-- */
-	    (notdied = strncmp(bp, "You die", 7))) {
-		strcat(toplines, "  ");
-		strcat(toplines, bp);
+	    s.len + toplines.len + 3 < CO - 8 && /* room for --More-- */
+	    (notdied = !nhseq(nhstrim(s, 7), nhsdupz("You die")))) {
+		toplines = nhscatf(toplines, "  %s", s);
 		cw->curx += 2;
 		if (!(cw->flags & WIN_STOP))
-			addtopl(bp);
+			addtopl(s);
 		return;
 	} else if (!(cw->flags & WIN_STOP)) {
-		if (ttyDisplay->toplin == 1)
+		if (ttyDisplay->toplin == 1) {
 			more();
-		else if (cw->cury) {		   /* for when flags.toplin == 2 && cury > 1 */
+		} else if (cw->cury) {		   /* for when flags.toplin == 2 && cury > 1 */
 			docorner(1, cw->cury + 1); /* reset cury = 0 if redraw screen */
 			cw->curx = cw->cury = 0;   /* from home--cls() & docorner(1,n) */
 		}
 	}
 	remember_topl();
-	strncpy(toplines, bp, TBUFSZ);
-	toplines[TBUFSZ - 1] = 0;
+	toplines = nhsdup(s);
 
-	for (tl = toplines; n0 >= CO;) {
-		otl = tl;
-		for (tl += CO - 1; tl != otl && !isspace(*tl); --tl)
-			;
-		if (tl == otl) {
+	nhstr ntopl = new_nhs();
+	nhstr tl = toplines;
+	while (tl.len >= CO) {
+		usize i = CO;
+		while (i && !isspace(tl.str[--i])) {}
+		if (!i) {
 			/* Eek!  A huge token.  Try splitting after it. */
-			tl = index(otl, ' ');
-			if (!tl) break; /* No choice but to spit it out whole. */
+			isize j = nhsindex(tl, ' ');
+
+			if (j < 0) break; /* No choice but to spit it out whole. */
+
+			i = j;
 		}
-		*tl++ = '\n';
-		n0 = strlen(tl);
+		ntopl = nhscatf(ntopl, "%s\n", nhstrim(tl, i));
+		tl = nhslice(tl, i+1);
 	}
+	toplines = nhscat(ntopl, tl);
+
 	if (!notdied) cw->flags &= ~WIN_STOP;
-	if (!(cw->flags & WIN_STOP)) redotoplin(toplines);
+	if (!(cw->flags & WIN_STOP)) redotopnlin(toplines);
 }
 
 static void topl_putsym(glyph_t c) {
@@ -310,6 +309,11 @@ void putsyms(const char *str) {
 		topl_putsym(*str++);
 }
 
+//todo style
+static void putnsyms(const nhstr s) {
+	for (usize i = 0; i < s.len; i++) topl_putsym(s.str[i]);
+}
+
 static void removetopl(int n) {
 	/* assume addtopl() has been done, so ttyDisplay->toplin is already set */
 	while (n-- > 0)
@@ -331,11 +335,10 @@ extern char erase_char; /* from xxxtty.c; don't need kill_char */
  */
 char tty_yn_function(const char *query, const char *resp, char def) {
 	char q;
-	char rtmp[40];
 	bool digit_ok, allow_num;
 	struct WinDesc *cw = wins[WIN_MESSAGE];
 	bool doprev = false;
-	char prompt[BUFSZ];
+	nhstr prompt;
 
 	if (ttyDisplay->toplin == 1 && !(cw->flags & WIN_STOP)) more();
 	cw->flags &= ~WIN_STOP;
@@ -348,9 +351,9 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 		strcpy(respbuf, resp);
 		/* any acceptable responses that follow <esc> aren't displayed */
 		if ((rb = index(respbuf, '\033')) != 0) *rb = '\0';
-		sprintf(prompt, "%s [%s] ", query, respbuf);
-		if (def) sprintf(eos(prompt), "(%c) ", def);
-		pline("%s", prompt);
+		prompt = nhsfmt("%S [%S] ", query, respbuf);
+		if (def) prompt = nhscatf(prompt, "(%c) ", def);
+		pline("%s", nhs2cstr(prompt));
 	} else {
 		pline("%s ", query);
 		q = readchar();
@@ -407,11 +410,11 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 			char z, digit_string[2];
 			int n_len = 0;
 			long value = 0;
-			addtopl("#"), n_len++;
+			addtopl(nhsdupz("#")), n_len++;
 			digit_string[1] = '\0';
 			if (q != '#') {
 				digit_string[0] = q;
-				addtopl(digit_string), n_len++;
+				addtopl(nhsdupz(digit_string)), n_len++;
 				value = q - '0';
 				q = '#';
 			}
@@ -421,7 +424,7 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 					value = (10 * value) + (z - '0');
 					if (value < 0) break; /* overflow: try again */
 					digit_string[0] = z;
-					addtopl(digit_string), n_len++;
+					addtopl(nhsdupz(digit_string)), n_len++;
 				} else if (z == 'y' || index(quitchars, z)) {
 					if (z == '\033') value = -1; /* abort */
 					z = '\n';		     /* break */
@@ -451,8 +454,7 @@ char tty_yn_function(const char *query, const char *resp, char def) {
 	} while (!q);
 
 	if (q != '#') {
-		sprintf(rtmp, "%c", q);
-		addtopl(rtmp);
+		addtopl(nhsfmt("%c", q));
 	}
 clean_up:
 	ttyDisplay->inread--;

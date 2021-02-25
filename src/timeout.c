@@ -221,10 +221,10 @@ void nh_timeout(void) {
 				case STONED:
 					if (kptr && kptr->name.len) {
 						killer.format = kptr->format;
-						nhsmove(&killer.name, &kptr->name);
+						killer.name = kptr->name;
 					} else {
 						killer.format = NO_KILLER_PREFIX;
-						nhscopyz(&killer.name, "killed by petrification");
+						killer.name = nhsdupz("killed by petrification");
 					}
 					dealloc_killer(kptr);
 					done(STONING);
@@ -232,10 +232,10 @@ void nh_timeout(void) {
 				case SLIMED:
 					if (kptr && kptr->name.len) {
 						killer.format = kptr->format;
-						nhsmove(&killer.name, &kptr->name);
+						killer.name = kptr->name;
 					} else {
 						killer.format = NO_KILLER_PREFIX;
-						nhscopyz(&killer.name, "turned into green slime");
+						killer.name = nhsdupz("turned into green slime");
 					}
 					u.uconduct.polyselfs++; // 'change form'
 					dealloc_killer(kptr);
@@ -248,19 +248,19 @@ void nh_timeout(void) {
 					pline("You die from your illness.");
 					if (kptr && kptr->name.len) {
 						killer.format = kptr->format;
-						nhsmove(&killer.name, &kptr->name);
+						killer.name = kptr->name;
 					} else {
 						killer.format = KILLED_BY_AN;
 						del_nhs(&killer.name);
 					}
 					dealloc_killer(kptr);
 
-					if ((m_idx = name_to_mon(nhs2cstr_tmp(killer.name))) >= LOW_PM) {
+					if ((m_idx = name_to_mon(nhs2cstr(killer.name))) >= LOW_PM) {
 						if (type_is_pname(&mons[m_idx])) {
 							killer.format = KILLED_BY;
 						} else if (mons[m_idx].geno & G_UNIQ) {
 							killer.format = KILLED_BY;
-							nhscopyz(&killer.name, the(nhs2cstr_tmp(killer.name)));
+							killer.name = nhsdupz(the(nhs2cstr(killer.name)));
 						}
 					}
 					u.usick_type = 0;
@@ -378,7 +378,7 @@ void nh_timeout(void) {
 					break;
 				case STRANGLED:
 					killer.format = KILLED_BY;
-					nhscopyz(&killer.name, (u.uburied) ? "suffocation" : "strangulation");
+					killer.name = nhsdupz((u.uburied) ? "suffocation" : "strangulation");
 					done(DIED);
 					break;
 				case FUMBLING:
@@ -948,28 +948,23 @@ static void slip_or_trip(void) {
 		}
 
 		if (!uarmf && otmp->otyp == CORPSE && touch_petrifies(&mons[otmp->corpsenm]) && !Stone_resistance) {
-			nhscopyf(&killer.name, "tripping over %S corpse", an(mons[otmp->corpsenm].mname));
-			instapetrify(nhs2cstr_tmp(killer.name));
+			killer.name = nhsfmt("tripping over %S corpse", an(mons[otmp->corpsenm].mname));
+			instapetrify(nhs2cstr(killer.name));
 		}
 	} else if (rn2(3) && is_ice(u.ux, u.uy)) {
 		pline("%s %s%s on the ice.",
 		      u.usteed ? upstart(x_monnam(u.usteed,
 						  has_name(u.usteed) ? ARTICLE_NONE : ARTICLE_THE,
-						  NULL, SUPPRESS_SADDLE, false)) :
-				 "You",
+						  NULL, SUPPRESS_SADDLE, false)) : "You",
 		      rn2(2) ? "slip" : "slide", on_foot ? "" : "s");
 	} else {
 		if (on_foot) {
 			switch (rn2(4)) {
 				case 1:
-					pline("You trip over your own %s.", Hallucination ?
-										    "elbow" :
-										    makeplural(body_part(FOOT)));
+					pline("You trip over your own %s.", Hallucination ? "elbow" : makeplural(body_part(FOOT)));
 					break;
 				case 2:
-					pline("You slip %s.", Hallucination ?
-								      "on a banana peel" :
-								      "and nearly fall");
+					pline("You slip %s.", Hallucination ?  "on a banana peel" : "and nearly fall");
 					break;
 				case 3:
 					pline("You flounder.");

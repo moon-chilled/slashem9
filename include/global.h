@@ -120,6 +120,7 @@ typedef ptrdiff_t isize;
 #endif
 
 void *alloc(usize); /* alloc.c */
+void *nhrealloc(void*,usize);
 #define _newtype(T, amnt) ((T *)alloc(sizeof(T) * (amnt)))
 
 // This is magic.  It means #define new(type typ, usize amnt = 1)
@@ -129,6 +130,9 @@ void *alloc(usize); /* alloc.c */
 #define new(...) _newtype_fx(__VA_ARGS__, _newtype_f2(__VA_ARGS__), _newtype_f1(__VA_ARGS__), 0)
 
 #define assert(cond, ...) do { if (!(cond)) impossible(__VA_ARGS__); } while (0)
+
+#define free(ptr) ((void)0)
+#define realloc nhrealloc
 
 #if defined(__GNUC__) && !defined(__PCC__) && !defined(__INTEL_COMPILER)
 # define fallthru __attribute__((fallthrough))

@@ -8,6 +8,8 @@ CFLAGS += -g -ggdb -O0 -pipe
 CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wimplicit-fallthrough -U_FORTIFY_SOURCE
 # -U_FORTIFY_SOURCE - some systems enable source fortification by default, but we can't handle that yet
 
+LDFLAGS += -lgc
+
 DLBMODE ?= lib
 
 ifeq ($(DLBMODE),embed)
@@ -33,9 +35,9 @@ endif
 
 CFLAGS := $(CFLAGS) $(shell pkg-config --cflags ncursesw)
 ifeq ($(shell uname -s),Darwin)
-	LDFLAGS += -lncurses
+	SLDFLAGS += -lncurses
 else
-	LDFLAGS += -lncursesw
+	SLDFLAGS += -lncursesw
 endif
 
 CC ?= cc
@@ -77,7 +79,7 @@ endif
 	chmod 755 $(BINDIR)/slashem9
 
 src/slashem9: $(SLASHEMOBJ)
-	$(CCLD) -o src/slashem9 $(SLASHEMOBJ) $(LDFLAGS)
+	$(CCLD) -o src/slashem9 $(SLASHEMOBJ) $(LDFLAGS) $(SLDFLAGS)
 
 util/slashem9-recover: $(OBJ_RECOVER)
 	$(CCLD) -o util/slashem9-recover $(OBJ_RECOVER) $(LDFLAGS)
@@ -99,7 +101,7 @@ util/dgn_yacc.c: util/dgn_yacc.y
 	mv -f y.tab.h util/dgn_yacc.h
 
 util/dgn_comp: $(OBJ_DGNCOMP)
-	$(CCLD) -o util/dgn_comp $(OBJ_DGNCOMP)
+	$(CCLD) -o util/dgn_comp $(OBJ_DGNCOMP) $(LDFLAGS)
 
 util/lev_lex.c: util/lev_yacc.c # ditto
 
@@ -112,10 +114,10 @@ util/lev_yacc.c: util/lev_yacc.y util/dgn_yacc.c
 	mv -f y.tab.h util/lev_yacc.h
 
 util/lev_comp: $(OBJ_LEVCOMP)
-	$(CCLD) -o util/lev_comp $(OBJ_LEVCOMP)
+	$(CCLD) -o util/lev_comp $(OBJ_LEVCOMP) $(LDFLAGS)
 
 util/dlb: $(OBJ_DLB)
-	$(CCLD) -o util/dlb $(OBJ_DLB)
+	$(CCLD) -o util/dlb $(OBJ_DLB) $(LDFLAGS)
 
 util/data2c: $(OBJ_DATA2C)
 	$(CCLD) -o util/data2c $(OBJ_DATA2C)

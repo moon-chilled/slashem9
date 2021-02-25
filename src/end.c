@@ -226,7 +226,7 @@ void done_in_by(struct monst *mtmp) {
 		if (multi) strcat(buf, " and helpless");
 	}
 
-	nhscopyz(&killer.name, buf);
+	killer.name = nhsdupz(buf);
 	if (mtmp->data->mlet == S_WRAITH)
 		u.ugrave_arise = PM_WRAITH;
 	else if (mtmp->data->mlet == S_MUMMY && urace.mummynum != NON_PM)
@@ -546,7 +546,7 @@ void done(int how) {
 
 	if (how == TRICKED) {
 		if (killer.name.len) {
-			paniclog("trickery", nhs2cstr_tmp(killer.name));
+			paniclog("trickery", nhs2cstr(killer.name));
 			del_nhs(&killer.name);
 		}
 		if (wizard) {
@@ -567,7 +567,7 @@ void done(int how) {
 	if (!killer.name.len && (how == STARVING || how == BURNING))
 		killer.format = KILLED_BY;
 	if (!killer.name.len || how >= PANICKED) {
-		nhscopyz(&killer.name, deaths[how]);
+		killer.name = nhsdupz(deaths[how]);
 	}
 
 	if (how < PANICKED) u.umortality++;
@@ -697,7 +697,7 @@ die:
 						 u.ux, u.uy, plname);
 			sprintf(pbuf, "%s, %s%s", plname,
 				killer.format == NO_KILLER_PREFIX ? "" : killed_by_prefix[how],
-				killer.format == KILLED_BY_AN ? an(nhs2cstr_tmp(killer.name)) : nhs2cstr_tmp(killer.name));
+				killer.format == KILLED_BY_AN ? an(nhs2cstr(killer.name)) : nhs2cstr(killer.name));
 			make_grave(u.ux, u.uy, pbuf);
 		}
 	}
@@ -707,7 +707,7 @@ die:
 		if (u.uhp < 1) {
 			how = DIED;
 			u.umortality++; /* skipped above when how==QUIT */
-			nhscopyz(&killer.name, "quit while already on Charon's boat");
+			killer.name = nhsdupz("quit while already on Charon's boat");
 		}
 	}
 	if (how == ESCAPED || how == PANICKED)
@@ -827,12 +827,12 @@ die:
 	}
 
 	if (u.uhave.amulet) {
-		nhscatz(&killer.name, " (with the Amulet)");
+		killer.name = nhscatz(killer.name, " (with the Amulet)");
 	} else if (how == ESCAPED) {
 		if (Is_astralevel(&u.uz)) /* offered Amulet to wrong deity */
-			nhscatz(&killer.name, " (in celestial disgrace)");
+			killer.name = nhscatz(killer.name, " (in celestial disgrace)");
 		else if (carrying(FAKE_AMULET_OF_YENDOR))
-			nhscatz(&killer.name, " (with a fake Amulet)");
+			killer.name = nhscatz(killer.name, " (with a fake Amulet)");
 		/* don't bother counting to see whether it should be plural */
 	}
 
@@ -1280,8 +1280,8 @@ static void dump_everything(int how, time_t when) {
 	nhstr bot1 = bot1str();
 	nhstr bot2 = bot2str();
 
-	putstr(0, 0, nhs2cstr_tmp(bot1));
-	putstr(0, 0, nhs2cstr_tmp(bot2));
+	putstr(0, 0, nhs2cstr(bot1));
+	putstr(0, 0, nhs2cstr(bot2));
 	putstr(0, 0, "");
 
 	del_nhs(&bot2);

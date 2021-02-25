@@ -10,8 +10,8 @@
 /* ### alloc.c ### */
 
 void *alloc(usize);
-void nhfree(const void *);
-#define free nhfree
+void *nhrealloc(void *, usize);
+#define realloc nhrealloc
 char *fmt_ptr(const void *, char *);
 
 /* This next pre-processor directive covers almost the entire file,
@@ -1477,14 +1477,14 @@ int dotip(void);
 #define verbalizes(str) verbalize("%s", (str))
 #define You_hear(str)	You_hearf("%s", (str))
 void msgpline_add(int typ, char *pattern);
-void msgpline_free(void);
 void pline(const char *line, ...) PRINTF_F(1, 2);
 void Norep(const char *line, ...) PRINTF_F(1, 2);
 void hear(const char *fmt, ...) PRINTF_F(1, 2);
 void You_hearf(const char *line, ...) PRINTF_F(1, 2);
 void verbalize(const char *line, ...) PRINTF_F(1, 2);
 void raw_printf(const char *line, ...) PRINTF_F(1, 2);
-void impossible(const char *s, ...) PRINTF_F(1, 2);
+void _impossible(const char *file, int line, const char *s, ...) PRINTF_F(3, 4);
+#define impossible(...) _impossible(__FILE__, __LINE__, __VA_ARGS__)
 const char *align_str(aligntyp alignment);
 void mstatusline(struct monst *mtmp);
 void ustatusline(void);

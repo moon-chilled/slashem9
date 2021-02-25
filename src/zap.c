@@ -2446,7 +2446,7 @@ uint zapyourself(struct obj *obj, boolean ordinary) {
 				break;
 			}
 			killer.format = NO_KILLER_PREFIX;
-			nhscopyf(&killer.name, "shot %Sself with a death ray", uhim());
+			killer.name = nhsfmt("shot %Sself with a death ray", uhim());
 			pline("You irradiate yourself with pure energy!");
 			pline("You die.");
 			makeknown(obj->otyp);
@@ -3021,7 +3021,7 @@ void miss(const char *str, struct monst *mtmp) {
 }
 
 static void skiprange(int range, int *skipstart, int *skipend) {
-	int tmp = range - (rnd(range / 4));
+	int tmp = range - (range >= 4 ? rnd(range / 4) : 0);
 	*skipstart = tmp;
 	*skipend = tmp - ((tmp / 4) * rnd(3));
 	if (*skipend >= tmp) *skipend = tmp - 1;
@@ -3657,7 +3657,7 @@ static void zhitu(int type, int nd, const char *fltxt, xchar sx, xchar sy) {
 				break;
 			}
 			killer.format = KILLED_BY_AN;
-			nhscopyz(&killer.name, fltxt);
+			killer.name = nhsdupz(fltxt);
 			/* when killed by disintegration breath, don't leave corpse */
 			u.ugrave_arise = (type == -ZT_BREATH(ZT_DEATH)) ? -3 : NON_PM;
 			done(DIED);

@@ -1493,7 +1493,7 @@ static int arti_invoke(struct obj *obj) {
 					if (u.uhp < 1) {
 						u.uhp = 0;
 						killer.format = KILLED_BY;
-						nhscopyz(&killer.name, "the Holy Spear of Light");
+						killer.name = nhsdupz("the Holy Spear of Light");
 						done(DIED);
 					}
 				}
@@ -1522,7 +1522,7 @@ static int arti_invoke(struct obj *obj) {
 					pline("The Eye turns on you!");
 					u.uhp = 0;
 					killer.format = KILLED_BY;
-					nhscopyz(&killer.name, "the Eye of the Beholder");
+					killer.name = nhsdupz("the Eye of the Beholder");
 					done(DIED);
 				}
 				pline("The Eye looks around with its icy gaze!");
@@ -1545,7 +1545,7 @@ static int arti_invoke(struct obj *obj) {
 					pline("The Hand claws you with its icy nails!");
 					if (u.uhp <= 0) {
 						killer.format = KILLED_BY;
-						nhscopyz(&killer.name, "the Hand of Vecna");
+						killer.name = nhsdupz("the Hand of Vecna");
 						done(DIED);
 					}
 				}

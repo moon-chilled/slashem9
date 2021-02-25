@@ -563,7 +563,7 @@ static void god_zaps_you(aligntyp resp_god) {
 static void fry_by_god(aligntyp resp_god) {
 	pline("You fry to a crisp.");
 	killer.format = KILLED_BY;
-	nhscopyf(&killer.name, "the wrath of %S", align_gname(resp_god));
+	killer.name = nhsfmt("the wrath of %S", align_gname(resp_god));
 	done(DIED);
 }
 
@@ -595,8 +595,7 @@ static void angrygods(aligntyp resp_god) {
 		case 3:
 			godvoice(resp_god, NULL);
 			pline("\"Thou %s, %s.\"",
-			      (ugod_is_angry() && resp_god == u.ualign.type) ? "hast strayed from the path" :
-									       "art arrogant",
+			      (ugod_is_angry() && resp_god == u.ualign.type) ? "hast strayed from the path" : "art arrogant",
 			      youmonst.data->mlet == S_HUMAN ? "mortal" : "creature");
 			verbalize("Thou must relearn thy lessons!");
 			adjattrib(A_WIS, -3, false);

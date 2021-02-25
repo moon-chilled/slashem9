@@ -118,7 +118,7 @@ int how;
 				strcat(buf, killed_by_prefix[how]);
 			} else
 				strcpy(buf, killed_by_prefix[how]);
-			strcat(buf, an(nhs2cstr_tmp(killer.name)));
+			strcat(buf, an(nhs2cstr(killer.name)));
 			break;
 		case KILLED_BY:
 			if (Instant_Death) {
@@ -129,10 +129,10 @@ int how;
 				strcat(buf, killed_by_prefix[how]);
 			} else
 				strcpy(buf, killed_by_prefix[how]);
-			strcat(buf, nhs2cstr_tmp(killer.name));
+			strcat(buf, nhs2cstr(killer.name));
 			break;
 		case NO_KILLER_PREFIX:
-			strcpy(buf, nhs2cstr_tmp(killer.name));
+			strcpy(buf, nhs2cstr(killer.name));
 			break;
 	}
 

@@ -203,7 +203,7 @@ static void winch(int sig) {
 					for (i = WIN_INVEN; i < MAXWIN; i++)
 						if (wins[i] && wins[i]->active) {
 							/* cop-out */
-							addtopl("Press Return to continue: ");
+							addtopl(nhsdupz("Press Return to continue: "));
 							break;
 						}
 				fflush(stdout);
@@ -1774,7 +1774,6 @@ const char *compress_str(const char *str) {
 	return cbuf;
 }
 
-// consumes str
 void tty_putnstr(winid window, int attr, nhstr str) {
 	struct WinDesc *cw = 0;
 
@@ -1782,7 +1781,7 @@ void tty_putnstr(winid window, int attr, nhstr str) {
 	 * probably a panic message
 	 */
 	if (window == WIN_ERR || (cw = wins[window]) == NULL) {
-		tty_raw_print(nhs2cstr_trunc_tmp(str));
+		tty_raw_print(nhs2cstr_trunc(str));
 		return;
 	}
 
@@ -1798,6 +1797,10 @@ void tty_putnstr(winid window, int attr, nhstr str) {
 	ttyDisplay->lastwin = window;
 
 	switch (cw->type) {
+		case NHW_MESSAGE:
+			update_topl(str);
+			break;
+
 		case NHW_STATUS: {
 			int stash_curx = cw->curx;
 			int j = cw->curx;
@@ -1836,7 +1839,7 @@ void tty_putnstr(winid window, int attr, nhstr str) {
 				}
 			}
 
-			strncpy(&cw->data[cw->cury][stash_curx], nhs2cstr_trunc_tmp(nb), min(cw->cols - stash_curx - 1, nb.len));
+			strncpy(&cw->data[cw->cury][stash_curx], nhs2cstr_trunc(nb), min(cw->cols - stash_curx - 1, nb.len));
 			memcpy(&cw->style_data[cw->cury][stash_curx], nb.style, min(cw->cols - stash_curx - 1, nb.len) * sizeof(nhstyle));
 			cw->data[cw->cury][cw->cols - 1] = '\0'; /* null terminate */
 			/* ALI - Clear third line if present and unused */
@@ -1850,10 +1853,9 @@ void tty_putnstr(winid window, int attr, nhstr str) {
 			break;
 		}
 
-		default: impossible("Can't tty_putnstr a %d yet", cw->type);
+		default:
+			return tty_putstr(window, attr, nhs2cstr(str));
 	}
-
-	del_nhs(&nb);
 }
 
 void tty_putstr(winid window, int attr, const char *str) {
@@ -1879,11 +1881,7 @@ void tty_putstr(winid window, int attr, const char *str) {
 
 	switch (cw->type) {
 		case NHW_MESSAGE:
-			/* really do this later */
-#if defined(USER_SOUNDS)
-			//play_sound_for_message(str);
-#endif
-			update_topl(str);
+			update_topl(nhsdupz(str));
 			break;
 
 		case NHW_STATUS:
@@ -2279,7 +2277,7 @@ void tty_wait_synch(void) {
 	} else {
 		tty_display_nhwindow(WIN_MAP, false);
 		if (ttyDisplay->inmore) {
-			addtopl("--More--");
+			addtopl(nhsdupz("--More--"));
 			fflush(stdout);
 		} else if (ttyDisplay->inread > program_state.gameover) {
 			/* this can only happen if we were reading and got interrupted */

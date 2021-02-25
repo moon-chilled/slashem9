@@ -331,11 +331,11 @@ int extcmd_via_menu(void) {Deferral
 		any.a_void = 0;
 		/* populate choices */
 		for (efp = extcmdlist; efp->ef_txt; efp++) {
-			if (!matchlevel || !strncmp(efp->ef_txt, nhs2cstr_tmp(cbuf), matchlevel)) {
+			if (!matchlevel || !strncmp(efp->ef_txt, nhs2cstr(cbuf), matchlevel)) {
 				choices[i++] = efp;
 				if ((int)strlen(efp->ef_desc) > biggest) {
 					biggest = strlen(efp->ef_desc);
-					nhscopyf(&fmtstr, "%%-%is", biggest + 15);
+					fmtstr = nhsfmt("%%-%is", biggest + 15);
 				}
 #ifdef DEBUG
 				if (i >= MAX_EXT_CMD - 2) {
@@ -351,7 +351,7 @@ int extcmd_via_menu(void) {Deferral
 		/* if we're down to one, we have our selection so get out of here */
 		if (nchoices == 1) {
 			for (i = 0; extcmdlist[i].ef_txt != NULL; i++)
-				if (!strncmpi(extcmdlist[i].ef_txt, nhs2cstr_tmp(cbuf), matchlevel)) {
+				if (!strncmpi(extcmdlist[i].ef_txt, nhs2cstr(cbuf), matchlevel)) {
 					ret = i;
 					break;
 				}
@@ -368,34 +368,34 @@ int extcmd_via_menu(void) {Deferral
 			if (accelerator != prevaccelerator || nchoices < (ROWNO - 3)) {
 				if (acount) {
 					/* flush the extended commands for that letter already in buf */
-					nhscopyf(&buf, nhs2cstr_tmp(fmtstr), prompt);
+					buf = nhsfmt(nhs2cstr(fmtstr), prompt);
 					any.a_char = prevaccelerator;
 					add_menu(win, NO_GLYPH, &any, any.a_char, 0,
-						 ATR_NONE, nhs2cstr_tmp(buf), false);
+						 ATR_NONE, nhs2cstr(buf), false);
 					acount = 0;
 				}
 			}
 			prevaccelerator = accelerator;
 			if (!acount || nchoices < (ROWNO - 3)) {
-				nhscopyf(&prompt, "%S [%S]", choices[i]->ef_txt,
+				prompt = nhsfmt("%S [%S]", choices[i]->ef_txt,
 					choices[i]->ef_desc);
 			} else if (acount == 1) {
-				nhscopyf(&prompt, "%S or %S", choices[i - 1]->ef_txt,
+				prompt = nhsfmt("%S or %S", choices[i - 1]->ef_txt,
 					choices[i]->ef_txt);
 			} else {
-				nhscatz(&prompt, " or ");
-				nhscatz(&prompt, choices[i]->ef_txt);
+				prompt = nhscatz(prompt, " or ");
+				prompt = nhscatz(prompt, choices[i]->ef_txt);
 			}
 			++acount;
 		}
 		if (acount) {
 			/* flush buf */
-			nhscopyf(&buf, nhs2cstr_tmp(fmtstr), prompt);
+			buf = nhsfmt(nhs2cstr(fmtstr), prompt);
 			any.a_char = prevaccelerator;
-			add_menu(win, NO_GLYPH, &any, any.a_char, 0, ATR_NONE, nhs2cstr_tmp(buf), false);
+			add_menu(win, NO_GLYPH, &any, any.a_char, 0, ATR_NONE, nhs2cstr(buf), false);
 		}
-		nhscopyf(&prompt, "Extended Command: %s", cbuf);
-		end_menu(win, nhs2cstr_tmp(*nhstrim(&prompt, QBUFSZ-1)));
+		prompt = nhsfmt("Extended Command: %s", cbuf);
+		end_menu(win, nhs2cstr_trunc(nhstrim(prompt, QBUFSZ-1)));
 		n = select_menu(win, PICK_ONE, &pick_list);
 		destroy_nhwindow(win);
 		if (n == 1) {
@@ -408,7 +408,7 @@ int extcmd_via_menu(void) {Deferral
 				ret = -1;
 			} else {
 				matchlevel++;
-				nhscatf(&cbuf, "%c", pick_list[0].item.a_char);
+				cbuf = nhscatf(cbuf, "%c", pick_list[0].item.a_char);
 				free(pick_list);
 			}
 		} else {
@@ -966,7 +966,7 @@ static const char
 static void enlght_line(const char *start, const char *middle, const char *end) {
 	nhstr buf = nhsfmt("%S%S%S.", start, middle, end);
 
-	putstr(en_win, 0, nhs2cstr_tmp_destroy(&buf));
+	putstr(en_win, 0, nhs2cstr(buf));
 }
 
 char *warned_of(int warntype, const char *aux) {
@@ -1180,7 +1180,7 @@ void enlightenment(int final) {
 	/* If you die while dismounting, u.usteed is still set.  Since several
 	 * places in the done() sequence depend on u.usteed, just detect this
 	 * special case. */
-	if (u.usteed && (final < 2 || strcmp(nhs2cstr_tmp(killer.name), "riding accident"))) {
+	if (u.usteed && (final < 2 || strcmp(nhs2cstr(killer.name), "riding accident"))) {
 		sprintf(buf, "riding %s", y_monnam(u.usteed));
 		you_are(buf);
 	}
@@ -1887,7 +1887,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"annotate", "name current level", donamelevel, IFBURIED, AUTOCOMPLETE},
 	{"chat", "talk to someone", dotalk, IFBURIED, AUTOCOMPLETE}, /* converse? */
 	{"conduct", "list which challenges you have adhered to", doconduct, IFBURIED, AUTOCOMPLETE},
-	{"dip", "dip an object into something", dodip, !IFBURIED, AUTOCOMPLETE},
+	{"dip", "dip an object into something", dodip, !IFBURIED, AUTOCOMPLETE, .disallowed_if_fuzzing=true},
 	{"enhance", "advance or check weapons skills", enhance_weapon_skill, IFBURIED, AUTOCOMPLETE},
 	{"force", "force a lock", doforce, !IFBURIED, AUTOCOMPLETE},
 	{"invoke", "invoke an object's powers", doinvoke, IFBURIED, AUTOCOMPLETE},
@@ -1897,7 +1897,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"name", "name an item or type of object", ddocall, IFBURIED, AUTOCOMPLETE},
 	{"offer", "offer a sacrifice to the gods", dosacrifice, !IFBURIED, AUTOCOMPLETE},
 	{"overview", "show an overview of the dungeon", dooverview, IFBURIED, AUTOCOMPLETE},
-	{"pray", "pray to the gods for help", dopray, IFBURIED, AUTOCOMPLETE},
+	{"pray", "pray to the gods for help", dopray, IFBURIED, AUTOCOMPLETE, .disallowed_if_fuzzing=true},
 	{"quit", "exit without saving current game", done2, IFBURIED, AUTOCOMPLETE, .disallowed_if_fuzzing = true},
 	{"removeimarkers", "remove markers of remembered invisible monsters", doremoveimarkers, IFBURIED, !AUTOCOMPLETE},
 	{"ride", "ride (or stop riding) a monster", doride, !IFBURIED, AUTOCOMPLETE},
@@ -2735,6 +2735,7 @@ void parseautocomplete(char *autocomplete, boolean condition) {
 	wait_synch();
 }
 char randomkey(void) {
+	if (!rn2(200)) return '#';
 	switch (rn2(12)) {
 		default:
 			return '\033';
@@ -2765,20 +2766,18 @@ char randomkey(void) {
 					// bot tends to get stuck in extcmd lists and those don't matter particularly
 					// options just don't particularly matter
 					if (cmdlist[k].bind_cmd->ef_funct == dopray || cmdlist[k].bind_cmd->ef_funct == extcmd_via_menu || cmdlist[k].bind_cmd->ef_funct == doset) {
-						if (!rn2(800)) continue;
+						 if (!rn2(900)) continue;
 					}
 
 					// just not that useful, likely to be cancelled anyway, and bot has a tendency to turn on extcmd
-					if (cmdlist[k].bind_cmd->ef_funct == get_ext_cmd) {
-						if (!rn2(100)) continue;
+					if (cmdlist[k].bind_cmd->ef_funct == get_ext_cmd || cmdlist[k].bind_cmd->ef_funct == doextcmd) {
+						 if (!rn2(900)) continue;
 					}
 
 					return k;
 				}
 			}
 		}
-		case 9:
-			return '#';
 	}
 }
 

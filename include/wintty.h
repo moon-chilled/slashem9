@@ -135,9 +135,9 @@ extern bool parse_status_color_options(char *);
 
 /* ### topl.c ### */
 
-extern void addtopl(const char *);
+extern void addtopl(const nhstr);
 extern void more(void);
-extern void update_topl(const char *);
+extern void update_topl(const nhstr);
 extern void putsyms(const char *);
 
 /* ### wintty.c ### */

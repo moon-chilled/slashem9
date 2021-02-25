@@ -54,8 +54,6 @@
 #define ERR	      (-1)
 
 #define NewTab(type, size) (type **)alloc(sizeof(type *) * size)
-#define Free(ptr) \
-	if (ptr) free((ptr))
 #define Write(fd, item, size) \
 	if (write(fd, (void *)(item), size) != size) return false;
 
@@ -85,7 +83,6 @@ void check_coord(int, int, const char *);
 void store_part(void);
 void store_room(void);
 bool write_level_file(char *, splev *, specialmaze *);
-void free_rooms(splev *);
 
 extern void monst_init(void);
 extern void objects_init(void);
@@ -974,16 +971,12 @@ static bool write_monsters(int fd, char *nmonster_p, monster ***monsters_p) {
 		Write(fd, m, sizeof *m);
 		if (name) {
 			Write(fd, name, m->name.len);
-			Free(name);
 		}
 		if (appr) {
 			Write(fd, appr, m->appear_as.len);
-			Free(appr);
 		}
-		Free(m);
 	}
 	if (*monsters_p) {
-		Free(*monsters_p);
 		*monsters_p = 0;
 	}
 	*nmonster_p = 0;
@@ -1007,12 +1000,9 @@ static bool write_objects(int fd, char *nobject_p, object ***objects_p) {
 		Write(fd, o, sizeof *o);
 		if (name) {
 			Write(fd, name, o->name.len);
-			Free(name);
 		}
-		Free(o);
 	}
 	if (*objects_p) {
-		Free(*objects_p);
 		*objects_p = 0;
 	}
 	*nobject_p = 0;
@@ -1035,11 +1025,8 @@ static bool write_engravings(int fd, char *nengraving_p, engraving ***engravings
 		e->engr.len = strlen(engr);
 		Write(fd, e, sizeof *e);
 		Write(fd, engr, e->engr.len);
-		Free(engr);
-		Free(e);
 	}
 	if (*engravings_p) {
-		Free(*engravings_p);
 		*engravings_p = 0;
 	}
 	*nengraving_p = 0;
@@ -1079,7 +1066,6 @@ bool write_level_file(char *filename, splev *room_level, specialmaze *maze_level
 
 /*
  * Here we write the structure of the maze in the specified file (fd).
- * Also, we have to free the memory allocated via alloc().
  */
 static bool write_maze(int fd, specialmaze *maze) {
 	short i, j;
@@ -1105,9 +1091,7 @@ static bool write_maze(int fd, specialmaze *maze) {
 			    pt->xsize > 1 || pt->ysize > 1) {
 				Write(fd, pt->map[j], pt->xsize * sizeof *pt->map[j]);
 			}
-			Free(pt->map[j]);
 		}
-		Free(pt->map);
 
 		/* level region stuff */
 		Write(fd, &pt->nlreg, sizeof pt->nlreg);
@@ -1119,12 +1103,8 @@ static bool write_maze(int fd, specialmaze *maze) {
 			Write(fd, l, sizeof *l);
 			if (rname) {
 				Write(fd, rname, l->rname.len);
-				Free(rname);
 			}
-			Free(l);
 		}
-		if (pt->nlreg > 0)
-			Free(pt->lregions);
 
 		/* random level regions registers */
 		Write(fd, &pt->nrndlreg, sizeof pt->nrndlreg);
@@ -1136,18 +1116,13 @@ static bool write_maze(int fd, specialmaze *maze) {
 			Write(fd, l, sizeof *l);
 			if (rname) {
 				Write(fd, rname, l->rname.len);
-				Free(rname);
 			}
-			Free(l);
 		}
-		if (pt->nrndlreg > 0)
-			Free(pt->rndlregions);
 
 		/* The random registers */
 		Write(fd, &(pt->nrobjects), sizeof(pt->nrobjects));
 		if (pt->nrobjects) {
 			Write(fd, pt->robjects, pt->nrobjects);
-			Free(pt->robjects);
 		}
 		Write(fd, &(pt->nlocset), sizeof(pt->nlocset));
 		if (pt->nlocset) {
@@ -1155,117 +1130,78 @@ static bool write_maze(int fd, specialmaze *maze) {
 			for (j = 0; j < pt->nlocset; j++) {
 				Write(fd, pt->rloc_x[j], pt->nloc[j]);
 				Write(fd, pt->rloc_y[j], pt->nloc[j]);
-				Free(pt->rloc_x[j]);
-				Free(pt->rloc_y[j]);
 			}
-			Free(pt->nloc);
-			Free(pt->rloc_x);
-			Free(pt->rloc_y);
 		}
 		Write(fd, &(pt->nrmonst), sizeof(pt->nrmonst));
 		if (pt->nrmonst) {
 			Write(fd, pt->rmonst, pt->nrmonst);
-			Free(pt->rmonst);
 		}
 
 		/* subrooms */
 		Write(fd, &(pt->nreg), sizeof(pt->nreg));
 		for (j = 0; j < pt->nreg; j++) {
 			Write(fd, pt->regions[j], sizeof(region));
-			Free(pt->regions[j]);
 		}
-		if (pt->nreg > 0)
-			Free(pt->regions);
 
 		/* the doors */
 		Write(fd, &(pt->ndoor), sizeof(pt->ndoor));
 		for (j = 0; j < pt->ndoor; j++) {
 			Write(fd, pt->doors[j], sizeof(door));
-			Free(pt->doors[j]);
 		}
-		if (pt->ndoor > 0)
-			Free(pt->doors);
 
 		/* The drawbridges */
 		Write(fd, &(pt->ndrawbridge), sizeof(pt->ndrawbridge));
 		for (j = 0; j < pt->ndrawbridge; j++) {
 			Write(fd, pt->drawbridges[j], sizeof(drawbridge));
-			Free(pt->drawbridges[j]);
 		}
-		if (pt->ndrawbridge > 0)
-			Free(pt->drawbridges);
 
 		/* The mazewalk directives */
 		Write(fd, &(pt->nwalk), sizeof(pt->nwalk));
 		for (j = 0; j < pt->nwalk; j++) {
 			Write(fd, pt->walks[j], sizeof(walk));
-			Free(pt->walks[j]);
 		}
-		if (pt->nwalk > 0)
-			Free(pt->walks);
 
 		/* The non_diggable directives */
 		Write(fd, &(pt->ndig), sizeof(pt->ndig));
 		for (j = 0; j < pt->ndig; j++) {
 			Write(fd, pt->digs[j], sizeof(digpos));
-			Free(pt->digs[j]);
 		}
-		if (pt->ndig > 0)
-			Free(pt->digs);
 
 		/* The non_passwall directives */
 		Write(fd, &(pt->npass), sizeof(pt->npass));
 		for (j = 0; j < pt->npass; j++) {
 			Write(fd, pt->passs[j], sizeof(digpos));
-			Free(pt->passs[j]);
 		}
-		if (pt->npass > 0)
-			Free(pt->passs);
 
 		/* The ladders */
 		Write(fd, &(pt->nlad), sizeof(pt->nlad));
 		for (j = 0; j < pt->nlad; j++) {
 			Write(fd, pt->lads[j], sizeof(lad));
-			Free(pt->lads[j]);
 		}
-		if (pt->nlad > 0)
-			Free(pt->lads);
 
 		/* The stairs */
 		Write(fd, &(pt->nstair), sizeof(pt->nstair));
 		for (j = 0; j < pt->nstair; j++) {
 			Write(fd, pt->stairs[j], sizeof(stair));
-			Free(pt->stairs[j]);
 		}
-		if (pt->nstair > 0)
-			Free(pt->stairs);
 
 		/* The altars */
 		Write(fd, &(pt->naltar), sizeof(pt->naltar));
 		for (j = 0; j < pt->naltar; j++) {
 			Write(fd, pt->altars[j], sizeof(altar));
-			Free(pt->altars[j]);
 		}
-		if (pt->naltar > 0)
-			Free(pt->altars);
 
 		/* The fountains */
 		Write(fd, &(pt->nfountain), sizeof(pt->nfountain));
 		for (j = 0; j < pt->nfountain; j++) {
 			Write(fd, pt->fountains[j], sizeof(fountain));
-			Free(pt->fountains[j]);
 		}
-		if (pt->nfountain > 0)
-			Free(pt->fountains);
 
 		/* The traps */
 		Write(fd, &(pt->ntrap), sizeof(pt->ntrap));
 		for (j = 0; j < pt->ntrap; j++) {
 			Write(fd, pt->traps[j], sizeof(trap));
-			Free(pt->traps[j]);
 		}
-		if (pt->ntrap)
-			Free(pt->traps);
 
 		/* The monsters */
 		if (!write_monsters(fd, &pt->nmonster, &pt->monsters))
@@ -1279,19 +1215,13 @@ static bool write_maze(int fd, specialmaze *maze) {
 		Write(fd, &(pt->ngold), sizeof(pt->ngold));
 		for (j = 0; j < pt->ngold; j++) {
 			Write(fd, pt->golds[j], sizeof(gold));
-			Free(pt->golds[j]);
 		}
-		if (pt->ngold > 0)
-			Free(pt->golds);
 
 		/* The engravings */
 		if (!write_engravings(fd, &pt->nengraving, &pt->engravings))
 			return false;
-
-		Free(pt);
 	}
 
-	Free(maze->parts);
 	maze->parts = NULL;
 	maze->numpart = 0;
 	return true;
@@ -1402,82 +1332,6 @@ static bool write_rooms(int fd, splev *lev) {
 	for (i = 0; i < lev->ncorr; i++)
 		Write(fd, lev->corrs[i], sizeof(corridor));
 	return true;
-}
-
-/*
- * Release memory allocated to a rooms-style special level; maze-style
- * levels have the fields freed as they're written; monsters, objects, and
- * engravings are freed as written for both styles, so not handled here.
- */
-void free_rooms(splev *lev) {
-	room *r;
-	int j, n = lev->nroom;
-
-	while (n--) {
-		r = lev->rooms[n];
-		Free(r->name);
-		Free(r->parent);
-		if ((j = r->ndoor) != 0) {
-			while (j--)
-				Free(r->doors[j]);
-			Free(r->doors);
-		}
-		if ((j = r->nstair) != 0) {
-			while (j--)
-				Free(r->stairs[j]);
-			Free(r->stairs);
-		}
-		if ((j = r->naltar) != 0) {
-			while (j--)
-				Free(r->altars[j]);
-			Free(r->altars);
-		}
-		if ((j = r->nfountain) != 0) {
-			while (j--)
-				Free(r->fountains[j]);
-			Free(r->fountains);
-		}
-		if ((j = r->nsink) != 0) {
-			while (j--)
-				Free(r->sinks[j]);
-			Free(r->sinks);
-		}
-		if ((j = r->npool) != 0) {
-			while (j--)
-				Free(r->pools[j]);
-			Free(r->pools);
-		}
-		if ((j = r->ntrap) != 0) {
-			while (j--)
-				Free(r->traps[j]);
-			Free(r->traps);
-		}
-		if ((j = r->ngold) != 0) {
-			while (j--)
-				Free(r->golds[j]);
-			Free(r->golds);
-		}
-		Free(r);
-		lev->rooms[n] = NULL;
-	}
-	Free(lev->rooms);
-	lev->rooms = NULL;
-	lev->nroom = 0;
-
-	for (j = 0; j < lev->ncorr; j++) {
-		Free(lev->corrs[j]);
-		lev->corrs[j] = NULL;
-	}
-	Free(lev->corrs);
-	lev->corrs = NULL;
-	lev->ncorr = 0;
-
-	Free(lev->robjects);
-	lev->robjects = NULL;
-	lev->nrobjects = 0;
-	Free(lev->rmonst);
-	lev->rmonst = NULL;
-	lev->nrmonst = 0;
 }
 
 #ifdef STRICT_REF_DEF

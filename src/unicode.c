@@ -44,6 +44,8 @@ void pututf8char(glyph_t c) {
 		putchar(0x80 | (c >> 12 & 0x3F));
 		putchar(0x80 | (c >> 6 & 0x3F));
 		putchar(0x80 | (c & 0x3F));
+	} else {
+		panic("bad codepoint %li", c);
 	}
 }
 /*unicode.c*/

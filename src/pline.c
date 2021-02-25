@@ -40,18 +40,6 @@ void msgpline_add(int typ, char *pattern) {
 	pline_msg = tmp;
 }
 
-void msgpline_free(void) {
-	struct _plinemsg *tmp = pline_msg;
-	struct _plinemsg *tmp2;
-	while (tmp) {
-		tre_regfree(&tmp->pattern);
-		tmp2 = tmp;
-		tmp = tmp->next;
-		free(tmp2);
-	}
-	pline_msg = NULL;
-}
-
 static int msgpline_type(const char *msg) {
 	struct _plinemsg *tmp = pline_msg;
 	while (tmp) {
@@ -78,7 +66,7 @@ static void vpline(const char *line, va_list the_args) {
 	}
 
 #ifndef MAC
-	if (no_repeat && !strcmp(line, toplines))
+	if (no_repeat && nhseq(nhsdupz(line), toplines))
 		return;
 #endif /* MAC */
 
@@ -174,19 +162,21 @@ static void vraw_printf(const char *line, va_list the_args) {
 	}
 }
 
-void impossible(const char *s, ...) {
+void _impossible(const char *file, int line, const char *s, ...) {
 	VA_START(s);
 	if (program_state.in_impossible)
 		panic("impossible called impossible");
 	program_state.in_impossible = 1;
 	{
 		char pbuf[BUFSZ];
-		vsnprintf(pbuf, sizeof(pbuf), s, VA_ARGS);
+		sprintf(pbuf, "%s:%d: ", file, line);
+		vsnprintf(eos(pbuf), sizeof(pbuf) - strlen(pbuf), s, VA_ARGS);
 		paniclog("impossible", pbuf);
 		if (iflags.debug_fuzzer) {
 			panic("%s", pbuf);
 		}
 	}
+	pline("%s:%d: ", file, line);
 	vpline(s, VA_ARGS);
 	pline("Program in disorder!  Saving and reloading may fix the problem.");
 	program_state.in_impossible = 0;

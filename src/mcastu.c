@@ -373,7 +373,7 @@ static void cast_wizard_spell(struct monst *mtmp, int dmg, int spellnum) {
 					pline("You have an out of body experience.");
 				} else {
 					killer.format = KILLED_BY_AN;
-					nhscopyz(&killer.name, "touch of death");
+					killer.name = nhsdupz("touch of death");
 					done(DIED);
 				}
 			} else {

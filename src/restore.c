@@ -720,7 +720,7 @@ void trickery(char *reason) {
 	pline("Strange, this map is not as I remember it.");
 	pline("Somebody is trying some trickery here...");
 	pline("This game is void.");
-	nhscopyz(&killer.name, reason);
+	killer.name = nhsdupz(reason);
 	done(TRICKED);
 }
 
