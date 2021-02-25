@@ -289,7 +289,7 @@ bool regmatch(const char *pattern, const char *string, bool caseblind) {
 	char rpattern[BUFSZ];
 	snprintf(rpattern, sizeof(rpattern), "^(%s)$", pattern);
 	regex_t regex;
-	int errnum = tre_regcomp(&regex, rpattern, REG_EXTENDED | REG_NOSUB | (caseblind ? REG_ICASE : 0));
+	int errnum = tre_regcomp(&regex, rpattern, REG_EXTENDED | (caseblind ? REG_ICASE : 0));
 	if (errnum != 0) {
 		char errbuf[BUFSZ];
 		tre_regerror(errnum, &regex, errbuf, sizeof(errbuf));

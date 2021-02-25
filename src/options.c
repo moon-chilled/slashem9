@@ -968,7 +968,7 @@ bool add_menu_coloring(char *str) {
 	}
 
 	tmp = alloc(sizeof(struct menucoloring));
-	errnum = tre_regcomp(&tmp->match, str, REG_EXTENDED | REG_NOSUB);
+	errnum = tre_regcomp(&tmp->match, str, REG_EXTENDED);
 	if (errnum != 0) {
 		tre_regerror(errnum, &tmp->match, errbuf, sizeof(errbuf));
 		err = errbuf;

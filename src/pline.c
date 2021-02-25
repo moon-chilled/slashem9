@@ -20,7 +20,7 @@ static bool no_repeat = false;
 
 void msgpline_add(const char *pattern, int typ, nhstyle style) {
 	regex_t regex;
-	int errnum = tre_regcomp(&regex, pattern, REG_EXTENDED | REG_NOSUB);
+	int errnum = tre_regcomp(&regex, pattern, REG_EXTENDED);
 	if (errnum != 0) {
 		char errbuf[BUFSZ];
 		tre_regerror(errnum, &regex, errbuf, sizeof(errbuf));
@@ -39,15 +39,38 @@ void msgpline_add(const char *pattern, int typ, nhstyle style) {
 }
 
 // returns true if match
-static bool msgpline_type(const char *msg, int *type, nhstyle *style) {
+static bool msgpline_type(const char *msg, int *type, nhstyle *style, int *start, int *end) {
+	regmatch_t matches[2];
 	for (struct _plinemsg *tmp = pline_msg; tmp; tmp = tmp->next) {
-		if (tre_regexec(&tmp->pattern, msg, 0, NULL, 0) == 0) {
+		if (tre_regexec(&tmp->pattern, msg, 2, matches, 0) == 0) {
 			*type = tmp->msgtype;
 			*style = tmp->style;
+			bool b = matches[1].rm_so != -1;
+			*start = matches[b].rm_so;
+			*end = matches[b].rm_eo;
 			return true;
 		}
 	}
 	return false;
+}
+
+static nhstr apply_style(nhstr str, nhstyle style, int start, int end) {
+	start = CLAMP(start, 0, str.len);
+
+	if (end < 0) end = str.len;
+	end = min(end, str.len);
+
+	if (nhstyle_eq(style, nhstyle_default())) return str;
+
+	nhstyle *n = memcpy(new(nhstyle, str.len), str.style, str.len * sizeof(nhstyle));
+	for (usize i = start; i < end; i++) {
+		if (n[i].fg == NO_COLOR) n[i].fg = style.fg;
+		if (n[i].bg == NO_COLOR) n[i].bg = style.bg;
+		if (!n[i].attr) n[i].attr = style.attr;
+	}
+	str.style = n;
+
+	return str;
 }
 
 static void npline(nhstr line) {
@@ -67,19 +90,11 @@ static void npline(nhstr line) {
 	if (u.ux) flush_screen(1); /* %% */
 
 	//todo make tre work on widechars (not as simple as #define wchar_t glyph_t; it uses wmemcmp and maybe also other annoying things), to avoid this copy
-	int typ;
+	int typ, start, end;
 	nhstyle style;
-	bool msgtyped = msgpline_type(nhs2cstr(line), &typ, &style);
+	bool msgtyped = msgpline_type(nhs2cstr_trunc(line), &typ, &style, &start, &end);
 
-	if (msgtyped && !nhstyle_eq(style, nhstyle_default())) {
-		nhstyle *n = memcpy(new(nhstyle, line.len), line.style, line.len * sizeof(nhstyle));
-		for (usize i = 0; i < line.len; i++) {
-			if (n[i].fg == NO_COLOR) n[i].fg = style.fg;
-			if (n[i].bg == NO_COLOR) n[i].bg = style.bg;
-			if (!n[i].attr) n[i].attr = style.attr;
-		}
-		line.style = n;
-	}
+	if (msgtyped) line = apply_style(line, style, start, end);
 
 	if (msgtyped && typ == MSGTYP_NOSHOW) return;
 
