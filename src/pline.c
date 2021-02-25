@@ -38,22 +38,6 @@ void msgpline_add(const char *pattern, int typ, nhstyle style) {
 	pline_msg = tmp;
 }
 
-// returns true if match
-static bool msgpline_type(const char *msg, int *type, nhstyle *style, int *start, int *end) {
-	regmatch_t matches[2];
-	for (struct _plinemsg *tmp = pline_msg; tmp; tmp = tmp->next) {
-		if (tre_regexec(&tmp->pattern, msg, 2, matches, 0) == 0) {
-			*type = tmp->msgtype;
-			*style = tmp->style;
-			bool b = matches[1].rm_so != -1;
-			*start = matches[b].rm_so;
-			*end = matches[b].rm_eo;
-			return true;
-		}
-	}
-	return false;
-}
-
 static nhstr apply_style(nhstr str, nhstyle style, int start, int end) {
 	start = CLAMP(start, 0, str.len);
 
@@ -73,6 +57,22 @@ static nhstr apply_style(nhstr str, nhstyle style, int start, int end) {
 	return str;
 }
 
+// returns true if match
+static bool msgpline_type(const char *msg, nhstr *nmsg, int *type) {
+	bool ret = false;
+
+	regmatch_t matches[2];
+	for (struct _plinemsg *tmp = pline_msg; tmp; tmp = tmp->next) {
+		if (tre_regexec(&tmp->pattern, msg, 2, matches, 0) == 0) {
+			*type = tmp->msgtype;
+			bool b = matches[1].rm_so != -1;
+			*nmsg = apply_style(*nmsg, tmp->style, matches[b].rm_so, matches[b].rm_eo);
+			ret = true;
+		}
+	}
+	return ret;
+}
+
 static void npline(nhstr line) {
 	if (program_state.wizkit_wishing) return;
 
@@ -90,11 +90,8 @@ static void npline(nhstr line) {
 	if (u.ux) flush_screen(1); /* %% */
 
 	//todo make tre work on widechars (not as simple as #define wchar_t glyph_t; it uses wmemcmp and maybe also other annoying things), to avoid this copy
-	int typ, start, end;
-	nhstyle style;
-	bool msgtyped = msgpline_type(nhs2cstr_trunc(line), &typ, &style, &start, &end);
-
-	if (msgtyped) line = apply_style(line, style, start, end);
+	int typ;
+	bool msgtyped = msgpline_type(nhs2cstr_trunc(line), &line, &typ);
 
 	if (msgtyped && typ == MSGTYP_NOSHOW) return;
 
