@@ -122,17 +122,17 @@ util/dlb: $(OBJ_DLB)
 util/data2c: $(OBJ_DATA2C)
 	$(CCLD) -o util/data2c $(OBJ_DATA2C)
 
-dat/nhdat: util/dlb util/dgn_comp util/lev_comp dat/lev/*.des dat/lev/dungeon.def dat/doc/* dat/text/*
+dat/nhdat: util/dlb util/dgn_comp util/lev_comp dat/lev/*.des dat/lev/dungeon.def dat/scm/* dat/doc/* dat/text/*
 	./util/dgn_comp dat/lev/dungeon.def
 	for i in dat/lev/*.des; do ./util/lev_comp $$i; done
 	mv *.lev dat/lev/
-	cd dat; ../util/dlb cf nhdat lev/dungeon lev/*.lev doc/* text/*
+	cd dat; ../util/dlb cf nhdat lev/dungeon lev/*.lev scm/* doc/* text/*
 
-include/dlb_archive.h: util/data2c util/dgn_comp util/lev_comp dat/lev/*.des dat/lev/dungeon.def dat/doc/* dat/text/*
+include/dlb_archive.h: util/data2c util/dgn_comp util/lev_comp dat/lev/*.des dat/lev/dungeon.def dat/scm/* dat/doc/* dat/text/*
 	./util/dgn_comp dat/lev/dungeon.def
 	for i in dat/lev/*.des; do ./util/lev_comp $$i; done
 	mv *.lev dat/lev/
-	cd dat; ../util/data2c ../include/dlb_archive.h lev/dungeon lev/*.lev doc/* text/*
+	cd dat; ../util/data2c ../include/dlb_archive.h lev/dungeon lev/*.lev scm/* doc/* text/*
 
 clean:
 	rm -f $(ALLOBJ) src/slashem9 util/dlb util/data2c util/lev_comp util/dgn_comp dat/nhdat dat/lev/*.lev util/*_yacc.c util/*_lex.c util/*_yacc.h dat/lev/dungeon include/dlb_archive.h

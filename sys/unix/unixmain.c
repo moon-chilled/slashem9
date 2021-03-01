@@ -106,6 +106,7 @@ int main(int argc, char **argv) {
 	    lock_windows(true);         /* Can't be overridden from options */
 	}
 #endif
+	dlb_init();	/* must be before s9s7_init() */
 	s9s7_init();
 	initoptions();
 	init_nhwindows(&argc,argv);
@@ -158,8 +159,6 @@ int main(int argc, char **argv) {
 		sprintf(lock, "%d%s", getuid(), plname);
 		getlock();
 	}
-
-	dlb_init();	/* must be before newgame() */
 
 	/*
 	 * Initialization of the boundaries of the mazes

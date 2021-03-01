@@ -269,17 +269,17 @@ typedef struct {
 
 #define NUM_MENU_CMDS 11
 static const menu_cmd_t default_menu_cmd_info[NUM_MENU_CMDS] = {
-	/* 0*/ {"menu_first_page", MENU_FIRST_PAGE},
+/* 0*/	{"menu_first_page", MENU_FIRST_PAGE},
 	{"menu_last_page", MENU_LAST_PAGE},
 	{"menu_next_page", MENU_NEXT_PAGE},
 	{"menu_previous_page", MENU_PREVIOUS_PAGE},
 	{"menu_select_all", MENU_SELECT_ALL},
-	/* 5*/ {"menu_deselect_all", MENU_UNSELECT_ALL},
+/* 5*/	{"menu_deselect_all", MENU_UNSELECT_ALL},
 	{"menu_invert_all", MENU_INVERT_ALL},
 	{"menu_select_page", MENU_SELECT_PAGE},
 	{"menu_deselect_page", MENU_UNSELECT_PAGE},
 	{"menu_invert_page", MENU_INVERT_PAGE},
-	/*10*/ {"menu_search", MENU_SEARCH},
+/*10*/	{"menu_search", MENU_SEARCH},
 };
 
 /*
