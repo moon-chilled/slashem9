@@ -1783,7 +1783,7 @@ int damageum(struct monst *mdef, struct attack *mattk) {
 		case AD_WERE: /* no special effect on monsters */
 		case AD_HEAL: /* likewise */
 		case AD_PHYS:
-		physical:
+physical:
 			if (mattk->aatyp == AT_WEAP) {
 				if (uwep) tmp = 0;
 			} else if (mattk->aatyp == AT_KICK) {
@@ -2275,7 +2275,7 @@ static int explum(struct monst *mdef, struct attack *mattk) {
 			goto common;
 		case AD_ELEC:
 			resistance = resists_elec(mdef);
-		common:
+common:
 			if (!resistance) {
 				pline("%s gets blasted!", Monnam(mdef));
 				mdef->mhp -= tmp;
@@ -2592,7 +2592,7 @@ static boolean hmonas(struct monst *mon) {
 
 		switch (mattk->aatyp) {
 			case AT_WEAP:
-			use_weapon:
+use_weapon:
 				/* Certain monsters don't use weapons when encountered as enemies,
 				 * but players who polymorph into them have hands or claws and thus
 				 * should be able to use weapons.  This shouldn't prohibit the use

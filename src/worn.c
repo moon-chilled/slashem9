@@ -291,7 +291,7 @@ void update_mon_intrinsics(struct monst *mon, struct obj *obj, boolean on, boole
 			case ACID_RES:
 			case STONE_RES:
 				mask = (uchar)(1 << (which - 1));
-			maybe_loose:
+maybe_loose:
 				/* If the monster doesn't have this resistance intrinsically,
 			   check whether any other worn item confers it.  Note that
 			   we don't currently check for anything conferred via simply
@@ -709,7 +709,7 @@ void mon_break_armor(struct monst *mon, boolean polyspot) {
 		if (mon == u.usteed)
 			goto noride;
 	} else if (mon == u.usteed && !can_ride(mon)) {
-	noride:
+noride:
 		pline("You can no longer ride %s.", mon_nam(mon));
 		if (touch_petrifies(u.usteed->data) &&
 		    !Stone_resistance && rnl(3)) {

@@ -1167,7 +1167,7 @@ void dosearch0(bool aflag) {
 						if ((mtmp = m_at(x, y)) && !aflag) {
 							if (mtmp->m_ap_type) {
 								seemimic(mtmp);
-							find:
+find:
 								exercise(A_WIS, true);
 								if (!canspotmon(mtmp)) {
 									if (memory_is_invisible(x, y)) {

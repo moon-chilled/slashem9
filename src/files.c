@@ -925,7 +925,7 @@ static int get_uchars(
 		num_read = get_uchar_list(bufp, list, size - count);
 		if (num_read < 0) {
 			count -= num_read + 1;
-		gi_error:
+gi_error:
 			raw_printf("Syntax error in %s", name);
 			wait_synch();
 			return count;

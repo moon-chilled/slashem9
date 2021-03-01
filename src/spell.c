@@ -273,7 +273,7 @@ static void deadbook(struct obj *book2) {
 
 	/* when not an invocation situation */
 	if (book2->cursed) {
-	raise_dead:
+raise_dead:
 
 		pline("You raised the dead!");
 		/* first maybe place a dangerous adversary */

@@ -202,7 +202,7 @@ int steal(struct monst *mtmp, char *objnambuf) {
 	if (occupation) maybe_finished_meal(false);
 
 	if (!invent || (inv_cnt() == 1 && uskin)) {
-	nothing_to_steal:
+nothing_to_steal:
 		/* Not even a thousand men in armor can strip a naked man. */
 		if (Blind)
 			pline("Somebody tries to rob you, but finds nothing to steal.");

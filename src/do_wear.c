@@ -798,7 +798,7 @@ void Ring_on(struct obj *obj) {
 			goto adjust_attrib;
 		case RIN_ADORNMENT:
 			which = A_CHA;
-		adjust_attrib:
+adjust_attrib:
 			old_attrib = ACURR(which);
 			ABON(which) += obj->spe;
 			if (ACURR(which) != old_attrib ||
@@ -941,7 +941,7 @@ static void Ring_off_or_gone(struct obj *obj, bool gone) {
 			goto adjust_attrib;
 		case RIN_ADORNMENT:
 			which = A_CHA;
-		adjust_attrib:
+adjust_attrib:
 			old_attrib = ACURR(which);
 			ABON(which) -= obj->spe;
 			if (ACURR(which) != old_attrib) {

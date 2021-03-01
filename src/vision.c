@@ -744,7 +744,7 @@ void vision_recalc(int control) {
 			 *   monster there.
 			 */
 			else {
-			not_in_sight:
+not_in_sight:
 				if ((old_row[col] & IN_SIGHT) || ((next_row[col] & COULD_SEE) ^ (old_row[col] & COULD_SEE)))
 					newsym(col, row);
 			}

@@ -1563,7 +1563,7 @@ void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 				return;
 			}
 		}
-	goodfruit:
+goodfruit:
 		nmcpy(pl_fruit, op, PL_FSIZ);
 		/* OBJ_NAME(objects[SLIME_MOLD]) won't work after initialization */
 		if (!*pl_fruit)

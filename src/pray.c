@@ -406,7 +406,7 @@ static void fix_worst_trouble(int trouble) {
 				what = rightglow;
 			else if (otmp == uleft)
 				what = leftglow;
-		decurse:
+decurse:
 			if (!otmp) {
 				impossible("fix_worst_trouble: nothing to uncurse.");
 				return;
@@ -697,7 +697,7 @@ static void gcrownu() {
 		       uwep->oartifact != ART_STORMBRINGER)) &&
 	    !carrying(SPE_FINGER_OF_DEATH)) {
 		class_gift = SPE_FINGER_OF_DEATH;
-	make_splbk:
+make_splbk:
 		obj = mksobj(class_gift, true, false);
 		bless(obj);
 		obj->bknown = true;

@@ -1487,7 +1487,7 @@ proceed:
 				}
 			}
 		}
-	thanks:
+thanks:
 		if (!itemize)
 			update_inventory(); /* Done in dopayobj() if itemize. */
 	}
@@ -1836,7 +1836,7 @@ static bool inherits(struct monst *shkp, int numsk, int croaked) {
 			eshkp->following = 0;
 			eshkp->robbed = 0L;
 		}
-	skip:
+skip:
 		/* in case we create bones */
 		rouse_shk(shkp, false); /* wake up */
 		if (!inhishop(shkp))
@@ -3592,7 +3592,7 @@ void pay_for_damage(const char *dmgstr, boolean cant_mollify) {
 			verbalize("Who dared %s my %s?", dmgstr,
 				  dugwall ? "shop" : "door");
 		} else {
-		getcad:
+getcad:
 			verbalize("How dare you %s my %s?", dmgstr,
 				  dugwall ? "shop" : "door");
 		}

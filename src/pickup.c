@@ -148,7 +148,7 @@ static boolean query_classes(char oclasses[], boolean *one_at_a_time, boolean *e
 			*menu_on_demand = 0;
 		}
 		ilets[iletct] = '\0';
-	ask_again:
+ask_again:
 		oclasses[oclassct = 0] = '\0';
 		*one_at_a_time = *everything = false;
 		not_everything = false;
@@ -411,7 +411,7 @@ int pickup(
 					  traverse_how | AUTOSELECT_SINGLE | INVORDER_SORT | FEEL_COCKATRICE,
 					  &pick_list, PICK_ANY, all_but_uchain);
 		}
-	menu_pickup:
+menu_pickup:
 		n_tried = n;
 		for (n_picked = i = 0; i < n; i++) {
 			res = pickup_object(pick_list[i].item.a_obj, pick_list[i].count,
@@ -1390,7 +1390,7 @@ lootcont:
 					for (coffers = fobj; coffers; coffers = coffers->nobj)
 						if (coffers->otyp == CHEST && coffers->spe == pass)
 							goto gotit; /* two level break */
-			gotit:
+gotit:
 				if (coffers) {
 					verbalize("Thank you for your contribution to reduce the debt.");
 					add_to_container(coffers, goldob);

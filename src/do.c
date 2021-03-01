@@ -246,7 +246,7 @@ static void dosinkring(struct obj *obj) {
 			goto giveback;
 		case RIN_SLOW_DIGESTION:
 			pline("The ring is regurgitated!");
-		giveback:
+giveback:
 			obj->in_use = false;
 			dropx(obj);
 			trycall(obj);

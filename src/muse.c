@@ -571,7 +571,7 @@ int use_defensive(struct monst *mtmp) {
 			mzapmsg(mtmp, otmp, true);
 			otmp->spe--;
 			how = WAN_TELEPORTATION;
-		mon_tele:
+mon_tele:
 			if (tele_restrict(mtmp)) { /* mysterious force... */
 				if (vismon && how) /* mentions 'teleport' */
 					makeknown(how);
@@ -1537,7 +1537,7 @@ int use_offensive(struct monst *mtmp) {
 				}
 				if (dmg) losehp(Maybe_Half_Phys(dmg), "scroll of earth", KILLED_BY_AN);
 			}
-		xxx_noobj:
+xxx_noobj:
 
 			return (mtmp->mhp <= 0) ? 1 : 2;
 		}

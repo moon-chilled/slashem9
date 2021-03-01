@@ -336,7 +336,7 @@ static boolean dog_hunger(struct monst *mtmp, struct edog *edog) {
 				pline("You feel worried about %s.", y_monnam(mtmp));
 			stop_occupation();
 		} else if (monstermoves > edog->hungrytime + 750 || mtmp->mhp < 1) {
-		dog_died:
+dog_died:
 			if (mtmp->mleashed && mtmp != u.usteed)
 				pline("Your leash goes slack.");
 			else if (cansee(mtmp->mx, mtmp->my))
@@ -1074,7 +1074,7 @@ newdogpos:
 		}
 		cc.x = mtmp->mx;
 		cc.y = mtmp->my;
-	dognext:
+dognext:
 		if (!m_in_out_region(mtmp, nix, niy))
 			return 1;
 		remove_monster(mtmp->mx, mtmp->my);

@@ -775,7 +775,7 @@ plus:
 			}
 		case WAND_CLASS:
 			add_erosion_words(obj, prefix);
-		charges:
+charges:
 			if (Hallucination)
 				break;
 			if (obj->known)
@@ -789,7 +789,7 @@ plus:
 			break;
 		case RING_CLASS:
 			add_erosion_words(obj, prefix);
-		ring:
+ring:
 			if (obj->owornmask & W_RINGR) strcat(bp, " (on right ");
 			if (obj->owornmask & W_RINGL) strcat(bp, " (on left ");
 			if (obj->owornmask & W_RING) {
@@ -1760,7 +1760,7 @@ char *makesingular(const char *oldstr) {
 			   !BSTRCMP(bp, p - 9, "iron bars") ||
 			   !BSTRCMP(bp, p - 5, "aklys"))
 			return bp;
-	mins:
+mins:
 		p[-1] = 0;
 
 	} else {

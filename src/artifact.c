@@ -226,7 +226,7 @@ struct obj *mk_artifact(
 		a = &artilist[m];
 
 		/* make an appropriate object if necessary, then christen it */
-	make_artif:
+make_artif:
 		if (by_align) otmp = mksobj((int)a->otyp, true, false);
 		otmp = oname(otmp, a->name);
 		otmp->oartifact = m;
@@ -1710,7 +1710,7 @@ static int arti_invoke(struct obj *obj) {
 		}
 
 		if ((eprop & ~W_ARTI) || iprop) {
-		nothing_special:
+nothing_special:
 			/* you had the property from some other source too */
 			if (carried(obj))
 				pline("You feel a surge of power, but nothing seems to happen.");

@@ -1882,7 +1882,7 @@ int bhito(struct obj *obj, struct obj *otmp) {
 							if (!animate_statue(obj, oox, ooy,
 									    ANIMATE_SPELL, NULL)) {
 								struct obj *item;
-							makecorpse:
+makecorpse:
 								if (mons[obj->corpsenm].geno &
 								    (G_NOCORPSE | G_UNIQ)) {
 									res = 0;
@@ -1939,7 +1939,7 @@ int bhito(struct obj *obj, struct obj *otmp) {
 						goto smell;
 					case GEM_CLASS: /* rocks & gems */
 						obj = poly_obj(obj, MEATBALL);
-					smell:
+smell:
 						if (herbivorous(youmonst.data) &&
 						    (!carnivorous(youmonst.data) ||
 						     Role_if(PM_MONK) || !u.uconduct.unvegetarian))
@@ -4072,7 +4072,7 @@ buzzmonst:
 			int bounce;
 			uchar rmn;
 
-		make_bounce:
+make_bounce:
 			/* WAC Player/Monster Fireball */
 			if (abs(type) == ZT_SPELL(ZT_FIRE)) {
 				sx = lsx;
@@ -4372,7 +4372,7 @@ int zap_over_floor(xchar x, xchar y, int type, boolean *shopdamage) {
 				hear_txt = "sizzling.";
 				break;
 			default:
-			def_case:
+def_case:
 				if (cansee(x, y)) {
 					pline("The door absorbs %s %s!",
 					      (type < 0) ? "the" : "your",

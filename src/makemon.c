@@ -1760,7 +1760,7 @@ struct permonst *rndmonst(void) {
 		 *	Find out how many monsters exist in the range we have selected.
 		 */
 
-	loopback:
+loopback:
 		/* (`mndx' initialized above) */
 		for (; mndx < SPECIAL_PM; mndx++) {
 			ptr = &mons[mndx];
@@ -2358,7 +2358,7 @@ void set_mimic_sym(struct monst *mtmp) {
 		}
 	} else {
 		s_sym = syms[rn2((int)sizeof(syms))];
-	assign_sym:
+assign_sym:
 		if (s_sym >= MAXOCLASSES) {
 			ap_type = M_AP_FURNITURE;
 			appear = s_sym == MAXOCLASSES ? S_upstair : S_dnstair;

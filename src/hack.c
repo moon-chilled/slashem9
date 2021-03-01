@@ -543,14 +543,14 @@ static int moverock(void) {
 				newsym(sx, sy);
 			}
 		} else {
-		nopushmsg:
+nopushmsg:
 			if (u.usteed)
 				pline("%s tries to move %s, but cannot.",
 				      upstart(y_monnam(u.usteed)), the(xname(otmp)));
 			else
 				pline("You try to move %s, but in vain.", the(xname(otmp)));
 			if (Blind) feel_location(sx, sy);
-		cannot_push:
+cannot_push:
 			if (throws_rocks(youmonst.data)) {
 				if (u.usteed && P_SKILL(P_RIDING) < P_BASIC) {
 					pline("You aren't skilled enough to %s %s from %s.",
@@ -912,7 +912,7 @@ boolean test_move(int ux, int uy, int dx, int dy, int mode) {
 				return false;
 			}
 		} else {
-		testdiag:
+testdiag:
 			if (dx && dy && !Passes_walls && ((tmpr->doormask & ~D_BROKEN) || Is_rogue_level(&u.uz) || block_door(x, y))) {
 				/* Diagonal moves into a door are not allowed. */
 				if (Blind && mode == DO_MOVE)
@@ -1037,7 +1037,7 @@ static bool findtravelpath(bool guess) {
 			uy = u.uy;
 		}
 
-	noguess:
+noguess:
 		memset((void *)travel, 0, sizeof(travel));
 		travelstepx[0][0] = tx;
 		travelstepy[0][0] = ty;
@@ -1297,7 +1297,7 @@ void domove(void) {
 					case 0:
 					case 1:
 					case 2:
-					pull_free:
+pull_free:
 						pline("You pull free from %s.", mon_nam(u.ustuck));
 						setustuck(0);
 						break;
@@ -2323,7 +2323,7 @@ void lookaround(void) {
 				if (context.run != 1) goto stop;
 				goto bcorr;
 			} else if (levl[x][y].typ == CORR) {
-			bcorr:
+bcorr:
 				if (levl[u.ux][u.uy].typ != ROOM) {
 					if (context.run == 1 || context.run == 3 || context.run == 8) {
 						i = dist2(x, y, u.ux + u.dx, u.uy + u.dy);
@@ -2365,7 +2365,7 @@ void lookaround(void) {
 				    ((y == u.uy - u.dy) && (x != u.ux + u.dx)))
 					continue;
 			}
-		stop:
+stop:
 			nomul(0);
 			return;
 		} /* end for loops */

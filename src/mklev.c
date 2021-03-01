@@ -636,7 +636,7 @@ static void makelevel(void) {
 		w = 1;
 		h = 1;
 		if (check_room(&vault_x, &w, &vault_y, &h, true)) {
-		fill_vault:
+fill_vault:
 			add_room(vault_x, vault_y, vault_x + w,
 				 vault_y + h, true, VAULT, false);
 			level.flags.has_vault = 1;
@@ -723,7 +723,7 @@ static void makelevel(void) {
 				mkroom(LEMUREPIT);
 		}
 
-	skip0:
+skip0:
 		/* Place multi-dungeon branch. */
 		place_branch(branchp, 0, 0);
 
@@ -796,7 +796,7 @@ static void makelevel(void) {
 				}
 			}
 
-		skip_nonrogue:
+skip_nonrogue:
 			/* STEPHEN WHITE'S NEW CODE */
 			if (!rn2(5)) {
 				mkobj_at(0, somex(croom), somey(croom), true);

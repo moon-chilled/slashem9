@@ -807,7 +807,7 @@ void dotrap(struct trap *trap, unsigned trflags) {
 						if (otmp && !snuff_lit(otmp))
 							erode_obj(otmp, false, true, false);
 					}
-				glovecheck:
+glovecheck:
 					rust_dmg(uarmg, "gauntlets", 1, true, &youmonst);
 					/* Not "metal gauntlets" since it gets called
 			 * even if it's leather for the message
@@ -1843,7 +1843,7 @@ int mintrap(struct monst *mtmp) {
 						target = MON_WEP(mtmp);
 						if (target && bimanual(target))
 							erode_obj(target, false, true, false);
-					glovecheck:
+glovecheck:
 						target = which_armor(mtmp, W_ARMG);
 						rust_dmg(target, "gauntlets", 1, true, mtmp);
 						break;

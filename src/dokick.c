@@ -1018,7 +1018,7 @@ int dokick(void) {
 		    IS_STWALL(maploc->typ)) {
 			if (!IS_STWALL(maploc->typ) && maploc->ladder == LA_DOWN)
 				goto dumb;
-		ouch:
+ouch:
 			pline("Ouch!  That hurts!");
 			exercise(A_DEX, false);
 			exercise(A_STR, false);
@@ -1041,7 +1041,7 @@ int dokick(void) {
 	if (maploc->doormask == D_ISOPEN ||
 	    maploc->doormask == D_BROKEN ||
 	    maploc->doormask == D_NODOOR) {
-	dumb:
+dumb:
 		exercise(A_DEX, false);
 		if (martial() || ACURR(A_DEX) >= 16 || rn2(3)) {
 			pline("You kick at empty space.");

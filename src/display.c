@@ -738,7 +738,7 @@ void newsym(int x, int y) {
 				goto show_mem;
 			}
 		} else {
-		show_mem:
+show_mem:
 			show_glyph(x, y, memory_glyph(x, y));
 		}
 	}
@@ -1910,7 +1910,7 @@ static int wall_angle(struct rm *lev) {
 			goto do_twall;
 		case TDWALL:
 			row = wall_matrix[T_d];
-		do_twall:
+do_twall:
 			switch (lev->wall_info & WM_MASK) {
 				case 0:
 					if (seenv == SV4) {
@@ -2029,7 +2029,7 @@ static int wall_angle(struct rm *lev) {
 			break;
 
 		case HWALL:
-		horiz:
+horiz:
 			switch (lev->wall_info & WM_MASK) {
 				case 0:
 					idx = seenv ? S_hwall : S_stone;
@@ -2116,7 +2116,7 @@ static int wall_angle(struct rm *lev) {
 					goto do_crwall;
 				case WM_X_BR:
 					row = cross_matrix[C_br];
-				do_crwall:
+do_crwall:
 					if (seenv == SV4)
 						idx = S_stone;
 					else {

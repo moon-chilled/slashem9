@@ -88,7 +88,7 @@ int dosit() {
 		else
 			pline("You sit down on the muddy bottom.");
 	} else if (is_pool(u.ux, u.uy)) {
-	in_water:
+in_water:
 		pline("You sit in the water.");
 		if (!rn2(10) && uarm)
 			rust_dmg(uarm, "armor", 1, true, &youmonst);

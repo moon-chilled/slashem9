@@ -399,7 +399,7 @@ static int dig(void) {
 			b_trapped("door", 0);
 			newsym(dpx, dpy);
 		}
-	cleanup:
+cleanup:
 		context.digging.lastdigtime = moves;
 		context.digging.quiet = false;
 		context.digging.level.dnum = 0;

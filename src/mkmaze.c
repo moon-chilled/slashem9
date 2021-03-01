@@ -393,7 +393,7 @@ static void fixup_special(void) {
 			fallthru;
 			case LR_UPSTAIR:
 			case LR_DOWNSTAIR:
-			place_it:
+place_it:
 				place_lregion(r->inarea.x1, r->inarea.y1,
 					      r->inarea.x2, r->inarea.y2,
 					      r->delarea.x1, r->delarea.y1,

@@ -1159,7 +1159,7 @@ void potionhit(struct monst *mon, struct obj *obj, boolean your_fault) {
 		if (!your_fault) angermon = false;
 		switch (obj->otyp) {
 			case POT_HEALING:
-			do_healing:
+do_healing:
 				if (mon->data == &mons[PM_PESTILENCE]) goto do_illness;
 				angermon = false;
 				if (canseemon(mon))
@@ -1195,7 +1195,7 @@ void potionhit(struct monst *mon, struct obj *obj, boolean your_fault) {
 						pline("%s looks unharmed.", Monnam(mon));
 					break;
 				}
-			do_illness:
+do_illness:
 				if ((mon->mhpmax > 3) && !resist(mon, POTION_CLASS, 0, NOTELL))
 					mon->mhpmax /= 2;
 				if ((mon->mhp > 2) && !resist(mon, POTION_CLASS, 0, NOTELL))
@@ -2636,7 +2636,7 @@ int dodip(void) {
 					pline("%s %s.", Yobjnam2(obj, "softly glow"), hcolor(NH_AMBER));
 				uncurse(obj);
 				obj->bknown = 1;
-			poof:
+poof:
 				if (!(objects[potion->otyp].oc_name_known) &&
 				    !(objects[potion->otyp].oc_uname))
 					docall(potion);

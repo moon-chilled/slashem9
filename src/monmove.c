@@ -1278,7 +1278,7 @@ void set_apparxy(struct monst *mtmp) {
 			my = u.uy - disp + rn2(2 * disp + 1);
 		} while (!isok(mx, my) || (disp != 2 && mx == mtmp->mx && my == mtmp->my) || ((mx != u.ux || my != u.uy) && !passes_walls(mtmp->data) && (!ACCESSIBLE(levl[mx][my].typ) || (closed_door(mx, my) && !(can_ooze(mtmp) || can_fog(mtmp))))) || !couldsee(mx, my));
 	} else {
-	found_you:
+found_you:
 		mx = u.ux;
 		my = u.uy;
 	}

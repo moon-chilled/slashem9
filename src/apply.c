@@ -3176,7 +3176,7 @@ int wand_explode(struct obj *obj, boolean hero_broke) {
 			dmg *= 2;
 			goto wanexpl;
 		case WAN_MAGIC_MISSILE:
-		wanexpl:
+wanexpl:
 			explode(u.ux, u.uy, ZT_MAGIC_MISSILE, dmg, WAND_CLASS, expltype);
 			makeknown(obj->otyp); /* explode described the effect */
 			goto discard_broken_wand;
@@ -3748,7 +3748,7 @@ int doapply(void) {
 				break;
 			}
 			pline("Sorry, I don't know how to use that.");
-		xit:
+xit:
 			nomul(0);
 			return 0;
 	}

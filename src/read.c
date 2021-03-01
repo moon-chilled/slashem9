@@ -593,7 +593,7 @@ void recharge(struct obj *obj, int curse_bless) {
 		} /* switch */
 
 	} else {
-	not_chargable:
+not_chargable:
 		pline("You have a feeling of loss.");
 	}
 }
@@ -1155,7 +1155,7 @@ int seffects(struct obj *sobj) {
 			else
 				useupf(sobj, 1L);
 			makeknown(SCR_IDENTIFY);
-		id:
+id:
 			if (invent && !confused) {
 				identify_pack(cval);
 			}

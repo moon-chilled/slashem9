@@ -259,7 +259,7 @@ static void
 					fallthru;
 					case ROOM:
 					case CORR: /* Try to make a pit */
-					do_pit:
+do_pit:
 						chasm = maketrap(x, y, PIT);
 						if (!chasm) break; /* no pit if portal at that location */
 						chasm->tseen = 1;

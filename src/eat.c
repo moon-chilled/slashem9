@@ -1927,7 +1927,7 @@ static void fprefx(struct obj *otmp) {
 				make_vomiting(Vomiting + d(10, 4), true);
 			} else {
 				boolean bad_for_you;
-			give_feedback:
+give_feedback:
 				bad_for_you = otmp->cursed ||
 					      (Race_if(PM_HUMAN_WEREWOLF) &&
 					       otmp->otyp == SPRIG_OF_WOLFSBANE);

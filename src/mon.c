@@ -282,7 +282,7 @@ static struct obj *make_corpse(struct monst *mtmp, unsigned corpseflags) {
 			pline("All that remains is a hand...");
 			obj = oname(mksobj(SEVERED_HAND, true, false),
 				    artiname(ART_HAND_OF_VECNA));
-		initspecial:
+initspecial:
 			obj->quan = 1;
 			curse(obj);
 			place_object(obj, x, y);
@@ -428,7 +428,7 @@ static struct obj *make_corpse(struct monst *mtmp, unsigned corpseflags) {
 				MNAME(mtmp) = NULL;
 			}
 			break;
-		default_1:
+default_1:
 		default:
 			if (mvitals[mndx].mvflags & G_NOCORPSE) {
 				return NULL;

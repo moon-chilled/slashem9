@@ -1104,7 +1104,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 		case AD_WERE:
 		case AD_HEAL:
 		case AD_PHYS:
-		physical:
+physical:
 			if (mattk->aatyp == AT_WEAP && otmp) {
 				if (otmp->otyp == CORPSE &&
 				    touch_petrifies(&mons[otmp->corpsenm]) && nohit)
@@ -1387,7 +1387,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 					return MM_AGR_DIED;
 				}
 			}
-		do_stone:
+do_stone:
 			/* may die from the acid if it eats a stone-curing corpse */
 			if (munstone(mdef, false)) goto post_stone;
 			if (poly_when_stoned(pd)) {
@@ -1398,7 +1398,7 @@ static int mdamagem(struct monst *magr, struct monst *mdef, struct attack *mattk
 			if (!resists_ston(mdef)) {
 				if (vis) pline("%s turns to stone!", Monnam(mdef));
 				monstone(mdef);
-			post_stone:
+post_stone:
 				if (mdef->mhp > 0)
 					return 0;
 				else if (mdef->mtame && !vis)

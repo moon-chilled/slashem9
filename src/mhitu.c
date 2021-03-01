@@ -1265,7 +1265,7 @@ static int hitmu(struct monst *mtmp, struct attack *mattk) {
 			goto dopois;
 		case AD_DRCO:
 			ptmp = A_CON;
-		dopois:
+dopois:
 			hitmsg(mtmp, mattk);
 			if (uncancelled && !rn2(8)) {
 				sprintf(buf, "%s %s",

@@ -169,7 +169,7 @@ void init_objects(void) {
 					break;
 			}
 		}
-	check:
+check:
 		sum = 0;
 		for (i = first; i < last; i++)
 			sum += objects[i].oc_prob;

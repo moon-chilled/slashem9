@@ -675,7 +675,7 @@ boolean teleport_pet(struct monst *mtmp, boolean force_it) {
 			return false;
 		} else {
 			pline("Your leash goes slack.");
-		release_it:
+release_it:
 			m_unleash(mtmp, false);
 			return true;
 		}
@@ -942,7 +942,7 @@ void level_tele(void) {
 		if (In_quest(&u.uz) && newlev > 0)
 			newlev = newlev + dungeons[u.uz.dnum].depth_start - 1;
 	} else { /* involuntary level tele */
-	random_levtport:
+random_levtport:
 		newlev = random_teleport_level();
 		if (newlev == depth(&u.uz)) {
 			pline("You shudder for a moment.");
