@@ -532,30 +532,30 @@ place_it:
 
 void makemaz(const char *s) {
 	int x, y;
-	char protofile[20];
+	char protofile[256];
 	s_level *sp = Is_special(&u.uz);
 	coord mm;
 
 	if (*s) {
 		if (sp && sp->rndlevs)
-			sprintf(protofile, "%s-%d", s,
+			sprintf(protofile, "lev/%s-%d", s,
 				rnd((int)sp->rndlevs));
 		else
-			strcpy(protofile, s);
+			sprintf(protofile, "lev/%s", s);
 	} else if (*(dungeons[u.uz.dnum].proto)) {
 		if (dunlevs_in_dungeon(&u.uz) > 1) {
 			if (sp && sp->rndlevs)
-				sprintf(protofile, "%s%d-%d", dungeons[u.uz.dnum].proto,
+				sprintf(protofile, "lev/%s%d-%d", dungeons[u.uz.dnum].proto,
 					dunlev(&u.uz),
 					rnd((int)sp->rndlevs));
 			else
-				sprintf(protofile, "%s%d", dungeons[u.uz.dnum].proto,
+				sprintf(protofile, "lev/%s%d", dungeons[u.uz.dnum].proto,
 					dunlev(&u.uz));
 		} else if (sp && sp->rndlevs) {
-			sprintf(protofile, "%s-%d", dungeons[u.uz.dnum].proto,
+			sprintf(protofile, "lev/%s-%d", dungeons[u.uz.dnum].proto,
 				rnd((int)sp->rndlevs));
 		} else
-			strcpy(protofile, dungeons[u.uz.dnum].proto);
+			sprintf(protofile, "lev/%s", dungeons[u.uz.dnum].proto);
 
 	} else
 		strcpy(protofile, "");

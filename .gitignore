@@ -14,8 +14,8 @@ util/lev_yacc.h
 util/dgn_lex.c
 util/lev_lex.c
 
-dat/*.lev
-dat/dungeon
+dat/lev/*.lev
+dat/lev/dungeon
 
 src/slashem9
 util/slashem9-recover

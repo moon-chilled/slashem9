@@ -122,20 +122,20 @@ util/dlb: $(OBJ_DLB)
 util/data2c: $(OBJ_DATA2C)
 	$(CCLD) -o util/data2c $(OBJ_DATA2C)
 
-dat/nhdat: util/dlb util/dgn_comp util/lev_comp dat/*.des dat/dungeon.def dat/help dat/hh dat/cmdhelp dat/history dat/license dat/opthelp dat/wizhelp dat/gypsy.txt dat/data.base dat/oracles.txt dat/quest.txt dat/rumors.fal dat/rumors.tru
-	./util/dgn_comp dat/dungeon.def
-	for i in dat/*.des; do ./util/lev_comp $$i; done
-	mv *.lev dat/
-	cd dat; ../util/dlb cf nhdat dungeon *.lev help hh cmdhelp history license opthelp wizhelp gypsy.txt data.base oracles.txt quest.txt rumors.fal rumors.tru
+dat/nhdat: util/dlb util/dgn_comp util/lev_comp dat/lev/*.des dat/lev/dungeon.def dat/doc/* dat/text/*
+	./util/dgn_comp dat/lev/dungeon.def
+	for i in dat/lev/*.des; do ./util/lev_comp $$i; done
+	mv *.lev dat/lev/
+	cd dat; ../util/dlb cf nhdat lev/dungeon lev/*.lev doc/* text/*
 
-include/dlb_archive.h: util/data2c util/dgn_comp util/lev_comp dat/*.des dat/dungeon.def dat/help dat/hh dat/cmdhelp dat/history dat/license dat/opthelp dat/wizhelp dat/gypsy.txt dat/data.base dat/oracles.txt dat/quest.txt dat/rumors.fal dat/rumors.tru
-	./util/dgn_comp dat/dungeon.def
-	for i in dat/*.des; do ./util/lev_comp $$i; done
-	mv *.lev dat/
-	cd dat; ../util/data2c ../include/dlb_archive.h dungeon *.lev help hh cmdhelp history license opthelp wizhelp gypsy.txt data.base oracles.txt quest.txt rumors.fal rumors.tru
+include/dlb_archive.h: util/data2c util/dgn_comp util/lev_comp dat/lev/*.des dat/lev/dungeon.def dat/doc/* dat/text/*
+	./util/dgn_comp dat/lev/dungeon.def
+	for i in dat/lev/*.des; do ./util/lev_comp $$i; done
+	mv *.lev dat/lev/
+	cd dat; ../util/data2c ../include/dlb_archive.h lev/dungeon lev/*.lev doc/* text/*
 
 clean:
-	rm -f $(ALLOBJ) src/slashem9 util/dlb util/data2c util/lev_comp util/dgn_comp dat/nhdat dat/*.lev util/*_yacc.c util/*_lex.c util/*_yacc.h dat/dungeon include/dlb_archive.h
+	rm -f $(ALLOBJ) src/slashem9 util/dlb util/data2c util/lev_comp util/dgn_comp dat/nhdat dat/lev/*.lev util/*_yacc.c util/*_lex.c util/*_yacc.h dat/lev/dungeon include/dlb_archive.h
 
 fetch-s7:
 	curl -O https://ccrma.stanford.edu/software/s7/s7.tar.gz

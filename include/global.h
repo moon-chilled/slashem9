@@ -14,19 +14,19 @@
 
 // Files expected to exist in the playground directory or in nhdat.
 
-#define NH_RECORD	 "record"	  // a file containing list of topscorers
-#define NH_HELP		 "help"		  // a file containing command descriptions
-#define NH_SHELP	 "hh"		  // abbreviated form of the same
-#define NH_DEBUGHELP	 "wizhelp"	  // a file containing debug mode cmds
-#define NH_RUMORFILE_TRU "rumors.tru"	  // a file with fortune cookies
-#define NH_RUMORFILE_FAL "rumors.fal"	  // a file with misleading fortune cookies
-#define NH_ORACLEFILE	 "oracles.txt"	  // a file with oracular information
-#define NH_DATAFILE	 "data.base"	  // a file giving the meaning of symbols used
-#define NH_CMDHELPFILE	 "cmdhelp"	  // file telling what commands do
-#define NH_HISTORY	 "history"	  // a file giving nethack's history
-#define NH_LICENSE	 "license"	  // file with license information
-#define NH_OPTIONFILE	 "opthelp"	  // a file explaining runtime options
-#define NH_GUIDEBOOK	 "Guidebook.txt"  // Nethack Guidebook*/
+#define NH_RECORD		"record"		// a file containing list of topscorers
+#define NH_HELP			"doc/help"		// a file containing command descriptions
+#define NH_SHELP		"doc/hh"		// abbreviated form of the same
+#define NH_DEBUGHELP		"doc/wizhelp"		// a file containing debug mode cmds
+#define NH_RUMORFILE_TRU	"text/rumors.tru"	// a file with fortune cookies
+#define NH_RUMORFILE_FAL	"text/rumors.fal"	// a file with misleading fortune cookies
+#define NH_ORACLEFILE		"text/oracles.txt"	// a file with oracular information
+#define NH_DATAFILE		"text/data.base"	// a file giving the meaning of symbols used
+#define NH_CMDHELPFILE		"doc/cmdhelp"		// file telling what commands do
+#define NH_HISTORY		"doc/history"		// a file giving nethack's history
+#define NH_LICENSE		"doc/license"		// file with license information
+#define NH_OPTIONFILE		"doc/opthelp"		// a file explaining runtime options
+#define NH_GUIDEBOOK		"doc/Guidebook.txt"	// Nethack Guidebook*/
 
 #define LEV_EXT ".lev" /* extension for special level files */
 

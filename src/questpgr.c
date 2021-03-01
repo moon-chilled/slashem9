@@ -9,7 +9,7 @@
 
 #include "qtext.h"
 
-#define QTEXT_FILE "quest.txt"
+#define QTEXT_FILE "text/quest.txt"
 
 static const char *intermed(void);
 static const char *neminame(void);
