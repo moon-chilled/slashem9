@@ -31,11 +31,7 @@ extern int curses_read_attrs(char *attrs);
  *  option (e.g. time and timed_delay) the shorter one must come first.
  */
 
-static struct Bool_Opt {
-	const char *name;
-	bool *addr, initvalue;
-	int optflags;
-} boolopt[] = {
+struct Bool_Opt boolopt[] = {
 	{"acoustics", &flags.acoustics, true, SET_IN_GAME},
 	{"autodig", &flags.autodig, false, SET_IN_GAME},
 	{"autopickup", &flags.pickup, true, SET_IN_GAME},
@@ -106,7 +102,6 @@ static struct Bool_Opt {
 	{"showdmg", &flags.showdmg, false, SET_IN_GAME},
 	{"showweight", &flags.showweight, true, SET_IN_GAME},
 	{"silent", &flags.silent, true, SET_IN_GAME},
-	{"softkeyboard", &iflags.wc2_softkeyboard, false, SET_IN_FILE},
 	{"sortpack", &flags.sortpack, true, SET_IN_GAME},
 	{"sparkle", &flags.sparkle, true, SET_IN_GAME},
 	{"standout", &flags.standout, false, SET_IN_GAME},
@@ -435,6 +430,7 @@ void initoptions(void) {
 	} else {
 		read_config_file(NULL);
 	}
+	s9s7_load_options("~/.slashem9rc.scm"); //todo
 
 	fruitadd(pl_fruit);
 	/* Remove "slime mold" from list of object names; this will	*/
@@ -942,13 +938,29 @@ bool read_style(const char *str, nhstyle *style) {
 	return true;
 }
 
+
+bool create_menu_coloring(const char *str, nhstyle style) {
+	char errbuf[256];
+	struct menucoloring *tmp = alloc(sizeof(struct menucoloring));
+
+	int errnum = tre_regcomp(&tmp->match, str, REG_EXTENDED);
+	if (errnum != 0) {
+		tre_regerror(errnum, &tmp->match, errbuf, sizeof(errbuf));
+		raw_printf("\nMenucolors: error in regex ‘%s’: ‘%s’\n", str, errbuf);
+		wait_synch();
+		free(tmp);
+		return false;
+	}
+	tmp->next = menu_colorings;
+	tmp->color = style.fg;
+	tmp->attr = style.attr;
+	menu_colorings = tmp;
+	return true;
+}
+
 /* parse '"regex_string"=color' and add it to menucoloring */
 bool add_menu_coloring(char *str) {
-	struct menucoloring *tmp;
 	char *cs = strchr(str, '=');
-	const char *err = NULL;
-	int errnum;
-	char errbuf[80];
 	nhstyle style;
 
 	if (!cs || !str) return false;
@@ -967,24 +979,7 @@ bool add_menu_coloring(char *str) {
 		}
 	}
 
-	tmp = alloc(sizeof(struct menucoloring));
-	errnum = tre_regcomp(&tmp->match, str, REG_EXTENDED);
-	if (errnum != 0) {
-		tre_regerror(errnum, &tmp->match, errbuf, sizeof(errbuf));
-		err = errbuf;
-	}
-	if (err) {
-		raw_printf("\nMenucolor regex error: %s\n", err);
-		wait_synch();
-		free(tmp);
-		return false;
-	} else {
-		tmp->next = menu_colorings;
-		tmp->color = style.fg;
-		tmp->attr = style.attr;
-		menu_colorings = tmp;
-		return true;
-	}
+	return create_menu_coloring(str, style);
 }
 
 /** Split up a string that matches name:value or 'name':value and
@@ -1128,8 +1123,72 @@ bool parse_object_symbol(const char *str) {
 	return false;
 }
 
-/** Parse '"dungeon feature":unicode_codepoint' and change symbol in
- * UTF8graphics. */
+void assign_boolopt(struct Bool_Opt *o, bool value, bool initial) {
+	/* options that don't exist */
+	if (!o->addr) {
+		if (!initial && value)
+			pline("The '%s' option is not available.", o->name);
+		return;
+	}
+	/* options that must come from config file */
+	if (!initial && (o->optflags == SET_IN_FILE)) {
+		rejectoption(o->name);
+		return;
+	}
+
+	if (iflags.debug_fuzzer && !initial) {
+		// don't randomly toggle this/these
+		if (o->addr == &flags.silent || o->addr == &flags.menu_on_esc)
+			return;
+	}
+
+	*o->addr = value;
+
+	duplicate_opt_detection(o->name, 0);
+
+	/* only do processing below if setting with doset() */
+	if (initial) return;
+
+	if (o->addr == &flags.time
+	 || o->addr == &flags.showexp
+	 || o->addr == &flags.showscore
+	 || o->addr == &flags.showweight) {
+		bot_reconfig();
+	} else if (o->addr == &flags.invlet_constant) {
+		if (flags.invlet_constant) reassign();
+	}
+#ifdef LAN_MAIL
+	else if ((o->addr) == &flags.biff) {
+		if (flags.biff)
+			lan_mail_init();
+		else
+			lan_mail_finish();
+	}
+#endif
+	else if (o->addr == &flags.lit_corridor) {
+		/*
+		 * All corridor squares seen via night vision or
+		 * candles & lamps change.  Update them by calling
+		 * newsym() on them.  Don't do this if we are
+		 * initializing the options --- the vision system
+		 * isn't set up yet.
+		 */
+		if (u.uz.dlevel) {
+			vision_recalc(2);			  /* shut down vision */
+			vision_full_recalc = 1;			  /* delayed recalc */
+			if (iflags.use_color) need_redraw = true; /* darkroom refresh */
+		}
+	} else if (o->addr == &iflags.use_inverse
+	        || o->addr == &iflags.showrace
+	        || o->addr == &iflags.hilite_pet) {
+		need_redraw = true;
+	} else if (o->addr == &iflags.use_color) {
+		need_redraw = true;
+	} else if (o->addr == &flags.perm_invent)
+		update_inventory();
+
+	return;
+}
 
 void parseoptions(char *opts, boolean tinitial, boolean tfrom_file) {
 	char *op;
@@ -2275,68 +2334,7 @@ goodfruit:
 	 */
 	for (i = 0; boolopt[i].name; i++) {
 		if (match_optname(opts, boolopt[i].name, 3, false)) {
-			/* options that don't exist */
-			if (!boolopt[i].addr) {
-				if (!initial && !negated)
-					pline("The \"%s\" option is not available.",
-					      boolopt[i].name);
-				return;
-			}
-			/* options that must come from config file */
-			if (!initial && (boolopt[i].optflags == SET_IN_FILE)) {
-				rejectoption(boolopt[i].name);
-				return;
-			}
-
-			if (iflags.debug_fuzzer && !initial) {
-				// don't randomly toggle this/these
-				if (boolopt[i].addr == &flags.silent || boolopt[i].addr == &flags.menu_on_esc)
-					return;
-			}
-
-			*(boolopt[i].addr) = !negated;
-
-			duplicate_opt_detection(boolopt[i].name, 0);
-
-			/* only do processing below if setting with doset() */
-			if (initial) return;
-
-			if ((boolopt[i].addr) == &flags.time || (boolopt[i].addr) == &flags.showexp || (boolopt[i].addr) == &flags.showscore || (boolopt[i].addr) == &flags.showweight)
-				bot_reconfig();
-
-			else if ((boolopt[i].addr) == &flags.invlet_constant) {
-				if (flags.invlet_constant) reassign();
-			}
-#ifdef LAN_MAIL
-			else if ((boolopt[i].addr) == &flags.biff) {
-				if (flags.biff)
-					lan_mail_init();
-				else
-					lan_mail_finish();
-			}
-#endif
-			else if ((boolopt[i].addr) == &flags.lit_corridor) {
-				/*
-				 * All corridor squares seen via night vision or
-				 * candles & lamps change.  Update them by calling
-				 * newsym() on them.  Don't do this if we are
-				 * initializing the options --- the vision system
-				 * isn't set up yet.
-				 */
-				if (u.uz.dlevel) {
-					vision_recalc(2);			  /* shut down vision */
-					vision_full_recalc = 1;			  /* delayed recalc */
-					if (iflags.use_color) need_redraw = true; /* darkroom refresh */
-				}
-			} else if ((boolopt[i].addr) == &iflags.use_inverse ||
-				   (boolopt[i].addr) == &iflags.showrace ||
-				   (boolopt[i].addr) == &iflags.hilite_pet) {
-				need_redraw = true;
-			} else if ((boolopt[i].addr) == &iflags.use_color) {
-				need_redraw = true;
-			} else if ((boolopt[i].addr) == &flags.perm_invent)
-				update_inventory();
-
+			assign_boolopt(boolopt + i, !negated, initial);
 			return;
 		}
 	}
@@ -3778,7 +3776,6 @@ struct wc_Opt wc_options[] = {
 
 struct wc_Opt wc2_options[] = {
 	{"fullscreen", WC2_FULLSCREEN},
-	{"softkeyboard", WC2_SOFTKEYBOARD},
 	{"wraptext", WC2_WRAPTEXT},
 	{"term_cols", WC2_TERM_COLS},
 	{"term_rows", WC2_TERM_ROWS},

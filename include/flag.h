@@ -216,7 +216,6 @@ struct instance_flags {
 	bool wc_popup_dialog;	// put queries in pop up dialogs instead of in the message window
 	bool wc_mouse_support;	// allow mouse support
 	bool wc2_fullscreen;	// run fullscreen
-	bool wc2_softkeyboard;	// use software keyboard
 	bool wc2_wraptext;	// wrap text
 	int wc2_term_cols;	// terminal width, in characters
 	int wc2_term_rows;	// terminal height, in characters
@@ -256,5 +255,11 @@ extern struct instance_flags iflags;
 #define RUN_LEAP  1 /* update display every 7 steps */
 #define RUN_STEP  2 /* update display every single step */
 #define RUN_CRAWL 3 /* walk w/ extra delay after each update */
+
+extern struct Bool_Opt {
+        const char *name;
+        bool *addr, initvalue;
+        int optflags;
+} boolopt[];
 
 #endif /* FLAG_H */

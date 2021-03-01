@@ -106,6 +106,7 @@ int main(int argc, char **argv) {
 	    lock_windows(true);         /* Can't be overridden from options */
 	}
 #endif
+	s9s7_init();
 	initoptions();
 	init_nhwindows(&argc,argv);
 	exact_username = whoami();

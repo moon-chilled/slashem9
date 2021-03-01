@@ -130,6 +130,7 @@ void *nhrealloc(void*,usize);
 #define new(...) _newtype_fx(__VA_ARGS__, _newtype_f2(__VA_ARGS__), _newtype_f1(__VA_ARGS__), 0)
 
 #define assert(cond, ...) do { if (!(cond)) impossible(__VA_ARGS__); } while (0)
+#define enforce(cond) do { if (!(cond)) panic("enforcement failure!"); } while (0)
 
 #define free(ptr) ((void)0)
 #define realloc nhrealloc

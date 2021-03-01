@@ -1376,6 +1376,7 @@ bool parse_monster_symbol(const char *);
 bool parse_object_symbol(const char *);
 bool parse_symbol(const char *);
 void parseoptions(char *, boolean, boolean);
+void assign_boolopt(struct Bool_Opt *o, bool value, bool initial);
 void parsetileset(char *);
 int doset(void);
 int dotogglepickup(void);
@@ -1393,6 +1394,7 @@ void set_wc2_option_mod_status(unsigned long, int);
 void set_option_mod_status(const char *, int);
 bool read_style(const char*, nhstyle*);
 bool add_menu_coloring(char *);
+bool create_menu_coloring(const char*, nhstyle);
 int add_autopickup_exception(const char *);
 void free_autopickup_exceptions(void);
 
@@ -1715,6 +1717,11 @@ char *getrumor(int, char *, bool);
 void outrumor(int, int);
 void outoracle(boolean, boolean);
 int doconsult(struct monst *);
+
+/* ### s9s7.c ### */
+
+void s9s7_init(void);
+void s9s7_load_options(const char*);
 
 /* ### save.c ### */
 

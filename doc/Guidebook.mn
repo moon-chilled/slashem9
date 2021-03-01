@@ -2405,8 +2405,6 @@ when the hero reaches the scroll_margin.
 .lp scroll_margin
 SLASH'EM should scroll the display when the hero or cursor
 is this number of cells away from the edge of the window.
-.lp softkeyboard
-Display an onscreen keyboard.  Handhelds are most likely to support this option.
 .lp splash_screen
 SLASH'EM should display an opening splash screen when it starts up (default yes).
 .lp tiled_map
