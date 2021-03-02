@@ -9,7 +9,7 @@
 #include "dlb.h"
 #include "display.h"
 
-#define DUNGEON_FILE "dungeon"
+#define DUNGEON_FILE "lev/dungeon"
 
 #define X_START	 "x-strt"
 #define X_LOCATE "x-loca"
