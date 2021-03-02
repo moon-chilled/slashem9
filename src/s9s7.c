@@ -81,11 +81,14 @@ static nhstyle s7_to_nhstyle(s7_scheme *s7, s7_pointer p) {
 
 	if (!s7_is_list(s7, p)) p = s7_list(s7, 1, p);
 
+	int *c = &s.fg;
+
 	for (s7_pointer o = s7_car(p); !s7_is_null(s7, p); o = s7_car(p), p = s7_cdr(p)) {
 		const char *n = s7_stringish(o);
 		for (usize i = 0; i < SIZE(clr); i++) {
 			if (!strcmp(n, clr[i].name)) {
-				s.fg = clr[i].value;
+				*c = clr[i].value;
+				c = &s.bg;
 				goto e;
 			}
 		}
