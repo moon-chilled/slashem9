@@ -89,8 +89,8 @@
         "clear potions? named (holy|blessed)"
         "potions (of|called) water named (holy|blessed)") holy-water-style)
       (("unholy water"
-        "cursed clear potion"
-        "cursed potions? called water"
+        "\\bcursed clear potion"
+        "\\bcursed potions? called water"
         "potions? (of|called) water named (unholy|cursed)") unholy-water-style)
 
       ("gold piece" gold-style)
