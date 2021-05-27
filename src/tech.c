@@ -745,7 +745,7 @@ static int techeffects(int tech_no) {
 			}
 			break;
 		case T_CUTTHROAT:
-			if (!is_blade(uwep)) {
+			if (!uwep || !is_blade(uwep)) {
 				pline("You need a blade to perform cutthroat!");
 				return 0;
 			}
