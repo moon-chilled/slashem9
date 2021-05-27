@@ -29,7 +29,7 @@ Changelist for slashem9 v0.9:
 - Interface: a common technique for identification of wands is to engrave with them on top of an existing engraving; the message produced will either uniquely identify the wand of confine it to one of a small number.  When doing so would uniquely identify the wand, formally identify it as well.
 - Internals: remove reliance on the system for a regex engine, and instead vendor one ourselves (libtre).
 - Gameplay: gypsies can no longer be farmed for wishes.  Gypsies generated via reverse genocide are 'tainted' and will not grant wishes.
-- Bugfix: artifact naming.  The rules here are a bit different from in other games in the family: a name is only prohibited to be attached to an object when either there exists an artifact whose name is that name and whose base object is that object, or where adherence to the previous rule would leak information.
+- Bugfix: artifact naming.  The rules here are a bit different from in other games in the family: a name is only prohibited to be attached to an object when either there exists an artifact whose name is that name and whose base object is that object, or where strict adherence to the previous rule would leak information.
 - Bugfix: when the player's hand slipped while naming an object with the name of an artifact, the name was changed to the proper name of the artifact plus a typo, rather than the actual player-inputted name plus a typo.
 - Bugfix: player was able to eat food from the floor of a pit while teetering at its edge.
 - Interface: get a nice death message when you die by jumping into a pit you made.
@@ -43,7 +43,7 @@ Changelist for slashem9 v0.9:
 - Grammar: better enlightenment messages when intrinsically warned of certain species.
 - Interface: use regex rather than pattern matching in autopickup exceptions.
 - Internals: use regex rather than pattern matching for database entries.
-- Bugfix: encyclopedia entry for Ruggo the Gnome King.
+- Bugfix: encyclopedia entry for Ruggo the Gnome King would not show up.
 - Bugfix: potion of sickness made you lose HP even if you were poison resistant.
 - Gameplay: #monster while vampshifted will always restore you to your vampiric form.
 - Bugfix: inventory display when inventory is empty and perm_invent is on says 'not carrying anything' rather than just '(end)'.
@@ -244,6 +244,7 @@ Imports from NetHack version 3.6:
 - Bugfix: #call could be used to distinguish high priests on astral plain.
 - Bugfix: amorphous monsters couldn't fit through tight gaps (because they were large).
 - Grammar: don't say 'you have summoned it' when sacrificing an own-race corpse while blind.
+- Bugfix: memory safety fixes (also via hardfought Slash'EM).
 
 Imports from other locations:
 - Bugfix: hallucination segfault (Slash'EM Extended).

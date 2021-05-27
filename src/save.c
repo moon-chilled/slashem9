@@ -22,7 +22,6 @@ static void saveobjchn(int, struct obj *, int);
 static void savemonchn(int, struct monst *, int);
 static void savetrapchn(int, struct trap *, int);
 static void savegamestate(int, int);
-#define nulls nul
 
 #if defined(UNIX) || defined(WIN32)
 #define HUP if (!program_state.done_hup)
@@ -778,7 +777,7 @@ static void savetrapchn(int fd, struct trap *trap, int mode) {
 		trap = trap2;
 	}
 	if (perform_bwrite(mode))
-		bwrite(fd, (void *)nulls, sizeof(struct trap));
+		bwrite(fd, &(struct trap){0}, sizeof(struct trap));
 }
 
 /* save all the fruit names and ID's; this is used only in saving whole games
@@ -799,7 +798,7 @@ void savefruitchn(int fd, int mode) {
 		f1 = f2;
 	}
 	if (perform_bwrite(mode))
-		bwrite(fd, nulls, sizeof(struct fruit));
+		bwrite(fd, &(struct fruit){0}, sizeof(struct fruit));
 	if (release_data(mode))
 		ffruit = 0;
 }
