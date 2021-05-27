@@ -5,7 +5,6 @@
 #include <ctype.h>
 
 #include "hack.h"
-#include "defer.h"
 #include "func_tab.h"
 /* #define DEBUG */ /* uncomment for debugging */
 
@@ -309,7 +308,7 @@ int doremoveimarkers(void) {
  */
 
 // here after # - now show pick-list of possible commands
-int extcmd_via_menu(void) {Deferral
+int extcmd_via_menu(void) {
 	const struct ext_func_tab *efp;
 	menu_item *pick_list = NULL;
 	winid win;
@@ -317,7 +316,6 @@ int extcmd_via_menu(void) {Deferral
 	const struct ext_func_tab *choices[MAX_EXT_CMD];
 	nhstr buf = new_nhs();
 	nhstr cbuf = new_nhs(), prompt = new_nhs(), fmtstr = new_nhs();
-	Defer({del_nhs(&buf); del_nhs(&cbuf); del_nhs(&prompt); del_nhs(&fmtstr);});
 	int i, n, nchoices, acount;
 	int ret, biggest;
 	int accelerator, prevaccelerator;
