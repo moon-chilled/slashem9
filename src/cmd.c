@@ -339,7 +339,7 @@ int extcmd_via_menu(void) {
 				if (i >= MAX_EXT_CMD - 2) {
 					impossible("Exceeded %d extended commands in doextcmd() menu",
 						   MAX_EXT_CMD - 2);
-					Return 0;
+					return 0;
 				}
 #endif
 			}
@@ -420,7 +420,7 @@ int extcmd_via_menu(void) {
 		// in fuzz mode, only allow to try one command
 		if (iflags.debug_fuzzer) break;
 	}
-	Return ret;
+	return ret;
 }
 #endif
 

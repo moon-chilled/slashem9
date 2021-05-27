@@ -2264,7 +2264,7 @@ static void mon_consume_unstone(struct monst *mon, struct obj *obj, boolean by_y
 		obj->quan = save_quan;
 	} else if (!Deaf)
 		You_hear((obj->otyp == POT_ACID) ? "drinking" : "chewing");
-	jf (((obj->otyp == POT_ACID) || acidic(&mons[obj->corpsenm])) &&
+	if (((obj->otyp == POT_ACID) || acidic(&mons[obj->corpsenm])) &&
 	    !resists_acid(mon)) {
 		mon->mhp -= rnd(15);
 		pline("%s has a very bad case of stomach acid.",
