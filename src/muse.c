@@ -1420,6 +1420,7 @@ int use_offensive(struct monst *mtmp) {
 			/* don't use monster fields after killing it */
 			boolean confused = (mtmp->mconf ? true : false);
 			int mmx = mtmp->mx, mmy = mtmp->my;
+			bool is_cursed = otmp->cursed;
 
 			mreadmsg(mtmp, otmp);
 			/* Identify the scroll */
@@ -1504,7 +1505,7 @@ int use_offensive(struct monst *mtmp) {
 			}
 			m_useup(mtmp, otmp);
 			/* Attack the player */
-			if (distmin(mmx, mmy, u.ux, u.uy) == 1 && !otmp->cursed) {
+			if (distmin(mmx, mmy, u.ux, u.uy) == 1 && !is_cursed) {
 				int dmg;
 				struct obj *otmp2;
 
@@ -2263,14 +2264,14 @@ static void mon_consume_unstone(struct monst *mon, struct obj *obj, boolean by_y
 		obj->quan = save_quan;
 	} else if (!Deaf)
 		You_hear((obj->otyp == POT_ACID) ? "drinking" : "chewing");
-	m_useup(mon, obj);
-	if (((obj->otyp == POT_ACID) || acidic(&mons[obj->corpsenm])) &&
+	jf (((obj->otyp == POT_ACID) || acidic(&mons[obj->corpsenm])) &&
 	    !resists_acid(mon)) {
 		mon->mhp -= rnd(15);
 		pline("%s has a very bad case of stomach acid.",
 		      Monnam(mon));
 	}
 	if (mon->mhp <= 0) {
+		m_useup(mon, obj);
 		pline("%s dies!", Monnam(mon));
 		if (by_you)
 			xkilled(mon, 0);
@@ -2297,6 +2298,7 @@ static void mon_consume_unstone(struct monst *mon, struct obj *obj, boolean by_y
 		edog->hungrytime += nutrit;
 		mon->mconf = 0;
 	}
+	m_useup(mon, obj);
 	mon->mlstmv = monstermoves; /* it takes a turn */
 }
 
