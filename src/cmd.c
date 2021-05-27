@@ -3092,7 +3092,7 @@ int movecmd(char sym) {
 		sdp = sdir; /* DICE workaround */
 
 	u.dz = 0;
-	if (!(dp = index(sdp, sym))) return 0;
+	if (!(dp = index(sdp, sym)) || !*dp) return 0;
 	u.dx = xdir[dp - sdp];
 	u.dy = ydir[dp - sdp];
 	u.dz = zdir[dp - sdp];
