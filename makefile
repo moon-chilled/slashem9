@@ -45,7 +45,8 @@ CCLD ?= $(CC)
 
 
 OBJ_BASE := src/allmain.o src/alloc.o src/apply.o src/artifact.o src/attrib.o src/ball.o src/bones.o src/botl.o src/cmd.o src/dbridge.o src/decl.o src/detect.o src/dig.o src/display.o src/dlb.o src/do.o src/do_name.o src/do_wear.o src/dog.o src/dogmove.o src/dokick.o src/dothrow.o src/drawing.o src/dungeon.o src/eat.o src/end.o src/engrave.o src/exper.o src/explode.o src/extralev.o src/files.o src/fountain.o src/hack.o src/hacklib.o src/invent.o src/light.o src/lock.o src/mail.o src/makemon.o src/mapglyph.o src/mcastu.o src/mhitm.o src/mhitu.o src/minion.o src/mklev.o src/mkmap.o src/mkmaze.o src/mkobj.o src/mkroom.o src/mon.o src/mondata.o src/monmove.o src/monst.o src/mplayer.o src/mthrowu.o src/monstr.o src/muse.o src/music.o src/nhstr.o src/o_init.o src/objects.o src/objnam.o src/options.o src/pager.o src/pickup.o src/pline.o src/polyself.o src/potion.o src/pray.o src/priest.o src/quest.o src/questpgr.o src/read.o src/rect.o src/region.o src/restore.o src/rip.o src/rnd.o src/role.o src/rumors.o src/save.o src/shk.o src/shknam.o src/sit.o src/sounds.o src/sp_lev.o src/spell.o src/steal.o src/steed.o src/teleport.o src/timeout.o src/topten.o src/track.o src/trap.o src/u_init.o src/uhitm.o src/vault.o src/version.o src/vision.o src/weapon.o src/were.o src/wield.o src/windows.o src/wizard.o src/worm.o src/worn.o src/write.o src/zap.o src/gypsy.o src/s9s7.o src/tech.o src/unicode.o
-OBJ_SYS := sys/share/ioctl.o sys/share/unixtty.o sys/unix/unixmain.o sys/unix/unixunix.o sys/unix/unixres.o sys/share/libtre/regcomp.o sys/share/libtre/regerror.o sys/share/libtre/regexec.o sys/share/libtre/tre-ast.o sys/share/libtre/tre-compile.o sys/share/libtre/tre-match-backtrack.o sys/share/libtre/tre-match-parallel.o sys/share/libtre/tre-mem.o sys/share/libtre/tre-parse.o sys/share/libtre/tre-stack.o sys/share/s7/s7.o
+OBJ_SYS := sys/share/ioctl.o sys/share/unixtty.o sys/unix/unixmain.o sys/unix/unixunix.o sys/unix/unixres.o sys/share/libtre/regcomp.o sys/share/libtre/regerror.o sys/share/libtre/regexec.o sys/share/libtre/tre-ast.o sys/share/libtre/tre-compile.o sys/share/libtre/tre-match-backtrack.o sys/share/libtre/tre-match-parallel.o sys/share/libtre/tre-mem.o sys/share/libtre/tre-parse.o sys/share/libtre/tre-stack.o
+OBJ_S7 := sys/share/s7/s7.o
 OBJ_TTY := win/tty/getline.o win/tty/termcap.o win/tty/topl.o win/tty/wintty.o
 OBJ_CURSES := win/curses/cursdial.o win/curses/cursinit.o win/curses/cursinvt.o win/curses/cursmain.o win/curses/cursmesg.o win/curses/cursmisc.o win/curses/cursstat.o win/curses/curswins.o
 OBJ_PROXY := win/proxy/callback.o win/proxy/dlbh.o win/proxy/getopt.o win/proxy/glyphmap.o win/proxy/mapid.o win/proxy/riputil.o win/proxy/winproxy.o
@@ -55,9 +56,11 @@ OBJ_DLB := util/dlb_main.o src/alloc.o util/panic.o src/dlb.o
 OBJ_DATA2C := util/data2c.o
 OBJ_RECOVER := util/recover.o
 
-SLASHEMOBJ := $(OBJ_BASE) $(OBJ_SYS) $(OBJ_TTY) $(OBJ_CURSES)
+MSLASHEMOBJ := $(OBJ_BASE) $(OBJ_SYS) $(OBJ_TTY) $(OBJ_CURSES)
+SLASHEMOBJ := $(MSLASHEMOBJ) $(OBJ_S7)
 
-ALLOBJ := $(SLASHEMOBJ) $(OBJ_DGNCOMP) $(OBJ_LEVCOMP) $(OBJ_RECOVER) $(OBJ_DLB) $(OBJ_DATA2C)
+MOSTOBJ := $(MSLASHEMOBJ) $(OBJ_DGNCOMP) $(OBJ_LEVCOMP) $(OBJ_RECOVER) $(OBJ_DLB) $(OBJ_DATA2C)
+ALLOBJ := $(MOSTOBJ) $(OBJ_S7)
 
 
 default: all
@@ -135,7 +138,10 @@ include/dlb_archive.h: util/data2c util/dgn_comp util/lev_comp dat/lev/*.des dat
 	cd dat; ../util/data2c ../include/dlb_archive.h lev/dungeon lev/*.lev scm/* doc/* text/*
 
 clean:
-	rm -f $(ALLOBJ) src/slashem9 util/dlb util/data2c util/lev_comp util/dgn_comp dat/nhdat dat/lev/*.lev util/*_yacc.c util/*_lex.c util/*_yacc.h dat/lev/dungeon include/dlb_archive.h
+	rm -f $(MOSTOBJ) src/slashem9 util/dlb util/data2c util/lev_comp util/dgn_comp dat/nhdat dat/lev/*.lev util/*_yacc.c util/*_lex.c util/*_yacc.h dat/lev/dungeon include/dlb_archive.h
+
+spotless: clean
+	rm -f $(ALLOBJ)
 
 fetch-s7:
 	curl -O https://ccrma.stanford.edu/software/s7/s7.tar.gz
@@ -145,4 +151,4 @@ fetch-s7:
 	rm -rf s7/
 
 sys/share/s7/s7.o: sys/share/s7/s7.c
-	cc -g -ggdb -O0 -pipe -std=c11 -U_FORTIFY_SOURCE -c -o sys/share/s7/s7.o sys/share/s7/s7.c
+	$(CC) -g -ggdb -O0 -pipe -std=c11 -U_FORTIFY_SOURCE -c -o sys/share/s7/s7.o sys/share/s7/s7.c

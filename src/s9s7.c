@@ -49,7 +49,7 @@ static s7_pointer set_boolopt(s7_scheme *s7, s7_pointer args) {
 static nhstyle s7_to_nhstyle(s7_scheme *s7, s7_pointer p) {
 	nhstyle s = nhstyle_default();
 	struct name_value {
-		char *name;
+		const char *name;
 		int value;
 	};
 

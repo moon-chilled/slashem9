@@ -1,5 +1,7 @@
 - json saves
 
+- objects from bones that are polymorphed into slime molds should use the bones' fruitname
+
 - Make overview/wizardmode levport show nicer names for special levels ('Storage Room' instead of 'stor', 'The Guild of Disgruntled Adventurers' instead of 'guild', etc.)
 
 - des/lev -> s7 scm (or lua, for 3.7 compat?)
