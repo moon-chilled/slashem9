@@ -2399,11 +2399,11 @@ void splitbill(struct obj *obj, struct obj *otmp) {
 		impossible("Zero quantity on bill??");
 	}
 	bp->bquan -= otmp->quan;
+	tmp = bp->price; // set this before reallocating memory
 
-	if (!extend_bill(ESHK(shkp), 1))
+	if (!extend_bill(ESHK(shkp), 1)) {
 		otmp->unpaid = 0;
-	else {
-		tmp = bp->price;
+	} else {
 		bp = &(ESHK(shkp)->bill_p[ESHK(shkp)->billct]);
 		bp->bo_id = otmp->o_id;
 		bp->bquan = otmp->quan;

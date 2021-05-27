@@ -3576,7 +3576,7 @@ int fruitadd(char *str) {
 	struct fruit *lastf = 0;
 	int highest_fruit_id = 0;
 	char buf[PL_FSIZ];
-	boolean user_specified = (str == pl_fruit);
+	bool user_specified = (str == pl_fruit);
 	/* if not user-specified, then it's a fruit name for a fruit on
 	 * a bones level...
 	 */
@@ -3589,7 +3589,7 @@ int fruitadd(char *str) {
 		 * to tell the difference)
 		 */
 
-		boolean found = false, numeric = false;
+		bool found = false, numeric = false;
 
 		for (i = bases[FOOD_CLASS]; objects[i].oc_class == FOOD_CLASS;
 		     i++) {

@@ -285,3 +285,4 @@ Imports from other locations:
 - Bugfix: fix hang on terminal loss at prompt (SporkHack).
 - Bugfix: crash when performing cutthroat while not wielding a weapon (Slash'EM Extended).
 - Bugfix: crash when engulfed (dNetHack).
+- Bugfix: memory safety fixes (George Bulmer).
