@@ -284,3 +284,4 @@ Imports from other locations:
 - Interface: allow player to configure number of items that must be on the floor to trigger the 'things that are here' list (Glyn Kennington).
 - Bugfix: fix hang on terminal loss at prompt (SporkHack).
 - Bugfix: crash when performing cutthroat while not wielding a weapon (Slash'EM Extended).
+- Bugfix: crash when engulfed (dNetHack).
