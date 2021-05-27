@@ -889,11 +889,12 @@ int doengrave(void) {
 			pline("You are not going to get anywhere trying to write in the %s with your dust.",
 			      is_ice(u.ux, u.uy) ? "frost" : "dust");
 		useup(otmp);
+		otmp = NULL; /* wand is now gone */
 		ptext = false;
 	}
 
 	if (!ptext) { /* Early exit for some implements. */
-		if (otmp->oclass == WAND_CLASS && !can_reach_floor())
+		if (otmp && otmp->oclass == WAND_CLASS && !can_reach_floor())
 			pline("You can't reach the %s!", surface(u.ux, u.uy));
 		return true;
 	}
