@@ -1009,6 +1009,7 @@ static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 			}
 			freeinv(obj);
 			potionhit(mon, obj, true);
+			obj = NULL; // has been freed
 			if (mon->mhp <= 0) return false; /* killed */
 			hittxt = true;
 			/* in case potion effect causes transformation */
@@ -1176,10 +1177,12 @@ static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 							pline(obj->otyp == CREAM_PIE ? "Splat!" : "Splash!");
 							setmangry(mon);
 						}
-						if (thrown)
-							obfree(obj, NULL);
-						else
-							useup(obj);
+						{
+							bool singular = obj->quan == 1;
+							if (thrown) obfree(obj, NULL);
+							else useup(obj);
+							if (singular || thrown) obj = NULL;
+						}
 						hittxt = true;
 						get_dmg_bonus = false;
 						tmp = 0;
@@ -1193,10 +1196,12 @@ static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 							pline("Your venom burns %s!", mon_nam(mon));
 							tmp = dmgval(obj, mon);
 						}
-						if (thrown)
-							obfree(obj, NULL);
-						else
-							useup(obj);
+						{
+							bool singular = obj->quan == 1;
+							if (thrown) obfree(obj, NULL);
+							else useup(obj);
+							if (singular || thrown) obj = NULL;
+						}
 						hittxt = true;
 						get_dmg_bonus = false;
 						break;
@@ -1204,10 +1209,8 @@ static bool hmon_hitmon(struct monst *mon, struct obj *obj, int thrown) {
 						/* non-weapons can damage because of their weight */
 						/* (but not too much) */
 						tmp = obj->owt / 100;
-						if (tmp < 1)
-							tmp = 1;
-						else
-							tmp = rnd(tmp);
+						if (tmp < 1) tmp = 1;
+						else tmp = rnd(tmp);
 						if (tmp > 6) tmp = 6;
 						/*
 						   * Things like silver wands can arrive here so
