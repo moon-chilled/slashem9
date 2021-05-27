@@ -631,7 +631,7 @@ static void maybe_tame(struct monst *mtmp, struct obj *sobj) {
 
 int seffects(struct obj *sobj) {
 	int cval;
-	boolean confused = (Confusion != 0);
+	boolean confused = (Confusion != 0), scursed = sobj->cursed;
 	struct obj *otmp;
 
 	if (objects[sobj->otyp].oc_magic)
@@ -660,8 +660,8 @@ int seffects(struct obj *sobj) {
 				strange_feeling(sobj,
 						!Blind ? "Your skin glows then fades." :
 							 "Your skin feels warm for a moment.");
-				exercise(A_CON, !sobj->cursed);
-				exercise(A_STR, !sobj->cursed);
+				exercise(A_CON, !scursed);
+				exercise(A_STR, !scursed);
 				return 1;
 			}
 			if (confused) {
