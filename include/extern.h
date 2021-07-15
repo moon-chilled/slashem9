@@ -2178,7 +2178,8 @@ void unwield(struct obj *, boolean);
 
 /* ### windows.c ### */
 
-void choose_windows(const char *);
+int lock_windows(int flag);
+void choose_windows(const char *s);
 char genl_message_menu(char, int, const char *);
 void genl_preference_update(const char *);
 void dump_redirect(bool onoff_flag);

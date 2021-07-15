@@ -59,33 +59,33 @@ int main(int argc, char **argv) {
 #endif
 	if(argc > 1) {
 #ifdef CHDIR
-	    if (!strncmp(argv[1], "-d", 2) && argv[1][2] != 'e') {
-		argc--;
-		argv++;
-		dir = argv[0]+2;
-		if(*dir == '=' || *dir == ':') dir++;
-		if(!*dir && argc > 1) {
+		if (!strncmp(argv[1], "-d", 2) && argv[1][2] != 'e') {
 			argc--;
 			argv++;
-			dir = argv[0];
+			dir = argv[0]+2;
+			if(*dir == '=' || *dir == ':') dir++;
+			if(!*dir && argc > 1) {
+				argc--;
+				argv++;
+				dir = argv[0];
+			}
+			if(!*dir)
+				error("Flag -d must be followed by a directory name.");
 		}
-		if(!*dir)
-		    error("Flag -d must be followed by a directory name.");
-	    }
-	    if (argc > 1)
+		if (argc > 1)
 #endif /* CHDIR */
 
-	    /*
-	     * Now we know the directory containing 'record' and
-	     * may do a prscore().  Exclude `-style' - it's a Qt option.
-	     */
-	    if (!strncmp(argv[1], "-s", 2) && strncmp(argv[1], "-style", 6)) {
+			/*
+			 * Now we know the directory containing 'record' and
+			 * may do a prscore().  Exclude `-style' - it's a Qt option.
+			 */
+			if (!strncmp(argv[1], "-s", 2) && strncmp(argv[1], "-style", 6)) {
 #ifdef CHDIR
-		chdirx(dir,0);
+				chdirx(dir,0);
 #endif
-		prscore(argc, argv);
-		exit(EXIT_SUCCESS);
-	    }
+				prscore(argc, argv);
+				exit(EXIT_SUCCESS);
+			}
 	}
 
 	/*
@@ -99,11 +99,11 @@ int main(int argc, char **argv) {
 #ifdef PROXY_GRAPHICS
 	/* Handle --proxy before options, if supported */
 	if (argc > 1 && !strcmp(argv[1], "--proxy")) {
-	    argv[1] = argv[0];
-	    argc--;
-	    argv++;
-	    choose_windows("proxy");
-	    lock_windows(true);         /* Can't be overridden from options */
+		argv[1] = argv[0];
+		argc--;
+		argv++;
+		choose_windows("proxy");
+		lock_windows(true);         /* Can't be overridden from options */
 	}
 #endif
 	dlb_init();	/* must be before s9s7_init() */

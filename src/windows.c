@@ -45,10 +45,7 @@ static struct win_choices {
 	{0, 0} /* must be last */
 };
 
-static void
-	def_raw_print(s)
-		const char *s;
-{
+static void def_raw_print(const char *s) {
 	puts(s);
 }
 

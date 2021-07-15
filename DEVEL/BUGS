@@ -22,6 +22,7 @@
 
 * " comes to live!"
  * (in grund's stronghold)
+* "You see here a statue of a pixie.   disappears!"
 
 * Segfault w/tcc.  Can reproduce with bones file.  Stacktrace:
 #0  0x0000000000523c04 in sobj_at ()

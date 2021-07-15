@@ -67,6 +67,7 @@ extern void proxy_outrip(winid, int);
 extern void proxy_preference_update(const char *);
 extern void proxy_status(int, int, const char **);
 extern FILE *proxy_config_file_open(void);
+extern void proxy_config_file_close(FILE*);
 
 /* riputil.c */
 extern char *get_killer_string(int);
