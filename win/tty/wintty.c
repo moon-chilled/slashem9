@@ -20,6 +20,7 @@
 #include "wintty.h"
 
 #include <sys/ioctl.h>
+#include <poll.h>
 
 #if defined(BSD)
 #include <signal.h>
@@ -28,6 +29,7 @@
 extern char mapped_menu_cmds[]; /* from options.c */
 
 int tty_kbhit(void);
+int tty_kbpoll(int);
 
 /* Interface definition, for windows.c */
 struct window_procs tty_procs = {
@@ -2488,6 +2490,35 @@ int tty_nhgetch(void) {
 	return i;
 }
 
+int tty_getkey(void) {
+	if (iflags.debug_fuzzer) return tty_nhgetch();
+
+	int c = tty_nhgetch();
+	if (c == '\033'/* && tty_kbpoll(10)*/) {
+		int n = tty_nhgetch();
+		if (n == '[') {
+		       	//if (!tty_kbpoll(10)) return META_FLG | '[';
+			switch (tty_nhgetch()) {
+				case 'A': return K_CURSORUP;
+				case 'B': return K_CURSORDOWN;
+				case 'C': return K_CURSORRIGHT;
+				case 'D': return K_CURSORLEFT;
+				default: return tty_getkey(); //unrecognized
+			}
+		} else {
+			ungetc(n, stdin);
+			c = tty_getkey();
+			if (c < 0) c &= ~META_FLG;
+			else c |= META_FLG;
+		}
+	}
+	if (c < 0x20 && c != '\r' && c != '\n') {
+		return CTRL_FLG | 0x60 | c;
+	}
+	if (c == '\177') return '\b';
+	return c;
+}
+
 /*
  * return a key, or 0, in which case a mouse button was pressed
  * mouse events should be returned as character postitions in the map window.
@@ -2503,6 +2534,10 @@ int tty_kbhit(void) {
 	int byteswaiting;
 	ioctl(fileno(stdin), FIONREAD, &byteswaiting);
 	return byteswaiting;
+}
+
+int tty_kbpoll(int timeout) {
+	return poll(&(struct pollfd){.fd = 0, .events = POLLIN}, 1, timeout) == 1;
 }
 
 void win_tty_init(void) {

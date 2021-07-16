@@ -15,6 +15,7 @@ typedef struct {
  * 	should be n-suffixed
  * things that deal with (f)ormatted strings should be f-suffixed
  * things that deal with (c)oloured strings should be c-suffixed
+ * things that deal with individual (g)glyphs should be g-suffixed
  */
 
 ///If a function has multiple suffixes, they should go in that order.
@@ -35,6 +36,9 @@ nhstr nhsdupzc(const char *str, nhstyle style);
 nhstr nhsdupz(const char *str);
 nhstr nhsdupzn(const char *str, usize len);
 nhstr nhscat(const nhstr str, const nhstr cat);
+nhstr nhsins(const nhstr str, usize i, nhstr cat);
+nhstr nhsinscg(const nhstr str, usize i, glyph_t g, nhstyle style);
+nhstr nhsinsg(const nhstr str, usize i, glyph_t g);
 nhstr nhsfmtc_v(nhstyle style, const char *cat, va_list the_args);
 nhstr nhscatfc(const nhstr str, nhstyle style, const char *cat, ...);
 nhstr nhscatf(const nhstr str, const char *cat, ...);

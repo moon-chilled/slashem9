@@ -132,6 +132,7 @@ extern void addtopl(const nhstr);
 extern void more(void);
 extern void update_topl(const nhstr);
 extern void putsyms(const char *);
+extern void putnsyms(const nhstr);
 
 /* ### wintty.c ### */
 extern void setclipped(void);
@@ -198,5 +199,7 @@ extern void tty_end_screen(void);
 extern void genl_outrip(winid, int);
 
 extern void tty_style_start(nhstyle);
+
+extern int tty_getkey(void);
 
 #endif /* WINTTY_H */

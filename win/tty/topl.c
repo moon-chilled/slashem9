@@ -10,7 +10,6 @@
 #include "wintty.h"
 #include <ctype.h>
 
-static void putnsyms(const nhstr str);
 static void redotoplin(const char *);
 static void redotopnlin(const nhstr);
 static void topl_putsym(glyph_t);
@@ -310,7 +309,7 @@ void putsyms(const char *str) {
 }
 
 //todo style
-static void putnsyms(const nhstr s) {
+void putnsyms(const nhstr s) {
 	nhstyle old = nhstyle_default();
 	for (usize i = 0; i < s.len; i++) {
 		if (!nhstyle_eq(s.style[i], old)) {

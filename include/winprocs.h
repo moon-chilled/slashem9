@@ -20,6 +20,29 @@
 #define ISCTRL(c) ((uchar)(c) < 0x20)
 #define UNCTRL(c) (ISCTRL(c) ? (0x60 | (c)) : (c))
 
+
+/*
+ * 'new' key press structure
+ * negative numbers are special keys (e.g. pageup, left arrow)
+ * high bits (below sign bit) are modifiers (inverted when negative)
+ * this is harder to misuse than a structure, and easier to slot into existing code
+ */
+#define META_FLG (1 << 30)
+#define CTRL_FLG (1 << 29)
+static inline int keyval(int c) {
+	return c < 0 ? c|META_FLG|CTRL_FLG : c & ~(META_FLG|CTRL_FLG);
+}
+static inline int keyflags(int c) {
+	return c < 0 ? keyflags(~c) : c & (META_FLG|CTRL_FLG);
+}
+
+enum {
+	K_CURSORLEFT  = -1,
+	K_CURSORRIGHT = -2,
+	K_CURSORUP    = -3,
+	K_CURSORDOWN  = -4,
+};
+
 struct window_procs {
 	const char *name;
 	unsigned long wincap;  /* window port capability options supported */

@@ -8,6 +8,7 @@
 
 #include "wintty.h"
 #include "func_tab.h"
+#include "readline.h"
 
 char morc = 0; /* tell the outside world what char you chose */
 static bool ext_cmd_getlin_hook(char *);
@@ -33,6 +34,91 @@ void tty_instant_getlin(const char *query, char *bufp, bool (*exit_early)(char *
 	hooked_tty_getlin(query, bufp, NULL, exit_early);
 }
 
+static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc hook, bool (*exit_early)(char *answer)) {
+	struct WinDesc *cw = wins[WIN_MESSAGE];
+	if (ttyDisplay->toplin == 1 && !(cw->flags & WIN_STOP)) more();
+	cw->flags &= ~WIN_STOP;
+	ttyDisplay->toplin = 3; /* special prompt state */
+	ttyDisplay->inread++;
+	pline("%s ", query);
+
+	bool doprev = false;
+
+	struct readline_state rs = {0};
+	int k;
+	usize old_len = rs.str.len, old_curs = rs.cursor;
+
+	for (;;) {
+		if (exit_early && exit_early(nhs2cstr(rs.str))) break;
+		fflush(stdout);
+		toplines = nhsfmt("%S %s", query, rs.str);
+
+		if (!doprev) {
+			for (usize i = old_len - old_curs; i-- > 0;) putchar(' ');
+			for (usize i = old_len - old_curs; i-- > 0;) putchar('\b');
+			for (usize i = old_curs; i-- > 0;) putsyms("\b \b");
+			putnsyms(rs.str);
+			for (usize i = rs.str.len - rs.cursor; i-- > 0;) putsyms("\b");
+		}
+		old_len = rs.str.len;
+		old_curs = rs.cursor;
+
+		if (keyval(k=tty_getkey()) == '\033') {
+			rs.str = nhsdupz("\033");
+			break;
+		}
+
+		if (ttyDisplay->intr) {
+			ttyDisplay->intr--;
+		}
+
+		if (k == (CTRL_FLG|'p')) {
+			if (iflags.prevmsg_window != 's') {
+				int sav = ttyDisplay->inread;
+				ttyDisplay->inread = 0;
+				tty_doprev_message();
+				ttyDisplay->inread = sav;
+				tty_clear_nhwindow(WIN_MESSAGE);
+				cw->maxcol = cw->maxrow;
+				addtopl(nhsfmt("%S %s", query, rs.str));
+				continue;
+			} else {
+				tty_clear_nhwindow(WIN_MESSAGE);
+				if (!doprev)
+					tty_doprev_message(); /* need two initially */
+				tty_doprev_message();
+				doprev = true;
+				continue;
+			}
+		} else if (doprev && iflags.prevmsg_window == 's') {
+			tty_clear_nhwindow(WIN_MESSAGE);
+			cw->maxcol = cw->maxrow;
+			doprev = false;
+			addtopl(nhsfmt("%S %s", query, rs.str));
+			old_len = old_curs = rs.str.len;
+			continue;
+		}
+
+		if (k == '\n') {
+			break;
+		}
+
+		//todo hook
+		bool beep;
+		readline_process(&rs, k, &beep);
+		rs.str = nhstrim(rs.str, COLNO);
+		rs.cursor = min(rs.cursor, rs.str.len);
+		if (beep) tty_nhbell();
+	}
+
+	ttyDisplay->toplin = 2; /* nonempty, no --More-- required */
+	ttyDisplay->inread--;
+	clear_nhwindow(WIN_MESSAGE); /* clean up after ourselves */
+
+	snprintf(bufp, BUFSZ, "%s", nhs2cstr(rs.str));
+}
+
+#if 0
 static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc hook, bool (*exit_early)(char *answer)) {
 	char *obufp = bufp;
 	int c;
@@ -137,6 +223,7 @@ static void hooked_tty_getlin(const char *query, char *bufp, getlin_hook_proc ho
 	ttyDisplay->inread--;
 	clear_nhwindow(WIN_MESSAGE); /* clean up after ourselves */
 }
+#endif
 
 // paramater: chars allowed besides return
 void xwaitforspace(const char *s) {

@@ -74,6 +74,28 @@ nhstr nhscat(const nhstr str, const nhstr cat) {
 	return (nhstr){.str=g, .style=s, .len=str.len+cat.len};
 }
 
+nhstr nhsins(const nhstr str, usize i, nhstr cat) {
+	i = min(i, str.len);
+	glyph_t *g = new(glyph_t, str.len + cat.len);
+	memcpy(g, str.str, i * sizeof(glyph_t));
+	memcpy(g + i, cat.str, cat.len * sizeof(glyph_t));
+	memcpy(g + i + cat.len, str.str + i, (str.len - i) * sizeof(glyph_t));;
+
+	nhstyle *s = new(nhstyle, str.len + cat.len);
+	memcpy(s, str.style, i * sizeof(nhstyle));
+	memcpy(s + i, cat.style, cat.len * sizeof(nhstyle));
+	memcpy(s + i + cat.len, str.style + i, (str.len - i) * sizeof(nhstyle));;
+
+	return (nhstr){.str=g, .style=s, .len=str.len+cat.len};
+}
+
+nhstr nhsinscg(const nhstr str, usize i, glyph_t l, nhstyle style) {
+	return nhsins(str, i, (nhstr){.str=&l, .style=&style, .len=1});
+}
+nhstr nhsinsg(const nhstr str, usize i, glyph_t l) {
+	return nhsinscg(str, i, l, nhstyle_default());
+}
+
 // limited at the moment
 // %s: nhstr
 // %S: char*

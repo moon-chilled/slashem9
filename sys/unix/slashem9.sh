@@ -48,7 +48,7 @@ if [ x$NH_USE_VALGRIND != x ]; then
 	HACK="valgrind --log-file=slashemlog.txt --leak-check=full --track-origins=yes --track-fds=yes $NH_VALGRIND_FLAGS $HACK"
 fi
 if [ x$NH_USE_GDB != x ]; then
-	HACK="gdb $NH_GDB_FLAGS $HACK"
+	HACK="gdb -q $NH_GDB_FLAGS $HACK"
 fi
 if [ x$NH_USE_LLDB != x ]; then
 	HACK="lldb $NH_LLDB_FLAGS $HACK"

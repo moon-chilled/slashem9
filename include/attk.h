@@ -40,7 +40,7 @@ typedef struct Attk {
 	bool wlearn;  /* Character learns identity of wobj */
 	bool hitmsg;
 	bool skbonus;
-} * Attk;
+} *Attk;
 
 extern void attk_by_you(Attk);
 extern void attk_by_mon(Attk, struct monst *);
