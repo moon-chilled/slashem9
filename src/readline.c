@@ -49,10 +49,19 @@ void readline_process(struct readline_state *s, int k, bool *beep) {
 			else s->cursor = word_forward(s);
 			break;
 		case '\b':
+		case CTRL_FLG|'h':
 			if (s->cursor) {
 				s->str = nhscat(nhstrim(s->str, s->cursor-1), nhslice(s->str, s->cursor));
 				s->cursor--;
 			}
+			break;
+		case K_DELETE:
+		case CTRL_FLG|'d':
+			if (s->cursor >= s->str.len || !s->str.len) {
+				*beep = true;
+				break;
+			}
+			s->str = nhscat(nhstrim(s->str, s->cursor), nhslice(s->str, s->cursor+1));
 			break;
 		case CTRL_FLG|'u':
 			s->kill_buffer = nhscat(nhstrim(s->str, s->cursor), kill_buffer);
@@ -60,7 +69,12 @@ void readline_process(struct readline_state *s, int k, bool *beep) {
 			s->cursor = 0;
 			s->just_killed = true;
 			break;
-
+		case CTRL_FLG|'k':
+			s->kill_buffer = nhscat(kill_buffer, nhslice(s->str, s->cursor));
+			s->str = nhstrim(s->str, s->cursor);
+			s->cursor = s->str.len;
+			s->just_killed = true;
+			break;
 		case CTRL_FLG|'w': {
 			usize nc = word_back(s);
 			s->kill_buffer = nhscat(nhslice(nhstrim(s->str, s->cursor), nc), kill_buffer);

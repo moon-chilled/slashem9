@@ -1239,9 +1239,6 @@ void pututf8char(glyph_t);
 
 /* ### winnt.c ### */
 
-#ifndef WIN32
-int tgetch(void);
-#endif
 char switchar(void);
 long freediskspace(char *);
 int findfirst(char *);

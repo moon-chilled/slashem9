@@ -174,8 +174,6 @@
 
 #define HLOCK "perm" /* an empty file used for locking purposes */
 
-#define tgetch getchar
-
 #include "system.h"
 
 #if defined(POSIX_TYPES) || defined(__GNUC__)

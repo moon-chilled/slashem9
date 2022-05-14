@@ -41,6 +41,7 @@ enum {
 	K_CURSORRIGHT = -2,
 	K_CURSORUP    = -3,
 	K_CURSORDOWN  = -4,
+	K_DELETE      = -5,
 };
 
 struct window_procs {

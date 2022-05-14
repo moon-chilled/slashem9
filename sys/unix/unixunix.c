@@ -13,6 +13,8 @@
 #endif
 #include <signal.h>
 
+int tgetch(void);
+
 static int veryold(int);
 static int eraseoldlocks(void);
 
@@ -136,10 +138,10 @@ void getlock(void) {
 		    printf("\nThere is already a game in progress under your name.");
 		    printf("  Destroy old game? [yn] ");
 		    fflush(stdout);
-		    c = getchar();
+		    c = tgetch();
 		    putchar(c);
 		    fflush(stdout);
-		    while (getchar() != '\n') ; /* eat rest of line and newline */
+		    while (tgetch() != '\n') ; /* eat rest of line and newline */
 		}
 		if(c == 'y' || c == 'Y') {
 			if(eraseoldlocks()) {

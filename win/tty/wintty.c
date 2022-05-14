@@ -2467,6 +2467,25 @@ void tty_raw_print_bold(const char *str) {
 	fflush(stdout);
 }
 
+static int input_buffer[8] = {-1,-1,-1};
+
+static void unget(int c) {
+	for(int i=0;i<SIZE(input_buffer);i++)if(input_buffer[i]==-1){input_buffer[i]=c;return;}
+}
+
+int tgetch(void) {
+	if (input_buffer[0] != -1) {
+		int r = input_buffer[0];
+		memmove(input_buffer, input_buffer+1, (SIZE(input_buffer)-1)*sizeof(*input_buffer));
+		input_buffer[SIZE(input_buffer)-1] = -1;
+		return r;
+	}
+	while(1) {
+		unsigned char ret;
+		if(1==read(fileno(stdin),&ret,1))return ret;
+	}
+}
+
 int tty_nhgetch(void) {
 	int i;
 
@@ -2494,25 +2513,33 @@ int tty_getkey(void) {
 	if (iflags.debug_fuzzer) return tty_nhgetch();
 
 	int c = tty_nhgetch();
-	if (c == '\033'/* && tty_kbpoll(10)*/) {
+	if (c == '\033' && tty_kbpoll(10)) {
 		int n = tty_nhgetch();
 		if (n == '[') {
-		       	//if (!tty_kbpoll(10)) return META_FLG | '[';
-			switch (tty_nhgetch()) {
+		       	if (!tty_kbpoll(10)) return META_FLG | '[';
+			switch ((n=tty_nhgetch())) {
 				case 'A': return K_CURSORUP;
 				case 'B': return K_CURSORDOWN;
 				case 'C': return K_CURSORRIGHT;
 				case 'D': return K_CURSORLEFT;
-				default: return tty_getkey(); //unrecognized
+				case '3':
+					if (!tty_kbpoll(10)) { unget(n); return META_FLG | '['; }
+					if ((n=tty_nhgetch())=='~')return K_DELETE;
+					unget('3');
+					unget('~');
+					return META_FLG | '[';
+				default:
+					unget(n);
+					return META_FLG | '[';
 			}
 		} else {
-			ungetc(n, stdin);
+			unget(n);
 			c = tty_getkey();
 			if (c < 0) c &= ~META_FLG;
 			else c |= META_FLG;
 		}
 	}
-	if (c < 0x20 && c != '\r' && c != '\n') {
+	if (c < 0x20 && c != '\r' && c != '\n' && c != '\033') {
 		return CTRL_FLG | 0x60 | c;
 	}
 	if (c == '\177') return '\b';
@@ -2537,7 +2564,7 @@ int tty_kbhit(void) {
 }
 
 int tty_kbpoll(int timeout) {
-	return poll(&(struct pollfd){.fd = 0, .events = POLLIN}, 1, timeout) == 1;
+	return poll(&(struct pollfd){.fd = fileno(stdin), .events = POLLIN}, 1, timeout) == 1;
 }
 
 void win_tty_init(void) {
