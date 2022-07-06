@@ -2213,7 +2213,7 @@ goodfruit:
 #ifdef CURSES_GRAPHICS
 			iflags.wc2_petattr = curses_read_attrs(op);
 #else
-			iflags.wc2_petattr = ATR_INVERSE
+			iflags.wc2_petattr = ATR_INVERSE;
 #endif
 		} else {
 			iflags.wc2_petattr = ATR_NONE;
