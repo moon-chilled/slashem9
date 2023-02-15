@@ -25,8 +25,7 @@ extern short glyph2tile[]; /* from tile.c */
  * is restored.  So might as well do that the first time instead of writing
  * another routine.
  */
-static void
-shuffle_tiles() {
+static void shuffle_tiles() {
 	int i;
 	short tmp_tilemap[NUM_OBJECTS];
 
@@ -47,8 +46,7 @@ extern short glyph2proxy[]; /* from glyphmap.c */
  * (internal glyphs are based on object numbers, proxy glyphs
  * are based on object descriptions).
  */
-static void
-shuffle_proxy_glyphs() {
+static void shuffle_proxy_glyphs() {
 	int i;
 	short tmp_glyphmap[NUM_OBJECTS];
 
@@ -61,10 +59,7 @@ shuffle_proxy_glyphs() {
 }
 #endif /* USE_TILES */
 
-static void
-	setgemprobs(dlev)
-		d_level *dlev;
-{
+static void setgemprobs(d_level *dlev) {
 	int j, first, lev;
 
 	if (dlev)

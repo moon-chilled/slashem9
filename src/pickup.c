@@ -1779,9 +1779,7 @@ static int in_container(struct obj *obj) {
 	return current_container ? 1 : -1;
 }
 
-static int
-	ck_bag(obj) struct obj *obj;
-{
+static int ck_bag(struct obj *obj) {
 	return current_container && obj != current_container;
 }
 

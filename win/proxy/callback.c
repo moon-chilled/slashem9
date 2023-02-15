@@ -131,7 +131,7 @@ static void
 	proxy_interface_mode = mode;
 	bot_set_handler(mode & NHPROXY_EXT_IM_STATUS ?
 				nhproxy_proc_status :
-				(void (*)())0L);
+				NULL);
 }
 
 static void

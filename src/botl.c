@@ -509,7 +509,7 @@ void bot_reconfig(void) {
 	context.botl = 1;
 }
 
-void bot_set_handler(void (*handler)(void)) {
+void bot_set_handler(void (*handler)()) {
 	raw_handler = handler;
 	bot_reconfig();
 }

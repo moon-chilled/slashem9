@@ -221,10 +221,7 @@ void vision_reset(void) {
  * Called from vision_recalc() and at least one light routine.  Get pointers
  * to the unused vision work area.
  */
-static void
-	get_unused_cs(rows, rmin, rmax) char ***rows;
-char **rmin, **rmax;
-{
+static void get_unused_cs(char ***rows, char **rmin, char **rmax) {
 	int row;
 	char *nrmin, *nrmax;
 
@@ -261,10 +258,7 @@ char **rmin, **rmax;
  * We set the in_sight bit here as well to escape a bug that shows up
  * due to the one-sided lit wall hack.
  */
-static void
-	rogue_vision(next, rmin, rmax) char **next; /* could_see array pointers */
-char *rmin, *rmax;
-{
+static void rogue_vision(char **next /*could_see array pointers*/, char *rmin, char *rmax) {
 	int rnum = levl[u.ux][u.uy].roomno - ROOMOFFSET; /* no SHARED... */
 	int start, stop, in_door, xhi, xlo, yhi, ylo;
 	int zx, zy;
@@ -849,10 +843,7 @@ void unblock_point(int x, int y) {
  *   This means that a right-edge (a blocked spot that has an open
  *    spot on its right) will point to itself.
  */
-static void
-	dig_point(row, col) int row,
-	col;
-{
+static void dig_point(int row, int col) {
 	int i;
 
 	if (viz_clear[row][col]) return; /* already done */
@@ -930,10 +921,7 @@ static void
 	}
 }
 
-static void
-	fill_point(row, col) int row,
-	col;
-{
+static void fill_point(int row, int col) {
 	int i;
 
 	if (!viz_clear[row][col]) return;
@@ -1279,12 +1267,12 @@ static void left_side(int, int, int, char *);
  * Mark positions as visible on one quadrant of the right side.  The
  * quadrant is determined by the value of the global variable step.
  */
-static void
-	right_side(row, left, right_mark, limits) int row; /* current row */
-int left;						   /* first (left side) visible spot on prev row */
-int right_mark;						   /* last (right side) visible spot on prev row */
-char *limits;						   /* points at range limit for current row, or NULL */
-{
+static void right_side(
+	int row,	// current row
+	int left,	// first (left side) visible spot on prev row
+	int right_mark,	// last (right side) visible spot on prev row
+	char *limits	// points at range limit for current row, or NULL
+	) {
 	int right;	/* right limit of "could see" */
 	int right_edge; /* right edge of an opening */
 	int nrow;	/* new row (calculate once) */
@@ -1461,11 +1449,7 @@ char *limits;						   /* points at range limit for current row, or NULL */
  * This routine is the mirror image of right_side().  See right_side() for
  * extensive comments.
  */
-static void
-	left_side(row, left_mark, right, limits) int row,
-	left_mark, right;
-char *limits;
-{
+static void left_side(int row, int left_mark, int right, char *limits) {
 	int left, left_edge, nrow, deeper, result;
 	int i;
 	char *rowp;
@@ -1584,16 +1568,15 @@ char *limits;
  * (srow,scol).  NOTE this is (y,x)!  Mark the visible locations in the
  * array provided.
  */
-static void
-	view_from(srow, scol, loc_cs_rows, left_most, right_most, range, func, arg) int srow,
-	scol;	    /* starting row and column */
-char **loc_cs_rows; /* pointers to the rows of the could_see array */
-char *left_most;    /* min mark on each row */
-char *right_most;   /* max mark on each row */
-int range;	    /* 0 if unlimited */
-void (*func)(int, int, void *);
-void *arg;
-{
+static void view_from(
+	int srow,
+	int scol,		// starting row and column
+	char **loc_cs_rows,	// pointers to the rows of the could_see array
+	char *left_most,	// min mark on each row
+	char *right_most,	// max mark on each row
+	int range,		// 0 if unlimited
+	void (*func)(int, int, void *),
+	void *arg) {
 	int i;	      /* loop counter */
 	char *rowp;   /* optimization for setting could_see */
 	int nrow;     /* the next row */
@@ -1679,12 +1662,7 @@ void *arg;
  * will call "func" when necessary.  If the hero is the center, use the
  * vision matrix and reduce extra work.
  */
-void
-	do_clear_area(scol, srow, range, func, arg) int scol,
-	srow, range;
-void (*func)(int, int, void *);
-void *arg;
-{
+void do_clear_area(int scol, int srow, int range, void (*func)(int, int, void*), void *arg) {
 	/* If not centered on hero, do the hard work of figuring the area */
 	if (scol != u.ux || srow != u.uy) {
 		view_from(srow, scol, NULL, NULL, NULL, range, func, arg);

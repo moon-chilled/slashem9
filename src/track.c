@@ -23,10 +23,7 @@ void settrack(void) {
 	utpnt++;
 }
 
-coord *
-	gettrack(x, y) int x,
-	y;
-{
+coord *gettrack(int x, int y) {
 	int cnt, ndist;
 	coord *tc;
 	cnt = utcnt;

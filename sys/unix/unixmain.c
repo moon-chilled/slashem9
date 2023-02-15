@@ -228,11 +228,7 @@ not_recovered:
 	return 0;
 }
 
-static void
-process_options(argc, argv)
-int argc;
-char *argv[];
-{
+static void process_options(int argc, char **argv) {
 	int i;
 
 

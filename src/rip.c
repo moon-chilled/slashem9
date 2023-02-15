@@ -65,10 +65,7 @@ static const char *rip_txt[] = {
 
 static char **rip;
 
-static void
-	center(line, text) int line;
-char *text;
-{
+static void center(int line, char *text) {
 	char *ip, *op;
 	ip = text;
 	op = &rip[line][STONE_LINE_CENT - ((strlen(text) + 1) >> 1)];
@@ -76,11 +73,7 @@ char *text;
 		*op++ = *ip++;
 }
 
-void
-	genl_outrip(tmpwin, how)
-		winid tmpwin;
-int how;
-{
+void genl_outrip(winid tmpwin, int how) {
 	char **dp;
 	char *dpx;
 	char buf[BUFSZ];

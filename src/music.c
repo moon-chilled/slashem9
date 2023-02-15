@@ -54,9 +54,7 @@ void pc_speaker(struct obj *, char *);
  * Wake every monster in range...
  */
 
-static void
-	awaken_monsters(distance) int distance;
-{
+static void awaken_monsters(int distance) {
 	struct monst *mtmp = fmon;
 	int distm;
 
@@ -81,9 +79,7 @@ static void
  * Make monsters fall asleep.  Note that they may resist the spell.
  */
 
-static void
-	put_monsters_to_sleep(distance) int distance;
-{
+static void put_monsters_to_sleep(int distance) {
 	struct monst *mtmp = fmon;
 
 	while (mtmp) {
@@ -100,9 +96,7 @@ static void
  * Charm snakes in range.  Note that the snakes are NOT tamed.
  */
 
-static void
-	charm_snakes(distance) int distance;
-{
+static void charm_snakes(int distance) {
 	struct monst *mtmp = fmon;
 	int could_see_mon, was_peaceful;
 
@@ -133,9 +127,7 @@ static void
  * Calm nymphs in range.
  */
 
-static void
-	calm_nymphs(distance) int distance;
-{
+static void calm_nymphs(int distance) {
 	struct monst *mtmp = fmon;
 
 	while (mtmp) {
@@ -177,9 +169,7 @@ void awaken_soldiers(void) {
  * If swallowed, range is reduced to 0.
  */
 
-static void
-	charm_monsters(distance) int distance;
-{
+static void charm_monsters(int distance) {
 	struct monst *mtmp, *mtmp2;
 
 	if (u.uswallow) {
@@ -202,9 +192,7 @@ static void
  * That is:  create random chasms (pits).
  */
 
-static void
-	do_earthquake(force) int force;
-{
+static void do_earthquake(int force) {
 	int x, y;
 	struct monst *mtmp;
 	struct obj *otmp;
@@ -351,7 +339,7 @@ do_pit:
  * The player is trying to extract something from his/her instrument.
  */
 
-static int do_improvisation(instr) struct obj *instr; {
+static int do_improvisation(struct obj *instr) {
 	int damage, do_spec = !Confusion;
 #if defined(MAC) || defined(VPIX_MUSIC) || defined(PCMUSIC)
 	struct obj itmp;
@@ -601,8 +589,7 @@ int do_play_instrument(struct obj *instr) {
  * Play audible music on the machine's speaker if appropriate.
  */
 
-static int
-atconsole() {
+static int atconsole() {
 	/*
 	 * Kluge alert: This code assumes that your [34]86 has no X terminals
 	 * attached and that the console tty type is AT386 (this is always true
@@ -618,10 +605,7 @@ atconsole() {
 	return !strcmp(termtype, "AT386") || !strcmp(termtype, "xterm");
 }
 
-static void
-	speaker(instr, buf) struct obj *instr;
-char *buf;
-{
+static void speaker(struct obj *instr, char *buf) {
 	/*
 	 * For this to work, you need to have installed the PD speaker-control
 	 * driver for PC-compatible UNIX boxes that I (esr@snark.thyrsus.com)
@@ -669,11 +653,8 @@ char *buf;
 
 #define noDEBUG
 
-static void tone(hz, ticks)
-	/* emit tone of frequency hz for given number of ticks */
-	uint hz,
-	ticks;
-{
+/* emit tone of frequency hz for given number of ticks */
+static void tone(uint hz, uint ticks) {
 	ioctl(0, KDMKTONE, hz | ((ticks * 10) << 16));
 #ifdef DEBUG
 	printf("TONE: %6d %6d\n", hz, ticks * 10);
@@ -681,10 +662,8 @@ static void tone(hz, ticks)
 	nap(ticks * 10);
 }
 
-static void rest(ticks)
-	/* rest for given number of ticks */
-	int ticks;
-{
+/* rest for given number of ticks */
+static void rest(int ticks) {
 	nap(ticks * 10);
 #ifdef DEBUG
 	printf("REST:        %6d\n", ticks * 10);
@@ -693,10 +672,7 @@ static void rest(ticks)
 
 #include "interp.c" /* from snd86unx.shr */
 
-static void
-	speaker(instr, buf) struct obj *instr;
-char *buf;
-{
+static void speaker(struct obj *instr, char *buf) {
 	/* emit a prefix to modify instrumental `timbre' */
 	playinit();
 	switch (instr->otyp) {

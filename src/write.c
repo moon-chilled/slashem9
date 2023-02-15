@@ -8,9 +8,7 @@ static int cost(struct obj *);
 /*
  * returns basecost of a scroll or a spellbook
  */
-static int
-	cost(otmp) struct obj *otmp;
-{
+static int cost(struct obj *otmp) {
 	if (otmp->oclass == SPBOOK_CLASS)
 		return 10 * objects[otmp->otyp].oc_level;
 

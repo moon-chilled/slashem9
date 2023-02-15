@@ -470,10 +470,7 @@ init_branch()
 	tmpbranch[n_brs].entry_lev = 0;
 }
 
-int
-getchain(s)
-	char	*s;
-{
+int getchain(char *s) {
 	int i;
 
 	if(strlen(s)) {

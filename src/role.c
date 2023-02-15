@@ -1171,9 +1171,7 @@ static char randomstr[] = "random";
 const usize maxAlign = sizeof aligns / sizeof aligns[0];
 #endif /* MAC_MPW */
 
-boolean
-	validrole(rolenum) int rolenum;
-{
+bool validrole(int rolenum) {
 	return rolenum >= 0 && rolenum < SIZE(roles) - 1;
 }
 
@@ -1210,10 +1208,7 @@ int str2role(char *str) {
 	return ROLE_NONE;
 }
 
-boolean
-	validrace(rolenum, racenum) int rolenum,
-	racenum;
-{
+bool validrace(int rolenum, int racenum) {
 	/* Assumes validrole */
 	/* WAC -- checks ROLE_GENDMASK and ROLE_ALIGNMASK as well (otherwise, there
 	 * might not be an allowed gender or alignment for that role
@@ -1297,10 +1292,7 @@ int str2race(char *str) {
 	return ROLE_NONE;
 }
 
-boolean
-	validgend(rolenum, racenum, gendnum) int rolenum,
-	racenum, gendnum;
-{
+bool validgend(int rolenum, int racenum, int gendnum) {
 	/* Assumes validrole and validrace */
 	return (gendnum >= 0 && gendnum < ROLE_GENDERS &&
 		(roles[rolenum].allow & races[racenum].allow &
@@ -1358,10 +1350,7 @@ int str2gend(char *str) {
 	return ROLE_NONE;
 }
 
-boolean
-	validalign(rolenum, racenum, alignnum) int rolenum,
-	racenum, alignnum;
-{
+bool validalign(int rolenum, int racenum, int alignnum) {
 	/* Assumes validrole and validrace */
 	return (alignnum >= 0 && alignnum < ROLE_ALIGNS &&
 		(roles[rolenum].allow & races[racenum].allow &
@@ -1418,10 +1407,7 @@ int str2align(char *str) {
 }
 
 /* is rolenum compatible with any racenum/gendnum/alignnum constraints? */
-boolean
-	ok_role(rolenum, racenum, gendnum, alignnum) int rolenum,
-	racenum, gendnum, alignnum;
-{
+bool ok_role(int rolenum, int racenum, int gendnum, int alignnum) {
 	int i;
 	short allow;
 
@@ -1487,10 +1473,7 @@ int pick_role(int racenum, int gendnum, int alignnum, int pickhow) {
 }
 
 /* is racenum compatible with any rolenum/gendnum/alignnum constraints? */
-boolean
-	ok_race(rolenum, racenum, gendnum, alignnum) int rolenum,
-	racenum, gendnum, alignnum;
-{
+bool ok_race(int rolenum, int racenum, int gendnum, int alignnum) {
 	int i;
 	short allow;
 
@@ -1557,10 +1540,7 @@ int pick_race(int rolenum, int gendnum, int alignnum, int pickhow) {
 
 /* is gendnum compatible with any rolenum/racenum/alignnum constraints? */
 /* gender and alignment are not comparable (and also not constrainable) */
-boolean
-	ok_gend(rolenum, racenum, gendnum, alignnum) int rolenum,
-	racenum, gendnum, alignnum;
-{
+bool ok_gend(int rolenum, int racenum, int gendnum, int alignnum) {
 	int i;
 	short allow;
 
@@ -1617,10 +1597,7 @@ int pick_gend(int rolenum, int racenum, int alignnum, int pickhow) {
 
 /* is alignnum compatible with any rolenum/racenum/gendnum constraints? */
 /* alignment and gender are not comparable (and also not constrainable) */
-boolean
-	ok_align(rolenum, racenum, gendnum, alignnum) int rolenum,
-	racenum, gendnum, alignnum;
-{
+bool ok_align(int rolenum, int racenum, int gendnum, int alignnum) {
 	int i;
 	short allow;
 
@@ -1715,10 +1692,7 @@ void rigid_role_checks(void) {
 
 static char pa[NUM_BP], post_attribs;
 
-static char *
-	promptsep(buf, num_post_attribs) char *buf;
-int num_post_attribs;
-{
+static char *promptsep(char *buf, int num_post_attribs) {
 	const char *conj = "and ";
 	if (num_post_attribs > 1 && post_attribs < num_post_attribs && post_attribs > 1)
 		strcat(buf, ",");
@@ -1728,9 +1702,7 @@ int num_post_attribs;
 	return buf;
 }
 
-static int
-	role_gendercount(rolenum) int rolenum;
-{
+static int role_gendercount(int rolenum) {
 	int gendcount = 0;
 	if (validrole(rolenum)) {
 		if (roles[rolenum].allow & ROLE_MALE) ++gendcount;
@@ -1740,9 +1712,7 @@ static int
 	return gendcount;
 }
 
-static int
-	race_alignmentcount(racenum) int racenum;
-{
+static int race_alignmentcount(int racenum) {
 	int aligncount = 0;
 	if (racenum != ROLE_NONE && racenum != ROLE_RANDOM) {
 		if (races[racenum].allow & ROLE_CHAOTIC) ++aligncount;
@@ -1752,8 +1722,7 @@ static int
 	return aligncount;
 }
 
-char *
-root_plselection_prompt(char *suppliedbuf, int buflen, int rolenum, int racenum, int gendnum, int alignnum) {
+char *root_plselection_prompt(char *suppliedbuf, int buflen, int rolenum, int racenum, int gendnum, int alignnum) {
 	int k, gendercount = 0, aligncount = 0;
 	char buf[BUFSZ];
 	static char err_ret[] = " character's";

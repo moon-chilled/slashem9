@@ -113,7 +113,6 @@ set_window_position(int *winx, int *winy, int *winw, int *winh, int orientation,
 /* Create the "main" nonvolitile windows used by nethack */
 
 void curses_create_main_windows() {
-	int min_message_height = 1;
 	int message_orientation = 0;
 	int status_orientation = 0;
 	int border_space = 0;
@@ -139,10 +138,6 @@ void curses_create_main_windows() {
 	if (borders) {
 		border_space = 2;
 		hspace -= border_space;
-	}
-
-	if ((term_cols - border_space) < COLNO) {
-		min_message_height++;
 	}
 
 	/* Determine status window orientation */

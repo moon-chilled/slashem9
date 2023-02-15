@@ -131,9 +131,7 @@ int main(int argc, char **argv) {
  * MAX_ERRORS wouldn't be reasonable.
  */
 
-void yyerror(s)
-	const char *s;
-{
+void yyerror(const char *s) {
 	fprintf(stderr,
 #ifndef MAC_MPW
 		"%s : line %d : %s\n",
@@ -151,9 +149,7 @@ void yyerror(s)
  * Just display a warning (that is : a non fatal error)
  */
 
-void yywarning(s)
-	const char *s;
-{
+void yywarning(const char *s) {
 	fprintf(stderr,
 #ifndef MAC_MPW
 		"%s : line %d : WARNING : %s\n",
