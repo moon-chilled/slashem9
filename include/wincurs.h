@@ -1,6 +1,10 @@
 #ifndef WINCURS_H
 #define WINCURS_H
 
+#ifndef A_ITALIC // ???
+# define A_ITALIC A_NONE
+#endif
+
 /* Global declarations for curses interface */
 
 extern int term_rows, term_cols; /* size of underlying terminal */
